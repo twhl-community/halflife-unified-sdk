@@ -2428,3 +2428,34 @@ void CTriggerCamera::Move()
 	float fraction = 2 * gpGlobals->frametime;
 	pev->velocity = ((pev->movedir * pev->speed) * fraction) + (pev->velocity * (1-fraction));
 }
+
+class CTriggerPlayerFreeze : public CBaseDelay
+{
+public:
+	void Spawn() override;
+
+	void Use( CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value ) override;
+
+public:
+	bool m_bUnFrozen;
+};
+
+LINK_ENTITY_TO_CLASS( trigger_playerfreeze, CTriggerPlayerFreeze );
+
+void CTriggerPlayerFreeze::Spawn()
+{
+	if( g_pGameRules->IsDeathmatch() )
+		REMOVE_ENTITY( edict() );
+	else
+		m_bUnFrozen = true;
+}
+
+void CTriggerPlayerFreeze::Use( CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value )
+{
+	m_bUnFrozen = !m_bUnFrozen;
+
+	//TODO: not made for multiplayer
+	auto pPlayer = GetClassPtr( ( CBasePlayer* ) &g_engfuncs.pfnPEntityOfEntIndex( 1 )->v );
+
+	pPlayer->EnableControl( m_bUnFrozen );
+}
