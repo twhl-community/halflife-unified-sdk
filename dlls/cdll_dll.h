@@ -21,6 +21,7 @@
 #define CDLL_DLL_H
 
 #define MAX_WEAPONS		32		// ???
+const int SV_MAX_PLAYERS = 32;
 
 #define MAX_WEAPON_SLOTS		5	// hud item selection slots
 #define MAX_ITEM_TYPES			6	// hud item selection slots

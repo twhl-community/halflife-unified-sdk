@@ -33,6 +33,7 @@
 #include "weapons.h"
 #include "gamerules.h"
 #include "teamplay_gamerules.h"
+#include "world.h"
 
 extern CGraph WorldGraph;
 extern CSoundEnt *pSoundEnt;
@@ -462,10 +463,6 @@ void ResetGlobalState( void )
 
 LINK_ENTITY_TO_CLASS( worldspawn, CWorld );
 
-#define SF_WORLD_DARK		0x0001		// Fade from black at startup
-#define SF_WORLD_TITLE		0x0002		// Display game title at startup
-#define SF_WORLD_FORCETEAM	0x0004		// Force teams
-
 extern DLL_GLOBAL BOOL		g_fGameOver;
 float g_flWeaponCheat; 
 
@@ -496,7 +493,7 @@ void CWorld :: Precache( void )
 		delete g_pGameRules;
 	}
 
-	g_pGameRules = InstallGameRules( );
+	g_pGameRules = InstallGameRules( this );
 
 	//!!!UNDONE why is there so much Spawn code in the Precache function? I'll just keep it here 
 

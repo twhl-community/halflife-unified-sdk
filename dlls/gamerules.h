@@ -72,6 +72,7 @@ public:
 	virtual BOOL IsDeathmatch( void ) = 0;//is this a deathmatch game?
 	virtual BOOL IsTeamplay( void ) { return FALSE; };// is this deathmatch game being played with team rules?
 	virtual BOOL IsCoOp( void ) = 0;// is this a coop game?
+	virtual BOOL IsCTF() = 0; // is this a ctf game?
 	virtual const char *GetGameDescription( void ) { return "Half-Life"; }  // this is the game name that gets seen in the server browser
 	
 // Client connection/disconnection
@@ -148,6 +149,11 @@ public:
 	virtual void ChangePlayerTeam( CBasePlayer *pPlayer, const char *pTeamName, BOOL bKill, BOOL bGib ) {}
 	virtual const char *SetDefaultPlayerTeam( CBasePlayer *pPlayer ) { return ""; }
 
+	virtual const char* GetCharacterType( int iTeamNum, int iCharNum ) { return ""; }
+	virtual int GetNumTeams() { return 0; }
+	virtual const char* TeamWithFewestPlayers() { return nullptr; }
+	virtual BOOL TeamsBalanced() { return true; }
+
 // Sounds
 	virtual BOOL PlayTextureSounds( void ) { return TRUE; }
 	virtual BOOL PlayFootstepSounds( CBasePlayer *pl, float fvol ) { return TRUE; }
@@ -159,7 +165,7 @@ public:
 	virtual void EndMultiplayerGame( void ) {}
 };
 
-extern CGameRules *InstallGameRules( void );
+extern CGameRules *InstallGameRules( CBaseEntity* pWorld );
 
 
 //=========================================================
@@ -183,6 +189,7 @@ public:
 	virtual BOOL IsMultiplayer( void );
 	virtual BOOL IsDeathmatch( void );
 	virtual BOOL IsCoOp( void );
+	BOOL IsCTF() override { return FALSE; }
 
 // Client connection/disconnection
 	virtual BOOL ClientConnected( edict_t *pEntity, const char *pszName, const char *pszAddress, char szRejectReason[ 128 ] );
@@ -270,6 +277,7 @@ public:
 	virtual BOOL IsMultiplayer( void );
 	virtual BOOL IsDeathmatch( void );
 	virtual BOOL IsCoOp( void );
+	BOOL IsCTF() override { return FALSE; }
 
 // Client connection/disconnection
 	// If ClientConnected returns FALSE, the connection is rejected and the user is provided the reason specified in
