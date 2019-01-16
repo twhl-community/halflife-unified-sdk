@@ -681,5 +681,5 @@ void CRecruit::TalkInit()
 
 int CRecruit::ObjectCaps()
 {
-	return bits_CAP_JUMP | bits_CAP_SQUAD;
+	return FCAP_ACROSS_TRANSITION | FCAP_IMPULSE_USE;
 }
