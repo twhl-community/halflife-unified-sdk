@@ -117,6 +117,7 @@
     <ClCompile Include="..\..\dlls\bullsquid.cpp" />
     <ClCompile Include="..\..\dlls\buttons.cpp" />
     <ClCompile Include="..\..\dlls\cbase.cpp" />
+    <ClCompile Include="..\..\dlls\CDrillSergeant.cpp" />
     <ClCompile Include="..\..\dlls\client.cpp" />
     <ClCompile Include="..\..\dlls\combat.cpp" />
     <ClCompile Include="..\..\dlls\controller.cpp" />
