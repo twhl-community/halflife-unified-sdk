@@ -97,6 +97,14 @@ inline void *GET_PRIVATE( edict_t *pent )
 	return NULL;
 }
 
+template<typename T>
+inline T* GET_PRIVATE( edict_t *pent )
+{
+	if( pent )
+		return static_cast<T*>( pent->pvPrivateData );
+	return nullptr;
+}
+
 #define FREE_PRIVATE	(*g_engfuncs.pfnFreeEntPrivateData)
 //#define STRING			(*g_engfuncs.pfnSzFromIndex)
 #define ALLOC_STRING	(*g_engfuncs.pfnAllocString)
