@@ -3052,7 +3052,7 @@
   ]
 ]
 
-@PointClass base(Monster, Sequence) studio("models/hgrunt_opfor.mdl") = monster_grunt_ally_repel : "Human Grunt Ally (Repel)"
+@PointClass base(Monster, Sequence, TalkMonster) studio("models/hgrunt_opfor.mdl") = monster_grunt_ally_repel : "Human Grunt Ally (Repel)"
 [
   spawnflags(Flags) =
   [
@@ -3076,10 +3076,13 @@
     2 : "Ops Mask"
     3 : "Bandana White"
     4 : "Bandana Black"
+	5 : "MP"
+	6 : "Major"
+	7 : "Beret (Black)"
   ]
 ]
 
-@PointClass base(Monster, Sequence) studio("models/hgrunt_opfor.mdl") = monster_human_grunt_ally : "Human Grunt Ally (camo)" 
+@PointClass base(Monster, Sequence, TalkMonster) studio("models/hgrunt_opfor.mdl") = monster_human_grunt_ally : "Human Grunt Ally (camo)" 
 [
     netname(string) : "Squad Name"
     
@@ -3124,6 +3127,7 @@
 		3 : "Dead On Back"
 		4 : "Dead On Stomach"
 		5 : "Head Crabbed"
+		6 : "Dead Canyon"
 	]
 
 	weapons(Choices) : "Weapons" : 1 =
@@ -3142,6 +3146,8 @@
 		3 : "Bandana White"
 		4 : "Bandana Black"
 		5 : "MP"
+		6 : "Major"
+		7 : "Beret (Black)"
 	]
 ]
 
