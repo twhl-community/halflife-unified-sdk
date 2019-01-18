@@ -103,6 +103,9 @@ void CEagle::WeaponIdle()
 
 	ResetEmptySound();
 
+	//Update autoaim
+	m_pPlayer->GetAutoaimVector( AUTOAIM_10DEGREES );
+
 	if( m_flTimeWeaponIdle <= UTIL_WeaponTimeBase() && m_iClip )
 	{
 		const float flNextIdle = UTIL_SharedRandomFloat( m_pPlayer->random_seed, 0.0, 1.0 );
