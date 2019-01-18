@@ -853,7 +853,7 @@ int DrawBar(int x, int y, int width, int height, float f)
 		width -= w;
 	}
 
-	UnpackRGB(r, g, b, RGB_YELLOWISH);
+	UnpackRGB(r, g, b, RGB_HUD_COLOR);
 
 	FillRGBA(x, y, width, height, r, g, b, 128);
 
