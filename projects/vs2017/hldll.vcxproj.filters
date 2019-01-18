@@ -37,6 +37,12 @@
     <Filter Include="Header Files\common">
       <UniqueIdentifier>{d9b0bb75-7f25-443b-8899-6b1a9e1dd63c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\dlls\rope">
+      <UniqueIdentifier>{8916e080-91ab-48f7-8f59-6cc9497efef1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\rope">
+      <UniqueIdentifier>{25bcec5f-fe9f-443f-b81c-ed38b2b511a1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\dlls\aflock.cpp">
@@ -363,6 +369,18 @@
     <ClCompile Include="..\..\dlls\COFSquadTalkMonster.cpp">
       <Filter>Source Files\dlls</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\dlls\rope\CElectrifiedWire.cpp">
+      <Filter>Source Files\dlls\rope</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\rope\CRope.cpp">
+      <Filter>Source Files\dlls\rope</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\rope\CRopeSample.cpp">
+      <Filter>Source Files\dlls\rope</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\rope\CRopeSegment.cpp">
+      <Filter>Source Files\dlls\rope</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\dlls\doors.h">
@@ -526,6 +544,18 @@
     </ClInclude>
     <ClInclude Include="..\..\dlls\COFSquadTalkMonster.h">
       <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\rope\CElectrifiedWire.h">
+      <Filter>Header Files\rope</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\rope\CRope.h">
+      <Filter>Header Files\rope</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\rope\CRopeSample.h">
+      <Filter>Header Files\rope</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\rope\CRopeSegment.h">
+      <Filter>Header Files\rope</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
