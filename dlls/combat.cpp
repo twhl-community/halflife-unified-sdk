@@ -1474,6 +1474,28 @@ void CBaseEntity::FireBullets(ULONG cShots, Vector vecSrc, Vector vecDirShooting
 					DecalGunshot( &tr, iBulletType );
 				}
 				break;
+
+			case BULLET_PLAYER_556:
+				pEntity->TraceAttack( pevAttacker, gSkillData.plrDmg556, vecDir, &tr, DMG_BULLET );
+				if( !tracer )
+				{
+					TEXTURETYPE_PlaySound( &tr, vecSrc, vecEnd, iBulletType );
+					DecalGunshot( &tr, iBulletType );
+				}
+				break;
+
+			case BULLET_PLAYER_762:
+				pEntity->TraceAttack( pevAttacker, gSkillData.plrDmg762, vecDir, &tr, DMG_BULLET );
+				if( !tracer )
+				{
+					TEXTURETYPE_PlaySound( &tr, vecSrc, vecEnd, iBulletType );
+					DecalGunshot( &tr, iBulletType );
+				}
+				break;
+
+			case BULLET_PLAYER_EAGLE:
+				pEntity->TraceAttack( pevAttacker, gSkillData.plrDmgEagle, vecDir, &tr, DMG_BULLET );
+				break;
 			
 			case BULLET_NONE: // FIX 
 				pEntity->TraceAttack(pevAttacker, 50, vecDir, &tr, DMG_CLUB);
@@ -1563,6 +1585,53 @@ Vector CBaseEntity::FireBulletsPlayer ( ULONG cShots, Vector vecSrc, Vector vecD
 			
 			case BULLET_PLAYER_357:		
 				pEntity->TraceAttack(pevAttacker, gSkillData.plrDmg357, vecDir, &tr, DMG_BULLET); 
+				break;
+
+			case BULLET_PLAYER_556:
+				pEntity->TraceAttack( pevAttacker, gSkillData.plrDmg556, vecDir, &tr, DMG_BULLET );
+				break;
+
+			case BULLET_PLAYER_762:
+				pEntity->TraceAttack( pevAttacker, gSkillData.plrDmg762, vecDir, &tr, DMG_BULLET );
+				
+				if( tr.pHit && tr.pHit->v.takedamage != DAMAGE_NO )
+				{
+					EMIT_SOUND_DYN( tr.pHit, CHAN_BODY, "weapons/xbow_hitbod2.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM );
+				
+					auto pHitEntity = Instance( tr.pHit );
+
+					if( pHitEntity->BloodColor() != DONT_BLEED )
+					{
+						MESSAGE_BEGIN( MSG_PVS, SVC_TEMPENTITY, EyePosition() );
+						WRITE_BYTE( TE_BLOODSTREAM );
+
+						WRITE_COORD( tr.vecEndPos.x );
+						WRITE_COORD( tr.vecEndPos.y );
+						WRITE_COORD( tr.vecEndPos.z );
+
+						const auto direction = vecSrc - tr.vecEndPos;
+
+						WRITE_COORD( direction.x );
+						WRITE_COORD( direction.y );
+						WRITE_COORD( direction.z );
+
+						if( pHitEntity->BloodColor() == BLOOD_COLOR_RED )
+						{
+							WRITE_BYTE( 70 );
+						}
+						else
+						{
+							WRITE_BYTE( pHitEntity->BloodColor() );
+						}
+						
+						WRITE_BYTE( 150 );
+						MESSAGE_END();
+					}
+				}
+				break;
+
+			case BULLET_PLAYER_EAGLE:
+				pEntity->TraceAttack( pevAttacker, gSkillData.plrDmgEagle, vecDir, &tr, DMG_BULLET );
 				break;
 				
 			case BULLET_NONE: // FIX 
