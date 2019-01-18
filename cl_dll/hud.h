@@ -357,10 +357,13 @@ public:
 	int MsgFunc_Flashlight(const char *pszName,  int iSize, void *pbuf );
 	int MsgFunc_FlashBat(const char *pszName,  int iSize, void *pbuf );
 	
+	void drawNightVision();
+
 private:
 	HSPRITE m_hSprite1;
 	HSPRITE m_hSprite2;
 	HSPRITE m_hBeam;
+	HSPRITE m_nvSprite;
 	wrect_t *m_prc1;
 	wrect_t *m_prc2;
 	wrect_t *m_prcBeam;
@@ -552,6 +555,8 @@ private:
 	float						m_flMouseSensitivity;
 	int							m_iConcussionEffect; 
 
+	bool mNightVisionState;
+
 public:
 
 	HSPRITE						m_hsprCursor;
@@ -647,6 +652,17 @@ public:
 	void AddHudElem(CHudBase *p);
 
 	float GetSensitivity();
+
+	bool isNightVisionOn() { return mNightVisionState; }
+
+	void setNightVisionState( bool state );
+
+	void getNightVisionHudItemColor( int& r, int& g, int& b )
+	{
+		r = 255;
+		g = 255;
+		b = 255;
+	}
 
 };
 

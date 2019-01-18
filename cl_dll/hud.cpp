@@ -695,4 +695,7 @@ float CHud::GetSensitivity( void )
 	return m_flMouseSensitivity;
 }
 
-
+void CHud::setNightVisionState( bool state )
+{
+	mNightVisionState = state;
+}
