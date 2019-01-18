@@ -354,6 +354,9 @@
     <ClCompile Include="..\..\dlls\CDrillSergeant.cpp">
       <Filter>Source Files\dlls</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\dlls\hgrunt_ally.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\dlls\COFAllyMonster.cpp">
       <Filter>Source Files\dlls</Filter>
     </ClCompile>
