@@ -48,6 +48,17 @@ cvar_t 	*g_psv_gravity = NULL;
 cvar_t	*g_psv_aim = NULL;
 cvar_t	*g_footsteps = NULL;
 
+//Macros to make skill cvars easier to define
+#define DECLARE_SKILL_CVARS( name )					\
+cvar_t	sk_##name##1 = { "sk_" #name "1", "0" };	\
+cvar_t	sk_##name##2 = { "sk_" #name "2", "0" };	\
+cvar_t	sk_##name##3 = { "sk_" #name "3", "0" }
+
+#define REGISTER_SKILL_CVARS( name )	\
+CVAR_REGISTER( &sk_##name##1 );			\
+CVAR_REGISTER( &sk_##name##2 );			\
+CVAR_REGISTER( &sk_##name##3 )
+
 //CVARS FOR SKILL LEVEL SETTINGS
 // Agrunt
 cvar_t	sk_agrunt_health1 = {"sk_agrunt_health1","0"};
@@ -68,6 +79,9 @@ cvar_t	sk_barney_health1	= {"sk_barney_health1","0"};
 cvar_t	sk_barney_health2	= {"sk_barney_health2","0"};
 cvar_t	sk_barney_health3	= {"sk_barney_health3","0"};
 
+// Otis
+DECLARE_SKILL_CVARS( otis_health );
+
 // Bullsquid
 cvar_t	sk_bullsquid_health1 = {"sk_bullsquid_health1","0"};
 cvar_t	sk_bullsquid_health2 = {"sk_bullsquid_health2","0"};
@@ -85,6 +99,11 @@ cvar_t	sk_bullsquid_dmg_spit1 = {"sk_bullsquid_dmg_spit1","0"};
 cvar_t	sk_bullsquid_dmg_spit2 = {"sk_bullsquid_dmg_spit2","0"};
 cvar_t	sk_bullsquid_dmg_spit3 = {"sk_bullsquid_dmg_spit3","0"};
 
+// Pit Drone
+DECLARE_SKILL_CVARS( pitdrone_health );
+DECLARE_SKILL_CVARS( pitdrone_dmg_bite );
+DECLARE_SKILL_CVARS( pitdrone_dmg_whip );
+DECLARE_SKILL_CVARS( pitdrone_dmg_spit );
 
 // Big Momma
 cvar_t	sk_bigmomma_health_factor1 = {"sk_bigmomma_health_factor1","1.0"};
@@ -136,6 +155,10 @@ cvar_t	sk_headcrab_dmg_bite1 = {"sk_headcrab_dmg_bite1","0"};
 cvar_t	sk_headcrab_dmg_bite2 = {"sk_headcrab_dmg_bite2","0"};
 cvar_t	sk_headcrab_dmg_bite3 = {"sk_headcrab_dmg_bite3","0"};
 
+// Shock Roach
+DECLARE_SKILL_CVARS( shockroach_health );
+DECLARE_SKILL_CVARS( shockroach_dmg_bite );
+DECLARE_SKILL_CVARS( shockroach_lifespan );
 
 // Hgrunt 
 cvar_t	sk_hgrunt_health1 = {"sk_hgrunt_health1","0"};
@@ -153,6 +176,38 @@ cvar_t	sk_hgrunt_pellets3 = {"sk_hgrunt_pellets3","0"};
 cvar_t	sk_hgrunt_gspeed1 = {"sk_hgrunt_gspeed1","0"};
 cvar_t	sk_hgrunt_gspeed2 = {"sk_hgrunt_gspeed2","0"};
 cvar_t	sk_hgrunt_gspeed3 = {"sk_hgrunt_gspeed3","0"};
+
+// Hgrunt Ally
+DECLARE_SKILL_CVARS( hgrunt_ally_health );
+DECLARE_SKILL_CVARS( hgrunt_ally_kick );
+DECLARE_SKILL_CVARS( hgrunt_ally_pellets );
+DECLARE_SKILL_CVARS( hgrunt_ally_gspeed );
+
+// Hgrunt Medic
+DECLARE_SKILL_CVARS( medic_ally_health );
+DECLARE_SKILL_CVARS( medic_ally_kick );
+DECLARE_SKILL_CVARS( medic_ally_pellets );
+DECLARE_SKILL_CVARS( medic_ally_gspeed );
+DECLARE_SKILL_CVARS( medic_ally_heal );
+
+// Hgrunt Torch
+DECLARE_SKILL_CVARS( torch_ally_health );
+DECLARE_SKILL_CVARS( torch_ally_kick );
+DECLARE_SKILL_CVARS( torch_ally_pellets );
+DECLARE_SKILL_CVARS( torch_ally_gspeed );
+
+// Male Assassin
+DECLARE_SKILL_CVARS( massassin_health );
+DECLARE_SKILL_CVARS( massassin_kick );
+DECLARE_SKILL_CVARS( massassin_pellets );
+DECLARE_SKILL_CVARS( massassin_gspeed );
+
+// Shock Trooper
+DECLARE_SKILL_CVARS( shocktrooper_health );
+DECLARE_SKILL_CVARS( shocktrooper_kick );
+DECLARE_SKILL_CVARS( shocktrooper_gspeed );
+DECLARE_SKILL_CVARS( shocktrooper_maxcharge );
+DECLARE_SKILL_CVARS( shocktrooper_rchgspeed );
 
 // Houndeye
 cvar_t	sk_houndeye_health1 = {"sk_houndeye_health1","0"};
@@ -232,6 +287,8 @@ cvar_t	sk_scientist_health1 = {"sk_scientist_health1","0"};
 cvar_t	sk_scientist_health2 = {"sk_scientist_health2","0"};
 cvar_t	sk_scientist_health3 = {"sk_scientist_health3","0"};
 
+// Cleansuit Scientist
+DECLARE_SKILL_CVARS( cleansuit_scientist_health );
 
 // Snark
 cvar_t	sk_snark_health1 = {"sk_snark_health1","0"};
@@ -246,7 +303,24 @@ cvar_t	sk_snark_dmg_pop1 = {"sk_snark_dmg_pop1","0"};
 cvar_t	sk_snark_dmg_pop2 = {"sk_snark_dmg_pop2","0"};
 cvar_t	sk_snark_dmg_pop3 = {"sk_snark_dmg_pop3","0"};
 
+// Voltigore
+DECLARE_SKILL_CVARS( voltigore_health );
+DECLARE_SKILL_CVARS( voltigore_dmg_punch );
+DECLARE_SKILL_CVARS( voltigore_dmg_beam );
 
+// Baby Voltigore
+DECLARE_SKILL_CVARS( babyvoltigore_health );
+DECLARE_SKILL_CVARS( babyvoltigore_dmg_punch );
+
+// Pit Worm
+DECLARE_SKILL_CVARS( pitworm_health );
+DECLARE_SKILL_CVARS( pitworm_dmg_swipe );
+DECLARE_SKILL_CVARS( pitworm_dmg_beam );
+
+// Gene Worm
+DECLARE_SKILL_CVARS( geneworm_health );
+DECLARE_SKILL_CVARS( geneworm_dmg_spit );
+DECLARE_SKILL_CVARS( geneworm_dmg_hit );
 
 // Zombie
 cvar_t	sk_zombie_health1 = {"sk_zombie_health1","0"};
@@ -261,6 +335,21 @@ cvar_t	sk_zombie_dmg_both_slash1 = {"sk_zombie_dmg_both_slash1","0"};
 cvar_t	sk_zombie_dmg_both_slash2 = {"sk_zombie_dmg_both_slash2","0"};
 cvar_t	sk_zombie_dmg_both_slash3 = {"sk_zombie_dmg_both_slash3","0"};
 
+// Zombie Barney
+DECLARE_SKILL_CVARS( zombie_barney_health );
+DECLARE_SKILL_CVARS( zombie_barney_dmg_one_slash );
+DECLARE_SKILL_CVARS( zombie_barney_dmg_both_slash );
+
+// Zombie Soldier
+DECLARE_SKILL_CVARS( zombie_soldier_health );
+DECLARE_SKILL_CVARS( zombie_soldier_dmg_one_slash );
+DECLARE_SKILL_CVARS( zombie_soldier_dmg_both_slash );
+
+// Gonome
+DECLARE_SKILL_CVARS( gonome_dmg_guts );
+DECLARE_SKILL_CVARS( gonome_health );
+DECLARE_SKILL_CVARS( gonome_dmg_one_slash );
+DECLARE_SKILL_CVARS( gonome_dmg_one_bite );
 
 //Turret
 cvar_t	sk_turret_health1 = {"sk_turret_health1","0"};
@@ -364,6 +453,35 @@ cvar_t	sk_plr_tripmine1 = {"sk_plr_tripmine1","0"};
 cvar_t	sk_plr_tripmine2 = {"sk_plr_tripmine2","0"};
 cvar_t	sk_plr_tripmine3 = {"sk_plr_tripmine3","0"};
 
+// Pipe Wrench
+DECLARE_SKILL_CVARS( plr_pipewrench );
+
+// Knife
+DECLARE_SKILL_CVARS( plr_knife );
+
+// Grapple
+DECLARE_SKILL_CVARS( plr_grapple );
+
+// Desert Eagle
+DECLARE_SKILL_CVARS( plr_eagle );
+
+// Sniper Rifle
+DECLARE_SKILL_CVARS( plr_762_bullet );
+
+// M249
+DECLARE_SKILL_CVARS( plr_556_bullet );
+
+// Displacer
+DECLARE_SKILL_CVARS( plr_displacer_self );
+DECLARE_SKILL_CVARS( plr_displacer_other );
+DECLARE_SKILL_CVARS( plr_displacer_radius );
+
+// Shock Roach
+DECLARE_SKILL_CVARS( plr_shockroachs );
+DECLARE_SKILL_CVARS( plr_shockroachm );
+
+// Spore Launcher
+DECLARE_SKILL_CVARS( plr_spore );
 
 // WORLD WEAPONS
 cvar_t	sk_12mm_bullet1 = {"sk_12mm_bullet1","0"};
@@ -404,6 +522,8 @@ cvar_t	sk_healthkit3	= { "sk_healthkit3","0" };
 cvar_t	sk_scientist_heal1	= { "sk_scientist_heal1","0" };	
 cvar_t	sk_scientist_heal2	= { "sk_scientist_heal2","0" };	
 cvar_t	sk_scientist_heal3	= { "sk_scientist_heal3","0" };	
+
+DECLARE_SKILL_CVARS( cleansuit_scientist_heal );
 
 
 // monster damage adjusters
@@ -511,6 +631,9 @@ void GameDLLInit( void )
 	CVAR_REGISTER ( &sk_barney_health2 );// {"sk_barney_health2","0"};
 	CVAR_REGISTER ( &sk_barney_health3 );// {"sk_barney_health3","0"};
 
+	// Otis
+	REGISTER_SKILL_CVARS( otis_health );
+
 	// Bullsquid
 	CVAR_REGISTER ( &sk_bullsquid_health1 );// {"sk_bullsquid_health1","0"};
 	CVAR_REGISTER ( &sk_bullsquid_health2 );// {"sk_bullsquid_health2","0"};
@@ -528,6 +651,11 @@ void GameDLLInit( void )
 	CVAR_REGISTER ( &sk_bullsquid_dmg_spit2 );// {"sk_bullsquid_dmg_spit2","0"};
 	CVAR_REGISTER ( &sk_bullsquid_dmg_spit3 );// {"sk_bullsquid_dmg_spit3","0"};
 
+	// Pit Drone
+	REGISTER_SKILL_CVARS( pitdrone_health );
+	REGISTER_SKILL_CVARS( pitdrone_dmg_bite );
+	REGISTER_SKILL_CVARS( pitdrone_dmg_whip );
+	REGISTER_SKILL_CVARS( pitdrone_dmg_spit );
 
 	CVAR_REGISTER ( &sk_bigmomma_health_factor1 );// {"sk_bigmomma_health_factor1","1.0"};
 	CVAR_REGISTER ( &sk_bigmomma_health_factor2 );// {"sk_bigmomma_health_factor2","1.0"};
@@ -578,6 +706,10 @@ void GameDLLInit( void )
 	CVAR_REGISTER ( &sk_headcrab_dmg_bite2 );// {"sk_headcrab_dmg_bite2","0"};
 	CVAR_REGISTER ( &sk_headcrab_dmg_bite3 );// {"sk_headcrab_dmg_bite3","0"};
 
+	// Shock Roach
+	REGISTER_SKILL_CVARS( shockroach_health );
+	REGISTER_SKILL_CVARS( shockroach_dmg_bite );
+	REGISTER_SKILL_CVARS( shockroach_lifespan );
 
 	// Hgrunt 
 	CVAR_REGISTER ( &sk_hgrunt_health1 );// {"sk_hgrunt_health1","0"};
@@ -595,6 +727,38 @@ void GameDLLInit( void )
 	CVAR_REGISTER ( &sk_hgrunt_gspeed1 );
 	CVAR_REGISTER ( &sk_hgrunt_gspeed2 );
 	CVAR_REGISTER ( &sk_hgrunt_gspeed3 );
+
+	// Hgrunt Ally
+	REGISTER_SKILL_CVARS( hgrunt_ally_health );
+	REGISTER_SKILL_CVARS( hgrunt_ally_kick );
+	REGISTER_SKILL_CVARS( hgrunt_ally_pellets );
+	REGISTER_SKILL_CVARS( hgrunt_ally_gspeed );
+
+	// Hgrunt Medic
+	REGISTER_SKILL_CVARS( medic_ally_health );
+	REGISTER_SKILL_CVARS( medic_ally_kick );
+	REGISTER_SKILL_CVARS( medic_ally_pellets );
+	REGISTER_SKILL_CVARS( medic_ally_gspeed );
+	REGISTER_SKILL_CVARS( medic_ally_heal );
+
+	// Hgrunt Torch
+	REGISTER_SKILL_CVARS( torch_ally_health );
+	REGISTER_SKILL_CVARS( torch_ally_kick );
+	REGISTER_SKILL_CVARS( torch_ally_pellets );
+	REGISTER_SKILL_CVARS( torch_ally_gspeed );
+
+	// Male Assassin
+	REGISTER_SKILL_CVARS( massassin_health );
+	REGISTER_SKILL_CVARS( massassin_kick );
+	REGISTER_SKILL_CVARS( massassin_pellets );
+	REGISTER_SKILL_CVARS( massassin_gspeed );
+
+	// Shock Trooper
+	REGISTER_SKILL_CVARS( shocktrooper_health );
+	REGISTER_SKILL_CVARS( shocktrooper_kick );
+	REGISTER_SKILL_CVARS( shocktrooper_gspeed );
+	REGISTER_SKILL_CVARS( shocktrooper_maxcharge );
+	REGISTER_SKILL_CVARS( shocktrooper_rchgspeed );
 
 	// Houndeye
 	CVAR_REGISTER ( &sk_houndeye_health1 );// {"sk_houndeye_health1","0"};
@@ -676,6 +840,8 @@ void GameDLLInit( void )
 	CVAR_REGISTER ( &sk_scientist_health2 );// {"sk_scientist_health2","0"};
 	CVAR_REGISTER ( &sk_scientist_health3 );// {"sk_scientist_health3","0"};
 
+	// Cleansuit Scientist
+	REGISTER_SKILL_CVARS( cleansuit_scientist_health );
 
 	// Snark
 	CVAR_REGISTER ( &sk_snark_health1 );// {"sk_snark_health1","0"};
@@ -690,7 +856,24 @@ void GameDLLInit( void )
 	CVAR_REGISTER ( &sk_snark_dmg_pop2 );// {"sk_snark_dmg_pop2","0"};
 	CVAR_REGISTER ( &sk_snark_dmg_pop3 );// {"sk_snark_dmg_pop3","0"};
 
+	// Voltigore
+	REGISTER_SKILL_CVARS( voltigore_health );
+	REGISTER_SKILL_CVARS( voltigore_dmg_punch );
+	REGISTER_SKILL_CVARS( voltigore_dmg_beam );
 
+	// Baby Voltigore
+	REGISTER_SKILL_CVARS( babyvoltigore_health );
+	REGISTER_SKILL_CVARS( babyvoltigore_dmg_punch );
+
+	// Pit Worm
+	REGISTER_SKILL_CVARS( pitworm_health );
+	REGISTER_SKILL_CVARS( pitworm_dmg_swipe );
+	REGISTER_SKILL_CVARS( pitworm_dmg_beam );
+
+	// Gene Worm
+	REGISTER_SKILL_CVARS( geneworm_health );
+	REGISTER_SKILL_CVARS( geneworm_dmg_spit );
+	REGISTER_SKILL_CVARS( geneworm_dmg_hit );
 
 	// Zombie
 	CVAR_REGISTER ( &sk_zombie_health1 );// {"sk_zombie_health1","0"};
@@ -704,6 +887,22 @@ void GameDLLInit( void )
 	CVAR_REGISTER ( &sk_zombie_dmg_both_slash1 );// {"sk_zombie_dmg_both_slash1","0"};
 	CVAR_REGISTER ( &sk_zombie_dmg_both_slash2 );// {"sk_zombie_dmg_both_slash2","0"};
 	CVAR_REGISTER ( &sk_zombie_dmg_both_slash3 );// {"sk_zombie_dmg_both_slash3","0"};
+
+	// Zombie Barney
+	REGISTER_SKILL_CVARS( zombie_barney_health );
+	REGISTER_SKILL_CVARS( zombie_barney_dmg_one_slash );
+	REGISTER_SKILL_CVARS( zombie_barney_dmg_both_slash );
+
+	// Zombie Soldier
+	REGISTER_SKILL_CVARS( zombie_soldier_health );
+	REGISTER_SKILL_CVARS( zombie_soldier_dmg_one_slash );
+	REGISTER_SKILL_CVARS( zombie_soldier_dmg_both_slash );
+
+	// Gonome
+	REGISTER_SKILL_CVARS( gonome_dmg_guts );
+	REGISTER_SKILL_CVARS( gonome_health );
+	REGISTER_SKILL_CVARS( gonome_dmg_one_slash );
+	REGISTER_SKILL_CVARS( gonome_dmg_one_bite );
 
 
 	//Turret
@@ -808,6 +1007,36 @@ void GameDLLInit( void )
 	CVAR_REGISTER ( &sk_plr_tripmine2 );// {"sk_plr_tripmine2","0"};
 	CVAR_REGISTER ( &sk_plr_tripmine3 );// {"sk_plr_tripmine3","0"};
 
+	// Pipe Wrench
+	REGISTER_SKILL_CVARS( plr_pipewrench );
+
+	// Knife
+	REGISTER_SKILL_CVARS( plr_knife );
+
+	// Grapple
+	REGISTER_SKILL_CVARS( plr_grapple );
+
+	// Desert Eagle
+	REGISTER_SKILL_CVARS( plr_eagle );
+
+	// Sniper Rifle
+	REGISTER_SKILL_CVARS( plr_762_bullet );
+
+	// M249
+	REGISTER_SKILL_CVARS( plr_556_bullet );
+
+	// Displacer
+	REGISTER_SKILL_CVARS( plr_displacer_self );
+	REGISTER_SKILL_CVARS( plr_displacer_other );
+	REGISTER_SKILL_CVARS( plr_displacer_radius );
+
+	// Shock Roach
+	REGISTER_SKILL_CVARS( plr_shockroachs );
+	REGISTER_SKILL_CVARS( plr_shockroachm );
+
+	// Spore Launcher
+	REGISTER_SKILL_CVARS( plr_spore );
+
 
 	// WORLD WEAPONS
 	CVAR_REGISTER ( &sk_12mm_bullet1 );// {"sk_12mm_bullet1","0"};
@@ -848,6 +1077,8 @@ void GameDLLInit( void )
 	CVAR_REGISTER ( &sk_scientist_heal1 );
 	CVAR_REGISTER ( &sk_scientist_heal2 );
 	CVAR_REGISTER ( &sk_scientist_heal3 );
+
+	REGISTER_SKILL_CVARS( cleansuit_scientist_heal );
 
 // monster damage adjusters
 	CVAR_REGISTER ( &sk_monster_head1 );
@@ -900,5 +1131,6 @@ void GameDLLInit( void )
 	// END REGISTER CVARS FOR OPPOSING FORCE
 
 	SERVER_COMMAND( "exec skill.cfg\n" );
+	SERVER_COMMAND( "exec skillopfor.cfg\n" );
 }
 
