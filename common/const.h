@@ -779,5 +779,32 @@ typedef struct
 	int		hitgroup;		// 0 == generic, non zero is specific body part
 } trace_t;
 
+/**
+*	@brief Constants for entvars_t::waterlevel
+*	@see entvars_t::waterlevel
+*/
+enum WaterLevel
+{
+	/**
+	*	Not in water at all
+	*/
+	WATERLEVEL_DRY = 0,
+
+	/**
+	*	Standing in water, feet only
+	*/
+	WATERLEVEL_FEET = 1,
+
+	/**
+	*	Halfway submerged
+	*/
+	WATERLEVEL_WAIST = 2,
+
+	/**
+	*	Submerged up to eyes or more
+	*/
+	WATERLEVEL_HEAD = 3
+};
+
 #endif
 
