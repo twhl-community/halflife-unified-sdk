@@ -119,6 +119,8 @@
     <ClCompile Include="..\..\dlls\cbase.cpp" />
     <ClCompile Include="..\..\dlls\CDrillSergeant.cpp" />
     <ClCompile Include="..\..\dlls\client.cpp" />
+    <ClCompile Include="..\..\dlls\COFAllyMonster.cpp" />
+    <ClCompile Include="..\..\dlls\COFSquadTalkMonster.cpp" />
     <ClCompile Include="..\..\dlls\combat.cpp" />
     <ClCompile Include="..\..\dlls\controller.cpp" />
     <ClCompile Include="..\..\dlls\CRecruit.cpp" />
@@ -219,6 +221,8 @@
     <ClInclude Include="..\..\dlls\cdll_dll.h" />
     <ClInclude Include="..\..\dlls\CItemCTF.h" />
     <ClInclude Include="..\..\dlls\client.h" />
+    <ClInclude Include="..\..\dlls\COFAllyMonster.h" />
+    <ClInclude Include="..\..\dlls\COFSquadTalkMonster.h" />
     <ClInclude Include="..\..\dlls\CTFGoal.h" />
     <ClInclude Include="..\..\dlls\CTFGoalBase.h" />
     <ClInclude Include="..\..\dlls\CTFGoalFlag.h" />
