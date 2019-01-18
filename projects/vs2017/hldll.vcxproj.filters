@@ -546,16 +546,16 @@
       <Filter>Header Files\dlls</Filter>
     </ClInclude>
     <ClInclude Include="..\..\dlls\rope\CElectrifiedWire.h">
-      <Filter>Header Files\rope</Filter>
+      <Filter>Header Files\dlls\rope</Filter>
     </ClInclude>
     <ClInclude Include="..\..\dlls\rope\CRope.h">
-      <Filter>Header Files\rope</Filter>
+      <Filter>Header Files\dlls\rope</Filter>
     </ClInclude>
     <ClInclude Include="..\..\dlls\rope\CRopeSample.h">
-      <Filter>Header Files\rope</Filter>
+      <Filter>Header Files\dlls\rope</Filter>
     </ClInclude>
     <ClInclude Include="..\..\dlls\rope\CRopeSegment.h">
-      <Filter>Header Files\rope</Filter>
+      <Filter>Header Files\dlls\rope</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
