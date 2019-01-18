@@ -79,6 +79,7 @@ public:
 #define WEAPON_TRIPMINE			13
 #define	WEAPON_SATCHEL			14
 #define	WEAPON_SNARK			15
+#define WEAPON_EAGLE			17
 
 #define WEAPON_ALLWEAPONS		(~(1<<WEAPON_SUIT))
 
@@ -105,6 +106,7 @@ public:
 #define SNARK_WEIGHT		5
 #define SATCHEL_WEIGHT		-10
 #define TRIPMINE_WEIGHT		-10
+#define EAGLE_WEIGHT		15
 
 
 // weapon clip/carry ammo capacities
@@ -139,6 +141,7 @@ public:
 #define SATCHEL_MAX_CLIP		WEAPON_NOCLIP
 #define TRIPMINE_MAX_CLIP		WEAPON_NOCLIP
 #define SNARK_MAX_CLIP			WEAPON_NOCLIP
+#define EAGLE_MAX_CLIP			7
 
 
 // the default amount of ammo that comes with each gun when it spawns
@@ -677,12 +680,12 @@ private:
 
 class CLaserSpot : public CBaseEntity
 {
+public:
 	void Spawn( void );
 	void Precache( void );
 
 	int	ObjectCaps( void ) { return FCAP_DONT_SAVE; }
 
-public:
 	void Suspend( float flSuspendTime );
 	void EXPORT Revive( void );
 	

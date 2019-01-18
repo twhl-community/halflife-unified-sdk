@@ -40,8 +40,14 @@
     <Filter Include="Source Files\dlls\rope">
       <UniqueIdentifier>{8916e080-91ab-48f7-8f59-6cc9497efef1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\dlls\weapons">
+      <UniqueIdentifier>{77768f37-3938-4e92-afeb-8f4fabab6919}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Header Files\dlls\rope">
       <UniqueIdentifier>{25bcec5f-fe9f-443f-b81c-ed38b2b511a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\dlls\weapons">
+      <UniqueIdentifier>{793b2d9a-ab13-4cf4-bf35-5f99e080e1b6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -381,6 +387,12 @@
     <ClCompile Include="..\..\dlls\rope\CRopeSegment.cpp">
       <Filter>Source Files\dlls\rope</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\dlls\weapons\CEagle.cpp">
+      <Filter>Source Files\dlls\weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\weapons\CEagleLaser.cpp">
+      <Filter>Source Files\dlls\weapons</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\dlls\doors.h">
@@ -556,6 +568,12 @@
     </ClInclude>
     <ClInclude Include="..\..\dlls\rope\CRopeSegment.h">
       <Filter>Header Files\dlls\rope</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\weapons\CEagle.h">
+      <Filter>Header Files\dlls\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\weapons\CEagleLaser.h">
+      <Filter>Header Files\dlls\weapons</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
