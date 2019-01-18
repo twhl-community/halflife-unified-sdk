@@ -3109,7 +3109,7 @@ void CDeadHGruntAlly::KeyValue( KeyValueData *pkvd )
 		CBaseMonster::KeyValue( pkvd );
 }
 
-LINK_ENTITY_TO_CLASS( monster_hgrunt_ally_dead, CDeadHGruntAlly );
+LINK_ENTITY_TO_CLASS( monster_human_grunt_ally_dead, CDeadHGruntAlly );
 
 //=========================================================
 // ********** DeadHGrunt SPAWN **********
