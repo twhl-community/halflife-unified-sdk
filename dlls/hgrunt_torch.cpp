@@ -591,7 +591,7 @@ BOOL COFTorchAlly :: CheckRangeAttack2 ( float flDot, float flDist )
 		vecTarget = m_vecEnemyLKP + (m_hEnemy->BodyTarget( pev->origin ) - m_hEnemy->pev->origin);
 		// estimate position
 		if (HasConditions( bits_COND_SEE_ENEMY))
-			vecTarget = vecTarget + ((vecTarget - pev->origin).Length() / gSkillData.hgruntAllyGrenadeSpeed) * m_hEnemy->pev->velocity;
+			vecTarget = vecTarget + ((vecTarget - pev->origin).Length() / gSkillData.torchAllyGrenadeSpeed) * m_hEnemy->pev->velocity;
 	}
 
 	// are any of my squad members near the intended grenade impact area?
@@ -637,7 +637,7 @@ BOOL COFTorchAlly :: CheckRangeAttack2 ( float flDot, float flDist )
 	}
 	else
 	{
-		Vector vecToss = VecCheckThrow( pev, GetGunPosition(), vecTarget, gSkillData.hgruntAllyGrenadeSpeed, 0.5 );
+		Vector vecToss = VecCheckThrow( pev, GetGunPosition(), vecTarget, gSkillData.torchAllyGrenadeSpeed, 0.5 );
 
 		if ( vecToss != g_vecZero )
 		{
@@ -1016,7 +1016,7 @@ void COFTorchAlly :: HandleAnimEvent( MonsterEvent_t *pEvent )
 				UTIL_MakeVectors( pev->angles );
 				pHurt->pev->punchangle.x = 15;
 				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_forward * 100 + gpGlobals->v_up * 50;
-				pHurt->TakeDamage( pev, pev, gSkillData.hgruntAllyDmgKick, DMG_CLUB );
+				pHurt->TakeDamage( pev, pev, gSkillData.torchAllyDmgKick, DMG_CLUB );
 			}
 		}
 		break;
