@@ -20,6 +20,7 @@
 #include "nodes.h"
 #include "player.h"
 #include "weapons/CEagle.h"
+#include "weapons/CSniperRifle.h"
 
 #include "usercmd.h"
 #include "entity_state.h"
@@ -68,6 +69,7 @@ CSatchel g_Satchel;
 CTripmine g_Tripmine;
 CSqueak g_Snark;
 CEagle g_Eagle;
+CSniperRifle g_SniperRifle;
 
 
 /*
@@ -622,6 +624,7 @@ void HUD_InitClientWeapons( void )
 	HUD_PrepEntity( &g_Tripmine	, &player );
 	HUD_PrepEntity( &g_Snark	, &player );
 	HUD_PrepEntity( &g_Eagle, &player );
+	HUD_PrepEntity( &g_SniperRifle, &player );
 }
 
 /*
@@ -745,6 +748,10 @@ void HUD_WeaponsPostThink( local_state_s *from, local_state_s *to, usercmd_t *cm
 
 		case WEAPON_EAGLE:
 			pWeapon = &g_Eagle;
+			break;
+
+		case WEAPON_SNIPERRIFLE:
+			pWeapon = &g_SniperRifle;
 			break;
 	}
 

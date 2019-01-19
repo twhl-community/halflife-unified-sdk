@@ -38,6 +38,7 @@
 //To avoid having to refactor a bunch of code, just exclude classes
 #define WEAPONS_NO_CLASSES
 #include "weapons/CEagle.h"
+#include "weapons/CSniperRifle.h"
 
 extern engine_studio_api_t IEngineStudio;
 
@@ -73,6 +74,7 @@ void EV_HornetGunFire( struct event_args_s *args  );
 void EV_TripmineFire( struct event_args_s *args  );
 void EV_SnarkFire( struct event_args_s *args  );
 void EV_FireEagle( struct event_args_s* args );
+void EV_SniperRifle( struct event_args_s* args );
 
 
 void EV_TrainPitchAdjust( struct event_args_s *args );
@@ -1723,6 +1725,50 @@ void EV_FireEagle( event_args_t* args )
 		BULLET_PLAYER_EAGLE,
 		0, nullptr,
 		args->fparam1, args->fparam2 );
+}
+
+void EV_SniperRifle( event_args_t* args )
+{
+	const int idx = args->entindex;
+	Vector vecOrigin = args->origin;
+	Vector vecAngles = args->angles;
+
+	const int iClip = args->iparam1;
+
+	Vector up, right, forward;
+
+	AngleVectors( vecAngles, forward, right, up );
+
+	if( EV_IsLocal( idx ) )
+	{
+		EV_MuzzleFlash();
+		gEngfuncs.pEventAPI->EV_WeaponAnimation( iClip <= 0 ? SNIPERRIFLE_FIRELASTROUND : SNIPERRIFLE_FIRE, 0 );
+		V_PunchAxis( 0, -2.0 );
+	}
+
+	gEngfuncs.pEventAPI->EV_PlaySound( idx, vecOrigin,
+		CHAN_WEAPON, "weapons/sniper_fire.wav",
+		gEngfuncs.pfnRandomFloat( 0.9f, 1.0f ), ATTN_NORM, 0, 98 + gEngfuncs.pfnRandomLong( 0, 3 ) );
+
+	Vector vecSrc;
+	Vector vecAiming = forward;
+
+	EV_GetGunPosition( args, vecSrc, vecOrigin );
+
+	EV_HLDM_FireBullets(
+		idx,
+		forward,
+		right,
+		up,
+		1,
+		vecSrc,
+		vecAiming,
+		8192.0,
+		BULLET_PLAYER_762,
+		0,
+		0,
+		args->fparam1,
+		args->fparam2 );
 }
 
 void EV_TrainPitchAdjust( event_args_t *args )

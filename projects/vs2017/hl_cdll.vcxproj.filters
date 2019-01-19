@@ -321,6 +321,9 @@
     <ClCompile Include="..\..\dlls\weapons\CEagle.cpp">
       <Filter>Source Files\_hl\dlls\weapons</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\dlls\weapons\CSniperRifle.cpp">
+      <Filter>Source Files\_hl\dlls\weapons</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\cl_dll\kbutton.h">
@@ -447,6 +450,9 @@
       <Filter>Header Files\common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\dlls\weapons\CEagle.h">
+      <Filter>Header Files\_hl\dlls\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\weapons\CSniperRifle.h">
       <Filter>Header Files\_hl\dlls\weapons</Filter>
     </ClInclude>
   </ItemGroup>
