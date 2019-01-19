@@ -92,8 +92,6 @@ enum TorchAllyWeaponFlag
 };
 }
 
-const int SF_HGRUNTALLY_SQUADLEADER = 1 << 5;
-
 //=========================================================
 // Monster's Anim Events Go Here
 //=========================================================
