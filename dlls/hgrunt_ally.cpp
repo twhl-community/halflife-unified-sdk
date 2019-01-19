@@ -54,7 +54,7 @@ extern DLL_GLOBAL int		g_iSkillLevel;
 //=========================================================
 #define	GRUNT_MP5_CLIP_SIZE				36 // how many bullets in a clip? - NOTE: 3 round burst sound, so keep as 3 * x!
 #define GRUNT_SHOTGUN_CLIP_SIZE			8
-#define GRUNT_MP5_CLIP_SIZE				36
+#define GRUNT_SAW_CLIP_SIZE				36
 #define GRUNT_VOL						0.35		// volume of grunt sounds
 #define GRUNT_ATTN						ATTN_NORM	// attenutation of grunt sentences
 #define HGRUNT_LIMP_HEALTH				20
@@ -265,6 +265,7 @@ LINK_ENTITY_TO_CLASS( monster_human_grunt_ally, CHGruntAlly );
 
 TYPEDESCRIPTION	CHGruntAlly::m_SaveData[] = 
 {
+	DEFINE_FIELD( CHGruntAlly, m_flPlayerDamage, FIELD_FLOAT ),
 	DEFINE_FIELD( CHGruntAlly, m_flNextGrenadeCheck, FIELD_TIME ),
 	DEFINE_FIELD( CHGruntAlly, m_flNextPainTime, FIELD_TIME ),
 //	DEFINE_FIELD( CHGruntAlly, m_flLastEnemySightTime, FIELD_TIME ), // don't save, go to zero
@@ -273,7 +274,7 @@ TYPEDESCRIPTION	CHGruntAlly::m_SaveData[] =
 	DEFINE_FIELD( CHGruntAlly, m_fStanding, FIELD_BOOLEAN ),
 	DEFINE_FIELD( CHGruntAlly, m_fFirstEncounter, FIELD_BOOLEAN ),
 	DEFINE_FIELD( CHGruntAlly, m_cClipSize, FIELD_INTEGER ),
-	DEFINE_FIELD( CHGruntAlly, m_voicePitch, FIELD_INTEGER ),
+//	DEFINE_FIELD( CHGruntAlly, m_voicePitch, FIELD_INTEGER ),
 //  DEFINE_FIELD( CShotgun, m_iBrassShell, FIELD_INTEGER ),
 //  DEFINE_FIELD( CShotgun, m_iShotgunShell, FIELD_INTEGER ),
 	DEFINE_FIELD( CHGruntAlly, m_iSentence, FIELD_INTEGER ),
@@ -552,7 +553,7 @@ BOOL CHGruntAlly :: CheckRangeAttack1 ( float flDot, float flDist )
 			const auto targetPosition = targetOrigin - pEnemy->pev->origin + m_vecEnemyLKP;
 
 			// verify that a bullet fired from the gun will hit the enemy before the world.
-			UTIL_TraceLine( vecSrc, targetPosition, ignore_monsters, ignore_glass, ENT( pev ), &tr );
+			UTIL_TraceLine( vecSrc, targetPosition, dont_ignore_monsters, ENT( pev ), &tr );
 
 			m_lastAttackCheck = tr.flFraction == 1.0 ? true : tr.pHit && GET_PRIVATE( tr.pHit ) == pEnemy;
 
@@ -718,7 +719,8 @@ void CHGruntAlly :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector 
 		ptr->iHitgroup = HITGROUP_HEAD;
 	}
 	//PCV absorbs some damage types
-	else if( ptr->iHitgroup == HITGROUP_CHEST && ( bitsDamageType & ( DMG_BLAST | DMG_BULLET | DMG_SLASH ) ) )
+	else if( ( ptr->iHitgroup == HITGROUP_CHEST || ptr->iHitgroup == HITGROUP_STOMACH )
+		&& ( bitsDamageType & ( DMG_BLAST | DMG_BULLET | DMG_SLASH ) ) )
 	{
 		flDamage*= 0.5;
 	}
@@ -1194,7 +1196,7 @@ void CHGruntAlly :: Spawn()
 	else if( pev->weapons & HGruntAllyWeaponFlag::Saw )
 	{
 		m_iWeaponIdx = HGruntAllyWeapon::Saw;
-		m_cClipSize = GRUNT_MP5_CLIP_SIZE;
+		m_cClipSize = GRUNT_SAW_CLIP_SIZE;
 		m_iGruntTorso = HGruntAllyTorso::Saw;
 	}
 	else
@@ -1297,6 +1299,8 @@ void CHGruntAlly :: Precache()
 
 	m_iBrassShell = PRECACHE_MODEL ("models/shell.mdl");// brass shell
 	m_iShotgunShell = PRECACHE_MODEL ("models/shotgunshell.mdl");
+
+	COFSquadTalkMonster::Precache();
 }	
 
 //=========================================================
