@@ -22,6 +22,16 @@
 
 #include "CEagle.h"
 
+#ifndef CLIENT_DLL
+TYPEDESCRIPTION	CEagle::m_SaveData[] =
+{
+	DEFINE_FIELD( CEagle, m_bSpotVisible, FIELD_INTEGER ),
+	DEFINE_FIELD( CEagle, m_bLaserActive, FIELD_INTEGER ),
+};
+
+IMPLEMENT_SAVERESTORE( CEagle, CEagle::BaseClass );
+#endif
+
 LINK_ENTITY_TO_CLASS( weapon_eagle, CEagle );
 
 void CEagle::Precache()

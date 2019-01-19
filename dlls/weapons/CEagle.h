@@ -38,6 +38,13 @@ class CEagle : public CBasePlayerWeapon
 public:
 	using BaseClass = CBasePlayerWeapon;
 
+#ifndef CLIENT_DLL
+	int Save( CSave &save ) override;
+	int Restore( CRestore &restore ) override;
+
+	static TYPEDESCRIPTION m_SaveData[];
+#endif
+
 	void Precache() override;
 
 	void Spawn() override;
@@ -60,6 +67,7 @@ public:
 
 	int GetItemInfo( ItemInfo* p ) override;
 
+	//TODO: requires oldweapons cvar
 	BOOL UseDecrement() override
 	{
 #if defined( CLIENT_WEAPONS )
@@ -80,8 +88,8 @@ private:
 	int m_iShell;
 	unsigned short m_usFireEagle;
 
-	bool m_bSpotVisible;
-	bool m_bLaserActive;
+	BOOL m_bSpotVisible;
+	BOOL m_bLaserActive;
 	CEagleLaser* m_pLaser;
 };
 #endif
