@@ -179,6 +179,7 @@ public:
 #define AMMO_RPGCLIP_GIVE		RPG_MAX_CLIP
 #define AMMO_URANIUMBOX_GIVE	20
 #define AMMO_SNARKBOX_GIVE		5
+#define AMMO_EAGLE_GIVE			7
 #define AMMO_SNIPERRIFLE_GIVE	5
 
 // bullet types

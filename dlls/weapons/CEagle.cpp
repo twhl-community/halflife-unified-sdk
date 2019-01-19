@@ -357,3 +357,32 @@ void CEagle::SetWeaponData( const weapon_data_t& data )
 
 	m_bLaserActive = data.iuser1 != 0;
 }
+
+class CEagleAmmo : public CBasePlayerAmmo
+{
+	void Spawn() override
+	{
+		Precache();
+		//TODO: could probably use a better model
+		SET_MODEL( ENT( pev ), "models/w_9mmclip.mdl" );
+		CBasePlayerAmmo::Spawn();
+	}
+
+	void Precache() override
+	{
+		PRECACHE_MODEL( "models/w_9mmclip.mdl" );
+		PRECACHE_SOUND( "items/9mmclip1.wav" );
+	}
+
+	BOOL AddAmmo( CBaseEntity* pOther ) override
+	{
+		if( pOther->GiveAmmo( AMMO_EAGLE_GIVE, "357", _357_MAX_CARRY ) != -1 )
+		{
+			EMIT_SOUND( ENT( pev ), CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM );
+			return TRUE;
+		}
+		return FALSE;
+	}
+};
+
+LINK_ENTITY_TO_CLASS( ammo_eagleclip, CEagleAmmo );
