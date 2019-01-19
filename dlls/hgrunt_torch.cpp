@@ -931,7 +931,7 @@ void COFTorchAlly :: Shoot ( void )
 
 	const auto pitch = random <= 10 ? random + 95 : 100;
 
-	EMIT_SOUND_DYN( edict(), CHAN_WEAPON, "weapons_desert_eagle_fire.wav", VOL_NORM, ATTN_NORM, 0, pitch );
+	EMIT_SOUND_DYN( edict(), CHAN_WEAPON, "weapons/desert_eagle_fire.wav", VOL_NORM, ATTN_NORM, 0, pitch );
 
 	pev->effects |= EF_MUZZLEFLASH;
 	
