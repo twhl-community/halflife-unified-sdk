@@ -123,8 +123,6 @@ enum HGruntAllyWeapon
 };
 }
 
-const int SF_HGRUNTALLY_SQUADLEADER = 1 << 5;
-
 //=========================================================
 // Monster's Anim Events Go Here
 //=========================================================
@@ -1209,19 +1207,19 @@ void CHGruntAlly :: Spawn()
 
 	if( m_iGruntHead == HGruntAllyHead::Default )
 	{
-		if( pev->spawnflags & SF_HGRUNTALLY_SQUADLEADER )
+		if( pev->spawnflags & SF_SQUADMONSTER_LEADER )
 		{
 			m_iGruntHead = HGruntAllyHead::BeretWhite;
 		}
-		else if( m_iWeaponIdx == 1 )
+		else if( m_iWeaponIdx == HGruntAllyWeapon::Shotgun )
 		{
 			m_iGruntHead = HGruntAllyHead::OpsMask;
 		}
-		else if( m_iWeaponIdx == 2 )
+		else if( m_iWeaponIdx == HGruntAllyWeapon::Saw )
 		{
 			m_iGruntHead = RANDOM_LONG( 0, 1 ) + HGruntAllyHead::BandanaWhite;
 		}
-		else if( m_iWeaponIdx )
+		else if( m_iWeaponIdx == HGruntAllyWeapon::MP5 )
 		{
 			m_iGruntHead = HGruntAllyHead::MilitaryPolice;
 		}
