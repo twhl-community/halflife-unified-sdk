@@ -1021,16 +1021,6 @@ void COFTorchAlly :: HandleAnimEvent( MonsterEvent_t *pEvent )
 		}
 		break;
 
-		case TORCH_AE_CAUGHT_ENEMY:
-		{
-			if ( FOkToSpeak() )
-			{
-				SENTENCEG_PlayRndSz(ENT(pev), "FG_ALERT", TORCH_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
-				 JustSpoke();
-			}
-
-		}
-
 		case TORCH_AE_HOLSTER_TORCH:
 			{
 				SetBodygroup( TorchAllyBodygroup::Weapons, TorchAllyWeapon::DesertEagle );
@@ -1092,6 +1082,16 @@ void COFTorchAlly :: HandleAnimEvent( MonsterEvent_t *pEvent )
 				}
 				break;
 			}
+
+		case TORCH_AE_CAUGHT_ENEMY:
+		{
+			if ( FOkToSpeak() )
+			{
+				SENTENCEG_PlayRndSz(ENT(pev), "FG_ALERT", TORCH_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
+				 JustSpoke();
+			}
+
+		}
 
 		default:
 			COFSquadTalkMonster::HandleAnimEvent( pEvent );
