@@ -925,7 +925,7 @@ void COFTorchAlly :: Shoot ( void )
 
 	UTIL_MakeVectors ( pev->angles );
 
-	FireBullets(1, vecShootOrigin, vecShootDir, VECTOR_CONE_2DEGREES, 1024, BULLET_PLAYER_357 ); // shoot +-5 degrees
+	FireBullets(1, vecShootOrigin, vecShootDir, VECTOR_CONE_2DEGREES, 1024, BULLET_PLAYER_357, 0 ); // shoot +-5 degrees
 
 	const auto random = RANDOM_LONG( 0, 20 );
 
