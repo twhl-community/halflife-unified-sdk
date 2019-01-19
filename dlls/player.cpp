@@ -1172,6 +1172,8 @@ void CBasePlayer::TabulateAmmo()
 	ammo_rockets = AmmoInventory( GetAmmoIndex( "rockets" ) );
 	ammo_uranium = AmmoInventory( GetAmmoIndex( "uranium" ) );
 	ammo_hornets = AmmoInventory( GetAmmoIndex( "Hornets" ) );
+	ammo_spores = AmmoInventory( GetAmmoIndex( "spores" ) );
+	ammo_762 = AmmoInventory( GetAmmoIndex( "762" ) );
 }
 
 

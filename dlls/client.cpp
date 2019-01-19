@@ -1736,6 +1736,8 @@ void UpdateClientData ( const edict_t *ent, int sendweapons, struct clientdata_s
 			cd->ammo_rockets	= pl->ammo_rockets;
 			cd->ammo_cells		= pl->ammo_uranium;
 			cd->vuser2.x		= pl->ammo_hornets;
+			cd->vuser2.y		= pl->ammo_spores;
+			cd->vuser2.z		= pl->ammo_762;
 			
 
 			if ( pl->m_pActiveItem )
