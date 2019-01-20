@@ -40,6 +40,7 @@
 #include "weapons/CEagle.h"
 #include "weapons/CPipewrench.h"
 #include "weapons/CSniperRifle.h"
+#include "weapons/CKnife.h"
 
 extern engine_studio_api_t IEngineStudio;
 
@@ -77,6 +78,7 @@ void EV_SnarkFire( struct event_args_s *args  );
 void EV_FireEagle( struct event_args_s* args );
 void EV_Pipewrench( struct event_args_s* args );
 void EV_SniperRifle( struct event_args_s* args );
+void EV_Knife( struct event_args_s* args );
 
 
 void EV_TrainPitchAdjust( struct event_args_s *args );
@@ -1819,6 +1821,40 @@ void EV_SniperRifle( event_args_t* args )
 		0,
 		args->fparam1,
 		args->fparam2 );
+}
+
+//Only predict the miss sounds, hit sounds are still played 
+//server side, so players don't get the wrong idea.
+void EV_Knife( event_args_t* args )
+{
+	const int idx = args->entindex;
+	Vector origin = args->origin;
+
+	const char* pszSwingSound;
+
+	switch( g_iSwing )
+	{
+	default:
+	case 0: pszSwingSound = "weapons/knife1.wav"; break;
+	case 1: pszSwingSound = "weapons/knife2.wav"; break;
+	case 2: pszSwingSound = "weapons/knife3.wav"; break;
+	}
+
+	//Play Swing sound
+	gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_WEAPON, pszSwingSound, 1, ATTN_NORM, 0, PITCH_NORM );
+
+	if( EV_IsLocal( idx ) )
+	{
+		switch( ( g_iSwing++ ) % 3 )
+		{
+		case 0:
+			gEngfuncs.pEventAPI->EV_WeaponAnimation( KNIFE_ATTACK1MISS, 0 ); break;
+		case 1:
+			gEngfuncs.pEventAPI->EV_WeaponAnimation( KNIFE_ATTACK2, 0 ); break;
+		case 2:
+			gEngfuncs.pEventAPI->EV_WeaponAnimation( KNIFE_ATTACK3, 0 ); break;
+		}
+	}
 }
 
 void EV_TrainPitchAdjust( event_args_t *args )

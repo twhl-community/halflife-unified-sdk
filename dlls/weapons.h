@@ -82,6 +82,7 @@ public:
 #define WEAPON_EAGLE			17
 #define WEAPON_PIPEWRENCH		18
 #define WEAPON_SNIPERRIFLE		24
+#define WEAPON_KNIFE			25
 
 #define WEAPON_ALLWEAPONS		(~(1<<WEAPON_SUIT))
 
