@@ -38,6 +38,7 @@
 //To avoid having to refactor a bunch of code, just exclude classes
 #define WEAPONS_NO_CLASSES
 #include "weapons/CEagle.h"
+#include "weapons/CPipewrench.h"
 #include "weapons/CSniperRifle.h"
 
 extern engine_studio_api_t IEngineStudio;
@@ -74,6 +75,7 @@ void EV_HornetGunFire( struct event_args_s *args  );
 void EV_TripmineFire( struct event_args_s *args  );
 void EV_SnarkFire( struct event_args_s *args  );
 void EV_FireEagle( struct event_args_s* args );
+void EV_Pipewrench( struct event_args_s* args );
 void EV_SniperRifle( struct event_args_s* args );
 
 
@@ -1726,6 +1728,54 @@ void EV_FireEagle( event_args_t* args )
 		0, nullptr,
 		args->fparam1, args->fparam2 );
 }
+
+//======================
+//	PIPE WRENCH START
+//======================
+//Only predict the miss sounds, hit sounds are still played 
+//server side, so players don't get the wrong idea.
+void EV_Pipewrench( event_args_t *args )
+{
+	const int idx = args->entindex;
+	Vector origin = args->origin;
+	const int iBigSwing = args->bparam1;
+
+	//Play Swing sound
+	if( iBigSwing )
+		gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_WEAPON, "weapons/pwrench_big_miss.wav", 1, ATTN_NORM, 0, PITCH_NORM );
+	else
+	{
+		switch( gEngfuncs.pfnRandomLong( 0, 1 ) )
+		{
+		case 0: gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_WEAPON, "weapons/pwrench_miss1.wav", 1, ATTN_NORM, 0, PITCH_NORM ); break;
+		case 1: gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_WEAPON, "weapons/pwrench_miss2.wav", 1, ATTN_NORM, 0, PITCH_NORM ); break;
+		}
+	}
+
+	if( EV_IsLocal( idx ) )
+	{
+		if( iBigSwing )
+		{
+			V_PunchAxis( 0, -2.0 );
+			gEngfuncs.pEventAPI->EV_WeaponAnimation( PIPEWRENCH_BIG_SWING_MISS, 1 );
+		}
+		else
+		{
+			switch( ( g_iSwing++ ) % 3 )
+			{
+			case 0:
+				gEngfuncs.pEventAPI->EV_WeaponAnimation( PIPEWRENCH_ATTACK1MISS, 1 ); break;
+			case 1:
+				gEngfuncs.pEventAPI->EV_WeaponAnimation( PIPEWRENCH_ATTACK2MISS, 1 ); break;
+			case 2:
+				gEngfuncs.pEventAPI->EV_WeaponAnimation( PIPEWRENCH_ATTACK3MISS, 1 ); break;
+			}
+		}
+	}
+}
+//======================
+//	 PIPE WRENCH END 
+//======================
 
 void EV_SniperRifle( event_args_t* args )
 {

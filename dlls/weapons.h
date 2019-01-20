@@ -80,6 +80,7 @@ public:
 #define	WEAPON_SATCHEL			14
 #define	WEAPON_SNARK			15
 #define WEAPON_EAGLE			17
+#define WEAPON_PIPEWRENCH		18
 #define WEAPON_SNIPERRIFLE		24
 
 #define WEAPON_ALLWEAPONS		(~(1<<WEAPON_SUIT))
@@ -108,6 +109,7 @@ public:
 #define SATCHEL_WEIGHT		-10
 #define TRIPMINE_WEIGHT		-10
 #define EAGLE_WEIGHT		15
+#define PIPEWRENCH_WEIGHT	2
 #define SNIPERRIFLE_WEIGHT	10
 
 
@@ -421,6 +423,8 @@ typedef struct
 } MULTIDAMAGE;
 
 extern MULTIDAMAGE gMultiDamage;
+
+void FindHullIntersection( const Vector &vecSrc, TraceResult &tr, float *mins, float *maxs, edict_t *pEntity );
 
 
 #define LOUD_GUN_VOLUME			1000

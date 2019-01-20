@@ -20,6 +20,7 @@
 #include "nodes.h"
 #include "player.h"
 #include "weapons/CEagle.h"
+#include "weapons/CPipewrench.h"
 #include "weapons/CSniperRifle.h"
 
 #include "usercmd.h"
@@ -69,6 +70,7 @@ CSatchel g_Satchel;
 CTripmine g_Tripmine;
 CSqueak g_Snark;
 CEagle g_Eagle;
+CPipewrench g_Pipewrench;
 CSniperRifle g_SniperRifle;
 
 
@@ -624,6 +626,7 @@ void HUD_InitClientWeapons( void )
 	HUD_PrepEntity( &g_Tripmine	, &player );
 	HUD_PrepEntity( &g_Snark	, &player );
 	HUD_PrepEntity( &g_Eagle, &player );
+	HUD_PrepEntity( &g_Pipewrench, &player );
 	HUD_PrepEntity( &g_SniperRifle, &player );
 }
 
@@ -748,6 +751,10 @@ void HUD_WeaponsPostThink( local_state_s *from, local_state_s *to, usercmd_t *cm
 
 		case WEAPON_EAGLE:
 			pWeapon = &g_Eagle;
+			break;
+
+		case WEAPON_PIPEWRENCH:
+			pWeapon = &g_Pipewrench;
 			break;
 
 		case WEAPON_SNIPERRIFLE:
