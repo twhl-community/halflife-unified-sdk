@@ -864,3 +864,63 @@ void CISlave :: ClearBeams( )
 
 	STOP_SOUND( ENT(pev), CHAN_WEAPON, "debris/zap4.wav" );
 }
+
+//=========================================================
+// DEAD ALIEN SLAVE PROP
+//
+// Designer selects a pose in worldcraft, 0 through num_poses-1
+// this value is added to what is selected as the 'first dead pose'
+// among the monster's normal animations. All dead poses must
+// appear sequentially in the model file. Be sure and set
+// the m_iFirstPose properly!
+//
+//=========================================================
+class CDeadISlave : public CBaseMonster
+{
+public:
+	void Spawn( void );
+	int	Classify( void ) { return	CLASS_ALIEN_PASSIVE; }
+
+	void KeyValue( KeyValueData *pkvd );
+
+	int	m_iPose;// which sequence to display	-- temporary, don't need to save
+	static char *m_szPoses[ 1 ];
+};
+
+char *CDeadISlave::m_szPoses[] = { "dead_on_stomach" };
+
+void CDeadISlave::KeyValue( KeyValueData *pkvd )
+{
+	if( FStrEq( pkvd->szKeyName, "pose" ) )
+	{
+		m_iPose = atoi( pkvd->szValue );
+		pkvd->fHandled = TRUE;
+	}
+	else
+		CBaseMonster::KeyValue( pkvd );
+}
+
+LINK_ENTITY_TO_CLASS( monster_alien_slave_dead, CDeadISlave );
+
+//=========================================================
+// ********** DeadISlave SPAWN **********
+//=========================================================
+void CDeadISlave::Spawn()
+{
+	PRECACHE_MODEL( "models/islave.mdl" );
+	SET_MODEL( ENT( pev ), "models/islave.mdl" );
+
+	pev->effects = 0;
+	pev->sequence = 0;
+	m_bloodColor = BLOOD_COLOR_GREEN;
+
+	pev->sequence = LookupSequence( m_szPoses[ m_iPose ] );
+	if( pev->sequence == -1 )
+	{
+		ALERT( at_console, "Dead slave with bad pose\n" );
+	}
+	// Corpses have less health
+	pev->health = 8;//gSkillData.slaveHealth;
+
+	MonsterInitDead();
+}
