@@ -692,4 +692,3 @@ inline CEntityEnumeratorWithStart<T, FindByTargetnameFunctor<T>> UTIL_FindEntiti
 {
 	return { pszName, pStartEntity };
 }
-#include <unordered_map>
