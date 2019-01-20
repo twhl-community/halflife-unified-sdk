@@ -182,6 +182,7 @@
     <ClCompile Include="..\..\dlls\weapons\CPipewrench.cpp" />
     <ClCompile Include="..\..\dlls\weapons\CShockRifle.cpp" />
     <ClCompile Include="..\..\dlls\weapons\CSniperRifle.cpp" />
+    <ClCompile Include="..\..\dlls\weapons\CSporeLauncher.cpp" />
     <ClCompile Include="..\..\dlls\wpn_shared\hl_wpn_glock.cpp" />
     <ClCompile Include="..\..\game_shared\vgui_checkbutton2.cpp" />
     <ClCompile Include="..\..\game_shared\vgui_grid.cpp" />
@@ -233,6 +234,7 @@
     <ClInclude Include="..\..\dlls\weapons\CPipewrench.h" />
     <ClInclude Include="..\..\dlls\weapons\CShockRifle.h" />
     <ClInclude Include="..\..\dlls\weapons\CSniperRifle.h" />
+    <ClInclude Include="..\..\dlls\weapons\CSporeLauncher.h" />
     <ClInclude Include="..\..\game_shared\vgui_scrollbar2.h" />
     <ClInclude Include="..\..\game_shared\vgui_slider2.h" />
     <ClInclude Include="..\..\game_shared\voice_banmgr.h" />

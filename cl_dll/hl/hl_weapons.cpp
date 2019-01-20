@@ -20,8 +20,9 @@
 #include "nodes.h"
 #include "player.h"
 #include "weapons/CEagle.h"
-#include "weapons/CShockRifle.h"
 #include "weapons/CPipewrench.h"
+#include "weapons/CShockRifle.h"
+#include "weapons/CSporeLauncher.h"
 #include "weapons/CSniperRifle.h"
 #include "weapons/CKnife.h"
 
@@ -74,6 +75,7 @@ CSqueak g_Snark;
 CEagle g_Eagle;
 CShockRifle g_ShockRifle;
 CPipewrench g_Pipewrench;
+CSporeLauncher g_SporeLauncher;
 CSniperRifle g_SniperRifle;
 CKnife g_Knife;
 
@@ -630,8 +632,9 @@ void HUD_InitClientWeapons( void )
 	HUD_PrepEntity( &g_Tripmine	, &player );
 	HUD_PrepEntity( &g_Snark	, &player );
 	HUD_PrepEntity( &g_Eagle, &player );
-	HUD_PrepEntity( &g_ShockRifle, &player );
 	HUD_PrepEntity( &g_Pipewrench, &player );
+	HUD_PrepEntity( &g_ShockRifle, &player );
+	HUD_PrepEntity( &g_SporeLauncher, &player );
 	HUD_PrepEntity( &g_SniperRifle, &player );
 	HUD_PrepEntity( &g_Knife, &player );
 }
@@ -759,12 +762,16 @@ void HUD_WeaponsPostThink( local_state_s *from, local_state_s *to, usercmd_t *cm
 			pWeapon = &g_Eagle;
 			break;
 
+		case WEAPON_PIPEWRENCH:
+			pWeapon = &g_Pipewrench;
+			break;
+
 		case WEAPON_SHOCKRIFLE:
 			pWeapon = &g_ShockRifle;
 			break;
 
-		case WEAPON_PIPEWRENCH:
-			pWeapon = &g_Pipewrench;
+		case WEAPON_SPORELAUNCHER:
+			pWeapon = &g_SporeLauncher;
 			break;
 
 		case WEAPON_SNIPERRIFLE:

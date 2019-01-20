@@ -38,8 +38,9 @@
 //To avoid having to refactor a bunch of code, just exclude classes
 #define WEAPONS_NO_CLASSES
 #include "weapons/CEagle.h"
-#include "weapons/CShockRifle.h"
 #include "weapons/CPipewrench.h"
+#include "weapons/CShockRifle.h"
+#include "weapons/CSporeLauncher.h"
 #include "weapons/CSniperRifle.h"
 #include "weapons/CKnife.h"
 
@@ -77,8 +78,9 @@ void EV_HornetGunFire( struct event_args_s *args  );
 void EV_TripmineFire( struct event_args_s *args  );
 void EV_SnarkFire( struct event_args_s *args  );
 void EV_FireEagle( struct event_args_s* args );
-void EV_FireShockRifle( struct event_args_s* args );
 void EV_Pipewrench( struct event_args_s* args );
+void EV_FireShockRifle( struct event_args_s* args );
+void EV_FireSpore( struct event_args_s* args );
 void EV_SniperRifle( struct event_args_s* args );
 void EV_Knife( struct event_args_s* args );
 
@@ -1733,24 +1735,6 @@ void EV_FireEagle( event_args_t* args )
 		args->fparam1, args->fparam2 );
 }
 
-void EV_FireShockRifle( event_args_t* args )
-{
-	gEngfuncs.pEventAPI->EV_PlaySound( args->entindex, args->origin, CHAN_WEAPON, "weapons/shock_fire.wav", 0.9, ATTN_NORM, 0, PITCH_NORM );
-
-	if( EV_IsLocal( args->entindex ) )
-		gEngfuncs.pEventAPI->EV_WeaponAnimation( SHOCKRIFLE_FIRE, 0 );
-
-	for( size_t uiIndex = 0; uiIndex < 3; ++uiIndex )
-	{
-		gEngfuncs.pEfxAPI->R_BeamEnts(
-			args->entindex | 0x1000, args->entindex | ( ( uiIndex + 2 ) << 12 ),
-			gEngfuncs.pEventAPI->EV_FindModelIndex( "sprites/lgtning.spr" ),
-			0.08,
-			1, 75 * 0.01, 190 / 255.0, 30, 0, 10,
-			0, 253 / 255.0, 253 / 255.0 );
-	}
-}
-
 //======================
 //	PIPE WRENCH START
 //======================
@@ -1798,6 +1782,54 @@ void EV_Pipewrench( event_args_t *args )
 //======================
 //	 PIPE WRENCH END 
 //======================
+
+void EV_FireShockRifle( event_args_t* args )
+{
+	gEngfuncs.pEventAPI->EV_PlaySound( args->entindex, args->origin, CHAN_WEAPON, "weapons/shock_fire.wav", 0.9, ATTN_NORM, 0, PITCH_NORM );
+
+	if( EV_IsLocal( args->entindex ) )
+		gEngfuncs.pEventAPI->EV_WeaponAnimation( SHOCKRIFLE_FIRE, 0 );
+
+	for( size_t uiIndex = 0; uiIndex < 3; ++uiIndex )
+	{
+		gEngfuncs.pEfxAPI->R_BeamEnts(
+			args->entindex | 0x1000, args->entindex | ( ( uiIndex + 2 ) << 12 ),
+			gEngfuncs.pEventAPI->EV_FindModelIndex( "sprites/lgtning.spr" ),
+			0.08,
+			1, 75 * 0.01, 190 / 255.0, 30, 0, 10,
+			0, 253 / 255.0, 253 / 255.0 );
+	}
+}
+
+void EV_FireSpore( event_args_t* args )
+{
+	gEngfuncs.pEventAPI->EV_PlaySound(
+		args->entindex, args->origin,
+		CHAN_WEAPON, "weapons/splauncher_fire.wav",
+		0.9,
+		ATTN_NORM, 0, PITCH_NORM );
+
+	if( EV_IsLocal( args->entindex ) )
+	{
+		gEngfuncs.pEventAPI->EV_WeaponAnimation( SPLAUNCHER_FIRE, 0 );
+
+		V_PunchAxis( 0, -3.0 );
+
+		if( cl_entity_t* pViewModel = gEngfuncs.GetViewModel() )
+		{
+			Vector vecSrc = pViewModel->attachment[ 1 ];
+
+			Vector forward;
+
+			AngleVectors( args->angles, forward, nullptr, nullptr );
+
+			gEngfuncs.pEfxAPI->R_Sprite_Spray(
+				vecSrc, forward,
+				gEngfuncs.pEventAPI->EV_FindModelIndex( "sprites/tinyspit.spr" ),
+				10, 10, 180 );
+		}
+	}
+}
 
 void EV_SniperRifle( event_args_t* args )
 {

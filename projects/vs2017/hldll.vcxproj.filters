@@ -426,6 +426,12 @@
     <ClCompile Include="..\..\dlls\weapons\CShockBeam.cpp">
       <Filter>Source Files\dlls\weapons</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\dlls\weapons\CSpore.cpp">
+      <Filter>Source Files\dlls\weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\weapons\CSporeLauncher.cpp">
+      <Filter>Source Files\dlls\weapons</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\dlls\doors.h">
@@ -621,6 +627,12 @@
       <Filter>Header Files\dlls\weapons</Filter>
     </ClInclude>
     <ClInclude Include="..\..\dlls\weapons\CShockRifle.h">
+      <Filter>Header Files\dlls\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\weapons\CSpore.h">
+      <Filter>Header Files\dlls\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\weapons\CSporeLauncher.h">
       <Filter>Header Files\dlls\weapons</Filter>
     </ClInclude>
   </ItemGroup>
