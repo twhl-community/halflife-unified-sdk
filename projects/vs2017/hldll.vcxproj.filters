@@ -420,6 +420,9 @@
     <ClCompile Include="..\..\dlls\zombie_barney.cpp">
       <Filter>Source Files\dlls</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\dlls\weapons\CShockBeam.cpp">
+      <Filter>Source Files\dlls\weapons</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\dlls\doors.h">
@@ -609,6 +612,9 @@
       <Filter>Header Files\dlls\weapons</Filter>
     </ClInclude>
     <ClInclude Include="..\..\dlls\weapons\CKnife.h">
+      <Filter>Header Files\dlls\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\weapons\CShockBeam.h">
       <Filter>Header Files\dlls\weapons</Filter>
     </ClInclude>
   </ItemGroup>
