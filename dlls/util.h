@@ -539,6 +539,13 @@ float UTIL_WeaponTimeBase( void );
 
 bool UTIL_IsMultiplayer();
 
+inline void WRITE_COORD_VECTOR( const Vector& vec )
+{
+	WRITE_COORD( vec.x );
+	WRITE_COORD( vec.y );
+	WRITE_COORD( vec.z );
+}
+
 template<typename T>
 struct FindByClassnameFunctor
 {
