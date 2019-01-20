@@ -81,6 +81,7 @@ public:
 #define	WEAPON_SNARK			15
 #define WEAPON_EAGLE			17
 #define WEAPON_PIPEWRENCH		18
+#define WEAPON_SHOCKRIFLE		22
 #define WEAPON_SNIPERRIFLE		24
 #define WEAPON_KNIFE			25
 
@@ -110,6 +111,7 @@ public:
 #define SATCHEL_WEIGHT		-10
 #define TRIPMINE_WEIGHT		-10
 #define EAGLE_WEIGHT		15
+#define SHOCKRIFLE_WEIGHT	15
 #define PIPEWRENCH_WEIGHT	2
 #define SNIPERRIFLE_WEIGHT	10
 
@@ -148,6 +150,7 @@ public:
 #define TRIPMINE_MAX_CLIP		WEAPON_NOCLIP
 #define SNARK_MAX_CLIP			WEAPON_NOCLIP
 #define EAGLE_MAX_CLIP			7
+#define SHOCKRIFLE_MAX_CLIP		10
 #define SNIPERRIFLE_MAX_CLIP	5
 
 
@@ -168,6 +171,7 @@ public:
 #define TRIPMINE_DEFAULT_GIVE		1
 #define SNARK_DEFAULT_GIVE			5
 #define HIVEHAND_DEFAULT_GIVE		8
+#define SHOCKRIFLE_DEFAULT_GIVE		10
 #define SNIPERRIFLE_DEFAULT_GIVE	5
 
 // The amount of ammo given to a player by an ammo item.

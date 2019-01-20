@@ -216,6 +216,7 @@
     <ClCompile Include="..\..\dlls\weapons\CKnife.cpp" />
     <ClCompile Include="..\..\dlls\weapons\CPipewrench.cpp" />
     <ClCompile Include="..\..\dlls\weapons\CShockBeam.cpp" />
+    <ClCompile Include="..\..\dlls\weapons\CShockRifle.cpp" />
     <ClCompile Include="..\..\dlls\weapons\CSniperRifle.cpp" />
     <ClCompile Include="..\..\dlls\world.cpp" />
     <ClCompile Include="..\..\dlls\wpn_shared\hl_wpn_glock.cpp" />
@@ -284,6 +285,7 @@
     <ClInclude Include="..\..\dlls\weapons\CKnife.h" />
     <ClInclude Include="..\..\dlls\weapons\CPipewrench.h" />
     <ClInclude Include="..\..\dlls\weapons\CShockBeam.h" />
+    <ClInclude Include="..\..\dlls\weapons\CShockRifle.h" />
     <ClInclude Include="..\..\dlls\weapons\CSniperRifle.h" />
     <ClInclude Include="..\..\dlls\world.h" />
     <ClInclude Include="..\..\engine\eiface.h" />

@@ -330,6 +330,9 @@
     <ClCompile Include="..\..\dlls\weapons\CKnife.cpp">
       <Filter>Source Files\_hl\dlls\weapons</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\dlls\weapons\CShockRifle.cpp">
+      <Filter>Source Files\_hl\dlls\weapons</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\cl_dll\kbutton.h">
@@ -465,6 +468,9 @@
       <Filter>Header Files\_hl\dlls\weapons</Filter>
     </ClInclude>
     <ClInclude Include="..\..\dlls\weapons\CKnife.h">
+      <Filter>Header Files\_hl\dlls\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\weapons\CShockRifle.h">
       <Filter>Header Files\_hl\dlls\weapons</Filter>
     </ClInclude>
   </ItemGroup>

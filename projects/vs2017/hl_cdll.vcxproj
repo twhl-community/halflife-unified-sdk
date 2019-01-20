@@ -180,6 +180,7 @@
     <ClCompile Include="..\..\dlls\weapons\CEagle.cpp" />
     <ClCompile Include="..\..\dlls\weapons\CKnife.cpp" />
     <ClCompile Include="..\..\dlls\weapons\CPipewrench.cpp" />
+    <ClCompile Include="..\..\dlls\weapons\CShockRifle.cpp" />
     <ClCompile Include="..\..\dlls\weapons\CSniperRifle.cpp" />
     <ClCompile Include="..\..\dlls\wpn_shared\hl_wpn_glock.cpp" />
     <ClCompile Include="..\..\game_shared\vgui_checkbutton2.cpp" />
@@ -230,6 +231,7 @@
     <ClInclude Include="..\..\dlls\weapons\CEagle.h" />
     <ClInclude Include="..\..\dlls\weapons\CKnife.h" />
     <ClInclude Include="..\..\dlls\weapons\CPipewrench.h" />
+    <ClInclude Include="..\..\dlls\weapons\CShockRifle.h" />
     <ClInclude Include="..\..\dlls\weapons\CSniperRifle.h" />
     <ClInclude Include="..\..\game_shared\vgui_scrollbar2.h" />
     <ClInclude Include="..\..\game_shared\vgui_slider2.h" />
