@@ -715,6 +715,8 @@ void CLeech::Killed(entvars_t *pevAttacker, int iGib)
 	else
 		SetActivity( ACT_DIEFORWARD );
 	
+	ClearShockEffect();
+
 	pev->movetype = MOVETYPE_TOSS;
 	pev->takedamage = DAMAGE_NO;
 	SetThink( &CLeech::DeadThink );

@@ -294,6 +294,8 @@ void CFlockingFlyer :: Killed( entvars_t *pevAttacker, int iGib )
 	UTIL_SetSize( pev, Vector(0,0,0), Vector(0,0,0) );
 	pev->movetype = MOVETYPE_TOSS;
 
+	ClearShockEffect();
+
 	SetThink ( &CFlockingFlyer::FallHack );
 	pev->nextthink = gpGlobals->time + 0.1;
 }

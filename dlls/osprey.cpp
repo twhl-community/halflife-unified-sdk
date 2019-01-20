@@ -511,6 +511,8 @@ int COsprey::TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float 
 
 void COsprey :: Killed( entvars_t *pevAttacker, int iGib )
 {
+	ClearShockEffect();
+
 	pev->movetype = MOVETYPE_TOSS;
 	pev->gravity = 0.3;
 	pev->velocity = m_velocity;

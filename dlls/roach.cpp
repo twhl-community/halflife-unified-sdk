@@ -162,6 +162,8 @@ void CRoach :: Killed( entvars_t *pevAttacker, int iGib )
 {
 	pev->solid = SOLID_NOT;
 
+	ClearShockEffect();
+
 	//random sound
 	if ( RANDOM_LONG(0,4) == 1 )
 	{
