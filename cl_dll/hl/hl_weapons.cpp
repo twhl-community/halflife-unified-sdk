@@ -1113,3 +1113,8 @@ void DLLEXPORT HUD_PostRunCmd( struct local_state_s *from, struct local_state_s 
 	// All games can use FOV state
 	g_lastFOV = to->client.fov;
 }
+
+bool UTIL_IsMultiplayer()
+{
+	return gEngfuncs.GetMaxClients() != 1;
+}

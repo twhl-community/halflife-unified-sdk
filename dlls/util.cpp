@@ -2547,3 +2547,7 @@ int	CRestore::BufferCheckZString( const char *string )
 	return 0;
 }
 
+bool UTIL_IsMultiplayer()
+{
+	return g_pGameRules->IsMultiplayer();
+}

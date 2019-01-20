@@ -537,6 +537,8 @@ float UTIL_SharedRandomFloat( unsigned int seed, float low, float high );
 
 float UTIL_WeaponTimeBase( void );
 
+bool UTIL_IsMultiplayer();
+
 template<typename T>
 struct FindByClassnameFunctor
 {
