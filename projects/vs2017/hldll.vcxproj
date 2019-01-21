@@ -193,6 +193,8 @@
     <ClCompile Include="..\..\dlls\schedule.cpp" />
     <ClCompile Include="..\..\dlls\scientist.cpp" />
     <ClCompile Include="..\..\dlls\scripted.cpp" />
+    <ClCompile Include="..\..\dlls\shockroach.cpp" />
+    <ClCompile Include="..\..\dlls\shocktrooper.cpp" />
     <ClCompile Include="..\..\dlls\shotgun.cpp" />
     <ClCompile Include="..\..\dlls\singleplay_gamerules.cpp" />
     <ClCompile Include="..\..\dlls\skill.cpp" />

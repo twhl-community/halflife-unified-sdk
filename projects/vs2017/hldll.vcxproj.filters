@@ -432,6 +432,12 @@
     <ClCompile Include="..\..\dlls\weapons\CSporeLauncher.cpp">
       <Filter>Source Files\dlls\weapons</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\dlls\shockroach.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\shocktrooper.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\dlls\doors.h">
