@@ -139,6 +139,16 @@ enum
 		9 : "Hear Combat"
 */
 
+/**
+	*	@brief Data used to spawn gibs
+	*/
+struct GibData
+{
+	const char* const ModelName;
+	const int FirstSubModel;
+	const int SubModelCount;
+};
+
 //
 // A gib is a chunk of a body, or a piece of wood/metal/rocks/etc.
 //
@@ -153,6 +163,7 @@ public:
 
 	virtual int	ObjectCaps( void ) { return (CBaseEntity :: ObjectCaps() & ~FCAP_ACROSS_TRANSITION) | FCAP_DONT_SAVE; }
 	static	void SpawnHeadGib( entvars_t *pevVictim );
+	static	void SpawnRandomGibs( entvars_t *pevVictim, int cGibs, const GibData& gibData );
 	static	void SpawnRandomGibs( entvars_t *pevVictim, int cGibs, int human );
 	static  void SpawnStickyGibs( entvars_t *pevVictim, Vector vecOrigin, int cGibs );
 
