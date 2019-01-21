@@ -177,6 +177,7 @@
     <ClCompile Include="..\..\dlls\shotgun.cpp" />
     <ClCompile Include="..\..\dlls\squeakgrenade.cpp" />
     <ClCompile Include="..\..\dlls\tripmine.cpp" />
+    <ClCompile Include="..\..\dlls\weapons\CDisplacer.cpp" />
     <ClCompile Include="..\..\dlls\weapons\CEagle.cpp" />
     <ClCompile Include="..\..\dlls\weapons\CKnife.cpp" />
     <ClCompile Include="..\..\dlls\weapons\CPipewrench.cpp" />
@@ -229,6 +230,7 @@
     <ClInclude Include="..\..\cl_dll\wrect.h" />
     <ClInclude Include="..\..\common\parsemsg.h" />
     <ClInclude Include="..\..\common\Platform.h" />
+    <ClInclude Include="..\..\dlls\weapons\CDisplacer.h" />
     <ClInclude Include="..\..\dlls\weapons\CEagle.h" />
     <ClInclude Include="..\..\dlls\weapons\CKnife.h" />
     <ClInclude Include="..\..\dlls\weapons\CPipewrench.h" />

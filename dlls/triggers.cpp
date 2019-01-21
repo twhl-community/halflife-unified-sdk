@@ -2489,3 +2489,77 @@ void CTriggerKillNoGib::KillTouch( CBaseEntity* pOther )
 	if( pOther->pev->takedamage != DAMAGE_NO )
 		pOther->TakeDamage( pev, pOther->pev, 500000, DMG_NEVERGIB );
 }
+
+class CTriggerXenReturn : public CBaseTrigger
+{
+public:
+	using BaseClass = CBaseTrigger;
+
+	void Spawn() override;
+
+	void EXPORT ReturnTouch( CBaseEntity* pOther );
+};
+
+LINK_ENTITY_TO_CLASS( trigger_xen_return, CTriggerXenReturn );
+
+LINK_ENTITY_TO_CLASS( info_displacer_earth_target, CPointEntity );
+LINK_ENTITY_TO_CLASS( info_displacer_xen_target, CPointEntity );
+
+void CTriggerXenReturn::Spawn()
+{
+	InitTrigger();
+
+	SetTouch( &CTriggerXenReturn::ReturnTouch );
+	SetUse( nullptr );
+}
+
+void CTriggerXenReturn::ReturnTouch( CBaseEntity* pOther )
+{
+	if( !pOther->IsPlayer() )
+		return;
+
+	auto pPlayer = static_cast<CBasePlayer*>( pOther );
+
+	float flDist = 8192;
+
+	CBaseEntity* pTarget = nullptr;
+
+	//Find the earth target nearest to the player's original location.
+	for( auto pDestination : UTIL_FindEntitiesByClassname( "info_displacer_earth_target" ) )
+	{
+		const float flThisDist = ( pPlayer->m_DisplacerReturn - pDestination->pev->origin ).Length();
+
+		if( flDist > flThisDist )
+		{
+			pTarget = pDestination;
+
+			flDist = flThisDist;
+		}
+	}
+
+	if( pTarget && !FNullEnt( pTarget->pev ) )
+	{
+		pPlayer->pev->flags &= ~FL_SKIPLOCALHOST;
+
+		auto vecDest = pTarget->pev->origin;
+
+		vecDest.z -= pPlayer->pev->mins.z;
+		vecDest.z += 1;
+
+		UTIL_SetOrigin( pPlayer->pev, vecDest );
+
+		pPlayer->pev->angles = pTarget->pev->angles;
+		pPlayer->pev->v_angle = pTarget->pev->angles;
+		pPlayer->pev->fixangle = 1;
+
+		pPlayer->pev->basevelocity = g_vecZero;
+		pPlayer->pev->velocity = g_vecZero;
+
+		pPlayer->pev->gravity = 1.0;
+
+		//TODO: this might not always be correct if the destination has a different room type. - Solokiller
+		pPlayer->m_flSndRoomtype = pPlayer->m_flDisplacerSndRoomtype;
+
+		EMIT_SOUND( edict(), CHAN_WEAPON, "weapons/displacer_self.wav", RANDOM_FLOAT( 0.8, 0.9 ), ATTN_NORM );
+	}
+}

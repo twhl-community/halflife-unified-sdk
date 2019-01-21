@@ -39,6 +39,7 @@ void EV_TripmineFire( struct event_args_s *args );
 void EV_SnarkFire( struct event_args_s *args );
 void EV_FireEagle( struct event_args_s* args );
 void EV_Pipewrench( struct event_args_s* args );
+void EV_FireDisplacer( struct event_args_s* args );
 void EV_FireShockRifle( struct event_args_s* args );
 void EV_FireSpore( struct event_args_s* args );
 void EV_SniperRifle( struct event_args_s* args );
@@ -84,6 +85,7 @@ void Game_HookEvents( void )
 	gEngfuncs.pfnHookEvent( "events/snarkfire.sc",				EV_SnarkFire );
 	gEngfuncs.pfnHookEvent( "events/eagle.sc",					EV_FireEagle );
 	gEngfuncs.pfnHookEvent( "events/pipewrench.sc",				EV_Pipewrench );
+	gEngfuncs.pfnHookEvent( "events/displacer.sc",				EV_FireDisplacer );
 	gEngfuncs.pfnHookEvent( "events/shock.sc",					EV_FireShockRifle );
 	gEngfuncs.pfnHookEvent( "events/spore.sc",					EV_FireSpore );
 	gEngfuncs.pfnHookEvent( "events/sniper.sc",					EV_SniperRifle );
