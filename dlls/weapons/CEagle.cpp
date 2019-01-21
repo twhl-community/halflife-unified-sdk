@@ -181,10 +181,11 @@ void CEagle::PrimaryAttack()
 				PlayEmptySound();
 				m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.2;
 			}
-			else
-			{
-				Reload();
-			}
+			//Don't do this because it glitches the animation
+			//else
+			//{
+			//	Reload();
+			//}
 		}
 
 		return;
@@ -240,7 +241,7 @@ void CEagle::PrimaryAttack()
 
 	if( !m_iClip )
 	{
-		if( m_pPlayer->m_rgAmmo[ PrimaryAmmoIndex() ] <= 0 )
+		if( m_pPlayer->m_rgAmmo[ m_iPrimaryAmmoType ] <= 0 )
 			m_pPlayer->SetSuitUpdate( "!HEV_AMO0", SUIT_SENTENCE, SUIT_REPEAT_OK );
 	}
 
@@ -274,7 +275,7 @@ void CEagle::SecondaryAttack()
 
 void CEagle::Reload()
 {
-	if( m_pPlayer->ammo_357 > 0 )
+	if( m_pPlayer->m_rgAmmo[ m_iPrimaryAmmoType ] > 0 )
 	{
 		const bool bResult = DefaultReload( EAGLE_MAX_CLIP, m_iClip ? EAGLE_RELOAD : EAGLE_RELOAD_NOSHOT, 1.5, 1 );
 	
