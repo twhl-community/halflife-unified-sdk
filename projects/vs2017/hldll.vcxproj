@@ -113,6 +113,7 @@
     <ClCompile Include="..\..\dlls\barney.cpp" />
     <ClCompile Include="..\..\dlls\bigmomma.cpp" />
     <ClCompile Include="..\..\dlls\bloater.cpp" />
+    <ClCompile Include="..\..\dlls\blowercannon.cpp" />
     <ClCompile Include="..\..\dlls\bmodels.cpp" />
     <ClCompile Include="..\..\dlls\bullsquid.cpp" />
     <ClCompile Include="..\..\dlls\buttons.cpp" />
