@@ -144,6 +144,7 @@
     <ClCompile Include="..\..\dlls\ggrenade.cpp" />
     <ClCompile Include="..\..\dlls\globals.cpp" />
     <ClCompile Include="..\..\dlls\gman.cpp" />
+    <ClCompile Include="..\..\dlls\gonome.cpp" />
     <ClCompile Include="..\..\dlls\handgrenade.cpp" />
     <ClCompile Include="..\..\dlls\hassassin.cpp" />
     <ClCompile Include="..\..\dlls\headcrab.cpp" />
