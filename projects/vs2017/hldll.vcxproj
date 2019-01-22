@@ -119,6 +119,7 @@
     <ClCompile Include="..\..\dlls\buttons.cpp" />
     <ClCompile Include="..\..\dlls\cbase.cpp" />
     <ClCompile Include="..\..\dlls\CDrillSergeant.cpp" />
+    <ClCompile Include="..\..\dlls\cleansuit_scientist.cpp" />
     <ClCompile Include="..\..\dlls\client.cpp" />
     <ClCompile Include="..\..\dlls\COFAllyMonster.cpp" />
     <ClCompile Include="..\..\dlls\COFSquadTalkMonster.cpp" />
