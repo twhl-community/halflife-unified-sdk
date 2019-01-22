@@ -388,6 +388,9 @@ void W_Precache(void)
 
 	UTIL_PrecacheOtherWeapon( "weapon_pipewrench" );
 
+	UTIL_PrecacheOtherWeapon( "weapon_m249" );
+	UTIL_PrecacheOther( "ammo_556" );
+
 	UTIL_PrecacheOtherWeapon( "weapon_displacer" );
 
 	UTIL_PrecacheOtherWeapon( "weapon_sporelauncher" );

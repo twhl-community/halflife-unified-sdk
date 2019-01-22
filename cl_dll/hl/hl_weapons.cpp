@@ -21,6 +21,7 @@
 #include "player.h"
 #include "weapons/CEagle.h"
 #include "weapons/CPipewrench.h"
+#include "weapons/CM249.h"
 #include "weapons/CDisplacer.h"
 #include "weapons/CShockRifle.h"
 #include "weapons/CSporeLauncher.h"
@@ -75,6 +76,7 @@ CTripmine g_Tripmine;
 CSqueak g_Snark;
 CEagle g_Eagle;
 CPipewrench g_Pipewrench;
+CM249 g_M249;
 CDisplacer g_Displacer;
 CShockRifle g_ShockRifle;
 CSporeLauncher g_SporeLauncher;
@@ -635,6 +637,7 @@ void HUD_InitClientWeapons( void )
 	HUD_PrepEntity( &g_Snark	, &player );
 	HUD_PrepEntity( &g_Eagle, &player );
 	HUD_PrepEntity( &g_Pipewrench, &player );
+	HUD_PrepEntity( &g_M249, &player );
 	HUD_PrepEntity( &g_Displacer, &player );
 	HUD_PrepEntity( &g_ShockRifle, &player );
 	HUD_PrepEntity( &g_SporeLauncher, &player );
@@ -767,6 +770,10 @@ void HUD_WeaponsPostThink( local_state_s *from, local_state_s *to, usercmd_t *cm
 
 		case WEAPON_PIPEWRENCH:
 			pWeapon = &g_Pipewrench;
+			break;
+
+		case WEAPON_M249:
+			pWeapon = &g_M249;
 			break;
 
 		case WEAPON_DISPLACER:

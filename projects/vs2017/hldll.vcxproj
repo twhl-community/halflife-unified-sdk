@@ -222,6 +222,7 @@
     <ClCompile Include="..\..\dlls\weapons\CEagle.cpp" />
     <ClCompile Include="..\..\dlls\weapons\CEagleLaser.cpp" />
     <ClCompile Include="..\..\dlls\weapons\CKnife.cpp" />
+    <ClCompile Include="..\..\dlls\weapons\CM249.cpp" />
     <ClCompile Include="..\..\dlls\weapons\CPipewrench.cpp" />
     <ClCompile Include="..\..\dlls\weapons\CShockBeam.cpp" />
     <ClCompile Include="..\..\dlls\weapons\CShockRifle.cpp" />
@@ -295,6 +296,7 @@
     <ClInclude Include="..\..\dlls\weapons\CEagle.h" />
     <ClInclude Include="..\..\dlls\weapons\CEagleLaser.h" />
     <ClInclude Include="..\..\dlls\weapons\CKnife.h" />
+    <ClInclude Include="..\..\dlls\weapons\CM249.h" />
     <ClInclude Include="..\..\dlls\weapons\CPipewrench.h" />
     <ClInclude Include="..\..\dlls\weapons\CShockBeam.h" />
     <ClInclude Include="..\..\dlls\weapons\CShockRifle.h" />
