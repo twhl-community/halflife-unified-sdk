@@ -4159,6 +4159,21 @@ void CBasePlayer :: UpdateClientData( void )
 
 		FireTargets( "game_playerspawn", this, this, USE_TOGGLE, 0 );
 
+		//Update the client's night vision state on restore/level transition
+		if( g_pGameRules->FAllowFlashlight() )
+		{
+			if( pev->weapons & WEAPON_SUIT )
+			{
+				if( FlashlightIsOn() )
+				{
+					MESSAGE_BEGIN( MSG_ONE, gmsgFlashlight, NULL, pev );
+					WRITE_BYTE( FlashlightIsOn() );
+					WRITE_BYTE( m_iFlashBattery );
+					MESSAGE_END();
+				}
+			}
+		}
+
 		InitStatusBar();
 	}
 
