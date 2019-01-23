@@ -561,9 +561,9 @@ void COFVoltigore :: SetYawSpeed ( void )
 	{
 	case ACT_TURN_LEFT:
 	case ACT_TURN_RIGHT:
-		ys = 110;
+		ys = 80;
 		break;
-	default:			ys = 100;
+	default:			ys = 70;
 	}
 
 	pev->yaw_speed = ys;
