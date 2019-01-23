@@ -41,6 +41,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <type_traits>
 
 // Prevent tons of unused windows definitions
 #ifdef _WIN32
@@ -52,6 +53,7 @@
 #include "winsani_in.h"
 #include <Windows.h>
 #include "winsani_out.h"
+#include <malloc.h>
 
 //Avoid the ISO conformant warning
 #define stricmp _stricmp
@@ -60,6 +62,18 @@
 #define strupr _strupr
 
 #define DLLEXPORT __declspec( dllexport )
+
+inline void* stackalloc( size_t size )
+{
+	return _alloca( size );
+}
+
+//Note: an implementation of stackfree must safely ignore null pointers
+inline void stackfree( void* pAddress )
+{
+	//Nothing
+}
+
 #else // _WIN32
 #define FALSE 0
 #define TRUE (!FALSE)
@@ -69,12 +83,32 @@ typedef int BOOL;
 #define MAX_PATH PATH_MAX
 #include <limits.h>
 #include <stdarg.h>
+#include <alloca.h>
 #define _vsnprintf(a,b,c,d) vsnprintf(a,b,c,d)
 
 #define DLLEXPORT __attribute__ ( ( visibility( "default" ) ) )
+
+inline void* stackalloc( size_t size )
+{
+	return alloca( size );
+}
+
+inline void stackfree( void* pAddress )
+{
+	//Nothing
+}
 #endif //_WIN32
 
 #define V_min(a,b)  (((a) < (b)) ? (a) : (b))
 #define V_max(a,b)  (((a) > (b)) ? (a) : (b))
+
+/**
+*	@brief Overload to allocate arrays on the stack
+*/
+template<typename T, std::enable_if_t< std::is_array_v<T> &&  std::extent_v<T> == 0, int> = 0>
+inline std::remove_extent_t<typename T>* stackalloc( size_t elementCount )
+{
+	return reinterpret_cast< std::remove_extent_t<T>* >( stackalloc( elementCount * sizeof( std::remove_extent_t<T> ) ) );
+}
 
 #endif //PLATFORM_H
