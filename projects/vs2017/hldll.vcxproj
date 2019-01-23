@@ -217,6 +217,7 @@
     <ClCompile Include="..\..\dlls\tripmine.cpp" />
     <ClCompile Include="..\..\dlls\turret.cpp" />
     <ClCompile Include="..\..\dlls\util.cpp" />
+    <ClCompile Include="..\..\dlls\voltigore.cpp" />
     <ClCompile Include="..\..\dlls\weapons.cpp" />
     <ClCompile Include="..\..\dlls\weapons\CDisplacer.cpp" />
     <ClCompile Include="..\..\dlls\weapons\CDisplacerBall.cpp" />
