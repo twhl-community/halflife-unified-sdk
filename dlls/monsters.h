@@ -139,14 +139,26 @@ enum
 		9 : "Hear Combat"
 */
 
+struct GibLimit
+{
+	const int MaxGibs;
+};
+
 /**
-	*	@brief Data used to spawn gibs
-	*/
+*	@brief Data used to spawn gibs
+*/
 struct GibData
 {
 	const char* const ModelName;
 	const int FirstSubModel;
 	const int SubModelCount;
+
+	/**
+	*	@brief Optional list of limits to apply to each submodel
+	*	Must be SubModelCount elements large
+	*	If used, instead of randomly selecting a submodel each submodel is used until the requested number of gibs have been spawned
+	*/
+	const GibLimit* const Limits = nullptr;
 };
 
 //

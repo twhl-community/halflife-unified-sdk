@@ -182,6 +182,16 @@ void CGib :: SpawnHeadGib( entvars_t *pevVictim )
 
 void CGib::SpawnRandomGibs( entvars_t *pevVictim, int cGibs, const GibData& gibData )
 {
+	//Track the number of uses of a particular submodel so we can avoid spawning too many of the same
+	auto pLimitTracking = gibData.Limits != nullptr ? stackalloc<int[]>( gibData.SubModelCount ) : nullptr;
+
+	if( pLimitTracking )
+	{
+		memset( pLimitTracking, 0, sizeof( int ) * gibData.SubModelCount );
+	}
+
+	auto currentBody = 0;
+
 	int cSplat;
 
 	for( cSplat = 0; cSplat < cGibs; cSplat++ )
@@ -196,7 +206,22 @@ void CGib::SpawnRandomGibs( entvars_t *pevVictim, int cGibs, const GibData& gibD
 		else
 		{
 			pGib->Spawn( gibData.ModelName );
-			pGib->pev->body = RANDOM_LONG( gibData.FirstSubModel, gibData.SubModelCount - 1 );
+
+			if( pLimitTracking )
+			{
+				if( pLimitTracking[ currentBody ] >= gibData.Limits[ currentBody ].MaxGibs )
+				{
+					++currentBody;
+				}
+
+				pGib->pev->body = currentBody;
+
+				++pLimitTracking[ currentBody ];
+			}
+			else
+			{
+				pGib->pev->body = RANDOM_LONG( gibData.FirstSubModel, gibData.SubModelCount - 1 );
+			}
 		}
 
 		if( pevVictim )
@@ -240,6 +265,8 @@ void CGib::SpawnRandomGibs( entvars_t *pevVictim, int cGibs, const GibData& gibD
 		}
 		pGib->LimitVelocity();
 	}
+
+	stackfree( pLimitTracking );
 }
 
 // start at one to avoid throwing random amounts of skulls (0th gib)
