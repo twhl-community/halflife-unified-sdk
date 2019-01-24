@@ -454,28 +454,32 @@ void COFGonome :: HandleAnimEvent( MonsterEvent_t *pEvent )
 
 		case ZOMBIE_AE_ATTACK_GUTS_GRAB:
 		{
-			Vector vecGutsPos, vecGutsAngles;
-			GetAttachment( 0, vecGutsPos, vecGutsAngles );
+				//Only if we still have an enemy at this point
+				if( m_hEnemy )
+				{
+					Vector vecGutsPos, vecGutsAngles;
+					GetAttachment( 0, vecGutsPos, vecGutsAngles );
 
-			if( !m_pGonomeGuts )
-			{
-				m_pGonomeGuts = COFGonomeGuts::GonomeGutsCreate( vecGutsPos );
-			}
+					if( !m_pGonomeGuts )
+					{
+						m_pGonomeGuts = COFGonomeGuts::GonomeGutsCreate( vecGutsPos );
+					}
 
-			//Attach to hand for throwing
-			m_pGonomeGuts->pev->skin = entindex();
-			m_pGonomeGuts->pev->body = 1;
-			m_pGonomeGuts->pev->aiment = edict();
-			m_pGonomeGuts->pev->movetype = MOVETYPE_FOLLOW;
+					//Attach to hand for throwing
+					m_pGonomeGuts->pev->skin = entindex();
+					m_pGonomeGuts->pev->body = 1;
+					m_pGonomeGuts->pev->aiment = edict();
+					m_pGonomeGuts->pev->movetype = MOVETYPE_FOLLOW;
 
-			auto direction = ( m_hEnemy->pev->origin - m_hEnemy->pev->view_ofs - vecGutsPos ).Normalize();
+					auto direction = ( m_hEnemy->pev->origin - m_hEnemy->pev->view_ofs - vecGutsPos ).Normalize();
 
-			direction = direction + Vector(
-				RANDOM_FLOAT( -0.05, 0.05 ),
-				RANDOM_FLOAT( -0.05, 0.05 ),
-				RANDOM_FLOAT( -0.05, 0 ) );
+					direction = direction + Vector(
+						RANDOM_FLOAT( -0.05, 0.05 ),
+						RANDOM_FLOAT( -0.05, 0.05 ),
+						RANDOM_FLOAT( -0.05, 0 ) );
 
-			UTIL_BloodDrips( vecGutsPos, direction, BLOOD_COLOR_RED, 35 );
+					UTIL_BloodDrips( vecGutsPos, direction, BLOOD_COLOR_RED, 35 );
+				}
 		}
 		break;
 
