@@ -468,6 +468,12 @@
     <ClCompile Include="..\..\dlls\baby_voltigore.cpp">
       <Filter>Source Files\dlls</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\dlls\weapons\CGrappleTip.cpp">
+      <Filter>Source Files\dlls\weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\weapons\CGrapple.cpp">
+      <Filter>Source Files\dlls\weapons</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\dlls\ehandle.cpp">
       <Filter>Source Files\dlls</Filter>
     </ClCompile>
@@ -681,6 +687,12 @@
       <Filter>Header Files\dlls\weapons</Filter>
     </ClInclude>
     <ClInclude Include="..\..\dlls\weapons\CM249.h">
+      <Filter>Header Files\dlls\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\weapons\CGrapple.h">
+      <Filter>Header Files\dlls\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\weapons\CGrappleTip.h">
       <Filter>Header Files\dlls\weapons</Filter>
     </ClInclude>
   </ItemGroup>

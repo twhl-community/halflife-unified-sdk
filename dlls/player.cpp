@@ -1051,6 +1051,33 @@ void CBasePlayer::SetAnimation( PLAYER_ANIM playerAnim )
 			m_IdealActivity = ACT_WALK;
 		}
 		break;
+
+	case PLAYER_GRAPPLE:
+		{
+			if( FBitSet( pev->flags, FL_ONGROUND ) )
+			{
+				if( pev->waterlevel > 1 )
+				{
+					if( speed == 0 )
+						m_IdealActivity = ACT_HOVER;
+					else
+						m_IdealActivity = ACT_SWIM;
+				}
+				else
+				{
+					m_IdealActivity = ACT_WALK;
+				}
+			}
+			else if( speed == 0 )
+			{
+				m_IdealActivity = ACT_HOVER;
+			}
+			else
+			{
+				m_IdealActivity = ACT_SWIM;
+			}
+		}
+		break;
 	}
 
 	switch (m_IdealActivity)
@@ -3740,6 +3767,7 @@ void CBasePlayer::CheatImpulseCommands( int iImpulse )
 		GiveNamedItem( "weapon_knife" );
 		GiveNamedItem( "weapon_m249" );
 		GiveNamedItem( "weapon_pipewrench" );
+		GiveNamedItem( "weapon_grapple" );
 		GiveNamedItem( "weapon_sniperrifle" );
 		GiveNamedItem( "weapon_displacer" );
 		//TODO: not given

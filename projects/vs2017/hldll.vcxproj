@@ -221,6 +221,8 @@
     <ClCompile Include="..\..\dlls\util.cpp" />
     <ClCompile Include="..\..\dlls\voltigore.cpp" />
     <ClCompile Include="..\..\dlls\weapons.cpp" />
+    <ClCompile Include="..\..\dlls\weapons\CGrapple.cpp" />
+    <ClCompile Include="..\..\dlls\weapons\CGrappleTip.cpp" />
     <ClCompile Include="..\..\dlls\weapons\CDisplacer.cpp" />
     <ClCompile Include="..\..\dlls\weapons\CDisplacerBall.cpp" />
     <ClCompile Include="..\..\dlls\weapons\CEagle.cpp" />
@@ -295,6 +297,8 @@
     <ClInclude Include="..\..\dlls\util.h" />
     <ClInclude Include="..\..\dlls\vector.h" />
     <ClInclude Include="..\..\dlls\weapons.h" />
+    <ClInclude Include="..\..\dlls\weapons\CGrapple.h" />
+    <ClInclude Include="..\..\dlls\weapons\CGrappleTip.h" />
     <ClInclude Include="..\..\dlls\weapons\CDisplacer.h" />
     <ClInclude Include="..\..\dlls\weapons\CDisplacerBall.h" />
     <ClInclude Include="..\..\dlls\weapons\CEagle.h" />
