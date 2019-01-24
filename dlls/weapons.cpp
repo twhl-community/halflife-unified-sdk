@@ -403,6 +403,10 @@ void W_Precache(void)
 
 	UTIL_PrecacheOtherWeapon( "weapon_knife" );
 
+	PRECACHE_SOUND( "weapons/spore_hit1.wav" );
+	PRECACHE_SOUND( "weapons/spore_hit2.wav" );
+	PRECACHE_SOUND( "weapons/spore_hit3.wav" );
+
 #if !defined( OEM_BUILD ) && !defined( HLDEMO_BUILD )
 	if ( g_pGameRules->IsDeathmatch() )
 	{
