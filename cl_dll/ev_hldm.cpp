@@ -37,6 +37,7 @@
 
 //To avoid having to refactor a bunch of code, just exclude classes
 #define WEAPONS_NO_CLASSES
+#include "weapons.h"
 #include "weapons/CEagle.h"
 #include "weapons/CPipewrench.h"
 #include "weapons/CM249.h"
@@ -808,11 +809,15 @@ void EV_FirePython( event_args_t *args )
 		// Python uses different body in multiplayer versus single player
 		int multiplayer = gEngfuncs.GetMaxClients() == 1 ? 0 : 1;
 
+		const auto body = multiplayer ? 1 : 0;
+
 		// Add muzzle flash to current weapon model
 		EV_MuzzleFlash();
-		gEngfuncs.pEventAPI->EV_WeaponAnimation( PYTHON_FIRE1, multiplayer ? 1 : 0 );
+		gEngfuncs.pEventAPI->EV_WeaponAnimation( PYTHON_FIRE1, body );
 
 		V_PunchAxis( 0, -10.0 );
+
+		SetLocalBody( WEAPON_PYTHON, body );
 	}
 
 	switch( gEngfuncs.pfnRandomLong( 0, 1 ) )
@@ -1804,6 +1809,7 @@ void EV_FireM249( event_args_t* args )
 
 	if( EV_IsLocal( args->entindex ) )
 	{
+		SetLocalBody( WEAPON_M249, iBody );
 		EV_MuzzleFlash();
 		gEngfuncs.pEventAPI->EV_WeaponAnimation( gEngfuncs.pfnRandomLong( 0, 2 ) + M249_SHOOT1, iBody );
 		V_PunchAxis( 0, gEngfuncs.pfnRandomFloat( -2, 2 ) );
