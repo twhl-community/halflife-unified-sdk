@@ -140,6 +140,7 @@
     <ClCompile Include="..\..\dlls\flyingmonster.cpp" />
     <ClCompile Include="..\..\dlls\func_break.cpp" />
     <ClCompile Include="..\..\dlls\func_tank.cpp" />
+    <ClCompile Include="..\..\dlls\func_tank_of.cpp" />
     <ClCompile Include="..\..\dlls\game.cpp" />
     <ClCompile Include="..\..\dlls\gamerules.cpp" />
     <ClCompile Include="..\..\dlls\gargantua.cpp" />
