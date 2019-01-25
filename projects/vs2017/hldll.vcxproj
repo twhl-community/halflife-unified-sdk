@@ -181,6 +181,7 @@
     <ClCompile Include="..\..\dlls\nihilanth.cpp" />
     <ClCompile Include="..\..\dlls\nodes.cpp" />
     <ClCompile Include="..\..\dlls\observer.cpp" />
+    <ClCompile Include="..\..\dlls\op4mortar.cpp" />
     <ClCompile Include="..\..\dlls\osprey.cpp" />
     <ClCompile Include="..\..\dlls\otis.cpp" />
     <ClCompile Include="..\..\dlls\pathcorner.cpp" />
