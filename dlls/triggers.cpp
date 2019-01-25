@@ -27,6 +27,7 @@
 #include "saverestore.h"
 #include "trains.h"			// trigger_camera has train functionality
 #include "gamerules.h"
+#include "skill.h"
 
 #define	SF_TRIGGER_PUSH_START_OFF	2//spawnflag that makes trigger_push spawn turned OFF
 #define SF_TRIGGER_HURT_TARGETONCE	1// Only fire hurt target once
@@ -2561,5 +2562,132 @@ void CTriggerXenReturn::ReturnTouch( CBaseEntity* pOther )
 		pPlayer->m_flSndRoomtype = pPlayer->m_flDisplacerSndRoomtype;
 
 		EMIT_SOUND( edict(), CHAN_WEAPON, "weapons/displacer_self.wav", RANDOM_FLOAT( 0.8, 0.9 ), ATTN_NORM );
+	}
+}
+
+const auto SF_GENEWORM_HIT_TARGET_ONCE = 1 << 0;
+const auto SF_GENEWORM_HIT_START_OFF = 1 << 1;
+const auto SF_GENEWORM_HIT_NO_CLIENTS = 1 << 3;
+const auto SF_GENEWORM_HIT_FIRE_CLIENT_ONLY = 1 << 4;
+const auto SF_GENEWORM_HIT_TOUCH_CLIENT_ONLY = 1 << 5;
+
+class COFTriggerGeneWormHit : public CBaseTrigger
+{
+public:
+	int	Save( CSave &save ) override;
+	int Restore( CRestore &restore ) override;
+	static TYPEDESCRIPTION m_SaveData[];
+
+	void Precache() override;
+	void Spawn() override;
+
+	void EXPORT GeneWormHitTouch( CBaseEntity* pOther );
+
+	static const char* pAttackSounds[];
+
+	float m_flLastDamageTime;
+};
+
+TYPEDESCRIPTION	COFTriggerGeneWormHit::m_SaveData[] =
+{
+	DEFINE_FIELD( COFTriggerGeneWormHit, m_flLastDamageTime, FIELD_TIME ),
+};
+
+IMPLEMENT_SAVERESTORE( COFTriggerGeneWormHit, CBaseTrigger );
+
+const char* COFTriggerGeneWormHit::pAttackSounds[] = 
+{
+	"zombie/claw_strike1.wav",
+	"zombie/claw_strike2.wav",
+	"zombie/claw_strike3.wav"
+};
+
+LINK_ENTITY_TO_CLASS( trigger_geneworm_hit, COFTriggerGeneWormHit );
+
+void COFTriggerGeneWormHit::Precache()
+{
+	PRECACHE_SOUND_ARRAY( pAttackSounds );
+}
+
+void COFTriggerGeneWormHit::Spawn()
+{
+	Precache();
+
+	InitTrigger();
+
+	SetTouch( &COFTriggerGeneWormHit::GeneWormHitTouch );
+
+	if( !FStringNull( pev->targetname ) )
+	{
+		SetUse( &COFTriggerGeneWormHit::ToggleUse );
+	}
+	else
+	{
+		SetUse( nullptr );
+	}
+
+	if( pev->spawnflags & SF_GENEWORM_HIT_START_OFF )
+	{
+		pev->solid = SOLID_NOT;
+	}
+
+	UTIL_SetOrigin( pev, pev->origin );
+
+	pev->dmg = gSkillData.geneWormDmgHit;
+	m_flLastDamageTime = gpGlobals->time;
+}
+
+void COFTriggerGeneWormHit::GeneWormHitTouch( CBaseEntity* pOther )
+{
+	if( gpGlobals->time - m_flLastDamageTime >= 2 && pOther->pev->takedamage != DAMAGE_NO )
+	{
+		if( pev->spawnflags & SF_GENEWORM_HIT_TOUCH_CLIENT_ONLY )
+		{
+			if( !pOther->IsPlayer() )
+				return;
+		}
+
+		if( !( pev->spawnflags & SF_GENEWORM_HIT_NO_CLIENTS ) || !pOther->IsPlayer() )
+		{
+			if( !g_pGameRules->IsMultiplayer() )
+			{
+				if( pev->dmgtime > gpGlobals->time && gpGlobals->time != pev->pain_finished )
+					return;
+			}
+			else if( pev->dmgtime <= gpGlobals->time )
+			{
+				pev->impulse = 0;
+				if( pOther->IsPlayer() )
+					pev->impulse |= 1 << ( pOther->entindex() - 1 );
+			}
+			else if( gpGlobals->time != pev->pain_finished )
+			{
+				if( !pOther->IsPlayer() )
+					return;
+
+				const auto playerBit = 1 << ( pOther->entindex() - 1 );
+
+				if( pev->impulse & playerBit )
+					return;
+
+				pev->impulse |= playerBit;
+			}
+
+			pOther->TakeDamage( pev,pev, pev->dmg, DMG_CRUSH );
+
+			EMIT_SOUND_DYN( pOther->edict(), CHAN_BODY, pAttackSounds[ RANDOM_LONG( 0, ARRAYSIZE( pAttackSounds ) - 1 ) ], VOL_NORM, 0.1, 0, RANDOM_LONG( -5, 5 ) + 100 );
+
+			pev->pain_finished = gpGlobals->time;
+			m_flLastDamageTime = gpGlobals->time;
+
+			if( !FStringNull( pev->target ) &&
+				( !( pev->spawnflags & SF_GENEWORM_HIT_FIRE_CLIENT_ONLY ) || pOther->IsPlayer() ) )
+			{
+				SUB_UseTargets( pOther, USE_TOGGLE, 0 );
+
+				if( pev->spawnflags & SF_GENEWORM_HIT_TARGET_ONCE )
+					pev->target = iStringNull;
+			}
+		}
 	}
 }

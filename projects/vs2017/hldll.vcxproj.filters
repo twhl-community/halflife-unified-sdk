@@ -489,6 +489,9 @@
     <ClCompile Include="..\..\dlls\nuclearbomb.cpp">
       <Filter>Source Files\dlls</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\dlls\geneworm.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\dlls\func_tank_of.cpp">
       <Filter>Source Files\dlls</Filter>
     </ClCompile>
