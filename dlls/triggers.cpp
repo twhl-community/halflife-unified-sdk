@@ -2561,7 +2561,7 @@ void CTriggerXenReturn::ReturnTouch( CBaseEntity* pOther )
 		//TODO: this might not always be correct if the destination has a different room type. - Solokiller
 		pPlayer->m_flSndRoomtype = pPlayer->m_flDisplacerSndRoomtype;
 
-		EMIT_SOUND( edict(), CHAN_WEAPON, "weapons/displacer_self.wav", RANDOM_FLOAT( 0.8, 0.9 ), ATTN_NORM );
+		EMIT_SOUND( pPlayer->edict(), CHAN_WEAPON, "weapons/displacer_self.wav", RANDOM_FLOAT( 0.8, 0.9 ), ATTN_NORM );
 	}
 }
 
