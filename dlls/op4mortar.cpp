@@ -635,6 +635,7 @@ CBaseEntity* COp4Mortar::FindTarget()
 		if( this == pEntity )
 			continue;
 
+		//This doesn't make sense
 		if( pEntity->pev->spawnflags & SF_MORTAR_LINE_OF_SIGHT )
 			continue;
 
@@ -655,14 +656,12 @@ CBaseEntity* COp4Mortar::FindTarget()
 		if( !FVisible( pEntity ) )
 			continue;
 
-		if( pEntity->IsPlayer() )
-			continue;
-
-		if( !pEntity->IsPlayer() || !( pev->spawnflags & SF_MORTAR_ACTIVE ) || pMonster->FInViewCone( this ) )
+		if( pEntity->IsPlayer() && ( pev->spawnflags & SF_MORTAR_ACTIVE ) )
 		{
-			pev->spawnflags &= ~SF_MORTAR_ACTIVE;
-			pEntity->m_pLink = m_pLink;
-			m_pLink = pEntity;
+			if( pMonster->FInViewCone( this ) )
+			{
+				pev->spawnflags &= ~SF_MORTAR_ACTIVE;
+			}
 		}
 	}
 

@@ -511,6 +511,7 @@ CBaseEntity* COFFuncTank::FindTarget()
 		if( this == pEntity )
 			continue;
 
+		//This doesn't make sense
 		if( pEntity->pev->spawnflags & SF_TANK_LINEOFSIGHT )
 			continue;
 
@@ -531,15 +532,16 @@ CBaseEntity* COFFuncTank::FindTarget()
 		if( !FVisible( pEntity ) )
 			continue;
 
-		if( pEntity->IsPlayer() )
-			continue;
-
-		if( !pEntity->IsPlayer() || !( pev->spawnflags & SF_TANK_ACTIVE ) || pMonster->FInViewCone( this ) )
+		if( pEntity->IsPlayer() && ( pev->spawnflags & SF_TANK_ACTIVE ) )
 		{
-			pev->spawnflags &= ~SF_TANK_ACTIVE;
-			pEntity->m_pLink = m_pLink;
-			m_pLink = pEntity;
+			if( pMonster->FInViewCone( this ) )
+			{
+				pev->spawnflags &= ~SF_TANK_ACTIVE;
+			}
 		}
+
+		pEntity->m_pLink = m_pLink;
+		m_pLink = pEntity;
 	}
 
 	for( auto pEntity = m_pLink; pEntity; pEntity = pEntity->m_pLink )
