@@ -196,11 +196,11 @@ void CDisplacer::SpinupThink()
 
 		int flags;
 
-#if defined( CLIENT_WEAPONS )
-		flags = FEV_NOTHOST;
-#else
+//#if defined( CLIENT_WEAPONS )
+//		flags = FEV_NOTHOST;
+//#else
 		flags = 0;
-#endif
+//#endif
 
 		PLAYBACK_EVENT_FULL( flags, m_pPlayer->edict(), m_usFireDisplacer, 0, g_vecZero, g_vecZero,
 			0, 0, static_cast<int>( m_Mode ), 0, 0, 0 );
@@ -241,11 +241,11 @@ void CDisplacer::AltSpinupThink()
 
 		int flags;
 
-#if defined( CLIENT_WEAPONS )
-		flags = FEV_NOTHOST;
-#else
+//#if defined( CLIENT_WEAPONS )
+//		flags = FEV_NOTHOST;
+//#else
 		flags = 0;
-#endif
+//#endif
 
 		PLAYBACK_EVENT_FULL( flags, m_pPlayer->edict(), m_usFireDisplacer, 0, g_vecZero, g_vecZero,
 			0, 0, static_cast<int>( m_Mode ), 0, 0, 0 );
