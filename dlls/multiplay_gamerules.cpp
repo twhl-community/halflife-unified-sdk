@@ -480,6 +480,9 @@ void CHalfLifeMultiplay :: ClientDisconnected( edict_t *pClient )
 
 		if ( pPlayer )
 		{
+			if( !g_fGameOver && pPlayer->m_iItems & CTFItem::ItemsMask )
+				ScatterPlayerCTFPowerups( pPlayer );
+
 			FireTargets( "game_playerleave", pPlayer, pPlayer, USE_TOGGLE, 0 );
 
 			// team match?
