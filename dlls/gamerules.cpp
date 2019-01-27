@@ -23,6 +23,7 @@
 #include	"weapons.h"
 #include	"gamerules.h"
 #include	"teamplay_gamerules.h"
+#include "ctf/ctfplay_gamerules.h"
 #include	"skill.h"
 #include	"game.h"
 #include "world.h"
@@ -437,7 +438,7 @@ CGameRules *InstallGameRules( CBaseEntity* pWorld )
 	{
 		if( pWorld->pev->spawnflags & SF_WORLD_CTF )
 		{
-
+			return new CHalfLifeCTFplay();
 		}
 
 		if ( teamplay.value > 0 )
