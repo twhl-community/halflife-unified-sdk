@@ -684,7 +684,7 @@ public:
 
 	iterator begin()
 	{
-		return { m_pszName, static_cast< T* >( Functor( m_pStartEntity, m_pszName ) ) };
+		return { m_pszName, static_cast< T* >( Functor::Find( m_pStartEntity, m_pszName ) ) };
 	}
 
 	iterator end()
