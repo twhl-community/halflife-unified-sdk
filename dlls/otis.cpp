@@ -102,6 +102,8 @@ public:
 
 	void TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
 	void Killed( entvars_t *pevAttacker, int iGib );
+
+	void KeyValue( KeyValueData* pkvd ) override;
 	
 	virtual int		Save( CSave &save );
 	virtual int		Restore( CRestore &restore );
@@ -817,7 +819,23 @@ void COtis::DeclineFollowing( void )
 	PlaySentence( "OT_POK", 2, VOL_NORM, ATTN_NORM );
 }
 
-
+void COtis::KeyValue( KeyValueData* pkvd )
+{
+	if( FStrEq( "head", pkvd->szKeyName ) )
+	{
+		m_iOtisHead = atoi( pkvd->szValue );
+		pkvd->fHandled = true;
+	}
+	else if( FStrEq( "bodystate", pkvd->szKeyName ) )
+	{
+		m_iOtisBody = atoi( pkvd->szValue );
+		pkvd->fHandled = true;
+	}
+	else
+	{
+		CBaseMonster::KeyValue( pkvd );
+	}
+}
 
 
 
