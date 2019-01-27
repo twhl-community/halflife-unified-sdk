@@ -546,6 +546,21 @@ inline void WRITE_COORD_VECTOR( const Vector& vec )
 	WRITE_COORD( vec.z );
 }
 
+struct MinuteSecondTime
+{
+	const int Minutes;
+	const int Seconds;
+};
+
+/**
+*	@brief Converts seconds to minutes and seconds
+*/
+inline MinuteSecondTime SecondsToTime( const int seconds )
+{
+	const auto minutes = seconds / 60;
+	return { minutes, seconds - ( minutes * 60 ) };
+}
+
 template<typename T>
 struct FindByClassnameFunctor
 {

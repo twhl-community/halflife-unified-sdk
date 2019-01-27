@@ -1683,16 +1683,17 @@ void CHalfLifeCTFplay::SendTeamStatInfo( CTFTeam iTeamNum )
 			if( FStringNull( pPlayer->pev->netname ) || !STRING( pPlayer->pev->netname ) )
 				continue;
 
-			auto v9 = ( long double ) pPlayer->m_iCTFScore + pPlayer->pev->frags;
-			if( v9 > iPts )
+			auto totalScore = pPlayer->m_iCTFScore + pPlayer->pev->frags;
+
+			if( totalScore > iPts )
 			{
 				iMostPts = iPlayer;
-				iPts = ( int ) v9;
+				iPts = totalScore;
 			}
 			if( pPlayer->pev->frags > iFrags )
 			{
 				iMostFrags = iPlayer;
-				iFrags = ( int ) pPlayer->pev->frags;
+				iFrags = pPlayer->pev->frags;
 			}
 			if( pPlayer->m_iCTFScore > iCTFPts )
 			{
@@ -1771,36 +1772,19 @@ void CHalfLifeCTFplay::SendTeamStatInfo( CTFTeam iTeamNum )
 			if( iTeamNum != CTFTeam::None )
 				continue;
 
-			auto v11 = ( int ) pPlayer->m_flJumpTime;
-			auto v12 = ( int ) ( v11 + ( ( unsigned __int64 ) ( -2004318071LL * v11 ) >> 32 ) ) >> 5;
-			auto v13 = v11 >> 31;
-			auto v233 = v11 + 4 * ( v11 / 60 ) - ( v11 / 60 << 6 );
-			auto v14 = ( int ) pPlayer->m_flShieldTime;
-			auto v252 = v12 - v13;
-			auto v222 = v14 + 4 * ( v14 / 60 ) - ( v14 / 60 << 6 );
-			auto v253 = v14 / 60;
-			auto v15 = ( int ) pPlayer->m_flHealthTime;
-			auto v16 = ( int ) ( v15 + ( ( unsigned __int64 ) ( -2004318071LL * v15 ) >> 32 ) ) >> 5;
-			auto v17 = v15 >> 31;
-			auto v220 = v15 + 4 * ( v15 / 60 ) - ( v15 / 60 << 6 );
-			auto v18 = ( int ) pPlayer->m_flBackpackTime;
-			auto v254 = v16 - v17;
-			auto v221 = v18 + 4 * ( v18 / 60 ) - ( v18 / 60 << 6 );
-			auto v255 = v18 / 60;
-			auto v19 = ( int ) pPlayer->m_flAccelTime;
-			auto v235 = v19 / 60;
-
-			auto v25 = v19 + 4 * ( v19 / 60 ) - ( v19 / 60 << 6 );
-
-			auto pEntitya = GetTeamName( pPlayer->edict() );
+			const auto accelTime = SecondsToTime( static_cast<int>( pPlayer->m_flAccelTime ) );
+			const auto backpackTime = SecondsToTime( static_cast<int>( pPlayer->m_flBackpackTime ) );
+			const auto healthTime = SecondsToTime( static_cast<int>( pPlayer->m_flHealthTime ) );
+			const auto shieldTime = SecondsToTime( static_cast<int>( pPlayer->m_flShieldTime ) );
+			const auto jumpTime = SecondsToTime( static_cast<int>( pPlayer->m_flJumpTime ) );
 
 			UTIL_LogPrintf(
 				"\"%s<%i><%u><%s>\" scored \"%d\" (kills \"%d\") (deaths \"%d\") (suicides \"%d\") (ctf_points \"%d\") (ctf_offense \"%d\") (ctf_defense \"%d\") (snipe_kills \"%d\") (barnacle_kills \"%d\") (best_damage \"%d\") (accel_time \"%0d:%02d\") (ammo_time \"%0d:%02d\") (health_time \"%0d:%02d\") (shield_time \"%0d:%02d\") (jump_time \"%0d:%02d\")\n",
 				STRING( pPlayer->pev->netname ),
 				g_engfuncs.pfnGetPlayerUserId( pPlayer->edict() ),
 				g_engfuncs.pfnGetPlayerWONId( pPlayer->edict() ),
-				pEntitya,
-				( int ) v9,
+				GetTeamName( pPlayer->edict() ),
+				( int ) totalScore,
 				( int ) pPlayer->pev->frags,
 				pPlayer->m_iDeaths,
 				pPlayer->m_iSuicides,
@@ -1810,44 +1794,24 @@ void CHalfLifeCTFplay::SendTeamStatInfo( CTFTeam iTeamNum )
 				pPlayer->m_iSnipeKills,
 				pPlayer->m_iBarnacleKills,
 				pPlayer->m_iMostDamage,
-				v235,
-				v25,
-				v255,
-				v221,
-				v254,
-				v220,
-				v253,
-				v222,
-				v252,
-				v233 );
+				accelTime.Minutes,
+				accelTime.Seconds,
+				backpackTime.Minutes,
+				backpackTime.Seconds,
+				healthTime.Minutes,
+				healthTime.Seconds,
+				shieldTime.Minutes,
+				shieldTime.Seconds,
+				jumpTime.Minutes,
+				jumpTime.Seconds );
 		}
 	}
 
-	const auto v28 = ( int ) flAccelVal;
-	const auto v213 = v28 / 60;
-	const auto v207 = ( signed __int16 ) v28;
-	const auto flAccelVala = v28 + 4 * ( v28 / 60 ) - ( v28 / 60 << 6 );
-	const auto v30 = ( int ) flBackpackVal;
-	const auto v215 = v30 / 60;
-	const auto v209 = ( signed __int16 ) v30;
-	const auto v31 = v30 + 4 * ( v30 / 60 ) - ( v30 / 60 << 6 );
-	const auto v32 = ( int ) flHealthVal;
-	const auto flBackpackVala = *( float * ) &v31;
-	const auto v217 = v32 / 60;
-	const auto v211 = ( signed __int16 ) v32;
-	const auto v33 = v32 + 4 * ( v32 / 60 ) - ( v32 / 60 << 6 );
-	const auto v34 = ( int ) flShieldVal;
-	const auto flHealthVala = *( float * ) &v33;
-	const auto v35 = v34 / 60;
-	const auto v36 = v34 / 60;
-	const auto v37 = v34 + 4 * ( v34 / 60 );
-	const auto flShieldVala = ( signed __int16 ) v34;
-	const auto v38 = ( int ) flJumpVal;
-	const auto v39 = v37 - ( v36 << 6 );
-	const auto v219 = v35;
-	const auto v40 = v38 + 4 * ( v38 / 60 ) - ( v38 / 60 << 6 );
-	const auto v234 = v38 / 60;
-	const auto flJumpVala = ( signed __int16 ) v38;
+	const auto accelTime = SecondsToTime( static_cast<int>( flAccelVal ) );
+	const auto backpackTime = SecondsToTime( static_cast<int>( flBackpackVal ) );
+	const auto healthTime = SecondsToTime( static_cast<int>( flHealthVal ) );
+	const auto shieldTime = SecondsToTime( static_cast<int>( flShieldVal ) );
+	const auto jumpTime = SecondsToTime( static_cast<int>( flJumpVal ) );
 
 	if( ( ToTeamIndex( iTeamNum ) ) < MaxTeams )
 	{
@@ -2153,16 +2117,16 @@ void CHalfLifeCTFplay::SendTeamStatInfo( CTFTeam iTeamNum )
 			g_engfuncs.pfnGetPlayerUserId( v129->pev->pContainingEntity ),
 			g_engfuncs.pfnGetPlayerWONId( v129->pev->pContainingEntity ),
 			GetTeamName( v129->edict() ),
-			v213,
-			flAccelVala );
+			accelTime.Minutes,
+			accelTime.Seconds );
 	}
 	else
 	{
 		g_engfuncs.pfnWriteString( "*Nobody*" );
-		UTIL_LogPrintf( "// %-40s : *Nobody* for %d:%02d\n", "Most Damage Powerup Time", v213, flAccelVala );
+		UTIL_LogPrintf( "// %-40s : *Nobody* for %d:%02d\n", "Most Damage Powerup Time", accelTime.Minutes, accelTime.Seconds );
 	}
 
-	g_engfuncs.pfnWriteShort( v207 );
+	g_engfuncs.pfnWriteShort( static_cast<short>( flAccelVal ) );
 	auto v137 = UTIL_PlayerByIndex( iMostBackpack );
 
 	if( v137 && !FStringNull( v137->pev->netname ) && STRING( v137->pev->netname ) )
@@ -2179,16 +2143,16 @@ void CHalfLifeCTFplay::SendTeamStatInfo( CTFTeam iTeamNum )
 			g_engfuncs.pfnGetPlayerUserId( v137->pev->pContainingEntity ),
 			g_engfuncs.pfnGetPlayerWONId( v137->pev->pContainingEntity ),
 			GetTeamName( v137->edict() ),
-			v215,
-			flBackpackVala );
+			backpackTime.Minutes,
+			backpackTime.Seconds );
 	}
 	else
 	{
 		g_engfuncs.pfnWriteString( "*Nobody*" );
-		UTIL_LogPrintf( "// %-40s : *Nobody* for %d:%02d\n", "Most Backpack Powerup Time", v215, flBackpackVala );
+		UTIL_LogPrintf( "// %-40s : *Nobody* for %d:%02d\n", "Most Backpack Powerup Time", backpackTime.Minutes, backpackTime.Seconds );
 	}
 
-	g_engfuncs.pfnWriteShort( v209 );
+	g_engfuncs.pfnWriteShort( static_cast<short>( flBackpackVal ) );
 	auto v145 = UTIL_PlayerByIndex( iMostHealth );
 
 	if( v145 && !FStringNull( v145->pev->netname ) && STRING( v145->pev->netname ) )
@@ -2205,15 +2169,15 @@ void CHalfLifeCTFplay::SendTeamStatInfo( CTFTeam iTeamNum )
 			g_engfuncs.pfnGetPlayerUserId( v145->pev->pContainingEntity ),
 			g_engfuncs.pfnGetPlayerWONId( v145->pev->pContainingEntity ),
 			GetTeamName( v145->edict() ),
-			v217,
-			flHealthVala );
+			healthTime.Minutes,
+			healthTime.Seconds );
 	}
 	else
 	{
 		g_engfuncs.pfnWriteString( "*Nobody*" );
-		UTIL_LogPrintf( "// %-40s : *Nobody* for %d:%02d\n", "Most Health Powerup Time", v217, flHealthVala );
+		UTIL_LogPrintf( "// %-40s : *Nobody* for %d:%02d\n", "Most Health Powerup Time", healthTime.Minutes, healthTime.Seconds );
 	}
-	g_engfuncs.pfnWriteShort( v211 );
+	g_engfuncs.pfnWriteShort( static_cast<short>( flHealthVal ) );
 	auto v153 = UTIL_PlayerByIndex( iMostShield );
 
 	if( v153 && !FStringNull( v153->pev->netname ) && STRING( v153->pev->netname ) )
@@ -2229,16 +2193,16 @@ void CHalfLifeCTFplay::SendTeamStatInfo( CTFTeam iTeamNum )
 			g_engfuncs.pfnGetPlayerUserId( v153->pev->pContainingEntity ),
 			g_engfuncs.pfnGetPlayerWONId( v153->pev->pContainingEntity ),
 			GetTeamName( v153->edict() ),
-			v219,
-			v39 );
+			shieldTime.Minutes,
+			shieldTime.Seconds );
 	}
 	else
 	{
 		g_engfuncs.pfnWriteString( "*Nobody*" );
-		UTIL_LogPrintf( "// %-40s : *Nobody* for %d:%02d\n", "Most Shield Powerup Time", v219, v39 );
+		UTIL_LogPrintf( "// %-40s : *Nobody* for %d:%02d\n", "Most Shield Powerup Time", shieldTime.Minutes, shieldTime.Seconds );
 	}
 
-	g_engfuncs.pfnWriteShort( flShieldVala );
+	g_engfuncs.pfnWriteShort( static_cast<short>( flShieldVal ) );
 
 	auto v161 = UTIL_PlayerByIndex( iMostJump );
 
@@ -2249,6 +2213,8 @@ void CHalfLifeCTFplay::SendTeamStatInfo( CTFTeam iTeamNum )
 
 		g_engfuncs.pfnWriteString( szBuf );
 
+		
+
 		UTIL_LogPrintf(
 			"// %-40s : \"%s<%i><%u><%s>\" for %d:%02d\n",
 			"Most Jumppack Powerup Time",
@@ -2256,16 +2222,16 @@ void CHalfLifeCTFplay::SendTeamStatInfo( CTFTeam iTeamNum )
 			g_engfuncs.pfnGetPlayerUserId( v161->pev->pContainingEntity ),
 			g_engfuncs.pfnGetPlayerWONId( v161->pev->pContainingEntity ),
 			GetTeamName( v161->edict() ),
-			v234,
-			v40 );
+			jumpTime.Minutes,
+			jumpTime.Seconds );
 	}
 	else
 	{
 		g_engfuncs.pfnWriteString( "*Nobody*" );
-		UTIL_LogPrintf( "// %-40s : *Nobody* for %d:%02d\n", "Most Jumppack Powerup Time", v234, v40 );
+		UTIL_LogPrintf( "// %-40s : *Nobody* for %d:%02d\n", "Most Jumppack Powerup Time", jumpTime.Minutes, jumpTime.Seconds );
 	}
 
-	g_engfuncs.pfnWriteShort( flJumpVala );
+	g_engfuncs.pfnWriteShort( static_cast<short>( flJumpVal ) );
 	g_engfuncs.pfnMessageEnd();
 }
 
