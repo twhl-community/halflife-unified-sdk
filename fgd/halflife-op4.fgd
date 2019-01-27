@@ -3413,6 +3413,7 @@ initammo(string) : "Initial Ammo" : "6"
 	spawnflags(flags) = 
 	[ 
 		4: "Random Spawn" : 1 
+		8: "Ignore Spawn Team Setting" : 0
 	]
 	team_no(Choices) : "Team" : 0 =
 	[
