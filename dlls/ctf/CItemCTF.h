@@ -23,6 +23,7 @@ class CItemCTF : public CBaseAnimating
 public:
 	void DropItem( CBasePlayer* pPlayer, bool bForceRespawn ) {}
 	void ScatterItem( CBasePlayer* pPlayer ) {}
+	void ThrowItem( CBasePlayer* pPlayer ) {}
 
 	CTFTeam team_no;
 	int m_iLastTouched;

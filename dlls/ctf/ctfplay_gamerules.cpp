@@ -436,7 +436,7 @@ static void ForEachPlayerCTFPowerup( CBasePlayer* pPlayer, ItemCallback callback
 	{
 		if( item.RespawnOrScatter && ( ( unsigned int ) pPlayer->m_iItems & ( unsigned int ) item.Mask ) )
 		{
-			for( CItemCTF* pItem = nullptr; ( pItem = static_cast< CItemCTF* >( UTIL_FindEntityByClassname( pItem, item.Name ) ) ); )
+			for( CItemCTF* pItem = nullptr; ( pItem = static_cast<CItemCTF* >( UTIL_FindEntityByClassname( pItem, item.Name ) ) ); )
 			{
 				if( pItem->team_no == CTFTeam::None || pItem->team_no == pPlayer->m_iTeamNum )
 				{
@@ -469,6 +469,15 @@ void ScatterPlayerCTFPowerups( CBasePlayer* pPlayer )
 	ForEachPlayerCTFPowerup( pPlayer, [ = ]( auto pPlayer, auto pItem )
 		{
 			pItem->ScatterItem( pPlayer );
+		}
+	);
+}
+
+void DropPlayerCTFPowerup( CBasePlayer* pPlayer )
+{
+	ForEachPlayerCTFPowerup( pPlayer, [ = ]( auto pPlayer, auto pItem )
+		{
+			pItem->ThrowItem( pPlayer );
 		}
 	);
 }
