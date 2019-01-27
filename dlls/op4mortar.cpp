@@ -635,8 +635,7 @@ CBaseEntity* COp4Mortar::FindTarget()
 		if( this == pEntity )
 			continue;
 
-		//This doesn't make sense
-		if( pEntity->pev->spawnflags & SF_MORTAR_LINE_OF_SIGHT )
+		if( pEntity->pev->spawnflags & SF_MONSTER_PRISONER )
 			continue;
 
 		if( pEntity->pev->health <= 0 )
