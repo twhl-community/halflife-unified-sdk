@@ -394,6 +394,53 @@ BOOL CHalfLifeMultiplay :: GetNextBestWeapon( CBasePlayer *pPlayer, CBasePlayerI
 BOOL CHalfLifeMultiplay :: ClientConnected( edict_t *pEntity, const char *pszName, const char *pszAddress, char szRejectReason[ 128 ] )
 {
 	g_VoiceGameMgr.ClientConnected(pEntity);
+
+	int playersInTeamsCount = 0;
+
+	for( int iPlayer = 1; iPlayer <= gpGlobals->maxClients; ++iPlayer )
+	{
+		auto pPlayer = static_cast< CBasePlayer* >( UTIL_PlayerByIndex( iPlayer ) );
+
+		if( pPlayer )
+		{
+			if( pPlayer->IsPlayer() )
+			{
+				playersInTeamsCount += ( pPlayer->m_iTeamNum > CTFTeam::None ) ? 1 : 0;
+			}
+		}
+	}
+
+	if( playersInTeamsCount <= 1 )
+	{
+		for( int iPlayer = 1; iPlayer <= gpGlobals->maxClients; ++iPlayer )
+		{
+			auto pPlayer = static_cast<CBasePlayer*>( UTIL_PlayerByIndex( iPlayer ) );
+
+			if( pPlayer && pPlayer->m_iItems != CTFItem::None )
+			{
+				if( pPlayer->m_iItems & CTFItem::ItemsMask )
+				{
+					RespawnPlayerCTFPowerups( pPlayer, true );
+				}
+
+				ClientPrint( pPlayer->pev, HUD_PRINTCENTER, "#CTFGameReset" );
+			}
+		}
+	}
+
+	if( pEntity )
+	{
+		//TODO: really shouldn't be modifying this directly
+		auto portNumber = strchr( const_cast<char*>( pszAddress ), ':' );
+
+		if( portNumber )
+			*portNumber = '\0';
+
+		pszPlayerIPs[ ENTINDEX( pEntity ) ] = strdup( pszAddress );
+	}
+
+	trace_line( "CHalfLifeMultiplay :: ClientConnected  g_pGameRules->IsMultiplayer()[%d] address[%s]\n", IsMultiplayer(), pszAddress );
+
 	return TRUE;
 }
 

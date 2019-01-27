@@ -110,6 +110,9 @@ private:
 	int m_iStatsPlayer;
 };
 
+extern char* pszPlayerIPs[ SV_MAX_PLAYERS * 2 ];
+
+void RespawnPlayerCTFPowerups( CBasePlayer* pPlayer, bool bForceRespawn );
 void ScatterPlayerCTFPowerups( CBasePlayer* pPlayer );
 void DropPlayerCTFPowerup( CBasePlayer* pPlayer );
 void FlushCTFPowerupTimes();
