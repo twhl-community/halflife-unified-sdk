@@ -110,6 +110,7 @@ private:
 	int m_iStatsPlayer;
 };
 
+void ScatterPlayerCTFPowerups( CBasePlayer* pPlayer );
 void DropPlayerCTFPowerup( CBasePlayer* pPlayer );
 void FlushCTFPowerupTimes();
 

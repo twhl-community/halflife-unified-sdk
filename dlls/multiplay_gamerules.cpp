@@ -667,6 +667,11 @@ void CHalfLifeMultiplay :: PlayerKilled( CBasePlayer *pVictim, entvars_t *pKille
 		DeactivateSatchels( pVictim );
 	}
 #endif
+
+	if( pVictim->IsPlayer() && !g_fGameOver && ( pVictim->m_iItems & CTFItem::ItemsMask ) )
+	{
+		ScatterPlayerCTFPowerups( pVictim );
+	}
 }
 
 //=========================================================
