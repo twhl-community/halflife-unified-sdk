@@ -574,6 +574,7 @@ cvar_t	sk_player_leg3	= { "sk_player_leg3","1" };
 
 cvar_t ctf_capture = { "mp_ctf_capture", 0, FCVAR_SERVER };
 cvar_t oldweapons = { "sv_oldweapons", 0, FCVAR_SERVER };
+cvar_t multipower = { "mp_multipower", 0, FCVAR_SERVER };
 
 // END Opposing Force variables
 
@@ -1127,6 +1128,7 @@ void GameDLLInit( void )
 
 	CVAR_REGISTER( &ctf_capture );
 	CVAR_REGISTER( &oldweapons );
+	CVAR_REGISTER( &multipower );
 
 	// END REGISTER CVARS FOR OPPOSING FORCE
 
