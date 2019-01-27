@@ -34,6 +34,7 @@
 #include "gamerules.h"
 #include "teamplay_gamerules.h"
 #include "world.h"
+#include "ctf/CItemCTF.h"
 
 extern CGraph WorldGraph;
 extern CSoundEnt *pSoundEnt;
@@ -479,6 +480,8 @@ void CWorld :: Spawn( void )
 {
 	g_fGameOver = FALSE;
 	Precache( );
+	CItemCTF::m_pLastSpawn = nullptr;
+	//TODO: needs some ctf specific code
 	g_flWeaponCheat = CVAR_GET_FLOAT( "sv_cheats" );  // Is the impulse 101 command allowed?
 }
 

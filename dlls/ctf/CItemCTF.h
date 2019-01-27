@@ -17,19 +17,46 @@
 
 #include "CTFDefs.h"
 
+class CItemSpawnCTF;
+
 //TODO: implement
 class CItemCTF : public CBaseAnimating
 {
 public:
-	void DropItem( CBasePlayer* pPlayer, bool bForceRespawn ) {}
-	void ScatterItem( CBasePlayer* pPlayer ) {}
-	void ThrowItem( CBasePlayer* pPlayer ) {}
+	static CItemSpawnCTF* m_pLastSpawn;
+
+public:
+	void KeyValue( KeyValueData* pkvd ) override;
+	void Precache() override;
+	void Spawn() override;
+
+	void SetObjectCollisionBox() override
+	{
+		pev->absmin = pev->origin + Vector( -16, -16, 0 );
+		pev->absmax = pev->origin + Vector( 16, 16, 48 );
+	}
+
+	void EXPORT DropPreThink();
+
+	void EXPORT DropThink();
+
+	void EXPORT CarryThink();
+
+	void EXPORT ItemTouch( CBaseEntity* pOther );
+
+	virtual void RemoveEffect( CBasePlayer* pPlayer ) {}
+
+	virtual bool MyTouch( CBasePlayer* pPlayer ) { return false; }
+
+	void DropItem( CBasePlayer* pPlayer, bool bForceRespawn );
+	void ScatterItem( CBasePlayer* pPlayer );
+	void ThrowItem( CBasePlayer* pPlayer );
 
 	CTFTeam team_no;
 	int m_iLastTouched;
 	float m_flNextTouchTime;
 	float m_flPickupTime;
-	unsigned int m_iItemFlag;
+	CTFItem::CTFItem m_iItemFlag;
 	const char* m_pszItemName;
 };
 

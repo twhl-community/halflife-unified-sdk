@@ -140,6 +140,23 @@ CTFTeam GetWinningTeam()
 	return CTFTeam::None;
 }
 
+void GetLosingTeam( int& iTeamNum, int& iScoreDiff )
+{
+	iTeamNum = 0;
+	iScoreDiff = 0;
+
+	//TODO: doesn't really make sense, if team 0 is losing the score difference is 0
+	if( teamscores[ 1 ] < teamscores[ 0 ] )
+	{
+		iTeamNum = 1;
+
+		const auto difference = teamscores[ 0 ] - teamscores[ 1 ];
+
+		if( iScoreDiff < difference )
+			iScoreDiff = difference;
+	}
+}
+
 void DisplayTeamFlags( CBasePlayer* pPlayer )
 {
 	CTFGoalFlag* v2 = nullptr;

@@ -131,6 +131,8 @@
     <ClCompile Include="..\..\dlls\CRecruit.cpp" />
     <ClCompile Include="..\..\dlls\crossbow.cpp" />
     <ClCompile Include="..\..\dlls\crowbar.cpp" />
+    <ClCompile Include="..\..\dlls\ctf\CItemCTF.cpp" />
+    <ClCompile Include="..\..\dlls\ctf\CItemSpawnCTF.cpp" />
     <ClCompile Include="..\..\dlls\ctf\ctfplay_gamerules.cpp" />
     <ClCompile Include="..\..\dlls\defaultai.cpp" />
     <ClCompile Include="..\..\dlls\doors.cpp" />
@@ -273,6 +275,7 @@
     <ClInclude Include="..\..\dlls\ctf\CItemLongJumpCTF.h" />
     <ClInclude Include="..\..\dlls\ctf\CItemPortableHEVCTF.h" />
     <ClInclude Include="..\..\dlls\ctf\CItemRegenerationCTF.h" />
+    <ClInclude Include="..\..\dlls\ctf\CItemSpawnCTF.h" />
     <ClInclude Include="..\..\dlls\ctf\CTFDefs.h" />
     <ClInclude Include="..\..\dlls\ctf\CTFGoal.h" />
     <ClInclude Include="..\..\dlls\ctf\CTFGoalBase.h" />
