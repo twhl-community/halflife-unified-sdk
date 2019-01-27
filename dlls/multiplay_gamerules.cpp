@@ -32,11 +32,11 @@
 #include <ctype.h>
 #endif
 
-#include "CItemAcceleratorCTF.h"
-#include "CItemBackpackCTF.h"
-#include "CItemLongJumpCTF.h"
-#include "CItemPortableHEVCTF.h"
-#include "CItemRegenerationCTF.h"
+#include "ctf/CItemAcceleratorCTF.h"
+#include "ctf/CItemBackpackCTF.h"
+#include "ctf/CItemLongJumpCTF.h"
+#include "ctf/CItemPortableHEVCTF.h"
+#include "ctf/CItemRegenerationCTF.h"
 
 extern DLL_GLOBAL CGameRules	*g_pGameRules;
 extern DLL_GLOBAL BOOL	g_fGameOver;
