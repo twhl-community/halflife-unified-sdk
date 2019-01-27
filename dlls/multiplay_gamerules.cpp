@@ -28,15 +28,11 @@
 #include	"voice_gamemgr.h"
 #include	"hltv.h"
 
+#include "ctf/ctfplay_gamerules.h"
+
 #if !defined ( _WIN32 )
 #include <ctype.h>
 #endif
-
-#include "ctf/CItemAcceleratorCTF.h"
-#include "ctf/CItemBackpackCTF.h"
-#include "ctf/CItemLongJumpCTF.h"
-#include "ctf/CItemPortableHEVCTF.h"
-#include "ctf/CItemRegenerationCTF.h"
 
 extern DLL_GLOBAL CGameRules	*g_pGameRules;
 extern DLL_GLOBAL BOOL	g_fGameOver;
@@ -1136,59 +1132,6 @@ BOOL CHalfLifeMultiplay :: FAllowMonsters( void )
 //=========================================================
 //======== CHalfLifeMultiplay private functions ===========
 #define INTERMISSION_TIME		6
-
-void FlushCTFPowerupTimes()
-{
-	for( auto pItem : UTIL_FindEntitiesByClassname<CItemCTF>( "item_ctflongjump" ) )
-	{
-		auto pPlayer = GET_PRIVATE<CBasePlayer>( pItem->pev->owner );
-
-		if( pPlayer && pPlayer->IsPlayer() )
-		{
-			pPlayer->m_flJumpTime += gpGlobals->time - pItem->m_flPickupTime;
-		}
-	}
-
-	for( auto pItem : UTIL_FindEntitiesByClassname<CItemPortableHEVCTF>( "item_ctfportablehev" ) )
-	{
-		auto pPlayer = GET_PRIVATE<CBasePlayer>( pItem->pev->owner );
-
-		if( pPlayer && pPlayer->IsPlayer() )
-		{
-			pPlayer->m_flShieldTime += gpGlobals->time - pItem->m_flPickupTime;
-		}
-	}
-
-	for( auto pItem : UTIL_FindEntitiesByClassname<CItemRegenerationCTF>( "item_ctfregeneration" ) )
-	{
-		auto pPlayer = GET_PRIVATE<CBasePlayer>( pItem->pev->owner );
-
-		if( pPlayer && pPlayer->IsPlayer() )
-		{
-			pPlayer->m_flHealthTime += gpGlobals->time - pItem->m_flPickupTime;
-		}
-	}
-
-	for( auto pItem : UTIL_FindEntitiesByClassname<CItemBackpackCTF>( "item_ctfbackpack" ) )
-	{
-		auto pPlayer = GET_PRIVATE<CBasePlayer>( pItem->pev->owner );
-
-		if( pPlayer && pPlayer->IsPlayer() )
-		{
-			pPlayer->m_flBackpackTime += gpGlobals->time - pItem->m_flPickupTime;
-		}
-	}
-
-	for( auto pItem : UTIL_FindEntitiesByClassname<CItemAcceleratorCTF>( "item_ctfaccelerator" ) )
-	{
-		auto pPlayer = GET_PRIVATE<CBasePlayer>( pItem->pev->owner );
-
-		if( pPlayer && pPlayer->IsPlayer() )
-		{
-			pPlayer->m_flAccelTime += gpGlobals->time - pItem->m_flPickupTime;
-		}
-	}
-}
 
 void CHalfLifeMultiplay :: GoToIntermission( void )
 {

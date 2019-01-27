@@ -24,10 +24,18 @@
 #include "weapons.h"
 #include "game.h"
 #include "gamerules.h"
+
 #include "ctfplay_gamerules.h"
 #include "CTFGoalFlag.h"
 #include "CItemCTF.h"
 #include "CTFGoalBase.h"
+
+#include "CItemAcceleratorCTF.h"
+#include "CItemBackpackCTF.h"
+#include "CItemLongJumpCTF.h"
+#include "CItemPortableHEVCTF.h"
+#include "CItemRegenerationCTF.h"
+
 #include "pm_shared.h"
 
 extern DLL_GLOBAL BOOL		g_fGameOver;
@@ -458,6 +466,59 @@ void ScatterPlayerCTFPowerups( CBasePlayer* pPlayer )
 			pItem->ScatterItem( pPlayer );
 		}
 	);
+}
+
+void FlushCTFPowerupTimes()
+{
+	for( auto pItem : UTIL_FindEntitiesByClassname<CItemCTF>( "item_ctflongjump" ) )
+	{
+		auto pPlayer = GET_PRIVATE<CBasePlayer>( pItem->pev->owner );
+
+		if( pPlayer && pPlayer->IsPlayer() )
+		{
+			pPlayer->m_flJumpTime += gpGlobals->time - pItem->m_flPickupTime;
+		}
+	}
+
+	for( auto pItem : UTIL_FindEntitiesByClassname<CItemPortableHEVCTF>( "item_ctfportablehev" ) )
+	{
+		auto pPlayer = GET_PRIVATE<CBasePlayer>( pItem->pev->owner );
+
+		if( pPlayer && pPlayer->IsPlayer() )
+		{
+			pPlayer->m_flShieldTime += gpGlobals->time - pItem->m_flPickupTime;
+		}
+	}
+
+	for( auto pItem : UTIL_FindEntitiesByClassname<CItemRegenerationCTF>( "item_ctfregeneration" ) )
+	{
+		auto pPlayer = GET_PRIVATE<CBasePlayer>( pItem->pev->owner );
+
+		if( pPlayer && pPlayer->IsPlayer() )
+		{
+			pPlayer->m_flHealthTime += gpGlobals->time - pItem->m_flPickupTime;
+		}
+	}
+
+	for( auto pItem : UTIL_FindEntitiesByClassname<CItemBackpackCTF>( "item_ctfbackpack" ) )
+	{
+		auto pPlayer = GET_PRIVATE<CBasePlayer>( pItem->pev->owner );
+
+		if( pPlayer && pPlayer->IsPlayer() )
+		{
+			pPlayer->m_flBackpackTime += gpGlobals->time - pItem->m_flPickupTime;
+		}
+	}
+
+	for( auto pItem : UTIL_FindEntitiesByClassname<CItemAcceleratorCTF>( "item_ctfaccelerator" ) )
+	{
+		auto pPlayer = GET_PRIVATE<CBasePlayer>( pItem->pev->owner );
+
+		if( pPlayer && pPlayer->IsPlayer() )
+		{
+			pPlayer->m_flAccelTime += gpGlobals->time - pItem->m_flPickupTime;
+		}
+	}
 }
 
 void InitItemsForPlayer( CBasePlayer* pPlayer )

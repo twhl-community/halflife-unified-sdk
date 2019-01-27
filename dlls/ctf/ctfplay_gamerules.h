@@ -108,4 +108,6 @@ private:
 	int m_iStatsPlayer;
 };
 
+void FlushCTFPowerupTimes();
+
 #endif
