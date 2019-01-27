@@ -280,7 +280,8 @@ void CEagle::Reload()
 		const bool bResult = DefaultReload( EAGLE_MAX_CLIP, m_iClip ? EAGLE_RELOAD : EAGLE_RELOAD_NOSHOT, 1.5, 1 );
 	
 #ifndef CLIENT_DLL
-		if( m_pLaser && m_bLaserActive )
+		//Only turn it off if we're actually reloading
+		if( bResult && m_pLaser && m_bLaserActive )
 		{
 			m_pLaser->pev->effects |= EF_NODRAW;
 			m_pLaser->SetThink( &CEagleLaser::Revive );
