@@ -17,10 +17,18 @@
 
 #include "CItemCTF.h"
 
-//TODO: implement
 class CItemAcceleratorCTF : public CItemCTF
 {
 public:
+	int Classify() override { return CLASS_CTFITEM; }
+
+	void Precache() override;
+
+	void Spawn() override;
+
+	void RemoveEffect( CBasePlayer* pPlayer ) override;
+
+	bool MyTouch( CBasePlayer* pPlayer ) override;
 };
 
 #endif

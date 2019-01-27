@@ -519,6 +519,9 @@
     <ClCompile Include="..\..\dlls\ctf\CItemSpawnCTF.cpp">
       <Filter>Source Files\dlls\ctf</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\dlls\ctf\CItemAcceleratorCTF.cpp">
+      <Filter>Source Files\dlls\ctf</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\dlls\doors.h">
