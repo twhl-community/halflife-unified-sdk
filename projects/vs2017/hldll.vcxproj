@@ -273,6 +273,7 @@
     <ClInclude Include="..\..\dlls\ctf\CItemLongJumpCTF.h" />
     <ClInclude Include="..\..\dlls\ctf\CItemPortableHEVCTF.h" />
     <ClInclude Include="..\..\dlls\ctf\CItemRegenerationCTF.h" />
+    <ClInclude Include="..\..\dlls\ctf\CTFDefs.h" />
     <ClInclude Include="..\..\dlls\ctf\CTFGoal.h" />
     <ClInclude Include="..\..\dlls\ctf\CTFGoalBase.h" />
     <ClInclude Include="..\..\dlls\ctf\CTFGoalFlag.h" />

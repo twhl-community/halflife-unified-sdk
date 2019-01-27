@@ -15,6 +15,8 @@
 #ifndef CITEMCTF_H
 #define CITEMCTF_H
 
+#include "CTFDefs.h"
+
 //TODO: implement
 class CItemCTF : public CBaseAnimating
 {
@@ -22,7 +24,7 @@ public:
 	void DropItem( CBasePlayer* pPlayer, bool bForceRespawn ) {}
 	void ScatterItem( CBasePlayer* pPlayer ) {}
 
-	int team_no;
+	CTFTeam team_no;
 	int m_iLastTouched;
 	float m_flNextTouchTime;
 	float m_flPickupTime;

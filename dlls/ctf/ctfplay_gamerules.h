@@ -15,6 +15,8 @@
 #ifndef CTFPLAY_GAMERULES_H
 #define CTFPLAY_GAMERULES_H
 
+#include "CTFDefs.h"
+
 /**
 *	@brief Opposing Force CTF gamemode rules
 */
@@ -94,7 +96,7 @@ public:
 	void GoToIntermission() override;
 
 private:
-	void SendTeamStatInfo( int iTeamNum );
+	void SendTeamStatInfo( CTFTeam iTeamNum );
 	void SendPlayerStatInfo( CBasePlayer* pPlayer );
 
 	void RecountTeams();

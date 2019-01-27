@@ -746,5 +746,8 @@
     <ClInclude Include="..\..\dlls\ctf\ctfplay_gamerules.h">
       <Filter>Header Files\dlls\ctf</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\dlls\ctf\CTFDefs.h">
+      <Filter>Header Files\dlls\ctf</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

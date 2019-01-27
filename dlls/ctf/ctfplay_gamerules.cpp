@@ -103,6 +103,11 @@ static const std::array<const char*, MaxTeamCharacters> team_chars =
 	"tower",
 };
 
+int ToTeamIndex( const CTFTeam team )
+{
+	return static_cast<int>( team ) - 1;
+}
+
 const char* GetTeamName( edict_t *pEntity )
 {
 	if( g_pGameRules->IsCTF() )
@@ -433,7 +438,7 @@ static void ForEachPlayerCTFPowerup( CBasePlayer* pPlayer, ItemCallback callback
 		{
 			for( CItemCTF* pItem = nullptr; ( pItem = static_cast< CItemCTF* >( UTIL_FindEntityByClassname( pItem, item.Name ) ) ); )
 			{
-				if( pItem->team_no == 0 || ( CTFTeam ) pItem->team_no == pPlayer->m_iTeamNum )
+				if( pItem->team_no == CTFTeam::None || pItem->team_no == pPlayer->m_iTeamNum )
 				{
 					callback( pPlayer, pItem );
 					break;
@@ -600,15 +605,15 @@ void CHalfLifeCTFplay::Think()
 				m_iStatsPhase = StatsPhase::OpenMenu;
 			break;
 		case StatsPhase::SendTeam2:
-			SendTeamStatInfo( 2 );
+			SendTeamStatInfo( CTFTeam::OpposingForce );
 			m_iStatsPhase = StatsPhase::SendPlayers;
 			break;
 		case StatsPhase::SendTeam1:
-			SendTeamStatInfo( 1 );
+			SendTeamStatInfo( CTFTeam::BlackMesa );
 			m_iStatsPhase = StatsPhase::SendTeam2;
 			break;
 		case StatsPhase::SendTeam0:
-			SendTeamStatInfo( 0 );
+			SendTeamStatInfo( CTFTeam::None );
 			m_iStatsPhase = StatsPhase::SendTeam1;
 			break;
 		}
@@ -1632,7 +1637,7 @@ void CHalfLifeCTFplay::GoToIntermission()
 	CHalfLifeMultiplay::GoToIntermission();
 }
 
-void CHalfLifeCTFplay::SendTeamStatInfo( int iTeamNum )
+void CHalfLifeCTFplay::SendTeamStatInfo( CTFTeam iTeamNum )
 {
 	char szBuf[ 21 ];
 
@@ -1673,7 +1678,7 @@ void CHalfLifeCTFplay::SendTeamStatInfo( int iTeamNum )
 		auto pPlayer = ( CBasePlayer * ) UTIL_PlayerByIndex( iPlayer );
 		if( pPlayer
 			&& pPlayer->IsPlayer()
-			&& ( !iTeamNum || pPlayer->m_iTeamNum == ( CTFTeam ) iTeamNum ) )
+			&& ( iTeamNum == CTFTeam::None || pPlayer->m_iTeamNum == iTeamNum ) )
 		{
 			if( FStringNull( pPlayer->pev->netname ) || !STRING( pPlayer->pev->netname ) )
 				continue;
@@ -1763,7 +1768,7 @@ void CHalfLifeCTFplay::SendTeamStatInfo( int iTeamNum )
 
 			++iNumPlayers;
 
-			if( iTeamNum )
+			if( iTeamNum != CTFTeam::None )
 				continue;
 
 			auto v11 = ( int ) pPlayer->m_flJumpTime;
@@ -1844,9 +1849,9 @@ void CHalfLifeCTFplay::SendTeamStatInfo( int iTeamNum )
 	const auto v234 = v38 / 60;
 	const auto flJumpVala = ( signed __int16 ) v38;
 
-	if( ( unsigned int ) ( iTeamNum - 1 ) <= 1 )
+	if( ( ToTeamIndex( iTeamNum ) ) < MaxTeams )
 	{
-		UTIL_LogPrintf( "// === Team %s Statistics ===\n", team_names[ iTeamNum - 1 ] );
+		UTIL_LogPrintf( "// === Team %s Statistics ===\n", team_names[ ToTeamIndex( iTeamNum ) ] );
 	}
 	else
 	{
@@ -1871,7 +1876,7 @@ void CHalfLifeCTFplay::SendTeamStatInfo( int iTeamNum )
 	}
 
 	g_engfuncs.pfnMessageBegin( 2, gmsgStatsInfo, 0, 0 );
-	g_engfuncs.pfnWriteByte( iTeamNum );
+	g_engfuncs.pfnWriteByte( static_cast<int>( iTeamNum ) );
 
 	g_engfuncs.pfnWriteByte( ( int ) GetWinningTeam() );
 	g_engfuncs.pfnWriteByte( iNumPlayers );
@@ -2052,7 +2057,7 @@ void CHalfLifeCTFplay::SendTeamStatInfo( int iTeamNum )
 	g_engfuncs.pfnWriteShort( iBarnacleVal );
 	g_engfuncs.pfnMessageEnd();
 	g_engfuncs.pfnMessageBegin( 2, gmsgStatsInfo, 0, 0 );
-	g_engfuncs.pfnWriteByte( iTeamNum );
+	g_engfuncs.pfnWriteByte( static_cast<int>( iTeamNum ) );
 
 	g_engfuncs.pfnWriteByte( ( int ) GetWinningTeam() );
 	g_engfuncs.pfnWriteByte( iNumPlayers );
