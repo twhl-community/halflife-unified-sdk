@@ -191,7 +191,7 @@ public:
 	char* m_szTeamModel;
 	CTFTeam m_iTeamNum;
 	CTFTeam m_iNewTeamNum;
-	CTFItem m_iItems;
+	CTFItem::CTFItem m_iItems;
 	unsigned int m_iClientItems;
 	EHANDLE m_pFlag;
 	int m_iCurrentMenu;

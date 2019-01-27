@@ -26,7 +26,9 @@ enum class CTFTeam
 	OpposingForce
 };
 
-enum class CTFItem : unsigned int
+namespace CTFItem
+{
+enum CTFItem : unsigned int
 {
 	None = 0,
 
@@ -42,5 +44,6 @@ enum class CTFItem : unsigned int
 
 	ItemsMask = LongJump | PortableHEV | Backpack | Acceleration | Unknown | Regeneration
 };
+}
 
 #endif //CTFDEFS_H

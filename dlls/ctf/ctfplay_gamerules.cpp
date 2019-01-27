@@ -386,7 +386,7 @@ struct ItemData
 {
 	using CleanupCallback_t = void( * )( CBasePlayer* pPlayer );
 
-	const CTFItem Mask;
+	const CTFItem::CTFItem Mask;
 	const char* const Name;
 
 	const color24 IconColor;
@@ -427,14 +427,14 @@ const ItemData CTFItems[] =
 template<typename ItemCallback>
 static void ForEachPlayerCTFPowerup( CBasePlayer* pPlayer, ItemCallback callback )
 {
-	if( !pPlayer || !( ( unsigned int ) pPlayer->m_iItems & ( unsigned int ) CTFItem::ItemsMask ) )
+	if( !pPlayer || !( pPlayer->m_iItems & CTFItem::ItemsMask ) )
 	{
 		return;
 	}
 
 	for( const auto& item : CTFItems )
 	{
-		if( item.RespawnOrScatter && ( ( unsigned int ) pPlayer->m_iItems & ( unsigned int ) item.Mask ) )
+		if( item.RespawnOrScatter && ( pPlayer->m_iItems & item.Mask ) )
 		{
 			for( CItemCTF* pItem = nullptr; ( pItem = static_cast<CItemCTF* >( UTIL_FindEntityByClassname( pItem, item.Name ) ) ); )
 			{
@@ -450,7 +450,7 @@ static void ForEachPlayerCTFPowerup( CBasePlayer* pPlayer, ItemCallback callback
 				item.CleanupCallback( pPlayer );
 			}
 
-			pPlayer->m_iItems = ( CTFItem ) ( ( unsigned int ) pPlayer->m_iItems & ~( ( unsigned int ) item.Mask ) );
+			pPlayer->m_iItems = (CTFItem::CTFItem ) ( pPlayer->m_iItems & ~item.Mask );
 		}
 	}
 }
@@ -544,7 +544,7 @@ void InitItemsForPlayer( CBasePlayer* pPlayer )
 			for( const auto& item : CTFItems )
 			{
 				//TODO: this can probably be optimized by finding the last item that the player is carrying and only sending that
-				if( ( unsigned int ) pOther->m_iItems & ( unsigned int ) item.Mask )
+				if( pOther->m_iItems & item.Mask )
 				{
 					g_engfuncs.pfnMessageBegin( MSG_ONE, gmsgPlayerIcon, nullptr, pPlayer->edict() );
 					g_engfuncs.pfnWriteByte( pOther->entindex() );
@@ -709,7 +709,7 @@ BOOL CHalfLifeCTFplay::ClientConnected( edict_t* pEntity, const char* pszName, c
 					pFlag->ReturnFlag();
 				}
 
-				if( ( unsigned int ) pPlayer->m_iItems & ( unsigned int ) CTFItem::ItemsMask )
+				if( pPlayer->m_iItems & CTFItem::ItemsMask )
 				{
 					RespawnPlayerCTFPowerups( pPlayer, true );
 				}
@@ -792,7 +792,7 @@ void CHalfLifeCTFplay::ClientDisconnected( edict_t* pClient )
 					pFlag->DropFlag( v2 );
 				}
 
-				if( ( unsigned int ) v2->m_iItems & ( unsigned int ) CTFItem::ItemsMask )
+				if( v2->m_iItems & CTFItem::ItemsMask )
 					ScatterPlayerCTFPowerups( v2 );
 			}
 			v2->m_iTeamNum = CTFTeam::None;
@@ -1280,7 +1280,7 @@ void CHalfLifeCTFplay::PlayerKilled( CBasePlayer* pVictim, entvars_t* pKiller, e
 			pFlag->DropFlag( pVictim );
 		}
 
-		if( ( unsigned int ) pVictim->m_iItems & ( unsigned int ) CTFItem::ItemsMask )
+		if( pVictim->m_iItems & CTFItem::ItemsMask )
 			ScatterPlayerCTFPowerups( pVictim );
 	}
 }
@@ -1410,7 +1410,7 @@ void CHalfLifeCTFplay::ChangePlayerTeam( CBasePlayer* pPlayer, const char* pChar
 						pPlayer->m_pFlag.Entity<CTFGoalFlag>()->DropFlag( pPlayer );
 					}
 
-					if( ( unsigned int ) pPlayer->m_iItems & ( unsigned int ) CTFItem::ItemsMask )
+					if( pPlayer->m_iItems & CTFItem::ItemsMask )
 					{
 						ScatterPlayerCTFPowerups( pPlayer );
 					}
@@ -1529,7 +1529,7 @@ void CHalfLifeCTFplay::ChangePlayerTeam( CBasePlayer* pPlayer, const char* pChar
 				pPlayer->m_pFlag.Entity<CTFGoalFlag>()->DropFlag( pPlayer );
 			}
 
-			if( ( unsigned int ) pPlayer->m_iItems & ( unsigned int ) CTFItem::ItemsMask )
+			if( pPlayer->m_iItems & CTFItem::ItemsMask )
 			{
 				ScatterPlayerCTFPowerups( pPlayer );
 			}
