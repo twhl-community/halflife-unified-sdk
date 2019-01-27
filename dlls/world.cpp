@@ -746,6 +746,14 @@ void CWorld :: KeyValue( KeyValueData *pkvd )
 		}
 		pkvd->fHandled = TRUE;
 	}
+	else if( FStrEq( pkvd->szKeyName, "defaultctf" ) )
+	{
+		if( atoi( pkvd->szValue ) )
+		{
+			pev->spawnflags |= SF_WORLD_CTF;
+		}
+		pkvd->fHandled = TRUE;
+	}
 	else
 		CBaseEntity::KeyValue( pkvd );
 }
