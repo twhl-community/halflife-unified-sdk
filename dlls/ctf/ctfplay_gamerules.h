@@ -106,8 +106,9 @@ private:
 	bool m_DisableDeathPenalty = false;
 	bool m_fRefreshScores = false;
 	float m_flNextStatsSend;
-	StatsPhase m_iStatsPhase = StatsPhase::SendTeam0;
-	int m_iStatsPlayer;
+	StatsPhase m_iStatsPhase = StatsPhase::Nothing;
+	//Use a sane default to avoid lockups
+	int m_iStatsPlayer = 1;
 };
 
 extern char* pszPlayerIPs[ SV_MAX_PLAYERS * 2 ];
