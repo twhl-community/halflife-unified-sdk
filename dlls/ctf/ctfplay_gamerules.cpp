@@ -1637,10 +1637,62 @@ void CHalfLifeCTFplay::GoToIntermission()
 	CHalfLifeMultiplay::GoToIntermission();
 }
 
+template<typename... ARGS>
+static void InternalSendTeamStat( int playerIndex, char* pszPlayerFormat, char* pszNobodyFormat, const char* pszStatName, const int value, ARGS&&... args )
+{
+	auto pPlayer = UTIL_PlayerByIndex( playerIndex );
+
+	if( pPlayer && !FStringNull( pPlayer->pev->netname ) && STRING( pPlayer->pev->netname ) )
+	{
+		char szBuf[ 21 ];
+
+		strncpy( szBuf, STRING( pPlayer->pev->netname ), sizeof( szBuf ) - 1 );
+		szBuf[ sizeof( szBuf ) - 1 ] = 0;
+
+		g_engfuncs.pfnWriteString( szBuf );
+
+		auto pEdict = pPlayer->edict();
+
+		UTIL_LogPrintf(
+			pszPlayerFormat,
+			pszStatName,
+			STRING( pPlayer->pev->netname ),
+			g_engfuncs.pfnGetPlayerUserId( pEdict ),
+			g_engfuncs.pfnGetPlayerWONId( pEdict ),
+			GetTeamName( pEdict ),
+			args... );
+	}
+	else
+	{
+		g_engfuncs.pfnWriteString( "*Nobody*" );
+		UTIL_LogPrintf( pszNobodyFormat, pszStatName, args... );
+	}
+
+	g_engfuncs.pfnWriteShort( value );
+}
+
+/**
+*	@brief Send a team statistic
+*	Was probably a variadic macro in the original
+*/
+static void SendTeamStat( int playerIndex, const char* pszStatName, const int value )
+{
+	InternalSendTeamStat( playerIndex, "// %-20s : \"%s<%i><%u><%s>\" for %d\n", "// %-20s : *Nobody* for %d\n", pszStatName, value, value );
+}
+
+/**
+*	@brief Send a team time statistic
+*	Was probably a variadic macro in the original
+*/
+static void SendTeamTimeStat( int playerIndex, const char* pszStatName, const float value )
+{
+	const auto time = SecondsToTime( value );
+
+	InternalSendTeamStat( playerIndex, "// %-40s : \"%s<%i><%u><%s>\" for %d:%02d\n", "// %-40s : *Nobody* for %d:%02d\n", pszStatName, static_cast<short>( value ), time.Minutes, time.Seconds );
+}
+
 void CHalfLifeCTFplay::SendTeamStatInfo( CTFTeam iTeamNum )
 {
-	char szBuf[ 21 ];
-
 	auto iDamageVal = 0;
 	auto iSuicidesVal = 0;
 	auto iDeathsVal = 0;
@@ -1807,20 +1859,18 @@ void CHalfLifeCTFplay::SendTeamStatInfo( CTFTeam iTeamNum )
 		}
 	}
 
-	const auto accelTime = SecondsToTime( static_cast<int>( flAccelVal ) );
-	const auto backpackTime = SecondsToTime( static_cast<int>( flBackpackVal ) );
-	const auto healthTime = SecondsToTime( static_cast<int>( flHealthVal ) );
-	const auto shieldTime = SecondsToTime( static_cast<int>( flShieldVal ) );
-	const auto jumpTime = SecondsToTime( static_cast<int>( flJumpVal ) );
-
 	if( ( ToTeamIndex( iTeamNum ) ) < MaxTeams )
 	{
 		UTIL_LogPrintf( "// === Team %s Statistics ===\n", team_names[ ToTeamIndex( iTeamNum ) ] );
 	}
 	else
 	{
-		UTIL_LogPrintf( "Team \"%s\" scored \"%d\" with \"%d\" players\n", team_names[ 0 ], teamscores[ 0 ], 0 );
-		UTIL_LogPrintf( "Team \"%s\" scored \"%d\" with \"%d\" players\n", team_names[ 1 ], teamscores[ 1 ], 0 );
+		//TODO: player count is always 0
+		for( auto i = 0; i < MaxTeams; ++i )
+		{
+			UTIL_LogPrintf( "Team \"%s\" scored \"%d\" with \"%d\" players\n", team_names[ i ], teamscores[ i ], 0 );
+		}
+
 		UTIL_LogPrintf( "// === End-Game Overall Statistics ===\n" );
 
 		auto winningTeam = GetWinningTeam();
@@ -1832,7 +1882,7 @@ void CHalfLifeCTFplay::SendTeamStatInfo( CTFTeam iTeamNum )
 		}
 		else
 		{
-			auto pszTeam = team_names[ ( int ) winningTeam - 1 ];
+			auto pszTeam = team_names[ ToTeamIndex( winningTeam ) ];
 
 			UTIL_LogPrintf( "// %-25s : %s\n", "Winning Team", pszTeam );
 			UTIL_LogPrintf( "Team \"%s\" triggered \"Victory\"\n", pszTeam );
@@ -1846,180 +1896,15 @@ void CHalfLifeCTFplay::SendTeamStatInfo( CTFTeam iTeamNum )
 	g_engfuncs.pfnWriteByte( iNumPlayers );
 	g_engfuncs.pfnWriteByte( 0 );
 
-	auto v46 = UTIL_PlayerByIndex( iMostPts );
-
-	if( v46 && !FStringNull( v46->pev->netname ) && STRING( v46->pev->netname ) )
-	{
-		strncpy( szBuf, STRING( v46->pev->netname ), sizeof( szBuf ) - 1 );
-		szBuf[ sizeof( szBuf ) - 1 ] = 0;
-
-		g_engfuncs.pfnWriteString( szBuf );
-
-		UTIL_LogPrintf(
-			"// %-20s : \"%s<%i><%u><%s>\" with %d\n",
-			"Most Points",
-			STRING( v46->pev->netname ),
-			g_engfuncs.pfnGetPlayerUserId( v46->pev->pContainingEntity ),
-			g_engfuncs.pfnGetPlayerWONId( v46->pev->pContainingEntity ),
-			GetTeamName( v46->edict() ),
-			iPts );
-	}
-	else
-	{
-		g_engfuncs.pfnWriteString( "*Nobody*" );
-		UTIL_LogPrintf( "// %-20s : *Nobody* with %d\n", "Most Points", iPts );
-	}
-
-	g_engfuncs.pfnWriteShort( iPts );
-	auto v55 = UTIL_PlayerByIndex( iMostFrags );
-
-	if( v55 && !FStringNull( v55->pev->netname ) && STRING( v55->pev->netname ) )
-	{
-		strncpy( szBuf, STRING( v55->pev->netname ), sizeof( szBuf ) - 1 );
-		szBuf[ sizeof( szBuf ) - 1 ] = 0;
-
-		g_engfuncs.pfnWriteString( szBuf );
-
-		UTIL_LogPrintf(
-			"// %-20s : \"%s<%i><%u><%s>\" with %d\n",
-			"Most Frags",
-			STRING( v55->pev->netname ),
-			g_engfuncs.pfnGetPlayerUserId( v55->pev->pContainingEntity ),
-			g_engfuncs.pfnGetPlayerWONId( v55->pev->pContainingEntity ),
-			GetTeamName( v55->edict() ),
-			iFrags );
-	}
-	else
-	{
-		g_engfuncs.pfnWriteString( "*Nobody*" );
-		UTIL_LogPrintf( "// %-20s : *Nobody* with %d\n", "Most Frags", iFrags );
-	}
-
-	g_engfuncs.pfnWriteShort( iFrags );
-	auto v64 = UTIL_PlayerByIndex( iMostCTFPts );
-
-	if( v64 && !FStringNull( v64->pev->netname ) && STRING( v64->pev->netname ) )
-	{
-		strncpy( szBuf, STRING( v64->pev->netname ), sizeof( szBuf ) - 1 );
-		szBuf[ sizeof( szBuf ) - 1 ] = 0;
-
-		g_engfuncs.pfnWriteString( szBuf );
-
-		UTIL_LogPrintf(
-			"// %-20s : \"%s<%i><%u><%s>\" with %d\n",
-			"Most CTF Points",
-			STRING( v64->pev->netname ),
-			g_engfuncs.pfnGetPlayerUserId( v64->pev->pContainingEntity ),
-			g_engfuncs.pfnGetPlayerWONId( v64->pev->pContainingEntity ),
-			GetTeamName( v64->edict() ),
-			iCTFPts );
-	}
-	else
-	{
-		g_engfuncs.pfnWriteString( "*Nobody*" );
-		UTIL_LogPrintf( "// %-20s : *Nobody* with %d\n", "Most CTF Points", iCTFPts );
-	}
-
-	g_engfuncs.pfnWriteShort( iCTFPts );
-	auto v73 = UTIL_PlayerByIndex( iMostOff );
-
-	if( v73 && !FStringNull( v73->pev->netname ) && STRING( v73->pev->netname ) )
-	{
-		strncpy( szBuf, STRING( v73->pev->netname ), sizeof( szBuf ) - 1 );
-		szBuf[ sizeof( szBuf ) - 1 ] = 0;
-
-		g_engfuncs.pfnWriteString( szBuf );
-
-		UTIL_LogPrintf(
-			"// %-20s : \"%s<%i><%u><%s>\" with %d points\n",
-			"Most Offense",
-			STRING( v73->pev->netname ),
-			g_engfuncs.pfnGetPlayerUserId( v73->pev->pContainingEntity ),
-			g_engfuncs.pfnGetPlayerWONId( v73->pev->pContainingEntity ),
-			GetTeamName( v73->edict() ),
-			iOffPts );
-	}
-	else
-	{
-		g_engfuncs.pfnWriteString( "*Nobody*" );
-		UTIL_LogPrintf( "// %-20s : *Nobody* with %d points\n", "Most Offense", iOffPts );
-	}
-
-	g_engfuncs.pfnWriteShort( iOffPts );
-	auto v82 = UTIL_PlayerByIndex( iMostDef );
-
-	if( v82 && !FStringNull( v82->pev->netname ) && STRING( v82->pev->netname ) )
-	{
-		strncpy( szBuf, STRING( v82->pev->netname ), sizeof( szBuf ) - 1 );
-		szBuf[ sizeof( szBuf ) - 1 ] = 0;
-
-		g_engfuncs.pfnWriteString( szBuf );
-
-		UTIL_LogPrintf(
-			"// %-20s : \"%s<%i><%u><%s>\" with %d points\n",
-			"Most Defense",
-			STRING( v82->pev->netname ),
-			g_engfuncs.pfnGetPlayerUserId( v82->pev->pContainingEntity ),
-			g_engfuncs.pfnGetPlayerWONId( v82->pev->pContainingEntity ),
-			GetTeamName( v82->edict() ),
-			iDefPts );
-	}
-	else
-	{
-		g_engfuncs.pfnWriteString( "*Nobody*" );
-		UTIL_LogPrintf( "// %-20s : *Nobody* with %d points\n", "Most Defense", iDefPts );
-	}
-
-	g_engfuncs.pfnWriteShort( iDefPts );
-	auto v91 = UTIL_PlayerByIndex( iMostSnipe );
-
-	if( v91 && !FStringNull( v91->pev->netname ) && STRING( v91->pev->netname ) )
-	{
-		strncpy( szBuf, STRING( v91->pev->netname ), sizeof( szBuf ) - 1 );
-		szBuf[ sizeof( szBuf ) - 1 ] = '\0';
-
-		g_engfuncs.pfnWriteString( szBuf );
-
-		UTIL_LogPrintf(
-			"// %-20s : \"%s<%i><%u><%s>\" with %d\n",
-			"Most Sniper Kills",
-			STRING( v91->pev->netname ),
-			g_engfuncs.pfnGetPlayerUserId( v91->pev->pContainingEntity ),
-			g_engfuncs.pfnGetPlayerWONId( v91->pev->pContainingEntity ),
-			GetTeamName( v91->edict() ),
-			iSnipeVal );
-	}
-	else
-	{
-		g_engfuncs.pfnWriteString( "*Nobody*" );
-		UTIL_LogPrintf( "// %-20s : *Nobody* with %d\n", "Most Sniper Kills", iSnipeVal );
-	}
-
-	g_engfuncs.pfnWriteShort( iSnipeVal );
-	auto v100 = UTIL_PlayerByIndex( iMostBarnacle );
-
-	if( v100 && !FStringNull( v100->pev->netname ) && STRING( v100->pev->netname ) )
-	{
-		strncpy( szBuf, STRING( v100->pev->netname ), sizeof( szBuf ) - 1 );
-		szBuf[ sizeof( szBuf ) - 1 ] = '\0';
-
-		g_engfuncs.pfnWriteString( szBuf );
-
-		//TODO: missing won id and team name
-		UTIL_LogPrintf(
-			"// %-20s : \"%s<%i><%u><%s>\" with %d\n",
-			"Most Barnacle Kills",
-			STRING( v100->pev->netname ),
-			g_engfuncs.pfnGetPlayerUserId( v100->pev->pContainingEntity ),
-			iBarnacleVal );
-	}
-	else
-	{
-		g_engfuncs.pfnWriteString( "*Nobody*" );
-		UTIL_LogPrintf( "// %-20s : *Nobody* with %d\n", "Most Barnacle Kills", iBarnacleVal );
-	}
-	g_engfuncs.pfnWriteShort( iBarnacleVal );
+	SendTeamStat( iMostPts, "Most Points", iPts );
+	SendTeamStat( iMostFrags, "Most Frags", iFrags );
+	SendTeamStat( iMostCTFPts, "Most CTF Points", iCTFPts );
+	SendTeamStat( iMostOff, "Most Offense", iOffPts );
+	SendTeamStat( iMostDef, "Most Defense", iDefPts );
+	SendTeamStat( iMostSnipe, "Most Sniper Kills", iSnipeVal );
+	SendTeamStat( iMostBarnacle, "Most Barnacle Kills", iBarnacleVal );
 	g_engfuncs.pfnMessageEnd();
+
 	g_engfuncs.pfnMessageBegin( 2, gmsgStatsInfo, 0, 0 );
 	g_engfuncs.pfnWriteByte( static_cast<int>( iTeamNum ) );
 
@@ -2027,211 +1912,14 @@ void CHalfLifeCTFplay::SendTeamStatInfo( CTFTeam iTeamNum )
 	g_engfuncs.pfnWriteByte( iNumPlayers );
 	g_engfuncs.pfnWriteByte( 1 );
 
-	auto pMostDeathsPlayer = UTIL_PlayerByIndex( iMostDeaths );
-
-	if( pMostDeathsPlayer && !FStringNull( pMostDeathsPlayer->pev->netname ) && STRING( pMostDeathsPlayer->pev->netname ) )
-	{
-		strncpy( szBuf, STRING( pMostDeathsPlayer->pev->netname ), sizeof( szBuf ) - 1 );
-		szBuf[ sizeof( szBuf ) - 1 ] = '\0';
-		g_engfuncs.pfnWriteString( szBuf );
-
-		UTIL_LogPrintf(
-			"// %-20s : \"%s<%i><%u><%s>\" with %d\n",
-			"Most Deaths",
-			STRING( pMostDeathsPlayer->pev->netname ),
-			g_engfuncs.pfnGetPlayerUserId( pMostDeathsPlayer->pev->pContainingEntity ),
-			g_engfuncs.pfnGetPlayerWONId( pMostDeathsPlayer->pev->pContainingEntity ),
-			GetTeamName( pMostDeathsPlayer->edict() ),
-			iDeathsVal );
-	}
-	else
-	{
-		g_engfuncs.pfnWriteString( "*Nobody*" );
-		UTIL_LogPrintf( "// %-20s : *Nobody* with %d\n", "Most Deaths", iDeathsVal );
-	}
-
-	g_engfuncs.pfnWriteShort( iDeathsVal );
-	auto v113 = UTIL_PlayerByIndex( iMostSuicides );
-
-	if( v113 && !FStringNull( v113->pev->netname ) && STRING( v113->pev->netname ) )
-	{
-		strncpy( szBuf, STRING( v113->pev->netname ), sizeof( szBuf ) - 1 );
-		szBuf[ sizeof( szBuf ) - 1 ] = 0;
-
-		g_engfuncs.pfnWriteString( szBuf );
-
-		UTIL_LogPrintf(
-			"// %-20s : \"%s<%i><%u><%s>\" with %d\n",
-			"Most Suicides",
-			STRING( v113->pev->netname ),
-			g_engfuncs.pfnGetPlayerUserId( v113->pev->pContainingEntity ),
-			g_engfuncs.pfnGetPlayerWONId( v113->pev->pContainingEntity ),
-			GetTeamName( v113->edict() ),
-			iSuicidesVal );
-	}
-	else
-	{
-		g_engfuncs.pfnWriteString( "*Nobody*" );
-		UTIL_LogPrintf( "// %-20s : *Nobody* with %d\n", "Most Suicides", iSuicidesVal );
-	}
-
-	g_engfuncs.pfnWriteShort( iSuicidesVal );
-	auto v121 = UTIL_PlayerByIndex( iMostDamage );
-
-	if( v121 && !FStringNull( v121->pev->netname ) && STRING( v121->pev->netname ) )
-	{
-		strncpy( szBuf, STRING( v121->pev->netname ), sizeof( szBuf ) - 1 );
-		szBuf[ sizeof( szBuf ) - 1 ] = 0;
-
-		g_engfuncs.pfnWriteString( szBuf );
-
-		UTIL_LogPrintf(
-			"// %-20s : \"%s<%i><%u><%s>\" with %d\n",
-			"Most Damage",
-			STRING( v121->pev->netname ),
-			g_engfuncs.pfnGetPlayerUserId( v121->pev->pContainingEntity ),
-			g_engfuncs.pfnGetPlayerWONId( v121->pev->pContainingEntity ),
-			GetTeamName( v121->edict() ),
-			iDamageVal );
-	}
-	else
-	{
-		g_engfuncs.pfnWriteString( "*Nobody*" );
-		UTIL_LogPrintf( "// %-20s : *Nobody* with %d\n", "Most Damage", iDamageVal );
-	}
-
-	g_engfuncs.pfnWriteShort( iDamageVal );
-	auto v129 = UTIL_PlayerByIndex( iMostAccel );
-
-	if( v129 && !FStringNull( v129->pev->netname ) && STRING( v129->pev->netname ) )
-	{
-		strncpy( szBuf, STRING( v129->pev->netname ), sizeof( szBuf ) - 1 );
-		szBuf[ sizeof( szBuf ) - 1 ] = 0;
-
-		g_engfuncs.pfnWriteString( szBuf );
-
-		UTIL_LogPrintf(
-			"// %-40s : \"%s<%i><%u><%s>\" for %d:%02d\n",
-			"Most Damage Powerup Time",
-			STRING( v129->pev->netname ),
-			g_engfuncs.pfnGetPlayerUserId( v129->pev->pContainingEntity ),
-			g_engfuncs.pfnGetPlayerWONId( v129->pev->pContainingEntity ),
-			GetTeamName( v129->edict() ),
-			accelTime.Minutes,
-			accelTime.Seconds );
-	}
-	else
-	{
-		g_engfuncs.pfnWriteString( "*Nobody*" );
-		UTIL_LogPrintf( "// %-40s : *Nobody* for %d:%02d\n", "Most Damage Powerup Time", accelTime.Minutes, accelTime.Seconds );
-	}
-
-	g_engfuncs.pfnWriteShort( static_cast<short>( flAccelVal ) );
-	auto v137 = UTIL_PlayerByIndex( iMostBackpack );
-
-	if( v137 && !FStringNull( v137->pev->netname ) && STRING( v137->pev->netname ) )
-	{
-		strncpy( szBuf, STRING( v137->pev->netname ), sizeof( szBuf ) - 1 );
-		szBuf[ sizeof( szBuf ) - 1 ] = 0;
-
-		g_engfuncs.pfnWriteString( szBuf );
-
-		UTIL_LogPrintf(
-			"// %-40s : \"%s<%i><%u><%s>\" for %d:%02d\n",
-			"Most Backpack Powerup Time",
-			STRING( v137->pev->netname ),
-			g_engfuncs.pfnGetPlayerUserId( v137->pev->pContainingEntity ),
-			g_engfuncs.pfnGetPlayerWONId( v137->pev->pContainingEntity ),
-			GetTeamName( v137->edict() ),
-			backpackTime.Minutes,
-			backpackTime.Seconds );
-	}
-	else
-	{
-		g_engfuncs.pfnWriteString( "*Nobody*" );
-		UTIL_LogPrintf( "// %-40s : *Nobody* for %d:%02d\n", "Most Backpack Powerup Time", backpackTime.Minutes, backpackTime.Seconds );
-	}
-
-	g_engfuncs.pfnWriteShort( static_cast<short>( flBackpackVal ) );
-	auto v145 = UTIL_PlayerByIndex( iMostHealth );
-
-	if( v145 && !FStringNull( v145->pev->netname ) && STRING( v145->pev->netname ) )
-	{
-		strncpy( szBuf, STRING( v145->pev->netname ), sizeof( szBuf ) - 1 );
-		szBuf[ sizeof( szBuf ) - 1 ] = 0;
-
-		g_engfuncs.pfnWriteString( szBuf );
-
-		UTIL_LogPrintf(
-			"// %-40s : \"%s<%i><%u><%s>\" for %d:%02d\n",
-			"Most Health Powerup Time",
-			STRING( v145->pev->netname ),
-			g_engfuncs.pfnGetPlayerUserId( v145->pev->pContainingEntity ),
-			g_engfuncs.pfnGetPlayerWONId( v145->pev->pContainingEntity ),
-			GetTeamName( v145->edict() ),
-			healthTime.Minutes,
-			healthTime.Seconds );
-	}
-	else
-	{
-		g_engfuncs.pfnWriteString( "*Nobody*" );
-		UTIL_LogPrintf( "// %-40s : *Nobody* for %d:%02d\n", "Most Health Powerup Time", healthTime.Minutes, healthTime.Seconds );
-	}
-	g_engfuncs.pfnWriteShort( static_cast<short>( flHealthVal ) );
-	auto v153 = UTIL_PlayerByIndex( iMostShield );
-
-	if( v153 && !FStringNull( v153->pev->netname ) && STRING( v153->pev->netname ) )
-	{
-		strncpy( szBuf, STRING( v153->pev->netname ), sizeof( szBuf ) - 1 );
-		szBuf[ sizeof( szBuf ) - 1 ] = 0;
-		g_engfuncs.pfnWriteString( szBuf );
-
-		UTIL_LogPrintf(
-			"// %-40s : \"%s<%i><%u><%s>\" for %d:%02d\n",
-			"Most Shield Powerup Time",
-			STRING( v153->pev->netname ),
-			g_engfuncs.pfnGetPlayerUserId( v153->pev->pContainingEntity ),
-			g_engfuncs.pfnGetPlayerWONId( v153->pev->pContainingEntity ),
-			GetTeamName( v153->edict() ),
-			shieldTime.Minutes,
-			shieldTime.Seconds );
-	}
-	else
-	{
-		g_engfuncs.pfnWriteString( "*Nobody*" );
-		UTIL_LogPrintf( "// %-40s : *Nobody* for %d:%02d\n", "Most Shield Powerup Time", shieldTime.Minutes, shieldTime.Seconds );
-	}
-
-	g_engfuncs.pfnWriteShort( static_cast<short>( flShieldVal ) );
-
-	auto v161 = UTIL_PlayerByIndex( iMostJump );
-
-	if( v161 && !FStringNull( v161->pev->netname ) && STRING( v161->pev->netname ) )
-	{
-		strncpy( szBuf, STRING( v161->pev->netname ), sizeof( szBuf ) - 1 );
-		szBuf[ sizeof( szBuf ) - 1 ] = 0;
-
-		g_engfuncs.pfnWriteString( szBuf );
-
-		
-
-		UTIL_LogPrintf(
-			"// %-40s : \"%s<%i><%u><%s>\" for %d:%02d\n",
-			"Most Jumppack Powerup Time",
-			STRING( v161->pev->netname ),
-			g_engfuncs.pfnGetPlayerUserId( v161->pev->pContainingEntity ),
-			g_engfuncs.pfnGetPlayerWONId( v161->pev->pContainingEntity ),
-			GetTeamName( v161->edict() ),
-			jumpTime.Minutes,
-			jumpTime.Seconds );
-	}
-	else
-	{
-		g_engfuncs.pfnWriteString( "*Nobody*" );
-		UTIL_LogPrintf( "// %-40s : *Nobody* for %d:%02d\n", "Most Jumppack Powerup Time", jumpTime.Minutes, jumpTime.Seconds );
-	}
-
-	g_engfuncs.pfnWriteShort( static_cast<short>( flJumpVal ) );
+	SendTeamStat( iMostDeaths, "Most Deaths", iDeathsVal );
+	SendTeamStat( iMostSuicides, "Most Suicides", iSuicidesVal );
+	SendTeamStat( iMostDamage, "Most Damage", iDamageVal );
+	SendTeamTimeStat( iMostAccel, "Most Damage Powerup Time", flAccelVal );
+	SendTeamTimeStat( iMostBackpack, "Most Backpack Powerup Time", flBackpackVal );
+	SendTeamTimeStat( iMostHealth, "Most Health Powerup Time", flHealthVal );
+	SendTeamTimeStat( iMostShield, "Most Shield Powerup Time", flShieldVal );
+	SendTeamTimeStat( iMostJump, "Most Jumppack Powerup Time", flJumpVal );
 	g_engfuncs.pfnMessageEnd();
 }
 
