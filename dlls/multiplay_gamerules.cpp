@@ -1138,6 +1138,8 @@ void CHalfLifeMultiplay :: GoToIntermission( void )
 	if ( g_fGameOver )
 		return;  // intermission has already been triggered, so ignore.
 
+	FlushCTFPowerupTimes();
+
 	MESSAGE_BEGIN(MSG_ALL, SVC_INTERMISSION);
 	MESSAGE_END();
 
