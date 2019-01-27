@@ -135,6 +135,7 @@
     <ClCompile Include="..\..\dlls\ctf\CItemCTF.cpp" />
     <ClCompile Include="..\..\dlls\ctf\CItemSpawnCTF.cpp" />
     <ClCompile Include="..\..\dlls\ctf\ctfplay_gamerules.cpp" />
+    <ClCompile Include="..\..\dlls\ctf\CTFSpawn.cpp" />
     <ClCompile Include="..\..\dlls\defaultai.cpp" />
     <ClCompile Include="..\..\dlls\doors.cpp" />
     <ClCompile Include="..\..\dlls\effects.cpp" />
@@ -282,6 +283,7 @@
     <ClInclude Include="..\..\dlls\ctf\CTFGoalBase.h" />
     <ClInclude Include="..\..\dlls\ctf\CTFGoalFlag.h" />
     <ClInclude Include="..\..\dlls\ctf\ctfplay_gamerules.h" />
+    <ClInclude Include="..\..\dlls\ctf\CTFSpawn.h" />
     <ClInclude Include="..\..\dlls\decals.h" />
     <ClInclude Include="..\..\dlls\defaultai.h" />
     <ClInclude Include="..\..\dlls\doors.h" />

@@ -24,7 +24,7 @@
 
 #include "gamerules.h"
 
-extern edict_t *EntSelectSpawnPoint( CBaseEntity *pPlayer );
+extern edict_t *EntSelectSpawnPoint( CBasePlayer *pPlayer );
 
 extern CBaseEntity* g_pLastSpawn;
 #endif

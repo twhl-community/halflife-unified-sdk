@@ -54,7 +54,7 @@ BOOL gInitHUD = TRUE;
 extern void CopyToBodyQue(entvars_t* pev);
 extern void respawn(entvars_t *pev, BOOL fCopyCorpse);
 extern Vector VecBModelOrigin(entvars_t *pevBModel );
-extern edict_t *EntSelectSpawnPoint( CBaseEntity *pPlayer );
+extern edict_t *EntSelectSpawnPoint( CBasePlayer *pPlayer );
 
 // the world node graph
 extern CGraph	WorldGraph;
@@ -2961,12 +2961,80 @@ Returns the entity to spawn at
 USES AND SETS GLOBAL g_pLastSpawn
 ============
 */
-edict_t *EntSelectSpawnPoint( CBaseEntity *pPlayer )
+edict_t *EntSelectSpawnPoint( CBasePlayer *pPlayer )
 {
 	CBaseEntity *pSpot;
 	edict_t		*player;
 
 	player = pPlayer->edict();
+
+	if( g_pGameRules->IsCTF() && pPlayer->m_iTeamNum != CTFTeam::None )
+	{
+		const auto pszTeamSpotName = pPlayer->m_iTeamNum == CTFTeam::BlackMesa ? "ctfs1" : "ctfs2";
+
+		pSpot = g_pLastSpawn;
+		// Randomize the start spot
+		for( int i = RANDOM_LONG( 1, 5 ); i > 0; i-- )
+			pSpot = UTIL_FindEntityByClassname( pSpot, pszTeamSpotName );
+		if( FNullEnt( pSpot ) )  // skip over the null point
+			pSpot = UTIL_FindEntityByClassname( pSpot, pszTeamSpotName );
+
+		CBaseEntity *pFirstSpot = pSpot;
+
+		do
+		{
+			if( pSpot )
+			{
+				// check if pSpot is valid
+				if( IsSpawnPointValid( pPlayer, pSpot ) && pSpot->pev->origin != g_vecZero )
+				{
+					// if so, go to pSpot
+					goto ReturnSpot;
+				}
+			}
+			// increment pSpot
+			pSpot = UTIL_FindEntityByClassname( pSpot, pszTeamSpotName );
+		}
+		while( pSpot != pFirstSpot ); // loop if we're not back to the start
+
+		//Try a shared spawn spot
+		// Randomize the start spot
+		for( int i = RANDOM_LONG( 1, 5 ); i > 0; i-- )
+			pSpot = UTIL_FindEntityByClassname( pSpot, "ctfs0" );
+		if( FNullEnt( pSpot ) )  // skip over the null point
+			pSpot = UTIL_FindEntityByClassname( pSpot, "ctfs0" );
+
+		pFirstSpot = pSpot;
+
+		do
+		{
+			if( pSpot )
+			{
+				// check if pSpot is valid
+				if( IsSpawnPointValid( pPlayer, pSpot ) && pSpot->pev->origin != g_vecZero )
+				{
+					// if so, go to pSpot
+					goto ReturnSpot;
+				}
+			}
+			// increment pSpot
+			pSpot = UTIL_FindEntityByClassname( pSpot, "ctfs0" );
+		}
+		while( pSpot != pFirstSpot ); // loop if we're not back to the start
+
+		// we haven't found a place to spawn yet,  so kill any guy at the first spawn point and spawn there
+		if( !FNullEnt( pSpot ) )
+		{
+			CBaseEntity *ent = NULL;
+			while( ( ent = UTIL_FindEntityInSphere( ent, pSpot->pev->origin, 128 ) ) != NULL )
+			{
+				// if ent is a client, kill em (unless they are ourselves)
+				if( ent->IsPlayer() && !( ent->edict() == player ) )
+					ent->TakeDamage( VARS( INDEXENT( 0 ) ), VARS( INDEXENT( 0 ) ), 300, DMG_GENERIC );
+			}
+			goto ReturnSpot;
+		}
+	}
 
 // choose a info_player_deathmatch point
 	if (g_pGameRules->IsCoOp())
