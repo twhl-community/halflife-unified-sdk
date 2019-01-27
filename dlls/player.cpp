@@ -3166,7 +3166,14 @@ void CBasePlayer::Spawn( void )
 // dont let uninitialized value here hurt the player
 	m_flFallVelocity = 0;
 
-	g_pGameRules->SetDefaultPlayerTeam( this );
+	if( !g_pGameRules->IsCTF() )
+		g_pGameRules->SetDefaultPlayerTeam( this );
+
+	if( !g_pGameRules->IsCTF() && m_iTeamNum == CTFTeam::None )
+	{
+		pev->iuser1 = OBS_ROAMING;
+	}
+
 	g_pGameRules->GetPlayerSpawnSpot( this );
 
     SET_MODEL(ENT(pev), "models/player.mdl");
@@ -3204,10 +3211,41 @@ void CBasePlayer::Spawn( void )
 	}
 
 	m_lastx = m_lasty = 0;
-	
+	m_iLastDamage = 0;
+	m_bIsClimbing = false;
+	m_flLastDamageTime = 0;
+
 	m_flNextChatTime = gpGlobals->time;
 
 	g_pGameRules->PlayerSpawn( this );
+
+	if( g_pGameRules->IsCTF() && m_iTeamNum == CTFTeam::None )
+	{
+		pev->effects |= EF_NODRAW;
+		pev->iuser1 = OBS_ROAMING;
+		pev->solid = SOLID_NOT;
+		pev->movetype = MOVETYPE_NOCLIP;
+		pev->takedamage = DAMAGE_NO;
+		m_iHideHUD = HIDEHUD_WEAPONS | HIDEHUD_HEALTH;
+		m_afPhysicsFlags |= PFLAG_OBSERVER;
+		pev->flags |= FL_SPECTATOR;
+
+		MESSAGE_BEGIN( MSG_ALL, gmsgSpectator );
+		WRITE_BYTE( entindex() );
+		WRITE_BYTE( 1 );
+		MESSAGE_END();
+
+		MESSAGE_BEGIN( MSG_ONE, gmsgTeamFull, nullptr, edict() );
+		WRITE_BYTE( 0 );
+		MESSAGE_END();
+
+		m_pGoalEnt = nullptr;
+
+		m_iCurrentMenu = 2 * ( m_iNewTeamNum > CTFTeam::None ) + 1;
+
+		if( g_pGameRules->IsCoOp() )
+			Player_Menu();
+	}
 }
 
 
