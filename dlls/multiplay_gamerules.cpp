@@ -492,6 +492,12 @@ void CHalfLifeMultiplay :: InitHUD( CBasePlayer *pl )
 
 	SendMOTDToClient( pl->edict() );
 
+	if( IsCTF() )
+	{
+		pl->m_iCurrentMenu = 2;
+		pl->Player_Menu();
+	}
+
 	// loop through all active players and send their score info to the new client
 	for ( int i = 1; i <= gpGlobals->maxClients; i++ )
 	{
