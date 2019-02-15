@@ -487,6 +487,7 @@ public:
 };
 
 //==============================================================================
+//TODO: rename to CTFViewport
 class TeamFortressViewport : public Panel
 {
 private:
@@ -619,6 +620,7 @@ public:
 	int MsgFunc_AllowSpec( const char *pszName, int iSize, void *pbuf );
 	int MsgFunc_SpecFade( const char *pszName, int iSize, void *pbuf );	
 	int MsgFunc_ResetFade( const char *pszName, int iSize, void *pbuf );	
+	int MsgFunc_TeamFull( const char *pszName, int iSize, void *pbuf );
 
 	// Input
 	bool SlotInput( int iSlot );
@@ -1722,6 +1724,9 @@ public:
 	CommandButton		*m_pCancelButton;
 	CommandButton		*m_pSpectateButton;
 
+	TextPanel* m_pTeamFull;
+	float m_flTeamFullReset;
+
 	int					m_iCurrentInfo;
 
 public:
@@ -1739,7 +1744,15 @@ public:
 	{
 		CMenuPanel::Reset();
 		m_iCurrentInfo = 0;
+
+		if( m_flTeamFullReset <= gHUD.m_flTime )
+		{
+			m_pTeamFull->setVisible( false );
+			m_flTeamFullReset = 0;
+		}
 	}
+
+	int MsgFunc_TeamFull( const char* pszName, int iSize, void* pbuf );
 };
 
 //=========================================================

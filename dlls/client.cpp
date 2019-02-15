@@ -558,6 +558,22 @@ void ClientCommand( edict_t *pEntity )
 	{
 		GetClassPtr((CBasePlayer *)pev)->SelectLastItem();
 	}
+	if( FStrEq( pcmd, "changeteam" ) )
+	{
+		if( g_pGameRules->IsCTF() )
+		{
+			auto pPlayer = GetClassPtr( ( CBasePlayer * ) pev );
+			if( pPlayer->m_iCurrentMenu == 2 )
+			{
+				ClientPrint( pev, HUD_PRINTCONSOLE, "Already in team selection menu.\n" );
+			}
+			else
+			{
+				pPlayer->m_iCurrentMenu = 2;
+				pPlayer->Player_Menu();
+			}
+		}
+	}
 	else if ( FStrEq( pcmd, "spectate" ) )	// clients wants to become a spectator
 	{
 			// always allow proxies to become a spectator

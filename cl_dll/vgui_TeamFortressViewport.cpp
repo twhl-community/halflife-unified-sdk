@@ -2642,3 +2642,9 @@ int TeamFortressViewport::MsgFunc_SpecFade( const char *pszName, int iSize, void
 
 	return 1;
 }
+
+int TeamFortressViewport::MsgFunc_TeamFull( const char *pszName, int iSize, void *pbuf )
+{
+	m_pTeamMenu->MsgFunc_TeamFull( pszName, iSize, pbuf );
+	return 1;
+}
