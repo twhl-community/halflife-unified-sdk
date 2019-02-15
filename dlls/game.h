@@ -40,6 +40,7 @@ extern cvar_t	allowmonsters;
 extern cvar_t	ctf_capture;
 extern cvar_t	oldweapons;
 extern cvar_t	multipower;
+extern cvar_t	ctf_autoteam;
 
 // Engine Cvars
 extern cvar_t	*g_psv_gravity;
