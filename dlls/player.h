@@ -367,11 +367,12 @@ public:
 	char m_SbarString0[ SBAR_STRING_SIZE ];
 	char m_SbarString1[ SBAR_STRING_SIZE ];	
 
-	//TODO: implement
-	void Player_Menu() {}
+	void Player_Menu();
 
-	BOOL Menu_Team_Input( int inp ) { return false; }
-	BOOL Menu_Char_Input( int inp ) { return false; }
+	void ResetMenu();
+
+	BOOL Menu_Team_Input( int inp );
+	BOOL Menu_Char_Input( int inp );
 
 	bool IsOnRope() const { return ( m_afPhysicsFlags & PFLAG_ONROPE ) != 0; }
 

@@ -3241,7 +3241,7 @@ void CBasePlayer::Spawn( void )
 
 		m_pGoalEnt = nullptr;
 
-		m_iCurrentMenu = 2 * ( m_iNewTeamNum > CTFTeam::None ) + 1;
+		m_iCurrentMenu = m_iNewTeamNum > CTFTeam::None ? 1 : 3;
 
 		if( g_pGameRules->IsCoOp() )
 			Player_Menu();
@@ -5006,6 +5006,220 @@ BOOL CBasePlayer :: SwitchWeapon( CBasePlayerItem *pWeapon )
 	pWeapon->Deploy( );
 
 	return TRUE;
+}
+
+void CBasePlayer::Player_Menu()
+{
+	if( m_iCurrentMenu == 2 )
+	{
+		MESSAGE_BEGIN( MSG_ONE, gmsgAllowSpec, nullptr, edict() );
+		WRITE_BYTE( 1 );
+		MESSAGE_END();
+
+		MESSAGE_BEGIN( MSG_ONE, gmsgTeamNames, nullptr, edict() );
+		g_engfuncs.pfnWriteByte( 2 );
+		WRITE_STRING( "#CTFTeam_BM" );
+		WRITE_STRING( "#CTFTeam_OF" );
+		MESSAGE_END();
+
+		MESSAGE_BEGIN( MSG_ONE, gmsgVGUIMenu, nullptr, edict() );
+		WRITE_BYTE( 2 );
+		MESSAGE_END();
+	}
+	else if( m_iCurrentMenu == 3 )
+	{
+		MESSAGE_BEGIN( MSG_ONE, gmsgSetMenuTeam, nullptr, edict() );
+		WRITE_BYTE( static_cast<int>( m_iNewTeamNum == CTFTeam::None ? m_iTeamNum : m_iNewTeamNum ) );
+		MESSAGE_END();
+
+		MESSAGE_BEGIN( MSG_ONE, gmsgVGUIMenu, nullptr, edict() );
+		WRITE_BYTE( 3 );
+		MESSAGE_END();
+	}
+}
+
+void CBasePlayer::ResetMenu()
+{
+	if( gmsgShowMenu )
+	{
+		MESSAGE_BEGIN( MSG_ONE, gmsgShowMenu, nullptr, edict() );
+		WRITE_SHORT( 0 );
+		WRITE_CHAR( 0 );
+		WRITE_BYTE( 0 );
+		WRITE_STRING( "" );
+		MESSAGE_END();
+	}
+
+	switch( m_iCurrentMenu )
+	{
+	case 1: m_iCurrentMenu = 2; break;
+	case 2: m_iCurrentMenu = 3; break;
+	default: return;
+	}
+
+	if( g_pGameRules->IsCTF() )
+		Player_Menu();
+}
+
+BOOL CBasePlayer::Menu_Team_Input( int inp )
+{
+	m_iNewTeamNum = CTFTeam::None;
+
+	if( inp == -1 )
+	{
+		g_pGameRules->ChangePlayerTeam( this, nullptr, false, false );
+
+		MESSAGE_BEGIN( MSG_ONE, gmsgTeamFull, nullptr, edict() );
+		WRITE_BYTE( 0 );
+		MESSAGE_END();
+		return true;
+	}
+	else if( inp == 3 )
+	{
+		if( g_pGameRules->TeamsBalanced() )
+		{
+			if( m_iTeamNum == CTFTeam::None )
+			{
+				m_iNewTeamNum = static_cast<CTFTeam>( RANDOM_LONG( 0, 1 ) + 1 );
+				if( m_iNewTeamNum <= CTFTeam::None )
+				{
+					m_iNewTeamNum = CTFTeam::BlackMesa;
+				}
+				else if( m_iNewTeamNum > CTFTeam::OpposingForce )
+				{
+					m_iNewTeamNum = CTFTeam::OpposingForce;
+				}
+			}
+			else
+			{
+				m_iNewTeamNum = m_iTeamNum;
+			}
+		}
+		else
+		{
+			m_iNewTeamNum = static_cast<CTFTeam>( g_pGameRules->GetTeamIndex( g_pGameRules->TeamWithFewestPlayers() ) + 1 );
+		}
+
+		MESSAGE_BEGIN( MSG_ONE, gmsgTeamFull, nullptr, edict() );
+		WRITE_BYTE( 0 );
+		MESSAGE_END();
+
+		ResetMenu();
+
+		pev->impulse = 0;
+
+		return true;
+	}
+	else if( inp <= g_pGameRules->GetNumTeams() && inp > 0 )
+	{
+		auto unbalanced = false;
+
+		if( ctf_autoteam.value == 1 )
+		{
+			if( m_iTeamNum != static_cast<CTFTeam>( inp ) )
+			{
+				if( !g_pGameRules->TeamsBalanced() && inp != g_pGameRules->GetTeamIndex( g_pGameRules->TeamWithFewestPlayers() ) + 1 )
+				{
+					ClientPrint( pev, HUD_PRINTCONSOLE, "Team balancing enabled.\nThis team is full.\n" );
+					MESSAGE_BEGIN( MSG_ONE, gmsgTeamFull, nullptr, edict() );
+					WRITE_BYTE( 1 );
+					MESSAGE_END();
+
+					unbalanced = true;
+				}
+				else
+				{
+					m_iNewTeamNum = static_cast<CTFTeam>( inp );
+				}
+			}
+			else
+			{
+				m_iNewTeamNum = m_iTeamNum;
+			}
+		}
+		else
+		{
+			m_iNewTeamNum = static_cast<CTFTeam>( inp );
+		}
+
+		if( !unbalanced )
+		{
+			MESSAGE_BEGIN( MSG_ONE, gmsgTeamFull, nullptr, edict() );
+			WRITE_BYTE( 0 );
+			MESSAGE_END();
+
+			ResetMenu();
+
+			pev->impulse = 0;
+
+			return true;
+		}
+	}
+	else if( inp == 6 && m_iTeamNum > CTFTeam::None )
+	{
+		m_iCurrentMenu = 0;
+		return true;
+	}
+LABEL_16:
+	m_iCurrentMenu = 2;
+
+	if( g_pGameRules->IsCTF() )
+		Player_Menu();
+
+	return false;
+}
+
+BOOL CBasePlayer::Menu_Char_Input( int inp )
+{
+	const char* pszCharacterType;
+
+	if( inp == 7 )
+	{
+		pszCharacterType = g_pGameRules->GetCharacterType( static_cast<int>( m_iNewTeamNum ) - 1, RANDOM_LONG( 0, 5 ) );
+	}
+	else
+	{
+		const auto characterIndex = inp - 1;
+
+		if( characterIndex < 0 || characterIndex > 5 )
+			return false;
+
+		pszCharacterType = g_pGameRules->GetCharacterType( static_cast<int>( m_iNewTeamNum ) - 1, characterIndex );
+	}
+
+	//Kill and gib the player if they're changing teams
+	const auto killAndGib = !pev->iuser1 && m_iTeamNum != m_iNewTeamNum;
+
+	g_pGameRules->ChangePlayerTeam( this, pszCharacterType, killAndGib, killAndGib );
+
+	ResetMenu();
+
+	pev->impulse = 0;
+
+	if( pev->iuser1 )
+	{
+		pev->effects &= EF_NODRAW;
+		pev->flags = FL_CLIENT;
+		pev->takedamage = DAMAGE_YES;
+		m_iHideHUD &= ~( HIDEHUD_HEALTH | HIDEHUD_WEAPONS );
+		m_afPhysicsFlags &= PFLAG_OBSERVER;
+		pev->flags &= ~FL_SPECTATOR;
+
+		MESSAGE_BEGIN( MSG_ALL, gmsgSpectator );
+		WRITE_BYTE( entindex() );
+		WRITE_BYTE( 0 );
+		MESSAGE_END();
+
+		pev->iuser1 = 0;
+		pev->deadflag = 0;
+		pev->solid = SOLID_SLIDEBOX;
+		pev->movetype = MOVETYPE_WALK;
+
+		g_pGameRules->GetPlayerSpawnSpot( this );
+		g_pGameRules->PlayerSpawn( this );
+	}
+
+	return true;
 }
 
 //=========================================================
