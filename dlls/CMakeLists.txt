@@ -120,7 +120,6 @@ target_sources(hl PRIVATE
 	squadmonster.cpp
 	squadmonster.h
 	squeakgrenade.cpp
-	stats.cpp
 	subs.cpp
 	talkmonster.cpp
 	talkmonster.h
