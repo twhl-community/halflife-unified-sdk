@@ -63,7 +63,19 @@ target_compile_definitions(client PRIVATE
 	$<$<CONFIG:DEBUG>:_DEBUG>
 	CLIENT_DLL
 	CLIENT_WEAPONS
-	HL_DLL)
+	HL_DLL
+	# These are defined for OSX as well
+	$<$<PLATFORM_ID:Linux, Darwin>:
+		POSIX
+		_POSIX
+		LINUX
+		_LINUX
+		GNUC
+	>
+	$<$<PLATFORM_ID:Darwin>:
+		OSX
+		_OSX
+	>)
 
 # TODO: review Linux compiler flags
 target_compile_options(client PRIVATE
@@ -102,7 +114,10 @@ target_compile_definitions(hl PRIVATE
 	VOXEL
 	QUAKE2
 	VALVE_DLL
-	CLIENT_WEAPONS)
+	CLIENT_WEAPONS
+	$<$<NOT:$<PLATFORM_ID:Windows>>:_LINUX>
+	$<$<PLATFORM_ID:Linux>:LINUX>
+	$<$<PLATFORM_ID:Darwin>:OSX>)
 
 # TODO: review Linux compiler flags
 target_compile_options(hl PRIVATE
@@ -151,11 +166,15 @@ install(TARGETS client
 	LIBRARY DESTINATION cl_dlls
 )
 
-install(FILES $<TARGET_PDB_FILE:client> DESTINATION cl_dlls OPTIONAL)
+if (WIN32)
+	install(FILES $<TARGET_PDB_FILE:client> DESTINATION cl_dlls OPTIONAL)
+endif()
 
 install(TARGETS hl
 	RUNTIME DESTINATION dlls
 	LIBRARY DESTINATION dlls
 )
 
-install(FILES $<TARGET_PDB_FILE:hl> DESTINATION dlls OPTIONAL)
+if (WIN32)
+	install(FILES $<TARGET_PDB_FILE:hl> DESTINATION dlls OPTIONAL)
+endif()
