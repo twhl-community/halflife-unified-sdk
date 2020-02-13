@@ -82,18 +82,17 @@ target_compile_definitions(client PRIVATE
 # TODO: review Linux compiler flags
 target_compile_options(client PRIVATE
      $<$<CXX_COMPILER_ID:Clang,AppleClang,GNU>:
-          -fpermissive -fno-strict-aliasing -Wno-invalid-offsetof>
+          -m32 -fpermissive -fno-strict-aliasing -Wno-invalid-offsetof>
      $<$<CXX_COMPILER_ID:MSVC>:
           /W3 /Zc:threadSafeInit->)
+
+target_link_options(client PRIVATE
+	$<$<CXX_COMPILER_ID:Clang,AppleClang,GNU>:-m32>)
 	
 target_link_libraries(client PRIVATE
 	vgui
 	$<$<PLATFORM_ID:Windows>:wsock32>
 	SDL2)
-
-set_target_properties(client PROPERTIES
-	COMPILE_OPTIONS $<$<CXX_COMPILER_ID:Clang,AppleClang,GNU>:-m32>
-	LINK_OPTIONS $<$<CXX_COMPILER_ID:Clang,AppleClang,GNU>:-m32>)
 
 add_subdirectory(cl_dll)
 
@@ -128,13 +127,12 @@ target_compile_definitions(hl PRIVATE
 # TODO: review Linux compiler flags
 target_compile_options(hl PRIVATE
      $<$<CXX_COMPILER_ID:Clang,AppleClang,GNU>:
-          -fpermissive -fno-strict-aliasing -Wno-invalid-offsetof>
+          -m32 -fpermissive -fno-strict-aliasing -Wno-invalid-offsetof>
      $<$<CXX_COMPILER_ID:MSVC>:
           /W3 /Zc:threadSafeInit->)
 
-set_target_properties(hl PROPERTIES
-	COMPILE_OPTIONS $<$<CXX_COMPILER_ID:Clang,AppleClang,GNU>:-m32>
-	LINK_OPTIONS $<$<CXX_COMPILER_ID:Clang,AppleClang,GNU>:-m32>)
+target_link_options(hl PRIVATE
+	$<$<CXX_COMPILER_ID:Clang,AppleClang,GNU>:-m32>)
 
 add_subdirectory(dlls)
 
