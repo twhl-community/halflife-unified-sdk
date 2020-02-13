@@ -5,8 +5,10 @@ project(HalfLifeMod
 	DESCRIPTION "Half-Life CMake Mod Template"
 	LANGUAGES CXX)
 
-#Try to get the directory path from registry if possible
-get_filename_component(STEAM_HALFLIFE_DIRECTORY "[HKEY_CURRENT_USER\\Software\\Valve\\Steam;ModInstallPath]" ABSOLUTE)
+if (WIN32)
+	#Try to get the directory path from registry if possible
+	get_filename_component(STEAM_HALFLIFE_DIRECTORY "[HKEY_CURRENT_USER\\Software\\Valve\\Steam;ModInstallPath]" ABSOLUTE)
+endif()
 
 # Used to locate binaries so dependencies are fixed up correctly (e.g. vgui.so)
 set(HALFLIFE_DIRECTORY "${STEAM_HALFLIFE_DIRECTORY}" CACHE PATH "Path to the Half-Life directory")
