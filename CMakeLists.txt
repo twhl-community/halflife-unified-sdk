@@ -123,6 +123,10 @@ target_link_libraries(client PRIVATE
 	$<$<PLATFORM_ID:Windows>:wsock32>
 	SDL2)
 
+target_link_options(client PRIVATE
+	$<$<PLATFORM_ID:Darwin>:
+		-framework Carbon>)
+
 add_subdirectory(cl_dll)
 
 # Add server library
