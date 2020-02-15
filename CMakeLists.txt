@@ -76,10 +76,23 @@ function(set_common_properties TARGET_NAME)
 
 	# TODO: review Linux compiler flags
 	target_compile_options(${TARGET_NAME} PRIVATE
-		 $<$<CXX_COMPILER_ID:Clang,AppleClang,GNU>:
-			  -m32 -fpermissive -fno-strict-aliasing -Wno-invalid-offsetof>
-		 $<$<CXX_COMPILER_ID:MSVC>:
-			  /W3 /Zc:threadSafeInit->)
+		# force 387 for FP math so the precision between win32 and linux and osx match
+		# Note: the pentium-m arch setting is not used for AMD systems in the original makefile
+		# Since the arch settings used are i686 this means including the setting ensures original settings are used,
+		# but it could cause problems for AMD targets
+		$<$<CXX_COMPILER_ID:Clang,AppleClang,GNU>:
+			-m32 -fpermissive -fno-strict-aliasing -Wno-invalid-offsetof -gdwarf-2 -g2 -march=pentium-m -mfpmath=387>
+			
+		$<$<AND:$<CXX_COMPILER_ID:Clang,AppleClang,GNU>, $<NOT:$<CONFIG:Release>>:
+			-O3>
+			
+		$<$<CXX_COMPILER_ID:MSVC>:
+			/W3 /Zc:threadSafeInit->
+			
+		# These are all from the original Makefile
+		# They have not been tested with CMake since there is no Mac system available to test on, so this might not work
+		$<$<PLATFORM_ID:Darwin>:
+			-Qunused-arguments -mmacosx-version-min=10.5 -fasm-blocks -arch i386 -march=prescott -momit-leaf-frame-pointer -mtune=core2>)
 
 	target_link_options(${TARGET_NAME} PRIVATE
 		$<$<CXX_COMPILER_ID:Clang,AppleClang,GNU>:-m32>)
