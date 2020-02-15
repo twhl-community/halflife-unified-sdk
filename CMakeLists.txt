@@ -168,15 +168,12 @@ install(TARGETS client
 	LIBRARY DESTINATION cl_dlls
 )
 
-if (WIN32)
-	install(FILES $<TARGET_PDB_FILE:client> DESTINATION cl_dlls OPTIONAL)
-endif()
-
 install(TARGETS hl
 	RUNTIME DESTINATION dlls
 	LIBRARY DESTINATION dlls
 )
 
 if (WIN32)
+	install(FILES $<TARGET_PDB_FILE:client> DESTINATION cl_dlls OPTIONAL)
 	install(FILES $<TARGET_PDB_FILE:hl> DESTINATION dlls OPTIONAL)
 endif()
