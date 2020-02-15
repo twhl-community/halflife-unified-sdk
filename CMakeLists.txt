@@ -83,7 +83,7 @@ function(set_common_properties TARGET_NAME)
 		$<$<CXX_COMPILER_ID:Clang,AppleClang,GNU>:
 			-m32 -fpermissive -fno-strict-aliasing -Wno-invalid-offsetof -gdwarf-2 -g2 -march=pentium-m -mfpmath=387>
 			
-		$<$<AND:$<CXX_COMPILER_ID:Clang,AppleClang,GNU>, $<NOT:$<CONFIG:Release>>:
+		$<$<AND:$<CXX_COMPILER_ID:Clang,AppleClang,GNU>,$<CONFIG:Release>>:
 			-O3>
 			
 		$<$<CXX_COMPILER_ID:MSVC>:
