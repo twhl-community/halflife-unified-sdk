@@ -21,6 +21,9 @@ elseif (NOT EXISTS ${HALFLIFE_DIRECTORY})
 	message(FATAL_ERROR "The given Half-Life directory path ${HALFLIFE_DIRECTORY} is not valid")
 endif()
 
+# Find dependencies
+find_package(Threads REQUIRED)
+
 # Set up vgui library
 add_library(vgui SHARED IMPORTED)
 
@@ -64,6 +67,9 @@ function(set_common_properties TARGET_NAME)
 			OSX
 			_OSX
 		>)
+		
+	target_link_libraries(${TARGET_NAME} PRIVATE
+		Threads::Threads)
 
 	# TODO: review Linux compiler flags
 	target_compile_options(${TARGET_NAME} PRIVATE
