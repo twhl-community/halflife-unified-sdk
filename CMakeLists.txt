@@ -71,7 +71,8 @@ function(set_common_properties TARGET_NAME)
 		>)
 		
 	target_link_libraries(${TARGET_NAME} PRIVATE
-		Threads::Threads)
+		Threads::Threads
+		$<$<PLATFORM_ID:Linux, Darwin>:dl>)
 
 	# TODO: review Linux compiler flags
 	target_compile_options(${TARGET_NAME} PRIVATE
