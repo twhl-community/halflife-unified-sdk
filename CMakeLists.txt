@@ -41,13 +41,45 @@ else()
 	set_target_properties(SDL2 PROPERTIES IMPORTED_LOCATION "${HALFLIFE_DIRECTORY}/libSDL2.so")
 endif()
 
+# Sets properties common to all projects
+function(set_common_properties TARGET_NAME)
+	set_target_properties(${TARGET_NAME} PROPERTIES PREFIX "")
 
+	# Link statically with the runtime
+	set_target_properties(${TARGET_NAME} PROPERTIES MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+		
+	target_compile_definitions(${TARGET_NAME} PRIVATE
+		_CRT_SECURE_NO_WARNINGS
+		$<$<CONFIG:DEBUG>:_DEBUG>
+		CLIENT_WEAPONS
+		# These are defined for OSX as well
+		$<$<PLATFORM_ID:Linux, Darwin>:
+			POSIX
+			_POSIX
+			LINUX
+			_LINUX
+			GNUC
+		>
+		$<$<PLATFORM_ID:Darwin>:
+			OSX
+			_OSX
+		>)
+
+	# TODO: review Linux compiler flags
+	target_compile_options(${TARGET_NAME} PRIVATE
+		 $<$<CXX_COMPILER_ID:Clang,AppleClang,GNU>:
+			  -m32 -fpermissive -fno-strict-aliasing -Wno-invalid-offsetof>
+		 $<$<CXX_COMPILER_ID:MSVC>:
+			  /W3 /Zc:threadSafeInit->)
+
+	target_link_options(${TARGET_NAME} PRIVATE
+		$<$<CXX_COMPILER_ID:Clang,AppleClang,GNU>:-m32>)
+endfunction()
+
+# Add client library
 add_library(client SHARED)
 
-set_target_properties(client PROPERTIES PREFIX "")
-
-# Link statically with the runtime
-set_target_properties(client PROPERTIES MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+set_common_properties(client)
 
 target_include_directories(client PRIVATE
 	dlls
@@ -61,33 +93,8 @@ target_include_directories(client PRIVATE
 	external)
 	
 target_compile_definitions(client PRIVATE
-	_CRT_SECURE_NO_WARNINGS
-	$<$<CONFIG:DEBUG>:_DEBUG>
 	CLIENT_DLL
-	CLIENT_WEAPONS
-	HL_DLL
-	# These are defined for OSX as well
-	$<$<PLATFORM_ID:Linux, Darwin>:
-		POSIX
-		_POSIX
-		LINUX
-		_LINUX
-		GNUC
-	>
-	$<$<PLATFORM_ID:Darwin>:
-		OSX
-		_OSX
-	>)
-
-# TODO: review Linux compiler flags
-target_compile_options(client PRIVATE
-     $<$<CXX_COMPILER_ID:Clang,AppleClang,GNU>:
-          -m32 -fpermissive -fno-strict-aliasing -Wno-invalid-offsetof>
-     $<$<CXX_COMPILER_ID:MSVC>:
-          /W3 /Zc:threadSafeInit->)
-
-target_link_options(client PRIVATE
-	$<$<CXX_COMPILER_ID:Clang,AppleClang,GNU>:-m32>)
+	HL_DLL)
 	
 target_link_libraries(client PRIVATE
 	vgui
@@ -96,13 +103,11 @@ target_link_libraries(client PRIVATE
 
 add_subdirectory(cl_dll)
 
+# Add server library
 # Add the def file as well
 add_library(hl SHARED dlls/hl.def)
 
-set_target_properties(hl PROPERTIES PREFIX "")
-
-# Link statically with the runtime
-set_target_properties(hl PROPERTIES MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+set_common_properties(hl)
 
 target_include_directories(hl PRIVATE
 	dlls
@@ -113,26 +118,10 @@ target_include_directories(hl PRIVATE
 	public)
 	
 target_compile_definitions(hl PRIVATE
-	_CRT_SECURE_NO_WARNINGS
-	$<$<CONFIG:DEBUG>:_DEBUG>
 	QUIVER
 	VOXEL
 	QUAKE2
-	VALVE_DLL
-	CLIENT_WEAPONS
-	$<$<NOT:$<PLATFORM_ID:Windows>>:_LINUX>
-	$<$<PLATFORM_ID:Linux>:LINUX>
-	$<$<PLATFORM_ID:Darwin>:OSX>)
-
-# TODO: review Linux compiler flags
-target_compile_options(hl PRIVATE
-     $<$<CXX_COMPILER_ID:Clang,AppleClang,GNU>:
-          -m32 -fpermissive -fno-strict-aliasing -Wno-invalid-offsetof>
-     $<$<CXX_COMPILER_ID:MSVC>:
-          /W3 /Zc:threadSafeInit->)
-
-target_link_options(hl PRIVATE
-	$<$<CXX_COMPILER_ID:Clang,AppleClang,GNU>:-m32>)
+	VALVE_DLL)
 
 add_subdirectory(dlls)
 
