@@ -13,7 +13,9 @@ endif()
 # Used to locate binaries so dependencies are fixed up correctly (e.g. vgui.so)
 set(HALFLIFE_DIRECTORY "${STEAM_HALFLIFE_DIRECTORY}" CACHE PATH "Path to the Half-Life directory")
 
-set(HLDS_DIRECTORY "" CACHE PATH "Path to the Half-Life Dedicated Server directory. Must be specified to automatically set up dedicated server debugging settings")
+if (MSVC)
+	set(HLDS_DIRECTORY "" CACHE PATH "Path to the Half-Life Dedicated Server directory. Must be specified to automatically set up dedicated server debugging settings")
+endif()
 
 if ("${HALFLIFE_DIRECTORY}" STREQUAL "")
 	message(FATAL_ERROR "You must specify the path to the Half-Life directory")
@@ -140,28 +142,25 @@ source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${CLIENT_SOURCES})
 # Set Visual Studio starting project
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT client)
 
-if (WIN32)
+if (MSVC)
 	set(HL_EXECUTABLE "hl.exe")
 	set(HLDS_EXECUTABLE "hlds.exe")
-else()
-	set(HL_EXECUTABLE "hl_linux")
-	set(HLDS_EXECUTABLE "hlds_linux")
+
+	# Set debugging settings to work on the mod directory
+	# It is assumed that the install path points to the mod directory
+	get_filename_component(MOD_NAME ${CMAKE_INSTALL_PREFIX} NAME_WE)
+
+	set_target_properties(client PROPERTIES
+		VS_DEBUGGER_COMMAND "${HALFLIFE_DIRECTORY}/${HL_EXECUTABLE}"
+		VS_DEBUGGER_COMMAND_ARGUMENTS "-game ${MOD_NAME}"
+		VS_DEBUGGER_WORKING_DIRECTORY "${HALFLIFE_DIRECTORY}")
+
+	# If HLDS_DIRECTORY is not specified it will leave a non-functional "default" setting
+	set_target_properties(hl PROPERTIES
+		VS_DEBUGGER_COMMAND "${HLDS_DIRECTORY}/${HLDS_EXECUTABLE}"
+		VS_DEBUGGER_COMMAND_ARGUMENTS "-game ${MOD_NAME}"
+		VS_DEBUGGER_WORKING_DIRECTORY "${HLDS_DIRECTORY}")
 endif()
-
-# Set debugging settings to work on the mod directory
-# It is assumed that the install path points to the mod directory
-get_filename_component(MOD_NAME ${CMAKE_INSTALL_PREFIX} NAME_WE)
-
-set_target_properties(client PROPERTIES
-	VS_DEBUGGER_COMMAND "${HALFLIFE_DIRECTORY}/${HL_EXECUTABLE}"
-	VS_DEBUGGER_COMMAND_ARGUMENTS "-game ${MOD_NAME}"
-	VS_DEBUGGER_WORKING_DIRECTORY "${HALFLIFE_DIRECTORY}")
-
-# If HLDS_DIRECTORY is not specified it will leave a non-functional "default" setting
-set_target_properties(hl PROPERTIES
-	VS_DEBUGGER_COMMAND "${HLDS_DIRECTORY}/${HLDS_EXECUTABLE}"
-	VS_DEBUGGER_COMMAND_ARGUMENTS "-game ${MOD_NAME}"
-	VS_DEBUGGER_WORKING_DIRECTORY "${HLDS_DIRECTORY}")
 	
 # Set install paths to the user-defined mod directory
 install(TARGETS client
