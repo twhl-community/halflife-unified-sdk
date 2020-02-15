@@ -92,10 +92,13 @@ function(set_common_properties TARGET_NAME)
 		# These are all from the original Makefile
 		# They have not been tested with CMake since there is no Mac system available to test on, so this might not work
 		$<$<PLATFORM_ID:Darwin>:
-			-Qunused-arguments -mmacosx-version-min=10.5 -fasm-blocks -arch i386 -march=prescott -momit-leaf-frame-pointer -mtune=core2>)
+			-fvisibility=hidden -Qunused-arguments -mmacosx-version-min=10.5 -fasm-blocks -arch i386 -march=prescott -momit-leaf-frame-pointer -mtune=core2>)
 
 	target_link_options(${TARGET_NAME} PRIVATE
-		$<$<CXX_COMPILER_ID:Clang,AppleClang,GNU>:-m32>)
+		$<$<CXX_COMPILER_ID:Clang,AppleClang,GNU>:
+			-m32 -gdwarf-2 -g2>
+		$<$<PLATFORM_ID:Linux>:
+			-Wl,-Map,${TARGET_NAME}_map.txt>)
 endfunction()
 
 # Add client library
