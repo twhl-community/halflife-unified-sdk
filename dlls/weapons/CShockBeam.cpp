@@ -23,6 +23,17 @@
 
 #include "CShockBeam.h"
 
+#ifndef CLIENT_DLL
+TYPEDESCRIPTION	CShockBeam::m_SaveData[] =
+{
+	DEFINE_FIELD( CShockBeam, m_pBeam1, FIELD_CLASSPTR ),
+	DEFINE_FIELD( CShockBeam, m_pBeam2, FIELD_CLASSPTR ),
+	DEFINE_FIELD( CShockBeam, m_pSprite, FIELD_CLASSPTR ),
+};
+
+IMPLEMENT_SAVERESTORE( CShockBeam, CShockBeam::BaseClass );
+#endif
+
 LINK_ENTITY_TO_CLASS( shock_beam, CShockBeam );
 
 void CShockBeam::Precache()

@@ -22,6 +22,13 @@ class CShockBeam : public CGrenade
 public:
 	using BaseClass = CGrenade;
 
+#ifndef CLIENT_DLL
+	int Save( CSave &save ) override;
+	int Restore( CRestore &restore ) override;
+
+	static TYPEDESCRIPTION m_SaveData[];
+#endif
+
 	void Precache() override;
 
 	void Spawn() override;
