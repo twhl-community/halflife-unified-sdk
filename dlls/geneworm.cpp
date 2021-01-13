@@ -1087,7 +1087,7 @@ void COFGeneWorm::DyingThink()
 		if( iDir > 0 )
 			pev->frame = 255;
 		else
-			pev->frame;
+			pev->frame = 0;
 
 		pev->renderfx = kRenderFxNone;
 		pev->rendermode = kRenderTransTexture;
