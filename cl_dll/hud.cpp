@@ -287,6 +287,27 @@ int __MsgFunc_TeamFull( const char *pszName, int iSize, void *pbuf )
 	return 0;
 }
 
+int __MsgFunc_SetMenuTeam(const char* pszName, int iSize, void* pbuf)
+{
+	if (gViewPort)
+		return gViewPort->MsgFunc_SetMenuTeam(pszName, iSize, pbuf);
+	return 0;
+}
+
+int __MsgFunc_StatsInfo(const char* pszName, int iSize, void* pbuf)
+{
+	if (gViewPort)
+		return gViewPort->MsgFunc_StatsInfo(pszName, iSize, pbuf);
+	return 0;
+}
+
+int __MsgFunc_StatsPlayer(const char* pszName, int iSize, void* pbuf)
+{
+	if (gViewPort)
+		return gViewPort->MsgFunc_StatsPlayer(pszName, iSize, pbuf);
+	return 0;
+}
+
 // This is called every time the DLL is loaded
 void CHud :: Init( void )
 {
@@ -319,6 +340,9 @@ void CHud :: Init( void )
 
 	HOOK_MESSAGE( Spectator );
 	HOOK_MESSAGE( AllowSpec );
+	HOOK_MESSAGE(SetMenuTeam);
+	HOOK_MESSAGE(StatsInfo);
+	HOOK_MESSAGE(StatsPlayer);
 	
 	HOOK_MESSAGE( SpecFade );
 	HOOK_MESSAGE( ResetFade );

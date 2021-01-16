@@ -290,6 +290,7 @@ void ScorePanel::Update()
 	else
 		SortTeams();
 
+	/*
 	// set scrollbar range
 	m_PlayerList.SetScrollRange(m_iRows);
 
@@ -303,6 +304,7 @@ void ScorePanel::Update()
 	{
 		 m_pCloseButton->setVisible ( false );
 	}
+	*/
 }
 
 //-----------------------------------------------------------------------------
@@ -528,7 +530,7 @@ void ScorePanel::RebuildTeams()
 	Update();
 }
 
-
+#if 0
 void ScorePanel::FillGrid()
 {
 	CSchemeManager *pSchemes = gViewPort->GetSchemeManager();
@@ -870,7 +872,7 @@ void ScorePanel::FillGrid()
 	m_PlayerList.getSize(x, y);
 	m_PlayerList.setSize(x, y);
 }
-
+#endif
 
 //-----------------------------------------------------------------------------
 // Purpose: Setup highlights for player names in scoreboard

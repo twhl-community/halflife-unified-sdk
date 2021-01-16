@@ -159,6 +159,7 @@
     <ClCompile Include="..\..\cl_dll\vgui_ScorePanel.cpp" />
     <ClCompile Include="..\..\cl_dll\vgui_ServerBrowser.cpp" />
     <ClCompile Include="..\..\cl_dll\vgui_SpectatorPanel.cpp" />
+    <ClCompile Include="..\..\cl_dll\vgui_StatsMenuPanel.cpp" />
     <ClCompile Include="..\..\cl_dll\vgui_TeamFortressViewport.cpp" />
     <ClCompile Include="..\..\cl_dll\vgui_teammenu.cpp" />
     <ClCompile Include="..\..\cl_dll\view.cpp" />
@@ -230,6 +231,7 @@
     <ClInclude Include="..\..\cl_dll\vgui_ScorePanel.h" />
     <ClInclude Include="..\..\cl_dll\vgui_ServerBrowser.h" />
     <ClInclude Include="..\..\cl_dll\vgui_SpectatorPanel.h" />
+    <ClInclude Include="..\..\cl_dll\vgui_StatsMenuPanel.h" />
     <ClInclude Include="..\..\cl_dll\view.h" />
     <ClInclude Include="..\..\cl_dll\wrect.h" />
     <ClInclude Include="..\..\common\parsemsg.h" />

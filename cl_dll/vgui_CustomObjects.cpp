@@ -332,14 +332,14 @@ CImageLabel::CImageLabel( const char* pImageName,int x,int y ) : Label( "", x,y 
 {
 	setContentFitted(true);
 	m_pTGA = LoadTGAForRes(pImageName);
-	setImage( m_pTGA );
+	Label::setImage( m_pTGA );
 }
 
 CImageLabel::CImageLabel( const char* pImageName,int x,int y,int wide,int tall ) : Label( "", x,y,wide,tall )
 {
 	setContentFitted(true);
 	m_pTGA = LoadTGAForRes(pImageName);
-	setImage( m_pTGA );
+	Label::setImage( m_pTGA );
 }
 
 //===========================================================
@@ -400,7 +400,21 @@ void CImageLabel::LoadImage(const char * pImageName)
 	m_pTGA->getSize( w, t );
 
 	setSize( XRES (w),YRES (t) );
-	setImage( m_pTGA );
+	Label::setImage( m_pTGA );
+}
+
+void CImageLabel::setImage(const char* pImageName)
+{
+	if (m_pTGA)
+		delete m_pTGA;
+
+	// Load the Image
+	char sz[256];
+	sprintf(sz, "%%d_%s", pImageName);
+	FileInputStream* fis = new FileInputStream(GetVGUITGAName(sz), false);
+	m_pTGA = new BitmapTGA(fis, true);
+	fis->close();
+	Label::setImage(m_pTGA);
 }
 
 //===========================================================

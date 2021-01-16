@@ -288,7 +288,7 @@ public:
 	void SortPlayers( int iTeam, char *team );
 	void RebuildTeams( void );
 
-	void FillGrid();
+	//void FillGrid();
 
 	void DeathMsg( int killer, int victim );
 

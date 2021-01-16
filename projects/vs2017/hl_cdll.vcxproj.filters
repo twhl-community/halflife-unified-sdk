@@ -351,6 +351,9 @@
     <ClCompile Include="..\..\dlls\ehandle.cpp">
       <Filter>Source Files\_hl\dlls</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\cl_dll\vgui_StatsMenuPanel.cpp">
+      <Filter>Source Files\cl_dll</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\cl_dll\kbutton.h">
@@ -505,6 +508,9 @@
     </ClInclude>
     <ClInclude Include="..\..\dlls\weapons\CGrappleTip.h">
       <Filter>Header Files\_hl\dlls\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\cl_dll\vgui_StatsMenuPanel.h">
+      <Filter>Header Files\cl_dll</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
