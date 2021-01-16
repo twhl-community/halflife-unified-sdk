@@ -561,7 +561,7 @@ void ClientCommand( edict_t *pEntity )
 	{
 		GetClassPtr((CBasePlayer *)pev)->SelectLastItem();
 	}
-	if( FStrEq( pcmd, "changeteam" ) )
+	else if( FStrEq( pcmd, "changeteam" ) )
 	{
 		if( g_pGameRules->IsCTF() )
 		{
@@ -574,6 +574,33 @@ void ClientCommand( edict_t *pEntity )
 			{
 				pPlayer->m_iCurrentMenu = 2;
 				pPlayer->Player_Menu();
+			}
+		}
+	}
+	else if( FStrEq( pcmd, "changeclass" ) )
+	{
+		if( g_pGameRules->IsCTF() )
+		{
+			auto pPlayer = GetClassPtr( ( CBasePlayer * ) pev );
+
+			if( pPlayer->m_iNewTeamNum != CTFTeam::None || pPlayer->m_iTeamNum != CTFTeam::None )
+			{
+				if( pPlayer->m_iCurrentMenu == 3 )
+				{
+					ClientPrint( pev, HUD_PRINTCONSOLE, "Already in character selection menu.\n" );
+				}
+				else
+				{
+					if( pPlayer->m_iNewTeamNum == CTFTeam::None )
+						pPlayer->m_iNewTeamNum = pPlayer->m_iTeamNum;
+
+					pPlayer->m_iCurrentMenu = 3;
+					pPlayer->Player_Menu();
+				}
+			}
+			else
+			{
+				ClientPrint( pev, HUD_PRINTCONSOLE, "No Team Selected.  Use \"changeteam\".\n" );
 			}
 		}
 	}
