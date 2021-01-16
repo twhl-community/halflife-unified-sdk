@@ -5010,31 +5010,34 @@ BOOL CBasePlayer :: SwitchWeapon( CBasePlayerItem *pWeapon )
 
 void CBasePlayer::Player_Menu()
 {
-	if( m_iCurrentMenu == 2 )
+	if( g_pGameRules->IsCTF() )
 	{
-		MESSAGE_BEGIN( MSG_ONE, gmsgAllowSpec, nullptr, edict() );
-		WRITE_BYTE( 1 );
-		MESSAGE_END();
+		if( m_iCurrentMenu == 2 )
+		{
+			MESSAGE_BEGIN( MSG_ONE, gmsgAllowSpec, nullptr, edict() );
+			WRITE_BYTE( 1 );
+			MESSAGE_END();
 
-		MESSAGE_BEGIN( MSG_ONE, gmsgTeamNames, nullptr, edict() );
-		g_engfuncs.pfnWriteByte( 2 );
-		WRITE_STRING( "#CTFTeam_BM" );
-		WRITE_STRING( "#CTFTeam_OF" );
-		MESSAGE_END();
+			MESSAGE_BEGIN( MSG_ONE, gmsgTeamNames, nullptr, edict() );
+			g_engfuncs.pfnWriteByte( 2 );
+			WRITE_STRING( "#CTFTeam_BM" );
+			WRITE_STRING( "#CTFTeam_OF" );
+			MESSAGE_END();
 
-		MESSAGE_BEGIN( MSG_ONE, gmsgVGUIMenu, nullptr, edict() );
-		WRITE_BYTE( 2 );
-		MESSAGE_END();
-	}
-	else if( m_iCurrentMenu == 3 )
-	{
-		MESSAGE_BEGIN( MSG_ONE, gmsgSetMenuTeam, nullptr, edict() );
-		WRITE_BYTE( static_cast<int>( m_iNewTeamNum == CTFTeam::None ? m_iTeamNum : m_iNewTeamNum ) );
-		MESSAGE_END();
+			MESSAGE_BEGIN( MSG_ONE, gmsgVGUIMenu, nullptr, edict() );
+			WRITE_BYTE( 2 );
+			MESSAGE_END();
+		}
+		else if( m_iCurrentMenu == 3 )
+		{
+			MESSAGE_BEGIN( MSG_ONE, gmsgSetMenuTeam, nullptr, edict() );
+			WRITE_BYTE( static_cast< int >( m_iNewTeamNum == CTFTeam::None ? m_iTeamNum : m_iNewTeamNum ) );
+			MESSAGE_END();
 
-		MESSAGE_BEGIN( MSG_ONE, gmsgVGUIMenu, nullptr, edict() );
-		WRITE_BYTE( 3 );
-		MESSAGE_END();
+			MESSAGE_BEGIN( MSG_ONE, gmsgVGUIMenu, nullptr, edict() );
+			WRITE_BYTE( 3 );
+			MESSAGE_END();
+		}
 	}
 }
 
@@ -5160,7 +5163,7 @@ BOOL CBasePlayer::Menu_Team_Input( int inp )
 		m_iCurrentMenu = 0;
 		return true;
 	}
-LABEL_16:
+
 	m_iCurrentMenu = 2;
 
 	if( g_pGameRules->IsCTF() )
