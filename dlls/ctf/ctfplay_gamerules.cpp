@@ -894,7 +894,8 @@ void CHalfLifeCTFplay::PlayerSpawn( CBasePlayer* pPlayer )
 	{
 		if( !pPlayer->pev->iuser1 )
 		{
-			pPlayer->pev->weapons |= WEAPON_SUIT;
+			//TODO: add weapon switch stuff
+			pPlayer->pev->weapons |= 1 << WEAPON_SUIT;
 
 			auto useDefault = true;
 
