@@ -3169,7 +3169,7 @@ void CBasePlayer::Spawn( void )
 	if( !g_pGameRules->IsCTF() )
 		g_pGameRules->SetDefaultPlayerTeam( this );
 
-	if( !g_pGameRules->IsCTF() && m_iTeamNum == CTFTeam::None )
+	if( g_pGameRules->IsCTF() && m_iTeamNum == CTFTeam::None )
 	{
 		pev->iuser1 = OBS_ROAMING;
 	}
