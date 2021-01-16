@@ -188,6 +188,11 @@ void DLLEXPORT HUD_Init( void )
 {
 //	RecClHudInit();
 	InitInput();
+
+	giR = 0;
+	giG = 160;
+	giB = 0;
+
 	gHUD.Init();
 	Scheme_Init();
 }

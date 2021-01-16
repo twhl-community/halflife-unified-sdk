@@ -109,7 +109,9 @@ int CHudBattery::Draw(float flTime)
 	}
 	else
 	{
-		UnpackRGB( r, g, b, RGB_HUD_COLOR );
+		r = giR;
+		g = giG;
+		b = giB;
 	}
 
 	if (!(gHUD.m_iWeaponBits & (1<<(WEAPON_SUIT)) ))

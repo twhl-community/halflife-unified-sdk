@@ -131,7 +131,9 @@ int CHudFlashlight::Draw(float flTime)
 		}
 		else
 		{
-			UnpackRGB( r, g, b, RGB_HUD_COLOR );
+			r = giR;
+			g = giG;
+			b = giB;
 		}
 	}
 

@@ -54,6 +54,8 @@ typedef struct {
 
 typedef struct cvar_s cvar_t;
 
+extern int giR, giG, giB;
+
 
 #define HUD_ACTIVE	1
 #define HUD_INTERMISSION 2

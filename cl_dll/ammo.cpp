@@ -867,7 +867,9 @@ int CHudAmmo::Draw(float flTime)
 	if (m_fFade > 0)
 		m_fFade -= (gHUD.m_flTimeDelta * 20);
 
-	UnpackRGB(r,g,b, RGB_HUD_COLOR);
+	r = giR;
+	g = giG;
+	b = giB;
 
 	ScaleColors(r, g, b, a );
 
@@ -896,7 +898,9 @@ int CHudAmmo::Draw(float flTime)
 
 			x += AmmoWidth/2;
 
-			UnpackRGB(r,g,b, RGB_HUD_COLOR);
+			r = giR;
+			g = giG;
+			b = giB;
 
 			// draw the | bar
 			FillRGBA(x, y, iBarWidth, gHUD.m_iFontHeight, r, g, b, a);
@@ -970,7 +974,9 @@ int DrawBar(int x, int y, int width, int height, float f)
 		}
 		else
 		{
-			UnpackRGB( r, g, b, RGB_GREENISH );
+			r = giR;
+			g = giG;
+			b = giB;
 		}
 
 		FillRGBA(x, y, w, height, r, g, b, 255);
@@ -984,7 +990,9 @@ int DrawBar(int x, int y, int width, int height, float f)
 	}
 	else
 	{
-		UnpackRGB( r, g, b, RGB_HUD_COLOR );
+		r = giR;
+		g = giG;
+		b = giB;
 	}
 
 	FillRGBA(x, y, width, height, r, g, b, 128);
@@ -1060,8 +1068,6 @@ int CHudAmmo::DrawWList(float flTime)
 	for ( i = 0; i < MAX_WEAPON_SLOTS; i++ )
 	{
 		int iWidth;
-
-		UnpackRGB(r,g,b, RGB_HUD_COLOR);
 	
 		if ( iActiveSlot == i )
 			a = 255;
@@ -1074,7 +1080,9 @@ int CHudAmmo::DrawWList(float flTime)
 		}
 		else
 		{
-			UnpackRGB( r, g, b, RGB_HUD_COLOR );
+			r = giR;
+			g = giG;
+			b = giB;
 			ScaleColors( r, g, b, 255 );
 		}
 
@@ -1128,7 +1136,9 @@ int CHudAmmo::DrawWList(float flTime)
 				}
 				else
 				{
-					UnpackRGB( r, g, b, RGB_HUD_COLOR );
+					r = giR;
+					g = giG;
+					b = giB;
 				}
 			
 				// if active, then we must have ammo.
@@ -1153,13 +1163,17 @@ int CHudAmmo::DrawWList(float flTime)
 						}
 						else
 						{
-							UnpackRGB( r, g, b, RGB_HUD_COLOR );
+							r = giR;
+							g = giG;
+							b = giB;
 						}
 						ScaleColors( r, g, b, 192 );
 					}
 					else
 					{
-						UnpackRGB(r,g,b, RGB_REDISH);
+						r = giR;
+						g = giG;
+						b = giB;
 						ScaleColors(r, g, b, 128);
 					}
 
@@ -1187,7 +1201,9 @@ int CHudAmmo::DrawWList(float flTime)
 			}
 			else
 			{
-				UnpackRGB( r, g, b, RGB_HUD_COLOR );
+				r = giR;
+				g = giG;
+				b = giB;
 			}
 
 			for ( int iPos = 0; iPos < MAX_WEAPON_POSITIONS; iPos++ )
@@ -1205,13 +1221,17 @@ int CHudAmmo::DrawWList(float flTime)
 					}
 					else
 					{
-						UnpackRGB( r, g, b, RGB_HUD_COLOR );
+						r = giR;
+						g = giG;
+						b = giB;
 					}
 					a = 128;
 				}
 				else
 				{
-					UnpackRGB(r,g,b, RGB_REDISH);
+					r = giR;
+					g = giG;
+					b = giB;
 					a = 96;
 				}
 
