@@ -60,7 +60,6 @@ extern int gmsgPlayerBrowse;
 extern int gmsgTeamFull;
 extern int gmsgCTFScore;
 
-const int MaxTeams = 2;
 const int MaxTeamNameLength = 16;
 const int MaxTeamCharacters = 12;
 const int MaxTeamCharacterNameLength = 16;
@@ -76,7 +75,7 @@ float g_flDefendCarrierTime = 10.0;
 char* pszPlayerIPs[ SV_MAX_PLAYERS * 2 ];
 
 static int team_scores[ MaxTeams ];
-static int teamscores[ MaxTeams ];
+int teamscores[ MaxTeams ];
 static int team_count[ MaxTeams ];
 
 static const char team_names[ MaxTeams ][ MaxTeamNameLength ] =

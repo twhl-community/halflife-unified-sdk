@@ -17,6 +17,13 @@
 
 #include "CTFDefs.h"
 
+const int MaxTeams = 2;
+
+extern int teamscores[MaxTeams];
+
+extern char g_szScoreIconNameBM[];
+extern char g_szScoreIconNameOF[];
+
 /**
 *	@brief Opposing Force CTF gamemode rules
 */

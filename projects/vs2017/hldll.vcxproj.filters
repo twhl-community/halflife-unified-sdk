@@ -525,6 +525,15 @@
     <ClCompile Include="..\..\dlls\ctf\CTFSpawn.cpp">
       <Filter>Source Files\dlls\ctf</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\dlls\ctf\CTFGoalBase.cpp">
+      <Filter>Source Files\dlls\ctf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\ctf\CTFGoal.cpp">
+      <Filter>Source Files\dlls\ctf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\ctf\CTFGoalFlag.cpp">
+      <Filter>Source Files\dlls\ctf</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\dlls\doors.h">

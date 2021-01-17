@@ -17,11 +17,16 @@
 
 #include "CTFGoal.h"
 
-//TODO: implement
 class CTFGoalBase : public CTFGoal
 {
 public:
-	void TurnOnLight( CBasePlayer* pPlayer ) {}
+	int Classify() override { return CLASS_NONE; }
+
+	void EXPORT BaseThink();
+
+	void Spawn() override;
+
+	void TurnOnLight(CBasePlayer* pPlayer);
 };
 
 #endif

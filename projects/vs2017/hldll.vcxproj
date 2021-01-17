@@ -134,6 +134,9 @@
     <ClCompile Include="..\..\dlls\ctf\CItemAcceleratorCTF.cpp" />
     <ClCompile Include="..\..\dlls\ctf\CItemCTF.cpp" />
     <ClCompile Include="..\..\dlls\ctf\CItemSpawnCTF.cpp" />
+    <ClCompile Include="..\..\dlls\ctf\CTFGoal.cpp" />
+    <ClCompile Include="..\..\dlls\ctf\CTFGoalBase.cpp" />
+    <ClCompile Include="..\..\dlls\ctf\CTFGoalFlag.cpp" />
     <ClCompile Include="..\..\dlls\ctf\ctfplay_gamerules.cpp" />
     <ClCompile Include="..\..\dlls\ctf\CTFSpawn.cpp" />
     <ClCompile Include="..\..\dlls\defaultai.cpp" />

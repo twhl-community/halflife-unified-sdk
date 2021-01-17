@@ -17,15 +17,53 @@
 
 #include "CTFGoal.h"
 
-//TODO: implement
+extern float g_flFlagReturnTime;
+
+void DumpCTFFlagInfo(CBasePlayer* pPlayer);
+
 class CTFGoalFlag : public CTFGoal
 {
 public:
-	void ReturnFlag() {}
+	void Precache() override;
 
-	void DropFlag( CBasePlayer* pPlayer ) {}
+	void EXPORT PlaceItem();
 
-	void TurnOnLight( CBasePlayer* pPlayer ) {}
+	void EXPORT ReturnFlag();
+
+	void EXPORT FlagCarryThink();
+
+	void goal_item_dropthink();
+
+	void Spawn() override;
+
+	void EXPORT ReturnFlagThink();
+
+	void StartItem();
+
+	void EXPORT ScoreFlagTouch(CBasePlayer* pOther);
+
+	void TurnOnLight(CBasePlayer* pPlayer);
+
+	void GiveFlagToPlayer(CBasePlayer* pPlayer);
+
+	void EXPORT goal_item_touch(CBaseEntity* pOther);
+
+	void SetDropTouch();
+
+	void DoDrop(const Vector& vecOrigin);
+
+	void DropFlag(CBasePlayer* pPlayer);
+
+	void DisplayFlagStatus(CBasePlayer* pPlayer);
+
+	int Classify() override { return CLASS_NONE; }
+
+	void SetObjectCollisionBox() override;
+
+	unsigned int drop_time;
+	Vector m_OriginalAngles;
+	int m_nReturnPlayer;
+	float m_flReturnTime;
 };
 
 #endif

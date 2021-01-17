@@ -15,10 +15,21 @@
 #ifndef CTFGOAL_H
 #define CTFGOAL_H
 
-//TODO: implement
 class CTFGoal : public CBaseAnimating
 {
 public:
+	int Classify() override { return CLASS_NONE; }
+
+	void KeyValue(KeyValueData* pkvd) override;
+
+	void Spawn() override;
+
+	void SetObjectCollisionBox() override;
+
+	void StartGoal();
+
+	void EXPORT PlaceGoal();
+
 	int m_iGoalNum;
 	int m_iGoalState;
 	Vector m_GoalMin;
