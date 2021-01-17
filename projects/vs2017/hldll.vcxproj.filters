@@ -534,6 +534,9 @@
     <ClCompile Include="..\..\dlls\ctf\CTFGoalFlag.cpp">
       <Filter>Source Files\dlls\ctf</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\dlls\ctf\CItemBackpackCTF.cpp">
+      <Filter>Source Files\dlls\ctf</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\dlls\doors.h">

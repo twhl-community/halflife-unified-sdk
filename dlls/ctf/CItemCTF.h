@@ -19,7 +19,6 @@
 
 class CItemSpawnCTF;
 
-//TODO: implement
 class CItemCTF : public CBaseAnimating
 {
 public:

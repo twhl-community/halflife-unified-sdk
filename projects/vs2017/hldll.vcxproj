@@ -132,6 +132,7 @@
     <ClCompile Include="..\..\dlls\crossbow.cpp" />
     <ClCompile Include="..\..\dlls\crowbar.cpp" />
     <ClCompile Include="..\..\dlls\ctf\CItemAcceleratorCTF.cpp" />
+    <ClCompile Include="..\..\dlls\ctf\CItemBackpackCTF.cpp" />
     <ClCompile Include="..\..\dlls\ctf\CItemCTF.cpp" />
     <ClCompile Include="..\..\dlls\ctf\CItemSpawnCTF.cpp" />
     <ClCompile Include="..\..\dlls\ctf\CTFGoal.cpp" />
