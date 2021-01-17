@@ -20,29 +20,31 @@
 #include "weapons.h"
 #include "game.h"
 #include "CItemCTF.h"
-#include "CItemBackpackCTF.h"
+#include "CItemLongJumpCTF.h"
 #include "gamerules.h"
 #include "ctfplay_gamerules.h"
 
 //TODO: move
 extern int gmsgItemPickup;
 
-LINK_ENTITY_TO_CLASS(item_ctfbackpack, CItemBackpackCTF);
+LINK_ENTITY_TO_CLASS(item_ctflongjump, CItemLongJumpCTF);
 
-void CItemBackpackCTF::Precache()
+void CItemLongJumpCTF::Precache()
 {
-	g_engfuncs.pfnPrecacheModel("models/w_backpack.mdl");
-	g_engfuncs.pfnPrecacheSound("ctf/pow_backpack.wav");
+	g_engfuncs.pfnPrecacheModel("models/w_jumppack.mdl");
+	g_engfuncs.pfnPrecacheSound("ctf/pow_big_jump.wav");
 }
 
-void CItemBackpackCTF::RemoveEffect(CBasePlayer* pPlayer)
+void CItemLongJumpCTF::RemoveEffect(CBasePlayer* pPlayer)
 {
-	pPlayer->m_flBackpackTime += gpGlobals->time - m_flPickupTime;
+	pPlayer->m_fLongJump = false;
+	g_engfuncs.pfnSetPhysicsKeyValue(pPlayer->edict(), "jpj", "0");
+	pPlayer->m_flJumpTime += gpGlobals->time - m_flPickupTime;
 }
 
-bool CItemBackpackCTF::MyTouch(CBasePlayer* pPlayer)
+bool CItemLongJumpCTF::MyTouch(CBasePlayer* pPlayer)
 {
-	if (!(pPlayer->m_iItems & CTFItem::Backpack))
+	if (!(pPlayer->m_iItems & CTFItem::LongJump))
 	{
 		if (!multipower.value)
 		{
@@ -54,24 +56,16 @@ bool CItemBackpackCTF::MyTouch(CBasePlayer* pPlayer)
 		{
 			if (pPlayer->pev->weapons & (1 << WEAPON_SUIT))
 			{
-				pPlayer->m_iItems = static_cast<CTFItem::CTFItem>(pPlayer->m_iItems | CTFItem::Backpack);
+				pPlayer->m_fLongJump = true;
+				g_engfuncs.pfnSetPhysicsKeyValue(pPlayer->edict(), "jpj", "1");
+
+				pPlayer->m_iItems = static_cast<CTFItem::CTFItem>(pPlayer->m_iItems | CTFItem::LongJump);
+
 				g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgItemPickup, 0, pPlayer->edict());
 				g_engfuncs.pfnWriteString(STRING(pev->classname));
 				g_engfuncs.pfnMessageEnd();
 
 				EMIT_SOUND_DYN(edict(), CHAN_VOICE, "items/ammopickup1.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
-
-				pPlayer->GiveAmmo(AMMO_URANIUMBOX_GIVE, "uranium", URANIUM_MAX_CARRY);
-				pPlayer->GiveAmmo(AMMO_GLOCKCLIP_GIVE, "9mm", _9MM_MAX_CARRY);
-				pPlayer->GiveAmmo(AMMO_357BOX_GIVE, "357", _357_MAX_CARRY);
-				pPlayer->GiveAmmo(AMMO_BUCKSHOTBOX_GIVE, "buckshot", BUCKSHOT_MAX_CARRY);
-				pPlayer->GiveAmmo(CROSSBOW_DEFAULT_GIVE, "bolts", BOLT_MAX_CARRY);
-				pPlayer->GiveAmmo(1, "rockets", ROCKET_MAX_CARRY);
-				pPlayer->GiveAmmo(HANDGRENADE_DEFAULT_GIVE, "Hand Grenade", HANDGRENADE_MAX_CARRY);
-				pPlayer->GiveAmmo(SNARK_DEFAULT_GIVE, "Snarks", SNARK_MAX_CARRY);
-				pPlayer->GiveAmmo(SPORELAUNCHER_DEFAULT_GIVE, "spores", SPORELAUNCHER_MAX_CARRY);
-				pPlayer->GiveAmmo(SNIPERRIFLE_DEFAULT_GIVE, "762", SNIPERRIFLE_MAX_CARRY);
-				pPlayer->GiveAmmo(M249_MAX_CARRY, "556", M249_MAX_CARRY);
 
 				return true;
 			}
@@ -81,7 +75,7 @@ bool CItemBackpackCTF::MyTouch(CBasePlayer* pPlayer)
 	return false;
 }
 
-void CItemBackpackCTF::Spawn()
+void CItemLongJumpCTF::Spawn()
 {
 	//TODO: precache calls should be in Precache
 	if (pev->model)
@@ -93,18 +87,17 @@ void CItemBackpackCTF::Spawn()
 	Precache();
 
 	//TODO: shouldn't this be using pev->model?
-	g_engfuncs.pfnSetModel(edict(), "models/w_backpack.mdl");
+	g_engfuncs.pfnSetModel(edict(), "models/w_jumppack.mdl");
 
 	pev->spawnflags |= SF_NORESPAWN;
 	pev->oldorigin = pev->origin;
-
 	CItemCTF::Spawn();
 
-	m_iItemFlag = CTFItem::Backpack;
-	m_pszItemName = "Ammo";
+	m_iItemFlag = CTFItem::LongJump;
+	m_pszItemName = "Jump";
 }
 
-int CItemBackpackCTF::Classify()
+int CItemLongJumpCTF::Classify()
 {
 	return CLASS_CTFITEM;
 }

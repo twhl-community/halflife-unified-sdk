@@ -2570,6 +2570,9 @@ void PM_Jump (void)
 	// See if user can super long jump?
 	cansuperjump = atoi( pmove->PM_Info_ValueForKey( pmove->physinfo, "slj" ) ) == 1 ? true : false;
 
+	//TODO: missing from Steam Op4
+	cansuperjump = cansuperjump || (atoi(pmove->PM_Info_ValueForKey(pmove->physinfo, "jpj")) == 1 ? true : false);
+
 	// Acclerate upward
 	// If we are ducking...
 	if ( ( pmove->bInDuck ) || ( pmove->flags & FL_DUCKING ) )
