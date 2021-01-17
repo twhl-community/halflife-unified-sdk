@@ -17,10 +17,18 @@
 
 #include "CItemCTF.h"
 
-//TODO: implement
 class CItemPortableHEVCTF : public CItemCTF
 {
 public:
+	void Precache() override;
+
+	void RemoveEffect(CBasePlayer* pPlayer) override;
+
+	bool MyTouch(CBasePlayer* pPlayer) override;
+
+	void CItemPortableHEVCTF::Spawn() override;
+
+	int Classify() override;
 };
 
 #endif

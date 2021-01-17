@@ -135,6 +135,7 @@
     <ClCompile Include="..\..\dlls\ctf\CItemBackpackCTF.cpp" />
     <ClCompile Include="..\..\dlls\ctf\CItemCTF.cpp" />
     <ClCompile Include="..\..\dlls\ctf\CItemLongJumpCTF.cpp" />
+    <ClCompile Include="..\..\dlls\ctf\CItemPortableHEVCTF.cpp" />
     <ClCompile Include="..\..\dlls\ctf\CItemSpawnCTF.cpp" />
     <ClCompile Include="..\..\dlls\ctf\CTFGoal.cpp" />
     <ClCompile Include="..\..\dlls\ctf\CTFGoalBase.cpp" />
