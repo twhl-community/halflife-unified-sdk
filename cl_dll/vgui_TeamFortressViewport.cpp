@@ -2553,6 +2553,7 @@ int TeamFortressViewport::MsgFunc_ScoreInfo( const char *pszName, int iSize, voi
 	short cl = READ_BYTE();
 	short frags = READ_SHORT();
 	short deaths = READ_SHORT();
+	//TODO: not written by Op4
 	short playerclass = READ_SHORT();
 	short teamnumber = READ_SHORT();
 
