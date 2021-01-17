@@ -138,6 +138,7 @@
     <ClCompile Include="..\..\dlls\ctf\CItemPortableHEVCTF.cpp" />
     <ClCompile Include="..\..\dlls\ctf\CItemRegenerationCTF.cpp" />
     <ClCompile Include="..\..\dlls\ctf\CItemSpawnCTF.cpp" />
+    <ClCompile Include="..\..\dlls\ctf\CTFDetect.cpp" />
     <ClCompile Include="..\..\dlls\ctf\CTFGoal.cpp" />
     <ClCompile Include="..\..\dlls\ctf\CTFGoalBase.cpp" />
     <ClCompile Include="..\..\dlls\ctf\CTFGoalFlag.cpp" />
@@ -286,6 +287,7 @@
     <ClInclude Include="..\..\dlls\ctf\CItemRegenerationCTF.h" />
     <ClInclude Include="..\..\dlls\ctf\CItemSpawnCTF.h" />
     <ClInclude Include="..\..\dlls\ctf\CTFDefs.h" />
+    <ClInclude Include="..\..\dlls\ctf\CTFDetect.h" />
     <ClInclude Include="..\..\dlls\ctf\CTFGoal.h" />
     <ClInclude Include="..\..\dlls\ctf\CTFGoalBase.h" />
     <ClInclude Include="..\..\dlls\ctf\CTFGoalFlag.h" />

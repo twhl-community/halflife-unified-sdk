@@ -21,9 +21,6 @@
 #include "gamerules.h"
 #include "ctfplay_gamerules.h"
 
-//TODO: should move this once detect is done
-float g_flPowerupRespawnTime = 30;
-
 const auto SF_ITEMCTF_RANDOM_SPAWN = 1 << 2;
 const auto SF_ITEMCTF_IGNORE_TEAM = 1 << 3;
 

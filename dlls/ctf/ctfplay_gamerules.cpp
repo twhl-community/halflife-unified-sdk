@@ -67,10 +67,12 @@ const int MaxTeamCharacterNameLength = 16;
 char g_szScoreIconNameBM[ 40 ] = "item_ctfflagh";
 char g_szScoreIconNameOF[ 40 ] = "item_ctfflagh";
 
-int g_iMapScoreMax;
-
-float g_flBaseDefendDist = 192.0;
-float g_flDefendCarrierTime = 10.0;
+float g_flFlagReturnTime = 30;
+float g_flBaseDefendDist = 192;
+float g_flDefendCarrierTime = 10;
+float g_flCaptureAssistTime = 10;
+float g_flPowerupRespawnTime = 30;
+int g_iMapScoreMax = 0;
 
 char* pszPlayerIPs[ SV_MAX_PLAYERS * 2 ];
 

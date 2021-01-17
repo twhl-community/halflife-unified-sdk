@@ -24,6 +24,13 @@ extern int teamscores[MaxTeams];
 extern char g_szScoreIconNameBM[];
 extern char g_szScoreIconNameOF[];
 
+extern float g_flFlagReturnTime;
+extern float g_flBaseDefendDist;
+extern float g_flDefendCarrierTime;
+extern float g_flCaptureAssistTime;
+extern float g_flPowerupRespawnTime;
+extern int g_iMapScoreMax;
+
 void DisplayTeamFlags(CBasePlayer* pPlayer);
 
 /**

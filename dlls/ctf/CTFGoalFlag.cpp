@@ -30,9 +30,6 @@ extern int gmsgFlagIcon;
 extern int gmsgCTFScore;
 extern int gmsgScoreInfo;
 
-float g_flFlagReturnTime = 30;
-float g_flCaptureAssistTime = 10;
-
 //TODO: merge into other one
 /*
 void DisplayTeamFlags(CBaseEntity* pPlayer)
