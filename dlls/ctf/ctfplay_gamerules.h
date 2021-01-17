@@ -24,6 +24,8 @@ extern int teamscores[MaxTeams];
 extern char g_szScoreIconNameBM[];
 extern char g_szScoreIconNameOF[];
 
+void DisplayTeamFlags(CBasePlayer* pPlayer);
+
 /**
 *	@brief Opposing Force CTF gamemode rules
 */

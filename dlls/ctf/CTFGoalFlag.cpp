@@ -33,6 +33,8 @@ extern int gmsgScoreInfo;
 float g_flFlagReturnTime = 30;
 float g_flCaptureAssistTime = 10;
 
+//TODO: merge into other one
+/*
 void DisplayTeamFlags(CBaseEntity* pPlayer)
 {
 	CTFGoalFlag* team1Flag = nullptr;
@@ -150,6 +152,7 @@ void DisplayTeamFlags(CBaseEntity* pPlayer)
 		}
 	}
 }
+*/
 
 void DumpCTFFlagInfo(CBasePlayer* pPlayer)
 {
@@ -416,7 +419,7 @@ void CTFGoalFlag::ReturnFlagThink()
 	}
 
 	UTIL_LogPrintf("World triggered \"%s\"\n", name);
-	DisplayTeamFlags(this);
+	DisplayTeamFlags(nullptr);
 }
 
 void CTFGoalFlag::StartItem()
@@ -622,7 +625,7 @@ void CTFGoalFlag::ScoreFlagTouch(CBasePlayer* pPlayer)
 		}
 	}
 
-	DisplayTeamFlags(this);
+	DisplayTeamFlags(nullptr);
 }
 
 void CTFGoalFlag::TurnOnLight(CBasePlayer* pPlayer)
@@ -723,7 +726,7 @@ void CTFGoalFlag::GiveFlagToPlayer(CBasePlayer* pPlayer)
 	g_engfuncs.pfnWriteShort(pPlayer->m_iDeaths);
 	g_engfuncs.pfnMessageEnd();
 
-	DisplayTeamFlags(this);
+	DisplayTeamFlags(nullptr);
 
 	for (auto entity : UTIL_FindEntitiesByClassname<CTFGoalBase>("item_ctfbase"))
 	{
@@ -896,7 +899,7 @@ void CTFGoalFlag::DropFlag(CBasePlayer* pPlayer)
 
 	m_iGoalState = 3;
 
-	DisplayTeamFlags(this);
+	DisplayTeamFlags(nullptr);
 }
 
 void CTFGoalFlag::DisplayFlagStatus(CBasePlayer* pPlayer)
