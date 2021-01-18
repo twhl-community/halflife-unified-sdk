@@ -34,6 +34,7 @@
 #include "decals.h"
 #include "gamerules.h"
 #include "ctf/ctfplay_gamerules.h"
+#include "ctf/CHUDIconTrigger.h"
 #include "game.h"
 #include "pm_shared.h"
 #include "hltv.h"
@@ -4315,6 +4316,11 @@ void CBasePlayer :: UpdateClientData( void )
 					MESSAGE_END();
 				}
 			}
+		}
+
+		if (g_pGameRules->IsMultiplayer())
+		{
+			RefreshCustomHUD(this);
 		}
 
 		InitStatusBar();

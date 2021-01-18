@@ -151,3 +151,22 @@ void CHUDIconTrigger::UpdateUser(CBaseEntity* pPlayer)
 
 	g_engfuncs.pfnMessageEnd();
 }
+
+void RefreshCustomHUD(CBasePlayer* pPlayer)
+{
+	//TODO: this will break when an index is larger than 31 or a negative value
+	int activeIcons = 0;
+
+	for (auto entity : UTIL_FindEntitiesByClassname<CHUDIconTrigger>("ctf_hudicon"))
+	{
+		if (!(activeIcons & (1 << entity->m_nCustomIndex)))
+		{
+			if (entity->m_fIsActive)
+			{
+				activeIcons |= 1 << entity->m_nCustomIndex;
+			}
+
+			entity->UpdateUser(pPlayer);
+		}
+	}
+}

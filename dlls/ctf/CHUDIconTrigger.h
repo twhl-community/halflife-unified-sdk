@@ -15,6 +15,8 @@
 
 #pragma once
 
+class CBasePlayer;
+
 class CHUDIconTrigger : public CBaseToggle
 {
 public:
@@ -35,3 +37,5 @@ public:
 	int m_nWidth;
 	int m_nHeight;
 };
+
+void RefreshCustomHUD(CBasePlayer* pPlayer);
