@@ -738,7 +738,7 @@ void CBasePlayer::PackDeadPlayerItems( void )
 
 	// get the game rules 
 	iWeaponRules = g_pGameRules->DeadPlayerWeapons( this );
- 	iAmmoRules = g_pGameRules->DeadPlayerAmmo( this );
+	iAmmoRules = g_pGameRules->DeadPlayerAmmo( this );
 
 	if ( iWeaponRules == GR_PLR_DROP_GUN_NO && iAmmoRules == GR_PLR_DROP_AMMO_NO )
 	{
@@ -2833,7 +2833,7 @@ void CBasePlayer::PostThink()
 		{
 			SetAnimation( PLAYER_WALK );
 		}
-    }
+	}
 
 	if (FBitSet(pev->flags, FL_ONGROUND))
 	{		
@@ -3179,8 +3179,8 @@ void CBasePlayer::Spawn( void )
 
 	g_pGameRules->GetPlayerSpawnSpot( this );
 
-    SET_MODEL(ENT(pev), "models/player.mdl");
-    g_ulModelIndexPlayer = pev->modelindex;
+	SET_MODEL(ENT(pev), "models/player.mdl");
+	g_ulModelIndexPlayer = pev->modelindex;
 	pev->sequence		= LookupActivity( ACT_IDLE );
 
 	if ( FBitSet(pev->flags, FL_DUCKING) ) 
@@ -3188,7 +3188,7 @@ void CBasePlayer::Spawn( void )
 	else
 		UTIL_SetSize(pev, VEC_HULL_MIN, VEC_HULL_MAX);
 
-    pev->view_ofs = VEC_VIEW;
+	pev->view_ofs = VEC_VIEW;
 	Precache();
 	m_HackedGunPos		= Vector( 0, 32, 0 );
 
@@ -3340,7 +3340,7 @@ int CBasePlayer::Restore( CRestore &restore )
 // Copied from spawn() for now
 	m_bloodColor	= BLOOD_COLOR_RED;
 
-    g_ulModelIndexPlayer = pev->modelindex;
+	g_ulModelIndexPlayer = pev->modelindex;
 
 	if ( FBitSet(pev->flags, FL_DUCKING) ) 
 	{
@@ -3697,7 +3697,7 @@ void CBasePlayer :: FlashlightTurnOn( void )
 void CBasePlayer :: FlashlightTurnOff( void )
 {
 	EMIT_SOUND_DYN( ENT(pev), CHAN_WEAPON, SOUND_FLASHLIGHT_OFF, 1.0, ATTN_NORM, 0, PITCH_NORM );
-    ClearBits(pev->effects, EF_BRIGHTLIGHT );
+	ClearBits(pev->effects, EF_BRIGHTLIGHT );
 	MESSAGE_BEGIN( MSG_ONE, gmsgFlashlight, NULL, pev );
 	WRITE_BYTE(0);
 	WRITE_BYTE(m_iFlashBattery);
@@ -3773,12 +3773,12 @@ void CBasePlayer::ImpulseCommands( )
 		break;
 		}
 	case 100:
-        // temporary flashlight for level designers
-        if ( FlashlightIsOn() )
+		// temporary flashlight for level designers
+		if ( FlashlightIsOn() )
 		{
 			FlashlightTurnOff();
 		}
-        else 
+		else 
 		{
 			FlashlightTurnOn();
 		}
@@ -4165,9 +4165,9 @@ Called every frame by the player PreThink
 void CBasePlayer::ItemPreFrame()
 {
 #if defined( CLIENT_WEAPONS )
-    if ( m_flNextAttack > 0 )
+	if ( m_flNextAttack > 0 )
 #else
-    if ( gpGlobals->time < m_flNextAttack )
+	if ( gpGlobals->time < m_flNextAttack )
 #endif
 	{
 		return;
@@ -4196,9 +4196,9 @@ void CBasePlayer::ItemPostFrame()
 		return;
 
 #if defined( CLIENT_WEAPONS )
-    if ( m_flNextAttack > 0 )
+	if ( m_flNextAttack > 0 )
 #else
-    if ( gpGlobals->time < m_flNextAttack )
+	if ( gpGlobals->time < m_flNextAttack )
 #endif
 	{
 		return;
@@ -4520,11 +4520,113 @@ void CBasePlayer :: UpdateClientData( void )
 	m_pClientActiveItem = m_pActiveItem;
 	m_iClientFOV = m_iFOV;
 
+	UpdateCTFHud();
+
 	// Update Status Bar
 	if ( m_flNextSBarUpdateTime < gpGlobals->time )
 	{
 		UpdateStatusBar();
 		m_flNextSBarUpdateTime = gpGlobals->time + 0.2;
+	}
+}
+
+void CBasePlayer::UpdateCTFHud()
+{
+	if (gmsgPlayerIcon && gmsgStatusIcon)
+	{
+		if (m_iItems != m_iClientItems)
+		{
+			const unsigned int itemsChanged = m_iItems ^ m_iClientItems;
+
+			const unsigned int removedItems = m_iClientItems & itemsChanged;
+			const unsigned int addedItems = m_iItems & itemsChanged;
+
+			m_iClientItems = m_iItems;
+
+			//Update flag item info
+			for (int id = CTFItem::BlackMesaFlag; id <= CTFItem::OpposingForceFlag; id <<= 1)
+			{
+				int state;
+
+				if (addedItems & id)
+				{
+					state = 1;
+				}
+				else if (removedItems & id)
+				{
+					state = 0;
+				}
+				else
+				{
+					//Unchanged
+					continue;
+				}
+
+				g_engfuncs.pfnMessageBegin(MSG_ALL, gmsgPlayerIcon, 0, 0);
+				g_engfuncs.pfnWriteByte(entindex());
+				g_engfuncs.pfnWriteByte(state);
+				g_engfuncs.pfnWriteByte(1);
+				g_engfuncs.pfnWriteByte(id);
+				g_engfuncs.pfnMessageEnd();
+			}
+
+			//Ugly hack
+			struct ItemData
+			{
+				const char* ClassName;
+				int R, G, B;
+			};
+
+			static const ItemData CTFItemData[] =
+			{
+				{"item_ctfljump", 255, 160, 0},
+				{"item_ctfphev", 128, 160, 255},
+				{"item_ctfbpack", 255, 255, 0},
+				{"item_ctfaccel", 255, 0, 0},
+				{"item_ctfregen", 0, 255, 0},
+			};
+
+			for (int id = CTFItem::LongJump, i = 0; id <= CTFItem::Regeneration; id <<= 1, ++i)
+			{
+				int state;
+
+				if (addedItems & id)
+				{
+					state = 1;
+				}
+				else if (removedItems & id)
+				{
+					state = 0;
+				}
+				else
+				{
+					//Unchanged
+					continue;
+				}
+
+				const auto& itemData{CTFItemData[i]};
+
+				g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgStatusIcon, 0, edict());
+				g_engfuncs.pfnWriteByte(state);
+				g_engfuncs.pfnWriteString(itemData.ClassName);
+
+				if (state)
+				{
+					g_engfuncs.pfnWriteByte(itemData.R);
+					g_engfuncs.pfnWriteByte(itemData.G);
+					g_engfuncs.pfnWriteByte(itemData.B);
+				}
+
+				g_engfuncs.pfnMessageEnd();
+
+				g_engfuncs.pfnMessageBegin(MSG_ALL, gmsgPlayerIcon, 0, 0);
+				g_engfuncs.pfnWriteByte(entindex());
+				g_engfuncs.pfnWriteByte(state);
+				g_engfuncs.pfnWriteByte(0);
+				g_engfuncs.pfnWriteByte(id);
+				g_engfuncs.pfnMessageEnd();
+			}
+		}
 	}
 }
 

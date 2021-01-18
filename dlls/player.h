@@ -277,6 +277,8 @@ public:
 
 	// JOHN:  sends custom messages if player HUD data has changed  (eg health, ammo)
 	virtual void UpdateClientData( void );
+
+	void UpdateCTFHud();
 	
 	static	TYPEDESCRIPTION m_playerSaveData[];
 
