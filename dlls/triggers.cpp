@@ -2785,7 +2785,7 @@ void CTriggerCTFGeneric::Touch(CBaseEntity* pOther)
 		if (team_score)
 		{
 			//TOOD: not sure why this check is here since pev must be valid if the entity exists
-			if (!pOther && pev)
+			if (!pOther && !score && pev)
 			{
 				UTIL_LogPrintf((char*)"World triggered \"%s\"\n", STRING(pev->targetname));
 			}
