@@ -549,6 +549,9 @@
     <ClCompile Include="..\..\dlls\ctf\CTFDetect.cpp">
       <Filter>Source Files\dlls\ctf</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\dlls\ctf\CHUDIconTrigger.cpp">
+      <Filter>Source Files\dlls\ctf</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\dlls\doors.h">
@@ -792,6 +795,9 @@
       <Filter>Header Files\dlls\ctf</Filter>
     </ClInclude>
     <ClInclude Include="..\..\dlls\ctf\CTFDetect.h">
+      <Filter>Header Files\dlls\ctf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\ctf\CHUDIconTrigger.h">
       <Filter>Header Files\dlls\ctf</Filter>
     </ClInclude>
   </ItemGroup>
