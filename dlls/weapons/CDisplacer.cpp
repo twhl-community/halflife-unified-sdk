@@ -21,6 +21,8 @@
 #ifndef CLIENT_DLL
 #include "rope/CRope.h"
 #include "CDisplacerBall.h"
+#include "ctf/CTFGoal.h"
+#include "ctf/CTFGoalFlag.h"
 
 #include "gamerules.h"
 
@@ -344,13 +346,12 @@ void CDisplacer::AltFireThink()
 
 	m_pPlayer->m_flDisplacerSndRoomtype = m_pPlayer->m_flSndRoomtype;
 
-	//TODO: CTF support - Solokiller
-#if 0
-	if( g_pGameRules->IsCTF() && m_pPlayer->m_hFlag )
+#ifndef CLIENT_DLL
+	if(g_pGameRules->IsCTF() && m_pPlayer->m_pFlag)
 	{
-		CCTFFlag* pFlag = EHANDLE_cast< CCTFFlag* >( m_pPlayer->m_hFlag );
+		auto pFlag = static_cast<CTFGoalFlag*>(static_cast<CBaseEntity*>(m_pPlayer->m_pFlag));
 
-		pFlag->DropFlag( m_pPlayer );
+		pFlag->DropFlag(m_pPlayer);
 	}
 #endif
 

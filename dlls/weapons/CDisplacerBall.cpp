@@ -21,8 +21,14 @@
 #include "skill.h"
 #include "decals.h"
 #include "gamerules.h"
+#include "ctf/CTFDefs.h"
+#include "ctf/CTFGoal.h"
+#include "ctf/CTFGoalFlag.h"
 
 #include "CDisplacerBall.h"
+
+//TODO: move
+extern int gmsgCTFScore;
 
 extern CBaseEntity* g_pLastSpawn;
 
@@ -162,46 +168,43 @@ void CDisplacerBall::BallTouch( CBaseEntity* pOther )
 	if( pOther->IsPlayer() )
 	{
 		//TODO: what is this for? - Solokiller
-		//pOther->pev->flags = FL_CLIENT;
+		pOther->pev->flags = FL_CLIENT;
 
 		CBasePlayer* pPlayer = static_cast<CBasePlayer*>( pOther );
 
-		//TODO: CTF support - Solokiller
-
-#if 0
-		if( g_pGameRules->IsCTF() && pPlayer->m_hFlag )
+		if( g_pGameRules->IsCTF() && pPlayer->m_pFlag )
 		{
-			CCTFGoalFlag* pFlag = pPlayer->m_hFlag;
+			auto pFlag = static_cast<CTFGoalFlag*>(static_cast<CBaseEntity*>(pPlayer->m_pFlag));
 
-			pFlag->DropFlag( pOther );
+			pFlag->DropFlag(pPlayer);
 
-			CBaseEntity* pOwner = GetOwner();
+			auto pOwner = CBaseEntity::Instance(pev->owner);
 
-			if( !pOwner )
-				pOwner = CWorld::GetInstance();
-
-			if( pOwner->IsPlayer() && pOwner->m_iTeamNum != pOther->m_iTeamNum )
+			if(pOwner->IsPlayer())
 			{
-				MESSAGE_BEGIN( MSG_ALL, gmsgCTFScore );
-					WRITE_BYTE( pPlayer->entindex() );
-					WRITE_BYTE( pPlayer->m_iCTFScore );
-				MESSAGE_END();
+				auto pOwnerPlayer = static_cast<CBasePlayer*>(pOwner);
 
-				ClientPrint( pPlayer, HUD_PRINTTALK, "#CTFScorePoint" );
-				UTIL_ClientPrintAll( HUD_PRINTNOTIFY, UTIL_VarArgs( "%s", pPlayer->GetNetName() ) );
+				if (pOwnerPlayer->m_iTeamNum != pPlayer->m_iTeamNum)
+				{
+					MESSAGE_BEGIN(MSG_ALL, gmsgCTFScore);
+					WRITE_BYTE(pPlayer->entindex());
+					WRITE_BYTE(pPlayer->m_iCTFScore);
+					MESSAGE_END();
 
-				//TODO: team IDs - Solokiller
-				if( pPlayer->m_iTeamNum == 1 )
-				{
-					UTIL_ClientPrintAll( HUD_PRINTNOTIFY, "#CTFFlagDisplacedBM" );
-				}
-				else if( pPlayer->m_iTeamNum == 2 )
-				{
-					UTIL_ClientPrintAll( HUD_PRINTNOTIFY, "#CTFFlagDisplacedOF" );
+					ClientPrint(pPlayer->pev, HUD_PRINTTALK, "#CTFScorePoint");
+					UTIL_ClientPrintAll(HUD_PRINTNOTIFY, UTIL_VarArgs("%s", STRING(pPlayer->pev->netname)));
+
+					if (pPlayer->m_iTeamNum == CTFTeam::BlackMesa)
+					{
+						UTIL_ClientPrintAll(HUD_PRINTNOTIFY, "#CTFFlagDisplacedBM");
+					}
+					else if (pPlayer->m_iTeamNum == CTFTeam::OpposingForce)
+					{
+						UTIL_ClientPrintAll(HUD_PRINTNOTIFY, "#CTFFlagDisplacedOF");
+					}
 				}
 			}
 		}
-#endif
 
 		auto pSpawnSpot = VARS( g_pGameRules->GetPlayerSpawnSpot( pPlayer ) );
 
