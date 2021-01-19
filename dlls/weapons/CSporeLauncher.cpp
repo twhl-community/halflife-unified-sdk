@@ -116,7 +116,14 @@ void CSporeLauncher::WeaponIdle()
 		}
 		else if( m_ReloadState != ReloadState::NOT_RELOADING )
 		{
-			if( m_iClip != SPORELAUNCHER_MAX_CLIP && m_pPlayer->m_rgAmmo[ m_iPrimaryAmmoType ] )
+			int maxClip = SPORELAUNCHER_MAX_CLIP;
+
+			if (m_pPlayer->m_iItems & CTFItem::Backpack)
+			{
+				maxClip *= 2;
+			}
+
+			if( m_iClip != maxClip && m_pPlayer->m_rgAmmo[ m_iPrimaryAmmoType ] )
 			{
 				Reload();
 			}
@@ -259,7 +266,14 @@ void CSporeLauncher::SecondaryAttack()
 
 void CSporeLauncher::Reload()
 {
-	if( m_pPlayer->m_rgAmmo[ m_iPrimaryAmmoType ] <= 0 || m_iClip == SPORELAUNCHER_MAX_CLIP )
+	int maxClip = SPORELAUNCHER_MAX_CLIP;
+
+	if (m_pPlayer->m_iItems & CTFItem::Backpack)
+	{
+		maxClip *= 2;
+	}
+
+	if( m_pPlayer->m_rgAmmo[ m_iPrimaryAmmoType ] <= 0 || m_iClip == maxClip)
 		return;
 
 	// don't reload until recoil is done

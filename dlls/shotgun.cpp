@@ -272,7 +272,14 @@ void CShotgun::SecondaryAttack( void )
 
 void CShotgun::Reload( void )
 {
-	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0 || m_iClip == SHOTGUN_MAX_CLIP)
+	int maxClip = SHOTGUN_MAX_CLIP;
+
+	if (m_pPlayer->m_iItems & CTFItem::Backpack)
+	{
+		maxClip *= 2;
+	}
+
+	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0 || m_iClip == maxClip)
 		return;
 
 	// don't reload until recoil is done
@@ -338,7 +345,14 @@ void CShotgun::WeaponIdle( void )
 		}
 		else if (m_fInSpecialReload != 0)
 		{
-			if (m_iClip != 8 && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType])
+			int maxClip = SHOTGUN_MAX_CLIP;
+
+			if (m_pPlayer->m_iItems & CTFItem::Backpack)
+			{
+				maxClip *= 2;
+			}
+
+			if (m_iClip != maxClip && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType])
 			{
 				Reload( );
 			}

@@ -666,10 +666,33 @@ BOOL CanAttack( float attack_time, float curtime, BOOL isPredicted )
 
 void CBasePlayerWeapon::ItemPostFrame( void )
 {
+	//Reset max clip and max ammo to default values
+	if (!(m_pPlayer->m_iItems & CTFItem::Backpack))
+	{
+		if (m_iClip > iMaxClip())
+		{
+			m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] += m_iClip - iMaxClip();
+
+			if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] > iMaxAmmo1())
+			{
+				m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] = iMaxAmmo1();
+			}
+
+			m_iClip = iMaxClip();
+		}
+	}
+
 	if ((m_fInReload) && ( m_pPlayer->m_flNextAttack <= UTIL_WeaponTimeBase() ) )
 	{
+		int maxClip = iMaxClip();
+
+		if ((m_pPlayer->m_iItems & CTFItem::Backpack) && maxClip > 1)
+		{
+			maxClip *= 2;
+		}
+
 		// complete the reload. 
-		int j = V_min( iMaxClip() - m_iClip, m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]);	
+		int j = V_min(maxClip - m_iClip, m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]);
 
 		// Add them to the clip
 		m_iClip += j;
@@ -911,6 +934,12 @@ BOOL CBasePlayerWeapon :: AddPrimaryAmmo( int iCount, char *szName, int iMaxClip
 {
 	int iIdAmmo;
 
+	//Don't double for single shot weapons (e.g. RPG)
+	if ((m_pPlayer->m_iItems & CTFItem::Backpack) && iMaxClip > 1)
+	{
+		iMaxClip *= 2;
+	}
+
 	if (iMaxClip < 1)
 	{
 		m_iClip = -1;
@@ -1034,6 +1063,11 @@ BOOL CBasePlayerWeapon :: DefaultReload( int iClipSize, int iAnim, float fDelay,
 {
 	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
 		return FALSE;
+
+	if (m_pPlayer->m_iItems & CTFItem::Backpack)
+	{
+		iClipSize *= 2;
+	}
 
 	int j = V_min(iClipSize - m_iClip, m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]);	
 
