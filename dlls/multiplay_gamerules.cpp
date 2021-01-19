@@ -593,12 +593,85 @@ BOOL CHalfLifeMultiplay::FPlayerCanTakeDamage( CBasePlayer *pPlayer, CBaseEntity
 
 //=========================================================
 //=========================================================
-void CHalfLifeMultiplay :: PlayerThink( CBasePlayer *pPlayer )
+void CHalfLifeMultiplay::PlayerThink(CBasePlayer* pPlayer)
 {
-	if ( g_fGameOver )
+	if (pPlayer->m_iItems & CTFItem::PortableHEV)
+	{
+		if (pPlayer->m_flNextHEVCharge <= gpGlobals->time)
+		{
+			if (pPlayer->pev->armorvalue < 150)
+			{
+				pPlayer->pev->armorvalue += 1;
+
+				if (!pPlayer->m_fPlayingAChargeSound)
+				{
+					EMIT_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_armor_charge.wav", VOL_NORM, ATTN_NORM);
+					pPlayer->m_fPlayingAChargeSound = true;
+				}
+			}
+			else if (pPlayer->m_fPlayingAChargeSound)
+			{
+				STOP_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_armor_charge.wav");
+				pPlayer->m_fPlayingAChargeSound = false;
+			}
+
+			pPlayer->m_flNextHEVCharge = gpGlobals->time + 0.5;
+		}
+	}
+	else if (pPlayer->pev->armorvalue > 100 && pPlayer->m_flNextHEVCharge <= gpGlobals->time)
+	{
+		pPlayer->pev->armorvalue -= 1;
+		pPlayer->m_flNextHEVCharge = gpGlobals->time + 0.5;
+	}
+
+	if (pPlayer->m_iItems & CTFItem::Regeneration)
+	{
+		if (pPlayer->m_flNextHealthCharge <= gpGlobals->time)
+		{
+			if (pPlayer->pev->health < 150.0)
+			{
+				pPlayer->pev->health += 1;
+
+				if (!pPlayer->m_fPlayingHChargeSound)
+				{
+					EMIT_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_health_charge.wav", VOL_NORM, ATTN_NORM);
+					pPlayer->m_fPlayingHChargeSound = true;
+				}
+			}
+			else if (pPlayer->m_fPlayingHChargeSound)
+			{
+				STOP_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_health_charge.wav");
+				pPlayer->m_fPlayingHChargeSound = false;
+			}
+
+			pPlayer->m_flNextHealthCharge = gpGlobals->time + 0.5;
+		}
+	}
+	else if (pPlayer->pev->health > 100.0 && gpGlobals->time >= pPlayer->m_flNextHealthCharge)
+	{
+		pPlayer->pev->health -= 1;
+		pPlayer->m_flNextHealthCharge = gpGlobals->time + 0.5;
+	}
+
+	if (pPlayer->m_pActiveItem && pPlayer->m_flNextAmmoCharge <= gpGlobals->time && (pPlayer->m_iItems & CTFItem::Backpack))
+	{
+		pPlayer->m_pActiveItem->IncrementAmmo(pPlayer);
+		pPlayer->m_flNextAmmoCharge = gpGlobals->time + 0.75;
+	}
+
+	if (gpGlobals->time - pPlayer->m_flLastDamageTime > 0.15)
+	{
+		if (pPlayer->m_iMostDamage < pPlayer->m_iLastDamage)
+			pPlayer->m_iMostDamage = pPlayer->m_iLastDamage;
+
+		pPlayer->m_flLastDamageTime = 0;
+		pPlayer->m_iLastDamage = 0;
+	}
+
+	if (g_fGameOver)
 	{
 		// check for button presses
-		if ( pPlayer->m_afButtonPressed & ( IN_DUCK | IN_ATTACK | IN_ATTACK2 | IN_USE | IN_JUMP ) )
+		if (pPlayer->m_afButtonPressed & (IN_DUCK | IN_ATTACK | IN_ATTACK2 | IN_USE | IN_JUMP))
 			m_iEndIntermissionButtonHit = TRUE;
 
 		// clear attack/use commands from player

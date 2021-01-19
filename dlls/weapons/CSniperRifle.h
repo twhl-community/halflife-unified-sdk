@@ -65,6 +65,8 @@ public:
 
 	int GetItemInfo( ItemInfo* p ) override;
 
+	void IncrementAmmo(CBasePlayer* pPlayer) override;
+
 	BOOL UseDecrement() override
 	{
 #if defined( CLIENT_WEAPONS )

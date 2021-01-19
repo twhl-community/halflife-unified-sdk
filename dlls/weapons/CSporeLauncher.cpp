@@ -322,6 +322,14 @@ int CSporeLauncher::GetItemInfo( ItemInfo* p )
 	return true;
 }
 
+void CSporeLauncher::IncrementAmmo(CBasePlayer* pPlayer)
+{
+	if (pPlayer->GiveAmmo(1, "spores", SPORELAUNCHER_MAX_CARRY))
+	{
+		EMIT_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
+	}
+}
+
 void CSporeLauncher::GetWeaponData( weapon_data_t& data )
 {
 	BaseClass::GetWeaponData( data );

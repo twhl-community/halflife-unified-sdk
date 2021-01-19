@@ -78,6 +78,21 @@ int CHandGrenade::GetItemInfo(ItemInfo *p)
 	return 1;
 }
 
+void CHandGrenade::IncrementAmmo(CBasePlayer* pPlayer)
+{
+#ifndef CLIENT_DLL
+	//TODO: not sure how useful this is given that the player has to have this weapon for this method to be called
+	if (!pPlayer->HasNamedPlayerItem("weapon_handgrenade"))
+	{
+		pPlayer->GiveNamedItem("weapon_handgrenade");
+	}
+#endif
+
+	if (pPlayer->GiveAmmo(1, "Hand Grenade", HANDGRENADE_MAX_CARRY))
+	{
+		EMIT_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
+	}
+}
 
 BOOL CHandGrenade::Deploy( )
 {

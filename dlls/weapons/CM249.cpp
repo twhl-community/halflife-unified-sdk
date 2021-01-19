@@ -356,6 +356,14 @@ int CM249::GetItemInfo( ItemInfo* p )
 	return true;
 }
 
+void CM249::IncrementAmmo(CBasePlayer* pPlayer)
+{
+	if (pPlayer->GiveAmmo(1, "556", M249_MAX_CARRY))
+	{
+		EMIT_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
+	}
+}
+
 class CAmmo556 : public CBasePlayerAmmo
 {
 public:

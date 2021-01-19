@@ -67,6 +67,8 @@ public:
 
 	int GetItemInfo( ItemInfo* p ) override;
 
+	void IncrementAmmo(CBasePlayer* pPlayer) override;
+
 	//TODO: requires oldweapons cvar
 	BOOL UseDecrement() override
 	{

@@ -232,6 +232,14 @@ int CSniperRifle::GetItemInfo( ItemInfo* p )
 	return true;
 }
 
+void CSniperRifle::IncrementAmmo(CBasePlayer* pPlayer)
+{
+	if (pPlayer->GiveAmmo(1, "762", SNIPERRIFLE_MAX_CARRY))
+	{
+		EMIT_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
+	}
+}
+
 void CSniperRifle::ToggleZoom()
 {
 	if( m_pPlayer->pev->fov == 0 )
