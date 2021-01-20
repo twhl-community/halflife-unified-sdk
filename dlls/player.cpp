@@ -514,6 +514,24 @@ int CBasePlayer :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, 
 	
 	CBaseEntity *pAttacker = CBaseEntity::Instance(pevAttacker);
 
+	if (pAttacker && pAttacker->IsPlayer())
+	{
+		auto pAttackerPlayer = static_cast<CBasePlayer*>(pAttacker);
+
+		//TODO: this is a pretty bad way to handle damage increase
+		if (pAttackerPlayer->m_iItems & CTFItem::Acceleration)
+		{
+			flDamage *= 1.6;
+
+			EMIT_SOUND(edict(), CHAN_STATIC, "turret/tu_ping.wav", VOL_NORM, ATTN_NORM);
+		}
+		if (m_pFlag)
+		{
+			m_nLastShotBy = pAttackerPlayer->entindex();
+			m_flLastShotTime = gpGlobals->time;
+		}
+	}
+
 	if ( !g_pGameRules->FPlayerCanTakeDamage( this, pAttacker ) )
 	{
 		// Refuse the damage
