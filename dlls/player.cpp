@@ -5165,9 +5165,17 @@ void CBasePlayer::ResetMenu()
 
 	switch( m_iCurrentMenu )
 	{
-	case 1: m_iCurrentMenu = 2; break;
-	case 2: m_iCurrentMenu = 3; break;
-	default: return;
+	case 1:
+		m_iCurrentMenu = 2;
+		break;
+
+	case 2:
+		m_iCurrentMenu = 3;
+		break;
+
+	default:
+		m_iCurrentMenu = 0;
+		return;
 	}
 
 	if( g_pGameRules->IsCTF() )
