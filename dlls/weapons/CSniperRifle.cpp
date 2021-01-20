@@ -173,9 +173,8 @@ void CSniperRifle::SecondaryAttack()
 
 	ToggleZoom();
 
-	//TODO: use UTIL_WeaponTimeBase() - Solokiller
 	//TODO: this doesn't really make sense
-	pev->nextthink = 0.0 + 0.1;
+	pev->nextthink = 0.1;
 
 	m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.5;
 }

@@ -476,7 +476,6 @@ void CDrillSergeant::RunTask( Task_t *pTask )
 {
 	switch( pTask->iTask )
 	{
-		//TODO: listed as 35 in op4, missing a task somewhere?
 	case TASK_RANGE_ATTACK1:
 		if( m_hEnemy != NULL && ( m_hEnemy->IsPlayer() ) )
 		{
