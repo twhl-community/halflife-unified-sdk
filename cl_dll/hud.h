@@ -460,10 +460,12 @@ public:
 	void Reset( void );
 	int Draw(float flTime);
 	int MsgFunc_StatusIcon(const char *pszName, int iSize, void *pbuf);
+	int MsgFunc_CustomIcon(const char* pszName, int iSize, void* pbuf);
 
 	enum { 
 		MAX_ICONSPRITENAME_LENGTH = MAX_SPRITE_NAME_LENGTH,
-		MAX_ICONSPRITES = 4,
+		MAX_ICONSPRITES = 5,
+		MAX_CUSTOMSPRITES = 6,
 	};
 
 	
@@ -471,6 +473,9 @@ public:
 	//could use a friend declaration instead...
 	void EnableIcon( char *pszIconName, unsigned char red, unsigned char green, unsigned char blue );
 	void DisableIcon( char *pszIconName );
+
+	void EnableCustomIcon(int nIndex, char* pszIconName, unsigned char red, unsigned char green, unsigned char blue, const wrect_t& aRect);
+	void DisableCustomIcon(int nIndex);
 
 private:
 
@@ -480,10 +485,11 @@ private:
 		HSPRITE spr;
 		wrect_t rc;
 		unsigned char r, g, b;
+		int teamnumber; //Not actually used
 	} icon_sprite_t;
 
 	icon_sprite_t m_IconList[MAX_ICONSPRITES];
-
+	CHudStatusIcons::icon_sprite_t m_CustomList[MAX_CUSTOMSPRITES];
 };
 
 //
