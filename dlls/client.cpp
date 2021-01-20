@@ -40,6 +40,10 @@
 #include "netadr.h"
 #include "pm_shared.h"
 
+#include "ctf/CTFGoal.h"
+#include "ctf/CTFGoalFlag.h"
+#include "ctf/ctfplay_gamerules.h"
+
 #if !defined ( _WIN32 )
 #include <ctype.h>
 #endif
@@ -602,6 +606,13 @@ void ClientCommand( edict_t *pEntity )
 			{
 				ClientPrint( pev, HUD_PRINTCONSOLE, "No Team Selected.  Use \"changeteam\".\n" );
 			}
+		}
+	}
+	else if (FStrEq(pcmd, "flaginfo"))
+	{
+		if (g_pGameRules->IsCTF())
+		{
+			DumpCTFFlagInfo(reinterpret_cast<CBasePlayer*>(GET_PRIVATE(pEntity)));
 		}
 	}
 	else if ( FStrEq( pcmd, "spectate" ) )	// clients wants to become a spectator
