@@ -2363,7 +2363,6 @@ void CDeadMOFAssassin:: Spawn( void )
 	pev->health			= 8;
 
 	// map old bodies onto new bodies
-	//TODO: verify these
 	switch( pev->body )
 	{
 	case 0: // Grunt with Gun
@@ -2375,19 +2374,19 @@ void CDeadMOFAssassin:: Spawn( void )
 	case 1: // Commander with Gun
 		pev->body = 0;
 		pev->skin = 0;
-		SetBodygroup( MAssassinBodygroup::Heads, MAssassinHead::Black );
+		SetBodygroup( MAssassinBodygroup::Heads, MAssassinHead::ThermalVision );
 		SetBodygroup( MAssassinBodygroup::Weapons, MAssassinWeapon::MP5 );
 		break;
 	case 2: // Grunt no Gun
 		pev->body = 0;
 		pev->skin = 0;
-		SetBodygroup( MAssassinBodygroup::Heads, MAssassinHead::White );
-		SetBodygroup( MAssassinBodygroup::Weapons, MAssassinWeapon::SniperRifle );
+		SetBodygroup( MAssassinBodygroup::Heads, MAssassinHead::Black );
+		SetBodygroup( MAssassinBodygroup::Weapons, MAssassinWeapon::None );
 		break;
 	case 3: // Commander no Gun
 		pev->body = 0;
 		pev->skin = 0;
-		SetBodygroup( MAssassinBodygroup::Heads, MAssassinHead::White );
+		SetBodygroup( MAssassinBodygroup::Heads, MAssassinHead::ThermalVision );
 		SetBodygroup( MAssassinBodygroup::Weapons, MAssassinWeapon::None );
 		break;
 	}
