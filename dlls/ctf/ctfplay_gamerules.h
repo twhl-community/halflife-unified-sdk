@@ -33,6 +33,8 @@ extern int g_iMapScoreMax;
 
 void DisplayTeamFlags(CBasePlayer* pPlayer);
 
+void ResetTeamScores();
+
 /**
 *	@brief Opposing Force CTF gamemode rules
 */

@@ -33,6 +33,7 @@
 #include "weapons.h"
 #include "gamerules.h"
 #include "teamplay_gamerules.h"
+#include "ctf/ctfplay_gamerules.h"
 #include "world.h"
 #include "ctf/CItemCTF.h"
 
@@ -481,7 +482,12 @@ void CWorld :: Spawn( void )
 	g_fGameOver = FALSE;
 	Precache( );
 	CItemCTF::m_pLastSpawn = nullptr;
-	//TODO: needs some ctf specific code
+
+	if (g_pGameRules->IsCTF())
+	{
+		ResetTeamScores();
+	}
+
 	g_flWeaponCheat = CVAR_GET_FLOAT( "sv_cheats" );  // Is the impulse 101 command allowed?
 }
 
