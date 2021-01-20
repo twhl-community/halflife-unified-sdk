@@ -19,6 +19,7 @@
 
 #ifndef CLIENT_DLL
 #include "gamerules.h"
+extern cvar_t oldgrapple;
 #endif
 
 #include "com_model.h"
@@ -143,21 +144,32 @@ void CGrappleTip::FlyThink()
 
 	pev->velocity = pev->velocity * 0.2 + ( flNewVel * gpGlobals->v_forward );
 
-	if( !UTIL_IsMultiplayer() )
+	float maxSpeed;
+
+	if(!UTIL_IsMultiplayer())
 	{
-		//Note: the old grapple had a maximum velocity of 1600. - Solokiller
-		if( pev->velocity.Length() > 750.0 )
+		if (oldgrapple.value != 1)
 		{
-			pev->velocity = pev->velocity.Normalize() * 750.0;
+			maxSpeed = 1600;
 		}
+		else
+		{
+			maxSpeed = 750;
+		}
+	}
+	else if (UTIL_IsCTF() || oldgrapple.value != 1)
+	{
+		maxSpeed = 2000;
 	}
 	else
 	{
-		//TODO: should probably clamp at sv_maxvelocity to prevent the tip from going off course. - Solokiller
-		if( pev->velocity.Length() > 2000.0 )
-		{
-			pev->velocity = pev->velocity.Normalize() * 2000.0;
-		}
+		maxSpeed = 1600;
+	}
+
+	//TODO: should probably clamp at sv_maxvelocity to prevent the tip from going off course. - Solokiller
+	if (pev->velocity.Length() > maxSpeed)
+	{
+		pev->velocity = pev->velocity.Normalize() * maxSpeed;
 	}
 #endif
 

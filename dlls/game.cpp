@@ -572,10 +572,12 @@ cvar_t	sk_player_leg3	= { "sk_player_leg3","1" };
 
 // BEGIN Opposing Force variables
 
+//TODO: define all Op4 cvars, ensure values are correct
 cvar_t ctf_capture = { "mp_ctf_capture", 0, FCVAR_SERVER };
 cvar_t oldweapons = { "sv_oldweapons", 0, FCVAR_SERVER };
 cvar_t multipower = { "mp_multipower", 0, FCVAR_SERVER };
 cvar_t ctf_autoteam = { "mp_ctf_autoteam", 0, FCVAR_SERVER };
+cvar_t oldgrapple = {"sv_oldgrapple", "0", FCVAR_SERVER};
 
 // END Opposing Force variables
 
@@ -1131,6 +1133,7 @@ void GameDLLInit( void )
 	CVAR_REGISTER( &oldweapons );
 	CVAR_REGISTER( &multipower );
 	CVAR_REGISTER( &ctf_autoteam );
+	CVAR_REGISTER(&oldgrapple);
 
 	// END REGISTER CVARS FOR OPPOSING FORCE
 

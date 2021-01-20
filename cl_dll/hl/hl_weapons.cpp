@@ -60,6 +60,8 @@ int   g_irunninggausspred = 0;
 
 vec3_t previousorigin;
 
+int giTeamplay = 0;
+
 // HLDM Weapon placeholder entities.
 CGlock g_Glock;
 CCrowbar g_Crowbar;
@@ -330,7 +332,7 @@ Vector CBaseEntity::FireBulletsPlayer ( ULONG cShots, Vector vecSrc, Vector vecD
 			
 	}
 
-    return Vector ( x * vecSpread.x, y * vecSpread.y, 0.0 );
+	return Vector ( x * vecSpread.x, y * vecSpread.y, 0.0 );
 }
 
 /*
@@ -1001,27 +1003,27 @@ void HUD_WeaponsPostThink( local_state_s *from, local_state_s *to, usercmd_t *cm
 			pto->m_fNextAimBonus = -1.0;
 		}
 
-		if ( pto->m_flNextPrimaryAttack < -1.0 )
+		if (pto->m_flNextPrimaryAttack < -1.0)
 		{
 			pto->m_flNextPrimaryAttack = -1.0;
 		}
 
-		if ( pto->m_flNextSecondaryAttack < -0.001 )
+		if (pto->m_flNextSecondaryAttack < -0.001)
 		{
 			pto->m_flNextSecondaryAttack = -0.001;
 		}
 
-		if ( pto->m_flTimeWeaponIdle < -0.001 )
+		if (pto->m_flTimeWeaponIdle < -0.001)
 		{
 			pto->m_flTimeWeaponIdle = -0.001;
 		}
 
-		if ( pto->m_flNextReload < -0.001 )
+		if (pto->m_flNextReload < -0.001)
 		{
 			pto->m_flNextReload = -0.001;
 		}
 
-		if ( pto->fuser1 < -0.001 )
+		if (pto->fuser1 < -0.001)
 		{
 			pto->fuser1 = -0.001;
 		}
@@ -1029,19 +1031,19 @@ void HUD_WeaponsPostThink( local_state_s *from, local_state_s *to, usercmd_t *cm
 
 	// m_flNextAttack is now part of the weapons, but is part of the player instead
 	to->client.m_flNextAttack -= cmd->msec / 1000.0;
-	if ( to->client.m_flNextAttack < -0.001 )
+	if (to->client.m_flNextAttack < -0.001)
 	{
 		to->client.m_flNextAttack = -0.001;
 	}
 
 	to->client.fuser2 -= cmd->msec / 1000.0;
-	if ( to->client.fuser2 < -0.001 )
+	if (to->client.fuser2 < -0.001)
 	{
 		to->client.fuser2 = -0.001;
 	}
-	
+
 	to->client.fuser3 -= cmd->msec / 1000.0;
-	if ( to->client.fuser3 < -0.001 )
+	if (to->client.fuser3 < -0.001)
 	{
 		to->client.fuser3 = -0.001;
 	}
@@ -1064,16 +1066,16 @@ runfuncs is 1 if this is the first time we've predicted this command.  If so, so
 be ignored
 =====================
 */
-void DLLEXPORT HUD_PostRunCmd( struct local_state_s *from, struct local_state_s *to, struct usercmd_s *cmd, int runfuncs, double time, unsigned int random_seed )
+void DLLEXPORT HUD_PostRunCmd(struct local_state_s* from, struct local_state_s* to, struct usercmd_s* cmd, int runfuncs, double time, unsigned int random_seed)
 {
-//	RecClPostRunCmd(from, to, cmd, runfuncs, time, random_seed);
+	//	RecClPostRunCmd(from, to, cmd, runfuncs, time, random_seed);
 
 	g_runfuncs = runfuncs;
 
 #if defined( CLIENT_WEAPONS )
-	if ( cl_lw && cl_lw->value )
+	if (cl_lw && cl_lw->value)
 	{
-		HUD_WeaponsPostThink( from, to, cmd, time, random_seed );
+		HUD_WeaponsPostThink(from, to, cmd, time, random_seed);
 	}
 	else
 #endif
@@ -1081,14 +1083,14 @@ void DLLEXPORT HUD_PostRunCmd( struct local_state_s *from, struct local_state_s 
 		to->client.fov = g_lastFOV;
 	}
 
-	if ( g_irunninggausspred == 1 )
+	if (g_irunninggausspred == 1)
 	{
 		Vector forward;
-		gEngfuncs.pfnAngleVectors( v_angles, forward, NULL, NULL );
-		to->client.velocity = to->client.velocity - forward * g_flApplyVel * 5; 
+		gEngfuncs.pfnAngleVectors(v_angles, forward, NULL, NULL);
+		to->client.velocity = to->client.velocity - forward * g_flApplyVel * 5;
 		g_irunninggausspred = false;
 	}
-	
+
 	// All games can use FOV state
 	g_lastFOV = to->client.fov;
 }
@@ -1096,4 +1098,9 @@ void DLLEXPORT HUD_PostRunCmd( struct local_state_s *from, struct local_state_s 
 bool UTIL_IsMultiplayer()
 {
 	return gEngfuncs.GetMaxClients() != 1;
+}
+
+bool UTIL_IsCTF()
+{
+	return giTeamplay == 2;
 }

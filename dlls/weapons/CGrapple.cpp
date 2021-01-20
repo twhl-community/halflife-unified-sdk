@@ -24,11 +24,20 @@
 
 #ifndef CLIENT_DLL
 #include "gamerules.h"
+#else
+//TODO: this is a great big mess due to duplicate definitions
+typedef int (*pfnUserMsgHook)(const char* pszName, int iSize, void* pbuf);
+#include "wrect.h"
+#include "cdll_int.h"
+#include "APIProxy.h"
+extern cl_enginefunc_t gEngfuncs;
 #endif
 
 #include "CGrapple.h"
 
 #ifndef CLIENT_DLL
+extern cvar_t oldgrapple;
+
 TYPEDESCRIPTION	CGrapple::m_SaveData[] =
 {
 	DEFINE_FIELD( CGrapple, m_pBeam, FIELD_CLASSPTR ),
@@ -387,14 +396,19 @@ void CGrapple::PrimaryAttack()
 		}
 	}
 
-	//TODO: CTF support - Solokiller
-	/*
-	if( g_pGameRules->IsMultiplayer() && g_pGameRules->IsCTF() )
+	const bool useNewGrapple =
+#ifdef CLIENT_DLL
+		gEngfuncs.pfnGetCvarFloat("sv_oldgrapple") != 1
+#else
+		oldgrapple.value != 1
+#endif
+		;
+
+	if (UTIL_IsMultiplayer() && (UTIL_IsCTF() || useNewGrapple))
 	{
 		m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase();
 	}
 	else
-	*/
 	{
 		m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.01;
 		m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 1.0;
@@ -454,14 +468,19 @@ void CGrapple::EndAttack()
 
 	m_flTimeWeaponIdle = UTIL_WeaponTimeBase();
 
-	//TODO: CTF support - Solokiller
-	/*
-	if( bIsMultiplayer() && g_pGameRules->IsCTF() )
+	const bool useNewGrapple =
+#ifdef CLIENT_DLL
+		gEngfuncs.pfnGetCvarFloat("sv_oldgrapple") != 1
+#else
+		oldgrapple.value != 1
+#endif
+		;
+
+	if(UTIL_IsMultiplayer() && (UTIL_IsCTF() || useNewGrapple))
 	{
-	m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase();
+		m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase();
 	}
 	else
-	*/
 	{
 		m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 1.0;
 	}

@@ -24,6 +24,8 @@
 #include "particleman.h"
 extern IParticleMan *g_pParticleMan;
 
+extern int giTeamplay;
+
 #define MAX_CLIENTS 32
 
 #if !defined( _TFC )
@@ -99,7 +101,9 @@ void CHud :: MsgFunc_InitHUD( const char *pszName, int iSize, void *pbuf )
 int CHud :: MsgFunc_GameMode(const char *pszName, int iSize, void *pbuf )
 {
 	BEGIN_READ( pbuf, iSize );
-	m_Teamplay = READ_BYTE();
+	m_Teamplay = giTeamplay = READ_BYTE();
+
+	//TODO: create scoreboard
 
 	return 1;
 }

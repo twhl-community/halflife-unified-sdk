@@ -543,6 +543,7 @@ float UTIL_SharedRandomFloat( unsigned int seed, float low, float high );
 float UTIL_WeaponTimeBase( void );
 
 bool UTIL_IsMultiplayer();
+bool UTIL_IsCTF();
 
 inline void WRITE_COORD_VECTOR( const Vector& vec )
 {

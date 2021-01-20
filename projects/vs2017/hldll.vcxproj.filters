@@ -800,5 +800,8 @@
     <ClInclude Include="..\..\dlls\ctf\CHUDIconTrigger.h">
       <Filter>Header Files\dlls\ctf</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\dlls\game.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
