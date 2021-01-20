@@ -65,7 +65,7 @@ bool CItemAcceleratorCTF::MyTouch( CBasePlayer* pPlayer )
 
 		if( team_no == CTFTeam::None || team_no == pPlayer->m_iTeamNum )
 		{
-			if( pPlayer->pev->weapons & WEAPON_SUIT )
+			if( pPlayer->pev->weapons & (1 << WEAPON_SUIT) )
 			{
 				pPlayer->m_iItems = static_cast<CTFItem::CTFItem>( pPlayer->m_iItems | CTFItem::Acceleration );
 				MESSAGE_BEGIN( MSG_ONE, gmsgItemPickup, nullptr, pPlayer->edict() );
