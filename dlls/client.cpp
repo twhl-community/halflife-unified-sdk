@@ -686,6 +686,8 @@ void ClientUserInfoChanged( edict_t *pEntity, char *infobuffer )
 	if ( !pEntity->pvPrivateData )
 		return;
 
+	auto player = GetClassPtr((CBasePlayer*)&pEntity->v);
+
 	// msg everyone if someone changes their name,  and it isn't the first time (changing no name to current name)
 	if ( pEntity->v.netname && STRING(pEntity->v.netname)[0] != 0 && !FStrEq( STRING(pEntity->v.netname), g_engfuncs.pfnInfoKeyValue( infobuffer, "name" )) )
 	{
@@ -714,9 +716,22 @@ void ClientUserInfoChanged( edict_t *pEntity, char *infobuffer )
 				WRITE_STRING( text );
 			MESSAGE_END();
 		}
-
+		
+		if (g_pGameRules->IsCTF())
+		{
+			//TODO: in vanilla Op4 this code incorrectly skips the above validation logic if the player is already in a team
+			if (player->m_iTeamNum != CTFTeam::None)
+			{
+				UTIL_LogPrintf("\"%s<%i><%s><%s>\" changed name to \"%s\"\n",
+					STRING(pEntity->v.netname),
+					GETPLAYERUSERID(pEntity),
+					GETPLAYERAUTHID(pEntity),
+					GetTeamName(pEntity),
+					g_engfuncs.pfnInfoKeyValue(infobuffer, "name"));
+			}
+		}
 		// team match?
-		if ( g_teamplay )
+		else if ( g_teamplay )
 		{
 			UTIL_LogPrintf( "\"%s<%i><%s><%s>\" changed name to \"%s\"\n", 
 				STRING( pEntity->v.netname ), 
@@ -736,7 +751,7 @@ void ClientUserInfoChanged( edict_t *pEntity, char *infobuffer )
 		}
 	}
 
-	g_pGameRules->ClientUserInfoChanged( GetClassPtr((CBasePlayer *)&pEntity->v), infobuffer );
+	g_pGameRules->ClientUserInfoChanged( player, infobuffer );
 }
 
 static int g_serveractive = 0;
