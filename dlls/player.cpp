@@ -4583,6 +4583,7 @@ void CBasePlayer::UpdateCTFHud()
 				{"item_ctfphev", 128, 160, 255},
 				{"item_ctfbpack", 255, 255, 0},
 				{"item_ctfaccel", 255, 0, 0},
+				{"Unknown", 0, 0, 0}, //Not actually used, but needed to match the index
 				{"item_ctfregen", 0, 255, 0},
 			};
 
