@@ -3246,7 +3246,7 @@ void CBasePlayer::Spawn( void )
 
 		m_iCurrentMenu = m_iNewTeamNum > CTFTeam::None ? 1 : 3;
 
-		if( g_pGameRules->IsCoOp() )
+		if( g_pGameRules->IsCTF() )
 			Player_Menu();
 	}
 }
