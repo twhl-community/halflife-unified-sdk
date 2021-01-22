@@ -2200,7 +2200,6 @@ int CBaseMonster::TaskIsRunning( void )
 //=========================================================
 int CBaseMonster::IRelationship ( CBaseEntity *pTarget )
 {
-	//TODO: need to update the entries for military ally & race x
 	static int iEnemy[16][16] =
 	{			 //   NONE	 MACH	 PLYR	 HPASS	 HMIL	 AMIL	 APASS	 AMONST	APREY	 APRED	 INSECT	PLRALY	PBWPN	ABWPN	HMILA	RACEX
 	/*NONE*/		{ R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO,	R_NO,	R_NO,	R_NO,	R_NO	},
