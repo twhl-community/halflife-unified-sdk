@@ -167,10 +167,11 @@ void CDisplacerBall::BallTouch( CBaseEntity* pOther )
 
 	if( pOther->IsPlayer() )
 	{
-		//TODO: what is this for? - Solokiller
-		pOther->pev->flags = FL_CLIENT;
-
 		CBasePlayer* pPlayer = static_cast<CBasePlayer*>( pOther );
+
+		//TODO: what is this for? - Solokiller
+		pPlayer->pev->flags = FL_CLIENT;
+		pPlayer->m_flFallVelocity = 0;
 
 		if( g_pGameRules->IsCTF() && pPlayer->m_pFlag )
 		{
