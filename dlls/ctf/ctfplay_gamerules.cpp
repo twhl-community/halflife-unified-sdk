@@ -989,9 +989,9 @@ void CHalfLifeCTFplay::PlayerThink( CBasePlayer* pPlayer )
 
 	if( gmsgPlayerBrowse && tr.flFraction < 1.0 && pPlayer->m_iLastPlayerTrace != g_engfuncs.pfnIndexOfEdict( tr.pHit ) )
 	{
-		auto pOtherPlayer = CBaseEntity::Instance<CBasePlayer>( tr.pHit );
+		auto pOther = CBaseEntity::Instance( tr.pHit );
 
-		if( !pOtherPlayer->IsPlayer() )
+		if( !pOther->IsPlayer() )
 		{
 			g_engfuncs.pfnMessageBegin( MSG_ONE, gmsgPlayerBrowse, nullptr, pPlayer->edict() );
 			g_engfuncs.pfnWriteByte( 0 );
@@ -1001,6 +1001,8 @@ void CHalfLifeCTFplay::PlayerThink( CBasePlayer* pPlayer )
 		}
 		else
 		{
+			auto pOtherPlayer = static_cast<CBasePlayer*>(pOther);
+
 			g_engfuncs.pfnMessageBegin( MSG_ONE, gmsgPlayerBrowse, nullptr, pPlayer->edict() );
 			g_engfuncs.pfnWriteByte( pOtherPlayer->m_iTeamNum == pPlayer->m_iTeamNum );
 
