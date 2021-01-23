@@ -67,7 +67,6 @@ int CHudFlagIcons::Draw(float flTime)
 
             if (flag.spr)
             {
-                //TODO: this seems to be adjusting Y coordinates twice
                 y += flag.rc.top - flag.rc.bottom - 5;
 
                 gEngfuncs.pfnSPR_Set(flag.spr, flag.r, flag.g, flag.b);
