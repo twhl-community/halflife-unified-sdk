@@ -552,6 +552,12 @@
     <ClCompile Include="..\..\dlls\ctf\CHUDIconTrigger.cpp">
       <Filter>Source Files\dlls\ctf</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\dlls\weapons\CPenguin.cpp">
+      <Filter>Source Files\dlls\weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\penguin_grenade.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\dlls\doors.h">
@@ -802,6 +808,9 @@
     </ClInclude>
     <ClInclude Include="..\..\dlls\game.h">
       <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\weapons\CPenguin.h">
+      <Filter>Header Files\dlls\weapons</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

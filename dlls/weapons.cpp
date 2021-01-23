@@ -405,6 +405,8 @@ void W_Precache(void)
 
 	UTIL_PrecacheOtherWeapon( "weapon_knife" );
 
+	UTIL_PrecacheOtherWeapon("weapon_penguin");
+
 	PRECACHE_SOUND( "weapons/spore_hit1.wav" );
 	PRECACHE_SOUND( "weapons/spore_hit2.wav" );
 	PRECACHE_SOUND( "weapons/spore_hit3.wav" );

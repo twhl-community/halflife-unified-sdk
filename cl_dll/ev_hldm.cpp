@@ -46,6 +46,7 @@
 #include "weapons/CSporeLauncher.h"
 #include "weapons/CSniperRifle.h"
 #include "weapons/CKnife.h"
+#include "weapons/CPenguin.h"
 
 extern engine_studio_api_t IEngineStudio;
 
@@ -88,6 +89,7 @@ void EV_FireShockRifle( struct event_args_s* args );
 void EV_FireSpore( struct event_args_s* args );
 void EV_SniperRifle( struct event_args_s* args );
 void EV_Knife( struct event_args_s* args );
+void EV_PenguinFire(event_args_t* args);
 
 
 void EV_TrainPitchAdjust( struct event_args_s *args );
@@ -2041,6 +2043,35 @@ void EV_Knife( event_args_t* args )
 		case 2:
 			gEngfuncs.pEventAPI->EV_WeaponAnimation( KNIFE_ATTACK3, 0 ); break;
 		}
+	}
+}
+
+void EV_PenguinFire(event_args_t* args)
+{
+	Vector origin = args->origin;
+	Vector angles = args->angles;
+	Vector forward;
+	gEngfuncs.pfnAngleVectors(angles, forward, nullptr, nullptr);
+
+	if (EV_IsLocal(args->entindex))
+	{
+		if (args->ducking)
+			origin.z += 18;
+
+		gEngfuncs.pEventAPI->EV_PushPMStates();
+		gEngfuncs.pEventAPI->EV_SetSolidPlayers(args->entindex - 1);
+		gEngfuncs.pEventAPI->EV_SetTraceHull(2);
+
+		Vector start = origin + (forward * 20);
+		Vector end = origin + (forward * 64);
+
+		pmtrace_t tr;
+		gEngfuncs.pEventAPI->EV_PlayerTrace(start, end, PM_NORMAL, -1, &tr);
+
+		if (!tr.allsolid && !tr.startsolid && tr.fraction > 0.25)
+			gEngfuncs.pEventAPI->EV_WeaponAnimation(PENGUIN_THROW, 0);
+
+		gEngfuncs.pEventAPI->EV_PopPMStates();
 	}
 }
 

@@ -360,6 +360,9 @@
     <ClCompile Include="..\..\cl_dll\hud_flagicons.cpp">
       <Filter>Source Files\cl_dll</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\dlls\weapons\CPenguin.cpp">
+      <Filter>Source Files\_hl\dlls\weapons</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\cl_dll\kbutton.h">
@@ -517,6 +520,9 @@
     </ClInclude>
     <ClInclude Include="..\..\cl_dll\vgui_StatsMenuPanel.h">
       <Filter>Header Files\cl_dll</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\weapons\CPenguin.h">
+      <Filter>Header Files\_hl\dlls\weapons</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
