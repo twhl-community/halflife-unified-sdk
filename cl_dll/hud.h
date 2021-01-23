@@ -550,6 +550,47 @@ private:
 //-----------------------------------------------------
 //
 
+class CHudFlagIcons : public CHudBase
+{
+public:
+	int Init();
+	int VidInit();
+	void InitHUDData();
+	int Draw(float flTime);
+
+	void EnableFlag(const char* pszFlagName, unsigned char team_idx, unsigned char red, unsigned char green, unsigned char blue, unsigned char score);
+	void DisableFlag(const char* pszFlagName, unsigned char team_idx);
+
+	int MsgFunc_FlagIcon(const char* pszName, int iSize, void* pbuf);
+	int MsgFunc_FlagTimer(const char* pszName, int iSize, void* pbuf);
+
+private:
+	enum
+	{
+		MAX_FLAGSPRITENAME_LENGTH = 24,
+		MAX_FLAGSPRITES = 4,
+	};
+
+	struct flag_sprite_t
+	{
+		char szSpriteName[MAX_FLAGSPRITENAME_LENGTH];
+		HSPRITE spr;
+		wrect_t rc;
+		unsigned char r;
+		unsigned char g;
+		unsigned char b;
+		unsigned char score;
+	};
+
+
+	flag_sprite_t m_FlagList[MAX_FLAGSPRITES];
+	bool m_bIsTimer;
+	bool m_bTimerReset;
+	float m_flTimeStart;
+	float m_flTimeLimit;
+};
+
+
 class CHudPlayerBrowse : public CHudBase
 {
 public:
@@ -667,6 +708,7 @@ public:
 	CHudStatusIcons m_StatusIcons;
 	CHudBenchmark	m_Benchmark;
 
+	CHudFlagIcons m_FlagIcons;
 	CHudPlayerBrowse m_PlayerBrowse;
 
 	void Init( void );

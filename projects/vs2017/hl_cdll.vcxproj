@@ -130,6 +130,7 @@
     <ClCompile Include="..\..\cl_dll\hud.cpp" />
     <ClCompile Include="..\..\cl_dll\hud_bench.cpp" />
     <ClCompile Include="..\..\cl_dll\hud_benchtrace.cpp" />
+    <ClCompile Include="..\..\cl_dll\hud_flagicons.cpp" />
     <ClCompile Include="..\..\cl_dll\hud_msg.cpp" />
     <ClCompile Include="..\..\cl_dll\hud_playerbrowse.cpp" />
     <ClCompile Include="..\..\cl_dll\hud_redraw.cpp" />
