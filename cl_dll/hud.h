@@ -550,6 +550,46 @@ private:
 //-----------------------------------------------------
 //
 
+class CHudPlayerBrowse : public CHudBase
+{
+public:
+	int Init();
+	int VidInit();
+	void InitHUDData();
+	int Draw(float flTime);
+
+	int MsgFunc_PlyrBrowse(const char* pszName, int iSize, void* pbuf);
+
+private:
+	enum
+	{
+		MAX_POWERUPSPRITENAME_LENGTH = 15,
+	};
+
+	struct powerup_sprite_t
+	{
+		char szSpriteName[MAX_POWERUPSPRITENAME_LENGTH];
+		HSPRITE spr;
+		wrect_t rc;
+		int r;
+		int g;
+		int b;
+	};
+
+	float m_flDelayFade;
+	float m_flDelayFadeSprite;
+
+	powerup_sprite_t m_PowerupSprite;
+
+	char m_szLineBuffer[256];
+	char m_szNewLineBuffer[256];
+
+	int m_iTeamNum;
+	int m_iNewTeamNum;
+	int m_iHealth;
+	int m_iArmor;
+	bool m_fFriendly;
+};
 
 class CHud
 {
@@ -626,6 +666,8 @@ public:
 	CHudTextMessage m_TextMessage;
 	CHudStatusIcons m_StatusIcons;
 	CHudBenchmark	m_Benchmark;
+
+	CHudPlayerBrowse m_PlayerBrowse;
 
 	void Init( void );
 	void VidInit( void );
