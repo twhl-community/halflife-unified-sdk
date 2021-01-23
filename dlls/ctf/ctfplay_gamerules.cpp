@@ -158,226 +158,129 @@ void GetLosingTeam( int& iTeamNum, int& iScoreDiff )
 	}
 }
 
-void DisplayTeamFlags( CBasePlayer* pPlayer )
+static void SendFlagIcon(CBasePlayer* player, bool isActive, const char* flagName, int teamIndex)
 {
-	CTFGoalFlag* v2 = nullptr;
+	g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgFlagIcon, nullptr, player->edict());
+	g_engfuncs.pfnWriteByte(isActive ? 1 : 0);
+	g_engfuncs.pfnWriteString(flagName);
+	g_engfuncs.pfnWriteByte(teamIndex);
 
-	while( ( v2 = static_cast<CTFGoalFlag*>( UTIL_FindEntityByClassname( v2, "item_ctfflag" ) ) ) && v2->m_iGoalNum != 1 )
+	if (teamIndex == 0)
 	{
+		g_engfuncs.pfnWriteByte(255);
+		g_engfuncs.pfnWriteByte(160);
+		g_engfuncs.pfnWriteByte(0);
 	}
-
-	CTFGoalFlag* v4 = nullptr;
-
-	while( ( v4 = static_cast<CTFGoalFlag*>( UTIL_FindEntityByClassname( v4, "item_ctfflag" ) ) ) && v4->m_iGoalNum != 2 )
+	else
 	{
+		g_engfuncs.pfnWriteByte(0);
+		g_engfuncs.pfnWriteByte(160);
+		g_engfuncs.pfnWriteByte(0);
 	}
+	
+	g_engfuncs.pfnWriteByte(teamscores[teamIndex]);
+	g_engfuncs.pfnMessageEnd();
+}
 
-	if( !pPlayer )
+static void SendFlagIcons(CBasePlayer* player, CTFGoalFlag* team1Flag, CTFGoalFlag* team2Flag)
+{
+	if (team1Flag || team2Flag)
 	{
-		if( gpGlobals->maxClients <= 0 )
-			return;
+		auto pMyFlag = static_cast<CTFGoalFlag*>(static_cast<CBaseEntity*>(player->m_pFlag));
 
-		const auto v9 = v2 == 0 && v4 == 0;
-		auto pFlagSoldier = v4;
-
-		for( int iPlayer = 1; iPlayer <= gpGlobals->maxClients; ++iPlayer )
+		if (team1Flag)
 		{
-			auto v11 = ( CBasePlayer * ) UTIL_PlayerByIndex( iPlayer );
+			const char* flagName = "";
 
-			if( v11 )
+			switch (team1Flag->m_iGoalState)
 			{
-				if( !v9 )
+			case 1:
+				flagName = "item_ctfflagh";
+				break;
+			case 2:
+				if (pMyFlag == team1Flag && pMyFlag)
 				{
-					auto pMyFlag = static_cast<CTFGoalFlag*>( v11->m_pFlag.operator CBaseEntity *() );
-					if( v2 && gmsgFlagIcon )
-					{
-						MESSAGE_BEGIN( MSG_ONE, gmsgFlagIcon, nullptr, v11->edict() );
-						g_engfuncs.pfnWriteByte( 1 );
-
-						switch( v2->m_iGoalState )
-						{
-						case 2:
-							if( pMyFlag == v2 && pMyFlag )
-								g_engfuncs.pfnWriteString( "item_ctfflagg" );
-							else
-								g_engfuncs.pfnWriteString( "item_ctfflagc" );
-							break;
-						case 3:
-							g_engfuncs.pfnWriteString( "item_ctfflagd" );
-							break;
-						case 1:
-							g_engfuncs.pfnWriteString( "item_ctfflagh" );
-							break;
-						}
-						g_engfuncs.pfnWriteByte( 0 );
-						g_engfuncs.pfnWriteByte( 255 );
-						g_engfuncs.pfnWriteByte( 160 );
-						g_engfuncs.pfnWriteByte( 0 );
-						g_engfuncs.pfnWriteByte( teamscores[ 0 ] );
-						g_engfuncs.pfnMessageEnd();
-					}
-					if( !pFlagSoldier || !gmsgFlagIcon )
-						continue;
-					g_engfuncs.pfnMessageBegin(
-						1,
-						gmsgFlagIcon,
-						0,
-						v11->edict() );
-					g_engfuncs.pfnWriteByte( 1 );
-
-					switch( pFlagSoldier->m_iGoalState )
-					{
-					case 2:
-						if( pMyFlag == pFlagSoldier && pMyFlag )
-							g_engfuncs.pfnWriteString( "item_ctfflagg" );
-						else
-							g_engfuncs.pfnWriteString( "item_ctfflagc" );
-						break;
-					case 3:
-						g_engfuncs.pfnWriteString( "item_ctfflagd" );
-						break;
-					case 1:
-						g_engfuncs.pfnWriteString( "item_ctfflagh" );
-						break;
-					}
-					goto LABEL_42;
+					flagName = "item_ctfflagg";
 				}
-				if( gmsgFlagIcon )
+				else
 				{
-					g_engfuncs.pfnMessageBegin(
-						MSG_ONE,
-						gmsgFlagIcon,
-						nullptr,
-						v11->edict() );
-					g_engfuncs.pfnWriteByte( 1 );
-					g_engfuncs.pfnWriteString( g_szScoreIconNameBM );
-					g_engfuncs.pfnWriteByte( 0 );
-					g_engfuncs.pfnWriteByte( 255 );
-					g_engfuncs.pfnWriteByte( 160 );
-					g_engfuncs.pfnWriteByte( 0 );
-					g_engfuncs.pfnWriteByte( teamscores[ 0 ] );
-					g_engfuncs.pfnMessageEnd();
-					g_engfuncs.pfnMessageBegin(
-						1,
-						gmsgFlagIcon,
-						0,
-						v11->edict() );
-					g_engfuncs.pfnWriteByte( 1 );
-					g_engfuncs.pfnWriteString( g_szScoreIconNameOF );
-				LABEL_42:
-					g_engfuncs.pfnWriteByte( 1 );
-					g_engfuncs.pfnWriteByte( 0 );
-					g_engfuncs.pfnWriteByte( 160 );
-					g_engfuncs.pfnWriteByte( 0 );
-					g_engfuncs.pfnWriteByte( teamscores[ 1 ] );
-					g_engfuncs.pfnMessageEnd();
-					continue;
+					flagName = "item_ctfflagc";
 				}
+				break;
+			case 3:
+				flagName = "item_ctfflagd";
+				break;
+			}
+
+			SendFlagIcon(player, true, flagName, 0);
+		}
+
+		if (team2Flag)
+		{
+			const char* flagName = "";
+
+			switch (team2Flag->m_iGoalState)
+			{
+			case 1:
+				flagName = "item_ctfflagh";
+				break;
+			case 2:
+				if (pMyFlag == team2Flag && pMyFlag)
+				{
+					flagName = "item_ctfflagg";
+				}
+				else
+				{
+					flagName = "item_ctfflagc";
+				}
+				break;
+			case 3:
+				flagName = "item_ctfflagd";
+				break;
+			}
+
+			SendFlagIcon(player, true, flagName, 1);
+		}
+	}
+	else
+	{
+		SendFlagIcon(player, true, g_szScoreIconNameBM, 0);
+		SendFlagIcon(player, true, g_szScoreIconNameOF, 1);
+	}
+}
+
+void DisplayTeamFlags(CBasePlayer* pPlayer)
+{
+	if (!gmsgFlagIcon)
+		return;
+
+	CTFGoalFlag* team1Flag = nullptr;
+
+	while ((team1Flag = static_cast<CTFGoalFlag*>(UTIL_FindEntityByClassname(team1Flag, "item_ctfflag"))) && team1Flag->m_iGoalNum != 1)
+	{
+	}
+
+	CTFGoalFlag* team2Flag = nullptr;
+
+	while ((team2Flag = static_cast<CTFGoalFlag*>(UTIL_FindEntityByClassname(team2Flag, "item_ctfflag"))) && team2Flag->m_iGoalNum != 2)
+	{
+	}
+
+	if (pPlayer)
+	{
+		SendFlagIcons(pPlayer, team1Flag, team2Flag);
+	}
+	else
+	{
+		for (int i = 1; i <= gpGlobals->maxClients; ++i)
+		{
+			auto player = static_cast<CBasePlayer*>(UTIL_PlayerByIndex(i));
+
+			if (player)
+			{
+				SendFlagIcons(player, team1Flag, team2Flag);
 			}
 		}
-
-		return;
-	}
-
-	if( !v4 && !v2 )
-	{
-		if( !gmsgFlagIcon )
-			return;
-
-		g_engfuncs.pfnMessageBegin(
-			1,
-			gmsgFlagIcon,
-			0,
-			pPlayer->edict() );
-		g_engfuncs.pfnWriteByte( 1 );
-		g_engfuncs.pfnWriteString( g_szScoreIconNameBM );
-		g_engfuncs.pfnWriteByte( 0 );
-		g_engfuncs.pfnWriteByte( 255 );
-		g_engfuncs.pfnWriteByte( 160 );
-		g_engfuncs.pfnWriteByte( 0 );
-		g_engfuncs.pfnWriteByte( teamscores[ 0 ] );
-		g_engfuncs.pfnMessageEnd();
-
-		g_engfuncs.pfnMessageBegin(
-			1,
-			gmsgFlagIcon,
-			0,
-			pPlayer->edict() );
-		g_engfuncs.pfnWriteByte( 1 );
-		g_engfuncs.pfnWriteString( g_szScoreIconNameOF );
-		g_engfuncs.pfnWriteByte( 1 );
-		g_engfuncs.pfnWriteByte( 0 );
-		g_engfuncs.pfnWriteByte( 160 );
-		g_engfuncs.pfnWriteByte( 0 );
-		g_engfuncs.pfnWriteByte( teamscores[ 1 ] );
-		g_engfuncs.pfnMessageEnd();
-		return;
-	}
-
-	auto v5 = static_cast<CTFGoalFlag*>( pPlayer->m_pFlag.operator CBaseEntity *() );
-
-	if( v2 && gmsgFlagIcon )
-	{
-		g_engfuncs.pfnMessageBegin(
-			MSG_ONE,
-			gmsgFlagIcon,
-			nullptr,
-			pPlayer->edict() );
-		g_engfuncs.pfnWriteByte( 1 );
-
-		switch( v2->m_iGoalState )
-		{
-		case 2:
-			if( v5 == v2 && v5 )
-				g_engfuncs.pfnWriteString( "item_ctfflagg" );
-			else
-				g_engfuncs.pfnWriteString( "item_ctfflagc" );
-			break;
-		case 3:
-			g_engfuncs.pfnWriteString( "item_ctfflagd" );
-			break;
-		case 1:
-			g_engfuncs.pfnWriteString( "item_ctfflagh" );
-			break;
-		}
-		g_engfuncs.pfnWriteByte( 0 );
-		g_engfuncs.pfnWriteByte( 255 );
-		g_engfuncs.pfnWriteByte( 160 );
-		g_engfuncs.pfnWriteByte( 0 );
-		g_engfuncs.pfnWriteByte( teamscores[ 0 ] );
-		g_engfuncs.pfnMessageEnd();
-	}
-	else if( v4 && gmsgFlagIcon )
-	{
-		g_engfuncs.pfnMessageBegin(
-			MSG_ONE,
-			gmsgFlagIcon,
-			nullptr,
-			pPlayer->edict() );
-		g_engfuncs.pfnWriteByte( 1 );
-
-		switch( v4->m_iGoalState )
-		{
-		case 2:
-			if( v5 == v4 && v5 )
-				g_engfuncs.pfnWriteString( "item_ctfflagg" );
-			else
-				g_engfuncs.pfnWriteString( "item_ctfflagc" );
-			break;
-		case 3:
-			g_engfuncs.pfnWriteString( "item_ctfflagd" );
-			break;
-		case 1:
-			g_engfuncs.pfnWriteString( "item_ctfflagh" );
-			break;
-		}
-
-		g_engfuncs.pfnWriteByte( 1 );
-		g_engfuncs.pfnWriteByte( 0 );
-		g_engfuncs.pfnWriteByte( 160 );
-		g_engfuncs.pfnWriteByte( 0 );
-		g_engfuncs.pfnWriteByte( teamscores[ 1 ] );
-		g_engfuncs.pfnMessageEnd();
 	}
 }
 
