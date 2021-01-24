@@ -139,5 +139,6 @@ void RespawnPlayerCTFPowerups( CBasePlayer* pPlayer, bool bForceRespawn );
 void ScatterPlayerCTFPowerups( CBasePlayer* pPlayer );
 void DropPlayerCTFPowerup( CBasePlayer* pPlayer );
 void FlushCTFPowerupTimes();
+void InitItemsForPlayer(CBasePlayer* pPlayer);
 
 #endif

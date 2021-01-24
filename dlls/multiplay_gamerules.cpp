@@ -40,6 +40,7 @@ extern int gmsgDeathMsg;	// client dll messages
 extern int gmsgScoreInfo;
 extern int gmsgMOTD;
 extern int gmsgServerName;
+extern int gmsgSpectator;
 
 extern int g_teamplay;
 
@@ -548,8 +549,16 @@ void CHalfLifeMultiplay :: ClientDisconnected( edict_t *pClient )
 
 			FireTargets( "game_playerleave", pPlayer, pPlayer, USE_TOGGLE, 0 );
 
+			if (IsCTF())
+			{
+				UTIL_LogPrintf("\"%s<%i><%s><%s>\" disconnected\n",
+					STRING(pPlayer->pev->netname),
+					GETPLAYERUSERID(pPlayer->edict()),
+					GETPLAYERAUTHID(pPlayer->edict()),
+					GetTeamName(pPlayer->edict()));
+			}
 			// team match?
-			if ( g_teamplay )
+			else if ( g_teamplay )
 			{
 				UTIL_LogPrintf( "\"%s<%i><%s><%s>\" disconnected\n",  
 					STRING( pPlayer->pev->netname ), 
@@ -567,6 +576,22 @@ void CHalfLifeMultiplay :: ClientDisconnected( edict_t *pClient )
 			}
 
 			pPlayer->RemoveAllItems( TRUE );// destroy all of the players weapons and items
+
+			g_engfuncs.pfnMessageBegin(MSG_ALL, gmsgSpectator, 0, 0);
+			g_engfuncs.pfnWriteByte(ENTINDEX(pClient));
+			g_engfuncs.pfnWriteByte(0);
+			g_engfuncs.pfnMessageEnd();
+
+			for (auto entity : UTIL_FindEntitiesByClassname<CBasePlayer>("player"))
+			{
+				if (entity->pev && entity != pPlayer && entity->m_hObserverTarget == pPlayer)
+				{
+					const int savedIUser1 = entity->pev->iuser1;
+					entity->pev->iuser1 = 0;
+					entity->m_hObserverTarget = nullptr;
+					entity->Observer_SetMode(savedIUser1);
+				}
+			}
 		}
 	}
 }
@@ -712,6 +737,8 @@ void CHalfLifeMultiplay :: PlayerSpawn( CBasePlayer *pPlayer )
 		pPlayer->GiveNamedItem( "weapon_9mmhandgun" );
 		pPlayer->GiveAmmo( 68, "9mm", _9MM_MAX_CARRY );// 4 full reloads
 	}
+
+	InitItemsForPlayer(pPlayer);
 
 	pPlayer->m_iAutoWepSwitch = savedAutoWepSwitch;
 }
@@ -864,7 +891,9 @@ void CHalfLifeMultiplay::DeathNotice( CBasePlayer *pVictim, entvars_t *pKiller, 
 	}
 
 	// strip the monster_* or weapon_* from the inflictor's classname
-	if ( strncmp( killer_weapon_name, "weapon_", 7 ) == 0 )
+	if (strncmp(killer_weapon_name, "ARgr", 4) == 0)
+		killer_weapon_name += 2;
+	else if ( strncmp( killer_weapon_name, "weapon_", 7 ) == 0 )
 		killer_weapon_name += 7;
 	else if ( strncmp( killer_weapon_name, "monster_", 8 ) == 0 )
 		killer_weapon_name += 8;
@@ -877,18 +906,30 @@ void CHalfLifeMultiplay::DeathNotice( CBasePlayer *pVictim, entvars_t *pKiller, 
 		WRITE_STRING( killer_weapon_name );		// what they were killed by (should this be a string?)
 	MESSAGE_END();
 
+	//Not done by Op4
+	/*
 	// replace the code names with the 'real' names
 	if ( !strcmp( killer_weapon_name, "egon" ) )
 		killer_weapon_name = gluon;
 	else if ( !strcmp( killer_weapon_name, "gauss" ) )
 		killer_weapon_name = tau;
+		*/
 
 	if ( pVictim->pev == pKiller )  
 	{
 		// killed self
 
+		if (IsCTF())
+		{
+			UTIL_LogPrintf("\"%s<%i><%s><%s>\" committed suicide with \"%s\"\n",
+				STRING(pVictim->pev->netname),
+				GETPLAYERUSERID(pVictim->edict()),
+				GETPLAYERAUTHID(pVictim->edict()),
+				GetTeamName(pKiller->pContainingEntity),
+				killer_weapon_name);
+		}
 		// team match?
-		if ( g_teamplay )
+		else if ( g_teamplay )
 		{
 			UTIL_LogPrintf( "\"%s<%i><%s><%s>\" committed suicide with \"%s\"\n",  
 				STRING( pVictim->pev->netname ), 
@@ -909,8 +950,21 @@ void CHalfLifeMultiplay::DeathNotice( CBasePlayer *pVictim, entvars_t *pKiller, 
 	}
 	else if ( pKiller->flags & FL_CLIENT )
 	{
+		if (IsCTF())
+		{
+			UTIL_LogPrintf("\"%s<%i><%s><%s>\" killed \"%s<%i><%s><%s>\" with \"%s\"\n",
+				STRING(pKiller->netname),
+				GETPLAYERUSERID(ENT(pKiller)),
+				GETPLAYERAUTHID(ENT(pKiller)),
+				GetTeamName(pKiller->pContainingEntity),
+				STRING(pVictim->pev->netname),
+				GETPLAYERUSERID(pVictim->edict()),
+				GETPLAYERAUTHID(pVictim->edict()),
+				GetTeamName(pVictim->edict()),
+				killer_weapon_name);
+		}
 		// team match?
-		if ( g_teamplay )
+		else if ( g_teamplay )
 		{
 			UTIL_LogPrintf( "\"%s<%i><%s><%s>\" killed \"%s<%i><%s><%s>\" with \"%s\"\n",  
 				STRING( pKiller->netname ),
@@ -941,8 +995,17 @@ void CHalfLifeMultiplay::DeathNotice( CBasePlayer *pVictim, entvars_t *pKiller, 
 	{ 
 		// killed by the world
 
+		if (IsCTF())
+		{
+			UTIL_LogPrintf("\"%s<%i><%s><%s>\" committed suicide with \"%s\" (world)\n",
+				STRING(pVictim->pev->netname),
+				GETPLAYERUSERID(pVictim->edict()),
+				GETPLAYERAUTHID(pVictim->edict()),
+				GetTeamName(pVictim->edict()),
+				killer_weapon_name);
+		}
 		// team match?
-		if ( g_teamplay )
+		else if ( g_teamplay )
 		{
 			UTIL_LogPrintf( "\"%s<%i><%s><%s>\" committed suicide with \"%s\" (world)\n",
 				STRING( pVictim->pev->netname ), 
@@ -1307,6 +1370,11 @@ void CHalfLifeMultiplay :: GoToIntermission( void )
 
 	g_fGameOver = TRUE;
 	m_iEndIntermissionButtonHit = FALSE;
+}
+
+void CHalfLifeMultiplay::ClientUserInfoChanged(CBasePlayer* pPlayer, char* infobuffer)
+{
+	pPlayer->SetPrefsFromUserinfo(infobuffer);
 }
 
 #define MAX_RULE_BUFFER 1024
