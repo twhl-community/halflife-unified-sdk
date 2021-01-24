@@ -1681,7 +1681,7 @@ void CHalfLifeMultiplay :: ChangeLevel( void )
 	char szCommands[ 1500 ];
 	char szRules[ 1500 ];
 	int minplayers = 0, maxplayers = 0;
-	strcpy( szFirstMapInList, "hldm1" );  // the absolute default level is hldm1
+	strcpy( szFirstMapInList, "op4_bootcamp" );  // the absolute default level is hldm1
 
 	int	curplayers;
 	BOOL do_cycle = TRUE;
