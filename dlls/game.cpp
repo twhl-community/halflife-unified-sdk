@@ -578,6 +578,8 @@ cvar_t oldweapons = { "sv_oldweapons", 0, FCVAR_SERVER };
 cvar_t multipower = { "mp_multipower", 0, FCVAR_SERVER };
 cvar_t ctf_autoteam = { "mp_ctf_autoteam", 0, FCVAR_SERVER };
 cvar_t oldgrapple = {"sv_oldgrapple", "0", FCVAR_SERVER};
+cvar_t coopplay = {"mp_coopplay", "0", FCVAR_SERVER};
+cvar_t coopweprespawn = {"mp_coopweprespawn", "0", FCVAR_SERVER};
 
 // END Opposing Force variables
 
@@ -1134,6 +1136,8 @@ void GameDLLInit( void )
 	CVAR_REGISTER( &multipower );
 	CVAR_REGISTER( &ctf_autoteam );
 	CVAR_REGISTER(&oldgrapple);
+	CVAR_REGISTER(&coopplay);
+	CVAR_REGISTER(&coopweprespawn);
 
 	// END REGISTER CVARS FOR OPPOSING FORCE
 

@@ -41,6 +41,8 @@ extern cvar_t	ctf_capture;
 extern cvar_t	oldweapons;
 extern cvar_t	multipower;
 extern cvar_t	ctf_autoteam;
+extern cvar_t coopplay;
+extern cvar_t coopweprespawn;
 
 // Engine Cvars
 extern cvar_t	*g_psv_gravity;

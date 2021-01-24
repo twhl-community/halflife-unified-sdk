@@ -128,6 +128,7 @@
     <ClCompile Include="..\..\dlls\COFSquadTalkMonster.cpp" />
     <ClCompile Include="..\..\dlls\combat.cpp" />
     <ClCompile Include="..\..\dlls\controller.cpp" />
+    <ClCompile Include="..\..\dlls\coopplay_gamerules.cpp" />
     <ClCompile Include="..\..\dlls\CRecruit.cpp" />
     <ClCompile Include="..\..\dlls\crossbow.cpp" />
     <ClCompile Include="..\..\dlls\crowbar.cpp" />
@@ -282,6 +283,7 @@
     <ClInclude Include="..\..\dlls\client.h" />
     <ClInclude Include="..\..\dlls\COFAllyMonster.h" />
     <ClInclude Include="..\..\dlls\COFSquadTalkMonster.h" />
+    <ClInclude Include="..\..\dlls\coopplay_gamerules.h" />
     <ClInclude Include="..\..\dlls\ctf\CHUDIconTrigger.h" />
     <ClInclude Include="..\..\dlls\ctf\CItemAcceleratorCTF.h" />
     <ClInclude Include="..\..\dlls\ctf\CItemBackpackCTF.h" />

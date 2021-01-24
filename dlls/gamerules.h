@@ -22,6 +22,7 @@ class CBasePlayerItem;
 class CBasePlayer;
 class CItem;
 class CBasePlayerAmmo;
+class CBaseMonster;
 
 // weapon respawning return codes
 enum
@@ -99,8 +100,10 @@ public:
 
 // Client kills/scoring
 	virtual int IPointsForKill( CBasePlayer *pAttacker, CBasePlayer *pKilled ) = 0;// how many points do I award whoever kills this player?
+	virtual int IPointsForMonsterKill(CBasePlayer* pAttacker, CBaseMonster* pKiller) { return 0; }
 	virtual void PlayerKilled( CBasePlayer *pVictim, entvars_t *pKiller, entvars_t *pInflictor ) = 0;// Called each time a player dies
 	virtual void DeathNotice( CBasePlayer *pVictim, entvars_t *pKiller, entvars_t *pInflictor )=  0;// Call this from within a GameRules class to report an obituary.
+	virtual void MonsterKilled(CBaseMonster* pVictim, entvars_t* pKiller, entvars_t* pInflictor) {}
 // Weapon retrieval
 	virtual BOOL CanHavePlayerItem( CBasePlayer *pPlayer, CBasePlayerItem *pWeapon );// The player is touching an CBasePlayerItem, do I give it to him?
 	virtual void PlayerGotWeapon( CBasePlayer *pPlayer, CBasePlayerItem *pWeapon ) = 0;// Called each time a player picks up a weapon from the ground
