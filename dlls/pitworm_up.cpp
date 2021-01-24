@@ -21,6 +21,7 @@
 #include "soundent.h"
 #include "weapons.h"
 #include "decals.h"
+#include "animation.h"
 
 const auto PITWORM_UP_AE_HITGROUND = 1;
 const auto PITWORM_UP_AE_SHOOTBEAM = 2;
@@ -1670,4 +1671,989 @@ void COFPitWormGibShooter::ShootThink( void )
 	SetUse( nullptr );
 	SetThink( &COFPitWormGibShooter::SUB_Remove );
 	pev->nextthink = gpGlobals->time + 0.1;
+}
+
+#define bits_MEMORY_ADVANCE_NODE	(bits_MEMORY_CUSTOM2)
+#define bits_MEMORY_COMPLETED_NODE	(bits_MEMORY_CUSTOM3)
+
+int gSpikeSprite, gSpikeDebrisSprite;
+
+/**
+*	@brief Unfinished, never used Pitworm NPC
+*/
+class COFPitWorm : public CBaseMonster
+{
+public:
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
+	static	TYPEDESCRIPTION m_SaveData[];
+
+	int Classify()
+	{
+		return CLASS_ALIEN_MONSTER;
+	}
+
+	void SetYawSpeed()
+	{
+		int yawSpeed = 100;
+		if (m_Activity != ACT_IDLE)
+			yawSpeed = 90;
+
+		pev->yaw_speed = yawSpeed;
+	}
+
+	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
+	void Precache();
+
+	BOOL CheckMeleeAttack1(float flDot, float flDist)
+	{
+		return flDot >= 0.7 && flDist <= 192.0;
+	}
+
+	void Activate()
+	{
+		if (m_hTargetEnt == NULL)
+			Remember(bits_MEMORY_ADVANCE_NODE);	// Start 'er up
+	}
+
+	void StartMonster();
+
+	void Spawn();
+
+	void KeyValue(KeyValueData* pkvd)
+	{
+		CBaseMonster::KeyValue(pkvd);
+	}
+
+	BOOL CheckRangeAttack1(float flDot, float flDist)
+	{
+		if (flDist <= 1024.0 && gpGlobals->time > m_spikeTime)
+		{
+			auto enemy = static_cast<CBaseEntity*>(m_hEnemy);
+
+			if (enemy && FVisible(enemy))
+			{
+				Vector vecStart, vecAngles;
+				GetAttachment(0, vecStart, vecAngles);
+
+				const auto vecEnd = BodyTarget(vecStart);
+
+				TraceResult tr;
+				UTIL_TraceLine(vecStart, vecEnd, dont_ignore_monsters, edict(), &tr);
+
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType);
+
+	void Move(float flInterval);
+
+	void ShootBeam();
+
+	void HandleAnimEvent(MonsterEvent_t* pEvent);
+
+	void StrafeBeam();
+
+	void EXPORT StartupUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+
+	void UpdateEye();
+
+	void TrackEnemy();
+
+	void RunAI();
+
+	void SetObjectCollisionBox();
+
+	static const char* pChildDieSounds[];
+	static const char* pSackSounds[];
+	static const char* pDeathSounds[];
+	static const char* pAttackSounds[];
+	static const char* pAttackHitSounds[];
+	static const char* pBirthSounds[];
+	static const char* pAlertSounds[];
+	static const char* pPainSounds[];
+	static const char* pFootSounds[];
+
+	float m_nodeTime;
+	float m_spikeTime;
+	float m_painSoundTime;
+	Activity m_slowMode;
+	float m_slowTime;
+	float m_flHeadYaw;
+	float m_flHeadPitch;
+	float m_flIdealHeadYaw;
+	float m_flIdealHeadPitch;
+	Vector m_posTarget;
+	Vector m_vecTarget;
+	CBeam* m_pBeam;
+	Vector m_posBeam;
+	Vector m_vecBeam;
+	Vector m_angleBeam;
+	float m_offsetBeam;
+	float m_flBeamExpireTime;
+	float m_flBeamDir;
+	Activity m_NextActivity;
+};
+
+TYPEDESCRIPTION COFPitWorm::m_SaveData[] =
+{
+	DEFINE_FIELD(COFPitWorm, m_nodeTime, FIELD_TIME),
+	DEFINE_FIELD(COFPitWorm, m_spikeTime, FIELD_TIME),
+	DEFINE_FIELD(COFPitWorm, m_painSoundTime, FIELD_TIME),
+	DEFINE_FIELD(COFPitWorm, m_slowMode, FIELD_INTEGER),
+	DEFINE_FIELD(COFPitWorm, m_slowTime, FIELD_TIME),
+	DEFINE_FIELD(COFPitWorm, m_flHeadYaw, FIELD_FLOAT),
+	DEFINE_FIELD(COFPitWorm, m_flHeadPitch, FIELD_FLOAT),
+	DEFINE_FIELD(COFPitWorm, m_flIdealHeadYaw, FIELD_FLOAT),
+	DEFINE_FIELD(COFPitWorm, m_flIdealHeadPitch, FIELD_FLOAT),
+	DEFINE_FIELD(COFPitWorm, m_posTarget, FIELD_VECTOR),
+	DEFINE_FIELD(COFPitWorm, m_vecTarget, FIELD_VECTOR),
+	DEFINE_FIELD(COFPitWorm, m_pBeam, FIELD_CLASSPTR),
+	DEFINE_FIELD(COFPitWorm, m_posBeam, FIELD_VECTOR),
+	DEFINE_FIELD(COFPitWorm, m_vecBeam, FIELD_VECTOR),
+	DEFINE_FIELD(COFPitWorm, m_angleBeam, FIELD_VECTOR),
+	DEFINE_FIELD(COFPitWorm, m_offsetBeam, FIELD_FLOAT),
+	DEFINE_FIELD(COFPitWorm, m_flBeamExpireTime, FIELD_FLOAT),
+	DEFINE_FIELD(COFPitWorm, m_flBeamDir, FIELD_FLOAT),
+	DEFINE_FIELD(COFPitWorm, m_NextActivity, FIELD_INTEGER)
+};
+
+IMPLEMENT_SAVERESTORE(COFPitWorm, CBaseMonster);
+
+const char* COFPitWorm::pChildDieSounds[] =
+{
+	"gonarch/gon_childdie1.wav",
+	"gonarch/gon_childdie2.wav",
+	"gonarch/gon_childdie3.wav",
+};
+
+const char* COFPitWorm::pSackSounds[] =
+{
+	"gonarch/gon_sack1.wav",
+	"gonarch/gon_sack2.wav",
+	"gonarch/gon_sack3.wav",
+};
+
+const char* COFPitWorm::pDeathSounds[] =
+{
+	"gonarch/gon_die1.wav",
+};
+
+const char* COFPitWorm::pAttackSounds[] =
+{
+	"gonarch/gon_attack1.wav",
+	"gonarch/gon_attack2.wav",
+	"gonarch/gon_attack3.wav",
+};
+const char* COFPitWorm::pAttackHitSounds[] =
+{
+	"zombie/claw_strike1.wav",
+	"zombie/claw_strike2.wav",
+	"zombie/claw_strike3.wav",
+};
+
+const char* COFPitWorm::pBirthSounds[] =
+{
+	"gonarch/gon_birth1.wav",
+	"gonarch/gon_birth2.wav",
+	"gonarch/gon_birth3.wav",
+};
+
+const char* COFPitWorm::pAlertSounds[] =
+{
+	"gonarch/gon_alert1.wav",
+	"gonarch/gon_alert2.wav",
+	"gonarch/gon_alert3.wav",
+};
+
+const char* COFPitWorm::pPainSounds[] =
+{
+	"gonarch/gon_pain2.wav",
+	"gonarch/gon_pain4.wav",
+	"gonarch/gon_pain5.wav",
+};
+
+const char* COFPitWorm::pFootSounds[] =
+{
+	"gonarch/gon_step1.wav",
+	"gonarch/gon_step2.wav",
+	"gonarch/gon_step3.wav",
+};
+
+LINK_ENTITY_TO_CLASS(monster_pitworm, COFPitWorm);
+
+int COFPitWorm::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+{
+	// Don't take any acid damage -- BigMomma's mortar is acid
+	if (bitsDamageType & DMG_ACID)
+		flDamage = 0;
+
+	if (!HasMemory(bits_MEMORY_PATH_FINISHED))
+	{
+		if (pev->health <= flDamage)
+		{
+			pev->health = flDamage + 1;
+			Remember(bits_MEMORY_ADVANCE_NODE | bits_MEMORY_COMPLETED_NODE);
+			ALERT(at_aiconsole, "BM: Finished node health!!!\n");
+		}
+	}
+
+	return 0;
+}
+
+void COFPitWorm::Precache()
+{
+	g_engfuncs.pfnPrecacheModel("models/pit_worm.mdl");
+	PRECACHE_SOUND_ARRAY(pChildDieSounds);
+	PRECACHE_SOUND_ARRAY(pSackSounds);
+	PRECACHE_SOUND_ARRAY(pDeathSounds);
+	PRECACHE_SOUND_ARRAY(pAttackSounds);
+	PRECACHE_SOUND_ARRAY(pAttackHitSounds);
+	PRECACHE_SOUND_ARRAY(pBirthSounds);
+	PRECACHE_SOUND_ARRAY(pAlertSounds);
+	PRECACHE_SOUND_ARRAY(pPainSounds);
+	PRECACHE_SOUND_ARRAY(pFootSounds);
+
+	g_engfuncs.pfnPrecacheModel("sprites/xspark1.spr");
+	gSpikeSprite = g_engfuncs.pfnPrecacheModel("sprites/mommaspout.spr");
+	gSpikeDebrisSprite = g_engfuncs.pfnPrecacheModel("sprites/mommablob.spr");
+	g_engfuncs.pfnPrecacheSound("bullchicken/bc_acid1.wav");
+	g_engfuncs.pfnPrecacheSound("bullchicken/bc_spithit1.wav");
+	g_engfuncs.pfnPrecacheSound("bullchicken/bc_spithit2.wav");
+}
+
+void COFPitWorm::StartMonster()
+{
+	// update capabilities
+	if (LookupActivity(ACT_RANGE_ATTACK1) != ACTIVITY_NOT_AVAILABLE)
+	{
+		m_afCapability |= bits_CAP_RANGE_ATTACK1;
+	}
+	if (LookupActivity(ACT_RANGE_ATTACK2) != ACTIVITY_NOT_AVAILABLE)
+	{
+		m_afCapability |= bits_CAP_RANGE_ATTACK2;
+	}
+	if (LookupActivity(ACT_MELEE_ATTACK1) != ACTIVITY_NOT_AVAILABLE)
+	{
+		m_afCapability |= bits_CAP_MELEE_ATTACK1;
+	}
+	if (LookupActivity(ACT_MELEE_ATTACK2) != ACTIVITY_NOT_AVAILABLE)
+	{
+		m_afCapability |= bits_CAP_MELEE_ATTACK2;
+	}
+
+	// Raise monster off the floor one unit, then drop to floor
+	if (pev->movetype != MOVETYPE_FLY && !FBitSet(pev->spawnflags, SF_MONSTER_FALL_TO_GROUND))
+	{
+		pev->origin.z += 1;
+		DROP_TO_FLOOR(ENT(pev));
+		// Try to move the monster to make sure it's not stuck in a brush.
+		if (!WALK_MOVE(ENT(pev), 0, 0, WALKMOVE_NORMAL))
+		{
+			ALERT(at_error, "Monster %s stuck in wall--level design error", STRING(pev->classname));
+			pev->effects = EF_BRIGHTFIELD;
+		}
+	}
+	else
+	{
+		pev->flags &= ~FL_ONGROUND;
+	}
+
+	if (!FStringNull(pev->target))// this monster has a target
+	{
+		// Find the monster's initial target entity, stash it
+		m_pGoalEnt = CBaseEntity::Instance(FIND_ENTITY_BY_TARGETNAME(NULL, STRING(pev->target)));
+
+		if (!m_pGoalEnt)
+		{
+			ALERT(at_error, "ReadyMonster()--%s couldn't find target %s", STRING(pev->classname), STRING(pev->target));
+		}
+		else
+		{
+			// Monster will start turning towards his destination
+			MakeIdealYaw(m_pGoalEnt->pev->origin);
+
+			// JAY: How important is this error message?  Big Momma doesn't obey this rule, so I took it out.
+#if 0
+			// At this point, we expect only a path_corner as initial goal
+			if (!FClassnameIs(m_pGoalEnt->pev, "path_corner"))
+			{
+				ALERT(at_warning, "ReadyMonster--monster's initial goal '%s' is not a path_corner", STRING(pev->target));
+			}
+#endif
+
+			// set the monster up to walk a path corner path. 
+			// !!!BUGBUG - this is a minor bit of a hack.
+			// JAYJAY
+			m_movementGoal = MOVEGOAL_PATHCORNER;
+			m_movementActivity = m_slowMode;
+
+			if (!FRefreshRoute())
+			{
+				ALERT(at_aiconsole, "Can't Create Route!\n");
+			}
+			SetState(MONSTERSTATE_IDLE);
+			//ChangeSchedule(GetScheduleOfType(SCHED_IDLE_WALK));
+		}
+	}
+
+	Vector vecEyePos, vecEyeAng;
+	GetAttachment(0, vecEyePos, vecEyeAng);
+
+	pev->view_ofs = vecEyePos - pev->origin;
+
+	//SetState ( m_IdealMonsterState );
+	//SetActivity ( m_IdealActivity );
+
+	// Delay drop to floor to make sure each door in the level has had its chance to spawn
+	// Spread think times so that they don't all happen at the same time (Carmack)
+	SetThink(&CBaseMonster::CallMonsterThink);
+	pev->nextthink += RANDOM_FLOAT(0.1, 0.4); // spread think times.
+}
+
+void COFPitWorm::Spawn()
+{
+	Precache();
+
+	SET_MODEL(ENT(pev), "models/pit_worm.mdl");
+	UTIL_SetSize(pev, Vector(-32, -32, 0), Vector(32, 32, 64));
+
+	pev->solid = SOLID_SLIDEBOX;
+	pev->movetype = MOVETYPE_STEP;
+	m_bloodColor = BLOOD_COLOR_GREEN;
+	pev->health = 150 * gSkillData.bigmommaHealthFactor;
+	pev->view_ofs = Vector(0, 0, 128);// position of the eyes relative to monster's origin.
+	m_flFieldOfView = 0.3;// indicates the width of this monster's forward view cone ( as a dotproduct result )
+	m_MonsterState = MONSTERSTATE_NONE;
+	m_afCapability = bits_CAP_RANGE_ATTACK1 | bits_CAP_MELEE_ATTACK1 | bits_CAP_TURN_HEAD;
+	m_slowMode = ACT_RUN;
+
+	MonsterInit();
+
+	m_flDistLook = 1024;
+	m_slowTime = 0;
+	m_pBeam = nullptr;
+}
+
+void COFPitWorm::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
+{
+	if (ptr->iHitgroup != 1)
+	{
+		// didn't hit the sack?
+
+		if (pev->dmgtime != gpGlobals->time || (RANDOM_LONG(0, 10) < 1))
+		{
+			UTIL_Ricochet(ptr->vecEndPos, RANDOM_FLOAT(1, 2));
+			pev->dmgtime = gpGlobals->time;
+		}
+	}
+	else if (gpGlobals->time > m_painSoundTime)
+	{
+		m_painSoundTime = gpGlobals->time + RANDOM_LONG(1, 3);
+		EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pPainSounds);
+
+		if (gpGlobals->time > m_slowTime)
+		{
+			if (flDamage >= 50.0)
+			{
+				m_slowMode = ACT_WALK_HURT;
+				m_IdealActivity = ACT_WALK_HURT;
+				m_movementActivity = ACT_WALK_HURT;
+				m_slowTime = gpGlobals->time + 3.0;
+			}
+			else
+			{
+				m_slowMode = ACT_WALK;
+				m_IdealActivity = ACT_WALK;
+				m_movementActivity = ACT_WALK;
+				m_slowTime = gpGlobals->time + 3.0;
+			}
+			SetConditions(bits_COND_SPECIAL2);
+		}
+
+		UTIL_BloodStream(ptr->vecEndPos, vecDir, m_bloodColor, 128);
+		UTIL_BloodDecalTrace(ptr, m_bloodColor);
+	}
+
+
+	CBaseMonster::TraceAttack(pevAttacker, flDamage, vecDir, ptr, bitsDamageType);
+}
+
+#define DIST_TO_CHECK	200
+
+void COFPitWorm::Move(float flInterval)
+{
+	float		flWaypointDist;
+	float		flCheckDist;
+	float		flDist;// how far the lookahead check got before hitting an object.
+	Vector		vecDir;
+	Vector		vecApex;
+	CBaseEntity* pTargetEnt;
+
+	// Don't move if no valid route
+	if (FRouteClear())
+	{
+		// If we still have a movement goal, then this is probably a route truncated by SimplifyRoute()
+		// so refresh it.
+		if (m_movementGoal == MOVEGOAL_NONE || !FRefreshRoute())
+		{
+			ALERT(at_aiconsole, "Tried to move with no route!\n");
+			TaskFail();
+			return;
+		}
+	}
+
+	if (m_flMoveWaitFinished > gpGlobals->time)
+		return;
+
+	// Debug, test movement code
+#if 0
+//	if ( CVAR_GET_FLOAT("stopmove" ) != 0 )
+	{
+		if (m_movementGoal == MOVEGOAL_ENEMY)
+			RouteSimplify(m_hEnemy);
+		else
+			RouteSimplify(m_hTargetEnt);
+		FRefreshRoute();
+		return;
+	}
+#else
+// Debug, draw the route
+//	DrawRoute( pev, m_Route, m_iRouteIndex, 0, 200, 0 );
+#endif
+
+	// if the monster is moving directly towards an entity (enemy for instance), we'll set this pointer
+	// to that entity for the CheckLocalMove and Triangulate functions.
+	pTargetEnt = NULL;
+
+	// local move to waypoint.
+	vecDir = (m_Route[m_iRouteIndex].vecLocation - pev->origin).Normalize();
+	flWaypointDist = (m_Route[m_iRouteIndex].vecLocation - pev->origin).Length2D();
+
+	if (flWaypointDist > 32)
+	{
+		MakeIdealYaw(m_Route[m_iRouteIndex].vecLocation);
+		ChangeYaw(pev->yaw_speed);
+	}
+
+	// if the waypoint is closer than CheckDist, CheckDist is the dist to waypoint
+	if (flWaypointDist < DIST_TO_CHECK)
+	{
+		flCheckDist = flWaypointDist;
+	}
+	else
+	{
+		flCheckDist = DIST_TO_CHECK;
+	}
+
+	if ((m_Route[m_iRouteIndex].iType & (~bits_MF_NOT_TO_MASK)) == bits_MF_TO_ENEMY)
+	{
+		// only on a PURE move to enemy ( i.e., ONLY MF_TO_ENEMY set, not MF_TO_ENEMY and DETOUR )
+		pTargetEnt = m_hEnemy;
+	}
+	else if ((m_Route[m_iRouteIndex].iType & ~bits_MF_NOT_TO_MASK) == bits_MF_TO_TARGETENT)
+	{
+		pTargetEnt = m_hTargetEnt;
+	}
+
+	// !!!BUGBUG - CheckDist should be derived from ground speed.
+	// If this fails, it should be because of some dynamic entity blocking this guy.
+	// We've already checked this path, so we should wait and time out if the entity doesn't move
+	flDist = 0;
+	if (CheckLocalMove(pev->origin, pev->origin + vecDir * flCheckDist, pTargetEnt, &flDist) != LOCALMOVE_VALID)
+	{
+		CBaseEntity* pBlocker;
+
+		// Can't move, stop
+		Stop();
+		// Blocking entity is in global trace_ent
+		pBlocker = CBaseEntity::Instance(gpGlobals->trace_ent);
+		if (pBlocker)
+		{
+			DispatchBlocked(edict(), pBlocker->edict());
+
+			m_IdealActivity = m_movementActivity = ACT_MELEE_ATTACK1;
+		}
+		else if (m_Activity == ACT_MELEE_ATTACK1)
+		{
+			m_IdealActivity = m_movementActivity = ACT_MELEE_ATTACK1;
+		}
+		else
+		{
+			m_IdealActivity = m_movementActivity = ACT_IDLE;
+		}
+
+		if (pBlocker && m_moveWaitTime > 0 && pBlocker->IsMoving() && !pBlocker->IsPlayer() && (gpGlobals->time - m_flMoveWaitFinished) > 3.0)
+		{
+			// Can we still move toward our target?
+			if (flDist < m_flGroundSpeed)
+			{
+				// No, Wait for a second
+				m_flMoveWaitFinished = gpGlobals->time + m_moveWaitTime;
+				return;
+			}
+			// Ok, still enough room to take a step
+
+			m_IdealActivity = m_movementActivity = m_slowMode;
+		}
+	}
+
+	// close enough to the target, now advance to the next target. This is done before actually reaching
+	// the target so that we get a nice natural turn while moving.
+	if (ShouldAdvanceRoute(flWaypointDist))///!!!BUGBUG- magic number
+	{
+		AdvanceRoute(flWaypointDist);
+	}
+
+	// Might be waiting for a door
+	if (m_flMoveWaitFinished > gpGlobals->time)
+	{
+		Stop();
+		return;
+	}
+
+	// UNDONE: this is a hack to quit moving farther than it has looked ahead.
+	if (flCheckDist < m_flGroundSpeed * flInterval)
+	{
+		flInterval = flCheckDist / m_flGroundSpeed;
+		// ALERT( at_console, "%.02f\n", flInterval );
+	}
+	MoveExecute(pTargetEnt, vecDir, flInterval);
+
+	if (MovementIsComplete())
+	{
+		Stop();
+		RouteClear();
+	}
+}
+
+void COFPitWorm::ShootBeam()
+{
+	if (m_hEnemy)
+	{
+		const float beamDirection = g_engfuncs.pfnRandomLong(0, 1) ? 1 : -1;
+
+		m_flBeamDir = -beamDirection;
+		m_offsetBeam = beamDirection * 40.0;
+
+		Vector vecEyePos, vecEyeAng;
+		GetAttachment(0, vecEyePos, vecEyeAng);
+
+		m_vecBeam = (m_posTarget - vecEyePos).Normalize();
+
+		m_angleBeam = UTIL_VecToAngles(m_vecBeam);
+		UTIL_MakeVectors(m_angleBeam);
+
+		m_vecBeam = gpGlobals->v_forward;
+		m_vecBeam.z = -m_vecBeam.z;
+
+		const Vector vecEnd = m_offsetBeam * gpGlobals->v_right + 2048 * m_vecBeam;
+
+		TraceResult tr;
+		UTIL_TraceLine(vecEyePos, vecEnd, dont_ignore_monsters, edict(), &tr);
+
+		m_pBeam = CBeam::BeamCreate("sprites/laserbeam.spr", 80);
+		if (m_pBeam)
+		{
+			//EHANDLE::operator CBaseEntity* (&this->baseclass_0.m_hEnemy);
+			m_pBeam->PointEntInit(tr.vecEndPos, entindex());
+
+			m_pBeam->SetEndAttachment(1);
+
+			m_pBeam->pev->rendercolor.x = 0;
+			m_pBeam->pev->rendercolor.y = 255;
+			m_pBeam->pev->rendercolor.z = 32;
+			m_pBeam->pev->renderamt = 192;
+			m_pBeam->pev->scale = 32;
+			m_pBeam->pev->spawnflags |= SF_BEAM_SPARKSTART;
+
+			auto target = CBaseEntity::Instance(tr.pHit);
+
+			if (target && target->pev->takedamage != DAMAGE_NO)
+			{
+				ClearMultiDamage();
+				target->TraceAttack(pev, 10, m_vecBeam, &tr, DMG_ENERGYBEAM);
+				target->TakeDamage(pev, pev, 10, DMG_ENERGYBEAM);
+			}
+			else if (tr.flFraction != 1.0)
+			{
+				UTIL_DecalTrace(&tr, g_engfuncs.pfnRandomLong(0, 4));
+				m_pBeam->DoSparks(tr.vecEndPos, tr.vecEndPos);
+			}
+
+			m_flBeamExpireTime = gpGlobals->time + 0.5;
+			m_flIdealHeadYaw = 50.0 * m_flBeamDir + m_flIdealHeadYaw;
+		}
+	}
+}
+
+void COFPitWorm::HandleAnimEvent(MonsterEvent_t* pEvent)
+{
+	switch (pEvent->event)
+	{
+	case 1:
+	{
+		UTIL_ScreenShake(pev->origin, 4.0, 3.0, 1.0, 750.0);
+
+		Vector forward, right;
+
+		UTIL_MakeVectorsPrivate(pev->angles, forward, right, NULL);
+
+		Vector center = pev->origin + forward * 128;
+		Vector mins = center - Vector(96, 96, 0);
+		Vector maxs = center + Vector(96, 96, 128);
+
+		CBaseEntity* pList[8];
+		int count = UTIL_EntitiesInBox(pList, 8, mins, maxs, FL_MONSTER | FL_CLIENT);
+		CBaseEntity* pHurt = NULL;
+
+		for (int i = 0; i < count && !pHurt; i++)
+		{
+			if (pList[i] != this)
+			{
+				if (pList[i]->pev->owner != edict())
+					pHurt = pList[i];
+			}
+		}
+
+		if (pHurt)
+		{
+			pHurt->TakeDamage(pev, pev, gSkillData.bigmommaDmgSlash, DMG_CRUSH | DMG_SLASH);
+			pHurt->pev->punchangle.x = 15;
+
+			pHurt->pev->velocity = pHurt->pev->velocity + (forward * 220) + Vector(0, 0, 200);
+
+			pHurt->pev->flags &= ~FL_ONGROUND;
+			EMIT_SOUND_DYN(edict(), CHAN_WEAPON, RANDOM_SOUND_ARRAY(pAttackHitSounds), 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5, 5));
+		}
+	}
+	break;
+
+	case 2:
+	{
+		m_posTarget = m_hEnemy->pev->origin;
+		m_posTarget.z += 24;
+
+		Vector vecEyePos, vecEyeAng;
+		GetAttachment(0, vecEyePos, vecEyeAng);
+
+		m_vecTarget = (m_posTarget - vecEyePos).Normalize();
+		m_posBeam = m_posTarget;
+		m_vecBeam = m_vecTarget;
+		m_angleBeam = UTIL_VecToAngles(m_vecBeam);
+
+		ShootBeam();
+	}
+	break;
+
+	case 3:
+	{
+		pev->flags &= ~FL_ONGROUND;
+
+		UTIL_SetOrigin(pev, pev->origin + Vector(0, 0, 1));
+		UTIL_MakeVectors(pev->angles);
+		pev->velocity = gpGlobals->v_forward * 200 + gpGlobals->v_up * 500;
+	}
+	break;
+
+	default:
+		CBaseMonster::HandleAnimEvent(pEvent);
+		break;
+	}
+}
+
+void COFPitWorm::StrafeBeam()
+{
+	m_offsetBeam += 20 * m_flBeamDir;
+
+	Vector vecEyePos, vecEyeAng;
+	GetAttachment(0, vecEyePos, vecEyeAng);
+
+	m_vecBeam = (m_posTarget - vecEyePos).Normalize();
+
+	m_angleBeam = UTIL_VecToAngles(m_vecBeam);
+	UTIL_MakeVectors(m_angleBeam);
+	m_vecBeam = gpGlobals->v_forward;
+	m_vecBeam.z = -m_vecBeam.z;
+
+	const Vector vecEnd = vecEyePos + gpGlobals->v_right * m_offsetBeam + m_vecBeam * 2048;
+
+	TraceResult tr;
+	UTIL_TraceLine(vecEyePos, vecEnd, dont_ignore_monsters, edict(), &tr);
+
+	m_pBeam->pev->origin = tr.vecEndPos;
+
+	auto hit = CBaseEntity::Instance(tr.pHit);
+
+	if (hit && hit->pev->takedamage != DAMAGE_NO)
+	{
+		ClearMultiDamage();
+		hit->TraceAttack(pev, 0x41200000, m_vecBeam, &tr, 1024);
+		hit->TakeDamage(pev,pev,0x41200000,1024);
+	}
+	else if (tr.flFraction != 1)
+	{
+		UTIL_DecalTrace(&tr, g_engfuncs.pfnRandomLong(0, 4));
+		m_pBeam->DoSparks(tr.vecEndPos, tr.vecEndPos);
+	}
+}
+
+void COFPitWorm::StartupUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
+{
+	SetThink(&COFPitWorm::CallMonsterThink);
+	pev->nextthink = gpGlobals->time + 0.1;
+	SetUse(nullptr);
+}
+
+void COFPitWorm::UpdateEye()
+{
+	if (m_flHeadYaw != m_flIdealHeadYaw)
+	{
+		if (m_flIdealHeadYaw <= m_flHeadYaw)
+		{
+			m_flHeadYaw -= min(5, m_flHeadYaw - m_flIdealHeadYaw);
+		}
+		else
+		{
+			m_flHeadYaw += min(5, m_flIdealHeadYaw - m_flHeadYaw);
+		}
+
+		SetBoneController(1, m_flHeadYaw);
+	}
+
+	if (m_flHeadPitch != m_flIdealHeadPitch)
+	{
+		if (m_flIdealHeadPitch <= m_flHeadPitch)
+		{
+			m_flHeadPitch -= min(5, m_flHeadPitch - m_flIdealHeadPitch);
+		}
+		else
+		{
+			m_flHeadPitch += min(5, m_flIdealHeadPitch - m_flHeadPitch);
+		}
+
+		SetBoneController(0, m_flHeadPitch);
+	}
+}
+
+void COFPitWorm::TrackEnemy()
+{
+	auto enemy = static_cast<CBaseEntity*>(m_hEnemy);
+
+	Vector vecEyePos, vecEyeAng;
+	GetAttachment(0, vecEyePos, vecEyeAng);
+
+	vecEyePos.x = pev->origin.x;
+	vecEyePos.y = pev->origin.y;
+
+	const Vector vec = enemy->pev->origin + enemy->pev->view_ofs - vecEyePos;
+
+	const Vector vecDir = UTIL_VecToAngles(vec);
+
+	m_flHeadPitch = vecDir.x - pev->angles.x;
+
+	if (m_flHeadPitch < 0)
+		m_flHeadPitch += 360;
+
+	m_flHeadPitch = -m_flHeadPitch;
+
+	if (m_flHeadPitch > 180)
+		m_flHeadPitch -= 360;
+
+	if (m_flHeadPitch < -180)
+		m_flHeadPitch += m_flHeadPitch;
+
+	if (m_flHeadPitch < 0)
+	{
+		m_flHeadPitch = max(-45, m_flHeadPitch);
+	}
+	else if (m_flHeadPitch > 0)
+	{
+		m_flHeadPitch = min(45, m_flHeadPitch);
+	}
+
+	m_flHeadYaw = -VecToYaw(vec) - pev->angles.y;
+
+	if (m_flHeadYaw < 0)
+		m_flHeadYaw += 360;
+
+	if (m_flHeadYaw > 180)
+		m_flHeadYaw -= 360;
+
+	if (m_flHeadYaw < -180)
+		m_flHeadYaw += 360;
+
+	if (m_flHeadYaw < 0)
+	{
+		m_flHeadYaw = max(-45, m_flHeadYaw);
+	}
+	else if (m_flHeadYaw > 0)
+	{
+		m_flHeadYaw = min(45, m_flHeadYaw);
+	}
+}
+
+void COFPitWorm::RunAI()
+{
+	if (!m_hEnemy)
+	{
+		Look(1024);
+
+		if (HasConditions(bits_COND_SEE_DISLIKE | bits_COND_SEE_HATE | bits_COND_SEE_NEMESIS))
+		{
+			auto enemy = BestVisibleEnemy();
+			if (static_cast<CBaseEntity*>(m_hEnemy) != enemy)
+			{
+				if (enemy)
+				{
+					PushEnemy(static_cast<CBaseEntity*>(m_hEnemy), m_vecEnemyLKP);
+					SetConditions(bits_COND_NEW_ENEMY);
+					m_hEnemy = enemy;
+					m_vecEnemyLKP = m_hEnemy->pev->origin;
+				}
+			}
+		}
+
+		if (!m_hEnemy && PopEnemy())
+		{
+			SetConditions(bits_COND_NEW_ENEMY);
+		}
+	}
+
+	if (!m_pGoalEnt)
+	{
+		if (pev->target)
+		{
+			m_movementGoal = MOVEGOAL_PATHCORNER;
+			m_pGoalEnt = UTIL_FindEntityByTargetname(nullptr, STRING(pev->target));
+			m_movementActivity = m_slowMode;
+
+			if (!FRefreshRoute())
+			{
+				ALERT(at_aiconsole, "Can't Create Route!\n");
+			}
+		}
+	}
+
+	if (m_hEnemy)
+	{
+		SetConditions(bits_COND_SEE_DISLIKE | bits_COND_SEE_HATE);
+
+		CheckEnemy(m_hEnemy);
+
+		if (m_hEnemy->IsAlive())
+		{
+			if (m_hEnemy && !m_pBeam)
+			{
+				TrackEnemy();
+			}
+		}
+		else
+		{
+			m_hEnemy = nullptr;
+		}
+	}
+
+	UpdateEye();
+
+	if (m_pBeam)
+	{
+		if (!m_hEnemy || m_flBeamExpireTime <= gpGlobals->time)
+		{
+			UTIL_Remove(m_pBeam);
+			m_pBeam = nullptr;
+		}
+		else
+		{
+			StrafeBeam();
+		}
+	}
+
+	if (!m_fSequenceFinished)
+	{
+		if (m_Activity != m_IdealActivity)
+		{
+			m_movementActivity = m_IdealActivity;
+			SetActivity(m_IdealActivity);
+		}
+		return;
+	}
+
+	if (m_hEnemy && HasConditions(bits_COND_CAN_RANGE_ATTACK1))
+	{
+		m_IdealActivity = ACT_RANGE_ATTACK1;
+		m_spikeTime = gpGlobals->time + g_engfuncs.pfnRandomFloat(7, 10);
+	}
+	else if (m_hEnemy && HasConditions(bits_COND_CAN_MELEE_ATTACK1))
+	{
+		m_IdealActivity = ACT_MELEE_ATTACK1;
+	}
+	else if (m_Activity == ACT_MELEE_ATTACK1 || m_Activity == ACT_RANGE_ATTACK1)
+	{
+		if (!m_movementGoal)
+		{
+			m_IdealActivity = ACT_IDLE;
+		}
+		else
+		{
+			m_IdealActivity = m_slowMode;
+		}
+	}
+	else
+	{
+		if (m_Activity == ACT_IDLE)
+		{
+			if (!m_movementGoal)
+			{
+				m_IdealActivity = ACT_IDLE;
+				return;
+			}
+		}
+		else if (!m_movementGoal)
+		{
+			m_IdealActivity = ACT_IDLE;
+			m_movementActivity = m_IdealActivity;
+			SetActivity(m_IdealActivity);
+			return;
+		}
+
+		if (HasConditions(bits_COND_SPECIAL2) && gpGlobals->time > m_slowTime)
+		{
+			ClearConditions(bits_COND_SPECIAL2);
+			m_IdealActivity = m_slowMode = ACT_RUN;
+		}
+		else
+		{
+			m_IdealActivity = m_slowMode;
+		}
+	}
+
+	if (m_Activity != m_IdealActivity)
+	{
+		m_movementActivity = m_IdealActivity;
+		SetActivity(m_IdealActivity);
+	}
+	else
+	{
+		if (m_Activity == ACT_MELEE_ATTACK1 || m_Activity == ACT_RANGE_ATTACK1)
+		{
+			m_IdealActivity = ACT_IDLE;
+
+			if (m_Activity != m_IdealActivity)
+			{
+				m_movementActivity = m_IdealActivity;
+				SetActivity(m_IdealActivity);
+			}
+		}
+	}
+}
+
+void COFPitWorm::SetObjectCollisionBox()
+{
+	pev->absmin = pev->origin + Vector(-64, -64, 0);
+	pev->absmax = pev->origin + Vector(64, 96, 128);
 }
