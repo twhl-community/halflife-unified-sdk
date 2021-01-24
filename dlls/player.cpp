@@ -5362,6 +5362,20 @@ BOOL CBasePlayer::Menu_Char_Input( int inp )
 	return true;
 }
 
+void CBasePlayer::SetPrefsFromUserinfo(char* infobuffer)
+{
+	auto value = g_engfuncs.pfnInfoKeyValue(infobuffer, "cl_autowepswitch");
+
+	if (*value)
+	{
+		m_iAutoWepSwitch = atoi(value);
+	}
+	else
+	{
+		m_iAutoWepSwitch = 1;
+	}
+}
+
 //=========================================================
 // Dead HEV suit prop
 //=========================================================

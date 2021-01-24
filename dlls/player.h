@@ -376,6 +376,10 @@ public:
 	BOOL Menu_Team_Input( int inp );
 	BOOL Menu_Char_Input( int inp );
 
+	void SetPrefsFromUserinfo(char* infobuffer);
+
+	int m_iAutoWepSwitch;
+
 	bool IsOnRope() const { return ( m_afPhysicsFlags & PFLAG_ONROPE ) != 0; }
 
 	void SetOnRopeState( bool bOnRope )

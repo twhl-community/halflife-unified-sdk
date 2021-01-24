@@ -798,7 +798,8 @@ void CHalfLifeCTFplay::PlayerSpawn( CBasePlayer* pPlayer )
 	{
 		if( !pPlayer->pev->iuser1 )
 		{
-			//TODO: add weapon switch stuff
+			const int savedAutoWepSwitch = pPlayer->m_iAutoWepSwitch;
+			pPlayer->m_iAutoWepSwitch = 1;
 			pPlayer->pev->weapons |= 1 << WEAPON_SUIT;
 
 			auto useDefault = true;
@@ -869,6 +870,8 @@ void CHalfLifeCTFplay::PlayerSpawn( CBasePlayer* pPlayer )
 
 			InitItemsForPlayer( pPlayer );
 			DisplayTeamFlags( pPlayer );
+
+			pPlayer->m_iAutoWepSwitch = savedAutoWepSwitch;
 		}
 	}
 }

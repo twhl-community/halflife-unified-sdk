@@ -357,6 +357,8 @@ public:
 	// Immediately end a multiplayer game
 	virtual void EndMultiplayerGame( void ) { GoToIntermission(); }
 
+	void ClientUserInfoChanged(CBasePlayer* pPlayer, char* infobuffer) override;
+
 protected:
 	virtual void ChangeLevel( void );
 	virtual void GoToIntermission( void );
