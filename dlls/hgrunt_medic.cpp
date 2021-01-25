@@ -211,7 +211,7 @@ public:
 
 	void HealOff();
 
-	void HealerUse( CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value );
+	void EXPORT HealerUse( CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value );
 
 	void HealerActivate( CBaseMonster* pTarget );
 
