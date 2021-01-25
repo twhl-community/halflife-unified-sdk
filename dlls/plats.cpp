@@ -1313,21 +1313,21 @@ void CSpriteTrain::Think()
 
 			Wait();
 		}
+	}
 
-		if( m_flWait != -1 )
+	if (m_flWait != -1)
+	{
+		if (m_nexting && pev->ltime >= m_nextTime)
 		{
-			if( m_nexting && pev->ltime >= m_nextTime )
+			if (m_stopSprite)
 			{
-				if( m_stopSprite )
-				{
-					pev->velocity = g_vecZero;
-					m_stopSprite = false;
-				}
-
-				m_nexting = false;
-
-				Next();
+				pev->velocity = g_vecZero;
+				m_stopSprite = false;
 			}
+
+			m_nexting = false;
+
+			Next();
 		}
 	}
 
