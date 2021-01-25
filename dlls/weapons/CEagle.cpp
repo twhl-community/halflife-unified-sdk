@@ -127,12 +127,12 @@ void CEagle::WeaponIdle()
 			if( flNextIdle > 0.5 )
 			{
 				iAnim = EAGLE_IDLE5;
-				m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + flNextIdle + 2.0;
+				m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 2.0;
 			}
 			else
 			{
 				iAnim = EAGLE_IDLE4;
-				m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + flNextIdle + 2.5;
+				m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 2.5;
 			}
 		}
 		else
@@ -140,19 +140,19 @@ void CEagle::WeaponIdle()
 			if( flNextIdle <= 0.3 )
 			{
 				iAnim = EAGLE_IDLE1;
-				m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + flNextIdle + 2.5;
+				m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 2.5;
 			}
 			else
 			{
 				if( flNextIdle > 0.6 )
 				{
 					iAnim = EAGLE_IDLE3;
-					m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + flNextIdle + 1.633;
+					m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 1.633;
 				}
 				else
 				{
 					iAnim = EAGLE_IDLE2;
-					m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + flNextIdle + 2.5;
+					m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 2.5;
 				}
 			}
 		}
