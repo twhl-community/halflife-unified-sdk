@@ -1171,9 +1171,7 @@ int CHudAmmo::DrawWList(float flTime)
 					}
 					else
 					{
-						r = giR;
-						g = giG;
-						b = giB;
+						UnpackRGB(r, g, b, RGB_REDISH);
 						ScaleColors(r, g, b, 128);
 					}
 
@@ -1229,9 +1227,7 @@ int CHudAmmo::DrawWList(float flTime)
 				}
 				else
 				{
-					r = giR;
-					g = giG;
-					b = giB;
+					UnpackRGB(r, g, b, RGB_REDISH);
 					a = 96;
 				}
 
