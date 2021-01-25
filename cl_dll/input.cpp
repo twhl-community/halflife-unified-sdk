@@ -514,19 +514,25 @@ void IN_Impulse (void)
 void IN_ScoreDown(void)
 {
 	KeyDown(&in_score);
+	gHUD.m_Scoreboard.UserCmd_ShowScores();
+	/*
 	if ( gViewPort )
 	{
 		gViewPort->ShowScoreBoard();
 	}
+	*/
 }
 
 void IN_ScoreUp(void)
 {
 	KeyUp(&in_score);
+	gHUD.m_Scoreboard.UserCmd_HideScores();
+	/*
 	if ( gViewPort )
 	{
 		gViewPort->HideScoreBoard();
 	}
+	*/
 }
 
 void IN_MLookUp (void)

@@ -251,6 +251,7 @@ int __MsgFunc_ServerName(const char *pszName, int iSize, void *pbuf)
 	return 0;
 }
 
+/*
 int __MsgFunc_ScoreInfo(const char *pszName, int iSize, void *pbuf)
 {
 	if (gViewPort)
@@ -271,6 +272,7 @@ int __MsgFunc_TeamInfo(const char *pszName, int iSize, void *pbuf)
 		return gViewPort->MsgFunc_TeamInfo( pszName, iSize, pbuf );
 	return 0;
 }
+*/
 
 int __MsgFunc_Spectator(const char *pszName, int iSize, void *pbuf)
 {
@@ -356,9 +358,11 @@ void CHud :: Init( void )
 	HOOK_MESSAGE( BuildSt );
 	HOOK_MESSAGE( RandomPC );
 	HOOK_MESSAGE( ServerName );
+	/*
 	HOOK_MESSAGE( ScoreInfo );
 	HOOK_MESSAGE( TeamScore );
 	HOOK_MESSAGE( TeamInfo );
+	*/
 
 	HOOK_MESSAGE( Spectator );
 	HOOK_MESSAGE( AllowSpec );
@@ -413,6 +417,7 @@ void CHud :: Init( void )
 	m_Battery.Init();
 	m_Flash.Init();
 	m_Message.Init();
+	m_Scoreboard.Init();
 	m_StatusBar.Init();
 	m_DeathNotice.Init();
 	m_AmmoSecondary.Init();
@@ -562,6 +567,7 @@ void CHud :: VidInit( void )
 	m_Battery.VidInit();
 	m_Flash.VidInit();
 	m_Message.VidInit();
+	m_Scoreboard.VidInit();
 	m_StatusBar.VidInit();
 	m_DeathNotice.VidInit();
 	m_SayText.VidInit();

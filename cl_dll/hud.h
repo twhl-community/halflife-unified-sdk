@@ -247,6 +247,8 @@ struct extra_player_info_t
 	bool dead; // UNUSED currently, spectator UI would like this
 	short teamnumber;
 	char teamname[MAX_TEAM_NAME];
+	short teamid;
+	short flagcaptures;
 };
 
 struct team_info_t 
@@ -632,6 +634,43 @@ private:
 	bool m_fFriendly;
 };
 
+//
+//-----------------------------------------------------
+//
+class CHudScoreboard : public CHudBase
+{
+public:
+	int Init(void);
+	void InitHUDData(void);
+	int VidInit(void);
+	int Draw(float flTime);
+	int DrawPlayers(int xoffset, float listslot, int nameoffset = 0, char* team = NULL); // returns the ypos where it finishes drawing
+	void UserCmd_ShowScores(void);
+	void UserCmd_HideScores(void);
+	int MsgFunc_ScoreInfo(const char* pszName, int iSize, void* pbuf);
+	int MsgFunc_TeamInfo(const char* pszName, int iSize, void* pbuf);
+	int MsgFunc_TeamScore(const char* pszName, int iSize, void* pbuf);
+	int MsgFunc_PlayerIcon(const char* pszName, int iSize, void* pbuf);
+	int MsgFunc_CTFScore(const char* pszName, int iSize, void* pbuf);
+	void DeathMsg(int killer, int victim);
+
+
+
+	int m_iNumTeams;
+
+	int m_iLastKilledBy;
+	int m_fLastKillTime;
+	int m_iPlayerNum;
+	int m_iShowscoresHeld;
+
+	struct cvar_s* cl_showpacketloss;
+
+	void GetAllPlayersInfo(void);
+
+
+
+};
+
 class CHud
 {
 private:
@@ -699,6 +738,7 @@ public:
 	CHudTrain		m_Train;
 	CHudFlashlight	m_Flash;
 	CHudMessage		m_Message;
+	CHudScoreboard m_Scoreboard;
 	CHudStatusBar   m_StatusBar;
 	CHudDeathNotice m_DeathNotice;
 	CHudSayText		m_SayText;

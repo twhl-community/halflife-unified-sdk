@@ -26,12 +26,30 @@
 #include <stdio.h>
 #include "vgui_TeamFortressViewport.h"
 
+#include "ctf/CTFDefs.h"
+
+struct icon_sprite_t
+{
+	char szSpriteName[24];
+	HSPRITE spr;
+	wrect_t rc;
+	unsigned char r;
+	unsigned char g;
+	unsigned char b;
+	unsigned char bFlags;
+};
+
+
+icon_sprite_t g_PlayerSpriteList[MAX_PLAYERS + 1][6];
+
 DECLARE_COMMAND( m_Scoreboard, ShowScores );
 DECLARE_COMMAND( m_Scoreboard, HideScores );
 
 DECLARE_MESSAGE( m_Scoreboard, ScoreInfo );
 DECLARE_MESSAGE( m_Scoreboard, TeamInfo );
 DECLARE_MESSAGE( m_Scoreboard, TeamScore );
+DECLARE_MESSAGE(m_Scoreboard, PlayerIcon);
+DECLARE_MESSAGE(m_Scoreboard, CTFScore);
 
 int CHudScoreboard :: Init( void )
 {
@@ -44,6 +62,8 @@ int CHudScoreboard :: Init( void )
 	HOOK_MESSAGE( ScoreInfo );
 	HOOK_MESSAGE( TeamScore );
 	HOOK_MESSAGE( TeamInfo );
+	HOOK_MESSAGE(PlayerIcon);
+	HOOK_MESSAGE(CTFScore);
 
 	InitHUDData();
 
@@ -72,6 +92,8 @@ void CHudScoreboard :: InitHUDData( void )
 	m_iFlags &= ~HUD_ACTIVE;  // starts out inactive
 
 	m_iFlags |= HUD_INTERMISSION; // is always drawn during an intermission
+
+	memset(g_PlayerSpriteList, 0, sizeof(g_PlayerSpriteList));
 }
 
 /* The scoreboard
@@ -89,8 +111,11 @@ We have a minimum width of 1-320 - we could have the field widths scale with it?
 #define DEATHS_RANGE_MAX  210
 #define PING_RANGE_MIN	245
 #define PING_RANGE_MAX	295
-#define PL_RANGE_MIN 315
+#define PL_RANGE_MIN 295
 #define PL_RANGE_MAX 375
+
+#define PL_CTF_RANGE_MIN 345
+#define PL_CTF_RANGE_MAX 390
 
 int SCOREBOARD_WIDTH = 320;
 		
@@ -105,8 +130,20 @@ int CHudScoreboard :: Draw( float fTime )
 	int can_show_packetloss = 0;
 	int FAR_RIGHT;
 
-	if ( !m_iShowscoresHeld && gHUD.m_Health.m_iHealth > 0 && !gHUD.m_iIntermission )
-		return 1;
+	if (!m_iShowscoresHeld && gHUD.m_Health.m_iHealth > 0)
+	{
+		if (!gHUD.m_iIntermission || gHUD.m_Teamplay == 2)
+		{
+			return 1;
+		}
+	}
+	else
+	{
+		if (gHUD.m_iIntermission && gHUD.m_Teamplay == 2)
+		{
+			return 1;
+		}
+	}
 
 	GetAllPlayersInfo();
 
@@ -137,15 +174,34 @@ int CHudScoreboard :: Draw( float fTime )
 
 	gHUD.DrawHudStringReverse( KILLS_RANGE_MAX + xpos_rel, ypos, 0, "kills", 255, 140, 0 );
 	gHUD.DrawHudString( DIVIDER_POS + xpos_rel, ypos, ScreenWidth, "/", 255, 140, 0 );
-	gHUD.DrawHudString( DEATHS_RANGE_MIN + xpos_rel + 5, ypos, ScreenWidth, "deaths", 255, 140, 0 );
-	gHUD.DrawHudString( PING_RANGE_MAX + xpos_rel - 35, ypos, ScreenWidth, "latency", 255, 140, 0 );
 
-	if ( can_show_packetloss )
+	if (gHUD.m_Teamplay == 2)
 	{
-		gHUD.DrawHudString( PL_RANGE_MAX + xpos_rel - 35, ypos, ScreenWidth, "pkt loss", 255, 140, 0 );
+		gHUD.DrawHudString(xpos_rel + 190, ypos, ScreenWidth, "deaths", 255, 140, 0);
+		gHUD.DrawHudString(xpos_rel + 240, ypos, ScreenWidth, "/", 255, 140, 0);
+		gHUD.DrawHudString(xpos_rel + 255, ypos, ScreenWidth, "scores", 255, 140, 0);
+		gHUD.DrawHudString(xpos_rel + 310, ypos, ScreenWidth, "latency", 255, 140, 0);
+
+		if (can_show_packetloss)
+		{
+			gHUD.DrawHudString(xpos_rel + 355, ypos, ScreenWidth, "pkt loss", 255, 140, 0);
+		}
+
+		FAR_RIGHT = can_show_packetloss ? 390 : 345;
+	}
+	else
+	{
+		gHUD.DrawHudString(xpos_rel + 190, ypos, ScreenWidth, "deaths", 255, 140, 0);
+		gHUD.DrawHudString(xpos_rel + PING_RANGE_MAX - 35, ypos, ScreenWidth, "latency", 255, 140, 0);
+
+		if (can_show_packetloss)
+		{
+			gHUD.DrawHudString(xpos_rel + PL_RANGE_MAX - 35, ypos, ScreenWidth, "pkt loss", 255, 140, 0);
+		}
+
+		FAR_RIGHT = can_show_packetloss ? PL_RANGE_MAX : PING_RANGE_MAX;
 	}
 
-	FAR_RIGHT = can_show_packetloss ? PL_RANGE_MAX : PING_RANGE_MAX;
 	FAR_RIGHT += 5;
 
 	list_slot += 1.2;
@@ -165,13 +221,17 @@ int CHudScoreboard :: Draw( float fTime )
 	// clear out team scores
 	for ( int i = 1; i <= m_iNumTeams; i++ )
 	{
-		if ( !g_TeamInfo[i].scores_overriden )
-			g_TeamInfo[i].frags = g_TeamInfo[i].deaths = 0;
+		if (gHUD.m_Teamplay != 2)
+		{
+			if (!g_TeamInfo[i].scores_overriden)
+				g_TeamInfo[i].frags = g_TeamInfo[i].deaths = 0;
+		}
+
 		g_TeamInfo[i].ping = g_TeamInfo[i].packetloss = 0;
 	}
 
 	// recalc the team scores, then draw them
-	for ( i = 1; i < MAX_PLAYERS; i++ )
+	for ( int i = 1; i < MAX_PLAYERS; i++ )
 	{
 		if ( g_PlayerInfoList[i].name == NULL )
 			continue; // empty player slot, skip
@@ -180,7 +240,8 @@ int CHudScoreboard :: Draw( float fTime )
 			continue; // skip over players who are not in a team
 
 		// find what team this player is in
-		for ( int j = 1; j <= m_iNumTeams; j++ )
+		int j;
+		for ( j = 1; j <= m_iNumTeams; j++ )
 		{
 			if ( !stricmp( g_PlayerExtraInfo[i].teamname, g_TeamInfo[j].name ) )
 				break;
@@ -204,7 +265,7 @@ int CHudScoreboard :: Draw( float fTime )
 	}
 
 	// find team ping/packetloss averages
-	for ( i = 1; i <= m_iNumTeams; i++ )
+	for ( int i = 1; i <= m_iNumTeams; i++ )
 	{
 		g_TeamInfo[i].already_drawn = FALSE;
 
@@ -221,7 +282,7 @@ int CHudScoreboard :: Draw( float fTime )
 		int highest_frags = -99999; int lowest_deaths = 99999;
 		int best_team = 0;
 
-		for ( i = 1; i <= m_iNumTeams; i++ )
+		for ( int i = 1; i <= m_iNumTeams; i++ )
 		{
 			if ( g_TeamInfo[i].players < 0 )
 				continue;
@@ -259,33 +320,49 @@ int CHudScoreboard :: Draw( float fTime )
 			FillRGBA( NAME_RANGE_MIN + xpos_rel - 5, ypos, FAR_RIGHT, ROW_GAP, 0, 0, 255, 70 );
 		}
 
-		// draw their name (left to right)
-		gHUD.DrawHudString( xpos, ypos, NAME_RANGE_MAX + xpos_rel, team_info->name, r, g, b );
+		static char buf[64];
 
-		// draw kills (right to left)
-		xpos = KILLS_RANGE_MAX + xpos_rel;
-		gHUD.DrawHudNumberString( xpos, ypos, KILLS_RANGE_MIN + xpos_rel, team_info->frags, r, g, b );
+		if (gHUD.m_Teamplay != 2)
+		{
 
-		// draw divider
-		xpos = DIVIDER_POS + xpos_rel;
-		gHUD.DrawHudString( xpos, ypos, xpos + 20, "/", r, g, b );
+			// draw their name (left to right)
+			gHUD.DrawHudString(xpos, ypos, NAME_RANGE_MAX + xpos_rel, team_info->name, r, g, b);
 
-		// draw deaths
-		xpos = DEATHS_RANGE_MAX + xpos_rel;
-		gHUD.DrawHudNumberString( xpos, ypos, DEATHS_RANGE_MIN + xpos_rel, team_info->deaths, r, g, b );
+			// draw kills (right to left)
+			xpos = KILLS_RANGE_MAX + xpos_rel;
+			gHUD.DrawHudNumberString(xpos, ypos, KILLS_RANGE_MIN + xpos_rel, team_info->frags, r, g, b);
+
+			// draw divider
+			xpos = DIVIDER_POS + xpos_rel;
+			gHUD.DrawHudString(xpos, ypos, xpos + 20, "/", r, g, b);
+
+			// draw deaths
+			xpos = DEATHS_RANGE_MAX + xpos_rel;
+			gHUD.DrawHudNumberString(xpos, ypos, DEATHS_RANGE_MIN + xpos_rel, team_info->deaths, r, g, b);
+
+			xpos = ((PING_RANGE_MAX - PING_RANGE_MIN) / 2) + PING_RANGE_MIN + xpos_rel + 25;
+		}
+		else
+		{
+			sprintf(buf, "%s Team Score:", team_info->name);
+			gHUD.DrawHudString(xpos, ypos, xpos_rel + 205, buf, r, g, b);
+			gHUD.DrawHudNumberString(xpos_rel + 275, ypos, xpos_rel + 250, team_info->frags, r, g, b);
+
+			xpos = ((PING_RANGE_MAX - PING_RANGE_MIN) / 2) + PING_RANGE_MIN + xpos_rel + 25 + 50;
+		}
 
 		// draw ping
 		// draw ping & packetloss
-		static char buf[64];
 		sprintf( buf, "%d", team_info->ping );
-		xpos = ((PING_RANGE_MAX - PING_RANGE_MIN) / 2) + PING_RANGE_MIN + xpos_rel + 25;
-		UnpackRGB( r, g, b, RGB_YELLOWISH );
+		r = giR;
+		g = giG;
+		b = giB;
 		gHUD.DrawHudStringReverse( xpos, ypos, xpos - 50, buf, r, g, b );
 
 	//  Packetloss removed on Kelly 'shipping nazi' Bailey's orders
 		if ( can_show_packetloss )
 		{
-			xpos = ((PL_RANGE_MAX - PL_RANGE_MIN) / 2) + PL_RANGE_MIN + xpos_rel + 25;
+			xpos = ((PL_RANGE_MAX - PL_RANGE_MIN) / 2) + PL_RANGE_MIN + xpos_rel + 25 + 10;
 		
 			sprintf( buf, "  %d", team_info->packetloss );
 			gHUD.DrawHudString( xpos, ypos, xpos+50, buf, r, g, b );
@@ -322,7 +399,15 @@ int CHudScoreboard :: DrawPlayers( int xpos_rel, float list_slot, int nameoffset
 		SCOREBOARD_WIDTH = 320;
 	}
 
-	FAR_RIGHT = can_show_packetloss ? PL_RANGE_MAX : PING_RANGE_MAX;
+	if (gHUD.m_Teamplay == 2)
+	{
+		FAR_RIGHT = can_show_packetloss ? PL_CTF_RANGE_MIN : PL_CTF_RANGE_MAX;
+	}
+	else
+	{
+		FAR_RIGHT = can_show_packetloss ? PL_RANGE_MAX : PING_RANGE_MAX;
+	}
+
 	FAR_RIGHT += 5;
 
 	// draw the players, in order,  and restricted to team if set
@@ -334,16 +419,16 @@ int CHudScoreboard :: DrawPlayers( int xpos_rel, float list_slot, int nameoffset
 
 		for ( int i = 1; i < MAX_PLAYERS; i++ )
 		{
-			if ( g_PlayerInfoList[i].name && g_PlayerExtraInfo[i].frags >= highest_frags )
+			if ( g_PlayerInfoList[i].name && (g_PlayerExtraInfo[i].frags + g_PlayerExtraInfo[i].flagcaptures) >= highest_frags )
 			{
 				if ( !(team && stricmp(g_PlayerExtraInfo[i].teamname, team)) )  // make sure it is the specified team
 				{
 					extra_player_info_t *pl_info = &g_PlayerExtraInfo[i];
-					if ( pl_info->frags > highest_frags || pl_info->deaths < lowest_deaths )
+					if ( (pl_info->frags + pl_info->flagcaptures) > highest_frags || pl_info->deaths < lowest_deaths )
 					{
 						best_player = i;
 						lowest_deaths = pl_info->deaths;
-						highest_frags = pl_info->frags;
+						highest_frags = (pl_info->frags + pl_info->flagcaptures);
 					}
 				}
 			}
@@ -360,6 +445,20 @@ int CHudScoreboard :: DrawPlayers( int xpos_rel, float list_slot, int nameoffset
 		// check we haven't drawn too far down
 		if ( ypos > ROW_RANGE_MAX )  // don't draw to close to the lower border
 			break;
+
+		int xpos_icon = xpos_rel;
+
+		for (int icon = 0; icon < 6; ++icon)
+		{
+			const auto& sprite = g_PlayerSpriteList[best_player][icon];
+
+			if (sprite.spr)
+			{
+				gEngfuncs.pfnSPR_Set(sprite.spr, sprite.r, sprite.g, sprite.b);
+				gEngfuncs.pfnSPR_DrawAdditive(0, xpos_icon, ypos, &sprite.rc);
+				xpos_icon += sprite.rc.left - sprite.rc.right - 5;
+			}
+		}
 
 		int xpos = NAME_RANGE_MIN + xpos_rel;
 		int r = 255, g = 255, b = 255;
@@ -392,13 +491,28 @@ int CHudScoreboard :: DrawPlayers( int xpos_rel, float list_slot, int nameoffset
 		gHUD.DrawHudString( xpos, ypos, xpos + 20, "/", r, g, b );
 
 		// draw deaths
-		xpos = DEATHS_RANGE_MAX + xpos_rel;
-		gHUD.DrawHudNumberString( xpos, ypos, DEATHS_RANGE_MIN + xpos_rel, g_PlayerExtraInfo[best_player].deaths, r, g, b );
+
+		if (gHUD.m_Teamplay == 2)
+		{
+			gHUD.DrawHudNumberString(xpos_rel + 230, ypos, xpos_rel + DEATHS_RANGE_MIN, g_PlayerExtraInfo[best_player].deaths, r, g, b);
+			gHUD.DrawHudString(xpos_rel + 240, ypos, xpos_rel + 260, "/", r, g, b);
+			gHUD.DrawHudNumberString(xpos_rel + 275, ypos, xpos_rel + 250, g_PlayerExtraInfo[best_player].flagcaptures, r, g, b);
+		}
+		else
+		{
+			gHUD.DrawHudNumberString(xpos_rel + DEATHS_RANGE_MAX, ypos, xpos_rel + DEATHS_RANGE_MIN, g_PlayerExtraInfo[best_player].deaths, r, g, b);
+		}
 
 		// draw ping & packetloss
 		static char buf[64];
 		sprintf( buf, "%d", g_PlayerInfoList[best_player].ping );
 		xpos = ((PING_RANGE_MAX - PING_RANGE_MIN) / 2) + PING_RANGE_MIN + xpos_rel + 25;
+
+		if (gHUD.m_Teamplay == 2)
+		{
+			xpos = xpos_rel + 345;
+		}
+
 		gHUD.DrawHudStringReverse( xpos, ypos, xpos - 50, buf, r, g, b );
 
 		//  Packetloss removed on Kelly 'shipping nazi' Bailey's orders
@@ -414,7 +528,12 @@ int CHudScoreboard :: DrawPlayers( int xpos_rel, float list_slot, int nameoffset
 				sprintf( buf, "  %d", g_PlayerInfoList[best_player].packetloss );
 			}
 
-			xpos = ((PL_RANGE_MAX - PL_RANGE_MIN) / 2) + PL_RANGE_MIN + xpos_rel + 25;
+			xpos = ((PL_RANGE_MAX - PL_RANGE_MIN) / 2) + PL_RANGE_MIN + xpos_rel + 25 + 10;
+
+			if (gHUD.m_Teamplay == 2)
+			{
+				xpos = xpos_rel + 385;
+			}
 		
 			gHUD.DrawHudString( xpos, ypos, xpos+50, buf, r, g, b );
 		}
@@ -431,7 +550,7 @@ void CHudScoreboard :: GetAllPlayersInfo( void )
 {
 	for ( int i = 1; i < MAX_PLAYERS; i++ )
 	{
-		GetPlayerInfo( i, &g_PlayerInfoList[i] );
+		gEngfuncs.pfnGetPlayerInfo( i, &g_PlayerInfoList[i] );
 
 		if ( g_PlayerInfoList[i].thisplayer )
 			m_iPlayerNum = i;  // !!!HACK: this should be initialized elsewhere... maybe gotten from the engine
@@ -487,7 +606,7 @@ int CHudScoreboard :: MsgFunc_TeamInfo( const char *pszName, int iSize, void *pb
 	// rebuild the team list
 	GetAllPlayersInfo();
 	m_iNumTeams = 0;
-	for ( i = 1; i < MAX_PLAYERS; i++ )
+	for ( int i = 1; i < MAX_PLAYERS; i++ )
 	{
 		if ( g_PlayerInfoList[i].name == NULL )
 			continue;
@@ -496,7 +615,8 @@ int CHudScoreboard :: MsgFunc_TeamInfo( const char *pszName, int iSize, void *pb
 			continue; // skip over players who are not in a team
 
 		// is this player in an existing team?
-		for ( int j = 1; j <= m_iNumTeams; j++ )
+		int j;
+		for ( j = 1; j <= m_iNumTeams; j++ )
 		{
 			if ( g_TeamInfo[j].name[0] == '\0' )
 				break;
@@ -523,7 +643,7 @@ int CHudScoreboard :: MsgFunc_TeamInfo( const char *pszName, int iSize, void *pb
 	}
 
 	// clear out any empty teams
-	for ( i = 1; i <= m_iNumTeams; i++ )
+	for ( int i = 1; i <= m_iNumTeams; i++ )
 	{
 		if ( g_TeamInfo[i].players < 1 )
 			memset( &g_TeamInfo[i], 0, sizeof(team_info_t) );
@@ -544,7 +664,8 @@ int CHudScoreboard :: MsgFunc_TeamScore( const char *pszName, int iSize, void *p
 	char *TeamName = READ_STRING();
 
 	// find the team matching the name
-	for ( int i = 1; i <= m_iNumTeams; i++ )
+	int i;
+	for ( i = 1; i <= m_iNumTeams; i++ )
 	{
 		if ( !stricmp( TeamName, g_TeamInfo[i].name ) )
 			break;
@@ -557,6 +678,171 @@ int CHudScoreboard :: MsgFunc_TeamScore( const char *pszName, int iSize, void *p
 	g_TeamInfo[i].frags = READ_SHORT();
 	g_TeamInfo[i].deaths = READ_SHORT();
 	
+	return 1;
+}
+
+int CHudScoreboard::MsgFunc_PlayerIcon(const char* pszName, int iSize, void* pbuf)
+{
+	BEGIN_READ(pbuf, iSize);
+	const short playerIndex = READ_BYTE();
+	const int isActive = READ_BYTE();
+	const int iconIndex = READ_BYTE();
+	const unsigned char itemId = READ_BYTE();
+
+	if (playerIndex > MAX_PLAYERS)
+		return 1;
+
+	if (!isActive)
+	{
+		for (int i = 0; i < 6; ++i)
+		{
+			if (itemId & g_PlayerSpriteList[playerIndex][i].bFlags)
+			{
+				memset(&g_PlayerSpriteList[playerIndex][i], 0, sizeof(g_PlayerSpriteList[playerIndex][i]));
+			}
+		}
+		return 1;
+	}
+
+	if (!itemId)
+	{
+		memset(&g_PlayerSpriteList[playerIndex][iconIndex], 0, sizeof(g_PlayerSpriteList[playerIndex][iconIndex]));
+		return 1;
+	}
+
+	for (int i = 0, id = CTFItem::BlackMesaFlag; i < 2; ++i, id <<= 1)
+	{
+		if (!(itemId & id))
+		{
+			continue;
+		}
+
+		const int spriteIndex = gHUD.GetSpriteIndex("score_flag");
+
+		auto& sprite = g_PlayerSpriteList[playerIndex][0];
+
+		sprite.spr = gHUD.GetSprite(spriteIndex);
+		sprite.rc = gHUD.GetSpriteRect(spriteIndex);
+		sprite.bFlags = itemId;
+
+		if (id == CTFItem::BlackMesaFlag)
+		{
+			sprite.r = 255;
+			sprite.g = 160;
+			sprite.b = 0;
+		}
+		else
+		{
+			sprite.r = 0;
+			sprite.g = 160;
+			sprite.b = 0;
+		}
+
+		strcpy(sprite.szSpriteName, "score_flag");
+
+		return 1;
+	}
+
+	for (int i = 1; i < 6; ++i)
+	{
+		if (itemId & g_PlayerSpriteList[playerIndex][i].bFlags)
+		{
+			return 1;
+		}
+	}
+
+	//Find an empty sprite slot
+	for (int i = 1; i < 6; ++i)
+	{
+		auto& sprite = g_PlayerSpriteList[playerIndex][i];
+
+		if (!sprite.spr)
+		{
+			if (itemId & CTFItem::LongJump)
+			{
+				const int spriteIndex = gHUD.GetSpriteIndex("score_ctfljump");
+
+				sprite.spr = gHUD.GetSprite(spriteIndex);
+				sprite.rc = gHUD.GetSpriteRect(spriteIndex);
+				sprite.bFlags = itemId;
+				sprite.r = 255;
+				sprite.g = 160;
+				sprite.b = 0;
+
+				strcpy(sprite.szSpriteName, "score_ctfljump");
+			}
+			else if (itemId & CTFItem::PortableHEV)
+			{
+				const int spriteIndex = gHUD.GetSpriteIndex("score_ctfphev");
+
+				sprite.spr = gHUD.GetSprite(spriteIndex);
+				sprite.rc = gHUD.GetSpriteRect(spriteIndex);
+				sprite.bFlags = itemId;
+				sprite.r = 128;
+				sprite.g = 160;
+				sprite.b = 255;
+
+				strcpy(sprite.szSpriteName, "score_ctfphev");
+			}
+			else if (itemId & CTFItem::Backpack)
+			{
+				const int spriteIndex = gHUD.GetSpriteIndex("score_ctfbpack");
+
+				sprite.spr = gHUD.GetSprite(spriteIndex);
+				sprite.rc = gHUD.GetSpriteRect(spriteIndex);
+				sprite.bFlags = itemId;
+				sprite.r = 255;
+				sprite.g = 255;
+				sprite.b = 0;
+
+				strcpy(sprite.szSpriteName, "score_ctfbpack");
+			}
+			else if (itemId & CTFItem::Acceleration)
+			{
+				const int spriteIndex = gHUD.GetSpriteIndex("score_ctfaccel");
+
+				sprite.spr = gHUD.GetSprite(spriteIndex);
+				sprite.rc = gHUD.GetSpriteRect(spriteIndex);
+				sprite.bFlags = itemId;
+				sprite.r = 255;
+				sprite.g = 0;
+				sprite.b = 0;
+
+				strcpy(sprite.szSpriteName, "score_ctfaccel");
+			}
+			else if (itemId & CTFItem::Regeneration)
+			{
+				const int spriteIndex = gHUD.GetSpriteIndex("score_ctfregen");
+
+				sprite.spr = gHUD.GetSprite(spriteIndex);
+				sprite.rc = gHUD.GetSpriteRect(spriteIndex);
+				sprite.bFlags = itemId;
+				sprite.r = 0;
+				sprite.g = 255;
+				sprite.b = 0;
+
+				strcpy(sprite.szSpriteName, "score_ctfregen");
+			}
+			break;
+		}
+	}
+
+	m_iFlags |= HUD_ACTIVE;
+
+	return 1;
+}
+
+int CHudScoreboard::MsgFunc_CTFScore(const char* pszName, int iSize, void* pbuf)
+{
+	BEGIN_READ(pbuf, iSize);
+	const int playerIndex = READ_BYTE();
+	const int score = READ_BYTE();
+
+	if (playerIndex >= 1 && playerIndex <= MAX_PLAYERS)
+	{
+		g_PlayerExtraInfo[playerIndex].flagcaptures = score;
+	}
+
 	return 1;
 }
 
