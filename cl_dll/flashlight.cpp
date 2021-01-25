@@ -195,7 +195,7 @@ void CHudFlashlight::drawNightVision()
 		for( auto x = 0; x < gHUD.m_scrinfo.iWidth; x += width )
 		{
 			drawingRect.left = 0;
-			drawingRect.bottom = x + width >= gHUD.m_scrinfo.iWidth ? gHUD.m_scrinfo.iWidth - x : width;
+			drawingRect.right = x + width >= gHUD.m_scrinfo.iWidth ? gHUD.m_scrinfo.iWidth - x : width;
 
 			for( auto y = 0; y < gHUD.m_scrinfo.iHeight; y += height )
 			{
