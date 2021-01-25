@@ -25,6 +25,12 @@ extern int gmsgWeapPickup;
 
 void DeactivateSatchels( CBasePlayer *pOwner );
 
+int UTIL_DefaultPlaybackFlags();
+
+bool UTIL_DefaultUseDecrement();
+
+bool UTIL_UseOldWeapons();
+
 #ifndef WEAPONS_NO_CLASSES
 // Contact Grenade / Timed grenade / Satchel Charge
 class CGrenade : public CBaseMonster
@@ -542,7 +548,7 @@ public:
 	virtual BOOL UseDecrement( void )
 	{ 
 #if defined( CLIENT_WEAPONS )
-		return TRUE;
+		return UTIL_DefaultUseDecrement();
 #else
 		return FALSE;
 #endif
@@ -577,7 +583,7 @@ public:
 	virtual BOOL UseDecrement( void )
 	{ 
 #if defined( CLIENT_WEAPONS )
-		return TRUE;
+		return UTIL_DefaultUseDecrement();
 #else
 		return FALSE;
 #endif
@@ -607,7 +613,7 @@ public:
 	virtual BOOL UseDecrement( void )
 	{ 
 #if defined( CLIENT_WEAPONS )
-		return TRUE;
+		return UTIL_DefaultUseDecrement();
 #else
 		return FALSE;
 #endif
@@ -639,7 +645,7 @@ public:
 	virtual BOOL UseDecrement( void )
 	{ 
 #if defined( CLIENT_WEAPONS )
-		return TRUE;
+		return UTIL_DefaultUseDecrement();
 #else
 		return FALSE;
 #endif
@@ -675,7 +681,7 @@ public:
 	virtual BOOL UseDecrement( void )
 	{ 
 #if defined( CLIENT_WEAPONS )
-		return TRUE;
+		return UTIL_DefaultUseDecrement();
 #else
 		return FALSE;
 #endif
@@ -716,7 +722,7 @@ public:
 	virtual BOOL UseDecrement( void )
 	{ 
 #if defined( CLIENT_WEAPONS )
-		return TRUE;
+		return UTIL_DefaultUseDecrement();
 #else
 		return FALSE;
 #endif
@@ -777,7 +783,7 @@ public:
 	virtual BOOL UseDecrement( void )
 	{ 
 #if defined( CLIENT_WEAPONS )
-		return TRUE;
+		return UTIL_DefaultUseDecrement();
 #else
 		return FALSE;
 #endif
@@ -845,7 +851,7 @@ public:
 	virtual BOOL UseDecrement( void )
 	{ 
 #if defined( CLIENT_WEAPONS )
-		return TRUE;
+		return UTIL_DefaultUseDecrement();
 #else
 		return FALSE;
 #endif
@@ -905,7 +911,7 @@ public:
 	virtual BOOL UseDecrement( void )
 	{ 
 #if defined( CLIENT_WEAPONS )
-		return TRUE;
+		return UTIL_DefaultUseDecrement();
 #else
 		return FALSE;
 #endif
@@ -947,7 +953,7 @@ public:
 	virtual BOOL UseDecrement( void )
 	{ 
 #if defined( CLIENT_WEAPONS )
-		return TRUE;
+		return UTIL_DefaultUseDecrement();
 #else
 		return FALSE;
 #endif
@@ -976,7 +982,7 @@ public:
 	virtual BOOL UseDecrement( void )
 	{ 
 #if defined( CLIENT_WEAPONS )
-		return TRUE;
+		return UTIL_DefaultUseDecrement();
 #else
 		return FALSE;
 #endif
@@ -1012,7 +1018,7 @@ public:
 	virtual BOOL UseDecrement( void )
 	{ 
 #if defined( CLIENT_WEAPONS )
-		return TRUE;
+		return UTIL_DefaultUseDecrement();
 #else
 		return FALSE;
 #endif
@@ -1042,7 +1048,7 @@ public:
 	virtual BOOL UseDecrement( void )
 	{ 
 #if defined( CLIENT_WEAPONS )
-		return TRUE;
+		return UTIL_DefaultUseDecrement();
 #else
 		return FALSE;
 #endif
@@ -1071,7 +1077,7 @@ public:
 	virtual BOOL UseDecrement( void )
 	{ 
 #if defined( CLIENT_WEAPONS )
-		return TRUE;
+		return UTIL_DefaultUseDecrement();
 #else
 		return FALSE;
 #endif

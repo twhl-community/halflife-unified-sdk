@@ -155,7 +155,7 @@ void CHgun::PrimaryAttack()
 
 	int flags;
 #if defined( CLIENT_WEAPONS )
-	flags = FEV_NOTHOST;
+	flags = UTIL_DefaultPlaybackFlags();
 #else
 	flags = 0;
 #endif
@@ -242,7 +242,7 @@ void CHgun::SecondaryAttack( void )
 
 	int flags;
 #if defined( CLIENT_WEAPONS )
-	flags = FEV_NOTHOST;
+	flags = UTIL_DefaultPlaybackFlags();
 #else
 	flags = 0;
 #endif

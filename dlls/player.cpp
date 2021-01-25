@@ -4213,11 +4213,14 @@ void CBasePlayer::ItemPostFrame()
 	if ( m_pTank != NULL )
 		return;
 
-#if defined( CLIENT_WEAPONS )
-	if ( m_flNextAttack > 0 )
-#else
-	if ( gpGlobals->time < m_flNextAttack )
-#endif
+	if (!oldweapons.value)
+	{
+		if (m_flNextAttack > 0)
+		{
+			return;
+		}
+	}
+	else if ( gpGlobals->time < m_flNextAttack )
 	{
 		return;
 	}

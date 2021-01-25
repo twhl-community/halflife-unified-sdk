@@ -199,7 +199,7 @@ void CSporeLauncher::PrimaryAttack()
 		int flags;
 
 #if defined( CLIENT_WEAPONS )
-		flags = FEV_NOTHOST;
+		flags = UTIL_DefaultPlaybackFlags();
 #else
 		flags = 0;
 #endif
@@ -249,7 +249,7 @@ void CSporeLauncher::SecondaryAttack()
 		int flags;
 
 #if defined( CLIENT_WEAPONS )
-		flags = FEV_NOTHOST;
+		flags = UTIL_DefaultPlaybackFlags();
 #else
 		flags = 0;
 #endif

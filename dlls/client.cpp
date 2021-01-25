@@ -1996,5 +1996,8 @@ AllowLagCompensation
 */
 int AllowLagCompensation( void )
 {
+	if (1 == oldweapons.value)
+		return 0;
+
 	return 1;
 }

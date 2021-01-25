@@ -88,7 +88,7 @@ void CPipewrench::Holster( int skiplocal )
 
 void CPipewrench::PrimaryAttack()
 {
-	if( m_iSwingMode == SWING_NONE && !Swing( true ) )
+	if( m_iSwingMode == SWING_NONE && !Swing( true ) && !UTIL_UseOldWeapons() )
 	{
 #ifndef CLIENT_DLL
 		SetThink( &CPipewrench::SwingAgain );
@@ -152,7 +152,7 @@ bool CPipewrench::Swing( const bool bFirst )
 
 	if( bFirst )
 	{
-		PLAYBACK_EVENT_FULL( FEV_NOTHOST, m_pPlayer->edict(), m_usPipewrench, 
+		PLAYBACK_EVENT_FULL(UTIL_DefaultPlaybackFlags(), m_pPlayer->edict(), m_usPipewrench,
 							 0.0, g_vecZero, g_vecZero, 0, 0, 0,
 							 0.0, 0, 0.0 );
 	}
@@ -317,7 +317,7 @@ void CPipewrench::BigSwing()
 	}
 #endif
 
-	PLAYBACK_EVENT_FULL( FEV_NOTHOST, m_pPlayer->edict(), m_usPipewrench, 
+	PLAYBACK_EVENT_FULL(UTIL_DefaultPlaybackFlags(), m_pPlayer->edict(), m_usPipewrench,
 	0.0, g_vecZero, g_vecZero, 0, 0, 0,
 	0.0, 1, 0.0 );
 

@@ -154,7 +154,7 @@ void CSniperRifle::PrimaryAttack()
 									8192, BULLET_PLAYER_762, 0, 0,
 									m_pPlayer->pev, m_pPlayer->random_seed );
 
-	PLAYBACK_EVENT_FULL( FEV_NOTHOST, 
+	PLAYBACK_EVENT_FULL(UTIL_DefaultPlaybackFlags(),
 							m_pPlayer->edict(), m_usSniper, 0, 
 							g_vecZero, g_vecZero, 
 							vecShot.x, vecShot.y, 

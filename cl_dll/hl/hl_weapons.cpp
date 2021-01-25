@@ -63,6 +63,8 @@ vec3_t previousorigin;
 
 int giTeamplay = 0;
 
+int giOldWeapons = 0;
+
 // HLDM Weapon placeholder entities.
 CGlock g_Glock;
 CCrowbar g_Crowbar;
@@ -120,6 +122,26 @@ bool bIsMultiplayer ( void )
 void LoadVModel ( char *szViewModel, CBasePlayer *m_pPlayer )
 {
 	gEngfuncs.CL_LoadModel( szViewModel, &m_pPlayer->pev->viewmodel );
+}
+
+int UTIL_DefaultPlaybackFlags()
+{
+	if (giOldWeapons == 1)
+	{
+		return 0;
+	}
+
+	return FEV_NOTHOST;
+}
+
+bool UTIL_DefaultUseDecrement()
+{
+	return !giOldWeapons;
+}
+
+bool UTIL_UseOldWeapons()
+{
+	return !!giOldWeapons;
 }
 
 /*
@@ -691,6 +713,11 @@ void HUD_SetLastOrg( void )
 
 CBasePlayerWeapon* GetLocalWeapon( int id )
 {
+	if (UTIL_UseOldWeapons())
+	{
+		return nullptr;
+	}
+
 	switch( id )
 	{
 	case WEAPON_CROWBAR: return &g_Crowbar;

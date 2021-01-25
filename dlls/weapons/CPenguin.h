@@ -59,7 +59,7 @@ public:
 	BOOL UseDecrement() override
 	{
 #if defined( CLIENT_WEAPONS )
-		return TRUE;
+		return UTIL_DefaultUseDecrement();
 #else
 		return FALSE;
 #endif

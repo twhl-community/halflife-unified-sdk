@@ -74,7 +74,7 @@ void CKnife::Holster( int skiplocal )
 
 void CKnife::PrimaryAttack()
 {
-	if( !Swing( true ) )
+	if( !Swing( true ) && !UTIL_UseOldWeapons() )
 	{
 #ifndef CLIENT_DLL
 		SetThink( &CKnife::SwingAgain );
@@ -113,7 +113,7 @@ bool CKnife::Swing( const bool bFirst )
 
 	if( bFirst )
 	{
-		PLAYBACK_EVENT_FULL( FEV_NOTHOST, m_pPlayer->edict(), m_usKnife,
+		PLAYBACK_EVENT_FULL(UTIL_DefaultPlaybackFlags(), m_pPlayer->edict(), m_usKnife,
 							 0.0, g_vecZero, g_vecZero, 0, 0, 0,
 							 0.0, 0, 0.0 );
 	}

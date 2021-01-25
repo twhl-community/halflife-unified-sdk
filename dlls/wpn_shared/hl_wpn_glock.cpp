@@ -131,7 +131,7 @@ void CGlock::GlockFire( float flSpread , float flCycleTime, BOOL fUseAutoAim )
 	int flags;
 
 #if defined( CLIENT_WEAPONS )
-	flags = FEV_NOTHOST;
+	flags = UTIL_DefaultPlaybackFlags();
 #else
 	flags = 0;
 #endif

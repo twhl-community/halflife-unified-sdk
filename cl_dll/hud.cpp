@@ -36,6 +36,8 @@ extra_player_info_t  g_PlayerExtraInfo[MAX_PLAYERS+1];   // additional player in
 
 int giR, giG, giB;
 
+extern int giOldWeapons;
+
 class CHLVoiceStatusHelper : public IVoiceStatusHelper
 {
 public:
@@ -94,6 +96,13 @@ int __MsgFunc_HudColor(const char* pszName, int iSize, void* pbuf)
 	giR = READ_BYTE();
 	giG = READ_BYTE();
 	giB = READ_BYTE();
+	return 1;
+}
+
+int __MsgFunc_OldWeapon(const char* pszName, int iSize, void* pbuf)
+{
+	BEGIN_READ(pbuf, iSize);
+	giOldWeapons = READ_BYTE();
 	return 1;
 }
 
@@ -330,6 +339,7 @@ void CHud :: Init( void )
 	HOOK_MESSAGE( SetFOV );
 	HOOK_MESSAGE( Concuss );
 	HOOK_MESSAGE(HudColor);
+	HOOK_MESSAGE(OldWeapon);
 
 	// TFFree CommandMenu
 	HOOK_COMMAND( "+commandmenu", OpenCommandMenu );

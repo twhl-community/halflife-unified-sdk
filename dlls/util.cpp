@@ -30,11 +30,19 @@
 #include "player.h"
 #include "weapons.h"
 #include "gamerules.h"
+#include "game.h"
 
-float UTIL_WeaponTimeBase( void )
+float UTIL_WeaponTimeBase(void)
 {
 #if defined( CLIENT_WEAPONS )
-	return 0.0;
+	if (oldweapons.value == 1)
+	{
+		return gpGlobals->time;
+	}
+	else
+	{
+		return 0.0;
+	}
 #else
 	return gpGlobals->time;
 #endif

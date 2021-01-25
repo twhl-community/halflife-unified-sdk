@@ -41,6 +41,7 @@ extern int gmsgScoreInfo;
 extern int gmsgMOTD;
 extern int gmsgServerName;
 extern int gmsgSpectator;
+extern int gmsgOldWeapon;
 
 extern int g_teamplay;
 
@@ -730,6 +731,10 @@ void CHalfLifeMultiplay :: PlayerSpawn( CBasePlayer *pPlayer )
 		pWeaponEntity->Touch( pPlayer );
 		addDefault = FALSE;
 	}
+
+	g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgOldWeapon, nullptr, pPlayer->edict());
+	g_engfuncs.pfnWriteByte(1 == oldweapons.value);
+	g_engfuncs.pfnMessageEnd();
 
 	if ( addDefault )
 	{

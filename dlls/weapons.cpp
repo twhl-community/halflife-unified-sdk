@@ -30,6 +30,7 @@
 #include "soundent.h"
 #include "decals.h"
 #include "gamerules.h"
+#include "game.h"
 
 extern CGraph	WorldGraph;
 extern int gEvilImpulse101;
@@ -56,6 +57,25 @@ MULTIDAMAGE gMultiDamage;
 
 #define TRACER_FREQ		4			// Tracers fire every fourth bullet
 
+int UTIL_DefaultPlaybackFlags()
+{
+	if (oldweapons.value == 1)
+	{
+		return 0;
+	}
+
+	return FEV_NOTHOST;
+}
+
+bool UTIL_DefaultUseDecrement()
+{
+	return !oldweapons.value;
+}
+
+bool UTIL_UseOldWeapons()
+{
+	return !!oldweapons.value;
+}
 
 //=========================================================
 // MaxAmmoCarry - pass in a name and this function will tell
@@ -1620,7 +1640,6 @@ void CBasePlayerWeapon::PrintState( void )
 
 	ALERT( at_console, "m_iclip:  %i\n", m_iClip );
 }
-
 
 TYPEDESCRIPTION	CRpg::m_SaveData[] = 
 {
