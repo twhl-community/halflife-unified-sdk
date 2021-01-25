@@ -43,7 +43,7 @@ void CItemRegenerationCTF::RemoveEffect(CBasePlayer* pPlayer)
 
 bool CItemRegenerationCTF::MyTouch(CBasePlayer* pPlayer)
 {
-	if (!(pPlayer->m_iItems & CTFItem::LongJump))
+	if (!(pPlayer->m_iItems & CTFItem::Regeneration))
 	{
 		if (!multipower.value)
 		{
