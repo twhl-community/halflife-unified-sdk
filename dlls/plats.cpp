@@ -1000,22 +1000,25 @@ void CSpriteTrain::LinearMove( const Vector& vecDest, float flSpeed )
 {
 	m_vecFinalDest = vecDest;
 
-	if( vecDest.x != pev->origin.x
-		|| vecDest.y != pev->origin.y
-		|| vecDest.z != pev->origin.z )
+	if (vecDest == pev->origin)
 	{
-		const auto distance = vecDest - pev->origin;
-		const auto speed = distance.Length() / flSpeed;
-
-		m_waiting = true;
-		m_stopSprite = true;
-		m_waitTime = pev->ltime + speed;
-
-		pev->velocity = distance / speed;
+		Wait();
 		return;
 	}
 
-	Wait();
+	// set destdelta to the vector needed to move
+	Vector vecDestDelta = vecDest - pev->origin;
+
+	// divide vector length by speed to get time to reach dest
+	float flTravelTime = vecDestDelta.Length() / flSpeed;
+
+	// set nextthink to trigger a call to LinearMoveDone when dest is reached
+	m_waiting = true;
+	m_stopSprite = true;
+	m_waitTime = pev->ltime + flTravelTime;
+
+	// scale the destdelta vector by the time spent traveling to get velocity
+	pev->velocity = vecDestDelta / flTravelTime;
 }
 
 
