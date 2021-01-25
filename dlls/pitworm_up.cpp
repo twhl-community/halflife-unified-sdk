@@ -514,7 +514,7 @@ void COFPitWormUp::HuntThink()
 			int iDir = 1;
 			pev->sequence = FindTransition( pev->sequence, PITWORM_ANIM_Flinch1 + RANDOM_LONG( 0, 1 ), &iDir );
 
-			if( iDir > 0 )
+			if( iDir <= 0 )
 				pev->frame = 255;
 			else
 				pev->frame = 0;
@@ -619,7 +619,7 @@ void COFPitWormUp::DyingThink()
 		int iDir = 1;
 		pev->sequence = FindTransition( pev->sequence, PITWORM_ANIM_Death, &iDir );
 
-		if( iDir > 0 )
+		if( iDir <= 0 )
 			pev->frame = 255;
 		else
 			pev->frame = 0;
@@ -1013,7 +1013,7 @@ void COFPitWormUp::NextActivity()
 		}
 	}
 
-	if( !m_hEnemy || !m_fFirstSighting )
+	if( !m_hEnemy || m_fFirstSighting )
 	{
 		if( m_iWasHit == 1 )
 		{
