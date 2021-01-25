@@ -565,56 +565,6 @@ void ClientCommand( edict_t *pEntity )
 	{
 		GetClassPtr((CBasePlayer *)pev)->SelectLastItem();
 	}
-	else if( FStrEq( pcmd, "changeteam" ) )
-	{
-		if( g_pGameRules->IsCTF() )
-		{
-			auto pPlayer = GetClassPtr( ( CBasePlayer * ) pev );
-			if( pPlayer->m_iCurrentMenu == 2 )
-			{
-				ClientPrint( pev, HUD_PRINTCONSOLE, "Already in team selection menu.\n" );
-			}
-			else
-			{
-				pPlayer->m_iCurrentMenu = 2;
-				pPlayer->Player_Menu();
-			}
-		}
-	}
-	else if( FStrEq( pcmd, "changeclass" ) )
-	{
-		if( g_pGameRules->IsCTF() )
-		{
-			auto pPlayer = GetClassPtr( ( CBasePlayer * ) pev );
-
-			if( pPlayer->m_iNewTeamNum != CTFTeam::None || pPlayer->m_iTeamNum != CTFTeam::None )
-			{
-				if( pPlayer->m_iCurrentMenu == 3 )
-				{
-					ClientPrint( pev, HUD_PRINTCONSOLE, "Already in character selection menu.\n" );
-				}
-				else
-				{
-					if( pPlayer->m_iNewTeamNum == CTFTeam::None )
-						pPlayer->m_iNewTeamNum = pPlayer->m_iTeamNum;
-
-					pPlayer->m_iCurrentMenu = 3;
-					pPlayer->Player_Menu();
-				}
-			}
-			else
-			{
-				ClientPrint( pev, HUD_PRINTCONSOLE, "No Team Selected.  Use \"changeteam\".\n" );
-			}
-		}
-	}
-	else if (FStrEq(pcmd, "flaginfo"))
-	{
-		if (g_pGameRules->IsCTF())
-		{
-			DumpCTFFlagInfo(reinterpret_cast<CBasePlayer*>(GET_PRIVATE(pEntity)));
-		}
-	}
 	else if ( FStrEq( pcmd, "spectate" ) )	// clients wants to become a spectator
 	{
 			// always allow proxies to become a spectator
@@ -654,6 +604,56 @@ void ClientCommand( edict_t *pEntity )
 	else if ( g_pGameRules->ClientCommand( GetClassPtr((CBasePlayer *)pev), pcmd ) )
 	{
 		// MenuSelect returns true only if the command is properly handled,  so don't print a warning
+	}
+	else if (FStrEq(pcmd, "changeteam"))
+	{
+		if (g_pGameRules->IsCTF())
+		{
+			auto pPlayer = GetClassPtr((CBasePlayer*)pev);
+			if (pPlayer->m_iCurrentMenu == 2)
+			{
+				ClientPrint(pev, HUD_PRINTCONSOLE, "Already in team selection menu.\n");
+			}
+			else
+			{
+				pPlayer->m_iCurrentMenu = 2;
+				pPlayer->Player_Menu();
+			}
+		}
+	}
+	else if (FStrEq(pcmd, "changeclass"))
+	{
+		if (g_pGameRules->IsCTF())
+		{
+			auto pPlayer = GetClassPtr((CBasePlayer*)pev);
+
+			if (pPlayer->m_iNewTeamNum != CTFTeam::None || pPlayer->m_iTeamNum != CTFTeam::None)
+			{
+				if (pPlayer->m_iCurrentMenu == 3)
+				{
+					ClientPrint(pev, HUD_PRINTCONSOLE, "Already in character selection menu.\n");
+				}
+				else
+				{
+					if (pPlayer->m_iNewTeamNum == CTFTeam::None)
+						pPlayer->m_iNewTeamNum = pPlayer->m_iTeamNum;
+
+					pPlayer->m_iCurrentMenu = 3;
+					pPlayer->Player_Menu();
+				}
+			}
+			else
+			{
+				ClientPrint(pev, HUD_PRINTCONSOLE, "No Team Selected.  Use \"changeteam\".\n");
+			}
+		}
+	}
+	else if (FStrEq(pcmd, "flaginfo"))
+	{
+		if (g_pGameRules->IsCTF())
+		{
+			DumpCTFFlagInfo(reinterpret_cast<CBasePlayer*>(GET_PRIVATE(pEntity)));
+		}
 	}
 	else
 	{
