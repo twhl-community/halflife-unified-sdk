@@ -572,14 +572,20 @@ cvar_t	sk_player_leg3	= { "sk_player_leg3","1" };
 
 // BEGIN Opposing Force variables
 
-//TODO: define all Op4 cvars, ensure values are correct
-cvar_t ctf_capture = { "mp_ctf_capture", "0", FCVAR_SERVER };
-cvar_t oldweapons = { "sv_oldweapons", "0", FCVAR_SERVER };
-cvar_t multipower = { "mp_multipower", "0", FCVAR_SERVER };
-cvar_t ctf_autoteam = { "mp_ctf_autoteam", "0", FCVAR_SERVER };
-cvar_t oldgrapple = {"sv_oldgrapple", "0", FCVAR_SERVER};
+cvar_t ctfplay = {"mp_ctfplay", "0", FCVAR_SERVER};
+cvar_t ctf_autoteam = {"mp_ctf_autoteam", "0", FCVAR_SERVER};
+cvar_t ctf_capture = {"mp_ctf_capture", "0", FCVAR_SERVER};
+
 cvar_t coopplay = {"mp_coopplay", "0", FCVAR_SERVER};
+cvar_t defaultcoop = {"mp_defaultcoop", "0", FCVAR_SERVER};
 cvar_t coopweprespawn = {"mp_coopweprespawn", "0", FCVAR_SERVER};
+
+cvar_t oldgrapple = {"sv_oldgrapple", "0", FCVAR_SERVER};
+cvar_t oldweapons = {"sv_oldweapons", "0", FCVAR_SERVER};
+
+cvar_t spamdelay = {"sv_spamdelay", "3.0", FCVAR_SERVER};
+cvar_t multipower = {"mp_multipower", "0", FCVAR_SERVER};
+cvar_t dmjumpsound = {"sv_dmjumpsound", "1", FCVAR_SERVER};
 
 // END Opposing Force variables
 
@@ -1131,13 +1137,20 @@ void GameDLLInit( void )
 
 	// BEGIN REGISTER CVARS FOR OPPOSING FORCE
 
-	CVAR_REGISTER( &ctf_capture );
-	CVAR_REGISTER( &oldweapons );
-	CVAR_REGISTER( &multipower );
-	CVAR_REGISTER( &ctf_autoteam );
-	CVAR_REGISTER(&oldgrapple);
+	CVAR_REGISTER(&ctfplay);
+	CVAR_REGISTER(&ctf_autoteam);
+	CVAR_REGISTER(&ctf_capture);
+
 	CVAR_REGISTER(&coopplay);
+	CVAR_REGISTER(&defaultcoop);
 	CVAR_REGISTER(&coopweprespawn);
+
+	CVAR_REGISTER(&oldgrapple);
+	CVAR_REGISTER(&oldweapons);
+
+	CVAR_REGISTER(&spamdelay);
+	CVAR_REGISTER(&multipower);
+	CVAR_REGISTER(&dmjumpsound);
 
 	// END REGISTER CVARS FOR OPPOSING FORCE
 

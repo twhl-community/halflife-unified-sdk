@@ -680,6 +680,15 @@ void CWorld :: Precache( void )
 	{
 		CVAR_SET_FLOAT( "mp_defaultteam", 0 );
 	}
+
+	if (pev->spawnflags & SF_WORLD_COOP)
+	{
+		CVAR_SET_FLOAT("mp_defaultcoop", 1);
+	}
+	else
+	{
+		CVAR_SET_FLOAT("mp_defaultcoop", 0);
+	}
 }
 
 
