@@ -1078,9 +1078,6 @@ void CSpriteTrain::Wait( void )
 			STOP_SOUND( edict(), CHAN_STATIC, ( char* ) STRING( pev->noiseMovement ) );
 		if( pev->noiseStopMoving )
 			EMIT_SOUND( ENT( pev ), CHAN_VOICE, ( char* ) STRING( pev->noiseStopMoving ), m_volume, ATTN_NORM );
-		
-		m_nexting = true;
-		m_nextTime = pev->ltime + m_flWait;
 		return;
 	}
 
