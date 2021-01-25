@@ -1025,10 +1025,10 @@ void CSpriteTrain::LinearMove( const Vector& vecDest, float flSpeed )
 void CSpriteTrain::Blocked( CBaseEntity *pOther )
 
 {
-	if( gpGlobals->time < m_flActivateFinished )
+	if( pev->ltime < m_flActivateFinished )
 		return;
 
-	m_flActivateFinished = gpGlobals->time + 0.5;
+	m_flActivateFinished = pev->ltime + 0.5;
 
 	pOther->TakeDamage( pev, pev, pev->dmg, DMG_CRUSH );
 }
