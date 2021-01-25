@@ -281,7 +281,7 @@ void CTFGoalFlag::Spawn()
 
 void CTFGoalFlag::ReturnFlagThink()
 {
-	pev->effects &= EF_NODRAW;
+	pev->effects &= ~EF_NODRAW;
 
 	SetThink(nullptr);
 	SetTouch(&CTFGoalFlag::goal_item_touch);
