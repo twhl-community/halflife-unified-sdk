@@ -39,7 +39,6 @@ public:
 	void			KeyValue( KeyValueData *pkvd );
 
 	// AI functions
-	void			SetActivity( Activity newActivity );
 	Schedule_t		*GetScheduleOfType( int Type );
 	void			StartTask( Task_t *pTask );
 	void			RunTask( Task_t *pTask );
