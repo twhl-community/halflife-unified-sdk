@@ -2821,12 +2821,8 @@ Schedule_t* CHGruntAlly :: GetScheduleOfType ( int Type )
 			return pSchedule;
 		}
 
-		//These exist in the original code, but are never used
-		//schedule IDs are wrong because the ids are different
-		/*
-	case 43:
+	case SCHED_CANT_FOLLOW:
 		return &slGruntAllyFail[ 0 ];
-		*/
 
 	default:
 		{

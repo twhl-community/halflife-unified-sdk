@@ -2673,12 +2673,8 @@ Schedule_t* COFTorchAlly :: GetScheduleOfType ( int Type )
 			return pSchedule;
 		}
 
-		//These exist in the original code, but are never used
-		//schedule IDs are wrong because the ids are different
-		/*
-	case 43:
+	case SCHED_CANT_FOLLOW:
 		return &slTorchAllyFail[ 0 ];
-		*/
 
 	default:
 		{

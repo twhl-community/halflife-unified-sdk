@@ -2915,12 +2915,8 @@ Schedule_t* COFMedicAlly :: GetScheduleOfType ( int Type )
 	case SCHED_MEDIC_ALLY_HEAL_ALLY:
 		return slMedicAllyHealTarget;
 
-		//These exist in the original code, but are never used
-		//schedule IDs are wrong because the ids are different
-		/*
-	case 43:
+	case SCHED_CANT_FOLLOW:
 		return &slMedicAllyFail[ 0 ];
-		*/
 
 	default:
 		{
