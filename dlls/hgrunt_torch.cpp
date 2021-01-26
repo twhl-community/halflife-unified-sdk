@@ -955,8 +955,7 @@ void COFTorchAlly :: HandleAnimEvent( MonsterEvent_t *pEvent )
 		case TORCH_AE_DROP_GUN:
 			{
 				//If we don't have a gun equipped
-				//TODO: why is it checking like this?
-				if( GetBodygroup( TorchAllyBodygroup::Weapons ) != TorchAllyWeapon::DesertEagle )
+				if( GetBodygroup( TorchAllyBodygroup::Weapons ) == TorchAllyWeapon::DesertEagle )
 				{
 					Vector	vecGunPos;
 					Vector	vecGunAngles;
