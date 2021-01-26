@@ -620,7 +620,7 @@ Schedule_t *COFSquadTalkMonster::GetScheduleOfType( int iType )
 		}
 
 	default:
-		return CBaseMonster::GetScheduleOfType( iType );
+		return COFAllyMonster::GetScheduleOfType( iType );
 	}
 }
 
