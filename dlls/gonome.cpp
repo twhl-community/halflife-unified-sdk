@@ -56,7 +56,7 @@ public:
 
 	void Touch( CBaseEntity* pOther ) override;
 
-	void Animate();
+	void EXPORT Animate();
 
 	static void Shoot( entvars_t* pevOwner, Vector vecStart, Vector vecVelocity );
 
