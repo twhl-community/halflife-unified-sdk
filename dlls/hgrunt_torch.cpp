@@ -949,7 +949,7 @@ void COFTorchAlly :: HandleAnimEvent( MonsterEvent_t *pEvent )
 {
 	Vector	vecShootDir;
 	Vector	vecShootOrigin;
-	//TODO: add remaining torch grunt events
+
 	switch( pEvent->event )
 	{
 		case TORCH_AE_DROP_GUN:
@@ -1050,7 +1050,7 @@ void COFTorchAlly :: HandleAnimEvent( MonsterEvent_t *pEvent )
 				if( m_pTorchBeam )
 				{
 					Vector vecTorchPos, vecTorchAng;
-					CBaseAnimating::GetAttachment( 2, vecTorchPos, vecTorchAng );
+					GetAttachment( 2, vecTorchPos, vecTorchAng );
 
 					m_pTorchBeam->EntsInit( entindex(), entindex() );
 
