@@ -172,7 +172,6 @@ void COFChargedBolt::ShutdownChargedBolt()
 	ClearBeams();
 
 	UTIL_Remove( this );
-	ALERT( at_console, "shutdown\n" );
 }
 
 COFChargedBolt* COFChargedBolt::ChargedBoltCreate()
@@ -325,7 +324,6 @@ void COFChargedBolt::ChargedBoltTouch( CBaseEntity* pOther )
 
 	SetThink( &COFChargedBolt::ShutdownChargedBolt );
 	pev->nextthink = gpGlobals->time + 0.5;
-	ALERT( at_console, "touched %s\n", STRING( pOther->pev->classname ) );
 }
 
 class COFVoltigore : public CSquadMonster
