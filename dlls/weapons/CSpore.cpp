@@ -25,7 +25,12 @@
 #ifndef CLIENT_DLL
 TYPEDESCRIPTION	CSpore::m_SaveData[] =
 {
-	DEFINE_FIELD( CSpore, m_flIgniteTime, FIELD_TIME ),
+	//TODO: only m_flIgniteTime is saved in vanilla Op4 which causes the type to restore as 0, which isn't a valid spore type
+	//It makes spores bounce around forever in grenade mode
+	DEFINE_FIELD(CSpore, m_SporeType, FIELD_INTEGER),
+	DEFINE_FIELD(CSpore, m_flIgniteTime, FIELD_TIME),
+	DEFINE_FIELD(CSpore, m_bIsAI, FIELD_BOOLEAN),
+	DEFINE_FIELD(CSpore, m_pSprite, FIELD_CLASSPTR)
 };
 
 IMPLEMENT_SAVERESTORE( CSpore, CSpore::BaseClass );

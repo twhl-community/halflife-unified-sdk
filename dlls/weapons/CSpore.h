@@ -72,8 +72,9 @@ private:
 	float m_flSoundDelay;
 
 	bool m_bPuked;
-	bool m_bIsAI;
+	BOOL m_bIsAI;
 
+	//TODO: should be an EHANDLE
 	CSprite* m_pSprite;
 };
 
