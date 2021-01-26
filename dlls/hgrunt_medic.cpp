@@ -966,9 +966,11 @@ void COFMedicAlly :: Shoot ( void )
 		pszSoundName = "weapons/desert_eagle_fire.wav";
 	}
 
-	const auto random = RANDOM_LONG( 0, 20 );
+	const auto random = RANDOM_LONG(0, 20);
 
-	EMIT_SOUND_DYN( edict(), CHAN_WEAPON, pszSoundName, VOL_NORM, ATTN_NORM, 0, random <= 10 ? random - 5 : 0 + 100 );
+	const auto pitch = random <= 10 ? random + 95 : 100;
+
+	EMIT_SOUND_DYN( edict(), CHAN_WEAPON, pszSoundName, VOL_NORM, ATTN_NORM, 0, pitch);
 
 	pev->effects |= EF_MUZZLEFLASH;
 	
