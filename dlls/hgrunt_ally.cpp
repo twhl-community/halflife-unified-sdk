@@ -414,7 +414,7 @@ int CHGruntAlly :: ISoundMask ( void )
 BOOL CHGruntAlly :: FOkToSpeak( void )
 {
 // if someone else is talking, don't speak
-	if (gpGlobals->time <= COFAllyMonster::g_talkWaitTime)
+	if (gpGlobals->time <= COFSquadTalkMonster::g_talkWaitTime)
 		return FALSE;
 
 	if ( pev->spawnflags & SF_MONSTER_GAG )
@@ -437,7 +437,7 @@ BOOL CHGruntAlly :: FOkToSpeak( void )
 //=========================================================
 void CHGruntAlly :: JustSpoke( void )
 {
-	COFAllyMonster::g_talkWaitTime = gpGlobals->time + RANDOM_FLOAT(1.5, 2.0);
+	COFSquadTalkMonster::g_talkWaitTime = gpGlobals->time + RANDOM_FLOAT(1.5, 2.0);
 	m_iSentence = HGRUNT_SENT_NONE;
 }
 
@@ -1244,7 +1244,7 @@ void CHGruntAlly :: Spawn()
 	m_iSawShell = PRECACHE_MODEL( "models/saw_shell.mdl" );
 	m_iSawLink = PRECACHE_MODEL( "models/saw_link.mdl" );
 
-	COFAllyMonster::g_talkWaitTime = 0;
+	COFSquadTalkMonster::g_talkWaitTime = 0;
 
 	m_flMedicWaitTime = gpGlobals->time;
 
@@ -2374,7 +2374,7 @@ Schedule_t *CHGruntAlly :: GetSchedule( void )
 				}
 
 				// call base class, all code to handle dead enemies is centralized there.
-				return CBaseMonster :: GetSchedule();
+				return COFSquadTalkMonster :: GetSchedule();
 			}
 
 			if( m_hWaitMedic )

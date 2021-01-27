@@ -134,7 +134,7 @@ void COFSquadTalkMonster::Killed( entvars_t *pevAttacker, int iGib )
 		MySquadLeader()->SquadRemove( this );
 	}
 
-	CBaseMonster::Killed( pevAttacker, iGib );
+	COFAllyMonster::Killed( pevAttacker, iGib );
 }
 
 // These functions are still awaiting conversion to COFSquadTalkMonster 
@@ -392,7 +392,7 @@ int COFSquadTalkMonster::CheckEnemy( CBaseEntity *pEnemy )
 {
 	int iUpdatedLKP;
 
-	iUpdatedLKP = CBaseMonster::CheckEnemy( m_hEnemy );
+	iUpdatedLKP = COFAllyMonster::CheckEnemy( m_hEnemy );
 
 	// communicate with squad members about the enemy IF this individual has the same enemy as the squad leader.
 	if( InSquad() && ( CBaseEntity * ) m_hEnemy == MySquadLeader()->m_hEnemy )
@@ -417,7 +417,7 @@ int COFSquadTalkMonster::CheckEnemy( CBaseEntity *pEnemy )
 //=========================================================
 void COFSquadTalkMonster::StartMonster( void )
 {
-	CBaseMonster::StartMonster();
+	COFAllyMonster::StartMonster();
 
 	if( ( m_afCapability & bits_CAP_SQUAD ) && !InSquad() )
 	{
@@ -538,7 +538,7 @@ MONSTERSTATE COFSquadTalkMonster::GetIdealState( void )
 		break;
 	}
 
-	return CBaseMonster::GetIdealState();
+	return COFAllyMonster::GetIdealState();
 }
 
 //=========================================================

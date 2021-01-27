@@ -395,7 +395,7 @@ void COFMedicAlly :: GibMonster ( void )
 		SetBodygroup( MedicAllyBodygroup::Weapons, MedicAllyWeapon::None );
 	}
 
-	CBaseMonster :: GibMonster();
+	COFSquadTalkMonster:: GibMonster();
 }
 
 //=========================================================
@@ -420,7 +420,7 @@ int COFMedicAlly :: ISoundMask ( void )
 BOOL COFMedicAlly :: FOkToSpeak( void )
 {
 // if someone else is talking, don't speak
-	if (gpGlobals->time <= COFAllyMonster::g_talkWaitTime)
+	if (gpGlobals->time <= COFSquadTalkMonster::g_talkWaitTime)
 		return FALSE;
 
 	if ( pev->spawnflags & SF_MONSTER_GAG )
@@ -443,7 +443,7 @@ BOOL COFMedicAlly :: FOkToSpeak( void )
 //=========================================================
 void COFMedicAlly :: JustSpoke( void )
 {
-	COFAllyMonster::g_talkWaitTime = gpGlobals->time + RANDOM_FLOAT(1.5, 2.0);
+	COFSquadTalkMonster::g_talkWaitTime = gpGlobals->time + RANDOM_FLOAT(1.5, 2.0);
 	m_iSentence = MEDIC_SENT_NONE;
 }
 
@@ -1199,7 +1199,7 @@ void COFMedicAlly :: Spawn()
 		m_voicePitch = 95;
 	}
 
-	COFAllyMonster::g_talkWaitTime = 0;
+	COFSquadTalkMonster::g_talkWaitTime = 0;
 
 	MonsterInit();
 
@@ -2481,7 +2481,7 @@ Schedule_t *COFMedicAlly :: GetSchedule( void )
 				}
 
 				// call base class, all code to handle dead enemies is centralized there.
-				return CBaseMonster :: GetSchedule();
+				return COFSquadTalkMonster:: GetSchedule();
 			}
 
 			if( m_hWaitMedic )
