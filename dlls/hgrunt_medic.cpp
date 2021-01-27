@@ -746,10 +746,10 @@ int COFMedicAlly :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker,
 	if( !IsAlive() || pev->deadflag == DEAD_DYING )
 		return ret;
 
+	Forget(bits_MEMORY_INCOVER);
+
 	if( m_MonsterState != MONSTERSTATE_PRONE && ( pevAttacker->flags & FL_CLIENT ) )
 	{
-		Forget( bits_MEMORY_INCOVER );
-
 		m_flPlayerDamage += flDamage;
 
 		// This is a heurstic to determine if the player intended to harm me

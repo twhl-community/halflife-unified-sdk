@@ -736,18 +736,16 @@ void CHGruntAlly :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector 
 //=========================================================
 int CHGruntAlly :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType )
 {
-	Forget( bits_MEMORY_INCOVER );
-
 	// make sure friends talk about it if player hurts talkmonsters...
 	int ret = COFSquadTalkMonster::TakeDamage( pevInflictor, pevAttacker, flDamage, bitsDamageType );
 
 	if( pev->deadflag != DEAD_NO )
 		return ret;
 
+	Forget(bits_MEMORY_INCOVER);
+
 	if( m_MonsterState != MONSTERSTATE_PRONE && ( pevAttacker->flags & FL_CLIENT ) )
 	{
-		Forget( bits_MEMORY_INCOVER );
-
 		m_flPlayerDamage += flDamage;
 
 		// This is a heurstic to determine if the player intended to harm me
