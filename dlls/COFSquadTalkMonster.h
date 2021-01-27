@@ -91,6 +91,6 @@ public:
 
 	COFSquadTalkMonster* FindSquadMedic( int searchRadius );
 
-	BOOL HealMe( COFSquadTalkMonster* pTarget );
+	virtual BOOL HealMe( COFSquadTalkMonster* pTarget );
 };
 
