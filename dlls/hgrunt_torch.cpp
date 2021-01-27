@@ -495,36 +495,32 @@ BOOL COFTorchAlly :: CheckMeleeAttack1 ( float flDot, float flDist )
 BOOL COFTorchAlly :: CheckRangeAttack1 ( float flDot, float flDist )
 {
 	//Only if we have a weapon
-	if( pev->weapons )
+	if( !m_fGunHolstered && flDist <= 1024 && flDot >= 0.5 /*&& NoFriendlyFire()*/ )
 	{
-		//Friendly fire is allowed
-		if( !HasConditions( bits_COND_ENEMY_OCCLUDED ) && flDist <= 1024 && flDot >= 0.5 /*&& NoFriendlyFire()*/ )
-		{
-			TraceResult	tr;
+		TraceResult	tr;
 
-			auto pEnemy = m_hEnemy.Entity<CBaseEntity>();
+		auto pEnemy = m_hEnemy.Entity<CBaseEntity>();
 
-			//if( !pEnemy->IsPlayer() && flDist <= 64 )
-			//{
-			//	// kick nonclients, but don't shoot at them.
-			//	return FALSE;
-			//}
+		//if( !pEnemy->IsPlayer() && flDist <= 64 )
+		//{
+		//	// kick nonclients, but don't shoot at them.
+		//	return FALSE;
+		//}
 
-			//TODO: kinda odd that this doesn't use GetGunPosition like the original
-			Vector vecSrc = pev->origin + Vector( 0, 0, 55 );
+		//TODO: kinda odd that this doesn't use GetGunPosition like the original
+		Vector vecSrc = pev->origin + Vector( 0, 0, 55 );
 
-			//Fire at last known position, adjusting for target origin being offset from entity origin
-			const auto targetOrigin = pEnemy->BodyTarget( vecSrc );
+		//Fire at last known position, adjusting for target origin being offset from entity origin
+		const auto targetOrigin = pEnemy->BodyTarget( vecSrc );
 
-			const auto targetPosition = targetOrigin - pEnemy->pev->origin + m_vecEnemyLKP;
+		const auto targetPosition = targetOrigin - pEnemy->pev->origin + m_vecEnemyLKP;
 
-			// verify that a bullet fired from the gun will hit the enemy before the world.
-			UTIL_TraceLine( vecSrc, targetPosition, dont_ignore_monsters, ENT( pev ), &tr );
+		// verify that a bullet fired from the gun will hit the enemy before the world.
+		UTIL_TraceLine( vecSrc, targetPosition, dont_ignore_monsters, ENT( pev ), &tr );
 
-			m_lastAttackCheck = tr.flFraction == 1.0 ? true : tr.pHit && GET_PRIVATE( tr.pHit ) == pEnemy;
+		m_lastAttackCheck = tr.flFraction == 1.0 ? true : tr.pHit && GET_PRIVATE( tr.pHit ) == pEnemy;
 
-			return m_lastAttackCheck;
-		}
+		return m_lastAttackCheck;
 	}
 
 	return FALSE;
@@ -2254,6 +2250,11 @@ Schedule_t *COFTorchAlly :: GetSchedule( void )
 				m_flMedicWaitTime = gpGlobals->time + 5.0;
 			}
 
+			if (!m_fTorchHolstered)
+			{
+				return COFSquadTalkMonster::GetSchedule();
+			}
+
 // new enemy
 			//Do not fire until fired upon
 			if ( HasAllConditions( bits_COND_NEW_ENEMY | bits_COND_LIGHT_DAMAGE ) )
@@ -2308,8 +2309,7 @@ Schedule_t *COFTorchAlly :: GetSchedule( void )
 			else if( HasConditions( bits_COND_HEAVY_DAMAGE ) )
 				return GetScheduleOfType( SCHED_TAKE_COVER_FROM_ENEMY );
 // no ammo
-			//Only if the grunt has a weapon
-			else if ( pev->weapons && HasConditions ( bits_COND_NO_AMMO_LOADED ) )
+			else if ( HasConditions ( bits_COND_NO_AMMO_LOADED ) )
 			{
 				//!!!KELLY - this individual just realized he's out of bullet ammo. 
 				// He's going to try to find cover to run to and reload, but rarely, if 
