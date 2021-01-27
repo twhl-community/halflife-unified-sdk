@@ -812,11 +812,12 @@ void CShockTrooper :: Shoot ( void )
 
 	auto shootAngles = angDir;
 
-	shootAngles.y = -shootAngles.y;
+	shootAngles.x = -shootAngles.x;
 
 	auto pBeam = CShockBeam::CreateShockBeam( vecShootOrigin, shootAngles, this );
 
 	pBeam->pev->velocity = vecShootDir * 2000;
+	pBeam->pev->speed = 2000;
 	
 	m_cAmmoLoaded--;// take away a bullet!
 
