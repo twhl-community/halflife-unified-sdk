@@ -865,12 +865,6 @@ void CShockTrooper :: HandleAnimEvent( MonsterEvent_t *pEvent )
 			}
 			break;
 
-		case STROOPER_AE_RELOAD:
-			EMIT_SOUND( ENT(pev), CHAN_WEAPON, "hgrunt/gr_reload1.wav", 1, ATTN_NORM );
-			m_cAmmoLoaded = m_cClipSize;
-			ClearConditions(bits_COND_NO_AMMO_LOADED);
-			break;
-
 		case STROOPER_AE_GREN_TOSS:
 		{
 			UTIL_MakeVectors( pev->angles );
@@ -902,11 +896,8 @@ void CShockTrooper :: HandleAnimEvent( MonsterEvent_t *pEvent )
 
 			Shoot();
 
-			if ( RANDOM_LONG(0,1) )
-			{
-				EMIT_SOUND( ENT(pev), CHAN_WEAPON, "weapons/shock_fire.wav", 1, ATTN_NORM );
-			}
-		
+			EMIT_SOUND( ENT(pev), CHAN_WEAPON, "weapons/shock_fire.wav", 1, ATTN_NORM );
+
 			CSoundEnt::InsertSound ( bits_SOUND_COMBAT, pev->origin, 384, 0.3 );
 		}
 		break;
@@ -931,7 +922,7 @@ void CShockTrooper :: HandleAnimEvent( MonsterEvent_t *pEvent )
 			if ( FOkToSpeak() )
 			{
 				SENTENCEG_PlayRndSz(ENT(pev), "ST_ALERT", ShockTrooper_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
-				 JustSpoke();
+				JustSpoke();
 			}
 
 		}
