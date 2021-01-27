@@ -92,6 +92,8 @@ void CSpore::Spawn()
 		{
 			pev->velocity = gpGlobals->v_forward * 1200;
 		}
+
+		pev->gravity = 1;
 	}
 	else
 	{
@@ -246,10 +248,10 @@ void CSpore::MyBounceTouch( CBaseEntity* pOther )
 				m_flSoundDelay = gpGlobals->time + 1.0;
 			}
 
-			if( pev->flags & FL_SWIM )
+			if( pev->flags & FL_ONGROUND )
 			{
-				pev->velocity = ( pev->velocity * 0.5 );
-
+				pev->velocity = pev->velocity * 0.5;
+				//TODO: in vanilla Op4 this is set to RANDOM_LONG(1, 1)
 				pev->sequence = SPORE_IDLE;
 			}
 			else
