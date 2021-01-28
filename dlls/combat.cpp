@@ -286,7 +286,8 @@ BOOL CBaseMonster :: HasHumanGibs( void )
 	if ( myClass == CLASS_HUMAN_MILITARY ||
 		 myClass == CLASS_PLAYER_ALLY	||
 		 myClass == CLASS_HUMAN_PASSIVE  ||
-		 myClass == CLASS_PLAYER )
+		 myClass == CLASS_PLAYER ||
+		myClass == CLASS_HUMAN_MILITARY_FRIENDLY)
 
 		 return TRUE;
 
@@ -303,7 +304,8 @@ BOOL CBaseMonster :: HasAlienGibs( void )
 		 myClass == CLASS_ALIEN_PASSIVE  ||
 		 myClass == CLASS_INSECT  ||
 		 myClass == CLASS_ALIEN_PREDATOR  ||
-		 myClass == CLASS_ALIEN_PREY )
+		 myClass == CLASS_ALIEN_PREY ||
+		myClass == CLASS_ALIEN_RACE_X)
 
 		 return TRUE;
 
