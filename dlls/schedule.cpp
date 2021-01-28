@@ -920,7 +920,6 @@ void CBaseMonster :: StartTask ( Task_t *pTask )
 			{
 				if( !m_hTargetEnt || !JumpToTarget( ACT_LEAP, 2.0 ) )
 				{
-					m_afConditions |= 0x40000000u;
 					TaskFail();
 					ALERT( at_aiconsole, "%s Failed to reach target!!!\n", STRING( pev->classname ) );
 					RouteClear();
