@@ -78,6 +78,23 @@ void CBaseMonster :: ChangeSchedule ( Schedule_t *pNewSchedule )
 {
 	ASSERT( pNewSchedule != NULL );
 
+	if (m_pSchedule && m_pSchedule->pTasklist && m_pSchedule->pTasklist[m_iScheduleIndex].iTask == TASK_DIE)
+	{
+		const char* className = STRING(pev->classname);
+
+		//TODO: not the correct way to check for missing classname, is like this in vanilla Op4
+		if (className)
+		{
+			ALERT(at_aiconsole, "ChangeSchedule called for dead monster class %s\n", className);
+		}
+		else
+		{
+			ALERT(at_console, "ChangeSchedule called for dead monster\n");
+		}
+
+		return;
+	}
+
 	m_pSchedule			= pNewSchedule;
 	m_iScheduleIndex	= 0;
 	m_iTaskStatus		= TASKSTATUS_NEW;
