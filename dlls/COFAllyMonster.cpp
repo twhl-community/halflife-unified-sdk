@@ -1174,7 +1174,8 @@ void COFAllyMonster::SetAnswerQuestion( COFAllyMonster *pSpeaker )
 
 int COFAllyMonster::TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType )
 {
-	if( IsAlive() )
+	//Don't inform friends if i'm in a script or if i'm dying/dead
+	if( m_MonsterState != MONSTERSTATE_SCRIPT && pev->deadflag == DEAD_NO )
 	{
 		// if player damaged this entity, have other friends talk about it
 		if( pevAttacker && m_MonsterState != MONSTERSTATE_PRONE && FBitSet( pevAttacker->flags, FL_CLIENT ) )
