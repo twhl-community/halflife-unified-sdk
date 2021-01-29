@@ -667,3 +667,64 @@ BOOL COFSquadTalkMonster::HealMe( COFSquadTalkMonster* pTarget )
 {
 	return false;
 }
+
+int COFSquadTalkMonster::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+{
+	if (m_MonsterState == MONSTERSTATE_SCRIPT)
+	{
+		return COFAllyMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
+	}
+
+	//If this attack deals enough damage to instakill me...
+	if (pev->deadflag == DEAD_NO && flDamage >= pev->max_health)
+	{
+		//Tell my squad mates...
+		auto pSquadLeader = MySquadLeader();
+
+		for (int i = 0; i < MAX_SQUAD_MEMBERS; i++)
+		{
+			COFSquadTalkMonster* pSquadMember = pSquadLeader->MySquadMember(i);
+
+			//If they're alive and have no enemy...
+			if (pSquadMember && pSquadMember->IsAlive() && !pSquadMember->m_hEnemy)
+			{
+				//If they're not being eaten by a barnacle and the attacker is a player...
+				if (m_MonsterState != MONSTERSTATE_PRONE && (pevAttacker->flags & FL_CLIENT))
+				{
+					//Friendly fire!
+					pSquadMember->Remember(bits_MEMORY_PROVOKED);
+				}
+				//Attacked by an NPC...
+				else
+				{
+					g_vecAttackDir = ((pevAttacker->origin + pevAttacker->view_ofs) - (pSquadMember->pev->origin + pSquadMember->pev->view_ofs)).Normalize();
+
+					const Vector vecStart = pSquadMember->pev->origin + pSquadMember->pev->view_ofs;
+					const Vector vecEnd = pevAttacker->origin + pevAttacker->view_ofs + (g_vecAttackDir * m_flDistLook);
+					TraceResult tr;
+
+					UTIL_TraceLine(vecStart, vecEnd, dont_ignore_monsters, pSquadMember->edict(), &tr);
+
+					//If they didn't see any enemy...
+					if (tr.flFraction == 1.0)
+					{
+						//Hunt for enemies
+						m_IdealMonsterState = MONSTERSTATE_HUNT;
+					}
+					//They can see an enemy
+					else
+					{
+						//Make the enemy an enemy of my squadmate
+						pSquadMember->m_hEnemy = CBaseEntity::Instance(tr.pHit);
+						pSquadMember->m_vecEnemyLKP = pevAttacker->origin;
+						pSquadMember->SetConditions(bits_COND_NEW_ENEMY);
+					}
+				}
+			}
+		}
+	}
+
+	m_flWaitFinished = gpGlobals->time;
+
+	return COFAllyMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
+}
