@@ -137,9 +137,6 @@ void COFSquadTalkMonster::Killed( entvars_t *pevAttacker, int iGib )
 	COFAllyMonster::Killed( pevAttacker, iGib );
 }
 
-// These functions are still awaiting conversion to COFSquadTalkMonster 
-
-
 //=========================================================
 //
 // SquadRemove(), remove pRemove from my squad.
@@ -244,37 +241,109 @@ void COFSquadTalkMonster::SquadCopyEnemyInfo( void )
 // the same entity.
 //
 //=========================================================
-void COFSquadTalkMonster::SquadMakeEnemy( CBaseEntity *pEnemy )
+void COFSquadTalkMonster::SquadMakeEnemy(CBaseEntity* pEnemy)
 {
-	if( !InSquad() )
-		return;
-
-	if( !pEnemy )
+	if (m_MonsterState == MONSTERSTATE_SCRIPT)
 	{
-		ALERT( at_console, "ERROR: SquadMakeEnemy() - pEnemy is NULL!\n" );
 		return;
 	}
 
-	COFSquadTalkMonster *pSquadLeader = MySquadLeader();
-	for( int i = 0; i < MAX_SQUAD_MEMBERS; i++ )
+	if (!InSquad())
 	{
-		COFSquadTalkMonster *pMember = pSquadLeader->MySquadMember( i );
-		if( pMember )
+		//TODO: pEnemy could be null here
+		if (m_hEnemy != NULL)
 		{
+			// remember their current enemy
+			PushEnemy(m_hEnemy, m_vecEnemyLKP);
+		}
+
+		ALERT(at_aiconsole, "Non-Squad friendly grunt adopted enemy of type %s\n", STRING(pEnemy->pev->classname));
+
+		// give them a new enemy
+		m_hEnemy = pEnemy;
+		m_vecEnemyLKP = pEnemy->pev->origin;
+		SetConditions(bits_COND_NEW_ENEMY);
+	}
+
+	if (!pEnemy)
+	{
+		ALERT(at_console, "ERROR: SquadMakeEnemy() - pEnemy is NULL!\n");
+		return;
+	}
+
+	auto squadLeader = MySquadLeader();
+
+	const bool fLeaderIsFollowing = squadLeader->m_hTargetEnt != NULL && squadLeader->m_hTargetEnt->IsPlayer();
+	const bool fImFollowing = m_hTargetEnt != NULL && m_hTargetEnt->IsPlayer();
+
+	if (!IsLeader() && fLeaderIsFollowing != fImFollowing)
+	{
+		ALERT(at_aiconsole, "Squad Member is not leader, and following state doesn't match in MakeEnemy\n");
+		return;
+	}
+
+	for (auto& squadMemberHandle : squadLeader->m_hSquadMember)
+	{
+		auto squadMember = squadMemberHandle.Entity<COFSquadTalkMonster>();
+
+		if (squadMember)
+		{
+			const bool isFollowing = squadMember->m_hTargetEnt != NULL && squadMember->m_hTargetEnt->IsPlayer();
+
 			// reset members who aren't activly engaged in fighting
-			if( pMember->m_hEnemy != pEnemy && !pMember->HasConditions( bits_COND_SEE_ENEMY ) )
+			if (fLeaderIsFollowing == isFollowing && squadMember->m_hEnemy != pEnemy && !squadMember->HasConditions(bits_COND_SEE_ENEMY))
 			{
-				if( pMember->m_hEnemy != NULL )
+				if (squadMember->m_hEnemy != NULL)
 				{
 					// remember their current enemy
-					pMember->PushEnemy( pMember->m_hEnemy, pMember->m_vecEnemyLKP );
+					squadMember->PushEnemy(squadMember->m_hEnemy, squadMember->m_vecEnemyLKP);
 				}
+
+				ALERT(at_aiconsole, "Non-Squad friendly grunt adopted enemy of type %s\n", STRING(pEnemy->pev->classname));
+
 				// give them a new enemy
-				pMember->m_hEnemy = pEnemy;
-				pMember->m_vecEnemyLKP = pEnemy->pev->origin;
-				pMember->SetConditions( bits_COND_NEW_ENEMY );
+				squadMember->m_hEnemy = pEnemy;
+				squadMember->m_vecEnemyLKP = pEnemy->pev->origin;
+				squadMember->SetConditions(bits_COND_NEW_ENEMY);
 			}
 		}
+	}
+
+	//Seems a bit redundant to recalculate this now
+	const bool leaderIsStillFollowing = squadLeader->m_hTargetEnt != NULL && squadLeader->m_hTargetEnt->IsPlayer();
+
+	// reset members who aren't activly engaged in fighting
+	if (fLeaderIsFollowing == leaderIsStillFollowing && squadLeader->m_hEnemy != pEnemy && !squadLeader->HasConditions(bits_COND_SEE_ENEMY))
+	{
+		if (squadLeader->m_hEnemy != NULL)
+		{
+			// remember their current enemy
+			squadLeader->PushEnemy(squadLeader->m_hEnemy, squadLeader->m_vecEnemyLKP);
+		}
+
+		ALERT(at_aiconsole, "Non-Squad friendly grunt adopted enemy of type %s\n", STRING(pEnemy->pev->classname));
+
+		// give them a new enemy
+		squadLeader->m_hEnemy = pEnemy;
+		squadLeader->m_vecEnemyLKP = pEnemy->pev->origin;
+		squadLeader->SetConditions(bits_COND_NEW_ENEMY);
+	}
+
+	// reset members who aren't activly engaged in fighting
+	if (squadLeader->m_hEnemy != pEnemy && !squadLeader->HasConditions(bits_COND_SEE_ENEMY))
+	{
+		if (squadLeader->m_hEnemy != NULL)
+		{
+			// remember their current enemy
+			squadLeader->PushEnemy(squadLeader->m_hEnemy, squadLeader->m_vecEnemyLKP);
+		}
+
+		ALERT(at_aiconsole, "Squad Leader friendly grunt adopted enemy of type %s\n", STRING(pEnemy->pev->classname));
+
+		// give them a new enemy
+		squadLeader->m_hEnemy = pEnemy;
+		squadLeader->m_vecEnemyLKP = pEnemy->pev->origin;
+		squadLeader->SetConditions(bits_COND_NEW_ENEMY);
 	}
 }
 
