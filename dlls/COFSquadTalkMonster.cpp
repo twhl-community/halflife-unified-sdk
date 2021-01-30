@@ -691,7 +691,35 @@ Schedule_t *COFSquadTalkMonster::GetScheduleOfType( int iType )
 
 void COFSquadTalkMonster::FollowerUse( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
 {
-	COFAllyMonster::FollowerUse( pActivator, pCaller, useType, value );
+	// Don't allow use during a scripted_sentence
+	if (m_useTime > gpGlobals->time)
+		return;
+
+	if (pCaller != NULL && pCaller->IsPlayer())
+	{
+		// Pre-disaster followers can't be used
+		if (pev->spawnflags & SF_MONSTER_PREDISASTER)
+		{
+			DeclineFollowing();
+		}
+		else if (CanFollow())
+		{
+			//Player can form squads of up to 6 NPCs
+			LimitFollowers(pCaller, 6);
+
+			if (m_afMemory & bits_MEMORY_PROVOKED)
+				ALERT(at_console, "I'm not following you, you evil person!\n");
+			else
+			{
+				StartFollowing(pCaller);
+				SetBits(m_bitsSaid, bit_saidHelloPlayer);	// Don't say hi after you've started following
+			}
+		}
+		else
+		{
+			StopFollowing(TRUE);
+		}
+	}
 }
 
 COFSquadTalkMonster* COFSquadTalkMonster::MySquadMedic()
