@@ -1219,7 +1219,7 @@ void CHGruntAlly :: Spawn()
 		{
 			m_iGruntHead = RANDOM_LONG( 0, 1 ) + HGruntAllyHead::BandanaWhite;
 		}
-		else if( m_iWeaponIdx == HGruntAllyWeapon::MP5 )
+		else if( m_iWeaponIdx == HGruntAllyWeapon::None)
 		{
 			m_iGruntHead = HGruntAllyHead::MilitaryPolice;
 		}
