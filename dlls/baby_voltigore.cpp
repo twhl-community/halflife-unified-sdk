@@ -631,6 +631,8 @@ Schedule_t	slBabyVoltigoreRangeAttack1[] =
 		ARRAYSIZE ( tlBabyVoltigoreRangeAttack1 ), 
 		bits_COND_NEW_ENEMY			|
 		bits_COND_ENEMY_DEAD		|
+		bits_COND_ENEMY_OCCLUDED	|
+		bits_COND_HEAR_SOUND		|
 		bits_COND_HEAVY_DAMAGE,
 		
 		0,
