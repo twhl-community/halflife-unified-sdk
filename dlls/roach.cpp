@@ -196,6 +196,8 @@ void CRoach :: MonsterThink( void  )
 
 	float flInterval = StudioFrameAdvance( ); // animate
 
+	UpdateShockEffect();
+
 	if ( !m_fLightHacked )
 	{
 		// if light value hasn't been collection for the first time yet, 

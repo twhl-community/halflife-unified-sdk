@@ -841,6 +841,8 @@ void CNihilanth :: HuntThink( void )
 	DispatchAnimEvents( );
 	StudioFrameAdvance( );
 
+	UpdateShockEffect();
+
 	ShootBalls( );
 
 	// if dead, force cancelation of current animation

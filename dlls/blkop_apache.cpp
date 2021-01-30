@@ -447,6 +447,8 @@ void COFBlackOpsApache :: HuntThink( void )
 	StudioFrameAdvance( );
 	pev->nextthink = gpGlobals->time + 0.1;
 
+	UpdateShockEffect();
+
 	ShowDamage( );
 
 	if ( m_pGoalEnt == NULL && !FStringNull(pev->target) )// this monster has a target

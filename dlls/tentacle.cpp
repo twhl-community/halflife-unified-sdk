@@ -476,6 +476,8 @@ void CTentacle :: Cycle( void )
 	DispatchAnimEvents( );
 	StudioFrameAdvance( );
 
+	UpdateShockEffect();
+
 	ChangeYaw( pev->yaw_speed );
 
 	CSound *pSound;

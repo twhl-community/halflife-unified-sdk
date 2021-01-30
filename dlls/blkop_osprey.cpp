@@ -386,6 +386,8 @@ void CBlackOpsOsprey::FlyThink( void )
 	StudioFrameAdvance( );
 	pev->nextthink = gpGlobals->time + 0.1;
 
+	UpdateShockEffect();
+
 	if ( m_pGoalEnt == NULL && !FStringNull(pev->target) )// this monster has a target
 	{
 		m_pGoalEnt = CBaseEntity::Instance( FIND_ENTITY_BY_TARGETNAME ( NULL, STRING( pev->target ) ) );

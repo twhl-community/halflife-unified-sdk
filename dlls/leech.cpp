@@ -572,6 +572,8 @@ void CLeech::SwimThink( void )
 	else
 		pev->nextthink = gpGlobals->time + 0.1;
 
+	UpdateShockEffect();
+
 	targetSpeed = LEECH_SWIM_SPEED;
 
 	if ( m_waterTime < gpGlobals->time )

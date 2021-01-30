@@ -1990,6 +1990,8 @@ void CBasePlayer::PreThink(void)
 	if ( g_fGameOver )
 		return;         // intermission or finale
 
+	UpdateShockEffect();
+
 	UTIL_MakeVectors(pev->v_angle);             // is this still used?
 	
 	ItemPreFrame( );

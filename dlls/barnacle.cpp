@@ -150,6 +150,8 @@ void CBarnacle :: BarnacleThink ( void )
 
 	pev->nextthink = gpGlobals->time + 0.1;
 
+	UpdateShockEffect();
+
 	if ( m_hEnemy != NULL )
 	{
 // barnacle has prey.
