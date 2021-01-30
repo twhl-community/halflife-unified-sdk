@@ -183,7 +183,7 @@ void CGib :: SpawnHeadGib( entvars_t *pevVictim )
 void CGib::SpawnRandomGibs( entvars_t *pevVictim, int cGibs, const GibData& gibData )
 {
 	//Track the number of uses of a particular submodel so we can avoid spawning too many of the same
-	auto pLimitTracking = gibData.Limits != nullptr ? stackalloc<int[]>( gibData.SubModelCount ) : nullptr;
+	auto pLimitTracking = gibData.Limits != nullptr ? reinterpret_cast<int*>(stackalloc(sizeof(int) * gibData.SubModelCount)) : nullptr;
 
 	if( pLimitTracking )
 	{
