@@ -3311,6 +3311,7 @@ void CBasePlayer::Spawn( void )
 
 		m_pGoalEnt = nullptr;
 
+		//TODO: define menu ids
 		m_iCurrentMenu = m_iNewTeamNum > CTFTeam::None ? 1 : 3;
 
 		if( g_pGameRules->IsCTF() )
