@@ -24,7 +24,7 @@
 const int SV_MAX_PLAYERS = 32;
 
 #define MAX_WEAPON_SLOTS		7	// hud item selection slots
-#define MAX_ITEM_TYPES			6	// hud item selection slots
+#define MAX_ITEM_TYPES			7	// hud item selection slots
 
 #define MAX_ITEMS				5	// hard coded item types
 
