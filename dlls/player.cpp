@@ -3871,6 +3871,12 @@ void CBasePlayer::ImpulseCommands( )
 
 		break;
 
+	case 204:
+	{
+		ForceClientDllUpdate();
+		break;
+	}
+
 	case 205:
 		{
 			DropPlayerCTFPowerup( this );
