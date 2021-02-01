@@ -1671,6 +1671,14 @@ void CBasePlayer::PlayerUse ( void )
 	
 	while ((pObject = UTIL_FindEntityInSphere( pObject, pev->origin, PLAYER_SEARCH_RADIUS )) != NULL)
 	{
+		//Special behavior for ropes: check if the player is close enough to the rope segment origin
+		if (FClassnameIs(pObject->pev, "rope_segment"))
+		{
+			if ((pev->origin - pObject->pev->origin).Length() > PLAYER_SEARCH_RADIUS)
+			{
+				continue;
+			}
+		}
 
 		if (pObject->ObjectCaps() & (FCAP_IMPULSE_USE | FCAP_CONTINUOUS_USE | FCAP_ONOFF_USE))
 		{
