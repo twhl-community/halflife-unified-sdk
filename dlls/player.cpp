@@ -3210,6 +3210,7 @@ void CBasePlayer::Spawn( void )
 
 	m_flNextDecalTime	= 0;// let this player decal as soon as he spawns.
 
+	m_DisplacerReturn = g_vecZero;
 	m_flgeigerDelay = gpGlobals->time + 2.0;	// wait a few seconds until user-defined message registrations
 												// are recieved by all clients
 	
