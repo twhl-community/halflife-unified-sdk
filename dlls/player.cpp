@@ -115,6 +115,7 @@ TYPEDESCRIPTION	CBasePlayer::m_playerSaveData[] =
 	DEFINE_FIELD( CBasePlayer, m_tbdPrev, FIELD_TIME ),
 
 	DEFINE_FIELD( CBasePlayer, m_pTank, FIELD_EHANDLE ),
+	DEFINE_FIELD(CBasePlayer, m_hViewEntity, FIELD_EHANDLE),
 	DEFINE_FIELD( CBasePlayer, m_iHideHUD, FIELD_INTEGER ),
 	DEFINE_FIELD( CBasePlayer, m_iFOV, FIELD_INTEGER ),
 	
@@ -1870,6 +1871,17 @@ void CBasePlayer::PreThink(void)
 	else
 		m_iHideHUD |= HIDEHUD_FLASHLIGHT;
 
+	if (m_bResetViewEntity)
+	{
+		m_bResetViewEntity = false;
+
+		CBaseEntity* viewEntity = m_hViewEntity;
+
+		if (viewEntity)
+		{
+			SET_VIEW(edict(), viewEntity->edict());
+		}
+	}
 
 	// JOHN: checks if new client data (for HUD and view control) needs to be sent to the client
 	UpdateClientData();
@@ -3064,6 +3076,8 @@ int CBasePlayer::Restore( CRestore &restore )
 	//			Barring that, we clear it out here instead of using the incorrect restored time value.
 	m_flNextAttack = UTIL_WeaponTimeBase();
 #endif
+
+	m_bResetViewEntity = true;
 
 	return status;
 }
@@ -4669,6 +4683,20 @@ BOOL CBasePlayer :: SwitchWeapon( CBasePlayerItem *pWeapon )
 	pWeapon->Deploy( );
 
 	return TRUE;
+}
+
+void CBasePlayer::SetPrefsFromUserinfo(char* infobuffer)
+{
+	const char* value = g_engfuncs.pfnInfoKeyValue(infobuffer, "cl_autowepswitch");
+
+	if (*value)
+	{
+		m_iAutoWepSwitch = atoi(value);
+	}
+	else
+	{
+		m_iAutoWepSwitch = 1;
+	}
 }
 
 //=========================================================
