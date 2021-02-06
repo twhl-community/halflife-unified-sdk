@@ -985,6 +985,8 @@ BOOL CHalfLifeCTFplay::ClientCommand( CBasePlayer* pPlayer, const char* pcmd )
 
 void CHalfLifeCTFplay::ClientUserInfoChanged( CBasePlayer* pPlayer, char* infobuffer )
 {
+	pPlayer->SetPrefsFromUserinfo(infobuffer);
+
 	if( pPlayer->m_szTeamModel )
 	{
 		auto pszNewModel = g_engfuncs.pfnInfoKeyValue( infobuffer, "model" );
