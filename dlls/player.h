@@ -172,6 +172,8 @@ public:
 	BOOL				m_fWeapon;				// Set this to FALSE to force a reset of the current weapon HUD info
 
 	EHANDLE				m_pTank;				// the tank which the player is currently controlling,  NULL if no tank
+	EHANDLE				m_hViewEntity;			// The view entity being used, or null if the player is using itself as the view entity
+	bool m_bResetViewEntity;					//True if the player's view needs to be set back to the view entity
 	float				m_fDeadTime;			// the time at which the player died  (used in PlayerDeathThink())
 
 	BOOL			m_fNoPlayerSound;	// a debugging feature. Player makes no sound if this is true. 
@@ -322,7 +324,7 @@ public:
 	void GiveNamedItem( const char *szName );
 	void EnableControl(BOOL fControl);
 
-	int  GiveAmmo( int iAmount, char *szName, int iMax );
+	int  GiveAmmo( int iAmount, const char *szName, int iMax );
 	void SendAmmoUpdate(void);
 
 	void WaterMove( void );
@@ -330,7 +332,7 @@ public:
 	void PlayerUse( void );
 
 	void CheckSuitUpdate();
-	void SetSuitUpdate(char *name, int fgroup, int iNoRepeat);
+	void SetSuitUpdate(const char *name, int fgroup, int iNoRepeat);
 	void UpdateGeigerCounter( void );
 	void CheckTimeBasedDamage( void );
 

@@ -99,7 +99,7 @@ AlertMessage
 Print debug messages to console
 ======================
 */
-void AlertMessage( ALERT_TYPE atype, char *szFmt, ... )
+void AlertMessage( ALERT_TYPE atype, const char *szFmt, ... )
 {
 	va_list		argptr;
 	static char	string[1024];
@@ -119,7 +119,7 @@ bool bIsMultiplayer ( void )
 	return gEngfuncs.GetMaxClients() == 1 ? 0 : 1;
 }
 //Just loads a v_ model.
-void LoadVModel ( char *szViewModel, CBasePlayer *m_pPlayer )
+void LoadVModel ( const char *szViewModel, CBasePlayer *m_pPlayer )
 {
 	gEngfuncs.CL_LoadModel( szViewModel, &m_pPlayer->pev->viewmodel );
 }
@@ -252,7 +252,7 @@ CBasePlayerWeapon :: DefaultDeploy
 
 =====================
 */
-BOOL CBasePlayerWeapon :: DefaultDeploy( char *szViewModel, char *szWeaponModel, int iAnim, char *szAnimExt, int skiplocal, int	body )
+BOOL CBasePlayerWeapon :: DefaultDeploy(const char *szViewModel, const char *szWeaponModel, int iAnim, const char *szAnimExt, int skiplocal, int	body )
 {
 	if ( !CanDeploy() )
 		return FALSE;
@@ -370,9 +370,15 @@ void CBasePlayerWeapon::ItemPostFrame( void )
 {
 	if ((m_fInReload) && (m_pPlayer->m_flNextAttack <= 0.0))
 	{
-#if 0 // FIXME, need ammo on client to make this work right
+#if 1
 		// complete the reload. 
-		int j = V_min( iMaxClip() - m_iClip, m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]);	
+		ItemInfo ii;
+
+		memset(&ii, 0, sizeof(ii));
+
+		GetItemInfo(&ii);
+
+		int j = V_min(ii.iMaxClip - m_iClip, m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]);
 
 		// Add them to the clip
 		m_iClip += j;

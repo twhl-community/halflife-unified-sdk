@@ -136,6 +136,17 @@ void ClientDisconnect( edict_t *pEntity )
 	pEntity->v.solid = SOLID_NOT;// nonsolid
 	UTIL_SetOrigin ( &pEntity->v, pEntity->v.origin );
 
+	auto pPlayer = reinterpret_cast<CBasePlayer*>(GET_PRIVATE(pEntity));
+
+	if (pPlayer)
+	{
+		if (pPlayer->m_pTank != NULL)
+		{
+			pPlayer->m_pTank->Use(pPlayer, pPlayer, USE_OFF, 0);
+			pPlayer->m_pTank = NULL;
+		}
+	}
+
 	g_pGameRules->ClientDisconnected( pEntity );
 }
 
@@ -466,7 +477,7 @@ void Host_Say( edict_t *pEntity, int teamonly )
 	// echo to server console
 	g_engfuncs.pfnServerPrint( text );
 
-	char * temp;
+	const char * temp;
 	if ( teamonly )
 		temp = "say_team";
 	else

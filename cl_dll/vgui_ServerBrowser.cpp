@@ -88,7 +88,7 @@ public:
 		m_nMouseOverRow	= row;
 	}
 
-	void DoSort( char *sortkey )
+	void DoSort( const char *sortkey )
 	{
 		// Request server list and refresh servers...
 		SortServers( sortkey );
@@ -439,7 +439,7 @@ private:
 	ServerBrowserTablePanel *m_pBrowser;
 
 public:
-	CSBLabel( char *name, char *sortkey ) : Label( name )
+	CSBLabel( const char *name, const char *sortkey ) : Label( name )
 	{
 		m_pBrowser = NULL;
 

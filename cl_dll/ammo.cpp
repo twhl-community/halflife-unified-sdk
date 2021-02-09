@@ -79,7 +79,7 @@ void WeaponsResource :: LoadWeaponSprites( WEAPON *pWeapon )
 	else
 		iRes = 640;
 
-	char sz[128];
+	char sz[256];
 
 	if ( !pWeapon )
 		return;
@@ -109,7 +109,7 @@ void WeaponsResource :: LoadWeaponSprites( WEAPON *pWeapon )
 		pWeapon->rcCrosshair = p->rc;
 	}
 	else
-		pWeapon->hCrosshair = NULL;
+		pWeapon->hCrosshair = 0;
 
 	p = GetSpriteList(pList, "autoaim", iRes, i);
 	if (p)

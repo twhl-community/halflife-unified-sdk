@@ -87,6 +87,9 @@ extern client_sprite_t *GetSpriteList(client_sprite_t *pList, const char *psz, i
 
 extern cvar_t *sensitivity;
 cvar_t *cl_lw = NULL;
+cvar_t* cl_rollangle = nullptr;
+cvar_t* cl_rollspeed = nullptr;
+cvar_t* cl_bobtilt = nullptr;
 
 void ShutdownInput (void);
 
@@ -386,10 +389,14 @@ void CHud :: Init( void )
 	setNightVisionState(false);
 
 	CVAR_CREATE( "zoom_sensitivity_ratio", "1.2", 0 );
+	CVAR_CREATE("cl_autowepswitch", "1", FCVAR_ARCHIVE | FCVAR_USERINFO);
 	default_fov = CVAR_CREATE( "default_fov", "90", 0 );
 	m_pCvarStealMouse = CVAR_CREATE( "hud_capturemouse", "1", FCVAR_ARCHIVE );
 	m_pCvarDraw = CVAR_CREATE( "hud_draw", "1", FCVAR_ARCHIVE );
 	cl_lw = gEngfuncs.pfnGetCvarPointer( "cl_lw" );
+	cl_rollangle = CVAR_CREATE("cl_rollangle", "2.0", FCVAR_ARCHIVE);
+	cl_rollspeed = CVAR_CREATE("cl_rollspeed", "200", FCVAR_ARCHIVE);
+	cl_bobtilt = CVAR_CREATE("cl_bobtilt", "0", FCVAR_ARCHIVE);
 
 	m_pSpriteList = NULL;
 

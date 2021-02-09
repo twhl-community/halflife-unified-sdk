@@ -376,7 +376,7 @@ public:
 
 	virtual BOOL CanDeploy( void );
 	virtual BOOL IsUseable( void );
-	BOOL DefaultDeploy( char *szViewModel, char *szWeaponModel, int iAnim, char *szAnimExt, int skiplocal = 0, int body = 0 );
+	BOOL DefaultDeploy(const char *szViewModel, const char *szWeaponModel, int iAnim, const char *szAnimExt, int skiplocal = 0, int body = 0 );
 	int DefaultReload( int iClipSize, int iAnim, float fDelay, int body = 0 );
 
 	virtual void ItemPostFrame( void );	// called each frame by the player PostThink
@@ -502,7 +502,7 @@ class CWeaponBox : public CBaseEntity
 	void Touch( CBaseEntity *pOther );
 	void KeyValue( KeyValueData *pkvd );
 	BOOL IsEmpty( void );
-	int  GiveAmmo( int iCount, char *szName, int iMax, int *pIndex = NULL );
+	int  GiveAmmo( int iCount, const char *szName, int iMax, int *pIndex = NULL );
 	void SetObjectCollisionBox( void );
 
 public:
@@ -525,7 +525,7 @@ public:
 
 #ifdef CLIENT_DLL
 bool bIsMultiplayer ( void );
-void LoadVModel ( char *szViewModel, CBasePlayer *m_pPlayer );
+void LoadVModel ( const char *szViewModel, CBasePlayer *m_pPlayer );
 #endif
 
 class CGlock : public CBasePlayerWeapon
@@ -635,7 +635,6 @@ public:
 
 	void PrimaryAttack( void );
 	void SecondaryAttack( void );
-	int SecondaryAmmoIndex( void );
 	BOOL Deploy( void );
 	void Reload( void );
 	void WeaponIdle( void );
@@ -715,6 +714,7 @@ public:
 	BOOL Deploy( );
 	void Reload( void );
 	void WeaponIdle( void );
+	void ItemPostFrame() override;
 	int m_fInReload;
 	float m_flNextReload;
 	int m_iShell;
@@ -809,7 +809,7 @@ public:
 
 	int m_iTrail;
 	float m_flIgniteTime;
-	CRpg *m_pLauncher;// pointer back to the launcher that fired me. 
+	EHANDLE m_pLauncher;// handle back to the launcher that fired me. 
 };
 
 class CGauss : public CBasePlayerWeapon
@@ -889,6 +889,7 @@ public:
 	void EndAttack( void );
 	void Attack( void );
 	void PrimaryAttack( void );
+	BOOL ShouldWeaponIdle() override { return TRUE; }
 	void WeaponIdle( void );
 
 	float m_flAmmoUseTime;// since we use < 1 point of ammo per update, we subtract ammo on a timer.

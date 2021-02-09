@@ -20,6 +20,8 @@
 
 */
 
+#include <cmath>
+
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
@@ -682,7 +684,7 @@ BOOL CanAttack( float attack_time, float curtime, BOOL isPredicted )
 	}
 	else
 	{
-		return ( attack_time <= 0.0 ) ? TRUE : FALSE;
+		return ( (static_cast<int>(std::floor(attack_time * 1000.0)) * 1000.0) <= 0.0 ) ? TRUE : FALSE;
 	}
 }
 
@@ -1020,16 +1022,38 @@ BOOL CBasePlayerWeapon :: AddSecondaryAmmo( int iCount, char *szName, int iMax )
 //=========================================================
 BOOL CBasePlayerWeapon :: IsUseable( void )
 {
-	if ( m_iClip <= 0 )
+	if (m_iClip > 0)
 	{
-		if ( m_pPlayer->m_rgAmmo[ PrimaryAmmoIndex() ] <= 0 && iMaxAmmo1() != -1 )			
+		return TRUE;
+	}
+
+	//Player has unlimited ammo for this weapon or does not use magazines
+	if (iMaxAmmo1() == WEAPON_NOCLIP)
+	{
+		return TRUE;
+	}
+
+	if (m_pPlayer->m_rgAmmo[PrimaryAmmoIndex()] > 0)
+	{
+		return TRUE;
+	}
+
+	if (pszAmmo2())
+	{
+		//Player has unlimited ammo for this weapon or does not use magazines
+		if (iMaxAmmo2() == WEAPON_NOCLIP)
 		{
-			// clip is empty (or nonexistant) and the player has no more ammo of this type. 
-			return FALSE;
+			return TRUE;
+		}
+
+		if (m_pPlayer->m_rgAmmo[SecondaryAmmoIndex()] > 0)
+		{
+			return TRUE;
 		}
 	}
 
-	return TRUE;
+	// clip is empty (or nonexistant) and the player has no more ammo of this type. 
+	return FALSE;
 }
 
 BOOL CBasePlayerWeapon :: CanDeploy( void )
@@ -1062,7 +1086,7 @@ BOOL CBasePlayerWeapon :: CanDeploy( void )
 	return TRUE;
 }
 
-BOOL CBasePlayerWeapon :: DefaultDeploy( char *szViewModel, char *szWeaponModel, int iAnim, char *szAnimExt, int skiplocal /* = 0 */, int body )
+BOOL CBasePlayerWeapon :: DefaultDeploy( const char *szViewModel, const char *szWeaponModel, int iAnim, const char *szAnimExt, int skiplocal /* = 0 */, int body )
 {
 	if (!CanDeploy( ))
 		return FALSE;
@@ -1134,7 +1158,7 @@ int CBasePlayerWeapon::PrimaryAmmoIndex( void )
 //=========================================================
 int CBasePlayerWeapon::SecondaryAmmoIndex( void )
 {
-	return -1;
+	return m_iSecondaryAmmoType;
 }
 
 void CBasePlayerWeapon::Holster( int skiplocal /* = 0 */ )
@@ -1231,7 +1255,7 @@ int CBasePlayerWeapon::ExtractAmmo( CBasePlayerWeapon *pWeapon )
 
 	if ( pszAmmo2() != NULL )
 	{
-		iReturn = pWeapon->AddSecondaryAmmo( 0, (char *)pszAmmo2(), iMaxAmmo2() );
+		iReturn |= pWeapon->AddSecondaryAmmo( 0, (char *)pszAmmo2(), iMaxAmmo2() );
 	}
 
 	return iReturn;
@@ -1253,7 +1277,7 @@ int CBasePlayerWeapon::ExtractClipAmmo( CBasePlayerWeapon *pWeapon )
 		iAmmo = m_iClip;
 	}
 	
-	return pWeapon->m_pPlayer->GiveAmmo( iAmmo, (char *)pszAmmo1(), iMaxAmmo1() ); // , &m_iPrimaryAmmoType
+	return pWeapon->m_pPlayer->GiveAmmo( iAmmo, pszAmmo1(), iMaxAmmo1() ); // , &m_iPrimaryAmmoType
 }
 	
 //=========================================================
@@ -1289,7 +1313,7 @@ float CBasePlayerWeapon::GetNextAttackDelay( float delay )
 	
 	// save the last fire time
 	m_flLastFireTime = gpGlobals->time;		
-	
+
 	float flNextAttack = UTIL_WeaponTimeBase() + delay - flCreep;
 	// we need to remember what the m_flNextPrimaryAttack time is set to for each shot, 
 	// store it as m_flPrevPrimaryAttack.
@@ -1415,7 +1439,7 @@ void CWeaponBox::Touch( CBaseEntity *pOther )
 		if ( !FStringNull( m_rgiszAmmo[ i ] ) )
 		{
 			// there's some ammo of this type. 
-			pPlayer->GiveAmmo( m_rgAmmo[ i ], (char *)STRING( m_rgiszAmmo[ i ] ), MaxAmmoCarry( m_rgiszAmmo[ i ] ) );
+			pPlayer->GiveAmmo( m_rgAmmo[ i ], STRING( m_rgiszAmmo[ i ] ), MaxAmmoCarry( m_rgiszAmmo[ i ] ) );
 
 			//ALERT ( at_console, "Gave %d rounds of %s\n", m_rgAmmo[i], STRING(m_rgiszAmmo[i]) );
 
@@ -1525,7 +1549,7 @@ BOOL CWeaponBox::PackAmmo( int iszName, int iCount )
 	if ( iMaxCarry != -1 && iCount > 0 )
 	{
 		//ALERT ( at_console, "Packed %d rounds of %s\n", iCount, STRING(iszName) );
-		GiveAmmo( iCount, (char *)STRING( iszName ), iMaxCarry );
+		GiveAmmo( iCount, STRING( iszName ), iMaxCarry );
 		return TRUE;
 	}
 
@@ -1535,7 +1559,7 @@ BOOL CWeaponBox::PackAmmo( int iszName, int iCount )
 //=========================================================
 // CWeaponBox - GiveAmmo
 //=========================================================
-int CWeaponBox::GiveAmmo( int iCount, char *szName, int iMax, int *pIndex/* = NULL*/ )
+int CWeaponBox::GiveAmmo( int iCount, const char *szName, int iMax, int *pIndex/* = NULL*/ )
 {
 	int i;
 
@@ -1651,7 +1675,7 @@ IMPLEMENT_SAVERESTORE( CRpg, CBasePlayerWeapon );
 TYPEDESCRIPTION	CRpgRocket::m_SaveData[] = 
 {
 	DEFINE_FIELD( CRpgRocket, m_flIgniteTime, FIELD_TIME ),
-	DEFINE_FIELD( CRpgRocket, m_pLauncher, FIELD_CLASSPTR ),
+	DEFINE_FIELD( CRpgRocket, m_pLauncher, FIELD_EHANDLE ),
 };
 IMPLEMENT_SAVERESTORE( CRpgRocket, CGrenade );
 

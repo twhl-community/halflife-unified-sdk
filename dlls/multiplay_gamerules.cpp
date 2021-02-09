@@ -120,6 +120,11 @@ BOOL CHalfLifeMultiplay::ClientCommand( CBasePlayer *pPlayer, const char *pcmd )
 	return CGameRules::ClientCommand(pPlayer, pcmd);
 }
 
+void CHalfLifeMultiplay::ClientUserInfoChanged(CBasePlayer* pPlayer, char* infobuffer)
+{
+	pPlayer->SetPrefsFromUserinfo(infobuffer);
+}
+
 //=========================================================
 //=========================================================
 void CHalfLifeMultiplay::RefreshSkillData( void )
@@ -316,8 +321,14 @@ BOOL CHalfLifeMultiplay::FShouldSwitchWeapon( CBasePlayer *pPlayer, CBasePlayerI
 		return FALSE;
 	}
 
-	if (pPlayer->m_iAutoWepSwitch == 2
-		&& (pPlayer->m_afButtonLast & (IN_ATTACK | IN_ATTACK2)))
+	//Never switch
+	if (pPlayer->m_iAutoWepSwitch == 0)
+	{
+		return FALSE;
+	}
+
+	//Only switch if not attacking
+	if (pPlayer->m_iAutoWepSwitch == 2 && (pPlayer->m_afButtonLast & (IN_ATTACK | IN_ATTACK2)))
 	{
 		return FALSE;
 	}
@@ -720,8 +731,10 @@ void CHalfLifeMultiplay :: PlayerSpawn( CBasePlayer *pPlayer )
 	BOOL		addDefault;
 	CBaseEntity	*pWeaponEntity = NULL;
 
-	const int savedAutoWepSwitch = pPlayer->m_iAutoWepSwitch;
+	//Ensure the player switches to the Glock on spawn regardless of setting
+	const int originalAutoWepSwitch = pPlayer->m_iAutoWepSwitch;
 	pPlayer->m_iAutoWepSwitch = 1;
+
 	pPlayer->pev->weapons |= (1<<WEAPON_SUIT);
 	
 	addDefault = TRUE;
@@ -742,10 +755,10 @@ void CHalfLifeMultiplay :: PlayerSpawn( CBasePlayer *pPlayer )
 		pPlayer->GiveNamedItem( "weapon_9mmhandgun" );
 		pPlayer->GiveAmmo( 68, "9mm", _9MM_MAX_CARRY );// 4 full reloads
 	}
-
+	
 	InitItemsForPlayer(pPlayer);
 
-	pPlayer->m_iAutoWepSwitch = savedAutoWepSwitch;
+	pPlayer->m_iAutoWepSwitch = originalAutoWepSwitch;
 }
 
 //=========================================================
@@ -865,8 +878,8 @@ void CHalfLifeMultiplay::DeathNotice( CBasePlayer *pVictim, entvars_t *pKiller, 
 	int killer_index = 0;
 	
 	// Hack to fix name change
-	char *tau = "tau_cannon";
-	char *gluon = "gluon gun";
+	const char *tau = "tau_cannon";
+	const char *gluon = "gluon gun";
 
 	if ( pKiller->flags & FL_CLIENT )
 	{

@@ -32,16 +32,17 @@
 #ifdef CLIENT_DLL
 	// Spectator Mode
 	int		iJumpSpectator;
-#ifndef DISABLE_JUMP_ORIGIN
 	float	vJumpOrigin[3];
 	float	vJumpAngles[3];
-#else
-	extern float	vJumpOrigin[3];
-	extern float	vJumpAngles[3];
-#endif
 #endif
 
 static int pm_shared_initialized = 0;
+
+//Because physics code is now compiled as C++ it conflicts with the version in util.cpp
+//That version is actually considered to be Vector vec3_origin, so some compilers will fail to link it
+//Until the code for vectors is rewritten to allow for a single definition on client and server, this separate version is needed
+//TODO: fix
+vec3_t shared_vec3_origin = {0,0,0};
 
 #pragma warning( disable : 4305 )
 
@@ -836,7 +837,7 @@ int PM_FlyMove (void)
 		//  are blocked by floor and wall.
 		if (trace.allsolid)
 		{	// entity is trapped in another solid
-			VectorCopy (vec3_origin, pmove->velocity);
+			VectorCopy (shared_vec3_origin, pmove->velocity);
 			//Con_DPrintf("Trapped 4\n");
 			return 4;
 		}
@@ -886,7 +887,7 @@ int PM_FlyMove (void)
 		if (numplanes >= MAX_CLIP_PLANES)
 		{	// this shouldn't really happen
 			//  Stop our movement if so.
-			VectorCopy (vec3_origin, pmove->velocity);
+			VectorCopy (shared_vec3_origin, pmove->velocity);
 			//Con_DPrintf("Too many planes 4\n");
 
 			break;
@@ -947,7 +948,7 @@ int PM_FlyMove (void)
 				if (numplanes != 2)
 				{
 					//Con_Printf ("clip velocity, numplanes == %i\n",numplanes);
-					VectorCopy (vec3_origin, pmove->velocity);
+					VectorCopy (shared_vec3_origin, pmove->velocity);
 					//Con_DPrintf("Trapped 4\n");
 
 					break;
@@ -964,7 +965,7 @@ int PM_FlyMove (void)
 			if (DotProduct (pmove->velocity, primal_velocity) <= 0)
 			{
 				//Con_DPrintf("Back\n");
-				VectorCopy (vec3_origin, pmove->velocity);
+				VectorCopy (shared_vec3_origin, pmove->velocity);
 				break;
 			}
 		}
@@ -972,7 +973,7 @@ int PM_FlyMove (void)
 
 	if ( allFraction == 0 )
 	{
-		VectorCopy (vec3_origin, pmove->velocity);
+		VectorCopy (shared_vec3_origin, pmove->velocity);
 		//Con_DPrintf( "Don't stick\n" );
 	}
 
@@ -1777,7 +1778,7 @@ void PM_SpectatorMove (void)
 		{
 			VectorCopy( vJumpOrigin, pmove->origin );
 			VectorCopy( vJumpAngles, pmove->angles );
-			VectorCopy( vec3_origin, pmove->velocity );
+			VectorCopy(shared_vec3_origin, pmove->velocity );
 			iJumpSpectator	= 0;
 			return;
 		}
@@ -1787,7 +1788,7 @@ void PM_SpectatorMove (void)
 		speed = Length (pmove->velocity);
 		if (speed < 1)
 		{
-			VectorCopy (vec3_origin, pmove->velocity)
+			VectorCopy (shared_vec3_origin, pmove->velocity)
 		}
 		else
 		{
@@ -1871,7 +1872,7 @@ void PM_SpectatorMove (void)
 		VectorCopy( pmove->physents[target].origin, pmove->origin );
 
 		// no velocity
-		VectorCopy( vec3_origin, pmove->velocity );
+		VectorCopy(shared_vec3_origin, pmove->velocity );
 	}
 }
 
@@ -2312,8 +2313,8 @@ void PM_Physics_Toss()
 	// If on ground and not moving, return.
 	if ( pmove->onground != -1 )
 	{
-		if (VectorCompare(pmove->basevelocity, vec3_origin) &&
-		    VectorCompare(pmove->velocity, vec3_origin))
+		if (VectorCompare(pmove->basevelocity, shared_vec3_origin) &&
+		    VectorCompare(pmove->velocity, shared_vec3_origin))
 			return;
 	}
 
@@ -2342,7 +2343,7 @@ void PM_Physics_Toss()
 	{	
 		// entity is trapped in another solid
 		pmove->onground = trace.ent;
-		VectorCopy (vec3_origin, pmove->velocity);
+		VectorCopy (shared_vec3_origin, pmove->velocity);
 		return;
 	}
 	
@@ -2383,7 +2384,7 @@ void PM_Physics_Toss()
 		if (vel < (30 * 30) || (pmove->movetype != MOVETYPE_BOUNCE && pmove->movetype != MOVETYPE_BOUNCEMISSILE))
 		{
 			pmove->onground = trace.ent;
-			VectorCopy (vec3_origin, pmove->velocity);
+			VectorCopy (shared_vec3_origin, pmove->velocity);
 		}
 		else
 		{
@@ -2664,7 +2665,7 @@ void PM_CheckWaterJump (void)
 	{
 		vecStart[2] += pmove->player_maxs[ savehull ][2] - WJ_HEIGHT;
 		VectorMA( vecStart, 24, flatforward, vecEnd );
-		VectorMA( vec3_origin, -50, tr.plane.normal, pmove->movedir );
+		VectorMA(shared_vec3_origin, -50, tr.plane.normal, pmove->movedir );
 
 		tr = pmove->PM_PlayerTrace( vecStart, vecEnd, PM_NORMAL, -1 );
 		if ( tr.fraction == 1.0 )
