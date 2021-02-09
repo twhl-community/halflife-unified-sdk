@@ -1390,11 +1390,6 @@ void CHalfLifeMultiplay :: GoToIntermission( void )
 	m_iEndIntermissionButtonHit = FALSE;
 }
 
-void CHalfLifeMultiplay::ClientUserInfoChanged(CBasePlayer* pPlayer, char* infobuffer)
-{
-	pPlayer->SetPrefsFromUserinfo(infobuffer);
-}
-
 #define MAX_RULE_BUFFER 1024
 
 typedef struct mapcycle_item_s
