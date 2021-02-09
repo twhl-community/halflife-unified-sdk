@@ -37,6 +37,24 @@
     <Filter Include="Header Files\common">
       <UniqueIdentifier>{d9b0bb75-7f25-443b-8899-6b1a9e1dd63c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\dlls\rope">
+      <UniqueIdentifier>{8916e080-91ab-48f7-8f59-6cc9497efef1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\dlls\weapons">
+      <UniqueIdentifier>{77768f37-3938-4e92-afeb-8f4fabab6919}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\dlls\rope">
+      <UniqueIdentifier>{25bcec5f-fe9f-443f-b81c-ed38b2b511a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\dlls\weapons">
+      <UniqueIdentifier>{793b2d9a-ab13-4cf4-bf35-5f99e080e1b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\dlls\ctf">
+      <UniqueIdentifier>{72e9e954-e014-46f2-ab3e-6c562ff15fcf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\dlls\ctf">
+      <UniqueIdentifier>{a2593f6b-0415-4442-8232-2135c1979f29}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\dlls\aflock.cpp">
@@ -345,6 +363,204 @@
     <ClCompile Include="..\..\pm_shared\pm_shared.cpp">
       <Filter>Source Files\pm_shared</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\dlls\CRecruit.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\CDrillSergeant.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\hgrunt_ally.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\COFAllyMonster.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\COFSquadTalkMonster.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\rope\CElectrifiedWire.cpp">
+      <Filter>Source Files\dlls\rope</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\rope\CRope.cpp">
+      <Filter>Source Files\dlls\rope</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\rope\CRopeSample.cpp">
+      <Filter>Source Files\dlls\rope</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\rope\CRopeSegment.cpp">
+      <Filter>Source Files\dlls\rope</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\weapons\CEagle.cpp">
+      <Filter>Source Files\dlls\weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\weapons\CEagleLaser.cpp">
+      <Filter>Source Files\dlls\weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\weapons\CSniperRifle.cpp">
+      <Filter>Source Files\dlls\weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\hgrunt_torch.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\hgrunt_medic.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\zombie_soldier.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\otis.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\weapons\CPipewrench.cpp">
+      <Filter>Source Files\dlls\weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\weapons\CKnife.cpp">
+      <Filter>Source Files\dlls\weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\loader.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\zombie_barney.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\weapons\CShockRifle.cpp">
+      <Filter>Source Files\dlls\weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\weapons\CShockBeam.cpp">
+      <Filter>Source Files\dlls\weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\weapons\CSpore.cpp">
+      <Filter>Source Files\dlls\weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\weapons\CSporeLauncher.cpp">
+      <Filter>Source Files\dlls\weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\shockroach.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\shocktrooper.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\weapons\CDisplacerBall.cpp">
+      <Filter>Source Files\dlls\weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\weapons\CDisplacer.cpp">
+      <Filter>Source Files\dlls\weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\blowercannon.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\gonome.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\pitdrone.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\male_assassin.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\weapons\CM249.cpp">
+      <Filter>Source Files\dlls\weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\cleansuit_scientist.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\voltigore.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\baby_voltigore.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\weapons\CGrappleTip.cpp">
+      <Filter>Source Files\dlls\weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\weapons\CGrapple.cpp">
+      <Filter>Source Files\dlls\weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\ehandle.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\pitworm_up.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\op4mortar.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\blkop_apache.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\nuclearbomb.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\geneworm.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\func_tank_of.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\hfgrunt.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\skeleton.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\blkop_osprey.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\item_generic.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\ctf\ctfplay_gamerules.cpp">
+      <Filter>Source Files\dlls\ctf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\ctf\CItemCTF.cpp">
+      <Filter>Source Files\dlls\ctf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\ctf\CItemSpawnCTF.cpp">
+      <Filter>Source Files\dlls\ctf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\ctf\CItemAcceleratorCTF.cpp">
+      <Filter>Source Files\dlls\ctf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\ctf\CTFSpawn.cpp">
+      <Filter>Source Files\dlls\ctf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\ctf\CTFGoalBase.cpp">
+      <Filter>Source Files\dlls\ctf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\ctf\CTFGoal.cpp">
+      <Filter>Source Files\dlls\ctf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\ctf\CTFGoalFlag.cpp">
+      <Filter>Source Files\dlls\ctf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\ctf\CItemBackpackCTF.cpp">
+      <Filter>Source Files\dlls\ctf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\ctf\CItemLongJumpCTF.cpp">
+      <Filter>Source Files\dlls\ctf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\ctf\CItemPortableHEVCTF.cpp">
+      <Filter>Source Files\dlls\ctf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\ctf\CItemRegenerationCTF.cpp">
+      <Filter>Source Files\dlls\ctf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\ctf\CTFDetect.cpp">
+      <Filter>Source Files\dlls\ctf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\ctf\CHUDIconTrigger.cpp">
+      <Filter>Source Files\dlls\ctf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\weapons\CPenguin.cpp">
+      <Filter>Source Files\dlls\weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\penguin_grenade.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\coopplay_gamerules.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\dlls\doors.h">
@@ -484,6 +700,123 @@
     </ClInclude>
     <ClInclude Include="..\..\common\Platform.h">
       <Filter>Header Files\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\world.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\COFAllyMonster.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\COFSquadTalkMonster.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\rope\CElectrifiedWire.h">
+      <Filter>Header Files\dlls\rope</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\rope\CRope.h">
+      <Filter>Header Files\dlls\rope</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\rope\CRopeSample.h">
+      <Filter>Header Files\dlls\rope</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\rope\CRopeSegment.h">
+      <Filter>Header Files\dlls\rope</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\weapons\CEagle.h">
+      <Filter>Header Files\dlls\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\weapons\CEagleLaser.h">
+      <Filter>Header Files\dlls\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\weapons\CSniperRifle.h">
+      <Filter>Header Files\dlls\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\weapons\CPipewrench.h">
+      <Filter>Header Files\dlls\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\weapons\CKnife.h">
+      <Filter>Header Files\dlls\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\weapons\CShockBeam.h">
+      <Filter>Header Files\dlls\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\weapons\CShockRifle.h">
+      <Filter>Header Files\dlls\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\weapons\CSpore.h">
+      <Filter>Header Files\dlls\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\weapons\CSporeLauncher.h">
+      <Filter>Header Files\dlls\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\weapons\CDisplacerBall.h">
+      <Filter>Header Files\dlls\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\weapons\CDisplacer.h">
+      <Filter>Header Files\dlls\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\weapons\CM249.h">
+      <Filter>Header Files\dlls\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\weapons\CGrapple.h">
+      <Filter>Header Files\dlls\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\weapons\CGrappleTip.h">
+      <Filter>Header Files\dlls\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\ctf\CItemAcceleratorCTF.h">
+      <Filter>Header Files\dlls\ctf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\ctf\CItemBackpackCTF.h">
+      <Filter>Header Files\dlls\ctf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\ctf\CItemCTF.h">
+      <Filter>Header Files\dlls\ctf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\ctf\CItemLongJumpCTF.h">
+      <Filter>Header Files\dlls\ctf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\ctf\CItemPortableHEVCTF.h">
+      <Filter>Header Files\dlls\ctf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\ctf\CItemRegenerationCTF.h">
+      <Filter>Header Files\dlls\ctf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\ctf\CTFGoal.h">
+      <Filter>Header Files\dlls\ctf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\ctf\CTFGoalBase.h">
+      <Filter>Header Files\dlls\ctf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\ctf\CTFGoalFlag.h">
+      <Filter>Header Files\dlls\ctf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\ctf\ctfplay_gamerules.h">
+      <Filter>Header Files\dlls\ctf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\ctf\CTFDefs.h">
+      <Filter>Header Files\dlls\ctf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\ctf\CItemSpawnCTF.h">
+      <Filter>Header Files\dlls\ctf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\ctf\CTFSpawn.h">
+      <Filter>Header Files\dlls\ctf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\ctf\CTFDetect.h">
+      <Filter>Header Files\dlls\ctf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\ctf\CHUDIconTrigger.h">
+      <Filter>Header Files\dlls\ctf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\game.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\weapons\CPenguin.h">
+      <Filter>Header Files\dlls\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\coopplay_gamerules.h">
+      <Filter>Header Files\dlls</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

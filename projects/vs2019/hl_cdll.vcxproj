@@ -42,13 +42,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(Configuration)\$(ProjectName)\</OutDir>
+    <OutDir>C:\Program Files (x86)\Steam\steamapps\common\Half-Life\half-life-op4\cl_dlls\</OutDir>
     <TargetName>client</TargetName>
     <IntDir>$(Configuration)\$(ProjectName)\int\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(Configuration)\$(ProjectName)\</OutDir>
+    <OutDir>C:\Program Files (x86)\Steam\steamapps\common\Half-Life\half-life-op4\cl_dlls\</OutDir>
     <TargetName>client</TargetName>
     <IntDir>$(Configuration)\$(ProjectName)\int\</IntDir>
   </PropertyGroup>
@@ -58,7 +58,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_DEBUG;_WINDOWS;CLIENT_DLL;CLIENT_WEAPONS;HL_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>OPFOR;WIN32;_CRT_SECURE_NO_WARNINGS;_DEBUG;_WINDOWS;CLIENT_DLL;CLIENT_WEAPONS;HL_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <AdditionalIncludeDirectories>..\..\dlls;..\..\cl_dll;..\..\public;..\..\common;..\..\pm_shared;..\..\engine;..\..\utils\vgui\include;..\..\game_shared;..\..\external;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
@@ -85,7 +85,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;NDEBUG;_WINDOWS;CLIENT_DLL;CLIENT_WEAPONS;HL_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>OPFOR;WIN32;_CRT_SECURE_NO_WARNINGS;NDEBUG;_WINDOWS;CLIENT_DLL;CLIENT_WEAPONS;HL_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <AdditionalIncludeDirectories>..\..\dlls;..\..\cl_dll;..\..\public;..\..\common;..\..\pm_shared;..\..\engine;..\..\utils\vgui\include;..\..\game_shared;..\..\external;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
@@ -130,7 +130,9 @@
     <ClCompile Include="..\..\cl_dll\hud.cpp" />
     <ClCompile Include="..\..\cl_dll\hud_bench.cpp" />
     <ClCompile Include="..\..\cl_dll\hud_benchtrace.cpp" />
+    <ClCompile Include="..\..\cl_dll\hud_flagicons.cpp" />
     <ClCompile Include="..\..\cl_dll\hud_msg.cpp" />
+    <ClCompile Include="..\..\cl_dll\hud_playerbrowse.cpp" />
     <ClCompile Include="..\..\cl_dll\hud_redraw.cpp" />
     <ClCompile Include="..\..\cl_dll\hud_servers.cpp" />
     <ClCompile Include="..\..\cl_dll\hud_spectator.cpp" />
@@ -142,6 +144,7 @@
     <ClCompile Include="..\..\cl_dll\menu.cpp" />
     <ClCompile Include="..\..\cl_dll\message.cpp" />
     <ClCompile Include="..\..\cl_dll\saytext.cpp" />
+    <ClCompile Include="..\..\cl_dll\scoreboard.cpp" />
     <ClCompile Include="..\..\cl_dll\statusbar.cpp" />
     <ClCompile Include="..\..\cl_dll\status_icons.cpp" />
     <ClCompile Include="..\..\cl_dll\StudioModelRenderer.cpp" />
@@ -159,6 +162,7 @@
     <ClCompile Include="..\..\cl_dll\vgui_ScorePanel.cpp" />
     <ClCompile Include="..\..\cl_dll\vgui_ServerBrowser.cpp" />
     <ClCompile Include="..\..\cl_dll\vgui_SpectatorPanel.cpp" />
+    <ClCompile Include="..\..\cl_dll\vgui_StatsMenuPanel.cpp" />
     <ClCompile Include="..\..\cl_dll\vgui_TeamFortressViewport.cpp" />
     <ClCompile Include="..\..\cl_dll\vgui_teammenu.cpp" />
     <ClCompile Include="..\..\cl_dll\view.cpp" />
@@ -167,6 +171,7 @@
     <ClCompile Include="..\..\dlls\crossbow.cpp" />
     <ClCompile Include="..\..\dlls\crowbar.cpp" />
     <ClCompile Include="..\..\dlls\egon.cpp" />
+    <ClCompile Include="..\..\dlls\ehandle.cpp" />
     <ClCompile Include="..\..\dlls\gauss.cpp" />
     <ClCompile Include="..\..\dlls\handgrenade.cpp" />
     <ClCompile Include="..\..\dlls\hornetgun.cpp" />
@@ -177,6 +182,17 @@
     <ClCompile Include="..\..\dlls\shotgun.cpp" />
     <ClCompile Include="..\..\dlls\squeakgrenade.cpp" />
     <ClCompile Include="..\..\dlls\tripmine.cpp" />
+    <ClCompile Include="..\..\dlls\weapons\CDisplacer.cpp" />
+    <ClCompile Include="..\..\dlls\weapons\CEagle.cpp" />
+    <ClCompile Include="..\..\dlls\weapons\CGrapple.cpp" />
+    <ClCompile Include="..\..\dlls\weapons\CGrappleTip.cpp" />
+    <ClCompile Include="..\..\dlls\weapons\CKnife.cpp" />
+    <ClCompile Include="..\..\dlls\weapons\CM249.cpp" />
+    <ClCompile Include="..\..\dlls\weapons\CPenguin.cpp" />
+    <ClCompile Include="..\..\dlls\weapons\CPipewrench.cpp" />
+    <ClCompile Include="..\..\dlls\weapons\CShockRifle.cpp" />
+    <ClCompile Include="..\..\dlls\weapons\CSniperRifle.cpp" />
+    <ClCompile Include="..\..\dlls\weapons\CSporeLauncher.cpp" />
     <ClCompile Include="..\..\dlls\wpn_shared\hl_wpn_glock.cpp" />
     <ClCompile Include="..\..\game_shared\vgui_checkbutton2.cpp" />
     <ClCompile Include="..\..\game_shared\vgui_grid.cpp" />
@@ -219,10 +235,22 @@
     <ClInclude Include="..\..\cl_dll\vgui_ScorePanel.h" />
     <ClInclude Include="..\..\cl_dll\vgui_ServerBrowser.h" />
     <ClInclude Include="..\..\cl_dll\vgui_SpectatorPanel.h" />
+    <ClInclude Include="..\..\cl_dll\vgui_StatsMenuPanel.h" />
     <ClInclude Include="..\..\cl_dll\view.h" />
     <ClInclude Include="..\..\cl_dll\wrect.h" />
     <ClInclude Include="..\..\common\parsemsg.h" />
     <ClInclude Include="..\..\common\Platform.h" />
+    <ClInclude Include="..\..\dlls\weapons\CDisplacer.h" />
+    <ClInclude Include="..\..\dlls\weapons\CEagle.h" />
+    <ClInclude Include="..\..\dlls\weapons\CGrapple.h" />
+    <ClInclude Include="..\..\dlls\weapons\CGrappleTip.h" />
+    <ClInclude Include="..\..\dlls\weapons\CKnife.h" />
+    <ClInclude Include="..\..\dlls\weapons\CM249.h" />
+    <ClInclude Include="..\..\dlls\weapons\CPenguin.h" />
+    <ClInclude Include="..\..\dlls\weapons\CPipewrench.h" />
+    <ClInclude Include="..\..\dlls\weapons\CShockRifle.h" />
+    <ClInclude Include="..\..\dlls\weapons\CSniperRifle.h" />
+    <ClInclude Include="..\..\dlls\weapons\CSporeLauncher.h" />
     <ClInclude Include="..\..\game_shared\vgui_scrollbar2.h" />
     <ClInclude Include="..\..\game_shared\vgui_slider2.h" />
     <ClInclude Include="..\..\game_shared\voice_banmgr.h" />
