@@ -990,7 +990,7 @@ void COFMedicAlly :: HandleAnimEvent( MonsterEvent_t *pEvent )
 {
 	Vector	vecShootDir;
 	Vector	vecShootOrigin;
-	//TODO: add remaining torch grunt events
+
 	switch( pEvent->event )
 	{
 		case MEDIC_AE_DROP_GUN:
@@ -3102,8 +3102,10 @@ void COFMedicAlly::HealerActivate( CBaseMonster* pTarget )
 		if( pMonster )
 			pMonster->m_hWaitMedic = nullptr;
 
-		//TODO: this makes little sense given the null check above
-		pMonster->m_hWaitMedic = this;
+		//TODO: could just change the type of pTarget since this is the only type passed in
+		auto pSquadTarget = static_cast<COFSquadTalkMonster*>(pTarget);
+
+		pSquadTarget->m_hWaitMedic = this;
 
 		m_hTargetEnt = pTarget;
 
