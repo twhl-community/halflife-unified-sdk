@@ -183,7 +183,6 @@ void CSporeLauncher::PrimaryAttack()
 			gpGlobals->v_right * 8 + 
 			gpGlobals->v_up * -8;
 
-		//TODO: is this correct?
 		vecAngles = vecAngles + m_pPlayer->GetAutoaimVectorFromPoint( vecSrc, AUTOAIM_10DEGREES );
 
 		CSpore* pSpore = CSpore::CreateSpore( 
