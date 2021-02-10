@@ -135,7 +135,6 @@ void CShockRifle::Holster( int skiplocal )
 
 	SendWeaponAnim( SHOCKRIFLE_HOLSTER );
 
-	//TODO: unnecessary if the shock rifle can regen while inactive. - Solokiller
 	if( !m_pPlayer->m_rgAmmo[ m_iPrimaryAmmoType ] )
 	{
 		m_pPlayer->m_rgAmmo[ m_iPrimaryAmmoType ] = 1;
@@ -273,16 +272,6 @@ void CShockRifle::Reload()
 {
 	RechargeAmmo( true );
 }
-
-/*
-void CShockRifle::WeaponHolsterPreFrame()
-{
-	BaseClass::WeaponHolsterPreFrame();
-
-	//Silently recharge in the background. - Solokiller
-	RechargeAmmo( false );
-}
-*/
 
 void CShockRifle::ItemPostFrame()
 {

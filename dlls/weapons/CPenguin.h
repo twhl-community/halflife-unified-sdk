@@ -55,7 +55,6 @@ public:
 
 	int GetItemInfo(ItemInfo* p) override;
 
-	//TODO: requires oldweapons cvar
 	BOOL UseDecrement() override
 	{
 #if defined( CLIENT_WEAPONS )

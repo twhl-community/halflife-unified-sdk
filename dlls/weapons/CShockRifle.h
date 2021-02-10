@@ -59,9 +59,6 @@ public:
 
 	void Reload() override;
 
-	//TODO: implement later
-	//void WeaponHolsterPreFrame() override;
-
 	void ItemPostFrame() override;
 
 	int iItemSlot() override;

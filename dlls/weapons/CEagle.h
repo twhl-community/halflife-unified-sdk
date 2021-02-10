@@ -69,7 +69,6 @@ public:
 
 	void IncrementAmmo(CBasePlayer* pPlayer) override;
 
-	//TODO: requires oldweapons cvar
 	BOOL UseDecrement() override
 	{
 #if defined( CLIENT_WEAPONS )
