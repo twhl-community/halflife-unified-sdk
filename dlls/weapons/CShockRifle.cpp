@@ -82,13 +82,6 @@ BOOL CShockRifle::AddToPlayer( CBasePlayer* pPlayer )
 {
 	if( BaseClass::AddToPlayer( pPlayer ) )
 	{
-		//TODO: this gives you full ammo on pickup
-		/*
-#ifndef CLIENT_DLL
-		pPlayer->m_rgAmmo[ m_iPrimaryAmmoType ] = SHOCKRIFLE_DEFAULT_GIVE;
-#endif
-		*/
-
 		MESSAGE_BEGIN( MSG_ONE, gmsgWeapPickup, nullptr, pPlayer->edict() );
 			WRITE_BYTE( m_iId );
 		MESSAGE_END();
