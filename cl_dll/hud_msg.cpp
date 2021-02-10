@@ -21,6 +21,9 @@
 #include "parsemsg.h"
 #include "r_efx.h"
 
+#include "vgui_TeamFortressViewport.h"
+#include "vgui_ScorePanel.h"
+
 #include "particleman.h"
 extern IParticleMan *g_pParticleMan;
 
@@ -103,7 +106,16 @@ int CHud :: MsgFunc_GameMode(const char *pszName, int iSize, void *pbuf )
 	BEGIN_READ( pbuf, iSize );
 	m_Teamplay = giTeamplay = READ_BYTE();
 
-	//TODO: create scoreboard
+	if (gViewPort && !gViewPort->m_pScoreBoard)
+	{
+		gViewPort->CreateScoreBoard();
+		gViewPort->m_pScoreBoard->Initialize();
+
+		if (!gHUD.m_iIntermission)
+		{
+			gViewPort->HideScoreBoard();
+		}
+	}
 
 	return 1;
 }
