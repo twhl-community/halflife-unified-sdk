@@ -793,8 +793,7 @@ public:
 	int Restore( CRestore &restore ) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
-	//TODO: verify that this works properly without crashing
-	int ObjectCaps() override { return 16; }
+	int ObjectCaps() override { return FCAP_CONTINUOUS_USE; }
 
 	void KeyValue( KeyValueData* pkvd ) override;
 
