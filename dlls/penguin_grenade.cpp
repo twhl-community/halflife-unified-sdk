@@ -122,7 +122,7 @@ void CPenguinGrenade::SuperBounceTouch(CBaseEntity* pOther)
 	{
 		// attack!
 
-		bool v13 = true;
+		bool hurtTarget = true;
 
 		if (g_pGameRules->IsMultiplayer())
 		{
@@ -131,16 +131,16 @@ void CPenguinGrenade::SuperBounceTouch(CBaseEntity* pOther)
 
 			auto ownerPlayer = owner->IsPlayer() ? owner : nullptr;
 
-			v13 = true;
+			hurtTarget = true;
 
 			if (pOther->IsPlayer())
 			{
 				if (ownerPlayer)
 				{
-					v13 = false;
+					hurtTarget = false;
 					if (ownerPlayer != pOther)
 					{
-						v13 = g_pGameRules->FPlayerCanTakeDamage(static_cast<CBasePlayer*>(pOther), ownerPlayer) != 0;
+						hurtTarget = g_pGameRules->FPlayerCanTakeDamage(static_cast<CBasePlayer*>(pOther), ownerPlayer) != 0;
 					}
 				}
 			}
@@ -161,7 +161,7 @@ void CPenguinGrenade::SuperBounceTouch(CBaseEntity* pOther)
 					ApplyMultiDamage(pev, pev);
 
 				// add more explosion damage
-				if (v13)
+				if (hurtTarget)
 					pev->dmg += gSkillData.plrDmgHandGrenade;
 				else
 					pev->dmg += gSkillData.plrDmgHandGrenade / 5.0;
