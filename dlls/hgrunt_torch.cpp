@@ -1335,26 +1335,25 @@ void COFTorchAlly :: PainSound ( void )
 //=========================================================
 void COFTorchAlly :: DeathSound ( void )
 {
-	//TODO: these sounds don't exist, the gr_ prefix is wrong
 	switch ( RANDOM_LONG(0,5) )
 	{
 	case 0:	
-		EMIT_SOUND( ENT(pev), CHAN_VOICE, "hgrunt/gr_death1.wav", 1, ATTN_IDLE );	
+		EMIT_SOUND( ENT(pev), CHAN_VOICE, "fgrunt/death1.wav", 1, ATTN_IDLE );	
 		break;
 	case 1:
-		EMIT_SOUND( ENT(pev), CHAN_VOICE, "hgrunt/gr_death2.wav", 1, ATTN_IDLE );	
+		EMIT_SOUND( ENT(pev), CHAN_VOICE, "fgrunt/death2.wav", 1, ATTN_IDLE );	
 		break;
 	case 2:
-		EMIT_SOUND( ENT(pev), CHAN_VOICE, "hgrunt/gr_death3.wav", 1, ATTN_IDLE );	
+		EMIT_SOUND( ENT(pev), CHAN_VOICE, "fgrunt/death3.wav", 1, ATTN_IDLE );	
 		break;
 	case 3:
-		EMIT_SOUND( ENT( pev ), CHAN_VOICE, "hgrunt/gr_death4.wav", 1, ATTN_IDLE );
+		EMIT_SOUND( ENT( pev ), CHAN_VOICE, "fgrunt/death4.wav", 1, ATTN_IDLE );
 		break;
 	case 4:
-		EMIT_SOUND( ENT( pev ), CHAN_VOICE, "hgrunt/gr_death5.wav", 1, ATTN_IDLE );
+		EMIT_SOUND( ENT( pev ), CHAN_VOICE, "fgrunt/death5.wav", 1, ATTN_IDLE );
 		break;
 	case 5:
-		EMIT_SOUND( ENT( pev ), CHAN_VOICE, "hgrunt/gr_death6.wav", 1, ATTN_IDLE );
+		EMIT_SOUND( ENT( pev ), CHAN_VOICE, "fgrunt/death6.wav", 1, ATTN_IDLE );
 		break;
 	}
 }
