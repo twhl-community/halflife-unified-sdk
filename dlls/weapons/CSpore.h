@@ -74,8 +74,7 @@ private:
 	bool m_bPuked;
 	BOOL m_bIsAI;
 
-	//TODO: should be an EHANDLE
-	CSprite* m_pSprite;
+	EHANDLE m_hSprite;
 };
 
 #endif

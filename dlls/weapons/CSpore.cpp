@@ -30,7 +30,7 @@ TYPEDESCRIPTION	CSpore::m_SaveData[] =
 	DEFINE_FIELD(CSpore, m_SporeType, FIELD_INTEGER),
 	DEFINE_FIELD(CSpore, m_flIgniteTime, FIELD_TIME),
 	DEFINE_FIELD(CSpore, m_bIsAI, FIELD_BOOLEAN),
-	DEFINE_FIELD(CSpore, m_pSprite, FIELD_CLASSPTR)
+	DEFINE_FIELD(CSpore, m_hSprite, FIELD_EHANDLE)
 };
 
 IMPLEMENT_SAVERESTORE( CSpore, CSpore::BaseClass );
@@ -107,13 +107,13 @@ void CSpore::Spawn()
 
 	pev->nextthink = gpGlobals->time + 0.01;
 
-	m_pSprite = CSprite::SpriteCreate( "sprites/glow01.spr", pev->origin, false );
+	auto sprite = CSprite::SpriteCreate( "sprites/glow01.spr", pev->origin, false );
 
-	m_pSprite->SetTransparency( kRenderTransAdd, 180, 180, 40, 100, kRenderFxDistort );
+	m_hSprite = sprite;
 
-	m_pSprite->SetScale( 0.8 );
-
-	m_pSprite->SetAttachment( edict(), 0 );
+	sprite->SetTransparency( kRenderTransAdd, 180, 180, 40, 100, kRenderFxDistort );
+	sprite->SetScale( 0.8 );
+	sprite->SetAttachment( edict(), 0 );
 
 	m_fRegisteredSound = false;
 
@@ -130,10 +130,10 @@ void CSpore::IgniteThink()
 	SetThink( nullptr );
 	SetTouch( nullptr );
 
-	if( m_pSprite )
+	if(m_hSprite)
 	{
-		UTIL_Remove( m_pSprite );
-		m_pSprite = nullptr;
+		UTIL_Remove(m_hSprite);
+		m_hSprite = nullptr;
 	}
 
 	EMIT_SOUND( edict(), CHAN_WEAPON, "weapons/splauncher_impact.wav", VOL_NORM, ATTN_NORM );
