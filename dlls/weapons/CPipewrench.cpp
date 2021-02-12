@@ -445,37 +445,41 @@ void CPipewrench::WeaponIdle()
 	if ( m_flTimeWeaponIdle > UTIL_WeaponTimeBase() )
 		return;
 
-	if ( m_iSwingMode != SWING_NONE )
+	if (m_iSwingMode == SWING_START_BIG)
 	{
-		if ( m_iSwingMode == SWING_START_BIG )
-		{
-			BigSwing();
-			m_iSwingMode = SWING_DOING_BIG;
-		}
-		else
-			m_iSwingMode = SWING_NONE;
-	}
+		const float earliestSwingTime = m_flBigSwingStart + 1;
 
-	if ( m_iSwingMode == SWING_NONE )
+		if (gpGlobals->time > earliestSwingTime)
+		{
+			m_iSwingMode = SWING_DOING_BIG;
+
+			m_flTimeWeaponIdle = earliestSwingTime + 1.2;
+			SetThink(&CPipewrench::BigSwing);
+			pev->nextthink = gpGlobals->time + 0.1;
+		}
+	}
+	else
 	{
+		m_iSwingMode = SWING_NONE;
 		int iAnim;
 		float flRand = UTIL_SharedRandomFloat( m_pPlayer->random_seed, 0.0, 1.0 );
 
-		if ( flRand <= 0.3 + 0 * 0.75 )
-		{
-			iAnim = PIPEWRENCH_IDLE1;
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 2.0;
-		}
-		else if ( flRand <= 0.6 + 0 * 0.875 )
-		{
-			iAnim = PIPEWRENCH_IDLE2;
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 3.0;
-		}
-		else
+		if (flRand <= 0.5)
 		{
 			iAnim = PIPEWRENCH_IDLE3;
 			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 3.0;
 		}
+		else if (flRand <= 0.9)
+		{
+			iAnim = PIPEWRENCH_IDLE1;
+			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 2.0;
+		}
+		else
+		{
+			iAnim = PIPEWRENCH_IDLE2;
+			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 3.0;
+		}
+
 		SendWeaponAnim( iAnim );
 	}
 }
