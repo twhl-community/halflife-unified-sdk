@@ -1773,7 +1773,6 @@ void EV_Pipewrench( event_args_t *args )
 	}
 
 	//TODO: hits aren't handled here because the server is already doing those
-	//TODO: vanilla Op4 always plays miss sounds, causing duplication
 
 	//Play Swing sound
 	if (iBigSwing)
@@ -1785,9 +1784,9 @@ void EV_Pipewrench( event_args_t *args )
 		else
 		{
 			gEngfuncs.pEventAPI->EV_WeaponAnimation(PIPEWRENCH_BIG_SWING_MISS, 0);
-
-			gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/pwrench_big_miss.wav", 1, ATTN_NORM, 0, PITCH_NORM);
 		}
+
+		gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/pwrench_big_miss.wav", 1, ATTN_NORM, 0, PITCH_NORM);
 	}
 	else
 	{
