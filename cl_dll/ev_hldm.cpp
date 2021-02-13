@@ -1772,14 +1772,12 @@ void EV_Pipewrench( event_args_t *args )
 		return;
 	}
 
-	//TODO: hits aren't handled here because the server is already doing those
-
 	//Play Swing sound
 	if (iBigSwing)
 	{
 		if (hitSomething)
 		{
-			//gEngfuncs.pEventAPI->EV_WeaponAnimation(PIPEWRENCH_BIG_SWING_HIT, 0);
+			gEngfuncs.pEventAPI->EV_WeaponAnimation(PIPEWRENCH_BIG_SWING_HIT, 0);
 		}
 		else
 		{
@@ -1792,7 +1790,6 @@ void EV_Pipewrench( event_args_t *args )
 	{
 		if (hitSomething)
 		{
-			/*
 			switch (g_iClub % 3)
 			{
 			case 0:
@@ -1802,7 +1799,6 @@ void EV_Pipewrench( event_args_t *args )
 			case 2:
 				gEngfuncs.pEventAPI->EV_WeaponAnimation(PIPEWRENCH_ATTACK3HIT, 0); break;
 			}
-			*/
 		}
 		else
 		{
