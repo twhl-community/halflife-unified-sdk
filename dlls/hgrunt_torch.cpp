@@ -333,8 +333,7 @@ void COFTorchAlly :: GibMonster ( void )
 	Vector	vecGunPos;
 	Vector	vecGunAngles;
 
-	//TODO: probably the wrong logic, but it was in the original
-	if ( GetBodygroup( TorchAllyBodygroup::Weapons ) != TorchAllyWeapon::DesertEagle )
+	if ( GetBodygroup( TorchAllyBodygroup::Weapons ) == TorchAllyWeapon::DesertEagle )
 	{// throw a gun if the grunt has one
 		GetAttachment( 0, vecGunPos, vecGunAngles );
 		
