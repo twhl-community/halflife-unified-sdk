@@ -452,13 +452,11 @@ void CPipewrench::WeaponIdle()
 
 	if (m_iSwingMode == SWING_START_BIG)
 	{
-		const float earliestSwingTime = m_flBigSwingStart + 1;
-
-		if (gpGlobals->time > earliestSwingTime)
+		if (gpGlobals->time > m_flBigSwingStart + 1)
 		{
 			m_iSwingMode = SWING_DOING_BIG;
 
-			m_flTimeWeaponIdle = earliestSwingTime + 1.2;
+			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 1.2;
 			SetThink(&CPipewrench::BigSwing);
 			pev->nextthink = gpGlobals->time + 0.1;
 		}
