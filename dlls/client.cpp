@@ -186,6 +186,13 @@ void ClientKill( edict_t *pEntity )
 
 	CBasePlayer *pl = (CBasePlayer*) CBasePlayer::Instance( pev );
 
+	//Only check for teams in CTF gamemode
+	if ((pl->pev->flags & FL_SPECTATOR)
+		|| (g_pGameRules->IsCTF() && pl->m_iTeamNum == CTFTeam::None))
+	{
+		return;
+	}
+
 	if ( pl->m_fNextSuicideTime > gpGlobals->time )
 		return;  // prevent suiciding too ofter
 
