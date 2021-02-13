@@ -63,7 +63,7 @@ public:
 	void PrimaryAttack() override;
 	void SecondaryAttack() override;
 	bool Swing( const bool bFirst );
-	void BigSwing();
+	void EXPORT BigSwing();
 	BOOL Deploy() override;
 	void Holster( int skiplocal = 0 ) override;
 	void WeaponIdle() override;
