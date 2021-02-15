@@ -5390,6 +5390,12 @@ BOOL CBasePlayer::Menu_Team_Input( int inp )
 
 BOOL CBasePlayer::Menu_Char_Input( int inp )
 {
+	if (m_iNewTeamNum == CTFTeam::None)
+	{
+		ClientPrint(pev, HUD_PRINTCONSOLE, "Can't change character; not in a team.\n");
+		return false;
+	}
+
 	const char* pszCharacterType;
 
 	if( inp == 7 )
