@@ -583,6 +583,8 @@ void ClientCommand( edict_t *pEntity )
 	{
 		GetClassPtr((CBasePlayer *)pev)->SelectLastItem();
 	}
+	//In Opposing Force this is handled only by the CTF gamerules
+#if false
 	else if ( FStrEq( pcmd, "spectate" ) )	// clients wants to become a spectator
 	{
 			// always allow proxies to become a spectator
@@ -608,6 +610,7 @@ void ClientCommand( edict_t *pEntity )
 		if ( pPlayer->IsObserver() )
 			pPlayer->Observer_SetMode( atoi( CMD_ARGV(1) ) );
 	}
+#endif
 	else if ( FStrEq(pcmd, "closemenus" ) )
 	{
 		// just ignore it
