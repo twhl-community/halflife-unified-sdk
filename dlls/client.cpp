@@ -1282,6 +1282,12 @@ int AddToFullPack( struct entity_state_s *state, int e, edict_t *ent, edict_t *h
 	state->skin       = ent->v.skin;
 	state->effects    = ent->v.effects;
 
+	//Remove the night vision illumination effect so other players don't see it
+	if (player && host != ent)
+	{
+		state->effects &= ~EF_BRIGHTLIGHT;
+	}
+
 	// This non-player entity is being moved by the game .dll and not the physics simulation system
 	//  make sure that we interpolate it's position on the client if it moves
 	if ( !player &&
