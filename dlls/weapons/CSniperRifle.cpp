@@ -88,8 +88,10 @@ void CSniperRifle::Holster( int skiplocal )
 {
 	m_fInReload = false;// cancel any reload in progress.
 
-	if( m_bInZoom )
+	if (m_pPlayer->m_iFOV != 0)
+	{
 		SecondaryAttack();
+	}
 
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.25;
 
@@ -169,8 +171,6 @@ void CSniperRifle::SecondaryAttack()
 {
 	EMIT_SOUND_DYN( m_pPlayer->edict(), CHAN_ITEM, "weapons/sniper_zoom.wav",  VOL_NORM, ATTN_NORM, 0, PITCH_NORM );
 
-	m_bInZoom = !m_bInZoom;
-
 	ToggleZoom();
 
 	//TODO: this doesn't really make sense
@@ -183,7 +183,7 @@ void CSniperRifle::Reload()
 {
 	if( m_pPlayer->ammo_762 > 0 )
 	{
-		if( m_bInZoom )
+		if( m_pPlayer->m_iFOV != 0)
 		{
 			ToggleZoom();
 		}
@@ -241,19 +241,13 @@ void CSniperRifle::IncrementAmmo(CBasePlayer* pPlayer)
 
 void CSniperRifle::ToggleZoom()
 {
-	if( m_pPlayer->pev->fov == 0 )
+	if( m_pPlayer->m_iFOV == 0 )
 	{
-		m_pPlayer->pev->fov = 18;
 		m_pPlayer->m_iFOV = 18;
-
-		m_bInZoom = true;
 	}
 	else
 	{
-		m_pPlayer->pev->fov = 0;
 		m_pPlayer->m_iFOV = 0;
-
-		m_bInZoom = false;
 	}
 }
 
