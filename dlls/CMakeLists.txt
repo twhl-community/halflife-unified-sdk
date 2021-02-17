@@ -131,6 +131,8 @@ target_sources(hl PRIVATE
 	triggers.cpp
 	tripmine.cpp
 	turret.cpp
+	UserMessages.cpp
+	UserMessages.h
 	util.cpp
 	util.h
 	vector.h
