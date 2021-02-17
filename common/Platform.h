@@ -59,6 +59,7 @@
 #define strnicmp _strnicmp
 #define itoa _itoa
 #define strupr _strupr
+#define strdup _strdup
 
 #define DLLEXPORT __declspec( dllexport )
 
