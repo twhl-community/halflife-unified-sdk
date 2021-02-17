@@ -475,7 +475,6 @@ void ResetGlobalState( void )
 LINK_ENTITY_TO_CLASS( worldspawn, CWorld );
 
 extern DLL_GLOBAL BOOL		g_fGameOver;
-float g_flWeaponCheat; 
 
 void CWorld :: Spawn( void )
 {
@@ -487,8 +486,6 @@ void CWorld :: Spawn( void )
 	{
 		ResetTeamScores();
 	}
-
-	g_flWeaponCheat = CVAR_GET_FLOAT( "sv_cheats" );  // Is the impulse 101 command allowed?
 }
 
 void CWorld :: Precache( void )
