@@ -45,10 +45,6 @@ extern int gmsgOldWeapon;
 
 extern int g_teamplay;
 
-#define ITEM_RESPAWN_TIME	30
-#define WEAPON_RESPAWN_TIME	20
-#define AMMO_RESPAWN_TIME	20
-
 float g_flIntermissionStartTime = 0;
 
 CVoiceGameMgr	g_VoiceGameMgr;
@@ -1134,10 +1130,6 @@ float CHalfLifeMultiplay :: FlWeaponRespawnTime( CBasePlayerItem *pWeapon )
 
 	return gpGlobals->time + WEAPON_RESPAWN_TIME;
 }
-
-// when we are within this close to running out of entities,  items 
-// marked with the ITEM_FLAG_LIMITINWORLD will delay their respawn
-#define ENTITY_INTOLERANCE	100
 
 //=========================================================
 // FlWeaponRespawnTime - Returns 0 if the weapon can respawn 

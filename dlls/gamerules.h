@@ -57,6 +57,14 @@ enum
 	GR_NEUTRAL,
 };
 
+#define ITEM_RESPAWN_TIME	30
+#define WEAPON_RESPAWN_TIME	20
+#define AMMO_RESPAWN_TIME	20
+
+// when we are within this close to running out of entities,  items 
+// marked with the ITEM_FLAG_LIMITINWORLD will delay their respawn
+#define ENTITY_INTOLERANCE	100
+
 class CGameRules
 {
 public:

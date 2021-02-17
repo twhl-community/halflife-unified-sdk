@@ -30,12 +30,6 @@ extern DLL_GLOBAL BOOL	g_fGameOver;
 extern int gmsgGameMode;
 extern int gmsgScoreInfo;
 
-//TODO: copy pasted from multiplay
-#define ITEM_RESPAWN_TIME	30
-#define WEAPON_RESPAWN_TIME	20
-#define AMMO_RESPAWN_TIME	20
-#define ENTITY_INTOLERANCE	100
-
 CHalfLifeCoopplay::CHalfLifeCoopplay()
 	: CHalfLifeMultiplay()
 {
