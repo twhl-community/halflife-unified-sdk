@@ -18,6 +18,7 @@
 #include "player.h"
 #include "Weapons.h"
 #include "gamerules.h"
+#include "UserMessages.h"
 
 #include "CSniperRifle.h"
 

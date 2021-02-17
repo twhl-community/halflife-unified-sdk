@@ -17,6 +17,7 @@
 #include "cbase.h"
 #include "weapons.h"
 #include "player.h"
+#include "UserMessages.h"
 
 #include "CEagleLaser.h"
 

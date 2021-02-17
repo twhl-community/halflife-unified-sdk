@@ -24,9 +24,7 @@
 #include "gamerules.h"
 #include "ctfplay_gamerules.h"
 #include "skill.h"
-
-//TODO: move
-extern int gmsgItemPickup;
+#include "UserMessages.h"
 
 LINK_ENTITY_TO_CLASS(item_ctfregeneration, CItemRegenerationCTF);
 

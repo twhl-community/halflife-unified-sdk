@@ -24,11 +24,9 @@
 #include "coopplay_gamerules.h"
 #include	"game.h"
 #include "items.h"
+#include "UserMessages.h"
 
 extern DLL_GLOBAL BOOL	g_fGameOver;
-
-extern int gmsgGameMode;
-extern int gmsgScoreInfo;
 
 CHalfLifeCoopplay::CHalfLifeCoopplay()
 	: CHalfLifeMultiplay()

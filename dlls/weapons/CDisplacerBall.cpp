@@ -24,11 +24,9 @@
 #include "ctf/CTFDefs.h"
 #include "ctf/CTFGoal.h"
 #include "ctf/CTFGoalFlag.h"
+#include "UserMessages.h"
 
 #include "CDisplacerBall.h"
-
-//TODO: move
-extern int gmsgCTFScore;
 
 extern CBaseEntity* g_pLastSpawn;
 

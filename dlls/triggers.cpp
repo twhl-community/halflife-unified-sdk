@@ -30,6 +30,7 @@
 #include "skill.h"
 #include "ctf/ctfplay_gamerules.h"
 #include "ctf/CTFGoalFlag.h"
+#include "UserMessages.h"
 
 #define	SF_TRIGGER_PUSH_START_OFF	2//spawnflag that makes trigger_push spawn turned OFF
 #define SF_TRIGGER_HURT_TARGETONCE	1// Only fire hurt target once
@@ -39,10 +40,6 @@
 #define SF_TRIGGER_HURT_CLIENTONLYTOUCH 32// only clients may touch this trigger.
 
 extern DLL_GLOBAL BOOL		g_fGameOver;
-
-//TODO: move
-extern int gmsgCTFScore;
-extern int gmsgScoreInfo;
 
 extern void SetMovedir(entvars_t* pev);
 extern Vector VecBModelOrigin( entvars_t* pevBModel );

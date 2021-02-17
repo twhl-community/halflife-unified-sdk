@@ -17,9 +17,8 @@
 #include "cbase.h"
 #include "player.h"
 #include "game.h"
+#include "UserMessages.h"
 #include "CItemAcceleratorCTF.h"
-
-extern int gmsgItemPickup;
 
 LINK_ENTITY_TO_CLASS( item_ctfaccelerator, CItemAcceleratorCTF );
 

@@ -17,10 +17,8 @@
 #include "util.h"
 #include "cbase.h"
 #include "player.h"
+#include "UserMessages.h"
 #include "CHUDIconTrigger.h"
-
-//TODO: move
-extern int gmsgCustomIcon;
 
 LINK_ENTITY_TO_CLASS(ctf_hudicon, CHUDIconTrigger);
 

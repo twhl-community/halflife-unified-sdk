@@ -23,9 +23,7 @@
 #include "CItemPortableHEVCTF.h"
 #include "gamerules.h"
 #include "ctfplay_gamerules.h"
-
-//TODO: move
-extern int gmsgItemPickup;
+#include "UserMessages.h"
 
 LINK_ENTITY_TO_CLASS(item_ctfportablehev, CItemPortableHEVCTF);
 

@@ -24,6 +24,7 @@
 #include "weapons.h"
 #include "game.h"
 #include "gamerules.h"
+#include "UserMessages.h"
 
 #include "ctfplay_gamerules.h"
 #include "CTFGoalFlag.h"
@@ -39,26 +40,6 @@
 #include "pm_shared.h"
 
 extern DLL_GLOBAL BOOL		g_fGameOver;
-
-extern int gmsgHealth;
-extern int gmsgCurWeapon;
-extern int gmsgScoreInfo;
-extern int gmsgSetFOV;
-extern int gmsgDeathMsg;
-extern int gmsgPlayerIcon;
-extern int gmsgOldWeapon;
-extern int gmsgGameMode;
-extern int gmsgTeamInfo;
-extern int gmsgSpectator;
-extern int gmsgFlagIcon;
-extern int gmsgFlagTimer;
-extern int gmsgVGUIMenu;
-extern int gmsgStatsInfo;
-extern int gmsgStatsPlayer;
-extern int gmsgHudColor;
-extern int gmsgPlayerBrowse;
-extern int gmsgTeamFull;
-extern int gmsgCTFScore;
 
 const int MaxTeamNameLength = 16;
 const int MaxTeamCharacters = 12;

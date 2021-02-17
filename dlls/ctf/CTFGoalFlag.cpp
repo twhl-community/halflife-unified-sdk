@@ -24,11 +24,7 @@
 
 #include "gamerules.h"
 #include "ctf/ctfplay_gamerules.h"
-
-//TODO: move
-extern int gmsgFlagIcon;
-extern int gmsgCTFScore;
-extern int gmsgScoreInfo;
+#include "UserMessages.h"
 
 void DumpCTFFlagInfo(CBasePlayer* pPlayer)
 {

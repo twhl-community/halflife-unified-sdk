@@ -17,8 +17,8 @@
 #include "cbase.h"
 #include "weapons.h"
 #include "player.h"
-
 #include "gamerules.h"
+#include "UserMessages.h"
 
 #include "CM249.h"
 
