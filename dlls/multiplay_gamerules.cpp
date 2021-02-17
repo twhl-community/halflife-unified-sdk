@@ -587,6 +587,11 @@ void CHalfLifeMultiplay :: ClientDisconnected( edict_t *pClient )
 					GETPLAYERUSERID( pPlayer->edict() ) );
 			}
 
+			const int playerIndex = ENTINDEX(pClient);
+
+			free(pszPlayerIPs[playerIndex]);
+			pszPlayerIPs[playerIndex] = nullptr;
+
 			pPlayer->RemoveAllItems( TRUE );// destroy all of the players weapons and items
 
 			g_engfuncs.pfnMessageBegin(MSG_ALL, gmsgSpectator, 0, 0);
