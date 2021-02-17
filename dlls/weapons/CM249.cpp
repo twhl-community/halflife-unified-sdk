@@ -270,7 +270,6 @@ void CM249::PrimaryAttack()
 
 	const float flZVel = m_pPlayer->pev->velocity.z;
 
-	//TODO: magic number - Solokiller
 	Vector vecInvPushDir = gpGlobals->v_forward * 35.0;
 
 	float flNewZVel = CVAR_GET_FLOAT( "sv_maxspeed" );
