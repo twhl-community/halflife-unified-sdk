@@ -24,6 +24,7 @@
 #include	"teamplay_gamerules.h"
 #include "ctf/ctfplay_gamerules.h"
 #include	"game.h"
+#include "UserMessages.h"
 
 static char team_names[MAX_TEAMS][MAX_TEAMNAME_LENGTH];
 static int team_scores[MAX_TEAMS];
@@ -163,12 +164,6 @@ BOOL CHalfLifeTeamplay :: ClientCommand( CBasePlayer *pPlayer, const char *pcmd 
 
 	return FALSE;
 }
-
-extern int gmsgGameMode;
-extern int gmsgSayText;
-extern int gmsgTeamInfo;
-extern int gmsgTeamNames;
-extern int gmsgScoreInfo;
 
 void CHalfLifeTeamplay :: UpdateGameMode( CBasePlayer *pPlayer )
 {
@@ -372,8 +367,6 @@ void CHalfLifeTeamplay::ClientUserInfoChanged( CBasePlayer *pPlayer, char *infob
 	// recound stuff
 	RecountTeams( TRUE );
 }
-
-extern int gmsgDeathMsg;
 
 //=========================================================
 // Deathnotice. 

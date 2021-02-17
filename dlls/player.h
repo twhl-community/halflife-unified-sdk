@@ -416,7 +416,6 @@ private:
 #define AUTOAIM_10DEGREES 0.1736481776669
 
 
-extern int	gmsgHudText;
 extern BOOL gInitHUD;
 
 class CPlayerIterator

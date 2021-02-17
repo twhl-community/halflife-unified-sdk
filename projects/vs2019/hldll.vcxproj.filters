@@ -559,6 +559,9 @@
       <Filter>Source Files\dlls</Filter>
     </ClCompile>
     <ClCompile Include="..\..\dlls\coopplay_gamerules.cpp">
+		<Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\UserMessages.cpp">
       <Filter>Source Files\dlls</Filter>
     </ClCompile>
   </ItemGroup>
@@ -816,6 +819,9 @@
       <Filter>Header Files\dlls\weapons</Filter>
     </ClInclude>
     <ClInclude Include="..\..\dlls\coopplay_gamerules.h">
+		<Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\UserMessages.h">
       <Filter>Header Files\dlls</Filter>
     </ClInclude>
   </ItemGroup>
