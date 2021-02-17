@@ -304,7 +304,7 @@ void CCrossbow::Holster( int skiplocal /* = 0 */ )
 {
 	m_fInReload = FALSE;// cancel any reload in progress.
 
-	if ( m_fInZoom )
+	if (m_pPlayer->m_iFOV != 0)
 	{
 		SecondaryAttack( );
 	}
@@ -320,9 +320,9 @@ void CCrossbow::PrimaryAttack( void )
 {
 
 #ifdef CLIENT_DLL
-	if ( m_fInZoom && bIsMultiplayer() )
+	if (m_pPlayer->m_iFOV != 0 && bIsMultiplayer() )
 #else
-	if ( m_fInZoom && g_pGameRules->IsMultiplayer() )
+	if (m_pPlayer->m_iFOV != 0 && g_pGameRules->IsMultiplayer() )
 #endif
 	{
 		FireSniperBolt();
@@ -446,15 +446,13 @@ void CCrossbow::FireBolt()
 
 void CCrossbow::SecondaryAttack()
 {
-	if ( m_pPlayer->pev->fov != 0 )
+	if ( m_pPlayer->m_iFOV != 0 )
 	{
-		m_pPlayer->pev->fov = m_pPlayer->m_iFOV = 0; // 0 means reset to default fov
-		m_fInZoom = 0;
+		m_pPlayer->m_iFOV = 0; // 0 means reset to default fov
 	}
-	else if ( m_pPlayer->pev->fov != 20 )
+	else if ( m_pPlayer->m_iFOV != 20 )
 	{
-		m_pPlayer->pev->fov = m_pPlayer->m_iFOV = 20;
-		m_fInZoom = 1;
+		m_pPlayer->m_iFOV = 20;
 	}
 	
 	pev->nextthink = UTIL_WeaponTimeBase() + 0.1;
@@ -467,7 +465,7 @@ void CCrossbow::Reload( void )
 	if ( m_pPlayer->ammo_bolts <= 0 )
 		return;
 
-	if ( m_pPlayer->pev->fov != 0 )
+	if ( m_pPlayer->m_iFOV != 0 )
 	{
 		SecondaryAttack();
 	}
