@@ -66,8 +66,6 @@ CRope::CRope()
 	m_iszEndingModel = MAKE_STRING( "models/rope16.mdl" );
 }
 
-//TODO: not called since destructors aren't called for entities
-//Need to implement the free callback from NEW_DLL_FUNCTIONS
 CRope::~CRope()
 {
 	for( size_t uiIndex = 0; uiIndex < MAX_TEMP_SAMPLES; ++uiIndex )
