@@ -96,7 +96,7 @@ public:
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	int m_iShowerSparks;
-	CBeam* m_pBeam[ VOLTIGORE_BEAM_COUNT ];
+	EHANDLE m_pBeam[ VOLTIGORE_BEAM_COUNT ];
 	int m_iBeams;
 	CBaseAnimating* m_pAttachEnt;
 	int m_iAttachIdx;
@@ -107,7 +107,7 @@ LINK_ENTITY_TO_CLASS( charged_bolt, COFChargedBolt );
 TYPEDESCRIPTION	COFChargedBolt::m_SaveData[] =
 {
 	DEFINE_FIELD( COFChargedBolt, m_iShowerSparks, FIELD_INTEGER ),
-	DEFINE_ARRAY( COFChargedBolt, m_pBeam, FIELD_CLASSPTR, VOLTIGORE_BEAM_COUNT ),
+	DEFINE_ARRAY( COFChargedBolt, m_pBeam, FIELD_EHANDLE, VOLTIGORE_BEAM_COUNT ),
 	DEFINE_FIELD( COFChargedBolt, m_iBeams, FIELD_INTEGER ),
 	DEFINE_FIELD( COFChargedBolt, m_pAttachEnt, FIELD_CLASSPTR ),
 	DEFINE_FIELD( COFChargedBolt, m_iAttachIdx, FIELD_INTEGER ),
@@ -178,7 +178,7 @@ COFChargedBolt* COFChargedBolt::ChargedBoltCreate()
 {
 	auto pBolt = GetClassPtr<COFChargedBolt>( nullptr );
 
-	//Note: the original called it "Charged Bolt",
+	//TODO: the original called it "Charged Bolt",
 	//which is different from the LINK name and also an invalid name
 	pBolt->pev->classname = MAKE_STRING( "charged_bolt" );
 
@@ -249,25 +249,27 @@ void COFChargedBolt::ArmBeam( int side )
 	if( flDist == 1.0 )
 		return;
 
-	m_pBeam[ m_iBeams ] = CBeam::BeamCreate( "sprites/lgtning.spr", 30 );
-	if( !m_pBeam[ m_iBeams ] )
+	CBeam* pBeam = CBeam::BeamCreate("sprites/lgtning.spr", 30);
+	m_pBeam[ m_iBeams ] = pBeam;
+
+	if( !pBeam)
 		return;
 
 	auto pHit = Instance( tr.pHit );
 
 	if( pHit && pHit->pev->takedamage != DAMAGE_NO )
 	{
-		m_pBeam[ m_iBeams ]->EntsInit( entindex(), pHit->entindex() );
-		m_pBeam[ m_iBeams ]->SetColor( 255, 16, 255 );
-		m_pBeam[ m_iBeams ]->SetBrightness( 255 );
-		m_pBeam[ m_iBeams ]->SetNoise( 20 );
+		pBeam->EntsInit( entindex(), pHit->entindex() );
+		pBeam->SetColor( 255, 16, 255 );
+		pBeam->SetBrightness( 255 );
+		pBeam->SetNoise( 20 );
 	}
 	else
 	{
-		m_pBeam[ m_iBeams ]->PointEntInit( tr.vecEndPos, entindex() );
-		m_pBeam[ m_iBeams ]->SetColor( 180, 16, 255 );
-		m_pBeam[ m_iBeams ]->SetBrightness( 255 );
-		m_pBeam[ m_iBeams ]->SetNoise( 80 );
+		pBeam->PointEntInit( tr.vecEndPos, entindex() );
+		pBeam->SetColor( 180, 16, 255 );
+		pBeam->SetBrightness( 255 );
+		pBeam->SetNoise( 80 );
 	}
 
 	++m_iBeams;
@@ -376,8 +378,7 @@ public:
 	static const char *pPainSounds[];
 	static const char *pAlertSounds[];
 
-	//TODO: not save restored, so they could be lost
-	CBeam* m_pBeam[ 8 ];
+	EHANDLE m_pBeam[ VOLTIGORE_BEAM_COUNT ];
 	int m_iBeams;
 
 	float	m_flNextBeamAttackCheck;
@@ -399,6 +400,8 @@ LINK_ENTITY_TO_CLASS( monster_alien_voltigore, COFVoltigore );
 
 TYPEDESCRIPTION	COFVoltigore::m_SaveData[] = 
 {
+	DEFINE_ARRAY(COFVoltigore, m_pBeam, FIELD_EHANDLE, VOLTIGORE_BEAM_COUNT),
+	DEFINE_FIELD(COFVoltigore, m_iBeams, FIELD_INTEGER),
 	DEFINE_FIELD( COFVoltigore, m_flNextBeamAttackCheck, FIELD_TIME ),
 	DEFINE_FIELD( COFVoltigore, m_flNextPainTime, FIELD_TIME ),
 	DEFINE_FIELD( COFVoltigore, m_flNextSpeakTime, FIELD_TIME ),
@@ -1066,16 +1069,17 @@ void COFVoltigore :: StartTask ( Task_t *pTask )
 
 			for( auto i = 0; i < 3; ++i )
 			{
-				m_pBeam[ m_iBeams ] = CBeam::BeamCreate( "sprites/lgtning.spr", 50 );
+				CBeam* pBeam = CBeam::BeamCreate( "sprites/lgtning.spr", 50 );
+				m_pBeam[m_iBeams] = pBeam;
 
-				if( !m_pBeam[ m_iBeams ] )
+				if( !pBeam)
 					return;
 
-				m_pBeam[ m_iBeams ]->PointEntInit( vecConverge, entindex() );
-				m_pBeam[ m_iBeams ]->SetEndAttachment( i + 1 );
-				m_pBeam[ m_iBeams ]->SetColor( 180, 16, 255 );
-				m_pBeam[ m_iBeams ]->SetBrightness( 255 );
-				m_pBeam[ m_iBeams ]->SetNoise( 20 );
+				pBeam->PointEntInit( vecConverge, entindex() );
+				pBeam->SetEndAttachment( i + 1 );
+				pBeam->SetColor( 180, 16, 255 );
+				pBeam->SetBrightness( 255 );
+				pBeam->SetNoise( 20 );
 
 				++m_iBeams;
 			}

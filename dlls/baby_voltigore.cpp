@@ -54,6 +54,8 @@ enum
 
 #define		BABYVOLTIGORE_MELEE_DIST	128
 
+const int BABY_VOLTIGORE_MAX_BEAMS = 8;
+
 int iBabyVoltigoreMuzzleFlash;
 
 class COFBabyVoltigore : public CSquadMonster
@@ -104,8 +106,7 @@ public:
 	static const char *pPainSounds[];
 	static const char *pAlertSounds[];
 
-	//TODO: not save restored, so they could be lost
-	CBeam* m_pBeam[ 8 ];
+	EHANDLE m_pBeam[BABY_VOLTIGORE_MAX_BEAMS];
 	int m_iBeams;
 
 	float	m_flNextBeamAttackCheck;
@@ -125,6 +126,8 @@ LINK_ENTITY_TO_CLASS( monster_alien_babyvoltigore, COFBabyVoltigore );
 
 TYPEDESCRIPTION	COFBabyVoltigore::m_SaveData[] = 
 {
+	DEFINE_ARRAY(COFBabyVoltigore, m_pBeam, FIELD_EHANDLE, BABY_VOLTIGORE_MAX_BEAMS),
+	DEFINE_FIELD(COFBabyVoltigore, m_iBeams, FIELD_INTEGER),
 	DEFINE_FIELD( COFBabyVoltigore, m_flNextBeamAttackCheck, FIELD_TIME ),
 	DEFINE_FIELD( COFBabyVoltigore, m_flNextPainTime, FIELD_TIME ),
 	DEFINE_FIELD( COFBabyVoltigore, m_flNextSpeakTime, FIELD_TIME ),
@@ -845,16 +848,17 @@ void COFBabyVoltigore :: StartTask ( Task_t *pTask )
 
 			for( auto i = 0; i < 3; ++i )
 			{
-				m_pBeam[ m_iBeams ] = CBeam::BeamCreate( "sprites/lgtning.spr", 50 );
+				CBeam* pBeam = CBeam::BeamCreate("sprites/lgtning.spr", 50);;
+				m_pBeam[ m_iBeams ] = pBeam;
 
-				if( !m_pBeam[ m_iBeams ] )
+				if( !pBeam)
 					return;
 
-				m_pBeam[ m_iBeams ]->PointEntInit( vecConverge, entindex() );
-				m_pBeam[ m_iBeams ]->SetEndAttachment( i + 1 );
-				m_pBeam[ m_iBeams ]->SetColor( 180, 16, 255 );
-				m_pBeam[ m_iBeams ]->SetBrightness( 255 );
-				m_pBeam[ m_iBeams ]->SetNoise( 20 );
+				pBeam->PointEntInit( vecConverge, entindex() );
+				pBeam->SetEndAttachment( i + 1 );
+				pBeam->SetColor( 180, 16, 255 );
+				pBeam->SetBrightness( 255 );
+				pBeam->SetNoise( 20 );
 
 				++m_iBeams;
 			}
