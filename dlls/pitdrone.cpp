@@ -1074,7 +1074,7 @@ Schedule_t *CPitdrone :: GetSchedule( void )
 				return GetScheduleOfType ( SCHED_WAKE_ANGRY );
 			}
 
-			if( HasConditions( bits_COND_SEE_HATE ) && m_iInitialAmmo != -1 )
+			if( HasConditions(bits_COND_NO_AMMO_LOADED) && m_iInitialAmmo != -1 )
 			{
 				return GetScheduleOfType( SCHED_PITDRONE_COVER_AND_RELOAD );
 			}
