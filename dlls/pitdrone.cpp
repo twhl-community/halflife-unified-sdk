@@ -450,8 +450,7 @@ void CPitdrone :: AlertSound ( void )
 {
 	int iPitch = RANDOM_LONG( 140, 160 );
 
-	//TODO: the random was never adjusted to match the newly added sound
-	switch ( RANDOM_LONG ( 0, 1  ) )
+	switch ( RANDOM_LONG ( 0, 2  ) )
 	{
 	case 0:
 		EMIT_SOUND_DYN( ENT(pev), CHAN_VOICE, "pitdrone/pit_drone_alert1.wav", 1, ATTN_NORM, 0, iPitch );	
