@@ -223,8 +223,7 @@ enum PitdroneWeapon
 {
 	Empty = 0,
 	Full,
-	Two = 6,
-	One = 7
+	One = 6,
 };
 }
 
@@ -534,8 +533,7 @@ void CPitdrone :: HandleAnimEvent( MonsterEvent_t *pEvent )
 
 				auto ammoSubModel = GetBodygroup( PitdroneBodygroup::Weapons );
 
-				//TODO: needs to be fixed so all spikes can be fired?
-				if( ammoSubModel == PitdroneWeapon::Two )
+				if( ammoSubModel == PitdroneWeapon::One)
 				{
 					ammoSubModel = PitdroneWeapon::Empty;
 				}
@@ -685,7 +683,8 @@ void CPitdrone :: Spawn()
 	}
 	else
 	{
-		SetBodygroup( PitdroneBodygroup::Weapons, PitdroneWeapon::One - m_iInitialAmmo );
+		//TODO: constrain value to valid range
+		SetBodygroup( PitdroneBodygroup::Weapons, (PitdroneWeapon::One + 1) - m_iInitialAmmo );
 	}
 
 	if( m_iInitialAmmo == -1 )
