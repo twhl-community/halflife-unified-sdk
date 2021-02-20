@@ -503,7 +503,7 @@ void CHalfLifeMultiplay :: InitHUD( CBasePlayer *pl )
 
 	if( IsCTF() )
 	{
-		pl->m_iCurrentMenu = 2;
+		pl->m_iCurrentMenu = MENU_TEAM;
 		pl->Player_Menu();
 	}
 

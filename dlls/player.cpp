@@ -3203,8 +3203,7 @@ void CBasePlayer::Spawn( void )
 
 		m_pGoalEnt = nullptr;
 
-		//TODO: define menu ids
-		m_iCurrentMenu = m_iNewTeamNum > CTFTeam::None ? 1 : 3;
+		m_iCurrentMenu = m_iNewTeamNum > CTFTeam::None ? MENU_DEFAULT : MENU_CLASS;
 
 		if( g_pGameRules->IsCTF() )
 			Player_Menu();
@@ -5098,7 +5097,7 @@ void CBasePlayer::Player_Menu()
 {
 	if( g_pGameRules->IsCTF() )
 	{
-		if( m_iCurrentMenu == 2 )
+		if(m_iCurrentMenu == MENU_TEAM)
 		{
 			MESSAGE_BEGIN( MSG_ONE, gmsgAllowSpec, nullptr, edict() );
 			WRITE_BYTE( 1 );
@@ -5111,17 +5110,17 @@ void CBasePlayer::Player_Menu()
 			MESSAGE_END();
 
 			MESSAGE_BEGIN( MSG_ONE, gmsgVGUIMenu, nullptr, edict() );
-			WRITE_BYTE( 2 );
+			WRITE_BYTE(MENU_TEAM);
 			MESSAGE_END();
 		}
-		else if( m_iCurrentMenu == 3 )
+		else if(m_iCurrentMenu == MENU_CLASS)
 		{
 			MESSAGE_BEGIN( MSG_ONE, gmsgSetMenuTeam, nullptr, edict() );
 			WRITE_BYTE( static_cast< int >( m_iNewTeamNum == CTFTeam::None ? m_iTeamNum : m_iNewTeamNum ) );
 			MESSAGE_END();
 
 			MESSAGE_BEGIN( MSG_ONE, gmsgVGUIMenu, nullptr, edict() );
-			WRITE_BYTE( 3 );
+			WRITE_BYTE(MENU_CLASS);
 			MESSAGE_END();
 		}
 	}
@@ -5141,16 +5140,16 @@ void CBasePlayer::ResetMenu()
 
 	switch( m_iCurrentMenu )
 	{
-	case 1:
-		m_iCurrentMenu = 2;
+	case MENU_DEFAULT:
+		m_iCurrentMenu = MENU_TEAM;
 		break;
 
-	case 2:
-		m_iCurrentMenu = 3;
+	case MENU_TEAM:
+		m_iCurrentMenu = MENU_CLASS;
 		break;
 
 	default:
-		m_iCurrentMenu = 0;
+		m_iCurrentMenu = MENU_NONE;
 		return;
 	}
 
@@ -5254,11 +5253,11 @@ BOOL CBasePlayer::Menu_Team_Input( int inp )
 	}
 	else if( inp == 6 && m_iTeamNum > CTFTeam::None )
 	{
-		m_iCurrentMenu = 0;
+		m_iCurrentMenu = MENU_NONE;
 		return true;
 	}
 
-	m_iCurrentMenu = 2;
+	m_iCurrentMenu = MENU_TEAM;
 
 	if( g_pGameRules->IsCTF() )
 		Player_Menu();

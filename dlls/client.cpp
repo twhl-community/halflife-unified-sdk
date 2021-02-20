@@ -629,13 +629,13 @@ void ClientCommand( edict_t *pEntity )
 		if (g_pGameRules->IsCTF())
 		{
 			auto pPlayer = GetClassPtr((CBasePlayer*)pev);
-			if (pPlayer->m_iCurrentMenu == 2)
+			if (pPlayer->m_iCurrentMenu == MENU_TEAM)
 			{
 				ClientPrint(pev, HUD_PRINTCONSOLE, "Already in team selection menu.\n");
 			}
 			else
 			{
-				pPlayer->m_iCurrentMenu = 2;
+				pPlayer->m_iCurrentMenu = MENU_TEAM;
 				pPlayer->Player_Menu();
 			}
 		}
@@ -648,7 +648,7 @@ void ClientCommand( edict_t *pEntity )
 
 			if (pPlayer->m_iNewTeamNum != CTFTeam::None || pPlayer->m_iTeamNum != CTFTeam::None)
 			{
-				if (pPlayer->m_iCurrentMenu == 3)
+				if (pPlayer->m_iCurrentMenu == MENU_CLASS)
 				{
 					ClientPrint(pev, HUD_PRINTCONSOLE, "Already in character selection menu.\n");
 				}
@@ -657,7 +657,7 @@ void ClientCommand( edict_t *pEntity )
 					if (pPlayer->m_iNewTeamNum == CTFTeam::None)
 						pPlayer->m_iNewTeamNum = pPlayer->m_iTeamNum;
 
-					pPlayer->m_iCurrentMenu = 3;
+					pPlayer->m_iCurrentMenu = MENU_CLASS;
 					pPlayer->Player_Menu();
 				}
 			}

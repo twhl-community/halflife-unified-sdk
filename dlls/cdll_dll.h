@@ -44,4 +44,17 @@ const int SV_MAX_PLAYERS = 32;
 
 #define WEAPON_SUIT			31
 
+#define MENU_NONE					0
+#define MENU_DEFAULT				1
+#define MENU_TEAM 					2
+#define MENU_CLASS 					3
+#define MENU_MAPBRIEFING			4
+#define MENU_INTRO 					5
+#define MENU_CLASSHELP				6
+#define MENU_CLASSHELP2 			7
+#define MENU_REPEATHELP 			8
+//#define MENU_SPECHELP				9
+#define MENU_STATSMENU				9
+#define MENU_SCOREBOARD				10
+
 #endif

@@ -912,20 +912,20 @@ BOOL CHalfLifeCTFplay::ClientCommand( CBasePlayer* pPlayer, const char* pcmd )
 {
 	if( !strcmp( "cancelmenu", pcmd ) )
 	{
-		if( pPlayer->m_iCurrentMenu == 3 )
+		if(pPlayer->m_iCurrentMenu == MENU_CLASS)
 		{
-			pPlayer->m_iCurrentMenu = 2;
+			pPlayer->m_iCurrentMenu = MENU_TEAM;
 			g_engfuncs.pfnMessageBegin( MSG_ONE, gmsgTeamFull, nullptr, pPlayer->edict() );
 			g_engfuncs.pfnWriteByte( 0 );
 			g_engfuncs.pfnMessageEnd();
 			pPlayer->m_iNewTeamNum = CTFTeam::None;
 			pPlayer->Player_Menu();
 		}
-		else if( pPlayer->m_iCurrentMenu == 2 )
+		else if( pPlayer->m_iCurrentMenu == MENU_TEAM)
 		{
 			if( pPlayer->m_iNewTeamNum != CTFTeam::None || pPlayer->m_iTeamNum != CTFTeam::None )
 			{
-				pPlayer->m_iCurrentMenu = 0;
+				pPlayer->m_iCurrentMenu = MENU_NONE;
 			}
 			else
 			{
@@ -937,7 +937,7 @@ BOOL CHalfLifeCTFplay::ClientCommand( CBasePlayer* pPlayer, const char* pcmd )
 	}
 	else if( !strcmp( "endmotd", pcmd ) )
 	{
-		pPlayer->m_iCurrentMenu = 2;
+		pPlayer->m_iCurrentMenu = MENU_TEAM;
 		pPlayer->Player_Menu();
 		return true;
 	}
@@ -1391,7 +1391,7 @@ void CHalfLifeCTFplay::ChangePlayerTeam( CBasePlayer* pPlayer, const char* pChar
 		pPlayer->m_iHideHUD |= HIDEHUD_HEALTH | HIDEHUD_WEAPONS;
 		pPlayer->m_afPhysicsFlags |= PFLAG_OBSERVER;
 		pPlayer->m_iNewTeamNum = CTFTeam::None;
-		pPlayer->m_iCurrentMenu = 0;
+		pPlayer->m_iCurrentMenu = MENU_NONE;
 		pPlayer->m_iTeamNum = CTFTeam::None;
 		pPlayer->SetSuitUpdate( nullptr, FALSE, SUIT_REPEAT_OK );
 		pPlayer->m_iClientHealth = 100;
