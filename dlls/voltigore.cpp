@@ -178,8 +178,6 @@ COFChargedBolt* COFChargedBolt::ChargedBoltCreate()
 {
 	auto pBolt = GetClassPtr<COFChargedBolt>( nullptr );
 
-	//TODO: the original called it "Charged Bolt",
-	//which is different from the LINK name and also an invalid name
 	pBolt->pev->classname = MAKE_STRING( "charged_bolt" );
 
 	pBolt->Spawn();
