@@ -2800,7 +2800,7 @@ void COFTorchAlly::MonsterThink()
 }
 
 //=========================================================
-// COFTorchAllyRepel - when triggered, spawns a monster_human_grunt_ally
+// COFTorchAllyRepel - when triggered, spawns a monster_human_torch_ally
 // repelling down a line.
 //=========================================================
 
@@ -2847,8 +2847,7 @@ void COFTorchAllyRepel::Spawn( void )
 
 void COFTorchAllyRepel::Precache( void )
 {
-	//TODO: needs to precache torch
-	UTIL_PrecacheOther( "monster_human_grunt_ally" );
+	UTIL_PrecacheOther( "monster_human_torch_ally" );
 	m_iSpriteTexture = PRECACHE_MODEL( "sprites/rope.spr" );
 }
 
@@ -2861,8 +2860,7 @@ void COFTorchAllyRepel::RepelUse ( CBaseEntity *pActivator, CBaseEntity *pCaller
 		return NULL;
 	*/
 
-	//TODO: needs to be torch
-	CBaseEntity *pEntity = Create( "monster_human_grunt_ally", pev->origin, pev->angles );
+	CBaseEntity *pEntity = Create( "monster_human_torch_ally", pev->origin, pev->angles );
 	auto pGrunt = static_cast<COFTorchAlly*>( pEntity->MySquadTalkMonsterPointer( ) );
 
 	if( pGrunt )

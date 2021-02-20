@@ -2299,7 +2299,7 @@ void CShockTrooper::MonsterThink()
 }
 
 //=========================================================
-// CShockTrooperRepel - when triggered, spawns a monster_human_grunt
+// CShockTrooperRepel - when triggered, spawns a monster_shocktrooper
 // repelling down a line.
 //=========================================================
 
@@ -2324,7 +2324,7 @@ void CShockTrooperRepel::Spawn( void )
 
 void CShockTrooperRepel::Precache( void )
 {
-	UTIL_PrecacheOther( "monster_human_grunt" );
+	UTIL_PrecacheOther( "monster_shocktrooper" );
 	m_iSpriteTexture = PRECACHE_MODEL( "sprites/rope.spr" );
 }
 
@@ -2337,7 +2337,7 @@ void CShockTrooperRepel::RepelUse ( CBaseEntity *pActivator, CBaseEntity *pCalle
 		return NULL;
 	*/
 
-	CBaseEntity *pEntity = Create( "monster_human_grunt", pev->origin, pev->angles );
+	CBaseEntity *pEntity = Create( "monster_shocktrooper", pev->origin, pev->angles );
 	CBaseMonster *pGrunt = pEntity->MyMonsterPointer( );
 	pGrunt->pev->movetype = MOVETYPE_FLY;
 	pGrunt->pev->velocity = Vector( 0, 0, RANDOM_FLOAT( -196, -128 ) );

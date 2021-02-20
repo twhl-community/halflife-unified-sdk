@@ -3240,7 +3240,7 @@ void COFMedicAlly::HealerUse( CBaseEntity* pActivator, CBaseEntity* pCaller, USE
 }
 
 //=========================================================
-// COFMedicAllyRepel - when triggered, spawns a monster_human_grunt_ally
+// COFMedicAllyRepel - when triggered, spawns a monster_human_medic_ally
 // repelling down a line.
 //=========================================================
 
@@ -3293,8 +3293,7 @@ void COFMedicAllyRepel::Spawn( void )
 
 void COFMedicAllyRepel::Precache( void )
 {
-	//TODO: needs to precache torch
-	UTIL_PrecacheOther( "monster_human_grunt_ally" );
+	UTIL_PrecacheOther( "monster_human_medic_ally" );
 	m_iSpriteTexture = PRECACHE_MODEL( "sprites/rope.spr" );
 }
 
@@ -3307,8 +3306,7 @@ void COFMedicAllyRepel::RepelUse ( CBaseEntity *pActivator, CBaseEntity *pCaller
 		return NULL;
 	*/
 
-	//TODO: needs to be torch
-	CBaseEntity *pEntity = Create( "monster_human_grunt_ally", pev->origin, pev->angles );
+	CBaseEntity *pEntity = Create( "monster_human_medic_ally", pev->origin, pev->angles );
 	auto pGrunt = static_cast<COFMedicAlly*>( pEntity->MySquadTalkMonsterPointer( ) );
 
 	if( pGrunt )

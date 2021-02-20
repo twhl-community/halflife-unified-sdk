@@ -2415,8 +2415,7 @@ void CHFGruntRepel::RepelUse ( CBaseEntity *pActivator, CBaseEntity *pCaller, US
 		return NULL;
 	*/
 
-	//TODO: needs fixing
-	CBaseEntity *pEntity = Create( "monster_human_grunt", pev->origin, pev->angles );
+	CBaseEntity *pEntity = Create( "monster_human_friendly_grunt", pev->origin, pev->angles );
 	CBaseMonster *pGrunt = pEntity->MyMonsterPointer( );
 	pGrunt->pev->movetype = MOVETYPE_FLY;
 	pGrunt->pev->velocity = Vector( 0, 0, RANDOM_FLOAT( -196, -128 ) );
