@@ -390,7 +390,7 @@ public:
 	float	m_flNextWordTime;
 	int		m_iLastWord;
 
-	COFChargedBolt* m_pChargedBolt;
+	EHANDLE m_pChargedBolt;
 
 	int m_iVoltigoreGibs;
 	BOOL m_fDeathCharge;
@@ -407,6 +407,7 @@ TYPEDESCRIPTION	COFVoltigore::m_SaveData[] =
 	DEFINE_FIELD( COFVoltigore, m_flNextSpeakTime, FIELD_TIME ),
 	DEFINE_FIELD( COFVoltigore, m_flNextWordTime, FIELD_TIME ),
 	DEFINE_FIELD( COFVoltigore, m_iLastWord, FIELD_INTEGER ),
+	DEFINE_FIELD(COFVoltigore, m_pChargedBolt, FIELD_EHANDLE),
 };
 
 IMPLEMENT_SAVERESTORE( COFVoltigore, CSquadMonster );
@@ -597,7 +598,9 @@ void COFVoltigore :: HandleAnimEvent( MonsterEvent_t *pEvent )
 				TraceResult tr;
 				UTIL_TraceLine( shootPosition, shootPosition + direction * 1024, dont_ignore_monsters, edict(), &tr );
 
-				m_pChargedBolt->LaunchChargedBolt( direction, edict(), 1000, 10 );
+				COFChargedBolt* bolt = m_pChargedBolt.Entity<COFChargedBolt>();
+
+				bolt->LaunchChargedBolt( direction, edict(), 1000, 10 );
 
 				//We no longer have to manage the bolt now
 				m_pChargedBolt = nullptr;
