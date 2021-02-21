@@ -223,6 +223,14 @@ bool CPipewrench::Swing( const bool bFirst )
 			ApplyMultiDamage( m_pPlayer->pev, m_pPlayer->pev );
 		}
 
+#endif
+
+		m_flNextPrimaryAttack = GetNextAttackDelay(0.5);
+		m_flNextSecondaryAttack = GetNextAttackDelay(0.5);
+		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 1.0;
+
+#ifndef CLIENT_DLL
+
 		// play thwack, smack, or dong sound
 		float flVol = 1.0;
 		bool bHitWorld = true;
@@ -286,9 +294,6 @@ bool CPipewrench::Swing( const bool bFirst )
 		SetThink( &CPipewrench::Smack );
 		pev->nextthink = UTIL_WeaponTimeBase() + 0.2;
 #endif
-		m_flNextPrimaryAttack = GetNextAttackDelay(0.5);
-		m_flNextSecondaryAttack = GetNextAttackDelay(0.5);
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 1.0;	
 	}
 	return bDidHit;
 }
