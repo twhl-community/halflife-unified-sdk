@@ -440,7 +440,7 @@ void CRosenberg::Scream(void)
 	{
 		Talk(10);
 		m_hTalkTarget = m_hEnemy;
-		PlaySentence("SC_SCREAM", RANDOM_FLOAT(3, 6), VOL_NORM, ATTN_NORM);
+		PlaySentence("RO_SCREAM", RANDOM_FLOAT(3, 6), VOL_NORM, ATTN_NORM);
 	}
 }
 
