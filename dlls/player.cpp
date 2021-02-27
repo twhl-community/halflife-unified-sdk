@@ -3243,7 +3243,7 @@ void CBasePlayer :: Precache( void )
 
 	m_iClientBattery = -1;
 
-	m_iTrain = TRAIN_NEW;
+	m_iTrain |= TRAIN_NEW;
 
 	// Make sure any necessary user messages have been registered
 	LinkUserMessages();
@@ -3336,6 +3336,8 @@ int CBasePlayer::Restore( CRestore &restore )
 #endif
 
 	m_bResetViewEntity = true;
+
+	m_bRestored = true;
 
 	return status;
 }
@@ -4384,6 +4386,18 @@ void CBasePlayer :: UpdateClientData( void )
 		m_bitsDamageType &= DMG_TIMEBASED;
 	}
 
+	if (m_bRestored)
+	{
+		//Tell client the flashlight is on
+		if (FlashlightIsOn())
+		{
+			MESSAGE_BEGIN(MSG_ONE, gmsgFlashlight, NULL, pev);
+			WRITE_BYTE(1);
+			WRITE_BYTE(m_iFlashBattery);
+			MESSAGE_END();
+		}
+	}
+
 	// Update Flashlight
 	if ((m_flFlashLightTime) && (m_flFlashLightTime <= gpGlobals->time))
 	{
@@ -4498,6 +4512,9 @@ void CBasePlayer :: UpdateClientData( void )
 		UpdateStatusBar();
 		m_flNextSBarUpdateTime = gpGlobals->time + 0.2;
 	}
+
+	//Handled anything that needs resetting
+	m_bRestored = false;
 }
 
 void CBasePlayer::UpdateCTFHud()

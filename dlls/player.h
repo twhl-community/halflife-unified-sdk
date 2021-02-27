@@ -408,6 +408,8 @@ private:
 	CRope* m_pRope;
 	float m_flLastClimbTime = 0;
 	bool m_bIsClimbing = false;
+
+	bool m_bRestored;
 };
 
 #define AUTOAIM_2DEGREES  0.0348994967025
