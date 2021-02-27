@@ -270,7 +270,14 @@ public:
 		return pEnt; 
 	}
 
-	static CBaseEntity *Instance( entvars_t *pev ) { return Instance( ENT( pev ) ); }
+	static CBaseEntity *Instance( entvars_t *pev )
+	{
+		if (!pev)
+			return Instance(ENT(0));
+
+		return Instance(ENT(pev));
+	}
+
 	static CBaseEntity *Instance( int eoffset) { return Instance( ENT( eoffset) ); }
 
 	template<typename T>
