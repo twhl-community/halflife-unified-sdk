@@ -573,8 +573,15 @@ void CBaseMonster :: MonsterThink ( void )
 //=========================================================
 void CBaseMonster :: MonsterUse ( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
 {
-	//Don't do this because it can resurrect dying monsters
-	//m_IdealMonsterState = MONSTERSTATE_ALERT;
+	//Only allow this if the NPC is either idle or in a script
+	//Blue Shift only to fix ba_yard4a frozen Alien Slaves
+	switch (m_IdealMonsterState)
+	{
+	case MONSTERSTATE_IDLE:
+	case MONSTERSTATE_SCRIPT:
+		m_IdealMonsterState = MONSTERSTATE_ALERT;
+		break;
+	}
 }
 
 //=========================================================
