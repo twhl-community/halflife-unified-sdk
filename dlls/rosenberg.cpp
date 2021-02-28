@@ -77,7 +77,6 @@ public:
 	void RunTask(Task_t* pTask);
 	void StartTask(Task_t* pTask);
 	int	ObjectCaps(void) { return CTalkMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
-	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
 	virtual int FriendNumber(int arrayNumber);
 	void SetActivity(Activity newActivity);
 	Activity GetStoppedActivity(void);
@@ -752,20 +751,6 @@ void CRosenberg::TalkInit()
 
 	m_voicePitch = 100;
 }
-
-int CRosenberg::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
-{
-
-	if (pevInflictor && pevInflictor->flags & FL_CLIENT)
-	{
-		Remember(bits_MEMORY_PROVOKED);
-		StopFollowing(TRUE);
-	}
-
-	// make sure friends talk about it if player hurts scientist...
-	return CTalkMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
-}
-
 
 //=========================================================
 // ISoundMask - returns a bit mask indicating which types
