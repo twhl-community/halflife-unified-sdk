@@ -107,9 +107,8 @@ void CPipewrench::SecondaryAttack()
 
 	m_iSwingMode = SWING_START_BIG;
 
-	m_flNextPrimaryAttack = GetNextAttackDelay( 1.0 );
-	m_flNextSecondaryAttack = GetNextAttackDelay( 1.0 );
-	m_flTimeWeaponIdle = m_flNextSecondaryAttack + 0.2;
+	m_flNextPrimaryAttack = m_flNextSecondaryAttack = GetNextAttackDelay( 0.1 );
+	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.2;
 }
 
 void CPipewrench::Smack()
