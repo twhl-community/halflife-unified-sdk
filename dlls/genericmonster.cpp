@@ -25,6 +25,8 @@
 // For holograms, make them not solid so the player can walk through them
 #define	SF_GENERICMONSTER_NOTSOLID					4 
 
+const int SF_GENERICMONSTER_CONTROLLER = 8;
+
 //=========================================================
 // Monster's Anim Events Go Here
 //=========================================================
@@ -38,8 +40,34 @@ public:
 	int  Classify ( void );
 	void HandleAnimEvent( MonsterEvent_t *pEvent );
 	int ISoundMask ( void );
+
+	void PlayScriptedSentence(const char* pszSentence, float duration, float volume, float attenuation, BOOL bConcurrent, CBaseEntity* pListener) override;
+
+	void MonsterThink() override;
+	void IdleHeadTurn(Vector& vecFriend);
+
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
+
+	static TYPEDESCRIPTION m_SaveData[];
+
+	float m_talkTime;
+	EHANDLE m_hTalkTarget;
+	float m_flIdealYaw;
+	float m_flCurrentYaw;
 };
 LINK_ENTITY_TO_CLASS( monster_generic, CGenericMonster );
+
+TYPEDESCRIPTION CGenericMonster::m_SaveData[] =
+{
+	//TODO: should be FIELD_TIME
+	DEFINE_FIELD(CGenericMonster, m_talkTime, FIELD_FLOAT),
+	DEFINE_FIELD(CGenericMonster, m_hTalkTarget, FIELD_EHANDLE),
+	DEFINE_FIELD(CGenericMonster, m_flIdealYaw, FIELD_FLOAT),
+	DEFINE_FIELD(CGenericMonster, m_flCurrentYaw, FIELD_FLOAT),
+};
+
+IMPLEMENT_SAVERESTORE(CGenericMonster, CBaseMonster);
 
 //=========================================================
 // Classify - indicates this monster's place in the 
@@ -126,6 +154,14 @@ void CGenericMonster :: Spawn()
 		pev->solid = SOLID_NOT;
 		pev->takedamage = DAMAGE_NO;
 	}
+
+	if (pev->spawnflags & SF_GENERICMONSTER_CONTROLLER)
+	{
+		m_afCapability = bits_CAP_TURN_HEAD;
+	}
+
+	m_flCurrentYaw = 0;
+	m_flIdealYaw = 0;
 }
 
 //=========================================================
@@ -135,6 +171,65 @@ void CGenericMonster :: Precache()
 {
 	PRECACHE_MODEL( (char *)STRING(pev->model) );
 }	
+
+void CGenericMonster::PlayScriptedSentence(const char* pszSentence, float duration, float volume, float attenuation, BOOL bConcurrent, CBaseEntity* pListener)
+{
+	m_talkTime = gpGlobals->time + duration;
+	PlaySentence(pszSentence, duration, volume, attenuation);
+
+	m_hTalkTarget = pListener;
+}
+
+void CGenericMonster::MonsterThink()
+{
+	if (m_afCapability & bits_CAP_TURN_HEAD)
+	{
+		if (m_hTalkTarget)
+		{
+			if (gpGlobals->time > m_talkTime)
+			{
+				m_flIdealYaw = 0;
+				m_hTalkTarget = nullptr;
+			}
+			else
+			{
+				IdleHeadTurn(m_hTalkTarget->pev->origin);
+			}
+		}
+
+		if (m_flCurrentYaw != m_flIdealYaw)
+		{
+			if (m_flCurrentYaw <= m_flIdealYaw)
+			{
+				m_flCurrentYaw += min(20.0, m_flIdealYaw - m_flCurrentYaw);
+			}
+			else
+			{
+				m_flCurrentYaw -= min(20.0, m_flCurrentYaw - m_flIdealYaw);
+			}
+
+			SetBoneController(0, m_flCurrentYaw);
+		}
+	}
+
+	CBaseMonster::MonsterThink();
+}
+
+// turn head towards supplied origin
+void CGenericMonster::IdleHeadTurn(Vector& vecFriend)
+{
+	// turn head in desired direction only if ent has a turnable head
+	if (m_afCapability & bits_CAP_TURN_HEAD)
+	{
+		float yaw = VecToYaw(vecFriend - pev->origin) - pev->angles.y;
+
+		if (yaw > 180) yaw -= 360;
+		if (yaw < -180) yaw += 360;
+
+		// turn towards vector
+		m_flIdealYaw = yaw;
+	}
+}
 
 //=========================================================
 // AI Schedules Specific to this monster
