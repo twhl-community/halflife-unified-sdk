@@ -37,13 +37,13 @@
 class CPathTrack : public CPointEntity
 {
 public:
-	void		Spawn( void );
-	void		Activate( void );
-	void		KeyValue( KeyValueData* pkvd);
+	void		Spawn() override;
+	void		Activate() override;
+	void		KeyValue( KeyValueData* pkvd) override;
 	
 	void		SetPrevious( CPathTrack *pprevious );
-	void		Link( void );
-	void		Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
+	void		Link();
+	void		Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value ) override;
 
 	CPathTrack	*ValidPath( CPathTrack *ppath, int testFlag );		// Returns ppath if enabled, NULL otherwise
 	void		Project( CPathTrack *pstart, CPathTrack *pend, Vector *origin, float dist );
@@ -53,15 +53,15 @@ public:
 	CPathTrack	*LookAhead( Vector *origin, float dist, int move );
 	CPathTrack	*Nearest( Vector origin );
 
-	CPathTrack	*GetNext( void );
-	CPathTrack	*GetPrevious( void );
+	CPathTrack	*GetNext();
+	CPathTrack	*GetPrevious();
 
-	virtual int		Save( CSave &save );
-	virtual int		Restore( CRestore &restore );
+	int		Save( CSave &save ) override;
+	int		Restore( CRestore &restore ) override;
 	
 	static	TYPEDESCRIPTION m_SaveData[];
 #if PATH_SPARKLE_DEBUG
-	void EXPORT Sparkle(void);
+	void EXPORT Sparkle();
 #endif
 
 	float		m_length;
@@ -75,36 +75,36 @@ public:
 class CFuncTrackTrain : public CBaseEntity
 {
 public:
-	void Spawn( void );
-	void Precache( void );
+	void Spawn() override;
+	void Precache() override;
 
-	void Blocked( CBaseEntity *pOther );
-	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
-	void KeyValue( KeyValueData* pkvd );
+	void Blocked( CBaseEntity *pOther ) override;
+	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value ) override;
+	void KeyValue( KeyValueData* pkvd ) override;
 
-	void EXPORT Next( void );
-	void EXPORT Find( void );
-	void EXPORT NearestPath( void );
-	void EXPORT DeadEnd( void );
+	void EXPORT Next();
+	void EXPORT Find();
+	void EXPORT NearestPath();
+	void EXPORT DeadEnd();
 
 	void		NextThink( float thinkTime, BOOL alwaysThink );
 
 	void SetTrack( CPathTrack *track ) { m_ppath = track->Nearest(pev->origin); }
 	void SetControls( entvars_t *pevControls );
-	BOOL OnControls( entvars_t *pev );
+	BOOL OnControls( entvars_t *pev ) override;
 
-	void StopSound ( void );
-	void UpdateSound ( void );
+	void StopSound ();
+	void UpdateSound ();
 	
 	static CFuncTrackTrain *Instance( edict_t *pent );
 
-	virtual int		Save( CSave &save );
-	virtual int		Restore( CRestore &restore );
+	int		Save( CSave &save ) override;
+	int		Restore( CRestore &restore ) override;
 	
 	static	TYPEDESCRIPTION m_SaveData[];
-	virtual int	ObjectCaps( void ) { return (CBaseEntity :: ObjectCaps() & ~FCAP_ACROSS_TRANSITION) | FCAP_DIRECTIONAL_USE; }
+	int	ObjectCaps() override { return (CBaseEntity :: ObjectCaps() & ~FCAP_ACROSS_TRANSITION) | FCAP_DIRECTIONAL_USE; }
 
-	virtual void	OverrideReset( void );
+	void	OverrideReset() override;
 
 	CPathTrack	*m_ppath;
 	float		m_length;

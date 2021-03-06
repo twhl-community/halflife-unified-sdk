@@ -35,16 +35,16 @@ LINK_ENTITY_TO_CLASS( info_target, CPointEntity );
 class CBubbling : public CBaseEntity
 {
 public:
-	void	Spawn( void );
-	void	Precache( void );
-	void	KeyValue( KeyValueData *pkvd );
+	void	Spawn() override;
+	void	Precache() override;
+	void	KeyValue( KeyValueData *pkvd ) override;
 	
-	void	EXPORT FizzThink( void );
-	void	Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
+	void	EXPORT FizzThink();
+	void	Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value ) override;
 
-	virtual int		Save( CSave &save );
-	virtual int		Restore( CRestore &restore );
-	virtual int		ObjectCaps( void ) { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+	int		Save( CSave &save ) override;
+	int		Restore( CRestore &restore ) override;
+	int		ObjectCaps() override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	int		m_density;
@@ -69,7 +69,7 @@ IMPLEMENT_SAVERESTORE( CBubbling, CBaseEntity );
 
 #define SF_BUBBLES_STARTOFF		0x0001
 
-void CBubbling::Spawn( void )
+void CBubbling::Spawn()
 {
 	Precache( );
 	SET_MODEL( ENT(pev), STRING(pev->model) );		// Set size
@@ -95,7 +95,7 @@ void CBubbling::Spawn( void )
 		m_state = 0;
 }
 
-void CBubbling::Precache( void )
+void CBubbling::Precache()
 {
 	m_bubbleModel = PRECACHE_MODEL("sprites/bubble.spr");			// Precache bubble sprite
 }
@@ -141,7 +141,7 @@ void CBubbling::KeyValue( KeyValueData *pkvd )
 }
 
 
-void CBubbling::FizzThink( void )
+void CBubbling::FizzThink()
 {
 	MESSAGE_BEGIN( MSG_PAS, SVC_TEMPENTITY, VecBModelOrigin(pev) );
 		WRITE_BYTE( TE_FIZZ );
@@ -164,13 +164,13 @@ void CBubbling::FizzThink( void )
 
 LINK_ENTITY_TO_CLASS( beam, CBeam );
 
-void CBeam::Spawn( void )
+void CBeam::Spawn()
 {
 	pev->solid = SOLID_NOT;							// Remove model & collisions
 	Precache( );
 }
 
-void CBeam::Precache( void )
+void CBeam::Precache()
 {
 	if ( pev->owner )
 		SetStartEntity( ENTINDEX( pev->owner ) );
@@ -192,7 +192,7 @@ void CBeam::SetEndEntity( int entityIndex )
 
 
 // These don't take attachments into account
-const Vector &CBeam::GetStartPos( void )
+const Vector &CBeam::GetStartPos()
 {
 	if ( GetType() == BEAM_ENTS )
 	{
@@ -203,7 +203,7 @@ const Vector &CBeam::GetStartPos( void )
 }
 
 
-const Vector &CBeam::GetEndPos( void )
+const Vector &CBeam::GetEndPos()
 {
 	int type = GetType();
 	if ( type == BEAM_POINTS || type == BEAM_HOSE )
@@ -290,7 +290,7 @@ void CBeam::EntsInit( int startIndex, int endIndex )
 }
 
 
-void CBeam::RelinkBeam( void )
+void CBeam::RelinkBeam()
 {
 	const Vector &startPos = GetStartPos(), &endPos = GetEndPos();
 
@@ -308,7 +308,7 @@ void CBeam::RelinkBeam( void )
 }
 
 #if 0
-void CBeam::SetObjectCollisionBox( void )
+void CBeam::SetObjectCollisionBox()
 {
 	const Vector &startPos = GetStartPos(), &endPos = GetEndPos();
 
@@ -371,31 +371,31 @@ void CBeam::DoSparks( const Vector &start, const Vector &end )
 class CLightning : public CBeam
 {
 public:
-	void	Spawn( void );
-	void	Precache( void );
-	void	KeyValue( KeyValueData *pkvd );
-	void	Activate( void );
+	void	Spawn() override;
+	void	Precache() override;
+	void	KeyValue( KeyValueData *pkvd ) override;
+	void	Activate() override;
 
-	void	EXPORT StrikeThink( void );
-	void	EXPORT DamageThink( void );
-	void	RandomArea( void );
+	void	EXPORT StrikeThink();
+	void	EXPORT DamageThink();
+	void	RandomArea();
 	void	RandomPoint( Vector &vecSrc );
 	void	Zap( const Vector &vecSrc, const Vector &vecDest );
 	void	EXPORT StrikeUse( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
 	void	EXPORT ToggleUse( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
 	
-	inline BOOL ServerSide( void )
+	inline BOOL ServerSide()
 	{
 		if ( m_life == 0 && !(pev->spawnflags & SF_BEAM_RING) )
 			return TRUE;
 		return FALSE;
 	}
 
-	virtual int		Save( CSave &save );
-	virtual int		Restore( CRestore &restore );
+	int		Save( CSave &save ) override;
+	int		Restore( CRestore &restore ) override;
 	static	TYPEDESCRIPTION m_SaveData[];
 
-	void	BeamUpdateVars( void );
+	void	BeamUpdateVars();
 
 	static CLightning* LightningCreate(const char* pSpriteName, int width)
 	{
@@ -429,11 +429,11 @@ LINK_ENTITY_TO_CLASS( env_beam, CLightning );
 #if _DEBUG
 class CTripBeam : public CLightning
 {
-	void Spawn( void );
+	void Spawn() override;
 };
 LINK_ENTITY_TO_CLASS( trip_beam, CTripBeam );
 
-void CTripBeam::Spawn( void )
+void CTripBeam::Spawn()
 {
 	CLightning::Spawn();
 	SetTouch( &CTripBeam::TriggerTouch );
@@ -464,7 +464,7 @@ TYPEDESCRIPTION	CLightning::m_SaveData[] =
 IMPLEMENT_SAVERESTORE( CLightning, CBeam );
 
 
-void CLightning::Spawn( void )
+void CLightning::Spawn()
 {
 	if ( FStringNull( m_iszSpriteName ) )
 	{
@@ -513,14 +513,14 @@ void CLightning::Spawn( void )
 	}
 }
 
-void CLightning::Precache( void )
+void CLightning::Precache()
 {
 	m_spriteTexture = PRECACHE_MODEL( (char *)STRING(m_iszSpriteName) );
 	CBeam::Precache();
 }
 
 
-void CLightning::Activate( void )
+void CLightning::Activate()
 {
 	if ( ServerSide() )
 		BeamUpdateVars();
@@ -645,7 +645,7 @@ int IsPointEntity( CBaseEntity *pEnt )
 }
 
 
-void CLightning::StrikeThink( void )
+void CLightning::StrikeThink()
 {
 	if ( m_life != 0 )
 	{
@@ -773,7 +773,7 @@ void CBeam::BeamDamage( TraceResult *ptr )
 }
 
 
-void CLightning::DamageThink( void )
+void CLightning::DamageThink()
 {
 	pev->nextthink = gpGlobals->time + 0.1;
 	TraceResult tr;
@@ -824,7 +824,7 @@ void CLightning::Zap( const Vector &vecSrc, const Vector &vecDest )
 	DoSparks( vecSrc, vecDest );
 }
 
-void CLightning::RandomArea( void )
+void CLightning::RandomArea()
 {
 	int iLoops = 0;
 
@@ -890,7 +890,7 @@ void CLightning::RandomPoint( Vector &vecSrc )
 
 
 
-void CLightning::BeamUpdateVars( void )
+void CLightning::BeamUpdateVars()
 {
 	int beamType;
 	int pointStart, pointEnd;
@@ -966,7 +966,7 @@ TYPEDESCRIPTION	CLaser::m_SaveData[] =
 
 IMPLEMENT_SAVERESTORE( CLaser, CBeam );
 
-void CLaser::Spawn( void )
+void CLaser::Spawn()
 {
 	if ( FStringNull( pev->model ) )
 	{
@@ -995,7 +995,7 @@ void CLaser::Spawn( void )
 		TurnOn();
 }
 
-void CLaser::Precache( void )
+void CLaser::Precache()
 {
 	pev->modelindex = PRECACHE_MODEL( (char *)STRING(pev->model) );
 	if ( m_iszSpriteName )
@@ -1050,7 +1050,7 @@ void CLaser::KeyValue( KeyValueData *pkvd )
 }
 
 
-int CLaser::IsOn( void )
+int CLaser::IsOn()
 {
 	if (pev->effects & EF_NODRAW)
 		return 0;
@@ -1058,7 +1058,7 @@ int CLaser::IsOn( void )
 }
 
 
-void CLaser::TurnOff( void )
+void CLaser::TurnOff()
 {
 	pev->effects |= EF_NODRAW;
 	pev->nextthink = 0;
@@ -1067,7 +1067,7 @@ void CLaser::TurnOff( void )
 }
 
 
-void CLaser::TurnOn( void )
+void CLaser::TurnOn()
 {
 	pev->effects &= ~EF_NODRAW;
 	if ( m_pSprite )
@@ -1104,7 +1104,7 @@ void CLaser::FireAtPoint( TraceResult &tr )
 	DoSparks( GetStartPos(), tr.vecEndPos );
 }
 
-void CLaser::StrikeThink( void )
+void CLaser::StrikeThink()
 {
 	CBaseEntity *pEnd = RandomTargetname( STRING(pev->message) );
 
@@ -1123,11 +1123,11 @@ void CLaser::StrikeThink( void )
 class CGlow : public CPointEntity
 {
 public:
-	void Spawn( void );
-	void Think( void );
+	void Spawn() override;
+	void Think() override;
 	void Animate( float frames );
-	virtual int		Save( CSave &save );
-	virtual int		Restore( CRestore &restore );
+	int		Save( CSave &save ) override;
+	int		Restore( CRestore &restore ) override;
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	float		m_lastTime;
@@ -1144,7 +1144,7 @@ TYPEDESCRIPTION	CGlow::m_SaveData[] =
 
 IMPLEMENT_SAVERESTORE( CGlow, CPointEntity );
 
-void CGlow::Spawn( void )
+void CGlow::Spawn()
 {
 	pev->solid			= SOLID_NOT;
 	pev->movetype		= MOVETYPE_NONE;
@@ -1162,7 +1162,7 @@ void CGlow::Spawn( void )
 }
 
 
-void CGlow::Think( void )
+void CGlow::Think()
 {
 	Animate( pev->framerate * (gpGlobals->time - m_lastTime) );
 
@@ -1188,7 +1188,7 @@ TYPEDESCRIPTION	CSprite::m_SaveData[] =
 
 IMPLEMENT_SAVERESTORE( CSprite, CPointEntity );
 
-void CSprite::Spawn( void )
+void CSprite::Spawn()
 {
 	pev->solid			= SOLID_NOT;
 	pev->movetype		= MOVETYPE_NONE;
@@ -1213,7 +1213,7 @@ void CSprite::Spawn( void )
 }
 
 
-void CSprite::Precache( void )
+void CSprite::Precache()
 {
 	PRECACHE_MODEL( (char *)STRING(pev->model) );
 
@@ -1250,7 +1250,7 @@ CSprite *CSprite::SpriteCreate( const char *pSpriteName, const Vector &origin, B
 }
 
 
-void CSprite::AnimateThink( void )
+void CSprite::AnimateThink()
 {
 	Animate( pev->framerate * (gpGlobals->time - m_lastTime) );
 
@@ -1258,7 +1258,7 @@ void CSprite::AnimateThink( void )
 	m_lastTime			= gpGlobals->time;
 }
 
-void CSprite::AnimateUntilDead( void )
+void CSprite::AnimateUntilDead()
 {
 	if ( gpGlobals->time > pev->dmgtime )
 		UTIL_Remove(this);
@@ -1280,7 +1280,7 @@ void CSprite::Expand( float scaleSpeed, float fadeSpeed )
 }
 
 
-void CSprite::ExpandThink( void )
+void CSprite::ExpandThink()
 {
 	float frametime = gpGlobals->time - m_lastTime;
 	pev->scale += pev->speed * frametime;
@@ -1316,14 +1316,14 @@ void CSprite::Animate( float frames )
 }
 
 
-void CSprite::TurnOff( void )
+void CSprite::TurnOff()
 {
 	pev->effects = EF_NODRAW;
 	pev->nextthink = 0;
 }
 
 
-void CSprite::TurnOn( void )
+void CSprite::TurnOn()
 {
 	pev->effects = 0;
 	if ( (pev->framerate && m_maxFrame > 1.0) || (pev->spawnflags & SF_SPRITE_ONCE) )
@@ -1356,16 +1356,16 @@ void CSprite::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useTy
 class CGibShooter : public CBaseDelay
 {
 public:
-	void	Spawn( void );
-	void	Precache( void );
-	void	KeyValue( KeyValueData *pkvd );
-	void EXPORT ShootThink( void );
-	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
+	void	Spawn() override;
+	void	Precache() override;
+	void	KeyValue( KeyValueData *pkvd ) override;
+	void EXPORT ShootThink();
+	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value ) override;
 
-	virtual CGib *CreateGib( void );
+	virtual CGib *CreateGib();
 
-	virtual int		Save( CSave &save );
-	virtual int		Restore( CRestore &restore );
+	int		Save( CSave &save ) override;
+	int		Restore( CRestore &restore ) override;
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	int	m_iGibs;
@@ -1392,7 +1392,7 @@ IMPLEMENT_SAVERESTORE( CGibShooter, CBaseDelay );
 LINK_ENTITY_TO_CLASS( gibshooter, CGibShooter );
 
 
-void CGibShooter :: Precache ( void )
+void CGibShooter :: Precache ()
 {
 	if ( g_Language == LANGUAGE_GERMAN )
 	{
@@ -1439,7 +1439,7 @@ void CGibShooter::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE u
 	pev->nextthink = gpGlobals->time;
 }
 
-void CGibShooter::Spawn( void )
+void CGibShooter::Spawn()
 {
 	Precache();
 
@@ -1461,7 +1461,7 @@ void CGibShooter::Spawn( void )
 }
 
 
-CGib *CGibShooter :: CreateGib ( void )
+CGib *CGibShooter :: CreateGib ()
 {
 	if ( CVAR_GET_FLOAT("violence_hgibs") == 0 )
 		return NULL;
@@ -1481,7 +1481,7 @@ CGib *CGibShooter :: CreateGib ( void )
 }
 
 
-void CGibShooter :: ShootThink ( void )
+void CGibShooter :: ShootThink ()
 {
 	pev->nextthink = gpGlobals->time + m_flDelay;
 
@@ -1534,10 +1534,10 @@ void CGibShooter :: ShootThink ( void )
 
 class CEnvShooter : public CGibShooter
 {
-	void		Precache( void );
-	void		KeyValue( KeyValueData *pkvd );
+	void		Precache() override;
+	void		KeyValue( KeyValueData *pkvd ) override;
 
-	CGib		*CreateGib( void );
+	CGib		*CreateGib() override;
 };
 
 LINK_ENTITY_TO_CLASS( env_shooter, CEnvShooter );
@@ -1584,14 +1584,14 @@ void CEnvShooter :: KeyValue( KeyValueData *pkvd )
 }
 
 
-void CEnvShooter :: Precache ( void )
+void CEnvShooter :: Precache ()
 {
 	m_iGibModelIndex = PRECACHE_MODEL( (char *)STRING(pev->model) );
 	CBreakable::MaterialSoundPrecache( (Materials)m_iGibMaterial );
 }
 
 
-CGib *CEnvShooter :: CreateGib ( void )
+CGib *CEnvShooter :: CreateGib ()
 {
 	CGib *pGib = GetClassPtr( (CGib *)NULL );
 
@@ -1622,11 +1622,11 @@ CGib *CEnvShooter :: CreateGib ( void )
 class CTestEffect : public CBaseDelay
 {
 public:
-	void	Spawn( void );
-	void	Precache( void );
-	// void	KeyValue( KeyValueData *pkvd );
-	void EXPORT TestThink( void );
-	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
+	void	Spawn() override;
+	void	Precache() override;
+	// void	KeyValue( KeyValueData *pkvd ) override;
+	void EXPORT TestThink();
+	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value ) override;
 
 	int		m_iLoop;
 	int		m_iBeam;
@@ -1638,17 +1638,17 @@ public:
 
 LINK_ENTITY_TO_CLASS( test_effect, CTestEffect );
 
-void CTestEffect::Spawn( void )
+void CTestEffect::Spawn()
 {
 	Precache( );
 }
 
-void CTestEffect::Precache( void )
+void CTestEffect::Precache()
 {
 	PRECACHE_MODEL( "sprites/lgtning.spr" );
 }
 
-void CTestEffect::TestThink( void )
+void CTestEffect::TestThink()
 {
 	int i;
 	float t = (gpGlobals->time - m_flStartTime);
@@ -1728,17 +1728,17 @@ void CTestEffect::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE u
 class CBlood : public CPointEntity
 {
 public:
-	void	Spawn( void );
-	void	Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
-	void	KeyValue( KeyValueData *pkvd );
+	void	Spawn() override;
+	void	Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value ) override;
+	void	KeyValue( KeyValueData *pkvd ) override;
 
-	inline	int		Color( void ) { return pev->impulse; }
-	inline	float 	BloodAmount( void ) { return pev->dmg; }
+	inline	int		Color() { return pev->impulse; }
+	inline	float 	BloodAmount() { return pev->dmg; }
 
 	inline	void SetColor( int color ) { pev->impulse = color; }
 	inline	void SetBloodAmount( float amount ) { pev->dmg = amount; }
 	
-	Vector	Direction( void );
+	Vector	Direction();
 	Vector	BloodPosition( CBaseEntity *pActivator );
 
 private:
@@ -1753,7 +1753,7 @@ LINK_ENTITY_TO_CLASS( env_blood, CBlood );
 #define SF_BLOOD_PLAYER		0x0004
 #define SF_BLOOD_DECAL		0x0008
 
-void CBlood::Spawn( void )
+void CBlood::Spawn()
 {
 	pev->solid			= SOLID_NOT;
 	pev->movetype		= MOVETYPE_NONE;
@@ -1790,7 +1790,7 @@ void CBlood::KeyValue( KeyValueData *pkvd )
 }
 
 
-Vector CBlood::Direction( void )
+Vector CBlood::Direction()
 {
 	if ( pev->spawnflags & SF_BLOOD_RANDOM )
 		return UTIL_RandomBloodVector();
@@ -1844,14 +1844,14 @@ void CBlood::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useTyp
 class CShake : public CPointEntity
 {
 public:
-	void	Spawn( void );
-	void	Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
-	void	KeyValue( KeyValueData *pkvd );
+	void	Spawn() override;
+	void	Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value ) override;
+	void	KeyValue( KeyValueData *pkvd ) override;
 
-	inline	float	Amplitude( void ) { return pev->scale; }
-	inline	float	Frequency( void ) { return pev->dmg_save; }
-	inline	float	Duration( void ) { return pev->dmg_take; }
-	inline	float	Radius( void ) { return pev->dmg; }
+	inline	float	Amplitude() { return pev->scale; }
+	inline	float	Frequency() { return pev->dmg_save; }
+	inline	float	Duration() { return pev->dmg_take; }
+	inline	float	Radius() { return pev->dmg; }
 
 	inline	void	SetAmplitude( float amplitude ) { pev->scale = amplitude; }
 	inline	void	SetFrequency( float frequency ) { pev->dmg_save = frequency; }
@@ -1874,7 +1874,7 @@ LINK_ENTITY_TO_CLASS( env_shake, CShake );
 #define SF_SHAKE_DISRUPT	0x0002		// Disrupt controls
 #define SF_SHAKE_INAIR		0x0004		// Shake players in air
 
-void CShake::Spawn( void )
+void CShake::Spawn()
 {
 	pev->solid			= SOLID_NOT;
 	pev->movetype		= MOVETYPE_NONE;
@@ -1922,12 +1922,12 @@ void CShake::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useTyp
 class CFade : public CPointEntity
 {
 public:
-	void	Spawn( void );
-	void	Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
-	void	KeyValue( KeyValueData *pkvd );
+	void	Spawn() override;
+	void	Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value ) override;
+	void	KeyValue( KeyValueData *pkvd ) override;
 
-	inline	float	Duration( void ) { return pev->dmg_take; }
-	inline	float	HoldTime( void ) { return pev->dmg_save; }
+	inline	float	Duration() { return pev->dmg_take; }
+	inline	float	HoldTime() { return pev->dmg_save; }
 
 	inline	void	SetDuration( float duration ) { pev->dmg_take = duration; }
 	inline	void	SetHoldTime( float hold ) { pev->dmg_save = hold; }
@@ -1942,7 +1942,7 @@ LINK_ENTITY_TO_CLASS( env_fade, CFade );
 #define SF_FADE_MODULATE		0x0002		// Modulate, don't blend
 #define SF_FADE_ONLYONE			0x0004
 
-void CFade::Spawn( void )
+void CFade::Spawn()
 {
 	pev->solid			= SOLID_NOT;
 	pev->movetype		= MOVETYPE_NONE;
@@ -1996,17 +1996,17 @@ void CFade::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType
 class CMessage : public CPointEntity
 {
 public:
-	void	Spawn( void );
-	void	Precache( void );
-	void	Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
-	void	KeyValue( KeyValueData *pkvd );
+	void	Spawn() override;
+	void	Precache() override;
+	void	Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value ) override;
+	void	KeyValue( KeyValueData *pkvd ) override;
 private:
 };
 
 LINK_ENTITY_TO_CLASS( env_message, CMessage );
 
 
-void CMessage::Spawn( void )
+void CMessage::Spawn()
 {
 	Precache();
 
@@ -2040,7 +2040,7 @@ void CMessage::Spawn( void )
 }
 
 
-void CMessage::Precache( void )
+void CMessage::Precache()
 {
 	if ( pev->noise )
 		PRECACHE_SOUND( (char *)STRING(pev->noise) );
@@ -2103,14 +2103,14 @@ void CMessage::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useT
 class CEnvFunnel : public CBaseDelay
 {
 public:
-	void	Spawn( void );
-	void	Precache( void );
-	void	Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
+	void	Spawn() override;
+	void	Precache() override;
+	void	Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value ) override;
 
 	int		m_iSprite;	// Don't save, precache
 };
 
-void CEnvFunnel :: Precache ( void )
+void CEnvFunnel :: Precache ()
 {
 	m_iSprite = PRECACHE_MODEL ( "sprites/flare6.spr" );
 }
@@ -2142,7 +2142,7 @@ void CEnvFunnel::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE us
 	pev->nextthink = gpGlobals->time;
 }
 
-void CEnvFunnel::Spawn( void )
+void CEnvFunnel::Spawn()
 {
 	Precache();
 	pev->solid = SOLID_NOT;
@@ -2157,12 +2157,12 @@ void CEnvFunnel::Spawn( void )
 class CEnvBeverage : public CBaseDelay
 {
 public:
-	void	Spawn( void );
-	void	Precache( void );
-	void	Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
+	void	Spawn() override;
+	void	Precache() override;
+	void	Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value ) override;
 };
 
-void CEnvBeverage :: Precache ( void )
+void CEnvBeverage :: Precache ()
 {
 	PRECACHE_MODEL( "models/can.mdl" );
 	PRECACHE_SOUND( "weapons/g_bounce3.wav" );
@@ -2197,7 +2197,7 @@ void CEnvBeverage::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE 
 	//pev->nextthink = gpGlobals->time;
 }
 
-void CEnvBeverage::Spawn( void )
+void CEnvBeverage::Spawn()
 {
 	Precache();
 	pev->solid = SOLID_NOT;
@@ -2216,19 +2216,19 @@ void CEnvBeverage::Spawn( void )
 class CItemSoda : public CBaseEntity
 {
 public:
-	void	Spawn( void );
-	void	Precache( void );
-	void	EXPORT CanThink ( void );
+	void	Spawn() override;
+	void	Precache() override;
+	void	EXPORT CanThink ();
 	void	EXPORT CanTouch ( CBaseEntity *pOther );
 };
 
-void CItemSoda :: Precache ( void )
+void CItemSoda :: Precache ()
 {
 }
 
 LINK_ENTITY_TO_CLASS( item_sodacan, CItemSoda );
 
-void CItemSoda::Spawn( void )
+void CItemSoda::Spawn()
 {
 	Precache();
 	pev->solid = SOLID_NOT;
@@ -2241,7 +2241,7 @@ void CItemSoda::Spawn( void )
 	pev->nextthink = gpGlobals->time + 0.5;
 }
 
-void CItemSoda::CanThink ( void )
+void CItemSoda::CanThink ()
 {
 	EMIT_SOUND (ENT(pev), CHAN_WEAPON, "weapons/g_bounce3.wav", 1, ATTN_NORM );
 

@@ -34,17 +34,17 @@
 class CBarnacle : public CBaseMonster
 {
 public:
-	void Spawn( void );
-	void Precache( void );
+	void Spawn() override;
+	void Precache() override;
 	CBaseEntity *TongueTouchEnt ( float *pflLength );
-	int  Classify ( void );
-	void HandleAnimEvent( MonsterEvent_t *pEvent );
-	void EXPORT BarnacleThink ( void );
-	void EXPORT WaitTillDead ( void );
-	void Killed( entvars_t *pevAttacker, int iGib );
-	int TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType );
-	virtual int		Save( CSave &save );
-	virtual int		Restore( CRestore &restore );
+	int  Classify () override;
+	void HandleAnimEvent( MonsterEvent_t *pEvent ) override;
+	void EXPORT BarnacleThink ();
+	void EXPORT WaitTillDead ();
+	void Killed( entvars_t *pevAttacker, int iGib ) override;
+	int TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType ) override;
+	int		Save( CSave &save ) override;
+	int		Restore( CRestore &restore ) override;
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	float m_flAltitude;
@@ -73,7 +73,7 @@ IMPLEMENT_SAVERESTORE( CBarnacle, CBaseMonster );
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	CBarnacle :: Classify ( void )
+int	CBarnacle :: Classify ()
 {
 	return	CLASS_ALIEN_MONSTER;
 }
@@ -142,7 +142,7 @@ int CBarnacle::TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, floa
 
 //=========================================================
 //=========================================================
-void CBarnacle :: BarnacleThink ( void )
+void CBarnacle :: BarnacleThink ()
 {
 	CBaseEntity *pTouchEnt;
 	CBaseMonster *pVictim;
@@ -354,7 +354,7 @@ void CBarnacle :: Killed( entvars_t *pevAttacker, int iGib )
 
 //=========================================================
 //=========================================================
-void CBarnacle :: WaitTillDead ( void )
+void CBarnacle :: WaitTillDead ()
 {
 	pev->nextthink = gpGlobals->time + 0.1;
 

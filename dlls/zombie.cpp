@@ -37,19 +37,19 @@
 class CZombie : public CBaseMonster
 {
 public:
-	void Spawn( void );
-	void Precache( void );
-	void SetYawSpeed( void );
-	int  Classify ( void );
-	void HandleAnimEvent( MonsterEvent_t *pEvent );
-	int IgnoreConditions ( void );
+	void Spawn() override;
+	void Precache() override;
+	void SetYawSpeed() override;
+	int  Classify () override;
+	void HandleAnimEvent( MonsterEvent_t *pEvent ) override;
+	int IgnoreConditions () override;
 
 	float m_flNextFlinch;
 
-	void PainSound( void );
-	void AlertSound( void );
-	void IdleSound( void );
-	void AttackSound( void );
+	void PainSound() override;
+	void AlertSound() override;
+	void IdleSound() override;
+	void AttackSound();
 
 	static const char *pAttackSounds[];
 	static const char *pIdleSounds[];
@@ -59,9 +59,9 @@ public:
 	static const char *pAttackMissSounds[];
 
 	// No range attacks
-	BOOL CheckRangeAttack1 ( float flDot, float flDist ) { return FALSE; }
-	BOOL CheckRangeAttack2 ( float flDot, float flDist ) { return FALSE; }
-	int TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType );
+	BOOL CheckRangeAttack1 ( float flDot, float flDist ) override { return FALSE; }
+	BOOL CheckRangeAttack2 ( float flDot, float flDist ) override { return FALSE; }
+	int TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType ) override;
 };
 
 LINK_ENTITY_TO_CLASS( monster_zombie, CZombie );
@@ -110,7 +110,7 @@ const char *CZombie::pPainSounds[] =
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	CZombie :: Classify ( void )
+int	CZombie :: Classify ()
 {
 	return	CLASS_ALIEN_MONSTER;
 }
@@ -119,7 +119,7 @@ int	CZombie :: Classify ( void )
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CZombie :: SetYawSpeed ( void )
+void CZombie :: SetYawSpeed ()
 {
 	int ys;
 
@@ -152,7 +152,7 @@ int CZombie :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, floa
 	return CBaseMonster::TakeDamage( pevInflictor, pevAttacker, flDamage, bitsDamageType );
 }
 
-void CZombie :: PainSound( void )
+void CZombie :: PainSound()
 {
 	int pitch = 95 + RANDOM_LONG(0,9);
 
@@ -160,14 +160,14 @@ void CZombie :: PainSound( void )
 		EMIT_SOUND_DYN ( ENT(pev), CHAN_VOICE, pPainSounds[ RANDOM_LONG(0,ARRAYSIZE(pPainSounds)-1) ], 1.0, ATTN_NORM, 0, pitch );
 }
 
-void CZombie :: AlertSound( void )
+void CZombie :: AlertSound()
 {
 	int pitch = 95 + RANDOM_LONG(0,9);
 
 	EMIT_SOUND_DYN ( ENT(pev), CHAN_VOICE, pAlertSounds[ RANDOM_LONG(0,ARRAYSIZE(pAlertSounds)-1) ], 1.0, ATTN_NORM, 0, pitch );
 }
 
-void CZombie :: IdleSound( void )
+void CZombie :: IdleSound()
 {
 	int pitch = 100 + RANDOM_LONG(-5,5);
 
@@ -175,7 +175,7 @@ void CZombie :: IdleSound( void )
 	EMIT_SOUND_DYN ( ENT(pev), CHAN_VOICE, pIdleSounds[ RANDOM_LONG(0,ARRAYSIZE(pIdleSounds)-1) ], 1.0, ATTN_NORM, 0, pitch );
 }
 
-void CZombie :: AttackSound( void )
+void CZombie :: AttackSound()
 {
 	int pitch = 100 + RANDOM_LONG(-5,5);
 
@@ -322,7 +322,7 @@ void CZombie :: Precache()
 
 
 
-int CZombie::IgnoreConditions ( void )
+int CZombie::IgnoreConditions ()
 {
 	int iIgnore = CBaseMonster::IgnoreConditions();
 

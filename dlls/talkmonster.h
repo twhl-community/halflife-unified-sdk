@@ -98,51 +98,51 @@ enum
 class CTalkMonster : public CBaseMonster
 {
 public:
-	void			TalkInit( void );				
+	void			TalkInit();				
 	CBaseEntity		*FindNearestFriend(BOOL fPlayer);
-	float			TargetDistance( void );
-	void			StopTalking( void ) { SentenceStop(); }
+	float			TargetDistance();
+	void			StopTalking() { SentenceStop(); }
 	
 	// Base Monster functions
-	void			Precache( void );
-	int				TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);
-	void			Touch(	CBaseEntity *pOther );
-	void			Killed( entvars_t *pevAttacker, int iGib );
-	int				IRelationship ( CBaseEntity *pTarget );
-	virtual int		CanPlaySentence( BOOL fDisregardState );
-	virtual void	PlaySentence( const char *pszSentence, float duration, float volume, float attenuation );
-	void			PlayScriptedSentence( const char *pszSentence, float duration, float volume, float attenuation, BOOL bConcurrent, CBaseEntity *pListener );
-	void			KeyValue( KeyValueData *pkvd );
+	void			Precache() override;
+	int				TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType) override;
+	void			Touch(	CBaseEntity *pOther ) override;
+	void			Killed( entvars_t *pevAttacker, int iGib ) override;
+	int				IRelationship ( CBaseEntity *pTarget ) override;
+	int		CanPlaySentence( BOOL fDisregardState ) override;
+	void	PlaySentence( const char *pszSentence, float duration, float volume, float attenuation ) override;
+	void			PlayScriptedSentence( const char *pszSentence, float duration, float volume, float attenuation, BOOL bConcurrent, CBaseEntity *pListener ) override;
+	void			KeyValue( KeyValueData *pkvd ) override;
 
 	// AI functions
-	void			SetActivity ( Activity newActivity );
-	Schedule_t		*GetScheduleOfType ( int Type );
-	void			StartTask( Task_t *pTask );
-	void			RunTask( Task_t *pTask );
-	void			HandleAnimEvent( MonsterEvent_t *pEvent );
-	void			PrescheduleThink( void );
+	void			SetActivity ( Activity newActivity ) override;
+	Schedule_t		*GetScheduleOfType ( int Type ) override;
+	void			StartTask( Task_t *pTask ) override;
+	void			RunTask( Task_t *pTask ) override;
+	void			HandleAnimEvent( MonsterEvent_t *pEvent ) override;
+	void			PrescheduleThink() override;
 	
 
 	// Conversations / communication
-	int				GetVoicePitch( void );
-	void			IdleRespond( void );
-	int				FIdleSpeak( void );
-	int				FIdleStare( void );
-	int				FIdleHello( void );
+	int				GetVoicePitch();
+	void			IdleRespond();
+	int				FIdleSpeak();
+	int				FIdleStare();
+	int				FIdleHello();
 	void			IdleHeadTurn( Vector &vecFriend );
-	int				FOkToSpeak( void );
-	void			TrySmellTalk( void );
+	int				FOkToSpeak();
+	void			TrySmellTalk();
 	CBaseEntity		*EnumFriends( CBaseEntity *pentPrevious, int listNumber, BOOL bTrace );
-	void			AlertFriends( void );
-	void			ShutUpFriends( void );
-	BOOL			IsTalking( void );
+	void			AlertFriends();
+	void			ShutUpFriends();
+	BOOL			IsTalking();
 	void			Talk( float flDuration );	
 	// For following
-	BOOL			CanFollow( void );
-	BOOL			IsFollowing( void ) { return m_hTargetEnt != NULL && m_hTargetEnt->IsPlayer(); }
+	BOOL			CanFollow();
+	BOOL			IsFollowing() { return m_hTargetEnt != NULL && m_hTargetEnt->IsPlayer(); }
 	void			StopFollowing( BOOL clearSchedule );
 	void			StartFollowing( CBaseEntity *pLeader );
-	virtual void	DeclineFollowing( void ) {}
+	virtual void	DeclineFollowing() {}
 	void			LimitFollowers( CBaseEntity *pPlayer, int maxFollowers );
 
 	void EXPORT		FollowerUse( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
@@ -150,8 +150,8 @@ public:
 	virtual void	SetAnswerQuestion( CTalkMonster *pSpeaker );
 	virtual int		FriendNumber( int arrayNumber )	{ return arrayNumber; }
 
-	virtual int		Save( CSave &save );
-	virtual int		Restore( CRestore &restore );
+	int		Save( CSave &save ) override;
+	int		Restore( CRestore &restore ) override;
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	

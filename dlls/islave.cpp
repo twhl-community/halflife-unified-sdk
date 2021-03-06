@@ -42,40 +42,40 @@ extern DLL_GLOBAL int		g_iSkillLevel;
 class CISlave : public CSquadMonster
 {
 public:
-	void Spawn( void );
-	void Precache( void );
-	void SetYawSpeed( void );
-	int	 ISoundMask( void );
-	int  Classify ( void );
-	int  IRelationship( CBaseEntity *pTarget );
-	void HandleAnimEvent( MonsterEvent_t *pEvent );
-	BOOL CheckRangeAttack1 ( float flDot, float flDist );
-	BOOL CheckRangeAttack2 ( float flDot, float flDist );
+	void Spawn() override;
+	void Precache() override;
+	void SetYawSpeed() override;
+	int	 ISoundMask() override;
+	int  Classify () override;
+	int  IRelationship( CBaseEntity *pTarget ) override;
+	void HandleAnimEvent( MonsterEvent_t *pEvent ) override;
+	BOOL CheckRangeAttack1 ( float flDot, float flDist ) override;
+	BOOL CheckRangeAttack2 ( float flDot, float flDist ) override;
 	void CallForHelp( const char *szClassname, float flDist, EHANDLE hEnemy, Vector &vecLocation );
-	void TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
-	int TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
+	void TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType) override;
+	int TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 
-	void DeathSound( void );
-	void PainSound( void );
-	void AlertSound( void );
-	void IdleSound( void );
+	void DeathSound() override;
+	void PainSound() override;
+	void AlertSound() override;
+	void IdleSound() override;
 
-	void Killed( entvars_t *pevAttacker, int iGib );
+	void Killed( entvars_t *pevAttacker, int iGib ) override;
 
-    void StartTask ( Task_t *pTask );
-	Schedule_t *GetSchedule( void );
-	Schedule_t *GetScheduleOfType ( int Type );
+    void StartTask ( Task_t *pTask ) override;
+	Schedule_t *GetSchedule() override;
+	Schedule_t *GetScheduleOfType ( int Type ) override;
 	CUSTOM_SCHEDULES;
 
-	int	Save( CSave &save ); 
-	int Restore( CRestore &restore );
+	int	Save( CSave &save ) override;
+	int Restore( CRestore &restore ) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
 	void ClearBeams( );
 	void ArmBeam( int side );
 	void WackBeam( int side, CBaseEntity *pEntity );
 	void ZapBeam( int side );
-	void BeamGlow( void );
+	void BeamGlow();
 
 	int m_iBravery;
 
@@ -145,7 +145,7 @@ const char *CISlave::pDeathSounds[] =
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	CISlave :: Classify ( void )
+int	CISlave :: Classify ()
 {
 	return	CLASS_ALIEN_MILITARY;
 }
@@ -189,7 +189,7 @@ void CISlave :: CallForHelp( const char *szClassname, float flDist, EHANDLE hEne
 //=========================================================
 // ALertSound - scream
 //=========================================================
-void CISlave :: AlertSound( void )
+void CISlave :: AlertSound()
 {
 	if ( m_hEnemy != NULL )
 	{
@@ -202,7 +202,7 @@ void CISlave :: AlertSound( void )
 //=========================================================
 // IdleSound
 //=========================================================
-void CISlave :: IdleSound( void )
+void CISlave :: IdleSound()
 {
 	if (RANDOM_LONG( 0, 2 ) == 0)
 	{
@@ -237,7 +237,7 @@ void CISlave :: IdleSound( void )
 //=========================================================
 // PainSound
 //=========================================================
-void CISlave :: PainSound( void )
+void CISlave :: PainSound()
 {
 	if (RANDOM_LONG( 0, 2 ) == 0)
 	{
@@ -249,7 +249,7 @@ void CISlave :: PainSound( void )
 // DieSound
 //=========================================================
 
-void CISlave :: DeathSound( void )
+void CISlave :: DeathSound()
 {
 	EMIT_SOUND_DYN ( ENT(pev), CHAN_WEAPON, pDeathSounds[ RANDOM_LONG(0,ARRAYSIZE(pDeathSounds)-1) ], 1.0, ATTN_NORM, 0, m_voicePitch );
 }
@@ -259,7 +259,7 @@ void CISlave :: DeathSound( void )
 // ISoundMask - returns a bit mask indicating which types
 // of sounds this monster regards. 
 //=========================================================
-int CISlave :: ISoundMask ( void) 
+int CISlave :: ISoundMask () 
 {
 	return	bits_SOUND_WORLD	|
 			bits_SOUND_COMBAT	|
@@ -278,7 +278,7 @@ void CISlave::Killed( entvars_t *pevAttacker, int iGib )
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CISlave :: SetYawSpeed ( void )
+void CISlave :: SetYawSpeed ()
 {
 	int ys;
 
@@ -640,7 +640,7 @@ IMPLEMENT_CUSTOM_SCHEDULES( CISlave, CSquadMonster );
 
 //=========================================================
 //=========================================================
-Schedule_t *CISlave :: GetSchedule( void )
+Schedule_t *CISlave :: GetSchedule()
 {
 	ClearBeams( );
 
