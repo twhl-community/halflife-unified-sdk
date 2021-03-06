@@ -342,18 +342,18 @@ LINK_ENTITY_TO_CLASS( item_longjump, CItemLongJump );
 
 class CItemHelmet : public CItem
 {
-	void Spawn(void)
+	void Spawn() override
 	{
 		Precache();
 		SET_MODEL(ENT(pev), "models/Barney_Helmet.mdl");
 		CItem::Spawn();
 	}
-	void Precache(void)
+	void Precache() override
 	{
 		PRECACHE_MODEL("models/Barney_Helmet.mdl");
 		PRECACHE_SOUND("items/gunpickup2.wav");
 	}
-	BOOL MyTouch(CBasePlayer* pPlayer)
+	BOOL MyTouch(CBasePlayer* pPlayer) override
 	{
 		if ((pPlayer->pev->armorvalue < MAX_NORMAL_BATTERY) &&
 			(pPlayer->pev->weapons & (1 << WEAPON_SUIT)))
@@ -393,18 +393,18 @@ LINK_ENTITY_TO_CLASS(item_helmet, CItemHelmet);
 
 class CItemArmorVest : public CItem
 {
-	void Spawn(void)
+	void Spawn() override
 	{
 		Precache();
 		SET_MODEL(ENT(pev), "models/Barney_Vest.mdl");
 		CItem::Spawn();
 	}
-	void Precache(void)
+	void Precache() override
 	{
 		PRECACHE_MODEL("models/Barney_Vest.mdl");
 		PRECACHE_SOUND("items/gunpickup2.wav");
 	}
-	BOOL MyTouch(CBasePlayer* pPlayer)
+	BOOL MyTouch(CBasePlayer* pPlayer) override
 	{
 		if ((pPlayer->pev->armorvalue < MAX_NORMAL_BATTERY) &&
 			(pPlayer->pev->weapons & (1 << WEAPON_SUIT)))

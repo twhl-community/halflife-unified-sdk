@@ -68,42 +68,42 @@ const int SF_ROSENBERG_NO_USE = 1 << 8;
 class CRosenberg : public CTalkMonster
 {
 public:
-	void Spawn(void);
-	void Precache(void);
+	void Spawn() override;
+	void Precache() override;
 
-	void SetYawSpeed(void);
-	int  Classify(void);
-	void HandleAnimEvent(MonsterEvent_t* pEvent);
-	void RunTask(Task_t* pTask);
-	void StartTask(Task_t* pTask);
-	int	ObjectCaps(void) { return CTalkMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
-	virtual int FriendNumber(int arrayNumber);
-	void SetActivity(Activity newActivity);
-	Activity GetStoppedActivity(void);
-	int ISoundMask(void);
-	void DeclineFollowing(void);
+	void SetYawSpeed() override;
+	int  Classify() override;
+	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
+	void RunTask(Task_t* pTask) override;
+	void StartTask(Task_t* pTask) override;
+	int	ObjectCaps() override { return CTalkMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
+	virtual int FriendNumber(int arrayNumber) override;
+	void SetActivity(Activity newActivity) override;
+	Activity GetStoppedActivity() override;
+	int ISoundMask() override;
+	void DeclineFollowing() override;
 
-	float	CoverRadius(void) { return 1200; }		// Need more room for cover because scientists want to get far away!
+	float	CoverRadius() override { return 1200; }		// Need more room for cover because scientists want to get far away!
 	BOOL	DisregardEnemy(CBaseEntity* pEnemy) { return !pEnemy->IsAlive() || (gpGlobals->time - m_fearTime) > 15; }
 
-	BOOL	CanHeal(void);
-	void	Heal(void);
-	void	Scream(void);
+	BOOL	CanHeal();
+	void	Heal();
+	void	Scream();
 
 	// Override these to set behavior
-	Schedule_t* GetScheduleOfType(int Type);
-	Schedule_t* GetSchedule(void);
-	MONSTERSTATE GetIdealState(void);
+	Schedule_t* GetScheduleOfType(int Type) override;
+	Schedule_t* GetSchedule() override;
+	MONSTERSTATE GetIdealState() override;
 
-	void DeathSound(void);
-	void PainSound(void);
+	void DeathSound() override;
+	void PainSound() override;
 
-	void TalkInit(void);
+	void TalkInit();
 
-	void			Killed(entvars_t* pevAttacker, int iGib);
+	void			Killed(entvars_t* pevAttacker, int iGib) override;
 
-	virtual int		Save(CSave& save);
-	virtual int		Restore(CRestore& restore);
+	int		Save(CSave& save) override;
+	int		Restore(CRestore& restore) override;
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	CUSTOM_SCHEDULES;
