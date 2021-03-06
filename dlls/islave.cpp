@@ -878,8 +878,8 @@ void CISlave :: ClearBeams( )
 class CDeadISlave : public CBaseMonster
 {
 public:
-	void Spawn( void ) override;
-	int	Classify( void ) override { return	CLASS_ALIEN_PASSIVE; }
+	void Spawn() override;
+	int	Classify() override { return	CLASS_ALIEN_PASSIVE; }
 
 	void KeyValue( KeyValueData *pkvd ) override;
 

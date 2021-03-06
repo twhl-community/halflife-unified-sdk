@@ -37,19 +37,19 @@
 class CZombieSoldier : public CBaseMonster
 {
 public:
-	void Spawn( void ) override;
-	void Precache( void ) override;
-	void SetYawSpeed( void ) override;
-	int  Classify ( void ) override;
+	void Spawn() override;
+	void Precache() override;
+	void SetYawSpeed() override;
+	int  Classify () override;
 	void HandleAnimEvent( MonsterEvent_t *pEvent ) override;
-	int IgnoreConditions ( void ) override;
+	int IgnoreConditions () override;
 
 	float m_flNextFlinch;
 
-	void PainSound( void ) override;
-	void AlertSound( void ) override;
-	void IdleSound( void ) override;
-	void AttackSound( void );
+	void PainSound() override;
+	void AlertSound() override;
+	void IdleSound() override;
+	void AttackSound();
 
 	static const char *pAttackSounds[];
 	static const char *pIdleSounds[];
@@ -110,7 +110,7 @@ const char *CZombieSoldier::pPainSounds[] =
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	CZombieSoldier :: Classify ( void )
+int	CZombieSoldier :: Classify ()
 {
 	return	CLASS_ALIEN_MONSTER;
 }
@@ -119,7 +119,7 @@ int	CZombieSoldier :: Classify ( void )
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CZombieSoldier :: SetYawSpeed ( void )
+void CZombieSoldier :: SetYawSpeed ()
 {
 	int ys;
 
@@ -152,7 +152,7 @@ int CZombieSoldier :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacke
 	return CBaseMonster::TakeDamage( pevInflictor, pevAttacker, flDamage, bitsDamageType );
 }
 
-void CZombieSoldier :: PainSound( void )
+void CZombieSoldier :: PainSound()
 {
 	int pitch = 95 + RANDOM_LONG(0,9);
 
@@ -160,14 +160,14 @@ void CZombieSoldier :: PainSound( void )
 		EMIT_SOUND_DYN ( ENT(pev), CHAN_VOICE, pPainSounds[ RANDOM_LONG(0,ARRAYSIZE(pPainSounds)-1) ], 1.0, ATTN_NORM, 0, pitch );
 }
 
-void CZombieSoldier :: AlertSound( void )
+void CZombieSoldier :: AlertSound()
 {
 	int pitch = 95 + RANDOM_LONG(0,9);
 
 	EMIT_SOUND_DYN ( ENT(pev), CHAN_VOICE, pAlertSounds[ RANDOM_LONG(0,ARRAYSIZE(pAlertSounds)-1) ], 1.0, ATTN_NORM, 0, pitch );
 }
 
-void CZombieSoldier :: IdleSound( void )
+void CZombieSoldier :: IdleSound()
 {
 	int pitch = 100 + RANDOM_LONG(-5,5);
 
@@ -175,7 +175,7 @@ void CZombieSoldier :: IdleSound( void )
 	EMIT_SOUND_DYN ( ENT(pev), CHAN_VOICE, pIdleSounds[ RANDOM_LONG(0,ARRAYSIZE(pIdleSounds)-1) ], 1.0, ATTN_NORM, 0, pitch );
 }
 
-void CZombieSoldier :: AttackSound( void )
+void CZombieSoldier :: AttackSound()
 {
 	int pitch = 100 + RANDOM_LONG(-5,5);
 
@@ -322,7 +322,7 @@ void CZombieSoldier :: Precache()
 
 
 
-int CZombieSoldier::IgnoreConditions ( void )
+int CZombieSoldier::IgnoreConditions ()
 {
 	int iIgnore = CBaseMonster::IgnoreConditions();
 
@@ -353,8 +353,8 @@ int CZombieSoldier::IgnoreConditions ( void )
 class CDeadZombieSoldier : public CBaseMonster
 {
 public:
-	void Spawn( void ) override;
-	int	Classify( void ) override { return	CLASS_ALIEN_MONSTER; }
+	void Spawn() override;
+	int	Classify() override { return	CLASS_ALIEN_MONSTER; }
 
 	void KeyValue( KeyValueData *pkvd ) override;
 
@@ -380,7 +380,7 @@ LINK_ENTITY_TO_CLASS( monster_zombie_soldier_dead, CDeadZombieSoldier );
 //=========================================================
 // ********** DeadZombieSoldier SPAWN **********
 //=========================================================
-void CDeadZombieSoldier::Spawn( void )
+void CDeadZombieSoldier::Spawn()
 {
 	PRECACHE_MODEL( "models/zombie_soldier.mdl" );
 	SET_MODEL( ENT( pev ), "models/zombie_soldier.mdl" );

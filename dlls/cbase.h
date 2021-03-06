@@ -241,11 +241,6 @@ public:
 	};
 #endif
 
-	void operator delete(void*, size_t)
-	{
-
-	}
-
 	void UpdateOnRemove();
 
 	// common member functions

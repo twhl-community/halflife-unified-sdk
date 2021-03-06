@@ -147,42 +147,42 @@ enum
 class CMOFAssassin : public CSquadMonster
 {
 public:
-	void Spawn( void ) override;
-	void Precache( void ) override;
-	void SetYawSpeed ( void ) override;
-	int  Classify ( void ) override;
-	int ISoundMask ( void ) override;
+	void Spawn() override;
+	void Precache() override;
+	void SetYawSpeed () override;
+	int  Classify () override;
+	int ISoundMask () override;
 	void HandleAnimEvent( MonsterEvent_t *pEvent ) override;
-	BOOL FCanCheckAttacks ( void ) override;
+	BOOL FCanCheckAttacks () override;
 	BOOL CheckMeleeAttack1 ( float flDot, float flDist ) override;
 	BOOL CheckRangeAttack1 ( float flDot, float flDist ) override;
 	BOOL CheckRangeAttack2 ( float flDot, float flDist ) override;
-	void CheckAmmo ( void ) override;
+	void CheckAmmo () override;
 	void SetActivity ( Activity NewActivity ) override;
 	void StartTask ( Task_t *pTask ) override;
 	void RunTask ( Task_t *pTask ) override;
-	void DeathSound( void ) override;
-	void PainSound( void ) override;
-	void IdleSound ( void ) override;
-	Vector GetGunPosition( void ) override;
-	void Shoot ( void );
-	void PrescheduleThink ( void ) override;
-	void GibMonster( void ) override;
-	void SpeakSentence( void );
+	void DeathSound() override;
+	void PainSound() override;
+	void IdleSound () override;
+	Vector GetGunPosition() override;
+	void Shoot ();
+	void PrescheduleThink () override;
+	void GibMonster() override;
+	void SpeakSentence();
 
 	int	Save( CSave &save ) override;
 	int Restore( CRestore &restore ) override;
 	
-	CBaseEntity	*Kick( void );
-	Schedule_t	*GetSchedule( void ) override;
+	CBaseEntity	*Kick();
+	Schedule_t	*GetSchedule() override;
 	Schedule_t  *GetScheduleOfType ( int Type ) override;
 	void TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType) override;
 	int TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType ) override;
 
 	int IRelationship ( CBaseEntity *pTarget ) override;
 
-	BOOL FOkToSpeak( void );
-	void JustSpoke( void );
+	BOOL FOkToSpeak();
+	void JustSpoke();
 
 	void KeyValue( KeyValueData* pkvd ) override;
 
@@ -277,7 +277,7 @@ enum
 // may still fail but in most cases, well after the grunt has 
 // started moving.
 //=========================================================
-void CMOFAssassin :: SpeakSentence( void )
+void CMOFAssassin :: SpeakSentence()
 {
 	if ( m_iSentence == MASSASSIN_SENT_NONE )
 	{
@@ -309,7 +309,7 @@ int CMOFAssassin::IRelationship ( CBaseEntity *pTarget )
 //=========================================================
 // GibMonster - make gun fly through the air.
 //=========================================================
-void CMOFAssassin :: GibMonster ( void )
+void CMOFAssassin :: GibMonster ()
 {
 	Vector	vecGunPos;
 	Vector	vecGunAngles;
@@ -352,7 +352,7 @@ void CMOFAssassin :: GibMonster ( void )
 // hear the DANGER sound that is made by hand grenades and
 // other dangerous items.
 //=========================================================
-int CMOFAssassin :: ISoundMask ( void )
+int CMOFAssassin :: ISoundMask ()
 {
 	return	bits_SOUND_WORLD	|
 			bits_SOUND_COMBAT	|
@@ -363,7 +363,7 @@ int CMOFAssassin :: ISoundMask ( void )
 //=========================================================
 // someone else is talking - don't speak
 //=========================================================
-BOOL CMOFAssassin :: FOkToSpeak( void )
+BOOL CMOFAssassin :: FOkToSpeak()
 {
 // if someone else is talking, don't speak
 	if (gpGlobals->time <= CTalkMonster::g_talkWaitTime)
@@ -387,7 +387,7 @@ BOOL CMOFAssassin :: FOkToSpeak( void )
 
 //=========================================================
 //=========================================================
-void CMOFAssassin :: JustSpoke( void )
+void CMOFAssassin :: JustSpoke()
 {
 	CTalkMonster::g_talkWaitTime = gpGlobals->time + RANDOM_FLOAT(1.5, 2.0);
 	m_iSentence = MASSASSIN_SENT_NONE;
@@ -397,7 +397,7 @@ void CMOFAssassin :: JustSpoke( void )
 // PrescheduleThink - this function runs after conditions
 // are collected and before scheduling code is run.
 //=========================================================
-void CMOFAssassin :: PrescheduleThink ( void )
+void CMOFAssassin :: PrescheduleThink ()
 {
 	if ( InSquad() && m_hEnemy != NULL )
 	{
@@ -429,7 +429,7 @@ void CMOFAssassin :: PrescheduleThink ( void )
 // this is a bad bug. Friendly machine gun fire avoidance
 // will unecessarily prevent the throwing of a grenade as well.
 //=========================================================
-BOOL CMOFAssassin :: FCanCheckAttacks ( void )
+BOOL CMOFAssassin :: FCanCheckAttacks ()
 {
 	if ( !HasConditions( bits_COND_ENEMY_TOOFAR ) )
 	{
@@ -673,7 +673,7 @@ int CMOFAssassin :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker,
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CMOFAssassin :: SetYawSpeed ( void )
+void CMOFAssassin :: SetYawSpeed ()
 {
 	int ys;
 
@@ -716,7 +716,7 @@ void CMOFAssassin :: SetYawSpeed ( void )
 	pev->yaw_speed = ys;
 }
 
-void CMOFAssassin :: IdleSound( void )
+void CMOFAssassin :: IdleSound()
 {
 }
 
@@ -724,7 +724,7 @@ void CMOFAssassin :: IdleSound( void )
 // CheckAmmo - overridden for the grunt because he actually
 // uses ammo! (base class doesn't)
 //=========================================================
-void CMOFAssassin :: CheckAmmo ( void )
+void CMOFAssassin :: CheckAmmo ()
 {
 	if ( pev->weapons && m_cAmmoLoaded <= 0 )
 	{
@@ -736,14 +736,14 @@ void CMOFAssassin :: CheckAmmo ( void )
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	CMOFAssassin :: Classify ( void )
+int	CMOFAssassin :: Classify ()
 {
 	return	CLASS_HUMAN_MILITARY;
 }
 
 //=========================================================
 //=========================================================
-CBaseEntity *CMOFAssassin :: Kick( void )
+CBaseEntity *CMOFAssassin :: Kick()
 {
 	TraceResult tr;
 
@@ -782,7 +782,7 @@ Vector CMOFAssassin :: GetGunPosition( )
 //=========================================================
 // Shoot
 //=========================================================
-void CMOFAssassin :: Shoot ( void )
+void CMOFAssassin :: Shoot ()
 {
 	if (m_hEnemy == NULL)
 	{
@@ -1133,14 +1133,14 @@ void CMOFAssassin :: RunTask ( Task_t *pTask )
 //=========================================================
 // PainSound
 //=========================================================
-void CMOFAssassin :: PainSound ( void )
+void CMOFAssassin :: PainSound ()
 {
 }
 
 //=========================================================
 // DeathSound 
 //=========================================================
-void CMOFAssassin :: DeathSound ( void )
+void CMOFAssassin :: DeathSound ()
 {
 	switch ( RANDOM_LONG(0,2) )
 	{
@@ -1896,7 +1896,7 @@ void CMOFAssassin :: SetActivity ( Activity NewActivity )
 //=========================================================
 // Get Schedule!
 //=========================================================
-Schedule_t *CMOFAssassin :: GetSchedule( void )
+Schedule_t *CMOFAssassin :: GetSchedule()
 {
 
 	// clear old sentence
@@ -2258,15 +2258,15 @@ void CMOFAssassin::KeyValue( KeyValueData* pkvd )
 class CMOFAssassinRepel : public CBaseMonster
 {
 public:
-	void Spawn( void ) override;
-	void Precache( void ) override;
+	void Spawn() override;
+	void Precache() override;
 	void EXPORT RepelUse ( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
 	int m_iSpriteTexture;	// Don't save, precache
 };
 
 LINK_ENTITY_TO_CLASS( monster_assassin_repel, CMOFAssassinRepel );
 
-void CMOFAssassinRepel::Spawn( void )
+void CMOFAssassinRepel::Spawn()
 {
 	Precache( );
 	pev->solid = SOLID_NOT;
@@ -2274,7 +2274,7 @@ void CMOFAssassinRepel::Spawn( void )
 	SetUse( &CMOFAssassinRepel::RepelUse );
 }
 
-void CMOFAssassinRepel::Precache( void )
+void CMOFAssassinRepel::Precache()
 {
 	UTIL_PrecacheOther( "monster_male_assassin" );
 	m_iSpriteTexture = PRECACHE_MODEL( "sprites/rope.spr" );
@@ -2315,8 +2315,8 @@ void CMOFAssassinRepel::RepelUse ( CBaseEntity *pActivator, CBaseEntity *pCaller
 class CDeadMOFAssassin : public CBaseMonster
 {
 public:
-	void Spawn( void ) override;
-	int	Classify ( void ) override { return	CLASS_HUMAN_MILITARY; }
+	void Spawn() override;
+	int	Classify () override { return	CLASS_HUMAN_MILITARY; }
 
 	void KeyValue( KeyValueData *pkvd ) override;
 
@@ -2342,7 +2342,7 @@ LINK_ENTITY_TO_CLASS( monster_massassin_dead, CDeadMOFAssassin );
 //=========================================================
 // ********** DeadMOFAssassin SPAWN **********
 //=========================================================
-void CDeadMOFAssassin:: Spawn( void )
+void CDeadMOFAssassin:: Spawn()
 {
 	PRECACHE_MODEL("models/massn.mdl");
 	SET_MODEL(ENT(pev), "models/massn.mdl");

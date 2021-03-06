@@ -932,17 +932,17 @@ void CFuncTrain::OverrideReset()
 class CSpriteTrain : public CBasePlatTrain
 {
 public:
-	void Spawn( void ) override;
-	void Precache( void ) override;
-	void Activate( void ) override;
-	void OverrideReset( void ) override;
+	void Spawn() override;
+	void Precache() override;
+	void Activate() override;
+	void OverrideReset() override;
 
 	void Blocked( CBaseEntity *pOther ) override;
 	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value ) override;
 
 
-	void EXPORT Wait( void );
-	void EXPORT Next( void );
+	void EXPORT Wait();
+	void EXPORT Next();
 
 	void Think() override;
 
@@ -1059,7 +1059,7 @@ void CSpriteTrain::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE 
 }
 
 
-void CSpriteTrain::Wait( void )
+void CSpriteTrain::Wait()
 {
 	// Fire the pass target if there is one
 	if( m_pevCurrentTarget->message )
@@ -1104,7 +1104,7 @@ void CSpriteTrain::Wait( void )
 //
 // Train next - path corner needs to change to next target 
 //
-void CSpriteTrain::Next( void )
+void CSpriteTrain::Next()
 {
 	CBaseEntity	*pTarg;
 
@@ -1162,7 +1162,7 @@ void CSpriteTrain::Next( void )
 }
 
 
-void CSpriteTrain::Activate( void )
+void CSpriteTrain::Activate()
 {
 	// Not yet active, so teleport to first target
 	if( !m_activated )
@@ -1197,7 +1197,7 @@ sounds
 1) ratchet metal
 */
 
-void CSpriteTrain::Spawn( void )
+void CSpriteTrain::Spawn()
 {
 	Precache();
 	if( pev->speed == 0 )
@@ -1236,7 +1236,7 @@ void CSpriteTrain::Spawn( void )
 }
 
 
-void CSpriteTrain::Precache( void )
+void CSpriteTrain::Precache()
 {
 	PRECACHE_MODEL( const_cast<char*>( STRING( pev->model ) ) );
 
@@ -1269,7 +1269,7 @@ void CSpriteTrain::Precache( void )
 }
 
 
-void CSpriteTrain::OverrideReset( void )
+void CSpriteTrain::OverrideReset()
 {
 	CBaseEntity	*pTarg;
 

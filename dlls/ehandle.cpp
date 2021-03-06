@@ -16,7 +16,7 @@
 #include "util.h"
 #include "cbase.h"
 
-edict_t * EHANDLE::Get( void )
+edict_t * EHANDLE::Get()
 {
 	if( m_pent )
 	{

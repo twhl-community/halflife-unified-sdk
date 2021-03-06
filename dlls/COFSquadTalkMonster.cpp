@@ -117,7 +117,7 @@ void COFSquadTalkMonster::VacateSlot()
 //=========================================================
 // ScheduleChange
 //=========================================================
-void COFSquadTalkMonster::ScheduleChange( void )
+void COFSquadTalkMonster::ScheduleChange()
 {
 	VacateSlot();
 }
@@ -213,7 +213,7 @@ BOOL COFSquadTalkMonster::SquadAdd( COFSquadTalkMonster *pAdd )
 // members who don't have current info.
 //
 //=========================================================
-void COFSquadTalkMonster::SquadPasteEnemyInfo( void )
+void COFSquadTalkMonster::SquadPasteEnemyInfo()
 {
 	COFSquadTalkMonster *pSquadLeader = MySquadLeader();
 	if( pSquadLeader )
@@ -228,7 +228,7 @@ void COFSquadTalkMonster::SquadPasteEnemyInfo( void )
 // so the most recent data is always available here.
 //
 //=========================================================
-void COFSquadTalkMonster::SquadCopyEnemyInfo( void )
+void COFSquadTalkMonster::SquadCopyEnemyInfo()
 {
 	COFSquadTalkMonster *pSquadLeader = MySquadLeader();
 	if( pSquadLeader )
@@ -354,7 +354,7 @@ void COFSquadTalkMonster::SquadMakeEnemy(CBaseEntity* pEnemy)
 // callable from leaders & followers
 //
 //=========================================================
-int COFSquadTalkMonster::SquadCount( void )
+int COFSquadTalkMonster::SquadCount()
 {
 	if( !InSquad() )
 		return 0;
@@ -484,7 +484,7 @@ int COFSquadTalkMonster::CheckEnemy( CBaseEntity *pEnemy )
 //=========================================================
 // StartMonster
 //=========================================================
-void COFSquadTalkMonster::StartMonster( void )
+void COFSquadTalkMonster::StartMonster()
 {
 	COFAllyMonster::StartMonster();
 
@@ -518,7 +518,7 @@ void COFSquadTalkMonster::StartMonster( void )
 // Builds a large box in front of the grunt and checks to see 
 // if any squad members are in that box. 
 //=========================================================
-BOOL COFSquadTalkMonster::NoFriendlyFire( void )
+BOOL COFSquadTalkMonster::NoFriendlyFire()
 {
 	if( !InSquad() )
 	{
@@ -585,7 +585,7 @@ BOOL COFSquadTalkMonster::NoFriendlyFire( void )
 // GetIdealState - surveys the Conditions information available
 // and finds the best new state for a monster.
 //=========================================================
-MONSTERSTATE COFSquadTalkMonster::GetIdealState( void )
+MONSTERSTATE COFSquadTalkMonster::GetIdealState()
 {
 	int	iConditions;
 
@@ -631,7 +631,7 @@ BOOL COFSquadTalkMonster::FValidateCover( const Vector &vecCoverLocation )
 // SquadEnemySplit- returns TRUE if not all squad members
 // are fighting the same enemy. 
 //=========================================================
-BOOL COFSquadTalkMonster::SquadEnemySplit( void )
+BOOL COFSquadTalkMonster::SquadEnemySplit()
 {
 	if( !InSquad() )
 		return FALSE;

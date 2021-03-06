@@ -1539,13 +1539,13 @@ void COFPitWormGib::GibFloat()
 class COFPitWormGibShooter : public CBaseEntity
 {
 public:
-	void	Spawn( void ) override;
-	void	Precache( void ) override;
+	void	Spawn() override;
+	void	Precache() override;
 	void	KeyValue( KeyValueData *pkvd ) override;
-	void EXPORT ShootThink( void );
+	void EXPORT ShootThink();
 	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value ) override;
 
-	virtual COFPitWormGib *CreateGib( void );
+	virtual COFPitWormGib *CreateGib();
 
 	int		Save( CSave &save ) override;
 	int		Restore( CRestore &restore ) override;
@@ -1572,7 +1572,7 @@ TYPEDESCRIPTION COFPitWormGibShooter::m_SaveData[] =
 IMPLEMENT_SAVERESTORE( COFPitWormGibShooter, CBaseEntity );
 LINK_ENTITY_TO_CLASS( pitworm_gibshooter, COFPitWormGibShooter );
 
-void COFPitWormGibShooter::Precache( void )
+void COFPitWormGibShooter::Precache()
 {
 	m_iGibModelIndex = PRECACHE_MODEL( "models/pit_worm_gibs.mdl" );
 }
@@ -1611,7 +1611,7 @@ void COFPitWormGibShooter::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, U
 	pev->nextthink = gpGlobals->time;
 }
 
-void COFPitWormGibShooter::Spawn( void )
+void COFPitWormGibShooter::Spawn()
 {
 	Precache();
 
@@ -1628,7 +1628,7 @@ void COFPitWormGibShooter::Spawn( void )
 }
 
 
-COFPitWormGib *COFPitWormGibShooter::CreateGib( void )
+COFPitWormGib *COFPitWormGibShooter::CreateGib()
 {
 	if( CVAR_GET_FLOAT( "violence_hgibs" ) == 0 )
 		return NULL;
@@ -1647,7 +1647,7 @@ COFPitWormGib *COFPitWormGibShooter::CreateGib( void )
 }
 
 
-void COFPitWormGibShooter::ShootThink( void )
+void COFPitWormGibShooter::ShootThink()
 {
 	pev->nextthink = gpGlobals->time + m_flDelay;
 

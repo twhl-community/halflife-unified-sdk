@@ -138,41 +138,41 @@ enum
 class CShockTrooper : public CSquadMonster
 {
 public:
-	void Spawn( void ) override;
-	void Precache( void ) override;
-	void SetYawSpeed ( void ) override;
-	int  Classify ( void ) override;
-	int ISoundMask ( void ) override;
+	void Spawn() override;
+	void Precache() override;
+	void SetYawSpeed () override;
+	int  Classify () override;
+	int ISoundMask () override;
 	void HandleAnimEvent( MonsterEvent_t *pEvent ) override;
-	BOOL FCanCheckAttacks ( void ) override;
+	BOOL FCanCheckAttacks () override;
 	BOOL CheckMeleeAttack1 ( float flDot, float flDist ) override;
 	BOOL CheckRangeAttack1 ( float flDot, float flDist ) override;
 	BOOL CheckRangeAttack2 ( float flDot, float flDist ) override;
-	void CheckAmmo ( void ) override;
+	void CheckAmmo () override;
 	void SetActivity ( Activity NewActivity ) override;
 	void StartTask ( Task_t *pTask ) override;
 	void RunTask ( Task_t *pTask ) override;
-	void PainSound( void ) override;
-	void IdleSound ( void ) override;
-	Vector GetGunPosition( void ) override;
-	void Shoot ( void );
-	void PrescheduleThink ( void ) override;
-	void GibMonster( void ) override;
-	void SpeakSentence( void );
+	void PainSound() override;
+	void IdleSound () override;
+	Vector GetGunPosition() override;
+	void Shoot ();
+	void PrescheduleThink () override;
+	void GibMonster() override;
+	void SpeakSentence();
 
 	int	Save( CSave &save ) override;
 	int Restore( CRestore &restore ) override;
 	
-	CBaseEntity	*Kick( void );
-	Schedule_t	*GetSchedule( void ) override;
+	CBaseEntity	*Kick();
+	Schedule_t	*GetSchedule() override;
 	Schedule_t  *GetScheduleOfType ( int Type ) override;
 	void TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType) override;
 	int TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType ) override;
 
 	int IRelationship ( CBaseEntity *pTarget ) override;
 
-	BOOL FOkToSpeak( void );
-	void JustSpoke( void );
+	BOOL FOkToSpeak();
+	void JustSpoke();
 
 	void MonsterThink() override;
 
@@ -265,7 +265,7 @@ enum
 // may still fail but in most cases, well after the grunt has 
 // started moving.
 //=========================================================
-void CShockTrooper :: SpeakSentence( void )
+void CShockTrooper :: SpeakSentence()
 {
 	if ( m_iSentence == ShockTrooper_SENT_NONE )
 	{
@@ -299,7 +299,7 @@ const GibData ShockTrooperGibs = { "models/strooper_gibs.mdl", 0, 8 };
 //=========================================================
 // GibMonster - make gun fly through the air.
 //=========================================================
-void CShockTrooper :: GibMonster ( void )
+void CShockTrooper :: GibMonster ()
 {
 	Vector	vecGunPos;
 	Vector	vecGunAngles;
@@ -339,7 +339,7 @@ void CShockTrooper :: GibMonster ( void )
 // hear the DANGER sound that is made by hand grenades and
 // other dangerous items.
 //=========================================================
-int CShockTrooper :: ISoundMask ( void )
+int CShockTrooper :: ISoundMask ()
 {
 	return	bits_SOUND_WORLD	|
 			bits_SOUND_COMBAT	|
@@ -350,7 +350,7 @@ int CShockTrooper :: ISoundMask ( void )
 //=========================================================
 // someone else is talking - don't speak
 //=========================================================
-BOOL CShockTrooper :: FOkToSpeak( void )
+BOOL CShockTrooper :: FOkToSpeak()
 {
 // if someone else is talking, don't speak
 	if (gpGlobals->time <= CTalkMonster::g_talkWaitTime)
@@ -374,7 +374,7 @@ BOOL CShockTrooper :: FOkToSpeak( void )
 
 //=========================================================
 //=========================================================
-void CShockTrooper :: JustSpoke( void )
+void CShockTrooper :: JustSpoke()
 {
 	CTalkMonster::g_talkWaitTime = gpGlobals->time + RANDOM_FLOAT(1.5, 2.0);
 	m_iSentence = ShockTrooper_SENT_NONE;
@@ -384,7 +384,7 @@ void CShockTrooper :: JustSpoke( void )
 // PrescheduleThink - this function runs after conditions
 // are collected and before scheduling code is run.
 //=========================================================
-void CShockTrooper :: PrescheduleThink ( void )
+void CShockTrooper :: PrescheduleThink ()
 {
 	if ( InSquad() && m_hEnemy != NULL )
 	{
@@ -416,7 +416,7 @@ void CShockTrooper :: PrescheduleThink ( void )
 // this is a bad bug. Friendly machine gun fire avoidance
 // will unecessarily prevent the throwing of a grenade as well.
 //=========================================================
-BOOL CShockTrooper :: FCanCheckAttacks ( void )
+BOOL CShockTrooper :: FCanCheckAttacks ()
 {
 	if ( !HasConditions( bits_COND_ENEMY_TOOFAR ) )
 	{
@@ -648,7 +648,7 @@ int CShockTrooper :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CShockTrooper :: SetYawSpeed ( void )
+void CShockTrooper :: SetYawSpeed ()
 {
 	int ys;
 
@@ -691,7 +691,7 @@ void CShockTrooper :: SetYawSpeed ( void )
 	pev->yaw_speed = ys;
 }
 
-void CShockTrooper :: IdleSound( void )
+void CShockTrooper :: IdleSound()
 {
 	if (FOkToSpeak() && (g_fShockTrooperQuestion || RANDOM_LONG(0,1)))
 	{
@@ -734,7 +734,7 @@ void CShockTrooper :: IdleSound( void )
 // CheckAmmo - overridden for the grunt because he actually
 // uses ammo! (base class doesn't)
 //=========================================================
-void CShockTrooper :: CheckAmmo ( void )
+void CShockTrooper :: CheckAmmo ()
 {
 	if ( m_cAmmoLoaded <= 0 )
 	{
@@ -746,14 +746,14 @@ void CShockTrooper :: CheckAmmo ( void )
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	CShockTrooper :: Classify ( void )
+int	CShockTrooper :: Classify ()
 {
 	return	CLASS_ALIEN_RACE_X;
 }
 
 //=========================================================
 //=========================================================
-CBaseEntity *CShockTrooper :: Kick( void )
+CBaseEntity *CShockTrooper :: Kick()
 {
 	TraceResult tr;
 
@@ -791,7 +791,7 @@ Vector CShockTrooper :: GetGunPosition( )
 //=========================================================
 // Shoot
 //=========================================================
-void CShockTrooper :: Shoot ( void )
+void CShockTrooper :: Shoot ()
 {
 	if (m_hEnemy == NULL)
 	{
@@ -1094,7 +1094,7 @@ void CShockTrooper :: RunTask ( Task_t *pTask )
 //=========================================================
 // PainSound
 //=========================================================
-void CShockTrooper :: PainSound ( void )
+void CShockTrooper :: PainSound ()
 {
 	if ( gpGlobals->time > m_flNextPainTime )
 	{
@@ -1865,7 +1865,7 @@ void CShockTrooper :: SetActivity ( Activity NewActivity )
 //=========================================================
 // Get Schedule!
 //=========================================================
-Schedule_t *CShockTrooper :: GetSchedule( void )
+Schedule_t *CShockTrooper :: GetSchedule()
 {
 
 	// clear old sentence
@@ -2306,15 +2306,15 @@ void CShockTrooper::MonsterThink()
 class CShockTrooperRepel : public CBaseMonster
 {
 public:
-	void Spawn( void ) override;
-	void Precache( void ) override;
+	void Spawn() override;
+	void Precache() override;
 	void EXPORT RepelUse ( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
 	int m_iSpriteTexture;	// Don't save, precache
 };
 
 LINK_ENTITY_TO_CLASS( monster_shocktrooper_repel, CShockTrooperRepel );
 
-void CShockTrooperRepel::Spawn( void )
+void CShockTrooperRepel::Spawn()
 {
 	Precache( );
 	pev->solid = SOLID_NOT;
@@ -2322,7 +2322,7 @@ void CShockTrooperRepel::Spawn( void )
 	SetUse( &CShockTrooperRepel::RepelUse );
 }
 
-void CShockTrooperRepel::Precache( void )
+void CShockTrooperRepel::Precache()
 {
 	UTIL_PrecacheOther( "monster_shocktrooper" );
 	m_iSpriteTexture = PRECACHE_MODEL( "sprites/rope.spr" );
@@ -2363,8 +2363,8 @@ void CShockTrooperRepel::RepelUse ( CBaseEntity *pActivator, CBaseEntity *pCalle
 class CDeadShockTrooper : public CBaseMonster
 {
 public:
-	void Spawn( void ) override;
-	int	Classify ( void ) override { return	CLASS_HUMAN_MILITARY; }
+	void Spawn() override;
+	int	Classify () override { return	CLASS_HUMAN_MILITARY; }
 
 	void KeyValue( KeyValueData *pkvd ) override;
 
@@ -2390,7 +2390,7 @@ LINK_ENTITY_TO_CLASS( monster_ShockTrooper_dead, CDeadShockTrooper );
 //=========================================================
 // ********** DeadHGrunt SPAWN **********
 //=========================================================
-void CDeadShockTrooper:: Spawn( void )
+void CDeadShockTrooper:: Spawn()
 {
 	PRECACHE_MODEL("models/strooper.mdl");
 	SET_MODEL(ENT(pev), "models/strooper.mdl");

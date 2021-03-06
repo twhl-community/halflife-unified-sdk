@@ -22,8 +22,8 @@
 class COFSkeleton : public CBaseMonster
 {
 public:
-	void Spawn( void ) override;
-	int	Classify( void ) override { return	CLASS_HUMAN_MILITARY; }
+	void Spawn() override;
+	int	Classify() override { return	CLASS_HUMAN_MILITARY; }
 
 	void KeyValue( KeyValueData *pkvd ) override;
 
@@ -49,7 +49,7 @@ LINK_ENTITY_TO_CLASS( monster_skeleton_dead, COFSkeleton );
 //=========================================================
 // ********** Skeleton SPAWN **********
 //=========================================================
-void COFSkeleton::Spawn( void )
+void COFSkeleton::Spawn()
 {
 	PRECACHE_MODEL( "models/skeleton.mdl" );
 	SET_MODEL( ENT( pev ), "models/skeleton.mdl" );

@@ -51,7 +51,7 @@ DECLARE_MESSAGE( m_Scoreboard, TeamScore );
 DECLARE_MESSAGE(m_Scoreboard, PlayerIcon);
 DECLARE_MESSAGE(m_Scoreboard, CTFScore);
 
-int CHudScoreboard :: Init( void )
+int CHudScoreboard :: Init()
 {
 	gHUD.AddHudElem( this );
 
@@ -73,14 +73,14 @@ int CHudScoreboard :: Init( void )
 }
 
 
-int CHudScoreboard :: VidInit( void )
+int CHudScoreboard :: VidInit()
 {
 	// Load sprites here
 
 	return 1;
 }
 
-void CHudScoreboard :: InitHUDData( void )
+void CHudScoreboard :: InitHUDData()
 {
 	memset( g_PlayerExtraInfo, 0, sizeof g_PlayerExtraInfo );
 	m_iLastKilledBy = 0;
@@ -546,7 +546,7 @@ int CHudScoreboard :: DrawPlayers( int xpos_rel, float list_slot, int nameoffset
 }
 
 
-void CHudScoreboard :: GetAllPlayersInfo( void )
+void CHudScoreboard :: GetAllPlayersInfo()
 {
 	for ( int i = 1; i < MAX_PLAYERS; i++ )
 	{
@@ -861,12 +861,12 @@ void CHudScoreboard :: DeathMsg( int killer, int victim )
 
 
 
-void CHudScoreboard :: UserCmd_ShowScores( void )
+void CHudScoreboard :: UserCmd_ShowScores()
 {
 	m_iShowscoresHeld = TRUE;
 }
 
-void CHudScoreboard :: UserCmd_HideScores( void )
+void CHudScoreboard :: UserCmd_HideScores()
 {
 	m_iShowscoresHeld = FALSE;
 }

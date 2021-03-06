@@ -208,16 +208,16 @@ public:
 
 	static TYPEDESCRIPTION m_SaveData[];
 
-	void Spawn( void ) override;
-	void Precache( void ) override;
-	void SetYawSpeed( void ) override;
-	int  Classify ( void ) override;
+	void Spawn() override;
+	void Precache() override;
+	void SetYawSpeed() override;
+	int  Classify () override;
 	void HandleAnimEvent( MonsterEvent_t *pEvent ) override;
-	int IgnoreConditions ( void ) override;
+	int IgnoreConditions () override;
 
-	void PainSound( void ) override;
-	void AlertSound( void ) override;
-	void IdleSound( void ) override;
+	void PainSound() override;
+	void AlertSound() override;
+	void IdleSound() override;
 
 	static const char *pIdleSounds[];
 	static const char *pAlertSounds[];
@@ -338,7 +338,7 @@ IMPLEMENT_CUSTOM_SCHEDULES( COFGonome, CBaseMonster );
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	COFGonome :: Classify ( void )
+int	COFGonome :: Classify ()
 {
 	return	CLASS_ALIEN_MONSTER;
 }
@@ -347,7 +347,7 @@ int	COFGonome :: Classify ( void )
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void COFGonome :: SetYawSpeed ( void )
+void COFGonome :: SetYawSpeed ()
 {
 	int ys;
 
@@ -380,7 +380,7 @@ int COFGonome :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, fl
 	return CBaseMonster::TakeDamage( pevInflictor, pevAttacker, flDamage, bitsDamageType );
 }
 
-void COFGonome :: PainSound( void )
+void COFGonome :: PainSound()
 {
 	int pitch = 95 + RANDOM_LONG(0,9);
 
@@ -388,14 +388,14 @@ void COFGonome :: PainSound( void )
 		EMIT_SOUND_DYN ( ENT(pev), CHAN_VOICE, pPainSounds[ RANDOM_LONG(0,ARRAYSIZE(pPainSounds)-1) ], 1.0, ATTN_NORM, 0, pitch );
 }
 
-void COFGonome :: AlertSound( void )
+void COFGonome :: AlertSound()
 {
 	int pitch = 95 + RANDOM_LONG(0,9);
 
 	EMIT_SOUND_DYN ( ENT(pev), CHAN_VOICE, pAlertSounds[ RANDOM_LONG(0,ARRAYSIZE(pAlertSounds)-1) ], 1.0, ATTN_NORM, 0, pitch );
 }
 
-void COFGonome :: IdleSound( void )
+void COFGonome :: IdleSound()
 {
 	int pitch = 100 + RANDOM_LONG(-5,5);
 
@@ -665,7 +665,7 @@ void COFGonome :: Precache()
 
 
 
-int COFGonome::IgnoreConditions ( void )
+int COFGonome::IgnoreConditions ()
 {
 	int iIgnore = CBaseMonster::IgnoreConditions();
 
@@ -890,8 +890,8 @@ void COFGonome::SetActivity( Activity NewActivity )
 class CDeadGonome : public CBaseMonster
 {
 public:
-	void Spawn( void ) override;
-	int	Classify( void ) override { return	CLASS_ALIEN_PASSIVE; }
+	void Spawn() override;
+	int	Classify() override { return	CLASS_ALIEN_PASSIVE; }
 
 	void KeyValue( KeyValueData *pkvd ) override;
 
@@ -917,7 +917,7 @@ LINK_ENTITY_TO_CLASS( monster_gonome_dead, CDeadGonome );
 //=========================================================
 // ********** DeadGonome SPAWN **********
 //=========================================================
-void CDeadGonome::Spawn( void )
+void CDeadGonome::Spawn()
 {
 	PRECACHE_MODEL( "models/gonome.mdl" );
 	SET_MODEL( ENT( pev ), "models/gonome.mdl" );

@@ -329,31 +329,31 @@ void COFChargedBolt::ChargedBoltTouch( CBaseEntity* pOther )
 class COFVoltigore : public CSquadMonster
 {
 public:
-	void Spawn( void ) override;
-	void Precache( void ) override;
-	void SetYawSpeed ( void ) override;
-	int  Classify ( void ) override;
-	int  ISoundMask ( void ) override;
+	void Spawn() override;
+	void Precache() override;
+	void SetYawSpeed () override;
+	int  Classify () override;
+	int  ISoundMask () override;
 	void HandleAnimEvent( MonsterEvent_t *pEvent ) override;
-	void SetObjectCollisionBox( void ) override
+	void SetObjectCollisionBox() override
 	{
 		pev->absmin = pev->origin + Vector( -80, -80, 0 );
 		pev->absmax = pev->origin + Vector( 80, 80, 90 );
 	}
 
-	Schedule_t* GetSchedule ( void ) override;
+	Schedule_t* GetSchedule () override;
 	Schedule_t* GetScheduleOfType ( int Type ) override;
-	BOOL FCanCheckAttacks ( void ) override;
+	BOOL FCanCheckAttacks () override;
 	BOOL CheckMeleeAttack1 ( float flDot, float flDist ) override;
 	BOOL CheckRangeAttack1 ( float flDot, float flDist ) override;
 	void StartTask ( Task_t *pTask ) override;
 	void RunTask( Task_t* pTask ) override;
-	void AlertSound( void ) override;
-	void PainSound ( void ) override;
+	void AlertSound() override;
+	void PainSound () override;
 	void TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType) override;
 	int IRelationship( CBaseEntity *pTarget ) override;
-	void StopTalking ( void );
-	BOOL ShouldSpeak( void );
+	void StopTalking ();
+	BOOL ShouldSpeak();
 
 	void ClearBeams();
 
@@ -455,7 +455,7 @@ int COFVoltigore::IRelationship ( CBaseEntity *pTarget )
 //=========================================================
 // ISoundMask 
 //=========================================================
-int COFVoltigore :: ISoundMask ( void )
+int COFVoltigore :: ISoundMask ()
 {
 	return	bits_SOUND_WORLD	|
 			bits_SOUND_COMBAT	|
@@ -481,7 +481,7 @@ void COFVoltigore :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector
 //=========================================================
 // StopTalking - won't speak again for 10-20 seconds.
 //=========================================================
-void COFVoltigore::StopTalking( void )
+void COFVoltigore::StopTalking()
 {
 	m_flNextWordTime = m_flNextSpeakTime = gpGlobals->time + 10 + RANDOM_LONG(0, 10);
 }
@@ -489,7 +489,7 @@ void COFVoltigore::StopTalking( void )
 //=========================================================
 // ShouldSpeak - Should this voltigore be talking?
 //=========================================================
-BOOL COFVoltigore::ShouldSpeak( void )
+BOOL COFVoltigore::ShouldSpeak()
 {
 	if ( m_flNextSpeakTime > gpGlobals->time )
 	{
@@ -516,7 +516,7 @@ BOOL COFVoltigore::ShouldSpeak( void )
 //=========================================================
 // AlertSound
 //=========================================================
-void COFVoltigore :: AlertSound ( void )
+void COFVoltigore :: AlertSound ()
 {
 	StopTalking();
 
@@ -526,7 +526,7 @@ void COFVoltigore :: AlertSound ( void )
 //=========================================================
 // PainSound
 //=========================================================
-void COFVoltigore :: PainSound ( void )
+void COFVoltigore :: PainSound ()
 {
 	if ( m_flNextPainTime > gpGlobals->time )
 	{
@@ -544,7 +544,7 @@ void COFVoltigore :: PainSound ( void )
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	COFVoltigore :: Classify ( void )
+int	COFVoltigore :: Classify ()
 {
 	return	CLASS_ALIEN_MILITARY;
 }
@@ -553,7 +553,7 @@ int	COFVoltigore :: Classify ( void )
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void COFVoltigore :: SetYawSpeed ( void )
+void COFVoltigore :: SetYawSpeed ()
 {
 	int ys;
 
@@ -966,7 +966,7 @@ IMPLEMENT_CUSTOM_SCHEDULES( COFVoltigore, CSquadMonster );
 // because they can use their smart weapons against unseen
 // enemies. Base class doesn't attack anyone it can't see.
 //=========================================================
-BOOL COFVoltigore :: FCanCheckAttacks ( void )
+BOOL COFVoltigore :: FCanCheckAttacks ()
 {
 	if ( !HasConditions( bits_COND_ENEMY_TOOFAR ) )
 	{
@@ -1152,7 +1152,7 @@ void COFVoltigore::RunTask( Task_t* pTask )
 // monster's member function to get a pointer to a schedule
 // of the proper type.
 //=========================================================
-Schedule_t *COFVoltigore :: GetSchedule ( void )
+Schedule_t *COFVoltigore :: GetSchedule ()
 {
 	if ( HasConditions(bits_COND_HEAR_SOUND) )
 	{

@@ -61,32 +61,32 @@ int iBabyVoltigoreMuzzleFlash;
 class COFBabyVoltigore : public CSquadMonster
 {
 public:
-	void Spawn( void ) override;
-	void Precache( void ) override;
-	void SetYawSpeed ( void ) override;
-	int  Classify ( void ) override;
-	int  ISoundMask ( void ) override;
+	void Spawn() override;
+	void Precache() override;
+	void SetYawSpeed () override;
+	int  Classify () override;
+	int  ISoundMask () override;
 	void HandleAnimEvent( MonsterEvent_t *pEvent ) override;
-	void SetObjectCollisionBox( void ) override
+	void SetObjectCollisionBox() override
 	{
 		pev->absmin = pev->origin + Vector( -16, -16, 0 );
 		pev->absmax = pev->origin + Vector( 16, 16, 32 );
 	}
 
-	Schedule_t* GetSchedule ( void ) override;
+	Schedule_t* GetSchedule () override;
 	Schedule_t* GetScheduleOfType ( int Type ) override;
-	BOOL FCanCheckAttacks ( void ) override;
+	BOOL FCanCheckAttacks () override;
 	BOOL CheckMeleeAttack1 ( float flDot, float flDist ) override;
 	BOOL CheckRangeAttack1 ( float flDot, float flDist ) override;
 	void StartTask ( Task_t *pTask ) override;
 	void RunTask( Task_t* pTask ) override;
-	void AlertSound( void ) override;
+	void AlertSound() override;
 	void AttackSound();
-	void PainSound ( void ) override;
+	void PainSound () override;
 	void TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType) override;
 	int IRelationship( CBaseEntity *pTarget ) override;
-	void StopTalking ( void );
-	BOOL ShouldSpeak( void );
+	void StopTalking ();
+	BOOL ShouldSpeak();
 
 	void ClearBeams();
 
@@ -188,7 +188,7 @@ int COFBabyVoltigore::IRelationship ( CBaseEntity *pTarget )
 //=========================================================
 // ISoundMask 
 //=========================================================
-int COFBabyVoltigore :: ISoundMask ( void )
+int COFBabyVoltigore :: ISoundMask ()
 {
 	return	bits_SOUND_WORLD	|
 			bits_SOUND_COMBAT	|
@@ -253,7 +253,7 @@ void COFBabyVoltigore :: TraceAttack( entvars_t *pevAttacker, float flDamage, Ve
 //=========================================================
 // StopTalking - won't speak again for 10-20 seconds.
 //=========================================================
-void COFBabyVoltigore::StopTalking( void )
+void COFBabyVoltigore::StopTalking()
 {
 	m_flNextWordTime = m_flNextSpeakTime = gpGlobals->time + 10 + RANDOM_LONG(0, 10);
 }
@@ -261,7 +261,7 @@ void COFBabyVoltigore::StopTalking( void )
 //=========================================================
 // ShouldSpeak - Should this voltigore be talking?
 //=========================================================
-BOOL COFBabyVoltigore::ShouldSpeak( void )
+BOOL COFBabyVoltigore::ShouldSpeak()
 {
 	if ( m_flNextSpeakTime > gpGlobals->time )
 	{
@@ -288,7 +288,7 @@ BOOL COFBabyVoltigore::ShouldSpeak( void )
 //=========================================================
 // AlertSound
 //=========================================================
-void COFBabyVoltigore :: AlertSound ( void )
+void COFBabyVoltigore :: AlertSound ()
 {
 	StopTalking();
 
@@ -298,7 +298,7 @@ void COFBabyVoltigore :: AlertSound ( void )
 //=========================================================
 // AttackSound
 //=========================================================
-void COFBabyVoltigore::AttackSound( void )
+void COFBabyVoltigore::AttackSound()
 {
 	StopTalking();
 
@@ -308,7 +308,7 @@ void COFBabyVoltigore::AttackSound( void )
 //=========================================================
 // PainSound
 //=========================================================
-void COFBabyVoltigore :: PainSound ( void )
+void COFBabyVoltigore :: PainSound ()
 {
 	if ( m_flNextPainTime > gpGlobals->time )
 	{
@@ -326,7 +326,7 @@ void COFBabyVoltigore :: PainSound ( void )
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	COFBabyVoltigore :: Classify ( void )
+int	COFBabyVoltigore :: Classify ()
 {
 	return	CLASS_ALIEN_MILITARY;
 }
@@ -335,7 +335,7 @@ int	COFBabyVoltigore :: Classify ( void )
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void COFBabyVoltigore :: SetYawSpeed ( void )
+void COFBabyVoltigore :: SetYawSpeed ()
 {
 	int ys;
 
@@ -751,7 +751,7 @@ IMPLEMENT_CUSTOM_SCHEDULES( COFBabyVoltigore, CSquadMonster );
 // because they can use their smart weapons against unseen
 // enemies. Base class doesn't attack anyone it can't see.
 //=========================================================
-BOOL COFBabyVoltigore :: FCanCheckAttacks ( void )
+BOOL COFBabyVoltigore :: FCanCheckAttacks ()
 {
 	if ( !HasConditions( bits_COND_ENEMY_TOOFAR ) )
 	{
@@ -926,7 +926,7 @@ void COFBabyVoltigore::RunTask( Task_t* pTask )
 // monster's member function to get a pointer to a schedule
 // of the proper type.
 //=========================================================
-Schedule_t *COFBabyVoltigore :: GetSchedule ( void )
+Schedule_t *COFBabyVoltigore :: GetSchedule ()
 {
 	if ( HasConditions(bits_COND_HEAR_SOUND) )
 	{

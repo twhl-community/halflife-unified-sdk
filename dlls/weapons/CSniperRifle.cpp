@@ -257,14 +257,14 @@ class CSniperRifleAmmo : public CBasePlayerAmmo
 public:
 	using BaseClass = CBasePlayerAmmo;
 
-	void Spawn( void ) override
+	void Spawn() override
 	{
 		Precache();
 		SET_MODEL( edict(), "models/w_m40a1clip.mdl" );
 		CBasePlayerAmmo::Spawn();
 	}
 
-	void Precache( void ) override
+	void Precache() override
 	{
 		PRECACHE_MODEL( "models/w_m40a1clip.mdl" );
 		PRECACHE_SOUND( "items/9mmclip1.wav" );

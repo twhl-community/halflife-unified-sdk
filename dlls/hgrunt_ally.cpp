@@ -173,41 +173,41 @@ enum
 class CHGruntAlly : public COFSquadTalkMonster
 {
 public:
-	void Spawn( void ) override;
-	void Precache( void ) override;
-	void SetYawSpeed ( void ) override;
-	int  Classify ( void ) override;
-	int ISoundMask ( void ) override;
+	void Spawn() override;
+	void Precache() override;
+	void SetYawSpeed () override;
+	int  Classify () override;
+	int ISoundMask () override;
 	void HandleAnimEvent( MonsterEvent_t *pEvent ) override;
-	BOOL FCanCheckAttacks ( void ) override;
+	BOOL FCanCheckAttacks () override;
 	BOOL CheckMeleeAttack1 ( float flDot, float flDist ) override;
 	BOOL CheckRangeAttack1 ( float flDot, float flDist ) override;
 	BOOL CheckRangeAttack2 ( float flDot, float flDist ) override;
-	void CheckAmmo ( void ) override;
+	void CheckAmmo () override;
 	void SetActivity ( Activity NewActivity ) override;
 	void StartTask ( Task_t *pTask ) override;
 	void RunTask ( Task_t *pTask ) override;
-	void DeathSound( void ) override;
-	void PainSound( void ) override;
-	void IdleSound ( void ) override;
-	Vector GetGunPosition( void ) override;
-	void Shoot ( void );
-	void Shotgun ( void );
-	void PrescheduleThink ( void ) override;
-	void GibMonster( void ) override;
-	void SpeakSentence( void );
+	void DeathSound() override;
+	void PainSound() override;
+	void IdleSound () override;
+	Vector GetGunPosition() override;
+	void Shoot ();
+	void Shotgun ();
+	void PrescheduleThink () override;
+	void GibMonster() override;
+	void SpeakSentence();
 
 	int	Save( CSave &save ) override;
 	int Restore( CRestore &restore ) override;
 	
-	CBaseEntity	*Kick( void );
-	Schedule_t	*GetSchedule( void ) override;
+	CBaseEntity	*Kick();
+	Schedule_t	*GetSchedule() override;
 	Schedule_t  *GetScheduleOfType ( int Type ) override;
 	void TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType) override;
 	int TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType ) override;
 
-	BOOL FOkToSpeak( void );
-	void JustSpoke( void );
+	BOOL FOkToSpeak();
+	void JustSpoke();
 
 	int ObjectCaps() override;
 
@@ -320,7 +320,7 @@ enum
 // may still fail but in most cases, well after the grunt has 
 // started moving.
 //=========================================================
-void CHGruntAlly :: SpeakSentence( void )
+void CHGruntAlly :: SpeakSentence()
 {
 	if ( m_iSentence == HGRUNT_SENT_NONE )
 	{
@@ -338,7 +338,7 @@ void CHGruntAlly :: SpeakSentence( void )
 //=========================================================
 // GibMonster - make gun fly through the air.
 //=========================================================
-void CHGruntAlly :: GibMonster ( void )
+void CHGruntAlly :: GibMonster ()
 {
 	if( m_hWaitMedic )
 	{
@@ -397,7 +397,7 @@ void CHGruntAlly :: GibMonster ( void )
 // hear the DANGER sound that is made by hand grenades and
 // other dangerous items.
 //=========================================================
-int CHGruntAlly :: ISoundMask ( void )
+int CHGruntAlly :: ISoundMask ()
 {
 	return	bits_SOUND_WORLD	|
 			bits_SOUND_COMBAT	|
@@ -411,7 +411,7 @@ int CHGruntAlly :: ISoundMask ( void )
 //=========================================================
 // someone else is talking - don't speak
 //=========================================================
-BOOL CHGruntAlly :: FOkToSpeak( void )
+BOOL CHGruntAlly :: FOkToSpeak()
 {
 // if someone else is talking, don't speak
 	if (gpGlobals->time <= COFSquadTalkMonster::g_talkWaitTime)
@@ -435,7 +435,7 @@ BOOL CHGruntAlly :: FOkToSpeak( void )
 
 //=========================================================
 //=========================================================
-void CHGruntAlly :: JustSpoke( void )
+void CHGruntAlly :: JustSpoke()
 {
 	COFSquadTalkMonster::g_talkWaitTime = gpGlobals->time + RANDOM_FLOAT(1.5, 2.0);
 	m_iSentence = HGRUNT_SENT_NONE;
@@ -445,7 +445,7 @@ void CHGruntAlly :: JustSpoke( void )
 // PrescheduleThink - this function runs after conditions
 // are collected and before scheduling code is run.
 //=========================================================
-void CHGruntAlly :: PrescheduleThink ( void )
+void CHGruntAlly :: PrescheduleThink ()
 {
 	if ( InSquad() && m_hEnemy != NULL )
 	{
@@ -477,7 +477,7 @@ void CHGruntAlly :: PrescheduleThink ( void )
 // this is a bad bug. Friendly machine gun fire avoidance
 // will unecessarily prevent the throwing of a grenade as well.
 //=========================================================
-BOOL CHGruntAlly :: FCanCheckAttacks ( void )
+BOOL CHGruntAlly :: FCanCheckAttacks ()
 {
 	if ( !HasConditions( bits_COND_ENEMY_TOOFAR ) )
 	{
@@ -792,7 +792,7 @@ int CHGruntAlly :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, 
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CHGruntAlly :: SetYawSpeed ( void )
+void CHGruntAlly :: SetYawSpeed ()
 {
 	int ys;
 
@@ -835,7 +835,7 @@ void CHGruntAlly :: SetYawSpeed ( void )
 	pev->yaw_speed = ys;
 }
 
-void CHGruntAlly :: IdleSound( void )
+void CHGruntAlly :: IdleSound()
 {
 	if (FOkToSpeak() && (g_fGruntAllyQuestion || RANDOM_LONG(0,1)))
 	{
@@ -878,7 +878,7 @@ void CHGruntAlly :: IdleSound( void )
 // CheckAmmo - overridden for the grunt because he actually
 // uses ammo! (base class doesn't)
 //=========================================================
-void CHGruntAlly :: CheckAmmo ( void )
+void CHGruntAlly :: CheckAmmo ()
 {
 	if ( m_cAmmoLoaded <= 0 )
 	{
@@ -890,14 +890,14 @@ void CHGruntAlly :: CheckAmmo ( void )
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	CHGruntAlly :: Classify ( void )
+int	CHGruntAlly :: Classify ()
 {
 	return	CLASS_HUMAN_MILITARY_FRIENDLY;
 }
 
 //=========================================================
 //=========================================================
-CBaseEntity *CHGruntAlly :: Kick( void )
+CBaseEntity *CHGruntAlly :: Kick()
 {
 	TraceResult tr;
 
@@ -936,7 +936,7 @@ Vector CHGruntAlly :: GetGunPosition( )
 //=========================================================
 // Shoot
 //=========================================================
-void CHGruntAlly :: Shoot ( void )
+void CHGruntAlly :: Shoot ()
 {
 	if (m_hEnemy == NULL)
 	{
@@ -963,7 +963,7 @@ void CHGruntAlly :: Shoot ( void )
 //=========================================================
 // Shoot
 //=========================================================
-void CHGruntAlly :: Shotgun ( void )
+void CHGruntAlly :: Shotgun ()
 {
 	if (m_hEnemy == NULL)
 	{
@@ -1382,7 +1382,7 @@ void CHGruntAlly :: RunTask ( Task_t *pTask )
 //=========================================================
 // PainSound
 //=========================================================
-void CHGruntAlly :: PainSound ( void )
+void CHGruntAlly :: PainSound ()
 {
 	if ( gpGlobals->time > m_flNextPainTime )
 	{
@@ -1427,7 +1427,7 @@ void CHGruntAlly :: PainSound ( void )
 //=========================================================
 // DeathSound 
 //=========================================================
-void CHGruntAlly :: DeathSound ( void )
+void CHGruntAlly :: DeathSound ()
 {
 	switch ( RANDOM_LONG(0,5) )
 	{
@@ -2299,7 +2299,7 @@ void CHGruntAlly :: SetActivity ( Activity NewActivity )
 //=========================================================
 // Get Schedule!
 //=========================================================
-Schedule_t *CHGruntAlly :: GetSchedule( void )
+Schedule_t *CHGruntAlly :: GetSchedule()
 {
 
 	// clear old sentence
@@ -2970,8 +2970,8 @@ class CHGruntAllyRepel : public CBaseMonster
 public:
 	void KeyValue( KeyValueData *pkvd ) override;
 
-	void Spawn( void ) override;
-	void Precache( void ) override;
+	void Spawn() override;
+	void Precache() override;
 	void EXPORT RepelUse ( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
 	int m_iSpriteTexture;	// Don't save, precache
 
@@ -3004,7 +3004,7 @@ void CHGruntAllyRepel::KeyValue( KeyValueData *pkvd )
 		CBaseMonster::KeyValue( pkvd );
 }
 
-void CHGruntAllyRepel::Spawn( void )
+void CHGruntAllyRepel::Spawn()
 {
 	Precache( );
 	pev->solid = SOLID_NOT;
@@ -3012,7 +3012,7 @@ void CHGruntAllyRepel::Spawn( void )
 	SetUse( &CHGruntAllyRepel::RepelUse );
 }
 
-void CHGruntAllyRepel::Precache( void )
+void CHGruntAllyRepel::Precache()
 {
 	UTIL_PrecacheOther( "monster_human_grunt_ally" );
 	m_iSpriteTexture = PRECACHE_MODEL( "sprites/rope.spr" );
@@ -3076,8 +3076,8 @@ void CHGruntAllyRepel::RepelUse ( CBaseEntity *pActivator, CBaseEntity *pCaller,
 class CDeadHGruntAlly : public CBaseMonster
 {
 public:
-	void Spawn( void ) override;
-	int	Classify ( void ) override { return	CLASS_HUMAN_MILITARY_FRIENDLY; }
+	void Spawn() override;
+	int	Classify () override { return	CLASS_HUMAN_MILITARY_FRIENDLY; }
 
 	void KeyValue( KeyValueData *pkvd ) override;
 
@@ -3109,7 +3109,7 @@ LINK_ENTITY_TO_CLASS( monster_human_grunt_ally_dead, CDeadHGruntAlly );
 //=========================================================
 // ********** DeadHGrunt SPAWN **********
 //=========================================================
-void CDeadHGruntAlly:: Spawn( void )
+void CDeadHGruntAlly:: Spawn()
 {
 	PRECACHE_MODEL("models/hgrunt_opfor.mdl");
 	SET_MODEL(ENT(pev), "models/hgrunt_opfor.mdl");

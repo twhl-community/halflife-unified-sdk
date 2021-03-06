@@ -74,28 +74,28 @@ Schedule_t	slRCRangeAttack1Fast[] =
 class COFShockRoach : public CBaseMonster
 {
 public:
-	void Spawn( void ) override;
-	void Precache( void ) override;
+	void Spawn() override;
+	void Precache() override;
 	void RunTask ( Task_t *pTask ) override;
 	void StartTask ( Task_t *pTask ) override;
-	void SetYawSpeed ( void ) override;
+	void SetYawSpeed () override;
 	void EXPORT LeapTouch ( CBaseEntity *pOther );
-	Vector Center( void ) override;
+	Vector Center() override;
 	Vector BodyTarget( const Vector &posSrc ) override;
-	void PainSound( void ) override;
-	void DeathSound( void ) override;
-	void IdleSound( void ) override;
-	void AlertSound( void ) override;
-	void PrescheduleThink( void ) override;
-	int  Classify ( void ) override;
+	void PainSound() override;
+	void DeathSound() override;
+	void IdleSound() override;
+	void AlertSound() override;
+	void PrescheduleThink() override;
+	int  Classify () override;
 	void HandleAnimEvent( MonsterEvent_t *pEvent ) override;
 	BOOL CheckRangeAttack1 ( float flDot, float flDist ) override;
 	BOOL CheckRangeAttack2 ( float flDot, float flDist ) override;
 	int TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType ) override;
 
-	virtual float GetDamageAmount( void ) { return gSkillData.shockroachDmgBite; }
-	virtual int GetVoicePitch( void ) { return 100; }
-	virtual float GetSoundVolue( void ) { return 1.0; }
+	virtual float GetDamageAmount() { return gSkillData.shockroachDmgBite; }
+	virtual int GetVoicePitch() { return 100; }
+	virtual float GetSoundVolue() { return 1.0; }
 	Schedule_t* GetScheduleOfType ( int Type ) override;
 
 	void MonsterThink() override;
@@ -167,7 +167,7 @@ const char *COFShockRoach::pBiteSounds[] =
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	COFShockRoach :: Classify ( void )
+int	COFShockRoach :: Classify ()
 {
 	return	CLASS_ALIEN_PREY;
 }
@@ -177,7 +177,7 @@ int	COFShockRoach :: Classify ( void )
 // bounding box is much larger than the actual creature so 
 // this is needed for targeting
 //=========================================================
-Vector COFShockRoach :: Center ( void )
+Vector COFShockRoach :: Center ()
 {
 	return Vector( pev->origin.x, pev->origin.y, pev->origin.z + 6 );
 }
@@ -192,7 +192,7 @@ Vector COFShockRoach :: BodyTarget( const Vector &posSrc )
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void COFShockRoach :: SetYawSpeed ( void )
+void COFShockRoach :: SetYawSpeed ()
 {
 	int ys;
 
@@ -392,7 +392,7 @@ void COFShockRoach :: LeapTouch ( CBaseEntity *pOther )
 //=========================================================
 // PrescheduleThink
 //=========================================================
-void COFShockRoach :: PrescheduleThink ( void )
+void COFShockRoach :: PrescheduleThink ()
 {
 	// make the crab coo a little bit in combat state
 	if ( m_MonsterState == MONSTERSTATE_COMBAT && RANDOM_FLOAT( 0, 5 ) < 0.1 )
@@ -467,28 +467,28 @@ int COFShockRoach :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker
 //=========================================================
 // IdleSound
 //=========================================================
-void COFShockRoach :: IdleSound ( void )
+void COFShockRoach :: IdleSound ()
 {
 }
 
 //=========================================================
 // AlertSound 
 //=========================================================
-void COFShockRoach :: AlertSound ( void )
+void COFShockRoach :: AlertSound ()
 {
 }
 
 //=========================================================
 // AlertSound 
 //=========================================================
-void COFShockRoach :: PainSound ( void )
+void COFShockRoach :: PainSound ()
 {
 }
 
 //=========================================================
 // DeathSound 
 //=========================================================
-void COFShockRoach :: DeathSound ( void )
+void COFShockRoach :: DeathSound ()
 {
 }
 

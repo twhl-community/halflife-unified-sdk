@@ -43,30 +43,30 @@ public:
 	int		Save( CSave &save ) override;
 	int		Restore( CRestore &restore ) override;
 	static	TYPEDESCRIPTION m_SaveData[];
-	int		ObjectCaps( void ) override { return CBaseMonster :: ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+	int		ObjectCaps() override { return CBaseMonster :: ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 	
-	void Spawn( void ) override;
-	void Precache( void ) override;
-	int  Classify( void ) override { return CLASS_MACHINE; };
-	int  BloodColor( void ) override { return DONT_BLEED; }
+	void Spawn() override;
+	void Precache() override;
+	int  Classify() override { return CLASS_MACHINE; };
+	int  BloodColor() override { return DONT_BLEED; }
 	void Killed( entvars_t *pevAttacker, int iGib ) override;
 
-	void UpdateGoal( void );
-	BOOL HasDead( void );
-	void EXPORT FlyThink( void );
-	void EXPORT DeployThink( void );
-	void Flight( void );
+	void UpdateGoal();
+	BOOL HasDead();
+	void EXPORT FlyThink();
+	void EXPORT DeployThink();
+	void Flight();
 	void EXPORT HitTouch( CBaseEntity *pOther );
-	void EXPORT FindAllThink( void );
-	void EXPORT HoverThink( void );
+	void EXPORT FindAllThink();
+	void EXPORT HoverThink();
 	CBaseMonster *MakeGrunt( Vector vecSrc );
 	void EXPORT CrashTouch( CBaseEntity *pOther );
-	void EXPORT DyingThink( void );
+	void EXPORT DyingThink();
 	void EXPORT CommandUse( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
 
 	// int  TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType ) override;
 	void TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType) override;
-	void ShowDamage( void );
+	void ShowDamage();
 
 	CBaseEntity *m_pGoalEnt;
 	Vector m_vel1;
@@ -142,7 +142,7 @@ TYPEDESCRIPTION	CBlackOpsOsprey::m_SaveData[] =
 IMPLEMENT_SAVERESTORE( CBlackOpsOsprey, CBaseMonster );
 
 
-void CBlackOpsOsprey :: Spawn( void )
+void CBlackOpsOsprey :: Spawn()
 {
 	Precache( );
 	// motor
@@ -181,7 +181,7 @@ void CBlackOpsOsprey :: Spawn( void )
 }
 
 
-void CBlackOpsOsprey::Precache( void )
+void CBlackOpsOsprey::Precache()
 {
 	UTIL_PrecacheOther( "monster_male_assassin" );
 
@@ -204,7 +204,7 @@ void CBlackOpsOsprey::CommandUse( CBaseEntity *pActivator, CBaseEntity *pCaller,
 	pev->nextthink = gpGlobals->time + 0.1;
 }
 
-void CBlackOpsOsprey :: FindAllThink( void )
+void CBlackOpsOsprey :: FindAllThink()
 {
 	CBaseEntity *pEntity = NULL;
 
@@ -231,7 +231,7 @@ void CBlackOpsOsprey :: FindAllThink( void )
 }
 
 
-void CBlackOpsOsprey :: DeployThink( void )
+void CBlackOpsOsprey :: DeployThink()
 {
 	UTIL_MakeAimVectors( pev->angles );
 
@@ -322,7 +322,7 @@ CBaseMonster *CBlackOpsOsprey :: MakeGrunt( Vector vecSrc )
 }
 
 
-void CBlackOpsOsprey :: HoverThink( void )
+void CBlackOpsOsprey :: HoverThink()
 {
 	int i;
 	for (i = 0; i < 4; i++)
@@ -381,7 +381,7 @@ void CBlackOpsOsprey::UpdateGoal( )
 }
 
 
-void CBlackOpsOsprey::FlyThink( void )
+void CBlackOpsOsprey::FlyThink()
 {
 	StudioFrameAdvance( );
 	pev->nextthink = gpGlobals->time + 0.1;
@@ -544,7 +544,7 @@ void CBlackOpsOsprey::CrashTouch( CBaseEntity *pOther )
 }
 
 
-void CBlackOpsOsprey :: DyingThink( void )
+void CBlackOpsOsprey :: DyingThink()
 {
 	StudioFrameAdvance( );
 	pev->nextthink = gpGlobals->time + 0.1;
@@ -733,7 +733,7 @@ void CBlackOpsOsprey :: DyingThink( void )
 }
 
 
-void CBlackOpsOsprey :: ShowDamage( void )
+void CBlackOpsOsprey :: ShowDamage()
 {
 	if (m_iDoLeftSmokePuff > 0 || RANDOM_LONG(0,99) > m_flLeftHealth)
 	{

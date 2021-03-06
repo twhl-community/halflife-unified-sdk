@@ -37,19 +37,19 @@
 class CZombieBarney : public CBaseMonster
 {
 public:
-	void Spawn( void ) override;
-	void Precache( void ) override;
-	void SetYawSpeed( void ) override;
-	int  Classify ( void ) override;
+	void Spawn() override;
+	void Precache() override;
+	void SetYawSpeed() override;
+	int  Classify () override;
 	void HandleAnimEvent( MonsterEvent_t *pEvent ) override;
-	int IgnoreConditions ( void ) override;
+	int IgnoreConditions () override;
 
 	float m_flNextFlinch;
 
-	void PainSound( void ) override;
-	void AlertSound( void ) override;
-	void IdleSound( void ) override;
-	void AttackSound( void );
+	void PainSound() override;
+	void AlertSound() override;
+	void IdleSound() override;
+	void AttackSound();
 
 	static const char *pAttackSounds[];
 	static const char *pIdleSounds[];
@@ -110,7 +110,7 @@ const char *CZombieBarney::pPainSounds[] =
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	CZombieBarney :: Classify ( void )
+int	CZombieBarney :: Classify ()
 {
 	return	CLASS_ALIEN_MONSTER;
 }
@@ -119,7 +119,7 @@ int	CZombieBarney :: Classify ( void )
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CZombieBarney :: SetYawSpeed ( void )
+void CZombieBarney :: SetYawSpeed ()
 {
 	int ys;
 
@@ -152,7 +152,7 @@ int CZombieBarney :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker
 	return CBaseMonster::TakeDamage( pevInflictor, pevAttacker, flDamage, bitsDamageType );
 }
 
-void CZombieBarney :: PainSound( void )
+void CZombieBarney :: PainSound()
 {
 	int pitch = 95 + RANDOM_LONG(0,9);
 
@@ -160,14 +160,14 @@ void CZombieBarney :: PainSound( void )
 		EMIT_SOUND_DYN ( ENT(pev), CHAN_VOICE, pPainSounds[ RANDOM_LONG(0,ARRAYSIZE(pPainSounds)-1) ], 1.0, ATTN_NORM, 0, pitch );
 }
 
-void CZombieBarney :: AlertSound( void )
+void CZombieBarney :: AlertSound()
 {
 	int pitch = 95 + RANDOM_LONG(0,9);
 
 	EMIT_SOUND_DYN ( ENT(pev), CHAN_VOICE, pAlertSounds[ RANDOM_LONG(0,ARRAYSIZE(pAlertSounds)-1) ], 1.0, ATTN_NORM, 0, pitch );
 }
 
-void CZombieBarney :: IdleSound( void )
+void CZombieBarney :: IdleSound()
 {
 	int pitch = 100 + RANDOM_LONG(-5,5);
 
@@ -175,7 +175,7 @@ void CZombieBarney :: IdleSound( void )
 	EMIT_SOUND_DYN ( ENT(pev), CHAN_VOICE, pIdleSounds[ RANDOM_LONG(0,ARRAYSIZE(pIdleSounds)-1) ], 1.0, ATTN_NORM, 0, pitch );
 }
 
-void CZombieBarney :: AttackSound( void )
+void CZombieBarney :: AttackSound()
 {
 	int pitch = 100 + RANDOM_LONG(-5,5);
 
@@ -322,7 +322,7 @@ void CZombieBarney :: Precache()
 
 
 
-int CZombieBarney::IgnoreConditions ( void )
+int CZombieBarney::IgnoreConditions ()
 {
 	int iIgnore = CBaseMonster::IgnoreConditions();
 

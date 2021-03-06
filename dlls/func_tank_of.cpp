@@ -46,12 +46,12 @@ enum TANKBULLET
 class COFFuncTank : public CBaseEntity
 {
 public:
-	void	Spawn( void ) override;
-	void	Precache( void ) override;
+	void	Spawn() override;
+	void	Precache() override;
 	void	KeyValue( KeyValueData *pkvd ) override;
 	void	Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value ) override;
-	void	Think( void ) override;
-	void	TrackTarget( void );
+	void	Think() override;
+	void	TrackTarget();
 
 	virtual void Fire( const Vector &barrelEnd, const Vector &forward, entvars_t *pevAttacker );
 	virtual Vector UpdateTargetPosition( CBaseEntity *pTarget )
@@ -59,16 +59,16 @@ public:
 		return pTarget->BodyTarget( pev->origin );
 	}
 
-	void	StartRotSound( void );
-	void	StopRotSound( void );
+	void	StartRotSound();
+	void	StopRotSound();
 
 	// Bmodels don't go across transitions
-	int	ObjectCaps( void ) override { return CBaseEntity :: ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+	int	ObjectCaps() override { return CBaseEntity :: ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 
-	inline BOOL IsActive( void ) { return (pev->spawnflags & SF_TANK_ACTIVE)?TRUE:FALSE; }
-	inline void TankActivate( void ) { pev->spawnflags |= SF_TANK_ACTIVE; pev->nextthink = pev->ltime + 0.1; m_fireLast = 0; }
-	inline void TankDeactivate( void ) { pev->spawnflags &= ~SF_TANK_ACTIVE; m_fireLast = 0; StopRotSound(); }
-	inline BOOL CanFire( void ) { return (gpGlobals->time - m_lastSightTime) < m_persist; }
+	inline BOOL IsActive() { return (pev->spawnflags & SF_TANK_ACTIVE)?TRUE:FALSE; }
+	inline void TankActivate() { pev->spawnflags |= SF_TANK_ACTIVE; pev->nextthink = pev->ltime + 0.1; m_fireLast = 0; }
+	inline void TankDeactivate() { pev->spawnflags &= ~SF_TANK_ACTIVE; m_fireLast = 0; StopRotSound(); }
+	inline BOOL CanFire() { return (gpGlobals->time - m_lastSightTime) < m_persist; }
 	BOOL		InRange( float range );
 
 	// Acquire a target.  pPlayer is a player in the PVS
@@ -76,7 +76,7 @@ public:
 
 	void		TankTrace( const Vector &vecStart, const Vector &vecForward, const Vector &vecSpread, TraceResult &tr );
 
-	Vector		BarrelPosition( void )
+	Vector		BarrelPosition()
 	{
 		Vector forward, right, up;
 		UTIL_MakeVectorsPrivate( pev->angles, forward, right, up );
@@ -91,8 +91,8 @@ public:
 
 	BOOL OnControls( entvars_t *pevTest ) override;
 	BOOL StartControl( CBasePlayer* pController );
-	void StopControl( void );
-	void ControllerPostFrame( void );
+	void StopControl();
+	void ControllerPostFrame();
 
 
 protected:
@@ -183,7 +183,7 @@ static Vector gTankSpread[] =
 #define MAX_FIRING_SPREADS ARRAYSIZE(gTankSpread)
 
 
-void COFFuncTank :: Spawn( void )
+void COFFuncTank :: Spawn()
 {
 	Precache();
 
@@ -210,7 +210,7 @@ void COFFuncTank :: Spawn( void )
 }
 
 
-void COFFuncTank :: Precache( void )
+void COFFuncTank :: Precache()
 {
 	if ( m_iszSpriteSmoke )
 		PRECACHE_MODEL( (char *)STRING(m_iszSpriteSmoke) );
@@ -407,7 +407,7 @@ void COFFuncTank :: StopControl()
 }
 
 // Called each frame by the player's ItemPostFrame
-void COFFuncTank :: ControllerPostFrame( void )
+void COFFuncTank :: ControllerPostFrame()
 {
 	ASSERT(m_pController != NULL);
 
@@ -585,7 +585,7 @@ BOOL COFFuncTank :: InRange( float range )
 }
 
 
-void COFFuncTank :: Think( void )
+void COFFuncTank :: Think()
 {
 	pev->avelocity = g_vecZero;
 	TrackTarget();
@@ -596,7 +596,7 @@ void COFFuncTank :: Think( void )
 		StopRotSound();
 }
 
-void COFFuncTank::TrackTarget( void )
+void COFFuncTank::TrackTarget()
 {
 	TraceResult tr;
 	edict_t *pPlayer = FIND_CLIENT_IN_PVS( edict() );
@@ -822,7 +822,7 @@ void COFFuncTank::TankTrace( const Vector &vecStart, const Vector &vecForward, c
 }
 
 	
-void COFFuncTank::StartRotSound( void )
+void COFFuncTank::StartRotSound()
 {
 	if ( !pev->noise || (pev->spawnflags & SF_TANK_SOUNDON) )
 		return;
@@ -831,7 +831,7 @@ void COFFuncTank::StartRotSound( void )
 }
 
 
-void COFFuncTank::StopRotSound( void )
+void COFFuncTank::StopRotSound()
 {
 	if ( pev->spawnflags & SF_TANK_SOUNDON )
 		STOP_SOUND( edict(), CHAN_STATIC, (char*)STRING(pev->noise) );
@@ -890,11 +890,11 @@ void COFFuncTankGun::Fire( const Vector &barrelEnd, const Vector &forward, entva
 class COFFuncTankLaser : public COFFuncTank
 {
 public:
-	void	Activate( void ) override;
+	void	Activate() override;
 	void	KeyValue( KeyValueData *pkvd ) override;
 	void	Fire( const Vector &barrelEnd, const Vector &forward, entvars_t *pevAttacker ) override;
-	void	Think( void ) override;
-	CLaser *GetLaser( void );
+	void	Think() override;
+	CLaser *GetLaser();
 
 	int	Save( CSave &save ) override;
 	int	Restore( CRestore &restore ) override;
@@ -914,7 +914,7 @@ TYPEDESCRIPTION	COFFuncTankLaser::m_SaveData[] =
 
 IMPLEMENT_SAVERESTORE( COFFuncTankLaser, COFFuncTank );
 
-void COFFuncTankLaser::Activate( void )
+void COFFuncTankLaser::Activate()
 {
 	if ( !GetLaser() )
 	{
@@ -940,7 +940,7 @@ void COFFuncTankLaser::KeyValue( KeyValueData *pkvd )
 }
 
 
-CLaser *COFFuncTankLaser::GetLaser( void )
+CLaser *COFFuncTankLaser::GetLaser()
 {
 	if ( m_pLaser )
 		return m_pLaser;
@@ -964,7 +964,7 @@ CLaser *COFFuncTankLaser::GetLaser( void )
 }
 
 
-void COFFuncTankLaser::Think( void )
+void COFFuncTankLaser::Think()
 {
 	if ( m_pLaser && (gpGlobals->time > m_laserTime) )
 		m_pLaser->TurnOff();
@@ -1009,12 +1009,12 @@ void COFFuncTankLaser::Fire( const Vector &barrelEnd, const Vector &forward, ent
 class COFFuncTankRocket : public COFFuncTank
 {
 public:
-	void Precache( void ) override;
+	void Precache() override;
 	void Fire( const Vector &barrelEnd, const Vector &forward, entvars_t *pevAttacker ) override;
 };
 LINK_ENTITY_TO_CLASS( func_tankrocket_of, COFFuncTankRocket );
 
-void COFFuncTankRocket::Precache( void )
+void COFFuncTankRocket::Precache()
 {
 	UTIL_PrecacheOther( "rpg_rocket" );
 	COFFuncTank::Precache();
@@ -1096,10 +1096,10 @@ void COFFuncTankMortar::Fire( const Vector &barrelEnd, const Vector &forward, en
 class COFFuncTankControls : public CBaseEntity
 {
 public:
-	int	ObjectCaps( void ) override;
-	void Spawn( void ) override;
+	int	ObjectCaps() override;
+	void Spawn() override;
 	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value ) override;
-	void Think( void ) override;
+	void Think() override;
 
 	int	Save( CSave &save ) override;
 	int	Restore( CRestore &restore ) override;
@@ -1116,7 +1116,7 @@ TYPEDESCRIPTION	COFFuncTankControls::m_SaveData[] =
 
 IMPLEMENT_SAVERESTORE( COFFuncTankControls, CBaseEntity );
 
-int	COFFuncTankControls :: ObjectCaps( void ) 
+int	COFFuncTankControls :: ObjectCaps() 
 { 
 	return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION) | FCAP_IMPULSE_USE; 
 }
@@ -1131,7 +1131,7 @@ void COFFuncTankControls :: Use( CBaseEntity *pActivator, CBaseEntity *pCaller, 
 }
 
 
-void COFFuncTankControls :: Think( void )
+void COFFuncTankControls :: Think()
 {
 	edict_t *pTarget = NULL;
 
@@ -1149,7 +1149,7 @@ void COFFuncTankControls :: Think( void )
 	m_pTank = (COFFuncTank*)Instance(pTarget);
 }
 
-void COFFuncTankControls::Spawn( void )
+void COFFuncTankControls::Spawn()
 {
 	pev->solid = SOLID_TRIGGER;
 	pev->movetype = MOVETYPE_NONE;

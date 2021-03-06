@@ -63,7 +63,7 @@ class CPitdroneSpike : public CBaseEntity
 {
 public:
 	void Precache() override;
-	void Spawn( void ) override;
+	void Spawn() override;
 
 	int Classify() override { return CLASS_NONE; }
 
@@ -97,7 +97,7 @@ void CPitdroneSpike::Precache()
 	iSpikeTrail = PRECACHE_MODEL( "sprites/spike_trail.spr" );
 }
 
-void CPitdroneSpike:: Spawn( void )
+void CPitdroneSpike:: Spawn()
 {
 	pev->movetype = MOVETYPE_FLY;
 	pev->classname = MAKE_STRING( "pitdronespike" );
@@ -230,26 +230,26 @@ enum PitdroneWeapon
 class CPitdrone : public CBaseMonster
 {
 public:
-	void Spawn( void ) override;
-	void Precache( void ) override;
-	void SetYawSpeed( void ) override;
-	int  ISoundMask( void ) override;
-	int  Classify ( void ) override;
+	void Spawn() override;
+	void Precache() override;
+	void SetYawSpeed() override;
+	int  ISoundMask() override;
+	int  Classify () override;
 	void HandleAnimEvent( MonsterEvent_t *pEvent ) override;
-	void IdleSound( void ) override;
-	void PainSound( void ) override;
-	void AlertSound ( void ) override;
+	void IdleSound() override;
+	void PainSound() override;
+	void AlertSound () override;
 	void StartTask ( Task_t *pTask ) override;
 	void RunTask ( Task_t *pTask ) override;
 	BOOL CheckMeleeAttack1 ( float flDot, float flDist ) override;
 	BOOL CheckMeleeAttack2 ( float flDot, float flDist ) override;
 	BOOL CheckRangeAttack1 ( float flDot, float flDist ) override;
-	void RunAI( void ) override;
+	void RunAI() override;
 	BOOL FValidateHintType ( short sHint ) override;
-	Schedule_t *GetSchedule( void ) override;
+	Schedule_t *GetSchedule() override;
 	Schedule_t *GetScheduleOfType ( int Type ) override;
 	int IRelationship ( CBaseEntity *pTarget ) override;
-	int IgnoreConditions ( void ) override;
+	int IgnoreConditions () override;
 
 	void CheckAmmo() override;
 	void GibMonster() override;
@@ -280,7 +280,7 @@ IMPLEMENT_SAVERESTORE( CPitdrone, CBaseMonster );
 //=========================================================
 // IgnoreConditions 
 //=========================================================
-int CPitdrone::IgnoreConditions ( void )
+int CPitdrone::IgnoreConditions ()
 {
 	int iIgnore = CBaseMonster::IgnoreConditions();
 
@@ -392,7 +392,7 @@ BOOL CPitdrone :: FValidateHintType ( short sHint )
 // of sounds this monster regards. In the base class implementation,
 // monsters care about all sounds, but no scents.
 //=========================================================
-int CPitdrone :: ISoundMask ( void )
+int CPitdrone :: ISoundMask ()
 {
 	return	bits_SOUND_WORLD	|
 			bits_SOUND_COMBAT	|
@@ -406,7 +406,7 @@ int CPitdrone :: ISoundMask ( void )
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	CPitdrone :: Classify ( void )
+int	CPitdrone :: Classify ()
 {
 	return	CLASS_ALIEN_PREDATOR;
 }
@@ -414,14 +414,14 @@ int	CPitdrone :: Classify ( void )
 //=========================================================
 // IdleSound 
 //=========================================================
-void CPitdrone :: IdleSound ( void )
+void CPitdrone :: IdleSound ()
 {
 }
 
 //=========================================================
 // PainSound 
 //=========================================================
-void CPitdrone :: PainSound ( void )
+void CPitdrone :: PainSound ()
 {
 	int iPitch = RANDOM_LONG( 85, 120 );
 
@@ -445,7 +445,7 @@ void CPitdrone :: PainSound ( void )
 //=========================================================
 // AlertSound
 //=========================================================
-void CPitdrone :: AlertSound ( void )
+void CPitdrone :: AlertSound ()
 {
 	int iPitch = RANDOM_LONG( 140, 160 );
 
@@ -467,7 +467,7 @@ void CPitdrone :: AlertSound ( void )
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CPitdrone :: SetYawSpeed ( void )
+void CPitdrone :: SetYawSpeed ()
 {
 	int ys;
 
@@ -745,7 +745,7 @@ void CPitdrone :: Precache()
 // RunAI - overridden for bullsquid because there are things
 // that need to be checked every think.
 //========================================================
-void CPitdrone :: RunAI ( void )
+void CPitdrone :: RunAI ()
 {
 	// first, do base class stuff
 	CBaseMonster :: RunAI();
@@ -1011,7 +1011,7 @@ IMPLEMENT_CUSTOM_SCHEDULES( CPitdrone, CBaseMonster );
 //=========================================================
 // GetSchedule 
 //=========================================================
-Schedule_t *CPitdrone :: GetSchedule( void )
+Schedule_t *CPitdrone :: GetSchedule()
 {
 	switch	( m_MonsterState )
 	{

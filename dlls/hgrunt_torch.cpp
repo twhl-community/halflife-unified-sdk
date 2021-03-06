@@ -145,40 +145,40 @@ enum
 class COFTorchAlly : public COFSquadTalkMonster
 {
 public:
-	void Spawn( void ) override;
-	void Precache( void ) override;
-	void SetYawSpeed ( void ) override;
-	int  Classify ( void ) override;
-	int ISoundMask ( void ) override;
+	void Spawn() override;
+	void Precache() override;
+	void SetYawSpeed () override;
+	int  Classify () override;
+	int ISoundMask () override;
 	void HandleAnimEvent( MonsterEvent_t *pEvent ) override;
-	BOOL FCanCheckAttacks ( void ) override;
+	BOOL FCanCheckAttacks () override;
 	BOOL CheckMeleeAttack1 ( float flDot, float flDist ) override;
 	BOOL CheckRangeAttack1 ( float flDot, float flDist ) override;
 	BOOL CheckRangeAttack2 ( float flDot, float flDist ) override;
-	void CheckAmmo ( void ) override;
+	void CheckAmmo () override;
 	void SetActivity ( Activity NewActivity ) override;
 	void StartTask ( Task_t *pTask ) override;
 	void RunTask ( Task_t *pTask ) override;
-	void DeathSound( void ) override;
-	void PainSound( void ) override;
-	void IdleSound ( void ) override;
-	Vector GetGunPosition( void ) override;
-	void Shoot ( void );
-	void PrescheduleThink ( void ) override;
-	void GibMonster( void ) override;
-	void SpeakSentence( void );
+	void DeathSound() override;
+	void PainSound() override;
+	void IdleSound () override;
+	Vector GetGunPosition() override;
+	void Shoot ();
+	void PrescheduleThink () override;
+	void GibMonster() override;
+	void SpeakSentence();
 
 	int	Save( CSave &save ) override;
 	int Restore( CRestore &restore ) override;
 	
-	CBaseEntity	*Kick( void );
-	Schedule_t	*GetSchedule( void ) override;
+	CBaseEntity	*Kick();
+	Schedule_t	*GetSchedule() override;
 	Schedule_t  *GetScheduleOfType ( int Type ) override;
 	void TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType) override;
 	int TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType ) override;
 
-	BOOL FOkToSpeak( void );
-	void JustSpoke( void );
+	BOOL FOkToSpeak();
+	void JustSpoke();
 
 	int ObjectCaps() override;
 
@@ -300,7 +300,7 @@ enum
 // may still fail but in most cases, well after the grunt has 
 // started moving.
 //=========================================================
-void COFTorchAlly :: SpeakSentence( void )
+void COFTorchAlly :: SpeakSentence()
 {
 	if ( m_iSentence == TORCH_SENT_NONE )
 	{
@@ -318,7 +318,7 @@ void COFTorchAlly :: SpeakSentence( void )
 //=========================================================
 // GibMonster - make gun fly through the air.
 //=========================================================
-void COFTorchAlly :: GibMonster ( void )
+void COFTorchAlly :: GibMonster ()
 {
 	if( m_hWaitMedic )
 	{
@@ -364,7 +364,7 @@ void COFTorchAlly :: GibMonster ( void )
 // hear the DANGER sound that is made by hand grenades and
 // other dangerous items.
 //=========================================================
-int COFTorchAlly :: ISoundMask ( void )
+int COFTorchAlly :: ISoundMask ()
 {
 	return	bits_SOUND_WORLD	|
 			bits_SOUND_COMBAT	|
@@ -378,7 +378,7 @@ int COFTorchAlly :: ISoundMask ( void )
 //=========================================================
 // someone else is talking - don't speak
 //=========================================================
-BOOL COFTorchAlly :: FOkToSpeak( void )
+BOOL COFTorchAlly :: FOkToSpeak()
 {
 // if someone else is talking, don't speak
 	if (gpGlobals->time <= COFSquadTalkMonster::g_talkWaitTime)
@@ -402,7 +402,7 @@ BOOL COFTorchAlly :: FOkToSpeak( void )
 
 //=========================================================
 //=========================================================
-void COFTorchAlly :: JustSpoke( void )
+void COFTorchAlly :: JustSpoke()
 {
 	COFSquadTalkMonster::g_talkWaitTime = gpGlobals->time + RANDOM_FLOAT(1.5, 2.0);
 	m_iSentence = TORCH_SENT_NONE;
@@ -412,7 +412,7 @@ void COFTorchAlly :: JustSpoke( void )
 // PrescheduleThink - this function runs after conditions
 // are collected and before scheduling code is run.
 //=========================================================
-void COFTorchAlly :: PrescheduleThink ( void )
+void COFTorchAlly :: PrescheduleThink ()
 {
 	if ( InSquad() && m_hEnemy != NULL )
 	{
@@ -444,7 +444,7 @@ void COFTorchAlly :: PrescheduleThink ( void )
 // this is a bad bug. Friendly machine gun fire avoidance
 // will unecessarily prevent the throwing of a grenade as well.
 //=========================================================
-BOOL COFTorchAlly :: FCanCheckAttacks ( void )
+BOOL COFTorchAlly :: FCanCheckAttacks ()
 {
 	if ( !HasConditions( bits_COND_ENEMY_TOOFAR ) )
 	{
@@ -761,7 +761,7 @@ int COFTorchAlly :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker,
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void COFTorchAlly :: SetYawSpeed ( void )
+void COFTorchAlly :: SetYawSpeed ()
 {
 	int ys;
 
@@ -804,7 +804,7 @@ void COFTorchAlly :: SetYawSpeed ( void )
 	pev->yaw_speed = ys;
 }
 
-void COFTorchAlly :: IdleSound( void )
+void COFTorchAlly :: IdleSound()
 {
 	if (FOkToSpeak() && (g_fTorchAllyQuestion || RANDOM_LONG(0,1)))
 	{
@@ -847,7 +847,7 @@ void COFTorchAlly :: IdleSound( void )
 // CheckAmmo - overridden for the grunt because he actually
 // uses ammo! (base class doesn't)
 //=========================================================
-void COFTorchAlly :: CheckAmmo ( void )
+void COFTorchAlly :: CheckAmmo ()
 {
 	if ( m_cAmmoLoaded <= 0 )
 	{
@@ -859,14 +859,14 @@ void COFTorchAlly :: CheckAmmo ( void )
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	COFTorchAlly :: Classify ( void )
+int	COFTorchAlly :: Classify ()
 {
 	return	CLASS_HUMAN_MILITARY_FRIENDLY;
 }
 
 //=========================================================
 //=========================================================
-CBaseEntity *COFTorchAlly :: Kick( void )
+CBaseEntity *COFTorchAlly :: Kick()
 {
 	TraceResult tr;
 
@@ -905,7 +905,7 @@ Vector COFTorchAlly :: GetGunPosition( )
 //=========================================================
 // Shoot
 //=========================================================
-void COFTorchAlly :: Shoot ( void )
+void COFTorchAlly :: Shoot ()
 {
 	//Limit fire rate
 	if (m_hEnemy == NULL || gpGlobals->time - m_flLastShot <= 0.11 )
@@ -1287,7 +1287,7 @@ void COFTorchAlly :: RunTask ( Task_t *pTask )
 //=========================================================
 // PainSound
 //=========================================================
-void COFTorchAlly :: PainSound ( void )
+void COFTorchAlly :: PainSound ()
 {
 	if ( gpGlobals->time > m_flNextPainTime )
 	{
@@ -1332,7 +1332,7 @@ void COFTorchAlly :: PainSound ( void )
 //=========================================================
 // DeathSound 
 //=========================================================
-void COFTorchAlly :: DeathSound ( void )
+void COFTorchAlly :: DeathSound ()
 {
 	switch ( RANDOM_LONG(0,5) )
 	{
@@ -2161,7 +2161,7 @@ void COFTorchAlly :: SetActivity ( Activity NewActivity )
 //=========================================================
 // Get Schedule!
 //=========================================================
-Schedule_t *COFTorchAlly :: GetSchedule( void )
+Schedule_t *COFTorchAlly :: GetSchedule()
 {
 
 	// clear old sentence
@@ -2809,8 +2809,8 @@ class COFTorchAllyRepel : public CBaseMonster
 public:
 	void KeyValue( KeyValueData *pkvd ) override;
 
-	void Spawn( void ) override;
-	void Precache( void ) override;
+	void Spawn() override;
+	void Precache() override;
 	void EXPORT RepelUse ( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
 	int m_iSpriteTexture;	// Don't save, precache
 
@@ -2837,7 +2837,7 @@ void COFTorchAllyRepel::KeyValue( KeyValueData *pkvd )
 		CBaseMonster::KeyValue( pkvd );
 }
 
-void COFTorchAllyRepel::Spawn( void )
+void COFTorchAllyRepel::Spawn()
 {
 	Precache( );
 	pev->solid = SOLID_NOT;
@@ -2845,7 +2845,7 @@ void COFTorchAllyRepel::Spawn( void )
 	SetUse( &COFTorchAllyRepel::RepelUse );
 }
 
-void COFTorchAllyRepel::Precache( void )
+void COFTorchAllyRepel::Precache()
 {
 	UTIL_PrecacheOther( "monster_human_torch_ally" );
 	m_iSpriteTexture = PRECACHE_MODEL( "sprites/rope.spr" );

@@ -33,30 +33,30 @@ class COFBlackOpsApache : public CBaseMonster
 	int		Restore( CRestore &restore ) override;
 	static	TYPEDESCRIPTION m_SaveData[];
 
-	void Spawn( void ) override;
-	void Precache( void ) override;
-	int  Classify( void ) override { return CLASS_HUMAN_MILITARY; };
-	int  BloodColor( void ) override { return DONT_BLEED; }
+	void Spawn() override;
+	void Precache() override;
+	int  Classify() override { return CLASS_HUMAN_MILITARY; };
+	int  BloodColor() override { return DONT_BLEED; }
 	void Killed( entvars_t *pevAttacker, int iGib ) override;
-	void GibMonster( void ) override;
+	void GibMonster() override;
 
-	void SetObjectCollisionBox( void ) override
+	void SetObjectCollisionBox() override
 	{
 		pev->absmin = pev->origin + Vector( -300, -300, -172);
 		pev->absmax = pev->origin + Vector(300, 300, 8);
 	}
 
-	void EXPORT HuntThink( void );
+	void EXPORT HuntThink();
 	void EXPORT FlyTouch( CBaseEntity *pOther );
 	void EXPORT CrashTouch( CBaseEntity *pOther );
-	void EXPORT DyingThink( void );
+	void EXPORT DyingThink();
 	void EXPORT StartupUse( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
-	void EXPORT NullThink( void );
+	void EXPORT NullThink();
 
-	void ShowDamage( void );
-	void Flight( void );
-	void FireRocket( void );
-	BOOL FireGun( void );
+	void ShowDamage();
+	void Flight();
+	void FireRocket();
+	BOOL FireGun();
 	
 	int  TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType ) override;
 	void TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType) override;
@@ -114,7 +114,7 @@ TYPEDESCRIPTION	COFBlackOpsApache::m_SaveData[] =
 IMPLEMENT_SAVERESTORE( COFBlackOpsApache, CBaseMonster );
 
 
-void COFBlackOpsApache :: Spawn( void )
+void COFBlackOpsApache :: Spawn()
 {
 	Precache( );
 	// motor
@@ -152,7 +152,7 @@ void COFBlackOpsApache :: Spawn( void )
 }
 
 
-void COFBlackOpsApache::Precache( void )
+void COFBlackOpsApache::Precache()
 {
 	PRECACHE_MODEL("models/blkop_apache.mdl");
 
@@ -177,7 +177,7 @@ void COFBlackOpsApache::Precache( void )
 
 
 
-void COFBlackOpsApache::NullThink( void )
+void COFBlackOpsApache::NullThink()
 {
 	StudioFrameAdvance( );
 	pev->nextthink = gpGlobals->time + 0.5;
@@ -218,7 +218,7 @@ void COFBlackOpsApache :: Killed( entvars_t *pevAttacker, int iGib )
 	}
 }
 
-void COFBlackOpsApache :: DyingThink( void )
+void COFBlackOpsApache :: DyingThink()
 {
 	StudioFrameAdvance( );
 	pev->nextthink = gpGlobals->time + 0.1;
@@ -436,13 +436,13 @@ void COFBlackOpsApache::CrashTouch( CBaseEntity *pOther )
 
 
 
-void COFBlackOpsApache :: GibMonster( void )
+void COFBlackOpsApache :: GibMonster()
 {
 	// EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "common/bodysplat.wav", 0.75, ATTN_NORM, 0, 200);		
 }
 
 
-void COFBlackOpsApache :: HuntThink( void )
+void COFBlackOpsApache :: HuntThink()
 {
 	StudioFrameAdvance( );
 	pev->nextthink = gpGlobals->time + 0.1;
@@ -592,7 +592,7 @@ void COFBlackOpsApache :: HuntThink( void )
 }
 
 
-void COFBlackOpsApache :: Flight( void )
+void COFBlackOpsApache :: Flight()
 {
 	// tilt model 5 degrees
 	Vector vecAdj = Vector( 5.0, 0, 0 );
@@ -747,7 +747,7 @@ void COFBlackOpsApache :: Flight( void )
 }
 
 
-void COFBlackOpsApache :: FireRocket( void )
+void COFBlackOpsApache :: FireRocket()
 {
 	static float side = 1.0;
 	static int count;
@@ -871,7 +871,7 @@ BOOL COFBlackOpsApache :: FireGun( )
 
 
 
-void COFBlackOpsApache :: ShowDamage( void )
+void COFBlackOpsApache :: ShowDamage()
 {
 	if (m_iDoSmokePuff > 0 || RANDOM_LONG(0,99) > pev->health)
 	{
@@ -943,10 +943,10 @@ void COFBlackOpsApache::TraceAttack( entvars_t *pevAttacker, float flDamage, Vec
 
 class COFBlackOpsApacheHVR : public CGrenade
 {
-	void Spawn( void ) override;
-	void Precache( void ) override;
-	void EXPORT IgniteThink( void );
-	void EXPORT AccelerateThink( void );
+	void Spawn() override;
+	void Precache() override;
+	void EXPORT IgniteThink();
+	void EXPORT AccelerateThink();
 
 	int		Save( CSave &save ) override;
 	int		Restore( CRestore &restore ) override;
@@ -965,7 +965,7 @@ TYPEDESCRIPTION	COFBlackOpsApacheHVR::m_SaveData[] =
 
 IMPLEMENT_SAVERESTORE( COFBlackOpsApacheHVR, CGrenade );
 
-void COFBlackOpsApacheHVR :: Spawn( void )
+void COFBlackOpsApacheHVR :: Spawn()
 {
 	Precache( );
 	// motor
@@ -989,7 +989,7 @@ void COFBlackOpsApacheHVR :: Spawn( void )
 }
 
 
-void COFBlackOpsApacheHVR :: Precache( void )
+void COFBlackOpsApacheHVR :: Precache()
 {
 	PRECACHE_MODEL("models/HVR.mdl");
 	m_iTrail = PRECACHE_MODEL("sprites/smoke.spr");
@@ -997,7 +997,7 @@ void COFBlackOpsApacheHVR :: Precache( void )
 }
 
 
-void COFBlackOpsApacheHVR :: IgniteThink( void  )
+void COFBlackOpsApacheHVR :: IgniteThink()
 {
 	// pev->movetype = MOVETYPE_TOSS;
 
@@ -1028,7 +1028,7 @@ void COFBlackOpsApacheHVR :: IgniteThink( void  )
 }
 
 
-void COFBlackOpsApacheHVR :: AccelerateThink( void  )
+void COFBlackOpsApacheHVR :: AccelerateThink()
 {
 	// check world boundaries
 	if (pev->origin.x < -4096 || pev->origin.x > 4096 || pev->origin.y < -4096 || pev->origin.y > 4096 || pev->origin.z < -4096 || pev->origin.z > 4096)
