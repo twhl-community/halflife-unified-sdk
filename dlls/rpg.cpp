@@ -45,7 +45,7 @@ LINK_ENTITY_TO_CLASS( laser_spot, CLaserSpot );
 
 //=========================================================
 //=========================================================
-CLaserSpot *CLaserSpot::CreateSpot( void )
+CLaserSpot *CLaserSpot::CreateSpot()
 {
 	CLaserSpot *pSpot = GetClassPtr( (CLaserSpot *)NULL );
 	pSpot->Spawn();
@@ -57,7 +57,7 @@ CLaserSpot *CLaserSpot::CreateSpot( void )
 
 //=========================================================
 //=========================================================
-void CLaserSpot::Spawn( void )
+void CLaserSpot::Spawn()
 {
 	Precache( );
 	pev->movetype = MOVETYPE_NONE;
@@ -85,14 +85,14 @@ void CLaserSpot::Suspend( float flSuspendTime )
 //=========================================================
 // Revive - bring a suspended laser sight back.
 //=========================================================
-void CLaserSpot::Revive( void )
+void CLaserSpot::Revive()
 {
 	pev->effects &= ~EF_NODRAW;
 
 	SetThink( NULL );
 }
 
-void CLaserSpot::Precache( void )
+void CLaserSpot::Precache()
 {
 	PRECACHE_MODEL("sprites/laserdot.spr");
 };
@@ -118,7 +118,7 @@ CRpgRocket *CRpgRocket::CreateRpgRocket( Vector vecOrigin, Vector vecAngles, CBa
 
 //=========================================================
 //=========================================================
-void CRpgRocket :: Spawn( void )
+void CRpgRocket :: Spawn()
 {
 	Precache( );
 	// motor
@@ -162,7 +162,7 @@ void CRpgRocket :: RocketTouch ( CBaseEntity *pOther )
 
 //=========================================================
 //=========================================================
-void CRpgRocket :: Precache( void )
+void CRpgRocket :: Precache()
 {
 	PRECACHE_MODEL("models/rpgrocket.mdl");
 	m_iTrail = PRECACHE_MODEL("sprites/smoke.spr");
@@ -170,7 +170,7 @@ void CRpgRocket :: Precache( void )
 }
 
 
-void CRpgRocket :: IgniteThink( void  )
+void CRpgRocket :: IgniteThink()
 {
 	// pev->movetype = MOVETYPE_TOSS;
 
@@ -203,7 +203,7 @@ void CRpgRocket :: IgniteThink( void  )
 }
 
 
-void CRpgRocket :: FollowThink( void  )
+void CRpgRocket :: FollowThink()
 {
 	CBaseEntity *pOther = NULL;
 	Vector vecTarget;
@@ -280,7 +280,7 @@ void CRpgRocket :: FollowThink( void  )
 
 
 
-void CRpg::Reload( void )
+void CRpg::Reload()
 {
 	if ( m_iClip == 1 )
 	{
@@ -354,7 +354,7 @@ void CRpg::Spawn( )
 }
 
 
-void CRpg::Precache( void )
+void CRpg::Precache()
 {
 	PRECACHE_MODEL("models/w_rpg.mdl");
 	PRECACHE_MODEL("models/v_rpg.mdl");
@@ -420,7 +420,7 @@ BOOL CRpg::Deploy( )
 }
 
 
-BOOL CRpg::CanHolster( void )
+BOOL CRpg::CanHolster()
 {
 	if ( m_fSpotActive && m_cActiveRockets )
 	{
@@ -512,7 +512,7 @@ void CRpg::SecondaryAttack()
 }
 
 
-void CRpg::WeaponIdle( void )
+void CRpg::WeaponIdle()
 {
 	UpdateSpot( );
 
@@ -553,7 +553,7 @@ void CRpg::WeaponIdle( void )
 
 
 
-void CRpg::UpdateSpot( void )
+void CRpg::UpdateSpot()
 {
 
 #ifndef CLIENT_DLL
@@ -580,18 +580,18 @@ void CRpg::UpdateSpot( void )
 
 class CRpgAmmo : public CBasePlayerAmmo
 {
-	void Spawn( void )
+	void Spawn() override
 	{ 
 		Precache( );
 		SET_MODEL(ENT(pev), "models/w_rpgammo.mdl");
 		CBasePlayerAmmo::Spawn( );
 	}
-	void Precache( void )
+	void Precache() override
 	{
 		PRECACHE_MODEL ("models/w_rpgammo.mdl");
 		PRECACHE_SOUND("items/9mmclip1.wav");
 	}
-	BOOL AddAmmo( CBaseEntity *pOther ) 
+	BOOL AddAmmo( CBaseEntity *pOther ) override
 	{ 
 		int iGive;
 

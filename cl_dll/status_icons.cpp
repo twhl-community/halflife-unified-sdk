@@ -28,7 +28,7 @@
 DECLARE_MESSAGE( m_StatusIcons, StatusIcon );
 DECLARE_MESSAGE(m_StatusIcons, CustomIcon);
 
-int CHudStatusIcons::Init( void )
+int CHudStatusIcons::Init()
 {
 	HOOK_MESSAGE( StatusIcon );
 	HOOK_MESSAGE(CustomIcon);
@@ -40,13 +40,13 @@ int CHudStatusIcons::Init( void )
 	return 1;
 }
 
-int CHudStatusIcons::VidInit( void )
+int CHudStatusIcons::VidInit()
 {
 
 	return 1;
 }
 
-void CHudStatusIcons::Reset( void )
+void CHudStatusIcons::Reset()
 {
 	memset( m_IconList, 0, sizeof m_IconList );
 	memset(m_CustomList, 0, sizeof(m_CustomList));

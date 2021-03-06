@@ -87,7 +87,7 @@ void CPython::Spawn( )
 }
 
 
-void CPython::Precache( void )
+void CPython::Precache()
 {
 	PRECACHE_MODEL("models/v_357.mdl");
 	PRECACHE_MODEL("models/w_357.mdl");
@@ -138,7 +138,7 @@ void CPython::Holster( int skiplocal /* = 0 */ )
 	SendWeaponAnim( PYTHON_HOLSTER );
 }
 
-void CPython::SecondaryAttack( void )
+void CPython::SecondaryAttack()
 {
 #ifdef CLIENT_DLL
 	if ( !bIsMultiplayer() )
@@ -219,7 +219,7 @@ void CPython::PrimaryAttack()
 }
 
 
-void CPython::Reload( void )
+void CPython::Reload()
 {
 	if ( m_pPlayer->ammo_357 <= 0 )
 		return;
@@ -240,7 +240,7 @@ void CPython::Reload( void )
 }
 
 
-void CPython::WeaponIdle( void )
+void CPython::WeaponIdle()
 {
 	ResetEmptySound( );
 
@@ -285,18 +285,18 @@ void CPython::WeaponIdle( void )
 
 class CPythonAmmo : public CBasePlayerAmmo
 {
-	void Spawn( void )
+	void Spawn() override
 	{ 
 		Precache( );
 		SET_MODEL(ENT(pev), "models/w_357ammobox.mdl");
 		CBasePlayerAmmo::Spawn( );
 	}
-	void Precache( void )
+	void Precache() override
 	{
 		PRECACHE_MODEL ("models/w_357ammobox.mdl");
 		PRECACHE_SOUND("items/9mmclip1.wav");
 	}
-	BOOL AddAmmo( CBaseEntity *pOther ) 
+	BOOL AddAmmo( CBaseEntity *pOther ) override
 	{ 
 		if (pOther->GiveAmmo( AMMO_357BOX_GIVE, "357", _357_MAX_CARRY ) != -1)
 		{

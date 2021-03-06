@@ -48,12 +48,12 @@ TeamFortressViewport *gViewPort = NULL;
 CSysModule *g_hParticleManModule = NULL;
 IParticleMan *g_pParticleMan = NULL;
 
-void CL_LoadParticleMan( void );
-void CL_UnloadParticleMan( void );
+void CL_LoadParticleMan();
+void CL_UnloadParticleMan();
 
-void InitInput (void);
-void EV_HookEvents( void );
-void IN_Commands( void );
+void InitInput ();
+void EV_HookEvents();
+void IN_Commands();
 
 /*
 ================================
@@ -164,7 +164,7 @@ so the HUD can reinitialize itself.
 ==========================
 */
 
-int DLLEXPORT HUD_VidInit( void )
+int DLLEXPORT HUD_VidInit()
 {
 //	RecClHudVidInit();
 
@@ -190,7 +190,7 @@ the hud variables.
 ==========================
 */
 
-void DLLEXPORT HUD_Init( void )
+void DLLEXPORT HUD_Init()
 {
 //	RecClHudInit();
 	InitInput();
@@ -249,7 +249,7 @@ Called at start and end of demos to restore to "non"HUD state.
 ==========================
 */
 
-void DLLEXPORT HUD_Reset( void )
+void DLLEXPORT HUD_Reset()
 {
 //	RecClHudReset();
 
@@ -304,7 +304,7 @@ void DLLEXPORT HUD_DirectorMessage( int iSize, void *pbuf )
 	gHUD.m_Spectator.DirectorMessage( iSize, pbuf );
 }
 
-void CL_UnloadParticleMan( void )
+void CL_UnloadParticleMan()
 {
 	Sys_UnloadModule( g_hParticleManModule );
 
@@ -312,7 +312,7 @@ void CL_UnloadParticleMan( void )
 	g_hParticleManModule = NULL;
 }
 
-void CL_LoadParticleMan( void )
+void CL_LoadParticleMan()
 {
 	char szPDir[512];
 
@@ -410,7 +410,7 @@ class CClientExports : public IGameClientExports
 {
 public:
 	// returns the name of the server the user is connected to, if any
-	virtual const char *GetServerHostName()
+	const char *GetServerHostName() override
 	{
 		/*if (gViewPortInterface)
 		{
@@ -420,14 +420,14 @@ public:
 	}
 
 	// ingame voice manipulation
-	virtual bool IsPlayerGameVoiceMuted(int playerIndex)
+	bool IsPlayerGameVoiceMuted(int playerIndex) override
 	{
 		if (GetClientVoiceMgr())
 			return GetClientVoiceMgr()->IsPlayerBlocked(playerIndex);
 		return false;
 	}
 
-	virtual void MutePlayerGameVoice(int playerIndex)
+	void MutePlayerGameVoice(int playerIndex) override
 	{
 		if (GetClientVoiceMgr())
 		{
@@ -435,7 +435,7 @@ public:
 		}
 	}
 
-	virtual void UnmutePlayerGameVoice(int playerIndex)
+	void UnmutePlayerGameVoice(int playerIndex) override
 	{
 		if (GetClientVoiceMgr())
 		{

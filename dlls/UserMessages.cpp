@@ -75,7 +75,7 @@ int gmsgTeamFull = 0;
 int gmsgOldWeapon = 0;
 int gmsgCustomIcon = 0;
 
-void LinkUserMessages(void)
+void LinkUserMessages()
 {
 	// Already taken care of?
 	if (gmsgSelAmmo)

@@ -175,7 +175,7 @@ CTeamMenuPanel::CTeamMenuPanel(int iTrans, int iRemoveMe, int x,int y,int wide,i
 //-----------------------------------------------------------------------------
 // Purpose: Called each time a new level is started.
 //-----------------------------------------------------------------------------
-void CTeamMenuPanel::Initialize( void )
+void CTeamMenuPanel::Initialize()
 {
 	m_bUpdatedMapName = false;
 	m_iCurrentInfo = 0;
@@ -185,7 +185,7 @@ void CTeamMenuPanel::Initialize( void )
 //-----------------------------------------------------------------------------
 // Purpose: Called everytime the Team Menu is displayed
 //-----------------------------------------------------------------------------
-void CTeamMenuPanel::Update( void )
+void CTeamMenuPanel::Update()
 {
 	int	 iYPos = TEAMMENU_TOPLEFT_BUTTON_Y;
 
@@ -369,7 +369,7 @@ bool CTeamMenuPanel::SlotInput( int iSlot )
 
 //======================================
 // Update the Team menu before opening it
-void CTeamMenuPanel::Open( void )
+void CTeamMenuPanel::Open()
 {
 	Update();
 	CMenuPanel::Open();
