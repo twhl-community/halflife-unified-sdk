@@ -40,16 +40,16 @@ typedef struct
 class CBlackOpsOsprey : public CBaseMonster
 {
 public:
-	int		Save( CSave &save );
-	int		Restore( CRestore &restore );
+	int		Save( CSave &save ) override;
+	int		Restore( CRestore &restore ) override;
 	static	TYPEDESCRIPTION m_SaveData[];
-	int		ObjectCaps( void ) { return CBaseMonster :: ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+	int		ObjectCaps( void ) override { return CBaseMonster :: ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 	
-	void Spawn( void );
-	void Precache( void );
-	int  Classify( void ) { return CLASS_MACHINE; };
-	int  BloodColor( void ) { return DONT_BLEED; }
-	void Killed( entvars_t *pevAttacker, int iGib );
+	void Spawn( void ) override;
+	void Precache( void ) override;
+	int  Classify( void ) override { return CLASS_MACHINE; };
+	int  BloodColor( void ) override { return DONT_BLEED; }
+	void Killed( entvars_t *pevAttacker, int iGib ) override;
 
 	void UpdateGoal( void );
 	BOOL HasDead( void );
@@ -64,8 +64,8 @@ public:
 	void EXPORT DyingThink( void );
 	void EXPORT CommandUse( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
 
-	// int  TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType );
-	void TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
+	// int  TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType ) override;
+	void TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType) override;
 	void ShowDamage( void );
 
 	CBaseEntity *m_pGoalEnt;

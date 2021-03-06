@@ -1309,10 +1309,10 @@ Schedule_t *CHoundeye :: GetSchedule()
 class CDeadHoundeye : public CBaseMonster
 {
 public:
-	void Spawn( void );
-	int	Classify( void ) { return	CLASS_ALIEN_PASSIVE; }
+	void Spawn( void ) override;
+	int	Classify( void ) override { return	CLASS_ALIEN_PASSIVE; }
 
-	void KeyValue( KeyValueData *pkvd );
+	void KeyValue( KeyValueData *pkvd ) override;
 
 	int	m_iPose;// which sequence to display	-- temporary, don't need to save
 	static char *m_szPoses[ 3 ];

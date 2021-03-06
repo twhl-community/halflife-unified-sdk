@@ -329,29 +329,29 @@ void COFChargedBolt::ChargedBoltTouch( CBaseEntity* pOther )
 class COFVoltigore : public CSquadMonster
 {
 public:
-	void Spawn( void );
-	void Precache( void );
-	void SetYawSpeed ( void );
-	int  Classify ( void );
-	int  ISoundMask ( void );
-	void HandleAnimEvent( MonsterEvent_t *pEvent );
-	void SetObjectCollisionBox( void )
+	void Spawn( void ) override;
+	void Precache( void ) override;
+	void SetYawSpeed ( void ) override;
+	int  Classify ( void ) override;
+	int  ISoundMask ( void ) override;
+	void HandleAnimEvent( MonsterEvent_t *pEvent ) override;
+	void SetObjectCollisionBox( void ) override
 	{
 		pev->absmin = pev->origin + Vector( -80, -80, 0 );
 		pev->absmax = pev->origin + Vector( 80, 80, 90 );
 	}
 
-	Schedule_t* GetSchedule ( void );
-	Schedule_t* GetScheduleOfType ( int Type );
-	BOOL FCanCheckAttacks ( void );
-	BOOL CheckMeleeAttack1 ( float flDot, float flDist );
-	BOOL CheckRangeAttack1 ( float flDot, float flDist );
-	void StartTask ( Task_t *pTask );
+	Schedule_t* GetSchedule ( void ) override;
+	Schedule_t* GetScheduleOfType ( int Type ) override;
+	BOOL FCanCheckAttacks ( void ) override;
+	BOOL CheckMeleeAttack1 ( float flDot, float flDist ) override;
+	BOOL CheckRangeAttack1 ( float flDot, float flDist ) override;
+	void StartTask ( Task_t *pTask ) override;
 	void RunTask( Task_t* pTask ) override;
-	void AlertSound( void );
-	void PainSound ( void );
-	void TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
-	int IRelationship( CBaseEntity *pTarget );
+	void AlertSound( void ) override;
+	void PainSound ( void ) override;
+	void TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType) override;
+	int IRelationship( CBaseEntity *pTarget ) override;
 	void StopTalking ( void );
 	BOOL ShouldSpeak( void );
 
@@ -367,8 +367,8 @@ public:
 
 	CUSTOM_SCHEDULES;
 
-	virtual int		Save( CSave &save );
-	virtual int		Restore( CRestore &restore );
+	int		Save( CSave &save ) override;
+	int		Restore( CRestore &restore ) override;
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	static const char *pAttackHitSounds[];

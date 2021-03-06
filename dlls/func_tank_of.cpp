@@ -46,11 +46,11 @@ enum TANKBULLET
 class COFFuncTank : public CBaseEntity
 {
 public:
-	void	Spawn( void );
-	void	Precache( void );
-	void	KeyValue( KeyValueData *pkvd );
-	void	Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
-	void	Think( void );
+	void	Spawn( void ) override;
+	void	Precache( void ) override;
+	void	KeyValue( KeyValueData *pkvd ) override;
+	void	Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value ) override;
+	void	Think( void ) override;
 	void	TrackTarget( void );
 
 	virtual void Fire( const Vector &barrelEnd, const Vector &forward, entvars_t *pevAttacker );
@@ -63,7 +63,7 @@ public:
 	void	StopRotSound( void );
 
 	// Bmodels don't go across transitions
-	virtual int	ObjectCaps( void ) { return CBaseEntity :: ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+	int	ObjectCaps( void ) override { return CBaseEntity :: ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 
 	inline BOOL IsActive( void ) { return (pev->spawnflags & SF_TANK_ACTIVE)?TRUE:FALSE; }
 	inline void TankActivate( void ) { pev->spawnflags |= SF_TANK_ACTIVE; pev->nextthink = pev->ltime + 0.1; m_fireLast = 0; }
@@ -85,11 +85,11 @@ public:
 
 	void		AdjustAnglesForBarrel( Vector &angles, float distance );
 
-	virtual int	Save( CSave &save );
-	virtual int	Restore( CRestore &restore );
+	int	Save( CSave &save ) override;
+	int	Restore( CRestore &restore ) override;
 	static	TYPEDESCRIPTION m_SaveData[];
 
-	BOOL OnControls( entvars_t *pevTest );
+	BOOL OnControls( entvars_t *pevTest ) override;
 	BOOL StartControl( CBasePlayer* pController );
 	void StopControl( void );
 	void ControllerPostFrame( void );
@@ -841,7 +841,7 @@ void COFFuncTank::StopRotSound( void )
 class COFFuncTankGun : public COFFuncTank
 {
 public:
-	void Fire( const Vector &barrelEnd, const Vector &forward, entvars_t *pevAttacker );
+	void Fire( const Vector &barrelEnd, const Vector &forward, entvars_t *pevAttacker ) override;
 };
 LINK_ENTITY_TO_CLASS( func_tank_of, COFFuncTankGun );
 
@@ -890,14 +890,14 @@ void COFFuncTankGun::Fire( const Vector &barrelEnd, const Vector &forward, entva
 class COFFuncTankLaser : public COFFuncTank
 {
 public:
-	void	Activate( void );
-	void	KeyValue( KeyValueData *pkvd );
-	void	Fire( const Vector &barrelEnd, const Vector &forward, entvars_t *pevAttacker );
-	void	Think( void );
+	void	Activate( void ) override;
+	void	KeyValue( KeyValueData *pkvd ) override;
+	void	Fire( const Vector &barrelEnd, const Vector &forward, entvars_t *pevAttacker ) override;
+	void	Think( void ) override;
 	CLaser *GetLaser( void );
 
-	virtual int	Save( CSave &save );
-	virtual int	Restore( CRestore &restore );
+	int	Save( CSave &save ) override;
+	int	Restore( CRestore &restore ) override;
 	static	TYPEDESCRIPTION m_SaveData[];
 
 private:
@@ -1009,8 +1009,8 @@ void COFFuncTankLaser::Fire( const Vector &barrelEnd, const Vector &forward, ent
 class COFFuncTankRocket : public COFFuncTank
 {
 public:
-	void Precache( void );
-	void Fire( const Vector &barrelEnd, const Vector &forward, entvars_t *pevAttacker );
+	void Precache( void ) override;
+	void Fire( const Vector &barrelEnd, const Vector &forward, entvars_t *pevAttacker ) override;
 };
 LINK_ENTITY_TO_CLASS( func_tankrocket_of, COFFuncTankRocket );
 
@@ -1046,8 +1046,8 @@ void COFFuncTankRocket::Fire( const Vector &barrelEnd, const Vector &forward, en
 class COFFuncTankMortar : public COFFuncTank
 {
 public:
-	void KeyValue( KeyValueData *pkvd );
-	void Fire( const Vector &barrelEnd, const Vector &forward, entvars_t *pevAttacker );
+	void KeyValue( KeyValueData *pkvd ) override;
+	void Fire( const Vector &barrelEnd, const Vector &forward, entvars_t *pevAttacker ) override;
 };
 LINK_ENTITY_TO_CLASS( func_tankmortar_of, COFFuncTankMortar );
 
@@ -1096,13 +1096,13 @@ void COFFuncTankMortar::Fire( const Vector &barrelEnd, const Vector &forward, en
 class COFFuncTankControls : public CBaseEntity
 {
 public:
-	virtual int	ObjectCaps( void );
-	void Spawn( void );
-	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
-	void Think( void );
+	int	ObjectCaps( void ) override;
+	void Spawn( void ) override;
+	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value ) override;
+	void Think( void ) override;
 
-	virtual int	Save( CSave &save );
-	virtual int	Restore( CRestore &restore );
+	int	Save( CSave &save ) override;
+	int	Restore( CRestore &restore ) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
 	COFFuncTank *m_pTank;

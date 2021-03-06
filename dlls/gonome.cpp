@@ -208,16 +208,16 @@ public:
 
 	static TYPEDESCRIPTION m_SaveData[];
 
-	void Spawn( void );
-	void Precache( void );
-	void SetYawSpeed( void );
-	int  Classify ( void );
-	void HandleAnimEvent( MonsterEvent_t *pEvent );
-	int IgnoreConditions ( void );
+	void Spawn( void ) override;
+	void Precache( void ) override;
+	void SetYawSpeed( void ) override;
+	int  Classify ( void ) override;
+	void HandleAnimEvent( MonsterEvent_t *pEvent ) override;
+	int IgnoreConditions ( void ) override;
 
-	void PainSound( void );
-	void AlertSound( void );
-	void IdleSound( void );
+	void PainSound( void ) override;
+	void AlertSound( void ) override;
+	void IdleSound( void ) override;
 
 	static const char *pIdleSounds[];
 	static const char *pAlertSounds[];
@@ -228,7 +228,7 @@ public:
 	// No range attacks
 	BOOL CheckRangeAttack1 ( float flDot, float flDist ) override;
 	BOOL CheckRangeAttack2 ( float flDot, float flDist ) override { return false; }
-	int TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType );
+	int TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType ) override;
 
 	BOOL CheckMeleeAttack1( float flDot, float flDist ) override;
 
@@ -890,10 +890,10 @@ void COFGonome::SetActivity( Activity NewActivity )
 class CDeadGonome : public CBaseMonster
 {
 public:
-	void Spawn( void );
-	int	Classify( void ) { return	CLASS_ALIEN_PASSIVE; }
+	void Spawn( void ) override;
+	int	Classify( void ) override { return	CLASS_ALIEN_PASSIVE; }
 
-	void KeyValue( KeyValueData *pkvd );
+	void KeyValue( KeyValueData *pkvd ) override;
 
 	int	m_iPose;// which sequence to display	-- temporary, don't need to save
 	static char *m_szPoses[ 3 ];

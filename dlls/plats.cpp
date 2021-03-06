@@ -932,13 +932,13 @@ void CFuncTrain::OverrideReset()
 class CSpriteTrain : public CBasePlatTrain
 {
 public:
-	void Spawn( void );
-	void Precache( void );
-	void Activate( void );
-	void OverrideReset( void );
+	void Spawn( void ) override;
+	void Precache( void ) override;
+	void Activate( void ) override;
+	void OverrideReset( void ) override;
 
-	void Blocked( CBaseEntity *pOther );
-	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
+	void Blocked( CBaseEntity *pOther ) override;
+	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value ) override;
 
 
 	void EXPORT Wait( void );
@@ -950,8 +950,8 @@ public:
 
 	void LinearMove( const Vector& vecDest, float flSpeed );
 
-	virtual int		Save( CSave &save );
-	virtual int		Restore( CRestore &restore );
+	int		Save( CSave &save ) override;
+	int		Restore( CRestore &restore ) override;
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	entvars_t	*m_pevCurrentTarget;

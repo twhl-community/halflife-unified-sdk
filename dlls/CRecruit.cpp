@@ -42,8 +42,8 @@
 class CRecruit : public CTalkMonster
 {
 public:
-	virtual int		Save( CSave &save );
-	virtual int		Restore( CRestore &restore );
+	int		Save( CSave &save ) override;
+	int		Restore( CRestore &restore ) override;
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	CUSTOM_SCHEDULES;

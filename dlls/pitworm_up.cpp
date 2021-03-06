@@ -1539,16 +1539,16 @@ void COFPitWormGib::GibFloat()
 class COFPitWormGibShooter : public CBaseEntity
 {
 public:
-	void	Spawn( void );
-	void	Precache( void );
-	void	KeyValue( KeyValueData *pkvd );
+	void	Spawn( void ) override;
+	void	Precache( void ) override;
+	void	KeyValue( KeyValueData *pkvd ) override;
 	void EXPORT ShootThink( void );
-	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
+	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value ) override;
 
 	virtual COFPitWormGib *CreateGib( void );
 
-	virtual int		Save( CSave &save );
-	virtual int		Restore( CRestore &restore );
+	int		Save( CSave &save ) override;
+	int		Restore( CRestore &restore ) override;
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	float m_flDelay;
@@ -1688,12 +1688,12 @@ public:
 	int Restore(CRestore& restore) override;
 	static	TYPEDESCRIPTION m_SaveData[];
 
-	int Classify()
+	int Classify() override
 	{
 		return CLASS_ALIEN_MONSTER;
 	}
 
-	void SetYawSpeed()
+	void SetYawSpeed() override
 	{
 		int yawSpeed = 100;
 		if (m_Activity != ACT_IDLE)
@@ -1702,30 +1702,30 @@ public:
 		pev->yaw_speed = yawSpeed;
 	}
 
-	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
-	void Precache();
+	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	void Precache() override;
 
-	BOOL CheckMeleeAttack1(float flDot, float flDist)
+	BOOL CheckMeleeAttack1(float flDot, float flDist) override
 	{
 		return flDot >= 0.7 && flDist <= 192.0;
 	}
 
-	void Activate()
+	void Activate() override
 	{
 		if (m_hTargetEnt == NULL)
 			Remember(bits_MEMORY_ADVANCE_NODE);	// Start 'er up
 	}
 
-	void StartMonster();
+	void StartMonster() override;
 
-	void Spawn();
+	void Spawn() override;
 
-	void KeyValue(KeyValueData* pkvd)
+	void KeyValue(KeyValueData* pkvd) override
 	{
 		CBaseMonster::KeyValue(pkvd);
 	}
 
-	BOOL CheckRangeAttack1(float flDot, float flDist)
+	BOOL CheckRangeAttack1(float flDot, float flDist) override
 	{
 		if (flDist <= 1024.0 && gpGlobals->time > m_spikeTime)
 		{
@@ -1748,13 +1748,13 @@ public:
 		return false;
 	}
 
-	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType);
+	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
 
-	void Move(float flInterval);
+	void Move(float flInterval) override;
 
 	void ShootBeam();
 
-	void HandleAnimEvent(MonsterEvent_t* pEvent);
+	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 
 	void StrafeBeam();
 
@@ -1764,9 +1764,9 @@ public:
 
 	void TrackEnemy();
 
-	void RunAI();
+	void RunAI() override;
 
-	void SetObjectCollisionBox();
+	void SetObjectCollisionBox() override;
 
 	static const char* pChildDieSounds[];
 	static const char* pSackSounds[];

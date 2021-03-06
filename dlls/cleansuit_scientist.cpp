@@ -66,23 +66,23 @@ enum
 class CCleansuitScientist : public CTalkMonster
 {
 public:
-	void Spawn( void );
-	void Precache( void );
+	void Spawn( void ) override;
+	void Precache( void ) override;
 
-	void SetYawSpeed( void );
-	int  Classify ( void );
-	void HandleAnimEvent( MonsterEvent_t *pEvent );
-	void RunTask( Task_t *pTask );
-	void StartTask( Task_t *pTask );
-	int	ObjectCaps( void ) { return CTalkMonster :: ObjectCaps() | FCAP_IMPULSE_USE; }
-	int TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
-	virtual int FriendNumber( int arrayNumber );
-	void SetActivity ( Activity newActivity );
-	Activity GetStoppedActivity( void );
-	int ISoundMask( void );
-	void DeclineFollowing( void );
+	void SetYawSpeed( void ) override;
+	int  Classify ( void ) override;
+	void HandleAnimEvent( MonsterEvent_t *pEvent ) override;
+	void RunTask( Task_t *pTask ) override;
+	void StartTask( Task_t *pTask ) override;
+	int	ObjectCaps( void ) override { return CTalkMonster :: ObjectCaps() | FCAP_IMPULSE_USE; }
+	int TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	int FriendNumber( int arrayNumber ) override;
+	void SetActivity ( Activity newActivity ) override;
+	Activity GetStoppedActivity( void ) override;
+	int ISoundMask( void ) override;
+	void DeclineFollowing( void ) override;
 
-	float	CoverRadius( void ) { return 1200; }		// Need more room for cover because scientists want to get far away!
+	float	CoverRadius( void ) override { return 1200; }		// Need more room for cover because scientists want to get far away!
 	BOOL	DisregardEnemy( CBaseEntity *pEnemy ) { return !pEnemy->IsAlive() || (gpGlobals->time - m_fearTime) > 15; }
 
 	BOOL	CanHeal( void );
@@ -90,19 +90,19 @@ public:
 	void	Scream( void );
 
 	// Override these to set behavior
-	Schedule_t *GetScheduleOfType ( int Type );
-	Schedule_t *GetSchedule ( void );
-	MONSTERSTATE GetIdealState ( void );
+	Schedule_t *GetScheduleOfType ( int Type ) override;
+	Schedule_t *GetSchedule ( void ) override;
+	MONSTERSTATE GetIdealState ( void ) override;
 
-	void DeathSound( void );
-	void PainSound( void );
+	void DeathSound( void ) override;
+	void PainSound( void ) override;
 	
 	void TalkInit( void );
 
-	void			Killed( entvars_t *pevAttacker, int iGib );
+	void			Killed( entvars_t *pevAttacker, int iGib ) override;
 	
-	virtual int		Save( CSave &save );
-	virtual int		Restore( CRestore &restore );
+	int		Save( CSave &save ) override;
+	int		Restore( CRestore &restore ) override;
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	CUSTOM_SCHEDULES;
@@ -1101,10 +1101,10 @@ int CCleansuitScientist::FriendNumber( int arrayNumber )
 class CDeadCleansuitScientist : public CBaseMonster
 {
 public:
-	void Spawn( void );
-	int	Classify ( void ) { return	CLASS_HUMAN_PASSIVE; }
+	void Spawn( void ) override;
+	int	Classify ( void ) override { return	CLASS_HUMAN_PASSIVE; }
 
-	void KeyValue( KeyValueData *pkvd );
+	void KeyValue( KeyValueData *pkvd ) override;
 	int	m_iPose;// which sequence to display
 	static char *m_szPoses[9];
 };
@@ -1165,17 +1165,17 @@ void CDeadCleansuitScientist :: Spawn( )
 class CSittingCleansuitScientist : public CCleansuitScientist // kdb: changed from public CBaseMonster so he can speak
 {
 public:
-	void Spawn( void );
-	void  Precache( void );
+	void Spawn( void ) override;
+	void  Precache( void ) override;
 
 	void EXPORT SittingThink( void );
-	int	Classify ( void );
-	virtual int		Save( CSave &save );
-	virtual int		Restore( CRestore &restore );
+	int	Classify ( void ) override;
+	int		Save( CSave &save ) override;
+	int		Restore( CRestore &restore ) override;
 	static	TYPEDESCRIPTION m_SaveData[];
 
-	virtual void SetAnswerQuestion( CTalkMonster *pSpeaker );
-	int FriendNumber( int arrayNumber );
+	void SetAnswerQuestion( CTalkMonster *pSpeaker ) override;
+	int FriendNumber( int arrayNumber ) override;
 
 	int FIdleSpeak ( void );
 	int		m_baseSequence;	

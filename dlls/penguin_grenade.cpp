@@ -41,17 +41,17 @@ public:
 
 	static TYPEDESCRIPTION m_SaveData[];
 
-	void Precache();
-	void GibMonster();
+	void Precache() override;
+	void GibMonster() override;
 	void EXPORT SuperBounceTouch(CBaseEntity* pOther);
-	void Spawn();
+	void Spawn() override;
 
-	int Classify();
-	int IRelationship(CBaseEntity* pTarget);
-	void Killed(entvars_t* pevAttacker, int iGib);
+	int Classify() override;
+	int IRelationship(CBaseEntity* pTarget) override;
+	void Killed(entvars_t* pevAttacker, int iGib) override;
 	void EXPORT HuntThink();
 	void Smoke();
-	int BloodColor();
+	int BloodColor() override;
 
 	static float m_flNextBounceSoundTime;
 

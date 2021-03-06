@@ -263,7 +263,7 @@ public:
 
 	void UpdatePosition( int direction, int controller );
 
-	void Use( CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value );
+	void Use( CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value ) override;
 
 	int d_x;
 	int d_y;

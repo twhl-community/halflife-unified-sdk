@@ -63,7 +63,7 @@ class CPitdroneSpike : public CBaseEntity
 {
 public:
 	void Precache() override;
-	void Spawn( void );
+	void Spawn( void ) override;
 
 	int Classify() override { return CLASS_NONE; }
 
@@ -72,8 +72,8 @@ public:
 
 	void EXPORT StartTrail();
 
-	virtual int		Save( CSave &save );
-	virtual int		Restore( CRestore &restore );
+	int		Save( CSave &save ) override;
+	int		Restore( CRestore &restore ) override;
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	int  m_maxFrame;
@@ -230,33 +230,33 @@ enum PitdroneWeapon
 class CPitdrone : public CBaseMonster
 {
 public:
-	void Spawn( void );
-	void Precache( void );
-	void SetYawSpeed( void );
-	int  ISoundMask( void );
-	int  Classify ( void );
-	void HandleAnimEvent( MonsterEvent_t *pEvent );
-	void IdleSound( void );
-	void PainSound( void );
-	void AlertSound ( void );
-	void StartTask ( Task_t *pTask );
-	void RunTask ( Task_t *pTask );
-	BOOL CheckMeleeAttack1 ( float flDot, float flDist );
-	BOOL CheckMeleeAttack2 ( float flDot, float flDist );
-	BOOL CheckRangeAttack1 ( float flDot, float flDist );
-	void RunAI( void );
-	BOOL FValidateHintType ( short sHint );
-	Schedule_t *GetSchedule( void );
-	Schedule_t *GetScheduleOfType ( int Type );
-	int IRelationship ( CBaseEntity *pTarget );
-	int IgnoreConditions ( void );
+	void Spawn( void ) override;
+	void Precache( void ) override;
+	void SetYawSpeed( void ) override;
+	int  ISoundMask( void ) override;
+	int  Classify ( void ) override;
+	void HandleAnimEvent( MonsterEvent_t *pEvent ) override;
+	void IdleSound( void ) override;
+	void PainSound( void ) override;
+	void AlertSound ( void ) override;
+	void StartTask ( Task_t *pTask ) override;
+	void RunTask ( Task_t *pTask ) override;
+	BOOL CheckMeleeAttack1 ( float flDot, float flDist ) override;
+	BOOL CheckMeleeAttack2 ( float flDot, float flDist ) override;
+	BOOL CheckRangeAttack1 ( float flDot, float flDist ) override;
+	void RunAI( void ) override;
+	BOOL FValidateHintType ( short sHint ) override;
+	Schedule_t *GetSchedule( void ) override;
+	Schedule_t *GetScheduleOfType ( int Type ) override;
+	int IRelationship ( CBaseEntity *pTarget ) override;
+	int IgnoreConditions ( void ) override;
 
 	void CheckAmmo() override;
 	void GibMonster() override;
 	void KeyValue( KeyValueData* pkvd ) override;
 
-	int	Save( CSave &save ); 
-	int Restore( CRestore &restore );
+	int	Save( CSave &save ) override;
+	int Restore( CRestore &restore ) override;
 
 	CUSTOM_SCHEDULES;
 	static TYPEDESCRIPTION m_SaveData[];

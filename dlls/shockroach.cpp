@@ -74,29 +74,29 @@ Schedule_t	slRCRangeAttack1Fast[] =
 class COFShockRoach : public CBaseMonster
 {
 public:
-	void Spawn( void );
-	void Precache( void );
-	void RunTask ( Task_t *pTask );
-	void StartTask ( Task_t *pTask );
-	void SetYawSpeed ( void );
+	void Spawn( void ) override;
+	void Precache( void ) override;
+	void RunTask ( Task_t *pTask ) override;
+	void StartTask ( Task_t *pTask ) override;
+	void SetYawSpeed ( void ) override;
 	void EXPORT LeapTouch ( CBaseEntity *pOther );
-	Vector Center( void );
-	Vector BodyTarget( const Vector &posSrc );
-	void PainSound( void );
-	void DeathSound( void );
-	void IdleSound( void );
-	void AlertSound( void );
-	void PrescheduleThink( void );
-	int  Classify ( void );
-	void HandleAnimEvent( MonsterEvent_t *pEvent );
-	BOOL CheckRangeAttack1 ( float flDot, float flDist );
-	BOOL CheckRangeAttack2 ( float flDot, float flDist );
-	int TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType );
+	Vector Center( void ) override;
+	Vector BodyTarget( const Vector &posSrc ) override;
+	void PainSound( void ) override;
+	void DeathSound( void ) override;
+	void IdleSound( void ) override;
+	void AlertSound( void ) override;
+	void PrescheduleThink( void ) override;
+	int  Classify ( void ) override;
+	void HandleAnimEvent( MonsterEvent_t *pEvent ) override;
+	BOOL CheckRangeAttack1 ( float flDot, float flDist ) override;
+	BOOL CheckRangeAttack2 ( float flDot, float flDist ) override;
+	int TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType ) override;
 
 	virtual float GetDamageAmount( void ) { return gSkillData.shockroachDmgBite; }
 	virtual int GetVoicePitch( void ) { return 100; }
 	virtual float GetSoundVolue( void ) { return 1.0; }
-	Schedule_t* GetScheduleOfType ( int Type );
+	Schedule_t* GetScheduleOfType ( int Type ) override;
 
 	void MonsterThink() override;
 

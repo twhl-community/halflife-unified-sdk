@@ -29,18 +29,18 @@ extern DLL_GLOBAL int		g_iSkillLevel;
 
 class COFBlackOpsApache : public CBaseMonster
 {
-	int		Save( CSave &save );
-	int		Restore( CRestore &restore );
+	int		Save( CSave &save ) override;
+	int		Restore( CRestore &restore ) override;
 	static	TYPEDESCRIPTION m_SaveData[];
 
-	void Spawn( void );
-	void Precache( void );
-	int  Classify( void ) { return CLASS_HUMAN_MILITARY; };
-	int  BloodColor( void ) { return DONT_BLEED; }
-	void Killed( entvars_t *pevAttacker, int iGib );
-	void GibMonster( void );
+	void Spawn( void ) override;
+	void Precache( void ) override;
+	int  Classify( void ) override { return CLASS_HUMAN_MILITARY; };
+	int  BloodColor( void ) override { return DONT_BLEED; }
+	void Killed( entvars_t *pevAttacker, int iGib ) override;
+	void GibMonster( void ) override;
 
-	void SetObjectCollisionBox( void )
+	void SetObjectCollisionBox( void ) override
 	{
 		pev->absmin = pev->origin + Vector( -300, -300, -172);
 		pev->absmax = pev->origin + Vector(300, 300, 8);
@@ -58,8 +58,8 @@ class COFBlackOpsApache : public CBaseMonster
 	void FireRocket( void );
 	BOOL FireGun( void );
 	
-	int  TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType );
-	void TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
+	int  TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType ) override;
+	void TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType) override;
 
 	int m_iRockets;
 	float m_flForce;
@@ -943,13 +943,13 @@ void COFBlackOpsApache::TraceAttack( entvars_t *pevAttacker, float flDamage, Vec
 
 class COFBlackOpsApacheHVR : public CGrenade
 {
-	void Spawn( void );
-	void Precache( void );
+	void Spawn( void ) override;
+	void Precache( void ) override;
 	void EXPORT IgniteThink( void );
 	void EXPORT AccelerateThink( void );
 
-	int		Save( CSave &save );
-	int		Restore( CRestore &restore );
+	int		Save( CSave &save ) override;
+	int		Restore( CRestore &restore ) override;
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	int m_iTrail;
