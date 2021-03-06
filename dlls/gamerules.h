@@ -79,7 +79,7 @@ public:
 // Functions to verify the single/multiplayer status of a game
 	virtual BOOL IsMultiplayer() = 0;// is this a multiplayer game? (either coop or deathmatch)
 	virtual BOOL IsDeathmatch() = 0;//is this a deathmatch game?
-	virtual BOOL IsTeamplay() { return FALSE; };// is this deathmatch game being played with team rules?
+	virtual BOOL IsTeamplay() { return FALSE; }// is this deathmatch game being played with team rules?
 	virtual BOOL IsCoOp() = 0;// is this a coop game?
 	virtual BOOL IsCTF() = 0; // is this a ctf game?
 	virtual const char *GetGameDescription() { return "Opposing Force"; }  // this is the game name that gets seen in the server browser
