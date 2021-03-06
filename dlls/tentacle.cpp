@@ -36,48 +36,49 @@
 class CTentacle : public CBaseMonster
 {
 public:
-	CTentacle( void );
+	CTentacle();
 
-	void Spawn( );
-	void Precache( );
-	void KeyValue( KeyValueData *pkvd );
+	void Spawn( ) override;
+	void Precache( ) override;
+	void KeyValue( KeyValueData *pkvd ) override;
 
-	int		Save( CSave &save );
-	int		Restore( CRestore &restore );
+	int		Save( CSave &save ) override;
+	int		Restore( CRestore &restore ) override;
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	// Don't allow the tentacle to go across transitions!!!
-	virtual int	ObjectCaps( void ) { return CBaseMonster :: ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+	int	ObjectCaps() override { return CBaseMonster :: ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 
-	void SetObjectCollisionBox( void )
+	void SetObjectCollisionBox() override
 	{
 		pev->absmin = pev->origin + Vector(-400, -400, 0);
 		pev->absmax = pev->origin + Vector(400, 400, 850);
 	}
 
-	void EXPORT Cycle( void );
+	void EXPORT Cycle();
 	void EXPORT CommandUse( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
-	void EXPORT Start( void );
-	void EXPORT DieThink( void );
+	void EXPORT Start();
+	void EXPORT DieThink();
 
-	void EXPORT Test( void );
+	void EXPORT Test();
 
 	void EXPORT HitTouch( CBaseEntity *pOther );
 
-	float HearingSensitivity( void ) { return 2.0; };
+	float HearingSensitivity() override { return 2.0; }
 
-	int TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType );
-	void HandleAnimEvent( MonsterEvent_t *pEvent );
-	void Killed( entvars_t *pevAttacker, int iGib );
+	int TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType ) override;
+	void HandleAnimEvent( MonsterEvent_t *pEvent ) override;
+	void Killed( entvars_t *pevAttacker, int iGib ) override;
 
-	MONSTERSTATE GetIdealState ( void ) { return MONSTERSTATE_IDLE; };
-	int CanPlaySequence( BOOL fDisregardState ) { return TRUE; };
+	MONSTERSTATE GetIdealState () override { return MONSTERSTATE_IDLE; }
+	//TODO: should override base, but has different signature
+	int CanPlaySequence( BOOL fDisregardState ) { return TRUE; }
 
-	int Classify( void );
+	int Classify() override;
 
 	int Level( float dz );
-	int MyLevel( void );
-	float MyHeight( void );
+	int MyLevel();
+	float MyHeight();
 
 	float m_flInitialYaw;
 	int m_iGoalAnim;
@@ -239,7 +240,7 @@ typedef enum
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	CTentacle :: Classify ( void )
+int	CTentacle :: Classify ()
 {
 	return	CLASS_ALIEN_MONSTER;
 }
@@ -443,7 +444,7 @@ int CTentacle :: MyLevel( )
 }
 
 
-void CTentacle :: Test( void )
+void CTentacle :: Test()
 {
 	pev->sequence = TENTACLE_ANIM_Floor_Strike;
 	pev->framerate = 0;
@@ -456,7 +457,7 @@ void CTentacle :: Test( void )
 //
 // TentacleThink
 //
-void CTentacle :: Cycle( void )
+void CTentacle :: Cycle()
 {
 	// ALERT( at_console, "%s %.2f %d %d\n", STRING( pev->targetname ), pev->origin.z, m_MonsterState, m_IdealMonsterState );
 	pev->nextthink = gpGlobals-> time + 0.1;
@@ -737,7 +738,7 @@ void CTentacle::CommandUse( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_T
 
 
 
-void CTentacle :: DieThink( void )
+void CTentacle :: DieThink()
 {
 	pev->nextthink = gpGlobals-> time + 0.1;
 
@@ -924,7 +925,7 @@ void CTentacle :: HandleAnimEvent( MonsterEvent_t *pEvent )
 // TentacleStart
 //
 // void CTentacle :: Start( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
-void CTentacle :: Start( void )
+void CTentacle :: Start()
 {
 	SetThink( &CTentacle::Cycle );
 
@@ -1010,8 +1011,8 @@ void CTentacle :: Killed( entvars_t *pevAttacker, int iGib )
 class CTentacleMaw : public CBaseMonster
 {
 public:
-	void Spawn( );
-	void Precache( );
+	void Spawn( ) override;
+	void Precache( ) override;
 };
 
 LINK_ENTITY_TO_CLASS( monster_tentaclemaw, CTentacleMaw );

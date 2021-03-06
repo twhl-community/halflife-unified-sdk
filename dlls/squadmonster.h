@@ -66,13 +66,13 @@ public:
 	// squad member info
 	int		m_iMySlot;// this is the behaviour slot that the monster currently holds in the squad. 
 
-	int  CheckEnemy ( CBaseEntity *pEnemy );
-	void StartMonster ( void );
-	void VacateSlot( void );
-	void ScheduleChange( void );
-	void Killed( entvars_t *pevAttacker, int iGib );
+	int  CheckEnemy ( CBaseEntity *pEnemy ) override;
+	void StartMonster () override;
+	void VacateSlot();
+	void ScheduleChange() override;
+	void Killed( entvars_t *pevAttacker, int iGib ) override;
 	BOOL OccupySlot( int iDesiredSlot );
-	BOOL NoFriendlyFire( void );
+	BOOL NoFriendlyFire();
 
 	// squad functions still left in base class
 	CSquadMonster *MySquadLeader( ) 
@@ -89,32 +89,32 @@ public:
 		else
 			return (CSquadMonster *)((CBaseEntity *)m_hSquadMember[i]); 
 	}
-	int	InSquad ( void ) { return m_hSquadLeader != NULL; }
-	int IsLeader ( void ) { return m_hSquadLeader == this; }
+	int	InSquad () { return m_hSquadLeader != NULL; }
+	int IsLeader () { return m_hSquadLeader == this; }
 	int SquadJoin ( int searchRadius );
 	int SquadRecruit ( int searchRadius, int maxMembers );
-	int	SquadCount( void );
+	int	SquadCount();
 	void SquadRemove( CSquadMonster *pRemove );
-	void SquadUnlink( void );
+	void SquadUnlink();
 	BOOL SquadAdd( CSquadMonster *pAdd );
-	void SquadDisband( void );
+	void SquadDisband();
 	void SquadAddConditions ( int iConditions );
 	void SquadMakeEnemy ( CBaseEntity *pEnemy );
-	void SquadPasteEnemyInfo ( void );
-	void SquadCopyEnemyInfo ( void );
-	BOOL SquadEnemySplit ( void );
+	void SquadPasteEnemyInfo ();
+	void SquadCopyEnemyInfo ();
+	BOOL SquadEnemySplit ();
 	BOOL SquadMemberInRange( const Vector &vecLocation, float flDist );
 
-	virtual CSquadMonster *MySquadMonsterPointer( void ) { return this; }
+	CSquadMonster *MySquadMonsterPointer() override { return this; }
 
 	static TYPEDESCRIPTION m_SaveData[];
 
-	int	Save( CSave &save ); 
-	int Restore( CRestore &restore );
+	int	Save( CSave &save ) override;
+	int Restore( CRestore &restore ) override;
 
-	BOOL FValidateCover ( const Vector &vecCoverLocation );
+	BOOL FValidateCover ( const Vector &vecCoverLocation ) override;
 
-	MONSTERSTATE GetIdealState ( void );
-	Schedule_t	*GetScheduleOfType ( int iType );
+	MONSTERSTATE GetIdealState () override;
+	Schedule_t	*GetScheduleOfType ( int iType ) override;
 };
 

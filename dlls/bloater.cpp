@@ -32,21 +32,21 @@
 class CBloater : public CBaseMonster
 {
 public:
-	void Spawn( void );
-	void Precache( void );
-	void SetYawSpeed( void );
-	int  Classify ( void );
-	void HandleAnimEvent( MonsterEvent_t *pEvent );
+	void Spawn() override;
+	void Precache() override;
+	void SetYawSpeed() override;
+	int  Classify () override;
+	void HandleAnimEvent( MonsterEvent_t *pEvent ) override;
 
-	void PainSound( void );
-	void AlertSound( void );
-	void IdleSound( void );
-	void AttackSnd( void );
+	void PainSound() override;
+	void AlertSound() override;
+	void IdleSound() override;
+	void AttackSnd();
 
 	// No range attacks
-	BOOL CheckRangeAttack1 ( float flDot, float flDist ) { return FALSE; }
-	BOOL CheckRangeAttack2 ( float flDot, float flDist ) { return FALSE; }
-	int TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType );
+	BOOL CheckRangeAttack1 ( float flDot, float flDist ) override { return FALSE; }
+	BOOL CheckRangeAttack2 ( float flDot, float flDist ) override { return FALSE; }
+	int TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType ) override;
 };
 
 LINK_ENTITY_TO_CLASS( monster_bloater, CBloater );
@@ -55,7 +55,7 @@ LINK_ENTITY_TO_CLASS( monster_bloater, CBloater );
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	CBloater :: Classify ( void )
+int	CBloater :: Classify ()
 {
 	return	CLASS_ALIEN_MONSTER;
 }
@@ -64,7 +64,7 @@ int	CBloater :: Classify ( void )
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CBloater :: SetYawSpeed ( void )
+void CBloater :: SetYawSpeed ()
 {
 	int ys;
 
@@ -85,7 +85,7 @@ int CBloater :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, flo
 	return CBaseMonster::TakeDamage( pevInflictor, pevAttacker, flDamage, bitsDamageType );
 }
 
-void CBloater :: PainSound( void )
+void CBloater :: PainSound()
 {
 #if 0	
 	int pitch = 95 + RANDOM_LONG(0,9);
@@ -104,7 +104,7 @@ void CBloater :: PainSound( void )
 #endif
 }
 
-void CBloater :: AlertSound( void )
+void CBloater :: AlertSound()
 {
 #if 0
 	int pitch = 95 + RANDOM_LONG(0,9);
@@ -124,7 +124,7 @@ void CBloater :: AlertSound( void )
 #endif
 }
 
-void CBloater :: IdleSound( void )
+void CBloater :: IdleSound()
 {
 #if 0
 	int pitch = 95 + RANDOM_LONG(0,9);
@@ -144,7 +144,7 @@ void CBloater :: IdleSound( void )
 #endif
 }
 
-void CBloater :: AttackSnd( void )
+void CBloater :: AttackSnd()
 {
 #if 0
 	int pitch = 95 + RANDOM_LONG(0,9);

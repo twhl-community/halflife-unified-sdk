@@ -25,12 +25,12 @@
 class CPathCorner : public CPointEntity
 {
 public:
-	void Spawn( );
-	void KeyValue( KeyValueData* pkvd );
-	float GetDelay( void ) { return m_flWait; }
-//	void Touch( CBaseEntity *pOther );
-	virtual int		Save( CSave &save );
-	virtual int		Restore( CRestore &restore );
+	void Spawn( ) override;
+	void KeyValue( KeyValueData* pkvd ) override;
+	float GetDelay() override { return m_flWait; }
+//	void Touch( CBaseEntity *pOther ) override;
+	int		Save( CSave &save ) override;
+	int		Restore( CRestore &restore ) override;
 	
 	static	TYPEDESCRIPTION m_SaveData[];
 
@@ -175,7 +175,7 @@ void CPathTrack :: Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE 
 }
 
 
-void CPathTrack :: Link( void  )
+void CPathTrack :: Link()
 {
 	edict_t *pentTarget;
 
@@ -212,7 +212,7 @@ void CPathTrack :: Link( void  )
 }
 
 
-void CPathTrack :: Spawn( void )
+void CPathTrack :: Spawn()
 {
 	pev->solid = SOLID_TRIGGER;
 	UTIL_SetSize(pev, Vector(-8, -8, -8), Vector(8, 8, 8));
@@ -227,7 +227,7 @@ void CPathTrack :: Spawn( void )
 }
 
 
-void CPathTrack::Activate( void )
+void CPathTrack::Activate()
 {
 	if ( !FStringNull( pev->targetname ) )		// Link to next, and back-link
 		Link();
@@ -255,7 +255,7 @@ void CPathTrack :: Project( CPathTrack *pstart, CPathTrack *pend, Vector *origin
 	}
 }
 
-CPathTrack *CPathTrack::GetNext( void )
+CPathTrack *CPathTrack::GetNext()
 {
 	if ( m_paltpath && FBitSet( pev->spawnflags, SF_PATH_ALTERNATE ) && !FBitSet( pev->spawnflags, SF_PATH_ALTREVERSE ) )
 		return m_paltpath;
@@ -265,7 +265,7 @@ CPathTrack *CPathTrack::GetNext( void )
 
 
 
-CPathTrack *CPathTrack::GetPrevious( void )
+CPathTrack *CPathTrack::GetPrevious()
 {
 	if ( m_paltpath && FBitSet( pev->spawnflags, SF_PATH_ALTERNATE ) && FBitSet( pev->spawnflags, SF_PATH_ALTREVERSE ) )
 		return m_paltpath;
@@ -415,7 +415,7 @@ CPathTrack *CPathTrack::Instance( edict_t *pent )
 
 	// DEBUGGING CODE
 #if PATH_SPARKLE_DEBUG
-void CPathTrack :: Sparkle( void )
+void CPathTrack :: Sparkle()
 {
 
 	pev->nextthink = gpGlobals->time + 0.2;
