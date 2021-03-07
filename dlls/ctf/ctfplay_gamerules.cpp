@@ -146,18 +146,20 @@ static void SendFlagIcon(CBasePlayer* player, bool isActive, const char* flagNam
 	g_engfuncs.pfnWriteString(flagName);
 	g_engfuncs.pfnWriteByte(teamIndex);
 
+	int r, g, b;
+
 	if (teamIndex == 0)
 	{
-		g_engfuncs.pfnWriteByte(255);
-		g_engfuncs.pfnWriteByte(160);
-		g_engfuncs.pfnWriteByte(0);
+		UnpackRGB(r, g, b, RGB_YELLOWISH);
 	}
 	else
 	{
-		g_engfuncs.pfnWriteByte(0);
-		g_engfuncs.pfnWriteByte(160);
-		g_engfuncs.pfnWriteByte(0);
+		UnpackRGB(r, g, b, RGB_HUD_COLOR);
 	}
+
+	g_engfuncs.pfnWriteByte(r);
+	g_engfuncs.pfnWriteByte(g);
+	g_engfuncs.pfnWriteByte(b);
 	
 	g_engfuncs.pfnWriteByte(teamscores[teamIndex]);
 	g_engfuncs.pfnMessageEnd();
@@ -818,35 +820,25 @@ void CHalfLifeCTFplay::PlayerSpawn( CBasePlayer* pPlayer )
 				pBase->TurnOnLight( pPlayer );
 			}
 
-			g_engfuncs.pfnMessageBegin( MSG_ONE, gmsgHudColor, nullptr, pPlayer->edict() );
+			int r = 128;
+			int g = 128;
+			int b = 128;
 
-			switch( pPlayer->m_iTeamNum )
+			switch (pPlayer->m_iTeamNum)
 			{
-			default:
-				{
-					g_engfuncs.pfnWriteByte( 128 );
-					g_engfuncs.pfnWriteByte( 128 );
-					g_engfuncs.pfnWriteByte( 128 );
-					break;
-				}
-
 			case CTFTeam::BlackMesa:
-				{
-					g_engfuncs.pfnWriteByte( 255 );
-					g_engfuncs.pfnWriteByte( 160 );
-					g_engfuncs.pfnWriteByte( 0 );
-					break;
-				}
-
+				UnpackRGB(r, g, b, RGB_YELLOWISH);
+				break;
+				
 			case CTFTeam::OpposingForce:
-				{
-					g_engfuncs.pfnWriteByte( 0 );
-					g_engfuncs.pfnWriteByte( 160 );
-					g_engfuncs.pfnWriteByte( 0 );
-					break;
-				}
+				UnpackRGB(r, g, b, RGB_HUD_COLOR);
+				break;
 			}
 
+			g_engfuncs.pfnMessageBegin( MSG_ONE, gmsgHudColor, nullptr, pPlayer->edict() );
+			g_engfuncs.pfnWriteByte(r);
+			g_engfuncs.pfnWriteByte(g);
+			g_engfuncs.pfnWriteByte(b);
 			g_engfuncs.pfnMessageEnd();
 
 			InitItemsForPlayer( pPlayer );

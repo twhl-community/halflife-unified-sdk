@@ -169,9 +169,7 @@ int DLLEXPORT HUD_VidInit()
 //	RecClHudVidInit();
 
 	//Reset to default on new map load
-	giR = 0;
-	giG = 160;
-	giB = 0;
+	UnpackRGB(giR, giG, giB, RGB_HUD_COLOR);
 
 	gHUD.VidInit();
 
