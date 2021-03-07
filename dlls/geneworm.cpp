@@ -19,6 +19,16 @@
 #include "effects.h"
 #include "weapons.h"
 
+const int AE_GENEWORM_SPIT_START = 0;
+const int AE_GENEWORM_LAUNCH_SPAWN = 2;
+const int AE_GENEWORM_SLASH_LEFT_ON = 3;
+const int AE_GENEWORM_SLASH_LEFT_OFF = 4;
+const int AE_GENEWORM_SLASH_RIGHT_ON = 5;
+const int AE_GENEWORM_SLASH_RIGHT_OFF = 6;
+const int AE_GENEWORM_SLASH_CENTER_ON = 7;
+const int AE_GENEWORM_SLASH_CENTER_OFF = 8;
+const int AE_GENEWORM_HIT_WALL = 9;
+
 class COFGeneWormCloud : public CBaseEntity
 {
 public:
@@ -1598,12 +1608,12 @@ void COFGeneWorm::HandleAnimEvent( MonsterEvent_t* pEvent )
 {
 	switch( pEvent->event )
 	{
-	case 0:
+	case AE_GENEWORM_SPIT_START:
 		m_fSpitting = true;
 		m_flSpitStartTime = gpGlobals->time;
 		break;
 
-	case 2:
+	case AE_GENEWORM_LAUNCH_SPAWN:
 		if( m_orificeGlow )
 		{
 			Vector vecPos, vecAng;
@@ -1618,31 +1628,31 @@ void COFGeneWorm::HandleAnimEvent( MonsterEvent_t* pEvent )
 		}
 		break;
 	
-	case 3:
+	case AE_GENEWORM_SLASH_LEFT_ON:
 		FireHurtTargets( "GeneWormLeftSlash", this, this, USE_ON, 0 );
 		break;
 
-	case 4:
+	case AE_GENEWORM_SLASH_LEFT_OFF:
 		FireHurtTargets( "GeneWormLeftSlash", this, this, USE_OFF, 0 );
 		break;
 
-	case 5:
+	case AE_GENEWORM_SLASH_RIGHT_ON:
 		FireHurtTargets( "GeneWormRightSlash", this, this, USE_ON, 0 ); 
 		break;
 
-	case 6:
+	case AE_GENEWORM_SLASH_RIGHT_OFF:
 		FireHurtTargets( "GeneWormRightSlash", this, this, USE_OFF, 0 ); 
 		break;
 
-	case 7:
+	case AE_GENEWORM_SLASH_CENTER_ON:
 		FireHurtTargets( "GeneWormCenterSlash", this, this, USE_ON, 0 );
 		break;
 
-	case 8:
+	case AE_GENEWORM_SLASH_CENTER_OFF:
 		FireHurtTargets( "GeneWormCenterSlash", this, this, USE_OFF, 0 );
 		break;
 
-	case 9:
+	case AE_GENEWORM_HIT_WALL:
 		FireTargets( "GeneWormWallHit", this, this, USE_TOGGLE, 0 );
 		UTIL_ScreenShake( pev->origin, 24, 3, 5, 2048 );
 		break;
