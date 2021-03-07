@@ -58,15 +58,11 @@ int CHudPlayerBrowse::Draw(float flTime)
 
 	if (m_iTeamNum == static_cast<int>(CTFTeam::BlackMesa))
 	{
-		r = 255;
-		g = 160;
-		b = 0;
+		UnpackRGB(r, g, b, RGB_YELLOWISH);
 	}
 	else if (m_iTeamNum == static_cast<int>(CTFTeam::OpposingForce))
 	{
-		g = 160;
-		r = 0;
-		b = 0;
+		UnpackRGB(r, g, b, RGB_HUD_COLOR);
 	}
 	else
 	{

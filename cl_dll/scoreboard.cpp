@@ -725,18 +725,20 @@ int CHudScoreboard::MsgFunc_PlayerIcon(const char* pszName, int iSize, void* pbu
 		sprite.rc = gHUD.GetSpriteRect(spriteIndex);
 		sprite.bFlags = itemId;
 
+		int r, g, b;
+
 		if (id == CTFItem::BlackMesaFlag)
 		{
-			sprite.r = 255;
-			sprite.g = 160;
-			sprite.b = 0;
+			UnpackRGB(r, g, b, RGB_YELLOWISH);
 		}
 		else
 		{
-			sprite.r = 0;
-			sprite.g = 160;
-			sprite.b = 0;
+			UnpackRGB(r, g, b, RGB_HUD_COLOR);
 		}
+
+		sprite.r = r;
+		sprite.g = g;
+		sprite.b = b;
 
 		strcpy(sprite.szSpriteName, "score_flag");
 
