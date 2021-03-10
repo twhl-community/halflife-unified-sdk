@@ -343,4 +343,50 @@ int CHud::GetNumWidth( int iNumber, int iFlags )
 
 }	
 
+int CHud::GetHudNumberWidth(int number, int width, int flags)
+{
+	const int digitWidth = GetSpriteRect(m_HUD_number_0).right - GetSpriteRect(m_HUD_number_0).left;
+
+	int totalDigits = 0;
+
+	if (number > 0)
+	{
+		totalDigits = static_cast<int>(log10(number)) + 1;
+	}
+	else if (flags & DHN_DRAWZERO)
+	{
+		totalDigits = 1;
+	}
+
+	totalDigits = V_max(totalDigits, width);
+
+	return totalDigits * digitWidth;
+}
+
+int CHud::DrawHudNumberReverse(int x, int y, int number, int flags, int r, int g, int b)
+{
+	if (number > 0 || (flags & DHN_DRAWZERO))
+	{
+		const int digitWidth = GetSpriteRect(m_HUD_number_0).right - GetSpriteRect(m_HUD_number_0).left;
+
+		int remainder = number;
+
+		do
+		{
+			const int digit = remainder % 10;
+			const int digitSpriteIndex = m_HUD_number_0 + digit;
+
+			//This has to happen *before* drawing because we're drawing in reverse
+			x -= digitWidth;
+
+			SPR_Set(GetSprite(digitSpriteIndex), r, g, b);
+			SPR_DrawAdditive(0, x, y, &GetSpriteRect(digitSpriteIndex));
+
+			remainder /= 10;
+		}
+		while (remainder > 0);
+	}
+
+	return x;
+}
 
