@@ -718,11 +718,11 @@ void COFPitWormUp::ChangeLevel()
 	{
 		if( m_posDesired.z <= pev->origin.z )
 		{
-			pev->origin.z -= min( m_flLevelSpeed, pev->origin.z - m_posDesired.z );
+			pev->origin.z -= V_min( m_flLevelSpeed, pev->origin.z - m_posDesired.z );
 		}
 		else
 		{
-			pev->origin.z += min( m_flLevelSpeed, m_posDesired.z - pev->origin.z );
+			pev->origin.z += V_min( m_flLevelSpeed, m_posDesired.z - pev->origin.z );
 		}
 	}
 
@@ -730,11 +730,11 @@ void COFPitWormUp::ChangeLevel()
 	{
 		if( m_flIdealTorsoYaw <= m_flTorsoYaw )
 		{
-			m_flTorsoYaw -= min( 5, m_flTorsoYaw - m_flIdealTorsoYaw );
+			m_flTorsoYaw -= V_min( 5, m_flTorsoYaw - m_flIdealTorsoYaw );
 		}
 		else
 		{
-			m_flTorsoYaw += min( 5, m_flIdealTorsoYaw -  m_flTorsoYaw );
+			m_flTorsoYaw += V_min( 5, m_flIdealTorsoYaw -  m_flTorsoYaw );
 		}
 
 		SetBoneController( 2, m_flTorsoYaw );
@@ -744,11 +744,11 @@ void COFPitWormUp::ChangeLevel()
 	{
 		if( m_flIdealHeadYaw <= m_flHeadYaw )
 		{
-			m_flHeadYaw -= min( 5, m_flHeadYaw - m_flIdealHeadYaw );
+			m_flHeadYaw -= V_min( 5, m_flHeadYaw - m_flIdealHeadYaw );
 		}
 		else
 		{
-			m_flHeadYaw += min( 5, m_flIdealHeadYaw - m_flHeadYaw );
+			m_flHeadYaw += V_min( 5, m_flIdealHeadYaw - m_flHeadYaw );
 		}
 
 		SetBoneController( 0, -m_flHeadYaw );
@@ -758,11 +758,11 @@ void COFPitWormUp::ChangeLevel()
 	{
 		if( m_flIdealHeadPitch <= m_flHeadPitch )
 		{
-			m_flHeadPitch -= min( 5, m_flHeadPitch - m_flIdealHeadPitch );
+			m_flHeadPitch -= V_min( 5, m_flHeadPitch - m_flIdealHeadPitch );
 		}
 		else
 		{
-			m_flHeadPitch += min( 5, m_flIdealHeadPitch - m_flHeadPitch );
+			m_flHeadPitch += V_min( 5, m_flIdealHeadPitch - m_flHeadPitch );
 		}
 
 		SetBoneController( 1, m_flHeadPitch );
@@ -938,7 +938,7 @@ void COFPitWormUp::TrackEnemy()
 
 	const auto vecDir = UTIL_VecToAngles( pEnemy->pev->origin + pEnemy->pev->view_ofs - vecEyePos );
 
-	m_flIdealHeadPitch = min( 45, max( -45, UTIL_AngleDiff( vecDir.x, pev->angles.x ) ) );
+	m_flIdealHeadPitch = V_min( 45, V_max( -45, UTIL_AngleDiff( vecDir.x, pev->angles.x ) ) );
 
 	const auto yaw = UTIL_AngleDiff( VecToYaw( pEnemy->pev->origin + pEnemy->pev->view_ofs - vecEyePos ), pev->angles.y );
 
@@ -946,16 +946,16 @@ void COFPitWormUp::TrackEnemy()
 	{
 		if( yaw < 0 )
 		{
-			m_flIdealTorsoYaw = max( yaw, m_iLevel == 1 ? -30 : -50 );
+			m_flIdealTorsoYaw = V_max( yaw, m_iLevel == 1 ? -30 : -50 );
 		}
 
 		if( yaw > 0 )
 		{
-			m_flIdealTorsoYaw = min( yaw, m_iLevel == 2 ? 30 : 50 );
+			m_flIdealTorsoYaw = V_min( yaw, m_iLevel == 2 ? 30 : 50 );
 		}
 	}
 
-	const auto headYaw = max( -45, min( 45, m_flTorsoYaw - yaw ) );
+	const auto headYaw = V_max( -45, V_min( 45, m_flTorsoYaw - yaw ) );
 
 	if( !m_fAttacking || m_pBeam )
 		m_flIdealHeadYaw = headYaw;
@@ -2415,11 +2415,11 @@ void COFPitWorm::UpdateEye()
 	{
 		if (m_flIdealHeadYaw <= m_flHeadYaw)
 		{
-			m_flHeadYaw -= min(5, m_flHeadYaw - m_flIdealHeadYaw);
+			m_flHeadYaw -= V_min(5, m_flHeadYaw - m_flIdealHeadYaw);
 		}
 		else
 		{
-			m_flHeadYaw += min(5, m_flIdealHeadYaw - m_flHeadYaw);
+			m_flHeadYaw += V_min(5, m_flIdealHeadYaw - m_flHeadYaw);
 		}
 
 		SetBoneController(1, m_flHeadYaw);
@@ -2429,11 +2429,11 @@ void COFPitWorm::UpdateEye()
 	{
 		if (m_flIdealHeadPitch <= m_flHeadPitch)
 		{
-			m_flHeadPitch -= min(5, m_flHeadPitch - m_flIdealHeadPitch);
+			m_flHeadPitch -= V_min(5, m_flHeadPitch - m_flIdealHeadPitch);
 		}
 		else
 		{
-			m_flHeadPitch += min(5, m_flIdealHeadPitch - m_flHeadPitch);
+			m_flHeadPitch += V_min(5, m_flIdealHeadPitch - m_flHeadPitch);
 		}
 
 		SetBoneController(0, m_flHeadPitch);
@@ -2469,11 +2469,11 @@ void COFPitWorm::TrackEnemy()
 
 	if (m_flHeadPitch < 0)
 	{
-		m_flHeadPitch = max(-45, m_flHeadPitch);
+		m_flHeadPitch = V_max(-45, m_flHeadPitch);
 	}
 	else if (m_flHeadPitch > 0)
 	{
-		m_flHeadPitch = min(45, m_flHeadPitch);
+		m_flHeadPitch = V_min(45, m_flHeadPitch);
 	}
 
 	m_flHeadYaw = -VecToYaw(vec) - pev->angles.y;
@@ -2489,11 +2489,11 @@ void COFPitWorm::TrackEnemy()
 
 	if (m_flHeadYaw < 0)
 	{
-		m_flHeadYaw = max(-45, m_flHeadYaw);
+		m_flHeadYaw = V_max(-45, m_flHeadYaw);
 	}
 	else if (m_flHeadYaw > 0)
 	{
-		m_flHeadYaw = min(45, m_flHeadYaw);
+		m_flHeadYaw = V_min(45, m_flHeadYaw);
 	}
 }
 

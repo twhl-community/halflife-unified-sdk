@@ -201,7 +201,7 @@ void CTFGoalFlag::goal_item_dropthink()
 	{
 		SetThink(&CTFGoalFlag::ReturnFlag);
 
-		pev->nextthink = gpGlobals->time + max(0, g_flFlagReturnTime - 5.0);
+		pev->nextthink = gpGlobals->time + V_max(0, g_flFlagReturnTime - 5.0);
 	}
 }
 

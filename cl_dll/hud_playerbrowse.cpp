@@ -96,7 +96,7 @@ int CHudPlayerBrowse::Draw(float flTime)
 		{
 			if (m_flDelayFadeSprite > 0)
 			{
-				ScaleColors(m_PowerupSprite.r, m_PowerupSprite.g, m_PowerupSprite.b, max(40, m_flDelayFadeSprite));
+				ScaleColors(m_PowerupSprite.r, m_PowerupSprite.g, m_PowerupSprite.b, V_max(40, m_flDelayFadeSprite));
 				m_flDelayFadeSprite -= 10 * gHUD.m_flTimeDelta;
 			}
 
