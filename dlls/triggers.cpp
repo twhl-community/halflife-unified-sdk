@@ -2480,7 +2480,7 @@ int CTriggerPlayerFreeze::Restore(CRestore& restore)
 	if (!restore.ReadFields("CTriggerPlayerFreeze", this, m_SaveData, ARRAYSIZE(m_SaveData)))
 		return false;
 
-	if (m_bUnFrozen)
+	if (!m_bUnFrozen)
 	{
 		SetThink(&CTriggerPlayerFreeze::PlayerFreezeDelay);
 		pev->nextthink = gpGlobals->time + 0.5;
