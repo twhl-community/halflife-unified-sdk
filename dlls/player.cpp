@@ -2770,7 +2770,7 @@ ReturnSpot:
 void CBasePlayer::Spawn()
 {
 	pev->classname		= MAKE_STRING("player");
-	pev->health			= 1000;
+	pev->health			= 100;
 	pev->armorvalue		= 0;
 	pev->takedamage		= DAMAGE_AIM;
 	pev->solid			= SOLID_SLIDEBOX;
@@ -3995,6 +3995,11 @@ void CBasePlayer :: UpdateClientData()
 
 	if (m_bRestored)
 	{
+		//Always tell client about battery state
+		MESSAGE_BEGIN(MSG_ONE, gmsgFlashBattery, NULL, pev);
+		WRITE_BYTE(m_iFlashBattery);
+		MESSAGE_END();
+
 		//Tell client the flashlight is on
 		if (FlashlightIsOn())
 		{
