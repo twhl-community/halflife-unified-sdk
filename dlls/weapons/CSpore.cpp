@@ -249,8 +249,6 @@ void CSpore::MyBounceTouch( CBaseEntity* pOther )
 			if( pev->flags & FL_ONGROUND )
 			{
 				pev->velocity = pev->velocity * 0.5;
-				//TODO: in vanilla Op4 this is set to RANDOM_LONG(1, 1)
-				pev->sequence = SPORE_IDLE;
 			}
 			else
 			{
