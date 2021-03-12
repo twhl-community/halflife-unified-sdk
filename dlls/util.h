@@ -302,12 +302,6 @@ extern void ClientPrint( entvars_t *client, int msg_dest, const char *msg_name, 
 extern void			UTIL_SayText( const char *pText, CBaseEntity *pEntity );
 extern void			UTIL_SayTextAll( const char *pText, CBaseEntity *pEntity );
 
-//TODO: Does nothing in a release build, might log to a file in a debug build
-//TODO: add the other usage from GameDLLInit
-inline void trace_line( const char* str, ... )
-{
-}
-
 typedef struct hudtextparms_s
 {
 	float		x;

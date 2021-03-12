@@ -449,8 +449,6 @@ BOOL CHalfLifeMultiplay :: ClientConnected( edict_t *pEntity, const char *pszNam
 		pszPlayerIPs[ ENTINDEX( pEntity ) ] = strdup( pszAddress );
 	}
 
-	trace_line( "CHalfLifeMultiplay :: ClientConnected  g_pGameRules->IsMultiplayer()[%d] address[%s]\n", IsMultiplayer(), pszAddress );
-
 	return TRUE;
 }
 
