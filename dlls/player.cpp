@@ -3610,23 +3610,6 @@ void CBasePlayer::GiveNamedItem( const char *pszName )
 	DispatchTouch( pent, ENT( pev ) );
 }
 
-
-
-CBaseEntity *FindEntityForward( CBaseEntity *pMe )
-{
-	TraceResult tr;
-
-	UTIL_MakeVectors(pMe->pev->v_angle);
-	UTIL_TraceLine(pMe->pev->origin + pMe->pev->view_ofs,pMe->pev->origin + pMe->pev->view_ofs + gpGlobals->v_forward * 8192,dont_ignore_monsters, pMe->edict(), &tr );
-	if ( tr.flFraction != 1.0 && !FNullEnt( tr.pHit) )
-	{
-		CBaseEntity *pHit = CBaseEntity::Instance( tr.pHit );
-		return pHit;
-	}
-	return NULL;
-}
-
-
 BOOL CBasePlayer :: FlashlightIsOn()
 {
 	return FBitSet(pev->effects, EF_BRIGHTLIGHT );
@@ -3864,7 +3847,7 @@ void CBasePlayer::CheatImpulseCommands( int iImpulse )
 
 	case 103:
 		// What the hell are you doing?
-		pEntity = FindEntityForward( this );
+		pEntity = UTIL_FindEntityForward( this );
 		if ( pEntity )
 		{
 			CBaseMonster *pMonster = pEntity->MyMonsterPointer();
@@ -3895,7 +3878,7 @@ void CBasePlayer::CheatImpulseCommands( int iImpulse )
 
 	case 106:
 		// Give me the classname and targetname of this entity.
-		pEntity = FindEntityForward( this );
+		pEntity = UTIL_FindEntityForward( this );
 		if ( pEntity )
 		{
 			ALERT ( at_console, "Classname: %s", STRING( pEntity->pev->classname ) );
@@ -3963,7 +3946,7 @@ void CBasePlayer::CheatImpulseCommands( int iImpulse )
 		}
 		break;
 	case	203:// remove creature.
-		pEntity = FindEntityForward( this );
+		pEntity = UTIL_FindEntityForward( this );
 		if ( pEntity )
 		{
 			if ( pEntity->pev->takedamage )
