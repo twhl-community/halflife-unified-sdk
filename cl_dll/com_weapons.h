@@ -13,7 +13,6 @@
 #pragma once
 #endif
 
-#include "hud_iface.h"
 #include "Exports.h"
 
 void			COM_Log( const char *pszFile, const char *fmt, ...);
@@ -37,8 +36,8 @@ void			stub_SetModel			( struct edict_s *e, const char *m );
 extern cvar_t *cl_lw;
 
 extern int g_runfuncs;
-extern vec3_t v_angles;
-extern vec3_t v_client_aimangles;
+extern Vector v_angles;
+extern Vector v_client_aimangles;
 extern float g_lastFOV;
 extern struct local_state_s *g_finalstate;
 

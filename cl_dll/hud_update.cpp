@@ -16,7 +16,6 @@
 //  hud_update.cpp
 //
 
-#include <math.h>
 #include "hud.h"
 #include "cl_util.h"
 #include <stdlib.h>
@@ -31,8 +30,8 @@ extern void HUD_SetCmdBits( int bits );
 
 int CHud::UpdateClientData(client_data_t *cdata, float time)
 {
-	memcpy(m_vecOrigin, cdata->origin, sizeof(vec3_t));
-	memcpy(m_vecAngles, cdata->viewangles, sizeof(vec3_t));
+	memcpy(m_vecOrigin, cdata->origin, sizeof(Vector));
+	memcpy(m_vecAngles, cdata->viewangles, sizeof(Vector));
 	
 	m_iKeyBits = CL_ButtonBits( 0 );
 	m_iWeaponBits = cdata->iWeaponBits;
