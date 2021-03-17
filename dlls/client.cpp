@@ -1364,9 +1364,6 @@ int AddToFullPack( struct entity_state_s *state, int e, edict_t *ent, edict_t *h
 	return 1;
 }
 
-// defaults for clientinfo messages
-#define	DEFAULT_VIEWHEIGHT	28
-
 /*
 ===================
 CreateBaseline
@@ -1374,7 +1371,7 @@ CreateBaseline
 Creates baselines used for network encoding, especially for player data since players are not spawned until connect time.
 ===================
 */
-void CreateBaseline( int player, int eindex, struct entity_state_s *baseline, struct edict_s *entity, int playermodelindex, vec3_t player_mins, vec3_t player_maxs )
+void CreateBaseline( int player, int eindex, struct entity_state_s *baseline, struct edict_s *entity, int playermodelindex, Vector* player_mins, Vector* player_maxs )
 {
 	baseline->origin		= entity->v.origin;
 	baseline->angles		= entity->v.angles;
@@ -1391,8 +1388,8 @@ void CreateBaseline( int player, int eindex, struct entity_state_s *baseline, st
 
 	if ( player )
 	{
-		baseline->mins			= player_mins;
-		baseline->maxs			= player_maxs;
+		baseline->mins			= *player_mins;
+		baseline->maxs			= *player_maxs;
 
 		baseline->colormap		= eindex;
 		baseline->modelindex	= playermodelindex;
@@ -1942,18 +1939,18 @@ int GetHullBounds( int hullnumber, float *mins, float *maxs )
 	switch ( hullnumber )
 	{
 	case 0:				// Normal player
-		mins = VEC_HULL_MIN;
-		maxs = VEC_HULL_MAX;
+		memcpy(mins, &VEC_HULL_MIN, sizeof(VEC_HULL_MIN));
+		memcpy(maxs, &VEC_HULL_MAX, sizeof(VEC_HULL_MAX));
 		iret = 1;
 		break;
 	case 1:				// Crouched player
-		mins = VEC_DUCK_HULL_MIN;
-		maxs = VEC_DUCK_HULL_MAX;
+		memcpy(mins, &VEC_DUCK_HULL_MIN, sizeof(VEC_DUCK_HULL_MIN));
+		memcpy(maxs, &VEC_DUCK_HULL_MAX, sizeof(VEC_DUCK_HULL_MAX));
 		iret = 1;
 		break;
 	case 2:				// Point based hull
-		mins = Vector( 0, 0, 0 );
-		maxs = Vector( 0, 0, 0 );
+		memcpy(mins, &g_vecZero, sizeof(g_vecZero));
+		memcpy(maxs, &g_vecZero, sizeof(g_vecZero));
 		iret = 1;
 		break;
 	}

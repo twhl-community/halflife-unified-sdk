@@ -15,41 +15,8 @@
 #include "../hud.h"
 #include "../cl_util.h"
 #include "event_api.h"
-
-extern "C"
-{
-// HLDM
-void EV_FireGlock1( struct event_args_s *args  );
-void EV_FireGlock2( struct event_args_s *args  );
-void EV_FireShotGunSingle( struct event_args_s *args  );
-void EV_FireShotGunDouble( struct event_args_s *args  );
-void EV_FireMP5( struct event_args_s *args  );
-void EV_FireMP52( struct event_args_s *args  );
-void EV_FirePython( struct event_args_s *args  );
-void EV_FireGauss( struct event_args_s *args  );
-void EV_SpinGauss( struct event_args_s *args  );
-void EV_Crowbar( struct event_args_s *args );
-void EV_FireCrossbow( struct event_args_s *args );
-void EV_FireCrossbow2( struct event_args_s *args );
-void EV_FireRpg( struct event_args_s *args );
-void EV_EgonFire( struct event_args_s *args );
-void EV_EgonStop( struct event_args_s *args );
-void EV_HornetGunFire( struct event_args_s *args );
-void EV_TripmineFire( struct event_args_s *args );
-void EV_SnarkFire( struct event_args_s *args );
-void EV_FireEagle( struct event_args_s* args );
-void EV_Pipewrench( struct event_args_s* args );
-void EV_FireM249( struct event_args_s* args );
-void EV_FireDisplacer( struct event_args_s* args );
-void EV_FireShockRifle( struct event_args_s* args );
-void EV_FireSpore( struct event_args_s* args );
-void EV_SniperRifle( struct event_args_s* args );
-void EV_Knife( struct event_args_s* args );
-void EV_PenguinFire(event_args_t* args);
-
-
-void EV_TrainPitchAdjust( struct event_args_s *args );
-}
+#include "pmtrace.h"
+#include "ev_hldm.h"
 
 /*
 ======================
