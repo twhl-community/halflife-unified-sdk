@@ -42,6 +42,14 @@
 #include <cstdlib>
 #include <cstring>
 
+using byte = unsigned char;
+using word = unsigned short;
+using func_t = unsigned int;
+using string_t = unsigned int;
+using qboolean = int;
+
+#define ARRAYSIZE(p)		(sizeof(p)/sizeof(p[0]))
+
 // Prevent tons of unused windows definitions
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
@@ -83,5 +91,7 @@ typedef int BOOL;
 
 #define V_min(a,b)  (((a) < (b)) ? (a) : (b))
 #define V_max(a,b)  (((a) > (b)) ? (a) : (b))
+
+#define clamp( val, min, max ) ( ((val) > (max)) ? (max) : ( ((val) < (min)) ? (min) : (val) ) )
 
 #endif //PLATFORM_H
