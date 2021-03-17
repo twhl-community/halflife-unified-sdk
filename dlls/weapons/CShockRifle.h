@@ -24,7 +24,6 @@ enum ShockRifleAnim
 	SHOCKRIFLE_IDLE3
 };
 
-#ifndef WEAPONS_NO_CLASSES
 class CShockRifle : public CBasePlayerWeapon
 {
 public:
@@ -85,6 +84,5 @@ private:
 	float m_flRechargeTime;
 	float m_flSoundDelay;
 };
-#endif
 
 #endif

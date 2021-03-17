@@ -34,7 +34,6 @@ enum pipewrench_e
 	PIPEWRENCH_BIG_SWING_IDLE
 };
 
-#ifndef WEAPONS_NO_CLASSES
 class CPipewrench : public CBasePlayerWeapon
 {
 private:
@@ -93,6 +92,5 @@ public:
 private:
 	unsigned short m_usPipewrench;
 };
-#endif
 
 #endif

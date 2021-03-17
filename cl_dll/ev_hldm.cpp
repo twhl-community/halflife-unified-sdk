@@ -19,6 +19,15 @@
 #include "util.h"
 #include "cbase.h"
 #include "weapons.h"
+#include "weapons/CEagle.h"
+#include "weapons/CPipewrench.h"
+#include "weapons/CM249.h"
+#include "weapons/CDisplacer.h"
+#include "weapons/CShockRifle.h"
+#include "weapons/CSporeLauncher.h"
+#include "weapons/CSniperRifle.h"
+#include "weapons/CKnife.h"
+#include "weapons/CPenguin.h"
 
 #include "const.h"
 #include "entity_state.h"
@@ -40,19 +49,6 @@
 
 #include "r_studioint.h"
 #include "com_model.h"
-
-//To avoid having to refactor a bunch of code, just exclude classes
-#define WEAPONS_NO_CLASSES
-#include "weapons.h"
-#include "weapons/CEagle.h"
-#include "weapons/CPipewrench.h"
-#include "weapons/CM249.h"
-#include "weapons/CDisplacer.h"
-#include "weapons/CShockRifle.h"
-#include "weapons/CSporeLauncher.h"
-#include "weapons/CSniperRifle.h"
-#include "weapons/CKnife.h"
-#include "weapons/CPenguin.h"
 
 extern engine_studio_api_t IEngineStudio;
 

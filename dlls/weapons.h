@@ -15,10 +15,8 @@
 #ifndef WEAPONS_H
 #define WEAPONS_H
 
-#ifndef WEAPONS_NO_CLASSES
 #include "effects.h"
 #include "weaponinfo.h"
-#endif
 
 class CBasePlayer;
 
@@ -30,7 +28,6 @@ bool UTIL_DefaultUseDecrement();
 
 bool UTIL_UseOldWeapons();
 
-#ifndef WEAPONS_NO_CLASSES
 // Contact Grenade / Timed grenade / Satchel Charge
 class CGrenade : public CBaseMonster
 {
@@ -63,7 +60,6 @@ public:
 
 	BOOL m_fRegisteredSound;// whether or not this grenade has issued its DANGER sound to the world sound list yet.
 };
-#endif
 
 // constant items
 #define ITEM_HEALTHKIT		1
@@ -245,7 +241,6 @@ typedef	enum
 
 #define WEAPON_IS_ONTARGET 0x40
 
-#ifndef WEAPONS_NO_CLASSES
 typedef struct
 {
 	int		iSlot;
@@ -1285,6 +1280,5 @@ public:
 private:
 	unsigned short m_usSnarkFire;
 };
-#endif
 
 #endif // WEAPONS_H

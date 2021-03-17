@@ -36,7 +36,6 @@ enum class DisplacerMode
 
 static const size_t DISPLACER_NUM_BEAMS = 4;
 
-#ifndef WEAPONS_NO_CLASSES
 class CDisplacer : public CBasePlayerWeapon
 {
 public:
@@ -96,6 +95,5 @@ private:
 
 	unsigned short m_usFireDisplacer;
 };
-#endif WEAPONS_NO_CLASSES
 
 #endif

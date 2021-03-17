@@ -28,7 +28,6 @@ enum SniperRifleAnim
 	SNIPERRIFLE_HOLSTER
 };
 
-#ifndef WEAPONS_NO_CLASSES
 /**
 *	@brief Opposing force sniper rifle
 */
@@ -84,6 +83,5 @@ private:
 	BOOL m_bReloading;
 	float m_flReloadStart;
 };
-#endif
 
 #endif

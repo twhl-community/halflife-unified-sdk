@@ -24,7 +24,6 @@ enum PenguinAnim
 	PENGUIN_THROW,
 };
 
-#ifndef WEAPONS_NO_CLASSES
 class CPenguin : public CBasePlayerWeapon
 {
 public:
@@ -68,4 +67,3 @@ private:
 	int m_fJustThrown;
 	unsigned short m_usPenguinFire;
 };
-#endif

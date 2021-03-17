@@ -32,7 +32,6 @@ enum KnifeAnim
 	KNIFE_STAB
 };
 
-#ifndef WEAPONS_NO_CLASSES
 class CKnife : public CBasePlayerWeapon
 {
 public:
@@ -73,6 +72,5 @@ private:
 	int m_iSwing;
 	TraceResult m_trHit;
 };
-#endif
 
 #endif

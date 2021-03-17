@@ -26,12 +26,7 @@
 #ifndef CLIENT_DLL
 #include "gamerules.h"
 #else
-//TODO: this is a great big mess due to duplicate definitions
-typedef int (*pfnUserMsgHook)(const char* pszName, int iSize, void* pbuf);
-#include "wrect.h"
-#include "cdll_int.h"
-#include "APIProxy.h"
-extern cl_enginefunc_t gEngfuncs;
+#include "cl_dll.h"
 #endif
 
 #include "CGrapple.h"

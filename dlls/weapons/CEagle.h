@@ -32,7 +32,6 @@ enum DesertEagleAnim
 	EAGLE_HOLSTER
 };
 
-#ifndef WEAPONS_NO_CLASSES
 class CEagle : public CBasePlayerWeapon
 {
 public:
@@ -93,6 +92,5 @@ private:
 	BOOL m_bLaserActive;
 	CEagleLaser* m_pLaser;
 };
-#endif
 
 #endif

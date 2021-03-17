@@ -28,7 +28,6 @@ enum M249Anim
 	M249_SHOOT3
 };
 
-#ifndef WEAPONS_NO_CLASSES
 class CM249 : public CBasePlayerWeapon
 {
 public:
@@ -92,6 +91,5 @@ private:
 	float m_flReloadStartTime;
 	float m_flReloadStart;
 };
-#endif
 
 #endif

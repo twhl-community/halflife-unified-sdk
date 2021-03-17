@@ -28,7 +28,6 @@ enum SporeLauncherAnim
 	SPLAUNCHER_IDLE2
 };
 
-#ifndef WEAPONS_NO_CLASSES
 class CSporeLauncher : public CBasePlayerWeapon
 {
 private:
@@ -95,6 +94,5 @@ private:
 
 	float m_flNextReload;
 };
-#endif
 
 #endif
