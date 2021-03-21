@@ -96,11 +96,11 @@ struct HUDLIST {
 class CHudAmmo: public CHudBase
 {
 public:
-	int Init();
-	int VidInit();
-	int Draw(float flTime);
-	void Think();
-	void Reset();
+	int Init() override;
+	int VidInit() override;
+	int Draw(float flTime) override;
+	void Think() override;
+	void Reset() override;
 	int DrawWList(float flTime);
 	int MsgFunc_CurWeapon(const char *pszName, int iSize, void *pbuf);
 	int MsgFunc_WeaponList(const char *pszName, int iSize, void *pbuf);
@@ -141,10 +141,10 @@ private:
 class CHudAmmoSecondary: public CHudBase
 {
 public:
-	int Init();
-	int VidInit();
-	void Reset();
-	int Draw(float flTime);
+	int Init() override;
+	int VidInit() override;
+	void Reset() override;
+	int Draw(float flTime) override;
 
 	int MsgFunc_SecAmmoVal( const char *pszName, int iSize, void *pbuf );
 	int MsgFunc_SecAmmoIcon( const char *pszName, int iSize, void *pbuf );
@@ -172,9 +172,9 @@ private:
 class CHudGeiger: public CHudBase
 {
 public:
-	int Init();
-	int VidInit();
-	int Draw(float flTime);
+	int Init() override;
+	int VidInit() override;
+	int Draw(float flTime) override;
 	int MsgFunc_Geiger(const char *pszName, int iSize, void *pbuf);
 	
 private:
@@ -188,9 +188,9 @@ private:
 class CHudTrain: public CHudBase
 {
 public:
-	int Init();
-	int VidInit();
-	int Draw(float flTime);
+	int Init() override;
+	int VidInit() override;
+	int Draw(float flTime) override;
 	int MsgFunc_Train(const char *pszName, int iSize, void *pbuf);
 
 private:
@@ -205,10 +205,10 @@ private:
 class CHudStatusBar : public CHudBase
 {
 public:
-	int Init();
-	int VidInit();
-	int Draw( float flTime );
-	void Reset();
+	int Init() override;
+	int VidInit() override;
+	int Draw( float flTime ) override;
+	void Reset() override;
 	void ParseStatusString( int line_num );
 
 	int MsgFunc_StatusText( const char *pszName, int iSize, void *pbuf );
@@ -266,10 +266,10 @@ struct team_info_t
 class CHudDeathNotice : public CHudBase
 {
 public:
-	int Init();
-	void InitHUDData();
-	int VidInit();
-	int Draw( float flTime );
+	int Init() override;
+	void InitHUDData() override;
+	int VidInit() override;
+	int Draw( float flTime ) override;
 	int MsgFunc_DeathMsg( const char *pszName, int iSize, void *pbuf );
 
 private:
@@ -282,11 +282,11 @@ private:
 class CHudMenu : public CHudBase
 {
 public:
-	int Init();
-	void InitHUDData();
-	int VidInit();
-	void Reset();
-	int Draw( float flTime );
+	int Init() override;
+	void InitHUDData() override;
+	int VidInit() override;
+	void Reset() override;
+	int Draw( float flTime ) override;
 	int MsgFunc_ShowMenu( const char *pszName, int iSize, void *pbuf );
 
 	void SelectMenuItem( int menu_item );
@@ -303,10 +303,10 @@ public:
 class CHudSayText : public CHudBase
 {
 public:
-	int Init();
-	void InitHUDData();
-	int VidInit();
-	int Draw( float flTime );
+	int Init() override;
+	void InitHUDData() override;
+	int VidInit() override;
+	int Draw( float flTime ) override;
 	int MsgFunc_SayText( const char *pszName, int iSize, void *pbuf );
 	void SayTextPrint( const char *pszBuf, int iBufSize, int clientIndex = -1 );
 	void EnsureTextFitsInOneLineAndWrapIfHaveTo( int line );
@@ -324,9 +324,9 @@ private:
 class CHudBattery: public CHudBase
 {
 public:
-	int Init();
-	int VidInit();
-	int Draw(float flTime);
+	int Init() override;
+	int VidInit() override;
+	int Draw(float flTime) override;
 	int MsgFunc_Battery(const char *pszName,  int iSize, void *pbuf );
 	
 private:
@@ -347,10 +347,10 @@ private:
 class CHudFlashlight: public CHudBase
 {
 public:
-	int Init();
-	int VidInit();
-	int Draw(float flTime);
-	void Reset();
+	int Init() override;
+	int VidInit() override;
+	int Draw(float flTime) override;
+	void Reset() override;
 	int MsgFunc_Flashlight(const char *pszName,  int iSize, void *pbuf );
 	int MsgFunc_FlashBat(const char *pszName,  int iSize, void *pbuf );
 	
@@ -399,7 +399,7 @@ struct message_parms_t
 class CHudTextMessage: public CHudBase
 {
 public:
-	int Init();
+	int Init() override;
 	static char *LocaliseTextString( const char *msg, char *dst_buffer, int buffer_size );
 	static char *BufferedLocaliseTextString( const char *msg );
 	const char *LookupString( const char *msg_name, int *msg_dest = NULL );
@@ -413,9 +413,9 @@ public:
 class CHudMessage: public CHudBase
 {
 public:
-	int Init();
-	int VidInit();
-	int Draw(float flTime);
+	int Init() override;
+	int VidInit() override;
+	int Draw(float flTime) override;
 	int MsgFunc_HudText(const char *pszName, int iSize, void *pbuf);
 	int MsgFunc_HudTextPro(const char *pszName, int iSize, void *pbuf);
 	int MsgFunc_GameTitle(const char *pszName, int iSize, void *pbuf);
@@ -429,7 +429,7 @@ public:
 	void MessageDrawScan( client_textmessage_t *pMessage, float time );
 	void MessageScanStart();
 	void MessageScanNextChar();
-	void Reset();
+	void Reset() override;
 
 private:
 	client_textmessage_t		*m_pMessages[maxHUDMessages];
@@ -452,10 +452,10 @@ private:
 class CHudStatusIcons: public CHudBase
 {
 public:
-	int Init();
-	int VidInit();
-	void Reset();
-	int Draw(float flTime);
+	int Init() override;
+	int VidInit() override;
+	void Reset() override;
+	int Draw(float flTime) override;
 	int MsgFunc_StatusIcon(const char *pszName, int iSize, void *pbuf);
 	int MsgFunc_CustomIcon(const char* pszName, int iSize, void* pbuf);
 
@@ -495,13 +495,13 @@ private:
 class CHudBenchmark : public CHudBase
 {
 public:
-	int Init();
-	int VidInit();
-	int Draw( float flTime );
+	int Init() override;
+	int VidInit() override;
+	int Draw( float flTime ) override;
 
 	void SetScore( float score );
 
-	void Think();
+	void Think() override;
 
 	void StartNextSection( int section );
 
