@@ -34,12 +34,8 @@ target_sources(client PRIVATE
 	hud_bench.cpp
 	hud_benchtrace.cpp
 	hud_benchtrace.h
-	hud_iface.h
 	hud_msg.cpp
 	hud_redraw.cpp
-	hud_servers.cpp
-	hud_servers.h
-	hud_servers_priv.h
 	hud_spectator.cpp
 	hud_spectator.h
 	hud_update.cpp
@@ -66,12 +62,7 @@ target_sources(client PRIVATE
 	tri.cpp
 	tri.h
 	util.cpp
-	util_vector.h
 	vgui_ClassMenu.cpp
-	vgui_ConsolePanel.cpp
-	vgui_ConsolePanel.h
-	vgui_ControlConfigPanel.cpp
-	vgui_ControlConfigPanel.h
 	vgui_CustomObjects.cpp
 	vgui_int.cpp
 	vgui_int.h
@@ -80,8 +71,6 @@ target_sources(client PRIVATE
 	vgui_SchemeManager.h
 	vgui_ScorePanel.cpp
 	vgui_ScorePanel.h
-	vgui_ServerBrowser.cpp
-	vgui_ServerBrowser.h
 	vgui_SpectatorPanel.cpp
 	vgui_SpectatorPanel.h
 	vgui_TeamFortressViewport.cpp
@@ -109,6 +98,7 @@ target_sources(client PRIVATE
 	../dlls/shotgun.cpp
 	../dlls/squeakgrenade.cpp
 	../dlls/tripmine.cpp
+	../dlls/weapons_shared.cpp
 	../dlls/wpn_shared/hl_wpn_glock.cpp
 	../common/beamdef.h
 	../common/cl_entity.h
@@ -132,6 +122,7 @@ target_sources(client PRIVATE
 	../common/interface.h
 	../common/in_buttons.h
 	../common/ivoicetweak.h
+	../common/mathlib.cpp
 	../common/mathlib.h
 	../common/netadr.h
 	../common/net_api.h

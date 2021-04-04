@@ -137,10 +137,12 @@ target_sources(hl PRIVATE
 	util.h
 	vector.h
 	weapons.cpp
+	weapons_shared.cpp
 	weapons.h
 	world.cpp
 	xen.cpp
 	zombie.cpp
+	../common/mathlib.cpp
 	../game_shared/voice_gamemgr.cpp
 	../game_shared/voice_gamemgr.h
 	../pm_shared/pm_debug.cpp
