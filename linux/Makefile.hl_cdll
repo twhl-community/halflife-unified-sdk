@@ -60,7 +60,9 @@ HL1_OBJS = \
 	$(HL1_OBJ_DIR)/health.o \
 	$(HL1_OBJ_DIR)/hud_bench.o \
 	$(HL1_OBJ_DIR)/hud_benchtrace.o \
+	$(HL1_OBJ_DIR)/hud_flagicons.o \
 	$(HL1_OBJ_DIR)/hud_msg.o \
+	$(HL1_OBJ_DIR)/hud_playerbrowse.o \
 	$(HL1_OBJ_DIR)/hud_redraw.o \
 	$(HL1_OBJ_DIR)/hud_update.o \
 	$(HL1_OBJ_DIR)/in_camera.o \
@@ -69,6 +71,7 @@ HL1_OBJS = \
 	$(HL1_OBJ_DIR)/menu.o \
 	$(HL1_OBJ_DIR)/message.o \
 	$(HL1_OBJ_DIR)/saytext.o \
+	$(HL1_OBJ_DIR)/scoreboard.o \
 	$(HL1_OBJ_DIR)/status_icons.o \
 	$(HL1_OBJ_DIR)/statusbar.o \
 	$(HL1_OBJ_DIR)/studio_util.o \
@@ -84,6 +87,7 @@ HL1_OBJS = \
 	$(HL1_OBJ_DIR)/vgui_MOTDWindow.o \
 	$(HL1_OBJ_DIR)/vgui_SchemeManager.o \
 	$(HL1_OBJ_DIR)/vgui_ScorePanel.o \
+	$(HL1_OBJ_DIR)/vgui_StatsMenuPanel.o \
 	$(HL1_OBJ_DIR)/vgui_TeamFortressViewport.o \
 	$(HL1_OBJ_DIR)/vgui_SpectatorPanel.o \
 	$(HL1_OBJ_DIR)/vgui_teammenu.o \
