@@ -34,23 +34,66 @@ DO_COMMON_CC=$(CC) $(COMMON_INCLUDEDIRS) $(CFLAGS) -o $@ -c $<
 #####################################################################
 
 HLDLL_OBJS = \
+	$(HLDLL_OBJ_DIR)/ctf/CHUDIconTrigger.o \
+	$(HLDLL_OBJ_DIR)/ctf/CItemAcceleratorCTF.o \
+	$(HLDLL_OBJ_DIR)/ctf/CItemBackpackCTF.o \
+	$(HLDLL_OBJ_DIR)/ctf/CItemCTF.o \
+	$(HLDLL_OBJ_DIR)/ctf/CItemLongJumpCTF.o \
+	$(HLDLL_OBJ_DIR)/ctf/CItemPortableHEVCTF.o \
+	$(HLDLL_OBJ_DIR)/ctf/CItemRegenerationCTF.o \
+	$(HLDLL_OBJ_DIR)/ctf/CItemSpawnCTF.o \
+	$(HLDLL_OBJ_DIR)/ctf/CTFDetect.o \
+	$(HLDLL_OBJ_DIR)/ctf/CTFGoal.o \
+	$(HLDLL_OBJ_DIR)/ctf/CTFGoalBase.o \
+	$(HLDLL_OBJ_DIR)/ctf/CTFGoalFlag.o \
+	$(HLDLL_OBJ_DIR)/ctf/ctfplay_gamerules.o \
+	$(HLDLL_OBJ_DIR)/ctf/CTFSpawn.o \
+	$(HLDLL_OBJ_DIR)/rope/CElectrifiedWire.o \
+	$(HLDLL_OBJ_DIR)/rope/CRope.o \
+	$(HLDLL_OBJ_DIR)/rope/CRopeSample.o \
+	$(HLDLL_OBJ_DIR)/rope/CRopeSegment.o \
+	$(HLDLL_OBJ_DIR)/weapons/CDisplacer.o \
+	$(HLDLL_OBJ_DIR)/weapons/CDisplacerBall.o \
+	$(HLDLL_OBJ_DIR)/weapons/CEagle.o \
+	$(HLDLL_OBJ_DIR)/weapons/CEagleLaser.o \
+	$(HLDLL_OBJ_DIR)/weapons/CGrapple.o \
+	$(HLDLL_OBJ_DIR)/weapons/CGrappleTip.o \
+	$(HLDLL_OBJ_DIR)/weapons/CKnife.o \
+	$(HLDLL_OBJ_DIR)/weapons/CM249.o \
+	$(HLDLL_OBJ_DIR)/weapons/CPenguin.o \
+	$(HLDLL_OBJ_DIR)/weapons/CPipewrench.o \
+	$(HLDLL_OBJ_DIR)/weapons/CShockBeam.o \
+	$(HLDLL_OBJ_DIR)/weapons/CShockRifle.o \
+	$(HLDLL_OBJ_DIR)/weapons/CSniperRifle.o \
+	$(HLDLL_OBJ_DIR)/weapons/CSpore.o \
+	$(HLDLL_OBJ_DIR)/weapons/CSporeLauncher.o \
 	$(HLDLL_OBJ_DIR)/aflock.o \
 	$(HLDLL_OBJ_DIR)/agrunt.o \
 	$(HLDLL_OBJ_DIR)/airtank.o \
 	$(HLDLL_OBJ_DIR)/animating.o \
 	$(HLDLL_OBJ_DIR)/animation.o \
 	$(HLDLL_OBJ_DIR)/apache.o \
+	$(HLDLL_OBJ_DIR)/baby_voltigore.o \
 	$(HLDLL_OBJ_DIR)/barnacle.o \
 	$(HLDLL_OBJ_DIR)/barney.o \
 	$(HLDLL_OBJ_DIR)/bigmomma.o \
+	$(HLDLL_OBJ_DIR)/blkop_apache.o \
+	$(HLDLL_OBJ_DIR)/blkop_osprey.o \
 	$(HLDLL_OBJ_DIR)/bloater.o \
+	$(HLDLL_OBJ_DIR)/blowercannon.o \
 	$(HLDLL_OBJ_DIR)/bmodels.o \
 	$(HLDLL_OBJ_DIR)/bullsquid.o \
 	$(HLDLL_OBJ_DIR)/buttons.o \
 	$(HLDLL_OBJ_DIR)/cbase.o \
+	$(HLDLL_OBJ_DIR)/CDrillSergeant.o \
+	$(HLDLL_OBJ_DIR)/cleansuit_scientist.o \
 	$(HLDLL_OBJ_DIR)/client.o \
+	$(HLDLL_OBJ_DIR)/COFAllyMonster.o \
+	$(HLDLL_OBJ_DIR)/COFSquadTalkMonster.o \
 	$(HLDLL_OBJ_DIR)/combat.o \
 	$(HLDLL_OBJ_DIR)/controller.o \
+	$(HLDLL_OBJ_DIR)/coopplay_gamerules.o \
+	$(HLDLL_OBJ_DIR)/CRecruit.o \
 	$(HLDLL_OBJ_DIR)/crossbow.o \
 	$(HLDLL_OBJ_DIR)/crowbar.o \
 	$(HLDLL_OBJ_DIR)/defaultai.o \
@@ -61,6 +104,7 @@ HLDLL_OBJS = \
 	$(HLDLL_OBJ_DIR)/flyingmonster.o \
 	$(HLDLL_OBJ_DIR)/func_break.o \
 	$(HLDLL_OBJ_DIR)/func_tank.o \
+	$(HLDLL_OBJ_DIR)/func_tank_of.o \
 	$(HLDLL_OBJ_DIR)/game.o \
 	$(HLDLL_OBJ_DIR)/gamerules.o \
 	$(HLDLL_OBJ_DIR)/gargantua.o \
@@ -78,15 +122,22 @@ HLDLL_OBJS = \
 	$(HLDLL_OBJ_DIR)/hassassin.o \
 	$(HLDLL_OBJ_DIR)/headcrab.o \
 	$(HLDLL_OBJ_DIR)/healthkit.o \
+	$(HLDLL_OBJ_DIR)/hfgrunt.o \
 	$(HLDLL_OBJ_DIR)/hgrunt.o \
+	$(HLDLL_OBJ_DIR)/hgrunt_ally.o \
+	$(HLDLL_OBJ_DIR)/hgrunt_medic.o \
+	$(HLDLL_OBJ_DIR)/hgrunt_torch.o \
 	$(HLDLL_OBJ_DIR)/hornet.o \
 	$(HLDLL_OBJ_DIR)/hornetgun.o \
 	$(HLDLL_OBJ_DIR)/houndeye.o \
 	$(HLDLL_OBJ_DIR)/ichthyosaur.o \
 	$(HLDLL_OBJ_DIR)/islave.o \
+	$(HLDLL_OBJ_DIR)/item_generic.o \
 	$(HLDLL_OBJ_DIR)/items.o \
 	$(HLDLL_OBJ_DIR)/leech.o \
 	$(HLDLL_OBJ_DIR)/lights.o \
+	$(HLDLL_OBJ_DIR)/loader.o \
+	$(HLDLL_OBJ_DIR)/male_assassin.o \
 	$(HLDLL_OBJ_DIR)/maprules.o \
 	$(HLDLL_OBJ_DIR)/monstermaker.o \
 	$(HLDLL_OBJ_DIR)/monsters.o \
@@ -95,9 +146,15 @@ HLDLL_OBJS = \
 	$(HLDLL_OBJ_DIR)/mp5.o \
 	$(HLDLL_OBJ_DIR)/nihilanth.o \
 	$(HLDLL_OBJ_DIR)/nodes.o \
+	$(HLDLL_OBJ_DIR)/nuclearbomb.o \
 	$(HLDLL_OBJ_DIR)/observer.o \
+	$(HLDLL_OBJ_DIR)/op4mortar.o \
 	$(HLDLL_OBJ_DIR)/osprey.o \
+	$(HLDLL_OBJ_DIR)/otis.o \
 	$(HLDLL_OBJ_DIR)/pathcorner.o \
+	$(HLDLL_OBJ_DIR)/penguin_grenade.o \
+	$(HLDLL_OBJ_DIR)/pitdrone.o \
+	$(HLDLL_OBJ_DIR)/pitworm_up.o \
 	$(HLDLL_OBJ_DIR)/plane.o \
 	$(HLDLL_OBJ_DIR)/plats.o \
 	$(HLDLL_OBJ_DIR)/player.o \
@@ -109,7 +166,10 @@ HLDLL_OBJS = \
 	$(HLDLL_OBJ_DIR)/schedule.o \
 	$(HLDLL_OBJ_DIR)/scientist.o \
 	$(HLDLL_OBJ_DIR)/scripted.o \
+	$(HLDLL_OBJ_DIR)/shockroach.o \
+	$(HLDLL_OBJ_DIR)/shocktrooper.o \
 	$(HLDLL_OBJ_DIR)/shotgun.o \
+	$(HLDLL_OBJ_DIR)/skeleton.o \
 	$(HLDLL_OBJ_DIR)/skill.o \
 	$(HLDLL_OBJ_DIR)/sound.o \
 	$(HLDLL_OBJ_DIR)/soundent.o \
@@ -128,11 +188,14 @@ HLDLL_OBJS = \
 	$(HLDLL_OBJ_DIR)/turret.o \
 	$(HLDLL_OBJ_DIR)/UserMessages.o \
 	$(HLDLL_OBJ_DIR)/util.o \
+	$(HLDLL_OBJ_DIR)/voltigore.o \
 	$(HLDLL_OBJ_DIR)/weapons.o \
 	$(HLDLL_OBJ_DIR)/weapons_shared.o \
 	$(HLDLL_OBJ_DIR)/world.o \
 	$(HLDLL_OBJ_DIR)/xen.o \
-	$(HLDLL_OBJ_DIR)/zombie.o
+	$(HLDLL_OBJ_DIR)/zombie.o \
+	$(HLDLL_OBJ_DIR)/zombie_barney.o \
+	$(HLDLL_OBJ_DIR)/zombie_soldier.o
 
 HLWPN_OBJS = \
 	$(HLWPN_OBJ_DIR)/hl_wpn_glock.o

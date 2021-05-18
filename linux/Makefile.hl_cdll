@@ -88,6 +88,18 @@ HL1_OBJS = \
 	$(HL1_OBJ_DIR)/voice_status.o \
 
 DLL_OBJS = \
+	$(HL1_SERVER_OBJ_DIR)/weapons/CDisplacer.o \
+	$(HL1_SERVER_OBJ_DIR)/weapons/CEagle.o \
+	$(HL1_SERVER_OBJ_DIR)/weapons/CGrapple.o \
+	$(HL1_SERVER_OBJ_DIR)/weapons/CGrappleTip.o \
+	$(HL1_SERVER_OBJ_DIR)/weapons/CKnife.o \
+	$(HL1_SERVER_OBJ_DIR)/weapons/CM249.o \
+	$(HL1_SERVER_OBJ_DIR)/weapons/CPenguin.o \
+	$(HL1_SERVER_OBJ_DIR)/weapons/CPipewrench.o \
+	$(HL1_SERVER_OBJ_DIR)/weapons/CShockBeam.o \
+	$(HL1_SERVER_OBJ_DIR)/weapons/CShockRifle.o \
+	$(HL1_SERVER_OBJ_DIR)/weapons/CSniperRifle.o \
+	$(HL1_SERVER_OBJ_DIR)/weapons/CSporeLauncher.o \
 	$(HL1_SERVER_OBJ_DIR)/crossbow.o \
 	$(HL1_SERVER_OBJ_DIR)/crowbar.o \
 	$(HL1_SERVER_OBJ_DIR)/egon.o \
