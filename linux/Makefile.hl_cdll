@@ -108,6 +108,7 @@ DLL_OBJS = \
 	$(WEAPONS_OBJ_DIR)/CSporeLauncher.o \
 	$(HL1_SERVER_OBJ_DIR)/crossbow.o \
 	$(HL1_SERVER_OBJ_DIR)/crowbar.o \
+	$(HL1_SERVER_OBJ_DIR)/ehandle.o \
 	$(HL1_SERVER_OBJ_DIR)/egon.o \
 	$(HL1_SERVER_OBJ_DIR)/gauss.o \
 	$(HL1_SERVER_OBJ_DIR)/handgrenade.o \
