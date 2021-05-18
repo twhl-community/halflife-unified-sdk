@@ -16,7 +16,7 @@
 #include "util.h"
 #include "cbase.h"
 #include "player.h"
-#include "Weapons.h"
+#include "weapons.h"
 #include "gamerules.h"
 #include "UserMessages.h"
 
