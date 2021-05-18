@@ -104,6 +104,7 @@ HLDLL_OBJS = \
 	$(HLDLL_OBJ_DIR)/python.o \
 	$(HLDLL_OBJ_DIR)/rat.o \
 	$(HLDLL_OBJ_DIR)/roach.o \
+	$(HLDLL_OBJ_DIR)/rosenberg.o \
 	$(HLDLL_OBJ_DIR)/rpg.o \
 	$(HLDLL_OBJ_DIR)/satchel.o \
 	$(HLDLL_OBJ_DIR)/schedule.o \
