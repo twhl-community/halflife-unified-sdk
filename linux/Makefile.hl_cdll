@@ -102,7 +102,6 @@ DLL_OBJS = \
 	$(WEAPONS_OBJ_DIR)/CM249.o \
 	$(WEAPONS_OBJ_DIR)/CPenguin.o \
 	$(WEAPONS_OBJ_DIR)/CPipewrench.o \
-	$(WEAPONS_OBJ_DIR)/CShockBeam.o \
 	$(WEAPONS_OBJ_DIR)/CShockRifle.o \
 	$(WEAPONS_OBJ_DIR)/CSniperRifle.o \
 	$(WEAPONS_OBJ_DIR)/CSporeLauncher.o \
