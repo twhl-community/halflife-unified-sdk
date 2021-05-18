@@ -15,7 +15,7 @@
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
-#include "Weapons.h"
+#include "weapons.h"
 
 #ifndef CLIENT_DLL
 #include "gamerules.h"
