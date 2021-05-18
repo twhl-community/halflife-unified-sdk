@@ -6,12 +6,18 @@
 
 HLDLL_SRC_DIR=$(SOURCE_DIR)/dlls
 HLWPN_SRC_DIR=$(HLDLL_SRC_DIR)/wpn_shared
+CTF_SRC_DIR=$(HLDLL_SRC_DIR)/ctf
+ROPE_SRC_DIR=$(HLDLL_SRC_DIR)/rope
+HLWEAPONS_SRC_DIR=$(HLDLL_SRC_DIR)/weapons
 
 HLDLL_OBJ_DIR=$(BUILD_OBJ_DIR)/hldll
 HLWPN_OBJ_DIR=$(HLDLL_OBJ_DIR)/wpn_shared
 PM_OBJ_DIR=$(HLDLL_OBJ_DIR)/pm_shared
 GAME_SHARED_OBJ_DIR=$(HLDLL_OBJ_DIR)/game_shared
 COMMON_OBJ_DIR=$(HLDLL_OBJ_DIR)/common
+CTF_OBJ_DIR=$(HLDLL_OBJ_DIR)/ctf
+ROPE_OBJ_DIR=$(HLDLL_OBJ_DIR)/rope
+WEAPONS_OBJ_DIR=$(HLDLL_OBJ_DIR)/weapons
 
 #CFLAGS=$(BASE_CFLAGS) $(ARCH_CFLAGS) $(SHLIBCFLAGS) -DCLIENT_WEAPONS
 CFLAGS=$(BASE_CFLAGS)  $(ARCH_CFLAGS)  -DCLIENT_WEAPONS
@@ -34,39 +40,39 @@ DO_COMMON_CC=$(CC) $(COMMON_INCLUDEDIRS) $(CFLAGS) -o $@ -c $<
 #####################################################################
 
 HLDLL_OBJS = \
-	$(HLDLL_OBJ_DIR)/ctf/CHUDIconTrigger.o \
-	$(HLDLL_OBJ_DIR)/ctf/CItemAcceleratorCTF.o \
-	$(HLDLL_OBJ_DIR)/ctf/CItemBackpackCTF.o \
-	$(HLDLL_OBJ_DIR)/ctf/CItemCTF.o \
-	$(HLDLL_OBJ_DIR)/ctf/CItemLongJumpCTF.o \
-	$(HLDLL_OBJ_DIR)/ctf/CItemPortableHEVCTF.o \
-	$(HLDLL_OBJ_DIR)/ctf/CItemRegenerationCTF.o \
-	$(HLDLL_OBJ_DIR)/ctf/CItemSpawnCTF.o \
-	$(HLDLL_OBJ_DIR)/ctf/CTFDetect.o \
-	$(HLDLL_OBJ_DIR)/ctf/CTFGoal.o \
-	$(HLDLL_OBJ_DIR)/ctf/CTFGoalBase.o \
-	$(HLDLL_OBJ_DIR)/ctf/CTFGoalFlag.o \
-	$(HLDLL_OBJ_DIR)/ctf/ctfplay_gamerules.o \
-	$(HLDLL_OBJ_DIR)/ctf/CTFSpawn.o \
-	$(HLDLL_OBJ_DIR)/rope/CElectrifiedWire.o \
-	$(HLDLL_OBJ_DIR)/rope/CRope.o \
-	$(HLDLL_OBJ_DIR)/rope/CRopeSample.o \
-	$(HLDLL_OBJ_DIR)/rope/CRopeSegment.o \
-	$(HLDLL_OBJ_DIR)/weapons/CDisplacer.o \
-	$(HLDLL_OBJ_DIR)/weapons/CDisplacerBall.o \
-	$(HLDLL_OBJ_DIR)/weapons/CEagle.o \
-	$(HLDLL_OBJ_DIR)/weapons/CEagleLaser.o \
-	$(HLDLL_OBJ_DIR)/weapons/CGrapple.o \
-	$(HLDLL_OBJ_DIR)/weapons/CGrappleTip.o \
-	$(HLDLL_OBJ_DIR)/weapons/CKnife.o \
-	$(HLDLL_OBJ_DIR)/weapons/CM249.o \
-	$(HLDLL_OBJ_DIR)/weapons/CPenguin.o \
-	$(HLDLL_OBJ_DIR)/weapons/CPipewrench.o \
-	$(HLDLL_OBJ_DIR)/weapons/CShockBeam.o \
-	$(HLDLL_OBJ_DIR)/weapons/CShockRifle.o \
-	$(HLDLL_OBJ_DIR)/weapons/CSniperRifle.o \
-	$(HLDLL_OBJ_DIR)/weapons/CSpore.o \
-	$(HLDLL_OBJ_DIR)/weapons/CSporeLauncher.o \
+	$(CTF_OBJ_DIR)/CHUDIconTrigger.o \
+	$(CTF_OBJ_DIR)/CItemAcceleratorCTF.o \
+	$(CTF_OBJ_DIR)/CItemBackpackCTF.o \
+	$(CTF_OBJ_DIR)/CItemCTF.o \
+	$(CTF_OBJ_DIR)/CItemLongJumpCTF.o \
+	$(CTF_OBJ_DIR)/CItemPortableHEVCTF.o \
+	$(CTF_OBJ_DIR)/CItemRegenerationCTF.o \
+	$(CTF_OBJ_DIR)/CItemSpawnCTF.o \
+	$(CTF_OBJ_DIR)/CTFDetect.o \
+	$(CTF_OBJ_DIR)/CTFGoal.o \
+	$(CTF_OBJ_DIR)/CTFGoalBase.o \
+	$(CTF_OBJ_DIR)/CTFGoalFlag.o \
+	$(CTF_OBJ_DIR)/ctfplay_gamerules.o \
+	$(CTF_OBJ_DIR)/CTFSpawn.o \
+	$(ROPE_OBJ_DIR)/CElectrifiedWire.o \
+	$(ROPE_OBJ_DIR)/CRope.o \
+	$(ROPE_OBJ_DIR)/CRopeSample.o \
+	$(ROPE_OBJ_DIR)/CRopeSegment.o \
+	$(WEAPONS_OBJ_DIR)/CDisplacer.o \
+	$(WEAPONS_OBJ_DIR)/CDisplacerBall.o \
+	$(WEAPONS_OBJ_DIR)/CEagle.o \
+	$(WEAPONS_OBJ_DIR)/CEagleLaser.o \
+	$(WEAPONS_OBJ_DIR)/CGrapple.o \
+	$(WEAPONS_OBJ_DIR)/CGrappleTip.o \
+	$(WEAPONS_OBJ_DIR)/CKnife.o \
+	$(WEAPONS_OBJ_DIR)/CM249.o \
+	$(WEAPONS_OBJ_DIR)/CPenguin.o \
+	$(WEAPONS_OBJ_DIR)/CPipewrench.o \
+	$(WEAPONS_OBJ_DIR)/CShockBeam.o \
+	$(WEAPONS_OBJ_DIR)/CShockRifle.o \
+	$(WEAPONS_OBJ_DIR)/CSniperRifle.o \
+	$(WEAPONS_OBJ_DIR)/CSpore.o \
+	$(WEAPONS_OBJ_DIR)/CSporeLauncher.o \
 	$(HLDLL_OBJ_DIR)/aflock.o \
 	$(HLDLL_OBJ_DIR)/agrunt.o \
 	$(HLDLL_OBJ_DIR)/airtank.o \
@@ -220,6 +226,9 @@ dirs:
 	-mkdir $(PM_OBJ_DIR)
 	-mkdir $(GAME_SHARED_OBJ_DIR)
 	-mkdir $(COMMON_OBJ_DIR)
+	-mkdir $(CTF_OBJ_DIR)
+	-mkdir $(ROPE_OBJ_DIR)
+	-mkdir $(WEAPONS_OBJ_DIR)
 
 hl.$(SHLIBEXT): $(HLDLL_OBJS) $(HLWPN_OBJS) $(PM_OBJS) $(GAME_SHARED_OBJS) $(COMMON_OBJS)
 	$(CC) $(LDFLAGS) $(SHLIBLDFLAGS) -o $(BUILD_DIR)/$@ $(HLDLL_OBJS) $(HLWPN_OBJS) $(PM_OBJS) $(GAME_SHARED_OBJS) $(COMMON_OBJS)
@@ -240,6 +249,15 @@ $(GAME_SHARED_OBJ_DIR)/%.o : $(GAME_SHARED_SRC_DIR)/%.cpp
 $(COMMON_OBJ_DIR)/%.o : $(COMMON_SRC_DIR)/%.cpp
 	$(DO_COMMON_CC)
 
+$(CTF_OBJ_DIR)/%.o : $(CTF_SRC_DIR)/%.cpp
+	$(DO_HLDLL_CC)
+
+$(ROPE_OBJ_DIR)/%.o : $(ROPE_SRC_DIR)/%.cpp
+	$(DO_HLDLL_CC)
+	
+$(WEAPONS_OBJ_DIR)/%.o : $(HLWEAPONS_SRC_DIR)/%.cpp
+	$(DO_HLDLL_CC)
+	
 clean:
 	-rm -rf $(COMMON_OBJ_DIR)
 	-rm -rf $(GAME_SHARED_OBJ_DIR)

@@ -5,6 +5,7 @@
 
 HL_SRC_DIR=$(SOURCE_DIR)/cl_dll
 HL_SERVER_SRC_DIR=$(SOURCE_DIR)/dlls
+WEAPONS_SRC_DIR=$(HL_SERVER_SRC_DIR)/weapons
 GAME_SHARED_SRC_DIR=$(SOURCE_DIR)/game_shared
 PM_SHARED_SRC_DIR=$(SOURCE_DIR)/pm_shared
 
@@ -13,6 +14,7 @@ PUBLIC_OBJ_DIR=$(HL1_OBJ_DIR)/public
 COMMON_OBJ_DIR=$(HL1_OBJ_DIR)/common
 GAME_SHARED_OBJ_DIR=$(HL1_OBJ_DIR)/game_shared
 HL1_SERVER_OBJ_DIR=$(HL1_OBJ_DIR)/server
+WEAPONS_OBJ_DIR=$(HL1_SERVER_OBJ_DIR)/weapons
 PM_SHARED_OBJ_DIR=$(HL1_OBJ_DIR)/pm_shared
 
 CFLAGS=$(BASE_CFLAGS) $(ARCH_CFLAGS) -DCLIENT_DLL -DCLIENT_WEAPONS -I/usr/include/malloc -D_snwprintf=swprintf
@@ -88,18 +90,18 @@ HL1_OBJS = \
 	$(HL1_OBJ_DIR)/voice_status.o \
 
 DLL_OBJS = \
-	$(HL1_SERVER_OBJ_DIR)/weapons/CDisplacer.o \
-	$(HL1_SERVER_OBJ_DIR)/weapons/CEagle.o \
-	$(HL1_SERVER_OBJ_DIR)/weapons/CGrapple.o \
-	$(HL1_SERVER_OBJ_DIR)/weapons/CGrappleTip.o \
-	$(HL1_SERVER_OBJ_DIR)/weapons/CKnife.o \
-	$(HL1_SERVER_OBJ_DIR)/weapons/CM249.o \
-	$(HL1_SERVER_OBJ_DIR)/weapons/CPenguin.o \
-	$(HL1_SERVER_OBJ_DIR)/weapons/CPipewrench.o \
-	$(HL1_SERVER_OBJ_DIR)/weapons/CShockBeam.o \
-	$(HL1_SERVER_OBJ_DIR)/weapons/CShockRifle.o \
-	$(HL1_SERVER_OBJ_DIR)/weapons/CSniperRifle.o \
-	$(HL1_SERVER_OBJ_DIR)/weapons/CSporeLauncher.o \
+	$(WEAPONS_OBJ_DIR)/CDisplacer.o \
+	$(WEAPONS_OBJ_DIR)/CEagle.o \
+	$(WEAPONS_OBJ_DIR)/CGrapple.o \
+	$(WEAPONS_OBJ_DIR)/CGrappleTip.o \
+	$(WEAPONS_OBJ_DIR)/CKnife.o \
+	$(WEAPONS_OBJ_DIR)/CM249.o \
+	$(WEAPONS_OBJ_DIR)/CPenguin.o \
+	$(WEAPONS_OBJ_DIR)/CPipewrench.o \
+	$(WEAPONS_OBJ_DIR)/CShockBeam.o \
+	$(WEAPONS_OBJ_DIR)/CShockRifle.o \
+	$(WEAPONS_OBJ_DIR)/CSniperRifle.o \
+	$(WEAPONS_OBJ_DIR)/CSporeLauncher.o \
 	$(HL1_SERVER_OBJ_DIR)/crossbow.o \
 	$(HL1_SERVER_OBJ_DIR)/crowbar.o \
 	$(HL1_SERVER_OBJ_DIR)/egon.o \
@@ -154,6 +156,7 @@ $(HL1_OBJ_DIR):
 
 $(HL1_SERVER_OBJ_DIR):
 	mkdir -p $(HL1_SERVER_OBJ_DIR)
+	mkdir -p $(WEAPONS_OBJ_DIR)
 	mkdir -p $(HL1_SERVER_OBJ_DIR)/wpn_shared
 
 $(PUBLIC_OBJ_DIR):
@@ -174,6 +177,9 @@ $(HL1_OBJ_DIR)/%.o: $(HL_SRC_DIR)/%.cpp $(filter-out $(wildcard  $(HL1_OBJ_DIR))
 $(HL1_SERVER_OBJ_DIR)/%.o: $(HL_SERVER_SRC_DIR)/%.cpp $(filter-out $(wildcard  $(HL1_SERVER_OBJ_DIR)),  $(HL1_SERVER_OBJ_DIR))
 	$(DO_CC)
 
+$(WEAPONS_OBJ_DIR)/%.o: $(WEAPONS_SRC_DIR)/%.cpp $(filter-out $(wildcard  $(WEAPONS_OBJ_DIR)),  $(WEAPONS_OBJ_DIR))
+	$(DO_CC)
+	
 $(HL1_OBJ_DIR)/%.o: $(HL_SRC_DIR)/hl/%.cpp $(filter-out $(wildcard  $(HL1_OBJ_DIR)),  $(HL1_OBJ_DIR))
 	$(DO_CC)
 
