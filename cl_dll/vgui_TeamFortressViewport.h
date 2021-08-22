@@ -489,7 +489,7 @@ public:
 };
 
 //==============================================================================
-//TODO: rename to CTFViewport
+//NOTE/ called CTFViewport in Op4
 class TeamFortressViewport : public Panel
 {
 private:
