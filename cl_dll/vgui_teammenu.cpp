@@ -277,7 +277,7 @@ void CTeamMenuPanel::Update()
 	}
 	
 	// If the player is already in a team, make the cancel button visible
-	if ( g_iTeamNumber )
+	if (gViewPort->m_iCTFTeamNumber)
 	{
 		m_pCancelButton->setPos( TEAMMENU_TOPLEFT_BUTTON_X, iYPos );
 		iYPos += TEAMMENU_BUTTON_SIZE_Y + TEAMMENU_BUTTON_SPACER_Y;

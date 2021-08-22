@@ -987,10 +987,12 @@ CCommandMenu *TeamFortressViewport::CreateDisguiseSubmenu( CommandButton *pButto
 	m_iNumMenus++;
 
 	// create the class choice buttons
-#ifdef _TFC
-	for ( int i = PC_SCOUT; i <= PC_ENGINEER; i++ )
+//#ifdef _TFC
+	for ( int i = PC_FIRSTCLASS; i <= PC_LASTCLASS; i++ )
 	{
-		CommandButton *pDisguiseButton = new CommandButton( CHudTextMessage::BufferedLocaliseTextString( sLocalisedClasses[i] ), 0, BUTTON_SIZE_Y, CMENU_SIZE_X, BUTTON_SIZE_Y );
+		CommandButton *pDisguiseButton = new CommandButton(
+			CHudTextMessage::BufferedLocaliseTextString(sLocalisedClasses[m_iCTFTeamNumber - 1][i]),
+			0, BUTTON_SIZE_Y, CMENU_SIZE_X, BUTTON_SIZE_Y);
 		
 		char sz[256]; 
 		sprintf(sz, "%s %d", commandText, i );
@@ -998,7 +1000,7 @@ CCommandMenu *TeamFortressViewport::CreateDisguiseSubmenu( CommandButton *pButto
 		
 		pMenu->AddButton( pDisguiseButton );
 	}
-#endif
+//#endif
 
 	return pMenu;
 }
@@ -1056,20 +1058,20 @@ CommandButton *TeamFortressViewport::CreateCustomButton( char *pButtonText, char
 		m_pCommandMenus[m_iNumMenus] = pMenu;
 		m_iNumMenus++;
 
-#ifdef _TFC
-		for (int i = PC_SCOUT; i <= PC_RANDOM; i++ )
+//#ifdef _TFC
+		for (int i = PC_FIRSTCLASS; i <= PC_LASTCLASS; i++ )
 		{
 			char sz[256]; 
 
 			// ChangeClass buttons
-			CHudTextMessage::LocaliseTextString( sLocalisedClasses[i], sz, 256 );
+			CHudTextMessage::LocaliseTextString( sLocalisedClasses[m_iCTFTeamNumber - 1][i], sz, 256 );
 			ClassButton *pClassButton = new ClassButton( i, sz, 0, BUTTON_SIZE_Y, CMENU_SIZE_X, BUTTON_SIZE_Y, false);
 
-			sprintf(sz, "%s", sTFClassSelection[i]);
+			sprintf(sz, "%s", sCTFClassSelection[m_iCTFTeamNumber - 1][i]);
 			pClassButton->addActionSignal(new CMenuHandler_StringCommandClassSelect(sz));
 			pMenu->AddButton( pClassButton );
 		}
-#endif
+//#endif
 	}
 #ifdef _TFC
 	// Map Briefing
