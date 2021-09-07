@@ -51,7 +51,6 @@ target_sources(hl PRIVATE
 	genericmonster.cpp
 	ggrenade.cpp
 	globals.cpp
-	#glock.cpp # Do not include; already included as hl_wpn_glock.cpp
 	gman.cpp
 	handgrenade.cpp
 	hassassin.cpp
