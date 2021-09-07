@@ -26,13 +26,17 @@ endif()
 # Find dependencies
 find_package(Threads REQUIRED)
 
+# Copy libraries provided by the game to the build directory so relative link paths work at build time (matches the SDK's way of doing things)
+configure_file(linux/release/vgui.so vgui.so COPYONLY)
+configure_file(linux/libSDL2-2.0.so.0 libSDL2-2.0.so.0 COPYONLY)
+
 # Set up vgui library
 add_library(vgui SHARED IMPORTED)
 
 if (WIN32)
 	set_target_properties(vgui PROPERTIES IMPORTED_IMPLIB "${CMAKE_CURRENT_SOURCE_DIR}/utils/vgui/lib/win32_vc6/vgui.lib")
 else()
-	set_target_properties(vgui PROPERTIES IMPORTED_LOCATION "${HALFLIFE_DIRECTORY}/vgui.so")
+	set_target_properties(vgui PROPERTIES IMPORTED_LOCATION "vgui.so")
 endif()
 
 target_include_directories(vgui INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/utils/vgui/include)
@@ -43,7 +47,7 @@ add_library(SDL2 SHARED IMPORTED)
 if (WIN32)
 	set_target_properties(SDL2 PROPERTIES IMPORTED_IMPLIB "${CMAKE_CURRENT_SOURCE_DIR}/lib/public/SDL2.lib")
 else()
-	set_target_properties(SDL2 PROPERTIES IMPORTED_LOCATION "${HALFLIFE_DIRECTORY}/libSDL2.so")
+	set_target_properties(SDL2 PROPERTIES IMPORTED_LOCATION "libSDL2-2.0.so.0")
 endif()
 
 # Sets properties common to all projects
