@@ -65,7 +65,6 @@ target_sources(hl PRIVATE
 	houndeye.cpp
 	h_ai.cpp
 	h_battery.cpp
-	h_cine.cpp
 	h_cycler.cpp
 	h_export.cpp
 	ichthyosaur.cpp
