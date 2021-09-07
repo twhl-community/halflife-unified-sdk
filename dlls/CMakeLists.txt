@@ -125,7 +125,6 @@ target_sources(hl PRIVATE
 	talkmonster.h
 	teamplay_gamerules.cpp
 	teamplay_gamerules.h
-	tempmonster.cpp
 	tentacle.cpp
 	trains.h
 	triggers.cpp
