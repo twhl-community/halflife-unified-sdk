@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*
+*	This product contains software technology licensed from Id
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
 *	All Rights Reserved.
 *
 *   This source code contains proprietary and confidential information of
@@ -47,34 +47,34 @@ class CCineMonster : public CBaseMonster
 {
 public:
 	void Spawn() override;
-	void KeyValue( KeyValueData *pkvd ) override;
-	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value ) override;
-	void Blocked( CBaseEntity *pOther ) override;
-	void Touch( CBaseEntity *pOther ) override;
-	int	 ObjectCaps() override { return (CBaseMonster :: ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
+	void KeyValue(KeyValueData* pkvd) override;
+	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+	void Blocked(CBaseEntity* pOther) override;
+	void Touch(CBaseEntity* pOther) override;
+	int	 ObjectCaps() override { return (CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
 	void Activate() override;
 
-	int		Save( CSave &save ) override;
-	int		Restore( CRestore &restore ) override;
-	
+	int		Save(CSave& save) override;
+	int		Restore(CRestore& restore) override;
+
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	// void EXPORT CineSpawnThink();
 	void EXPORT CineThink();
 	void Pain();
 	void Die();
-	void DelayStart( int state );
+	void DelayStart(int state);
 	BOOL FindEntity();
 	virtual void PossessEntity();
 
-	void ReleaseEntity( CBaseMonster *pEntity );
+	void ReleaseEntity(CBaseMonster* pEntity);
 	void CancelScript();
-	virtual BOOL StartSequence( CBaseMonster *pTarget, int iszSeq, BOOL completeOnEmpty );
-	virtual BOOL FCanOverrideState ();
-	void SequenceDone ( CBaseMonster *pMonster );
-	virtual void FixScriptMonsterSchedule( CBaseMonster *pMonster );
+	virtual BOOL StartSequence(CBaseMonster* pTarget, int iszSeq, BOOL completeOnEmpty);
+	virtual BOOL FCanOverrideState();
+	void SequenceDone(CBaseMonster* pMonster);
+	virtual void FixScriptMonsterSchedule(CBaseMonster* pMonster);
 	BOOL	CanInterrupt();
-	void	AllowInterrupt( BOOL fAllow );
+	void	AllowInterrupt(BOOL fAllow);
 	int		IgnoreConditions() override;
 
 	int	m_iszIdle;		// string index for idle animation
@@ -91,16 +91,16 @@ public:
 	int	m_saved_movetype;
 	int	m_saved_solid;
 	int m_saved_effects;
-//	Vector m_vecOrigOrigin;
+	//	Vector m_vecOrigOrigin;
 	BOOL m_interruptable;
 };
 
 class CCineAI : public CCineMonster
 {
-	BOOL StartSequence( CBaseMonster *pTarget, int iszSeq, BOOL completeOnEmpty ) override;
+	BOOL StartSequence(CBaseMonster* pTarget, int iszSeq, BOOL completeOnEmpty) override;
 	void PossessEntity() override;
-	BOOL FCanOverrideState () override;
-	void FixScriptMonsterSchedule( CBaseMonster *pMonster ) override;
+	BOOL FCanOverrideState() override;
+	void FixScriptMonsterSchedule(CBaseMonster* pMonster) override;
 };
 
 

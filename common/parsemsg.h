@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1999, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*
+*	This product contains software technology licensed from Id
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -23,7 +23,7 @@
 
 #define ASSERT( x )
 //--------------------------------------------------------------------------------------------------------------
-void BEGIN_READ( void *buf, int size );
+void BEGIN_READ(void* buf, int size);
 int READ_CHAR();
 int READ_BYTE();
 int READ_SHORT();
@@ -41,18 +41,18 @@ class BufferWriter
 {
 public:
 	BufferWriter();
-	BufferWriter( unsigned char *buffer, int bufferLen );
-	void Init( unsigned char *buffer, int bufferLen );
+	BufferWriter(unsigned char* buffer, int bufferLen);
+	void Init(unsigned char* buffer, int bufferLen);
 
-	void WriteByte( unsigned char data );
-	void WriteLong( int data );
-	void WriteString( const char *str );
+	void WriteByte(unsigned char data);
+	void WriteLong(int data);
+	void WriteString(const char* str);
 
 	bool HasOverflowed();
 	int GetSpaceUsed();
 
 protected:
-	unsigned char *m_buffer;
+	unsigned char* m_buffer;
 	int m_remaining;
 	bool m_overflow;
 	int m_overallLength;

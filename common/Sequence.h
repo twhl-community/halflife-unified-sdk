@@ -25,8 +25,8 @@ typedef struct client_textmessage_s
 	float	fadeout;
 	float	holdtime;
 	float	fxtime;
-	const char *pName;
-	const char *pMessage;
+	const char* pName;
+	const char* pMessage;
 } client_textmessage_t;
 
 
@@ -38,19 +38,19 @@ typedef struct client_textmessage_s
 //---------------------------------------------------------------------------
 enum sequenceModifierBits
 {
-	SEQUENCE_MODIFIER_EFFECT_BIT		= (1 << 1),
-	SEQUENCE_MODIFIER_POSITION_BIT		= (1 << 2),
-	SEQUENCE_MODIFIER_COLOR_BIT			= (1 << 3),
-	SEQUENCE_MODIFIER_COLOR2_BIT		= (1 << 4),
-	SEQUENCE_MODIFIER_FADEIN_BIT		= (1 << 5),
-	SEQUENCE_MODIFIER_FADEOUT_BIT		= (1 << 6),
-	SEQUENCE_MODIFIER_HOLDTIME_BIT		= (1 << 7),
-	SEQUENCE_MODIFIER_FXTIME_BIT		= (1 << 8),
-	SEQUENCE_MODIFIER_SPEAKER_BIT		= (1 << 9),
-	SEQUENCE_MODIFIER_LISTENER_BIT		= (1 << 10),
-	SEQUENCE_MODIFIER_TEXTCHANNEL_BIT	= (1 << 11),
+	SEQUENCE_MODIFIER_EFFECT_BIT = (1 << 1),
+	SEQUENCE_MODIFIER_POSITION_BIT = (1 << 2),
+	SEQUENCE_MODIFIER_COLOR_BIT = (1 << 3),
+	SEQUENCE_MODIFIER_COLOR2_BIT = (1 << 4),
+	SEQUENCE_MODIFIER_FADEIN_BIT = (1 << 5),
+	SEQUENCE_MODIFIER_FADEOUT_BIT = (1 << 6),
+	SEQUENCE_MODIFIER_HOLDTIME_BIT = (1 << 7),
+	SEQUENCE_MODIFIER_FXTIME_BIT = (1 << 8),
+	SEQUENCE_MODIFIER_SPEAKER_BIT = (1 << 9),
+	SEQUENCE_MODIFIER_LISTENER_BIT = (1 << 10),
+	SEQUENCE_MODIFIER_TEXTCHANNEL_BIT = (1 << 11),
 };
-typedef enum sequenceModifierBits sequenceModifierBits_e ;
+typedef enum sequenceModifierBits sequenceModifierBits_e;
 
 
 //---------------------------------------------------------------------------
@@ -111,7 +111,7 @@ typedef struct sequenceCommandMapping_ sequenceCommandMapping_s;
 struct sequenceCommandMapping_
 {
 	sequenceCommandEnum_e	commandEnum;
-	const char*				commandName;
+	const char* commandName;
 	sequenceCommandType_e	commandType;
 };
 
@@ -127,17 +127,17 @@ struct sequenceCommandLine_
 {
 	int						commandType;		// Specifies the type of command
 	client_textmessage_t	clientMessage;		// Text HUD message struct
-	char*					speakerName;		// Targetname of speaking entity
-	char*					listenerName;		// Targetname of entity being spoken to
-	char*					soundFileName;		// Name of sound file to play
-	char*					sentenceName;		// Name of sentences.txt to play
-	char*					fireTargetNames;	// List of targetnames to fire
-	char*					killTargetNames;	// List of targetnames to remove
+	char* speakerName;		// Targetname of speaking entity
+	char* listenerName;		// Targetname of entity being spoken to
+	char* soundFileName;		// Name of sound file to play
+	char* sentenceName;		// Name of sentences.txt to play
+	char* fireTargetNames;	// List of targetnames to fire
+	char* killTargetNames;	// List of targetnames to remove
 	float					delay;				// Seconds 'till next command
 	int						repeatCount;		// If nonzero, reset execution pointer to top of block (N times, -1 = infinite)
 	int						textChannel;		// Display channel on which text message is sent
 	int						modifierBitField;	// Bit field to specify what clientmessage fields are valid
-	sequenceCommandLine_s*	nextCommandLine;	// Next command (linked list)
+	sequenceCommandLine_s* nextCommandLine;	// Next command (linked list)
 };
 
 
@@ -150,10 +150,10 @@ struct sequenceCommandLine_
 typedef struct sequenceEntry_ sequenceEntry_s;
 struct sequenceEntry_
 {
-	char*					fileName;		// Name of sequence file without .SEQ extension
-	char*					entryName;		// Name of entry label in file
-	sequenceCommandLine_s*	firstCommand;	// Linked list of commands in entry
-	sequenceEntry_s*		nextEntry;		// Next loaded entry
+	char* fileName;		// Name of sequence file without .SEQ extension
+	char* entryName;		// Name of entry label in file
+	sequenceCommandLine_s* firstCommand;	// Linked list of commands in entry
+	sequenceEntry_s* nextEntry;		// Next loaded entry
 	qboolean				isGlobal;		// Is entry retained over level transitions?
 };
 
@@ -168,8 +168,8 @@ struct sequenceEntry_
 typedef struct sentenceEntry_ sentenceEntry_s;
 struct sentenceEntry_
 {
-	char*					data;			// sentence data (ie "We have hostiles" )
-	sentenceEntry_s*		nextEntry;		// Next loaded entry
+	char* data;			// sentence data (ie "We have hostiles" )
+	sentenceEntry_s* nextEntry;		// Next loaded entry
 	qboolean				isGlobal;		// Is entry retained over level transitions?
 	unsigned int			index;			// this entry's position in the file.
 };
@@ -184,18 +184,18 @@ struct sentenceEntry_
 typedef struct sentenceGroupEntry_ sentenceGroupEntry_s;
 struct sentenceGroupEntry_
 {
-	char*					groupName;		// name of the group (ie CT_ALERT )
+	char* groupName;		// name of the group (ie CT_ALERT )
 	unsigned int			numSentences;	// number of sentences in group
-	sentenceEntry_s*		firstSentence;	// head of linked list of sentences in group
-	sentenceGroupEntry_s*	nextEntry;		// next loaded group
+	sentenceEntry_s* firstSentence;	// head of linked list of sentences in group
+	sentenceGroupEntry_s* nextEntry;		// next loaded group
 };
 
 //---------------------------------------------------------------------------
 // Function declarations
 //---------------------------------------------------------------------------
-sequenceEntry_s* SequenceGet( const char* fileName, const char* entryName );
-void Sequence_ParseFile( const char* fileName, qboolean isGlobal );
-void Sequence_OnLevelLoad( const char* mapName );
-sentenceEntry_s* SequencePickSentence( const char *groupName, int pickMethod, int *picked );
+sequenceEntry_s* SequenceGet(const char* fileName, const char* entryName);
+void Sequence_ParseFile(const char* fileName, qboolean isGlobal);
+void Sequence_OnLevelLoad(const char* mapName);
+sentenceEntry_s* SequencePickSentence(const char* groupName, int pickMethod, int* picked);
 
 #endif // _INCLUDE_SEQUENCE_H_

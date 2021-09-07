@@ -21,7 +21,7 @@ struct movevars_s
 	float	accelerate;        // Acceleration factor
 	float	airaccelerate;     // Same for when in open air
 	float	wateraccelerate;   // Same for when in water
-	float	friction;          
+	float	friction;
 	float   edgefriction;	   // Extra friction near dropofs 
 	float	waterfriction;     // Less in water
 	float	entgravity;        // 1.0

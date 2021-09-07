@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*
+*	This product contains software technology licensed from Id
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -88,11 +88,11 @@ enum sbar_data
 class CBasePlayer : public CBaseMonster
 {
 public:
-	
+
 	// Spectator camera
-	void	Observer_FindNextPlayer( bool bReverse );
+	void	Observer_FindNextPlayer(bool bReverse);
 	void	Observer_HandleButtons();
-	void	Observer_SetMode( int iMode );
+	void	Observer_SetMode(int iMode);
 	void	Observer_CheckTarget();
 	void	Observer_CheckProperties();
 	EHANDLE	m_hObserverTarget;
@@ -109,20 +109,20 @@ public:
 	int					m_iExtraSoundTypes;// additional classification for this weapon's sound
 	int					m_iWeaponFlash;// brightness of the weapon flash
 	float				m_flStopExtraSoundTime;
-	
+
 	float				m_flFlashLightTime;	// Time until next battery draw/Recharge
 	int					m_iFlashBattery;		// Flashlight Battery Draw
 
 	int					m_afButtonLast;
 	int					m_afButtonPressed;
 	int					m_afButtonReleased;
-	
-	edict_t			   *m_pentSndLast;			// last sound entity to modify player room type
+
+	edict_t* m_pentSndLast;			// last sound entity to modify player room type
 	float				m_flSndRoomtype;		// last roomtype set by sound entity
 	float				m_flSndRange;			// dist from player to sound entity
 
 	float				m_flFallVelocity;
-	
+
 	int					m_rgItems[MAX_ITEMS];
 	int					m_fKnownItem;		// True when a new item needs to be added
 	int					m_fNewAmmo;			// True when a new item has been added
@@ -180,10 +180,10 @@ public:
 	int			m_iFOV;			// field of view
 	int			m_iClientFOV;	// client's known FOV
 	// usable player items 
-	CBasePlayerItem	*m_rgpPlayerItems[MAX_ITEM_TYPES];
-	CBasePlayerItem *m_pActiveItem;
-	CBasePlayerItem *m_pClientActiveItem;  // client version of the active item
-	CBasePlayerItem *m_pLastItem;
+	CBasePlayerItem* m_rgpPlayerItems[MAX_ITEM_TYPES];
+	CBasePlayerItem* m_pActiveItem;
+	CBasePlayerItem* m_pClientActiveItem;  // client version of the active item
+	CBasePlayerItem* m_pLastItem;
 	// shared ammo slots
 	int	m_rgAmmo[MAX_AMMO_SLOTS];
 	int	m_rgAmmoLast[MAX_AMMO_SLOTS];
@@ -203,17 +203,17 @@ public:
 	void Spawn() override;
 	void Pain();
 
-//	void Think() override;
+	//	void Think() override;
 	virtual void Jump();
 	virtual void Duck();
 	virtual void PreThink();
 	virtual void PostThink();
 	Vector GetGunPosition() override;
-	int TakeHealth( float flHealth, int bitsDamageType ) override;
-	void TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType) override;
-	int TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
-	void	Killed( entvars_t *pevAttacker, int iGib ) override;
-	Vector BodyTarget( const Vector &posSrc ) override { return Center( ) + pev->view_ofs * RANDOM_FLOAT( 0.5, 1.1 ); }		// position to shoot at
+	int TakeHealth(float flHealth, int bitsDamageType) override;
+	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
+	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	void	Killed(entvars_t* pevAttacker, int iGib) override;
+	Vector BodyTarget(const Vector& posSrc) override { return Center() + pev->view_ofs * RANDOM_FLOAT(0.5, 1.1); }		// position to shoot at
 	void StartSneaking() override { m_tSneaking = gpGlobals->time - 1; }
 	void StopSneaking() override { m_tSneaking = gpGlobals->time + 30; }
 	BOOL IsSneaking() override { return m_tSneaking <= gpGlobals->time; }
@@ -223,61 +223,61 @@ public:
 
 	BOOL IsNetClient() override { return TRUE; }		// Bots should return FALSE for this, they can't receive NET messages
 															// Spectators should return TRUE for this
-	const char *TeamID() override;
+	const char* TeamID() override;
 
-	int		Save( CSave &save ) override;
-	int		Restore( CRestore &restore ) override;
+	int		Save(CSave& save) override;
+	int		Restore(CRestore& restore) override;
 	void RenewItems();
 	void PackDeadPlayerItems();
-	void RemoveAllItems( BOOL removeSuit );
-	BOOL SwitchWeapon( CBasePlayerItem *pWeapon );
+	void RemoveAllItems(BOOL removeSuit);
+	BOOL SwitchWeapon(CBasePlayerItem* pWeapon);
 
 	// JOHN:  sends custom messages if player HUD data has changed  (eg health, ammo)
 	virtual void UpdateClientData();
-	
+
 	static	TYPEDESCRIPTION m_playerSaveData[];
 
 	// Player is moved across the transition by other means
-	int		ObjectCaps() override { return CBaseMonster :: ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+	int		ObjectCaps() override { return CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 	void	Precache() override;
 	BOOL			IsOnLadder();
 	BOOL			FlashlightIsOn();
 	void			FlashlightTurnOn();
 	void			FlashlightTurnOff();
-	
-	void UpdatePlayerSound ();
-	void DeathSound () override;
 
-	int Classify () override;
-	void SetAnimation( PLAYER_ANIM playerAnim );
-	void SetWeaponAnimType( const char *szExtention );
+	void UpdatePlayerSound();
+	void DeathSound() override;
+
+	int Classify() override;
+	void SetAnimation(PLAYER_ANIM playerAnim);
+	void SetWeaponAnimType(const char* szExtention);
 	char m_szAnimExtention[32];
 
 	// custom player functions
 	virtual void ImpulseCommands();
-	void CheatImpulseCommands( int iImpulse );
+	void CheatImpulseCommands(int iImpulse);
 
 	void StartDeathCam();
-	void StartObserver( Vector vecPosition, Vector vecViewAngle );
+	void StartObserver(Vector vecPosition, Vector vecViewAngle);
 
-	void AddPoints( int score, BOOL bAllowNegativeScore ) override;
-	void AddPointsToTeam( int score, BOOL bAllowNegativeScore ) override;
-	BOOL AddPlayerItem( CBasePlayerItem *pItem ) override;
-	BOOL RemovePlayerItem( CBasePlayerItem *pItem ) override;
-	void DropPlayerItem ( char *pszItemName );
-	BOOL HasPlayerItem( CBasePlayerItem *pCheckItem );
-	BOOL HasNamedPlayerItem( const char *pszItemName );
+	void AddPoints(int score, BOOL bAllowNegativeScore) override;
+	void AddPointsToTeam(int score, BOOL bAllowNegativeScore) override;
+	BOOL AddPlayerItem(CBasePlayerItem* pItem) override;
+	BOOL RemovePlayerItem(CBasePlayerItem* pItem) override;
+	void DropPlayerItem(char* pszItemName);
+	BOOL HasPlayerItem(CBasePlayerItem* pCheckItem);
+	BOOL HasNamedPlayerItem(const char* pszItemName);
 	BOOL HasWeapons();// do I have ANY weapons?
-	void SelectPrevItem( int iItem );
-	void SelectNextItem( int iItem );
+	void SelectPrevItem(int iItem);
+	void SelectNextItem(int iItem);
 	void SelectLastItem();
-	void SelectItem(const char *pstr);
+	void SelectItem(const char* pstr);
 	void ItemPreFrame();
 	void ItemPostFrame();
-	void GiveNamedItem( const char *szName );
+	void GiveNamedItem(const char* szName);
 	void EnableControl(BOOL fControl);
 
-	int  GiveAmmo( int iAmount, const char *szName, int iMax ) override;
+	int  GiveAmmo(int iAmount, const char* szName, int iMax) override;
 	void SendAmmoUpdate();
 
 	void WaterMove();
@@ -285,26 +285,26 @@ public:
 	void PlayerUse();
 
 	void CheckSuitUpdate();
-	void SetSuitUpdate(const char *name, int fgroup, int iNoRepeat);
+	void SetSuitUpdate(const char* name, int fgroup, int iNoRepeat);
 	void UpdateGeigerCounter();
 	void CheckTimeBasedDamage();
 
-	BOOL FBecomeProne () override;
-	void BarnacleVictimBitten ( entvars_t *pevBarnacle ) override;
-	void BarnacleVictimReleased () override;
-	static int GetAmmoIndex(const char *psz);
-	int AmmoInventory( int iAmmoIndex );
+	BOOL FBecomeProne() override;
+	void BarnacleVictimBitten(entvars_t* pevBarnacle) override;
+	void BarnacleVictimReleased() override;
+	static int GetAmmoIndex(const char* psz);
+	int AmmoInventory(int iAmmoIndex);
 	int Illumination() override;
 
 	void ResetAutoaim();
-	Vector GetAutoaimVector( float flDelta  );
-	Vector AutoaimDeflection( Vector &vecSrc, float flDist, float flDelta  );
+	Vector GetAutoaimVector(float flDelta);
+	Vector AutoaimDeflection(Vector& vecSrc, float flDist, float flDelta);
 
 	void ForceClientDllUpdate();  // Forces all client .dll specific data to be resent to client.
 
-	void DeathMessage( entvars_t *pevKiller );
+	void DeathMessage(entvars_t* pevKiller);
 
-	void SetCustomDecalFrames( int nFrames );
+	void SetCustomDecalFrames(int nFrames);
 	int GetCustomDecalFrames();
 
 	void TabulateAmmo();
@@ -313,18 +313,18 @@ public:
 	float m_flAmmoStartCharge;
 	float m_flPlayAftershock;
 	float m_flNextAmmoBurn;// while charging, when to absorb another unit of player's ammo?
-	
+
 	//Player ID
 	void InitStatusBar();
 	void UpdateStatusBar();
-	int m_izSBarState[ SBAR_END ];
+	int m_izSBarState[SBAR_END];
 	float m_flNextSBarUpdateTime;
 	float m_flStatusBarDisappearDelay;
-	char m_SbarString0[ SBAR_STRING_SIZE ];
-	char m_SbarString1[ SBAR_STRING_SIZE ];
-	
+	char m_SbarString0[SBAR_STRING_SIZE];
+	char m_SbarString1[SBAR_STRING_SIZE];
+
 	float m_flNextChatTime;
-	
+
 	void SetPrefsFromUserinfo(char* infobuffer);
 
 	int m_iAutoWepSwitch;

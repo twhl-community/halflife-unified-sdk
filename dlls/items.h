@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*
+*	This product contains software technology licensed from Id
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -20,10 +20,10 @@ class CItem : public CBaseEntity
 {
 public:
 	void	Spawn() override;
-	CBaseEntity*	Respawn() override;
-	void	EXPORT ItemTouch( CBaseEntity *pOther );
+	CBaseEntity* Respawn() override;
+	void	EXPORT ItemTouch(CBaseEntity* pOther);
 	void	EXPORT Materialize();
-	virtual BOOL MyTouch( CBasePlayer *pPlayer ) { return FALSE; }
+	virtual BOOL MyTouch(CBasePlayer* pPlayer) { return FALSE; }
 };
 
 #endif // ITEMS_H

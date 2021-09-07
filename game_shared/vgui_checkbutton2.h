@@ -27,7 +27,7 @@ class CCheckButton2;
 class ICheckButton2Handler
 {
 public:
-	virtual void	StateChanged(CCheckButton2 *pButton) = 0;
+	virtual void	StateChanged(CCheckButton2* pButton) = 0;
 };
 
 
@@ -39,35 +39,35 @@ class CCheckButton2 : public Panel, public CDefaultInputSignal
 {
 public:
 
-				CCheckButton2();
-				~CCheckButton2();
-	
+	CCheckButton2();
+	~CCheckButton2();
+
 	// Initialize the button with these.
-	void		SetImages(char const *pChecked, char const *pUnchecked);
-	void		SetImages(Image *pChecked, Image *pUnchecked);		// If you use this, the button will never delete the images.
+	void		SetImages(char const* pChecked, char const* pUnchecked);
+	void		SetImages(Image* pChecked, Image* pUnchecked);		// If you use this, the button will never delete the images.
 	void		DeleteImages();
 
 	// The checkbox can be to the left or the right of the text (default is left).
 	void		SetCheckboxLeft(bool bLeftAlign);
 	bool		GetCheckboxLeft();
-	
+
 	// Set the label text.
-	void		SetText(char const *pText, ...);
+	void		SetText(char const* pText, ...);
 	void		SetTextColor(int r, int g, int b, int a);
 
 	// You can register for change notification here.
-	void		SetHandler(ICheckButton2Handler *pHandler);
-	
+	void		SetHandler(ICheckButton2Handler* pHandler);
+
 	// Get/set the check state.
 	bool		IsChecked();
 	void		SetChecked(bool bChecked);
 
 
 
-// Panel overrides.
+	// Panel overrides.
 public:
 
-	virtual void	internalMousePressed(MouseCode code);	
+	virtual void	internalMousePressed(MouseCode code);
 
 
 protected:
@@ -75,20 +75,20 @@ protected:
 	void			SetupControls();
 
 
-// InputSignal overrides.
+	// InputSignal overrides.
 protected:
-	virtual void mousePressed(MouseCode code,Panel* panel);
+	virtual void mousePressed(MouseCode code, Panel* panel);
 
 
 public:
-	ICheckButton2Handler	*m_pHandler;
+	ICheckButton2Handler* m_pHandler;
 
 	bool		m_bCheckboxLeft;
 	Label		m_Label;
 	ImagePanel	m_CheckboxPanel;
-	
-	Image		*m_pChecked;
-	Image		*m_pUnchecked;
+
+	Image* m_pChecked;
+	Image* m_pUnchecked;
 	bool		m_bOwnImages;
 
 	bool		m_bChecked;

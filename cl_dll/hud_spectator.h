@@ -24,8 +24,8 @@
 #define OVERVIEW_TILE_SIZE		128		// don't change this
 #define OVERVIEW_MAX_LAYERS		1
 
-extern void VectorAngles( const float *forward, float *angles );
-void NormalizeAngles( float* angles );
+extern void VectorAngles(const float* forward, float* angles);
+void NormalizeAngles(float* angles);
 
 //-----------------------------------------------------------------------------
 // Purpose: Handles the drawing of the spectator stuff (camera & top-down map and all the things on it )
@@ -39,7 +39,7 @@ typedef struct overviewInfo_s {
 	float		layersHeights[OVERVIEW_MAX_LAYERS];
 	char		layersImages[OVERVIEW_MAX_LAYERS][255];
 	qboolean	rotated;	// are map images rotated (90 degrees) ?
-	
+
 	int			insetWindowX;
 	int			insetWindowY;
 	int			insetWindowHeight;
@@ -49,11 +49,11 @@ typedef struct overviewInfo_s {
 typedef struct overviewEntity_s {
 
 	HSPRITE					hSprite;
-	struct cl_entity_s *	entity;
+	struct cl_entity_s* entity;
 	double					killTime;
 } overviewEntity_t;
 
-typedef struct cameraWayPoint_s 
+typedef struct cameraWayPoint_s
 {
 	float	time;
 	Vector	position;
@@ -72,34 +72,34 @@ public:
 	int  ToggleInset(bool allowOff);
 	void CheckSettings();
 	void InitHUDData() override;
-	bool AddOverviewEntityToList( HSPRITE sprite, cl_entity_t * ent, double killTime);
+	bool AddOverviewEntityToList(HSPRITE sprite, cl_entity_t* ent, double killTime);
 	void DeathMessage(int victim);
-	bool AddOverviewEntity( int type, struct cl_entity_s *ent, const char *modelname );
+	bool AddOverviewEntity(int type, struct cl_entity_s* ent, const char* modelname);
 	void CheckOverviewEntities();
 	void DrawOverview();
 	void DrawOverviewEntities();
-	void GetMapPosition( float * returnvec );
+	void GetMapPosition(float* returnvec);
 	void DrawOverviewLayer();
 	void LoadMapSprites();
 	bool ParseOverviewFile();
-	bool IsActivePlayer(cl_entity_t * ent);
+	bool IsActivePlayer(cl_entity_t* ent);
 	void SetModes(int iMainMode, int iInsetMode);
 	void HandleButtonsDown(int ButtonPressed);
 	void HandleButtonsUp(int ButtonPressed);
-	void FindNextPlayer( bool bReverse );
-	void FindPlayer(const char *name);
-	void DirectorMessage( int iSize, void *pbuf );
+	void FindNextPlayer(bool bReverse);
+	void FindPlayer(const char* name);
+	void DirectorMessage(int iSize, void* pbuf);
 	void SetSpectatorStartPosition();
 	int Init() override;
 	int VidInit() override;
 
 	int Draw(float flTime) override;
 
-	void	AddWaypoint( float time, Vector pos, Vector angle, float fov, int flags );
+	void	AddWaypoint(float time, Vector pos, Vector angle, float fov, int flags);
 	void	SetCameraView(Vector pos, Vector angle, float fov);
 	float	GetFOV();
-	bool	GetDirectorCamera(Vector&position, Vector&angle);
-	void	SetWayInterpolation(cameraWayPoint_t * prev, cameraWayPoint_t * start, cameraWayPoint_t * end, cameraWayPoint_t * next);
+	bool	GetDirectorCamera(Vector& position, Vector& angle);
+	void	SetWayInterpolation(cameraWayPoint_t* prev, cameraWayPoint_t* start, cameraWayPoint_t* end, cameraWayPoint_t* next);
 
 
 	int m_iDrawCycle;
@@ -110,16 +110,16 @@ public:
 	overviewEntity_t	m_OverviewEntities[MAX_OVERVIEW_ENTITIES];
 	int					m_iObserverFlags;
 	int					m_iSpectatorNumber;
-	
+
 	float				m_mapZoom;		// zoom the user currently uses
 	Vector				m_mapOrigin;	// origin where user rotates around
-	cvar_t *			m_drawnames;
-	cvar_t *			m_drawcone;
-	cvar_t *			m_drawstatus;
-	cvar_t *			m_autoDirector;
-	cvar_t *			m_pip;
+	cvar_t* m_drawnames;
+	cvar_t* m_drawcone;
+	cvar_t* m_drawstatus;
+	cvar_t* m_autoDirector;
+	cvar_t* m_pip;
 	qboolean			m_chatEnabled;
-	
+
 	qboolean			m_IsInterpolating;
 	int					m_ChaseEntity;	// if != 0, follow this entity with viewangles
 	int					m_WayPoint;		// current waypoint 1
@@ -142,7 +142,7 @@ private:
 
 	wrect_t		m_crosshairRect;
 
-	struct model_s * m_MapSprite;	// each layer image is saved in one sprite, where each tile is a sprite frame
+	struct model_s* m_MapSprite;	// each layer image is saved in one sprite, where each tile is a sprite frame
 	float		m_flNextObserverInput;
 	float		m_FOV;
 	float		m_zoomDelta;

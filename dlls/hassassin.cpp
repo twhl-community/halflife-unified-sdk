@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*
+*	This product contains software technology licensed from Id
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
 *	All Rights Reserved.
 *
 *   This source code contains proprietary and confidential information of
@@ -66,26 +66,26 @@ class CHAssassin : public CBaseMonster
 public:
 	void Spawn() override;
 	void Precache() override;
-	void SetYawSpeed () override;
-	int  Classify () override;
-	int  ISoundMask () override;
+	void SetYawSpeed() override;
+	int  Classify() override;
+	int  ISoundMask() override;
 	void Shoot();
-	void HandleAnimEvent( MonsterEvent_t *pEvent ) override;
-	Schedule_t* GetSchedule () override;
-	Schedule_t* GetScheduleOfType ( int Type ) override;
-	BOOL CheckMeleeAttack1 ( float flDot, float flDist ) override;	// jump
+	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
+	Schedule_t* GetSchedule() override;
+	Schedule_t* GetScheduleOfType(int Type) override;
+	BOOL CheckMeleeAttack1(float flDot, float flDist) override;	// jump
 	// BOOL CheckMeleeAttack2 ( float flDot, float flDist ) override;
-	BOOL CheckRangeAttack1 ( float flDot, float flDist ) override;	// shoot
-	BOOL CheckRangeAttack2 ( float flDot, float flDist ) override;	// throw grenade
-	void StartTask ( Task_t *pTask ) override;
+	BOOL CheckRangeAttack1(float flDot, float flDist) override;	// shoot
+	BOOL CheckRangeAttack2(float flDot, float flDist) override;	// throw grenade
+	void StartTask(Task_t* pTask) override;
 	void RunAI() override;
-	void RunTask ( Task_t *pTask ) override;
-	void DeathSound () override;
-	void IdleSound () override;
+	void RunTask(Task_t* pTask) override;
+	void DeathSound() override;
+	void IdleSound() override;
 	CUSTOM_SCHEDULES;
 
-	int	Save( CSave &save ) override;
-	int Restore( CRestore &restore ) override;
+	int	Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
 	float m_flLastShot;
@@ -104,39 +104,39 @@ public:
 
 	int		m_iShell;
 };
-LINK_ENTITY_TO_CLASS( monster_human_assassin, CHAssassin );
+LINK_ENTITY_TO_CLASS(monster_human_assassin, CHAssassin);
 
 
-TYPEDESCRIPTION	CHAssassin::m_SaveData[] = 
+TYPEDESCRIPTION	CHAssassin::m_SaveData[] =
 {
-	DEFINE_FIELD( CHAssassin, m_flLastShot, FIELD_TIME ),
-	DEFINE_FIELD( CHAssassin, m_flDiviation, FIELD_FLOAT ),
+	DEFINE_FIELD(CHAssassin, m_flLastShot, FIELD_TIME),
+	DEFINE_FIELD(CHAssassin, m_flDiviation, FIELD_FLOAT),
 
-	DEFINE_FIELD( CHAssassin, m_flNextJump, FIELD_TIME ),
-	DEFINE_FIELD( CHAssassin, m_vecJumpVelocity, FIELD_VECTOR ),
+	DEFINE_FIELD(CHAssassin, m_flNextJump, FIELD_TIME),
+	DEFINE_FIELD(CHAssassin, m_vecJumpVelocity, FIELD_VECTOR),
 
-	DEFINE_FIELD( CHAssassin, m_flNextGrenadeCheck, FIELD_TIME ),
-	DEFINE_FIELD( CHAssassin, m_vecTossVelocity, FIELD_VECTOR ),
-	DEFINE_FIELD( CHAssassin, m_fThrowGrenade, FIELD_BOOLEAN ),
+	DEFINE_FIELD(CHAssassin, m_flNextGrenadeCheck, FIELD_TIME),
+	DEFINE_FIELD(CHAssassin, m_vecTossVelocity, FIELD_VECTOR),
+	DEFINE_FIELD(CHAssassin, m_fThrowGrenade, FIELD_BOOLEAN),
 
-	DEFINE_FIELD( CHAssassin, m_iTargetRanderamt, FIELD_INTEGER ),
-	DEFINE_FIELD( CHAssassin, m_iFrustration, FIELD_INTEGER ),
+	DEFINE_FIELD(CHAssassin, m_iTargetRanderamt, FIELD_INTEGER),
+	DEFINE_FIELD(CHAssassin, m_iFrustration, FIELD_INTEGER),
 };
 
-IMPLEMENT_SAVERESTORE( CHAssassin, CBaseMonster );
+IMPLEMENT_SAVERESTORE(CHAssassin, CBaseMonster);
 
 
 //=========================================================
 // DieSound
 //=========================================================
-void CHAssassin :: DeathSound ()
+void CHAssassin::DeathSound()
 {
 }
 
 //=========================================================
 // IdleSound
 //=========================================================
-void CHAssassin :: IdleSound ()
+void CHAssassin::IdleSound()
 {
 }
 
@@ -144,12 +144,12 @@ void CHAssassin :: IdleSound ()
 // ISoundMask - returns a bit mask indicating which types
 // of sounds this monster regards. 
 //=========================================================
-int CHAssassin :: ISoundMask () 
+int CHAssassin::ISoundMask()
 {
-	return	bits_SOUND_WORLD	|
-			bits_SOUND_COMBAT	|
-			bits_SOUND_DANGER	|
-			bits_SOUND_PLAYER;
+	return	bits_SOUND_WORLD |
+		bits_SOUND_COMBAT |
+		bits_SOUND_DANGER |
+		bits_SOUND_PLAYER;
 }
 
 
@@ -157,7 +157,7 @@ int CHAssassin :: ISoundMask ()
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	CHAssassin :: Classify ()
+int	CHAssassin::Classify()
 {
 	return	CLASS_HUMAN_MILITARY;
 }
@@ -166,17 +166,17 @@ int	CHAssassin :: Classify ()
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CHAssassin :: SetYawSpeed ()
+void CHAssassin::SetYawSpeed()
 {
 	int ys;
 
-	switch ( m_Activity )
+	switch (m_Activity)
 	{
 	case ACT_TURN_LEFT:
 	case ACT_TURN_RIGHT:
 		ys = 360;
 		break;
-	default:			
+	default:
 		ys = 360;
 		break;
 	}
@@ -188,7 +188,7 @@ void CHAssassin :: SetYawSpeed ()
 //=========================================================
 // Shoot
 //=========================================================
-void CHAssassin :: Shoot ()
+void CHAssassin::Shoot()
 {
 	if (m_hEnemy == NULL)
 	{
@@ -196,7 +196,7 @@ void CHAssassin :: Shoot ()
 	}
 
 	Vector vecShootOrigin = GetGunPosition();
-	Vector vecShootDir = ShootAtEnemy( vecShootOrigin );
+	Vector vecShootDir = ShootAtEnemy(vecShootOrigin);
 
 	if (m_flLastShot + 2 < gpGlobals->time)
 	{
@@ -210,13 +210,13 @@ void CHAssassin :: Shoot ()
 	}
 	m_flLastShot = gpGlobals->time;
 
-	UTIL_MakeVectors ( pev->angles );
+	UTIL_MakeVectors(pev->angles);
 
-	Vector	vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40,90) + gpGlobals->v_up * RANDOM_FLOAT(75,200) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
-	EjectBrass ( pev->origin + gpGlobals->v_up * 32 + gpGlobals->v_forward * 12, vecShellVelocity, pev->angles.y, m_iShell, TE_BOUNCE_SHELL); 
-	FireBullets(1, vecShootOrigin, vecShootDir, Vector( m_flDiviation, m_flDiviation, m_flDiviation ), 2048, BULLET_MONSTER_9MM ); // shoot +-8 degrees
+	Vector	vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40, 90) + gpGlobals->v_up * RANDOM_FLOAT(75, 200) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
+	EjectBrass(pev->origin + gpGlobals->v_up * 32 + gpGlobals->v_forward * 12, vecShellVelocity, pev->angles.y, m_iShell, TE_BOUNCE_SHELL);
+	FireBullets(1, vecShootOrigin, vecShootDir, Vector(m_flDiviation, m_flDiviation, m_flDiviation), 2048, BULLET_MONSTER_9MM); // shoot +-8 degrees
 
-	switch(RANDOM_LONG(0,1))
+	switch (RANDOM_LONG(0, 1))
 	{
 	case 0:
 		EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/pl_gun1.wav", RANDOM_FLOAT(0.6, 0.8), ATTN_NORM);
@@ -228,8 +228,8 @@ void CHAssassin :: Shoot ()
 
 	pev->effects |= EF_MUZZLEFLASH;
 
-	Vector angDir = UTIL_VecToAngles( vecShootDir );
-	SetBlending( 0, angDir.x );
+	Vector angDir = UTIL_VecToAngles(vecShootDir);
+	SetBlending(0, angDir.x);
 
 	m_cAmmoLoaded--;
 }
@@ -241,35 +241,35 @@ void CHAssassin :: Shoot ()
 //
 // Returns number of events handled, 0 if none.
 //=========================================================
-void CHAssassin :: HandleAnimEvent( MonsterEvent_t *pEvent )
+void CHAssassin::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
-	switch( pEvent->event )
+	switch (pEvent->event)
 	{
 	case ASSASSIN_AE_SHOOT1:
-		Shoot( );
+		Shoot();
 		break;
 	case ASSASSIN_AE_TOSS1:
-		{
-			UTIL_MakeVectors( pev->angles );
-			CGrenade::ShootTimed( pev, pev->origin + gpGlobals->v_forward * 34 + Vector (0, 0, 32), m_vecTossVelocity, 2.0 );
+	{
+		UTIL_MakeVectors(pev->angles);
+		CGrenade::ShootTimed(pev, pev->origin + gpGlobals->v_forward * 34 + Vector(0, 0, 32), m_vecTossVelocity, 2.0);
 
-			m_flNextGrenadeCheck = gpGlobals->time + 6;// wait six seconds before even looking again to see if a grenade can be thrown.
-			m_fThrowGrenade = FALSE;
-			// !!!LATER - when in a group, only try to throw grenade if ordered.
-		}
-		break;
+		m_flNextGrenadeCheck = gpGlobals->time + 6;// wait six seconds before even looking again to see if a grenade can be thrown.
+		m_fThrowGrenade = FALSE;
+		// !!!LATER - when in a group, only try to throw grenade if ordered.
+	}
+	break;
 	case ASSASSIN_AE_JUMP:
-		{
-			// ALERT( at_console, "jumping");
-			UTIL_MakeAimVectors( pev->angles );
-			pev->movetype = MOVETYPE_TOSS;
-			pev->flags &= ~FL_ONGROUND;
-			pev->velocity = m_vecJumpVelocity;
-			m_flNextJump = gpGlobals->time + 3.0;
-		}
-		return;
+	{
+		// ALERT( at_console, "jumping");
+		UTIL_MakeAimVectors(pev->angles);
+		pev->movetype = MOVETYPE_TOSS;
+		pev->flags &= ~FL_ONGROUND;
+		pev->velocity = m_vecJumpVelocity;
+		m_flNextJump = gpGlobals->time + 3.0;
+	}
+	return;
 	default:
-		CBaseMonster::HandleAnimEvent( pEvent );
+		CBaseMonster::HandleAnimEvent(pEvent);
 		break;
 	}
 }
@@ -277,28 +277,28 @@ void CHAssassin :: HandleAnimEvent( MonsterEvent_t *pEvent )
 //=========================================================
 // Spawn
 //=========================================================
-void CHAssassin :: Spawn()
+void CHAssassin::Spawn()
 {
-	Precache( );
+	Precache();
 
 	SET_MODEL(ENT(pev), "models/hassassin.mdl");
 	UTIL_SetSize(pev, VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX);
 
-	pev->solid			= SOLID_SLIDEBOX;
-	pev->movetype		= MOVETYPE_STEP;
-	m_bloodColor		= BLOOD_COLOR_RED;
-	pev->effects		= 0;
-	pev->health			= gSkillData.hassassinHealth;
-	m_flFieldOfView		= VIEW_FIELD_WIDE; // indicates the width of this monster's forward view cone ( as a dotproduct result )
-	m_MonsterState		= MONSTERSTATE_NONE;
-	m_afCapability		= bits_CAP_MELEE_ATTACK1 | bits_CAP_DOORS_GROUP;
-	pev->friction		= 1;
+	pev->solid = SOLID_SLIDEBOX;
+	pev->movetype = MOVETYPE_STEP;
+	m_bloodColor = BLOOD_COLOR_RED;
+	pev->effects = 0;
+	pev->health = gSkillData.hassassinHealth;
+	m_flFieldOfView = VIEW_FIELD_WIDE; // indicates the width of this monster's forward view cone ( as a dotproduct result )
+	m_MonsterState = MONSTERSTATE_NONE;
+	m_afCapability = bits_CAP_MELEE_ATTACK1 | bits_CAP_DOORS_GROUP;
+	pev->friction = 1;
 
-	m_HackedGunPos		= Vector( 0, 24, 48 );
+	m_HackedGunPos = Vector(0, 24, 48);
 
-	m_iTargetRanderamt	= 20;
-	pev->renderamt		= 20;
-	pev->rendermode		= kRenderTransTexture;
+	m_iTargetRanderamt = 20;
+	pev->renderamt = 20;
+	pev->rendermode = kRenderTransTexture;
 
 	MonsterInit();
 }
@@ -306,7 +306,7 @@ void CHAssassin :: Spawn()
 //=========================================================
 // Precache - precaches all resources this monster needs
 //=========================================================
-void CHAssassin :: Precache()
+void CHAssassin::Precache()
 {
 	PRECACHE_MODEL("models/hassassin.mdl");
 
@@ -315,9 +315,9 @@ void CHAssassin :: Precache()
 
 	PRECACHE_SOUND("debris/beamstart1.wav");
 
-	m_iShell = PRECACHE_MODEL ("models/shell.mdl");// brass shell
-}	
-	
+	m_iShell = PRECACHE_MODEL("models/shell.mdl");// brass shell
+}
+
 
 
 //=========================================================
@@ -340,15 +340,15 @@ Schedule_t	slAssassinFail[] =
 {
 	{
 		tlAssassinFail,
-		ARRAYSIZE ( tlAssassinFail ),
-		bits_COND_LIGHT_DAMAGE		|
-		bits_COND_HEAVY_DAMAGE		|
-		bits_COND_PROVOKED			|
+		ARRAYSIZE(tlAssassinFail),
+		bits_COND_LIGHT_DAMAGE |
+		bits_COND_HEAVY_DAMAGE |
+		bits_COND_PROVOKED |
 		bits_COND_CAN_RANGE_ATTACK1 |
 		bits_COND_CAN_RANGE_ATTACK2 |
 		bits_COND_CAN_MELEE_ATTACK1 |
 		bits_COND_HEAR_SOUND,
-	
+
 		bits_SOUND_DANGER |
 		bits_SOUND_PLAYER,
 		"AssassinFail"
@@ -371,7 +371,7 @@ Schedule_t slAssassinExposed[] =
 {
 	{
 		tlAssassinExposed,
-		ARRAYSIZE ( tlAssassinExposed ),
+		ARRAYSIZE(tlAssassinExposed),
 		bits_COND_CAN_MELEE_ATTACK1,
 		0,
 		"AssassinExposed",
@@ -397,13 +397,13 @@ Task_t	tlAssassinTakeCoverFromEnemy[] =
 
 Schedule_t	slAssassinTakeCoverFromEnemy[] =
 {
-	{ 
+	{
 		tlAssassinTakeCoverFromEnemy,
-		ARRAYSIZE ( tlAssassinTakeCoverFromEnemy ), 
+		ARRAYSIZE(tlAssassinTakeCoverFromEnemy),
 		bits_COND_NEW_ENEMY |
-		bits_COND_CAN_MELEE_ATTACK1		|
+		bits_COND_CAN_MELEE_ATTACK1 |
 		bits_COND_HEAR_SOUND,
-		
+
 		bits_SOUND_DANGER,
 		"AssassinTakeCoverFromEnemy"
 	},
@@ -430,13 +430,13 @@ Task_t	tlAssassinTakeCoverFromEnemy2[] =
 
 Schedule_t	slAssassinTakeCoverFromEnemy2[] =
 {
-	{ 
+	{
 		tlAssassinTakeCoverFromEnemy2,
-		ARRAYSIZE ( tlAssassinTakeCoverFromEnemy2 ), 
+		ARRAYSIZE(tlAssassinTakeCoverFromEnemy2),
 		bits_COND_NEW_ENEMY |
-		bits_COND_CAN_MELEE_ATTACK2		|
+		bits_COND_CAN_MELEE_ATTACK2 |
 		bits_COND_HEAR_SOUND,
-		
+
 		bits_SOUND_DANGER,
 		"AssassinTakeCoverFromEnemy2"
 	},
@@ -459,9 +459,9 @@ Task_t	tlAssassinTakeCoverFromBestSound[] =
 
 Schedule_t	slAssassinTakeCoverFromBestSound[] =
 {
-	{ 
+	{
 		tlAssassinTakeCoverFromBestSound,
-		ARRAYSIZE ( tlAssassinTakeCoverFromBestSound ), 
+		ARRAYSIZE(tlAssassinTakeCoverFromBestSound),
 		bits_COND_NEW_ENEMY,
 		0,
 		"AssassinTakeCoverFromBestSound"
@@ -485,17 +485,17 @@ Task_t	tlAssassinHide[] =
 
 Schedule_t	slAssassinHide[] =
 {
-	{ 
+	{
 		tlAssassinHide,
-		ARRAYSIZE ( tlAssassinHide ), 
-		bits_COND_NEW_ENEMY				|
-		bits_COND_SEE_ENEMY				|
-		bits_COND_SEE_FEAR				|
-		bits_COND_LIGHT_DAMAGE			|
-		bits_COND_HEAVY_DAMAGE			|
-		bits_COND_PROVOKED		|
+		ARRAYSIZE(tlAssassinHide),
+		bits_COND_NEW_ENEMY |
+		bits_COND_SEE_ENEMY |
+		bits_COND_SEE_FEAR |
+		bits_COND_LIGHT_DAMAGE |
+		bits_COND_HEAVY_DAMAGE |
+		bits_COND_PROVOKED |
 		bits_COND_HEAR_SOUND,
-		
+
 		bits_SOUND_DANGER,
 		"AssassinHide"
 	},
@@ -506,7 +506,7 @@ Schedule_t	slAssassinHide[] =
 //=========================================================
 // HUNT Schedules
 //=========================================================
-Task_t tlAssassinHunt[] = 
+Task_t tlAssassinHunt[] =
 {
 	{ TASK_GET_PATH_TO_ENEMY,	(float)0		},
 	{ TASK_RUN_PATH,			(float)0		},
@@ -515,14 +515,14 @@ Task_t tlAssassinHunt[] =
 
 Schedule_t slAssassinHunt[] =
 {
-	{ 
+	{
 		tlAssassinHunt,
-		ARRAYSIZE ( tlAssassinHunt ),
-		bits_COND_NEW_ENEMY			|
+		ARRAYSIZE(tlAssassinHunt),
+		bits_COND_NEW_ENEMY |
 		// bits_COND_SEE_ENEMY			|
-		bits_COND_CAN_RANGE_ATTACK1	|
+		bits_COND_CAN_RANGE_ATTACK1 |
 		bits_COND_HEAR_SOUND,
-		
+
 		bits_SOUND_DANGER,
 		"AssassinHunt"
 	},
@@ -541,11 +541,11 @@ Task_t	tlAssassinJump[] =
 
 Schedule_t	slAssassinJump[] =
 {
-	{ 
+	{
 		tlAssassinJump,
-		ARRAYSIZE ( tlAssassinJump ), 
-		0, 
-		0, 
+		ARRAYSIZE(tlAssassinJump),
+		0,
+		0,
 		"AssassinJump"
 	},
 };
@@ -564,10 +564,10 @@ Task_t	tlAssassinJumpAttack[] =
 
 Schedule_t	slAssassinJumpAttack[] =
 {
-	{ 
+	{
 		tlAssassinJumpAttack,
-		ARRAYSIZE ( tlAssassinJumpAttack ), 
-		0, 
+		ARRAYSIZE(tlAssassinJumpAttack),
+		0,
 		0,
 		"AssassinJumpAttack"
 	},
@@ -594,53 +594,53 @@ Task_t	tlAssassinJumpLand[] =
 
 Schedule_t	slAssassinJumpLand[] =
 {
-	{ 
+	{
 		tlAssassinJumpLand,
-		ARRAYSIZE ( tlAssassinJumpLand ), 
-		0, 
+		ARRAYSIZE(tlAssassinJumpLand),
+		0,
 		0,
 		"AssassinJumpLand"
 	},
 };
 
-DEFINE_CUSTOM_SCHEDULES( CHAssassin )
+DEFINE_CUSTOM_SCHEDULES(CHAssassin)
 {
 	slAssassinFail,
-	slAssassinExposed,
-	slAssassinTakeCoverFromEnemy,
-	slAssassinTakeCoverFromEnemy2,
-	slAssassinTakeCoverFromBestSound,
-	slAssassinHide,
-	slAssassinHunt,
-	slAssassinJump,
-	slAssassinJumpAttack,
-	slAssassinJumpLand,
+		slAssassinExposed,
+		slAssassinTakeCoverFromEnemy,
+		slAssassinTakeCoverFromEnemy2,
+		slAssassinTakeCoverFromBestSound,
+		slAssassinHide,
+		slAssassinHunt,
+		slAssassinJump,
+		slAssassinJumpAttack,
+		slAssassinJumpLand,
 };
 
-IMPLEMENT_CUSTOM_SCHEDULES( CHAssassin, CBaseMonster );
+IMPLEMENT_CUSTOM_SCHEDULES(CHAssassin, CBaseMonster);
 
 
 //=========================================================
 // CheckMeleeAttack1 - jump like crazy if the enemy gets too close. 
 //=========================================================
-BOOL CHAssassin :: CheckMeleeAttack1 ( float flDot, float flDist )
+BOOL CHAssassin::CheckMeleeAttack1(float flDot, float flDist)
 {
-	if ( m_flNextJump < gpGlobals->time && (flDist <= 128 || HasMemory( bits_MEMORY_BADJUMP )) && m_hEnemy != NULL )
+	if (m_flNextJump < gpGlobals->time && (flDist <= 128 || HasMemory(bits_MEMORY_BADJUMP)) && m_hEnemy != NULL)
 	{
 		TraceResult	tr;
 
-		Vector vecDest = pev->origin + Vector( RANDOM_FLOAT( -64, 64), RANDOM_FLOAT( -64, 64 ), 160 );
+		Vector vecDest = pev->origin + Vector(RANDOM_FLOAT(-64, 64), RANDOM_FLOAT(-64, 64), 160);
 
-		UTIL_TraceHull( pev->origin + Vector( 0, 0, 36 ), vecDest + Vector( 0, 0, 36 ), dont_ignore_monsters, human_hull, ENT(pev), &tr);
+		UTIL_TraceHull(pev->origin + Vector(0, 0, 36), vecDest + Vector(0, 0, 36), dont_ignore_monsters, human_hull, ENT(pev), &tr);
 
-		if ( tr.fStartSolid || tr.flFraction < 1.0)
+		if (tr.fStartSolid || tr.flFraction < 1.0)
 		{
 			return FALSE;
 		}
 
 		float flGravity = g_psv_gravity->value;
 
-		float time = sqrt( 160 / (0.5 * flGravity));
+		float time = sqrt(160 / (0.5 * flGravity));
 		float speed = flGravity * time / 160;
 		m_vecJumpVelocity = (vecDest - pev->origin) * speed;
 
@@ -653,18 +653,18 @@ BOOL CHAssassin :: CheckMeleeAttack1 ( float flDot, float flDist )
 // CheckRangeAttack1  - drop a cap in their ass
 //
 //=========================================================
-BOOL CHAssassin :: CheckRangeAttack1 ( float flDot, float flDist )
+BOOL CHAssassin::CheckRangeAttack1(float flDot, float flDist)
 {
-	if ( !HasConditions( bits_COND_ENEMY_OCCLUDED ) && flDist > 64 && flDist <= 2048 /* && flDot >= 0.5 */ /* && NoFriendlyFire() */ )
+	if (!HasConditions(bits_COND_ENEMY_OCCLUDED) && flDist > 64 && flDist <= 2048 /* && flDot >= 0.5 */ /* && NoFriendlyFire() */)
 	{
 		TraceResult	tr;
 
 		Vector vecSrc = GetGunPosition();
 
 		// verify that a bullet fired from the gun will hit the enemy before the world.
-		UTIL_TraceLine( vecSrc, m_hEnemy->BodyTarget(vecSrc), dont_ignore_monsters, ENT(pev), &tr);
+		UTIL_TraceLine(vecSrc, m_hEnemy->BodyTarget(vecSrc), dont_ignore_monsters, ENT(pev), &tr);
 
-		if ( tr.flFraction == 1 || tr.pHit == m_hEnemy->edict() )
+		if (tr.flFraction == 1 || tr.pHit == m_hEnemy->edict())
 		{
 			return TRUE;
 		}
@@ -675,24 +675,24 @@ BOOL CHAssassin :: CheckRangeAttack1 ( float flDot, float flDist )
 //=========================================================
 // CheckRangeAttack2 - toss grenade is enemy gets in the way and is too close. 
 //=========================================================
-BOOL CHAssassin :: CheckRangeAttack2 ( float flDot, float flDist )
+BOOL CHAssassin::CheckRangeAttack2(float flDot, float flDist)
 {
 	m_fThrowGrenade = FALSE;
-	if ( !FBitSet ( m_hEnemy->pev->flags, FL_ONGROUND ) )
+	if (!FBitSet(m_hEnemy->pev->flags, FL_ONGROUND))
 	{
 		// don't throw grenades at anything that isn't on the ground!
 		return FALSE;
 	}
 
 	// don't get grenade happy unless the player starts to piss you off
-	if ( m_iFrustration <= 2)
+	if (m_iFrustration <= 2)
 		return FALSE;
 
-	if ( m_flNextGrenadeCheck < gpGlobals->time && !HasConditions( bits_COND_ENEMY_OCCLUDED ) && flDist <= 512 /* && flDot >= 0.5 */ /* && NoFriendlyFire() */ )
+	if (m_flNextGrenadeCheck < gpGlobals->time && !HasConditions(bits_COND_ENEMY_OCCLUDED) && flDist <= 512 /* && flDot >= 0.5 */ /* && NoFriendlyFire() */)
 	{
-		Vector vecToss = VecCheckThrow( pev, GetGunPosition( ), m_hEnemy->Center(), flDist, 0.5 ); // use dist as speed to get there in 1 second
+		Vector vecToss = VecCheckThrow(pev, GetGunPosition(), m_hEnemy->Center(), flDist, 0.5); // use dist as speed to get there in 1 second
 
-		if ( vecToss != g_vecZero )
+		if (vecToss != g_vecZero)
 		{
 			m_vecTossVelocity = vecToss;
 
@@ -710,9 +710,9 @@ BOOL CHAssassin :: CheckRangeAttack2 ( float flDot, float flDist )
 //=========================================================
 // RunAI
 //=========================================================
-void CHAssassin :: RunAI()
+void CHAssassin::RunAI()
 {
-	CBaseMonster :: RunAI();
+	CBaseMonster::RunAI();
 
 	// always visible if moving
 	// always visible is not on hard
@@ -725,15 +725,15 @@ void CHAssassin :: RunAI()
 	{
 		if (pev->renderamt == 255)
 		{
-			EMIT_SOUND (ENT(pev), CHAN_BODY, "debris/beamstart1.wav", 0.2, ATTN_NORM );
+			EMIT_SOUND(ENT(pev), CHAN_BODY, "debris/beamstart1.wav", 0.2, ATTN_NORM);
 		}
 
-		pev->renderamt = V_max( pev->renderamt - 50, m_iTargetRanderamt );
+		pev->renderamt = V_max(pev->renderamt - 50, m_iTargetRanderamt);
 		pev->rendermode = kRenderTransTexture;
 	}
 	else if (pev->renderamt < m_iTargetRanderamt)
 	{
-		pev->renderamt = V_min( pev->renderamt + 50, m_iTargetRanderamt );
+		pev->renderamt = V_min(pev->renderamt + 50, m_iTargetRanderamt);
 		if (pev->renderamt == 255)
 			pev->rendermode = kRenderNormal;
 	}
@@ -741,15 +741,15 @@ void CHAssassin :: RunAI()
 	if (m_Activity == ACT_RUN || m_Activity == ACT_WALK)
 	{
 		static int iStep = 0;
-		iStep = ! iStep;
+		iStep = !iStep;
 		if (iStep)
 		{
-			switch( RANDOM_LONG( 0, 3 ) )
+			switch (RANDOM_LONG(0, 3))
 			{
-			case 0:	EMIT_SOUND( ENT(pev), CHAN_BODY, "player/pl_step1.wav", 0.5, ATTN_NORM);	break;
-			case 1:	EMIT_SOUND( ENT(pev), CHAN_BODY, "player/pl_step3.wav", 0.5, ATTN_NORM);	break;
-			case 2:	EMIT_SOUND( ENT(pev), CHAN_BODY, "player/pl_step2.wav", 0.5, ATTN_NORM);	break;
-			case 3:	EMIT_SOUND( ENT(pev), CHAN_BODY, "player/pl_step4.wav", 0.5, ATTN_NORM);	break;
+			case 0:	EMIT_SOUND(ENT(pev), CHAN_BODY, "player/pl_step1.wav", 0.5, ATTN_NORM);	break;
+			case 1:	EMIT_SOUND(ENT(pev), CHAN_BODY, "player/pl_step3.wav", 0.5, ATTN_NORM);	break;
+			case 2:	EMIT_SOUND(ENT(pev), CHAN_BODY, "player/pl_step2.wav", 0.5, ATTN_NORM);	break;
+			case 3:	EMIT_SOUND(ENT(pev), CHAN_BODY, "player/pl_step4.wav", 0.5, ATTN_NORM);	break;
 			}
 		}
 	}
@@ -759,24 +759,24 @@ void CHAssassin :: RunAI()
 //=========================================================
 // StartTask
 //=========================================================
-void CHAssassin :: StartTask ( Task_t *pTask )
+void CHAssassin::StartTask(Task_t* pTask)
 {
-	switch ( pTask->iTask )
+	switch (pTask->iTask)
 	{
 	case TASK_RANGE_ATTACK2:
 		if (!m_fThrowGrenade)
 		{
-			TaskComplete( );
+			TaskComplete();
 		}
 		else
 		{
-			CBaseMonster :: StartTask ( pTask );
+			CBaseMonster::StartTask(pTask);
 		}
 		break;
 	case TASK_ASSASSIN_FALL_TO_GROUND:
 		break;
 	default:
-		CBaseMonster :: StartTask ( pTask );
+		CBaseMonster::StartTask(pTask);
 		break;
 	}
 }
@@ -785,42 +785,42 @@ void CHAssassin :: StartTask ( Task_t *pTask )
 //=========================================================
 // RunTask 
 //=========================================================
-void CHAssassin :: RunTask ( Task_t *pTask )
+void CHAssassin::RunTask(Task_t* pTask)
 {
-	switch ( pTask->iTask )
+	switch (pTask->iTask)
 	{
 	case TASK_ASSASSIN_FALL_TO_GROUND:
-		MakeIdealYaw( m_vecEnemyLKP );
-		ChangeYaw( pev->yaw_speed );
+		MakeIdealYaw(m_vecEnemyLKP);
+		ChangeYaw(pev->yaw_speed);
 
 		if (m_fSequenceFinished)
 		{
 			if (pev->velocity.z > 0)
 			{
-				pev->sequence = LookupSequence( "fly_up" );
+				pev->sequence = LookupSequence("fly_up");
 			}
-			else if (HasConditions ( bits_COND_SEE_ENEMY ))
+			else if (HasConditions(bits_COND_SEE_ENEMY))
 			{
-				pev->sequence = LookupSequence( "fly_attack" );
+				pev->sequence = LookupSequence("fly_attack");
 				pev->frame = 0;
 			}
 			else
 			{
-				pev->sequence = LookupSequence( "fly_down" );
+				pev->sequence = LookupSequence("fly_down");
 				pev->frame = 0;
 			}
-			
-			ResetSequenceInfo( );
+
+			ResetSequenceInfo();
 			SetYawSpeed();
 		}
 		if (pev->flags & FL_ONGROUND)
 		{
 			// ALERT( at_console, "on ground\n");
-			TaskComplete( );
+			TaskComplete();
 		}
 		break;
-	default: 
-		CBaseMonster :: RunTask ( pTask );
+	default:
+		CBaseMonster::RunTask(pTask);
 		break;
 	}
 }
@@ -831,140 +831,140 @@ void CHAssassin :: RunTask ( Task_t *pTask )
 // monster's member function to get a pointer to a schedule
 // of the proper type.
 //=========================================================
-Schedule_t *CHAssassin :: GetSchedule ()
+Schedule_t* CHAssassin::GetSchedule()
 {
-	switch	( m_MonsterState )
+	switch (m_MonsterState)
 	{
 	case MONSTERSTATE_IDLE:
 	case MONSTERSTATE_ALERT:
+	{
+		if (HasConditions(bits_COND_HEAR_SOUND))
 		{
-			if ( HasConditions ( bits_COND_HEAR_SOUND ))
-			{
-				CSound *pSound;
-				pSound = PBestSound();
+			CSound* pSound;
+			pSound = PBestSound();
 
-				ASSERT( pSound != NULL );
-				if ( pSound && (pSound->m_iType & bits_SOUND_DANGER) )
-				{
-					return GetScheduleOfType( SCHED_TAKE_COVER_FROM_BEST_SOUND );
-				}
-				if ( pSound && (pSound->m_iType & bits_SOUND_COMBAT) )
-				{
-					return GetScheduleOfType( SCHED_INVESTIGATE_SOUND );
-				}
+			ASSERT(pSound != NULL);
+			if (pSound && (pSound->m_iType & bits_SOUND_DANGER))
+			{
+				return GetScheduleOfType(SCHED_TAKE_COVER_FROM_BEST_SOUND);
+			}
+			if (pSound && (pSound->m_iType & bits_SOUND_COMBAT))
+			{
+				return GetScheduleOfType(SCHED_INVESTIGATE_SOUND);
 			}
 		}
-		break;
+	}
+	break;
 
 	case MONSTERSTATE_COMBAT:
+	{
+		// dead enemy
+		if (HasConditions(bits_COND_ENEMY_DEAD))
 		{
-// dead enemy
-			if ( HasConditions( bits_COND_ENEMY_DEAD ) )
-			{
-				// call base class, all code to handle dead enemies is centralized there.
-				return CBaseMonster :: GetSchedule();
-			}
+			// call base class, all code to handle dead enemies is centralized there.
+			return CBaseMonster::GetSchedule();
+		}
 
-			// flying?
-			if ( pev->movetype == MOVETYPE_TOSS)
+		// flying?
+		if (pev->movetype == MOVETYPE_TOSS)
+		{
+			if (pev->flags & FL_ONGROUND)
 			{
-				if (pev->flags & FL_ONGROUND)
-				{
-					// ALERT( at_console, "landed\n");
-					// just landed
-					pev->movetype = MOVETYPE_STEP;
-					return GetScheduleOfType ( SCHED_ASSASSIN_JUMP_LAND );
-				}
+				// ALERT( at_console, "landed\n");
+				// just landed
+				pev->movetype = MOVETYPE_STEP;
+				return GetScheduleOfType(SCHED_ASSASSIN_JUMP_LAND);
+			}
+			else
+			{
+				// ALERT( at_console, "jump\n");
+				// jump or jump/shoot
+				if (m_MonsterState == MONSTERSTATE_COMBAT)
+					return GetScheduleOfType(SCHED_ASSASSIN_JUMP);
 				else
-				{
-					// ALERT( at_console, "jump\n");
-					// jump or jump/shoot
-					if ( m_MonsterState == MONSTERSTATE_COMBAT )
-						return GetScheduleOfType ( SCHED_ASSASSIN_JUMP );
-					else
-						return GetScheduleOfType ( SCHED_ASSASSIN_JUMP_ATTACK );
-				}
+					return GetScheduleOfType(SCHED_ASSASSIN_JUMP_ATTACK);
 			}
+		}
 
-			if ( HasConditions ( bits_COND_HEAR_SOUND ))
-			{
-				CSound *pSound;
-				pSound = PBestSound();
+		if (HasConditions(bits_COND_HEAR_SOUND))
+		{
+			CSound* pSound;
+			pSound = PBestSound();
 
-				ASSERT( pSound != NULL );
-				if ( pSound && (pSound->m_iType & bits_SOUND_DANGER) )
-				{
-					return GetScheduleOfType( SCHED_TAKE_COVER_FROM_BEST_SOUND );
-				}
+			ASSERT(pSound != NULL);
+			if (pSound && (pSound->m_iType & bits_SOUND_DANGER))
+			{
+				return GetScheduleOfType(SCHED_TAKE_COVER_FROM_BEST_SOUND);
 			}
+		}
 
-			if ( HasConditions ( bits_COND_LIGHT_DAMAGE ) )
-			{
-				m_iFrustration++;
-			}
-			if ( HasConditions ( bits_COND_HEAVY_DAMAGE ) )
-			{
-				m_iFrustration++;
-			}
+		if (HasConditions(bits_COND_LIGHT_DAMAGE))
+		{
+			m_iFrustration++;
+		}
+		if (HasConditions(bits_COND_HEAVY_DAMAGE))
+		{
+			m_iFrustration++;
+		}
 
 		// jump player!
-			if ( HasConditions ( bits_COND_CAN_MELEE_ATTACK1 ) )
-			{
-				// ALERT( at_console, "melee attack 1\n");
-				return GetScheduleOfType ( SCHED_MELEE_ATTACK1 );
-			}
+		if (HasConditions(bits_COND_CAN_MELEE_ATTACK1))
+		{
+			// ALERT( at_console, "melee attack 1\n");
+			return GetScheduleOfType(SCHED_MELEE_ATTACK1);
+		}
 
 		// throw grenade
-			if ( HasConditions ( bits_COND_CAN_RANGE_ATTACK2 ) )
-			{
-				// ALERT( at_console, "range attack 2\n");
-				return GetScheduleOfType ( SCHED_RANGE_ATTACK2 );
-			}
+		if (HasConditions(bits_COND_CAN_RANGE_ATTACK2))
+		{
+			// ALERT( at_console, "range attack 2\n");
+			return GetScheduleOfType(SCHED_RANGE_ATTACK2);
+		}
 
 		// spotted
-			if ( HasConditions ( bits_COND_SEE_ENEMY ) && HasConditions ( bits_COND_ENEMY_FACING_ME ) )
-			{
-				// ALERT( at_console, "exposed\n");
-				m_iFrustration++;
-				return GetScheduleOfType ( SCHED_ASSASSIN_EXPOSED );
-			}
+		if (HasConditions(bits_COND_SEE_ENEMY) && HasConditions(bits_COND_ENEMY_FACING_ME))
+		{
+			// ALERT( at_console, "exposed\n");
+			m_iFrustration++;
+			return GetScheduleOfType(SCHED_ASSASSIN_EXPOSED);
+		}
 
 		// can attack
-			if ( HasConditions ( bits_COND_CAN_RANGE_ATTACK1 ) )
-			{
-				// ALERT( at_console, "range attack 1\n");
-				m_iFrustration = 0;
-				return GetScheduleOfType ( SCHED_RANGE_ATTACK1 );
-			}
+		if (HasConditions(bits_COND_CAN_RANGE_ATTACK1))
+		{
+			// ALERT( at_console, "range attack 1\n");
+			m_iFrustration = 0;
+			return GetScheduleOfType(SCHED_RANGE_ATTACK1);
+		}
 
-			if ( HasConditions ( bits_COND_SEE_ENEMY ) )
-			{
-				// ALERT( at_console, "face\n");
-				return GetScheduleOfType ( SCHED_COMBAT_FACE );
-			}
+		if (HasConditions(bits_COND_SEE_ENEMY))
+		{
+			// ALERT( at_console, "face\n");
+			return GetScheduleOfType(SCHED_COMBAT_FACE);
+		}
 
 		// new enemy
-			if ( HasConditions ( bits_COND_NEW_ENEMY ) )
-			{
-				// ALERT( at_console, "take cover\n");
-				return GetScheduleOfType ( SCHED_TAKE_COVER_FROM_ENEMY );
-			}
-
-			// ALERT( at_console, "stand\n");
-			return GetScheduleOfType ( SCHED_ALERT_STAND );
+		if (HasConditions(bits_COND_NEW_ENEMY))
+		{
+			// ALERT( at_console, "take cover\n");
+			return GetScheduleOfType(SCHED_TAKE_COVER_FROM_ENEMY);
 		}
-		break;
+
+		// ALERT( at_console, "stand\n");
+		return GetScheduleOfType(SCHED_ALERT_STAND);
+	}
+	break;
 	}
 
-	return CBaseMonster :: GetSchedule();
+	return CBaseMonster::GetSchedule();
 }
 
 //=========================================================
 //=========================================================
-Schedule_t* CHAssassin :: GetScheduleOfType ( int Type ) 
+Schedule_t* CHAssassin::GetScheduleOfType(int Type)
 {
 	// ALERT( at_console, "%d\n", m_iFrustration );
-	switch	( Type )
+	switch (Type)
 	{
 	case SCHED_TAKE_COVER_FROM_ENEMY:
 		if (pev->health > 30)
@@ -1009,7 +1009,7 @@ Schedule_t* CHAssassin :: GetScheduleOfType ( int Type )
 		return slAssassinJumpLand;
 	}
 
-	return CBaseMonster :: GetScheduleOfType( Type );
+	return CBaseMonster::GetScheduleOfType(Type);
 }
 
 #endif

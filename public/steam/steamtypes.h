@@ -12,10 +12,10 @@
 
 // Steam-specific types. Defined here so this header file can be included in other code bases.
 #if defined( __GNUC__ ) && !defined(POSIX)
-	#if __GNUC__ < 4
-		#error "Steamworks requires GCC 4.X (4.2 or 4.4 have been tested)"
-	#endif
-	#define POSIX 1
+#if __GNUC__ < 4
+#error "Steamworks requires GCC 4.X (4.2 or 4.4 have been tested)"
+#endif
+#define POSIX 1
 #endif
 
 #if defined(__x86_64__) || defined(_WIN64)
@@ -66,12 +66,12 @@ typedef unsigned int uintp;
 #endif // else _WIN32
 
 #ifdef __cplusplus
-const int k_cubSaltSize   = 8;
+const int k_cubSaltSize = 8;
 #else
 #define k_cubSaltSize 8
 #endif
 
-typedef	uint8 Salt_t[ k_cubSaltSize ];
+typedef	uint8 Salt_t[k_cubSaltSize];
 
 //-----------------------------------------------------------------------------
 // GID (GlobalID) stuff

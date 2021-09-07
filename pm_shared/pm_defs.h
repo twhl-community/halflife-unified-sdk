@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*
+*	This product contains software technology licensed from Id
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -50,8 +50,8 @@ typedef struct physent_s
 	char			name[32];             // Name of model, or "player" or "world".
 	int				player;
 	Vector			origin;               // Model's origin in world coordinates.
-	model_t*		model;		          // only for bsp models
-	model_t*		studiomodel;         // SOLID_BBOX, but studio clip intersections.
+	model_t* model;		          // only for bsp models
+	model_t* studiomodel;         // SOLID_BBOX, but studio clip intersections.
 	Vector			mins, maxs;	          // only for non-bsp models
 	int				info;		          // For client or server to use to identify (index into edicts or cl_entities)
 	Vector			angles;               // rotated entities need this info for hull testing to work.
@@ -59,7 +59,7 @@ typedef struct physent_s
 	int				solid;				  // Triggers and func_door type WATER brushes are SOLID_NOT
 	int				skin;                 // BSP Contents for such things like fun_door water brushes.
 	int				rendermode;			  // So we can ignore glass
-	
+
 	// Complex collision detection.
 	float			frame;
 	int				sequence;
@@ -105,12 +105,12 @@ typedef struct playermove_s
 	Vector			velocity;      // Current movement direction.
 	Vector			movedir;       // For waterjumping, a forced forward velocity so we can fly over lip of ledge.
 	Vector			basevelocity;  // Velocity of the conveyor we are standing, e.g.
-	
+
 	// For ducking/dead
 	Vector			view_ofs;      // Our eye position.
 	float			flDuckTime;    // Time we started duck
 	qboolean		bInDuck;       // In process of ducking or ducked already?
-	
+
 	// For walking/falling
 	int				flTimeStepSound;  // Next time we can play a step sound
 	int				iStepLeft;
@@ -161,16 +161,16 @@ typedef struct playermove_s
 	Vector			vuser4;
 	// world state
 	// Number of entities to clip against.
-	int				numphysent;    
+	int				numphysent;
 	physent_t		physents[MAX_PHYSENTS];
 	// Number of momvement entities (ladders)
 	int				nummoveent;
 	// just a list of ladders
-	physent_t		moveents[MAX_MOVEENTS];	
+	physent_t		moveents[MAX_MOVEENTS];
 
 	// All things being rendered, for tracing against things you don't actually collide with
 	int				numvisent;
-	physent_t		visents[ MAX_PHYSENTS ];
+	physent_t		visents[MAX_PHYSENTS];
 
 	// input to run through physics.
 	usercmd_t		cmd;
@@ -179,47 +179,47 @@ typedef struct playermove_s
 	int				numtouch;
 	pmtrace_t		touchindex[MAX_PHYSENTS];
 
-	char			physinfo[ MAX_PHYSINFO_STRING ]; // Physics info string
+	char			physinfo[MAX_PHYSINFO_STRING]; // Physics info string
 
-	struct movevars_s *movevars;
-	Vector player_mins[ 4 ];
-	Vector player_maxs[ 4 ];
-	
+	struct movevars_s* movevars;
+	Vector player_mins[4];
+	Vector player_maxs[4];
+
 	// Common functions
-	const char		*(*PM_Info_ValueForKey) ( const char *s, const char *key );
-	void			(*PM_Particle)( float *origin, int color, float life, int zpos, int zvel);
-	int				(*PM_TestPlayerPosition) (float *pos, pmtrace_t *ptrace );
-	void			(*Con_NPrintf)( int idx, const char *fmt, ... );
-	void			(*Con_DPrintf)(const char *fmt, ... );
-	void			(*Con_Printf)(const char *fmt, ... );
+	const char* (*PM_Info_ValueForKey) (const char* s, const char* key);
+	void			(*PM_Particle)(float* origin, int color, float life, int zpos, int zvel);
+	int				(*PM_TestPlayerPosition) (float* pos, pmtrace_t* ptrace);
+	void			(*Con_NPrintf)(int idx, const char* fmt, ...);
+	void			(*Con_DPrintf)(const char* fmt, ...);
+	void			(*Con_Printf)(const char* fmt, ...);
 	double			(*Sys_FloatTime)();
-	void			(*PM_StuckTouch)( int hitent, pmtrace_t *ptraceresult );
-	int				(*PM_PointContents) (float *p, int *truecontents /*filled in if this is non-null*/ );
-	int				(*PM_TruePointContents) (float *p);
-	int				(*PM_HullPointContents) ( struct hull_s *hull, int num, float *p);   
-	pmtrace_t		(*PM_PlayerTrace) (float *start, float *end, int traceFlags, int ignore_pe );
-	struct pmtrace_s *(*PM_TraceLine)( float *start, float *end, int flags, int usehulll, int ignore_pe );
-	int32			(*RandomLong)( int32 lLow, int32 lHigh );
-	float			(*RandomFloat)( float flLow, float flHigh );
-	int				(*PM_GetModelType)(model_t* mod );
-	void			(*PM_GetModelBounds)(model_t* mod, float *mins, float *maxs );
-	void			*(*PM_HullForBsp)( physent_t *pe, float *offset );
-	float			(*PM_TraceModel)( physent_t *pEnt, float *start, float *end, trace_t *trace );
-	int				(*COM_FileSize)(const char *filename);
-	byte			*(*COM_LoadFile) (const char *path, int usehunk, int *pLength);
-	void			(*COM_FreeFile) ( void *buffer );
-	char			*(*memfgets)( byte *pMemFile, int fileSize, int *pFilePos, char *pBuffer, int bufferSize );
+	void			(*PM_StuckTouch)(int hitent, pmtrace_t* ptraceresult);
+	int				(*PM_PointContents) (float* p, int* truecontents /*filled in if this is non-null*/);
+	int				(*PM_TruePointContents) (float* p);
+	int				(*PM_HullPointContents) (struct hull_s* hull, int num, float* p);
+	pmtrace_t(*PM_PlayerTrace) (float* start, float* end, int traceFlags, int ignore_pe);
+	struct pmtrace_s* (*PM_TraceLine)(float* start, float* end, int flags, int usehulll, int ignore_pe);
+	int32(*RandomLong)(int32 lLow, int32 lHigh);
+	float			(*RandomFloat)(float flLow, float flHigh);
+	int				(*PM_GetModelType)(model_t* mod);
+	void			(*PM_GetModelBounds)(model_t* mod, float* mins, float* maxs);
+	void* (*PM_HullForBsp)(physent_t* pe, float* offset);
+	float			(*PM_TraceModel)(physent_t* pEnt, float* start, float* end, trace_t* trace);
+	int				(*COM_FileSize)(const char* filename);
+	byte* (*COM_LoadFile) (const char* path, int usehunk, int* pLength);
+	void			(*COM_FreeFile) (void* buffer);
+	char* (*memfgets)(byte* pMemFile, int fileSize, int* pFilePos, char* pBuffer, int bufferSize);
 
 	// Functions
 	// Run functions for this frame?
-	qboolean		runfuncs;      
-	void			(*PM_PlaySound) ( int channel, const char *sample, float volume, float attenuation, int fFlags, int pitch );
-	const char		*(*PM_TraceTexture) ( int ground, float *vstart, float *vend );
-	void			(*PM_PlaybackEventFull) ( int flags, int clientindex, unsigned short eventindex, float delay, float *origin, float *angles, float fparam1, float fparam2, int iparam1, int iparam2, int bparam1, int bparam2 );
-	
-	pmtrace_t		(*PM_PlayerTraceEx) (float *start, float *end, int traceFlags, int (*pfnIgnore)( physent_t *pe ) );
-	int				(*PM_TestPlayerPositionEx) (float *pos, pmtrace_t *ptrace, int (*pfnIgnore)( physent_t *pe ) );
-	struct pmtrace_s *(*PM_TraceLineEx)( float *start, float *end, int flags, int usehulll, int (*pfnIgnore)( physent_t *pe ) );
+	qboolean		runfuncs;
+	void			(*PM_PlaySound) (int channel, const char* sample, float volume, float attenuation, int fFlags, int pitch);
+	const char* (*PM_TraceTexture) (int ground, float* vstart, float* vend);
+	void			(*PM_PlaybackEventFull) (int flags, int clientindex, unsigned short eventindex, float delay, float* origin, float* angles, float fparam1, float fparam2, int iparam1, int iparam2, int bparam1, int bparam2);
+
+	pmtrace_t(*PM_PlayerTraceEx) (float* start, float* end, int traceFlags, int (*pfnIgnore)(physent_t* pe));
+	int				(*PM_TestPlayerPositionEx) (float* pos, pmtrace_t* ptrace, int (*pfnIgnore)(physent_t* pe));
+	struct pmtrace_s* (*PM_TraceLineEx)(float* start, float* end, int flags, int usehulll, int (*pfnIgnore)(physent_t* pe));
 } playermove_t;
 
 #endif

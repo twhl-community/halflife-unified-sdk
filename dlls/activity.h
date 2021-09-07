@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*
+*	This product contains software technology licensed from Id
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -79,7 +79,7 @@ typedef enum {
 	ACT_FEAR_DISPLAY,		// monster just saw something that it is afraid of
 	ACT_EXCITED,			// for some reason, monster is excited. Sees something he really likes to eat, or whatever.
 	ACT_SPECIAL_ATTACK1,	// very monster specific special attacks.
-	ACT_SPECIAL_ATTACK2,	
+	ACT_SPECIAL_ATTACK2,
 	ACT_COMBAT_IDLE,		// agitated idle.
 	ACT_WALK_SCARED,
 	ACT_RUN_SCARED,
@@ -100,7 +100,7 @@ typedef enum {
 
 typedef struct {
 	int	type;
-	const char *name;
+	const char* name;
 } activity_map_t;
 
 extern activity_map_t activity_map[];

@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1999, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*
+*	This product contains software technology licensed from Id
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -35,9 +35,9 @@
 								gHUD.y.UserCmd_##x( ); \
 							}
 
-inline float CVAR_GET_FLOAT( const char *x ) {	return gEngfuncs.pfnGetCvarFloat( (char*)x ); }
-inline const char* CVAR_GET_STRING( const char *x ) {	return gEngfuncs.pfnGetCvarString( (char*)x ); }
-inline struct cvar_s *CVAR_CREATE( const char *cv, const char *val, const int flags ) {	return gEngfuncs.pfnRegisterVariable( (char*)cv, (char*)val, flags ); }
+inline float CVAR_GET_FLOAT(const char* x) { return gEngfuncs.pfnGetCvarFloat((char*)x); }
+inline const char* CVAR_GET_STRING(const char* x) { return gEngfuncs.pfnGetCvarString((char*)x); }
+inline struct cvar_s* CVAR_CREATE(const char* cv, const char* val, const int flags) { return gEngfuncs.pfnRegisterVariable((char*)cv, (char*)val, flags); }
 
 #define SPR_Load (*gEngfuncs.pfnSPR_Load)
 #define SPR_Set (*gEngfuncs.pfnSPR_Set)
@@ -81,98 +81,98 @@ inline struct cvar_s *CVAR_CREATE( const char *cv, const char *val, const int fl
 
 
 // Gets the height & width of a sprite,  at the specified frame
-inline int SPR_Height( HSPRITE x, int f )	{ return gEngfuncs.pfnSPR_Height(x, f); }
-inline int SPR_Width( HSPRITE x, int f )	{ return gEngfuncs.pfnSPR_Width(x, f); }
+inline int SPR_Height(HSPRITE x, int f) { return gEngfuncs.pfnSPR_Height(x, f); }
+inline int SPR_Width(HSPRITE x, int f) { return gEngfuncs.pfnSPR_Width(x, f); }
 
-inline 	client_textmessage_t	*TextMessageGet( const char *pName ) { return gEngfuncs.pfnTextMessageGet( pName ); }
-inline 	int						TextMessageDrawChar( int x, int y, int number, int r, int g, int b ) 
-{ 
-	return gEngfuncs.pfnDrawCharacter( x, y, number, r, g, b ); 
-}
-
-inline int DrawConsoleString( int x, int y, const char *string )
+inline 	client_textmessage_t* TextMessageGet(const char* pName) { return gEngfuncs.pfnTextMessageGet(pName); }
+inline 	int						TextMessageDrawChar(int x, int y, int number, int r, int g, int b)
 {
-	return gEngfuncs.pfnDrawConsoleString( x, y, (char*) string );
+	return gEngfuncs.pfnDrawCharacter(x, y, number, r, g, b);
 }
 
-inline void GetConsoleStringSize( const char *string, int *width, int *height )
+inline int DrawConsoleString(int x, int y, const char* string)
 {
-	gEngfuncs.pfnDrawConsoleStringLen( string, width, height );
+	return gEngfuncs.pfnDrawConsoleString(x, y, (char*)string);
 }
 
-inline int ConsoleStringLen( const char *string )
+inline void GetConsoleStringSize(const char* string, int* width, int* height)
+{
+	gEngfuncs.pfnDrawConsoleStringLen(string, width, height);
+}
+
+inline int ConsoleStringLen(const char* string)
 {
 	int _width, _height;
-	GetConsoleStringSize( string, &_width, &_height );
+	GetConsoleStringSize(string, &_width, &_height);
 	return _width;
 }
 
-inline void ConsolePrint( const char *string )
+inline void ConsolePrint(const char* string)
 {
-	gEngfuncs.pfnConsolePrint( string );
+	gEngfuncs.pfnConsolePrint(string);
 }
 
-inline void CenterPrint( const char *string )
+inline void CenterPrint(const char* string)
 {
-	gEngfuncs.pfnCenterPrint( string );
+	gEngfuncs.pfnCenterPrint(string);
 }
 
 
-inline char *safe_strcpy( char *dst, const char *src, int len_dst)
+inline char* safe_strcpy(char* dst, const char* src, int len_dst)
 {
-	if( len_dst <= 0 )
+	if (len_dst <= 0)
 	{
 		return NULL; // this is bad
 	}
 
-	strncpy(dst,src,len_dst);
-	dst[ len_dst - 1 ] = '\0';
+	strncpy(dst, src, len_dst);
+	dst[len_dst - 1] = '\0';
 
 	return dst;
 }
 
-inline int safe_sprintf( char *dst, int len_dst, const char *format, ...)
+inline int safe_sprintf(char* dst, int len_dst, const char* format, ...)
 {
-	if( len_dst <= 0 )
+	if (len_dst <= 0)
 	{
 		return -1; // this is bad
 	}
 
 	va_list v;
 
-    va_start(v, format);
+	va_start(v, format);
 
-	_vsnprintf(dst,len_dst,format,v);
+	_vsnprintf(dst, len_dst, format, v);
 
 	va_end(v);
 
-	dst[ len_dst - 1 ] = '\0';
+	dst[len_dst - 1] = '\0';
 
 	return 0;
 }
 
 // sound functions
-inline void PlaySound( const char *szSound, float vol ) { gEngfuncs.pfnPlaySoundByName( szSound, vol ); }
-inline void PlaySound( int iSound, float vol ) { gEngfuncs.pfnPlaySoundByIndex( iSound, vol ); }
+inline void PlaySound(const char* szSound, float vol) { gEngfuncs.pfnPlaySoundByName(szSound, vol); }
+inline void PlaySound(int iSound, float vol) { gEngfuncs.pfnPlaySoundByIndex(iSound, vol); }
 
-void ScaleColors( int &r, int &g, int &b, int a );
+void ScaleColors(int& r, int& g, int& b, int a);
 
-float Length(const float *v);
-void VectorMA (const float *veca, float scale, const float *vecb, float *vecc);
-void VectorScale (const float *in, float scale, float *out);
-float VectorNormalize (float *v);
-void VectorInverse ( float *v );
+float Length(const float* v);
+void VectorMA(const float* veca, float scale, const float* vecb, float* vecc);
+void VectorScale(const float* in, float scale, float* out);
+float VectorNormalize(float* v);
+void VectorInverse(float* v);
 
 // disable 'possible loss of data converting float to int' warning message
 #pragma warning( disable: 4244 )
 // disable 'truncation from 'const double' to 'float' warning message
 #pragma warning( disable: 4305 )
 
-inline void UnpackRGB(int &r, int &g, int &b, unsigned long ulRGB)\
+inline void UnpackRGB(int& r, int& g, int& b, unsigned long ulRGB)\
 {\
-	r = (ulRGB & 0xFF0000) >>16;\
-	g = (ulRGB & 0xFF00) >> 8;\
-	b = ulRGB & 0xFF;\
+r = (ulRGB & 0xFF0000) >> 16; \
+g = (ulRGB & 0xFF00) >> 8; \
+b = ulRGB & 0xFF; \
 }
 
-HSPRITE LoadSprite(const char *pszName);
+HSPRITE LoadSprite(const char* pszName);

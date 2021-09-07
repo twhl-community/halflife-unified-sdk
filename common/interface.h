@@ -35,7 +35,7 @@ public:
 
 
 #define CREATEINTERFACE_PROCNAME	"CreateInterface"
-typedef IBaseInterface* (*CreateInterfaceFn)(const char *pName, int *pReturnCode);
+typedef IBaseInterface* (*CreateInterfaceFn)(const char* pName, int* pReturnCode);
 
 
 typedef IBaseInterface* (*InstantiateInterfaceFn)();
@@ -45,15 +45,15 @@ typedef IBaseInterface* (*InstantiateInterfaceFn)();
 class InterfaceReg
 {
 public:
-				InterfaceReg(InstantiateInterfaceFn fn, const char *pName);
+	InterfaceReg(InstantiateInterfaceFn fn, const char* pName);
 
 public:
 
 	InstantiateInterfaceFn	m_CreateFn;
-	const char				*m_pName;
+	const char* m_pName;
 
-	InterfaceReg			*m_pNext; // For the global list.
-	static InterfaceReg		*s_pInterfaceRegs;
+	InterfaceReg* m_pNext; // For the global list.
+	static InterfaceReg* s_pInterfaceRegs;
 };
 
 
@@ -87,16 +87,16 @@ public:
 
 
 #ifdef WIN32
-	#define EXPORT_FUNCTION __declspec(dllexport)
+#define EXPORT_FUNCTION __declspec(dllexport)
 #else
-	#define EXPORT_FUNCTION
+#define EXPORT_FUNCTION
 #endif
 
 
 // This function is automatically exported and allows you to access any interfaces exposed with the above macros.
 // if pReturnCode is set, it will return one of the following values
 // extend this for other error conditions/code
-enum 
+enum
 {
 	IFACE_OK = 0,
 	IFACE_FAILED
@@ -105,7 +105,7 @@ enum
 
 extern "C"
 {
-	EXPORT_FUNCTION IBaseInterface* CreateInterface(const char *pName, int *pReturnCode);
+	EXPORT_FUNCTION IBaseInterface* CreateInterface(const char* pName, int* pReturnCode);
 };
 
 
@@ -114,12 +114,12 @@ typedef struct HInterfaceModule_t* HINTERFACEMODULE;
 
 
 // Use these to load and unload a module.
-extern HINTERFACEMODULE		Sys_LoadModule(const char *pModuleName);
+extern HINTERFACEMODULE		Sys_LoadModule(const char* pModuleName);
 extern void					Sys_FreeModule(HINTERFACEMODULE hModule);
 
 // Use these to get the factory function from either a loaded module or the current module.
-extern CreateInterfaceFn	Sys_GetFactory( HINTERFACEMODULE hModule );
-extern CreateInterfaceFn	Sys_GetFactoryThis( void );
+extern CreateInterfaceFn	Sys_GetFactory(HINTERFACEMODULE hModule);
+extern CreateInterfaceFn	Sys_GetFactoryThis(void);
 
 #endif // __cplusplus
 

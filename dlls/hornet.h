@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*
+*	This product contains software technology licensed from Id
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -35,21 +35,21 @@ class CHornet : public CBaseMonster
 public:
 	void Spawn() override;
 	void Precache() override;
-	int	 Classify () override;
-	int  IRelationship ( CBaseEntity *pTarget ) override;
-	int		Save( CSave &save ) override;
-	int		Restore( CRestore &restore ) override;
+	int	 Classify() override;
+	int  IRelationship(CBaseEntity* pTarget) override;
+	int		Save(CSave& save) override;
+	int		Restore(CRestore& restore) override;
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	void IgniteTrail();
-	void EXPORT StartTrack ();
-	void EXPORT StartDart ();
-	void EXPORT TrackTarget ();
-	void EXPORT TrackTouch ( CBaseEntity *pOther );
-	void EXPORT DartTouch( CBaseEntity *pOther );
-	void EXPORT DieTouch ( CBaseEntity *pOther );
-	
-	int TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType ) override;
+	void EXPORT StartTrack();
+	void EXPORT StartDart();
+	void EXPORT TrackTarget();
+	void EXPORT TrackTouch(CBaseEntity* pOther);
+	void EXPORT DartTouch(CBaseEntity* pOther);
+	void EXPORT DieTouch(CBaseEntity* pOther);
+
+	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 
 	float			m_flStopAttack;
 	int				m_iHornetType;

@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*
+*	This product contains software technology licensed from Id
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -60,10 +60,10 @@ typedef struct ref_params_s
 	int		smoothing;
 
 	// Last issued usercmd
-	struct usercmd_s *cmd;
+	struct usercmd_s* cmd;
 
 	// Movevars
-	struct movevars_s *movevars;
+	struct movevars_s* movevars;
 
 	int		viewport[4];		// the viewport coordinates x ,y , width, height
 

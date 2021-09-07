@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*
+*	This product contains software technology licensed from Id
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -26,18 +26,18 @@
 
 #include "parsemsg.h"
 
-DECLARE_MESSAGE(m_Geiger, Geiger )
+DECLARE_MESSAGE(m_Geiger, Geiger)
 
 int CHudGeiger::Init()
 {
-	HOOK_MESSAGE( Geiger );
+	HOOK_MESSAGE(Geiger);
 
 	m_iGeigerRange = 0;
 	m_iFlags = 0;
 
 	gHUD.AddHudElem(this);
 
-	srand( (unsigned)time( NULL ) );
+	srand((unsigned)time(NULL));
 
 	return 1;
 };
@@ -47,27 +47,27 @@ int CHudGeiger::VidInit()
 	return 1;
 };
 
-int CHudGeiger::MsgFunc_Geiger(const char *pszName,  int iSize, void *pbuf)
+int CHudGeiger::MsgFunc_Geiger(const char* pszName, int iSize, void* pbuf)
 {
 
-	BEGIN_READ( pbuf, iSize );
+	BEGIN_READ(pbuf, iSize);
 
 	// update geiger data
 	m_iGeigerRange = READ_BYTE();
 	m_iGeigerRange = m_iGeigerRange << 2;
-	
+
 	m_iFlags |= HUD_ACTIVE;
 
 	return 1;
 }
 
-int CHudGeiger::Draw (float flTime)
+int CHudGeiger::Draw(float flTime)
 {
 	int pct;
 	float flvol;
 	int rg[3];
 	int i;
-	
+
 	if (m_iGeigerRange <= 800 && m_iGeigerRange > 0)
 	{
 		// peicewise linear is better than continuous formula for this
@@ -165,14 +165,14 @@ int CHudGeiger::Draw (float flTime)
 		{
 			//S_StartDynamicSound (-1, 0, rgsfx[rand() % i], r_origin, flvol, 1.0, 0, 100);	
 			char sz[256];
-			
+
 			int j = rand() & 1;
 			if (i > 2)
 				j += rand() & 1;
 
 			sprintf(sz, "player/geiger%d.wav", j + 1);
 			PlaySound(sz, flvol);
-			
+
 		}
 	}
 

@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*
+*	This product contains software technology licensed from Id
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -31,18 +31,18 @@
 class CCycler : public CBaseMonster
 {
 public:
-	int	ObjectCaps() override { return (CBaseEntity :: ObjectCaps() | FCAP_IMPULSE_USE); }
-	int TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType ) override;
+	int	ObjectCaps() override { return (CBaseEntity::ObjectCaps() | FCAP_IMPULSE_USE); }
+	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 	void Spawn() override;
 	void Think() override;
 	//void Pain( float flDamage );
-	void Use ( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value ) override;
+	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
 	// Don't treat as a live target
 	BOOL IsAlive() override { return FALSE; }
 
-	int		Save( CSave &save ) override;
-	int		Restore( CRestore &restore ) override;
+	int		Save(CSave& save) override;
+	int		Restore(CRestore& restore) override;
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	int			m_animate;
@@ -50,12 +50,12 @@ public:
 
 LINK_ENTITY_TO_CLASS(cycler, CCycler);
 
-TYPEDESCRIPTION	CCycler::m_SaveData[] = 
+TYPEDESCRIPTION	CCycler::m_SaveData[] =
 {
-	DEFINE_FIELD( CCycler, m_animate, FIELD_INTEGER ),
+	DEFINE_FIELD(CCycler, m_animate, FIELD_INTEGER),
 };
 
-IMPLEMENT_SAVERESTORE( CCycler, CBaseMonster );
+IMPLEMENT_SAVERESTORE(CCycler, CBaseMonster);
 
 // Cycler member functions
 
@@ -109,13 +109,13 @@ void CCycler::Spawn()
 //
 // cycler think
 //
-void CCycler :: Think()
+void CCycler::Think()
 {
 	pev->nextthink = gpGlobals->time + 0.1;
 
 	if (m_animate)
 	{
-		StudioFrameAdvance ( );
+		StudioFrameAdvance();
 	}
 	if (m_fSequenceFinished && !m_fSequenceLoops)
 	{
@@ -134,7 +134,7 @@ void CCycler :: Think()
 //
 // CyclerUse - starts a rotation trend
 //
-void CCycler :: Use ( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
+void CCycler::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
 	m_animate = !m_animate;
 	if (m_animate)
@@ -147,27 +147,27 @@ void CCycler :: Use ( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE us
 // CyclerPain , changes sequences when shot
 //
 //void CCycler :: Pain( float flDamage )
-int CCycler :: TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType )
+int CCycler::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
 	if (m_animate)
 	{
 		pev->sequence++;
 
-		ResetSequenceInfo( );
+		ResetSequenceInfo();
 
 		if (m_flFrameRate == 0.0)
 		{
 			pev->sequence = 0;
-			ResetSequenceInfo( );
+			ResetSequenceInfo();
 		}
 		pev->frame = 0;
 	}
 	else
 	{
 		pev->framerate = 1.0;
-		StudioFrameAdvance ( 0.1 );
+		StudioFrameAdvance(0.1);
 		pev->framerate = 0;
-		ALERT( at_console, "sequence: %d, frame %.0f\n", pev->sequence, pev->frame );
+		ALERT(at_console, "sequence: %d, frame %.0f\n", pev->sequence, pev->frame);
 	}
 
 	return 0;
@@ -178,13 +178,13 @@ class CCyclerSprite : public CBaseEntity
 public:
 	void Spawn() override;
 	void Think() override;
-	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value ) override;
-	int	ObjectCaps() override { return (CBaseEntity :: ObjectCaps() | FCAP_DONT_SAVE | FCAP_IMPULSE_USE); }
-	int	TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType ) override;
-	void	Animate( float frames );
+	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+	int	ObjectCaps() override { return (CBaseEntity::ObjectCaps() | FCAP_DONT_SAVE | FCAP_IMPULSE_USE); }
+	int	TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	void	Animate(float frames);
 
-	int		Save( CSave &save ) override;
-	int		Restore( CRestore &restore ) override;
+	int		Save(CSave& save) override;
+	int		Restore(CRestore& restore) override;
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	inline int		ShouldAnimate() { return m_animate && m_maxFrame > 1.0; }
@@ -193,68 +193,68 @@ public:
 	float		m_maxFrame;
 };
 
-LINK_ENTITY_TO_CLASS( cycler_sprite, CCyclerSprite );
+LINK_ENTITY_TO_CLASS(cycler_sprite, CCyclerSprite);
 
-TYPEDESCRIPTION	CCyclerSprite::m_SaveData[] = 
+TYPEDESCRIPTION	CCyclerSprite::m_SaveData[] =
 {
-	DEFINE_FIELD( CCyclerSprite, m_animate, FIELD_INTEGER ),
-	DEFINE_FIELD( CCyclerSprite, m_lastTime, FIELD_TIME ),
-	DEFINE_FIELD( CCyclerSprite, m_maxFrame, FIELD_FLOAT ),
+	DEFINE_FIELD(CCyclerSprite, m_animate, FIELD_INTEGER),
+	DEFINE_FIELD(CCyclerSprite, m_lastTime, FIELD_TIME),
+	DEFINE_FIELD(CCyclerSprite, m_maxFrame, FIELD_FLOAT),
 };
 
-IMPLEMENT_SAVERESTORE( CCyclerSprite, CBaseEntity );
+IMPLEMENT_SAVERESTORE(CCyclerSprite, CBaseEntity);
 
 
 void CCyclerSprite::Spawn()
 {
-	pev->solid			= SOLID_SLIDEBOX;
-	pev->movetype		= MOVETYPE_NONE;
-	pev->takedamage		= DAMAGE_YES;
-	pev->effects		= 0;
+	pev->solid = SOLID_SLIDEBOX;
+	pev->movetype = MOVETYPE_NONE;
+	pev->takedamage = DAMAGE_YES;
+	pev->effects = 0;
 
-	pev->frame			= 0;
-	pev->nextthink		= gpGlobals->time + 0.1;
-	m_animate			= 1;
-	m_lastTime			= gpGlobals->time;
+	pev->frame = 0;
+	pev->nextthink = gpGlobals->time + 0.1;
+	m_animate = 1;
+	m_lastTime = gpGlobals->time;
 
-	PRECACHE_MODEL( (char *)STRING(pev->model) );
-	SET_MODEL( ENT(pev), STRING(pev->model) );
+	PRECACHE_MODEL((char*)STRING(pev->model));
+	SET_MODEL(ENT(pev), STRING(pev->model));
 
-	m_maxFrame = (float) MODEL_FRAMES( pev->modelindex ) - 1;
+	m_maxFrame = (float)MODEL_FRAMES(pev->modelindex) - 1;
 }
 
 
 void CCyclerSprite::Think()
 {
-	if ( ShouldAnimate() )
-		Animate( pev->framerate * (gpGlobals->time - m_lastTime) );
+	if (ShouldAnimate())
+		Animate(pev->framerate * (gpGlobals->time - m_lastTime));
 
-	pev->nextthink		= gpGlobals->time + 0.1;
+	pev->nextthink = gpGlobals->time + 0.1;
 	m_lastTime = gpGlobals->time;
 }
 
 
-void CCyclerSprite::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
+void CCyclerSprite::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
 	m_animate = !m_animate;
-	ALERT( at_console, "Sprite: %s\n", STRING(pev->model) );
+	ALERT(at_console, "Sprite: %s\n", STRING(pev->model));
 }
 
 
-int	CCyclerSprite::TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType )
+int	CCyclerSprite::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
-	if ( m_maxFrame > 1.0 )
+	if (m_maxFrame > 1.0)
 	{
-		Animate( 1.0 );
+		Animate(1.0);
 	}
 	return 1;
 }
 
-void CCyclerSprite::Animate( float frames )
-{ 
+void CCyclerSprite::Animate(float frames)
+{
 	pev->frame += frames;
-	if ( m_maxFrame > 0 )
-		pev->frame = fmod( pev->frame, m_maxFrame );
+	if (m_maxFrame > 0)
+		pev->frame = fmod(pev->frame, m_maxFrame);
 }
 
 
@@ -268,7 +268,7 @@ class CWeaponCycler : public CBasePlayerWeapon
 public:
 	void Spawn() override;
 	int iItemSlot() override { return 1; }
-	int GetItemInfo(ItemInfo *p) override {return 0; }
+	int GetItemInfo(ItemInfo* p) override { return 0; }
 
 	void PrimaryAttack() override;
 	void SecondaryAttack() override;
@@ -277,31 +277,31 @@ public:
 	int m_iszModel;
 	int m_iModel;
 };
-LINK_ENTITY_TO_CLASS( cycler_weapon, CWeaponCycler );
+LINK_ENTITY_TO_CLASS(cycler_weapon, CWeaponCycler);
 
 
-void CWeaponCycler::Spawn( )
+void CWeaponCycler::Spawn()
 {
-	pev->solid			= SOLID_SLIDEBOX;
-	pev->movetype		= MOVETYPE_NONE;
+	pev->solid = SOLID_SLIDEBOX;
+	pev->movetype = MOVETYPE_NONE;
 
-	PRECACHE_MODEL( (char *)STRING(pev->model) );
-	SET_MODEL( ENT(pev), STRING(pev->model) );
+	PRECACHE_MODEL((char*)STRING(pev->model));
+	SET_MODEL(ENT(pev), STRING(pev->model));
 	m_iszModel = pev->model;
 	m_iModel = pev->modelindex;
 
-	UTIL_SetOrigin( pev, pev->origin );
+	UTIL_SetOrigin(pev, pev->origin);
 	UTIL_SetSize(pev, Vector(-16, -16, 0), Vector(16, 16, 16));
-	SetTouch( &CWeaponCycler::DefaultTouch );
+	SetTouch(&CWeaponCycler::DefaultTouch);
 }
 
 
 
-BOOL CWeaponCycler::Deploy( )
+BOOL CWeaponCycler::Deploy()
 {
 	m_pPlayer->pev->viewmodel = m_iszModel;
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 1.0;
-	SendWeaponAnim( 0 );
+	SendWeaponAnim(0);
 	m_iClip = 0;
 	return TRUE;
 }
@@ -316,7 +316,7 @@ void CWeaponCycler::Holster()
 void CWeaponCycler::PrimaryAttack()
 {
 
-	SendWeaponAnim( pev->sequence );
+	SendWeaponAnim(pev->sequence);
 
 	m_flNextPrimaryAttack = gpGlobals->time + 0.3;
 }
@@ -329,8 +329,8 @@ void CWeaponCycler::SecondaryAttack()
 	pev->sequence = (pev->sequence + 1) % 8;
 
 	pev->modelindex = m_iModel;
-	void *pmodel = GET_MODEL_PTR( ENT(pev) );
-	GetSequenceInfo( pmodel, pev, &flFrameRate, &flGroundSpeed );
+	void* pmodel = GET_MODEL_PTR(ENT(pev));
+	GetSequenceInfo(pmodel, pev, &flFrameRate, &flGroundSpeed);
 	pev->modelindex = 0;
 
 	if (flFrameRate == 0.0)
@@ -338,7 +338,7 @@ void CWeaponCycler::SecondaryAttack()
 		pev->sequence = 0;
 	}
 
-	SendWeaponAnim( pev->sequence );
+	SendWeaponAnim(pev->sequence);
 
 	m_flNextSecondaryAttack = gpGlobals->time + 0.3;
 }
@@ -348,8 +348,8 @@ void CWeaponCycler::SecondaryAttack()
 // Flaming Wreakage
 class CWreckage : public CBaseMonster
 {
-	int		Save( CSave &save ) override;
-	int		Restore( CRestore &restore ) override;
+	int		Save(CSave& save) override;
+	int		Restore(CRestore& restore) override;
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	void Spawn() override;
@@ -358,72 +358,72 @@ class CWreckage : public CBaseMonster
 
 	int m_flStartTime;
 };
-TYPEDESCRIPTION	CWreckage::m_SaveData[] = 
+TYPEDESCRIPTION	CWreckage::m_SaveData[] =
 {
-	DEFINE_FIELD( CWreckage, m_flStartTime, FIELD_TIME ),
+	DEFINE_FIELD(CWreckage, m_flStartTime, FIELD_TIME),
 };
-IMPLEMENT_SAVERESTORE( CWreckage, CBaseMonster );
+IMPLEMENT_SAVERESTORE(CWreckage, CBaseMonster);
 
 
-LINK_ENTITY_TO_CLASS( cycler_wreckage, CWreckage );
+LINK_ENTITY_TO_CLASS(cycler_wreckage, CWreckage);
 
 void CWreckage::Spawn()
 {
-	pev->solid			= SOLID_NOT;
-	pev->movetype		= MOVETYPE_NONE;
-	pev->takedamage		= 0;
-	pev->effects		= 0;
+	pev->solid = SOLID_NOT;
+	pev->movetype = MOVETYPE_NONE;
+	pev->takedamage = 0;
+	pev->effects = 0;
 
-	pev->frame			= 0;
-	pev->nextthink		= gpGlobals->time + 0.1;
+	pev->frame = 0;
+	pev->nextthink = gpGlobals->time + 0.1;
 
 	if (pev->model)
 	{
-		PRECACHE_MODEL( (char *)STRING(pev->model) );
-		SET_MODEL( ENT(pev), STRING(pev->model) );
+		PRECACHE_MODEL((char*)STRING(pev->model));
+		SET_MODEL(ENT(pev), STRING(pev->model));
 	}
 	// pev->scale = 5.0;
 
-	m_flStartTime		= gpGlobals->time;
+	m_flStartTime = gpGlobals->time;
 }
 
-void CWreckage::Precache( )
+void CWreckage::Precache()
 {
-	if ( pev->model )
-		PRECACHE_MODEL( (char *)STRING(pev->model) );
+	if (pev->model)
+		PRECACHE_MODEL((char*)STRING(pev->model));
 }
 
 void CWreckage::Think()
 {
-	StudioFrameAdvance( );
+	StudioFrameAdvance();
 	pev->nextthink = gpGlobals->time + 0.2;
 
 	if (pev->dmgtime)
 	{
 		if (pev->dmgtime < gpGlobals->time)
 		{
-			UTIL_Remove( this );
+			UTIL_Remove(this);
 			return;
 		}
-		else if (RANDOM_FLOAT( 0, pev->dmgtime - m_flStartTime ) > pev->dmgtime - gpGlobals->time)
+		else if (RANDOM_FLOAT(0, pev->dmgtime - m_flStartTime) > pev->dmgtime - gpGlobals->time)
 		{
 			return;
 		}
 	}
-	
-	Vector VecSrc;
-	
-	VecSrc.x = RANDOM_FLOAT( pev->absmin.x, pev->absmax.x );
-	VecSrc.y = RANDOM_FLOAT( pev->absmin.y, pev->absmax.y );
-	VecSrc.z = RANDOM_FLOAT( pev->absmin.z, pev->absmax.z );
 
-	MESSAGE_BEGIN( MSG_PVS, SVC_TEMPENTITY, VecSrc );
-		WRITE_BYTE( TE_SMOKE );
-		WRITE_COORD( VecSrc.x );
-		WRITE_COORD( VecSrc.y );
-		WRITE_COORD( VecSrc.z );
-		WRITE_SHORT( g_sModelIndexSmoke );
-		WRITE_BYTE( RANDOM_LONG(0,49) + 50 ); // scale * 10
-		WRITE_BYTE( RANDOM_LONG(0, 3) + 8  ); // framerate
+	Vector VecSrc;
+
+	VecSrc.x = RANDOM_FLOAT(pev->absmin.x, pev->absmax.x);
+	VecSrc.y = RANDOM_FLOAT(pev->absmin.y, pev->absmax.y);
+	VecSrc.z = RANDOM_FLOAT(pev->absmin.z, pev->absmax.z);
+
+	MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, VecSrc);
+	WRITE_BYTE(TE_SMOKE);
+	WRITE_COORD(VecSrc.x);
+	WRITE_COORD(VecSrc.y);
+	WRITE_COORD(VecSrc.z);
+	WRITE_SHORT(g_sModelIndexSmoke);
+	WRITE_BYTE(RANDOM_LONG(0, 49) + 50); // scale * 10
+	WRITE_BYTE(RANDOM_LONG(0, 3) + 8); // framerate
 	MESSAGE_END();
 }

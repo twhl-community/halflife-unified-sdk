@@ -57,9 +57,9 @@ R_StudioDrawPlayer
 
 ====================
 */
-int R_StudioDrawPlayer( int flags, entity_state_t *pplayer )
+int R_StudioDrawPlayer(int flags, entity_state_t* pplayer)
 {
-	return g_StudioRenderer.StudioDrawPlayer( flags, pplayer );
+	return g_StudioRenderer.StudioDrawPlayer(flags, pplayer);
 }
 
 /*
@@ -68,9 +68,9 @@ R_StudioDrawModel
 
 ====================
 */
-int R_StudioDrawModel( int flags )
+int R_StudioDrawModel(int flags)
 {
-	return g_StudioRenderer.StudioDrawModel( flags );
+	return g_StudioRenderer.StudioDrawModel(flags);
 }
 
 /*
@@ -99,18 +99,18 @@ HUD_GetStudioModelInterface
 Export this function for the engine to use the studio renderer class to render objects.
 ====================
 */
-int DLLEXPORT HUD_GetStudioModelInterface( int version, struct r_studio_interface_s **ppinterface, struct engine_studio_api_s *pstudio )
+int DLLEXPORT HUD_GetStudioModelInterface(int version, struct r_studio_interface_s** ppinterface, struct engine_studio_api_s* pstudio)
 {
-//	RecClStudioInterface(version, ppinterface, pstudio);
+	//	RecClStudioInterface(version, ppinterface, pstudio);
 
-	if ( version != STUDIO_INTERFACE_VERSION )
+	if (version != STUDIO_INTERFACE_VERSION)
 		return 0;
 
 	// Point the engine to our callbacks
 	*ppinterface = &studio;
 
 	// Copy in engine helper functions
-	memcpy( &IEngineStudio, pstudio, sizeof( IEngineStudio ) );
+	memcpy(&IEngineStudio, pstudio, sizeof(IEngineStudio));
 
 	// Initialize local variables, etc.
 	R_StudioInit();

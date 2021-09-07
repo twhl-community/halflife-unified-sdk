@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*
+*	This product contains software technology licensed from Id
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -18,9 +18,9 @@
 //
 // Dynamic Decals
 //
-enum decal_e 
-{	
-	DECAL_GUNSHOT1 = 0, 
+enum decal_e
+{
+	DECAL_GUNSHOT1 = 0,
 	DECAL_GUNSHOT2,
 	DECAL_GUNSHOT3,
 	DECAL_GUNSHOT4,
@@ -33,18 +33,18 @@ enum decal_e
 	DECAL_LAMBDA6,
 	DECAL_SCORCH1,
 	DECAL_SCORCH2,
-	DECAL_BLOOD1, 
-	DECAL_BLOOD2, 
-	DECAL_BLOOD3, 
-	DECAL_BLOOD4, 
-	DECAL_BLOOD5, 
-	DECAL_BLOOD6, 
-	DECAL_YBLOOD1, 
-	DECAL_YBLOOD2, 
-	DECAL_YBLOOD3, 
-	DECAL_YBLOOD4, 
-	DECAL_YBLOOD5, 
-	DECAL_YBLOOD6, 
+	DECAL_BLOOD1,
+	DECAL_BLOOD2,
+	DECAL_BLOOD3,
+	DECAL_BLOOD4,
+	DECAL_BLOOD5,
+	DECAL_BLOOD6,
+	DECAL_YBLOOD1,
+	DECAL_YBLOOD2,
+	DECAL_YBLOOD3,
+	DECAL_YBLOOD4,
+	DECAL_YBLOOD5,
+	DECAL_YBLOOD6,
 	DECAL_GLASSBREAK1,
 	DECAL_GLASSBREAK2,
 	DECAL_GLASSBREAK3,
@@ -64,9 +64,9 @@ enum decal_e
 	DECAL_MOMMASPLAT,
 };
 
-typedef struct 
+typedef struct
 {
-	const char	*name;
+	const char* name;
 	int			index;
 } DLL_DECALLIST;
 

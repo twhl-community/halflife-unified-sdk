@@ -31,16 +31,16 @@ namespace vgui
 class CListBox : public Panel
 {
 public:
-	
-					CListBox();
-					~CListBox();
+
+	CListBox();
+	~CListBox();
 
 	void			Init();
 	void			Term();
 
 	// Add an item to the listbox. This automatically sets the item's parent to the listbox 
 	// and resizes the item's width to fit within the listbox.
-	void			AddItem(Panel *pPanel);
+	void			AddItem(Panel* pPanel);
 
 	// Get the number of items currently in the listbox.
 	int				GetNumItems();
@@ -59,11 +59,11 @@ public:
 	// returns the maximum value the scrollbar can scroll to
 	int				GetScrollMax();
 
-// vgui overrides.
+	// vgui overrides.
 public:
-	
+
 	virtual void	setPos(int x, int y);
-	virtual void	setSize(int wide,int tall);
+	virtual void	setSize(int wide, int tall);
 	virtual void	setPixelScroll(int value);
 	virtual void	paintBackground();
 
@@ -73,28 +73,28 @@ protected:
 	class LBItem
 	{
 	public:
-		Panel	*m_pPanel;
-		LBItem	*m_pPrev, *m_pNext;
+		Panel* m_pPanel;
+		LBItem* m_pPrev, * m_pNext;
 	};
 
 	class ListBoxSignal : public IntChangeSignal
 	{
 	public:
-		void intChanged(int value,Panel* panel)
+		void intChanged(int value, Panel* panel)
 		{
 			m_pListBox->setPixelScroll(-value);
 		}
 
-		vgui::CListBox	*m_pListBox;
+		vgui::CListBox* m_pListBox;
 	};
 
 
 protected:
-	
+
 	void			InternalLayout();
 
 
-protected: 
+protected:
 
 	// All the items..
 	LBItem			m_Items;

@@ -20,7 +20,7 @@
 
 #include "particleman.h"
 #include "tri.h"
-extern IParticleMan *g_pParticleMan;
+extern IParticleMan* g_pParticleMan;
 
 /*
 =================
@@ -31,7 +31,7 @@ Non-transparent triangles-- add them here
 */
 void DLLEXPORT HUD_DrawNormalTriangles()
 {
-//	RecClDrawNormalTriangles();
+	//	RecClDrawNormalTriangles();
 
 	gHUD.m_Spectator.DrawOverview();
 }
@@ -49,12 +49,12 @@ Render any triangles with transparent rendermode needs here
 */
 void DLLEXPORT HUD_DrawTransparentTriangles()
 {
-//	RecClDrawTransparentTriangles();
+	//	RecClDrawTransparentTriangles();
 
 #if defined( _TFC )
 	RunEventList();
 #endif
 
-	if ( g_pParticleMan )
-		 g_pParticleMan->Update();
+	if (g_pParticleMan)
+		g_pParticleMan->Update();
 }

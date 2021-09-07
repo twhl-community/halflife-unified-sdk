@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*
+*	This product contains software technology licensed from Id
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -34,7 +34,7 @@
 typedef struct beam_s BEAM;
 struct beam_s
 {
-	BEAM		*next;
+	BEAM* next;
 	int			type;
 	int			flags;
 	Vector		source;
@@ -55,8 +55,8 @@ struct beam_s
 	int			endEntity;
 	int			modelIndex;
 	int			frameCount;
-	struct model_s		*pFollowModel;
-	struct particle_s	*particles;
+	struct model_s* pFollowModel;
+	struct particle_s* particles;
 };
 
 #endif

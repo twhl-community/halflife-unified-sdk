@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*
+*	This product contains software technology licensed from Id
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -28,11 +28,11 @@
 
 typedef struct cvar_s
 {
-	const char	*name;
+	const char* name;
 	//Technically this should be non-const but that only matters to engine code
-	const char	*string;
+	const char* string;
 	int		flags;
 	float	value;
-	struct cvar_s *next;
+	struct cvar_s* next;
 } cvar_t;
 #endif

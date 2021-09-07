@@ -24,15 +24,15 @@ namespace vgui
 class CGrid : public Panel
 {
 public:
-						CGrid();
+	CGrid();
 	virtual				~CGrid();
 
 	bool				SetDimensions(int xCols, int yRows);		// Set how many columns and rows in the grid.
 	void				Term();
 
-	Panel*				GetEntry(int x, int y);						// Get the panel associated with a grid entry.
-	bool				SetEntry(int x, int y, Panel *pPanel);
-	
+	Panel* GetEntry(int x, int y);						// Get the panel associated with a grid entry.
+	bool				SetEntry(int x, int y, Panel* pPanel);
+
 	int					GetXSpacing();
 	int					GetYSpacing();
 	void				SetSpacing(int xSpacing, int ySpacing);		// Set spacing between rows and columns.
@@ -53,9 +53,9 @@ public:
 	void				AutoSetRowHeights();						// Just does SetRowHeight(iRow, CalcFitRowHeight(iRow)) for all rows.
 
 	bool				GetEntryBox(								// Returns the bounding box for the specified entry.
-		int col, int row, int &x, int &y, int &w, int &h);
+		int col, int row, int& x, int& y, int& w, int& h);
 
-	bool				CopyColumnWidths(CGrid *pOther);			// Copy the column widths from the other grid. Fails if the 
+	bool				CopyColumnWidths(CGrid* pOther);			// Copy the column widths from the other grid. Fails if the 
 																	// column count is different.
 
 	void				RepositionContents();						// Sets the size and position of all the grid entries based
@@ -67,11 +67,11 @@ public:
 	void				SetRowUnderline(int row, bool enabled, int offset, int r, int g, int b, int a);	// sets underline color for a particular row
 
 	// returns the true if found, false otherwise
-	bool					getCellAtPoint(int worldX, int worldY, int &row, int &col);
+	bool					getCellAtPoint(int worldX, int worldY, int& row, int& col);
 
-// Panel overrides.
+	// Panel overrides.
 public:
-	
+
 	virtual void		paint();
 	virtual void		paintBackground();
 
@@ -80,10 +80,10 @@ protected:
 	class CGridEntry
 	{
 	public:
-				CGridEntry();
-				~CGridEntry();
-		
-		Panel	*m_pPanel;
+		CGridEntry();
+		~CGridEntry();
+
+		Panel* m_pPanel;
 
 		bool	m_bUnderline;
 		short	m_UnderlineColor[4];
@@ -91,7 +91,7 @@ protected:
 	};
 
 	void				Clear();
-	CGridEntry*			GridEntry(int x, int y);
+	CGridEntry* GridEntry(int x, int y);
 
 	void				CalcColOffsets(int iStart);
 	void				CalcRowOffsets(int iStart);
@@ -103,17 +103,17 @@ protected:
 
 	int			m_xCols;
 	int			m_yRows;
-	
+
 	int			m_xSpacing;
 	int			m_ySpacing;
 
-	int			*m_Widths;
-	int			*m_Heights;
-	int			*m_ColOffsets;
-	int			*m_RowOffsets;
-	
-	CGridEntry	*m_GridEntries;
-	
+	int* m_Widths;
+	int* m_Heights;
+	int* m_ColOffsets;
+	int* m_RowOffsets;
+
+	CGridEntry* m_GridEntries;
+
 };
 
 };

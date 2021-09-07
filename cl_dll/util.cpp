@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*
+*	This product contains software technology licensed from Id
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -25,10 +25,10 @@
 #include "cl_util.h"
 #include <string.h>
 
-HSPRITE LoadSprite(const char *pszName)
+HSPRITE LoadSprite(const char* pszName)
 {
 	int i;
-	char sz[256]; 
+	char sz[256];
 
 	if (ScreenWidth < 640)
 		i = 320;

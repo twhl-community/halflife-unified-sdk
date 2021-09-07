@@ -33,7 +33,7 @@
 
 #endif
 
-void *Sys_GetProcAddress( void *pModuleHandle, const char *pName );
+void* Sys_GetProcAddress(void* pModuleHandle, const char* pName);
 
 // All interfaces derive from this.
 class IBaseInterface
@@ -45,7 +45,7 @@ public:
 
 
 #define CREATEINTERFACE_PROCNAME	"CreateInterface"
-typedef IBaseInterface* (*CreateInterfaceFn)(const char *pName, int *pReturnCode);
+typedef IBaseInterface* (*CreateInterfaceFn)(const char* pName, int* pReturnCode);
 
 
 typedef IBaseInterface* (*InstantiateInterfaceFn)();
@@ -55,15 +55,15 @@ typedef IBaseInterface* (*InstantiateInterfaceFn)();
 class InterfaceReg
 {
 public:
-				InterfaceReg(InstantiateInterfaceFn fn, const char *pName);
+	InterfaceReg(InstantiateInterfaceFn fn, const char* pName);
 
 public:
 
 	InstantiateInterfaceFn	m_CreateFn;
-	const char				*m_pName;
+	const char* m_pName;
 
-	InterfaceReg			*m_pNext; // For the global list.
-	static InterfaceReg		*s_pInterfaceRegs;
+	InterfaceReg* m_pNext; // For the global list.
+	static InterfaceReg* s_pInterfaceRegs;
 };
 
 
@@ -98,16 +98,16 @@ public:
 
 
 #ifdef WIN32
-	#define EXPORT_FUNCTION __declspec(dllexport)
+#define EXPORT_FUNCTION __declspec(dllexport)
 #else
-	#define EXPORT_FUNCTION __attribute__ ((visibility("default")))
+#define EXPORT_FUNCTION __attribute__ ((visibility("default")))
 #endif
 
 
 // This function is automatically exported and allows you to access any interfaces exposed with the above macros.
 // if pReturnCode is set, it will return one of the following values
 // extend this for other error conditions/code
-enum 
+enum
 {
 	IFACE_OK = 0,
 	IFACE_FAILED
@@ -116,17 +116,17 @@ enum
 
 extern "C"
 {
-	EXPORT_FUNCTION IBaseInterface* CreateInterface(const char *pName, int *pReturnCode);
+	EXPORT_FUNCTION IBaseInterface* CreateInterface(const char* pName, int* pReturnCode);
 };
 
 
-extern CreateInterfaceFn	Sys_GetFactoryThis( void );
+extern CreateInterfaceFn	Sys_GetFactoryThis(void);
 
 
 //-----------------------------------------------------------------------------
 // UNDONE: This is obsolete, use the module load/unload/get instead!!!
 //-----------------------------------------------------------------------------
-extern CreateInterfaceFn	Sys_GetFactory( const char *pModuleName );
+extern CreateInterfaceFn	Sys_GetFactory(const char* pModuleName);
 
 
 // load/unload components
@@ -137,10 +137,10 @@ class CSysModule;
 // The factory for that module should be passed on to dependent components for
 // proper versioning.
 //-----------------------------------------------------------------------------
-extern CSysModule			*Sys_LoadModule( const char *pModuleName );
-extern void					Sys_UnloadModule( CSysModule *pModule );
+extern CSysModule* Sys_LoadModule(const char* pModuleName);
+extern void					Sys_UnloadModule(CSysModule* pModule);
 
-extern CreateInterfaceFn	Sys_GetFactory( CSysModule *pModule );
+extern CreateInterfaceFn	Sys_GetFactory(CSysModule* pModule);
 
 
 #endif

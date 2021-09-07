@@ -3,7 +3,7 @@
 
 #include "particleman.h"
 
-extern IParticleMan *g_pParticleMan;
+extern IParticleMan* g_pParticleMan;
 
 
 

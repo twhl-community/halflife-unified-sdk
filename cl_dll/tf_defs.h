@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*
+*	This product contains software technology licensed from Id
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
 *	All Rights Reserved.
 *
 ****/
@@ -47,9 +47,9 @@
 //#define MAP_DEBUG                     // Debug for Map code. I suggest running in a hi-res
 										// mode and/or piping the output from the server to a file.
 #ifdef MAP_DEBUG
-	#define MDEBUG(x) x
+#define MDEBUG(x) x
 #else
-	#define MDEBUG(x)
+#define MDEBUG(x)
 #endif
 //#define VERBOSE                       // Verbose Debugging on/off
 
@@ -1015,10 +1015,10 @@ float live_camera;
 float already_chosen_map;
 
 // grappling hook variables
-.entity	hook;	
+.entity	hook;
 .float	on_hook;
 .float  fire_held_down;// flag - TRUE if player is still holding down the
-                       // fire button after throwing a hook.
+					   // fire button after throwing a hook.
 */
 /*==================================================*/
 /* Server Settings								    */
@@ -1200,7 +1200,7 @@ extern float fOldCeaseFire;
 extern float cb_ceasefire_time;
 extern float last_id;
 extern float spy_off;
-extern float old_grens;		
+extern float old_grens;
 extern float flagem_checked;
 extern float flNextEqualisationCalc;
 extern BOOL  cease_fire;
@@ -1213,14 +1213,14 @@ extern float autokick_kills;
 extern float deathmsg;		// Global, which is set before every T_Damage, to indicate
 							// the death message that should be used.
 
-extern char *sTeamSpawnNames[];
-extern char *sClassNames[];
-extern char *sNewClassModelFiles[];
-extern char *sOldClassModelFiles[];
-extern char *sClassModels[];
-extern char *sClassCfgs[];
-extern char *sGrenadeNames[];
-extern string_t	team_menu_string;	
+extern char* sTeamSpawnNames[];
+extern char* sClassNames[];
+extern char* sNewClassModelFiles[];
+extern char* sOldClassModelFiles[];
+extern char* sClassModels[];
+extern char* sClassCfgs[];
+extern char* sGrenadeNames[];
+extern string_t	team_menu_string;
 
 extern int toggleflags;					// toggleable flags
 
@@ -1232,7 +1232,7 @@ extern float g_fNextPrematchAlert;
 typedef struct
 {
 	int			ip;
-	edict_t	*pEdict;
+	edict_t* pEdict;
 } ip_storage_t;
 
 extern ip_storage_t g_IpStorage[32];
@@ -1242,22 +1242,22 @@ class CGhost;
 BOOL ClassIsRestricted(float tno, int pc);
 char* GetTeamName(int tno);
 int TeamFortress_GetNoPlayers();
-void DestroyBuilding(CBaseEntity *eng, char *bld);
-void teamsprint( int tno, CBaseEntity *ignore, int msg_dest, const char *st, const char *param1 = NULL, const char *param2 = NULL, const char *param3 = NULL );
-float anglemod( float v );
+void DestroyBuilding(CBaseEntity* eng, char* bld);
+void teamsprint(int tno, CBaseEntity* ignore, int msg_dest, const char* st, const char* param1 = NULL, const char* param2 = NULL, const char* param3 = NULL);
+float anglemod(float v);
 
 // Team Funcs
 BOOL TeamFortress_TeamIsCivilian(float tno);
-void TeamFortress_TeamShowScores(BOOL bLong, CBasePlayer *pPlayer);
+void TeamFortress_TeamShowScores(BOOL bLong, CBasePlayer* pPlayer);
 BOOL TeamFortress_TeamPutPlayerInTeam();
 void TeamFortress_TeamSetColor(int tno);
 void TeamFortress_TeamIncreaseScore(int tno, int scoretoadd);
 int TeamFortress_TeamGetScoreFrags(int tno);
 int TeamFortress_TeamGetNoPlayers(int tno);
-float TeamEqualiseDamage(CBaseEntity *targ, CBaseEntity *attacker, float damage);
-BOOL IsSpawnPointValid( Vector &pos );
-BOOL TeamFortress_SortTeams( void );
-void DumpClanScores( void );
+float TeamEqualiseDamage(CBaseEntity* targ, CBaseEntity* attacker, float damage);
+BOOL IsSpawnPointValid(Vector& pos);
+BOOL TeamFortress_SortTeams(void);
+void DumpClanScores(void);
 void CalculateTeamEqualiser();
 
 // mapscript funcs
@@ -1266,29 +1266,29 @@ void ParseTFMapSettings();
 CBaseEntity* Finditem(int ino);
 CBaseEntity* Findgoal(int gno);
 CBaseEntity* Findteamspawn(int gno);
-void RemoveGoal(CBaseEntity *Goal);
-void tfgoalitem_GiveToPlayer(CBaseEntity *Item, CBasePlayer *AP, CBaseEntity *Goal);
-void dremove( CBaseEntity *te );
-void tfgoalitem_RemoveFromPlayer(CBaseEntity *Item, CBasePlayer *AP, int iMethod);
-void tfgoalitem_drop(CBaseEntity *Item, BOOL PAlive, CBasePlayer *P);
-void DisplayItemStatus(CBaseEntity *Goal, CBasePlayer *Player, CBaseEntity *Item);
-void tfgoalitem_checkgoalreturn(CBaseEntity *Item);
-void DoGoalWork(CBaseEntity *Goal, CBasePlayer *AP);
-void DoResults(CBaseEntity *Goal, CBasePlayer *AP, BOOL bAddBonuses);
-void DoGroupWork(CBaseEntity *Goal, CBasePlayer *AP);
+void RemoveGoal(CBaseEntity* Goal);
+void tfgoalitem_GiveToPlayer(CBaseEntity* Item, CBasePlayer* AP, CBaseEntity* Goal);
+void dremove(CBaseEntity* te);
+void tfgoalitem_RemoveFromPlayer(CBaseEntity* Item, CBasePlayer* AP, int iMethod);
+void tfgoalitem_drop(CBaseEntity* Item, BOOL PAlive, CBasePlayer* P);
+void DisplayItemStatus(CBaseEntity* Goal, CBasePlayer* Player, CBaseEntity* Item);
+void tfgoalitem_checkgoalreturn(CBaseEntity* Item);
+void DoGoalWork(CBaseEntity* Goal, CBasePlayer* AP);
+void DoResults(CBaseEntity* Goal, CBasePlayer* AP, BOOL bAddBonuses);
+void DoGroupWork(CBaseEntity* Goal, CBasePlayer* AP);
 // hooks into the mapscript for all entities
-BOOL ActivateDoResults(CBaseEntity *Goal, CBasePlayer *AP, CBaseEntity *ActivatingGoal);
-BOOL ActivationSucceeded(CBaseEntity *Goal, CBasePlayer *AP, CBaseEntity *ActivatingGoal);
+BOOL ActivateDoResults(CBaseEntity* Goal, CBasePlayer* AP, CBaseEntity* ActivatingGoal);
+BOOL ActivationSucceeded(CBaseEntity* Goal, CBasePlayer* AP, CBaseEntity* ActivatingGoal);
 
 // prematch & ceasefire
 void Display_Prematch();
 void Check_Ceasefire();
 
 // admin
-void KickPlayer( CBaseEntity *pTarget );
-void BanPlayer( CBaseEntity *pTarget );
-CGhost *FindGhost( int iGhostID );
-int GetBattleID( edict_t *pEntity );
+void KickPlayer(CBaseEntity* pTarget);
+void BanPlayer(CBaseEntity* pTarget);
+CGhost* FindGhost(int iGhostID);
+int GetBattleID(edict_t* pEntity);
 
 extern cvar_t	tfc_spam_penalty1;// the initial gag penalty for a spammer (seconds)
 extern cvar_t	tfc_spam_penalty2;// incremental gag penalty (seconds) for each time gagged spammer continues to speak.
@@ -1302,11 +1302,11 @@ extern cvar_t	allow_spectators;
 class CTFFlame : public CBaseMonster
 {
 public:
-	void	Spawn( void );
-	void	Precache( void );
-	void	EXPORT FlameThink( void );
-	static  CTFFlame *FlameSpawn( CBaseEntity *pOwner, CBaseEntity *pTarget );
-	void	FlameDestroy( void );
+	void	Spawn(void);
+	void	Precache(void);
+	void	EXPORT FlameThink(void);
+	static  CTFFlame* FlameSpawn(CBaseEntity* pOwner, CBaseEntity* pTarget);
+	void	FlameDestroy(void);
 
 	float	m_flNextDamageTime;
 };
@@ -1316,22 +1316,22 @@ public:
 class CTFGoal : public CBaseAnimating
 {
 public:
-	void	Spawn( void );
-	void	StartGoal( void );
-	void	EXPORT PlaceGoal( void );
-	void	Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
-	int		Classify ( void ) { return	CLASS_TFGOAL; }
+	void	Spawn(void);
+	void	StartGoal(void);
+	void	EXPORT PlaceGoal(void);
+	void	Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	int		Classify(void) { return	CLASS_TFGOAL; }
 
-	void	SetObjectCollisionBox( void );
+	void	SetObjectCollisionBox(void);
 };
- 
+
 class CTFGoalItem : public CTFGoal
 {
 public:
-	void	Spawn( void );
-	void	StartItem( void );
-	void	EXPORT PlaceItem( void );
-	int		Classify ( void ) { return	CLASS_TFGOAL_ITEM; }
+	void	Spawn(void);
+	void	StartItem(void);
+	void	EXPORT PlaceItem(void);
+	int		Classify(void) { return	CLASS_TFGOAL_ITEM; }
 
 	float	m_flDroppedAt;
 };
@@ -1339,17 +1339,17 @@ public:
 class CTFTimerGoal : public CTFGoal
 {
 public:
-	void	Spawn( void );
-	int		Classify ( void ) { return	CLASS_TFGOAL_TIMER; }
+	void	Spawn(void);
+	int		Classify(void) { return	CLASS_TFGOAL_TIMER; }
 };
 
 class CTFSpawn : public CBaseEntity
 {
 public:
-	void	Spawn( void );
-	void	Activate( void );
-	int		Classify ( void ) { return	CLASS_TFSPAWN; }
-	BOOL	CheckTeam( int iTeamNo );
+	void	Spawn(void);
+	void	Activate(void);
+	int		Classify(void) { return	CLASS_TFSPAWN; }
+	BOOL	CheckTeam(int iTeamNo);
 
 	EHANDLE m_pTeamCheck;
 };
@@ -1357,30 +1357,30 @@ public:
 class CTFDetect : public CBaseEntity
 {
 public:
-	void	Spawn( void );
-	int		Classify ( void ) { return	CLASS_TFGOAL; }
+	void	Spawn(void);
+	int		Classify(void) { return	CLASS_TFGOAL; }
 };
 
 class CTelefragDeath : public CBaseEntity
 {
 public:
-	void		Spawn( void );
-	void		EXPORT	DeathTouch( CBaseEntity *pOther );
+	void		Spawn(void);
+	void		EXPORT	DeathTouch(CBaseEntity* pOther);
 };
 
 class CTeamCheck : public CBaseDelay
 {
 public:
-	void Spawn( void );
-	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
-	BOOL TeamMatches( int iTeam );
+	void Spawn(void);
+	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	BOOL TeamMatches(int iTeam);
 };
 
 class CTeamSet : public CBaseDelay
 {
 public:
-	void Spawn( void );
-	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
+	void Spawn(void);
+	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 };
 
 #endif // TF_DEFS_ONLY

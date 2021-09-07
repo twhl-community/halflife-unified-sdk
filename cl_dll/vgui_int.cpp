@@ -27,42 +27,42 @@
 namespace
 {
 
-class TexturePanel : public Panel , public ActionSignal
+class TexturePanel : public Panel, public ActionSignal
 {
 private:
 	int _bindIndex;
 	TextEntry* _textEntry;
 public:
-	TexturePanel() : Panel(0,0,256,276)
+	TexturePanel() : Panel(0, 0, 256, 276)
 	{
-		_bindIndex=2700;
-		_textEntry=new TextEntry("2700",0,0,128,20);
+		_bindIndex = 2700;
+		_textEntry = new TextEntry("2700", 0, 0, 128, 20);
 		_textEntry->setParent(this);
 		_textEntry->addActionSignal(this);
 	}
 public:
-	bool isWithin(int x,int y) override
+	bool isWithin(int x, int y) override
 	{
-		return _textEntry->isWithin(x,y);
+		return _textEntry->isWithin(x, y);
 	}
 public:
 	void actionPerformed(Panel* panel) override
 	{
 		char buf[256];
-		_textEntry->getText(0,buf,256);
-		sscanf(buf,"%d",&_bindIndex);
+		_textEntry->getText(0, buf, 256);
+		sscanf(buf, "%d", &_bindIndex);
 	}
 protected:
 	void paintBackground() override
 	{
-			Panel::paintBackground();
-			
-			int wide,tall;
-			getPaintSize(wide,tall);
-		
-			drawSetColor(0,0,255,0);
-			drawSetTexture(_bindIndex);
-			drawTexturedRect(0,19,257,257);
+		Panel::paintBackground();
+
+		int wide, tall;
+		getPaintSize(wide, tall);
+
+		drawSetColor(0, 0, 255, 0);
+		drawSetTexture(_bindIndex);
+		drawTexturedRect(0, 19, 257, 257);
 	}
 
 };
@@ -83,28 +83,28 @@ void* VGui_GetPanel()
 
 void VGui_Startup()
 {
-	Panel* root=(Panel*)VGui_GetPanel();
-	root->setBgColor(128,128,0,0);
+	Panel* root = (Panel*)VGui_GetPanel();
+	root->setBgColor(128, 128, 0, 0);
 	//root->setNonPainted(false);
 	//root->setBorder(new LineBorder());
 	root->setLayout(new BorderLayout(0));
 
-	
+
 	//root->getSurfaceBase()->setEmulatedCursorVisible(true);
 
 	if (gViewPort != NULL)
 	{
-//		root->removeChild(gViewPort);
+		//		root->removeChild(gViewPort);
 
-		// free the memory
-//		delete gViewPort;
-//		gViewPort = NULL;
+				// free the memory
+		//		delete gViewPort;
+		//		gViewPort = NULL;
 
 		gViewPort->Initialize();
 	}
 	else
 	{
-		gViewPort = new TeamFortressViewport(0,0,root->getWide(),root->getTall());
+		gViewPort = new TeamFortressViewport(0, 0, root->getWide(), root->getTall());
 		gViewPort->setParent(root);
 	}
 

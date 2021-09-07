@@ -20,7 +20,7 @@ class IGameClientExports : public IBaseInterface
 {
 public:
 	// returns the name of the server the user is connected to, if any
-	virtual const char *GetServerHostName() = 0;
+	virtual const char* GetServerHostName() = 0;
 
 	// ingame voice manipulation
 	virtual bool IsPlayerGameVoiceMuted(int playerIndex) = 0;

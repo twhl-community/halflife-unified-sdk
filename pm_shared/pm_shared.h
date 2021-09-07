@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*
+*	This product contains software technology licensed from Id
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -20,9 +20,9 @@
 #define PM_SHAREDH
 #pragma once
 
-void PM_Init( struct playermove_s *ppmove );
-void PM_Move ( struct playermove_s *ppmove, int server );
-char PM_FindTextureType( char *name );
+void PM_Init(struct playermove_s* ppmove);
+void PM_Move(struct playermove_s* ppmove, int server);
+char PM_FindTextureType(char* name);
 
 // Spectator Movement modes (stored in pev->iuser1, so the physics code can get at them)
 #define OBS_NONE				0

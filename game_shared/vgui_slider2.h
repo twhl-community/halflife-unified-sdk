@@ -36,17 +36,17 @@ private:
 	bool                  _rangeWindowEnabled;
 	int                   _buttonOffset;
 public:
-	Slider2(int x,int y,int wide,int tall,bool vertical);
+	Slider2(int x, int y, int wide, int tall, bool vertical);
 public:
 	virtual void setValue(int value);
 	virtual int  getValue();
 	virtual bool isVertical();
 	virtual void addIntChangeSignal(IntChangeSignal* s);
-    virtual void setRange(int min,int max);
-	virtual void getRange(int& min,int& max);
+	virtual void setRange(int min, int max);
+	virtual void getRange(int& min, int& max);
 	virtual void setRangeWindow(int rangeWindow);
 	virtual void setRangeWindowEnabled(bool state);
-    void setSize(int wide,int tall) override;
+	void setSize(int wide, int tall) override;
 	virtual void getNobPos(int& min, int& max);
 	virtual bool hasFullRange();
 	virtual void setButtonOffset(int buttonOffset);
@@ -54,12 +54,12 @@ private:
 	virtual void recomputeNobPosFromValue();
 	virtual void recomputeValueFromNobPos();
 public: //bullshit public
-	virtual void privateCursorMoved(int x,int y,Panel* panel);
-	virtual void privateMousePressed(MouseCode code,Panel* panel);
-	virtual void privateMouseReleased(MouseCode code,Panel* panel);
+	virtual void privateCursorMoved(int x, int y, Panel* panel);
+	virtual void privateMousePressed(MouseCode code, Panel* panel);
+	virtual void privateMouseReleased(MouseCode code, Panel* panel);
 protected:
-    virtual void fireIntChangeSignal();
-    void paintBackground() override;
+	virtual void fireIntChangeSignal();
+	void paintBackground() override;
 };
 
 }

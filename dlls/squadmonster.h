@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*
+*	This product contains software technology licensed from Id
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
 *	All Rights Reserved.
 *
 *   This source code contains proprietary and confidential information of
@@ -53,12 +53,12 @@
 //=========================================================
 // CSquadMonster - for any monster that forms squads.
 //=========================================================
-class CSquadMonster : public CBaseMonster 
+class CSquadMonster : public CBaseMonster
 {
 public:
 	// squad leader info
 	EHANDLE	m_hSquadLeader;		// who is my leader
-	EHANDLE	m_hSquadMember[MAX_SQUAD_MEMBERS-1];	// valid only for leader
+	EHANDLE	m_hSquadMember[MAX_SQUAD_MEMBERS - 1];	// valid only for leader
 	int		m_afSquadSlots;
 	float	m_flLastEnemySightTime; // last time anyone in the squad saw the enemy
 	BOOL	m_fEnemyEluded;
@@ -66,55 +66,55 @@ public:
 	// squad member info
 	int		m_iMySlot;// this is the behaviour slot that the monster currently holds in the squad. 
 
-	int  CheckEnemy ( CBaseEntity *pEnemy ) override;
-	void StartMonster () override;
+	int  CheckEnemy(CBaseEntity* pEnemy) override;
+	void StartMonster() override;
 	void VacateSlot();
 	void ScheduleChange() override;
-	void Killed( entvars_t *pevAttacker, int iGib ) override;
-	BOOL OccupySlot( int iDesiredSlot );
+	void Killed(entvars_t* pevAttacker, int iGib) override;
+	BOOL OccupySlot(int iDesiredSlot);
 	BOOL NoFriendlyFire();
 
 	// squad functions still left in base class
-	CSquadMonster *MySquadLeader( ) 
-	{ 
-		CSquadMonster *pSquadLeader = (CSquadMonster *)((CBaseEntity *)m_hSquadLeader); 
+	CSquadMonster* MySquadLeader()
+	{
+		CSquadMonster* pSquadLeader = (CSquadMonster*)((CBaseEntity*)m_hSquadLeader);
 		if (pSquadLeader != NULL)
 			return pSquadLeader;
 		return this;
 	}
-	CSquadMonster *MySquadMember( int i ) 
-	{ 
-		if (i >= MAX_SQUAD_MEMBERS-1)
+	CSquadMonster* MySquadMember(int i)
+	{
+		if (i >= MAX_SQUAD_MEMBERS - 1)
 			return this;
 		else
-			return (CSquadMonster *)((CBaseEntity *)m_hSquadMember[i]); 
+			return (CSquadMonster*)((CBaseEntity*)m_hSquadMember[i]);
 	}
-	int	InSquad () { return m_hSquadLeader != NULL; }
-	int IsLeader () { return m_hSquadLeader == this; }
-	int SquadJoin ( int searchRadius );
-	int SquadRecruit ( int searchRadius, int maxMembers );
+	int	InSquad() { return m_hSquadLeader != NULL; }
+	int IsLeader() { return m_hSquadLeader == this; }
+	int SquadJoin(int searchRadius);
+	int SquadRecruit(int searchRadius, int maxMembers);
 	int	SquadCount();
-	void SquadRemove( CSquadMonster *pRemove );
+	void SquadRemove(CSquadMonster* pRemove);
 	void SquadUnlink();
-	BOOL SquadAdd( CSquadMonster *pAdd );
+	BOOL SquadAdd(CSquadMonster* pAdd);
 	void SquadDisband();
-	void SquadAddConditions ( int iConditions );
-	void SquadMakeEnemy ( CBaseEntity *pEnemy );
-	void SquadPasteEnemyInfo ();
-	void SquadCopyEnemyInfo ();
-	BOOL SquadEnemySplit ();
-	BOOL SquadMemberInRange( const Vector &vecLocation, float flDist );
+	void SquadAddConditions(int iConditions);
+	void SquadMakeEnemy(CBaseEntity* pEnemy);
+	void SquadPasteEnemyInfo();
+	void SquadCopyEnemyInfo();
+	BOOL SquadEnemySplit();
+	BOOL SquadMemberInRange(const Vector& vecLocation, float flDist);
 
-	CSquadMonster *MySquadMonsterPointer() override { return this; }
+	CSquadMonster* MySquadMonsterPointer() override { return this; }
 
 	static TYPEDESCRIPTION m_SaveData[];
 
-	int	Save( CSave &save ) override;
-	int Restore( CRestore &restore ) override;
+	int	Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 
-	BOOL FValidateCover ( const Vector &vecCoverLocation ) override;
+	BOOL FValidateCover(const Vector& vecCoverLocation) override;
 
-	MONSTERSTATE GetIdealState () override;
-	Schedule_t	*GetScheduleOfType ( int iType ) override;
+	MONSTERSTATE GetIdealState() override;
+	Schedule_t* GetScheduleOfType(int iType) override;
 };
 

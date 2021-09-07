@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*
+*	This product contains software technology licensed from Id
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -116,7 +116,7 @@
 
 // entity flags
 #define EFLAG_SLERP				1	// do studio interpolation of this entity
-		
+
 //
 // temp entity events
 //
@@ -679,8 +679,8 @@
 #define TE_BOUNCE_SHOTSHELL	2
 
 // Rendering constants
-enum 
-{	
+enum
+{
 	kRenderNormal,			// src
 	kRenderTransColor,		// c*a+dest*(1-a)
 	kRenderTransTexture,	// src*a+dest*(1-a)
@@ -689,21 +689,21 @@ enum
 	kRenderTransAdd,		// src*a+dest
 };
 
-enum 
-{	
-	kRenderFxNone = 0, 
-	kRenderFxPulseSlow, 
-	kRenderFxPulseFast, 
-	kRenderFxPulseSlowWide, 
-	kRenderFxPulseFastWide, 
-	kRenderFxFadeSlow, 
-	kRenderFxFadeFast, 
-	kRenderFxSolidSlow, 
-	kRenderFxSolidFast, 	   
-	kRenderFxStrobeSlow, 
-	kRenderFxStrobeFast, 
-	kRenderFxStrobeFaster, 
-	kRenderFxFlickerSlow, 
+enum
+{
+	kRenderFxNone = 0,
+	kRenderFxPulseSlow,
+	kRenderFxPulseFast,
+	kRenderFxPulseSlowWide,
+	kRenderFxPulseFastWide,
+	kRenderFxFadeSlow,
+	kRenderFxFadeFast,
+	kRenderFxSolidSlow,
+	kRenderFxSolidFast,
+	kRenderFxStrobeSlow,
+	kRenderFxStrobeFast,
+	kRenderFxStrobeFaster,
+	kRenderFxFlickerSlow,
 	kRenderFxFlickerFast,
 	kRenderFxNoDissipation,
 	kRenderFxDistort,			// Distort/scale/translate flicker
@@ -741,7 +741,7 @@ typedef struct
 #endif
 typedef struct link_s
 {
-	struct link_s	*prev, *next;
+	struct link_s* prev, * next;
 } link_t;
 
 typedef struct edict_s edict_t;
@@ -760,7 +760,7 @@ typedef struct
 	float	fraction;		// time completed, 1.0 = didn't hit anything
 	Vector	endpos;			// final position
 	plane_t	plane;			// surface normal at impact
-	edict_t	*ent;			// entity the surface is on
+	edict_t* ent;			// entity the surface is on
 	int		hitgroup;		// 0 == generic, non zero is specific body part
 } trace_t;
 
