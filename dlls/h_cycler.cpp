@@ -28,14 +28,9 @@
 #include "weapons.h"
 #include "player.h"
 
-
-#define TEMP_FOR_SCREEN_SHOTS
-#ifdef TEMP_FOR_SCREEN_SHOTS //===================================================
-
 class CCycler : public CBaseMonster
 {
 public:
-	void GenericCyclerSpawn(const char *szModel, Vector vecMin, Vector vecMax);
 	int	ObjectCaps() override { return (CBaseEntity :: ObjectCaps() | FCAP_IMPULSE_USE); }
 	int TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType ) override;
 	void Spawn() override;
@@ -53,6 +48,8 @@ public:
 	int			m_animate;
 };
 
+LINK_ENTITY_TO_CLASS(cycler, CCycler);
+
 TYPEDESCRIPTION	CCycler::m_SaveData[] = 
 {
 	DEFINE_FIELD( CCycler, m_animate, FIELD_INTEGER ),
@@ -60,76 +57,41 @@ TYPEDESCRIPTION	CCycler::m_SaveData[] =
 
 IMPLEMENT_SAVERESTORE( CCycler, CBaseMonster );
 
-
-//
-// we should get rid of all the other cyclers and replace them with this.
-//
-class CGenericCycler : public CCycler
-{
-public:
-	void Spawn() override { GenericCyclerSpawn( STRING(pev->model), Vector(-16, -16, 0), Vector(16, 16, 72) ); }
-};
-LINK_ENTITY_TO_CLASS( cycler, CGenericCycler );
-
-
-
-// Probe droid imported for tech demo compatibility
-//
-// PROBE DROID
-//
-class CCyclerProbe : public CCycler
-{
-public:	
-	void Spawn() override;
-};
-LINK_ENTITY_TO_CLASS( cycler_prdroid, CCyclerProbe );
-void CCyclerProbe :: Spawn()
-{
-	pev->origin = pev->origin + Vector ( 0, 0, 16 );
-	GenericCyclerSpawn( "models/prdroid.mdl", Vector(-16,-16,-16), Vector(16,16,16));
-}
-
-
-
 // Cycler member functions
 
-void CCycler :: GenericCyclerSpawn(const char *szModel, Vector vecMin, Vector vecMax)
+void CCycler::Spawn()
 {
+	const char* szModel = STRING(pev->model);
+
+	const Vector vecMin(-16, -16, 0);
+	const Vector vecMax(16, 16, 72);
+
 	if (!szModel || !*szModel)
 	{
-		ALERT(at_error, "cycler at %.0f %.0f %0.f missing modelname", pev->origin.x, pev->origin.y, pev->origin.z );
+		ALERT(at_error, "cycler at %.0f %.0f %0.f missing modelname", pev->origin.x, pev->origin.y, pev->origin.z);
 		REMOVE_ENTITY(ENT(pev));
 		return;
 	}
 
-	pev->classname		= MAKE_STRING("cycler");
-	PRECACHE_MODEL( szModel );
-	SET_MODEL(ENT(pev),	szModel);
+	PRECACHE_MODEL(szModel);
+	SET_MODEL(ENT(pev), szModel);
 
-	CCycler::Spawn( );
-
-	UTIL_SetSize(pev, vecMin, vecMax);
-}
-
-
-void CCycler :: Spawn( )
-{
 	InitBoneControllers();
-	pev->solid			= SOLID_SLIDEBOX;
-	pev->movetype		= MOVETYPE_NONE;
-	pev->takedamage		= DAMAGE_YES;
-	pev->effects		= 0;
-	pev->health			= 80000;// no cycler should die
-	pev->yaw_speed		= 5;
-	pev->ideal_yaw		= pev->angles.y;
-	ChangeYaw( 360 );
-	
-	m_flFrameRate		= 75;
-	m_flGroundSpeed		= 0;
+	pev->solid = SOLID_SLIDEBOX;
+	pev->movetype = MOVETYPE_NONE;
+	pev->takedamage = DAMAGE_YES;
+	pev->effects = 0;
+	pev->health = 80000;// no cycler should die
+	pev->yaw_speed = 5;
+	pev->ideal_yaw = pev->angles.y;
+	ChangeYaw(360);
 
-	pev->nextthink		+= 1.0;
+	m_flFrameRate = 75;
+	m_flGroundSpeed = 0;
 
-	ResetSequenceInfo( );
+	pev->nextthink += 1.0;
+
+	ResetSequenceInfo();
 
 	if (pev->sequence != 0 || pev->frame != 0)
 	{
@@ -140,10 +102,9 @@ void CCycler :: Spawn( )
 	{
 		m_animate = 1;
 	}
+
+	UTIL_SetSize(pev, vecMin, vecMax);
 }
-
-
-
 
 //
 // cycler think
@@ -211,9 +172,6 @@ int CCycler :: TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, floa
 
 	return 0;
 }
-
-#endif
-
 
 class CCyclerSprite : public CBaseEntity
 {
