@@ -35,10 +35,6 @@ extern void ClientPrecache();
 extern const char *GetGameDescription();
 extern void PlayerCustomization( edict_t *pEntity, customization_t *pCust );
 
-extern void SpectatorConnect ( edict_t *pEntity );
-extern void SpectatorDisconnect ( edict_t *pEntity );
-extern void SpectatorThink ( edict_t *pEntity );
-
 extern void Sys_Error( const char *error_string );
 
 extern void SetupVisibility( edict_t *pViewEntity, edict_t *pClient, unsigned char **pvs, unsigned char **pas );

@@ -114,8 +114,6 @@ target_sources(hl PRIVATE
 	sound.cpp
 	soundent.cpp
 	soundent.h
-	spectator.cpp
-	spectator.h
 	squad.h
 	squadmonster.cpp
 	squadmonster.h

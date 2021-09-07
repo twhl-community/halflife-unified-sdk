@@ -29,6 +29,11 @@ char PM_FindTextureType( char *name );
 
 void OnFreeEntPrivateData(edict_s* pEdict);
 
+void DummySpectatorFunction(edict_t*)
+{
+	//Nothing
+}
+
 extern Vector VecBModelOrigin( entvars_t* pevBModel );
 extern DLL_GLOBAL Vector		g_vecAttackDir;
 extern DLL_GLOBAL int			g_iSkillLevel;
@@ -72,9 +77,9 @@ static DLL_FUNCTIONS gFunctionTable =
 	GetGameDescription,         //pfnGetGameDescription    Returns string describing current .dll game.
 	PlayerCustomization,        //pfnPlayerCustomization   Notifies .dll of new customization for player.
 
-	SpectatorConnect,			//pfnSpectatorConnect      Called when spectator joins server
-	SpectatorDisconnect,        //pfnSpectatorDisconnect   Called when spectator leaves the server
-	SpectatorThink,				//pfnSpectatorThink        Called when spectator sends a command packet (usercmd_t)
+	DummySpectatorFunction,		//pfnSpectatorConnect      Called when spectator joins server
+	DummySpectatorFunction,     //pfnSpectatorDisconnect   Called when spectator leaves the server
+	DummySpectatorFunction,		//pfnSpectatorThink        Called when spectator sends a command packet (usercmd_t)
 
 	Sys_Error,					//pfnSys_Error				Called when engine has encountered an error
 

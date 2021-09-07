@@ -28,7 +28,6 @@
 #include "cbase.h"
 #include "saverestore.h"
 #include "player.h"
-#include "spectator.h"
 #include "client.h"
 #include "soundent.h"
 #include "gamerules.h"
@@ -986,54 +985,6 @@ void PlayerCustomization( edict_t *pEntity, customization_t *pCust )
 		ALERT(at_console, "PlayerCustomization:  Unknown customization type!\n");
 		break;
 	}
-}
-
-/*
-================
-SpectatorConnect
-
-A spectator has joined the game
-================
-*/
-void SpectatorConnect( edict_t *pEntity )
-{
-	entvars_t *pev = &pEntity->v;
-	CBaseSpectator *pPlayer = (CBaseSpectator *)GET_PRIVATE(pEntity);
-
-	if (pPlayer)
-		pPlayer->SpectatorConnect( );
-}
-
-/*
-================
-SpectatorConnect
-
-A spectator has left the game
-================
-*/
-void SpectatorDisconnect( edict_t *pEntity )
-{
-	entvars_t *pev = &pEntity->v;
-	CBaseSpectator *pPlayer = (CBaseSpectator *)GET_PRIVATE(pEntity);
-
-	if (pPlayer)
-		pPlayer->SpectatorDisconnect( );
-}
-
-/*
-================
-SpectatorConnect
-
-A spectator has sent a usercmd
-================
-*/
-void SpectatorThink( edict_t *pEntity )
-{
-	entvars_t *pev = &pEntity->v;
-	CBaseSpectator *pPlayer = (CBaseSpectator *)GET_PRIVATE(pEntity);
-
-	if (pPlayer)
-		pPlayer->SpectatorThink( );
 }
 
 ////////////////////////////////////////////////////////
