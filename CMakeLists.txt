@@ -10,16 +10,14 @@ if (WIN32)
 	get_filename_component(STEAM_HALFLIFE_DIRECTORY "[HKEY_CURRENT_USER\\Software\\Valve\\Steam;ModInstallPath]" ABSOLUTE)
 endif()
 
-# Used to locate binaries so dependencies are fixed up correctly (e.g. vgui.so)
+# Used to set up debugging settings on Windows
 set(HALFLIFE_DIRECTORY "${STEAM_HALFLIFE_DIRECTORY}" CACHE PATH "Path to the Half-Life directory")
 
 if (MSVC)
 	set(HLDS_DIRECTORY "" CACHE PATH "Path to the Half-Life Dedicated Server directory. Must be specified to automatically set up dedicated server debugging settings")
 endif()
 
-if ("${HALFLIFE_DIRECTORY}" STREQUAL "")
-	message(FATAL_ERROR "You must specify the path to the Half-Life directory")
-elseif (NOT EXISTS ${HALFLIFE_DIRECTORY})
+if (NOT "${HALFLIFE_DIRECTORY}" STREQUAL "" AND NOT EXISTS ${HALFLIFE_DIRECTORY})
 	message(FATAL_ERROR "The given Half-Life directory path ${HALFLIFE_DIRECTORY} is not valid")
 endif()
 
@@ -164,7 +162,7 @@ source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${CLIENT_SOURCES})
 # Set Visual Studio starting project
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT client)
 
-if (MSVC)
+if (MSVC AND NOT "${HALFLIFE_DIRECTORY}" STREQUAL "")
 	set(HL_EXECUTABLE "hl.exe")
 	set(HLDS_EXECUTABLE "hlds.exe")
 
