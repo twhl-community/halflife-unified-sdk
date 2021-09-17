@@ -24,30 +24,6 @@ endif()
 # Find dependencies
 find_package(Threads REQUIRED)
 
-# Copy libraries provided by the game to the build directory so relative link paths work at build time (matches the SDK's way of doing things)
-configure_file(linux/release/vgui.so vgui.so COPYONLY)
-configure_file(linux/libSDL2-2.0.so.0 libSDL2-2.0.so.0 COPYONLY)
-
-# Set up vgui library
-add_library(vgui SHARED IMPORTED)
-
-if (WIN32)
-	set_target_properties(vgui PROPERTIES IMPORTED_IMPLIB "${CMAKE_CURRENT_SOURCE_DIR}/utils/vgui/lib/win32_vc6/vgui.lib")
-else()
-	set_target_properties(vgui PROPERTIES IMPORTED_LOCATION "vgui.so")
-endif()
-
-target_include_directories(vgui INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/utils/vgui/include)
-
-# Set up SDL2 library. No include path since it's used directly by the client project
-add_library(SDL2 SHARED IMPORTED)
-
-if (WIN32)
-	set_target_properties(SDL2 PROPERTIES IMPORTED_IMPLIB "${CMAKE_CURRENT_SOURCE_DIR}/lib/public/SDL2.lib")
-else()
-	set_target_properties(SDL2 PROPERTIES IMPORTED_LOCATION "libSDL2-2.0.so.0")
-endif()
-
 # Sets properties common to all projects
 function(set_common_properties TARGET_NAME)
 	set_target_properties(${TARGET_NAME} PROPERTIES PREFIX "")
@@ -100,64 +76,8 @@ function(set_common_properties TARGET_NAME)
 			-Wl,-Map,${TARGET_NAME}_map.txt>)
 endfunction()
 
-# Add client library
-add_library(client SHARED)
-
-set_common_properties(client)
-
-target_include_directories(client PRIVATE
-	dlls
-	cl_dll
-	public
-	common
-	pm_shared
-	engine
-	utils/vgui/include
-	game_shared
-	external)
-	
-target_compile_definitions(client PRIVATE
-	CLIENT_DLL
-	HL_DLL)
-	
-target_link_libraries(client PRIVATE
-	vgui
-	$<$<PLATFORM_ID:Windows>:wsock32>
-	SDL2)
-
-target_link_options(client PRIVATE
-	$<$<PLATFORM_ID:Darwin>:
-		-framework Carbon>)
-
-add_subdirectory(cl_dll)
-
-# Add server library
-# Add the def file as well
-add_library(hl SHARED dlls/hl.def)
-
-set_common_properties(hl)
-
-target_include_directories(hl PRIVATE
-	dlls
-	engine
-	common
-	pm_shared
-	game_shared
-	public)
-	
-target_compile_definitions(hl PRIVATE
-	QUIVER
-	VOXEL
-	QUAKE2
-	VALVE_DLL)
-
-add_subdirectory(dlls)
-
-# Create filters
-get_target_property(SERVER_SOURCES hl SOURCES)
-get_target_property(CLIENT_SOURCES client SOURCES)
-source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SERVER_SOURCES})
-source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${CLIENT_SOURCES})
+add_subdirectory(src/game/client)
+add_subdirectory(src/game/server)
 
 # Set Visual Studio starting project
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT client)

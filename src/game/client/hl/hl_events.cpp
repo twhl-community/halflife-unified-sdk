@@ -12,8 +12,8 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#include "../hud.h"
-#include "../cl_util.h"
+#include "hud.h"
+#include "cl_util.h"
 #include "event_api.h"
 #include "pmtrace.h"
 #include "ev_hldm.h"
