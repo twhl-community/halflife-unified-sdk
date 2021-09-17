@@ -1,6 +1,6 @@
 # Server library
 # Add the def file as well
-add_library(hl SHARED hl.def)
+add_library(hl SHARED $<$<PLATFORM_ID:Windows>:hl.def>)
 
 set_common_properties(hl)
 
