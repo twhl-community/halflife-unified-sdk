@@ -1,7 +1,7 @@
 if (UNIX)
 	# Copy libraries provided by the game to the build directory so relative link paths work at build time (matches the SDK's way of doing things)
-	configure_file(../../../linux/release/vgui.so vgui.so COPYONLY)
-	configure_file(../../../external/SDL2/lib/libSDL2-2.0.so.0 libSDL2-2.0.so.0 COPYONLY)
+	configure_file(../../../linux/release/vgui${CMAKE_SHARED_LIBRARY_SUFFIX} vgui${CMAKE_SHARED_LIBRARY_SUFFIX} COPYONLY)
+	configure_file(../../../external/SDL2/lib/libSDL2-2.0${CMAKE_SHARED_LIBRARY_SUFFIX}.0 libSDL2-2.0${CMAKE_SHARED_LIBRARY_SUFFIX}.0 COPYONLY)
 endif()
 
 # Set up vgui library
@@ -10,7 +10,7 @@ add_library(vgui SHARED IMPORTED)
 if (WIN32)
 	set_target_properties(vgui PROPERTIES IMPORTED_IMPLIB "${CMAKE_CURRENT_SOURCE_DIR}/../../../utils/vgui/lib/win32_vc6/vgui.lib")
 else()
-	set_target_properties(vgui PROPERTIES IMPORTED_LOCATION "vgui.so")
+	set_target_properties(vgui PROPERTIES IMPORTED_LOCATION "vgui${CMAKE_SHARED_LIBRARY_SUFFIX}")
 endif()
 
 target_include_directories(vgui INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/../../../utils/vgui/include)
@@ -21,7 +21,7 @@ add_library(SDL2 SHARED IMPORTED)
 if (WIN32)
 	set_target_properties(SDL2 PROPERTIES IMPORTED_IMPLIB "${CMAKE_CURRENT_SOURCE_DIR}/../../../external/SDL2/lib/SDL2.lib")
 else()
-	set_target_properties(SDL2 PROPERTIES IMPORTED_LOCATION "libSDL2-2.0.so.0")
+	set_target_properties(SDL2 PROPERTIES IMPORTED_LOCATION "libSDL2-2.0${CMAKE_SHARED_LIBRARY_SUFFIX}.0")
 endif()
 
 target_include_directories(SDL2 INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/../../../external/SDL2/include)
