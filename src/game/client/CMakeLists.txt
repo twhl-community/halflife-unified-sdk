@@ -206,8 +206,6 @@ target_sources(client PRIVATE
 	../../../common/event_args.h
 	../../../common/event_flags.h
 	../../../common/hltv.h
-	# ../common/interface.cpp # Do not include, version from /public is used
-	../../../common/interface.h
 	../../../common/in_buttons.h
 	../../../common/ivoicetweak.h
 	../../../common/mathlib.cpp
