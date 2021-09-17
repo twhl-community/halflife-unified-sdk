@@ -1,6 +1,8 @@
-# Copy libraries provided by the game to the build directory so relative link paths work at build time (matches the SDK's way of doing things)
-configure_file(../../../linux/release/vgui.so vgui.so COPYONLY)
-configure_file(../../../external/SDL2/lib/libSDL2-2.0.so.0 libSDL2-2.0.so.0 COPYONLY)
+if (UNIX)
+	# Copy libraries provided by the game to the build directory so relative link paths work at build time (matches the SDK's way of doing things)
+	configure_file(../../../linux/release/vgui.so vgui.so COPYONLY)
+	configure_file(../../../external/SDL2/lib/libSDL2-2.0.so.0 libSDL2-2.0.so.0 COPYONLY)
+endif()
 
 # Set up vgui library
 add_library(vgui SHARED IMPORTED)
