@@ -1,7 +1,7 @@
 if (UNIX)
 	# Copy libraries provided by the game to the build directory so relative link paths work at build time (matches the SDK's way of doing things)
 	# Copy the files to the root binary directory so this works properly
-	configure_file(../../../linux/release/vgui${CMAKE_SHARED_LIBRARY_SUFFIX} ${CMAKE_BINARY_DIR}/vgui${CMAKE_SHARED_LIBRARY_SUFFIX} COPYONLY)
+	configure_file(../../../utils/vgui/lib/linux/vgui${CMAKE_SHARED_LIBRARY_SUFFIX} ${CMAKE_BINARY_DIR}/vgui${CMAKE_SHARED_LIBRARY_SUFFIX} COPYONLY)
 	configure_file(../../../external/SDL2/lib/libSDL2-2.0${CMAKE_SHARED_LIBRARY_SUFFIX}.0 ${CMAKE_BINARY_DIR}/libSDL2-2.0${CMAKE_SHARED_LIBRARY_SUFFIX}.0 COPYONLY)
 endif()
 

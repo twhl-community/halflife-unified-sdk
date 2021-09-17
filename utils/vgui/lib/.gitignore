@@ -1,4 +1,4 @@
 # Allow Half-Life-specific files that would otherwise be ignored
-!vgui.so
-!release/vgui.dylib
-!release/vgui.so
+!linux/vgui.dylib
+!linux/vgui.so
+!win32_vc6/vgui.lib
