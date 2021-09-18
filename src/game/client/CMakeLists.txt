@@ -175,6 +175,12 @@ target_sources(client PRIVATE
 	ui/vgui/utils/vgui_scrollbar2.h
 	ui/vgui/utils/vgui_slider2.cpp
 	ui/vgui/utils/vgui_slider2.h
+
+	../server/cdll_dll.h
+	../server/enginecallback.h
+	../server/extdll.h
+	../server/entities/cbase.h
+	../server/entities/NPCs/basemonster.h
 	
 	../shared/voice_common.h
 	../shared/entities/items/weapons/crossbow.cpp
@@ -192,6 +198,7 @@ target_sources(client PRIVATE
 	../shared/entities/items/weapons/squeakgrenade.cpp
 	../shared/entities/items/weapons/tripmine.cpp
 	../shared/entities/items/weapons/weapons_shared.cpp
+	../shared/entities/items/weapons/weapons.h
 	../../common/beamdef.h
 	../../common/cl_entity.h
 	../../common/com_model.h
@@ -235,6 +242,13 @@ target_sources(client PRIVATE
 	../../common/weaponinfo.h
 	../../common/winsani_in.h
 	../../common/winsani_out.h
+
+	../../engine/APIProxy.h
+	../../engine/cdll_int.h
+	../../engine/custom.h
+	../../engine/customentity.h
+	../../engine/edict.h
+	../../engine/eiface.h
 
 	../shared/bitvec.h
 	
