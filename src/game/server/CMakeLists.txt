@@ -191,4 +191,4 @@ target_sources(hl PRIVATE
 
 # Create filters
 get_target_property(SERVER_SOURCES hl SOURCES)
-source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/../../.. FILES ${SERVER_SOURCES})
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/../.. FILES ${SERVER_SOURCES})
