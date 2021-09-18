@@ -62,7 +62,7 @@ function(set_common_properties TARGET_NAME)
 			-m32 -fpermissive -fno-strict-aliasing -Wno-invalid-offsetof -gdwarf-2 -g2 -march=pentium-m -mfpmath=387>
 			
 		$<$<CXX_COMPILER_ID:MSVC>:
-			/W3>
+			/W3 /MP>
 			
 		# These are all from the original Makefile
 		# They have not been tested with CMake since there is no Mac system available to test on, so this might not work
