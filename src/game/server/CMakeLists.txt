@@ -169,6 +169,15 @@ target_sources(hl PRIVATE
 	gamerules/teamplay_gamerules.h
 	
 	../../common/mathlib.cpp
+	../../common/Sequence.h
+
+	../../engine/edict.h
+	../../engine/eiface.h
+	../../engine/progdefs.h
+
+	../../public/steam/steamtypes.h
+
+	../shared/bitvec.h
 	../shared/voice_common.h
 	../shared/player_movement/pm_debug.cpp
 	../shared/player_movement/pm_debug.h
