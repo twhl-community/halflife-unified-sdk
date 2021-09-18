@@ -79,9 +79,6 @@ endfunction()
 add_subdirectory(src/game/client)
 add_subdirectory(src/game/server)
 
-# Make the client depend on the server so launching out of date clients builds both projects
-add_dependencies(client hl)
-
 # Set Visual Studio starting project
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT client)
 
