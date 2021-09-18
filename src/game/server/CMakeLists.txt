@@ -11,11 +11,11 @@ target_include_directories(hl PRIVATE
 	../shared/entities/items/weapons
 	entities/NPCs
 	gamerules
-	../../../engine
-	../../../common
+	../../engine
+	../../common
 	../shared
 	../shared/player_movement
-	../../../public)
+	../../public)
 	
 target_compile_definitions(hl PRIVATE
 	VALVE_DLL)
@@ -168,7 +168,7 @@ target_sources(hl PRIVATE
 	gamerules/teamplay_gamerules.cpp
 	gamerules/teamplay_gamerules.h
 	
-	../../../common/mathlib.cpp
+	../../common/mathlib.cpp
 	../shared/voice_common.h
 	../shared/player_movement/pm_debug.cpp
 	../shared/player_movement/pm_debug.h

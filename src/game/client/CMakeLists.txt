@@ -45,11 +45,11 @@ target_include_directories(client PRIVATE
 	ui/hud
 	ui/vgui
 	ui/vgui/utils
-	../../../public
-	../../../common
+	../../public
+	../../common
 	../shared
 	../shared/player_movement
-	../../../engine
+	../../engine
 	../../../utils/vgui/include)
 	
 target_compile_definitions(client PRIVATE
@@ -192,49 +192,49 @@ target_sources(client PRIVATE
 	../shared/entities/items/weapons/squeakgrenade.cpp
 	../shared/entities/items/weapons/tripmine.cpp
 	../shared/entities/items/weapons/weapons_shared.cpp
-	../../../common/beamdef.h
-	../../../common/cl_entity.h
-	../../../common/com_model.h
-	../../../common/const.h
-	../../../common/con_nprint.h
-	../../../common/crc.h
-	../../../common/cvardef.h
-	../../../common/demo_api.h
-	../../../common/director_cmds.h
-	../../../common/dlight.h
-	../../../common/dll_state.h
-	../../../common/entity_state.h
-	../../../common/entity_types.h
-	../../../common/enums.h
-	../../../common/event_api.h
-	../../../common/event_args.h
-	../../../common/event_flags.h
-	../../../common/hltv.h
-	../../../common/in_buttons.h
-	../../../common/ivoicetweak.h
-	../../../common/mathlib.cpp
-	../../../common/mathlib.h
-	../../../common/netadr.h
-	../../../common/net_api.h
-	../../../common/nowin.h
-	../../../common/parsemsg.cpp
-	../../../common/parsemsg.h
-	../../../common/particledef.h
-	../../../common/Platform.h
-	../../../common/pmtrace.h
-	../../../common/port.h
-	../../../common/qfont.h
-	../../../common/ref_params.h
-	../../../common/r_efx.h
-	../../../common/r_studioint.h
-	../../../common/screenfade.h
-	../../../common/Sequence.h
-	../../../common/studio_event.h
-	../../../common/triangleapi.h
-	../../../common/usercmd.h
-	../../../common/weaponinfo.h
-	../../../common/winsani_in.h
-	../../../common/winsani_out.h
+	../../common/beamdef.h
+	../../common/cl_entity.h
+	../../common/com_model.h
+	../../common/const.h
+	../../common/con_nprint.h
+	../../common/crc.h
+	../../common/cvardef.h
+	../../common/demo_api.h
+	../../common/director_cmds.h
+	../../common/dlight.h
+	../../common/dll_state.h
+	../../common/entity_state.h
+	../../common/entity_types.h
+	../../common/enums.h
+	../../common/event_api.h
+	../../common/event_args.h
+	../../common/event_flags.h
+	../../common/hltv.h
+	../../common/in_buttons.h
+	../../common/ivoicetweak.h
+	../../common/mathlib.cpp
+	../../common/mathlib.h
+	../../common/netadr.h
+	../../common/net_api.h
+	../../common/nowin.h
+	../../common/parsemsg.cpp
+	../../common/parsemsg.h
+	../../common/particledef.h
+	../../common/Platform.h
+	../../common/pmtrace.h
+	../../common/port.h
+	../../common/qfont.h
+	../../common/ref_params.h
+	../../common/r_efx.h
+	../../common/r_studioint.h
+	../../common/screenfade.h
+	../../common/Sequence.h
+	../../common/studio_event.h
+	../../common/triangleapi.h
+	../../common/usercmd.h
+	../../common/weaponinfo.h
+	../../common/winsani_in.h
+	../../common/winsani_out.h
 
 	../shared/bitvec.h
 	
@@ -248,16 +248,16 @@ target_sources(client PRIVATE
 	../shared/player_movement/pm_shared.cpp
 	../shared/player_movement/pm_shared.h
 
-	../../../public/archtypes.h
-	../../../public/FileSystem.h
-	../../../public/interface.cpp
-	../../../public/interface.h
-	../../../public/keydefs.h
-	../../../public/particleman.h
-	../../../public/pman_particlemem.h
-	../../../public/pman_triangleffect.h
-	../../../public/cl_dll/IGameClientExports.h
-	../../../public/steam/steamtypes.h
+	../../public/archtypes.h
+	../../public/FileSystem.h
+	../../public/interface.cpp
+	../../public/interface.h
+	../../public/keydefs.h
+	../../public/particleman.h
+	../../public/pman_particlemem.h
+	../../public/pman_triangleffect.h
+	../../public/cl_dll/IGameClientExports.h
+	../../public/steam/steamtypes.h
 )
 
 # Create filters
