@@ -1,0 +1,15 @@
+# This script installs mod libraries to the HLDS directory if it has been specified
+
+# Initialize variables defined by master CMakeLists file
+set(HLDS_DIRECTORY "@HLDS_DIRECTORY@")
+
+get_filename_component(MOD_NAME ${CMAKE_INSTALL_PREFIX} NAME_WE)
+
+set(MOD_DIR ${HLDS_DIRECTORY}/${MOD_NAME})
+	
+# These will copy every file in the cl_dlls and dlls directories, including anything not built by this project
+execute_process(COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_INSTALL_PREFIX}/cl_dlls" ${MOD_DIR}/cl_dlls)
+execute_process(COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_INSTALL_PREFIX}/dlls" ${MOD_DIR}/dlls)
+
+# Add more commands here if you want to copy other files, or copy the entire mod directory
+# Prefer copy_if_different to avoid a lot of unnecessary copying

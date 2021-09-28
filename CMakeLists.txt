@@ -117,3 +117,11 @@ if (WIN32)
 	install(FILES $<TARGET_PDB_FILE:client> DESTINATION cl_dlls OPTIONAL)
 	install(FILES $<TARGET_PDB_FILE:hl> DESTINATION dlls OPTIONAL)
 endif()
+
+# Set up the script that will copy the mod libraries to the HLDS directory
+if (NOT ${HLDS_DIRECTORY} STREQUAL "")
+	set(hldsInstallScriptFile ${CMAKE_CURRENT_BINARY_DIR}/InstallToHLDS.cmake)
+	configure_file(cmake/InstallToHLDS.cmake.in ${hldsInstallScriptFile} @ONLY)
+	install(SCRIPT ${hldsInstallScriptFile})
+endif()
+	
