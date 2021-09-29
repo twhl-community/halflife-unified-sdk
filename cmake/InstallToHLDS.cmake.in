@@ -2,9 +2,9 @@
 
 # Initialize variables defined by master CMakeLists file
 set(MOD_NAME "@MOD_NAME@")
-set(HLDS_DIRECTORY "@HLDS_DIRECTORY@")
+set(HalfLife_HLDS_DIRECTORY "@HalfLife_HLDS_DIRECTORY@")
 
-set(MOD_DIR ${HLDS_DIRECTORY}/${MOD_NAME})
+set(MOD_DIR ${HalfLife_HLDS_DIRECTORY}/${MOD_NAME})
 	
 # These will copy every file in the cl_dlls and dlls directories, including anything not built by this project
 execute_process(COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_INSTALL_PREFIX}/cl_dlls" ${MOD_DIR}/cl_dlls)

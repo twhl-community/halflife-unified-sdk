@@ -16,7 +16,8 @@ endif()
 cmake_path(GET CMAKE_INSTALL_PREFIX PARENT_PATH HALFLIFE_DIRECTORY)
 cmake_path(GET CMAKE_INSTALL_PREFIX STEM MOD_NAME)
 
-set(HLDS_DIRECTORY "" CACHE PATH "Path to the Half-Life Dedicated Server directory. Must be specified to automatically set up dedicated server debugging settings and to copy libraries")
+# All Half-Life specific commands are prefixed with HalfLife so they show up in the same group in the CMake GUI
+set(HalfLife_HLDS_DIRECTORY "" CACHE PATH "Path to the Half-Life Dedicated Server directory. Must be specified to automatically set up dedicated server debugging settings and to copy libraries")
 
 # Find dependencies
 find_package(Threads REQUIRED)
@@ -82,18 +83,38 @@ set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT c
 if (MSVC)
 	set(HL_EXECUTABLE "hl.exe")
 	set(HLDS_EXECUTABLE "hlds.exe")
+	
+	set(HalfLife_DEVELOPER_LEVEL "0" CACHE STRING "When launching from Visual Studio, the developer level is set to this value")
+	set_property(CACHE HalfLife_DEVELOPER_LEVEL PROPERTY STRINGS 0 1 2 3)
+	
+	option(HalfLife_ENABLE_CHEATS "When launching from Visual Studio, enable cheats as well" OFF)
+	option(HalfLife_ENABLE_CONSOLE "When launching from Visual Studio, enable the console on startup" OFF)
+	
+	set(HalfLife_ADDITIONAL_COMMAND_ARGUMENTS "" CACHE STRING "When launching from Visual Studio, additional command line arguments to add")
+	
+	set(COMMAND_ARGUMENTS "-game ${MOD_NAME} +developer ${HalfLife_DEVELOPER_LEVEL}")
+	
+	if (HalfLife_ENABLE_CHEATS)
+		set(COMMAND_ARGUMENTS "${COMMAND_ARGUMENTS} +sv_cheats 1")
+	endif()
+	
+	if (HalfLife_ENABLE_CONSOLE)
+		set(COMMAND_ARGUMENTS "${COMMAND_ARGUMENTS} -console")
+	endif()
+	
+	set(COMMAND_ARGUMENTS "${COMMAND_ARGUMENTS} ${HalfLife_ADDITIONAL_COMMAND_ARGUMENTS}")
 
 	# Set debugging settings to work on the mod directory
 	set_target_properties(client PROPERTIES
 		VS_DEBUGGER_COMMAND "${HALFLIFE_DIRECTORY}/${HL_EXECUTABLE}"
-		VS_DEBUGGER_COMMAND_ARGUMENTS "-game ${MOD_NAME}"
+		VS_DEBUGGER_COMMAND_ARGUMENTS "${COMMAND_ARGUMENTS}"
 		VS_DEBUGGER_WORKING_DIRECTORY "${HALFLIFE_DIRECTORY}")
 
-	# If HLDS_DIRECTORY is not specified it will leave a non-functional "default" setting
+	# If HalfLife_HLDS_DIRECTORY is not specified it will leave a non-functional "default" setting
 	set_target_properties(hl PROPERTIES
-		VS_DEBUGGER_COMMAND "${HLDS_DIRECTORY}/${HLDS_EXECUTABLE}"
-		VS_DEBUGGER_COMMAND_ARGUMENTS "-game ${MOD_NAME}"
-		VS_DEBUGGER_WORKING_DIRECTORY "${HLDS_DIRECTORY}")
+		VS_DEBUGGER_COMMAND "${HalfLife_HLDS_DIRECTORY}/${HLDS_EXECUTABLE}"
+		VS_DEBUGGER_COMMAND_ARGUMENTS "${COMMAND_ARGUMENTS}"
+		VS_DEBUGGER_WORKING_DIRECTORY "${HalfLife_HLDS_DIRECTORY}")
 endif()
 	
 # Set install paths to the user-defined mod directory
@@ -113,7 +134,7 @@ if (MSVC)
 endif()
 
 # Set up the script that will copy the mod libraries to the HLDS directory
-if (NOT ${HLDS_DIRECTORY} STREQUAL "")
+if (NOT ${HalfLife_HLDS_DIRECTORY} STREQUAL "")
 	set(hldsInstallScriptFile ${CMAKE_CURRENT_BINARY_DIR}/InstallToHLDS.cmake)
 	configure_file(cmake/InstallToHLDS.cmake.in ${hldsInstallScriptFile} @ONLY)
 	install(SCRIPT ${hldsInstallScriptFile})
