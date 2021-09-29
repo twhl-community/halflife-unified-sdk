@@ -1,9 +1,8 @@
 # This script installs mod libraries to the HLDS directory if it has been specified
 
 # Initialize variables defined by master CMakeLists file
+set(MOD_NAME "@MOD_NAME@")
 set(HLDS_DIRECTORY "@HLDS_DIRECTORY@")
-
-get_filename_component(MOD_NAME ${CMAKE_INSTALL_PREFIX} NAME_WE)
 
 set(MOD_DIR ${HLDS_DIRECTORY}/${MOD_NAME})
 	

@@ -5,21 +5,18 @@ project(HalfLifeMod
 	DESCRIPTION "Half-Life CMake Mod Template"
 	LANGUAGES CXX)
 
-if (WIN32)
-	#Try to get the directory path from registry if possible
-	get_filename_component(STEAM_HALFLIFE_DIRECTORY "[HKEY_CURRENT_USER\\Software\\Valve\\Steam;ModInstallPath]" ABSOLUTE)
+# Get the Half-Life directory and mod name from the install path
+cmake_path(HAS_PARENT_PATH CMAKE_INSTALL_PREFIX HAS_HALFLIFE_DIRECTORY)
+cmake_path(HAS_STEM CMAKE_INSTALL_PREFIX HAS_MOD_NAME)
+
+if (NOT HAS_HALFLIFE_DIRECTORY OR NOT HAS_MOD_NAME)
+	message(FATAL_ERROR "The install path must point to a mod directory")
 endif()
 
-# Used to set up debugging settings on Windows
-set(HALFLIFE_DIRECTORY "${STEAM_HALFLIFE_DIRECTORY}" CACHE PATH "Path to the Half-Life directory")
+cmake_path(GET CMAKE_INSTALL_PREFIX PARENT_PATH HALFLIFE_DIRECTORY)
+cmake_path(GET CMAKE_INSTALL_PREFIX STEM MOD_NAME)
 
-if (MSVC)
-	set(HLDS_DIRECTORY "" CACHE PATH "Path to the Half-Life Dedicated Server directory. Must be specified to automatically set up dedicated server debugging settings")
-endif()
-
-if (NOT "${HALFLIFE_DIRECTORY}" STREQUAL "" AND NOT EXISTS ${HALFLIFE_DIRECTORY})
-	message(FATAL_ERROR "The given Half-Life directory path ${HALFLIFE_DIRECTORY} is not valid")
-endif()
+set(HLDS_DIRECTORY "" CACHE PATH "Path to the Half-Life Dedicated Server directory. Must be specified to automatically set up dedicated server debugging settings and to copy libraries")
 
 # Find dependencies
 find_package(Threads REQUIRED)
@@ -82,14 +79,11 @@ add_subdirectory(src/game/server)
 # Set Visual Studio starting project
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT client)
 
-if (MSVC AND NOT "${HALFLIFE_DIRECTORY}" STREQUAL "")
+if (MSVC)
 	set(HL_EXECUTABLE "hl.exe")
 	set(HLDS_EXECUTABLE "hlds.exe")
 
 	# Set debugging settings to work on the mod directory
-	# It is assumed that the install path points to the mod directory
-	get_filename_component(MOD_NAME ${CMAKE_INSTALL_PREFIX} NAME_WE)
-
 	set_target_properties(client PROPERTIES
 		VS_DEBUGGER_COMMAND "${HALFLIFE_DIRECTORY}/${HL_EXECUTABLE}"
 		VS_DEBUGGER_COMMAND_ARGUMENTS "-game ${MOD_NAME}"
@@ -113,7 +107,7 @@ install(TARGETS hl
 	LIBRARY DESTINATION dlls
 )
 
-if (WIN32)
+if (MSVC)
 	install(FILES $<TARGET_PDB_FILE:client> DESTINATION cl_dlls OPTIONAL)
 	install(FILES $<TARGET_PDB_FILE:hl> DESTINATION dlls OPTIONAL)
 endif()
