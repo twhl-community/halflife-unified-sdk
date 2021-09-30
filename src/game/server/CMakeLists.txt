@@ -110,45 +110,19 @@ target_sources(hl PRIVATE
 	../shared/entities/items/weapons/weapons_shared.cpp
 	../shared/entities/items/weapons/weapons.h
 	
-	entities/NPCs/aflock.cpp
-	entities/NPCs/agrunt.cpp
-	entities/NPCs/apache.cpp
-	entities/NPCs/barnacle.cpp
-	entities/NPCs/barney.cpp
 	entities/NPCs/basemonster.h
-	entities/NPCs/bigmomma.cpp
-	entities/NPCs/bloater.cpp
-	entities/NPCs/bullsquid.cpp
 	entities/NPCs/combat.cpp
-	entities/NPCs/controller.cpp
 	entities/NPCs/defaultai.cpp
 	entities/NPCs/defaultai.h
 	entities/NPCs/flyingmonster.cpp
-	entities/NPCs/flyingmonster.h
-	entities/NPCs/gargantua.cpp
-	entities/NPCs/genericmonster.cpp
-	entities/NPCs/gman.cpp
-	entities/NPCs/hassassin.cpp
-	entities/NPCs/headcrab.cpp
-	entities/NPCs/hgrunt.cpp
-	entities/NPCs/hornet.cpp
-	entities/NPCs/hornet.h
-	entities/NPCs/houndeye.cpp
+	entities/NPCs/flyingmonster.h	
 	entities/NPCs/h_ai.cpp
-	entities/NPCs/ichthyosaur.cpp
-	entities/NPCs/islave.cpp
-	entities/NPCs/leech.cpp
 	entities/NPCs/monstermaker.cpp
 	entities/NPCs/monsters.cpp
 	entities/NPCs/monsters.h
 	entities/NPCs/monsterstate.cpp
-	entities/NPCs/nihilanth.cpp
-	entities/NPCs/osprey.cpp
-	entities/NPCs/rat.cpp
-	entities/NPCs/roach.cpp
 	entities/NPCs/schedule.cpp
 	entities/NPCs/schedule.h
-	entities/NPCs/scientist.cpp
 	entities/NPCs/scripted.cpp
 	entities/NPCs/scripted.h
 	entities/NPCs/scriptevent.h
@@ -157,10 +131,41 @@ target_sources(hl PRIVATE
 	entities/NPCs/squadmonster.h
 	entities/NPCs/talkmonster.cpp
 	entities/NPCs/talkmonster.h
-	entities/NPCs/tentacle.cpp
-	entities/NPCs/turret.cpp
-	entities/NPCs/zombie.cpp
 	
+	entities/NPCs/aliens/aflock.cpp
+	entities/NPCs/aliens/agrunt.cpp
+	entities/NPCs/aliens/barnacle.cpp
+	entities/NPCs/aliens/bigmomma.cpp
+	entities/NPCs/aliens/bloater.cpp
+	entities/NPCs/aliens/bullsquid.cpp
+	entities/NPCs/aliens/controller.cpp
+	entities/NPCs/aliens/gargantua.cpp
+	entities/NPCs/aliens/headcrab.cpp
+	entities/NPCs/aliens/hornet.cpp
+	entities/NPCs/aliens/hornet.h
+	entities/NPCs/aliens/houndeye.cpp
+	entities/NPCs/aliens/ichthyosaur.cpp
+	entities/NPCs/aliens/islave.cpp
+	entities/NPCs/aliens/leech.cpp
+	entities/NPCs/aliens/nihilanth.cpp
+	entities/NPCs/aliens/tentacle.cpp
+	entities/NPCs/aliens/zombie.cpp
+	
+	entities/NPCs/blackmesa/barney.cpp
+	entities/NPCs/blackmesa/scientist.cpp
+	
+	entities/NPCs/blackops/hassassin.cpp
+	
+	entities/NPCs/military/apache.cpp
+	entities/NPCs/military/hgrunt.cpp
+	entities/NPCs/military/osprey.cpp
+	entities/NPCs/military/turret.cpp
+	
+	entities/NPCs/other/genericmonster.cpp
+	entities/NPCs/other/gman.cpp
+	entities/NPCs/other/rat.cpp
+	entities/NPCs/other/roach.cpp
+
 	gamerules/gamerules.cpp
 	gamerules/gamerules.h
 	gamerules/multiplay_gamerules.cpp

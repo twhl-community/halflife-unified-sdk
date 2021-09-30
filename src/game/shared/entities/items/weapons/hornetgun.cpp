@@ -21,7 +21,7 @@
 #include "weapons.h"
 #include "nodes.h"
 #include "player.h"
-#include "hornet.h"
+#include "aliens/hornet.h"
 #include "gamerules.h"
 #include "UserMessages.h"
 
