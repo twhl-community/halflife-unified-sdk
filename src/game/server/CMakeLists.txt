@@ -154,6 +154,7 @@ target_sources(hl PRIVATE
 	entities/NPCs/blackmesa/barney.cpp
 	entities/NPCs/blackmesa/rosenberg.cpp
 	entities/NPCs/blackmesa/scientist.cpp
+	entities/NPCs/blackmesa/scientist.h
 	
 	entities/NPCs/blackops/hassassin.cpp
 	
