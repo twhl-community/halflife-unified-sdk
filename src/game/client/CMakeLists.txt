@@ -37,6 +37,7 @@ target_include_directories(client PRIVATE
 	../server/entities
 	../server/entities/NPCs
 	../server/gamerules
+	../shared/entities
 	../shared/entities/items/weapons
 	${CMAKE_CURRENT_SOURCE_DIR}
 	input
@@ -183,6 +184,8 @@ target_sources(client PRIVATE
 	../server/entities/NPCs/basemonster.h
 	
 	../shared/voice_common.h
+	../shared/entities/ehandle.cpp
+	../shared/entities/ehandle.h
 	../shared/entities/items/weapons/crossbow.cpp
 	../shared/entities/items/weapons/crowbar.cpp
 	../shared/entities/items/weapons/egon.cpp

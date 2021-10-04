@@ -8,6 +8,7 @@ target_include_directories(hl PRIVATE
 	${CMAKE_CURRENT_SOURCE_DIR}
 	entities
 	entities/items
+	../shared/entities
 	../shared/entities/items/weapons
 	entities/NPCs
 	gamerules
@@ -93,6 +94,8 @@ target_sources(hl PRIVATE
 	
 	entities/items/weapons/weapons.cpp
 	
+	../shared/entities/ehandle.cpp
+	../shared/entities/ehandle.h
 	../shared/entities/items/weapons/crossbow.cpp
 	../shared/entities/items/weapons/crowbar.cpp
 	../shared/entities/items/weapons/egon.cpp

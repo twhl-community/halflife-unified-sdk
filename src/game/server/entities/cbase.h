@@ -52,6 +52,8 @@ CBaseEntity
 
 #include "Platform.h"
 
+#include "ehandle.h"
+
 // C functions for external declarations that call the appropriate C++ methods
 
 #define EXPORT DLLEXPORT
@@ -109,25 +111,6 @@ class CSquadMonster;
 
 
 #define	SF_NORESPAWN	( 1 << 30 )// !!!set this bit on guns and stuff that should never respawn.
-
-//
-// EHANDLE. Safe way to point to CBaseEntities who may die between frames
-//
-class EHANDLE
-{
-private:
-	edict_t* m_pent;
-	int		m_serialnumber;
-public:
-	edict_t* Get();
-	edict_t* Set(edict_t* pent);
-
-	operator CBaseEntity* ();
-
-	CBaseEntity* operator = (CBaseEntity* pEntity);
-	CBaseEntity* operator ->();
-};
-
 
 //
 // Base Entity.  All entity types derive from this
