@@ -356,6 +356,8 @@ void W_Precache()
 	UTIL_PrecacheOtherWeapon("weapon_hornetgun");
 #endif
 
+	UTIL_PrecacheOtherWeapon("weapon_pipewrench");
+
 	UTIL_PrecacheOtherWeapon("weapon_knife");
 
 #if !defined( OEM_BUILD ) && !defined( HLDEMO_BUILD )

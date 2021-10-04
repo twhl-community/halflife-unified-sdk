@@ -264,6 +264,9 @@ void CGameRules::RefreshSkillData()
 	// Tripmine
 	gSkillData.plrDmgTripmine = GetSkillCvar("sk_plr_tripmine");
 
+	// Pipe Wrench
+	gSkillData.plrDmgPipewrench = GetSkillCvar("sk_plr_pipewrench");
+
 	// Knife
 	gSkillData.plrDmgKnife = GetSkillCvar("sk_plr_knife");
 

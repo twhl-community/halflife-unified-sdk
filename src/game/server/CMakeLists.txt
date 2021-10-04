@@ -98,6 +98,8 @@ target_sources(hl PRIVATE
 	../shared/entities/ehandle.h
 	../shared/entities/items/weapons/CKnife.cpp
 	../shared/entities/items/weapons/CKnife.h
+	../shared/entities/items/weapons/CPipewrench.cpp
+	../shared/entities/items/weapons/CPipewrench.h
 	../shared/entities/items/weapons/crossbow.cpp
 	../shared/entities/items/weapons/crowbar.cpp
 	../shared/entities/items/weapons/egon.cpp

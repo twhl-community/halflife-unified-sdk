@@ -370,6 +370,11 @@ cvar_t	sk_plr_hornet_dmg1 = {"sk_plr_hornet_dmg1","0"};
 cvar_t	sk_plr_hornet_dmg2 = {"sk_plr_hornet_dmg2","0"};
 cvar_t	sk_plr_hornet_dmg3 = {"sk_plr_hornet_dmg3","0"};
 
+// Pipe Wrench
+cvar_t	sk_plr_pipewrench1 = {"sk_plr_pipewrench1","0"};
+cvar_t	sk_plr_pipewrench2 = {"sk_plr_pipewrench2","0"};
+cvar_t	sk_plr_pipewrench3 = {"sk_plr_pipewrench3","0"};
+
 // Knife
 cvar_t	sk_plr_knife1 = {"sk_plr_knife1","0"};
 cvar_t	sk_plr_knife2 = {"sk_plr_knife2","0"};
@@ -816,6 +821,11 @@ void GameDLLInit()
 	CVAR_REGISTER(&sk_plr_hornet_dmg1);// {"sk_plr_hornet_dmg1","0"};
 	CVAR_REGISTER(&sk_plr_hornet_dmg2);// {"sk_plr_hornet_dmg2","0"};
 	CVAR_REGISTER(&sk_plr_hornet_dmg3);// {"sk_plr_hornet_dmg3","0"};
+
+	// Pipe Wrench
+	CVAR_REGISTER(&sk_plr_pipewrench1);// {"sk_plr_pipewrench1","0"};
+	CVAR_REGISTER(&sk_plr_pipewrench2);// {"sk_plr_pipewrench2","0"};
+	CVAR_REGISTER(&sk_plr_pipewrench3);// {"sk_plr_pipewrench3","0"};
 
 	// Knife
 	CVAR_REGISTER(&sk_plr_knife1);// {"sk_plr_knife1","0"};

@@ -78,6 +78,7 @@ public:
 #define WEAPON_TRIPMINE			13
 #define	WEAPON_SATCHEL			14
 #define	WEAPON_SNARK			15
+#define WEAPON_PIPEWRENCH		18
 #define WEAPON_KNIFE			25
 
 #define WEAPON_ALLWEAPONS		(~(1<<WEAPON_SUIT))
@@ -105,7 +106,7 @@ public:
 #define SNARK_WEIGHT		5
 #define SATCHEL_WEIGHT		-10
 #define TRIPMINE_WEIGHT		-10
-
+#define PIPEWRENCH_WEIGHT	2
 
 // weapon clip/carry ammo capacities
 #define URANIUM_MAX_CARRY		100
