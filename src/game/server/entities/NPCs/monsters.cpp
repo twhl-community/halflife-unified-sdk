@@ -525,6 +525,8 @@ void CBaseMonster::MonsterThink()
 
 	RunAI();
 
+	UpdateShockEffect();
+
 	float flInterval = StudioFrameAdvance(); // animate
 // start or end a fidget
 // This needs a better home -- switching animations over time should be encapsulated on a per-activity basis
@@ -3469,4 +3471,66 @@ BOOL CBaseMonster::ShouldFadeOnDeath()
 		return TRUE;
 
 	return FALSE;
+}
+
+void CBaseMonster::AddShockEffect(float r, float g, float b, float size, float flShockDuration)
+{
+	if (pev->deadflag == DEAD_NO)
+	{
+		if (m_fShockEffect)
+		{
+			m_flShockDuration += flShockDuration;
+		}
+		else
+		{
+			m_iOldRenderMode = pev->rendermode;
+			m_iOldRenderFX = pev->renderfx;
+			m_OldRenderColor.x = pev->rendercolor.x;
+			m_OldRenderColor.y = pev->rendercolor.y;
+			m_OldRenderColor.z = pev->rendercolor.z;
+			m_flOldRenderAmt = pev->renderamt;
+
+			pev->rendermode = kRenderNormal;
+
+			pev->renderfx = kRenderFxGlowShell;
+			pev->rendercolor.x = r;
+			pev->rendercolor.y = g;
+			pev->rendercolor.z = b;
+			pev->renderamt = size;
+
+			m_fShockEffect = true;
+			m_flShockDuration = flShockDuration;
+			m_flShockTime = gpGlobals->time;
+		}
+	}
+}
+
+void CBaseMonster::UpdateShockEffect()
+{
+	if (m_fShockEffect && (gpGlobals->time - m_flShockTime > m_flShockDuration))
+	{
+		pev->rendermode = m_iOldRenderMode;
+		pev->renderfx = m_iOldRenderFX;
+		pev->rendercolor.x = m_OldRenderColor.x;
+		pev->rendercolor.y = m_OldRenderColor.y;
+		pev->rendercolor.z = m_OldRenderColor.z;
+		pev->renderamt = m_flOldRenderAmt;
+		m_flShockDuration = 0;
+		m_fShockEffect = false;
+	}
+}
+
+void CBaseMonster::ClearShockEffect()
+{
+	if (m_fShockEffect)
+	{
+		pev->rendermode = m_iOldRenderMode;
+		pev->renderfx = m_iOldRenderFX;
+		pev->rendercolor.x = m_OldRenderColor.x;
+		pev->rendercolor.y = m_OldRenderColor.y;
+		pev->rendercolor.z = m_OldRenderColor.z;
+		pev->renderamt = m_flOldRenderAmt;
+		m_flShockDuration = 0;
+		m_fShockEffect = false;
+	}
 }

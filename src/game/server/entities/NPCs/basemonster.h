@@ -336,6 +336,19 @@ public:
 	CBaseEntity* DropItem(const char* pszItemName, const Vector& vecPos, const Vector& vecAng);// drop an item.
 
 	BOOL JumpToTarget(Activity movementAct, float waitTime);
+
+	//Shock rifle shock effect
+	float m_flShockDuration = 0;
+	float m_flShockTime = 0;
+	int m_iOldRenderMode = 0;
+	int m_iOldRenderFX = 0;
+	Vector m_OldRenderColor;
+	float m_flOldRenderAmt = 0;
+	BOOL m_fShockEffect = FALSE;
+
+	void AddShockEffect(float r, float g, float b, float size, float flShockDuration);
+	void UpdateShockEffect();
+	void ClearShockEffect();
 };
 
 
