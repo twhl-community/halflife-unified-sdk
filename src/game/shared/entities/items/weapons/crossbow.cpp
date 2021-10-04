@@ -304,12 +304,7 @@ void CCrossbow::Holster()
 
 void CCrossbow::PrimaryAttack()
 {
-
-#ifdef CLIENT_DLL
-	if (m_pPlayer->m_iFOV != 0 && bIsMultiplayer())
-#else
-	if (m_pPlayer->m_iFOV != 0 && g_pGameRules->IsMultiplayer())
-#endif
+	if (m_pPlayer->m_iFOV != 0 && UTIL_IsMultiplayer())
 	{
 		FireSniperBolt();
 		return;
