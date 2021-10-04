@@ -264,6 +264,9 @@ void CGameRules::RefreshSkillData()
 	// Tripmine
 	gSkillData.plrDmgTripmine = GetSkillCvar("sk_plr_tripmine");
 
+	// Knife
+	gSkillData.plrDmgKnife = GetSkillCvar("sk_plr_knife");
+
 	// MONSTER WEAPONS
 	gSkillData.monDmg12MM = GetSkillCvar("sk_12mm_bullet");
 	gSkillData.monDmgMP5 = GetSkillCvar("sk_9mmAR_bullet");

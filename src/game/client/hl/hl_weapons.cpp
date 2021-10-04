@@ -19,6 +19,7 @@
 #include "weapons.h"
 #include "nodes.h"
 #include "player.h"
+#include "CKnife.h"
 
 #include "usercmd.h"
 #include "entity_state.h"
@@ -66,6 +67,8 @@ CHandGrenade g_HandGren;
 CSatchel g_Satchel;
 CTripmine g_Tripmine;
 CSqueak g_Snark;
+
+CKnife g_Knife;
 
 
 /*
@@ -459,6 +462,8 @@ void HUD_InitClientWeapons()
 	HUD_PrepEntity(&g_Satchel, &player);
 	HUD_PrepEntity(&g_Tripmine, &player);
 	HUD_PrepEntity(&g_Snark, &player);
+
+	HUD_PrepEntity(&g_Knife, &player);
 }
 
 /*
@@ -515,6 +520,8 @@ CBasePlayerWeapon* GetLocalWeapon(int id)
 	case WEAPON_SATCHEL: return &g_Satchel;
 	case WEAPON_TRIPMINE: return &g_Tripmine;
 	case WEAPON_SNARK: return &g_Snark;
+
+	case WEAPON_KNIFE: return &g_Knife;
 
 	default: return nullptr;
 	}

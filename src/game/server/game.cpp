@@ -370,6 +370,10 @@ cvar_t	sk_plr_hornet_dmg1 = {"sk_plr_hornet_dmg1","0"};
 cvar_t	sk_plr_hornet_dmg2 = {"sk_plr_hornet_dmg2","0"};
 cvar_t	sk_plr_hornet_dmg3 = {"sk_plr_hornet_dmg3","0"};
 
+// Knife
+cvar_t	sk_plr_knife1 = {"sk_plr_knife1","0"};
+cvar_t	sk_plr_knife2 = {"sk_plr_knife2","0"};
+cvar_t	sk_plr_knife3 = {"sk_plr_knife3","0"};
 
 // WORLD WEAPONS
 cvar_t	sk_12mm_bullet1 = {"sk_12mm_bullet1","0"};
@@ -813,6 +817,10 @@ void GameDLLInit()
 	CVAR_REGISTER(&sk_plr_hornet_dmg2);// {"sk_plr_hornet_dmg2","0"};
 	CVAR_REGISTER(&sk_plr_hornet_dmg3);// {"sk_plr_hornet_dmg3","0"};
 
+	// Knife
+	CVAR_REGISTER(&sk_plr_knife1);// {"sk_plr_knife1","0"};
+	CVAR_REGISTER(&sk_plr_knife2);// {"sk_plr_knife2","0"};
+	CVAR_REGISTER(&sk_plr_knife3);// {"sk_plr_knife3","0"};
 
 	// WORLD WEAPONS
 	CVAR_REGISTER(&sk_12mm_bullet1);// {"sk_12mm_bullet1","0"};

@@ -35,7 +35,7 @@ extern "C"
 	void EV_TripmineFire(event_args_t* args);
 	void EV_SnarkFire(event_args_t* args);
 
-
+	void EV_Knife(event_args_t* args);
 
 	void EV_TrainPitchAdjust(event_args_t* args);
 }
