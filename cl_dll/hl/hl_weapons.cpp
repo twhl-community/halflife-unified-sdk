@@ -864,6 +864,8 @@ void HUD_WeaponsPostThink( local_state_s *from, local_state_s *to, usercmd_t *cm
 		to->client.vuser4[1]				= player.m_rgAmmo[ pCurrent->m_iPrimaryAmmoType ];
 		to->client.vuser4[2]				= player.m_rgAmmo[ pCurrent->m_iSecondaryAmmoType ];
 
+		pCurrent->GetWeaponData(*pto);
+
 /*		if ( pto->m_flPumpTime != -9999 )
 		{
 			pto->m_flPumpTime -= cmd->msec / 1000.0;
