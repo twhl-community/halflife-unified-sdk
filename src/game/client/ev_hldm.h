@@ -40,4 +40,6 @@ extern "C"
 	void EV_TrainPitchAdjust(event_args_t* args);
 }
 
+void SetLocalBody(int id, int body);
+
 #endif // EV_HLDMH
