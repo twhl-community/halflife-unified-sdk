@@ -412,6 +412,7 @@ typedef struct
 
 extern MULTIDAMAGE gMultiDamage;
 
+void FindHullIntersection(const Vector& vecSrc, TraceResult& tr, const Vector& mins, const Vector& maxs, edict_t* pEntity);
 
 #define LOUD_GUN_VOLUME			1000
 #define NORMAL_GUN_VOLUME		600
