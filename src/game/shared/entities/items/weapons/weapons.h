@@ -16,6 +16,7 @@
 #define WEAPONS_H
 
 #include "effects.h"
+#include "weaponinfo.h"
 
 class CBasePlayer;
 
@@ -263,6 +264,10 @@ public:
 	virtual int UpdateClientData(CBasePlayer* pPlayer) { return 0; }
 
 	virtual CBasePlayerItem* GetWeaponPtr() { return NULL; }
+
+	virtual void GetWeaponData(weapon_data_t& data) {}
+
+	virtual void SetWeaponData(const weapon_data_t& data) {}
 
 	static ItemInfo ItemInfoArray[MAX_WEAPONS];
 	static AmmoInfo AmmoInfoArray[MAX_AMMO_SLOTS];
