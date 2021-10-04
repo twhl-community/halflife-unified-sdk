@@ -169,6 +169,9 @@ public:
 	float		m_flLastSaidSmelled;// last time we talked about something that stinks
 	float		m_flStopTalkTime;// when in the future that I'll be done saying this sentence.
 
+	//TODO: needs save/restore
+	BOOL m_fStartSuspicious;
+
 	EHANDLE		m_hTalkTarget;	// who to look at while talking
 	CUSTOM_SCHEDULES;
 };
