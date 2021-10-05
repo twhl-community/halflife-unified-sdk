@@ -385,9 +385,7 @@ cvar_t	sk_plr_hornet_dmg3 = {"sk_plr_hornet_dmg3","0"};
 DECLARE_SKILL_CVARS(plr_pipewrench);
 
 // Knife
-cvar_t	sk_plr_knife1 = {"sk_plr_knife1","0"};
-cvar_t	sk_plr_knife2 = {"sk_plr_knife2","0"};
-cvar_t	sk_plr_knife3 = {"sk_plr_knife3","0"};
+DECLARE_SKILL_CVARS(plr_knife);
 
 // Grapple
 DECLARE_SKILL_CVARS(plr_grapple);
@@ -840,9 +838,7 @@ void GameDLLInit()
 	REGISTER_SKILL_CVARS(plr_pipewrench);
 
 	// Knife
-	CVAR_REGISTER(&sk_plr_knife1);// {"sk_plr_knife1","0"};
-	CVAR_REGISTER(&sk_plr_knife2);// {"sk_plr_knife2","0"};
-	CVAR_REGISTER(&sk_plr_knife3);// {"sk_plr_knife3","0"};
+	REGISTER_SKILL_CVARS(plr_knife);
 
 	// Grapple
 	REGISTER_SKILL_CVARS(plr_grapple);
