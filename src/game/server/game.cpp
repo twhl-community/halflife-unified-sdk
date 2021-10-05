@@ -151,6 +151,11 @@ cvar_t	sk_headcrab_dmg_bite1 = {"sk_headcrab_dmg_bite1","0"};
 cvar_t	sk_headcrab_dmg_bite2 = {"sk_headcrab_dmg_bite2","0"};
 cvar_t	sk_headcrab_dmg_bite3 = {"sk_headcrab_dmg_bite3","0"};
 
+// Shock Roach
+DECLARE_SKILL_CVARS(shockroach_health);
+DECLARE_SKILL_CVARS(shockroach_dmg_bite);
+DECLARE_SKILL_CVARS(shockroach_lifespan);
+
 
 // Hgrunt 
 cvar_t	sk_hgrunt_health1 = {"sk_hgrunt_health1","0"};
@@ -648,6 +653,10 @@ void GameDLLInit()
 	CVAR_REGISTER(&sk_headcrab_dmg_bite2);// {"sk_headcrab_dmg_bite2","0"};
 	CVAR_REGISTER(&sk_headcrab_dmg_bite3);// {"sk_headcrab_dmg_bite3","0"};
 
+	// Shock Roach
+	REGISTER_SKILL_CVARS(shockroach_health);
+	REGISTER_SKILL_CVARS(shockroach_dmg_bite);
+	REGISTER_SKILL_CVARS(shockroach_lifespan);
 
 	// Hgrunt 
 	CVAR_REGISTER(&sk_hgrunt_health1);// {"sk_hgrunt_health1","0"};

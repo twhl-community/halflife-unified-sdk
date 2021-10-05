@@ -167,6 +167,11 @@ void CGameRules::RefreshSkillData()
 	gSkillData.headcrabHealth = GetSkillCvar("sk_headcrab_health");
 	gSkillData.headcrabDmgBite = GetSkillCvar("sk_headcrab_dmg_bite");
 
+	// Shock Roach
+	gSkillData.shockroachHealth = GetSkillCvar("sk_shockroach_health");
+	gSkillData.shockroachDmgBite = GetSkillCvar("sk_shockroach_dmg_bite");
+	gSkillData.shockroachLifespan = GetSkillCvar("sk_shockroach_lifespan");
+
 	// Hgrunt 
 	gSkillData.hgruntHealth = GetSkillCvar("sk_hgrunt_health");
 	gSkillData.hgruntDmgKick = GetSkillCvar("sk_hgrunt_kick");

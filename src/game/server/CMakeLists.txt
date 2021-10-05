@@ -227,6 +227,8 @@ target_sources(hl PRIVATE
 	entities/NPCs/other/rat.cpp
 	entities/NPCs/other/roach.cpp
 	entities/NPCs/other/skeleton.cpp
+	
+	entities/NPCs/racex/shockroach.cpp
 
 	gamerules/gamerules.cpp
 	gamerules/gamerules.h

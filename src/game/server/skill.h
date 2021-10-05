@@ -51,6 +51,10 @@ struct skilldata_t
 	float headcrabHealth;
 	float headcrabDmgBite;
 
+	float shockroachHealth;
+	float shockroachDmgBite;
+	float shockroachLifespan;
+
 	float hgruntHealth;
 	float hgruntDmgKick;
 	float hgruntShotgunPellets;
