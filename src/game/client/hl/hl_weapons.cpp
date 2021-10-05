@@ -20,6 +20,7 @@
 #include "nodes.h"
 #include "player.h"
 
+#include "CGrapple.h"
 #include "CKnife.h"
 #include "CPipewrench.h"
 
@@ -70,6 +71,7 @@ CSatchel g_Satchel;
 CTripmine g_Tripmine;
 CSqueak g_Snark;
 
+CGrapple g_Grapple;
 CPipewrench g_Pipewrench;
 CKnife g_Knife;
 
@@ -466,6 +468,7 @@ void HUD_InitClientWeapons()
 	HUD_PrepEntity(&g_Tripmine, &player);
 	HUD_PrepEntity(&g_Snark, &player);
 
+	HUD_PrepEntity(&g_Grapple, &player);
 	HUD_PrepEntity(&g_Pipewrench, &player);
 	HUD_PrepEntity(&g_Knife, &player);
 }
@@ -525,6 +528,7 @@ CBasePlayerWeapon* GetLocalWeapon(int id)
 	case WEAPON_TRIPMINE: return &g_Tripmine;
 	case WEAPON_SNARK: return &g_Snark;
 
+	case WEAPON_GRAPPLE: return &g_Grapple;
 	case WEAPON_PIPEWRENCH: return &g_Pipewrench;
 	case WEAPON_KNIFE: return &g_Knife;
 

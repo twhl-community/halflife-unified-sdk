@@ -78,6 +78,7 @@ public:
 #define WEAPON_TRIPMINE			13
 #define	WEAPON_SATCHEL			14
 #define	WEAPON_SNARK			15
+#define WEAPON_GRAPPLE			16
 #define WEAPON_PIPEWRENCH		18
 #define WEAPON_KNIFE			25
 

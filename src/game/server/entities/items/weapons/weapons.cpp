@@ -356,6 +356,8 @@ void W_Precache()
 	UTIL_PrecacheOtherWeapon("weapon_hornetgun");
 #endif
 
+	UTIL_PrecacheOtherWeapon("weapon_grapple");
+
 	UTIL_PrecacheOtherWeapon("weapon_pipewrench");
 
 	UTIL_PrecacheOtherWeapon("weapon_knife");

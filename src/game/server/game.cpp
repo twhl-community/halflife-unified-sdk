@@ -49,6 +49,17 @@ cvar_t* g_psv_aim = NULL;
 cvar_t* g_footsteps = NULL;
 cvar_t* g_psv_cheats = nullptr;
 
+//Macros to make skill cvars easier to define
+#define DECLARE_SKILL_CVARS( name )					\
+cvar_t	sk_##name##1 = { "sk_" #name "1", "0" };	\
+cvar_t	sk_##name##2 = { "sk_" #name "2", "0" };	\
+cvar_t	sk_##name##3 = { "sk_" #name "3", "0" }
+
+#define REGISTER_SKILL_CVARS( name )	\
+CVAR_REGISTER( &sk_##name##1 );			\
+CVAR_REGISTER( &sk_##name##2 );			\
+CVAR_REGISTER( &sk_##name##3 )
+
 //CVARS FOR SKILL LEVEL SETTINGS
 // Agrunt
 cvar_t	sk_agrunt_health1 = {"sk_agrunt_health1","0"};
@@ -380,6 +391,9 @@ cvar_t	sk_plr_knife1 = {"sk_plr_knife1","0"};
 cvar_t	sk_plr_knife2 = {"sk_plr_knife2","0"};
 cvar_t	sk_plr_knife3 = {"sk_plr_knife3","0"};
 
+// Grapple
+DECLARE_SKILL_CVARS(plr_grapple);
+
 // WORLD WEAPONS
 cvar_t	sk_12mm_bullet1 = {"sk_12mm_bullet1","0"};
 cvar_t	sk_12mm_bullet2 = {"sk_12mm_bullet2","0"};
@@ -464,6 +478,8 @@ cvar_t	sk_player_leg2 = {"sk_player_leg2","1"};
 cvar_t	sk_player_leg3 = {"sk_player_leg3","1"};
 
 // END Cvars for Skill Level settings
+
+cvar_t oldgrapple = {"sv_oldgrapple", "0", FCVAR_SERVER};
 
 // Register your console variables here
 // This gets called one time when the game is initialied
@@ -832,6 +848,9 @@ void GameDLLInit()
 	CVAR_REGISTER(&sk_plr_knife2);// {"sk_plr_knife2","0"};
 	CVAR_REGISTER(&sk_plr_knife3);// {"sk_plr_knife3","0"};
 
+	// Grapple
+	REGISTER_SKILL_CVARS(plr_grapple);
+
 	// WORLD WEAPONS
 	CVAR_REGISTER(&sk_12mm_bullet1);// {"sk_12mm_bullet1","0"};
 	CVAR_REGISTER(&sk_12mm_bullet2);// {"sk_12mm_bullet2","0"};
@@ -914,6 +933,8 @@ void GameDLLInit()
 	CVAR_REGISTER(&sk_player_leg2);
 	CVAR_REGISTER(&sk_player_leg3);
 	// END REGISTER CVARS FOR SKILL LEVEL STUFF
+
+	CVAR_REGISTER(&oldgrapple);
 
 	SERVER_COMMAND("exec skill.cfg\n");
 }

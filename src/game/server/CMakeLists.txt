@@ -78,6 +78,8 @@ target_sources(hl PRIVATE
 	entities/items/h_battery.cpp
 	entities/items/items.cpp
 	entities/items/items.h
+	entities/items/weapons/CGrappleTip.cpp
+	entities/items/weapons/CGrappleTip.h
 	entities/mortar.cpp
 	entities/pathcorner.cpp
 	entities/plats.cpp
@@ -96,6 +98,8 @@ target_sources(hl PRIVATE
 	
 	../shared/entities/ehandle.cpp
 	../shared/entities/ehandle.h
+	../shared/entities/items/weapons/CGrapple.cpp
+	../shared/entities/items/weapons/CGrapple.h
 	../shared/entities/items/weapons/CKnife.cpp
 	../shared/entities/items/weapons/CKnife.h
 	../shared/entities/items/weapons/CPipewrench.cpp
