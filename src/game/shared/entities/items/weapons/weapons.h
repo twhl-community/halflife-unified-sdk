@@ -79,6 +79,7 @@ public:
 #define	WEAPON_SATCHEL			14
 #define	WEAPON_SNARK			15
 #define WEAPON_GRAPPLE			16
+#define WEAPON_EAGLE			17
 #define WEAPON_PIPEWRENCH		18
 #define WEAPON_DISPLACER		20
 #define WEAPON_KNIFE			25
@@ -108,6 +109,7 @@ public:
 #define SNARK_WEIGHT		5
 #define SATCHEL_WEIGHT		-10
 #define TRIPMINE_WEIGHT		-10
+#define EAGLE_WEIGHT		15
 #define PIPEWRENCH_WEIGHT	2
 #define DISPLACER_WEIGHT	10
 
@@ -143,6 +145,7 @@ public:
 #define SATCHEL_MAX_CLIP		WEAPON_NOCLIP
 #define TRIPMINE_MAX_CLIP		WEAPON_NOCLIP
 #define SNARK_MAX_CLIP			WEAPON_NOCLIP
+#define EAGLE_MAX_CLIP			7
 
 
 // the default amount of ammo that comes with each gun when it spawns
@@ -175,6 +178,7 @@ public:
 #define AMMO_RPGCLIP_GIVE		RPG_MAX_CLIP
 #define AMMO_URANIUMBOX_GIVE	20
 #define AMMO_SNARKBOX_GIVE		5
+#define AMMO_EAGLE_GIVE			7
 
 // bullet types
 typedef	enum
@@ -189,6 +193,7 @@ typedef	enum
 	BULLET_MONSTER_9MM,
 	BULLET_MONSTER_MP5,
 	BULLET_MONSTER_12MM,
+	BULLET_PLAYER_EAGLE,
 } Bullet;
 
 
@@ -759,12 +764,12 @@ private:
 
 class CLaserSpot : public CBaseEntity
 {
+public:
 	void Spawn() override;
 	void Precache() override;
 
 	int	ObjectCaps() override { return FCAP_DONT_SAVE; }
 
-public:
 	void Suspend(float flSuspendTime);
 	void EXPORT Revive();
 

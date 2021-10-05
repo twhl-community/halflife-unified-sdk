@@ -390,6 +390,9 @@ DECLARE_SKILL_CVARS(plr_knife);
 // Grapple
 DECLARE_SKILL_CVARS(plr_grapple);
 
+// Desert Eagle
+DECLARE_SKILL_CVARS(plr_eagle);
+
 // Displacer
 DECLARE_SKILL_CVARS(plr_displacer_self);
 DECLARE_SKILL_CVARS(plr_displacer_other);
@@ -847,6 +850,9 @@ void GameDLLInit()
 
 	// Grapple
 	REGISTER_SKILL_CVARS(plr_grapple);
+
+	// Desert Eagle
+	REGISTER_SKILL_CVARS(plr_eagle);
 
 	// Displacer
 	REGISTER_SKILL_CVARS(plr_displacer_self);

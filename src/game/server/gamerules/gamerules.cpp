@@ -273,6 +273,9 @@ void CGameRules::RefreshSkillData()
 	// Grapple
 	gSkillData.plrDmgGrapple = GetSkillCvar("sk_plr_grapple");
 
+	// Desert Eagle
+	gSkillData.plrDmgEagle = GetSkillCvar("sk_plr_eagle");
+
 	// Displacer
 	gSkillData.plrDmgDisplacerSelf = GetSkillCvar("sk_plr_displacer_self");
 	gSkillData.plrDmgDisplacerOther = GetSkillCvar("sk_plr_displacer_other");
