@@ -230,6 +230,7 @@ target_sources(hl PRIVATE
 	
 	entities/NPCs/racex/baby_voltigore.cpp
 	entities/NPCs/racex/pitdrone.cpp
+	entities/NPCs/racex/pitworm_up.cpp
 	entities/NPCs/racex/shockroach.cpp
 	entities/NPCs/racex/shocktrooper.cpp
 	entities/NPCs/racex/voltigore.cpp

@@ -112,6 +112,10 @@ struct skilldata_t
 	float babyvoltigoreHealth;
 	float babyvoltigoreDmgPunch;
 
+	float pitWormHealth;
+	float pitWormDmgSwipe;
+	float pitWormDmgBeam;
+
 	float zombieHealth;
 	float zombieDmgOneSlash;
 	float zombieDmgBothSlash;

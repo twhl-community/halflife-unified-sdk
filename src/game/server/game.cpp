@@ -296,6 +296,11 @@ DECLARE_SKILL_CVARS(voltigore_dmg_beam);
 DECLARE_SKILL_CVARS(babyvoltigore_health);
 DECLARE_SKILL_CVARS(babyvoltigore_dmg_punch);
 
+// Pit Worm
+DECLARE_SKILL_CVARS(pitworm_health);
+DECLARE_SKILL_CVARS(pitworm_dmg_swipe);
+DECLARE_SKILL_CVARS(pitworm_dmg_beam);
+
 // Zombie
 cvar_t	sk_zombie_health1 = {"sk_zombie_health1","0"};
 cvar_t	sk_zombie_health2 = {"sk_zombie_health2","0"};
@@ -820,6 +825,11 @@ void GameDLLInit()
 	// Baby Voltigore
 	REGISTER_SKILL_CVARS(babyvoltigore_health);
 	REGISTER_SKILL_CVARS(babyvoltigore_dmg_punch);
+
+	// Pit Worm
+	REGISTER_SKILL_CVARS(pitworm_health);
+	REGISTER_SKILL_CVARS(pitworm_dmg_swipe);
+	REGISTER_SKILL_CVARS(pitworm_dmg_beam);
 
 	// Zombie
 	CVAR_REGISTER(&sk_zombie_health1);// {"sk_zombie_health1","0"};
