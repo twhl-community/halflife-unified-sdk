@@ -27,6 +27,7 @@
 #include "CM249.h"
 #include "CPenguin.h"
 #include "CShockRifle.h"
+#include "CSporeLauncher.h"
 
 #include "const.h"
 #include "entity_state.h"

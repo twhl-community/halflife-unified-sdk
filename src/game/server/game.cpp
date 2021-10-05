@@ -405,6 +405,9 @@ DECLARE_SKILL_CVARS(plr_displacer_radius);
 DECLARE_SKILL_CVARS(plr_shockroachs);
 DECLARE_SKILL_CVARS(plr_shockroachm);
 
+// Spore Launcher
+DECLARE_SKILL_CVARS(plr_spore);
+
 // WORLD WEAPONS
 cvar_t	sk_12mm_bullet1 = {"sk_12mm_bullet1","0"};
 cvar_t	sk_12mm_bullet2 = {"sk_12mm_bullet2","0"};
@@ -872,6 +875,9 @@ void GameDLLInit()
 	// Shock Roach
 	REGISTER_SKILL_CVARS(plr_shockroachs);
 	REGISTER_SKILL_CVARS(plr_shockroachm);
+
+	// Spore Launcher
+	REGISTER_SKILL_CVARS(plr_spore);
 
 	// WORLD WEAPONS
 	CVAR_REGISTER(&sk_12mm_bullet1);// {"sk_12mm_bullet1","0"};

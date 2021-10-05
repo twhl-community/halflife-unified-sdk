@@ -288,6 +288,9 @@ void CGameRules::RefreshSkillData()
 	gSkillData.plrDmgShockRoachS = GetSkillCvar("sk_plr_shockroachs");
 	gSkillData.plrDmgShockRoachM = GetSkillCvar("sk_plr_shockroachm");
 
+	// Spore Launcher
+	gSkillData.plrDmgSpore = GetSkillCvar("sk_plr_spore");
+
 	// MONSTER WEAPONS
 	gSkillData.monDmg12MM = GetSkillCvar("sk_12mm_bullet");
 	gSkillData.monDmgMP5 = GetSkillCvar("sk_9mmAR_bullet");

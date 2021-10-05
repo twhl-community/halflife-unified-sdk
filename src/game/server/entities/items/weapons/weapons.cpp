@@ -367,11 +367,18 @@ void W_Precache()
 
 	UTIL_PrecacheOtherWeapon("weapon_displacer");
 
+	UTIL_PrecacheOtherWeapon("weapon_sporelauncher");
+	UTIL_PrecacheOther("ammo_spore");
+
 	UTIL_PrecacheOtherWeapon("weapon_shockrifle");
 
 	UTIL_PrecacheOtherWeapon("weapon_knife");
 
 	UTIL_PrecacheOtherWeapon("weapon_penguin");
+
+	PRECACHE_SOUND("weapons/spore_hit1.wav");
+	PRECACHE_SOUND("weapons/spore_hit2.wav");
+	PRECACHE_SOUND("weapons/spore_hit3.wav");
 
 #if !defined( OEM_BUILD ) && !defined( HLDEMO_BUILD )
 	if (g_pGameRules->IsDeathmatch())
