@@ -20,6 +20,7 @@
 #include "cbase.h"
 #include "weapons.h"
 
+#include "CDisplacer.h"
 #include "CKnife.h"
 #include "CPipewrench.h"
 
@@ -1614,6 +1615,72 @@ void EV_Pipewrench(event_args_t* args)
 //	 PIPE WRENCH END 
 //======================
 
+void EV_FireDisplacer(event_args_t* args)
+{
+	const auto mode = static_cast<DisplacerMode>(args->iparam1);
+
+	switch (mode)
+	{
+	case DisplacerMode::SPINNING_UP:
+	{
+		int iAttach = 0;
+
+		int iStartAttach, iEndAttach;
+
+		for (size_t uiIndex = 0; uiIndex < DISPLACER_NUM_BEAMS; ++uiIndex)
+		{
+			if (iAttach <= 2)
+			{
+				iStartAttach = iAttach++ + 2;
+				iEndAttach = iAttach % 2 + 2;
+			}
+			else
+			{
+				iStartAttach = 0;
+				iEndAttach = 0;
+			}
+
+			gEngfuncs.pEfxAPI->R_BeamEnts(
+				args->entindex | (iStartAttach << 12), args->entindex | (iEndAttach << 12),
+				gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/lgtning.spr"),
+				1,
+				1, 60 * 0.01, 190 / 255.0, 30, 0, 10,
+				96 / 255.0, 128 / 255.0, 16 / 255.0);
+		}
+
+		break;
+	}
+
+	case DisplacerMode::FIRED:
+	{
+		//bparam1 indicates whether it's a primary or secondary attack. - Solokiller
+		if (!args->bparam1)
+		{
+			gEngfuncs.pEventAPI->EV_PlaySound(
+				args->entindex, args->origin,
+				CHAN_WEAPON, "weapons/displacer_fire.wav",
+				gEngfuncs.pfnRandomFloat(0.8, 0.9), ATTN_NORM, 0, PITCH_NORM);
+		}
+		else
+		{
+			gEngfuncs.pEventAPI->EV_PlaySound(
+				args->entindex, args->origin,
+				CHAN_WEAPON, "weapons/displacer_self.wav",
+				gEngfuncs.pfnRandomFloat(0.8, 0.9), ATTN_NORM, 0, PITCH_NORM);
+		}
+
+		if (EV_IsLocal(args->entindex))
+		{
+			gEngfuncs.pEventAPI->EV_WeaponAnimation(DISPLACER_FIRE, 0);
+			V_PunchAxis(0, -2);
+		}
+
+		break;
+	}
+
+	default: break;
+	}
+}
 //Only predict the miss sounds, hit sounds are still played 
 //server side, so players don't get the wrong idea.
 void EV_Knife(event_args_t* args)

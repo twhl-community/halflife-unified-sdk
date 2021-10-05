@@ -80,6 +80,7 @@ public:
 #define	WEAPON_SNARK			15
 #define WEAPON_GRAPPLE			16
 #define WEAPON_PIPEWRENCH		18
+#define WEAPON_DISPLACER		20
 #define WEAPON_KNIFE			25
 
 #define WEAPON_ALLWEAPONS		(~(1<<WEAPON_SUIT))
@@ -108,6 +109,7 @@ public:
 #define SATCHEL_WEIGHT		-10
 #define TRIPMINE_WEIGHT		-10
 #define PIPEWRENCH_WEIGHT	2
+#define DISPLACER_WEIGHT	10
 
 // weapon clip/carry ammo capacities
 #define URANIUM_MAX_CARRY		100
@@ -159,6 +161,7 @@ public:
 #define TRIPMINE_DEFAULT_GIVE		1
 #define SNARK_DEFAULT_GIVE			5
 #define HIVEHAND_DEFAULT_GIVE		8
+#define DISPLACER_DEFAULT_GIVE		40
 
 // The amount of ammo given to a player by an ammo item.
 #define AMMO_URANIUMBOX_GIVE	20

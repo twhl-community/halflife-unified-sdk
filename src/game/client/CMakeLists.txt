@@ -186,6 +186,8 @@ target_sources(client PRIVATE
 	../shared/voice_common.h
 	../shared/entities/ehandle.cpp
 	../shared/entities/ehandle.h
+	../shared/entities/items/weapons/CDisplacer.cpp
+	../shared/entities/items/weapons/CDisplacer.h
 	../shared/entities/items/weapons/CGrapple.cpp
 	../shared/entities/items/weapons/CGrapple.h
 	../shared/entities/items/weapons/CKnife.cpp

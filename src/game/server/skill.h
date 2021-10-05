@@ -112,6 +112,9 @@ struct skilldata_t
 	float plrDmgPipewrench;
 	float plrDmgKnife;
 	float plrDmgGrapple;
+	float plrDmgDisplacerSelf;
+	float plrDmgDisplacerOther;
+	float plrRadiusDisplacer;
 
 	// weapons shared by monsters
 	float monDmg9MM;

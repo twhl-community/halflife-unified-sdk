@@ -121,6 +121,10 @@ TYPEDESCRIPTION	CBasePlayer::m_playerSaveData[] =
 	DEFINE_FIELD(CBasePlayer, m_iHideHUD, FIELD_INTEGER),
 	DEFINE_FIELD(CBasePlayer, m_iFOV, FIELD_INTEGER),
 
+	//Vanilla Op4 doesn't restore this. Not a big deal but it can cause you to teleport to the wrong area after a restore
+	DEFINE_FIELD(CBasePlayer, m_DisplacerReturn, FIELD_POSITION_VECTOR),
+	DEFINE_FIELD(CBasePlayer, m_flDisplacerSndRoomtype, FIELD_FLOAT),
+
 	//DEFINE_FIELD( CBasePlayer, m_fDeadTime, FIELD_FLOAT ), // only used in multiplayer games
 	//DEFINE_FIELD( CBasePlayer, m_fGameHUDInitialized, FIELD_INTEGER ), // only used in multiplayer games
 	//DEFINE_FIELD( CBasePlayer, m_flStopExtraSoundTime, FIELD_TIME ),
@@ -2831,6 +2835,7 @@ void CBasePlayer::Spawn()
 
 	m_flNextDecalTime = 0;// let this player decal as soon as he spawns.
 
+	m_DisplacerReturn = g_vecZero;
 	m_flgeigerDelay = gpGlobals->time + 2.0;	// wait a few seconds until user-defined message registrations
 												// are recieved by all clients
 
@@ -3478,6 +3483,7 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse)
 		GiveNamedItem("weapon_knife");
 		GiveNamedItem("weapon_pipewrench");
 		GiveNamedItem("weapon_grapple");
+		GiveNamedItem("weapon_displacer");
 
 		gEvilImpulse101 = FALSE;
 		break;
