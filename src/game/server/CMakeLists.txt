@@ -211,6 +211,7 @@ target_sources(hl PRIVATE
 	
 	entities/NPCs/military/apache.cpp
 	entities/NPCs/military/drill_sergeant.cpp
+	entities/NPCs/military/hfgrunt.cpp
 	entities/NPCs/military/hgrunt.cpp
 	entities/NPCs/military/osprey.cpp
 	entities/NPCs/military/recruit.cpp
