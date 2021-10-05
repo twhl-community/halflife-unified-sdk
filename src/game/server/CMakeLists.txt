@@ -208,6 +208,7 @@ target_sources(hl PRIVATE
 	entities/NPCs/blackmesa/scientist.cpp
 	entities/NPCs/blackmesa/scientist.h
 	
+	entities/NPCs/blackops/blkop_apache.cpp
 	entities/NPCs/blackops/hassassin.cpp
 	
 	entities/NPCs/military/apache.cpp
