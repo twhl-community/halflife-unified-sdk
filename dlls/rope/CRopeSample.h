@@ -13,7 +13,7 @@
 *
 ****/
 #ifndef ROPE_CROPESAMPLE_H
-#define CROPESAMPLE_H
+#define ROPE_CROPESAMPLE_H
 
 class CRope;
 
