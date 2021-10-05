@@ -169,6 +169,12 @@ cvar_t	sk_hgrunt_gspeed1 = {"sk_hgrunt_gspeed1","0"};
 cvar_t	sk_hgrunt_gspeed2 = {"sk_hgrunt_gspeed2","0"};
 cvar_t	sk_hgrunt_gspeed3 = {"sk_hgrunt_gspeed3","0"};
 
+// Male Assassin
+DECLARE_SKILL_CVARS(massassin_health);
+DECLARE_SKILL_CVARS(massassin_kick);
+DECLARE_SKILL_CVARS(massassin_pellets);
+DECLARE_SKILL_CVARS(massassin_gspeed);
+
 // Houndeye
 cvar_t	sk_houndeye_health1 = {"sk_houndeye_health1","0"};
 cvar_t	sk_houndeye_health2 = {"sk_houndeye_health2","0"};
@@ -659,6 +665,12 @@ void GameDLLInit()
 	CVAR_REGISTER(&sk_hgrunt_gspeed1);
 	CVAR_REGISTER(&sk_hgrunt_gspeed2);
 	CVAR_REGISTER(&sk_hgrunt_gspeed3);
+
+	// Male Assassin
+	REGISTER_SKILL_CVARS(massassin_health);
+	REGISTER_SKILL_CVARS(massassin_kick);
+	REGISTER_SKILL_CVARS(massassin_pellets);
+	REGISTER_SKILL_CVARS(massassin_gspeed);
 
 	// Houndeye
 	CVAR_REGISTER(&sk_houndeye_health1);// {"sk_houndeye_health1","0"};

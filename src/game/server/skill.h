@@ -56,6 +56,10 @@ struct skilldata_t
 	float hgruntShotgunPellets;
 	float hgruntGrenadeSpeed;
 
+	float massassinHealth;
+	float massassinDmgKick;
+	float massassinGrenadeSpeed;
+
 	float houndeyeHealth;
 	float houndeyeDmgBlast;
 

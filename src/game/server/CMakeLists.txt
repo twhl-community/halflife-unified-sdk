@@ -210,6 +210,7 @@ target_sources(hl PRIVATE
 	
 	entities/NPCs/blackops/blkop_apache.cpp
 	entities/NPCs/blackops/hassassin.cpp
+	entities/NPCs/blackops/male_assassin.cpp
 	
 	entities/NPCs/military/apache.cpp
 	entities/NPCs/military/drill_sergeant.cpp
