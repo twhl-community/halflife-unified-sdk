@@ -108,6 +108,15 @@ target_sources(hl PRIVATE
 	entities/items/weapons/CSpore.h
 	entities/items/weapons/weapons.cpp
 	
+	entities/rope/CElectrifiedWire.cpp
+	entities/rope/CElectrifiedWire.h
+	entities/rope/CRope.cpp
+	entities/rope/CRope.h
+	entities/rope/CRopeSample.cpp
+	entities/rope/CRopeSample.h
+	entities/rope/CRopeSegment.cpp
+	entities/rope/CRopeSegment.h
+	
 	../shared/entities/ehandle.cpp
 	../shared/entities/ehandle.h
 	../shared/entities/items/weapons/CDisplacer.cpp
