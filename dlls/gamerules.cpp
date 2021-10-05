@@ -142,7 +142,7 @@ void CGameRules::RefreshSkillData ()
 	// Barney
 	gSkillData.barneyHealth = GetSkillCvar( "sk_barney_health");
 
-	// Barney
+	// Otis
 	gSkillData.otisHealth = GetSkillCvar( "sk_otis_health" );
 
 	// Big Momma
@@ -371,7 +371,7 @@ void CGameRules::RefreshSkillData ()
 	gSkillData.plrDmgDisplacerOther = GetSkillCvar( "sk_plr_displacer_other" );
 	gSkillData.plrRadiusDisplacer = GetSkillCvar( "sk_plr_displacer_radius" );
 
-	// Shock Roack
+	// Shock Roach
 	gSkillData.plrDmgShockRoachS = GetSkillCvar( "sk_plr_shockroachs" );
 	gSkillData.plrDmgShockRoachM = GetSkillCvar( "sk_plr_shockroachm" );
 

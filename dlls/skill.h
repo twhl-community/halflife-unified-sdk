@@ -122,11 +122,14 @@ struct skilldata_t
 	float voltigoreHealth;
 	float voltigoreDmgBeam;
 	float voltigoreDmgPunch;
+
 	float babyvoltigoreHealth;
 	float babyvoltigoreDmgPunch;
+
 	float pitWormHealth;
 	float pitWormDmgSwipe;
 	float pitWormDmgBeam;
+
 	float geneWormHealth;
 	float geneWormDmgSpit;
 	float geneWormDmgHit;
