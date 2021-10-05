@@ -407,7 +407,7 @@ public:
 private:
 	CRope* m_pRope;
 	float m_flLastClimbTime = 0;
-	bool m_bIsClimbing = false;
+	BOOL m_bIsClimbing = false;
 
 	bool m_bRestored;
 };
