@@ -81,6 +81,7 @@ public:
 #define WEAPON_GRAPPLE			16
 #define WEAPON_EAGLE			17
 #define WEAPON_PIPEWRENCH		18
+#define WEAPON_M249				19
 #define WEAPON_DISPLACER		20
 #define WEAPON_SHOCKRIFLE		22
 #define WEAPON_KNIFE			25
@@ -113,6 +114,7 @@ public:
 #define EAGLE_WEIGHT		15
 #define SHOCKRIFLE_WEIGHT	15
 #define PIPEWRENCH_WEIGHT	2
+#define M249_WEIGHT			20
 #define DISPLACER_WEIGHT	10
 
 // weapon clip/carry ammo capacities
@@ -128,6 +130,7 @@ public:
 #define SNARK_MAX_CARRY			15
 #define HORNET_MAX_CARRY		8
 #define M203_GRENADE_MAX_CARRY	10
+#define M249_MAX_CARRY			200
 
 // the maximum amount of ammo each weapon's clip can hold
 #define WEAPON_NOCLIP			-1
@@ -148,6 +151,7 @@ public:
 #define TRIPMINE_MAX_CLIP		WEAPON_NOCLIP
 #define SNARK_MAX_CLIP			WEAPON_NOCLIP
 #define EAGLE_MAX_CLIP			7
+#define M249_MAX_CLIP			50
 #define SHOCKRIFLE_MAX_CLIP		10
 
 
@@ -167,6 +171,7 @@ public:
 #define TRIPMINE_DEFAULT_GIVE		1
 #define SNARK_DEFAULT_GIVE			5
 #define HIVEHAND_DEFAULT_GIVE		8
+#define M249_DEFAULT_GIVE			50
 #define DISPLACER_DEFAULT_GIVE		40
 #define SHOCKRIFLE_DEFAULT_GIVE		10
 
@@ -182,6 +187,7 @@ public:
 #define AMMO_RPGCLIP_GIVE		RPG_MAX_CLIP
 #define AMMO_URANIUMBOX_GIVE	20
 #define AMMO_SNARKBOX_GIVE		5
+#define AMMO_M249_GIVE			50
 #define AMMO_EAGLE_GIVE			7
 
 // bullet types
@@ -197,6 +203,8 @@ typedef	enum
 	BULLET_MONSTER_9MM,
 	BULLET_MONSTER_MP5,
 	BULLET_MONSTER_12MM,
+
+	BULLET_PLAYER_556,
 	BULLET_PLAYER_EAGLE,
 } Bullet;
 

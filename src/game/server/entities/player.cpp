@@ -3483,6 +3483,7 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse)
 		GiveNamedItem("weapon_eagle");
 		GiveNamedItem("weapon_shockrifle");
 		GiveNamedItem("weapon_knife");
+		GiveNamedItem("weapon_m249");
 		GiveNamedItem("weapon_pipewrench");
 		GiveNamedItem("weapon_grapple");
 		GiveNamedItem("weapon_displacer");
