@@ -292,6 +292,10 @@ DECLARE_SKILL_CVARS(voltigore_health);
 DECLARE_SKILL_CVARS(voltigore_dmg_punch);
 DECLARE_SKILL_CVARS(voltigore_dmg_beam);
 
+// Baby Voltigore
+DECLARE_SKILL_CVARS(babyvoltigore_health);
+DECLARE_SKILL_CVARS(babyvoltigore_dmg_punch);
+
 // Zombie
 cvar_t	sk_zombie_health1 = {"sk_zombie_health1","0"};
 cvar_t	sk_zombie_health2 = {"sk_zombie_health2","0"};
@@ -812,6 +816,10 @@ void GameDLLInit()
 	REGISTER_SKILL_CVARS(voltigore_health);
 	REGISTER_SKILL_CVARS(voltigore_dmg_punch);
 	REGISTER_SKILL_CVARS(voltigore_dmg_beam);
+
+	// Baby Voltigore
+	REGISTER_SKILL_CVARS(babyvoltigore_health);
+	REGISTER_SKILL_CVARS(babyvoltigore_dmg_punch);
 
 	// Zombie
 	CVAR_REGISTER(&sk_zombie_health1);// {"sk_zombie_health1","0"};
