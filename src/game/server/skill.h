@@ -65,6 +65,20 @@ struct skilldata_t
 	float hgruntShotgunPellets;
 	float hgruntGrenadeSpeed;
 
+	float hgruntAllyHealth;
+	float hgruntAllyDmgKick;
+	float hgruntAllyShotgunPellets;
+	float hgruntAllyGrenadeSpeed;
+
+	float medicAllyHealth;
+	float medicAllyDmgKick;
+	float medicAllyGrenadeSpeed;
+	float medicAllyHeal;
+
+	float torchAllyHealth;
+	float torchAllyDmgKick;
+	float torchAllyGrenadeSpeed;
+
 	float massassinHealth;
 	float massassinDmgKick;
 	float massassinGrenadeSpeed;

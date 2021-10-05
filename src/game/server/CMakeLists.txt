@@ -214,9 +214,16 @@ target_sources(hl PRIVATE
 	entities/NPCs/blackops/male_assassin.cpp
 	
 	entities/NPCs/military/apache.cpp
+	entities/NPCs/military/COFAllyMonster.cpp
+	entities/NPCs/military/COFAllyMonster.h
+	entities/NPCs/military/COFSquadTalkMonster.cpp
+	entities/NPCs/military/COFSquadTalkMonster.h
 	entities/NPCs/military/drill_sergeant.cpp
 	entities/NPCs/military/hfgrunt.cpp
 	entities/NPCs/military/hgrunt.cpp
+	entities/NPCs/military/hgrunt_ally.cpp
+	entities/NPCs/military/hgrunt_medic.cpp
+	entities/NPCs/military/hgrunt_torch.cpp
 	entities/NPCs/military/osprey.cpp
 	entities/NPCs/military/recruit.cpp
 	entities/NPCs/military/turret.cpp

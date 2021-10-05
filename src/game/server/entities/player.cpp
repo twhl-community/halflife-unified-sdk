@@ -32,6 +32,10 @@
 #include "weapons.h"
 #include "soundent.h"
 #include "monsters.h"
+#include "talkmonster.h"
+#include "squadmonster.h"
+#include "military/COFAllyMonster.h"
+#include "military/COFSquadTalkMonster.h"
 #include "shake.h"
 #include "decals.h"
 #include "gamerules.h"
@@ -365,6 +369,13 @@ void CBasePlayer::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vec
 #define ARMOR_RATIO	 0.2	// Armor Takes 80% of the damage
 #define ARMOR_BONUS  0.5	// Each Point of Armor is work 1/x points of health
 
+static const char* m_szSquadClasses[] =
+{
+	"monster_human_grunt_ally",
+	"monster_human_medic_ally",
+	"monster_human_torch_ally"
+};
+
 int CBasePlayer::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
 	// have suit diagnose the problem - ie: report damage type
@@ -592,6 +603,32 @@ int CBasePlayer::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, flo
 		}
 		else
 			SetSuitUpdate("!HEV_HLTH1", FALSE, SUIT_NEXT_IN_10MIN);	// health dropping
+	}
+
+	//Make all grunts following me attack the NPC that attacked me
+	if (pAttacker)
+	{
+		auto enemy = pAttacker->MyMonsterPointer();
+
+		if (!enemy || enemy->IRelationship(this) == R_AL)
+		{
+			return fTookDamage;
+		}
+
+		for (int i = 0; i < ARRAYSIZE(m_szSquadClasses); ++i)
+		{
+			for (auto ally : UTIL_FindEntitiesByClassname<CBaseEntity>(m_szSquadClasses[i]))
+			{
+				auto squadAlly = ally->MySquadTalkMonsterPointer();
+
+				if (squadAlly
+					&& squadAlly->m_hTargetEnt
+					&& squadAlly->m_hTargetEnt->IsPlayer())
+				{
+					squadAlly->SquadMakeEnemy(enemy);
+				}
+			}
+		}
 	}
 
 	return fTookDamage;

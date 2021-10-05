@@ -184,6 +184,23 @@ void CGameRules::RefreshSkillData()
 	gSkillData.hgruntShotgunPellets = GetSkillCvar("sk_hgrunt_pellets");
 	gSkillData.hgruntGrenadeSpeed = GetSkillCvar("sk_hgrunt_gspeed");
 
+	// Hgrunt Ally
+	gSkillData.hgruntAllyHealth = GetSkillCvar("sk_hgrunt_ally_health");
+	gSkillData.hgruntAllyDmgKick = GetSkillCvar("sk_hgrunt_ally_kick");
+	gSkillData.hgruntAllyShotgunPellets = GetSkillCvar("sk_hgrunt_ally_pellets");
+	gSkillData.hgruntAllyGrenadeSpeed = GetSkillCvar("sk_hgrunt_ally_gspeed");
+
+	// Hgrunt Medic
+	gSkillData.medicAllyHealth = GetSkillCvar("sk_medic_ally_health");
+	gSkillData.medicAllyDmgKick = GetSkillCvar("sk_medic_ally_kick");
+	gSkillData.medicAllyGrenadeSpeed = GetSkillCvar("sk_medic_ally_gspeed");
+	gSkillData.medicAllyHeal = GetSkillCvar("sk_medic_ally_heal");
+
+	// Hgrunt Torch
+	gSkillData.torchAllyHealth = GetSkillCvar("sk_torch_ally_health");
+	gSkillData.torchAllyDmgKick = GetSkillCvar("sk_torch_ally_kick");
+	gSkillData.torchAllyGrenadeSpeed = GetSkillCvar("sk_torch_ally_gspeed");
+
 	// Male Assassin
 	gSkillData.massassinHealth = GetSkillCvar("sk_massassin_health");
 	gSkillData.massassinDmgKick = GetSkillCvar("sk_massassin_kick");
@@ -351,7 +368,7 @@ void CGameRules::RefreshSkillData()
 	gSkillData.plrDmgDisplacerOther = GetSkillCvar("sk_plr_displacer_other");
 	gSkillData.plrRadiusDisplacer = GetSkillCvar("sk_plr_displacer_radius");
 
-	// Shock Roack
+	// Shock Roach
 	gSkillData.plrDmgShockRoachS = GetSkillCvar("sk_plr_shockroachs");
 	gSkillData.plrDmgShockRoachM = GetSkillCvar("sk_plr_shockroachm");
 

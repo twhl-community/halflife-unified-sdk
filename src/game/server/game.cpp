@@ -180,6 +180,25 @@ cvar_t	sk_hgrunt_gspeed1 = {"sk_hgrunt_gspeed1","0"};
 cvar_t	sk_hgrunt_gspeed2 = {"sk_hgrunt_gspeed2","0"};
 cvar_t	sk_hgrunt_gspeed3 = {"sk_hgrunt_gspeed3","0"};
 
+// Hgrunt Ally
+DECLARE_SKILL_CVARS(hgrunt_ally_health);
+DECLARE_SKILL_CVARS(hgrunt_ally_kick);
+DECLARE_SKILL_CVARS(hgrunt_ally_pellets);
+DECLARE_SKILL_CVARS(hgrunt_ally_gspeed);
+
+// Hgrunt Medic
+DECLARE_SKILL_CVARS(medic_ally_health);
+DECLARE_SKILL_CVARS(medic_ally_kick);
+DECLARE_SKILL_CVARS(medic_ally_pellets);
+DECLARE_SKILL_CVARS(medic_ally_gspeed);
+DECLARE_SKILL_CVARS(medic_ally_heal);
+
+// Hgrunt Torch
+DECLARE_SKILL_CVARS(torch_ally_health);
+DECLARE_SKILL_CVARS(torch_ally_kick);
+DECLARE_SKILL_CVARS(torch_ally_pellets);
+DECLARE_SKILL_CVARS(torch_ally_gspeed);
+
 // Male Assassin
 DECLARE_SKILL_CVARS(massassin_health);
 DECLARE_SKILL_CVARS(massassin_kick);
@@ -711,6 +730,25 @@ void GameDLLInit()
 	CVAR_REGISTER(&sk_hgrunt_gspeed1);
 	CVAR_REGISTER(&sk_hgrunt_gspeed2);
 	CVAR_REGISTER(&sk_hgrunt_gspeed3);
+
+	// Hgrunt Ally
+	REGISTER_SKILL_CVARS(hgrunt_ally_health);
+	REGISTER_SKILL_CVARS(hgrunt_ally_kick);
+	REGISTER_SKILL_CVARS(hgrunt_ally_pellets);
+	REGISTER_SKILL_CVARS(hgrunt_ally_gspeed);
+
+	// Hgrunt Medic
+	REGISTER_SKILL_CVARS(medic_ally_health);
+	REGISTER_SKILL_CVARS(medic_ally_kick);
+	REGISTER_SKILL_CVARS(medic_ally_pellets);
+	REGISTER_SKILL_CVARS(medic_ally_gspeed);
+	REGISTER_SKILL_CVARS(medic_ally_heal);
+
+	// Hgrunt Torch
+	REGISTER_SKILL_CVARS(torch_ally_health);
+	REGISTER_SKILL_CVARS(torch_ally_kick);
+	REGISTER_SKILL_CVARS(torch_ally_pellets);
+	REGISTER_SKILL_CVARS(torch_ally_gspeed);
 
 	// Male Assassin
 	REGISTER_SKILL_CVARS(massassin_health);
