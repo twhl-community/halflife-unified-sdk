@@ -99,6 +99,8 @@ struct skilldata_t
 
 	float scientistHealth;
 
+	float cleansuitScientistHealth;
+
 	float snarkHealth;
 	float snarkDmgBite;
 	float snarkDmgPop;
