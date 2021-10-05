@@ -183,6 +183,13 @@ void CGameRules::RefreshSkillData()
 	gSkillData.massassinDmgKick = GetSkillCvar("sk_massassin_kick");
 	gSkillData.massassinGrenadeSpeed = GetSkillCvar("sk_massassin_gspeed");
 
+	// Shock Trooper
+	gSkillData.shocktrooperHealth = GetSkillCvar("sk_shocktrooper_health");
+	gSkillData.shocktrooperDmgKick = GetSkillCvar("sk_shocktrooper_kick");
+	gSkillData.shocktrooperGrenadeSpeed = GetSkillCvar("sk_shocktrooper_gspeed");
+	gSkillData.shocktrooperMaxCharge = GetSkillCvar("sk_shocktrooper_maxcharge");
+	gSkillData.shocktrooperRechargeSpeed = GetSkillCvar("sk_shocktrooper_rchgspeed");
+
 	// Houndeye
 	gSkillData.houndeyeHealth = GetSkillCvar("sk_houndeye_health");
 	gSkillData.houndeyeDmgBlast = GetSkillCvar("sk_houndeye_dmg_blast");

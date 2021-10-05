@@ -180,6 +180,13 @@ DECLARE_SKILL_CVARS(massassin_kick);
 DECLARE_SKILL_CVARS(massassin_pellets);
 DECLARE_SKILL_CVARS(massassin_gspeed);
 
+// Shock Trooper
+DECLARE_SKILL_CVARS(shocktrooper_health);
+DECLARE_SKILL_CVARS(shocktrooper_kick);
+DECLARE_SKILL_CVARS(shocktrooper_gspeed);
+DECLARE_SKILL_CVARS(shocktrooper_maxcharge);
+DECLARE_SKILL_CVARS(shocktrooper_rchgspeed);
+
 // Houndeye
 cvar_t	sk_houndeye_health1 = {"sk_houndeye_health1","0"};
 cvar_t	sk_houndeye_health2 = {"sk_houndeye_health2","0"};
@@ -680,6 +687,13 @@ void GameDLLInit()
 	REGISTER_SKILL_CVARS(massassin_kick);
 	REGISTER_SKILL_CVARS(massassin_pellets);
 	REGISTER_SKILL_CVARS(massassin_gspeed);
+
+	// Shock Trooper
+	REGISTER_SKILL_CVARS(shocktrooper_health);
+	REGISTER_SKILL_CVARS(shocktrooper_kick);
+	REGISTER_SKILL_CVARS(shocktrooper_gspeed);
+	REGISTER_SKILL_CVARS(shocktrooper_maxcharge);
+	REGISTER_SKILL_CVARS(shocktrooper_rchgspeed);
 
 	// Houndeye
 	CVAR_REGISTER(&sk_houndeye_health1);// {"sk_houndeye_health1","0"};

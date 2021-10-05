@@ -64,6 +64,12 @@ struct skilldata_t
 	float massassinDmgKick;
 	float massassinGrenadeSpeed;
 
+	float shocktrooperHealth;
+	float shocktrooperDmgKick;
+	float shocktrooperGrenadeSpeed;
+	float shocktrooperMaxCharge;
+	float shocktrooperRechargeSpeed;
+
 	float houndeyeHealth;
 	float houndeyeDmgBlast;
 
