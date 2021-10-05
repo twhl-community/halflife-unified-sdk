@@ -76,6 +76,7 @@ target_sources(hl PRIVATE
 	entities/items/ggrenade.cpp
 	entities/items/healthkit.cpp
 	entities/items/h_battery.cpp
+	entities/items/item_generic.cpp
 	entities/items/items.cpp
 	entities/items/items.h
 	entities/items/weapons/CDisplacerBall.cpp
