@@ -532,6 +532,8 @@ cvar_t	sk_scientist_heal1 = {"sk_scientist_heal1","0"};
 cvar_t	sk_scientist_heal2 = {"sk_scientist_heal2","0"};
 cvar_t	sk_scientist_heal3 = {"sk_scientist_heal3","0"};
 
+DECLARE_SKILL_CVARS(cleansuit_scientist_heal);
+
 
 // monster damage adjusters
 cvar_t	sk_monster_head1 = {"sk_monster_head1","2"};
@@ -1084,6 +1086,8 @@ void GameDLLInit()
 	CVAR_REGISTER(&sk_scientist_heal1);
 	CVAR_REGISTER(&sk_scientist_heal2);
 	CVAR_REGISTER(&sk_scientist_heal3);
+
+	REGISTER_SKILL_CVARS(cleansuit_scientist_heal);
 
 	// monster damage adjusters
 	CVAR_REGISTER(&sk_monster_head1);
