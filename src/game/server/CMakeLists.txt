@@ -186,6 +186,7 @@ target_sources(hl PRIVATE
 	entities/NPCs/aliens/bullsquid.cpp
 	entities/NPCs/aliens/controller.cpp
 	entities/NPCs/aliens/gargantua.cpp
+	entities/NPCs/aliens/gonome.cpp
 	entities/NPCs/aliens/headcrab.cpp
 	entities/NPCs/aliens/hornet.cpp
 	entities/NPCs/aliens/hornet.h

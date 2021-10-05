@@ -94,6 +94,11 @@ struct skilldata_t
 	float zombieSoldierDmgOneSlash;
 	float zombieSoldierDmgBothSlash;
 
+	float gonomeDmgGuts;
+	float gonomeHealth;
+	float gonomeDmgOneSlash;
+	float gonomeDmgOneBite;
+
 	float turretHealth;
 	float miniturretHealth;
 	float sentryHealth;

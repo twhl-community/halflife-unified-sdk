@@ -283,6 +283,12 @@ DECLARE_SKILL_CVARS(zombie_soldier_health);
 DECLARE_SKILL_CVARS(zombie_soldier_dmg_one_slash);
 DECLARE_SKILL_CVARS(zombie_soldier_dmg_both_slash);
 
+// Gonome
+DECLARE_SKILL_CVARS(gonome_dmg_guts);
+DECLARE_SKILL_CVARS(gonome_health);
+DECLARE_SKILL_CVARS(gonome_dmg_one_slash);
+DECLARE_SKILL_CVARS(gonome_dmg_one_bite);
+
 
 //Turret
 cvar_t	sk_turret_health1 = {"sk_turret_health1","0"};
@@ -767,6 +773,11 @@ void GameDLLInit()
 	REGISTER_SKILL_CVARS(zombie_soldier_dmg_one_slash);
 	REGISTER_SKILL_CVARS(zombie_soldier_dmg_both_slash);
 
+	// Gonome
+	REGISTER_SKILL_CVARS(gonome_dmg_guts);
+	REGISTER_SKILL_CVARS(gonome_health);
+	REGISTER_SKILL_CVARS(gonome_dmg_one_slash);
+	REGISTER_SKILL_CVARS(gonome_dmg_one_bite);
 
 	//Turret
 	CVAR_REGISTER(&sk_turret_health1);// {"sk_turret_health1","0"};
