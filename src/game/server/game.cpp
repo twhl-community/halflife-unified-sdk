@@ -287,7 +287,10 @@ cvar_t	sk_snark_dmg_pop1 = {"sk_snark_dmg_pop1","0"};
 cvar_t	sk_snark_dmg_pop2 = {"sk_snark_dmg_pop2","0"};
 cvar_t	sk_snark_dmg_pop3 = {"sk_snark_dmg_pop3","0"};
 
-
+// Voltigore
+DECLARE_SKILL_CVARS(voltigore_health);
+DECLARE_SKILL_CVARS(voltigore_dmg_punch);
+DECLARE_SKILL_CVARS(voltigore_dmg_beam);
 
 // Zombie
 cvar_t	sk_zombie_health1 = {"sk_zombie_health1","0"};
@@ -805,7 +808,10 @@ void GameDLLInit()
 	CVAR_REGISTER(&sk_snark_dmg_pop2);// {"sk_snark_dmg_pop2","0"};
 	CVAR_REGISTER(&sk_snark_dmg_pop3);// {"sk_snark_dmg_pop3","0"};
 
-
+	// Voltigore
+	REGISTER_SKILL_CVARS(voltigore_health);
+	REGISTER_SKILL_CVARS(voltigore_dmg_punch);
+	REGISTER_SKILL_CVARS(voltigore_dmg_beam);
 
 	// Zombie
 	CVAR_REGISTER(&sk_zombie_health1);// {"sk_zombie_health1","0"};

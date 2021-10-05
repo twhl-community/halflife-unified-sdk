@@ -231,6 +231,7 @@ target_sources(hl PRIVATE
 	entities/NPCs/racex/pitdrone.cpp
 	entities/NPCs/racex/shockroach.cpp
 	entities/NPCs/racex/shocktrooper.cpp
+	entities/NPCs/racex/voltigore.cpp
 
 	gamerules/gamerules.cpp
 	gamerules/gamerules.h
