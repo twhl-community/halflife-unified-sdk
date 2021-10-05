@@ -80,6 +80,7 @@ target_sources(hl PRIVATE
 	entities/items/item_generic.cpp
 	entities/items/items.cpp
 	entities/items/items.h
+	entities/items/nuclearbomb.cpp
 	entities/items/weapons/CDisplacerBall.cpp
 	entities/items/weapons/CDisplacerBall.h
 	entities/items/weapons/CEagleLaser.cpp
