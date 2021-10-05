@@ -278,6 +278,11 @@ DECLARE_SKILL_CVARS(zombie_barney_health);
 DECLARE_SKILL_CVARS(zombie_barney_dmg_one_slash);
 DECLARE_SKILL_CVARS(zombie_barney_dmg_both_slash);
 
+// Zombie Soldier
+DECLARE_SKILL_CVARS(zombie_soldier_health);
+DECLARE_SKILL_CVARS(zombie_soldier_dmg_one_slash);
+DECLARE_SKILL_CVARS(zombie_soldier_dmg_both_slash);
+
 
 //Turret
 cvar_t	sk_turret_health1 = {"sk_turret_health1","0"};
@@ -756,6 +761,11 @@ void GameDLLInit()
 	REGISTER_SKILL_CVARS(zombie_barney_health);
 	REGISTER_SKILL_CVARS(zombie_barney_dmg_one_slash);
 	REGISTER_SKILL_CVARS(zombie_barney_dmg_both_slash);
+
+	// Zombie Soldier
+	REGISTER_SKILL_CVARS(zombie_soldier_health);
+	REGISTER_SKILL_CVARS(zombie_soldier_dmg_one_slash);
+	REGISTER_SKILL_CVARS(zombie_soldier_dmg_both_slash);
 
 
 	//Turret
