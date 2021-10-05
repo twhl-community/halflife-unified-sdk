@@ -228,6 +228,7 @@ target_sources(hl PRIVATE
 	entities/NPCs/other/roach.cpp
 	entities/NPCs/other/skeleton.cpp
 	
+	entities/NPCs/racex/pitdrone.cpp
 	entities/NPCs/racex/shockroach.cpp
 	entities/NPCs/racex/shocktrooper.cpp
 

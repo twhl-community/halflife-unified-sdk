@@ -154,6 +154,12 @@ void CGameRules::RefreshSkillData()
 	gSkillData.bullsquidDmgWhip = GetSkillCvar("sk_bullsquid_dmg_whip");
 	gSkillData.bullsquidDmgSpit = GetSkillCvar("sk_bullsquid_dmg_spit");
 
+	// Pit Drone
+	gSkillData.pitdroneHealth = GetSkillCvar("sk_pitdrone_health");
+	gSkillData.pitdroneDmgBite = GetSkillCvar("sk_pitdrone_dmg_bite");
+	gSkillData.pitdroneDmgWhip = GetSkillCvar("sk_pitdrone_dmg_whip");
+	gSkillData.pitdroneDmgSpit = GetSkillCvar("sk_pitdrone_dmg_spit");
+
 	// Gargantua
 	gSkillData.gargantuaHealth = GetSkillCvar("sk_gargantua_health");
 	gSkillData.gargantuaDmgSlash = GetSkillCvar("sk_gargantua_dmg_slash");

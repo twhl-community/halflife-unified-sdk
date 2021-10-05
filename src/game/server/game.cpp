@@ -100,6 +100,12 @@ cvar_t	sk_bullsquid_dmg_spit1 = {"sk_bullsquid_dmg_spit1","0"};
 cvar_t	sk_bullsquid_dmg_spit2 = {"sk_bullsquid_dmg_spit2","0"};
 cvar_t	sk_bullsquid_dmg_spit3 = {"sk_bullsquid_dmg_spit3","0"};
 
+// Pit Drone
+DECLARE_SKILL_CVARS(pitdrone_health);
+DECLARE_SKILL_CVARS(pitdrone_dmg_bite);
+DECLARE_SKILL_CVARS(pitdrone_dmg_whip);
+DECLARE_SKILL_CVARS(pitdrone_dmg_spit);
+
 
 // Big Momma
 cvar_t	sk_bigmomma_health_factor1 = {"sk_bigmomma_health_factor1","1.0"};
@@ -610,6 +616,11 @@ void GameDLLInit()
 	CVAR_REGISTER(&sk_bullsquid_dmg_spit2);// {"sk_bullsquid_dmg_spit2","0"};
 	CVAR_REGISTER(&sk_bullsquid_dmg_spit3);// {"sk_bullsquid_dmg_spit3","0"};
 
+	// Pit Drone
+	REGISTER_SKILL_CVARS(pitdrone_health);
+	REGISTER_SKILL_CVARS(pitdrone_dmg_bite);
+	REGISTER_SKILL_CVARS(pitdrone_dmg_whip);
+	REGISTER_SKILL_CVARS(pitdrone_dmg_spit);
 
 	CVAR_REGISTER(&sk_bigmomma_health_factor1);// {"sk_bigmomma_health_factor1","1.0"};
 	CVAR_REGISTER(&sk_bigmomma_health_factor2);// {"sk_bigmomma_health_factor2","1.0"};
