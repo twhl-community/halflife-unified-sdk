@@ -29,6 +29,7 @@
 #include "CPenguin.h"
 #include "CShockRifle.h"
 #include "CSporeLauncher.h"
+#include "CSniperRifle.h"
 
 #include "usercmd.h"
 #include "entity_state.h"
@@ -84,6 +85,7 @@ CM249 g_M249;
 CDisplacer g_Displacer;
 CShockRifle g_ShockRifle;
 CSporeLauncher g_SporeLauncher;
+CSniperRifle g_SniperRifle;
 CKnife g_Knife;
 CPenguin g_Penguin;
 
@@ -487,6 +489,7 @@ void HUD_InitClientWeapons()
 	HUD_PrepEntity(&g_Displacer, &player);
 	HUD_PrepEntity(&g_ShockRifle, &player);
 	HUD_PrepEntity(&g_SporeLauncher, &player);
+	HUD_PrepEntity(&g_SniperRifle, &player);
 	HUD_PrepEntity(&g_Knife, &player);
 	HUD_PrepEntity(&g_Penguin, &player);
 }
@@ -553,6 +556,7 @@ CBasePlayerWeapon* GetLocalWeapon(int id)
 	case WEAPON_DISPLACER: return &g_Displacer;
 	case WEAPON_SHOCKRIFLE: return &g_ShockRifle;
 	case WEAPON_SPORELAUNCHER: return &g_SporeLauncher;
+	case WEAPON_SNIPERRIFLE: return &g_SniperRifle;
 	case WEAPON_KNIFE: return &g_Knife;
 	case WEAPON_PENGUIN: return &g_Penguin;
 
@@ -695,6 +699,7 @@ void HUD_WeaponsPostThink(local_state_s* from, local_state_s* to, usercmd_t* cmd
 	player.ammo_hornets = (int)from->client.vuser2[0];
 	player.ammo_rockets = (int)from->client.ammo_rockets;
 	player.ammo_spores = (int)from->client.vuser2.y;
+	player.ammo_762 = (int)from->client.vuser2.z;
 
 
 	// Point to current weapon object
@@ -771,6 +776,7 @@ void HUD_WeaponsPostThink(local_state_s* from, local_state_s* to, usercmd_t* cmd
 	to->client.vuser2[0] = player.ammo_hornets;
 	to->client.ammo_rockets = player.ammo_rockets;
 	to->client.vuser2.y = player.ammo_spores;
+	to->client.vuser2.z = player.ammo_762;
 
 	if (player.m_pActiveItem->m_iId == WEAPON_RPG)
 	{

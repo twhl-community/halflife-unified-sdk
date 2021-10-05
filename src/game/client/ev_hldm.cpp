@@ -28,6 +28,7 @@
 #include "CPenguin.h"
 #include "CShockRifle.h"
 #include "CSporeLauncher.h"
+#include "CSniperRifle.h"
 
 #include "const.h"
 #include "entity_state.h"
@@ -267,6 +268,7 @@ void EV_HLDM_DecalGunshot(pmtrace_t* pTrace, int iBulletType)
 		case BULLET_PLAYER_BUCKSHOT:
 		case BULLET_PLAYER_357:
 		case BULLET_PLAYER_556:
+		case BULLET_PLAYER_762:
 		case BULLET_PLAYER_EAGLE:
 		default:
 			// smoke and decal
@@ -311,6 +313,7 @@ int EV_HLDM_CheckTracer(int idx, float* vecSrc, float* end, float* forward, floa
 		case BULLET_MONSTER_9MM:
 		case BULLET_MONSTER_12MM:
 		case BULLET_PLAYER_556:
+		case BULLET_PLAYER_762:
 		case BULLET_PLAYER_EAGLE:
 		default:
 			EV_CreateTracer(vecTracerSrc, end);
@@ -413,6 +416,11 @@ void EV_HLDM_FireBullets(int idx, float* forward, float* right, float* up, int c
 				break;
 
 			case BULLET_PLAYER_EAGLE:
+				EV_HLDM_PlayTextureSound(idx, &tr, vecSrc, vecEnd, iBulletType);
+				EV_HLDM_DecalGunshot(&tr, iBulletType);
+				break;
+
+			case BULLET_PLAYER_762:
 				EV_HLDM_PlayTextureSound(idx, &tr, vecSrc, vecEnd, iBulletType);
 				EV_HLDM_DecalGunshot(&tr, iBulletType);
 				break;
@@ -1883,6 +1891,50 @@ void EV_FireSpore(event_args_t* args)
 				10, 10, 180);
 		}
 	}
+}
+
+void EV_SniperRifle(event_args_t* args)
+{
+	const int idx = args->entindex;
+	Vector vecOrigin = args->origin;
+	Vector vecAngles = args->angles;
+
+	const int iClip = args->iparam1;
+
+	Vector up, right, forward;
+
+	AngleVectors(vecAngles, forward, right, up);
+
+	if (EV_IsLocal(idx))
+	{
+		EV_MuzzleFlash();
+		gEngfuncs.pEventAPI->EV_WeaponAnimation(iClip <= 0 ? SNIPERRIFLE_FIRELASTROUND : SNIPERRIFLE_FIRE, 0);
+		V_PunchAxis(0, -2.0);
+	}
+
+	gEngfuncs.pEventAPI->EV_PlaySound(idx, vecOrigin,
+		CHAN_WEAPON, "weapons/sniper_fire.wav",
+		gEngfuncs.pfnRandomFloat(0.9f, 1.0f), ATTN_NORM, 0, 98 + gEngfuncs.pfnRandomLong(0, 3));
+
+	Vector vecSrc;
+	Vector vecAiming = forward;
+
+	EV_GetGunPosition(args, vecSrc, vecOrigin);
+
+	EV_HLDM_FireBullets(
+		idx,
+		forward,
+		right,
+		up,
+		1,
+		vecSrc,
+		vecAiming,
+		8192.0,
+		BULLET_PLAYER_762,
+		0,
+		0,
+		args->fparam1,
+		args->fparam2);
 }
 
 //Only predict the miss sounds, hit sounds are still played 

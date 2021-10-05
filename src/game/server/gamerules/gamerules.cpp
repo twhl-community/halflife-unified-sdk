@@ -276,6 +276,9 @@ void CGameRules::RefreshSkillData()
 	// Desert Eagle
 	gSkillData.plrDmgEagle = GetSkillCvar("sk_plr_eagle");
 
+	// Sniper Rifle
+	gSkillData.plrDmg762 = GetSkillCvar("sk_plr_762_bullet");
+
 	// M249
 	gSkillData.plrDmg556 = GetSkillCvar("sk_plr_556_bullet");
 

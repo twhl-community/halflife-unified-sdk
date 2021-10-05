@@ -393,6 +393,9 @@ DECLARE_SKILL_CVARS(plr_grapple);
 // Desert Eagle
 DECLARE_SKILL_CVARS(plr_eagle);
 
+// Sniper Rifle
+DECLARE_SKILL_CVARS(plr_762_bullet);
+
 // M249
 DECLARE_SKILL_CVARS(plr_556_bullet);
 
@@ -863,6 +866,9 @@ void GameDLLInit()
 
 	// Desert Eagle
 	REGISTER_SKILL_CVARS(plr_eagle);
+
+	// Sniper Rifle
+	REGISTER_SKILL_CVARS(plr_762_bullet);
 
 	// M249
 	REGISTER_SKILL_CVARS(plr_556_bullet);

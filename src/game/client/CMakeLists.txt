@@ -204,6 +204,8 @@ target_sources(client PRIVATE
 	../shared/entities/items/weapons/crowbar.cpp
 	../shared/entities/items/weapons/CShockRifle.cpp
 	../shared/entities/items/weapons/CShockRifle.h
+	../shared/entities/items/weapons/CSniperRifle.cpp
+	../shared/entities/items/weapons/CSniperRifle.h
 	../shared/entities/items/weapons/CSporeLauncher.cpp
 	../shared/entities/items/weapons/CSporeLauncher.h
 	../shared/entities/items/weapons/egon.cpp

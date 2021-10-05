@@ -85,6 +85,7 @@ public:
 #define WEAPON_DISPLACER		20
 #define WEAPON_SHOCKRIFLE		22
 #define WEAPON_SPORELAUNCHER	23
+#define WEAPON_SNIPERRIFLE		24
 #define WEAPON_KNIFE			25
 #define WEAPON_PENGUIN			26
 
@@ -119,6 +120,7 @@ public:
 #define M249_WEIGHT			20
 #define DISPLACER_WEIGHT	10
 #define SPORELAUNCHER_WEIGHT	20
+#define SNIPERRIFLE_WEIGHT	10
 #define PENGUIN_WEIGHT 5
 
 // weapon clip/carry ammo capacities
@@ -136,6 +138,7 @@ public:
 #define M203_GRENADE_MAX_CARRY	10
 #define M249_MAX_CARRY			200
 #define SPORELAUNCHER_MAX_CARRY	20
+#define SNIPERRIFLE_MAX_CARRY	15
 #define PENGUIN_MAX_CARRY 9
 
 // the maximum amount of ammo each weapon's clip can hold
@@ -160,6 +163,7 @@ public:
 #define M249_MAX_CLIP			50
 #define SPORELAUNCHER_MAX_CLIP	5
 #define SHOCKRIFLE_MAX_CLIP		10
+#define SNIPERRIFLE_MAX_CLIP	5
 #define PENGUIN_MAX_CLIP		3
 
 
@@ -183,6 +187,7 @@ public:
 #define DISPLACER_DEFAULT_GIVE		40
 #define SPORELAUNCHER_DEFAULT_GIVE	5
 #define SHOCKRIFLE_DEFAULT_GIVE		10
+#define SNIPERRIFLE_DEFAULT_GIVE	5
 
 // The amount of ammo given to a player by an ammo item.
 #define AMMO_URANIUMBOX_GIVE	20
@@ -199,6 +204,7 @@ public:
 #define AMMO_M249_GIVE			50
 #define AMMO_EAGLE_GIVE			7
 #define AMMO_SPORE_GIVE			1
+#define AMMO_SNIPERRIFLE_GIVE	5
 
 // bullet types
 typedef	enum
@@ -215,6 +221,7 @@ typedef	enum
 	BULLET_MONSTER_12MM,
 
 	BULLET_PLAYER_556,
+	BULLET_PLAYER_762,
 	BULLET_PLAYER_EAGLE,
 } Bullet;
 

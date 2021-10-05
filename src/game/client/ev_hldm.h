@@ -41,6 +41,7 @@ extern "C"
 	void EV_FireDisplacer(event_args_t* args);
 	void EV_FireShockRifle(event_args_t* args);
 	void EV_FireSpore(event_args_t* args);
+	void EV_SniperRifle(event_args_t* args);
 	void EV_Knife(event_args_t* args);
 	void EV_PenguinFire(event_args_t* args);
 
