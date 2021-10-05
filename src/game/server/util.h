@@ -532,6 +532,12 @@ CBaseEntity* UTIL_FindEntityForward(CBaseEntity* pMe);
 
 bool UTIL_IsMultiplayer();
 
+inline bool UTIL_IsCTF()
+{
+	//TODO: CTF
+	return false;
+}
+
 inline void WRITE_COORD_VECTOR(const Vector& vec)
 {
 	WRITE_COORD(vec.x);
