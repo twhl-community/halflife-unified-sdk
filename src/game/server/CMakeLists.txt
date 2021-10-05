@@ -217,6 +217,7 @@ target_sources(hl PRIVATE
 	
 	entities/NPCs/other/genericmonster.cpp
 	entities/NPCs/other/gman.cpp
+	entities/NPCs/other/penguin_grenade.cpp
 	entities/NPCs/other/rat.cpp
 	entities/NPCs/other/roach.cpp
 	entities/NPCs/other/skeleton.cpp
