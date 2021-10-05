@@ -45,6 +45,7 @@ TYPEDESCRIPTION	CTalkMonster::m_SaveData[] =
 	DEFINE_FIELD(CTalkMonster, m_flLastSaidSmelled, FIELD_TIME),
 	DEFINE_FIELD(CTalkMonster, m_flStopTalkTime, FIELD_TIME),
 	DEFINE_FIELD(CTalkMonster, m_hTalkTarget, FIELD_EHANDLE),
+	DEFINE_FIELD(CTalkMonster, m_fStartSuspicious, FIELD_BOOLEAN),
 };
 
 IMPLEMENT_SAVERESTORE(CTalkMonster, CBaseMonster);
