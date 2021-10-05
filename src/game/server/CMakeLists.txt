@@ -196,6 +196,7 @@ target_sources(hl PRIVATE
 	entities/NPCs/aliens/nihilanth.cpp
 	entities/NPCs/aliens/tentacle.cpp
 	entities/NPCs/aliens/zombie.cpp
+	entities/NPCs/aliens/zombie_barney.cpp
 	
 	entities/NPCs/blackmesa/barney.cpp
 	entities/NPCs/blackmesa/rosenberg.cpp
