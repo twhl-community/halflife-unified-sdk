@@ -1631,6 +1631,8 @@ void EV_FireEagle(event_args_t* args)
 //======================
 //	PIPE WRENCH START
 //======================
+int g_iClub;
+
 //Only predict the miss sounds, hit sounds are still played 
 //server side, so players don't get the wrong idea.
 void EV_Pipewrench(event_args_t* args)
@@ -1638,38 +1640,61 @@ void EV_Pipewrench(event_args_t* args)
 	const int idx = args->entindex;
 	Vector origin = args->origin;
 	const int iBigSwing = args->bparam1;
+	const int hitSomething = args->bparam2;
+
+	if (!EV_IsLocal(idx))
+	{
+		return;
+	}
 
 	//Play Swing sound
 	if (iBigSwing)
-		gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/pwrench_big_miss.wav", 1, ATTN_NORM, 0, PITCH_NORM);
-	else
 	{
-		switch (gEngfuncs.pfnRandomLong(0, 1))
+		if (hitSomething)
 		{
-		case 0: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/pwrench_miss1.wav", 1, ATTN_NORM, 0, PITCH_NORM); break;
-		case 1: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/pwrench_miss2.wav", 1, ATTN_NORM, 0, PITCH_NORM); break;
-		}
-	}
-
-	if (EV_IsLocal(idx))
-	{
-		if (iBigSwing)
-		{
-			V_PunchAxis(0, -2.0);
-			gEngfuncs.pEventAPI->EV_WeaponAnimation(PIPEWRENCH_BIG_SWING_MISS, 1);
+			gEngfuncs.pEventAPI->EV_WeaponAnimation(PIPEWRENCH_BIG_SWING_HIT, 0);
 		}
 		else
 		{
-			switch ((g_iSwing++) % 3)
+			gEngfuncs.pEventAPI->EV_WeaponAnimation(PIPEWRENCH_BIG_SWING_MISS, 0);
+		}
+
+		gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/pwrench_big_miss.wav", 1, ATTN_NORM, 0, PITCH_NORM);
+	}
+	else
+	{
+		if (hitSomething)
+		{
+			switch (g_iClub % 3)
 			{
 			case 0:
-				gEngfuncs.pEventAPI->EV_WeaponAnimation(PIPEWRENCH_ATTACK1MISS, 1); break;
+				gEngfuncs.pEventAPI->EV_WeaponAnimation(PIPEWRENCH_ATTACK1HIT, 0); break;
 			case 1:
-				gEngfuncs.pEventAPI->EV_WeaponAnimation(PIPEWRENCH_ATTACK2MISS, 1); break;
+				gEngfuncs.pEventAPI->EV_WeaponAnimation(PIPEWRENCH_ATTACK2HIT, 0); break;
 			case 2:
-				gEngfuncs.pEventAPI->EV_WeaponAnimation(PIPEWRENCH_ATTACK3MISS, 1); break;
+				gEngfuncs.pEventAPI->EV_WeaponAnimation(PIPEWRENCH_ATTACK3HIT, 0); break;
 			}
 		}
+		else
+		{
+			switch (g_iClub % 3)
+			{
+			case 0:
+				gEngfuncs.pEventAPI->EV_WeaponAnimation(PIPEWRENCH_ATTACK1MISS, 0); break;
+			case 1:
+				gEngfuncs.pEventAPI->EV_WeaponAnimation(PIPEWRENCH_ATTACK2MISS, 0); break;
+			case 2:
+				gEngfuncs.pEventAPI->EV_WeaponAnimation(PIPEWRENCH_ATTACK3MISS, 0); break;
+			}
+
+			switch (g_iClub % 2)
+			{
+			case 0: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/pwrench_miss1.wav", 1, ATTN_NORM, 0, PITCH_NORM); break;
+			case 1: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/pwrench_miss2.wav", 1, ATTN_NORM, 0, PITCH_NORM); break;
+			}
+		}
+
+		++g_iClub;
 	}
 }
 //======================
