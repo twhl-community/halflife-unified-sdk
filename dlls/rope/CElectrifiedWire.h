@@ -46,7 +46,7 @@ public:
 	/**
 	*	@return Whether the wire is active.
 	*/
-	bool IsActive() const { return m_bIsActive; }
+	bool IsActive() const { return m_bIsActive != FALSE; }
 
 	/**
 	*	@param iFrequency Frequency.
@@ -65,7 +65,7 @@ public:
 	void DoLightning();
 
 public:
-	bool m_bIsActive;
+	BOOL m_bIsActive;
 
 	int m_iTipSparkFrequency;
 	int m_iBodySparkFrequency;

@@ -174,7 +174,7 @@ public:
 	/**
 	*	@return Whether an object is attached.
 	*/
-	bool IsObjectAttached() const { return m_bObjectAttached; }
+	bool IsObjectAttached() const { return m_bObjectAttached != FALSE; }
 
 	/**
 	*	@return Whether this rope allows attachments.
@@ -199,12 +199,12 @@ public:
 	/**
 	*	@return The toggle value.
 	*/
-	bool GetToggleValue() const { return m_bToggle; }
+	bool GetToggleValue() const { return m_bToggle != FALSE; }
 
 	/**
 	*	@return Whether this rope is allowed to make sounds.
 	*/
-	bool IsSoundAllowed() const { return m_bMakeSound; }
+	bool IsSoundAllowed() const { return m_bMakeSound != FALSE; }
 
 	/**
 	*	Sets whether this rope is allowed to make sounds.
@@ -287,9 +287,9 @@ private:
 	CRopeSegment* seg[ MAX_SEGMENTS ];
 	CRopeSegment* altseg[ MAX_SEGMENTS ];
 
-	bool m_bToggle;
+	BOOL m_bToggle;
 
-	bool m_bInitialDeltaTime;
+	BOOL m_bInitialDeltaTime;
 
 	float m_flLastTime;
 
@@ -310,7 +310,7 @@ private:
 
 	bool m_bSpringsInitialized;
 
-	bool m_bObjectAttached;
+	BOOL m_bObjectAttached;
 
 	size_t m_uiAttachedObjectsSegment;
 	float m_flAttachedObjectsOffset;
@@ -319,9 +319,9 @@ private:
 	string_t m_iszBodyModel;
 	string_t m_iszEndingModel;
 
-	bool m_bDisallowPlayerAttachment;
+	BOOL m_bDisallowPlayerAttachment;
 
-	bool m_bMakeSound;
+	BOOL m_bMakeSound;
 };
 
 #endif

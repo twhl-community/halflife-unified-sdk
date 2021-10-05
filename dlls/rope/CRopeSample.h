@@ -27,7 +27,7 @@ struct RopeSampleData
 	Vector mForce;
 	Vector mExternalForce;
 
-	bool mApplyExternalForce;
+	BOOL mApplyExternalForce;
 
 	float mMassReciprocal;
 };

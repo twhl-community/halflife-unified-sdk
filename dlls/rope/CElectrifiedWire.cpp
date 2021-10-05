@@ -127,15 +127,15 @@ void CElectrifiedWire::Spawn()
 	{
 		for( size_t uiIndex = 0; uiIndex < m_uiNumUninsulatedSegments; ++uiIndex )
 		{
-			GetSegments()[ uiIndex ]->SetCauseDamageOnTouch( m_bIsActive );
-			GetAltSegments()[ uiIndex ]->SetCauseDamageOnTouch( m_bIsActive );
+			GetSegments()[ uiIndex ]->SetCauseDamageOnTouch(IsActive());
+			GetAltSegments()[ uiIndex ]->SetCauseDamageOnTouch(IsActive());
 		}
 	}
 
 	if( m_iTipSparkFrequency > 0 )
 	{
-		GetSegments()[ GetNumSegments() - 1 ]->SetCauseDamageOnTouch( m_bIsActive );
-		GetAltSegments()[ GetNumSegments() - 1 ]->SetCauseDamageOnTouch( m_bIsActive );
+		GetSegments()[ GetNumSegments() - 1 ]->SetCauseDamageOnTouch(IsActive());
+		GetAltSegments()[ GetNumSegments() - 1 ]->SetCauseDamageOnTouch(IsActive());
 	}
 
 	m_flLastSparkTime = gpGlobals->time;
@@ -180,15 +180,15 @@ void CElectrifiedWire::Use( CBaseEntity* pActivator, CBaseEntity* pCaller, USE_T
 	{
 		for( size_t uiIndex = 0; uiIndex < m_uiNumUninsulatedSegments; ++uiIndex )
 		{
-			GetSegments()[ m_uiUninsulatedSegments[ uiIndex ] ]->SetCauseDamageOnTouch( m_bIsActive );
-			GetAltSegments()[ m_uiUninsulatedSegments[ uiIndex ] ]->SetCauseDamageOnTouch( m_bIsActive );
+			GetSegments()[ m_uiUninsulatedSegments[ uiIndex ] ]->SetCauseDamageOnTouch(IsActive());
+			GetAltSegments()[ m_uiUninsulatedSegments[ uiIndex ] ]->SetCauseDamageOnTouch(IsActive());
 		}
 	}
 
 	if( m_iTipSparkFrequency > 0 )
 	{
-		GetSegments()[ GetNumSegments() - 1 ]->SetCauseDamageOnTouch( m_bIsActive );
-		GetAltSegments()[ GetNumSegments() - 1 ]->SetCauseDamageOnTouch( m_bIsActive );
+		GetSegments()[ GetNumSegments() - 1 ]->SetCauseDamageOnTouch(IsActive());
+		GetAltSegments()[ GetNumSegments() - 1 ]->SetCauseDamageOnTouch(IsActive());
 	}
 }
 
