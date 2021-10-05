@@ -327,6 +327,9 @@ void CBarnacle::Killed(entvars_t* pevAttacker, int iGib)
 	pev->solid = SOLID_NOT;
 	pev->takedamage = DAMAGE_NO;
 
+	//Added for Op4
+	pev->deadflag = DEAD_DYING;
+
 	ClearShockEffect();
 
 	if (m_hEnemy != NULL)
