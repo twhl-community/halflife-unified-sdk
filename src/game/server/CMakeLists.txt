@@ -72,7 +72,21 @@ target_sources(hl PRIVATE
 	entities/maprules.cpp
 	entities/maprules.h
 	entities/monsterevent.h
+	entities/mortar.cpp
 	entities/observer.cpp
+	entities/op4mortar.cpp
+	entities/pathcorner.cpp
+	entities/plats.cpp
+	entities/player.cpp
+	entities/player.h
+	entities/sound.cpp
+	entities/soundent.cpp
+	entities/soundent.h
+	entities/subs.cpp
+	entities/trains.h
+	entities/triggers.cpp
+	entities/world.cpp
+	entities/xen.cpp
 	
 	entities/items/airtank.cpp
 	entities/items/ggrenade.cpp
@@ -93,19 +107,6 @@ target_sources(hl PRIVATE
 	entities/items/weapons/CSpore.cpp
 	entities/items/weapons/CSpore.h
 	entities/items/weapons/weapons.cpp
-	entities/mortar.cpp
-	entities/pathcorner.cpp
-	entities/plats.cpp
-	entities/player.cpp
-	entities/player.h
-	entities/sound.cpp
-	entities/soundent.cpp
-	entities/soundent.h
-	entities/subs.cpp
-	entities/trains.h
-	entities/triggers.cpp
-	entities/world.cpp
-	entities/xen.cpp
 	
 	../shared/entities/ehandle.cpp
 	../shared/entities/ehandle.h
