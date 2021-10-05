@@ -281,6 +281,10 @@ void CGameRules::RefreshSkillData()
 	gSkillData.plrDmgDisplacerOther = GetSkillCvar("sk_plr_displacer_other");
 	gSkillData.plrRadiusDisplacer = GetSkillCvar("sk_plr_displacer_radius");
 
+	// Shock Roack
+	gSkillData.plrDmgShockRoachS = GetSkillCvar("sk_plr_shockroachs");
+	gSkillData.plrDmgShockRoachM = GetSkillCvar("sk_plr_shockroachm");
+
 	// MONSTER WEAPONS
 	gSkillData.monDmg12MM = GetSkillCvar("sk_12mm_bullet");
 	gSkillData.monDmgMP5 = GetSkillCvar("sk_9mmAR_bullet");

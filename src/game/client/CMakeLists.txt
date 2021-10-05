@@ -198,6 +198,8 @@ target_sources(client PRIVATE
 	../shared/entities/items/weapons/CPipewrench.h
 	../shared/entities/items/weapons/crossbow.cpp
 	../shared/entities/items/weapons/crowbar.cpp
+	../shared/entities/items/weapons/CShockRifle.cpp
+	../shared/entities/items/weapons/CShockRifle.h
 	../shared/entities/items/weapons/egon.cpp
 	../shared/entities/items/weapons/gauss.cpp
 	../shared/entities/items/weapons/handgrenade.cpp

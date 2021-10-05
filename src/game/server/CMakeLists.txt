@@ -84,6 +84,8 @@ target_sources(hl PRIVATE
 	entities/items/weapons/CEagleLaser.h
 	entities/items/weapons/CGrappleTip.cpp
 	entities/items/weapons/CGrappleTip.h
+	entities/items/weapons/CShockBeam.cpp
+	entities/items/weapons/CShockBeam.h
 	entities/items/weapons/weapons.cpp
 	entities/mortar.cpp
 	entities/pathcorner.cpp
@@ -113,6 +115,8 @@ target_sources(hl PRIVATE
 	../shared/entities/items/weapons/CPipewrench.h
 	../shared/entities/items/weapons/crossbow.cpp
 	../shared/entities/items/weapons/crowbar.cpp
+	../shared/entities/items/weapons/CShockRifle.cpp
+	../shared/entities/items/weapons/CShockRifle.h
 	../shared/entities/items/weapons/egon.cpp
 	../shared/entities/items/weapons/gauss.cpp
 	../shared/entities/items/weapons/handgrenade.cpp

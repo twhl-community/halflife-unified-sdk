@@ -116,6 +116,8 @@ struct skilldata_t
 	float plrDmgDisplacerSelf;
 	float plrDmgDisplacerOther;
 	float plrRadiusDisplacer;
+	float plrDmgShockRoachS;
+	float plrDmgShockRoachM;
 
 	// weapons shared by monsters
 	float monDmg9MM;

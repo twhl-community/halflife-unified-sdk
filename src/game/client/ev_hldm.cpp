@@ -24,6 +24,7 @@
 #include "CEagle.h"
 #include "CKnife.h"
 #include "CPipewrench.h"
+#include "CShockRifle.h"
 
 #include "const.h"
 #include "entity_state.h"
@@ -1741,6 +1742,55 @@ void EV_FireDisplacer(event_args_t* args)
 	default: break;
 	}
 }
+
+void EV_FireShockRifle(event_args_t* args)
+{
+	gEngfuncs.pEventAPI->EV_PlaySound(args->entindex, args->origin, CHAN_WEAPON, "weapons/shock_fire.wav", 0.9, ATTN_NORM, 0, PITCH_NORM);
+
+	if (EV_IsLocal(args->entindex))
+		gEngfuncs.pEventAPI->EV_WeaponAnimation(SHOCKRIFLE_FIRE, 0);
+
+	for (size_t uiIndex = 0; uiIndex < 3; ++uiIndex)
+	{
+		gEngfuncs.pEfxAPI->R_BeamEnts(
+			args->entindex | 0x1000, args->entindex | ((uiIndex + 2) << 12),
+			gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/lgtning.spr"),
+			0.08,
+			1, 75 * 0.01, 190 / 255.0, 30, 0, 10,
+			0, 253 / 255.0, 253 / 255.0);
+	}
+}
+
+void EV_FireSpore(event_args_t* args)
+{
+	gEngfuncs.pEventAPI->EV_PlaySound(
+		args->entindex, args->origin,
+		CHAN_WEAPON, "weapons/splauncher_fire.wav",
+		0.9,
+		ATTN_NORM, 0, PITCH_NORM);
+
+	if (EV_IsLocal(args->entindex))
+	{
+		gEngfuncs.pEventAPI->EV_WeaponAnimation(SPLAUNCHER_FIRE, 0);
+
+		V_PunchAxis(0, -3.0);
+
+		if (cl_entity_t* pViewModel = gEngfuncs.GetViewModel())
+		{
+			Vector vecSrc = pViewModel->attachment[1];
+
+			Vector forward;
+
+			AngleVectors(args->angles, forward, nullptr, nullptr);
+
+			gEngfuncs.pEfxAPI->R_Sprite_Spray(
+				vecSrc, forward,
+				gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/tinyspit.spr"),
+				10, 10, 180);
+		}
+	}
+}
+
 //Only predict the miss sounds, hit sounds are still played 
 //server side, so players don't get the wrong idea.
 void EV_Knife(event_args_t* args)
