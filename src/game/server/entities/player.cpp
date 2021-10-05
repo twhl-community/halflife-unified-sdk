@@ -4179,13 +4179,17 @@ void CBasePlayer::EnableControl(BOOL fControl)
 //=========================================================
 Vector CBasePlayer::GetAutoaimVector(float flDelta)
 {
+	return GetAutoaimVectorFromPoint(GetGunPosition(), flDelta);
+}
+
+Vector CBasePlayer::GetAutoaimVectorFromPoint(const Vector& vecSrc, float flDelta)
+{
 	if (g_iSkillLevel == SKILL_HARD)
 	{
 		UTIL_MakeVectors(pev->v_angle + pev->punchangle);
 		return gpGlobals->v_forward;
 	}
 
-	Vector vecSrc = GetGunPosition();
 	float flDist = 8192;
 
 	// always use non-sticky autoaim
@@ -4263,7 +4267,7 @@ Vector CBasePlayer::GetAutoaimVector(float flDelta)
 }
 
 
-Vector CBasePlayer::AutoaimDeflection(Vector& vecSrc, float flDist, float flDelta)
+Vector CBasePlayer::AutoaimDeflection(const Vector& vecSrc, float flDist, float flDelta)
 {
 	edict_t* pEdict = g_engfuncs.pfnPEntityOfEntIndex(1);
 	CBaseEntity* pEntity;

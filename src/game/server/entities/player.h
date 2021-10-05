@@ -298,7 +298,8 @@ public:
 
 	void ResetAutoaim();
 	Vector GetAutoaimVector(float flDelta);
-	Vector AutoaimDeflection(Vector& vecSrc, float flDist, float flDelta);
+	Vector GetAutoaimVectorFromPoint(const Vector& vecSrc, float flDelta);
+	Vector AutoaimDeflection(const Vector& vecSrc, float flDist, float flDelta);
 
 	void ForceClientDllUpdate();  // Forces all client .dll specific data to be resent to client.
 
