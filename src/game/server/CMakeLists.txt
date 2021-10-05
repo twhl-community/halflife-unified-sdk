@@ -52,6 +52,7 @@ target_sources(hl PRIVATE
 	entities/animating.cpp
 	entities/animation.cpp
 	entities/animation.h
+	entities/blowercannon.cpp
 	entities/bmodels.cpp
 	entities/buttons.cpp
 	entities/cbase.cpp
