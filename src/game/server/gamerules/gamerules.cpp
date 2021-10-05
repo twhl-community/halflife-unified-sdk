@@ -250,6 +250,11 @@ void CGameRules::RefreshSkillData()
 	gSkillData.pitWormDmgSwipe = GetSkillCvar("sk_pitworm_dmg_swipe");
 	gSkillData.pitWormDmgBeam = GetSkillCvar("sk_pitworm_dmg_beam");
 
+	// Gene Worm
+	gSkillData.geneWormHealth = GetSkillCvar("sk_geneworm_health");
+	gSkillData.geneWormDmgSpit = GetSkillCvar("sk_geneworm_dmg_spit");
+	gSkillData.geneWormDmgHit = GetSkillCvar("sk_geneworm_dmg_hit");
+
 	// Zombie
 	gSkillData.zombieHealth = GetSkillCvar("sk_zombie_health");
 	gSkillData.zombieDmgOneSlash = GetSkillCvar("sk_zombie_dmg_one_slash");

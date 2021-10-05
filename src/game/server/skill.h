@@ -116,6 +116,10 @@ struct skilldata_t
 	float pitWormDmgSwipe;
 	float pitWormDmgBeam;
 
+	float geneWormHealth;
+	float geneWormDmgSpit;
+	float geneWormDmgHit;
+
 	float zombieHealth;
 	float zombieDmgOneSlash;
 	float zombieDmgBothSlash;

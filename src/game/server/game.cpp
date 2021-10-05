@@ -301,6 +301,11 @@ DECLARE_SKILL_CVARS(pitworm_health);
 DECLARE_SKILL_CVARS(pitworm_dmg_swipe);
 DECLARE_SKILL_CVARS(pitworm_dmg_beam);
 
+// Gene Worm
+DECLARE_SKILL_CVARS(geneworm_health);
+DECLARE_SKILL_CVARS(geneworm_dmg_spit);
+DECLARE_SKILL_CVARS(geneworm_dmg_hit);
+
 // Zombie
 cvar_t	sk_zombie_health1 = {"sk_zombie_health1","0"};
 cvar_t	sk_zombie_health2 = {"sk_zombie_health2","0"};
@@ -830,6 +835,11 @@ void GameDLLInit()
 	REGISTER_SKILL_CVARS(pitworm_health);
 	REGISTER_SKILL_CVARS(pitworm_dmg_swipe);
 	REGISTER_SKILL_CVARS(pitworm_dmg_beam);
+
+	// Gene Worm
+	REGISTER_SKILL_CVARS(geneworm_health);
+	REGISTER_SKILL_CVARS(geneworm_dmg_spit);
+	REGISTER_SKILL_CVARS(geneworm_dmg_hit);
 
 	// Zombie
 	CVAR_REGISTER(&sk_zombie_health1);// {"sk_zombie_health1","0"};
