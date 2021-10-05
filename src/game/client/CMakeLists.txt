@@ -196,6 +196,8 @@ target_sources(client PRIVATE
 	../shared/entities/items/weapons/CKnife.h
 	../shared/entities/items/weapons/CM249.cpp
 	../shared/entities/items/weapons/CM249.h
+	../shared/entities/items/weapons/CPenguin.cpp
+	../shared/entities/items/weapons/CPenguin.h
 	../shared/entities/items/weapons/CPipewrench.cpp
 	../shared/entities/items/weapons/CPipewrench.h
 	../shared/entities/items/weapons/crossbow.cpp

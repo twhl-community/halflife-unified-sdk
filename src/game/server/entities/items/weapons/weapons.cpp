@@ -371,6 +371,8 @@ void W_Precache()
 
 	UTIL_PrecacheOtherWeapon("weapon_knife");
 
+	UTIL_PrecacheOtherWeapon("weapon_penguin");
+
 #if !defined( OEM_BUILD ) && !defined( HLDEMO_BUILD )
 	if (g_pGameRules->IsDeathmatch())
 	{

@@ -85,6 +85,7 @@ public:
 #define WEAPON_DISPLACER		20
 #define WEAPON_SHOCKRIFLE		22
 #define WEAPON_KNIFE			25
+#define WEAPON_PENGUIN			26
 
 #define WEAPON_ALLWEAPONS		(~(1<<WEAPON_SUIT))
 
@@ -116,6 +117,7 @@ public:
 #define PIPEWRENCH_WEIGHT	2
 #define M249_WEIGHT			20
 #define DISPLACER_WEIGHT	10
+#define PENGUIN_WEIGHT 5
 
 // weapon clip/carry ammo capacities
 #define URANIUM_MAX_CARRY		100
@@ -131,6 +133,7 @@ public:
 #define HORNET_MAX_CARRY		8
 #define M203_GRENADE_MAX_CARRY	10
 #define M249_MAX_CARRY			200
+#define PENGUIN_MAX_CARRY 9
 
 // the maximum amount of ammo each weapon's clip can hold
 #define WEAPON_NOCLIP			-1
@@ -153,6 +156,7 @@ public:
 #define EAGLE_MAX_CLIP			7
 #define M249_MAX_CLIP			50
 #define SHOCKRIFLE_MAX_CLIP		10
+#define PENGUIN_MAX_CLIP		3
 
 
 // the default amount of ammo that comes with each gun when it spawns

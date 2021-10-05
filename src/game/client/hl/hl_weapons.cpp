@@ -26,6 +26,7 @@
 #include "CKnife.h"
 #include "CPipewrench.h"
 #include "CM249.h"
+#include "CPenguin.h"
 #include "CShockRifle.h"
 
 #include "usercmd.h"
@@ -82,6 +83,7 @@ CM249 g_M249;
 CDisplacer g_Displacer;
 CShockRifle g_ShockRifle;
 CKnife g_Knife;
+CPenguin g_Penguin;
 
 
 /*
@@ -483,6 +485,7 @@ void HUD_InitClientWeapons()
 	HUD_PrepEntity(&g_Displacer, &player);
 	HUD_PrepEntity(&g_ShockRifle, &player);
 	HUD_PrepEntity(&g_Knife, &player);
+	HUD_PrepEntity(&g_Penguin, &player);
 }
 
 /*
@@ -547,6 +550,7 @@ CBasePlayerWeapon* GetLocalWeapon(int id)
 	case WEAPON_DISPLACER: return &g_Displacer;
 	case WEAPON_SHOCKRIFLE: return &g_ShockRifle;
 	case WEAPON_KNIFE: return &g_Knife;
+	case WEAPON_PENGUIN: return &g_Penguin;
 
 	default: return nullptr;
 	}
