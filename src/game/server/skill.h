@@ -29,6 +29,8 @@ struct skilldata_t
 
 	float barneyHealth;
 
+	float otisHealth;
+
 	float bigmommaHealthFactor;		// Multiply each node's health by this
 	float bigmommaDmgSlash;			// melee attack damage
 	float bigmommaDmgBlast;			// mortar attack damage
