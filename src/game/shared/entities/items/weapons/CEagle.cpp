@@ -60,7 +60,7 @@ void CEagle::Spawn()
 
 	SET_MODEL(edict(), "models/w_desert_eagle.mdl");
 
-	m_iDefaultAmmo = EAGLE_MAX_CLIP;
+	m_iDefaultAmmo = DEAGLE_DEFAULT_GIVE;
 
 	FallInit();
 }
