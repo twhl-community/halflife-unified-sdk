@@ -3074,6 +3074,7 @@ void CBasePlayer::Spawn()
 	}
 
 	m_lastx = m_lasty = 0;
+	m_bIsClimbing = false;
 
 	m_flNextChatTime = gpGlobals->time;
 
