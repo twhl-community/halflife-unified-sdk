@@ -22,12 +22,9 @@
 #include "decals.h"
 #include "gamerules.h"
 
-//TODO: CTF
-#if false
 #include "ctf/CTFDefs.h"
 #include "ctf/CTFGoal.h"
 #include "ctf/CTFGoalFlag.h"
-#endif
 
 #include "UserMessages.h"
 
@@ -176,7 +173,6 @@ void CDisplacerBall::BallTouch(CBaseEntity* pOther)
 		pPlayer->pev->flags = FL_CLIENT;
 		pPlayer->m_flFallVelocity = 0;
 
-#if false
 		if (g_pGameRules->IsCTF() && pPlayer->m_pFlag)
 		{
 			auto pFlag = static_cast<CTFGoalFlag*>(static_cast<CBaseEntity*>(pPlayer->m_pFlag));
@@ -210,7 +206,6 @@ void CDisplacerBall::BallTouch(CBaseEntity* pOther)
 				}
 			}
 		}
-#endif
 
 		auto pSpawnSpot = VARS(g_pGameRules->GetPlayerSpawnSpot(pPlayer));
 

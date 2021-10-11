@@ -25,11 +25,9 @@
 #include "rope/CRope.h"
 #endif
 #include "weapons/CDisplacerBall.h"
-//TODO: CTF
-#if false
+
 #include "ctf/CTFGoal.h"
 #include "ctf/CTFGoalFlag.h"
-#endif
 
 #include "gamerules.h"
 
@@ -357,15 +355,12 @@ void CDisplacer::AltFireThink()
 	m_pPlayer->m_flDisplacerSndRoomtype = m_pPlayer->m_flSndRoomtype;
 
 #ifndef CLIENT_DLL
-	//TODO: CTF
-#if false
 	if (g_pGameRules->IsCTF() && m_pPlayer->m_pFlag)
 	{
 		auto pFlag = static_cast<CTFGoalFlag*>(static_cast<CBaseEntity*>(m_pPlayer->m_pFlag));
 
 		pFlag->DropFlag(m_pPlayer);
 	}
-#endif
 #endif
 
 #ifndef CLIENT_DLL

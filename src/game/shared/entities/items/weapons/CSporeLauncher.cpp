@@ -119,13 +119,10 @@ void CSporeLauncher::WeaponIdle()
 		{
 			int maxClip = SPORELAUNCHER_MAX_CLIP;
 
-			//TODO: CTF
-#if false
 			if (m_pPlayer->m_iItems & CTFItem::Backpack)
 			{
 				maxClip *= 2;
 			}
-#endif
 
 			if (m_iClip != maxClip && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType])
 			{
