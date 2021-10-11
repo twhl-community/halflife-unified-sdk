@@ -219,10 +219,7 @@ void CDisplacerBall::BallTouch(CBaseEntity* pOther)
 
 		pPlayer->pev->sequence = pPlayer->LookupActivity(ACT_IDLE);
 
-		//TODO: ropes
-#if false
 		pPlayer->SetIsClimbing(false);
-#endif
 
 		pPlayer->m_lastx = 0;
 		pPlayer->m_lasty = 0;

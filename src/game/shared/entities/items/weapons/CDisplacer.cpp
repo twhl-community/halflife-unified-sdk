@@ -20,10 +20,8 @@
 #include "UserMessages.h"
 
 #ifndef CLIENT_DLL
-//TODO: ropes
-#if false
 #include "rope/CRope.h"
-#endif
+
 #include "weapons/CDisplacerBall.h"
 
 #include "ctf/CTFGoal.h"
@@ -335,8 +333,6 @@ void CDisplacer::FireThink()
 void CDisplacer::AltFireThink()
 {
 #ifndef CLIENT_DLL
-	//TODO: ropes
-#if false
 	if (m_pPlayer->IsOnRope())
 	{
 		m_pPlayer->pev->movetype = MOVETYPE_WALK;
@@ -345,7 +341,6 @@ void CDisplacer::AltFireThink()
 		m_pPlayer->GetRope()->DetachObject();
 		m_pPlayer->SetRope(nullptr);
 	}
-#endif
 #endif
 
 	STOP_SOUND(m_pPlayer->edict(), CHAN_WEAPON, "weapons/displacer_spin.wav");
