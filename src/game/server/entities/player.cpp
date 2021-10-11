@@ -39,6 +39,8 @@
 #include "shake.h"
 #include "decals.h"
 #include "gamerules.h"
+#include "ctfplay_gamerules.h"
+#include "ctf/CHUDIconTrigger.h"
 #include "game.h"
 #include "pm_shared.h"
 #include "hltv.h"
@@ -59,7 +61,7 @@ extern DLL_GLOBAL int		g_iSkillLevel, gDisplayTitle;
 BOOL gInitHUD = TRUE;
 
 extern void CopyToBodyQue(entvars_t* pev);
-extern edict_t* EntSelectSpawnPoint(CBaseEntity* pPlayer);
+extern edict_t* EntSelectSpawnPoint(CBasePlayer* pPlayer);
 
 // the world node graph
 extern CGraph	WorldGraph;
@@ -405,6 +407,24 @@ int CBasePlayer::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, flo
 
 
 	CBaseEntity* pAttacker = CBaseEntity::Instance(pevAttacker);
+
+	if (pAttacker && pAttacker->IsPlayer())
+	{
+		auto pAttackerPlayer = static_cast<CBasePlayer*>(pAttacker);
+
+		//TODO: this is a pretty bad way to handle damage increase
+		if (pAttackerPlayer->m_iItems & CTFItem::Acceleration)
+		{
+			flDamage *= 1.6;
+
+			EMIT_SOUND(edict(), CHAN_STATIC, "turret/tu_ping.wav", VOL_NORM, ATTN_NORM);
+		}
+		if (m_pFlag)
+		{
+			m_nLastShotBy = pAttackerPlayer->entindex();
+			m_flLastShotTime = gpGlobals->time;
+		}
+	}
 
 	if (!g_pGameRules->FPlayerCanTakeDamage(this, pAttacker))
 	{
@@ -2897,12 +2917,80 @@ Returns the entity to spawn at
 USES AND SETS GLOBAL g_pLastSpawn
 ============
 */
-edict_t* EntSelectSpawnPoint(CBaseEntity* pPlayer)
+edict_t* EntSelectSpawnPoint(CBasePlayer* pPlayer)
 {
 	CBaseEntity* pSpot;
 	edict_t* player;
 
 	player = pPlayer->edict();
+
+	if (g_pGameRules->IsCTF() && pPlayer->m_iTeamNum != CTFTeam::None)
+	{
+		const auto pszTeamSpotName = pPlayer->m_iTeamNum == CTFTeam::BlackMesa ? "ctfs1" : "ctfs2";
+
+		pSpot = g_pLastSpawn;
+		// Randomize the start spot
+		for (int i = RANDOM_LONG(1, 5); i > 0; i--)
+			pSpot = UTIL_FindEntityByClassname(pSpot, pszTeamSpotName);
+		if (FNullEnt(pSpot))  // skip over the null point
+			pSpot = UTIL_FindEntityByClassname(pSpot, pszTeamSpotName);
+
+		CBaseEntity* pFirstSpot = pSpot;
+
+		do
+		{
+			if (pSpot)
+			{
+				// check if pSpot is valid
+				if (IsSpawnPointValid(pPlayer, pSpot) && pSpot->pev->origin != g_vecZero)
+				{
+					// if so, go to pSpot
+					goto ReturnSpot;
+				}
+			}
+			// increment pSpot
+			pSpot = UTIL_FindEntityByClassname(pSpot, pszTeamSpotName);
+		}
+		while (pSpot != pFirstSpot); // loop if we're not back to the start
+
+		//Try a shared spawn spot
+		// Randomize the start spot
+		for (int i = RANDOM_LONG(1, 5); i > 0; i--)
+			pSpot = UTIL_FindEntityByClassname(pSpot, "ctfs0");
+		if (FNullEnt(pSpot))  // skip over the null point
+			pSpot = UTIL_FindEntityByClassname(pSpot, "ctfs0");
+
+		pFirstSpot = pSpot;
+
+		do
+		{
+			if (pSpot)
+			{
+				// check if pSpot is valid
+				if (IsSpawnPointValid(pPlayer, pSpot) && pSpot->pev->origin != g_vecZero)
+				{
+					// if so, go to pSpot
+					goto ReturnSpot;
+				}
+			}
+			// increment pSpot
+			pSpot = UTIL_FindEntityByClassname(pSpot, "ctfs0");
+		}
+		while (pSpot != pFirstSpot); // loop if we're not back to the start
+
+		// we haven't found a place to spawn yet,  so kill any guy at the first spawn point and spawn there
+		if (!FNullEnt(pSpot))
+		{
+			CBaseEntity* ent = NULL;
+			while ((ent = UTIL_FindEntityInSphere(ent, pSpot->pev->origin, 128)) != NULL)
+			{
+				// if ent is a client, kill em (unless they are ourselves)
+				if (ent->IsPlayer() && !(ent->edict() == player))
+					ent->TakeDamage(VARS(INDEXENT(0)), VARS(INDEXENT(0)), 300, DMG_GENERIC);
+			}
+			goto ReturnSpot;
+		}
+	}
 
 	// choose a info_player_deathmatch point
 	if (g_pGameRules->IsCoOp())
@@ -3012,6 +3100,7 @@ void CBasePlayer::Spawn()
 
 	g_engfuncs.pfnSetPhysicsKeyValue(edict(), "slj", "0");
 	g_engfuncs.pfnSetPhysicsKeyValue(edict(), "hl", "1");
+	g_engfuncs.pfnSetPhysicsKeyValue(edict(), "jpj", "0");
 
 	m_iFOV = 0;// init field of view.
 	m_iClientFOV = -1; // make sure fov reset is sent
@@ -3036,7 +3125,14 @@ void CBasePlayer::Spawn()
 // dont let uninitialized value here hurt the player
 	m_flFallVelocity = 0;
 
-	g_pGameRules->SetDefaultPlayerTeam(this);
+	if (!g_pGameRules->IsCTF())
+		g_pGameRules->SetDefaultPlayerTeam(this);
+
+	if (g_pGameRules->IsCTF() && m_iTeamNum == CTFTeam::None)
+	{
+		pev->iuser1 = OBS_ROAMING;
+	}
+
 	g_pGameRules->GetPlayerSpawnSpot(this);
 
 	SET_MODEL(ENT(pev), "models/player.mdl");
@@ -3074,11 +3170,41 @@ void CBasePlayer::Spawn()
 	}
 
 	m_lastx = m_lasty = 0;
+	m_iLastDamage = 0;
 	m_bIsClimbing = false;
+	m_flLastDamageTime = 0;
 
 	m_flNextChatTime = gpGlobals->time;
 
 	g_pGameRules->PlayerSpawn(this);
+
+	if (g_pGameRules->IsCTF() && m_iTeamNum == CTFTeam::None)
+	{
+		pev->effects |= EF_NODRAW;
+		pev->iuser1 = OBS_ROAMING;
+		pev->solid = SOLID_NOT;
+		pev->movetype = MOVETYPE_NOCLIP;
+		pev->takedamage = DAMAGE_NO;
+		m_iHideHUD = HIDEHUD_WEAPONS | HIDEHUD_HEALTH;
+		m_afPhysicsFlags |= PFLAG_OBSERVER;
+		pev->flags |= FL_SPECTATOR;
+
+		MESSAGE_BEGIN(MSG_ALL, gmsgSpectator);
+		WRITE_BYTE(entindex());
+		WRITE_BYTE(1);
+		MESSAGE_END();
+
+		MESSAGE_BEGIN(MSG_ONE, gmsgTeamFull, nullptr, edict());
+		WRITE_BYTE(0);
+		MESSAGE_END();
+
+		m_pGoalEnt = nullptr;
+
+		m_iCurrentMenu = m_iNewTeamNum > CTFTeam::None ? MENU_DEFAULT : MENU_CLASS;
+
+		if (g_pGameRules->IsCTF())
+			Player_Menu();
+	}
 }
 
 
@@ -3595,6 +3721,12 @@ void CBasePlayer::ImpulseCommands()
 
 		break;
 
+	case 205:
+	{
+		DropPlayerCTFPowerup(this);
+		break;
+	}
+
 	default:
 		// check all of the cheat impulse commands now
 		CheatImpulseCommands(iImpulse);
@@ -4092,6 +4224,11 @@ void CBasePlayer::UpdateClientData()
 
 		FireTargets("game_playerspawn", this, this, USE_TOGGLE, 0);
 
+		if (g_pGameRules->IsMultiplayer())
+		{
+			RefreshCustomHUD(this);
+		}
+
 		InitStatusBar();
 	}
 
@@ -4316,6 +4453,7 @@ void CBasePlayer::UpdateClientData()
 	// Cache and client weapon change
 	m_pClientActiveItem = m_pActiveItem;
 	m_iClientFOV = m_iFOV;
+	UpdateCTFHud();
 
 	// Update Status Bar
 	if (m_flNextSBarUpdateTime < gpGlobals->time)
@@ -4328,6 +4466,106 @@ void CBasePlayer::UpdateClientData()
 	m_bRestored = false;
 }
 
+void CBasePlayer::UpdateCTFHud()
+{
+	if (gmsgPlayerIcon && gmsgStatusIcon)
+	{
+		if (m_iItems != m_iClientItems)
+		{
+			const unsigned int itemsChanged = m_iItems ^ m_iClientItems;
+
+			const unsigned int removedItems = m_iClientItems & itemsChanged;
+			const unsigned int addedItems = m_iItems & itemsChanged;
+
+			m_iClientItems = m_iItems;
+
+			//Update flag item info
+			for (int id = CTFItem::BlackMesaFlag; id <= CTFItem::OpposingForceFlag; id <<= 1)
+			{
+				int state;
+
+				if (addedItems & id)
+				{
+					state = 1;
+				}
+				else if (removedItems & id)
+				{
+					state = 0;
+				}
+				else
+				{
+					//Unchanged
+					continue;
+				}
+
+				g_engfuncs.pfnMessageBegin(MSG_ALL, gmsgPlayerIcon, 0, 0);
+				g_engfuncs.pfnWriteByte(entindex());
+				g_engfuncs.pfnWriteByte(state);
+				g_engfuncs.pfnWriteByte(1);
+				g_engfuncs.pfnWriteByte(id);
+				g_engfuncs.pfnMessageEnd();
+			}
+
+			//Ugly hack
+			struct ItemData
+			{
+				const char* ClassName;
+				int R, G, B;
+			};
+
+			static const ItemData CTFItemData[] =
+			{
+				{"item_ctfljump", 255, 160, 0},
+				{"item_ctfphev", 128, 160, 255},
+				{"item_ctfbpack", 255, 255, 0},
+				{"item_ctfaccel", 255, 0, 0},
+				{"Unknown", 0, 0, 0}, //Not actually used, but needed to match the index
+				{"item_ctfregen", 0, 255, 0},
+			};
+
+			for (int id = CTFItem::LongJump, i = 0; id <= CTFItem::Regeneration; id <<= 1, ++i)
+			{
+				int state;
+
+				if (addedItems & id)
+				{
+					state = 1;
+				}
+				else if (removedItems & id)
+				{
+					state = 0;
+				}
+				else
+				{
+					//Unchanged
+					continue;
+				}
+
+				const auto& itemData{CTFItemData[i]};
+
+				g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgStatusIcon, 0, edict());
+				g_engfuncs.pfnWriteByte(state);
+				g_engfuncs.pfnWriteString(itemData.ClassName);
+
+				if (state)
+				{
+					g_engfuncs.pfnWriteByte(itemData.R);
+					g_engfuncs.pfnWriteByte(itemData.G);
+					g_engfuncs.pfnWriteByte(itemData.B);
+				}
+
+				g_engfuncs.pfnMessageEnd();
+
+				g_engfuncs.pfnMessageBegin(MSG_ALL, gmsgPlayerIcon, 0, 0);
+				g_engfuncs.pfnWriteByte(entindex());
+				g_engfuncs.pfnWriteByte(state);
+				g_engfuncs.pfnWriteByte(0);
+				g_engfuncs.pfnWriteByte(id);
+				g_engfuncs.pfnMessageEnd();
+			}
+		}
+	}
+}
 
 //=========================================================
 // FBecomeProne - Overridden for the player to set the proper
@@ -4823,6 +5061,237 @@ BOOL CBasePlayer::SwitchWeapon(CBasePlayerItem* pWeapon)
 	}
 
 	return TRUE;
+}
+
+void CBasePlayer::Player_Menu()
+{
+	if (g_pGameRules->IsCTF())
+	{
+		if (m_iCurrentMenu == MENU_TEAM)
+		{
+			MESSAGE_BEGIN(MSG_ONE, gmsgAllowSpec, nullptr, edict());
+			WRITE_BYTE(1);
+			MESSAGE_END();
+
+			MESSAGE_BEGIN(MSG_ONE, gmsgTeamNames, nullptr, edict());
+			g_engfuncs.pfnWriteByte(2);
+			WRITE_STRING("#CTFTeam_BM");
+			WRITE_STRING("#CTFTeam_OF");
+			MESSAGE_END();
+
+			MESSAGE_BEGIN(MSG_ONE, gmsgVGUIMenu, nullptr, edict());
+			WRITE_BYTE(MENU_TEAM);
+			MESSAGE_END();
+		}
+		else if (m_iCurrentMenu == MENU_CLASS)
+		{
+			MESSAGE_BEGIN(MSG_ONE, gmsgSetMenuTeam, nullptr, edict());
+			WRITE_BYTE(static_cast<int>(m_iNewTeamNum == CTFTeam::None ? m_iTeamNum : m_iNewTeamNum));
+			MESSAGE_END();
+
+			MESSAGE_BEGIN(MSG_ONE, gmsgVGUIMenu, nullptr, edict());
+			WRITE_BYTE(MENU_CLASS);
+			MESSAGE_END();
+		}
+	}
+}
+
+void CBasePlayer::ResetMenu()
+{
+	if (gmsgShowMenu)
+	{
+		MESSAGE_BEGIN(MSG_ONE, gmsgShowMenu, nullptr, edict());
+		WRITE_SHORT(0);
+		WRITE_CHAR(0);
+		WRITE_BYTE(0);
+		WRITE_STRING("");
+		MESSAGE_END();
+	}
+
+	switch (m_iCurrentMenu)
+	{
+	case MENU_DEFAULT:
+		m_iCurrentMenu = MENU_TEAM;
+		break;
+
+	case MENU_TEAM:
+		m_iCurrentMenu = MENU_CLASS;
+		break;
+
+	default:
+		m_iCurrentMenu = MENU_NONE;
+		return;
+	}
+
+	if (g_pGameRules->IsCTF())
+		Player_Menu();
+}
+
+BOOL CBasePlayer::Menu_Team_Input(int inp)
+{
+	m_iNewTeamNum = CTFTeam::None;
+
+	if (inp == -1)
+	{
+		g_pGameRules->ChangePlayerTeam(this, nullptr, false, false);
+
+		MESSAGE_BEGIN(MSG_ONE, gmsgTeamFull, nullptr, edict());
+		WRITE_BYTE(0);
+		MESSAGE_END();
+		return true;
+	}
+	else if (inp == 3)
+	{
+		if (g_pGameRules->TeamsBalanced())
+		{
+			if (m_iTeamNum == CTFTeam::None)
+			{
+				m_iNewTeamNum = static_cast<CTFTeam>(RANDOM_LONG(0, 1) + 1);
+				if (m_iNewTeamNum <= CTFTeam::None)
+				{
+					m_iNewTeamNum = CTFTeam::BlackMesa;
+				}
+				else if (m_iNewTeamNum > CTFTeam::OpposingForce)
+				{
+					m_iNewTeamNum = CTFTeam::OpposingForce;
+				}
+			}
+			else
+			{
+				m_iNewTeamNum = m_iTeamNum;
+			}
+		}
+		else
+		{
+			m_iNewTeamNum = static_cast<CTFTeam>(g_pGameRules->GetTeamIndex(g_pGameRules->TeamWithFewestPlayers()) + 1);
+		}
+
+		MESSAGE_BEGIN(MSG_ONE, gmsgTeamFull, nullptr, edict());
+		WRITE_BYTE(0);
+		MESSAGE_END();
+
+		ResetMenu();
+
+		pev->impulse = 0;
+
+		return true;
+	}
+	else if (inp <= g_pGameRules->GetNumTeams() && inp > 0)
+	{
+		auto unbalanced = false;
+
+		if (ctf_autoteam.value == 1)
+		{
+			if (m_iTeamNum != static_cast<CTFTeam>(inp))
+			{
+				if (!g_pGameRules->TeamsBalanced() && inp != g_pGameRules->GetTeamIndex(g_pGameRules->TeamWithFewestPlayers()) + 1)
+				{
+					ClientPrint(pev, HUD_PRINTCONSOLE, "Team balancing enabled.\nThis team is full.\n");
+					MESSAGE_BEGIN(MSG_ONE, gmsgTeamFull, nullptr, edict());
+					WRITE_BYTE(1);
+					MESSAGE_END();
+
+					unbalanced = true;
+				}
+				else
+				{
+					m_iNewTeamNum = static_cast<CTFTeam>(inp);
+				}
+			}
+			else
+			{
+				m_iNewTeamNum = m_iTeamNum;
+			}
+		}
+		else
+		{
+			m_iNewTeamNum = static_cast<CTFTeam>(inp);
+		}
+
+		if (!unbalanced)
+		{
+			MESSAGE_BEGIN(MSG_ONE, gmsgTeamFull, nullptr, edict());
+			WRITE_BYTE(0);
+			MESSAGE_END();
+
+			ResetMenu();
+
+			pev->impulse = 0;
+
+			return true;
+		}
+	}
+	else if (inp == 6 && m_iTeamNum > CTFTeam::None)
+	{
+		m_iCurrentMenu = MENU_NONE;
+		return true;
+	}
+
+	m_iCurrentMenu = MENU_TEAM;
+
+	if (g_pGameRules->IsCTF())
+		Player_Menu();
+
+	return false;
+}
+
+BOOL CBasePlayer::Menu_Char_Input(int inp)
+{
+	if (m_iNewTeamNum == CTFTeam::None)
+	{
+		ClientPrint(pev, HUD_PRINTCONSOLE, "Can't change character; not in a team.\n");
+		return false;
+	}
+
+	const char* pszCharacterType;
+
+	if (inp == 7)
+	{
+		pszCharacterType = g_pGameRules->GetCharacterType(static_cast<int>(m_iNewTeamNum) - 1, RANDOM_LONG(0, 5));
+	}
+	else
+	{
+		const auto characterIndex = inp - 1;
+
+		if (characterIndex < 0 || characterIndex > 5)
+			return false;
+
+		pszCharacterType = g_pGameRules->GetCharacterType(static_cast<int>(m_iNewTeamNum) - 1, characterIndex);
+	}
+
+	//Kill and gib the player if they're changing teams
+	const auto killAndGib = !pev->iuser1 && m_iTeamNum != m_iNewTeamNum;
+
+	g_pGameRules->ChangePlayerTeam(this, pszCharacterType, killAndGib, killAndGib);
+
+	ResetMenu();
+
+	pev->impulse = 0;
+
+	if (pev->iuser1)
+	{
+		pev->effects &= EF_NODRAW;
+		pev->flags = FL_CLIENT;
+		pev->takedamage = DAMAGE_YES;
+		m_iHideHUD &= ~(HIDEHUD_HEALTH | HIDEHUD_WEAPONS);
+		m_afPhysicsFlags &= PFLAG_OBSERVER;
+		pev->flags &= ~FL_SPECTATOR;
+
+		MESSAGE_BEGIN(MSG_ALL, gmsgSpectator);
+		WRITE_BYTE(entindex());
+		WRITE_BYTE(0);
+		MESSAGE_END();
+
+		pev->iuser1 = 0;
+		pev->deadflag = 0;
+		pev->solid = SOLID_SLIDEBOX;
+		pev->movetype = MOVETYPE_WALK;
+
+		g_pGameRules->GetPlayerSpawnSpot(this);
+		g_pGameRules->PlayerSpawn(this);
+	}
+
+	return true;
 }
 
 void CBasePlayer::SetPrefsFromUserinfo(char* infobuffer)

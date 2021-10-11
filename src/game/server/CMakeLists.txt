@@ -86,7 +86,36 @@ target_sources(hl PRIVATE
 	entities/trains.h
 	entities/triggers.cpp
 	entities/world.cpp
+	entities/world.h
 	entities/xen.cpp
+	
+	entities/ctf/CHUDIconTrigger.cpp
+	entities/ctf/CHUDIconTrigger.h
+	entities/ctf/CItemAcceleratorCTF.cpp
+	entities/ctf/CItemAcceleratorCTF.h
+	entities/ctf/CItemBackpackCTF.cpp
+	entities/ctf/CItemBackpackCTF.h
+	entities/ctf/CItemCTF.cpp
+	entities/ctf/CItemCTF.h
+	entities/ctf/CItemLongJumpCTF.cpp
+	entities/ctf/CItemLongJumpCTF.h
+	entities/ctf/CItemPortableHEVCTF.cpp
+	entities/ctf/CItemPortableHEVCTF.h
+	entities/ctf/CItemRegenerationCTF.cpp
+	entities/ctf/CItemRegenerationCTF.h
+	entities/ctf/CItemSpawnCTF.cpp
+	entities/ctf/CItemSpawnCTF.h
+	entities/ctf/CTFDefs.h
+	entities/ctf/CTFDetect.cpp
+	entities/ctf/CTFDetect.h
+	entities/ctf/CTFGoal.cpp
+	entities/ctf/CTFGoal.h
+	entities/ctf/CTFGoalBase.cpp
+	entities/ctf/CTFGoalBase.h
+	entities/ctf/CTFGoalFlag.cpp
+	entities/ctf/CTFGoalFlag.h
+	entities/ctf/CTFSpawn.cpp
+	entities/ctf/CTFSpawn.h
 	
 	entities/items/airtank.cpp
 	entities/items/ggrenade.cpp
@@ -243,6 +272,8 @@ target_sources(hl PRIVATE
 	entities/NPCs/racex/shocktrooper.cpp
 	entities/NPCs/racex/voltigore.cpp
 
+	gamerules/ctfplay_gamerules.cpp
+	gamerules/ctfplay_gamerules.h
 	gamerules/gamerules.cpp
 	gamerules/gamerules.h
 	gamerules/multiplay_gamerules.cpp

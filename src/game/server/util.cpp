@@ -2564,3 +2564,8 @@ bool UTIL_IsMultiplayer()
 {
 	return g_pGameRules->IsMultiplayer();
 }
+
+bool UTIL_IsCTF()
+{
+	return g_pGameRules->IsCTF();
+}

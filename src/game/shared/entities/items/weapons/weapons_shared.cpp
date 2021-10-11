@@ -162,6 +162,24 @@ BOOL CanAttack(float attack_time, float curtime, BOOL isPredicted)
 
 void CBasePlayerWeapon::ItemPostFrame()
 {
+#ifndef CLIENT_DLL
+	//Reset max clip and max ammo to default values
+	if (!(m_pPlayer->m_iItems & CTFItem::Backpack))
+	{
+		if (m_iClip > iMaxClip())
+		{
+			m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] += m_iClip - iMaxClip();
+
+			if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] > iMaxAmmo1())
+			{
+				m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] = iMaxAmmo1();
+			}
+
+			m_iClip = iMaxClip();
+		}
+	}
+#endif
+
 	if ((m_fInReload) && (m_pPlayer->m_flNextAttack <= UTIL_WeaponTimeBase()))
 	{
 		// complete the reload. 

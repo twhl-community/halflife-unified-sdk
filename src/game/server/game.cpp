@@ -579,7 +579,17 @@ cvar_t	sk_player_leg3 = {"sk_player_leg3","1"};
 
 // END Cvars for Skill Level settings
 
+// BEGIN Opposing Force variables
+
+cvar_t ctfplay = {"mp_ctfplay", "0", FCVAR_SERVER};
+cvar_t ctf_autoteam = {"mp_ctf_autoteam", "0", FCVAR_SERVER};
+cvar_t ctf_capture = {"mp_ctf_capture", "0", FCVAR_SERVER};
+
 cvar_t oldgrapple = {"sv_oldgrapple", "0", FCVAR_SERVER};
+
+cvar_t multipower = {"mp_multipower", "0", FCVAR_SERVER};
+
+// END Opposing Force variables
 
 // Register your console variables here
 // This gets called one time when the game is initialied
@@ -1132,7 +1142,17 @@ void GameDLLInit()
 	CVAR_REGISTER(&sk_player_leg3);
 	// END REGISTER CVARS FOR SKILL LEVEL STUFF
 
+	// BEGIN REGISTER CVARS FOR OPPOSING FORCE
+
+	CVAR_REGISTER(&ctfplay);
+	CVAR_REGISTER(&ctf_autoteam);
+	CVAR_REGISTER(&ctf_capture);
+
 	CVAR_REGISTER(&oldgrapple);
+
+	CVAR_REGISTER(&multipower);
+
+	// END REGISTER CVARS FOR OPPOSING FORCE
 
 	SERVER_COMMAND("exec skill.cfg\n");
 }

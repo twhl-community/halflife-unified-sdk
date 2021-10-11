@@ -257,6 +257,18 @@ public:
 
 	static CBaseEntity* Instance(int eoffset) { return Instance(ENT(eoffset)); }
 
+	template<typename T>
+	static T* Instance(edict_t* pent)
+	{
+		if (!pent)
+			pent = ENT(0);
+		CBaseEntity* pEnt = (CBaseEntity*)GET_PRIVATE(pent);
+		return static_cast<T*>(pEnt);
+	}
+
+	template<typename T>
+	static T* Instance(entvars_t* pev) { return Instance<T>(ENT(pev)); }
+
 	CBaseMonster* GetMonsterPointer(entvars_t* pevMonster)
 	{
 		CBaseEntity* pEntity = Instance(pevMonster);

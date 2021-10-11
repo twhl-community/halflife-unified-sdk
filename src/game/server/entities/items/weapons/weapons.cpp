@@ -783,6 +783,12 @@ BOOL CBasePlayerWeapon::AddPrimaryAmmo(int iCount, char* szName, int iMaxClip, i
 {
 	int iIdAmmo;
 
+	//Don't double for single shot weapons (e.g. RPG)
+	if ((m_pPlayer->m_iItems & CTFItem::Backpack) && iMaxClip > 1)
+	{
+		iMaxClip *= 2;
+	}
+
 	if (iMaxClip < 1)
 	{
 		m_iClip = -1;

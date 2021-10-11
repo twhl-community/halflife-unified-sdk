@@ -28,6 +28,9 @@
 #include "trains.h"			// trigger_camera has train functionality
 #include "gamerules.h"
 #include "skill.h"
+#include "ctfplay_gamerules.h"
+#include "ctf/CTFGoalFlag.h"
+#include "UserMessages.h"
 
 #define	SF_TRIGGER_PUSH_START_OFF	2//spawnflag that makes trigger_push spawn turned OFF
 #define SF_TRIGGER_HURT_TARGETONCE	1// Only fire hurt target once
@@ -2745,5 +2748,155 @@ void COFTriggerGeneWormHit::GeneWormHitTouch(CBaseEntity* pOther)
 					pev->target = iStringNull;
 			}
 		}
+	}
+}
+
+class CTriggerCTFGeneric : public CBaseTrigger
+{
+public:
+	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+
+	void Spawn() override;
+
+	void Touch(CBaseEntity* pOther) override;
+
+	void KeyValue(KeyValueData* pkvd) override;
+
+	USE_TYPE triggerType;
+	CTFTeam team_no;
+	float trigger_delay;
+	float m_flTriggerDelayTime;
+	int score;
+	int team_score;
+};
+
+LINK_ENTITY_TO_CLASS(trigger_ctfgeneric, CTriggerCTFGeneric);
+
+void CTriggerCTFGeneric::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
+{
+	Touch(nullptr);
+}
+
+void CTriggerCTFGeneric::Spawn()
+{
+	InitTrigger();
+
+	m_flTriggerDelayTime = 0;
+}
+
+void CTriggerCTFGeneric::Touch(CBaseEntity* pOther)
+{
+	if (m_flTriggerDelayTime <= gpGlobals->time)
+	{
+		CBasePlayer* pOtherPlayer = nullptr;
+
+		if (pOther)
+		{
+			if (score || !pOther->IsPlayer())
+			{
+				return;
+			}
+
+			pOtherPlayer = static_cast<CBasePlayer*>(pOther);
+
+			if (team_no != CTFTeam::None && team_no != pOtherPlayer->m_iTeamNum)
+			{
+				return;
+			}
+		}
+
+		SUB_UseTargets(this, triggerType, 0);
+
+		//TODO: constrain team_no input to valid values
+		if (team_score)
+			teamscores[static_cast<int>(team_no) - 1] += team_score;
+
+		if (pOtherPlayer && score != 0)
+		{
+			pOtherPlayer->m_iCTFScore += score;
+			pOtherPlayer->m_iOffense += score;
+			g_engfuncs.pfnMessageBegin(MSG_ALL, gmsgCTFScore, 0, 0);
+			g_engfuncs.pfnWriteByte(pOtherPlayer->entindex());
+			g_engfuncs.pfnWriteByte(pOtherPlayer->m_iCTFScore);
+			g_engfuncs.pfnMessageEnd();
+
+			g_engfuncs.pfnMessageBegin(MSG_ALL, gmsgScoreInfo, 0, 0);
+			g_engfuncs.pfnWriteByte(pOtherPlayer->entindex());
+			g_engfuncs.pfnWriteShort(pev->frags);
+			g_engfuncs.pfnWriteShort(pOtherPlayer->m_iDeaths);
+			g_engfuncs.pfnMessageEnd();
+
+			UTIL_LogPrintf(
+				"\"%s<%i><%u><%s>\" triggered \"%s\"\n",
+				STRING(pOtherPlayer->pev->targetname),
+				g_engfuncs.pfnGetPlayerUserId(pOtherPlayer->edict()),
+				g_engfuncs.pfnGetPlayerWONId(pOtherPlayer->edict()),
+				GetTeamName(pOtherPlayer->edict()),
+				STRING(pOtherPlayer->pev->targetname));
+		}
+
+		if (team_score)
+		{
+			//TOOD: not sure why this check is here since pev must be valid if the entity exists
+			if (!pOther && !score && pev)
+			{
+				UTIL_LogPrintf((char*)"World triggered \"%s\"\n", STRING(pev->targetname));
+			}
+
+			DisplayTeamFlags(nullptr);
+		}
+
+		m_flTriggerDelayTime = gpGlobals->time + trigger_delay;
+	}
+}
+
+void CTriggerCTFGeneric::KeyValue(KeyValueData* pkvd)
+{
+	if (FStrEq("team_no", pkvd->szKeyName))
+	{
+		team_no = static_cast<CTFTeam>(atoi(pkvd->szValue));
+		pkvd->fHandled = true;
+	}
+	else if (FStrEq("trigger_delay", pkvd->szKeyName))
+	{
+		trigger_delay = atof(pkvd->szValue);
+
+		if (trigger_delay == 0)
+			trigger_delay = 5;
+
+		pkvd->fHandled = true;
+	}
+	else if (FStrEq("score", pkvd->szKeyName))
+	{
+		score = atof(pkvd->szValue);
+		pkvd->fHandled = true;
+	}
+	else if (FStrEq("team_score", pkvd->szKeyName))
+	{
+		team_score = atof(pkvd->szValue);
+		pkvd->fHandled = true;
+	}
+	else if (FStrEq("triggerstate", pkvd->szKeyName))
+	{
+		switch (atoi(pkvd->szValue))
+		{
+		case 1:
+			triggerType = USE_ON;
+			break;
+
+		case 2:
+			triggerType = USE_TOGGLE;
+			break;
+
+		default:
+			triggerType = USE_OFF;
+			break;
+		}
+
+		pkvd->fHandled = true;
+	}
+	else
+	{
+		pkvd->fHandled = false;
 	}
 }

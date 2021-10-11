@@ -58,7 +58,22 @@ int gmsgTeamNames = 0;
 int gmsgStatusText = 0;
 int gmsgStatusValue = 0;
 
+int gmsgSpectator = 0;
+int gmsgStatusIcon = 0;
+int gmsgPlayerBrowse = 0;
 int gmsgHudColor = 0;
+int gmsgFlagIcon = 0;
+int gmsgFlagTimer = 0;
+int gmsgPlayerIcon = 0;
+int gmsgVGUIMenu = 0;
+int gmsgAllowSpec = 0;
+int gmsgSetMenuTeam = 0;
+int gmsgCTFScore = 0;
+int gmsgStatsInfo = 0;
+int gmsgStatsPlayer = 0;
+int gmsgTeamFull = 0;
+int gmsgCustomIcon = 0;
+
 void LinkUserMessages()
 {
 	// Already taken care of?
@@ -104,5 +119,20 @@ void LinkUserMessages()
 
 	gmsgStatusText = REG_USER_MSG("StatusText", -1);
 	gmsgStatusValue = REG_USER_MSG("StatusValue", 3);
+
+	gmsgSpectator = g_engfuncs.pfnRegUserMsg("Spectator", 2);
+	gmsgStatusIcon = g_engfuncs.pfnRegUserMsg("StatusIcon", -1);
+	gmsgPlayerBrowse = g_engfuncs.pfnRegUserMsg("PlyrBrowse", -1);
 	gmsgHudColor = g_engfuncs.pfnRegUserMsg("HudColor", 3);
+	gmsgFlagIcon = g_engfuncs.pfnRegUserMsg("FlagIcon", -1);
+	gmsgFlagTimer = g_engfuncs.pfnRegUserMsg("FlagTimer", -1);
+	gmsgPlayerIcon = g_engfuncs.pfnRegUserMsg("PlayerIcon", -1);
+	gmsgVGUIMenu = g_engfuncs.pfnRegUserMsg("VGUIMenu", -1);
+	gmsgAllowSpec = g_engfuncs.pfnRegUserMsg("AllowSpec", 1);
+	gmsgSetMenuTeam = g_engfuncs.pfnRegUserMsg("SetMenuTeam", 1);
+	gmsgCTFScore = g_engfuncs.pfnRegUserMsg("CTFScore", 2);
+	gmsgStatsInfo = g_engfuncs.pfnRegUserMsg("StatsInfo", -1);
+	gmsgStatsPlayer = g_engfuncs.pfnRegUserMsg("StatsPlayer", 31);
+	gmsgTeamFull = g_engfuncs.pfnRegUserMsg("TeamFull", 1);
+	gmsgCustomIcon = g_engfuncs.pfnRegUserMsg("CustomIcon", -1);
 }

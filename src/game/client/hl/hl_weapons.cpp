@@ -62,6 +62,8 @@ int   g_irunninggausspred = 0;
 
 Vector previousorigin;
 
+int giTeamplay = 0;
+
 // HLDM Weapon placeholder entities.
 CGlock g_Glock;
 CCrowbar g_Crowbar;
@@ -943,4 +945,9 @@ void DLLEXPORT HUD_PostRunCmd(struct local_state_s* from, struct local_state_s* 
 bool UTIL_IsMultiplayer()
 {
 	return gEngfuncs.GetMaxClients() != 1;
+}
+
+bool UTIL_IsCTF()
+{
+	return giTeamplay == 2;
 }

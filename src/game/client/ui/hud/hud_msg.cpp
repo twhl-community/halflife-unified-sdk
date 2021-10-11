@@ -21,8 +21,13 @@
 #include "parsemsg.h"
 #include "r_efx.h"
 
+#include "vgui_TeamFortressViewport.h"
+#include "vgui_ScorePanel.h"
+
 #include "particleman.h"
 extern IParticleMan* g_pParticleMan;
+
+extern int giTeamplay;
 
 #define MAX_CLIENTS 32
 
@@ -101,7 +106,18 @@ void CHud::MsgFunc_InitHUD(const char* pszName, int iSize, void* pbuf)
 int CHud::MsgFunc_GameMode(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
-	m_Teamplay = READ_BYTE();
+	m_Teamplay = giTeamplay = READ_BYTE();
+
+	if (gViewPort && !gViewPort->m_pScoreBoard)
+	{
+		gViewPort->CreateScoreBoard();
+		gViewPort->m_pScoreBoard->Initialize();
+
+		if (!gHUD.m_iIntermission)
+		{
+			gViewPort->HideScoreBoard();
+		}
+	}
 
 	return 1;
 }

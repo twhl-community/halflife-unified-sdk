@@ -54,5 +54,20 @@ extern int gmsgTeamNames;
 extern int gmsgStatusText;
 extern int gmsgStatusValue;
 
+extern int gmsgSpectator;
+extern int gmsgStatusIcon;
+extern int gmsgPlayerBrowse;
 extern int gmsgHudColor;
+extern int gmsgFlagIcon;
+extern int gmsgFlagTimer;
+extern int gmsgPlayerIcon;
+extern int gmsgVGUIMenu;
+extern int gmsgAllowSpec;
+extern int gmsgSetMenuTeam;
+extern int gmsgCTFScore;
+extern int gmsgStatsInfo;
+extern int gmsgStatsPlayer;
+extern int gmsgTeamFull;
+extern int gmsgCustomIcon;
+
 void LinkUserMessages();

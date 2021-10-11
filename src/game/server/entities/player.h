@@ -17,6 +17,7 @@
 
 
 #include "pm_materials.h"
+#include "ctf/CTFDefs.h"
 
 class CRope;
 
@@ -185,6 +186,42 @@ public:
 	int			m_iClientHideHUD;
 	int			m_iFOV;			// field of view
 	int			m_iClientFOV;	// client's known FOV
+
+	// Opposing Force specific
+
+	char* m_szTeamModel;
+	CTFTeam m_iTeamNum;
+	CTFTeam m_iNewTeamNum;
+	CTFItem::CTFItem m_iItems;
+	unsigned int m_iClientItems;
+	EHANDLE m_pFlag;
+	int m_iCurrentMenu;
+	float m_flNextHEVCharge;
+	float m_flNextHealthCharge;
+	float m_flNextAmmoCharge;
+	int m_iLastPlayerTrace;
+	BOOL m_fPlayingHChargeSound;
+	BOOL m_fPlayingAChargeSound;
+	int m_nLastShotBy;
+	float m_flLastShotTime;
+	int m_iFlagCaptures;
+	int m_iCTFScore;
+	BOOL m_fWONAuthSent;
+
+	short m_iOffense;
+	short m_iDefense;
+	short m_iSnipeKills;
+	short m_iBarnacleKills;
+	short m_iSuicides;
+	float m_flLastDamageTime;
+	short m_iLastDamage;
+	short m_iMostDamage;
+	float m_flAccelTime;
+	float m_flBackpackTime;
+	float m_flHealthTime;
+	float m_flShieldTime;
+	float m_flJumpTime;
+
 	// usable player items 
 	CBasePlayerItem* m_rgpPlayerItems[MAX_ITEM_TYPES];
 	CBasePlayerItem* m_pActiveItem;
@@ -240,6 +277,8 @@ public:
 
 	// JOHN:  sends custom messages if player HUD data has changed  (eg health, ammo)
 	virtual void UpdateClientData();
+
+	void UpdateCTFHud();
 
 	static	TYPEDESCRIPTION m_playerSaveData[];
 
@@ -331,6 +370,13 @@ public:
 	char m_SbarString1[SBAR_STRING_SIZE];
 
 	float m_flNextChatTime;
+
+	void Player_Menu();
+
+	void ResetMenu();
+
+	BOOL Menu_Team_Input(int inp);
+	BOOL Menu_Char_Input(int inp);
 
 	void SetPrefsFromUserinfo(char* infobuffer);
 

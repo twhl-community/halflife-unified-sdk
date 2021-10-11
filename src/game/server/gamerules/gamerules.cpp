@@ -23,11 +23,13 @@
 #include	"weapons.h"
 #include	"gamerules.h"
 #include	"teamplay_gamerules.h"
+#include "ctfplay_gamerules.h"
 #include	"skill.h"
 #include	"game.h"
+#include "world.h"
 #include "UserMessages.h"
 
-extern edict_t* EntSelectSpawnPoint(CBaseEntity* pPlayer);
+extern edict_t* EntSelectSpawnPoint(CBasePlayer* pPlayer);
 
 DLL_GLOBAL CGameRules* g_pGameRules = NULL;
 extern DLL_GLOBAL BOOL	g_fGameOver;
@@ -414,7 +416,7 @@ void CGameRules::RefreshSkillData()
 // instantiate the proper game rules object
 //=========================================================
 
-CGameRules* InstallGameRules()
+CGameRules* InstallGameRules(CBaseEntity* pWorld)
 {
 	SERVER_COMMAND("exec game.cfg\n");
 	SERVER_EXECUTE();
@@ -425,8 +427,20 @@ CGameRules* InstallGameRules()
 		g_teamplay = 0;
 		return new CHalfLifeRules;
 	}
-	else
+	//TODO: Co-op gamemode
+#if false
+	if (coopplay.value > 0)
 	{
+		return new CHalfLifeCoopplay();
+	}
+	else
+#endif
+	{
+		if (pWorld->pev->spawnflags & SF_WORLD_CTF)
+		{
+			return new CHalfLifeCTFplay();
+		}
+
 		if (teamplay.value > 0)
 		{
 			// teamplay

@@ -56,6 +56,14 @@ enum
 	GR_NEUTRAL,
 };
 
+#define ITEM_RESPAWN_TIME	30
+#define WEAPON_RESPAWN_TIME	20
+#define AMMO_RESPAWN_TIME	20
+
+// when we are within this close to running out of entities,  items 
+// marked with the ITEM_FLAG_LIMITINWORLD will delay their respawn
+#define ENTITY_INTOLERANCE	100
+
 class CGameRules
 {
 public:
@@ -72,6 +80,7 @@ public:
 	virtual BOOL IsDeathmatch() = 0;//is this a deathmatch game?
 	virtual BOOL IsTeamplay() { return FALSE; }// is this deathmatch game being played with team rules?
 	virtual BOOL IsCoOp() = 0;// is this a coop game?
+	virtual BOOL IsCTF() = 0; // is this a ctf game?
 	virtual const char* GetGameDescription() { return "Half-Life"; }  // this is the game name that gets seen in the server browser
 
 // Client connection/disconnection
@@ -148,6 +157,11 @@ public:
 	virtual void ChangePlayerTeam(CBasePlayer* pPlayer, const char* pTeamName, BOOL bKill, BOOL bGib) {}
 	virtual const char* SetDefaultPlayerTeam(CBasePlayer* pPlayer) { return ""; }
 
+	virtual const char* GetCharacterType(int iTeamNum, int iCharNum) { return ""; }
+	virtual int GetNumTeams() { return 0; }
+	virtual const char* TeamWithFewestPlayers() { return nullptr; }
+	virtual BOOL TeamsBalanced() { return true; }
+
 	// Sounds
 	virtual BOOL PlayTextureSounds() { return TRUE; }
 	virtual BOOL PlayFootstepSounds(CBasePlayer* pl, float fvol) { return TRUE; }
@@ -159,7 +173,7 @@ public:
 	virtual void EndMultiplayerGame() {}
 };
 
-extern CGameRules* InstallGameRules();
+extern CGameRules* InstallGameRules(CBaseEntity* pWorld);
 
 
 //=========================================================
@@ -183,6 +197,7 @@ public:
 	BOOL IsMultiplayer() override;
 	BOOL IsDeathmatch() override;
 	BOOL IsCoOp() override;
+	BOOL IsCTF() override { return FALSE; }
 
 	// Client connection/disconnection
 	BOOL ClientConnected(edict_t* pEntity, const char* pszName, const char* pszAddress, char szRejectReason[128]) override;
@@ -270,6 +285,7 @@ public:
 	BOOL IsMultiplayer() override;
 	BOOL IsDeathmatch() override;
 	BOOL IsCoOp() override;
+	BOOL IsCTF() override { return FALSE; }
 
 	// Client connection/disconnection
 		// If ClientConnected returns FALSE, the connection is rejected and the user is provided the reason specified in

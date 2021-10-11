@@ -116,7 +116,8 @@ void SpectatorHelp()
 {
 	if (gViewPort)
 	{
-		gViewPort->ShowVGUIMenu(MENU_SPECHELP);
+		//TODO: none of this spectator stuff exists in Op4
+		//gViewPort->ShowVGUIMenu( MENU_SPECHELP );
 	}
 	else
 	{

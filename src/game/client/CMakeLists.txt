@@ -134,7 +134,9 @@ target_sources(client PRIVATE
 	ui/hud/hud_bench.cpp
 	ui/hud/hud_benchtrace.cpp
 	ui/hud/hud_benchtrace.h
+	ui/hud/hud_flagicons.cpp
 	ui/hud/hud_msg.cpp
+	ui/hud/hud_playerbrowse.cpp
 	ui/hud/hud_redraw.cpp
 	ui/hud/hud_spectator.cpp
 	ui/hud/hud_spectator.h
@@ -142,6 +144,7 @@ target_sources(client PRIVATE
 	ui/hud/menu.cpp
 	ui/hud/message.cpp
 	ui/hud/saytext.cpp
+	ui/hud/scoreboard.cpp
 	ui/hud/statusbar.cpp
 	ui/hud/status_icons.cpp
 	ui/hud/text_message.cpp
@@ -158,6 +161,8 @@ target_sources(client PRIVATE
 	ui/vgui/vgui_ScorePanel.h
 	ui/vgui/vgui_SpectatorPanel.cpp
 	ui/vgui/vgui_SpectatorPanel.h
+	ui/vgui/vgui_StatsMenuPanel.cpp
+	ui/vgui/vgui_StatsMenuPanel.h
 	ui/vgui/vgui_TeamFortressViewport.cpp
 	ui/vgui/vgui_TeamFortressViewport.h
 	ui/vgui/vgui_teammenu.cpp

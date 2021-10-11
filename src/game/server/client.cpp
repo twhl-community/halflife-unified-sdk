@@ -40,6 +40,10 @@
 #include "pm_shared.h"
 #include "UserMessages.h"
 
+#include "ctf/CTFGoal.h"
+#include "ctf/CTFGoalFlag.h"
+#include "ctfplay_gamerules.h"
+
 #if !defined ( _WIN32 )
 #include <ctype.h>
 #endif
@@ -181,6 +185,13 @@ void ClientKill(edict_t* pEntity)
 
 	CBasePlayer* pl = (CBasePlayer*)CBasePlayer::Instance(pev);
 
+	//Only check for teams in CTF gamemode
+	if ((pl->pev->flags & FL_SPECTATOR)
+		|| (g_pGameRules->IsCTF() && pl->m_iTeamNum == CTFTeam::None))
+	{
+		return;
+	}
+
 	if (pl->m_fNextSuicideTime > gpGlobals->time)
 		return;  // prevent suiciding too ofter
 
@@ -217,8 +228,11 @@ void ClientPutInServer(edict_t* pEntity)
 	// Reset interpolation during first frame
 	pPlayer->pev->effects |= EF_NOINTERP;
 
+	//Player can be made spectator on spawn, so don't do this
+	/*
 	pPlayer->pev->iuser1 = 0;	// disable any spec modes
 	pPlayer->pev->iuser2 = 0;
+	*/
 }
 
 #include "voice_gamemgr.h"
@@ -568,6 +582,8 @@ void ClientCommand(edict_t* pEntity)
 	{
 		player->SelectLastItem();
 	}
+	//In Opposing Force this is handled only by the CTF gamerules
+#if false
 	else if (FStrEq(pcmd, "spectate"))	// clients wants to become a spectator
 	{
 		// always allow proxies to become a spectator
@@ -589,6 +605,7 @@ void ClientCommand(edict_t* pEntity)
 		if (player->IsObserver())
 			player->Observer_SetMode(atoi(CMD_ARGV(1)));
 	}
+#endif
 	else if (FStrEq(pcmd, "closemenus"))
 	{
 		// just ignore it
@@ -601,6 +618,56 @@ void ClientCommand(edict_t* pEntity)
 	else if (g_pGameRules->ClientCommand(player, pcmd))
 	{
 		// MenuSelect returns true only if the command is properly handled,  so don't print a warning
+	}
+	else if (FStrEq(pcmd, "changeteam"))
+	{
+		if (g_pGameRules->IsCTF())
+		{
+			auto pPlayer = GetClassPtr((CBasePlayer*)pev);
+			if (pPlayer->m_iCurrentMenu == MENU_TEAM)
+			{
+				ClientPrint(pev, HUD_PRINTCONSOLE, "Already in team selection menu.\n");
+			}
+			else
+			{
+				pPlayer->m_iCurrentMenu = MENU_TEAM;
+				pPlayer->Player_Menu();
+			}
+		}
+	}
+	else if (FStrEq(pcmd, "changeclass"))
+	{
+		if (g_pGameRules->IsCTF())
+		{
+			auto pPlayer = GetClassPtr((CBasePlayer*)pev);
+
+			if (pPlayer->m_iNewTeamNum != CTFTeam::None || pPlayer->m_iTeamNum != CTFTeam::None)
+			{
+				if (pPlayer->m_iCurrentMenu == MENU_CLASS)
+				{
+					ClientPrint(pev, HUD_PRINTCONSOLE, "Already in character selection menu.\n");
+				}
+				else
+				{
+					if (pPlayer->m_iNewTeamNum == CTFTeam::None)
+						pPlayer->m_iNewTeamNum = pPlayer->m_iTeamNum;
+
+					pPlayer->m_iCurrentMenu = MENU_CLASS;
+					pPlayer->Player_Menu();
+				}
+			}
+			else
+			{
+				ClientPrint(pev, HUD_PRINTCONSOLE, "No Team Selected.  Use \"changeteam\".\n");
+			}
+		}
+	}
+	else if (FStrEq(pcmd, "flaginfo"))
+	{
+		if (g_pGameRules->IsCTF())
+		{
+			DumpCTFFlagInfo(reinterpret_cast<CBasePlayer*>(GET_PRIVATE(pEntity)));
+		}
 	}
 	else
 	{
@@ -633,6 +700,8 @@ void ClientUserInfoChanged(edict_t* pEntity, char* infobuffer)
 	if (!pEntity->pvPrivateData)
 		return;
 
+	auto player = GetClassPtr((CBasePlayer*)&pEntity->v);
+
 	// msg everyone if someone changes their name,  and it isn't the first time (changing no name to current name)
 	if (pEntity->v.netname && STRING(pEntity->v.netname)[0] != 0 && !FStrEq(STRING(pEntity->v.netname), g_engfuncs.pfnInfoKeyValue(infobuffer, "name")))
 	{
@@ -662,8 +731,21 @@ void ClientUserInfoChanged(edict_t* pEntity, char* infobuffer)
 			MESSAGE_END();
 		}
 
+		if (g_pGameRules->IsCTF())
+		{
+			//TODO: in vanilla Op4 this code incorrectly skips the above validation logic if the player is already in a team
+			if (player->m_iTeamNum != CTFTeam::None)
+			{
+				UTIL_LogPrintf("\"%s<%i><%s><%s>\" changed name to \"%s\"\n",
+					STRING(pEntity->v.netname),
+					GETPLAYERUSERID(pEntity),
+					GETPLAYERAUTHID(pEntity),
+					GetTeamName(pEntity),
+					g_engfuncs.pfnInfoKeyValue(infobuffer, "name"));
+			}
+		}
 		// team match?
-		if (g_teamplay)
+		else if (g_teamplay)
 		{
 			UTIL_LogPrintf("\"%s<%i><%s><%s>\" changed name to \"%s\"\n",
 				STRING(pEntity->v.netname),
@@ -683,7 +765,7 @@ void ClientUserInfoChanged(edict_t* pEntity, char* infobuffer)
 		}
 	}
 
-	g_pGameRules->ClientUserInfoChanged(GetClassPtr((CBasePlayer*)&pEntity->v), infobuffer);
+	g_pGameRules->ClientUserInfoChanged(player, infobuffer);
 }
 
 static int g_serveractive = 0;

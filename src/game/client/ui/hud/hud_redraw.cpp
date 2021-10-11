@@ -20,6 +20,7 @@
 #include "bench.h"
 
 #include "vgui_TeamFortressViewport.h"
+#include "vgui_StatsMenuPanel.h"
 
 #define MAX_LOGO_FRAMES 56
 
@@ -114,6 +115,10 @@ int CHud::Redraw(float flTime, int intermission)
 			m_iIntermission = intermission;
 			gViewPort->HideCommandMenu();
 			gViewPort->HideScoreBoard();
+			if (gViewPort->m_pStatsMenu && gViewPort->m_pStatsMenu->isVisible())
+			{
+				gViewPort->m_pStatsMenu->setVisible(true);
+			}
 			gViewPort->UpdateSpectatorPanel();
 		}
 		else if (!m_iIntermission && intermission)
@@ -245,7 +250,50 @@ int CHud::DrawHudNumberString(int xpos, int ypos, int iMinX, int iNumber, int r,
 // draws a string from right to left (right-aligned)
 int CHud::DrawHudStringReverse(int xpos, int ypos, int iMinX, char* szString, int r, int g, int b)
 {
-	return xpos - gEngfuncs.pfnDrawStringReverse(xpos, ypos, szString, r, g, b);
+	/*
+	return xpos - gEngfuncs.pfnDrawStringReverse( xpos, ypos, szString, r, g, b);
+	*/
+
+	//Op4 uses custom reverse drawing to fix an issue with the letter k overlapping the letter i in the string "kills"
+
+	if (!(*szString))
+	{
+		return xpos;
+	}
+
+	char* i;
+
+	for (i = szString; *i; ++i)
+	{
+	}
+
+	--i;
+
+	int x = xpos - gHUD.m_scrinfo.charWidths[*i];
+
+	if (iMinX > x)
+	{
+		return xpos;
+	}
+
+	while (true)
+	{
+		gEngfuncs.pfnDrawCharacter(x, ypos, *i, r, g, b);
+
+		if (i == szString)
+			break;
+
+		--i;
+
+		const int width = gHUD.m_scrinfo.charWidths[*i];
+
+		if (x - width < iMinX)
+			break;
+
+		x -= width;
+	}
+
+	return x;
 }
 
 int CHud::DrawHudNumber(int x, int y, int iFlags, int iNumber, int r, int g, int b)
