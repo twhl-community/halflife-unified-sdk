@@ -271,7 +271,9 @@ target_sources(hl PRIVATE
 	entities/NPCs/racex/shockroach.cpp
 	entities/NPCs/racex/shocktrooper.cpp
 	entities/NPCs/racex/voltigore.cpp
-
+	
+	gamerules/coopplay_gamerules.cpp
+	gamerules/coopplay_gamerules.h
 	gamerules/ctfplay_gamerules.cpp
 	gamerules/ctfplay_gamerules.h
 	gamerules/gamerules.cpp

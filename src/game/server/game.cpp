@@ -584,6 +584,9 @@ cvar_t	sk_player_leg3 = {"sk_player_leg3","1"};
 cvar_t ctfplay = {"mp_ctfplay", "0", FCVAR_SERVER};
 cvar_t ctf_autoteam = {"mp_ctf_autoteam", "0", FCVAR_SERVER};
 cvar_t ctf_capture = {"mp_ctf_capture", "0", FCVAR_SERVER};
+cvar_t coopplay = {"mp_coopplay", "0", FCVAR_SERVER};
+cvar_t defaultcoop = {"mp_defaultcoop", "0", FCVAR_SERVER};
+cvar_t coopweprespawn = {"mp_coopweprespawn", "0", FCVAR_SERVER};
 
 cvar_t oldgrapple = {"sv_oldgrapple", "0", FCVAR_SERVER};
 
@@ -1147,6 +1150,9 @@ void GameDLLInit()
 	CVAR_REGISTER(&ctfplay);
 	CVAR_REGISTER(&ctf_autoteam);
 	CVAR_REGISTER(&ctf_capture);
+	CVAR_REGISTER(&coopplay);
+	CVAR_REGISTER(&defaultcoop);
+	CVAR_REGISTER(&coopweprespawn);
 
 	CVAR_REGISTER(&oldgrapple);
 

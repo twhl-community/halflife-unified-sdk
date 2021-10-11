@@ -24,6 +24,7 @@
 #include	"gamerules.h"
 #include	"teamplay_gamerules.h"
 #include "ctfplay_gamerules.h"
+#include "coopplay_gamerules.h"
 #include	"skill.h"
 #include	"game.h"
 #include "world.h"
@@ -427,14 +428,12 @@ CGameRules* InstallGameRules(CBaseEntity* pWorld)
 		g_teamplay = 0;
 		return new CHalfLifeRules;
 	}
-	//TODO: Co-op gamemode
-#if false
+
 	if (coopplay.value > 0)
 	{
 		return new CHalfLifeCoopplay();
 	}
 	else
-#endif
 	{
 		if (pWorld->pev->spawnflags & SF_WORLD_CTF)
 		{
