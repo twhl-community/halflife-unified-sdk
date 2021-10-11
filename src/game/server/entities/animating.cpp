@@ -25,6 +25,7 @@
 #include "cbase.h"
 #include "animation.h"
 #include "saverestore.h"
+#include "studio.h"
 
 TYPEDESCRIPTION	CBaseAnimating::m_SaveData[] =
 {
@@ -246,6 +247,20 @@ int CBaseAnimating::GetBodygroup(int iGroup)
 	return ::GetBodygroup(GET_MODEL_PTR(ENT(pev)), pev, iGroup);
 }
 
+int CBaseAnimating::GetBodygroupSubmodelCount(int group)
+{
+	auto pstudiohdr = reinterpret_cast<studiohdr_t*>(GET_MODEL_PTR(ENT(pev)));
+
+	if (!pstudiohdr)
+		return 0;
+
+	if (group < 0 || group >= pstudiohdr->numbodyparts)
+		return 0;
+
+	auto pbodypart = (mstudiobodyparts_t*)((byte*)pstudiohdr + pstudiohdr->bodypartindex) + group;
+
+	return pbodypart->nummodels;
+}
 
 int CBaseAnimating::ExtractBbox(int sequence, float* mins, float* maxs)
 {

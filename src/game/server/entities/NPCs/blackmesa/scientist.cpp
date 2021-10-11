@@ -550,14 +550,12 @@ void CScientist::HandleAnimEvent(MonsterEvent_t* pEvent)
 		break;
 	case SCIENTIST_AE_NEEDLEON:
 	{
-		int oldBody = pev->body;
-		pev->body = (oldBody % NUM_SCIENTIST_HEADS) + NUM_SCIENTIST_HEADS * 1;
+		SetBodygroup(ScientistBodygroup::Needle, 1);
 	}
 	break;
 	case SCIENTIST_AE_NEEDLEOFF:
 	{
-		int oldBody = pev->body;
-		pev->body = (oldBody % NUM_SCIENTIST_HEADS) + NUM_SCIENTIST_HEADS * 0;
+		SetBodygroup(ScientistBodygroup::Needle, 0);
 	}
 	break;
 
@@ -593,11 +591,11 @@ void CScientist::Spawn()
 
 	if (pev->body == -1)
 	{// -1 chooses a random head
-		pev->body = RANDOM_LONG(0, NUM_SCIENTIST_HEADS - 1);// pick a head, any head
+		SetBodygroup(ScientistBodygroup::Head, RANDOM_LONG(0, GetBodygroupSubmodelCount(ScientistBodygroup::Head)) - 1);// pick a head, any head
 	}
 
 	// Luther is black, make his hands black
-	if (pev->body == HEAD_LUTHER)
+	if (GetBodygroup(ScientistBodygroup::Head) == HEAD_LUTHER)
 		pev->skin = 1;
 
 	MonsterInit();
@@ -664,7 +662,7 @@ void CScientist::TalkInit()
 	m_szGrp[TLK_MORTAL] = "SC_MORTAL";
 
 	// get voice for head
-	switch (pev->body % 3)
+	switch (GetBodygroup(ScientistBodygroup::Head) % 3)
 	{
 	default:
 	case HEAD_GLASSES:	m_voicePitch = 105; break;	//glasses
@@ -1061,10 +1059,10 @@ void CDeadScientist::Spawn()
 
 	if (pev->body == -1)
 	{// -1 chooses a random head
-		pev->body = RANDOM_LONG(0, NUM_SCIENTIST_HEADS - 1);// pick a head, any head
+		SetBodygroup(ScientistBodygroup::Head, RANDOM_LONG(0, GetBodygroupSubmodelCount(ScientistBodygroup::Head) - 1));// pick a head, any head
 	}
 	// Luther is black, make his hands black
-	if (pev->body == HEAD_LUTHER)
+	if (GetBodygroup(ScientistBodygroup::Head) == HEAD_LUTHER)
 		pev->skin = 1;
 	else
 		pev->skin = 0;
@@ -1152,10 +1150,10 @@ void CSittingScientist::Spawn()
 
 	if (pev->body == -1)
 	{// -1 chooses a random head
-		pev->body = RANDOM_LONG(0, NUM_SCIENTIST_HEADS - 1);// pick a head, any head
+		SetBodygroup(ScientistBodygroup::Head, RANDOM_LONG(0, GetBodygroupSubmodelCount(ScientistBodygroup::Head) - 1));// pick a head, any head
 	}
 	// Luther is black, make his hands black
-	if (pev->body == HEAD_LUTHER)
+	if (GetBodygroup(ScientistBodygroup::Head) == HEAD_LUTHER)
 		pev->skin = 1;
 
 	m_baseSequence = LookupSequence("sitlookleft");

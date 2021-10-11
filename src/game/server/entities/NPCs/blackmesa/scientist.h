@@ -18,6 +18,16 @@
 #define		NUM_SCIENTIST_HEADS		4 // four heads available for scientist model
 enum { HEAD_GLASSES = 0, HEAD_EINSTEIN = 1, HEAD_LUTHER = 2, HEAD_SLICK = 3 };
 
+namespace ScientistBodygroup
+{
+enum ScientistBodygroup
+{
+	Body = 0,
+	Head = 1,
+	Needle = 2,
+};
+}
+
 enum
 {
 	SCHED_HIDE = LAST_TALKMONSTER_SCHEDULE + 1,
