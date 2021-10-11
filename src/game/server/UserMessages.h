@@ -54,4 +54,5 @@ extern int gmsgTeamNames;
 extern int gmsgStatusText;
 extern int gmsgStatusValue;
 
+extern int gmsgHudColor;
 void LinkUserMessages();

@@ -58,6 +58,7 @@ int gmsgTeamNames = 0;
 int gmsgStatusText = 0;
 int gmsgStatusValue = 0;
 
+int gmsgHudColor = 0;
 void LinkUserMessages()
 {
 	// Already taken care of?
@@ -103,4 +104,5 @@ void LinkUserMessages()
 
 	gmsgStatusText = REG_USER_MSG("StatusText", -1);
 	gmsgStatusValue = REG_USER_MSG("StatusValue", 3);
+	gmsgHudColor = g_engfuncs.pfnRegUserMsg("HudColor", 3);
 }
