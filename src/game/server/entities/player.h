@@ -87,8 +87,6 @@ enum sbar_data
 	SBAR_END,
 };
 
-#define CHAT_INTERVAL 1.0f
-
 class CBasePlayer : public CBaseMonster
 {
 public:

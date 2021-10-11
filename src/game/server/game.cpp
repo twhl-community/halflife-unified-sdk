@@ -590,6 +590,7 @@ cvar_t coopweprespawn = {"mp_coopweprespawn", "0", FCVAR_SERVER};
 
 cvar_t oldgrapple = {"sv_oldgrapple", "0", FCVAR_SERVER};
 
+cvar_t spamdelay = {"sv_spamdelay", "3.0", FCVAR_SERVER};
 cvar_t multipower = {"mp_multipower", "0", FCVAR_SERVER};
 
 // END Opposing Force variables
@@ -1156,6 +1157,7 @@ void GameDLLInit()
 
 	CVAR_REGISTER(&oldgrapple);
 
+	CVAR_REGISTER(&spamdelay);
 	CVAR_REGISTER(&multipower);
 
 	// END REGISTER CVARS FOR OPPOSING FORCE

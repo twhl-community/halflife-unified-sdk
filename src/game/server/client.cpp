@@ -436,7 +436,8 @@ void Host_Say(edict_t* pEntity, int teamonly)
 	strcat(text, "\n");
 
 
-	player->m_flNextChatTime = gpGlobals->time + CHAT_INTERVAL;
+	//TODO: clamp cvar value so it can't be negative
+	player->m_flNextChatTime = gpGlobals->time + spamdelay.value;
 
 	// loop through all players
 	// Start with the first player.
