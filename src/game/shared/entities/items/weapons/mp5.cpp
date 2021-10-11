@@ -39,6 +39,8 @@ void CMP5::Spawn()
 
 	m_iDefaultAmmo = MP5_DEFAULT_GIVE;
 
+	m_flNextGrenadeLoad = gpGlobals->time;
+
 	FallInit();// get ready to fall down.
 }
 
