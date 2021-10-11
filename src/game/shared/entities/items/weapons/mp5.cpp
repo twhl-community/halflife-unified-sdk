@@ -89,6 +89,20 @@ int CMP5::GetItemInfo(ItemInfo* p)
 	return 1;
 }
 
+void CMP5::IncrementAmmo(CBasePlayer* pPlayer)
+{
+	if (pPlayer->GiveAmmo(1, "9mm", _9MM_MAX_CARRY))
+	{
+		EMIT_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
+	}
+
+	if (m_flNextGrenadeLoad < gpGlobals->time)
+	{
+		pPlayer->GiveAmmo(1, "ARgrenades", M203_GRENADE_MAX_CARRY);
+		m_flNextGrenadeLoad = gpGlobals->time + 10;
+	}
+}
+
 int CMP5::AddToPlayer(CBasePlayer* pPlayer)
 {
 	if (CBasePlayerWeapon::AddToPlayer(pPlayer))

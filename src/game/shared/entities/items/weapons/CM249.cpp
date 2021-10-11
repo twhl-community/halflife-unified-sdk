@@ -355,8 +355,6 @@ int CM249::GetItemInfo(ItemInfo* p)
 	return true;
 }
 
-//TODO: CTF
-#if false
 void CM249::IncrementAmmo(CBasePlayer* pPlayer)
 {
 	if (pPlayer->GiveAmmo(1, "556", M249_MAX_CARRY))
@@ -364,7 +362,6 @@ void CM249::IncrementAmmo(CBasePlayer* pPlayer)
 		EMIT_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
 	}
 }
-#endif
 
 class CAmmo556 : public CBasePlayerAmmo
 {

@@ -302,6 +302,8 @@ public:
 	virtual int PrimaryAmmoIndex() { return -1; }
 	virtual int SecondaryAmmoIndex() { return -1; }
 
+	virtual void IncrementAmmo(CBasePlayer* pPlayer) {}
+
 	virtual int UpdateClientData(CBasePlayer* pPlayer) { return 0; }
 
 	virtual CBasePlayerItem* GetWeaponPtr() { return NULL; }
@@ -540,6 +542,8 @@ public:
 	int iItemSlot() override { return 2; }
 	int GetItemInfo(ItemInfo* p) override;
 
+	void IncrementAmmo(CBasePlayer* pPlayer) override;
+
 	void PrimaryAttack() override;
 	void SecondaryAttack() override;
 	void GlockFire(float flSpread, float flCycleTime, BOOL fUseAutoAim);
@@ -625,6 +629,7 @@ public:
 	void Precache() override;
 	int iItemSlot() override { return 2; }
 	int GetItemInfo(ItemInfo* p) override;
+	void IncrementAmmo(CBasePlayer* pPlayer) override;
 	int AddToPlayer(CBasePlayer* pPlayer) override;
 	void PrimaryAttack() override;
 	void SecondaryAttack() override;
@@ -665,6 +670,7 @@ public:
 	void Precache() override;
 	int iItemSlot() override { return 3; }
 	int GetItemInfo(ItemInfo* p) override;
+	void IncrementAmmo(CBasePlayer* pPlayer) override;
 	int AddToPlayer(CBasePlayer* pPlayer) override;
 
 	void PrimaryAttack() override;
@@ -685,6 +691,7 @@ public:
 	}
 
 private:
+	float m_flNextGrenadeLoad;
 	unsigned short m_usMP5;
 	unsigned short m_usMP52;
 };
@@ -712,6 +719,7 @@ public:
 	void Precache() override;
 	int iItemSlot() override { return 3; }
 	int GetItemInfo(ItemInfo* p) override;
+	void IncrementAmmo(CBasePlayer* pPlayer) override;
 
 	void FireBolt();
 	void FireSniperBolt();
@@ -766,6 +774,7 @@ public:
 	void Precache() override;
 	int iItemSlot() override { return 3; }
 	int GetItemInfo(ItemInfo* p) override;
+	void IncrementAmmo(CBasePlayer* pPlayer) override;
 	int AddToPlayer(CBasePlayer* pPlayer) override;
 
 	void PrimaryAttack() override;
@@ -835,6 +844,7 @@ public:
 	void Reload() override;
 	int iItemSlot() override { return 4; }
 	int GetItemInfo(ItemInfo* p) override;
+	void IncrementAmmo(CBasePlayer* pPlayer) override;
 	int AddToPlayer(CBasePlayer* pPlayer) override;
 
 	BOOL Deploy() override;
@@ -914,6 +924,7 @@ public:
 	void Precache() override;
 	int iItemSlot() override { return 4; }
 	int GetItemInfo(ItemInfo* p) override;
+	void IncrementAmmo(CBasePlayer* pPlayer) override;
 	int AddToPlayer(CBasePlayer* pPlayer) override;
 
 	BOOL Deploy() override;
@@ -994,6 +1005,7 @@ public:
 	void Precache() override;
 	int iItemSlot() override { return 4; }
 	int GetItemInfo(ItemInfo* p) override;
+	void IncrementAmmo(CBasePlayer* pPlayer) override;
 	int AddToPlayer(CBasePlayer* pPlayer) override;
 
 	BOOL Deploy() override;
@@ -1108,6 +1120,7 @@ public:
 	void Precache() override;
 	int iItemSlot() override { return 5; }
 	int GetItemInfo(ItemInfo* p) override;
+	void IncrementAmmo(CBasePlayer* pPlayer) override;
 
 	void PrimaryAttack() override;
 	BOOL Deploy() override;

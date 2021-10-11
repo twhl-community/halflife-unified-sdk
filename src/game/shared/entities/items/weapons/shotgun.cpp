@@ -97,7 +97,13 @@ int CShotgun::GetItemInfo(ItemInfo* p)
 	return 1;
 }
 
-
+void CShotgun::IncrementAmmo(CBasePlayer* pPlayer)
+{
+	if (pPlayer->GiveAmmo(1, "buckshot", BUCKSHOT_MAX_CARRY))
+	{
+		EMIT_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
+	}
+}
 
 BOOL CShotgun::Deploy()
 {

@@ -64,10 +64,7 @@ public:
 
 	int GetItemInfo(ItemInfo* p) override;
 
-	//TODO: CTF
-#if false
 	void IncrementAmmo(CBasePlayer* pPlayer) override;
-#endif
 
 	BOOL UseDecrement() override
 	{

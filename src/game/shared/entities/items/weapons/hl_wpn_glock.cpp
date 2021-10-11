@@ -73,6 +73,14 @@ int CGlock::GetItemInfo(ItemInfo* p)
 	return 1;
 }
 
+void CGlock::IncrementAmmo(CBasePlayer* pPlayer)
+{
+	if (pPlayer->GiveAmmo(1, "9mm", _9MM_MAX_CARRY))
+	{
+		EMIT_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
+	}
+}
+
 BOOL CGlock::Deploy()
 {
 	// pev->body = 1;

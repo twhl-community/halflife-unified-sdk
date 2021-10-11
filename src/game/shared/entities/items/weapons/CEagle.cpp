@@ -349,8 +349,6 @@ int CEagle::GetItemInfo(ItemInfo* p)
 	return true;
 }
 
-//TODO: CTF
-#if false
 void CEagle::IncrementAmmo(CBasePlayer* pPlayer)
 {
 	if (pPlayer->GiveAmmo(1, "357", _357_MAX_CARRY))
@@ -358,7 +356,6 @@ void CEagle::IncrementAmmo(CBasePlayer* pPlayer)
 		EMIT_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
 	}
 }
-#endif
 
 void CEagle::GetWeaponData(weapon_data_t& data)
 {
