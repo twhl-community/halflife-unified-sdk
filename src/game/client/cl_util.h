@@ -168,11 +168,4 @@ void VectorInverse(float* v);
 // disable 'truncation from 'const double' to 'float' warning message
 #pragma warning( disable: 4305 )
 
-inline void UnpackRGB(int& r, int& g, int& b, unsigned long ulRGB)\
-{\
-r = (ulRGB & 0xFF0000) >> 16; \
-g = (ulRGB & 0xFF00) >> 8; \
-b = ulRGB & 0xFF; \
-}
-
 HSPRITE LoadSprite(const char* pszName);
