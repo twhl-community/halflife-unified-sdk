@@ -23,6 +23,7 @@
 #include "parsemsg.h"
 #include "pm_shared.h"
 #include "triangleapi.h"
+#include "com_model.h"
 
 #include <string.h>
 #include <stdio.h>
@@ -294,6 +295,7 @@ int CHudAmmo::Init()
 
 	CVAR_CREATE("hud_drawhistory_time", HISTORY_DRAW_TIME, 0);
 	CVAR_CREATE("hud_fastswitch", "0", FCVAR_ARCHIVE);		// controls whether or not weapons can be selected in one keypress
+	m_pCvarCrosshairScale = CVAR_CREATE("crosshair_scale", "4", FCVAR_ARCHIVE);
 
 	m_iFlags |= HUD_ACTIVE; //!!!
 
@@ -850,18 +852,110 @@ void CHudAmmo::SetAutoaimCrosshair(HSPRITE sprite, wrect_t rect)
 	m_AutoaimCrosshair.rect = rect;
 }
 
+void AdjustSubRect(const int iWidth, const int iHeight, float* pfLeft, float* pfRight, float* pfTop, float* pfBottom, int* pw, int* ph, const wrect_t* prcSubRect)
+{
+	if (prcSubRect)
+	{
+		int iLeft = prcSubRect->left;
+		int iRight = prcSubRect->right;
+		if (prcSubRect->left < iRight)
+		{
+			int iTop = prcSubRect->top;
+			int iBottom = prcSubRect->bottom;
+			if (iTop < iBottom)
+			{
+				if (iLeft < 0)
+					iLeft = 0;
+				if (*pw <= iRight)
+					iRight = *pw;
+				if (iLeft < iRight)
+				{
+					if (iTop < 0)
+						iTop = 0;
+					if (*ph <= iBottom)
+						iBottom = *ph;
+					if (iTop < iBottom)
+					{
+						*pw = iRight - iLeft;
+						*ph = iBottom - iTop;
+						double flWidth = 1.0 / (long double)iWidth;
+						*pfLeft = ((long double)iLeft + 0.5) * flWidth;
+						*pfRight = ((long double)iRight - 0.5) * flWidth;
+						double flHeight = 1.0 / (long double)iHeight;
+						*pfTop = ((long double)iTop + 0.5) * flHeight;
+						*pfBottom = ((long double)iBottom - 0.5) * flHeight;
+					}
+				}
+			}
+		}
+	}
+}
+
 void CHudAmmo::DrawCrosshair(int x, int y)
 {
-	auto renderer = [](int x, int y, const Crosshair& crosshair, RGB24 color)
+	auto renderer = [this](int x, int y, const Crosshair& crosshair, RGB24 color)
 	{
 		if (crosshair.sprite)
 		{
 			SPR_Set(crosshair.sprite, color);
 
-			x -= (crosshair.rect.right - crosshair.rect.left) / 2;
-			y -= (crosshair.rect.bottom - crosshair.rect.top) / 2;
+			//gEngfuncs.pfnSPR_DrawHoles(0, x, y, &crosshair.rect);
 
-			gEngfuncs.pfnSPR_DrawHoles(0, x, y, &crosshair.rect);
+			const int iOrigWidth = gEngfuncs.pfnSPR_Width(crosshair.sprite, 0);
+			const int iOrigHeight = gEngfuncs.pfnSPR_Height(crosshair.sprite, 0);
+
+			const float flScale = V_max(1, m_pCvarCrosshairScale->value);
+
+			wrect_t subRect = crosshair.rect;
+
+			wrect_t rect;
+
+			//Trim a pixel border around it, since it blends. - Solokiller
+			rect.left = subRect.left * flScale + (flScale - 1);
+			rect.top = subRect.top * flScale + (flScale - 1);
+			rect.right = subRect.right * flScale - (flScale - 1);
+			rect.bottom = subRect.bottom * flScale - (flScale - 1);
+
+			const int iWidth = iOrigWidth * flScale;
+			const int iHeight = iOrigHeight * flScale;
+
+			x -= (rect.right - rect.left) / 2;
+			y -= (rect.bottom - rect.top) / 2;
+
+			auto pCrosshair = const_cast<model_t*>(gEngfuncs.GetSpritePointer(crosshair.sprite));
+
+			auto TriAPI = gEngfuncs.pTriAPI;
+
+			TriAPI->SpriteTexture(pCrosshair, 0);
+
+			TriAPI->Color4fRendermode(color.Red / 255.0f, color.Green / 255.0f, color.Blue / 255.0f, 255 / 255.0f, kRenderTransAlpha);
+			TriAPI->RenderMode(kRenderTransAlpha);
+
+			float flLeft = 0;
+			float flTop = 0;
+			float flRight = 1.0;
+			float flBottom = 1.0f;
+
+			int iImgWidth = iWidth;
+			int iImgHeight = iHeight;
+
+			AdjustSubRect(iWidth, iHeight, &flLeft, &flRight, &flTop, &flBottom, &iImgWidth, &iImgHeight, &rect);
+
+			TriAPI->Begin(TRI_QUADS);
+
+			TriAPI->TexCoord2f(flLeft, flTop);
+			TriAPI->Vertex3f(x, y, 0);
+
+			TriAPI->TexCoord2f(flRight, flTop);
+			TriAPI->Vertex3f(x + iImgWidth, y, 0);
+
+			TriAPI->TexCoord2f(flRight, flBottom);
+			TriAPI->Vertex3f(x + iImgWidth, y + iImgHeight, 0);
+
+			TriAPI->TexCoord2f(flLeft, flBottom);
+			TriAPI->Vertex3f(x, y + iImgHeight, 0);
+
+			TriAPI->End();
 		}
 	};
 

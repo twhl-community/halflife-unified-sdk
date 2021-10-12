@@ -154,6 +154,8 @@ private:
 
 	Crosshair m_Crosshair;
 	Crosshair m_AutoaimCrosshair;
+
+	cvar_t* m_pCvarCrosshairScale = nullptr;
 };
 
 //
