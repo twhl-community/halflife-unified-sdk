@@ -548,12 +548,16 @@ int CHudAmmo::MsgFunc_HideWeapon(const char* pszName, int iSize, void* pbuf)
 	{
 		static wrect_t nullrc;
 		gpActiveSel = NULL;
-		SetCrosshair(0, nullrc, {0, 0, 0});
+		SetDrawCrosshair(false);
+		SetCrosshair(0, nullrc);
 	}
 	else
 	{
 		if (m_pWeapon)
-			SetCrosshair(m_pWeapon->hCrosshair, m_pWeapon->rcCrosshair, {255, 255, 255});
+		{
+			SetDrawCrosshair(true);
+			SetCrosshair(m_pWeapon->hCrosshair, m_pWeapon->rcCrosshair);
+		}
 	}
 
 	return 1;
@@ -583,7 +587,8 @@ int CHudAmmo::MsgFunc_CurWeapon(const char* pszName, int iSize, void* pbuf)
 
 	if (iId < 1)
 	{
-		SetCrosshair(0, nullrc, {0, 0, 0});
+		SetDrawCrosshair(false);
+		SetCrosshair(0, nullrc);
 		m_pWeapon = nullptr;
 		return 0;
 	}
@@ -616,20 +621,25 @@ int CHudAmmo::MsgFunc_CurWeapon(const char* pszName, int iSize, void* pbuf)
 
 	m_pWeapon = pWeapon;
 
+	SetDrawCrosshair(true);
+
 	if (gHUD.m_iFOV >= 90)
 	{ // normal crosshairs
 		if (fOnTarget && m_pWeapon->hAutoaim)
-			SetCrosshair(m_pWeapon->hAutoaim, m_pWeapon->rcAutoaim, {255, 255, 255});
+			SetAutoaimCrosshair(m_pWeapon->hAutoaim, m_pWeapon->rcAutoaim);
 		else
-			SetCrosshair(m_pWeapon->hCrosshair, m_pWeapon->rcCrosshair, {255, 255, 255});
+			SetAutoaimCrosshair(0, {});
+
+		SetCrosshair(m_pWeapon->hCrosshair, m_pWeapon->rcCrosshair);
 	}
 	else
 	{ // zoomed crosshairs
 		if (fOnTarget && m_pWeapon->hZoomedAutoaim)
-			SetCrosshair(m_pWeapon->hZoomedAutoaim, m_pWeapon->rcZoomedAutoaim, {255, 255, 255});
+			SetAutoaimCrosshair(m_pWeapon->hZoomedAutoaim, m_pWeapon->rcZoomedAutoaim);
 		else
-			SetCrosshair(m_pWeapon->hZoomedCrosshair, m_pWeapon->rcZoomedCrosshair, {255, 255, 255});
+			SetAutoaimCrosshair(0, {});
 
+		SetCrosshair(m_pWeapon->hZoomedCrosshair, m_pWeapon->rcZoomedCrosshair);
 	}
 
 	m_fFade = 200.0f; //!!!
@@ -828,24 +838,35 @@ void CHudAmmo::UserCmd_PrevWeapon()
 	gpActiveSel = NULL;
 }
 
-void CHudAmmo::SetCrosshair(HSPRITE sprite, wrect_t rect, RGB24 color)
+void CHudAmmo::SetCrosshair(HSPRITE sprite, wrect_t rect)
 {
-	m_CrosshairSprite = sprite;
-	m_CrosshairRect = rect;
-	m_CrosshairColor = color;
+	m_Crosshair.sprite = sprite;
+	m_Crosshair.rect = rect;
+}
+
+void CHudAmmo::SetAutoaimCrosshair(HSPRITE sprite, wrect_t rect)
+{
+	m_AutoaimCrosshair.sprite = sprite;
+	m_AutoaimCrosshair.rect = rect;
 }
 
 void CHudAmmo::DrawCrosshair(int x, int y)
 {
-	if (m_CrosshairSprite)
+	auto renderer = [](int x, int y, const Crosshair& crosshair, RGB24 color)
 	{
-		SPR_Set(m_CrosshairSprite, m_CrosshairColor);
+		if (crosshair.sprite)
+		{
+			SPR_Set(crosshair.sprite, color);
 
-		x -= (m_CrosshairRect.right - m_CrosshairRect.left) / 2;
-		y -= (m_CrosshairRect.bottom - m_CrosshairRect.top) / 2;
+			x -= (crosshair.rect.right - crosshair.rect.left) / 2;
+			y -= (crosshair.rect.bottom - crosshair.rect.top) / 2;
 
-		gEngfuncs.pfnSPR_DrawHoles(0, x, y, &m_CrosshairRect);
-	}
+			gEngfuncs.pfnSPR_DrawHoles(0, x, y, &crosshair.rect);
+		}
+	};
+
+	renderer(x, y, m_Crosshair, gHUD.m_HudItemColor);
+	renderer(x, y, m_AutoaimCrosshair, RGB_REDISH);
 }
 
 
@@ -872,7 +893,7 @@ int CHudAmmo::Draw(float flTime)
 
 	//Draw crosshair here so original engine behavior is mimicked pretty closely
 	{
-		if (gHUD.m_pCvarCrosshair->value)
+		if (gHUD.m_pCvarCrosshair->value && m_DrawCrosshair)
 		{
 			const Vector angles = v_angles + v_crosshairangle;
 			Vector forward;

@@ -124,21 +124,36 @@ public:
 	void _cdecl UserCmd_NextWeapon();
 	void _cdecl UserCmd_PrevWeapon();
 
-	void SetCrosshair(HSPRITE sprite, wrect_t rect, RGB24 color);
+	bool IsCrosshairDrawn() const { return m_DrawCrosshair; }
+
+	void SetDrawCrosshair(bool state)
+	{
+		m_DrawCrosshair = state;
+	}
+
+	void SetCrosshair(HSPRITE sprite, wrect_t rect);
+	void SetAutoaimCrosshair(HSPRITE sprite, wrect_t rect);
 
 private:
 	void DrawCrosshair(int x, int y);
 
 private:
+	struct Crosshair
+	{
+		HSPRITE sprite = 0;
+		wrect_t rect{};
+	};
+
 	float m_fFade;
 	RGBA  m_rgba;
 	WEAPON* m_pWeapon;
 	int	m_HUD_bucket0;
 	int m_HUD_selection;
 
-	HSPRITE m_CrosshairSprite = 0;
-	wrect_t m_CrosshairRect{};
-	RGB24 m_CrosshairColor{};
+	bool m_DrawCrosshair = true;
+
+	Crosshair m_Crosshair;
+	Crosshair m_AutoaimCrosshair;
 };
 
 //
