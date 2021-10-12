@@ -54,19 +54,29 @@ void CHudFlashlight::Reset()
 
 int CHudFlashlight::VidInit()
 {
-	int HUD_flash_empty = gHUD.GetSpriteIndex("flash_empty");
-	int HUD_flash_full = gHUD.GetSpriteIndex("flash_full");
-	int HUD_flash_beam = gHUD.GetSpriteIndex("flash_beam");
+	auto setup = [](const char* empty, const char* full, const char* beam)
+	{
+		const int HUD_flash_empty = gHUD.GetSpriteIndex(empty);
+		const int HUD_flash_full = gHUD.GetSpriteIndex(full);
+		const int HUD_flash_beam = gHUD.GetSpriteIndex(beam);
+
+		LightData data;
+
+		data.m_hSprite1 = gHUD.GetSprite(HUD_flash_empty);
+		data.m_hSprite2 = gHUD.GetSprite(HUD_flash_full);
+		data.m_hBeam = gHUD.GetSprite(HUD_flash_beam);
+		data.m_prc1 = &gHUD.GetSpriteRect(HUD_flash_empty);
+		data.m_prc2 = &gHUD.GetSpriteRect(HUD_flash_full);
+		data.m_prcBeam = &gHUD.GetSpriteRect(HUD_flash_beam);
+		data.m_iWidth = data.m_prc2->right - data.m_prc2->left;
+
+		return data;
+	};
+
+	m_Flashlight = setup("flash_empty", "flash_full", "flash_beam");
+	m_Nightvision = setup("nvg_empty", "nvg_full", "nvg_beam");
 
 	m_nvSprite = LoadSprite("sprites/of_nv_b.spr");
-
-	m_hSprite1 = gHUD.GetSprite(HUD_flash_empty);
-	m_hSprite2 = gHUD.GetSprite(HUD_flash_full);
-	m_hBeam = gHUD.GetSprite(HUD_flash_beam);
-	m_prc1 = &gHUD.GetSpriteRect(HUD_flash_empty);
-	m_prc2 = &gHUD.GetSpriteRect(HUD_flash_full);
-	m_prcBeam = &gHUD.GetSpriteRect(HUD_flash_beam);
-	m_iWidth = m_prc2->right - m_prc2->left;
 
 	return 1;
 };
@@ -113,19 +123,21 @@ int CHudFlashlight::Draw(float flTime)
 
 	const auto color = originalColor.Scale(a);
 
-	y = (m_prc1->bottom - m_prc2->top) / 2;
-	x = ScreenWidth - m_iWidth - m_iWidth / 2;
+	auto data = GetLightData();
+
+	y = (data->m_prc1->bottom - data->m_prc2->top) / 2;
+	x = ScreenWidth - data->m_iWidth - data->m_iWidth / 2;
 
 	// Draw the flashlight casing
-	SPR_Set(m_hSprite1, color);
-	SPR_DrawAdditive(0, x, y, m_prc1);
+	SPR_Set(data->m_hSprite1, color);
+	SPR_DrawAdditive(0, x, y, data->m_prc1);
 
 	if (m_fOn)
 	{  // draw the flashlight beam
-		x = ScreenWidth - m_iWidth / 2;
+		x = ScreenWidth - data->m_iWidth / 2;
 
-		SPR_Set(m_hBeam, color);
-		SPR_DrawAdditive(0, x, y, m_prcBeam);
+		SPR_Set(data->m_hBeam, color);
+		SPR_DrawAdditive(0, x, y, data->m_prcBeam);
 
 		if (m_SuitLightType == SuitLightType::Nightvision)
 		{
@@ -134,14 +146,14 @@ int CHudFlashlight::Draw(float flTime)
 	}
 
 	// draw the flashlight energy level
-	x = ScreenWidth - m_iWidth - m_iWidth / 2;
-	int iOffset = m_iWidth * (1.0 - m_flBat);
-	if (iOffset < m_iWidth)
+	x = ScreenWidth - data->m_iWidth - data->m_iWidth / 2;
+	int iOffset = data->m_iWidth * (1.0 - m_flBat);
+	if (iOffset < data->m_iWidth)
 	{
-		rc = *m_prc2;
+		rc = *data->m_prc2;
 		rc.left += iOffset;
 
-		SPR_Set(m_hSprite2, color);
+		SPR_Set(data->m_hSprite2, color);
 		SPR_DrawAdditive(0, x + iOffset, y, &rc);
 	}
 

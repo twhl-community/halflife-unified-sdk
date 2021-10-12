@@ -345,6 +345,18 @@ private:
 //
 class CHudFlashlight : public CHudBase
 {
+private:
+	struct LightData
+	{
+		HSPRITE m_hSprite1 = 0;
+		HSPRITE m_hSprite2 = 0;
+		HSPRITE m_hBeam = 0;
+		wrect_t* m_prc1 = nullptr;
+		wrect_t* m_prc2 = nullptr;
+		wrect_t* m_prcBeam = nullptr;
+		int	  m_iWidth = 0;		// width of the battery innards
+	};
+
 public:
 	int Init() override;
 	int VidInit() override;
@@ -354,22 +366,29 @@ public:
 	int MsgFunc_FlashBat(const char* pszName, int iSize, void* pbuf);
 
 private:
+	LightData* GetLightData()
+	{
+		switch (m_SuitLightType)
+		{
+		default:
+		case SuitLightType::Flashlight: return &m_Flashlight;
+		case SuitLightType::Nightvision: return &m_Nightvision;
+		}
+	}
+
 	void DrawNightVision();
 
 private:
-	HSPRITE m_hSprite1;
-	HSPRITE m_hSprite2;
-	HSPRITE m_hBeam;
+	LightData m_Flashlight;
+	LightData m_Nightvision;
+
 	HSPRITE m_nvSprite;
-	wrect_t* m_prc1;
-	wrect_t* m_prc2;
-	wrect_t* m_prcBeam;
+
 	SuitLightType m_SuitLightType = SuitLightType::Flashlight;
 	float m_flBat;
 	int	  m_iBat;
 	int	  m_fOn;
 	float m_fFade;
-	int	  m_iWidth;		// width of the battery innards
 };
 
 //
