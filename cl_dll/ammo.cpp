@@ -868,11 +868,18 @@ int CHudAmmo::Draw(float flTime)
 	if (m_fFade > 0)
 		m_fFade -= (gHUD.m_flTimeDelta * 20);
 
-	r = giR;
-	g = giG;
-	b = giB;
+	if (gHUD.isNightVisionOn())
+	{
+		gHUD.getNightVisionHudItemColor(r, g, b);
+	}
+	else
+	{
+		r = giR;
+		g = giG;
+		b = giB;
 
-	ScaleColors(r, g, b, a );
+		ScaleColors(r, g, b, a);
+	}
 
 	// Does this weapon have a clip?
 	y = ScreenHeight - gHUD.m_iFontHeight - gHUD.m_iFontHeight/2;
@@ -899,9 +906,16 @@ int CHudAmmo::Draw(float flTime)
 
 			x += AmmoWidth/2;
 
-			r = giR;
-			g = giG;
-			b = giB;
+			if (gHUD.isNightVisionOn())
+			{
+				gHUD.getNightVisionHudItemColor(r, g, b);
+			}
+			else
+			{
+				r = giR;
+				g = giG;
+				b = giB;
+			}
 
 			// draw the | bar
 			FillRGBA(x, y, iBarWidth, gHUD.m_iFontHeight, r, g, b, a);
@@ -909,7 +923,11 @@ int CHudAmmo::Draw(float flTime)
 			x += iBarWidth + AmmoWidth/2;
 
 			// GL Seems to need this
-			ScaleColors(r, g, b, a );
+			if (!gHUD.isNightVisionOn())
+			{
+				ScaleColors(r, g, b, a);
+			}
+
 			x = gHUD.DrawHudNumber(x, y, iFlags | DHN_3DIGITS, gWR.CountAmmo(pw->iAmmoType), r, g, b);		
 
 
