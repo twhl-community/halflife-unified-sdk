@@ -141,6 +141,8 @@ void CShockRifle::WeaponIdle()
 
 	ResetEmptySound();
 
+	m_pPlayer->GetAutoaimVector(AUTOAIM_10DEGREES);
+
 	if( m_flSoundDelay != 0 && gpGlobals->time >= m_flSoundDelay )
 	{
 		m_flSoundDelay = 0;
