@@ -515,6 +515,16 @@ void Host_Say(edict_t* pEntity, int teamonly)
 	}
 }
 
+bool UTIL_CheatsAllowed(CBasePlayer* pEntity, const char* name)
+{
+	if (!g_psv_cheats->value)
+	{
+		CLIENT_PRINTF(pEntity->edict(), print_console, UTIL_VarArgs("The command \"%s\" can only be used when cheats are enabled\n", name));
+		return false;
+	}
+
+	return true;
+}
 
 /*
 ===========
@@ -573,9 +583,26 @@ void ClientCommand(edict_t* pEntity)
 			CLIENT_PRINTF(pEntity, print_console, UTIL_VarArgs("\"fov\" is \"%d\"\n", (int)player->m_iFOV));
 		}
 	}
+	else if (FStrEq(pcmd, "set_hud_color"))
+	{
+		if (UTIL_CheatsAllowed(player, "set_hud_color"))
+		{
+			if (CMD_ARGC() >= 4)
+			{
+				Vector color{255, 255, 255};
+				UTIL_StringToVector(color, CMD_ARGS());
+
+				player->SetHudColor({
+					static_cast<std::uint8_t>(color.x),
+					static_cast<std::uint8_t>(color.y),
+					static_cast<std::uint8_t>(color.z)
+					});
+			}
+		}
+	}
 	else if (FStrEq(pcmd, "set_light_type"))
 	{
-		if (g_psv_cheats->value)
+		if (UTIL_CheatsAllowed(player, "set_light_type"))
 		{
 			if (CMD_ARGC() > 1)
 			{
@@ -602,10 +629,6 @@ void ClientCommand(edict_t* pEntity)
 					CLIENT_PRINTF(pEntity, print_console, UTIL_VarArgs("Unknown light type \"%s\"\n", CMD_ARGV(1)));
 				}
 			}
-		}
-		else
-		{
-			CLIENT_PRINTF(pEntity, print_console, "The command \"setsuitlighttype\" can only be used when cheats are enabled\n");
 		}
 	}
 	else if (FStrEq(pcmd, "use"))
