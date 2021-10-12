@@ -146,7 +146,7 @@ static void SendFlagIcon(CBasePlayer* player, bool isActive, const char* flagNam
 	g_engfuncs.pfnWriteString(flagName);
 	g_engfuncs.pfnWriteByte(teamIndex);
 
-	const auto& color = teamIndex == 0 ? RGB_YELLOWISH : RGB_HUD_COLOR;
+	const auto& color = teamIndex == 0 ? RGB_YELLOWISH : RGB_GREENISH;
 
 	g_engfuncs.pfnWriteByte(color.Red);
 	g_engfuncs.pfnWriteByte(color.Green);
@@ -815,7 +815,7 @@ void CHalfLifeCTFplay::PlayerSpawn(CBasePlayer* pPlayer)
 				break;
 
 			case CTFTeam::OpposingForce:
-				color = RGB_HUD_COLOR;
+				color = RGB_GREENISH;
 				break;
 			}
 

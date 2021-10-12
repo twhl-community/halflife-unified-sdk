@@ -124,7 +124,7 @@ int HistoryResource::DrawAmmoHistory(float flTime)
 				HSPRITE* spr = gWR.GetAmmoPicFromWeapon(rgAmmoHistory[i].iId, rcPic);
 
 				float scale = (rgAmmoHistory[i].DisplayTime - flTime) * 80;
-				const auto color = RGB_HUD_COLOR.Scale(V_min(scale, 255));
+				const auto color = gHUD.m_HudColor.Scale(V_min(scale, 255));
 
 				// Draw the pic
 				int ypos = ScreenHeight - (AMMO_PICKUP_PICK_HEIGHT + (AMMO_PICKUP_GAP * i));
@@ -146,7 +146,7 @@ int HistoryResource::DrawAmmoHistory(float flTime)
 					return 1;  // we don't know about the weapon yet, so don't draw anything
 
 				// if the weapon doesn't have ammo, display it as red
-				const auto& originalColor = gWR.HasAmmo(weap) ? RGB_HUD_COLOR : RGB_REDISH;
+				const auto& originalColor = gWR.HasAmmo(weap) ? gHUD.m_HudColor : RGB_REDISH;
 
 				float scale = (rgAmmoHistory[i].DisplayTime - flTime) * 80;
 				const auto color = originalColor.Scale(V_min(scale, 255));
@@ -164,7 +164,7 @@ int HistoryResource::DrawAmmoHistory(float flTime)
 				wrect_t rect = gHUD.GetSpriteRect(rgAmmoHistory[i].iId);
 
 				float scale = (rgAmmoHistory[i].DisplayTime - flTime) * 80;
-				const auto color = RGB_HUD_COLOR.Scale(V_min(scale, 255));
+				const auto color = gHUD.m_HudColor.Scale(V_min(scale, 255));
 
 				int ypos = ScreenHeight - (AMMO_PICKUP_PICK_HEIGHT + (AMMO_PICKUP_GAP * i));
 				int xpos = ScreenWidth - (rect.right - rect.left) - 10;

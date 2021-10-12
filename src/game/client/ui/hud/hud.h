@@ -686,6 +686,8 @@ public:
 	cvar_t* m_pCvarStealMouse;
 	cvar_t* m_pCvarDraw;
 
+	RGB24 m_HudColor = RGB_HUD_COLOR;
+
 	int m_iFontHeight;
 	int DrawHudNumber(int x, int y, int iFlags, int iNumber, const RGB24& color);
 	int DrawHudString(int x, int y, int iMaxX, char* szString, const RGB24& color);
@@ -751,6 +753,7 @@ public:
 	// user messages
 	int _cdecl MsgFunc_Damage(const char* pszName, int iSize, void* pbuf);
 	int _cdecl MsgFunc_GameMode(const char* pszName, int iSize, void* pbuf);
+	int MsgFunc_HudColor(const char* pszName, int iSize, void* pbuf);
 	int _cdecl MsgFunc_Logo(const char* pszName, int iSize, void* pbuf);
 	int _cdecl MsgFunc_ResetHUD(const char* pszName, int iSize, void* pbuf);
 	void _cdecl MsgFunc_InitHUD(const char* pszName, int iSize, void* pbuf);

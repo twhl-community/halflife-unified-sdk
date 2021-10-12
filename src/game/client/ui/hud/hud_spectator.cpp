@@ -1565,7 +1565,7 @@ void CHudSpectator::DrawOverviewEntities()
 
 	z = m_OverviewData.layersHeights[0] * zScale;
 	// get yellow/brown HUD color
-	const auto color = RGB_HUD_COLOR;
+	const auto color = gHUD.m_HudColor;
 	r = (float)color.Red / 255.0f;
 	g = (float)color.Green / 255.0f;
 	b = (float)color.Blue / 255.0f;

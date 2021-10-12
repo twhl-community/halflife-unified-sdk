@@ -107,7 +107,7 @@ int CHudFlashlight::Draw(float flTime)
 
 	const int a = m_fOn ? 225 : MIN_ALPHA;
 
-	const auto& originalColor = m_flBat < 0.20 ? RGB_REDISH : RGB_HUD_COLOR;
+	const auto& originalColor = m_flBat < 0.20 ? RGB_REDISH : gHUD.m_HudColor;
 
 	const auto color = originalColor.Scale(a);
 

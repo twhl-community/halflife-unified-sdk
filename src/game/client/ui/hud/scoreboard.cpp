@@ -355,7 +355,7 @@ int CHudScoreboard::Draw(float fTime)
 		// draw ping & packetloss
 		sprintf(buf, "%d", team_info->ping);
 
-		gHUD.DrawHudStringReverse(xpos, ypos, xpos - 50, buf, RGB_HUD_COLOR);
+		gHUD.DrawHudStringReverse(xpos, ypos, xpos - 50, buf, gHUD.m_HudColor);
 
 		//  Packetloss removed on Kelly 'shipping nazi' Bailey's orders
 		if (can_show_packetloss)
@@ -363,7 +363,7 @@ int CHudScoreboard::Draw(float fTime)
 			xpos = ((PL_RANGE_MAX - PL_RANGE_MIN) / 2) + PL_RANGE_MIN + xpos_rel + 25 + 10;
 
 			sprintf(buf, "  %d", team_info->packetloss);
-			gHUD.DrawHudString(xpos, ypos, xpos + 50, buf, RGB_HUD_COLOR);
+			gHUD.DrawHudString(xpos, ypos, xpos + 50, buf, gHUD.m_HudColor);
 		}
 
 		team_info->already_drawn = TRUE;  // set the already_drawn to be TRUE, so this team won't get drawn again
@@ -722,7 +722,7 @@ int CHudScoreboard::MsgFunc_PlayerIcon(const char* pszName, int iSize, void* pbu
 		sprite.spr = gHUD.GetSprite(spriteIndex);
 		sprite.rc = gHUD.GetSpriteRect(spriteIndex);
 		sprite.bFlags = itemId;
-		sprite.color = id == CTFItem::BlackMesaFlag ? RGB_YELLOWISH : RGB_HUD_COLOR;
+		sprite.color = id == CTFItem::BlackMesaFlag ? RGB_YELLOWISH : RGB_GREENISH;
 
 		strcpy(sprite.szSpriteName, "score_flag");
 

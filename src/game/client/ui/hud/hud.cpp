@@ -88,6 +88,11 @@ cvar_t* cl_bobtilt = nullptr;
 
 void ShutdownInput();
 
+int __MsgFunc_HudColor(const char* pszName, int iSize, void* pbuf)
+{
+	return gHUD.MsgFunc_HudColor(pszName, iSize, pbuf);
+}
+
 //DECLARE_MESSAGE(m_Logo, Logo)
 int __MsgFunc_Logo(const char* pszName, int iSize, void* pbuf)
 {
@@ -307,6 +312,7 @@ int __MsgFunc_StatsPlayer(const char* pszName, int iSize, void* pbuf)
 // This is called every time the DLL is loaded
 void CHud::Init()
 {
+	HOOK_MESSAGE(HudColor);
 	HOOK_MESSAGE(Logo);
 	HOOK_MESSAGE(ResetHUD);
 	HOOK_MESSAGE(GameMode);
@@ -531,6 +537,9 @@ void CHud::VidInit()
 
 	m_iFontHeight = m_rgrcRects[m_HUD_number_0].bottom - m_rgrcRects[m_HUD_number_0].top;
 
+	//Reset to default on new map load
+	m_HudColor = RGB_HUD_COLOR;
+
 	m_Ammo.VidInit();
 	m_Health.VidInit();
 	m_Spectator.VidInit();
@@ -550,6 +559,17 @@ void CHud::VidInit()
 	m_FlagIcons.VidInit();
 	m_PlayerBrowse.VidInit();
 	GetClientVoiceMgr()->VidInit();
+}
+
+int CHud::MsgFunc_HudColor(const char* pszName, int iSize, void* pbuf)
+{
+	BEGIN_READ(pbuf, iSize);
+
+	m_HudColor.Red = READ_BYTE();
+	m_HudColor.Green = READ_BYTE();
+	m_HudColor.Blue = READ_BYTE();
+
+	return 1;
 }
 
 int CHud::MsgFunc_Logo(const char* pszName, int iSize, void* pbuf)

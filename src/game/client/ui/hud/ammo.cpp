@@ -868,7 +868,7 @@ int CHudAmmo::Draw(float flTime)
 	if (m_fFade > 0)
 		m_fFade -= (gHUD.m_flTimeDelta * 20);
 
-	const auto color = RGB_HUD_COLOR.Scale(a);
+	const auto color = gHUD.m_HudColor.Scale(a);
 
 	// Does this weapon have a clip?
 	y = ScreenHeight - gHUD.m_iFontHeight - gHUD.m_iFontHeight / 2;
@@ -896,7 +896,7 @@ int CHudAmmo::Draw(float flTime)
 			x += AmmoWidth / 2;
 
 			// draw the | bar
-			FillRGBA(x, y, iBarWidth, gHUD.m_iFontHeight, RGB_HUD_COLOR, a);
+			FillRGBA(x, y, iBarWidth, gHUD.m_iFontHeight, gHUD.m_HudColor, a);
 
 			x += iBarWidth + AmmoWidth / 2;
 
@@ -962,7 +962,7 @@ int DrawBar(int x, int y, int width, int height, float f)
 		width -= w;
 	}
 
-	FillRGBA(x, y, width, height, RGB_HUD_COLOR, 128);
+	FillRGBA(x, y, width, height, gHUD.m_HudColor, 128);
 
 	return (x + width);
 }
@@ -1043,7 +1043,7 @@ int CHudAmmo::DrawWList(float flTime)
 			a = 192;
 		*/
 
-		SPR_Set(gHUD.GetSprite(m_HUD_bucket0 + i), RGB_HUD_COLOR.Scale(255));
+		SPR_Set(gHUD.GetSprite(m_HUD_bucket0 + i), gHUD.m_HudColor.Scale(255));
 
 		// make active slot wide enough to accomodate gun pictures
 		if (i == iActiveSlot)
@@ -1086,7 +1086,7 @@ int CHudAmmo::DrawWList(float flTime)
 				if (!p || !p->iId)
 					continue;
 
-				const auto color = RGB_HUD_COLOR;
+				const auto color = gHUD.m_HudColor;
 
 				// if active, then we must have ammo.
 
@@ -1134,7 +1134,7 @@ int CHudAmmo::DrawWList(float flTime)
 
 				if (gWR.HasAmmo(p))
 				{
-					color = RGB_HUD_COLOR;
+					color = gHUD.m_HudColor;
 					a = 128;
 				}
 				else

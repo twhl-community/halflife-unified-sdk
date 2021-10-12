@@ -62,7 +62,7 @@ int CHudPlayerBrowse::Draw(float flTime)
 	}
 	else if (m_iTeamNum == static_cast<int>(CTFTeam::OpposingForce))
 	{
-		color = RGB_HUD_COLOR;
+		color = gHUD.m_HudColor;
 	}
 	else
 	{

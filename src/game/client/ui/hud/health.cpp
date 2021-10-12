@@ -155,7 +155,7 @@ RGB24 CHudHealth::GetPainColor()
 #else
 	if (m_iHealth > 25)
 	{
-		return RGB_HUD_COLOR;
+		return gHUD.m_HudColor;
 	}
 	else
 	{
@@ -224,7 +224,7 @@ int CHudHealth::Draw(float flTime)
 
 		int iHeight = gHUD.m_iFontHeight;
 		int iWidth = HealthWidth / 10;
-		FillRGBA(x, y, iWidth, iHeight, RGB_HUD_COLOR, a);
+		FillRGBA(x, y, iWidth, iHeight, gHUD.m_HudColor, a);
 	}
 
 	DrawDamage(flTime);
@@ -373,7 +373,7 @@ int CHudHealth::DrawDamage(float flTime)
 
 	const int a = (int)(fabs(sin(flTime * 2)) * 256.0);
 
-	const auto color = RGB_HUD_COLOR.Scale(a);
+	const auto color = gHUD.m_HudColor.Scale(a);
 
 	// Draw all the items
 	int i;

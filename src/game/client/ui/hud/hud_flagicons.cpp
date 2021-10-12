@@ -95,7 +95,7 @@ int CHudFlagIcons::Draw(float flTime)
             //TODO: this buffer is static in vanilla Op4
             char szBuf[40];
             sprintf(szBuf, "%s %d:%02d", CHudTextMessage::BufferedLocaliseTextString("#CTFTimeRemain"), minutesLeft, secondsLeft);
-            gHUD.DrawHudString(5, ScreenHeight - 60, 200, szBuf, RGB_HUD_COLOR);
+            gHUD.DrawHudString(5, ScreenHeight - 60, 200, szBuf, gHUD.m_HudColor);
         }
     }
 
