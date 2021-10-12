@@ -354,12 +354,17 @@ public:
 	int MsgFunc_FlashBat(const char* pszName, int iSize, void* pbuf);
 
 private:
+	void DrawNightVision();
+
+private:
 	HSPRITE m_hSprite1;
 	HSPRITE m_hSprite2;
 	HSPRITE m_hBeam;
+	HSPRITE m_nvSprite;
 	wrect_t* m_prc1;
 	wrect_t* m_prc2;
 	wrect_t* m_prcBeam;
+	SuitLightType m_SuitLightType = SuitLightType::Flashlight;
 	float m_flBat;
 	int	  m_iBat;
 	int	  m_fOn;
@@ -670,6 +675,8 @@ private:
 	float						m_flMouseSensitivity;
 	int							m_iConcussionEffect;
 
+	bool m_NightVisionState = false;
+
 public:
 
 	HSPRITE						m_hsprCursor;
@@ -687,6 +694,11 @@ public:
 	cvar_t* m_pCvarDraw;
 
 	RGB24 m_HudColor = RGB_HUD_COLOR;
+
+	/**
+	*	@brief The color to use for Hud items
+	*/
+	RGB24 m_HudItemColor = RGB_HUD_COLOR;
 
 	int m_iFontHeight;
 	int DrawHudNumber(int x, int y, int iFlags, int iNumber, const RGB24& color);
@@ -776,6 +788,21 @@ public:
 
 	float GetSensitivity();
 
+	bool IsNightVisionOn() const { return m_NightVisionState; }
+
+	void SetNightVisionState(bool state);
+
+	RGB24 GetHudItemColor(RGB24 color) const
+	{
+		if (IsNightVisionOn())
+		{
+			return m_HudItemColor;
+		}
+		else
+		{
+			return color;
+		}
+	}
 };
 
 extern CHud gHUD;

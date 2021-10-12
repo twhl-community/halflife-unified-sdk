@@ -539,6 +539,7 @@ void CHud::VidInit()
 
 	//Reset to default on new map load
 	m_HudColor = RGB_HUD_COLOR;
+	m_HudItemColor = RGB_HUD_COLOR;
 
 	m_Ammo.VidInit();
 	m_Health.VidInit();
@@ -568,6 +569,12 @@ int CHud::MsgFunc_HudColor(const char* pszName, int iSize, void* pbuf)
 	m_HudColor.Red = READ_BYTE();
 	m_HudColor.Green = READ_BYTE();
 	m_HudColor.Blue = READ_BYTE();
+
+	//Sync item color up if we're not in NVG mode
+	if (!m_NightVisionState)
+	{
+		m_HudItemColor = m_HudColor;
+	}
 
 	return 1;
 }
@@ -754,4 +761,16 @@ float CHud::GetSensitivity()
 	return m_flMouseSensitivity;
 }
 
+void CHud::SetNightVisionState(bool state)
+{
+	m_NightVisionState = state;
 
+	if (state)
+	{
+		m_HudItemColor = RGB_WHITE;
+	}
+	else
+	{
+		m_HudItemColor = m_HudColor;
+	}
+}

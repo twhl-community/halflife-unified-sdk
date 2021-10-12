@@ -64,6 +64,9 @@ class CRope;
 #define	SOUND_FLASHLIGHT_ON		"items/flashlight1.wav"
 #define	SOUND_FLASHLIGHT_OFF	"items/flashlight1.wav"
 
+#define	SOUND_NIGHTVISION_ON	"items/nightvision1.wav"
+#define	SOUND_NIGHTVISION_OFF	"items/nightvision2.wav"
+
 #define TEAM_NAME_LENGTH	16
 
 typedef enum
@@ -116,6 +119,12 @@ public:
 	int					m_iWeaponFlash;// brightness of the weapon flash
 	float				m_flStopExtraSoundTime;
 
+	/**
+	*	@brief What type of suit light the player can use
+	*	@details The initial value here is the default
+	*	To change this setting at runtime call @see SetSuitLightType so that player state is updated properly
+	*/
+	SuitLightType m_SuitLightType = SuitLightType::Flashlight;
 	float				m_flFlashLightTime;	// Time until next battery draw/Recharge
 	int					m_iFlashBattery;		// Flashlight Battery Draw
 
@@ -285,9 +294,14 @@ public:
 	int		ObjectCaps() override { return CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 	void	Precache() override;
 	BOOL			IsOnLadder();
+
+	int GetFlashlightFlag() const;
+
 	BOOL			FlashlightIsOn();
 	void			FlashlightTurnOn();
 	void			FlashlightTurnOff();
+
+	void SetSuitLightType(SuitLightType type);
 
 	void UpdatePlayerSound();
 	void DeathSound() override;

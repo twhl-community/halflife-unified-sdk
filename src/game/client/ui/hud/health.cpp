@@ -148,20 +148,25 @@ RGB24 CHudHealth::GetPainColor()
 		iHealth -= 25;
 	else if (iHealth < 0)
 		iHealth = 0;
+
+	RGB24 color;
+
 #if 0
 	const std::uint8_t g = iHealth * 255 / 100;
 
-	return {static_cast<std::uint8_t>(255 - g), g, 0};
+	color = {static_cast<std::uint8_t>(255 - g), g, 0};
 #else
 	if (m_iHealth > 25)
 	{
-		return gHUD.m_HudColor;
+		color = gHUD.m_HudItemColor;
 	}
 	else
 	{
-		return {250, 0, 0};
+		color = {250, 0, 0};
 	}
-#endif 
+#endif
+
+	return gHUD.GetHudItemColor(color);
 }
 
 int CHudHealth::Draw(float flTime)
@@ -197,7 +202,7 @@ int CHudHealth::Draw(float flTime)
 	if (m_iHealth <= 15)
 		a = 255;
 
-	const auto painColor = GetPainColor().Scale(a);
+	const auto painColor = gHUD.GetHudItemColor(GetPainColor().Scale(a));
 
 	// Only draw health if we have the suit.
 	if (gHUD.m_iWeaponBits & (1 << (WEAPON_SUIT)))
@@ -224,7 +229,7 @@ int CHudHealth::Draw(float flTime)
 
 		int iHeight = gHUD.m_iFontHeight;
 		int iWidth = HealthWidth / 10;
-		FillRGBA(x, y, iWidth, iHeight, gHUD.m_HudColor, a);
+		FillRGBA(x, y, iWidth, iHeight, gHUD.m_HudItemColor, a);
 	}
 
 	DrawDamage(flTime);
@@ -307,7 +312,7 @@ int CHudHealth::DrawPain(float flTime)
 	if (m_fAttackFront > 0.4)
 	{
 		shade = a * V_max(m_fAttackFront, 0.5);
-		const auto painColor = GetPainColor().Scale(shade);
+		const auto painColor = gHUD.GetHudItemColor(GetPainColor()).Scale(shade);
 		SPR_Set(m_hSprite, painColor);
 
 		x = ScreenWidth / 2 - SPR_Width(m_hSprite, 0) / 2;
@@ -321,7 +326,7 @@ int CHudHealth::DrawPain(float flTime)
 	if (m_fAttackRight > 0.4)
 	{
 		shade = a * V_max(m_fAttackRight, 0.5);
-		const auto painColor = GetPainColor().Scale(shade);
+		const auto painColor = gHUD.GetHudItemColor(GetPainColor()).Scale(shade);
 		SPR_Set(m_hSprite, painColor);
 
 		x = ScreenWidth / 2 + SPR_Width(m_hSprite, 1) * 2;
@@ -335,7 +340,7 @@ int CHudHealth::DrawPain(float flTime)
 	if (m_fAttackRear > 0.4)
 	{
 		shade = a * V_max(m_fAttackRear, 0.5);
-		const auto painColor = GetPainColor().Scale(shade);
+		const auto painColor = gHUD.GetHudItemColor(GetPainColor()).Scale(shade);
 		SPR_Set(m_hSprite, painColor);
 
 		x = ScreenWidth / 2 - SPR_Width(m_hSprite, 2) / 2;
@@ -349,7 +354,7 @@ int CHudHealth::DrawPain(float flTime)
 	if (m_fAttackLeft > 0.4)
 	{
 		shade = a * V_max(m_fAttackLeft, 0.5);
-		const auto painColor = GetPainColor().Scale(shade);
+		const auto painColor = gHUD.GetHudItemColor(GetPainColor()).Scale(shade);
 		SPR_Set(m_hSprite, painColor);
 
 		x = ScreenWidth / 2 - SPR_Width(m_hSprite, 3) * 3;

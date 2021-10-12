@@ -23,6 +23,8 @@
 
 */
 
+#include <optional>
+
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
@@ -571,6 +573,41 @@ void ClientCommand(edict_t* pEntity)
 			CLIENT_PRINTF(pEntity, print_console, UTIL_VarArgs("\"fov\" is \"%d\"\n", (int)player->m_iFOV));
 		}
 	}
+	else if (FStrEq(pcmd, "set_light_type"))
+	{
+		if (g_psv_cheats->value)
+		{
+			if (CMD_ARGC() > 1)
+			{
+				const auto type = [](const char* value) -> std::optional<SuitLightType>
+				{
+					if (!strcmp("flashlight", value))
+					{
+						return SuitLightType::Flashlight;
+					}
+					else if (!strcmp("nightvision", value))
+					{
+						return SuitLightType::Nightvision;
+					}
+
+					return {};
+				}(CMD_ARGV(1));
+
+				if (type.has_value())
+				{
+					player->SetSuitLightType(type.value());
+				}
+				else
+				{
+					CLIENT_PRINTF(pEntity, print_console, UTIL_VarArgs("Unknown light type \"%s\"\n", CMD_ARGV(1)));
+				}
+			}
+		}
+		else
+		{
+			CLIENT_PRINTF(pEntity, print_console, "The command \"setsuitlighttype\" can only be used when cheats are enabled\n");
+		}
+	}
 	else if (FStrEq(pcmd, "use"))
 	{
 		player->SelectItem((char*)CMD_ARGV(1));
@@ -967,6 +1004,9 @@ void ClientPrecache()
 	PRECACHE_SOUND(SOUND_FLASHLIGHT_ON);
 	PRECACHE_SOUND(SOUND_FLASHLIGHT_OFF);
 
+	PRECACHE_SOUND(SOUND_NIGHTVISION_ON);
+	PRECACHE_SOUND(SOUND_NIGHTVISION_OFF);
+
 	// player gib sounds
 	PRECACHE_SOUND("common/bodysplat.wav");
 
@@ -1227,6 +1267,12 @@ int AddToFullPack(struct entity_state_s* state, int e, edict_t* ent, edict_t* ho
 
 	state->skin = ent->v.skin;
 	state->effects = ent->v.effects;
+
+	//Remove the night vision illumination effect so other players don't see it
+	if (player && host != ent)
+	{
+		state->effects &= ~EF_BRIGHTLIGHT;
+	}
 
 	// This non-player entity is being moved by the game .dll and not the physics simulation system
 	//  make sure that we interpolate it's position on the client if it moves

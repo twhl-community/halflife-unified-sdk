@@ -46,6 +46,12 @@ const int SV_MAX_PLAYERS = 32;
 
 #define WEAPON_SUIT			31
 
+enum class SuitLightType
+{
+	Flashlight = 0,
+	Nightvision
+};
+
 // used by suit voice to indicate damage sustained and repaired type to player
 
 // instant damage
@@ -170,6 +176,7 @@ constexpr Vector VEC_DEAD_VIEW(0, 0, -8);
 #define MENU_STATSMENU				9
 #define MENU_SCOREBOARD				10
 
+constexpr RGB24 RGB_WHITE{255, 255, 255};
 constexpr RGB24 RGB_YELLOWISH{255, 160, 0};
 constexpr RGB24 RGB_REDISH{255, 16, 16};
 constexpr RGB24 RGB_GREENISH{0, 160, 0};

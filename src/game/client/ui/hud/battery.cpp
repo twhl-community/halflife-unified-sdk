@@ -127,7 +127,7 @@ int CHudBattery::Draw(float flTime)
 	else
 		a = MIN_ALPHA;
 
-	const auto color = gHUD.m_HudColor.Scale(a);
+	const auto color = gHUD.m_HudItemColor.Scale(a);
 
 	int iOffset = (m_prc1->bottom - m_prc1->top) / 6;
 

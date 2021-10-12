@@ -81,6 +81,7 @@ extern CGraph	WorldGraph;
 // Global Savedata for player
 TYPEDESCRIPTION	CBasePlayer::m_playerSaveData[] =
 {
+	DEFINE_FIELD(CBasePlayer, m_SuitLightType, FIELD_INTEGER),
 	DEFINE_FIELD(CBasePlayer, m_flFlashLightTime, FIELD_TIME),
 	DEFINE_FIELD(CBasePlayer, m_iFlashBattery, FIELD_INTEGER),
 
@@ -3585,11 +3586,30 @@ void CBasePlayer::GiveNamedItem(const char* pszName)
 	DispatchTouch(pent, ENT(pev));
 }
 
-BOOL CBasePlayer::FlashlightIsOn()
+int CBasePlayer::GetFlashlightFlag() const
 {
-	return FBitSet(pev->effects, EF_DIMLIGHT);
+	switch (m_SuitLightType)
+	{
+	default:
+	case SuitLightType::Flashlight: return EF_DIMLIGHT;
+
+	case SuitLightType::Nightvision: return EF_BRIGHTLIGHT;
+	}
 }
 
+BOOL CBasePlayer::FlashlightIsOn()
+{
+	return FBitSet(pev->effects, GetFlashlightFlag());
+}
+
+static void UpdateFlashlight(CBasePlayer* player, bool isOn)
+{
+	MESSAGE_BEGIN(MSG_ONE, gmsgFlashlight, NULL, player->pev);
+	WRITE_BYTE(static_cast<int>(player->m_SuitLightType));
+	WRITE_BYTE(isOn ? 1 : 0);
+	WRITE_BYTE(player->m_iFlashBattery);
+	MESSAGE_END();
+}
 
 void CBasePlayer::FlashlightTurnOn()
 {
@@ -3600,30 +3620,64 @@ void CBasePlayer::FlashlightTurnOn()
 
 	if ((pev->weapons & (1 << WEAPON_SUIT)))
 	{
-		EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, SOUND_FLASHLIGHT_ON, 1.0, ATTN_NORM, 0, PITCH_NORM);
-		SetBits(pev->effects, EF_DIMLIGHT);
-		MESSAGE_BEGIN(MSG_ONE, gmsgFlashlight, NULL, pev);
-		WRITE_BYTE(1);
-		WRITE_BYTE(m_iFlashBattery);
-		MESSAGE_END();
+		auto onSound = [this]()
+		{
+			switch (m_SuitLightType)
+			{
+			default:
+			case SuitLightType::Flashlight: return SOUND_FLASHLIGHT_ON;
+			case SuitLightType::Nightvision: return SOUND_NIGHTVISION_ON;
+			}
+		}();
+
+		EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, onSound, 1.0, ATTN_NORM, 0, PITCH_NORM);
+
+		SetBits(pev->effects, GetFlashlightFlag());
+		UpdateFlashlight(this, true);
 
 		m_flFlashLightTime = FLASH_DRAIN_TIME + gpGlobals->time;
-
 	}
 }
 
-
 void CBasePlayer::FlashlightTurnOff()
 {
-	EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, SOUND_FLASHLIGHT_OFF, 1.0, ATTN_NORM, 0, PITCH_NORM);
-	ClearBits(pev->effects, EF_DIMLIGHT);
-	MESSAGE_BEGIN(MSG_ONE, gmsgFlashlight, NULL, pev);
-	WRITE_BYTE(0);
-	WRITE_BYTE(m_iFlashBattery);
-	MESSAGE_END();
+	auto offSound = [this]()
+	{
+		switch (m_SuitLightType)
+		{
+		default:
+		case SuitLightType::Flashlight: return SOUND_FLASHLIGHT_OFF;
+		case SuitLightType::Nightvision: return SOUND_NIGHTVISION_OFF;
+		}
+	}();
+
+	EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, offSound, 1.0, ATTN_NORM, 0, PITCH_NORM);
+
+	ClearBits(pev->effects, GetFlashlightFlag());
+	UpdateFlashlight(this, false);
 
 	m_flFlashLightTime = FLASH_CHARGE_TIME + gpGlobals->time;
+}
 
+void CBasePlayer::SetSuitLightType(SuitLightType type)
+{
+	if (m_SuitLightType == type)
+	{
+		return;
+	}
+
+	const bool isOn = FlashlightIsOn();
+
+	ClearBits(pev->effects, GetFlashlightFlag());
+
+	m_SuitLightType = type;
+
+	if (isOn)
+	{
+		SetBits(pev->effects, GetFlashlightFlag());
+	}
+
+	UpdateFlashlight(this, isOn);
 }
 
 /*
@@ -4330,6 +4384,7 @@ void CBasePlayer::UpdateClientData()
 		if (FlashlightIsOn())
 		{
 			MESSAGE_BEGIN(MSG_ONE, gmsgFlashlight, NULL, pev);
+			WRITE_BYTE(static_cast<int>(m_SuitLightType));
 			WRITE_BYTE(1);
 			WRITE_BYTE(m_iFlashBattery);
 			MESSAGE_END();
