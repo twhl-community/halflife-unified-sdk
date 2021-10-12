@@ -1054,7 +1054,7 @@ int CHudAmmo::Draw(float flTime)
 			x += AmmoWidth / 2;
 
 			// draw the | bar
-			FillRGBA(x, y, iBarWidth, gHUD.m_iFontHeight, gHUD.m_HudColor, a);
+			FillRGBA(x, y, iBarWidth, gHUD.m_iFontHeight, gHUD.m_HudItemColor, a);
 
 			x += iBarWidth + AmmoWidth / 2;
 
