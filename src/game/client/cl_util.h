@@ -19,6 +19,7 @@
 #include "cvardef.h"
 
 #include "Platform.h"
+#include "palette.h"
 
 // Macros to hook function calls into the HUD object
 #define HOOK_MESSAGE(x) gEngfuncs.pfnHookUserMsg(#x, __MsgFunc_##x );
@@ -40,7 +41,12 @@ inline const char* CVAR_GET_STRING(const char* x) { return gEngfuncs.pfnGetCvarS
 inline struct cvar_s* CVAR_CREATE(const char* cv, const char* val, const int flags) { return gEngfuncs.pfnRegisterVariable((char*)cv, (char*)val, flags); }
 
 #define SPR_Load (*gEngfuncs.pfnSPR_Load)
-#define SPR_Set (*gEngfuncs.pfnSPR_Set)
+
+inline void SPR_Set(HSPRITE hPic, const RGB24& color)
+{
+	gEngfuncs.pfnSPR_Set(hPic, color.Red, color.Green, color.Blue);
+}
+
 #define SPR_Frames (*gEngfuncs.pfnSPR_Frames)
 #define SPR_GetList (*gEngfuncs.pfnSPR_GetList)
 
@@ -56,8 +62,10 @@ inline struct cvar_s* CVAR_CREATE(const char* cv, const char* val, const int fla
 // SPR_DisableScissor  disables the clipping rect
 #define SPR_DisableScissor (*gEngfuncs.pfnSPR_DisableScissor)
 //
-#define FillRGBA (*gEngfuncs.pfnFillRGBA)
-
+inline void FillRGBA(int x, int y, int width, int height, const RGB24& color, int a)
+{
+	gEngfuncs.pfnFillRGBA(x, y, width, height, color.Red, color.Green, color.Blue, a);
+}
 
 // ScreenHeight returns the height of the screen, in pixels
 #define ScreenHeight (gHUD.m_scrinfo.iHeight)
@@ -154,8 +162,6 @@ inline int safe_sprintf(char* dst, int len_dst, const char* format, ...)
 // sound functions
 inline void PlaySound(const char* szSound, float vol) { gEngfuncs.pfnPlaySoundByName(szSound, vol); }
 inline void PlaySound(int iSound, float vol) { gEngfuncs.pfnPlaySoundByIndex(iSound, vol); }
-
-void ScaleColors(int& r, int& g, int& b, int a);
 
 float Length(const float* v);
 void VectorMA(const float* veca, float scale, const float* vecb, float* vecc);

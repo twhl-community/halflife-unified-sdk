@@ -54,21 +54,19 @@ void CHudPlayerBrowse::InitHUDData()
 
 int CHudPlayerBrowse::Draw(float flTime)
 {
-	int r, g, b;
+	RGB24 color;
 
 	if (m_iTeamNum == static_cast<int>(CTFTeam::BlackMesa))
 	{
-		UnpackRGB(r, g, b, RGB_YELLOWISH);
+		color = RGB_YELLOWISH;
 	}
 	else if (m_iTeamNum == static_cast<int>(CTFTeam::OpposingForce))
 	{
-		UnpackRGB(r, g, b, RGB_HUD_COLOR);
+		color = RGB_HUD_COLOR;
 	}
 	else
 	{
-		r = 192;
-		g = 192;
-		b = 192;
+		color = {192, 192, 192};
 	}
 
 	if (m_flDelayFade > 0)
@@ -85,7 +83,7 @@ int CHudPlayerBrowse::Draw(float flTime)
 		}
 		else
 		{
-			ScaleColors(r, g, b, m_flDelayFade);
+			color = color.Scale(m_flDelayFade);
 			m_flDelayFade -= 85 * gHUD.m_flTimeDelta;
 		}
 	}
@@ -96,11 +94,11 @@ int CHudPlayerBrowse::Draw(float flTime)
 		{
 			if (m_flDelayFadeSprite > 0)
 			{
-				ScaleColors(m_PowerupSprite.r, m_PowerupSprite.g, m_PowerupSprite.b, V_max(40, m_flDelayFadeSprite));
+				m_PowerupSprite.color = m_PowerupSprite.color.Scale(V_max(40, m_flDelayFadeSprite));
 				m_flDelayFadeSprite -= 10 * gHUD.m_flTimeDelta;
 			}
 
-			gEngfuncs.pfnSPR_Set(m_PowerupSprite.spr, m_PowerupSprite.r, m_PowerupSprite.g, m_PowerupSprite.b);
+			SPR_Set(m_PowerupSprite.spr, m_PowerupSprite.color);
 			gEngfuncs.pfnSPR_DrawAdditive(
 				0,
 				ScreenWidth / 2 + (m_PowerupSprite.rc.left - m_PowerupSprite.rc.right - 105),
@@ -108,7 +106,7 @@ int CHudPlayerBrowse::Draw(float flTime)
 				&m_PowerupSprite.rc);
 		}
 
-		gHUD.DrawHudString(ScreenWidth / 2 - 100, ScreenHeight * 0.75, ScreenWidth, m_szLineBuffer, r, g, b);
+		gHUD.DrawHudString(ScreenWidth / 2 - 100, ScreenHeight * 0.75, ScreenWidth, m_szLineBuffer, color);
 	}
 
 	return 1;
@@ -147,45 +145,35 @@ int CHudPlayerBrowse::MsgFunc_PlyrBrowse(const char* pszName, int iSize, void* p
 				const int spriteIndex = gHUD.GetSpriteIndex("score_ctfljump");
 				m_PowerupSprite.spr = gHUD.GetSprite(spriteIndex);
 				m_PowerupSprite.rc = gHUD.GetSpriteRect(spriteIndex);
-				m_PowerupSprite.r = 255;
-				m_PowerupSprite.g = 160;
-				m_PowerupSprite.b = 0;
+				m_PowerupSprite.color = {255, 160, 0};
 			}
 			else if (items & CTFItem::PortableHEV)
 			{
 				const int spriteIndex = gHUD.GetSpriteIndex("score_ctfphev");
 				m_PowerupSprite.spr = gHUD.GetSprite(spriteIndex);
 				m_PowerupSprite.rc = gHUD.GetSpriteRect(spriteIndex);
-				m_PowerupSprite.r = 128;
-				m_PowerupSprite.g = 160;
-				m_PowerupSprite.b = 255;
+				m_PowerupSprite.color = {128, 160, 255};
 			}
 			else if (items & CTFItem::Regeneration)
 			{
 				const int spriteIndex = gHUD.GetSpriteIndex("score_ctfregen");
 				m_PowerupSprite.spr = gHUD.GetSprite(spriteIndex);
 				m_PowerupSprite.rc = gHUD.GetSpriteRect(spriteIndex);
-				m_PowerupSprite.r = 0;
-				m_PowerupSprite.g = 255;
-				m_PowerupSprite.b = 0;
+				m_PowerupSprite.color = {0, 255, 0};
 			}
 			else if (items & CTFItem::Acceleration)
 			{
 				const int spriteIndex = gHUD.GetSpriteIndex("score_ctfaccel");
 				m_PowerupSprite.spr = gHUD.GetSprite(spriteIndex);
 				m_PowerupSprite.rc = gHUD.GetSpriteRect(spriteIndex);
-				m_PowerupSprite.r = 255;
-				m_PowerupSprite.g = 0;
-				m_PowerupSprite.b = 0;
+				m_PowerupSprite.color = {255, 0, 0};
 			}
 			else if (items & CTFItem::Backpack)
 			{
 				const int spriteIndex = gHUD.GetSpriteIndex("score_ctfbpack");
 				m_PowerupSprite.spr = gHUD.GetSprite(spriteIndex);
 				m_PowerupSprite.rc = gHUD.GetSpriteRect(spriteIndex);
-				m_PowerupSprite.r = 255;
-				m_PowerupSprite.g = 255;
-				m_PowerupSprite.b = 0;
+				m_PowerupSprite.color = {255, 255, 0};
 			}
 		}
 		else

@@ -188,7 +188,7 @@ int CHud::Redraw(float flTime, int intermission)
 		if (m_hsprLogo == 0)
 			m_hsprLogo = LoadSprite("sprites/%d_logo.spr");
 
-		SPR_Set(m_hsprLogo, 250, 250, 250);
+		SPR_Set(m_hsprLogo, {250, 250, 250});
 
 		x = SPR_Width(m_hsprLogo, 0);
 		x = ScreenWidth - x;
@@ -226,29 +226,21 @@ int CHud::Redraw(float flTime, int intermission)
 	return 1;
 }
 
-void ScaleColors(int& r, int& g, int& b, int a)
+int CHud::DrawHudString(int xpos, int ypos, int iMaxX, char* szIt, const RGB24& color)
 {
-	float x = (float)a / 255;
-	r = (int)(r * x);
-	g = (int)(g * x);
-	b = (int)(b * x);
+	return xpos + gEngfuncs.pfnDrawString(xpos, ypos, szIt, color.Red, color.Green, color.Blue);
 }
 
-int CHud::DrawHudString(int xpos, int ypos, int iMaxX, char* szIt, int r, int g, int b)
-{
-	return xpos + gEngfuncs.pfnDrawString(xpos, ypos, szIt, r, g, b);
-}
-
-int CHud::DrawHudNumberString(int xpos, int ypos, int iMinX, int iNumber, int r, int g, int b)
+int CHud::DrawHudNumberString(int xpos, int ypos, int iMinX, int iNumber, const RGB24& color)
 {
 	char szString[32];
 	sprintf(szString, "%d", iNumber);
-	return DrawHudStringReverse(xpos, ypos, iMinX, szString, r, g, b);
+	return DrawHudStringReverse(xpos, ypos, iMinX, szString, color);
 
 }
 
 // draws a string from right to left (right-aligned)
-int CHud::DrawHudStringReverse(int xpos, int ypos, int iMinX, char* szString, int r, int g, int b)
+int CHud::DrawHudStringReverse(int xpos, int ypos, int iMinX, char* szString, const RGB24& color)
 {
 	/*
 	return xpos - gEngfuncs.pfnDrawStringReverse( xpos, ypos, szString, r, g, b);
@@ -278,7 +270,7 @@ int CHud::DrawHudStringReverse(int xpos, int ypos, int iMinX, char* szString, in
 
 	while (true)
 	{
-		gEngfuncs.pfnDrawCharacter(x, ypos, *i, r, g, b);
+		gEngfuncs.pfnDrawCharacter(x, ypos, *i, color.Red, color.Green, color.Blue);
 
 		if (i == szString)
 			break;
@@ -296,7 +288,7 @@ int CHud::DrawHudStringReverse(int xpos, int ypos, int iMinX, char* szString, in
 	return x;
 }
 
-int CHud::DrawHudNumber(int x, int y, int iFlags, int iNumber, int r, int g, int b)
+int CHud::DrawHudNumber(int x, int y, int iFlags, int iNumber, const RGB24& color)
 {
 	int iWidth = GetSpriteRect(m_HUD_number_0).right - GetSpriteRect(m_HUD_number_0).left;
 	int k;
@@ -307,7 +299,7 @@ int CHud::DrawHudNumber(int x, int y, int iFlags, int iNumber, int r, int g, int
 		if (iNumber >= 100)
 		{
 			k = iNumber / 100;
-			SPR_Set(GetSprite(m_HUD_number_0 + k), r, g, b);
+			SPR_Set(GetSprite(m_HUD_number_0 + k), color);
 			SPR_DrawAdditive(0, x, y, &GetSpriteRect(m_HUD_number_0 + k));
 			x += iWidth;
 		}
@@ -321,7 +313,7 @@ int CHud::DrawHudNumber(int x, int y, int iFlags, int iNumber, int r, int g, int
 		if (iNumber >= 10)
 		{
 			k = (iNumber % 100) / 10;
-			SPR_Set(GetSprite(m_HUD_number_0 + k), r, g, b);
+			SPR_Set(GetSprite(m_HUD_number_0 + k), color);
 			SPR_DrawAdditive(0, x, y, &GetSpriteRect(m_HUD_number_0 + k));
 			x += iWidth;
 		}
@@ -333,13 +325,13 @@ int CHud::DrawHudNumber(int x, int y, int iFlags, int iNumber, int r, int g, int
 
 		// SPR_Draw ones
 		k = iNumber % 10;
-		SPR_Set(GetSprite(m_HUD_number_0 + k), r, g, b);
+		SPR_Set(GetSprite(m_HUD_number_0 + k), color);
 		SPR_DrawAdditive(0, x, y, &GetSpriteRect(m_HUD_number_0 + k));
 		x += iWidth;
 	}
 	else if (iFlags & DHN_DRAWZERO)
 	{
-		SPR_Set(GetSprite(m_HUD_number_0), r, g, b);
+		SPR_Set(GetSprite(m_HUD_number_0), color);
 
 		// SPR_Draw 100's
 		if (iFlags & (DHN_3DIGITS))
@@ -410,7 +402,7 @@ int CHud::GetHudNumberWidth(int number, int width, int flags)
 	return totalDigits * digitWidth;
 }
 
-int CHud::DrawHudNumberReverse(int x, int y, int number, int flags, int r, int g, int b)
+int CHud::DrawHudNumberReverse(int x, int y, int number, int flags, const RGB24& color)
 {
 	if (number > 0 || (flags & DHN_DRAWZERO))
 	{
@@ -426,7 +418,7 @@ int CHud::DrawHudNumberReverse(int x, int y, int number, int flags, int r, int g
 			//This has to happen *before* drawing because we're drawing in reverse
 			x -= digitWidth;
 
-			SPR_Set(GetSprite(digitSpriteIndex), r, g, b);
+			SPR_Set(GetSprite(digitSpriteIndex), color);
 			SPR_DrawAdditive(0, x, y, &GetSpriteRect(digitSpriteIndex));
 
 			remainder /= 10;

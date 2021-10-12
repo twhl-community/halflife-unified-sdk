@@ -27,6 +27,7 @@
 #include "wrect.h"
 #include "cl_dll.h"
 #include "ammo.h"
+#include "palette.h"
 
 #define DHN_DRAWZERO 1
 #define DHN_2DIGITS  2
@@ -461,10 +462,10 @@ public:
 
 	//had to make these public so CHud could access them (to enable concussion icon)
 	//could use a friend declaration instead...
-	void EnableIcon(const char* pszIconName, unsigned char red, unsigned char green, unsigned char blue);
+	void EnableIcon(const char* pszIconName, const RGB24& color);
 	void DisableIcon(const char* pszIconName);
 
-	void EnableCustomIcon(int nIndex, char* pszIconName, unsigned char red, unsigned char green, unsigned char blue, const wrect_t& aRect);
+	void EnableCustomIcon(int nIndex, char* pszIconName, const RGB24& color, const wrect_t& aRect);
 	void DisableCustomIcon(int nIndex);
 
 private:
@@ -474,7 +475,7 @@ private:
 		char szSpriteName[MAX_ICONSPRITENAME_LENGTH];
 		HSPRITE spr;
 		wrect_t rc;
-		unsigned char r, g, b;
+		RGB24 color;
 		int teamnumber; //Not actually used
 	} icon_sprite_t;
 
@@ -602,9 +603,7 @@ private:
 		char szSpriteName[MAX_POWERUPSPRITENAME_LENGTH];
 		HSPRITE spr;
 		wrect_t rc;
-		int r;
-		int g;
-		int b;
+		RGB24 color;
 	};
 
 	float m_flDelayFade;
@@ -688,14 +687,14 @@ public:
 	cvar_t* m_pCvarDraw;
 
 	int m_iFontHeight;
-	int DrawHudNumber(int x, int y, int iFlags, int iNumber, int r, int g, int b);
-	int DrawHudString(int x, int y, int iMaxX, char* szString, int r, int g, int b);
-	int DrawHudStringReverse(int xpos, int ypos, int iMinX, char* szString, int r, int g, int b);
-	int DrawHudNumberString(int xpos, int ypos, int iMinX, int iNumber, int r, int g, int b);
+	int DrawHudNumber(int x, int y, int iFlags, int iNumber, const RGB24& color);
+	int DrawHudString(int x, int y, int iMaxX, char* szString, const RGB24& color);
+	int DrawHudStringReverse(int xpos, int ypos, int iMinX, char* szString, const RGB24& color);
+	int DrawHudNumberString(int xpos, int ypos, int iMinX, int iNumber, const RGB24& color);
 	int GetNumWidth(int iNumber, int iFlags);
 
 	int GetHudNumberWidth(int number, int width, int flags);
-	int DrawHudNumberReverse(int x, int y, int number, int flags, int r, int g, int b);
+	int DrawHudNumberReverse(int x, int y, int number, int flags, const RGB24& color);
 
 private:
 	// the memory for these arrays are allocated in the first call to CHud::VidInit(), when the hud.txt and associated sprites are loaded.

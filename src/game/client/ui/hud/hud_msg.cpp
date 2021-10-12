@@ -153,9 +153,7 @@ int CHud::MsgFunc_Concuss(const char* pszName, int iSize, void* pbuf)
 	m_iConcussionEffect = READ_BYTE();
 	if (m_iConcussionEffect)
 	{
-		int r, g, b;
-		UnpackRGB(r, g, b, RGB_YELLOWISH);
-		this->m_StatusIcons.EnableIcon("dmg_concuss", r, g, b);
+		this->m_StatusIcons.EnableIcon("dmg_concuss", RGB_HUD_COLOR);
 	}
 	else
 		this->m_StatusIcons.DisableIcon("dmg_concuss");

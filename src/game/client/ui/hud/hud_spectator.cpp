@@ -44,6 +44,13 @@ extern Vector v_angles;		// last view angle
 extern Vector v_cl_angles;	// last client/mouse angle
 extern Vector v_sim_org;	// last sim origin
 
+void UnpackRGB(int& r, int& g, int& b, unsigned long ulRGB)
+{
+	r = (ulRGB & 0xFF0000) >> 16;
+	g = (ulRGB & 0xFF00) >> 8;
+	b = ulRGB & 0xFF;
+}
+
 #if 0 
 const char* GetSpectatorLabel(int iMode)
 {
@@ -1546,7 +1553,7 @@ void CHudSpectator::DrawOverviewLayer()
 
 void CHudSpectator::DrawOverviewEntities()
 {
-	int				i, ir, ig, ib;
+	int				i;
 	struct model_s* hSpriteModel;
 	Vector			origin, angles, point, forward, right, left, up, world, screen, offset;
 	float			x, y, z, r, g, b, sizeScale = 4.0f;
@@ -1558,10 +1565,10 @@ void CHudSpectator::DrawOverviewEntities()
 
 	z = m_OverviewData.layersHeights[0] * zScale;
 	// get yellow/brown HUD color
-	UnpackRGB(ir, ig, ib, RGB_YELLOWISH);
-	r = (float)ir / 255.0f;
-	g = (float)ig / 255.0f;
-	b = (float)ib / 255.0f;
+	const auto color = RGB_HUD_COLOR;
+	r = (float)color.Red / 255.0f;
+	g = (float)color.Green / 255.0f;
+	b = (float)color.Blue / 255.0f;
 
 	gEngfuncs.pTriAPI->CullFace(TRI_NONE);
 

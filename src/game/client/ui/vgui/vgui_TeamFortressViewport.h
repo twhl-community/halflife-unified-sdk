@@ -56,7 +56,6 @@ class CStatsMenuPanel;
 
 char* GetVGUITGAName(const char *pszName);
 BitmapTGA *LoadTGAForRes(const char* pImageName);
-void ScaleColors( int &r, int &g, int &b, int a );
 
 const int StatsTeamsCount = 4;
 
@@ -1798,7 +1797,7 @@ public:
 	void paint()
 	{
 		// Get the paint color
-		int r,g,b,a;
+		int a;
 		// Has health changed? Flash the health #
 		if (gHUD.m_Health.m_fFade)
 		{
@@ -1815,8 +1814,7 @@ public:
 		else
 			a = MIN_ALPHA;
 
-		gHUD.m_Health.GetPainColor( r, g, b );
-		ScaleColors(r, g, b, a );
+		const auto color = gHUD.m_Health.GetPainColor().Scale(a);
 
 		// If health is getting low, make it bright red
 		if (gHUD.m_Health.m_iHealth <= 15)
@@ -1827,12 +1825,12 @@ public:
 		m_pHealthTGA->getPos(iXPos, iYPos);
 
 		// Paint the player's health
-		int x = gHUD.DrawHudNumber( iXPos + iXSize + 5, iYPos + 5, DHN_3DIGITS | DHN_DRAWZERO, gHUD.m_Health.m_iHealth, r, g, b);
+		int x = gHUD.DrawHudNumber( iXPos + iXSize + 5, iYPos + 5, DHN_3DIGITS | DHN_DRAWZERO, gHUD.m_Health.m_iHealth, color);
 
 		// Draw the vertical line
 		int HealthWidth = gHUD.GetSpriteRect(gHUD.m_HUD_number_0).right - gHUD.GetSpriteRect(gHUD.m_HUD_number_0).left;
 		x += HealthWidth / 2;
-		FillRGBA(x, iYPos + 5, HealthWidth / 10, gHUD.m_iFontHeight, 255, 160, 0, a);
+		FillRGBA(x, iYPos + 5, HealthWidth / 10, gHUD.m_iFontHeight, {255, 160, 0}, a);
 	}
 };
 

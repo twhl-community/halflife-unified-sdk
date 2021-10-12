@@ -33,9 +33,7 @@ struct icon_sprite_t
 	char szSpriteName[24];
 	HSPRITE spr;
 	wrect_t rc;
-	unsigned char r;
-	unsigned char g;
-	unsigned char b;
+	RGB24 color;
 	unsigned char bFlags;
 };
 
@@ -167,36 +165,38 @@ int CHudScoreboard::Draw(float fTime)
 	int ypos = ROW_RANGE_MIN + (list_slot * ROW_GAP);
 	int	xpos = NAME_RANGE_MIN + xpos_rel;
 
-	if (!gHUD.m_Teamplay)
-		gHUD.DrawHudString(xpos, ypos, NAME_RANGE_MAX + xpos_rel, "Player", 255, 140, 0);
-	else
-		gHUD.DrawHudString(xpos, ypos, NAME_RANGE_MAX + xpos_rel, "Teams", 255, 140, 0);
+	const RGB24 color{255, 140, 0};
 
-	gHUD.DrawHudStringReverse(KILLS_RANGE_MAX + xpos_rel, ypos, 0, "kills", 255, 140, 0);
-	gHUD.DrawHudString(DIVIDER_POS + xpos_rel, ypos, ScreenWidth, "/", 255, 140, 0);
+	if (!gHUD.m_Teamplay)
+		gHUD.DrawHudString(xpos, ypos, NAME_RANGE_MAX + xpos_rel, "Player", color);
+	else
+		gHUD.DrawHudString(xpos, ypos, NAME_RANGE_MAX + xpos_rel, "Teams", color);
+
+	gHUD.DrawHudStringReverse(KILLS_RANGE_MAX + xpos_rel, ypos, 0, "kills", color);
+	gHUD.DrawHudString(DIVIDER_POS + xpos_rel, ypos, ScreenWidth, "/", color);
 
 	if (gHUD.m_Teamplay == 2)
 	{
-		gHUD.DrawHudString(xpos_rel + 190, ypos, ScreenWidth, "deaths", 255, 140, 0);
-		gHUD.DrawHudString(xpos_rel + 240, ypos, ScreenWidth, "/", 255, 140, 0);
-		gHUD.DrawHudString(xpos_rel + 255, ypos, ScreenWidth, "scores", 255, 140, 0);
-		gHUD.DrawHudString(xpos_rel + 310, ypos, ScreenWidth, "latency", 255, 140, 0);
+		gHUD.DrawHudString(xpos_rel + 190, ypos, ScreenWidth, "deaths", color);
+		gHUD.DrawHudString(xpos_rel + 240, ypos, ScreenWidth, "/", color);
+		gHUD.DrawHudString(xpos_rel + 255, ypos, ScreenWidth, "scores", color);
+		gHUD.DrawHudString(xpos_rel + 310, ypos, ScreenWidth, "latency", color);
 
 		if (can_show_packetloss)
 		{
-			gHUD.DrawHudString(xpos_rel + 355, ypos, ScreenWidth, "pkt loss", 255, 140, 0);
+			gHUD.DrawHudString(xpos_rel + 355, ypos, ScreenWidth, "pkt loss", color);
 		}
 
 		FAR_RIGHT = can_show_packetloss ? 390 : 345;
 	}
 	else
 	{
-		gHUD.DrawHudString(xpos_rel + 190, ypos, ScreenWidth, "deaths", 255, 140, 0);
-		gHUD.DrawHudString(xpos_rel + PING_RANGE_MAX - 35, ypos, ScreenWidth, "latency", 255, 140, 0);
+		gHUD.DrawHudString(xpos_rel + 190, ypos, ScreenWidth, "deaths", color);
+		gHUD.DrawHudString(xpos_rel + PING_RANGE_MAX - 35, ypos, ScreenWidth, "latency", color);
 
 		if (can_show_packetloss)
 		{
-			gHUD.DrawHudString(xpos_rel + PL_RANGE_MAX - 35, ypos, ScreenWidth, "pkt loss", 255, 140, 0);
+			gHUD.DrawHudString(xpos_rel + PL_RANGE_MAX - 35, ypos, ScreenWidth, "pkt loss", color);
 		}
 
 		FAR_RIGHT = can_show_packetloss ? PL_RANGE_MAX : PING_RANGE_MAX;
@@ -207,7 +207,7 @@ int CHudScoreboard::Draw(float fTime)
 	list_slot += 1.2;
 	ypos = ROW_RANGE_MIN + (list_slot * ROW_GAP);
 	xpos = NAME_RANGE_MIN + xpos_rel;
-	FillRGBA(xpos - 5, ypos, FAR_RIGHT, 1, 255, 140, 0, 255);  // draw the seperator line
+	FillRGBA(xpos - 5, ypos, FAR_RIGHT, 1, color, 255);  // draw the seperator line
 
 	list_slot += 0.8;
 
@@ -312,12 +312,12 @@ int CHudScoreboard::Draw(float fTime)
 			break;
 
 		xpos = NAME_RANGE_MIN + xpos_rel;
-		int r = 255, g = 225, b = 55; // draw the stuff kinda yellowish
+		const RGB24 textColor{255, 225, 55}; // draw the stuff kinda yellowish
 
 		if (team_info->ownteam) // if it is their team, draw the background different color
 		{
 			// overlay the background in blue,  then draw the score text over it
-			FillRGBA(NAME_RANGE_MIN + xpos_rel - 5, ypos, FAR_RIGHT, ROW_GAP, 0, 0, 255, 70);
+			FillRGBA(NAME_RANGE_MIN + xpos_rel - 5, ypos, FAR_RIGHT, ROW_GAP, {0, 0, 255}, 70);
 		}
 
 		static char buf[64];
@@ -326,27 +326,27 @@ int CHudScoreboard::Draw(float fTime)
 		{
 
 			// draw their name (left to right)
-			gHUD.DrawHudString(xpos, ypos, NAME_RANGE_MAX + xpos_rel, team_info->name, r, g, b);
+			gHUD.DrawHudString(xpos, ypos, NAME_RANGE_MAX + xpos_rel, team_info->name, textColor);
 
 			// draw kills (right to left)
 			xpos = KILLS_RANGE_MAX + xpos_rel;
-			gHUD.DrawHudNumberString(xpos, ypos, KILLS_RANGE_MIN + xpos_rel, team_info->frags, r, g, b);
+			gHUD.DrawHudNumberString(xpos, ypos, KILLS_RANGE_MIN + xpos_rel, team_info->frags, textColor);
 
 			// draw divider
 			xpos = DIVIDER_POS + xpos_rel;
-			gHUD.DrawHudString(xpos, ypos, xpos + 20, "/", r, g, b);
+			gHUD.DrawHudString(xpos, ypos, xpos + 20, "/", textColor);
 
 			// draw deaths
 			xpos = DEATHS_RANGE_MAX + xpos_rel;
-			gHUD.DrawHudNumberString(xpos, ypos, DEATHS_RANGE_MIN + xpos_rel, team_info->deaths, r, g, b);
+			gHUD.DrawHudNumberString(xpos, ypos, DEATHS_RANGE_MIN + xpos_rel, team_info->deaths, textColor);
 
 			xpos = ((PING_RANGE_MAX - PING_RANGE_MIN) / 2) + PING_RANGE_MIN + xpos_rel + 25;
 		}
 		else
 		{
 			sprintf(buf, "%s Team Score:", team_info->name);
-			gHUD.DrawHudString(xpos, ypos, xpos_rel + 205, buf, r, g, b);
-			gHUD.DrawHudNumberString(xpos_rel + 275, ypos, xpos_rel + 250, team_info->frags, r, g, b);
+			gHUD.DrawHudString(xpos, ypos, xpos_rel + 205, buf, textColor);
+			gHUD.DrawHudNumberString(xpos_rel + 275, ypos, xpos_rel + 250, team_info->frags, textColor);
 
 			xpos = ((PING_RANGE_MAX - PING_RANGE_MIN) / 2) + PING_RANGE_MIN + xpos_rel + 25 + 50;
 		}
@@ -354,9 +354,8 @@ int CHudScoreboard::Draw(float fTime)
 		// draw ping
 		// draw ping & packetloss
 		sprintf(buf, "%d", team_info->ping);
-		UnpackRGB(r, g, b, RGB_YELLOWISH);
 
-		gHUD.DrawHudStringReverse(xpos, ypos, xpos - 50, buf, r, g, b);
+		gHUD.DrawHudStringReverse(xpos, ypos, xpos - 50, buf, RGB_HUD_COLOR);
 
 		//  Packetloss removed on Kelly 'shipping nazi' Bailey's orders
 		if (can_show_packetloss)
@@ -364,7 +363,7 @@ int CHudScoreboard::Draw(float fTime)
 			xpos = ((PL_RANGE_MAX - PL_RANGE_MIN) / 2) + PL_RANGE_MIN + xpos_rel + 25 + 10;
 
 			sprintf(buf, "  %d", team_info->packetloss);
-			gHUD.DrawHudString(xpos, ypos, xpos + 50, buf, r, g, b);
+			gHUD.DrawHudString(xpos, ypos, xpos + 50, buf, RGB_HUD_COLOR);
 		}
 
 		team_info->already_drawn = TRUE;  // set the already_drawn to be TRUE, so this team won't get drawn again
@@ -453,53 +452,53 @@ int CHudScoreboard::DrawPlayers(int xpos_rel, float list_slot, int nameoffset, c
 
 			if (sprite.spr)
 			{
-				gEngfuncs.pfnSPR_Set(sprite.spr, sprite.r, sprite.g, sprite.b);
+				SPR_Set(sprite.spr, sprite.color);
 				gEngfuncs.pfnSPR_DrawAdditive(0, xpos_icon, ypos, &sprite.rc);
 				xpos_icon += sprite.rc.left - sprite.rc.right - 5;
 			}
 		}
 
 		int xpos = NAME_RANGE_MIN + xpos_rel;
-		int r = 255, g = 255, b = 255;
+		RGB24 textColor{255, 255, 255};
 		if (best_player == m_iLastKilledBy && m_fLastKillTime && m_fLastKillTime > gHUD.m_flTime)
 		{
 			if (pl_info->thisplayer)
 			{  // green is the suicide color? i wish this could do grey...
-				FillRGBA(NAME_RANGE_MIN + xpos_rel - 5, ypos, FAR_RIGHT, ROW_GAP, 80, 155, 0, 70);
+				FillRGBA(NAME_RANGE_MIN + xpos_rel - 5, ypos, FAR_RIGHT, ROW_GAP, {80, 155, 0}, 70);
 			}
 			else
 			{  // Highlight the killers name - overlay the background in red,  then draw the score text over it
-				FillRGBA(NAME_RANGE_MIN + xpos_rel - 5, ypos, FAR_RIGHT, ROW_GAP, 255, 0, 0, ((float)15 * (float)(m_fLastKillTime - gHUD.m_flTime)));
+				FillRGBA(NAME_RANGE_MIN + xpos_rel - 5, ypos, FAR_RIGHT, ROW_GAP, {255, 0, 0}, ((float)15 * (float)(m_fLastKillTime - gHUD.m_flTime)));
 			}
 		}
 		else if (pl_info->thisplayer) // if it is their name, draw it a different color
 		{
 			// overlay the background in blue,  then draw the score text over it
-			FillRGBA(NAME_RANGE_MIN + xpos_rel - 5, ypos, FAR_RIGHT, ROW_GAP, 0, 0, 255, 70);
+			FillRGBA(NAME_RANGE_MIN + xpos_rel - 5, ypos, FAR_RIGHT, ROW_GAP, {0, 0, 255}, 70);
 		}
 
 		// draw their name (left to right)
-		gHUD.DrawHudString(xpos + nameoffset, ypos, NAME_RANGE_MAX + xpos_rel, pl_info->name, r, g, b);
+		gHUD.DrawHudString(xpos + nameoffset, ypos, NAME_RANGE_MAX + xpos_rel, pl_info->name, textColor);
 
 		// draw kills (right to left)
 		xpos = KILLS_RANGE_MAX + xpos_rel;
-		gHUD.DrawHudNumberString(xpos, ypos, KILLS_RANGE_MIN + xpos_rel, g_PlayerExtraInfo[best_player].frags, r, g, b);
+		gHUD.DrawHudNumberString(xpos, ypos, KILLS_RANGE_MIN + xpos_rel, g_PlayerExtraInfo[best_player].frags, textColor);
 
 		// draw divider
 		xpos = DIVIDER_POS + xpos_rel;
-		gHUD.DrawHudString(xpos, ypos, xpos + 20, "/", r, g, b);
+		gHUD.DrawHudString(xpos, ypos, xpos + 20, "/", textColor);
 
 		// draw deaths
 
 		if (gHUD.m_Teamplay == 2)
 		{
-			gHUD.DrawHudNumberString(xpos_rel + 230, ypos, xpos_rel + DEATHS_RANGE_MIN, g_PlayerExtraInfo[best_player].deaths, r, g, b);
-			gHUD.DrawHudString(xpos_rel + 240, ypos, xpos_rel + 260, "/", r, g, b);
-			gHUD.DrawHudNumberString(xpos_rel + 275, ypos, xpos_rel + 250, g_PlayerExtraInfo[best_player].flagcaptures, r, g, b);
+			gHUD.DrawHudNumberString(xpos_rel + 230, ypos, xpos_rel + DEATHS_RANGE_MIN, g_PlayerExtraInfo[best_player].deaths, textColor);
+			gHUD.DrawHudString(xpos_rel + 240, ypos, xpos_rel + 260, "/", textColor);
+			gHUD.DrawHudNumberString(xpos_rel + 275, ypos, xpos_rel + 250, g_PlayerExtraInfo[best_player].flagcaptures, textColor);
 		}
 		else
 		{
-			gHUD.DrawHudNumberString(xpos_rel + DEATHS_RANGE_MAX, ypos, xpos_rel + DEATHS_RANGE_MIN, g_PlayerExtraInfo[best_player].deaths, r, g, b);
+			gHUD.DrawHudNumberString(xpos_rel + DEATHS_RANGE_MAX, ypos, xpos_rel + DEATHS_RANGE_MIN, g_PlayerExtraInfo[best_player].deaths, textColor);
 		}
 
 		// draw ping & packetloss
@@ -512,14 +511,14 @@ int CHudScoreboard::DrawPlayers(int xpos_rel, float list_slot, int nameoffset, c
 			xpos = xpos_rel + 345;
 		}
 
-		gHUD.DrawHudStringReverse(xpos, ypos, xpos - 50, buf, r, g, b);
+		gHUD.DrawHudStringReverse(xpos, ypos, xpos - 50, buf, textColor);
 
 		//  Packetloss removed on Kelly 'shipping nazi' Bailey's orders
 		if (can_show_packetloss)
 		{
 			if (g_PlayerInfoList[best_player].packetloss >= 63)
 			{
-				UnpackRGB(r, g, b, RGB_REDISH);
+				textColor = RGB_REDISH;
 				sprintf(buf, " !!!!");
 			}
 			else
@@ -534,7 +533,7 @@ int CHudScoreboard::DrawPlayers(int xpos_rel, float list_slot, int nameoffset, c
 				xpos = xpos_rel + 385;
 			}
 
-			gHUD.DrawHudString(xpos, ypos, xpos + 50, buf, r, g, b);
+			gHUD.DrawHudString(xpos, ypos, xpos + 50, buf, textColor);
 		}
 
 		pl_info->name = NULL;  // set the name to be NULL, so this client won't get drawn again
@@ -723,21 +722,7 @@ int CHudScoreboard::MsgFunc_PlayerIcon(const char* pszName, int iSize, void* pbu
 		sprite.spr = gHUD.GetSprite(spriteIndex);
 		sprite.rc = gHUD.GetSpriteRect(spriteIndex);
 		sprite.bFlags = itemId;
-
-		int r, g, b;
-
-		if (id == CTFItem::BlackMesaFlag)
-		{
-			UnpackRGB(r, g, b, RGB_YELLOWISH);
-		}
-		else
-		{
-			UnpackRGB(r, g, b, RGB_HUD_COLOR);
-		}
-
-		sprite.r = r;
-		sprite.g = g;
-		sprite.b = b;
+		sprite.color = id == CTFItem::BlackMesaFlag ? RGB_YELLOWISH : RGB_HUD_COLOR;
 
 		strcpy(sprite.szSpriteName, "score_flag");
 
@@ -766,9 +751,7 @@ int CHudScoreboard::MsgFunc_PlayerIcon(const char* pszName, int iSize, void* pbu
 				sprite.spr = gHUD.GetSprite(spriteIndex);
 				sprite.rc = gHUD.GetSpriteRect(spriteIndex);
 				sprite.bFlags = itemId;
-				sprite.r = 255;
-				sprite.g = 160;
-				sprite.b = 0;
+				sprite.color = {255, 160, 0};
 
 				strcpy(sprite.szSpriteName, "score_ctfljump");
 			}
@@ -779,9 +762,7 @@ int CHudScoreboard::MsgFunc_PlayerIcon(const char* pszName, int iSize, void* pbu
 				sprite.spr = gHUD.GetSprite(spriteIndex);
 				sprite.rc = gHUD.GetSpriteRect(spriteIndex);
 				sprite.bFlags = itemId;
-				sprite.r = 128;
-				sprite.g = 160;
-				sprite.b = 255;
+				sprite.color = {128, 160, 255};
 
 				strcpy(sprite.szSpriteName, "score_ctfphev");
 			}
@@ -792,9 +773,7 @@ int CHudScoreboard::MsgFunc_PlayerIcon(const char* pszName, int iSize, void* pbu
 				sprite.spr = gHUD.GetSprite(spriteIndex);
 				sprite.rc = gHUD.GetSpriteRect(spriteIndex);
 				sprite.bFlags = itemId;
-				sprite.r = 255;
-				sprite.g = 255;
-				sprite.b = 0;
+				sprite.color = {255, 255, 0};
 
 				strcpy(sprite.szSpriteName, "score_ctfbpack");
 			}
@@ -805,9 +784,7 @@ int CHudScoreboard::MsgFunc_PlayerIcon(const char* pszName, int iSize, void* pbu
 				sprite.spr = gHUD.GetSprite(spriteIndex);
 				sprite.rc = gHUD.GetSpriteRect(spriteIndex);
 				sprite.bFlags = itemId;
-				sprite.r = 255;
-				sprite.g = 0;
-				sprite.b = 0;
+				sprite.color = {255, 0, 0};
 
 				strcpy(sprite.szSpriteName, "score_ctfaccel");
 			}
@@ -818,9 +795,7 @@ int CHudScoreboard::MsgFunc_PlayerIcon(const char* pszName, int iSize, void* pbu
 				sprite.spr = gHUD.GetSprite(spriteIndex);
 				sprite.rc = gHUD.GetSpriteRect(spriteIndex);
 				sprite.bFlags = itemId;
-				sprite.r = 0;
-				sprite.g = 255;
-				sprite.b = 0;
+				sprite.color = {0, 255, 0};
 
 				strcpy(sprite.szSpriteName, "score_ctfregen");
 			}

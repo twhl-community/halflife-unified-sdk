@@ -188,6 +188,7 @@ target_sources(client PRIVATE
 	../server/entities/cbase.h
 	../server/entities/NPCs/basemonster.h
 	
+	../shared/palette.h
 	../shared/voice_common.h
 	../shared/entities/ehandle.cpp
 	../shared/entities/ehandle.h

@@ -13,6 +13,8 @@
 *
 ****/
 
+#include "palette.h"
+
 #define DMG_IMAGE_LIFE		2	// seconds that image is up
 
 #define DMG_IMAGE_POISON	0
@@ -54,7 +56,7 @@ public:
 	int m_HUD_dmg_bio;
 	int m_HUD_cross;
 	float m_fAttackFront, m_fAttackRear, m_fAttackLeft, m_fAttackRight;
-	void GetPainColor(int& r, int& g, int& b);
+	RGB24 GetPainColor();
 	float m_fFade;
 
 private:

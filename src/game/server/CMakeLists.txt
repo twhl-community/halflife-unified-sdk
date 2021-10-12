@@ -293,6 +293,7 @@ target_sources(hl PRIVATE
 	../../public/steam/steamtypes.h
 
 	../shared/bitvec.h
+	../shared/palette.h
 	../shared/voice_common.h
 	../shared/player_movement/pm_debug.cpp
 	../shared/player_movement/pm_debug.h

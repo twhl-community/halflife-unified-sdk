@@ -59,12 +59,13 @@ int CHudAmmoSecondary::Draw(float flTime)
 		return 1;
 
 	// draw secondary ammo icons above normal ammo readout
-	int a, x, y, r, g, b, AmmoWidth;
-	UnpackRGB(r, g, b, RGB_YELLOWISH);
-	a = (int)V_max(MIN_ALPHA, m_fFade);
+	int x, y, AmmoWidth;
+
+	const int a = (int)V_max(MIN_ALPHA, m_fFade);
 	if (m_fFade > 0)
 		m_fFade -= (gHUD.m_flTimeDelta * 20);  // slowly lower alpha to fade out icons
-	ScaleColors(r, g, b, a);
+
+	const auto color = RGB_HUD_COLOR.Scale(a);
 
 	AmmoWidth = gHUD.GetSpriteRect(gHUD.m_HUD_number_0).right - gHUD.GetSpriteRect(gHUD.m_HUD_number_0).left;
 
@@ -77,7 +78,7 @@ int CHudAmmoSecondary::Draw(float flTime)
 		x -= (gHUD.GetSpriteRect(m_HUD_ammoicon).right - gHUD.GetSpriteRect(m_HUD_ammoicon).left);
 		y -= (gHUD.GetSpriteRect(m_HUD_ammoicon).top - gHUD.GetSpriteRect(m_HUD_ammoicon).bottom);
 
-		SPR_Set(gHUD.GetSprite(m_HUD_ammoicon), r, g, b);
+		SPR_Set(gHUD.GetSprite(m_HUD_ammoicon), color);
 		SPR_DrawAdditive(0, x, y, &gHUD.GetSpriteRect(m_HUD_ammoicon));
 	}
 	else
@@ -97,13 +98,13 @@ int CHudAmmoSecondary::Draw(float flTime)
 
 		// draw the number, right-aligned
 		x -= (gHUD.GetNumWidth(m_iAmmoAmounts[i], DHN_DRAWZERO) * AmmoWidth);
-		gHUD.DrawHudNumber(x, y, DHN_DRAWZERO, m_iAmmoAmounts[i], r, g, b);
+		gHUD.DrawHudNumber(x, y, DHN_DRAWZERO, m_iAmmoAmounts[i], color);
 
 		if (i != 0)
 		{
 			// draw the divider bar
 			x -= (AmmoWidth / 2);
-			FillRGBA(x, y, (AmmoWidth / 10), gHUD.m_iFontHeight, r, g, b, a);
+			FillRGBA(x, y, (AmmoWidth / 10), gHUD.m_iFontHeight, color, a);
 		}
 	}
 

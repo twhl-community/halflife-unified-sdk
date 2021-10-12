@@ -70,7 +70,7 @@ int CHudStatusIcons::Draw(float flTime)
 			{
 				y -= (m_IconList[i].rc.bottom - m_IconList[i].rc.top) + 5;
 
-				SPR_Set(m_IconList[i].spr, m_IconList[i].r, m_IconList[i].g, m_IconList[i].b);
+				SPR_Set(m_IconList[i].spr, m_IconList[i].color);
 				SPR_DrawAdditive(0, x, y, &m_IconList[i].rc);
 			}
 		}
@@ -92,7 +92,7 @@ int CHudStatusIcons::Draw(float flTime)
 			{
 				const int x = (i < (MAX_CUSTOMSPRITES / 2)) ? 100 : (ScreenWidth - 100);
 
-				gEngfuncs.pfnSPR_Set(icon.spr, icon.r, icon.g, icon.b);
+				SPR_Set(icon.spr, icon.color);
 				gEngfuncs.pfnSPR_DrawAdditive(0, x, y, &icon.rc);
 				y += (icon.rc.bottom - icon.rc.top) + 5;
 			}
@@ -117,10 +117,11 @@ int CHudStatusIcons::MsgFunc_StatusIcon(const char* pszName, int iSize, void* pb
 	char* pszIconName = READ_STRING();
 	if (ShouldEnable)
 	{
-		int r = READ_BYTE();
-		int g = READ_BYTE();
-		int b = READ_BYTE();
-		EnableIcon(pszIconName, r, g, b);
+		RGB24 color;
+		color.Red = READ_BYTE();
+		color.Green = READ_BYTE();
+		color.Blue = READ_BYTE();
+		EnableIcon(pszIconName, color);
 		m_iFlags |= HUD_ACTIVE;
 	}
 	else
@@ -141,9 +142,10 @@ int CHudStatusIcons::MsgFunc_CustomIcon(const char* pszName, int iSize, void* pb
 	if (ShouldEnable)
 	{
 		char* pszIconName = READ_STRING();
-		int r = READ_BYTE();
-		int g = READ_BYTE();
-		int b = READ_BYTE();
+		RGB24 color;
+		color.Red = READ_BYTE();
+		color.Green = READ_BYTE();
+		color.Blue = READ_BYTE();
 
 		wrect_t aRect;
 		aRect.left = READ_BYTE();
@@ -151,7 +153,7 @@ int CHudStatusIcons::MsgFunc_CustomIcon(const char* pszName, int iSize, void* pb
 		aRect.right = READ_BYTE();
 		aRect.bottom = READ_BYTE();
 
-		EnableCustomIcon(index, pszIconName, r, g, b, aRect);
+		EnableCustomIcon(index, pszIconName, color, aRect);
 		m_iFlags |= HUD_ACTIVE;
 	}
 	else
@@ -163,7 +165,7 @@ int CHudStatusIcons::MsgFunc_CustomIcon(const char* pszName, int iSize, void* pb
 }
 
 // add the icon to the icon list, and set it's drawing color
-void CHudStatusIcons::EnableIcon(const char* pszIconName, unsigned char red, unsigned char green, unsigned char blue)
+void CHudStatusIcons::EnableIcon(const char* pszIconName, const RGB24& color)
 {
 	int i;
 	// check to see if the sprite is in the current list
@@ -194,9 +196,7 @@ void CHudStatusIcons::EnableIcon(const char* pszIconName, unsigned char red, uns
 	int spr_index = gHUD.GetSpriteIndex(pszIconName);
 	m_IconList[i].spr = gHUD.GetSprite(spr_index);
 	m_IconList[i].rc = gHUD.GetSpriteRect(spr_index);
-	m_IconList[i].r = red;
-	m_IconList[i].g = green;
-	m_IconList[i].b = blue;
+	m_IconList[i].color = color;
 	strcpy(m_IconList[i].szSpriteName, pszIconName);
 
 	// Hack: Play Timer sound when a grenade icon is played (in 0.8 seconds)
@@ -221,7 +221,7 @@ void CHudStatusIcons::DisableIcon(const char* pszIconName)
 	}
 }
 
-void CHudStatusIcons::EnableCustomIcon(int nIndex, char* pszIconName, unsigned char red, unsigned char green, unsigned char blue, const wrect_t& aRect)
+void CHudStatusIcons::EnableCustomIcon(int nIndex, char* pszIconName, const RGB24& color, const wrect_t& aRect)
 {
 	if (nIndex < MAX_CUSTOMSPRITES)
 	{
@@ -232,9 +232,7 @@ void CHudStatusIcons::EnableCustomIcon(int nIndex, char* pszIconName, unsigned c
 
 		icon.spr = gEngfuncs.pfnSPR_Load(szTemp);
 		icon.rc = aRect;
-		icon.r = red;
-		icon.g = green;
-		icon.b = blue;
+		icon.color = color;
 		//TODO: potential overflow
 		strcpy(icon.szSpriteName, pszIconName);
 	}

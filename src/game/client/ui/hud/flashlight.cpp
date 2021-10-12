@@ -99,36 +99,30 @@ int CHudFlashlight::Draw(float flTime)
 	if (gHUD.m_iHideHUDDisplay & (HIDEHUD_FLASHLIGHT | HIDEHUD_ALL))
 		return 1;
 
-	int r, g, b, x, y, a;
+	int x, y;
 	wrect_t rc;
 
 	if (!(gHUD.m_iWeaponBits & (1 << (WEAPON_SUIT))))
 		return 1;
 
-	if (m_fOn)
-		a = 225;
-	else
-		a = MIN_ALPHA;
+	const int a = m_fOn ? 225 : MIN_ALPHA;
 
-	if (m_flBat < 0.20)
-		UnpackRGB(r, g, b, RGB_REDISH);
-	else
-		UnpackRGB(r, g, b, RGB_YELLOWISH);
+	const auto& originalColor = m_flBat < 0.20 ? RGB_REDISH : RGB_HUD_COLOR;
 
-	ScaleColors(r, g, b, a);
+	const auto color = originalColor.Scale(a);
 
 	y = (m_prc1->bottom - m_prc2->top) / 2;
 	x = ScreenWidth - m_iWidth - m_iWidth / 2;
 
 	// Draw the flashlight casing
-	SPR_Set(m_hSprite1, r, g, b);
+	SPR_Set(m_hSprite1, color);
 	SPR_DrawAdditive(0, x, y, m_prc1);
 
 	if (m_fOn)
 	{  // draw the flashlight beam
 		x = ScreenWidth - m_iWidth / 2;
 
-		SPR_Set(m_hBeam, r, g, b);
+		SPR_Set(m_hBeam, color);
 		SPR_DrawAdditive(0, x, y, m_prcBeam);
 	}
 
@@ -140,7 +134,7 @@ int CHudFlashlight::Draw(float flTime)
 		rc = *m_prc2;
 		rc.left += iOffset;
 
-		SPR_Set(m_hSprite2, r, g, b);
+		SPR_Set(m_hSprite2, color);
 		SPR_DrawAdditive(0, x + iOffset, y, &rc);
 	}
 

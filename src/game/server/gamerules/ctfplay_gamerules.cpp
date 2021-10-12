@@ -146,20 +146,11 @@ static void SendFlagIcon(CBasePlayer* player, bool isActive, const char* flagNam
 	g_engfuncs.pfnWriteString(flagName);
 	g_engfuncs.pfnWriteByte(teamIndex);
 
-	int r, g, b;
+	const auto& color = teamIndex == 0 ? RGB_YELLOWISH : RGB_HUD_COLOR;
 
-	if (teamIndex == 0)
-	{
-		UnpackRGB(r, g, b, RGB_YELLOWISH);
-	}
-	else
-	{
-		UnpackRGB(r, g, b, RGB_HUD_COLOR);
-	}
-
-	g_engfuncs.pfnWriteByte(r);
-	g_engfuncs.pfnWriteByte(g);
-	g_engfuncs.pfnWriteByte(b);
+	g_engfuncs.pfnWriteByte(color.Red);
+	g_engfuncs.pfnWriteByte(color.Green);
+	g_engfuncs.pfnWriteByte(color.Blue);
 
 	g_engfuncs.pfnWriteByte(teamscores[teamIndex]);
 	g_engfuncs.pfnMessageEnd();
@@ -815,25 +806,23 @@ void CHalfLifeCTFplay::PlayerSpawn(CBasePlayer* pPlayer)
 				pBase->TurnOnLight(pPlayer);
 			}
 
-			int r = 128;
-			int g = 128;
-			int b = 128;
+			RGB24 color{128, 128, 128};
 
 			switch (pPlayer->m_iTeamNum)
 			{
 			case CTFTeam::BlackMesa:
-				UnpackRGB(r, g, b, RGB_YELLOWISH);
+				color = RGB_YELLOWISH;
 				break;
 
 			case CTFTeam::OpposingForce:
-				UnpackRGB(r, g, b, RGB_HUD_COLOR);
+				color = RGB_HUD_COLOR;
 				break;
 			}
 
 			g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgHudColor, nullptr, pPlayer->edict());
-			g_engfuncs.pfnWriteByte(r);
-			g_engfuncs.pfnWriteByte(g);
-			g_engfuncs.pfnWriteByte(b);
+			g_engfuncs.pfnWriteByte(color.Red);
+			g_engfuncs.pfnWriteByte(color.Green);
+			g_engfuncs.pfnWriteByte(color.Blue);
 			g_engfuncs.pfnMessageEnd();
 
 			InitItemsForPlayer(pPlayer);

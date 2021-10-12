@@ -75,7 +75,7 @@ int CHudFlagIcons::Draw(float flTime)
                     flag.rc.right - flag.rc.left + 10,
                     y + ((flag.rc.bottom - flag.rc.top) / 2) - 5,
                     DHN_DRAWZERO | DHN_2DIGITS,
-                    flag.score, flag.r, flag.g, flag.b);
+                    flag.score, {flag.r, flag.g, flag.b});
             }
         }
 
@@ -95,9 +95,7 @@ int CHudFlagIcons::Draw(float flTime)
             //TODO: this buffer is static in vanilla Op4
             char szBuf[40];
             sprintf(szBuf, "%s %d:%02d", CHudTextMessage::BufferedLocaliseTextString("#CTFTimeRemain"), minutesLeft, secondsLeft);
-            int r, g, b;
-            UnpackRGB(r, g, b, RGB_YELLOWISH);
-            gHUD.DrawHudString(5, ScreenHeight - 60, 200, szBuf, r, g, b);
+            gHUD.DrawHudString(5, ScreenHeight - 60, 200, szBuf, RGB_HUD_COLOR);
         }
     }
 

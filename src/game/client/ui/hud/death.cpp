@@ -94,7 +94,7 @@ int CHudDeathNotice::VidInit()
 
 int CHudDeathNotice::Draw(float flTime)
 {
-	int x, y, r, g, b;
+	int x, y;
 
 	for (int i = 0; i < MAX_DEATHNOTICES; i++)
 	{
@@ -130,14 +130,11 @@ int CHudDeathNotice::Draw(float flTime)
 				x = 5 + DrawConsoleString(x, y, rgDeathNoticeList[i].szKiller);
 			}
 
-			r = 255;  g = 80;	b = 0;
-			if (rgDeathNoticeList[i].iTeamKill)
-			{
-				r = 10;	g = 240; b = 10;  // display it in sickly green
-			}
+			// If it's a teamkill, display it in sickly green
+			const auto color = rgDeathNoticeList[i].iTeamKill ? RGB24{10, 240, 10} : RGB24{255, 80, 0};
 
 			// Draw death weapon
-			SPR_Set(gHUD.GetSprite(id), r, g, b);
+			SPR_Set(gHUD.GetSprite(id), color);
 			SPR_DrawAdditive(0, x, y, &gHUD.GetSpriteRect(id));
 
 			x += (gHUD.GetSpriteRect(id).right - gHUD.GetSpriteRect(id).left);

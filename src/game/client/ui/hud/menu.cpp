@@ -78,7 +78,8 @@ int CHudMenu::VidInit()
    \R : Right-align (just for the remainder of the current line)
 =================================*/
 
-static int menu_r, menu_g, menu_b, menu_x, menu_ralign;
+static RGB24 menu_color;
+static int menu_x, menu_ralign;
 
 static inline const char* ParseEscapeToken(const char* token)
 {
@@ -93,27 +94,19 @@ static inline const char* ParseEscapeToken(const char* token)
 		return token;
 
 	case 'w':
-		menu_r = 255;
-		menu_g = 255;
-		menu_b = 255;
+		menu_color = {255, 255, 255};
 		break;
 
 	case 'd':
-		menu_r = 100;
-		menu_g = 100;
-		menu_b = 100;
+		menu_color = {100, 100, 100};
 		break;
 
 	case 'y':
-		menu_r = 255;
-		menu_g = 210;
-		menu_b = 64;
+		menu_color = {255, 210, 64};
 		break;
 
 	case 'r':
-		menu_r = 210;
-		menu_g = 24;
-		menu_b = 0;
+		menu_color = {210, 24, 0};
 		break;
 
 	case 'R':
@@ -164,9 +157,7 @@ int CHudMenu::Draw(float flTime)
 	// center it
 	int y = (ScreenHeight / 2) - ((nlc / 2) * 12) - 40; // make sure it is above the say text
 
-	menu_r = 255;
-	menu_g = 255;
-	menu_b = 255;
+	menu_color = {255, 255, 255};
 	menu_x = 20;
 	menu_ralign = FALSE;
 
@@ -200,11 +191,11 @@ int CHudMenu::Draw(float flTime)
 			if (menu_ralign)
 			{
 				// IMPORTANT: Right-to-left rendered text does not parse escape tokens!
-				menu_x = gHUD.DrawHudStringReverse(menu_x, y, 0, menubuf, menu_r, menu_g, menu_b);
+				menu_x = gHUD.DrawHudStringReverse(menu_x, y, 0, menubuf, menu_color);
 			}
 			else
 			{
-				menu_x = gHUD.DrawHudString(menu_x, y, 320, menubuf, menu_r, menu_g, menu_b);
+				menu_x = gHUD.DrawHudString(menu_x, y, 320, menubuf, menu_color);
 			}
 		}
 	}

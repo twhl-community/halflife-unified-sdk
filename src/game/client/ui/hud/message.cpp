@@ -344,11 +344,12 @@ int CHudMessage::Draw(float fTime)
 			int x = XPosition(m_pGameTitle->x, fullWidth, fullWidth);
 			int y = YPosition(m_pGameTitle->y, fullHeight);
 
+			const auto color = RGB24{m_pGameTitle->r1, m_pGameTitle->g1, m_pGameTitle->b1}.Scale(brightness);
 
-			SPR_Set(gHUD.GetSprite(m_HUD_title_half), brightness * m_pGameTitle->r1, brightness * m_pGameTitle->g1, brightness * m_pGameTitle->b1);
+			SPR_Set(gHUD.GetSprite(m_HUD_title_half), color);
 			SPR_DrawAdditive(0, x, y, &gHUD.GetSpriteRect(m_HUD_title_half));
 
-			SPR_Set(gHUD.GetSprite(m_HUD_title_life), brightness * m_pGameTitle->r1, brightness * m_pGameTitle->g1, brightness * m_pGameTitle->b1);
+			SPR_Set(gHUD.GetSprite(m_HUD_title_life), color);
 			SPR_DrawAdditive(0, x + halfWidth, y, &gHUD.GetSpriteRect(m_HUD_title_life));
 
 			drawn = 1;
