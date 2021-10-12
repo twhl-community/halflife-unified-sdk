@@ -124,6 +124,11 @@ public:
 	void _cdecl UserCmd_NextWeapon();
 	void _cdecl UserCmd_PrevWeapon();
 
+	void SetCrosshair(HSPRITE sprite, wrect_t rect, RGB24 color);
+
+private:
+	void DrawCrosshair(int x, int y);
+
 private:
 	float m_fFade;
 	RGBA  m_rgba;
@@ -131,6 +136,9 @@ private:
 	int	m_HUD_bucket0;
 	int m_HUD_selection;
 
+	HSPRITE m_CrosshairSprite = 0;
+	wrect_t m_CrosshairRect{};
+	RGB24 m_CrosshairColor{};
 };
 
 //
@@ -711,6 +719,7 @@ public:
 	int		m_iRes;
 	cvar_t* m_pCvarStealMouse;
 	cvar_t* m_pCvarDraw;
+	cvar_t* m_pCvarCrosshair;
 
 	RGB24 m_HudColor = RGB_HUD_COLOR;
 

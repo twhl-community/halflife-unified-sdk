@@ -76,6 +76,7 @@ qboolean	v_resetCamera = 1;
 
 Vector v_client_aimangles;
 Vector ev_punchangle;
+Vector v_crosshairangle;
 
 cvar_t* scr_ofsx;
 cvar_t* scr_ofsy;
@@ -839,6 +840,7 @@ void V_CalcNormalRefdef(struct ref_params_s* pparams)
 	lasttime = pparams->time;
 
 	v_origin = pparams->vieworg;
+	v_crosshairangle = pparams->crosshairangle;
 }
 
 void V_SmoothInterpolateAngles(float* startAngle, float* endAngle, float* finalAngle, float degreesPerSec)

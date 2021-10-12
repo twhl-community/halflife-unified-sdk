@@ -1221,12 +1221,12 @@ void CHudSpectator::SetModes(int iNewMainMode, int iNewInsetMode)
 			m_crosshairRect.right = 48;
 			m_crosshairRect.bottom = 24;
 
-			SetCrosshair(m_hCrosshair, m_crosshairRect, 255, 255, 255);
+			gHUD.m_Ammo.SetCrosshair(m_hCrosshair, m_crosshairRect, {255, 255, 255});
 		}
 		else
 		{
 			memset(&m_crosshairRect, 0, sizeof(m_crosshairRect));
-			SetCrosshair(0, m_crosshairRect, 0, 0, 0);
+			gHUD.m_Ammo.SetCrosshair(0, m_crosshairRect, {0, 0, 0});
 		}
 
 		gViewPort->MsgFunc_ResetFade(NULL, 0, NULL);
@@ -1888,12 +1888,12 @@ void CHudSpectator::CheckSettings()
 		m_crosshairRect.right = 48;
 		m_crosshairRect.bottom = 24;
 
-		SetCrosshair(m_hCrosshair, m_crosshairRect, 255, 255, 255);
+		gHUD.m_Ammo.SetCrosshair(m_hCrosshair, m_crosshairRect, {255, 255, 255});
 	}
 	else
 	{
 		memset(&m_crosshairRect, 0, sizeof(m_crosshairRect));
-		SetCrosshair(0, m_crosshairRect, 0, 0, 0);
+		gHUD.m_Ammo.SetCrosshair(0, m_crosshairRect, {0, 0, 0});
 	}
 
 

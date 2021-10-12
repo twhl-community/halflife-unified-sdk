@@ -22,12 +22,17 @@
 #include "cl_util.h"
 #include "parsemsg.h"
 #include "pm_shared.h"
+#include "triangleapi.h"
 
 #include <string.h>
 #include <stdio.h>
 
 #include "ammohistory.h"
 #include "vgui_TeamFortressViewport.h"
+
+extern Vector v_origin;
+extern Vector v_angles;
+extern Vector v_crosshairangle;
 
 WEAPON* gpActiveSel;	// NULL means off, 1 means just the menu bar, otherwise
 						// this points to the active weapon menu item
@@ -543,12 +548,12 @@ int CHudAmmo::MsgFunc_HideWeapon(const char* pszName, int iSize, void* pbuf)
 	{
 		static wrect_t nullrc;
 		gpActiveSel = NULL;
-		SetCrosshair(0, nullrc, 0, 0, 0);
+		SetCrosshair(0, nullrc, {0, 0, 0});
 	}
 	else
 	{
 		if (m_pWeapon)
-			SetCrosshair(m_pWeapon->hCrosshair, m_pWeapon->rcCrosshair, 255, 255, 255);
+			SetCrosshair(m_pWeapon->hCrosshair, m_pWeapon->rcCrosshair, {255, 255, 255});
 	}
 
 	return 1;
@@ -578,7 +583,7 @@ int CHudAmmo::MsgFunc_CurWeapon(const char* pszName, int iSize, void* pbuf)
 
 	if (iId < 1)
 	{
-		SetCrosshair(0, nullrc, 0, 0, 0);
+		SetCrosshair(0, nullrc, {0, 0, 0});
 		m_pWeapon = nullptr;
 		return 0;
 	}
@@ -614,16 +619,16 @@ int CHudAmmo::MsgFunc_CurWeapon(const char* pszName, int iSize, void* pbuf)
 	if (gHUD.m_iFOV >= 90)
 	{ // normal crosshairs
 		if (fOnTarget && m_pWeapon->hAutoaim)
-			SetCrosshair(m_pWeapon->hAutoaim, m_pWeapon->rcAutoaim, 255, 255, 255);
+			SetCrosshair(m_pWeapon->hAutoaim, m_pWeapon->rcAutoaim, {255, 255, 255});
 		else
-			SetCrosshair(m_pWeapon->hCrosshair, m_pWeapon->rcCrosshair, 255, 255, 255);
+			SetCrosshair(m_pWeapon->hCrosshair, m_pWeapon->rcCrosshair, {255, 255, 255});
 	}
 	else
 	{ // zoomed crosshairs
 		if (fOnTarget && m_pWeapon->hZoomedAutoaim)
-			SetCrosshair(m_pWeapon->hZoomedAutoaim, m_pWeapon->rcZoomedAutoaim, 255, 255, 255);
+			SetCrosshair(m_pWeapon->hZoomedAutoaim, m_pWeapon->rcZoomedAutoaim, {255, 255, 255});
 		else
-			SetCrosshair(m_pWeapon->hZoomedCrosshair, m_pWeapon->rcZoomedCrosshair, 255, 255, 255);
+			SetCrosshair(m_pWeapon->hZoomedCrosshair, m_pWeapon->rcZoomedCrosshair, {255, 255, 255});
 
 	}
 
@@ -823,6 +828,25 @@ void CHudAmmo::UserCmd_PrevWeapon()
 	gpActiveSel = NULL;
 }
 
+void CHudAmmo::SetCrosshair(HSPRITE sprite, wrect_t rect, RGB24 color)
+{
+	m_CrosshairSprite = sprite;
+	m_CrosshairRect = rect;
+	m_CrosshairColor = color;
+}
+
+void CHudAmmo::DrawCrosshair(int x, int y)
+{
+	if (m_CrosshairSprite)
+	{
+		SPR_Set(m_CrosshairSprite, m_CrosshairColor);
+
+		x -= (m_CrosshairRect.right - m_CrosshairRect.left) / 2;
+		y -= (m_CrosshairRect.bottom - m_CrosshairRect.top) / 2;
+
+		gEngfuncs.pfnSPR_DrawHoles(0, x, y, &m_CrosshairRect);
+	}
+}
 
 
 //-------------------------------------------------------------------------
@@ -845,6 +869,25 @@ int CHudAmmo::Draw(float flTime)
 
 	// Draw ammo pickup history
 	gHR.DrawAmmoHistory(flTime);
+
+	//Draw crosshair here so original engine behavior is mimicked pretty closely
+	{
+		if (gHUD.m_pCvarCrosshair->value)
+		{
+			const Vector angles = v_angles + v_crosshairangle;
+			Vector forward;
+			AngleVectors(angles, forward, nullptr, nullptr);
+
+			Vector point = v_origin + forward;
+			Vector screen;
+			gEngfuncs.pTriAPI->WorldToScreen(point, screen);
+
+			const int adjustedX = XPROJECT(screen[0]);
+			const int adjustedY = YPROJECT(screen[1]);
+
+			DrawCrosshair(adjustedX, adjustedY);
+		}
+	}
 
 	if (!(m_iFlags & HUD_ACTIVE))
 		return 0;
