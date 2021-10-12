@@ -5308,6 +5308,15 @@ void CBasePlayer::SetPrefsFromUserinfo(char* infobuffer)
 	}
 }
 
+void CBasePlayer::SetHudColor(RGB24 color)
+{
+	g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgHudColor, nullptr, edict());
+	g_engfuncs.pfnWriteByte(color.Red);
+	g_engfuncs.pfnWriteByte(color.Green);
+	g_engfuncs.pfnWriteByte(color.Blue);
+	g_engfuncs.pfnMessageEnd();
+}
+
 //=========================================================
 // Dead HEV suit prop
 //=========================================================

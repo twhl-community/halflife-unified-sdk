@@ -819,11 +819,7 @@ void CHalfLifeCTFplay::PlayerSpawn(CBasePlayer* pPlayer)
 				break;
 			}
 
-			g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgHudColor, nullptr, pPlayer->edict());
-			g_engfuncs.pfnWriteByte(color.Red);
-			g_engfuncs.pfnWriteByte(color.Green);
-			g_engfuncs.pfnWriteByte(color.Blue);
-			g_engfuncs.pfnMessageEnd();
+			pPlayer->SetHudColor(color);
 
 			InitItemsForPlayer(pPlayer);
 			DisplayTeamFlags(pPlayer);

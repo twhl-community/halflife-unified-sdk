@@ -79,6 +79,7 @@ target_sources(hl PRIVATE
 	entities/plats.cpp
 	entities/player.cpp
 	entities/player.h
+	entities/player_sethudcolor.cpp
 	entities/sound.cpp
 	entities/soundent.cpp
 	entities/soundent.h

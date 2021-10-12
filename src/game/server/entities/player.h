@@ -18,6 +18,7 @@
 
 #include "pm_materials.h"
 #include "ctf/CTFDefs.h"
+#include "palette.h"
 
 class CRope;
 
@@ -408,6 +409,13 @@ private:
 	CRope* m_pRope;
 	float m_flLastClimbTime = 0;
 	bool m_bIsClimbing = false;
+
+public:
+	/**
+	*	@brief Sets the player's hud color
+	*	@details The player must be fully connected and ready to receive user messages for this to work
+	*/
+	void SetHudColor(RGB24 color);
 };
 
 #define AUTOAIM_2DEGREES  0.0348994967025
