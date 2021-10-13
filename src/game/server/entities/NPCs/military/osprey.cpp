@@ -21,89 +21,7 @@
 #include "soundent.h"
 #include "effects.h"
 #include "customentity.h"
-
-typedef struct
-{
-	int isValid;
-	EHANDLE hGrunt;
-	Vector	vecOrigin;
-	Vector  vecAngles;
-} t_ospreygrunt;
-
-
-
-#define SF_WAITFORTRIGGER	0x40
-
-
-#define MAX_CARRY	24
-
-class COsprey : public CBaseMonster
-{
-public:
-	int		Save(CSave& save) override;
-	int		Restore(CRestore& restore) override;
-	static	TYPEDESCRIPTION m_SaveData[];
-	int		ObjectCaps() override { return CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
-
-	void Spawn() override;
-	void Precache() override;
-	int  Classify() override { return CLASS_MACHINE; }
-	int  BloodColor() override { return DONT_BLEED; }
-	void Killed(entvars_t* pevAttacker, int iGib) override;
-
-	void UpdateGoal();
-	BOOL HasDead();
-	void EXPORT FlyThink();
-	void EXPORT DeployThink();
-	void Flight();
-	void EXPORT HitTouch(CBaseEntity* pOther);
-	void EXPORT FindAllThink();
-	void EXPORT HoverThink();
-	CBaseMonster* MakeGrunt(Vector vecSrc);
-	void EXPORT CrashTouch(CBaseEntity* pOther);
-	void EXPORT DyingThink();
-	void EXPORT CommandUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-
-	// int  TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType ) override;
-	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
-	void ShowDamage();
-
-	CBaseEntity* m_pGoalEnt;
-	Vector m_vel1;
-	Vector m_vel2;
-	Vector m_pos1;
-	Vector m_pos2;
-	Vector m_ang1;
-	Vector m_ang2;
-	float m_startTime;
-	float m_dTime;
-
-	Vector m_velocity;
-
-	float m_flIdealtilt;
-	float m_flRotortilt;
-
-	float m_flRightHealth;
-	float m_flLeftHealth;
-
-	int	m_iUnits;
-	EHANDLE m_hGrunt[MAX_CARRY];
-	Vector m_vecOrigin[MAX_CARRY];
-	EHANDLE m_hRepel[4];
-
-	int m_iSoundState;
-	int m_iSpriteTexture;
-
-	int m_iPitch;
-
-	int m_iExplode;
-	int	m_iTailGibs;
-	int	m_iBodyGibs;
-	int	m_iEngineGibs;
-
-	int m_iDoLeftSmokePuff;
-	int m_iDoRightSmokePuff;
-};
+#include "osprey.h"
 
 LINK_ENTITY_TO_CLASS(monster_osprey, COsprey);
 
@@ -141,15 +59,14 @@ TYPEDESCRIPTION	COsprey::m_SaveData[] =
 };
 IMPLEMENT_SAVERESTORE(COsprey, CBaseMonster);
 
-
-void COsprey::Spawn()
+void COsprey::SpawnCore(const char* model)
 {
 	Precache();
 	// motor
 	pev->movetype = MOVETYPE_FLY;
 	pev->solid = SOLID_BBOX;
 
-	SET_MODEL(ENT(pev), "models/osprey.mdl");
+	SET_MODEL(ENT(pev), model);
 	UTIL_SetSize(pev, Vector(-400, -400, -100), Vector(400, 400, 32));
 	UTIL_SetOrigin(pev, pev->origin);
 
@@ -180,12 +97,16 @@ void COsprey::Spawn()
 	m_vel2 = pev->velocity;
 }
 
-
-void COsprey::Precache()
+void COsprey::Spawn()
 {
-	UTIL_PrecacheOther("monster_human_grunt");
+	SpawnCore("models/osprey.mdl");
+}
 
-	PRECACHE_MODEL("models/osprey.mdl");
+void COsprey::PrecacheCore(const char* ospreyModel, const char* tailModel, const char* bodyModel, const char* engineModel)
+{
+	UTIL_PrecacheOther(GetMonsterClassname());
+
+	PRECACHE_MODEL(ospreyModel);
 	PRECACHE_MODEL("models/HVR.mdl");
 
 	PRECACHE_SOUND("apache/ap_rotor4.wav");
@@ -194,9 +115,14 @@ void COsprey::Precache()
 	m_iSpriteTexture = PRECACHE_MODEL("sprites/rope.spr");
 
 	m_iExplode = PRECACHE_MODEL("sprites/fexplo.spr");
-	m_iTailGibs = PRECACHE_MODEL("models/osprey_tailgibs.mdl");
-	m_iBodyGibs = PRECACHE_MODEL("models/osprey_bodygibs.mdl");
-	m_iEngineGibs = PRECACHE_MODEL("models/osprey_enginegibs.mdl");
+	m_iTailGibs = PRECACHE_MODEL(tailModel);
+	m_iBodyGibs = PRECACHE_MODEL(bodyModel);
+	m_iEngineGibs = PRECACHE_MODEL(engineModel);
+}
+
+void COsprey::Precache()
+{
+	PrecacheCore("models/osprey.mdl", "models/osprey_tailgibs.mdl", "models/osprey_bodygibs.mdl", "models/osprey_enginegibs.mdl");
 }
 
 void COsprey::CommandUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
@@ -209,7 +135,7 @@ void COsprey::FindAllThink()
 	CBaseEntity* pEntity = NULL;
 
 	m_iUnits = 0;
-	while (m_iUnits < MAX_CARRY && (pEntity = UTIL_FindEntityByClassname(pEntity, "monster_human_grunt")) != NULL)
+	while (m_iUnits < MAX_CARRY && (pEntity = UTIL_FindEntityByClassname(pEntity, GetMonsterClassname())) != NULL)
 	{
 		if (pEntity->IsAlive())
 		{
@@ -221,7 +147,7 @@ void COsprey::FindAllThink()
 
 	if (m_iUnits == 0)
 	{
-		ALERT(at_console, "osprey error: no grunts to resupply\n");
+		ALERT(at_console, "%s error: no grunts to resupply\n", STRING(pev->classname));
 		UTIL_Remove(this);
 		return;
 	}
@@ -298,7 +224,7 @@ CBaseMonster* COsprey::MakeGrunt(Vector vecSrc)
 			{
 				m_hGrunt[i]->SUB_StartFadeOut();
 			}
-			pEntity = Create("monster_human_grunt", vecSrc, pev->angles);
+			pEntity = Create(GetMonsterClassname(), vecSrc, pev->angles);
 			pGrunt = pEntity->MyMonsterPointer();
 			pGrunt->pev->movetype = MOVETYPE_FLY;
 			pGrunt->pev->velocity = Vector(0, 0, RANDOM_FLOAT(-196, -128));
@@ -376,7 +302,7 @@ void COsprey::UpdateGoal()
 	}
 	else
 	{
-		ALERT(at_console, "osprey missing target");
+		ALERT(at_console, "%s missing target\n", STRING(pev->classname));
 	}
 }
 
@@ -803,8 +729,3 @@ void COsprey::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir,
 		UTIL_Sparks(ptr->vecEndPos);
 	}
 }
-
-
-
-
-
