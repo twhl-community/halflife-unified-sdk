@@ -194,7 +194,7 @@ void CBlackOpsOsprey::Precache()
 	m_iSpriteTexture = PRECACHE_MODEL( "sprites/rope.spr" );
 
 	m_iExplode	= PRECACHE_MODEL( "sprites/fexplo.spr" );
-	m_iTailGibs = PRECACHE_MODEL( "models/blkop_tailgib.mdl" );
+	m_iTailGibs = PRECACHE_MODEL( "models/blkop_tailgibs.mdl" );
 	m_iBodyGibs = PRECACHE_MODEL( "models/blkop_bodygibs.mdl" );
 	m_iEngineGibs = PRECACHE_MODEL( "models/blkop_enginegibs.mdl" );
 }
