@@ -24,6 +24,7 @@
 #include "pm_shared.h"
 #include "triangleapi.h"
 #include "com_model.h"
+#include "r_studioint.h"
 
 #include <string.h>
 #include <stdio.h>
@@ -34,6 +35,7 @@
 extern Vector v_origin;
 extern Vector v_angles;
 extern Vector v_crosshairangle;
+extern engine_studio_api_t IEngineStudio;
 
 WEAPON* gpActiveSel;	// NULL means off, 1 means just the menu bar, otherwise
 						// this points to the active weapon menu item
@@ -897,24 +899,29 @@ void CHudAmmo::DrawCrosshair(int x, int y)
 	{
 		if (crosshair.sprite)
 		{
-			SPR_Set(crosshair.sprite, color);
+			if (!IEngineStudio.IsHardware())
+			{
+				//Fall back to the regular render path for software
+				x -= (crosshair.rect.right - crosshair.rect.left) / 2;
+				y -= (crosshair.rect.bottom - crosshair.rect.top) / 2;
 
-			//gEngfuncs.pfnSPR_DrawHoles(0, x, y, &crosshair.rect);
+				SPR_Set(crosshair.sprite, color);
+				gEngfuncs.pfnSPR_DrawHoles(0, x, y, &crosshair.rect);
+				return;
+			}
 
 			const int iOrigWidth = gEngfuncs.pfnSPR_Width(crosshair.sprite, 0);
 			const int iOrigHeight = gEngfuncs.pfnSPR_Height(crosshair.sprite, 0);
 
 			const float flScale = V_max(1, m_pCvarCrosshairScale->value);
 
-			wrect_t subRect = crosshair.rect;
-
 			wrect_t rect;
 
 			//Trim a pixel border around it, since it blends. - Solokiller
-			rect.left = subRect.left * flScale + (flScale - 1);
-			rect.top = subRect.top * flScale + (flScale - 1);
-			rect.right = subRect.right * flScale - (flScale - 1);
-			rect.bottom = subRect.bottom * flScale - (flScale - 1);
+			rect.left = crosshair.rect.left * flScale + (flScale - 1);
+			rect.top = crosshair.rect.top * flScale + (flScale - 1);
+			rect.right = crosshair.rect.right * flScale - (flScale - 1);
+			rect.bottom = crosshair.rect.bottom * flScale - (flScale - 1);
 
 			const int iWidth = iOrigWidth * flScale;
 			const int iHeight = iOrigHeight * flScale;
