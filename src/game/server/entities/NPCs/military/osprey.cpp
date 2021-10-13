@@ -135,7 +135,10 @@ void COsprey::FindAllThink()
 	CBaseEntity* pEntity = NULL;
 
 	m_iUnits = 0;
-	while (m_iUnits < MAX_CARRY && (pEntity = UTIL_FindEntityByClassname(pEntity, GetMonsterClassname())) != NULL)
+
+	const auto monsterClassname = GetMonsterClassname();
+
+	while (m_iUnits < MAX_CARRY && (pEntity = UTIL_FindEntityByClassname(pEntity, monsterClassname)) != NULL)
 	{
 		if (pEntity->IsAlive())
 		{
@@ -216,6 +219,8 @@ CBaseMonster* COsprey::MakeGrunt(Vector vecSrc)
 	if (tr.pHit && Instance(tr.pHit)->pev->solid != SOLID_BSP)
 		return NULL;
 
+	const auto monsterClassname = GetMonsterClassname();
+
 	for (int i = 0; i < m_iUnits; i++)
 	{
 		if (m_hGrunt[i] == NULL || !m_hGrunt[i]->IsAlive())
@@ -224,7 +229,7 @@ CBaseMonster* COsprey::MakeGrunt(Vector vecSrc)
 			{
 				m_hGrunt[i]->SUB_StartFadeOut();
 			}
-			pEntity = Create(GetMonsterClassname(), vecSrc, pev->angles);
+			pEntity = Create(monsterClassname, vecSrc, pev->angles);
 			pGrunt = pEntity->MyMonsterPointer();
 			pGrunt->pev->movetype = MOVETYPE_FLY;
 			pGrunt->pev->velocity = Vector(0, 0, RANDOM_FLOAT(-196, -128));
