@@ -244,6 +244,7 @@ target_sources(hl PRIVATE
 	entities/NPCs/blackops/male_assassin.cpp
 	
 	entities/NPCs/military/apache.cpp
+	entities/NPCs/military/apache.h
 	entities/NPCs/military/COFAllyMonster.cpp
 	entities/NPCs/military/COFAllyMonster.h
 	entities/NPCs/military/COFSquadTalkMonster.cpp

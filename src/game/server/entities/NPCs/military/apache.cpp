@@ -21,73 +21,10 @@
 #include "weapons.h"
 #include "nodes.h"
 #include "effects.h"
+#include "apache.h"
 
 extern DLL_GLOBAL int		g_iSkillLevel;
 
-#define SF_WAITFORTRIGGER	(0x04 | 0x40) // UNDONE: Fix!
-#define SF_NOWRECKAGE		0x08
-
-class CApache : public CBaseMonster
-{
-	int		Save(CSave& save) override;
-	int		Restore(CRestore& restore) override;
-	static	TYPEDESCRIPTION m_SaveData[];
-
-	void Spawn() override;
-	void Precache() override;
-	int  Classify() override { return CLASS_HUMAN_MILITARY; }
-	int  BloodColor() override { return DONT_BLEED; }
-	void Killed(entvars_t* pevAttacker, int iGib) override;
-	void GibMonster() override;
-
-	void SetObjectCollisionBox() override
-	{
-		pev->absmin = pev->origin + Vector(-300, -300, -172);
-		pev->absmax = pev->origin + Vector(300, 300, 8);
-	}
-
-	void EXPORT HuntThink();
-	void EXPORT FlyTouch(CBaseEntity* pOther);
-	void EXPORT CrashTouch(CBaseEntity* pOther);
-	void EXPORT DyingThink();
-	void EXPORT StartupUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-	void EXPORT NullThink();
-
-	void ShowDamage();
-	void Flight();
-	void FireRocket();
-	BOOL FireGun();
-
-	int  TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
-	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
-
-	int m_iRockets;
-	float m_flForce;
-	float m_flNextRocket;
-
-	Vector m_vecTarget;
-	Vector m_posTarget;
-
-	Vector m_vecDesired;
-	Vector m_posDesired;
-
-	Vector m_vecGoal;
-
-	Vector m_angGun;
-	float m_flLastSeen;
-	float m_flPrevSeen;
-
-	int m_iSoundState; // don't save this
-
-	int m_iSpriteTexture;
-	int m_iExplode;
-	int m_iBodyGibs;
-
-	float m_flGoalSpeed;
-
-	int m_iDoSmokePuff;
-	CBeam* m_pBeam;
-};
 LINK_ENTITY_TO_CLASS(monster_apache, CApache);
 
 TYPEDESCRIPTION	CApache::m_SaveData[] =
@@ -113,15 +50,14 @@ TYPEDESCRIPTION	CApache::m_SaveData[] =
 };
 IMPLEMENT_SAVERESTORE(CApache, CBaseMonster);
 
-
-void CApache::Spawn()
+void CApache::SpawnCore(const char* model)
 {
 	Precache();
 	// motor
 	pev->movetype = MOVETYPE_FLY;
 	pev->solid = SOLID_BBOX;
 
-	SET_MODEL(ENT(pev), "models/apache.mdl");
+	SET_MODEL(ENT(pev), model);
 	UTIL_SetSize(pev, Vector(-32, -32, -64), Vector(32, 32, 0));
 	UTIL_SetOrigin(pev, pev->origin);
 
@@ -151,10 +87,14 @@ void CApache::Spawn()
 	m_iRockets = 10;
 }
 
-
-void CApache::Precache()
+void CApache::Spawn()
 {
-	PRECACHE_MODEL("models/apache.mdl");
+	SpawnCore("models/apache.mdl");
+}
+
+void CApache::PrecacheCore(const char* model)
+{
+	PRECACHE_MODEL(model);
 
 	PRECACHE_SOUND("apache/ap_rotor1.wav");
 	PRECACHE_SOUND("apache/ap_rotor2.wav");
@@ -175,14 +115,16 @@ void CApache::Precache()
 	UTIL_PrecacheOther("hvr_rocket");
 }
 
-
+void CApache::Precache()
+{
+	PrecacheCore("models/apache.mdl");
+}
 
 void CApache::NullThink()
 {
 	StudioFrameAdvance();
 	pev->nextthink = gpGlobals->time + 0.5;
 }
-
 
 void CApache::StartupUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
