@@ -27,46 +27,6 @@
 
 LINK_ENTITY_TO_CLASS(monster_zombie, CZombie);
 
-const char* CZombie::pAttackHitSounds[] =
-{
-	"zombie/claw_strike1.wav",
-	"zombie/claw_strike2.wav",
-	"zombie/claw_strike3.wav",
-};
-
-const char* CZombie::pAttackMissSounds[] =
-{
-	"zombie/claw_miss1.wav",
-	"zombie/claw_miss2.wav",
-};
-
-const char* CZombie::pAttackSounds[] =
-{
-	"zombie/zo_attack1.wav",
-	"zombie/zo_attack2.wav",
-};
-
-const char* CZombie::pIdleSounds[] =
-{
-	"zombie/zo_idle1.wav",
-	"zombie/zo_idle2.wav",
-	"zombie/zo_idle3.wav",
-	"zombie/zo_idle4.wav",
-};
-
-const char* CZombie::pAlertSounds[] =
-{
-	"zombie/zo_alert10.wav",
-	"zombie/zo_alert20.wav",
-	"zombie/zo_alert30.wav",
-};
-
-const char* CZombie::pPainSounds[] =
-{
-	"zombie/zo_pain1.wav",
-	"zombie/zo_pain2.wav",
-};
-
 //=========================================================
 // Classify - indicates this monster's place in the 
 // relationship table.
@@ -97,14 +57,13 @@ void CZombie::SetYawSpeed()
 
 int CZombie::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
-	// Take 30% damage from bullets
 	if (bitsDamageType == DMG_BULLET)
 	{
 		Vector vecDir = pev->origin - (pevInflictor->absmin + pevInflictor->absmax) * 0.5;
 		vecDir = vecDir.Normalize();
 		float flForce = DamageForce(flDamage);
 		pev->velocity = pev->velocity + vecDir * flForce;
-		flDamage *= 0.3;
+		flDamage *= m_flBulletDamageFraction;
 	}
 
 	// HACK HACK -- until we fix this.
@@ -154,6 +113,28 @@ float CZombie::GetBothSlashDamage()
 	return gSkillData.zombieDmgBothSlash;
 }
 
+void CZombie::ZombieSlashAttack(float damage, const Vector& punchAngle, const Vector& velocity, bool playAttackSound)
+{
+	// do stuff for this event.
+//		ALERT( at_console, "Slash!\n" );
+	CBaseEntity* pHurt = CheckTraceHullAttack(70, damage, DMG_SLASH);
+	if (pHurt)
+	{
+		if (pHurt->pev->flags & (FL_MONSTER | FL_CLIENT))
+		{
+			pHurt->pev->punchangle = punchAngle;
+			pHurt->pev->velocity = pHurt->pev->velocity + velocity;
+		}
+		// Play a random attack hit sound
+		EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, pAttackHitSounds[RANDOM_LONG(0, ARRAYSIZE(pAttackHitSounds) - 1)], 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5, 5));
+	}
+	else // Play a random attack miss sound
+		EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, pAttackMissSounds[RANDOM_LONG(0, ARRAYSIZE(pAttackMissSounds) - 1)], 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5, 5));
+
+	if (playAttackSound && RANDOM_LONG(0, 1))
+		AttackSound();
+}
+
 //=========================================================
 // HandleAnimEvent - catches the monster-specific messages
 // that occur when tagged animation frames are played.
@@ -163,72 +144,16 @@ void CZombie::HandleAnimEvent(MonsterEvent_t* pEvent)
 	switch (pEvent->event)
 	{
 	case ZOMBIE_AE_ATTACK_RIGHT:
-	{
-		// do stuff for this event.
-//		ALERT( at_console, "Slash right!\n" );
-		CBaseEntity* pHurt = CheckTraceHullAttack(70, GetOneSlashDamage(), DMG_SLASH);
-		if (pHurt)
-		{
-			if (pHurt->pev->flags & (FL_MONSTER | FL_CLIENT))
-			{
-				pHurt->pev->punchangle.z = -18;
-				pHurt->pev->punchangle.x = 5;
-				pHurt->pev->velocity = pHurt->pev->velocity - gpGlobals->v_right * 100;
-			}
-			// Play a random attack hit sound
-			EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, pAttackHitSounds[RANDOM_LONG(0, ARRAYSIZE(pAttackHitSounds) - 1)], 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5, 5));
-		}
-		else // Play a random attack miss sound
-			EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, pAttackMissSounds[RANDOM_LONG(0, ARRAYSIZE(pAttackMissSounds) - 1)], 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5, 5));
-
-		if (RANDOM_LONG(0, 1))
-			AttackSound();
-	}
-	break;
+		ZombieSlashAttack(GetOneSlashDamage(), {5, 0, -18}, -(gpGlobals->v_right * 100));
+		break;
 
 	case ZOMBIE_AE_ATTACK_LEFT:
-	{
-		// do stuff for this event.
-//		ALERT( at_console, "Slash left!\n" );
-		CBaseEntity* pHurt = CheckTraceHullAttack(70, GetOneSlashDamage(), DMG_SLASH);
-		if (pHurt)
-		{
-			if (pHurt->pev->flags & (FL_MONSTER | FL_CLIENT))
-			{
-				pHurt->pev->punchangle.z = 18;
-				pHurt->pev->punchangle.x = 5;
-				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_right * 100;
-			}
-			EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, pAttackHitSounds[RANDOM_LONG(0, ARRAYSIZE(pAttackHitSounds) - 1)], 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5, 5));
-		}
-		else
-			EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, pAttackMissSounds[RANDOM_LONG(0, ARRAYSIZE(pAttackMissSounds) - 1)], 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5, 5));
-
-		if (RANDOM_LONG(0, 1))
-			AttackSound();
-	}
-	break;
+		ZombieSlashAttack(GetOneSlashDamage(), {5, 0, 18}, gpGlobals->v_right * 100);
+		break;
 
 	case ZOMBIE_AE_ATTACK_BOTH:
-	{
-		// do stuff for this event.
-		CBaseEntity* pHurt = CheckTraceHullAttack(70, GetBothSlashDamage(), DMG_SLASH);
-		if (pHurt)
-		{
-			if (pHurt->pev->flags & (FL_MONSTER | FL_CLIENT))
-			{
-				pHurt->pev->punchangle.x = 5;
-				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_forward * -100;
-			}
-			EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, pAttackHitSounds[RANDOM_LONG(0, ARRAYSIZE(pAttackHitSounds) - 1)], 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5, 5));
-		}
-		else
-			EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, pAttackMissSounds[RANDOM_LONG(0, ARRAYSIZE(pAttackMissSounds) - 1)], 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5, 5));
-
-		if (RANDOM_LONG(0, 1))
-			AttackSound();
-	}
-	break;
+		ZombieSlashAttack(GetBothSlashDamage(), {5, 0, 0}, gpGlobals->v_forward * -100);
+		break;
 
 	default:
 		CBaseMonster::HandleAnimEvent(pEvent);
