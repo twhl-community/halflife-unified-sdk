@@ -231,6 +231,7 @@ target_sources(hl PRIVATE
 	entities/NPCs/aliens/zombie_soldier.cpp
 	
 	entities/NPCs/blackmesa/barney.cpp
+	entities/NPCs/blackmesa/barney.h
 	entities/NPCs/blackmesa/cleansuit_scientist.cpp
 	entities/NPCs/blackmesa/loader.cpp
 	entities/NPCs/blackmesa/otis.cpp

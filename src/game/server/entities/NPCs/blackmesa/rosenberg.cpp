@@ -45,7 +45,7 @@ public:
 
 	void PainSound() override;
 
-	void TalkInit();
+	void TalkInit() override;
 };
 
 LINK_ENTITY_TO_CLASS(monster_rosenberg, CRosenberg);

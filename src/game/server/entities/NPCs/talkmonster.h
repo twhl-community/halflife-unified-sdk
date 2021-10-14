@@ -98,7 +98,7 @@ enum
 class CTalkMonster : public CBaseMonster
 {
 public:
-	void			TalkInit();
+	virtual void TalkInit();
 	CBaseEntity* FindNearestFriend(BOOL fPlayer);
 	float			TargetDistance();
 	void			StopTalking() { SentenceStop(); }

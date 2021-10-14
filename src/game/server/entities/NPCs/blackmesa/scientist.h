@@ -96,7 +96,7 @@ public:
 	void DeathSound() override;
 	void PainSound() override;
 
-	void TalkInit();
+	void TalkInit() override;
 
 	void			Killed(entvars_t* pevAttacker, int iGib) override;
 

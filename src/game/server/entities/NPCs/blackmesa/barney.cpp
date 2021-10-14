@@ -27,76 +27,15 @@
 #include	"scripted.h"
 #include	"weapons.h"
 #include	"soundent.h"
-
-//=========================================================
-// Monster's Anim Events Go Here
-//=========================================================
-// first flag is barney dying for scripted sequences?
-#define		BARNEY_AE_DRAW		( 2 )
-#define		BARNEY_AE_SHOOT		( 3 )
-#define		BARNEY_AE_HOLSTER	( 4 )
-
-#define	BARNEY_BODY_GUNHOLSTERED	0
-#define	BARNEY_BODY_GUNDRAWN		1
-#define BARNEY_BODY_GUNGONE			2
-
-class CBarney : public CTalkMonster
-{
-public:
-	void Spawn() override;
-	void Precache() override;
-	void SetYawSpeed() override;
-	int  ISoundMask() override;
-	void BarneyFirePistol();
-	void AlertSound() override;
-	int  Classify() override;
-	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
-
-	void RunTask(Task_t* pTask) override;
-	void StartTask(Task_t* pTask) override;
-	int	ObjectCaps() override { return CTalkMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
-	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
-	BOOL CheckRangeAttack1(float flDot, float flDist) override;
-
-	void DeclineFollowing() override;
-
-	// Override these to set behavior
-	Schedule_t* GetScheduleOfType(int Type) override;
-	Schedule_t* GetSchedule() override;
-	MONSTERSTATE GetIdealState() override;
-
-	void DeathSound() override;
-	void PainSound() override;
-
-	void TalkInit();
-
-	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
-	void Killed(entvars_t* pevAttacker, int iGib) override;
-
-	int		Save(CSave& save) override;
-	int		Restore(CRestore& restore) override;
-	static	TYPEDESCRIPTION m_SaveData[];
-
-	BOOL	m_fGunDrawn;
-	float	m_painTime;
-	float	m_checkAttackTime;
-	BOOL	m_lastAttackCheck;
-
-	// UNDONE: What is this for?  It isn't used?
-	float	m_flPlayerDamage;// how much pain has the player inflicted on me?
-
-	CUSTOM_SCHEDULES;
-};
+#include "barney.h"
 
 LINK_ENTITY_TO_CLASS(monster_barney, CBarney);
 
 TYPEDESCRIPTION	CBarney::m_SaveData[] =
 {
-	DEFINE_FIELD(CBarney, m_fGunDrawn, FIELD_BOOLEAN),
 	DEFINE_FIELD(CBarney, m_painTime, FIELD_TIME),
 	DEFINE_FIELD(CBarney, m_checkAttackTime, FIELD_TIME),
 	DEFINE_FIELD(CBarney, m_lastAttackCheck, FIELD_BOOLEAN),
-	DEFINE_FIELD(CBarney, m_flPlayerDamage, FIELD_FLOAT),
 };
 
 IMPLEMENT_SAVERESTORE(CBarney, CTalkMonster);
@@ -337,10 +276,10 @@ BOOL CBarney::CheckRangeAttack1(float flDot, float flDist)
 
 
 //=========================================================
-// BarneyFirePistol - shoots one round from the pistol at
+// GuardFirePistol - shoots one round from the pistol at
 // the enemy barney is facing.
 //=========================================================
-void CBarney::BarneyFirePistol()
+void CBarney::GuardFirePistol()
 {
 	Vector vecShootOrigin;
 
@@ -380,19 +319,23 @@ void CBarney::HandleAnimEvent(MonsterEvent_t* pEvent)
 	switch (pEvent->event)
 	{
 	case BARNEY_AE_SHOOT:
-		BarneyFirePistol();
+		GuardFirePistol();
 		break;
 
 	case BARNEY_AE_DRAW:
-		// barney's bodygroup switches here so he can pull gun from holster
-		pev->body = BARNEY_BODY_GUNDRAWN;
-		m_fGunDrawn = TRUE;
+		// guard's bodygroup switches here so he can pull gun from holster
+		if (GetBodygroup(GuardBodyGroup::Weapons) == GuardWeapon::None)
+		{
+			SetBodygroup(GuardBodyGroup::Weapons, GuardWeapon::Gun);
+		}
 		break;
 
 	case BARNEY_AE_HOLSTER:
 		// change bodygroup to replace gun in holster
-		pev->body = BARNEY_BODY_GUNHOLSTERED;
-		m_fGunDrawn = FALSE;
+		if (GetBodygroup(GuardBodyGroup::Weapons) == GuardWeapon::Gun)
+		{
+			SetBodygroup(GuardBodyGroup::Weapons, GuardWeapon::None);
+		}
 		break;
 
 	default:
@@ -400,39 +343,53 @@ void CBarney::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 }
 
-//=========================================================
-// Spawn
-//=========================================================
-void CBarney::Spawn()
+void CBarney::SpawnCore(const char* model, float health)
 {
 	Precache();
 
-	SET_MODEL(ENT(pev), "models/barney.mdl");
+	SET_MODEL(ENT(pev), model);
 	UTIL_SetSize(pev, VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX);
 
 	pev->solid = SOLID_SLIDEBOX;
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_RED;
-	pev->health = gSkillData.barneyHealth;
+	pev->health = health;
 	pev->view_ofs = Vector(0, 0, 50);// position of the eyes relative to monster's origin.
 	m_flFieldOfView = VIEW_FIELD_WIDE; // NOTE: we need a wide field of view so npc will notice player and say hello
 	m_MonsterState = MONSTERSTATE_NONE;
 
-	pev->body = 0; // gun in holster
-	m_fGunDrawn = FALSE;
-
 	m_afCapability = bits_CAP_HEAR | bits_CAP_TURN_HEAD | bits_CAP_DOORS_GROUP;
+
+	if (m_iGuardHead == GuardHead::Random)
+	{
+		m_iGuardHead = RANDOM_LONG(0, 1);
+	}
+
+	if (m_iGuardBody == GuardWeapon::Random)
+	{
+		m_iGuardBody = GuardWeapon::None;
+	}
+
+	SetBodygroup(GuardBodyGroup::Weapons, m_iGuardBody);
+
+	//Only applicable if the model has a head bodygroup
+	SetBodygroup(GuardBodyGroup::Heads, m_iGuardHead);
 
 	MonsterInit();
 	SetUse(&CBarney::FollowerUse);
 }
 
 //=========================================================
-// Precache - precaches all resources this monster needs
+// Spawn
 //=========================================================
-void CBarney::Precache()
+void CBarney::Spawn()
 {
-	PRECACHE_MODEL("models/barney.mdl");
+	SpawnCore("models/barney.mdl", gSkillData.barneyHealth);
+}
+
+void CBarney::PrecacheCore(const char* model)
+{
+	PRECACHE_MODEL(model);
 
 	PRECACHE_SOUND("barney/ba_attack1.wav");
 	PRECACHE_SOUND("barney/ba_attack2.wav");
@@ -449,6 +406,14 @@ void CBarney::Precache()
 	// when a level is loaded, nobody will talk (time is reset to 0)
 	TalkInit();
 	CTalkMonster::Precache();
+}
+
+//=========================================================
+// Precache - precaches all resources this monster needs
+//=========================================================
+void CBarney::Precache()
+{
+	PrecacheCore("models/barney.mdl");
 }
 
 // Init talk data
@@ -496,8 +461,6 @@ int CBarney::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float f
 
 	if (m_MonsterState != MONSTERSTATE_PRONE && (pevAttacker->flags & FL_CLIENT))
 	{
-		m_flPlayerDamage += flDamage;
-
 		// This is a heurstic to determine if the player intended to harm me
 		// If I have an enemy, we can't establish intent (may just be crossfire)
 		if (m_hEnemy == NULL)
@@ -571,6 +534,7 @@ void CBarney::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir,
 			flDamage = flDamage / 2;
 		}
 		break;
+		//TODO: Otis doesn't have a helmet, probably don't want his dome being bulletproof
 	case 10:
 		if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_CLUB))
 		{
@@ -589,19 +553,19 @@ void CBarney::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir,
 	CTalkMonster::TraceAttack(pevAttacker, flDamage, vecDir, ptr, bitsDamageType);
 }
 
+void CBarney::DropWeapon()
+{
+	Vector vecGunPos, vecGunAngles;
+	GetAttachment(0, vecGunPos, vecGunAngles);
+	DropItem("weapon_9mmhandgun", vecGunPos, vecGunAngles);
+}
 
 void CBarney::Killed(entvars_t* pevAttacker, int iGib)
 {
-	if (pev->body < BARNEY_BODY_GUNGONE)
+	if (GetBodygroup(GuardBodyGroup::Weapons) == GuardWeapon::Gun)
 	{// drop the gun!
-		Vector vecGunPos;
-		Vector vecGunAngles;
-
-		pev->body = BARNEY_BODY_GUNGONE;
-
-		GetAttachment(0, vecGunPos, vecGunAngles);
-
-		CBaseEntity* pGun = DropItem("weapon_9mmhandgun", vecGunPos, vecGunAngles);
+		SetBodygroup(GuardBodyGroup::Weapons, GuardWeapon::None);
+		DropWeapon();
 	}
 
 	SetUse(NULL);
@@ -657,6 +621,11 @@ Schedule_t* CBarney::GetScheduleOfType(int Type)
 	return CTalkMonster::GetScheduleOfType(Type);
 }
 
+void CBarney::SpeakKilledEnemy()
+{
+	PlaySentence("BA_KILL", 4, VOL_NORM, ATTN_NORM);
+}
+
 //=========================================================
 // GetSchedule - Decides which type of schedule best suits
 // the monster's current state and conditions. Then calls
@@ -676,7 +645,7 @@ Schedule_t* CBarney::GetSchedule()
 	}
 	if (HasConditions(bits_COND_ENEMY_DEAD) && FOkToSpeak())
 	{
-		PlaySentence("BA_KILL", 4, VOL_NORM, ATTN_NORM);
+		SpeakKilledEnemy();
 	}
 
 	switch (m_MonsterState)
@@ -695,7 +664,7 @@ Schedule_t* CBarney::GetSchedule()
 			return GetScheduleOfType(SCHED_SMALL_FLINCH);
 
 		// wait for one schedule to draw gun
-		if (!m_fGunDrawn)
+		if (GetBodygroup(GuardBodyGroup::Weapons) != GuardWeapon::Gun)
 			return GetScheduleOfType(SCHED_ARM_WEAPON);
 
 		if (HasConditions(bits_COND_HEAVY_DAMAGE))
@@ -747,16 +716,28 @@ MONSTERSTATE CBarney::GetIdealState()
 	return CTalkMonster::GetIdealState();
 }
 
-
-
 void CBarney::DeclineFollowing()
 {
 	PlaySentence("BA_POK", 2, VOL_NORM, ATTN_NORM);
 }
 
-
-
-
+void CBarney::KeyValue(KeyValueData* pkvd)
+{
+	if (FStrEq("head", pkvd->szKeyName))
+	{
+		m_iGuardHead = atoi(pkvd->szValue);
+		pkvd->fHandled = true;
+	}
+	else if (FStrEq("bodystate", pkvd->szKeyName))
+	{
+		m_iGuardBody = atoi(pkvd->szValue);
+		pkvd->fHandled = true;
+	}
+	else
+	{
+		CBaseMonster::KeyValue(pkvd);
+	}
+}
 
 //=========================================================
 // DEAD BARNEY PROP

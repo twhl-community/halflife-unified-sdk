@@ -22,286 +22,32 @@
 #include	"cbase.h"
 #include	"monsters.h"
 #include	"talkmonster.h"
-#include	"schedule.h"
-#include	"defaultai.h"
-#include	"scripted.h"
 #include	"weapons.h"
 #include	"soundent.h"
+#include "barney.h"
 
-//=========================================================
-// Monster's Anim Events Go Here
-//=========================================================
-// first flag is otis dying for scripted sequences?
-#define		OTIS_AE_DRAW		( 2 )
-#define		OTIS_AE_SHOOT		( 3 )
-#define		OTIS_AE_HOLSTER	( 4 )
+//TODO: work out a way to abstract sentences out so we don't need to override here to change just those
 
-#define	OTIS_BODY_GUNHOLSTERED	0
-#define	OTIS_BODY_GUNDRAWN		1
-#define OTIS_BODY_GUNGONE			2
-
-namespace OtisBodyGroup
-{
-enum OtisBodyGroup
-{
-	Weapons = 1,
-	Heads = 2
-};
-}
-
-namespace OtisWeapon
-{
-enum OtisWeapon
-{
-	Random = -1,
-	None = 0,
-	DesertEagle,
-	Donut
-};
-}
-
-namespace OtisHead
-{
-enum OtisHead
-{
-	Random = -1,
-	Hair = 0,
-	Balding
-};
-}
-
-class COtis : public CTalkMonster
+class COtis : public CBarney
 {
 public:
 	void Spawn() override;
 	void Precache() override;
-	void SetYawSpeed() override;
-	int  ISoundMask() override;
-	void OtisFirePistol();
+	void GuardFirePistol() override;
 	void AlertSound() override;
-	int  Classify() override;
-	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 
-	void RunTask(Task_t* pTask) override;
-	void StartTask(Task_t* pTask) override;
-	int	ObjectCaps() override { return CTalkMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
 	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
-	BOOL CheckRangeAttack1(float flDot, float flDist) override;
 
 	void DeclineFollowing() override;
 
-	// Override these to set behavior
-	Schedule_t* GetScheduleOfType(int Type) override;
-	Schedule_t* GetSchedule() override;
-	MONSTERSTATE GetIdealState() override;
+	void TalkInit() override;
 
-	void DeathSound() override;
-	void PainSound() override;
-
-	void TalkInit();
-
-	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
-	void Killed(entvars_t* pevAttacker, int iGib) override;
-
-	void KeyValue(KeyValueData* pkvd) override;
-
-	int		Save(CSave& save) override;
-	int		Restore(CRestore& restore) override;
-	static	TYPEDESCRIPTION m_SaveData[];
-
-	BOOL	m_fGunDrawn;
-	float	m_painTime;
-	float	m_checkAttackTime;
-	BOOL	m_lastAttackCheck;
-
-	//These were originally used to store off the setting AND track state,
-	//but state is now tracked by calling GetBodygroup
-	int m_iOtisBody;
-	int m_iOtisHead;
-
-	// UNDONE: What is this for?  It isn't used?
-	float	m_flPlayerDamage;// how much pain has the player inflicted on me?
-
-	CUSTOM_SCHEDULES;
+protected:
+	void DropWeapon() override;
+	void SpeakKilledEnemy() override;
 };
 
 LINK_ENTITY_TO_CLASS(monster_otis, COtis);
-
-TYPEDESCRIPTION	COtis::m_SaveData[] =
-{
-	DEFINE_FIELD(COtis, m_fGunDrawn, FIELD_BOOLEAN),
-	DEFINE_FIELD(COtis, m_painTime, FIELD_TIME),
-	DEFINE_FIELD(COtis, m_checkAttackTime, FIELD_TIME),
-	DEFINE_FIELD(COtis, m_lastAttackCheck, FIELD_BOOLEAN),
-	DEFINE_FIELD(COtis, m_flPlayerDamage, FIELD_FLOAT),
-	DEFINE_FIELD(COtis, m_iOtisBody, FIELD_INTEGER),
-	DEFINE_FIELD(COtis, m_iOtisHead, FIELD_INTEGER),
-};
-
-IMPLEMENT_SAVERESTORE(COtis, CTalkMonster);
-
-//=========================================================
-// AI Schedules Specific to this monster
-//=========================================================
-Task_t	tlOtFollow[] =
-{
-	{ TASK_MOVE_TO_TARGET_RANGE,(float)128		},	// Move within 128 of target ent (client)
-	{ TASK_SET_SCHEDULE,		(float)SCHED_TARGET_FACE },
-};
-
-Schedule_t	slOtFollow[] =
-{
-	{
-		tlOtFollow,
-		ARRAYSIZE(tlOtFollow),
-		bits_COND_NEW_ENEMY |
-		bits_COND_LIGHT_DAMAGE |
-		bits_COND_HEAVY_DAMAGE |
-		bits_COND_HEAR_SOUND |
-		bits_COND_PROVOKED,
-		bits_SOUND_DANGER,
-		"Follow"
-	},
-};
-
-//=========================================================
-// OtisDraw- much better looking draw schedule for when
-// otis knows who he's gonna attack.
-//=========================================================
-Task_t	tlOtisEnemyDraw[] =
-{
-	{ TASK_STOP_MOVING,					0				},
-	{ TASK_FACE_ENEMY,					0				},
-	{ TASK_PLAY_SEQUENCE_FACE_ENEMY,	(float)ACT_ARM },
-};
-
-Schedule_t slOtisEnemyDraw[] =
-{
-	{
-		tlOtisEnemyDraw,
-		ARRAYSIZE(tlOtisEnemyDraw),
-		0,
-		0,
-		"Otis Enemy Draw"
-	}
-};
-
-Task_t	tlOtFaceTarget[] =
-{
-	{ TASK_SET_ACTIVITY,		(float)ACT_IDLE },
-	{ TASK_FACE_TARGET,			(float)0		},
-	{ TASK_SET_ACTIVITY,		(float)ACT_IDLE },
-	{ TASK_SET_SCHEDULE,		(float)SCHED_TARGET_CHASE },
-};
-
-Schedule_t	slOtFaceTarget[] =
-{
-	{
-		tlOtFaceTarget,
-		ARRAYSIZE(tlOtFaceTarget),
-		bits_COND_CLIENT_PUSH |
-		bits_COND_NEW_ENEMY |
-		bits_COND_LIGHT_DAMAGE |
-		bits_COND_HEAVY_DAMAGE |
-		bits_COND_HEAR_SOUND |
-		bits_COND_PROVOKED,
-		bits_SOUND_DANGER,
-		"FaceTarget"
-	},
-};
-
-
-Task_t	tlIdleOtStand[] =
-{
-	{ TASK_STOP_MOVING,			0				},
-	{ TASK_SET_ACTIVITY,		(float)ACT_IDLE },
-	{ TASK_WAIT,				(float)2		}, // repick IDLESTAND every two seconds.
-	{ TASK_TLK_HEADRESET,		(float)0		}, // reset head position
-};
-
-Schedule_t	slIdleOtStand[] =
-{
-	{
-		tlIdleOtStand,
-		ARRAYSIZE(tlIdleOtStand),
-		bits_COND_NEW_ENEMY |
-		bits_COND_LIGHT_DAMAGE |
-		bits_COND_HEAVY_DAMAGE |
-		bits_COND_HEAR_SOUND |
-		bits_COND_SMELL |
-		bits_COND_PROVOKED,
-
-		bits_SOUND_COMBAT |// sound flags - change these, and you'll break the talking code.
-		//bits_SOUND_PLAYER		|
-		//bits_SOUND_WORLD		|
-
-		bits_SOUND_DANGER |
-		bits_SOUND_MEAT |// scents
-		bits_SOUND_CARCASS |
-		bits_SOUND_GARBAGE,
-		"IdleStand"
-	},
-};
-
-DEFINE_CUSTOM_SCHEDULES(COtis)
-{
-	slOtFollow,
-		slOtisEnemyDraw,
-		slOtFaceTarget,
-		slIdleOtStand,
-};
-
-
-IMPLEMENT_CUSTOM_SCHEDULES(COtis, CTalkMonster);
-
-void COtis::StartTask(Task_t* pTask)
-{
-	CTalkMonster::StartTask(pTask);
-}
-
-void COtis::RunTask(Task_t* pTask)
-{
-	switch (pTask->iTask)
-	{
-	case TASK_RANGE_ATTACK1:
-		if (m_hEnemy != NULL && (m_hEnemy->IsPlayer()))
-		{
-			pev->framerate = 1.5;
-		}
-		CTalkMonster::RunTask(pTask);
-		break;
-	default:
-		CTalkMonster::RunTask(pTask);
-		break;
-	}
-}
-
-
-
-
-//=========================================================
-// ISoundMask - returns a bit mask indicating which types
-// of sounds this monster regards. 
-//=========================================================
-int COtis::ISoundMask()
-{
-	return	bits_SOUND_WORLD |
-		bits_SOUND_COMBAT |
-		bits_SOUND_CARCASS |
-		bits_SOUND_MEAT |
-		bits_SOUND_GARBAGE |
-		bits_SOUND_DANGER |
-		bits_SOUND_PLAYER;
-}
-
-//=========================================================
-// Classify - indicates this monster's place in the 
-// relationship table.
-//=========================================================
-int	COtis::Classify()
-{
-	return	CLASS_PLAYER_ALLY;
-}
 
 //=========================================================
 // ALertSound - otis says "Freeze!"
@@ -315,71 +61,13 @@ void COtis::AlertSound()
 			PlaySentence("OT_ATTACK", RANDOM_FLOAT(2.8, 3.2), VOL_NORM, ATTN_IDLE);
 		}
 	}
-
-}
-//=========================================================
-// SetYawSpeed - allows each sequence to have a different
-// turn rate associated with it.
-//=========================================================
-void COtis::SetYawSpeed()
-{
-	int ys;
-
-	ys = 0;
-
-	switch (m_Activity)
-	{
-	case ACT_IDLE:
-		ys = 70;
-		break;
-	case ACT_WALK:
-		ys = 70;
-		break;
-	case ACT_RUN:
-		ys = 90;
-		break;
-	default:
-		ys = 70;
-		break;
-	}
-
-	pev->yaw_speed = ys;
 }
 
-
 //=========================================================
-// CheckRangeAttack1
-//=========================================================
-BOOL COtis::CheckRangeAttack1(float flDot, float flDist)
-{
-	if (flDist <= 1024 && flDot >= 0.5)
-	{
-		if (gpGlobals->time > m_checkAttackTime)
-		{
-			TraceResult tr;
-
-			Vector shootOrigin = pev->origin + Vector(0, 0, 55);
-			CBaseEntity* pEnemy = m_hEnemy;
-			Vector shootTarget = ((pEnemy->BodyTarget(shootOrigin) - pEnemy->pev->origin) + m_vecEnemyLKP);
-			UTIL_TraceLine(shootOrigin, shootTarget, dont_ignore_monsters, ENT(pev), &tr);
-			m_checkAttackTime = gpGlobals->time + 1;
-			if (tr.flFraction == 1.0 || (tr.pHit != NULL && CBaseEntity::Instance(tr.pHit) == pEnemy))
-				m_lastAttackCheck = TRUE;
-			else
-				m_lastAttackCheck = FALSE;
-			m_checkAttackTime = gpGlobals->time + 1.5;
-		}
-		return m_lastAttackCheck;
-	}
-	return FALSE;
-}
-
-
-//=========================================================
-// OtisFirePistol - shoots one round from the pistol at
+// GuardFirePistol - shoots one round from the pistol at
 // the enemy otis is facing.
 //=========================================================
-void COtis::OtisFirePistol()
+void COtis::GuardFirePistol()
 {
 	Vector vecShootOrigin;
 
@@ -409,83 +97,11 @@ void COtis::OtisFirePistol()
 }
 
 //=========================================================
-// HandleAnimEvent - catches the monster-specific messages
-// that occur when tagged animation frames are played.
-//
-// Returns number of events handled, 0 if none.
-//=========================================================
-void COtis::HandleAnimEvent(MonsterEvent_t* pEvent)
-{
-	switch (pEvent->event)
-	{
-	case OTIS_AE_SHOOT:
-		OtisFirePistol();
-		break;
-
-	case OTIS_AE_DRAW:
-		// otis's bodygroup switches here so he can pull gun from holster
-		if (GetBodygroup(OtisBodyGroup::Weapons) == OtisWeapon::None)
-		{
-			SetBodygroup(OtisBodyGroup::Weapons, OtisWeapon::DesertEagle);
-			m_iOtisBody = OtisWeapon::DesertEagle;
-			m_fGunDrawn = true;
-		}
-
-		break;
-
-	case OTIS_AE_HOLSTER:
-		// change bodygroup to replace gun in holster
-		if (GetBodygroup(OtisBodyGroup::Weapons) == OtisWeapon::DesertEagle)
-		{
-			SetBodygroup(OtisBodyGroup::Weapons, OtisWeapon::None);
-			m_iOtisBody = OtisWeapon::None;
-			m_fGunDrawn = false;
-		}
-		break;
-
-	default:
-		CTalkMonster::HandleAnimEvent(pEvent);
-	}
-}
-
-//=========================================================
 // Spawn
 //=========================================================
 void COtis::Spawn()
 {
-	Precache();
-
-	SET_MODEL(ENT(pev), "models/otis.mdl");
-	UTIL_SetSize(pev, VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX);
-
-	pev->solid = SOLID_SLIDEBOX;
-	pev->movetype = MOVETYPE_STEP;
-	m_bloodColor = BLOOD_COLOR_RED;
-	pev->health = gSkillData.otisHealth;
-	pev->view_ofs = Vector(0, 0, 50);// position of the eyes relative to monster's origin.
-	m_flFieldOfView = VIEW_FIELD_WIDE; // NOTE: we need a wide field of view so npc will notice player and say hello
-	m_MonsterState = MONSTERSTATE_NONE;
-
-	m_afCapability = bits_CAP_HEAR | bits_CAP_TURN_HEAD | bits_CAP_DOORS_GROUP;
-
-	//Note: This originally didn't use SetBodygroup
-	if (m_iOtisHead == OtisHead::Random)
-	{
-		m_iOtisHead = RANDOM_LONG(0, 1);
-	}
-
-	if (m_iOtisBody == OtisWeapon::Random)
-	{
-		m_iOtisBody = OtisWeapon::None;
-	}
-
-	SetBodygroup(OtisBodyGroup::Weapons, m_iOtisBody);
-	SetBodygroup(OtisBodyGroup::Heads, m_iOtisHead);
-
-	m_fGunDrawn = m_iOtisBody == OtisWeapon::DesertEagle;
-
-	MonsterInit();
-	SetUse(&COtis::FollowerUse);
+	SpawnCore("models/otis.mdl", gSkillData.otisHealth);
 }
 
 //=========================================================
@@ -493,31 +109,13 @@ void COtis::Spawn()
 //=========================================================
 void COtis::Precache()
 {
-	PRECACHE_MODEL("models/otis.mdl");
-
-	PRECACHE_SOUND("barney/ba_attack1.wav");
-	PRECACHE_SOUND("barney/ba_attack2.wav");
-
+	PrecacheCore("models/otis.mdl");
 	PRECACHE_SOUND("weapons/de_shot1.wav");
-
-	PRECACHE_SOUND("barney/ba_pain1.wav");
-	PRECACHE_SOUND("barney/ba_pain2.wav");
-	PRECACHE_SOUND("barney/ba_pain3.wav");
-
-	PRECACHE_SOUND("barney/ba_die1.wav");
-	PRECACHE_SOUND("barney/ba_die2.wav");
-	PRECACHE_SOUND("barney/ba_die3.wav");
-
-	// every new otis must call this, otherwise
-	// when a level is loaded, nobody will talk (time is reset to 0)
-	TalkInit();
-	CTalkMonster::Precache();
 }
 
 // Init talk data
 void COtis::TalkInit()
 {
-
 	CTalkMonster::TalkInit();
 
 	// scientists speach group names (group names are in sentences.txt)
@@ -559,8 +157,6 @@ int COtis::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flD
 
 	if (m_MonsterState != MONSTERSTATE_PRONE && (pevAttacker->flags & FL_CLIENT))
 	{
-		m_flPlayerDamage += flDamage;
-
 		// This is a heurstic to determine if the player intended to harm me
 		// If I have an enemy, we can't establish intent (may just be crossfire)
 		if (m_hEnemy == NULL)
@@ -590,254 +186,22 @@ int COtis::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flD
 	return ret;
 }
 
-
-//=========================================================
-// PainSound
-//=========================================================
-void COtis::PainSound()
+void COtis::DropWeapon()
 {
-	if (gpGlobals->time < m_painTime)
-		return;
-
-	m_painTime = gpGlobals->time + RANDOM_FLOAT(0.5, 0.75);
-
-	switch (RANDOM_LONG(0, 2))
-	{
-	case 0: EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "barney/ba_pain1.wav", 1, ATTN_NORM, 0, GetVoicePitch()); break;
-	case 1: EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "barney/ba_pain2.wav", 1, ATTN_NORM, 0, GetVoicePitch()); break;
-	case 2: EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "barney/ba_pain3.wav", 1, ATTN_NORM, 0, GetVoicePitch()); break;
-	}
+	Vector vecGunPos, vecGunAngles;
+	GetAttachment(0, vecGunPos, vecGunAngles);
+	DropItem("weapon_eagle", vecGunPos, vecGunAngles);
 }
 
-//=========================================================
-// DeathSound 
-//=========================================================
-void COtis::DeathSound()
+void COtis::SpeakKilledEnemy()
 {
-	switch (RANDOM_LONG(0, 2))
-	{
-	case 0: EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "barney/ba_die1.wav", 1, ATTN_NORM, 0, GetVoicePitch()); break;
-	case 1: EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "barney/ba_die2.wav", 1, ATTN_NORM, 0, GetVoicePitch()); break;
-	case 2: EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "barney/ba_die3.wav", 1, ATTN_NORM, 0, GetVoicePitch()); break;
-	}
+	PlaySentence("OT_KILL", 4, VOL_NORM, ATTN_NORM);
 }
-
-
-void COtis::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
-{
-	switch (ptr->iHitgroup)
-	{
-	case HITGROUP_CHEST:
-	case HITGROUP_STOMACH:
-		if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_BLAST))
-		{
-			flDamage = flDamage / 2;
-		}
-		break;
-		//TODO: Otis doesn't have a helmet, probably don't want his dome being bulletproof
-	case 10:
-		if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_CLUB))
-		{
-			flDamage -= 20;
-			if (flDamage <= 0)
-			{
-				UTIL_Ricochet(ptr->vecEndPos, 1.0);
-				flDamage = 0.01;
-			}
-		}
-		// always a head shot
-		ptr->iHitgroup = HITGROUP_HEAD;
-		break;
-	}
-
-	CTalkMonster::TraceAttack(pevAttacker, flDamage, vecDir, ptr, bitsDamageType);
-}
-
-
-void COtis::Killed(entvars_t* pevAttacker, int iGib)
-{
-	if (GetBodygroup(OtisBodyGroup::Weapons) == OtisWeapon::DesertEagle)
-	{// drop the gun!
-		Vector vecGunPos;
-		Vector vecGunAngles;
-
-		SetBodygroup(OtisBodyGroup::Weapons, OtisWeapon::None);
-		m_iOtisBody = OtisWeapon::None;
-
-		GetAttachment(0, vecGunPos, vecGunAngles);
-
-		CBaseEntity* pGun = DropItem("weapon_eagle", vecGunPos, vecGunAngles);
-	}
-
-	SetUse(NULL);
-	CTalkMonster::Killed(pevAttacker, iGib);
-}
-
-//=========================================================
-// AI Schedules Specific to this monster
-//=========================================================
-
-Schedule_t* COtis::GetScheduleOfType(int Type)
-{
-	Schedule_t* psched;
-
-	switch (Type)
-	{
-	case SCHED_ARM_WEAPON:
-		if (m_hEnemy != NULL)
-		{
-			// face enemy, then draw.
-			return slOtisEnemyDraw;
-		}
-		break;
-
-		// Hook these to make a looping schedule
-	case SCHED_TARGET_FACE:
-		// call base class default so that otis will talk
-		// when 'used' 
-		psched = CTalkMonster::GetScheduleOfType(Type);
-
-		if (psched == slIdleStand)
-			return slOtFaceTarget;	// override this for different target face behavior
-		else
-			return psched;
-
-	case SCHED_TARGET_CHASE:
-		return slOtFollow;
-
-	case SCHED_IDLE_STAND:
-		// call base class default so that scientist will talk
-		// when standing during idle
-		psched = CTalkMonster::GetScheduleOfType(Type);
-
-		if (psched == slIdleStand)
-		{
-			// just look straight ahead.
-			return slIdleOtStand;
-		}
-		else
-			return psched;
-	}
-
-	return CTalkMonster::GetScheduleOfType(Type);
-}
-
-//=========================================================
-// GetSchedule - Decides which type of schedule best suits
-// the monster's current state and conditions. Then calls
-// monster's member function to get a pointer to a schedule
-// of the proper type.
-//=========================================================
-Schedule_t* COtis::GetSchedule()
-{
-	if (HasConditions(bits_COND_HEAR_SOUND))
-	{
-		CSound* pSound;
-		pSound = PBestSound();
-
-		ASSERT(pSound != NULL);
-		if (pSound && (pSound->m_iType & bits_SOUND_DANGER))
-			return GetScheduleOfType(SCHED_TAKE_COVER_FROM_BEST_SOUND);
-	}
-	if (HasConditions(bits_COND_ENEMY_DEAD) && FOkToSpeak())
-	{
-		PlaySentence("OT_KILL", 4, VOL_NORM, ATTN_NORM);
-	}
-
-	switch (m_MonsterState)
-	{
-	case MONSTERSTATE_COMBAT:
-	{
-		// dead enemy
-		if (HasConditions(bits_COND_ENEMY_DEAD))
-		{
-			// call base class, all code to handle dead enemies is centralized there.
-			return CBaseMonster::GetSchedule();
-		}
-
-		// always act surprized with a new enemy
-		if (HasConditions(bits_COND_NEW_ENEMY) && HasConditions(bits_COND_LIGHT_DAMAGE))
-			return GetScheduleOfType(SCHED_SMALL_FLINCH);
-
-		// wait for one schedule to draw gun
-		if (!m_fGunDrawn)
-			return GetScheduleOfType(SCHED_ARM_WEAPON);
-
-		if (HasConditions(bits_COND_HEAVY_DAMAGE))
-			return GetScheduleOfType(SCHED_TAKE_COVER_FROM_ENEMY);
-	}
-	break;
-
-	case MONSTERSTATE_ALERT:
-	case MONSTERSTATE_IDLE:
-		if (HasConditions(bits_COND_LIGHT_DAMAGE | bits_COND_HEAVY_DAMAGE))
-		{
-			// flinch if hurt
-			return GetScheduleOfType(SCHED_SMALL_FLINCH);
-		}
-
-		if (m_hEnemy == NULL && IsFollowing())
-		{
-			if (!m_hTargetEnt->IsAlive())
-			{
-				// UNDONE: Comment about the recently dead player here?
-				StopFollowing(FALSE);
-				break;
-			}
-			else
-			{
-				if (HasConditions(bits_COND_CLIENT_PUSH))
-				{
-					return GetScheduleOfType(SCHED_MOVE_AWAY_FOLLOW);
-				}
-				return GetScheduleOfType(SCHED_TARGET_FACE);
-			}
-		}
-
-		if (HasConditions(bits_COND_CLIENT_PUSH))
-		{
-			return GetScheduleOfType(SCHED_MOVE_AWAY);
-		}
-
-		// try to say something about smells
-		TrySmellTalk();
-		break;
-	}
-
-	return CTalkMonster::GetSchedule();
-}
-
-MONSTERSTATE COtis::GetIdealState()
-{
-	return CTalkMonster::GetIdealState();
-}
-
-
 
 void COtis::DeclineFollowing()
 {
 	PlaySentence("OT_POK", 2, VOL_NORM, ATTN_NORM);
 }
-
-void COtis::KeyValue(KeyValueData* pkvd)
-{
-	if (FStrEq("head", pkvd->szKeyName))
-	{
-		m_iOtisHead = atoi(pkvd->szValue);
-		pkvd->fHandled = true;
-	}
-	else if (FStrEq("bodystate", pkvd->szKeyName))
-	{
-		m_iOtisBody = atoi(pkvd->szValue);
-		pkvd->fHandled = true;
-	}
-	else
-	{
-		CBaseMonster::KeyValue(pkvd);
-	}
-}
-
-
 
 //=========================================================
 // DEAD OTIS PROP
@@ -899,5 +263,3 @@ void CDeadOtis::Spawn()
 
 	MonsterInitDead();
 }
-
-
