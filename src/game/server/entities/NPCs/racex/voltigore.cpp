@@ -25,43 +25,7 @@
 #include	"weapons.h"
 #include	"soundent.h"
 #include "decals.h"
-
-//=========================================================
-// monster-specific schedule types
-//=========================================================
-enum
-{
-	SCHED_VOLTIGORE_THREAT_DISPLAY = LAST_COMMON_SCHEDULE + 1,
-};
-
-//=========================================================
-// monster-specific tasks
-//=========================================================
-enum
-{
-	TASK_VOLTIGORE_GET_PATH_TO_ENEMY_CORPSE = LAST_COMMON_TASK + 1,
-};
-
-//=========================================================
-// Monster's Anim Events Go Here
-//=========================================================
-#define		VOLTIGORE_AE_BOLT1	( 1 )
-#define		VOLTIGORE_AE_BOLT2	( 2 )
-#define		VOLTIGORE_AE_BOLT3	( 3 )
-#define		VOLTIGORE_AE_BOLT4	( 4 )
-#define		VOLTIGORE_AE_BOLT5	( 5 )
-// some events are set up in the QC file that aren't recognized by the code yet.
-#define		VOLTIGORE_AE_PUNCH		( 6 )
-#define		VOLTIGORE_AE_BITE		( 7 )
-
-#define		VOLTIGORE_AE_LEFT_PUNCH ( 12 )
-#define		VOLTIGORE_AE_RIGHT_PUNCH ( 13 )
-
-
-
-#define		VOLTIGORE_MELEE_DIST	128
-
-constexpr auto VOLTIGORE_BEAM_COUNT = 8;
+#include "voltigore.h"
 
 class COFChargedBolt : public CBaseEntity
 {
@@ -325,74 +289,6 @@ void COFChargedBolt::ChargedBoltTouch(CBaseEntity* pOther)
 	pev->nextthink = gpGlobals->time + 0.5;
 }
 
-class COFVoltigore : public CSquadMonster
-{
-public:
-	void Spawn() override;
-	void Precache() override;
-	void SetYawSpeed() override;
-	int  Classify() override;
-	int  ISoundMask() override;
-	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
-	void SetObjectCollisionBox() override
-	{
-		pev->absmin = pev->origin + Vector(-80, -80, 0);
-		pev->absmax = pev->origin + Vector(80, 80, 90);
-	}
-
-	Schedule_t* GetSchedule() override;
-	Schedule_t* GetScheduleOfType(int Type) override;
-	BOOL FCanCheckAttacks() override;
-	BOOL CheckMeleeAttack1(float flDot, float flDist) override;
-	BOOL CheckRangeAttack1(float flDot, float flDist) override;
-	void StartTask(Task_t* pTask) override;
-	void RunTask(Task_t* pTask) override;
-	void AlertSound() override;
-	void PainSound() override;
-	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
-	int IRelationship(CBaseEntity* pTarget) override;
-	void StopTalking();
-	BOOL ShouldSpeak();
-
-	void ClearBeams();
-
-	void EXPORT CallDeathGibThink();
-
-	virtual void DeathGibThink();
-
-	void GibMonster() override;
-
-	void Killed(entvars_t* pevAttacker, int iGib) override;
-
-	CUSTOM_SCHEDULES;
-
-	int		Save(CSave& save) override;
-	int		Restore(CRestore& restore) override;
-	static	TYPEDESCRIPTION m_SaveData[];
-
-	static const char* pAttackHitSounds[];
-	static const char* pAttackMissSounds[];
-	static const char* pPainSounds[];
-	static const char* pAlertSounds[];
-
-	EHANDLE m_pBeam[VOLTIGORE_BEAM_COUNT];
-	int m_iBeams;
-
-	float	m_flNextBeamAttackCheck;
-
-	float m_flNextPainTime;
-
-	// three hacky fields for speech stuff. These don't really need to be saved.
-	float	m_flNextSpeakTime;
-	float	m_flNextWordTime;
-	int		m_iLastWord;
-
-	EHANDLE m_pChargedBolt;
-
-	int m_iVoltigoreGibs;
-	BOOL m_fDeathCharge;
-	float m_flDeathStartTime;
-};
 LINK_ENTITY_TO_CLASS(monster_alien_voltigore, COFVoltigore);
 
 TYPEDESCRIPTION	COFVoltigore::m_SaveData[] =
@@ -408,34 +304,6 @@ TYPEDESCRIPTION	COFVoltigore::m_SaveData[] =
 };
 
 IMPLEMENT_SAVERESTORE(COFVoltigore, CSquadMonster);
-
-const char* COFVoltigore::pAttackHitSounds[] =
-{
-	"zombie/claw_strike1.wav",
-	"zombie/claw_strike2.wav",
-	"zombie/claw_strike3.wav",
-};
-
-const char* COFVoltigore::pAttackMissSounds[] =
-{
-	"zombie/claw_miss1.wav",
-	"zombie/claw_miss2.wav",
-};
-
-const char* COFVoltigore::pPainSounds[] =
-{
-	"voltigore/voltigore_pain1.wav",
-	"voltigore/voltigore_pain2.wav",
-	"voltigore/voltigore_pain3.wav",
-	"voltigore/voltigore_pain4.wav",
-};
-
-const char* COFVoltigore::pAlertSounds[] =
-{
-	"voltigore/voltigore_alert1.wav",
-	"voltigore/voltigore_alert2.wav",
-	"voltigore/voltigore_alert3.wav",
-};
 
 //=========================================================
 // IRelationship - overridden because Human Grunts are 
@@ -673,21 +541,18 @@ void COFVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 }
 
-//=========================================================
-// Spawn
-//=========================================================
-void COFVoltigore::Spawn()
+void COFVoltigore::SpawnCore(const char* model, const Vector& mins, const Vector& maxs, float health)
 {
 	Precache();
 
-	SET_MODEL(ENT(pev), "models/voltigore.mdl");
-	UTIL_SetSize(pev, Vector(-80, -80, 0), Vector(80, 80, 90));
+	SET_MODEL(ENT(pev), model);
+	UTIL_SetSize(pev, mins, maxs);
 
 	pev->solid = SOLID_SLIDEBOX;
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_GREEN;
 	pev->effects = 0;
-	pev->health = gSkillData.voltigoreHealth;
+	pev->health = health;
 	m_flFieldOfView = 0.2;// indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
 	m_afCapability = 0;
@@ -705,13 +570,18 @@ void COFVoltigore::Spawn()
 }
 
 //=========================================================
-// Precache - precaches all resources this monster needs
+// Spawn
 //=========================================================
-void COFVoltigore::Precache()
+void COFVoltigore::Spawn()
+{
+	SpawnCore("models/voltigore.mdl", {-80, -80, 0}, {80, 80, 90}, gSkillData.voltigoreHealth);
+}
+
+void COFVoltigore::PrecacheCore(const char* model)
 {
 	int i;
 
-	PRECACHE_MODEL("models/voltigore.mdl");
+	PRECACHE_MODEL(model);
 
 	for (i = 0; i < ARRAYSIZE(pAttackHitSounds); i++)
 		PRECACHE_SOUND((char*)pAttackHitSounds[i]);
@@ -725,8 +595,8 @@ void COFVoltigore::Precache()
 	for (i = 0; i < ARRAYSIZE(pAlertSounds); i++)
 		PRECACHE_SOUND((char*)pAlertSounds[i]);
 
-	PRECACHE_SOUND("voltigore/voltigore_attack_melee1.wav");
-	PRECACHE_SOUND("voltigore/voltigore_attack_melee2.wav");
+	PRECACHE_SOUND_ARRAY(pAttackSounds);
+
 	PRECACHE_SOUND("voltigore/voltigore_attack_shock.wav");
 
 	PRECACHE_SOUND("voltigore/voltigore_communicate1.wav");
@@ -751,6 +621,14 @@ void COFVoltigore::Precache()
 	UTIL_PrecacheOther("charged_bolt");
 
 	m_iVoltigoreGibs = PRECACHE_MODEL("models/vgibs.mdl");
+}
+
+//=========================================================
+// Precache - precaches all resources this monster needs
+//=========================================================
+void COFVoltigore::Precache()
+{
+	PrecacheCore("models/voltigore.mdl");
 }
 
 //=========================================================
@@ -1054,7 +932,11 @@ void COFVoltigore::StartTask(Task_t* pTask)
 
 	case TASK_DIE:
 	{
-		SetThink(&COFVoltigore::CallDeathGibThink);
+		if (BlowsUpOnDeath())
+		{
+			SetThink(&COFVoltigore::CallDeathGibThink);
+		}
+
 		CSquadMonster::StartTask(pTask);
 	}
 	break;
@@ -1084,9 +966,12 @@ void COFVoltigore::StartTask(Task_t* pTask)
 			++m_iBeams;
 		}
 
-		m_pChargedBolt = COFChargedBolt::ChargedBoltCreate();
+		if (CanUseRangeAttacks())
+		{
+			m_pChargedBolt = COFChargedBolt::ChargedBoltCreate();
 
-		UTIL_SetOrigin(m_pChargedBolt->pev, vecConverge);
+			UTIL_SetOrigin(m_pChargedBolt->pev, vecConverge);
+		}
 
 		UTIL_EmitAmbientSound(edict(), pev->origin, "debris/beamstart2.wav", 0.5, ATTN_NORM, 0, RANDOM_LONG(140, 160));
 		CBaseMonster::StartTask(pTask);
