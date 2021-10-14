@@ -178,6 +178,11 @@ protected:
 	BOOL CheckRangeAttack2Core(float flDot, float flDist, float grenadeSpeed);
 
 	virtual std::tuple<int, Activity> GetSequenceForActivity(Activity NewActivity);
+
+	/**
+	*	@brief Gets a reference to the global grunt question variable used to communicate between grunts
+	*/
+	virtual int& GetGruntQuestion();
 };
 
 /**

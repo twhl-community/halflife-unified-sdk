@@ -78,6 +78,11 @@ const char* CHGrunt::pGruntSentences[] =
 	"HG_TAUNT", // say rude things
 };
 
+int& CHGrunt::GetGruntQuestion()
+{
+	return g_fGruntQuestion;
+}
+
 //=========================================================
 // Speak Sentence - say your cued up sentence.
 //
@@ -537,20 +542,22 @@ void CHGrunt::SetYawSpeed()
 
 void CHGrunt::IdleSound()
 {
-	if (FOkToSpeak() && (g_fGruntQuestion || RANDOM_LONG(0, 1)))
+	int& question = GetGruntQuestion();
+
+	if (FOkToSpeak() && (question || RANDOM_LONG(0, 1)))
 	{
-		if (!g_fGruntQuestion)
+		if (!question)
 		{
 			// ask question or make statement
 			switch (RANDOM_LONG(0, 2))
 			{
 			case 0: // check in
 				SENTENCEG_PlayRndSz(ENT(pev), "HG_CHECK", HGRUNT_SENTENCE_VOLUME, ATTN_NORM, 0, m_voicePitch);
-				g_fGruntQuestion = 1;
+				question = 1;
 				break;
 			case 1: // question
 				SENTENCEG_PlayRndSz(ENT(pev), "HG_QUEST", HGRUNT_SENTENCE_VOLUME, ATTN_NORM, 0, m_voicePitch);
-				g_fGruntQuestion = 2;
+				question = 2;
 				break;
 			case 2: // statement
 				SENTENCEG_PlayRndSz(ENT(pev), "HG_IDLE", HGRUNT_SENTENCE_VOLUME, ATTN_NORM, 0, m_voicePitch);
@@ -559,7 +566,7 @@ void CHGrunt::IdleSound()
 		}
 		else
 		{
-			switch (g_fGruntQuestion)
+			switch (question)
 			{
 			case 1: // check in
 				SENTENCEG_PlayRndSz(ENT(pev), "HG_CLEAR", HGRUNT_SENTENCE_VOLUME, ATTN_NORM, 0, m_voicePitch);
@@ -568,7 +575,7 @@ void CHGrunt::IdleSound()
 				SENTENCEG_PlayRndSz(ENT(pev), "HG_ANSWER", HGRUNT_SENTENCE_VOLUME, ATTN_NORM, 0, m_voicePitch);
 				break;
 			}
-			g_fGruntQuestion = 0;
+			question = 0;
 		}
 		JustSpoke();
 	}
