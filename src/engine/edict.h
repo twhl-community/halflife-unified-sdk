@@ -19,14 +19,14 @@ struct edict_s
 	qboolean	free;
 	int			serialnumber;
 	link_t		area;				// linked to a division node or leaf
-	
+
 	int			headnode;			// -1 to use normal leaf check
 	int			num_leafs;
 	short		leafnums[MAX_ENT_LEAFS];
 
 	float		freetime;			// sv.time when the object was freed
 
-	void*		pvPrivateData;		// Alloced and freed by engine, used by DLLs
+	void* pvPrivateData;		// Alloced and freed by engine, used by DLLs
 
 	entvars_t	v;					// C exported fields from progs
 

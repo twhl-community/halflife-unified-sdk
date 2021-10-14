@@ -26,7 +26,7 @@ public:
 
 	void Spawn() override;
 
-	void RemoveEffect( CBasePlayer* pPlayer ) override;
+	void RemoveEffect(CBasePlayer* pPlayer) override;
 
-	bool MyTouch( CBasePlayer* pPlayer ) override;
+	bool MyTouch(CBasePlayer* pPlayer) override;
 };

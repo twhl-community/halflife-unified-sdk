@@ -112,7 +112,7 @@ public:
 	virtual void PlayerKilled(CBasePlayer* pVictim, entvars_t* pKiller, entvars_t* pInflictor) = 0;// Called each time a player dies
 	virtual void DeathNotice(CBasePlayer* pVictim, entvars_t* pKiller, entvars_t* pInflictor) = 0;// Call this from within a GameRules class to report an obituary.
 	virtual void MonsterKilled(CBaseMonster* pVictim, entvars_t* pKiller, entvars_t* pInflictor) {}
-// Weapon retrieval
+	// Weapon retrieval
 	virtual BOOL CanHavePlayerItem(CBasePlayer* pPlayer, CBasePlayerItem* pWeapon);// The player is touching an CBasePlayerItem, do I give it to him?
 	virtual void PlayerGotWeapon(CBasePlayer* pPlayer, CBasePlayerItem* pWeapon) = 0;// Called each time a player picks up a weapon from the ground
 

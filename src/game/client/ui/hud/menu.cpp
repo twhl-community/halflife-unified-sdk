@@ -143,9 +143,9 @@ int CHudMenu::Draw(float flTime)
 		return 1;
 		*/
 
-	// draw the menu, along the left-hand side of the screen
+		// draw the menu, along the left-hand side of the screen
 
-	// count the number of newlines
+		// count the number of newlines
 	int nlc = 0;
 	int i;
 	for (i = 0; i < MAX_MENU_STRING && g_szMenuString[i] != '\0'; i++)

@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*
+*	This product contains software technology licensed from Id
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
 *	All Rights Reserved.
 *
 *   This source code contains proprietary and confidential information of
@@ -31,7 +31,7 @@
 
 int			   iSpikeTrail;
 int iPitdroneSpitSprite;
-	
+
 
 //=========================================================
 // monster-specific schedule types
@@ -51,7 +51,7 @@ enum
 //=========================================================
 // monster-specific tasks
 //=========================================================
-enum 
+enum
 {
 	TASK_PITDRONE_HOPTURN = LAST_COMMON_TASK + 1,
 };
@@ -67,41 +67,41 @@ public:
 
 	int Classify() override { return CLASS_NONE; }
 
-	static void Shoot( entvars_t *pevOwner, Vector vecStart, Vector vecVelocity, Vector vecAngles );
-	void EXPORT SpikeTouch( CBaseEntity *pOther );
+	static void Shoot(entvars_t* pevOwner, Vector vecStart, Vector vecVelocity, Vector vecAngles);
+	void EXPORT SpikeTouch(CBaseEntity* pOther);
 
 	void EXPORT StartTrail();
 
-	int		Save( CSave &save ) override;
-	int		Restore( CRestore &restore ) override;
+	int		Save(CSave& save) override;
+	int		Restore(CRestore& restore) override;
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	int  m_maxFrame;
 };
 
-LINK_ENTITY_TO_CLASS( pitdronespike, CPitdroneSpike );
+LINK_ENTITY_TO_CLASS(pitdronespike, CPitdroneSpike);
 
 TYPEDESCRIPTION	CPitdroneSpike::m_SaveData[] =
 {
-	DEFINE_FIELD( CPitdroneSpike, m_maxFrame, FIELD_INTEGER ),
+	DEFINE_FIELD(CPitdroneSpike, m_maxFrame, FIELD_INTEGER),
 };
 
-IMPLEMENT_SAVERESTORE( CPitdroneSpike, CBaseEntity );
+IMPLEMENT_SAVERESTORE(CPitdroneSpike, CBaseEntity);
 
 void CPitdroneSpike::Precache()
 {
-	PRECACHE_MODEL( "models/pit_drone_spike.mdl" );
-	PRECACHE_SOUND( "weapons/xbow_hitbod1.wav" );
-	PRECACHE_SOUND( "weapons/xbox_hit1.wav" );
+	PRECACHE_MODEL("models/pit_drone_spike.mdl");
+	PRECACHE_SOUND("weapons/xbow_hitbod1.wav");
+	PRECACHE_SOUND("weapons/xbox_hit1.wav");
 
-	iSpikeTrail = PRECACHE_MODEL( "sprites/spike_trail.spr" );
+	iSpikeTrail = PRECACHE_MODEL("sprites/spike_trail.spr");
 }
 
-void CPitdroneSpike:: Spawn()
+void CPitdroneSpike::Spawn()
 {
 	pev->movetype = MOVETYPE_FLY;
-	pev->classname = MAKE_STRING( "pitdronespike" );
-	
+	pev->classname = MAKE_STRING("pitdronespike");
+
 	pev->solid = SOLID_BBOX;
 	pev->takedamage = DAMAGE_YES;
 	pev->flags |= FL_MONSTER;
@@ -111,92 +111,92 @@ void CPitdroneSpike:: Spawn()
 	pev->frame = 0;
 	pev->scale = 0.5;
 
-	UTIL_SetSize( pev, Vector( -4, -4, -4 ), Vector( 4, 4, 4 ) );
+	UTIL_SetSize(pev, Vector(-4, -4, -4), Vector(4, 4, 4));
 
-	m_maxFrame = (float) MODEL_FRAMES( pev->modelindex ) - 1;
+	m_maxFrame = (float)MODEL_FRAMES(pev->modelindex) - 1;
 }
 
-void CPitdroneSpike::Shoot( entvars_t *pevOwner, Vector vecStart, Vector vecVelocity, Vector vecAngles )
+void CPitdroneSpike::Shoot(entvars_t* pevOwner, Vector vecStart, Vector vecVelocity, Vector vecAngles)
 {
-	CPitdroneSpike *pSpit = GetClassPtr( ( CPitdroneSpike *)NULL );
-	
+	CPitdroneSpike* pSpit = GetClassPtr((CPitdroneSpike*)NULL);
+
 	pSpit->pev->angles = vecAngles;
-	UTIL_SetOrigin( pSpit->pev, vecStart );
+	UTIL_SetOrigin(pSpit->pev, vecStart);
 
 	pSpit->Spawn();
 
 	pSpit->pev->velocity = vecVelocity;
 	pSpit->pev->owner = ENT(pevOwner);
 
-	pSpit->SetThink ( &CPitdroneSpike::StartTrail );
+	pSpit->SetThink(&CPitdroneSpike::StartTrail);
 	pSpit->pev->nextthink = gpGlobals->time + 0.1;
 }
 
-void CPitdroneSpike::SpikeTouch( CBaseEntity *pOther )
+void CPitdroneSpike::SpikeTouch(CBaseEntity* pOther)
 {
 	// splat sound
-	int iPitch = RANDOM_FLOAT( 120, 140 );
+	int iPitch = RANDOM_FLOAT(120, 140);
 
-	if( !pOther->pev->takedamage )
+	if (!pOther->pev->takedamage)
 	{
-		EMIT_SOUND_DYN( edict(), CHAN_VOICE, "weapons/xbow_hit1.wav", VOL_NORM, ATTN_NORM, 0, iPitch );
+		EMIT_SOUND_DYN(edict(), CHAN_VOICE, "weapons/xbow_hit1.wav", VOL_NORM, ATTN_NORM, 0, iPitch);
 	}
 	else
 	{
-		pOther->TakeDamage( pev, pev, gSkillData.pitdroneDmgSpit, DMG_GENERIC );
-		EMIT_SOUND_DYN( edict(), CHAN_VOICE, "weapons/xbow_hitbod1.wav", VOL_NORM, ATTN_NORM, 0, iPitch );
+		pOther->TakeDamage(pev, pev, gSkillData.pitdroneDmgSpit, DMG_GENERIC);
+		EMIT_SOUND_DYN(edict(), CHAN_VOICE, "weapons/xbow_hitbod1.wav", VOL_NORM, ATTN_NORM, 0, iPitch);
 	}
 
-	SetTouch( nullptr );
+	SetTouch(nullptr);
 
 	//Stick it in the world for a bit
 	//TODO: maybe stick it on any entity that reports FL_WORLDBRUSH too?
-	if( !strcmp( "worldspawn", STRING( pOther->pev->classname ) ) )
+	if (!strcmp("worldspawn", STRING(pOther->pev->classname)))
 	{
 		const auto vecDir = pev->velocity.Normalize();
 
 		const auto vecOrigin = pev->origin - vecDir * 6;
 
-		UTIL_SetOrigin( pev, vecOrigin );
+		UTIL_SetOrigin(pev, vecOrigin);
 
-		auto v41 = UTIL_VecToAngles( vecDir );
+		auto v41 = UTIL_VecToAngles(vecDir);
 
-		pev->angles = UTIL_VecToAngles( vecDir );
+		pev->angles = UTIL_VecToAngles(vecDir);
 		pev->solid = SOLID_NOT;
 		pev->movetype = MOVETYPE_FLY;
 
-		pev->angles.z = RANDOM_LONG( 0, 360 );
+		pev->angles.z = RANDOM_LONG(0, 360);
 
 		pev->velocity = g_vecZero;
 		pev->avelocity = g_vecZero;
 
-		SetThink( &CBaseEntity::SUB_FadeOut );
+		SetThink(&CBaseEntity::SUB_FadeOut);
 		pev->nextthink = gpGlobals->time + 90.0;
 	}
 	else
 	{
 		//Hit something else, remove
-		SetThink( &CBaseEntity::SUB_Remove );
+		SetThink(&CBaseEntity::SUB_Remove);
 		pev->nextthink = gpGlobals->time + 0.1;
 	}
 }
 
 void CPitdroneSpike::StartTrail()
 {
-	MESSAGE_BEGIN( MSG_BROADCAST, SVC_TEMPENTITY );
-	WRITE_BYTE( TE_BEAMFOLLOW );
-	WRITE_SHORT( entindex() );
-	WRITE_SHORT( iSpikeTrail );
-	WRITE_BYTE( 2 );
-	WRITE_BYTE( 1 );
-	WRITE_BYTE( 197 );
-	WRITE_BYTE( 194 );
-	WRITE_BYTE( 11 );
-	WRITE_BYTE( 192 );
+	MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
+	WRITE_BYTE(TE_BEAMFOLLOW);
+	WRITE_SHORT(entindex());
+	WRITE_SHORT(iSpikeTrail);
+	WRITE_BYTE(2);
+	WRITE_BYTE(1);
+	WRITE_BYTE(197);
+	WRITE_BYTE(194);
+	WRITE_BYTE(11);
+	WRITE_BYTE(192);
 	MESSAGE_END();
 
-	SetTouch( &CPitdroneSpike::SpikeTouch );
-	SetThink( nullptr );
+	SetTouch(&CPitdroneSpike::SpikeTouch);
+	SetThink(nullptr);
 }
 
 //=========================================================
@@ -234,29 +234,29 @@ public:
 	void Precache() override;
 	void SetYawSpeed() override;
 	int  ISoundMask() override;
-	int  Classify () override;
-	void HandleAnimEvent( MonsterEvent_t *pEvent ) override;
+	int  Classify() override;
+	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 	void IdleSound() override;
 	void PainSound() override;
-	void AlertSound () override;
-	void StartTask ( Task_t *pTask ) override;
-	void RunTask ( Task_t *pTask ) override;
-	BOOL CheckMeleeAttack1 ( float flDot, float flDist ) override;
-	BOOL CheckMeleeAttack2 ( float flDot, float flDist ) override;
-	BOOL CheckRangeAttack1 ( float flDot, float flDist ) override;
+	void AlertSound() override;
+	void StartTask(Task_t* pTask) override;
+	void RunTask(Task_t* pTask) override;
+	BOOL CheckMeleeAttack1(float flDot, float flDist) override;
+	BOOL CheckMeleeAttack2(float flDot, float flDist) override;
+	BOOL CheckRangeAttack1(float flDot, float flDist) override;
 	void RunAI() override;
-	BOOL FValidateHintType ( short sHint ) override;
-	Schedule_t *GetSchedule() override;
-	Schedule_t *GetScheduleOfType ( int Type ) override;
-	int IRelationship ( CBaseEntity *pTarget ) override;
-	int IgnoreConditions () override;
+	BOOL FValidateHintType(short sHint) override;
+	Schedule_t* GetSchedule() override;
+	Schedule_t* GetScheduleOfType(int Type) override;
+	int IRelationship(CBaseEntity* pTarget) override;
+	int IgnoreConditions() override;
 
 	void CheckAmmo() override;
 	void GibMonster() override;
-	void KeyValue( KeyValueData* pkvd ) override;
+	void KeyValue(KeyValueData* pkvd) override;
 
-	int	Save( CSave &save ) override;
-	int Restore( CRestore &restore ) override;
+	int	Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 
 	CUSTOM_SCHEDULES;
 	static TYPEDESCRIPTION m_SaveData[];
@@ -266,25 +266,25 @@ public:
 	int m_iInitialAmmo;
 	float m_flNextEatTime;
 };
-LINK_ENTITY_TO_CLASS( monster_pitdrone, CPitdrone );
+LINK_ENTITY_TO_CLASS(monster_pitdrone, CPitdrone);
 
-TYPEDESCRIPTION	CPitdrone::m_SaveData[] = 
+TYPEDESCRIPTION	CPitdrone::m_SaveData[] =
 {
-	DEFINE_FIELD( CPitdrone, m_flLastHurtTime, FIELD_TIME ),
-	DEFINE_FIELD( CPitdrone, m_flNextSpikeTime, FIELD_TIME ),
-	DEFINE_FIELD( CPitdrone, m_flNextEatTime, FIELD_TIME ),
+	DEFINE_FIELD(CPitdrone, m_flLastHurtTime, FIELD_TIME),
+	DEFINE_FIELD(CPitdrone, m_flNextSpikeTime, FIELD_TIME),
+	DEFINE_FIELD(CPitdrone, m_flNextEatTime, FIELD_TIME),
 };
 
-IMPLEMENT_SAVERESTORE( CPitdrone, CBaseMonster );
+IMPLEMENT_SAVERESTORE(CPitdrone, CBaseMonster);
 
 //=========================================================
 // IgnoreConditions 
 //=========================================================
-int CPitdrone::IgnoreConditions ()
+int CPitdrone::IgnoreConditions()
 {
 	int iIgnore = CBaseMonster::IgnoreConditions();
 
-	if ( gpGlobals->time - m_flLastHurtTime <= 20 )
+	if (gpGlobals->time - m_flLastHurtTime <= 20)
 	{
 		// haven't been hurt in 20 seconds, so let the drone care about stink. 
 		iIgnore = bits_COND_SMELL | bits_COND_SMELL_FOOD;
@@ -293,42 +293,42 @@ int CPitdrone::IgnoreConditions ()
 	return iIgnore;
 }
 
-int CPitdrone::IRelationship ( CBaseEntity *pTarget )
+int CPitdrone::IRelationship(CBaseEntity* pTarget)
 {
 	//Always mark pit drones as allies
-	if ( FClassnameIs ( pTarget->pev, "monster_pitdrone" ) )
+	if (FClassnameIs(pTarget->pev, "monster_pitdrone"))
 	{
 		return R_AL;
 	}
 
-	return CBaseMonster :: IRelationship ( pTarget );
+	return CBaseMonster::IRelationship(pTarget);
 }
 
 //=========================================================
 // CheckRangeAttack1
 //=========================================================
-BOOL CPitdrone :: CheckRangeAttack1 ( float flDot, float flDist )
+BOOL CPitdrone::CheckRangeAttack1(float flDot, float flDist)
 {
-	if ( m_iInitialAmmo == -1
-		|| GetBodygroup( PitdroneBodygroup::Weapons ) == PitdroneWeapon::Empty
-		|| ( IsMoving() && flDist >= 512 ) )
+	if (m_iInitialAmmo == -1
+		|| GetBodygroup(PitdroneBodygroup::Weapons) == PitdroneWeapon::Empty
+		|| (IsMoving() && flDist >= 512))
 	{
 		// squid will far too far behind if he stops running to spit at this distance from the enemy.
 		return FALSE;
 	}
 
-	if ( flDist > 128 && flDist <= 784 && flDot >= 0.5 && gpGlobals->time >= m_flNextSpikeTime )
+	if (flDist > 128 && flDist <= 784 && flDot >= 0.5 && gpGlobals->time >= m_flNextSpikeTime)
 	{
-		if ( m_hEnemy != NULL )
+		if (m_hEnemy != NULL)
 		{
-			if ( fabs( pev->origin.z - m_hEnemy->pev->origin.z ) > 256 )
+			if (fabs(pev->origin.z - m_hEnemy->pev->origin.z) > 256)
 			{
 				// don't try to spit at someone up really high or down really low.
 				return FALSE;
 			}
 		}
 
-		if ( IsMoving() )
+		if (IsMoving())
 		{
 			// don't spit again for a long time, resume chasing enemy.
 			m_flNextSpikeTime = gpGlobals->time + 5;
@@ -345,28 +345,28 @@ BOOL CPitdrone :: CheckRangeAttack1 ( float flDot, float flDist )
 	return FALSE;
 }
 
-BOOL CPitdrone :: CheckMeleeAttack1 ( float flDot, float flDist )
+BOOL CPitdrone::CheckMeleeAttack1(float flDot, float flDist)
 {
-	if ( flDist <= 64 && flDot >= 0.7 )
+	if (flDist <= 64 && flDot >= 0.7)
 	{
-		return RANDOM_LONG( 0, 3 ) == 0;
+		return RANDOM_LONG(0, 3) == 0;
 	}
 	return FALSE;
 }
 
-BOOL CPitdrone :: CheckMeleeAttack2 ( float flDot, float flDist )
+BOOL CPitdrone::CheckMeleeAttack2(float flDot, float flDist)
 {
-	if ( flDist <= 64 && flDot >= 0.7 && !HasConditions( bits_COND_CAN_MELEE_ATTACK1 ) )
+	if (flDist <= 64 && flDot >= 0.7 && !HasConditions(bits_COND_CAN_MELEE_ATTACK1))
 	{
 		return TRUE;
 	}
 	return FALSE;
-}  
+}
 
 //=========================================================
 //  FValidateHintType 
 //=========================================================
-BOOL CPitdrone :: FValidateHintType ( short sHint )
+BOOL CPitdrone::FValidateHintType(short sHint)
 {
 	int i;
 
@@ -375,15 +375,15 @@ BOOL CPitdrone :: FValidateHintType ( short sHint )
 		HINT_WORLD_HUMAN_BLOOD,
 	};
 
-	for ( i = 0 ; i < ARRAYSIZE ( sSquidHints ) ; i++ )
+	for (i = 0; i < ARRAYSIZE(sSquidHints); i++)
 	{
-		if ( sSquidHints[ i ] == sHint )
+		if (sSquidHints[i] == sHint)
 		{
 			return TRUE;
 		}
 	}
 
-	ALERT ( at_aiconsole, "Couldn't validate hint type" );
+	ALERT(at_aiconsole, "Couldn't validate hint type");
 	return FALSE;
 }
 
@@ -392,21 +392,21 @@ BOOL CPitdrone :: FValidateHintType ( short sHint )
 // of sounds this monster regards. In the base class implementation,
 // monsters care about all sounds, but no scents.
 //=========================================================
-int CPitdrone :: ISoundMask ()
+int CPitdrone::ISoundMask()
 {
-	return	bits_SOUND_WORLD	|
-			bits_SOUND_COMBAT	|
-			bits_SOUND_CARCASS	|
-			bits_SOUND_MEAT		|
-			bits_SOUND_GARBAGE	|
-			bits_SOUND_PLAYER;
+	return	bits_SOUND_WORLD |
+		bits_SOUND_COMBAT |
+		bits_SOUND_CARCASS |
+		bits_SOUND_MEAT |
+		bits_SOUND_GARBAGE |
+		bits_SOUND_PLAYER;
 }
 
 //=========================================================
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	CPitdrone :: Classify ()
+int	CPitdrone::Classify()
 {
 	return	CLASS_ALIEN_PREDATOR;
 }
@@ -414,30 +414,30 @@ int	CPitdrone :: Classify ()
 //=========================================================
 // IdleSound 
 //=========================================================
-void CPitdrone :: IdleSound ()
+void CPitdrone::IdleSound()
 {
 }
 
 //=========================================================
 // PainSound 
 //=========================================================
-void CPitdrone :: PainSound ()
+void CPitdrone::PainSound()
 {
-	int iPitch = RANDOM_LONG( 85, 120 );
+	int iPitch = RANDOM_LONG(85, 120);
 
-	switch ( RANDOM_LONG(0,3) )
+	switch (RANDOM_LONG(0, 3))
 	{
-	case 0:	
-		EMIT_SOUND_DYN( ENT(pev), CHAN_VOICE, "pitdrone/pit_drone_pain1.wav", 1, ATTN_NORM, 0, iPitch );	
+	case 0:
+		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "pitdrone/pit_drone_pain1.wav", 1, ATTN_NORM, 0, iPitch);
 		break;
-	case 1:	
-		EMIT_SOUND_DYN( ENT(pev), CHAN_VOICE, "pitdrone/pit_drone_pain2.wav", 1, ATTN_NORM, 0, iPitch );	
+	case 1:
+		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "pitdrone/pit_drone_pain2.wav", 1, ATTN_NORM, 0, iPitch);
 		break;
-	case 2:	
-		EMIT_SOUND_DYN( ENT(pev), CHAN_VOICE, "pitdrone/pit_drone_pain3.wav", 1, ATTN_NORM, 0, iPitch );	
+	case 2:
+		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "pitdrone/pit_drone_pain3.wav", 1, ATTN_NORM, 0, iPitch);
 		break;
-	case 3:	
-		EMIT_SOUND_DYN( ENT(pev), CHAN_VOICE, "pitdrone/pit_drone_pain4.wav", 1, ATTN_NORM, 0, iPitch );	
+	case 3:
+		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "pitdrone/pit_drone_pain4.wav", 1, ATTN_NORM, 0, iPitch);
 		break;
 	}
 }
@@ -445,20 +445,20 @@ void CPitdrone :: PainSound ()
 //=========================================================
 // AlertSound
 //=========================================================
-void CPitdrone :: AlertSound ()
+void CPitdrone::AlertSound()
 {
-	int iPitch = RANDOM_LONG( 140, 160 );
+	int iPitch = RANDOM_LONG(140, 160);
 
-	switch ( RANDOM_LONG ( 0, 2  ) )
+	switch (RANDOM_LONG(0, 2))
 	{
 	case 0:
-		EMIT_SOUND_DYN( ENT(pev), CHAN_VOICE, "pitdrone/pit_drone_alert1.wav", 1, ATTN_NORM, 0, iPitch );	
+		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "pitdrone/pit_drone_alert1.wav", 1, ATTN_NORM, 0, iPitch);
 		break;
 	case 1:
-		EMIT_SOUND_DYN( ENT(pev), CHAN_VOICE, "pitdrone/pit_drone_alert2.wav", 1, ATTN_NORM, 0, iPitch );	
+		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "pitdrone/pit_drone_alert2.wav", 1, ATTN_NORM, 0, iPitch);
 		break;
 	case 2:
-		EMIT_SOUND_DYN( ENT( pev ), CHAN_VOICE, "pitdrone/pit_drone_alert3.wav", 1, ATTN_NORM, 0, iPitch );
+		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "pitdrone/pit_drone_alert3.wav", 1, ATTN_NORM, 0, iPitch);
 		break;
 	}
 }
@@ -467,13 +467,13 @@ void CPitdrone :: AlertSound ()
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CPitdrone :: SetYawSpeed ()
+void CPitdrone::SetYawSpeed()
 {
 	int ys;
 
 	ys = 0;
 
-	switch ( m_Activity )
+	switch (m_Activity)
 	{
 	case	ACT_WALK:			ys = 90;	break;
 	case	ACT_RUN:			ys = 90;	break;
@@ -491,203 +491,203 @@ void CPitdrone :: SetYawSpeed ()
 // HandleAnimEvent - catches the monster-specific messages
 // that occur when tagged animation frames are played.
 //=========================================================
-void CPitdrone :: HandleAnimEvent( MonsterEvent_t *pEvent )
+void CPitdrone::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
-	switch( pEvent->event )
+	switch (pEvent->event)
 	{
-		case PITDRONE_AE_SPIT:
+	case PITDRONE_AE_SPIT:
+	{
+		if (m_iInitialAmmo != -1 && GetBodygroup(PitdroneBodygroup::Weapons) != PitdroneWeapon::Empty)
 		{
-			if( m_iInitialAmmo != -1 && GetBodygroup( PitdroneBodygroup::Weapons ) != PitdroneWeapon::Empty )
+			Vector	vecSpitOffset;
+			Vector	vecSpitDir;
+
+			UTIL_MakeVectors(pev->angles);
+
+			// !!!HACKHACK - the spot at which the spit originates (in front of the mouth) was measured in 3ds and hardcoded here.
+			// we should be able to read the position of bones at runtime for this info.
+			vecSpitOffset = (gpGlobals->v_forward * 15 + gpGlobals->v_up * 36);
+			vecSpitOffset = (pev->origin + vecSpitOffset);
+			vecSpitDir = ((m_hEnemy->pev->origin + m_hEnemy->pev->view_ofs) - vecSpitOffset).Normalize();
+
+			vecSpitDir.x += RANDOM_FLOAT(-0.05, 0.05);
+			vecSpitDir.y += RANDOM_FLOAT(-0.05, 0.05);
+			vecSpitDir.z += RANDOM_FLOAT(-0.05, 0);
+
+			// spew the spittle temporary ents.
+			MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, vecSpitOffset);
+			WRITE_BYTE(TE_SPRITE_SPRAY);
+			WRITE_COORD(vecSpitOffset.x);	// pos
+			WRITE_COORD(vecSpitOffset.y);
+			WRITE_COORD(vecSpitOffset.z);
+			WRITE_COORD(vecSpitDir.x);	// dir
+			WRITE_COORD(vecSpitDir.y);
+			WRITE_COORD(vecSpitDir.z);
+			WRITE_SHORT(iPitdroneSpitSprite);	// model
+			WRITE_BYTE(10);			// count
+			WRITE_BYTE(110);			// speed
+			WRITE_BYTE(25);			// noise ( client will divide by 100 )
+			MESSAGE_END();
+
+			CPitdroneSpike::Shoot(pev, vecSpitOffset, vecSpitDir * 900, UTIL_VecToAngles(vecSpitDir));
+
+			auto ammoSubModel = GetBodygroup(PitdroneBodygroup::Weapons);
+
+			if (ammoSubModel == PitdroneWeapon::One)
 			{
-				Vector	vecSpitOffset;
-				Vector	vecSpitDir;
-
-				UTIL_MakeVectors( pev->angles );
-
-				// !!!HACKHACK - the spot at which the spit originates (in front of the mouth) was measured in 3ds and hardcoded here.
-				// we should be able to read the position of bones at runtime for this info.
-				vecSpitOffset = ( gpGlobals->v_forward * 15 + gpGlobals->v_up * 36 );
-				vecSpitOffset = ( pev->origin + vecSpitOffset );
-				vecSpitDir = ( ( m_hEnemy->pev->origin + m_hEnemy->pev->view_ofs ) - vecSpitOffset ).Normalize();
-
-				vecSpitDir.x += RANDOM_FLOAT( -0.05, 0.05 );
-				vecSpitDir.y += RANDOM_FLOAT( -0.05, 0.05 );
-				vecSpitDir.z += RANDOM_FLOAT( -0.05, 0 );
-
-				// spew the spittle temporary ents.
-				MESSAGE_BEGIN( MSG_PVS, SVC_TEMPENTITY, vecSpitOffset );
-				WRITE_BYTE( TE_SPRITE_SPRAY );
-				WRITE_COORD( vecSpitOffset.x );	// pos
-				WRITE_COORD( vecSpitOffset.y );
-				WRITE_COORD( vecSpitOffset.z );
-				WRITE_COORD( vecSpitDir.x );	// dir
-				WRITE_COORD( vecSpitDir.y );
-				WRITE_COORD( vecSpitDir.z );
-				WRITE_SHORT( iPitdroneSpitSprite );	// model
-				WRITE_BYTE( 10 );			// count
-				WRITE_BYTE( 110 );			// speed
-				WRITE_BYTE( 25 );			// noise ( client will divide by 100 )
-				MESSAGE_END();
-
-				CPitdroneSpike::Shoot( pev, vecSpitOffset, vecSpitDir * 900, UTIL_VecToAngles( vecSpitDir ) );
-
-				auto ammoSubModel = GetBodygroup( PitdroneBodygroup::Weapons );
-
-				if( ammoSubModel == PitdroneWeapon::One)
-				{
-					ammoSubModel = PitdroneWeapon::Empty;
-				}
-				else
-				{
-					++ammoSubModel;
-				}
-
-				SetBodygroup( PitdroneBodygroup::Weapons, ammoSubModel );
-				--m_cAmmoLoaded;
+				ammoSubModel = PitdroneWeapon::Empty;
 			}
+			else
+			{
+				++ammoSubModel;
+			}
+
+			SetBodygroup(PitdroneBodygroup::Weapons, ammoSubModel);
+			--m_cAmmoLoaded;
 		}
-		break;
+	}
+	break;
 
-		case PITDRONE_AE_BITE:
+	case PITDRONE_AE_BITE:
+	{
+		// SOUND HERE!
+		CBaseEntity* pHurt = CheckTraceHullAttack(70, gSkillData.pitdroneDmgBite, DMG_SLASH);
+
+		if (pHurt)
 		{
-			// SOUND HERE!
-			CBaseEntity *pHurt = CheckTraceHullAttack( 70, gSkillData.pitdroneDmgBite, DMG_SLASH );
-			
-			if ( pHurt )
-			{
-				//pHurt->pev->punchangle.z = -15;
-				//pHurt->pev->punchangle.x = -45;
-				pHurt->pev->velocity = pHurt->pev->velocity - gpGlobals->v_forward * 100;
-				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_up * 100;
-			}
+			//pHurt->pev->punchangle.z = -15;
+			//pHurt->pev->punchangle.x = -45;
+			pHurt->pev->velocity = pHurt->pev->velocity - gpGlobals->v_forward * 100;
+			pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_up * 100;
 		}
-		break;
+	}
+	break;
 
-		case PITDRONE_AE_TAILWHIP:
+	case PITDRONE_AE_TAILWHIP:
+	{
+		CBaseEntity* pHurt = CheckTraceHullAttack(70, gSkillData.pitdroneDmgWhip, DMG_CLUB | DMG_ALWAYSGIB);
+		if (pHurt)
 		{
-			CBaseEntity *pHurt = CheckTraceHullAttack( 70, gSkillData.pitdroneDmgWhip, DMG_CLUB | DMG_ALWAYSGIB );
-			if ( pHurt ) 
-			{
-				pHurt->pev->punchangle.z = -20;
-				pHurt->pev->punchangle.x = 20;
-				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_right * 200;
-				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_up * 100;
-			}
+			pHurt->pev->punchangle.z = -20;
+			pHurt->pev->punchangle.x = 20;
+			pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_right * 200;
+			pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_up * 100;
 		}
-		break;
+	}
+	break;
 
-		case PITDRONE_AE_HOP:
+	case PITDRONE_AE_HOP:
+	{
+		float flGravity = g_psv_gravity->value;
+
+		// throw the squid up into the air on this frame.
+		if (FBitSet(pev->flags, FL_ONGROUND))
 		{
-			float flGravity = g_psv_gravity->value;
+			pev->flags -= FL_ONGROUND;
+		}
 
-			// throw the squid up into the air on this frame.
-			if ( FBitSet ( pev->flags, FL_ONGROUND ) )
-			{
-				pev->flags -= FL_ONGROUND;
-			}
-
-			// jump into air for 0.8 (24/30) seconds
+		// jump into air for 0.8 (24/30) seconds
 //			pev->velocity.z += (0.875 * flGravity) * 0.5;
-			pev->velocity.z += (0.625 * flGravity) * 0.5;
+		pev->velocity.z += (0.625 * flGravity) * 0.5;
+	}
+	break;
+
+	case PITDRONE_AE_THROW:
+	{
+		int iPitch;
+
+		// squid throws its prey IF the prey is a client. 
+		CBaseEntity* pHurt = CheckTraceHullAttack(70, 0, 0);
+
+
+		if (pHurt)
+		{
+			// croonchy bite sound
+			iPitch = RANDOM_FLOAT(90, 110);
+			switch (RANDOM_LONG(0, 1))
+			{
+			case 0:
+				EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "bullchicken/bc_bite2.wav", 1, ATTN_NORM, 0, iPitch);
+				break;
+			case 1:
+				EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "bullchicken/bc_bite3.wav", 1, ATTN_NORM, 0, iPitch);
+				break;
+			}
+
+
+			//pHurt->pev->punchangle.x = RANDOM_LONG(0,34) - 5;
+			//pHurt->pev->punchangle.z = RANDOM_LONG(0,49) - 25;
+			//pHurt->pev->punchangle.y = RANDOM_LONG(0,89) - 45;
+
+			// screeshake transforms the viewmodel as well as the viewangle. No problems with seeing the ends of the viewmodels.
+			UTIL_ScreenShake(pHurt->pev->origin, 25.0, 1.5, 0.7, 2);
+
+			if (pHurt->IsPlayer())
+			{
+				UTIL_MakeVectors(pev->angles);
+				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_forward * 300 + gpGlobals->v_up * 300;
+			}
 		}
-		break;
+	}
+	break;
 
-		case PITDRONE_AE_THROW:
-			{
-				int iPitch;
+	case PITDRONE_AE_RELOAD:
+	{
+		if (m_iInitialAmmo == -1)
+		{
+			m_cAmmoLoaded = 0;
+		}
+		else
+		{
+			SetBodygroup(PitdroneBodygroup::Weapons, PitdroneWeapon::Full);
+			m_cAmmoLoaded = 6;
+		}
 
-				// squid throws its prey IF the prey is a client. 
-				CBaseEntity *pHurt = CheckTraceHullAttack( 70, 0, 0 );
+		ClearConditions(bits_COND_NO_AMMO_LOADED);
+	}
+	break;
 
-
-				if ( pHurt )
-				{
-					// croonchy bite sound
-					iPitch = RANDOM_FLOAT( 90, 110 );
-					switch ( RANDOM_LONG( 0, 1 ) )
-					{
-					case 0:
-						EMIT_SOUND_DYN( ENT(pev), CHAN_WEAPON, "bullchicken/bc_bite2.wav", 1, ATTN_NORM, 0, iPitch );	
-						break;
-					case 1:
-						EMIT_SOUND_DYN( ENT(pev), CHAN_WEAPON, "bullchicken/bc_bite3.wav", 1, ATTN_NORM, 0, iPitch );	
-						break;
-					}
-
-					
-					//pHurt->pev->punchangle.x = RANDOM_LONG(0,34) - 5;
-					//pHurt->pev->punchangle.z = RANDOM_LONG(0,49) - 25;
-					//pHurt->pev->punchangle.y = RANDOM_LONG(0,89) - 45;
-		
-					// screeshake transforms the viewmodel as well as the viewangle. No problems with seeing the ends of the viewmodels.
-					UTIL_ScreenShake( pHurt->pev->origin, 25.0, 1.5, 0.7, 2 );
-
-					if ( pHurt->IsPlayer() )
-					{
-						UTIL_MakeVectors( pev->angles );
-						pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_forward * 300 + gpGlobals->v_up * 300;
-					}
-				}
-			}
-		break;
-
-		case PITDRONE_AE_RELOAD:
-			{
-				if( m_iInitialAmmo == -1 )
-				{
-					m_cAmmoLoaded = 0;
-				}
-				else
-				{
-					SetBodygroup( PitdroneBodygroup::Weapons, PitdroneWeapon::Full );
-					m_cAmmoLoaded = 6;
-				}
-
-				ClearConditions( bits_COND_NO_AMMO_LOADED );
-			}
-			break;
-
-		default:
-			CBaseMonster::HandleAnimEvent( pEvent );
+	default:
+		CBaseMonster::HandleAnimEvent(pEvent);
 	}
 }
 
 //=========================================================
 // Spawn
 //=========================================================
-void CPitdrone :: Spawn()
+void CPitdrone::Spawn()
 {
-	Precache( );
+	Precache();
 
 	SET_MODEL(ENT(pev), "models/pit_drone.mdl");
-	UTIL_SetSize( pev, Vector( -16, -16, 0 ), Vector( 16, 16, 48 ) );
+	UTIL_SetSize(pev, Vector(-16, -16, 0), Vector(16, 16, 48));
 
-	pev->solid			= SOLID_SLIDEBOX;
-	pev->movetype		= MOVETYPE_STEP;
-	m_bloodColor		= BLOOD_COLOR_GREEN;
-	pev->effects		= 0;
-	pev->health			= gSkillData.pitdroneHealth;
-	m_flFieldOfView		= VIEW_FIELD_WIDE;// indicates the width of this monster's forward view cone ( as a dotproduct result )
-	m_MonsterState		= MONSTERSTATE_NONE;
+	pev->solid = SOLID_SLIDEBOX;
+	pev->movetype = MOVETYPE_STEP;
+	m_bloodColor = BLOOD_COLOR_GREEN;
+	pev->effects = 0;
+	pev->health = gSkillData.pitdroneHealth;
+	m_flFieldOfView = VIEW_FIELD_WIDE;// indicates the width of this monster's forward view cone ( as a dotproduct result )
+	m_MonsterState = MONSTERSTATE_NONE;
 
 	m_flNextSpikeTime = gpGlobals->time;
 
-	if( m_iInitialAmmo == -1 )
+	if (m_iInitialAmmo == -1)
 	{
-		SetBodygroup( PitdroneBodygroup::Weapons, PitdroneWeapon::Full );
+		SetBodygroup(PitdroneBodygroup::Weapons, PitdroneWeapon::Full);
 	}
-	else if( m_iInitialAmmo <= 0 )
+	else if (m_iInitialAmmo <= 0)
 	{
 		m_iInitialAmmo = -1;
-		SetBodygroup( PitdroneBodygroup::Weapons, PitdroneWeapon::Empty );
+		SetBodygroup(PitdroneBodygroup::Weapons, PitdroneWeapon::Empty);
 	}
 	else
 	{
 		//TODO: constrain value to valid range
-		SetBodygroup( PitdroneBodygroup::Weapons, (PitdroneWeapon::One + 1) - m_iInitialAmmo );
+		SetBodygroup(PitdroneBodygroup::Weapons, (PitdroneWeapon::One + 1) - m_iInitialAmmo);
 	}
 
-	if( m_iInitialAmmo == -1 )
+	if (m_iInitialAmmo == -1)
 		m_iInitialAmmo = 0;
 
 	m_cAmmoLoaded = m_iInitialAmmo;
@@ -700,44 +700,44 @@ void CPitdrone :: Spawn()
 //=========================================================
 // Precache - precaches all resources this monster needs
 //=========================================================
-void CPitdrone :: Precache()
+void CPitdrone::Precache()
 {
 	PRECACHE_MODEL("models/pit_drone.mdl");
-	PRECACHE_MODEL( "models/pit_drone_gibs.mdl" );
+	PRECACHE_MODEL("models/pit_drone_gibs.mdl");
 
-	UTIL_PrecacheOther( "pitdronespike" );
-	
+	UTIL_PrecacheOther("pitdronespike");
+
 	iPitdroneSpitSprite = PRECACHE_MODEL("sprites/tinyspit.spr");// client side spittle.
 
 	PRECACHE_SOUND("zombie/claw_miss2.wav");// because we use the basemonster SWIPE animation event
 
-	PRECACHE_SOUND( "pitdrone/pit_drone_alert1.wav" );
-	PRECACHE_SOUND( "pitdrone/pit_drone_alert2.wav" );
-	PRECACHE_SOUND( "pitdrone/pit_drone_alert3.wav" );
-	PRECACHE_SOUND( "pitdrone/pit_drone_attack_spike1.wav" );
-	PRECACHE_SOUND( "pitdrone/pit_drone_attack_spike2.wav" );
-	PRECACHE_SOUND( "pitdrone/pit_drone_communicate1.wav" );
-	PRECACHE_SOUND( "pitdrone/pit_drone_communicate2.wav" );
-	PRECACHE_SOUND( "pitdrone/pit_drone_communicate3.wav" );
-	PRECACHE_SOUND( "pitdrone/pit_drone_communicate4.wav" );
-	PRECACHE_SOUND( "pitdrone/pit_drone_die1.wav" );
-	PRECACHE_SOUND( "pitdrone/pit_drone_die2.wav" );
-	PRECACHE_SOUND( "pitdrone/pit_drone_die3.wav" );
-	PRECACHE_SOUND( "pitdrone/pit_drone_hunt1.wav" );
-	PRECACHE_SOUND( "pitdrone/pit_drone_hunt2.wav" );
-	PRECACHE_SOUND( "pitdrone/pit_drone_hunt3.wav" );
-	PRECACHE_SOUND( "pitdrone/pit_drone_idle1.wav" );
-	PRECACHE_SOUND( "pitdrone/pit_drone_idle2.wav" );
-	PRECACHE_SOUND( "pitdrone/pit_drone_idle3.wav" );
-	PRECACHE_SOUND( "pitdrone/pit_drone_melee_attack1.wav" );
-	PRECACHE_SOUND( "pitdrone/pit_drone_melee_attack2.wav" );
-	PRECACHE_SOUND( "pitdrone/pit_drone_pain1.wav" );
-	PRECACHE_SOUND( "pitdrone/pit_drone_pain2.wav" );
-	PRECACHE_SOUND( "pitdrone/pit_drone_pain3.wav" );
-	PRECACHE_SOUND( "pitdrone/pit_drone_pain4.wav" );
-	PRECACHE_SOUND( "pitdrone/pit_drone_run_on_grate.wav" );
-	PRECACHE_SOUND( "bullchicken/bc_bite2.wav" );
-	PRECACHE_SOUND( "bullchicken/bc_bite3.wav" );
+	PRECACHE_SOUND("pitdrone/pit_drone_alert1.wav");
+	PRECACHE_SOUND("pitdrone/pit_drone_alert2.wav");
+	PRECACHE_SOUND("pitdrone/pit_drone_alert3.wav");
+	PRECACHE_SOUND("pitdrone/pit_drone_attack_spike1.wav");
+	PRECACHE_SOUND("pitdrone/pit_drone_attack_spike2.wav");
+	PRECACHE_SOUND("pitdrone/pit_drone_communicate1.wav");
+	PRECACHE_SOUND("pitdrone/pit_drone_communicate2.wav");
+	PRECACHE_SOUND("pitdrone/pit_drone_communicate3.wav");
+	PRECACHE_SOUND("pitdrone/pit_drone_communicate4.wav");
+	PRECACHE_SOUND("pitdrone/pit_drone_die1.wav");
+	PRECACHE_SOUND("pitdrone/pit_drone_die2.wav");
+	PRECACHE_SOUND("pitdrone/pit_drone_die3.wav");
+	PRECACHE_SOUND("pitdrone/pit_drone_hunt1.wav");
+	PRECACHE_SOUND("pitdrone/pit_drone_hunt2.wav");
+	PRECACHE_SOUND("pitdrone/pit_drone_hunt3.wav");
+	PRECACHE_SOUND("pitdrone/pit_drone_idle1.wav");
+	PRECACHE_SOUND("pitdrone/pit_drone_idle2.wav");
+	PRECACHE_SOUND("pitdrone/pit_drone_idle3.wav");
+	PRECACHE_SOUND("pitdrone/pit_drone_melee_attack1.wav");
+	PRECACHE_SOUND("pitdrone/pit_drone_melee_attack2.wav");
+	PRECACHE_SOUND("pitdrone/pit_drone_pain1.wav");
+	PRECACHE_SOUND("pitdrone/pit_drone_pain2.wav");
+	PRECACHE_SOUND("pitdrone/pit_drone_pain3.wav");
+	PRECACHE_SOUND("pitdrone/pit_drone_pain4.wav");
+	PRECACHE_SOUND("pitdrone/pit_drone_run_on_grate.wav");
+	PRECACHE_SOUND("bullchicken/bc_bite2.wav");
+	PRECACHE_SOUND("bullchicken/bc_bite3.wav");
 
 }
 
@@ -745,15 +745,15 @@ void CPitdrone :: Precache()
 // RunAI - overridden for bullsquid because there are things
 // that need to be checked every think.
 //========================================================
-void CPitdrone :: RunAI ()
+void CPitdrone::RunAI()
 {
 	// first, do base class stuff
-	CBaseMonster :: RunAI();
+	CBaseMonster::RunAI();
 
-	if ( m_hEnemy != NULL && m_Activity == ACT_RUN )
+	if (m_hEnemy != NULL && m_Activity == ACT_RUN)
 	{
 		// chasing enemy. Sprint for last bit
-		if ( (pev->origin - m_hEnemy->pev->origin).Length2D() < SQUID_SPRINT_DIST )
+		if ((pev->origin - m_hEnemy->pev->origin).Length2D() < SQUID_SPRINT_DIST)
 		{
 			pev->framerate = 1.25;
 		}
@@ -776,13 +776,13 @@ Task_t	tlPitdroneRangeAttack1[] =
 
 Schedule_t	slPitdroneRangeAttack1[] =
 {
-	{ 
+	{
 		tlPitdroneRangeAttack1,
-		ARRAYSIZE ( tlPitdroneRangeAttack1 ), 
-		bits_COND_NEW_ENEMY			|
-		bits_COND_ENEMY_DEAD		|
-		bits_COND_HEAVY_DAMAGE		|
-		bits_COND_ENEMY_OCCLUDED	|
+		ARRAYSIZE(tlPitdroneRangeAttack1),
+		bits_COND_NEW_ENEMY |
+		bits_COND_ENEMY_DEAD |
+		bits_COND_HEAVY_DAMAGE |
+		bits_COND_ENEMY_OCCLUDED |
 		bits_COND_NO_AMMO_LOADED,
 		0,
 		"Squid Range Attack1"
@@ -790,7 +790,7 @@ Schedule_t	slPitdroneRangeAttack1[] =
 };
 
 // Chase enemy schedule
-Task_t tlPitdroneChaseEnemy1[] = 
+Task_t tlPitdroneChaseEnemy1[] =
 {
 	{ TASK_SET_FAIL_SCHEDULE,	(float)SCHED_RANGE_ATTACK1	},// !!!OEM - this will stop nasty squid oscillation.
 	{ TASK_GET_PATH_TO_ENEMY,	(float)0					},
@@ -800,19 +800,19 @@ Task_t tlPitdroneChaseEnemy1[] =
 
 Schedule_t slPitdroneChaseEnemy[] =
 {
-	{ 
+	{
 		tlPitdroneChaseEnemy1,
-		ARRAYSIZE ( tlPitdroneChaseEnemy1 ),
-		bits_COND_NEW_ENEMY			|
-		bits_COND_ENEMY_DEAD		|
-		bits_COND_SMELL_FOOD		|
-		bits_COND_CAN_RANGE_ATTACK1	|
-		bits_COND_CAN_MELEE_ATTACK1	|
-		bits_COND_CAN_MELEE_ATTACK2	|
-		bits_COND_TASK_FAILED		|
+		ARRAYSIZE(tlPitdroneChaseEnemy1),
+		bits_COND_NEW_ENEMY |
+		bits_COND_ENEMY_DEAD |
+		bits_COND_SMELL_FOOD |
+		bits_COND_CAN_RANGE_ATTACK1 |
+		bits_COND_CAN_MELEE_ATTACK1 |
+		bits_COND_CAN_MELEE_ATTACK2 |
+		bits_COND_TASK_FAILED |
 		bits_COND_HEAR_SOUND,
-		
-		bits_SOUND_DANGER			|
+
+		bits_SOUND_DANGER |
 		bits_SOUND_MEAT,
 		"Squid Chase Enemy"
 	},
@@ -830,7 +830,7 @@ Schedule_t slPitdroneHurtHop[] =
 {
 	{
 		tlPitdroneHurtHop,
-		ARRAYSIZE ( tlPitdroneHurtHop ),
+		ARRAYSIZE(tlPitdroneHurtHop),
 		0,
 		0,
 		"SquidHurtHop"
@@ -860,17 +860,17 @@ Schedule_t slPitdroneEat[] =
 {
 	{
 		tlPitdroneEat,
-		ARRAYSIZE( tlPitdroneEat ),
-		bits_COND_LIGHT_DAMAGE	|
-		bits_COND_HEAVY_DAMAGE	|
+		ARRAYSIZE(tlPitdroneEat),
+		bits_COND_LIGHT_DAMAGE |
+		bits_COND_HEAVY_DAMAGE |
 		bits_COND_NEW_ENEMY	,
-		
-		// even though HEAR_SOUND/SMELL FOOD doesn't break this schedule, we need this mask
-		// here or the monster won't detect these sounds at ALL while running this schedule.
-		bits_SOUND_MEAT			|
-		bits_SOUND_CARCASS,
-		"SquidEat"
-	}
+
+	// even though HEAR_SOUND/SMELL FOOD doesn't break this schedule, we need this mask
+	// here or the monster won't detect these sounds at ALL while running this schedule.
+	bits_SOUND_MEAT |
+	bits_SOUND_CARCASS,
+	"SquidEat"
+}
 };
 
 // this is a bit different than just Eat. We use this schedule when the food is far away, occluded, or behind
@@ -898,17 +898,17 @@ Schedule_t slPitdroneSniffAndEat[] =
 {
 	{
 		tlPitdroneSniffAndEat,
-		ARRAYSIZE( tlPitdroneSniffAndEat ),
-		bits_COND_LIGHT_DAMAGE	|
-		bits_COND_HEAVY_DAMAGE	|
+		ARRAYSIZE(tlPitdroneSniffAndEat),
+		bits_COND_LIGHT_DAMAGE |
+		bits_COND_HEAVY_DAMAGE |
 		bits_COND_NEW_ENEMY	,
-		
-		// even though HEAR_SOUND/SMELL FOOD doesn't break this schedule, we need this mask
-		// here or the monster won't detect these sounds at ALL while running this schedule.
-		bits_SOUND_MEAT			|
-		bits_SOUND_CARCASS,
-		"SquidSniffAndEat"
-	}
+
+	// even though HEAR_SOUND/SMELL FOOD doesn't break this schedule, we need this mask
+	// here or the monster won't detect these sounds at ALL while running this schedule.
+	bits_SOUND_MEAT |
+	bits_SOUND_CARCASS,
+	"SquidSniffAndEat"
+}
 };
 
 // squid does this to stinky things. 
@@ -932,22 +932,22 @@ Schedule_t slPitdroneWallow[] =
 {
 	{
 		tlPitdroneWallow,
-		ARRAYSIZE( tlPitdroneWallow ),
-		bits_COND_LIGHT_DAMAGE	|
-		bits_COND_HEAVY_DAMAGE	|
+		ARRAYSIZE(tlPitdroneWallow),
+		bits_COND_LIGHT_DAMAGE |
+		bits_COND_HEAVY_DAMAGE |
 		bits_COND_NEW_ENEMY	,
-		
-		// even though HEAR_SOUND/SMELL FOOD doesn't break this schedule, we need this mask
-		// here or the monster won't detect these sounds at ALL while running this schedule.
-		bits_SOUND_GARBAGE,
 
-		"SquidWallow"
-	}
+	// even though HEAR_SOUND/SMELL FOOD doesn't break this schedule, we need this mask
+	// here or the monster won't detect these sounds at ALL while running this schedule.
+	bits_SOUND_GARBAGE,
+
+	"SquidWallow"
+}
 };
 
 Task_t tlPitdroneHideReload[] =
 {
-	{ TASK_STOP_MOVING,				( float ) 0			},
+	{ TASK_STOP_MOVING,				(float)0			},
 	{ TASK_SET_FAIL_SCHEDULE,		ACT_MELEE_ATTACK1	},
 	{ TASK_FIND_COVER_FROM_ENEMY,	0					},
 	{ TASK_RUN_PATH,				0					},
@@ -961,7 +961,7 @@ Schedule_t slPitdroneHideReload[] =
 {
 	{
 		tlPitdroneHideReload,
-		ARRAYSIZE( tlPitdroneHideReload ),
+		ARRAYSIZE(tlPitdroneHideReload),
 		bits_COND_HEAVY_DAMAGE |
 		bits_COND_HEAR_SOUND,
 		bits_SOUND_DANGER,
@@ -972,7 +972,7 @@ Schedule_t slPitdroneHideReload[] =
 
 Task_t tlPitdroneWaitInCover[] =
 {
-	{ TASK_STOP_MOVING,			( float ) 0		},
+	{ TASK_STOP_MOVING,			(float)0		},
 	{ TASK_SET_ACTIVITY,		ACT_IDLE		},
 	{ TASK_WAIT_FACE_ENEMY,		1				},
 };
@@ -981,7 +981,7 @@ Schedule_t slPitdroneWaitInCover[] =
 {
 	{
 		tlPitdroneWaitInCover,
-		ARRAYSIZE( tlPitdroneWaitInCover ),
+		ARRAYSIZE(tlPitdroneWaitInCover),
 		bits_COND_CAN_RANGE_ATTACK1 |
 		bits_COND_CAN_MELEE_ATTACK1 |
 		bits_COND_CAN_RANGE_ATTACK2 |
@@ -994,151 +994,151 @@ Schedule_t slPitdroneWaitInCover[] =
 	}
 };
 
-DEFINE_CUSTOM_SCHEDULES( CPitdrone ) 
+DEFINE_CUSTOM_SCHEDULES(CPitdrone)
 {
 	slPitdroneRangeAttack1,
-	slPitdroneChaseEnemy,
-	slPitdroneHurtHop,
-	slPitdroneEat,
-	slPitdroneSniffAndEat,
-	slPitdroneWallow,
-	slPitdroneHideReload,
-	slPitdroneWaitInCover
+		slPitdroneChaseEnemy,
+		slPitdroneHurtHop,
+		slPitdroneEat,
+		slPitdroneSniffAndEat,
+		slPitdroneWallow,
+		slPitdroneHideReload,
+		slPitdroneWaitInCover
 };
 
-IMPLEMENT_CUSTOM_SCHEDULES( CPitdrone, CBaseMonster );
+IMPLEMENT_CUSTOM_SCHEDULES(CPitdrone, CBaseMonster);
 
 //=========================================================
 // GetSchedule 
 //=========================================================
-Schedule_t *CPitdrone :: GetSchedule()
+Schedule_t* CPitdrone::GetSchedule()
 {
-	switch	( m_MonsterState )
+	switch (m_MonsterState)
 	{
 	case MONSTERSTATE_ALERT:
+	{
+		if (HasConditions(bits_COND_LIGHT_DAMAGE | bits_COND_HEAVY_DAMAGE))
 		{
-			if ( HasConditions(bits_COND_LIGHT_DAMAGE | bits_COND_HEAVY_DAMAGE) )
-			{
-				return GetScheduleOfType ( SCHED_PITDRONE_HURTHOP );
-			}
+			return GetScheduleOfType(SCHED_PITDRONE_HURTHOP);
+		}
 
-			if( m_flNextEatTime <= gpGlobals->time )
+		if (m_flNextEatTime <= gpGlobals->time)
+		{
+			if (HasConditions(bits_COND_SMELL_FOOD))
 			{
-				if( HasConditions( bits_COND_SMELL_FOOD ) )
+				CSound* pSound;
+
+				pSound = PBestScent();
+
+				if (pSound && (!FInViewCone(&pSound->m_vecOrigin) || !FVisible(pSound->m_vecOrigin)))
 				{
-					CSound		*pSound;
-
-					pSound = PBestScent();
-
-					if( pSound && ( !FInViewCone( &pSound->m_vecOrigin ) || !FVisible( pSound->m_vecOrigin ) ) )
-					{
-						m_flNextEatTime = gpGlobals->time + 90;
-
-						// scent is behind or occluded
-						return GetScheduleOfType( SCHED_PITDRONE_SNIFF_AND_EAT );
-					}
-
 					m_flNextEatTime = gpGlobals->time + 90;
 
-					// food is right out in the open. Just go get it.
-					return GetScheduleOfType( SCHED_PITDRONE_EAT );
+					// scent is behind or occluded
+					return GetScheduleOfType(SCHED_PITDRONE_SNIFF_AND_EAT);
 				}
 
-				if( HasConditions( bits_COND_SMELL ) )
+				m_flNextEatTime = gpGlobals->time + 90;
+
+				// food is right out in the open. Just go get it.
+				return GetScheduleOfType(SCHED_PITDRONE_EAT);
+			}
+
+			if (HasConditions(bits_COND_SMELL))
+			{
+				// there's something stinky. 
+				CSound* pSound;
+
+				pSound = PBestScent();
+				if (pSound)
 				{
-					// there's something stinky. 
-					CSound		*pSound;
-
-					pSound = PBestScent();
-					if( pSound )
-					{
-						m_flNextEatTime = gpGlobals->time + 90;
-						return GetScheduleOfType( SCHED_PITDRONE_WALLOW );
-					}
+					m_flNextEatTime = gpGlobals->time + 90;
+					return GetScheduleOfType(SCHED_PITDRONE_WALLOW);
 				}
 			}
-
-			break;
 		}
+
+		break;
+	}
 	case MONSTERSTATE_COMBAT:
+	{
+		// dead enemy
+		if (HasConditions(bits_COND_ENEMY_DEAD))
 		{
-// dead enemy
-			if ( HasConditions( bits_COND_ENEMY_DEAD ) )
-			{
-				// call base class, all code to handle dead enemies is centralized there.
-				return CBaseMonster :: GetSchedule();
-			}
-
-			if ( HasConditions(bits_COND_NEW_ENEMY) )
-			{
-				return GetScheduleOfType ( SCHED_WAKE_ANGRY );
-			}
-
-			if( HasConditions(bits_COND_NO_AMMO_LOADED) && m_iInitialAmmo != -1 )
-			{
-				return GetScheduleOfType( SCHED_PITDRONE_COVER_AND_RELOAD );
-			}
-
-			if ( HasConditions( bits_COND_CAN_RANGE_ATTACK1 ) )
-			{
-				return GetScheduleOfType ( SCHED_RANGE_ATTACK1 );
-			}
-
-			if ( HasConditions( bits_COND_CAN_MELEE_ATTACK1 ) )
-			{
-				return GetScheduleOfType ( SCHED_MELEE_ATTACK1 );
-			}
-
-			if ( HasConditions( bits_COND_CAN_MELEE_ATTACK2 ) )
-			{
-				return GetScheduleOfType ( SCHED_MELEE_ATTACK2 );
-			}
-			
-			return GetScheduleOfType ( SCHED_CHASE_ENEMY );
-
-			break;
+			// call base class, all code to handle dead enemies is centralized there.
+			return CBaseMonster::GetSchedule();
 		}
+
+		if (HasConditions(bits_COND_NEW_ENEMY))
+		{
+			return GetScheduleOfType(SCHED_WAKE_ANGRY);
+		}
+
+		if (HasConditions(bits_COND_NO_AMMO_LOADED) && m_iInitialAmmo != -1)
+		{
+			return GetScheduleOfType(SCHED_PITDRONE_COVER_AND_RELOAD);
+		}
+
+		if (HasConditions(bits_COND_CAN_RANGE_ATTACK1))
+		{
+			return GetScheduleOfType(SCHED_RANGE_ATTACK1);
+		}
+
+		if (HasConditions(bits_COND_CAN_MELEE_ATTACK1))
+		{
+			return GetScheduleOfType(SCHED_MELEE_ATTACK1);
+		}
+
+		if (HasConditions(bits_COND_CAN_MELEE_ATTACK2))
+		{
+			return GetScheduleOfType(SCHED_MELEE_ATTACK2);
+		}
+
+		return GetScheduleOfType(SCHED_CHASE_ENEMY);
+
+		break;
+	}
 	}
 
-	return CBaseMonster :: GetSchedule();
+	return CBaseMonster::GetSchedule();
 }
 
 //=========================================================
 // GetScheduleOfType
 //=========================================================
-Schedule_t* CPitdrone :: GetScheduleOfType ( int Type ) 
+Schedule_t* CPitdrone::GetScheduleOfType(int Type)
 {
-	switch	( Type )
+	switch (Type)
 	{
 	case SCHED_RANGE_ATTACK1:
-		return &slPitdroneRangeAttack1[ 0 ];
+		return &slPitdroneRangeAttack1[0];
 		break;
 	case SCHED_PITDRONE_HURTHOP:
-		return &slPitdroneHurtHop[ 0 ];
+		return &slPitdroneHurtHop[0];
 		break;
 	case SCHED_PITDRONE_EAT:
-		return &slPitdroneEat[ 0 ];
+		return &slPitdroneEat[0];
 		break;
 	case SCHED_PITDRONE_SNIFF_AND_EAT:
-		return &slPitdroneSniffAndEat[ 0 ];
+		return &slPitdroneSniffAndEat[0];
 		break;
 	case SCHED_PITDRONE_WALLOW:
-		return &slPitdroneWallow[ 0 ];
+		return &slPitdroneWallow[0];
 		break;
 	case SCHED_CHASE_ENEMY:
-		return &slPitdroneChaseEnemy[ 0 ];
+		return &slPitdroneChaseEnemy[0];
 		break;
 
 	case SCHED_PITDRONE_COVER_AND_RELOAD:
-		return &slPitdroneHideReload[ 0 ];
+		return &slPitdroneHideReload[0];
 		break;
 
 	case SCHED_PITDRONE_WAIT_FACE_ENEMY:
-		return &slPitdroneWaitInCover[ 0 ];
+		return &slPitdroneWaitInCover[0];
 		break;
 	}
 
-	return CBaseMonster :: GetScheduleOfType ( Type );
+	return CBaseMonster::GetScheduleOfType(Type);
 }
 
 //=========================================================
@@ -1146,97 +1146,97 @@ Schedule_t* CPitdrone :: GetScheduleOfType ( int Type )
 // any necessary calculations to start the next task on the
 // schedule.
 //=========================================================
-void CPitdrone :: StartTask ( Task_t *pTask )
+void CPitdrone::StartTask(Task_t* pTask)
 {
 	m_iTaskStatus = TASKSTATUS_RUNNING;
 
-	switch ( pTask->iTask )
+	switch (pTask->iTask)
 	{
 	case TASK_PITDRONE_HOPTURN:
-		{
-			SetActivity ( ACT_HOP );
-			MakeIdealYaw ( m_vecEnemyLKP );
-			break;
-		}
+	{
+		SetActivity(ACT_HOP);
+		MakeIdealYaw(m_vecEnemyLKP);
+		break;
+	}
 	case TASK_GET_PATH_TO_ENEMY:
+	{
+		if (BuildRoute(m_hEnemy->pev->origin, bits_MF_TO_ENEMY, m_hEnemy))
 		{
-			if ( BuildRoute ( m_hEnemy->pev->origin, bits_MF_TO_ENEMY, m_hEnemy ) )
-			{
-				m_iTaskStatus = TASKSTATUS_COMPLETE;
-			}
-			else
-			{
-				ALERT ( at_aiconsole, "GetPathToEnemy failed!!\n" );
-				TaskFail();
-			}
-			break;
+			m_iTaskStatus = TASKSTATUS_COMPLETE;
 		}
+		else
+		{
+			ALERT(at_aiconsole, "GetPathToEnemy failed!!\n");
+			TaskFail();
+		}
+		break;
+	}
 	default:
-		{
-			CBaseMonster :: StartTask ( pTask );
-			break;
-		}
+	{
+		CBaseMonster::StartTask(pTask);
+		break;
+	}
 	}
 }
 
 //=========================================================
 // RunTask
 //=========================================================
-void CPitdrone :: RunTask ( Task_t *pTask )
+void CPitdrone::RunTask(Task_t* pTask)
 {
-	switch ( pTask->iTask )
+	switch (pTask->iTask)
 	{
 	case TASK_PITDRONE_HOPTURN:
-		{
-			MakeIdealYaw( m_vecEnemyLKP );
-			ChangeYaw( pev->yaw_speed );
+	{
+		MakeIdealYaw(m_vecEnemyLKP);
+		ChangeYaw(pev->yaw_speed);
 
-			if ( m_fSequenceFinished )
-			{
-				m_iTaskStatus = TASKSTATUS_COMPLETE;
-			}
-			break;
-		}
-	default:
+		if (m_fSequenceFinished)
 		{
-			CBaseMonster :: RunTask( pTask );
-			break;
+			m_iTaskStatus = TASKSTATUS_COMPLETE;
 		}
+		break;
+	}
+	default:
+	{
+		CBaseMonster::RunTask(pTask);
+		break;
+	}
 	}
 }
 
 void CPitdrone::CheckAmmo()
 {
-	if( m_iInitialAmmo != -1 && m_cAmmoLoaded <= 0 )
+	if (m_iInitialAmmo != -1 && m_cAmmoLoaded <= 0)
 	{
-		SetConditions( bits_COND_NO_AMMO_LOADED );
+		SetConditions(bits_COND_NO_AMMO_LOADED);
 	}
 }
 
-const GibData PitDroneGibs = { "models/pit_drone_gibs.mdl", 0, 7 };
+const GibData PitDroneGibs = {"models/pit_drone_gibs.mdl", 0, 7};
 
 void CPitdrone::GibMonster()
 {
-	EMIT_SOUND( ENT( pev ), CHAN_WEAPON, "common/bodysplat.wav", 1, ATTN_NORM );
+	EMIT_SOUND(ENT(pev), CHAN_WEAPON, "common/bodysplat.wav", 1, ATTN_NORM);
 
-	if( CVAR_GET_FLOAT( "violence_agibs" ) != 0 )	// Should never get here, but someone might call it directly
+	if (CVAR_GET_FLOAT("violence_agibs") != 0)	// Should never get here, but someone might call it directly
 	{
 		//Note: the original doesn't check for German censorship
-		CGib::SpawnRandomGibs( pev, 6, PitDroneGibs );	// Throw alien gibs
+		CGib::SpawnRandomGibs(pev, 6, PitDroneGibs);	// Throw alien gibs
 	}
 
 	// don't remove players!
-	SetThink( &CBaseMonster::SUB_Remove );
+	SetThink(&CBaseMonster::SUB_Remove);
 	pev->nextthink = gpGlobals->time;
 }
 
-void CPitdrone::KeyValue( KeyValueData* pkvd )
+void CPitdrone::KeyValue(KeyValueData* pkvd)
 {
-	if( FStrEq( "initammo", pkvd->szKeyName ) )
+	if (FStrEq("initammo", pkvd->szKeyName))
 	{
-		m_iInitialAmmo = atoi( pkvd->szValue );
+		m_iInitialAmmo = atoi(pkvd->szValue);
 		pkvd->fHandled = true;
 	}
 	else
-		CBaseMonster::KeyValue( pkvd );
+		CBaseMonster::KeyValue(pkvd);
 }

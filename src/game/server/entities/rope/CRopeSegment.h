@@ -34,22 +34,22 @@ public:
 
 	void Think() override;
 
-	void Touch( CBaseEntity* pOther ) override;
+	void Touch(CBaseEntity* pOther) override;
 
-	int Save( CSave &save ) override;
-	int Restore( CRestore &restore ) override;
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 
 	static TYPEDESCRIPTION m_SaveData[];
 
-	static CRopeSegment* CreateSegment( CRopeSample* pSample, string_t iszModelName );
-	
+	static CRopeSegment* CreateSegment(CRopeSample* pSample, string_t iszModelName);
+
 	CRopeSample* GetSample() { return m_pSample; }
 
 	/**
 	*	Applies external force to the segment.
 	*	@param vecForce Force.
 	*/
-	void ApplyExternalForce( const Vector& vecForce );
+	void ApplyExternalForce(const Vector& vecForce);
 
 	/**
 	*	Resets the mass to the default value.
@@ -60,25 +60,25 @@ public:
 	*	Sets the default mass.
 	*	@param flDefaultMass Mass.
 	*/
-	void SetDefaultMass( const float flDefaultMass );
+	void SetDefaultMass(const float flDefaultMass);
 
 	/**
 	*	Sets the mass.
 	*	@param flMass Mass.
 	*/
-	void SetMass( const float flMass );
+	void SetMass(const float flMass);
 
 	/**
 	*	Sets whether the segment should cause damage on touch.
 	*	@param bCauseDamage Whether to cause damage.
 	*/
-	void SetCauseDamageOnTouch( const bool bCauseDamage );
+	void SetCauseDamageOnTouch(const bool bCauseDamage);
 
 	/**
 	*	Sets whether the segment can be grabbed.
 	*	@param bCanBeGrabbed Whether the segment can be grabbed.
 	*/
-	void SetCanBeGrabbed( const bool bCanBeGrabbed );
+	void SetCanBeGrabbed(const bool bCanBeGrabbed);
 
 private:
 	CRopeSample* m_pSample;

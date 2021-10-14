@@ -37,16 +37,16 @@ class CGrapple : public CBasePlayerWeapon
 private:
 	enum class FireState
 	{
-		OFF		= 0,
-		CHARGE	= 1
+		OFF = 0,
+		CHARGE = 1
 	};
 
 public:
 	using BaseClass = CBasePlayerWeapon;
 
 #ifndef CLIENT_DLL
-	int Save( CSave &save ) override;
-	int Restore( CRestore &restore ) override;
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 
 	static TYPEDESCRIPTION m_SaveData[];
 #endif
@@ -55,7 +55,7 @@ public:
 
 	void Spawn() override;
 
-	BOOL AddToPlayer( CBasePlayer* pPlayer ) override;
+	BOOL AddToPlayer(CBasePlayer* pPlayer) override;
 
 	BOOL Deploy() override;
 
@@ -69,7 +69,7 @@ public:
 
 	int iItemSlot() override;
 
-	int GetItemInfo( ItemInfo* p ) override;
+	int GetItemInfo(ItemInfo* p) override;
 
 	BOOL UseDecrement() override
 	{
@@ -81,7 +81,7 @@ public:
 	}
 
 private:
-	void Fire( const Vector& vecOrigin, const Vector& vecDir );
+	void Fire(const Vector& vecOrigin, const Vector& vecDir);
 	void EndAttack();
 
 	void CreateEffect();

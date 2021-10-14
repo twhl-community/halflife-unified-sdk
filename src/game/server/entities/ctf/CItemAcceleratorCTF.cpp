@@ -20,22 +20,22 @@
 #include "UserMessages.h"
 #include "CItemAcceleratorCTF.h"
 
-LINK_ENTITY_TO_CLASS( item_ctfaccelerator, CItemAcceleratorCTF );
+LINK_ENTITY_TO_CLASS(item_ctfaccelerator, CItemAcceleratorCTF);
 
 void CItemAcceleratorCTF::Precache()
 {
 	CItemCTF::Precache();
 
-	PRECACHE_MODEL( "models/w_accelerator.mdl" );
-	PRECACHE_SOUND( "turret/tu_ping.wav" );
+	PRECACHE_MODEL("models/w_accelerator.mdl");
+	PRECACHE_SOUND("turret/tu_ping.wav");
 }
 
 void CItemAcceleratorCTF::Spawn()
 {
 	Precache();
 
-	SET_MODEL( edict(), "models/w_accelerator.mdl" );
-	
+	SET_MODEL(edict(), "models/w_accelerator.mdl");
+
 	//TODO: is this actually used?
 	pev->spawnflags |= SF_NORESPAWN;
 
@@ -47,30 +47,30 @@ void CItemAcceleratorCTF::Spawn()
 	m_pszItemName = "Damage";
 }
 
-void CItemAcceleratorCTF::RemoveEffect( CBasePlayer* pPlayer )
+void CItemAcceleratorCTF::RemoveEffect(CBasePlayer* pPlayer)
 {
 	pPlayer->m_flAccelTime += gpGlobals->time - m_flPickupTime;
 }
 
-bool CItemAcceleratorCTF::MyTouch( CBasePlayer* pPlayer )
+bool CItemAcceleratorCTF::MyTouch(CBasePlayer* pPlayer)
 {
-	if( !( pPlayer->m_iItems & CTFItem::Acceleration ) )
+	if (!(pPlayer->m_iItems & CTFItem::Acceleration))
 	{
-		if( !multipower.value )
+		if (!multipower.value)
 		{
-			if( pPlayer->m_iItems & CTFItem::ItemsMask )
+			if (pPlayer->m_iItems & CTFItem::ItemsMask)
 				return false;
 		}
 
-		if( team_no == CTFTeam::None || team_no == pPlayer->m_iTeamNum )
+		if (team_no == CTFTeam::None || team_no == pPlayer->m_iTeamNum)
 		{
-			if( pPlayer->pev->weapons & (1 << WEAPON_SUIT) )
+			if (pPlayer->pev->weapons & (1 << WEAPON_SUIT))
 			{
-				pPlayer->m_iItems = static_cast<CTFItem::CTFItem>( pPlayer->m_iItems | CTFItem::Acceleration );
-				MESSAGE_BEGIN( MSG_ONE, gmsgItemPickup, nullptr, pPlayer->edict() );
-				WRITE_STRING( STRING( pev->classname ) );
+				pPlayer->m_iItems = static_cast<CTFItem::CTFItem>(pPlayer->m_iItems | CTFItem::Acceleration);
+				MESSAGE_BEGIN(MSG_ONE, gmsgItemPickup, nullptr, pPlayer->edict());
+				WRITE_STRING(STRING(pev->classname));
 				MESSAGE_END();
-				EMIT_SOUND( edict(), CHAN_VOICE, "items/ammopickup1.wav", VOL_NORM, ATTN_NORM );
+				EMIT_SOUND(edict(), CHAN_VOICE, "items/ammopickup1.wav", VOL_NORM, ATTN_NORM);
 				return true;
 			}
 		}
