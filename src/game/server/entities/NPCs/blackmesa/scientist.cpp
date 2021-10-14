@@ -564,20 +564,17 @@ void CScientist::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 }
 
-//=========================================================
-// Spawn
-//=========================================================
-void CScientist::Spawn()
+void CScientist::SpawnCore(const char* model, float health)
 {
 	Precache();
 
-	SET_MODEL(ENT(pev), "models/scientist.mdl");
+	SET_MODEL(ENT(pev), model);
 	UTIL_SetSize(pev, VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX);
 
 	pev->solid = SOLID_SLIDEBOX;
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_RED;
-	pev->health = gSkillData.scientistHealth;
+	pev->health = health;
 	pev->view_ofs = Vector(0, 0, 50);// position of the eyes relative to monster's origin.
 	m_flFieldOfView = VIEW_FIELD_WIDE; // NOTE: we need a wide field of view so scientists will notice player and say hello
 	m_MonsterState = MONSTERSTATE_NONE;
@@ -599,7 +596,7 @@ void CScientist::Spawn()
 		pev->skin = 1;
 
 	MonsterInit();
-	
+
 	if (!(pev->spawnflags & SF_SCIENTIST_NO_USE))
 	{
 		SetUse(&CScientist::FollowerUse);
@@ -607,11 +604,16 @@ void CScientist::Spawn()
 }
 
 //=========================================================
-// Precache - precaches all resources this monster needs
+// Spawn
 //=========================================================
-void CScientist::Precache()
+void CScientist::Spawn()
 {
-	PRECACHE_MODEL("models/scientist.mdl");
+	SpawnCore("models/scientist.mdl", gSkillData.scientistHealth);
+}
+
+void CScientist::PrecacheCore(const char* model)
+{
+	PRECACHE_MODEL(model);
 	PRECACHE_SOUND("scientist/sci_pain1.wav");
 	PRECACHE_SOUND("scientist/sci_pain2.wav");
 	PRECACHE_SOUND("scientist/sci_pain3.wav");
@@ -623,6 +625,14 @@ void CScientist::Precache()
 	TalkInit();
 
 	CTalkMonster::Precache();
+}
+
+//=========================================================
+// Precache - precaches all resources this monster needs
+//=========================================================
+void CScientist::Precache()
+{
+	PrecacheCore("models/scientist.mdl");
 }
 
 // Init talk data
@@ -1077,32 +1087,6 @@ void CDeadScientist::Spawn()
 	MonsterInitDead();
 }
 
-
-//=========================================================
-// Sitting Scientist PROP
-//=========================================================
-
-class CSittingScientist : public CScientist // kdb: changed from public CBaseMonster so he can speak
-{
-public:
-	void Spawn() override;
-	void  Precache() override;
-
-	void EXPORT SittingThink();
-	int	Classify() override;
-	int		Save(CSave& save) override;
-	int		Restore(CRestore& restore) override;
-	static	TYPEDESCRIPTION m_SaveData[];
-
-	void SetAnswerQuestion(CTalkMonster* pSpeaker) override;
-	int FriendNumber(int arrayNumber) override;
-
-	int FIdleSpeak();
-	int		m_baseSequence;
-	int		m_headTurn;
-	float	m_flResponseDelay;
-};
-
 LINK_ENTITY_TO_CLASS(monster_sitting_scientist, CSittingScientist);
 TYPEDESCRIPTION	CSittingScientist::m_SaveData[] =
 {
@@ -1123,14 +1107,10 @@ typedef enum
 	SITTING_ANIM_sitting3
 } SITTING_ANIM;
 
-
-//
-// ********** Scientist SPAWN **********
-//
-void CSittingScientist::Spawn()
+void CSittingScientist::SpawnCore(const char* model)
 {
-	PRECACHE_MODEL("models/scientist.mdl");
-	SET_MODEL(ENT(pev), "models/scientist.mdl");
+	PRECACHE_MODEL(model);
+	SET_MODEL(ENT(pev), model);
 	Precache();
 	InitBoneControllers();
 
@@ -1166,6 +1146,14 @@ void CSittingScientist::Spawn()
 	DROP_TO_FLOOR(ENT(pev));
 }
 
+//
+// ********** Scientist SPAWN **********
+//
+void CSittingScientist::Spawn()
+{
+	SpawnCore("models/scientist.mdl");
+}
+
 void CSittingScientist::Precache()
 {
 	m_baseSequence = LookupSequence("sitlookleft");
@@ -1180,7 +1168,6 @@ int	CSittingScientist::Classify()
 	return	CLASS_HUMAN_PASSIVE;
 }
 
-
 int CSittingScientist::FriendNumber(int arrayNumber)
 {
 	static int array[3] = {2, 1, 0};
@@ -1188,8 +1175,6 @@ int CSittingScientist::FriendNumber(int arrayNumber)
 		return array[arrayNumber];
 	return arrayNumber;
 }
-
-
 
 //=========================================================
 // sit, do stuff
@@ -1297,7 +1282,6 @@ void CSittingScientist::SetAnswerQuestion(CTalkMonster* pSpeaker)
 	m_flResponseDelay = gpGlobals->time + RANDOM_FLOAT(3, 4);
 	m_hTalkTarget = (CBaseMonster*)pSpeaker;
 }
-
 
 //=========================================================
 // FIdleSpeak

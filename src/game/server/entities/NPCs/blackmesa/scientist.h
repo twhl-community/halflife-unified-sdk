@@ -85,7 +85,7 @@ public:
 	BOOL	DisregardEnemy(CBaseEntity* pEnemy) { return !pEnemy->IsAlive() || (gpGlobals->time - m_fearTime) > 15; }
 
 	BOOL	CanHeal();
-	void	Heal();
+	virtual void Heal();
 	virtual void Scream();
 
 	// Override these to set behavior
@@ -110,4 +110,48 @@ protected:
 	float m_painTime;
 	float m_healTime;
 	float m_fearTime;
+
+protected:
+	/**
+	*	@brief Spawns the Scientist
+	*	@param model Must be a string literal
+	*/
+	void SpawnCore(const char* model, float health);
+
+	/**
+	*	@brief Precaches all of the Scientist's assets
+	*	@param model Must be a string literal
+	*/
+	void PrecacheCore(const char* model);
+};
+
+/**
+*	@brief Sitting Scientist PROP
+*/
+class CSittingScientist : public CScientist // kdb: changed from public CBaseMonster so he can speak
+{
+public:
+	void Spawn() override;
+	void  Precache() override;
+
+	void EXPORT SittingThink();
+	int	Classify() override;
+	int		Save(CSave& save) override;
+	int		Restore(CRestore& restore) override;
+	static	TYPEDESCRIPTION m_SaveData[];
+
+	void SetAnswerQuestion(CTalkMonster* pSpeaker) override;
+	int FriendNumber(int arrayNumber) override;
+
+	int FIdleSpeak();
+	int		m_baseSequence;
+	int		m_headTurn;
+	float	m_flResponseDelay;
+
+protected:
+	/**
+	*	@brief Spawns the Scientist
+	*	@param model Must be a string literal
+	*/
+	void SpawnCore(const char* model);
 };
