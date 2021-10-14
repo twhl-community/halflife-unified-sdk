@@ -227,6 +227,7 @@ target_sources(hl PRIVATE
 	entities/NPCs/aliens/nihilanth.cpp
 	entities/NPCs/aliens/tentacle.cpp
 	entities/NPCs/aliens/zombie.cpp
+	entities/NPCs/aliens/zombie.h
 	entities/NPCs/aliens/zombie_barney.cpp
 	entities/NPCs/aliens/zombie_soldier.cpp
 	

@@ -23,46 +23,7 @@
 #include	"cbase.h"
 #include	"monsters.h"
 #include	"schedule.h"
-
-
-//=========================================================
-// Monster's Anim Events Go Here
-//=========================================================
-#define	ZOMBIE_AE_ATTACK_RIGHT		0x01
-#define	ZOMBIE_AE_ATTACK_LEFT		0x02
-#define	ZOMBIE_AE_ATTACK_BOTH		0x03
-
-#define ZOMBIE_FLINCH_DELAY			2		// at most one flinch every n secs
-
-class CZombie : public CBaseMonster
-{
-public:
-	void Spawn() override;
-	void Precache() override;
-	void SetYawSpeed() override;
-	int  Classify() override;
-	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
-	int IgnoreConditions() override;
-
-	float m_flNextFlinch;
-
-	void PainSound() override;
-	void AlertSound() override;
-	void IdleSound() override;
-	void AttackSound();
-
-	static const char* pAttackSounds[];
-	static const char* pIdleSounds[];
-	static const char* pAlertSounds[];
-	static const char* pPainSounds[];
-	static const char* pAttackHitSounds[];
-	static const char* pAttackMissSounds[];
-
-	// No range attacks
-	BOOL CheckRangeAttack1(float flDot, float flDist) override { return FALSE; }
-	BOOL CheckRangeAttack2(float flDot, float flDist) override { return FALSE; }
-	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
-};
+#include "zombie.h"
 
 LINK_ENTITY_TO_CLASS(monster_zombie, CZombie);
 
@@ -183,6 +144,15 @@ void CZombie::AttackSound()
 	EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, pAttackSounds[RANDOM_LONG(0, ARRAYSIZE(pAttackSounds) - 1)], 1.0, ATTN_NORM, 0, pitch);
 }
 
+float CZombie::GetOneSlashDamage()
+{
+	return gSkillData.zombieDmgOneSlash;
+}
+
+float CZombie::GetBothSlashDamage()
+{
+	return gSkillData.zombieDmgBothSlash;
+}
 
 //=========================================================
 // HandleAnimEvent - catches the monster-specific messages
@@ -196,7 +166,7 @@ void CZombie::HandleAnimEvent(MonsterEvent_t* pEvent)
 	{
 		// do stuff for this event.
 //		ALERT( at_console, "Slash right!\n" );
-		CBaseEntity* pHurt = CheckTraceHullAttack(70, gSkillData.zombieDmgOneSlash, DMG_SLASH);
+		CBaseEntity* pHurt = CheckTraceHullAttack(70, GetOneSlashDamage(), DMG_SLASH);
 		if (pHurt)
 		{
 			if (pHurt->pev->flags & (FL_MONSTER | FL_CLIENT))
@@ -220,7 +190,7 @@ void CZombie::HandleAnimEvent(MonsterEvent_t* pEvent)
 	{
 		// do stuff for this event.
 //		ALERT( at_console, "Slash left!\n" );
-		CBaseEntity* pHurt = CheckTraceHullAttack(70, gSkillData.zombieDmgOneSlash, DMG_SLASH);
+		CBaseEntity* pHurt = CheckTraceHullAttack(70, GetOneSlashDamage(), DMG_SLASH);
 		if (pHurt)
 		{
 			if (pHurt->pev->flags & (FL_MONSTER | FL_CLIENT))
@@ -242,7 +212,7 @@ void CZombie::HandleAnimEvent(MonsterEvent_t* pEvent)
 	case ZOMBIE_AE_ATTACK_BOTH:
 	{
 		// do stuff for this event.
-		CBaseEntity* pHurt = CheckTraceHullAttack(70, gSkillData.zombieDmgBothSlash, DMG_SLASH);
+		CBaseEntity* pHurt = CheckTraceHullAttack(70, GetBothSlashDamage(), DMG_SLASH);
 		if (pHurt)
 		{
 			if (pHurt->pev->flags & (FL_MONSTER | FL_CLIENT))
@@ -266,20 +236,17 @@ void CZombie::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 }
 
-//=========================================================
-// Spawn
-//=========================================================
-void CZombie::Spawn()
+void CZombie::SpawnCore(const char* model, float health)
 {
 	Precache();
 
-	SET_MODEL(ENT(pev), "models/zombie.mdl");
+	SET_MODEL(ENT(pev), model);
 	UTIL_SetSize(pev, VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX);
 
 	pev->solid = SOLID_SLIDEBOX;
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_GREEN;
-	pev->health = gSkillData.zombieHealth;
+	pev->health = health;
 	pev->view_ofs = VEC_VIEW;// position of the eyes relative to monster's origin.
 	m_flFieldOfView = 0.5;// indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
@@ -289,13 +256,18 @@ void CZombie::Spawn()
 }
 
 //=========================================================
-// Precache - precaches all resources this monster needs
+// Spawn
 //=========================================================
-void CZombie::Precache()
+void CZombie::Spawn()
+{
+	SpawnCore("models/zombie.mdl", gSkillData.zombieHealth);
+}
+
+void CZombie::PrecacheCore(const char* model)
 {
 	int i;
 
-	PRECACHE_MODEL("models/zombie.mdl");
+	PRECACHE_MODEL(model);
 
 	for (i = 0; i < ARRAYSIZE(pAttackHitSounds); i++)
 		PRECACHE_SOUND((char*)pAttackHitSounds[i]);
@@ -314,6 +286,14 @@ void CZombie::Precache()
 
 	for (i = 0; i < ARRAYSIZE(pPainSounds); i++)
 		PRECACHE_SOUND((char*)pPainSounds[i]);
+}
+
+//=========================================================
+// Precache - precaches all resources this monster needs
+//=========================================================
+void CZombie::Precache()
+{
+	PrecacheCore("models/zombie.mdl");
 }
 
 //=========================================================
