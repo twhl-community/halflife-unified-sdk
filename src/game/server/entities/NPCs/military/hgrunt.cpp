@@ -41,151 +41,11 @@
 #include	"soundent.h"
 #include	"effects.h"
 #include	"customentity.h"
+#include "hgrunt.h"
 
 int g_fGruntQuestion;				// true if an idle grunt asked a question. Cleared when someone answers.
 
 extern DLL_GLOBAL int		g_iSkillLevel;
-
-//=========================================================
-// monster-specific DEFINE's
-//=========================================================
-#define	GRUNT_CLIP_SIZE					36 // how many bullets in a clip? - NOTE: 3 round burst sound, so keep as 3 * x!
-#define GRUNT_VOL						0.35		// volume of grunt sounds
-#define GRUNT_ATTN						ATTN_NORM	// attenutation of grunt sentences
-#define HGRUNT_LIMP_HEALTH				20
-#define HGRUNT_DMG_HEADSHOT				( DMG_BULLET | DMG_CLUB )	// damage types that can kill a grunt with a single headshot.
-#define HGRUNT_NUM_HEADS				2 // how many grunt heads are there? 
-#define HGRUNT_MINIMUM_HEADSHOT_DAMAGE	15 // must do at least this much damage in one shot to head to score a headshot kill
-#define	HGRUNT_SENTENCE_VOLUME			(float)0.35 // volume of grunt sentences
-
-#define HGRUNT_9MMAR				( 1 << 0)
-#define HGRUNT_HANDGRENADE			( 1 << 1)
-#define HGRUNT_GRENADELAUNCHER		( 1 << 2)
-#define HGRUNT_SHOTGUN				( 1 << 3)
-
-#define HEAD_GROUP					1
-#define HEAD_GRUNT					0
-#define HEAD_COMMANDER				1
-#define HEAD_SHOTGUN				2
-#define HEAD_M203					3
-#define GUN_GROUP					2
-#define GUN_MP5						0
-#define GUN_SHOTGUN					1
-#define GUN_NONE					2
-
-//=========================================================
-// Monster's Anim Events Go Here
-//=========================================================
-#define		HGRUNT_AE_RELOAD		( 2 )
-#define		HGRUNT_AE_KICK			( 3 )
-#define		HGRUNT_AE_BURST1		( 4 )
-#define		HGRUNT_AE_BURST2		( 5 ) 
-#define		HGRUNT_AE_BURST3		( 6 ) 
-#define		HGRUNT_AE_GREN_TOSS		( 7 )
-#define		HGRUNT_AE_GREN_LAUNCH	( 8 )
-#define		HGRUNT_AE_GREN_DROP		( 9 )
-#define		HGRUNT_AE_CAUGHT_ENEMY	( 10) // grunt established sight with an enemy (player only) that had previously eluded the squad.
-#define		HGRUNT_AE_DROP_GUN		( 11) // grunt (probably dead) is dropping his mp5.
-
-//=========================================================
-// monster-specific schedule types
-//=========================================================
-enum
-{
-	SCHED_GRUNT_SUPPRESS = LAST_COMMON_SCHEDULE + 1,
-	SCHED_GRUNT_ESTABLISH_LINE_OF_FIRE,// move to a location to set up an attack against the enemy. (usually when a friendly is in the way).
-	SCHED_GRUNT_COVER_AND_RELOAD,
-	SCHED_GRUNT_SWEEP,
-	SCHED_GRUNT_FOUND_ENEMY,
-	SCHED_GRUNT_REPEL,
-	SCHED_GRUNT_REPEL_ATTACK,
-	SCHED_GRUNT_REPEL_LAND,
-	SCHED_GRUNT_WAIT_FACE_ENEMY,
-	SCHED_GRUNT_TAKECOVER_FAILED,// special schedule type that forces analysis of conditions and picks the best possible schedule to recover from this type of failure.
-	SCHED_GRUNT_ELOF_FAIL,
-};
-
-//=========================================================
-// monster-specific tasks
-//=========================================================
-enum
-{
-	TASK_GRUNT_FACE_TOSS_DIR = LAST_COMMON_TASK + 1,
-	TASK_GRUNT_SPEAK_SENTENCE,
-	TASK_GRUNT_CHECK_FIRE,
-};
-
-//=========================================================
-// monster-specific conditions
-//=========================================================
-#define bits_COND_GRUNT_NOFIRE	( bits_COND_SPECIAL1 )
-
-class CHGrunt : public CSquadMonster
-{
-public:
-	void Spawn() override;
-	void Precache() override;
-	void SetYawSpeed() override;
-	int  Classify() override;
-	int ISoundMask() override;
-	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
-	BOOL FCanCheckAttacks() override;
-	BOOL CheckMeleeAttack1(float flDot, float flDist) override;
-	BOOL CheckRangeAttack1(float flDot, float flDist) override;
-	BOOL CheckRangeAttack2(float flDot, float flDist) override;
-	void CheckAmmo() override;
-	void SetActivity(Activity NewActivity) override;
-	void StartTask(Task_t* pTask) override;
-	void RunTask(Task_t* pTask) override;
-	void DeathSound() override;
-	void PainSound() override;
-	void IdleSound() override;
-	Vector GetGunPosition() override;
-	void Shoot();
-	void Shotgun();
-	void PrescheduleThink() override;
-	void GibMonster() override;
-	void SpeakSentence();
-
-	int	Save(CSave& save) override;
-	int Restore(CRestore& restore) override;
-
-	CBaseEntity* Kick();
-	Schedule_t* GetSchedule() override;
-	Schedule_t* GetScheduleOfType(int Type) override;
-	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
-	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
-
-	int IRelationship(CBaseEntity* pTarget) override;
-
-	BOOL FOkToSpeak();
-	void JustSpoke();
-
-	CUSTOM_SCHEDULES;
-	static TYPEDESCRIPTION m_SaveData[];
-
-	// checking the feasibility of a grenade toss is kind of costly, so we do it every couple of seconds,
-	// not every server frame.
-	float m_flNextGrenadeCheck;
-	float m_flNextPainTime;
-	float m_flLastEnemySightTime;
-
-	Vector	m_vecTossVelocity;
-
-	BOOL	m_fThrowGrenade;
-	BOOL	m_fStanding;
-	BOOL	m_fFirstEncounter;// only put on the handsign show in the squad's first encounter.
-	int		m_cClipSize;
-
-	int m_voicePitch;
-
-	int		m_iBrassShell;
-	int		m_iShotgunShell;
-
-	int		m_iSentence;
-
-	static const char* pGruntSentences[];
-};
 
 LINK_ENTITY_TO_CLASS(monster_human_grunt, CHGrunt);
 
@@ -216,18 +76,6 @@ const char* CHGrunt::pGruntSentences[] =
 	"HG_THROW", // about to throw grenade
 	"HG_CHARGE",  // running out to get the enemy
 	"HG_TAUNT", // say rude things
-};
-
-enum HGRUNT_SENTENCE_TYPES
-{
-	HGRUNT_SENT_NONE = -1,
-	HGRUNT_SENT_GREN = 0,
-	HGRUNT_SENT_ALERT,
-	HGRUNT_SENT_MONSTER,
-	HGRUNT_SENT_COVER,
-	HGRUNT_SENT_THROW,
-	HGRUNT_SENT_CHARGE,
-	HGRUNT_SENT_TAUNT,
 };
 
 //=========================================================
@@ -328,7 +176,7 @@ int CHGrunt::ISoundMask()
 //=========================================================
 // someone else is talking - don't speak
 //=========================================================
-BOOL CHGrunt::FOkToSpeak()
+bool CHGrunt::FOkToSpeak()
 {
 	// if someone else is talking, don't speak
 	if (gpGlobals->time <= CTalkMonster::g_talkWaitTime)
@@ -467,11 +315,7 @@ BOOL CHGrunt::CheckRangeAttack1(float flDot, float flDist)
 	return FALSE;
 }
 
-//=========================================================
-// CheckRangeAttack2 - this checks the Grunt's grenade
-// attack. 
-//=========================================================
-BOOL CHGrunt::CheckRangeAttack2(float flDot, float flDist)
+BOOL CHGrunt::CheckRangeAttack2Core(float flDot, float flDist, float grenadeSpeed)
 {
 	if (!FBitSet(pev->weapons, (HGRUNT_HANDGRENADE | HGRUNT_GRENADELAUNCHER)))
 	{
@@ -526,7 +370,7 @@ BOOL CHGrunt::CheckRangeAttack2(float flDot, float flDist)
 		vecTarget = m_vecEnemyLKP + (m_hEnemy->BodyTarget(pev->origin) - m_hEnemy->pev->origin);
 		// estimate position
 		if (HasConditions(bits_COND_SEE_ENEMY))
-			vecTarget = vecTarget + ((vecTarget - pev->origin).Length() / gSkillData.hgruntGrenadeSpeed) * m_hEnemy->pev->velocity;
+			vecTarget = vecTarget + ((vecTarget - pev->origin).Length() / grenadeSpeed) * m_hEnemy->pev->velocity;
 	}
 
 	// are any of my squad members near the intended grenade impact area?
@@ -572,7 +416,7 @@ BOOL CHGrunt::CheckRangeAttack2(float flDot, float flDist)
 	}
 	else
 	{
-		Vector vecToss = VecCheckThrow(pev, GetGunPosition(), vecTarget, gSkillData.hgruntGrenadeSpeed, 0.5);
+		Vector vecToss = VecCheckThrow(pev, GetGunPosition(), vecTarget, grenadeSpeed, 0.5);
 
 		if (vecToss != g_vecZero)
 		{
@@ -597,6 +441,14 @@ BOOL CHGrunt::CheckRangeAttack2(float flDot, float flDist)
 	return m_fThrowGrenade;
 }
 
+//=========================================================
+// CheckRangeAttack2 - this checks the Grunt's grenade
+// attack. 
+//=========================================================
+BOOL CHGrunt::CheckRangeAttack2(float flDot, float flDist)
+{
+	return CheckRangeAttack2Core(flDot, flDist, gSkillData.hgruntGrenadeSpeed);
+}
 
 //=========================================================
 // TraceAttack - make sure we're not taking it in the helmet
@@ -784,55 +636,72 @@ Vector CHGrunt::GetGunPosition()
 //=========================================================
 // Shoot
 //=========================================================
-void CHGrunt::Shoot()
+void CHGrunt::Shoot(bool firstShotInBurst)
 {
 	if (m_hEnemy == NULL)
 	{
 		return;
 	}
 
-	Vector vecShootOrigin = GetGunPosition();
-	Vector vecShootDir = ShootAtEnemy(vecShootOrigin);
-
-	UTIL_MakeVectors(pev->angles);
-
-	Vector	vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40, 90) + gpGlobals->v_up * RANDOM_FLOAT(75, 200) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
-	EjectBrass(vecShootOrigin - vecShootDir * 24, vecShellVelocity, pev->angles.y, m_iBrassShell, TE_BOUNCE_SHELL);
-	FireBullets(1, vecShootOrigin, vecShootDir, VECTOR_CONE_10DEGREES, 2048, BULLET_MONSTER_MP5); // shoot +-5 degrees
-
-	pev->effects |= EF_MUZZLEFLASH;
-
-	m_cAmmoLoaded--;// take away a bullet!
-
-	Vector angDir = UTIL_VecToAngles(vecShootDir);
-	SetBlending(0, angDir.x);
-}
-
-//=========================================================
-// Shoot
-//=========================================================
-void CHGrunt::Shotgun()
-{
-	if (m_hEnemy == NULL)
+	if (FBitSet(pev->weapons, HGRUNT_9MMAR))
 	{
-		return;
+		Vector vecShootOrigin = GetGunPosition();
+		Vector vecShootDir = ShootAtEnemy(vecShootOrigin);
+
+		UTIL_MakeVectors(pev->angles);
+
+		Vector	vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40, 90) + gpGlobals->v_up * RANDOM_FLOAT(75, 200) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
+		EjectBrass(vecShootOrigin - vecShootDir * 24, vecShellVelocity, pev->angles.y, m_iBrassShell, TE_BOUNCE_SHELL);
+		FireBullets(1, vecShootOrigin, vecShootDir, VECTOR_CONE_10DEGREES, 2048, BULLET_MONSTER_MP5); // shoot +-5 degrees
+
+		pev->effects |= EF_MUZZLEFLASH;
+
+		m_cAmmoLoaded--;// take away a bullet!
+
+		Vector angDir = UTIL_VecToAngles(vecShootDir);
+		SetBlending(0, angDir.x);
+
+		if (firstShotInBurst)
+		{
+			// the first round of the three round burst plays the sound and puts a sound in the world sound list.
+			if (RANDOM_LONG(0, 1))
+			{
+				EMIT_SOUND(ENT(pev), CHAN_WEAPON, "hgrunt/gr_mgun1.wav", 1, ATTN_NORM);
+			}
+			else
+			{
+				EMIT_SOUND(ENT(pev), CHAN_WEAPON, "hgrunt/gr_mgun2.wav", 1, ATTN_NORM);
+			}
+		}
+	}
+	else
+	{
+		Vector vecShootOrigin = GetGunPosition();
+		Vector vecShootDir = ShootAtEnemy(vecShootOrigin);
+
+		UTIL_MakeVectors(pev->angles);
+
+		Vector	vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40, 90) + gpGlobals->v_up * RANDOM_FLOAT(75, 200) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
+		EjectBrass(vecShootOrigin - vecShootDir * 24, vecShellVelocity, pev->angles.y, m_iShotgunShell, TE_BOUNCE_SHOTSHELL);
+		FireBullets(gSkillData.hgruntShotgunPellets, vecShootOrigin, vecShootDir, VECTOR_CONE_15DEGREES, 2048, BULLET_PLAYER_BUCKSHOT, 0); // shoot +-7.5 degrees
+
+		pev->effects |= EF_MUZZLEFLASH;
+
+		m_cAmmoLoaded--;// take away a bullet!
+
+		Vector angDir = UTIL_VecToAngles(vecShootDir);
+		SetBlending(0, angDir.x);
+
+		if (firstShotInBurst)
+		{
+			EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/sbarrel1.wav", 1, ATTN_NORM);
+		}
 	}
 
-	Vector vecShootOrigin = GetGunPosition();
-	Vector vecShootDir = ShootAtEnemy(vecShootOrigin);
-
-	UTIL_MakeVectors(pev->angles);
-
-	Vector	vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40, 90) + gpGlobals->v_up * RANDOM_FLOAT(75, 200) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
-	EjectBrass(vecShootOrigin - vecShootDir * 24, vecShellVelocity, pev->angles.y, m_iShotgunShell, TE_BOUNCE_SHOTSHELL);
-	FireBullets(gSkillData.hgruntShotgunPellets, vecShootOrigin, vecShootDir, VECTOR_CONE_15DEGREES, 2048, BULLET_PLAYER_BUCKSHOT, 0); // shoot +-7.5 degrees
-
-	pev->effects |= EF_MUZZLEFLASH;
-
-	m_cAmmoLoaded--;// take away a bullet!
-
-	Vector angDir = UTIL_VecToAngles(vecShootDir);
-	SetBlending(0, angDir.x);
+	if (firstShotInBurst)
+	{
+		CSoundEnt::InsertSound(bits_SOUND_COMBAT, pev->origin, 384, 0.3);
+	}
 }
 
 //=========================================================
@@ -911,35 +780,9 @@ void CHGrunt::HandleAnimEvent(MonsterEvent_t* pEvent)
 	break;
 
 	case HGRUNT_AE_BURST1:
-	{
-		if (FBitSet(pev->weapons, HGRUNT_9MMAR))
-		{
-			Shoot();
-
-			// the first round of the three round burst plays the sound and puts a sound in the world sound list.
-			if (RANDOM_LONG(0, 1))
-			{
-				EMIT_SOUND(ENT(pev), CHAN_WEAPON, "hgrunt/gr_mgun1.wav", 1, ATTN_NORM);
-			}
-			else
-			{
-				EMIT_SOUND(ENT(pev), CHAN_WEAPON, "hgrunt/gr_mgun2.wav", 1, ATTN_NORM);
-			}
-		}
-		else
-		{
-			Shotgun();
-
-			EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/sbarrel1.wav", 1, ATTN_NORM);
-		}
-
-		CSoundEnt::InsertSound(bits_SOUND_COMBAT, pev->origin, 384, 0.3);
-	}
-	break;
-
 	case HGRUNT_AE_BURST2:
 	case HGRUNT_AE_BURST3:
-		Shoot();
+		Shoot(pEvent->event == HGRUNT_AE_BURST1);
 		break;
 
 	case HGRUNT_AE_KICK:
@@ -1040,12 +883,9 @@ void CHGrunt::Spawn()
 	MonsterInit();
 }
 
-//=========================================================
-// Precache - precaches all resources this monster needs
-//=========================================================
-void CHGrunt::Precache()
+void CHGrunt::PrecacheCore(const char* model)
 {
-	PRECACHE_MODEL("models/hgrunt.mdl");
+	PRECACHE_MODEL(model);
 
 	PRECACHE_SOUND("hgrunt/gr_mgun1.wav");
 	PRECACHE_SOUND("hgrunt/gr_mgun2.wav");
@@ -1076,6 +916,14 @@ void CHGrunt::Precache()
 
 	m_iBrassShell = PRECACHE_MODEL("models/shell.mdl");// brass shell
 	m_iShotgunShell = PRECACHE_MODEL("models/shotgunshell.mdl");
+}
+
+//=========================================================
+// Precache - precaches all resources this monster needs
+//=========================================================
+void CHGrunt::Precache()
+{
+	PrecacheCore("models/hgrunt.mdl");
 }
 
 //=========================================================
@@ -1860,10 +1708,7 @@ DEFINE_CUSTOM_SCHEDULES(CHGrunt)
 
 IMPLEMENT_CUSTOM_SCHEDULES(CHGrunt, CSquadMonster);
 
-//=========================================================
-// SetActivity 
-//=========================================================
-void CHGrunt::SetActivity(Activity NewActivity)
+std::tuple<int, Activity> CHGrunt::GetSequenceForActivity(Activity NewActivity)
 {
 	int	iSequence = ACTIVITY_NOT_AVAILABLE;
 	void* pmodel = GET_MODEL_PTR(ENT(pev));
@@ -1947,7 +1792,17 @@ void CHGrunt::SetActivity(Activity NewActivity)
 		break;
 	}
 
-	m_Activity = NewActivity; // Go ahead and set this so it doesn't keep trying when the anim is not present
+	return {iSequence, NewActivity};
+}
+
+//=========================================================
+// SetActivity 
+//=========================================================
+void CHGrunt::SetActivity(Activity NewActivity)
+{
+	const auto [iSequence, activity] = GetSequenceForActivity(NewActivity);
+
+	m_Activity = activity; // Go ahead and set this so it doesn't keep trying when the anim is not present
 
 	// Set to the desired anim, or default anim if the desired is not present
 	if (iSequence > ACTIVITY_NOT_AVAILABLE)
@@ -1964,7 +1819,7 @@ void CHGrunt::SetActivity(Activity NewActivity)
 	else
 	{
 		// Not available try to get default anim
-		ALERT(at_console, "%s has no sequence for act:%d\n", STRING(pev->classname), NewActivity);
+		ALERT(at_console, "%s has no sequence for act:%d\n", STRING(pev->classname), activity);
 		pev->sequence = 0;	// Set to the reset anim (if it's there)
 	}
 }
@@ -2371,21 +2226,6 @@ Schedule_t* CHGrunt::GetScheduleOfType(int Type)
 	}
 }
 
-
-//=========================================================
-// CHGruntRepel - when triggered, spawns a monster_human_grunt
-// repelling down a line.
-//=========================================================
-
-class CHGruntRepel : public CBaseMonster
-{
-public:
-	void Spawn() override;
-	void Precache() override;
-	void EXPORT RepelUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-	int m_iSpriteTexture;	// Don't save, precache
-};
-
 LINK_ENTITY_TO_CLASS(monster_grunt_repel, CHGruntRepel);
 
 void CHGruntRepel::Spawn()
@@ -2396,13 +2236,18 @@ void CHGruntRepel::Spawn()
 	SetUse(&CHGruntRepel::RepelUse);
 }
 
-void CHGruntRepel::Precache()
+void CHGruntRepel::PrecacheCore(const char* classname)
 {
-	UTIL_PrecacheOther("monster_human_grunt");
+	UTIL_PrecacheOther(classname);
 	m_iSpriteTexture = PRECACHE_MODEL("sprites/rope.spr");
 }
 
-void CHGruntRepel::RepelUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
+void CHGruntRepel::Precache()
+{
+	PrecacheCore("monster_human_grunt");
+}
+
+void CHGruntRepel::CreateMonster(const char* classname)
 {
 	TraceResult tr;
 	UTIL_TraceLine(pev->origin, pev->origin + Vector(0, 0, -4096.0), dont_ignore_monsters, ENT(pev), &tr);
@@ -2411,7 +2256,7 @@ void CHGruntRepel::RepelUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_T
 		return NULL;
 	*/
 
-	CBaseEntity* pEntity = Create("monster_human_grunt", pev->origin, pev->angles);
+	CBaseEntity* pEntity = Create(classname, pev->origin, pev->angles);
 	CBaseMonster* pGrunt = pEntity->MyMonsterPointer();
 	pGrunt->pev->movetype = MOVETYPE_FLY;
 	pGrunt->pev->velocity = Vector(0, 0, RANDOM_FLOAT(-196, -128));
@@ -2429,24 +2274,10 @@ void CHGruntRepel::RepelUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_T
 	UTIL_Remove(this);
 }
 
-
-
-//=========================================================
-// DEAD HGRUNT PROP
-//=========================================================
-class CDeadHGrunt : public CBaseMonster
+void CHGruntRepel::RepelUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
-public:
-	void Spawn() override;
-	int	Classify() override { return	CLASS_HUMAN_MILITARY; }
-
-	void KeyValue(KeyValueData* pkvd) override;
-
-	int	m_iPose;// which sequence to display	-- temporary, don't need to save
-	static const char* m_szPoses[3];
-};
-
-const char* CDeadHGrunt::m_szPoses[] = {"deadstomach", "deadside", "deadsitting"};
+	CreateMonster("monster_human_grunt");
+}
 
 void CDeadHGrunt::KeyValue(KeyValueData* pkvd)
 {
@@ -2461,13 +2292,10 @@ void CDeadHGrunt::KeyValue(KeyValueData* pkvd)
 
 LINK_ENTITY_TO_CLASS(monster_hgrunt_dead, CDeadHGrunt);
 
-//=========================================================
-// ********** DeadHGrunt SPAWN **********
-//=========================================================
-void CDeadHGrunt::Spawn()
+void CDeadHGrunt::SpawnCore(const char* model)
 {
-	PRECACHE_MODEL("models/hgrunt.mdl");
-	SET_MODEL(ENT(pev), "models/hgrunt.mdl");
+	PRECACHE_MODEL(model);
+	SET_MODEL(ENT(pev), model);
 
 	pev->effects = 0;
 	pev->yaw_speed = 8;
@@ -2483,6 +2311,13 @@ void CDeadHGrunt::Spawn()
 
 	// Corpses have less health
 	pev->health = 8;
+
+	MonsterInitDead();
+}
+
+void CDeadHGrunt::Spawn()
+{
+	SpawnCore("models/hgrunt.mdl");
 
 	// map old bodies onto new bodies
 	switch (pev->body)
@@ -2512,6 +2347,4 @@ void CDeadHGrunt::Spawn()
 		SetBodygroup(GUN_GROUP, GUN_NONE);
 		break;
 	}
-
-	MonsterInitDead();
 }

@@ -252,6 +252,7 @@ target_sources(hl PRIVATE
 	entities/NPCs/military/drill_sergeant.cpp
 	entities/NPCs/military/hfgrunt.cpp
 	entities/NPCs/military/hgrunt.cpp
+	entities/NPCs/military/hgrunt.h
 	entities/NPCs/military/hgrunt_ally.cpp
 	entities/NPCs/military/hgrunt_medic.cpp
 	entities/NPCs/military/hgrunt_torch.cpp
