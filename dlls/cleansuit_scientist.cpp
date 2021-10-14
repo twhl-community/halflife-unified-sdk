@@ -778,6 +778,9 @@ int CCleansuitScientist :: ISoundMask ()
 {
 	return	bits_SOUND_WORLD	|
 			bits_SOUND_COMBAT	|
+			bits_SOUND_CARCASS	|
+			bits_SOUND_MEAT		|
+			bits_SOUND_GARBAGE	|
 			bits_SOUND_DANGER	|
 			bits_SOUND_PLAYER;
 }
