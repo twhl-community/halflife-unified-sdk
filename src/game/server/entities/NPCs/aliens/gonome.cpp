@@ -200,12 +200,6 @@ class COFGonome : public CZombie
 public:
 	using BaseClass = CZombie;
 
-	// Take 15% damage from bullets
-	COFGonome()
-		: CZombie(0.15f)
-	{
-	}
-
 	int Save(CSave& save) override;
 	int Restore(CRestore& restore) override;
 
@@ -257,6 +251,9 @@ public:
 protected:
 	float GetOneSlashDamage() override { return gSkillData.gonomeDmgOneSlash; }
 	float GetBothSlashDamage() override { return 0; } //Not used, so just return 0
+
+	// Take 15% damage from bullets
+	virtual float GetBulletDamageFraction() const override { return 0.15f; }
 };
 
 TYPEDESCRIPTION	COFGonome::m_SaveData[] =

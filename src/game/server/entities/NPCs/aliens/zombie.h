@@ -27,12 +27,6 @@
 class CZombie : public CBaseMonster
 {
 public:
-	CZombie() = default;
-	CZombie(float bulletDamageFraction)
-		: m_flBulletDamageFraction(bulletDamageFraction)
-	{
-	}
-
 	void Spawn() override;
 	void Precache() override;
 	void SetYawSpeed() override;
@@ -92,10 +86,6 @@ public:
 	BOOL CheckRangeAttack2(float flDot, float flDist) override { return FALSE; }
 	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 
-private:
-	// Take 30% damage from bullets by default
-	float m_flBulletDamageFraction = 0.3f;
-
 protected:
 	/**
 	*	@brief Spawns the Zombie
@@ -113,4 +103,7 @@ protected:
 	virtual float GetBothSlashDamage();
 
 	void ZombieSlashAttack(float damage, const Vector& punchAngle, const Vector& velocity, bool playAttackSound = true);
+
+	// Take 30% damage from bullets by default
+	virtual float GetBulletDamageFraction() const { return 0.3f; }
 };
