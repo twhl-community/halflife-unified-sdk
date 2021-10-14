@@ -40,8 +40,6 @@ public:
 
 	void Precache() override;
 
-	void GuardFirePistol() override;
-
 	void TalkInit() override;
 
 	int ObjectCaps() override { return FCAP_ACROSS_TRANSITION | FCAP_IMPULSE_USE; }
@@ -126,35 +124,6 @@ int CDrillSergeant::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, 
 void CDrillSergeant::Precache()
 {
 	PrecacheCore("models/drill.mdl");
-}
-
-void CDrillSergeant::GuardFirePistol()
-{
-	Vector vecShootOrigin;
-
-	UTIL_MakeVectors(pev->angles);
-	vecShootOrigin = pev->origin + Vector(0, 0, 55);
-	Vector vecShootDir = ShootAtEnemy(vecShootOrigin);
-
-	Vector angDir = UTIL_VecToAngles(vecShootDir);
-	SetBlending(0, angDir.x);
-	pev->effects = EF_MUZZLEFLASH;
-
-	FireBullets(1, vecShootOrigin, vecShootDir, VECTOR_CONE_2DEGREES, 1024, BULLET_MONSTER_9MM);
-
-	int pitchShift = RANDOM_LONG(0, 20);
-
-	// Only shift about half the time
-	if (pitchShift > 10)
-		pitchShift = 0;
-	else
-		pitchShift -= 5;
-	EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "barney/ba_attack2.wav", 1, ATTN_NORM, 0, 100 + pitchShift);
-
-	CSoundEnt::InsertSound(bits_SOUND_COMBAT, pev->origin, 384, 0.3);
-
-	// UNDONE: Reload?
-	m_cAmmoLoaded--;// take away a bullet!
 }
 
 void CDrillSergeant::TalkInit()
