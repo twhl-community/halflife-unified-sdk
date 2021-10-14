@@ -23,10 +23,6 @@
 #define		BARNEY_AE_SHOOT		( 3 )
 #define		BARNEY_AE_HOLSTER	( 4 )
 
-#define	BARNEY_BODY_GUNHOLSTERED	0
-#define	BARNEY_BODY_GUNDRAWN		1
-#define BARNEY_BODY_GUNGONE			2
-
 namespace GuardBodyGroup
 {
 enum GuardBodyGroup

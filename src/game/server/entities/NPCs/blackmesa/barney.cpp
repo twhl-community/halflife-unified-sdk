@@ -419,7 +419,6 @@ void CBarney::Precache()
 // Init talk data
 void CBarney::TalkInit()
 {
-
 	CTalkMonster::TalkInit();
 
 	// scientists speach group names (group names are in sentences.txt)
