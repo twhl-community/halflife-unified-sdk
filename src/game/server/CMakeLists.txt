@@ -247,8 +247,6 @@ target_sources(hl PRIVATE
 	
 	entities/NPCs/military/apache.cpp
 	entities/NPCs/military/apache.h
-	entities/NPCs/military/COFAllyMonster.cpp
-	entities/NPCs/military/COFAllyMonster.h
 	entities/NPCs/military/COFSquadTalkMonster.cpp
 	entities/NPCs/military/COFSquadTalkMonster.h
 	entities/NPCs/military/drill_sergeant.cpp

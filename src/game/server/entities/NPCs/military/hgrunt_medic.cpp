@@ -36,7 +36,6 @@
 #include	"squadmonster.h"
 #include	"weapons.h"
 #include	"talkmonster.h"
-#include "COFAllyMonster.h"
 #include "COFSquadTalkMonster.h"
 #include	"soundent.h"
 #include	"effects.h"

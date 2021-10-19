@@ -34,7 +34,6 @@
 #include "monsters.h"
 #include "talkmonster.h"
 #include "squadmonster.h"
-#include "military/COFAllyMonster.h"
 #include "military/COFSquadTalkMonster.h"
 #include "shake.h"
 #include "decals.h"

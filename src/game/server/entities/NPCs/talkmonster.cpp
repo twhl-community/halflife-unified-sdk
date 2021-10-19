@@ -22,6 +22,9 @@
 #include	"scripted.h"
 #include	"soundent.h"
 #include	"animation.h"
+#include "player.h"
+
+#include <limits>
 
 //=========================================================
 // Talking monster base class
@@ -49,15 +52,6 @@ TYPEDESCRIPTION	CTalkMonster::m_SaveData[] =
 };
 
 IMPLEMENT_SAVERESTORE(CTalkMonster, CBaseMonster);
-
-// array of friend names
-const char* CTalkMonster::m_szFriends[TLK_CFRIENDS] =
-{
-	"monster_barney",
-	"monster_scientist",
-	"monster_sitting_scientist",
-};
-
 
 //=========================================================
 // AI Schedules Specific to talking monsters
@@ -626,98 +620,41 @@ void CTalkMonster::Killed(entvars_t* pevAttacker, int iGib)
 	CBaseMonster::Killed(pevAttacker, iGib);
 }
 
-
-
-CBaseEntity* CTalkMonster::EnumFriends(CBaseEntity* pPrevious, int listNumber, BOOL bTrace)
-{
-	CBaseEntity* pFriend = pPrevious;
-	const char* pszFriend;
-	TraceResult tr;
-	Vector vecCheck;
-
-	pszFriend = m_szFriends[FriendNumber(listNumber)];
-	while (pFriend = UTIL_FindEntityByClassname(pFriend, pszFriend))
-	{
-		if (pFriend == this || !pFriend->IsAlive())
-			// don't talk to self or dead people
-			continue;
-		if (bTrace)
-		{
-			vecCheck = pFriend->pev->origin;
-			vecCheck.z = pFriend->pev->absmax.z;
-
-			UTIL_TraceLine(pev->origin, vecCheck, ignore_monsters, ENT(pev), &tr);
-		}
-		else
-			tr.flFraction = 1.0;
-
-		if (tr.flFraction == 1.0)
-		{
-			return pFriend;
-		}
-	}
-
-	return NULL;
-}
-
-
 void CTalkMonster::AlertFriends()
 {
-	CBaseEntity* pFriend = NULL;
-	int i;
-
 	// for each friend in this bsp...
-	for (i = 0; i < TLK_CFRIENDS; i++)
-	{
-		while (pFriend = EnumFriends(pFriend, i, TRUE))
+	EnumFriends([](CBaseEntity* pFriend)
 		{
-			CBaseMonster* pMonster = pFriend->MyMonsterPointer();
-			if (pMonster->IsAlive())
+			if (CBaseMonster* pMonster = pFriend->MyMonsterPointer(); pMonster->IsAlive())
 			{
 				// don't provoke a friend that's playing a death animation. They're a goner
 				pMonster->m_afMemory |= bits_MEMORY_PROVOKED;
 			}
-		}
-	}
+		}, true);
 }
-
-
 
 void CTalkMonster::ShutUpFriends()
 {
-	CBaseEntity* pFriend = NULL;
-	int i;
-
 	// for each friend in this bsp...
-	for (i = 0; i < TLK_CFRIENDS; i++)
-	{
-		while (pFriend = EnumFriends(pFriend, i, TRUE))
+	EnumFriends([](CBaseEntity* pFriend)
 		{
-			CBaseMonster* pMonster = pFriend->MyMonsterPointer();
-			if (pMonster)
+			if (CBaseMonster* pMonster = pFriend->MyMonsterPointer(); pMonster->IsAlive())
 			{
 				pMonster->SentenceStop();
 			}
-		}
-	}
+		}, true);
 }
-
 
 // UNDONE: Keep a follow time in each follower, make a list of followers in this function and do LRU
 // UNDONE: Check this in Restore to keep restored monsters from joining a full list of followers
 void CTalkMonster::LimitFollowers(CBaseEntity* pPlayer, int maxFollowers)
 {
-	CBaseEntity* pFriend = NULL;
-	int i, count;
+	int count = 0;
 
-	count = 0;
 	// for each friend in this bsp...
-	for (i = 0; i < TLK_CFRIENDS; i++)
-	{
-		while (pFriend = EnumFriends(pFriend, i, FALSE))
+	EnumFriends([&](CBaseEntity* pFriend)
 		{
-			CBaseMonster* pMonster = pFriend->MyMonsterPointer();
-			if (pMonster)
+			if (CBaseMonster* pMonster = pFriend->MyMonsterPointer(); pMonster->IsAlive())
 			{
 				if (pMonster->m_hTargetEnt == pPlayer)
 				{
@@ -726,10 +663,8 @@ void CTalkMonster::LimitFollowers(CBaseEntity* pPlayer, int maxFollowers)
 						pMonster->StopFollowing(TRUE);
 				}
 			}
-		}
-	}
+		}, true);
 }
-
 
 float CTalkMonster::TargetDistance()
 {
@@ -783,69 +718,58 @@ void CTalkMonster::TalkInit()
 //=========================================================
 CBaseEntity* CTalkMonster::FindNearestFriend(BOOL fPlayer)
 {
-	CBaseEntity* pFriend = NULL;
-	CBaseEntity* pNearest = NULL;
-	float range = 10000000.0;
+	CBaseEntity* pNearest = nullptr;
+	float range = std::numeric_limits<float>::max();
 	TraceResult tr;
-	Vector vecStart = pev->origin;
-	Vector vecCheck;
-	int i;
-	const char* pszFriend;
-	int cfriends;
 
-	vecStart.z = pev->absmax.z;
-
-	if (fPlayer)
-		cfriends = 1;
-	else
-		cfriends = TLK_CFRIENDS;
+	const Vector vecStart{pev->origin.x, pev->origin.y, pev->absmax.z};
 
 	// for each type of friend...
-
-	for (i = cfriends - 1; i > -1; i--)
+	auto friendHandler = [&, this](CBaseEntity* pFriend)
 	{
-		if (fPlayer)
-			pszFriend = "player";
-		else
-			pszFriend = m_szFriends[FriendNumber(i)];
+		if (pFriend == this || !pFriend->IsAlive())
+			// don't talk to self or dead people
+			return;
 
-		if (!pszFriend)
-			continue;
+		CBaseMonster* pMonster = pFriend->MyMonsterPointer();
 
-		// for each friend in this bsp...
-		while (pFriend = UTIL_FindEntityByClassname(pFriend, pszFriend))
+		// If not a monster for some reason, or in a script, or prone
+		if (!pMonster || !(pMonster->pev->flags & FL_MONSTER) || pMonster->m_MonsterState == MONSTERSTATE_SCRIPT || pMonster->m_MonsterState == MONSTERSTATE_PRONE)
+			return;
+
+		Vector vecCheck = pFriend->pev->origin;
+		vecCheck.z = pFriend->pev->absmax.z;
+
+		// if closer than previous friend, and in range, see if he's visible
+
+		if (range > (vecStart - vecCheck).Length())
 		{
-			if (pFriend == this || !pFriend->IsAlive())
-				// don't talk to self or dead people
-				continue;
+			UTIL_TraceLine(vecStart, vecCheck, ignore_monsters, ENT(pev), &tr);
 
-			CBaseMonster* pMonster = pFriend->MyMonsterPointer();
-
-			// If not a monster for some reason, or in a script, or prone
-			if (!pMonster || pMonster->m_MonsterState == MONSTERSTATE_SCRIPT || pMonster->m_MonsterState == MONSTERSTATE_PRONE)
-				continue;
-
-			vecCheck = pFriend->pev->origin;
-			vecCheck.z = pFriend->pev->absmax.z;
-
-			// if closer than previous friend, and in range, see if he's visible
-
-			if (range > (vecStart - vecCheck).Length())
+			if (tr.flFraction == 1.0)
 			{
-				UTIL_TraceLine(vecStart, vecCheck, ignore_monsters, ENT(pev), &tr);
-
-				if (tr.flFraction == 1.0)
+				// visible and in range, this is the new nearest scientist
+				if ((vecStart - vecCheck).Length() < TALKRANGE_MIN)
 				{
-					// visible and in range, this is the new nearest scientist
-					if ((vecStart - vecCheck).Length() < TALKRANGE_MIN)
-					{
-						pNearest = pFriend;
-						range = (vecStart - vecCheck).Length();
-					}
+					pNearest = pFriend;
+					range = (vecStart - vecCheck).Length();
 				}
 			}
 		}
+	};
+
+	if (fPlayer)
+	{
+		for (auto friendEntity : UTIL_FindPlayers())
+		{
+			friendHandler(friendEntity);
+		}
 	}
+	else
+	{
+		ForEachFriend(friendHandler);
+	}
+
 	return pNearest;
 }
 

@@ -24,7 +24,6 @@
 #include "saverestore.h"
 #include "talkmonster.h"
 #include "squadmonster.h"
-#include "COFAllyMonster.h"
 #include "COFSquadTalkMonster.h"
 #include "plane.h"
 
@@ -45,7 +44,7 @@ TYPEDESCRIPTION	COFSquadTalkMonster::m_SaveData[] =
 
 };
 
-IMPLEMENT_SAVERESTORE(COFSquadTalkMonster, COFAllyMonster);
+IMPLEMENT_SAVERESTORE(COFSquadTalkMonster, CTalkMonster);
 
 
 //=========================================================
@@ -134,7 +133,7 @@ void COFSquadTalkMonster::Killed(entvars_t* pevAttacker, int iGib)
 		MySquadLeader()->SquadRemove(this);
 	}
 
-	COFAllyMonster::Killed(pevAttacker, iGib);
+	CTalkMonster::Killed(pevAttacker, iGib);
 }
 
 //=========================================================
@@ -461,7 +460,7 @@ int COFSquadTalkMonster::CheckEnemy(CBaseEntity* pEnemy)
 {
 	int iUpdatedLKP;
 
-	iUpdatedLKP = COFAllyMonster::CheckEnemy(m_hEnemy);
+	iUpdatedLKP = CTalkMonster::CheckEnemy(m_hEnemy);
 
 	// communicate with squad members about the enemy IF this individual has the same enemy as the squad leader.
 	if (InSquad() && (CBaseEntity*)m_hEnemy == MySquadLeader()->m_hEnemy)
@@ -486,7 +485,7 @@ int COFSquadTalkMonster::CheckEnemy(CBaseEntity* pEnemy)
 //=========================================================
 void COFSquadTalkMonster::StartMonster()
 {
-	COFAllyMonster::StartMonster();
+	CTalkMonster::StartMonster();
 
 	if ((m_afCapability & bits_CAP_SQUAD) && !InSquad())
 	{
@@ -603,7 +602,7 @@ MONSTERSTATE COFSquadTalkMonster::GetIdealState()
 		break;
 	}
 
-	return COFAllyMonster::GetIdealState();
+	return CTalkMonster::GetIdealState();
 }
 
 //=========================================================
@@ -685,7 +684,7 @@ Schedule_t* COFSquadTalkMonster::GetScheduleOfType(int iType)
 	}
 
 	default:
-		return COFAllyMonster::GetScheduleOfType(iType);
+		return CTalkMonster::GetScheduleOfType(iType);
 	}
 }
 
@@ -765,7 +764,7 @@ int COFSquadTalkMonster::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttac
 {
 	if (m_MonsterState == MONSTERSTATE_SCRIPT)
 	{
-		return COFAllyMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
+		return CTalkMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
 	}
 
 	//If this attack deals enough damage to instakill me...
@@ -819,5 +818,5 @@ int COFSquadTalkMonster::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttac
 
 	m_flWaitFinished = gpGlobals->time;
 
-	return COFAllyMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
+	return CTalkMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
 }

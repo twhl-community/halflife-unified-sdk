@@ -37,8 +37,6 @@
 #define bit_saidHeard			(1<<6)
 #define bit_saidSmelled			(1<<7)
 
-#define TLK_CFRIENDS		3
-
 typedef enum
 {
 	TLK_ANSWER = 0,
@@ -131,11 +129,21 @@ public:
 	void			IdleHeadTurn(Vector& vecFriend);
 	int				FOkToSpeak();
 	void			TrySmellTalk();
-	CBaseEntity* EnumFriends(CBaseEntity* pentPrevious, int listNumber, BOOL bTrace);
 	void			AlertFriends();
 	void			ShutUpFriends();
 	BOOL			IsTalking();
 	void			Talk(float flDuration);
+
+	/**
+	*	@brief Invokes @c callback on each friend
+	*	@details Return false to stop iteration
+	*/
+	template<typename Callback>
+	void ForEachFriend(Callback callback);
+
+	template<typename Callback>
+	void EnumFriends(Callback callback, bool trace);
+
 	// For following
 	BOOL			CanFollow();
 	BOOL			IsFollowing() { return m_hTargetEnt != NULL && m_hTargetEnt->IsPlayer(); }
@@ -153,8 +161,6 @@ public:
 	int		Restore(CRestore& restore) override;
 	static	TYPEDESCRIPTION m_SaveData[];
 
-
-	static const char* m_szFriends[TLK_CFRIENDS];		// array of friend names
 	static float g_talkWaitTime;
 
 	int			m_bitsSaid;						// set bits for sentences we don't want repeated
@@ -175,6 +181,93 @@ public:
 	CUSTOM_SCHEDULES;
 };
 
+template<typename Callback>
+void CTalkMonster::ForEachFriend(Callback callback)
+{
+	//First pass: check for other NPCs of our own type
+	const auto classname = STRING(pev->classname);
+
+	for (auto friendEntity : UTIL_FindEntitiesByClassname(classname))
+	{
+		callback(friendEntity);
+	}
+
+	//Second pass: check for other NPCs of the same class
+	const auto myClass = Classify();
+
+	for (auto friendEntity : UTIL_FindEntities())
+	{
+		if (friendEntity->IsPlayer())
+		{
+			//No players
+			continue;
+		}
+
+		if (myClass != friendEntity->Classify())
+		{
+			continue;
+		}
+
+		callback(friendEntity);
+	}
+
+	//Third pass: check for other NPCs that are friendly to us
+	for (auto friendEntity : UTIL_FindEntities())
+	{
+		if (friendEntity->IsPlayer())
+		{
+			//No players
+			continue;
+		}
+
+		if (myClass == friendEntity->Classify())
+		{
+			//Already checked these. Includes other NPCs of my type
+			continue;
+		}
+
+		const auto relationship = IRelationship(friendEntity);
+
+		if (relationship != R_AL && relationship != R_NO)
+		{
+			//Not a friend
+			continue;
+		}
+
+		callback(friendEntity);
+	}
+}
+
+template<typename Callback>
+void CTalkMonster::EnumFriends(Callback callback, bool trace)
+{
+	auto wrapper = [&](CBaseEntity* pFriend)
+	{
+		if (pFriend == this || !pFriend->IsAlive() || !(pFriend->pev->flags & FL_MONSTER))
+		{
+			// don't talk to self or dead people or non-monster entities
+			return;
+		}
+
+		if (trace)
+		{
+			Vector vecCheck = pFriend->pev->origin;
+			vecCheck.z = pFriend->pev->absmax.z;
+
+			TraceResult tr;
+			UTIL_TraceLine(pev->origin, vecCheck, ignore_monsters, ENT(pev), &tr);
+
+			if (tr.flFraction != 1.0)
+			{
+				return;
+			}
+		}
+
+		callback(pFriend);
+	};
+
+	ForEachFriend(wrapper);
+}
 
 // Clients can push talkmonsters out of their way
 #define		bits_COND_CLIENT_PUSH		( bits_COND_SPECIAL1 )

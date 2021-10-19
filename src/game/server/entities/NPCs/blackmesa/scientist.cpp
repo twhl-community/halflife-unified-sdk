@@ -638,14 +638,7 @@ void CScientist::Precache()
 // Init talk data
 void CScientist::TalkInit()
 {
-
 	CTalkMonster::TalkInit();
-
-	// scientist will try to talk to friends in this order:
-
-	m_szFriends[0] = "monster_scientist";
-	m_szFriends[1] = "monster_sitting_scientist";
-	m_szFriends[2] = "monster_barney";
 
 	// scientists speach group names (group names are in sentences.txt)
 
