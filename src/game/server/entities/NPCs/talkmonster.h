@@ -115,7 +115,6 @@ public:
 	void			KeyValue(KeyValueData* pkvd) override;
 
 	// AI functions
-	void			SetActivity(Activity newActivity) override;
 	Schedule_t* GetScheduleOfType(int Type) override;
 	void			StartTask(Task_t* pTask) override;
 	void			RunTask(Task_t* pTask) override;
