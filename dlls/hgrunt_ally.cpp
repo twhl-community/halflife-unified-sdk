@@ -538,11 +538,11 @@ BOOL CHGruntAlly :: CheckRangeAttack1 ( float flDot, float flDist )
 
 			auto pEnemy = m_hEnemy.Entity<CBaseEntity>();
 
-			if( !pEnemy->IsPlayer() && flDist <= 64 )
-			{
-				// kick nonclients, but don't shoot at them.
-				return FALSE;
-			}
+			//if( !pEnemy->IsPlayer() && flDist <= 64 )
+			//{
+			//	// kick nonclients, but don't shoot at them.
+			//	return FALSE;
+			//}
 
 			//TODO: kinda odd that this doesn't use GetGunPosition like the original
 			Vector vecSrc = pev->origin + Vector( 0, 0, 55 );
