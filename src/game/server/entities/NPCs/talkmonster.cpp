@@ -32,15 +32,15 @@
 //=========================================================
 float	CTalkMonster::g_talkWaitTime = 0;		// time delay until it's ok to speak: used so that two NPCs don't talk at once
 
-// NOTE: m_voicePitch & m_szGrp should be fixed up by precache each save/restore
+// NOTE: m_szGrp should be fixed up by precache each save/restore
 
 TYPEDESCRIPTION	CTalkMonster::m_SaveData[] =
 {
 	DEFINE_FIELD(CTalkMonster, m_bitsSaid, FIELD_INTEGER),
 	DEFINE_FIELD(CTalkMonster, m_nSpeak, FIELD_INTEGER),
 
+	DEFINE_FIELD( CTalkMonster, m_voicePitch, FIELD_INTEGER ),
 	// Recalc'ed in Precache()
-	//	DEFINE_FIELD( CTalkMonster, m_voicePitch, FIELD_INTEGER ),
 	//	DEFINE_FIELD( CTalkMonster, m_szGrp, FIELD_??? ),
 	DEFINE_FIELD(CTalkMonster, m_useTime, FIELD_TIME),
 	DEFINE_FIELD(CTalkMonster, m_iszUse, FIELD_STRING),
@@ -709,7 +709,10 @@ void CTalkMonster::TalkInit()
 
 	CTalkMonster::g_talkWaitTime = 0;
 
-	m_voicePitch = 100;
+	if (!UTIL_IsRestoring())
+	{
+		m_voicePitch = 100;
+	}
 }
 //=========================================================
 // FindNearestFriend
