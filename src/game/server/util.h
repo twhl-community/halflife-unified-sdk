@@ -574,6 +574,31 @@ struct FindByTargetnameFunctor
 	}
 };
 
+template<typename T>
+struct FindNextEntityFunctor
+{
+	static T* Find(T* pStartEntity)
+	{
+		//Start with first player, ignore world
+		auto index = pStartEntity ? pStartEntity->entindex() + 1 : 1;
+
+		auto entities = g_engfuncs.pfnPEntityOfEntIndexAllEntities(0);
+
+		//Find the first entity that has a valid baseentity
+		for (; index < gpGlobals->maxEntities; ++index)
+		{
+			auto entity = static_cast<CBaseEntity*>(GET_PRIVATE(&entities[index]));
+
+			if (entity)
+			{
+				return static_cast<T*>(entity);
+			}
+		}
+
+		return nullptr;
+	}
+};
+
 template<typename T, typename FINDER>
 class CEntityIterator
 {
@@ -709,4 +734,78 @@ template<typename T = CBaseEntity>
 inline CEntityEnumeratorWithStart<T, FindByTargetnameFunctor<T>> UTIL_FindEntitiesByTargetname(const char* pszName, T* pStartEntity)
 {
 	return {pszName, pStartEntity};
+}
+
+template<typename T, typename FINDER>
+class CNextEntityIterator
+{
+public:
+	constexpr CNextEntityIterator() = default;
+
+	constexpr CNextEntityIterator(T* pStartEntity)
+		: m_pEntity(pStartEntity)
+	{
+	}
+
+	constexpr CNextEntityIterator(const CNextEntityIterator&) = default;
+	constexpr CNextEntityIterator& operator=(const CNextEntityIterator&) = default;
+
+	constexpr const T* operator*() const { return m_pEntity; }
+
+	constexpr T* operator*() { return m_pEntity; }
+
+	constexpr T* operator->() { return m_pEntity; }
+
+	void operator++()
+	{
+		m_pEntity = static_cast<T*>(FINDER::Find(m_pEntity));
+	}
+
+	void operator++(int)
+	{
+		++*this;
+	}
+
+	constexpr bool operator==(const CNextEntityIterator& other) const
+	{
+		return m_pEntity == other.m_pEntity;
+	}
+
+	constexpr bool operator!=(const CNextEntityIterator& other) const
+	{
+		return !(*this == other);
+	}
+
+private:
+	T* m_pEntity = nullptr;
+};
+
+/**
+*	@brief Entity enumerator optimized for iteration from start
+*/
+template<typename T, typename FINDER>
+class CNextEntityEnumerator
+{
+public:
+	using Functor = FINDER;
+	using iterator = CNextEntityIterator<T, Functor>;
+
+public:
+	CNextEntityEnumerator() = default;
+
+	iterator begin()
+	{
+		return {static_cast<T*>(Functor::Find(nullptr))};
+	}
+
+	iterator end()
+	{
+		return {nullptr};
+	}
+};
+
+template<typename T = CBaseEntity>
+inline CNextEntityEnumerator<T, FindNextEntityFunctor<T>> UTIL_FindEntities()
+{
+	return {};
 }
