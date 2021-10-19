@@ -683,24 +683,25 @@ void CHGrunt::Shoot(bool firstShotInBurst)
 	}
 	else
 	{
-		Vector vecShootOrigin = GetGunPosition();
-		Vector vecShootDir = ShootAtEnemy(vecShootOrigin);
-
-		UTIL_MakeVectors(pev->angles);
-
-		Vector	vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40, 90) + gpGlobals->v_up * RANDOM_FLOAT(75, 200) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
-		EjectBrass(vecShootOrigin - vecShootDir * 24, vecShellVelocity, pev->angles.y, m_iShotgunShell, TE_BOUNCE_SHOTSHELL);
-		FireBullets(gSkillData.hgruntShotgunPellets, vecShootOrigin, vecShootDir, VECTOR_CONE_15DEGREES, 2048, BULLET_PLAYER_BUCKSHOT, 0); // shoot +-7.5 degrees
-
-		pev->effects |= EF_MUZZLEFLASH;
-
-		m_cAmmoLoaded--;// take away a bullet!
-
-		Vector angDir = UTIL_VecToAngles(vecShootDir);
-		SetBlending(0, angDir.x);
-
+		//Check this so shotgunners don't shoot bursts if the animation happens to have the events
 		if (firstShotInBurst)
 		{
+			Vector vecShootOrigin = GetGunPosition();
+			Vector vecShootDir = ShootAtEnemy(vecShootOrigin);
+
+			UTIL_MakeVectors(pev->angles);
+
+			Vector	vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40, 90) + gpGlobals->v_up * RANDOM_FLOAT(75, 200) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
+			EjectBrass(vecShootOrigin - vecShootDir * 24, vecShellVelocity, pev->angles.y, m_iShotgunShell, TE_BOUNCE_SHOTSHELL);
+			FireBullets(gSkillData.hgruntShotgunPellets, vecShootOrigin, vecShootDir, VECTOR_CONE_15DEGREES, 2048, BULLET_PLAYER_BUCKSHOT, 0); // shoot +-7.5 degrees
+
+			pev->effects |= EF_MUZZLEFLASH;
+
+			m_cAmmoLoaded--;// take away a bullet!
+
+			Vector angDir = UTIL_VecToAngles(vecShootDir);
+			SetBlending(0, angDir.x);
+
 			EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/sbarrel1.wav", 1, ATTN_NORM);
 		}
 	}
