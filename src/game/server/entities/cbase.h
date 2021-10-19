@@ -62,6 +62,8 @@ extern "C" DLLEXPORT int GetEntityAPI(DLL_FUNCTIONS * pFunctionTable, int interf
 extern "C" DLLEXPORT int GetEntityAPI2(DLL_FUNCTIONS * pFunctionTable, int* interfaceVersion);
 extern "C" DLLEXPORT int GetNewDLLFunctions(NEW_DLL_FUNCTIONS * pFunctionTable, int* interfaceVersion);
 
+bool UTIL_IsRestoring();
+
 extern int DispatchSpawn(edict_t* pent);
 extern void DispatchKeyValue(edict_t* pentKeyvalue, KeyValueData* pkvd);
 extern void DispatchTouch(edict_t* pentTouched, edict_t* pentOther);
@@ -490,7 +492,7 @@ public:
 	int  FindTransition(int iEndingSequence, int iGoalSequence, int* piDir);
 	void GetAttachment(int iAttachment, Vector& origin, Vector& angles);
 	void SetBodygroup(int iGroup, int iValue);
-	int GetBodygroup(int iGroup);
+	int GetBodygroup(int iGroup) const;
 	int GetBodygroupSubmodelCount(int group);
 	int ExtractBbox(int sequence, float* mins, float* maxs);
 	void SetSequenceBox();

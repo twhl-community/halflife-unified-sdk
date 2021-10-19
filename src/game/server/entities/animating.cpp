@@ -242,7 +242,7 @@ void CBaseAnimating::SetBodygroup(int iGroup, int iValue)
 	::SetBodygroup(GET_MODEL_PTR(ENT(pev)), pev, iGroup, iValue);
 }
 
-int CBaseAnimating::GetBodygroup(int iGroup)
+int CBaseAnimating::GetBodygroup(int iGroup) const
 {
 	return ::GetBodygroup(GET_MODEL_PTR(ENT(pev)), pev, iGroup);
 }

@@ -256,6 +256,8 @@ target_sources(hl PRIVATE
 	entities/NPCs/military/hgrunt.cpp
 	entities/NPCs/military/hgrunt.h
 	entities/NPCs/military/hgrunt_ally.cpp
+	entities/NPCs/military/hgrunt_ally_base.cpp
+	entities/NPCs/military/hgrunt_ally_base.h
 	entities/NPCs/military/hgrunt_medic.cpp
 	entities/NPCs/military/hgrunt_torch.cpp
 	entities/NPCs/military/osprey.cpp

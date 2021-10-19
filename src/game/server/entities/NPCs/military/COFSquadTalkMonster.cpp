@@ -45,7 +45,7 @@ TYPEDESCRIPTION	COFSquadTalkMonster::m_SaveData[] =
 
 };
 
-IMPLEMENT_SAVERESTORE(COFSquadTalkMonster, CBaseMonster);
+IMPLEMENT_SAVERESTORE(COFSquadTalkMonster, COFAllyMonster);
 
 
 //=========================================================

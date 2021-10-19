@@ -30,15 +30,15 @@
 //=========================================================
 float	COFAllyMonster::g_talkWaitTime = 0;		// time delay until it's ok to speak: used so that two NPCs don't talk at once
 
-// NOTE: m_voicePitch & m_szGrp should be fixed up by precache each save/restore
+// NOTE: m_szGrp should be fixed up by precache each save/restore
 
 TYPEDESCRIPTION	COFAllyMonster::m_SaveData[] =
 {
 	DEFINE_FIELD(COFAllyMonster, m_bitsSaid, FIELD_INTEGER),
 	DEFINE_FIELD(COFAllyMonster, m_nSpeak, FIELD_INTEGER),
 
+	DEFINE_FIELD(COFAllyMonster, m_voicePitch, FIELD_INTEGER),
 	// Recalc'ed in Precache()
-	//	DEFINE_FIELD( COFAllyMonster, m_voicePitch, FIELD_INTEGER ),
 	//	DEFINE_FIELD( COFAllyMonster, m_szGrp, FIELD_??? ),
 	DEFINE_FIELD(COFAllyMonster, m_useTime, FIELD_TIME),
 	DEFINE_FIELD(COFAllyMonster, m_iszUse, FIELD_STRING),
@@ -774,7 +774,10 @@ void COFAllyMonster::TalkInit()
 
 	COFAllyMonster::g_talkWaitTime = 0;
 
-	m_voicePitch = 100;
+	if (!UTIL_IsRestoring())
+	{
+		m_voicePitch = 100;
+	}
 }
 //=========================================================
 // FindNearestFriend
