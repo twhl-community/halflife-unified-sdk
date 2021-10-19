@@ -1243,10 +1243,6 @@ void COFMedicAlly :: Precache()
 
 	PRECACHE_SOUND("zombie/claw_miss2.wav");// because we use the basemonster SWIPE animation event
 
-	PRECACHE_SOUND( "fgrunt/torch_light.wav" );
-	PRECACHE_SOUND( "fgrunt/torch_cut_loop.wav" );
-	PRECACHE_SOUND( "fgrunt/medic.wav" );
-
 	// get voice pitch
 	m_voicePitch = 105;
 
