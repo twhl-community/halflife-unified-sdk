@@ -65,7 +65,7 @@ BOOL CKnife::Deploy()
 		KNIFE_DRAW, "crowbar" );
 }
 
-void CKnife::Holster( int skiplocal )
+void CKnife::Holster()
 {
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;
 

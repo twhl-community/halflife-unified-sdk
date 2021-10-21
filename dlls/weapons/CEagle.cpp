@@ -86,7 +86,7 @@ BOOL CEagle::Deploy()
 		"onehanded" );
 }
 
-void CEagle::Holster( int skiplocal )
+void CEagle::Holster()
 {
 	m_fInReload = false;
 
@@ -278,7 +278,7 @@ void CEagle::Reload()
 {
 	if( m_pPlayer->m_rgAmmo[ m_iPrimaryAmmoType ] > 0 )
 	{
-		const bool bResult = DefaultReload( EAGLE_MAX_CLIP, m_iClip ? EAGLE_RELOAD : EAGLE_RELOAD_NOSHOT, 1.5, 1 );
+		const bool bResult = DefaultReload( EAGLE_MAX_CLIP, m_iClip ? EAGLE_RELOAD : EAGLE_RELOAD_NOSHOT, 1.5 );
 	
 #ifndef CLIENT_DLL
 		//Only turn it off if we're actually reloading

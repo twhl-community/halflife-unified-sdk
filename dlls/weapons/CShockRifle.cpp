@@ -119,7 +119,7 @@ BOOL CShockRifle::Deploy()
 	return DefaultDeploy( "models/v_shock.mdl", "models/p_shock.mdl", SHOCKRIFLE_DRAW, "bow" );
 }
 
-void CShockRifle::Holster( int skiplocal )
+void CShockRifle::Holster()
 {
 	m_fInReload = false;
 

@@ -64,7 +64,7 @@ public:
 	bool Swing( const bool bFirst );
 	void EXPORT BigSwing();
 	BOOL Deploy() override;
-	void Holster( int skiplocal = 0 ) override;
+	void Holster() override;
 	void WeaponIdle() override;
 
 	void GetWeaponData( weapon_data_t& data ) override;

@@ -85,7 +85,7 @@ BOOL CSniperRifle::Deploy()
 	return BaseClass::DefaultDeploy( "models/v_m40a1.mdl", "models/p_m40a1.mdl", SNIPERRIFLE_DRAW, "bow" );
 }
 
-void CSniperRifle::Holster( int skiplocal )
+void CSniperRifle::Holster()
 {
 	m_fInReload = false;// cancel any reload in progress.
 
@@ -191,12 +191,12 @@ void CSniperRifle::Reload()
 
 		if( m_iClip )
 		{
-			if( DefaultReload( SNIPERRIFLE_MAX_CLIP, SNIPERRIFLE_RELOAD3, 2.324, 1 ) )
+			if( DefaultReload( SNIPERRIFLE_MAX_CLIP, SNIPERRIFLE_RELOAD3, 2.324 ) )
 			{
 				m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 2.324;
 			}
 		}
-		else if( DefaultReload( SNIPERRIFLE_MAX_CLIP, SNIPERRIFLE_RELOAD1, 2.324, 1 ) )
+		else if( DefaultReload( SNIPERRIFLE_MAX_CLIP, SNIPERRIFLE_RELOAD1, 2.324 ) )
 		{
 			m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 4.102;
 			m_flReloadStart = gpGlobals->time;

@@ -69,7 +69,7 @@ BOOL CPenguin::Deploy()
 	return DefaultDeploy("models/v_penguin.mdl", "models/p_penguin.mdl", PENGUIN_UP, "penguin");
 }
 
-void CPenguin::Holster(int skiplocal)
+void CPenguin::Holster()
 {
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;
 

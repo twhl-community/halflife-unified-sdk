@@ -104,7 +104,7 @@ BOOL CGrapple::Deploy()
 	return DefaultDeploy( "models/v_bgrap.mdl", "models/p_bgrap.mdl", BGRAPPLE_UP, "gauss" );
 }
 
-void CGrapple::Holster( int skiplocal )
+void CGrapple::Holster()
 {
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;
 

@@ -93,7 +93,7 @@ BOOL CM249::Deploy()
 	return DefaultDeploy( "models/v_saw.mdl", "models/p_saw.mdl", M249_DRAW, "mp5" );
 }
 
-void CM249::Holster( int skiplocal )
+void CM249::Holster()
 {
 	SetThink( nullptr );
 
@@ -141,7 +141,7 @@ void CM249::WeaponIdle()
 			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 6.16;
 		}
 
-		SendWeaponAnim( iAnim, true, pev->body );
+		SendWeaponAnim( iAnim, pev->body );
 	}
 }
 
@@ -305,7 +305,7 @@ void CM249::PrimaryAttack()
 
 void CM249::Reload()
 {
-	if( DefaultReload( M249_MAX_CLIP, M249_RELOAD_START, 1.0, 0 ) )
+	if( DefaultReload( M249_MAX_CLIP, M249_RELOAD_START, 1.0 ) )
 	{
 		m_bReloading = true;
 

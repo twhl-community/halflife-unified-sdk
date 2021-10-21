@@ -88,7 +88,7 @@ BOOL CDisplacer::Deploy()
 	return DefaultDeploy( "models/v_displacer.mdl", "models/p_displacer.mdl", DISPLACER_DRAW, "egon" );
 }
 
-void CDisplacer::Holster( int skiplocal )
+void CDisplacer::Holster()
 {
 	m_fInReload = false;
 

@@ -89,7 +89,7 @@ BOOL CSporeLauncher::Deploy()
 	return DefaultDeploy( "models/v_spore_launcher.mdl", "models/p_spore_launcher.mdl", SPLAUNCHER_DRAW1, "rpg" );
 }
 
-void CSporeLauncher::Holster( int skiplocal )
+void CSporeLauncher::Holster()
 {
 	m_ReloadState = ReloadState::NOT_RELOADING;
 
