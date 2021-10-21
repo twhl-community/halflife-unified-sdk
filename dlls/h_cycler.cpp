@@ -221,7 +221,7 @@ public:
 	void Spawn() override;
 	void Think() override;
 	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value ) override;
-	int	ObjectCaps() override { return (CBaseEntity :: ObjectCaps() | FCAP_DONT_SAVE | FCAP_IMPULSE_USE); }
+	int	ObjectCaps() override { return (CBaseEntity :: ObjectCaps() | FCAP_IMPULSE_USE); }
 	int	TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType ) override;
 	void	Animate( float frames );
 
@@ -315,7 +315,7 @@ public:
 	void PrimaryAttack() override;
 	void SecondaryAttack() override;
 	BOOL Deploy() override;
-	void Holster( int skiplocal = 0 ) override;
+	void Holster() override;
 	int m_iszModel;
 	int m_iModel;
 };
@@ -349,7 +349,7 @@ BOOL CWeaponCycler::Deploy( )
 }
 
 
-void CWeaponCycler::Holster( int skiplocal /* = 0 */ )
+void CWeaponCycler::Holster()
 {
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;
 }
