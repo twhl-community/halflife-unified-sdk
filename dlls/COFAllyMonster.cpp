@@ -51,7 +51,7 @@ TYPEDESCRIPTION	COFAllyMonster::m_SaveData[] =
 IMPLEMENT_SAVERESTORE( COFAllyMonster, CBaseMonster );
 
 // array of friend names
-char *COFAllyMonster::m_szFriends[ TLK_CFRIENDS ] =
+const char *COFAllyMonster::m_szFriends[ TLK_CFRIENDS ] =
 {
 	"monster_human_grunt_ally",
 	"monster_human_medic_ally",
@@ -631,7 +631,7 @@ void COFAllyMonster::Killed( entvars_t *pevAttacker, int iGib )
 CBaseEntity	*COFAllyMonster::EnumFriends( CBaseEntity *pPrevious, int listNumber, BOOL bTrace )
 {
 	CBaseEntity *pFriend = pPrevious;
-	char *pszFriend;
+	const char *pszFriend;
 	TraceResult tr;
 	Vector vecCheck;
 
@@ -790,7 +790,7 @@ CBaseEntity *COFAllyMonster::FindNearestFriend( BOOL fPlayer )
 	Vector vecStart = pev->origin;
 	Vector vecCheck;
 	int i;
-	char *pszFriend;
+	const char *pszFriend;
 	int cfriends;
 
 	vecStart.z = pev->absmax.z;
