@@ -76,7 +76,7 @@ BOOL CCrowbar::Deploy( )
 	return DefaultDeploy( "models/v_crowbar.mdl", "models/p_crowbar.mdl", CROWBAR_DRAW, "crowbar" );
 }
 
-void CCrowbar::Holster( int skiplocal /* = 0 */ )
+void CCrowbar::Holster()
 {
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;
 	SendWeaponAnim( CROWBAR_HOLSTER );
@@ -179,7 +179,7 @@ int CCrowbar::Swing( int fFirst )
 #endif
 
 	PLAYBACK_EVENT_FULL(UTIL_DefaultPlaybackFlags(), m_pPlayer->edict(), m_usCrowbar,
-	0.0, (float *)&g_vecZero, (float *)&g_vecZero, 0, 0, 0,
+	0.0, g_vecZero, g_vecZero, 0, 0, 0,
 	0.0, 0, 0.0 );
 
 

@@ -307,7 +307,7 @@ void CRpg::Reload()
 
 	if (m_iClip == 0)
 	{
-		int iResult = DefaultReload(RPG_MAX_CLIP, RPG_RELOAD, 2);
+		const int iResult = DefaultReload(RPG_MAX_CLIP, RPG_RELOAD, 2);
 
 		if (iResult)
 			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10, 15);
@@ -418,7 +418,7 @@ BOOL CRpg::CanHolster()
 	return TRUE;
 }
 
-void CRpg::Holster( int skiplocal /* = 0 */ )
+void CRpg::Holster()
 {
 	m_fInReload = FALSE;// cancel any reload in progress.
 
