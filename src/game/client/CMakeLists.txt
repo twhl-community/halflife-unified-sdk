@@ -69,6 +69,8 @@ target_link_options(client PRIVATE
 		-framework Carbon>)
 
 target_sources(client PRIVATE
+	CClientLibrary.cpp
+	CClientLibrary.h
 	cdll_int.cpp
 	cl_dll.h
 	cl_util.h

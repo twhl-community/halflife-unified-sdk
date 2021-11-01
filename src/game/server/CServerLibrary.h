@@ -40,7 +40,7 @@ public:
 	bool Initialize();
 
 	/**
-	*	@brief Handles server-side shutdow
+	*	@brief Handles server-side shutdown
 	*	@details Called even if @see Initialize returned false
 	*/
 	void Shutdown();

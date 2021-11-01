@@ -6,7 +6,7 @@
 // rights reserved.
 #include "hud.h"
 #include "cl_util.h"
-#include "utils/shared_utils.h"
+#include "CClientLibrary.h"
 #include "camera.h"
 extern "C"
 {
@@ -1044,7 +1044,7 @@ void DLLEXPORT HUD_Shutdown()
 	ClearEventList();
 #endif
 
-	g_LogSystem.Shutdown();
-	FileSystem_FreeFileSystem();
+	g_Client.Shutdown();
+
 	CL_UnloadParticleMan();
 }

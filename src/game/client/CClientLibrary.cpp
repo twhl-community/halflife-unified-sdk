@@ -13,16 +13,16 @@
 *
 ****/
 
+#include "hud.h"
 #include "extdll.h"
 #include "util.h"
-#include "cbase.h"
-#include "CServerLibrary.h"
+#include "CClientLibrary.h"
 
-bool CServerLibrary::Initialize()
+bool CClientLibrary::Initialize()
 {
 	if (!FileSystem_LoadFileSystem())
 	{
-		g_engfuncs.pfnServerPrint("Could not load filesystem library\n");
+		gEngfuncs.Con_Printf("Could not load filesystem library\n");
 		return false;
 	}
 
@@ -34,20 +34,8 @@ bool CServerLibrary::Initialize()
 	return true;
 }
 
-void CServerLibrary::Shutdown()
+void CClientLibrary::Shutdown()
 {
 	g_LogSystem.Shutdown();
 	FileSystem_FreeFileSystem();
-}
-
-void CServerLibrary::NewMapStarted(bool loadGame)
-{
-	ClearStringPool();
-
-	//Initialize map state to its default state
-	m_MapState = CMapState{};
-}
-
-void CServerLibrary::MapActivate()
-{
 }

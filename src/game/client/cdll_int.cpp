@@ -24,6 +24,7 @@
 #include "netadr.h"
 #include "interface.h"
 #include "com_weapons.h"
+#include "CClientLibrary.h"
 //#include "vgui_schememanager.h"
 
 #include "pm_shared.h"
@@ -149,12 +150,7 @@ int DLLEXPORT Initialize(cl_enginefunc_t* pEnginefuncs, int iVersion)
 	EV_HookEvents();
 	CL_LoadParticleMan();
 
-	if (!FileSystem_LoadFileSystem())
-	{
-		return false;
-	}
-
-	if (!g_LogSystem.Initialize())
+	if (!g_Client.Initialize())
 	{
 		return false;
 	}
