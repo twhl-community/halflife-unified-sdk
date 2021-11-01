@@ -93,7 +93,7 @@ public:
 
 	int PlayerRelationship( CBaseEntity* pPlayer, CBaseEntity* pTarget ) override;
 
-	int CHalfLifeCTFplay::GetTeamIndex( const char* pTeamName ) override;
+	int GetTeamIndex( const char* pTeamName ) override;
 
 	const char* GetIndexedTeamName( int teamIndex ) override;
 
