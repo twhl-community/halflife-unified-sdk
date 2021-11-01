@@ -16,7 +16,8 @@
 #ifndef GAME_H
 #define GAME_H
 
-extern void GameDLLInit(void);
+void GameDLLInit();
+void GameDLLShutdown();
 
 
 extern cvar_t	displaysoundlist;

@@ -16,6 +16,7 @@
 #include "eiface.h"
 #include "util.h"
 #include "game.h"
+#include "CServerLibrary.h"
 
 cvar_t	displaysoundlist = {"displaysoundlist","0"};
 
@@ -599,6 +600,13 @@ cvar_t multipower = {"mp_multipower", "0", FCVAR_SERVER};
 // This gets called one time when the game is initialied
 void GameDLLInit()
 {
+	if (!g_Server.Initialize())
+	{
+		//Shut the game down ASAP
+		SERVER_COMMAND("quit\n");
+		return;
+	}
+
 	// Register cvars here:
 
 	g_psv_gravity = CVAR_GET_POINTER("sv_gravity");
@@ -1165,3 +1173,7 @@ void GameDLLInit()
 	SERVER_COMMAND("exec skill.cfg\n");
 }
 
+void GameDLLShutdown()
+{
+	g_Server.Shutdown();
+}

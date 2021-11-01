@@ -35,6 +35,7 @@
 #include "teamplay_gamerules.h"
 #include "ctfplay_gamerules.h"
 #include "world.h"
+#include "CServerLibrary.h"
 #include "ctf/CItemCTF.h"
 
 extern CGraph WorldGraph;
@@ -475,6 +476,11 @@ void ResetGlobalState()
 LINK_ENTITY_TO_CLASS(worldspawn, CWorld);
 
 extern DLL_GLOBAL BOOL		g_fGameOver;
+
+CWorld::~CWorld()
+{
+	g_Server.MapIsEnding();
+}
 
 void CWorld::Spawn()
 {

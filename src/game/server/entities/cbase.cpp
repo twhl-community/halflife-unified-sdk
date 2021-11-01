@@ -20,6 +20,7 @@
 #include	"decals.h"
 #include	"gamerules.h"
 #include	"game.h"
+#include "CServerLibrary.h"
 
 void EntvarsKeyvalue(entvars_t* pev, KeyValueData* pkvd);
 
@@ -105,6 +106,7 @@ static DLL_FUNCTIONS gFunctionTable =
 NEW_DLL_FUNCTIONS gNewDLLFunctions =
 {
 	OnFreeEntPrivateData,		//pfnOnFreeEntPrivateData
+	GameDLLShutdown,
 };
 
 static void SetObjectCollisionBox(entvars_t* pev);
@@ -205,6 +207,8 @@ void DispatchKeyValue(edict_t* pentKeyvalue, KeyValueData* pkvd)
 {
 	if (!pkvd || !pentKeyvalue)
 		return;
+
+	g_Server.CheckForNewMapStart(false);
 
 	EntvarsKeyvalue(VARS(pentKeyvalue), pkvd);
 
@@ -481,6 +485,9 @@ void SaveWriteFields(SAVERESTOREDATA* pSaveData, const char* pname, void* pBaseD
 
 void SaveReadFields(SAVERESTOREDATA* pSaveData, const char* pname, void* pBaseData, TYPEDESCRIPTION* pFields, int fieldCount)
 {
+	//Will happen here if we're loading a saved game
+	g_Server.CheckForNewMapStart(true);
+
 	CRestore restoreHelper(pSaveData);
 	restoreHelper.ReadFields(pname, pBaseData, pFields, fieldCount);
 }

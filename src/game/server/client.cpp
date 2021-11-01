@@ -41,6 +41,7 @@
 #include "netadr.h"
 #include "pm_shared.h"
 #include "UserMessages.h"
+#include "CServerLibrary.h"
 
 #include "ctf/CTFGoal.h"
 #include "ctf/CTFGoalFlag.h"
@@ -853,6 +854,8 @@ void ServerActivate(edict_t* pEdictList, int edictCount, int clientMax)
 
 	// Every call to ServerActivate should be matched by a call to ServerDeactivate
 	g_serveractive = 1;
+
+	g_Server.MapActivate();
 
 	// Clients have not been initialized yet
 	for (i = 0; i < edictCount; i++)

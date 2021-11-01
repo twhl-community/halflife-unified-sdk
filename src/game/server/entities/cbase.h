@@ -731,6 +731,9 @@ typedef struct _SelAmmo
 class CWorld : public CBaseEntity
 {
 public:
+	CWorld() = default;
+	~CWorld() override;
+
 	void Spawn() override;
 	void Precache() override;
 	void KeyValue(KeyValueData* pkvd) override;

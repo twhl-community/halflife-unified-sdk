@@ -27,6 +27,10 @@ target_sources(hl PRIVATE
 	cdll_dll.h
 	client.cpp
 	client.h
+	CMapState.cpp
+	CMapState.h
+	CServerLibrary.cpp
+	CServerLibrary.h
 	decals.h
 	enginecallback.h
 	extdll.h
