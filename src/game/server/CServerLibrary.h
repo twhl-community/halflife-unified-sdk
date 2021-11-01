@@ -15,12 +15,13 @@
 
 #pragma once
 
+#include "CGameLibrary.h"
 #include "CMapState.h"
 
 /**
 *	@brief Handles core server actions
 */
-class CServerLibrary final
+class CServerLibrary final : public CGameLibrary
 {
 public:
 	CServerLibrary() = default;

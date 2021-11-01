@@ -13,22 +13,30 @@
 *
 ****/
 
-#include "hud.h"
 #include "extdll.h"
 #include "util.h"
-#include "CClientLibrary.h"
+#include "CGameLibrary.h"
 
-bool CClientLibrary::Initialize()
+bool CGameLibrary::InitializeCommon()
 {
-	if (!InitializeCommon())
+	if (!FileSystem_LoadFileSystem())
 	{
+		g_engfuncs.pfnServerPrint("Could not load filesystem library\n");
+		return false;
+	}
+
+	if (!g_LogSystem.Initialize())
+	{
+		g_engfuncs.pfnServerPrint("Could not initialize logging system\n");
 		return false;
 	}
 
 	return true;
 }
 
-void CClientLibrary::Shutdown()
+void CGameLibrary::ShutdownCommon()
 {
-	ShutdownCommon();
+	g_LogSystem.Shutdown();
+	FileSystem_FreeFileSystem();
 }
+

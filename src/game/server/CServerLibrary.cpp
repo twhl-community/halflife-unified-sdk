@@ -20,13 +20,7 @@
 
 bool CServerLibrary::Initialize()
 {
-	if (!FileSystem_LoadFileSystem())
-	{
-		g_engfuncs.pfnServerPrint("Could not load filesystem library\n");
-		return false;
-	}
-
-	if (!g_LogSystem.Initialize())
+	if (!InitializeCommon())
 	{
 		return false;
 	}
@@ -36,8 +30,7 @@ bool CServerLibrary::Initialize()
 
 void CServerLibrary::Shutdown()
 {
-	g_LogSystem.Shutdown();
-	FileSystem_FreeFileSystem();
+	ShutdownCommon();
 }
 
 void CServerLibrary::NewMapStarted(bool loadGame)

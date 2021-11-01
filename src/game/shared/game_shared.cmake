@@ -1,6 +1,8 @@
 function(add_game_shared_sources target)
 	target_sources(${target}
 		PRIVATE
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/CGameLibrary.cpp
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/CGameLibrary.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/palette.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/voice_common.h
 			

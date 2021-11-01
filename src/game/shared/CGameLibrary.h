@@ -15,33 +15,32 @@
 
 #pragma once
 
-#include "CGameLibrary.h"
-
 /**
-*	@brief Handles core client actions
+*	@brief Handles core game actions
 */
-class CClientLibrary final : public CGameLibrary
+class CGameLibrary
 {
+protected:
+	CGameLibrary() = default;
+
 public:
-	CClientLibrary() = default;
-	~CClientLibrary() = default;
+	~CGameLibrary() = default;
 
-	CClientLibrary(const CClientLibrary&) = delete;
-	CClientLibrary& operator=(const CClientLibrary&) = delete;
-	CClientLibrary(CClientLibrary&&) = delete;
-	CClientLibrary& operator=(CClientLibrary&&) = delete;
+	CGameLibrary(const CGameLibrary&) = delete;
+	CGameLibrary& operator=(const CGameLibrary&) = delete;
+	CGameLibrary(CGameLibrary&&) = delete;
+	CGameLibrary& operator=(CGameLibrary&&) = delete;
 
+protected:
 	/**
 	*	@brief Handles client-side initialization
 	*	@return Whether initialization succeeded
 	*/
-	bool Initialize();
+	bool InitializeCommon();
 
 	/**
 	*	@brief Handles client-side shutdown
 	*	@details Called even if @see Initialize returned false
 	*/
-	void Shutdown();
+	void ShutdownCommon();
 };
-
-inline CClientLibrary g_Client;
