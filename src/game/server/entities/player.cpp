@@ -4314,7 +4314,8 @@ void CBasePlayer::UpdateClientData()
 
 	if (pev->health != m_iClientHealth)
 	{
-		int iHealth = clamp(pev->health, 0, std::numeric_limits<short>::max());  // make sure that no negative health values are sent
+		// make sure that no negative health values are sent
+		int iHealth = std::clamp(pev->health, 0.f, static_cast<float>(std::numeric_limits<short>::max()));
 		if (pev->health > 0.0f && pev->health <= 1.0f)
 			iHealth = 1;
 
