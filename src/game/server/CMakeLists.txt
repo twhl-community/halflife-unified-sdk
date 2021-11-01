@@ -1,4 +1,6 @@
 # Server library
+include(../shared/game_shared.cmake)
+
 # Add the def file as well
 add_library(hl SHARED $<$<PLATFORM_ID:Windows>:hl.def>)
 
@@ -93,23 +95,6 @@ target_sources(hl PRIVATE
 	
 	entities/items/weapons/weapons.cpp
 	
-	../shared/entities/items/weapons/crossbow.cpp
-	../shared/entities/items/weapons/crowbar.cpp
-	../shared/entities/items/weapons/egon.cpp
-	../shared/entities/items/weapons/gauss.cpp
-	../shared/entities/items/weapons/handgrenade.cpp
-	../shared/entities/items/weapons/hornetgun.cpp
-	../shared/entities/items/weapons/hl_wpn_glock.cpp
-	../shared/entities/items/weapons/mp5.cpp
-	../shared/entities/items/weapons/python.cpp
-	../shared/entities/items/weapons/rpg.cpp
-	../shared/entities/items/weapons/satchel.cpp
-	../shared/entities/items/weapons/shotgun.cpp
-	../shared/entities/items/weapons/squeakgrenade.cpp
-	../shared/entities/items/weapons/tripmine.cpp
-	../shared/entities/items/weapons/weapons_shared.cpp
-	../shared/entities/items/weapons/weapons.h
-	
 	entities/NPCs/basemonster.h
 	entities/NPCs/combat.cpp
 	entities/NPCs/defaultai.cpp
@@ -180,19 +165,9 @@ target_sources(hl PRIVATE
 	../../engine/eiface.h
 	../../engine/progdefs.h
 
-	../../public/steam/steamtypes.h
+	../../public/steam/steamtypes.h)
 
-	../shared/bitvec.h
-	../shared/voice_common.h
-	../shared/player_movement/pm_debug.cpp
-	../shared/player_movement/pm_debug.h
-	../shared/player_movement/pm_defs.h
-	../shared/player_movement/pm_info.h
-	../shared/player_movement/pm_materials.h
-	../shared/player_movement/pm_math.cpp
-	../shared/player_movement/pm_movevars.h
-	../shared/player_movement/pm_shared.cpp
-	../shared/player_movement/pm_shared.h)
+add_game_shared_sources(hl)
 
 # Create filters
 get_target_property(SERVER_SOURCES hl SOURCES)
