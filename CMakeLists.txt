@@ -89,6 +89,12 @@ add_subdirectory(external/json-schema-validator
 	json-validator-binary-dir
 	EXCLUDE_FROM_ALL)
 
+set_target_properties(
+	nlohmann_json
+	nlohmann_json_schema_validator
+	PROPERTIES
+		FOLDER "Dependencies")
+
 function(add_json_dependencies target)
 	target_link_libraries(${target}
 		PRIVATE
