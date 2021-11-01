@@ -33,6 +33,7 @@ target_include_directories(SDL2 INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/../../../e
 add_library(client SHARED)
 
 set_common_properties(client)
+add_json_dependencies(client)
 
 target_include_directories(client PRIVATE
 	../server
