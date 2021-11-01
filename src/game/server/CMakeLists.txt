@@ -1,4 +1,6 @@
 # Server library
+include(../shared/game_shared.cmake)
+
 # Add the def file as well
 add_library(hl SHARED $<$<PLATFORM_ID:Windows>:hl.def>)
 
@@ -151,50 +153,6 @@ target_sources(hl PRIVATE
 	entities/rope/CRopeSegment.cpp
 	entities/rope/CRopeSegment.h
 	
-	../shared/entities/ehandle.cpp
-	../shared/entities/ehandle.h
-	../shared/entities/items/weapons/CDisplacer.cpp
-	../shared/entities/items/weapons/CDisplacer.h
-	../shared/entities/items/weapons/CEagle.cpp
-	../shared/entities/items/weapons/CEagle.h
-	../shared/entities/items/weapons/CGrapple.cpp
-	../shared/entities/items/weapons/CGrapple.h
-	../shared/entities/items/weapons/CKnife.cpp
-	../shared/entities/items/weapons/CKnife.h
-	../shared/entities/items/weapons/CM249.cpp
-	../shared/entities/items/weapons/CM249.h
-	../shared/entities/items/weapons/CPenguin.cpp
-	../shared/entities/items/weapons/CPenguin.h
-	../shared/entities/items/weapons/CPipewrench.cpp
-	../shared/entities/items/weapons/CPipewrench.h
-	../shared/entities/items/weapons/crossbow.cpp
-	../shared/entities/items/weapons/crowbar.cpp
-	../shared/entities/items/weapons/CShockRifle.cpp
-	../shared/entities/items/weapons/CShockRifle.h
-	../shared/entities/items/weapons/CSniperRifle.cpp
-	../shared/entities/items/weapons/CSniperRifle.h
-	../shared/entities/items/weapons/CSporeLauncher.cpp
-	../shared/entities/items/weapons/CSporeLauncher.h
-	../shared/entities/items/weapons/egon.cpp
-	../shared/entities/items/weapons/gauss.cpp
-	../shared/entities/items/weapons/handgrenade.cpp
-	../shared/entities/items/weapons/hornetgun.cpp
-	../shared/entities/items/weapons/hl_wpn_glock.cpp
-	../shared/entities/items/weapons/mp5.cpp
-	../shared/entities/items/weapons/python.cpp
-	../shared/entities/items/weapons/rpg.cpp
-	../shared/entities/items/weapons/satchel.cpp
-	../shared/entities/items/weapons/shotgun.cpp
-	../shared/entities/items/weapons/squeakgrenade.cpp
-	../shared/entities/items/weapons/tripmine.cpp
-	../shared/entities/items/weapons/weapons_shared.cpp
-	../shared/entities/items/weapons/weapons.h
-	
-	../shared/utils/CStringPool.cpp
-	../shared/utils/CStringPool.h
-	../shared/utils/shared_utils.cpp
-	../shared/utils/shared_utils.h
-	
 	entities/NPCs/basemonster.h
 	entities/NPCs/combat.cpp
 	entities/NPCs/defaultai.cpp
@@ -306,20 +264,9 @@ target_sources(hl PRIVATE
 	../../engine/eiface.h
 	../../engine/progdefs.h
 
-	../../public/steam/steamtypes.h
+	../../public/steam/steamtypes.h)
 
-	../shared/bitvec.h
-	../shared/palette.h
-	../shared/voice_common.h
-	../shared/player_movement/pm_debug.cpp
-	../shared/player_movement/pm_debug.h
-	../shared/player_movement/pm_defs.h
-	../shared/player_movement/pm_info.h
-	../shared/player_movement/pm_materials.h
-	../shared/player_movement/pm_math.cpp
-	../shared/player_movement/pm_movevars.h
-	../shared/player_movement/pm_shared.cpp
-	../shared/player_movement/pm_shared.h)
+add_game_shared_sources(hl)
 
 # Create filters
 get_target_property(SERVER_SOURCES hl SOURCES)
