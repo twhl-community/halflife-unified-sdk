@@ -15,6 +15,8 @@
 
 #pragma once
 
+#include "filesystem_shared.h"
+
 extern globalvars_t* gpGlobals;
 
 inline const char* STRING(string_t offset)

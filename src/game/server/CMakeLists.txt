@@ -263,7 +263,9 @@ target_sources(hl PRIVATE
 	../../engine/edict.h
 	../../engine/eiface.h
 	../../engine/progdefs.h
-
+	
+	../../public/interface.cpp
+	../../public/interface.h
 	../../public/steam/steamtypes.h)
 
 add_game_shared_sources(hl)

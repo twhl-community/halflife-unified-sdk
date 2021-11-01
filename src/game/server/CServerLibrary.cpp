@@ -21,11 +21,18 @@
 
 bool CServerLibrary::Initialize()
 {
+	if (!FileSystem_LoadFileSystem())
+	{
+		g_engfuncs.pfnServerPrint("Could not load filesystem library\n");
+		return false;
+	}
+
 	return true;
 }
 
 void CServerLibrary::Shutdown()
 {
+	FileSystem_FreeFileSystem();
 }
 
 void CServerLibrary::NewMapStarted(bool loadGame)

@@ -20,6 +20,7 @@
 
 #include "hud.h"
 #include "cl_util.h"
+#include "utils/shared_utils.h"
 #include "netadr.h"
 #include "interface.h"
 //#include "vgui_schememanager.h"
@@ -144,6 +145,11 @@ int DLLEXPORT Initialize(cl_enginefunc_t* pEnginefuncs, int iVersion)
 
 	EV_HookEvents();
 	CL_LoadParticleMan();
+
+	if (!FileSystem_LoadFileSystem())
+	{
+		return false;
+	}
 
 	// get tracker interface, if any
 	return 1;
