@@ -18,6 +18,8 @@
 // implementation of CHudAmmo class
 //
 
+#include <algorithm>
+
 #include "hud.h"
 #include "cl_util.h"
 #include "parsemsg.h"
@@ -854,43 +856,42 @@ void CHudAmmo::SetAutoaimCrosshair(HSPRITE sprite, wrect_t rect)
 	m_AutoaimCrosshair.rect = rect;
 }
 
-void AdjustSubRect(const int iWidth, const int iHeight, float* pfLeft, float* pfRight, float* pfTop, float* pfBottom, int* pw, int* ph, const wrect_t* prcSubRect)
+void AdjustSubRect(const int iWidth, const int iHeight, float& left, float& right, float& top, float& bottom, int& w, int& h, const wrect_t& rcSubRect)
 {
-	if (prcSubRect)
+	if (rcSubRect.left >= rcSubRect.right
+		|| rcSubRect.top >= rcSubRect.bottom)
 	{
-		int iLeft = prcSubRect->left;
-		int iRight = prcSubRect->right;
-		if (prcSubRect->left < iRight)
-		{
-			int iTop = prcSubRect->top;
-			int iBottom = prcSubRect->bottom;
-			if (iTop < iBottom)
-			{
-				if (iLeft < 0)
-					iLeft = 0;
-				if (*pw <= iRight)
-					iRight = *pw;
-				if (iLeft < iRight)
-				{
-					if (iTop < 0)
-						iTop = 0;
-					if (*ph <= iBottom)
-						iBottom = *ph;
-					if (iTop < iBottom)
-					{
-						*pw = iRight - iLeft;
-						*ph = iBottom - iTop;
-						double flWidth = 1.0 / (long double)iWidth;
-						*pfLeft = ((long double)iLeft + 0.5) * flWidth;
-						*pfRight = ((long double)iRight - 0.5) * flWidth;
-						double flHeight = 1.0 / (long double)iHeight;
-						*pfTop = ((long double)iTop + 0.5) * flHeight;
-						*pfBottom = ((long double)iBottom - 0.5) * flHeight;
-					}
-				}
-			}
-		}
+		return;
 	}
+
+	const int iLeft = std::max(0, rcSubRect.left);
+	const int iRight = std::min(w, rcSubRect.right);
+
+	if (iLeft >= iRight)
+	{
+		return;
+	}
+
+	const int iTop = std::max(0, rcSubRect.top);
+	const int iBottom = std::min(h, rcSubRect.bottom);
+
+	if (iTop >= iBottom)
+	{
+		return;
+	}
+
+	w = iRight - iLeft;
+	h = iBottom - iTop;
+
+	const double flWidth = 1.0 / iWidth;
+
+	left = (iLeft + 0.5) * flWidth;
+	right = (iRight - 0.5) * flWidth;
+
+	const double flHeight = 1.0 / iHeight;
+
+	top = (iTop + 0.5) * flHeight;
+	bottom = (iBottom - 0.5) * flHeight;
 }
 
 void CHudAmmo::DrawCrosshair(int x, int y)
@@ -946,7 +947,7 @@ void CHudAmmo::DrawCrosshair(int x, int y)
 			int iImgWidth = iWidth;
 			int iImgHeight = iHeight;
 
-			AdjustSubRect(iWidth, iHeight, &flLeft, &flRight, &flTop, &flBottom, &iImgWidth, &iImgHeight, &rect);
+			AdjustSubRect(iWidth, iHeight, flLeft, flRight, flTop, flBottom, iImgWidth, iImgHeight, rect);
 
 			TriAPI->Begin(TRI_QUADS);
 
