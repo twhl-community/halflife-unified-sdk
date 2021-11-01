@@ -222,6 +222,9 @@ void CGameEnd::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useTy
 class CGameText : public CRulePointEntity
 {
 public:
+	void Precache() override;
+	void Spawn() override;
+
 	void	Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 	void	KeyValue(KeyValueData* pkvd) override;
 
@@ -249,6 +252,23 @@ TYPEDESCRIPTION	CGameText::m_SaveData[] =
 
 IMPLEMENT_SAVERESTORE(CGameText, CRulePointEntity);
 
+void CGameText::Precache()
+{
+	CRulePointEntity::Precache();
+
+	//Re-allocate the message to handle escape characters
+	if (!FStringNull(pev->message))
+	{
+		pev->message = ALLOC_ESCAPED_STRING(STRING(pev->message));
+	}
+}
+
+void CGameText::Spawn()
+{
+	Precache();
+
+	CRulePointEntity::Spawn();
+}
 
 void CGameText::KeyValue(KeyValueData* pkvd)
 {

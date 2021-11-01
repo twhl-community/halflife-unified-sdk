@@ -13,29 +13,28 @@
 *
 ****/
 
-#include "extdll.h"
-#include "util.h"
-#include "cbase.h"
-#include "com_model.h"
-#include "CServerLibrary.h"
+#pragma once
 
-bool CServerLibrary::Initialize()
+extern globalvars_t* gpGlobals;
+
+inline const char* STRING(string_t offset)
 {
-	return true;
+	return ((const char*)(gpGlobals->pStringBase + (unsigned int)(offset)));
 }
 
-void CServerLibrary::Shutdown()
+/**
+*	@brief Use this instead of ALLOC_STRING on constant strings
+*/
+inline string_t MAKE_STRING(const char* str)
 {
+	return ((uint64)(str)-(uint64)(STRING(0)));
 }
 
-void CServerLibrary::NewMapStarted(bool loadGame)
-{
-	ClearStringPool();
+string_t ALLOC_STRING(const char* str);
 
-	//Initialize map state to its default state
-	m_MapState = CMapState{};
-}
+/**
+*	@brief Version of ALLOC_STRING that parses and converts escape characters
+*/
+string_t ALLOC_ESCAPED_STRING(const char* str);
 
-void CServerLibrary::MapActivate()
-{
-}
+void ClearStringPool();

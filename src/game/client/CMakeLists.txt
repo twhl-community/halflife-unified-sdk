@@ -228,6 +228,12 @@ target_sources(client PRIVATE
 	../shared/entities/items/weapons/tripmine.cpp
 	../shared/entities/items/weapons/weapons_shared.cpp
 	../shared/entities/items/weapons/weapons.h
+	
+	../shared/utils/CStringPool.cpp
+	../shared/utils/CStringPool.h
+	../shared/utils/shared_utils.cpp
+	../shared/utils/shared_utils.h
+	
 	../../common/beamdef.h
 	../../common/cl_entity.h
 	../../common/com_model.h
