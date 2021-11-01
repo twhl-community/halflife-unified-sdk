@@ -747,8 +747,8 @@ public:
 
 	int m_iFontHeight;
 	int DrawHudNumber(int x, int y, int iFlags, int iNumber, const RGB24& color);
-	int DrawHudString(int x, int y, int iMaxX, char* szString, const RGB24& color);
-	int DrawHudStringReverse(int xpos, int ypos, int iMinX, char* szString, const RGB24& color);
+	int DrawHudString(int x, int y, int iMaxX, const char* szString, const RGB24& color);
+	int DrawHudStringReverse(int xpos, int ypos, int iMinX, const char* szString, const RGB24& color);
 	int DrawHudNumberString(int xpos, int ypos, int iMinX, int iNumber, const RGB24& color);
 	int GetNumWidth(int iNumber, int iFlags);
 

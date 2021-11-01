@@ -226,7 +226,15 @@ int CHud::Redraw(float flTime, int intermission)
 	return 1;
 }
 
-int CHud::DrawHudString(int xpos, int ypos, int iMaxX, char* szIt, const RGB24& color)
+void ScaleColors(int& r, int& g, int& b, int a)
+{
+	float x = (float)a / 255;
+	r = (int)(r * x);
+	g = (int)(g * x);
+	b = (int)(b * x);
+}
+
+int CHud::DrawHudString(int xpos, int ypos, int iMaxX, const char* szIt, const RGB24& color)
 {
 	return xpos + gEngfuncs.pfnDrawString(xpos, ypos, szIt, color.Red, color.Green, color.Blue);
 }
@@ -240,7 +248,7 @@ int CHud::DrawHudNumberString(int xpos, int ypos, int iMinX, int iNumber, const 
 }
 
 // draws a string from right to left (right-aligned)
-int CHud::DrawHudStringReverse(int xpos, int ypos, int iMinX, char* szString, const RGB24& color)
+int CHud::DrawHudStringReverse(int xpos, int ypos, int iMinX, const char* szString, const RGB24& color)
 {
 	/*
 	return xpos - gEngfuncs.pfnDrawStringReverse( xpos, ypos, szString, r, g, b);
@@ -253,7 +261,7 @@ int CHud::DrawHudStringReverse(int xpos, int ypos, int iMinX, char* szString, co
 		return xpos;
 	}
 
-	char* i;
+	const char* i;
 
 	for (i = szString; *i; ++i)
 	{
