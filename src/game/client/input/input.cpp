@@ -1044,6 +1044,7 @@ void DLLEXPORT HUD_Shutdown()
 	ClearEventList();
 #endif
 
+	g_LogSystem.Shutdown();
 	FileSystem_FreeFileSystem();
 	CL_UnloadParticleMan();
 }

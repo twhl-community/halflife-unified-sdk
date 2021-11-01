@@ -16,6 +16,7 @@
 #pragma once
 
 #include "filesystem_shared.h"
+#include "logging_utils.h"
 
 extern globalvars_t* gpGlobals;
 

@@ -27,11 +27,17 @@ bool CServerLibrary::Initialize()
 		return false;
 	}
 
+	if (!g_LogSystem.Initialize())
+	{
+		return false;
+	}
+
 	return true;
 }
 
 void CServerLibrary::Shutdown()
 {
+	g_LogSystem.Shutdown();
 	FileSystem_FreeFileSystem();
 }
 

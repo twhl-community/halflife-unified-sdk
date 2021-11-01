@@ -112,6 +112,11 @@ void AlertMessage(ALERT_TYPE atype, const char* szFmt, ...)
 	gEngfuncs.Con_Printf(string);
 }
 
+void ServerPrint(const char* msg)
+{
+	gEngfuncs.Con_Printf("%s", msg);
+}
+
 //Just loads a v_ model.
 void LoadVModel(const char* szViewModel, CBasePlayer* m_pPlayer)
 {
@@ -456,6 +461,7 @@ void HUD_InitClientWeapons()
 	// Handled locally
 	g_engfuncs.pfnPlaybackEvent = HUD_PlaybackEvent;
 	g_engfuncs.pfnAlertMessage = AlertMessage;
+	g_engfuncs.pfnServerPrint = ServerPrint;
 
 	// Pass through to engine
 	g_engfuncs.pfnPrecacheEvent = gEngfuncs.pfnPrecacheEvent;
@@ -592,8 +598,6 @@ void HUD_WeaponsPostThink(local_state_s* from, local_state_s* to, usercmd_t* cmd
 	static int lasthealth;
 
 	memset(&nulldata, 0, sizeof(nulldata));
-
-	HUD_InitClientWeapons();
 
 	// Get current clock
 	gpGlobals->time = time;

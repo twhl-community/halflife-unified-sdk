@@ -58,6 +58,8 @@ function(add_game_shared_sources target)
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/CStringPool.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/filesystem_shared.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/filesystem_shared.h
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/logging_utils.cpp
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/logging_utils.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/shared_utils.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/shared_utils.h)
 endfunction()
