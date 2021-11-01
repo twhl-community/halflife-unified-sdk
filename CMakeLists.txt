@@ -23,7 +23,7 @@ cmake_path(GET CMAKE_INSTALL_PREFIX STEM MOD_NAME)
 # All Half-Life specific commands are prefixed with HalfLife so they show up in the same group in the CMake GUI
 set(HalfLife_HLDS_DIRECTORY "" CACHE PATH "Path to the Half-Life Dedicated Server directory. Must be specified to automatically set up dedicated server debugging settings and to copy libraries")
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
