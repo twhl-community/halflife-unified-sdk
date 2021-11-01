@@ -1005,6 +1005,16 @@ int CHudAmmo::Draw(float flTime)
 			Vector screen;
 			gEngfuncs.pTriAPI->WorldToScreen(point, screen);
 
+			//Round the value so the crosshair doesn't jitter
+			screen = screen * 1000;
+
+			for (int i = 0; i < 3; ++i)
+			{
+				screen[i] = std::floor(i);
+			}
+
+			screen = screen / 1000;
+
 			const int adjustedX = XPROJECT(screen[0]);
 			const int adjustedY = YPROJECT(screen[1]);
 
