@@ -26,7 +26,7 @@ public:
 
 	bool MyTouch(CBasePlayer* pPlayer) override;
 
-	void CItemPortableHEVCTF::Spawn() override;
+	void Spawn() override;
 
 	int Classify() override;
 };
