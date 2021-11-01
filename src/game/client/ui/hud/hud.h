@@ -680,7 +680,7 @@ public:
 	void InitHUDData();
 	int VidInit();
 	int Draw(float flTime);
-	int DrawPlayers(int xoffset, float listslot, int nameoffset = 0, char* team = NULL); // returns the ypos where it finishes drawing
+	int DrawPlayers(int xoffset, float listslot, int nameoffset = 0, const char* team = NULL); // returns the ypos where it finishes drawing
 	void UserCmd_ShowScores();
 	void UserCmd_HideScores();
 	int MsgFunc_ScoreInfo(const char* pszName, int iSize, void* pbuf);

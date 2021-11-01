@@ -381,7 +381,7 @@ int CHudScoreboard::Draw(float fTime)
 }
 
 // returns the ypos where it finishes drawing
-int CHudScoreboard::DrawPlayers(int xpos_rel, float list_slot, int nameoffset, char* team)
+int CHudScoreboard::DrawPlayers(int xpos_rel, float list_slot, int nameoffset, const char* team)
 {
 	int can_show_packetloss = 0;
 	int FAR_RIGHT;
