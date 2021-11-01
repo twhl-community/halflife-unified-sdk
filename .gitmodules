@@ -1,3 +1,6 @@
 [submodule "external/json"]
 	path = external/json
 	url = https://github.com/nlohmann/json.git
+[submodule "external/json-schema-validator"]
+	path = external/json-schema-validator
+	url = https://github.com/pboettch/json-schema-validator.git
