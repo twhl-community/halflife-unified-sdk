@@ -5,6 +5,7 @@ include(../shared/game_shared.cmake)
 add_library(hl SHARED $<$<PLATFORM_ID:Windows>:hl.def>)
 
 set_common_properties(hl)
+add_json_dependencies(hl)
 
 target_include_directories(hl PRIVATE
 	${CMAKE_CURRENT_SOURCE_DIR}

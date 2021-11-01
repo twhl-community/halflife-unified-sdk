@@ -77,6 +77,17 @@ function(set_common_properties TARGET_NAME)
 			-Wl,-Map,${TARGET_NAME}_map.txt>)
 endfunction()
 
+set(JSON_BuildTests OFF)
+add_subdirectory(external/json
+	json-binary-dir
+	EXCLUDE_FROM_ALL)
+
+function(add_json_dependencies target)
+	target_link_libraries(${target}
+		PRIVATE
+			nlohmann_json::nlohmann_json)
+endfunction()
+
 add_subdirectory(src/game/client)
 add_subdirectory(src/game/server)
 
