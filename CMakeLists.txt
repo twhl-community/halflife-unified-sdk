@@ -82,10 +82,15 @@ add_subdirectory(external/json
 	json-binary-dir
 	EXCLUDE_FROM_ALL)
 
+option(BUILD_TESTS OFF)
+add_subdirectory(external/json-schema-validator
+	json-validator-binary-dir
+	EXCLUDE_FROM_ALL)
+
 function(add_json_dependencies target)
 	target_link_libraries(${target}
 		PRIVATE
-			nlohmann_json::nlohmann_json)
+			nlohmann_json_schema_validator)
 endfunction()
 
 add_subdirectory(src/game/client)
