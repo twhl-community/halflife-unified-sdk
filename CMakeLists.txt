@@ -44,6 +44,7 @@ add_subdirectory(external/json-schema-validator
 	EXCLUDE_FROM_ALL)
 
 set_target_properties(
+	spdlog
 	nlohmann_json
 	nlohmann_json_schema_validator
 	PROPERTIES
