@@ -27,6 +27,28 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 # Find dependencies
 find_package(Threads REQUIRED)
 
+option(SPDLOG_BUILD_TESTS OFF)
+option(SPDLOG_BUILD_TESTS_HO OFF)
+add_subdirectory(external/spdlog
+	spdlog-binary-dir
+	EXCLUDE_FROM_ALL)
+	
+option(JSON_BuildTests OFF)
+add_subdirectory(external/json
+	json-binary-dir
+	EXCLUDE_FROM_ALL)
+
+option(BUILD_TESTS OFF)
+add_subdirectory(external/json-schema-validator
+	json-validator-binary-dir
+	EXCLUDE_FROM_ALL)
+
+set_target_properties(
+	nlohmann_json
+	nlohmann_json_schema_validator
+	PROPERTIES
+		FOLDER "Dependencies")
+
 # Sets properties common to all projects
 function(set_common_properties TARGET_NAME)
 	set_target_properties(${TARGET_NAME} PROPERTIES PREFIX "")
@@ -52,6 +74,7 @@ function(set_common_properties TARGET_NAME)
 		>)
 		
 	target_link_libraries(${TARGET_NAME} PRIVATE
+		spdlog::spdlog
 		Threads::Threads
 		${CMAKE_DL_LIBS})
 
@@ -78,22 +101,6 @@ function(set_common_properties TARGET_NAME)
 		$<$<PLATFORM_ID:Linux>:
 			-Wl,-Map,${TARGET_NAME}_map.txt>)
 endfunction()
-
-set(JSON_BuildTests OFF)
-add_subdirectory(external/json
-	json-binary-dir
-	EXCLUDE_FROM_ALL)
-
-option(BUILD_TESTS OFF)
-add_subdirectory(external/json-schema-validator
-	json-validator-binary-dir
-	EXCLUDE_FROM_ALL)
-
-set_target_properties(
-	nlohmann_json
-	nlohmann_json_schema_validator
-	PROPERTIES
-		FOLDER "Dependencies")
 
 function(add_json_dependencies target)
 	target_link_libraries(${target}
