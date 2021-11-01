@@ -491,10 +491,10 @@ public:
 
 	int	m_iPose;// which sequence to display	-- temporary, don't need to save
 	int m_iGruntHead;
-	static char* m_szPoses[7];
+	static const char* m_szPoses[7];
 };
 
-char* CDeadHGruntAlly::m_szPoses[] = {"deadstomach", "deadside", "deadsitting", "dead_on_back", "hgrunt_dead_stomach", "dead_headcrabed", "dead_canyon"};
+const char* CDeadHGruntAlly::m_szPoses[] = {"deadstomach", "deadside", "deadsitting", "dead_on_back", "hgrunt_dead_stomach", "dead_headcrabed", "dead_canyon"};
 
 void CDeadHGruntAlly::KeyValue(KeyValueData* pkvd)
 {

@@ -766,10 +766,10 @@ public:
 	void KeyValue(KeyValueData* pkvd) override;
 
 	int	m_iPose;// which sequence to display	-- temporary, don't need to save
-	static char* m_szPoses[3];
+	static const char* m_szPoses[3];
 };
 
-char* CDeadGonome::m_szPoses[] = {"dead_on_stomach1", "dead_on_back", "dead_on_side"};
+const char* CDeadGonome::m_szPoses[] = {"dead_on_stomach1", "dead_on_back", "dead_on_side"};
 
 void CDeadGonome::KeyValue(KeyValueData* pkvd)
 {

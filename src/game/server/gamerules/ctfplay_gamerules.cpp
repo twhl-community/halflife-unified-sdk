@@ -1529,7 +1529,7 @@ void CHalfLifeCTFplay::GoToIntermission()
 }
 
 template<typename... ARGS>
-static void InternalSendTeamStat(int playerIndex, char* pszPlayerFormat, char* pszNobodyFormat, const char* pszStatName, const int value, ARGS&&... args)
+static void InternalSendTeamStat(int playerIndex, const char* pszPlayerFormat, const char* pszNobodyFormat, const char* pszStatName, const int value, ARGS&&... args)
 {
 	auto pPlayer = UTIL_PlayerByIndex(playerIndex);
 
