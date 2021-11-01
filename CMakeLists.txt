@@ -24,6 +24,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
+# Link statically with the runtime
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+
 # Find dependencies
 find_package(Threads REQUIRED)
 
@@ -53,9 +56,6 @@ set_target_properties(
 # Sets properties common to all projects
 function(set_common_properties TARGET_NAME)
 	set_target_properties(${TARGET_NAME} PROPERTIES PREFIX "")
-
-	# Link statically with the runtime
-	set_target_properties(${TARGET_NAME} PROPERTIES MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 		
 	target_compile_definitions(${TARGET_NAME} PRIVATE
 		_CRT_SECURE_NO_WARNINGS
