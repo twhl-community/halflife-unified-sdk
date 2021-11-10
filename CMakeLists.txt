@@ -41,6 +41,7 @@ add_subdirectory(external/spdlog
 	EXCLUDE_FROM_ALL)
 	
 option(JSON_BuildTests OFF)
+option(JSON_MultipleHeaders ON)
 add_subdirectory(external/json
 	json-binary-dir
 	EXCLUDE_FROM_ALL)
