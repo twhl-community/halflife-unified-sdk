@@ -15,20 +15,57 @@
 
 #include "extdll.h"
 #include "util.h"
+#include "utils/command_utils.h"
+#include "utils/json_utils.h"
 #include "CGameLibrary.h"
 
 bool CGameLibrary::InitializeCommon()
 {
 	if (!FileSystem_LoadFileSystem())
 	{
-		g_engfuncs.pfnServerPrint("Could not load filesystem library\n");
+		Con_Printf("Could not load filesystem library\n");
 		return false;
 	}
 
-	if (!g_LogSystem.Initialize())
+	g_pDeveloper = g_ConCommands.GetCVar("developer");
+
+	//These systems have to initialize in a specific order because they depend on each-other
 	{
-		g_engfuncs.pfnServerPrint("Could not initialize logging system\n");
-		return false;
+		if (!g_Logging->Initialize())
+		{
+			Con_Printf("Could not initialize logging system\n");
+			return false;
+		}
+
+		if (!g_ConCommands.Initialize())
+		{
+			Con_Printf("Could not initialize console command system\n");
+			return false;
+		}
+
+		if (!g_JSON.Initialize())
+		{
+			Con_Printf("Could not initialize JSON system\n");
+			return false;
+		}
+
+		if (!g_Logging->PostInitialize())
+		{
+			Con_Printf("Could not post-initialize logging system\n");
+			return false;
+		}
+
+		if (!g_ConCommands.PostInitialize())
+		{
+			Con_Printf("Could not post-initialize console command system\n");
+			return false;
+		}
+
+		if (!g_JSON.PostInitialize())
+		{
+			Con_Printf("Could not post-initialize JSON system\n");
+			return false;
+		}
 	}
 
 	return true;
@@ -36,7 +73,9 @@ bool CGameLibrary::InitializeCommon()
 
 void CGameLibrary::ShutdownCommon()
 {
-	g_LogSystem.Shutdown();
+	g_JSON.Shutdown();
+	g_ConCommands.Shutdown();
+	g_Logging->Shutdown();
 	FileSystem_FreeFileSystem();
 }
 

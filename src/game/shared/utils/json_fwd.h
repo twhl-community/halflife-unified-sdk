@@ -13,10 +13,14 @@
 *
 ****/
 
-#include "extdll.h"
-#include "util.h"
-#include "CLogSystem.h"
-#include "logging_utils.h"
+#pragma once
 
-static CLogSystem g_LoggingImplementation;
-ILogSystem* const g_Logging = &g_LoggingImplementation;
+#include <nlohmann/json_fwd.hpp>
+
+namespace nlohmann::json_schema
+{
+class json_validator;
+}
+
+using nlohmann::json;
+using nlohmann::json_schema::json_validator;

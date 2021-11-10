@@ -15,10 +15,14 @@
 
 #pragma once
 
+#include <string_view>
+
 #include "filesystem_shared.h"
 #include "logging_utils.h"
 
 extern globalvars_t* gpGlobals;
+
+inline cvar_t* g_pDeveloper;
 
 inline const char* STRING(string_t offset)
 {
@@ -41,3 +45,53 @@ string_t ALLOC_STRING(const char* str);
 string_t ALLOC_ESCAPED_STRING(const char* str);
 
 void ClearStringPool();
+
+void Con_Printf(const char* format, ...);
+
+/**
+*	@brief Gets the command line value for the given key
+*	@return Whether the key was specified on the command line
+*/
+bool COM_GetParam(const char* name, const char** next);
+
+/**
+*	@brief Checks whether the given key was specified on the command line
+*/
+bool COM_HasParam(const char* name);
+
+constexpr bool UTIL_IsServer()
+{
+#ifdef CLIENT_DLL
+	return false;
+#else
+	return true;
+#endif
+}
+
+constexpr std::string_view GetShortLibraryPrefix()
+{
+	using namespace std::literals;
+
+	if constexpr (UTIL_IsServer())
+	{
+		return "sv"sv;
+	}
+	else
+	{
+		return "cl"sv;
+	}
+}
+
+constexpr std::string_view GetLongLibraryPrefix()
+{
+	using namespace std::literals;
+
+	if constexpr (UTIL_IsServer())
+	{
+		return "server"sv;
+	}
+	else
+	{
+		return "client"sv;
+	}
+}

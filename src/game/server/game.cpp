@@ -600,13 +600,6 @@ cvar_t multipower = {"mp_multipower", "0", FCVAR_SERVER};
 // This gets called one time when the game is initialied
 void GameDLLInit()
 {
-	if (!g_Server.Initialize())
-	{
-		//Shut the game down ASAP
-		SERVER_COMMAND("quit\n");
-		return;
-	}
-
 	// Register cvars here:
 
 	g_psv_gravity = CVAR_GET_POINTER("sv_gravity");
@@ -1169,6 +1162,13 @@ void GameDLLInit()
 	CVAR_REGISTER(&multipower);
 
 	// END REGISTER CVARS FOR OPPOSING FORCE
+
+	if (!g_Server.Initialize())
+	{
+		//Shut the game down ASAP
+		SERVER_COMMAND("quit\n");
+		return;
+	}
 
 	SERVER_COMMAND("exec skill.cfg\n");
 }

@@ -117,6 +117,11 @@ void ServerPrint(const char* msg)
 	gEngfuncs.Con_Printf("%s", msg);
 }
 
+void AddServerCommand(const char* cmd_name, void (*function)())
+{
+	gEngfuncs.pfnAddCommand(cmd_name, function);
+}
+
 //Just loads a v_ model.
 void LoadVModel(const char* szViewModel, CBasePlayer* m_pPlayer)
 {
@@ -462,6 +467,9 @@ void HUD_InitClientWeapons()
 	g_engfuncs.pfnPlaybackEvent = HUD_PlaybackEvent;
 	g_engfuncs.pfnAlertMessage = AlertMessage;
 	g_engfuncs.pfnServerPrint = ServerPrint;
+	g_engfuncs.pfnAddServerCommand = AddServerCommand;
+	g_engfuncs.pfnCmd_Argc = gEngfuncs.Cmd_Argc;
+	g_engfuncs.pfnCmd_Argv = gEngfuncs.Cmd_Argv;
 
 	// Pass through to engine
 	g_engfuncs.pfnPrecacheEvent = gEngfuncs.pfnPrecacheEvent;
@@ -470,6 +478,7 @@ void HUD_InitClientWeapons()
 	g_engfuncs.pfnCVarGetPointer = gEngfuncs.pfnGetCvarPointer;
 	g_engfuncs.pfnCVarGetString = gEngfuncs.pfnGetCvarString;
 	g_engfuncs.pfnCVarGetFloat = gEngfuncs.pfnGetCvarFloat;
+	g_engfuncs.pfnCheckParm = gEngfuncs.CheckParm;
 
 	// Allocate a slot for the local player
 	HUD_PrepEntity(&player, NULL);

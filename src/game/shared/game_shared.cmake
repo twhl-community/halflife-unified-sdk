@@ -56,10 +56,19 @@ function(add_game_shared_sources target)
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/player_movement/pm_shared.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/player_movement/pm_shared.h
 			
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/CLogSystem.cpp
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/CLogSystem.h
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/command_utils.cpp
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/command_utils.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/CStringPool.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/CStringPool.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/filesystem_shared.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/filesystem_shared.h
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/heterogeneous_lookup.h
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/ILogSystem.h
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/json_fwd.h
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/json_utils.cpp
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/json_utils.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/logging_utils.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/logging_utils.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/shared_utils.cpp

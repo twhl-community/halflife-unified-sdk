@@ -69,3 +69,35 @@ void ClearStringPool()
 	//This clears the pool and frees memory
 	g_StringPool = CStringPool{};
 }
+
+void Con_Printf(const char* format, ...)
+{
+	static char buffer[8192];
+
+	va_list list;
+
+	va_start(list, format);
+
+	const int result = vsnprintf(buffer, std::size(buffer), format, list);
+
+	if (result >= 0 && static_cast<std::size_t>(result) < std::size(buffer))
+	{
+		g_engfuncs.pfnServerPrint(buffer);
+	}
+	else
+	{
+		g_engfuncs.pfnServerPrint("Error logging message\n");
+	}
+
+	va_end(list);
+}
+
+bool COM_GetParam(const char* name, const char** next)
+{
+	return g_engfuncs.pfnCheckParm(name, next) != 0;
+}
+
+bool COM_HasParam(const char* name)
+{
+	return g_engfuncs.pfnCheckParm(name, nullptr) != 0;
+}
