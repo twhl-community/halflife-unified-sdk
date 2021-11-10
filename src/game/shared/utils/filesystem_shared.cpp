@@ -14,6 +14,7 @@
 ****/
 
 #include <cassert>
+#include <limits>
 
 #include "Platform.h"
 
@@ -138,4 +139,31 @@ std::vector<std::byte> FileSystem_LoadFileIntoBuffer(const char* filename, const
 	g_pFileSystem->Close(fileHandle);
 
 	return buffer;
+}
+
+bool FileSystem_WriteTextToFile(const char* filename, const char* text, const char* pathID)
+{
+	if (!filename || !text)
+	{
+		return false;
+	}
+
+	const std::size_t length = std::strlen(text);
+
+	if (length > static_cast<std::size_t>(std::numeric_limits<int>::max()))
+	{
+		Con_Printf("FileSystem_WriteTextToFile: text too long\n");
+		return false;
+	}
+
+	if (FSFile file{filename, "w", pathID}; file)
+	{
+		file.Write(text, length);
+
+		return true;
+	}
+
+	Con_Printf("FileSystem_WriteTextToFile: couldn't open file \"%s\" for writing\n", filename);
+
+	return false;
 }

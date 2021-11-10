@@ -31,6 +31,8 @@ void FileSystem_FreeFileSystem();
 
 std::vector<std::byte> FileSystem_LoadFileIntoBuffer(const char* filename, const char* pathID = nullptr);
 
+bool FileSystem_WriteTextToFile(const char* filename, const char* text, const char* pathID = nullptr);
+
 class FSFile
 {
 public:
