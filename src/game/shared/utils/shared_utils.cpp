@@ -101,3 +101,85 @@ bool COM_HasParam(const char* name)
 {
 	return g_engfuncs.pfnCheckParm(name, nullptr) != 0;
 }
+
+const char* COM_Parse(const char* data)
+{
+	int             c;
+	int             len;
+
+	len = 0;
+	com_token[0] = 0;
+
+	if (!data)
+		return NULL;
+
+	// skip whitespace
+skipwhite:
+	while ((c = *data) <= ' ')
+	{
+		if (c == 0)
+			return NULL;                    // end of file;
+		data++;
+	}
+
+	// skip // comments
+	if (c == '/' && data[1] == '/')
+	{
+		while (*data && *data != '\n')
+			data++;
+		goto skipwhite;
+	}
+
+
+	// handle quoted strings specially
+	if (c == '\"')
+	{
+		data++;
+		while (1)
+		{
+			c = *data++;
+			if (c == '\"' || !c)
+			{
+				com_token[len] = 0;
+				return data;
+			}
+			com_token[len] = c;
+			len++;
+		}
+	}
+
+	// parse single characters
+	if (c == '{' || c == '}' || c == ')' || c == '(' || c == '\'' || c == ',')
+	{
+		com_token[len] = c;
+		len++;
+		com_token[len] = 0;
+		return data + 1;
+	}
+
+	// parse a regular word
+	do
+	{
+		com_token[len] = c;
+		data++;
+		len++;
+		c = *data;
+		if (c == '{' || c == '}' || c == ')' || c == '(' || c == '\'' || c == ',')
+			break;
+	}
+	while (c > 32);
+
+	com_token[len] = 0;
+	return data;
+}
+
+bool COM_TokenWaiting(const char* buffer)
+{
+	for (const char* p = buffer; *p && *p != '\n'; ++p)
+	{
+		if (!isspace(*p) || isalnum(*p))
+			return true;
+	}
+
+	return false;
+}

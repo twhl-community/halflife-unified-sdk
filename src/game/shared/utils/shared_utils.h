@@ -95,3 +95,15 @@ constexpr std::string_view GetLongLibraryPrefix()
 		return "client"sv;
 	}
 }
+
+inline char com_token[1500];
+
+/**
+*	@brief Parse a token out of a string
+*/
+const char* COM_Parse(const char* data);
+
+/**
+*	@brief Returns true if additional data is waiting to be processed on this line
+*/
+bool COM_TokenWaiting(const char* buffer);
