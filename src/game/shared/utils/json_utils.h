@@ -89,7 +89,7 @@ public:
 	/**
 	*	@brief Helper function to parse JSON Schemas.
 	*/
-	std::optional<json> ParseJSONSchema(const std::string_view& schema);
+	std::optional<json> ParseJSONSchema(std::string_view schema);
 
 	/**
 	*	@brief Loads a JSON file and parses it into an object.
@@ -147,7 +147,7 @@ inline auto JSONSystem::ParseJSON(Callable callable, const json& input) -> std::
 	}
 }
 
-inline std::optional<json> JSONSystem::ParseJSONSchema(const std::string_view& schema)
+inline std::optional<json> JSONSystem::ParseJSONSchema(std::string_view schema)
 {
 	if (!m_Logger)
 	{
