@@ -35,7 +35,7 @@ constexpr const char* const MapConfigCommandWhitelistFileName = "cfg/MapConfigCo
 const std::regex MapConfigCommandWhitelistRegex{"^[\\w]+$"};
 
 cvar_t servercfgfile = {"sv_servercfgfile", "cfg/server/server.json", FCVAR_NOEXTRAWHITEPACE | FCVAR_ISPATH};
-cvar_t mapchangecfgfile = {"sv_mapchangecfgfile", "cfg/server/server.json", FCVAR_NOEXTRAWHITEPACE | FCVAR_ISPATH};
+cvar_t mapchangecfgfile = {"sv_mapchangecfgfile", "", FCVAR_NOEXTRAWHITEPACE | FCVAR_ISPATH};
 
 static void AddCommonConfigSections(std::vector<std::unique_ptr<const GameConfigSection>>& sections)
 {
