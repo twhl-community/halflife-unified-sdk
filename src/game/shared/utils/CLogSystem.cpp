@@ -108,7 +108,7 @@ static json GetLoggingConfigSchema()
 					"Name": {{
 						"title": "Logger Name",
 						"type": "string",
-						"pattern": "/^[\\w]+$/"
+						"pattern": "^[\\w]+$"
 					}},
 					"LogLevel": {{
 						"title": "Log Level",
