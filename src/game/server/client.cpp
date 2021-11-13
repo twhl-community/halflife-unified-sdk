@@ -855,7 +855,7 @@ void ServerActivate(edict_t* pEdictList, int edictCount, int clientMax)
 	// Every call to ServerActivate should be matched by a call to ServerDeactivate
 	g_serveractive = 1;
 
-	g_Server.MapActivate();
+	g_Server.PreMapActivate();
 
 	// Clients have not been initialized yet
 	for (i = 0; i < edictCount; i++)
@@ -881,6 +881,8 @@ void ServerActivate(edict_t* pEdictList, int edictCount, int clientMax)
 
 	// Link user messages here to make sure first client can get them...
 	LinkUserMessages();
+
+	g_Server.PostMapActivate();
 }
 
 

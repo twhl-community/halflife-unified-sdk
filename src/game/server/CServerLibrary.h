@@ -15,8 +15,18 @@
 
 #pragma once
 
+#include <memory>
+#include <string>
+#include <unordered_set>
+
 #include "CGameLibrary.h"
 #include "CMapState.h"
+
+#include "config/GameConfigLoader.h"
+
+#include "utils/json_utils.h"
+
+class GameConfigDefinition;
 
 /**
 *	@brief Handles core server actions
@@ -24,8 +34,8 @@
 class CServerLibrary final : public CGameLibrary
 {
 public:
-	CServerLibrary() = default;
-	~CServerLibrary() = default;
+	CServerLibrary();
+	~CServerLibrary();
 
 	CServerLibrary(const CServerLibrary&) = delete;
 	CServerLibrary& operator=(const CServerLibrary&) = delete;
@@ -66,7 +76,15 @@ public:
 		return false;
 	}
 
-	void MapActivate();
+	/**
+	*	@brief Called right before entities are activated
+	*/
+	void PreMapActivate();
+
+	/**
+	*	@brief Called right after entities are activated
+	*/
+	void PostMapActivate();
 
 private:
 	/**
@@ -75,7 +93,25 @@ private:
 	*/
 	void NewMapStarted(bool loadGame);
 
+	void CreateConfigDefinitions();
+
+	void LoadConfigFile(const char* fileName, const GameConfigDefinition& definition, const GameConfigLoadParameters& parameters = {});
+
+	void LoadServerConfigFiles();
+
+	void LoadMapChangeConfigFile();
+
+	static json GetMapConfigCommandWhitelistSchema();
+
+	std::unordered_set<std::string> GetMapConfigCommandWhitelist();
+
 private:
+	json_validator m_MapConfigCommandWhitelistValidator;
+
+	std::shared_ptr<const GameConfigDefinition> m_ServerConfigDefinition;
+	std::shared_ptr<const GameConfigDefinition> m_MapConfigDefinition;
+	std::shared_ptr<const GameConfigDefinition> m_MapChangeConfigDefinition;
+
 	bool m_isStartingNewMap = true;
 
 	CMapState m_MapState;

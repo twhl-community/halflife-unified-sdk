@@ -83,6 +83,10 @@ CHalfLifeMultiplay::CHalfLifeMultiplay()
 	// 3/31/99
 	// Added lservercfg file cvar, since listen and dedicated servers should not
 	// share a single config file. (sjb)
+	
+	// This has been deprecated and replaced with JSON-based config files.
+	// See CServerLibrary::LoadServerConfigFiles
+	/*
 	if (IS_DEDICATED_SERVER())
 	{
 		// this code has been moved into engine, to only run server.cfg once
@@ -101,6 +105,7 @@ CHalfLifeMultiplay::CHalfLifeMultiplay()
 			SERVER_COMMAND(szCommand);
 		}
 	}
+	*/
 }
 
 BOOL CHalfLifeMultiplay::ClientCommand(CBasePlayer* pPlayer, const char* pcmd)

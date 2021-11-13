@@ -15,6 +15,7 @@
 
 #include "extdll.h"
 #include "util.h"
+#include "config/GameConfigLoader.h"
 #include "utils/command_utils.h"
 #include "utils/json_utils.h"
 #include "CGameLibrary.h"
@@ -68,14 +69,20 @@ bool CGameLibrary::InitializeCommon()
 		}
 	}
 
+	if (!g_GameConfigLoader.Initialize())
+	{
+		Con_Printf("Could not initialize game configuration loader\n");
+		return false;
+	}
+
 	return true;
 }
 
 void CGameLibrary::ShutdownCommon()
 {
+	g_GameConfigLoader.Shutdown();
 	g_JSON.Shutdown();
 	g_ConCommands.Shutdown();
 	g_Logging->Shutdown();
 	FileSystem_FreeFileSystem();
 }
-

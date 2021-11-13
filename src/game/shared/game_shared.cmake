@@ -6,6 +6,15 @@ function(add_game_shared_sources target)
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/palette.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/voice_common.h
 			
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/GameConfig.h
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/GameConfigDefinition.cpp
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/GameConfigDefinition.h
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/GameConfigLoader.cpp
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/GameConfigLoader.h
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/GameConfigSection.h
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/sections/CommandsSection.h
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/sections/EchoSection.h
+			
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/entities/ehandle.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/entities/ehandle.h
 			
