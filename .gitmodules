@@ -7,3 +7,6 @@
 [submodule "external/spdlog"]
 	path = external/spdlog
 	url = https://github.com/gabime/spdlog.git
+[submodule "external/Angelscript"]
+	path = external/Angelscript
+	url = https://github.com/codecat/angelscript-mirror.git
