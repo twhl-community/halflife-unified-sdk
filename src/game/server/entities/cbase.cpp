@@ -486,7 +486,11 @@ void SaveWriteFields(SAVERESTOREDATA* pSaveData, const char* pname, void* pBaseD
 void SaveReadFields(SAVERESTOREDATA* pSaveData, const char* pname, void* pBaseData, TYPEDESCRIPTION* pFields, int fieldCount)
 {
 	//Will happen here if we're loading a saved game
-	g_Server.CheckForNewMapStart(true);
+	//ETABLE is the first chunk of data read after the engine has set up some global variables that we need
+	if (!strcmp(pname, "ETABLE"))
+	{
+		g_Server.CheckForNewMapStart(true);
+	}
 
 	CRestore restoreHelper(pSaveData);
 	restoreHelper.ReadFields(pname, pBaseData, pFields, fieldCount);
