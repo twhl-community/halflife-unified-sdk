@@ -147,7 +147,7 @@ std::optional<json> JSONSystem::LoadJSONFile(const char* fileName, const json_va
 		{
 			auto text = reinterpret_cast<const char*>(file.data());
 
-			auto data = json::parse(text, text + file.size());
+			auto data = json::parse(text, text + file.size(), nullptr, true, true);
 
 			//Only validate if enabled
 			if (m_JsonSchemaValidation->value && validator)
