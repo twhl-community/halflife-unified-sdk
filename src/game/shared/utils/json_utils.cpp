@@ -61,7 +61,7 @@ public:
 		const std::string& message) override
 	{
 		basic_error_handler::error(pointer, instance, message);
-		m_Logger.error("Error validating JSON \"{}\" with value \"{}\": {}", pointer.to_string(), instance, message);
+		m_Logger.error("Error validating JSON \"{}\" with value \"{}\": {}", pointer.to_string(), instance.dump(), message);
 	}
 
 private:
