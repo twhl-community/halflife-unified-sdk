@@ -97,6 +97,8 @@ private:
 	static void CommandCallbackWrapper();
 	void CommandCallback();
 
+	const char* TryGetCVarCommandLineValue(std::string_view name) const;
+
 private:
 	std::shared_ptr<spdlog::logger> m_Logger;
 

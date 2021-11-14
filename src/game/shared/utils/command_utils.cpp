@@ -27,6 +27,12 @@
 #include "hud.h"
 #endif
 
+/**
+*	@brief Prefix used for cvars registered by this system that can be set on the command line.
+*	@details Typical use on the command line is :cvar_name_with_or_without_library_prefix value
+*/
+constexpr char CommandLineCVarPrefix = ':';
+
 int CCommandArgs::Count() const
 {
 	return CMD_ARGC();
@@ -114,7 +120,25 @@ cvar_t* CConCommandSystem::CreateCVar(std::string_view name, const char* default
 
 	m_Cvars.push_back(std::move(data));
 
-	return m_Cvars.back().CVar;
+	auto& cvar = m_Cvars.back();
+
+	//Check if an initial value was passed on the command line.
+	//Two cases to consider: is the complete name being used or is the non-prefixed name being used?
+	//Prefer complete name to allow for more granular control.
+	//This is required because the server is loaded after stuffcmds has run on a listen server, so the cvars aren't set.
+	auto value = TryGetCVarCommandLineValue(cvar.Name.get());
+
+	if (!value)
+	{
+		value = TryGetCVarCommandLineValue(name);
+	}
+
+	if (value)
+	{
+		g_engfuncs.pfnCvar_DirectSet(cvar.CVar, value);
+	}
+
+	return cvar.CVar;
 }
 
 void CConCommandSystem::CreateCommand(std::string_view name, std::function<void(const CCommandArgs&)>&& callback)
@@ -166,4 +190,27 @@ void CConCommandSystem::CommandCallback()
 		//Should never happen
 		m_Logger->error("CConCommandSystem::CommandCallback: Couldn't find command \"{}\"", args.Argument(0));
 	}
+}
+
+const char* CConCommandSystem::TryGetCVarCommandLineValue(std::string_view name) const
+{
+	const auto parameter = fmt::format("{}{}", CommandLineCVarPrefix, name);
+
+	const char* next = nullptr;
+
+	if (!COM_GetParam(parameter.c_str(), &next))
+	{
+		return nullptr;
+	}
+
+	//Check for common mistakes, like not specifying a value (if it's the last argument or followed by another parameter or engine cvar set).
+	//Note that this can happen if a cvar contains a map name that happens to start with these characters.
+	//Filenames shouldn't include these characters anyway because it confuses command line parsing code.
+	if (!next || next[0] == '-' || next[0] == '+')
+	{
+		m_Logger->error("CVar specified on the command line with no value");
+		return nullptr;
+	}
+
+	return next;
 }
