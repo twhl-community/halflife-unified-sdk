@@ -153,6 +153,14 @@ void CServerLibrary::LoadConfigFile(const char* fileName, const GameConfigDefini
 
 void CServerLibrary::LoadServerConfigFiles()
 {
+	//Configure the config conditionals
+	//TODO: need to get this from gamerules
+	GameConfigConditionals conditionals;
+	conditionals.Singleplayer = gpGlobals->deathmatch == 0;
+	conditionals.Multiplayer = gpGlobals->deathmatch != 0;
+
+	g_GameConfigLoader.SetConditionals(std::move(conditionals));
+
 	if (const auto cfgFile = servercfgfile.string; cfgFile && cfgFile[0])
 	{
 		LoadConfigFile(cfgFile, *m_ServerConfigDefinition, {.PathID = "GAMECONFIG"});

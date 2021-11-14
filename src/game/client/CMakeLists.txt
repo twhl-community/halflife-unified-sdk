@@ -260,4 +260,4 @@ add_game_shared_sources(client)
 
 # Create filters
 get_target_property(CLIENT_SOURCES client SOURCES)
-source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}../../.. FILES ${CLIENT_SOURCES})
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}../../../.. FILES ${CLIENT_SOURCES})

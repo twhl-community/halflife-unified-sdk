@@ -23,9 +23,14 @@
 
 #include <spdlog/logger.h>
 
+#include "scripting/AS/as_utils.h"
+
 #include "utils/json_fwd.h"
 
 #include "GameConfig.h"
+#include "GameConfigConditionals.h"
+
+class asIScriptContext;
 
 class GameConfigDefinition;
 class GameConfigLoader;
@@ -60,15 +65,31 @@ public:
 
 	std::shared_ptr<spdlog::logger> GetLogger() { return m_Logger; }
 
+	void SetConditionals(GameConfigConditionals&& conditionals)
+	{
+		m_Conditionals = std::move(conditionals);
+	}
+
 	std::shared_ptr<const GameConfigDefinition> CreateDefinition(std::string&& name, std::vector<std::unique_ptr<const GameConfigSection>>&& sections);
 
 	std::optional<GameConfig> TryLoad(const char* fileName, const GameConfigDefinition& definition, const GameConfigLoadParameters& parameters = {});
+
+	/**
+	*	@brief Evaluate a conditional expression
+	*	@return If the conditional was successfully evaluated, returns the result.
+	*		Otherwise, returns an empty optional.
+	*/
+	std::optional<bool> EvaluateConditional(std::string_view conditional);
 
 private:
 	GameConfig ParseConfig(std::string_view configFileName, const GameConfigDefinition& definition, const json& input);
 
 private:
 	std::shared_ptr<spdlog::logger> m_Logger;
+
+	as::EnginePtr m_ScriptEngine;
+	as::UniquePtr<asIScriptContext> m_ScriptContext;
+	GameConfigConditionals m_Conditionals;
 };
 
 inline GameConfigLoader g_GameConfigLoader;

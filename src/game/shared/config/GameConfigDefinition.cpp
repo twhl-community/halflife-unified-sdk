@@ -95,6 +95,11 @@ json GameConfigDefinition::GetSchema() const
 			"default": "{0}",
 			"readOnly": true
 		}},
+		"Condition": {{
+			"description": "If specified, this section will only be used if the condition evaluates true",
+			"type": "string",
+			"pattern": "^[\\w]+$"
+		}},
 		{1}
 	}},
 	"required": [

@@ -15,10 +15,15 @@
 
 #include "extdll.h"
 #include "util.h"
+
+#include "CGameLibrary.h"
+
 #include "config/GameConfigLoader.h"
+
+#include "scripting/AS/CASManager.h"
+
 #include "utils/command_utils.h"
 #include "utils/json_utils.h"
-#include "CGameLibrary.h"
 
 bool CGameLibrary::InitializeCommon()
 {
@@ -69,6 +74,13 @@ bool CGameLibrary::InitializeCommon()
 		}
 	}
 
+	if (!g_ASManager.Initialize())
+	{
+		Con_Printf("Could not initialize Angelscript engine manager\n");
+		return false;
+	}
+
+	//Depends on Angelscript
 	if (!g_GameConfigLoader.Initialize())
 	{
 		Con_Printf("Could not initialize game configuration loader\n");
@@ -81,6 +93,7 @@ bool CGameLibrary::InitializeCommon()
 void CGameLibrary::ShutdownCommon()
 {
 	g_GameConfigLoader.Shutdown();
+	g_ASManager.Shutdown();
 	g_JSON.Shutdown();
 	g_ConCommands.Shutdown();
 	g_Logging->Shutdown();

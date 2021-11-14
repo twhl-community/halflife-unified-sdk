@@ -117,6 +117,11 @@ function(set_common_properties TARGET_NAME)
 			-m32 -gdwarf-2 -g2>
 		$<$<PLATFORM_ID:Linux>:
 			-Wl,-Map,${TARGET_NAME}_map.txt>)
+	
+	target_sources(${TARGET_NAME}
+		PRIVATE
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/external/Angelscript/sdk/add_on/scriptstdstring/scriptstdstring.cpp
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/external/Angelscript/sdk/add_on/scriptstdstring/scriptstdstring.h)
 endfunction()
 
 function(add_json_dependencies target)
