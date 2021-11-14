@@ -86,12 +86,12 @@ public:
 	/**
 	*	@brief Creates a cvar with a library-specific prefix
 	*/
-	cvar_t* CreateCVar(const std::string_view& name, const char* defaultValue, int flags = 0);
+	cvar_t* CreateCVar(std::string_view name, const char* defaultValue, int flags = 0);
 
 	/**
 	*	@brief Creates a command with a library-specific prefix
 	*/
-	void CreateCommand(const std::string_view& name, std::function<void(const CCommandArgs&)>&& callback);
+	void CreateCommand(std::string_view name, std::function<void(const CCommandArgs&)>&& callback);
 
 private:
 	static void CommandCallbackWrapper();

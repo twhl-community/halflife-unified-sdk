@@ -69,7 +69,7 @@ cvar_t* CConCommandSystem::GetCVar(const char* name) const
 	return g_engfuncs.pfnCVarGetPointer(name);
 }
 
-cvar_t* CConCommandSystem::CreateCVar(const std::string_view& name, const char* defaultValue, int flags)
+cvar_t* CConCommandSystem::CreateCVar(std::string_view name, const char* defaultValue, int flags)
 {
 	if (name.empty() || !defaultValue)
 	{
@@ -117,7 +117,7 @@ cvar_t* CConCommandSystem::CreateCVar(const std::string_view& name, const char* 
 	return m_Cvars.back().CVar;
 }
 
-void CConCommandSystem::CreateCommand(const std::string_view& name, std::function<void(const CCommandArgs&)>&& callback)
+void CConCommandSystem::CreateCommand(std::string_view name, std::function<void(const CCommandArgs&)>&& callback)
 {
 	if (name.empty() || !callback)
 	{
