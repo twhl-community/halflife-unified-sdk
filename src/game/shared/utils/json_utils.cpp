@@ -141,6 +141,8 @@ std::optional<json> JSONSystem::LoadJSONFile(const char* fileName, const json_va
 		return {};
 	}
 
+	m_Logger->trace("Loading JSON file \"{}\"", fileName);
+
 	if (const auto file = FileSystem_LoadFileIntoBuffer(fileName, pathID); !file.empty())
 	{
 		try
@@ -152,15 +154,20 @@ std::optional<json> JSONSystem::LoadJSONFile(const char* fileName, const json_va
 			//Only validate if enabled
 			if (m_JsonSchemaValidation->value && validator)
 			{
+				m_Logger->trace("Validating JSON file");
+
 				JSONValidatorErrorHandler errorHandler{*m_Logger};
 
 				validator->validate(data, errorHandler);
 
 				if (errorHandler)
 				{
+					m_Logger->trace("JSON file failed validation");
 					return {};
 				}
 			}
+
+			m_Logger->trace("Successfully loaded JSON file");
 
 			return data;
 		}
