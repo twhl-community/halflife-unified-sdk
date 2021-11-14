@@ -51,10 +51,15 @@ add_subdirectory(external/json-schema-validator
 	json-validator-binary-dir
 	EXCLUDE_FROM_ALL)
 
+add_subdirectory(external/Angelscript/sdk/angelscript/projects/cmake
+	Angelscript-binary-dir
+	EXCLUDE_FROM_ALL)
+
 set_target_properties(
 	spdlog
 	nlohmann_json
 	nlohmann_json_schema_validator
+	angelscript
 	PROPERTIES
 		FOLDER "Dependencies")
 
@@ -80,9 +85,15 @@ function(set_common_properties TARGET_NAME)
 		>)
 		
 	target_link_libraries(${TARGET_NAME} PRIVATE
+		angelscript
 		spdlog::spdlog
 		Threads::Threads
 		${CMAKE_DL_LIBS})
+	
+	# TODO: should be fixed in Angelscript's CMake project
+	target_include_directories(${TARGET_NAME} PRIVATE
+		${CMAKE_CURRENT_FUNCTION_LIST_DIR}/external/Angelscript/sdk/angelscript/include
+		${CMAKE_CURRENT_FUNCTION_LIST_DIR}/external/Angelscript/sdk/add_on)
 
 	# TODO: review Linux compiler flags
 	target_compile_options(${TARGET_NAME} PRIVATE
