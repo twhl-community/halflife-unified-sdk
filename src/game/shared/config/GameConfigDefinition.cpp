@@ -100,8 +100,7 @@ json GameConfigDefinition::GetSchema() const
 		}},
 		"Condition": {{
 			"description": "If specified, this section will only be used if the condition evaluates true",
-			"type": "string",
-			"pattern": "^[\\w]+$"
+			"type": "string"
 		}},
 		{1}
 	}},
