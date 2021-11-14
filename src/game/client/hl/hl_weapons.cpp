@@ -434,20 +434,12 @@ void UTIL_ParticleLine(CBasePlayer* player, float* start, float* end, float life
 	gEngfuncs.pEfxAPI->R_ParticleLine(start, end, r, g, b, life);
 }
 
-/*
-=====================
-HUD_InitClientWeapons
-
-Set up weapons, player and functions needed to run weapons code client-side.
-=====================
-*/
-void HUD_InitClientWeapons()
+void HUD_SetupServerEngineInterface()
 {
-	static int initialized = 0;
-	if (initialized)
+	if (gpGlobals)
+	{
 		return;
-
-	initialized = 1;
+	}
 
 	// Set up pointer ( dummy object )
 	gpGlobals = &Globals;
@@ -480,6 +472,18 @@ void HUD_InitClientWeapons()
 	g_engfuncs.pfnCheckParm = gEngfuncs.CheckParm;
 	g_engfuncs.pfnCmd_Argc = gEngfuncs.Cmd_Argc;
 	g_engfuncs.pfnCmd_Argv = gEngfuncs.Cmd_Argv;
+}
+
+/**
+*	@brief Set up weapons, player needed to run weapons code client-side.
+*/
+void HUD_InitClientWeapons()
+{
+	static int initialized = 0;
+	if (initialized)
+		return;
+
+	initialized = 1;
 
 	// Allocate a slot for the local player
 	HUD_PrepEntity(&player, NULL);
@@ -608,6 +612,8 @@ void HUD_WeaponsPostThink(local_state_s* from, local_state_s* to, usercmd_t* cmd
 	static int lasthealth;
 
 	memset(&nulldata, 0, sizeof(nulldata));
+
+	HUD_InitClientWeapons();
 
 	// Get current clock
 	gpGlobals->time = time;

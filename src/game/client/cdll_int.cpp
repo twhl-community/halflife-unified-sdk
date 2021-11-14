@@ -145,7 +145,7 @@ int DLLEXPORT Initialize(cl_enginefunc_t* pEnginefuncs, int iVersion)
 
 	memcpy(&gEngfuncs, pEnginefuncs, sizeof(cl_enginefunc_t));
 
-	HUD_InitClientWeapons();
+	HUD_SetupServerEngineInterface();
 
 	EV_HookEvents();
 	CL_LoadParticleMan();
