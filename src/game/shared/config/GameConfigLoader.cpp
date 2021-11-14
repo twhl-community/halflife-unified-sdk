@@ -24,12 +24,14 @@
 #include "util.h"
 
 #include "GameConfigDefinition.h"
+#include "GameConfigIncludeStack.h"
 #include "GameConfigLoader.h"
 #include "GameConfigSection.h"
 
 #include "scripting/AS/CASManager.h"
 
 #include "utils/json_utils.h"
+#include "utils/string_utils.h"
 
 using namespace std::literals;
 
@@ -108,28 +110,26 @@ std::shared_ptr<const GameConfigDefinition> GameConfigLoader::CreateDefinition(
 std::optional<GameConfig> GameConfigLoader::TryLoad(
 	const char* fileName, const GameConfigDefinition& definition, const GameConfigLoadParameters& parameters)
 {
-	m_Logger->trace("Loading \"{}\" configuration file \"{}\"", definition.GetName(), fileName);
+	GameConfigIncludeStack includeStack;
+	GameConfig config;
 
-	auto config = g_JSON.ParseJSONFile(
-		fileName,
-		definition.GetValidator(),
-		[&, this](const json& input) { return ParseConfig(fileName, definition, input); },
-		parameters.PathID);
+	//So you can't get a stack overflow including yourself over and over.
+	includeStack.Add(fileName);
 
-	if (config.has_value())
+	LoadContext loadContext
 	{
-		m_Logger->trace("Successfully loaded configuration file");
-	}
-	else
+		.Definition = definition,
+		.Parameters = parameters,
+		.IncludeStack = includeStack,
+		.Config = config
+	};
+
+	if (TryLoadCore(loadContext, fileName))
 	{
-		m_Logger->trace("Failed to load configuration file");
+		return config;
 	}
 
-	//Free up resources used by the context and engine
-	g_ASManager.UnprepareContext(*m_ScriptContext);
-	m_ScriptEngine->GarbageCollect();
-
-	return config;
+	return {};
 }
 
 std::optional<bool> GameConfigLoader::EvaluateConditional(std::string_view conditional)
@@ -183,20 +183,90 @@ std::optional<bool> GameConfigLoader::EvaluateConditional(std::string_view condi
 	return result != 0;
 }
 
-GameConfig GameConfigLoader::ParseConfig(std::string_view configFileName, const GameConfigDefinition& definition, const json& input)
+bool GameConfigLoader::TryLoadCore(LoadContext& loadContext, const char* fileName)
 {
-	GameConfig config;
+	m_Logger->trace("Loading \"{}\" configuration file \"{}\" (depth {})", loadContext.Definition.GetName(), fileName, loadContext.Depth);
 
-	if (!input.is_object())
+	auto result = g_JSON.ParseJSONFile(
+		fileName,
+		loadContext.Definition.GetValidator(),
+		[&, this](const json& input)
+		{
+			ParseConfig(loadContext, fileName, input);
+			return true; //Just return something so optional doesn't complain.
+		},
+		loadContext.Parameters.PathID);
+
+	if (result.has_value())
 	{
-		return config;
+		m_Logger->trace("Successfully loaded configuration file");
+	}
+	else
+	{
+		m_Logger->trace("Failed to load configuration file");
 	}
 
+	//Free up resources used by the context and engine
+	g_ASManager.UnprepareContext(*m_ScriptContext);
+	m_ScriptEngine->GarbageCollect();
+
+	return result.has_value();
+}
+
+void GameConfigLoader::ParseConfig(LoadContext& loadContext, std::string_view configFileName, const json& input)
+{
+	if (input.is_object())
+	{
+		ParseIncludedFiles(loadContext, input);
+		ParseSections(loadContext, configFileName, input);
+	}
+}
+
+void GameConfigLoader::ParseIncludedFiles(LoadContext& loadContext, const json& input)
+{
+	if (auto includes = input.find("Includes"); includes != input.end())
+	{
+		if (!includes->is_array())
+		{
+			return;
+		}
+
+		for (const auto& include : *includes)
+		{
+			if (!include.is_string())
+			{
+				continue;
+			}
+
+			auto includeFileName = include.get<std::string>();
+
+			includeFileName = Trim(includeFileName);
+
+			if (loadContext.IncludeStack.Add(includeFileName))
+			{
+				m_Logger->trace("Including file \"{}\"", includeFileName);
+
+				++loadContext.Depth;
+
+				TryLoadCore(loadContext, includeFileName.c_str());
+
+				--loadContext.Depth;
+			}
+			else
+			{
+				m_Logger->debug("Included file \"{}\" already included before", includeFileName);
+			}
+		}
+	}
+}
+
+void GameConfigLoader::ParseSections(LoadContext& loadContext, std::string_view configFileName, const json& input)
+{
 	if (auto sections = input.find("Sections"); sections != input.end())
 	{
 		if (!sections->is_array())
 		{
-			return config;
+			return;
 		}
 
 		for (const auto& section : *sections)
@@ -208,7 +278,7 @@ GameConfig GameConfigLoader::ParseConfig(std::string_view configFileName, const 
 
 			if (const auto name = section.value("Name", ""sv); !name.empty())
 			{
-				if (const auto sectionObj = definition.FindSection(name); sectionObj)
+				if (const auto sectionObj = loadContext.Definition.FindSection(name); sectionObj)
 				{
 					if (const auto condition = section.value("Condition", ""sv); !condition.empty())
 					{
@@ -238,9 +308,9 @@ GameConfig GameConfigLoader::ParseConfig(std::string_view configFileName, const 
 					{
 						.ConfigFileName = configFileName,
 						.Input = section,
-						.Definition = definition,
+						.Definition = loadContext.Definition,
 						.Loader = *this,
-						.Configuration = config
+						.Configuration = loadContext.Config
 					};
 
 					if (!sectionObj->TryParse(context))
@@ -255,6 +325,4 @@ GameConfig GameConfigLoader::ParseConfig(std::string_view configFileName, const 
 			}
 		}
 	}
-
-	return config;
 }

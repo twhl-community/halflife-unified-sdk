@@ -33,6 +33,7 @@
 class asIScriptContext;
 
 class GameConfigDefinition;
+class GameConfigIncludeStack;
 class GameConfigLoader;
 class GameConfigSection;
 
@@ -56,6 +57,18 @@ struct GameConfigContext final
 */
 class GameConfigLoader final
 {
+private:
+	struct LoadContext
+	{
+		const GameConfigDefinition& Definition;
+		const GameConfigLoadParameters& Parameters;
+
+		GameConfigIncludeStack& IncludeStack;
+		GameConfig& Config;
+
+		int Depth = 1;
+	};
+
 public:
 	GameConfigLoader();
 	~GameConfigLoader();
@@ -82,7 +95,13 @@ public:
 	std::optional<bool> EvaluateConditional(std::string_view conditional);
 
 private:
-	GameConfig ParseConfig(std::string_view configFileName, const GameConfigDefinition& definition, const json& input);
+	bool TryLoadCore(LoadContext& loadContext, const char* fileName);
+
+	void ParseConfig(LoadContext& loadContext, std::string_view configFileName, const json& input);
+
+	void ParseIncludedFiles(LoadContext& loadContext, const json& input);
+
+	void ParseSections(LoadContext& loadContext, std::string_view configFileName, const json& input);
 
 private:
 	std::shared_ptr<spdlog::logger> m_Logger;

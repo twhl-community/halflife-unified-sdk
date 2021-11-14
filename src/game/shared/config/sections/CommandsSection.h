@@ -34,9 +34,8 @@
 class CommandsData final : public GameConfigData
 {
 public:
-	CommandsData(std::shared_ptr<spdlog::logger>&& logger, std::vector<std::string>&& commands)
+	CommandsData(std::shared_ptr<spdlog::logger>&& logger)
 		: m_Logger(std::move(logger))
-		, m_Commands(std::move(commands))
 	{
 	}
 
@@ -53,6 +52,23 @@ public:
 
 			g_engfuncs.pfnServerCommand(buffer.c_str());
 		}
+	}
+
+	void AddCommands(std::vector<std::string>&& commands)
+	{
+		//Prevent accidental self-append
+		if (&m_Commands == &commands)
+		{
+			return;
+		}
+
+		//Append commands from other into my list.
+		m_Commands.insert(
+			m_Commands.end(),
+			std::make_move_iterator(commands.begin()),
+			std::make_move_iterator(commands.end()));
+
+		commands.clear();
 	}
 
 private:
@@ -157,7 +173,9 @@ public:
 			}
 		}
 
-		context.Configuration.Add(std::make_unique<CommandsData>(context.Loader.GetLogger(), std::move(commands)));
+		auto data = context.Configuration.GetOrCreate<CommandsData>(context.Loader.GetLogger());
+
+		data->AddCommands(std::move(commands));
 
 		return true;
 	}

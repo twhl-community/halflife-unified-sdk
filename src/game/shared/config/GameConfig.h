@@ -17,6 +17,7 @@
 
 #include <any>
 #include <memory>
+#include <type_traits>
 #include <vector>
 
 /**
@@ -45,14 +46,62 @@ public:
 class GameConfig final
 {
 public:
-	void Add(std::unique_ptr<GameConfigData>&& data)
+	/**
+	*	@brief Gets a data object of type T.
+	*/
+	template<typename T, typename = std::enable_if_t<std::is_base_of_v<GameConfigData, T>>>
+	T* Get()
+	{
+		for (const auto& object : m_Data)
+		{
+			if (auto candidate = dynamic_cast<T*>(object.get()); candidate)
+			{
+				return candidate;
+			}
+		}
+
+		return nullptr;
+	}
+
+	/**
+	*	@brief Adds a new data object to the configuration.
+	*/
+	template<typename T, typename = std::enable_if_t<std::is_base_of_v<GameConfigData, T>>>
+	T* Add(std::unique_ptr<T>&& data)
 	{
 		if (!data)
 		{
-			return;
+			return nullptr;
 		}
 
 		m_Data.emplace_back(std::move(data));
+
+		return static_cast<T*>(m_Data.back().get());
+	}
+
+	/**
+	*	@brief Creates a data object of type T.
+	*	The given arguments will be forwarded to its constructor.
+	*/
+	template<typename T, typename... Args, typename = std::enable_if_t<std::is_base_of_v<GameConfigData, T>>>
+	T* Create(Args&&... args)
+	{
+		return Add(std::make_unique<T>(std::forward<Args>(args)...));
+	}
+
+	/**
+	*	@brief Gets or creates a data object of type T.
+	*	If an object has to be created the given arguments will be forwarded to its constructor.
+	*/
+	template<typename T, typename... Args, typename = std::enable_if_t<std::is_base_of_v<GameConfigData, T>>>
+	T* GetOrCreate(Args&&... args)
+	{
+		if (auto candidate = Get<T>(); candidate)
+		{
+			return candidate;
+		}
+
+		return Create<T>(std::forward<Args>(args)...);
 	}
 
 	/**

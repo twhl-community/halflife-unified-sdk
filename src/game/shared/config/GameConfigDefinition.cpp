@@ -54,6 +54,9 @@ json GameConfigDefinition::GetSchema() const
 	//A configuration is structured like this:
 	/*
 	{
+		"Includes": [
+			"some_filename.json"
+		],
 		"Sections": [
 			{
 				"Name": "SectionName",
@@ -119,6 +122,16 @@ json GameConfigDefinition::GetSchema() const
 	"title": "{} Game Configuration",
 	"type": "object",
 	"properties": {{
+		"Includes": {{
+			"title": "Included Files",
+			"description": "List of JSON files to include before this file.",
+			"type": "array",
+			"items": {{
+				"title": "Include",
+				"type": "string",
+				"pattern": "^[\\w/]+.json$"
+			}}
+		}},
 		"Sections": {{
 			"title": "Sections",
 			"type": "array",

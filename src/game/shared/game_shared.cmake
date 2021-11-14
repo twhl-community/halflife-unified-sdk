@@ -11,6 +11,7 @@ function(add_game_shared_sources target)
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/GameConfigConditionals.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/GameConfigDefinition.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/GameConfigDefinition.h
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/GameConfigIncludeStack.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/GameConfigLoader.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/GameConfigLoader.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/GameConfigSection.h
@@ -88,5 +89,7 @@ function(add_game_shared_sources target)
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/logging_utils.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/logging_utils.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/shared_utils.cpp
-			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/shared_utils.h)
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/shared_utils.h
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/string_utils.cpp
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/string_utils.h)
 endfunction()
