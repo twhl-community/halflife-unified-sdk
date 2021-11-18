@@ -12,7 +12,6 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#if !defined( OEM_BUILD ) && !defined( HLDEMO_BUILD )
 
 #include "extdll.h"
 #include "util.h"
@@ -296,6 +295,3 @@ class CPythonAmmo : public CBasePlayerAmmo
 	}
 };
 LINK_ENTITY_TO_CLASS( ammo_357, CPythonAmmo );
-
-
-#endif
