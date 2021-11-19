@@ -26,13 +26,11 @@
 #include "player.h"
 #include "monsters.h"
 #include "weapons.h"
-#include "nodes.h"
 #include "soundent.h"
 #include "decals.h"
 #include "gamerules.h"
 #include "UserMessages.h"
 
-extern CGraph	WorldGraph;
 extern int gEvilImpulse101;
 
 
@@ -1037,7 +1035,7 @@ float CBasePlayerWeapon::GetNextAttackDelay( float delay )
 	// store it as m_flPrevPrimaryAttack.
 	m_flPrevPrimaryAttack = flNextAttack - UTIL_WeaponTimeBase();
 // 	char szMsg[256];
-// 	_snprintf( szMsg, sizeof(szMsg), "next attack time: %0.4f\n", gpGlobals->time + flNextAttack );
+// 	snprintf( szMsg, sizeof(szMsg), "next attack time: %0.4f\n", gpGlobals->time + flNextAttack );
 // 	OutputDebugString( szMsg );
 	return flNextAttack;
 }

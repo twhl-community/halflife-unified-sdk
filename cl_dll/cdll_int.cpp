@@ -21,22 +21,19 @@
 #include "hud.h"
 #include "cl_util.h"
 #include "netadr.h"
-#undef INTERFACE_H
-#include "../public/interface.h"
+#include "interface.h"
 //#include "vgui_schememanager.h"
 
 #include "pm_shared.h"
 
 #include <string.h>
 #include "vgui_int.h"
-#include "interface.h"
 
 #include "Platform.h"
 #include "Exports.h"
 
 #include "tri.h"
 #include "vgui_TeamFortressViewport.h"
-#include "../public/interface.h"
 
 cl_enginefunc_t gEngfuncs;
 CHud gHUD;
@@ -334,14 +331,9 @@ void CL_LoadParticleMan()
 	}
 }
 
-cldll_func_dst_t *g_pcldstAddrs;
-
 extern "C" void DLLEXPORT F(void *pv)
 {
 	cldll_func_t *pcldll_func = (cldll_func_t *)pv;
-
-	// Hack!
-	g_pcldstAddrs = ((cldll_func_dst_t *)pcldll_func->pHudVidInitFunc);
 
 	cldll_func_t cldll_func = 
 	{

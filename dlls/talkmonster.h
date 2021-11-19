@@ -12,12 +12,10 @@
 *   use or distribution of this code by or to any unlicensed person is illegal.
 *
 ****/
-#ifndef TALKMONSTER_H
-#define TALKMONSTER_H
 
-#ifndef MONSTERS_H
+#pragma once
+
 #include "monsters.h"
-#endif
 
 //=========================================================
 // Talking monster base class
@@ -178,6 +176,3 @@ public:
 #define		bits_COND_CLIENT_PUSH		( bits_COND_SPECIAL1 )
 // Don't see a client right now.
 #define		bits_COND_CLIENT_UNSEEN		( bits_COND_SPECIAL2 )
-
-
-#endif		//TALKMONSTER_H

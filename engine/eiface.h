@@ -12,14 +12,13 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#ifndef EIFACE_H
-#define EIFACE_H
 
-#include "archtypes.h"     // DAL
+#pragma once
+
+#include "Platform.h"
 
 #define INTERFACE_VERSION		140
 
-#include <stdio.h>
 #include "custom.h"
 #include "cvardef.h"
 #include "Sequence.h"
@@ -31,14 +30,6 @@
 //		include progdefs.h
 // This is conveniently done for them in extdll.h
 //
-
-/*
-#ifdef _WIN32
-#define DLLEXPORT __stdcall
-#else
-#define DLLEXPORT  __attribute__ ((visibility("default")))
-#endif
-*/
 
 typedef enum
 	{
@@ -91,7 +82,7 @@ typedef struct
 	int	fEnabled;
 	int	fPlayLooping;
 	float	cdvolume;
-	//BYTE 	remap[100];
+	//byte 	remap[100];
 	int	fCDRom;
 	int	fPlayTrack;
 } CDStatus;
@@ -334,12 +325,7 @@ typedef struct
 #define FENTTABLE_MOVEABLE		0x20000000
 #define FENTTABLE_GLOBAL		0x10000000
 
-typedef struct saverestore_s SAVERESTOREDATA;
-
-#ifdef _WIN32
-typedef 
-#endif
-struct saverestore_s
+typedef struct saverestore_s
 {
 	char		*pBaseData;		// Start of all entity save data
 	char		*pCurrentData;	// Current buffer pointer for sequential access
@@ -361,11 +347,7 @@ struct saverestore_s
 	float		time;
 	char		szCurrentMapName[32];	// To check global entities
 
-} 
-#ifdef _WIN32
-SAVERESTOREDATA 
-#endif
-;
+} SAVERESTOREDATA;
 
 typedef enum _fieldtypes
 {
@@ -390,10 +372,6 @@ typedef enum _fieldtypes
 
 	FIELD_TYPECOUNT,		// MUST BE LAST
 } FIELDTYPE;
-
-#if !defined(offsetof)  && !defined(GNUC)
-#define offsetof(s,m)	(size_t)&(((s *)0)->m)
-#endif
 
 #define _FIELD(type,name,fieldtype,count,flags)		{ fieldtype, #name, static_cast<int>(offsetof(type, name)), count, flags }
 #define DEFINE_FIELD(type,name,fieldtype)			_FIELD(type, name, fieldtype, 1, 0)
@@ -523,5 +501,3 @@ extern NEW_DLL_FUNCTIONS	gNewDLLFunctions;
 
 typedef int	(*APIFUNCTION)( DLL_FUNCTIONS *pFunctionTable, int interfaceVersion );
 typedef int	(*APIFUNCTION2)( DLL_FUNCTIONS *pFunctionTable, int *interfaceVersion );
-
-#endif //EIFACE_H

@@ -1021,7 +1021,7 @@ void UTIL_SetOrigin( entvars_t *pev, const Vector &vecOrigin )
 		SET_ORIGIN( ent, vecOrigin );
 }
 
-void UTIL_ParticleEffect( const Vector &vecOrigin, const Vector &vecDirection, ULONG ulColor, ULONG ulCount )
+void UTIL_ParticleEffect( const Vector &vecOrigin, const Vector &vecDirection, unsigned int ulColor, unsigned int ulCount )
 {
 	PARTICLE_EFFECT( vecOrigin, vecDirection, (float)ulColor, (float)ulCount );
 }
@@ -1783,7 +1783,7 @@ void CSaveRestoreBuffer :: BufferRewind( int size )
 	m_pdata->size -= size;
 }
 
-#ifndef _WIN32
+#ifndef WIN32
 extern "C" {
 unsigned _rotr ( unsigned val, int shift)
 {

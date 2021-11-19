@@ -5,8 +5,7 @@
 // $NoKeywords: $
 //=============================================================================
 
-#ifndef VGUI_H
-#define VGUI_H
+#pragma once
 
 //If you are going to add stuff to the vgui core...
 //
@@ -77,7 +76,7 @@
 //		then App can come along later and fire all the signals
 //TODO: Change all method naming to starting with a capital letter.
 
-#ifdef _WIN32
+#ifdef WIN32
 # define VGUIAPI __declspec( dllexport )
 #else
 # define VGUIAPI  __attribute__ ((visibility("default")))
@@ -103,6 +102,3 @@ VGUIAPI int   vgui_dprintf(const char* format,...);
 VGUIAPI int   vgui_dprintf2(const char* format,...);
 
 }
-
-#endif
-

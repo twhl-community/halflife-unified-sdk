@@ -12,18 +12,17 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#include "archtypes.h"     // DAL
+
+#pragma once
+
+#include "Platform.h"
 
 //
 // Misc utility code
 //
-#ifndef ACTIVITY_H
 #include "activity.h"
-#endif
-
-#ifndef ENGINECALLBACK_H
 #include "enginecallback.h"
-#endif
+
 inline void MESSAGE_BEGIN( int msg_dest, int msg_type, const float *pOrigin, entvars_t *ent );  // implementation later in this file
 
 extern globalvars_t				*gpGlobals;
@@ -156,8 +155,8 @@ inline BOOL FStringNull(int iString)			{ return iString == iStringNull; }
 
 // All monsters need this data
 #define		DONT_BLEED			-1
-#define		BLOOD_COLOR_RED		(BYTE)247
-#define		BLOOD_COLOR_YELLOW	(BYTE)195
+#define		BLOOD_COLOR_RED		(byte)247
+#define		BLOOD_COLOR_YELLOW	(byte)195
 #define		BLOOD_COLOR_GREEN	BLOOD_COLOR_YELLOW
 
 typedef enum 
@@ -231,7 +230,7 @@ extern void			UTIL_MakeInvVectors		( const Vector &vec, globalvars_t *pgv );
 
 extern void			UTIL_SetOrigin			( entvars_t* pev, const Vector &vecOrigin );
 extern void			UTIL_EmitAmbientSound	( edict_t *entity, const Vector &vecOrigin, const char *samp, float vol, float attenuation, int fFlags, int pitch );
-extern void			UTIL_ParticleEffect		( const Vector &vecOrigin, const Vector &vecDirection, ULONG ulColor, ULONG ulCount );
+extern void			UTIL_ParticleEffect		( const Vector &vecOrigin, const Vector &vecDirection, unsigned int ulColor, unsigned int ulCount );
 extern void			UTIL_ScreenShake		( const Vector &center, float amplitude, float frequency, float duration, float radius );
 extern void			UTIL_ScreenShakeAll		( const Vector &center, float amplitude, float frequency, float duration );
 extern void			UTIL_ShowMessage		( const char *pString, CBaseEntity *pPlayer );

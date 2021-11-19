@@ -678,7 +678,6 @@ void TeamFortressViewport::Initialize()
 	App::getInstance()->setCursorOveride( App::getInstance()->getScheme()->getCursor(Scheme::scu_none) );
 }
 
-class CException;
 //-----------------------------------------------------------------------------
 // Purpose: Read the Command Menu structure from the txt file and create the menu.
 //			Returns Index of menu in m_pCommandMenus
@@ -708,10 +707,6 @@ int TeamFortressViewport::CreateCommandMenu( const char * menuFile, int directio
 		return newIndex;
 	}
 
-#ifdef _WIN32
-try
-{
-#endif
 	// First, read in the localisation strings
 
 	// Detpack strings
@@ -918,17 +913,6 @@ try
 
 		pfile = gEngfuncs.COM_ParseFile(pfile, token);
 	}
-#ifdef _WIN32
-}
-catch( CException *e )
-{
-	e;
-	//e->Delete();
-	e = NULL;
-	m_iInitialized = false;
-	return newIndex;
-}
-#endif
 
 	SetCurrentMenu( NULL );
 	SetCurrentCommandMenu( NULL );
@@ -1534,7 +1518,7 @@ void TeamFortressViewport::UpdateSpectatorPanel()
 			m_pSpectatorPanel->setVisible( true );	// show spectator panel, but
 			m_pSpectatorPanel->ShowMenu( false );	// dsiable all menus/buttons
 			
-			_snprintf( tempString, sizeof( tempString ) - 1, "%c%s", HUD_PRINTCENTER, CHudTextMessage::BufferedLocaliseTextString( "#Spec_Duck" ) );
+			snprintf( tempString, sizeof( tempString ) - 1, "%c%s", HUD_PRINTCENTER, CHudTextMessage::BufferedLocaliseTextString( "#Spec_Duck" ) );
 			tempString[ sizeof( tempString ) - 1 ] = '\0';
 
 			gHUD.m_TextMessage.MsgFunc_TextMsg( NULL, strlen( tempString ) + 1, tempString );
@@ -1606,7 +1590,7 @@ void TeamFortressViewport::UpdateSpectatorPanel()
 		if ( gEngfuncs.IsSpectateOnly() )
 		{
 			// in HLTV mode show number of spectators
-			_snprintf( szText, 63, "%s: %d", CHudTextMessage::BufferedLocaliseTextString( "#Spectators" ), gHUD.m_Spectator.m_iSpectatorNumber );
+			snprintf( szText, 63, "%s: %d", CHudTextMessage::BufferedLocaliseTextString( "#Spectators" ), gHUD.m_Spectator.m_iSpectatorNumber );
 		}
 		else
 		{
@@ -1614,7 +1598,7 @@ void TeamFortressViewport::UpdateSpectatorPanel()
 			char szMapName[64];
 			COM_FileBase( gEngfuncs.pfnGetLevelName(), szMapName );
 
-			_snprintf ( szText, 63, "%s: %s",CHudTextMessage::BufferedLocaliseTextString( "#Spec_Map" ), szMapName );
+			snprintf( szText, 63, "%s: %s",CHudTextMessage::BufferedLocaliseTextString( "#Spec_Map" ), szMapName );
 		}
 
 		szText[63] = 0;
@@ -1627,7 +1611,7 @@ void TeamFortressViewport::UpdateSpectatorPanel()
 		if ( timer < 0 )
 			 timer	= 0;
 
-		_snprintf ( szText, 63, "%d:%02d\n", (timer / 60), (timer % 60) );
+		snprintf ( szText, 63, "%d:%02d\n", (timer / 60), (timer % 60) );
 		
 		szText[63] = 0;
 				

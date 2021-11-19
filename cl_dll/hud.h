@@ -20,16 +20,13 @@
 // CHud handles the message, calculation, and drawing the HUD
 //
 
+#pragma once
 
 #define RGB_YELLOWISH 0x005F5FFF //95,95,255
 #define RGB_REDISH 0x00FF1010 //255,160,0
 #define RGB_GREENISH 0x0000A000 //0,160,0
 
-#ifndef _WIN32
-#define _cdecl 
-#endif
-
-#include "wrect.h"
+#include "common_types.h"
 #include "cl_dll.h"
 #include "ammo.h"
 
@@ -114,19 +111,19 @@ public:
 	int MsgFunc_HideWeapon( const char *pszName, int iSize, void *pbuf );
 
 	void SlotInput( int iSlot );
-	void _cdecl UserCmd_Slot1();
-	void _cdecl UserCmd_Slot2();
-	void _cdecl UserCmd_Slot3();
-	void _cdecl UserCmd_Slot4();
-	void _cdecl UserCmd_Slot5();
-	void _cdecl UserCmd_Slot6();
-	void _cdecl UserCmd_Slot7();
-	void _cdecl UserCmd_Slot8();
-	void _cdecl UserCmd_Slot9();
-	void _cdecl UserCmd_Slot10();
-	void _cdecl UserCmd_Close();
-	void _cdecl UserCmd_NextWeapon();
-	void _cdecl UserCmd_PrevWeapon();
+	void UserCmd_Slot1();
+	void UserCmd_Slot2();
+	void UserCmd_Slot3();
+	void UserCmd_Slot4();
+	void UserCmd_Slot5();
+	void UserCmd_Slot6();
+	void UserCmd_Slot7();
+	void UserCmd_Slot8();
+	void UserCmd_Slot9();
+	void UserCmd_Slot10();
+	void UserCmd_Close();
+	void UserCmd_NextWeapon();
+	void UserCmd_PrevWeapon();
 
 private:
 	float m_fFade;
@@ -333,8 +330,8 @@ public:
 private:
 	HSPRITE m_hSprite1;
 	HSPRITE m_hSprite2;
-	wrect_t *m_prc1;
-	wrect_t *m_prc2;
+	Rect *m_prc1;
+	Rect *m_prc2;
 	int	  m_iBat;	
 	int	  m_iBatMax;
 	float m_fFade;
@@ -359,9 +356,9 @@ private:
 	HSPRITE m_hSprite1;
 	HSPRITE m_hSprite2;
 	HSPRITE m_hBeam;
-	wrect_t *m_prc1;
-	wrect_t *m_prc2;
-	wrect_t *m_prcBeam;
+	Rect *m_prc1;
+	Rect *m_prc2;
+	Rect *m_prcBeam;
 	float m_flBat;	
 	int	  m_iBat;	
 	int	  m_fOn;
@@ -471,66 +468,12 @@ private:
 	{
 		char szSpriteName[MAX_ICONSPRITENAME_LENGTH];
 		HSPRITE spr;
-		wrect_t rc;
+		Rect rc;
 		unsigned char r, g, b;
 	} icon_sprite_t;
 
 	icon_sprite_t m_IconList[MAX_ICONSPRITES];
 
-};
-
-//
-//-----------------------------------------------------
-//
-class CHudBenchmark : public CHudBase
-{
-public:
-	int Init() override;
-	int VidInit() override;
-	int Draw( float flTime ) override;
-
-	void SetScore( float score );
-
-	void Think() override;
-
-	void StartNextSection( int section );
-
-	int MsgFunc_Bench(const char *pszName, int iSize, void *pbuf);
-
-	void CountFrame( float dt );
-
-	int GetObjects() { return m_nObjects; }
-
-	void SetCompositeScore();
-
-	void Restart();
-
-	int Bench_ScoreForValue( int stage, float raw );
-
-private:
-	float	m_fDrawTime;
-	float	m_fDrawScore;
-	float	m_fAvgScore;
-
-	float   m_fSendTime;
-	float	m_fReceiveTime;
-
-	int		m_nFPSCount;
-	float	m_fAverageFT;
-	float	m_fAvgFrameRate;
-
-	int		m_nSentFinish;
-	float	m_fStageStarted;
-
-	float	m_StoredLatency;
-	float	m_StoredPacketLoss;
-	int		m_nStoredHopCount;
-	int		m_nTraceDone;
-
-	int		m_nObjects;
-
-	int		m_nScoreComputed;
-	int 	m_nCompositeScore;
 };
 
 //
@@ -580,7 +523,7 @@ private:
 	// the memory for these arrays are allocated in the first call to CHud::VidInit(), when the hud.txt and associated sprites are loaded.
 	// freed in ~CHud()
 	HSPRITE *m_rghSprites;	/*[HUD_SPRITE_COUNT]*/			// the sprites loaded from hud.txt
-	wrect_t *m_rgrcRects;	/*[HUD_SPRITE_COUNT]*/
+	Rect *m_rgrcRects;	/*[HUD_SPRITE_COUNT]*/
 	char *m_rgszSpriteNames; /*[HUD_SPRITE_COUNT][MAX_SPRITE_NAME_LENGTH]*/
 
 	struct cvar_s *default_fov;
@@ -590,7 +533,7 @@ public:
 		return (index < 0) ? 0 : m_rghSprites[index];
 	}
 
-	wrect_t& GetSpriteRect( int index )
+	Rect& GetSpriteRect( int index )
 	{
 		return m_rgrcRects[index];
 	}
@@ -613,7 +556,6 @@ public:
 	CHudAmmoSecondary	m_AmmoSecondary;
 	CHudTextMessage m_TextMessage;
 	CHudStatusIcons m_StatusIcons;
-	CHudBenchmark	m_Benchmark;
 
 	void Init();
 	void VidInit();
@@ -625,14 +567,14 @@ public:
 	~CHud();			// destructor, frees allocated memory
 
 	// user messages
-	int _cdecl MsgFunc_Damage(const char *pszName, int iSize, void *pbuf );
-	int _cdecl MsgFunc_GameMode(const char *pszName, int iSize, void *pbuf );
-	int _cdecl MsgFunc_Logo(const char *pszName,  int iSize, void *pbuf);
-	int _cdecl MsgFunc_ResetHUD(const char *pszName,  int iSize, void *pbuf);
-	void _cdecl MsgFunc_InitHUD( const char *pszName, int iSize, void *pbuf );
-	void _cdecl MsgFunc_ViewMode( const char *pszName, int iSize, void *pbuf );
-	int _cdecl MsgFunc_SetFOV(const char *pszName,  int iSize, void *pbuf);
-	int  _cdecl MsgFunc_Concuss( const char *pszName, int iSize, void *pbuf );
+	int MsgFunc_Damage(const char *pszName, int iSize, void *pbuf );
+	int MsgFunc_GameMode(const char *pszName, int iSize, void *pbuf );
+	int MsgFunc_Logo(const char *pszName,  int iSize, void *pbuf);
+	int MsgFunc_ResetHUD(const char *pszName,  int iSize, void *pbuf);
+	void MsgFunc_InitHUD( const char *pszName, int iSize, void *pbuf );
+	void MsgFunc_ViewMode( const char *pszName, int iSize, void *pbuf );
+	int MsgFunc_SetFOV(const char *pszName,  int iSize, void *pbuf);
+	int  MsgFunc_Concuss( const char *pszName, int iSize, void *pbuf );
 
 	// Screen information
 	SCREENINFO	m_scrinfo;

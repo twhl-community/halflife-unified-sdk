@@ -41,14 +41,10 @@
 #include "pm_shared.h"
 #include "UserMessages.h"
 
-#if !defined ( _WIN32 )
-#include <ctype.h>
-#endif
-
-extern DLL_GLOBAL ULONG		g_ulModelIndexPlayer;
+extern DLL_GLOBAL unsigned int g_ulModelIndexPlayer;
 extern DLL_GLOBAL BOOL		g_fGameOver;
 extern DLL_GLOBAL int		g_iSkillLevel;
-extern DLL_GLOBAL ULONG		g_ulFrameCount;
+extern DLL_GLOBAL unsigned int g_ulFrameCount;
 
 extern void CopyToBodyQue(entvars_t* pev);
 extern int giPrecacheGrunt;
@@ -110,7 +106,7 @@ void ClientDisconnect( edict_t *pEntity )
 
 	char text[256] = "" ;
 	if ( pEntity->v.netname )
-		_snprintf( text, sizeof(text), "- %s has left the game\n", STRING(pEntity->v.netname) );
+		snprintf( text, sizeof(text), "- %s has left the game\n", STRING(pEntity->v.netname) );
 	text[ sizeof(text) - 1 ] = 0;
 	MESSAGE_BEGIN( MSG_ALL, gmsgSayText, NULL );
 		WRITE_BYTE( ENTINDEX(pEntity) );

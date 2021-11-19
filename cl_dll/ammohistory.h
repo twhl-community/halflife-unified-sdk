@@ -16,6 +16,8 @@
 // ammohistory.h
 //
 
+#pragma once
+
 // this is the max number of items in each bucket
 #define MAX_WEAPON_POSITIONS		MAX_WEAPON_SLOTS
 
@@ -89,7 +91,7 @@ public:
 
 	int CountAmmo( int iId );
 
-	HSPRITE* GetAmmoPicFromWeapon( int iAmmoId, wrect_t& rect );
+	HSPRITE* GetAmmoPicFromWeapon( int iAmmoId, Rect& rect );
 };
 
 extern WeaponsResource gWR;
