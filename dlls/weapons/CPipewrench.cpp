@@ -19,7 +19,6 @@
 #include "monsters.h"
 #include "weapons.h"
 #include "CPipewrench.h"
-#include "nodes.h"
 #include "player.h"
 #include "gamerules.h"
 

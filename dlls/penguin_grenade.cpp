@@ -18,7 +18,6 @@
 #include "monsters.h"
 #include "player.h"
 #include "weapons.h"
-#include "nodes.h"
 #include "soundent.h"
 #include "decals.h"
 #include "gamerules.h"
