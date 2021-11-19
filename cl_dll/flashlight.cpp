@@ -109,7 +109,7 @@ int CHudFlashlight::Draw(float flTime)
 		return 1;
 
 	int r, g, b, x, y, a;
-	wrect_t rc;
+	Rect rc;
 
 	if (!(gHUD.m_iWeaponBits & (1<<(WEAPON_SUIT)) ))
 		return 1;
@@ -190,7 +190,7 @@ void CHudFlashlight::drawNightVision()
 
 		gEngfuncs.pfnSPR_Set( m_nvSprite, 0, 170, 0 );
 
-		wrect_t drawingRect;
+		Rect drawingRect;
 
 		for( auto x = 0; x < gHUD.m_scrinfo.iWidth; x += width )
 		{

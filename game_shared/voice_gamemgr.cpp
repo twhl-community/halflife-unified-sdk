@@ -5,9 +5,7 @@
 // $NoKeywords: $
 //=============================================================================
 
-#include "archtypes.h"     // DAL
 #include "voice_gamemgr.h"
-#include <string.h>
 #include <assert.h>
 #include "extdll.h"
 #include "util.h"
@@ -74,7 +72,7 @@ static void VoiceServerDebug( char const *pFmt, ... )
 		return;
 
 	va_start( marker, pFmt );
-	_vsnprintf( msg, sizeof(msg), pFmt, marker );
+	vsnprintf( msg, sizeof(msg), pFmt, marker );
 	va_end( marker );
 
 	ALERT( at_console, "%s", msg );

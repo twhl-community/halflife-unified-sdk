@@ -12,8 +12,9 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#ifndef CONST_H
-#define CONST_H
+
+#pragma once
+
 //
 // Constants shared by the engine and dlls
 // This header file included by engine files and DLL files.
@@ -645,9 +646,7 @@
 #define SF_TRAIN_PASSABLE		8		// Train is not solid -- used to make water trains
 
 // buttons
-#ifndef IN_BUTTONS_H
 #include "in_buttons.h"
-#endif
 
 // Break Model Defines
 
@@ -727,18 +726,11 @@ typedef struct
 	unsigned r, g, b, a;
 } colorVec;
 
-#ifdef _WIN32
-#pragma pack(push,2)
-#endif
-
 typedef struct
 {
 	unsigned short r, g, b, a;
 } PackedColorVec;
 
-#ifdef _WIN32
-#pragma pack(pop)
-#endif
 typedef struct link_s
 {
 	struct link_s	*prev, *next;
@@ -790,6 +782,3 @@ enum WaterLevel
 	*/
 	WATERLEVEL_HEAD = 3
 };
-
-#endif
-

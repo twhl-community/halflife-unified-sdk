@@ -12,8 +12,8 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#ifndef SCRIPTEVENT_H
-#define SCRIPTEVENT_H
+
+#pragma once
 
 #define SCRIPT_EVENT_DEAD					1000		// character is now dead
 #define SCRIPT_EVENT_NOINTERRUPT			1001		// does not allow interrupt
@@ -29,4 +29,3 @@
 #define SCRIPT_EVENT_SOUND_VOICE_BODY		1011		// Play named wave file with normal attenuation (on CHAN_BODY)
 #define SCRIPT_EVENT_SOUND_VOICE_VOICE		1012		// Play named wave file with normal attenuation (on CHAN_VOICE)
 #define SCRIPT_EVENT_SOUND_VOICE_WEAPON		1013		// Play named wave file with normal attenuation (on CHAN_WEAPON)
-#endif   //SCRIPTEVENT_H

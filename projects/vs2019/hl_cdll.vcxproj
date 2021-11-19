@@ -130,8 +130,6 @@
     <ClCompile Include="..\..\cl_dll\hl\hl_objects.cpp" />
     <ClCompile Include="..\..\cl_dll\hl\hl_weapons.cpp" />
     <ClCompile Include="..\..\cl_dll\hud.cpp" />
-    <ClCompile Include="..\..\cl_dll\hud_bench.cpp" />
-    <ClCompile Include="..\..\cl_dll\hud_benchtrace.cpp" />
     <ClCompile Include="..\..\cl_dll\hud_flagicons.cpp" />
     <ClCompile Include="..\..\cl_dll\hud_msg.cpp" />
     <ClCompile Include="..\..\cl_dll\hud_playerbrowse.cpp" />
@@ -233,9 +231,9 @@
     <ClInclude Include="..\..\cl_dll\vgui_SpectatorPanel.h" />
     <ClInclude Include="..\..\cl_dll\vgui_StatsMenuPanel.h" />
     <ClInclude Include="..\..\cl_dll\view.h" />
-    <ClInclude Include="..\..\cl_dll\wrect.h" />
     <ClInclude Include="..\..\common\beamdef.h" />
     <ClInclude Include="..\..\common\cl_entity.h" />
+    <ClInclude Include="..\..\common\common_types.h" />
     <ClInclude Include="..\..\common\com_model.h" />
     <ClInclude Include="..\..\common\const.h" />
     <ClInclude Include="..\..\common\con_nprint.h" />
@@ -252,13 +250,11 @@
     <ClInclude Include="..\..\common\event_args.h" />
     <ClInclude Include="..\..\common\event_flags.h" />
     <ClInclude Include="..\..\common\hltv.h" />
-    <ClInclude Include="..\..\common\interface.h" />
     <ClInclude Include="..\..\common\in_buttons.h" />
     <ClInclude Include="..\..\common\ivoicetweak.h" />
     <ClInclude Include="..\..\common\mathlib.h" />
     <ClInclude Include="..\..\common\netadr.h" />
     <ClInclude Include="..\..\common\net_api.h" />
-    <ClInclude Include="..\..\common\nowin.h" />
     <ClInclude Include="..\..\common\parsemsg.h" />
     <ClInclude Include="..\..\common\particledef.h" />
     <ClInclude Include="..\..\common\Platform.h" />
@@ -274,7 +270,6 @@
     <ClInclude Include="..\..\dlls\weapons\CSniperRifle.h" />
     <ClInclude Include="..\..\dlls\weapons\CSporeLauncher.h" />
     <ClInclude Include="..\..\common\pmtrace.h" />
-    <ClInclude Include="..\..\common\port.h" />
     <ClInclude Include="..\..\common\qfont.h" />
     <ClInclude Include="..\..\common\ref_params.h" />
     <ClInclude Include="..\..\common\r_efx.h" />
@@ -308,9 +303,6 @@
     <ClInclude Include="..\..\pm_shared\pm_materials.h" />
     <ClInclude Include="..\..\pm_shared\pm_movevars.h" />
     <ClInclude Include="..\..\pm_shared\pm_shared.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="..\..\lib\public\game_controls.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

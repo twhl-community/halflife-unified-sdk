@@ -24,7 +24,7 @@
 #include	"animation.h"
 #include	"doors.h"
 
-#if !defined ( _WIN32 )
+#if !defined ( WIN32 )
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <fcntl.h>
@@ -119,12 +119,12 @@ void CGraph :: InitGraph()
 int CGraph :: AllocNodes ()
 {
 //  malloc all of the nodes
-	WorldGraph.m_pNodes = (CNode *)calloc ( sizeof ( CNode ), MAX_NODES );
+	m_pNodes = (CNode *)calloc ( sizeof ( CNode ), MAX_NODES );
 
 // could not malloc space for all the nodes!
-	if ( !WorldGraph.m_pNodes )
+	if ( !m_pNodes )
 	{
-		ALERT ( at_aiconsole, "**ERROR**\nCouldn't malloc %d nodes!\n", WorldGraph.m_cNodes );
+		ALERT ( at_aiconsole, "**ERROR**\nCouldn't malloc %d nodes!\n", m_cNodes );
 		return FALSE;
 	}
 
@@ -779,7 +779,7 @@ int CGraph :: FindShortestPath ( int *piPath, int iStart, int iDest, int iHull, 
 	return iNumPathNodes;
 }
 
-inline ULONG Hash(void *p, int len)
+inline unsigned int Hash(void *p, int len)
 {
 	CRC32_t ulCrc;
 	CRC32_INIT(&ulCrc);
@@ -879,7 +879,7 @@ int	CGraph :: FindNearestNode ( const Vector &vecOrigin,  int afNodeTypes )
 
 	// Check with the cache
 	//
-	ULONG iHash = (CACHE_SIZE-1) & Hash((void *)(const float *)vecOrigin, sizeof(vecOrigin));
+	unsigned int iHash = (CACHE_SIZE-1) & Hash((void *)(const float *)vecOrigin, sizeof(vecOrigin));
 	if (m_Cache[iHash].v == vecOrigin)
 	{
 		//ALERT(at_aiconsole, "Cache Hit.\n");
@@ -1310,7 +1310,7 @@ int CGraph :: LinkVisibleNodes ( CLink *pLinkPool, FILE *file, int *piBadNode )
 			}
 
 			// record the connection info in the link pool
-			WorldGraph.m_pNodes [ i ].m_cNumLinks = cLinksThisNode;
+			m_pNodes [ i ].m_cNumLinks = cLinksThisNode;
 			
 			// keep track of the most initial links ANY node had, so we can figure out
 			// if we have a large enough default link pool

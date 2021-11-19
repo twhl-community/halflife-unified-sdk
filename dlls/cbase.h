@@ -12,6 +12,9 @@
 *   without written permission from Valve LLC.
 *
 ****/
+
+#pragma once
+
 /*
 
 Class Hierachy
@@ -42,15 +45,10 @@ CBaseEntity
 // UNDONE: This will ignore transition volumes (trigger_transition), but not the PVS!!!
 #define		FCAP_FORCE_TRANSITION		0x00000080		// ALWAYS goes across transitions
 
-#include "archtypes.h"     // DAL
+#include "Platform.h"
 #include "saverestore.h"
 #include "schedule.h"
-
-#ifndef MONSTEREVENT_H
 #include "monsterevent.h"
-#endif
-
-#include "Platform.h"
 
 // C functions for external declarations that call the appropriate C++ methods
 
@@ -250,8 +248,8 @@ public:
 	void EXPORT SUB_FadeOut ();
 	void EXPORT SUB_CallUseToggle() { this->Use( this, this, USE_TOGGLE, 0 ); }
 	int			ShouldToggle( USE_TYPE useType, BOOL currentState );
-	void		FireBullets( ULONG	cShots, Vector  vecSrc, Vector	vecDirShooting,	Vector	vecSpread, float flDistance, int iBulletType, int iTracerFreq = 4, int iDamage = 0, entvars_t *pevAttacker = NULL  );
-	Vector		FireBulletsPlayer( ULONG	cShots, Vector  vecSrc, Vector	vecDirShooting,	Vector	vecSpread, float flDistance, int iBulletType, int iTracerFreq = 4, int iDamage = 0, entvars_t *pevAttacker = NULL, int shared_rand = 0 );
+	void		FireBullets( unsigned int cShots, Vector  vecSrc, Vector	vecDirShooting,	Vector	vecSpread, float flDistance, int iBulletType, int iTracerFreq = 4, int iDamage = 0, entvars_t *pevAttacker = NULL  );
+	Vector		FireBulletsPlayer( unsigned int cShots, Vector  vecSrc, Vector	vecDirShooting,	Vector	vecSpread, float flDistance, int iBulletType, int iTracerFreq = 4, int iDamage = 0, entvars_t *pevAttacker = NULL, int shared_rand = 0 );
 
 	virtual CBaseEntity *Respawn() { return NULL; }
 
@@ -433,8 +431,8 @@ typedef struct locksounds			// sounds that doors and buttons make when locked/un
 
 	float	flwaitSound;			// time delay between playing consecutive 'locked/unlocked' sounds
 	float	flwaitSentence;			// time delay between playing consecutive sentences
-	BYTE	bEOFLocked;				// true if hit end of list of locked sentences
-	BYTE	bEOFUnlocked;			// true if hit end of list of unlocked sentences
+	byte	bEOFLocked;				// true if hit end of list of locked sentences
+	byte	bEOFUnlocked;			// true if hit end of list of unlocked sentences
 } locksound_t;
 
 void PlayLockSounds(entvars_t *pev, locksound_t *pls, int flocked, int fbutton);
@@ -670,10 +668,10 @@ public:
 
 	locksound_t m_ls;			// door lock sounds
 	
-	BYTE	m_bLockedSound;		// ordinals from entity selection
-	BYTE	m_bLockedSentence;	
-	BYTE	m_bUnlockedSound;	
-	BYTE	m_bUnlockedSentence;
+	byte	m_bLockedSound;		// ordinals from entity selection
+	byte	m_bLockedSentence;	
+	byte	m_bUnlockedSound;	
+	byte	m_bUnlockedSentence;
 	int		m_sounds;
 };
 
@@ -735,10 +733,10 @@ push_trigger_data
 
 typedef struct _SelAmmo
 {
-	BYTE	Ammo1Type;
-	BYTE	Ammo1;
-	BYTE	Ammo2Type;
-	BYTE	Ammo2;
+	byte	Ammo1Type;
+	byte	Ammo1;
+	byte	Ammo2Type;
+	byte	Ammo2;
 } SelAmmo;
 
 

@@ -17,8 +17,7 @@
 
 // this file is included by both the game-dll and the client-dll,
 
-#ifndef CDLL_DLL_H
-#define CDLL_DLL_H
+#pragma once
 
 #define MAX_WEAPONS		32		// ???
 const int SV_MAX_PLAYERS = 32;
@@ -180,5 +179,3 @@ inline void UnpackRGB(int& r, int& g, int& b, unsigned long ulRGB)
 	g = (ulRGB & 0xFF00) >> 8;
 	b = ulRGB & 0xFF;
 }
-
-#endif

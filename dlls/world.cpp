@@ -37,7 +37,6 @@
 #include "world.h"
 #include "ctf/CItemCTF.h"
 
-extern CGraph WorldGraph;
 extern CSoundEnt *pSoundEnt;
 
 extern CBaseEntity				*g_pLastSpawn;

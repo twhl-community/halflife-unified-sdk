@@ -32,7 +32,7 @@ struct icon_sprite_t
 {
 	char szSpriteName[24];
 	HSPRITE spr;
-	wrect_t rc;
+	Rect rc;
 	unsigned char r;
 	unsigned char g;
 	unsigned char b;

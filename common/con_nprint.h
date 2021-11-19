@@ -12,15 +12,8 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#if !defined( CON_NPRINTH )
-#define CON_NPRINTH
-#ifdef _WIN32
-#pragma once
-#endif
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#pragma once
 	
 typedef struct con_nprint_s
 {
@@ -31,8 +24,3 @@ typedef struct con_nprint_s
 
 void Con_NPrintf( int idx, char *fmt, ... );
 void Con_NXPrintf( struct con_nprint_s *info, char *fmt, ... );
-#ifdef __cplusplus
-}
-#endif
-
-#endif
