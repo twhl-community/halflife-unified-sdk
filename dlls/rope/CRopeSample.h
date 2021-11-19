@@ -12,8 +12,8 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#ifndef ROPE_CROPESAMPLE_H
-#define ROPE_CROPESAMPLE_H
+
+#pragma once
 
 class CRope;
 
@@ -64,5 +64,3 @@ private:
 	RopeSampleData m_Data;
 	CRope* m_pMasterRope;
 };
-
-#endif

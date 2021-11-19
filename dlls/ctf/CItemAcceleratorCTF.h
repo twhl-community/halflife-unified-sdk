@@ -12,8 +12,8 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#ifndef CITEMACCELERATORCTF_H
-#define CITEMACCELERATORCTF_H
+
+#pragma once
 
 #include "CItemCTF.h"
 
@@ -30,5 +30,3 @@ public:
 
 	bool MyTouch( CBasePlayer* pPlayer ) override;
 };
-
-#endif

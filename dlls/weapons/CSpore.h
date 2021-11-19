@@ -12,8 +12,8 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#ifndef WEAPONS_CSPORE_H
-#define WEAPONS_CSPORE_H
+
+#pragma once
 
 enum SporeAnim
 {
@@ -76,5 +76,3 @@ private:
 
 	EHANDLE m_hSprite;
 };
-
-#endif

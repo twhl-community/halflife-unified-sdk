@@ -12,8 +12,8 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#ifndef WEAPONS_CDISPLACER_H
-#define WEAPONS_CDISPLACER_H
+
+#pragma once
 
 enum DisplacerAnim
 {
@@ -95,5 +95,3 @@ private:
 
 	unsigned short m_usFireDisplacer;
 };
-
-#endif

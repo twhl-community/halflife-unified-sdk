@@ -12,8 +12,8 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#ifndef CITEMCTF_H
-#define CITEMCTF_H
+
+#pragma once
 
 #include "CTFDefs.h"
 
@@ -58,5 +58,3 @@ public:
 	CTFItem::CTFItem m_iItemFlag;
 	const char* m_pszItemName;
 };
-
-#endif

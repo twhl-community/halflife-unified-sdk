@@ -12,8 +12,8 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#ifndef CITEMPORTABLEHEVCTF_H
-#define CITEMPORTABLEHEVCTF_H
+
+#pragma once
 
 #include "CItemCTF.h"
 
@@ -30,5 +30,3 @@ public:
 
 	int Classify() override;
 };
-
-#endif

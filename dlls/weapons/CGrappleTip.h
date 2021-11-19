@@ -12,8 +12,8 @@
 *   use or distribution of this code by or to any unlicensed person is illegal.
 *
 ****/
-#ifndef WEAPONS_CGRAPPLETIP_H
-#define WEAPONS_CGRAPPLETIP_H
+
+#pragma once
 
 class CGrappleTip : public CBaseEntity
 {
@@ -65,5 +65,3 @@ private:
 	EHANDLE m_hGrappleTarget;
 	Vector m_vecOriginOffset;
 };
-
-#endif

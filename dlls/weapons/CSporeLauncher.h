@@ -12,8 +12,8 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#ifndef WEAPONS_CSPORELAUNCHER_H
-#define WEAPONS_CSPORELAUNCHER_H
+
+#pragma once
 
 enum SporeLauncherAnim
 {
@@ -94,5 +94,3 @@ private:
 
 	float m_flNextReload;
 };
-
-#endif

@@ -12,8 +12,8 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#ifndef WEAPONS_CSHOCKRIFLE_H
-#define WEAPONS_CSHOCKRIFLE_H
+
+#pragma once
 
 enum ShockRifleAnim
 {
@@ -84,5 +84,3 @@ private:
 	float m_flRechargeTime;
 	float m_flSoundDelay;
 };
-
-#endif

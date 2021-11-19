@@ -12,8 +12,8 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#ifndef WEAPONS_CKNIFE_H
-#define WEAPONS_CKNIFE_H
+
+#pragma once
 
 enum KnifeAnim
 {
@@ -72,5 +72,3 @@ private:
 	int m_iSwing;
 	TraceResult m_trHit;
 };
-
-#endif

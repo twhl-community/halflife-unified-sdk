@@ -12,8 +12,8 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#ifndef ROPE_CROPESEGMENT_H
-#define ROPE_CROPESEGMENT_H
+
+#pragma once
 
 class CRopeSample;
 
@@ -87,5 +87,3 @@ private:
 	BOOL m_bCauseDamage;
 	BOOL m_bCanBeGrabbed;
 };
-
-#endif

@@ -12,8 +12,8 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#ifndef CITEMREGENERATIONCTF_H
-#define CITEMREGENERATIONCTF_H
+
+#pragma once
 
 #include "CItemCTF.h"
 
@@ -30,5 +30,3 @@ public:
 
 	int Classify() override;
 };
-
-#endif

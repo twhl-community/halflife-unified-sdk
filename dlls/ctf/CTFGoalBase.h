@@ -12,8 +12,8 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#ifndef CTFGOALBASE_H
-#define CTFGOALBASE_H
+
+#pragma once
 
 #include "CTFGoal.h"
 
@@ -28,5 +28,3 @@ public:
 
 	void TurnOnLight(CBasePlayer* pPlayer);
 };
-
-#endif

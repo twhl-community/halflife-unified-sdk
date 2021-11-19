@@ -12,8 +12,8 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#ifndef CTFGOAL_H
-#define CTFGOAL_H
+
+#pragma once
 
 class CTFGoal : public CBaseAnimating
 {
@@ -35,5 +35,3 @@ public:
 	Vector m_GoalMin;
 	Vector m_GoalMax;
 };
-
-#endif

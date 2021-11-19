@@ -12,8 +12,8 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#ifndef WEAPONS_CEAGLELASER_H
-#define WEAPONS_CEAGLELASER_H
+
+#pragma once
 
 /**
 *	@brief Identical to CLaserSpot, different class to avoid RPG laser confusion logic. - Solokiller
@@ -25,4 +25,3 @@ public:
 
 	static CEagleLaser* CreateSpot();
 };
-#endif

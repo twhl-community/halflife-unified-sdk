@@ -12,8 +12,8 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#ifndef COFALLYMONSTER_H
-#define COFALLYMONSTER_H
+
+#pragma once
 
 /**
 *	@brief Base class for Opposing force allies
@@ -95,5 +95,3 @@ public:
 	EHANDLE		m_hTalkTarget;	// who to look at while talking
 	CUSTOM_SCHEDULES;
 };
-
-#endif

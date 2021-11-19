@@ -12,8 +12,8 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#ifndef WEAPONS_CSNIPERRIFLE_H
-#define WEAPONS_CSNIPERRIFLE_H
+
+#pragma once
 
 enum SniperRifleAnim
 {
@@ -83,5 +83,3 @@ private:
 	BOOL m_bReloading;
 	float m_flReloadStart;
 };
-
-#endif

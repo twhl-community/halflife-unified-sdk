@@ -12,8 +12,8 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#ifndef WEAPONS_CDISPLACERBALL_H
-#define WEAPONS_CDISPLACERBALL_H
+
+#pragma once
 
 class CDisplacerBall : public CBaseEntity
 {
@@ -60,5 +60,3 @@ private:
 
 	EHANDLE m_hDisplacedTarget;
 };
-
-#endif

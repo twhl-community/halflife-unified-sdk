@@ -12,8 +12,8 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#ifndef GAME_SERVER_ENTITIES_ROPE_CROPE_H
-#define GAME_SERVER_ENTITIES_ROPE_CROPE_H
+
+#pragma once
 
 class CRopeSegment;
 class CRopeSample;
@@ -323,5 +323,3 @@ private:
 
 	BOOL m_bMakeSound;
 };
-
-#endif

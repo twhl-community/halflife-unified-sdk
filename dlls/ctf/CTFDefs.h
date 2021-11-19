@@ -12,8 +12,8 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#ifndef CTFDEFS_H
-#define CTFDEFS_H
+
+#pragma once
 
 /**
 *	@file CTF gamemode definitions
@@ -45,5 +45,3 @@ enum CTFItem : unsigned int
 	ItemsMask = LongJump | PortableHEV | Backpack | Acceleration | Unknown | Regeneration
 };
 }
-
-#endif //CTFDEFS_H

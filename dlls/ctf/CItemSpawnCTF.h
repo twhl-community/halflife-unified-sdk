@@ -12,8 +12,8 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#ifndef CITEMSPAWNCTF_H
-#define CITEMSPAWNCTF_H
+
+#pragma once
 
 #include "CTFDefs.h"
 
@@ -24,5 +24,3 @@ public:
 
 	CTFTeam team_no;
 };
-
-#endif

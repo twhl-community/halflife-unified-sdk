@@ -12,8 +12,8 @@
 *   use or distribution of this code by or to any unlicensed person is illegal.
 *
 ****/
-#ifndef WEAPONS_CGRAPPLE_H
-#define WEAPONS_CGRAPPLE_H
+
+#pragma once
 
 class CGrappleTip;
 
@@ -104,5 +104,3 @@ private:
 
 	bool m_bMomentaryStuck;
 };
-
-#endif

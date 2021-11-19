@@ -12,8 +12,8 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#ifndef WEAPONS_CM249_H
-#define WEAPONS_CM249_H
+
+#pragma once
 
 enum M249Anim
 {
@@ -91,5 +91,3 @@ private:
 	float m_flReloadStartTime;
 	float m_flReloadStart;
 };
-
-#endif

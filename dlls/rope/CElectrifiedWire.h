@@ -12,8 +12,8 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#ifndef ROPE_CELECTRIFIEDWIRE_H
-#define ROPE_CELECTRIFIEDWIRE_H
+
+#pragma once
 
 #include "CRope.h"
 
@@ -82,5 +82,3 @@ public:
 
 	float m_flLastSparkTime;
 };
-
-#endif

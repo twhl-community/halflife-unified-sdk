@@ -12,8 +12,8 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#ifndef CTFPLAY_GAMERULES_H
-#define CTFPLAY_GAMERULES_H
+
+#pragma once
 
 #include "CTFDefs.h"
 
@@ -140,5 +140,3 @@ void ScatterPlayerCTFPowerups( CBasePlayer* pPlayer );
 void DropPlayerCTFPowerup( CBasePlayer* pPlayer );
 void FlushCTFPowerupTimes();
 void InitItemsForPlayer(CBasePlayer* pPlayer);
-
-#endif

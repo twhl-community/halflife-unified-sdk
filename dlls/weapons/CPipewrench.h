@@ -12,8 +12,8 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#ifndef WEAPONS_CPIPEWRENCH_H
-#define WEAPONS_CPIPEWRENCH_H
+
+#pragma once
 
 enum pipewrench_e
 {
@@ -92,5 +92,3 @@ public:
 private:
 	unsigned short m_usPipewrench;
 };
-
-#endif

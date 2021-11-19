@@ -13,8 +13,8 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#ifndef WEAPONS_CSHOCKBEAM_H
-#define WEAPONS_CSHOCKBEAM_H
+
+#pragma once
 
 class CShockBeam : public CGrenade
 {
@@ -55,5 +55,3 @@ public:
 
 	int m_iBeams;
 };
-
-#endif
