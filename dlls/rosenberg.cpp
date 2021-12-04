@@ -16,20 +16,26 @@
 // human scientist (passive lab worker)
 //=========================================================
 
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"monsters.h"
-#include	"talkmonster.h"
-#include	"schedule.h"
-#include	"defaultai.h"
-#include	"scripted.h"
-#include	"animation.h"
-#include	"soundent.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
+#include "talkmonster.h"
+#include "schedule.h"
+#include "defaultai.h"
+#include "scripted.h"
+#include "animation.h"
+#include "soundent.h"
 
 
-#define		NUM_SCIENTIST_HEADS		4 // four heads available for scientist model
-enum { HEAD_GLASSES = 0, HEAD_EINSTEIN = 1, HEAD_LUTHER = 2, HEAD_SLICK = 3 };
+#define NUM_SCIENTIST_HEADS 4 // four heads available for scientist model
+enum
+{
+	HEAD_GLASSES = 0,
+	HEAD_EINSTEIN = 1,
+	HEAD_LUTHER = 2,
+	HEAD_SLICK = 3
+};
 
 enum
 {
@@ -57,9 +63,9 @@ const int SF_ROSENBERG_NO_USE = 1 << 8;
 //=========================================================
 // Monster's Anim Events Go Here
 //=========================================================
-#define		SCIENTIST_AE_HEAL		( 1 )
-#define		SCIENTIST_AE_NEEDLEON	( 2 )
-#define		SCIENTIST_AE_NEEDLEOFF	( 3 )
+#define SCIENTIST_AE_HEAL (1)
+#define SCIENTIST_AE_NEEDLEON (2)
+#define SCIENTIST_AE_NEEDLEOFF (3)
 
 //=======================================================
 // Scientist
@@ -72,23 +78,23 @@ public:
 	void Precache() override;
 
 	void SetYawSpeed() override;
-	int  Classify() override;
+	int Classify() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 	void RunTask(Task_t* pTask) override;
 	void StartTask(Task_t* pTask) override;
-	int	ObjectCaps() override { return CTalkMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
+	int ObjectCaps() override { return CTalkMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
 	virtual int FriendNumber(int arrayNumber) override;
 	void SetActivity(Activity newActivity) override;
 	Activity GetStoppedActivity() override;
 	int ISoundMask() override;
 	void DeclineFollowing() override;
 
-	float	CoverRadius() override { return 1200; }		// Need more room for cover because scientists want to get far away!
-	BOOL	DisregardEnemy(CBaseEntity* pEnemy) { return !pEnemy->IsAlive() || (gpGlobals->time - m_fearTime) > 15; }
+	float CoverRadius() override { return 1200; } // Need more room for cover because scientists want to get far away!
+	bool DisregardEnemy(CBaseEntity* pEnemy) { return !pEnemy->IsAlive() || (gpGlobals->time - m_fearTime) > 15; }
 
-	BOOL	CanHeal();
-	void	Heal();
-	void	Scream();
+	bool CanHeal();
+	void Heal();
+	void Scream();
 
 	// Override these to set behavior
 	Schedule_t* GetScheduleOfType(int Type) override;
@@ -100,11 +106,11 @@ public:
 
 	void TalkInit();
 
-	void			Killed(entvars_t* pevAttacker, int iGib) override;
+	void Killed(entvars_t* pevAttacker, int iGib) override;
 
-	int		Save(CSave& save) override;
-	int		Restore(CRestore& restore) override;
-	static	TYPEDESCRIPTION m_SaveData[];
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
+	static TYPEDESCRIPTION m_SaveData[];
 
 	CUSTOM_SCHEDULES;
 
@@ -116,11 +122,11 @@ private:
 
 LINK_ENTITY_TO_CLASS(monster_rosenberg, CRosenberg);
 
-TYPEDESCRIPTION	CRosenberg::m_SaveData[] =
-{
-	DEFINE_FIELD(CRosenberg, m_painTime, FIELD_TIME),
-	DEFINE_FIELD(CRosenberg, m_healTime, FIELD_TIME),
-	DEFINE_FIELD(CRosenberg, m_fearTime, FIELD_TIME),
+TYPEDESCRIPTION CRosenberg::m_SaveData[] =
+	{
+		DEFINE_FIELD(CRosenberg, m_painTime, FIELD_TIME),
+		DEFINE_FIELD(CRosenberg, m_healTime, FIELD_TIME),
+		DEFINE_FIELD(CRosenberg, m_fearTime, FIELD_TIME),
 };
 
 IMPLEMENT_SAVERESTORE(CRosenberg, CTalkMonster);
@@ -129,296 +135,272 @@ IMPLEMENT_SAVERESTORE(CRosenberg, CTalkMonster);
 // AI Schedules Specific to this monster
 //=========================================================
 Task_t tlRoFollow[] =
-{
-	{ TASK_SET_FAIL_SCHEDULE,	(float)SCHED_CANT_FOLLOW },	// If you fail, bail out of follow
-	{ TASK_MOVE_TO_TARGET_RANGE,(float)128		},	// Move within 128 of target ent (client)
-//	{ TASK_SET_SCHEDULE,		(float)SCHED_TARGET_FACE },
+	{
+		{TASK_SET_FAIL_SCHEDULE, (float)SCHED_CANT_FOLLOW}, // If you fail, bail out of follow
+		{TASK_MOVE_TO_TARGET_RANGE, (float)128},			// Move within 128 of target ent (client)
+		//	{ TASK_SET_SCHEDULE,		(float)SCHED_TARGET_FACE },
 };
 
-Schedule_t	slRoFollow[] =
-{
+Schedule_t slRoFollow[] =
 	{
-		tlRoFollow,
-		ARRAYSIZE(tlRoFollow),
-		bits_COND_NEW_ENEMY |
-		bits_COND_LIGHT_DAMAGE |
-		bits_COND_HEAVY_DAMAGE |
-		bits_COND_HEAR_SOUND,
-		bits_SOUND_COMBAT |
-		bits_SOUND_DANGER,
-		"Follow"
-	},
+		{tlRoFollow,
+			ARRAYSIZE(tlRoFollow),
+			bits_COND_NEW_ENEMY |
+				bits_COND_LIGHT_DAMAGE |
+				bits_COND_HEAVY_DAMAGE |
+				bits_COND_HEAR_SOUND,
+			bits_SOUND_COMBAT |
+				bits_SOUND_DANGER,
+			"Follow"},
 };
 
 Task_t tlRoFollowScared[] =
-{
-	{ TASK_SET_FAIL_SCHEDULE,	(float)SCHED_TARGET_CHASE },// If you fail, follow normally
-	{ TASK_MOVE_TO_TARGET_RANGE_SCARED,(float)128		},	// Move within 128 of target ent (client)
-//	{ TASK_SET_SCHEDULE,		(float)SCHED_TARGET_FACE_SCARED },
+	{
+		{TASK_SET_FAIL_SCHEDULE, (float)SCHED_TARGET_CHASE}, // If you fail, follow normally
+		{TASK_MOVE_TO_TARGET_RANGE_SCARED, (float)128},		 // Move within 128 of target ent (client)
+		//	{ TASK_SET_SCHEDULE,		(float)SCHED_TARGET_FACE_SCARED },
 };
 
-Schedule_t	slRoFollowScared[] =
-{
+Schedule_t slRoFollowScared[] =
 	{
-		tlRoFollowScared,
-		ARRAYSIZE(tlRoFollowScared),
-		bits_COND_NEW_ENEMY |
-		bits_COND_HEAR_SOUND |
-		bits_COND_LIGHT_DAMAGE |
-		bits_COND_HEAVY_DAMAGE,
-		bits_SOUND_DANGER,
-		"FollowScared"
-	},
+		{tlRoFollowScared,
+			ARRAYSIZE(tlRoFollowScared),
+			bits_COND_NEW_ENEMY |
+				bits_COND_HEAR_SOUND |
+				bits_COND_LIGHT_DAMAGE |
+				bits_COND_HEAVY_DAMAGE,
+			bits_SOUND_DANGER,
+			"FollowScared"},
 };
 
 Task_t tlRoFaceTargetScared[] =
-{
-	{ TASK_FACE_TARGET,			(float)0		},
-	{ TASK_SET_ACTIVITY,		(float)ACT_CROUCHIDLE },
-	{ TASK_SET_SCHEDULE,		(float)SCHED_TARGET_CHASE_SCARED },
+	{
+		{TASK_FACE_TARGET, (float)0},
+		{TASK_SET_ACTIVITY, (float)ACT_CROUCHIDLE},
+		{TASK_SET_SCHEDULE, (float)SCHED_TARGET_CHASE_SCARED},
 };
 
-Schedule_t	slRoFaceTargetScared[] =
-{
+Schedule_t slRoFaceTargetScared[] =
 	{
-		tlRoFaceTargetScared,
-		ARRAYSIZE(tlRoFaceTargetScared),
-		bits_COND_HEAR_SOUND |
-		bits_COND_NEW_ENEMY,
-		bits_SOUND_DANGER,
-		"FaceTargetScared"
-	},
+		{tlRoFaceTargetScared,
+			ARRAYSIZE(tlRoFaceTargetScared),
+			bits_COND_HEAR_SOUND |
+				bits_COND_NEW_ENEMY,
+			bits_SOUND_DANGER,
+			"FaceTargetScared"},
 };
 
 Task_t tlRoStopFollowing[] =
-{
-	{ TASK_CANT_FOLLOW,		(float)0 },
+	{
+		{TASK_CANT_FOLLOW, (float)0},
 };
 
-Schedule_t	slRoStopFollowing[] =
-{
+Schedule_t slRoStopFollowing[] =
 	{
-		tlRoStopFollowing,
-		ARRAYSIZE(tlRoStopFollowing),
-		0,
-		0,
-		"StopFollowing"
-	},
+		{tlRoStopFollowing,
+			ARRAYSIZE(tlRoStopFollowing),
+			0,
+			0,
+			"StopFollowing"},
 };
 
 
 Task_t tlRoHeal[] =
-{
-	{ TASK_MOVE_TO_TARGET_RANGE,(float)50		},	// Move within 60 of target ent (client)
-	{ TASK_SET_FAIL_SCHEDULE,	(float)SCHED_TARGET_CHASE },	// If you fail, catch up with that guy! (change this to put syringe away and then chase)
-	{ TASK_FACE_IDEAL,			(float)0		},
-	{ TASK_SAY_HEAL,			(float)0		},
-	{ TASK_PLAY_SEQUENCE_FACE_TARGET,		(float)ACT_ARM	},			// Whip out the needle
-	{ TASK_HEAL,				(float)0	},	// Put it in the player
-	{ TASK_PLAY_SEQUENCE_FACE_TARGET,		(float)ACT_DISARM	},			// Put away the needle
+	{
+		{TASK_MOVE_TO_TARGET_RANGE, (float)50},				 // Move within 60 of target ent (client)
+		{TASK_SET_FAIL_SCHEDULE, (float)SCHED_TARGET_CHASE}, // If you fail, catch up with that guy! (change this to put syringe away and then chase)
+		{TASK_FACE_IDEAL, (float)0},
+		{TASK_SAY_HEAL, (float)0},
+		{TASK_PLAY_SEQUENCE_FACE_TARGET, (float)ACT_ARM},	 // Whip out the needle
+		{TASK_HEAL, (float)0},								 // Put it in the player
+		{TASK_PLAY_SEQUENCE_FACE_TARGET, (float)ACT_DISARM}, // Put away the needle
 };
 
-Schedule_t	slRoHeal[] =
-{
+Schedule_t slRoHeal[] =
 	{
-		tlRoHeal,
-		ARRAYSIZE(tlRoHeal),
-		0,	// Don't interrupt or he'll end up running around with a needle all the time
-		0,
-		"Heal"
-	},
+		{tlRoHeal,
+			ARRAYSIZE(tlRoHeal),
+			0, // Don't interrupt or he'll end up running around with a needle all the time
+			0,
+			"Heal"},
 };
 
 
 Task_t tlRoFaceTarget[] =
-{
-	{ TASK_STOP_MOVING,			(float)0		},
-	{ TASK_FACE_TARGET,			(float)0		},
-	{ TASK_SET_ACTIVITY,		(float)ACT_IDLE },
-	{ TASK_SET_SCHEDULE,		(float)SCHED_TARGET_CHASE },
+	{
+		{TASK_STOP_MOVING, (float)0},
+		{TASK_FACE_TARGET, (float)0},
+		{TASK_SET_ACTIVITY, (float)ACT_IDLE},
+		{TASK_SET_SCHEDULE, (float)SCHED_TARGET_CHASE},
 };
 
-Schedule_t	slRoFaceTarget[] =
-{
+Schedule_t slRoFaceTarget[] =
 	{
-		tlRoFaceTarget,
-		ARRAYSIZE(tlRoFaceTarget),
-		bits_COND_CLIENT_PUSH |
-		bits_COND_NEW_ENEMY |
-		bits_COND_HEAR_SOUND,
-		bits_SOUND_COMBAT |
-		bits_SOUND_DANGER,
-		"FaceTarget"
-	},
+		{tlRoFaceTarget,
+			ARRAYSIZE(tlRoFaceTarget),
+			bits_COND_CLIENT_PUSH |
+				bits_COND_NEW_ENEMY |
+				bits_COND_HEAR_SOUND,
+			bits_SOUND_COMBAT |
+				bits_SOUND_DANGER,
+			"FaceTarget"},
 };
 
 
 Task_t tlRoSciPanic[] =
-{
-	{ TASK_STOP_MOVING,			(float)0		},
-	{ TASK_FACE_ENEMY,			(float)0		},
-	{ TASK_SCREAM,				(float)0		},
-	{ TASK_PLAY_SEQUENCE_FACE_ENEMY,		(float)ACT_EXCITED	},	// This is really fear-stricken excitement
-	{ TASK_SET_ACTIVITY,		(float)ACT_IDLE	},
+	{
+		{TASK_STOP_MOVING, (float)0},
+		{TASK_FACE_ENEMY, (float)0},
+		{TASK_SCREAM, (float)0},
+		{TASK_PLAY_SEQUENCE_FACE_ENEMY, (float)ACT_EXCITED}, // This is really fear-stricken excitement
+		{TASK_SET_ACTIVITY, (float)ACT_IDLE},
 };
 
-Schedule_t	slRoSciPanic[] =
-{
+Schedule_t slRoSciPanic[] =
 	{
-		tlRoSciPanic,
-		ARRAYSIZE(tlRoSciPanic),
-		0,
-		0,
-		"SciPanic"
-	},
+		{tlRoSciPanic,
+			ARRAYSIZE(tlRoSciPanic),
+			0,
+			0,
+			"SciPanic"},
 };
 
 
 Task_t tlRoIdleSciStand[] =
-{
-	{ TASK_STOP_MOVING,			0				},
-	{ TASK_SET_ACTIVITY,		(float)ACT_IDLE },
-	{ TASK_WAIT,				(float)2		}, // repick IDLESTAND every two seconds.
-	{ TASK_TLK_HEADRESET,		(float)0		}, // reset head position
+	{
+		{TASK_STOP_MOVING, 0},
+		{TASK_SET_ACTIVITY, (float)ACT_IDLE},
+		{TASK_WAIT, (float)2},			// repick IDLESTAND every two seconds.
+		{TASK_TLK_HEADRESET, (float)0}, // reset head position
 };
 
-Schedule_t	slRoIdleSciStand[] =
-{
+Schedule_t slRoIdleSciStand[] =
 	{
-		tlRoIdleSciStand,
-		ARRAYSIZE(tlRoIdleSciStand),
-		bits_COND_NEW_ENEMY |
-		bits_COND_LIGHT_DAMAGE |
-		bits_COND_HEAVY_DAMAGE |
-		bits_COND_HEAR_SOUND |
-		bits_COND_SMELL |
-		bits_COND_CLIENT_PUSH |
-		bits_COND_PROVOKED,
+		{tlRoIdleSciStand,
+			ARRAYSIZE(tlRoIdleSciStand),
+			bits_COND_NEW_ENEMY |
+				bits_COND_LIGHT_DAMAGE |
+				bits_COND_HEAVY_DAMAGE |
+				bits_COND_HEAR_SOUND |
+				bits_COND_SMELL |
+				bits_COND_CLIENT_PUSH |
+				bits_COND_PROVOKED,
 
-		bits_SOUND_COMBAT |// sound flags
-		//bits_SOUND_PLAYER		|
-		//bits_SOUND_WORLD		|
-		bits_SOUND_DANGER |
-		bits_SOUND_MEAT |// scents
-		bits_SOUND_CARCASS |
-		bits_SOUND_GARBAGE,
-		"IdleSciStand"
+			bits_SOUND_COMBAT | // sound flags
+				//bits_SOUND_PLAYER		|
+				//bits_SOUND_WORLD		|
+				bits_SOUND_DANGER |
+				bits_SOUND_MEAT | // scents
+				bits_SOUND_CARCASS |
+				bits_SOUND_GARBAGE,
+			"IdleSciStand"
 
-	},
+		},
 };
 
 
 Task_t tlRoScientistCover[] =
-{
-	{ TASK_SET_FAIL_SCHEDULE,		(float)SCHED_PANIC },		// If you fail, just panic!
-	{ TASK_STOP_MOVING,				(float)0					},
-	{ TASK_FIND_COVER_FROM_ENEMY,	(float)0					},
-	{ TASK_RUN_PATH_SCARED,			(float)0					},
-	{ TASK_TURN_LEFT,				(float)179					},
-	{ TASK_SET_SCHEDULE,			(float)SCHED_HIDE			},
+	{
+		{TASK_SET_FAIL_SCHEDULE, (float)SCHED_PANIC}, // If you fail, just panic!
+		{TASK_STOP_MOVING, (float)0},
+		{TASK_FIND_COVER_FROM_ENEMY, (float)0},
+		{TASK_RUN_PATH_SCARED, (float)0},
+		{TASK_TURN_LEFT, (float)179},
+		{TASK_SET_SCHEDULE, (float)SCHED_HIDE},
 };
 
-Schedule_t	slRoScientistCover[] =
-{
+Schedule_t slRoScientistCover[] =
 	{
-		tlRoScientistCover,
-		ARRAYSIZE(tlRoScientistCover),
-		bits_COND_NEW_ENEMY,
-		0,
-		"ScientistCover"
-	},
+		{tlRoScientistCover,
+			ARRAYSIZE(tlRoScientistCover),
+			bits_COND_NEW_ENEMY,
+			0,
+			"ScientistCover"},
 };
 
 
 
 Task_t tlRoScientistHide[] =
-{
-	{ TASK_SET_FAIL_SCHEDULE,		(float)SCHED_PANIC },		// If you fail, just panic!
-	{ TASK_STOP_MOVING,				(float)0					},
-	{ TASK_PLAY_SEQUENCE,			(float)ACT_CROUCH			},
-	{ TASK_SET_ACTIVITY,			(float)ACT_CROUCHIDLE		},	// FIXME: This looks lame
-	{ TASK_WAIT_RANDOM,				(float)10.0					},
+	{
+		{TASK_SET_FAIL_SCHEDULE, (float)SCHED_PANIC}, // If you fail, just panic!
+		{TASK_STOP_MOVING, (float)0},
+		{TASK_PLAY_SEQUENCE, (float)ACT_CROUCH},
+		{TASK_SET_ACTIVITY, (float)ACT_CROUCHIDLE}, // FIXME: This looks lame
+		{TASK_WAIT_RANDOM, (float)10.0},
 };
 
-Schedule_t	slRoScientistHide[] =
-{
+Schedule_t slRoScientistHide[] =
 	{
-		tlRoScientistHide,
-		ARRAYSIZE(tlRoScientistHide),
-		bits_COND_NEW_ENEMY |
-		bits_COND_HEAR_SOUND |
-		bits_COND_SEE_ENEMY |
-		bits_COND_SEE_HATE |
-		bits_COND_SEE_FEAR |
-		bits_COND_SEE_DISLIKE,
-		bits_SOUND_DANGER,
-		"ScientistHide"
-	},
+		{tlRoScientistHide,
+			ARRAYSIZE(tlRoScientistHide),
+			bits_COND_NEW_ENEMY |
+				bits_COND_HEAR_SOUND |
+				bits_COND_SEE_ENEMY |
+				bits_COND_SEE_HATE |
+				bits_COND_SEE_FEAR |
+				bits_COND_SEE_DISLIKE,
+			bits_SOUND_DANGER,
+			"ScientistHide"},
 };
 
 
 Task_t tlRoScientistStartle[] =
-{
-	{ TASK_SET_FAIL_SCHEDULE,		(float)SCHED_PANIC },		// If you fail, just panic!
-	{ TASK_RANDOM_SCREAM,			(float)0.3 },				// Scream 30% of the time
-	{ TASK_STOP_MOVING,				(float)0					},
-	{ TASK_PLAY_SEQUENCE_FACE_ENEMY,			(float)ACT_CROUCH			},
-	{ TASK_RANDOM_SCREAM,			(float)0.1 },				// Scream again 10% of the time
-	{ TASK_PLAY_SEQUENCE_FACE_ENEMY,			(float)ACT_CROUCHIDLE		},
-	{ TASK_WAIT_RANDOM,				(float)1.0					},
+	{
+		{TASK_SET_FAIL_SCHEDULE, (float)SCHED_PANIC}, // If you fail, just panic!
+		{TASK_RANDOM_SCREAM, (float)0.3},			  // Scream 30% of the time
+		{TASK_STOP_MOVING, (float)0},
+		{TASK_PLAY_SEQUENCE_FACE_ENEMY, (float)ACT_CROUCH},
+		{TASK_RANDOM_SCREAM, (float)0.1}, // Scream again 10% of the time
+		{TASK_PLAY_SEQUENCE_FACE_ENEMY, (float)ACT_CROUCHIDLE},
+		{TASK_WAIT_RANDOM, (float)1.0},
 };
 
-Schedule_t	slRoScientistStartle[] =
-{
+Schedule_t slRoScientistStartle[] =
 	{
-		tlRoScientistStartle,
-		ARRAYSIZE(tlRoScientistStartle),
-		bits_COND_NEW_ENEMY |
-		bits_COND_SEE_ENEMY |
-		bits_COND_SEE_HATE |
-		bits_COND_SEE_FEAR |
-		bits_COND_SEE_DISLIKE,
-		0,
-		"ScientistStartle"
-	},
+		{tlRoScientistStartle,
+			ARRAYSIZE(tlRoScientistStartle),
+			bits_COND_NEW_ENEMY |
+				bits_COND_SEE_ENEMY |
+				bits_COND_SEE_HATE |
+				bits_COND_SEE_FEAR |
+				bits_COND_SEE_DISLIKE,
+			0,
+			"ScientistStartle"},
 };
 
 
 
 Task_t tlRoFear[] =
-{
-	{ TASK_STOP_MOVING,				(float)0					},
-	{ TASK_FACE_ENEMY,				(float)0					},
-	{ TASK_SAY_FEAR,				(float)0					},
-	//	{ TASK_PLAY_SEQUENCE,			(float)ACT_FEAR_DISPLAY		},
-};
-
-Schedule_t	slRoFear[] =
-{
 	{
-		tlRoFear,
-		ARRAYSIZE(tlRoFear),
-		bits_COND_NEW_ENEMY,
-		0,
-		"Fear"
-	},
+		{TASK_STOP_MOVING, (float)0},
+		{TASK_FACE_ENEMY, (float)0},
+		{TASK_SAY_FEAR, (float)0},
+		//	{ TASK_PLAY_SEQUENCE,			(float)ACT_FEAR_DISPLAY		},
+};
+
+Schedule_t slRoFear[] =
+	{
+		{tlRoFear,
+			ARRAYSIZE(tlRoFear),
+			bits_COND_NEW_ENEMY,
+			0,
+			"Fear"},
 };
 
 
-DEFINE_CUSTOM_SCHEDULES(CRosenberg)
-{
+DEFINE_CUSTOM_SCHEDULES(CRosenberg){
 	slRoFollow,
-		slRoFaceTarget,
-		slRoIdleSciStand,
-		slRoFear,
-		slRoScientistCover,
-		slRoScientistHide,
-		slRoScientistStartle,
-		slRoHeal,
-		slRoStopFollowing,
-		slRoSciPanic,
-		slRoFollowScared,
-		slRoFaceTargetScared,
+	slRoFaceTarget,
+	slRoIdleSciStand,
+	slRoFear,
+	slRoScientistCover,
+	slRoScientistHide,
+	slRoScientistStartle,
+	slRoHeal,
+	slRoStopFollowing,
+	slRoSciPanic,
+	slRoFollowScared,
+	slRoFaceTargetScared,
 };
 
 
@@ -554,7 +536,7 @@ void CRosenberg::RunTask(Task_t* pTask)
 			if (distance < pTask->flData)
 			{
 				TaskComplete();
-				RouteClear();		// Stop moving
+				RouteClear(); // Stop moving
 			}
 			else if (distance < 190 && m_movementActivity != ACT_WALK_SCARED)
 				m_movementActivity = ACT_WALK_SCARED;
@@ -584,12 +566,12 @@ void CRosenberg::RunTask(Task_t* pTask)
 }
 
 //=========================================================
-// Classify - indicates this monster's place in the 
+// Classify - indicates this monster's place in the
 // relationship table.
 //=========================================================
-int	CRosenberg::Classify(void)
+int CRosenberg::Classify(void)
 {
-	return	CLASS_HUMAN_PASSIVE;
+	return CLASS_HUMAN_PASSIVE;
 }
 
 
@@ -631,7 +613,7 @@ void CRosenberg::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
 	switch (pEvent->event)
 	{
-	case SCIENTIST_AE_HEAL:		// Heal my target (if within range)
+	case SCIENTIST_AE_HEAL: // Heal my target (if within range)
 		Heal();
 		break;
 	case SCIENTIST_AE_NEEDLEON:
@@ -666,7 +648,7 @@ void CRosenberg::Spawn(void)
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_RED;
 	pev->health = gSkillData.scientistHealth;
-	pev->view_ofs = Vector(0, 0, 50);// position of the eyes relative to monster's origin.
+	pev->view_ofs = Vector(0, 0, 50);  // position of the eyes relative to monster's origin.
 	m_flFieldOfView = VIEW_FIELD_WIDE; // NOTE: we need a wide field of view so scientists will notice player and say hello
 	m_MonsterState = MONSTERSTATE_NONE;
 
@@ -678,8 +660,8 @@ void CRosenberg::Spawn(void)
 	pev->skin = 0;
 
 	if (pev->body == -1)
-	{// -1 chooses a random head
-		pev->body = RANDOM_LONG(0, NUM_SCIENTIST_HEADS - 1);// pick a head, any head
+	{														 // -1 chooses a random head
+		pev->body = RANDOM_LONG(0, NUM_SCIENTIST_HEADS - 1); // pick a head, any head
 	}
 
 	// Luther is black, make his hands black
@@ -688,7 +670,7 @@ void CRosenberg::Spawn(void)
 
 	MonsterInit();
 
-	if (!(pev->spawnflags & SF_ROSENBERG_NO_USE))
+	if ((pev->spawnflags & SF_ROSENBERG_NO_USE) == 0)
 	{
 		SetUse(&CRosenberg::FollowerUse);
 	}
@@ -759,13 +741,13 @@ void CRosenberg::TalkInit()
 //=========================================================
 int CRosenberg::ISoundMask(void)
 {
-	return	bits_SOUND_WORLD |
-		bits_SOUND_COMBAT |
-		bits_SOUND_CARCASS |
-		bits_SOUND_MEAT |
-		bits_SOUND_GARBAGE |
-		bits_SOUND_DANGER |
-		bits_SOUND_PLAYER;
+	return bits_SOUND_WORLD |
+		   bits_SOUND_COMBAT |
+		   bits_SOUND_CARCASS |
+		   bits_SOUND_MEAT |
+		   bits_SOUND_GARBAGE |
+		   bits_SOUND_DANGER |
+		   bits_SOUND_PLAYER;
 }
 
 //=========================================================
@@ -789,7 +771,7 @@ void CRosenberg::PainSound(void)
 }
 
 //=========================================================
-// DeathSound 
+// DeathSound
 //=========================================================
 void CRosenberg::DeathSound(void)
 {
@@ -806,7 +788,7 @@ void CRosenberg::Killed(entvars_t* pevAttacker, int iGib)
 
 void CRosenberg::SetActivity(Activity newActivity)
 {
-	int	iSequence;
+	int iSequence;
 
 	iSequence = LookupActivity(newActivity);
 
@@ -826,11 +808,11 @@ Schedule_t* CRosenberg::GetScheduleOfType(int Type)
 		// Hook these to make a looping schedule
 	case SCHED_TARGET_FACE:
 		// call base class default so that scientist will talk
-		// when 'used' 
+		// when 'used'
 		psched = CTalkMonster::GetScheduleOfType(Type);
 
 		if (psched == slIdleStand)
-			return slRoFaceTarget;	// override this for different target face behavior
+			return slRoFaceTarget; // override this for different target face behavior
 		else
 			return psched;
 
@@ -883,7 +865,7 @@ Schedule_t* CRosenberg::GetSchedule(void)
 		pSound = PBestSound();
 
 		ASSERT(pSound != NULL);
-		if (pSound && (pSound->m_iType & bits_SOUND_DANGER))
+		if (pSound && (pSound->m_iType & bits_SOUND_DANGER) != 0)
 			return GetScheduleOfType(SCHED_TAKE_COVER_FROM_BEST_SOUND);
 	}
 
@@ -895,7 +877,7 @@ Schedule_t* CRosenberg::GetSchedule(void)
 		{
 			if (HasConditions(bits_COND_SEE_ENEMY))
 				m_fearTime = gpGlobals->time;
-			else if (DisregardEnemy(pEnemy))		// After 15 seconds of being hidden, return to alert
+			else if (DisregardEnemy(pEnemy)) // After 15 seconds of being hidden, return to alert
 			{
 				m_hEnemy = NULL;
 				pEnemy = NULL;
@@ -917,12 +899,12 @@ Schedule_t* CRosenberg::GetSchedule(void)
 			ASSERT(pSound != NULL);
 			if (pSound)
 			{
-				if (pSound->m_iType & (bits_SOUND_DANGER | bits_SOUND_COMBAT))
+				if ((pSound->m_iType & (bits_SOUND_DANGER | bits_SOUND_COMBAT)) != 0)
 				{
-					if (gpGlobals->time - m_fearTime > 3)	// Only cower every 3 seconds or so
+					if (gpGlobals->time - m_fearTime > 3) // Only cower every 3 seconds or so
 					{
-						m_fearTime = gpGlobals->time;		// Update last fear
-						return GetScheduleOfType(SCHED_STARTLE);	// This will just duck for a second
+						m_fearTime = gpGlobals->time;			 // Update last fear
+						return GetScheduleOfType(SCHED_STARTLE); // This will just duck for a second
 					}
 				}
 			}
@@ -934,7 +916,7 @@ Schedule_t* CRosenberg::GetSchedule(void)
 			if (!m_hTargetEnt->IsAlive())
 			{
 				// UNDONE: Comment about the recently dead player here?
-				StopFollowing(FALSE);
+				StopFollowing(false);
 				break;
 			}
 
@@ -950,22 +932,22 @@ Schedule_t* CRosenberg::GetSchedule(void)
 				// If I'm already close enough to my target
 				if (TargetDistance() <= 128)
 				{
-					if (CanHeal())	// Heal opportunistically
+					if (CanHeal()) // Heal opportunistically
 						return slRoHeal;
-					if (HasConditions(bits_COND_CLIENT_PUSH))	// Player wants me to move
+					if (HasConditions(bits_COND_CLIENT_PUSH)) // Player wants me to move
 						return GetScheduleOfType(SCHED_MOVE_AWAY_FOLLOW);
 				}
-				return GetScheduleOfType(SCHED_TARGET_FACE);	// Just face and follow.
+				return GetScheduleOfType(SCHED_TARGET_FACE); // Just face and follow.
 			}
-			else	// UNDONE: When afraid, scientist won't move out of your way.  Keep This?  If not, write move away scared
+			else // UNDONE: When afraid, scientist won't move out of your way.  Keep This?  If not, write move away scared
 			{
-				if (HasConditions(bits_COND_NEW_ENEMY)) // I just saw something new and scary, react
-					return GetScheduleOfType(SCHED_FEAR);					// React to something scary
-				return GetScheduleOfType(SCHED_TARGET_FACE_SCARED);	// face and follow, but I'm scared!
+				if (HasConditions(bits_COND_NEW_ENEMY))				// I just saw something new and scary, react
+					return GetScheduleOfType(SCHED_FEAR);			// React to something scary
+				return GetScheduleOfType(SCHED_TARGET_FACE_SCARED); // face and follow, but I'm scared!
 			}
 		}
 
-		if (HasConditions(bits_COND_CLIENT_PUSH))	// Player wants me to move
+		if (HasConditions(bits_COND_CLIENT_PUSH)) // Player wants me to move
 			return GetScheduleOfType(SCHED_MOVE_AWAY);
 
 		// try to say something about smells
@@ -973,14 +955,14 @@ Schedule_t* CRosenberg::GetSchedule(void)
 		break;
 	case MONSTERSTATE_COMBAT:
 		if (HasConditions(bits_COND_NEW_ENEMY))
-			return slRoFear;					// Point and scream!
+			return slRoFear; // Point and scream!
 		if (HasConditions(bits_COND_SEE_ENEMY))
-			return slRoScientistCover;		// Take Cover
+			return slRoScientistCover; // Take Cover
 
 		if (HasConditions(bits_COND_HEAR_SOUND))
-			return slTakeCoverFromBestSound;	// Cower and panic from the scary sound!
+			return slTakeCoverFromBestSound; // Cower and panic from the scary sound!
 
-		return slRoScientistCover;			// Run & Cower
+		return slRoScientistCover; // Run & Cower
 		break;
 	}
 
@@ -1004,14 +986,14 @@ MONSTERSTATE CRosenberg::GetIdealState(void)
 					m_IdealMonsterState = MONSTERSTATE_ALERT;
 					return m_IdealMonsterState;
 				}
-				StopFollowing(TRUE);
+				StopFollowing(true);
 			}
 		}
 		else if (HasConditions(bits_COND_LIGHT_DAMAGE | bits_COND_HEAVY_DAMAGE))
 		{
 			// Stop following if you take damage
 			if (IsFollowing())
-				StopFollowing(TRUE);
+				StopFollowing(true);
 		}
 		break;
 
@@ -1020,7 +1002,7 @@ MONSTERSTATE CRosenberg::GetIdealState(void)
 		CBaseEntity* pEnemy = m_hEnemy;
 		if (pEnemy != NULL)
 		{
-			if (DisregardEnemy(pEnemy))		// After 15 seconds of being hidden, return to alert
+			if (DisregardEnemy(pEnemy)) // After 15 seconds of being hidden, return to alert
 			{
 				// Strip enemy when going to alert
 				m_IdealMonsterState = MONSTERSTATE_ALERT;
@@ -1040,7 +1022,6 @@ MONSTERSTATE CRosenberg::GetIdealState(void)
 				m_IdealMonsterState = MONSTERSTATE_COMBAT;
 				return m_IdealMonsterState;
 			}
-
 		}
 	}
 	break;
@@ -1050,12 +1031,12 @@ MONSTERSTATE CRosenberg::GetIdealState(void)
 }
 
 
-BOOL CRosenberg::CanHeal(void)
+bool CRosenberg::CanHeal(void)
 {
 	if ((m_healTime > gpGlobals->time) || (m_hTargetEnt == NULL) || (m_hTargetEnt->pev->health > (m_hTargetEnt->pev->max_health * 0.5)))
-		return FALSE;
+		return false;
 
-	return TRUE;
+	return true;
 }
 
 void CRosenberg::Heal(void)

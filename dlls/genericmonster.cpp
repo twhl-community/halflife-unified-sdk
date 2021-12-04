@@ -15,15 +15,15 @@
 //=========================================================
 // Generic Monster - purely for scripted sequence work.
 //=========================================================
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"monsters.h"
-#include	"schedule.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
+#include "schedule.h"
 #include "soundent.h"
 
 // For holograms, make them not solid so the player can walk through them
-#define	SF_GENERICMONSTER_NOTSOLID					4 
+#define SF_GENERICMONSTER_NOTSOLID 4
 
 const int SF_GENERICMONSTER_CONTROLLER = 8;
 
@@ -37,17 +37,17 @@ public:
 	void Spawn() override;
 	void Precache() override;
 	void SetYawSpeed() override;
-	int  Classify () override;
-	void HandleAnimEvent( MonsterEvent_t *pEvent ) override;
-	int ISoundMask () override;
+	int Classify() override;
+	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
+	int ISoundMask() override;
 
-	void PlayScriptedSentence(const char* pszSentence, float duration, float volume, float attenuation, BOOL bConcurrent, CBaseEntity* pListener) override;
+	void PlayScriptedSentence(const char* pszSentence, float duration, float volume, float attenuation, bool bConcurrent, CBaseEntity* pListener) override;
 
 	void MonsterThink() override;
 	void IdleHeadTurn(Vector& vecFriend);
 
-	int Save(CSave& save) override;
-	int Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 
 	static TYPEDESCRIPTION m_SaveData[];
 
@@ -56,37 +56,37 @@ public:
 	float m_flIdealYaw;
 	float m_flCurrentYaw;
 };
-LINK_ENTITY_TO_CLASS( monster_generic, CGenericMonster );
+LINK_ENTITY_TO_CLASS(monster_generic, CGenericMonster);
 
 TYPEDESCRIPTION CGenericMonster::m_SaveData[] =
-{
-	//TODO: should be FIELD_TIME
-	DEFINE_FIELD(CGenericMonster, m_talkTime, FIELD_FLOAT),
-	DEFINE_FIELD(CGenericMonster, m_hTalkTarget, FIELD_EHANDLE),
-	DEFINE_FIELD(CGenericMonster, m_flIdealYaw, FIELD_FLOAT),
-	DEFINE_FIELD(CGenericMonster, m_flCurrentYaw, FIELD_FLOAT),
+	{
+		//TODO: should be FIELD_TIME
+		DEFINE_FIELD(CGenericMonster, m_talkTime, FIELD_FLOAT),
+		DEFINE_FIELD(CGenericMonster, m_hTalkTarget, FIELD_EHANDLE),
+		DEFINE_FIELD(CGenericMonster, m_flIdealYaw, FIELD_FLOAT),
+		DEFINE_FIELD(CGenericMonster, m_flCurrentYaw, FIELD_FLOAT),
 };
 
 IMPLEMENT_SAVERESTORE(CGenericMonster, CBaseMonster);
 
 //=========================================================
-// Classify - indicates this monster's place in the 
+// Classify - indicates this monster's place in the
 // relationship table.
 //=========================================================
-int	CGenericMonster :: Classify ()
+int CGenericMonster::Classify()
 {
-	return	CLASS_PLAYER_ALLY;
+	return CLASS_PLAYER_ALLY;
 }
 
 //=========================================================
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CGenericMonster :: SetYawSpeed ()
+void CGenericMonster::SetYawSpeed()
 {
 	int ys;
 
-	switch ( m_Activity )
+	switch (m_Activity)
 	{
 	case ACT_IDLE:
 	default:
@@ -100,13 +100,13 @@ void CGenericMonster :: SetYawSpeed ()
 // HandleAnimEvent - catches the monster-specific messages
 // that occur when tagged animation frames are played.
 //=========================================================
-void CGenericMonster :: HandleAnimEvent( MonsterEvent_t *pEvent )
+void CGenericMonster::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
-	switch( pEvent->event )
+	switch (pEvent->event)
 	{
 	case 0:
 	default:
-		CBaseMonster::HandleAnimEvent( pEvent );
+		CBaseMonster::HandleAnimEvent(pEvent);
 		break;
 	}
 }
@@ -114,42 +114,42 @@ void CGenericMonster :: HandleAnimEvent( MonsterEvent_t *pEvent )
 //=========================================================
 // ISoundMask - generic monster can't hear.
 //=========================================================
-int CGenericMonster :: ISoundMask ()
+int CGenericMonster::ISoundMask()
 {
-	return	bits_SOUND_NONE;
+	return bits_SOUND_NONE;
 }
 
 //=========================================================
 // Spawn
 //=========================================================
-void CGenericMonster :: Spawn()
+void CGenericMonster::Spawn()
 {
 	Precache();
 
-	SET_MODEL( ENT(pev), STRING(pev->model) );
+	SET_MODEL(ENT(pev), STRING(pev->model));
 
-/*
+	/*
 	if ( FStrEq( STRING(pev->model), "models/player.mdl" ) )
 		UTIL_SetSize(pev, VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX);
 	else
 		UTIL_SetSize(pev, VEC_HULL_MIN, VEC_HULL_MAX);
 */
 
-	if ( FStrEq( STRING(pev->model), "models/player.mdl" ) || FStrEq( STRING(pev->model), "models/holo.mdl" ) )
+	if (FStrEq(STRING(pev->model), "models/player.mdl") || FStrEq(STRING(pev->model), "models/holo.mdl"))
 		UTIL_SetSize(pev, VEC_HULL_MIN, VEC_HULL_MAX);
 	else
 		UTIL_SetSize(pev, VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX);
 
-	pev->solid			= SOLID_SLIDEBOX;
-	pev->movetype		= MOVETYPE_STEP;
-	m_bloodColor		= BLOOD_COLOR_RED;
-	pev->health			= 8;
-	m_flFieldOfView		= 0.5;// indicates the width of this monster's forward view cone ( as a dotproduct result )
-	m_MonsterState		= MONSTERSTATE_NONE;
+	pev->solid = SOLID_SLIDEBOX;
+	pev->movetype = MOVETYPE_STEP;
+	m_bloodColor = BLOOD_COLOR_RED;
+	pev->health = 8;
+	m_flFieldOfView = 0.5; // indicates the width of this monster's forward view cone ( as a dotproduct result )
+	m_MonsterState = MONSTERSTATE_NONE;
 
 	MonsterInit();
 
-	if ( pev->spawnflags & SF_GENERICMONSTER_NOTSOLID )
+	if ((pev->spawnflags & SF_GENERICMONSTER_NOTSOLID) != 0)
 	{
 		pev->solid = SOLID_NOT;
 		pev->takedamage = DAMAGE_NO;
@@ -167,12 +167,12 @@ void CGenericMonster :: Spawn()
 //=========================================================
 // Precache - precaches all resources this monster needs
 //=========================================================
-void CGenericMonster :: Precache()
+void CGenericMonster::Precache()
 {
-	PRECACHE_MODEL( (char *)STRING(pev->model) );
-}	
+	PRECACHE_MODEL((char*)STRING(pev->model));
+}
 
-void CGenericMonster::PlayScriptedSentence(const char* pszSentence, float duration, float volume, float attenuation, BOOL bConcurrent, CBaseEntity* pListener)
+void CGenericMonster::PlayScriptedSentence(const char* pszSentence, float duration, float volume, float attenuation, bool bConcurrent, CBaseEntity* pListener)
 {
 	m_talkTime = gpGlobals->time + duration;
 	PlaySentence(pszSentence, duration, volume, attenuation);
@@ -223,8 +223,10 @@ void CGenericMonster::IdleHeadTurn(Vector& vecFriend)
 	{
 		float yaw = VecToYaw(vecFriend - pev->origin) - pev->angles.y;
 
-		if (yaw > 180) yaw -= 360;
-		if (yaw < -180) yaw += 360;
+		if (yaw > 180)
+			yaw -= 360;
+		if (yaw < -180)
+			yaw += 360;
 
 		// turn towards vector
 		m_flIdealYaw = yaw;
