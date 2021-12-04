@@ -708,7 +708,7 @@ int CBasePlayerWeapon::AddToPlayer( CBasePlayer *pPlayer )
 
 int CBasePlayerWeapon::UpdateClientData( CBasePlayer *pPlayer )
 {
-	BOOL bSend = false;
+	bool bSend = false;
 	int state = 0;
 	if ( pPlayer->m_pActiveItem == this )
 	{

@@ -1729,7 +1729,7 @@ void CNihilanthHVR :: DissipateThink()
 
 bool CNihilanthHVR :: CircleTarget( Vector vecTarget )
 {
-	BOOL fClose = false;
+	bool fClose = false;
 
 	Vector vecDest = vecTarget;
 	Vector vecEst = pev->origin + pev->velocity * 0.5;
