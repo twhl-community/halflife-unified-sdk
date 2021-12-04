@@ -51,7 +51,7 @@ IMPLEMENT_SAVERESTORE( COFSquadTalkMonster, COFAllyMonster );
 // OccupySlot - if any slots of the passed slots are 
 // available, the monster will be assigned to one.
 //=========================================================
-BOOL COFSquadTalkMonster::OccupySlot( int iDesiredSlots )
+bool COFSquadTalkMonster::OccupySlot( int iDesiredSlots )
 {
 	int i;
 	int iMask;
@@ -185,7 +185,7 @@ void COFSquadTalkMonster::SquadRemove( COFSquadTalkMonster *pRemove )
 // SquadAdd(), add pAdd to my squad
 //
 //=========================================================
-BOOL COFSquadTalkMonster::SquadAdd( COFSquadTalkMonster *pAdd )
+bool COFSquadTalkMonster::SquadAdd( COFSquadTalkMonster *pAdd )
 {
 	ASSERT( pAdd != NULL );
 	ASSERT( !pAdd->InSquad() );
@@ -517,7 +517,7 @@ void COFSquadTalkMonster::StartMonster()
 // Builds a large box in front of the grunt and checks to see 
 // if any squad members are in that box. 
 //=========================================================
-BOOL COFSquadTalkMonster::NoFriendlyFire()
+bool COFSquadTalkMonster::NoFriendlyFire()
 {
 	if( !InSquad() )
 	{
@@ -610,7 +610,7 @@ MONSTERSTATE COFSquadTalkMonster::GetIdealState()
 // cover location is a good one to move to. (currently based
 // on proximity to others in the squad)
 //=========================================================
-BOOL COFSquadTalkMonster::FValidateCover( const Vector &vecCoverLocation )
+bool COFSquadTalkMonster::FValidateCover( const Vector &vecCoverLocation )
 {
 	if( !InSquad() )
 	{
@@ -630,7 +630,7 @@ BOOL COFSquadTalkMonster::FValidateCover( const Vector &vecCoverLocation )
 // SquadEnemySplit- returns true if not all squad members
 // are fighting the same enemy. 
 //=========================================================
-BOOL COFSquadTalkMonster::SquadEnemySplit()
+bool COFSquadTalkMonster::SquadEnemySplit()
 {
 	if( !InSquad() )
 		return false;
@@ -654,7 +654,7 @@ BOOL COFSquadTalkMonster::SquadEnemySplit()
 // cover location is a good one to move to. (currently based
 // on proximity to others in the squad)
 //=========================================================
-BOOL COFSquadTalkMonster::SquadMemberInRange( const Vector &vecLocation, float flDist )
+bool COFSquadTalkMonster::SquadMemberInRange( const Vector &vecLocation, float flDist )
 {
 	if( !InSquad() )
 		return false;
@@ -755,7 +755,7 @@ COFSquadTalkMonster* COFSquadTalkMonster::FindSquadMedic( int searchRadius )
 	return nullptr;
 }
 
-BOOL COFSquadTalkMonster::HealMe( COFSquadTalkMonster* pTarget )
+bool COFSquadTalkMonster::HealMe( COFSquadTalkMonster* pTarget )
 {
 	return false;
 }

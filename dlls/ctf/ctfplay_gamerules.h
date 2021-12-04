@@ -56,12 +56,12 @@ public:
 
 	void Think() override;
 
-	BOOL IsTeamplay() override { return true; }
-	BOOL IsCTF() override { return true; }
+	bool IsTeamplay() override { return true; }
+	bool IsCTF() override { return true; }
 
 	const char* GetGameDescription() override { return "OpFor CTF"; }
 
-	BOOL ClientConnected( edict_t* pEntity, const char* pszName, const char* pszAddress, char* szRejectReason ) override;
+	bool ClientConnected( edict_t* pEntity, const char* pszName, const char* pszAddress, char* szRejectReason ) override;
 
 	void InitHUD( CBasePlayer* pPlayer ) override;
 
@@ -69,15 +69,15 @@ public:
 
 	void UpdateGameMode( CBasePlayer* pPlayer ) override;
 
-	BOOL FPlayerCanTakeDamage( CBasePlayer* pPlayer, CBaseEntity* pAttacker ) override;
+	bool FPlayerCanTakeDamage( CBasePlayer* pPlayer, CBaseEntity* pAttacker ) override;
 
-	BOOL ShouldAutoAim( CBasePlayer* pPlayer, edict_t* target ) override;
+	bool ShouldAutoAim( CBasePlayer* pPlayer, edict_t* target ) override;
 
 	void PlayerSpawn( CBasePlayer* pPlayer ) override;
 
 	void PlayerThink( CBasePlayer* pPlayer ) override;
 
-	BOOL ClientCommand( CBasePlayer* pPlayer, const char* pcmd ) override;
+	bool ClientCommand( CBasePlayer* pPlayer, const char* pcmd ) override;
 
 	void ClientUserInfoChanged( CBasePlayer* pPlayer, char* infobuffer ) override;
 
@@ -87,7 +87,7 @@ public:
 
 	void DeathNotice( CBasePlayer* pVictim, entvars_t* pKiller, entvars_t* pevInflictor ) override;
 
-	BOOL CanHaveAmmo( CBasePlayer* pPlayer, const char* pszAmmoName, int iMaxCarry ) override;
+	bool CanHaveAmmo( CBasePlayer* pPlayer, const char* pszAmmoName, int iMaxCarry ) override;
 
 	const char* GetTeamID( CBaseEntity* pEntity ) override;
 
@@ -97,9 +97,9 @@ public:
 
 	const char* GetIndexedTeamName( int teamIndex ) override;
 
-	BOOL IsValidTeam( const char* pTeamName ) override;
+	bool IsValidTeam( const char* pTeamName ) override;
 
-	void ChangePlayerTeam( CBasePlayer* pPlayer, const char* pCharName, BOOL bKill, BOOL bGib ) override;
+	void ChangePlayerTeam( CBasePlayer* pPlayer, const char* pCharName, bool bKill, bool bGib ) override;
 
 	const char* SetDefaultPlayerTeam( CBasePlayer* pPlayer ) override;
 
@@ -109,7 +109,7 @@ public:
 
 	const char* TeamWithFewestPlayers() override;
 
-	BOOL TeamsBalanced() override;
+	bool TeamsBalanced() override;
 
 	void GoToIntermission() override;
 

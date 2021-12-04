@@ -58,7 +58,7 @@ void CKnife::Spawn()
 	FallInit();
 }
 
-BOOL CKnife::Deploy()
+bool CKnife::Deploy()
 {
 	return DefaultDeploy( 
 		"models/v_knife.mdl", "models/p_knife.mdl", 

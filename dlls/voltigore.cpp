@@ -343,9 +343,9 @@ public:
 
 	Schedule_t* GetSchedule () override;
 	Schedule_t* GetScheduleOfType ( int Type ) override;
-	BOOL FCanCheckAttacks () override;
-	BOOL CheckMeleeAttack1 ( float flDot, float flDist ) override;
-	BOOL CheckRangeAttack1 ( float flDot, float flDist ) override;
+	bool FCanCheckAttacks () override;
+	bool CheckMeleeAttack1 ( float flDot, float flDist ) override;
+	bool CheckRangeAttack1 ( float flDot, float flDist ) override;
 	void StartTask ( Task_t *pTask ) override;
 	void RunTask( Task_t* pTask ) override;
 	void AlertSound() override;
@@ -353,7 +353,7 @@ public:
 	void TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType) override;
 	int IRelationship( CBaseEntity *pTarget ) override;
 	void StopTalking ();
-	BOOL ShouldSpeak();
+	bool ShouldSpeak();
 
 	void ClearBeams();
 
@@ -489,7 +489,7 @@ void COFVoltigore::StopTalking()
 //=========================================================
 // ShouldSpeak - Should this voltigore be talking?
 //=========================================================
-BOOL COFVoltigore::ShouldSpeak()
+bool COFVoltigore::ShouldSpeak()
 {
 	if ( m_flNextSpeakTime > gpGlobals->time )
 	{
@@ -966,7 +966,7 @@ IMPLEMENT_CUSTOM_SCHEDULES( COFVoltigore, CSquadMonster );
 // because they can use their smart weapons against unseen
 // enemies. Base class doesn't attack anyone it can't see.
 //=========================================================
-BOOL COFVoltigore :: FCanCheckAttacks ()
+bool COFVoltigore :: FCanCheckAttacks ()
 {
 	if ( !HasConditions( bits_COND_ENEMY_TOOFAR ) )
 	{
@@ -982,7 +982,7 @@ BOOL COFVoltigore :: FCanCheckAttacks ()
 // CheckMeleeAttack1 - alien grunts zap the crap out of 
 // any enemy that gets too close. 
 //=========================================================
-BOOL COFVoltigore :: CheckMeleeAttack1 ( float flDot, float flDist )
+bool COFVoltigore :: CheckMeleeAttack1 ( float flDot, float flDist )
 {
 	if ( HasConditions ( bits_COND_SEE_ENEMY ) && flDist <= VOLTIGORE_MELEE_DIST && flDot >= 0.6 && m_hEnemy != NULL )
 	{
@@ -998,7 +998,7 @@ BOOL COFVoltigore :: CheckMeleeAttack1 ( float flDot, float flDist )
 // tracelines are done, so we may not want to do this every
 // server frame. Definitely not while firing. 
 //=========================================================
-BOOL COFVoltigore :: CheckRangeAttack1 ( float flDot, float flDist )
+bool COFVoltigore :: CheckRangeAttack1 ( float flDot, float flDist )
 {
 	if ( IsMoving() && flDist >= 512 )
 	{

@@ -98,9 +98,9 @@ public:
 
 	void TraceAttack( entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType ) override;
 
-	BOOL FVisible( CBaseEntity* pEntity ) override;
+	bool FVisible( CBaseEntity* pEntity ) override;
 
-	BOOL FVisible( const Vector& vecOrigin ) override;
+	bool FVisible( const Vector& vecOrigin ) override;
 
 	void HandleAnimEvent( MonsterEvent_t* pEvent ) override;
 
@@ -128,7 +128,7 @@ public:
 
 	void NextActivity();
 
-	BOOL ClawAttack();
+	bool ClawAttack();
 
 	void LockTopLevel();
 
@@ -1059,7 +1059,7 @@ void COFPitWormUp::NextActivity()
 	}
 }
 
-BOOL COFPitWormUp::ClawAttack()
+bool COFPitWormUp::ClawAttack()
 {
 	if( !m_hEnemy
 		|| pev->origin.z != m_posDesired.z 
@@ -1296,7 +1296,7 @@ void COFPitWormUp::TraceAttack( entvars_t* pevAttacker, float flDamage, Vector v
 	}
 }
 
-BOOL COFPitWormUp::FVisible( CBaseEntity* pEntity )
+bool COFPitWormUp::FVisible( CBaseEntity* pEntity )
 {
 	if( !( pEntity->pev->flags & FL_NOTARGET ) )
 	{
@@ -1309,7 +1309,7 @@ BOOL COFPitWormUp::FVisible( CBaseEntity* pEntity )
 	return false;
 }
 
-BOOL COFPitWormUp::FVisible( const Vector& vecOrigin )
+bool COFPitWormUp::FVisible( const Vector& vecOrigin )
 {
 	Vector vecLookerOrigin, vecLookerAngle;
 	GetAttachment( 0, vecLookerOrigin, vecLookerAngle );
@@ -1705,7 +1705,7 @@ public:
 	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 	void Precache() override;
 
-	BOOL CheckMeleeAttack1(float flDot, float flDist) override
+	bool CheckMeleeAttack1(float flDot, float flDist) override
 	{
 		return flDot >= 0.7 && flDist <= 192.0;
 	}
@@ -1725,7 +1725,7 @@ public:
 		CBaseMonster::KeyValue(pkvd);
 	}
 
-	BOOL CheckRangeAttack1(float flDot, float flDist) override
+	bool CheckRangeAttack1(float flDot, float flDist) override
 	{
 		if (flDist <= 1024.0 && gpGlobals->time > m_spikeTime)
 		{

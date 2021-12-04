@@ -203,7 +203,7 @@ CBasePlayerWeapon :: DefaultDeploy
 
 =====================
 */
-BOOL CBasePlayerWeapon :: DefaultDeploy(const char *szViewModel, const char *szWeaponModel, int iAnim, const char *szAnimExt, int body )
+bool CBasePlayerWeapon :: DefaultDeploy(const char *szViewModel, const char *szWeaponModel, int iAnim, const char *szAnimExt, int body )
 {
 	if ( !CanDeploy() )
 		return false;
@@ -224,7 +224,7 @@ CBasePlayerWeapon :: PlayEmptySound
 
 =====================
 */
-BOOL CBasePlayerWeapon :: PlayEmptySound()
+bool CBasePlayerWeapon :: PlayEmptySound()
 {
 	if (m_iPlayEmptySound)
 	{

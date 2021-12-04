@@ -39,7 +39,7 @@ int g_teamplay = 0;
 
 //=========================================================
 //=========================================================
-BOOL CGameRules::CanHaveAmmo( CBasePlayer *pPlayer, const char *pszAmmoName, int iMaxCarry )
+bool CGameRules::CanHaveAmmo( CBasePlayer *pPlayer, const char *pszAmmoName, int iMaxCarry )
 {
 	int iAmmoIndex;
 
@@ -78,7 +78,7 @@ edict_t *CGameRules :: GetPlayerSpawnSpot( CBasePlayer *pPlayer )
 
 //=========================================================
 //=========================================================
-BOOL CGameRules::CanHavePlayerItem( CBasePlayer *pPlayer, CBasePlayerItem *pWeapon )
+bool CGameRules::CanHavePlayerItem( CBasePlayer *pPlayer, CBasePlayerItem *pWeapon )
 {
 	// only living players can have items
 	if ( pPlayer->pev->deadflag != DEAD_NO )

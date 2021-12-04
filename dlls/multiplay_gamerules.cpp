@@ -99,7 +99,7 @@ CHalfLifeMultiplay :: CHalfLifeMultiplay()
 	}
 }
 
-BOOL CHalfLifeMultiplay::ClientCommand( CBasePlayer *pPlayer, const char *pcmd )
+bool CHalfLifeMultiplay::ClientCommand( CBasePlayer *pPlayer, const char *pcmd )
 {
 	if(g_VoiceGameMgr.ClientCommand(pPlayer, pcmd))
 		return true;
@@ -267,28 +267,28 @@ void CHalfLifeMultiplay :: Think ()
 
 //=========================================================
 //=========================================================
-BOOL CHalfLifeMultiplay::IsMultiplayer()
+bool CHalfLifeMultiplay::IsMultiplayer()
 {
 	return true;
 }
 
 //=========================================================
 //=========================================================
-BOOL CHalfLifeMultiplay::IsDeathmatch()
+bool CHalfLifeMultiplay::IsDeathmatch()
 {
 	return true;
 }
 
 //=========================================================
 //=========================================================
-BOOL CHalfLifeMultiplay::IsCoOp()
+bool CHalfLifeMultiplay::IsCoOp()
 {
 	return gpGlobals->coop;
 }
 
 //=========================================================
 //=========================================================
-BOOL CHalfLifeMultiplay::FShouldSwitchWeapon( CBasePlayer *pPlayer, CBasePlayerItem *pWeapon )
+bool CHalfLifeMultiplay::FShouldSwitchWeapon( CBasePlayer *pPlayer, CBasePlayerItem *pWeapon )
 {
 	if ( !pWeapon->CanDeploy() )
 	{
@@ -328,7 +328,7 @@ BOOL CHalfLifeMultiplay::FShouldSwitchWeapon( CBasePlayer *pPlayer, CBasePlayerI
 	return false;
 }
 
-BOOL CHalfLifeMultiplay :: GetNextBestWeapon( CBasePlayer *pPlayer, CBasePlayerItem *pCurrentWeapon )
+bool CHalfLifeMultiplay :: GetNextBestWeapon( CBasePlayer *pPlayer, CBasePlayerItem *pCurrentWeapon )
 {
 
 	CBasePlayerItem *pCheck;
@@ -397,7 +397,7 @@ BOOL CHalfLifeMultiplay :: GetNextBestWeapon( CBasePlayer *pPlayer, CBasePlayerI
 
 //=========================================================
 //=========================================================
-BOOL CHalfLifeMultiplay :: ClientConnected( edict_t *pEntity, const char *pszName, const char *pszAddress, char szRejectReason[ 128 ] )
+bool CHalfLifeMultiplay :: ClientConnected( edict_t *pEntity, const char *pszName, const char *pszAddress, char szRejectReason[ 128 ] )
 {
 	g_VoiceGameMgr.ClientConnected(pEntity);
 
@@ -616,7 +616,7 @@ float CHalfLifeMultiplay :: FlPlayerFallDamage( CBasePlayer *pPlayer )
 
 //=========================================================
 //=========================================================
-BOOL CHalfLifeMultiplay::FPlayerCanTakeDamage( CBasePlayer *pPlayer, CBaseEntity *pAttacker )
+bool CHalfLifeMultiplay::FPlayerCanTakeDamage( CBasePlayer *pPlayer, CBaseEntity *pAttacker )
 {
 	return true;
 }
@@ -750,7 +750,7 @@ void CHalfLifeMultiplay :: PlayerSpawn( CBasePlayer *pPlayer )
 
 //=========================================================
 //=========================================================
-BOOL CHalfLifeMultiplay :: FPlayerCanRespawn( CBasePlayer *pPlayer )
+bool CHalfLifeMultiplay :: FPlayerCanRespawn( CBasePlayer *pPlayer )
 {
 	return true;
 }
@@ -762,7 +762,7 @@ float CHalfLifeMultiplay :: FlPlayerSpawnTime( CBasePlayer *pPlayer )
 	return gpGlobals->time;//now!
 }
 
-BOOL CHalfLifeMultiplay :: AllowAutoTargetCrosshair()
+bool CHalfLifeMultiplay :: AllowAutoTargetCrosshair()
 {
 	return ( aimcrosshair.value != 0 );
 }
@@ -1162,7 +1162,7 @@ int CHalfLifeMultiplay :: WeaponShouldRespawn( CBasePlayerItem *pWeapon )
 // CanHaveWeapon - returns false if the player is not allowed
 // to pick up this weapon
 //=========================================================
-BOOL CHalfLifeMultiplay::CanHavePlayerItem( CBasePlayer *pPlayer, CBasePlayerItem *pItem )
+bool CHalfLifeMultiplay::CanHavePlayerItem( CBasePlayer *pPlayer, CBasePlayerItem *pItem )
 {
 	if ( weaponstay.value > 0 )
 	{
@@ -1191,7 +1191,7 @@ BOOL CHalfLifeMultiplay::CanHavePlayerItem( CBasePlayer *pPlayer, CBasePlayerIte
 
 //=========================================================
 //=========================================================
-BOOL CHalfLifeMultiplay::CanHaveItem( CBasePlayer *pPlayer, CItem *pItem )
+bool CHalfLifeMultiplay::CanHaveItem( CBasePlayer *pPlayer, CItem *pItem )
 {
 	return true;
 }
@@ -1240,7 +1240,7 @@ void CHalfLifeMultiplay::PlayerGotAmmo( CBasePlayer *pPlayer, char *szName, int 
 
 //=========================================================
 //=========================================================
-BOOL CHalfLifeMultiplay::IsAllowedToSpawn( CBaseEntity *pEntity )
+bool CHalfLifeMultiplay::IsAllowedToSpawn( CBaseEntity *pEntity )
 {
 //	if ( pEntity->pev->flags & FL_MONSTER )
 //		return false;
@@ -1321,7 +1321,7 @@ int CHalfLifeMultiplay::PlayerRelationship( CBaseEntity *pPlayer, CBaseEntity *p
 	return GR_NOTTEAMMATE;
 }
 
-BOOL CHalfLifeMultiplay :: PlayFootstepSounds( CBasePlayer *pl, float fvol )
+bool CHalfLifeMultiplay :: PlayFootstepSounds( CBasePlayer *pl, float fvol )
 {
 	if ( g_footsteps && g_footsteps->value == 0 )
 		return false;
@@ -1332,14 +1332,14 @@ BOOL CHalfLifeMultiplay :: PlayFootstepSounds( CBasePlayer *pl, float fvol )
 	return false;
 }
 
-BOOL CHalfLifeMultiplay :: FAllowFlashlight() 
+bool CHalfLifeMultiplay :: FAllowFlashlight()
 { 
 	return flashlight.value != 0; 
 }
 
 //=========================================================
 //=========================================================
-BOOL CHalfLifeMultiplay :: FAllowMonsters()
+bool CHalfLifeMultiplay :: FAllowMonsters()
 {
 	return ( allowmonsters.value != 0 );
 }

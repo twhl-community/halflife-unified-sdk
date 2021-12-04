@@ -226,11 +226,11 @@ public:
 	static const char *pAttackMissSounds[];
 
 	// No range attacks
-	BOOL CheckRangeAttack1 ( float flDot, float flDist ) override;
-	BOOL CheckRangeAttack2 ( float flDot, float flDist ) override { return false; }
+	bool CheckRangeAttack1 ( float flDot, float flDist ) override;
+	bool CheckRangeAttack2 ( float flDot, float flDist ) override { return false; }
 	int TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType ) override;
 
-	BOOL CheckMeleeAttack1( float flDot, float flDist ) override;
+	bool CheckMeleeAttack1( float flDot, float flDist ) override;
 
 	Schedule_t* GetScheduleOfType( int Type ) override;
 
@@ -694,7 +694,7 @@ int COFGonome::IgnoreConditions ()
 	
 }
 
-BOOL COFGonome::CheckMeleeAttack1( float flDot, float flDist )
+bool COFGonome::CheckMeleeAttack1( float flDot, float flDist )
 {
 	if( flDist <= 64.0 && flDot >= 0.7 && m_hEnemy )
 	{
@@ -704,7 +704,7 @@ BOOL COFGonome::CheckMeleeAttack1( float flDot, float flDist )
 	return false;
 }
 
-BOOL COFGonome::CheckRangeAttack1( float flDot, float flDist )
+bool COFGonome::CheckRangeAttack1( float flDot, float flDist )
 {
 	if( flDist < 256.0 )
 		return false;

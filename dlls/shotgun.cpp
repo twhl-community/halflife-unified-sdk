@@ -104,7 +104,7 @@ void CShotgun::IncrementAmmo(CBasePlayer* pPlayer)
 	}
 }
 
-BOOL CShotgun::Deploy( )
+bool CShotgun::Deploy( )
 {
 	return DefaultDeploy( "models/v_shotgun.mdl", "models/p_shotgun.mdl", SHOTGUN_DRAW, "shotgun" );
 }
@@ -407,7 +407,7 @@ class CShotgunAmmo : public CBasePlayerAmmo
 		PRECACHE_MODEL ("models/w_shotbox.mdl");
 		PRECACHE_SOUND("items/9mmclip1.wav");
 	}
-	BOOL AddAmmo( CBaseEntity *pOther ) override
+	bool AddAmmo( CBaseEntity *pOther ) override
 	{ 
 		if (pOther->GiveAmmo( AMMO_BUCKSHOTBOX_GIVE, "buckshot", BUCKSHOT_MAX_CARRY ) != -1)
 		{

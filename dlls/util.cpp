@@ -352,7 +352,7 @@ edict_t *DBG_EntOfVars( const entvars_t *pev )
 #ifdef	DEBUG
 	void
 DBG_AssertFunction(
-	BOOL		fExpr,
+	bool		fExpr,
 	const char*	szExpr,
 	const char*	szFile,
 	int			szLine,
@@ -369,7 +369,7 @@ DBG_AssertFunction(
 	}
 #endif	// DEBUG
 
-BOOL UTIL_GetNextBestWeapon( CBasePlayer *pPlayer, CBasePlayerItem *pCurrentWeapon )
+bool UTIL_GetNextBestWeapon( CBasePlayer *pPlayer, CBasePlayerItem *pCurrentWeapon )
 {
 	return g_pGameRules->GetNextBestWeapon( pPlayer, pCurrentWeapon );
 }
@@ -971,7 +971,8 @@ void UTIL_ShowMessageAll( const char *pString )
 // Overloaded to add IGNORE_GLASS
 void UTIL_TraceLine( const Vector &vecStart, const Vector &vecEnd, IGNORE_MONSTERS igmon, IGNORE_GLASS ignoreGlass, edict_t *pentIgnore, TraceResult *ptr )
 {
-	TRACE_LINE( vecStart, vecEnd, (igmon == ignore_monsters ? true : false) | (ignoreGlass?0x100:0), pentIgnore, ptr );
+	//TODO: define constants
+	TRACE_LINE( vecStart, vecEnd, (igmon == ignore_monsters ? 1 : 0) | (ignoreGlass?0x100:0), pentIgnore, ptr );
 }
 
 
@@ -1139,7 +1140,7 @@ int UTIL_IsMasterTriggered(string_t sMaster, CBaseEntity *pActivator)
 	return 1;
 }
 
-BOOL UTIL_ShouldShowBlood( int color )
+bool UTIL_ShouldShowBlood( int color )
 {
 	if ( color != DONT_BLEED )
 	{
@@ -1307,7 +1308,7 @@ Tell connected clients to display it, or use the default spray can decal
 if the custom can't be loaded.
 ==============
 */
-void UTIL_PlayerDecalTrace( TraceResult *pTrace, int playernum, int decalNumber, BOOL bIsCustom )
+void UTIL_PlayerDecalTrace( TraceResult *pTrace, int playernum, int decalNumber, bool bIsCustom )
 {
 	int index;
 	
@@ -1383,7 +1384,7 @@ void UTIL_Ricochet( const Vector &position, float scale )
 }
 
 
-BOOL UTIL_TeamsMatch( const char *pTeamName1, const char *pTeamName2 )
+bool UTIL_TeamsMatch( const char *pTeamName1, const char *pTeamName2 )
 {
 	// Everyone matches unless it's teamplay
 	if ( !g_pGameRules->IsTeamplay() )
@@ -1587,7 +1588,7 @@ void UTIL_Remove( CBaseEntity *pEntity )
 }
 
 
-BOOL UTIL_IsValidEntity( edict_t *pent )
+bool UTIL_IsValidEntity( edict_t *pent )
 {
 	if ( !pent || pent->free || (pent->v.flags & FL_KILLME) )
 		return false;

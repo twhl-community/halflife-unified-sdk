@@ -52,13 +52,13 @@ public:
 
 	void Spawn() override;
 
-	BOOL AddToPlayer( CBasePlayer* pPlayer ) override;
+	int AddToPlayer( CBasePlayer* pPlayer ) override;
 
-	BOOL Deploy() override;
+	bool Deploy() override;
 
 	void Holster() override;
 
-	BOOL ShouldWeaponIdle() override;
+	bool ShouldWeaponIdle() override;
 
 	void WeaponIdle() override;
 
@@ -74,7 +74,7 @@ public:
 
 	void IncrementAmmo(CBasePlayer* pPlayer) override;
 
-	BOOL UseDecrement() override
+	bool UseDecrement() override
 	{
 #if defined( CLIENT_WEAPONS )
 		return UTIL_DefaultUseDecrement();

@@ -57,7 +57,7 @@ void CPenguin::Spawn()
 	pev->framerate = 1;
 }
 
-BOOL CPenguin::Deploy()
+bool CPenguin::Deploy()
 {
 	if (g_engfuncs.pfnRandomFloat(0.0, 1.0) <= 0.5)
 		EMIT_SOUND(edict(), CHAN_VOICE, "squeek/sqk_hunt2.wav", VOL_NORM, ATTN_NORM);

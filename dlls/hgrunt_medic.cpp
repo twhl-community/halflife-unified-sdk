@@ -164,10 +164,10 @@ public:
 	int  Classify () override;
 	int ISoundMask () override;
 	void HandleAnimEvent( MonsterEvent_t *pEvent ) override;
-	BOOL FCanCheckAttacks () override;
-	BOOL CheckMeleeAttack1 ( float flDot, float flDist ) override;
-	BOOL CheckRangeAttack1 ( float flDot, float flDist ) override;
-	BOOL CheckRangeAttack2 ( float flDot, float flDist ) override;
+	bool FCanCheckAttacks () override;
+	bool CheckMeleeAttack1 ( float flDot, float flDist ) override;
+	bool CheckRangeAttack1 ( float flDot, float flDist ) override;
+	bool CheckRangeAttack2 ( float flDot, float flDist ) override;
 	void CheckAmmo () override;
 	void SetActivity ( Activity NewActivity ) override;
 	void StartTask ( Task_t *pTask ) override;
@@ -190,7 +190,7 @@ public:
 	void TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType) override;
 	int TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType ) override;
 
-	BOOL FOkToSpeak();
+	bool FOkToSpeak();
 	void JustSpoke();
 
 	int ObjectCaps() override;
@@ -207,7 +207,7 @@ public:
 
 	void MonsterThink() override;
 
-	BOOL HealMe( COFSquadTalkMonster* pTarget ) override;
+	bool HealMe( COFSquadTalkMonster* pTarget ) override;
 
 	void HealOff();
 
@@ -417,7 +417,7 @@ int COFMedicAlly :: ISoundMask ()
 //=========================================================
 // someone else is talking - don't speak
 //=========================================================
-BOOL COFMedicAlly :: FOkToSpeak()
+bool COFMedicAlly :: FOkToSpeak()
 {
 // if someone else is talking, don't speak
 	if (gpGlobals->time <= COFSquadTalkMonster::g_talkWaitTime)
@@ -483,7 +483,7 @@ void COFMedicAlly :: PrescheduleThink ()
 // this is a bad bug. Friendly machine gun fire avoidance
 // will unecessarily prevent the throwing of a grenade as well.
 //=========================================================
-BOOL COFMedicAlly :: FCanCheckAttacks ()
+bool COFMedicAlly :: FCanCheckAttacks ()
 {
 	if ( !HasConditions( bits_COND_ENEMY_TOOFAR ) )
 	{
@@ -499,7 +499,7 @@ BOOL COFMedicAlly :: FCanCheckAttacks ()
 //=========================================================
 // CheckMeleeAttack1
 //=========================================================
-BOOL COFMedicAlly :: CheckMeleeAttack1 ( float flDot, float flDist )
+bool COFMedicAlly :: CheckMeleeAttack1 ( float flDot, float flDist )
 {
 	CBaseMonster *pEnemy;
 
@@ -530,7 +530,7 @@ BOOL COFMedicAlly :: CheckMeleeAttack1 ( float flDot, float flDist )
 // occluded (throw grenade over wall, etc). We must 
 // disqualify the machine gun attack if the enemy is occluded.
 //=========================================================
-BOOL COFMedicAlly :: CheckRangeAttack1 ( float flDot, float flDist )
+bool COFMedicAlly :: CheckRangeAttack1 ( float flDot, float flDist )
 {
 	//Only if we have a weapon
 	if( pev->weapons )
@@ -572,7 +572,7 @@ BOOL COFMedicAlly :: CheckRangeAttack1 ( float flDot, float flDist )
 // CheckRangeAttack2 - this checks the Grunt's grenade
 // attack. 
 //=========================================================
-BOOL COFMedicAlly :: CheckRangeAttack2 ( float flDot, float flDist )
+bool COFMedicAlly :: CheckRangeAttack2 ( float flDot, float flDist )
 {
 	if ( !FBitSet( pev->weapons, MedicAllyWeaponFlag::HandGrenade ) )
 	{
@@ -3028,7 +3028,7 @@ void COFMedicAlly::MonsterThink()
 	COFSquadTalkMonster::MonsterThink();
 }
 
-BOOL COFMedicAlly::HealMe( COFSquadTalkMonster* pTarget )
+bool COFMedicAlly::HealMe( COFSquadTalkMonster* pTarget )
 {
 	if( pTarget )
 	{

@@ -284,7 +284,7 @@ void CCrossbow::IncrementAmmo(CBasePlayer* pPlayer)
 	}
 }
 
-BOOL CCrossbow::Deploy( )
+bool CCrossbow::Deploy( )
 {
 	if (m_iClip)
 		return DefaultDeploy( "models/v_crossbow.mdl", "models/p_crossbow.mdl", CROSSBOW_DRAW1, "bow" );
@@ -520,7 +520,7 @@ class CCrossbowAmmo : public CBasePlayerAmmo
 		PRECACHE_MODEL ("models/w_crossbow_clip.mdl");
 		PRECACHE_SOUND("items/9mmclip1.wav");
 	}
-	BOOL AddAmmo( CBaseEntity *pOther ) override
+	bool AddAmmo( CBaseEntity *pOther ) override
 	{ 
 		if (pOther->GiveAmmo( AMMO_CROSSBOWCLIP_GIVE, "bolts", BOLT_MAX_CARRY ) != -1)
 		{

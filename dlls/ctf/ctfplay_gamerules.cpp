@@ -579,7 +579,7 @@ void CHalfLifeCTFplay::Think()
 	}
 }
 
-BOOL CHalfLifeCTFplay::ClientConnected( edict_t* pEntity, const char* pszName, const char* pszAddress, char* szRejectReason )
+bool CHalfLifeCTFplay::ClientConnected( edict_t* pEntity, const char* pszName, const char* pszAddress, char* szRejectReason )
 {
 	m_fRefreshScores = true;
 
@@ -752,7 +752,7 @@ void CHalfLifeCTFplay::UpdateGameMode( CBasePlayer* pPlayer )
 	g_engfuncs.pfnMessageEnd();
 }
 
-BOOL CHalfLifeCTFplay::FPlayerCanTakeDamage( CBasePlayer* pPlayer, CBaseEntity* pAttacker )
+bool CHalfLifeCTFplay::FPlayerCanTakeDamage( CBasePlayer* pPlayer, CBaseEntity* pAttacker )
 {
 	if( pAttacker
 		&& PlayerRelationship( pPlayer, pAttacker ) == GR_TEAMMATE
@@ -763,7 +763,7 @@ BOOL CHalfLifeCTFplay::FPlayerCanTakeDamage( CBasePlayer* pPlayer, CBaseEntity* 
 	return CHalfLifeMultiplay::FPlayerCanTakeDamage( pPlayer, pAttacker );
 }
 
-BOOL CHalfLifeCTFplay::ShouldAutoAim( CBasePlayer* pPlayer, edict_t* target )
+bool CHalfLifeCTFplay::ShouldAutoAim( CBasePlayer* pPlayer, edict_t* target )
 {
 	auto v4 = CBaseEntity::Instance( target );
 
@@ -900,7 +900,7 @@ void CHalfLifeCTFplay::PlayerThink( CBasePlayer* pPlayer )
 	CHalfLifeMultiplay::PlayerThink( pPlayer );
 }
 
-BOOL CHalfLifeCTFplay::ClientCommand( CBasePlayer* pPlayer, const char* pcmd )
+bool CHalfLifeCTFplay::ClientCommand( CBasePlayer* pPlayer, const char* pcmd )
 {
 	if( !strcmp( "cancelmenu", pcmd ) )
 	{
@@ -1214,7 +1214,7 @@ void CHalfLifeCTFplay::DeathNotice( CBasePlayer* pVictim, entvars_t* pKiller, en
 	}
 }
 
-BOOL CHalfLifeCTFplay::CanHaveAmmo( CBasePlayer* pPlayer, const char* pszAmmoName, int iMaxCarry )
+bool CHalfLifeCTFplay::CanHaveAmmo( CBasePlayer* pPlayer, const char* pszAmmoName, int iMaxCarry )
 {
 	if( pszAmmoName )
 	{
@@ -1270,12 +1270,12 @@ const char* CHalfLifeCTFplay::GetIndexedTeamName( int teamIndex )
 	return "";
 }
 
-BOOL CHalfLifeCTFplay::IsValidTeam( const char* pTeamName )
+bool CHalfLifeCTFplay::IsValidTeam( const char* pTeamName )
 {
 	return GetTeamIndex( pTeamName ) != -1;
 }
 
-void CHalfLifeCTFplay::ChangePlayerTeam( CBasePlayer* pPlayer, const char* pCharName, BOOL bKill, BOOL bGib )
+void CHalfLifeCTFplay::ChangePlayerTeam( CBasePlayer* pPlayer, const char* pCharName, bool bKill, bool bGib )
 {
 	auto v5 = pPlayer->entindex();
 
@@ -1524,7 +1524,7 @@ const char* CHalfLifeCTFplay::TeamWithFewestPlayers()
 	return team_names[ 0 ];
 }
 
-BOOL CHalfLifeCTFplay::TeamsBalanced()
+bool CHalfLifeCTFplay::TeamsBalanced()
 {
 	int teamCount[ MaxTeams ] = {};
 

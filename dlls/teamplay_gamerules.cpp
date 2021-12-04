@@ -145,7 +145,7 @@ void CHalfLifeTeamplay :: Think ()
 // the user has typed a command which is unrecognized by everything else;
 // this check to see if the gamerules knows anything about the command
 //=========================================================
-BOOL CHalfLifeTeamplay :: ClientCommand( CBasePlayer *pPlayer, const char *pcmd )
+bool CHalfLifeTeamplay :: ClientCommand( CBasePlayer *pPlayer, const char *pcmd )
 {
 	if(g_VoiceGameMgr.ClientCommand(pPlayer, pcmd))
 		return true;
@@ -254,7 +254,7 @@ void CHalfLifeTeamplay::InitHUD( CBasePlayer *pPlayer )
 }
 
 
-void CHalfLifeTeamplay::ChangePlayerTeam( CBasePlayer *pPlayer, const char *pTeamName, BOOL bKill, BOOL bGib )
+void CHalfLifeTeamplay::ChangePlayerTeam( CBasePlayer *pPlayer, const char *pTeamName, bool bKill, bool bGib )
 {
 	int damageFlags = DMG_GENERIC;
 	int clientIndex = pPlayer->entindex();
@@ -412,12 +412,12 @@ void CHalfLifeTeamplay :: PlayerKilled( CBasePlayer *pVictim, entvars_t *pKiller
 //=========================================================
 // IsTeamplay
 //=========================================================
-BOOL CHalfLifeTeamplay::IsTeamplay()
+bool CHalfLifeTeamplay::IsTeamplay()
 {
 	return true;
 }
 
-BOOL CHalfLifeTeamplay::FPlayerCanTakeDamage( CBasePlayer *pPlayer, CBaseEntity *pAttacker )
+bool CHalfLifeTeamplay::FPlayerCanTakeDamage( CBasePlayer *pPlayer, CBaseEntity *pAttacker )
 {
 	if ( pAttacker && PlayerRelationship( pPlayer, pAttacker ) == GR_TEAMMATE )
 	{
@@ -451,7 +451,7 @@ int CHalfLifeTeamplay::PlayerRelationship( CBaseEntity *pPlayer, CBaseEntity *pT
 
 //=========================================================
 //=========================================================
-BOOL CHalfLifeTeamplay::ShouldAutoAim( CBasePlayer *pPlayer, edict_t *target )
+bool CHalfLifeTeamplay::ShouldAutoAim( CBasePlayer *pPlayer, edict_t *target )
 {
 	// always autoaim, unless target is a teammate
 	CBaseEntity *pTgt = CBaseEntity::Instance( target );
@@ -517,7 +517,7 @@ const char *CHalfLifeTeamplay::GetIndexedTeamName( int teamIndex )
 }
 
 
-BOOL CHalfLifeTeamplay::IsValidTeam( const char *pTeamName ) 
+bool CHalfLifeTeamplay::IsValidTeam( const char *pTeamName )
 {
 	if ( !m_teamLimit )	// Any team is valid if the teamlist isn't set
 		return true;

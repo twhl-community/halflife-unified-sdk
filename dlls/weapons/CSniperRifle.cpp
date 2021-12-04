@@ -68,7 +68,7 @@ void CSniperRifle::Spawn()
 	FallInit(); // get ready to fall down.
 }
 
-BOOL CSniperRifle::AddToPlayer( CBasePlayer* pPlayer )
+int CSniperRifle::AddToPlayer( CBasePlayer* pPlayer )
 {
 	if( BaseClass::AddToPlayer( pPlayer ) )
 	{
@@ -80,7 +80,7 @@ BOOL CSniperRifle::AddToPlayer( CBasePlayer* pPlayer )
 	return false;
 }
 
-BOOL CSniperRifle::Deploy()
+bool CSniperRifle::Deploy()
 {
 	return BaseClass::DefaultDeploy( "models/v_m40a1.mdl", "models/p_m40a1.mdl", SNIPERRIFLE_DRAW, "bow" );
 }
@@ -270,7 +270,7 @@ public:
 		PRECACHE_SOUND( "items/9mmclip1.wav" );
 	}
 
-	BOOL AddAmmo( CBaseEntity *pOther ) override
+	bool AddAmmo( CBaseEntity *pOther ) override
 	{
 		if( pOther->GiveAmmo( AMMO_SNIPERRIFLE_GIVE, "762", SNIPERRIFLE_MAX_CARRY ) != -1 )
 		{

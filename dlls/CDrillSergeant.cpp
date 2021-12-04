@@ -78,7 +78,7 @@ public:
 
 	void PainSound() override;
 
-	BOOL CheckRangeAttack1( float flDot, float flDist ) override;
+	bool CheckRangeAttack1( float flDot, float flDist ) override;
 
 	int TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType ) override;
 
@@ -504,7 +504,7 @@ void CDrillSergeant::PainSound()
 	}
 }
 
-BOOL CDrillSergeant::CheckRangeAttack1( float flDot, float flDist )
+bool CDrillSergeant::CheckRangeAttack1( float flDot, float flDist )
 {
 	if( flDist <= 1024 && flDot >= 0.5 )
 	{

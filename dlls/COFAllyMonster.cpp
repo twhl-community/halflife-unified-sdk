@@ -628,7 +628,7 @@ void COFAllyMonster::Killed( entvars_t *pevAttacker, int iGib )
 
 
 
-CBaseEntity	*COFAllyMonster::EnumFriends( CBaseEntity *pPrevious, int listNumber, BOOL bTrace )
+CBaseEntity	*COFAllyMonster::EnumFriends( CBaseEntity *pPrevious, int listNumber, bool bTrace )
 {
 	CBaseEntity *pFriend = pPrevious;
 	const char *pszFriend;
@@ -781,7 +781,7 @@ void COFAllyMonster::TalkInit()
 // Scan for nearest, visible friend. If fPlayer is true, look for
 // nearest player
 //=========================================================
-CBaseEntity *COFAllyMonster::FindNearestFriend( BOOL fPlayer )
+CBaseEntity *COFAllyMonster::FindNearestFriend(bool fPlayer )
 {
 	CBaseEntity *pFriend = NULL;
 	CBaseEntity *pNearest = NULL;
@@ -928,7 +928,7 @@ int COFAllyMonster::FOkToSpeak()
 }
 
 
-int COFAllyMonster::CanPlaySentence( BOOL fDisregardState )
+int COFAllyMonster::CanPlaySentence(bool fDisregardState )
 {
 	if( fDisregardState )
 		return CBaseMonster::CanPlaySentence( fDisregardState );
@@ -1118,7 +1118,7 @@ int COFAllyMonster::FIdleSpeak()
 	return false;
 }
 
-void COFAllyMonster::PlayScriptedSentence( const char *pszSentence, float duration, float volume, float attenuation, BOOL bConcurrent, CBaseEntity *pListener )
+void COFAllyMonster::PlayScriptedSentence( const char *pszSentence, float duration, float volume, float attenuation, bool bConcurrent, CBaseEntity *pListener )
 {
 	if( !bConcurrent )
 		ShutUpFriends();
@@ -1291,7 +1291,7 @@ Schedule_t* COFAllyMonster::GetScheduleOfType( int Type )
 //=========================================================
 // IsTalking - am I saying a sentence right now?
 //=========================================================
-BOOL COFAllyMonster::IsTalking()
+bool COFAllyMonster::IsTalking()
 {
 	if( m_flStopTalkTime > gpGlobals->time )
 	{
@@ -1344,7 +1344,7 @@ int COFAllyMonster::IRelationship( CBaseEntity *pTarget )
 }
 
 
-void COFAllyMonster::StopFollowing( BOOL clearSchedule )
+void COFAllyMonster::StopFollowing(bool clearSchedule )
 {
 	if( IsFollowing() )
 	{
@@ -1381,7 +1381,7 @@ void COFAllyMonster::StartFollowing( CBaseEntity *pLeader )
 }
 
 
-BOOL COFAllyMonster::CanFollow()
+bool COFAllyMonster::CanFollow()
 {
 	if( m_MonsterState == MONSTERSTATE_SCRIPT )
 	{

@@ -583,9 +583,9 @@ public:
 		CBaseMonster::Killed( pevAttacker, iGib );
 	}
 
-	BOOL FVisible( CBaseEntity* pEntity ) override;
+	bool FVisible( CBaseEntity* pEntity ) override;
 
-	BOOL FVisible( const Vector& vecOrigin ) override;
+	bool FVisible( const Vector& vecOrigin ) override;
 
 	void HandleAnimEvent( MonsterEvent_t* pEvent ) override;
 
@@ -603,7 +603,7 @@ public:
 
 	void NextActivity();
 
-	BOOL ClawAttack();
+	bool ClawAttack();
 
 	void SpewCloud();
 
@@ -1307,7 +1307,7 @@ void COFGeneWorm::NextActivity()
 	EMIT_SOUND_DYN( edict(), CHAN_BODY, pIdleSounds[ RANDOM_LONG( 0, ARRAYSIZE( pIdleSounds ) - 1 ) ], VOL_NORM, 0.1, 0, RANDOM_LONG( -5, 5 ) + 100 );
 }
 
-BOOL COFGeneWorm::ClawAttack()
+bool COFGeneWorm::ClawAttack()
 {
 	auto pEnemy = m_hEnemy.Entity<CBaseEntity>();
 
@@ -1552,7 +1552,7 @@ void COFGeneWorm::TraceAttack( entvars_t* pevAttacker, float flDamage, Vector ve
 	}
 }
 
-BOOL COFGeneWorm::FVisible( CBaseEntity* pEntity )
+bool COFGeneWorm::FVisible( CBaseEntity* pEntity )
 {
 	if( !( pEntity->pev->flags & FL_NOTARGET ) )
 	{
@@ -1565,7 +1565,7 @@ BOOL COFGeneWorm::FVisible( CBaseEntity* pEntity )
 	return false;
 }
 
-BOOL COFGeneWorm::FVisible( const Vector& vecOrigin )
+bool COFGeneWorm::FVisible( const Vector& vecOrigin )
 {
 	Vector vecLookerOrigin, vecLookerAngle;
 	GetAttachment( 0, vecLookerOrigin, vecLookerAngle );

@@ -151,10 +151,10 @@ public:
 	int  Classify () override;
 	int ISoundMask () override;
 	void HandleAnimEvent( MonsterEvent_t *pEvent ) override;
-	BOOL FCanCheckAttacks () override;
-	BOOL CheckMeleeAttack1 ( float flDot, float flDist ) override;
-	BOOL CheckRangeAttack1 ( float flDot, float flDist ) override;
-	BOOL CheckRangeAttack2 ( float flDot, float flDist ) override;
+	bool FCanCheckAttacks () override;
+	bool CheckMeleeAttack1 ( float flDot, float flDist ) override;
+	bool CheckRangeAttack1 ( float flDot, float flDist ) override;
+	bool CheckRangeAttack2 ( float flDot, float flDist ) override;
 	void CheckAmmo () override;
 	void SetActivity ( Activity NewActivity ) override;
 	void StartTask ( Task_t *pTask ) override;
@@ -177,7 +177,7 @@ public:
 	void TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType) override;
 	int TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType ) override;
 
-	BOOL FOkToSpeak();
+	bool FOkToSpeak();
 	void JustSpoke();
 
 	int ObjectCaps() override;
@@ -378,7 +378,7 @@ int COFTorchAlly :: ISoundMask ()
 //=========================================================
 // someone else is talking - don't speak
 //=========================================================
-BOOL COFTorchAlly :: FOkToSpeak()
+bool COFTorchAlly :: FOkToSpeak()
 {
 // if someone else is talking, don't speak
 	if (gpGlobals->time <= COFSquadTalkMonster::g_talkWaitTime)
@@ -444,7 +444,7 @@ void COFTorchAlly :: PrescheduleThink ()
 // this is a bad bug. Friendly machine gun fire avoidance
 // will unecessarily prevent the throwing of a grenade as well.
 //=========================================================
-BOOL COFTorchAlly :: FCanCheckAttacks ()
+bool COFTorchAlly :: FCanCheckAttacks ()
 {
 	if ( !HasConditions( bits_COND_ENEMY_TOOFAR ) )
 	{
@@ -460,7 +460,7 @@ BOOL COFTorchAlly :: FCanCheckAttacks ()
 //=========================================================
 // CheckMeleeAttack1
 //=========================================================
-BOOL COFTorchAlly :: CheckMeleeAttack1 ( float flDot, float flDist )
+bool COFTorchAlly :: CheckMeleeAttack1 ( float flDot, float flDist )
 {
 	CBaseMonster *pEnemy;
 
@@ -491,7 +491,7 @@ BOOL COFTorchAlly :: CheckMeleeAttack1 ( float flDot, float flDist )
 // occluded (throw grenade over wall, etc). We must 
 // disqualify the machine gun attack if the enemy is occluded.
 //=========================================================
-BOOL COFTorchAlly :: CheckRangeAttack1 ( float flDot, float flDist )
+bool COFTorchAlly :: CheckRangeAttack1 ( float flDot, float flDist )
 {
 	//Only if we have a weapon
 	if( !m_fGunHolstered && flDist <= 1024 && flDot >= 0.5 /*&& NoFriendlyFire()*/ )
@@ -529,7 +529,7 @@ BOOL COFTorchAlly :: CheckRangeAttack1 ( float flDot, float flDist )
 // CheckRangeAttack2 - this checks the Grunt's grenade
 // attack. 
 //=========================================================
-BOOL COFTorchAlly :: CheckRangeAttack2 ( float flDot, float flDist )
+bool COFTorchAlly :: CheckRangeAttack2 ( float flDot, float flDist )
 {
 	if ( m_fGunHolstered || !FBitSet( pev->weapons, TorchAllyWeaponFlag::HandGrenade ) )
 	{

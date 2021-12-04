@@ -677,7 +677,7 @@ int CBaseEntity :: IsDormant()
 	return FBitSet( pev->flags, FL_DORMANT );
 }
 
-BOOL CBaseEntity :: IsInWorld()
+bool CBaseEntity :: IsInWorld()
 {
 	// position 
 	if (pev->origin.x >= 4096) return false;
@@ -697,7 +697,7 @@ BOOL CBaseEntity :: IsInWorld()
 	return true;
 }
 
-int CBaseEntity::ShouldToggle( USE_TYPE useType, BOOL currentState )
+int CBaseEntity::ShouldToggle( USE_TYPE useType, bool currentState )
 {
 	if ( useType != USE_TOGGLE && useType != USE_SET )
 	{

@@ -39,8 +39,8 @@ public:
 	void VacateSlot();
 	void ScheduleChange() override;
 	void Killed( entvars_t *pevAttacker, int iGib ) override;
-	BOOL OccupySlot( int iDesiredSlot );
-	BOOL NoFriendlyFire();
+	bool OccupySlot( int iDesiredSlot );
+	bool NoFriendlyFire();
 
 	// squad functions still left in base class
 	COFSquadTalkMonster *MySquadLeader()
@@ -64,14 +64,14 @@ public:
 	int	SquadCount();
 	void SquadRemove( COFSquadTalkMonster *pRemove );
 	void SquadUnlink();
-	BOOL SquadAdd( COFSquadTalkMonster *pAdd );
+	bool SquadAdd( COFSquadTalkMonster *pAdd );
 	void SquadDisband();
 	void SquadAddConditions( int iConditions );
 	void SquadMakeEnemy( CBaseEntity *pEnemy );
 	void SquadPasteEnemyInfo();
 	void SquadCopyEnemyInfo();
-	BOOL SquadEnemySplit();
-	BOOL SquadMemberInRange( const Vector &vecLocation, float flDist );
+	bool SquadEnemySplit();
+	bool SquadMemberInRange( const Vector &vecLocation, float flDist );
 
 	COFSquadTalkMonster *MySquadTalkMonsterPointer() override { return this; }
 
@@ -80,7 +80,7 @@ public:
 	int	Save( CSave &save ) override;
 	int Restore( CRestore &restore ) override;
 
-	BOOL FValidateCover( const Vector &vecCoverLocation ) override;
+	bool FValidateCover( const Vector &vecCoverLocation ) override;
 
 	MONSTERSTATE GetIdealState() override;
 	Schedule_t	*GetScheduleOfType( int iType ) override;
@@ -91,7 +91,7 @@ public:
 
 	COFSquadTalkMonster* FindSquadMedic( int searchRadius );
 
-	virtual BOOL HealMe( COFSquadTalkMonster* pTarget );
+	virtual bool HealMe( COFSquadTalkMonster* pTarget );
 
 	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 };

@@ -85,7 +85,7 @@ void CGrapple::Spawn()
 	FallInit();
 }
 
-BOOL CGrapple::AddToPlayer( CBasePlayer* pPlayer )
+int CGrapple::AddToPlayer( CBasePlayer* pPlayer )
 {
 	if( BaseClass::AddToPlayer( pPlayer ) )
 	{
@@ -99,7 +99,7 @@ BOOL CGrapple::AddToPlayer( CBasePlayer* pPlayer )
 	return false;
 }
 
-BOOL CGrapple::Deploy()
+bool CGrapple::Deploy()
 {
 	return DefaultDeploy( "models/v_bgrap.mdl", "models/p_bgrap.mdl", BGRAPPLE_UP, "gauss" );
 }

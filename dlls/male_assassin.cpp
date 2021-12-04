@@ -153,10 +153,10 @@ public:
 	int  Classify () override;
 	int ISoundMask () override;
 	void HandleAnimEvent( MonsterEvent_t *pEvent ) override;
-	BOOL FCanCheckAttacks () override;
-	BOOL CheckMeleeAttack1 ( float flDot, float flDist ) override;
-	BOOL CheckRangeAttack1 ( float flDot, float flDist ) override;
-	BOOL CheckRangeAttack2 ( float flDot, float flDist ) override;
+	bool FCanCheckAttacks () override;
+	bool CheckMeleeAttack1 ( float flDot, float flDist ) override;
+	bool CheckRangeAttack1 ( float flDot, float flDist ) override;
+	bool CheckRangeAttack2 ( float flDot, float flDist ) override;
 	void CheckAmmo () override;
 	void SetActivity ( Activity NewActivity ) override;
 	void StartTask ( Task_t *pTask ) override;
@@ -181,7 +181,7 @@ public:
 
 	int IRelationship ( CBaseEntity *pTarget ) override;
 
-	BOOL FOkToSpeak();
+	bool FOkToSpeak();
 	void JustSpoke();
 
 	void KeyValue( KeyValueData* pkvd ) override;
@@ -363,7 +363,7 @@ int CMOFAssassin :: ISoundMask ()
 //=========================================================
 // someone else is talking - don't speak
 //=========================================================
-BOOL CMOFAssassin :: FOkToSpeak()
+bool CMOFAssassin :: FOkToSpeak()
 {
 // if someone else is talking, don't speak
 	if (gpGlobals->time <= CTalkMonster::g_talkWaitTime)
@@ -429,7 +429,7 @@ void CMOFAssassin :: PrescheduleThink ()
 // this is a bad bug. Friendly machine gun fire avoidance
 // will unecessarily prevent the throwing of a grenade as well.
 //=========================================================
-BOOL CMOFAssassin :: FCanCheckAttacks ()
+bool CMOFAssassin :: FCanCheckAttacks ()
 {
 	if ( !HasConditions( bits_COND_ENEMY_TOOFAR ) )
 	{
@@ -445,7 +445,7 @@ BOOL CMOFAssassin :: FCanCheckAttacks ()
 //=========================================================
 // CheckMeleeAttack1
 //=========================================================
-BOOL CMOFAssassin :: CheckMeleeAttack1 ( float flDot, float flDist )
+bool CMOFAssassin :: CheckMeleeAttack1 ( float flDot, float flDist )
 {
 	CBaseMonster *pEnemy;
 
@@ -476,7 +476,7 @@ BOOL CMOFAssassin :: CheckMeleeAttack1 ( float flDot, float flDist )
 // occluded (throw grenade over wall, etc). We must 
 // disqualify the machine gun attack if the enemy is occluded.
 //=========================================================
-BOOL CMOFAssassin :: CheckRangeAttack1 ( float flDot, float flDist )
+bool CMOFAssassin :: CheckRangeAttack1 ( float flDot, float flDist )
 {
 	if( pev->weapons )
 	{
@@ -514,7 +514,7 @@ BOOL CMOFAssassin :: CheckRangeAttack1 ( float flDot, float flDist )
 // CheckRangeAttack2 - this checks the Grunt's grenade
 // attack. 
 //=========================================================
-BOOL CMOFAssassin :: CheckRangeAttack2 ( float flDot, float flDist )
+bool CMOFAssassin :: CheckRangeAttack2 ( float flDot, float flDist )
 {
 	if (! FBitSet(pev->weapons, (MAssassinWeaponFlag::HandGrenade | MAssassinWeaponFlag ::GrenadeLauncher)))
 	{
