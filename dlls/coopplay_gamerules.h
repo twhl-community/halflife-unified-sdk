@@ -69,6 +69,6 @@ public:
 	const char* GetGameDescription() override { return "HL Coopplay"; }
 
 private:
-	BOOL m_DisableDeathMessages;
-	BOOL m_DisableDeathPenalty;
+	bool m_DisableDeathMessages;
+	bool m_DisableDeathPenalty;
 };

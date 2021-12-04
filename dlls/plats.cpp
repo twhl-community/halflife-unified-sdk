@@ -965,15 +965,15 @@ public:
 
 	entvars_t	*m_pevCurrentTarget;
 	int			m_sounds;
-	BOOL		m_activated;
+	bool		m_activated;
 
 	float m_maxFrame;
 	float m_lastTime;
-	BOOL m_waiting;
-	BOOL m_nexting;
+	bool m_waiting;
+	bool m_nexting;
 	float m_nextTime;
 	float m_waitTime;
-	BOOL m_stopSprite;
+	bool m_stopSprite;
 };
 
 LINK_ENTITY_TO_CLASS( env_spritetrain, CSpriteTrain );

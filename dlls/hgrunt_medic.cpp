@@ -223,7 +223,7 @@ public:
 	CUSTOM_SCHEDULES;
 	static TYPEDESCRIPTION m_SaveData[];
 
-	BOOL m_lastAttackCheck;
+	bool m_lastAttackCheck;
 	float m_flPlayerDamage;
 
 	// checking the feasibility of a grenade toss is kind of costly, so we do it every couple of seconds,
@@ -234,33 +234,33 @@ public:
 
 	Vector m_vecTossVelocity;
 
-	BOOL m_fThrowGrenade;
-	BOOL m_fStanding;
-	BOOL m_fFirstEncounter;// only put on the handsign show in the squad's first encounter.
+	bool m_fThrowGrenade;
+	bool m_fStanding;
+	bool m_fFirstEncounter;// only put on the handsign show in the squad's first encounter.
 	int m_cClipSize;
 
 	int m_iHealCharge;
-	BOOL m_fUseHealing;
-	BOOL m_fHealing;
+	bool m_fUseHealing;
+	bool m_fHealing;
 
 	float m_flLastUseTime;
 
 	EHANDLE m_hNewTargetEnt;
 
-	BOOL m_fQueueFollow;
-	BOOL m_fHealAudioPlaying;
+	bool m_fQueueFollow;
+	bool m_fHealAudioPlaying;
 
 	float m_flFollowCheckTime;
-	BOOL m_fFollowChecking;
-	BOOL m_fFollowChecked;
+	bool m_fFollowChecking;
+	bool m_fFollowChecked;
 
 	float m_flLastRejectAudio;
 
 	int m_iBlackOrWhite;
 
-	BOOL m_fGunHolstered;
-	BOOL m_fHypoHolstered;
-	BOOL m_fHealActive;
+	bool m_fGunHolstered;
+	bool m_fHypoHolstered;
+	bool m_fHealActive;
 
 	int m_iWeaponIdx;
 

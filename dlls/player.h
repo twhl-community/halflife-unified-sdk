@@ -200,13 +200,13 @@ public:
 	float m_flNextHealthCharge;
 	float m_flNextAmmoCharge;
 	int m_iLastPlayerTrace;
-	BOOL m_fPlayingHChargeSound;
-	BOOL m_fPlayingAChargeSound;
+	bool m_fPlayingHChargeSound;
+	bool m_fPlayingAChargeSound;
 	int m_nLastShotBy;
 	float m_flLastShotTime;
 	int m_iFlagCaptures;
 	int m_iCTFScore;
-	BOOL m_fWONAuthSent;
+	bool m_fWONAuthSent;
 
 	short m_iOffense;
 	short m_iDefense;
@@ -406,7 +406,7 @@ public:
 private:
 	CRope* m_pRope;
 	float m_flLastClimbTime = 0;
-	BOOL m_bIsClimbing = false;
+	bool m_bIsClimbing = false;
 
 	bool m_bRestored;
 };

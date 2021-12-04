@@ -200,11 +200,11 @@ public:
 	CUSTOM_SCHEDULES;
 	static TYPEDESCRIPTION m_SaveData[];
 
-	BOOL m_fGunDrawn;
+	bool m_fGunDrawn;
 	float m_painTime;
 	float m_checkAttackTime;
 
-	BOOL m_lastAttackCheck;
+	bool m_lastAttackCheck;
 	float m_flPlayerDamage;
 
 	// checking the feasibility of a grenade toss is kind of costly, so we do it every couple of seconds,
@@ -215,17 +215,17 @@ public:
 
 	Vector m_vecTossVelocity;
 
-	BOOL m_fThrowGrenade;
-	BOOL m_fStanding;
-	BOOL m_fFirstEncounter;// only put on the handsign show in the squad's first encounter.
+	bool m_fThrowGrenade;
+	bool m_fStanding;
+	bool m_fFirstEncounter;// only put on the handsign show in the squad's first encounter.
 	int m_cClipSize;
 
-	BOOL m_fUseTorch;
+	bool m_fUseTorch;
 	EHANDLE m_hNewTargetEnt;
 	int m_iBlackOrWhite;
-	BOOL m_fGunHolstered;
-	BOOL m_fTorchHolstered;
-	BOOL m_fTorchActive;
+	bool m_fGunHolstered;
+	bool m_fTorchHolstered;
+	bool m_fTorchActive;
 
 	CBeam* m_pTorchBeam;
 

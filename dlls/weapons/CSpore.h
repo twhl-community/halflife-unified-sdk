@@ -72,7 +72,7 @@ private:
 	float m_flSoundDelay;
 
 	bool m_bPuked;
-	BOOL m_bIsAI;
+	bool m_bIsAI;
 
 	EHANDLE m_hSprite;
 };

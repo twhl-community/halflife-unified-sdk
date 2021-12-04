@@ -287,9 +287,9 @@ private:
 	CRopeSegment* seg[ MAX_SEGMENTS ];
 	CRopeSegment* altseg[ MAX_SEGMENTS ];
 
-	BOOL m_bToggle;
+	bool m_bToggle;
 
-	BOOL m_bInitialDeltaTime;
+	bool m_bInitialDeltaTime;
 
 	float m_flLastTime;
 
@@ -310,7 +310,7 @@ private:
 
 	bool m_bSpringsInitialized;
 
-	BOOL m_bObjectAttached;
+	bool m_bObjectAttached;
 
 	size_t m_uiAttachedObjectsSegment;
 	float m_flAttachedObjectsOffset;
@@ -319,7 +319,7 @@ private:
 	string_t m_iszBodyModel;
 	string_t m_iszEndingModel;
 
-	BOOL m_bDisallowPlayerAttachment;
+	bool m_bDisallowPlayerAttachment;
 
-	BOOL m_bMakeSound;
+	bool m_bMakeSound;
 };

@@ -247,7 +247,7 @@ public:
 
 	//TODO: needs to be EHANDLE, save/restored or a save during a windup will cause problems
 	COFGonomeGuts* m_pGonomeGuts;
-	BOOL m_fPlayerLocked;
+	bool m_fPlayerLocked;
 };
 
 TYPEDESCRIPTION	COFGonome::m_SaveData[] =

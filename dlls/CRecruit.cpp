@@ -93,10 +93,10 @@ public:
 	int ObjectCaps() override;
 
 public:
-	BOOL m_fGunDrawn;
+	bool m_fGunDrawn;
 	float m_painTime;
 	float m_checkAttackTime;
-	BOOL m_lastAttackCheck;
+	bool m_lastAttackCheck;
 	float m_flPlayerDamage;
 };
 

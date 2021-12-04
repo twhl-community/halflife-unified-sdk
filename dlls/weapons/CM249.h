@@ -82,12 +82,12 @@ private:
 	int m_iShell;
 
 	//Used to alternate between ejecting shells and links. - Solokiller
-	BOOL m_bAlternatingEject;
+	bool m_bAlternatingEject;
 	int m_iLink;
 	int m_iSmoke;
 	int m_iFire;
 
-	BOOL m_bReloading;
+	bool m_bReloading;
 	float m_flReloadStartTime;
 	float m_flReloadStart;
 };

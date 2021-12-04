@@ -88,7 +88,7 @@ private:
 	int m_iShell;
 	unsigned short m_usFireEagle;
 
-	BOOL m_bSpotVisible;
-	BOOL m_bLaserActive;
+	bool m_bSpotVisible;
+	bool m_bLaserActive;
 	CEagleLaser* m_pLaser;
 };

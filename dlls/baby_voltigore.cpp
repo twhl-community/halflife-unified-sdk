@@ -119,7 +119,7 @@ public:
 	int		m_iLastWord;
 
 	int m_iBabyVoltigoreGibs;
-	BOOL m_fDeathCharge;
+	bool m_fDeathCharge;
 	float m_flDeathStartTime;
 };
 LINK_ENTITY_TO_CLASS( monster_alien_babyvoltigore, COFBabyVoltigore );

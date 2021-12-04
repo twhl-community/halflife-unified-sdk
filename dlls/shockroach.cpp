@@ -105,7 +105,7 @@ public:
 	static TYPEDESCRIPTION m_SaveData[];
 
 	float m_flBirthTime;
-	BOOL m_fRoachSolid;
+	bool m_fRoachSolid;
 
 	CUSTOM_SCHEDULES;
 
