@@ -156,7 +156,7 @@ BOOL CBaseMonster :: FShouldEat ()
 		return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
 //=========================================================
@@ -620,13 +620,13 @@ void CBaseMonster :: RouteNew ()
 }
 
 //=========================================================
-// FRouteClear - returns TRUE is the Route is cleared out
+// FRouteClear - returns true is the Route is cleared out
 // ( invalid )
 //=========================================================
 BOOL CBaseMonster :: FRouteClear ()
 {
 	if ( m_Route[ m_iRouteIndex ].iType == 0 || m_movementGoal == MOVEGOAL_NONE )
-		return TRUE;
+		return true;
 
 	return false;
 }
@@ -668,7 +668,7 @@ BOOL CBaseMonster :: FRefreshRoute ()
 					i++;
 				}
 			}
-			returnCode = TRUE;
+			returnCode = true;
 			break;
 
 		case MOVEGOAL_ENEMY:
@@ -813,7 +813,7 @@ int ShouldSimplify( int routeType )
 
 	if ( (routeType == bits_MF_TO_PATHCORNER) || (routeType & bits_MF_DONT_SIMPLIFY) )
 		return false;
-	return TRUE;
+	return true;
 }
 
 //=========================================================
@@ -937,7 +937,7 @@ BOOL CBaseMonster :: FBecomeProne ()
 	}
 
 	m_IdealMonsterState = MONSTERSTATE_PRONE;
-	return TRUE;
+	return true;
 }
 
 //=========================================================
@@ -947,7 +947,7 @@ BOOL CBaseMonster :: CheckRangeAttack1 ( float flDot, float flDist )
 {
 	if ( flDist > 64 && flDist <= 784 && flDot >= 0.5 )
 	{
-		return TRUE;
+		return true;
 	}
 	return false;
 }
@@ -959,7 +959,7 @@ BOOL CBaseMonster :: CheckRangeAttack2 ( float flDot, float flDist )
 {
 	if ( flDist > 64 && flDist <= 512 && flDot >= 0.5 )
 	{
-		return TRUE;
+		return true;
 	}
 	return false;
 }
@@ -972,7 +972,7 @@ BOOL CBaseMonster :: CheckMeleeAttack1 ( float flDot, float flDist )
 	// Decent fix to keep folks from kicking/punching hornets and snarks is to check the onground flag(sjb)
 	if ( flDist <= 64 && flDot >= 0.7 && m_hEnemy != NULL && FBitSet ( m_hEnemy->pev->flags, FL_ONGROUND ) )
 	{
-		return TRUE;
+		return true;
 	}
 	return false;
 }
@@ -984,7 +984,7 @@ BOOL CBaseMonster :: CheckMeleeAttack2 ( float flDot, float flDist )
 {
 	if ( flDist <= 64 && flDot >= 0.7 )
 	{
-		return TRUE;
+		return true;
 	}
 	return false;
 }
@@ -1042,7 +1042,7 @@ BOOL CBaseMonster :: FCanCheckAttacks ()
 {
 	if ( HasConditions(bits_COND_SEE_ENEMY) && !HasConditions( bits_COND_ENEMY_TOOFAR ) )
 	{
-		return TRUE;
+		return true;
 	}
 
 	return false;
@@ -1051,12 +1051,12 @@ BOOL CBaseMonster :: FCanCheckAttacks ()
 //=========================================================
 // CheckEnemy - part of the Condition collection process,
 // gets and stores data and conditions pertaining to a monster's
-// enemy. Returns TRUE if Enemy LKP was updated.
+// enemy. Returns true if Enemy LKP was updated.
 //=========================================================
 int CBaseMonster :: CheckEnemy ( CBaseEntity *pEnemy )
 {
 	float	flDistToEnemy;
-	int		iUpdatedLKP;// set this to TRUE if you update the EnemyLKP in this function.
+	int		iUpdatedLKP;// set this to true if you update the EnemyLKP in this function.
 
 	iUpdatedLKP = false;
 	ClearConditions ( bits_COND_ENEMY_FACING_ME );
@@ -1097,7 +1097,7 @@ int CBaseMonster :: CheckEnemy ( CBaseEntity *pEnemy )
 	{
 		CBaseMonster *pEnemyMonster;
 
-		iUpdatedLKP = TRUE;
+		iUpdatedLKP = true;
 		m_vecEnemyLKP = pEnemy->pev->origin;
 
 		pEnemyMonster = pEnemy->MyMonsterPointer();
@@ -1127,7 +1127,7 @@ int CBaseMonster :: CheckEnemy ( CBaseEntity *pEnemy )
 		// if the enemy is not occluded, and unseen, that means it is behind or beside the monster.
 		// if the enemy is near enough the monster, we go ahead and let the monster know where the
 		// enemy is. 
-		iUpdatedLKP = TRUE;
+		iUpdatedLKP = true;
 		m_vecEnemyLKP = pEnemy->pev->origin;
 	}
 
@@ -1204,7 +1204,7 @@ BOOL CBaseMonster :: PopEnemy( )
 				m_hEnemy = m_hOldEnemy[i];
 				m_vecEnemyLKP = m_vecOldEnemy[i];
 				// ALERT( at_console, "remembering\n");
-				return TRUE;
+				return true;
 			}
 			else
 			{
@@ -1283,7 +1283,7 @@ void CBaseMonster :: SetSequenceByName ( const char *szSequence )
 }
 
 //=========================================================
-// CheckLocalMove - returns TRUE if the caller can walk a 
+// CheckLocalMove - returns true if the caller can walk a 
 // straight line from its current origin to the given 
 // location. If so, don't use the node graph!
 //
@@ -1362,7 +1362,7 @@ int CBaseMonster :: CheckLocalMove ( const Vector &vecStart, const Vector &vecEn
 			{
 				// If we're going toward an entity, and we're almost getting there, it's OK.
 //				if ( pTarget && fabs( flDist - iStep ) < LOCAL_STEP_SIZE )
-//					fReturn = TRUE;
+//					fReturn = true;
 //				else
 				iReturn = LOCALMOVE_INVALID;
 				break;
@@ -1550,7 +1550,7 @@ BOOL CBaseMonster :: BuildRoute ( const Vector &vecGoal, int iMoveFlag, CBaseEnt
 	if ( iLocalMove == LOCALMOVE_VALID )
 	{
 		// monster can walk straight there!
-		return TRUE;
+		return true;
 	}
 // try to triangulate around any obstacles.
 	else if ( iLocalMove != LOCALMOVE_INVALID_DONT_TRIANGULATE && FTriangulate( pev->origin, vecGoal, flDist, pTarget, &vecApex ) )
@@ -1574,7 +1574,7 @@ BOOL CBaseMonster :: BuildRoute ( const Vector &vecGoal, int iMoveFlag, CBaseEnt
 			*/
 
 		RouteSimplify( pTarget );
-		return TRUE;
+		return true;
 	}
 
 // last ditch, try nodes
@@ -1583,7 +1583,7 @@ BOOL CBaseMonster :: BuildRoute ( const Vector &vecGoal, int iMoveFlag, CBaseEnt
 //		ALERT ( at_console, "Can get there on nodes\n" );
 		m_vecMoveGoal = vecGoal;
 		RouteSimplify( pTarget );
-		return TRUE;
+		return true;
 	}
 
 	// b0rk
@@ -1729,7 +1729,7 @@ BOOL CBaseMonster :: FTriangulate ( const Vector &vecStart , const Vector &vecEn
 					*pApex = vecRight;
 				}
 
-				return TRUE;
+				return true;
 			}
 		}
 		if ( CheckLocalMove( pev->origin, vecLeft, pTargetEnt, NULL ) == LOCALMOVE_VALID )
@@ -1741,7 +1741,7 @@ BOOL CBaseMonster :: FTriangulate ( const Vector &vecStart , const Vector &vecEn
 					*pApex = vecLeft;
 				}
 
-				return TRUE;
+				return true;
 			}
 		}
 
@@ -1757,7 +1757,7 @@ BOOL CBaseMonster :: FTriangulate ( const Vector &vecStart , const Vector &vecEn
 						//ALERT(at_aiconsole, "triangulate over\n");
 					}
 
-					return TRUE;
+					return true;
 				}
 			}
 #if 1
@@ -1771,7 +1771,7 @@ BOOL CBaseMonster :: FTriangulate ( const Vector &vecStart , const Vector &vecEn
 						//ALERT(at_aiconsole, "triangulate under\n");
 					}
 
-					return TRUE;
+					return true;
 				}
 			}
 #endif
@@ -1969,7 +1969,7 @@ BOOL CBaseMonster:: ShouldAdvanceRoute( float flWaypointDist )
 	if ( flWaypointDist <= MONSTER_CUT_CORNER_DIST )
 	{
 		// ALERT( at_console, "cut %f\n", flWaypointDist );
-		return TRUE;
+		return true;
 	}
 
 	return false;
@@ -2320,7 +2320,7 @@ BOOL CBaseMonster :: FindCover ( Vector vecThreat, Vector vecViewOffset, float f
 						MESSAGE_END();
 						*/
 
-						return TRUE;
+						return true;
 					}
 				}
 			}
@@ -2405,7 +2405,7 @@ BOOL CBaseMonster :: BuildNearestRoute ( Vector vecThreat, Vector vecViewOffset,
 					{
 						flMaxDist = flDist;
 						m_vecMoveGoal = node.m_vecOrigin;
-						return TRUE; // UNDONE: keep looking for something closer!
+						return true; // UNDONE: keep looking for something closer!
 					}
 				}
 			}
@@ -2692,7 +2692,7 @@ void CBaseMonster :: HandleAnimEvent( MonsterEvent_t *pEvent )
 
 	case SCRIPT_EVENT_CANINTERRUPT:		// OK to interrupt now
 		if ( m_pCine )
-			m_pCine->AllowInterrupt( TRUE );
+			m_pCine->AllowInterrupt( true );
 		break;
 
 #if 0
@@ -2777,7 +2777,7 @@ Vector CBaseMonster :: GetGunPosition( )
 // FGetNodeRoute - tries to build an entire node path from
 // the callers origin to the passed vector. If this is 
 // possible, ROUTE_SIZE waypoints will be copied into the
-// callers m_Route. TRUE is returned if the operation 
+// callers m_Route. true is returned if the operation 
 // succeeds (path is valid) or false if failed (no path 
 // exists )
 //=========================================================
@@ -2858,7 +2858,7 @@ BOOL CBaseMonster :: FGetNodeRoute ( Vector vecDest )
 		m_Route[ iNumToCopy ].iType |= bits_MF_IS_GOAL;
 	}
 
-	return TRUE;
+	return true;
 }
 
 //=========================================================
@@ -2996,12 +2996,12 @@ void CBaseMonster :: KeyValue( KeyValueData *pkvd )
 	if (FStrEq(pkvd->szKeyName, "TriggerTarget"))
 	{
 		m_iszTriggerTarget = ALLOC_STRING( pkvd->szValue );
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "TriggerCondition") )
 	{
 		m_iTriggerCondition = atoi( pkvd->szValue );
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else
 	{
@@ -3014,7 +3014,7 @@ void CBaseMonster :: KeyValue( KeyValueData *pkvd )
 // if there is a condition, then checks to see if condition is 
 // met. If yes, the monster's TriggerTarget is fired.
 //
-// Returns TRUE if the target is fired.
+// Returns true if the target is fired.
 //=========================================================
 BOOL CBaseMonster :: FCheckAITrigger ()
 {
@@ -3033,13 +3033,13 @@ BOOL CBaseMonster :: FCheckAITrigger ()
 	case AITRIGGER_SEEPLAYER_ANGRY_AT_PLAYER:
 		if ( m_hEnemy != NULL && m_hEnemy->IsPlayer() && HasConditions ( bits_COND_SEE_ENEMY ) )
 		{
-			fFireTarget = TRUE;
+			fFireTarget = true;
 		}
 		break;
 	case AITRIGGER_SEEPLAYER_UNCONDITIONAL:
 		if ( HasConditions ( bits_COND_SEE_CLIENT ) )
 		{
-			fFireTarget = TRUE;
+			fFireTarget = true;
 		}
 		break;
 	case AITRIGGER_SEEPLAYER_NOT_IN_COMBAT:
@@ -3048,25 +3048,25 @@ BOOL CBaseMonster :: FCheckAITrigger ()
 			 m_MonsterState != MONSTERSTATE_PRONE	&& 
 			 m_MonsterState != MONSTERSTATE_SCRIPT)
 		{
-			fFireTarget = TRUE;
+			fFireTarget = true;
 		}
 		break;
 	case AITRIGGER_TAKEDAMAGE:
 		if ( m_afConditions & ( bits_COND_LIGHT_DAMAGE | bits_COND_HEAVY_DAMAGE ) )
 		{
-			fFireTarget = TRUE;
+			fFireTarget = true;
 		}
 		break;
 	case AITRIGGER_DEATH:
 		if ( pev->deadflag != DEAD_NO )
 		{
-			fFireTarget = TRUE;
+			fFireTarget = true;
 		}
 		break;
 	case AITRIGGER_HALFHEALTH:
 		if ( IsAlive() && pev->health <= ( pev->max_health / 2 ) )
 		{
-			fFireTarget = TRUE;
+			fFireTarget = true;
 		}
 		break;
 /*
@@ -3081,19 +3081,19 @@ BOOL CBaseMonster :: FCheckAITrigger ()
 	case AITRIGGER_HEARWORLD:
 		if ( m_afConditions & bits_COND_HEAR_SOUND && m_afSoundTypes & bits_SOUND_WORLD )
 		{
-			fFireTarget = TRUE;
+			fFireTarget = true;
 		}
 		break;
 	case AITRIGGER_HEARPLAYER:
 		if ( m_afConditions & bits_COND_HEAR_SOUND && m_afSoundTypes & bits_SOUND_PLAYER )
 		{
-			fFireTarget = TRUE;
+			fFireTarget = true;
 		}
 		break;
 	case AITRIGGER_HEARCOMBAT:
 		if ( m_afConditions & bits_COND_HEAR_SOUND && m_afSoundTypes & bits_SOUND_COMBAT )
 		{
-			fFireTarget = TRUE;
+			fFireTarget = true;
 		}
 		break;
 	}
@@ -3104,7 +3104,7 @@ BOOL CBaseMonster :: FCheckAITrigger ()
 		ALERT ( at_aiconsole, "AI Trigger Fire Target\n" );
 		FireTargets( STRING( m_iszTriggerTarget ), this, this, USE_TOGGLE, 0 );
 		m_iTriggerCondition = AITRIGGER_NONE;
-		return TRUE;
+		return true;
 	}
 
 	return false;
@@ -3128,17 +3128,17 @@ int CBaseMonster :: CanPlaySequence( BOOL fDisregardMonsterState, int interruptL
 	if ( fDisregardMonsterState )
 	{
 		// ok to go, no matter what the monster state. (scripted AI)
-		return TRUE;
+		return true;
 	}
 
 	if ( m_MonsterState == MONSTERSTATE_NONE || m_MonsterState == MONSTERSTATE_IDLE || m_IdealMonsterState == MONSTERSTATE_IDLE )
 	{
 		// ok to go, but only in these states
-		return TRUE;
+		return true;
 	}
 	
 	if ( m_MonsterState == MONSTERSTATE_ALERT && interruptLevel >= SS_INTERRUPT_BY_NAME )
-		return TRUE;
+		return true;
 
 	// unknown situation
 	return false;
@@ -3183,7 +3183,7 @@ BOOL CBaseMonster :: FindLateralCover ( const Vector &vecThreat, const Vector &v
 			{
 				if ( MoveToLocation( ACT_RUN, 0, vecLeftTest ) )
 				{
-					return TRUE;
+					return true;
 				}
 			}
 		}
@@ -3197,7 +3197,7 @@ BOOL CBaseMonster :: FindLateralCover ( const Vector &vecThreat, const Vector &v
 			{
 				if ( MoveToLocation( ACT_RUN, 0, vecRightTest ) )
 				{
-					return TRUE;
+					return true;
 				}
 			}
 		}
@@ -3232,7 +3232,7 @@ BOOL CBaseMonster :: FacingIdeal()
 {
 	if ( fabs( FlYawDiff() ) <= 0.006 )//!!!BUGBUG - no magic numbers!!!
 	{
-		return TRUE;
+		return true;
 	}
 
 	return false;
@@ -3246,7 +3246,7 @@ BOOL CBaseMonster :: FCanActiveIdle ()
 	/*
 	if ( m_MonsterState == MONSTERSTATE_IDLE && m_IdealMonsterState == MONSTERSTATE_IDLE && !IsMoving() )
 	{
-		return TRUE;
+		return true;
 	}
 	*/
 	return false;
@@ -3369,7 +3369,7 @@ BOOL CBaseMonster :: BBoxFlat ()
 	}
 	flLength = flLength2;
 
-	return TRUE;
+	return true;
 }
 
 //=========================================================
@@ -3424,7 +3424,7 @@ BOOL CBaseMonster :: GetEnemy ()
 	if ( m_hEnemy != NULL )
 	{
 		// monster has an enemy.
-		return TRUE;
+		return true;
 	}
 
 	return false;// monster has no enemy
@@ -3464,7 +3464,7 @@ BOOL CBaseMonster :: ShouldFadeOnDeath()
 {
 	// if flagged to fade out or I have an owner (I came from a monster spawner)
 	if ( (pev->spawnflags & SF_MONSTER_FADECORPSE) || !FNullEnt( pev->owner ) )
-		return TRUE;
+		return true;
 
 	return false;
 }

@@ -502,7 +502,7 @@ BOOL CISlave :: CheckRangeAttack2 ( float flDot, float flDist )
 		}
 	}
 	if (m_hDead != NULL)
-		return TRUE;
+		return true;
 	else
 		return false;
 }
@@ -894,7 +894,7 @@ void CDeadISlave::KeyValue( KeyValueData *pkvd )
 	if( FStrEq( pkvd->szKeyName, "pose" ) )
 	{
 		m_iPose = atoi( pkvd->szValue );
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else
 		CBaseMonster::KeyValue( pkvd );

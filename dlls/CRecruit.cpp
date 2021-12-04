@@ -518,7 +518,7 @@ BOOL CRecruit::CheckRangeAttack1( float flDot, float flDist )
 			UTIL_TraceLine( shootOrigin, shootTarget, dont_ignore_monsters, ENT( pev ), &tr );
 			m_checkAttackTime = gpGlobals->time + 1;
 			if( tr.flFraction == 1.0 || ( tr.pHit != NULL && CBaseEntity::Instance( tr.pHit ) == pEnemy ) )
-				m_lastAttackCheck = TRUE;
+				m_lastAttackCheck = true;
 			else
 				m_lastAttackCheck = false;
 			m_checkAttackTime = gpGlobals->time + 1.5;
@@ -550,7 +550,7 @@ int CRecruit::TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float
 				PlaySentence( "RC_MAD", 4, VOL_NORM, ATTN_NORM );
 
 				Remember( bits_MEMORY_PROVOKED );
-				StopFollowing( TRUE );
+				StopFollowing( true );
 			}
 			else
 			{
@@ -629,7 +629,7 @@ void CRecruit::HandleAnimEvent( MonsterEvent_t *pEvent )
 	case BARNEY_AE_DRAW:
 		// barney's bodygroup switches here so he can pull gun from holster
 		pev->body = BARNEY_BODY_GUNDRAWN;
-		m_fGunDrawn = TRUE;
+		m_fGunDrawn = true;
 		break;
 
 	case BARNEY_AE_HOLSTER:

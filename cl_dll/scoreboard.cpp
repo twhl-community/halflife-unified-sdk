@@ -259,7 +259,7 @@ int CHudScoreboard :: Draw( float fTime )
 		g_TeamInfo[j].packetloss += g_PlayerInfoList[i].packetloss;
 
 		if ( g_PlayerInfoList[i].thisplayer )
-			g_TeamInfo[j].ownteam = TRUE;
+			g_TeamInfo[j].ownteam = true;
 		else
 			g_TeamInfo[j].ownteam = false;
 	}
@@ -368,7 +368,7 @@ int CHudScoreboard :: Draw( float fTime )
 			gHUD.DrawHudString( xpos, ypos, xpos+50, buf, r, g, b );
 		}
 
-		team_info->already_drawn = TRUE;  // set the already_drawn to be TRUE, so this team won't get drawn again
+		team_info->already_drawn = true;  // set the already_drawn to be true, so this team won't get drawn again
 		list_slot++;
 
 		// draw all the players that belong to this team, indented slightly
@@ -674,7 +674,7 @@ int CHudScoreboard :: MsgFunc_TeamScore( const char *pszName, int iSize, void *p
 		return 1;
 
 	// use this new score data instead of combined player scores
-	g_TeamInfo[i].scores_overriden = TRUE;
+	g_TeamInfo[i].scores_overriden = true;
 	g_TeamInfo[i].frags = READ_SHORT();
 	g_TeamInfo[i].deaths = READ_SHORT();
 	
@@ -865,7 +865,7 @@ void CHudScoreboard :: DeathMsg( int killer, int victim )
 
 void CHudScoreboard :: UserCmd_ShowScores()
 {
-	m_iShowscoresHeld = TRUE;
+	m_iShowscoresHeld = true;
 }
 
 void CHudScoreboard :: UserCmd_HideScores()

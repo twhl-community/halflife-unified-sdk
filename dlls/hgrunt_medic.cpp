@@ -436,7 +436,7 @@ BOOL COFMedicAlly :: FOkToSpeak()
 //	if (FNullEnt(FIND_CLIENT_IN_PVS(edict())))
 //		return false;
 	
-	return TRUE;
+	return true;
 }
 
 //=========================================================
@@ -465,7 +465,7 @@ void COFMedicAlly :: PrescheduleThink ()
 			if ( gpGlobals->time - MySquadLeader()->m_flLastEnemySightTime > 5 )
 			{
 				// been a while since we've seen the enemy
-				MySquadLeader()->m_fEnemyEluded = TRUE;
+				MySquadLeader()->m_fEnemyEluded = true;
 			}
 		}
 	}
@@ -487,7 +487,7 @@ BOOL COFMedicAlly :: FCanCheckAttacks ()
 {
 	if ( !HasConditions( bits_COND_ENEMY_TOOFAR ) )
 	{
-		return TRUE;
+		return true;
 	}
 	else
 	{
@@ -517,7 +517,7 @@ BOOL COFMedicAlly :: CheckMeleeAttack1 ( float flDot, float flDist )
 		 pEnemy->Classify() != CLASS_ALIEN_BIOWEAPON &&
 		 pEnemy->Classify() != CLASS_PLAYER_BIOWEAPON )
 	{
-		return TRUE;
+		return true;
 	}
 	return false;
 }
@@ -659,7 +659,7 @@ BOOL COFMedicAlly :: CheckRangeAttack2 ( float flDot, float flDist )
 			m_vecTossVelocity = vecToss;
 
 			// throw a hand grenade
-			m_fThrowGrenade = TRUE;
+			m_fThrowGrenade = true;
 			// don't check again for a while.
 			m_flNextGrenadeCheck = gpGlobals->time; // 1/3 second.
 		}
@@ -680,7 +680,7 @@ BOOL COFMedicAlly :: CheckRangeAttack2 ( float flDot, float flDist )
 			m_vecTossVelocity = vecToss;
 
 			// throw a hand grenade
-			m_fThrowGrenade = TRUE;
+			m_fThrowGrenade = true;
 			// don't check again for a while.
 			m_flNextGrenadeCheck = gpGlobals->time + 0.3; // 1/3 second.
 		}
@@ -764,7 +764,7 @@ int COFMedicAlly :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker,
 				PlaySentence( "FG_MAD", 4, VOL_NORM, ATTN_NORM );
 
 				Remember( bits_MEMORY_PROVOKED );
-				StopFollowing( TRUE );
+				StopFollowing( true );
 				ALERT( at_console, "HGrunt Ally is now MAD!\n" );
 			}
 			else
@@ -1132,7 +1132,7 @@ void COFMedicAlly :: Spawn()
 	m_afCapability		= bits_CAP_SQUAD | bits_CAP_TURN_HEAD | bits_CAP_DOORS_GROUP | bits_CAP_HEAR;
 
 	m_fEnemyEluded		= false;
-	m_fFirstEncounter	= TRUE;// this is true when the grunt spawns, because he hasn't encountered an enemy yet.
+	m_fFirstEncounter	= true;// this is true when the grunt spawns, because he hasn't encountered an enemy yet.
 
 	m_HackedGunPos = Vector ( 0, 0, 55 );
 
@@ -3268,12 +3268,12 @@ void COFMedicAllyRepel::KeyValue( KeyValueData *pkvd )
 	else if( FStrEq( pkvd->szKeyName, "UseSentence" ) )
 	{
 		m_iszUse = ALLOC_STRING( pkvd->szValue );
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else if( FStrEq( pkvd->szKeyName, "UnUseSentence" ) )
 	{
 		m_iszUnUse = ALLOC_STRING( pkvd->szValue );
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else
 		CBaseMonster::KeyValue( pkvd );

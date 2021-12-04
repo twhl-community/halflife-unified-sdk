@@ -429,7 +429,7 @@ BOOL COFShockRoach :: CheckRangeAttack1 ( float flDot, float flDist )
 {
 	if ( FBitSet( pev->flags, FL_ONGROUND ) && flDist <= 256 && flDot >= 0.65 )
 	{
-		return TRUE;
+		return true;
 	}
 	return false;
 }
@@ -444,7 +444,7 @@ BOOL COFShockRoach :: CheckRangeAttack2 ( float flDot, float flDist )
 #if 0
 	if ( FBitSet( pev->flags, FL_ONGROUND ) && flDist > 64 && flDist <= 256 && flDot >= 0.5 )
 	{
-		return TRUE;
+		return true;
 	}
 	return false;
 #endif

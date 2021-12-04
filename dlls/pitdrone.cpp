@@ -339,7 +339,7 @@ BOOL CPitdrone :: CheckRangeAttack1 ( float flDot, float flDist )
 			m_flNextSpikeTime = gpGlobals->time + 0.5;
 		}
 
-		return TRUE;
+		return true;
 	}
 
 	return false;
@@ -358,7 +358,7 @@ BOOL CPitdrone :: CheckMeleeAttack2 ( float flDot, float flDist )
 {
 	if ( flDist <= 64 && flDot >= 0.7 && !HasConditions( bits_COND_CAN_MELEE_ATTACK1 ) )
 	{
-		return TRUE;
+		return true;
 	}
 	return false;
 }  
@@ -379,7 +379,7 @@ BOOL CPitdrone :: FValidateHintType ( short sHint )
 	{
 		if ( sSquidHints[ i ] == sHint )
 		{
-			return TRUE;
+			return true;
 		}
 	}
 

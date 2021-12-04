@@ -277,8 +277,8 @@ public:
 	
 	static	TYPEDESCRIPTION m_SaveData[];
 
-	virtual int AddToPlayer( CBasePlayer *pPlayer );	// return TRUE if the item you want the item added to the player inventory
-	virtual int AddDuplicate( CBasePlayerItem *pItem ) { return false; }	// return TRUE if you want your duplicate removed from world
+	virtual int AddToPlayer( CBasePlayer *pPlayer );	// return true if the item you want the item added to the player inventory
+	virtual int AddDuplicate( CBasePlayerItem *pItem ) { return false; }	// return true if you want your duplicate removed from world
 	void EXPORT DestroyItem();
 	void EXPORT DefaultTouch( CBaseEntity *pOther );	// default weapon touch
 	void EXPORT FallThink ();// when an item is first spawned, this think is run to determine when the object has hit the ground.
@@ -288,11 +288,11 @@ public:
 	void FallInit();
 	void CheckRespawn();
 	virtual int GetItemInfo(ItemInfo *p) { return 0; }	// returns 0 if struct not filled out
-	virtual BOOL CanDeploy() { return TRUE; }
+	virtual BOOL CanDeploy() { return true; }
 	virtual BOOL Deploy( )								// returns is deploy was successful
-		 { return TRUE; }
+		 { return true; }
 
-	virtual BOOL CanHolster() { return TRUE; }// can this weapon be put away right now?
+	virtual BOOL CanHolster() { return true; }// can this weapon be put away right now?
 	virtual void Holster();
 	virtual void UpdateItemInfo() {}
 
@@ -353,10 +353,10 @@ public:
 	int AddToPlayer( CBasePlayer *pPlayer ) override;
 	int AddDuplicate( CBasePlayerItem *pItem ) override;
 
-	virtual int ExtractAmmo( CBasePlayerWeapon *pWeapon ); //{ return TRUE; }			// Return TRUE if you can add ammo to yourself when picked up
-	virtual int ExtractClipAmmo( CBasePlayerWeapon *pWeapon );// { return TRUE; }			// Return TRUE if you can add ammo to yourself when picked up
+	virtual int ExtractAmmo( CBasePlayerWeapon *pWeapon ); //{ return true; }			// Return true if you can add ammo to yourself when picked up
+	virtual int ExtractClipAmmo( CBasePlayerWeapon *pWeapon );// { return true; }			// Return true if you can add ammo to yourself when picked up
 
-	virtual int AddWeapon() { ExtractAmmo( this ); return TRUE; }	// Return TRUE if you want to add yourself to the player
+	virtual int AddWeapon() { ExtractAmmo( this ); return true; }	// Return true if you want to add yourself to the player
 
 	// generic "shared" ammo handlers
 	BOOL AddPrimaryAmmo( int iCount, char *szName, int iMaxClip, int iMaxCarry );
@@ -423,7 +423,7 @@ class CBasePlayerAmmo : public CBaseEntity
 public:
     void Spawn() override;
 	void EXPORT DefaultTouch( CBaseEntity *pOther ); // default weapon touch
-	virtual BOOL AddAmmo( CBaseEntity *pOther ) { return TRUE; }
+	virtual BOOL AddAmmo( CBaseEntity *pOther ) { return true; }
 
 	CBaseEntity* Respawn() override;
 	void EXPORT Materialize();
@@ -862,7 +862,7 @@ public:
 	void WeaponIdle() override;
 
 	void UpdateSpot();
-	BOOL ShouldWeaponIdle() override { return TRUE; }
+	BOOL ShouldWeaponIdle() override { return true; }
 
 	CLaserSpot *m_pSpot;
 	int m_fSpotActive;
@@ -1025,7 +1025,7 @@ public:
 	void EndAttack();
 	void Attack();
 	void PrimaryAttack() override;
-	BOOL ShouldWeaponIdle() override { return TRUE; }
+	BOOL ShouldWeaponIdle() override { return true; }
 	void WeaponIdle() override;
 
 	float m_flAmmoUseTime;// since we use < 1 point of ammo per update, we subtract ammo on a timer.

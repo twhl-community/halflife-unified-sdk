@@ -364,7 +364,7 @@ BOOL COtis :: CheckRangeAttack1 ( float flDot, float flDist )
 			UTIL_TraceLine( shootOrigin, shootTarget, dont_ignore_monsters, ENT(pev), &tr );
 			m_checkAttackTime = gpGlobals->time + 1;
 			if ( tr.flFraction == 1.0 || (tr.pHit != NULL && CBaseEntity::Instance(tr.pHit) == pEnemy) )
-				m_lastAttackCheck = TRUE;
+				m_lastAttackCheck = true;
 			else
 				m_lastAttackCheck = false;
 			m_checkAttackTime = gpGlobals->time + 1.5;
@@ -572,7 +572,7 @@ int COtis :: TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float 
 				PlaySentence( "OT_MAD", 4, VOL_NORM, ATTN_NORM );
 
 				Remember( bits_MEMORY_PROVOKED );
-				StopFollowing( TRUE );
+				StopFollowing( true );
 			}
 			else
 			{
@@ -868,7 +868,7 @@ void CDeadOtis::KeyValue( KeyValueData *pkvd )
 	if (FStrEq(pkvd->szKeyName, "pose"))
 	{
 		m_iPose = atoi(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else 
 		CBaseMonster::KeyValue( pkvd );

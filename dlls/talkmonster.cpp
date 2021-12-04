@@ -688,7 +688,7 @@ void CTalkMonster::AlertFriends()
 	// for each friend in this bsp...
 	for ( i = 0; i < TLK_CFRIENDS; i++ )
 	{
-		while (pFriend = EnumFriends( pFriend, i, TRUE ))
+		while (pFriend = EnumFriends( pFriend, i, true ))
 		{
 			CBaseMonster *pMonster = pFriend->MyMonsterPointer();
 			if ( pMonster->IsAlive() )
@@ -710,7 +710,7 @@ void CTalkMonster::ShutUpFriends()
 	// for each friend in this bsp...
 	for ( i = 0; i < TLK_CFRIENDS; i++ )
 	{
-		while (pFriend = EnumFriends( pFriend, i, TRUE ))
+		while (pFriend = EnumFriends( pFriend, i, true ))
 		{
 			CBaseMonster *pMonster = pFriend->MyMonsterPointer();
 			if ( pMonster )
@@ -742,7 +742,7 @@ void CTalkMonster::LimitFollowers( CBaseEntity *pPlayer, int maxFollowers )
 				{
 					count++;
 					if ( count > maxFollowers )
-						pMonster->StopFollowing( TRUE );
+						pMonster->StopFollowing( true );
 				}
 			}
 		}
@@ -943,7 +943,7 @@ int CTalkMonster :: FOkToSpeak()
 	if (m_hEnemy != NULL && FVisible( m_hEnemy ))
 		return false;
 
-	return TRUE;
+	return true;
 }
 
 
@@ -964,8 +964,8 @@ int CTalkMonster :: FIdleStare()
 
 	PlaySentence( m_szGrp[TLK_STARE], RANDOM_FLOAT(5, 7.5), VOL_NORM, ATTN_IDLE );
 
-	m_hTalkTarget = FindNearestFriend( TRUE );
-	return TRUE;
+	m_hTalkTarget = FindNearestFriend( true );
+	return true;
 }
 
 //=========================================================
@@ -981,7 +981,7 @@ int CTalkMonster :: FIdleHello()
 	if (!FBitSet(m_bitsSaid, bit_saidHelloPlayer))
 	{
 		// get a player
-		CBaseEntity *pPlayer = FindNearestFriend(TRUE);
+		CBaseEntity *pPlayer = FindNearestFriend(true);
 
 		if (pPlayer)
 		{
@@ -996,7 +996,7 @@ int CTalkMonster :: FIdleHello()
 
 				SetBits(m_bitsSaid, bit_saidHelloPlayer);
 				
-				return TRUE;
+				return true;
 			}
 		}
 	}
@@ -1070,7 +1070,7 @@ int CTalkMonster :: FIdleSpeak ()
 					//EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, m_szGrp[TLK_PLHURT3], 1.0, ATTN_IDLE, 0, pitch);
 					PlaySentence( m_szGrp[TLK_PLHURT3], duration, VOL_NORM, ATTN_IDLE );
 					SetBits(m_bitsSaid, bit_saidDamageHeavy);
-					return TRUE;
+					return true;
 				}
 				else if (!FBitSet(m_bitsSaid, bit_saidDamageMedium) && 
 					(m_hTargetEnt->pev->health <= m_hTargetEnt->pev->max_health / 4))
@@ -1078,7 +1078,7 @@ int CTalkMonster :: FIdleSpeak ()
 					//EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, m_szGrp[TLK_PLHURT2], 1.0, ATTN_IDLE, 0, pitch);
 					PlaySentence( m_szGrp[TLK_PLHURT2], duration, VOL_NORM, ATTN_IDLE );
 					SetBits(m_bitsSaid, bit_saidDamageMedium);
-					return TRUE;
+					return true;
 				}
 				else if (!FBitSet(m_bitsSaid, bit_saidDamageLight) &&
 					(m_hTargetEnt->pev->health <= m_hTargetEnt->pev->max_health / 2))
@@ -1086,7 +1086,7 @@ int CTalkMonster :: FIdleSpeak ()
 					//EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, m_szGrp[TLK_PLHURT1], 1.0, ATTN_IDLE, 0, pitch);
 					PlaySentence( m_szGrp[TLK_PLHURT1], duration, VOL_NORM, ATTN_IDLE );
 					SetBits(m_bitsSaid, bit_saidDamageLight);
-					return TRUE;
+					return true;
 				}
 			}
 			else
@@ -1113,21 +1113,21 @@ int CTalkMonster :: FIdleSpeak ()
 		pTalkMonster->m_flStopTalkTime = m_flStopTalkTime;
 
 		m_nSpeak++;
-		return TRUE;
+		return true;
 	}
 
 	// otherwise, play an idle statement, try to face client when making a statement.
 	if ( RANDOM_LONG(0,1) )
 	{
 		//SENTENCEG_PlayRndSz( ENT(pev), szIdleGroup, 1.0, ATTN_IDLE, 0, pitch );
-		CBaseEntity *pFriend = FindNearestFriend(TRUE);
+		CBaseEntity *pFriend = FindNearestFriend(true);
 
 		if ( pFriend )
 		{
 			m_hTalkTarget = pFriend;
 			PlaySentence( szIdleGroup, duration, VOL_NORM, ATTN_IDLE );
 			m_nSpeak++;
-			return TRUE;
+			return true;
 		}
 	}
 
@@ -1313,7 +1313,7 @@ BOOL CTalkMonster :: IsTalking()
 {
 	if ( m_flStopTalkTime > gpGlobals->time )
 	{
-		return TRUE;
+		return true;
 	}
 
 	return false;
@@ -1450,7 +1450,7 @@ void CTalkMonster :: FollowerUse( CBaseEntity *pActivator, CBaseEntity *pCaller,
 		}
 		else
 		{
-			StopFollowing( TRUE );
+			StopFollowing( true );
 		}
 	}
 }
@@ -1460,17 +1460,17 @@ void CTalkMonster::KeyValue( KeyValueData *pkvd )
 	if (FStrEq(pkvd->szKeyName, "UseSentence"))
 	{
 		m_iszUse = ALLOC_STRING(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "UnUseSentence"))
 	{
 		m_iszUnUse = ALLOC_STRING(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else if( FStrEq( pkvd->szKeyName, "suspicious" ) )
 	{
 		m_fStartSuspicious = atoi( pkvd->szValue );
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else 
 		CBaseMonster::KeyValue( pkvd );

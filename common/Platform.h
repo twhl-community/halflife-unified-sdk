@@ -126,7 +126,7 @@ using qboolean = int;
 
 #else // WIN32
 #define false 0
-#define TRUE (!false)
+#define true (!false)
 typedef int BOOL;
 #define MAX_PATH PATH_MAX
 

@@ -59,7 +59,7 @@ BOOL COFSquadTalkMonster::OccupySlot( int iDesiredSlots )
 
 	if( !InSquad() )
 	{
-		return TRUE;
+		return true;
 	}
 
 	if( SquadEnemySplit() )
@@ -68,7 +68,7 @@ BOOL COFSquadTalkMonster::OccupySlot( int iDesiredSlots )
 		// so that a squad member doesn't get stranded unable to engage his enemy because
 		// all of the attack slots are taken by squad members fighting other enemies.
 		m_iMySlot = bits_SLOT_SQUAD_SPLIT;
-		return TRUE;
+		return true;
 	}
 
 	COFSquadTalkMonster *pSquadLeader = MySquadLeader();
@@ -92,7 +92,7 @@ BOOL COFSquadTalkMonster::OccupySlot( int iDesiredSlots )
 				pSquadLeader->m_afSquadSlots |= iMask;
 				m_iMySlot = iMask;
 				//				ALERT ( at_aiconsole, "Took slot %d - %d\n", i, m_hSquadLeader->m_afSquadSlots );
-				return TRUE;
+				return true;
 			}
 		}
 	}
@@ -197,7 +197,7 @@ BOOL COFSquadTalkMonster::SquadAdd( COFSquadTalkMonster *pAdd )
 		{
 			m_hSquadMember[ i ] = pAdd;
 			pAdd->m_hSquadLeader = this;
-			return TRUE;
+			return true;
 		}
 	}
 	return false;
@@ -521,7 +521,7 @@ BOOL COFSquadTalkMonster::NoFriendlyFire()
 {
 	if( !InSquad() )
 	{
-		return TRUE;
+		return true;
 	}
 
 	CPlane	backPlane;
@@ -577,7 +577,7 @@ BOOL COFSquadTalkMonster::NoFriendlyFire()
 		}
 	}
 
-	return TRUE;
+	return true;
 }
 
 //=========================================================
@@ -614,7 +614,7 @@ BOOL COFSquadTalkMonster::FValidateCover( const Vector &vecCoverLocation )
 {
 	if( !InSquad() )
 	{
-		return TRUE;
+		return true;
 	}
 
 	if( SquadMemberInRange( vecCoverLocation, 128 ) )
@@ -623,11 +623,11 @@ BOOL COFSquadTalkMonster::FValidateCover( const Vector &vecCoverLocation )
 		return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
 //=========================================================
-// SquadEnemySplit- returns TRUE if not all squad members
+// SquadEnemySplit- returns true if not all squad members
 // are fighting the same enemy. 
 //=========================================================
 BOOL COFSquadTalkMonster::SquadEnemySplit()
@@ -643,7 +643,7 @@ BOOL COFSquadTalkMonster::SquadEnemySplit()
 		COFSquadTalkMonster *pMember = pSquadLeader->MySquadMember( i );
 		if( pMember != NULL && pMember->m_hEnemy != NULL && pMember->m_hEnemy != pEnemy )
 		{
-			return TRUE;
+			return true;
 		}
 	}
 	return false;
@@ -665,7 +665,7 @@ BOOL COFSquadTalkMonster::SquadMemberInRange( const Vector &vecLocation, float f
 	{
 		COFSquadTalkMonster *pSquadMember = pSquadLeader->MySquadMember( i );
 		if( pSquadMember && ( vecLocation - pSquadMember->pev->origin ).Length2D() <= flDist )
-			return TRUE;
+			return true;
 	}
 	return false;
 }
@@ -716,7 +716,7 @@ void COFSquadTalkMonster::FollowerUse( CBaseEntity *pActivator, CBaseEntity *pCa
 		}
 		else
 		{
-			StopFollowing(TRUE);
+			StopFollowing(true);
 		}
 	}
 }
