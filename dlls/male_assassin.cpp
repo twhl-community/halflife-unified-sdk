@@ -367,20 +367,20 @@ BOOL CMOFAssassin :: FOkToSpeak()
 {
 // if someone else is talking, don't speak
 	if (gpGlobals->time <= CTalkMonster::g_talkWaitTime)
-		return FALSE;
+		return false;
 
 	if ( pev->spawnflags & SF_MONSTER_GAG )
 	{
 		if ( m_MonsterState != MONSTERSTATE_COMBAT )
 		{
 			// no talking outside of combat if gagged.
-			return FALSE;
+			return false;
 		}
 	}
 
 	// if player is not in pvs, don't speak
 //	if (FNullEnt(FIND_CLIENT_IN_PVS(edict())))
-//		return FALSE;
+//		return false;
 	
 	return TRUE;
 }
@@ -437,7 +437,7 @@ BOOL CMOFAssassin :: FCanCheckAttacks ()
 	}
 	else
 	{
-		return FALSE;
+		return false;
 	}
 }
 
@@ -455,7 +455,7 @@ BOOL CMOFAssassin :: CheckMeleeAttack1 ( float flDot, float flDist )
 
 		if ( !pEnemy )
 		{
-			return FALSE;
+			return false;
 		}
 	}
 
@@ -465,7 +465,7 @@ BOOL CMOFAssassin :: CheckMeleeAttack1 ( float flDot, float flDist )
 	{
 		return TRUE;
 	}
-	return FALSE;
+	return false;
 }
 
 //=========================================================
@@ -492,7 +492,7 @@ BOOL CMOFAssassin :: CheckRangeAttack1 ( float flDot, float flDist )
 			if( !m_hEnemy->IsPlayer() && flDist <= 64 )
 			{
 				// kick nonclients, but don't shoot at them.
-				return FALSE;
+				return false;
 			}
 
 			Vector vecSrc = GetGunPosition();
@@ -507,7 +507,7 @@ BOOL CMOFAssassin :: CheckRangeAttack1 ( float flDot, float flDist )
 		}
 	}
 
-	return FALSE;
+	return false;
 }
 
 //=========================================================
@@ -518,13 +518,13 @@ BOOL CMOFAssassin :: CheckRangeAttack2 ( float flDot, float flDist )
 {
 	if (! FBitSet(pev->weapons, (MAssassinWeaponFlag::HandGrenade | MAssassinWeaponFlag ::GrenadeLauncher)))
 	{
-		return FALSE;
+		return false;
 	}
 	
 	// if the grunt isn't moving, it's ok to check.
 	if ( m_flGroundSpeed != 0 )
 	{
-		m_fThrowGrenade = FALSE;
+		m_fThrowGrenade = false;
 		return m_fThrowGrenade;
 	}
 
@@ -539,7 +539,7 @@ BOOL CMOFAssassin :: CheckRangeAttack2 ( float flDot, float flDist )
 		//!!!BUGBUG - we should make this check movetype and make sure it isn't FLY? Players who jump a lot are unlikely to 
 		// be grenaded.
 		// don't throw grenades at anything that isn't on the ground!
-		m_fThrowGrenade = FALSE;
+		m_fThrowGrenade = false;
 		return m_fThrowGrenade;
 	}
 	
@@ -579,7 +579,7 @@ BOOL CMOFAssassin :: CheckRangeAttack2 ( float flDot, float flDist )
 		{
 			// crap, I might blow my own guy up. Don't throw a grenade and don't check again for a while.
 			m_flNextGrenadeCheck = gpGlobals->time + 1; // one full second.
-			m_fThrowGrenade = FALSE;
+			m_fThrowGrenade = false;
 		}
 	}
 	
@@ -587,7 +587,7 @@ BOOL CMOFAssassin :: CheckRangeAttack2 ( float flDot, float flDist )
 	{
 		// crap, I don't want to blow myself up
 		m_flNextGrenadeCheck = gpGlobals->time + 1; // one full second.
-		m_fThrowGrenade = FALSE;
+		m_fThrowGrenade = false;
 		return m_fThrowGrenade;
 	}
 
@@ -608,7 +608,7 @@ BOOL CMOFAssassin :: CheckRangeAttack2 ( float flDot, float flDist )
 		else
 		{
 			// don't throw
-			m_fThrowGrenade = FALSE;
+			m_fThrowGrenade = false;
 			// don't check again for a while.
 			m_flNextGrenadeCheck = gpGlobals->time + 1; // one full second.
 		}
@@ -629,7 +629,7 @@ BOOL CMOFAssassin :: CheckRangeAttack2 ( float flDot, float flDist )
 		else
 		{
 			// don't throw
-			m_fThrowGrenade = FALSE;
+			m_fThrowGrenade = false;
 			// don't check again for a while.
 			m_flNextGrenadeCheck = gpGlobals->time + 1; // one full second.
 		}
@@ -869,7 +869,7 @@ void CMOFAssassin :: HandleAnimEvent( MonsterEvent_t *pEvent )
 			// CGrenade::ShootTimed( pev, pev->origin + gpGlobals->v_forward * 34 + Vector (0, 0, 32), m_vecTossVelocity, 3.5 );
 			CGrenade::ShootTimed( pev, GetGunPosition(), m_vecTossVelocity, 3.5 );
 
-			m_fThrowGrenade = FALSE;
+			m_fThrowGrenade = false;
 			m_flNextGrenadeCheck = gpGlobals->time + 6;// wait six seconds before even looking again to see if a grenade can be thrown.
 			// !!!LATER - when in a group, only try to throw grenade if ordered.
 		}
@@ -879,7 +879,7 @@ void CMOFAssassin :: HandleAnimEvent( MonsterEvent_t *pEvent )
 		{
 			EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/glauncher.wav", 0.8, ATTN_NORM);
 			CGrenade::ShootContact( pev, GetGunPosition(), m_vecTossVelocity );
-			m_fThrowGrenade = FALSE;
+			m_fThrowGrenade = false;
 			if (g_iSkillLevel == SKILL_HARD)
 				m_flNextGrenadeCheck = gpGlobals->time + RANDOM_FLOAT( 2, 5 );// wait a random amount of time before shooting again
 			else
@@ -968,7 +968,7 @@ void CMOFAssassin :: Spawn()
 
 	m_afCapability		= bits_CAP_SQUAD | bits_CAP_TURN_HEAD | bits_CAP_DOORS_GROUP;
 
-	m_fEnemyEluded		= FALSE;
+	m_fEnemyEluded		= false;
 	m_fFirstEncounter	= TRUE;// this is true when the grunt spawns, because he hasn't encountered an enemy yet.
 
 	m_HackedGunPos = Vector ( 0, 0, 55 );
@@ -1958,7 +1958,7 @@ Schedule_t *CMOFAssassin :: GetSchedule()
 			{
 				if ( InSquad() )
 				{
-					MySquadLeader()->m_fEnemyEluded = FALSE;
+					MySquadLeader()->m_fEnemyEluded = false;
 
 					if ( !IsLeader() )
 					{
@@ -2027,7 +2027,7 @@ Schedule_t *CMOFAssassin :: GetSchedule()
 					// little time and give the player a chance to turn.
 					if ( MySquadLeader()->m_fEnemyEluded && !HasConditions ( bits_COND_ENEMY_FACING_ME ) )
 					{
-						MySquadLeader()->m_fEnemyEluded = FALSE;
+						MySquadLeader()->m_fEnemyEluded = false;
 						return GetScheduleOfType ( SCHED_MASSASSIN_FOUND_ENEMY );
 					}
 				}
@@ -2193,7 +2193,7 @@ Schedule_t* CMOFAssassin :: GetScheduleOfType ( int Type )
 		{
 			if ( m_hEnemy->IsPlayer() && m_fFirstEncounter )
 			{
-				m_fFirstEncounter = FALSE;// after first encounter, leader won't issue handsigns anymore when he has a new enemy
+				m_fFirstEncounter = false;// after first encounter, leader won't issue handsigns anymore when he has a new enemy
 				return &slOFMAssassinSignalSuppress[ 0 ];
 			}
 			else

@@ -703,12 +703,12 @@ int CBasePlayerWeapon::AddToPlayer( CBasePlayer *pPlayer )
 
 	if (bResult)
 		return AddWeapon( );
-	return FALSE;
+	return false;
 }
 
 int CBasePlayerWeapon::UpdateClientData( CBasePlayer *pPlayer )
 {
-	BOOL bSend = FALSE;
+	BOOL bSend = false;
 	int state = 0;
 	if ( pPlayer->m_pActiveItem == this )
 	{
@@ -764,7 +764,7 @@ int CBasePlayerWeapon::UpdateClientData( CBasePlayer *pPlayer )
 
 void CBasePlayerWeapon::SendWeaponAnim( int iAnim, int body )
 {
-	const bool skiplocal = UseDecrement() != FALSE;
+	const bool skiplocal = UseDecrement() != false;
 
 	m_pPlayer->pev->weaponanim = iAnim;
 
@@ -819,7 +819,7 @@ BOOL CBasePlayerWeapon :: AddPrimaryAmmo( int iCount, char *szName, int iMaxClip
 		}
 	}
 
-	return iIdAmmo > 0 ? TRUE : FALSE;
+	return iIdAmmo > 0 ? TRUE : false;
 }
 
 
@@ -836,7 +836,7 @@ BOOL CBasePlayerWeapon :: AddSecondaryAmmo( int iCount, char *szName, int iMax )
 		m_iSecondaryAmmoType = iIdAmmo;
 		EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
 	}
-	return iIdAmmo > 0 ? TRUE : FALSE;
+	return iIdAmmo > 0 ? TRUE : false;
 }
 
 //=========================================================
@@ -878,13 +878,13 @@ BOOL CBasePlayerWeapon :: IsUseable()
 	}
 
 	// clip is empty (or nonexistant) and the player has no more ammo of this type. 
-	return FALSE;
+	return false;
 }
 
 BOOL CBasePlayerWeapon :: DefaultDeploy( const char *szViewModel, const char *szWeaponModel, int iAnim, const char *szAnimExt, int body )
 {
 	if (!CanDeploy( ))
-		return FALSE;
+		return false;
 
 	m_pPlayer->TabulateAmmo();
 	m_pPlayer->pev->viewmodel = MAKE_STRING(szViewModel);
@@ -926,7 +926,7 @@ int CBasePlayerWeapon::SecondaryAmmoIndex()
 
 void CBasePlayerWeapon::Holster()
 { 
-	m_fInReload = FALSE; // cancel any reload in progress.
+	m_fInReload = false; // cancel any reload in progress.
 	m_pPlayer->pev->viewmodel = 0; 
 	m_pPlayer->pev->weaponmodel = 0;
 }
@@ -1256,7 +1256,7 @@ BOOL CWeaponBox::PackWeapon( CBasePlayerItem *pWeapon )
 	// is one of these weapons already packed in this box?
 	if ( HasWeapon( pWeapon ) )
 	{
-		return FALSE;// box can only hold one of each weapon type
+		return false;// box can only hold one of each weapon type
 	}
 
 	if ( pWeapon->m_pPlayer )
@@ -1264,7 +1264,7 @@ BOOL CWeaponBox::PackWeapon( CBasePlayerItem *pWeapon )
 		if ( !pWeapon->m_pPlayer->RemovePlayerItem( pWeapon ) )
 		{
 			// failed to unhook the weapon from the player!
-			return FALSE;
+			return false;
 		}
 	}
 
@@ -1310,7 +1310,7 @@ BOOL CWeaponBox::PackAmmo( int iszName, int iCount )
 	{
 		// error here
 		ALERT ( at_console, "NULL String in PackAmmo!\n" );
-		return FALSE;
+		return false;
 	}
 	
 	iMaxCarry = MaxAmmoCarry( iszName );
@@ -1322,7 +1322,7 @@ BOOL CWeaponBox::PackAmmo( int iszName, int iCount )
 		return TRUE;
 	}
 
-	return FALSE;
+	return false;
 }
 
 //=========================================================
@@ -1380,7 +1380,7 @@ BOOL CWeaponBox::HasWeapon( CBasePlayerItem *pCheckItem )
 		pItem = pItem->m_pNext;
 	}
 
-	return FALSE;
+	return false;
 }
 
 //=========================================================
@@ -1394,7 +1394,7 @@ BOOL CWeaponBox::IsEmpty()
 	{
 		if ( m_rgpPlayerItems[ i ] )
 		{
-			return FALSE;
+			return false;
 		}
 	}
 
@@ -1403,7 +1403,7 @@ BOOL CWeaponBox::IsEmpty()
 		if ( !FStringNull( m_rgiszAmmo[ i ] ) )
 		{
 			// still have a bit of this type of ammo
-			return FALSE;
+			return false;
 		}
 	}
 

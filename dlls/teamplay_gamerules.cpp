@@ -34,8 +34,8 @@ extern DLL_GLOBAL BOOL		g_fGameOver;
 
 CHalfLifeTeamplay :: CHalfLifeTeamplay()
 {
-	m_DisableDeathMessages = FALSE;
-	m_DisableDeathPenalty = FALSE;
+	m_DisableDeathMessages = false;
+	m_DisableDeathPenalty = false;
 
 	memset( team_names, 0, sizeof(team_names) );
 	memset( team_scores, 0, sizeof(team_scores) );
@@ -63,7 +63,7 @@ CHalfLifeTeamplay :: CHalfLifeTeamplay()
 	if ( strlen( m_szTeamList ) )
 		m_teamLimit = TRUE;
 	else
-		m_teamLimit = FALSE;
+		m_teamLimit = false;
 
 	RecountTeams();
 }
@@ -162,7 +162,7 @@ BOOL CHalfLifeTeamplay :: ClientCommand( CBasePlayer *pPlayer, const char *pcmd 
 		return TRUE;
 	}
 
-	return FALSE;
+	return false;
 }
 
 void CHalfLifeTeamplay :: UpdateGameMode( CBasePlayer *pPlayer )
@@ -234,7 +234,7 @@ void CHalfLifeTeamplay::InitHUD( CBasePlayer *pPlayer )
 		sprintf( text, "* assigned to team %s\n", pPlayer->m_szTeamName );
 	}
 
-	ChangePlayerTeam( pPlayer, pPlayer->m_szTeamName, FALSE, FALSE );
+	ChangePlayerTeam( pPlayer, pPlayer->m_szTeamName, false, false );
 	UTIL_SayText( text, pPlayer );
 	int clientIndex = pPlayer->entindex();
 	RecountTeams();
@@ -277,8 +277,8 @@ void CHalfLifeTeamplay::ChangePlayerTeam( CBasePlayer *pPlayer, const char *pTea
 		entvars_t *pevWorld = VARS( INDEXENT(0) );
 		pPlayer->TakeDamage( pevWorld, pevWorld, 900, damageFlags );
 
-		m_DisableDeathMessages = FALSE;
-		m_DisableDeathPenalty = FALSE;
+		m_DisableDeathMessages = false;
+		m_DisableDeathPenalty = false;
 	}
 
 	// copy out the team name from the model
@@ -425,7 +425,7 @@ BOOL CHalfLifeTeamplay::FPlayerCanTakeDamage( CBasePlayer *pPlayer, CBaseEntity 
 		if ( (friendlyfire.value == 0) && (pAttacker != pPlayer) )
 		{
 			// friendly fire is off, and this hit came from someone other than myself,  then don't get hurt
-			return FALSE;
+			return false;
 		}
 	}
 
@@ -458,7 +458,7 @@ BOOL CHalfLifeTeamplay::ShouldAutoAim( CBasePlayer *pPlayer, edict_t *target )
 	if ( pTgt && pTgt->IsPlayer() )
 	{
 		if ( PlayerRelationship( pPlayer, pTgt ) == GR_TEAMMATE )
-			return FALSE; // don't autoaim at teammates
+			return false; // don't autoaim at teammates
 	}
 
 	return CHalfLifeMultiplay::ShouldAutoAim( pPlayer, target );
@@ -522,7 +522,7 @@ BOOL CHalfLifeTeamplay::IsValidTeam( const char *pTeamName )
 	if ( !m_teamLimit )	// Any team is valid if the teamlist isn't set
 		return TRUE;
 
-	return ( GetTeamIndex( pTeamName ) != -1 ) ? TRUE : FALSE;
+	return ( GetTeamIndex( pTeamName ) != -1 ) ? TRUE : false;
 }
 
 const char *CHalfLifeTeamplay::TeamWithFewestPlayers()
@@ -589,7 +589,7 @@ void CHalfLifeTeamplay::RecountTeams( bool bResendInfo )
 	if ( num_teams < 2 )
 	{
 		num_teams = 0;
-		m_teamLimit = FALSE;
+		m_teamLimit = false;
 	}
 
 	// Sanity check

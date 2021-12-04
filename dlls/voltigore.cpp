@@ -494,7 +494,7 @@ BOOL COFVoltigore::ShouldSpeak()
 	if ( m_flNextSpeakTime > gpGlobals->time )
 	{
 		// my time to talk is still in the future.
-		return FALSE;
+		return false;
 	}
 
 	if ( pev->spawnflags & SF_MONSTER_GAG )
@@ -506,7 +506,7 @@ BOOL COFVoltigore::ShouldSpeak()
 			// into the future a bit, so we don't talk immediately after 
 			// going into combat
 			m_flNextSpeakTime = gpGlobals->time + 3;
-			return FALSE;
+			return false;
 		}
 	}
 
@@ -974,7 +974,7 @@ BOOL COFVoltigore :: FCanCheckAttacks ()
 	}
 	else
 	{
-		return FALSE;
+		return false;
 	}
 }
 
@@ -988,7 +988,7 @@ BOOL COFVoltigore :: CheckMeleeAttack1 ( float flDot, float flDist )
 	{
 		return TRUE;
 	}
-	return FALSE;
+	return false;
 }
 
 //=========================================================

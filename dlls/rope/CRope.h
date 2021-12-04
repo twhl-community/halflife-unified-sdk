@@ -174,7 +174,7 @@ public:
 	/**
 	*	@return Whether an object is attached.
 	*/
-	bool IsObjectAttached() const { return m_bObjectAttached != FALSE; }
+	bool IsObjectAttached() const { return m_bObjectAttached != false; }
 
 	/**
 	*	@return Whether this rope allows attachments.
@@ -199,12 +199,12 @@ public:
 	/**
 	*	@return The toggle value.
 	*/
-	bool GetToggleValue() const { return m_bToggle != FALSE; }
+	bool GetToggleValue() const { return m_bToggle != false; }
 
 	/**
 	*	@return Whether this rope is allowed to make sounds.
 	*/
-	bool IsSoundAllowed() const { return m_bMakeSound != FALSE; }
+	bool IsSoundAllowed() const { return m_bMakeSound != false; }
 
 	/**
 	*	Sets whether this rope is allowed to make sounds.

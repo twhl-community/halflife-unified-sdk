@@ -392,7 +392,7 @@ class CEagleAmmo : public CBasePlayerAmmo
 			EMIT_SOUND( ENT( pev ), CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM );
 			return TRUE;
 		}
-		return FALSE;
+		return false;
 	}
 };
 

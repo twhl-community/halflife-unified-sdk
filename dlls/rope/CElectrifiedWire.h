@@ -46,7 +46,7 @@ public:
 	/**
 	*	@return Whether the wire is active.
 	*/
-	bool IsActive() const { return m_bIsActive != FALSE; }
+	bool IsActive() const { return m_bIsActive != false; }
 
 	/**
 	*	@param iFrequency Frequency.

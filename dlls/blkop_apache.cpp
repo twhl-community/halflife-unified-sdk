@@ -864,7 +864,7 @@ BOOL COFBlackOpsApache :: FireGun( )
 			m_pBeam = NULL;
 		}
 	}
-	return FALSE;
+	return false;
 }
 
 

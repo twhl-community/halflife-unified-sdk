@@ -125,8 +125,8 @@ using qboolean = int;
 #define stackfree(address)
 
 #else // WIN32
-#define FALSE 0
-#define TRUE (!FALSE)
+#define false 0
+#define TRUE (!false)
 typedef int BOOL;
 #define MAX_PATH PATH_MAX
 

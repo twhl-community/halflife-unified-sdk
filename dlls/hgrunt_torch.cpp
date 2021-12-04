@@ -382,20 +382,20 @@ BOOL COFTorchAlly :: FOkToSpeak()
 {
 // if someone else is talking, don't speak
 	if (gpGlobals->time <= COFSquadTalkMonster::g_talkWaitTime)
-		return FALSE;
+		return false;
 
 	if ( pev->spawnflags & SF_MONSTER_GAG )
 	{
 		if ( m_MonsterState != MONSTERSTATE_COMBAT )
 		{
 			// no talking outside of combat if gagged.
-			return FALSE;
+			return false;
 		}
 	}
 
 	// if player is not in pvs, don't speak
 //	if (FNullEnt(FIND_CLIENT_IN_PVS(edict())))
-//		return FALSE;
+//		return false;
 	
 	return TRUE;
 }
@@ -452,7 +452,7 @@ BOOL COFTorchAlly :: FCanCheckAttacks ()
 	}
 	else
 	{
-		return FALSE;
+		return false;
 	}
 }
 
@@ -470,7 +470,7 @@ BOOL COFTorchAlly :: CheckMeleeAttack1 ( float flDot, float flDist )
 
 		if ( !pEnemy )
 		{
-			return FALSE;
+			return false;
 		}
 	}
 
@@ -480,7 +480,7 @@ BOOL COFTorchAlly :: CheckMeleeAttack1 ( float flDot, float flDist )
 	{
 		return TRUE;
 	}
-	return FALSE;
+	return false;
 }
 
 //=========================================================
@@ -503,7 +503,7 @@ BOOL COFTorchAlly :: CheckRangeAttack1 ( float flDot, float flDist )
 		//if( !pEnemy->IsPlayer() && flDist <= 64 )
 		//{
 		//	// kick nonclients, but don't shoot at them.
-		//	return FALSE;
+		//	return false;
 		//}
 
 		//TODO: kinda odd that this doesn't use GetGunPosition like the original
@@ -522,7 +522,7 @@ BOOL COFTorchAlly :: CheckRangeAttack1 ( float flDot, float flDist )
 		return m_lastAttackCheck;
 	}
 
-	return FALSE;
+	return false;
 }
 
 //=========================================================
@@ -533,13 +533,13 @@ BOOL COFTorchAlly :: CheckRangeAttack2 ( float flDot, float flDist )
 {
 	if ( m_fGunHolstered || !FBitSet( pev->weapons, TorchAllyWeaponFlag::HandGrenade ) )
 	{
-		return FALSE;
+		return false;
 	}
 	
 	// if the grunt isn't moving, it's ok to check.
 	if ( m_flGroundSpeed != 0 )
 	{
-		m_fThrowGrenade = FALSE;
+		m_fThrowGrenade = false;
 		return m_fThrowGrenade;
 	}
 
@@ -554,7 +554,7 @@ BOOL COFTorchAlly :: CheckRangeAttack2 ( float flDot, float flDist )
 		//!!!BUGBUG - we should make this check movetype and make sure it isn't FLY? Players who jump a lot are unlikely to 
 		// be grenaded.
 		// don't throw grenades at anything that isn't on the ground!
-		m_fThrowGrenade = FALSE;
+		m_fThrowGrenade = false;
 		return m_fThrowGrenade;
 	}
 	
@@ -594,7 +594,7 @@ BOOL COFTorchAlly :: CheckRangeAttack2 ( float flDot, float flDist )
 		{
 			// crap, I might blow my own guy up. Don't throw a grenade and don't check again for a while.
 			m_flNextGrenadeCheck = gpGlobals->time + 1; // one full second.
-			m_fThrowGrenade = FALSE;
+			m_fThrowGrenade = false;
 		}
 	}
 	
@@ -602,7 +602,7 @@ BOOL COFTorchAlly :: CheckRangeAttack2 ( float flDot, float flDist )
 	{
 		// crap, I don't want to blow myself up
 		m_flNextGrenadeCheck = gpGlobals->time + 1; // one full second.
-		m_fThrowGrenade = FALSE;
+		m_fThrowGrenade = false;
 		return m_fThrowGrenade;
 	}
 
@@ -623,7 +623,7 @@ BOOL COFTorchAlly :: CheckRangeAttack2 ( float flDot, float flDist )
 		else
 		{
 			// don't throw
-			m_fThrowGrenade = FALSE;
+			m_fThrowGrenade = false;
 			// don't check again for a while.
 			m_flNextGrenadeCheck = gpGlobals->time + 1; // one full second.
 		}
@@ -644,7 +644,7 @@ BOOL COFTorchAlly :: CheckRangeAttack2 ( float flDot, float flDist )
 		else
 		{
 			// don't throw
-			m_fThrowGrenade = FALSE;
+			m_fThrowGrenade = false;
 			// don't check again for a while.
 			m_flNextGrenadeCheck = gpGlobals->time + 1; // one full second.
 		}
@@ -979,7 +979,7 @@ void COFTorchAlly :: HandleAnimEvent( MonsterEvent_t *pEvent )
 			// CGrenade::ShootTimed( pev, pev->origin + gpGlobals->v_forward * 34 + Vector (0, 0, 32), m_vecTossVelocity, 3.5 );
 			CGrenade::ShootTimed( pev, GetGunPosition(), m_vecTossVelocity, 3.5 );
 
-			m_fThrowGrenade = FALSE;
+			m_fThrowGrenade = false;
 			m_flNextGrenadeCheck = gpGlobals->time + 6;// wait six seconds before even looking again to see if a grenade can be thrown.
 			// !!!LATER - when in a group, only try to throw grenade if ordered.
 		}
@@ -1114,7 +1114,7 @@ void COFTorchAlly :: Spawn()
 
 	m_afCapability		= bits_CAP_SQUAD | bits_CAP_TURN_HEAD | bits_CAP_DOORS_GROUP | bits_CAP_HEAR;
 
-	m_fEnemyEluded		= FALSE;
+	m_fEnemyEluded		= false;
 	m_fFirstEncounter	= TRUE;// this is true when the grunt spawns, because he hasn't encountered an enemy yet.
 
 	m_HackedGunPos = Vector ( 0, 0, 55 );
@@ -2259,7 +2259,7 @@ Schedule_t *COFTorchAlly :: GetSchedule()
 			{
 				if ( InSquad() )
 				{
-					MySquadLeader()->m_fEnemyEluded = FALSE;
+					MySquadLeader()->m_fEnemyEluded = false;
 
 					if ( !IsLeader() )
 					{
@@ -2356,7 +2356,7 @@ Schedule_t *COFTorchAlly :: GetSchedule()
 					// little time and give the player a chance to turn.
 					if ( MySquadLeader()->m_fEnemyEluded && !HasConditions ( bits_COND_ENEMY_FACING_ME ) )
 					{
-						MySquadLeader()->m_fEnemyEluded = FALSE;
+						MySquadLeader()->m_fEnemyEluded = false;
 						return GetScheduleOfType ( SCHED_TORCH_ALLY_FOUND_ENEMY );
 					}
 				}
@@ -2474,7 +2474,7 @@ Schedule_t *COFTorchAlly :: GetSchedule()
 				if( !m_hTargetEnt->IsAlive() )
 				{
 					// UNDONE: Comment about the recently dead player here?
-					StopFollowing( FALSE );
+					StopFollowing( false );
 					break;
 				}
 				else
@@ -2614,7 +2614,7 @@ Schedule_t* COFTorchAlly :: GetScheduleOfType ( int Type )
 		{
 			if ( m_hEnemy->IsPlayer() && m_fFirstEncounter )
 			{
-				m_fFirstEncounter = FALSE;// after first encounter, leader won't issue handsigns anymore when he has a new enemy
+				m_fFirstEncounter = false;// after first encounter, leader won't issue handsigns anymore when he has a new enemy
 				return &slTorchAllySignalSuppress[ 0 ];
 			}
 			else

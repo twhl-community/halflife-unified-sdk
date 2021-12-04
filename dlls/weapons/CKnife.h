@@ -62,7 +62,7 @@ public:
 #if defined( CLIENT_WEAPONS )
 		return UTIL_DefaultUseDecrement();
 #else
-		return FALSE;
+		return false;
 #endif
 	}
 

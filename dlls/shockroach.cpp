@@ -431,7 +431,7 @@ BOOL COFShockRoach :: CheckRangeAttack1 ( float flDot, float flDist )
 	{
 		return TRUE;
 	}
-	return FALSE;
+	return false;
 }
 
 //=========================================================
@@ -439,14 +439,14 @@ BOOL COFShockRoach :: CheckRangeAttack1 ( float flDot, float flDist )
 //=========================================================
 BOOL COFShockRoach :: CheckRangeAttack2 ( float flDot, float flDist )
 {
-	return FALSE;
+	return false;
 	// BUGBUG: Why is this code here?  There is no ACT_RANGE_ATTACK2 animation.  I've disabled it for now.
 #if 0
 	if ( FBitSet( pev->flags, FL_ONGROUND ) && flDist > 64 && flDist <= 256 && flDot >= 0.5 )
 	{
 		return TRUE;
 	}
-	return FALSE;
+	return false;
 #endif
 }
 

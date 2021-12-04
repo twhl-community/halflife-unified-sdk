@@ -428,7 +428,7 @@ void COFAllyMonster::StartTask( Task_t *pTask )
 		break;
 
 	case TASK_CANT_FOLLOW:
-		StopFollowing( FALSE );
+		StopFollowing( false );
 		PlaySentence( m_szGrp[ TLK_STOP ], RANDOM_FLOAT( 2, 2.5 ), VOL_NORM, ATTN_NORM );
 		TaskComplete();
 		break;
@@ -714,7 +714,7 @@ void COFAllyMonster::LimitFollowers( CBaseEntity *pPlayer, int maxFollowers )
 	// for each friend in this bsp...
 	for( i = 0; i < TLK_CFRIENDS; i++ )
 	{
-		while( pFriend = EnumFriends( pFriend, i, FALSE ) )
+		while( pFriend = EnumFriends( pFriend, i, false ) )
 		{
 			CBaseMonster *pMonster = pFriend->MyMonsterPointer();
 			if( pMonster )
@@ -897,32 +897,32 @@ int COFAllyMonster::FOkToSpeak()
 	// if in the grip of a barnacle, don't speak
 	if( m_MonsterState == MONSTERSTATE_PRONE || m_IdealMonsterState == MONSTERSTATE_PRONE )
 	{
-		return FALSE;
+		return false;
 	}
 
 	// if not alive, certainly don't speak
 	if( pev->deadflag != DEAD_NO )
 	{
-		return FALSE;
+		return false;
 	}
 
 	// if someone else is talking, don't speak
 	if( gpGlobals->time <= COFAllyMonster::g_talkWaitTime )
-		return FALSE;
+		return false;
 
 	if( pev->spawnflags & SF_MONSTER_GAG )
-		return FALSE;
+		return false;
 
 	if( m_MonsterState == MONSTERSTATE_PRONE )
-		return FALSE;
+		return false;
 
 	// if player is not in pvs, don't speak
 	if( !IsAlive() || FNullEnt( FIND_CLIENT_IN_PVS( edict() ) ) )
-		return FALSE;
+		return false;
 
 	// don't talk if you're in combat
 	if( m_hEnemy != NULL && FVisible( m_hEnemy ) )
-		return FALSE;
+		return false;
 
 	return TRUE;
 }
@@ -941,7 +941,7 @@ int COFAllyMonster::CanPlaySentence( BOOL fDisregardState )
 int COFAllyMonster::FIdleStare()
 {
 	if( !FOkToSpeak() )
-		return FALSE;
+		return false;
 
 	PlaySentence( m_szGrp[ TLK_STARE ], RANDOM_FLOAT( 5, 7.5 ), VOL_NORM, ATTN_IDLE );
 
@@ -956,7 +956,7 @@ int COFAllyMonster::FIdleStare()
 int COFAllyMonster::FIdleHello()
 {
 	if( !FOkToSpeak() )
-		return FALSE;
+		return false;
 
 	// if this is first time scientist has seen player, greet him
 	if( !FBitSet( m_bitsSaid, bit_saidHelloPlayer ) )
@@ -981,7 +981,7 @@ int COFAllyMonster::FIdleHello()
 			}
 		}
 	}
-	return FALSE;
+	return false;
 }
 
 
@@ -1014,7 +1014,7 @@ int COFAllyMonster::FIdleSpeak()
 	float duration;
 
 	if( !FOkToSpeak() )
-		return FALSE;
+		return false;
 
 	// set idle groups based on pre/post disaster
 	if( FBitSet( pev->spawnflags, SF_MONSTER_PREDISASTER ) )
@@ -1080,7 +1080,7 @@ int COFAllyMonster::FIdleSpeak()
 	}
 
 	// if there is a friend nearby to speak to, play sentence, set friend's response time, return
-	CBaseEntity *pFriend = FindNearestFriend( FALSE );
+	CBaseEntity *pFriend = FindNearestFriend( false );
 
 	if( pFriend && !( pFriend->IsMoving() ) && ( RANDOM_LONG( 0, 99 ) < 75 ) )
 	{
@@ -1115,7 +1115,7 @@ int COFAllyMonster::FIdleSpeak()
 	// didn't speak
 	Talk( 0 );
 	COFAllyMonster::g_talkWaitTime = 0;
-	return FALSE;
+	return false;
 }
 
 void COFAllyMonster::PlayScriptedSentence( const char *pszSentence, float duration, float volume, float attenuation, BOOL bConcurrent, CBaseEntity *pListener )
@@ -1180,7 +1180,7 @@ int COFAllyMonster::TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker,
 		// if player damaged this entity, have other friends talk about it
 		if( pevAttacker && m_MonsterState != MONSTERSTATE_PRONE && FBitSet( pevAttacker->flags, FL_CLIENT ) )
 		{
-			CBaseEntity *pFriend = FindNearestFriend( FALSE );
+			CBaseEntity *pFriend = FindNearestFriend( false );
 
 			if( pFriend && pFriend->IsAlive() )
 			{
@@ -1298,7 +1298,7 @@ BOOL COFAllyMonster::IsTalking()
 		return TRUE;
 	}
 
-	return FALSE;
+	return false;
 }
 
 //=========================================================
@@ -1386,11 +1386,11 @@ BOOL COFAllyMonster::CanFollow()
 	if( m_MonsterState == MONSTERSTATE_SCRIPT )
 	{
 		if( !m_pCine->CanInterrupt() )
-			return FALSE;
+			return false;
 	}
 
 	if( !IsAlive() )
-		return FALSE;
+		return false;
 
 	return !IsFollowing();
 }
