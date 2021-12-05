@@ -911,7 +911,8 @@ void CBaseMonster::StartTask(Task_t* pTask)
 		break;
 	}
 
-	case TASK_JUMP_TO_TARGET: {
+	case TASK_JUMP_TO_TARGET:
+	{
 		if ((m_hTargetEnt->pev->origin - pev->origin).Length() >= 1.0)
 		{
 			if (!m_hTargetEnt || !JumpToTarget(ACT_LEAP, 2.0))
@@ -926,7 +927,8 @@ void CBaseMonster::StartTask(Task_t* pTask)
 		break;
 	}
 
-	case TASK_WAIT_FOR_JUMP: {
+	case TASK_WAIT_FOR_JUMP:
+	{
 		if ((pev->flags & FL_ONGROUND) != 0)
 		{
 			if (!HasConditions(bits_COND_TASK_FAILED))

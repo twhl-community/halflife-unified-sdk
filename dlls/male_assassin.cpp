@@ -830,7 +830,8 @@ void CMOFAssassin::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 	switch (pEvent->event)
 	{
-	case MASSASSIN_AE_DROP_GUN: {
+	case MASSASSIN_AE_DROP_GUN:
+	{
 		Vector vecGunPos;
 		Vector vecGunAngles;
 
@@ -861,7 +862,8 @@ void CMOFAssassin::HandleAnimEvent(MonsterEvent_t* pEvent)
 		ClearConditions(bits_COND_NO_AMMO_LOADED);
 		break;
 
-	case MASSASSIN_AE_GREN_TOSS: {
+	case MASSASSIN_AE_GREN_TOSS:
+	{
 		UTIL_MakeVectors(pev->angles);
 		// CGrenade::ShootTimed( pev, pev->origin + gpGlobals->v_forward * 34 + Vector (0, 0, 32), m_vecTossVelocity, 3.5 );
 		CGrenade::ShootTimed(pev, GetGunPosition(), m_vecTossVelocity, 3.5);
@@ -872,7 +874,8 @@ void CMOFAssassin::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 	break;
 
-	case MASSASSIN_AE_GREN_LAUNCH: {
+	case MASSASSIN_AE_GREN_LAUNCH:
+	{
 		EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/glauncher.wav", 0.8, ATTN_NORM);
 		CGrenade::ShootContact(pev, GetGunPosition(), m_vecTossVelocity);
 		m_fThrowGrenade = false;
@@ -883,13 +886,15 @@ void CMOFAssassin::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 	break;
 
-	case MASSASSIN_AE_GREN_DROP: {
+	case MASSASSIN_AE_GREN_DROP:
+	{
 		UTIL_MakeVectors(pev->angles);
 		CGrenade::ShootTimed(pev, pev->origin + gpGlobals->v_forward * 17 - gpGlobals->v_right * 27 + gpGlobals->v_up * 6, g_vecZero, 3);
 	}
 	break;
 
-	case MASSASSIN_AE_BURST1: {
+	case MASSASSIN_AE_BURST1:
+	{
 		Shoot();
 
 		if (FBitSet(pev->weapons, MAssassinWeaponFlag::MP5))
@@ -918,7 +923,8 @@ void CMOFAssassin::HandleAnimEvent(MonsterEvent_t* pEvent)
 		Shoot();
 		break;
 
-	case MASSASSIN_AE_KICK: {
+	case MASSASSIN_AE_KICK:
+	{
 		CBaseEntity* pHurt = Kick();
 
 		if (pHurt)
@@ -1103,7 +1109,8 @@ void CMOFAssassin::RunTask(Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
-	case TASK_MASSASSIN_FACE_TOSS_DIR: {
+	case TASK_MASSASSIN_FACE_TOSS_DIR:
+	{
 		// project a point along the toss vector and turn to face that point.
 		MakeIdealYaw(pev->origin + m_vecTossVelocity * 64);
 		ChangeYaw(pev->yaw_speed);
@@ -1114,7 +1121,8 @@ void CMOFAssassin::RunTask(Task_t* pTask)
 		}
 		break;
 	}
-	default: {
+	default:
+	{
 		CSquadMonster::RunTask(pTask);
 		break;
 	}
@@ -1891,7 +1899,8 @@ Schedule_t* CMOFAssassin::GetSchedule()
 	}
 	switch (m_MonsterState)
 	{
-	case MONSTERSTATE_COMBAT: {
+	case MONSTERSTATE_COMBAT:
+	{
 		// dead enemy
 		if (HasConditions(bits_COND_ENEMY_DEAD))
 		{
@@ -2038,7 +2047,8 @@ Schedule_t* CMOFAssassin::GetScheduleOfType(int Type)
 {
 	switch (Type)
 	{
-	case SCHED_TAKE_COVER_FROM_ENEMY: {
+	case SCHED_TAKE_COVER_FROM_ENEMY:
+	{
 		if (InSquad())
 		{
 			if (g_iSkillLevel == SKILL_HARD && HasConditions(bits_COND_CAN_RANGE_ATTACK2) && OccupySlot(bits_SLOTS_HGRUNT_GRENADE))
@@ -2062,10 +2072,12 @@ Schedule_t* CMOFAssassin::GetScheduleOfType(int Type)
 			}
 		}
 	}
-	case SCHED_TAKE_COVER_FROM_BEST_SOUND: {
+	case SCHED_TAKE_COVER_FROM_BEST_SOUND:
+	{
 		return &slOFMAssassinTakeCoverFromBestSound[0];
 	}
-	case SCHED_MASSASSIN_TAKECOVER_FAILED: {
+	case SCHED_MASSASSIN_TAKECOVER_FAILED:
+	{
 		if (HasConditions(bits_COND_CAN_RANGE_ATTACK1) && OccupySlot(bits_SLOTS_HGRUNT_ENGAGE))
 		{
 			return GetScheduleOfType(SCHED_RANGE_ATTACK1);
@@ -2074,16 +2086,19 @@ Schedule_t* CMOFAssassin::GetScheduleOfType(int Type)
 		return GetScheduleOfType(SCHED_FAIL);
 	}
 	break;
-	case SCHED_MASSASSIN_ELOF_FAIL: {
+	case SCHED_MASSASSIN_ELOF_FAIL:
+	{
 		// human grunt is unable to move to a position that allows him to attack the enemy.
 		return GetScheduleOfType(SCHED_TAKE_COVER_FROM_ENEMY);
 	}
 	break;
-	case SCHED_MASSASSIN_ESTABLISH_LINE_OF_FIRE: {
+	case SCHED_MASSASSIN_ESTABLISH_LINE_OF_FIRE:
+	{
 		return &slOFMAssassinEstablishLineOfFire[0];
 	}
 	break;
-	case SCHED_RANGE_ATTACK1: {
+	case SCHED_RANGE_ATTACK1:
+	{
 		// randomly stand or crouch
 		if (RANDOM_LONG(0, 9) == 0)
 			m_fStanding = RANDOM_LONG(0, 1);
@@ -2093,25 +2108,32 @@ Schedule_t* CMOFAssassin::GetScheduleOfType(int Type)
 		else
 			return &slOFMAssassinRangeAttack1A[0];
 	}
-	case SCHED_RANGE_ATTACK2: {
+	case SCHED_RANGE_ATTACK2:
+	{
 		return &slOFMAssassinRangeAttack2[0];
 	}
-	case SCHED_COMBAT_FACE: {
+	case SCHED_COMBAT_FACE:
+	{
 		return &slOFMAssassinCombatFace[0];
 	}
-	case SCHED_MASSASSIN_WAIT_FACE_ENEMY: {
+	case SCHED_MASSASSIN_WAIT_FACE_ENEMY:
+	{
 		return &slOFMAssassinWaitInCover[0];
 	}
-	case SCHED_MASSASSIN_SWEEP: {
+	case SCHED_MASSASSIN_SWEEP:
+	{
 		return &slOFMAssassinSweep[0];
 	}
-	case SCHED_MASSASSIN_COVER_AND_RELOAD: {
+	case SCHED_MASSASSIN_COVER_AND_RELOAD:
+	{
 		return &slOFMAssassinHideReload[0];
 	}
-	case SCHED_MASSASSIN_FOUND_ENEMY: {
+	case SCHED_MASSASSIN_FOUND_ENEMY:
+	{
 		return &slOFMAssassinFoundEnemy[0];
 	}
-	case SCHED_VICTORY_DANCE: {
+	case SCHED_VICTORY_DANCE:
+	{
 		if (InSquad())
 		{
 			if (!IsLeader())
@@ -2122,7 +2144,8 @@ Schedule_t* CMOFAssassin::GetScheduleOfType(int Type)
 
 		return &slOFMAssassinVictoryDance[0];
 	}
-	case SCHED_MASSASSIN_SUPPRESS: {
+	case SCHED_MASSASSIN_SUPPRESS:
+	{
 		if (m_hEnemy->IsPlayer() && m_fFirstEncounter)
 		{
 			m_fFirstEncounter = false; // after first encounter, leader won't issue handsigns anymore when he has a new enemy
@@ -2133,7 +2156,8 @@ Schedule_t* CMOFAssassin::GetScheduleOfType(int Type)
 			return &slOFMAssassinSuppress[0];
 		}
 	}
-	case SCHED_FAIL: {
+	case SCHED_FAIL:
+	{
 		if (m_hEnemy != NULL)
 		{
 			// grunt has an enemy, so pick a different default fail schedule most likely to help recover.
@@ -2142,20 +2166,24 @@ Schedule_t* CMOFAssassin::GetScheduleOfType(int Type)
 
 		return &slOFMAssassinFail[0];
 	}
-	case SCHED_MASSASSIN_REPEL: {
+	case SCHED_MASSASSIN_REPEL:
+	{
 		if (pev->velocity.z > -128)
 			pev->velocity.z -= 32;
 		return &slOFMAssassinRepel[0];
 	}
-	case SCHED_MASSASSIN_REPEL_ATTACK: {
+	case SCHED_MASSASSIN_REPEL_ATTACK:
+	{
 		if (pev->velocity.z > -128)
 			pev->velocity.z -= 32;
 		return &slOFMAssassinRepelAttack[0];
 	}
-	case SCHED_MASSASSIN_REPEL_LAND: {
+	case SCHED_MASSASSIN_REPEL_LAND:
+	{
 		return &slOFMAssassinRepelLand[0];
 	}
-	default: {
+	default:
+	{
 		return CSquadMonster::GetScheduleOfType(Type);
 	}
 	}

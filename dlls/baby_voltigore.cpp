@@ -388,7 +388,8 @@ void COFBabyVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 		}
 		break;
 
-	case BABYVOLTIGORE_AE_LEFT_PUNCH: {
+	case BABYVOLTIGORE_AE_LEFT_PUNCH:
+	{
 		CBaseEntity* pHurt = CheckTraceHullAttack(BABYVOLTIGORE_MELEE_DIST, gSkillData.babyvoltigoreDmgPunch, DMG_CLUB);
 
 		if (pHurt)
@@ -417,7 +418,8 @@ void COFBabyVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 	break;
 
-	case BABYVOLTIGORE_AE_RIGHT_PUNCH: {
+	case BABYVOLTIGORE_AE_RIGHT_PUNCH:
+	{
 		CBaseEntity* pHurt = CheckTraceHullAttack(BABYVOLTIGORE_MELEE_DIST, gSkillData.babyvoltigoreDmgPunch, DMG_CLUB);
 
 		if (pHurt)
@@ -814,7 +816,8 @@ void COFBabyVoltigore::StartTask(Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
-	case TASK_BABYVOLTIGORE_GET_PATH_TO_ENEMY_CORPSE: {
+	case TASK_BABYVOLTIGORE_GET_PATH_TO_ENEMY_CORPSE:
+	{
 		ClearBeams();
 
 		UTIL_MakeVectors(pev->angles);
@@ -830,7 +833,8 @@ void COFBabyVoltigore::StartTask(Task_t* pTask)
 	}
 	break;
 
-	case TASK_RANGE_ATTACK1_NOTURN: {
+	case TASK_RANGE_ATTACK1_NOTURN:
+	{
 		ClearBeams();
 
 		UTIL_MakeVectors(pev->angles);
@@ -872,7 +876,8 @@ void COFBabyVoltigore::RunTask(Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
-	case TASK_DIE: {
+	case TASK_DIE:
+	{
 		if (m_fSequenceFinished)
 		{
 			if (pev->frame >= 255)
@@ -934,7 +939,8 @@ Schedule_t* COFBabyVoltigore::GetSchedule()
 
 	switch (m_MonsterState)
 	{
-	case MONSTERSTATE_COMBAT: {
+	case MONSTERSTATE_COMBAT:
+	{
 		// dead enemy
 		if (HasConditions(bits_COND_ENEMY_DEAD))
 		{

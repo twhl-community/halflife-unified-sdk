@@ -1455,7 +1455,8 @@ void COFGeneWorm::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vec
 
 	switch (ptr->iHitgroup)
 	{
-	case 4: {
+	case 4:
+	{
 		if (!m_fLeftEyeHit)
 		{
 			if (0 == strcmp("left_eye_laser", STRING(pevAttacker->targetname)))
@@ -1488,7 +1489,8 @@ void COFGeneWorm::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vec
 		break;
 	}
 
-	case 5: {
+	case 5:
+	{
 		if (!m_fRightEyeHit)
 		{
 			if (0 == strcmp("right_eye_laser", STRING(pevAttacker->targetname)))
@@ -1520,7 +1522,8 @@ void COFGeneWorm::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vec
 		break;
 	}
 
-	case 6: {
+	case 6:
+	{
 		if (m_flOrificeOpenTime > gpGlobals->time && !m_fOrificeHit)
 		{
 			pev->health -= flDamage;

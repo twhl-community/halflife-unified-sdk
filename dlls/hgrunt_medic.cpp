@@ -991,7 +991,8 @@ void COFMedicAlly::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 	switch (pEvent->event)
 	{
-	case MEDIC_AE_DROP_GUN: {
+	case MEDIC_AE_DROP_GUN:
+	{
 		Vector vecGunPos;
 		Vector vecGunAngles;
 
@@ -1029,7 +1030,8 @@ void COFMedicAlly::HandleAnimEvent(MonsterEvent_t* pEvent)
 		ClearConditions(bits_COND_NO_AMMO_LOADED);
 		break;
 
-	case MEDIC_AE_GREN_TOSS: {
+	case MEDIC_AE_GREN_TOSS:
+	{
 		UTIL_MakeVectors(pev->angles);
 		// CGrenade::ShootTimed( pev, pev->origin + gpGlobals->v_forward * 34 + Vector (0, 0, 32), m_vecTossVelocity, 3.5 );
 		CGrenade::ShootTimed(pev, GetGunPosition(), m_vecTossVelocity, 3.5);
@@ -1040,18 +1042,21 @@ void COFMedicAlly::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 	break;
 
-	case MEDIC_AE_GREN_DROP: {
+	case MEDIC_AE_GREN_DROP:
+	{
 		UTIL_MakeVectors(pev->angles);
 		CGrenade::ShootTimed(pev, pev->origin + gpGlobals->v_forward * 17 - gpGlobals->v_right * 27 + gpGlobals->v_up * 6, g_vecZero, 3);
 	}
 	break;
 
-	case MEDIC_AE_SHOOT: {
+	case MEDIC_AE_SHOOT:
+	{
 		Shoot();
 	}
 	break;
 
-	case MEDIC_AE_KICK: {
+	case MEDIC_AE_KICK:
+	{
 		CBaseEntity* pHurt = Kick();
 
 		if (pHurt)
@@ -1085,7 +1090,8 @@ void COFMedicAlly::HandleAnimEvent(MonsterEvent_t* pEvent)
 		m_fGunHolstered = false;
 		break;
 
-	case MEDIC_AE_CAUGHT_ENEMY: {
+	case MEDIC_AE_CAUGHT_ENEMY:
+	{
 		if (FOkToSpeak())
 		{
 			SENTENCEG_PlayRndSz(ENT(pev), "FG_ALERT", MEDIC_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
@@ -1287,7 +1293,8 @@ void COFMedicAlly::StartTask(Task_t* pTask)
 		}
 		break;
 
-	case TASK_MELEE_ATTACK2: {
+	case TASK_MELEE_ATTACK2:
+	{
 		m_IdealActivity = ACT_MELEE_ATTACK2;
 
 		if (!m_fHealAudioPlaying)
@@ -1298,7 +1305,8 @@ void COFMedicAlly::StartTask(Task_t* pTask)
 		break;
 	}
 
-	case TASK_WAIT_FOR_MOVEMENT: {
+	case TASK_WAIT_FOR_MOVEMENT:
+	{
 		if (!m_fHealing)
 			return COFSquadTalkMonster::StartTask(pTask);
 
@@ -1357,7 +1365,8 @@ void COFMedicAlly::RunTask(Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
-	case TASK_MEDIC_ALLY_FACE_TOSS_DIR: {
+	case TASK_MEDIC_ALLY_FACE_TOSS_DIR:
+	{
 		// project a point along the toss vector and turn to face that point.
 		MakeIdealYaw(pev->origin + m_vecTossVelocity * 64);
 		ChangeYaw(pev->yaw_speed);
@@ -1369,7 +1378,8 @@ void COFMedicAlly::RunTask(Task_t* pTask)
 		break;
 	}
 
-	case TASK_MELEE_ATTACK2: {
+	case TASK_MELEE_ATTACK2:
+	{
 		if (m_fSequenceFinished)
 		{
 			if (m_fUseHealing)
@@ -1408,7 +1418,8 @@ void COFMedicAlly::RunTask(Task_t* pTask)
 		break;
 	}
 
-	default: {
+	default:
+	{
 		COFSquadTalkMonster::RunTask(pTask);
 		break;
 	}
@@ -2391,7 +2402,8 @@ Schedule_t* COFMedicAlly::GetSchedule()
 	}
 	switch (m_MonsterState)
 	{
-	case MONSTERSTATE_COMBAT: {
+	case MONSTERSTATE_COMBAT:
+	{
 		// dead enemy
 		if (HasConditions(bits_COND_ENEMY_DEAD))
 		{
@@ -2669,7 +2681,8 @@ Schedule_t* COFMedicAlly::GetScheduleOfType(int Type)
 {
 	switch (Type)
 	{
-	case SCHED_TAKE_COVER_FROM_ENEMY: {
+	case SCHED_TAKE_COVER_FROM_ENEMY:
+	{
 		if (InSquad())
 		{
 			if (g_iSkillLevel == SKILL_HARD && HasConditions(bits_COND_CAN_RANGE_ATTACK2) && OccupySlot(bits_SLOTS_HGRUNT_GRENADE))
@@ -2698,10 +2711,12 @@ Schedule_t* COFMedicAlly::GetScheduleOfType(int Type)
 			//}
 		}
 	}
-	case SCHED_TAKE_COVER_FROM_BEST_SOUND: {
+	case SCHED_TAKE_COVER_FROM_BEST_SOUND:
+	{
 		return &slMedicAllyTakeCoverFromBestSound[0];
 	}
-	case SCHED_MEDIC_ALLY_TAKECOVER_FAILED: {
+	case SCHED_MEDIC_ALLY_TAKECOVER_FAILED:
+	{
 		if (HasConditions(bits_COND_CAN_RANGE_ATTACK1) && OccupySlot(bits_SLOTS_HGRUNT_ENGAGE))
 		{
 			return GetScheduleOfType(SCHED_RANGE_ATTACK1);
@@ -2710,16 +2725,19 @@ Schedule_t* COFMedicAlly::GetScheduleOfType(int Type)
 		return GetScheduleOfType(SCHED_FAIL);
 	}
 	break;
-	case SCHED_MEDIC_ALLY_ELOF_FAIL: {
+	case SCHED_MEDIC_ALLY_ELOF_FAIL:
+	{
 		// human grunt is unable to move to a position that allows him to attack the enemy.
 		return GetScheduleOfType(SCHED_TAKE_COVER_FROM_ENEMY);
 	}
 	break;
-	case SCHED_MEDIC_ALLY_ESTABLISH_LINE_OF_FIRE: {
+	case SCHED_MEDIC_ALLY_ESTABLISH_LINE_OF_FIRE:
+	{
 		return &slMedicAllyEstablishLineOfFire[0];
 	}
 	break;
-	case SCHED_RANGE_ATTACK1: {
+	case SCHED_RANGE_ATTACK1:
+	{
 		// randomly stand or crouch
 		if (RANDOM_LONG(0, 9) == 0)
 			m_fStanding = RANDOM_LONG(0, 1);
@@ -2729,25 +2747,32 @@ Schedule_t* COFMedicAlly::GetScheduleOfType(int Type)
 		else
 			return &slMedicAllyRangeAttack1A[0];
 	}
-	case SCHED_RANGE_ATTACK2: {
+	case SCHED_RANGE_ATTACK2:
+	{
 		return &slMedicAllyRangeAttack2[0];
 	}
-	case SCHED_COMBAT_FACE: {
+	case SCHED_COMBAT_FACE:
+	{
 		return &slMedicAllyCombatFace[0];
 	}
-	case SCHED_MEDIC_ALLY_WAIT_FACE_ENEMY: {
+	case SCHED_MEDIC_ALLY_WAIT_FACE_ENEMY:
+	{
 		return &slMedicAllyWaitInCover[0];
 	}
-	case SCHED_MEDIC_ALLY_SWEEP: {
+	case SCHED_MEDIC_ALLY_SWEEP:
+	{
 		return &slMedicAllySweep[0];
 	}
-	case SCHED_MEDIC_ALLY_COVER_AND_RELOAD: {
+	case SCHED_MEDIC_ALLY_COVER_AND_RELOAD:
+	{
 		return &slMedicAllyHideReload[0];
 	}
-	case SCHED_MEDIC_ALLY_FOUND_ENEMY: {
+	case SCHED_MEDIC_ALLY_FOUND_ENEMY:
+	{
 		return &slMedicAllyFoundEnemy[0];
 	}
-	case SCHED_VICTORY_DANCE: {
+	case SCHED_VICTORY_DANCE:
+	{
 		if (InSquad())
 		{
 			if (!IsLeader())
@@ -2759,7 +2784,8 @@ Schedule_t* COFMedicAlly::GetScheduleOfType(int Type)
 		return &slMedicAllyVictoryDance[0];
 	}
 
-	case SCHED_MEDIC_ALLY_SUPPRESS: {
+	case SCHED_MEDIC_ALLY_SUPPRESS:
+	{
 		if (m_hEnemy->IsPlayer() && m_fFirstEncounter)
 		{
 			m_fFirstEncounter = false; // after first encounter, leader won't issue handsigns anymore when he has a new enemy
@@ -2770,7 +2796,8 @@ Schedule_t* COFMedicAlly::GetScheduleOfType(int Type)
 			return &slMedicAllySuppress[0];
 		}
 	}
-	case SCHED_FAIL: {
+	case SCHED_FAIL:
+	{
 		if (m_hEnemy != NULL)
 		{
 			// grunt has an enemy, so pick a different default fail schedule most likely to help recover.
@@ -2779,24 +2806,28 @@ Schedule_t* COFMedicAlly::GetScheduleOfType(int Type)
 
 		return &slMedicAllyFail[0];
 	}
-	case SCHED_MEDIC_ALLY_REPEL: {
+	case SCHED_MEDIC_ALLY_REPEL:
+	{
 		if (pev->velocity.z > -128)
 			pev->velocity.z -= 32;
 		return &slMedicAllyRepel[0];
 	}
-	case SCHED_MEDIC_ALLY_REPEL_ATTACK: {
+	case SCHED_MEDIC_ALLY_REPEL_ATTACK:
+	{
 		if (pev->velocity.z > -128)
 			pev->velocity.z -= 32;
 		return &slMedicAllyRepelAttack[0];
 	}
-	case SCHED_MEDIC_ALLY_REPEL_LAND: {
+	case SCHED_MEDIC_ALLY_REPEL_LAND:
+	{
 		return &slMedicAllyRepelLand[0];
 	}
 
 	case SCHED_TARGET_CHASE:
 		return slMedicAllyFollow;
 
-	case SCHED_TARGET_FACE: {
+	case SCHED_TARGET_FACE:
+	{
 		auto pSchedule = COFSquadTalkMonster::GetScheduleOfType(SCHED_TARGET_FACE);
 
 		if (pSchedule == slIdleStand)
@@ -2804,7 +2835,8 @@ Schedule_t* COFMedicAlly::GetScheduleOfType(int Type)
 		return pSchedule;
 	}
 
-	case SCHED_IDLE_STAND: {
+	case SCHED_IDLE_STAND:
+	{
 		auto pSchedule = COFSquadTalkMonster::GetScheduleOfType(SCHED_IDLE_STAND);
 
 		if (pSchedule == slIdleStand)
@@ -2818,7 +2850,8 @@ Schedule_t* COFMedicAlly::GetScheduleOfType(int Type)
 	case SCHED_CANT_FOLLOW:
 		return &slMedicAllyFail[0];
 
-	default: {
+	default:
+	{
 		return COFSquadTalkMonster::GetScheduleOfType(Type);
 	}
 	}

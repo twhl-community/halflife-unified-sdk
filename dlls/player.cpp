@@ -965,7 +965,8 @@ void CBasePlayer::SetAnimation(PLAYER_ANIM playerAnim)
 		}
 		break;
 
-	case PLAYER_GRAPPLE: {
+	case PLAYER_GRAPPLE:
+	{
 		if (FBitSet(pev->flags, FL_ONGROUND))
 		{
 			if (pev->waterlevel > 1)
@@ -3695,12 +3696,14 @@ void CBasePlayer::ImpulseCommands()
 
 		break;
 
-	case 204: {
+	case 204:
+	{
 		ForceClientDllUpdate();
 		break;
 	}
 
-	case 205: {
+	case 205:
+	{
 		DropPlayerCTFPowerup(this);
 		break;
 	}

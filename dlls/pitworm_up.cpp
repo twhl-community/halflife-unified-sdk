@@ -2274,7 +2274,8 @@ void COFPitWorm::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
 	switch (pEvent->event)
 	{
-	case 1: {
+	case 1:
+	{
 		UTIL_ScreenShake(pev->origin, 4.0, 3.0, 1.0, 750.0);
 
 		Vector forward, right;
@@ -2311,7 +2312,8 @@ void COFPitWorm::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 	break;
 
-	case 2: {
+	case 2:
+	{
 		m_posTarget = m_hEnemy->pev->origin;
 		m_posTarget.z += 24;
 
@@ -2327,7 +2329,8 @@ void COFPitWorm::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 	break;
 
-	case 3: {
+	case 3:
+	{
 		pev->flags &= ~FL_ONGROUND;
 
 		UTIL_SetOrigin(pev, pev->origin + Vector(0, 0, 1));

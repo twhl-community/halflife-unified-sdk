@@ -410,7 +410,8 @@ void COFGonome::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
 	switch (pEvent->event)
 	{
-	case ZOMBIE_AE_ATTACK_RIGHT: {
+	case ZOMBIE_AE_ATTACK_RIGHT:
+	{
 		// do stuff for this event.
 		//		ALERT( at_console, "Slash right!\n" );
 		CBaseEntity* pHurt = CheckTraceHullAttack(70, gSkillData.gonomeDmgOneSlash, DMG_SLASH);
@@ -430,7 +431,8 @@ void COFGonome::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 	break;
 
-	case ZOMBIE_AE_ATTACK_LEFT: {
+	case ZOMBIE_AE_ATTACK_LEFT:
+	{
 		// do stuff for this event.
 		//		ALERT( at_console, "Slash left!\n" );
 		CBaseEntity* pHurt = CheckTraceHullAttack(70, gSkillData.gonomeDmgOneSlash, DMG_SLASH);
@@ -449,7 +451,8 @@ void COFGonome::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 	break;
 
-	case ZOMBIE_AE_ATTACK_GUTS_GRAB: {
+	case ZOMBIE_AE_ATTACK_GUTS_GRAB:
+	{
 		//Only if we still have an enemy at this point
 		if (m_hEnemy)
 		{
@@ -479,7 +482,8 @@ void COFGonome::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 	break;
 
-	case ZOMBIE_AE_ATTACK_GUTS_THROW: {
+	case ZOMBIE_AE_ATTACK_GUTS_THROW:
+	{
 		//Note: this check wasn't in the original. If an enemy dies during gut throw windup, this can be null and crash
 		if (m_hEnemy)
 		{
@@ -521,7 +525,8 @@ void COFGonome::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 	case GONOME_AE_ATTACK_BITE_FIRST:
 	case GONOME_AE_ATTACK_BITE_SECOND:
-	case GONOME_AE_ATTACK_BITE_THIRD: {
+	case GONOME_AE_ATTACK_BITE_THIRD:
+	{
 		//TODO: this doesn't check if the enemy is the player, can cause bugs
 		if ((pev->origin - m_hEnemy->pev->origin).Length() < 48)
 		{
@@ -551,7 +556,8 @@ void COFGonome::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 	break;
 
-	case GONOME_AE_ATTACK_BITE_FINISH: {
+	case GONOME_AE_ATTACK_BITE_FINISH:
+	{
 		auto pPlayer = static_cast<CBasePlayer*>(UTIL_FindEntityByClassname(nullptr, "player"));
 
 		if (pPlayer && pPlayer->IsAlive())
@@ -760,7 +766,8 @@ void COFGonome::StartTask(Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
-	case TASK_GONOME_GET_PATH_TO_ENEMY_CORPSE: {
+	case TASK_GONOME_GET_PATH_TO_ENEMY_CORPSE:
+	{
 		if (m_pGonomeGuts)
 		{
 			UTIL_Remove(m_pGonomeGuts);

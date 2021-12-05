@@ -417,7 +417,8 @@ void COFAllyMonster::StartTask(Task_t* pTask)
 		m_movementActivity = ACT_WALK;
 		break;
 
-	case TASK_MOVE_AWAY_PATH: {
+	case TASK_MOVE_AWAY_PATH:
+	{
 		Vector dir = pev->angles;
 		dir.y = pev->ideal_yaw + 180;
 		Vector move;
@@ -505,7 +506,8 @@ void COFAllyMonster::RunTask(Task_t* pTask)
 		}
 		break;
 
-	case TASK_FACE_PLAYER: {
+	case TASK_FACE_PLAYER:
+	{
 		// Get edict for one player
 		edict_t* pPlayer = g_engfuncs.pfnPEntityOfEntIndex(1);
 
@@ -538,7 +540,8 @@ void COFAllyMonster::RunTask(Task_t* pTask)
 		}
 		break;
 
-	case TASK_WALK_PATH_FOR_UNITS: {
+	case TASK_WALK_PATH_FOR_UNITS:
+	{
 		float distance;
 
 		distance = (m_vecLastPosition - pev->origin).Length2D();
@@ -1193,7 +1196,8 @@ Schedule_t* COFAllyMonster::GetScheduleOfType(int Type)
 		else
 			return slIdleStand;
 
-	case SCHED_IDLE_STAND: {
+	case SCHED_IDLE_STAND:
+	{
 		// if never seen player, try to greet him
 		if (!FBitSet(m_bitsSaid, bit_saidHelloPlayer))
 		{

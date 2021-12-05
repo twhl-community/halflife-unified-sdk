@@ -501,7 +501,8 @@ void CPitdrone::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
 	switch (pEvent->event)
 	{
-	case PITDRONE_AE_SPIT: {
+	case PITDRONE_AE_SPIT:
+	{
 		if (m_iInitialAmmo != -1 && GetBodygroup(PitdroneBodygroup::Weapons) != PitdroneWeapon::Empty)
 		{
 			Vector vecSpitOffset;
@@ -553,7 +554,8 @@ void CPitdrone::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 	break;
 
-	case PITDRONE_AE_BITE: {
+	case PITDRONE_AE_BITE:
+	{
 		// SOUND HERE!
 		CBaseEntity* pHurt = CheckTraceHullAttack(70, gSkillData.pitdroneDmgBite, DMG_SLASH);
 
@@ -567,7 +569,8 @@ void CPitdrone::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 	break;
 
-	case PITDRONE_AE_TAILWHIP: {
+	case PITDRONE_AE_TAILWHIP:
+	{
 		CBaseEntity* pHurt = CheckTraceHullAttack(70, gSkillData.pitdroneDmgWhip, DMG_CLUB | DMG_ALWAYSGIB);
 		if (pHurt)
 		{
@@ -579,7 +582,8 @@ void CPitdrone::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 	break;
 
-	case PITDRONE_AE_HOP: {
+	case PITDRONE_AE_HOP:
+	{
 		float flGravity = g_psv_gravity->value;
 
 		// throw the squid up into the air on this frame.
@@ -594,7 +598,8 @@ void CPitdrone::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 	break;
 
-	case PITDRONE_AE_THROW: {
+	case PITDRONE_AE_THROW:
+	{
 		int iPitch;
 
 		// squid throws its prey IF the prey is a client.
@@ -632,7 +637,8 @@ void CPitdrone::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 	break;
 
-	case PITDRONE_AE_RELOAD: {
+	case PITDRONE_AE_RELOAD:
+	{
 		if (m_iInitialAmmo == -1)
 		{
 			m_cAmmoLoaded = 0;
@@ -989,7 +995,8 @@ Schedule_t* CPitdrone::GetSchedule()
 {
 	switch (m_MonsterState)
 	{
-	case MONSTERSTATE_ALERT: {
+	case MONSTERSTATE_ALERT:
+	{
 		if (HasConditions(bits_COND_LIGHT_DAMAGE | bits_COND_HEAVY_DAMAGE))
 		{
 			return GetScheduleOfType(SCHED_PITDRONE_HURTHOP);
@@ -1033,7 +1040,8 @@ Schedule_t* CPitdrone::GetSchedule()
 
 		break;
 	}
-	case MONSTERSTATE_COMBAT: {
+	case MONSTERSTATE_COMBAT:
+	{
 		// dead enemy
 		if (HasConditions(bits_COND_ENEMY_DEAD))
 		{
@@ -1124,12 +1132,14 @@ void CPitdrone::StartTask(Task_t* pTask)
 
 	switch (pTask->iTask)
 	{
-	case TASK_PITDRONE_HOPTURN: {
+	case TASK_PITDRONE_HOPTURN:
+	{
 		SetActivity(ACT_HOP);
 		MakeIdealYaw(m_vecEnemyLKP);
 		break;
 	}
-	case TASK_GET_PATH_TO_ENEMY: {
+	case TASK_GET_PATH_TO_ENEMY:
+	{
 		if (BuildRoute(m_hEnemy->pev->origin, bits_MF_TO_ENEMY, m_hEnemy))
 		{
 			m_iTaskStatus = TASKSTATUS_COMPLETE;
@@ -1141,7 +1151,8 @@ void CPitdrone::StartTask(Task_t* pTask)
 		}
 		break;
 	}
-	default: {
+	default:
+	{
 		CBaseMonster::StartTask(pTask);
 		break;
 	}
@@ -1155,7 +1166,8 @@ void CPitdrone::RunTask(Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
-	case TASK_PITDRONE_HOPTURN: {
+	case TASK_PITDRONE_HOPTURN:
+	{
 		MakeIdealYaw(m_vecEnemyLKP);
 		ChangeYaw(pev->yaw_speed);
 
@@ -1165,7 +1177,8 @@ void CPitdrone::RunTask(Task_t* pTask)
 		}
 		break;
 	}
-	default: {
+	default:
+	{
 		CBaseMonster::RunTask(pTask);
 		break;
 	}

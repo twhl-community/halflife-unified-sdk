@@ -945,7 +945,8 @@ void COFTorchAlly::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 	switch (pEvent->event)
 	{
-	case TORCH_AE_DROP_GUN: {
+	case TORCH_AE_DROP_GUN:
+	{
 		//If we don't have a gun equipped
 		if (GetBodygroup(TorchAllyBodygroup::Weapons) == TorchAllyWeapon::DesertEagle)
 		{
@@ -970,7 +971,8 @@ void COFTorchAlly::HandleAnimEvent(MonsterEvent_t* pEvent)
 		ClearConditions(bits_COND_NO_AMMO_LOADED);
 		break;
 
-	case TORCH_AE_GREN_TOSS: {
+	case TORCH_AE_GREN_TOSS:
+	{
 		UTIL_MakeVectors(pev->angles);
 		// CGrenade::ShootTimed( pev, pev->origin + gpGlobals->v_forward * 34 + Vector (0, 0, 32), m_vecTossVelocity, 3.5 );
 		CGrenade::ShootTimed(pev, GetGunPosition(), m_vecTossVelocity, 3.5);
@@ -981,18 +983,21 @@ void COFTorchAlly::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 	break;
 
-	case TORCH_AE_GREN_DROP: {
+	case TORCH_AE_GREN_DROP:
+	{
 		UTIL_MakeVectors(pev->angles);
 		CGrenade::ShootTimed(pev, pev->origin + gpGlobals->v_forward * 17 - gpGlobals->v_right * 27 + gpGlobals->v_up * 6, g_vecZero, 3);
 	}
 	break;
 
-	case TORCH_AE_SHOOT: {
+	case TORCH_AE_SHOOT:
+	{
 		Shoot();
 	}
 	break;
 
-	case TORCH_AE_KICK: {
+	case TORCH_AE_KICK:
+	{
 		CBaseEntity* pHurt = Kick();
 
 		if (pHurt)
@@ -1006,28 +1011,32 @@ void COFTorchAlly::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 	break;
 
-	case TORCH_AE_HOLSTER_TORCH: {
+	case TORCH_AE_HOLSTER_TORCH:
+	{
 		SetBodygroup(TorchAllyBodygroup::Weapons, TorchAllyWeapon::DesertEagle);
 		m_fGunHolstered = false;
 		m_fTorchHolstered = true;
 		break;
 	}
 
-	case TORCH_AE_HOLSTER_GUN: {
+	case TORCH_AE_HOLSTER_GUN:
+	{
 		SetBodygroup(TorchAllyBodygroup::Weapons, TorchAllyWeapon::Torch);
 		m_fGunHolstered = true;
 		m_fTorchHolstered = false;
 		break;
 	}
 
-	case TORCH_AE_HOLSTER_BOTH: {
+	case TORCH_AE_HOLSTER_BOTH:
+	{
 		SetBodygroup(TorchAllyBodygroup::Weapons, TorchAllyWeapon::None);
 		m_fGunHolstered = true;
 		m_fTorchHolstered = true;
 		break;
 	}
 
-	case TORCH_AE_ACTIVATE_TORCH: {
+	case TORCH_AE_ACTIVATE_TORCH:
+	{
 		m_fTorchActive = true;
 		m_pTorchBeam = CBeam::BeamCreate(TORCH_BEAM_SPRITE, 5);
 
@@ -1053,7 +1062,8 @@ void COFTorchAlly::HandleAnimEvent(MonsterEvent_t* pEvent)
 		break;
 	}
 
-	case TORCH_AE_DEACTIVATE_TORCH: {
+	case TORCH_AE_DEACTIVATE_TORCH:
+	{
 		if (m_pTorchBeam)
 		{
 			m_fTorchActive = false;
@@ -1063,7 +1073,8 @@ void COFTorchAlly::HandleAnimEvent(MonsterEvent_t* pEvent)
 		break;
 	}
 
-	case TORCH_AE_CAUGHT_ENEMY: {
+	case TORCH_AE_CAUGHT_ENEMY:
+	{
 		if (FOkToSpeak())
 		{
 			SENTENCEG_PlayRndSz(ENT(pev), "FG_ALERT", TORCH_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
@@ -1250,7 +1261,8 @@ void COFTorchAlly::RunTask(Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
-	case TASK_TORCH_ALLY_FACE_TOSS_DIR: {
+	case TASK_TORCH_ALLY_FACE_TOSS_DIR:
+	{
 		// project a point along the toss vector and turn to face that point.
 		MakeIdealYaw(pev->origin + m_vecTossVelocity * 64);
 		ChangeYaw(pev->yaw_speed);
@@ -1261,7 +1273,8 @@ void COFTorchAlly::RunTask(Task_t* pTask)
 		}
 		break;
 	}
-	default: {
+	default:
+	{
 		COFSquadTalkMonster::RunTask(pTask);
 		break;
 	}
@@ -2156,7 +2169,8 @@ Schedule_t* COFTorchAlly::GetSchedule()
 	}
 	switch (m_MonsterState)
 	{
-	case MONSTERSTATE_COMBAT: {
+	case MONSTERSTATE_COMBAT:
+	{
 		// dead enemy
 		if (HasConditions(bits_COND_ENEMY_DEAD))
 		{
@@ -2438,7 +2452,8 @@ Schedule_t* COFTorchAlly::GetScheduleOfType(int Type)
 {
 	switch (Type)
 	{
-	case SCHED_TAKE_COVER_FROM_ENEMY: {
+	case SCHED_TAKE_COVER_FROM_ENEMY:
+	{
 		if (InSquad())
 		{
 			if (g_iSkillLevel == SKILL_HARD && HasConditions(bits_COND_CAN_RANGE_ATTACK2) && OccupySlot(bits_SLOTS_HGRUNT_GRENADE))
@@ -2467,10 +2482,12 @@ Schedule_t* COFTorchAlly::GetScheduleOfType(int Type)
 			//}
 		}
 	}
-	case SCHED_TAKE_COVER_FROM_BEST_SOUND: {
+	case SCHED_TAKE_COVER_FROM_BEST_SOUND:
+	{
 		return &slTorchAllyTakeCoverFromBestSound[0];
 	}
-	case SCHED_TORCH_ALLY_TAKECOVER_FAILED: {
+	case SCHED_TORCH_ALLY_TAKECOVER_FAILED:
+	{
 		if (HasConditions(bits_COND_CAN_RANGE_ATTACK1) && OccupySlot(bits_SLOTS_HGRUNT_ENGAGE))
 		{
 			return GetScheduleOfType(SCHED_RANGE_ATTACK1);
@@ -2479,16 +2496,19 @@ Schedule_t* COFTorchAlly::GetScheduleOfType(int Type)
 		return GetScheduleOfType(SCHED_FAIL);
 	}
 	break;
-	case SCHED_TORCH_ALLY_ELOF_FAIL: {
+	case SCHED_TORCH_ALLY_ELOF_FAIL:
+	{
 		// human grunt is unable to move to a position that allows him to attack the enemy.
 		return GetScheduleOfType(SCHED_TAKE_COVER_FROM_ENEMY);
 	}
 	break;
-	case SCHED_TORCH_ALLY_ESTABLISH_LINE_OF_FIRE: {
+	case SCHED_TORCH_ALLY_ESTABLISH_LINE_OF_FIRE:
+	{
 		return &slTorchAllyEstablishLineOfFire[0];
 	}
 	break;
-	case SCHED_RANGE_ATTACK1: {
+	case SCHED_RANGE_ATTACK1:
+	{
 		// randomly stand or crouch
 		if (RANDOM_LONG(0, 9) == 0)
 			m_fStanding = RANDOM_LONG(0, 1);
@@ -2498,25 +2518,32 @@ Schedule_t* COFTorchAlly::GetScheduleOfType(int Type)
 		else
 			return &slTorchAllyRangeAttack1A[0];
 	}
-	case SCHED_RANGE_ATTACK2: {
+	case SCHED_RANGE_ATTACK2:
+	{
 		return &slTorchAllyRangeAttack2[0];
 	}
-	case SCHED_COMBAT_FACE: {
+	case SCHED_COMBAT_FACE:
+	{
 		return &slTorchAllyCombatFace[0];
 	}
-	case SCHED_TORCH_ALLY_WAIT_FACE_ENEMY: {
+	case SCHED_TORCH_ALLY_WAIT_FACE_ENEMY:
+	{
 		return &slTorchAllyWaitInCover[0];
 	}
-	case SCHED_TORCH_ALLY_SWEEP: {
+	case SCHED_TORCH_ALLY_SWEEP:
+	{
 		return &slTorchAllySweep[0];
 	}
-	case SCHED_TORCH_ALLY_COVER_AND_RELOAD: {
+	case SCHED_TORCH_ALLY_COVER_AND_RELOAD:
+	{
 		return &slTorchAllyHideReload[0];
 	}
-	case SCHED_TORCH_ALLY_FOUND_ENEMY: {
+	case SCHED_TORCH_ALLY_FOUND_ENEMY:
+	{
 		return &slTorchAllyFoundEnemy[0];
 	}
-	case SCHED_VICTORY_DANCE: {
+	case SCHED_VICTORY_DANCE:
+	{
 		if (InSquad())
 		{
 			if (!IsLeader())
@@ -2528,7 +2555,8 @@ Schedule_t* COFTorchAlly::GetScheduleOfType(int Type)
 		return &slTorchAllyVictoryDance[0];
 	}
 
-	case SCHED_TORCH_ALLY_SUPPRESS: {
+	case SCHED_TORCH_ALLY_SUPPRESS:
+	{
 		if (m_hEnemy->IsPlayer() && m_fFirstEncounter)
 		{
 			m_fFirstEncounter = false; // after first encounter, leader won't issue handsigns anymore when he has a new enemy
@@ -2539,7 +2567,8 @@ Schedule_t* COFTorchAlly::GetScheduleOfType(int Type)
 			return &slTorchAllySuppress[0];
 		}
 	}
-	case SCHED_FAIL: {
+	case SCHED_FAIL:
+	{
 		if (m_hEnemy != NULL)
 		{
 			// grunt has an enemy, so pick a different default fail schedule most likely to help recover.
@@ -2548,24 +2577,28 @@ Schedule_t* COFTorchAlly::GetScheduleOfType(int Type)
 
 		return &slTorchAllyFail[0];
 	}
-	case SCHED_TORCH_ALLY_REPEL: {
+	case SCHED_TORCH_ALLY_REPEL:
+	{
 		if (pev->velocity.z > -128)
 			pev->velocity.z -= 32;
 		return &slTorchAllyRepel[0];
 	}
-	case SCHED_TORCH_ALLY_REPEL_ATTACK: {
+	case SCHED_TORCH_ALLY_REPEL_ATTACK:
+	{
 		if (pev->velocity.z > -128)
 			pev->velocity.z -= 32;
 		return &slTorchAllyRepelAttack[0];
 	}
-	case SCHED_TORCH_ALLY_REPEL_LAND: {
+	case SCHED_TORCH_ALLY_REPEL_LAND:
+	{
 		return &slTorchAllyRepelLand[0];
 	}
 
 	case SCHED_TARGET_CHASE:
 		return slTorchAllyFollow;
 
-	case SCHED_TARGET_FACE: {
+	case SCHED_TARGET_FACE:
+	{
 		auto pSchedule = COFSquadTalkMonster::GetScheduleOfType(SCHED_TARGET_FACE);
 
 		if (pSchedule == slIdleStand)
@@ -2573,7 +2606,8 @@ Schedule_t* COFTorchAlly::GetScheduleOfType(int Type)
 		return pSchedule;
 	}
 
-	case SCHED_IDLE_STAND: {
+	case SCHED_IDLE_STAND:
+	{
 		auto pSchedule = COFSquadTalkMonster::GetScheduleOfType(SCHED_IDLE_STAND);
 
 		if (pSchedule == slIdleStand)
@@ -2584,7 +2618,8 @@ Schedule_t* COFTorchAlly::GetScheduleOfType(int Type)
 	case SCHED_CANT_FOLLOW:
 		return &slTorchAllyFail[0];
 
-	default: {
+	default:
+	{
 		return COFSquadTalkMonster::GetScheduleOfType(Type);
 	}
 	}
