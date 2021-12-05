@@ -41,17 +41,17 @@ private:
 public:
 	using BaseClass = CBaseToggle;
 
-	bool Save( CSave &save ) override;
-	bool Restore( CRestore &restore ) override;
-	static	TYPEDESCRIPTION m_SaveData[];
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
+	static TYPEDESCRIPTION m_SaveData[];
 
-	bool KeyValue( KeyValueData* pkvd ) override;
+	bool KeyValue(KeyValueData* pkvd) override;
 
 	void Precache() override;
 	void Spawn() override;
 
-	void EXPORT BlowerCannonStart( CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value );
-	void EXPORT BlowerCannonStop( CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value );
+	void EXPORT BlowerCannonStart(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void EXPORT BlowerCannonStop(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 	void EXPORT BlowerCannonThink();
 
 	//TODO: probably shadowing CBaseDelay
@@ -61,38 +61,38 @@ public:
 	FireType m_iFireType;
 };
 
-TYPEDESCRIPTION	CBlowerCannon::m_SaveData[] =
-{
-	DEFINE_FIELD( CBlowerCannon, m_flDelay, FIELD_FLOAT ),
-	DEFINE_FIELD( CBlowerCannon, m_iZOffset, FIELD_INTEGER ),
-	DEFINE_FIELD( CBlowerCannon, m_iWeaponType, FIELD_INTEGER ),
-	DEFINE_FIELD( CBlowerCannon, m_iFireType, FIELD_INTEGER ),
+TYPEDESCRIPTION CBlowerCannon::m_SaveData[] =
+	{
+		DEFINE_FIELD(CBlowerCannon, m_flDelay, FIELD_FLOAT),
+		DEFINE_FIELD(CBlowerCannon, m_iZOffset, FIELD_INTEGER),
+		DEFINE_FIELD(CBlowerCannon, m_iWeaponType, FIELD_INTEGER),
+		DEFINE_FIELD(CBlowerCannon, m_iFireType, FIELD_INTEGER),
 };
 
-IMPLEMENT_SAVERESTORE( CBlowerCannon, CBlowerCannon::BaseClass );
+IMPLEMENT_SAVERESTORE(CBlowerCannon, CBlowerCannon::BaseClass);
 
-LINK_ENTITY_TO_CLASS( env_blowercannon, CBlowerCannon );
+LINK_ENTITY_TO_CLASS(env_blowercannon, CBlowerCannon);
 
-bool CBlowerCannon::KeyValue( KeyValueData* pkvd )
+bool CBlowerCannon::KeyValue(KeyValueData* pkvd)
 {
-	if( FStrEq( pkvd->szKeyName, "delay" ) )
+	if (FStrEq(pkvd->szKeyName, "delay"))
 	{
-		m_flDelay = atof( pkvd->szValue );
+		m_flDelay = atof(pkvd->szValue);
 		return true;
 	}
-	else if( FStrEq( pkvd->szKeyName, "weaptype" ) )
+	else if (FStrEq(pkvd->szKeyName, "weaptype"))
 	{
-		m_iWeaponType = static_cast<WeaponType>( atoi( pkvd->szValue ) );
+		m_iWeaponType = static_cast<WeaponType>(atoi(pkvd->szValue));
 		return true;
 	}
-	else if( FStrEq( pkvd->szKeyName, "firetype" ) )
+	else if (FStrEq(pkvd->szKeyName, "firetype"))
 	{
-		m_iFireType = static_cast<FireType>( atoi( pkvd->szValue ) );
+		m_iFireType = static_cast<FireType>(atoi(pkvd->szValue));
 		return true;
 	}
-	else if( FStrEq( pkvd->szKeyName, "zoffset" ) )
+	else if (FStrEq(pkvd->szKeyName, "zoffset"))
 	{
-		m_iZOffset = atoi( pkvd->szValue );
+		m_iZOffset = atoi(pkvd->szValue);
 		return true;
 	}
 
@@ -102,19 +102,19 @@ bool CBlowerCannon::KeyValue( KeyValueData* pkvd )
 
 void CBlowerCannon::Precache()
 {
-	UTIL_PrecacheOther( "displacer_ball" );
-	UTIL_PrecacheOther( "spore" );
-	UTIL_PrecacheOther( "shock_beam" );
+	UTIL_PrecacheOther("displacer_ball");
+	UTIL_PrecacheOther("spore");
+	UTIL_PrecacheOther("shock_beam");
 }
 
 void CBlowerCannon::Spawn()
 {
-	SetThink( nullptr );
-	SetUse( &CBlowerCannon::BlowerCannonStart );
+	SetThink(nullptr);
+	SetUse(&CBlowerCannon::BlowerCannonStart);
 
 	pev->nextthink = gpGlobals->time + 0.1;
 
-	if( m_flDelay < 0 )
+	if (m_flDelay < 0)
 	{
 		m_flDelay = 1;
 	}
@@ -122,18 +122,18 @@ void CBlowerCannon::Spawn()
 	Precache();
 }
 
-void CBlowerCannon::BlowerCannonStart( CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value )
+void CBlowerCannon::BlowerCannonStart(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
-	SetUse( &CBlowerCannon::BlowerCannonStop );
-	SetThink( &CBlowerCannon::BlowerCannonThink );
+	SetUse(&CBlowerCannon::BlowerCannonStop);
+	SetThink(&CBlowerCannon::BlowerCannonThink);
 
 	pev->nextthink = gpGlobals->time + m_flDelay;
 }
 
-void CBlowerCannon::BlowerCannonStop( CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value )
+void CBlowerCannon::BlowerCannonStop(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
-	SetUse( &CBlowerCannon::BlowerCannonStart );
-	SetThink( nullptr );
+	SetUse(&CBlowerCannon::BlowerCannonStart);
+	SetThink(nullptr);
 }
 
 void CBlowerCannon::BlowerCannonThink()
@@ -144,31 +144,32 @@ void CBlowerCannon::BlowerCannonThink()
 	auto distance = pTarget->origin - pev->origin;
 	distance.z += m_iZOffset;
 
-	auto angles = UTIL_VecToAngles( distance );
+	auto angles = UTIL_VecToAngles(distance);
 	angles.z = -angles.z;
 
-	switch( m_iWeaponType )
+	switch (m_iWeaponType)
 	{
 	case WeaponType::SporeRocket:
 	case WeaponType::SporeGrenade:
-		CSpore::CreateSpore( pev->origin, angles, this, static_cast< CSpore::SporeType >( ( m_iWeaponType != WeaponType::SporeRocket ? 1 : 0 ) + static_cast< int >( CSpore::SporeType::ROCKET ) ), false, false );
+		CSpore::CreateSpore(pev->origin, angles, this, static_cast<CSpore::SporeType>((m_iWeaponType != WeaponType::SporeRocket ? 1 : 0) + static_cast<int>(CSpore::SporeType::ROCKET)), false, false);
 		break;
 
 	case WeaponType::ShockBeam:
-		CShockBeam::CreateShockBeam( pev->origin, angles, this );
+		CShockBeam::CreateShockBeam(pev->origin, angles, this);
 		break;
 
 	case WeaponType::DisplacerBall:
-		CDisplacerBall::CreateDisplacerBall( pev->origin, angles, this );
+		CDisplacerBall::CreateDisplacerBall(pev->origin, angles, this);
 		break;
 
-	default: break;
+	default:
+		break;
 	}
 
-	if( m_iFireType == FireType::FireOnTrigger )
+	if (m_iFireType == FireType::FireOnTrigger)
 	{
-		SetUse( &CBlowerCannon::BlowerCannonStart );
-		SetThink( nullptr );
+		SetUse(&CBlowerCannon::BlowerCannonStart);
+		SetThink(nullptr);
 	}
 
 	pev->nextthink = gpGlobals->time + m_flDelay;

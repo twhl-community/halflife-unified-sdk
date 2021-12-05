@@ -15,18 +15,18 @@
 //
 // coopplay_gamerules.cpp
 //
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"player.h"
-#include	"weapons.h"
-#include	"gamerules.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "player.h"
+#include "weapons.h"
+#include "gamerules.h"
 #include "coopplay_gamerules.h"
-#include	"game.h"
+#include "game.h"
 #include "items.h"
 #include "UserMessages.h"
 
-extern DLL_GLOBAL bool	g_fGameOver;
+extern DLL_GLOBAL bool g_fGameOver;
 
 CHalfLifeCoopplay::CHalfLifeCoopplay()
 	: CHalfLifeMultiplay()

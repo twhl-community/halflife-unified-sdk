@@ -26,31 +26,31 @@
 #include "CSporeLauncher.h"
 
 #ifndef CLIENT_DLL
-TYPEDESCRIPTION	CSporeLauncher::m_SaveData[] =
-{
-	DEFINE_FIELD( CSporeLauncher, m_ReloadState, FIELD_INTEGER ),
+TYPEDESCRIPTION CSporeLauncher::m_SaveData[] =
+	{
+		DEFINE_FIELD(CSporeLauncher, m_ReloadState, FIELD_INTEGER),
 };
 
-IMPLEMENT_SAVERESTORE( CSporeLauncher, CSporeLauncher::BaseClass );
+IMPLEMENT_SAVERESTORE(CSporeLauncher, CSporeLauncher::BaseClass);
 #endif
 
-LINK_ENTITY_TO_CLASS( weapon_sporelauncher, CSporeLauncher );
+LINK_ENTITY_TO_CLASS(weapon_sporelauncher, CSporeLauncher);
 
 void CSporeLauncher::Precache()
 {
-	PRECACHE_MODEL( "models/w_spore_launcher.mdl" );
-	PRECACHE_MODEL( "models/v_spore_launcher.mdl" );
-	PRECACHE_MODEL( "models/p_spore_launcher.mdl" );
+	PRECACHE_MODEL("models/w_spore_launcher.mdl");
+	PRECACHE_MODEL("models/v_spore_launcher.mdl");
+	PRECACHE_MODEL("models/p_spore_launcher.mdl");
 
-	PRECACHE_SOUND( "weapons/splauncher_fire.wav" );
-	PRECACHE_SOUND( "weapons/splauncher_altfire.wav" );
-	PRECACHE_SOUND( "weapons/splauncher_bounce.wav" );
-	PRECACHE_SOUND( "weapons/splauncher_reload.wav" );
-	PRECACHE_SOUND( "weapons/splauncher_pet.wav" );
+	PRECACHE_SOUND("weapons/splauncher_fire.wav");
+	PRECACHE_SOUND("weapons/splauncher_altfire.wav");
+	PRECACHE_SOUND("weapons/splauncher_bounce.wav");
+	PRECACHE_SOUND("weapons/splauncher_reload.wav");
+	PRECACHE_SOUND("weapons/splauncher_pet.wav");
 
-	UTIL_PrecacheOther( "spore" );
+	UTIL_PrecacheOther("spore");
 
-	m_usFireSpore = PRECACHE_EVENT( 1, "events/spore.sc" );
+	m_usFireSpore = PRECACHE_EVENT(1, "events/spore.sc");
 }
 
 void CSporeLauncher::Spawn()
@@ -59,7 +59,7 @@ void CSporeLauncher::Spawn()
 
 	m_iId = WEAPON_SPORELAUNCHER;
 
-	SET_MODEL( edict(), "models/w_spore_launcher.mdl" );
+	SET_MODEL(edict(), "models/w_spore_launcher.mdl");
 
 	m_iDefaultAmmo = SPORELAUNCHER_DEFAULT_GIVE;
 
@@ -72,12 +72,12 @@ void CSporeLauncher::Spawn()
 	pev->framerate = 1;
 }
 
-bool CSporeLauncher::AddToPlayer( CBasePlayer* pPlayer )
+bool CSporeLauncher::AddToPlayer(CBasePlayer* pPlayer)
 {
-	if( CBasePlayerWeapon::AddToPlayer( pPlayer ) )
+	if (CBasePlayerWeapon::AddToPlayer(pPlayer))
 	{
-		MESSAGE_BEGIN( MSG_ONE, gmsgWeapPickup, NULL, pPlayer->edict() );
-			WRITE_BYTE( m_iId );
+		MESSAGE_BEGIN(MSG_ONE, gmsgWeapPickup, NULL, pPlayer->edict());
+		WRITE_BYTE(m_iId);
 		MESSAGE_END();
 		return true;
 	}
@@ -86,7 +86,7 @@ bool CSporeLauncher::AddToPlayer( CBasePlayer* pPlayer )
 
 bool CSporeLauncher::Deploy()
 {
-	return DefaultDeploy( "models/v_spore_launcher.mdl", "models/p_spore_launcher.mdl", SPLAUNCHER_DRAW1, "rpg" );
+	return DefaultDeploy("models/v_spore_launcher.mdl", "models/p_spore_launcher.mdl", SPLAUNCHER_DRAW1, "rpg");
 }
 
 void CSporeLauncher::Holster()
@@ -95,7 +95,7 @@ void CSporeLauncher::Holster()
 
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;
 
-	SendWeaponAnim( SPLAUNCHER_HOLSTER1 );
+	SendWeaponAnim(SPLAUNCHER_HOLSTER1);
 }
 
 bool CSporeLauncher::ShouldWeaponIdle()
@@ -107,15 +107,15 @@ void CSporeLauncher::WeaponIdle()
 {
 	ResetEmptySound();
 
-	m_pPlayer->GetAutoaimVector( AUTOAIM_10DEGREES );
+	m_pPlayer->GetAutoaimVector(AUTOAIM_10DEGREES);
 
-	if( m_flTimeWeaponIdle < UTIL_WeaponTimeBase() )
+	if (m_flTimeWeaponIdle < UTIL_WeaponTimeBase())
 	{
-		if( m_iClip == 0 && m_ReloadState == ReloadState::NOT_RELOADING && 0 != m_pPlayer->m_rgAmmo[ m_iPrimaryAmmoType ] )
+		if (m_iClip == 0 && m_ReloadState == ReloadState::NOT_RELOADING && 0 != m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType])
 		{
 			Reload();
 		}
-		else if( m_ReloadState != ReloadState::NOT_RELOADING )
+		else if (m_ReloadState != ReloadState::NOT_RELOADING)
 		{
 			int maxClip = SPORELAUNCHER_MAX_CLIP;
 
@@ -124,14 +124,14 @@ void CSporeLauncher::WeaponIdle()
 				maxClip *= 2;
 			}
 
-			if( m_iClip != maxClip && 0 != m_pPlayer->m_rgAmmo[ m_iPrimaryAmmoType ] )
+			if (m_iClip != maxClip && 0 != m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType])
 			{
 				Reload();
 			}
 			else
 			{
 				// reload debounce has timed out
-				SendWeaponAnim( SPLAUNCHER_AIM );
+				SendWeaponAnim(SPLAUNCHER_AIM);
 
 				m_ReloadState = ReloadState::NOT_RELOADING;
 				m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.83;
@@ -140,13 +140,13 @@ void CSporeLauncher::WeaponIdle()
 		else
 		{
 			int iAnim;
-			float flRand = UTIL_SharedRandomFloat( m_pPlayer->random_seed, 0, 1 );
-			if( flRand <= 0.75 )
+			float flRand = UTIL_SharedRandomFloat(m_pPlayer->random_seed, 0, 1);
+			if (flRand <= 0.75)
 			{
 				iAnim = SPLAUNCHER_IDLE;
 				m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 2;
 			}
-			else if( flRand <= 0.95 )
+			else if (flRand <= 0.95)
 			{
 				iAnim = SPLAUNCHER_IDLE2;
 				m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 4;
@@ -156,55 +156,55 @@ void CSporeLauncher::WeaponIdle()
 				iAnim = SPLAUNCHER_FIDGET;
 				m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 4;
 
-				EMIT_SOUND( m_pPlayer->edict(), CHAN_ITEM, "weapons/splauncher_pet.wav", 0.7, ATTN_NORM );
+				EMIT_SOUND(m_pPlayer->edict(), CHAN_ITEM, "weapons/splauncher_pet.wav", 0.7, ATTN_NORM);
 			}
 
-			SendWeaponAnim( iAnim );
+			SendWeaponAnim(iAnim);
 		}
 	}
 }
 
 void CSporeLauncher::PrimaryAttack()
 {
-	if( 0 != m_iClip )
+	if (0 != m_iClip)
 	{
 		m_pPlayer->m_iWeaponVolume = LOUD_GUN_VOLUME;
 		m_pPlayer->m_iWeaponFlash = BRIGHT_GUN_FLASH;
 
 #ifndef CLIENT_DLL
-		m_pPlayer->SetAnimation( PLAYER_ATTACK1 );
+		m_pPlayer->SetAnimation(PLAYER_ATTACK1);
 
 		Vector vecAngles = m_pPlayer->pev->v_angle + m_pPlayer->pev->punchangle;
 
-		UTIL_MakeVectors( vecAngles );
+		UTIL_MakeVectors(vecAngles);
 
-		const Vector vecSrc = 
-			m_pPlayer->GetGunPosition() + 
+		const Vector vecSrc =
+			m_pPlayer->GetGunPosition() +
 			gpGlobals->v_forward * 16 +
-			gpGlobals->v_right * 8 + 
+			gpGlobals->v_right * 8 +
 			gpGlobals->v_up * -8;
 
-		vecAngles = vecAngles + m_pPlayer->GetAutoaimVectorFromPoint( vecSrc, AUTOAIM_10DEGREES );
+		vecAngles = vecAngles + m_pPlayer->GetAutoaimVectorFromPoint(vecSrc, AUTOAIM_10DEGREES);
 
-		CSpore* pSpore = CSpore::CreateSpore( 
+		CSpore* pSpore = CSpore::CreateSpore(
 			vecSrc, vecAngles,
-			m_pPlayer, 
-			CSpore::SporeType::ROCKET, false, false );
+			m_pPlayer,
+			CSpore::SporeType::ROCKET, false, false);
 
-		UTIL_MakeVectors( vecAngles );
+		UTIL_MakeVectors(vecAngles);
 
-		pSpore->pev->velocity = pSpore->pev->velocity + DotProduct( pSpore->pev->velocity, gpGlobals->v_forward ) * gpGlobals->v_forward;
+		pSpore->pev->velocity = pSpore->pev->velocity + DotProduct(pSpore->pev->velocity, gpGlobals->v_forward) * gpGlobals->v_forward;
 #endif
 
 		int flags;
 
-#if defined( CLIENT_WEAPONS )
+#if defined(CLIENT_WEAPONS)
 		flags = UTIL_DefaultPlaybackFlags();
 #else
 		flags = 0;
 #endif
 
-		PLAYBACK_EVENT( flags, m_pPlayer->edict(), m_usFireSpore );
+		PLAYBACK_EVENT(flags, m_pPlayer->edict(), m_usFireSpore);
 
 		--m_iClip;
 	}
@@ -216,17 +216,17 @@ void CSporeLauncher::PrimaryAttack()
 
 void CSporeLauncher::SecondaryAttack()
 {
-	if( 0 != m_iClip )
+	if (0 != m_iClip)
 	{
 		m_pPlayer->m_iWeaponVolume = LOUD_GUN_VOLUME;
 		m_pPlayer->m_iWeaponFlash = BRIGHT_GUN_FLASH;
 
 #ifndef CLIENT_DLL
-		m_pPlayer->SetAnimation( PLAYER_ATTACK1 );
+		m_pPlayer->SetAnimation(PLAYER_ATTACK1);
 
 		Vector vecAngles = m_pPlayer->pev->v_angle + m_pPlayer->pev->punchangle;
 
-		UTIL_MakeVectors( vecAngles );
+		UTIL_MakeVectors(vecAngles);
 
 		const Vector vecSrc =
 			m_pPlayer->GetGunPosition() +
@@ -234,27 +234,27 @@ void CSporeLauncher::SecondaryAttack()
 			gpGlobals->v_right * 8 +
 			gpGlobals->v_up * -8;
 
-		vecAngles = vecAngles + m_pPlayer->GetAutoaimVectorFromPoint( vecSrc, AUTOAIM_10DEGREES );
+		vecAngles = vecAngles + m_pPlayer->GetAutoaimVectorFromPoint(vecSrc, AUTOAIM_10DEGREES);
 
 		CSpore* pSpore = CSpore::CreateSpore(
 			vecSrc, vecAngles,
 			m_pPlayer,
-			CSpore::SporeType::GRENADE, false, false );
+			CSpore::SporeType::GRENADE, false, false);
 
-		UTIL_MakeVectors( vecAngles );
+		UTIL_MakeVectors(vecAngles);
 
 		pSpore->pev->velocity = m_pPlayer->pev->velocity + 800 * gpGlobals->v_forward;
 #endif
 
 		int flags;
 
-#if defined( CLIENT_WEAPONS )
+#if defined(CLIENT_WEAPONS)
 		flags = UTIL_DefaultPlaybackFlags();
 #else
 		flags = 0;
 #endif
 
-		PLAYBACK_EVENT( flags, m_pPlayer->edict(), m_usFireSpore );
+		PLAYBACK_EVENT(flags, m_pPlayer->edict(), m_usFireSpore);
 
 		--m_iClip;
 	}
@@ -273,17 +273,17 @@ void CSporeLauncher::Reload()
 		maxClip *= 2;
 	}
 
-	if( m_pPlayer->m_rgAmmo[ m_iPrimaryAmmoType ] <= 0 || m_iClip == maxClip)
+	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0 || m_iClip == maxClip)
 		return;
 
 	// don't reload until recoil is done
-	if( m_flNextPrimaryAttack > UTIL_WeaponTimeBase() )
+	if (m_flNextPrimaryAttack > UTIL_WeaponTimeBase())
 		return;
 
 	// check to see if we're ready to reload
-	if( m_ReloadState == ReloadState::NOT_RELOADING )
+	if (m_ReloadState == ReloadState::NOT_RELOADING)
 	{
-		SendWeaponAnim( SPLAUNCHER_RELOAD_REACH );
+		SendWeaponAnim(SPLAUNCHER_RELOAD_REACH);
 		m_ReloadState = ReloadState::DO_RELOAD_EFFECTS;
 		m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.66;
 		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.66;
@@ -291,16 +291,16 @@ void CSporeLauncher::Reload()
 		m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.66;
 		return;
 	}
-	else if( m_ReloadState == ReloadState::DO_RELOAD_EFFECTS )
+	else if (m_ReloadState == ReloadState::DO_RELOAD_EFFECTS)
 	{
-		if( m_flTimeWeaponIdle > UTIL_WeaponTimeBase() )
+		if (m_flTimeWeaponIdle > UTIL_WeaponTimeBase())
 			return;
 		// was waiting for gun to move to side
 		m_ReloadState = ReloadState::RELOAD_ONE;
 
-		EMIT_SOUND( m_pPlayer->edict(), CHAN_ITEM, "weapons/splauncher_reload.wav", 0.7, ATTN_NORM );
+		EMIT_SOUND(m_pPlayer->edict(), CHAN_ITEM, "weapons/splauncher_reload.wav", 0.7, ATTN_NORM);
 
-		SendWeaponAnim( SPLAUNCHER_RELOAD );
+		SendWeaponAnim(SPLAUNCHER_RELOAD);
 
 		m_flNextReload = UTIL_WeaponTimeBase() + 1;
 		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 1;
@@ -309,7 +309,7 @@ void CSporeLauncher::Reload()
 	{
 		// Add them to the clip
 		m_iClip += 1;
-		m_pPlayer->m_rgAmmo[ m_iPrimaryAmmoType ] -= 1;
+		m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] -= 1;
 		m_ReloadState = ReloadState::DO_RELOAD_EFFECTS;
 	}
 }
@@ -319,11 +319,11 @@ int CSporeLauncher::iItemSlot()
 	return 4;
 }
 
-bool CSporeLauncher::GetItemInfo( ItemInfo* p )
+bool CSporeLauncher::GetItemInfo(ItemInfo* p)
 {
 	p->pszAmmo1 = "spores";
 	p->iMaxAmmo1 = SPORELAUNCHER_MAX_CARRY;
-	p->pszName = STRING( pev->classname );
+	p->pszName = STRING(pev->classname);
 	p->pszAmmo2 = nullptr;
 	p->iMaxAmmo2 = WEAPON_NOCLIP;
 	p->iMaxClip = SPORELAUNCHER_MAX_CLIP;
@@ -344,19 +344,19 @@ void CSporeLauncher::IncrementAmmo(CBasePlayer* pPlayer)
 	}
 }
 
-void CSporeLauncher::GetWeaponData( weapon_data_t& data )
+void CSporeLauncher::GetWeaponData(weapon_data_t& data)
 {
-	BaseClass::GetWeaponData( data );
+	BaseClass::GetWeaponData(data);
 
 	//m_ReloadState is called m_fInSpecialReload in Op4. - Solokiller
-	data.m_fInSpecialReload = static_cast<int>( m_ReloadState );
+	data.m_fInSpecialReload = static_cast<int>(m_ReloadState);
 }
 
-void CSporeLauncher::SetWeaponData( const weapon_data_t& data )
+void CSporeLauncher::SetWeaponData(const weapon_data_t& data)
 {
-	BaseClass::SetWeaponData( data );
+	BaseClass::SetWeaponData(data);
 
-	m_ReloadState = static_cast<ReloadState>( data.m_fInSpecialReload );
+	m_ReloadState = static_cast<ReloadState>(data.m_fInSpecialReload);
 }
 
 #ifndef CLIENT_DLL
@@ -384,23 +384,23 @@ public:
 
 	void Precache() override
 	{
-		PRECACHE_MODEL( "models/spore_ammo.mdl" );
-		PRECACHE_SOUND( "weapons/spore_ammo.wav" );
+		PRECACHE_MODEL("models/spore_ammo.mdl");
+		PRECACHE_SOUND("weapons/spore_ammo.wav");
 	}
 
 	void Spawn() override
 	{
 		Precache();
 
-		SET_MODEL( edict(), "models/spore_ammo.mdl" );
+		SET_MODEL(edict(), "models/spore_ammo.mdl");
 
 		pev->movetype = MOVETYPE_FLY;
 
-		UTIL_SetSize( pev, Vector( -16, -16, -16 ), Vector( 16, 16, 16 ) );
+		UTIL_SetSize(pev, Vector(-16, -16, -16), Vector(16, 16, 16));
 
 		pev->origin.z += 16;
 
-		UTIL_SetOrigin( pev, pev->origin );
+		UTIL_SetOrigin(pev, pev->origin);
 
 		pev->angles.x -= 90;
 
@@ -421,13 +421,13 @@ public:
 
 		pev->solid = SOLID_BBOX;
 
-		SetTouch( &CSporeAmmo::SporeTouch );
-		SetThink( &CSporeAmmo::Idling );
+		SetTouch(&CSporeAmmo::SporeTouch);
+		SetThink(&CSporeAmmo::Idling);
 	}
 
-	bool TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType ) override
+	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override
 	{
-		if( pev->body == SPOREAMMOBODY_EMPTY )
+		if (pev->body == SPOREAMMOBODY_EMPTY)
 		{
 			return false;
 		}
@@ -446,24 +446,24 @@ public:
 		//Rotate it so spores that aren't rotated in Hammer point in the right direction. - Solokiller
 		vecLaunchDir.y += 180;
 
-		vecLaunchDir.x += RANDOM_FLOAT( -20, 20 );
-		vecLaunchDir.y += RANDOM_FLOAT( -20, 20 );
-		vecLaunchDir.z += RANDOM_FLOAT( -20, 20 );
+		vecLaunchDir.x += RANDOM_FLOAT(-20, 20);
+		vecLaunchDir.y += RANDOM_FLOAT(-20, 20);
+		vecLaunchDir.z += RANDOM_FLOAT(-20, 20);
 
-		auto pSpore = CSpore::CreateSpore( pev->origin, vecLaunchDir, this, CSpore::SporeType::GRENADE, false, true );
+		auto pSpore = CSpore::CreateSpore(pev->origin, vecLaunchDir, this, CSpore::SporeType::GRENADE, false, true);
 
-		UTIL_MakeVectors( vecLaunchDir );
+		UTIL_MakeVectors(vecLaunchDir);
 
 		pSpore->pev->velocity = gpGlobals->v_forward * 800;
 
 		return false;
 	}
 
-	bool AddAmmo( CBaseEntity* pOther ) override
+	bool AddAmmo(CBaseEntity* pOther) override
 	{
-		if( pOther->GiveAmmo( AMMO_SPORE_GIVE, "spores", SPORELAUNCHER_MAX_CARRY ) != -1 )
+		if (pOther->GiveAmmo(AMMO_SPORE_GIVE, "spores", SPORELAUNCHER_MAX_CARRY) != -1)
 		{
-			EMIT_SOUND( edict(), CHAN_ITEM, "weapons/spore_ammo.wav", VOL_NORM, ATTN_NORM );
+			EMIT_SOUND(edict(), CHAN_ITEM, "weapons/spore_ammo.wav", VOL_NORM, ATTN_NORM);
 
 			return true;
 		}
@@ -473,45 +473,43 @@ public:
 
 	void EXPORT Idling()
 	{
-		switch( pev->sequence )
+		switch (pev->sequence)
 		{
-		case SPOREAMMO_SPAWNDN:
-			{
-				pev->sequence = SPOREAMMO_IDLE1;
-				pev->animtime = gpGlobals->time;
-				pev->frame = 0;
-				break;
-			}
+		case SPOREAMMO_SPAWNDN: {
+			pev->sequence = SPOREAMMO_IDLE1;
+			pev->animtime = gpGlobals->time;
+			pev->frame = 0;
+			break;
+		}
 
-		case SPOREAMMO_SNATCHDN:
-			{
-				pev->sequence = SPOREAMMO_IDLE;
-				pev->animtime = gpGlobals->time;
-				pev->frame = 0;
-				pev->nextthink = gpGlobals->time + 10;
-				break;
-			}
+		case SPOREAMMO_SNATCHDN: {
+			pev->sequence = SPOREAMMO_IDLE;
+			pev->animtime = gpGlobals->time;
+			pev->frame = 0;
+			pev->nextthink = gpGlobals->time + 10;
+			break;
+		}
 
-		case SPOREAMMO_IDLE:
-			{
-				pev->body = SPOREAMMOBODY_FULL;
-				pev->sequence = SPOREAMMO_SPAWNDN;
-				pev->animtime = gpGlobals->time;
-				pev->frame = 0;
-				pev->nextthink = gpGlobals->time + 4;
-				break;
-			}
+		case SPOREAMMO_IDLE: {
+			pev->body = SPOREAMMOBODY_FULL;
+			pev->sequence = SPOREAMMO_SPAWNDN;
+			pev->animtime = gpGlobals->time;
+			pev->frame = 0;
+			pev->nextthink = gpGlobals->time + 4;
+			break;
+		}
 
-		default: break;
+		default:
+			break;
 		}
 	}
 
-	void EXPORT SporeTouch( CBaseEntity* pOther )
+	void EXPORT SporeTouch(CBaseEntity* pOther)
 	{
-		if( !pOther->IsPlayer() || pev->body == SPOREAMMOBODY_EMPTY )
+		if (!pOther->IsPlayer() || pev->body == SPOREAMMOBODY_EMPTY)
 			return;
 
-		if( AddAmmo( pOther ) )
+		if (AddAmmo(pOther))
 		{
 			pev->body = SPOREAMMOBODY_EMPTY;
 
@@ -524,5 +522,5 @@ public:
 	}
 };
 
-LINK_ENTITY_TO_CLASS( ammo_spore, CSporeAmmo );
+LINK_ENTITY_TO_CLASS(ammo_spore, CSporeAmmo);
 #endif

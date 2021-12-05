@@ -20,11 +20,11 @@ class CGrappleTip : public CBaseEntity
 public:
 	enum class TargetClass
 	{
-		NOT_A_TARGET	= 0,
-		SMALL			= 1,
-		MEDIUM			= 2,
-		LARGE			= 3,
-		FIXED			= 4,
+		NOT_A_TARGET = 0,
+		SMALL = 1,
+		MEDIUM = 2,
+		LARGE = 3,
+		FIXED = 4,
 	};
 
 public:
@@ -38,11 +38,11 @@ public:
 
 	void EXPORT OffsetThink();
 
-	void EXPORT TongueTouch( CBaseEntity* pOther );
+	void EXPORT TongueTouch(CBaseEntity* pOther);
 
-	TargetClass ClassifyTarget( CBaseEntity* pTarget );
+	TargetClass ClassifyTarget(CBaseEntity* pTarget);
 
-	void SetPosition( const Vector& vecOrigin, const Vector& vecAngles, CBaseEntity* pOwner );
+	void SetPosition(const Vector& vecOrigin, const Vector& vecAngles, CBaseEntity* pOwner);
 
 	TargetClass GetGrappleType() const { return m_GrappleType; }
 
@@ -52,7 +52,7 @@ public:
 
 	EHANDLE& GetGrappleTarget() { return m_hGrappleTarget; }
 
-	void SetGrappleTarget( CBaseEntity* pTarget )
+	void SetGrappleTarget(CBaseEntity* pTarget)
 	{
 		m_hGrappleTarget = pTarget;
 	}

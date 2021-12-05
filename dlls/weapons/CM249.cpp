@@ -23,49 +23,49 @@
 #include "CM249.h"
 
 #ifndef CLIENT_DLL
-TYPEDESCRIPTION	CM249::m_SaveData[] =
-{
-	DEFINE_FIELD( CM249, m_flReloadStartTime, FIELD_FLOAT ),
-	DEFINE_FIELD( CM249, m_flReloadStart, FIELD_FLOAT ),
-	DEFINE_FIELD( CM249, m_bReloading, FIELD_BOOLEAN ),
-	DEFINE_FIELD( CM249, m_iFire, FIELD_INTEGER ),
-	DEFINE_FIELD( CM249, m_iSmoke, FIELD_INTEGER ),
-	DEFINE_FIELD( CM249, m_iLink, FIELD_INTEGER ),
-	DEFINE_FIELD( CM249, m_iShell, FIELD_INTEGER ),
+TYPEDESCRIPTION CM249::m_SaveData[] =
+	{
+		DEFINE_FIELD(CM249, m_flReloadStartTime, FIELD_FLOAT),
+		DEFINE_FIELD(CM249, m_flReloadStart, FIELD_FLOAT),
+		DEFINE_FIELD(CM249, m_bReloading, FIELD_BOOLEAN),
+		DEFINE_FIELD(CM249, m_iFire, FIELD_INTEGER),
+		DEFINE_FIELD(CM249, m_iSmoke, FIELD_INTEGER),
+		DEFINE_FIELD(CM249, m_iLink, FIELD_INTEGER),
+		DEFINE_FIELD(CM249, m_iShell, FIELD_INTEGER),
 };
 
-IMPLEMENT_SAVERESTORE( CM249, CM249::BaseClass );
+IMPLEMENT_SAVERESTORE(CM249, CM249::BaseClass);
 #endif
 
-LINK_ENTITY_TO_CLASS( weapon_m249, CM249 );
+LINK_ENTITY_TO_CLASS(weapon_m249, CM249);
 
 void CM249::Precache()
 {
-	PRECACHE_MODEL( "models/v_saw.mdl" );
-	PRECACHE_MODEL( "models/w_saw.mdl" );
-	PRECACHE_MODEL( "models/p_saw.mdl" );
+	PRECACHE_MODEL("models/v_saw.mdl");
+	PRECACHE_MODEL("models/w_saw.mdl");
+	PRECACHE_MODEL("models/p_saw.mdl");
 
-	m_iShell = PRECACHE_MODEL( "models/saw_shell.mdl" );
-	m_iLink = PRECACHE_MODEL( "models/saw_link.mdl" );
-	m_iSmoke = PRECACHE_MODEL( "sprites/wep_smoke_01.spr" );
-	m_iFire = PRECACHE_MODEL( "sprites/xfire.spr" );
+	m_iShell = PRECACHE_MODEL("models/saw_shell.mdl");
+	m_iLink = PRECACHE_MODEL("models/saw_link.mdl");
+	m_iSmoke = PRECACHE_MODEL("sprites/wep_smoke_01.spr");
+	m_iFire = PRECACHE_MODEL("sprites/xfire.spr");
 
-	PRECACHE_SOUND( "weapons/saw_reload.wav" );
-	PRECACHE_SOUND( "weapons/saw_reload2.wav" );
-	PRECACHE_SOUND( "weapons/saw_fire1.wav" );
+	PRECACHE_SOUND("weapons/saw_reload.wav");
+	PRECACHE_SOUND("weapons/saw_reload2.wav");
+	PRECACHE_SOUND("weapons/saw_fire1.wav");
 
-	m_usFireM249 = PRECACHE_EVENT( 1, "events/m249.sc" );
+	m_usFireM249 = PRECACHE_EVENT(1, "events/m249.sc");
 }
 
 void CM249::Spawn()
 {
-	pev->classname = MAKE_STRING( "weapon_m249" );
+	pev->classname = MAKE_STRING("weapon_m249");
 
 	Precache();
 
 	m_iId = WEAPON_M249;
 
-	SET_MODEL( edict(), "models/w_saw.mdl" );
+	SET_MODEL(edict(), "models/w_saw.mdl");
 
 	m_iDefaultAmmo = M249_DEFAULT_GIVE;
 
@@ -74,12 +74,12 @@ void CM249::Spawn()
 	FallInit(); // get ready to fall down.
 }
 
-bool CM249::AddToPlayer( CBasePlayer* pPlayer )
+bool CM249::AddToPlayer(CBasePlayer* pPlayer)
 {
-	if( BaseClass::AddToPlayer( pPlayer ) )
+	if (BaseClass::AddToPlayer(pPlayer))
 	{
-		MESSAGE_BEGIN( MSG_ONE, gmsgWeapPickup, nullptr, pPlayer->edict() );
-			WRITE_BYTE( m_iId );
+		MESSAGE_BEGIN(MSG_ONE, gmsgWeapPickup, nullptr, pPlayer->edict());
+		WRITE_BYTE(m_iId);
 		MESSAGE_END();
 
 		return true;
@@ -90,14 +90,14 @@ bool CM249::AddToPlayer( CBasePlayer* pPlayer )
 
 bool CM249::Deploy()
 {
-	return DefaultDeploy( "models/v_saw.mdl", "models/p_saw.mdl", M249_DRAW, "mp5" );
+	return DefaultDeploy("models/v_saw.mdl", "models/p_saw.mdl", M249_DRAW, "mp5");
 }
 
 void CM249::Holster()
 {
-	SetThink( nullptr );
+	SetThink(nullptr);
 
-	SendWeaponAnim( M249_HOLSTER );
+	SendWeaponAnim(M249_HOLSTER);
 
 	m_bReloading = false;
 
@@ -105,7 +105,7 @@ void CM249::Holster()
 
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;
 
-	m_flTimeWeaponIdle = UTIL_SharedRandomFloat( m_pPlayer->random_seed, 10.0, 15.0 );
+	m_flTimeWeaponIdle = UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10.0, 15.0);
 }
 
 void CM249::WeaponIdle()
@@ -113,24 +113,24 @@ void CM249::WeaponIdle()
 	ResetEmptySound();
 
 	//Update auto-aim
-	m_pPlayer->GetAutoaimVector( AUTOAIM_5DEGREES );
+	m_pPlayer->GetAutoaimVector(AUTOAIM_5DEGREES);
 
-	if( m_bReloading && gpGlobals->time >= m_flReloadStart + 1.33 )
+	if (m_bReloading && gpGlobals->time >= m_flReloadStart + 1.33)
 	{
 		m_bReloading = false;
 
 		pev->body = 0;
 
-		SendWeaponAnim( M249_RELOAD_END, pev->body );
+		SendWeaponAnim(M249_RELOAD_END, pev->body);
 	}
 
-	if( m_flTimeWeaponIdle <= UTIL_WeaponTimeBase() )
+	if (m_flTimeWeaponIdle <= UTIL_WeaponTimeBase())
 	{
-		const float flNextIdle = UTIL_SharedRandomFloat( m_pPlayer->random_seed, 0.0, 1.0 );
+		const float flNextIdle = UTIL_SharedRandomFloat(m_pPlayer->random_seed, 0.0, 1.0);
 
 		int iAnim;
 
-		if( flNextIdle <= 0.95 )
+		if (flNextIdle <= 0.95)
 		{
 			iAnim = M249_SLOWIDLE;
 			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 5.0;
@@ -141,13 +141,13 @@ void CM249::WeaponIdle()
 			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 6.16;
 		}
 
-		SendWeaponAnim( iAnim, pev->body );
+		SendWeaponAnim(iAnim, pev->body);
 	}
 }
 
 void CM249::PrimaryAttack()
 {
-	if( m_pPlayer->pev->waterlevel == WATERLEVEL_HEAD )
+	if (m_pPlayer->pev->waterlevel == WATERLEVEL_HEAD)
 	{
 		PlayEmptySound();
 
@@ -155,9 +155,9 @@ void CM249::PrimaryAttack()
 		return;
 	}
 
-	if( m_iClip <= 0 )
+	if (m_iClip <= 0)
 	{
-		if( !m_fInReload )
+		if (!m_fInReload)
 		{
 			PlayEmptySound();
 
@@ -169,7 +169,7 @@ void CM249::PrimaryAttack()
 
 	--m_iClip;
 
-	pev->body = RecalculateBody( m_iClip );
+	pev->body = RecalculateBody(m_iClip);
 
 	m_bAlternatingEject = !m_bAlternatingEject;
 
@@ -180,26 +180,26 @@ void CM249::PrimaryAttack()
 
 	m_flNextAnimTime = UTIL_WeaponTimeBase() + 0.2;
 
-	m_pPlayer->SetAnimation( PLAYER_ATTACK1 );
+	m_pPlayer->SetAnimation(PLAYER_ATTACK1);
 
-	UTIL_MakeVectors( m_pPlayer->pev->v_angle + m_pPlayer->pev->punchangle );
+	UTIL_MakeVectors(m_pPlayer->pev->v_angle + m_pPlayer->pev->punchangle);
 
 	Vector vecSrc = m_pPlayer->GetGunPosition();
 
-	Vector vecAiming = m_pPlayer->GetAutoaimVector( AUTOAIM_5DEGREES );
+	Vector vecAiming = m_pPlayer->GetAutoaimVector(AUTOAIM_5DEGREES);
 
 	Vector vecSpread;
 
-	if( UTIL_IsMultiplayer() )
+	if (UTIL_IsMultiplayer())
 	{
-		if( (m_pPlayer->pev->button & IN_DUCK ) != 0)
+		if ((m_pPlayer->pev->button & IN_DUCK) != 0)
 		{
 			vecSpread = VECTOR_CONE_3DEGREES;
 		}
-		else if( (m_pPlayer->pev->button & ( IN_MOVERIGHT |
-										   IN_MOVELEFT | 
-										   IN_FORWARD | 
-										   IN_BACK ) ) != 0)
+		else if ((m_pPlayer->pev->button & (IN_MOVERIGHT |
+											   IN_MOVELEFT |
+											   IN_FORWARD |
+											   IN_BACK)) != 0)
 		{
 			vecSpread = VECTOR_CONE_15DEGREES;
 		}
@@ -210,14 +210,14 @@ void CM249::PrimaryAttack()
 	}
 	else
 	{
-		if( (m_pPlayer->pev->button & IN_DUCK ) != 0)
+		if ((m_pPlayer->pev->button & IN_DUCK) != 0)
 		{
 			vecSpread = VECTOR_CONE_4DEGREES;
 		}
-		else if( (m_pPlayer->pev->button & ( IN_MOVERIGHT |
-										   IN_MOVELEFT |
-										   IN_FORWARD |
-										   IN_BACK )) != 0)
+		else if ((m_pPlayer->pev->button & (IN_MOVERIGHT |
+											   IN_MOVELEFT |
+											   IN_FORWARD |
+											   IN_BACK)) != 0)
 		{
 			vecSpread = VECTOR_CONE_10DEGREES;
 		}
@@ -227,31 +227,31 @@ void CM249::PrimaryAttack()
 		}
 	}
 
-	Vector vecDir = m_pPlayer->FireBulletsPlayer( 
-		1, 
-		vecSrc, vecAiming, vecSpread, 
-		8192.0, BULLET_PLAYER_556, 2, 0, 
-		m_pPlayer->pev, m_pPlayer->random_seed );
+	Vector vecDir = m_pPlayer->FireBulletsPlayer(
+		1,
+		vecSrc, vecAiming, vecSpread,
+		8192.0, BULLET_PLAYER_556, 2, 0,
+		m_pPlayer->pev, m_pPlayer->random_seed);
 
 	int flags;
-#if defined( CLIENT_WEAPONS )
+#if defined(CLIENT_WEAPONS)
 	flags = UTIL_DefaultPlaybackFlags();
 #else
 	flags = 0;
 #endif
 
-	PLAYBACK_EVENT_FULL( 
-		flags, m_pPlayer->edict(), m_usFireM249, 0, 
-		g_vecZero, g_vecZero, 
-		vecDir.x, vecDir.y, 
-		pev->body, 0, 
-		m_bAlternatingEject ? 1 : 0, 0 );
+	PLAYBACK_EVENT_FULL(
+		flags, m_pPlayer->edict(), m_usFireM249, 0,
+		g_vecZero, g_vecZero,
+		vecDir.x, vecDir.y,
+		pev->body, 0,
+		m_bAlternatingEject ? 1 : 0, 0);
 
-	if( 0 == m_iClip )
+	if (0 == m_iClip)
 	{
-		if( m_pPlayer->m_rgAmmo[ m_iPrimaryAmmoType ] <= 0 )
+		if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
 		{
-			m_pPlayer->SetSuitUpdate( "!HEV_AMO0", SUIT_SENTENCE, SUIT_REPEAT_OK );
+			m_pPlayer->SetSuitUpdate("!HEV_AMO0", SUIT_SENTENCE, SUIT_REPEAT_OK);
 		}
 	}
 
@@ -260,11 +260,11 @@ void CM249::PrimaryAttack()
 	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.2;
 
 #ifndef CLIENT_DLL
-	m_pPlayer->pev->punchangle.x = RANDOM_FLOAT( -2, 2 );
+	m_pPlayer->pev->punchangle.x = RANDOM_FLOAT(-2, 2);
 
-	m_pPlayer->pev->punchangle.y = RANDOM_FLOAT( -1, 1 );
+	m_pPlayer->pev->punchangle.y = RANDOM_FLOAT(-1, 1);
 
-	UTIL_MakeVectors( m_pPlayer->pev->v_angle + m_pPlayer->pev->punchangle );
+	UTIL_MakeVectors(m_pPlayer->pev->v_angle + m_pPlayer->pev->punchangle);
 
 	const Vector& vecVelocity = m_pPlayer->pev->velocity;
 
@@ -272,12 +272,12 @@ void CM249::PrimaryAttack()
 
 	Vector vecInvPushDir = gpGlobals->v_forward * 35.0;
 
-	float flNewZVel = CVAR_GET_FLOAT( "sv_maxspeed" );
+	float flNewZVel = CVAR_GET_FLOAT("sv_maxspeed");
 
-	if( vecInvPushDir.z >= 10.0 )
+	if (vecInvPushDir.z >= 10.0)
 		flNewZVel = vecInvPushDir.z;
 
-	if( !g_pGameRules->IsDeathmatch() )
+	if (!g_pGameRules->IsDeathmatch())
 	{
 		m_pPlayer->pev->velocity = m_pPlayer->pev->velocity - vecInvPushDir;
 
@@ -286,14 +286,14 @@ void CM249::PrimaryAttack()
 	}
 	else
 	{
-		const float flZTreshold = -( flNewZVel + 100.0 );
+		const float flZTreshold = -(flNewZVel + 100.0);
 
-		if( vecVelocity.x > flZTreshold )
+		if (vecVelocity.x > flZTreshold)
 		{
 			m_pPlayer->pev->velocity.x -= vecInvPushDir.x;
 		}
 
-		if( vecVelocity.y > flZTreshold )
+		if (vecVelocity.y > flZTreshold)
 		{
 			m_pPlayer->pev->velocity.y -= vecInvPushDir.y;
 		}
@@ -305,7 +305,7 @@ void CM249::PrimaryAttack()
 
 void CM249::Reload()
 {
-	if( DefaultReload( M249_MAX_CLIP, M249_RELOAD_START, 1.0 ) )
+	if (DefaultReload(M249_MAX_CLIP, M249_RELOAD_START, 1.0))
 	{
 		m_bReloading = true;
 
@@ -317,13 +317,13 @@ void CM249::Reload()
 	}
 }
 
-int CM249::RecalculateBody( int iClip )
+int CM249::RecalculateBody(int iClip)
 {
-	if( iClip == 0 )
+	if (iClip == 0)
 	{
 		return 8;
 	}
-	else if( iClip >= 0 && iClip <= 7 )
+	else if (iClip >= 0 && iClip <= 7)
 	{
 		return 9 - iClip;
 	}
@@ -338,11 +338,11 @@ int CM249::iItemSlot()
 	return 4;
 }
 
-bool CM249::GetItemInfo( ItemInfo* p )
+bool CM249::GetItemInfo(ItemInfo* p)
 {
 	p->pszAmmo1 = "556";
 	p->iMaxAmmo1 = M249_MAX_CARRY;
-	p->pszName = STRING( pev->classname );
+	p->pszName = STRING(pev->classname);
 	p->pszAmmo2 = nullptr;
 	p->iMaxAmmo2 = WEAPON_NOCLIP;
 	p->iMaxClip = M249_MAX_CLIP;
@@ -370,24 +370,24 @@ public:
 
 	void Precache() override
 	{
-		PRECACHE_MODEL( "models/w_saw_clip.mdl" );
-		PRECACHE_SOUND( "items/9mmclip1.wav" );
+		PRECACHE_MODEL("models/w_saw_clip.mdl");
+		PRECACHE_SOUND("items/9mmclip1.wav");
 	}
 
 	void Spawn() override
 	{
 		Precache();
 
-		SET_MODEL( edict(), "models/w_saw_clip.mdl" );
+		SET_MODEL(edict(), "models/w_saw_clip.mdl");
 
 		BaseClass::Spawn();
 	}
 
-	bool AddAmmo( CBaseEntity* pOther ) override
+	bool AddAmmo(CBaseEntity* pOther) override
 	{
-		if( pOther->GiveAmmo( AMMO_M249_GIVE, "556", M249_MAX_CARRY ) != -1 )
+		if (pOther->GiveAmmo(AMMO_M249_GIVE, "556", M249_MAX_CARRY) != -1)
 		{
-			EMIT_SOUND( edict(), CHAN_ITEM, "items/9mmclip1.wav", VOL_NORM, ATTN_NORM );
+			EMIT_SOUND(edict(), CHAN_ITEM, "items/9mmclip1.wav", VOL_NORM, ATTN_NORM);
 
 			return true;
 		}
@@ -396,4 +396,4 @@ public:
 	}
 };
 
-LINK_ENTITY_TO_CLASS( ammo_556, CAmmo556 );
+LINK_ENTITY_TO_CLASS(ammo_556, CAmmo556);

@@ -17,15 +17,15 @@
 #include "cbase.h"
 #include "CItemSpawnCTF.h"
 
-LINK_ENTITY_TO_CLASS( info_ctfspawn_pickup, CItemSpawnCTF );
+LINK_ENTITY_TO_CLASS(info_ctfspawn_pickup, CItemSpawnCTF);
 
-bool CItemSpawnCTF::KeyValue( KeyValueData* pkvd )
+bool CItemSpawnCTF::KeyValue(KeyValueData* pkvd)
 {
-	if( FStrEq( "team_no", pkvd->szKeyName ) )
+	if (FStrEq("team_no", pkvd->szKeyName))
 	{
-		team_no = static_cast<CTFTeam>( atoi( pkvd->szValue ) );
+		team_no = static_cast<CTFTeam>(atoi(pkvd->szValue));
 		return true;
 	}
 
-	return CPointEntity::KeyValue( pkvd );
+	return CPointEntity::KeyValue(pkvd);
 }

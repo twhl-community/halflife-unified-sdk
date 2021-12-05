@@ -26,79 +26,75 @@ extern cvar_t oldgrapple;
 
 #include "CGrappleTip.h"
 
-LINK_ENTITY_TO_CLASS( grapple_tip, CGrappleTip );
+LINK_ENTITY_TO_CLASS(grapple_tip, CGrappleTip);
 
 namespace
 {
 //TODO: this should be handled differently. A method that returns an overall size, another whether it's fixed, etc. - Solokiller
-const char* const grapple_small[] = 
-{
-	"monster_bloater",
-	"monster_snark",
-	"monster_shockroach",
-	"monster_rat",
-	"monster_alien_babyvoltigore",
-	"monster_babycrab",
-	"monster_cockroach",
-	"monster_flyer_flock",
-	"monster_headcrab",
-	"monster_leech",
-	"monster_penguin"
-};
+const char* const grapple_small[] =
+	{
+		"monster_bloater",
+		"monster_snark",
+		"monster_shockroach",
+		"monster_rat",
+		"monster_alien_babyvoltigore",
+		"monster_babycrab",
+		"monster_cockroach",
+		"monster_flyer_flock",
+		"monster_headcrab",
+		"monster_leech",
+		"monster_penguin"};
 
-const char* const grapple_medium[] = 
-{
-	"monster_alien_controller",
-	"monster_alien_slave",
-	"monster_barney",
-	"monster_bullchicken",
-	"monster_cleansuit_scientist",
-	"monster_houndeye",
-	"monster_human_assassin",
-	"monster_human_grunt",
-	"monster_human_grunt_ally",
-	"monster_human_medic_ally",
-	"monster_human_torch_ally",
-	"monster_male_assassin",
-	"monster_otis",
-	"monster_pitdrone",
-	"monster_scientist",
-	"monster_zombie",
-	"monster_zombie_barney",
-	"monster_zombie_soldier"
-};
+const char* const grapple_medium[] =
+	{
+		"monster_alien_controller",
+		"monster_alien_slave",
+		"monster_barney",
+		"monster_bullchicken",
+		"monster_cleansuit_scientist",
+		"monster_houndeye",
+		"monster_human_assassin",
+		"monster_human_grunt",
+		"monster_human_grunt_ally",
+		"monster_human_medic_ally",
+		"monster_human_torch_ally",
+		"monster_male_assassin",
+		"monster_otis",
+		"monster_pitdrone",
+		"monster_scientist",
+		"monster_zombie",
+		"monster_zombie_barney",
+		"monster_zombie_soldier"};
 
-const char* const grapple_large[] = 
-{
-	"monster_alien_grunt",
-	"monster_alien_voltigore",
-	"monster_assassin_repel",
-	"monster_grunt_ally_repel",
-	"monster_bigmomma",
-	"monster_gargantua",
-	"monster_geneworm",
-	"monster_gonome",
-	"monster_grunt_repel",
-	"monster_ichthyosaur",
-	"monster_nihilanth",
-	"monster_pitworm",
-	"monster_pitworm_up",
-	"monster_shocktrooper"
-};
+const char* const grapple_large[] =
+	{
+		"monster_alien_grunt",
+		"monster_alien_voltigore",
+		"monster_assassin_repel",
+		"monster_grunt_ally_repel",
+		"monster_bigmomma",
+		"monster_gargantua",
+		"monster_geneworm",
+		"monster_gonome",
+		"monster_grunt_repel",
+		"monster_ichthyosaur",
+		"monster_nihilanth",
+		"monster_pitworm",
+		"monster_pitworm_up",
+		"monster_shocktrooper"};
 
-const char* const grapple_fixed[] = 
-{
-	"monster_barnacle",
-	"monster_sitting_cleansuit_scientist",
-	"monster_sitting_scientist",
-	"monster_tentacle",
-	"ammo_spore"
-};
+const char* const grapple_fixed[] =
+	{
+		"monster_barnacle",
+		"monster_sitting_cleansuit_scientist",
+		"monster_sitting_scientist",
+		"monster_tentacle",
+		"ammo_spore"};
 }
 
 void CGrappleTip::Precache()
 {
-	PRECACHE_MODEL( "models/shock_effect.mdl" );
+	PRECACHE_MODEL("models/shock_effect.mdl");
 }
 
 void CGrappleTip::Spawn()
@@ -108,20 +104,20 @@ void CGrappleTip::Spawn()
 	pev->movetype = MOVETYPE_FLY;
 	pev->solid = SOLID_BBOX;
 
-	SET_MODEL( edict(), "models/shock_effect.mdl" );
+	SET_MODEL(edict(), "models/shock_effect.mdl");
 
-	UTIL_SetSize( pev, g_vecZero, g_vecZero );
+	UTIL_SetSize(pev, g_vecZero, g_vecZero);
 
-	UTIL_SetOrigin( pev, pev->origin );
+	UTIL_SetOrigin(pev, pev->origin);
 
-	SetThink( &CGrappleTip::FlyThink );
-	SetTouch( &CGrappleTip::TongueTouch );
+	SetThink(&CGrappleTip::FlyThink);
+	SetTouch(&CGrappleTip::TongueTouch);
 
 	pev->angles.x -= 30.0;
 
-	UTIL_MakeVectors( pev->angles );
+	UTIL_MakeVectors(pev->angles);
 
-	pev->angles.x = -( 30.0 + pev->angles.x );
+	pev->angles.x = -(30.0 + pev->angles.x);
 
 	pev->velocity = g_vecZero;
 
@@ -136,17 +132,17 @@ void CGrappleTip::Spawn()
 void CGrappleTip::FlyThink()
 {
 #ifndef CLIENT_DLL
-	UTIL_MakeAimVectors( pev->angles );
+	UTIL_MakeAimVectors(pev->angles);
 
-	pev->angles = UTIL_VecToAngles( gpGlobals->v_forward );
+	pev->angles = UTIL_VecToAngles(gpGlobals->v_forward);
 
-	const float flNewVel = ( ( pev->velocity.Length() * 0.8 ) + 400.0 );
+	const float flNewVel = ((pev->velocity.Length() * 0.8) + 400.0);
 
-	pev->velocity = pev->velocity * 0.2 + ( flNewVel * gpGlobals->v_forward );
+	pev->velocity = pev->velocity * 0.2 + (flNewVel * gpGlobals->v_forward);
 
 	float maxSpeed;
 
-	if(!UTIL_IsMultiplayer())
+	if (!UTIL_IsMultiplayer())
 	{
 		if (oldgrapple.value != 1)
 		{
@@ -181,18 +177,18 @@ void CGrappleTip::OffsetThink()
 	//Nothing
 }
 
-void CGrappleTip::TongueTouch( CBaseEntity* pOther )
+void CGrappleTip::TongueTouch(CBaseEntity* pOther)
 {
 	TargetClass targetClass;
 
-	if( !pOther )
+	if (!pOther)
 	{
 		targetClass = TargetClass::NOT_A_TARGET;
 		m_bMissed = true;
 	}
 	else
 	{
-		if( pOther->IsPlayer() )
+		if (pOther->IsPlayer())
 		{
 			targetClass = TargetClass::MEDIUM;
 
@@ -202,9 +198,9 @@ void CGrappleTip::TongueTouch( CBaseEntity* pOther )
 		}
 		else
 		{
-			targetClass = ClassifyTarget( pOther );
+			targetClass = ClassifyTarget(pOther);
 
-			if( targetClass != TargetClass::NOT_A_TARGET )
+			if (targetClass != TargetClass::NOT_A_TARGET)
 			{
 				m_bIsStuck = true;
 			}
@@ -219,18 +215,18 @@ void CGrappleTip::TongueTouch( CBaseEntity* pOther )
 
 	m_GrappleType = targetClass;
 
-	SetThink( &CGrappleTip::OffsetThink );
+	SetThink(&CGrappleTip::OffsetThink);
 	pev->nextthink = gpGlobals->time + 0.02;
 
-	SetTouch( nullptr );
+	SetTouch(nullptr);
 }
 
-CGrappleTip::TargetClass CGrappleTip::ClassifyTarget( CBaseEntity* pTarget )
+CGrappleTip::TargetClass CGrappleTip::ClassifyTarget(CBaseEntity* pTarget)
 {
-	if( !pTarget )
+	if (!pTarget)
 		return TargetClass::NOT_A_TARGET;
 
-	if( pTarget->IsPlayer() )
+	if (pTarget->IsPlayer())
 	{
 		m_hGrappleTarget = pTarget;
 
@@ -241,26 +237,26 @@ CGrappleTip::TargetClass CGrappleTip::ClassifyTarget( CBaseEntity* pTarget )
 
 	TraceResult tr;
 
-	UTIL_TraceLine( pev->origin, vecEnd, ignore_monsters, edict(), &tr );
+	UTIL_TraceLine(pev->origin, vecEnd, ignore_monsters, edict(), &tr);
 
 	auto pHit = tr.pHit;
 
-	if( !tr.pHit )
-		pHit = INDEXENT( 0 );
+	if (!tr.pHit)
+		pHit = INDEXENT(0);
 
-	const auto pszTexture = TRACE_TEXTURE( pHit, pev->origin, vecEnd );
+	const auto pszTexture = TRACE_TEXTURE(pHit, pev->origin, vecEnd);
 
 	bool bIsFixed = false;
 
-	if( pszTexture && strnicmp( pszTexture, "xeno_grapple", 12 ) == 0 )
+	if (pszTexture && strnicmp(pszTexture, "xeno_grapple", 12) == 0)
 	{
 		bIsFixed = true;
 	}
 	else
 	{
-		for( size_t uiIndex = 0; uiIndex < ARRAYSIZE( grapple_small ); ++uiIndex )
+		for (size_t uiIndex = 0; uiIndex < ARRAYSIZE(grapple_small); ++uiIndex)
 		{
-			if( FClassnameIs( pTarget->pev, grapple_small[ uiIndex ] ) )
+			if (FClassnameIs(pTarget->pev, grapple_small[uiIndex]))
 			{
 				m_hGrappleTarget = pTarget;
 				m_vecOriginOffset = pev->origin - pTarget->pev->origin;
@@ -269,9 +265,9 @@ CGrappleTip::TargetClass CGrappleTip::ClassifyTarget( CBaseEntity* pTarget )
 			}
 		}
 
-		for( size_t uiIndex = 0; uiIndex < ARRAYSIZE( grapple_medium ); ++uiIndex )
+		for (size_t uiIndex = 0; uiIndex < ARRAYSIZE(grapple_medium); ++uiIndex)
 		{
-			if( FClassnameIs( pTarget->pev, grapple_medium[ uiIndex ] ) )
+			if (FClassnameIs(pTarget->pev, grapple_medium[uiIndex]))
 			{
 				m_hGrappleTarget = pTarget;
 				m_vecOriginOffset = pev->origin - pTarget->pev->origin;
@@ -280,9 +276,9 @@ CGrappleTip::TargetClass CGrappleTip::ClassifyTarget( CBaseEntity* pTarget )
 			}
 		}
 
-		for( size_t uiIndex = 0; uiIndex < ARRAYSIZE( grapple_large ); ++uiIndex )
+		for (size_t uiIndex = 0; uiIndex < ARRAYSIZE(grapple_large); ++uiIndex)
 		{
-			if( FClassnameIs( pTarget->pev, grapple_large[ uiIndex ] ) )
+			if (FClassnameIs(pTarget->pev, grapple_large[uiIndex]))
 			{
 				m_hGrappleTarget = pTarget;
 				m_vecOriginOffset = pev->origin - pTarget->pev->origin;
@@ -291,9 +287,9 @@ CGrappleTip::TargetClass CGrappleTip::ClassifyTarget( CBaseEntity* pTarget )
 			}
 		}
 
-		for( size_t uiIndex = 0; uiIndex < ARRAYSIZE( grapple_fixed ); ++uiIndex )
+		for (size_t uiIndex = 0; uiIndex < ARRAYSIZE(grapple_fixed); ++uiIndex)
 		{
-			if( FClassnameIs( pTarget->pev, grapple_fixed[ uiIndex ] ) )
+			if (FClassnameIs(pTarget->pev, grapple_fixed[uiIndex]))
 			{
 				bIsFixed = true;
 				break;
@@ -301,7 +297,7 @@ CGrappleTip::TargetClass CGrappleTip::ClassifyTarget( CBaseEntity* pTarget )
 		}
 	}
 
-	if( bIsFixed )
+	if (bIsFixed)
 	{
 		m_hGrappleTarget = pTarget;
 		m_vecOriginOffset = g_vecZero;
@@ -312,9 +308,9 @@ CGrappleTip::TargetClass CGrappleTip::ClassifyTarget( CBaseEntity* pTarget )
 	return TargetClass::NOT_A_TARGET;
 }
 
-void CGrappleTip::SetPosition( const Vector& vecOrigin, const Vector& vecAngles, CBaseEntity* pOwner )
+void CGrappleTip::SetPosition(const Vector& vecOrigin, const Vector& vecAngles, CBaseEntity* pOwner)
 {
-	UTIL_SetOrigin( pev, vecOrigin );
+	UTIL_SetOrigin(pev, vecOrigin);
 	pev->angles = vecAngles;
 	pev->owner = pOwner->edict();
 }

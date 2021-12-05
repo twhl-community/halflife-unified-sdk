@@ -47,7 +47,7 @@ public:
 
 	void PrimaryAttack() override;
 
-	bool Swing( const bool bFirst );
+	bool Swing(const bool bFirst);
 
 	void EXPORT SwingAgain();
 
@@ -55,11 +55,11 @@ public:
 
 	int iItemSlot() override;
 
-	bool GetItemInfo( ItemInfo* p ) override;
+	bool GetItemInfo(ItemInfo* p) override;
 
 	bool UseDecrement() override
 	{
-#if defined( CLIENT_WEAPONS )
+#if defined(CLIENT_WEAPONS)
 		return UTIL_DefaultUseDecrement();
 #else
 		return false;

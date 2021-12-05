@@ -23,20 +23,20 @@ struct skilldata_t
 
 	int iSkillLevel; // game skill level
 
-// Monster Health & Damage
-	float	agruntHealth;
+	// Monster Health & Damage
+	float agruntHealth;
 	float agruntDmgPunch;
 
 	float apacheHealth;
-	
+
 	float barneyHealth;
 
 	float otisHealth;
 
-	float bigmommaHealthFactor;		// Multiply each node's health by this
-	float bigmommaDmgSlash;			// melee attack damage
-	float bigmommaDmgBlast;			// mortar attack damage
-	float bigmommaRadiusBlast;		// mortar attack radius
+	float bigmommaHealthFactor; // Multiply each node's health by this
+	float bigmommaDmgSlash;		// melee attack damage
+	float bigmommaDmgBlast;		// mortar attack damage
+	float bigmommaRadiusBlast;	// mortar attack radius
 
 	float bullsquidHealth;
 	float bullsquidDmgBite;
@@ -158,7 +158,7 @@ struct skilldata_t
 	float sentryHealth;
 
 
-// Player Weapons
+	// Player Weapons
 	float plrDmgCrowbar;
 	float plrDmg9MM;
 	float plrDmg357;
@@ -188,14 +188,14 @@ struct skilldata_t
 	float plrDmgShockRoachS;
 	float plrDmgShockRoachM;
 	float plrDmgSpore;
-	
-// weapons shared by monsters
+
+	// weapons shared by monsters
 	float monDmg9MM;
 	float monDmgMP5;
 	float monDmg12MM;
 	float monDmgHornet;
 
-// health/suit charge
+	// health/suit charge
 	float suitchargerCapacity;
 	float batteryCapacity;
 	float healthchargerCapacity;
@@ -203,14 +203,14 @@ struct skilldata_t
 	float scientistHeal;
 	float cleansuitScientistHeal;
 
-// monster damage adj
+	// monster damage adj
 	float monHead;
 	float monChest;
 	float monStomach;
 	float monLeg;
 	float monArm;
 
-// player damage adj
+	// player damage adj
 	float plrHead;
 	float plrChest;
 	float plrStomach;
@@ -218,11 +218,11 @@ struct skilldata_t
 	float plrArm;
 };
 
-extern	DLL_GLOBAL	skilldata_t	gSkillData;
-float GetSkillCvar( const char *pName );
+extern DLL_GLOBAL skilldata_t gSkillData;
+float GetSkillCvar(const char* pName);
 
-extern DLL_GLOBAL int		g_iSkillLevel;
+extern DLL_GLOBAL int g_iSkillLevel;
 
-#define SKILL_EASY		1
-#define SKILL_MEDIUM	2
-#define SKILL_HARD		3
+#define SKILL_EASY 1
+#define SKILL_MEDIUM 2
+#define SKILL_HARD 3

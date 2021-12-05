@@ -21,45 +21,45 @@ const auto SF_ITEMGENERIC_DROP_TO_FLOOR = 1 << 0;
 class CGenericItem : public CBaseAnimating
 {
 public:
-	bool KeyValue( KeyValueData* pkvd ) override;
+	bool KeyValue(KeyValueData* pkvd) override;
 	void Precache() override;
 	void Spawn() override;
 
 	void EXPORT StartItem();
 	void EXPORT AnimateThink();
 
-	void Use( CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value ) override;
+	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
 	float m_lastTime;
 	int m_iSequence;
 };
 
-LINK_ENTITY_TO_CLASS( item_generic, CGenericItem );
+LINK_ENTITY_TO_CLASS(item_generic, CGenericItem);
 
-bool CGenericItem::KeyValue( KeyValueData* pkvd )
+bool CGenericItem::KeyValue(KeyValueData* pkvd)
 {
-	if( FStrEq( "sequencename", pkvd->szKeyName ) )
+	if (FStrEq("sequencename", pkvd->szKeyName))
 	{
-		m_iSequence = ALLOC_STRING( pkvd->szValue );
+		m_iSequence = ALLOC_STRING(pkvd->szValue);
 		return true;
 	}
-	else if( FStrEq( "skin", pkvd->szKeyName ) )
+	else if (FStrEq("skin", pkvd->szKeyName))
 	{
-		pev->skin = static_cast<int>( atof( pkvd->szValue ) );
+		pev->skin = static_cast<int>(atof(pkvd->szValue));
 		return true;
 	}
-	else if( FStrEq( "body", pkvd->szKeyName ) )
+	else if (FStrEq("body", pkvd->szKeyName))
 	{
-		pev->body = atoi( pkvd->szValue );
+		pev->body = atoi(pkvd->szValue);
 		return true;
 	}
 
-	return CBaseDelay::KeyValue( pkvd );
+	return CBaseDelay::KeyValue(pkvd);
 }
 
 void CGenericItem::Precache()
 {
-	PRECACHE_MODEL( const_cast<char*>( STRING( pev->model ) ) );
+	PRECACHE_MODEL(const_cast<char*>(STRING(pev->model)));
 }
 
 void CGenericItem::Spawn()
@@ -71,20 +71,20 @@ void CGenericItem::Spawn()
 
 	Precache();
 
-	SET_MODEL( edict(), STRING( pev->model ) );
+	SET_MODEL(edict(), STRING(pev->model));
 
-	if( 0 != m_iSequence )
+	if (0 != m_iSequence)
 	{
-		SetThink( &CGenericItem::StartItem );
+		SetThink(&CGenericItem::StartItem);
 		pev->nextthink = gpGlobals->time + 0.1;
 	}
-	
-	if( (pev->spawnflags & SF_ITEMGENERIC_DROP_TO_FLOOR ) != 0)
+
+	if ((pev->spawnflags & SF_ITEMGENERIC_DROP_TO_FLOOR) != 0)
 	{
-		if( 0 == g_engfuncs.pfnDropToFloor( pev->pContainingEntity ) )
+		if (0 == g_engfuncs.pfnDropToFloor(pev->pContainingEntity))
 		{
-			ALERT( at_error, "Item %s fell out of level at %f,%f,%f", STRING( pev->classname ), pev->origin.x, pev->origin.y, pev->origin.z );
-			UTIL_Remove( this );
+			ALERT(at_error, "Item %s fell out of level at %f,%f,%f", STRING(pev->classname), pev->origin.x, pev->origin.y, pev->origin.z);
+			UTIL_Remove(this);
 		}
 	}
 }
@@ -93,11 +93,11 @@ void CGenericItem::StartItem()
 {
 	pev->effects = 0;
 
-	pev->sequence = LookupSequence( STRING( m_iSequence ) );
+	pev->sequence = LookupSequence(STRING(m_iSequence));
 	pev->frame = 0;
 	ResetSequenceInfo();
 
-	SetThink( &CGenericItem::AnimateThink );
+	SetThink(&CGenericItem::AnimateThink);
 	pev->nextthink = gpGlobals->time + 0.1;
 	pev->frame = 0;
 }
@@ -107,7 +107,7 @@ void CGenericItem::AnimateThink()
 	DispatchAnimEvents();
 	StudioFrameAdvance();
 
-	if( m_fSequenceFinished && !m_fSequenceLoops )
+	if (m_fSequenceFinished && !m_fSequenceLoops)
 	{
 		pev->frame = 0;
 		ResetSequenceInfo();
@@ -117,8 +117,8 @@ void CGenericItem::AnimateThink()
 	m_lastTime = gpGlobals->time;
 }
 
-void CGenericItem::Use( CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value )
+void CGenericItem::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
-	SetThink( &CGenericItem::SUB_Remove );
+	SetThink(&CGenericItem::SUB_Remove);
 	pev->nextthink = gpGlobals->time + 0.1;
 }

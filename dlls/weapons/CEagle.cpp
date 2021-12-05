@@ -24,51 +24,51 @@
 #include "CEagle.h"
 
 #ifndef CLIENT_DLL
-TYPEDESCRIPTION	CEagle::m_SaveData[] =
-{
-	DEFINE_FIELD( CEagle, m_bSpotVisible, FIELD_BOOLEAN ),
-	DEFINE_FIELD( CEagle, m_bLaserActive, FIELD_BOOLEAN ),
+TYPEDESCRIPTION CEagle::m_SaveData[] =
+	{
+		DEFINE_FIELD(CEagle, m_bSpotVisible, FIELD_BOOLEAN),
+		DEFINE_FIELD(CEagle, m_bLaserActive, FIELD_BOOLEAN),
 };
 
-IMPLEMENT_SAVERESTORE( CEagle, CEagle::BaseClass );
+IMPLEMENT_SAVERESTORE(CEagle, CEagle::BaseClass);
 #endif
 
-LINK_ENTITY_TO_CLASS( weapon_eagle, CEagle );
+LINK_ENTITY_TO_CLASS(weapon_eagle, CEagle);
 
 void CEagle::Precache()
 {
-	PRECACHE_MODEL( "models/v_desert_eagle.mdl" );
-	PRECACHE_MODEL( "models/w_desert_eagle.mdl" );
-	PRECACHE_MODEL( "models/p_desert_eagle.mdl" );
-	m_iShell = PRECACHE_MODEL( "models/shell.mdl" );
-	PRECACHE_SOUND( "weapons/desert_eagle_fire.wav" );
-	PRECACHE_SOUND( "weapons/desert_eagle_reload.wav" );
-	PRECACHE_SOUND( "weapons/desert_eagle_sight.wav" );
-	PRECACHE_SOUND( "weapons/desert_eagle_sight2.wav" );
-	m_usFireEagle = PRECACHE_EVENT( 1, "events/eagle.sc" );
+	PRECACHE_MODEL("models/v_desert_eagle.mdl");
+	PRECACHE_MODEL("models/w_desert_eagle.mdl");
+	PRECACHE_MODEL("models/p_desert_eagle.mdl");
+	m_iShell = PRECACHE_MODEL("models/shell.mdl");
+	PRECACHE_SOUND("weapons/desert_eagle_fire.wav");
+	PRECACHE_SOUND("weapons/desert_eagle_reload.wav");
+	PRECACHE_SOUND("weapons/desert_eagle_sight.wav");
+	PRECACHE_SOUND("weapons/desert_eagle_sight2.wav");
+	m_usFireEagle = PRECACHE_EVENT(1, "events/eagle.sc");
 }
 
 void CEagle::Spawn()
 {
-	pev->classname = MAKE_STRING( "weapon_eagle" );
+	pev->classname = MAKE_STRING("weapon_eagle");
 
 	Precache();
 
 	m_iId = WEAPON_EAGLE;
 
-	SET_MODEL( edict(), "models/w_desert_eagle.mdl" );
+	SET_MODEL(edict(), "models/w_desert_eagle.mdl");
 
 	m_iDefaultAmmo = DEAGLE_DEFAULT_GIVE;
 
 	FallInit();
 }
 
-bool CEagle::AddToPlayer( CBasePlayer* pPlayer )
+bool CEagle::AddToPlayer(CBasePlayer* pPlayer)
 {
-	if( BaseClass::AddToPlayer( pPlayer ) )
+	if (BaseClass::AddToPlayer(pPlayer))
 	{
-		MESSAGE_BEGIN( MSG_ONE, gmsgWeapPickup, nullptr, pPlayer->edict() );
-			WRITE_BYTE( m_iId );
+		MESSAGE_BEGIN(MSG_ONE, gmsgWeapPickup, nullptr, pPlayer->edict());
+		WRITE_BYTE(m_iId);
 		MESSAGE_END();
 		return true;
 	}
@@ -80,10 +80,10 @@ bool CEagle::Deploy()
 {
 	m_bSpotVisible = true;
 
-	return DefaultDeploy( 
-		"models/v_desert_eagle.mdl", "models/p_desert_eagle.mdl", 
+	return DefaultDeploy(
+		"models/v_desert_eagle.mdl", "models/p_desert_eagle.mdl",
 		EAGLE_DRAW,
-		"onehanded" );
+		"onehanded");
 }
 
 void CEagle::Holster()
@@ -91,9 +91,9 @@ void CEagle::Holster()
 	m_fInReload = false;
 
 #ifndef CLIENT_DLL
-	if( m_pLaser )
+	if (m_pLaser)
 	{
-		m_pLaser->Killed( nullptr, GIB_NEVER );
+		m_pLaser->Killed(nullptr, GIB_NEVER);
 		m_pLaser = nullptr;
 		m_bSpotVisible = false;
 	}
@@ -101,9 +101,9 @@ void CEagle::Holster()
 
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;
 
-	m_flTimeWeaponIdle = UTIL_SharedRandomFloat( m_pPlayer->random_seed, 10.0, 15.0 );
+	m_flTimeWeaponIdle = UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10.0, 15.0);
 
-	SendWeaponAnim( EAGLE_HOLSTER );
+	SendWeaponAnim(EAGLE_HOLSTER);
 }
 
 void CEagle::WeaponIdle()
@@ -115,17 +115,17 @@ void CEagle::WeaponIdle()
 	ResetEmptySound();
 
 	//Update autoaim
-	m_pPlayer->GetAutoaimVector( AUTOAIM_10DEGREES );
+	m_pPlayer->GetAutoaimVector(AUTOAIM_10DEGREES);
 
-	if( m_flTimeWeaponIdle <= UTIL_WeaponTimeBase() && 0 != m_iClip )
+	if (m_flTimeWeaponIdle <= UTIL_WeaponTimeBase() && 0 != m_iClip)
 	{
-		const float flNextIdle = UTIL_SharedRandomFloat( m_pPlayer->random_seed, 0.0, 1.0 );
+		const float flNextIdle = UTIL_SharedRandomFloat(m_pPlayer->random_seed, 0.0, 1.0);
 
 		int iAnim;
 
-		if( m_bLaserActive )
+		if (m_bLaserActive)
 		{
-			if( flNextIdle > 0.5 )
+			if (flNextIdle > 0.5)
 			{
 				iAnim = EAGLE_IDLE5;
 				m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 2.0;
@@ -138,14 +138,14 @@ void CEagle::WeaponIdle()
 		}
 		else
 		{
-			if( flNextIdle <= 0.3 )
+			if (flNextIdle <= 0.3)
 			{
 				iAnim = EAGLE_IDLE1;
 				m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 2.5;
 			}
 			else
 			{
-				if( flNextIdle > 0.6 )
+				if (flNextIdle > 0.6)
 				{
 					iAnim = EAGLE_IDLE3;
 					m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 1.633;
@@ -158,13 +158,13 @@ void CEagle::WeaponIdle()
 			}
 		}
 
-		SendWeaponAnim( iAnim );
+		SendWeaponAnim(iAnim);
 	}
 }
 
 void CEagle::PrimaryAttack()
 {
-	if( m_pPlayer->pev->waterlevel == WATERLEVEL_HEAD )
+	if (m_pPlayer->pev->waterlevel == WATERLEVEL_HEAD)
 	{
 		PlayEmptySound();
 
@@ -173,11 +173,11 @@ void CEagle::PrimaryAttack()
 		return;
 	}
 
-	if( m_iClip <= 0 )
+	if (m_iClip <= 0)
 	{
-		if( !m_fInReload )
+		if (!m_fInReload)
 		{
-			if( m_fFireOnEmpty )
+			if (m_fFireOnEmpty)
 			{
 				PlayEmptySound();
 				m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.2;
@@ -199,35 +199,35 @@ void CEagle::PrimaryAttack()
 
 	m_pPlayer->pev->effects |= EF_MUZZLEFLASH;
 
-	m_pPlayer->SetAnimation( PLAYER_ATTACK1 );
+	m_pPlayer->SetAnimation(PLAYER_ATTACK1);
 
 #ifndef CLIENT_DLL
-	if( m_pLaser && m_bLaserActive )
+	if (m_pLaser && m_bLaserActive)
 	{
 		m_pLaser->pev->effects |= EF_NODRAW;
-		m_pLaser->SetThink( &CEagleLaser::Revive );
+		m_pLaser->SetThink(&CEagleLaser::Revive);
 		m_pLaser->pev->nextthink = gpGlobals->time + 0.6;
 	}
 #endif
 
-	UTIL_MakeVectors( m_pPlayer->pev->v_angle + m_pPlayer->pev->punchangle );
+	UTIL_MakeVectors(m_pPlayer->pev->v_angle + m_pPlayer->pev->punchangle);
 
 	Vector vecSrc = m_pPlayer->GetGunPosition();
 
-	Vector vecAiming = m_pPlayer->GetAutoaimVector( AUTOAIM_10DEGREES );
+	Vector vecAiming = m_pPlayer->GetAutoaimVector(AUTOAIM_10DEGREES);
 
 	const float flSpread = m_bLaserActive ? 0.001 : 0.1;
 
 	const Vector vecSpread = m_pPlayer->FireBulletsPlayer(
-		1, 
-		vecSrc, vecAiming, Vector( flSpread, flSpread, flSpread ),
+		1,
+		vecSrc, vecAiming, Vector(flSpread, flSpread, flSpread),
 		8192.0, BULLET_PLAYER_EAGLE, 0, 0,
-		m_pPlayer->pev, m_pPlayer->random_seed );
+		m_pPlayer->pev, m_pPlayer->random_seed);
 
-	m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + ( m_bLaserActive ? 0.5 : 0.22 );
+	m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + (m_bLaserActive ? 0.5 : 0.22);
 
 	int flags;
-#if defined( CLIENT_WEAPONS )
+#if defined(CLIENT_WEAPONS)
 	flags = UTIL_DefaultPlaybackFlags();
 #else
 	flags = 0;
@@ -238,15 +238,15 @@ void CEagle::PrimaryAttack()
 		g_vecZero, g_vecZero,
 		vecSpread.x, vecSpread.y,
 		0, 0,
-		static_cast<int>(m_iClip == 0), 0 );
+		static_cast<int>(m_iClip == 0), 0);
 
-	if( 0 == m_iClip )
+	if (0 == m_iClip)
 	{
-		if( m_pPlayer->m_rgAmmo[ m_iPrimaryAmmoType ] <= 0 )
-			m_pPlayer->SetSuitUpdate( "!HEV_AMO0", SUIT_SENTENCE, SUIT_REPEAT_OK );
+		if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
+			m_pPlayer->SetSuitUpdate("!HEV_AMO0", SUIT_SENTENCE, SUIT_REPEAT_OK);
 	}
 
-	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat( m_pPlayer->random_seed, 10.0, 15.0 );
+	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10.0, 15.0);
 
 #ifndef CLIENT_DLL
 	UpdateLaser();
@@ -258,15 +258,15 @@ void CEagle::SecondaryAttack()
 #ifndef CLIENT_DLL
 	m_bLaserActive = !m_bLaserActive;
 
-	if( !m_bLaserActive )
+	if (!m_bLaserActive)
 	{
-		if( m_pLaser )
+		if (m_pLaser)
 		{
-			m_pLaser->Killed( nullptr, GIB_NEVER );
+			m_pLaser->Killed(nullptr, GIB_NEVER);
 
 			m_pLaser = nullptr;
 
-			EMIT_SOUND_DYN( edict(), CHAN_WEAPON, "weapons/desert_eagle_sight2.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM );
+			EMIT_SOUND_DYN(edict(), CHAN_WEAPON, "weapons/desert_eagle_sight2.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
 		}
 	}
 #endif
@@ -276,25 +276,25 @@ void CEagle::SecondaryAttack()
 
 void CEagle::Reload()
 {
-	if( m_pPlayer->m_rgAmmo[ m_iPrimaryAmmoType ] > 0 )
+	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] > 0)
 	{
-		const bool bResult = DefaultReload( EAGLE_MAX_CLIP, 0 != m_iClip ? EAGLE_RELOAD : EAGLE_RELOAD_NOSHOT, 1.5 );
-	
+		const bool bResult = DefaultReload(EAGLE_MAX_CLIP, 0 != m_iClip ? EAGLE_RELOAD : EAGLE_RELOAD_NOSHOT, 1.5);
+
 #ifndef CLIENT_DLL
 		//Only turn it off if we're actually reloading
-		if( bResult && m_pLaser && m_bLaserActive )
+		if (bResult && m_pLaser && m_bLaserActive)
 		{
 			m_pLaser->pev->effects |= EF_NODRAW;
-			m_pLaser->SetThink( &CEagleLaser::Revive );
+			m_pLaser->SetThink(&CEagleLaser::Revive);
 			m_pLaser->pev->nextthink = gpGlobals->time + 1.6;
 
 			m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 1.5;
 		}
 #endif
 
-		if( bResult )
+		if (bResult)
 		{
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat( m_pPlayer->random_seed, 10.0, 15.0 );
+			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10.0, 15.0);
 		}
 	}
 }
@@ -302,16 +302,16 @@ void CEagle::Reload()
 void CEagle::UpdateLaser()
 {
 #ifndef CLIENT_DLL
-	if( m_bLaserActive && m_bSpotVisible )
+	if (m_bLaserActive && m_bSpotVisible)
 	{
-		if( !m_pLaser )
+		if (!m_pLaser)
 		{
 			m_pLaser = CEagleLaser::CreateSpot();
 
-			EMIT_SOUND_DYN( edict(), CHAN_WEAPON, "weapons/desert_eagle_sight.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM );
+			EMIT_SOUND_DYN(edict(), CHAN_WEAPON, "weapons/desert_eagle_sight.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
 		}
 
-		UTIL_MakeVectors( m_pPlayer->pev->v_angle );
+		UTIL_MakeVectors(m_pPlayer->pev->v_angle);
 
 		Vector vecSrc = m_pPlayer->GetGunPosition();
 
@@ -319,9 +319,9 @@ void CEagle::UpdateLaser()
 
 		TraceResult tr;
 
-		UTIL_TraceLine( vecSrc, vecEnd, dont_ignore_monsters, m_pPlayer->edict(), &tr );
+		UTIL_TraceLine(vecSrc, vecEnd, dont_ignore_monsters, m_pPlayer->edict(), &tr);
 
-		UTIL_SetOrigin( m_pLaser->pev, tr.vecEndPos );
+		UTIL_SetOrigin(m_pLaser->pev, tr.vecEndPos);
 	}
 #endif
 }
@@ -331,11 +331,11 @@ int CEagle::iItemSlot()
 	return 2;
 }
 
-bool CEagle::GetItemInfo( ItemInfo* p )
+bool CEagle::GetItemInfo(ItemInfo* p)
 {
 	p->pszAmmo1 = "357";
 	p->iMaxAmmo1 = _357_MAX_CARRY;
-	p->pszName = STRING( pev->classname );
+	p->pszName = STRING(pev->classname);
 	p->pszAmmo2 = 0;
 	p->iMaxAmmo2 = WEAPON_NOCLIP;
 	p->iMaxClip = EAGLE_MAX_CLIP;
@@ -355,16 +355,16 @@ void CEagle::IncrementAmmo(CBasePlayer* pPlayer)
 	}
 }
 
-void CEagle::GetWeaponData( weapon_data_t& data )
+void CEagle::GetWeaponData(weapon_data_t& data)
 {
-	BaseClass::GetWeaponData( data );
+	BaseClass::GetWeaponData(data);
 
 	data.iuser1 = static_cast<int>(m_bLaserActive);
 }
 
-void CEagle::SetWeaponData( const weapon_data_t& data )
+void CEagle::SetWeaponData(const weapon_data_t& data)
 {
-	BaseClass::SetWeaponData( data );
+	BaseClass::SetWeaponData(data);
 
 	m_bLaserActive = data.iuser1 != 0;
 }
@@ -375,25 +375,25 @@ class CEagleAmmo : public CBasePlayerAmmo
 	{
 		Precache();
 		//TODO: could probably use a better model
-		SET_MODEL( ENT( pev ), "models/w_9mmclip.mdl" );
+		SET_MODEL(ENT(pev), "models/w_9mmclip.mdl");
 		CBasePlayerAmmo::Spawn();
 	}
 
 	void Precache() override
 	{
-		PRECACHE_MODEL( "models/w_9mmclip.mdl" );
-		PRECACHE_SOUND( "items/9mmclip1.wav" );
+		PRECACHE_MODEL("models/w_9mmclip.mdl");
+		PRECACHE_SOUND("items/9mmclip1.wav");
 	}
 
-	bool AddAmmo( CBaseEntity* pOther ) override
+	bool AddAmmo(CBaseEntity* pOther) override
 	{
-		if( pOther->GiveAmmo( AMMO_EAGLE_GIVE, "357", _357_MAX_CARRY ) != -1 )
+		if (pOther->GiveAmmo(AMMO_EAGLE_GIVE, "357", _357_MAX_CARRY) != -1)
 		{
-			EMIT_SOUND( ENT( pev ), CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM );
+			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
 			return true;
 		}
 		return false;
 	}
 };
 
-LINK_ENTITY_TO_CLASS( ammo_eagleclip, CEagleAmmo );
+LINK_ENTITY_TO_CLASS(ammo_eagleclip, CEagleAmmo);

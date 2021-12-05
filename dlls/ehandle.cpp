@@ -16,11 +16,11 @@
 #include "util.h"
 #include "cbase.h"
 
-edict_t * EHANDLE::Get()
+edict_t* EHANDLE::Get()
 {
-	if( m_pent )
+	if (m_pent)
 	{
-		if( m_pent->serialnumber == m_serialnumber )
+		if (m_pent->serialnumber == m_serialnumber)
 			return m_pent;
 		else
 			return NULL;
@@ -28,27 +28,27 @@ edict_t * EHANDLE::Get()
 	return NULL;
 };
 
-edict_t * EHANDLE::Set( edict_t *pent )
+edict_t* EHANDLE::Set(edict_t* pent)
 {
 	m_pent = pent;
-	if( pent )
+	if (pent)
 		m_serialnumber = m_pent->serialnumber;
 	return pent;
 };
 
 
-EHANDLE :: operator CBaseEntity *( )
+EHANDLE ::operator CBaseEntity*()
 {
-	return ( CBaseEntity * ) GET_PRIVATE( Get() );
+	return (CBaseEntity*)GET_PRIVATE(Get());
 };
 
 
-CBaseEntity * EHANDLE :: operator = ( CBaseEntity *pEntity )
+CBaseEntity* EHANDLE ::operator=(CBaseEntity* pEntity)
 {
-	if( pEntity )
+	if (pEntity)
 	{
-		m_pent = ENT( pEntity->pev );
-		if( m_pent )
+		m_pent = ENT(pEntity->pev);
+		if (m_pent)
 			m_serialnumber = m_pent->serialnumber;
 	}
 	else
@@ -59,7 +59,7 @@ CBaseEntity * EHANDLE :: operator = ( CBaseEntity *pEntity )
 	return pEntity;
 }
 
-CBaseEntity * EHANDLE :: operator -> ()
+CBaseEntity* EHANDLE ::operator->()
 {
-	return ( CBaseEntity * ) GET_PRIVATE( Get() );
+	return (CBaseEntity*)GET_PRIVATE(Get());
 }

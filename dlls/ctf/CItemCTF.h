@@ -25,14 +25,14 @@ public:
 	static CItemSpawnCTF* m_pLastSpawn;
 
 public:
-	bool KeyValue( KeyValueData* pkvd ) override;
+	bool KeyValue(KeyValueData* pkvd) override;
 	void Precache() override;
 	void Spawn() override;
 
 	void SetObjectCollisionBox() override
 	{
-		pev->absmin = pev->origin + Vector( -16, -16, 0 );
-		pev->absmax = pev->origin + Vector( 16, 16, 48 );
+		pev->absmin = pev->origin + Vector(-16, -16, 0);
+		pev->absmax = pev->origin + Vector(16, 16, 48);
 	}
 
 	void EXPORT DropPreThink();
@@ -41,15 +41,15 @@ public:
 
 	void EXPORT CarryThink();
 
-	void EXPORT ItemTouch( CBaseEntity* pOther );
+	void EXPORT ItemTouch(CBaseEntity* pOther);
 
-	virtual void RemoveEffect( CBasePlayer* pPlayer ) {}
+	virtual void RemoveEffect(CBasePlayer* pPlayer) {}
 
-	virtual bool MyTouch( CBasePlayer* pPlayer ) { return false; }
+	virtual bool MyTouch(CBasePlayer* pPlayer) { return false; }
 
-	void DropItem( CBasePlayer* pPlayer, bool bForceRespawn );
-	void ScatterItem( CBasePlayer* pPlayer );
-	void ThrowItem( CBasePlayer* pPlayer );
+	void DropItem(CBasePlayer* pPlayer, bool bForceRespawn);
+	void ScatterItem(CBasePlayer* pPlayer);
+	void ThrowItem(CBasePlayer* pPlayer);
 
 	CTFTeam team_no;
 	int m_iLastTouched;

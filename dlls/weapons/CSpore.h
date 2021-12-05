@@ -25,16 +25,16 @@ class CSpore : public CGrenade
 public:
 	enum class SporeType
 	{
-		ROCKET		= 1,
-		GRENADE		= 2
+		ROCKET = 1,
+		GRENADE = 2
 	};
 
 public:
 	using BaseClass = CGrenade;
 
 #ifndef CLIENT_DLL
-	bool Save( CSave &save ) override;
-	bool Restore( CRestore &restore ) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 
 	static TYPEDESCRIPTION m_SaveData[];
 #endif
@@ -51,13 +51,13 @@ public:
 
 	void EXPORT GibThink();
 
-	void EXPORT RocketTouch( CBaseEntity* pOther );
+	void EXPORT RocketTouch(CBaseEntity* pOther);
 
-	void EXPORT MyBounceTouch( CBaseEntity* pOther );
+	void EXPORT MyBounceTouch(CBaseEntity* pOther);
 
-	static CSpore* CreateSpore( 
+	static CSpore* CreateSpore(
 		const Vector& vecOrigin, const Vector& vecAngles, CBaseEntity* pOwner,
-		SporeType sporeType, bool bIsAI, bool bPuked );
+		SporeType sporeType, bool bIsAI, bool bPuked);
 
 private:
 	int m_iBlow;

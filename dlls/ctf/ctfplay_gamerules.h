@@ -61,49 +61,49 @@ public:
 
 	const char* GetGameDescription() override { return "OpFor CTF"; }
 
-	bool ClientConnected( edict_t* pEntity, const char* pszName, const char* pszAddress, char* szRejectReason ) override;
+	bool ClientConnected(edict_t* pEntity, const char* pszName, const char* pszAddress, char* szRejectReason) override;
 
-	void InitHUD( CBasePlayer* pPlayer ) override;
+	void InitHUD(CBasePlayer* pPlayer) override;
 
-	void ClientDisconnected( edict_t* pClient ) override;
+	void ClientDisconnected(edict_t* pClient) override;
 
-	void UpdateGameMode( CBasePlayer* pPlayer ) override;
+	void UpdateGameMode(CBasePlayer* pPlayer) override;
 
-	bool FPlayerCanTakeDamage( CBasePlayer* pPlayer, CBaseEntity* pAttacker ) override;
+	bool FPlayerCanTakeDamage(CBasePlayer* pPlayer, CBaseEntity* pAttacker) override;
 
-	bool ShouldAutoAim( CBasePlayer* pPlayer, edict_t* target ) override;
+	bool ShouldAutoAim(CBasePlayer* pPlayer, edict_t* target) override;
 
-	void PlayerSpawn( CBasePlayer* pPlayer ) override;
+	void PlayerSpawn(CBasePlayer* pPlayer) override;
 
-	void PlayerThink( CBasePlayer* pPlayer ) override;
+	void PlayerThink(CBasePlayer* pPlayer) override;
 
-	bool ClientCommand( CBasePlayer* pPlayer, const char* pcmd ) override;
+	bool ClientCommand(CBasePlayer* pPlayer, const char* pcmd) override;
 
-	void ClientUserInfoChanged( CBasePlayer* pPlayer, char* infobuffer ) override;
+	void ClientUserInfoChanged(CBasePlayer* pPlayer, char* infobuffer) override;
 
-	int IPointsForKill( CBasePlayer* pAttacker, CBasePlayer* pKilled ) override;
+	int IPointsForKill(CBasePlayer* pAttacker, CBasePlayer* pKilled) override;
 
-	void PlayerKilled( CBasePlayer* pVictim, entvars_t* pKiller, entvars_t* pInflictor ) override;
+	void PlayerKilled(CBasePlayer* pVictim, entvars_t* pKiller, entvars_t* pInflictor) override;
 
-	void DeathNotice( CBasePlayer* pVictim, entvars_t* pKiller, entvars_t* pevInflictor ) override;
+	void DeathNotice(CBasePlayer* pVictim, entvars_t* pKiller, entvars_t* pevInflictor) override;
 
-	bool CanHaveAmmo( CBasePlayer* pPlayer, const char* pszAmmoName, int iMaxCarry ) override;
+	bool CanHaveAmmo(CBasePlayer* pPlayer, const char* pszAmmoName, int iMaxCarry) override;
 
-	const char* GetTeamID( CBaseEntity* pEntity ) override;
+	const char* GetTeamID(CBaseEntity* pEntity) override;
 
-	int PlayerRelationship( CBaseEntity* pPlayer, CBaseEntity* pTarget ) override;
+	int PlayerRelationship(CBaseEntity* pPlayer, CBaseEntity* pTarget) override;
 
-	int GetTeamIndex( const char* pTeamName ) override;
+	int GetTeamIndex(const char* pTeamName) override;
 
-	const char* GetIndexedTeamName( int teamIndex ) override;
+	const char* GetIndexedTeamName(int teamIndex) override;
 
-	bool IsValidTeam( const char* pTeamName ) override;
+	bool IsValidTeam(const char* pTeamName) override;
 
-	void ChangePlayerTeam( CBasePlayer* pPlayer, const char* pCharName, bool bKill, bool bGib ) override;
+	void ChangePlayerTeam(CBasePlayer* pPlayer, const char* pCharName, bool bKill, bool bGib) override;
 
-	const char* SetDefaultPlayerTeam( CBasePlayer* pPlayer ) override;
+	const char* SetDefaultPlayerTeam(CBasePlayer* pPlayer) override;
 
-	const char* GetCharacterType( int iTeamNum, int iCharNum ) override;
+	const char* GetCharacterType(int iTeamNum, int iCharNum) override;
 
 	int GetNumTeams() override;
 
@@ -114,8 +114,8 @@ public:
 	void GoToIntermission() override;
 
 private:
-	void SendTeamStatInfo( CTFTeam iTeamNum );
-	void SendPlayerStatInfo( CBasePlayer* pPlayer );
+	void SendTeamStatInfo(CTFTeam iTeamNum);
+	void SendPlayerStatInfo(CBasePlayer* pPlayer);
 
 	void RecountTeams();
 
@@ -129,14 +129,14 @@ private:
 	int m_iStatsPlayer = 1;
 };
 
-extern char* pszPlayerIPs[ SV_MAX_PLAYERS * 2 ];
+extern char* pszPlayerIPs[SV_MAX_PLAYERS * 2];
 
-const char* GetTeamName( edict_t *pEntity );
+const char* GetTeamName(edict_t* pEntity);
 
-void GetLosingTeam( int& iTeamNum, int& iScoreDiff );
+void GetLosingTeam(int& iTeamNum, int& iScoreDiff);
 
-void RespawnPlayerCTFPowerups( CBasePlayer* pPlayer, bool bForceRespawn );
-void ScatterPlayerCTFPowerups( CBasePlayer* pPlayer );
-void DropPlayerCTFPowerup( CBasePlayer* pPlayer );
+void RespawnPlayerCTFPowerups(CBasePlayer* pPlayer, bool bForceRespawn);
+void ScatterPlayerCTFPowerups(CBasePlayer* pPlayer);
+void DropPlayerCTFPowerup(CBasePlayer* pPlayer);
 void FlushCTFPowerupTimes();
 void InitItemsForPlayer(CBasePlayer* pPlayer);

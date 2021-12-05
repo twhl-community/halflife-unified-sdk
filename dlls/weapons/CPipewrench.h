@@ -48,8 +48,8 @@ public:
 	using BaseClass = CBasePlayerWeapon;
 
 #ifndef CLIENT_DLL
-	bool Save( CSave &save ) override;
-	bool Restore( CRestore &restore ) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 
 	static TYPEDESCRIPTION m_SaveData[];
 #endif
@@ -61,23 +61,23 @@ public:
 
 	void PrimaryAttack() override;
 	void SecondaryAttack() override;
-	bool Swing( const bool bFirst );
+	bool Swing(const bool bFirst);
 	void EXPORT BigSwing();
 	bool Deploy() override;
 	void Holster() override;
 	void WeaponIdle() override;
 
-	void GetWeaponData( weapon_data_t& data ) override;
+	void GetWeaponData(weapon_data_t& data) override;
 
-	void SetWeaponData( const weapon_data_t& data ) override;
+	void SetWeaponData(const weapon_data_t& data) override;
 
 	int iItemSlot() override;
 
-	bool GetItemInfo( ItemInfo* p ) override;
+	bool GetItemInfo(ItemInfo* p) override;
 
 	bool UseDecrement() override
 	{
-#if defined( CLIENT_WEAPONS )
+#if defined(CLIENT_WEAPONS)
 		return UTIL_DefaultUseDecrement();
 #else
 		return false;

@@ -40,23 +40,23 @@
 #include "../com_weapons.h"
 #include "../demo.h"
 
-extern globalvars_t *gpGlobals;
+extern globalvars_t* gpGlobals;
 extern int g_iUser1;
 
 // Pool of client side entities/entvars_t
-static entvars_t	ev[ 32 ];
-static int			num_ents = 0;
+static entvars_t ev[32];
+static int num_ents = 0;
 
 // The entity we'll use to represent the local client
-static CBasePlayer	player;
+static CBasePlayer player;
 
 // Local version of game .dll global variables ( time, etc. )
-static globalvars_t	Globals; 
+static globalvars_t Globals;
 
-static CBasePlayerWeapon *g_pWpns[ 32 ];
+static CBasePlayerWeapon* g_pWpns[32];
 
 float g_flApplyVel = 0.0;
-bool   g_irunninggausspred = false;
+bool g_irunninggausspred = false;
 
 Vector previousorigin;
 
@@ -98,29 +98,29 @@ AlertMessage
 Print debug messages to console
 ======================
 */
-void AlertMessage( ALERT_TYPE atype, const char *szFmt, ... )
+void AlertMessage(ALERT_TYPE atype, const char* szFmt, ...)
 {
-	va_list		argptr;
-	static char	string[1024];
-	
-	va_start (argptr, szFmt);
-	vsprintf (string, szFmt,argptr);
-	va_end (argptr);
+	va_list argptr;
+	static char string[1024];
 
-	gEngfuncs.Con_Printf( "cl:  " );
-	gEngfuncs.Con_Printf( string );
+	va_start(argptr, szFmt);
+	vsprintf(string, szFmt, argptr);
+	va_end(argptr);
+
+	gEngfuncs.Con_Printf("cl:  ");
+	gEngfuncs.Con_Printf(string);
 }
 
 //Returns if it's multiplayer.
 //Mostly used by the client side weapons.
-bool bIsMultiplayer ()
+bool bIsMultiplayer()
 {
 	return gEngfuncs.GetMaxClients() != 1;
 }
 //Just loads a v_ model.
-void LoadVModel ( const char *szViewModel, CBasePlayer *m_pPlayer )
+void LoadVModel(const char* szViewModel, CBasePlayer* m_pPlayer)
 {
-	gEngfuncs.CL_LoadModel( szViewModel, &m_pPlayer->pev->viewmodel );
+	gEngfuncs.CL_LoadModel(szViewModel, &m_pPlayer->pev->viewmodel);
 }
 
 int UTIL_DefaultPlaybackFlags()
@@ -151,23 +151,23 @@ Links the raw entity to an entvars_s holder.  If a player is passed in as the ow
 we set up the m_pPlayer field.
 =====================
 */
-void HUD_PrepEntity( CBaseEntity *pEntity, CBasePlayer *pWeaponOwner )
+void HUD_PrepEntity(CBaseEntity* pEntity, CBasePlayer* pWeaponOwner)
 {
-	memset( &ev[ num_ents ], 0, sizeof( entvars_t ) );
-	pEntity->pev = &ev[ num_ents++ ];
+	memset(&ev[num_ents], 0, sizeof(entvars_t));
+	pEntity->pev = &ev[num_ents++];
 
 	pEntity->Precache();
 	pEntity->Spawn();
 
-	if ( pWeaponOwner )
+	if (pWeaponOwner)
 	{
 		ItemInfo info;
 
 		memset(&info, 0, sizeof(info));
-		
-		((CBasePlayerWeapon *)pEntity)->m_pPlayer = pWeaponOwner;
-		
-		((CBasePlayerWeapon *)pEntity)->GetItemInfo( &info );
+
+		((CBasePlayerWeapon*)pEntity)->m_pPlayer = pWeaponOwner;
+
+		((CBasePlayerWeapon*)pEntity)->GetItemInfo(&info);
 
 		CBasePlayerItem::ItemInfoArray[info.iId] = info;
 
@@ -181,7 +181,7 @@ void HUD_PrepEntity( CBaseEntity *pEntity, CBasePlayer *pWeaponOwner )
 			AddAmmoNameToAmmoRegistry(info.pszAmmo2);
 		}
 
-		g_pWpns[ info.iId ] = (CBasePlayerWeapon *)pEntity;
+		g_pWpns[info.iId] = (CBasePlayerWeapon*)pEntity;
 	}
 }
 
@@ -192,7 +192,7 @@ CBaseEntity :: Killed
 If weapons code "kills" an entity, just set its effects to EF_NODRAW
 =====================
 */
-void CBaseEntity :: Killed( entvars_t *pevAttacker, int iGib )
+void CBaseEntity ::Killed(entvars_t* pevAttacker, int iGib)
 {
 	pev->effects |= EF_NODRAW;
 }
@@ -203,14 +203,14 @@ CBasePlayerWeapon :: DefaultDeploy
 
 =====================
 */
-bool CBasePlayerWeapon :: DefaultDeploy(const char *szViewModel, const char *szWeaponModel, int iAnim, const char *szAnimExt, int body )
+bool CBasePlayerWeapon ::DefaultDeploy(const char* szViewModel, const char* szWeaponModel, int iAnim, const char* szAnimExt, int body)
 {
-	if ( !CanDeploy() )
+	if (!CanDeploy())
 		return false;
 
-	gEngfuncs.CL_LoadModel( szViewModel, &m_pPlayer->pev->viewmodel );
-	
-	SendWeaponAnim( iAnim, body );
+	gEngfuncs.CL_LoadModel(szViewModel, &m_pPlayer->pev->viewmodel);
+
+	SendWeaponAnim(iAnim, body);
 
 	g_irunninggausspred = false;
 	m_pPlayer->m_flNextAttack = 0.5;
@@ -224,11 +224,11 @@ CBasePlayerWeapon :: PlayEmptySound
 
 =====================
 */
-bool CBasePlayerWeapon :: PlayEmptySound()
+bool CBasePlayerWeapon ::PlayEmptySound()
 {
 	if (m_iPlayEmptySound)
 	{
-		HUD_PlaySound( "weapons/357_cock1.wav", 0.8 );
+		HUD_PlaySound("weapons/357_cock1.wav", 0.8);
 		m_iPlayEmptySound = false;
 		return false;
 	}
@@ -243,10 +243,10 @@ Put away weapon
 =====================
 */
 void CBasePlayerWeapon::Holster()
-{ 
+{
 	m_fInReload = false; // cancel any reload in progress.
 	g_irunninggausspred = false;
-	m_pPlayer->pev->viewmodel = 0; 
+	m_pPlayer->pev->viewmodel = 0;
 }
 
 /*
@@ -256,11 +256,11 @@ CBasePlayerWeapon::SendWeaponAnim
 Animate weapon model
 =====================
 */
-void CBasePlayerWeapon::SendWeaponAnim( int iAnim, int body )
+void CBasePlayerWeapon::SendWeaponAnim(int iAnim, int body)
 {
 	m_pPlayer->pev->weaponanim = iAnim;
-	
-	HUD_SendWeaponAnim( iAnim, body, false );
+
+	HUD_SendWeaponAnim(iAnim, body, false);
 }
 
 /*
@@ -270,33 +270,33 @@ CBaseEntity::FireBulletsPlayer
 Only produces random numbers to match the server ones.
 =====================
 */
-Vector CBaseEntity::FireBulletsPlayer (unsigned int cShots, Vector vecSrc, Vector vecDirShooting, Vector vecSpread, float flDistance, int iBulletType, int iTracerFreq, int iDamage, entvars_t *pevAttacker, int shared_rand )
+Vector CBaseEntity::FireBulletsPlayer(unsigned int cShots, Vector vecSrc, Vector vecDirShooting, Vector vecSpread, float flDistance, int iBulletType, int iTracerFreq, int iDamage, entvars_t* pevAttacker, int shared_rand)
 {
 	float x, y, z;
 
-	for (unsigned int iShot = 1; iShot <= cShots; iShot++ )
+	for (unsigned int iShot = 1; iShot <= cShots; iShot++)
 	{
-		if ( pevAttacker == NULL )
+		if (pevAttacker == NULL)
 		{
 			// get circular gaussian spread
-			do {
-					x = RANDOM_FLOAT(-0.5, 0.5) + RANDOM_FLOAT(-0.5, 0.5);
-					y = RANDOM_FLOAT(-0.5, 0.5) + RANDOM_FLOAT(-0.5, 0.5);
-					z = x*x+y*y;
+			do
+			{
+				x = RANDOM_FLOAT(-0.5, 0.5) + RANDOM_FLOAT(-0.5, 0.5);
+				y = RANDOM_FLOAT(-0.5, 0.5) + RANDOM_FLOAT(-0.5, 0.5);
+				z = x * x + y * y;
 			} while (z > 1);
 		}
 		else
 		{
 			//Use player's random seed.
 			// get circular gaussian spread
-			x = UTIL_SharedRandomFloat( shared_rand + iShot, -0.5, 0.5 ) + UTIL_SharedRandomFloat( shared_rand + ( 1 + iShot ) , -0.5, 0.5 );
-			y = UTIL_SharedRandomFloat( shared_rand + ( 2 + iShot ), -0.5, 0.5 ) + UTIL_SharedRandomFloat( shared_rand + ( 3 + iShot ), -0.5, 0.5 );
+			x = UTIL_SharedRandomFloat(shared_rand + iShot, -0.5, 0.5) + UTIL_SharedRandomFloat(shared_rand + (1 + iShot), -0.5, 0.5);
+			y = UTIL_SharedRandomFloat(shared_rand + (2 + iShot), -0.5, 0.5) + UTIL_SharedRandomFloat(shared_rand + (3 + iShot), -0.5, 0.5);
 			z = x * x + y * y;
 		}
-			
 	}
 
-	return Vector ( x * vecSpread.x, y * vecSpread.y, 0.0 );
+	return Vector(x * vecSpread.x, y * vecSpread.y, 0.0);
 }
 
 /*
@@ -306,29 +306,29 @@ CBasePlayer::SelectItem
   Switch weapons
 =====================
 */
-void CBasePlayer::SelectItem(const char *pstr)
+void CBasePlayer::SelectItem(const char* pstr)
 {
 	if (!pstr)
 		return;
 
-	CBasePlayerItem *pItem = NULL;
+	CBasePlayerItem* pItem = NULL;
 
 	if (!pItem)
 		return;
 
-	
+
 	if (pItem == m_pActiveItem)
 		return;
 
 	if (m_pActiveItem)
-		m_pActiveItem->Holster( );
-	
+		m_pActiveItem->Holster();
+
 	m_pLastItem = m_pActiveItem;
 	m_pActiveItem = pItem;
 
 	if (m_pActiveItem)
 	{
-		m_pActiveItem->Deploy( );
+		m_pActiveItem->Deploy();
 	}
 }
 
@@ -338,12 +338,12 @@ CBasePlayer::Killed
 
 =====================
 */
-void CBasePlayer::Killed( entvars_t *pevAttacker, int iGib )
+void CBasePlayer::Killed(entvars_t* pevAttacker, int iGib)
 {
 	// Holster weapon immediately, to allow it to cleanup
-	if ( m_pActiveItem )
-		 m_pActiveItem->Holster( );
-	
+	if (m_pActiveItem)
+		m_pActiveItem->Holster();
+
 	g_irunninggausspred = false;
 }
 
@@ -356,7 +356,7 @@ CBasePlayer::Spawn
 void CBasePlayer::Spawn()
 {
 	if (m_pActiveItem)
-		m_pActiveItem->Deploy( );
+		m_pActiveItem->Deploy();
 
 	g_irunninggausspred = false;
 }
@@ -368,9 +368,9 @@ UTIL_TraceLine
 Don't actually trace, but act like the trace didn't hit anything.
 =====================
 */
-void UTIL_TraceLine( const Vector &vecStart, const Vector &vecEnd, IGNORE_MONSTERS igmon, edict_t *pentIgnore, TraceResult *ptr )
+void UTIL_TraceLine(const Vector& vecStart, const Vector& vecEnd, IGNORE_MONSTERS igmon, edict_t* pentIgnore, TraceResult* ptr)
 {
-	memset( ptr, 0, sizeof( *ptr ) );
+	memset(ptr, 0, sizeof(*ptr));
 	ptr->flFraction = 1.0;
 }
 
@@ -381,18 +381,18 @@ UTIL_ParticleBox
 For debugging, draw a box around a player made out of particles
 =====================
 */
-void UTIL_ParticleBox( CBasePlayer *player, float *mins, float *maxs, float life, unsigned char r, unsigned char g, unsigned char b )
+void UTIL_ParticleBox(CBasePlayer* player, float* mins, float* maxs, float life, unsigned char r, unsigned char g, unsigned char b)
 {
 	int i;
 	Vector mmin, mmax;
 
-	for ( i = 0; i < 3; i++ )
+	for (i = 0; i < 3; i++)
 	{
-		mmin[ i ] = player->pev->origin[ i ] + mins[ i ];
-		mmax[ i ] = player->pev->origin[ i ] + maxs[ i ];
+		mmin[i] = player->pev->origin[i] + mins[i];
+		mmax[i] = player->pev->origin[i] + maxs[i];
 	}
 
-	gEngfuncs.pEfxAPI->R_ParticleBox( (float *)&mmin, (float *)&mmax, 5.0, 0, 255, 0 );
+	gEngfuncs.pEfxAPI->R_ParticleBox((float*)&mmin, (float*)&mmax, 5.0, 0, 255, 0);
 }
 
 /*
@@ -405,31 +405,31 @@ For debugging, draw boxes for other collidable players
 void UTIL_ParticleBoxes()
 {
 	int idx;
-	physent_t *pe;
-	cl_entity_t *player;
+	physent_t* pe;
+	cl_entity_t* player;
 	Vector mins, maxs;
-	
-	gEngfuncs.pEventAPI->EV_SetUpPlayerPrediction( 0, 1 );
+
+	gEngfuncs.pEventAPI->EV_SetUpPlayerPrediction(0, 1);
 
 	// Store off the old count
 	gEngfuncs.pEventAPI->EV_PushPMStates();
 
 	player = gEngfuncs.GetLocalPlayer();
 	// Now add in all of the players.
-	gEngfuncs.pEventAPI->EV_SetSolidPlayers ( player->index - 1 );	
+	gEngfuncs.pEventAPI->EV_SetSolidPlayers(player->index - 1);
 
-	for ( idx = 1; idx < 100; idx++ )
+	for (idx = 1; idx < 100; idx++)
 	{
-		pe = gEngfuncs.pEventAPI->EV_GetPhysent( idx );
-		if ( !pe )
+		pe = gEngfuncs.pEventAPI->EV_GetPhysent(idx);
+		if (!pe)
 			break;
 
-		if ( pe->info >= 1 && pe->info <= gEngfuncs.GetMaxClients() )
+		if (pe->info >= 1 && pe->info <= gEngfuncs.GetMaxClients())
 		{
 			mins = pe->origin + pe->mins;
 			maxs = pe->origin + pe->maxs;
 
-			gEngfuncs.pEfxAPI->R_ParticleBox( (float *)&mins, (float *)&maxs, 0, 0, 255, 2.0 );
+			gEngfuncs.pEfxAPI->R_ParticleBox((float*)&mins, (float*)&maxs, 0, 0, 255, 2.0);
 		}
 	}
 
@@ -443,9 +443,9 @@ UTIL_ParticleLine
 For debugging, draw a line made out of particles
 =====================
 */
-void UTIL_ParticleLine( CBasePlayer *player, float *start, float *end, float life, unsigned char r, unsigned char g, unsigned char b )
+void UTIL_ParticleLine(CBasePlayer* player, float* start, float* end, float life, unsigned char r, unsigned char g, unsigned char b)
 {
-	gEngfuncs.pEfxAPI->R_ParticleLine( start, end, r, g, b, life );
+	gEngfuncs.pEfxAPI->R_ParticleLine(start, end, r, g, b, life);
 }
 
 /*
@@ -458,7 +458,7 @@ Set up weapons, player and functions needed to run weapons code client-side.
 void HUD_InitClientWeapons()
 {
 	static bool initialized = false;
-	if ( initialized )
+	if (initialized)
 		return;
 
 	initialized = true;
@@ -470,52 +470,52 @@ void HUD_InitClientWeapons()
 	gpGlobals->time = gEngfuncs.GetClientTime();
 
 	// Fake functions
-	g_engfuncs.pfnPrecacheModel		= stub_PrecacheModel;
-	g_engfuncs.pfnPrecacheSound		= stub_PrecacheSound;
-	g_engfuncs.pfnPrecacheEvent		= stub_PrecacheEvent;
-	g_engfuncs.pfnNameForFunction	= stub_NameForFunction;
-	g_engfuncs.pfnSetModel			= stub_SetModel;
+	g_engfuncs.pfnPrecacheModel = stub_PrecacheModel;
+	g_engfuncs.pfnPrecacheSound = stub_PrecacheSound;
+	g_engfuncs.pfnPrecacheEvent = stub_PrecacheEvent;
+	g_engfuncs.pfnNameForFunction = stub_NameForFunction;
+	g_engfuncs.pfnSetModel = stub_SetModel;
 	g_engfuncs.pfnSetClientMaxspeed = HUD_SetMaxSpeed;
 
 	// Handled locally
-	g_engfuncs.pfnPlaybackEvent		= HUD_PlaybackEvent;
-	g_engfuncs.pfnAlertMessage		= AlertMessage;
+	g_engfuncs.pfnPlaybackEvent = HUD_PlaybackEvent;
+	g_engfuncs.pfnAlertMessage = AlertMessage;
 
 	// Pass through to engine
-	g_engfuncs.pfnPrecacheEvent		= gEngfuncs.pfnPrecacheEvent;
-	g_engfuncs.pfnRandomFloat		= gEngfuncs.pfnRandomFloat;
-	g_engfuncs.pfnRandomLong		= gEngfuncs.pfnRandomLong;
-	g_engfuncs.pfnCVarGetPointer	= gEngfuncs.pfnGetCvarPointer;
-	g_engfuncs.pfnCVarGetString		= gEngfuncs.pfnGetCvarString;
-	g_engfuncs.pfnCVarGetFloat		= gEngfuncs.pfnGetCvarFloat;
+	g_engfuncs.pfnPrecacheEvent = gEngfuncs.pfnPrecacheEvent;
+	g_engfuncs.pfnRandomFloat = gEngfuncs.pfnRandomFloat;
+	g_engfuncs.pfnRandomLong = gEngfuncs.pfnRandomLong;
+	g_engfuncs.pfnCVarGetPointer = gEngfuncs.pfnGetCvarPointer;
+	g_engfuncs.pfnCVarGetString = gEngfuncs.pfnGetCvarString;
+	g_engfuncs.pfnCVarGetFloat = gEngfuncs.pfnGetCvarFloat;
 
 	// Allocate a slot for the local player
-	HUD_PrepEntity( &player		, NULL );
+	HUD_PrepEntity(&player, NULL);
 
 	// Allocate slot(s) for each weapon that we are going to be predicting
-	HUD_PrepEntity( &g_Glock	, &player );
-	HUD_PrepEntity( &g_Crowbar	, &player );
-	HUD_PrepEntity( &g_Python	, &player );
-	HUD_PrepEntity( &g_Mp5	, &player );
-	HUD_PrepEntity( &g_Crossbow	, &player );
-	HUD_PrepEntity( &g_Shotgun	, &player );
-	HUD_PrepEntity( &g_Rpg	, &player );
-	HUD_PrepEntity( &g_Gauss	, &player );
-	HUD_PrepEntity( &g_Egon	, &player );
-	HUD_PrepEntity( &g_HGun	, &player );
-	HUD_PrepEntity( &g_HandGren	, &player );
-	HUD_PrepEntity( &g_Satchel	, &player );
-	HUD_PrepEntity( &g_Tripmine	, &player );
-	HUD_PrepEntity( &g_Snark	, &player );
-	HUD_PrepEntity( &g_Grapple, &player );
-	HUD_PrepEntity( &g_Eagle, &player );
-	HUD_PrepEntity( &g_Pipewrench, &player );
-	HUD_PrepEntity( &g_M249, &player );
-	HUD_PrepEntity( &g_Displacer, &player );
-	HUD_PrepEntity( &g_ShockRifle, &player );
-	HUD_PrepEntity( &g_SporeLauncher, &player );
-	HUD_PrepEntity( &g_SniperRifle, &player );
-	HUD_PrepEntity( &g_Knife, &player );
+	HUD_PrepEntity(&g_Glock, &player);
+	HUD_PrepEntity(&g_Crowbar, &player);
+	HUD_PrepEntity(&g_Python, &player);
+	HUD_PrepEntity(&g_Mp5, &player);
+	HUD_PrepEntity(&g_Crossbow, &player);
+	HUD_PrepEntity(&g_Shotgun, &player);
+	HUD_PrepEntity(&g_Rpg, &player);
+	HUD_PrepEntity(&g_Gauss, &player);
+	HUD_PrepEntity(&g_Egon, &player);
+	HUD_PrepEntity(&g_HGun, &player);
+	HUD_PrepEntity(&g_HandGren, &player);
+	HUD_PrepEntity(&g_Satchel, &player);
+	HUD_PrepEntity(&g_Tripmine, &player);
+	HUD_PrepEntity(&g_Snark, &player);
+	HUD_PrepEntity(&g_Grapple, &player);
+	HUD_PrepEntity(&g_Eagle, &player);
+	HUD_PrepEntity(&g_Pipewrench, &player);
+	HUD_PrepEntity(&g_M249, &player);
+	HUD_PrepEntity(&g_Displacer, &player);
+	HUD_PrepEntity(&g_ShockRifle, &player);
+	HUD_PrepEntity(&g_SporeLauncher, &player);
+	HUD_PrepEntity(&g_SniperRifle, &player);
+	HUD_PrepEntity(&g_Knife, &player);
 	HUD_PrepEntity(&g_Penguin, &player);
 }
 
@@ -526,12 +526,12 @@ HUD_GetLastOrg
 Retruns the last position that we stored for egon beam endpoint.
 =====================
 */
-void HUD_GetLastOrg( float *org )
+void HUD_GetLastOrg(float* org)
 {
 	int i;
-	
+
 	// Return last origin
-	for ( i = 0; i < 3; i++ )
+	for (i = 0; i < 3; i++)
 	{
 		org[i] = previousorigin[i];
 	}
@@ -547,57 +547,82 @@ Remember our exact predicted origin so we can draw the egon to the right positio
 void HUD_SetLastOrg()
 {
 	int i;
-	
+
 	// Offset final origin by view_offset
-	for ( i = 0; i < 3; i++ )
+	for (i = 0; i < 3; i++)
 	{
-		previousorigin[i] = g_finalstate->playerstate.origin[i] + g_finalstate->client.view_ofs[ i ];
+		previousorigin[i] = g_finalstate->playerstate.origin[i] + g_finalstate->client.view_ofs[i];
 	}
 }
 
-CBasePlayerWeapon* GetLocalWeapon( int id )
+CBasePlayerWeapon* GetLocalWeapon(int id)
 {
 	if (UTIL_UseOldWeapons())
 	{
 		return nullptr;
 	}
 
-	switch( id )
+	switch (id)
 	{
-	case WEAPON_CROWBAR: return &g_Crowbar;
-	case WEAPON_GLOCK: return &g_Glock;
-	case WEAPON_PYTHON: return &g_Python;
-	case WEAPON_MP5: return &g_Mp5;
-	case WEAPON_CROSSBOW: return &g_Crossbow;
-	case WEAPON_SHOTGUN: return &g_Shotgun;
-	case WEAPON_RPG: return &g_Rpg;
-	case WEAPON_GAUSS: return &g_Gauss;
-	case WEAPON_EGON: return &g_Egon;
-	case WEAPON_HORNETGUN: return &g_HGun;
-	case WEAPON_HANDGRENADE: return &g_HandGren;
-	case WEAPON_SATCHEL: return &g_Satchel;
-	case WEAPON_TRIPMINE: return &g_Tripmine;
-	case WEAPON_SNARK: return &g_Snark;
-	case WEAPON_GRAPPLE: return &g_Grapple;
-	case WEAPON_EAGLE: return &g_Eagle;
-	case WEAPON_PIPEWRENCH: return &g_Pipewrench;
-	case WEAPON_M249: return &g_M249;
-	case WEAPON_DISPLACER: return &g_Displacer;
-	case WEAPON_SHOCKRIFLE: return &g_ShockRifle;
-	case WEAPON_SPORELAUNCHER: return &g_SporeLauncher;
-	case WEAPON_SNIPERRIFLE: return &g_SniperRifle;
-	case WEAPON_KNIFE: return &g_Knife;
-	case WEAPON_PENGUIN: return &g_Penguin;
+	case WEAPON_CROWBAR:
+		return &g_Crowbar;
+	case WEAPON_GLOCK:
+		return &g_Glock;
+	case WEAPON_PYTHON:
+		return &g_Python;
+	case WEAPON_MP5:
+		return &g_Mp5;
+	case WEAPON_CROSSBOW:
+		return &g_Crossbow;
+	case WEAPON_SHOTGUN:
+		return &g_Shotgun;
+	case WEAPON_RPG:
+		return &g_Rpg;
+	case WEAPON_GAUSS:
+		return &g_Gauss;
+	case WEAPON_EGON:
+		return &g_Egon;
+	case WEAPON_HORNETGUN:
+		return &g_HGun;
+	case WEAPON_HANDGRENADE:
+		return &g_HandGren;
+	case WEAPON_SATCHEL:
+		return &g_Satchel;
+	case WEAPON_TRIPMINE:
+		return &g_Tripmine;
+	case WEAPON_SNARK:
+		return &g_Snark;
+	case WEAPON_GRAPPLE:
+		return &g_Grapple;
+	case WEAPON_EAGLE:
+		return &g_Eagle;
+	case WEAPON_PIPEWRENCH:
+		return &g_Pipewrench;
+	case WEAPON_M249:
+		return &g_M249;
+	case WEAPON_DISPLACER:
+		return &g_Displacer;
+	case WEAPON_SHOCKRIFLE:
+		return &g_ShockRifle;
+	case WEAPON_SPORELAUNCHER:
+		return &g_SporeLauncher;
+	case WEAPON_SNIPERRIFLE:
+		return &g_SniperRifle;
+	case WEAPON_KNIFE:
+		return &g_Knife;
+	case WEAPON_PENGUIN:
+		return &g_Penguin;
 
-	default: return nullptr;
+	default:
+		return nullptr;
 	}
 }
 
-void SetLocalBody( int id, int body )
+void SetLocalBody(int id, int body)
 {
-	auto pWeapon = GetLocalWeapon( id );
+	auto pWeapon = GetLocalWeapon(id);
 
-	if( pWeapon )
+	if (pWeapon)
 	{
 		pWeapon->pev->body = body;
 	}
@@ -610,24 +635,24 @@ HUD_WeaponsPostThink
 Run Weapon firing code on client
 =====================
 */
-void HUD_WeaponsPostThink( local_state_s *from, local_state_s *to, usercmd_t *cmd, double time, unsigned int random_seed )
+void HUD_WeaponsPostThink(local_state_s* from, local_state_s* to, usercmd_t* cmd, double time, unsigned int random_seed)
 {
 	int i;
 	int buttonsChanged;
-	CBasePlayerWeapon *pCurrent;
+	CBasePlayerWeapon* pCurrent;
 	weapon_data_t nulldata, *pfrom, *pto;
 	static int lasthealth;
 
-	memset( &nulldata, 0, sizeof( nulldata ) );
+	memset(&nulldata, 0, sizeof(nulldata));
 
-	HUD_InitClientWeapons();	
+	HUD_InitClientWeapons();
 
 	// Get current clock
 	gpGlobals->time = time;
 
 	// Fill in data based on selected weapon
 	// FIXME, make this a method in each weapon?  where you pass in an entity_state_t *?
-	auto pWeapon = GetLocalWeapon( from->client.m_iId );
+	auto pWeapon = GetLocalWeapon(from->client.m_iId);
 
 	// Store pointer to our destination entity_state_t so we can get our origin, etc. from it
 	//  for setting up events on the client
@@ -636,14 +661,13 @@ void HUD_WeaponsPostThink( local_state_s *from, local_state_s *to, usercmd_t *cm
 	// If we are running events/etc. go ahead and see if we
 	//  managed to die between last frame and this one
 	// If so, run the appropriate player killed or spawn function
-	if ( g_runfuncs )
+	if (g_runfuncs)
 	{
-		if ( to->client.health <= 0 && lasthealth > 0 )
+		if (to->client.health <= 0 && lasthealth > 0)
 		{
-			player.Killed( NULL, 0 );
-			
+			player.Killed(NULL, 0);
 		}
-		else if ( to->client.health > 0 && lasthealth <= 0 )
+		else if (to->client.health > 0 && lasthealth <= 0)
 		{
 			player.Spawn();
 		}
@@ -652,39 +676,39 @@ void HUD_WeaponsPostThink( local_state_s *from, local_state_s *to, usercmd_t *cm
 	}
 
 	// We are not predicting the current weapon, just bow out here.
-	if ( !pWeapon )
+	if (!pWeapon)
 		return;
 
-	for ( i = 0; i < 32; i++ )
+	for (i = 0; i < 32; i++)
 	{
-		pCurrent = g_pWpns[ i ];
-		if ( !pCurrent )
+		pCurrent = g_pWpns[i];
+		if (!pCurrent)
 		{
 			continue;
 		}
 
-		pfrom = &from->weapondata[ i ];
-		
-		pCurrent->m_fInReload			= 0 != pfrom->m_fInReload;
-		pCurrent->m_fInSpecialReload	= pfrom->m_fInSpecialReload;
-//		pCurrent->m_flPumpTime			= pfrom->m_flPumpTime;
-		pCurrent->m_iClip				= pfrom->m_iClip;
-		pCurrent->m_flNextPrimaryAttack	= pfrom->m_flNextPrimaryAttack;
+		pfrom = &from->weapondata[i];
+
+		pCurrent->m_fInReload = 0 != pfrom->m_fInReload;
+		pCurrent->m_fInSpecialReload = pfrom->m_fInSpecialReload;
+		//		pCurrent->m_flPumpTime			= pfrom->m_flPumpTime;
+		pCurrent->m_iClip = pfrom->m_iClip;
+		pCurrent->m_flNextPrimaryAttack = pfrom->m_flNextPrimaryAttack;
 		pCurrent->m_flNextSecondaryAttack = pfrom->m_flNextSecondaryAttack;
-		pCurrent->m_flTimeWeaponIdle	= pfrom->m_flTimeWeaponIdle;
-		pCurrent->pev->fuser1			= pfrom->fuser1;
-		pCurrent->m_flStartThrow		= pfrom->fuser2;
-		pCurrent->m_flReleaseThrow		= pfrom->fuser3;
-		pCurrent->m_chargeReady			= pfrom->iuser1;
-		pCurrent->m_fInAttack			= pfrom->iuser2;
-		pCurrent->m_fireState			= pfrom->iuser3;
+		pCurrent->m_flTimeWeaponIdle = pfrom->m_flTimeWeaponIdle;
+		pCurrent->pev->fuser1 = pfrom->fuser1;
+		pCurrent->m_flStartThrow = pfrom->fuser2;
+		pCurrent->m_flReleaseThrow = pfrom->fuser3;
+		pCurrent->m_chargeReady = pfrom->iuser1;
+		pCurrent->m_fInAttack = pfrom->iuser2;
+		pCurrent->m_fireState = pfrom->iuser3;
 
-		pCurrent->m_iSecondaryAmmoType		= (int)from->client.vuser3[ 2 ];
-		pCurrent->m_iPrimaryAmmoType		= (int)from->client.vuser4[ 0 ];
-		player.m_rgAmmo[ pCurrent->m_iPrimaryAmmoType ]	= (int)from->client.vuser4[ 1 ];
-		player.m_rgAmmo[ pCurrent->m_iSecondaryAmmoType ]	= (int)from->client.vuser4[ 2 ];
+		pCurrent->m_iSecondaryAmmoType = (int)from->client.vuser3[2];
+		pCurrent->m_iPrimaryAmmoType = (int)from->client.vuser4[0];
+		player.m_rgAmmo[pCurrent->m_iPrimaryAmmoType] = (int)from->client.vuser4[1];
+		player.m_rgAmmo[pCurrent->m_iSecondaryAmmoType] = (int)from->client.vuser4[2];
 
-		pCurrent->SetWeaponData( *pfrom );
+		pCurrent->SetWeaponData(*pfrom);
 	}
 
 	// For random weapon events, use this seed to seed random # generator
@@ -694,11 +718,11 @@ void HUD_WeaponsPostThink( local_state_s *from, local_state_s *to, usercmd_t *cm
 	player.m_afButtonLast = from->playerstate.oldbuttons;
 
 	// Which buttsons chave changed
-	buttonsChanged = (player.m_afButtonLast ^ cmd->buttons);	// These buttons have changed this frame
-	
+	buttonsChanged = (player.m_afButtonLast ^ cmd->buttons); // These buttons have changed this frame
+
 	// Debounced button codes for pressed/released
 	// The changed ones still down are "pressed"
-	player.m_afButtonPressed =  buttonsChanged & cmd->buttons;	
+	player.m_afButtonPressed = buttonsChanged & cmd->buttons;
 	// The ones not down are "released"
 	player.m_afButtonReleased = buttonsChanged & (~cmd->buttons);
 
@@ -710,7 +734,7 @@ void HUD_WeaponsPostThink( local_state_s *from, local_state_s *to, usercmd_t *cm
 
 	player.pev->deadflag = from->client.deadflag;
 	player.pev->waterlevel = from->client.waterlevel;
-	player.pev->maxspeed    = from->client.maxspeed;
+	player.pev->maxspeed = from->client.maxspeed;
 	player.m_iFOV = from->client.fov;
 	player.pev->weaponanim = from->client.weaponanim;
 	player.pev->viewmodel = from->client.viewmodel;
@@ -719,64 +743,64 @@ void HUD_WeaponsPostThink( local_state_s *from, local_state_s *to, usercmd_t *cm
 	player.m_flAmmoStartCharge = from->client.fuser3;
 
 	//Stores all our ammo info, so the client side weapons can use them.
-	player.ammo_9mm			= (int)from->client.vuser1[0];
-	player.ammo_357			= (int)from->client.vuser1[1];
-	player.ammo_argrens		= (int)from->client.vuser1[2];
-	player.ammo_bolts		= (int)from->client.ammo_nails; //is an int anyways...
-	player.ammo_buckshot	= (int)from->client.ammo_shells; 
-	player.ammo_uranium		= (int)from->client.ammo_cells;
-	player.ammo_hornets		= (int)from->client.vuser2[0];
-	player.ammo_rockets		= (int)from->client.ammo_rockets;
-	player.ammo_spores		= ( int ) from->client.vuser2.y;
-	player.ammo_762			= ( int ) from->client.vuser2.z;
+	player.ammo_9mm = (int)from->client.vuser1[0];
+	player.ammo_357 = (int)from->client.vuser1[1];
+	player.ammo_argrens = (int)from->client.vuser1[2];
+	player.ammo_bolts = (int)from->client.ammo_nails; //is an int anyways...
+	player.ammo_buckshot = (int)from->client.ammo_shells;
+	player.ammo_uranium = (int)from->client.ammo_cells;
+	player.ammo_hornets = (int)from->client.vuser2[0];
+	player.ammo_rockets = (int)from->client.ammo_rockets;
+	player.ammo_spores = (int)from->client.vuser2.y;
+	player.ammo_762 = (int)from->client.vuser2.z;
 
-	
+
 	// Point to current weapon object
-	if ( WEAPON_NONE != from->client.m_iId )
+	if (WEAPON_NONE != from->client.m_iId)
 	{
-		player.m_pActiveItem = g_pWpns[ from->client.m_iId ];
+		player.m_pActiveItem = g_pWpns[from->client.m_iId];
 	}
 
-	if ( player.m_pActiveItem->m_iId == WEAPON_RPG )
+	if (player.m_pActiveItem->m_iId == WEAPON_RPG)
 	{
-		 ( ( CRpg * )player.m_pActiveItem)->m_fSpotActive = static_cast<bool>(from->client.vuser2[ 1 ]);
-		 ( ( CRpg * )player.m_pActiveItem)->m_cActiveRockets = (int)from->client.vuser2[ 2 ];
+		((CRpg*)player.m_pActiveItem)->m_fSpotActive = static_cast<bool>(from->client.vuser2[1]);
+		((CRpg*)player.m_pActiveItem)->m_cActiveRockets = (int)from->client.vuser2[2];
 	}
-	
+
 	// Don't go firing anything if we have died or are spectating
 	// Or if we don't have a weapon model deployed
-	if ( ( player.pev->deadflag != ( DEAD_DISCARDBODY + 1 ) ) && 
-		 !CL_IsDead() && 0 != player.pev->viewmodel && 0 == g_iUser1 )
+	if ((player.pev->deadflag != (DEAD_DISCARDBODY + 1)) &&
+		!CL_IsDead() && 0 != player.pev->viewmodel && 0 == g_iUser1)
 	{
-		if ( player.m_flNextAttack <= 0 )
+		if (player.m_flNextAttack <= 0)
 		{
 			pWeapon->ItemPostFrame();
 		}
 	}
 
 	// Assume that we are not going to switch weapons
-	to->client.m_iId					= from->client.m_iId;
+	to->client.m_iId = from->client.m_iId;
 
 	// Now see if we issued a changeweapon command ( and we're not dead )
-	if ( 0 != cmd->weaponselect && ( player.pev->deadflag != ( DEAD_DISCARDBODY + 1 ) ) )
+	if (0 != cmd->weaponselect && (player.pev->deadflag != (DEAD_DISCARDBODY + 1)))
 	{
 		// Switched to a different weapon?
-		if ( from->weapondata[ cmd->weaponselect ].m_iId == cmd->weaponselect )
+		if (from->weapondata[cmd->weaponselect].m_iId == cmd->weaponselect)
 		{
-			CBasePlayerWeapon *pNew = g_pWpns[ cmd->weaponselect ];
-			if ( pNew && ( pNew != pWeapon ) )
+			CBasePlayerWeapon* pNew = g_pWpns[cmd->weaponselect];
+			if (pNew && (pNew != pWeapon))
 			{
 				// Put away old weapon
 				if (player.m_pActiveItem)
-					player.m_pActiveItem->Holster( );
-				
+					player.m_pActiveItem->Holster();
+
 				player.m_pLastItem = player.m_pActiveItem;
 				player.m_pActiveItem = pNew;
 
 				// Deploy new weapon
 				if (player.m_pActiveItem)
 				{
-					player.m_pActiveItem->Deploy( );
+					player.m_pActiveItem->Deploy();
 				}
 
 				// Update weapon id so we can predict things correctly.
@@ -786,93 +810,93 @@ void HUD_WeaponsPostThink( local_state_s *from, local_state_s *to, usercmd_t *cm
 	}
 
 	// Copy in results of prediction code
-	to->client.viewmodel				= player.pev->viewmodel;
-	to->client.fov						= player.m_iFOV;
-	to->client.weaponanim				= player.pev->weaponanim;
-	to->client.m_flNextAttack			= player.m_flNextAttack;
-	to->client.fuser2					= player.m_flNextAmmoBurn;
-	to->client.fuser3					= player.m_flAmmoStartCharge;
-	to->client.maxspeed					= player.pev->maxspeed;
+	to->client.viewmodel = player.pev->viewmodel;
+	to->client.fov = player.m_iFOV;
+	to->client.weaponanim = player.pev->weaponanim;
+	to->client.m_flNextAttack = player.m_flNextAttack;
+	to->client.fuser2 = player.m_flNextAmmoBurn;
+	to->client.fuser3 = player.m_flAmmoStartCharge;
+	to->client.maxspeed = player.pev->maxspeed;
 
 	//HL Weapons
-	to->client.vuser1[0]				= player.ammo_9mm;
-	to->client.vuser1[1]				= player.ammo_357;
-	to->client.vuser1[2]				= player.ammo_argrens;
+	to->client.vuser1[0] = player.ammo_9mm;
+	to->client.vuser1[1] = player.ammo_357;
+	to->client.vuser1[2] = player.ammo_argrens;
 
-	to->client.ammo_nails				= player.ammo_bolts;
-	to->client.ammo_shells				= player.ammo_buckshot;
-	to->client.ammo_cells				= player.ammo_uranium;
-	to->client.vuser2[0]				= player.ammo_hornets;
-	to->client.ammo_rockets				= player.ammo_rockets;
-	to->client.vuser2.y					= player.ammo_spores;
-	to->client.vuser2.z					= player.ammo_762;
+	to->client.ammo_nails = player.ammo_bolts;
+	to->client.ammo_shells = player.ammo_buckshot;
+	to->client.ammo_cells = player.ammo_uranium;
+	to->client.vuser2[0] = player.ammo_hornets;
+	to->client.ammo_rockets = player.ammo_rockets;
+	to->client.vuser2.y = player.ammo_spores;
+	to->client.vuser2.z = player.ammo_762;
 
-	if ( player.m_pActiveItem->m_iId == WEAPON_RPG )
+	if (player.m_pActiveItem->m_iId == WEAPON_RPG)
 	{
-		 to->client.vuser2[ 1 ] = static_cast<float>(( ( CRpg * )player.m_pActiveItem)->m_fSpotActive);
-		 to->client.vuser2[ 2 ] = ( ( CRpg * )player.m_pActiveItem)->m_cActiveRockets;
+		to->client.vuser2[1] = static_cast<float>(((CRpg*)player.m_pActiveItem)->m_fSpotActive);
+		to->client.vuser2[2] = ((CRpg*)player.m_pActiveItem)->m_cActiveRockets;
 	}
 
 	// Make sure that weapon animation matches what the game .dll is telling us
 	//  over the wire ( fixes some animation glitches )
-	if ( g_runfuncs && ( HUD_GetWeaponAnim() != to->client.weaponanim ) )
+	if (g_runfuncs && (HUD_GetWeaponAnim() != to->client.weaponanim))
 	{
 		//Make sure the 357 has the right body
 		g_Python.pev->body = bIsMultiplayer() ? 1 : 0;
 
 		// Force a fixed anim down to viewmodel
-		HUD_SendWeaponAnim( to->client.weaponanim, pWeapon->pev->body, true );
+		HUD_SendWeaponAnim(to->client.weaponanim, pWeapon->pev->body, true);
 	}
 
-	for ( i = 0; i < 32; i++ )
+	for (i = 0; i < 32; i++)
 	{
-		pCurrent = g_pWpns[ i ];
+		pCurrent = g_pWpns[i];
 
-		pto = &to->weapondata[ i ];
+		pto = &to->weapondata[i];
 
-		if ( !pCurrent )
+		if (!pCurrent)
 		{
-			memset( pto, 0, sizeof( weapon_data_t ) );
+			memset(pto, 0, sizeof(weapon_data_t));
 			continue;
 		}
-	
-		pto->m_fInReload				= static_cast<int>(pCurrent->m_fInReload);
-		pto->m_fInSpecialReload			= pCurrent->m_fInSpecialReload;
-//		pto->m_flPumpTime				= pCurrent->m_flPumpTime;
-		pto->m_iClip					= pCurrent->m_iClip; 
-		pto->m_flNextPrimaryAttack		= pCurrent->m_flNextPrimaryAttack;
-		pto->m_flNextSecondaryAttack	= pCurrent->m_flNextSecondaryAttack;
-		pto->m_flTimeWeaponIdle			= pCurrent->m_flTimeWeaponIdle;
-		pto->fuser1						= pCurrent->pev->fuser1;
-		pto->fuser2						= pCurrent->m_flStartThrow;
-		pto->fuser3						= pCurrent->m_flReleaseThrow;
-		pto->iuser1						= pCurrent->m_chargeReady;
-		pto->iuser2						= pCurrent->m_fInAttack;
-		pto->iuser3						= pCurrent->m_fireState;
+
+		pto->m_fInReload = static_cast<int>(pCurrent->m_fInReload);
+		pto->m_fInSpecialReload = pCurrent->m_fInSpecialReload;
+		//		pto->m_flPumpTime				= pCurrent->m_flPumpTime;
+		pto->m_iClip = pCurrent->m_iClip;
+		pto->m_flNextPrimaryAttack = pCurrent->m_flNextPrimaryAttack;
+		pto->m_flNextSecondaryAttack = pCurrent->m_flNextSecondaryAttack;
+		pto->m_flTimeWeaponIdle = pCurrent->m_flTimeWeaponIdle;
+		pto->fuser1 = pCurrent->pev->fuser1;
+		pto->fuser2 = pCurrent->m_flStartThrow;
+		pto->fuser3 = pCurrent->m_flReleaseThrow;
+		pto->iuser1 = pCurrent->m_chargeReady;
+		pto->iuser2 = pCurrent->m_fInAttack;
+		pto->iuser3 = pCurrent->m_fireState;
 
 		// Decrement weapon counters, server does this at same time ( during post think, after doing everything else )
-		pto->m_flNextReload				-= cmd->msec / 1000.0;
-		pto->m_fNextAimBonus			-= cmd->msec / 1000.0;
-		pto->m_flNextPrimaryAttack		-= cmd->msec / 1000.0;
-		pto->m_flNextSecondaryAttack	-= cmd->msec / 1000.0;
-		pto->m_flTimeWeaponIdle			-= cmd->msec / 1000.0;
-		pto->fuser1						-= cmd->msec / 1000.0;
+		pto->m_flNextReload -= cmd->msec / 1000.0;
+		pto->m_fNextAimBonus -= cmd->msec / 1000.0;
+		pto->m_flNextPrimaryAttack -= cmd->msec / 1000.0;
+		pto->m_flNextSecondaryAttack -= cmd->msec / 1000.0;
+		pto->m_flTimeWeaponIdle -= cmd->msec / 1000.0;
+		pto->fuser1 -= cmd->msec / 1000.0;
 
-		to->client.vuser3[2]				= pCurrent->m_iSecondaryAmmoType;
-		to->client.vuser4[0]				= pCurrent->m_iPrimaryAmmoType;
-		to->client.vuser4[1]				= player.m_rgAmmo[ pCurrent->m_iPrimaryAmmoType ];
-		to->client.vuser4[2]				= player.m_rgAmmo[ pCurrent->m_iSecondaryAmmoType ];
+		to->client.vuser3[2] = pCurrent->m_iSecondaryAmmoType;
+		to->client.vuser4[0] = pCurrent->m_iPrimaryAmmoType;
+		to->client.vuser4[1] = player.m_rgAmmo[pCurrent->m_iPrimaryAmmoType];
+		to->client.vuser4[2] = player.m_rgAmmo[pCurrent->m_iSecondaryAmmoType];
 
 		pCurrent->GetWeaponData(*pto);
 
-/*		if ( pto->m_flPumpTime != -9999 )
+		/*		if ( pto->m_flPumpTime != -9999 )
 		{
 			pto->m_flPumpTime -= cmd->msec / 1000.0;
 			if ( pto->m_flPumpTime < -0.001 )
 				pto->m_flPumpTime = -0.001;
 		}*/
 
-		if ( pto->m_fNextAimBonus < -1.0 )
+		if (pto->m_fNextAimBonus < -1.0)
 		{
 			pto->m_fNextAimBonus = -1.0;
 		}
@@ -946,7 +970,7 @@ void DLLEXPORT HUD_PostRunCmd(struct local_state_s* from, struct local_state_s* 
 
 	g_runfuncs = runfuncs != 0;
 
-#if defined( CLIENT_WEAPONS )
+#if defined(CLIENT_WEAPONS)
 	if (cl_lw && 0 != cl_lw->value)
 	{
 		HUD_WeaponsPostThink(from, to, cmd, time, random_seed);
@@ -957,7 +981,7 @@ void DLLEXPORT HUD_PostRunCmd(struct local_state_s* from, struct local_state_s* 
 		to->client.fov = g_lastFOV;
 	}
 
-	if ( g_irunninggausspred )
+	if (g_irunninggausspred)
 	{
 		Vector forward;
 		gEngfuncs.pfnAngleVectors(v_angles, forward, NULL, NULL);

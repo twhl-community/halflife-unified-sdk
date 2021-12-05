@@ -22,9 +22,9 @@
 
 #ifndef CLIENT_DLL
 //TODO: this isn't in vanilla Op4 so it won't save properly there
-TYPEDESCRIPTION	CPenguin::m_SaveData[] =
-{
-	DEFINE_FIELD(CPenguin, m_fJustThrown, FIELD_BOOLEAN),
+TYPEDESCRIPTION CPenguin::m_SaveData[] =
+	{
+		DEFINE_FIELD(CPenguin, m_fJustThrown, FIELD_BOOLEAN),
 };
 
 IMPLEMENT_SAVERESTORE(CPenguin, CPenguin::BaseClass);
@@ -152,7 +152,7 @@ void CPenguin::PrimaryAttack()
 		UTIL_TraceLine(vecStart, vecEnd, dont_ignore_monsters, nullptr, &tr);
 
 		int flags;
-#if defined( CLIENT_WEAPONS )
+#if defined(CLIENT_WEAPONS)
 		flags = UTIL_DefaultPlaybackFlags();
 #else
 		flags = 0;

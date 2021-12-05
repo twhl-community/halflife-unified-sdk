@@ -18,20 +18,20 @@
 
 #include "CRopeSample.h"
 
-TYPEDESCRIPTION	CRopeSample::m_SaveData[] =
-{
-	DEFINE_FIELD( CRopeSample, m_Data.mPosition, FIELD_VECTOR ),
-	DEFINE_FIELD( CRopeSample, m_Data.mVelocity, FIELD_VECTOR ),
-	DEFINE_FIELD( CRopeSample, m_Data.mForce, FIELD_VECTOR ),
-	DEFINE_FIELD( CRopeSample, m_Data.mExternalForce, FIELD_VECTOR ),
-	DEFINE_FIELD( CRopeSample, m_Data.mApplyExternalForce, FIELD_BOOLEAN ),
-	DEFINE_FIELD( CRopeSample, m_Data.mMassReciprocal, FIELD_FLOAT ),
-	DEFINE_FIELD( CRopeSample, m_pMasterRope, FIELD_CLASSPTR ),
+TYPEDESCRIPTION CRopeSample::m_SaveData[] =
+	{
+		DEFINE_FIELD(CRopeSample, m_Data.mPosition, FIELD_VECTOR),
+		DEFINE_FIELD(CRopeSample, m_Data.mVelocity, FIELD_VECTOR),
+		DEFINE_FIELD(CRopeSample, m_Data.mForce, FIELD_VECTOR),
+		DEFINE_FIELD(CRopeSample, m_Data.mExternalForce, FIELD_VECTOR),
+		DEFINE_FIELD(CRopeSample, m_Data.mApplyExternalForce, FIELD_BOOLEAN),
+		DEFINE_FIELD(CRopeSample, m_Data.mMassReciprocal, FIELD_FLOAT),
+		DEFINE_FIELD(CRopeSample, m_pMasterRope, FIELD_CLASSPTR),
 };
 
-LINK_ENTITY_TO_CLASS( rope_sample, CRopeSample );
+LINK_ENTITY_TO_CLASS(rope_sample, CRopeSample);
 
-IMPLEMENT_SAVERESTORE( CRopeSample, CRopeSample::BaseClass );
+IMPLEMENT_SAVERESTORE(CRopeSample, CRopeSample::BaseClass);
 
 void CRopeSample::Spawn()
 {
@@ -41,7 +41,7 @@ void CRopeSample::Spawn()
 
 CRopeSample* CRopeSample::CreateSample()
 {
-	auto pSample = GetClassPtr( reinterpret_cast<CRopeSample*>( VARS( CREATE_NAMED_ENTITY( MAKE_STRING( "rope_sample" ) ) ) ) );
+	auto pSample = GetClassPtr(reinterpret_cast<CRopeSample*>(VARS(CREATE_NAMED_ENTITY(MAKE_STRING("rope_sample")))));
 
 	pSample->Spawn();
 

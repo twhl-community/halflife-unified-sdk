@@ -38,8 +38,8 @@ public:
 	using BaseClass = CBasePlayerWeapon;
 
 #ifndef CLIENT_DLL
-	bool Save( CSave &save ) override;
-	bool Restore( CRestore &restore ) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 
 	static TYPEDESCRIPTION m_SaveData[];
 #endif
@@ -48,7 +48,7 @@ public:
 
 	void Spawn() override;
 
-	bool AddToPlayer( CBasePlayer* pPlayer ) override;
+	bool AddToPlayer(CBasePlayer* pPlayer) override;
 
 	bool Deploy() override;
 
@@ -64,22 +64,22 @@ public:
 
 	int iItemSlot() override;
 
-	bool GetItemInfo( ItemInfo* p ) override;
+	bool GetItemInfo(ItemInfo* p) override;
 
 	void IncrementAmmo(CBasePlayer* pPlayer) override;
 
 	bool UseDecrement() override
 	{
-#if defined( CLIENT_WEAPONS )
+#if defined(CLIENT_WEAPONS)
 		return UTIL_DefaultUseDecrement();
 #else
 		return false;
 #endif
 	}
 
-	void GetWeaponData( weapon_data_t& data ) override;
+	void GetWeaponData(weapon_data_t& data) override;
 
-	void SetWeaponData( const weapon_data_t& data ) override;
+	void SetWeaponData(const weapon_data_t& data) override;
 
 private:
 	void UpdateLaser();

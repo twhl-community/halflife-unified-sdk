@@ -190,10 +190,7 @@ void CTFGoalFlag::goal_item_dropthink()
 
 	int contents = UTIL_PointContents(pev->origin);
 
-	if (contents == CONTENTS_SOLID
-		|| contents == CONTENTS_SLIME
-		|| contents == CONTENTS_LAVA
-		|| contents == CONTENTS_SKY)
+	if (contents == CONTENTS_SOLID || contents == CONTENTS_SLIME || contents == CONTENTS_LAVA || contents == CONTENTS_SKY)
 	{
 		ReturnFlag();
 	}
@@ -286,8 +283,10 @@ void CTFGoalFlag::ReturnFlagThink()
 
 	switch (m_iGoalNum)
 	{
-	case 1: name = "ReturnedBlackMesaFlag";
-	case 2: name = "ReturnedOpposingForceFlag";
+	case 1:
+		name = "ReturnedBlackMesaFlag";
+	case 2:
+		name = "ReturnedOpposingForceFlag";
 	}
 
 	UTIL_LogPrintf("World triggered \"%s\"\n", name);
@@ -785,8 +784,7 @@ void CTFGoalFlag::DisplayFlagStatus(CBasePlayer* pPlayer)
 			ClientPrint(pPlayer->pev, HUD_PRINTNOTIFY, "#CTFInfoFlagAtBaseOF");
 		break;
 
-	case 2:
-	{
+	case 2: {
 		auto owner = CBaseEntity::Instance(pev->owner);
 
 		if (owner)

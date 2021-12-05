@@ -15,8 +15,8 @@
 
 #pragma once
 
-#define SF_WORLD_DARK		0x0001		// Fade from black at startup
-#define SF_WORLD_TITLE		0x0002		// Display game title at startup
-#define SF_WORLD_FORCETEAM	0x0004		// Force teams
-#define SF_WORLD_CTF		0x0008		// CTF gamemode
-#define SF_WORLD_COOP		0x0010		// Co-op gamemode
+#define SF_WORLD_DARK 0x0001	  // Fade from black at startup
+#define SF_WORLD_TITLE 0x0002	  // Display game title at startup
+#define SF_WORLD_FORCETEAM 0x0004 // Force teams
+#define SF_WORLD_CTF 0x0008		  // CTF gamemode
+#define SF_WORLD_COOP 0x0010	  // Co-op gamemode

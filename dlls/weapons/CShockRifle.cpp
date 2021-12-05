@@ -27,48 +27,48 @@
 #include "CShockRifle.h"
 
 #ifndef CLIENT_DLL
-TYPEDESCRIPTION	CShockRifle::m_SaveData[] =
-{
-	//This isn't restored in the original
-	DEFINE_FIELD( CShockRifle, m_flRechargeTime, FIELD_TIME ),
+TYPEDESCRIPTION CShockRifle::m_SaveData[] =
+	{
+		//This isn't restored in the original
+		DEFINE_FIELD(CShockRifle, m_flRechargeTime, FIELD_TIME),
 };
 
-IMPLEMENT_SAVERESTORE( CShockRifle, CShockRifle::BaseClass );
+IMPLEMENT_SAVERESTORE(CShockRifle, CShockRifle::BaseClass);
 #endif
 
-LINK_ENTITY_TO_CLASS( weapon_shockrifle, CShockRifle );
-LINK_ENTITY_TO_CLASS( weapon_shockroach, CShockRifle );
+LINK_ENTITY_TO_CLASS(weapon_shockrifle, CShockRifle);
+LINK_ENTITY_TO_CLASS(weapon_shockroach, CShockRifle);
 
 void CShockRifle::Precache()
 {
 	BaseClass::Precache();
 
-	PRECACHE_MODEL( "models/v_shock.mdl" );
-	PRECACHE_MODEL( "models/w_shock_rifle.mdl" );
-	PRECACHE_MODEL( "models/p_shock.mdl" );
-	m_iSpriteTexture = PRECACHE_MODEL( "sprites/shockwave.spr" );
-	PRECACHE_MODEL( "sprites/lgtning.spr" );
+	PRECACHE_MODEL("models/v_shock.mdl");
+	PRECACHE_MODEL("models/w_shock_rifle.mdl");
+	PRECACHE_MODEL("models/p_shock.mdl");
+	m_iSpriteTexture = PRECACHE_MODEL("sprites/shockwave.spr");
+	PRECACHE_MODEL("sprites/lgtning.spr");
 
-	PRECACHE_SOUND( "weapons/shock_fire.wav" );
-	PRECACHE_SOUND( "weapons/shock_draw.wav" );
-	PRECACHE_SOUND( "weapons/shock_recharge.wav" );
-	PRECACHE_SOUND( "weapons/shock_discharge.wav" );
+	PRECACHE_SOUND("weapons/shock_fire.wav");
+	PRECACHE_SOUND("weapons/shock_draw.wav");
+	PRECACHE_SOUND("weapons/shock_recharge.wav");
+	PRECACHE_SOUND("weapons/shock_discharge.wav");
 
-	UTIL_PrecacheOther( "shock_beam" );
+	UTIL_PrecacheOther("shock_beam");
 
-	m_usShockRifle = PRECACHE_EVENT( 1, "events/shock.sc" );
+	m_usShockRifle = PRECACHE_EVENT(1, "events/shock.sc");
 }
 
 void CShockRifle::Spawn()
 {
 	// Hack to allow for old names.
-	pev->classname = MAKE_STRING( "weapon_shockrifle" );
+	pev->classname = MAKE_STRING("weapon_shockrifle");
 
 	m_iId = WEAPON_SHOCKRIFLE;
 
 	Precache();
 
-	SET_MODEL( edict(), "models/w_shock_rifle.mdl" );
+	SET_MODEL(edict(), "models/w_shock_rifle.mdl");
 
 	m_iDefaultAmmo = SHOCKRIFLE_DEFAULT_GIVE;
 
@@ -79,12 +79,12 @@ void CShockRifle::Spawn()
 	pev->framerate = 1;
 }
 
-bool CShockRifle::AddToPlayer( CBasePlayer* pPlayer )
+bool CShockRifle::AddToPlayer(CBasePlayer* pPlayer)
 {
-	if( BaseClass::AddToPlayer( pPlayer ) )
+	if (BaseClass::AddToPlayer(pPlayer))
 	{
-		MESSAGE_BEGIN( MSG_ONE, gmsgWeapPickup, nullptr, pPlayer->edict() );
-			WRITE_BYTE( m_iId );
+		MESSAGE_BEGIN(MSG_ONE, gmsgWeapPickup, nullptr, pPlayer->edict());
+		WRITE_BYTE(m_iId);
 		MESSAGE_END();
 		return true;
 	}
@@ -92,12 +92,12 @@ bool CShockRifle::AddToPlayer( CBasePlayer* pPlayer )
 	return false;
 }
 
-void CShockRifle::AttachToPlayer( CBasePlayer* pPlayer )
+void CShockRifle::AttachToPlayer(CBasePlayer* pPlayer)
 {
-	if( 0 == m_iDefaultAmmo )
+	if (0 == m_iDefaultAmmo)
 		m_iDefaultAmmo = 1;
 
-	BaseClass::AttachToPlayer( pPlayer );
+	BaseClass::AttachToPlayer(pPlayer);
 }
 
 bool CShockRifle::CanDeploy()
@@ -107,7 +107,7 @@ bool CShockRifle::CanDeploy()
 
 bool CShockRifle::Deploy()
 {
-	if( UTIL_IsMultiplayer() )
+	if (UTIL_IsMultiplayer())
 	{
 		m_flRechargeTime = gpGlobals->time + 0.25;
 	}
@@ -116,22 +116,22 @@ bool CShockRifle::Deploy()
 		m_flRechargeTime = gpGlobals->time + 0.5;
 	}
 
-	return DefaultDeploy( "models/v_shock.mdl", "models/p_shock.mdl", SHOCKRIFLE_DRAW, "bow" );
+	return DefaultDeploy("models/v_shock.mdl", "models/p_shock.mdl", SHOCKRIFLE_DRAW, "bow");
 }
 
 void CShockRifle::Holster()
 {
 	m_fInReload = false;
 
-	SetThink( nullptr );
+	SetThink(nullptr);
 
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 1.0;
 
-	SendWeaponAnim( SHOCKRIFLE_HOLSTER );
+	SendWeaponAnim(SHOCKRIFLE_HOLSTER);
 
-	if( 0 == m_pPlayer->m_rgAmmo[ m_iPrimaryAmmoType ] )
+	if (0 == m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType])
 	{
-		m_pPlayer->m_rgAmmo[ m_iPrimaryAmmoType ] = 1;
+		m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] = 1;
 	}
 }
 
@@ -143,7 +143,7 @@ void CShockRifle::WeaponIdle()
 
 	m_pPlayer->GetAutoaimVector(AUTOAIM_10DEGREES);
 
-	if( m_flSoundDelay != 0 && gpGlobals->time >= m_flSoundDelay )
+	if (m_flSoundDelay != 0 && gpGlobals->time >= m_flSoundDelay)
 	{
 		m_flSoundDelay = 0;
 	}
@@ -151,14 +151,14 @@ void CShockRifle::WeaponIdle()
 	//This used to be completely broken. It used the current game time instead of the weapon time base, which froze the idle animation.
 	//It also never handled IDLE3, so it only ever played IDLE1, and then only animated it when you held down secondary fire.
 	//This is now fixed. - Solokiller
-	if( m_flTimeWeaponIdle > UTIL_WeaponTimeBase() )
+	if (m_flTimeWeaponIdle > UTIL_WeaponTimeBase())
 		return;
 
 	int iAnim;
 
-	const float flRand = UTIL_SharedRandomFloat( m_pPlayer->random_seed, 0, 1 );
+	const float flRand = UTIL_SharedRandomFloat(m_pPlayer->random_seed, 0, 1);
 
-	if( flRand <= 0.75 )
+	if (flRand <= 0.75)
 	{
 		iAnim = SHOCKRIFLE_IDLE3;
 		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 51.0 / 15.0;
@@ -169,35 +169,35 @@ void CShockRifle::WeaponIdle()
 		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 101.0 / 30.0;
 	}
 
-	SendWeaponAnim( iAnim );
+	SendWeaponAnim(iAnim);
 }
 
 void CShockRifle::PrimaryAttack()
 {
-	if( m_pPlayer->pev->waterlevel == WATERLEVEL_HEAD )
+	if (m_pPlayer->pev->waterlevel == WATERLEVEL_HEAD)
 	{
 		//Water goes zap.
-		const float flVolume = RANDOM_FLOAT( 0.8, 0.9 );
+		const float flVolume = RANDOM_FLOAT(0.8, 0.9);
 
-		EMIT_SOUND_DYN( m_pPlayer->edict(), CHAN_ITEM, "weapons/shock_discharge.wav", flVolume, ATTN_NONE, 0, PITCH_NORM );
+		EMIT_SOUND_DYN(m_pPlayer->edict(), CHAN_ITEM, "weapons/shock_discharge.wav", flVolume, ATTN_NONE, 0, PITCH_NORM);
 
 		RadiusDamage(
-			pev->origin, 
+			pev->origin,
 			m_pPlayer->pev,
 			m_pPlayer->pev,
-			m_pPlayer->m_rgAmmo[ m_iPrimaryAmmoType ] * 100.0, 
-			m_pPlayer->m_rgAmmo[ m_iPrimaryAmmoType ] * 150.0, 
+			m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] * 100.0,
+			m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] * 150.0,
 			CLASS_NONE,
-			DMG_ALWAYSGIB | DMG_BLAST );
+			DMG_ALWAYSGIB | DMG_BLAST);
 
-		m_pPlayer->m_rgAmmo[ m_iPrimaryAmmoType ] = 0;
+		m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] = 0;
 
 		return;
 	}
 
 	Reload();
 
-	if( m_pPlayer->m_rgAmmo[ m_iPrimaryAmmoType ] <= 0 )
+	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
 	{
 		return;
 	}
@@ -205,49 +205,49 @@ void CShockRifle::PrimaryAttack()
 	m_pPlayer->m_iWeaponVolume = LOUD_GUN_VOLUME;
 	m_pPlayer->m_iWeaponFlash = BRIGHT_GUN_FLASH;
 
-	--m_pPlayer->m_rgAmmo[ m_iPrimaryAmmoType ];
+	--m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType];
 
 	m_flRechargeTime = gpGlobals->time + 1.0;
 
 	int flags;
 
-#if defined( CLIENT_WEAPONS )
+#if defined(CLIENT_WEAPONS)
 	flags = UTIL_DefaultPlaybackFlags();
 #else
 	flags = 0;
 #endif
 
-	PLAYBACK_EVENT( flags, m_pPlayer->edict(), m_usShockRifle );
+	PLAYBACK_EVENT(flags, m_pPlayer->edict(), m_usShockRifle);
 
-	m_pPlayer->SetAnimation( PLAYER_ATTACK1 );
+	m_pPlayer->SetAnimation(PLAYER_ATTACK1);
 
 	m_pPlayer->pev->effects |= EF_MUZZLEFLASH;
 
 #ifndef CLIENT_DLL
 	const Vector vecAnglesAim = m_pPlayer->pev->v_angle + m_pPlayer->pev->punchangle;
 
-	UTIL_MakeVectors( vecAnglesAim );
+	UTIL_MakeVectors(vecAnglesAim);
 
-	const auto vecSrc = 
-		m_pPlayer->GetGunPosition() + 
-		gpGlobals->v_forward * 16 + 
-		gpGlobals->v_right * 9 + 
+	const auto vecSrc =
+		m_pPlayer->GetGunPosition() +
+		gpGlobals->v_forward * 16 +
+		gpGlobals->v_right * 9 +
 		gpGlobals->v_up * -7;
 
 	//Update auto-aim
-	m_pPlayer->GetAutoaimVectorFromPoint( vecSrc, AUTOAIM_10DEGREES );
+	m_pPlayer->GetAutoaimVectorFromPoint(vecSrc, AUTOAIM_10DEGREES);
 
-	auto pBeam = CShockBeam::CreateShockBeam( vecSrc, vecAnglesAim, m_pPlayer );
+	auto pBeam = CShockBeam::CreateShockBeam(vecSrc, vecAnglesAim, m_pPlayer);
 
-	UTIL_SetOrigin( pBeam->m_pBeam1->pev, pBeam->pev->origin );
+	UTIL_SetOrigin(pBeam->m_pBeam1->pev, pBeam->pev->origin);
 
-	if( !g_pGameRules->IsMultiplayer() )
+	if (!g_pGameRules->IsMultiplayer())
 	{
-		UTIL_SetOrigin( pBeam->m_pBeam2->pev, pBeam->pev->origin );
+		UTIL_SetOrigin(pBeam->m_pBeam2->pev, pBeam->pev->origin);
 	}
 #endif
 
-	if( UTIL_IsMultiplayer() )
+	if (UTIL_IsMultiplayer())
 	{
 		m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.1;
 	}
@@ -266,7 +266,7 @@ void CShockRifle::SecondaryAttack()
 
 void CShockRifle::Reload()
 {
-	RechargeAmmo( true );
+	RechargeAmmo(true);
 }
 
 void CShockRifle::ItemPostFrame()
@@ -276,18 +276,18 @@ void CShockRifle::ItemPostFrame()
 	Reload();
 }
 
-void CShockRifle::RechargeAmmo( bool bLoud )
+void CShockRifle::RechargeAmmo(bool bLoud)
 {
-	while( m_pPlayer->m_rgAmmo[ m_iPrimaryAmmoType ] < SHOCKRIFLE_DEFAULT_GIVE && m_flRechargeTime < gpGlobals->time )
+	while (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] < SHOCKRIFLE_DEFAULT_GIVE && m_flRechargeTime < gpGlobals->time)
 	{
-		++m_pPlayer->m_rgAmmo[ m_iPrimaryAmmoType ];
+		++m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType];
 
-		if( bLoud )
+		if (bLoud)
 		{
-			EMIT_SOUND( m_pPlayer->edict(), CHAN_WEAPON, "weapons/shock_recharge.wav", VOL_NORM, ATTN_NORM );
+			EMIT_SOUND(m_pPlayer->edict(), CHAN_WEAPON, "weapons/shock_recharge.wav", VOL_NORM, ATTN_NORM);
 		}
 
-		if( UTIL_IsMultiplayer() )
+		if (UTIL_IsMultiplayer())
 		{
 			m_flRechargeTime += 0.25;
 		}
@@ -303,11 +303,11 @@ int CShockRifle::iItemSlot()
 	return 4;
 }
 
-bool CShockRifle::GetItemInfo( ItemInfo* p )
+bool CShockRifle::GetItemInfo(ItemInfo* p)
 {
 	p->pszAmmo1 = "shock";
 	p->iMaxAmmo1 = SHOCKRIFLE_MAX_CLIP;
-	p->pszName = STRING( pev->classname );
+	p->pszName = STRING(pev->classname);
 	p->pszAmmo2 = nullptr;
 	p->iMaxAmmo2 = WEAPON_NOCLIP;
 	p->iMaxClip = WEAPON_NOCLIP;

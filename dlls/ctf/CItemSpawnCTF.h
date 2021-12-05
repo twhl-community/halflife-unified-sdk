@@ -20,7 +20,7 @@
 class CItemSpawnCTF : public CPointEntity
 {
 public:
-	bool KeyValue( KeyValueData* pkvd ) override;
+	bool KeyValue(KeyValueData* pkvd) override;
 
 	CTFTeam team_no;
 };

@@ -22,45 +22,45 @@
 
 #include "CRopeSegment.h"
 
-TYPEDESCRIPTION	CRopeSegment::m_SaveData[] =
-{
-	DEFINE_FIELD( CRopeSegment, m_pSample, FIELD_CLASSPTR ),
-	DEFINE_FIELD( CRopeSegment, m_iszModelName, FIELD_STRING ),
-	DEFINE_FIELD( CRopeSegment, m_flDefaultMass, FIELD_FLOAT ),
-	DEFINE_FIELD( CRopeSegment, m_bCauseDamage, FIELD_BOOLEAN ),
-	DEFINE_FIELD( CRopeSegment, m_bCanBeGrabbed, FIELD_BOOLEAN ),
+TYPEDESCRIPTION CRopeSegment::m_SaveData[] =
+	{
+		DEFINE_FIELD(CRopeSegment, m_pSample, FIELD_CLASSPTR),
+		DEFINE_FIELD(CRopeSegment, m_iszModelName, FIELD_STRING),
+		DEFINE_FIELD(CRopeSegment, m_flDefaultMass, FIELD_FLOAT),
+		DEFINE_FIELD(CRopeSegment, m_bCauseDamage, FIELD_BOOLEAN),
+		DEFINE_FIELD(CRopeSegment, m_bCanBeGrabbed, FIELD_BOOLEAN),
 };
 
-LINK_ENTITY_TO_CLASS( rope_segment, CRopeSegment );
+LINK_ENTITY_TO_CLASS(rope_segment, CRopeSegment);
 
-IMPLEMENT_SAVERESTORE( CRopeSegment, CRopeSegment::BaseClass );
+IMPLEMENT_SAVERESTORE(CRopeSegment, CRopeSegment::BaseClass);
 
 CRopeSegment::CRopeSegment()
 {
-	m_iszModelName = MAKE_STRING( "models/rope16.mdl" );
+	m_iszModelName = MAKE_STRING("models/rope16.mdl");
 }
 
 void CRopeSegment::Precache()
 {
 	BaseClass::Precache();
 
-	PRECACHE_MODEL( const_cast<char*>( STRING( m_iszModelName ) ) );
-	PRECACHE_SOUND( "items/grab_rope.wav" );
+	PRECACHE_MODEL(const_cast<char*>(STRING(m_iszModelName)));
+	PRECACHE_SOUND("items/grab_rope.wav");
 }
 
 void CRopeSegment::Spawn()
 {
 	Precache();
 
-	SET_MODEL( edict(), STRING( m_iszModelName ) );
+	SET_MODEL(edict(), STRING(m_iszModelName));
 
 	pev->movetype = MOVETYPE_NOCLIP;
 	pev->solid = SOLID_TRIGGER;
 	pev->flags |= FL_ALWAYSTHINK;
 	pev->effects = EF_NODRAW;
-	UTIL_SetOrigin( pev, pev->origin );
+	UTIL_SetOrigin(pev, pev->origin);
 
-	UTIL_SetSize( pev, Vector( -30, -30, -30 ), Vector( 30, 30, 30 ) );
+	UTIL_SetSize(pev, Vector(-30, -30, -30), Vector(30, 30, 30));
 
 	pev->nextthink = gpGlobals->time + 0.5;
 }
@@ -70,33 +70,33 @@ void CRopeSegment::Think()
 	//Do nothing.
 }
 
-void CRopeSegment::Touch( CBaseEntity* pOther )
+void CRopeSegment::Touch(CBaseEntity* pOther)
 {
-	if( pOther->IsPlayer() )
+	if (pOther->IsPlayer())
 	{
-		auto pPlayer = static_cast<CBasePlayer*>( pOther );
+		auto pPlayer = static_cast<CBasePlayer*>(pOther);
 
 		//Electrified wires deal damage. - Solokiller
-		if( m_bCauseDamage )
+		if (m_bCauseDamage)
 		{
-			pOther->TakeDamage( pev, pev, 1, DMG_SHOCK );
+			pOther->TakeDamage(pev, pev, 1, DMG_SHOCK);
 		}
 
-		if( m_pSample->GetMasterRope()->IsAcceptingAttachment() && !pPlayer->IsOnRope() )
+		if (m_pSample->GetMasterRope()->IsAcceptingAttachment() && !pPlayer->IsOnRope())
 		{
-			if( m_bCanBeGrabbed )
+			if (m_bCanBeGrabbed)
 			{
 				auto& data = m_pSample->GetData();
 
-				UTIL_SetOrigin( pOther->pev, data.mPosition );
+				UTIL_SetOrigin(pOther->pev, data.mPosition);
 
-				pPlayer->SetOnRopeState( true );
-				pPlayer->SetRope( m_pSample->GetMasterRope() );
-				m_pSample->GetMasterRope()->AttachObjectToSegment( this );
+				pPlayer->SetOnRopeState(true);
+				pPlayer->SetRope(m_pSample->GetMasterRope());
+				m_pSample->GetMasterRope()->AttachObjectToSegment(this);
 
 				const Vector& vecVelocity = pOther->pev->velocity;
 
-				if( vecVelocity.Length() > 0.5 )
+				if (vecVelocity.Length() > 0.5)
 				{
 					//Apply some external force to move the rope. - Solokiller
 					data.mApplyExternalForce = true;
@@ -104,9 +104,9 @@ void CRopeSegment::Touch( CBaseEntity* pOther )
 					data.mExternalForce = data.mExternalForce + vecVelocity * 750;
 				}
 
-				if( m_pSample->GetMasterRope()->IsSoundAllowed() )
+				if (m_pSample->GetMasterRope()->IsSoundAllowed())
 				{
-					EMIT_SOUND( edict(), CHAN_BODY, "items/grab_rope.wav", 1.0, ATTN_NORM );
+					EMIT_SOUND(edict(), CHAN_BODY, "items/grab_rope.wav", 1.0, ATTN_NORM);
 				}
 			}
 			else
@@ -116,26 +116,26 @@ void CRopeSegment::Touch( CBaseEntity* pOther )
 
 				CRopeSegment* pSegment;
 
-				if( pRope->GetNumSegments() <= 4 )
+				if (pRope->GetNumSegments() <= 4)
 				{
 					//Fewer than 5 segments exist, so allow grabbing the last one. - Solokiller
-					pSegment = pRope->GetSegments()[ pRope->GetNumSegments() - 1 ];
-					pSegment->SetCanBeGrabbed( true );
+					pSegment = pRope->GetSegments()[pRope->GetNumSegments() - 1];
+					pSegment->SetCanBeGrabbed(true);
 				}
 				else
 				{
-					pSegment = pRope->GetSegments()[ 4 ];
+					pSegment = pRope->GetSegments()[4];
 				}
 
-				pSegment->Touch( pOther );
+				pSegment->Touch(pOther);
 			}
 		}
 	}
 }
 
-CRopeSegment* CRopeSegment::CreateSegment( CRopeSample* pSample, string_t iszModelName )
+CRopeSegment* CRopeSegment::CreateSegment(CRopeSample* pSample, string_t iszModelName)
 {
-	auto pSegment = GetClassPtr( reinterpret_cast<CRopeSegment*>( VARS( CREATE_NAMED_ENTITY( MAKE_STRING( "rope_segment" ) ) ) ) );
+	auto pSegment = GetClassPtr(reinterpret_cast<CRopeSegment*>(VARS(CREATE_NAMED_ENTITY(MAKE_STRING("rope_segment")))));
 
 	pSegment->m_iszModelName = iszModelName;
 
@@ -150,7 +150,7 @@ CRopeSegment* CRopeSegment::CreateSegment( CRopeSample* pSample, string_t iszMod
 	return pSegment;
 }
 
-void CRopeSegment::ApplyExternalForce( const Vector& vecForce )
+void CRopeSegment::ApplyExternalForce(const Vector& vecForce)
 {
 	m_pSample->GetData().mApplyExternalForce = true;
 
@@ -162,22 +162,22 @@ void CRopeSegment::SetMassToDefault()
 	m_pSample->GetData().mMassReciprocal = m_flDefaultMass;
 }
 
-void CRopeSegment::SetDefaultMass( const float flDefaultMass )
+void CRopeSegment::SetDefaultMass(const float flDefaultMass)
 {
 	m_flDefaultMass = flDefaultMass;
 }
 
-void CRopeSegment::SetMass( const float flMass )
+void CRopeSegment::SetMass(const float flMass)
 {
 	m_pSample->GetData().mMassReciprocal = flMass;
 }
 
-void CRopeSegment::SetCauseDamageOnTouch( const bool bCauseDamage )
+void CRopeSegment::SetCauseDamageOnTouch(const bool bCauseDamage)
 {
 	m_bCauseDamage = bCauseDamage;
 }
 
-void CRopeSegment::SetCanBeGrabbed( const bool bCanBeGrabbed )
+void CRopeSegment::SetCanBeGrabbed(const bool bCanBeGrabbed)
 {
 	m_bCanBeGrabbed = bCanBeGrabbed;
 }

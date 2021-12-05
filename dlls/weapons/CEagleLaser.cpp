@@ -19,19 +19,19 @@
 
 #include "CEagleLaser.h"
 
-LINK_ENTITY_TO_CLASS( eagle_laser, CEagleLaser );
+LINK_ENTITY_TO_CLASS(eagle_laser, CEagleLaser);
 
 //=========================================================
 //=========================================================
-CEagleLaser *CEagleLaser::CreateSpot()
+CEagleLaser* CEagleLaser::CreateSpot()
 {
-	auto pSpot = GetClassPtr( reinterpret_cast<CEagleLaser*>( VARS( CREATE_NAMED_ENTITY( MAKE_STRING( "eagle_laser" ) ) ) ) );
+	auto pSpot = GetClassPtr(reinterpret_cast<CEagleLaser*>(VARS(CREATE_NAMED_ENTITY(MAKE_STRING("eagle_laser")))));
 	pSpot->Spawn();
 
 	//Eagle laser is smaller
 	pSpot->pev->scale = 0.5;
 
-	pSpot->pev->classname = MAKE_STRING( "eagle_laser" );
+	pSpot->pev->classname = MAKE_STRING("eagle_laser");
 
 	return pSpot;
 }

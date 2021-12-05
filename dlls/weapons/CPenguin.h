@@ -56,7 +56,7 @@ public:
 
 	bool UseDecrement() override
 	{
-#if defined( CLIENT_WEAPONS )
+#if defined(CLIENT_WEAPONS)
 		return UTIL_DefaultUseDecrement();
 #else
 		return false;

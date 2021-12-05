@@ -18,34 +18,34 @@
 extern void GameDLLInit();
 
 
-extern cvar_t	displaysoundlist;
+extern cvar_t displaysoundlist;
 
 // multiplayer server rules
-extern cvar_t	teamplay;
-extern cvar_t	fraglimit;
-extern cvar_t	timelimit;
-extern cvar_t	friendlyfire;
-extern cvar_t	falldamage;
-extern cvar_t	weaponstay;
-extern cvar_t	forcerespawn;
-extern cvar_t	flashlight;
-extern cvar_t	aimcrosshair;
-extern cvar_t	decalfrequency;
-extern cvar_t	teamlist;
-extern cvar_t	teamoverride;
-extern cvar_t	defaultteam;
-extern cvar_t	allowmonsters;
+extern cvar_t teamplay;
+extern cvar_t fraglimit;
+extern cvar_t timelimit;
+extern cvar_t friendlyfire;
+extern cvar_t falldamage;
+extern cvar_t weaponstay;
+extern cvar_t forcerespawn;
+extern cvar_t flashlight;
+extern cvar_t aimcrosshair;
+extern cvar_t decalfrequency;
+extern cvar_t teamlist;
+extern cvar_t teamoverride;
+extern cvar_t defaultteam;
+extern cvar_t allowmonsters;
 
-extern cvar_t	ctf_capture;
-extern cvar_t	oldweapons;
-extern cvar_t	multipower;
-extern cvar_t	ctf_autoteam;
+extern cvar_t ctf_capture;
+extern cvar_t oldweapons;
+extern cvar_t multipower;
+extern cvar_t ctf_autoteam;
 extern cvar_t coopplay;
 extern cvar_t coopweprespawn;
 extern cvar_t spamdelay;
 
 // Engine Cvars
-extern cvar_t	*g_psv_gravity;
-extern cvar_t	*g_psv_aim;
-extern cvar_t	*g_footsteps;
+extern cvar_t* g_psv_gravity;
+extern cvar_t* g_psv_aim;
+extern cvar_t* g_footsteps;
 extern cvar_t* g_psv_cheats;

@@ -22,101 +22,101 @@
 
 bool CTFGoal::KeyValue(KeyValueData* pkvd)
 {
-    if (FStrEq("goal_no", pkvd->szKeyName))
-    {
-        m_iGoalNum = strtol(pkvd->szValue, 0, 10);
-        return true;
-    }
-    else if (FStrEq("goal_min", pkvd->szKeyName))
-    {
-        Vector tmp;
-        UTIL_StringToVector(tmp, pkvd->szValue);
-        if (tmp != g_vecZero)
-            m_GoalMin = tmp;
+	if (FStrEq("goal_no", pkvd->szKeyName))
+	{
+		m_iGoalNum = strtol(pkvd->szValue, 0, 10);
+		return true;
+	}
+	else if (FStrEq("goal_min", pkvd->szKeyName))
+	{
+		Vector tmp;
+		UTIL_StringToVector(tmp, pkvd->szValue);
+		if (tmp != g_vecZero)
+			m_GoalMin = tmp;
 
-        return true;
-    }
-    else if (FStrEq("goal_max", pkvd->szKeyName))
-    {
-        Vector tmp;
-        UTIL_StringToVector(tmp, pkvd->szValue);
-        if (tmp != g_vecZero)
-            m_GoalMax = tmp;
+		return true;
+	}
+	else if (FStrEq("goal_max", pkvd->szKeyName))
+	{
+		Vector tmp;
+		UTIL_StringToVector(tmp, pkvd->szValue);
+		if (tmp != g_vecZero)
+			m_GoalMax = tmp;
 
-        return true;
-    }
+		return true;
+	}
 
-    return false;
+	return false;
 }
 
 void CTFGoal::Spawn()
 {
-    if (!FStringNull(pev->model))
-    {
-        const char* modelName = STRING(pev->model);
+	if (!FStringNull(pev->model))
+	{
+		const char* modelName = STRING(pev->model);
 
-        if (*modelName == '*')
-            pev->effects |= EF_NODRAW;
+		if (*modelName == '*')
+			pev->effects |= EF_NODRAW;
 
-        g_engfuncs.pfnPrecacheModel((char*)modelName);
-        g_engfuncs.pfnSetModel(edict(), STRING(pev->model));
-    }
+		g_engfuncs.pfnPrecacheModel((char*)modelName);
+		g_engfuncs.pfnSetModel(edict(), STRING(pev->model));
+	}
 
-    pev->solid = SOLID_TRIGGER;
+	pev->solid = SOLID_TRIGGER;
 
-    if (0 == m_iGoalState)
-        m_iGoalState = 1;
+	if (0 == m_iGoalState)
+		m_iGoalState = 1;
 
-    UTIL_SetOrigin(pev, pev->origin);
+	UTIL_SetOrigin(pev, pev->origin);
 
-    SetThink(&CTFGoal::PlaceGoal);
-    pev->nextthink = gpGlobals->time + 0.2;
+	SetThink(&CTFGoal::PlaceGoal);
+	pev->nextthink = gpGlobals->time + 0.2;
 }
 
 void CTFGoal::SetObjectCollisionBox()
 {
-    if (*STRING(pev->model) == '*')
-    {
-        float max = 0;
-        for (int i = 0; i < 3; ++i)
-        {
-            float v = fabs(pev->mins[i]);
-            if (v > max)
-                max = v;
-            v = fabs(pev->maxs[i]);
-            if (v > max)
-                max = v;
-        }
+	if (*STRING(pev->model) == '*')
+	{
+		float max = 0;
+		for (int i = 0; i < 3; ++i)
+		{
+			float v = fabs(pev->mins[i]);
+			if (v > max)
+				max = v;
+			v = fabs(pev->maxs[i]);
+			if (v > max)
+				max = v;
+		}
 
-        for (int i = 0; i < 3; ++i)
-        {
-            pev->absmin[i] = pev->origin[i] - max;
-            pev->absmax[i] = pev->origin[i] + max;
-        }
+		for (int i = 0; i < 3; ++i)
+		{
+			pev->absmin[i] = pev->origin[i] - max;
+			pev->absmax[i] = pev->origin[i] + max;
+		}
 
-        pev->absmin.x -= 1.0;
-        pev->absmin.y -= 1.0;
-        pev->absmin.z -= 1.0;
-        pev->absmax.x += 1.0;
-        pev->absmax.y += 1.0;
-        pev->absmax.z += 1.0;
-    }
-    else
-    {
-        pev->absmin = pev->origin + Vector(-24, -24, 0);
-        pev->absmax = pev->origin + Vector(24, 24, 16);
-    }
+		pev->absmin.x -= 1.0;
+		pev->absmin.y -= 1.0;
+		pev->absmin.z -= 1.0;
+		pev->absmax.x += 1.0;
+		pev->absmax.y += 1.0;
+		pev->absmax.z += 1.0;
+	}
+	else
+	{
+		pev->absmin = pev->origin + Vector(-24, -24, 0);
+		pev->absmax = pev->origin + Vector(24, 24, 16);
+	}
 }
 
 void CTFGoal::StartGoal()
 {
-    SetThink(&CTFGoal::PlaceGoal);
-    pev->nextthink = gpGlobals->time + 0.2;
+	SetThink(&CTFGoal::PlaceGoal);
+	pev->nextthink = gpGlobals->time + 0.2;
 }
 
 void CTFGoal::PlaceGoal()
 {
-    pev->movetype = MOVETYPE_NONE;
-    pev->velocity = g_vecZero;
-    pev->oldorigin = pev->origin;
+	pev->movetype = MOVETYPE_NONE;
+	pev->velocity = g_vecZero;
+	pev->oldorigin = pev->origin;
 }

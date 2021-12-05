@@ -5,7 +5,7 @@
 // Valve, L.L.C., or in accordance with the terms and conditions stipulated in
 // the agreement/contract under which the contents have been supplied.
 //
-// Purpose: TFC Stats Menu 
+// Purpose: TFC Stats Menu
 //
 // $Workfile:     $
 // $Date:         $
@@ -59,21 +59,21 @@ struct team_stat_info_t
 };
 
 
-#define STATSMENU_TITLE_X				XRES(40)
-#define STATSMENU_TITLE_Y				YRES(32)
-#define STATSMENU_TOPLEFT_BUTTON_X		XRES(40)
-#define STATSMENU_TOPLEFT_BUTTON_Y		YRES(400)
-#define STATSMENU_BUTTON_SIZE_X			XRES(124)
-#define STATSMENU_BUTTON_SIZE_Y			YRES(24)
-#define STATSMENU_BUTTON_SPACER_Y		YRES(8)
-#define STATSMENU_WINDOW_X				XRES(40)
-#define STATSMENU_WINDOW_Y				YRES(80)
-#define STATSMENU_WINDOW_SIZE_X			XRES(600)
-#define STATSMENU_WINDOW_SIZE_Y			YRES(312)
-#define STATSMENU_WINDOW_TEXT_X			XRES(150)
-#define STATSMENU_WINDOW_TEXT_Y			YRES(80)
-#define STATSMENU_WINDOW_NAME_X			XRES(150)
-#define STATSMENU_WINDOW_NAME_Y			YRES(8)
+#define STATSMENU_TITLE_X XRES(40)
+#define STATSMENU_TITLE_Y YRES(32)
+#define STATSMENU_TOPLEFT_BUTTON_X XRES(40)
+#define STATSMENU_TOPLEFT_BUTTON_Y YRES(400)
+#define STATSMENU_BUTTON_SIZE_X XRES(124)
+#define STATSMENU_BUTTON_SIZE_Y YRES(24)
+#define STATSMENU_BUTTON_SPACER_Y YRES(8)
+#define STATSMENU_WINDOW_X XRES(40)
+#define STATSMENU_WINDOW_Y YRES(80)
+#define STATSMENU_WINDOW_SIZE_X XRES(600)
+#define STATSMENU_WINDOW_SIZE_Y YRES(312)
+#define STATSMENU_WINDOW_TEXT_X XRES(150)
+#define STATSMENU_WINDOW_TEXT_Y YRES(80)
+#define STATSMENU_WINDOW_NAME_X XRES(150)
+#define STATSMENU_WINDOW_NAME_Y YRES(8)
 
 static char szStatsBuf[StatsTeamsCount][1024];
 static int g_iWinningTeam = 0;
@@ -392,29 +392,19 @@ bool CStatsMenuPanel::MsgFunc_StatsInfo(const char* pszName, int iSize, void* pb
 					g_TeamStatInfo[teamNum].iDamageVal,
 					g_TeamStatInfo[teamNum].szMostAccel,
 					g_TeamStatInfo[teamNum].iAccelVal / 60,
-					g_TeamStatInfo[teamNum].iAccelVal
-					+ 4 * (g_TeamStatInfo[teamNum].iAccelVal / 60)
-					- (g_TeamStatInfo[teamNum].iAccelVal / 60 << 6),
+					g_TeamStatInfo[teamNum].iAccelVal + 4 * (g_TeamStatInfo[teamNum].iAccelVal / 60) - (g_TeamStatInfo[teamNum].iAccelVal / 60 << 6),
 					g_TeamStatInfo[teamNum].szMostBackpack,
 					g_TeamStatInfo[teamNum].iBackpackVal / 60,
-					g_TeamStatInfo[teamNum].iBackpackVal
-					+ 4 * (g_TeamStatInfo[teamNum].iBackpackVal / 60)
-					- (g_TeamStatInfo[teamNum].iBackpackVal / 60 << 6),
+					g_TeamStatInfo[teamNum].iBackpackVal + 4 * (g_TeamStatInfo[teamNum].iBackpackVal / 60) - (g_TeamStatInfo[teamNum].iBackpackVal / 60 << 6),
 					g_TeamStatInfo[teamNum].szMostHealth,
 					g_TeamStatInfo[teamNum].iHealthVal / 60,
-					g_TeamStatInfo[teamNum].iHealthVal
-					+ 4 * (g_TeamStatInfo[teamNum].iHealthVal / 60)
-					- (g_TeamStatInfo[teamNum].iHealthVal / 60 << 6),
+					g_TeamStatInfo[teamNum].iHealthVal + 4 * (g_TeamStatInfo[teamNum].iHealthVal / 60) - (g_TeamStatInfo[teamNum].iHealthVal / 60 << 6),
 					g_TeamStatInfo[teamNum].szMostShield,
 					g_TeamStatInfo[teamNum].iShieldVal / 60,
-					g_TeamStatInfo[teamNum].iShieldVal
-					+ 4 * (g_TeamStatInfo[teamNum].iShieldVal / 60)
-					- (g_TeamStatInfo[teamNum].iShieldVal / 60 << 6),
+					g_TeamStatInfo[teamNum].iShieldVal + 4 * (g_TeamStatInfo[teamNum].iShieldVal / 60) - (g_TeamStatInfo[teamNum].iShieldVal / 60 << 6),
 					g_TeamStatInfo[teamNum].szMostJump,
 					g_TeamStatInfo[teamNum].iJumpVal / 60,
-					g_TeamStatInfo[teamNum].iJumpVal
-					+ 4 * (g_TeamStatInfo[teamNum].iJumpVal / 60)
-					- (g_TeamStatInfo[teamNum].iJumpVal / 60 << 6));
+					g_TeamStatInfo[teamNum].iJumpVal + 4 * (g_TeamStatInfo[teamNum].iJumpVal / 60) - (g_TeamStatInfo[teamNum].iJumpVal / 60 << 6));
 			}
 
 			m_pStatsWindow[teamNum]->setText(szStatsBuf[teamNum]);

@@ -23,47 +23,47 @@ class COFSkeleton : public CBaseMonster
 {
 public:
 	void Spawn() override;
-	int	Classify() override { return	CLASS_HUMAN_MILITARY; }
+	int Classify() override { return CLASS_HUMAN_MILITARY; }
 
-	bool KeyValue( KeyValueData *pkvd ) override;
+	bool KeyValue(KeyValueData* pkvd) override;
 
-	int	m_iPose;// which sequence to display	-- temporary, don't need to save
-	static char *m_szPoses[ 4 ];
+	int m_iPose; // which sequence to display	-- temporary, don't need to save
+	static char* m_szPoses[4];
 };
 
-char *COFSkeleton::m_szPoses[] = { "s_onback", "s_sitting", "dead_against_wall", "dead_stomach" };
+char* COFSkeleton::m_szPoses[] = {"s_onback", "s_sitting", "dead_against_wall", "dead_stomach"};
 
-bool COFSkeleton::KeyValue( KeyValueData *pkvd )
+bool COFSkeleton::KeyValue(KeyValueData* pkvd)
 {
-	if( FStrEq( pkvd->szKeyName, "pose" ) )
+	if (FStrEq(pkvd->szKeyName, "pose"))
 	{
-		m_iPose = atoi( pkvd->szValue );
+		m_iPose = atoi(pkvd->szValue);
 		return true;
 	}
 
-	return CBaseMonster::KeyValue( pkvd );
+	return CBaseMonster::KeyValue(pkvd);
 }
 
-LINK_ENTITY_TO_CLASS( monster_skeleton_dead, COFSkeleton );
+LINK_ENTITY_TO_CLASS(monster_skeleton_dead, COFSkeleton);
 
 //=========================================================
 // ********** Skeleton SPAWN **********
 //=========================================================
 void COFSkeleton::Spawn()
 {
-	PRECACHE_MODEL( "models/skeleton.mdl" );
-	SET_MODEL( ENT( pev ), "models/skeleton.mdl" );
+	PRECACHE_MODEL("models/skeleton.mdl");
+	SET_MODEL(ENT(pev), "models/skeleton.mdl");
 
 	pev->effects = 0;
 	pev->yaw_speed = 8;
 	pev->sequence = 0;
 	m_bloodColor = DONT_BLEED;
 
-	pev->sequence = LookupSequence( m_szPoses[ m_iPose ] );
+	pev->sequence = LookupSequence(m_szPoses[m_iPose]);
 
-	if( pev->sequence == -1 )
+	if (pev->sequence == -1)
 	{
-		ALERT( at_console, "Dead skeleton with bad pose\n" );
+		ALERT(at_console, "Dead skeleton with bad pose\n");
 	}
 
 	// Corpses have less health

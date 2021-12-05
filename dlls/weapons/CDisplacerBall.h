@@ -29,7 +29,7 @@ public:
 
 	int Classify() override;
 
-	void EXPORT BallTouch( CBaseEntity* pOther );
+	void EXPORT BallTouch(CBaseEntity* pOther);
 
 	void EXPORT FlyThink();
 
@@ -45,16 +45,16 @@ public:
 
 	void ClearBeams();
 
-	void ArmBeam( int iSide );
+	void ArmBeam(int iSide);
 
-	bool ClassifyTarget( CBaseEntity* pTarget );
+	bool ClassifyTarget(CBaseEntity* pTarget);
 
-	static CDisplacerBall* CreateDisplacerBall( const Vector& vecOrigin, const Vector& vecAngles, CBaseEntity* pOwner );
+	static CDisplacerBall* CreateDisplacerBall(const Vector& vecOrigin, const Vector& vecAngles, CBaseEntity* pOwner);
 
 private:
 	int m_iTrail;
 
-	CBeam* m_pBeam[ NUM_BEAMS ];
+	CBeam* m_pBeam[NUM_BEAMS];
 
 	size_t m_uiBeams;
 

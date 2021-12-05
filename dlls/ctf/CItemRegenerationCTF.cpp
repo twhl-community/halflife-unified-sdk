@@ -83,7 +83,7 @@ void CItemRegenerationCTF::Spawn()
 
 	g_engfuncs.pfnPrecacheSound("ctf/itemthrow.wav");
 	g_engfuncs.pfnPrecacheSound("items/ammopickup1.wav");
-	
+
 	Precache();
 
 	//TODO: shouldn't this be using pev->model?

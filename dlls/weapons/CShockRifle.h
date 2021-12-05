@@ -30,8 +30,8 @@ public:
 	using BaseClass = CBasePlayerWeapon;
 
 #ifndef CLIENT_DLL
-	bool Save( CSave &save ) override;
-	bool Restore( CRestore &restore ) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 
 	static TYPEDESCRIPTION m_SaveData[];
 #endif
@@ -40,9 +40,9 @@ public:
 
 	void Spawn() override;
 
-	bool AddToPlayer( CBasePlayer* pPlayer ) override;
+	bool AddToPlayer(CBasePlayer* pPlayer) override;
 
-	void AttachToPlayer( CBasePlayer* pPlayer ) override;
+	void AttachToPlayer(CBasePlayer* pPlayer) override;
 
 	bool CanDeploy() override;
 
@@ -62,11 +62,11 @@ public:
 
 	int iItemSlot() override;
 
-	bool GetItemInfo( ItemInfo* p ) override;
+	bool GetItemInfo(ItemInfo* p) override;
 
 	bool UseDecrement() override
 	{
-#if defined( CLIENT_WEAPONS )
+#if defined(CLIENT_WEAPONS)
 		return UTIL_DefaultUseDecrement();
 #else
 		return false;
@@ -74,7 +74,7 @@ public:
 	}
 
 private:
-	void RechargeAmmo( bool bLoud );
+	void RechargeAmmo(bool bLoud);
 
 private:
 	int m_iSpriteTexture;

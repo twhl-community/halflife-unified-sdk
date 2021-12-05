@@ -22,8 +22,8 @@ public:
 	using BaseClass = CGrenade;
 
 #ifndef CLIENT_DLL
-	bool Save( CSave &save ) override;
-	bool Restore( CRestore &restore ) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 
 	static TYPEDESCRIPTION m_SaveData[];
 #endif
@@ -40,9 +40,9 @@ public:
 
 	void EXPORT WaterExplodeThink();
 
-	void EXPORT BallTouch( CBaseEntity* pOther );
+	void EXPORT BallTouch(CBaseEntity* pOther);
 
-	static CShockBeam* CreateShockBeam( const Vector& vecOrigin, const Vector& vecAngles, CBaseEntity* pOwner );
+	static CShockBeam* CreateShockBeam(const Vector& vecOrigin, const Vector& vecAngles, CBaseEntity* pOwner);
 
 private:
 	void Explode();
