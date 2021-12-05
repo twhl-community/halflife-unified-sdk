@@ -274,6 +274,7 @@
     <ClInclude Include="..\..\dlls\weapons\CShockRifle.h" />
     <ClInclude Include="..\..\dlls\weapons\CSniperRifle.h" />
     <ClInclude Include="..\..\dlls\weapons\CSporeLauncher.h" />
+    <ClInclude Include="..\..\common\PlatformHeaders.h" />
     <ClInclude Include="..\..\common\pmtrace.h" />
     <ClInclude Include="..\..\common\qfont.h" />
     <ClInclude Include="..\..\common\ref_params.h" />
@@ -285,8 +286,6 @@
     <ClInclude Include="..\..\common\triangleapi.h" />
     <ClInclude Include="..\..\common\usercmd.h" />
     <ClInclude Include="..\..\common\weaponinfo.h" />
-    <ClInclude Include="..\..\common\winsani_in.h" />
-    <ClInclude Include="..\..\common\winsani_out.h" />
     <ClInclude Include="..\..\dlls\cdll_dll.h" />
     <ClInclude Include="..\..\engine\APIProxy.h" />
     <ClInclude Include="..\..\engine\cdll_int.h" />
