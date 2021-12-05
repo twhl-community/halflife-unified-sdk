@@ -36,7 +36,7 @@ public:
 
 	void SetYawSpeed() override;
 
-	int TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType ) override;
+	bool TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType ) override;
 
 	void TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType ) override;
 
@@ -88,7 +88,7 @@ void COFLoader::SetYawSpeed()
 	pev->yaw_speed = 90;
 }
 
-int COFLoader::TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType )
+bool COFLoader::TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType )
 {
 	//Don't take damage
 	return true;

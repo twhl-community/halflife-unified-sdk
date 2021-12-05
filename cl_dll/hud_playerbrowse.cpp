@@ -29,7 +29,7 @@
 
 DECLARE_MESSAGE(m_PlayerBrowse, PlyrBrowse);
 
-int CHudPlayerBrowse::Init()
+bool CHudPlayerBrowse::Init()
 {
 	gHUD.AddHudElem(this);
 
@@ -37,12 +37,12 @@ int CHudPlayerBrowse::Init()
 
 	Reset();
 
-	return 1;
+	return true;
 }
 
-int CHudPlayerBrowse::VidInit()
+bool CHudPlayerBrowse::VidInit()
 {
-	return 1;
+	return true;
 }
 
 void CHudPlayerBrowse::InitHUDData()
@@ -52,7 +52,7 @@ void CHudPlayerBrowse::InitHUDData()
 	m_flDelayFade = 0;
 }
 
-int CHudPlayerBrowse::Draw(float flTime)
+bool CHudPlayerBrowse::Draw(float flTime)
 {
 	int r, g, b;
 
@@ -90,9 +90,9 @@ int CHudPlayerBrowse::Draw(float flTime)
 		}
 	}
 
-	if (m_szLineBuffer[0])
+	if ('\0' != m_szLineBuffer[0])
 	{
-		if (m_PowerupSprite.spr)
+		if (0 != m_PowerupSprite.spr)
 		{
 			if (m_flDelayFadeSprite > 0)
 			{
@@ -111,10 +111,10 @@ int CHudPlayerBrowse::Draw(float flTime)
 		gHUD.DrawHudString(ScreenWidth / 2 - 100, ScreenHeight * 0.75, ScreenWidth, m_szLineBuffer, r, g, b);
 	}
 
-	return 1;
+	return true;
 }
 
-int CHudPlayerBrowse::MsgFunc_PlyrBrowse(const char* pszName, int iSize, void* pbuf)
+bool CHudPlayerBrowse::MsgFunc_PlyrBrowse(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 
@@ -136,13 +136,13 @@ int CHudPlayerBrowse::MsgFunc_PlyrBrowse(const char* pszName, int iSize, void* p
 	//TODO: unsafe use of strncat count parameter
 	strncat(m_szNewLineBuffer, READ_STRING(), iSize - 3);
 
-	if (m_szNewLineBuffer[0])
+	if ('\0' != m_szNewLineBuffer[0])
 	{
 		const int items = READ_BYTE();
 
-		if (items)
+		if (0 != items)
 		{
-			if (items & CTFItem::LongJump)
+			if ((items & CTFItem::LongJump) != 0)
 			{
 				const int spriteIndex = gHUD.GetSpriteIndex("score_ctfljump");
 				m_PowerupSprite.spr = gHUD.GetSprite(spriteIndex);
@@ -151,7 +151,7 @@ int CHudPlayerBrowse::MsgFunc_PlyrBrowse(const char* pszName, int iSize, void* p
 				m_PowerupSprite.g = 160;
 				m_PowerupSprite.b = 0;
 			}
-			else if (items & CTFItem::PortableHEV)
+			else if ((items & CTFItem::PortableHEV) != 0)
 			{
 				const int spriteIndex = gHUD.GetSpriteIndex("score_ctfphev");
 				m_PowerupSprite.spr = gHUD.GetSprite(spriteIndex);
@@ -160,7 +160,7 @@ int CHudPlayerBrowse::MsgFunc_PlyrBrowse(const char* pszName, int iSize, void* p
 				m_PowerupSprite.g = 160;
 				m_PowerupSprite.b = 255;
 			}
-			else if (items & CTFItem::Regeneration)
+			else if ((items & CTFItem::Regeneration) != 0)
 			{
 				const int spriteIndex = gHUD.GetSpriteIndex("score_ctfregen");
 				m_PowerupSprite.spr = gHUD.GetSprite(spriteIndex);
@@ -169,7 +169,7 @@ int CHudPlayerBrowse::MsgFunc_PlyrBrowse(const char* pszName, int iSize, void* p
 				m_PowerupSprite.g = 255;
 				m_PowerupSprite.b = 0;
 			}
-			else if (items & CTFItem::Acceleration)
+			else if ((items & CTFItem::Acceleration) != 0)
 			{
 				const int spriteIndex = gHUD.GetSpriteIndex("score_ctfaccel");
 				m_PowerupSprite.spr = gHUD.GetSprite(spriteIndex);
@@ -178,7 +178,7 @@ int CHudPlayerBrowse::MsgFunc_PlyrBrowse(const char* pszName, int iSize, void* p
 				m_PowerupSprite.g = 0;
 				m_PowerupSprite.b = 0;
 			}
-			else if (items & CTFItem::Backpack)
+			else if ((items & CTFItem::Backpack) != 0)
 			{
 				const int spriteIndex = gHUD.GetSpriteIndex("score_ctfbpack");
 				m_PowerupSprite.spr = gHUD.GetSprite(spriteIndex);
@@ -196,7 +196,7 @@ int CHudPlayerBrowse::MsgFunc_PlyrBrowse(const char* pszName, int iSize, void* p
 		m_iHealth = READ_BYTE();
 		m_iArmor = READ_BYTE();
 
-		if (!(m_fFriendly == 0) || !m_iNewTeamNum)
+		if (m_fFriendly || 0 == m_iNewTeamNum)
 		{
 			//TODO: unsafe
 			sprintf(&m_szNewLineBuffer[strlen(m_szNewLineBuffer)], " (%d/%d)", m_iHealth, m_iArmor);
@@ -215,5 +215,5 @@ int CHudPlayerBrowse::MsgFunc_PlyrBrowse(const char* pszName, int iSize, void* p
 		m_flDelayFadeSprite = 255;
 	}
 
-	return 1;
+	return true;
 }

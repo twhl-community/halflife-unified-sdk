@@ -72,7 +72,7 @@ void CTFGoalBase::Spawn()
     vecMin.z = 0;
     UTIL_SetSize(pev, vecMin, vecMax);
 
-    if (!g_engfuncs.pfnDropToFloor(edict()))
+    if (0 == g_engfuncs.pfnDropToFloor(edict()))
     {
         ALERT(
             at_error,
@@ -86,7 +86,7 @@ void CTFGoalBase::Spawn()
     }
     else
     {
-        if (pev->model)
+        if (!FStringNull(pev->model))
         {
             g_engfuncs.pfnPrecacheModel((char*)STRING(pev->model));
             g_engfuncs.pfnSetModel(edict(), STRING(pev->model));

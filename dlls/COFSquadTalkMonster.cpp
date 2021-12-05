@@ -73,7 +73,7 @@ bool COFSquadTalkMonster::OccupySlot( int iDesiredSlots )
 
 	COFSquadTalkMonster *pSquadLeader = MySquadLeader();
 
-	if( !( iDesiredSlots ^ pSquadLeader->m_afSquadSlots ) )
+	if( ( iDesiredSlots ^ pSquadLeader->m_afSquadSlots ) == 0)
 	{
 		// none of the desired slots are available. 
 		return false;
@@ -84,9 +84,9 @@ bool COFSquadTalkMonster::OccupySlot( int iDesiredSlots )
 	for( i = 0; i < NUM_SLOTS; i++ )
 	{
 		iMask = 1 << i;
-		if( iDesiredSlots & iMask ) // am I looking for this bit?
+		if( (iDesiredSlots & iMask ) != 0) // am I looking for this bit?
 		{
-			if( !( iSquadSlots & iMask ) )	// Is it already taken?
+			if( ( iSquadSlots & iMask ) == 0)	// Is it already taken?
 			{
 				// No, use this bit
 				pSquadLeader->m_afSquadSlots |= iMask;
@@ -456,11 +456,9 @@ int COFSquadTalkMonster::SquadRecruit( int searchRadius, int maxMembers )
 //=========================================================
 // CheckEnemy
 //=========================================================
-int COFSquadTalkMonster::CheckEnemy( CBaseEntity *pEnemy )
+bool COFSquadTalkMonster::CheckEnemy( CBaseEntity *pEnemy )
 {
-	int iUpdatedLKP;
-
-	iUpdatedLKP = COFAllyMonster::CheckEnemy( m_hEnemy );
+	const bool iUpdatedLKP = COFAllyMonster::CheckEnemy( m_hEnemy );
 
 	// communicate with squad members about the enemy IF this individual has the same enemy as the squad leader.
 	if( InSquad() && ( CBaseEntity * ) m_hEnemy == MySquadLeader()->m_hEnemy )
@@ -487,12 +485,12 @@ void COFSquadTalkMonster::StartMonster()
 {
 	COFAllyMonster::StartMonster();
 
-	if( ( m_afCapability & bits_CAP_SQUAD ) && !InSquad() )
+	if( ( m_afCapability & bits_CAP_SQUAD ) != 0 && !InSquad() )
 	{
 		if( !FStringNull( pev->netname ) )
 		{
 			// if I have a groupname, I can only recruit if I'm flagged as leader
-			if( !( pev->spawnflags & SF_SQUADMONSTER_LEADER ) )
+			if( ( pev->spawnflags & SF_SQUADMONSTER_LEADER ) == 0)
 			{
 				return;
 			}
@@ -501,7 +499,7 @@ void COFSquadTalkMonster::StartMonster()
 		// try to form squads now.
 		int iSquadSize = SquadRecruit( 1024, 4 );
 
-		if( iSquadSize )
+		if( 0 != iSquadSize )
 		{
 			ALERT( at_aiconsole, "Squad of %d %s formed\n", iSquadSize, STRING( pev->classname ) );
 		}
@@ -664,7 +662,7 @@ bool COFSquadTalkMonster::SquadMemberInRange( const Vector &vecLocation, float f
 	for( int i = 0; i < MAX_SQUAD_MEMBERS; i++ )
 	{
 		COFSquadTalkMonster *pSquadMember = pSquadLeader->MySquadMember( i );
-		if( pSquadMember && ( vecLocation - pSquadMember->pev->origin ).Length2D() <= flDist )
+		if( nullptr != pSquadMember && ( vecLocation - pSquadMember->pev->origin ).Length2D() <= flDist )
 			return true;
 	}
 	return false;
@@ -697,7 +695,7 @@ void COFSquadTalkMonster::FollowerUse( CBaseEntity *pActivator, CBaseEntity *pCa
 	if (pCaller != NULL && pCaller->IsPlayer())
 	{
 		// Pre-disaster followers can't be used
-		if (pev->spawnflags & SF_MONSTER_PREDISASTER)
+		if ((pev->spawnflags & SF_MONSTER_PREDISASTER) != 0)
 		{
 			DeclineFollowing();
 		}
@@ -706,7 +704,7 @@ void COFSquadTalkMonster::FollowerUse( CBaseEntity *pActivator, CBaseEntity *pCa
 			//Player can form squads of up to 6 NPCs
 			LimitFollowers(pCaller, 6);
 
-			if (m_afMemory & bits_MEMORY_PROVOKED)
+			if ((m_afMemory & bits_MEMORY_PROVOKED) != 0)
 				ALERT(at_console, "I'm not following you, you evil person!\n");
 			else
 			{
@@ -760,7 +758,7 @@ bool COFSquadTalkMonster::HealMe( COFSquadTalkMonster* pTarget )
 	return false;
 }
 
-int COFSquadTalkMonster::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool COFSquadTalkMonster::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
 	if (m_MonsterState == MONSTERSTATE_SCRIPT)
 	{
@@ -781,7 +779,7 @@ int COFSquadTalkMonster::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttac
 			if (pSquadMember && pSquadMember->IsAlive() && !pSquadMember->m_hEnemy)
 			{
 				//If they're not being eaten by a barnacle and the attacker is a player...
-				if (m_MonsterState != MONSTERSTATE_PRONE && (pevAttacker->flags & FL_CLIENT))
+				if (m_MonsterState != MONSTERSTATE_PRONE && (pevAttacker->flags & FL_CLIENT) != 0)
 				{
 					//Friendly fire!
 					pSquadMember->Remember(bits_MEMORY_PROVOKED);

@@ -91,8 +91,8 @@ public:
 
 	void EXPORT ChargedBoltTouch( CBaseEntity* pOther );
 
-	int Save( CSave &save ) override;
-	int Restore( CRestore &restore ) override;
+	bool Save( CSave &save ) override;
+	bool Restore( CRestore &restore ) override;
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	int m_iShowerSparks;
@@ -298,7 +298,7 @@ void COFChargedBolt::ChargedBoltTouch( CBaseEntity* pOther )
 
 	if( pOther->pev->takedamage == DAMAGE_NO )
 	{
-		if( !strcmp( "worldspawn", STRING( pOther->pev->classname ) ) )
+		if( 0 == strcmp( "worldspawn", STRING( pOther->pev->classname ) ) )
 		{
 			TraceResult tr;
 			UTIL_TraceLine( pev->origin, pev->origin + pev->velocity * 10, dont_ignore_monsters, edict(), &tr );
@@ -367,8 +367,8 @@ public:
 
 	CUSTOM_SCHEDULES;
 
-	int		Save( CSave &save ) override;
-	int		Restore( CRestore &restore ) override;
+	bool		Save( CSave &save ) override;
+	bool		Restore( CRestore &restore ) override;
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	static const char *pAttackHitSounds[];
@@ -470,7 +470,7 @@ void COFVoltigore :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector
 {
 	//Ignore shock damage since we have a shock based attack
 	//TODO: use a filter based on attacker to identify self harm
-	if ( !( bitsDamageType & DMG_SHOCK ) )
+	if ( ( bitsDamageType & DMG_SHOCK ) == 0)
 	{
 		SpawnBlood(ptr->vecEndPos, BloodColor(), flDamage);// a little surface blood.
 		TraceBleed( flDamage, vecDir, ptr, bitsDamageType );
@@ -497,7 +497,7 @@ bool COFVoltigore::ShouldSpeak()
 		return false;
 	}
 
-	if ( pev->spawnflags & SF_MONSTER_GAG )
+	if ( (pev->spawnflags & SF_MONSTER_GAG ) != 0)
 	{
 		if ( m_MonsterState != MONSTERSTATE_COMBAT )
 		{
@@ -1160,7 +1160,7 @@ Schedule_t *COFVoltigore :: GetSchedule ()
 		pSound = PBestSound();
 
 		ASSERT( pSound != NULL );
-		if ( pSound && (pSound->m_iType & bits_SOUND_DANGER) )
+		if ( pSound && (pSound->m_iType & bits_SOUND_DANGER) != 0)
 		{
 			// dangerous sound nearby!
 			return GetScheduleOfType( SCHED_TAKE_COVER_FROM_BEST_SOUND );
@@ -1313,7 +1313,7 @@ void COFVoltigore::DeathGibThink()
 	{
 		for( auto i = 0; i < 2; ++i )
 		{
-			const auto side = ( i % 2 ) == 0;
+			const auto side = static_cast<int>(( i % 2 ) == 0);
 
 			UTIL_MakeAimVectors( pev->angles );
 

@@ -246,7 +246,7 @@ void CSpore::MyBounceTouch( CBaseEntity* pOther )
 				m_flSoundDelay = gpGlobals->time + 1.0;
 			}
 
-			if( pev->flags & FL_ONGROUND )
+			if( (pev->flags & FL_ONGROUND ) != 0)
 			{
 				pev->velocity = pev->velocity * 0.5;
 			}

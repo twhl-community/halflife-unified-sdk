@@ -31,7 +31,7 @@ int grgLogoFrame[MAX_LOGO_FRAMES] =
 };
 
 
-extern int g_iVisibleMouse;
+extern bool g_iVisibleMouse;
 
 float HUD_GetFOV();
 
@@ -48,7 +48,7 @@ void CHud::Think()
 
 	while (pList)
 	{
-		if (pList->p->m_iFlags & HUD_ACTIVE)
+		if ((pList->p->m_iFlags & HUD_ACTIVE) != 0)
 			pList->p->Think();
 		pList = pList->pNext;
 	}
@@ -83,7 +83,7 @@ void CHud::Think()
 		m_iFOV = V_max( default_fov->value, 90 );  
 	}
 	
-	if ( gEngfuncs.IsSpectateOnly() )
+	if (0 != gEngfuncs.IsSpectateOnly() )
 	{
 		m_iFOV = gHUD.m_Spectator.GetFOV();	// default_fov->value;
 	}
@@ -92,7 +92,7 @@ void CHud::Think()
 // Redraw
 // step through the local data,  placing the appropriate graphics & text as appropriate
 // returns 1 if they've changed, 0 otherwise
-int CHud :: Redraw( float flTime, int intermission )
+bool CHud :: Redraw( float flTime, bool intermission )
 {
 	m_fOldTime = m_flTime;	// save time of previous redraw
 	m_flTime = flTime;
@@ -132,7 +132,7 @@ int CHud :: Redraw( float flTime, int intermission )
 		}
 	}
 
-	if (m_flShotTime && m_flShotTime < flTime)
+	if (0 != m_flShotTime && m_flShotTime < flTime)
 	{
 		gEngfuncs.pfnClientCmd("snapshot\n");
 		m_flShotTime = 0;
@@ -144,7 +144,7 @@ int CHud :: Redraw( float flTime, int intermission )
 	// return 0;
 	
 	// draw all registered HUD elements
-	if ( m_pCvarDraw->value )
+	if ( 0 != m_pCvarDraw->value )
 	{
 		HUDLIST *pList = m_pHudList;
 
@@ -152,12 +152,12 @@ int CHud :: Redraw( float flTime, int intermission )
 		{
 			if ( !intermission )
 			{
-				if ( (pList->p->m_iFlags & HUD_ACTIVE) && !(m_iHideHUDDisplay & HIDEHUD_ALL) )
+				if ( (pList->p->m_iFlags & HUD_ACTIVE) != 0 && (m_iHideHUDDisplay & HIDEHUD_ALL) == 0)
 					pList->p->Draw(flTime);
 			}
 			else
 			{  // it's an intermission,  so only draw hud elements that are set to draw during intermissions
-				if ( pList->p->m_iFlags & HUD_INTERMISSION )
+				if ( (pList->p->m_iFlags & HUD_INTERMISSION ) != 0)
 					pList->p->Draw( flTime );
 			}
 
@@ -166,7 +166,7 @@ int CHud :: Redraw( float flTime, int intermission )
 	}
 
 	// are we in demo mode? do we need to draw the logo in the top corner?
-	if (m_iLogo)
+	if (0 != m_iLogo)
 	{
 		int x, y, i;
 
@@ -208,7 +208,7 @@ int CHud :: Redraw( float flTime, int intermission )
 	}
 	*/
 
-	return 1;
+	return true;
 }
 
 void ScaleColors( int &r, int &g, int &b, int a )
@@ -241,14 +241,14 @@ int CHud :: DrawHudStringReverse( int xpos, int ypos, int iMinX, const char *szS
 
 	//Op4 uses custom reverse drawing to fix an issue with the letter k overlapping the letter i in the string "kills"
 
-	if (!(*szString))
+	if ('\0' == (*szString))
 	{
 		return xpos;
 	}
 
 	const char* i;
 
-	for (i = szString; *i; ++i)
+	for (i = szString; '\0' != *i; ++i)
 	{
 	}
 
@@ -296,7 +296,7 @@ int CHud :: DrawHudNumber( int x, int y, int iFlags, int iNumber, int r, int g, 
 			SPR_DrawAdditive( 0, x, y, &GetSpriteRect(m_HUD_number_0 + k));
 			x += iWidth;
 		}
-		else if (iFlags & (DHN_3DIGITS))
+		else if ((iFlags & DHN_3DIGITS) != 0)
 		{
 			//SPR_DrawAdditive( 0, x, y, &rc );
 			x += iWidth;
@@ -310,7 +310,7 @@ int CHud :: DrawHudNumber( int x, int y, int iFlags, int iNumber, int r, int g, 
 			SPR_DrawAdditive( 0, x, y, &GetSpriteRect(m_HUD_number_0 + k));
 			x += iWidth;
 		}
-		else if (iFlags & (DHN_3DIGITS | DHN_2DIGITS))
+		else if ((iFlags & (DHN_3DIGITS | DHN_2DIGITS)) != 0)
 		{
 			//SPR_DrawAdditive( 0, x, y, &rc );
 			x += iWidth;
@@ -322,18 +322,18 @@ int CHud :: DrawHudNumber( int x, int y, int iFlags, int iNumber, int r, int g, 
 		SPR_DrawAdditive(0,  x, y, &GetSpriteRect(m_HUD_number_0 + k));
 		x += iWidth;
 	} 
-	else if (iFlags & DHN_DRAWZERO) 
+	else if ((iFlags & DHN_DRAWZERO) != 0)
 	{
 		SPR_Set(GetSprite(m_HUD_number_0), r, g, b );
 
 		// SPR_Draw 100's
-		if (iFlags & (DHN_3DIGITS))
+		if ((iFlags & DHN_3DIGITS) != 0)
 		{
 			//SPR_DrawAdditive( 0, x, y, &rc );
 			x += iWidth;
 		}
 
-		if (iFlags & (DHN_3DIGITS | DHN_2DIGITS))
+		if ((iFlags & (DHN_3DIGITS | DHN_2DIGITS)) != 0)
 		{
 			//SPR_DrawAdditive( 0, x, y, &rc );
 			x += iWidth;
@@ -351,15 +351,15 @@ int CHud :: DrawHudNumber( int x, int y, int iFlags, int iNumber, int r, int g, 
 
 int CHud::GetNumWidth( int iNumber, int iFlags )
 {
-	if (iFlags & (DHN_3DIGITS))
+	if ((iFlags & DHN_3DIGITS) != 0)
 		return 3;
 
-	if (iFlags & (DHN_2DIGITS))
+	if ((iFlags & DHN_2DIGITS) != 0)
 		return 2;
 
 	if (iNumber <= 0)
 	{
-		if (iFlags & (DHN_DRAWZERO))
+		if ((iFlags & DHN_DRAWZERO) != 0)
 			return 1;
 		else
 			return 0;
@@ -385,7 +385,7 @@ int CHud::GetHudNumberWidth(int number, int width, int flags)
 	{
 		totalDigits = static_cast<int>(log10(number)) + 1;
 	}
-	else if (flags & DHN_DRAWZERO)
+	else if ((flags & DHN_DRAWZERO) != 0)
 	{
 		totalDigits = 1;
 	}
@@ -397,7 +397,7 @@ int CHud::GetHudNumberWidth(int number, int width, int flags)
 
 int CHud::DrawHudNumberReverse(int x, int y, int number, int flags, int r, int g, int b)
 {
-	if (number > 0 || (flags & DHN_DRAWZERO))
+	if (number > 0 || (flags & DHN_DRAWZERO) != 0)
 	{
 		const int digitWidth = GetSpriteRect(m_HUD_number_0).right - GetSpriteRect(m_HUD_number_0).left;
 

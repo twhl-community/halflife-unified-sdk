@@ -79,7 +79,7 @@ void CShockRifle::Spawn()
 	pev->framerate = 1;
 }
 
-int CShockRifle::AddToPlayer( CBasePlayer* pPlayer )
+bool CShockRifle::AddToPlayer( CBasePlayer* pPlayer )
 {
 	if( BaseClass::AddToPlayer( pPlayer ) )
 	{
@@ -94,7 +94,7 @@ int CShockRifle::AddToPlayer( CBasePlayer* pPlayer )
 
 void CShockRifle::AttachToPlayer( CBasePlayer* pPlayer )
 {
-	if( !m_iDefaultAmmo )
+	if( 0 == m_iDefaultAmmo )
 		m_iDefaultAmmo = 1;
 
 	BaseClass::AttachToPlayer( pPlayer );
@@ -129,7 +129,7 @@ void CShockRifle::Holster()
 
 	SendWeaponAnim( SHOCKRIFLE_HOLSTER );
 
-	if( !m_pPlayer->m_rgAmmo[ m_iPrimaryAmmoType ] )
+	if( 0 == m_pPlayer->m_rgAmmo[ m_iPrimaryAmmoType ] )
 	{
 		m_pPlayer->m_rgAmmo[ m_iPrimaryAmmoType ] = 1;
 	}
@@ -303,7 +303,7 @@ int CShockRifle::iItemSlot()
 	return 4;
 }
 
-int CShockRifle::GetItemInfo( ItemInfo* p )
+bool CShockRifle::GetItemInfo( ItemInfo* p )
 {
 	p->pszAmmo1 = "shock";
 	p->iMaxAmmo1 = SHOCKRIFLE_MAX_CLIP;
@@ -316,5 +316,5 @@ int CShockRifle::GetItemInfo( ItemInfo* p )
 	p->iPosition = 1;
 	p->iId = m_iId = WEAPON_SHOCKRIFLE;
 	p->iWeight = SHOCKRIFLE_WEIGHT;
-	return 1;
+	return true;
 }

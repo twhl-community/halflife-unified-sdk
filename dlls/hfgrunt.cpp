@@ -147,14 +147,14 @@ public:
 	void GibMonster() override;
 	void SpeakSentence();
 
-	int	Save( CSave &save ) override;
-	int Restore( CRestore &restore ) override;
+	bool	Save( CSave &save ) override;
+	bool Restore( CRestore &restore ) override;
 	
 	CBaseEntity	*Kick();
 	Schedule_t	*GetSchedule() override;
 	Schedule_t  *GetScheduleOfType ( int Type ) override;
 	void TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType) override;
-	int TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType ) override;
+	bool TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType ) override;
 
 	int IRelationship ( CBaseEntity *pTarget ) override;
 
@@ -338,7 +338,7 @@ bool CHFGrunt :: FOkToSpeak()
 	if (gpGlobals->time <= CTalkMonster::g_talkWaitTime)
 		return false;
 
-	if ( pev->spawnflags & SF_MONSTER_GAG )
+	if ( (pev->spawnflags & SF_MONSTER_GAG ) != 0)
 	{
 		if ( m_MonsterState != MONSTERSTATE_COMBAT )
 		{
@@ -611,7 +611,7 @@ void CHFGrunt :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vec
 	if (ptr->iHitgroup == 11)
 	{
 		// make sure we're wearing one
-		if (GetBodygroup( 1 ) == HEAD_GRUNT && (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_BLAST | DMG_CLUB)))
+		if (GetBodygroup( 1 ) == HEAD_GRUNT && (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_BLAST | DMG_CLUB)) != 0)
 		{
 			// absorb damage
 			flDamage -= 20;
@@ -633,7 +633,7 @@ void CHFGrunt :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vec
 // needs to forget that he is in cover if he's hurt. (Obviously
 // not in a safe place anymore).
 //=========================================================
-int CHFGrunt :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType )
+bool CHFGrunt :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType )
 {
 	Forget( bits_MEMORY_INCOVER );
 
@@ -689,9 +689,9 @@ void CHFGrunt :: SetYawSpeed ()
 
 void CHFGrunt :: IdleSound()
 {
-	if (FOkToSpeak() && (g_fFGruntQuestion || RANDOM_LONG(0,1)))
+	if (FOkToSpeak() && (0 != g_fFGruntQuestion || RANDOM_LONG(0,1)))
 	{
-		if (!g_fFGruntQuestion)
+		if (0 == g_fFGruntQuestion)
 		{
 			// ask question or make statement
 			switch (RANDOM_LONG(0,2))
@@ -1906,7 +1906,7 @@ void CHFGrunt :: SetActivity ( Activity NewActivity )
 	case ACT_RANGE_ATTACK2:
 		// grunt is going to a secondary long range attack. This may be a thrown 
 		// grenade or fired grenade, we must determine which and pick proper sequence
-		if ( pev->weapons & HGRUNT_HANDGRENADE )
+		if ( (pev->weapons & HGRUNT_HANDGRENADE ) != 0)
 		{
 			// get toss anim
 			iSequence = LookupSequence( "throwgrenade" );
@@ -1985,7 +1985,7 @@ Schedule_t *CHFGrunt :: GetSchedule()
 	// flying? If PRONE, barnacle has me. IF not, it's assumed I am rapelling. 
 	if ( pev->movetype == MOVETYPE_FLY && m_MonsterState != MONSTERSTATE_PRONE )
 	{
-		if (pev->flags & FL_ONGROUND)
+		if ((pev->flags & FL_ONGROUND) != 0)
 		{
 			// just landed
 			pev->movetype = MOVETYPE_STEP;
@@ -2010,7 +2010,7 @@ Schedule_t *CHFGrunt :: GetSchedule()
 		ASSERT( pSound != NULL );
 		if ( pSound)
 		{
-			if (pSound->m_iType & bits_SOUND_DANGER)
+			if ((pSound->m_iType & bits_SOUND_DANGER) != 0)
 			{
 				// dangerous sound nearby!
 				
@@ -2444,7 +2444,7 @@ public:
 	void Spawn() override;
 	int	Classify () override { return	CLASS_HUMAN_MILITARY; }
 
-	void KeyValue( KeyValueData *pkvd ) override;
+	bool KeyValue( KeyValueData *pkvd ) override;
 
 	int	m_iPose;// which sequence to display	-- temporary, don't need to save
 	static char *m_szPoses[3];
@@ -2452,15 +2452,15 @@ public:
 
 char *CDeadHFGrunt::m_szPoses[] = { "deadstomach", "deadside", "deadsitting" };
 
-void CDeadHFGrunt::KeyValue( KeyValueData *pkvd )
+bool CDeadHFGrunt::KeyValue( KeyValueData *pkvd )
 {
 	if (FStrEq(pkvd->szKeyName, "pose"))
 	{
 		m_iPose = atoi(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
-	else 
-		CBaseMonster::KeyValue( pkvd );
+
+	return CBaseMonster::KeyValue( pkvd );
 }
 
 LINK_ENTITY_TO_CLASS( monster_fhgrunt_dead, CDeadHFGrunt );

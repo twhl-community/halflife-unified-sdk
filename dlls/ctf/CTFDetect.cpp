@@ -22,55 +22,53 @@
 
 LINK_ENTITY_TO_CLASS(info_ctfdetect, CTFDetect);
 
-void CTFDetect::KeyValue(KeyValueData* pkvd)
+bool CTFDetect::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq("is_ctf", pkvd->szKeyName))
 	{
 		is_ctf = atoi(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq("flagreturntime", pkvd->szKeyName))
 	{
 		g_flFlagReturnTime = atof(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq("basedefenddist", pkvd->szKeyName))
 	{
 		g_flBaseDefendDist = atof(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq("defendcarriertime", pkvd->szKeyName))
 	{
 		g_flDefendCarrierTime = atof(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq("captureassisttime", pkvd->szKeyName))
 	{
 		g_flCaptureAssistTime = atof(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq("poweruprespawntime", pkvd->szKeyName))
 	{
 		g_flPowerupRespawnTime = atof(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq("score_icon_namebm", pkvd->szKeyName))
 	{
 		strcpy(g_szScoreIconNameBM, pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq("score_icon_nameof", pkvd->szKeyName))
 	{
 		strcpy(g_szScoreIconNameOF, pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq("map_score_max", pkvd->szKeyName))
 	{
 		g_iMapScoreMax = atoi(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
-	else
-	{
-		pkvd->fHandled = false;
-	}
+
+	return false;
 }

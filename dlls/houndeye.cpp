@@ -97,8 +97,8 @@ public:
 	Schedule_t *GetScheduleOfType ( int Type ) override;
 	Schedule_t *GetSchedule() override;
 
-	int	Save( CSave &save ) override;
-	int Restore( CRestore &restore ) override;
+	bool Save( CSave &save ) override;
+	bool Restore( CRestore &restore ) override;
 
 	CUSTOM_SCHEDULES;
 	static TYPEDESCRIPTION m_SaveData[];
@@ -1310,7 +1310,7 @@ public:
 	void Spawn() override;
 	int	Classify() override { return	CLASS_ALIEN_PASSIVE; }
 
-	void KeyValue( KeyValueData *pkvd ) override;
+	bool KeyValue( KeyValueData *pkvd ) override;
 
 	int	m_iPose;// which sequence to display	-- temporary, don't need to save
 	static char *m_szPoses[ 3 ];
@@ -1318,15 +1318,15 @@ public:
 
 char *CDeadHoundeye::m_szPoses[] = { "dead" };
 
-void CDeadHoundeye::KeyValue( KeyValueData *pkvd )
+bool CDeadHoundeye::KeyValue( KeyValueData *pkvd )
 {
 	if( FStrEq( pkvd->szKeyName, "pose" ) )
 	{
 		m_iPose = atoi( pkvd->szValue );
-		pkvd->fHandled = true;
+		return true;
 	}
-	else
-		CBaseMonster::KeyValue( pkvd );
+
+	return CBaseMonster::KeyValue( pkvd );
 }
 
 LINK_ENTITY_TO_CLASS( monster_houndeye_dead, CDeadHoundeye );

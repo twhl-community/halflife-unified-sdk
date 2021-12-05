@@ -73,7 +73,7 @@ void CMP5::Precache()
 	m_usMP52 = PRECACHE_EVENT( 1, "events/mp52.sc" );
 }
 
-int CMP5::GetItemInfo(ItemInfo *p)
+bool CMP5::GetItemInfo(ItemInfo *p)
 {
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo1 = "9mm";
@@ -87,12 +87,12 @@ int CMP5::GetItemInfo(ItemInfo *p)
 	p->iId = m_iId = WEAPON_MP5;
 	p->iWeight = MP5_WEIGHT;
 
-	return 1;
+	return true;
 }
 
 void CMP5::IncrementAmmo(CBasePlayer* pPlayer)
 {
-	if (pPlayer->GiveAmmo(1, "9mm", _9MM_MAX_CARRY))
+	if (pPlayer->GiveAmmo(1, "9mm", _9MM_MAX_CARRY) != 0)
 	{
 		EMIT_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
 	}
@@ -104,7 +104,7 @@ void CMP5::IncrementAmmo(CBasePlayer* pPlayer)
 	}
 }
 
-int CMP5::AddToPlayer( CBasePlayer *pPlayer )
+bool CMP5::AddToPlayer( CBasePlayer *pPlayer )
 {
 	if ( CBasePlayerWeapon::AddToPlayer( pPlayer ) )
 	{
@@ -178,7 +178,7 @@ void CMP5::PrimaryAttack()
 
 	PLAYBACK_EVENT_FULL( flags, m_pPlayer->edict(), m_usMP5, 0.0, g_vecZero, g_vecZero, vecDir.x, vecDir.y, 0, 0, 0, 0 );
 
-	if (!m_iClip && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
+	if (0 == m_iClip && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
 		// HEV suit - indicate out of ammo condition
 		m_pPlayer->SetSuitUpdate("!HEV_AMO0", false, 0);
 
@@ -239,7 +239,7 @@ void CMP5::SecondaryAttack()
 	m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 1;
 	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 5;// idle pretty soon after shooting.
 
-	if (!m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType])
+	if (0 == m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType])
 		// HEV suit - indicate out of ammo condition
 		m_pPlayer->SetSuitUpdate("!HEV_AMO0", false, 0);
 }
@@ -297,7 +297,7 @@ class CMP5AmmoClip : public CBasePlayerAmmo
 	}
 	bool AddAmmo( CBaseEntity *pOther ) override
 	{ 
-		int bResult = (pOther->GiveAmmo( AMMO_MP5CLIP_GIVE, "9mm", _9MM_MAX_CARRY) != -1);
+		bool bResult = (pOther->GiveAmmo( AMMO_MP5CLIP_GIVE, "9mm", _9MM_MAX_CARRY) != -1);
 		if (bResult)
 		{
 			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
@@ -325,7 +325,7 @@ class CMP5Chainammo : public CBasePlayerAmmo
 	}
 	bool AddAmmo( CBaseEntity *pOther ) override
 	{ 
-		int bResult = (pOther->GiveAmmo( AMMO_CHAINBOX_GIVE, "9mm", _9MM_MAX_CARRY) != -1);
+		bool bResult = (pOther->GiveAmmo( AMMO_CHAINBOX_GIVE, "9mm", _9MM_MAX_CARRY) != -1);
 		if (bResult)
 		{
 			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
@@ -351,7 +351,7 @@ class CMP5AmmoGrenade : public CBasePlayerAmmo
 	}
 	bool AddAmmo( CBaseEntity *pOther ) override
 	{ 
-		int bResult = (pOther->GiveAmmo( AMMO_M203BOX_GIVE, "ARgrenades", M203_GRENADE_MAX_CARRY ) != -1);
+		bool bResult = (pOther->GiveAmmo( AMMO_M203BOX_GIVE, "ARgrenades", M203_GRENADE_MAX_CARRY ) != -1);
 
 		if (bResult)
 		{

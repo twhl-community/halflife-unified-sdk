@@ -25,7 +25,7 @@ public:
 	void Spawn() override;
 	int	Classify() override { return	CLASS_HUMAN_MILITARY; }
 
-	void KeyValue( KeyValueData *pkvd ) override;
+	bool KeyValue( KeyValueData *pkvd ) override;
 
 	int	m_iPose;// which sequence to display	-- temporary, don't need to save
 	static char *m_szPoses[ 4 ];
@@ -33,15 +33,15 @@ public:
 
 char *COFSkeleton::m_szPoses[] = { "s_onback", "s_sitting", "dead_against_wall", "dead_stomach" };
 
-void COFSkeleton::KeyValue( KeyValueData *pkvd )
+bool COFSkeleton::KeyValue( KeyValueData *pkvd )
 {
 	if( FStrEq( pkvd->szKeyName, "pose" ) )
 	{
 		m_iPose = atoi( pkvd->szValue );
-		pkvd->fHandled = true;
+		return true;
 	}
-	else
-		CBaseMonster::KeyValue( pkvd );
+
+	return CBaseMonster::KeyValue( pkvd );
 }
 
 LINK_ENTITY_TO_CLASS( monster_skeleton_dead, COFSkeleton );

@@ -140,7 +140,7 @@ void CHalfLifeCoopplay::Think()
 
 int CHalfLifeCoopplay::WeaponShouldRespawn(CBasePlayerItem* pWeapon)
 {
-	if (coopweprespawn.value > 0 && !(pWeapon->pev->spawnflags & SF_NORESPAWN))
+	if (coopweprespawn.value > 0 && (pWeapon->pev->spawnflags & SF_NORESPAWN) == 0)
 		return GR_WEAPON_RESPAWN_YES;
 
 	return GR_WEAPON_RESPAWN_NO;
@@ -148,7 +148,7 @@ int CHalfLifeCoopplay::WeaponShouldRespawn(CBasePlayerItem* pWeapon)
 
 int CHalfLifeCoopplay::ItemShouldRespawn(CItem* pItem)
 {
-	if (coopweprespawn.value > 0 && !(pItem->pev->spawnflags & SF_NORESPAWN))
+	if (coopweprespawn.value > 0 && (pItem->pev->spawnflags & SF_NORESPAWN) == 0)
 		return GR_ITEM_RESPAWN_YES;
 
 	return GR_ITEM_RESPAWN_NO;
@@ -166,7 +166,7 @@ float CHalfLifeCoopplay::FlItemRespawnTime(CItem* pItem)
 
 int CHalfLifeCoopplay::AmmoShouldRespawn(CBasePlayerAmmo* pAmmo)
 {
-	if (coopweprespawn.value > 0 && !(pAmmo->pev->spawnflags & SF_NORESPAWN))
+	if (coopweprespawn.value > 0 && (pAmmo->pev->spawnflags & SF_NORESPAWN) == 0)
 		return GR_AMMO_RESPAWN_YES;
 
 	return GR_AMMO_RESPAWN_NO;
@@ -209,7 +209,7 @@ bool CHalfLifeCoopplay::ClientCommand(CBasePlayer* pPlayer, const char* pcmd)
 
 float CHalfLifeCoopplay::FlWeaponTryRespawn(CBasePlayerItem* pWeapon)
 {
-	if (coopweprespawn.value > 0 && pWeapon && pWeapon->m_iId && (pWeapon->iFlags() & ITEM_FLAG_LIMITINWORLD))
+	if (coopweprespawn.value > 0 && pWeapon && WEAPON_NONE != pWeapon->m_iId && (pWeapon->iFlags() & ITEM_FLAG_LIMITINWORLD) != 0)
 	{
 		if (NUMBER_OF_ENTITIES() < (gpGlobals->maxEntities - ENTITY_INTOLERANCE))
 			return 0;
@@ -227,7 +227,7 @@ float CHalfLifeCoopplay::FlWeaponRespawnTime(CBasePlayerItem* pWeapon)
 	{
 		return -1;
 	}
-	else if (weaponstay.value <= 0 || pWeapon->iFlags() & ITEM_FLAG_LIMITINWORLD)
+	else if (weaponstay.value <= 0 || (pWeapon->iFlags() & ITEM_FLAG_LIMITINWORLD) != 0)
 	{
 		return gpGlobals->time + WEAPON_RESPAWN_TIME;
 	}

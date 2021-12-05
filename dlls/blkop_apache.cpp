@@ -27,8 +27,8 @@ extern DLL_GLOBAL int		g_iSkillLevel;
 
 class COFBlackOpsApache : public CBaseMonster
 {
-	int		Save( CSave &save ) override;
-	int		Restore( CRestore &restore ) override;
+	bool		Save( CSave &save ) override;
+	bool		Restore( CRestore &restore ) override;
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	void Spawn() override;
@@ -56,7 +56,7 @@ class COFBlackOpsApache : public CBaseMonster
 	void FireRocket();
 	bool FireGun();
 	
-	int  TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType ) override;
+	bool  TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType ) override;
 	void TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType) override;
 
 	int m_iRockets;
@@ -135,7 +135,7 @@ void COFBlackOpsApache :: Spawn()
 
 	InitBoneControllers();
 
-	if (pev->spawnflags & SF_WAITFORTRIGGER)
+	if ((pev->spawnflags & SF_WAITFORTRIGGER) != 0)
 	{
 		SetUse( &COFBlackOpsApache::StartupUse );
 	}
@@ -206,7 +206,7 @@ void COFBlackOpsApache :: Killed( entvars_t *pevAttacker, int iGib )
 	pev->health = 0;
 	pev->takedamage = DAMAGE_NO;
 
-	if (pev->spawnflags & SF_NOWRECKAGE)
+	if ((pev->spawnflags & SF_NOWRECKAGE) != 0)
 	{
 		m_flNextRocket = gpGlobals->time + 4.0;
 	}
@@ -354,7 +354,7 @@ void COFBlackOpsApache :: DyingThink()
 
 		RadiusDamage( pev->origin, pev, pev, 300, CLASS_NONE, DMG_BLAST );
 
-		if (/*!(pev->spawnflags & SF_NOWRECKAGE) && */(pev->flags & FL_ONGROUND))
+		if (/*!(pev->spawnflags & SF_NOWRECKAGE) && */(pev->flags & FL_ONGROUND) != 0)
 		{
 			CBaseEntity *pWreckage = Create( "cycler_wreckage", pev->origin, pev->angles );
 			// SET_MODEL( ENT(pWreckage->pev), STRING(pev->model) );
@@ -888,12 +888,12 @@ void COFBlackOpsApache :: ShowDamage()
 }
 
 
-int COFBlackOpsApache :: TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType )
+bool COFBlackOpsApache :: TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType )
 {
 	if (pevInflictor->owner == edict())
-		return 0;
+		return false;
 
-	if (bitsDamageType & DMG_BLAST)
+	if ((bitsDamageType & DMG_BLAST) != 0)
 	{
 		flDamage *= 2;
 	}
@@ -917,7 +917,7 @@ void COFBlackOpsApache::TraceAttack( entvars_t *pevAttacker, float flDamage, Vec
 	// ALERT( at_console, "%d %.0f\n", ptr->iHitgroup, flDamage );
 
 	// ignore blades
-	if (ptr->iHitgroup == 6 && (bitsDamageType & (DMG_ENERGYBEAM|DMG_BULLET|DMG_CLUB)))
+	if (ptr->iHitgroup == 6 && (bitsDamageType & (DMG_ENERGYBEAM|DMG_BULLET|DMG_CLUB)) != 0)
 		return;
 
 	// hit hard, hits cockpit, hits engines
@@ -946,8 +946,8 @@ class COFBlackOpsApacheHVR : public CGrenade
 	void EXPORT IgniteThink();
 	void EXPORT AccelerateThink();
 
-	int		Save( CSave &save ) override;
-	int		Restore( CRestore &restore ) override;
+	bool		Save( CSave &save ) override;
+	bool		Restore( CRestore &restore ) override;
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	int m_iTrail;

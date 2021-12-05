@@ -197,14 +197,14 @@ public:
 	void GibMonster() override;
 	void SpeakSentence();
 
-	int	Save( CSave &save ) override;
-	int Restore( CRestore &restore ) override;
+	bool	Save( CSave &save ) override;
+	bool Restore( CRestore &restore ) override;
 	
 	CBaseEntity	*Kick();
 	Schedule_t	*GetSchedule() override;
 	Schedule_t  *GetScheduleOfType ( int Type ) override;
 	void TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType) override;
-	int TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType ) override;
+	bool TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType ) override;
 
 	bool FOkToSpeak();
 	void JustSpoke();
@@ -219,7 +219,7 @@ public:
 
 	void ShootSaw();
 
-	void KeyValue( KeyValueData* pkvd ) override;
+	bool KeyValue( KeyValueData* pkvd ) override;
 
 	void Killed( entvars_t* pevAttacker, int iGib ) override;
 
@@ -417,7 +417,7 @@ bool CHGruntAlly :: FOkToSpeak()
 	if (gpGlobals->time <= COFSquadTalkMonster::g_talkWaitTime)
 		return false;
 
-	if ( pev->spawnflags & SF_MONSTER_GAG )
+	if ( (pev->spawnflags & SF_MONSTER_GAG) != 0)
 	{
 		if ( m_MonsterState != MONSTERSTATE_COMBAT )
 		{
@@ -527,9 +527,9 @@ bool CHGruntAlly :: CheckMeleeAttack1 ( float flDot, float flDist )
 bool CHGruntAlly :: CheckRangeAttack1 ( float flDot, float flDist )
 {
 	//Only if we have a weapon
-	if( pev->weapons )
+	if( (pev->weapons ) != 0)
 	{
-		const auto maxDistance = pev->weapons & HGruntAllyWeaponFlag::Shotgun ? 640 : 1024;
+		const auto maxDistance = (pev->weapons & HGruntAllyWeaponFlag::Shotgun) != 0 ? 640 : 1024;
 
 		//Friendly fire is allowed
 		if( !HasConditions( bits_COND_ENEMY_OCCLUDED ) && flDist <= maxDistance && flDot >= 0.5 /*&& NoFriendlyFire()*/ )
@@ -705,7 +705,7 @@ void CHGruntAlly :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector 
 	{
 		// make sure we're wearing one
 		//TODO: disabled for ally
-		if (/*GetBodygroup( HGruntAllyBodygroup::Head ) == HGruntAllyHead::GasMask &&*/ (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_CLUB)))
+		if (/*GetBodygroup( HGruntAllyBodygroup::Head ) == HGruntAllyHead::GasMask &&*/ (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_CLUB)) != 0)
 		{
 			// absorb damage
 			flDamage -= 20;
@@ -720,7 +720,7 @@ void CHGruntAlly :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector 
 	}
 	//PCV absorbs some damage types
 	else if( ( ptr->iHitgroup == HITGROUP_CHEST || ptr->iHitgroup == HITGROUP_STOMACH )
-		&& ( bitsDamageType & ( DMG_BLAST | DMG_BULLET | DMG_SLASH ) ) )
+		&& ( bitsDamageType & ( DMG_BLAST | DMG_BULLET | DMG_SLASH ) ) != 0)
 	{
 		flDamage*= 0.5;
 	}
@@ -734,17 +734,17 @@ void CHGruntAlly :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector 
 // needs to forget that he is in cover if he's hurt. (Obviously
 // not in a safe place anymore).
 //=========================================================
-int CHGruntAlly :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType )
+bool CHGruntAlly :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType )
 {
 	// make sure friends talk about it if player hurts talkmonsters...
-	int ret = COFSquadTalkMonster::TakeDamage( pevInflictor, pevAttacker, flDamage, bitsDamageType );
+	bool ret = COFSquadTalkMonster::TakeDamage( pevInflictor, pevAttacker, flDamage, bitsDamageType );
 
 	if( pev->deadflag != DEAD_NO )
 		return ret;
 
 	Forget(bits_MEMORY_INCOVER);
 
-	if( m_MonsterState != MONSTERSTATE_PRONE && ( pevAttacker->flags & FL_CLIENT ) )
+	if( m_MonsterState != MONSTERSTATE_PRONE && ( pevAttacker->flags & FL_CLIENT ) != 0)
 	{
 		m_flPlayerDamage += flDamage;
 
@@ -754,7 +754,7 @@ int CHGruntAlly :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, 
 		{
 			// If the player was facing directly at me, or I'm already suspicious, get mad
 			if( gpGlobals->time - m_flLastHitByPlayer < 4.0 && m_iPlayerHits > 2
-				&& ( ( m_afMemory & bits_MEMORY_SUSPICIOUS ) || IsFacing( pevAttacker, pev->origin ) ) )
+				&& ( ( m_afMemory & bits_MEMORY_SUSPICIOUS ) != 0 || IsFacing( pevAttacker, pev->origin ) ) )
 			{
 				// Alright, now I'm pissed!
 				PlaySentence( "FG_MAD", 4, VOL_NORM, ATTN_NORM );
@@ -837,9 +837,9 @@ void CHGruntAlly :: SetYawSpeed ()
 
 void CHGruntAlly :: IdleSound()
 {
-	if (FOkToSpeak() && (g_fGruntAllyQuestion || RANDOM_LONG(0,1)))
+	if (FOkToSpeak() && (0 != g_fGruntAllyQuestion || RANDOM_LONG(0,1)))
 	{
-		if (!g_fGruntAllyQuestion)
+		if (0 == g_fGruntAllyQuestion)
 		{
 			// ask question or make statement
 			switch (RANDOM_LONG(0,2))
@@ -1180,18 +1180,18 @@ void CHGruntAlly :: Spawn()
 	pev->body = 0;
 	m_iGruntTorso = HGruntAllyTorso::Normal;
 
-	if( pev->weapons & HGruntAllyWeaponFlag::MP5 )
+	if( (pev->weapons & HGruntAllyWeaponFlag::MP5 ) != 0)
 	{
 		m_iWeaponIdx = HGruntAllyWeapon::MP5;
 		m_cClipSize = GRUNT_MP5_CLIP_SIZE;
 	}
-	else if( pev->weapons & HGruntAllyWeaponFlag::Shotgun )
+	else if( (pev->weapons & HGruntAllyWeaponFlag::Shotgun ) != 0)
 	{
 		m_cClipSize = GRUNT_SHOTGUN_CLIP_SIZE;
 		m_iWeaponIdx = HGruntAllyWeapon::Shotgun;
 		m_iGruntTorso = HGruntAllyTorso::Shotgun;
 	}
-	else if( pev->weapons & HGruntAllyWeaponFlag::Saw )
+	else if( (pev->weapons & HGruntAllyWeaponFlag::Saw ) != 0)
 	{
 		m_iWeaponIdx = HGruntAllyWeapon::Saw;
 		m_cClipSize = GRUNT_SAW_CLIP_SIZE;
@@ -1207,7 +1207,7 @@ void CHGruntAlly :: Spawn()
 
 	if( m_iGruntHead == HGruntAllyHead::Default )
 	{
-		if( pev->spawnflags & SF_SQUADMONSTER_LEADER )
+		if( (pev->spawnflags & SF_SQUADMONSTER_LEADER ) != 0)
 		{
 			m_iGruntHead = HGruntAllyHead::BeretWhite;
 		}
@@ -2229,7 +2229,7 @@ void CHGruntAlly :: SetActivity ( Activity NewActivity )
 	case ACT_RANGE_ATTACK2:
 		// grunt is going to a secondary long range attack. This may be a thrown 
 		// grenade or fired grenade, we must determine which and pick proper sequence
-		if ( pev->weapons & HGruntAllyWeaponFlag::HandGrenade )
+		if ( (pev->weapons & HGruntAllyWeaponFlag::HandGrenade ) != 0)
 		{
 			// get toss anim
 			iSequence = LookupSequence( "throwgrenade" );
@@ -2308,7 +2308,7 @@ Schedule_t *CHGruntAlly :: GetSchedule()
 	// flying? If PRONE, barnacle has me. IF not, it's assumed I am rapelling. 
 	if ( pev->movetype == MOVETYPE_FLY && m_MonsterState != MONSTERSTATE_PRONE )
 	{
-		if (pev->flags & FL_ONGROUND)
+		if ((pev->flags & FL_ONGROUND) != 0)
 		{
 			// just landed
 			pev->movetype = MOVETYPE_STEP;
@@ -2333,7 +2333,7 @@ Schedule_t *CHGruntAlly :: GetSchedule()
 		ASSERT( pSound != NULL );
 		if ( pSound)
 		{
-			if (pSound->m_iType & bits_SOUND_DANGER)
+			if ((pSound->m_iType & bits_SOUND_DANGER) != 0)
 			{
 				// dangerous sound nearby!
 				
@@ -2441,7 +2441,7 @@ Schedule_t *CHGruntAlly :: GetSchedule()
 				return GetScheduleOfType( SCHED_TAKE_COVER_FROM_ENEMY );
 // no ammo
 			//Only if the grunt has a weapon
-			else if ( pev->weapons && HasConditions ( bits_COND_NO_AMMO_LOADED ) )
+			else if ( pev->weapons != 0 && HasConditions ( bits_COND_NO_AMMO_LOADED ) )
 			{
 				//!!!KELLY - this individual just realized he's out of bullet ammo. 
 				// He's going to try to find cover to run to and reload, but rarely, if 
@@ -2706,7 +2706,7 @@ Schedule_t* CHGruntAlly :: GetScheduleOfType ( int Type )
 	case SCHED_RANGE_ATTACK1:
 		{
 			//Always stand when using Saw
-			if( pev->weapons & HGruntAllyWeaponFlag::Saw )
+			if( (pev->weapons & HGruntAllyWeaponFlag::Saw ) != 0)
 			{
 				m_fStanding = true;
 				return &slGruntAllyRangeAttack1B[ 0 ];
@@ -2924,15 +2924,15 @@ void CHGruntAlly::ShootSaw()
 	SetBlending( 0, angDir.x );
 }
 
-void CHGruntAlly::KeyValue( KeyValueData *pkvd )
+bool CHGruntAlly::KeyValue( KeyValueData *pkvd )
 {
 	if( FStrEq( pkvd->szKeyName, "head" ) )
 	{
 		m_iGruntHead = atoi( pkvd->szValue );
-		pkvd->fHandled = true;
+		return true;
 	}
-	else
-		COFSquadTalkMonster::KeyValue( pkvd );
+
+	return COFSquadTalkMonster::KeyValue( pkvd );
 }
 
 void CHGruntAlly::Killed( entvars_t* pevAttacker, int iGib )
@@ -2950,7 +2950,7 @@ void CHGruntAlly::Killed( entvars_t* pevAttacker, int iGib )
 	if( m_hWaitMedic )
 	{
 		auto v4 = m_hWaitMedic.Entity<COFSquadTalkMonster>();
-		if( v4->pev->deadflag )
+		if(DEAD_NO != v4->pev->deadflag )
 			m_hWaitMedic = nullptr;
 		else
 			v4->HealMe( nullptr );
@@ -2968,7 +2968,7 @@ void CHGruntAlly::Killed( entvars_t* pevAttacker, int iGib )
 class CHGruntAllyRepel : public CBaseMonster
 {
 public:
-	void KeyValue( KeyValueData *pkvd ) override;
+	bool KeyValue( KeyValueData *pkvd ) override;
 
 	void Spawn() override;
 	void Precache() override;
@@ -2983,25 +2983,25 @@ public:
 
 LINK_ENTITY_TO_CLASS( monster_grunt_ally_repel, CHGruntAllyRepel );
 
-void CHGruntAllyRepel::KeyValue( KeyValueData *pkvd )
+bool CHGruntAllyRepel::KeyValue( KeyValueData *pkvd )
 {
 	if( FStrEq( pkvd->szKeyName, "head" ) )
 	{
 		m_iGruntHead = atoi( pkvd->szValue );
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if( FStrEq( pkvd->szKeyName, "UseSentence" ) )
 	{
 		m_iszUse = ALLOC_STRING( pkvd->szValue );
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if( FStrEq( pkvd->szKeyName, "UnUseSentence" ) )
 	{
 		m_iszUnUse = ALLOC_STRING( pkvd->szValue );
-		pkvd->fHandled = true;
+		return true;
 	}
-	else
-		CBaseMonster::KeyValue( pkvd );
+
+	return CBaseMonster::KeyValue( pkvd );
 }
 
 void CHGruntAllyRepel::Spawn()
@@ -3079,7 +3079,7 @@ public:
 	void Spawn() override;
 	int	Classify () override { return	CLASS_HUMAN_MILITARY_FRIENDLY; }
 
-	void KeyValue( KeyValueData *pkvd ) override;
+	bool KeyValue( KeyValueData *pkvd ) override;
 
 	int	m_iPose;// which sequence to display	-- temporary, don't need to save
 	int m_iGruntHead;
@@ -3088,20 +3088,20 @@ public:
 
 char *CDeadHGruntAlly::m_szPoses[] = { "deadstomach", "deadside", "deadsitting", "dead_on_back", "hgrunt_dead_stomach", "dead_headcrabed", "dead_canyon" };
 
-void CDeadHGruntAlly::KeyValue( KeyValueData *pkvd )
+bool CDeadHGruntAlly::KeyValue( KeyValueData *pkvd )
 {
 	if (FStrEq(pkvd->szKeyName, "pose"))
 	{
 		m_iPose = atoi(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if( FStrEq( pkvd->szKeyName, "head" ) )
 	{
 		m_iGruntHead = atoi( pkvd->szValue );
-		pkvd->fHandled = true;
+		return true;
 	}
-	else 
-		CBaseMonster::KeyValue( pkvd );
+
+	return CBaseMonster::KeyValue( pkvd );
 }
 
 LINK_ENTITY_TO_CLASS( monster_human_grunt_ally_dead, CDeadHGruntAlly );
@@ -3129,17 +3129,17 @@ void CDeadHGruntAlly:: Spawn()
 	// Corpses have less health
 	pev->health			= 8;
 
-	if( pev->weapons & HGruntAllyWeaponFlag::MP5 )
+	if( (pev->weapons & HGruntAllyWeaponFlag::MP5 ) != 0)
 	{
 		SetBodygroup( HGruntAllyBodygroup::Torso, HGruntAllyTorso::Normal );
 		SetBodygroup( HGruntAllyBodygroup::Weapons, HGruntAllyWeapon::MP5 );
 	}
-	else if( pev->weapons & HGruntAllyWeaponFlag::Shotgun )
+	else if( (pev->weapons & HGruntAllyWeaponFlag::Shotgun ) != 0)
 	{
 		SetBodygroup( HGruntAllyBodygroup::Torso, HGruntAllyTorso::Shotgun );
 		SetBodygroup( HGruntAllyBodygroup::Weapons, HGruntAllyWeapon::Shotgun );
 	}
-	else if( pev->weapons & HGruntAllyWeaponFlag::Saw )
+	else if( (pev->weapons & HGruntAllyWeaponFlag::Saw ) != 0)
 	{
 		SetBodygroup( HGruntAllyBodygroup::Torso, HGruntAllyTorso::Saw );
 		SetBodygroup( HGruntAllyBodygroup::Weapons, HGruntAllyWeapon::Saw );

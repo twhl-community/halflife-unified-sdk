@@ -40,17 +40,17 @@ void CItemBackpackCTF::RemoveEffect(CBasePlayer* pPlayer)
 
 bool CItemBackpackCTF::MyTouch(CBasePlayer* pPlayer)
 {
-	if (!(pPlayer->m_iItems & CTFItem::Backpack))
+	if ((pPlayer->m_iItems & CTFItem::Backpack) == 0)
 	{
-		if (!multipower.value)
+		if (0 == multipower.value)
 		{
-			if (pPlayer->m_iItems & ~(CTFItem::BlackMesaFlag | CTFItem::OpposingForceFlag))
+			if ((pPlayer->m_iItems & ~(CTFItem::BlackMesaFlag | CTFItem::OpposingForceFlag)) != 0)
 				return false;
 		}
 
 		if (static_cast<int>(team_no) <= 0 || team_no == pPlayer->m_iTeamNum)
 		{
-			if (pPlayer->pev->weapons & (1 << WEAPON_SUIT))
+			if ((pPlayer->pev->weapons & (1 << WEAPON_SUIT)) != 0)
 			{
 				pPlayer->m_iItems = static_cast<CTFItem::CTFItem>(pPlayer->m_iItems | CTFItem::Backpack);
 				g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgItemPickup, 0, pPlayer->edict());
@@ -82,7 +82,7 @@ bool CItemBackpackCTF::MyTouch(CBasePlayer* pPlayer)
 void CItemBackpackCTF::Spawn()
 {
 	//TODO: precache calls should be in Precache
-	if (pev->model)
+	if (!FStringNull(pev->model))
 		g_engfuncs.pfnPrecacheModel((char*)STRING(pev->model));
 
 	g_engfuncs.pfnPrecacheSound("ctf/itemthrow.wav");

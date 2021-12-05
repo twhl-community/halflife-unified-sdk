@@ -27,22 +27,20 @@ const char* const sTeamSpawnNames[] =
 
 LINK_ENTITY_TO_CLASS( info_ctfspawn, CTFSpawn );
 
-void CTFSpawn::KeyValue( KeyValueData* pkvd )
+bool CTFSpawn::KeyValue( KeyValueData* pkvd )
 {
 	if( FStrEq( "team_no", pkvd->szKeyName ) )
 	{
 		team_no = static_cast<CTFTeam>( atoi( pkvd->szValue ) );
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if( FStrEq( "master", pkvd->szKeyName ) )
 	{
 		pev->netname = ALLOC_STRING( pkvd->szValue );
-		pkvd->fHandled = true;
+		return true;
 	}
-	else
-	{
-		CBaseEntity::KeyValue( pkvd );
-	}
+
+	return CBaseEntity::KeyValue( pkvd );
 }
 
 void CTFSpawn::Spawn()

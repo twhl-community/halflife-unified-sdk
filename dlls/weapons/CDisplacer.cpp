@@ -71,7 +71,7 @@ void CDisplacer::Spawn()
 	FallInit();
 }
 
-int CDisplacer::AddToPlayer( CBasePlayer* pPlayer )
+bool CDisplacer::AddToPlayer( CBasePlayer* pPlayer )
 {
 	if( CBasePlayerWeapon::AddToPlayer( pPlayer ) )
 	{
@@ -424,7 +424,7 @@ void CDisplacer::AltFireThink()
 
 		CDisplacerBall::CreateDisplacerBall( m_pPlayer->m_DisplacerReturn, Vector( 90, 0, 0 ), m_pPlayer );
 
-		if( !m_iClip )
+		if( 0 == m_iClip )
 		{
 			if( m_pPlayer->m_rgAmmo[ m_iPrimaryAmmoType ] <= 0 )
 				m_pPlayer->SetSuitUpdate( "!HEV_AMO0", SUIT_SENTENCE, SUIT_REPEAT_OK );
@@ -447,7 +447,7 @@ int CDisplacer::iItemSlot()
 	return 4;
 }
 
-int CDisplacer::GetItemInfo( ItemInfo* p )
+bool CDisplacer::GetItemInfo( ItemInfo* p )
 {
 	p->pszAmmo1 = "uranium";
 	p->iMaxAmmo1 = URANIUM_MAX_CARRY;
@@ -460,12 +460,12 @@ int CDisplacer::GetItemInfo( ItemInfo* p )
 	p->iPosition = 1;
 	p->iId = m_iId = WEAPON_DISPLACER;
 	p->iWeight = DISPLACER_WEIGHT;
-	return 1;
+	return true;
 }
 
 void CDisplacer::IncrementAmmo(CBasePlayer* pPlayer)
 {
-	if (pPlayer->GiveAmmo(1, "uranium", URANIUM_MAX_CARRY))
+	if (pPlayer->GiveAmmo(1, "uranium", URANIUM_MAX_CARRY) != 0)
 	{
 		EMIT_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
 	}

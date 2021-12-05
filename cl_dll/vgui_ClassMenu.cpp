@@ -53,7 +53,7 @@
 #define CLASSMENU_WINDOW_PLAYERS_Y		YRES(42)
 
 // Creation
-CClassMenuPanel::CClassMenuPanel(int iTrans, int iRemoveMe, int x,int y,int wide,int tall) : CMenuPanel(iTrans, iRemoveMe, x,y,wide,tall)
+CClassMenuPanel::CClassMenuPanel(int iTrans, bool iRemoveMe, int x,int y,int wide,int tall) : CMenuPanel(iTrans, iRemoveMe, x,y,wide,tall)
 {
 	// don't show class graphics at below 640x480 resolution
 	bool bShowClassGraphic = true;
@@ -232,7 +232,7 @@ CClassMenuPanel::CClassMenuPanel(int iTrans, int iRemoveMe, int x,int y,int wide
 void CClassMenuPanel::Update()
 {
 	// Don't allow the player to join a team if they're not in a team
-	if (!gViewPort->m_iCTFTeamNumber )
+	if (0 == gViewPort->m_iCTFTeamNumber )
 		return;
 
 	const auto teamIndex = gViewPort->m_iCTFTeamNumber - 1;
@@ -255,7 +255,7 @@ void CClassMenuPanel::Update()
 				iYPos += CLASSMENU_BUTTON_SIZE_Y + CLASSMENU_BUTTON_SPACER_Y;
 
 				// Start with the first option up
-				if( !m_iCurrentInfo )
+				if( 0 == m_iCurrentInfo )
 					SetActiveInfo( i );
 			}
 

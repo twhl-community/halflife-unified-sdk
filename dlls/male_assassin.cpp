@@ -170,21 +170,21 @@ public:
 	void GibMonster() override;
 	void SpeakSentence();
 
-	int	Save( CSave &save ) override;
-	int Restore( CRestore &restore ) override;
+	bool	Save( CSave &save ) override;
+	bool Restore( CRestore &restore ) override;
 	
 	CBaseEntity	*Kick();
 	Schedule_t	*GetSchedule() override;
 	Schedule_t  *GetScheduleOfType ( int Type ) override;
 	void TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType) override;
-	int TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType ) override;
+	bool TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType ) override;
 
 	int IRelationship ( CBaseEntity *pTarget ) override;
 
 	bool FOkToSpeak();
 	void JustSpoke();
 
-	void KeyValue( KeyValueData* pkvd ) override;
+	bool KeyValue( KeyValueData* pkvd ) override;
 
 	CUSTOM_SCHEDULES;
 	static TYPEDESCRIPTION m_SaveData[];
@@ -369,7 +369,7 @@ bool CMOFAssassin :: FOkToSpeak()
 	if (gpGlobals->time <= CTalkMonster::g_talkWaitTime)
 		return false;
 
-	if ( pev->spawnflags & SF_MONSTER_GAG )
+	if ( (pev->spawnflags & SF_MONSTER_GAG ) != 0)
 	{
 		if ( m_MonsterState != MONSTERSTATE_COMBAT )
 		{
@@ -478,7 +478,7 @@ bool CMOFAssassin :: CheckMeleeAttack1 ( float flDot, float flDist )
 //=========================================================
 bool CMOFAssassin :: CheckRangeAttack1 ( float flDot, float flDist )
 {
-	if( pev->weapons )
+	if( pev->weapons != 0)
 	{
 		if( m_fStandingGround && m_flStandGroundRange >= flDist )
 		{
@@ -662,7 +662,7 @@ void CMOFAssassin :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector
 // needs to forget that he is in cover if he's hurt. (Obviously
 // not in a safe place anymore).
 //=========================================================
-int CMOFAssassin :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType )
+bool CMOFAssassin :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType )
 {
 	Forget( bits_MEMORY_INCOVER );
 
@@ -726,7 +726,7 @@ void CMOFAssassin :: IdleSound()
 //=========================================================
 void CMOFAssassin :: CheckAmmo ()
 {
-	if ( pev->weapons && m_cAmmoLoaded <= 0 )
+	if ( pev->weapons != 0 && m_cAmmoLoaded <= 0 )
 	{
 		SetConditions(bits_COND_NO_AMMO_LOADED);
 	}
@@ -1826,7 +1826,7 @@ void CMOFAssassin :: SetActivity ( Activity NewActivity )
 	case ACT_RANGE_ATTACK2:
 		// grunt is going to a secondary long range attack. This may be a thrown 
 		// grenade or fired grenade, we must determine which and pick proper sequence
-		if ( pev->weapons & MAssassinWeaponFlag::HandGrenade )
+		if ( (pev->weapons & MAssassinWeaponFlag::HandGrenade ) != 0)
 		{
 			// get toss anim
 			iSequence = LookupSequence( "throwgrenade" );
@@ -1905,7 +1905,7 @@ Schedule_t *CMOFAssassin :: GetSchedule()
 	// flying? If PRONE, barnacle has me. IF not, it's assumed I am rapelling. 
 	if ( pev->movetype == MOVETYPE_FLY && m_MonsterState != MONSTERSTATE_PRONE )
 	{
-		if (pev->flags & FL_ONGROUND)
+		if ((pev->flags & FL_ONGROUND) != 0)
 		{
 			// just landed
 			pev->movetype = MOVETYPE_STEP;
@@ -1930,7 +1930,7 @@ Schedule_t *CMOFAssassin :: GetSchedule()
 		ASSERT( pSound != NULL );
 		if ( pSound)
 		{
-			if (pSound->m_iType & bits_SOUND_DANGER)
+			if ((pSound->m_iType & bits_SOUND_DANGER) != 0)
 			{
 				return GetScheduleOfType( SCHED_TAKE_COVER_FROM_BEST_SOUND );
 			}
@@ -2234,20 +2234,20 @@ Schedule_t* CMOFAssassin :: GetScheduleOfType ( int Type )
 	}
 }
 
-void CMOFAssassin::KeyValue( KeyValueData* pkvd )
+bool CMOFAssassin::KeyValue( KeyValueData* pkvd )
 {
 	if( FStrEq( "head", pkvd->szKeyName ) )
 	{
 		m_iAssassinHead = atoi( pkvd->szValue );
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if( FStrEq( "standgroundrange", pkvd->szKeyName ) )
 	{
 		m_flStandGroundRange = atof( pkvd->szValue );
-		pkvd->fHandled = true;
+		return true;
 	}
-	else
-		CSquadMonster::KeyValue( pkvd );
+
+	return CSquadMonster::KeyValue( pkvd );
 }
 
 //=========================================================
@@ -2318,7 +2318,7 @@ public:
 	void Spawn() override;
 	int	Classify () override { return	CLASS_HUMAN_MILITARY; }
 
-	void KeyValue( KeyValueData *pkvd ) override;
+	bool KeyValue( KeyValueData *pkvd ) override;
 
 	int	m_iPose;// which sequence to display	-- temporary, don't need to save
 	static char *m_szPoses[3];
@@ -2326,15 +2326,15 @@ public:
 
 char *CDeadMOFAssassin::m_szPoses[] = { "deadstomach", "deadside", "deadsitting" };
 
-void CDeadMOFAssassin::KeyValue( KeyValueData *pkvd )
+bool CDeadMOFAssassin::KeyValue( KeyValueData *pkvd )
 {
 	if (FStrEq(pkvd->szKeyName, "pose"))
 	{
 		m_iPose = atoi(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
-	else 
-		CBaseMonster::KeyValue( pkvd );
+
+	return CBaseMonster::KeyValue( pkvd );
 }
 
 LINK_ENTITY_TO_CLASS( monster_massassin_dead, CDeadMOFAssassin );

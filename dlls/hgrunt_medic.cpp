@@ -181,14 +181,14 @@ public:
 	void GibMonster() override;
 	void SpeakSentence();
 
-	int	Save( CSave &save ) override;
-	int Restore( CRestore &restore ) override;
+	bool	Save( CSave &save ) override;
+	bool Restore( CRestore &restore ) override;
 	
 	CBaseEntity	*Kick();
 	Schedule_t	*GetSchedule() override;
 	Schedule_t  *GetScheduleOfType ( int Type ) override;
 	void TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType) override;
-	int TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType ) override;
+	bool TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType ) override;
 
 	bool FOkToSpeak();
 	void JustSpoke();
@@ -201,7 +201,7 @@ public:
 
 	void DeclineFollowing() override;
 
-	void KeyValue( KeyValueData *pkvd ) override;
+	bool KeyValue( KeyValueData *pkvd ) override;
 
 	void Killed( entvars_t* pevAttacker, int iGib ) override;
 
@@ -374,16 +374,16 @@ void COFMedicAlly :: GibMonster ()
 
 		CBaseEntity *pGun;
 		
-		if( pev->weapons & MedicAllyWeaponFlag::Glock )
+		if( (pev->weapons & MedicAllyWeaponFlag::Glock ) != 0)
 		{
 			pGun = DropItem( "weapon_9mmhandgun", vecGunPos, vecGunAngles );
 		}
-		else if( pev->weapons & MedicAllyWeaponFlag::DesertEagle )
+		else if( (pev->weapons & MedicAllyWeaponFlag::DesertEagle ) != 0)
 		{
 			pGun = DropItem( "weapon_eagle", vecGunPos, vecGunAngles );
 		}
 
-		if( pGun )
+		if( nullptr != pGun )
 		{
 			pGun->pev->velocity = Vector( RANDOM_FLOAT( -100, 100 ), RANDOM_FLOAT( -100, 100 ), RANDOM_FLOAT( 200, 300 ) );
 			pGun->pev->avelocity = Vector( 0, RANDOM_FLOAT( 200, 400 ), 0 );
@@ -423,7 +423,7 @@ bool COFMedicAlly :: FOkToSpeak()
 	if (gpGlobals->time <= COFSquadTalkMonster::g_talkWaitTime)
 		return false;
 
-	if ( pev->spawnflags & SF_MONSTER_GAG )
+	if ( (pev->spawnflags & SF_MONSTER_GAG ) != 0)
 	{
 		if ( m_MonsterState != MONSTERSTATE_COMBAT )
 		{
@@ -533,7 +533,7 @@ bool COFMedicAlly :: CheckMeleeAttack1 ( float flDot, float flDist )
 bool COFMedicAlly :: CheckRangeAttack1 ( float flDot, float flDist )
 {
 	//Only if we have a weapon
-	if( pev->weapons )
+	if( pev->weapons != 0)
 	{
 		//Friendly fire is allowed
 		if( !HasConditions( bits_COND_ENEMY_OCCLUDED ) && flDist <= 1024 && flDot >= 0.5 /*&& NoFriendlyFire()*/ )
@@ -709,7 +709,7 @@ void COFMedicAlly :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector
 	{
 		// make sure we're wearing one
 		//TODO: disabled for ally
-		if (/*GetBodygroup( HGruntAllyBodygroup::Head ) == HGruntAllyHead::GasMask &&*/ (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_CLUB)))
+		if (/*GetBodygroup( HGruntAllyBodygroup::Head ) == HGruntAllyHead::GasMask &&*/ (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_CLUB))!= 0)
 		{
 			// absorb damage
 			flDamage -= 20;
@@ -724,7 +724,7 @@ void COFMedicAlly :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector
 	}
 	//PCV absorbs some damage types
 	else if( ( ptr->iHitgroup == HITGROUP_CHEST || ptr->iHitgroup == HITGROUP_STOMACH )
-		&& ( bitsDamageType & ( DMG_BLAST | DMG_BULLET | DMG_SLASH ) ) )
+		&& ( bitsDamageType & ( DMG_BLAST | DMG_BULLET | DMG_SLASH ) ) != 0)
 	{
 		flDamage*= 0.5;
 	}
@@ -738,17 +738,17 @@ void COFMedicAlly :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector
 // needs to forget that he is in cover if he's hurt. (Obviously
 // not in a safe place anymore).
 //=========================================================
-int COFMedicAlly :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType )
+bool COFMedicAlly :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType )
 {
 	// make sure friends talk about it if player hurts talkmonsters...
-	int ret = COFSquadTalkMonster::TakeDamage( pevInflictor, pevAttacker, flDamage, bitsDamageType );
+	bool ret = COFSquadTalkMonster::TakeDamage( pevInflictor, pevAttacker, flDamage, bitsDamageType );
 
 	if( !IsAlive() || pev->deadflag == DEAD_DYING )
 		return ret;
 
 	Forget(bits_MEMORY_INCOVER);
 
-	if( m_MonsterState != MONSTERSTATE_PRONE && ( pevAttacker->flags & FL_CLIENT ) )
+	if( m_MonsterState != MONSTERSTATE_PRONE && ( pevAttacker->flags & FL_CLIENT ) != 0)
 	{
 		m_flPlayerDamage += flDamage;
 
@@ -758,7 +758,7 @@ int COFMedicAlly :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker,
 		{
 			// If the player was facing directly at me, or I'm already suspicious, get mad
 			if( gpGlobals->time - m_flLastHitByPlayer < 4.0 && m_iPlayerHits > 2
-				&& ( ( m_afMemory & bits_MEMORY_SUSPICIOUS ) || IsFacing( pevAttacker, pev->origin ) ) )
+				&& ( ( m_afMemory & bits_MEMORY_SUSPICIOUS ) != 0 || IsFacing( pevAttacker, pev->origin ) ) )
 			{
 				// Alright, now I'm pissed!
 				PlaySentence( "FG_MAD", 4, VOL_NORM, ATTN_NORM );
@@ -841,9 +841,9 @@ void COFMedicAlly :: SetYawSpeed ()
 
 void COFMedicAlly :: IdleSound()
 {
-	if (FOkToSpeak() && (g_fMedicAllyQuestion || RANDOM_LONG(0,1)))
+	if (FOkToSpeak() && (0 != g_fMedicAllyQuestion || RANDOM_LONG(0,1)))
 	{
-		if (!g_fMedicAllyQuestion)
+		if (0 == g_fMedicAllyQuestion)
 		{
 			// ask question or make statement
 			switch (RANDOM_LONG(0,2))
@@ -955,12 +955,12 @@ void COFMedicAlly :: Shoot ()
 
 	const char* pszSoundName;
 
-	if( pev->weapons & MedicAllyWeaponFlag::Glock )
+	if( (pev->weapons & MedicAllyWeaponFlag::Glock ) != 0)
 	{
 		FireBullets( 1, vecShootOrigin, vecShootDir, VECTOR_CONE_2DEGREES, 1024, BULLET_MONSTER_9MM ); // shoot +-5 degrees
 		pszSoundName = "weapons/pl_gun3.wav";
 	}
-	else if( pev->weapons & MedicAllyWeaponFlag::DesertEagle )
+	else if( (pev->weapons & MedicAllyWeaponFlag::DesertEagle ) != 0)
 	{
 		FireBullets( 1, vecShootOrigin, vecShootDir, VECTOR_CONE_2DEGREES, 1024, BULLET_PLAYER_357 ); // shoot +-5 degrees
 		pszSoundName = "weapons/desert_eagle_fire.wav";
@@ -1004,7 +1004,7 @@ void COFMedicAlly :: HandleAnimEvent( MonsterEvent_t *pEvent )
 				SetBodygroup( MedicAllyBodygroup::Weapons, MedicAllyWeapon::None );
 
 				// now spawn a gun.
-				if( pev->weapons & MedicAllyWeaponFlag::Glock )
+				if( (pev->weapons & MedicAllyWeaponFlag::Glock ) != 0)
 				{
 					DropItem( "weapon_9mmhandgun", vecGunPos, vecGunAngles );
 				}
@@ -1019,7 +1019,7 @@ void COFMedicAlly :: HandleAnimEvent( MonsterEvent_t *pEvent )
 
 		case MEDIC_AE_RELOAD:
 
-			if( pev->weapons & MedicAllyWeaponFlag::DesertEagle )
+			if( (pev->weapons & MedicAllyWeaponFlag::DesertEagle ) != 0)
 			{
 				EMIT_SOUND( ENT( pev ), CHAN_WEAPON, "weapons/desert_eagle_reload.wav", 1, ATTN_NORM );
 			}
@@ -1088,7 +1088,7 @@ void COFMedicAlly :: HandleAnimEvent( MonsterEvent_t *pEvent )
 			break;
 
 		case MEDIC_AE_EQUIP_GUN:
-			SetBodygroup( MedicAllyBodygroup::Weapons, pev->weapons & MedicAllyWeaponFlag::Glock ? MedicAllyWeapon::Glock : MedicAllyWeapon::DesertEagle );
+			SetBodygroup( MedicAllyBodygroup::Weapons, (pev->weapons & MedicAllyWeaponFlag::Glock) != 0 ? MedicAllyWeapon::Glock : MedicAllyWeapon::DesertEagle );
 			m_fGunHolstered = false;
 			break;
 
@@ -1152,27 +1152,27 @@ void COFMedicAlly :: Spawn()
 	m_fFollowChecking = false;
 
 
-	if( !pev->weapons )
+	if( 0 == pev->weapons )
 	{
 		pev->weapons |= MedicAllyWeaponFlag::Glock;
 	}
 
 	if( m_iBlackOrWhite == MedicAllyHead::Default )
 	{
-		m_iBlackOrWhite = RANDOM_LONG( 0, 99 ) % 2 == 0 ? MedicAllyHead::White : MedicAllyHead::Black;
+		m_iBlackOrWhite = (RANDOM_LONG( 0, 99 ) % 2) == 0 ? MedicAllyHead::White : MedicAllyHead::Black;
 	}
 
-	if( pev->weapons & MedicAllyWeaponFlag::Glock )
+	if( (pev->weapons & MedicAllyWeaponFlag::Glock ) != 0)
 	{
 		m_iWeaponIdx = MedicAllyWeapon::Glock;
 		m_cClipSize = MEDIC_GLOCK_CLIP_SIZE;
 	}
-	else if( pev->weapons & MedicAllyWeaponFlag::DesertEagle )
+	else if( (pev->weapons & MedicAllyWeaponFlag::DesertEagle ) != 0)
 	{
 		m_iWeaponIdx = MedicAllyWeapon::DesertEagle;
 		m_cClipSize = MEDIC_DEAGLE_CLIP_SIZE;
 	}
-	else if( pev->weapons & MedicAllyWeaponFlag::Needle )
+	else if( (pev->weapons & MedicAllyWeaponFlag::Needle ) != 0)
 	{
 		m_iWeaponIdx = MedicAllyWeapon::Needle;
 		m_cClipSize = 1;
@@ -2394,7 +2394,7 @@ Schedule_t *COFMedicAlly :: GetSchedule()
 	// flying? If PRONE, barnacle has me. IF not, it's assumed I am rapelling. 
 	if ( pev->movetype == MOVETYPE_FLY && m_MonsterState != MONSTERSTATE_PRONE )
 	{
-		if (pev->flags & FL_ONGROUND)
+		if ((pev->flags & FL_ONGROUND) != 0)
 		{
 			// just landed
 			pev->movetype = MOVETYPE_STEP;
@@ -2418,7 +2418,7 @@ Schedule_t *COFMedicAlly :: GetSchedule()
 
 			if( ( pHealTarget->pev->origin - pev->origin ).Make2D().Length() <= 50.0
 				&& ( !m_fUseHealing || gpGlobals->time - m_flLastUseTime <= 0.25 )
-				&& m_iHealCharge
+				&& 0 != m_iHealCharge
 				&& pHealTarget->IsAlive()
 				&& pHealTarget->pev->health != pHealTarget->pev->max_health )
 			{
@@ -2438,7 +2438,7 @@ Schedule_t *COFMedicAlly :: GetSchedule()
 		ASSERT( pSound != NULL );
 		if ( pSound)
 		{
-			if (pSound->m_iType & bits_SOUND_DANGER)
+			if ((pSound->m_iType & bits_SOUND_DANGER) != 0)
 			{
 				// dangerous sound nearby!
 				
@@ -2546,7 +2546,7 @@ Schedule_t *COFMedicAlly :: GetSchedule()
 				return GetScheduleOfType( SCHED_TAKE_COVER_FROM_ENEMY );
 // no ammo
 			//Only if the grunt has a weapon
-			else if ( pev->weapons && HasConditions ( bits_COND_NO_AMMO_LOADED ) )
+			else if ( pev->weapons != 0 && HasConditions ( bits_COND_NO_AMMO_LOADED ) )
 			{
 				//!!!KELLY - this individual just realized he's out of bullet ammo. 
 				// He's going to try to find cover to run to and reload, but rarely, if 
@@ -2973,15 +2973,15 @@ void COFMedicAlly::DeclineFollowing()
 	PlaySentence( "FG_POK", 2, VOL_NORM, ATTN_NORM );
 }
 
-void COFMedicAlly::KeyValue( KeyValueData *pkvd )
+bool COFMedicAlly::KeyValue( KeyValueData *pkvd )
 {
 	if( FStrEq( pkvd->szKeyName, "head" ) )
 	{
 		m_iBlackOrWhite = atoi( pkvd->szValue );
-		pkvd->fHandled = true;
+		return true;
 	}
-	else
-		COFSquadTalkMonster::KeyValue( pkvd );
+
+	return COFSquadTalkMonster::KeyValue( pkvd );
 }
 
 
@@ -3047,7 +3047,7 @@ bool COFMedicAlly::HealMe( COFSquadTalkMonster* pTarget )
 			}
 		}
 
-		if( m_MonsterState != MONSTERSTATE_COMBAT && m_iHealCharge )
+		if( m_MonsterState != MONSTERSTATE_COMBAT && 0 != m_iHealCharge )
 		{
 			HealerActivate( pTarget );
 			return true;
@@ -3157,7 +3157,7 @@ void COFMedicAlly::HealerUse( CBaseEntity* pActivator, CBaseEntity* pCaller, USE
 			m_fFollowChecking = false;
 		}
 
-		const auto newTarget = !m_fUseHealing && m_hTargetEnt && m_fHealing;
+		const auto newTarget = !m_fUseHealing && nullptr != m_hTargetEnt && m_fHealing;
 
 		if( newTarget )
 		{
@@ -3243,7 +3243,7 @@ void COFMedicAlly::HealerUse( CBaseEntity* pActivator, CBaseEntity* pCaller, USE
 class COFMedicAllyRepel : public CBaseMonster
 {
 public:
-	void KeyValue( KeyValueData *pkvd ) override;
+	bool KeyValue( KeyValueData *pkvd ) override;
 
 	void Spawn() override;
 	void Precache() override;
@@ -3258,25 +3258,25 @@ public:
 
 LINK_ENTITY_TO_CLASS( monster_medic_ally_repel, COFMedicAllyRepel );
 
-void COFMedicAllyRepel::KeyValue( KeyValueData *pkvd )
+bool COFMedicAllyRepel::KeyValue( KeyValueData *pkvd )
 {
 	if( FStrEq( pkvd->szKeyName, "head" ) )
 	{
 		m_iBlackOrWhite = atoi( pkvd->szValue );
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if( FStrEq( pkvd->szKeyName, "UseSentence" ) )
 	{
 		m_iszUse = ALLOC_STRING( pkvd->szValue );
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if( FStrEq( pkvd->szKeyName, "UnUseSentence" ) )
 	{
 		m_iszUnUse = ALLOC_STRING( pkvd->szValue );
-		pkvd->fHandled = true;
+		return true;
 	}
-	else
-		CBaseMonster::KeyValue( pkvd );
+
+	return CBaseMonster::KeyValue( pkvd );
 }
 
 void COFMedicAllyRepel::Spawn()

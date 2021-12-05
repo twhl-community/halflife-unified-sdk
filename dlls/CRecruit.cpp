@@ -42,8 +42,8 @@
 class CRecruit : public CTalkMonster
 {
 public:
-	int		Save( CSave &save ) override;
-	int		Restore( CRestore &restore ) override;
+	bool		Save( CSave &save ) override;
+	bool		Restore( CRestore &restore ) override;
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	CUSTOM_SCHEDULES;
@@ -80,7 +80,7 @@ public:
 
 	bool CheckRangeAttack1( float flDot, float flDist ) override;
 
-	int TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType ) override;
+	bool TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType ) override;
 
 	void Precache() override;
 
@@ -271,7 +271,7 @@ Schedule_t* CRecruit::GetSchedule()
 		pSound = PBestSound();
 
 		ASSERT( pSound != NULL );
-		if( pSound && ( pSound->m_iType & bits_SOUND_DANGER ) )
+		if( pSound && ( pSound->m_iType & bits_SOUND_DANGER ) != 0)
 			return GetScheduleOfType( SCHED_TAKE_COVER_FROM_BEST_SOUND );
 	}
 	if( HasConditions( bits_COND_ENEMY_DEAD ) && FOkToSpeak() )
@@ -354,13 +354,13 @@ void CRecruit::TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDi
 	{
 	case HITGROUP_CHEST:
 	case HITGROUP_STOMACH:
-		if( bitsDamageType & ( DMG_BULLET | DMG_SLASH | DMG_BLAST ) )
+		if( (bitsDamageType & ( DMG_BULLET | DMG_SLASH | DMG_BLAST ) ) != 0)
 		{
 			flDamage = flDamage / 2;
 		}
 		break;
 	case 10:
-		if( bitsDamageType & ( DMG_BULLET | DMG_SLASH | DMG_CLUB ) )
+		if( (bitsDamageType & ( DMG_BULLET | DMG_SLASH | DMG_CLUB ) ) != 0)
 		{
 			flDamage -= 20;
 			if( flDamage <= 0 )
@@ -528,14 +528,14 @@ bool CRecruit::CheckRangeAttack1( float flDot, float flDist )
 	return false;
 }
 
-int CRecruit::TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType )
+bool CRecruit::TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType )
 {
 	// make sure friends talk about it if player hurts talkmonsters...
-	int ret = CTalkMonster::TakeDamage( pevInflictor, pevAttacker, flDamage, bitsDamageType );
+	bool ret = CTalkMonster::TakeDamage( pevInflictor, pevAttacker, flDamage, bitsDamageType );
 	if( !IsAlive() || pev->deadflag == DEAD_DYING )
 		return ret;
 
-	if( m_MonsterState != MONSTERSTATE_PRONE && ( pevAttacker->flags & FL_CLIENT ) )
+	if( m_MonsterState != MONSTERSTATE_PRONE && ( pevAttacker->flags & FL_CLIENT ) != 0)
 	{
 		m_flPlayerDamage += flDamage;
 
@@ -544,7 +544,7 @@ int CRecruit::TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float
 		if( m_hEnemy == NULL )
 		{
 			// If the player was facing directly at me, or I'm already suspicious, get mad
-			if( ( m_afMemory & bits_MEMORY_SUSPICIOUS ) || IsFacing( pevAttacker, pev->origin ) )
+			if( ( m_afMemory & bits_MEMORY_SUSPICIOUS ) != 0 || IsFacing( pevAttacker, pev->origin ) )
 			{
 				// Alright, now I'm pissed!
 				PlaySentence( "RC_MAD", 4, VOL_NORM, ATTN_NORM );

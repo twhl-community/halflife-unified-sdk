@@ -26,8 +26,8 @@
 #ifndef CLIENT_DLL
 TYPEDESCRIPTION	CEagle::m_SaveData[] =
 {
-	DEFINE_FIELD( CEagle, m_bSpotVisible, FIELD_INTEGER ),
-	DEFINE_FIELD( CEagle, m_bLaserActive, FIELD_INTEGER ),
+	DEFINE_FIELD( CEagle, m_bSpotVisible, FIELD_BOOLEAN ),
+	DEFINE_FIELD( CEagle, m_bLaserActive, FIELD_BOOLEAN ),
 };
 
 IMPLEMENT_SAVERESTORE( CEagle, CEagle::BaseClass );
@@ -63,7 +63,7 @@ void CEagle::Spawn()
 	FallInit();
 }
 
-int CEagle::AddToPlayer( CBasePlayer* pPlayer )
+bool CEagle::AddToPlayer( CBasePlayer* pPlayer )
 {
 	if( BaseClass::AddToPlayer( pPlayer ) )
 	{
@@ -117,7 +117,7 @@ void CEagle::WeaponIdle()
 	//Update autoaim
 	m_pPlayer->GetAutoaimVector( AUTOAIM_10DEGREES );
 
-	if( m_flTimeWeaponIdle <= UTIL_WeaponTimeBase() && m_iClip )
+	if( m_flTimeWeaponIdle <= UTIL_WeaponTimeBase() && 0 != m_iClip )
 	{
 		const float flNextIdle = UTIL_SharedRandomFloat( m_pPlayer->random_seed, 0.0, 1.0 );
 
@@ -238,9 +238,9 @@ void CEagle::PrimaryAttack()
 		g_vecZero, g_vecZero,
 		vecSpread.x, vecSpread.y,
 		0, 0,
-		m_iClip == 0, 0 );
+		static_cast<int>(m_iClip == 0), 0 );
 
-	if( !m_iClip )
+	if( 0 == m_iClip )
 	{
 		if( m_pPlayer->m_rgAmmo[ m_iPrimaryAmmoType ] <= 0 )
 			m_pPlayer->SetSuitUpdate( "!HEV_AMO0", SUIT_SENTENCE, SUIT_REPEAT_OK );
@@ -278,7 +278,7 @@ void CEagle::Reload()
 {
 	if( m_pPlayer->m_rgAmmo[ m_iPrimaryAmmoType ] > 0 )
 	{
-		const bool bResult = DefaultReload( EAGLE_MAX_CLIP, m_iClip ? EAGLE_RELOAD : EAGLE_RELOAD_NOSHOT, 1.5 );
+		const bool bResult = DefaultReload( EAGLE_MAX_CLIP, 0 != m_iClip ? EAGLE_RELOAD : EAGLE_RELOAD_NOSHOT, 1.5 );
 	
 #ifndef CLIENT_DLL
 		//Only turn it off if we're actually reloading
@@ -331,7 +331,7 @@ int CEagle::iItemSlot()
 	return 2;
 }
 
-int CEagle::GetItemInfo( ItemInfo* p )
+bool CEagle::GetItemInfo( ItemInfo* p )
 {
 	p->pszAmmo1 = "357";
 	p->iMaxAmmo1 = _357_MAX_CARRY;
@@ -349,7 +349,7 @@ int CEagle::GetItemInfo( ItemInfo* p )
 
 void CEagle::IncrementAmmo(CBasePlayer* pPlayer)
 {
-	if (pPlayer->GiveAmmo(1, "357", _357_MAX_CARRY))
+	if (pPlayer->GiveAmmo(1, "357", _357_MAX_CARRY) != 0)
 	{
 		EMIT_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
 	}
@@ -359,7 +359,7 @@ void CEagle::GetWeaponData( weapon_data_t& data )
 {
 	BaseClass::GetWeaponData( data );
 
-	data.iuser1 = m_bLaserActive;
+	data.iuser1 = static_cast<int>(m_bLaserActive);
 }
 
 void CEagle::SetWeaponData( const weapon_data_t& data )

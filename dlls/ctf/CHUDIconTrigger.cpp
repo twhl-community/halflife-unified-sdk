@@ -34,14 +34,14 @@ void CHUDIconTrigger::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYP
 {
 	if (m_flNextActiveTime <= gpGlobals->time && UTIL_IsMasterTriggered(m_sMaster, pActivator))
 	{
-		if (pev->noise)
+		if (!FStringNull(pev->noise))
 			EMIT_SOUND_DYN(edict(), CHAN_VOICE, STRING(pev->noise), VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
 
 		m_hActivator = pActivator;
 
 		SUB_UseTargets(m_hActivator, USE_TOGGLE, 0);
 
-		if (pev->message && pActivator->IsPlayer())
+		if (!FStringNull(pev->message) && pActivator->IsPlayer())
 			UTIL_ShowMessage(STRING(pev->message), pActivator);
 
 		switch (useType)
@@ -60,7 +60,7 @@ void CHUDIconTrigger::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYP
 		}
 
 		g_engfuncs.pfnMessageBegin(MSG_ALL, gmsgCustomIcon, 0, 0);
-		g_engfuncs.pfnWriteByte(m_fIsActive);
+		g_engfuncs.pfnWriteByte(static_cast<int>(m_fIsActive));
 		g_engfuncs.pfnWriteByte(m_nCustomIndex);
 
 		if (m_fIsActive)
@@ -91,48 +91,46 @@ void CHUDIconTrigger::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYP
 		}
 	}
 }
-void CHUDIconTrigger::KeyValue(KeyValueData* pkvd)
+bool CHUDIconTrigger::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq("icon_name", pkvd->szKeyName))
 	{
 		m_iszCustomName = g_engfuncs.pfnAllocString(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq("icon_index", pkvd->szKeyName))
 	{
 		m_nCustomIndex = atoi(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq("icon_left", pkvd->szKeyName))
 	{
 		m_nLeft = atoi(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq("icon_top", pkvd->szKeyName))
 	{
 		m_nTop = atoi(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq("icon_width", pkvd->szKeyName))
 	{
 		m_nWidth = atoi(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq("icon_height", pkvd->szKeyName))
 	{
 		m_nHeight = atoi(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
-	else
-	{
-		pkvd->fHandled = false;
-	}
+
+	return false;
 }
 
 void CHUDIconTrigger::UpdateUser(CBaseEntity* pPlayer)
 {
 	g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgCustomIcon, 0, pPlayer->edict());
-	g_engfuncs.pfnWriteByte(m_fIsActive);
+	g_engfuncs.pfnWriteByte(static_cast<int>(m_fIsActive));
 	g_engfuncs.pfnWriteByte(m_nCustomIndex);
 
 	if (m_fIsActive)
@@ -157,7 +155,7 @@ void RefreshCustomHUD(CBasePlayer* pPlayer)
 
 	for (auto entity : UTIL_FindEntitiesByClassname<CHUDIconTrigger>("ctf_hudicon"))
 	{
-		if (!(activeIcons & (1 << entity->m_nCustomIndex)))
+		if ((activeIcons & (1 << entity->m_nCustomIndex)) == 0)
 		{
 			if (entity->m_fIsActive)
 			{

@@ -207,7 +207,7 @@ int DLLEXPORT HUD_Redraw( float time, int intermission )
 {
 //	RecClHudRedraw(time, intermission);
 
-	gHUD.Redraw( time, intermission );
+	gHUD.Redraw( time, 0 != intermission );
 
 	return 1;
 }
@@ -232,7 +232,7 @@ int DLLEXPORT HUD_UpdateClientData(client_data_t *pcldata, float flTime )
 
 	IN_Commands();
 
-	return gHUD.UpdateClientData(pcldata, flTime );
+	return static_cast<int>(gHUD.UpdateClientData(pcldata, flTime ));
 }
 
 /*
@@ -278,7 +278,7 @@ void DLLEXPORT HUD_VoiceStatus(int entindex, qboolean bTalking)
 {
 ////	RecClVoiceStatus(entindex, bTalking);
 
-	GetClientVoiceMgr()->UpdateSpeakerStatus(entindex, bTalking);
+	GetClientVoiceMgr()->UpdateSpeakerStatus(entindex, 0 != bTalking);
 }
 
 /*
@@ -308,7 +308,7 @@ void CL_LoadParticleMan()
 {
 	char szPDir[512];
 
-	if ( gEngfuncs.COM_ExpandFilename( PARTICLEMAN_DLLNAME, szPDir, sizeof( szPDir ) ) == false )
+	if ( gEngfuncs.COM_ExpandFilename( PARTICLEMAN_DLLNAME, szPDir, sizeof( szPDir ) ) == 0 )
 	{
 		g_pParticleMan = NULL;
 		g_hParticleManModule = NULL;

@@ -23,8 +23,8 @@
 class CMortarShell : public CGrenade
 {
 public:
-	int	Save( CSave &save ) override;
-	int Restore( CRestore &restore ) override;
+	bool	Save( CSave &save ) override;
+	bool Restore( CRestore &restore ) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
 	void Precache() override;
@@ -41,14 +41,14 @@ public:
 	int m_iTrail;
 	float m_flIgniteTime;
 	int m_velocity;
-	int m_iSoundedOff;
+	bool m_iSoundedOff;
 };
 
 TYPEDESCRIPTION	CMortarShell::m_SaveData[] =
 {
 	DEFINE_FIELD( CMortarShell, m_velocity, FIELD_INTEGER ),
 	DEFINE_FIELD( CMortarShell, m_flIgniteTime, FIELD_TIME ),
-	DEFINE_FIELD( CMortarShell, m_iSoundedOff, FIELD_INTEGER ),
+	DEFINE_FIELD( CMortarShell, m_iSoundedOff, FIELD_BOOLEAN ),
 };
 
 IMPLEMENT_SAVERESTORE( CMortarShell, CGrenade );
@@ -237,11 +237,11 @@ const auto SF_MORTAR_CONTROLLABLE = 1 << 5;
 class COp4Mortar : public CBaseMonster
 {
 public:
-	int	Save( CSave &save ) override;
-	int Restore( CRestore &restore ) override;
+	bool	Save( CSave &save ) override;
+	bool Restore( CRestore &restore ) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
-	void KeyValue( KeyValueData* pkvd ) override;
+	bool KeyValue( KeyValueData* pkvd ) override;
 
 	void Precache() override;
 
@@ -251,7 +251,7 @@ public:
 
 	void EXPORT MortarThink();
 
-	int TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType ) override;
+	bool TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType ) override;
 
 	void PlaySound();
 
@@ -268,7 +268,7 @@ public:
 	int d_x;
 	int d_y;
 	float m_lastupdate;
-	int m_playsound;
+	bool m_playsound;
 	int m_updated;
 	int m_direction;
 	Vector m_start;
@@ -294,7 +294,7 @@ TYPEDESCRIPTION	COp4Mortar::m_SaveData[] =
 	DEFINE_FIELD( COp4Mortar, d_x, FIELD_INTEGER ),
 	DEFINE_FIELD( COp4Mortar, d_y, FIELD_INTEGER ),
 	DEFINE_FIELD( COp4Mortar, m_lastupdate, FIELD_FLOAT ),
-	DEFINE_FIELD( COp4Mortar, m_playsound, FIELD_INTEGER ),
+	DEFINE_FIELD( COp4Mortar, m_playsound, FIELD_BOOLEAN ),
 	DEFINE_FIELD( COp4Mortar, m_updated, FIELD_INTEGER ),
 	DEFINE_FIELD( COp4Mortar, m_direction, FIELD_INTEGER ),
 	DEFINE_FIELD( COp4Mortar, m_start, FIELD_VECTOR ),
@@ -319,47 +319,45 @@ IMPLEMENT_SAVERESTORE( COp4Mortar, CBaseMonster );
 
 LINK_ENTITY_TO_CLASS( op4mortar, COp4Mortar );
 
-void COp4Mortar::KeyValue( KeyValueData* pkvd )
+bool COp4Mortar::KeyValue( KeyValueData* pkvd )
 {
 	if( FStrEq( "h_max", pkvd->szKeyName ) )
 	{
 		m_hmax = atoi( pkvd->szValue );
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if( FStrEq( "h_min", pkvd->szKeyName ) )
 	{
 		m_hmin = atoi( pkvd->szValue );
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if( FStrEq( "mortar_velocity", pkvd->szKeyName ) )
 	{
 		m_velocity = atoi( pkvd->szValue );
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if( FStrEq( "mindist", pkvd->szKeyName ) )
 	{
 		m_minRange = atof( pkvd->szValue );
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if( FStrEq( "maxdist", pkvd->szKeyName ) )
 	{
 		m_maxRange = atof( pkvd->szValue );
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if( FStrEq( "enemytype", pkvd->szKeyName ) )
 	{
 		m_iEnemyType = atoi( pkvd->szValue );
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if( FStrEq( "firedelay", pkvd->szKeyName ) )
 	{
 		m_fireDelay = atoi( pkvd->szValue );
-		pkvd->fHandled = true;
+		return true;
 	}
-	else
-	{
-		CBaseToggle::KeyValue( pkvd );
-	}
+
+	return CBaseToggle::KeyValue( pkvd );
 }
 
 void COp4Mortar::Precache()
@@ -434,7 +432,7 @@ void COp4Mortar::MortarThink()
 
 	pev->nextthink = gpGlobals->time + 0.1;
 
-	if( pev->spawnflags & SF_MORTAR_ACTIVE )
+	if( (pev->spawnflags & SF_MORTAR_ACTIVE ) != 0)
 	{
 		if( !m_hEnemy )
 		{
@@ -502,7 +500,7 @@ void COp4Mortar::MortarThink()
 	}
 }
 
-int COp4Mortar::TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType )
+bool COp4Mortar::TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType )
 {
 	//Ignore all damage
 	return CBaseMonster::TakeDamage( pevInflictor, pevAttacker, 0, bitsDamageType );
@@ -576,7 +574,7 @@ void COp4Mortar::AIUpdatePosition()
 		d_x = 0;
 	}
 
-	if( d_x || d_y )
+	if( 0 != d_x || 0 != d_y )
 	{
 		PlaySound();
 	}
@@ -612,9 +610,9 @@ CBaseEntity* COp4Mortar::FindTarget()
 			TraceResult tr;
 			UTIL_TraceLine( barrelEnd, pPlayerTarget->pev->origin + pPlayerTarget->pev->view_ofs, dont_ignore_monsters, edict(), &tr );
 
-			if( !( pev->spawnflags & SF_MORTAR_LINE_OF_SIGHT ) || tr.pHit == pPlayerTarget->pev->pContainingEntity )
+			if( ( pev->spawnflags & SF_MORTAR_LINE_OF_SIGHT ) == 0 || tr.pHit == pPlayerTarget->pev->pContainingEntity )
 			{
-				if( !m_iEnemyType )
+				if( 0 == m_iEnemyType )
 					return pPlayerTarget;
 
 				flIdealDist = distance;
@@ -635,7 +633,7 @@ CBaseEntity* COp4Mortar::FindTarget()
 		if( this == pEntity )
 			continue;
 
-		if( pEntity->pev->spawnflags & SF_MONSTER_PRISONER )
+		if( (pEntity->pev->spawnflags & SF_MONSTER_PRISONER ) != 0)
 			continue;
 
 		if( pEntity->pev->health <= 0 )
@@ -649,13 +647,13 @@ CBaseEntity* COp4Mortar::FindTarget()
 		if( pMonster->IRelationship( pPlayerTarget ) != R_AL )
 			continue;
 
-		if( pEntity->pev->flags & FL_NOTARGET )
+		if( (pEntity->pev->flags & FL_NOTARGET ) != 0)
 			continue;
 
 		if( !FVisible( pEntity ) )
 			continue;
 
-		if( pEntity->IsPlayer() && ( pev->spawnflags & SF_MORTAR_ACTIVE ) )
+		if( pEntity->IsPlayer() && ( pev->spawnflags & SF_MORTAR_ACTIVE ) != 0)
 		{
 			if( pMonster->FInViewCone( this ) )
 			{
@@ -673,7 +671,7 @@ CBaseEntity* COp4Mortar::FindTarget()
 			TraceResult tr;
 			UTIL_TraceLine( barrelEnd, pEntity->pev->origin + pEntity->pev->view_ofs, dont_ignore_monsters, edict(), &tr );
 
-			if( pev->spawnflags & SF_MORTAR_LINE_OF_SIGHT )
+			if( (pev->spawnflags & SF_MORTAR_LINE_OF_SIGHT ) != 0)
 			{
 				if( tr.pHit == pEntity->edict() )
 				{
@@ -734,7 +732,7 @@ void COp4Mortar::UpdatePosition( int direction, int controller )
 			d_x = 0;
 		}
 
-		if( d_x || d_y )
+		if( 0 != d_x || 0 != d_y )
 		{
 			PlaySound();
 		}
@@ -753,7 +751,7 @@ void COp4Mortar::Use( CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE us
 {
 	if( useType == USE_TOGGLE && ( !pActivator || pActivator->Classify() == CLASS_PLAYER ) )
 	{
-		if( !( pev->spawnflags & SF_MORTAR_ACTIVE ) && ( pev->spawnflags & SF_MORTAR_CONTROLLABLE ) )
+		if( ( pev->spawnflags & SF_MORTAR_ACTIVE ) == 0 && ( pev->spawnflags & SF_MORTAR_CONTROLLABLE ) != 0)
 		{
 			//Player fired a mortar
 			EMIT_SOUND( edict(), CHAN_VOICE, "weapons/mortarhit.wav", VOL_NORM, ATTN_NONE );
@@ -789,13 +787,13 @@ void COp4Mortar::Use( CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE us
 class COp4MortarController : public CBaseToggle
 {
 public:
-	int	Save( CSave &save ) override;
-	int Restore( CRestore &restore ) override;
+	bool	Save( CSave &save ) override;
+	bool Restore( CRestore &restore ) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
 	int ObjectCaps() override { return FCAP_CONTINUOUS_USE; }
 
-	void KeyValue( KeyValueData* pkvd ) override;
+	bool KeyValue( KeyValueData* pkvd ) override;
 
 	void Spawn() override;
 
@@ -819,17 +817,15 @@ IMPLEMENT_SAVERESTORE( COp4MortarController, CBaseToggle );
 
 LINK_ENTITY_TO_CLASS( func_op4mortarcontroller, COp4MortarController );
 
-void COp4MortarController::KeyValue( KeyValueData* pkvd )
+bool COp4MortarController::KeyValue( KeyValueData* pkvd )
 {
 	if( FStrEq( "mortar_axis", pkvd->szKeyName ) )
 	{
 		m_controller = atoi( pkvd->szValue );
-		pkvd->fHandled = true;
+		return true;
 	}
-	else
-	{
-		CBaseToggle::KeyValue( pkvd );
-	}
+
+	return CBaseToggle::KeyValue( pkvd );
 }
 
 void COp4MortarController::Spawn()

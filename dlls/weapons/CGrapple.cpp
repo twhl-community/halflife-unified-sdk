@@ -85,7 +85,7 @@ void CGrapple::Spawn()
 	FallInit();
 }
 
-int CGrapple::AddToPlayer( CBasePlayer* pPlayer )
+bool CGrapple::AddToPlayer( CBasePlayer* pPlayer )
 {
 	if( BaseClass::AddToPlayer( pPlayer ) )
 	{
@@ -438,7 +438,7 @@ void CGrapple::Fire( const Vector& vecOrigin, const Vector& vecDir )
 
 	UTIL_TraceLine( vecSrc, vecEnd, dont_ignore_monsters, m_pPlayer->edict(), &tr );
 
-	if( !tr.fAllSolid )
+	if( 0 == tr.fAllSolid )
 	{
 		auto pHit = Instance( tr.pHit );
 
@@ -562,7 +562,7 @@ int CGrapple::iItemSlot()
 	return 1;
 }
 
-int CGrapple::GetItemInfo( ItemInfo* p )
+bool CGrapple::GetItemInfo( ItemInfo* p )
 {
 	p->pszAmmo1 = nullptr;
 	p->iMaxAmmo1 = WEAPON_NOCLIP;

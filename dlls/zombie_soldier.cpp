@@ -61,7 +61,7 @@ public:
 	// No range attacks
 	bool CheckRangeAttack1 ( float flDot, float flDist ) override { return false; }
 	bool CheckRangeAttack2 ( float flDot, float flDist ) override { return false; }
-	int TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType ) override;
+	bool TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType ) override;
 };
 
 LINK_ENTITY_TO_CLASS( monster_zombie_soldier, CZombieSoldier );
@@ -134,7 +134,7 @@ void CZombieSoldier :: SetYawSpeed ()
 	pev->yaw_speed = ys;
 }
 
-int CZombieSoldier :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType )
+bool CZombieSoldier :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType )
 {
 	// Take 30% damage from bullets
 	if ( bitsDamageType == DMG_BULLET )
@@ -199,7 +199,7 @@ void CZombieSoldier :: HandleAnimEvent( MonsterEvent_t *pEvent )
 			CBaseEntity *pHurt = CheckTraceHullAttack( 70, gSkillData.zombieSoldierDmgOneSlash, DMG_SLASH );
 			if ( pHurt )
 			{
-				if ( pHurt->pev->flags & (FL_MONSTER|FL_CLIENT) )
+				if ( (pHurt->pev->flags & (FL_MONSTER|FL_CLIENT)) != 0 )
 				{
 					pHurt->pev->punchangle.z = -18;
 					pHurt->pev->punchangle.x = 5;
@@ -223,7 +223,7 @@ void CZombieSoldier :: HandleAnimEvent( MonsterEvent_t *pEvent )
 			CBaseEntity *pHurt = CheckTraceHullAttack( 70, gSkillData.zombieSoldierDmgOneSlash, DMG_SLASH );
 			if ( pHurt )
 			{
-				if ( pHurt->pev->flags & (FL_MONSTER|FL_CLIENT) )
+				if ( (pHurt->pev->flags & (FL_MONSTER|FL_CLIENT)) != 0 )
 				{
 					pHurt->pev->punchangle.z = 18;
 					pHurt->pev->punchangle.x = 5;
@@ -245,7 +245,7 @@ void CZombieSoldier :: HandleAnimEvent( MonsterEvent_t *pEvent )
 			CBaseEntity *pHurt = CheckTraceHullAttack( 70, gSkillData.zombieSoldierDmgBothSlash, DMG_SLASH );
 			if ( pHurt )
 			{
-				if ( pHurt->pev->flags & (FL_MONSTER|FL_CLIENT) )
+				if ( (pHurt->pev->flags & (FL_MONSTER|FL_CLIENT)) != 0 )
 				{
 					pHurt->pev->punchangle.x = 5;
 					pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_forward * -100;
@@ -356,7 +356,7 @@ public:
 	void Spawn() override;
 	int	Classify() override { return	CLASS_ALIEN_MONSTER; }
 
-	void KeyValue( KeyValueData *pkvd ) override;
+	bool KeyValue( KeyValueData *pkvd ) override;
 
 	int	m_iPose;// which sequence to display	-- temporary, don't need to save
 	static char *m_szPoses[ 2 ];
@@ -364,15 +364,15 @@ public:
 
 char *CDeadZombieSoldier::m_szPoses[] = { "dead_on_stomach", "dead_on_back" };
 
-void CDeadZombieSoldier::KeyValue( KeyValueData *pkvd )
+bool CDeadZombieSoldier::KeyValue( KeyValueData *pkvd )
 {
 	if( FStrEq( pkvd->szKeyName, "pose" ) )
 	{
 		m_iPose = atoi( pkvd->szValue );
-		pkvd->fHandled = true;
+		return true;
 	}
-	else
-		CBaseMonster::KeyValue( pkvd );
+
+	return CBaseMonster::KeyValue( pkvd );
 }
 
 LINK_ENTITY_TO_CLASS( monster_zombie_soldier_dead, CDeadZombieSoldier );

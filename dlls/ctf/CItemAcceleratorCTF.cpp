@@ -54,17 +54,17 @@ void CItemAcceleratorCTF::RemoveEffect( CBasePlayer* pPlayer )
 
 bool CItemAcceleratorCTF::MyTouch( CBasePlayer* pPlayer )
 {
-	if( !( pPlayer->m_iItems & CTFItem::Acceleration ) )
+	if( ( pPlayer->m_iItems & CTFItem::Acceleration ) == 0)
 	{
-		if( !multipower.value )
+		if( 0 == multipower.value )
 		{
-			if( pPlayer->m_iItems & CTFItem::ItemsMask )
+			if( (pPlayer->m_iItems & CTFItem::ItemsMask ) != 0)
 				return false;
 		}
 
 		if( team_no == CTFTeam::None || team_no == pPlayer->m_iTeamNum )
 		{
-			if( pPlayer->pev->weapons & (1 << WEAPON_SUIT) )
+			if( (pPlayer->pev->weapons & (1 << WEAPON_SUIT) ) != 0)
 			{
 				pPlayer->m_iItems = static_cast<CTFItem::CTFItem>( pPlayer->m_iItems | CTFItem::Acceleration );
 				MESSAGE_BEGIN( MSG_ONE, gmsgItemPickup, nullptr, pPlayer->edict() );

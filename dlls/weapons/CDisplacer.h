@@ -45,7 +45,7 @@ public:
 
 	void Spawn() override;
 
-	int AddToPlayer( CBasePlayer* pPlayer ) override;
+	bool AddToPlayer( CBasePlayer* pPlayer ) override;
 
 	bool Deploy() override;
 
@@ -69,7 +69,7 @@ public:
 
 	int iItemSlot() override;
 
-	int GetItemInfo( ItemInfo* p ) override;
+	bool GetItemInfo( ItemInfo* p ) override;
 
 	void IncrementAmmo(CBasePlayer* pPlayer) override;
 

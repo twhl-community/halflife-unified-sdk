@@ -234,7 +234,7 @@ static void SendFlagIcons(CBasePlayer* player, CTFGoalFlag* team1Flag, CTFGoalFl
 
 void DisplayTeamFlags(CBasePlayer* pPlayer)
 {
-	if (!gmsgFlagIcon)
+	if (0 == gmsgFlagIcon)
 		return;
 
 	CTFGoalFlag* team1Flag = nullptr;
@@ -441,14 +441,14 @@ void FlushCTFPowerupTimes()
 
 void InitItemsForPlayer( CBasePlayer* pPlayer )
 {
-	if( gmsgPlayerIcon )
+	if( 0 != gmsgPlayerIcon )
 	{
 		for( auto pOther : UTIL_FindPlayers() )
 		{
 			for( const auto& item : CTFItems )
 			{
 				//TODO: this can probably be optimized by finding the last item that the player is carrying and only sending that
-				if( pOther->m_iItems & item.Mask )
+				if( (pOther->m_iItems & item.Mask ) != 0)
 				{
 					g_engfuncs.pfnMessageBegin( MSG_ONE, gmsgPlayerIcon, nullptr, pPlayer->edict() );
 					g_engfuncs.pfnWriteByte( pOther->entindex() );
@@ -613,7 +613,7 @@ bool CHalfLifeCTFplay::ClientConnected( edict_t* pEntity, const char* pszName, c
 					pFlag->ReturnFlag();
 				}
 
-				if( pPlayer->m_iItems & CTFItem::ItemsMask )
+				if( (pPlayer->m_iItems & CTFItem::ItemsMask ) != 0)
 				{
 					RespawnPlayerCTFPowerups( pPlayer, true );
 				}
@@ -652,7 +652,7 @@ void CHalfLifeCTFplay::InitHUD( CBasePlayer* pPlayer )
 
 	RecountTeams();
 
-	if( pPlayer->m_iTeamNum > CTFTeam::None && !pPlayer->pev->iuser1 )
+	if( pPlayer->m_iTeamNum > CTFTeam::None && OBS_NONE == pPlayer->pev->iuser1 )
 	{
 		char text[ 1024 ];
 		sprintf( text, "* you are on team '%s'\n", team_names[ ( int ) pPlayer->m_iTeamNum - 1 ] );
@@ -696,7 +696,7 @@ void CHalfLifeCTFplay::ClientDisconnected( edict_t* pClient )
 					pFlag->DropFlag( v2 );
 				}
 
-				if( v2->m_iItems & CTFItem::ItemsMask )
+				if( (v2->m_iItems & CTFItem::ItemsMask ) != 0)
 					ScatterPlayerCTFPowerups( v2 );
 			}
 			v2->m_iTeamNum = CTFTeam::None;
@@ -779,7 +779,7 @@ void CHalfLifeCTFplay::PlayerSpawn( CBasePlayer* pPlayer )
 {
 	if( pPlayer->m_iTeamNum != CTFTeam::None )
 	{
-		if( !pPlayer->pev->iuser1 )
+		if( OBS_NONE == pPlayer->pev->iuser1 )
 		{
 			const int savedAutoWepSwitch = pPlayer->m_iAutoWepSwitch;
 			pPlayer->m_iAutoWepSwitch = 1;
@@ -796,7 +796,7 @@ void CHalfLifeCTFplay::PlayerSpawn( CBasePlayer* pPlayer )
 
 			MESSAGE_BEGIN( MSG_ONE, gmsgOldWeapon, nullptr, pPlayer->edict() );
 
-			g_engfuncs.pfnWriteByte( 1.0 == oldweapons.value );
+			g_engfuncs.pfnWriteByte( static_cast<int>(1 == oldweapons.value) );
 			g_engfuncs.pfnMessageEnd();
 
 			if( useDefault )
@@ -857,7 +857,7 @@ void CHalfLifeCTFplay::PlayerThink( CBasePlayer* pPlayer )
 
 	TraceResult tr;
 
-	if( pPlayer->m_iFOV )
+	if( 0 != pPlayer->m_iFOV )
 	{
 		UTIL_TraceLine( vecSrc, vecSrc + 4096 * gpGlobals->v_forward, dont_ignore_monsters, pPlayer->edict(), &tr );
 	}
@@ -866,7 +866,7 @@ void CHalfLifeCTFplay::PlayerThink( CBasePlayer* pPlayer )
 		UTIL_TraceLine( vecSrc, vecSrc + 1280.0 * gpGlobals->v_forward, dont_ignore_monsters, pPlayer->edict(), &tr );
 	}
 
-	if( gmsgPlayerBrowse && tr.flFraction < 1.0 && pPlayer->m_iLastPlayerTrace != g_engfuncs.pfnIndexOfEdict( tr.pHit ) )
+	if( 0 != gmsgPlayerBrowse && tr.flFraction < 1.0 && pPlayer->m_iLastPlayerTrace != g_engfuncs.pfnIndexOfEdict( tr.pHit ) )
 	{
 		auto pOther = CBaseEntity::Instance( tr.pHit );
 
@@ -883,9 +883,9 @@ void CHalfLifeCTFplay::PlayerThink( CBasePlayer* pPlayer )
 			auto pOtherPlayer = static_cast<CBasePlayer*>(pOther);
 
 			g_engfuncs.pfnMessageBegin( MSG_ONE, gmsgPlayerBrowse, nullptr, pPlayer->edict() );
-			g_engfuncs.pfnWriteByte( pOtherPlayer->m_iTeamNum == pPlayer->m_iTeamNum );
+			g_engfuncs.pfnWriteByte( static_cast<int>(pOtherPlayer->m_iTeamNum == pPlayer->m_iTeamNum) );
 
-			const auto v11 = !pPlayer->pev->iuser1 ? pOtherPlayer->m_iTeamNum : CTFTeam::None;
+			const auto v11 = OBS_NONE == pPlayer->pev->iuser1 ? pOtherPlayer->m_iTeamNum : CTFTeam::None;
 
 			g_engfuncs.pfnWriteByte( ( int ) v11 );
 			g_engfuncs.pfnWriteString( STRING( pOtherPlayer->pev->netname ) );
@@ -902,7 +902,7 @@ void CHalfLifeCTFplay::PlayerThink( CBasePlayer* pPlayer )
 
 bool CHalfLifeCTFplay::ClientCommand( CBasePlayer* pPlayer, const char* pcmd )
 {
-	if( !strcmp( "cancelmenu", pcmd ) )
+	if( 0 == strcmp( "cancelmenu", pcmd ) )
 	{
 		if(pPlayer->m_iCurrentMenu == MENU_CLASS)
 		{
@@ -927,23 +927,23 @@ bool CHalfLifeCTFplay::ClientCommand( CBasePlayer* pPlayer, const char* pcmd )
 
 		return true;
 	}
-	else if( !strcmp( "endmotd", pcmd ) )
+	else if( 0 == strcmp( "endmotd", pcmd ) )
 	{
 		pPlayer->m_iCurrentMenu = MENU_TEAM;
 		pPlayer->Player_Menu();
 		return true;
 	}
-	else if( !strcmp( "jointeam", pcmd ) )
+	else if( 0 == strcmp( "jointeam", pcmd ) )
 	{
 		pPlayer->Menu_Team_Input( atoi( CMD_ARGV( 1 ) ) );
 		return true;
 	}
-	else if( !strcmp( "spectate", pcmd ) )
+	else if( 0 == strcmp( "spectate", pcmd ) )
 	{
 		pPlayer->Menu_Team_Input( -1 );
 		return true;
 	}
-	else if( !strcmp( "selectchar", pcmd ) )
+	else if( 0 == strcmp( "selectchar", pcmd ) )
 	{
 		if( g_engfuncs.pfnCmd_Argc() > 1 )
 		{
@@ -965,15 +965,15 @@ void CHalfLifeCTFplay::ClientUserInfoChanged( CBasePlayer* pPlayer, char* infobu
 		auto pszNewModel = g_engfuncs.pfnInfoKeyValue( infobuffer, "model" );
 		if( *pszNewModel != '=' )
 		{
-			if( strcmp( pszNewModel, pPlayer->m_szTeamModel ) )
+			if( 0 != strcmp( pszNewModel, pPlayer->m_szTeamModel ) )
 			{
 				if( std::any_of( team_chars.begin(), team_chars.end(), [ = ]( auto pszChar )
 					{
-						return !strcmp( pPlayer->m_szTeamModel, pszChar );
+						return 0 == strcmp( pPlayer->m_szTeamModel, pszChar );
 					}))
 				{
 					auto pszPlayerName = STRING( pPlayer->pev->netname );
-					if( pszPlayerName && *pszPlayerName )
+					if( pszPlayerName && '\0' != *pszPlayerName)
 					{
 						UTIL_LogPrintf( "\"%s<%i><%u><%s>\" changed role to \"%s\"\n",
 							pszPlayerName,
@@ -998,7 +998,7 @@ int CHalfLifeCTFplay::IPointsForKill( CBasePlayer* pAttacker, CBasePlayer* pKill
 		if( pAttacker )
 		{
 			if( pAttacker != pKilled )
-				return 2 * ( PlayerRelationship( pAttacker, pKilled ) != GR_TEAMMATE ) - 1;
+				return 2 * static_cast<int>( PlayerRelationship( pAttacker, pKilled ) != GR_TEAMMATE ) - 1;
 		}
 
 		return 1;
@@ -1009,7 +1009,7 @@ int CHalfLifeCTFplay::IPointsForKill( CBasePlayer* pAttacker, CBasePlayer* pKill
 
 void CHalfLifeCTFplay::PlayerKilled( CBasePlayer* pVictim, entvars_t* pKiller, entvars_t* pInflictor )
 {
-	if( !pVictim || pVictim->pev->iuser1 )
+	if( !pVictim || OBS_NONE != pVictim->pev->iuser1 )
 		return;
 
 	if( !m_DisableDeathPenalty && !g_fGameOver )
@@ -1083,19 +1083,19 @@ void CHalfLifeCTFplay::PlayerKilled( CBasePlayer* pVictim, entvars_t* pKiller, e
 				if( v5->m_pActiveItem )
 					pszInflictorName = CBasePlayerItem::ItemInfoArray[ v5->m_pActiveItem->m_iId ].pszName;
 			}
-			else if( pInflictor && pInflictor->classname )
+			else if( pInflictor && !FStringNull(pInflictor->classname ))
 			{
 				pszInflictorName = STRING( pInflictor->classname );
 			}
 
 			if( pszInflictorName )
 			{
-				if( !strcmp( "weapon_sniperrifle", pszInflictorName )
-					|| !strcmp( "weapon_crossbow", pszInflictorName ) )
+				if( 0 == strcmp( "weapon_sniperrifle", pszInflictorName )
+					|| 0 == strcmp( "weapon_crossbow", pszInflictorName ) )
 				{
 					++v5->m_iSnipeKills;
 				}
-				else if( !strcmp( "weapon_grapple", pszInflictorName ) )
+				else if( 0 == strcmp( "weapon_grapple", pszInflictorName ) )
 				{
 					++v5->m_iBarnacleKills;
 				}
@@ -1182,7 +1182,7 @@ void CHalfLifeCTFplay::PlayerKilled( CBasePlayer* pVictim, entvars_t* pKiller, e
 			pFlag->DropFlag( pVictim );
 		}
 
-		if( pVictim->m_iItems & CTFItem::ItemsMask )
+		if( (pVictim->m_iItems & CTFItem::ItemsMask ) != 0)
 			ScatterPlayerCTFPowerups( pVictim );
 	}
 }
@@ -1193,7 +1193,7 @@ void CHalfLifeCTFplay::DeathNotice( CBasePlayer* pVictim, entvars_t* pKiller, en
 	{
 		if( pKiller
 			&& pVictim
-			&& pKiller->flags & FL_CLIENT )
+			&& (pKiller->flags & FL_CLIENT ) != 0)
 		{
 			auto pEntKiller = CBaseEntity::Instance<CBasePlayer>( pKiller );
 
@@ -1240,7 +1240,7 @@ int CHalfLifeCTFplay::PlayerRelationship( CBaseEntity* pPlayer, CBaseEntity* pTa
 	if( pTarget && pPlayer )
 	{
 		if( pTarget->IsPlayer() )
-			return static_cast<CBasePlayer*>( pPlayer )->m_iTeamNum == static_cast<CBasePlayer*>( pTarget )->m_iTeamNum;
+			return static_cast<CBasePlayer*>( pPlayer )->m_iTeamNum == static_cast<CBasePlayer*>( pTarget )->m_iTeamNum ? GR_TEAMMATE : GR_NOTTEAMMATE;
 	}
 
 	return GR_NOTTEAMMATE;
@@ -1248,7 +1248,7 @@ int CHalfLifeCTFplay::PlayerRelationship( CBaseEntity* pPlayer, CBaseEntity* pTa
 
 int CHalfLifeCTFplay::GetTeamIndex( const char* pTeamName )
 {
-	if( pTeamName && *pTeamName )
+	if( pTeamName && '\0' != *pTeamName)
 	{
 		for( int i = 0; i < MaxTeams; ++i )
 		{
@@ -1312,7 +1312,7 @@ void CHalfLifeCTFplay::ChangePlayerTeam( CBasePlayer* pPlayer, const char* pChar
 						pPlayer->m_pFlag.Entity<CTFGoalFlag>()->DropFlag( pPlayer );
 					}
 
-					if( pPlayer->m_iItems & CTFItem::ItemsMask )
+					if( (pPlayer->m_iItems & CTFItem::ItemsMask ) != 0)
 					{
 						ScatterPlayerCTFPowerups( pPlayer );
 					}
@@ -1358,7 +1358,7 @@ void CHalfLifeCTFplay::ChangePlayerTeam( CBasePlayer* pPlayer, const char* pChar
 
 		const auto v19 = STRING( pPlayer->pev->netname );
 
-		if( v19 && *v19 )
+		if( v19 && '\0' != *v19)
 		{
 			UTIL_LogPrintf( "\"%s<%i><%u><%s>\" changed role to \"%s\"\n",
 				v19,
@@ -1372,7 +1372,7 @@ void CHalfLifeCTFplay::ChangePlayerTeam( CBasePlayer* pPlayer, const char* pChar
 	{
 		if( pPlayer->pev->health <= 0.0 )
 		{
-			respawn( pPlayer->pev, 0 );
+			respawn( pPlayer->pev, false );
 		}
 
 		pPlayer->pev->effects |= EF_NODRAW;
@@ -1431,7 +1431,7 @@ void CHalfLifeCTFplay::ChangePlayerTeam( CBasePlayer* pPlayer, const char* pChar
 				pPlayer->m_pFlag.Entity<CTFGoalFlag>()->DropFlag( pPlayer );
 			}
 
-			if( pPlayer->m_iItems & CTFItem::ItemsMask )
+			if( (pPlayer->m_iItems & CTFItem::ItemsMask ) != 0)
 			{
 				ScatterPlayerCTFPowerups( pPlayer );
 			}

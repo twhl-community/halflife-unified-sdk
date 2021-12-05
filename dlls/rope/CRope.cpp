@@ -77,37 +77,37 @@ CRope::~CRope()
 	delete[] m_pSprings;
 }
 
-void CRope::KeyValue( KeyValueData* pkvd )
+bool CRope::KeyValue( KeyValueData* pkvd )
 {
 	if( FStrEq( pkvd->szKeyName, "segments" ) )
 	{
-		pkvd->fHandled = true;
-
 		m_uiSegments = strtoul( pkvd->szValue, nullptr, 10 );
 
 		if( m_uiSegments >= MAX_SEGMENTS )
 			m_uiSegments = MAX_SEGMENTS - 1;
+
+		return true;
 	}
 	else if( FStrEq( pkvd->szKeyName, "bodymodel" ) )
 	{
-		pkvd->fHandled = true;
-
 		m_iszBodyModel = ALLOC_STRING( pkvd->szValue );
+
+		return true;
 	}
 	else if( FStrEq( pkvd->szKeyName, "endingmodel" ) )
 	{
-		pkvd->fHandled = true;
-
 		m_iszEndingModel = ALLOC_STRING( pkvd->szValue );
+
+		return true;
 	}
 	else if( FStrEq( pkvd->szKeyName, "disable" ) )
 	{
-		pkvd->fHandled = true;
-
 		m_bDisallowPlayerAttachment = strtol( pkvd->szValue, nullptr, 10 ) != 0;
+
+		return true;
 	}
-	else
-		BaseClass::KeyValue( pkvd );
+	
+	return BaseClass::KeyValue( pkvd );
 }
 
 void CRope::Precache()
@@ -260,7 +260,7 @@ void CRope::Touch( CBaseEntity* pOther )
 	//Nothing.
 }
 
-int CRope::Save( CSave& save )
+bool CRope::Save( CSave& save )
 {
 	if( !BaseClass::Save( save ) )
 		return false;
@@ -268,7 +268,7 @@ int CRope::Save( CSave& save )
 	return save.WriteFields( "CRope", this, m_SaveData, ARRAYSIZE( m_SaveData ) );
 }
 
-int CRope::Restore( CRestore& restore )
+bool CRope::Restore( CRestore& restore )
 {
 	if( !BaseClass::Restore( restore ) )
 	{
@@ -679,12 +679,12 @@ void CRope::TraceModels( CRopeSegment** ppPrimarySegs, CRopeSegment** ppHiddenSe
 
 			UTIL_TraceLine( ppHiddenSegs[ uiSeg ]->pev->origin, vecEnd, ignore_monsters, edict(), &tr );
 			
-			if( tr.flFraction == 1.0 && tr.fAllSolid )
+			if( tr.flFraction == 1.0 && 0 != tr.fAllSolid )
 			{
 				break;
 			}
 
-			if( tr.flFraction != 1.0 || tr.fStartSolid || !tr.fInOpen )
+			if( tr.flFraction != 1.0 || 0 != tr.fStartSolid || 0 == tr.fInOpen )
 			{
 				Vector vecOrigin = tr.vecEndPos - vecTraceDist;
 

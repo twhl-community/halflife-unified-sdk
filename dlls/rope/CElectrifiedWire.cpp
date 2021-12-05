@@ -56,46 +56,46 @@ CElectrifiedWire::CElectrifiedWire()
 {
 }
 
-void CElectrifiedWire::KeyValue( KeyValueData* pkvd )
+bool CElectrifiedWire::KeyValue( KeyValueData* pkvd )
 {
 	if( FStrEq( pkvd->szKeyName, "sparkfrequency" ) )
 	{
 		m_iTipSparkFrequency = strtol( pkvd->szValue, nullptr, 10 );
 
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if( FStrEq( pkvd->szKeyName, "bodysparkfrequency" ) )
 	{
 		m_iBodySparkFrequency = strtol( pkvd->szValue, nullptr, 10 );
 
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if( FStrEq( pkvd->szKeyName, "lightningfrequency" ) )
 	{
 		m_iLightningFrequency = strtol( pkvd->szValue, nullptr, 10 );
 
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if( FStrEq( pkvd->szKeyName, "xforce" ) )
 	{
 		m_iXJoltForce = strtol( pkvd->szValue, nullptr, 10 );
 
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if( FStrEq( pkvd->szKeyName, "yforce" ) )
 	{
 		m_iYJoltForce = strtol( pkvd->szValue, nullptr, 10 );
 
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if( FStrEq( pkvd->szKeyName, "zforce" ) )
 	{
 		m_iZJoltForce = strtol( pkvd->szValue, nullptr, 10 );
 
-		pkvd->fHandled = true;
+		return true;
 	}
-	else
-		BaseClass::KeyValue( pkvd );
+
+	return BaseClass::KeyValue( pkvd );
 }
 
 void CElectrifiedWire::Precache()

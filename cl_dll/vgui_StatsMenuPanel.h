@@ -5,7 +5,7 @@
 class CStatsMenuPanel : public CMenuPanel
 {
 public:
-	CStatsMenuPanel(int iTrans, int iRemoveMe, int x, int y, int wide, int tall);
+	CStatsMenuPanel(int iTrans, bool iRemoveMe, int x, int y, int wide, int tall);
 
 	void Initialize();
 	void Open() override;
@@ -18,8 +18,8 @@ public:
 	virtual void Update() {}
 	void SaveStats() {}
 
-	int MsgFunc_StatsInfo(const char* pszName, int iSize, void* pbuf);
-	int MsgFunc_StatsPlayer(const char* pszName, int iSize, void* pbuf);
+	bool MsgFunc_StatsInfo(const char* pszName, int iSize, void* pbuf);
+	bool MsgFunc_StatsPlayer(const char* pszName, int iSize, void* pbuf);
 
 public:
 	CTransparentPanel* m_pClassInfoPanel[StatsTeamsCount];
