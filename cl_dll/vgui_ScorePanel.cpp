@@ -1084,7 +1084,8 @@ void CLabelHeader::calcAlignment(int iwide, int itall, int& x, int& y)
 	// left
 	case Label::a_northwest:
 	case Label::a_west:
-	case Label::a_southwest: {
+	case Label::a_southwest:
+	{
 		x = 0;
 		break;
 	}
@@ -1092,7 +1093,8 @@ void CLabelHeader::calcAlignment(int iwide, int itall, int& x, int& y)
 	// center
 	case Label::a_north:
 	case Label::a_center:
-	case Label::a_south: {
+	case Label::a_south:
+	{
 		x = (wide - iwide) / 2;
 		break;
 	}
@@ -1100,7 +1102,8 @@ void CLabelHeader::calcAlignment(int iwide, int itall, int& x, int& y)
 	// right
 	case Label::a_northeast:
 	case Label::a_east:
-	case Label::a_southeast: {
+	case Label::a_southeast:
+	{
 		x = wide - iwide;
 		break;
 	}
@@ -1112,7 +1115,8 @@ void CLabelHeader::calcAlignment(int iwide, int itall, int& x, int& y)
 	// top
 	case Label::a_northwest:
 	case Label::a_north:
-	case Label::a_northeast: {
+	case Label::a_northeast:
+	{
 		y = 0;
 		break;
 	}
@@ -1120,7 +1124,8 @@ void CLabelHeader::calcAlignment(int iwide, int itall, int& x, int& y)
 	// center
 	case Label::a_west:
 	case Label::a_center:
-	case Label::a_east: {
+	case Label::a_east:
+	{
 		y = (tall - itall) / 2;
 		break;
 	}
@@ -1128,7 +1133,8 @@ void CLabelHeader::calcAlignment(int iwide, int itall, int& x, int& y)
 	// south
 	case Label::a_southwest:
 	case Label::a_south:
-	case Label::a_southeast: {
+	case Label::a_southeast:
+	{
 		y = tall - itall;
 		break;
 	}
