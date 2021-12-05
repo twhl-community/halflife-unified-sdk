@@ -22,6 +22,8 @@ void GameDLLShutdown();
 extern cvar_t displaysoundlist;
 
 // multiplayer server rules
+extern cvar_t fragsleft;
+extern cvar_t timeleft;
 extern cvar_t teamplay;
 extern cvar_t fraglimit;
 extern cvar_t timelimit;
@@ -50,3 +52,5 @@ extern cvar_t* g_psv_gravity;
 extern cvar_t* g_psv_aim;
 extern cvar_t* g_footsteps;
 extern cvar_t* g_psv_cheats;
+extern cvar_t allow_spectators;
+extern cvar_t mp_chattime;

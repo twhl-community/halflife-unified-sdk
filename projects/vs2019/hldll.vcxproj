@@ -170,7 +170,6 @@
     <ClCompile Include="..\..\dlls\genericmonster.cpp" />
     <ClCompile Include="..\..\dlls\geneworm.cpp" />
     <ClCompile Include="..\..\dlls\ggrenade.cpp" />
-    <ClCompile Include="..\..\dlls\globals.cpp" />
     <ClCompile Include="..\..\dlls\gman.cpp" />
     <ClCompile Include="..\..\dlls\gonome.cpp" />
     <ClCompile Include="..\..\dlls\handgrenade.cpp" />

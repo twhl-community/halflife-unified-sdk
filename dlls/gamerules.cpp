@@ -32,11 +32,6 @@
 
 extern edict_t* EntSelectSpawnPoint(CBasePlayer* pPlayer);
 
-DLL_GLOBAL CGameRules* g_pGameRules = NULL;
-extern DLL_GLOBAL bool g_fGameOver;
-
-bool g_teamplay = false;
-
 //=========================================================
 //=========================================================
 bool CGameRules::CanHaveAmmo(CBasePlayer* pPlayer, const char* pszAmmoName, int iMaxCarry)

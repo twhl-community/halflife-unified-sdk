@@ -51,16 +51,6 @@
 
 // #define DUCKFIX
 
-extern DLL_GLOBAL unsigned int g_ulModelIndexPlayer;
-extern DLL_GLOBAL bool g_fGameOver;
-extern DLL_GLOBAL bool g_fDrawLines;
-bool gEvilImpulse101;
-extern DLL_GLOBAL int g_iSkillLevel;
-extern DLL_GLOBAL bool gDisplayTitle;
-
-
-bool gInitHUD = true;
-
 extern void CopyToBodyQue(entvars_t* pev);
 extern edict_t* EntSelectSpawnPoint(CBasePlayer* pPlayer);
 
@@ -163,9 +153,6 @@ TYPEDESCRIPTION CBasePlayer::m_playerSaveData[] =
 		//DEFINE_FIELD( CBasePlayer, m_nCustomSprayFrames, FIELD_INTEGER ), // Don't need to restore
 
 };
-
-
-bool giPrecacheGrunt = false;
 
 LINK_ENTITY_TO_CLASS(player, CBasePlayer);
 
@@ -831,8 +818,6 @@ void CBasePlayer::RemoveAllItems(bool removeSuit)
  *
  * ENTITY_METHOD(PlayerDie)
  */
-entvars_t* g_pevLastInflictor; // Set in combat.cpp.  Used to pass the damage inflictor for death messages.
-							   // Better solution:  Add as parameter to all Killed() functions.
 
 void CBasePlayer::Killed(entvars_t* pevAttacker, int iGib)
 {
@@ -2903,9 +2888,6 @@ bool IsSpawnPointValid(CBaseEntity* pPlayer, CBaseEntity* pSpot)
 	return true;
 }
 
-
-DLL_GLOBAL CBaseEntity* g_pLastSpawn;
-
 /*
 ============
 EntSelectSpawnPoint
@@ -4256,6 +4238,7 @@ void CBasePlayer ::UpdateClientData()
 	}
 
 	// HACKHACK -- send the message to display the game title
+	//TODO: will not work properly in multiplayer
 	if (gDisplayTitle)
 	{
 		MESSAGE_BEGIN(MSG_ONE, gmsgShowGameTitle, NULL, pev);
