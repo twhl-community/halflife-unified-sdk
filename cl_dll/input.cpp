@@ -19,6 +19,7 @@
 #include "Exports.h"
 
 #include "vgui_TeamFortressViewport.h"
+#include "filesystem_utils.h"
 
 
 extern bool g_iAlive;
@@ -1035,5 +1036,6 @@ void DLLEXPORT HUD_Shutdown()
 	ClearEventList();
 #endif
 
+	FileSystem_FreeFileSystem();
 	CL_UnloadParticleMan();
 }

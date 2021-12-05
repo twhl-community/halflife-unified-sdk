@@ -66,6 +66,8 @@
     </Filter>
     <Filter Include="Header Files\_hl\dlls\weapons">
       <UniqueIdentifier>{c98d7745-f010-438b-9e1f-b4f217174e1f}</UniqueIdentifier>
+    <Filter Include="Header Files\public">
+      <UniqueIdentifier>{243d59b1-51fd-4488-ae96-9d338f92e340}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -357,6 +359,9 @@
     <ClCompile Include="..\..\dlls\weapons_shared.cpp">
       <Filter>Source Files\_hl\dlls</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\game_shared\filesystem_utils.cpp">
+      <Filter>Source Files\game_shared</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\cl_dll\kbutton.h">
@@ -646,6 +651,12 @@
     </ClInclude>
     <ClInclude Include="..\..\common\common_types.h">
       <Filter>Header Files\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\interface.h">
+      <Filter>Header Files\public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\game_shared\filesystem_utils.h">
+      <Filter>Header Files\game_shared</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
