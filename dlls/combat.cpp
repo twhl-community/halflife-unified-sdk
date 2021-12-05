@@ -38,7 +38,7 @@ extern Vector VecBModelOrigin(entvars_t* pevBModel);
 
 
 // HACKHACK -- The gib velocity equations don't work
-void CGib ::LimitVelocity()
+void CGib::LimitVelocity()
 {
 	float length = pev->velocity.Length();
 
@@ -49,7 +49,7 @@ void CGib ::LimitVelocity()
 }
 
 
-void CGib ::SpawnStickyGibs(entvars_t* pevVictim, Vector vecOrigin, int cGibs)
+void CGib::SpawnStickyGibs(entvars_t* pevVictim, Vector vecOrigin, int cGibs)
 {
 	int i;
 
@@ -118,7 +118,7 @@ void CGib ::SpawnStickyGibs(entvars_t* pevVictim, Vector vecOrigin, int cGibs)
 	}
 }
 
-void CGib ::SpawnHeadGib(entvars_t* pevVictim)
+void CGib::SpawnHeadGib(entvars_t* pevVictim)
 {
 	CGib* pGib = GetClassPtr((CGib*)NULL);
 
@@ -269,13 +269,13 @@ void CGib::SpawnRandomGibs(entvars_t* pevVictim, int cGibs, const GibData& gibDa
 const GibData HumanGibs = {"models/hgibs.mdl", 1, HUMAN_GIB_COUNT};
 const GibData AlienGibs = {"models/agibs.mdl", 0, ALIEN_GIB_COUNT};
 
-void CGib ::SpawnRandomGibs(entvars_t* pevVictim, int cGibs, bool human)
+void CGib::SpawnRandomGibs(entvars_t* pevVictim, int cGibs, bool human)
 {
 	SpawnRandomGibs(pevVictim, cGibs, human ? HumanGibs : AlienGibs);
 }
 
 
-bool CBaseMonster ::HasHumanGibs()
+bool CBaseMonster::HasHumanGibs()
 {
 	int myClass = Classify();
 
@@ -291,7 +291,7 @@ bool CBaseMonster ::HasHumanGibs()
 }
 
 
-bool CBaseMonster ::HasAlienGibs()
+bool CBaseMonster::HasAlienGibs()
 {
 	int myClass = Classify();
 
@@ -324,7 +324,7 @@ void CBaseMonster::FadeMonster()
 // GibMonster - create some gore and get rid of a monster's
 // model.
 //=========================================================
-void CBaseMonster ::GibMonster()
+void CBaseMonster::GibMonster()
 {
 	TraceResult tr;
 	bool gibbed = false;
@@ -369,7 +369,7 @@ void CBaseMonster ::GibMonster()
 // GetDeathActivity - determines the best type of death
 // anim to play.
 //=========================================================
-Activity CBaseMonster ::GetDeathActivity()
+Activity CBaseMonster::GetDeathActivity()
 {
 	Activity deathActivity;
 	bool fTriedDirection;
@@ -490,7 +490,7 @@ Activity CBaseMonster ::GetDeathActivity()
 // GetSmallFlinchActivity - determines the best type of flinch
 // anim to play.
 //=========================================================
-Activity CBaseMonster ::GetSmallFlinchActivity()
+Activity CBaseMonster::GetSmallFlinchActivity()
 {
 	Activity flinchActivity;
 	bool fTriedDirection;
@@ -612,7 +612,7 @@ void CBaseMonster::CallGibMonster()
 Killed
 ============
 */
-void CBaseMonster ::Killed(entvars_t* pevAttacker, int iGib)
+void CBaseMonster::Killed(entvars_t* pevAttacker, int iGib)
 {
 	unsigned int cCount = 0;
 	bool fDone = false;
@@ -668,7 +668,7 @@ void CBaseMonster ::Killed(entvars_t* pevAttacker, int iGib)
 //
 // DON'T USE ME FOR GIBS AND STUFF IN MULTIPLAYER!
 // SET A FUTURE THINK AND A RENDERMODE!!
-void CBaseEntity ::SUB_StartFadeOut()
+void CBaseEntity::SUB_StartFadeOut()
 {
 	if (pev->rendermode == kRenderNormal)
 	{
@@ -683,7 +683,7 @@ void CBaseEntity ::SUB_StartFadeOut()
 	SetThink(&CBaseEntity::SUB_FadeOut);
 }
 
-void CBaseEntity ::SUB_FadeOut()
+void CBaseEntity::SUB_FadeOut()
 {
 	if (pev->renderamt > 7)
 	{
@@ -704,7 +704,7 @@ void CBaseEntity ::SUB_FadeOut()
 // bouncing to emit their scent. That's what this function
 // does.
 //=========================================================
-void CGib ::WaitTillLand()
+void CGib::WaitTillLand()
 {
 	if (!IsInWorld())
 	{
@@ -734,7 +734,7 @@ void CGib ::WaitTillLand()
 //
 // Gib bounces on the ground or wall, sponges some blood down, too!
 //
-void CGib ::BounceGibTouch(CBaseEntity* pOther)
+void CGib::BounceGibTouch(CBaseEntity* pOther)
 {
 	Vector vecSpot;
 	TraceResult tr;
@@ -777,7 +777,7 @@ void CGib ::BounceGibTouch(CBaseEntity* pOther)
 //
 // Sticky gib puts blood on the wall and stays put.
 //
-void CGib ::StickyGibTouch(CBaseEntity* pOther)
+void CGib::StickyGibTouch(CBaseEntity* pOther)
 {
 	Vector vecSpot;
 	TraceResult tr;
@@ -805,7 +805,7 @@ void CGib ::StickyGibTouch(CBaseEntity* pOther)
 //
 // Throw a chunk
 //
-void CGib ::Spawn(const char* szGibModel)
+void CGib::Spawn(const char* szGibModel)
 {
 	pev->movetype = MOVETYPE_BOUNCE;
 	pev->friction = 0.55; // deading the bounce a bit
@@ -831,7 +831,7 @@ void CGib ::Spawn(const char* szGibModel)
 }
 
 // take health
-bool CBaseMonster ::TakeHealth(float flHealth, int bitsDamageType)
+bool CBaseMonster::TakeHealth(float flHealth, int bitsDamageType)
 {
 	if (0 == pev->takedamage)
 		return false;
@@ -861,7 +861,7 @@ When a monster is poisoned via an arrow etc it takes all the poison damage at on
 GLOBALS ASSUMED SET:  g_iSkillLevel
 ============
 */
-bool CBaseMonster ::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool CBaseMonster::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
 	float flTake;
 	Vector vecDir;
@@ -890,7 +890,7 @@ bool CBaseMonster ::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, 
 	vecDir = Vector(0, 0, 0);
 	if (!FNullEnt(pevInflictor))
 	{
-		CBaseEntity* pInflictor = CBaseEntity ::Instance(pevInflictor);
+		CBaseEntity* pInflictor = CBaseEntity::Instance(pevInflictor);
 		if (pInflictor)
 		{
 			vecDir = (pInflictor->Center() - Vector(0, 0, 10) - Center()).Normalize();
@@ -997,7 +997,7 @@ bool CBaseMonster ::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, 
 // DeadTakeDamage - takedamage function called when a monster's
 // corpse is damaged.
 //=========================================================
-bool CBaseMonster ::DeadTakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool CBaseMonster::DeadTakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
 	Vector vecDir;
 
@@ -1005,7 +1005,7 @@ bool CBaseMonster ::DeadTakeDamage(entvars_t* pevInflictor, entvars_t* pevAttack
 	vecDir = Vector(0, 0, 0);
 	if (!FNullEnt(pevInflictor))
 	{
-		CBaseEntity* pInflictor = CBaseEntity ::Instance(pevInflictor);
+		CBaseEntity* pInflictor = CBaseEntity::Instance(pevInflictor);
 		if (pInflictor)
 		{
 			vecDir = (pInflictor->Center() - Vector(0, 0, 10) - Center()).Normalize();
@@ -1043,7 +1043,7 @@ bool CBaseMonster ::DeadTakeDamage(entvars_t* pevInflictor, entvars_t* pevAttack
 }
 
 
-float CBaseMonster ::DamageForce(float damage)
+float CBaseMonster::DamageForce(float damage)
 {
 	float force = damage * ((32 * 32 * 72.0) / (pev->size.x * pev->size.y * pev->size.z)) * 5;
 
@@ -1136,13 +1136,13 @@ void RadiusDamage(Vector vecSrc, entvars_t* pevInflictor, entvars_t* pevAttacker
 }
 
 
-void CBaseMonster ::RadiusDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int iClassIgnore, int bitsDamageType)
+void CBaseMonster::RadiusDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int iClassIgnore, int bitsDamageType)
 {
 	::RadiusDamage(pev->origin, pevInflictor, pevAttacker, flDamage, flDamage * 2.5, iClassIgnore, bitsDamageType);
 }
 
 
-void CBaseMonster ::RadiusDamage(Vector vecSrc, entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int iClassIgnore, int bitsDamageType)
+void CBaseMonster::RadiusDamage(Vector vecSrc, entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int iClassIgnore, int bitsDamageType)
 {
 	::RadiusDamage(vecSrc, pevInflictor, pevAttacker, flDamage, flDamage * 2.5, iClassIgnore, bitsDamageType);
 }
@@ -1156,7 +1156,7 @@ void CBaseMonster ::RadiusDamage(Vector vecSrc, entvars_t* pevInflictor, entvars
 //
 // Used for many contact-range melee attacks. Bites, claws, etc.
 //=========================================================
-CBaseEntity* CBaseMonster ::CheckTraceHullAttack(float flDist, int iDamage, int iDmgType)
+CBaseEntity* CBaseMonster::CheckTraceHullAttack(float flDist, int iDamage, int iDmgType)
 {
 	TraceResult tr;
 
@@ -1192,7 +1192,7 @@ CBaseEntity* CBaseMonster ::CheckTraceHullAttack(float flDist, int iDamage, int 
 // the caller's forward view cone. The dot product is performed
 // in 2d, making the view cone infinitely tall.
 //=========================================================
-bool CBaseMonster ::FInViewCone(CBaseEntity* pEntity)
+bool CBaseMonster::FInViewCone(CBaseEntity* pEntity)
 {
 	Vector2D vec2LOS;
 	float flDot;
@@ -1219,7 +1219,7 @@ bool CBaseMonster ::FInViewCone(CBaseEntity* pEntity)
 // the caller's forward view cone. The dot product is performed
 // in 2d, making the view cone infinitely tall.
 //=========================================================
-bool CBaseMonster ::FInViewCone(Vector* pOrigin)
+bool CBaseMonster::FInViewCone(Vector* pOrigin)
 {
 	Vector2D vec2LOS;
 	float flDot;
@@ -1245,7 +1245,7 @@ bool CBaseMonster ::FInViewCone(Vector* pOrigin)
 // FVisible - returns true if a line can be traced from
 // the caller's eyes to the target
 //=========================================================
-bool CBaseEntity ::FVisible(CBaseEntity* pEntity)
+bool CBaseEntity::FVisible(CBaseEntity* pEntity)
 {
 	TraceResult tr;
 	Vector vecLookerOrigin;
@@ -1277,7 +1277,7 @@ bool CBaseEntity ::FVisible(CBaseEntity* pEntity)
 // FVisible - returns true if a line can be traced from
 // the caller's eyes to the target vector
 //=========================================================
-bool CBaseEntity ::FVisible(const Vector& vecOrigin)
+bool CBaseEntity::FVisible(const Vector& vecOrigin)
 {
 	TraceResult tr;
 	Vector vecLookerOrigin;
@@ -1348,7 +1348,7 @@ void CBaseMonster::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector ve
 //=========================================================
 // TraceAttack
 //=========================================================
-void CBaseMonster ::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
+void CBaseMonster::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
 {
 	if (0 != pev->takedamage)
 	{
@@ -1698,7 +1698,7 @@ Vector CBaseEntity::FireBulletsPlayer(unsigned int cShots, Vector vecSrc, Vector
 	return Vector(x * vecSpread.x, y * vecSpread.y, 0.0);
 }
 
-void CBaseEntity ::TraceBleed(float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
+void CBaseEntity::TraceBleed(float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
 {
 	if (BloodColor() == DONT_BLEED)
 		return;
@@ -1767,7 +1767,7 @@ void CBaseEntity ::TraceBleed(float flDamage, Vector vecDir, TraceResult* ptr, i
 
 //=========================================================
 //=========================================================
-void CBaseMonster ::MakeDamageBloodDecal(int cCount, float flNoise, TraceResult* ptr, const Vector& vecDir)
+void CBaseMonster::MakeDamageBloodDecal(int cCount, float flNoise, TraceResult* ptr, const Vector& vecDir)
 {
 	// make blood decal on the wall!
 	TraceResult Bloodtr;

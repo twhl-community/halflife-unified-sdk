@@ -43,7 +43,7 @@ void ClearEventList();
 
 /// USER-DEFINED SERVER MESSAGE HANDLERS
 
-bool CHud ::MsgFunc_ResetHUD(const char* pszName, int iSize, void* pbuf)
+bool CHud::MsgFunc_ResetHUD(const char* pszName, int iSize, void* pbuf)
 {
 	ASSERT(iSize == 0);
 
@@ -68,12 +68,12 @@ bool CHud ::MsgFunc_ResetHUD(const char* pszName, int iSize, void* pbuf)
 
 void CAM_ToFirstPerson();
 
-void CHud ::MsgFunc_ViewMode(const char* pszName, int iSize, void* pbuf)
+void CHud::MsgFunc_ViewMode(const char* pszName, int iSize, void* pbuf)
 {
 	CAM_ToFirstPerson();
 }
 
-void CHud ::MsgFunc_InitHUD(const char* pszName, int iSize, void* pbuf)
+void CHud::MsgFunc_InitHUD(const char* pszName, int iSize, void* pbuf)
 {
 	// prepare all hud data
 	HUDLIST* pList = m_pHudList;
@@ -103,7 +103,7 @@ void CHud ::MsgFunc_InitHUD(const char* pszName, int iSize, void* pbuf)
 }
 
 
-bool CHud ::MsgFunc_GameMode(const char* pszName, int iSize, void* pbuf)
+bool CHud::MsgFunc_GameMode(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 
@@ -127,7 +127,7 @@ bool CHud ::MsgFunc_GameMode(const char* pszName, int iSize, void* pbuf)
 }
 
 
-bool CHud ::MsgFunc_Damage(const char* pszName, int iSize, void* pbuf)
+bool CHud::MsgFunc_Damage(const char* pszName, int iSize, void* pbuf)
 {
 	int armor, blood;
 	Vector from;
@@ -151,7 +151,7 @@ bool CHud ::MsgFunc_Damage(const char* pszName, int iSize, void* pbuf)
 	return true;
 }
 
-bool CHud ::MsgFunc_Concuss(const char* pszName, int iSize, void* pbuf)
+bool CHud::MsgFunc_Concuss(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 	m_iConcussionEffect = READ_BYTE();

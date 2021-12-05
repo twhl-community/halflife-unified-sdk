@@ -182,13 +182,13 @@ int COFBabyVoltigore::IRelationship(CBaseEntity* pTarget)
 		return R_NM;
 	}
 
-	return CSquadMonster ::IRelationship(pTarget);
+	return CSquadMonster::IRelationship(pTarget);
 }
 
 //=========================================================
 // ISoundMask
 //=========================================================
-int COFBabyVoltigore ::ISoundMask()
+int COFBabyVoltigore::ISoundMask()
 {
 	return bits_SOUND_WORLD |
 		   bits_SOUND_COMBAT |
@@ -199,7 +199,7 @@ int COFBabyVoltigore ::ISoundMask()
 //=========================================================
 // TraceAttack
 //=========================================================
-void COFBabyVoltigore ::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
+void COFBabyVoltigore::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
 {
 	//Ignore shock damage since we have a shock based attack
 	//TODO: use a filter based on attacker to identify self harm
@@ -288,7 +288,7 @@ bool COFBabyVoltigore::ShouldSpeak()
 //=========================================================
 // AlertSound
 //=========================================================
-void COFBabyVoltigore ::AlertSound()
+void COFBabyVoltigore::AlertSound()
 {
 	StopTalking();
 
@@ -308,7 +308,7 @@ void COFBabyVoltigore::AttackSound()
 //=========================================================
 // PainSound
 //=========================================================
-void COFBabyVoltigore ::PainSound()
+void COFBabyVoltigore::PainSound()
 {
 	if (m_flNextPainTime > gpGlobals->time)
 	{
@@ -326,7 +326,7 @@ void COFBabyVoltigore ::PainSound()
 // Classify - indicates this monster's place in the
 // relationship table.
 //=========================================================
-int COFBabyVoltigore ::Classify()
+int COFBabyVoltigore::Classify()
 {
 	return CLASS_ALIEN_MILITARY;
 }
@@ -335,7 +335,7 @@ int COFBabyVoltigore ::Classify()
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void COFBabyVoltigore ::SetYawSpeed()
+void COFBabyVoltigore::SetYawSpeed()
 {
 	int ys;
 
@@ -358,7 +358,7 @@ void COFBabyVoltigore ::SetYawSpeed()
 //
 // Returns number of events handled, 0 if none.
 //=========================================================
-void COFBabyVoltigore ::HandleAnimEvent(MonsterEvent_t* pEvent)
+void COFBabyVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
 	//This is in the original for some reason
 	/*
@@ -468,7 +468,7 @@ void COFBabyVoltigore ::HandleAnimEvent(MonsterEvent_t* pEvent)
 //=========================================================
 // Spawn
 //=========================================================
-void COFBabyVoltigore ::Spawn()
+void COFBabyVoltigore::Spawn()
 {
 	Precache();
 
@@ -499,7 +499,7 @@ void COFBabyVoltigore ::Spawn()
 //=========================================================
 // Precache - precaches all resources this monster needs
 //=========================================================
-void COFBabyVoltigore ::Precache()
+void COFBabyVoltigore::Precache()
 {
 	int i;
 
@@ -744,7 +744,7 @@ IMPLEMENT_CUSTOM_SCHEDULES(COFBabyVoltigore, CSquadMonster);
 // because they can use their smart weapons against unseen
 // enemies. Base class doesn't attack anyone it can't see.
 //=========================================================
-bool COFBabyVoltigore ::FCanCheckAttacks()
+bool COFBabyVoltigore::FCanCheckAttacks()
 {
 	if (!HasConditions(bits_COND_ENEMY_TOOFAR))
 	{
@@ -760,7 +760,7 @@ bool COFBabyVoltigore ::FCanCheckAttacks()
 // CheckMeleeAttack1 - alien grunts zap the crap out of
 // any enemy that gets too close.
 //=========================================================
-bool COFBabyVoltigore ::CheckMeleeAttack1(float flDot, float flDist)
+bool COFBabyVoltigore::CheckMeleeAttack1(float flDot, float flDist)
 {
 	if (HasConditions(bits_COND_SEE_ENEMY) && flDist <= BABYVOLTIGORE_MELEE_DIST && flDot >= 0.6 && m_hEnemy != NULL)
 	{
@@ -776,7 +776,7 @@ bool COFBabyVoltigore ::CheckMeleeAttack1(float flDot, float flDist)
 // tracelines are done, so we may not want to do this every
 // server frame. Definitely not while firing.
 //=========================================================
-bool COFBabyVoltigore ::CheckRangeAttack1(float flDot, float flDist)
+bool COFBabyVoltigore::CheckRangeAttack1(float flDot, float flDist)
 {
 	if (IsMoving() && flDist >= 512)
 	{
@@ -810,7 +810,7 @@ bool COFBabyVoltigore ::CheckRangeAttack1(float flDot, float flDist)
 //=========================================================
 // StartTask
 //=========================================================
-void COFBabyVoltigore ::StartTask(Task_t* pTask)
+void COFBabyVoltigore::StartTask(Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
@@ -863,7 +863,7 @@ void COFBabyVoltigore ::StartTask(Task_t* pTask)
 	default:
 		ClearBeams();
 
-		CSquadMonster ::StartTask(pTask);
+		CSquadMonster::StartTask(pTask);
 		break;
 	}
 }
@@ -917,7 +917,7 @@ void COFBabyVoltigore::RunTask(Task_t* pTask)
 // monster's member function to get a pointer to a schedule
 // of the proper type.
 //=========================================================
-Schedule_t* COFBabyVoltigore ::GetSchedule()
+Schedule_t* COFBabyVoltigore::GetSchedule()
 {
 	if (HasConditions(bits_COND_HEAR_SOUND))
 	{
@@ -939,7 +939,7 @@ Schedule_t* COFBabyVoltigore ::GetSchedule()
 		if (HasConditions(bits_COND_ENEMY_DEAD))
 		{
 			// call base class, all code to handle dead enemies is centralized there.
-			return CBaseMonster ::GetSchedule();
+			return CBaseMonster::GetSchedule();
 		}
 
 		if (HasConditions(bits_COND_NEW_ENEMY))
@@ -974,12 +974,12 @@ Schedule_t* COFBabyVoltigore ::GetSchedule()
 	}
 	}
 
-	return CSquadMonster ::GetSchedule();
+	return CSquadMonster::GetSchedule();
 }
 
 //=========================================================
 //=========================================================
-Schedule_t* COFBabyVoltigore ::GetScheduleOfType(int Type)
+Schedule_t* COFBabyVoltigore::GetScheduleOfType(int Type)
 {
 	switch (Type)
 	{
@@ -1033,7 +1033,7 @@ Schedule_t* COFBabyVoltigore ::GetScheduleOfType(int Type)
 		break;
 	}
 
-	return CSquadMonster ::GetScheduleOfType(Type);
+	return CSquadMonster::GetScheduleOfType(Type);
 }
 
 void COFBabyVoltigore::ClearBeams()

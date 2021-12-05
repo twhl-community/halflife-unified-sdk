@@ -474,7 +474,7 @@ void SaveReadFields(SAVERESTOREDATA* pSaveData, const char* pname, void* pBaseDa
 }
 
 // give health
-bool CBaseEntity ::TakeHealth(float flHealth, int bitsDamageType)
+bool CBaseEntity::TakeHealth(float flHealth, int bitsDamageType)
 {
 	if (0 == pev->takedamage)
 		return false;
@@ -493,7 +493,7 @@ bool CBaseEntity ::TakeHealth(float flHealth, int bitsDamageType)
 
 // inflict damage on this entity.  bitsDamageType indicates type of damage inflicted, ie: DMG_CRUSH
 
-bool CBaseEntity ::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool CBaseEntity::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
 	Vector vecTemp;
 
@@ -544,7 +544,7 @@ bool CBaseEntity ::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, f
 }
 
 
-void CBaseEntity ::Killed(entvars_t* pevAttacker, int iGib)
+void CBaseEntity::Killed(entvars_t* pevAttacker, int iGib)
 {
 	pev->takedamage = DAMAGE_NO;
 	pev->deadflag = DEAD_DEAD;
@@ -653,7 +653,7 @@ void CBaseEntity::SetObjectCollisionBox()
 }
 
 
-bool CBaseEntity ::Intersects(CBaseEntity* pOther)
+bool CBaseEntity::Intersects(CBaseEntity* pOther)
 {
 	if (pOther->pev->absmin.x > pev->absmax.x ||
 		pOther->pev->absmin.y > pev->absmax.y ||
@@ -665,7 +665,7 @@ bool CBaseEntity ::Intersects(CBaseEntity* pOther)
 	return true;
 }
 
-void CBaseEntity ::MakeDormant()
+void CBaseEntity::MakeDormant()
 {
 	SetBits(pev->flags, FL_DORMANT);
 
@@ -681,12 +681,12 @@ void CBaseEntity ::MakeDormant()
 	UTIL_SetOrigin(pev, pev->origin);
 }
 
-bool CBaseEntity ::IsDormant()
+bool CBaseEntity::IsDormant()
 {
 	return FBitSet(pev->flags, FL_DORMANT);
 }
 
-bool CBaseEntity ::IsInWorld()
+bool CBaseEntity::IsInWorld()
 {
 	// position
 	if (pev->origin.x >= 4096)
@@ -729,7 +729,7 @@ bool CBaseEntity::ShouldToggle(USE_TYPE useType, bool currentState)
 }
 
 
-int CBaseEntity ::DamageDecal(int bitsDamageType)
+int CBaseEntity::DamageDecal(int bitsDamageType)
 {
 	if (pev->rendermode == kRenderTransAlpha)
 		return -1;

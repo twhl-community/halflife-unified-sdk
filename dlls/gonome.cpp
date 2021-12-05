@@ -337,7 +337,7 @@ IMPLEMENT_CUSTOM_SCHEDULES(COFGonome, CBaseMonster);
 // Classify - indicates this monster's place in the
 // relationship table.
 //=========================================================
-int COFGonome ::Classify()
+int COFGonome::Classify()
 {
 	return CLASS_ALIEN_MONSTER;
 }
@@ -346,7 +346,7 @@ int COFGonome ::Classify()
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void COFGonome ::SetYawSpeed()
+void COFGonome::SetYawSpeed()
 {
 	int ys;
 
@@ -361,7 +361,7 @@ void COFGonome ::SetYawSpeed()
 	pev->yaw_speed = ys;
 }
 
-bool COFGonome ::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool COFGonome::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
 	// Take 15% damage from bullets
 	if (bitsDamageType == DMG_BULLET)
@@ -379,7 +379,7 @@ bool COFGonome ::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, flo
 	return CBaseMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
 }
 
-void COFGonome ::PainSound()
+void COFGonome::PainSound()
 {
 	int pitch = 95 + RANDOM_LONG(0, 9);
 
@@ -387,14 +387,14 @@ void COFGonome ::PainSound()
 		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, pPainSounds[RANDOM_LONG(0, ARRAYSIZE(pPainSounds) - 1)], 1.0, ATTN_NORM, 0, pitch);
 }
 
-void COFGonome ::AlertSound()
+void COFGonome::AlertSound()
 {
 	int pitch = 95 + RANDOM_LONG(0, 9);
 
 	EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, pAlertSounds[RANDOM_LONG(0, ARRAYSIZE(pAlertSounds) - 1)], 1.0, ATTN_NORM, 0, pitch);
 }
 
-void COFGonome ::IdleSound()
+void COFGonome::IdleSound()
 {
 	int pitch = 100 + RANDOM_LONG(-5, 5);
 
@@ -406,7 +406,7 @@ void COFGonome ::IdleSound()
 // HandleAnimEvent - catches the monster-specific messages
 // that occur when tagged animation frames are played.
 //=========================================================
-void COFGonome ::HandleAnimEvent(MonsterEvent_t* pEvent)
+void COFGonome::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
 	switch (pEvent->event)
 	{
@@ -587,7 +587,7 @@ void COFGonome ::HandleAnimEvent(MonsterEvent_t* pEvent)
 //=========================================================
 // Spawn
 //=========================================================
-void COFGonome ::Spawn()
+void COFGonome::Spawn()
 {
 	Precache();
 
@@ -613,7 +613,7 @@ void COFGonome ::Spawn()
 //=========================================================
 // Precache - precaches all resources this monster needs
 //=========================================================
-void COFGonome ::Precache()
+void COFGonome::Precache()
 {
 	int i;
 

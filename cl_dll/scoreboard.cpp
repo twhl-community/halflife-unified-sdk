@@ -51,7 +51,7 @@ DECLARE_MESSAGE(m_Scoreboard, TeamScore);
 DECLARE_MESSAGE(m_Scoreboard, PlayerIcon);
 DECLARE_MESSAGE(m_Scoreboard, CTFScore);
 
-bool CHudScoreboard ::Init()
+bool CHudScoreboard::Init()
 {
 	gHUD.AddHudElem(this);
 
@@ -73,14 +73,14 @@ bool CHudScoreboard ::Init()
 }
 
 
-bool CHudScoreboard ::VidInit()
+bool CHudScoreboard::VidInit()
 {
 	// Load sprites here
 
 	return true;
 }
 
-void CHudScoreboard ::InitHUDData()
+void CHudScoreboard::InitHUDData()
 {
 	memset(g_PlayerExtraInfo, 0, sizeof g_PlayerExtraInfo);
 	m_iLastKilledBy = 0;
@@ -125,7 +125,7 @@ int SCOREBOARD_WIDTH = 320;
 #define ROW_RANGE_MIN 15
 #define ROW_RANGE_MAX (ScreenHeight - 50)
 
-bool CHudScoreboard ::Draw(float fTime)
+bool CHudScoreboard::Draw(float fTime)
 {
 	bool can_show_packetloss = false;
 	int FAR_RIGHT;
@@ -380,7 +380,7 @@ bool CHudScoreboard ::Draw(float fTime)
 }
 
 // returns the ypos where it finishes drawing
-int CHudScoreboard ::DrawPlayers(int xpos_rel, float list_slot, int nameoffset, char* team)
+int CHudScoreboard::DrawPlayers(int xpos_rel, float list_slot, int nameoffset, char* team)
 {
 	bool can_show_packetloss = false;
 	int FAR_RIGHT;
@@ -544,7 +544,7 @@ int CHudScoreboard ::DrawPlayers(int xpos_rel, float list_slot, int nameoffset, 
 }
 
 
-void CHudScoreboard ::GetAllPlayersInfo()
+void CHudScoreboard::GetAllPlayersInfo()
 {
 	for (int i = 1; i < MAX_PLAYERS; i++)
 	{
@@ -555,7 +555,7 @@ void CHudScoreboard ::GetAllPlayersInfo()
 	}
 }
 
-bool CHudScoreboard ::MsgFunc_ScoreInfo(const char* pszName, int iSize, void* pbuf)
+bool CHudScoreboard::MsgFunc_ScoreInfo(const char* pszName, int iSize, void* pbuf)
 {
 	m_iFlags |= HUD_ACTIVE;
 
@@ -583,7 +583,7 @@ bool CHudScoreboard ::MsgFunc_ScoreInfo(const char* pszName, int iSize, void* pb
 // accepts two values:
 //		byte: client number
 //		string: client team name
-bool CHudScoreboard ::MsgFunc_TeamInfo(const char* pszName, int iSize, void* pbuf)
+bool CHudScoreboard::MsgFunc_TeamInfo(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 	short cl = READ_BYTE();
@@ -656,7 +656,7 @@ bool CHudScoreboard ::MsgFunc_TeamInfo(const char* pszName, int iSize, void* pbu
 //		short: teams kills
 //		short: teams deaths
 // if this message is never received, then scores will simply be the combined totals of the players.
-bool CHudScoreboard ::MsgFunc_TeamScore(const char* pszName, int iSize, void* pbuf)
+bool CHudScoreboard::MsgFunc_TeamScore(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 	char* TeamName = READ_STRING();
@@ -846,7 +846,7 @@ bool CHudScoreboard::MsgFunc_CTFScore(const char* pszName, int iSize, void* pbuf
 	return true;
 }
 
-void CHudScoreboard ::DeathMsg(int killer, int victim)
+void CHudScoreboard::DeathMsg(int killer, int victim)
 {
 	// if we were the one killed,  or the world killed us, set the scoreboard to indicate suicide
 	if (victim == m_iPlayerNum || killer == 0)
@@ -861,12 +861,12 @@ void CHudScoreboard ::DeathMsg(int killer, int victim)
 
 
 
-void CHudScoreboard ::UserCmd_ShowScores()
+void CHudScoreboard::UserCmd_ShowScores()
 {
 	m_iShowscoresHeld = true;
 }
 
-void CHudScoreboard ::UserCmd_HideScores()
+void CHudScoreboard::UserCmd_HideScores()
 {
 	m_iShowscoresHeld = false;
 }

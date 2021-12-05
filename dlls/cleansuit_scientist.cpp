@@ -80,7 +80,7 @@ public:
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 	void RunTask(Task_t* pTask) override;
 	void StartTask(Task_t* pTask) override;
-	int ObjectCaps() override { return CTalkMonster ::ObjectCaps() | FCAP_IMPULSE_USE; }
+	int ObjectCaps() override { return CTalkMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
 	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 	int FriendNumber(int arrayNumber) override;
 	void SetActivity(Activity newActivity) override;
@@ -414,7 +414,7 @@ void CCleansuitScientist::DeclineFollowing()
 }
 
 
-void CCleansuitScientist ::Scream()
+void CCleansuitScientist::Scream()
 {
 	if (FOkToSpeak())
 	{
@@ -433,7 +433,7 @@ Activity CCleansuitScientist::GetStoppedActivity()
 }
 
 
-void CCleansuitScientist ::StartTask(Task_t* pTask)
+void CCleansuitScientist::StartTask(Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
@@ -496,7 +496,7 @@ void CCleansuitScientist ::StartTask(Task_t* pTask)
 	}
 }
 
-void CCleansuitScientist ::RunTask(Task_t* pTask)
+void CCleansuitScientist::RunTask(Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
@@ -566,7 +566,7 @@ void CCleansuitScientist ::RunTask(Task_t* pTask)
 // Classify - indicates this monster's place in the
 // relationship table.
 //=========================================================
-int CCleansuitScientist ::Classify()
+int CCleansuitScientist::Classify()
 {
 	return CLASS_HUMAN_PASSIVE;
 }
@@ -576,7 +576,7 @@ int CCleansuitScientist ::Classify()
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CCleansuitScientist ::SetYawSpeed()
+void CCleansuitScientist::SetYawSpeed()
 {
 	int ys;
 
@@ -606,7 +606,7 @@ void CCleansuitScientist ::SetYawSpeed()
 // HandleAnimEvent - catches the monster-specific messages
 // that occur when tagged animation frames are played.
 //=========================================================
-void CCleansuitScientist ::HandleAnimEvent(MonsterEvent_t* pEvent)
+void CCleansuitScientist::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
 	switch (pEvent->event)
 	{
@@ -632,7 +632,7 @@ void CCleansuitScientist ::HandleAnimEvent(MonsterEvent_t* pEvent)
 //=========================================================
 // Spawn
 //=========================================================
-void CCleansuitScientist ::Spawn()
+void CCleansuitScientist::Spawn()
 {
 	Precache();
 
@@ -670,7 +670,7 @@ void CCleansuitScientist ::Spawn()
 //=========================================================
 // Precache - precaches all resources this monster needs
 //=========================================================
-void CCleansuitScientist ::Precache()
+void CCleansuitScientist::Precache()
 {
 	PRECACHE_MODEL("models/cleansuit_scientist.mdl");
 	PRECACHE_SOUND("scientist/sci_pain1.wav");
@@ -687,7 +687,7 @@ void CCleansuitScientist ::Precache()
 }
 
 // Init talk data
-void CCleansuitScientist ::TalkInit()
+void CCleansuitScientist::TalkInit()
 {
 
 	CTalkMonster::TalkInit();
@@ -741,7 +741,7 @@ void CCleansuitScientist ::TalkInit()
 	}
 }
 
-bool CCleansuitScientist ::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool CCleansuitScientist::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
 
 	if (pevInflictor && (pevInflictor->flags & FL_CLIENT) != 0)
@@ -760,7 +760,7 @@ bool CCleansuitScientist ::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAtt
 // of sounds this monster regards. In the base class implementation,
 // monsters care about all sounds, but no scents.
 //=========================================================
-int CCleansuitScientist ::ISoundMask()
+int CCleansuitScientist::ISoundMask()
 {
 	return bits_SOUND_WORLD |
 		   bits_SOUND_COMBAT |
@@ -774,7 +774,7 @@ int CCleansuitScientist ::ISoundMask()
 //=========================================================
 // PainSound
 //=========================================================
-void CCleansuitScientist ::PainSound()
+void CCleansuitScientist::PainSound()
 {
 	if (gpGlobals->time < m_painTime)
 		return;
@@ -804,7 +804,7 @@ void CCleansuitScientist ::PainSound()
 //=========================================================
 // DeathSound
 //=========================================================
-void CCleansuitScientist ::DeathSound()
+void CCleansuitScientist::DeathSound()
 {
 	PainSound();
 }
@@ -817,7 +817,7 @@ void CCleansuitScientist::Killed(entvars_t* pevAttacker, int iGib)
 }
 
 
-void CCleansuitScientist ::SetActivity(Activity newActivity)
+void CCleansuitScientist::SetActivity(Activity newActivity)
 {
 	int iSequence;
 
@@ -830,7 +830,7 @@ void CCleansuitScientist ::SetActivity(Activity newActivity)
 }
 
 
-Schedule_t* CCleansuitScientist ::GetScheduleOfType(int Type)
+Schedule_t* CCleansuitScientist::GetScheduleOfType(int Type)
 {
 	Schedule_t* psched;
 
@@ -885,7 +885,7 @@ Schedule_t* CCleansuitScientist ::GetScheduleOfType(int Type)
 	return CTalkMonster::GetScheduleOfType(Type);
 }
 
-Schedule_t* CCleansuitScientist ::GetSchedule()
+Schedule_t* CCleansuitScientist::GetSchedule()
 {
 	// so we don't keep calling through the EHANDLE stuff
 	CBaseEntity* pEnemy = m_hEnemy;
@@ -1000,7 +1000,7 @@ Schedule_t* CCleansuitScientist ::GetSchedule()
 	return CTalkMonster::GetSchedule();
 }
 
-MONSTERSTATE CCleansuitScientist ::GetIdealState()
+MONSTERSTATE CCleansuitScientist::GetIdealState()
 {
 	switch (m_MonsterState)
 	{
@@ -1122,7 +1122,7 @@ LINK_ENTITY_TO_CLASS(monster_cleansuit_scientist_dead, CDeadCleansuitScientist);
 //
 // ********** DeadScientist SPAWN **********
 //
-void CDeadCleansuitScientist ::Spawn()
+void CDeadCleansuitScientist::Spawn()
 {
 	PRECACHE_MODEL("models/cleansuit_scientist.mdl");
 	SET_MODEL(ENT(pev), "models/cleansuit_scientist.mdl");
@@ -1204,7 +1204,7 @@ typedef enum
 //
 // ********** Scientist SPAWN **********
 //
-void CSittingCleansuitScientist ::Spawn()
+void CSittingCleansuitScientist::Spawn()
 {
 	PRECACHE_MODEL("models/cleansuit_scientist.mdl");
 	SET_MODEL(ENT(pev), "models/cleansuit_scientist.mdl");
@@ -1243,7 +1243,7 @@ void CSittingCleansuitScientist ::Spawn()
 	DROP_TO_FLOOR(ENT(pev));
 }
 
-void CSittingCleansuitScientist ::Precache()
+void CSittingCleansuitScientist::Precache()
 {
 	m_baseSequence = LookupSequence("sitlookleft");
 	TalkInit();
@@ -1252,7 +1252,7 @@ void CSittingCleansuitScientist ::Precache()
 //=========================================================
 // ID as a passive human
 //=========================================================
-int CSittingCleansuitScientist ::Classify()
+int CSittingCleansuitScientist::Classify()
 {
 	return CLASS_HUMAN_PASSIVE;
 }
@@ -1271,7 +1271,7 @@ int CSittingCleansuitScientist::FriendNumber(int arrayNumber)
 //=========================================================
 // sit, do stuff
 //=========================================================
-void CSittingCleansuitScientist ::SittingThink()
+void CSittingCleansuitScientist::SittingThink()
 {
 	CBaseEntity* pent;
 
@@ -1373,7 +1373,7 @@ void CSittingCleansuitScientist ::SittingThink()
 }
 
 // prepare sitting scientist to answer a question
-void CSittingCleansuitScientist ::SetAnswerQuestion(CTalkMonster* pSpeaker)
+void CSittingCleansuitScientist::SetAnswerQuestion(CTalkMonster* pSpeaker)
 {
 	m_flResponseDelay = gpGlobals->time + RANDOM_FLOAT(3, 4);
 	m_hTalkTarget = (CBaseMonster*)pSpeaker;
@@ -1384,7 +1384,7 @@ void CSittingCleansuitScientist ::SetAnswerQuestion(CTalkMonster* pSpeaker)
 // FIdleSpeak
 // ask question of nearby friend, or make statement
 //=========================================================
-bool CSittingCleansuitScientist ::FIdleSpeak()
+bool CSittingCleansuitScientist::FIdleSpeak()
 {
 	// try to start a conversation, or make statement
 	int pitch;

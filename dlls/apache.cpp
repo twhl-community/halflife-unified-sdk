@@ -110,7 +110,7 @@ TYPEDESCRIPTION CApache::m_SaveData[] =
 IMPLEMENT_SAVERESTORE(CApache, CBaseMonster);
 
 
-void CApache ::Spawn()
+void CApache::Spawn()
 {
 	Precache();
 	// motor
@@ -188,7 +188,7 @@ void CApache::StartupUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE
 	SetUse(NULL);
 }
 
-void CApache ::Killed(entvars_t* pevAttacker, int iGib)
+void CApache::Killed(entvars_t* pevAttacker, int iGib)
 {
 	ClearShockEffect();
 
@@ -214,7 +214,7 @@ void CApache ::Killed(entvars_t* pevAttacker, int iGib)
 	}
 }
 
-void CApache ::DyingThink()
+void CApache::DyingThink()
 {
 	StudioFrameAdvance();
 	pev->nextthink = gpGlobals->time + 0.1;
@@ -432,13 +432,13 @@ void CApache::CrashTouch(CBaseEntity* pOther)
 
 
 
-void CApache ::GibMonster()
+void CApache::GibMonster()
 {
 	// EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "common/bodysplat.wav", 0.75, ATTN_NORM, 0, 200);
 }
 
 
-void CApache ::HuntThink()
+void CApache::HuntThink()
 {
 	StudioFrameAdvance();
 	pev->nextthink = gpGlobals->time + 0.1;
@@ -588,7 +588,7 @@ void CApache ::HuntThink()
 }
 
 
-void CApache ::Flight()
+void CApache::Flight()
 {
 	// tilt model 5 degrees
 	Vector vecAdj = Vector(5.0, 0, 0);
@@ -743,7 +743,7 @@ void CApache ::Flight()
 }
 
 
-void CApache ::FireRocket()
+void CApache::FireRocket()
 {
 	static float side = 1.0;
 	static int count;
@@ -793,7 +793,7 @@ void CApache ::FireRocket()
 
 
 
-bool CApache ::FireGun()
+bool CApache::FireGun()
 {
 	UTIL_MakeAimVectors(pev->angles);
 
@@ -876,7 +876,7 @@ bool CApache ::FireGun()
 
 
 
-void CApache ::ShowDamage()
+void CApache::ShowDamage()
 {
 	if (m_iDoSmokePuff > 0 || RANDOM_LONG(0, 99) > pev->health)
 	{
@@ -895,7 +895,7 @@ void CApache ::ShowDamage()
 }
 
 
-bool CApache ::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool CApache::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
 	if (pevInflictor->owner == edict())
 		return false;
@@ -970,7 +970,7 @@ TYPEDESCRIPTION CApacheHVR::m_SaveData[] =
 
 IMPLEMENT_SAVERESTORE(CApacheHVR, CGrenade);
 
-void CApacheHVR ::Spawn()
+void CApacheHVR::Spawn()
 {
 	Precache();
 	// motor
@@ -994,7 +994,7 @@ void CApacheHVR ::Spawn()
 }
 
 
-void CApacheHVR ::Precache()
+void CApacheHVR::Precache()
 {
 	PRECACHE_MODEL("models/HVR.mdl");
 	m_iTrail = PRECACHE_MODEL("sprites/smoke.spr");
@@ -1002,7 +1002,7 @@ void CApacheHVR ::Precache()
 }
 
 
-void CApacheHVR ::IgniteThink()
+void CApacheHVR::IgniteThink()
 {
 	// pev->movetype = MOVETYPE_TOSS;
 
@@ -1033,7 +1033,7 @@ void CApacheHVR ::IgniteThink()
 }
 
 
-void CApacheHVR ::AccelerateThink()
+void CApacheHVR::AccelerateThink()
 {
 	// check world boundaries
 	if (pev->origin.x < -4096 || pev->origin.x > 4096 || pev->origin.y < -4096 || pev->origin.y > 4096 || pev->origin.z < -4096 || pev->origin.z > 4096)

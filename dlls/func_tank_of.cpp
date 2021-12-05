@@ -63,7 +63,7 @@ public:
 	void StopRotSound();
 
 	// Bmodels don't go across transitions
-	int ObjectCaps() override { return CBaseEntity ::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+	int ObjectCaps() override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 
 	inline bool IsActive() { return (pev->spawnflags & SF_TANK_ACTIVE) != 0; }
 	inline void TankActivate()
@@ -193,7 +193,7 @@ static Vector gTankSpread[] =
 #define MAX_FIRING_SPREADS ARRAYSIZE(gTankSpread)
 
 
-void COFFuncTank ::Spawn()
+void COFFuncTank::Spawn()
 {
 	Precache();
 
@@ -220,7 +220,7 @@ void COFFuncTank ::Spawn()
 }
 
 
-void COFFuncTank ::Precache()
+void COFFuncTank::Precache()
 {
 	if (!FStringNull(m_iszSpriteSmoke))
 		PRECACHE_MODEL((char*)STRING(m_iszSpriteSmoke));
@@ -232,7 +232,7 @@ void COFFuncTank ::Precache()
 }
 
 
-bool COFFuncTank ::KeyValue(KeyValueData* pkvd)
+bool COFFuncTank::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq(pkvd->szKeyName, "yawrate"))
 	{
@@ -352,7 +352,7 @@ bool COFFuncTank ::KeyValue(KeyValueData* pkvd)
 
 //==================================================================================
 // TANK CONTROLLING
-bool COFFuncTank ::OnControls(entvars_t* pevTest)
+bool COFFuncTank::OnControls(entvars_t* pevTest)
 {
 	if ((pev->spawnflags & SF_TANK_CANCONTROL) == 0)
 		return false;
@@ -365,7 +365,7 @@ bool COFFuncTank ::OnControls(entvars_t* pevTest)
 	return false;
 }
 
-bool COFFuncTank ::StartControl(CBasePlayer* pController)
+bool COFFuncTank::StartControl(CBasePlayer* pController)
 {
 	if (m_pController != NULL)
 		return false;
@@ -395,7 +395,7 @@ bool COFFuncTank ::StartControl(CBasePlayer* pController)
 	return true;
 }
 
-void COFFuncTank ::StopControl()
+void COFFuncTank::StopControl()
 {
 	// TODO: bring back the controllers current weapon
 	if (!m_pController)
@@ -416,7 +416,7 @@ void COFFuncTank ::StopControl()
 }
 
 // Called each frame by the player's ItemPostFrame
-void COFFuncTank ::ControllerPostFrame()
+void COFFuncTank::ControllerPostFrame()
 {
 	ASSERT(m_pController != NULL);
 
@@ -442,7 +442,7 @@ void COFFuncTank ::ControllerPostFrame()
 ////////////// END NEW STUFF //////////////
 
 
-void COFFuncTank ::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
+void COFFuncTank::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
 	if ((pev->spawnflags & SF_TANK_CANCONTROL) != 0)
 	{ // player controlled turret
@@ -583,7 +583,7 @@ CBaseEntity* COFFuncTank::FindTarget()
 
 
 
-bool COFFuncTank ::InRange(float range)
+bool COFFuncTank::InRange(float range)
 {
 	if (range < m_minRange)
 		return false;
@@ -594,7 +594,7 @@ bool COFFuncTank ::InRange(float range)
 }
 
 
-void COFFuncTank ::Think()
+void COFFuncTank::Think()
 {
 	pev->avelocity = g_vecZero;
 	TrackTarget();
@@ -1126,13 +1126,13 @@ TYPEDESCRIPTION COFFuncTankControls::m_SaveData[] =
 
 IMPLEMENT_SAVERESTORE(COFFuncTankControls, CBaseEntity);
 
-int COFFuncTankControls ::ObjectCaps()
+int COFFuncTankControls::ObjectCaps()
 {
 	return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION) | FCAP_IMPULSE_USE;
 }
 
 
-void COFFuncTankControls ::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
+void COFFuncTankControls::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 { // pass the Use command onto the controls
 	if (m_pTank)
 		m_pTank->Use(pActivator, pCaller, useType, value);
@@ -1141,7 +1141,7 @@ void COFFuncTankControls ::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, US
 }
 
 
-void COFFuncTankControls ::Think()
+void COFFuncTankControls::Think()
 {
 	edict_t* pTarget = NULL;
 

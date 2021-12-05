@@ -162,7 +162,7 @@ const char* COFShockRoach::pBiteSounds[] =
 // Classify - indicates this monster's place in the
 // relationship table.
 //=========================================================
-int COFShockRoach ::Classify()
+int COFShockRoach::Classify()
 {
 	return CLASS_ALIEN_PREY;
 }
@@ -172,13 +172,13 @@ int COFShockRoach ::Classify()
 // bounding box is much larger than the actual creature so
 // this is needed for targeting
 //=========================================================
-Vector COFShockRoach ::Center()
+Vector COFShockRoach::Center()
 {
 	return Vector(pev->origin.x, pev->origin.y, pev->origin.z + 6);
 }
 
 
-Vector COFShockRoach ::BodyTarget(const Vector& posSrc)
+Vector COFShockRoach::BodyTarget(const Vector& posSrc)
 {
 	return Center();
 }
@@ -187,7 +187,7 @@ Vector COFShockRoach ::BodyTarget(const Vector& posSrc)
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void COFShockRoach ::SetYawSpeed()
+void COFShockRoach::SetYawSpeed()
 {
 	int ys;
 
@@ -212,7 +212,7 @@ void COFShockRoach ::SetYawSpeed()
 // HandleAnimEvent - catches the monster-specific messages
 // that occur when tagged animation frames are played.
 //=========================================================
-void COFShockRoach ::HandleAnimEvent(MonsterEvent_t* pEvent)
+void COFShockRoach::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
 	switch (pEvent->event)
 	{
@@ -276,7 +276,7 @@ void COFShockRoach ::HandleAnimEvent(MonsterEvent_t* pEvent)
 //=========================================================
 // Spawn
 //=========================================================
-void COFShockRoach ::Spawn()
+void COFShockRoach::Spawn()
 {
 	Precache();
 
@@ -302,7 +302,7 @@ void COFShockRoach ::Spawn()
 //=========================================================
 // Precache - precaches all resources this monster needs
 //=========================================================
-void COFShockRoach ::Precache()
+void COFShockRoach::Precache()
 {
 	PRECACHE_SOUND_ARRAY(pIdleSounds);
 	PRECACHE_SOUND_ARRAY(pAlertSounds);
@@ -320,7 +320,7 @@ void COFShockRoach ::Precache()
 //=========================================================
 // RunTask
 //=========================================================
-void COFShockRoach ::RunTask(Task_t* pTask)
+void COFShockRoach::RunTask(Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
@@ -335,7 +335,7 @@ void COFShockRoach ::RunTask(Task_t* pTask)
 		break;
 	}
 	default: {
-		CBaseMonster ::RunTask(pTask);
+		CBaseMonster::RunTask(pTask);
 	}
 	}
 }
@@ -344,7 +344,7 @@ void COFShockRoach ::RunTask(Task_t* pTask)
 // LeapTouch - this is the headcrab's touch function when it
 // is in the air
 //=========================================================
-void COFShockRoach ::LeapTouch(CBaseEntity* pOther)
+void COFShockRoach::LeapTouch(CBaseEntity* pOther)
 {
 	if (0 == pOther->pev->takedamage)
 	{
@@ -384,7 +384,7 @@ void COFShockRoach ::LeapTouch(CBaseEntity* pOther)
 //=========================================================
 // PrescheduleThink
 //=========================================================
-void COFShockRoach ::PrescheduleThink()
+void COFShockRoach::PrescheduleThink()
 {
 	// make the crab coo a little bit in combat state
 	if (m_MonsterState == MONSTERSTATE_COMBAT && RANDOM_FLOAT(0, 5) < 0.1)
@@ -393,7 +393,7 @@ void COFShockRoach ::PrescheduleThink()
 	}
 }
 
-void COFShockRoach ::StartTask(Task_t* pTask)
+void COFShockRoach::StartTask(Task_t* pTask)
 {
 	m_iTaskStatus = TASKSTATUS_RUNNING;
 
@@ -406,7 +406,7 @@ void COFShockRoach ::StartTask(Task_t* pTask)
 		break;
 	}
 	default: {
-		CBaseMonster ::StartTask(pTask);
+		CBaseMonster::StartTask(pTask);
 	}
 	}
 }
@@ -415,7 +415,7 @@ void COFShockRoach ::StartTask(Task_t* pTask)
 //=========================================================
 // CheckRangeAttack1
 //=========================================================
-bool COFShockRoach ::CheckRangeAttack1(float flDot, float flDist)
+bool COFShockRoach::CheckRangeAttack1(float flDot, float flDist)
 {
 	if (FBitSet(pev->flags, FL_ONGROUND) && flDist <= 256 && flDot >= 0.65)
 	{
@@ -427,7 +427,7 @@ bool COFShockRoach ::CheckRangeAttack1(float flDot, float flDist)
 //=========================================================
 // CheckRangeAttack2
 //=========================================================
-bool COFShockRoach ::CheckRangeAttack2(float flDot, float flDist)
+bool COFShockRoach::CheckRangeAttack2(float flDot, float flDist)
 {
 	return false;
 	// BUGBUG: Why is this code here?  There is no ACT_RANGE_ATTACK2 animation.  I've disabled it for now.
@@ -440,7 +440,7 @@ bool COFShockRoach ::CheckRangeAttack2(float flDot, float flDist)
 #endif
 }
 
-bool COFShockRoach ::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool COFShockRoach::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
 	// Don't take any acid damage -- BigMomma's mortar is acid
 	if ((bitsDamageType & DMG_ACID) != 0)
@@ -457,32 +457,32 @@ bool COFShockRoach ::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker,
 //=========================================================
 // IdleSound
 //=========================================================
-void COFShockRoach ::IdleSound()
+void COFShockRoach::IdleSound()
 {
 }
 
 //=========================================================
 // AlertSound
 //=========================================================
-void COFShockRoach ::AlertSound()
+void COFShockRoach::AlertSound()
 {
 }
 
 //=========================================================
 // AlertSound
 //=========================================================
-void COFShockRoach ::PainSound()
+void COFShockRoach::PainSound()
 {
 }
 
 //=========================================================
 // DeathSound
 //=========================================================
-void COFShockRoach ::DeathSound()
+void COFShockRoach::DeathSound()
 {
 }
 
-Schedule_t* COFShockRoach ::GetScheduleOfType(int Type)
+Schedule_t* COFShockRoach::GetScheduleOfType(int Type)
 {
 	switch (Type)
 	{

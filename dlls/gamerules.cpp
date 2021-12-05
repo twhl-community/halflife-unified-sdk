@@ -57,7 +57,7 @@ bool CGameRules::CanHaveAmmo(CBasePlayer* pPlayer, const char* pszAmmoName, int 
 
 //=========================================================
 //=========================================================
-edict_t* CGameRules ::GetPlayerSpawnSpot(CBasePlayer* pPlayer)
+edict_t* CGameRules::GetPlayerSpawnSpot(CBasePlayer* pPlayer)
 {
 	edict_t* pentSpawnSpot = EntSelectSpawnPoint(pPlayer);
 

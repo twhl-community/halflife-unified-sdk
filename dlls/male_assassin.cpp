@@ -277,7 +277,7 @@ enum
 // may still fail but in most cases, well after the grunt has
 // started moving.
 //=========================================================
-void CMOFAssassin ::SpeakSentence()
+void CMOFAssassin::SpeakSentence()
 {
 	if (m_iSentence == MASSASSIN_SENT_NONE)
 	{
@@ -309,7 +309,7 @@ int CMOFAssassin::IRelationship(CBaseEntity* pTarget)
 //=========================================================
 // GibMonster - make gun fly through the air.
 //=========================================================
-void CMOFAssassin ::GibMonster()
+void CMOFAssassin::GibMonster()
 {
 	Vector vecGunPos;
 	Vector vecGunAngles;
@@ -344,7 +344,7 @@ void CMOFAssassin ::GibMonster()
 		}
 	}
 
-	CBaseMonster ::GibMonster();
+	CBaseMonster::GibMonster();
 }
 
 //=========================================================
@@ -352,7 +352,7 @@ void CMOFAssassin ::GibMonster()
 // hear the DANGER sound that is made by hand grenades and
 // other dangerous items.
 //=========================================================
-int CMOFAssassin ::ISoundMask()
+int CMOFAssassin::ISoundMask()
 {
 	return bits_SOUND_WORLD |
 		   bits_SOUND_COMBAT |
@@ -363,7 +363,7 @@ int CMOFAssassin ::ISoundMask()
 //=========================================================
 // someone else is talking - don't speak
 //=========================================================
-bool CMOFAssassin ::FOkToSpeak()
+bool CMOFAssassin::FOkToSpeak()
 {
 	// if someone else is talking, don't speak
 	if (gpGlobals->time <= CTalkMonster::g_talkWaitTime)
@@ -387,7 +387,7 @@ bool CMOFAssassin ::FOkToSpeak()
 
 //=========================================================
 //=========================================================
-void CMOFAssassin ::JustSpoke()
+void CMOFAssassin::JustSpoke()
 {
 	CTalkMonster::g_talkWaitTime = gpGlobals->time + RANDOM_FLOAT(1.5, 2.0);
 	m_iSentence = MASSASSIN_SENT_NONE;
@@ -397,7 +397,7 @@ void CMOFAssassin ::JustSpoke()
 // PrescheduleThink - this function runs after conditions
 // are collected and before scheduling code is run.
 //=========================================================
-void CMOFAssassin ::PrescheduleThink()
+void CMOFAssassin::PrescheduleThink()
 {
 	if (InSquad() && m_hEnemy != NULL)
 	{
@@ -429,7 +429,7 @@ void CMOFAssassin ::PrescheduleThink()
 // this is a bad bug. Friendly machine gun fire avoidance
 // will unecessarily prevent the throwing of a grenade as well.
 //=========================================================
-bool CMOFAssassin ::FCanCheckAttacks()
+bool CMOFAssassin::FCanCheckAttacks()
 {
 	if (!HasConditions(bits_COND_ENEMY_TOOFAR))
 	{
@@ -445,7 +445,7 @@ bool CMOFAssassin ::FCanCheckAttacks()
 //=========================================================
 // CheckMeleeAttack1
 //=========================================================
-bool CMOFAssassin ::CheckMeleeAttack1(float flDot, float flDist)
+bool CMOFAssassin::CheckMeleeAttack1(float flDot, float flDist)
 {
 	CBaseMonster* pEnemy;
 
@@ -476,7 +476,7 @@ bool CMOFAssassin ::CheckMeleeAttack1(float flDot, float flDist)
 // occluded (throw grenade over wall, etc). We must
 // disqualify the machine gun attack if the enemy is occluded.
 //=========================================================
-bool CMOFAssassin ::CheckRangeAttack1(float flDot, float flDist)
+bool CMOFAssassin::CheckRangeAttack1(float flDot, float flDist)
 {
 	if (pev->weapons != 0)
 	{
@@ -514,9 +514,9 @@ bool CMOFAssassin ::CheckRangeAttack1(float flDot, float flDist)
 // CheckRangeAttack2 - this checks the Grunt's grenade
 // attack.
 //=========================================================
-bool CMOFAssassin ::CheckRangeAttack2(float flDot, float flDist)
+bool CMOFAssassin::CheckRangeAttack2(float flDot, float flDist)
 {
-	if (!FBitSet(pev->weapons, (MAssassinWeaponFlag::HandGrenade | MAssassinWeaponFlag ::GrenadeLauncher)))
+	if (!FBitSet(pev->weapons, (MAssassinWeaponFlag::HandGrenade | MAssassinWeaponFlag::GrenadeLauncher)))
 	{
 		return false;
 	}
@@ -644,7 +644,7 @@ bool CMOFAssassin ::CheckRangeAttack2(float flDot, float flDist)
 //=========================================================
 // TraceAttack - make sure we're not taking it in the helmet
 //=========================================================
-void CMOFAssassin ::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
+void CMOFAssassin::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
 {
 	// check for helmet shot
 	if (ptr->iHitgroup == 11)
@@ -662,18 +662,18 @@ void CMOFAssassin ::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector v
 // needs to forget that he is in cover if he's hurt. (Obviously
 // not in a safe place anymore).
 //=========================================================
-bool CMOFAssassin ::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool CMOFAssassin::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
 	Forget(bits_MEMORY_INCOVER);
 
-	return CSquadMonster ::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
+	return CSquadMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
 }
 
 //=========================================================
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CMOFAssassin ::SetYawSpeed()
+void CMOFAssassin::SetYawSpeed()
 {
 	int ys;
 
@@ -716,7 +716,7 @@ void CMOFAssassin ::SetYawSpeed()
 	pev->yaw_speed = ys;
 }
 
-void CMOFAssassin ::IdleSound()
+void CMOFAssassin::IdleSound()
 {
 }
 
@@ -724,7 +724,7 @@ void CMOFAssassin ::IdleSound()
 // CheckAmmo - overridden for the grunt because he actually
 // uses ammo! (base class doesn't)
 //=========================================================
-void CMOFAssassin ::CheckAmmo()
+void CMOFAssassin::CheckAmmo()
 {
 	if (pev->weapons != 0 && m_cAmmoLoaded <= 0)
 	{
@@ -736,14 +736,14 @@ void CMOFAssassin ::CheckAmmo()
 // Classify - indicates this monster's place in the
 // relationship table.
 //=========================================================
-int CMOFAssassin ::Classify()
+int CMOFAssassin::Classify()
 {
 	return CLASS_HUMAN_MILITARY;
 }
 
 //=========================================================
 //=========================================================
-CBaseEntity* CMOFAssassin ::Kick()
+CBaseEntity* CMOFAssassin::Kick()
 {
 	TraceResult tr;
 
@@ -767,7 +767,7 @@ CBaseEntity* CMOFAssassin ::Kick()
 // GetGunPosition	return the end of the barrel
 //=========================================================
 
-Vector CMOFAssassin ::GetGunPosition()
+Vector CMOFAssassin::GetGunPosition()
 {
 	if (m_fStanding)
 	{
@@ -782,7 +782,7 @@ Vector CMOFAssassin ::GetGunPosition()
 //=========================================================
 // Shoot
 //=========================================================
-void CMOFAssassin ::Shoot()
+void CMOFAssassin::Shoot()
 {
 	if (m_hEnemy == NULL)
 	{
@@ -823,7 +823,7 @@ void CMOFAssassin ::Shoot()
 // HandleAnimEvent - catches the monster-specific messages
 // that occur when tagged animation frames are played.
 //=========================================================
-void CMOFAssassin ::HandleAnimEvent(MonsterEvent_t* pEvent)
+void CMOFAssassin::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
 	Vector vecShootDir;
 	Vector vecShootOrigin;
@@ -941,7 +941,7 @@ void CMOFAssassin ::HandleAnimEvent(MonsterEvent_t* pEvent)
 //=========================================================
 // Spawn
 //=========================================================
-void CMOFAssassin ::Spawn()
+void CMOFAssassin::Spawn()
 {
 	Precache();
 
@@ -1016,7 +1016,7 @@ void CMOFAssassin ::Spawn()
 //=========================================================
 // Precache - precaches all resources this monster needs
 //=========================================================
-void CMOFAssassin ::Precache()
+void CMOFAssassin::Precache()
 {
 	PRECACHE_MODEL("models/massn.mdl");
 
@@ -1047,7 +1047,7 @@ void CMOFAssassin ::Precache()
 //=========================================================
 // start task
 //=========================================================
-void CMOFAssassin ::StartTask(Task_t* pTask)
+void CMOFAssassin::StartTask(Task_t* pTask)
 {
 	m_iTaskStatus = TASKSTATUS_RUNNING;
 
@@ -1071,7 +1071,7 @@ void CMOFAssassin ::StartTask(Task_t* pTask)
 	case TASK_RUN_PATH:
 		// grunt no longer assumes he is covered if he moves
 		Forget(bits_MEMORY_INCOVER);
-		CSquadMonster ::StartTask(pTask);
+		CSquadMonster::StartTask(pTask);
 		break;
 
 	case TASK_RELOAD:
@@ -1083,7 +1083,7 @@ void CMOFAssassin ::StartTask(Task_t* pTask)
 
 	case TASK_FACE_IDEAL:
 	case TASK_FACE_ENEMY:
-		CSquadMonster ::StartTask(pTask);
+		CSquadMonster::StartTask(pTask);
 		if (pev->movetype == MOVETYPE_FLY)
 		{
 			m_IdealActivity = ACT_GLIDE;
@@ -1091,7 +1091,7 @@ void CMOFAssassin ::StartTask(Task_t* pTask)
 		break;
 
 	default:
-		CSquadMonster ::StartTask(pTask);
+		CSquadMonster::StartTask(pTask);
 		break;
 	}
 }
@@ -1099,7 +1099,7 @@ void CMOFAssassin ::StartTask(Task_t* pTask)
 //=========================================================
 // RunTask
 //=========================================================
-void CMOFAssassin ::RunTask(Task_t* pTask)
+void CMOFAssassin::RunTask(Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
@@ -1115,7 +1115,7 @@ void CMOFAssassin ::RunTask(Task_t* pTask)
 		break;
 	}
 	default: {
-		CSquadMonster ::RunTask(pTask);
+		CSquadMonster::RunTask(pTask);
 		break;
 	}
 	}
@@ -1124,14 +1124,14 @@ void CMOFAssassin ::RunTask(Task_t* pTask)
 //=========================================================
 // PainSound
 //=========================================================
-void CMOFAssassin ::PainSound()
+void CMOFAssassin::PainSound()
 {
 }
 
 //=========================================================
 // DeathSound
 //=========================================================
-void CMOFAssassin ::DeathSound()
+void CMOFAssassin::DeathSound()
 {
 	switch (RANDOM_LONG(0, 2))
 	{
@@ -1749,7 +1749,7 @@ IMPLEMENT_CUSTOM_SCHEDULES(CMOFAssassin, CSquadMonster);
 //=========================================================
 // SetActivity
 //=========================================================
-void CMOFAssassin ::SetActivity(Activity NewActivity)
+void CMOFAssassin::SetActivity(Activity NewActivity)
 {
 	int iSequence = ACTIVITY_NOT_AVAILABLE;
 	void* pmodel = GET_MODEL_PTR(ENT(pev));
@@ -1843,7 +1843,7 @@ void CMOFAssassin ::SetActivity(Activity NewActivity)
 //=========================================================
 // Get Schedule!
 //=========================================================
-Schedule_t* CMOFAssassin ::GetSchedule()
+Schedule_t* CMOFAssassin::GetSchedule()
 {
 
 	// clear old sentence
@@ -1896,7 +1896,7 @@ Schedule_t* CMOFAssassin ::GetSchedule()
 		if (HasConditions(bits_COND_ENEMY_DEAD))
 		{
 			// call base class, all code to handle dead enemies is centralized there.
-			return CBaseMonster ::GetSchedule();
+			return CBaseMonster::GetSchedule();
 		}
 
 		// new enemy
@@ -2029,12 +2029,12 @@ Schedule_t* CMOFAssassin ::GetSchedule()
 	}
 
 	// no special cases here, call the base class
-	return CSquadMonster ::GetSchedule();
+	return CSquadMonster::GetSchedule();
 }
 
 //=========================================================
 //=========================================================
-Schedule_t* CMOFAssassin ::GetScheduleOfType(int Type)
+Schedule_t* CMOFAssassin::GetScheduleOfType(int Type)
 {
 	switch (Type)
 	{
@@ -2156,7 +2156,7 @@ Schedule_t* CMOFAssassin ::GetScheduleOfType(int Type)
 		return &slOFMAssassinRepelLand[0];
 	}
 	default: {
-		return CSquadMonster ::GetScheduleOfType(Type);
+		return CSquadMonster::GetScheduleOfType(Type);
 	}
 	}
 }

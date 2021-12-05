@@ -110,7 +110,7 @@ const char* CZombieBarney::pPainSounds[] =
 // Classify - indicates this monster's place in the
 // relationship table.
 //=========================================================
-int CZombieBarney ::Classify()
+int CZombieBarney::Classify()
 {
 	return CLASS_ALIEN_MONSTER;
 }
@@ -119,7 +119,7 @@ int CZombieBarney ::Classify()
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CZombieBarney ::SetYawSpeed()
+void CZombieBarney::SetYawSpeed()
 {
 	int ys;
 
@@ -134,7 +134,7 @@ void CZombieBarney ::SetYawSpeed()
 	pev->yaw_speed = ys;
 }
 
-bool CZombieBarney ::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool CZombieBarney::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
 	// Take 30% damage from bullets
 	if (bitsDamageType == DMG_BULLET)
@@ -152,7 +152,7 @@ bool CZombieBarney ::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker,
 	return CBaseMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
 }
 
-void CZombieBarney ::PainSound()
+void CZombieBarney::PainSound()
 {
 	int pitch = 95 + RANDOM_LONG(0, 9);
 
@@ -160,14 +160,14 @@ void CZombieBarney ::PainSound()
 		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, pPainSounds[RANDOM_LONG(0, ARRAYSIZE(pPainSounds) - 1)], 1.0, ATTN_NORM, 0, pitch);
 }
 
-void CZombieBarney ::AlertSound()
+void CZombieBarney::AlertSound()
 {
 	int pitch = 95 + RANDOM_LONG(0, 9);
 
 	EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, pAlertSounds[RANDOM_LONG(0, ARRAYSIZE(pAlertSounds) - 1)], 1.0, ATTN_NORM, 0, pitch);
 }
 
-void CZombieBarney ::IdleSound()
+void CZombieBarney::IdleSound()
 {
 	int pitch = 100 + RANDOM_LONG(-5, 5);
 
@@ -175,7 +175,7 @@ void CZombieBarney ::IdleSound()
 	EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, pIdleSounds[RANDOM_LONG(0, ARRAYSIZE(pIdleSounds) - 1)], 1.0, ATTN_NORM, 0, pitch);
 }
 
-void CZombieBarney ::AttackSound()
+void CZombieBarney::AttackSound()
 {
 	int pitch = 100 + RANDOM_LONG(-5, 5);
 
@@ -188,7 +188,7 @@ void CZombieBarney ::AttackSound()
 // HandleAnimEvent - catches the monster-specific messages
 // that occur when tagged animation frames are played.
 //=========================================================
-void CZombieBarney ::HandleAnimEvent(MonsterEvent_t* pEvent)
+void CZombieBarney::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
 	switch (pEvent->event)
 	{
@@ -266,7 +266,7 @@ void CZombieBarney ::HandleAnimEvent(MonsterEvent_t* pEvent)
 //=========================================================
 // Spawn
 //=========================================================
-void CZombieBarney ::Spawn()
+void CZombieBarney::Spawn()
 {
 	Precache();
 
@@ -288,7 +288,7 @@ void CZombieBarney ::Spawn()
 //=========================================================
 // Precache - precaches all resources this monster needs
 //=========================================================
-void CZombieBarney ::Precache()
+void CZombieBarney::Precache()
 {
 	int i;
 

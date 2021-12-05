@@ -84,7 +84,7 @@ public:
 
 	void RunTask(Task_t* pTask) override;
 	void StartTask(Task_t* pTask) override;
-	int ObjectCaps() override { return CTalkMonster ::ObjectCaps() | FCAP_IMPULSE_USE; }
+	int ObjectCaps() override { return CTalkMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
 	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 	bool CheckRangeAttack1(float flDot, float flDist) override;
 
@@ -244,12 +244,12 @@ DEFINE_CUSTOM_SCHEDULES(COtis){
 
 IMPLEMENT_CUSTOM_SCHEDULES(COtis, CTalkMonster);
 
-void COtis ::StartTask(Task_t* pTask)
+void COtis::StartTask(Task_t* pTask)
 {
 	CTalkMonster::StartTask(pTask);
 }
 
-void COtis ::RunTask(Task_t* pTask)
+void COtis::RunTask(Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
@@ -273,7 +273,7 @@ void COtis ::RunTask(Task_t* pTask)
 // ISoundMask - returns a bit mask indicating which types
 // of sounds this monster regards.
 //=========================================================
-int COtis ::ISoundMask()
+int COtis::ISoundMask()
 {
 	return bits_SOUND_WORLD |
 		   bits_SOUND_COMBAT |
@@ -288,7 +288,7 @@ int COtis ::ISoundMask()
 // Classify - indicates this monster's place in the
 // relationship table.
 //=========================================================
-int COtis ::Classify()
+int COtis::Classify()
 {
 	return CLASS_PLAYER_ALLY;
 }
@@ -296,7 +296,7 @@ int COtis ::Classify()
 //=========================================================
 // ALertSound - otis says "Freeze!"
 //=========================================================
-void COtis ::AlertSound()
+void COtis::AlertSound()
 {
 	if (m_hEnemy != NULL)
 	{
@@ -310,7 +310,7 @@ void COtis ::AlertSound()
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void COtis ::SetYawSpeed()
+void COtis::SetYawSpeed()
 {
 	int ys;
 
@@ -339,7 +339,7 @@ void COtis ::SetYawSpeed()
 //=========================================================
 // CheckRangeAttack1
 //=========================================================
-bool COtis ::CheckRangeAttack1(float flDot, float flDist)
+bool COtis::CheckRangeAttack1(float flDot, float flDist)
 {
 	if (flDist <= 1024 && flDot >= 0.5)
 	{
@@ -368,7 +368,7 @@ bool COtis ::CheckRangeAttack1(float flDot, float flDist)
 // OtisFirePistol - shoots one round from the pistol at
 // the enemy otis is facing.
 //=========================================================
-void COtis ::OtisFirePistol()
+void COtis::OtisFirePistol()
 {
 	Vector vecShootOrigin;
 
@@ -403,7 +403,7 @@ void COtis ::OtisFirePistol()
 //
 // Returns number of events handled, 0 if none.
 //=========================================================
-void COtis ::HandleAnimEvent(MonsterEvent_t* pEvent)
+void COtis::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
 	switch (pEvent->event)
 	{
@@ -440,7 +440,7 @@ void COtis ::HandleAnimEvent(MonsterEvent_t* pEvent)
 //=========================================================
 // Spawn
 //=========================================================
-void COtis ::Spawn()
+void COtis::Spawn()
 {
 	Precache();
 
@@ -480,7 +480,7 @@ void COtis ::Spawn()
 //=========================================================
 // Precache - precaches all resources this monster needs
 //=========================================================
-void COtis ::Precache()
+void COtis::Precache()
 {
 	PRECACHE_MODEL("models/otis.mdl");
 
@@ -504,7 +504,7 @@ void COtis ::Precache()
 }
 
 // Init talk data
-void COtis ::TalkInit()
+void COtis::TalkInit()
 {
 
 	CTalkMonster::TalkInit();
@@ -539,7 +539,7 @@ void COtis ::TalkInit()
 	m_voicePitch = 100;
 }
 
-bool COtis ::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool COtis::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
 	// make sure friends talk about it if player hurts talkmonsters...
 	bool ret = CTalkMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
@@ -583,7 +583,7 @@ bool COtis ::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float f
 //=========================================================
 // PainSound
 //=========================================================
-void COtis ::PainSound()
+void COtis::PainSound()
 {
 	if (gpGlobals->time < m_painTime)
 		return;
@@ -607,7 +607,7 @@ void COtis ::PainSound()
 //=========================================================
 // DeathSound
 //=========================================================
-void COtis ::DeathSound()
+void COtis::DeathSound()
 {
 	switch (RANDOM_LONG(0, 2))
 	{
@@ -678,7 +678,7 @@ void COtis::Killed(entvars_t* pevAttacker, int iGib)
 // AI Schedules Specific to this monster
 //=========================================================
 
-Schedule_t* COtis ::GetScheduleOfType(int Type)
+Schedule_t* COtis::GetScheduleOfType(int Type)
 {
 	Schedule_t* psched;
 
@@ -729,7 +729,7 @@ Schedule_t* COtis ::GetScheduleOfType(int Type)
 // monster's member function to get a pointer to a schedule
 // of the proper type.
 //=========================================================
-Schedule_t* COtis ::GetSchedule()
+Schedule_t* COtis::GetSchedule()
 {
 	if (HasConditions(bits_COND_HEAR_SOUND))
 	{
@@ -752,7 +752,7 @@ Schedule_t* COtis ::GetSchedule()
 		if (HasConditions(bits_COND_ENEMY_DEAD))
 		{
 			// call base class, all code to handle dead enemies is centralized there.
-			return CBaseMonster ::GetSchedule();
+			return CBaseMonster::GetSchedule();
 		}
 
 		// always act surprized with a new enemy
@@ -807,7 +807,7 @@ Schedule_t* COtis ::GetSchedule()
 	return CTalkMonster::GetSchedule();
 }
 
-MONSTERSTATE COtis ::GetIdealState()
+MONSTERSTATE COtis::GetIdealState()
 {
 	return CTalkMonster::GetIdealState();
 }

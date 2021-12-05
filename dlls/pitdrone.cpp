@@ -301,13 +301,13 @@ int CPitdrone::IRelationship(CBaseEntity* pTarget)
 		return R_AL;
 	}
 
-	return CBaseMonster ::IRelationship(pTarget);
+	return CBaseMonster::IRelationship(pTarget);
 }
 
 //=========================================================
 // CheckRangeAttack1
 //=========================================================
-bool CPitdrone ::CheckRangeAttack1(float flDot, float flDist)
+bool CPitdrone::CheckRangeAttack1(float flDot, float flDist)
 {
 	if (m_iInitialAmmo == -1 || GetBodygroup(PitdroneBodygroup::Weapons) == PitdroneWeapon::Empty || (IsMoving() && flDist >= 512))
 	{
@@ -343,7 +343,7 @@ bool CPitdrone ::CheckRangeAttack1(float flDot, float flDist)
 	return false;
 }
 
-bool CPitdrone ::CheckMeleeAttack1(float flDot, float flDist)
+bool CPitdrone::CheckMeleeAttack1(float flDot, float flDist)
 {
 	if (flDist <= 64 && flDot >= 0.7)
 	{
@@ -352,7 +352,7 @@ bool CPitdrone ::CheckMeleeAttack1(float flDot, float flDist)
 	return false;
 }
 
-bool CPitdrone ::CheckMeleeAttack2(float flDot, float flDist)
+bool CPitdrone::CheckMeleeAttack2(float flDot, float flDist)
 {
 	if (flDist <= 64 && flDot >= 0.7 && !HasConditions(bits_COND_CAN_MELEE_ATTACK1))
 	{
@@ -364,7 +364,7 @@ bool CPitdrone ::CheckMeleeAttack2(float flDot, float flDist)
 //=========================================================
 //  FValidateHintType
 //=========================================================
-bool CPitdrone ::FValidateHintType(short sHint)
+bool CPitdrone::FValidateHintType(short sHint)
 {
 	int i;
 
@@ -390,7 +390,7 @@ bool CPitdrone ::FValidateHintType(short sHint)
 // of sounds this monster regards. In the base class implementation,
 // monsters care about all sounds, but no scents.
 //=========================================================
-int CPitdrone ::ISoundMask()
+int CPitdrone::ISoundMask()
 {
 	return bits_SOUND_WORLD |
 		   bits_SOUND_COMBAT |
@@ -404,7 +404,7 @@ int CPitdrone ::ISoundMask()
 // Classify - indicates this monster's place in the
 // relationship table.
 //=========================================================
-int CPitdrone ::Classify()
+int CPitdrone::Classify()
 {
 	return CLASS_ALIEN_PREDATOR;
 }
@@ -412,14 +412,14 @@ int CPitdrone ::Classify()
 //=========================================================
 // IdleSound
 //=========================================================
-void CPitdrone ::IdleSound()
+void CPitdrone::IdleSound()
 {
 }
 
 //=========================================================
 // PainSound
 //=========================================================
-void CPitdrone ::PainSound()
+void CPitdrone::PainSound()
 {
 	int iPitch = RANDOM_LONG(85, 120);
 
@@ -443,7 +443,7 @@ void CPitdrone ::PainSound()
 //=========================================================
 // AlertSound
 //=========================================================
-void CPitdrone ::AlertSound()
+void CPitdrone::AlertSound()
 {
 	int iPitch = RANDOM_LONG(140, 160);
 
@@ -465,7 +465,7 @@ void CPitdrone ::AlertSound()
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CPitdrone ::SetYawSpeed()
+void CPitdrone::SetYawSpeed()
 {
 	int ys;
 
@@ -497,7 +497,7 @@ void CPitdrone ::SetYawSpeed()
 // HandleAnimEvent - catches the monster-specific messages
 // that occur when tagged animation frames are played.
 //=========================================================
-void CPitdrone ::HandleAnimEvent(MonsterEvent_t* pEvent)
+void CPitdrone::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
 	switch (pEvent->event)
 	{
@@ -655,7 +655,7 @@ void CPitdrone ::HandleAnimEvent(MonsterEvent_t* pEvent)
 //=========================================================
 // Spawn
 //=========================================================
-void CPitdrone ::Spawn()
+void CPitdrone::Spawn()
 {
 	Precache();
 
@@ -700,7 +700,7 @@ void CPitdrone ::Spawn()
 //=========================================================
 // Precache - precaches all resources this monster needs
 //=========================================================
-void CPitdrone ::Precache()
+void CPitdrone::Precache()
 {
 	PRECACHE_MODEL("models/pit_drone.mdl");
 	PRECACHE_MODEL("models/pit_drone_gibs.mdl");
@@ -744,10 +744,10 @@ void CPitdrone ::Precache()
 // RunAI - overridden for bullsquid because there are things
 // that need to be checked every think.
 //========================================================
-void CPitdrone ::RunAI()
+void CPitdrone::RunAI()
 {
 	// first, do base class stuff
-	CBaseMonster ::RunAI();
+	CBaseMonster::RunAI();
 
 	if (m_hEnemy != NULL && m_Activity == ACT_RUN)
 	{
@@ -985,7 +985,7 @@ IMPLEMENT_CUSTOM_SCHEDULES(CPitdrone, CBaseMonster);
 //=========================================================
 // GetSchedule
 //=========================================================
-Schedule_t* CPitdrone ::GetSchedule()
+Schedule_t* CPitdrone::GetSchedule()
 {
 	switch (m_MonsterState)
 	{
@@ -1038,7 +1038,7 @@ Schedule_t* CPitdrone ::GetSchedule()
 		if (HasConditions(bits_COND_ENEMY_DEAD))
 		{
 			// call base class, all code to handle dead enemies is centralized there.
-			return CBaseMonster ::GetSchedule();
+			return CBaseMonster::GetSchedule();
 		}
 
 		if (HasConditions(bits_COND_NEW_ENEMY))
@@ -1072,13 +1072,13 @@ Schedule_t* CPitdrone ::GetSchedule()
 	}
 	}
 
-	return CBaseMonster ::GetSchedule();
+	return CBaseMonster::GetSchedule();
 }
 
 //=========================================================
 // GetScheduleOfType
 //=========================================================
-Schedule_t* CPitdrone ::GetScheduleOfType(int Type)
+Schedule_t* CPitdrone::GetScheduleOfType(int Type)
 {
 	switch (Type)
 	{
@@ -1110,7 +1110,7 @@ Schedule_t* CPitdrone ::GetScheduleOfType(int Type)
 		break;
 	}
 
-	return CBaseMonster ::GetScheduleOfType(Type);
+	return CBaseMonster::GetScheduleOfType(Type);
 }
 
 //=========================================================
@@ -1118,7 +1118,7 @@ Schedule_t* CPitdrone ::GetScheduleOfType(int Type)
 // any necessary calculations to start the next task on the
 // schedule.
 //=========================================================
-void CPitdrone ::StartTask(Task_t* pTask)
+void CPitdrone::StartTask(Task_t* pTask)
 {
 	m_iTaskStatus = TASKSTATUS_RUNNING;
 
@@ -1142,7 +1142,7 @@ void CPitdrone ::StartTask(Task_t* pTask)
 		break;
 	}
 	default: {
-		CBaseMonster ::StartTask(pTask);
+		CBaseMonster::StartTask(pTask);
 		break;
 	}
 	}
@@ -1151,7 +1151,7 @@ void CPitdrone ::StartTask(Task_t* pTask)
 //=========================================================
 // RunTask
 //=========================================================
-void CPitdrone ::RunTask(Task_t* pTask)
+void CPitdrone::RunTask(Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
@@ -1166,7 +1166,7 @@ void CPitdrone ::RunTask(Task_t* pTask)
 		break;
 	}
 	default: {
-		CBaseMonster ::RunTask(pTask);
+		CBaseMonster::RunTask(pTask);
 		break;
 	}
 	}

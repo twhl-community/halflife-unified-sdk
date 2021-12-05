@@ -344,7 +344,7 @@ enum
 // may still fail but in most cases, well after the grunt has
 // started moving.
 //=========================================================
-void COFMedicAlly ::SpeakSentence()
+void COFMedicAlly::SpeakSentence()
 {
 	if (m_iSentence == MEDIC_SENT_NONE)
 	{
@@ -362,7 +362,7 @@ void COFMedicAlly ::SpeakSentence()
 //=========================================================
 // GibMonster - make gun fly through the air.
 //=========================================================
-void COFMedicAlly ::GibMonster()
+void COFMedicAlly::GibMonster()
 {
 	Vector vecGunPos;
 	Vector vecGunAngles;
@@ -403,7 +403,7 @@ void COFMedicAlly ::GibMonster()
 // hear the DANGER sound that is made by hand grenades and
 // other dangerous items.
 //=========================================================
-int COFMedicAlly ::ISoundMask()
+int COFMedicAlly::ISoundMask()
 {
 	return bits_SOUND_WORLD |
 		   bits_SOUND_COMBAT |
@@ -417,7 +417,7 @@ int COFMedicAlly ::ISoundMask()
 //=========================================================
 // someone else is talking - don't speak
 //=========================================================
-bool COFMedicAlly ::FOkToSpeak()
+bool COFMedicAlly::FOkToSpeak()
 {
 	// if someone else is talking, don't speak
 	if (gpGlobals->time <= COFSquadTalkMonster::g_talkWaitTime)
@@ -441,7 +441,7 @@ bool COFMedicAlly ::FOkToSpeak()
 
 //=========================================================
 //=========================================================
-void COFMedicAlly ::JustSpoke()
+void COFMedicAlly::JustSpoke()
 {
 	COFSquadTalkMonster::g_talkWaitTime = gpGlobals->time + RANDOM_FLOAT(1.5, 2.0);
 	m_iSentence = MEDIC_SENT_NONE;
@@ -451,7 +451,7 @@ void COFMedicAlly ::JustSpoke()
 // PrescheduleThink - this function runs after conditions
 // are collected and before scheduling code is run.
 //=========================================================
-void COFMedicAlly ::PrescheduleThink()
+void COFMedicAlly::PrescheduleThink()
 {
 	if (InSquad() && m_hEnemy != NULL)
 	{
@@ -483,7 +483,7 @@ void COFMedicAlly ::PrescheduleThink()
 // this is a bad bug. Friendly machine gun fire avoidance
 // will unecessarily prevent the throwing of a grenade as well.
 //=========================================================
-bool COFMedicAlly ::FCanCheckAttacks()
+bool COFMedicAlly::FCanCheckAttacks()
 {
 	if (!HasConditions(bits_COND_ENEMY_TOOFAR))
 	{
@@ -499,7 +499,7 @@ bool COFMedicAlly ::FCanCheckAttacks()
 //=========================================================
 // CheckMeleeAttack1
 //=========================================================
-bool COFMedicAlly ::CheckMeleeAttack1(float flDot, float flDist)
+bool COFMedicAlly::CheckMeleeAttack1(float flDot, float flDist)
 {
 	CBaseMonster* pEnemy;
 
@@ -530,7 +530,7 @@ bool COFMedicAlly ::CheckMeleeAttack1(float flDot, float flDist)
 // occluded (throw grenade over wall, etc). We must
 // disqualify the machine gun attack if the enemy is occluded.
 //=========================================================
-bool COFMedicAlly ::CheckRangeAttack1(float flDot, float flDist)
+bool COFMedicAlly::CheckRangeAttack1(float flDot, float flDist)
 {
 	//Only if we have a weapon
 	if (pev->weapons != 0)
@@ -572,7 +572,7 @@ bool COFMedicAlly ::CheckRangeAttack1(float flDot, float flDist)
 // CheckRangeAttack2 - this checks the Grunt's grenade
 // attack.
 //=========================================================
-bool COFMedicAlly ::CheckRangeAttack2(float flDot, float flDist)
+bool COFMedicAlly::CheckRangeAttack2(float flDot, float flDist)
 {
 	if (!FBitSet(pev->weapons, MedicAllyWeaponFlag::HandGrenade))
 	{
@@ -702,7 +702,7 @@ bool COFMedicAlly ::CheckRangeAttack2(float flDot, float flDist)
 //=========================================================
 // TraceAttack - make sure we're not taking it in the helmet
 //=========================================================
-void COFMedicAlly ::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
+void COFMedicAlly::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
 {
 	// check for helmet shot
 	if (ptr->iHitgroup == 11)
@@ -737,7 +737,7 @@ void COFMedicAlly ::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector v
 // needs to forget that he is in cover if he's hurt. (Obviously
 // not in a safe place anymore).
 //=========================================================
-bool COFMedicAlly ::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool COFMedicAlly::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
 	// make sure friends talk about it if player hurts talkmonsters...
 	bool ret = COFSquadTalkMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
@@ -794,7 +794,7 @@ bool COFMedicAlly ::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, 
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void COFMedicAlly ::SetYawSpeed()
+void COFMedicAlly::SetYawSpeed()
 {
 	int ys;
 
@@ -837,7 +837,7 @@ void COFMedicAlly ::SetYawSpeed()
 	pev->yaw_speed = ys;
 }
 
-void COFMedicAlly ::IdleSound()
+void COFMedicAlly::IdleSound()
 {
 	if (FOkToSpeak() && (0 != g_fMedicAllyQuestion || RANDOM_LONG(0, 1)))
 	{
@@ -880,7 +880,7 @@ void COFMedicAlly ::IdleSound()
 // CheckAmmo - overridden for the grunt because he actually
 // uses ammo! (base class doesn't)
 //=========================================================
-void COFMedicAlly ::CheckAmmo()
+void COFMedicAlly::CheckAmmo()
 {
 	if (m_cAmmoLoaded <= 0)
 	{
@@ -892,14 +892,14 @@ void COFMedicAlly ::CheckAmmo()
 // Classify - indicates this monster's place in the
 // relationship table.
 //=========================================================
-int COFMedicAlly ::Classify()
+int COFMedicAlly::Classify()
 {
 	return CLASS_HUMAN_MILITARY_FRIENDLY;
 }
 
 //=========================================================
 //=========================================================
-CBaseEntity* COFMedicAlly ::Kick()
+CBaseEntity* COFMedicAlly::Kick()
 {
 	TraceResult tr;
 
@@ -923,7 +923,7 @@ CBaseEntity* COFMedicAlly ::Kick()
 // GetGunPosition	return the end of the barrel
 //=========================================================
 
-Vector COFMedicAlly ::GetGunPosition()
+Vector COFMedicAlly::GetGunPosition()
 {
 	if (m_fStanding)
 	{
@@ -938,7 +938,7 @@ Vector COFMedicAlly ::GetGunPosition()
 //=========================================================
 // Shoot
 //=========================================================
-void COFMedicAlly ::Shoot()
+void COFMedicAlly::Shoot()
 {
 	//Limit fire rate
 	if (m_hEnemy == NULL || gpGlobals->time - m_flLastShot <= 0.11)
@@ -984,7 +984,7 @@ void COFMedicAlly ::Shoot()
 // HandleAnimEvent - catches the monster-specific messages
 // that occur when tagged animation frames are played.
 //=========================================================
-void COFMedicAlly ::HandleAnimEvent(MonsterEvent_t* pEvent)
+void COFMedicAlly::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
 	Vector vecShootDir;
 	Vector vecShootOrigin;
@@ -1102,7 +1102,7 @@ void COFMedicAlly ::HandleAnimEvent(MonsterEvent_t* pEvent)
 //=========================================================
 // Spawn
 //=========================================================
-void COFMedicAlly ::Spawn()
+void COFMedicAlly::Spawn()
 {
 	Precache();
 
@@ -1200,7 +1200,7 @@ void COFMedicAlly ::Spawn()
 //=========================================================
 // Precache - precaches all resources this monster needs
 //=========================================================
-void COFMedicAlly ::Precache()
+void COFMedicAlly::Precache()
 {
 	PRECACHE_MODEL("models/hgrunt_medic.mdl");
 
@@ -1245,7 +1245,7 @@ void COFMedicAlly ::Precache()
 //=========================================================
 // start task
 //=========================================================
-void COFMedicAlly ::StartTask(Task_t* pTask)
+void COFMedicAlly::StartTask(Task_t* pTask)
 {
 	m_iTaskStatus = TASKSTATUS_RUNNING;
 
@@ -1353,7 +1353,7 @@ void COFMedicAlly ::StartTask(Task_t* pTask)
 //=========================================================
 // RunTask
 //=========================================================
-void COFMedicAlly ::RunTask(Task_t* pTask)
+void COFMedicAlly::RunTask(Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
@@ -1418,7 +1418,7 @@ void COFMedicAlly ::RunTask(Task_t* pTask)
 //=========================================================
 // PainSound
 //=========================================================
-void COFMedicAlly ::PainSound()
+void COFMedicAlly::PainSound()
 {
 	if (gpGlobals->time > m_flNextPainTime)
 	{
@@ -1463,7 +1463,7 @@ void COFMedicAlly ::PainSound()
 //=========================================================
 // DeathSound
 //=========================================================
-void COFMedicAlly ::DeathSound()
+void COFMedicAlly::DeathSound()
 {
 	switch (RANDOM_LONG(0, 5))
 	{
@@ -2236,7 +2236,7 @@ IMPLEMENT_CUSTOM_SCHEDULES(COFMedicAlly, COFSquadTalkMonster);
 //=========================================================
 // SetActivity
 //=========================================================
-void COFMedicAlly ::SetActivity(Activity NewActivity)
+void COFMedicAlly::SetActivity(Activity NewActivity)
 {
 	int iSequence = ACTIVITY_NOT_AVAILABLE;
 	void* pmodel = GET_MODEL_PTR(ENT(pev));
@@ -2315,7 +2315,7 @@ void COFMedicAlly ::SetActivity(Activity NewActivity)
 //=========================================================
 // Get Schedule!
 //=========================================================
-Schedule_t* COFMedicAlly ::GetSchedule()
+Schedule_t* COFMedicAlly::GetSchedule()
 {
 
 	// clear old sentence
@@ -2665,7 +2665,7 @@ Schedule_t* COFMedicAlly ::GetSchedule()
 
 //=========================================================
 //=========================================================
-Schedule_t* COFMedicAlly ::GetScheduleOfType(int Type)
+Schedule_t* COFMedicAlly::GetScheduleOfType(int Type)
 {
 	switch (Type)
 	{

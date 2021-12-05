@@ -42,7 +42,7 @@ public:
 	bool Save(CSave& save) override;
 	bool Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
-	int ObjectCaps() override { return CBaseMonster ::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+	int ObjectCaps() override { return CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 
 	void Spawn() override;
 	void Precache() override;
@@ -141,7 +141,7 @@ TYPEDESCRIPTION CBlackOpsOsprey::m_SaveData[] =
 IMPLEMENT_SAVERESTORE(CBlackOpsOsprey, CBaseMonster);
 
 
-void CBlackOpsOsprey ::Spawn()
+void CBlackOpsOsprey::Spawn()
 {
 	Precache();
 	// motor
@@ -203,7 +203,7 @@ void CBlackOpsOsprey::CommandUse(CBaseEntity* pActivator, CBaseEntity* pCaller, 
 	pev->nextthink = gpGlobals->time + 0.1;
 }
 
-void CBlackOpsOsprey ::FindAllThink()
+void CBlackOpsOsprey::FindAllThink()
 {
 	CBaseEntity* pEntity = NULL;
 
@@ -230,7 +230,7 @@ void CBlackOpsOsprey ::FindAllThink()
 }
 
 
-void CBlackOpsOsprey ::DeployThink()
+void CBlackOpsOsprey::DeployThink()
 {
 	UTIL_MakeAimVectors(pev->angles);
 
@@ -262,7 +262,7 @@ void CBlackOpsOsprey ::DeployThink()
 
 
 
-bool CBlackOpsOsprey ::HasDead()
+bool CBlackOpsOsprey::HasDead()
 {
 	for (int i = 0; i < m_iUnits; i++)
 	{
@@ -279,7 +279,7 @@ bool CBlackOpsOsprey ::HasDead()
 }
 
 
-CBaseMonster* CBlackOpsOsprey ::MakeGrunt(Vector vecSrc)
+CBaseMonster* CBlackOpsOsprey::MakeGrunt(Vector vecSrc)
 {
 	CBaseEntity* pEntity;
 	CBaseMonster* pGrunt;
@@ -321,7 +321,7 @@ CBaseMonster* CBlackOpsOsprey ::MakeGrunt(Vector vecSrc)
 }
 
 
-void CBlackOpsOsprey ::HoverThink()
+void CBlackOpsOsprey::HoverThink()
 {
 	int i;
 	for (i = 0; i < 4; i++)
@@ -510,7 +510,7 @@ int CBlackOpsOsprey::TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker
 
 
 
-void CBlackOpsOsprey ::Killed(entvars_t* pevAttacker, int iGib)
+void CBlackOpsOsprey::Killed(entvars_t* pevAttacker, int iGib)
 {
 	ClearShockEffect();
 
@@ -543,7 +543,7 @@ void CBlackOpsOsprey::CrashTouch(CBaseEntity* pOther)
 }
 
 
-void CBlackOpsOsprey ::DyingThink()
+void CBlackOpsOsprey::DyingThink()
 {
 	StudioFrameAdvance();
 	pev->nextthink = gpGlobals->time + 0.1;
@@ -732,7 +732,7 @@ void CBlackOpsOsprey ::DyingThink()
 }
 
 
-void CBlackOpsOsprey ::ShowDamage()
+void CBlackOpsOsprey::ShowDamage()
 {
 	if (m_iDoLeftSmokePuff > 0 || RANDOM_LONG(0, 99) > m_flLeftHealth)
 	{

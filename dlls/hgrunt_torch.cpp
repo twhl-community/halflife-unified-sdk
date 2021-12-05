@@ -300,7 +300,7 @@ enum
 // may still fail but in most cases, well after the grunt has
 // started moving.
 //=========================================================
-void COFTorchAlly ::SpeakSentence()
+void COFTorchAlly::SpeakSentence()
 {
 	if (m_iSentence == TORCH_SENT_NONE)
 	{
@@ -318,7 +318,7 @@ void COFTorchAlly ::SpeakSentence()
 //=========================================================
 // GibMonster - make gun fly through the air.
 //=========================================================
-void COFTorchAlly ::GibMonster()
+void COFTorchAlly::GibMonster()
 {
 	if (m_hWaitMedic)
 	{
@@ -364,7 +364,7 @@ void COFTorchAlly ::GibMonster()
 // hear the DANGER sound that is made by hand grenades and
 // other dangerous items.
 //=========================================================
-int COFTorchAlly ::ISoundMask()
+int COFTorchAlly::ISoundMask()
 {
 	return bits_SOUND_WORLD |
 		   bits_SOUND_COMBAT |
@@ -378,7 +378,7 @@ int COFTorchAlly ::ISoundMask()
 //=========================================================
 // someone else is talking - don't speak
 //=========================================================
-bool COFTorchAlly ::FOkToSpeak()
+bool COFTorchAlly::FOkToSpeak()
 {
 	// if someone else is talking, don't speak
 	if (gpGlobals->time <= COFSquadTalkMonster::g_talkWaitTime)
@@ -402,7 +402,7 @@ bool COFTorchAlly ::FOkToSpeak()
 
 //=========================================================
 //=========================================================
-void COFTorchAlly ::JustSpoke()
+void COFTorchAlly::JustSpoke()
 {
 	COFSquadTalkMonster::g_talkWaitTime = gpGlobals->time + RANDOM_FLOAT(1.5, 2.0);
 	m_iSentence = TORCH_SENT_NONE;
@@ -412,7 +412,7 @@ void COFTorchAlly ::JustSpoke()
 // PrescheduleThink - this function runs after conditions
 // are collected and before scheduling code is run.
 //=========================================================
-void COFTorchAlly ::PrescheduleThink()
+void COFTorchAlly::PrescheduleThink()
 {
 	if (InSquad() && m_hEnemy != NULL)
 	{
@@ -444,7 +444,7 @@ void COFTorchAlly ::PrescheduleThink()
 // this is a bad bug. Friendly machine gun fire avoidance
 // will unecessarily prevent the throwing of a grenade as well.
 //=========================================================
-bool COFTorchAlly ::FCanCheckAttacks()
+bool COFTorchAlly::FCanCheckAttacks()
 {
 	if (!HasConditions(bits_COND_ENEMY_TOOFAR))
 	{
@@ -460,7 +460,7 @@ bool COFTorchAlly ::FCanCheckAttacks()
 //=========================================================
 // CheckMeleeAttack1
 //=========================================================
-bool COFTorchAlly ::CheckMeleeAttack1(float flDot, float flDist)
+bool COFTorchAlly::CheckMeleeAttack1(float flDot, float flDist)
 {
 	CBaseMonster* pEnemy;
 
@@ -491,7 +491,7 @@ bool COFTorchAlly ::CheckMeleeAttack1(float flDot, float flDist)
 // occluded (throw grenade over wall, etc). We must
 // disqualify the machine gun attack if the enemy is occluded.
 //=========================================================
-bool COFTorchAlly ::CheckRangeAttack1(float flDot, float flDist)
+bool COFTorchAlly::CheckRangeAttack1(float flDot, float flDist)
 {
 	//Only if we have a weapon
 	if (!m_fGunHolstered && flDist <= 1024 && flDot >= 0.5 /*&& NoFriendlyFire()*/)
@@ -529,7 +529,7 @@ bool COFTorchAlly ::CheckRangeAttack1(float flDot, float flDist)
 // CheckRangeAttack2 - this checks the Grunt's grenade
 // attack.
 //=========================================================
-bool COFTorchAlly ::CheckRangeAttack2(float flDot, float flDist)
+bool COFTorchAlly::CheckRangeAttack2(float flDot, float flDist)
 {
 	if (m_fGunHolstered || !FBitSet(pev->weapons, TorchAllyWeaponFlag::HandGrenade))
 	{
@@ -659,7 +659,7 @@ bool COFTorchAlly ::CheckRangeAttack2(float flDot, float flDist)
 //=========================================================
 // TraceAttack - make sure we're not taking it in the helmet
 //=========================================================
-void COFTorchAlly ::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
+void COFTorchAlly::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
 {
 	// check for Torch fuel tank hit
 	if (ptr->iHitgroup == 8)
@@ -702,7 +702,7 @@ void COFTorchAlly ::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector v
 // needs to forget that he is in cover if he's hurt. (Obviously
 // not in a safe place anymore).
 //=========================================================
-bool COFTorchAlly ::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool COFTorchAlly::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
 	// make sure friends talk about it if player hurts talkmonsters...
 	bool ret = COFSquadTalkMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
@@ -759,7 +759,7 @@ bool COFTorchAlly ::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, 
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void COFTorchAlly ::SetYawSpeed()
+void COFTorchAlly::SetYawSpeed()
 {
 	int ys;
 
@@ -802,7 +802,7 @@ void COFTorchAlly ::SetYawSpeed()
 	pev->yaw_speed = ys;
 }
 
-void COFTorchAlly ::IdleSound()
+void COFTorchAlly::IdleSound()
 {
 	if (FOkToSpeak() && (0 != g_fTorchAllyQuestion || RANDOM_LONG(0, 1)))
 	{
@@ -845,7 +845,7 @@ void COFTorchAlly ::IdleSound()
 // CheckAmmo - overridden for the grunt because he actually
 // uses ammo! (base class doesn't)
 //=========================================================
-void COFTorchAlly ::CheckAmmo()
+void COFTorchAlly::CheckAmmo()
 {
 	if (m_cAmmoLoaded <= 0)
 	{
@@ -857,14 +857,14 @@ void COFTorchAlly ::CheckAmmo()
 // Classify - indicates this monster's place in the
 // relationship table.
 //=========================================================
-int COFTorchAlly ::Classify()
+int COFTorchAlly::Classify()
 {
 	return CLASS_HUMAN_MILITARY_FRIENDLY;
 }
 
 //=========================================================
 //=========================================================
-CBaseEntity* COFTorchAlly ::Kick()
+CBaseEntity* COFTorchAlly::Kick()
 {
 	TraceResult tr;
 
@@ -888,7 +888,7 @@ CBaseEntity* COFTorchAlly ::Kick()
 // GetGunPosition	return the end of the barrel
 //=========================================================
 
-Vector COFTorchAlly ::GetGunPosition()
+Vector COFTorchAlly::GetGunPosition()
 {
 	if (m_fStanding)
 	{
@@ -903,7 +903,7 @@ Vector COFTorchAlly ::GetGunPosition()
 //=========================================================
 // Shoot
 //=========================================================
-void COFTorchAlly ::Shoot()
+void COFTorchAlly::Shoot()
 {
 	//Limit fire rate
 	if (m_hEnemy == NULL || gpGlobals->time - m_flLastShot <= 0.11)
@@ -938,7 +938,7 @@ void COFTorchAlly ::Shoot()
 // HandleAnimEvent - catches the monster-specific messages
 // that occur when tagged animation frames are played.
 //=========================================================
-void COFTorchAlly ::HandleAnimEvent(MonsterEvent_t* pEvent)
+void COFTorchAlly::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
 	Vector vecShootDir;
 	Vector vecShootOrigin;
@@ -1080,7 +1080,7 @@ void COFTorchAlly ::HandleAnimEvent(MonsterEvent_t* pEvent)
 //=========================================================
 // Spawn
 //=========================================================
-void COFTorchAlly ::Spawn()
+void COFTorchAlly::Spawn()
 {
 	Precache();
 
@@ -1153,7 +1153,7 @@ void COFTorchAlly ::Spawn()
 //=========================================================
 // Precache - precaches all resources this monster needs
 //=========================================================
-void COFTorchAlly ::Precache()
+void COFTorchAlly::Precache()
 {
 	PRECACHE_MODEL("models/hgrunt_torch.mdl");
 	PRECACHE_MODEL(TORCH_BEAM_SPRITE);
@@ -1195,7 +1195,7 @@ void COFTorchAlly ::Precache()
 //=========================================================
 // start task
 //=========================================================
-void COFTorchAlly ::StartTask(Task_t* pTask)
+void COFTorchAlly::StartTask(Task_t* pTask)
 {
 	m_iTaskStatus = TASKSTATUS_RUNNING;
 
@@ -1246,7 +1246,7 @@ void COFTorchAlly ::StartTask(Task_t* pTask)
 //=========================================================
 // RunTask
 //=========================================================
-void COFTorchAlly ::RunTask(Task_t* pTask)
+void COFTorchAlly::RunTask(Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
@@ -1271,7 +1271,7 @@ void COFTorchAlly ::RunTask(Task_t* pTask)
 //=========================================================
 // PainSound
 //=========================================================
-void COFTorchAlly ::PainSound()
+void COFTorchAlly::PainSound()
 {
 	if (gpGlobals->time > m_flNextPainTime)
 	{
@@ -1316,7 +1316,7 @@ void COFTorchAlly ::PainSound()
 //=========================================================
 // DeathSound
 //=========================================================
-void COFTorchAlly ::DeathSound()
+void COFTorchAlly::DeathSound()
 {
 	switch (RANDOM_LONG(0, 5))
 	{
@@ -2016,7 +2016,7 @@ IMPLEMENT_CUSTOM_SCHEDULES(COFTorchAlly, COFSquadTalkMonster);
 //=========================================================
 // SetActivity
 //=========================================================
-void COFTorchAlly ::SetActivity(Activity NewActivity)
+void COFTorchAlly::SetActivity(Activity NewActivity)
 {
 	int iSequence = ACTIVITY_NOT_AVAILABLE;
 	void* pmodel = GET_MODEL_PTR(ENT(pev));
@@ -2095,7 +2095,7 @@ void COFTorchAlly ::SetActivity(Activity NewActivity)
 //=========================================================
 // Get Schedule!
 //=========================================================
-Schedule_t* COFTorchAlly ::GetSchedule()
+Schedule_t* COFTorchAlly::GetSchedule()
 {
 
 	// clear old sentence
@@ -2434,7 +2434,7 @@ Schedule_t* COFTorchAlly ::GetSchedule()
 
 //=========================================================
 //=========================================================
-Schedule_t* COFTorchAlly ::GetScheduleOfType(int Type)
+Schedule_t* COFTorchAlly::GetScheduleOfType(int Type)
 {
 	switch (Type)
 	{

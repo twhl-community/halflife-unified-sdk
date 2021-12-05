@@ -37,13 +37,13 @@ edict_t* EHANDLE::Set(edict_t* pent)
 };
 
 
-EHANDLE ::operator CBaseEntity*()
+EHANDLE::operator CBaseEntity*()
 {
 	return (CBaseEntity*)GET_PRIVATE(Get());
 };
 
 
-CBaseEntity* EHANDLE ::operator=(CBaseEntity* pEntity)
+CBaseEntity* EHANDLE::operator=(CBaseEntity* pEntity)
 {
 	if (pEntity)
 	{
@@ -59,7 +59,7 @@ CBaseEntity* EHANDLE ::operator=(CBaseEntity* pEntity)
 	return pEntity;
 }
 
-CBaseEntity* EHANDLE ::operator->()
+CBaseEntity* EHANDLE::operator->()
 {
 	return (CBaseEntity*)GET_PRIVATE(Get());
 }
