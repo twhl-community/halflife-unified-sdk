@@ -403,8 +403,7 @@ void CImageLabel::LoadImage(const char* pImageName)
 
 void CImageLabel::setImage(const char* pImageName)
 {
-	if (m_pTGA)
-		delete m_pTGA;
+	delete m_pTGA;
 
 	// Load the Image
 	char sz[256];
