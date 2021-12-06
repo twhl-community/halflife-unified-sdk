@@ -95,6 +95,7 @@ TYPEDESCRIPTION CBasePlayer::m_playerSaveData[] =
 		DEFINE_ARRAY(CBasePlayer, m_rgpPlayerItems, FIELD_CLASSPTR, MAX_ITEM_TYPES),
 		DEFINE_FIELD(CBasePlayer, m_pActiveItem, FIELD_CLASSPTR),
 		DEFINE_FIELD(CBasePlayer, m_pLastItem, FIELD_CLASSPTR),
+		DEFINE_FIELD(CBasePlayer, m_WeaponBits, FIELD_INT64),
 
 		DEFINE_ARRAY(CBasePlayer, m_rgAmmo, FIELD_INTEGER, MAX_AMMO_SLOTS),
 		DEFINE_FIELD(CBasePlayer, m_idrowndmg, FIELD_INTEGER),
@@ -802,10 +803,10 @@ void CBasePlayer::RemoveAllItems(bool removeSuit)
 	pev->viewmodel = 0;
 	pev->weaponmodel = 0;
 
-	if (removeSuit)
-		pev->weapons = 0;
-	else
-		pev->weapons &= ~WEAPON_ALLWEAPONS;
+	m_WeaponBits = 0ULL;
+
+	//Re-add suit bit if needed.
+	SetHasSuit(!removeSuit);
 
 	for (i = 0; i < MAX_AMMO_SLOTS; i++)
 		m_rgAmmo[i] = 0;
@@ -2420,7 +2421,7 @@ void CBasePlayer::CheckSuitUpdate()
 	int isearch = m_iSuitPlayNext;
 
 	// Ignore suit updates if no suit
-	if ((pev->weapons & (1 << WEAPON_SUIT)) == 0)
+	if (!HasSuit())
 		return;
 
 	// if in range of radiation source, ping geiger counter
@@ -2484,7 +2485,7 @@ void CBasePlayer::SetSuitUpdate(const char* name, bool fgroup, int iNoRepeatTime
 
 
 	// Ignore suit updates if no suit
-	if ((pev->weapons & (1 << WEAPON_SUIT)) == 0)
+	if (!HasSuit())
 		return;
 
 	if (g_pGameRules->IsMultiplayer())
@@ -3575,7 +3576,7 @@ void CBasePlayer::FlashlightTurnOn()
 		return;
 	}
 
-	if ((pev->weapons & (1 << WEAPON_SUIT)) != 0)
+	if (HasSuit())
 	{
 		EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, SOUND_FLASHLIGHT_ON, 1.0, ATTN_NORM, 0, PITCH_NORM);
 		SetBits(pev->effects, EF_BRIGHTLIGHT);
@@ -4205,7 +4206,7 @@ void CBasePlayer::UpdateClientData()
 		//Update the client's night vision state on restore/level transition
 		if (g_pGameRules->FAllowFlashlight())
 		{
-			if ((pev->weapons & WEAPON_SUIT) != 0)
+			if (HasSuit())
 			{
 				if (FlashlightIsOn())
 				{
@@ -4276,6 +4277,19 @@ void CBasePlayer::UpdateClientData()
 		// send "health" update message
 		MESSAGE_BEGIN(MSG_ONE, gmsgBattery, NULL, pev);
 		WRITE_SHORT((int)pev->armorvalue);
+		MESSAGE_END();
+	}
+
+	if (m_WeaponBits != m_ClientWeaponBits)
+	{
+		m_ClientWeaponBits = m_WeaponBits;
+
+		const int lowerBits = m_WeaponBits & 0xFFFFFFFF;
+		const int upperBits = (m_WeaponBits >> 32) & 0xFFFFFFFF;
+
+		MESSAGE_BEGIN(MSG_ONE, gmsgWeapons, nullptr, pev);
+		WRITE_LONG(lowerBits);
+		WRITE_LONG(upperBits);
 		MESSAGE_END();
 	}
 
@@ -4416,7 +4430,7 @@ void CBasePlayer::UpdateClientData()
 			WRITE_BYTE(II.iMaxAmmo2);			   // byte     Max Ammo 2
 			WRITE_BYTE(II.iSlot);				   // byte		bucket
 			WRITE_BYTE(II.iPosition);			   // byte		bucket pos
-			WRITE_BYTE(II.iId);					   // byte		id (bit index into pev->weapons)
+			WRITE_BYTE(II.iId);					   // byte		id (bit index into m_WeaponBits)
 			WRITE_BYTE(II.iFlags);				   // byte		Flags
 			MESSAGE_END();
 		}
@@ -4946,7 +4960,7 @@ void CBasePlayer::DropPlayerItem(char* pszItemName)
 
 			UTIL_MakeVectors(pev->angles);
 
-			pev->weapons &= ~(1 << pWeapon->m_iId); // take item off hud
+			ClearWeaponBit(pWeapon->m_iId); // take item off hud
 
 			CWeaponBox* pWeaponBox = (CWeaponBox*)CBaseEntity::Create("weaponbox", pev->origin + gpGlobals->v_forward * 10, pev->angles, edict());
 			pWeaponBox->pev->angles.x = 0;

@@ -52,7 +52,7 @@ bool CItemLongJumpCTF::MyTouch(CBasePlayer* pPlayer)
 
 		if (static_cast<int>(team_no) <= 0 || team_no == pPlayer->m_iTeamNum)
 		{
-			if ((pPlayer->pev->weapons & (1 << WEAPON_SUIT)) != 0)
+			if (pPlayer->HasSuit())
 			{
 				pPlayer->m_fLongJump = true;
 				g_engfuncs.pfnSetPhysicsKeyValue(pPlayer->edict(), "jpj", "1");

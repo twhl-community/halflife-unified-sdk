@@ -114,7 +114,7 @@ bool CHudBattery::Draw(float flTime)
 		b = giB;
 	}
 
-	if ((gHUD.m_iWeaponBits & (1 << (WEAPON_SUIT))) == 0)
+	if (!gHUD.HasSuit())
 		return true;
 
 	// Has health changed? Flash the health #
