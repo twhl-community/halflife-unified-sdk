@@ -305,22 +305,24 @@ const ItemData CTFItems[] =
 		{CTFItem::OpposingForceFlag, "", {1, 1, 2}, false, nullptr},
 
 		{CTFItem::LongJump, "item_ctflongjump", {1, 0, 4}, true, nullptr},
-		{CTFItem::PortableHEV, "item_ctfportablehev", {1, 0, 8}, true, [](auto pPlayer) {
-			 if (pPlayer->m_fPlayingAChargeSound)
-			 {
-				 STOP_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_armor_charge.wav");
-				 pPlayer->m_fPlayingAChargeSound = false;
-			 }
-		 }},
+		{CTFItem::PortableHEV, "item_ctfportablehev", {1, 0, 8}, true, [](auto pPlayer)
+			{
+				if (pPlayer->m_fPlayingAChargeSound)
+				{
+					STOP_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_armor_charge.wav");
+					pPlayer->m_fPlayingAChargeSound = false;
+				}
+			}},
 		{CTFItem::Backpack, "item_ctfbackpack", {1, 0, 16}, true, nullptr},
 		{CTFItem::Acceleration, "item_ctfaccelerator", {1, 0, 32}, true, nullptr},
-		{CTFItem::Regeneration, "item_ctfregeneration", {1, 0, 128}, true, [](auto pPlayer) {
-			 if (pPlayer->m_fPlayingHChargeSound)
-			 {
-				 STOP_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_health_charge.wav");
-				 pPlayer->m_fPlayingHChargeSound = false;
-			 }
-		 }},
+		{CTFItem::Regeneration, "item_ctfregeneration", {1, 0, 128}, true, [](auto pPlayer)
+			{
+				if (pPlayer->m_fPlayingHChargeSound)
+				{
+					STOP_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_health_charge.wav");
+					pPlayer->m_fPlayingHChargeSound = false;
+				}
+			}},
 };
 
 template <typename ItemCallback>
@@ -356,23 +358,20 @@ static void ForEachPlayerCTFPowerup(CBasePlayer* pPlayer, ItemCallback callback)
 
 void RespawnPlayerCTFPowerups(CBasePlayer* pPlayer, bool bForceRespawn)
 {
-	ForEachPlayerCTFPowerup(pPlayer, [=](auto pPlayer, auto pItem) {
-		pItem->DropItem(pPlayer, bForceRespawn);
-	});
+	ForEachPlayerCTFPowerup(pPlayer, [=](auto pPlayer, auto pItem)
+		{ pItem->DropItem(pPlayer, bForceRespawn); });
 }
 
 void ScatterPlayerCTFPowerups(CBasePlayer* pPlayer)
 {
-	ForEachPlayerCTFPowerup(pPlayer, [=](auto pPlayer, auto pItem) {
-		pItem->ScatterItem(pPlayer);
-	});
+	ForEachPlayerCTFPowerup(pPlayer, [=](auto pPlayer, auto pItem)
+		{ pItem->ScatterItem(pPlayer); });
 }
 
 void DropPlayerCTFPowerup(CBasePlayer* pPlayer)
 {
-	ForEachPlayerCTFPowerup(pPlayer, [=](auto pPlayer, auto pItem) {
-		pItem->ThrowItem(pPlayer);
-	});
+	ForEachPlayerCTFPowerup(pPlayer, [=](auto pPlayer, auto pItem)
+		{ pItem->ThrowItem(pPlayer); });
 }
 
 void FlushCTFPowerupTimes()
@@ -953,9 +952,8 @@ void CHalfLifeCTFplay::ClientUserInfoChanged(CBasePlayer* pPlayer, char* infobuf
 		{
 			if (0 != strcmp(pszNewModel, pPlayer->m_szTeamModel))
 			{
-				if (std::any_of(team_chars.begin(), team_chars.end(), [=](auto pszChar) {
-						return 0 == strcmp(pPlayer->m_szTeamModel, pszChar);
-					}))
+				if (std::any_of(team_chars.begin(), team_chars.end(), [=](auto pszChar)
+						{ return 0 == strcmp(pPlayer->m_szTeamModel, pszChar); }))
 				{
 					auto pszPlayerName = STRING(pPlayer->pev->netname);
 					if (pszPlayerName && '\0' != *pszPlayerName)
@@ -1261,15 +1259,13 @@ void CHalfLifeCTFplay::ChangePlayerTeam(CBasePlayer* pPlayer, const char* pCharN
 	{
 		auto team = CTFTeam::None;
 
-		if (std::any_of(team_chars.begin(), team_chars.begin() + team_chars.size() / 2, [=](auto pszChar) {
-				return !strcmp(pCharName, pszChar);
-			}))
+		if (std::any_of(team_chars.begin(), team_chars.begin() + team_chars.size() / 2, [=](auto pszChar)
+				{ return !strcmp(pCharName, pszChar); }))
 		{
 			team = CTFTeam::BlackMesa;
 		}
-		else if (std::any_of(team_chars.begin() + team_chars.size() / 2, team_chars.end(), [=](auto pszChar) {
-					 return !strcmp(pCharName, pszChar);
-				 }))
+		else if (std::any_of(team_chars.begin() + team_chars.size() / 2, team_chars.end(), [=](auto pszChar)
+					 { return !strcmp(pCharName, pszChar); }))
 		{
 			team = CTFTeam::OpposingForce;
 		}
