@@ -441,7 +441,7 @@ bool CStatsMenuPanel::MsgFunc_StatsPlayer(const char* pszName, int iSize, void* 
 	const int iShieldTime = READ_SHORT();
 	const int iJumpVal = READ_SHORT();
 
-	if (playerIndex > 0 && playerIndex < MAX_PLAYERS)
+	if (playerIndex > 0 && playerIndex < MAX_PLAYERS_HUD)
 	{
 		char sz[64];
 		sprintf(sz, "stats/stats_%s.ost", sCTFStatsSelection[3]);
