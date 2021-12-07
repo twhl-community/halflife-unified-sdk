@@ -124,7 +124,6 @@ target_sources(client PRIVATE
 	ui/hud/ammohistory.h
 	ui/hud/ammo_secondary.cpp
 	ui/hud/battery.cpp
-	ui/hud/bench.h
 	ui/hud/death.cpp
 	ui/hud/flashlight.cpp
 	ui/hud/geiger.cpp
@@ -132,9 +131,6 @@ target_sources(client PRIVATE
 	ui/hud/health.h
 	ui/hud/hud.cpp
 	ui/hud/hud.h
-	ui/hud/hud_bench.cpp
-	ui/hud/hud_benchtrace.cpp
-	ui/hud/hud_benchtrace.h
 	ui/hud/hud_msg.cpp
 	ui/hud/hud_redraw.cpp
 	ui/hud/hud_spectator.cpp
