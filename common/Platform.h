@@ -75,8 +75,6 @@ using qboolean = int;
 #define stackfree(address)
 
 #else // WIN32
-#define MAX_PATH PATH_MAX
-
 #include <alloca.h>
 
 #define stricmp strcasecmp
