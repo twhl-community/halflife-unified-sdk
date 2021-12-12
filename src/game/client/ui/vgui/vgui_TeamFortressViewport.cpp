@@ -708,7 +708,7 @@ int TeamFortressViewport::CreateCommandMenu(const char* menuFile, int direction,
 		return newIndex;
 	}
 
-#ifdef _WIN32
+#ifdef WIN32
 	try
 	{
 #endif
@@ -918,7 +918,7 @@ int TeamFortressViewport::CreateCommandMenu(const char* menuFile, int direction,
 
 			pfile = gEngfuncs.COM_ParseFile(pfile, token);
 		}
-#ifdef _WIN32
+#ifdef WIN32
 	}
 	catch (CException* e)
 	{
