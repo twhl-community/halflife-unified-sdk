@@ -202,11 +202,11 @@ public:
 	void AttackSound();
 	void StartTask(Task_t* pTask) override;
 	void RunTask(Task_t* pTask) override;
-	BOOL CheckMeleeAttack1(float flDot, float flDist) override;
-	BOOL CheckMeleeAttack2(float flDot, float flDist) override;
-	BOOL CheckRangeAttack1(float flDot, float flDist) override;
+	bool CheckMeleeAttack1(float flDot, float flDist) override;
+	bool CheckMeleeAttack2(float flDot, float flDist) override;
+	bool CheckRangeAttack1(float flDot, float flDist) override;
 	void RunAI() override;
-	BOOL FValidateHintType(short sHint) override;
+	bool FValidateHintType(short sHint) override;
 	Schedule_t* GetSchedule() override;
 	Schedule_t* GetScheduleOfType(int Type) override;
 	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
@@ -220,7 +220,7 @@ public:
 	CUSTOM_SCHEDULES;
 	static TYPEDESCRIPTION m_SaveData[];
 
-	BOOL m_fCanThreatDisplay;// this is so the squid only does the "I see a headcrab!" dance one time. 
+	bool m_fCanThreatDisplay;// this is so the squid only does the "I see a headcrab!" dance one time. 
 
 	float m_flLastHurtTime;// we keep track of this, because if something hurts a squid, it will forget about its love of headcrabs for a while.
 	float m_flNextSpitTime;// last time the bullsquid used the spit attack.
@@ -316,7 +316,7 @@ int CBullsquid::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, floa
 //=========================================================
 // CheckRangeAttack1
 //=========================================================
-BOOL CBullsquid::CheckRangeAttack1(float flDot, float flDist)
+bool CBullsquid::CheckRangeAttack1(float flDot, float flDist)
 {
 	if (IsMoving() && flDist >= 512)
 	{
@@ -346,7 +346,7 @@ BOOL CBullsquid::CheckRangeAttack1(float flDot, float flDist)
 			m_flNextSpitTime = gpGlobals->time + 0.5;
 		}
 
-		return TRUE;
+		return true;
 	}
 
 	return false;
@@ -356,11 +356,11 @@ BOOL CBullsquid::CheckRangeAttack1(float flDot, float flDist)
 // CheckMeleeAttack1 - bullsquid is a big guy, so has a longer
 // melee range than most monsters. This is the tailwhip attack
 //=========================================================
-BOOL CBullsquid::CheckMeleeAttack1(float flDot, float flDist)
+bool CBullsquid::CheckMeleeAttack1(float flDot, float flDist)
 {
 	if (m_hEnemy->pev->health <= gSkillData.bullsquidDmgWhip && flDist <= 85 && flDot >= 0.7)
 	{
-		return TRUE;
+		return true;
 	}
 	return false;
 }
@@ -371,11 +371,11 @@ BOOL CBullsquid::CheckMeleeAttack1(float flDot, float flDist)
 // this attack will not be performed if the tailwhip attack
 // is valid.
 //=========================================================
-BOOL CBullsquid::CheckMeleeAttack2(float flDot, float flDist)
+bool CBullsquid::CheckMeleeAttack2(float flDot, float flDist)
 {
 	if (flDist <= 85 && flDot >= 0.7 && !HasConditions(bits_COND_CAN_MELEE_ATTACK1))		// The player & bullsquid can be as much as their bboxes 
 	{										// apart (48 * sqrt(3)) and he can still attack (85 is a little more than 48*sqrt(3))
-		return TRUE;
+		return true;
 	}
 	return false;
 }
@@ -383,7 +383,7 @@ BOOL CBullsquid::CheckMeleeAttack2(float flDot, float flDist)
 //=========================================================
 //  FValidateHintType 
 //=========================================================
-BOOL CBullsquid::FValidateHintType(short sHint)
+bool CBullsquid::FValidateHintType(short sHint)
 {
 	int i;
 
@@ -396,7 +396,7 @@ BOOL CBullsquid::FValidateHintType(short sHint)
 	{
 		if (sSquidHints[i] == sHint)
 		{
-			return TRUE;
+			return true;
 		}
 	}
 
@@ -684,7 +684,7 @@ void CBullsquid::Spawn()
 	m_flFieldOfView = 0.2;// indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
 
-	m_fCanThreatDisplay = TRUE;
+	m_fCanThreatDisplay = true;
 	m_flNextSpitTime = gpGlobals->time;
 
 	MonsterInit();

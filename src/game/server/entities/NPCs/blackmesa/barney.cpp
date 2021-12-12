@@ -56,7 +56,7 @@ public:
 	void StartTask(Task_t* pTask) override;
 	int	ObjectCaps() override { return CTalkMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
 	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
-	BOOL CheckRangeAttack1(float flDot, float flDist) override;
+	bool CheckRangeAttack1(float flDot, float flDist) override;
 
 	void DeclineFollowing() override;
 
@@ -77,10 +77,10 @@ public:
 	int		Restore(CRestore& restore) override;
 	static	TYPEDESCRIPTION m_SaveData[];
 
-	BOOL	m_fGunDrawn;
+	bool	m_fGunDrawn;
 	float	m_painTime;
 	float	m_checkAttackTime;
-	BOOL	m_lastAttackCheck;
+	bool	m_lastAttackCheck;
 
 	// UNDONE: What is this for?  It isn't used?
 	float	m_flPlayerDamage;// how much pain has the player inflicted on me?
@@ -311,7 +311,7 @@ void CBarney::SetYawSpeed()
 //=========================================================
 // CheckRangeAttack1
 //=========================================================
-BOOL CBarney::CheckRangeAttack1(float flDot, float flDist)
+bool CBarney::CheckRangeAttack1(float flDot, float flDist)
 {
 	if (flDist <= 1024 && flDot >= 0.5)
 	{
@@ -325,7 +325,7 @@ BOOL CBarney::CheckRangeAttack1(float flDot, float flDist)
 			UTIL_TraceLine(shootOrigin, shootTarget, dont_ignore_monsters, ENT(pev), &tr);
 			m_checkAttackTime = gpGlobals->time + 1;
 			if (tr.flFraction == 1.0 || (tr.pHit != NULL && CBaseEntity::Instance(tr.pHit) == pEnemy))
-				m_lastAttackCheck = TRUE;
+				m_lastAttackCheck = true;
 			else
 				m_lastAttackCheck = false;
 			m_checkAttackTime = gpGlobals->time + 1.5;
@@ -386,7 +386,7 @@ void CBarney::HandleAnimEvent(MonsterEvent_t* pEvent)
 	case BARNEY_AE_DRAW:
 		// barney's bodygroup switches here so he can pull gun from holster
 		pev->body = BARNEY_BODY_GUNDRAWN;
-		m_fGunDrawn = TRUE;
+		m_fGunDrawn = true;
 		break;
 
 	case BARNEY_AE_HOLSTER:
@@ -488,7 +488,7 @@ void CBarney::TalkInit()
 }
 
 
-BOOL IsFacing(entvars_t* pevTest, const Vector& reference)
+bool IsFacing(entvars_t* pevTest, const Vector& reference)
 {
 	Vector vecDir = (reference - pevTest->origin);
 	vecDir.z = 0;
@@ -500,7 +500,7 @@ BOOL IsFacing(entvars_t* pevTest, const Vector& reference)
 	// He's facing me, he meant it
 	if (DotProduct(forward, vecDir) > 0.96)	// +/- 15 degrees or so
 	{
-		return TRUE;
+		return true;
 	}
 	return false;
 }
@@ -528,7 +528,7 @@ int CBarney::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float f
 				PlaySentence("BA_MAD", 4, VOL_NORM, ATTN_NORM);
 
 				Remember(bits_MEMORY_PROVOKED);
-				StopFollowing(TRUE);
+				StopFollowing(true);
 			}
 			else
 			{
@@ -806,7 +806,7 @@ void CDeadBarney::KeyValue(KeyValueData* pkvd)
 	if (FStrEq(pkvd->szKeyName, "pose"))
 	{
 		m_iPose = atoi(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else
 		CBaseMonster::KeyValue(pkvd);

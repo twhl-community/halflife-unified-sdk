@@ -43,7 +43,7 @@
 //-----------------------------------------------------
 #define CSUITPLAYLIST	4		// max of 4 suit sentences queued up at any time
 
-#define SUIT_GROUP			TRUE
+#define SUIT_GROUP			true
 #define	SUIT_SENTENCE		false
 
 #define	SUIT_REPEAT_OK		0
@@ -157,18 +157,18 @@ public:
 
 	int					m_bitsHUDDamage;		// Damage bits for the current fame. These get sent to 
 												// the hude via the DAMAGE message
-	BOOL				m_fInitHUD;				// True when deferred HUD restart msg needs to be sent
-	BOOL				m_fGameHUDInitialized;
+	bool				m_fInitHUD;				// True when deferred HUD restart msg needs to be sent
+	bool				m_fGameHUDInitialized;
 	int					m_iTrain;				// Train control position
-	BOOL				m_fWeapon;				// Set this to false to force a reset of the current weapon HUD info
+	bool				m_fWeapon;				// Set this to false to force a reset of the current weapon HUD info
 
 	EHANDLE				m_pTank;				// the tank which the player is currently controlling,  NULL if no tank
 	EHANDLE				m_hViewEntity;			// The view entity being used, or null if the player is using itself as the view entity
 	bool m_bResetViewEntity;					//True if the player's view needs to be set back to the view entity
 	float				m_fDeadTime;			// the time at which the player died  (used in PlayerDeathThink())
 
-	BOOL			m_fNoPlayerSound;	// a debugging feature. Player makes no sound if this is true. 
-	BOOL			m_fLongJump; // does this player have the longjump module?
+	bool			m_fNoPlayerSound;	// a debugging feature. Player makes no sound if this is true. 
+	bool			m_fLongJump; // does this player have the longjump module?
 
 	float       m_tSneaking;
 	int			m_iUpdateTime;		// stores the number of frame ticks before sending HUD update messages
@@ -188,7 +188,7 @@ public:
 	int	m_rgAmmoLast[MAX_AMMO_SLOTS];
 
 	Vector				m_vecAutoAim;
-	BOOL				m_fOnTarget;
+	bool				m_fOnTarget;
 	int					m_iDeaths;
 	float				m_iRespawnFrames;	// used in PlayerDeathThink() to make sure players can always respawn
 
@@ -215,21 +215,21 @@ public:
 	Vector BodyTarget(const Vector& posSrc) override { return Center() + pev->view_ofs * RANDOM_FLOAT(0.5, 1.1); }		// position to shoot at
 	void StartSneaking() override { m_tSneaking = gpGlobals->time - 1; }
 	void StopSneaking() override { m_tSneaking = gpGlobals->time + 30; }
-	BOOL IsSneaking() override { return m_tSneaking <= gpGlobals->time; }
-	BOOL IsAlive() override { return (pev->deadflag == DEAD_NO) && pev->health > 0; }
-	BOOL ShouldFadeOnDeath() override { return false; }
-	BOOL IsPlayer() override { return TRUE; }			// Spectators should return false for this, they aren't "players" as far as game logic is concerned
+	bool IsSneaking() override { return m_tSneaking <= gpGlobals->time; }
+	bool IsAlive() override { return (pev->deadflag == DEAD_NO) && pev->health > 0; }
+	bool ShouldFadeOnDeath() override { return false; }
+	bool IsPlayer() override { return true; }			// Spectators should return false for this, they aren't "players" as far as game logic is concerned
 
-	BOOL IsNetClient() override { return TRUE; }		// Bots should return false for this, they can't receive NET messages
-															// Spectators should return TRUE for this
+	bool IsNetClient() override { return true; }		// Bots should return false for this, they can't receive NET messages
+															// Spectators should return true for this
 	const char* TeamID() override;
 
 	int		Save(CSave& save) override;
 	int		Restore(CRestore& restore) override;
 	void RenewItems();
 	void PackDeadPlayerItems();
-	void RemoveAllItems(BOOL removeSuit);
-	BOOL SwitchWeapon(CBasePlayerItem* pWeapon);
+	void RemoveAllItems(bool removeSuit);
+	bool SwitchWeapon(CBasePlayerItem* pWeapon);
 
 	// JOHN:  sends custom messages if player HUD data has changed  (eg health, ammo)
 	virtual void UpdateClientData();
@@ -239,8 +239,8 @@ public:
 	// Player is moved across the transition by other means
 	int		ObjectCaps() override { return CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 	void	Precache() override;
-	BOOL			IsOnLadder();
-	BOOL			FlashlightIsOn();
+	bool			IsOnLadder();
+	bool			FlashlightIsOn();
 	void			FlashlightTurnOn();
 	void			FlashlightTurnOff();
 
@@ -259,14 +259,14 @@ public:
 	void StartDeathCam();
 	void StartObserver(Vector vecPosition, Vector vecViewAngle);
 
-	void AddPoints(int score, BOOL bAllowNegativeScore) override;
-	void AddPointsToTeam(int score, BOOL bAllowNegativeScore) override;
-	BOOL AddPlayerItem(CBasePlayerItem* pItem) override;
-	BOOL RemovePlayerItem(CBasePlayerItem* pItem) override;
+	void AddPoints(int score, bool bAllowNegativeScore) override;
+	void AddPointsToTeam(int score, bool bAllowNegativeScore) override;
+	bool AddPlayerItem(CBasePlayerItem* pItem) override;
+	bool RemovePlayerItem(CBasePlayerItem* pItem) override;
 	void DropPlayerItem(char* pszItemName);
-	BOOL HasPlayerItem(CBasePlayerItem* pCheckItem);
-	BOOL HasNamedPlayerItem(const char* pszItemName);
-	BOOL HasWeapons();// do I have ANY weapons?
+	bool HasPlayerItem(CBasePlayerItem* pCheckItem);
+	bool HasNamedPlayerItem(const char* pszItemName);
+	bool HasWeapons();// do I have ANY weapons?
 	void SelectPrevItem(int iItem);
 	void SelectNextItem(int iItem);
 	void SelectLastItem();
@@ -274,7 +274,7 @@ public:
 	void ItemPreFrame();
 	void ItemPostFrame();
 	void GiveNamedItem(const char* szName);
-	void EnableControl(BOOL fControl);
+	void EnableControl(bool fControl);
 
 	int  GiveAmmo(int iAmount, const char* szName, int iMax) override;
 	void SendAmmoUpdate();
@@ -288,7 +288,7 @@ public:
 	void UpdateGeigerCounter();
 	void CheckTimeBasedDamage();
 
-	BOOL FBecomeProne() override;
+	bool FBecomeProne() override;
 	void BarnacleVictimBitten(entvars_t* pevBarnacle) override;
 	void BarnacleVictimReleased() override;
 	static int GetAmmoIndex(const char* psz);
@@ -337,4 +337,4 @@ public:
 #define AUTOAIM_10DEGREES 0.1736481776669
 
 
-extern BOOL gInitHUD;
+extern bool gInitHUD;

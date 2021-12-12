@@ -33,9 +33,9 @@ public:
 	// PointInFront - determines whether the given vector is 
 	// in front of the plane. 
 	//=========================================================
-	BOOL PointInFront(const Vector& vecPoint);
+	bool PointInFront(const Vector& vecPoint);
 
 	Vector	m_vecNormal;
 	float	m_flDist;
-	BOOL	m_fInitialized;
+	bool	m_fInitialized;
 };

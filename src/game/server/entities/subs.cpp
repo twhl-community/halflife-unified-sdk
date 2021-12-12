@@ -27,7 +27,7 @@
 #include "nodes.h"
 #include "doors.h"
 
-extern BOOL FEntIsVisible(entvars_t* pev, entvars_t* pevTarget);
+extern bool FEntIsVisible(entvars_t* pev, entvars_t* pevTarget);
 
 extern DLL_GLOBAL int g_iSkillLevel;
 
@@ -58,7 +58,7 @@ class CBaseDMStart : public CPointEntity
 {
 public:
 	void		KeyValue(KeyValueData* pkvd) override;
-	BOOL		IsTriggered(CBaseEntity* pEntity) override;
+	bool		IsTriggered(CBaseEntity* pEntity) override;
 
 private:
 };
@@ -73,15 +73,15 @@ void CBaseDMStart::KeyValue(KeyValueData* pkvd)
 	if (FStrEq(pkvd->szKeyName, "master"))
 	{
 		pev->netname = ALLOC_STRING(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else
 		CPointEntity::KeyValue(pkvd);
 }
 
-BOOL CBaseDMStart::IsTriggered(CBaseEntity* pEntity)
+bool CBaseDMStart::IsTriggered(CBaseEntity* pEntity)
 {
-	BOOL master = UTIL_IsMasterTriggered(pev->netname, pEntity);
+	bool master = UTIL_IsMasterTriggered(pev->netname, pEntity);
 
 	return master;
 }
@@ -143,12 +143,12 @@ void CBaseDelay::KeyValue(KeyValueData* pkvd)
 	if (FStrEq(pkvd->szKeyName, "delay"))
 	{
 		m_flDelay = atof(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "killtarget"))
 	{
 		m_iszKillTarget = ALLOC_STRING(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else
 	{
@@ -360,22 +360,22 @@ void CBaseToggle::KeyValue(KeyValueData* pkvd)
 	if (FStrEq(pkvd->szKeyName, "lip"))
 	{
 		m_flLip = atof(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "wait"))
 	{
 		m_flWait = atof(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "master"))
 	{
 		m_sMaster = ALLOC_STRING(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "distance"))
 	{
 		m_flMoveDistance = atof(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else
 		CBaseDelay::KeyValue(pkvd);
@@ -440,10 +440,10 @@ void CBaseToggle::LinearMoveDone()
 		(this->*m_pfnCallWhenMoveDone)();
 }
 
-BOOL CBaseToggle::IsLockedByMaster()
+bool CBaseToggle::IsLockedByMaster()
 {
 	if (m_sMaster && !UTIL_IsMasterTriggered(m_sMaster, m_hActivator))
-		return TRUE;
+		return true;
 	else
 		return false;
 }
@@ -539,10 +539,10 @@ float CBaseToggle::AxisDelta(int flags, const Vector& angle1, const Vector& angl
 =============
 FEntIsVisible
 
-returns TRUE if the passed entity is visible to caller, even if not infront ()
+returns true if the passed entity is visible to caller, even if not infront ()
 =============
 */
-BOOL
+bool
 FEntIsVisible(
 	entvars_t* pev,
 	entvars_t* pevTarget)
@@ -557,7 +557,7 @@ FEntIsVisible(
 		return false;                   // sight line crossed contents
 
 	if (tr.flFraction == 1)
-		return TRUE;
+		return true;
 
 	return false;
 }

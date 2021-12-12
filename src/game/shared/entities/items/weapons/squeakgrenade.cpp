@@ -449,7 +449,7 @@ int CSqueak::GetItemInfo(ItemInfo* p)
 
 
 
-BOOL CSqueak::Deploy()
+bool CSqueak::Deploy()
 {
 	// play hunt sound
 	float flRndSound = RANDOM_FLOAT(0, 1);
@@ -461,7 +461,7 @@ BOOL CSqueak::Deploy()
 
 	m_pPlayer->m_iWeaponVolume = QUIET_GUN_VOLUME;
 
-	const BOOL result = DefaultDeploy("models/v_squeak.mdl", "models/p_squeak.mdl", SQUEAK_UP, "squeak");
+	const bool result = DefaultDeploy("models/v_squeak.mdl", "models/p_squeak.mdl", SQUEAK_UP, "squeak");
 
 	if (result)
 	{

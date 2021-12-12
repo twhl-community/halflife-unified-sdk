@@ -69,27 +69,27 @@ void CInfoBM::KeyValue(KeyValueData* pkvd)
 	if (FStrEq(pkvd->szKeyName, "radius"))
 	{
 		pev->scale = atof(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "reachdelay"))
 	{
 		pev->speed = atof(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "reachtarget"))
 	{
 		pev->message = ALLOC_STRING(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "reachsequence"))
 	{
 		pev->netname = ALLOC_STRING(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "presequence"))
 	{
 		m_preSequence = ALLOC_STRING(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else
 		CPointEntity::KeyValue(pkvd);
@@ -188,7 +188,7 @@ public:
 
 	void NodeStart(int iszNextNode);
 	void NodeReach();
-	BOOL ShouldGoToNode();
+	bool ShouldGoToNode();
 
 	void SetYawSpeed() override;
 	int  Classify() override;
@@ -255,7 +255,7 @@ public:
 
 	void DeathNotice(entvars_t* pevChild) override;
 
-	BOOL CanLayCrab()
+	bool CanLayCrab()
 	{
 		if (m_crabTime < gpGlobals->time && m_crabCount < BIG_MAXCHILDREN)
 		{
@@ -270,7 +270,7 @@ public:
 				if (pList[i] != this)	// Don't hurt yourself!
 					return false;
 			}
-			return TRUE;
+			return true;
 		}
 
 		return false;
@@ -284,9 +284,9 @@ public:
 		pev->absmax = pev->origin + Vector(95, 95, 190);
 	}
 
-	BOOL CheckMeleeAttack1(float flDot, float flDist) override;	// Slash
-	BOOL CheckMeleeAttack2(float flDot, float flDist) override;	// Lay a crab
-	BOOL CheckRangeAttack1(float flDot, float flDist) override;	// Mortar launch
+	bool CheckMeleeAttack1(float flDot, float flDist) override;	// Slash
+	bool CheckMeleeAttack2(float flDot, float flDist) override;	// Lay a crab
+	bool CheckRangeAttack1(float flDot, float flDist) override;	// Mortar launch
 
 	int	Save(CSave& save) override;
 	int	Restore(CRestore& restore) override;
@@ -392,7 +392,7 @@ void CBigMomma::KeyValue(KeyValueData* pkvd)
 	if (FStrEq(pkvd->szKeyName, "volume"))
 	{
 		m_volume = atof(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else
 #endif
@@ -761,26 +761,26 @@ void CBigMomma::NodeReach()
 
 
 // Slash
-BOOL CBigMomma::CheckMeleeAttack1(float flDot, float flDist)
+bool CBigMomma::CheckMeleeAttack1(float flDot, float flDist)
 {
 	if (flDot >= 0.7)
 	{
 		if (flDist <= BIG_ATTACKDIST)
-			return TRUE;
+			return true;
 	}
 	return false;
 }
 
 
 // Lay a crab
-BOOL CBigMomma::CheckMeleeAttack2(float flDot, float flDist)
+bool CBigMomma::CheckMeleeAttack2(float flDot, float flDist)
 {
 	return CanLayCrab();
 }
 
 
 // Mortar launch
-BOOL CBigMomma::CheckRangeAttack1(float flDot, float flDist)
+bool CBigMomma::CheckRangeAttack1(float flDot, float flDist)
 {
 	if (flDist <= BIG_MORTARDIST && m_mortarTime < gpGlobals->time)
 	{
@@ -792,7 +792,7 @@ BOOL CBigMomma::CheckRangeAttack1(float flDot, float flDist)
 			startPos.z += 180;
 			pev->movedir = VecCheckSplatToss(pev, startPos, pEnemy->BodyTarget(pev->origin), RANDOM_FLOAT(150, 500));
 			if (pev->movedir != g_vecZero)
-				return TRUE;
+				return true;
 		}
 	}
 	return false;
@@ -894,12 +894,12 @@ Schedule_t* CBigMomma::GetScheduleOfType(int Type)
 }
 
 
-BOOL CBigMomma::ShouldGoToNode()
+bool CBigMomma::ShouldGoToNode()
 {
 	if (HasMemory(bits_MEMORY_ADVANCE_NODE))
 	{
 		if (m_nodeTime < gpGlobals->time)
-			return TRUE;
+			return true;
 	}
 	return false;
 }

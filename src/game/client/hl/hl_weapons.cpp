@@ -159,7 +159,7 @@ CBasePlayerWeapon :: DefaultDeploy
 
 =====================
 */
-BOOL CBasePlayerWeapon::DefaultDeploy(const char* szViewModel, const char* szWeaponModel, int iAnim, const char* szAnimExt, int body)
+bool CBasePlayerWeapon::DefaultDeploy(const char* szViewModel, const char* szWeaponModel, int iAnim, const char* szAnimExt, int body)
 {
 	if (!CanDeploy())
 		return false;
@@ -171,7 +171,7 @@ BOOL CBasePlayerWeapon::DefaultDeploy(const char* szViewModel, const char* szWea
 	g_irunninggausspred = false;
 	m_pPlayer->m_flNextAttack = 0.5;
 	m_flTimeWeaponIdle = 1.0;
-	return TRUE;
+	return true;
 }
 
 /*
@@ -180,7 +180,7 @@ CBasePlayerWeapon :: PlayEmptySound
 
 =====================
 */
-BOOL CBasePlayerWeapon::PlayEmptySound()
+bool CBasePlayerWeapon::PlayEmptySound()
 {
 	if (m_iPlayEmptySound)
 	{

@@ -85,7 +85,7 @@ int CGauss::AddToPlayer(CBasePlayer* pPlayer)
 		MESSAGE_BEGIN(MSG_ONE, gmsgWeapPickup, NULL, pPlayer->pev);
 		WRITE_BYTE(m_iId);
 		MESSAGE_END();
-		return TRUE;
+		return true;
 	}
 	return false;
 }
@@ -107,7 +107,7 @@ int CGauss::GetItemInfo(ItemInfo* p)
 	return 1;
 }
 
-BOOL CGauss::Deploy()
+bool CGauss::Deploy()
 {
 	m_pPlayer->m_flPlayAftershock = 0.0;
 	return DefaultDeploy("models/v_gauss.mdl", "models/p_gauss.mdl", GAUSS_DRAW, "gauss");
@@ -142,7 +142,7 @@ void CGauss::PrimaryAttack()
 	}
 
 	m_pPlayer->m_iWeaponVolume = GAUSS_PRIMARY_FIRE_VOLUME;
-	m_fPrimaryFire = TRUE;
+	m_fPrimaryFire = true;
 
 	m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] -= 2;
 
@@ -591,15 +591,14 @@ class CGaussAmmo : public CBasePlayerAmmo
 		PRECACHE_MODEL("models/w_gaussammo.mdl");
 		PRECACHE_SOUND("items/9mmclip1.wav");
 	}
-	BOOL AddAmmo(CBaseEntity* pOther) override
+	bool AddAmmo(CBaseEntity* pOther) override
 	{
 		if (pOther->GiveAmmo(AMMO_URANIUMBOX_GIVE, "uranium", URANIUM_MAX_CARRY) != -1)
 		{
 			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
-			return TRUE;
+			return true;
 		}
 		return false;
 	}
 };
-
 LINK_ENTITY_TO_CLASS(ammo_gaussclip, CGaussAmmo);

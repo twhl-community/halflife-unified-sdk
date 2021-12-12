@@ -111,10 +111,10 @@ class CGraph
 {
 public:
 
-	// the graph has two flags, and should not be accessed unless both flags are TRUE!
-	BOOL	m_fGraphPresent;// is the graph in memory?
-	BOOL	m_fGraphPointersSet;// are the entity pointers for the graph all set?
-	BOOL    m_fRoutingComplete; // are the optimal routes computed, yet?
+	// the graph has two flags, and should not be accessed unless both flags are true!
+	qboolean	m_fGraphPresent;// is the graph in memory?
+	qboolean	m_fGraphPointersSet;// are the entity pointers for the graph all set?
+	qboolean    m_fRoutingComplete; // are the optimal routes computed, yet?
 
 	CNode* m_pNodes;// pointer to the memory block that contains all node info
 	CLink* m_pLinkPool;// big list of all node connections
@@ -166,7 +166,7 @@ public:
 	int		FindShortestPath(int* piPath, int iStart, int iDest, int iHull, int afCapMask);
 	int		FindNearestNode(const Vector& vecOrigin, CBaseEntity* pEntity);
 	int		FindNearestNode(const Vector& vecOrigin, int afNodeTypes);
-	//int		FindNearestLink ( const Vector &vecTestPoint, int *piNearestLink, BOOL *pfAlongLine );
+	//int		FindNearestLink ( const Vector &vecTestPoint, int *piNearestLink, bool *pfAlongLine );
 	float	PathLength(int iStart, int iDest, int iHull, int afCapMask);
 	int		NextNodeInRoute(int iCurrentNode, int iDest, int iHull, int iCap);
 

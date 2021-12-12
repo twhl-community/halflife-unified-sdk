@@ -85,9 +85,9 @@ public:
 
 	Schedule_t* GetSchedule() override;
 	Schedule_t* GetScheduleOfType(int Type) override;
-	BOOL FCanCheckAttacks() override;
-	BOOL CheckMeleeAttack1(float flDot, float flDist) override;
-	BOOL CheckRangeAttack1(float flDot, float flDist) override;
+	bool FCanCheckAttacks() override;
+	bool CheckMeleeAttack1(float flDot, float flDist) override;
+	bool CheckRangeAttack1(float flDot, float flDist) override;
 	void StartTask(Task_t* pTask) override;
 	void AlertSound() override;
 	void DeathSound() override;
@@ -97,7 +97,7 @@ public:
 	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
 	int IRelationship(CBaseEntity* pTarget) override;
 	void StopTalking();
-	BOOL ShouldSpeak();
+	bool ShouldSpeak();
 	CUSTOM_SCHEDULES;
 
 	int		Save(CSave& save) override;
@@ -112,7 +112,7 @@ public:
 	static const char* pIdleSounds[];
 	static const char* pAlertSounds[];
 
-	BOOL	m_fCanHornetAttack;
+	bool	m_fCanHornetAttack;
 	float	m_flNextHornetAttackCheck;
 
 	float m_flNextPainTime;
@@ -273,7 +273,7 @@ void CAGrunt::StopTalking()
 //=========================================================
 // ShouldSpeak - Should this agrunt be talking?
 //=========================================================
-BOOL CAGrunt::ShouldSpeak()
+bool CAGrunt::ShouldSpeak()
 {
 	if (m_flNextSpeakTime > gpGlobals->time)
 	{
@@ -294,7 +294,7 @@ BOOL CAGrunt::ShouldSpeak()
 		}
 	}
 
-	return TRUE;
+	return true;
 }
 
 //=========================================================
@@ -892,11 +892,11 @@ IMPLEMENT_CUSTOM_SCHEDULES(CAGrunt, CSquadMonster);
 // because they can use their smart weapons against unseen
 // enemies. Base class doesn't attack anyone it can't see.
 //=========================================================
-BOOL CAGrunt::FCanCheckAttacks()
+bool CAGrunt::FCanCheckAttacks()
 {
 	if (!HasConditions(bits_COND_ENEMY_TOOFAR))
 	{
-		return TRUE;
+		return true;
 	}
 	else
 	{
@@ -908,11 +908,11 @@ BOOL CAGrunt::FCanCheckAttacks()
 // CheckMeleeAttack1 - alien grunts zap the crap out of 
 // any enemy that gets too close. 
 //=========================================================
-BOOL CAGrunt::CheckMeleeAttack1(float flDot, float flDist)
+bool CAGrunt::CheckMeleeAttack1(float flDot, float flDist)
 {
 	if (HasConditions(bits_COND_SEE_ENEMY) && flDist <= AGRUNT_MELEE_DIST && flDot >= 0.6 && m_hEnemy != NULL)
 	{
-		return TRUE;
+		return true;
 	}
 	return false;
 }
@@ -924,7 +924,7 @@ BOOL CAGrunt::CheckMeleeAttack1(float flDot, float flDist)
 // tracelines are done, so we may not want to do this every
 // server frame. Definitely not while firing. 
 //=========================================================
-BOOL CAGrunt::CheckRangeAttack1(float flDot, float flDist)
+bool CAGrunt::CheckRangeAttack1(float flDot, float flDist)
 {
 	if (gpGlobals->time < m_flNextHornetAttackCheck)
 	{
@@ -946,7 +946,7 @@ BOOL CAGrunt::CheckRangeAttack1(float flDot, float flDist)
 		if (tr.flFraction == 1.0 || tr.pHit == m_hEnemy->edict())
 		{
 			m_flNextHornetAttackCheck = gpGlobals->time + RANDOM_FLOAT(2, 5);
-			m_fCanHornetAttack = TRUE;
+			m_fCanHornetAttack = true;
 			return m_fCanHornetAttack;
 		}
 	}
@@ -991,7 +991,7 @@ void CAGrunt::StartTask(Task_t* pTask)
 		{
 			Vector		vecCenter;
 			TraceResult	tr;
-			BOOL		fSkip;
+			bool		fSkip;
 
 			fSkip = false;
 			vecCenter = Center();
@@ -1002,7 +1002,7 @@ void CAGrunt::StartTask(Task_t* pTask)
 			if (tr.flFraction == 1.0)
 			{
 				MakeIdealYaw(pev->origin + gpGlobals->v_right * 128);
-				fSkip = TRUE;
+				fSkip = true;
 				TaskComplete();
 			}
 
@@ -1012,7 +1012,7 @@ void CAGrunt::StartTask(Task_t* pTask)
 				if (tr.flFraction == 1.0)
 				{
 					MakeIdealYaw(pev->origin - gpGlobals->v_right * 128);
-					fSkip = TRUE;
+					fSkip = true;
 					TaskComplete();
 				}
 			}
@@ -1023,7 +1023,7 @@ void CAGrunt::StartTask(Task_t* pTask)
 				if (tr.flFraction == 1.0)
 				{
 					MakeIdealYaw(pev->origin + gpGlobals->v_right * 256);
-					fSkip = TRUE;
+					fSkip = true;
 					TaskComplete();
 				}
 			}
@@ -1034,7 +1034,7 @@ void CAGrunt::StartTask(Task_t* pTask)
 				if (tr.flFraction == 1.0)
 				{
 					MakeIdealYaw(pev->origin - gpGlobals->v_right * 256);
-					fSkip = TRUE;
+					fSkip = true;
 					TaskComplete();
 				}
 			}

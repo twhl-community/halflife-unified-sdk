@@ -27,17 +27,17 @@
 #include "soundent.h"
 
 //=========================================================
-// FHaveSchedule - Returns TRUE if monster's m_pSchedule
+// FHaveSchedule - Returns true if monster's m_pSchedule
 // is anything other than NULL.
 //=========================================================
-BOOL CBaseMonster::FHaveSchedule()
+bool CBaseMonster::FHaveSchedule()
 {
 	if (m_pSchedule == NULL)
 	{
 		return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
 //=========================================================
@@ -52,16 +52,16 @@ void CBaseMonster::ClearSchedule()
 }
 
 //=========================================================
-// FScheduleDone - Returns TRUE if the caller is on the
+// FScheduleDone - Returns true if the caller is on the
 // last task in the schedule
 //=========================================================
-BOOL CBaseMonster::FScheduleDone()
+bool CBaseMonster::FScheduleDone()
 {
 	ASSERT(m_pSchedule != NULL);
 
 	if (m_iScheduleIndex == m_pSchedule->cTasks)
 	{
-		return TRUE;
+		return true;
 	}
 
 	return false;
@@ -165,11 +165,11 @@ int CBaseMonster::IScheduleFlags()
 }
 
 //=========================================================
-// FScheduleValid - returns TRUE as long as the current
+// FScheduleValid - returns true as long as the current
 // schedule is still the proper schedule to be executing,
 // taking into account all conditions
 //=========================================================
-BOOL CBaseMonster::FScheduleValid()
+bool CBaseMonster::FScheduleValid()
 {
 	if (m_pSchedule == NULL)
 	{
@@ -195,7 +195,7 @@ BOOL CBaseMonster::FScheduleValid()
 		return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
 //=========================================================
@@ -522,7 +522,7 @@ void CBaseMonster::RunTask(Task_t* pTask)
 		if (m_pCine->m_iDelay <= 0 && gpGlobals->time >= m_pCine->m_startTime)
 		{
 			TaskComplete();
-			m_pCine->StartSequence((CBaseMonster*)this, m_pCine->m_iszPlay, TRUE);
+			m_pCine->StartSequence((CBaseMonster*)this, m_pCine->m_iszPlay, true);
 			if (m_fSequenceFinished)
 				ClearSchedule();
 			pev->framerate = 1.0;

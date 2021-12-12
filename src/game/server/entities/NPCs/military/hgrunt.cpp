@@ -129,10 +129,10 @@ public:
 	int  Classify() override;
 	int ISoundMask() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
-	BOOL FCanCheckAttacks() override;
-	BOOL CheckMeleeAttack1(float flDot, float flDist) override;
-	BOOL CheckRangeAttack1(float flDot, float flDist) override;
-	BOOL CheckRangeAttack2(float flDot, float flDist) override;
+	bool FCanCheckAttacks() override;
+	bool CheckMeleeAttack1(float flDot, float flDist) override;
+	bool CheckRangeAttack1(float flDot, float flDist) override;
+	bool CheckRangeAttack2(float flDot, float flDist) override;
 	void CheckAmmo() override;
 	void SetActivity(Activity NewActivity) override;
 	void StartTask(Task_t* pTask) override;
@@ -158,7 +158,7 @@ public:
 
 	int IRelationship(CBaseEntity* pTarget) override;
 
-	BOOL FOkToSpeak();
+	bool FOkToSpeak();
 	void JustSpoke();
 
 	CUSTOM_SCHEDULES;
@@ -172,9 +172,9 @@ public:
 
 	Vector	m_vecTossVelocity;
 
-	BOOL	m_fThrowGrenade;
-	BOOL	m_fStanding;
-	BOOL	m_fFirstEncounter;// only put on the handsign show in the squad's first encounter.
+	bool	m_fThrowGrenade;
+	bool	m_fStanding;
+	bool	m_fFirstEncounter;// only put on the handsign show in the squad's first encounter.
 	int		m_cClipSize;
 
 	int m_voicePitch;
@@ -328,7 +328,7 @@ int CHGrunt::ISoundMask()
 //=========================================================
 // someone else is talking - don't speak
 //=========================================================
-BOOL CHGrunt::FOkToSpeak()
+bool CHGrunt::FOkToSpeak()
 {
 	// if someone else is talking, don't speak
 	if (gpGlobals->time <= CTalkMonster::g_talkWaitTime)
@@ -347,7 +347,7 @@ BOOL CHGrunt::FOkToSpeak()
 //	if (FNullEnt(FIND_CLIENT_IN_PVS(edict())))
 //		return false;
 
-	return TRUE;
+	return true;
 }
 
 //=========================================================
@@ -376,7 +376,7 @@ void CHGrunt::PrescheduleThink()
 			if (gpGlobals->time - MySquadLeader()->m_flLastEnemySightTime > 5)
 			{
 				// been a while since we've seen the enemy
-				MySquadLeader()->m_fEnemyEluded = TRUE;
+				MySquadLeader()->m_fEnemyEluded = true;
 			}
 		}
 	}
@@ -394,11 +394,11 @@ void CHGrunt::PrescheduleThink()
 // this is a bad bug. Friendly machine gun fire avoidance
 // will unecessarily prevent the throwing of a grenade as well.
 //=========================================================
-BOOL CHGrunt::FCanCheckAttacks()
+bool CHGrunt::FCanCheckAttacks()
 {
 	if (!HasConditions(bits_COND_ENEMY_TOOFAR))
 	{
-		return TRUE;
+		return true;
 	}
 	else
 	{
@@ -410,7 +410,7 @@ BOOL CHGrunt::FCanCheckAttacks()
 //=========================================================
 // CheckMeleeAttack1
 //=========================================================
-BOOL CHGrunt::CheckMeleeAttack1(float flDot, float flDist)
+bool CHGrunt::CheckMeleeAttack1(float flDot, float flDist)
 {
 	CBaseMonster* pEnemy;
 
@@ -428,7 +428,7 @@ BOOL CHGrunt::CheckMeleeAttack1(float flDot, float flDist)
 		pEnemy->Classify() != CLASS_ALIEN_BIOWEAPON &&
 		pEnemy->Classify() != CLASS_PLAYER_BIOWEAPON)
 	{
-		return TRUE;
+		return true;
 	}
 	return false;
 }
@@ -441,7 +441,7 @@ BOOL CHGrunt::CheckMeleeAttack1(float flDot, float flDist)
 // occluded (throw grenade over wall, etc). We must 
 // disqualify the machine gun attack if the enemy is occluded.
 //=========================================================
-BOOL CHGrunt::CheckRangeAttack1(float flDot, float flDist)
+bool CHGrunt::CheckRangeAttack1(float flDot, float flDist)
 {
 	if (!HasConditions(bits_COND_ENEMY_OCCLUDED) && flDist <= 2048 && flDot >= 0.5 && NoFriendlyFire())
 	{
@@ -460,7 +460,7 @@ BOOL CHGrunt::CheckRangeAttack1(float flDot, float flDist)
 
 		if (tr.flFraction == 1.0)
 		{
-			return TRUE;
+			return true;
 		}
 	}
 
@@ -471,7 +471,7 @@ BOOL CHGrunt::CheckRangeAttack1(float flDot, float flDist)
 // CheckRangeAttack2 - this checks the Grunt's grenade
 // attack. 
 //=========================================================
-BOOL CHGrunt::CheckRangeAttack2(float flDot, float flDist)
+bool CHGrunt::CheckRangeAttack2(float flDot, float flDist)
 {
 	if (!FBitSet(pev->weapons, (HGRUNT_HANDGRENADE | HGRUNT_GRENADELAUNCHER)))
 	{
@@ -558,7 +558,7 @@ BOOL CHGrunt::CheckRangeAttack2(float flDot, float flDist)
 			m_vecTossVelocity = vecToss;
 
 			// throw a hand grenade
-			m_fThrowGrenade = TRUE;
+			m_fThrowGrenade = true;
 			// don't check again for a while.
 			m_flNextGrenadeCheck = gpGlobals->time; // 1/3 second.
 		}
@@ -579,7 +579,7 @@ BOOL CHGrunt::CheckRangeAttack2(float flDot, float flDist)
 			m_vecTossVelocity = vecToss;
 
 			// throw a hand grenade
-			m_fThrowGrenade = TRUE;
+			m_fThrowGrenade = true;
 			// don't check again for a while.
 			m_flNextGrenadeCheck = gpGlobals->time + 0.3; // 1/3 second.
 		}
@@ -997,7 +997,7 @@ void CHGrunt::Spawn()
 	m_afCapability = bits_CAP_SQUAD | bits_CAP_TURN_HEAD | bits_CAP_DOORS_GROUP;
 
 	m_fEnemyEluded = false;
-	m_fFirstEncounter = TRUE;// this is true when the grunt spawns, because he hasn't encountered an enemy yet.
+	m_fFirstEncounter = true;// this is true when the grunt spawns, because he hasn't encountered an enemy yet.
 
 	m_HackedGunPos = Vector(0, 0, 55);
 
@@ -1215,7 +1215,7 @@ void CHGrunt::DeathSound()
 		EMIT_SOUND(ENT(pev), CHAN_VOICE, "hgrunt/gr_die3.wav", 1, ATTN_IDLE);
 		break;
 	}
-	}
+}
 
 //=========================================================
 // AI Schedules Specific to this monster
@@ -2453,7 +2453,7 @@ void CDeadHGrunt::KeyValue(KeyValueData* pkvd)
 	if (FStrEq(pkvd->szKeyName, "pose"))
 	{
 		m_iPose = atoi(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else
 		CBaseMonster::KeyValue(pkvd);

@@ -58,7 +58,7 @@ int CFlyingMonster::CheckLocalMove(const Vector& vecStart, const Vector& vecEnd,
 }
 
 
-BOOL CFlyingMonster::FTriangulate(const Vector& vecStart, const Vector& vecEnd, float flDist, CBaseEntity* pTargetEnt, Vector* pApex)
+bool CFlyingMonster::FTriangulate(const Vector& vecStart, const Vector& vecEnd, float flDist, CBaseEntity* pTargetEnt, Vector* pApex)
 {
 	return CBaseMonster::FTriangulate(vecStart, vecEnd, flDist, pTargetEnt, pApex);
 }
@@ -160,14 +160,14 @@ void CFlyingMonster::Move(float flInterval)
 }
 
 
-BOOL CFlyingMonster::ShouldAdvanceRoute(float flWaypointDist)
+bool CFlyingMonster::ShouldAdvanceRoute(float flWaypointDist)
 {
 	// Get true 3D distance to the goal so we actually reach the correct height
 	if (m_Route[m_iRouteIndex].iType & bits_MF_IS_GOAL)
 		flWaypointDist = (m_Route[m_iRouteIndex].vecLocation - pev->origin).Length();
 
 	if (flWaypointDist <= 64 + (m_flGroundSpeed * gpGlobals->frametime))
-		return TRUE;
+		return true;
 
 	return false;
 }
@@ -233,7 +233,7 @@ float CFlyingMonster::CeilingZ(const Vector& position)
 	return maxUp.z;
 }
 
-BOOL CFlyingMonster::ProbeZ(const Vector& position, const Vector& probe, float* pFraction)
+bool CFlyingMonster::ProbeZ(const Vector& position, const Vector& probe, float* pFraction)
 {
 	int conPosition = UTIL_PointContents(position);
 	if ((((pev->flags) & FL_SWIM) == FL_SWIM) ^ (conPosition == CONTENTS_WATER))
@@ -242,7 +242,7 @@ BOOL CFlyingMonster::ProbeZ(const Vector& position, const Vector& probe, float* 
 		// or FLYING  & WATER
 		//
 		*pFraction = 0.0;
-		return TRUE; // We hit a water boundary because we are where we don't belong.
+		return true; // We hit a water boundary because we are where we don't belong.
 	}
 	int conProbe = UTIL_PointContents(probe);
 	if (conProbe == conPosition)
@@ -276,7 +276,7 @@ BOOL CFlyingMonster::ProbeZ(const Vector& position, const Vector& probe, float* 
 	}
 	*pFraction = minProbeLength / ProbeLength;
 
-	return TRUE;
+	return true;
 }
 
 float CFlyingMonster::FloorZ(const Vector& position)

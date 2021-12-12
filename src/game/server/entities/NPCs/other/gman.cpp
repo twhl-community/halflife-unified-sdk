@@ -46,7 +46,7 @@ public:
 	int  TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
 
-	void PlayScriptedSentence(const char* pszSentence, float duration, float volume, float attenuation, BOOL bConcurrent, CBaseEntity* pListener) override;
+	void PlayScriptedSentence(const char* pszSentence, float duration, float volume, float attenuation, bool bConcurrent, CBaseEntity* pListener) override;
 
 	EHANDLE m_hPlayer;
 	EHANDLE m_hTalkTarget;
@@ -218,7 +218,7 @@ int CGMan::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flD
 	{
 		SetConditions(bits_COND_HEAVY_DAMAGE);
 	}
-	return TRUE;
+	return true;
 }
 
 
@@ -229,7 +229,7 @@ void CGMan::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, T
 }
 
 
-void CGMan::PlayScriptedSentence(const char* pszSentence, float duration, float volume, float attenuation, BOOL bConcurrent, CBaseEntity* pListener)
+void CGMan::PlayScriptedSentence(const char* pszSentence, float duration, float volume, float attenuation, bool bConcurrent, CBaseEntity* pListener)
 {
 	CBaseMonster::PlayScriptedSentence(pszSentence, duration, volume, attenuation, bConcurrent, pListener);
 

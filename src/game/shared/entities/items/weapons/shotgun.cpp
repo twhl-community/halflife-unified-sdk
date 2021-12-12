@@ -73,7 +73,7 @@ int CShotgun::AddToPlayer(CBasePlayer* pPlayer)
 		MESSAGE_BEGIN(MSG_ONE, gmsgWeapPickup, NULL, pPlayer->pev);
 		WRITE_BYTE(m_iId);
 		MESSAGE_END();
-		return TRUE;
+		return true;
 	}
 	return false;
 }
@@ -98,7 +98,7 @@ int CShotgun::GetItemInfo(ItemInfo* p)
 
 
 
-BOOL CShotgun::Deploy()
+bool CShotgun::Deploy()
 {
 	return DefaultDeploy("models/v_shotgun.mdl", "models/p_shotgun.mdl", SHOTGUN_DRAW, "shotgun");
 }
@@ -387,12 +387,12 @@ class CShotgunAmmo : public CBasePlayerAmmo
 		PRECACHE_MODEL("models/w_shotbox.mdl");
 		PRECACHE_SOUND("items/9mmclip1.wav");
 	}
-	BOOL AddAmmo(CBaseEntity* pOther) override
+	bool AddAmmo(CBaseEntity* pOther) override
 	{
 		if (pOther->GiveAmmo(AMMO_BUCKSHOTBOX_GIVE, "buckshot", BUCKSHOT_MAX_CARRY) != -1)
 		{
 			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
-			return TRUE;
+			return true;
 		}
 		return false;
 	}

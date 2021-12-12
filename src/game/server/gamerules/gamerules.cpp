@@ -30,13 +30,13 @@
 extern edict_t* EntSelectSpawnPoint(CBaseEntity* pPlayer);
 
 DLL_GLOBAL CGameRules* g_pGameRules = NULL;
-extern DLL_GLOBAL BOOL	g_fGameOver;
+extern DLL_GLOBAL bool	g_fGameOver;
 
 int g_teamplay = 0;
 
 //=========================================================
 //=========================================================
-BOOL CGameRules::CanHaveAmmo(CBasePlayer* pPlayer, const char* pszAmmoName, int iMaxCarry)
+bool CGameRules::CanHaveAmmo(CBasePlayer* pPlayer, const char* pszAmmoName, int iMaxCarry)
 {
 	int iAmmoIndex;
 
@@ -49,7 +49,7 @@ BOOL CGameRules::CanHaveAmmo(CBasePlayer* pPlayer, const char* pszAmmoName, int 
 			if (pPlayer->AmmoInventory(iAmmoIndex) < iMaxCarry)
 			{
 				// player has room for more of this type of ammo
-				return TRUE;
+				return true;
 			}
 		}
 	}
@@ -68,14 +68,14 @@ edict_t* CGameRules::GetPlayerSpawnSpot(CBasePlayer* pPlayer)
 	pPlayer->pev->velocity = g_vecZero;
 	pPlayer->pev->angles = VARS(pentSpawnSpot)->angles;
 	pPlayer->pev->punchangle = g_vecZero;
-	pPlayer->pev->fixangle = TRUE;
+	pPlayer->pev->fixangle = true;
 
 	return pentSpawnSpot;
 }
 
 //=========================================================
 //=========================================================
-BOOL CGameRules::CanHavePlayerItem(CBasePlayer* pPlayer, CBasePlayerItem* pWeapon)
+bool CGameRules::CanHavePlayerItem(CBasePlayer* pPlayer, CBasePlayerItem* pWeapon)
 {
 	// only living players can have items
 	if (pPlayer->pev->deadflag != DEAD_NO)
@@ -103,7 +103,7 @@ BOOL CGameRules::CanHavePlayerItem(CBasePlayer* pPlayer, CBasePlayerItem* pWeapo
 	}
 
 	// note: will fall through to here if GetItemInfo doesn't fill the struct!
-	return TRUE;
+	return true;
 }
 
 //=========================================================

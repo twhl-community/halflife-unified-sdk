@@ -236,46 +236,46 @@ int CSatchel::GetItemInfo(ItemInfo* p)
 
 //=========================================================
 //=========================================================
-BOOL CSatchel::IsUseable()
+bool CSatchel::IsUseable()
 {
 	if (m_pPlayer->m_rgAmmo[PrimaryAmmoIndex()] > 0)
 	{
 		// player is carrying some satchels
-		return TRUE;
+		return true;
 	}
 
 	if (m_chargeReady != 0)
 	{
 		// player isn't carrying any satchels, but has some out
-		return TRUE;
+		return true;
 	}
 
 	return false;
 }
 
-BOOL CSatchel::CanDeploy()
+bool CSatchel::CanDeploy()
 {
 	if (m_pPlayer->m_rgAmmo[PrimaryAmmoIndex()] > 0)
 	{
 		// player is carrying some satchels
-		return TRUE;
+		return true;
 	}
 
 	if (m_chargeReady != 0)
 	{
 		// player isn't carrying any satchels, but has some out
-		return TRUE;
+		return true;
 	}
 
 	return false;
 }
 
-BOOL CSatchel::Deploy()
+bool CSatchel::Deploy()
 {
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 1.0;
 	//m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat( m_pPlayer->random_seed, 10, 15 );
 
-	BOOL result;
+	bool result;
 
 	if (m_chargeReady)
 		result = DefaultDeploy("models/v_satchel_radio.mdl", "models/p_satchel_radio.mdl", SATCHEL_RADIO_DRAW, "hive");

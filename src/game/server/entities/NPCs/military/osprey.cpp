@@ -51,7 +51,7 @@ public:
 	void Killed(entvars_t* pevAttacker, int iGib) override;
 
 	void UpdateGoal();
-	BOOL HasDead();
+	bool HasDead();
 	void EXPORT FlyThink();
 	void EXPORT DeployThink();
 	void Flight();
@@ -262,13 +262,13 @@ void COsprey::DeployThink()
 
 
 
-BOOL COsprey::HasDead()
+bool COsprey::HasDead()
 {
 	for (int i = 0; i < m_iUnits; i++)
 	{
 		if (m_hGrunt[i] == NULL || !m_hGrunt[i]->IsAlive())
 		{
-			return TRUE;
+			return true;
 		}
 		else
 		{

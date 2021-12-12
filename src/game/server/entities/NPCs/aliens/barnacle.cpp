@@ -50,8 +50,8 @@ public:
 	float m_flAltitude;
 	float m_flKillVictimTime;
 	int	  m_cGibs;// barnacle loads up on gibs each time it kills something.
-	BOOL  m_fTongueExtended;
-	BOOL  m_fLiftingPrey;
+	bool  m_fTongueExtended;
+	bool  m_fLiftingPrey;
 	float m_flTongueAdj;
 };
 LINK_ENTITY_TO_CLASS(monster_barnacle, CBarnacle);
@@ -285,7 +285,7 @@ void CBarnacle::BarnacleThink()
 				pTouchEnt->pev->origin.x = pev->origin.x;
 				pTouchEnt->pev->origin.y = pev->origin.y;
 
-				m_fLiftingPrey = TRUE;// indicate that we should be lifting prey.
+				m_fLiftingPrey = true;// indicate that we should be lifting prey.
 				m_flKillVictimTime = -1;// set this to a bogus time while the victim is lifted.
 
 				m_flAltitude = (pev->origin.z - pTouchEnt->EyePosition().z);
@@ -303,7 +303,7 @@ void CBarnacle::BarnacleThink()
 			else
 			{
 				m_flAltitude = flLength;
-				m_fTongueExtended = TRUE;
+				m_fTongueExtended = true;
 			}
 
 		}

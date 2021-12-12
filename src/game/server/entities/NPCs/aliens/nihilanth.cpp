@@ -59,8 +59,8 @@ public:
 
 	void Flight();
 
-	BOOL AbsorbSphere();
-	BOOL EmitSphere();
+	bool AbsorbSphere();
+	bool EmitSphere();
 	void TargetSphere(USE_TYPE useType, float value);
 	CBaseEntity* RandomTargetname(const char* szName);
 	void ShootBalls();
@@ -185,7 +185,7 @@ public:
 	void ZapInit(CBaseEntity* pEnemy);
 
 	void EXPORT HoverThink();
-	BOOL CircleTarget(Vector vecTarget);
+	bool CircleTarget(Vector vecTarget);
 	void EXPORT DissipateThink();
 
 	void EXPORT ZapThink();
@@ -682,7 +682,7 @@ void CNihilanth::NextActivity()
 	{
 		if (m_pBall == NULL)
 		{
-			m_pBall = CSprite::SpriteCreate("sprites/tele1.spr", pev->origin, TRUE);
+			m_pBall = CSprite::SpriteCreate("sprites/tele1.spr", pev->origin, true);
 			if (m_pBall)
 			{
 				m_pBall->SetTransparency(kRenderTransAdd, 255, 255, 255, 255, kRenderFxNoDissipation);
@@ -847,7 +847,7 @@ void CNihilanth::HuntThink()
 	if (pev->health <= 0)
 	{
 		SetThink(&CNihilanth::DyingThink);
-		m_fSequenceFinished = TRUE;
+		m_fSequenceFinished = true;
 		return;
 	}
 
@@ -969,7 +969,7 @@ void CNihilanth::Flight()
 }
 
 
-BOOL CNihilanth::AbsorbSphere()
+bool CNihilanth::AbsorbSphere()
 {
 	for (int i = 0; i < N_SPHERES; i++)
 	{
@@ -979,14 +979,14 @@ BOOL CNihilanth::AbsorbSphere()
 			pSphere->AbsorbInit();
 			m_hSphere[i] = NULL;
 			m_iActiveSpheres--;
-			return TRUE;
+			return true;
 		}
 	}
 	return false;
 }
 
 
-BOOL CNihilanth::EmitSphere()
+bool CNihilanth::EmitSphere()
 {
 	m_iActiveSpheres = 0;
 	int empty = 0;
@@ -1012,7 +1012,7 @@ BOOL CNihilanth::EmitSphere()
 	pEntity->CircleInit(this);
 
 	m_hSphere[empty] = pEntity;
-	return TRUE;
+	return true;
 }
 
 
@@ -1726,9 +1726,9 @@ void CNihilanthHVR::DissipateThink()
 }
 
 
-BOOL CNihilanthHVR::CircleTarget(Vector vecTarget)
+bool CNihilanthHVR::CircleTarget(Vector vecTarget)
 {
-	BOOL fClose = false;
+	bool fClose = false;
 
 	Vector vecDest = vecTarget;
 	Vector vecEst = pev->origin + pev->velocity * 0.5;
@@ -1758,7 +1758,7 @@ BOOL CNihilanthHVR::CircleTarget(Vector vecTarget)
 
 	if (d1 < 32)
 	{
-		fClose = TRUE;
+		fClose = true;
 	}
 
 	m_vecIdeal = m_vecIdeal + Vector(RANDOM_FLOAT(-2, 2), RANDOM_FLOAT(-2, 2), RANDOM_FLOAT(-2, 2));

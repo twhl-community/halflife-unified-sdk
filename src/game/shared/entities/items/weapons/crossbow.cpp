@@ -239,7 +239,7 @@ int CCrossbow::AddToPlayer(CBasePlayer* pPlayer)
 		MESSAGE_BEGIN(MSG_ONE, gmsgWeapPickup, NULL, pPlayer->pev);
 		WRITE_BYTE(m_iId);
 		MESSAGE_END();
-		return TRUE;
+		return true;
 	}
 	return false;
 }
@@ -277,7 +277,7 @@ int CCrossbow::GetItemInfo(ItemInfo* p)
 }
 
 
-BOOL CCrossbow::Deploy()
+bool CCrossbow::Deploy()
 {
 	if (m_iClip)
 		return DefaultDeploy("models/v_crossbow.mdl", "models/p_crossbow.mdl", CROSSBOW_DRAW1, "bow");
@@ -513,12 +513,12 @@ class CCrossbowAmmo : public CBasePlayerAmmo
 		PRECACHE_MODEL("models/w_crossbow_clip.mdl");
 		PRECACHE_SOUND("items/9mmclip1.wav");
 	}
-	BOOL AddAmmo(CBaseEntity* pOther) override
+	bool AddAmmo(CBaseEntity* pOther) override
 	{
 		if (pOther->GiveAmmo(AMMO_CROSSBOWCLIP_GIVE, "bolts", BOLT_MAX_CARRY) != -1)
 		{
 			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
-			return TRUE;
+			return true;
 		}
 		return false;
 	}

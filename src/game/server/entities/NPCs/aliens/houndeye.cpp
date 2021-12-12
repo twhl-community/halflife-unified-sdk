@@ -91,9 +91,9 @@ public:
 	void PrescheduleThink() override;
 	void SetActivity(Activity NewActivity) override;
 	void WriteBeamColor();
-	BOOL CheckRangeAttack1(float flDot, float flDist) override;
-	BOOL FValidateHintType(short sHint) override;
-	BOOL FCanActiveIdle() override;
+	bool CheckRangeAttack1(float flDot, float flDist) override;
+	bool FValidateHintType(short sHint) override;
+	bool FCanActiveIdle() override;
 	Schedule_t* GetScheduleOfType(int Type) override;
 	Schedule_t* GetSchedule() override;
 
@@ -104,8 +104,8 @@ public:
 	static TYPEDESCRIPTION m_SaveData[];
 
 	int m_iSpriteTexture;
-	BOOL m_fAsleep;// some houndeyes sleep in idle mode if this is set, the houndeye is lying down
-	BOOL m_fDontBlink;// don't try to open/close eye if this bit is set!
+	bool m_fAsleep;// some houndeyes sleep in idle mode if this is set, the houndeye is lying down
+	bool m_fDontBlink;// don't try to open/close eye if this bit is set!
 	Vector	m_vecPackCenter; // the center of the pack. The leader maintains this by averaging the origins of all pack members.
 };
 LINK_ENTITY_TO_CLASS(monster_houndeye, CHoundeye);
@@ -132,7 +132,7 @@ int	CHoundeye::Classify()
 //=========================================================
 //  FValidateHintType 
 //=========================================================
-BOOL CHoundeye::FValidateHintType(short sHint)
+bool CHoundeye::FValidateHintType(short sHint)
 {
 	int i;
 
@@ -148,7 +148,7 @@ BOOL CHoundeye::FValidateHintType(short sHint)
 	{
 		if (sHoundHints[i] == sHint)
 		{
-			return TRUE;
+			return true;
 		}
 	}
 
@@ -160,7 +160,7 @@ BOOL CHoundeye::FValidateHintType(short sHint)
 //=========================================================
 // FCanActiveIdle
 //=========================================================
-BOOL CHoundeye::FCanActiveIdle()
+bool CHoundeye::FCanActiveIdle()
 {
 	if (InSquad())
 	{
@@ -177,10 +177,10 @@ BOOL CHoundeye::FCanActiveIdle()
 			}
 		}
 
-		return TRUE;
+		return true;
 	}
 
-	return TRUE;
+	return true;
 }
 
 
@@ -189,11 +189,11 @@ BOOL CHoundeye::FCanActiveIdle()
 // try to get within half of their max attack radius before
 // attacking, so as to increase their chances of doing damage.
 //=========================================================
-BOOL CHoundeye::CheckRangeAttack1(float flDot, float flDist)
+bool CHoundeye::CheckRangeAttack1(float flDot, float flDist)
 {
 	if (flDist <= (HOUNDEYE_MAX_ATTACK_RADIUS * 0.5) && flDot >= 0.3)
 	{
-		return TRUE;
+		return true;
 	}
 	return false;
 }
@@ -676,7 +676,7 @@ void CHoundeye::StartTask(Task_t* pTask)
 	{
 	case TASK_HOUND_FALL_ASLEEP:
 	{
-		m_fAsleep = TRUE; // signal that hound is lying down (must stand again before doing anything else!)
+		m_fAsleep = true; // signal that hound is lying down (must stand again before doing anything else!)
 		m_iTaskStatus = TASKSTATUS_COMPLETE;
 		break;
 	}
@@ -695,7 +695,7 @@ void CHoundeye::StartTask(Task_t* pTask)
 	case TASK_HOUND_CLOSE_EYE:
 	{
 		pev->skin = 0;
-		m_fDontBlink = TRUE; // tell blink code to leave the eye alone.
+		m_fDontBlink = true; // tell blink code to leave the eye alone.
 		break;
 	}
 	case TASK_HOUND_THREAT_DISPLAY:

@@ -35,7 +35,7 @@
 #define SF_TRIGGER_HURT_CLIENTONLYFIRE	16// trigger hurt will only fire its target if it is hurting a client
 #define SF_TRIGGER_HURT_CLIENTONLYTOUCH 32// only clients may touch this trigger.
 
-extern DLL_GLOBAL BOOL		g_fGameOver;
+extern DLL_GLOBAL bool		g_fGameOver;
 
 extern void SetMovedir(entvars_t* pev);
 extern Vector VecBModelOrigin(entvars_t* pevBModel);
@@ -92,7 +92,7 @@ void CFrictionModifier::KeyValue(KeyValueData* pkvd)
 	if (FStrEq(pkvd->szKeyName, "modifier"))
 	{
 		m_frictionFraction = atof(pkvd->szValue) / 100.0;
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else
 		CBaseEntity::KeyValue(pkvd);
@@ -137,7 +137,7 @@ void CAutoTrigger::KeyValue(KeyValueData* pkvd)
 	if (FStrEq(pkvd->szKeyName, "globalstate"))
 	{
 		m_globalstate = ALLOC_STRING(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "triggerstate"))
 	{
@@ -154,7 +154,7 @@ void CAutoTrigger::KeyValue(KeyValueData* pkvd)
 			triggerType = USE_ON;
 			break;
 		}
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else
 		CBaseDelay::KeyValue(pkvd);
@@ -229,7 +229,7 @@ void CTriggerRelay::KeyValue(KeyValueData* pkvd)
 			triggerType = USE_ON;
 			break;
 		}
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else
 		CBaseDelay::KeyValue(pkvd);
@@ -272,7 +272,7 @@ public:
 	void EXPORT ManagerReport();
 #endif
 
-	BOOL		HasTarget(string_t targetname) override;
+	bool		HasTarget(string_t targetname) override;
 
 	int ObjectCaps() override { return CBaseToggle::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 
@@ -287,13 +287,13 @@ public:
 	int		m_iTargetName[MAX_MULTI_TARGETS];// list if indexes into global string array
 	float	m_flTargetDelay[MAX_MULTI_TARGETS];// delay (in seconds) from time of manager fire to target fire
 private:
-	inline BOOL IsClone() { return (pev->spawnflags & SF_MULTIMAN_CLONE) ? TRUE : false; }
-	inline BOOL ShouldClone()
+	inline bool IsClone() { return (pev->spawnflags & SF_MULTIMAN_CLONE) ? true : false; }
+	inline bool ShouldClone()
 	{
 		if (IsClone())
 			return false;
 
-		return (pev->spawnflags & SF_MULTIMAN_THREAD) ? TRUE : false;
+		return (pev->spawnflags & SF_MULTIMAN_THREAD) ? true : false;
 	}
 
 	CMultiManager* Clone();
@@ -322,7 +322,7 @@ void CMultiManager::KeyValue(KeyValueData* pkvd)
 	if (FStrEq(pkvd->szKeyName, "wait"))
 	{
 		m_flWait = atof(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else // add this field to the target list
 	{
@@ -335,7 +335,7 @@ void CMultiManager::KeyValue(KeyValueData* pkvd)
 			m_iTargetName[m_cTargets] = ALLOC_STRING(tmp);
 			m_flTargetDelay[m_cTargets] = atof(pkvd->szValue);
 			m_cTargets++;
-			pkvd->fHandled = TRUE;
+			pkvd->fHandled = true;
 		}
 	}
 }
@@ -372,11 +372,11 @@ void CMultiManager::Spawn()
 }
 
 
-BOOL CMultiManager::HasTarget(string_t targetname)
+bool CMultiManager::HasTarget(string_t targetname)
 {
 	for (int i = 0; i < m_cTargets; i++)
 		if (FStrEq(STRING(targetname), STRING(m_iTargetName[i])))
-			return TRUE;
+			return true;
 
 	return false;
 }
@@ -565,17 +565,17 @@ void CBaseTrigger::KeyValue(KeyValueData* pkvd)
 	if (FStrEq(pkvd->szKeyName, "damage"))
 	{
 		pev->dmg = atof(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "count"))
 	{
 		m_cTriggersLeft = (int)atof(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "damagetype"))
 	{
 		m_bitsDamageInflict = atoi(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else
 		CBaseToggle::KeyValue(pkvd);
@@ -753,7 +753,7 @@ void CTargetCDAudio::KeyValue(KeyValueData* pkvd)
 	if (FStrEq(pkvd->szKeyName, "radius"))
 	{
 		pev->scale = atof(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else
 		CPointEntity::KeyValue(pkvd);
@@ -1217,7 +1217,7 @@ void CBaseTrigger::CounterUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE
 	if (m_cTriggersLeft < 0)
 		return;
 
-	BOOL fTellActivator =
+	bool fTellActivator =
 		(m_hActivator != 0) &&
 		FClassnameIs(m_hActivator->pev, "player") &&
 		!FBitSet(pev->spawnflags, SPAWNFLAG_NOMESSAGE);
@@ -1373,24 +1373,24 @@ void CChangeLevel::KeyValue(KeyValueData* pkvd)
 		if (strlen(pkvd->szValue) >= cchMapNameMost)
 			ALERT(at_error, "Map name '%s' too long (32 chars)\n", pkvd->szValue);
 		strcpy(m_szMapName, pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "landmark"))
 	{
 		if (strlen(pkvd->szValue) >= cchMapNameMost)
 			ALERT(at_error, "Landmark name '%s' too long (32 chars)\n", pkvd->szValue);
 		strcpy(m_szLandmarkName, pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "changetarget"))
 	{
 		m_changeTarget = ALLOC_STRING(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "changedelay"))
 	{
 		m_changeTargetDelay = atof(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else
 		CBaseTrigger::KeyValue(pkvd);
@@ -1728,7 +1728,7 @@ void NextLevel()
 		pChange = GetClassPtr((CChangeLevel*)VARS(pent));
 
 	strcpy(st_szNextMap, pChange->m_szMapName);
-	g_fGameOver = TRUE;
+	g_fGameOver = true;
 
 	if (pChange->pev->nextthink < gpGlobals->time)
 	{
@@ -1918,7 +1918,7 @@ void CBaseTrigger::TeleportTouch(CBaseEntity* pOther)
 		pevToucher->v_angle = pentTarget->v.angles;
 	}
 
-	pevToucher->fixangle = TRUE;
+	pevToucher->fixangle = true;
 	pevToucher->velocity = pevToucher->basevelocity = g_vecZero;
 }
 
@@ -2042,7 +2042,7 @@ void CTriggerEndSection::KeyValue(KeyValueData* pkvd)
 		//		m_iszSectionName = ALLOC_STRING( pkvd->szValue );
 				// Store this in message so we don't have to write save/restore for this ent
 		pev->message = ALLOC_STRING(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else
 		CBaseTrigger::KeyValue(pkvd);
@@ -2109,7 +2109,7 @@ void CTriggerChangeTarget::KeyValue(KeyValueData* pkvd)
 	if (FStrEq(pkvd->szKeyName, "m_iszNewTarget"))
 	{
 		m_iszNewTarget = ALLOC_STRING(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else
 		CBaseDelay::KeyValue(pkvd);
@@ -2212,22 +2212,22 @@ void CTriggerCamera::KeyValue(KeyValueData* pkvd)
 	if (FStrEq(pkvd->szKeyName, "wait"))
 	{
 		m_flWait = atof(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "moveto"))
 	{
 		m_sPath = ALLOC_STRING(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "acceleration"))
 	{
 		m_acceleration = atof(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "deceleration"))
 	{
 		m_deceleration = atof(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else
 		CBaseDelay::KeyValue(pkvd);
@@ -2340,7 +2340,7 @@ void CTriggerCamera::FollowTarget()
 		if (player->IsAlive())
 		{
 			SET_VIEW(player->edict(), player->edict());
-			player->EnableControl(TRUE);
+			player->EnableControl(true);
 		}
 
 		player->m_hViewEntity = nullptr;

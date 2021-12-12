@@ -72,8 +72,8 @@ public:
 	void  StartTask(Task_t* pTask) override;
 	void  RunTask(Task_t* pTask) override;
 
-	BOOL  CheckMeleeAttack1(float flDot, float flDist) override;
-	BOOL  CheckRangeAttack1(float flDot, float flDist) override;
+	bool  CheckMeleeAttack1(float flDot, float flDist) override;
+	bool  CheckRangeAttack1(float flDot, float flDist) override;
 
 	float ChangeYaw(int speed) override;
 	Activity GetStoppedActivity() override;
@@ -95,7 +95,7 @@ public:
 	float m_flBlink;
 
 	float m_flEnemyTouched;
-	BOOL  m_bOnAttack;
+	bool  m_bOnAttack;
 
 	float m_flMaxSpeed;
 	float m_flMinSpeed;
@@ -332,11 +332,11 @@ int	CIchthyosaur::Classify()
 //=========================================================
 // CheckMeleeAttack1
 //=========================================================
-BOOL CIchthyosaur::CheckMeleeAttack1(float flDot, float flDist)
+bool CIchthyosaur::CheckMeleeAttack1(float flDot, float flDist)
 {
 	if (flDot >= 0.7 && m_flEnemyTouched > gpGlobals->time - 0.2)
 	{
-		return TRUE;
+		return true;
 	}
 	return false;
 }
@@ -347,7 +347,7 @@ void CIchthyosaur::BiteTouch(CBaseEntity* pOther)
 	if (pOther == m_hEnemy)
 	{
 		m_flEnemyTouched = gpGlobals->time;
-		m_bOnAttack = TRUE;
+		m_bOnAttack = true;
 	}
 }
 
@@ -370,11 +370,11 @@ void CIchthyosaur::CombatUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_
 // CheckRangeAttack1  - swim in for a chomp
 //
 //=========================================================
-BOOL CIchthyosaur::CheckRangeAttack1(float flDot, float flDist)
+bool CIchthyosaur::CheckRangeAttack1(float flDot, float flDist)
 {
 	if (flDot > -0.7 && (m_bOnAttack || (flDist <= 192 && m_idealDist <= 192)))
 	{
-		return TRUE;
+		return true;
 	}
 
 	return false;
@@ -437,7 +437,7 @@ void CIchthyosaur::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 			if (DotProduct(vecShootDir, gpGlobals->v_forward) > 0.707)
 			{
-				m_bOnAttack = TRUE;
+				m_bOnAttack = true;
 				pHurt->pev->punchangle.z = -18;
 				pHurt->pev->punchangle.x = 5;
 				pHurt->pev->velocity = pHurt->pev->velocity - gpGlobals->v_right * 300;
@@ -446,14 +446,14 @@ void CIchthyosaur::HandleAnimEvent(MonsterEvent_t* pEvent)
 					pHurt->pev->angles.x += RANDOM_FLOAT(-35, 35);
 					pHurt->pev->angles.y += RANDOM_FLOAT(-90, 90);
 					pHurt->pev->angles.z = 0;
-					pHurt->pev->fixangle = TRUE;
+					pHurt->pev->fixangle = true;
 				}
 				pHurt->TakeDamage(pev, pev, gSkillData.ichthyosaurDmgShake, DMG_SLASH);
 			}
 		}
 		BiteSound();
 
-		bDidAttack = TRUE;
+		bDidAttack = true;
 	}
 	break;
 	default:
@@ -552,11 +552,11 @@ Schedule_t* CIchthyosaur::GetSchedule()
 		}
 		if (HasConditions(bits_COND_HEAVY_DAMAGE))
 		{
-			m_bOnAttack = TRUE;
+			m_bOnAttack = true;
 		}
 		if (pev->health < pev->max_health - 20)
 		{
-			m_bOnAttack = TRUE;
+			m_bOnAttack = true;
 		}
 
 		return GetScheduleOfType(SCHED_STANDOFF);
@@ -611,7 +611,7 @@ void CIchthyosaur::StartTask(Task_t* pTask)
 		}
 		else
 		{
-			m_bOnAttack = TRUE;
+			m_bOnAttack = true;
 		}
 		CFlyingMonster::StartTask(pTask);
 		break;
@@ -1099,7 +1099,7 @@ Vector CIchthyosaur::DoProbe(const Vector& Probe)
 {
 	Vector WallNormal = Vector(0, 0, -1); // WATER normal is Straight Down for fish.
 	float frac;
-	BOOL bBumpedSomething = ProbeZ(pev->origin, Probe, &frac);
+	bool bBumpedSomething = ProbeZ(pev->origin, Probe, &frac);
 
 	TraceResult tr;
 	TRACE_MONSTER_HULL(edict(), pev->origin, Probe, dont_ignore_monsters, edict(), &tr);
@@ -1110,7 +1110,7 @@ Vector CIchthyosaur::DoProbe(const Vector& Probe)
 		if (tr.flFraction < frac)
 		{
 			frac = tr.flFraction;
-			bBumpedSomething = TRUE;
+			bBumpedSomething = true;
 			WallNormal = tr.vecPlaneNormal;
 		}
 	}
