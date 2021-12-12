@@ -210,7 +210,6 @@ target_sources(client PRIVATE
 	../../common/particledef.h
 	../../common/Platform.h
 	../../common/pmtrace.h
-	../../common/port.h
 	../../common/qfont.h
 	../../common/ref_params.h
 	../../common/r_efx.h
