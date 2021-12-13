@@ -34,19 +34,19 @@ set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 # Find dependencies
 find_package(Threads REQUIRED)
 
-option(SPDLOG_BUILD_TESTS OFF)
-option(SPDLOG_BUILD_TESTS_HO OFF)
+option(SPDLOG_BUILD_TESTS "" OFF)
+option(SPDLOG_BUILD_TESTS_HO "" OFF)
 add_subdirectory(external/spdlog
 	spdlog-binary-dir
 	EXCLUDE_FROM_ALL)
 	
-option(JSON_BuildTests OFF)
-option(JSON_MultipleHeaders ON)
+option(JSON_BuildTests "" OFF)
+option(JSON_MultipleHeaders "" ON)
 add_subdirectory(external/json
 	json-binary-dir
 	EXCLUDE_FROM_ALL)
 
-option(BUILD_TESTS OFF)
+option(JSON_VALIDATOR_BUILD_TESTS "" OFF)
 add_subdirectory(external/json-schema-validator
 	json-validator-binary-dir
 	EXCLUDE_FROM_ALL)
