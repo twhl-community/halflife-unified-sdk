@@ -66,6 +66,18 @@ set_target_properties(
 	PROPERTIES
 		FOLDER "Dependencies")
 
+if (UNIX)
+	function(set_32bit_compilation TARGET_NAME)
+		target_compile_options(${TARGET_NAME} PRIVATE -m32)
+		target_link_options(${TARGET_NAME} PRIVATE -m32)
+	endfunction()
+
+	set_32bit_compilation(spdlog)
+	#set_32bit_compilation(nlohmann_json) # Don't set it for this one, it's an INTERFACE library (header-only)
+	set_32bit_compilation(nlohmann_json_schema_validator)
+	set_32bit_compilation(angelscript)
+endif()
+
 # Sets properties common to all projects
 function(set_common_properties TARGET_NAME)
 	set_target_properties(${TARGET_NAME} PROPERTIES PREFIX "")
