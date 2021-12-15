@@ -9,6 +9,9 @@ project(HalfLifeMod
 	DESCRIPTION "Half-Life CMake Mod Template"
 	LANGUAGES CXX)
 
+# Disable the use of absolute paths in library paths even in development builds.
+set(CMAKE_SKIP_BUILD_RPATH ON)
+
 # Get the Half-Life directory and mod name from the install path
 cmake_path(HAS_PARENT_PATH CMAKE_INSTALL_PREFIX HAS_HALFLIFE_DIRECTORY)
 cmake_path(HAS_STEM CMAKE_INSTALL_PREFIX HAS_MOD_NAME)
