@@ -12,14 +12,12 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#if !defined( OEM_BUILD ) && !defined( HLDEMO_BUILD )
 
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
 #include "monsters.h"
 #include "weapons.h"
-#include "nodes.h"
 #include "player.h"
 #include "gamerules.h"
 
@@ -478,5 +476,3 @@ void DeactivateSatchels(CBasePlayer* pOwner)
 		pFind = FIND_ENTITY_BY_CLASSNAME(pFind, "monster_satchel");
 	}
 }
-
-#endif

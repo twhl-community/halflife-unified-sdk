@@ -12,14 +12,12 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#if !defined( OEM_BUILD ) && !defined( HLDEMO_BUILD )
 
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
 #include "monsters.h"
 #include "weapons.h"
-#include "nodes.h"
 #include "player.h"
 #include "aliens/hornet.h"
 #include "gamerules.h"
@@ -151,7 +149,7 @@ void CHgun::PrimaryAttack()
 	flags = 0;
 #endif
 
-	PLAYBACK_EVENT_FULL(flags, m_pPlayer->edict(), m_usHornetFire, 0.0, (float*)&g_vecZero, (float*)&g_vecZero, 0.0, 0.0, FIREMODE_TRACK, 0, 0, 0);
+	PLAYBACK_EVENT_FULL(flags, m_pPlayer->edict(), m_usHornetFire, 0.0, g_vecZero, g_vecZero, 0.0, 0.0, FIREMODE_TRACK, 0, 0, 0);
 
 
 
@@ -238,7 +236,7 @@ void CHgun::SecondaryAttack()
 	flags = 0;
 #endif
 
-	PLAYBACK_EVENT_FULL(flags, m_pPlayer->edict(), m_usHornetFire, 0.0, (float*)&g_vecZero, (float*)&g_vecZero, 0.0, 0.0, FIREMODE_FAST, 0, 0, 0);
+	PLAYBACK_EVENT_FULL(flags, m_pPlayer->edict(), m_usHornetFire, 0.0, g_vecZero, g_vecZero, 0.0, 0.0, FIREMODE_FAST, 0, 0, 0);
 
 
 	m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]--;
@@ -292,5 +290,3 @@ void CHgun::WeaponIdle()
 	}
 	SendWeaponAnim(iAnim);
 }
-
-#endif

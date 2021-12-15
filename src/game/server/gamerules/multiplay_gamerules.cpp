@@ -29,10 +29,6 @@
 #include	"hltv.h"
 #include "UserMessages.h"
 
-#if !defined ( _WIN32 )
-#include <ctype.h>
-#endif
-
 extern DLL_GLOBAL CGameRules* g_pGameRules;
 extern DLL_GLOBAL BOOL	g_fGameOver;
 
@@ -676,12 +672,11 @@ void CHalfLifeMultiplay::PlayerKilled(CBasePlayer* pVictim, entvars_t* pKiller, 
 		// let the killer paint another decal as soon as he'd like.
 		PK->m_flNextDecalTime = gpGlobals->time;
 	}
-#ifndef HLDEMO_BUILD
+
 	if (pVictim->HasNamedPlayerItem("weapon_satchel"))
 	{
 		DeactivateSatchels(pVictim);
 	}
-#endif
 }
 
 //=========================================================

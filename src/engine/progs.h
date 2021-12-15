@@ -12,8 +12,8 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#ifndef PROGS_H
-#define PROGS_H
+
+#pragma once
 
 #include "progdefs.h"
 
@@ -52,13 +52,8 @@ struct event_state_s
 	struct event_info_s ei[ MAX_EVENT_QUEUE ];
 };
 
-#if !defined( ENTITY_STATEH )
 #include "entity_state.h"
-#endif
-
-#if !defined( EDICT_H )
 #include "edict.h"
-#endif
 
 #define	STRUCT_FROM_LINK(l,t,m) ((t *)((byte *)l - (int)&(((t *)0)->m)))
 #define	EDICT_FROM_AREA(l) STRUCT_FROM_LINK(l,edict_t,area)
@@ -78,5 +73,3 @@ edict_t		*EDICT_NUM(int n);
 int			NUM_FOR_EDICT(const edict_t *e);
 
 #define PROG_TO_EDICT(e) ((edict_t *)((byte *)sv.edicts + e))
-
-#endif // PROGS_H

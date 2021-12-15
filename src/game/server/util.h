@@ -12,18 +12,17 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#include "archtypes.h"     // DAL
+
+#pragma once
+
+#include "Platform.h"
 
 //
 // Misc utility code
 //
-#ifndef ACTIVITY_H
 #include "activity.h"
-#endif
-
-#ifndef ENGINECALLBACK_H
 #include "enginecallback.h"
-#endif
+
 inline void MESSAGE_BEGIN(int msg_dest, int msg_type, const float* pOrigin, entvars_t* ent);  // implementation later in this file
 
 extern globalvars_t* gpGlobals;
@@ -501,8 +500,8 @@ void EMIT_GROUPNAME_SUIT(edict_t* entity, const char* groupname);
 
 #define RANDOM_SOUND_ARRAY( array ) (array) [ RANDOM_LONG(0,ARRAYSIZE( (array) )-1) ]
 
-#define PLAYBACK_EVENT( flags, who, index ) PLAYBACK_EVENT_FULL( flags, who, index, 0, (float *)&g_vecZero, (float *)&g_vecZero, 0.0, 0.0, 0, 0, 0, 0 );
-#define PLAYBACK_EVENT_DELAY( flags, who, index, delay ) PLAYBACK_EVENT_FULL( flags, who, index, delay, (float *)&g_vecZero, (float *)&g_vecZero, 0.0, 0.0, 0, 0, 0, 0 );
+#define PLAYBACK_EVENT( flags, who, index ) PLAYBACK_EVENT_FULL( flags, who, index, 0, g_vecZero, g_vecZero, 0.0, 0.0, 0, 0, 0, 0 );
+#define PLAYBACK_EVENT_DELAY( flags, who, index, delay ) PLAYBACK_EVENT_FULL( flags, who, index, delay, g_vecZero, g_vecZero, 0.0, 0.0, 0, 0, 0, 0 );
 
 #define GROUP_OP_AND	0
 #define GROUP_OP_NAND	1

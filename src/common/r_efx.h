@@ -12,31 +12,20 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#if !defined ( R_EFXH )
-#define R_EFXH
-#ifdef _WIN32
+
 #pragma once
-#endif
 
 // particle_t
-#if !defined( PARTICLEDEFH )  
 #include "particledef.h"
-#endif
 
 // BEAM
-#if !defined( BEAMDEFH )
 #include "beamdef.h"
-#endif
 
 // dlight_t
-#if !defined ( DLIGHTH )
 #include "dlight.h"
-#endif
 
 // cl_entity_t
-#if !defined( CL_ENTITYH )
 #include "cl_entity.h"
-#endif
 
 /*
 // FOR REFERENCE, These are the built-in tracer colors.  Note, color 4 is the one
@@ -193,5 +182,3 @@ struct efx_api_s
 };
 
 extern efx_api_t efx;
-
-#endif

@@ -12,12 +12,10 @@
 *   use or distribution of this code by or to any unlicensed person is illegal.
 *
 ****/
-#ifndef SCRIPTED_H
-#define SCRIPTED_H
 
-#ifndef SCRIPTEVENT_H
+#pragma once
+
 #include "scriptevent.h"
-#endif
 
 #define SF_SCRIPT_WAITTILLSEEN		1
 #define SF_SCRIPT_EXITAGITATED		2
@@ -102,6 +100,3 @@ class CCineAI : public CCineMonster
 	BOOL FCanOverrideState() override;
 	void FixScriptMonsterSchedule(CBaseMonster* pMonster) override;
 };
-
-
-#endif		//SCRIPTED_H

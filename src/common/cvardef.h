@@ -12,8 +12,8 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#ifndef CVARDEF_H
-#define CVARDEF_H
+
+#pragma once
 
 #define	FCVAR_ARCHIVE		(1<<0)	// set to cause it to be saved to vars.rc
 #define	FCVAR_USERINFO		(1<<1)	// changes the client's info string
@@ -25,6 +25,8 @@
 #define FCVAR_PRINTABLEONLY (1<<7)  // This cvar's string cannot contain unprintable characters ( e.g., used for player name etc ).
 #define FCVAR_UNLOGGED		(1<<8)  // If this is a FCVAR_SERVER, don't log changes to the log file / console if we are creating a log
 #define FCVAR_NOEXTRAWHITEPACE	(1<<9)  // strip trailing/leading white space from this cvar
+#define FCVAR_ISEXECUTED	(1 << 12)	// This cvar's string contains a value that will be executed as a cfg file; don't allow commands to be appended to it
+#define FCVAR_ISPATH		(1 << 13)	// This cvar's string is a path or filename; don't allow absolute paths, escaping to another directory or backslashes
 
 typedef struct cvar_s
 {
@@ -35,4 +37,3 @@ typedef struct cvar_s
 	float	value;
 	struct cvar_s* next;
 } cvar_t;
-#endif

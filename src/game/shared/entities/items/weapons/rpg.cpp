@@ -12,14 +12,12 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#if !defined( OEM_BUILD )
 
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
 #include "monsters.h"
 #include "weapons.h"
-#include "nodes.h"
 #include "player.h"
 #include "gamerules.h"
 #include "UserMessages.h"
@@ -269,8 +267,6 @@ void CRpgRocket::FollowThink()
 
 void CRpg::Reload()
 {
-	int iResult;
-
 	if (m_iClip == 1)
 	{
 		// don't bother with any of this if don't need to reload.
@@ -308,10 +304,12 @@ void CRpg::Reload()
 #endif
 
 	if (m_iClip == 0)
-		iResult = DefaultReload(RPG_MAX_CLIP, RPG_RELOAD, 2);
+	{
+		const int iResult = DefaultReload(RPG_MAX_CLIP, RPG_RELOAD, 2);
 
-	if (iResult)
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10, 15);
+		if (iResult)
+			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10, 15);
+	}
 
 }
 
@@ -596,6 +594,5 @@ class CRpgAmmo : public CBasePlayerAmmo
 		return FALSE;
 	}
 };
-LINK_ENTITY_TO_CLASS(ammo_rpgclip, CRpgAmmo);
 
-#endif
+LINK_ENTITY_TO_CLASS(ammo_rpgclip, CRpgAmmo);

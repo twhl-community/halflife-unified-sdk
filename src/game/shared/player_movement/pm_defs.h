@@ -13,11 +13,10 @@
 *
 ****/
 // pm_defs.h
-#if !defined( PM_DEFSH )
-#define PM_DEFSH
+
 #pragma once
 
-#include "archtypes.h"     // DAL
+#include "Platform.h"
 #define	MAX_PHYSENTS 600 		  // Must have room for all entities in the world.
 #define MAX_MOVEENTS 64
 #define	MAX_CLIP_PLANES	5
@@ -38,9 +37,7 @@
 // PM_PlayerTrace results.
 #include "pmtrace.h"
 
-#if !defined ( USERCMD_H )
 #include "usercmd.h"
-#endif
 
 typedef struct model_s model_t;
 
@@ -221,5 +218,3 @@ typedef struct playermove_s
 	int				(*PM_TestPlayerPositionEx) (float* pos, pmtrace_t* ptrace, int (*pfnIgnore)(physent_t* pe));
 	struct pmtrace_s* (*PM_TraceLineEx)(float* start, float* end, int flags, int usehulll, int (*pfnIgnore)(physent_t* pe));
 } playermove_t;
-
-#endif

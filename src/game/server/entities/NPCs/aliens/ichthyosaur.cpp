@@ -12,7 +12,6 @@
 *   use or distribution of this code by or to any unlicensed person is illegal.
 *
 ****/
-#if !defined( OEM_BUILD ) && !defined( HLDEMO_BUILD )
 
 //=========================================================
 // icthyosaur - evin, satan fish monster
@@ -33,8 +32,6 @@
 #define SEARCH_RETRY	16
 
 #define ICHTHYOSAUR_SPEED 150
-
-extern CGraph WorldGraph;
 
 #define EYE_MAD		0
 #define EYE_BASE	1
@@ -1136,5 +1133,3 @@ Vector CIchthyosaur::DoProbe(const Vector& Probe)
 	}
 	return Vector(0, 0, 0);
 }
-
-#endif

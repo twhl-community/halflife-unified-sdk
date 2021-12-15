@@ -12,18 +12,13 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#ifndef EIFACE_H
-#define EIFACE_H
 
-#include "archtypes.h"     // DAL
+#pragma once
 
-#ifdef HLDEMO_BUILD
-#define INTERFACE_VERSION       001
-#else  // !HLDEMO_BUILD, i.e., regular version of HL
+#include "Platform.h"
+
 #define INTERFACE_VERSION		140
-#endif // !HLDEMO_BUILD
 
-#include <stdio.h>
 #include "custom.h"
 #include "cvardef.h"
 #include "Sequence.h"
@@ -35,14 +30,6 @@
 //		include progdefs.h
 // This is conveniently done for them in extdll.h
 //
-
-/*
-#ifdef _WIN32
-#define DLLEXPORT __stdcall
-#else
-#define DLLEXPORT  __attribute__ ((visibility("default")))
-#endif
-*/
 
 typedef enum
 	{
@@ -231,7 +218,7 @@ typedef struct enginefuncs_s
 	void		(*pfnSetPhysicsKeyValue)	( const edict_t *pClient, const char *key, const char *value );
 	const char *(*pfnGetPhysicsInfoString)	( const edict_t *pClient );
 	unsigned short (*pfnPrecacheEvent)		( int type, const char*psz );
-	void		(*pfnPlaybackEvent)			( int flags, const edict_t *pInvoker, unsigned short eventindex, float delay, float *origin, float *angles, float fparam1, float fparam2, int iparam1, int iparam2, int bparam1, int bparam2 );
+	void		(*pfnPlaybackEvent)			( int flags, const edict_t *pInvoker, unsigned short eventindex, float delay, const float *origin, const float *angles, float fparam1, float fparam2, int iparam1, int iparam2, int bparam1, int bparam2 );
 
 	unsigned char *(*pfnSetFatPVS)			( float *org );
 	unsigned char *(*pfnSetFatPAS)			( float *org );
@@ -295,7 +282,7 @@ typedef struct enginefuncs_s
 
 	void (*pfnQueryClientCvarValue)( const edict_t *player, const char *cvarName );
 	void (*pfnQueryClientCvarValue2)( const edict_t *player, const char *cvarName, int requestID );
-	int (*pfnCheckParm)( const char *pchCmdLineToken, char **ppnext );
+	int (*pfnCheckParm)( const char *pchCmdLineToken, const char **ppnext );
 	edict_t* (*pfnPEntityOfEntIndexAllEntities)(int iEntIndex);
 } enginefuncs_t;
 
@@ -338,12 +325,7 @@ typedef struct
 #define FENTTABLE_MOVEABLE		0x20000000
 #define FENTTABLE_GLOBAL		0x10000000
 
-typedef struct saverestore_s SAVERESTOREDATA;
-
-#ifdef _WIN32
-typedef 
-#endif
-struct saverestore_s
+typedef struct saverestore_s
 {
 	char		*pBaseData;		// Start of all entity save data
 	char		*pCurrentData;	// Current buffer pointer for sequential access
@@ -365,11 +347,7 @@ struct saverestore_s
 	float		time;
 	char		szCurrentMapName[32];	// To check global entities
 
-} 
-#ifdef _WIN32
-SAVERESTOREDATA 
-#endif
-;
+} SAVERESTOREDATA;
 
 typedef enum _fieldtypes
 {
@@ -394,10 +372,6 @@ typedef enum _fieldtypes
 
 	FIELD_TYPECOUNT,		// MUST BE LAST
 } FIELDTYPE;
-
-#if !defined(offsetof)  && !defined(GNUC)
-#define offsetof(s,m)	(size_t)&(((s *)0)->m)
-#endif
 
 #define _FIELD(type,name,fieldtype,count,flags)		{ fieldtype, #name, static_cast<int>(offsetof(type, name)), count, flags }
 #define DEFINE_FIELD(type,name,fieldtype)			_FIELD(type, name, fieldtype, 1, 0)
@@ -527,5 +501,3 @@ extern NEW_DLL_FUNCTIONS	gNewDLLFunctions;
 
 typedef int	(*APIFUNCTION)( DLL_FUNCTIONS *pFunctionTable, int interfaceVersion );
 typedef int	(*APIFUNCTION2)( DLL_FUNCTIONS *pFunctionTable, int *interfaceVersion );
-
-#endif //EIFACE_H

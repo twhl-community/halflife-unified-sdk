@@ -5,8 +5,6 @@
 // $NoKeywords: $
 //=============================================================================
 
-#ifndef VOICE_STATUS_H
-#define VOICE_STATUS_H
 #pragma once
 
 
@@ -223,6 +221,3 @@ public:
 
 // Get the (global) voice manager. 
 CVoiceStatus* GetClientVoiceMgr();
-
-
-#endif // VOICE_STATUS_H

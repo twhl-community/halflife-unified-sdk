@@ -8,8 +8,6 @@
 // in_win.c -- windows 95 mouse and joystick code
 // 02/21/97 JCB Added extended DirectInput code to support external controllers.
 
-#include "port.h"
-
 #include "hud.h"
 #include "cl_util.h"
 #include "camera.h"
@@ -80,7 +78,6 @@ static cvar_t* m_mousethread_sleep;
 
 int			mouse_buttons;
 int			mouse_oldbuttonstate;
-POINT		current_pos;
 int			old_mouse_x, old_mouse_y, mx_accum, my_accum;
 float		mouse_x, mouse_y;
 
@@ -114,13 +111,13 @@ enum _ControlList
 
 
 
-DWORD	dwAxisMap[JOY_MAX_AXES];
-DWORD	dwControlMap[JOY_MAX_AXES];
+std::uint32_t dwAxisMap[JOY_MAX_AXES];
+std::uint32_t dwControlMap[JOY_MAX_AXES];
 int	pdwRawValue[JOY_MAX_AXES];
-DWORD		joy_oldbuttonstate, joy_oldpovstate;
+std::uint32_t joy_oldbuttonstate, joy_oldpovstate;
 
 int			joy_id;
-DWORD		joy_numbuttons;
+std::uint32_t joy_numbuttons;
 
 SDL_GameController* s_pJoystick = NULL;
 
@@ -151,7 +148,7 @@ cvar_t* joy_wwhack2;
 
 int			joy_avail, joy_advancedinit, joy_haspov;
 
-#ifdef _WIN32
+#ifdef WIN32
 DWORD	s_hMouseThreadId = 0;
 HANDLE	s_hMouseThread = 0;
 HANDLE	s_hMouseQuitEvent = 0;
@@ -176,9 +173,10 @@ void Force_CenterView_f()
 	}
 }
 
-#ifdef _WIN32
+#ifdef WIN32
 long s_mouseDeltaX = 0;
 long s_mouseDeltaY = 0;
+POINT		current_pos;
 POINT		old_mouse_pos;
 
 long ThreadInterlockedExchange(long* pDest, long value)
@@ -229,7 +227,7 @@ void DLLEXPORT IN_ActivateMouse()
 {
 	if (mouseinitialized)
 	{
-#ifdef _WIN32
+#ifdef WIN32
 		if (mouseparmsvalid)
 			restore_spi = SystemParametersInfo(SPI_SETMOUSE, 0, newmouseparms, 0);
 
@@ -237,7 +235,7 @@ void DLLEXPORT IN_ActivateMouse()
 		mouseactive = 1;
 	}
 
-#ifdef _WIN32
+#ifdef WIN32
 	if (!m_bRawInput)
 	{
 		SDL_SetRelativeMouseMode(SDL_FALSE);
@@ -263,7 +261,7 @@ void DLLEXPORT IN_DeactivateMouse()
 {
 	if (mouseinitialized)
 	{
-#ifdef _WIN32
+#ifdef WIN32
 		if (restore_spi)
 			SystemParametersInfo(SPI_SETMOUSE, 0, originalmouseparms, 0);
 
@@ -272,7 +270,7 @@ void DLLEXPORT IN_DeactivateMouse()
 		mouseactive = 0;
 	}
 
-#ifdef _WIN32
+#ifdef WIN32
 	if (m_bRawInput)
 	{
 		mouseRelative = SDL_FALSE;
@@ -293,7 +291,7 @@ void IN_StartupMouse()
 		return;
 
 	mouseinitialized = 1;
-#ifdef _WIN32
+#ifdef WIN32
 	mouseparmsvalid = SystemParametersInfo(SPI_GETMOUSE, 0, originalmouseparms, 0);
 
 	if (mouseparmsvalid)
@@ -328,7 +326,7 @@ void IN_Shutdown()
 {
 	IN_DeactivateMouse();
 
-#ifdef _WIN32
+#ifdef WIN32
 	if (s_hMouseQuitEvent)
 	{
 		SetEvent(s_hMouseQuitEvent);
@@ -379,7 +377,7 @@ FIXME: Call through to engine?
 void IN_ResetMouse()
 {
 	// no work to do in SDL
-#ifdef _WIN32
+#ifdef WIN32
 	if (gpGlobals && (gpGlobals->time - s_flRawInputUpdateTime > 1.0f || s_flRawInputUpdateTime == 0.0f))
 	{
 		s_flRawInputUpdateTime = gpGlobals->time;
@@ -504,7 +502,7 @@ void IN_MouseMove(float frametime, usercmd_t* cmd)
 	if (!iMouseInUse && !gHUD.m_iIntermission && !g_iVisibleMouse)
 	{
 		int deltaX, deltaY;
-#ifdef _WIN32
+#ifdef WIN32
 		if (!m_bRawInput)
 		{
 			if (m_bMouseThread)
@@ -523,11 +521,13 @@ void IN_MouseMove(float frametime, usercmd_t* cmd)
 #endif
 		{
 			SDL_GetRelativeMouseState(&deltaX, &deltaY);
+#ifdef WIN32
 			current_pos.x = deltaX;
 			current_pos.y = deltaY;
+#endif
 		}
 
-#ifdef _WIN32
+#ifdef WIN32
 		if (!m_bRawInput)
 		{
 			if (m_bMouseThread)
@@ -603,7 +603,7 @@ void IN_MouseMove(float frametime, usercmd_t* cmd)
 
 	gEngfuncs.SetViewAngles((float*)viewangles);
 
-#ifdef _WIN32
+#ifdef WIN32
 	if (!m_bRawInput && mouseRelative)
 	{
 		SDL_SetRelativeMouseMode(SDL_FALSE);
@@ -641,7 +641,7 @@ void DLLEXPORT IN_Accumulate()
 	{
 		if (mouseactive)
 		{
-#ifdef _WIN32
+#ifdef WIN32
 			if (!m_bRawInput)
 			{
 				if (!m_bMouseThread)
@@ -761,7 +761,7 @@ void Joy_AdvancedUpdate_f()
 	// called once by IN_ReadJoystick and by user whenever an update is needed
 	// cvars are now available
 	int	i;
-	DWORD dwTemp;
+	std::uint32_t dwTemp;
 
 	// initialize all the maps
 	for (i = 0; i < JOY_MAX_AXES; i++)
@@ -790,22 +790,22 @@ void Joy_AdvancedUpdate_f()
 
 		// advanced initialization here
 		// data supplied by user via joy_axisn cvars
-		dwTemp = (DWORD)joy_advaxisx->value;
+		dwTemp = (std::uint32_t)joy_advaxisx->value;
 		dwAxisMap[JOY_AXIS_X] = dwTemp & 0x0000000f;
 		dwControlMap[JOY_AXIS_X] = dwTemp & JOY_RELATIVE_AXIS;
-		dwTemp = (DWORD)joy_advaxisy->value;
+		dwTemp = (std::uint32_t)joy_advaxisy->value;
 		dwAxisMap[JOY_AXIS_Y] = dwTemp & 0x0000000f;
 		dwControlMap[JOY_AXIS_Y] = dwTemp & JOY_RELATIVE_AXIS;
-		dwTemp = (DWORD)joy_advaxisz->value;
+		dwTemp = (std::uint32_t)joy_advaxisz->value;
 		dwAxisMap[JOY_AXIS_Z] = dwTemp & 0x0000000f;
 		dwControlMap[JOY_AXIS_Z] = dwTemp & JOY_RELATIVE_AXIS;
-		dwTemp = (DWORD)joy_advaxisr->value;
+		dwTemp = (std::uint32_t)joy_advaxisr->value;
 		dwAxisMap[JOY_AXIS_R] = dwTemp & 0x0000000f;
 		dwControlMap[JOY_AXIS_R] = dwTemp & JOY_RELATIVE_AXIS;
-		dwTemp = (DWORD)joy_advaxisu->value;
+		dwTemp = (std::uint32_t)joy_advaxisu->value;
 		dwAxisMap[JOY_AXIS_U] = dwTemp & 0x0000000f;
 		dwControlMap[JOY_AXIS_U] = dwTemp & JOY_RELATIVE_AXIS;
-		dwTemp = (DWORD)joy_advaxisv->value;
+		dwTemp = (std::uint32_t)joy_advaxisv->value;
 		dwAxisMap[JOY_AXIS_V] = dwTemp & 0x0000000f;
 		dwControlMap[JOY_AXIS_V] = dwTemp & JOY_RELATIVE_AXIS;
 	}
@@ -826,7 +826,7 @@ void IN_Commands()
 		return;
 	}
 
-	DWORD	buttonstate, povstate;
+	std::uint32_t buttonstate, povstate;
 
 	// loop through the joystick buttons
 	// key a joystick event or auxillary event for higher number buttons for each state change
@@ -1133,7 +1133,7 @@ void IN_Init()
 	m_customaccel_max = gEngfuncs.pfnRegisterVariable("m_customaccel_max", "0", FCVAR_ARCHIVE);
 	m_customaccel_exponent = gEngfuncs.pfnRegisterVariable("m_customaccel_exponent", "1", FCVAR_ARCHIVE);
 
-#ifdef _WIN32
+#ifdef WIN32
 	m_bRawInput = CVAR_GET_FLOAT("m_rawinput") > 0;
 	m_bMouseThread = gEngfuncs.CheckParm("-mousethread", NULL) != NULL;
 	m_mousethread_sleep = gEngfuncs.pfnRegisterVariable("m_mousethread_sleep", "10", FCVAR_ARCHIVE);

@@ -55,9 +55,6 @@ BOOL gInitHUD = TRUE;
 extern void CopyToBodyQue(entvars_t* pev);
 extern edict_t* EntSelectSpawnPoint(CBaseEntity* pPlayer);
 
-// the world node graph
-extern CGraph	WorldGraph;
-
 #define TRAIN_ACTIVE	0x80 
 #define TRAIN_NEW		0xc0
 #define TRAIN_OFF		0x00
@@ -3390,7 +3387,6 @@ void CBasePlayer::ImpulseCommands()
 //=========================================================
 void CBasePlayer::CheatImpulseCommands(int iImpulse)
 {
-#if !defined( HLDEMO_BUILD )
 	if (!g_psv_cheats->value)
 	{
 		return;
@@ -3431,7 +3427,7 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse)
 		GiveNamedItem("ammo_ARgrenades");
 		GiveNamedItem("weapon_handgrenade");
 		GiveNamedItem("weapon_tripmine");
-#ifndef OEM_BUILD
+
 		GiveNamedItem("weapon_357");
 		GiveNamedItem("ammo_357");
 		GiveNamedItem("weapon_crossbow");
@@ -3444,7 +3440,7 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse)
 		GiveNamedItem("weapon_satchel");
 		GiveNamedItem("weapon_snark");
 		GiveNamedItem("weapon_hornetgun");
-#endif
+
 		gEvilImpulse101 = FALSE;
 		break;
 
@@ -3562,7 +3558,6 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse)
 		}
 		break;
 	}
-#endif	// HLDEMO_BUILD
 }
 
 //

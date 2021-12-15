@@ -5,15 +5,9 @@
 // $NoKeywords: $
 //=============================================================================
 
-#if !defined( NET_APIH )
-#define NET_APIH
-#ifdef _WIN32
 #pragma once
-#endif
 
-#if !defined ( NETADRH )
 #include "netadr.h"
-#endif
 
 #define NETAPI_REQUEST_SERVERLIST	( 0 )  // Doesn't need a remote address
 #define NETAPI_REQUEST_PING			( 1 )
@@ -95,5 +89,3 @@ typedef struct net_api_s
 } net_api_t;
 
 extern net_api_t netapi;
-
-#endif // NET_APIH

@@ -13,8 +13,7 @@
 *
 ****/
 
-#ifndef PLATFORM_H
-#define PLATFORM_H
+#pragma once
 
 /**
 *	@file
@@ -34,10 +33,16 @@
 #pragma warning(disable : 4514)		// unreferenced inline function removed
 #pragma warning(disable : 4100)		// unreferenced formal parameter
 
-#include "archtypes.h"     // DAL
+#include "steam/steamtypes.h"     // DAL
+#include "common_types.h"
 
 // Misc C-runtime library headers
+#include <cctype>
+#include <climits>
 #include <cmath>
+#include <cstdarg>
+#include <cstddef>
+#include <cstdint>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -51,13 +56,54 @@ using qboolean = int;
 #define ARRAYSIZE(p)		(sizeof(p)/sizeof(p[0]))
 
 // Prevent tons of unused windows definitions
-#ifdef _WIN32
+#ifdef WIN32
 #define WIN32_LEAN_AND_MEAN
-#define NOWINRES
-#define NOSERVICE
-#define NOMCX
-#define NOIME
+
+//Disable all Windows 10 and older APIs otherwise pulled in by Windows.h
+#define NOGDICAPMASKS
+#define NOVIRTUALKEYCODES
+#define NOWINMESSAGES
+#define NOWINSTYLES
+#define NOSYSMETRICS
+#define NOMENUS
+#define NOICONS
+#define NOKEYSTATES
+#define NOSYSCOMMANDS
+#define NORASTEROPS
+#define NOSHOWWINDOW
+#define OEMRESOURCE
+#define NOATOM
+#define NOCLIPBOARD
+#define NOCOLOR
+#define NOCTLMGR
+#define NODRAWTEXT
+#define NOGDI
+#define NOKERNEL
+//#define NOUSER //Need GetCursorPos in the mouse thread code
+#define NONLS
+#define NOMB
+#define NOMEMMGR
+#define NOMETAFILE
 #define NOMINMAX
+#define NOMSG
+#define NOOPENFILE
+#define NOSCROLL
+#define NOSERVICE
+#define NOSOUND
+#define NOTEXTMETRIC
+#define NOWH
+#define NOWINOFFSETS
+#define NOCOMM
+#define NOKANJI
+#define NOHELP
+#define NOPROFILER
+#define NODEFERWINDOWPOS
+#define NOMCX
+
+//Disable additional stuff not covered by the Windows.h list
+#define NOWINRES
+#define NOIME
+
 #include "winsani_in.h"
 #include <Windows.h>
 #include "winsani_out.h"
@@ -69,29 +115,24 @@ using qboolean = int;
 #define strupr _strupr
 
 #define DLLEXPORT __declspec( dllexport )
-#else // _WIN32
+#define DLLHIDDEN
+#else // WIN32
 #define FALSE 0
 #define TRUE (!FALSE)
 typedef uint32 ULONG;
 typedef unsigned char BYTE;
 typedef int BOOL;
 #define MAX_PATH PATH_MAX
-#include <limits.h>
-#include <stdarg.h>
-#define _vsnprintf(a,b,c,d) vsnprintf(a,b,c,d)
 
 #define stricmp strcasecmp
-#define _strnicmp strncasecmp
 #define strnicmp strncasecmp
-#define _snprintf snprintf
 #define _alloca alloca
 
 #define DLLEXPORT __attribute__ ( ( visibility( "default" ) ) )
-#endif //_WIN32
+#define DLLHIDDEN __attribute__ ( ( visibility( "hidden" ) ) )
+#endif //WIN32
 
 #define V_min(a,b)  (((a) < (b)) ? (a) : (b))
 #define V_max(a,b)  (((a) > (b)) ? (a) : (b))
 
 #define clamp( val, min, max ) ( ((val) > (max)) ? (max) : ( ((val) < (min)) ? (min) : (val) ) )
-
-#endif //PLATFORM_H

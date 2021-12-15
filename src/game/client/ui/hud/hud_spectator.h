@@ -5,8 +5,6 @@
 // $NoKeywords: $
 //=============================================================================
 
-#ifndef SPECTATOR_H
-#define SPECTATOR_H
 #pragma once
 
 #include "cl_entity.h"
@@ -140,7 +138,7 @@ private:
 	HSPRITE		m_hsprBeam;
 	HSPRITE		m_hCrosshair;
 
-	wrect_t		m_crosshairRect;
+	Rect		m_crosshairRect;
 
 	struct model_s* m_MapSprite;	// each layer image is saved in one sprite, where each tile is a sprite frame
 	float		m_flNextObserverInput;
@@ -152,5 +150,3 @@ private:
 
 	cameraWayPoint_t	m_CamPath[MAX_CAM_WAYPOINTS];
 };
-
-#endif // SPECTATOR_H
