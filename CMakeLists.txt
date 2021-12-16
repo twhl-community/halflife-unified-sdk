@@ -25,6 +25,10 @@ set(HalfLife_HLDS_DIRECTORY "" CACHE PATH "Path to the Half-Life Dedicated Serve
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Because we have 2 libraries that use the same symbols we have to default visibility to hidden so there are no collisions,
+# and so the symbols don't merge and cause problems like server code calling the client version of a function.
+set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+
 # Find dependencies
 find_package(Threads REQUIRED)
 
