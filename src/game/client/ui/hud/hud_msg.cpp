@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1999, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -26,19 +26,19 @@ extern IParticleMan* g_pParticleMan;
 
 #define MAX_CLIENTS 32
 
-#if !defined( _TFC )
+#if !defined(_TFC)
 extern BEAM* pBeam;
 extern BEAM* pBeam2;
-extern TEMPENTITY* pFlare;	// Vit_amiN
-#endif 
+extern TEMPENTITY* pFlare; // Vit_amiN
+#endif
 
-#if defined( _TFC )
+#if defined(_TFC)
 void ClearEventList();
 #endif
 
 /// USER-DEFINED SERVER MESSAGE HANDLERS
 
-bool CHud::MsgFunc_ResetHUD(const char* pszName, int iSize, void* pbuf)
+bool CHud ::MsgFunc_ResetHUD(const char* pszName, int iSize, void* pbuf)
 {
 	ASSERT(iSize == 0);
 
@@ -63,12 +63,12 @@ bool CHud::MsgFunc_ResetHUD(const char* pszName, int iSize, void* pbuf)
 
 void CAM_ToFirstPerson();
 
-void CHud::MsgFunc_ViewMode(const char* pszName, int iSize, void* pbuf)
+void CHud ::MsgFunc_ViewMode(const char* pszName, int iSize, void* pbuf)
 {
 	CAM_ToFirstPerson();
 }
 
-void CHud::MsgFunc_InitHUD(const char* pszName, int iSize, void* pbuf)
+void CHud ::MsgFunc_InitHUD(const char* pszName, int iSize, void* pbuf)
 {
 	// prepare all hud data
 	HUDLIST* pList = m_pHudList;
@@ -80,7 +80,7 @@ void CHud::MsgFunc_InitHUD(const char* pszName, int iSize, void* pbuf)
 		pList = pList->pNext;
 	}
 
-#if defined( _TFC )
+#if defined(_TFC)
 	ClearEventList();
 
 	// catch up on any building events that are going on
@@ -90,15 +90,15 @@ void CHud::MsgFunc_InitHUD(const char* pszName, int iSize, void* pbuf)
 	if (g_pParticleMan)
 		g_pParticleMan->ResetParticles();
 
-#if !defined( _TFC )
+#if !defined(_TFC)
 	//Probably not a good place to put this.
 	pBeam = pBeam2 = NULL;
-	pFlare = NULL;	// Vit_amiN: clear egon's beam flare
+	pFlare = NULL; // Vit_amiN: clear egon's beam flare
 #endif
 }
 
 
-bool CHud::MsgFunc_GameMode(const char* pszName, int iSize, void* pbuf)
+bool CHud ::MsgFunc_GameMode(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 	//Note: this user message could be updated to include multiple gamemodes, so make sure this checks for game mode 1
@@ -110,12 +110,12 @@ bool CHud::MsgFunc_GameMode(const char* pszName, int iSize, void* pbuf)
 }
 
 
-bool CHud::MsgFunc_Damage(const char* pszName, int iSize, void* pbuf)
+bool CHud ::MsgFunc_Damage(const char* pszName, int iSize, void* pbuf)
 {
-	int		armor, blood;
-	Vector	from;
-	int		i;
-	float	count;
+	int armor, blood;
+	Vector from;
+	int i;
+	float count;
 
 	BEGIN_READ(pbuf, iSize);
 	armor = READ_BYTE();
@@ -134,7 +134,7 @@ bool CHud::MsgFunc_Damage(const char* pszName, int iSize, void* pbuf)
 	return true;
 }
 
-bool CHud::MsgFunc_Concuss(const char* pszName, int iSize, void* pbuf)
+bool CHud ::MsgFunc_Concuss(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 	m_iConcussionEffect = READ_BYTE();

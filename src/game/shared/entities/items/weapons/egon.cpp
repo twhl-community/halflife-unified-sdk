@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -24,8 +24,8 @@
 #include "gamerules.h"
 #include "UserMessages.h"
 
-#define EGON_SWITCH_NARROW_TIME			0.75			// Time it takes to switch fire modes
-#define EGON_SWITCH_WIDE_TIME			1.5
+#define EGON_SWITCH_NARROW_TIME 0.75 // Time it takes to switch fire modes
+#define EGON_SWITCH_WIDE_TIME 1.5
 
 LINK_ENTITY_TO_CLASS(weapon_egon, CEgon);
 
@@ -37,7 +37,7 @@ void CEgon::Spawn()
 
 	m_iDefaultAmmo = EGON_DEFAULT_GIVE;
 
-	FallInit();// get ready to fall down.
+	FallInit(); // get ready to fall down.
 }
 
 
@@ -110,8 +110,8 @@ bool CEgon::GetItemInfo(ItemInfo* p)
 	return true;
 }
 
-#define EGON_PULSE_INTERVAL			0.1
-#define EGON_DISCHARGE_INTERVAL		0.1
+#define EGON_PULSE_INTERVAL 0.1
+#define EGON_DISCHARGE_INTERVAL 0.1
 
 float CEgon::GetPulseInterval()
 {
@@ -161,7 +161,7 @@ void CEgon::Attack()
 	Vector vecSrc = m_pPlayer->GetGunPosition();
 
 	int flags;
-#if defined( CLIENT_WEAPONS )
+#if defined(CLIENT_WEAPONS)
 	flags = FEV_NOTHOST;
 #else
 	flags = 0;
@@ -169,8 +169,7 @@ void CEgon::Attack()
 
 	switch (m_fireState)
 	{
-	case FIRE_OFF:
-	{
+	case FIRE_OFF: {
 		if (!HasAmmo())
 		{
 			m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.25;
@@ -178,7 +177,7 @@ void CEgon::Attack()
 			return;
 		}
 
-		m_flAmmoUseTime = gpGlobals->time;// start using ammo ASAP.
+		m_flAmmoUseTime = gpGlobals->time; // start using ammo ASAP.
 
 		PLAYBACK_EVENT_FULL(flags, m_pPlayer->edict(), m_usEgonFire, 0.0, g_vecZero, g_vecZero, 0.0, 0.0, m_fireState, m_fireMode, 1, 0);
 
@@ -193,8 +192,7 @@ void CEgon::Attack()
 	}
 	break;
 
-	case FIRE_CHARGE:
-	{
+	case FIRE_CHARGE: {
 		Fire(vecSrc, vecAiming);
 		m_pPlayer->m_iWeaponVolume = EGON_PRIMARY_VOLUME;
 
@@ -209,7 +207,6 @@ void CEgon::Attack()
 			EndAttack();
 			m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 1.0;
 		}
-
 	}
 	break;
 	}
@@ -219,7 +216,6 @@ void CEgon::PrimaryAttack()
 {
 	m_fireMode = FIRE_WIDE;
 	Attack();
-
 }
 
 void CEgon::Fire(const Vector& vecOrigSrc, const Vector& vecDir)
@@ -388,7 +384,6 @@ void CEgon::UpdateEffect(const Vector& startPoint, const Vector& endPoint, float
 	m_pNoise->SetStartPos(endPoint);
 
 #endif
-
 }
 
 void CEgon::CreateEffect()
@@ -401,7 +396,7 @@ void CEgon::CreateEffect()
 	m_pBeam->PointEntInit(pev->origin, m_pPlayer->entindex());
 	m_pBeam->SetFlags(BEAM_FSINE);
 	m_pBeam->SetEndAttachment(1);
-	m_pBeam->pev->spawnflags |= SF_BEAM_TEMPORARY;	// Flag these to be destroyed on save/restore or level transition
+	m_pBeam->pev->spawnflags |= SF_BEAM_TEMPORARY; // Flag these to be destroyed on save/restore or level transition
 	m_pBeam->pev->flags |= FL_SKIPLOCALHOST;
 	m_pBeam->pev->owner = m_pPlayer->edict();
 
@@ -436,7 +431,6 @@ void CEgon::CreateEffect()
 		m_pNoise->SetNoise(2);
 	}
 #endif
-
 }
 
 
@@ -463,7 +457,6 @@ void CEgon::DestroyEffect()
 		m_pSprite = NULL;
 	}
 #endif
-
 }
 
 

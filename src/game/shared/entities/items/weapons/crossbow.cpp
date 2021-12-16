@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -23,11 +23,11 @@
 #include "UserMessages.h"
 
 #ifndef CLIENT_DLL
-#define BOLT_AIR_VELOCITY	2000
-#define BOLT_WATER_VELOCITY	1000
+#define BOLT_AIR_VELOCITY 2000
+#define BOLT_WATER_VELOCITY 1000
 
 // UNDONE: Save/restore this?  Don't forget to set classname and LINK_ENTITY_TO_CLASS()
-// 
+//
 // OVERLOADS SOME ENTVARS:
 //
 // speed - the ideal magnitude of my velocity
@@ -35,7 +35,7 @@ class CCrossbowBolt : public CBaseEntity
 {
 	void Spawn() override;
 	void Precache() override;
-	int  Classify() override;
+	int Classify() override;
 	void EXPORT BubbleThink();
 	void EXPORT BoltTouch(CBaseEntity* pOther);
 	void EXPORT ExplodeThink();
@@ -88,9 +88,9 @@ void CCrossbowBolt::Precache()
 }
 
 
-int	CCrossbowBolt::Classify()
+int CCrossbowBolt ::Classify()
 {
-	return	CLASS_NONE;
+	return CLASS_NONE;
 }
 
 void CCrossbowBolt::BoltTouch(CBaseEntity* pOther)
@@ -124,9 +124,11 @@ void CCrossbowBolt::BoltTouch(CBaseEntity* pOther)
 		switch (RANDOM_LONG(0, 1))
 		{
 		case 0:
-			EMIT_SOUND(ENT(pev), CHAN_BODY, "weapons/xbow_hitbod1.wav", 1, ATTN_NORM); break;
+			EMIT_SOUND(ENT(pev), CHAN_BODY, "weapons/xbow_hitbod1.wav", 1, ATTN_NORM);
+			break;
 		case 1:
-			EMIT_SOUND(ENT(pev), CHAN_BODY, "weapons/xbow_hitbod2.wav", 1, ATTN_NORM); break;
+			EMIT_SOUND(ENT(pev), CHAN_BODY, "weapons/xbow_hitbod2.wav", 1, ATTN_NORM);
+			break;
 		}
 
 		if (!g_pGameRules->IsMultiplayer())
@@ -139,7 +141,7 @@ void CCrossbowBolt::BoltTouch(CBaseEntity* pOther)
 		EMIT_SOUND_DYN(ENT(pev), CHAN_BODY, "weapons/xbow_hit1.wav", RANDOM_FLOAT(0.95, 1.0), ATTN_NORM, 0, 98 + RANDOM_LONG(0, 7));
 
 		SetThink(&CCrossbowBolt::SUB_Remove);
-		pev->nextthink = gpGlobals->time;// this will get changed below if the bolt is allowed to stick in what it hit.
+		pev->nextthink = gpGlobals->time; // this will get changed below if the bolt is allowed to stick in what it hit.
 
 		if (FClassnameIs(pOther->pev, "worldspawn"))
 		{
@@ -200,7 +202,7 @@ void CCrossbowBolt::ExplodeThink()
 		WRITE_SHORT(g_sModelIndexWExplosion);
 	}
 	WRITE_BYTE(iScale); // scale * 10
-	WRITE_BYTE(15); // framerate
+	WRITE_BYTE(15);		// framerate
 	WRITE_BYTE(TE_EXPLFLAG_NONE);
 	MESSAGE_END();
 
@@ -229,7 +231,7 @@ void CCrossbow::Spawn()
 
 	m_iDefaultAmmo = CROSSBOW_DEFAULT_GIVE;
 
-	FallInit();// get ready to fall down.
+	FallInit(); // get ready to fall down.
 }
 
 bool CCrossbow::AddToPlayer(CBasePlayer* pPlayer)
@@ -286,7 +288,7 @@ bool CCrossbow::Deploy()
 
 void CCrossbow::Holster()
 {
-	m_fInReload = false;// cancel any reload in progress.
+	m_fInReload = false; // cancel any reload in progress.
 
 	if (m_pPlayer->m_iFOV != 0)
 	{
@@ -333,7 +335,7 @@ void CCrossbow::FireSniperBolt()
 	m_iClip--;
 
 	int flags;
-#if defined( CLIENT_WEAPONS )
+#if defined(CLIENT_WEAPONS)
 	flags = FEV_NOTHOST;
 #else
 	flags = 0;
@@ -376,7 +378,7 @@ void CCrossbow::FireBolt()
 	m_iClip--;
 
 	int flags;
-#if defined( CLIENT_WEAPONS )
+#if defined(CLIENT_WEAPONS)
 	flags = FEV_NOTHOST;
 #else
 	flags = 0;
@@ -463,7 +465,7 @@ void CCrossbow::Reload()
 
 void CCrossbow::WeaponIdle()
 {
-	m_pPlayer->GetAutoaimVector(AUTOAIM_2DEGREES);  // get the autoaim vector but ignore it;  used for autoaim crosshair in DM
+	m_pPlayer->GetAutoaimVector(AUTOAIM_2DEGREES); // get the autoaim vector but ignore it;  used for autoaim crosshair in DM
 
 	ResetEmptySound();
 

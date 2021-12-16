@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1999, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -40,7 +40,7 @@ void BEGIN_READ(void* buf, int size)
 
 int READ_CHAR()
 {
-	int     c;
+	int c;
 
 	if (giRead + 1 > giSize)
 	{
@@ -56,7 +56,7 @@ int READ_CHAR()
 
 int READ_BYTE()
 {
-	int     c;
+	int c;
 
 	if (giRead + 1 > giSize)
 	{
@@ -72,7 +72,7 @@ int READ_BYTE()
 
 int READ_SHORT()
 {
-	int     c;
+	int c;
 
 	if (giRead + 2 > giSize)
 	{
@@ -95,7 +95,7 @@ int READ_WORD()
 
 int READ_LONG()
 {
-	int     c;
+	int c;
 
 	if (giRead + 4 > giSize)
 	{
@@ -114,9 +114,9 @@ float READ_FLOAT()
 {
 	union
 	{
-		byte    b[4];
-		float   f;
-		int     l;
+		byte b[4];
+		float f;
+		int l;
 	} dat;
 
 	dat.b[0] = gpBuf[giRead];
@@ -132,8 +132,8 @@ float READ_FLOAT()
 
 char* READ_STRING()
 {
-	static char     string[2048];
-	int             l, c;
+	static char string[2048];
+	int l, c;
 
 	string[0] = 0;
 
@@ -148,8 +148,7 @@ char* READ_STRING()
 			break;
 		string[l] = c;
 		l++;
-	}
-	while (l < sizeof(string) - 1);
+	} while (l < sizeof(string) - 1);
 
 	string[l] = 0;
 

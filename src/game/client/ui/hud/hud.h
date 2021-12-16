@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1999, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -12,7 +12,7 @@
 *   without written permission from Valve LLC.
 *
 ****/
-//			
+//
 //  hud.h
 //
 // class CHud declaration
@@ -23,39 +23,41 @@
 #pragma once
 
 #define RGB_YELLOWISH 0x00FFA000 //255,160,0
-#define RGB_REDISH 0x00FF1010 //255,160,0
-#define RGB_GREENISH 0x0000A000 //0,160,0
+#define RGB_REDISH 0x00FF1010	 //255,160,0
+#define RGB_GREENISH 0x0000A000	 //0,160,0
 
 #include "common_types.h"
 #include "cl_dll.h"
 #include "ammo.h"
 
 #define DHN_DRAWZERO 1
-#define DHN_2DIGITS  2
-#define DHN_3DIGITS  4
-#define MIN_ALPHA	 100	
+#define DHN_2DIGITS 2
+#define DHN_3DIGITS 4
+#define MIN_ALPHA 100
 
-#define		HUDELEM_ACTIVE	1
+#define HUDELEM_ACTIVE 1
 
-typedef struct {
+typedef struct
+{
 	int x, y;
 } POSITION;
 
 #include "global_consts.h"
 
-typedef struct {
+typedef struct
+{
 	unsigned char r, g, b, a;
 } RGBA;
 
 typedef struct cvar_s cvar_t;
 
 
-#define HUD_ACTIVE	1
+#define HUD_ACTIVE 1
 #define HUD_INTERMISSION 2
 
-#define MAX_PLAYER_NAME_LENGTH		32
+#define MAX_PLAYER_NAME_LENGTH 32
 
-#define	MAX_MOTD_LENGTH				1536
+#define MAX_MOTD_LENGTH 1536
 
 //
 //-----------------------------------------------------
@@ -63,20 +65,20 @@ typedef struct cvar_s cvar_t;
 class CHudBase
 {
 public:
-	POSITION  m_pos;
-	int   m_type;
-	int	  m_iFlags; // active, moving, 
-	virtual		~CHudBase() {}
+	POSITION m_pos;
+	int m_type;
+	int m_iFlags; // active, moving,
+	virtual ~CHudBase() {}
 	virtual bool Init() { return false; }
 	virtual bool VidInit() { return false; }
 	virtual bool Draw(float flTime) { return false; }
 	virtual void Think() {}
 	virtual void Reset() {}
-	virtual void InitHUDData() {}		// called every time a server is connected to
-
+	virtual void InitHUDData() {} // called every time a server is connected to
 };
 
-struct HUDLIST {
+struct HUDLIST
+{
 	CHudBase* p;
 	HUDLIST* pNext;
 };
@@ -127,11 +129,10 @@ public:
 
 private:
 	float m_fFade;
-	RGBA  m_rgba;
+	RGBA m_rgba;
 	WEAPON* m_pWeapon;
-	int	m_HUD_bucket0;
+	int m_HUD_bucket0;
 	int m_HUD_selection;
-
 };
 
 //
@@ -150,7 +151,8 @@ public:
 	bool MsgFunc_SecAmmoIcon(const char* pszName, int iSize, void* pbuf);
 
 private:
-	enum {
+	enum
+	{
 		MAX_SEC_AMMO_VALUES = 4
 	};
 
@@ -179,7 +181,6 @@ public:
 
 private:
 	int m_iGeigerRange;
-
 };
 
 //
@@ -196,7 +197,6 @@ public:
 private:
 	HSPRITE m_hSprite;
 	int m_iPos;
-
 };
 
 //
@@ -215,15 +215,16 @@ public:
 	bool MsgFunc_StatusValue(const char* pszName, int iSize, void* pbuf);
 
 protected:
-	enum {
+	enum
+	{
 		MAX_STATUSTEXT_LENGTH = 128,
 		MAX_STATUSBAR_VALUES = 8,
 		MAX_STATUSBAR_LINES = 3,
 	};
 
-	char m_szStatusText[MAX_STATUSBAR_LINES][MAX_STATUSTEXT_LENGTH];  // a text string describing how the status bar is to be drawn
-	char m_szStatusBar[MAX_STATUSBAR_LINES][MAX_STATUSTEXT_LENGTH];	// the constructed bar that is drawn
-	int m_iStatusValues[MAX_STATUSBAR_VALUES];  // an array of values for use in the status bar
+	char m_szStatusText[MAX_STATUSBAR_LINES][MAX_STATUSTEXT_LENGTH]; // a text string describing how the status bar is to be drawn
+	char m_szStatusBar[MAX_STATUSBAR_LINES][MAX_STATUSTEXT_LENGTH];	 // the constructed bar that is drawn
+	int m_iStatusValues[MAX_STATUSBAR_VALUES];						 // an array of values for use in the status bar
 
 	bool m_bReparseString; // set to true whenever the m_szStatusBar needs to be recalculated
 
@@ -237,7 +238,7 @@ struct extra_player_info_t
 	short deaths;
 	short playerclass;
 	short health; // UNUSED currently, spectator UI would like this
-	bool dead; // UNUSED currently, spectator UI would like this
+	bool dead;	  // UNUSED currently, spectator UI would like this
 	short teamnumber;
 	char teamname[MAX_TEAM_NAME];
 };
@@ -271,7 +272,7 @@ public:
 	bool MsgFunc_DeathMsg(const char* pszName, int iSize, void* pbuf);
 
 private:
-	int m_HUD_d_skull;  // sprite index of skull icon
+	int m_HUD_d_skull; // sprite index of skull icon
 };
 
 //
@@ -311,7 +312,6 @@ public:
 	friend class CHudSpectator;
 
 private:
-
 	struct cvar_s* m_HUD_saytext;
 	struct cvar_s* m_HUD_saytext_time;
 };
@@ -332,10 +332,10 @@ private:
 	HSPRITE m_hSprite2;
 	Rect* m_prc1;
 	Rect* m_prc2;
-	int	  m_iBat;
-	int	  m_iBatMax;
+	int m_iBat;
+	int m_iBatMax;
 	float m_fFade;
-	int	  m_iHeight;		// width of the battery innards
+	int m_iHeight; // width of the battery innards
 };
 
 
@@ -360,10 +360,10 @@ private:
 	Rect* m_prc2;
 	Rect* m_prcBeam;
 	float m_flBat;
-	int	  m_iBat;
-	bool  m_fOn;
+	int m_iBat;
+	bool m_fOn;
 	float m_fFade;
-	int	  m_iWidth;		// width of the battery innards
+	int m_iWidth; // width of the battery innards
 };
 
 //
@@ -373,9 +373,9 @@ const int maxHUDMessages = 16;
 struct message_parms_t
 {
 	client_textmessage_t* pMessage;
-	float	time;
+	float time;
 	int x, y;
-	int	totalWidth, totalHeight;
+	int totalWidth, totalHeight;
 	int width;
 	int lines;
 	int lineLength;
@@ -416,7 +416,7 @@ public:
 	bool MsgFunc_GameTitle(const char* pszName, int iSize, void* pbuf);
 
 	float FadeBlend(float fadein, float fadeout, float hold, float localTime);
-	int	XPosition(float x, int width, int lineWidth);
+	int XPosition(float x, int width, int lineWidth);
 	int YPosition(float y, int height);
 
 	void MessageAdd(const char* pName, float time);
@@ -428,9 +428,9 @@ public:
 
 private:
 	client_textmessage_t* m_pMessages[maxHUDMessages];
-	float						m_startTime[maxHUDMessages];
-	message_parms_t				m_parms;
-	float						m_gameTitleTime;
+	float m_startTime[maxHUDMessages];
+	message_parms_t m_parms;
+	float m_gameTitleTime;
 	client_textmessage_t* m_pGameTitle;
 
 	int m_HUD_title_life;
@@ -440,7 +440,7 @@ private:
 //
 //-----------------------------------------------------
 //
-#define MAX_SPRITE_NAME_LENGTH	24
+#define MAX_SPRITE_NAME_LENGTH 24
 
 class CHudStatusIcons : public CHudBase
 {
@@ -451,7 +451,8 @@ public:
 	bool Draw(float flTime) override;
 	bool MsgFunc_StatusIcon(const char* pszName, int iSize, void* pbuf);
 
-	enum {
+	enum
+	{
 		MAX_ICONSPRITENAME_LENGTH = MAX_SPRITE_NAME_LENGTH,
 		MAX_ICONSPRITES = 4,
 	};
@@ -463,7 +464,6 @@ public:
 	void DisableIcon(const char* pszIconName);
 
 private:
-
 	typedef struct
 	{
 		char szSpriteName[MAX_ICONSPRITENAME_LENGTH];
@@ -473,7 +473,6 @@ private:
 	} icon_sprite_t;
 
 	icon_sprite_t m_IconList[MAX_ICONSPRITES];
-
 };
 
 //
@@ -485,27 +484,26 @@ class CHud
 {
 private:
 	HUDLIST* m_pHudList;
-	HSPRITE						m_hsprLogo;
-	int							m_iLogo;
+	HSPRITE m_hsprLogo;
+	int m_iLogo;
 	client_sprite_t* m_pSpriteList;
-	int							m_iSpriteCount;
-	int							m_iSpriteCountAllRes;
-	float						m_flMouseSensitivity;
-	int							m_iConcussionEffect;
+	int m_iSpriteCount;
+	int m_iSpriteCountAllRes;
+	float m_flMouseSensitivity;
+	int m_iConcussionEffect;
 
 public:
-
-	HSPRITE						m_hsprCursor;
-	float m_flTime;	   // the current client time
-	float m_fOldTime;  // the time at which the HUD was last redrawn
+	HSPRITE m_hsprCursor;
+	float m_flTime;		  // the current client time
+	float m_fOldTime;	  // the time at which the HUD was last redrawn
 	double m_flTimeDelta; // the difference between flTime and fOldTime
-	Vector	m_vecOrigin;
-	Vector	m_vecAngles;
-	int		m_iKeyBits;
-	int		m_iHideHUDDisplay;
-	int		m_iFOV;
-	bool	m_Teamplay;
-	int		m_iRes;
+	Vector m_vecOrigin;
+	Vector m_vecAngles;
+	int m_iKeyBits;
+	int m_iHideHUDDisplay;
+	int m_iFOV;
+	bool m_Teamplay;
+	int m_iRes;
 	cvar_t* m_pCvarStealMouse;
 	cvar_t* m_pCvarDraw;
 
@@ -522,11 +520,12 @@ public:
 private:
 	// the memory for these arrays are allocated in the first call to CHud::VidInit(), when the hud.txt and associated sprites are loaded.
 	// freed in ~CHud()
-	HSPRITE* m_rghSprites;	/*[HUD_SPRITE_COUNT]*/			// the sprites loaded from hud.txt
-	Rect* m_rgrcRects;	/*[HUD_SPRITE_COUNT]*/
-	char* m_rgszSpriteNames; /*[HUD_SPRITE_COUNT][MAX_SPRITE_NAME_LENGTH]*/
+	HSPRITE* m_rghSprites; /*[HUD_SPRITE_COUNT]*/ // the sprites loaded from hud.txt
+	Rect* m_rgrcRects;							  /*[HUD_SPRITE_COUNT]*/
+	char* m_rgszSpriteNames;					  /*[HUD_SPRITE_COUNT][MAX_SPRITE_NAME_LENGTH]*/
 
 	struct cvar_s* default_fov;
+
 public:
 	HSPRITE GetSprite(int index)
 	{
@@ -539,21 +538,21 @@ public:
 	}
 
 
-	int GetSpriteIndex(const char* SpriteName);	// gets a sprite index, for use in the m_rghSprites[] array
+	int GetSpriteIndex(const char* SpriteName); // gets a sprite index, for use in the m_rghSprites[] array
 
-	CHudAmmo		m_Ammo;
-	CHudHealth		m_Health;
-	CHudSpectator		m_Spectator;
-	CHudGeiger		m_Geiger;
-	CHudBattery		m_Battery;
-	CHudTrain		m_Train;
-	CHudFlashlight	m_Flash;
-	CHudMessage		m_Message;
-	CHudStatusBar   m_StatusBar;
+	CHudAmmo m_Ammo;
+	CHudHealth m_Health;
+	CHudSpectator m_Spectator;
+	CHudGeiger m_Geiger;
+	CHudBattery m_Battery;
+	CHudTrain m_Train;
+	CHudFlashlight m_Flash;
+	CHudMessage m_Message;
+	CHudStatusBar m_StatusBar;
 	CHudDeathNotice m_DeathNotice;
-	CHudSayText		m_SayText;
-	CHudMenu		m_Menu;
-	CHudAmmoSecondary	m_AmmoSecondary;
+	CHudSayText m_SayText;
+	CHudMenu m_Menu;
+	CHudAmmoSecondary m_AmmoSecondary;
 	CHudTextMessage m_TextMessage;
 	CHudStatusIcons m_StatusIcons;
 
@@ -564,7 +563,7 @@ public:
 	bool UpdateClientData(client_data_t* cdata, float time);
 
 	CHud() : m_iSpriteCount(0), m_pHudList(NULL) {}
-	~CHud();			// destructor, frees allocated memory
+	~CHud(); // destructor, frees allocated memory
 
 	// user messages
 	bool MsgFunc_Damage(const char* pszName, int iSize, void* pbuf);
@@ -577,9 +576,9 @@ public:
 	bool MsgFunc_Concuss(const char* pszName, int iSize, void* pbuf);
 
 	// Screen information
-	SCREENINFO	m_scrinfo;
+	SCREENINFO m_scrinfo;
 
-	int	m_iWeaponBits;
+	int m_iWeaponBits;
 	bool m_fPlayerDead;
 	bool m_iIntermission;
 
@@ -590,7 +589,6 @@ public:
 	void AddHudElem(CHudBase* p);
 
 	float GetSensitivity();
-
 };
 
 extern CHud gHUD;
@@ -600,4 +598,3 @@ extern int g_iTeamNumber;
 extern int g_iUser1;
 extern int g_iUser2;
 extern int g_iUser3;
-

@@ -1,9 +1,9 @@
 /***
  *
  *	Copyright (c) 2009, Valve LLC. All rights reserved.
- *
- *	This product contains software technology licensed from Id
- *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	
+ *	This product contains software technology licensed from Id 
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
  *	All Rights Reserved.
  *
  *   Use, distribution, and modification of this source code and/or resulting
@@ -19,5 +19,5 @@ typedef enum netsrc_s
 {
 	NS_CLIENT,
 	NS_SERVER,
-	NS_MULTICAST	// xxxMO
+	NS_MULTICAST // xxxMO
 } netsrc_t;

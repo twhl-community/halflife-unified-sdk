@@ -15,29 +15,29 @@
 
 #pragma once
 
-#define DMG_IMAGE_LIFE		2	// seconds that image is up
+#define DMG_IMAGE_LIFE 2 // seconds that image is up
 
-#define DMG_IMAGE_POISON	0
-#define DMG_IMAGE_ACID		1
-#define DMG_IMAGE_COLD		2
-#define DMG_IMAGE_DROWN		3
-#define DMG_IMAGE_BURN		4
-#define DMG_IMAGE_NERVE		5
-#define DMG_IMAGE_RAD		6
-#define DMG_IMAGE_SHOCK		7
+#define DMG_IMAGE_POISON 0
+#define DMG_IMAGE_ACID 1
+#define DMG_IMAGE_COLD 2
+#define DMG_IMAGE_DROWN 3
+#define DMG_IMAGE_BURN 4
+#define DMG_IMAGE_NERVE 5
+#define DMG_IMAGE_RAD 6
+#define DMG_IMAGE_SHOCK 7
 //tf defines
-#define DMG_IMAGE_CALTROP	8
-#define DMG_IMAGE_TRANQ		9
-#define DMG_IMAGE_CONCUSS	10
-#define DMG_IMAGE_HALLUC	11
-#define NUM_DMG_TYPES		12
+#define DMG_IMAGE_CALTROP 8
+#define DMG_IMAGE_TRANQ 9
+#define DMG_IMAGE_CONCUSS 10
+#define DMG_IMAGE_HALLUC 11
+#define NUM_DMG_TYPES 12
 // instant damage
 
 typedef struct
 {
 	float fExpire;
 	float fBaseline;
-	int	x, y;
+	int x, y;
 } DAMAGE_IMAGE;
 
 //
@@ -64,7 +64,7 @@ private:
 	HSPRITE m_hDamage;
 
 	DAMAGE_IMAGE m_dmg[NUM_DMG_TYPES];
-	int	m_bitsDamage;
+	int m_bitsDamage;
 	bool DrawPain(float fTime);
 	bool DrawDamage(float fTime);
 	void CalcDamageDirection(Vector vecFrom);

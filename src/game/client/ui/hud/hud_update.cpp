@@ -49,5 +49,3 @@ bool CHud::UpdateClientData(client_data_t* cdata, float time)
 	// return 1 if in anything in the client_data struct has been changed, 0 otherwise
 	return true;
 }
-
-

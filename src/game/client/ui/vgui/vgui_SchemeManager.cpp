@@ -5,7 +5,7 @@
 // Valve, L.L.C., or in accordance with the terms and conditions stipulated in
 // the agreement/contract under which the contents have been supplied.
 //
-// Purpose: 
+// Purpose:
 //
 // $Workfile:     $
 // $Date:         $
@@ -39,7 +39,8 @@ void Scheme_Init()
 class CSchemeManager::CScheme
 {
 public:
-	enum {
+	enum
+	{
 		SCHEME_NAME_LENGTH = 32,
 		FONT_NAME_LENGTH = 48,
 		FONT_FILENAME_LENGTH = 64,
@@ -95,17 +96,16 @@ CSchemeManager::CScheme::~CScheme()
 //			!! needs to be shared out
 //-----------------------------------------------------------------------------
 static int g_ResArray[] =
-{
-	320,
-	400,
-	512,
-	640,
-	800,
-	1024,
-	1152,
-	1280,
-	1600
-};
+	{
+		320,
+		400,
+		512,
+		640,
+		800,
+		1024,
+		1152,
+		1280,
+		1600};
 static int g_NumReses = sizeof(g_ResArray) / sizeof(int);
 
 static byte* LoadFileByResolution(const char* filePrefix, int xRes, const char* filePostfix)
@@ -155,7 +155,7 @@ static void ParseRGBAFromString(byte colorArray[4], const char* colorVector)
 //-----------------------------------------------------------------------------
 // Purpose: initializes the scheme manager
 //			loading the scheme files for the current resolution
-// Input  : xRes - 
+// Input  : xRes -
 //			yRes - dimensions of output window
 //-----------------------------------------------------------------------------
 CSchemeManager::CSchemeManager(int xRes, int yRes)
@@ -377,9 +377,7 @@ buildDefaultFont:
 		for (int j = 0; j < i; j++)
 		{
 			// check if the font name, size, and weight are the same
-			if (!stricmp(m_pSchemeList[i].fontName, m_pSchemeList[j].fontName)
-				&& m_pSchemeList[i].fontSize == m_pSchemeList[j].fontSize
-				&& m_pSchemeList[i].fontWeight == m_pSchemeList[j].fontWeight)
+			if (!stricmp(m_pSchemeList[i].fontName, m_pSchemeList[j].fontName) && m_pSchemeList[i].fontSize == m_pSchemeList[j].fontSize && m_pSchemeList[i].fontWeight == m_pSchemeList[j].fontWeight)
 			{
 				// copy the pointer, but mark i as not owning it
 				m_pSchemeList[i].font = m_pSchemeList[j].font;
@@ -467,7 +465,7 @@ SchemeHandle_t CSchemeManager::getSchemeHandle(const char* schemeName)
 
 //-----------------------------------------------------------------------------
 // Purpose: always returns a valid scheme handle
-// Input  : schemeHandle - 
+// Input  : schemeHandle -
 // Output : CScheme
 //-----------------------------------------------------------------------------
 CSchemeManager::CScheme* CSchemeManager::getSafeScheme(SchemeHandle_t schemeHandle)
@@ -481,7 +479,7 @@ CSchemeManager::CScheme* CSchemeManager::getSafeScheme(SchemeHandle_t schemeHand
 
 //-----------------------------------------------------------------------------
 // Purpose: Returns the schemes pointer to a font
-// Input  : schemeHandle - 
+// Input  : schemeHandle -
 // Output : vgui::Font
 //-----------------------------------------------------------------------------
 vgui::Font* CSchemeManager::getFont(SchemeHandle_t schemeHandle)
@@ -551,6 +549,3 @@ void CSchemeManager::getBorderColor(SchemeHandle_t schemeHandle, int& r, int& g,
 	b = pScheme->borderColor[2];
 	a = pScheme->borderColor[3];
 }
-
-
-

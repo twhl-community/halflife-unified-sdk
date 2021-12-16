@@ -17,7 +17,7 @@
 //=============================================================================
 
 
-#include<VGUI_LineBorder.h>
+#include <VGUI_LineBorder.h>
 
 #include "hud.h"
 #include "cl_util.h"
@@ -31,47 +31,47 @@
 #include "voice_status.h"
 #include "vgui_SpectatorPanel.h"
 
-extern hud_player_info_t	 g_PlayerInfoList[MAX_PLAYERS + 1];	   // player info from the engine
-extern extra_player_info_t  g_PlayerExtraInfo[MAX_PLAYERS + 1];   // additional player info sent directly to the client dll
-team_info_t			 g_TeamInfo[MAX_TEAMS + 1];
-int					 g_IsSpectator[MAX_PLAYERS + 1];
+extern hud_player_info_t g_PlayerInfoList[MAX_PLAYERS + 1];	   // player info from the engine
+extern extra_player_info_t g_PlayerExtraInfo[MAX_PLAYERS + 1]; // additional player info sent directly to the client dll
+team_info_t g_TeamInfo[MAX_TEAMS + 1];
+int g_IsSpectator[MAX_PLAYERS + 1];
 
 bool HUD_IsGame(const char* game);
 bool EV_TFC_IsAllyTeam(int iTeam1, int iTeam2);
 
 // Scoreboard dimensions
-#define SBOARD_TITLE_SIZE_Y			YRES(22)
+#define SBOARD_TITLE_SIZE_Y YRES(22)
 
-#define X_BORDER					XRES(4)
+#define X_BORDER XRES(4)
 
 // Column sizes
 class SBColumnInfo
 {
 public:
-	const char* m_pTitle;		// If null, ignore, if starts with #, it's localized, otherwise use the string directly.
-	int					m_Width;		// Based on 640 width. Scaled to fit other resolutions.
-	Label::Alignment	m_Alignment;
+	const char* m_pTitle; // If null, ignore, if starts with #, it's localized, otherwise use the string directly.
+	int m_Width;		  // Based on 640 width. Scaled to fit other resolutions.
+	Label::Alignment m_Alignment;
 };
 
 // grid size is marked out for 640x480 screen
 
 SBColumnInfo g_ColumnInfo[NUM_COLUMNS] =
-{
-	{NULL,			24,			Label::a_east},		// tracker column
-	{NULL,			140,		Label::a_east},		// name
-	{NULL,			56,			Label::a_east},		// class
-	{"#SCORE",		40,			Label::a_east},
-	{"#DEATHS",		46,			Label::a_east},
-	{"#LATENCY",	46,			Label::a_east},
-	{"#VOICE",		40,			Label::a_east},
-	{NULL,			2,			Label::a_east},		// blank column to take up the slack
+	{
+		{NULL, 24, Label::a_east},	// tracker column
+		{NULL, 140, Label::a_east}, // name
+		{NULL, 56, Label::a_east},	// class
+		{"#SCORE", 40, Label::a_east},
+		{"#DEATHS", 46, Label::a_east},
+		{"#LATENCY", 46, Label::a_east},
+		{"#VOICE", 40, Label::a_east},
+		{NULL, 2, Label::a_east}, // blank column to take up the slack
 };
 
 
-#define TEAM_NO				0
-#define TEAM_YES			1
-#define TEAM_SPECTATORS		2
-#define TEAM_BLANK			3
+#define TEAM_NO 0
+#define TEAM_YES 1
+#define TEAM_SPECTATORS 2
+#define TEAM_BLANK 3
 
 
 //-----------------------------------------------------------------------------
@@ -335,7 +335,7 @@ void ScorePanel::SortTeams()
 			if (!stricmp(g_PlayerExtraInfo[i].teamname, g_TeamInfo[j].name))
 				break;
 		}
-		if (j > m_iNumTeams)  // player is not in a team, skip to the next guy
+		if (j > m_iNumTeams) // player is not in a team, skip to the next guy
 			continue;
 
 		if (!g_TeamInfo[j].scores_overriden)
@@ -363,15 +363,16 @@ void ScorePanel::SortTeams()
 
 		if (g_TeamInfo[i].players > 0)
 		{
-			g_TeamInfo[i].ping /= g_TeamInfo[i].players;  // use the average ping of all the players in the team as the teams ping
-			g_TeamInfo[i].packetloss /= g_TeamInfo[i].players;  // use the average ping of all the players in the team as the teams ping
+			g_TeamInfo[i].ping /= g_TeamInfo[i].players;	   // use the average ping of all the players in the team as the teams ping
+			g_TeamInfo[i].packetloss /= g_TeamInfo[i].players; // use the average ping of all the players in the team as the teams ping
 		}
 	}
 
 	// Draw the teams
 	while (true)
 	{
-		int highest_frags = -99999; int lowest_deaths = 99999;
+		int highest_frags = -99999;
+		int lowest_deaths = 99999;
 		int best_team = 0;
 
 		for (i = 1; i <= m_iNumTeams; i++)
@@ -397,7 +398,7 @@ void ScorePanel::SortTeams()
 		// Put this team in the sorted list
 		m_iSortedRows[m_iRows] = best_team;
 		m_iIsATeam[m_iRows] = TEAM_YES;
-		g_TeamInfo[best_team].already_drawn = true;  // set the already_drawn to be true, so this team won't get sorted again
+		g_TeamInfo[best_team].already_drawn = true; // set the already_drawn to be true, so this team won't get sorted again
 		m_iRows++;
 
 		// Now sort all the players on this team
@@ -419,7 +420,8 @@ void ScorePanel::SortPlayers(int iTeam, char* team)
 	while (true)
 	{
 		// Find the top ranking player
-		int highest_frags = -99999;	int lowest_deaths = 99999;
+		int highest_frags = -99999;
+		int lowest_deaths = 99999;
 		int best_player;
 		best_player = 0;
 
@@ -677,7 +679,7 @@ void ScorePanel::FillGrid()
 				}
 			}
 
-			// Align 
+			// Align
 			if (col == COLUMN_NAME || col == COLUMN_CLASS)
 			{
 				pLabel->setContentAlignment(vgui::Label::a_west);
@@ -881,7 +883,7 @@ void ScorePanel::DeathMsg(int killer, int victim)
 	if (victim == m_iPlayerNum || killer == 0)
 	{
 		m_iLastKilledBy = 0 != killer ? killer : m_iPlayerNum;
-		m_fLastKillTime = gHUD.m_flTime + 10;	// display who we were killed by for 10 seconds
+		m_fLastKillTime = gHUD.m_flTime + 10; // display who we were killed by for 10 seconds
 
 		if (killer == m_iPlayerNum)
 			m_iLastKilledBy = m_iPlayerNum;
@@ -969,8 +971,8 @@ void ScorePanel::cursorMoved(int x, int y, Panel* panel)
 
 //-----------------------------------------------------------------------------
 // Purpose: Handles mouse movement over a cell
-// Input  : row - 
-//			col - 
+// Input  : row -
+//			col -
 //-----------------------------------------------------------------------------
 void ScorePanel::MouseOverCell(int row, int col)
 {
@@ -1077,11 +1079,10 @@ void CLabelHeader::calcAlignment(int iwide, int itall, int& x, int& y)
 	// align left/right
 	switch (_contentAlignment)
 	{
-		// left
+	// left
 	case Label::a_northwest:
 	case Label::a_west:
-	case Label::a_southwest:
-	{
+	case Label::a_southwest: {
 		x = 0;
 		break;
 	}
@@ -1089,8 +1090,7 @@ void CLabelHeader::calcAlignment(int iwide, int itall, int& x, int& y)
 	// center
 	case Label::a_north:
 	case Label::a_center:
-	case Label::a_south:
-	{
+	case Label::a_south: {
 		x = (wide - iwide) / 2;
 		break;
 	}
@@ -1098,8 +1098,7 @@ void CLabelHeader::calcAlignment(int iwide, int itall, int& x, int& y)
 	// right
 	case Label::a_northeast:
 	case Label::a_east:
-	case Label::a_southeast:
-	{
+	case Label::a_southeast: {
 		x = wide - iwide;
 		break;
 	}
@@ -1108,11 +1107,10 @@ void CLabelHeader::calcAlignment(int iwide, int itall, int& x, int& y)
 	// top/down
 	switch (_contentAlignment)
 	{
-		// top
+	// top
 	case Label::a_northwest:
 	case Label::a_north:
-	case Label::a_northeast:
-	{
+	case Label::a_northeast: {
 		y = 0;
 		break;
 	}
@@ -1120,8 +1118,7 @@ void CLabelHeader::calcAlignment(int iwide, int itall, int& x, int& y)
 	// center
 	case Label::a_west:
 	case Label::a_center:
-	case Label::a_east:
-	{
+	case Label::a_east: {
 		y = (tall - itall) / 2;
 		break;
 	}
@@ -1129,8 +1126,7 @@ void CLabelHeader::calcAlignment(int iwide, int itall, int& x, int& y)
 	// south
 	case Label::a_southwest:
 	case Label::a_south:
-	case Label::a_southeast:
-	{
+	case Label::a_southeast: {
 		y = tall - itall;
 		break;
 	}

@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -57,9 +57,9 @@ enum decal_e
 	DECAL_SPIT2,
 	DECAL_BPROOF1,		// Bulletproof glass decal
 	DECAL_GARGSTOMP1,	// Gargantua stomp crack
-	DECAL_SMALLSCORCH1,	// Small scorch mark
-	DECAL_SMALLSCORCH2,	// Small scorch mark
-	DECAL_SMALLSCORCH3,	// Small scorch mark
+	DECAL_SMALLSCORCH1, // Small scorch mark
+	DECAL_SMALLSCORCH2, // Small scorch mark
+	DECAL_SMALLSCORCH3, // Small scorch mark
 	DECAL_MOMMABIRTH,	// Big momma birth splatter
 	DECAL_MOMMASPLAT,
 };
@@ -67,7 +67,7 @@ enum decal_e
 typedef struct
 {
 	const char* name;
-	int			index;
+	int index;
 } DLL_DECALLIST;
 
 extern DLL_DECALLIST gDecals[];

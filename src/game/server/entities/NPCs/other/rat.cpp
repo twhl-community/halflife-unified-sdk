@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
 *	All Rights Reserved.
 *
 *   This source code contains proprietary and confidential information of
@@ -16,11 +16,11 @@
 // rat - environmental monster
 //=========================================================
 
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"monsters.h"
-#include	"schedule.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
+#include "schedule.h"
 
 //=========================================================
 // Monster's Anim Events Go Here
@@ -32,24 +32,24 @@ public:
 	void Spawn() override;
 	void Precache() override;
 	void SetYawSpeed() override;
-	int  Classify() override;
+	int Classify() override;
 };
 LINK_ENTITY_TO_CLASS(monster_rat, CRat);
 
 //=========================================================
-// Classify - indicates this monster's place in the 
+// Classify - indicates this monster's place in the
 // relationship table.
 //=========================================================
-int	CRat::Classify()
+int CRat ::Classify()
 {
-	return	CLASS_INSECT;
+	return CLASS_INSECT;
 }
 
 //=========================================================
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CRat::SetYawSpeed()
+void CRat ::SetYawSpeed()
 {
 	int ys;
 
@@ -67,7 +67,7 @@ void CRat::SetYawSpeed()
 //=========================================================
 // Spawn
 //=========================================================
-void CRat::Spawn()
+void CRat ::Spawn()
 {
 	Precache();
 
@@ -78,8 +78,8 @@ void CRat::Spawn()
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_RED;
 	pev->health = 8;
-	pev->view_ofs = Vector(0, 0, 6);// position of the eyes relative to monster's origin.
-	m_flFieldOfView = 0.5;// indicates the width of this monster's forward view cone ( as a dotproduct result )
+	pev->view_ofs = Vector(0, 0, 6); // position of the eyes relative to monster's origin.
+	m_flFieldOfView = 0.5;			 // indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
 
 	MonsterInit();
@@ -88,7 +88,7 @@ void CRat::Spawn()
 //=========================================================
 // Precache - precaches all resources this monster needs
 //=========================================================
-void CRat::Precache()
+void CRat ::Precache()
 {
 	PRECACHE_MODEL("models/bigrat.mdl");
 }

@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -46,7 +46,7 @@ bool CHudBattery::VidInit()
 	int HUD_suit_empty = gHUD.GetSpriteIndex("suit_empty");
 	int HUD_suit_full = gHUD.GetSpriteIndex("suit_full");
 
-	m_hSprite1 = m_hSprite2 = 0;  // delaying get sprite handles until we know the sprites are loaded
+	m_hSprite1 = m_hSprite2 = 0; // delaying get sprite handles until we know the sprites are loaded
 	m_prc1 = &gHUD.GetSpriteRect(HUD_suit_empty);
 	m_prc2 = &gHUD.GetSpriteRect(HUD_suit_full);
 	m_iHeight = m_prc2->bottom - m_prc1->top;
@@ -61,7 +61,7 @@ bool CHudBattery::MsgFunc_Battery(const char* pszName, int iSize, void* pbuf)
 	BEGIN_READ(pbuf, iSize);
 	int x = READ_SHORT();
 
-#if defined( _TFC )
+#if defined(_TFC)
 	int y = READ_SHORT();
 
 	if (x != m_iBat || y != m_iBatMax)
@@ -92,7 +92,7 @@ bool CHudBattery::Draw(float flTime)
 
 	rc = *m_prc2;
 
-#if defined( _TFC )
+#if defined(_TFC)
 	float fScale = 0.0;
 
 	if (m_iBatMax > 0)
@@ -100,7 +100,7 @@ bool CHudBattery::Draw(float flTime)
 
 	rc.top += m_iHeight * ((float)(m_iBatMax - (V_min(m_iBatMax, m_iBat))) * fScale); // battery can go from 0 to m_iBatMax so * fScale goes from 0 to 1
 #else
-	rc.top += m_iHeight * ((float)(100 - (V_min(100, m_iBat))) * 0.01);	// battery can go from 0 to 100 so * 0.01 goes from 0 to 1
+	rc.top += m_iHeight * ((float)(100 - (V_min(100, m_iBat))) * 0.01); // battery can go from 0 to 100 so * 0.01 goes from 0 to 1
 #endif
 
 	UnpackRGB(r, g, b, RGB_YELLOWISH);
@@ -124,7 +124,6 @@ bool CHudBattery::Draw(float flTime)
 		// Fade the health number back to dim
 
 		a = MIN_ALPHA + (m_fFade / FADE_TIME) * 128;
-
 	}
 	else
 		a = MIN_ALPHA;

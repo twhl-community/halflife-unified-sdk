@@ -1,6 +1,6 @@
 //========= Copyright © 1996-2002, Valve LLC, All rights reserved. ============
 //
-// Purpose: 
+// Purpose:
 //
 // $NoKeywords: $
 //=============================================================================
@@ -13,9 +13,9 @@ using namespace vgui;
 
 
 CListBox::CListBox() : Panel(0, 0, 0, 0),
-m_ItemsPanel(0, 0, 0, 0),
-m_ScrollBar(0, 0, 0, 0, true),
-m_Slider(0, 0, 10, 40, true)
+					   m_ItemsPanel(0, 0, 0, 0),
+					   m_ScrollBar(0, 0, 0, 0, true),
+					   m_Slider(0, 0, 10, 40, true)
 {
 	m_Signal.m_pListBox = this;
 
@@ -53,7 +53,7 @@ void CListBox::Term()
 	LBItem* pNext;
 	for (LBItem* pItem = m_Items.m_pNext; pItem != &m_Items; pItem = pNext)
 	{
-		pItem->m_pPanel->setParent(NULL);	// detach the panel from us
+		pItem->m_pPanel->setParent(NULL); // detach the panel from us
 		pNext = pItem->m_pNext;
 		delete pItem;
 	}
@@ -194,7 +194,7 @@ void CListBox::SetScrollRange(int maxScroll)
 	InternalLayout();
 }
 
-int	CListBox::GetScrollMax()
+int CListBox::GetScrollMax()
 {
 	if (m_iScrollMax < 0)
 	{
@@ -203,5 +203,3 @@ int	CListBox::GetScrollMax()
 
 	return m_iScrollMax;
 }
-
-

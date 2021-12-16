@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
 *	All Rights Reserved.
 *
 *   This source code contains proprietary and confidential information of
@@ -17,28 +17,28 @@
 //=========================================================
 // UNDONE: Holster weapon?
 
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"monsters.h"
-#include	"talkmonster.h"
-#include	"schedule.h"
-#include	"defaultai.h"
-#include	"scripted.h"
-#include	"weapons.h"
-#include	"soundent.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
+#include "talkmonster.h"
+#include "schedule.h"
+#include "defaultai.h"
+#include "scripted.h"
+#include "weapons.h"
+#include "soundent.h"
 
 //=========================================================
 // Monster's Anim Events Go Here
 //=========================================================
 // first flag is barney dying for scripted sequences?
-#define		BARNEY_AE_DRAW		( 2 )
-#define		BARNEY_AE_SHOOT		( 3 )
-#define		BARNEY_AE_HOLSTER	( 4 )
+#define BARNEY_AE_DRAW (2)
+#define BARNEY_AE_SHOOT (3)
+#define BARNEY_AE_HOLSTER (4)
 
-#define	BARNEY_BODY_GUNHOLSTERED	0
-#define	BARNEY_BODY_GUNDRAWN		1
-#define BARNEY_BODY_GUNGONE			2
+#define BARNEY_BODY_GUNHOLSTERED 0
+#define BARNEY_BODY_GUNDRAWN 1
+#define BARNEY_BODY_GUNGONE 2
 
 class CBarney : public CTalkMonster
 {
@@ -46,15 +46,15 @@ public:
 	void Spawn() override;
 	void Precache() override;
 	void SetYawSpeed() override;
-	int  ISoundMask() override;
+	int ISoundMask() override;
 	void BarneyFirePistol();
 	void AlertSound() override;
-	int  Classify() override;
+	int Classify() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 
 	void RunTask(Task_t* pTask) override;
 	void StartTask(Task_t* pTask) override;
-	int	ObjectCaps() override { return CTalkMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
+	int ObjectCaps() override { return CTalkMonster ::ObjectCaps() | FCAP_IMPULSE_USE; }
 	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 	bool CheckRangeAttack1(float flDot, float flDist) override;
 
@@ -73,30 +73,30 @@ public:
 	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
 	void Killed(entvars_t* pevAttacker, int iGib) override;
 
-	bool	Save(CSave& save) override;
-	bool	Restore(CRestore& restore) override;
-	static	TYPEDESCRIPTION m_SaveData[];
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
+	static TYPEDESCRIPTION m_SaveData[];
 
-	bool	m_fGunDrawn;
-	float	m_painTime;
-	float	m_checkAttackTime;
-	bool	m_lastAttackCheck;
+	bool m_fGunDrawn;
+	float m_painTime;
+	float m_checkAttackTime;
+	bool m_lastAttackCheck;
 
 	// UNDONE: What is this for?  It isn't used?
-	float	m_flPlayerDamage;// how much pain has the player inflicted on me?
+	float m_flPlayerDamage; // how much pain has the player inflicted on me?
 
 	CUSTOM_SCHEDULES;
 };
 
 LINK_ENTITY_TO_CLASS(monster_barney, CBarney);
 
-TYPEDESCRIPTION	CBarney::m_SaveData[] =
-{
-	DEFINE_FIELD(CBarney, m_fGunDrawn, FIELD_BOOLEAN),
-	DEFINE_FIELD(CBarney, m_painTime, FIELD_TIME),
-	DEFINE_FIELD(CBarney, m_checkAttackTime, FIELD_TIME),
-	DEFINE_FIELD(CBarney, m_lastAttackCheck, FIELD_BOOLEAN),
-	DEFINE_FIELD(CBarney, m_flPlayerDamage, FIELD_FLOAT),
+TYPEDESCRIPTION CBarney::m_SaveData[] =
+	{
+		DEFINE_FIELD(CBarney, m_fGunDrawn, FIELD_BOOLEAN),
+		DEFINE_FIELD(CBarney, m_painTime, FIELD_TIME),
+		DEFINE_FIELD(CBarney, m_checkAttackTime, FIELD_TIME),
+		DEFINE_FIELD(CBarney, m_lastAttackCheck, FIELD_BOOLEAN),
+		DEFINE_FIELD(CBarney, m_flPlayerDamage, FIELD_FLOAT),
 };
 
 IMPLEMENT_SAVERESTORE(CBarney, CTalkMonster);
@@ -104,123 +104,113 @@ IMPLEMENT_SAVERESTORE(CBarney, CTalkMonster);
 //=========================================================
 // AI Schedules Specific to this monster
 //=========================================================
-Task_t	tlBaFollow[] =
-{
-	{ TASK_MOVE_TO_TARGET_RANGE,(float)128		},	// Move within 128 of target ent (client)
-	{ TASK_SET_SCHEDULE,		(float)SCHED_TARGET_FACE },
+Task_t tlBaFollow[] =
+	{
+		{TASK_MOVE_TO_TARGET_RANGE, (float)128}, // Move within 128 of target ent (client)
+		{TASK_SET_SCHEDULE, (float)SCHED_TARGET_FACE},
 };
 
-Schedule_t	slBaFollow[] =
-{
+Schedule_t slBaFollow[] =
 	{
-		tlBaFollow,
-		ARRAYSIZE(tlBaFollow),
-		bits_COND_NEW_ENEMY |
-		bits_COND_LIGHT_DAMAGE |
-		bits_COND_HEAVY_DAMAGE |
-		bits_COND_HEAR_SOUND |
-		bits_COND_PROVOKED,
-		bits_SOUND_DANGER,
-		"Follow"
-	},
+		{tlBaFollow,
+			ARRAYSIZE(tlBaFollow),
+			bits_COND_NEW_ENEMY |
+				bits_COND_LIGHT_DAMAGE |
+				bits_COND_HEAVY_DAMAGE |
+				bits_COND_HEAR_SOUND |
+				bits_COND_PROVOKED,
+			bits_SOUND_DANGER,
+			"Follow"},
 };
 
 //=========================================================
 // BarneyDraw- much better looking draw schedule for when
 // barney knows who he's gonna attack.
 //=========================================================
-Task_t	tlBarneyEnemyDraw[] =
-{
-	{ TASK_STOP_MOVING,					0				},
-	{ TASK_FACE_ENEMY,					0				},
-	{ TASK_PLAY_SEQUENCE_FACE_ENEMY,	(float)ACT_ARM },
+Task_t tlBarneyEnemyDraw[] =
+	{
+		{TASK_STOP_MOVING, 0},
+		{TASK_FACE_ENEMY, 0},
+		{TASK_PLAY_SEQUENCE_FACE_ENEMY, (float)ACT_ARM},
 };
 
 Schedule_t slBarneyEnemyDraw[] =
-{
 	{
-		tlBarneyEnemyDraw,
-		ARRAYSIZE(tlBarneyEnemyDraw),
-		0,
-		0,
-		"Barney Enemy Draw"
-	}
-};
+		{tlBarneyEnemyDraw,
+			ARRAYSIZE(tlBarneyEnemyDraw),
+			0,
+			0,
+			"Barney Enemy Draw"}};
 
-Task_t	tlBaFaceTarget[] =
-{
-	{ TASK_SET_ACTIVITY,		(float)ACT_IDLE },
-	{ TASK_FACE_TARGET,			(float)0		},
-	{ TASK_SET_ACTIVITY,		(float)ACT_IDLE },
-	{ TASK_SET_SCHEDULE,		(float)SCHED_TARGET_CHASE },
-};
-
-Schedule_t	slBaFaceTarget[] =
-{
+Task_t tlBaFaceTarget[] =
 	{
-		tlBaFaceTarget,
-		ARRAYSIZE(tlBaFaceTarget),
-		bits_COND_CLIENT_PUSH |
-		bits_COND_NEW_ENEMY |
-		bits_COND_LIGHT_DAMAGE |
-		bits_COND_HEAVY_DAMAGE |
-		bits_COND_HEAR_SOUND |
-		bits_COND_PROVOKED,
-		bits_SOUND_DANGER,
-		"FaceTarget"
-	},
+		{TASK_SET_ACTIVITY, (float)ACT_IDLE},
+		{TASK_FACE_TARGET, (float)0},
+		{TASK_SET_ACTIVITY, (float)ACT_IDLE},
+		{TASK_SET_SCHEDULE, (float)SCHED_TARGET_CHASE},
 };
 
-
-Task_t	tlIdleBaStand[] =
-{
-	{ TASK_STOP_MOVING,			0				},
-	{ TASK_SET_ACTIVITY,		(float)ACT_IDLE },
-	{ TASK_WAIT,				(float)2		}, // repick IDLESTAND every two seconds.
-	{ TASK_TLK_HEADRESET,		(float)0		}, // reset head position
-};
-
-Schedule_t	slIdleBaStand[] =
-{
+Schedule_t slBaFaceTarget[] =
 	{
-		tlIdleBaStand,
-		ARRAYSIZE(tlIdleBaStand),
-		bits_COND_NEW_ENEMY |
-		bits_COND_LIGHT_DAMAGE |
-		bits_COND_HEAVY_DAMAGE |
-		bits_COND_HEAR_SOUND |
-		bits_COND_SMELL |
-		bits_COND_PROVOKED,
-
-		bits_SOUND_COMBAT |// sound flags - change these, and you'll break the talking code.
-		//bits_SOUND_PLAYER		|
-		//bits_SOUND_WORLD		|
-
-		bits_SOUND_DANGER |
-		bits_SOUND_MEAT |// scents
-		bits_SOUND_CARCASS |
-		bits_SOUND_GARBAGE,
-		"IdleStand"
-	},
+		{tlBaFaceTarget,
+			ARRAYSIZE(tlBaFaceTarget),
+			bits_COND_CLIENT_PUSH |
+				bits_COND_NEW_ENEMY |
+				bits_COND_LIGHT_DAMAGE |
+				bits_COND_HEAVY_DAMAGE |
+				bits_COND_HEAR_SOUND |
+				bits_COND_PROVOKED,
+			bits_SOUND_DANGER,
+			"FaceTarget"},
 };
 
-DEFINE_CUSTOM_SCHEDULES(CBarney)
-{
+
+Task_t tlIdleBaStand[] =
+	{
+		{TASK_STOP_MOVING, 0},
+		{TASK_SET_ACTIVITY, (float)ACT_IDLE},
+		{TASK_WAIT, (float)2},			// repick IDLESTAND every two seconds.
+		{TASK_TLK_HEADRESET, (float)0}, // reset head position
+};
+
+Schedule_t slIdleBaStand[] =
+	{
+		{tlIdleBaStand,
+			ARRAYSIZE(tlIdleBaStand),
+			bits_COND_NEW_ENEMY |
+				bits_COND_LIGHT_DAMAGE |
+				bits_COND_HEAVY_DAMAGE |
+				bits_COND_HEAR_SOUND |
+				bits_COND_SMELL |
+				bits_COND_PROVOKED,
+
+			bits_SOUND_COMBAT | // sound flags - change these, and you'll break the talking code.
+				//bits_SOUND_PLAYER		|
+				//bits_SOUND_WORLD		|
+
+				bits_SOUND_DANGER |
+				bits_SOUND_MEAT | // scents
+				bits_SOUND_CARCASS |
+				bits_SOUND_GARBAGE,
+			"IdleStand"},
+};
+
+DEFINE_CUSTOM_SCHEDULES(CBarney){
 	slBaFollow,
-		slBarneyEnemyDraw,
-		slBaFaceTarget,
-		slIdleBaStand,
+	slBarneyEnemyDraw,
+	slBaFaceTarget,
+	slIdleBaStand,
 };
 
 
 IMPLEMENT_CUSTOM_SCHEDULES(CBarney, CTalkMonster);
 
-void CBarney::StartTask(Task_t* pTask)
+void CBarney ::StartTask(Task_t* pTask)
 {
 	CTalkMonster::StartTask(pTask);
 }
 
-void CBarney::RunTask(Task_t* pTask)
+void CBarney ::RunTask(Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
@@ -242,32 +232,32 @@ void CBarney::RunTask(Task_t* pTask)
 
 //=========================================================
 // ISoundMask - returns a bit mask indicating which types
-// of sounds this monster regards. 
+// of sounds this monster regards.
 //=========================================================
-int CBarney::ISoundMask()
+int CBarney ::ISoundMask()
 {
-	return	bits_SOUND_WORLD |
-		bits_SOUND_COMBAT |
-		bits_SOUND_CARCASS |
-		bits_SOUND_MEAT |
-		bits_SOUND_GARBAGE |
-		bits_SOUND_DANGER |
-		bits_SOUND_PLAYER;
+	return bits_SOUND_WORLD |
+		   bits_SOUND_COMBAT |
+		   bits_SOUND_CARCASS |
+		   bits_SOUND_MEAT |
+		   bits_SOUND_GARBAGE |
+		   bits_SOUND_DANGER |
+		   bits_SOUND_PLAYER;
 }
 
 //=========================================================
-// Classify - indicates this monster's place in the 
+// Classify - indicates this monster's place in the
 // relationship table.
 //=========================================================
-int	CBarney::Classify()
+int CBarney ::Classify()
 {
-	return	CLASS_PLAYER_ALLY;
+	return CLASS_PLAYER_ALLY;
 }
 
 //=========================================================
 // ALertSound - barney says "Freeze!"
 //=========================================================
-void CBarney::AlertSound()
+void CBarney ::AlertSound()
 {
 	if (m_hEnemy != NULL)
 	{
@@ -276,13 +266,12 @@ void CBarney::AlertSound()
 			PlaySentence("BA_ATTACK", RANDOM_FLOAT(2.8, 3.2), VOL_NORM, ATTN_IDLE);
 		}
 	}
-
 }
 //=========================================================
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CBarney::SetYawSpeed()
+void CBarney ::SetYawSpeed()
 {
 	int ys;
 
@@ -311,7 +300,7 @@ void CBarney::SetYawSpeed()
 //=========================================================
 // CheckRangeAttack1
 //=========================================================
-bool CBarney::CheckRangeAttack1(float flDot, float flDist)
+bool CBarney ::CheckRangeAttack1(float flDot, float flDist)
 {
 	if (flDist <= 1024 && flDot >= 0.5)
 	{
@@ -340,7 +329,7 @@ bool CBarney::CheckRangeAttack1(float flDot, float flDist)
 // BarneyFirePistol - shoots one round from the pistol at
 // the enemy barney is facing.
 //=========================================================
-void CBarney::BarneyFirePistol()
+void CBarney ::BarneyFirePistol()
 {
 	Vector vecShootOrigin;
 
@@ -366,7 +355,7 @@ void CBarney::BarneyFirePistol()
 	CSoundEnt::InsertSound(bits_SOUND_COMBAT, pev->origin, 384, 0.3);
 
 	// UNDONE: Reload?
-	m_cAmmoLoaded--;// take away a bullet!
+	m_cAmmoLoaded--; // take away a bullet!
 }
 
 //=========================================================
@@ -375,7 +364,7 @@ void CBarney::BarneyFirePistol()
 //
 // Returns number of events handled, 0 if none.
 //=========================================================
-void CBarney::HandleAnimEvent(MonsterEvent_t* pEvent)
+void CBarney ::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
 	switch (pEvent->event)
 	{
@@ -403,7 +392,7 @@ void CBarney::HandleAnimEvent(MonsterEvent_t* pEvent)
 //=========================================================
 // Spawn
 //=========================================================
-void CBarney::Spawn()
+void CBarney ::Spawn()
 {
 	Precache();
 
@@ -414,7 +403,7 @@ void CBarney::Spawn()
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_RED;
 	pev->health = gSkillData.barneyHealth;
-	pev->view_ofs = Vector(0, 0, 50);// position of the eyes relative to monster's origin.
+	pev->view_ofs = Vector(0, 0, 50);  // position of the eyes relative to monster's origin.
 	m_flFieldOfView = VIEW_FIELD_WIDE; // NOTE: we need a wide field of view so npc will notice player and say hello
 	m_MonsterState = MONSTERSTATE_NONE;
 
@@ -430,7 +419,7 @@ void CBarney::Spawn()
 //=========================================================
 // Precache - precaches all resources this monster needs
 //=========================================================
-void CBarney::Precache()
+void CBarney ::Precache()
 {
 	PRECACHE_MODEL("models/barney.mdl");
 
@@ -452,7 +441,7 @@ void CBarney::Precache()
 }
 
 // Init talk data
-void CBarney::TalkInit()
+void CBarney ::TalkInit()
 {
 
 	CTalkMonster::TalkInit();
@@ -474,9 +463,9 @@ void CBarney::TalkInit()
 	m_szGrp[TLK_PLHURT2] = "!BA_CUREB";
 	m_szGrp[TLK_PLHURT3] = "!BA_CUREC";
 
-	m_szGrp[TLK_PHELLO] = NULL;	//"BA_PHELLO";		// UNDONE
-	m_szGrp[TLK_PIDLE] = NULL;	//"BA_PIDLE";			// UNDONE
-	m_szGrp[TLK_PQUESTION] = "BA_PQUEST";		// UNDONE
+	m_szGrp[TLK_PHELLO] = NULL;			  //"BA_PHELLO";		// UNDONE
+	m_szGrp[TLK_PIDLE] = NULL;			  //"BA_PIDLE";			// UNDONE
+	m_szGrp[TLK_PQUESTION] = "BA_PQUEST"; // UNDONE
 
 	m_szGrp[TLK_SMELL] = "BA_SMELL";
 
@@ -498,7 +487,7 @@ bool IsFacing(entvars_t* pevTest, const Vector& reference)
 	angle.x = 0;
 	UTIL_MakeVectorsPrivate(angle, forward, NULL, NULL);
 	// He's facing me, he meant it
-	if (DotProduct(forward, vecDir) > 0.96)	// +/- 15 degrees or so
+	if (DotProduct(forward, vecDir) > 0.96) // +/- 15 degrees or so
 	{
 		return true;
 	}
@@ -506,7 +495,7 @@ bool IsFacing(entvars_t* pevTest, const Vector& reference)
 }
 
 
-bool CBarney::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool CBarney ::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
 	// make sure friends talk about it if player hurts talkmonsters...
 	bool ret = CTalkMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
@@ -550,7 +539,7 @@ bool CBarney::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float 
 //=========================================================
 // PainSound
 //=========================================================
-void CBarney::PainSound()
+void CBarney ::PainSound()
 {
 	if (gpGlobals->time < m_painTime)
 		return;
@@ -559,22 +548,34 @@ void CBarney::PainSound()
 
 	switch (RANDOM_LONG(0, 2))
 	{
-	case 0: EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "barney/ba_pain1.wav", 1, ATTN_NORM, 0, GetVoicePitch()); break;
-	case 1: EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "barney/ba_pain2.wav", 1, ATTN_NORM, 0, GetVoicePitch()); break;
-	case 2: EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "barney/ba_pain3.wav", 1, ATTN_NORM, 0, GetVoicePitch()); break;
+	case 0:
+		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "barney/ba_pain1.wav", 1, ATTN_NORM, 0, GetVoicePitch());
+		break;
+	case 1:
+		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "barney/ba_pain2.wav", 1, ATTN_NORM, 0, GetVoicePitch());
+		break;
+	case 2:
+		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "barney/ba_pain3.wav", 1, ATTN_NORM, 0, GetVoicePitch());
+		break;
 	}
 }
 
 //=========================================================
-// DeathSound 
+// DeathSound
 //=========================================================
-void CBarney::DeathSound()
+void CBarney ::DeathSound()
 {
 	switch (RANDOM_LONG(0, 2))
 	{
-	case 0: EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "barney/ba_die1.wav", 1, ATTN_NORM, 0, GetVoicePitch()); break;
-	case 1: EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "barney/ba_die2.wav", 1, ATTN_NORM, 0, GetVoicePitch()); break;
-	case 2: EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "barney/ba_die3.wav", 1, ATTN_NORM, 0, GetVoicePitch()); break;
+	case 0:
+		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "barney/ba_die1.wav", 1, ATTN_NORM, 0, GetVoicePitch());
+		break;
+	case 1:
+		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "barney/ba_die2.wav", 1, ATTN_NORM, 0, GetVoicePitch());
+		break;
+	case 2:
+		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "barney/ba_die3.wav", 1, ATTN_NORM, 0, GetVoicePitch());
+		break;
 	}
 }
 
@@ -612,7 +613,7 @@ void CBarney::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir,
 void CBarney::Killed(entvars_t* pevAttacker, int iGib)
 {
 	if (pev->body < BARNEY_BODY_GUNGONE)
-	{// drop the gun!
+	{ // drop the gun!
 		Vector vecGunPos;
 		Vector vecGunAngles;
 
@@ -631,7 +632,7 @@ void CBarney::Killed(entvars_t* pevAttacker, int iGib)
 // AI Schedules Specific to this monster
 //=========================================================
 
-Schedule_t* CBarney::GetScheduleOfType(int Type)
+Schedule_t* CBarney ::GetScheduleOfType(int Type)
 {
 	Schedule_t* psched;
 
@@ -645,14 +646,14 @@ Schedule_t* CBarney::GetScheduleOfType(int Type)
 		}
 		break;
 
-		// Hook these to make a looping schedule
+	// Hook these to make a looping schedule
 	case SCHED_TARGET_FACE:
 		// call base class default so that barney will talk
-		// when 'used' 
+		// when 'used'
 		psched = CTalkMonster::GetScheduleOfType(Type);
 
 		if (psched == slIdleStand)
-			return slBaFaceTarget;	// override this for different target face behavior
+			return slBaFaceTarget; // override this for different target face behavior
 		else
 			return psched;
 
@@ -682,7 +683,7 @@ Schedule_t* CBarney::GetScheduleOfType(int Type)
 // monster's member function to get a pointer to a schedule
 // of the proper type.
 //=========================================================
-Schedule_t* CBarney::GetSchedule()
+Schedule_t* CBarney ::GetSchedule()
 {
 	if (HasConditions(bits_COND_HEAR_SOUND))
 	{
@@ -700,13 +701,12 @@ Schedule_t* CBarney::GetSchedule()
 
 	switch (m_MonsterState)
 	{
-	case MONSTERSTATE_COMBAT:
-	{
+	case MONSTERSTATE_COMBAT: {
 		// dead enemy
 		if (HasConditions(bits_COND_ENEMY_DEAD))
 		{
 			// call base class, all code to handle dead enemies is centralized there.
-			return CBaseMonster::GetSchedule();
+			return CBaseMonster ::GetSchedule();
 		}
 
 		// always act surprized with a new enemy
@@ -761,7 +761,7 @@ Schedule_t* CBarney::GetSchedule()
 	return CTalkMonster::GetSchedule();
 }
 
-MONSTERSTATE CBarney::GetIdealState()
+MONSTERSTATE CBarney ::GetIdealState()
 {
 	return CTalkMonster::GetIdealState();
 }
@@ -791,11 +791,11 @@ class CDeadBarney : public CBaseMonster
 {
 public:
 	void Spawn() override;
-	int	Classify() override { return	CLASS_PLAYER_ALLY; }
+	int Classify() override { return CLASS_PLAYER_ALLY; }
 
 	bool KeyValue(KeyValueData* pkvd) override;
 
-	int	m_iPose;// which sequence to display	-- temporary, don't need to save
+	int m_iPose; // which sequence to display	-- temporary, don't need to save
 	static const char* m_szPoses[3];
 };
 
@@ -817,7 +817,7 @@ LINK_ENTITY_TO_CLASS(monster_barney_dead, CDeadBarney);
 //=========================================================
 // ********** DeadBarney SPAWN **********
 //=========================================================
-void CDeadBarney::Spawn()
+void CDeadBarney ::Spawn()
 {
 	PRECACHE_MODEL("models/barney.mdl");
 	SET_MODEL(ENT(pev), "models/barney.mdl");
@@ -833,9 +833,7 @@ void CDeadBarney::Spawn()
 		ALERT(at_console, "Dead barney with bad pose\n");
 	}
 	// Corpses have less health
-	pev->health = 8;//gSkillData.barneyHealth;
+	pev->health = 8; //gSkillData.barneyHealth;
 
 	MonsterInitDead();
 }
-
-

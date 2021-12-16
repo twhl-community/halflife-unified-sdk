@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -63,7 +63,7 @@ void CPython::Spawn()
 
 	m_iDefaultAmmo = PYTHON_DEFAULT_GIVE;
 
-	FallInit();// get ready to fall down.
+	FallInit(); // get ready to fall down.
 }
 
 
@@ -106,7 +106,7 @@ bool CPython::Deploy()
 
 void CPython::Holster()
 {
-	m_fInReload = false;// cancel any reload in progress.
+	m_fInReload = false; // cancel any reload in progress.
 
 	if (m_pPlayer->m_iFOV != 0)
 	{
@@ -131,7 +131,7 @@ void CPython::SecondaryAttack()
 
 	if (m_pPlayer->m_iFOV != 0)
 	{
-		m_pPlayer->m_iFOV = 0;  // 0 means reset to default fov
+		m_pPlayer->m_iFOV = 0; // 0 means reset to default fov
 	}
 	else if (m_pPlayer->m_iFOV != 40)
 	{
@@ -182,7 +182,7 @@ void CPython::PrimaryAttack()
 	vecDir = m_pPlayer->FireBulletsPlayer(1, vecSrc, vecAiming, VECTOR_CONE_1DEGREES, 8192, BULLET_PLAYER_357, 0, 0, m_pPlayer->pev, m_pPlayer->random_seed);
 
 	int flags;
-#if defined( CLIENT_WEAPONS )
+#if defined(CLIENT_WEAPONS)
 	flags = FEV_NOTHOST;
 #else
 	flags = 0;
@@ -206,7 +206,7 @@ void CPython::Reload()
 
 	if (m_pPlayer->m_iFOV != 0)
 	{
-		m_pPlayer->m_iFOV = 0;  // 0 means reset to default fov
+		m_pPlayer->m_iFOV = 0; // 0 means reset to default fov
 	}
 
 	bool bUseScope = false;

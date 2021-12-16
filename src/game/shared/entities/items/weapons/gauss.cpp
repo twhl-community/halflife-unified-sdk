@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -52,7 +52,7 @@ void CGauss::Spawn()
 
 	m_iDefaultAmmo = GAUSS_DEFAULT_GIVE;
 
-	FallInit();// get ready to fall down.
+	FallInit(); // get ready to fall down.
 }
 
 
@@ -183,7 +183,7 @@ void CGauss::SecondaryAttack()
 
 		m_fPrimaryFire = false;
 
-		m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]--;// take one ammo just to start the spin
+		m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]--; // take one ammo just to start the spin
 		m_pPlayer->m_flNextAmmoBurn = UTIL_WeaponTimeBase();
 
 		// spin up
@@ -283,10 +283,10 @@ void CGauss::SecondaryAttack()
 }
 
 //=========================================================
-// StartFire- since all of this code has to run and then 
-// call Fire(), it was easier at this point to rip it out 
+// StartFire- since all of this code has to run and then
+// call Fire(), it was easier at this point to rip it out
 // of weaponidle() and make its own function then to try to
-// merge this into Fire(), which has some identical variable names 
+// merge this into Fire(), which has some identical variable names
 //=========================================================
 void CGauss::StartFire()
 {
@@ -310,7 +310,7 @@ void CGauss::StartFire()
 		// fixed damage on primary attack
 #ifdef CLIENT_DLL
 		flDamage = 20;
-#else 
+#else
 		flDamage = gSkillData.plrDmgGauss;
 #endif
 	}
@@ -353,10 +353,10 @@ void CGauss::Fire(Vector vecOrigSrc, Vector vecDir, float flDamage)
 	edict_t* pentIgnore;
 	TraceResult tr, beam_tr;
 	float flMaxFrac = 1.0;
-	int	nTotal = 0;
+	int nTotal = 0;
 	bool fHasPunched = false;
 	bool fFirstBeam = true;
-	int	nMaxHits = 10;
+	int nMaxHits = 10;
 
 	pentIgnore = ENT(m_pPlayer->pev);
 
@@ -375,12 +375,12 @@ void CGauss::Fire(Vector vecOrigSrc, Vector vecDir, float flDamage)
 	PLAYBACK_EVENT_FULL(FEV_NOTHOST | FEV_RELIABLE, m_pPlayer->edict(), m_usGaussFire, 0.01, m_pPlayer->pev->origin, m_pPlayer->pev->angles, 0.0, 0.0, 0, 0, 0, 1);
 
 
-	/*ALERT( at_console, "%f %f %f\n%f %f %f\n",
-		vecSrc.x, vecSrc.y, vecSrc.z,
+	/*ALERT( at_console, "%f %f %f\n%f %f %f\n", 
+		vecSrc.x, vecSrc.y, vecSrc.z, 
 		vecDest.x, vecDest.y, vecDest.z );*/
 
 
-		//	ALERT( at_console, "%f %f\n", tr.flFraction, flMaxFrac );
+	//	ALERT( at_console, "%f %f\n", tr.flFraction, flMaxFrac );
 
 #ifndef CLIENT_DLL
 	while (flDamage > 10 && nMaxHits > 0)
@@ -439,7 +439,8 @@ void CGauss::Fire(Vector vecOrigSrc, Vector vecDir, float flDamage)
 				nTotal += 34;
 
 				// lose energy
-				if (n == 0) n = 0.1;
+				if (n == 0)
+					n = 0.1;
 				flDamage = flDamage * (1 - n);
 			}
 			else
@@ -464,7 +465,8 @@ void CGauss::Fire(Vector vecOrigSrc, Vector vecDir, float flDamage)
 
 						if (n < flDamage)
 						{
-							if (n == 0) n = 1;
+							if (n == 0)
+								n = 1;
 							flDamage -= n;
 
 							// ALERT( at_console, "punch %f\n", n );
@@ -477,7 +479,7 @@ void CGauss::Fire(Vector vecOrigSrc, Vector vecDir, float flDamage)
 
 							if (g_pGameRules->IsMultiplayer())
 							{
-								damage_radius = flDamage * 1.75;  // Old code == 2.5
+								damage_radius = flDamage * 1.75; // Old code == 2.5
 							}
 							else
 							{
@@ -505,7 +507,6 @@ void CGauss::Fire(Vector vecOrigSrc, Vector vecDir, float flDamage)
 
 					flDamage = 0;
 				}
-
 			}
 		}
 		else
@@ -530,10 +531,17 @@ void CGauss::WeaponIdle()
 	{
 		switch (RANDOM_LONG(0, 3))
 		{
-		case 0:	EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/electro4.wav", RANDOM_FLOAT(0.7, 0.8), ATTN_NORM); break;
-		case 1:	EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/electro5.wav", RANDOM_FLOAT(0.7, 0.8), ATTN_NORM); break;
-		case 2:	EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/electro6.wav", RANDOM_FLOAT(0.7, 0.8), ATTN_NORM); break;
-		case 3:	break; // no sound
+		case 0:
+			EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/electro4.wav", RANDOM_FLOAT(0.7, 0.8), ATTN_NORM);
+			break;
+		case 1:
+			EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/electro5.wav", RANDOM_FLOAT(0.7, 0.8), ATTN_NORM);
+			break;
+		case 2:
+			EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/electro6.wav", RANDOM_FLOAT(0.7, 0.8), ATTN_NORM);
+			break;
+		case 3:
+			break; // no sound
 		}
 		m_pPlayer->m_flPlayAftershock = 0.0;
 	}
@@ -569,7 +577,6 @@ void CGauss::WeaponIdle()
 
 		return;
 		SendWeaponAnim(iAnim);
-
 	}
 }
 

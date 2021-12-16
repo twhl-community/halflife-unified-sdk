@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
 *	All Rights Reserved.
 *
 *   This source code contains proprietary and confidential information of
@@ -12,20 +12,20 @@
 *   use or distribution of this code by or to any unlicensed person is illegal.
 *
 ****/
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"monsters.h"
-#include	"schedule.h"
-#include	"flyingmonster.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
+#include "schedule.h"
+#include "flyingmonster.h"
 
-#define FLYING_AE_FLAP		(8)
-#define FLYING_AE_FLAPSOUND	(9)
+#define FLYING_AE_FLAP (8)
+#define FLYING_AE_FLAPSOUND (9)
 
 
 extern DLL_GLOBAL edict_t* g_pBodyQueueHead;
 
-int CFlyingMonster::CheckLocalMove(const Vector& vecStart, const Vector& vecEnd, CBaseEntity* pTarget, float* pflDist)
+int CFlyingMonster ::CheckLocalMove(const Vector& vecStart, const Vector& vecEnd, CBaseEntity* pTarget, float* pflDist)
 {
 	// UNDONE: need to check more than the endpoint
 	if (FBitSet(pev->flags, FL_SWIM) && (UTIL_PointContents(vecEnd) != CONTENTS_WATER))
@@ -43,7 +43,7 @@ int CFlyingMonster::CheckLocalMove(const Vector& vecStart, const Vector& vecEnd,
 
 	if (pflDist)
 	{
-		*pflDist = ((tr.vecEndPos - Vector(0, 0, 32)) - vecStart).Length();// get the distance.
+		*pflDist = ((tr.vecEndPos - Vector(0, 0, 32)) - vecStart).Length(); // get the distance.
 	}
 
 	// ALERT( at_console, "check %d %d %f\n", tr.fStartSolid, tr.fAllSolid, tr.flFraction );
@@ -58,22 +58,22 @@ int CFlyingMonster::CheckLocalMove(const Vector& vecStart, const Vector& vecEnd,
 }
 
 
-bool CFlyingMonster::FTriangulate(const Vector& vecStart, const Vector& vecEnd, float flDist, CBaseEntity* pTargetEnt, Vector* pApex)
+bool CFlyingMonster ::FTriangulate(const Vector& vecStart, const Vector& vecEnd, float flDist, CBaseEntity* pTargetEnt, Vector* pApex)
 {
 	return CBaseMonster::FTriangulate(vecStart, vecEnd, flDist, pTargetEnt, pApex);
 }
 
 
-Activity CFlyingMonster::GetStoppedActivity()
+Activity CFlyingMonster ::GetStoppedActivity()
 {
-	if (pev->movetype != MOVETYPE_FLY)		// UNDONE: Ground idle here, IDLE may be something else
+	if (pev->movetype != MOVETYPE_FLY) // UNDONE: Ground idle here, IDLE may be something else
 		return ACT_IDLE;
 
 	return ACT_HOVER;
 }
 
 
-void CFlyingMonster::Stop()
+void CFlyingMonster ::Stop()
 {
 	Activity stopped = GetStoppedActivity();
 	if (m_IdealActivity != stopped)
@@ -87,7 +87,7 @@ void CFlyingMonster::Stop()
 }
 
 
-float CFlyingMonster::ChangeYaw(int speed)
+float CFlyingMonster ::ChangeYaw(int speed)
 {
 	if (pev->movetype == MOVETYPE_FLY)
 	{
@@ -122,7 +122,7 @@ float CFlyingMonster::ChangeYaw(int speed)
 }
 
 
-void CFlyingMonster::Killed(entvars_t* pevAttacker, int iGib)
+void CFlyingMonster ::Killed(entvars_t* pevAttacker, int iGib)
 {
 	pev->movetype = MOVETYPE_STEP;
 	ClearBits(pev->flags, FL_ONGROUND);
@@ -132,7 +132,7 @@ void CFlyingMonster::Killed(entvars_t* pevAttacker, int iGib)
 }
 
 
-void CFlyingMonster::HandleAnimEvent(MonsterEvent_t* pEvent)
+void CFlyingMonster ::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
 	switch (pEvent->event)
 	{
@@ -152,7 +152,7 @@ void CFlyingMonster::HandleAnimEvent(MonsterEvent_t* pEvent)
 }
 
 
-void CFlyingMonster::Move(float flInterval)
+void CFlyingMonster ::Move(float flInterval)
 {
 	if (pev->movetype == MOVETYPE_FLY)
 		m_flGroundSpeed = m_flightSpeed;
@@ -293,4 +293,3 @@ float CFlyingMonster::FloorZ(const Vector& position)
 
 	return down.z;
 }
-

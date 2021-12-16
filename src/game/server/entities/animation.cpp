@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -24,7 +24,7 @@
 
 extern globalvars_t* gpGlobals;
 
-#pragma warning( disable : 4244 )
+#pragma warning(disable : 4244)
 
 
 
@@ -336,8 +336,10 @@ float SetController(void* pmodel, entvars_t* pev, int iController, float flValue
 
 	int setting = 255 * (flValue - pbonecontroller->start) / (pbonecontroller->end - pbonecontroller->start);
 
-	if (setting < 0) setting = 0;
-	if (setting > 255) setting = 255;
+	if (setting < 0)
+		setting = 0;
+	if (setting > 255)
+		setting = 255;
 	pev->controller[iController] = setting;
 
 	return setting * (1.0 / 255.0) * (pbonecontroller->end - pbonecontroller->start) + pbonecontroller->start;
@@ -377,8 +379,10 @@ float SetBlending(void* pmodel, entvars_t* pev, int iBlender, float flValue)
 
 	int setting = 255 * (flValue - pseqdesc->blendstart[iBlender]) / (pseqdesc->blendend[iBlender] - pseqdesc->blendstart[iBlender]);
 
-	if (setting < 0) setting = 0;
-	if (setting > 255) setting = 255;
+	if (setting < 0)
+		setting = 0;
+	if (setting > 255)
+		setting = 255;
 
 	pev->blending[iBlender] = setting;
 
@@ -405,7 +409,7 @@ int FindTransition(void* pmodel, int iEndingAnim, int iGoalAnim, int* piDir)
 		return iGoalAnim;
 	}
 
-	int	iEndNode;
+	int iEndNode;
 
 	// ALERT( at_console, "from %d to %d: ", pEndNode->iEndNode, pGoalNode->iStartNode );
 

@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -26,7 +26,7 @@
 
 #include "vgui_TeamFortressViewport.h"
 
-#define MAX_MENU_STRING	512
+#define MAX_MENU_STRING 512
 char g_szMenuString[MAX_MENU_STRING];
 char g_szPrelocalisedMenuString[MAX_MENU_STRING];
 
@@ -34,7 +34,7 @@ bool KB_ConvertString(char* in, char** ppout);
 
 DECLARE_MESSAGE(m_Menu, ShowMenu);
 
-bool CHudMenu::Init()
+bool CHudMenu ::Init()
 {
 	gHUD.AddHudElem(this);
 
@@ -45,20 +45,20 @@ bool CHudMenu::Init()
 	return true;
 }
 
-void CHudMenu::InitHUDData()
+void CHudMenu ::InitHUDData()
 {
 	m_fMenuDisplayed = false;
 	m_bitsValidSlots = 0;
 	Reset();
 }
 
-void CHudMenu::Reset()
+void CHudMenu ::Reset()
 {
 	g_szPrelocalisedMenuString[0] = 0;
 	m_fWaitingForMore = false;
 }
 
-bool CHudMenu::VidInit()
+bool CHudMenu ::VidInit()
 {
 	return true;
 }
@@ -127,13 +127,13 @@ static inline const char* ParseEscapeToken(const char* token)
 }
 
 
-bool CHudMenu::Draw(float flTime)
+bool CHudMenu ::Draw(float flTime)
 {
 	// check for if menu is set to disappear
 	if (m_flShutoffTime > 0)
 	{
 		if (m_flShutoffTime <= gHUD.m_flTime)
-		{  // times up, shutoff
+		{ // times up, shutoff
 			m_fMenuDisplayed = false;
 			m_iFlags &= ~HUD_ACTIVE;
 			return true;
@@ -207,7 +207,7 @@ bool CHudMenu::Draw(float flTime)
 }
 
 // selects an item from the menu
-void CHudMenu::SelectMenuItem(int menu_item)
+void CHudMenu ::SelectMenuItem(int menu_item)
 {
 	// if menu_item is in a valid slot,  send a menuselect command to the server
 	if ((menu_item > 0) && (m_bitsValidSlots & (1 << (menu_item - 1))) != 0)
@@ -230,7 +230,7 @@ void CHudMenu::SelectMenuItem(int menu_item)
 //		byte : a boolean, true if there is more string yet to be received before displaying the menu, false if it's the last string
 //		string: menu string to display
 // if this message is never received, then scores will simply be the combined totals of the players.
-bool CHudMenu::MsgFunc_ShowMenu(const char* pszName, int iSize, void* pbuf)
+bool CHudMenu ::MsgFunc_ShowMenu(const char* pszName, int iSize, void* pbuf)
 {
 	char* temp = NULL;
 
@@ -252,13 +252,13 @@ bool CHudMenu::MsgFunc_ShowMenu(const char* pszName, int iSize, void* pbuf)
 			strncpy(g_szPrelocalisedMenuString, READ_STRING(), MAX_MENU_STRING);
 		}
 		else
-		{  // append to the current menu string
+		{ // append to the current menu string
 			strncat(g_szPrelocalisedMenuString, READ_STRING(), MAX_MENU_STRING - strlen(g_szPrelocalisedMenuString));
 		}
-		g_szPrelocalisedMenuString[MAX_MENU_STRING - 1] = 0;  // ensure null termination (strncat/strncpy does not)
+		g_szPrelocalisedMenuString[MAX_MENU_STRING - 1] = 0; // ensure null termination (strncat/strncpy does not)
 
 		if (!NeedMore)
-		{  // we have the whole string, so we can localise it now
+		{ // we have the whole string, so we can localise it now
 			strcpy(g_szMenuString, gHUD.m_TextMessage.BufferedLocaliseTextString(g_szPrelocalisedMenuString));
 
 			// Swap in characters

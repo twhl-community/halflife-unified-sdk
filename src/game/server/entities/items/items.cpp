@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -33,9 +33,9 @@
 class CWorldItem : public CBaseEntity
 {
 public:
-	bool	KeyValue(KeyValueData* pkvd) override;
-	void	Spawn() override;
-	int		m_iType;
+	bool KeyValue(KeyValueData* pkvd) override;
+	void Spawn() override;
+	int m_iType;
 };
 
 LINK_ENTITY_TO_CLASS(world_items, CWorldItem);
@@ -126,7 +126,7 @@ void CItem::ItemTouch(CBaseEntity* pOther)
 		SUB_UseTargets(pOther, USE_TOGGLE, 0);
 		SetTouch(NULL);
 
-		// player grabbed the item. 
+		// player grabbed the item.
 		g_pGameRules->PlayerGotItem(pPlayer, this);
 		if (g_pGameRules->ItemShouldRespawn(this) == GR_ITEM_RESPAWN_YES)
 		{
@@ -148,7 +148,7 @@ CBaseEntity* CItem::Respawn()
 	SetTouch(NULL);
 	pev->effects |= EF_NODRAW;
 
-	UTIL_SetOrigin(pev, g_pGameRules->VecItemRespawnSpot(this));// blip to whereever you should respawn.
+	UTIL_SetOrigin(pev, g_pGameRules->VecItemRespawnSpot(this)); // blip to whereever you should respawn.
 
 	SetThink(&CItem::Materialize);
 	pev->nextthink = g_pGameRules->FlItemRespawnTime(this);
@@ -168,7 +168,7 @@ void CItem::Materialize()
 	SetTouch(&CItem::ItemTouch);
 }
 
-#define SF_SUIT_SHORTLOGON		0x0001
+#define SF_SUIT_SHORTLOGON 0x0001
 
 class CItemSuit : public CItem
 {
@@ -188,9 +188,9 @@ class CItemSuit : public CItem
 			return false;
 
 		if ((pev->spawnflags & SF_SUIT_SHORTLOGON) != 0)
-			EMIT_SOUND_SUIT(pPlayer->edict(), "!HEV_A0");		// short version of suit logon,
+			EMIT_SOUND_SUIT(pPlayer->edict(), "!HEV_A0"); // short version of suit logon,
 		else
-			EMIT_SOUND_SUIT(pPlayer->edict(), "!HEV_AAx");	// long version of suit logon
+			EMIT_SOUND_SUIT(pPlayer->edict(), "!HEV_AAx"); // long version of suit logon
 
 		pPlayer->pev->weapons |= (1 << WEAPON_SUIT);
 		return true;
@@ -323,7 +323,7 @@ class CItemLongJump : public CItem
 
 		if ((pPlayer->pev->weapons & (1 << WEAPON_SUIT)) != 0)
 		{
-			pPlayer->m_fLongJump = true;// player now has longjump module
+			pPlayer->m_fLongJump = true; // player now has longjump module
 
 			g_engfuncs.pfnSetPhysicsKeyValue(pPlayer->edict(), "slj", "1");
 
@@ -331,7 +331,7 @@ class CItemLongJump : public CItem
 			WRITE_STRING(STRING(pev->classname));
 			MESSAGE_END();
 
-			EMIT_SOUND_SUIT(pPlayer->edict(), "!HEV_A1");	// Play the longjump sound UNDONE: Kelly? correct sound?
+			EMIT_SOUND_SUIT(pPlayer->edict(), "!HEV_A1"); // Play the longjump sound UNDONE: Kelly? correct sound?
 			return true;
 		}
 		return false;

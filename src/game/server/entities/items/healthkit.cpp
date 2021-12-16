@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -29,19 +29,18 @@ class CHealthKit : public CItem
 	bool MyTouch(CBasePlayer* pPlayer) override;
 
 	/*
-		int		Save( CSave &save ) override;
-		int		Restore( CRestore &restore ) override;
-
-		static	TYPEDESCRIPTION m_SaveData[];
-	*/
-
+	int		Save( CSave &save ) override; 
+	int		Restore( CRestore &restore ) override;
+	
+	static	TYPEDESCRIPTION m_SaveData[];
+*/
 };
 
 
 LINK_ENTITY_TO_CLASS(item_healthkit, CHealthKit);
 
 /*
-TYPEDESCRIPTION	CHealthKit::m_SaveData[] =
+TYPEDESCRIPTION	CHealthKit::m_SaveData[] = 
 {
 
 };
@@ -50,7 +49,7 @@ TYPEDESCRIPTION	CHealthKit::m_SaveData[] =
 IMPLEMENT_SAVERESTORE( CHealthKit, CItem);
 */
 
-void CHealthKit::Spawn()
+void CHealthKit ::Spawn()
 {
 	Precache();
 	SET_MODEL(ENT(pev), "models/w_medkit.mdl");
@@ -109,26 +108,26 @@ public:
 	void EXPORT Recharge();
 	bool KeyValue(KeyValueData* pkvd) override;
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
-	int	ObjectCaps() override { return (CBaseToggle::ObjectCaps() | FCAP_CONTINUOUS_USE) & ~FCAP_ACROSS_TRANSITION; }
-	bool	Save(CSave& save) override;
-	bool	Restore(CRestore& restore) override;
+	int ObjectCaps() override { return (CBaseToggle ::ObjectCaps() | FCAP_CONTINUOUS_USE) & ~FCAP_ACROSS_TRANSITION; }
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 
-	static	TYPEDESCRIPTION m_SaveData[];
+	static TYPEDESCRIPTION m_SaveData[];
 
 	float m_flNextCharge;
-	int		m_iReactivate; // DeathMatch Delay until reactvated
-	int		m_iJuice;
-	int		m_iOn;			// 0 = off, 1 = startup, 2 = going
-	float   m_flSoundTime;
+	int m_iReactivate; // DeathMatch Delay until reactvated
+	int m_iJuice;
+	int m_iOn; // 0 = off, 1 = startup, 2 = going
+	float m_flSoundTime;
 };
 
 TYPEDESCRIPTION CWallHealth::m_SaveData[] =
-{
-	DEFINE_FIELD(CWallHealth, m_flNextCharge, FIELD_TIME),
-	DEFINE_FIELD(CWallHealth, m_iReactivate, FIELD_INTEGER),
-	DEFINE_FIELD(CWallHealth, m_iJuice, FIELD_INTEGER),
-	DEFINE_FIELD(CWallHealth, m_iOn, FIELD_INTEGER),
-	DEFINE_FIELD(CWallHealth, m_flSoundTime, FIELD_TIME),
+	{
+		DEFINE_FIELD(CWallHealth, m_flNextCharge, FIELD_TIME),
+		DEFINE_FIELD(CWallHealth, m_iReactivate, FIELD_INTEGER),
+		DEFINE_FIELD(CWallHealth, m_iJuice, FIELD_INTEGER),
+		DEFINE_FIELD(CWallHealth, m_iOn, FIELD_INTEGER),
+		DEFINE_FIELD(CWallHealth, m_flSoundTime, FIELD_TIME),
 };
 
 IMPLEMENT_SAVERESTORE(CWallHealth, CBaseEntity);
@@ -162,12 +161,11 @@ void CWallHealth::Spawn()
 	pev->solid = SOLID_BSP;
 	pev->movetype = MOVETYPE_PUSH;
 
-	UTIL_SetOrigin(pev, pev->origin);		// set size and link into world
+	UTIL_SetOrigin(pev, pev->origin); // set size and link into world
 	UTIL_SetSize(pev, pev->mins, pev->maxs);
 	SET_MODEL(ENT(pev), STRING(pev->model));
 	m_iJuice = gSkillData.healthchargerCapacity;
 	pev->frame = 0;
-
 }
 
 void CWallHealth::Precache()

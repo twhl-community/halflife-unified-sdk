@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -27,7 +27,7 @@
 #include "decals.h"
 #include "explode.h"
 
-extern DLL_GLOBAL Vector		g_vecAttackDir;
+extern DLL_GLOBAL Vector g_vecAttackDir;
 
 // =================== FUNC_Breakable ==============================================
 
@@ -35,29 +35,29 @@ extern DLL_GLOBAL Vector		g_vecAttackDir;
 // This is done instead of just a classname in the FGD so we can control which entities can
 // be spawned, and still remain fairly flexible
 const char* CBreakable::pSpawnObjects[] =
-{
-	NULL,				// 0
-	"item_battery",		// 1
-	"item_healthkit",	// 2
-	"weapon_9mmhandgun",// 3
-	"ammo_9mmclip",		// 4
-	"weapon_9mmAR",		// 5
-	"ammo_9mmAR",		// 6
-	"ammo_ARgrenades",	// 7
-	"weapon_shotgun",	// 8
-	"ammo_buckshot",	// 9
-	"weapon_crossbow",	// 10
-	"ammo_crossbow",	// 11
-	"weapon_357",		// 12
-	"ammo_357",			// 13
-	"weapon_rpg",		// 14
-	"ammo_rpgclip",		// 15
-	"ammo_gaussclip",	// 16
-	"weapon_handgrenade",// 17
-	"weapon_tripmine",	// 18
-	"weapon_satchel",	// 19
-	"weapon_snark",		// 20
-	"weapon_hornetgun",	// 21
+	{
+		NULL,				  // 0
+		"item_battery",		  // 1
+		"item_healthkit",	  // 2
+		"weapon_9mmhandgun",  // 3
+		"ammo_9mmclip",		  // 4
+		"weapon_9mmAR",		  // 5
+		"ammo_9mmAR",		  // 6
+		"ammo_ARgrenades",	  // 7
+		"weapon_shotgun",	  // 8
+		"ammo_buckshot",	  // 9
+		"weapon_crossbow",	  // 10
+		"ammo_crossbow",	  // 11
+		"weapon_357",		  // 12
+		"ammo_357",			  // 13
+		"weapon_rpg",		  // 14
+		"ammo_rpgclip",		  // 15
+		"ammo_gaussclip",	  // 16
+		"weapon_handgrenade", // 17
+		"weapon_tripmine",	  // 18
+		"weapon_satchel",	  // 19
+		"weapon_snark",		  // 20
+		"weapon_hornetgun",	  // 21
 };
 
 bool CBreakable::KeyValue(KeyValueData* pkvd)
@@ -134,12 +134,12 @@ bool CBreakable::KeyValue(KeyValueData* pkvd)
 //
 LINK_ENTITY_TO_CLASS(func_breakable, CBreakable);
 TYPEDESCRIPTION CBreakable::m_SaveData[] =
-{
-	DEFINE_FIELD(CBreakable, m_Material, FIELD_INTEGER),
-	DEFINE_FIELD(CBreakable, m_Explosion, FIELD_INTEGER),
+	{
+		DEFINE_FIELD(CBreakable, m_Material, FIELD_INTEGER),
+		DEFINE_FIELD(CBreakable, m_Explosion, FIELD_INTEGER),
 
-	// Don't need to save/restore these because we precache after restore
-	//	DEFINE_FIELD( CBreakable, m_idShard, FIELD_INTEGER ),
+		// Don't need to save/restore these because we precache after restore
+		//	DEFINE_FIELD( CBreakable, m_idShard, FIELD_INTEGER ),
 
 		DEFINE_FIELD(CBreakable, m_angle, FIELD_FLOAT),
 		DEFINE_FIELD(CBreakable, m_iszGibModel, FIELD_STRING),
@@ -171,10 +171,10 @@ void CBreakable::Spawn()
 		pev->playerclass = 1;
 	}
 
-	SET_MODEL(ENT(pev), STRING(pev->model));//set size and link into world.
+	SET_MODEL(ENT(pev), STRING(pev->model)); //set size and link into world.
 
 	SetTouch(&CBreakable::BreakTouch);
-	if (FBitSet(pev->spawnflags, SF_BREAK_TRIGGER_ONLY))		// Only break on trigger
+	if (FBitSet(pev->spawnflags, SF_BREAK_TRIGGER_ONLY)) // Only break on trigger
 		SetTouch(NULL);
 
 	// Flag unbreakable glass as "worldbrush" so it will block ALL tracelines
@@ -184,42 +184,42 @@ void CBreakable::Spawn()
 
 
 const char* CBreakable::pSoundsWood[] =
-{
-	"debris/wood1.wav",
-	"debris/wood2.wav",
-	"debris/wood3.wav",
+	{
+		"debris/wood1.wav",
+		"debris/wood2.wav",
+		"debris/wood3.wav",
 };
 
 const char* CBreakable::pSoundsFlesh[] =
-{
-	"debris/flesh1.wav",
-	"debris/flesh2.wav",
-	"debris/flesh3.wav",
-	"debris/flesh5.wav",
-	"debris/flesh6.wav",
-	"debris/flesh7.wav",
+	{
+		"debris/flesh1.wav",
+		"debris/flesh2.wav",
+		"debris/flesh3.wav",
+		"debris/flesh5.wav",
+		"debris/flesh6.wav",
+		"debris/flesh7.wav",
 };
 
 const char* CBreakable::pSoundsMetal[] =
-{
-	"debris/metal1.wav",
-	"debris/metal2.wav",
-	"debris/metal3.wav",
+	{
+		"debris/metal1.wav",
+		"debris/metal2.wav",
+		"debris/metal3.wav",
 };
 
 const char* CBreakable::pSoundsConcrete[] =
-{
-	"debris/concrete1.wav",
-	"debris/concrete2.wav",
-	"debris/concrete3.wav",
+	{
+		"debris/concrete1.wav",
+		"debris/concrete2.wav",
+		"debris/concrete3.wav",
 };
 
 
 const char* CBreakable::pSoundsGlass[] =
-{
-	"debris/glass1.wav",
-	"debris/glass2.wav",
-	"debris/glass3.wav",
+	{
+		"debris/glass1.wav",
+		"debris/glass2.wav",
+		"debris/glass3.wav",
 };
 
 const char** CBreakable::MaterialSoundList(Materials precacheMaterial, int& soundCount)
@@ -268,7 +268,7 @@ const char** CBreakable::MaterialSoundList(Materials precacheMaterial, int& soun
 void CBreakable::MaterialSoundPrecache(Materials precacheMaterial)
 {
 	const char** pSoundList;
-	int			i, soundCount = 0;
+	int i, soundCount = 0;
 
 	pSoundList = MaterialSoundList(precacheMaterial, soundCount);
 
@@ -281,7 +281,7 @@ void CBreakable::MaterialSoundPrecache(Materials precacheMaterial)
 void CBreakable::MaterialSoundRandom(edict_t* pEdict, Materials soundMaterial, float volume)
 {
 	const char** pSoundList;
-	int			soundCount = 0;
+	int soundCount = 0;
 
 	pSoundList = MaterialSoundList(soundMaterial, soundCount);
 
@@ -449,7 +449,7 @@ void CBreakable::BreakTouch(CBaseEntity* pOther)
 	}
 
 	if (FBitSet(pev->spawnflags, SF_BREAK_TOUCH))
-	{// can be broken when run into 
+	{ // can be broken when run into
 		flDamage = pevToucher->velocity.Length() * 0.01;
 
 		if (flDamage >= pev->health)
@@ -463,7 +463,7 @@ void CBreakable::BreakTouch(CBaseEntity* pOther)
 	}
 
 	if (FBitSet(pev->spawnflags, SF_BREAK_PRESSURE) && pevToucher->absmin.z >= pev->maxs.z - 2)
-	{// can be broken when stood upon
+	{ // can be broken when stood upon
 
 		// play creaking sound here.
 		DamageSound();
@@ -472,14 +472,12 @@ void CBreakable::BreakTouch(CBaseEntity* pOther)
 		SetTouch(NULL);
 
 		if (m_flDelay == 0)
-		{// !!!BUGBUG - why doesn't zero delay work?
+		{ // !!!BUGBUG - why doesn't zero delay work?
 			m_flDelay = 0.1;
 		}
 
 		pev->nextthink = pev->ltime + m_flDelay;
-
 	}
-
 }
 
 
@@ -508,15 +506,18 @@ void CBreakable::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecD
 	{
 		switch (m_Material)
 		{
-		case matComputer:
-		{
+		case matComputer: {
 			UTIL_Sparks(ptr->vecEndPos);
 
-			float flVolume = RANDOM_FLOAT(0.7, 1.0);//random volume range
+			float flVolume = RANDOM_FLOAT(0.7, 1.0); //random volume range
 			switch (RANDOM_LONG(0, 1))
 			{
-			case 0: EMIT_SOUND(ENT(pev), CHAN_VOICE, "buttons/spark5.wav", flVolume, ATTN_NORM);	break;
-			case 1: EMIT_SOUND(ENT(pev), CHAN_VOICE, "buttons/spark6.wav", flVolume, ATTN_NORM);	break;
+			case 0:
+				EMIT_SOUND(ENT(pev), CHAN_VOICE, "buttons/spark5.wav", flVolume, ATTN_NORM);
+				break;
+			case 1:
+				EMIT_SOUND(ENT(pev), CHAN_VOICE, "buttons/spark6.wav", flVolume, ATTN_NORM);
+				break;
 			}
 		}
 		break;
@@ -535,12 +536,12 @@ void CBreakable::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecD
 // exceptions that are breakable-specific
 // bitsDamageType indicates the type of damage sustained ie: DMG_CRUSH
 //=========================================================
-bool CBreakable::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool CBreakable ::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
-	Vector	vecTemp;
+	Vector vecTemp;
 
 	// if Attacker == Inflictor, the attack was a melee or other instant-hit attack.
-	// (that is, no actual entity projectile was involved in the attack so use the shooter's origin). 
+	// (that is, no actual entity projectile was involved in the attack so use the shooter's origin).
 	if (pevAttacker == pevInflictor)
 	{
 		vecTemp = pevInflictor->origin - (pev->absmin + (pev->size * 0.5));
@@ -551,7 +552,7 @@ bool CBreakable::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, flo
 			flDamage = pev->health;
 	}
 	else
-		// an actual missile was involved.
+	// an actual missile was involved.
 	{
 		vecTemp = pevInflictor->origin - (pev->absmin + (pev->size * 0.5));
 	}
@@ -590,8 +591,8 @@ bool CBreakable::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, flo
 
 void CBreakable::Die()
 {
-	Vector vecSpot;// shard origin
-	Vector vecVelocity;// shard velocity
+	Vector vecSpot;		// shard origin
+	Vector vecVelocity; // shard velocity
 	CBaseEntity* pEntity = NULL;
 	char cFlag = 0;
 	int pitch;
@@ -616,9 +617,11 @@ void CBreakable::Die()
 	case matGlass:
 		switch (RANDOM_LONG(0, 1))
 		{
-		case 0:	EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "debris/bustglass1.wav", fvol, ATTN_NORM, 0, pitch);
+		case 0:
+			EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "debris/bustglass1.wav", fvol, ATTN_NORM, 0, pitch);
 			break;
-		case 1:	EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "debris/bustglass2.wav", fvol, ATTN_NORM, 0, pitch);
+		case 1:
+			EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "debris/bustglass2.wav", fvol, ATTN_NORM, 0, pitch);
 			break;
 		}
 		cFlag = BREAK_GLASS;
@@ -627,9 +630,11 @@ void CBreakable::Die()
 	case matWood:
 		switch (RANDOM_LONG(0, 1))
 		{
-		case 0:	EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "debris/bustcrate1.wav", fvol, ATTN_NORM, 0, pitch);
+		case 0:
+			EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "debris/bustcrate1.wav", fvol, ATTN_NORM, 0, pitch);
 			break;
-		case 1:	EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "debris/bustcrate2.wav", fvol, ATTN_NORM, 0, pitch);
+		case 1:
+			EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "debris/bustcrate2.wav", fvol, ATTN_NORM, 0, pitch);
 			break;
 		}
 		cFlag = BREAK_WOOD;
@@ -639,9 +644,11 @@ void CBreakable::Die()
 	case matMetal:
 		switch (RANDOM_LONG(0, 1))
 		{
-		case 0:	EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "debris/bustmetal1.wav", fvol, ATTN_NORM, 0, pitch);
+		case 0:
+			EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "debris/bustmetal1.wav", fvol, ATTN_NORM, 0, pitch);
 			break;
-		case 1:	EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "debris/bustmetal2.wav", fvol, ATTN_NORM, 0, pitch);
+		case 1:
+			EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "debris/bustmetal2.wav", fvol, ATTN_NORM, 0, pitch);
 			break;
 		}
 		cFlag = BREAK_METAL;
@@ -650,9 +657,11 @@ void CBreakable::Die()
 	case matFlesh:
 		switch (RANDOM_LONG(0, 1))
 		{
-		case 0:	EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "debris/bustflesh1.wav", fvol, ATTN_NORM, 0, pitch);
+		case 0:
+			EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "debris/bustflesh1.wav", fvol, ATTN_NORM, 0, pitch);
 			break;
-		case 1:	EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "debris/bustflesh2.wav", fvol, ATTN_NORM, 0, pitch);
+		case 1:
+			EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "debris/bustflesh2.wav", fvol, ATTN_NORM, 0, pitch);
 			break;
 		}
 		cFlag = BREAK_FLESH;
@@ -662,9 +671,11 @@ void CBreakable::Die()
 	case matCinderBlock:
 		switch (RANDOM_LONG(0, 1))
 		{
-		case 0:	EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "debris/bustconcrete1.wav", fvol, ATTN_NORM, 0, pitch);
+		case 0:
+			EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "debris/bustconcrete1.wav", fvol, ATTN_NORM, 0, pitch);
 			break;
-		case 1:	EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "debris/bustconcrete2.wav", fvol, ATTN_NORM, 0, pitch);
+		case 1:
+			EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "debris/bustconcrete2.wav", fvol, ATTN_NORM, 0, pitch);
 			break;
 		}
 		cFlag = BREAK_CONCRETE;
@@ -708,13 +719,13 @@ void CBreakable::Die()
 	WRITE_BYTE(10);
 
 	// Model
-	WRITE_SHORT(m_idShard);	//model id#
+	WRITE_SHORT(m_idShard); //model id#
 
 	// # of shards
-	WRITE_BYTE(0);	// let client decide
+	WRITE_BYTE(0); // let client decide
 
 	// duration
-	WRITE_BYTE(25);// 2.5 seconds
+	WRITE_BYTE(25); // 2.5 seconds
 
 	// flags
 	WRITE_BYTE(cFlag);
@@ -766,13 +777,13 @@ void CBreakable::Die()
 
 
 
-bool CBreakable::IsBreakable()
+bool CBreakable ::IsBreakable()
 {
 	return m_Material != matUnbreakableGlass;
 }
 
 
-int	CBreakable::DamageDecal(int bitsDamageType)
+int CBreakable ::DamageDecal(int bitsDamageType)
 {
 	if (m_Material == matGlass)
 		return DECAL_GLASSBREAK1 + RANDOM_LONG(0, 2);
@@ -787,46 +798,46 @@ int	CBreakable::DamageDecal(int bitsDamageType)
 class CPushable : public CBreakable
 {
 public:
-	void	Spawn() override;
-	void	Precache() override;
-	void	Touch(CBaseEntity* pOther) override;
-	void	Move(CBaseEntity* pMover, bool push);
-	bool	KeyValue(KeyValueData* pkvd) override;
-	void	Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
-	void	EXPORT StopSound();
+	void Spawn() override;
+	void Precache() override;
+	void Touch(CBaseEntity* pOther) override;
+	void Move(CBaseEntity* pMover, bool push);
+	bool KeyValue(KeyValueData* pkvd) override;
+	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+	void EXPORT StopSound();
 	//	virtual void	SetActivator( CBaseEntity *pActivator ) { m_pPusher = pActivator; }
 
-	int	ObjectCaps() override { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION) | FCAP_CONTINUOUS_USE; }
-	bool	Save(CSave& save) override;
-	bool	Restore(CRestore& restore) override;
+	int ObjectCaps() override { return (CBaseEntity ::ObjectCaps() & ~FCAP_ACROSS_TRANSITION) | FCAP_CONTINUOUS_USE; }
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 
 	inline float MaxSpeed() { return m_maxSpeed; }
 
 	// breakables use an overridden takedamage
-	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)  override;
+	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 
-	static	TYPEDESCRIPTION m_SaveData[];
+	static TYPEDESCRIPTION m_SaveData[];
 
 	static const char* m_soundNames[3];
-	int		m_lastSound;	// no need to save/restore, just keeps the same sound from playing twice in a row
-	float	m_maxSpeed;
-	float	m_soundTime;
+	int m_lastSound; // no need to save/restore, just keeps the same sound from playing twice in a row
+	float m_maxSpeed;
+	float m_soundTime;
 };
 
-TYPEDESCRIPTION	CPushable::m_SaveData[] =
-{
-	DEFINE_FIELD(CPushable, m_maxSpeed, FIELD_FLOAT),
-	DEFINE_FIELD(CPushable, m_soundTime, FIELD_TIME),
+TYPEDESCRIPTION CPushable::m_SaveData[] =
+	{
+		DEFINE_FIELD(CPushable, m_maxSpeed, FIELD_FLOAT),
+		DEFINE_FIELD(CPushable, m_soundTime, FIELD_TIME),
 };
 
 IMPLEMENT_SAVERESTORE(CPushable, CBreakable);
 
 LINK_ENTITY_TO_CLASS(func_pushable, CPushable);
 
-const char* CPushable::m_soundNames[3] = {"debris/pushbox1.wav", "debris/pushbox2.wav", "debris/pushbox3.wav"};
+const char* CPushable ::m_soundNames[3] = {"debris/pushbox1.wav", "debris/pushbox2.wav", "debris/pushbox3.wav"};
 
 
-void CPushable::Spawn()
+void CPushable ::Spawn()
 {
 	if ((pev->spawnflags & SF_PUSH_BREAKABLE) != 0)
 		CBreakable::Spawn();
@@ -844,7 +855,7 @@ void CPushable::Spawn()
 	SetBits(pev->flags, FL_FLOAT);
 	pev->friction = 0;
 
-	pev->origin.z += 1;	// Pick up off of the floor
+	pev->origin.z += 1; // Pick up off of the floor
 	UTIL_SetOrigin(pev, pev->origin);
 
 	// Multiply by area of the box's cross-section (assume 1000 units^3 standard volume)
@@ -853,7 +864,7 @@ void CPushable::Spawn()
 }
 
 
-void CPushable::Precache()
+void CPushable ::Precache()
 {
 	for (int i = 0; i < 3; i++)
 		PRECACHE_SOUND(m_soundNames[i]);
@@ -863,7 +874,7 @@ void CPushable::Precache()
 }
 
 
-bool CPushable::KeyValue(KeyValueData* pkvd)
+bool CPushable ::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq(pkvd->szKeyName, "size"))
 	{
@@ -871,7 +882,7 @@ bool CPushable::KeyValue(KeyValueData* pkvd)
 
 		switch (bbox)
 		{
-		case 0:	// Point
+		case 0: // Point
 			UTIL_SetSize(pev, Vector(-8, -8, -8), Vector(8, 8, 8));
 			break;
 
@@ -902,7 +913,7 @@ bool CPushable::KeyValue(KeyValueData* pkvd)
 
 
 // Pull the func_pushable
-void CPushable::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
+void CPushable ::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
 	if (!pActivator || !pActivator->IsPlayer())
 	{
@@ -916,7 +927,7 @@ void CPushable::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useT
 }
 
 
-void CPushable::Touch(CBaseEntity* pOther)
+void CPushable ::Touch(CBaseEntity* pOther)
 {
 	if (FClassnameIs(pOther->pev, "worldspawn"))
 		return;
@@ -925,7 +936,7 @@ void CPushable::Touch(CBaseEntity* pOther)
 }
 
 
-void CPushable::Move(CBaseEntity* pOther, bool push)
+void CPushable ::Move(CBaseEntity* pOther, bool push)
 {
 	entvars_t* pevToucher = pOther->pev;
 	bool playerTouch = false;
@@ -943,7 +954,7 @@ void CPushable::Move(CBaseEntity* pOther, bool push)
 
 	if (pOther->IsPlayer())
 	{
-		if (push && (pevToucher->button & (IN_FORWARD | IN_USE)) == 0)	// Don't push unless the player is pushing forward and NOT use (pull)
+		if (push && (pevToucher->button & (IN_FORWARD | IN_USE)) == 0) // Don't push unless the player is pushing forward and NOT use (pull)
 			return;
 		playerTouch = true;
 	}
@@ -952,7 +963,7 @@ void CPushable::Move(CBaseEntity* pOther, bool push)
 
 	if (playerTouch)
 	{
-		if ((pevToucher->flags & FL_ONGROUND) == 0)	// Don't push away from jumping/falling players unless in water
+		if ((pevToucher->flags & FL_ONGROUND) == 0) // Don't push away from jumping/falling players unless in water
 		{
 			if (pev->waterlevel < 1)
 				return;
@@ -998,8 +1009,8 @@ void CPushable::Move(CBaseEntity* pOther, bool push)
 void CPushable::StopSound()
 {
 	Vector dist = pev->oldorigin - pev->origin;
-	if (dist.Length() <= 0)
-		STOP_SOUND(ENT(pev), CHAN_WEAPON, m_soundNames[m_lastSound]);
+	if ( dist.Length() <= 0 )
+		STOP_SOUND( ENT(pev), CHAN_WEAPON, m_soundNames[m_lastSound] );
 }
 #endif
 
@@ -1010,4 +1021,3 @@ bool CPushable::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, floa
 
 	return true;
 }
-

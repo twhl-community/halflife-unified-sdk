@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1999, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -23,19 +23,21 @@
 #include "Platform.h"
 
 // Macros to hook function calls into the HUD object
-#define HOOK_MESSAGE(x) gEngfuncs.pfnHookUserMsg(#x, __MsgFunc_##x );
+#define HOOK_MESSAGE(x) gEngfuncs.pfnHookUserMsg(#x, __MsgFunc_##x);
 
-#define DECLARE_MESSAGE(y, x) int __MsgFunc_##x(const char *pszName, int iSize, void *pbuf) \
-							{ \
-							return gHUD.y.MsgFunc_##x(pszName, iSize, pbuf ); \
-							}
+#define DECLARE_MESSAGE(y, x)                                     \
+	int __MsgFunc_##x(const char* pszName, int iSize, void* pbuf) \
+	{                                                             \
+		return gHUD.y.MsgFunc_##x(pszName, iSize, pbuf);          \
+	}
 
 
-#define HOOK_COMMAND(x, y) gEngfuncs.pfnAddCommand( x, __CmdFunc_##y );
-#define DECLARE_COMMAND(y, x) void __CmdFunc_##x() \
-							{ \
-								gHUD.y.UserCmd_##x( ); \
-							}
+#define HOOK_COMMAND(x, y) gEngfuncs.pfnAddCommand(x, __CmdFunc_##y);
+#define DECLARE_COMMAND(y, x) \
+	void __CmdFunc_##x()      \
+	{                         \
+		gHUD.y.UserCmd_##x(); \
+	}
 
 inline float CVAR_GET_FLOAT(const char* x) { return gEngfuncs.pfnGetCvarFloat((char*)x); }
 inline const char* CVAR_GET_STRING(const char* x) { return gEngfuncs.pfnGetCvarString((char*)x); }
@@ -69,11 +71,11 @@ inline struct cvar_s* CVAR_CREATE(const char* cv, const char* val, const int fla
 #define BASE_XRES 640.f
 
 // use this to project world coordinates to screen coordinates
-#define XPROJECT(x)	( (1.0f+(x))*ScreenWidth*0.5f )
-#define YPROJECT(y) ( (1.0f-(y))*ScreenHeight*0.5f )
+#define XPROJECT(x) ((1.0f + (x)) * ScreenWidth * 0.5f)
+#define YPROJECT(y) ((1.0f - (y)) * ScreenHeight * 0.5f)
 
-#define XRES(x)					(x  * ((float)ScreenWidth / 640))
-#define YRES(y)					(y  * ((float)ScreenHeight / 480))
+#define XRES(x) (x * ((float)ScreenWidth / 640))
+#define YRES(y) (y * ((float)ScreenHeight / 480))
 
 #define GetScreenInfo (*gEngfuncs.pfnGetScreenInfo)
 #define ServerCmd (*gEngfuncs.pfnServerCmd)
@@ -86,8 +88,8 @@ inline struct cvar_s* CVAR_CREATE(const char* cv, const char* val, const int fla
 inline int SPR_Height(HSPRITE x, int f) { return gEngfuncs.pfnSPR_Height(x, f); }
 inline int SPR_Width(HSPRITE x, int f) { return gEngfuncs.pfnSPR_Width(x, f); }
 
-inline 	client_textmessage_t* TextMessageGet(const char* pName) { return gEngfuncs.pfnTextMessageGet(pName); }
-inline 	int						TextMessageDrawChar(int x, int y, int number, int r, int g, int b)
+inline client_textmessage_t* TextMessageGet(const char* pName) { return gEngfuncs.pfnTextMessageGet(pName); }
+inline int TextMessageDrawChar(int x, int y, int number, int r, int g, int b)
 {
 	return gEngfuncs.pfnDrawCharacter(x, y, number, r, g, b);
 }
@@ -166,15 +168,15 @@ float VectorNormalize(float* v);
 void VectorInverse(float* v);
 
 // disable 'possible loss of data converting float to int' warning message
-#pragma warning( disable: 4244 )
+#pragma warning(disable : 4244)
 // disable 'truncation from 'const double' to 'float' warning message
-#pragma warning( disable: 4305 )
+#pragma warning(disable : 4305)
 
-inline void UnpackRGB(int& r, int& g, int& b, unsigned long ulRGB)\
-{\
-r = (ulRGB & 0xFF0000) >> 16; \
-g = (ulRGB & 0xFF00) >> 8; \
-b = ulRGB & 0xFF; \
+inline void UnpackRGB(int& r, int& g, int& b, unsigned long ulRGB)
+{
+	r = (ulRGB & 0xFF0000) >> 16;
+	g = (ulRGB & 0xFF00) >> 8;
+	b = ulRGB & 0xFF;
 }
 
 HSPRITE LoadSprite(const char* pszName);

@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -57,7 +57,7 @@ void CLaserSpot::Spawn()
 };
 
 //=========================================================
-// Suspend- make the laser sight invisible. 
+// Suspend- make the laser sight invisible.
 //=========================================================
 void CLaserSpot::Suspend(float flSuspendTime)
 {
@@ -94,8 +94,8 @@ CRpgRocket* CRpgRocket::CreateRpgRocket(Vector vecOrigin, Vector vecAngles, CBas
 	pRocket->pev->angles = vecAngles;
 	pRocket->Spawn();
 	pRocket->SetTouch(&CRpgRocket::RocketTouch);
-	pRocket->m_pLauncher = pLauncher;// remember what RPG fired me. 
-	pLauncher->m_cActiveRockets++;// register this missile as active for the launcher
+	pRocket->m_pLauncher = pLauncher; // remember what RPG fired me.
+	pLauncher->m_cActiveRockets++;	  // register this missile as active for the launcher
 	pRocket->pev->owner = pOwner->edict();
 
 	return pRocket;
@@ -103,7 +103,7 @@ CRpgRocket* CRpgRocket::CreateRpgRocket(Vector vecOrigin, Vector vecAngles, CBas
 
 //=========================================================
 //=========================================================
-void CRpgRocket::Spawn()
+void CRpgRocket ::Spawn()
 {
 	Precache();
 	// motor
@@ -133,7 +133,7 @@ void CRpgRocket::Spawn()
 
 //=========================================================
 //=========================================================
-void CRpgRocket::RocketTouch(CBaseEntity* pOther)
+void CRpgRocket ::RocketTouch(CBaseEntity* pOther)
 {
 	if (m_pLauncher)
 	{
@@ -147,7 +147,7 @@ void CRpgRocket::RocketTouch(CBaseEntity* pOther)
 
 //=========================================================
 //=========================================================
-void CRpgRocket::Precache()
+void CRpgRocket ::Precache()
 {
 	PRECACHE_MODEL("models/rpgrocket.mdl");
 	m_iTrail = PRECACHE_MODEL("sprites/smoke.spr");
@@ -155,7 +155,7 @@ void CRpgRocket::Precache()
 }
 
 
-void CRpgRocket::IgniteThink()
+void CRpgRocket ::IgniteThink()
 {
 	// pev->movetype = MOVETYPE_TOSS;
 
@@ -169,16 +169,16 @@ void CRpgRocket::IgniteThink()
 	MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
 
 	WRITE_BYTE(TE_BEAMFOLLOW);
-	WRITE_SHORT(entindex());	// entity
-	WRITE_SHORT(m_iTrail);	// model
-	WRITE_BYTE(40); // life
-	WRITE_BYTE(5);  // width
-	WRITE_BYTE(224);   // r, g, b
-	WRITE_BYTE(224);   // r, g, b
-	WRITE_BYTE(255);   // r, g, b
-	WRITE_BYTE(255);	// brightness
+	WRITE_SHORT(entindex()); // entity
+	WRITE_SHORT(m_iTrail);	 // model
+	WRITE_BYTE(40);			 // life
+	WRITE_BYTE(5);			 // width
+	WRITE_BYTE(224);		 // r, g, b
+	WRITE_BYTE(224);		 // r, g, b
+	WRITE_BYTE(255);		 // r, g, b
+	WRITE_BYTE(255);		 // brightness
 
-	MESSAGE_END();  // move PHS/PVS data sending into here (SEND_ALL, SEND_PVS, SEND_PHS)
+	MESSAGE_END(); // move PHS/PVS data sending into here (SEND_ALL, SEND_PVS, SEND_PHS)
 
 	m_flIgniteTime = gpGlobals->time;
 
@@ -188,7 +188,7 @@ void CRpgRocket::IgniteThink()
 }
 
 
-void CRpgRocket::FollowThink()
+void CRpgRocket ::FollowThink()
 {
 	CBaseEntity* pOther = NULL;
 	Vector vecTarget;
@@ -277,7 +277,7 @@ void CRpg::Reload()
 		return;
 
 	// because the RPG waits to autoreload when no missiles are active while  the LTD is on, the
-	// weapons code is constantly calling into this function, but is often denied because 
+	// weapons code is constantly calling into this function, but is often denied because
 	// a) missiles are in flight, but the LTD is on
 	// or
 	// b) player is totally out of ammo and has nothing to switch to, and should be allowed to
@@ -291,7 +291,7 @@ void CRpg::Reload()
 	if (0 != m_cActiveRockets && m_fSpotActive)
 	{
 		// no reloading when there are active missiles tracking the designator.
-		// ward off future autoreload attempts by setting next attack time into the future for a bit. 
+		// ward off future autoreload attempts by setting next attack time into the future for a bit.
 		return;
 	}
 
@@ -310,7 +310,6 @@ void CRpg::Reload()
 		if (iResult)
 			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10, 15);
 	}
-
 }
 
 void CRpg::Spawn()
@@ -327,7 +326,7 @@ void CRpg::Spawn()
 	if (g_pGameRules->IsMultiplayer())
 #endif
 	{
-		// more default ammo in multiplay. 
+		// more default ammo in multiplay.
 		m_iDefaultAmmo = RPG_DEFAULT_GIVE * 2;
 	}
 	else
@@ -335,7 +334,7 @@ void CRpg::Spawn()
 		m_iDefaultAmmo = RPG_DEFAULT_GIVE;
 	}
 
-	FallInit();// get ready to fall down.
+	FallInit(); // get ready to fall down.
 }
 
 
@@ -410,7 +409,7 @@ bool CRpg::CanHolster()
 
 void CRpg::Holster()
 {
-	m_fInReload = false;// cancel any reload in progress.
+	m_fInReload = false; // cancel any reload in progress.
 
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;
 
@@ -423,7 +422,6 @@ void CRpg::Holster()
 		m_pSpot = NULL;
 	}
 #endif
-
 }
 
 
@@ -444,7 +442,7 @@ void CRpg::PrimaryAttack()
 
 		CRpgRocket* pRocket = CRpgRocket::CreateRpgRocket(vecSrc, m_pPlayer->pev->v_angle, m_pPlayer, this);
 
-		UTIL_MakeVectors(m_pPlayer->pev->v_angle);// RpgRocket::Create stomps on globals, so remake.
+		UTIL_MakeVectors(m_pPlayer->pev->v_angle); // RpgRocket::Create stomps on globals, so remake.
 		pRocket->pev->velocity = pRocket->pev->velocity + gpGlobals->v_forward * DotProduct(m_pPlayer->pev->velocity, gpGlobals->v_forward);
 #endif
 
@@ -452,7 +450,7 @@ void CRpg::PrimaryAttack()
 		// Ken signed up for this as a global change (sjb)
 
 		int flags;
-#if defined( CLIENT_WEAPONS )
+#if defined(CLIENT_WEAPONS)
 		flags = FEV_NOTHOST;
 #else
 		flags = 0;
@@ -551,7 +549,6 @@ void CRpg::UpdateSpot()
 		UTIL_SetOrigin(m_pSpot->pev, tr.vecEndPos);
 	}
 #endif
-
 }
 
 

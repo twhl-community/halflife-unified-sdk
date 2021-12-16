@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -32,7 +32,7 @@ class CCycler : public CBaseMonster
 {
 public:
 	void GenericCyclerSpawn(const char* szModel, Vector vecMin, Vector vecMax);
-	int	ObjectCaps() override { return (CBaseEntity::ObjectCaps() | FCAP_IMPULSE_USE); }
+	int ObjectCaps() override { return (CBaseEntity ::ObjectCaps() | FCAP_IMPULSE_USE); }
 	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 	void Spawn() override;
 	void Think() override;
@@ -42,16 +42,16 @@ public:
 	// Don't treat as a live target
 	bool IsAlive() override { return false; }
 
-	bool	Save(CSave& save) override;
-	bool	Restore(CRestore& restore) override;
-	static	TYPEDESCRIPTION m_SaveData[];
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
+	static TYPEDESCRIPTION m_SaveData[];
 
 	bool m_animate;
 };
 
-TYPEDESCRIPTION	CCycler::m_SaveData[] =
-{
-	DEFINE_FIELD(CCycler, m_animate, FIELD_BOOLEAN),
+TYPEDESCRIPTION CCycler::m_SaveData[] =
+	{
+		DEFINE_FIELD(CCycler, m_animate, FIELD_BOOLEAN),
 };
 
 IMPLEMENT_SAVERESTORE(CCycler, CBaseMonster);
@@ -79,7 +79,7 @@ public:
 	void Spawn() override;
 };
 LINK_ENTITY_TO_CLASS(cycler_prdroid, CCyclerProbe);
-void CCyclerProbe::Spawn()
+void CCyclerProbe ::Spawn()
 {
 	pev->origin = pev->origin + Vector(0, 0, 16);
 	GenericCyclerSpawn("models/prdroid.mdl", Vector(-16, -16, -16), Vector(16, 16, 16));
@@ -89,7 +89,7 @@ void CCyclerProbe::Spawn()
 
 // Cycler member functions
 
-void CCycler::GenericCyclerSpawn(const char* szModel, Vector vecMin, Vector vecMax)
+void CCycler ::GenericCyclerSpawn(const char* szModel, Vector vecMin, Vector vecMax)
 {
 	if (!szModel || '\0' == *szModel)
 	{
@@ -108,14 +108,14 @@ void CCycler::GenericCyclerSpawn(const char* szModel, Vector vecMin, Vector vecM
 }
 
 
-void CCycler::Spawn()
+void CCycler ::Spawn()
 {
 	InitBoneControllers();
 	pev->solid = SOLID_SLIDEBOX;
 	pev->movetype = MOVETYPE_NONE;
 	pev->takedamage = DAMAGE_YES;
 	pev->effects = 0;
-	pev->health = 80000;// no cycler should die
+	pev->health = 80000; // no cycler should die
 	pev->yaw_speed = 5;
 	pev->ideal_yaw = pev->angles.y;
 	ChangeYaw(360);
@@ -144,7 +144,7 @@ void CCycler::Spawn()
 //
 // cycler think
 //
-void CCycler::Think()
+void CCycler ::Think()
 {
 	pev->nextthink = gpGlobals->time + 0.1;
 
@@ -162,14 +162,14 @@ void CCycler::Think()
 		m_flLastEventCheck = gpGlobals->time;
 		pev->frame = 0;
 		if (!m_animate)
-			pev->framerate = 0.0;	// FIX: don't reset framerate
+			pev->framerate = 0.0; // FIX: don't reset framerate
 	}
 }
 
 //
 // CyclerUse - starts a rotation trend
 //
-void CCycler::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
+void CCycler ::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
 	m_animate = !m_animate;
 	if (m_animate)
@@ -182,7 +182,7 @@ void CCycler::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useTyp
 // CyclerPain , changes sequences when shot
 //
 //void CCycler :: Pain( float flDamage )
-bool CCycler::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool CCycler ::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
 	if (m_animate)
 	{
@@ -214,27 +214,27 @@ public:
 	void Spawn() override;
 	void Think() override;
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
-	int	ObjectCaps() override { return (CBaseEntity::ObjectCaps() | FCAP_IMPULSE_USE); }
-	bool	TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
-	void	Animate(float frames);
+	int ObjectCaps() override { return (CBaseEntity ::ObjectCaps() | FCAP_IMPULSE_USE); }
+	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	void Animate(float frames);
 
-	bool	Save(CSave& save) override;
-	bool	Restore(CRestore& restore) override;
-	static	TYPEDESCRIPTION m_SaveData[];
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
+	static TYPEDESCRIPTION m_SaveData[];
 
-	inline bool		ShouldAnimate() { return m_animate && m_maxFrame > 1.0; }
+	inline bool ShouldAnimate() { return m_animate && m_maxFrame > 1.0; }
 	bool m_animate;
-	float		m_lastTime;
-	float		m_maxFrame;
+	float m_lastTime;
+	float m_maxFrame;
 };
 
 LINK_ENTITY_TO_CLASS(cycler_sprite, CCyclerSprite);
 
-TYPEDESCRIPTION	CCyclerSprite::m_SaveData[] =
-{
-	DEFINE_FIELD(CCyclerSprite, m_animate, FIELD_BOOLEAN),
-	DEFINE_FIELD(CCyclerSprite, m_lastTime, FIELD_TIME),
-	DEFINE_FIELD(CCyclerSprite, m_maxFrame, FIELD_FLOAT),
+TYPEDESCRIPTION CCyclerSprite::m_SaveData[] =
+	{
+		DEFINE_FIELD(CCyclerSprite, m_animate, FIELD_BOOLEAN),
+		DEFINE_FIELD(CCyclerSprite, m_lastTime, FIELD_TIME),
+		DEFINE_FIELD(CCyclerSprite, m_maxFrame, FIELD_FLOAT),
 };
 
 IMPLEMENT_SAVERESTORE(CCyclerSprite, CBaseEntity);
@@ -276,7 +276,7 @@ void CCyclerSprite::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE 
 }
 
 
-bool	CCyclerSprite::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool CCyclerSprite::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
 	if (m_maxFrame > 1.0)
 	{
@@ -383,9 +383,9 @@ void CWeaponCycler::SecondaryAttack()
 // Flaming Wreakage
 class CWreckage : public CBaseMonster
 {
-	bool	Save(CSave& save) override;
-	bool	Restore(CRestore& restore) override;
-	static	TYPEDESCRIPTION m_SaveData[];
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
+	static TYPEDESCRIPTION m_SaveData[];
 
 	void Spawn() override;
 	void Precache() override;
@@ -393,9 +393,9 @@ class CWreckage : public CBaseMonster
 
 	int m_flStartTime;
 };
-TYPEDESCRIPTION	CWreckage::m_SaveData[] =
-{
-	DEFINE_FIELD(CWreckage, m_flStartTime, FIELD_TIME),
+TYPEDESCRIPTION CWreckage::m_SaveData[] =
+	{
+		DEFINE_FIELD(CWreckage, m_flStartTime, FIELD_TIME),
 };
 IMPLEMENT_SAVERESTORE(CWreckage, CBaseMonster);
 
@@ -459,6 +459,6 @@ void CWreckage::Think()
 	WRITE_COORD(VecSrc.z);
 	WRITE_SHORT(g_sModelIndexSmoke);
 	WRITE_BYTE(RANDOM_LONG(0, 49) + 50); // scale * 10
-	WRITE_BYTE(RANDOM_LONG(0, 3) + 8); // framerate
+	WRITE_BYTE(RANDOM_LONG(0, 3) + 8);	 // framerate
 	MESSAGE_END();
 }

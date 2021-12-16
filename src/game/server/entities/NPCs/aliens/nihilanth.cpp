@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
 *	All Rights Reserved.
 *
 *   This source code contains proprietary and confidential information of
@@ -21,20 +21,20 @@
 #include "nodes.h"
 #include "effects.h"
 
-#define N_SCALE		15
-#define N_SPHERES	20
+#define N_SCALE 15
+#define N_SPHERES 20
 
 class CNihilanth : public CBaseMonster
 {
 public:
-	bool	Save(CSave& save) override;
-	bool	Restore(CRestore& restore) override;
-	static	TYPEDESCRIPTION m_SaveData[];
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
+	static TYPEDESCRIPTION m_SaveData[];
 
 	void Spawn() override;
 	void Precache() override;
-	int  Classify() override { return CLASS_ALIEN_MILITARY; }
-	int  BloodColor() override { return BLOOD_COLOR_YELLOW; }
+	int Classify() override { return CLASS_ALIEN_MILITARY; }
+	int BloodColor() override { return BLOOD_COLOR_YELLOW; }
 	void Killed(entvars_t* pevAttacker, int iGib) override;
 	void GibMonster() override;
 
@@ -72,13 +72,13 @@ public:
 	void PainSound() override;
 	void DeathSound() override;
 
-	static const char* pAttackSounds[];	// vocalization: play sometimes when he launches an attack
-	static const char* pBallSounds[];	// the sound of the lightening ball launch
-	static const char* pShootSounds[];	// grunting vocalization: play sometimes when he launches an attack
-	static const char* pRechargeSounds[];	// vocalization: play when he recharges
-	static const char* pLaughSounds[];	// vocalization: play sometimes when hit and still has lots of health
-	static const char* pPainSounds[];	// vocalization: play sometimes when hit and has much less health and no more chargers
-	static const char* pDeathSounds[];	// vocalization: play as he dies
+	static const char* pAttackSounds[];	  // vocalization: play sometimes when he launches an attack
+	static const char* pBallSounds[];	  // the sound of the lightening ball launch
+	static const char* pShootSounds[];	  // grunting vocalization: play sometimes when he launches an attack
+	static const char* pRechargeSounds[]; // vocalization: play when he recharges
+	static const char* pLaughSounds[];	  // vocalization: play sometimes when hit and still has lots of health
+	static const char* pPainSounds[];	  // vocalization: play sometimes when hit and has much less health and no more chargers
+	static const char* pDeathSounds[];	  // vocalization: play as he dies
 
 	// x_teleattack1.wav	the looping sound of the teleport attack ball.
 
@@ -95,8 +95,8 @@ public:
 	Vector m_vecDesired;
 	Vector m_posDesired;
 
-	float  m_flMinZ;
-	float  m_flMaxZ;
+	float m_flMinZ;
+	float m_flMaxZ;
 
 	Vector m_vecGoal;
 
@@ -111,7 +111,7 @@ public:
 	EHANDLE m_hRecharger;
 
 	EHANDLE m_hSphere[N_SPHERES];
-	int	m_iActiveSpheres;
+	int m_iActiveSpheres;
 
 	float m_flAdj;
 
@@ -132,38 +132,38 @@ public:
 
 LINK_ENTITY_TO_CLASS(monster_nihilanth, CNihilanth);
 
-TYPEDESCRIPTION	CNihilanth::m_SaveData[] =
-{
-	DEFINE_FIELD(CNihilanth, m_flForce, FIELD_FLOAT),
-	DEFINE_FIELD(CNihilanth, m_flNextPainSound, FIELD_TIME),
-	DEFINE_FIELD(CNihilanth, m_velocity, FIELD_VECTOR),
-	DEFINE_FIELD(CNihilanth, m_avelocity, FIELD_VECTOR),
-	DEFINE_FIELD(CNihilanth, m_vecTarget, FIELD_VECTOR),
-	DEFINE_FIELD(CNihilanth, m_posTarget, FIELD_POSITION_VECTOR),
-	DEFINE_FIELD(CNihilanth, m_vecDesired, FIELD_VECTOR),
-	DEFINE_FIELD(CNihilanth, m_posDesired, FIELD_POSITION_VECTOR),
-	DEFINE_FIELD(CNihilanth, m_flMinZ, FIELD_FLOAT),
-	DEFINE_FIELD(CNihilanth, m_flMaxZ, FIELD_FLOAT),
-	DEFINE_FIELD(CNihilanth, m_vecGoal, FIELD_VECTOR),
-	DEFINE_FIELD(CNihilanth, m_flLastSeen, FIELD_TIME),
-	DEFINE_FIELD(CNihilanth, m_flPrevSeen, FIELD_TIME),
-	DEFINE_FIELD(CNihilanth, m_irritation, FIELD_INTEGER),
-	DEFINE_FIELD(CNihilanth, m_iLevel, FIELD_INTEGER),
-	DEFINE_FIELD(CNihilanth, m_iTeleport, FIELD_INTEGER),
-	DEFINE_FIELD(CNihilanth, m_hRecharger, FIELD_EHANDLE),
-	DEFINE_ARRAY(CNihilanth, m_hSphere, FIELD_EHANDLE, N_SPHERES),
-	DEFINE_FIELD(CNihilanth, m_iActiveSpheres, FIELD_INTEGER),
-	DEFINE_FIELD(CNihilanth, m_flAdj, FIELD_FLOAT),
-	DEFINE_FIELD(CNihilanth, m_pBall, FIELD_CLASSPTR),
-	DEFINE_ARRAY(CNihilanth, m_szRechargerTarget, FIELD_CHARACTER, 64),
-	DEFINE_ARRAY(CNihilanth, m_szDrawUse, FIELD_CHARACTER, 64),
-	DEFINE_ARRAY(CNihilanth, m_szTeleportUse, FIELD_CHARACTER, 64),
-	DEFINE_ARRAY(CNihilanth, m_szTeleportTouch, FIELD_CHARACTER, 64),
-	DEFINE_ARRAY(CNihilanth, m_szDeadUse, FIELD_CHARACTER, 64),
-	DEFINE_ARRAY(CNihilanth, m_szDeadTouch, FIELD_CHARACTER, 64),
-	DEFINE_FIELD(CNihilanth, m_flShootEnd, FIELD_TIME),
-	DEFINE_FIELD(CNihilanth, m_flShootTime, FIELD_TIME),
-	DEFINE_ARRAY(CNihilanth, m_hFriend, FIELD_EHANDLE, 3),
+TYPEDESCRIPTION CNihilanth::m_SaveData[] =
+	{
+		DEFINE_FIELD(CNihilanth, m_flForce, FIELD_FLOAT),
+		DEFINE_FIELD(CNihilanth, m_flNextPainSound, FIELD_TIME),
+		DEFINE_FIELD(CNihilanth, m_velocity, FIELD_VECTOR),
+		DEFINE_FIELD(CNihilanth, m_avelocity, FIELD_VECTOR),
+		DEFINE_FIELD(CNihilanth, m_vecTarget, FIELD_VECTOR),
+		DEFINE_FIELD(CNihilanth, m_posTarget, FIELD_POSITION_VECTOR),
+		DEFINE_FIELD(CNihilanth, m_vecDesired, FIELD_VECTOR),
+		DEFINE_FIELD(CNihilanth, m_posDesired, FIELD_POSITION_VECTOR),
+		DEFINE_FIELD(CNihilanth, m_flMinZ, FIELD_FLOAT),
+		DEFINE_FIELD(CNihilanth, m_flMaxZ, FIELD_FLOAT),
+		DEFINE_FIELD(CNihilanth, m_vecGoal, FIELD_VECTOR),
+		DEFINE_FIELD(CNihilanth, m_flLastSeen, FIELD_TIME),
+		DEFINE_FIELD(CNihilanth, m_flPrevSeen, FIELD_TIME),
+		DEFINE_FIELD(CNihilanth, m_irritation, FIELD_INTEGER),
+		DEFINE_FIELD(CNihilanth, m_iLevel, FIELD_INTEGER),
+		DEFINE_FIELD(CNihilanth, m_iTeleport, FIELD_INTEGER),
+		DEFINE_FIELD(CNihilanth, m_hRecharger, FIELD_EHANDLE),
+		DEFINE_ARRAY(CNihilanth, m_hSphere, FIELD_EHANDLE, N_SPHERES),
+		DEFINE_FIELD(CNihilanth, m_iActiveSpheres, FIELD_INTEGER),
+		DEFINE_FIELD(CNihilanth, m_flAdj, FIELD_FLOAT),
+		DEFINE_FIELD(CNihilanth, m_pBall, FIELD_CLASSPTR),
+		DEFINE_ARRAY(CNihilanth, m_szRechargerTarget, FIELD_CHARACTER, 64),
+		DEFINE_ARRAY(CNihilanth, m_szDrawUse, FIELD_CHARACTER, 64),
+		DEFINE_ARRAY(CNihilanth, m_szTeleportUse, FIELD_CHARACTER, 64),
+		DEFINE_ARRAY(CNihilanth, m_szTeleportTouch, FIELD_CHARACTER, 64),
+		DEFINE_ARRAY(CNihilanth, m_szDeadUse, FIELD_CHARACTER, 64),
+		DEFINE_ARRAY(CNihilanth, m_szDeadTouch, FIELD_CHARACTER, 64),
+		DEFINE_FIELD(CNihilanth, m_flShootEnd, FIELD_TIME),
+		DEFINE_FIELD(CNihilanth, m_flShootTime, FIELD_TIME),
+		DEFINE_ARRAY(CNihilanth, m_hFriend, FIELD_EHANDLE, 3),
 };
 
 IMPLEMENT_SAVERESTORE(CNihilanth, CBaseMonster);
@@ -171,9 +171,9 @@ IMPLEMENT_SAVERESTORE(CNihilanth, CBaseMonster);
 class CNihilanthHVR : public CBaseMonster
 {
 public:
-	bool	Save(CSave& save) override;
-	bool	Restore(CRestore& restore) override;
-	static	TYPEDESCRIPTION m_SaveData[];
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
+	static TYPEDESCRIPTION m_SaveData[];
 
 	void Spawn() override;
 	void Precache() override;
@@ -216,13 +216,13 @@ public:
 LINK_ENTITY_TO_CLASS(nihilanth_energy_ball, CNihilanthHVR);
 
 
-TYPEDESCRIPTION	CNihilanthHVR::m_SaveData[] =
-{
-	DEFINE_FIELD(CNihilanthHVR, m_flIdealVel, FIELD_FLOAT),
-	DEFINE_FIELD(CNihilanthHVR, m_vecIdeal, FIELD_VECTOR),
-	DEFINE_FIELD(CNihilanthHVR, m_pNihilanth, FIELD_CLASSPTR),
-	DEFINE_FIELD(CNihilanthHVR, m_hTouch, FIELD_EHANDLE),
-	DEFINE_FIELD(CNihilanthHVR, m_nFrames, FIELD_INTEGER),
+TYPEDESCRIPTION CNihilanthHVR::m_SaveData[] =
+	{
+		DEFINE_FIELD(CNihilanthHVR, m_flIdealVel, FIELD_FLOAT),
+		DEFINE_FIELD(CNihilanthHVR, m_vecIdeal, FIELD_VECTOR),
+		DEFINE_FIELD(CNihilanthHVR, m_pNihilanth, FIELD_CLASSPTR),
+		DEFINE_FIELD(CNihilanthHVR, m_hTouch, FIELD_EHANDLE),
+		DEFINE_FIELD(CNihilanthHVR, m_nFrames, FIELD_INTEGER),
 };
 
 
@@ -234,48 +234,48 @@ IMPLEMENT_SAVERESTORE(CNihilanthHVR, CBaseMonster);
 //=========================================================
 
 const char* CNihilanth::pAttackSounds[] =
-{
-	"X/x_attack1.wav",
-	"X/x_attack2.wav",
-	"X/x_attack3.wav",
+	{
+		"X/x_attack1.wav",
+		"X/x_attack2.wav",
+		"X/x_attack3.wav",
 };
 
 const char* CNihilanth::pBallSounds[] =
-{
-	"X/x_ballattack1.wav",
+	{
+		"X/x_ballattack1.wav",
 };
 
 const char* CNihilanth::pShootSounds[] =
-{
-	"X/x_shoot1.wav",
+	{
+		"X/x_shoot1.wav",
 };
 
 const char* CNihilanth::pRechargeSounds[] =
-{
-	"X/x_recharge1.wav",
-	"X/x_recharge2.wav",
-	"X/x_recharge3.wav",
+	{
+		"X/x_recharge1.wav",
+		"X/x_recharge2.wav",
+		"X/x_recharge3.wav",
 };
 
 const char* CNihilanth::pLaughSounds[] =
-{
-	"X/x_laugh1.wav",
-	"X/x_laugh2.wav",
+	{
+		"X/x_laugh1.wav",
+		"X/x_laugh2.wav",
 };
 
 const char* CNihilanth::pPainSounds[] =
-{
-	"X/x_pain1.wav",
-	"X/x_pain2.wav",
+	{
+		"X/x_pain1.wav",
+		"X/x_pain2.wav",
 };
 
 const char* CNihilanth::pDeathSounds[] =
-{
-	"X/x_die1.wav",
+	{
+		"X/x_die1.wav",
 };
 
 
-void CNihilanth::Spawn()
+void CNihilanth ::Spawn()
 {
 	Precache();
 	// motor
@@ -308,12 +308,18 @@ void CNihilanth::Spawn()
 	m_iLevel = 1;
 	m_iTeleport = 1;
 
-	if (m_szRechargerTarget[0] == '\0')	strcpy(m_szRechargerTarget, "n_recharger");
-	if (m_szDrawUse[0] == '\0')			strcpy(m_szDrawUse, "n_draw");
-	if (m_szTeleportUse[0] == '\0')		strcpy(m_szTeleportUse, "n_leaving");
-	if (m_szTeleportTouch[0] == '\0')	strcpy(m_szTeleportTouch, "n_teleport");
-	if (m_szDeadUse[0] == '\0')			strcpy(m_szDeadUse, "n_dead");
-	if (m_szDeadTouch[0] == '\0')		strcpy(m_szDeadTouch, "n_ending");
+	if (m_szRechargerTarget[0] == '\0')
+		strcpy(m_szRechargerTarget, "n_recharger");
+	if (m_szDrawUse[0] == '\0')
+		strcpy(m_szDrawUse, "n_draw");
+	if (m_szTeleportUse[0] == '\0')
+		strcpy(m_szTeleportUse, "n_leaving");
+	if (m_szTeleportTouch[0] == '\0')
+		strcpy(m_szTeleportTouch, "n_teleport");
+	if (m_szDeadUse[0] == '\0')
+		strcpy(m_szDeadUse, "n_dead");
+	if (m_szDeadTouch[0] == '\0')
+		strcpy(m_szDeadTouch, "n_ending");
 
 	// near death
 	/*
@@ -345,7 +351,7 @@ void CNihilanth::Precache()
 
 
 
-void CNihilanth::PainSound()
+void CNihilanth ::PainSound()
 {
 	if (m_flNextPainSound > gpGlobals->time)
 		return;
@@ -362,7 +368,7 @@ void CNihilanth::PainSound()
 	}
 }
 
-void CNihilanth::DeathSound()
+void CNihilanth ::DeathSound()
 {
 	EMIT_SOUND(edict(), CHAN_VOICE, RANDOM_SOUND_ARRAY(pDeathSounds), 1.0, 0.1);
 }
@@ -415,12 +421,12 @@ void CNihilanth::StartupThink()
 }
 
 
-void CNihilanth::Killed(entvars_t* pevAttacker, int iGib)
+void CNihilanth ::Killed(entvars_t* pevAttacker, int iGib)
 {
 	CBaseMonster::Killed(pevAttacker, iGib);
 }
 
-void CNihilanth::DyingThink()
+void CNihilanth ::DyingThink()
 {
 	pev->nextthink = gpGlobals->time + 0.1;
 	DispatchAnimEvents();
@@ -475,10 +481,10 @@ void CNihilanth::DyingThink()
 	UTIL_MakeAimVectors(pev->angles);
 	int iAttachment = RANDOM_LONG(1, 4);
 
-	do {
+	do
+	{
 		vecDir = Vector(RANDOM_FLOAT(-1, 1), RANDOM_FLOAT(-1, 1), RANDOM_FLOAT(-1, 1));
-	}
-	while (DotProduct(vecDir, vecDir) > 1.0);
+	} while (DotProduct(vecDir, vecDir) > 1.0);
 
 	switch (RANDOM_LONG(1, 4))
 	{
@@ -517,16 +523,16 @@ void CNihilanth::DyingThink()
 	WRITE_COORD(tr.vecEndPos.y);
 	WRITE_COORD(tr.vecEndPos.z);
 	WRITE_SHORT(g_sModelIndexLaser);
-	WRITE_BYTE(0); // frame start
-	WRITE_BYTE(10); // framerate
-	WRITE_BYTE(5); // life
-	WRITE_BYTE(100);  // width
-	WRITE_BYTE(120);   // noise
-	WRITE_BYTE(64);   // r, g, b
-	WRITE_BYTE(128);   // r, g, b
-	WRITE_BYTE(255);   // r, g, b
-	WRITE_BYTE(255);	// brightness
-	WRITE_BYTE(10);		// speed
+	WRITE_BYTE(0);	 // frame start
+	WRITE_BYTE(10);	 // framerate
+	WRITE_BYTE(5);	 // life
+	WRITE_BYTE(100); // width
+	WRITE_BYTE(120); // noise
+	WRITE_BYTE(64);	 // r, g, b
+	WRITE_BYTE(128); // r, g, b
+	WRITE_BYTE(255); // r, g, b
+	WRITE_BYTE(255); // brightness
+	WRITE_BYTE(10);	 // speed
 	MESSAGE_END();
 
 	GetAttachment(0, vecSrc, vecAngles);
@@ -551,14 +557,14 @@ void CNihilanth::CrashTouch(CBaseEntity* pOther)
 
 
 
-void CNihilanth::GibMonster()
+void CNihilanth ::GibMonster()
 {
-	// EMIT_SOUND_DYN(edict(), CHAN_VOICE, "common/bodysplat.wav", 0.75, ATTN_NORM, 0, 200);		
+	// EMIT_SOUND_DYN(edict(), CHAN_VOICE, "common/bodysplat.wav", 0.75, ATTN_NORM, 0, 200);
 }
 
 
 
-void CNihilanth::FloatSequence()
+void CNihilanth ::FloatSequence()
 {
 	if (m_irritation >= 2)
 	{
@@ -587,7 +593,7 @@ void CNihilanth::FloatSequence()
 }
 
 
-void CNihilanth::ShootBalls()
+void CNihilanth ::ShootBalls()
 {
 	if (m_flShootEnd > gpGlobals->time)
 	{
@@ -624,7 +630,7 @@ void CNihilanth::ShootBalls()
 }
 
 
-void CNihilanth::MakeFriend(Vector vecStart)
+void CNihilanth ::MakeFriend(Vector vecStart)
 {
 	int i;
 
@@ -674,7 +680,7 @@ void CNihilanth::MakeFriend(Vector vecStart)
 }
 
 
-void CNihilanth::NextActivity()
+void CNihilanth ::NextActivity()
 {
 	UTIL_MakeAimVectors(pev->angles);
 
@@ -697,16 +703,16 @@ void CNihilanth::NextActivity()
 		{
 			MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
 			WRITE_BYTE(TE_ELIGHT);
-			WRITE_SHORT(entindex() + 0x1000);		// entity, attachment
-			WRITE_COORD(pev->origin.x);		// origin
+			WRITE_SHORT(entindex() + 0x1000); // entity, attachment
+			WRITE_COORD(pev->origin.x);		  // origin
 			WRITE_COORD(pev->origin.y);
 			WRITE_COORD(pev->origin.z);
-			WRITE_COORD(256);	// radius
-			WRITE_BYTE(255);	// R
-			WRITE_BYTE(192);	// G
-			WRITE_BYTE(64);	// B
-			WRITE_BYTE(200);	// life * 10
-			WRITE_COORD(0); // decay
+			WRITE_COORD(256); // radius
+			WRITE_BYTE(255);  // R
+			WRITE_BYTE(192);  // G
+			WRITE_BYTE(64);	  // B
+			WRITE_BYTE(200);  // life * 10
+			WRITE_COORD(0);	  // decay
 			MESSAGE_END();
 		}
 	}
@@ -835,7 +841,7 @@ void CNihilanth::NextActivity()
 	FloatSequence();
 }
 
-void CNihilanth::HuntThink()
+void CNihilanth ::HuntThink()
 {
 	pev->nextthink = gpGlobals->time + 0.1;
 	DispatchAnimEvents();
@@ -869,7 +875,7 @@ void CNihilanth::HuntThink()
 		pev->framerate = 2.0 - 1.0 * (pev->health / gSkillData.nihilanthHealth);
 	}
 
-	// look for current enemy	
+	// look for current enemy
 	if (m_hEnemy != NULL && m_hRecharger == NULL)
 	{
 		if (FVisible(m_hEnemy))
@@ -901,7 +907,7 @@ void CNihilanth::HuntThink()
 
 
 
-void CNihilanth::Flight()
+void CNihilanth ::Flight()
 {
 	// estimate where I'll be facing in one seconds
 	UTIL_MakeAimVectors(pev->angles + m_avelocity);
@@ -965,11 +971,11 @@ void CNihilanth::Flight()
 	UTIL_SetOrigin(pev, pev->origin + m_velocity * 0.1);
 	pev->angles = pev->angles + m_avelocity * 0.1;
 
-	// ALERT( at_console, "%5.0f %5.0f : %4.0f : %3.0f : %2.0f\n", m_posDesired.z, pev->origin.z, m_velocity.z, m_avelocity.y, m_flForce ); 
+	// ALERT( at_console, "%5.0f %5.0f : %4.0f : %3.0f : %2.0f\n", m_posDesired.z, pev->origin.z, m_velocity.z, m_avelocity.y, m_flForce );
 }
 
 
-bool CNihilanth::AbsorbSphere()
+bool CNihilanth ::AbsorbSphere()
 {
 	for (int i = 0; i < N_SPHERES; i++)
 	{
@@ -986,7 +992,7 @@ bool CNihilanth::AbsorbSphere()
 }
 
 
-bool CNihilanth::EmitSphere()
+bool CNihilanth ::EmitSphere()
 {
 	m_iActiveSpheres = 0;
 	int empty = 0;
@@ -1016,7 +1022,7 @@ bool CNihilanth::EmitSphere()
 }
 
 
-void CNihilanth::TargetSphere(USE_TYPE useType, float value)
+void CNihilanth ::TargetSphere(USE_TYPE useType, float value)
 {
 	CBaseMonster* pSphere;
 	int i;
@@ -1043,13 +1049,13 @@ void CNihilanth::TargetSphere(USE_TYPE useType, float value)
 
 
 
-void CNihilanth::HandleAnimEvent(MonsterEvent_t* pEvent)
+void CNihilanth ::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
 	switch (pEvent->event)
 	{
-	case 1:	// shoot 
+	case 1: // shoot
 		break;
-	case 2:	// zen
+	case 2: // zen
 		if (m_hEnemy != NULL)
 		{
 			if (RANDOM_LONG(0, 4) == 0)
@@ -1059,29 +1065,29 @@ void CNihilanth::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 			MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
 			WRITE_BYTE(TE_ELIGHT);
-			WRITE_SHORT(entindex() + 0x3000);		// entity, attachment
-			WRITE_COORD(pev->origin.x);		// origin
+			WRITE_SHORT(entindex() + 0x3000); // entity, attachment
+			WRITE_COORD(pev->origin.x);		  // origin
 			WRITE_COORD(pev->origin.y);
 			WRITE_COORD(pev->origin.z);
-			WRITE_COORD(256);	// radius
-			WRITE_BYTE(128);	// R
-			WRITE_BYTE(128);	// G
-			WRITE_BYTE(255);	// B
-			WRITE_BYTE(10);	// life * 10
+			WRITE_COORD(256); // radius
+			WRITE_BYTE(128);  // R
+			WRITE_BYTE(128);  // G
+			WRITE_BYTE(255);  // B
+			WRITE_BYTE(10);	  // life * 10
 			WRITE_COORD(128); // decay
 			MESSAGE_END();
 
 			MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
 			WRITE_BYTE(TE_ELIGHT);
-			WRITE_SHORT(entindex() + 0x4000);		// entity, attachment
-			WRITE_COORD(pev->origin.x);		// origin
+			WRITE_SHORT(entindex() + 0x4000); // entity, attachment
+			WRITE_COORD(pev->origin.x);		  // origin
 			WRITE_COORD(pev->origin.y);
 			WRITE_COORD(pev->origin.z);
-			WRITE_COORD(256);	// radius
-			WRITE_BYTE(128);	// R
-			WRITE_BYTE(128);	// G
-			WRITE_BYTE(255);	// B
-			WRITE_BYTE(10);	// life * 10
+			WRITE_COORD(256); // radius
+			WRITE_BYTE(128);  // R
+			WRITE_BYTE(128);  // G
+			WRITE_BYTE(255);  // B
+			WRITE_BYTE(10);	  // life * 10
 			WRITE_COORD(128); // decay
 			MESSAGE_END();
 
@@ -1089,7 +1095,7 @@ void CNihilanth::HandleAnimEvent(MonsterEvent_t* pEvent)
 			m_flShootEnd = gpGlobals->time + 1.0;
 		}
 		break;
-	case 3:	// prayer
+	case 3: // prayer
 		if (m_hEnemy != NULL)
 		{
 			char szText[128];
@@ -1120,29 +1126,29 @@ void CNihilanth::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 				MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
 				WRITE_BYTE(TE_ELIGHT);
-				WRITE_SHORT(entindex() + 0x3000);		// entity, attachment
-				WRITE_COORD(pev->origin.x);		// origin
+				WRITE_SHORT(entindex() + 0x3000); // entity, attachment
+				WRITE_COORD(pev->origin.x);		  // origin
 				WRITE_COORD(pev->origin.y);
 				WRITE_COORD(pev->origin.z);
-				WRITE_COORD(256);	// radius
-				WRITE_BYTE(128);	// R
-				WRITE_BYTE(128);	// G
-				WRITE_BYTE(255);	// B
-				WRITE_BYTE(10);	// life * 10
+				WRITE_COORD(256); // radius
+				WRITE_BYTE(128);  // R
+				WRITE_BYTE(128);  // G
+				WRITE_BYTE(255);  // B
+				WRITE_BYTE(10);	  // life * 10
 				WRITE_COORD(128); // decay
 				MESSAGE_END();
 
 				MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
 				WRITE_BYTE(TE_ELIGHT);
-				WRITE_SHORT(entindex() + 0x4000);		// entity, attachment
-				WRITE_COORD(pev->origin.x);		// origin
+				WRITE_SHORT(entindex() + 0x4000); // entity, attachment
+				WRITE_COORD(pev->origin.x);		  // origin
 				WRITE_COORD(pev->origin.y);
 				WRITE_COORD(pev->origin.z);
-				WRITE_COORD(256);	// radius
-				WRITE_BYTE(128);	// R
-				WRITE_BYTE(128);	// G
-				WRITE_BYTE(255);	// B
-				WRITE_BYTE(10);	// life * 10
+				WRITE_COORD(256); // radius
+				WRITE_BYTE(128);  // R
+				WRITE_BYTE(128);  // G
+				WRITE_BYTE(255);  // B
+				WRITE_BYTE(10);	  // life * 10
 				WRITE_COORD(128); // decay
 				MESSAGE_END();
 
@@ -1151,7 +1157,7 @@ void CNihilanth::HandleAnimEvent(MonsterEvent_t* pEvent)
 			}
 		}
 		break;
-	case 4:	// get a sphere
+	case 4: // get a sphere
 	{
 		if (m_hRecharger != NULL)
 		{
@@ -1162,7 +1168,7 @@ void CNihilanth::HandleAnimEvent(MonsterEvent_t* pEvent)
 		}
 	}
 	break;
-	case 5:	// start up sphere machine
+	case 5: // start up sphere machine
 	{
 		EMIT_SOUND(edict(), CHAN_VOICE, RANDOM_SOUND_ARRAY(pRechargeSounds), 1.0, 0.2);
 	}
@@ -1180,7 +1186,7 @@ void CNihilanth::HandleAnimEvent(MonsterEvent_t* pEvent)
 	case 7:
 		/*
 		Vector vecSrc, vecAngles;
-		GetAttachment( 0, vecSrc, vecAngles );
+		GetAttachment( 0, vecSrc, vecAngles ); 
 		CNihilanthHVR *pEntity = (CNihilanthHVR *)Create( "nihilanth_energy_ball", vecSrc, pev->angles, edict() );
 		pEntity->pev->velocity = Vector ( RANDOM_FLOAT( -0.7, 0.7 ), RANDOM_FLOAT( -0.7, 0.7 ), 1.0 ) * 600.0;
 		pEntity->GreenBallInit( );
@@ -1195,8 +1201,7 @@ void CNihilanth::CommandUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_T
 {
 	switch (useType)
 	{
-	case USE_OFF:
-	{
+	case USE_OFF: {
 		CBaseEntity* pTouch = UTIL_FindEntityByTargetname(NULL, m_szDeadTouch);
 
 		if (pTouch)
@@ -1231,7 +1236,7 @@ void CNihilanth::CommandUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_T
 }
 
 
-bool CNihilanth::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool CNihilanth ::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
 	if (pevInflictor->owner == edict())
 		return false;
@@ -1301,7 +1306,7 @@ CBaseEntity* CNihilanth::RandomTargetname(const char* szName)
 
 
 
-void CNihilanthHVR::Spawn()
+void CNihilanthHVR ::Spawn()
 {
 	Precache();
 
@@ -1311,7 +1316,7 @@ void CNihilanthHVR::Spawn()
 }
 
 
-void CNihilanthHVR::Precache()
+void CNihilanthHVR ::Precache()
 {
 	PRECACHE_MODEL("sprites/flare6.spr");
 	PRECACHE_MODEL("sprites/nhth1.spr");
@@ -1327,7 +1332,7 @@ void CNihilanthHVR::Precache()
 
 
 
-void CNihilanthHVR::CircleInit(CBaseEntity* pTarget)
+void CNihilanthHVR ::CircleInit(CBaseEntity* pTarget)
 {
 	pev->movetype = MOVETYPE_NOCLIP;
 	pev->solid = SOLID_NOT;
@@ -1369,7 +1374,7 @@ CBaseEntity* CNihilanthHVR::RandomClassname(const char* szName)
 	return pEntity;
 }
 
-void CNihilanthHVR::HoverThink()
+void CNihilanthHVR ::HoverThink()
 {
 	pev->nextthink = gpGlobals->time + 0.1;
 
@@ -1386,46 +1391,46 @@ void CNihilanthHVR::HoverThink()
 	if (RANDOM_LONG(0, 99) < 5)
 	{
 		/*
-				CBaseEntity *pOther = RandomClassname( STRING(pev->classname) );
+		CBaseEntity *pOther = RandomClassname( STRING(pev->classname) );
 
-				if (pOther && pOther != this)
-				{
-					MESSAGE_BEGIN( MSG_BROADCAST, SVC_TEMPENTITY );
-						WRITE_BYTE( TE_BEAMENTS );
-						WRITE_SHORT( this->entindex() );
-						WRITE_SHORT( pOther->entindex() );
-						WRITE_SHORT( g_sModelIndexLaser );
-						WRITE_BYTE( 0 ); // framestart
-						WRITE_BYTE( 0 ); // framerate
-						WRITE_BYTE( 10 ); // life
-						WRITE_BYTE( 80 );  // width
-						WRITE_BYTE( 80 );   // noise
-						WRITE_BYTE( 255 );   // r, g, b
-						WRITE_BYTE( 128 );   // r, g, b
-						WRITE_BYTE( 64 );   // r, g, b
-						WRITE_BYTE( 255 );	// brightness
-						WRITE_BYTE( 30 );		// speed
-					MESSAGE_END();
-				}
-		*/
+		if (pOther && pOther != this)
+		{
+			MESSAGE_BEGIN( MSG_BROADCAST, SVC_TEMPENTITY );
+				WRITE_BYTE( TE_BEAMENTS );
+				WRITE_SHORT( this->entindex() );
+				WRITE_SHORT( pOther->entindex() );
+				WRITE_SHORT( g_sModelIndexLaser );
+				WRITE_BYTE( 0 ); // framestart
+				WRITE_BYTE( 0 ); // framerate
+				WRITE_BYTE( 10 ); // life
+				WRITE_BYTE( 80 );  // width
+				WRITE_BYTE( 80 );   // noise
+				WRITE_BYTE( 255 );   // r, g, b
+				WRITE_BYTE( 128 );   // r, g, b
+				WRITE_BYTE( 64 );   // r, g, b
+				WRITE_BYTE( 255 );	// brightness
+				WRITE_BYTE( 30 );		// speed
+			MESSAGE_END();
+		}
+*/
 		/*
-				MESSAGE_BEGIN( MSG_BROADCAST, SVC_TEMPENTITY );
-					WRITE_BYTE( TE_BEAMENTS );
-					WRITE_SHORT( this->entindex() );
-					WRITE_SHORT( m_hTargetEnt->entindex() + 0x1000 );
-					WRITE_SHORT( g_sModelIndexLaser );
-					WRITE_BYTE( 0 ); // framestart
-					WRITE_BYTE( 0 ); // framerate
-					WRITE_BYTE( 10 ); // life
-					WRITE_BYTE( 80 );  // width
-					WRITE_BYTE( 80 );   // noise
-					WRITE_BYTE( 255 );   // r, g, b
-					WRITE_BYTE( 128 );   // r, g, b
-					WRITE_BYTE( 64 );   // r, g, b
-					WRITE_BYTE( 255 );	// brightness
-					WRITE_BYTE( 30 );		// speed
-				MESSAGE_END();
-		*/
+		MESSAGE_BEGIN( MSG_BROADCAST, SVC_TEMPENTITY );
+			WRITE_BYTE( TE_BEAMENTS );
+			WRITE_SHORT( this->entindex() );
+			WRITE_SHORT( m_hTargetEnt->entindex() + 0x1000 );
+			WRITE_SHORT( g_sModelIndexLaser );
+			WRITE_BYTE( 0 ); // framestart
+			WRITE_BYTE( 0 ); // framerate
+			WRITE_BYTE( 10 ); // life
+			WRITE_BYTE( 80 );  // width
+			WRITE_BYTE( 80 );   // noise
+			WRITE_BYTE( 255 );   // r, g, b
+			WRITE_BYTE( 128 );   // r, g, b
+			WRITE_BYTE( 64 );   // r, g, b
+			WRITE_BYTE( 255 );	// brightness
+			WRITE_BYTE( 30 );		// speed
+		MESSAGE_END();
+*/
 	}
 
 	pev->frame = ((int)pev->frame + 1) % m_nFrames;
@@ -1434,7 +1439,7 @@ void CNihilanthHVR::HoverThink()
 
 
 
-void CNihilanthHVR::ZapInit(CBaseEntity* pEnemy)
+void CNihilanthHVR ::ZapInit(CBaseEntity* pEnemy)
 {
 	pev->movetype = MOVETYPE_FLY;
 	pev->solid = SOLID_BBOX;
@@ -1456,7 +1461,7 @@ void CNihilanthHVR::ZapInit(CBaseEntity* pEnemy)
 	EMIT_SOUND_DYN(edict(), CHAN_WEAPON, "debris/zap4.wav", 1, ATTN_NORM, 0, 100);
 }
 
-void CNihilanthHVR::ZapThink()
+void CNihilanthHVR ::ZapThink()
 {
 	pev->nextthink = gpGlobals->time + 0.05;
 
@@ -1497,16 +1502,16 @@ void CNihilanthHVR::ZapThink()
 		WRITE_COORD(tr.vecEndPos.y);
 		WRITE_COORD(tr.vecEndPos.z);
 		WRITE_SHORT(g_sModelIndexLaser);
-		WRITE_BYTE(0); // frame start
-		WRITE_BYTE(10); // framerate
-		WRITE_BYTE(3); // life
-		WRITE_BYTE(20);  // width
-		WRITE_BYTE(20);   // noise
-		WRITE_BYTE(64);   // r, g, b
-		WRITE_BYTE(196);   // r, g, b
-		WRITE_BYTE(255);   // r, g, b
-		WRITE_BYTE(255);	// brightness
-		WRITE_BYTE(10);		// speed
+		WRITE_BYTE(0);	 // frame start
+		WRITE_BYTE(10);	 // framerate
+		WRITE_BYTE(3);	 // life
+		WRITE_BYTE(20);	 // width
+		WRITE_BYTE(20);	 // noise
+		WRITE_BYTE(64);	 // r, g, b
+		WRITE_BYTE(196); // r, g, b
+		WRITE_BYTE(255); // r, g, b
+		WRITE_BYTE(255); // brightness
+		WRITE_BYTE(10);	 // speed
 		MESSAGE_END();
 
 		UTIL_EmitAmbientSound(edict(), tr.vecEndPos, "weapons/electro4.wav", 0.5, ATTN_NORM, 0, RANDOM_LONG(140, 160));
@@ -1521,15 +1526,15 @@ void CNihilanthHVR::ZapThink()
 
 	MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
 	WRITE_BYTE(TE_ELIGHT);
-	WRITE_SHORT(entindex());		// entity, attachment
-	WRITE_COORD(pev->origin.x);		// origin
+	WRITE_SHORT(entindex());	// entity, attachment
+	WRITE_COORD(pev->origin.x); // origin
 	WRITE_COORD(pev->origin.y);
 	WRITE_COORD(pev->origin.z);
-	WRITE_COORD(128);	// radius
-	WRITE_BYTE(128);	// R
-	WRITE_BYTE(128);	// G
-	WRITE_BYTE(255);	// B
-	WRITE_BYTE(10);	// life * 10
+	WRITE_COORD(128); // radius
+	WRITE_BYTE(128);  // R
+	WRITE_BYTE(128);  // G
+	WRITE_BYTE(255);  // B
+	WRITE_BYTE(10);	  // life * 10
 	WRITE_COORD(128); // decay
 	MESSAGE_END();
 
@@ -1558,7 +1563,7 @@ void CNihilanthHVR::ZapTouch(CBaseEntity* pOther)
 
 
 
-void CNihilanthHVR::TeleportInit(CNihilanth* pOwner, CBaseEntity* pEnemy, CBaseEntity* pTarget, CBaseEntity* pTouch)
+void CNihilanthHVR ::TeleportInit(CNihilanth* pOwner, CBaseEntity* pEnemy, CBaseEntity* pTarget, CBaseEntity* pTouch)
 {
 	pev->movetype = MOVETYPE_FLY;
 	pev->solid = SOLID_BBOX;
@@ -1583,7 +1588,7 @@ void CNihilanthHVR::TeleportInit(CNihilanth* pOwner, CBaseEntity* pEnemy, CBaseE
 }
 
 
-void CNihilanthHVR::GreenBallInit()
+void CNihilanthHVR ::GreenBallInit()
 {
 	pev->movetype = MOVETYPE_FLY;
 	pev->solid = SOLID_BBOX;
@@ -1599,7 +1604,7 @@ void CNihilanthHVR::GreenBallInit()
 }
 
 
-void CNihilanthHVR::TeleportThink()
+void CNihilanthHVR ::TeleportThink()
 {
 	pev->nextthink = gpGlobals->time + 0.1;
 
@@ -1629,15 +1634,15 @@ void CNihilanthHVR::TeleportThink()
 
 	MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
 	WRITE_BYTE(TE_ELIGHT);
-	WRITE_SHORT(entindex());		// entity, attachment
-	WRITE_COORD(pev->origin.x);		// origin
+	WRITE_SHORT(entindex());	// entity, attachment
+	WRITE_COORD(pev->origin.x); // origin
 	WRITE_COORD(pev->origin.y);
 	WRITE_COORD(pev->origin.z);
-	WRITE_COORD(256);	// radius
-	WRITE_BYTE(0);	// R
-	WRITE_BYTE(255);	// G
-	WRITE_BYTE(0);	// B
-	WRITE_BYTE(10);	// life * 10
+	WRITE_COORD(256); // radius
+	WRITE_BYTE(0);	  // R
+	WRITE_BYTE(255);  // G
+	WRITE_BYTE(0);	  // B
+	WRITE_BYTE(10);	  // life * 10
 	WRITE_COORD(256); // decay
 	MESSAGE_END();
 
@@ -1645,7 +1650,7 @@ void CNihilanthHVR::TeleportThink()
 }
 
 
-void CNihilanthHVR::AbsorbInit()
+void CNihilanthHVR ::AbsorbInit()
 {
 	SetThink(&CNihilanthHVR::DissipateThink);
 	pev->renderamt = 255;
@@ -1655,16 +1660,16 @@ void CNihilanthHVR::AbsorbInit()
 	WRITE_SHORT(this->entindex());
 	WRITE_SHORT(m_hTargetEnt->entindex() + 0x1000);
 	WRITE_SHORT(g_sModelIndexLaser);
-	WRITE_BYTE(0); // framestart
-	WRITE_BYTE(0); // framerate
-	WRITE_BYTE(50); // life
-	WRITE_BYTE(80);  // width
-	WRITE_BYTE(80);   // noise
-	WRITE_BYTE(255);   // r, g, b
-	WRITE_BYTE(128);   // r, g, b
-	WRITE_BYTE(64);   // r, g, b
-	WRITE_BYTE(255);	// brightness
-	WRITE_BYTE(30);		// speed
+	WRITE_BYTE(0);	 // framestart
+	WRITE_BYTE(0);	 // framerate
+	WRITE_BYTE(50);	 // life
+	WRITE_BYTE(80);	 // width
+	WRITE_BYTE(80);	 // noise
+	WRITE_BYTE(255); // r, g, b
+	WRITE_BYTE(128); // r, g, b
+	WRITE_BYTE(64);	 // r, g, b
+	WRITE_BYTE(255); // brightness
+	WRITE_BYTE(30);	 // speed
 	MESSAGE_END();
 }
 
@@ -1691,7 +1696,7 @@ void CNihilanthHVR::TeleportTouch(CBaseEntity* pOther)
 }
 
 
-void CNihilanthHVR::DissipateThink()
+void CNihilanthHVR ::DissipateThink()
 {
 	pev->nextthink = gpGlobals->time + 0.1;
 
@@ -1712,21 +1717,21 @@ void CNihilanthHVR::DissipateThink()
 
 	MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
 	WRITE_BYTE(TE_ELIGHT);
-	WRITE_SHORT(entindex());		// entity, attachment
-	WRITE_COORD(pev->origin.x);		// origin
+	WRITE_SHORT(entindex());	// entity, attachment
+	WRITE_COORD(pev->origin.x); // origin
 	WRITE_COORD(pev->origin.y);
 	WRITE_COORD(pev->origin.z);
-	WRITE_COORD(pev->renderamt);	// radius
-	WRITE_BYTE(255);	// R
-	WRITE_BYTE(192);	// G
-	WRITE_BYTE(64);	// B
-	WRITE_BYTE(2);	// life * 10
-	WRITE_COORD(0); // decay
+	WRITE_COORD(pev->renderamt); // radius
+	WRITE_BYTE(255);			 // R
+	WRITE_BYTE(192);			 // G
+	WRITE_BYTE(64);				 // B
+	WRITE_BYTE(2);				 // life * 10
+	WRITE_COORD(0);				 // decay
 	MESSAGE_END();
 }
 
 
-bool CNihilanthHVR::CircleTarget(Vector vecTarget)
+bool CNihilanthHVR ::CircleTarget(Vector vecTarget)
 {
 	bool fClose = false;
 
@@ -1763,8 +1768,8 @@ bool CNihilanthHVR::CircleTarget(Vector vecTarget)
 
 	m_vecIdeal = m_vecIdeal + Vector(RANDOM_FLOAT(-2, 2), RANDOM_FLOAT(-2, 2), RANDOM_FLOAT(-2, 2));
 	m_vecIdeal = Vector(m_vecIdeal.x, m_vecIdeal.y, 0).Normalize() * 200
-		/* + Vector( -m_vecIdeal.y, m_vecIdeal.x, 0 ).Normalize( ) * 32 */
-		+ Vector(0, 0, m_vecIdeal.z);
+				 /* + Vector( -m_vecIdeal.y, m_vecIdeal.x, 0 ).Normalize( ) * 32 */
+				 + Vector(0, 0, m_vecIdeal.z);
 	// m_vecIdeal = m_vecIdeal + Vector( -m_vecIdeal.y, m_vecIdeal.x, 0 ).Normalize( ) * 2;
 
 	// move up/down
@@ -1781,7 +1786,7 @@ bool CNihilanthHVR::CircleTarget(Vector vecTarget)
 }
 
 
-void CNihilanthHVR::MovetoTarget(Vector vecTarget)
+void CNihilanthHVR ::MovetoTarget(Vector vecTarget)
 {
 	if (m_vecIdeal == Vector(0, 0, 0))
 	{
@@ -1801,7 +1806,7 @@ void CNihilanthHVR::MovetoTarget(Vector vecTarget)
 
 
 
-void CNihilanthHVR::Crawl()
+void CNihilanthHVR ::Crawl()
 {
 
 	Vector vecAim = Vector(RANDOM_FLOAT(-1, 1), RANDOM_FLOAT(-1, 1), RANDOM_FLOAT(-1, 1)).Normalize();
@@ -1814,16 +1819,16 @@ void CNihilanthHVR::Crawl()
 	WRITE_COORD(vecPnt.y);
 	WRITE_COORD(vecPnt.z);
 	WRITE_SHORT(g_sModelIndexLaser);
-	WRITE_BYTE(0); // frame start
-	WRITE_BYTE(10); // framerate
-	WRITE_BYTE(3); // life
-	WRITE_BYTE(20);  // width
-	WRITE_BYTE(80);   // noise
-	WRITE_BYTE(64);   // r, g, b
-	WRITE_BYTE(128);   // r, g, b
-	WRITE_BYTE(255);   // r, g, b
-	WRITE_BYTE(255);	// brightness
-	WRITE_BYTE(10);		// speed
+	WRITE_BYTE(0);	 // frame start
+	WRITE_BYTE(10);	 // framerate
+	WRITE_BYTE(3);	 // life
+	WRITE_BYTE(20);	 // width
+	WRITE_BYTE(80);	 // noise
+	WRITE_BYTE(64);	 // r, g, b
+	WRITE_BYTE(128); // r, g, b
+	WRITE_BYTE(255); // r, g, b
+	WRITE_BYTE(255); // brightness
+	WRITE_BYTE(10);	 // speed
 	MESSAGE_END();
 }
 

@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -30,25 +30,25 @@
 
 extern float* GetClientColor(int clientIndex);
 
-#define MAX_LINES	5
-#define MAX_CHARS_PER_LINE	256  /* it can be less than this, depending on char size */
+#define MAX_LINES 5
+#define MAX_CHARS_PER_LINE 256 /* it can be less than this, depending on char size */
 
 // allow 20 pixels on either side of the text
-#define MAX_LINE_WIDTH  ( ScreenWidth - 40 )
-#define LINE_START  10
+#define MAX_LINE_WIDTH (ScreenWidth - 40)
+#define LINE_START 10
 static float SCROLL_SPEED = 5;
 
 static char g_szLineBuffer[MAX_LINES + 1][MAX_CHARS_PER_LINE];
 static float* g_pflNameColors[MAX_LINES + 1];
 static int g_iNameLengths[MAX_LINES + 1];
-static float flScrollTime = 0;  // the time at which the lines next scroll up
+static float flScrollTime = 0; // the time at which the lines next scroll up
 
 static int Y_START = 0;
 static int line_height = 0;
 
 DECLARE_MESSAGE(m_SayText, SayText);
 
-bool CHudSayText::Init()
+bool CHudSayText ::Init()
 {
 	gHUD.AddHudElem(this);
 
@@ -65,14 +65,14 @@ bool CHudSayText::Init()
 }
 
 
-void CHudSayText::InitHUDData()
+void CHudSayText ::InitHUDData()
 {
 	memset(g_szLineBuffer, 0, sizeof g_szLineBuffer);
 	memset(g_pflNameColors, 0, sizeof g_pflNameColors);
 	memset(g_iNameLengths, 0, sizeof g_iNameLengths);
 }
 
-bool CHudSayText::VidInit()
+bool CHudSayText ::VidInit()
 {
 	return true;
 }
@@ -96,7 +96,7 @@ int ScrollTextUp()
 	return 1;
 }
 
-bool CHudSayText::Draw(float flTime)
+bool CHudSayText ::Draw(float flTime)
 {
 	int y = Y_START;
 
@@ -163,17 +163,17 @@ bool CHudSayText::Draw(float flTime)
 	return true;
 }
 
-bool CHudSayText::MsgFunc_SayText(const char* pszName, int iSize, void* pbuf)
+bool CHudSayText ::MsgFunc_SayText(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 
-	int client_index = READ_BYTE();		// the client who spoke the message
+	int client_index = READ_BYTE(); // the client who spoke the message
 	SayTextPrint(READ_STRING(), iSize - 1, client_index);
 
 	return true;
 }
 
-void CHudSayText::SayTextPrint(const char* pszBuf, int iBufSize, int clientIndex)
+void CHudSayText ::SayTextPrint(const char* pszBuf, int iBufSize, int clientIndex)
 {
 	if (gViewPort && gViewPort->AllowedToPrintText() == false)
 	{
@@ -234,7 +234,7 @@ void CHudSayText::SayTextPrint(const char* pszBuf, int iBufSize, int clientIndex
 	Y_START = ScreenHeight - 60 - (line_height * (MAX_LINES + 2));
 }
 
-void CHudSayText::EnsureTextFitsInOneLineAndWrapIfHaveTo(int line)
+void CHudSayText ::EnsureTextFitsInOneLineAndWrapIfHaveTo(int line)
 {
 	int line_width = 0;
 	GetConsoleStringSize(g_szLineBuffer[line], &line_width, &line_height);
@@ -265,15 +265,15 @@ void CHudSayText::EnsureTextFitsInOneLineAndWrapIfHaveTo(int line)
 			char buf[2];
 			buf[1] = 0;
 
-			if (*x == ' ' && x != g_szLineBuffer[line])  // store each line break,  except for the very first character
+			if (*x == ' ' && x != g_szLineBuffer[line]) // store each line break,  except for the very first character
 				last_break = x;
 
-			buf[0] = *x;  // get the length of the current character
+			buf[0] = *x; // get the length of the current character
 			GetConsoleStringSize(buf, &tmp_len, &line_height);
 			length += tmp_len;
 
 			if (length > MAX_LINE_WIDTH)
-			{  // needs to be broken up
+			{ // needs to be broken up
 				if (!last_break)
 					last_break = x - 1;
 
@@ -295,8 +295,7 @@ void CHudSayText::EnsureTextFitsInOneLineAndWrapIfHaveTo(int line)
 						line -= linesmoved;
 						last_break = last_break - (sizeof(g_szLineBuffer[0]) * linesmoved);
 					}
-				}
-				while (j == MAX_LINES);
+				} while (j == MAX_LINES);
 
 				// copy remaining string into next buffer,  making sure it starts with a space character
 				if ((char)*last_break == (char)' ')

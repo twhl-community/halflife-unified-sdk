@@ -7,10 +7,10 @@
 
 #include "vgui_slider2.h"
 
-#include<VGUI_InputSignal.h>
-#include<VGUI_App.h>
-#include<VGUI_IntChangeSignal.h>
-#include<VGUI_MouseCode.h>
+#include <VGUI_InputSignal.h>
+#include <VGUI_App.h>
+#include <VGUI_IntChangeSignal.h>
+#include <VGUI_MouseCode.h>
 
 using namespace vgui;
 
@@ -20,11 +20,13 @@ class FooDefaultSliderSignal : public InputSignal
 {
 private:
 	Slider2* _slider;
+
 public:
 	FooDefaultSliderSignal(Slider2* slider)
 	{
 		_slider = slider;
 	}
+
 public:
 	void cursorMoved(int x, int y, Panel* panel) override
 	{
@@ -277,9 +279,9 @@ void Slider2::paintBackground()
 
 		// slider border
 		drawSetColor(60, 60, 60, 0);
-		drawFilledRect(0, _nobPos[0], wide, _nobPos[0] + 1);      // top
-		drawFilledRect(0, _nobPos[1], wide, _nobPos[1] + 1);      // bottom
-		drawFilledRect(0, _nobPos[0] + 1, 1, _nobPos[1]);         // left
+		drawFilledRect(0, _nobPos[0], wide, _nobPos[0] + 1);		// top
+		drawFilledRect(0, _nobPos[1], wide, _nobPos[1] + 1);		// bottom
+		drawFilledRect(0, _nobPos[0] + 1, 1, _nobPos[1]);			// left
 		drawFilledRect(wide - 1, _nobPos[0] + 1, wide, _nobPos[1]); // right
 	}
 	else
@@ -405,7 +407,6 @@ void Slider2::privateMousePressed(MouseCode code, Panel* panel)
 			_dragStartPos[1] = y;
 		}
 	}
-
 }
 
 void Slider2::privateMouseReleased(MouseCode code, Panel* panel)

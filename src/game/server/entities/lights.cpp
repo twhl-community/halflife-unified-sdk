@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -29,25 +29,25 @@
 class CLight : public CPointEntity
 {
 public:
-	bool	KeyValue(KeyValueData* pkvd) override;
-	void	Spawn() override;
-	void	Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+	bool KeyValue(KeyValueData* pkvd) override;
+	void Spawn() override;
+	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
-	bool	Save(CSave& save) override;
-	bool	Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 
-	static	TYPEDESCRIPTION m_SaveData[];
+	static TYPEDESCRIPTION m_SaveData[];
 
 private:
-	int		m_iStyle;
-	int		m_iszPattern;
+	int m_iStyle;
+	int m_iszPattern;
 };
 LINK_ENTITY_TO_CLASS(light, CLight);
 
-TYPEDESCRIPTION	CLight::m_SaveData[] =
-{
-	DEFINE_FIELD(CLight, m_iStyle, FIELD_INTEGER),
-	DEFINE_FIELD(CLight, m_iszPattern, FIELD_STRING),
+TYPEDESCRIPTION CLight::m_SaveData[] =
+	{
+		DEFINE_FIELD(CLight, m_iStyle, FIELD_INTEGER),
+		DEFINE_FIELD(CLight, m_iszPattern, FIELD_STRING),
 };
 
 IMPLEMENT_SAVERESTORE(CLight, CPointEntity);
@@ -56,7 +56,7 @@ IMPLEMENT_SAVERESTORE(CLight, CPointEntity);
 //
 // Cache user-entity-field values until spawn is called.
 //
-bool CLight::KeyValue(KeyValueData* pkvd)
+bool CLight ::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq(pkvd->szKeyName, "style"))
 	{
@@ -84,10 +84,10 @@ Default style is 0
 If targeted, it will toggle between on or off.
 */
 
-void CLight::Spawn()
+void CLight ::Spawn()
 {
 	if (FStringNull(pev->targetname))
-	{       // inert light
+	{ // inert light
 		REMOVE_ENTITY(ENT(pev));
 		return;
 	}
@@ -105,7 +105,7 @@ void CLight::Spawn()
 }
 
 
-void CLight::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
+void CLight ::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
 	if (m_iStyle >= 32)
 	{
@@ -137,8 +137,8 @@ LINK_ENTITY_TO_CLASS(light_spot, CLight);
 class CEnvLight : public CLight
 {
 public:
-	bool	KeyValue(KeyValueData* pkvd) override;
-	void	Spawn() override;
+	bool KeyValue(KeyValueData* pkvd) override;
+	void Spawn() override;
 };
 
 LINK_ENTITY_TO_CLASS(light_environment, CEnvLight);
@@ -180,7 +180,7 @@ bool CEnvLight::KeyValue(KeyValueData* pkvd)
 }
 
 
-void CEnvLight::Spawn()
+void CEnvLight ::Spawn()
 {
 	char szVector[64];
 	UTIL_MakeAimVectors(pev->angles);

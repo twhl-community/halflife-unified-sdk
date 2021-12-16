@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -34,19 +34,19 @@ extern globalvars_t* gpGlobals;
 extern int g_iUser1;
 
 // Pool of client side entities/entvars_t
-static entvars_t	ev[32];
-static int			num_ents = 0;
+static entvars_t ev[32];
+static int num_ents = 0;
 
 // The entity we'll use to represent the local client
-static CBasePlayer	player;
+static CBasePlayer player;
 
 // Local version of game .dll global variables ( time, etc. )
-static globalvars_t	Globals;
+static globalvars_t Globals;
 
 static CBasePlayerWeapon* g_pWpns[32];
 
 float g_flApplyVel = 0.0;
-bool   g_irunninggausspred = false;
+bool g_irunninggausspred = false;
 
 Vector previousorigin;
 
@@ -76,8 +76,8 @@ Print debug messages to console
 */
 void AlertMessage(ALERT_TYPE atype, const char* szFmt, ...)
 {
-	va_list		argptr;
-	static char	string[1024];
+	va_list argptr;
+	static char string[1024];
 
 	va_start(argptr, szFmt);
 	vsprintf(string, szFmt, argptr);
@@ -148,7 +148,7 @@ CBaseEntity :: Killed
 If weapons code "kills" an entity, just set its effects to EF_NODRAW
 =====================
 */
-void CBaseEntity::Killed(entvars_t* pevAttacker, int iGib)
+void CBaseEntity ::Killed(entvars_t* pevAttacker, int iGib)
 {
 	pev->effects |= EF_NODRAW;
 }
@@ -159,7 +159,7 @@ CBasePlayerWeapon :: DefaultDeploy
 
 =====================
 */
-bool CBasePlayerWeapon::DefaultDeploy(const char* szViewModel, const char* szWeaponModel, int iAnim, const char* szAnimExt, int body)
+bool CBasePlayerWeapon ::DefaultDeploy(const char* szViewModel, const char* szWeaponModel, int iAnim, const char* szAnimExt, int body)
 {
 	if (!CanDeploy())
 		return false;
@@ -180,7 +180,7 @@ CBasePlayerWeapon :: PlayEmptySound
 
 =====================
 */
-bool CBasePlayerWeapon::PlayEmptySound()
+bool CBasePlayerWeapon ::PlayEmptySound()
 {
 	if (m_iPlayEmptySound)
 	{
@@ -235,12 +235,12 @@ Vector CBaseEntity::FireBulletsPlayer(unsigned int cShots, Vector vecSrc, Vector
 		if (pevAttacker == NULL)
 		{
 			// get circular gaussian spread
-			do {
+			do
+			{
 				x = RANDOM_FLOAT(-0.5, 0.5) + RANDOM_FLOAT(-0.5, 0.5);
 				y = RANDOM_FLOAT(-0.5, 0.5) + RANDOM_FLOAT(-0.5, 0.5);
 				z = x * x + y * y;
-			}
-			while (z > 1);
+			} while (z > 1);
 		}
 		else
 		{
@@ -250,7 +250,6 @@ Vector CBaseEntity::FireBulletsPlayer(unsigned int cShots, Vector vecSrc, Vector
 			y = UTIL_SharedRandomFloat(shared_rand + (2 + iShot), -0.5, 0.5) + UTIL_SharedRandomFloat(shared_rand + (3 + iShot), -0.5, 0.5);
 			z = x * x + y * y;
 		}
-
 	}
 
 	return Vector(x * vecSpread.x, y * vecSpread.y, 0.0);
@@ -515,7 +514,7 @@ void HUD_WeaponsPostThink(local_state_s* from, local_state_s* to, usercmd_t* cmd
 	int buttonsChanged;
 	CBasePlayerWeapon* pWeapon = NULL;
 	CBasePlayerWeapon* pCurrent;
-	weapon_data_t nulldata, * pfrom, * pto;
+	weapon_data_t nulldata, *pfrom, *pto;
 	static int lasthealth;
 
 	memset(&nulldata, 0, sizeof(nulldata));
@@ -598,7 +597,6 @@ void HUD_WeaponsPostThink(local_state_s* from, local_state_s* to, usercmd_t* cmd
 		if (to->client.health <= 0 && lasthealth > 0)
 		{
 			player.Killed(NULL, 0);
-
 		}
 		else if (to->client.health > 0 && lasthealth <= 0)
 		{
@@ -649,7 +647,7 @@ void HUD_WeaponsPostThink(local_state_s* from, local_state_s* to, usercmd_t* cmd
 	player.m_afButtonLast = from->playerstate.oldbuttons;
 
 	// Which buttsons chave changed
-	buttonsChanged = (player.m_afButtonLast ^ cmd->buttons);	// These buttons have changed this frame
+	buttonsChanged = (player.m_afButtonLast ^ cmd->buttons); // These buttons have changed this frame
 
 	// Debounced button codes for pressed/released
 	// The changed ones still down are "pressed"
@@ -815,11 +813,11 @@ void HUD_WeaponsPostThink(local_state_s* from, local_state_s* to, usercmd_t* cmd
 		to->client.vuser4[2] = player.m_rgAmmo[pCurrent->m_iSecondaryAmmoType];
 
 		/*		if ( pto->m_flPumpTime != -9999 )
-				{
-					pto->m_flPumpTime -= cmd->msec / 1000.0;
-					if ( pto->m_flPumpTime < -0.001 )
-						pto->m_flPumpTime = -0.001;
-				}*/
+		{
+			pto->m_flPumpTime -= cmd->msec / 1000.0;
+			if ( pto->m_flPumpTime < -0.001 )
+				pto->m_flPumpTime = -0.001;
+		}*/
 
 		if (pto->m_fNextAimBonus < -1.0)
 		{
@@ -895,7 +893,7 @@ void DLLEXPORT HUD_PostRunCmd(struct local_state_s* from, struct local_state_s* 
 
 	g_runfuncs = runfuncs != 0;
 
-#if defined( CLIENT_WEAPONS )
+#if defined(CLIENT_WEAPONS)
 	if (cl_lw && 0 != cl_lw->value)
 	{
 		HUD_WeaponsPostThink(from, to, cmd, time, random_seed);

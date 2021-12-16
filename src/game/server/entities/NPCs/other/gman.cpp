@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
 *	All Rights Reserved.
 *
 *   This source code contains proprietary and confidential information of
@@ -15,12 +15,12 @@
 //=========================================================
 // GMan - misunderstood servant of the people
 //=========================================================
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"monsters.h"
-#include	"schedule.h"
-#include	"weapons.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
+#include "schedule.h"
+#include "weapons.h"
 #include "soundent.h"
 
 //=========================================================
@@ -33,11 +33,11 @@ public:
 	void Spawn() override;
 	void Precache() override;
 	void SetYawSpeed() override;
-	int  Classify() override;
+	int Classify() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 	int ISoundMask() override;
 
-	bool	Save(CSave& save) override;
+	bool Save(CSave& save) override;
 	bool Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
@@ -55,28 +55,28 @@ public:
 LINK_ENTITY_TO_CLASS(monster_gman, CGMan);
 
 
-TYPEDESCRIPTION	CGMan::m_SaveData[] =
-{
-	DEFINE_FIELD(CGMan, m_hTalkTarget, FIELD_EHANDLE),
-	DEFINE_FIELD(CGMan, m_flTalkTime, FIELD_TIME),
+TYPEDESCRIPTION CGMan::m_SaveData[] =
+	{
+		DEFINE_FIELD(CGMan, m_hTalkTarget, FIELD_EHANDLE),
+		DEFINE_FIELD(CGMan, m_flTalkTime, FIELD_TIME),
 };
 IMPLEMENT_SAVERESTORE(CGMan, CBaseMonster);
 
 
 //=========================================================
-// Classify - indicates this monster's place in the 
+// Classify - indicates this monster's place in the
 // relationship table.
 //=========================================================
-int	CGMan::Classify()
+int CGMan ::Classify()
 {
-	return	CLASS_NONE;
+	return CLASS_NONE;
 }
 
 //=========================================================
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CGMan::SetYawSpeed()
+void CGMan ::SetYawSpeed()
 {
 	int ys;
 
@@ -94,7 +94,7 @@ void CGMan::SetYawSpeed()
 // HandleAnimEvent - catches the monster-specific messages
 // that occur when tagged animation frames are played.
 //=========================================================
-void CGMan::HandleAnimEvent(MonsterEvent_t* pEvent)
+void CGMan ::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
 	switch (pEvent->event)
 	{
@@ -108,15 +108,15 @@ void CGMan::HandleAnimEvent(MonsterEvent_t* pEvent)
 //=========================================================
 // ISoundMask - generic monster can't hear.
 //=========================================================
-int CGMan::ISoundMask()
+int CGMan ::ISoundMask()
 {
-	return	bits_SOUND_NONE;
+	return bits_SOUND_NONE;
 }
 
 //=========================================================
 // Spawn
 //=========================================================
-void CGMan::Spawn()
+void CGMan ::Spawn()
 {
 	Precache();
 
@@ -127,7 +127,7 @@ void CGMan::Spawn()
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = DONT_BLEED;
 	pev->health = 100;
-	m_flFieldOfView = 0.5;// indicates the width of this monster's forward view cone ( as a dotproduct result )
+	m_flFieldOfView = 0.5; // indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
 
 	MonsterInit();
@@ -136,7 +136,7 @@ void CGMan::Spawn()
 //=========================================================
 // Precache - precaches all resources this monster needs
 //=========================================================
-void CGMan::Precache()
+void CGMan ::Precache()
 {
 	PRECACHE_MODEL("models/gman.mdl");
 }
@@ -147,7 +147,7 @@ void CGMan::Precache()
 //=========================================================
 
 
-void CGMan::StartTask(Task_t* pTask)
+void CGMan ::StartTask(Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
@@ -161,7 +161,7 @@ void CGMan::StartTask(Task_t* pTask)
 	CBaseMonster::StartTask(pTask);
 }
 
-void CGMan::RunTask(Task_t* pTask)
+void CGMan ::RunTask(Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
@@ -171,8 +171,10 @@ void CGMan::RunTask(Task_t* pTask)
 		{
 			float yaw = VecToYaw(m_hTalkTarget->pev->origin - pev->origin) - pev->angles.y;
 
-			if (yaw > 180) yaw -= 360;
-			if (yaw < -180) yaw += 360;
+			if (yaw > 180)
+				yaw -= 360;
+			if (yaw < -180)
+				yaw += 360;
 
 			// turn towards vector
 			SetBoneController(0, yaw);
@@ -182,8 +184,10 @@ void CGMan::RunTask(Task_t* pTask)
 		{
 			float yaw = VecToYaw(m_hPlayer->pev->origin - pev->origin) - pev->angles.y;
 
-			if (yaw > 180) yaw -= 360;
-			if (yaw < -180) yaw += 360;
+			if (yaw > 180)
+				yaw -= 360;
+			if (yaw < -180)
+				yaw += 360;
 
 			// turn towards vector
 			SetBoneController(0, yaw);
@@ -205,7 +209,7 @@ void CGMan::RunTask(Task_t* pTask)
 //=========================================================
 // Override all damage
 //=========================================================
-bool CGMan::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool CGMan ::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
 	pev->health = pev->max_health / 2; // always trigger the 50% damage aitrigger
 

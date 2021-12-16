@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1999, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -66,17 +66,17 @@ int DLLEXPORT HUD_GetHullBounds(int hullnumber, float* mins, float* maxs)
 
 	switch (hullnumber)
 	{
-	case 0:				// Normal player
+	case 0: // Normal player
 		memcpy(mins, &VEC_HULL_MIN, sizeof(VEC_HULL_MIN));
 		memcpy(maxs, &VEC_HULL_MAX, sizeof(VEC_HULL_MAX));
 		iret = 1;
 		break;
-	case 1:				// Crouched player
+	case 1: // Crouched player
 		memcpy(mins, &VEC_DUCK_HULL_MIN, sizeof(VEC_DUCK_HULL_MIN));
 		memcpy(maxs, &VEC_DUCK_HULL_MAX, sizeof(VEC_DUCK_HULL_MAX));
 		iret = 1;
 		break;
-	case 2:				// Point based hull
+	case 2: // Point based hull
 		memcpy(mins, &g_vecZero, sizeof(g_vecZero));
 		memcpy(maxs, &g_vecZero, sizeof(g_vecZero));
 		iret = 1;
@@ -94,11 +94,11 @@ HUD_ConnectionlessPacket
   size of the response_buffer, so you must zero it out if you choose not to respond.
 ================================
 */
-int	DLLEXPORT HUD_ConnectionlessPacket(const struct netadr_s* net_from, const char* args, char* response_buffer, int* response_buffer_size)
+int DLLEXPORT HUD_ConnectionlessPacket(const struct netadr_s* net_from, const char* args, char* response_buffer, int* response_buffer_size)
 {
 	//	RecClConnectionlessPacket(net_from, args, response_buffer, response_buffer_size);
 
-		// Parse stuff from args
+	// Parse stuff from args
 	int max_buffer_size = *response_buffer_size;
 
 	// Zero it out since we aren't going to respond.
@@ -175,7 +175,7 @@ int DLLEXPORT HUD_VidInit()
 	HUD_Init
 
 Called whenever the client connects
-to a server.  Reinitializes all
+to a server.  Reinitializes all 
 the hud variables.
 ==========================
 */
@@ -336,49 +336,49 @@ extern "C" void DLLEXPORT F(void* pv)
 	cldll_func_t* pcldll_func = (cldll_func_t*)pv;
 
 	cldll_func_t cldll_func =
-	{
-	Initialize,
-	HUD_Init,
-	HUD_VidInit,
-	HUD_Redraw,
-	HUD_UpdateClientData,
-	HUD_Reset,
-	HUD_PlayerMove,
-	HUD_PlayerMoveInit,
-	HUD_PlayerMoveTexture,
-	IN_ActivateMouse,
-	IN_DeactivateMouse,
-	IN_MouseEvent,
-	IN_ClearStates,
-	IN_Accumulate,
-	CL_CreateMove,
-	CL_IsThirdPerson,
-	CL_CameraOffset,
-	KB_Find,
-	CAM_Think,
-	V_CalcRefdef,
-	HUD_AddEntity,
-	HUD_CreateEntities,
-	HUD_DrawNormalTriangles,
-	HUD_DrawTransparentTriangles,
-	HUD_StudioEvent,
-	HUD_PostRunCmd,
-	HUD_Shutdown,
-	HUD_TxferLocalOverrides,
-	HUD_ProcessPlayerState,
-	HUD_TxferPredictionData,
-	Demo_ReadBuffer,
-	HUD_ConnectionlessPacket,
-	HUD_GetHullBounds,
-	HUD_Frame,
-	HUD_Key_Event,
-	HUD_TempEntUpdate,
-	HUD_GetUserEntity,
-	HUD_VoiceStatus,
-	HUD_DirectorMessage,
-	HUD_GetStudioModelInterface,
-	HUD_ChatInputPosition,
-	};
+		{
+			Initialize,
+			HUD_Init,
+			HUD_VidInit,
+			HUD_Redraw,
+			HUD_UpdateClientData,
+			HUD_Reset,
+			HUD_PlayerMove,
+			HUD_PlayerMoveInit,
+			HUD_PlayerMoveTexture,
+			IN_ActivateMouse,
+			IN_DeactivateMouse,
+			IN_MouseEvent,
+			IN_ClearStates,
+			IN_Accumulate,
+			CL_CreateMove,
+			CL_IsThirdPerson,
+			CL_CameraOffset,
+			KB_Find,
+			CAM_Think,
+			V_CalcRefdef,
+			HUD_AddEntity,
+			HUD_CreateEntities,
+			HUD_DrawNormalTriangles,
+			HUD_DrawTransparentTriangles,
+			HUD_StudioEvent,
+			HUD_PostRunCmd,
+			HUD_Shutdown,
+			HUD_TxferLocalOverrides,
+			HUD_ProcessPlayerState,
+			HUD_TxferPredictionData,
+			Demo_ReadBuffer,
+			HUD_ConnectionlessPacket,
+			HUD_GetHullBounds,
+			HUD_Frame,
+			HUD_Key_Event,
+			HUD_TempEntUpdate,
+			HUD_GetUserEntity,
+			HUD_VoiceStatus,
+			HUD_DirectorMessage,
+			HUD_GetStudioModelInterface,
+			HUD_ChatInputPosition,
+		};
 
 	*pcldll_func = cldll_func;
 }

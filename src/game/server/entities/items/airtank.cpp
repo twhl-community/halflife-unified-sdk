@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -25,28 +25,28 @@ class CAirtank : public CGrenade
 	void Precache() override;
 	void EXPORT TankThink();
 	void EXPORT TankTouch(CBaseEntity* pOther);
-	int	 BloodColor() override { return DONT_BLEED; }
+	int BloodColor() override { return DONT_BLEED; }
 	void Killed(entvars_t* pevAttacker, int iGib) override;
 
-	bool	Save(CSave& save) override;
-	bool	Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 
-	static	TYPEDESCRIPTION m_SaveData[];
+	static TYPEDESCRIPTION m_SaveData[];
 
-	bool	 m_state;
+	bool m_state;
 };
 
 
 LINK_ENTITY_TO_CLASS(item_airtank, CAirtank);
-TYPEDESCRIPTION	CAirtank::m_SaveData[] =
-{
-	DEFINE_FIELD(CAirtank, m_state, FIELD_BOOLEAN),
+TYPEDESCRIPTION CAirtank::m_SaveData[] =
+	{
+		DEFINE_FIELD(CAirtank, m_state, FIELD_BOOLEAN),
 };
 
 IMPLEMENT_SAVERESTORE(CAirtank, CGrenade);
 
 
-void CAirtank::Spawn()
+void CAirtank ::Spawn()
 {
 	Precache();
 	// motor
@@ -74,7 +74,7 @@ void CAirtank::Precache()
 }
 
 
-void CAirtank::Killed(entvars_t* pevAttacker, int iGib)
+void CAirtank ::Killed(entvars_t* pevAttacker, int iGib)
 {
 	pev->owner = ENT(pevAttacker);
 

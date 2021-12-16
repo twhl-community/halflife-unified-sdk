@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -19,17 +19,17 @@
 #include "const.h"
 
 // up / down
-#define	PITCH	0
+#define PITCH 0
 // left / right
-#define	YAW		1
+#define YAW 1
 // fall over
-#define	ROLL	2 
+#define ROLL 2
 
 #pragma warning(disable : 4244)
 
 int nanmask = 255 << 23;
 
-float	anglemod(float a)
+float anglemod(float a)
 {
 	a = (360.0 / 65536) * ((int)(a * (65536 / 360.0)) & 65535);
 	return a;
@@ -37,8 +37,8 @@ float	anglemod(float a)
 
 void AngleVectors(const Vector& angles, Vector* forward, Vector* right, Vector* up)
 {
-	float		angle;
-	float		sr, sp, sy, cr, cp, cy;
+	float angle;
+	float sr, sp, sy, cr, cp, cy;
 
 	angle = angles[YAW] * (M_PI * 2 / 360);
 	sy = sin(angle);
@@ -72,8 +72,8 @@ void AngleVectors(const Vector& angles, Vector* forward, Vector* right, Vector* 
 
 void AngleVectorsTranspose(const Vector& angles, Vector* forward, Vector* right, Vector* up)
 {
-	float		angle;
-	float		sr, sp, sy, cr, cp, cy;
+	float angle;
+	float sr, sp, sy, cr, cp, cy;
 
 	angle = angles[YAW] * (M_PI * 2 / 360);
 	sy = sin(angle);
@@ -105,10 +105,10 @@ void AngleVectorsTranspose(const Vector& angles, Vector* forward, Vector* right,
 	}
 }
 
-void AngleMatrix(const float* angles, float(*matrix)[4])
+void AngleMatrix(const float* angles, float (*matrix)[4])
 {
-	float		angle;
-	float		sr, sp, sy, cr, cp, cy;
+	float angle;
+	float sr, sp, sy, cr, cp, cy;
 
 	angle = angles[YAW] * (M_PI * 2 / 360);
 	sy = sin(angle);
@@ -137,8 +137,8 @@ void AngleMatrix(const float* angles, float(*matrix)[4])
 
 void AngleIMatrix(const Vector& angles, float matrix[3][4])
 {
-	float		angle;
-	float		sr, sp, sy, cr, cp, cy;
+	float angle;
+	float sr, sp, sy, cr, cp, cy;
 
 	angle = angles[YAW] * (M_PI * 2 / 360);
 	sy = sin(angle);
@@ -252,7 +252,7 @@ void VectorTransform(const float* in1, float in2[3][4], float* out)
 
 bool VectorCompare(const float* v1, const float* v2)
 {
-	int		i;
+	int i;
 
 	for (i = 0; i < 3; i++)
 		if (v1[i] != v2[i])
@@ -277,12 +277,12 @@ void CrossProduct(const float* v1, const float* v2, float* cross)
 
 float Length(const float* v)
 {
-	int		i;
-	float	length = 0.0f;
+	int i;
+	float length = 0.0f;
 
 	for (i = 0; i < 3; i++)
 		length += v[i] * v[i];
-	length = sqrt(length);		// FIXME
+	length = sqrt(length); // FIXME
 
 	return length;
 }
@@ -296,10 +296,10 @@ float Distance(const float* v1, const float* v2)
 
 float VectorNormalize(float* v)
 {
-	float	length, ilength;
+	float length, ilength;
 
 	length = v[0] * v[0] + v[1] * v[1] + v[2] * v[2];
-	length = sqrt(length);		// FIXME
+	length = sqrt(length); // FIXME
 
 	if (0 != length)
 	{
@@ -310,7 +310,6 @@ float VectorNormalize(float* v)
 	}
 
 	return length;
-
 }
 
 void VectorInverse(float* v)
@@ -350,7 +349,9 @@ void VectorMatrix(const Vector& forward, Vector& right, Vector& up)
 		return;
 	}
 
-	tmp[0] = 0; tmp[1] = 0; tmp[2] = 1.0;
+	tmp[0] = 0;
+	tmp[1] = 0;
+	tmp[2] = 1.0;
 	CrossProduct(forward, tmp, right);
 	VectorNormalize(right);
 	CrossProduct(right, forward, up);
@@ -359,7 +360,7 @@ void VectorMatrix(const Vector& forward, Vector& right, Vector& up)
 
 void VectorAngles(const float* forward, float* angles)
 {
-	double	tmp, yaw, pitch;
+	double tmp, yaw, pitch;
 
 	if (forward[1] == 0 && forward[0] == 0)
 	{
@@ -395,27 +396,27 @@ ConcatTransforms
 void ConcatTransforms(float in1[3][4], float in2[3][4], float out[3][4])
 {
 	out[0][0] = in1[0][0] * in2[0][0] + in1[0][1] * in2[1][0] +
-		in1[0][2] * in2[2][0];
+				in1[0][2] * in2[2][0];
 	out[0][1] = in1[0][0] * in2[0][1] + in1[0][1] * in2[1][1] +
-		in1[0][2] * in2[2][1];
+				in1[0][2] * in2[2][1];
 	out[0][2] = in1[0][0] * in2[0][2] + in1[0][1] * in2[1][2] +
-		in1[0][2] * in2[2][2];
+				in1[0][2] * in2[2][2];
 	out[0][3] = in1[0][0] * in2[0][3] + in1[0][1] * in2[1][3] +
-		in1[0][2] * in2[2][3] + in1[0][3];
+				in1[0][2] * in2[2][3] + in1[0][3];
 	out[1][0] = in1[1][0] * in2[0][0] + in1[1][1] * in2[1][0] +
-		in1[1][2] * in2[2][0];
+				in1[1][2] * in2[2][0];
 	out[1][1] = in1[1][0] * in2[0][1] + in1[1][1] * in2[1][1] +
-		in1[1][2] * in2[2][1];
+				in1[1][2] * in2[2][1];
 	out[1][2] = in1[1][0] * in2[0][2] + in1[1][1] * in2[1][2] +
-		in1[1][2] * in2[2][2];
+				in1[1][2] * in2[2][2];
 	out[1][3] = in1[1][0] * in2[0][3] + in1[1][1] * in2[1][3] +
-		in1[1][2] * in2[2][3] + in1[1][3];
+				in1[1][2] * in2[2][3] + in1[1][3];
 	out[2][0] = in1[2][0] * in2[0][0] + in1[2][1] * in2[1][0] +
-		in1[2][2] * in2[2][0];
+				in1[2][2] * in2[2][0];
 	out[2][1] = in1[2][0] * in2[0][1] + in1[2][1] * in2[1][1] +
-		in1[2][2] * in2[2][1];
+				in1[2][2] * in2[2][1];
 	out[2][2] = in1[2][0] * in2[0][2] + in1[2][1] * in2[1][2] +
-		in1[2][2] * in2[2][2];
+				in1[2][2] * in2[2][2];
 	out[2][3] = in1[2][0] * in2[0][3] + in1[2][1] * in2[1][3] +
-		in1[2][2] * in2[2][3] + in1[2][3];
+				in1[2][2] * in2[2][3] + in1[2][3];
 }

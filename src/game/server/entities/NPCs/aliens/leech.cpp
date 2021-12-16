@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
 *	All Rights Reserved.
 *
 *   This source code contains proprietary and confidential information of
@@ -35,34 +35,34 @@
 //
 
 
-#include	"float.h"
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"monsters.h"
+#include "float.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
 
 
 
 
 // Animation events
-#define LEECH_AE_ATTACK		1
-#define LEECH_AE_FLOP		2
+#define LEECH_AE_ATTACK 1
+#define LEECH_AE_FLOP 2
 
 
 // Movement constants
 
-#define		LEECH_ACCELERATE		10
-#define		LEECH_CHECK_DIST		45
-#define		LEECH_SWIM_SPEED		50
-#define		LEECH_SWIM_ACCEL		80
-#define		LEECH_SWIM_DECEL		10
-#define		LEECH_TURN_RATE			90
-#define		LEECH_SIZEX				10
-#define		LEECH_FRAMETIME			0.1
+#define LEECH_ACCELERATE 10
+#define LEECH_CHECK_DIST 45
+#define LEECH_SWIM_SPEED 50
+#define LEECH_SWIM_ACCEL 80
+#define LEECH_SWIM_DECEL 10
+#define LEECH_TURN_RATE 90
+#define LEECH_SIZEX 10
+#define LEECH_FRAMETIME 0.1
 
 
 
-#define DEBUG_BEAMS		0
+#define DEBUG_BEAMS 0
 
 #if DEBUG_BEAMS
 #include "effects.h"
@@ -106,34 +106,34 @@ public:
 
 	// Base entity functions
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
-	int	BloodColor() override { return DONT_BLEED; }
+	int BloodColor() override { return DONT_BLEED; }
 	void Killed(entvars_t* pevAttacker, int iGib) override;
 	void Activate() override;
 	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
-	int	Classify() override { return CLASS_INSECT; }
+	int Classify() override { return CLASS_INSECT; }
 	int IRelationship(CBaseEntity* pTarget) override;
 
-	bool	Save(CSave& save) override;
-	bool	Restore(CRestore& restore) override;
-	static	TYPEDESCRIPTION m_SaveData[];
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
+	static TYPEDESCRIPTION m_SaveData[];
 
 	static const char* pAttackSounds[];
 	static const char* pAlertSounds[];
 
 private:
 	// UNDONE: Remove unused boid vars, do group behavior
-	float	m_flTurning;// is this boid turning?
-	bool	m_fPathBlocked;// true if there is an obstacle ahead
-	float	m_flAccelerate;
-	float	m_obstacle;
-	float	m_top;
-	float	m_bottom;
-	float	m_height;
-	float	m_waterTime;
-	float	m_sideTime;		// Timer to randomly check clearance on sides
-	float	m_zTime;
-	float	m_stateTime;
-	float	m_attackSoundTime;
+	float m_flTurning;	 // is this boid turning?
+	bool m_fPathBlocked; // true if there is an obstacle ahead
+	float m_flAccelerate;
+	float m_obstacle;
+	float m_top;
+	float m_bottom;
+	float m_height;
+	float m_waterTime;
+	float m_sideTime; // Timer to randomly check clearance on sides
+	float m_zTime;
+	float m_stateTime;
+	float m_attackSoundTime;
 
 #if DEBUG_BEAMS
 	CBeam* m_pb;
@@ -145,36 +145,36 @@ private:
 
 LINK_ENTITY_TO_CLASS(monster_leech, CLeech);
 
-TYPEDESCRIPTION	CLeech::m_SaveData[] =
-{
-	DEFINE_FIELD(CLeech, m_flTurning, FIELD_FLOAT),
-	DEFINE_FIELD(CLeech, m_fPathBlocked, FIELD_BOOLEAN),
-	DEFINE_FIELD(CLeech, m_flAccelerate, FIELD_FLOAT),
-	DEFINE_FIELD(CLeech, m_obstacle, FIELD_FLOAT),
-	DEFINE_FIELD(CLeech, m_top, FIELD_FLOAT),
-	DEFINE_FIELD(CLeech, m_bottom, FIELD_FLOAT),
-	DEFINE_FIELD(CLeech, m_height, FIELD_FLOAT),
-	DEFINE_FIELD(CLeech, m_waterTime, FIELD_TIME),
-	DEFINE_FIELD(CLeech, m_sideTime, FIELD_TIME),
-	DEFINE_FIELD(CLeech, m_zTime, FIELD_TIME),
-	DEFINE_FIELD(CLeech, m_stateTime, FIELD_TIME),
-	DEFINE_FIELD(CLeech, m_attackSoundTime, FIELD_TIME),
+TYPEDESCRIPTION CLeech::m_SaveData[] =
+	{
+		DEFINE_FIELD(CLeech, m_flTurning, FIELD_FLOAT),
+		DEFINE_FIELD(CLeech, m_fPathBlocked, FIELD_BOOLEAN),
+		DEFINE_FIELD(CLeech, m_flAccelerate, FIELD_FLOAT),
+		DEFINE_FIELD(CLeech, m_obstacle, FIELD_FLOAT),
+		DEFINE_FIELD(CLeech, m_top, FIELD_FLOAT),
+		DEFINE_FIELD(CLeech, m_bottom, FIELD_FLOAT),
+		DEFINE_FIELD(CLeech, m_height, FIELD_FLOAT),
+		DEFINE_FIELD(CLeech, m_waterTime, FIELD_TIME),
+		DEFINE_FIELD(CLeech, m_sideTime, FIELD_TIME),
+		DEFINE_FIELD(CLeech, m_zTime, FIELD_TIME),
+		DEFINE_FIELD(CLeech, m_stateTime, FIELD_TIME),
+		DEFINE_FIELD(CLeech, m_attackSoundTime, FIELD_TIME),
 };
 
 IMPLEMENT_SAVERESTORE(CLeech, CBaseMonster);
 
 
 const char* CLeech::pAttackSounds[] =
-{
-	"leech/leech_bite1.wav",
-	"leech/leech_bite2.wav",
-	"leech/leech_bite3.wav",
+	{
+		"leech/leech_bite1.wav",
+		"leech/leech_bite2.wav",
+		"leech/leech_bite3.wav",
 };
 
 const char* CLeech::pAlertSounds[] =
-{
-	"leech/leech_alert1.wav",
-	"leech/leech_alert2.wav",
+	{
+		"leech/leech_alert1.wav",
+		"leech/leech_alert2.wav",
 };
 
 
@@ -185,7 +185,7 @@ void CLeech::Spawn()
 	// Just for fun
 	//	SET_MODEL(ENT(pev), "models/icky.mdl");
 
-//	UTIL_SetSize( pev, g_vecZero, g_vecZero );
+	//	UTIL_SetSize( pev, g_vecZero, g_vecZero );
 	UTIL_SetSize(pev, Vector(-1, -1, 0), Vector(1, 1, 2));
 	// Don't push the minz down too much or the water check will fail because this entity is really point-sized
 	pev->solid = SOLID_SLIDEBOX;
@@ -193,7 +193,7 @@ void CLeech::Spawn()
 	SetBits(pev->flags, FL_SWIM);
 	pev->health = gSkillData.leechHealth;
 
-	m_flFieldOfView = -0.5;	// 180 degree FOV
+	m_flFieldOfView = -0.5; // 180 degree FOV
 	m_flDistLook = 750;
 	MonsterInit();
 	SetThink(&CLeech::SwimThink);
@@ -339,7 +339,7 @@ void CLeech::HandleAnimEvent(MonsterEvent_t* pEvent)
 			face = face.Normalize();
 
 
-			if (DotProduct(dir, face) > 0.9)		// Only take damage if the leech is facing the prey
+			if (DotProduct(dir, face) > 0.9) // Only take damage if the leech is facing the prey
 				pEnemy->TakeDamage(pev, pev, gSkillData.leechDmgBite, DMG_SLASH);
 		}
 		m_stateTime -= 2;
@@ -369,8 +369,8 @@ void CLeech::MakeVectors()
 //
 float CLeech::ObstacleDistance(CBaseEntity* pTarget)
 {
-	TraceResult		tr;
-	Vector			vecTest;
+	TraceResult tr;
+	Vector vecTest;
 
 	// use VELOCITY, not angles, not all boids point the direction they are flying
 	//Vector vecDir = UTIL_VecToAngles( pev->velocity );
@@ -521,7 +521,7 @@ void CLeech::UpdateMotion()
 		pev->movetype = MOVETYPE_FLY;
 		pev->flags &= ~FL_ONGROUND;
 		RecalculateWaterlevel();
-		m_waterTime = gpGlobals->time + 2;	// Recalc again soon, water may be rising
+		m_waterTime = gpGlobals->time + 2; // Recalc again soon, water may be rising
 	}
 
 	if (m_Activity != m_IdealActivity)
@@ -556,11 +556,11 @@ void CLeech::UpdateMotion()
 
 void CLeech::SwimThink()
 {
-	TraceResult		tr;
-	float			flLeftSide;
-	float			flRightSide;
-	float			targetSpeed;
-	float			targetYaw = 0;
+	TraceResult tr;
+	float flLeftSide;
+	float flRightSide;
+	float targetSpeed;
+	float targetYaw = 0;
 	CBaseEntity* pTarget;
 
 	if (FNullEnt(FIND_CLIENT_IN_PVS(edict())))
@@ -652,7 +652,6 @@ void CLeech::SwimThink()
 		m_fPathBlocked = false;
 		pev->speed = UTIL_Approach(targetSpeed, pev->speed, LEECH_SWIM_ACCEL * LEECH_FRAMETIME);
 		pev->velocity = gpGlobals->v_forward * pev->speed;
-
 	}
 	else
 	{
@@ -660,7 +659,7 @@ void CLeech::SwimThink()
 		// IF we get this far in the function, the leader's path is blocked!
 		m_fPathBlocked = true;
 
-		if (m_flTurning == 0)// something in the way and leech is not already turning to avoid
+		if (m_flTurning == 0) // something in the way and leech is not already turning to avoid
 		{
 			Vector vecTest;
 			// measure clearance on left and right to pick the best dir to turn
@@ -689,8 +688,8 @@ void CLeech::SwimThink()
 
 void CLeech::Killed(entvars_t* pevAttacker, int iGib)
 {
-	Vector			vecSplatDir;
-	TraceResult		tr;
+	Vector vecSplatDir;
+	TraceResult tr;
 
 	//ALERT(at_aiconsole, "Leech: killed\n");
 	// tell owner ( if any ) that we're dead.This is mostly for MonsterMaker functionality.
@@ -719,5 +718,3 @@ void CLeech::Killed(entvars_t* pevAttacker, int iGib)
 	pev->takedamage = DAMAGE_NO;
 	SetThink(&CLeech::DeadThink);
 }
-
-

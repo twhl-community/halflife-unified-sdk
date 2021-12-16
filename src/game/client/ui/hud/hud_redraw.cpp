@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1999, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -23,11 +23,10 @@
 #define MAX_LOGO_FRAMES 56
 
 int grgLogoFrame[MAX_LOGO_FRAMES] =
-{
-	1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 13, 13, 13, 13, 13, 12, 11, 10, 9, 8, 14, 15,
-	16, 17, 18, 19, 20, 20, 20, 20, 20, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
-	29, 29, 29, 29, 29, 28, 27, 26, 25, 24, 30, 31
-};
+	{
+		1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 13, 13, 13, 13, 13, 12, 11, 10, 9, 8, 14, 15,
+		16, 17, 18, 19, 20, 20, 20, 20, 20, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
+		29, 29, 29, 29, 29, 28, 27, 26, 25, 24, 30, 31};
 
 
 extern bool g_iVisibleMouse;
@@ -78,22 +77,22 @@ void CHud::Think()
 
 	// think about default fov
 	if (m_iFOV == 0)
-	{  // only let players adjust up in fov,  and only if they are not overriden by something else
+	{ // only let players adjust up in fov,  and only if they are not overriden by something else
 		m_iFOV = V_max(default_fov->value, 90);
 	}
 
 	if (0 != gEngfuncs.IsSpectateOnly())
 	{
-		m_iFOV = gHUD.m_Spectator.GetFOV();	// default_fov->value;
+		m_iFOV = gHUD.m_Spectator.GetFOV(); // default_fov->value;
 	}
 }
 
 // Redraw
 // step through the local data,  placing the appropriate graphics & text as appropriate
 // returns 1 if they've changed, 0 otherwise
-bool CHud::Redraw(float flTime, bool intermission)
+bool CHud ::Redraw(float flTime, bool intermission)
 {
-	m_fOldTime = m_flTime;	// save time of previous redraw
+	m_fOldTime = m_flTime; // save time of previous redraw
 	m_flTime = flTime;
 	m_flTimeDelta = (double)m_flTime - m_fOldTime;
 	static float m_flShotTime = 0;
@@ -123,7 +122,7 @@ bool CHud::Redraw(float flTime, bool intermission)
 
 			// Take a screenshot if the client's got the cvar set
 			if (CVAR_GET_FLOAT("hud_takesshots") != 0)
-				m_flShotTime = flTime + 1.0;	// Take a screenshot in a second
+				m_flShotTime = flTime + 1.0; // Take a screenshot in a second
 		}
 	}
 
@@ -151,7 +150,7 @@ bool CHud::Redraw(float flTime, bool intermission)
 					pList->p->Draw(flTime);
 			}
 			else
-			{  // it's an intermission,  so only draw hud elements that are set to draw during intermissions
+			{ // it's an intermission,  so only draw hud elements that are set to draw during intermissions
 				if ((pList->p->m_iFlags & HUD_INTERMISSION) != 0)
 					pList->p->Draw(flTime);
 			}
@@ -188,7 +187,7 @@ bool CHud::Redraw(float flTime, bool intermission)
 		int mx, my;
 
 		IN_GetMousePos( &mx, &my );
-
+		
 		if (m_hsprCursor == 0)
 		{
 			char sz[256];
@@ -197,7 +196,7 @@ bool CHud::Redraw(float flTime, bool intermission)
 		}
 
 		SPR_Set(m_hsprCursor, 250, 250, 250 );
-
+		
 		// Draw the logo at 20 fps
 		SPR_DrawAdditive( 0, mx, my, NULL );
 	}
@@ -214,26 +213,25 @@ void ScaleColors(int& r, int& g, int& b, int a)
 	b = (int)(b * x);
 }
 
-int CHud::DrawHudString(int xpos, int ypos, int iMaxX, const char* szIt, int r, int g, int b)
+int CHud ::DrawHudString(int xpos, int ypos, int iMaxX, const char* szIt, int r, int g, int b)
 {
 	return xpos + gEngfuncs.pfnDrawString(xpos, ypos, szIt, r, g, b);
 }
 
-int CHud::DrawHudNumberString(int xpos, int ypos, int iMinX, int iNumber, int r, int g, int b)
+int CHud ::DrawHudNumberString(int xpos, int ypos, int iMinX, int iNumber, int r, int g, int b)
 {
 	char szString[32];
 	sprintf(szString, "%d", iNumber);
 	return DrawHudStringReverse(xpos, ypos, iMinX, szString, r, g, b);
-
 }
 
 // draws a string from right to left (right-aligned)
-int CHud::DrawHudStringReverse(int xpos, int ypos, int iMinX, const char* szString, int r, int g, int b)
+int CHud ::DrawHudStringReverse(int xpos, int ypos, int iMinX, const char* szString, int r, int g, int b)
 {
 	return xpos - gEngfuncs.pfnDrawStringReverse(xpos, ypos, szString, r, g, b);
 }
 
-int CHud::DrawHudNumber(int x, int y, int iFlags, int iNumber, int r, int g, int b)
+int CHud ::DrawHudNumber(int x, int y, int iFlags, int iNumber, int r, int g, int b)
 {
 	int iWidth = GetSpriteRect(m_HUD_number_0).right - GetSpriteRect(m_HUD_number_0).left;
 	int k;
@@ -324,7 +322,6 @@ int CHud::GetNumWidth(int iNumber, int iFlags)
 		return 2;
 
 	return 3;
-
 }
 
 int CHud::GetHudNumberWidth(int number, int width, int flags)
@@ -367,10 +364,8 @@ int CHud::DrawHudNumberReverse(int x, int y, int number, int flags, int r, int g
 			SPR_DrawAdditive(0, x, y, &GetSpriteRect(digitSpriteIndex));
 
 			remainder /= 10;
-		}
-		while (remainder > 0);
+		} while (remainder > 0);
 	}
 
 	return x;
 }
-

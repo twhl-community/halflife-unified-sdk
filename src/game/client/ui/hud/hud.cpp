@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -30,8 +30,8 @@
 #include "demo_api.h"
 #include "vgui_ScorePanel.h"
 
-hud_player_info_t	 g_PlayerInfoList[MAX_PLAYERS + 1];	   // player info from the engine
-extra_player_info_t  g_PlayerExtraInfo[MAX_PLAYERS + 1];   // additional player info sent directly to the client dll
+hud_player_info_t g_PlayerInfoList[MAX_PLAYERS + 1];	// player info from the engine
+extra_player_info_t g_PlayerExtraInfo[MAX_PLAYERS + 1]; // additional player info sent directly to the client dll
 
 class CHLVoiceStatusHelper : public IVoiceStatusHelper
 {
@@ -62,7 +62,7 @@ public:
 		gViewPort->UpdateCursorState();
 	}
 
-	int	GetAckIconHeight() override
+	int GetAckIconHeight() override
 	{
 		return ScreenHeight - gHUD.m_iFontHeight * 3 - 6;
 	}
@@ -275,7 +275,7 @@ int __MsgFunc_AllowSpec(const char* pszName, int iSize, void* pbuf)
 }
 
 // This is called every time the DLL is loaded
-void CHud::Init()
+void CHud ::Init()
 {
 	HOOK_MESSAGE(Logo);
 	HOOK_MESSAGE(ResetHUD);
@@ -312,8 +312,8 @@ void CHud::Init()
 	// VGUI Menus
 	HOOK_MESSAGE(VGUIMenu);
 
-	CVAR_CREATE("hud_classautokill", "1", FCVAR_ARCHIVE | FCVAR_USERINFO);		// controls whether or not to suicide immediately on TF class switch
-	CVAR_CREATE("hud_takesshots", "0", FCVAR_ARCHIVE);		// controls whether or not to automatically take screenshots at the end of a round
+	CVAR_CREATE("hud_classautokill", "1", FCVAR_ARCHIVE | FCVAR_USERINFO); // controls whether or not to suicide immediately on TF class switch
+	CVAR_CREATE("hud_takesshots", "0", FCVAR_ARCHIVE);					   // controls whether or not to automatically take screenshots at the end of a round
 
 
 	m_iLogo = 0;
@@ -370,7 +370,7 @@ void CHud::Init()
 
 // CHud destructor
 // cleans up memory allocated for m_rg* arrays
-CHud :: ~CHud()
+CHud ::~CHud()
 {
 	delete[] m_rghSprites;
 	delete[] m_rgrcRects;
@@ -393,7 +393,7 @@ CHud :: ~CHud()
 // searches through the sprite list loaded from hud.txt for a name matching SpriteName
 // returns an index into the gHUD.m_rghSprites[] array
 // returns 0 if sprite not found
-int CHud::GetSpriteIndex(const char* SpriteName)
+int CHud ::GetSpriteIndex(const char* SpriteName)
 {
 	// look through the loaded sprite name list for SpriteName
 	for (int i = 0; i < m_iSpriteCount; i++)
@@ -405,7 +405,7 @@ int CHud::GetSpriteIndex(const char* SpriteName)
 	return -1; // invalid sprite
 }
 
-void CHud::VidInit()
+void CHud ::VidInit()
 {
 	m_scrinfo.iSize = sizeof(m_scrinfo);
 	GetScreenInfo(&m_scrinfo);
@@ -413,7 +413,7 @@ void CHud::VidInit()
 	// ----------
 	// Load Sprites
 	// ---------
-//	m_hsprFont = LoadSprite("sprites/%d_font.spr");
+	//	m_hsprFont = LoadSprite("sprites/%d_font.spr");
 
 	m_hsprLogo = 0;
 	m_hsprCursor = 0;
@@ -538,10 +538,10 @@ void COM_FileBase(const char* in, char* out)
 	while (0 != end && in[end] != '.' && in[end] != '/' && in[end] != '\\')
 		end--;
 
-	if (in[end] != '.')		// no '.', copy to end
+	if (in[end] != '.') // no '.', copy to end
 		end = len - 1;
 	else
-		end--;					// Found ',', copy to left of '.'
+		end--; // Found ',', copy to left of '.'
 
 
 	// Scan backward for '/'
@@ -658,7 +658,7 @@ bool CHud::MsgFunc_SetFOV(const char* pszName, int iSize, void* pbuf)
 
 void CHud::AddHudElem(CHudBase* phudelem)
 {
-	HUDLIST* pdl, * ptemp;
+	HUDLIST *pdl, *ptemp;
 
 	//phudelem->Think();
 
@@ -690,5 +690,3 @@ float CHud::GetSensitivity()
 {
 	return m_flMouseSensitivity;
 }
-
-

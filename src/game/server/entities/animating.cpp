@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -26,13 +26,13 @@
 #include "animation.h"
 #include "saverestore.h"
 
-TYPEDESCRIPTION	CBaseAnimating::m_SaveData[] =
-{
-	DEFINE_FIELD(CBaseMonster, m_flFrameRate, FIELD_FLOAT),
-	DEFINE_FIELD(CBaseMonster, m_flGroundSpeed, FIELD_FLOAT),
-	DEFINE_FIELD(CBaseMonster, m_flLastEventCheck, FIELD_TIME),
-	DEFINE_FIELD(CBaseMonster, m_fSequenceFinished, FIELD_BOOLEAN),
-	DEFINE_FIELD(CBaseMonster, m_fSequenceLoops, FIELD_BOOLEAN),
+TYPEDESCRIPTION CBaseAnimating::m_SaveData[] =
+	{
+		DEFINE_FIELD(CBaseMonster, m_flFrameRate, FIELD_FLOAT),
+		DEFINE_FIELD(CBaseMonster, m_flGroundSpeed, FIELD_FLOAT),
+		DEFINE_FIELD(CBaseMonster, m_flLastEventCheck, FIELD_TIME),
+		DEFINE_FIELD(CBaseMonster, m_fSequenceFinished, FIELD_BOOLEAN),
+		DEFINE_FIELD(CBaseMonster, m_fSequenceLoops, FIELD_BOOLEAN),
 };
 
 IMPLEMENT_SAVERESTORE(CBaseAnimating, CBaseDelay);
@@ -42,7 +42,7 @@ IMPLEMENT_SAVERESTORE(CBaseAnimating, CBaseDelay);
 // StudioFrameAdvance - advance the animation frame up to the current time
 // if an flInterval is passed in, only advance animation that number of seconds
 //=========================================================
-float CBaseAnimating::StudioFrameAdvance(float flInterval)
+float CBaseAnimating ::StudioFrameAdvance(float flInterval)
 {
 	if (flInterval == 0.0)
 	{
@@ -65,7 +65,7 @@ float CBaseAnimating::StudioFrameAdvance(float flInterval)
 			pev->frame -= (int)(pev->frame / 256.0) * 256.0;
 		else
 			pev->frame = (pev->frame < 0.0) ? 0 : 255;
-		m_fSequenceFinished = true;	// just in case it wasn't caught in GetEvents
+		m_fSequenceFinished = true; // just in case it wasn't caught in GetEvents
 	}
 
 	return flInterval;
@@ -74,7 +74,7 @@ float CBaseAnimating::StudioFrameAdvance(float flInterval)
 //=========================================================
 // LookupActivity
 //=========================================================
-int CBaseAnimating::LookupActivity(int activity)
+int CBaseAnimating ::LookupActivity(int activity)
 {
 	ASSERT(activity != 0);
 	void* pmodel = GET_MODEL_PTR(ENT(pev));
@@ -88,7 +88,7 @@ int CBaseAnimating::LookupActivity(int activity)
 // Get activity with highest 'weight'
 //
 //=========================================================
-int CBaseAnimating::LookupActivityHeaviest(int activity)
+int CBaseAnimating ::LookupActivityHeaviest(int activity)
 {
 	void* pmodel = GET_MODEL_PTR(ENT(pev));
 
@@ -97,7 +97,7 @@ int CBaseAnimating::LookupActivityHeaviest(int activity)
 
 //=========================================================
 //=========================================================
-int CBaseAnimating::LookupSequence(const char* label)
+int CBaseAnimating ::LookupSequence(const char* label)
 {
 	void* pmodel = GET_MODEL_PTR(ENT(pev));
 
@@ -107,7 +107,7 @@ int CBaseAnimating::LookupSequence(const char* label)
 
 //=========================================================
 //=========================================================
-void CBaseAnimating::ResetSequenceInfo()
+void CBaseAnimating ::ResetSequenceInfo()
 {
 	void* pmodel = GET_MODEL_PTR(ENT(pev));
 
@@ -123,7 +123,7 @@ void CBaseAnimating::ResetSequenceInfo()
 
 //=========================================================
 //=========================================================
-int CBaseAnimating::GetSequenceFlags()
+int CBaseAnimating ::GetSequenceFlags()
 {
 	void* pmodel = GET_MODEL_PTR(ENT(pev));
 
@@ -133,9 +133,9 @@ int CBaseAnimating::GetSequenceFlags()
 //=========================================================
 // DispatchAnimEvents
 //=========================================================
-void CBaseAnimating::DispatchAnimEvents(float flInterval)
+void CBaseAnimating ::DispatchAnimEvents(float flInterval)
 {
-	MonsterEvent_t	event;
+	MonsterEvent_t event;
 
 	void* pmodel = GET_MODEL_PTR(ENT(pev));
 
@@ -168,7 +168,7 @@ void CBaseAnimating::DispatchAnimEvents(float flInterval)
 
 //=========================================================
 //=========================================================
-float CBaseAnimating::SetBoneController(int iController, float flValue)
+float CBaseAnimating ::SetBoneController(int iController, float flValue)
 {
 	void* pmodel = GET_MODEL_PTR(ENT(pev));
 
@@ -177,7 +177,7 @@ float CBaseAnimating::SetBoneController(int iController, float flValue)
 
 //=========================================================
 //=========================================================
-void CBaseAnimating::InitBoneControllers()
+void CBaseAnimating ::InitBoneControllers()
 {
 	void* pmodel = GET_MODEL_PTR(ENT(pev));
 
@@ -189,7 +189,7 @@ void CBaseAnimating::InitBoneControllers()
 
 //=========================================================
 //=========================================================
-float CBaseAnimating::SetBlending(int iBlender, float flValue)
+float CBaseAnimating ::SetBlending(int iBlender, float flValue)
 {
 	void* pmodel = GET_MODEL_PTR(ENT(pev));
 
@@ -198,21 +198,21 @@ float CBaseAnimating::SetBlending(int iBlender, float flValue)
 
 //=========================================================
 //=========================================================
-void CBaseAnimating::GetBonePosition(int iBone, Vector& origin, Vector& angles)
+void CBaseAnimating ::GetBonePosition(int iBone, Vector& origin, Vector& angles)
 {
 	GET_BONE_POSITION(ENT(pev), iBone, origin, angles);
 }
 
 //=========================================================
 //=========================================================
-void CBaseAnimating::GetAttachment(int iAttachment, Vector& origin, Vector& angles)
+void CBaseAnimating ::GetAttachment(int iAttachment, Vector& origin, Vector& angles)
 {
 	GET_ATTACHMENT(ENT(pev), iAttachment, origin, angles);
 }
 
 //=========================================================
 //=========================================================
-int CBaseAnimating::FindTransition(int iEndingSequence, int iGoalSequence, int* piDir)
+int CBaseAnimating ::FindTransition(int iEndingSequence, int iGoalSequence, int* piDir)
 {
 	void* pmodel = GET_MODEL_PTR(ENT(pev));
 
@@ -231,23 +231,22 @@ int CBaseAnimating::FindTransition(int iEndingSequence, int iGoalSequence, int* 
 
 //=========================================================
 //=========================================================
-void CBaseAnimating::GetAutomovement(Vector& origin, Vector& angles, float flInterval)
+void CBaseAnimating ::GetAutomovement(Vector& origin, Vector& angles, float flInterval)
 {
-
 }
 
-void CBaseAnimating::SetBodygroup(int iGroup, int iValue)
+void CBaseAnimating ::SetBodygroup(int iGroup, int iValue)
 {
 	::SetBodygroup(GET_MODEL_PTR(ENT(pev)), pev, iGroup, iValue);
 }
 
-int CBaseAnimating::GetBodygroup(int iGroup)
+int CBaseAnimating ::GetBodygroup(int iGroup)
 {
 	return ::GetBodygroup(GET_MODEL_PTR(ENT(pev)), pev, iGroup);
 }
 
 
-bool CBaseAnimating::ExtractBbox(int sequence, float* mins, float* maxs)
+bool CBaseAnimating ::ExtractBbox(int sequence, float* mins, float* maxs)
 {
 	return ::ExtractBbox(GET_MODEL_PTR(ENT(pev)), sequence, mins, maxs);
 }
@@ -255,7 +254,7 @@ bool CBaseAnimating::ExtractBbox(int sequence, float* mins, float* maxs)
 //=========================================================
 //=========================================================
 
-void CBaseAnimating::SetSequenceBox()
+void CBaseAnimating ::SetSequenceBox()
 {
 	Vector mins, maxs;
 
@@ -315,4 +314,3 @@ void CBaseAnimating::SetSequenceBox()
 		UTIL_SetSize(pev, rmin, rmax);
 	}
 }
-
