@@ -25,9 +25,6 @@
 #include "vgui_SchemeManager.h"
 
 #define TF_DEFS_ONLY
-#ifdef _TFC
-#include "../tfc/tf_defs.h"
-#else
 #define PC_LASTCLASS 10
 #define PC_UNDEFINED 0
 #define MENU_DEFAULT 1
@@ -39,7 +36,6 @@
 #define MENU_CLASSHELP2 7
 #define MENU_REPEATHELP 8
 #define MENU_SPECHELP 9
-#endif
 using namespace vgui;
 
 class Cursor;
@@ -1021,10 +1017,6 @@ public:
 	virtual bool IsNotValid()
 	{
 		// Only visible for spies
-#ifdef _TFC
-		if (g_iPlayerClass != PC_SPY)
-			return true;
-#endif
 
 		if (m_iFeignState == gViewPort->GetIsFeigning())
 			return false;
@@ -1068,11 +1060,6 @@ public:
 
 	virtual bool IsNotValid()
 	{
-#ifdef _TFC
-		// Only visible for spies
-		if (g_iPlayerClass != PC_SPY)
-			return true;
-#endif
 
 		// if it's not tied to a specific team, then always show (for spies)
 		if (!m_iValidTeamsBits)
@@ -1099,11 +1086,6 @@ public:
 
 	virtual bool IsNotValid()
 	{
-#ifdef _TFC
-		// Only visible for demomen
-		if (g_iPlayerClass != PC_DEMOMAN)
-			return true;
-#endif
 
 		if (m_iDetpackState == gViewPort->GetIsSettingDetpack())
 			return false;
@@ -1141,63 +1123,6 @@ public:
 
 	virtual bool IsNotValid()
 	{
-#ifdef _TFC
-		// Only visible for engineers
-		if (g_iPlayerClass != PC_ENGINEER)
-			return true;
-
-		// If this isn't set, it's only active when they're not building
-		if (m_iBuildState & BUILDSTATE_BUILDING)
-		{
-			// Make sure the player's building
-			if (!(gViewPort->GetBuildState() & BS_BUILDING))
-				return true;
-		}
-		else
-		{
-			// Make sure the player's not building
-			if (gViewPort->GetBuildState() & BS_BUILDING)
-				return true;
-		}
-
-		if (m_iBuildState & BUILDSTATE_BASE)
-		{
-			// Only appear if we've got enough metal to build something, or something already built
-			if (gViewPort->GetBuildState() & (BS_HAS_SENTRYGUN | BS_HAS_DISPENSER | BS_CANB_SENTRYGUN | BS_CANB_DISPENSER | BS_HAS_ENTRY_TELEPORTER | BS_HAS_EXIT_TELEPORTER | BS_CANB_ENTRY_TELEPORTER | BS_CANB_EXIT_TELEPORTER))
-				return false;
-
-			return true;
-		}
-
-		// Must have a building
-		if (m_iBuildState & BUILDSTATE_HASBUILDING)
-		{
-			if (m_iBuildData == BuildButton::DISPENSER && !(gViewPort->GetBuildState() & BS_HAS_DISPENSER))
-				return true;
-			if (m_iBuildData == BuildButton::SENTRYGUN && !(gViewPort->GetBuildState() & BS_HAS_SENTRYGUN))
-				return true;
-			if (m_iBuildData == BuildButton::ENTRY_TELEPORTER && !(gViewPort->GetBuildState() & BS_HAS_ENTRY_TELEPORTER))
-				return true;
-			if (m_iBuildData == BuildButton::EXIT_TELEPORTER && !(gViewPort->GetBuildState() & BS_HAS_EXIT_TELEPORTER))
-				return true;
-		}
-
-		// Can build something
-		if (m_iBuildState & BUILDSTATE_CANBUILD)
-		{
-			// Make sure they've got the ammo and don't have one already
-			if (m_iBuildData == BuildButton::DISPENSER && (gViewPort->GetBuildState() & BS_CANB_DISPENSER))
-				return false;
-			if (m_iBuildData == BuildButton::SENTRYGUN && (gViewPort->GetBuildState() & BS_CANB_SENTRYGUN))
-				return false;
-			if (m_iBuildData == BuildButton::ENTRY_TELEPORTER && (gViewPort->GetBuildState() & BS_CANB_ENTRY_TELEPORTER))
-				return false;
-			if (m_iBuildData == BuildButton::EXIT_TELEPORTER && (gViewPort->GetBuildState() & BS_CANB_EXIT_TELEPORTER))
-				return false;
-
-			return true;
-		}
-#endif
 		return false;
 	}
 };
@@ -1426,10 +1351,10 @@ private:
 	struct cvar_s * m_cvar;
 	CImageLabel *	pLabelOn;
 	CImageLabel *	pLabelOff;
-
+	
 public:
 
-	SpectToggleButton( const char* cvarname, const char* text,int x,int y,int wide,int tall, bool flat ) :
+	SpectToggleButton( const char* cvarname, const char* text,int x,int y,int wide,int tall, bool flat ) : 
 	  ToggleCommandButton( cvarname, text, x, y, wide, tall, flat, true )
 	 {
 		m_cvar = gEngfuncs.pfnGetCvarPointer( cvarname );
@@ -1438,7 +1363,7 @@ public:
 		pLabelOn = new CImageLabel( "checked", 0, 0 );
 		pLabelOn->setParent(this);
 		pLabelOn->addInputSignal(this);
-
+				
 		pLabelOff = new CImageLabel( "unchecked", 0, 0 );
 		pLabelOff->setParent(this);
 		pLabelOff->setEnabled(true);
@@ -1446,30 +1371,30 @@ public:
 
 		int textwide, texttall;
 		getTextSize( textwide, texttall);
-
+	
 		// Reposition
 		pLabelOn->setPos( textwide, (tall - pLabelOn->getTall()) / 2 );
 
 		pLabelOff->setPos( textwide, (tall - pLabelOff->getTall()) / 2 );
-
+		
 		// Set text color to orange
 		setFgColor(Scheme::sc_primary1);
 	}
-
+		
 	virtual void paintBackground()
 	{
 		if ( isArmed())
 		{
-			drawSetColor( 143,143, 54, 125 );
+			drawSetColor( 143,143, 54, 125 ); 
 			drawFilledRect( 5, 0,_size[0] - 5,_size[1]);
 		}
 	}
 
 	virtual void paint()
 	{
-
+	
 		if ( isArmed() )
-		{
+		{ 
 			setFgColor( 194, 202, 54, 0 );
 		}
 		else
@@ -1481,7 +1406,7 @@ public:
 		{
 			pLabelOff->setVisible(false);
 			pLabelOn->setVisible(false);
-		}
+		} 
 		else if ( m_cvar->value )
 		{
 			pLabelOff->setVisible(false);

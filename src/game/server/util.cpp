@@ -1668,12 +1668,12 @@ static int gSizes[FIELD_TYPECOUNT] =
 #else
 		sizeof(int*), // FIELD_FUNCTION
 #endif
-		sizeof(byte),  // FIELD_BOOLEAN
-		sizeof(short), // FIELD_SHORT
-		sizeof(char),  // FIELD_CHARACTER
-		sizeof(float), // FIELD_TIME
-		sizeof(int),   // FIELD_MODELNAME
-		sizeof(int),   // FIELD_SOUNDNAME
+		sizeof(byte),		   // FIELD_BOOLEAN
+		sizeof(short),		   // FIELD_SHORT
+		sizeof(char),		   // FIELD_CHARACTER
+		sizeof(float),		   // FIELD_TIME
+		sizeof(int),		   // FIELD_MODELNAME
+		sizeof(int),		   // FIELD_SOUNDNAME
 		sizeof(std::uint64_t), //FIELD_INT64
 };
 
