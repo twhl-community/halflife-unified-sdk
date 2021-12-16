@@ -3298,7 +3298,8 @@ void CBasePlayer::ImpulseCommands()
 	int iImpulse = (int)pev->impulse;
 	switch (iImpulse)
 	{
-	case 99: {
+	case 99:
+	{
 
 		bool iOn;
 
@@ -3377,7 +3378,8 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse)
 
 	switch (iImpulse)
 	{
-	case 76: {
+	case 76:
+	{
 		if (!giPrecacheGrunt)
 		{
 			giPrecacheGrunt = true;
@@ -3480,7 +3482,8 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse)
 		}
 		break;
 
-	case 107: {
+	case 107:
+	{
 		TraceResult tr;
 
 		edict_t* pWorld = g_engfuncs.pfnPEntityOfEntIndex(0);
