@@ -100,13 +100,6 @@ DLLEXPORT IBaseInterface* CreateInterface(const char* pName, int* pReturnCode);
 
 extern CreateInterfaceFn Sys_GetFactoryThis(void);
 
-
-//-----------------------------------------------------------------------------
-// UNDONE: This is obsolete, use the module load/unload/get instead!!!
-//-----------------------------------------------------------------------------
-extern CreateInterfaceFn Sys_GetFactory(const char* pModuleName);
-
-
 // load/unload components
 class CSysModule;
 
