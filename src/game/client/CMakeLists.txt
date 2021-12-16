@@ -1,10 +1,10 @@
 include(../shared/game_shared.cmake)
 
 if (UNIX)
-	# Copy libraries provided by the game to the build directory so relative link paths work at build time (matches the SDK's way of doing things)
-	# Copy the files to the root binary directory so this works properly
-	configure_file(../../../utils/vgui/lib/linux/vgui${CMAKE_SHARED_LIBRARY_SUFFIX} ${CMAKE_BINARY_DIR}/vgui${CMAKE_SHARED_LIBRARY_SUFFIX} COPYONLY)
-	configure_file(../../../external/SDL2/lib/libSDL2-2.0${CMAKE_SHARED_LIBRARY_SUFFIX}.0 ${CMAKE_BINARY_DIR}/libSDL2-2.0${CMAKE_SHARED_LIBRARY_SUFFIX}.0 COPYONLY)
+	# Copy libraries provided by the game to the build directory so we can point the compiler and linker to the files.
+	configure_file(../../../utils/vgui/lib/linux/vgui${CMAKE_SHARED_LIBRARY_SUFFIX} ${CMAKE_CURRENT_BINARY_DIR}/vgui${CMAKE_SHARED_LIBRARY_SUFFIX} COPYONLY)
+	
+	configure_file(../../../external/SDL2/lib/libSDL2-2.0${CMAKE_SHARED_LIBRARY_SUFFIX}.0 ${CMAKE_CURRENT_BINARY_DIR}/libSDL2-2.0${CMAKE_SHARED_LIBRARY_SUFFIX}.0 COPYONLY)
 endif()
 
 # Set up vgui library
@@ -13,7 +13,7 @@ add_library(vgui SHARED IMPORTED)
 if (WIN32)
 	set_target_properties(vgui PROPERTIES IMPORTED_IMPLIB "${CMAKE_CURRENT_SOURCE_DIR}/../../../utils/vgui/lib/win32_vc6/vgui.lib")
 else()
-	set_target_properties(vgui PROPERTIES IMPORTED_LOCATION "vgui${CMAKE_SHARED_LIBRARY_SUFFIX}")
+	set_target_properties(vgui PROPERTIES IMPORTED_LOCATION "${CMAKE_CURRENT_BINARY_DIR}/vgui${CMAKE_SHARED_LIBRARY_SUFFIX}")
 endif()
 
 target_include_directories(vgui INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/../../../utils/vgui/include)
@@ -24,7 +24,7 @@ add_library(SDL2 SHARED IMPORTED)
 if (WIN32)
 	set_target_properties(SDL2 PROPERTIES IMPORTED_IMPLIB "${CMAKE_CURRENT_SOURCE_DIR}/../../../external/SDL2/lib/SDL2.lib")
 else()
-	set_target_properties(SDL2 PROPERTIES IMPORTED_LOCATION "libSDL2-2.0${CMAKE_SHARED_LIBRARY_SUFFIX}.0")
+	set_target_properties(SDL2 PROPERTIES IMPORTED_LOCATION "${CMAKE_CURRENT_BINARY_DIR}/libSDL2-2.0${CMAKE_SHARED_LIBRARY_SUFFIX}.0")
 endif()
 
 target_include_directories(SDL2 INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/../../../external/SDL2/include)
@@ -62,6 +62,12 @@ target_link_libraries(client PRIVATE
 	vgui
 	$<$<PLATFORM_ID:Windows>:wsock32>
 	SDL2)
+	
+if (UNIX)
+	# Tell the linker to search for vgui.so and SDL2-2.0.so.0 in here
+	target_link_directories(client PRIVATE
+		${CMAKE_CURRENT_BINARY_DIR})
+endif()
 
 target_link_options(client PRIVATE
 	$<$<PLATFORM_ID:Darwin>:
