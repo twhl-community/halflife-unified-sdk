@@ -34,7 +34,6 @@ target_sources(hl PRIVATE
 	extdll.h
 	game.cpp
 	game.h
-	globals.cpp
 	h_export.cpp
 	nodes.cpp
 	nodes.h
