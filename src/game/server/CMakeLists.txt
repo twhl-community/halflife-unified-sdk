@@ -160,6 +160,8 @@ target_sources(hl PRIVATE
 	gamerules/teamplay_gamerules.h
 	
 	../../common/mathlib.cpp
+	../../common/Platform.h
+	../../common/PlatformHeaders.h
 	../../common/Sequence.h
 
 	../../engine/edict.h
