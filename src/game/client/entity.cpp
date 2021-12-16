@@ -220,7 +220,7 @@ void DLLEXPORT HUD_TxferPredictionData(struct entity_state_s* ps, const struct e
 	VectorCopy(ppcd->vuser3, pcd->vuser3);
 	VectorCopy(ppcd->vuser4, pcd->vuser4);
 
-	memcpy(wd, pwd, 32 * sizeof(weapon_data_t));
+	memcpy(wd, pwd, MAX_WEAPONS * sizeof(weapon_data_t));
 }
 
 #if defined(BEAM_TEST)
@@ -316,7 +316,7 @@ void DLLEXPORT HUD_CreateEntities()
 }
 
 #if defined(_TFC)
-extern int g_bACSpinning[33];
+extern int g_bACSpinning[MAX_PLAYERS + 1];
 #endif
 
 /*

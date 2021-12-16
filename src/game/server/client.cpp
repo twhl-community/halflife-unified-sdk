@@ -1519,6 +1519,8 @@ void RegisterEncoders()
 
 int GetWeaponData(struct edict_s* player, struct weapon_data_s* info)
 {
+	memset(info, 0, MAX_WEAPONS * sizeof(weapon_data_t));
+
 #if defined(CLIENT_WEAPONS)
 	int i;
 	weapon_data_t* item;
@@ -1527,8 +1529,6 @@ int GetWeaponData(struct edict_s* player, struct weapon_data_s* info)
 	CBasePlayerWeapon* gun;
 
 	ItemInfo II;
-
-	memset(info, 0, 32 * sizeof(weapon_data_t));
 
 	if (!pl)
 		return 1;
@@ -1550,7 +1550,7 @@ int GetWeaponData(struct edict_s* player, struct weapon_data_s* info)
 					memset(&II, 0, sizeof(II));
 					gun->GetItemInfo(&II);
 
-					if (II.iId >= 0 && II.iId < 32)
+					if (II.iId >= 0 && II.iId < MAX_WEAPONS)
 					{
 						item = &info[II.iId];
 
@@ -1577,8 +1577,6 @@ int GetWeaponData(struct edict_s* player, struct weapon_data_s* info)
 			}
 		}
 	}
-#else
-	memset(info, 0, 32 * sizeof(weapon_data_t));
 #endif
 	return 1;
 }
