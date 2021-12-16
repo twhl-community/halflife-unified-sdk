@@ -17,6 +17,7 @@ target_include_directories(hl PRIVATE
 	../../common
 	../shared
 	../shared/player_movement
+	../shared/utils
 	../../public)
 	
 target_compile_definitions(hl PRIVATE
@@ -165,6 +166,9 @@ target_sources(hl PRIVATE
 	../../engine/eiface.h
 	../../engine/progdefs.h
 
+	../../public/FileSystem.h
+	../../public/interface.cpp
+	../../public/interface.h
 	../../public/steam/steamtypes.h)
 
 add_game_shared_sources(hl)
