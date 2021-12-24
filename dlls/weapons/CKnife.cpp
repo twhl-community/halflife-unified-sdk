@@ -158,16 +158,33 @@ bool CKnife::Swing(const bool bFirst)
 		{
 			ClearMultiDamage();
 
-			if ((m_flNextPrimaryAttack + 1 < UTIL_WeaponTimeBase()) || g_pGameRules->IsMultiplayer())
+			float damage = gSkillData.plrDmgKnife;
+
+			int damageTypes = DMG_CLUB;
+
+			if (g_pGameRules->IsMultiplayer())
 			{
-				// first swing does full damage
-				pEntity->TraceAttack(m_pPlayer->pev, gSkillData.plrDmgKnife, gpGlobals->v_forward, &tr, DMG_CLUB);
+				//TODO: This code assumes the target is a player and not some NPC. Rework it to support NPC backstabbing.
+				UTIL_MakeVectors(pEntity->pev->v_angle);
+
+				const Vector targetRightDirection = gpGlobals->v_right;
+
+				UTIL_MakeVectors(m_pPlayer->pev->v_angle);
+
+				const Vector ownerForwardDirection = gpGlobals->v_forward;
+
+				//In multiplayer the knife can backstab targets.
+				const bool isBehindTarget = CrossProduct(targetRightDirection, ownerForwardDirection).z > 0;
+
+				if (isBehindTarget)
+				{
+					damage *= 100;
+					damageTypes |= DMG_NEVERGIB;
+				}
 			}
-			else
-			{
-				// subsequent swings do half
-				pEntity->TraceAttack(m_pPlayer->pev, gSkillData.plrDmgKnife / 2, gpGlobals->v_forward, &tr, DMG_CLUB);
-			}
+
+			pEntity->TraceAttack(m_pPlayer->pev, damage, gpGlobals->v_forward, &tr, damageTypes);
+
 			ApplyMultiDamage(m_pPlayer->pev, m_pPlayer->pev);
 		}
 
