@@ -134,7 +134,6 @@ target_sources(hl PRIVATE
 	entities/NPCs/aliens/leech.cpp
 	entities/NPCs/aliens/nihilanth.cpp
 	entities/NPCs/aliens/tentacle.cpp
-	entities/NPCs/aliens/zombie.cpp
 	
 	entities/NPCs/blackmesa/barney.cpp
 	entities/NPCs/blackmesa/scientist.cpp
@@ -150,6 +149,8 @@ target_sources(hl PRIVATE
 	entities/NPCs/other/gman.cpp
 	entities/NPCs/other/rat.cpp
 	entities/NPCs/other/roach.cpp
+	
+	entities/NPCs/zombies/zombie.cpp
 
 	gamerules/gamerules.cpp
 	gamerules/gamerules.h
