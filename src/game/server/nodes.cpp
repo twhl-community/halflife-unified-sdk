@@ -119,12 +119,12 @@ void CGraph::InitGraph()
 int CGraph::AllocNodes()
 {
 	//  malloc all of the nodes
-	WorldGraph.m_pNodes = (CNode*)calloc(sizeof(CNode), MAX_NODES);
+	m_pNodes = (CNode*)calloc(sizeof(CNode), MAX_NODES);
 
 	// could not malloc space for all the nodes!
-	if (!WorldGraph.m_pNodes)
+	if (!m_pNodes)
 	{
-		ALERT(at_aiconsole, "**ERROR**\nCouldn't malloc %d nodes!\n", WorldGraph.m_cNodes);
+		ALERT(at_aiconsole, "**ERROR**\nCouldn't malloc %d nodes!\n", m_cNodes);
 		return FALSE;
 	}
 
@@ -1310,7 +1310,7 @@ int CGraph::LinkVisibleNodes(CLink* pLinkPool, FILE* file, int* piBadNode)
 			}
 
 			// record the connection info in the link pool
-			WorldGraph.m_pNodes[i].m_cNumLinks = cLinksThisNode;
+			m_pNodes[i].m_cNumLinks = cLinksThisNode;
 
 			// keep track of the most initial links ANY node had, so we can figure out
 			// if we have a large enough default link pool
@@ -3454,11 +3454,11 @@ void CGraph::TestRoutingTables()
 							cPathSize2 = FindShortestPath(pMyPath2, iFrom, iTo, iHull, iCapMask);
 							goto EnoughSaid;
 						}
-						}
 					}
 				}
 			}
 		}
+	}
 
 EnoughSaid:
 
@@ -3466,7 +3466,7 @@ EnoughSaid:
 	if (pMyPath2) delete pMyPath2;
 	pMyPath = 0;
 	pMyPath2 = 0;
-	}
+}
 
 
 

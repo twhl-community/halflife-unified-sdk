@@ -18,7 +18,6 @@
 #include "cbase.h"
 #include "monsters.h"
 #include "weapons.h"
-#include "nodes.h"
 #include "effects.h"
 #include "apache.h"
 
