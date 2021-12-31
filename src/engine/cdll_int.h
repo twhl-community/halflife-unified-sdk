@@ -22,10 +22,6 @@
 #ifndef CDLL_INT_H
 #define CDLL_INT_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include "const.h"
 #include "steam/steamtypes.h"
 #include "ref_params.h"
@@ -33,61 +29,63 @@ extern "C" {
 #include "studio_event.h"
 #include "common_types.h"
 
-	// this file is included by both the engine and the client-dll,
-	// so make sure engine declarations aren't done twice
+// this file is included by both the engine and the client-dll,
+// so make sure engine declarations aren't done twice
 
-	typedef int HSPRITE;	// handle to a graphic
+typedef int HSPRITE;	// handle to a graphic
 
 #define SCRINFO_SCREENFLASH 1
 #define SCRINFO_STRETCHED	2
 
-	typedef struct SCREENINFO_s
-	{
-		int		iSize;
-		int		iWidth;
-		int		iHeight;
-		int		iFlags;
-		int		iCharHeight;
-		short	charWidths[256];
-	} SCREENINFO;
+typedef struct SCREENINFO_s
+{
+	int		iSize;
+	int		iWidth;
+	int		iHeight;
+	int		iFlags;
+	int		iCharHeight;
+	short	charWidths[256];
+} SCREENINFO;
 
 
-	typedef struct client_data_s
-	{
-		// fields that cannot be modified  (ie. have no effect if changed)
-		Vector origin;
+typedef struct client_data_s
+{
+	// fields that cannot be modified  (ie. have no effect if changed)
+	Vector origin;
 
-		// fields that can be changed by the cldll
-		Vector viewangles;
-		int		iWeaponBits;
-		//	int		iAccessoryBits;
-		float	fov;	// field of view
-	} client_data_t;
+	// fields that can be changed by the cldll
+	Vector viewangles;
+	int		iWeaponBits;
+	//	int		iAccessoryBits;
+	float	fov;	// field of view
+} client_data_t;
 
-	typedef struct client_sprite_s
-	{
-		char szName[64];
-		char szSprite[64];
-		int hspr;
-		int iRes;
-		Rect rc;
-	} client_sprite_t;
+typedef struct client_sprite_s
+{
+	char szName[64];
+	char szSprite[64];
+	int hspr;
+	int iRes;
+	Rect rc;
+} client_sprite_t;
 
-	typedef struct hud_player_info_s
-	{
-		char* name;
-		short ping;
-		byte thisplayer;  // TRUE if this is the calling player
 
-		byte spectator;
-		byte packetloss;
 
-		char* model;
-		short topcolor;
-		short bottomcolor;
+typedef struct hud_player_info_s
+{
+	char* name;
+	short ping;
+	byte thisplayer;  // TRUE if this is the calling player
 
-		uint64 m_nSteamID;
-	} hud_player_info_t;
+	byte spectator;
+	byte packetloss;
+
+	char* model;
+	short topcolor;
+	short bottomcolor;
+
+	uint64 m_nSteamID;
+} hud_player_info_t;
 
 #ifndef IN_BUTTONS_H
 #include "in_buttons.h"
@@ -95,11 +93,7 @@ extern "C" {
 
 #define CLDLL_INTERFACE_VERSION		7
 
-		//#include "server.h" // server_static_t define for apiproxy
+//#include "server.h" // server_static_t define for apiproxy
 #include "APIProxy.h"
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif // CDLL_INT_H
