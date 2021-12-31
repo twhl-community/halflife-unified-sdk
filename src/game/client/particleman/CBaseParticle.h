@@ -21,10 +21,10 @@
 #define RENDER_FACEPLAYER_ROTATEZ (1 << 8) //Just like above but m_vAngles.z is untouched so the sprite can rotate.
 
 
-#include "pman_particlemem.h"
+#include "CMiniMem.h"
 
 //pure virtual baseclass
-class CCoreTriangleEffect
+class CBaseParticle
 {
 private:
 	int m_iRenderFlags;
@@ -37,33 +37,39 @@ private:
 public:
 	void* operator new(size_t size)
 	{
-		// Requested size should match size of class.
-		if (size != sizeof(CCoreTriangleEffect))
-#ifdef WIN32
-			throw "Error in requested size of new particle class instance.";
-#else
-			return NULL;
-#endif
+		return CMiniMem::Instance()->Allocate(size);
+	}
 
-		return ((CCoreTriangleEffect*)CMiniMem::Instance()->newBlock());
+	void* operator new(size_t size, std::align_val_t alignment)
+	{
+		return CMiniMem::Instance()->Allocate(size, static_cast<std::size_t>(alignment));
+	}
 
-	} //this asks for a new block of memory from the MiniMen class
+	void operator delete(void* memory, std::size_t size)
+	{
+		CMiniMem::Instance()->Deallocate(memory, size);
+	}
 
-	virtual void Think(float time) = 0;
-	virtual bool CheckVisibility(void) = 0;
-	virtual void Draw(void) = 0;
-	virtual void Animate(float time) = 0;
-	virtual void AnimateAndDie(float time) = 0;
-	virtual void Expand(float time) = 0;
-	virtual void Contract(float time) = 0;
-	virtual void Fade(float time) = 0;
-	virtual void Spin(float time) = 0;
-	virtual void CalculateVelocity(float time) = 0;
-	virtual void CheckCollision(float time) = 0;
-	virtual void Touch(Vector pos, Vector normal, int index) = 0;
-	virtual void Die(void) = 0;
-	virtual void InitializeSprite(Vector org, Vector normal, model_s* sprite, float size, float brightness) = 0;
-	virtual void Force(void) = 0;
+	void operator delete(void* memory, std::size_t size, std::align_val_t alignment)
+	{
+		CMiniMem::Instance()->Deallocate(memory, size, static_cast<std::size_t>(alignment));
+	}
+
+	virtual void Think(float time);
+	virtual bool CheckVisibility(void);
+	virtual void Draw(void);
+	virtual void Animate(float time);
+	virtual void AnimateAndDie(float time);
+	virtual void Expand(float time);
+	virtual void Contract(float time);
+	virtual void Fade(float time);
+	virtual void Spin(float time);
+	virtual void CalculateVelocity(float time);
+	virtual void CheckCollision(float time);
+	virtual void Touch(Vector pos, Vector normal, int index);
+	virtual void Die(void);
+	virtual void InitializeSprite(Vector org, Vector normal, model_s* sprite, float size, float brightness);
+	virtual void Force(void);
 
 	float m_flSize;			 //scale of object
 	float m_flScaleSpeed;	 //speed at which object expands
@@ -170,7 +176,7 @@ public:
 		m_iRenderFlags |= iFlag;
 	}
 
-	float GetPlayerDistance(void) { return m_flPlayerDistance; }
+	float GetPlayerDistance() const { return m_flPlayerDistance; }
 	void SetPlayerDistance(float flDistance) { m_flPlayerDistance = flDistance; }
 
 protected:
@@ -180,21 +186,4 @@ protected:
 	Vector m_vPrevOrigin;
 
 	float m_flNextCollisionTime;
-
-protected:
-	static bool CheckSize(int size)
-	{
-		// This check will help prevent a class frome being defined later,
-		//  that is larger than the max size MemoryPool is expecting,
-		//  from being successfully allocated.
-		if ((unsigned)size > (unsigned long)CMiniMem::Instance()->MaxBlockSize())
-		{
-#ifdef WIN32
-			throw "New particle class is larger than memory pool max size, update lMaxParticleClassSize() function.";
-#endif
-			return (false);
-		}
-
-		return (true);
-	}
 };
