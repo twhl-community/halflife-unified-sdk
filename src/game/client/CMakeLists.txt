@@ -101,7 +101,6 @@ target_sources(client PRIVATE
 	util.cpp
 	view.cpp
 	view.h
-	wrect.h
 	
 	hl/hl_baseentity.cpp
 	hl/hl_events.cpp
@@ -198,6 +197,7 @@ target_sources(client PRIVATE
 	../../common/beamdef.h
 	../../common/cl_entity.h
 	../../common/com_model.h
+	../../common/common_types.h
 	../../common/const.h
 	../../common/con_nprint.h
 	../../common/crc.h

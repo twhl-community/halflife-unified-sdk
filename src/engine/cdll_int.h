@@ -31,7 +31,7 @@ extern "C" {
 #include "ref_params.h"
 #include "r_efx.h"
 #include "studio_event.h"
-#include "wrect.h"
+#include "common_types.h"
 
 	// this file is included by both the engine and the client-dll,
 	// so make sure engine declarations aren't done twice
@@ -70,10 +70,8 @@ extern "C" {
 		char szSprite[64];
 		int hspr;
 		int iRes;
-		wrect_t rc;
+		Rect rc;
 	} client_sprite_t;
-
-
 
 	typedef struct hud_player_info_s
 	{

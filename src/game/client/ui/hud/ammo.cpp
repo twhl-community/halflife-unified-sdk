@@ -94,10 +94,10 @@ void WeaponsResource::LoadWeaponSprites(WEAPON* pWeapon)
 	if (!pWeapon)
 		return;
 
-	memset(&pWeapon->rcActive, 0, sizeof(wrect_t));
-	memset(&pWeapon->rcInactive, 0, sizeof(wrect_t));
-	memset(&pWeapon->rcAmmo, 0, sizeof(wrect_t));
-	memset(&pWeapon->rcAmmo2, 0, sizeof(wrect_t));
+	memset(&pWeapon->rcActive, 0, sizeof(Rect));
+	memset(&pWeapon->rcInactive, 0, sizeof(Rect));
+	memset(&pWeapon->rcAmmo, 0, sizeof(Rect));
+	memset(&pWeapon->rcAmmo2, 0, sizeof(Rect));
 	pWeapon->hInactive = 0;
 	pWeapon->hActive = 0;
 	pWeapon->hAmmo = 0;
@@ -402,7 +402,7 @@ void CHudAmmo::Think()
 // Helper function to return a Ammo pointer from id
 //
 
-HSPRITE* WeaponsResource::GetAmmoPicFromWeapon(int iAmmoId, wrect_t& rect)
+HSPRITE* WeaponsResource::GetAmmoPicFromWeapon(int iAmmoId, Rect& rect)
 {
 	for (int i = 0; i < MAX_WEAPONS; i++)
 	{
@@ -552,7 +552,7 @@ int CHudAmmo::MsgFunc_HideWeapon(const char* pszName, int iSize, void* pbuf)
 
 	if (gHUD.m_iHideHUDDisplay & (HIDEHUD_WEAPONS | HIDEHUD_ALL))
 	{
-		static wrect_t nullrc;
+		static Rect nullrc;
 		gpActiveSel = NULL;
 		SetDrawCrosshair(false);
 		SetCrosshair(0, nullrc);
@@ -576,7 +576,7 @@ int CHudAmmo::MsgFunc_HideWeapon(const char* pszName, int iSize, void* pbuf)
 //
 int CHudAmmo::MsgFunc_CurWeapon(const char* pszName, int iSize, void* pbuf)
 {
-	static wrect_t nullrc;
+	static Rect nullrc;
 	int fOnTarget = FALSE;
 
 	BEGIN_READ(pbuf, iSize);
@@ -844,19 +844,19 @@ void CHudAmmo::UserCmd_PrevWeapon()
 	gpActiveSel = NULL;
 }
 
-void CHudAmmo::SetCrosshair(HSPRITE sprite, wrect_t rect)
+void CHudAmmo::SetCrosshair(HSPRITE sprite, Rect rect)
 {
 	m_Crosshair.sprite = sprite;
 	m_Crosshair.rect = rect;
 }
 
-void CHudAmmo::SetAutoaimCrosshair(HSPRITE sprite, wrect_t rect)
+void CHudAmmo::SetAutoaimCrosshair(HSPRITE sprite, Rect rect)
 {
 	m_AutoaimCrosshair.sprite = sprite;
 	m_AutoaimCrosshair.rect = rect;
 }
 
-void AdjustSubRect(const int iWidth, const int iHeight, float& left, float& right, float& top, float& bottom, int& w, int& h, const wrect_t& rcSubRect)
+void AdjustSubRect(const int iWidth, const int iHeight, float& left, float& right, float& top, float& bottom, int& w, int& h, const Rect& rcSubRect)
 {
 	if (rcSubRect.left >= rcSubRect.right
 		|| rcSubRect.top >= rcSubRect.bottom)
@@ -916,7 +916,7 @@ void CHudAmmo::DrawCrosshair(int x, int y)
 
 			const float flScale = V_max(1, m_pCvarCrosshairScale->value);
 
-			wrect_t rect;
+			Rect rect;
 
 			//Trim a pixel border around it, since it blends. - Solokiller
 			rect.left = crosshair.rect.left * flScale + (flScale - 1);
@@ -1061,7 +1061,7 @@ int CHudAmmo::Draw(float flTime)
 			x = ScreenWidth - (8 * AmmoWidth) - iIconWidth;
 			x = gHUD.DrawHudNumber(x, y, iFlags | DHN_3DIGITS, pw->iClip, color);
 
-			wrect_t rc;
+			Rect rc;
 			rc.top = 0;
 			rc.left = 0;
 			rc.right = AmmoWidth;

@@ -147,7 +147,7 @@ int CHudStatusIcons::MsgFunc_CustomIcon(const char* pszName, int iSize, void* pb
 		color.Green = READ_BYTE();
 		color.Blue = READ_BYTE();
 
-		wrect_t aRect;
+		Rect aRect;
 		aRect.left = READ_BYTE();
 		aRect.top = READ_BYTE();
 		aRect.right = READ_BYTE();
@@ -221,7 +221,7 @@ void CHudStatusIcons::DisableIcon(const char* pszIconName)
 	}
 }
 
-void CHudStatusIcons::EnableCustomIcon(int nIndex, char* pszIconName, const RGB24& color, const wrect_t& aRect)
+void CHudStatusIcons::EnableCustomIcon(int nIndex, char* pszIconName, const RGB24& color, const Rect& aRect)
 {
 	if (nIndex < MAX_CUSTOMSPRITES)
 	{

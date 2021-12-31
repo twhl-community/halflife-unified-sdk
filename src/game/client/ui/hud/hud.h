@@ -24,7 +24,7 @@
 #define _cdecl 
 #endif
 
-#include "wrect.h"
+#include "common_types.h"
 #include "cl_dll.h"
 #include "ammo.h"
 #include "palette.h"
@@ -131,8 +131,8 @@ public:
 		m_DrawCrosshair = state;
 	}
 
-	void SetCrosshair(HSPRITE sprite, wrect_t rect);
-	void SetAutoaimCrosshair(HSPRITE sprite, wrect_t rect);
+	void SetCrosshair(HSPRITE sprite, Rect rect);
+	void SetAutoaimCrosshair(HSPRITE sprite, Rect rect);
 
 private:
 	void DrawCrosshair(int x, int y);
@@ -141,7 +141,7 @@ private:
 	struct Crosshair
 	{
 		HSPRITE sprite = 0;
-		wrect_t rect{};
+		Rect rect{};
 	};
 
 	float m_fFade;
@@ -356,8 +356,8 @@ public:
 private:
 	HSPRITE m_hSprite1;
 	HSPRITE m_hSprite2;
-	wrect_t* m_prc1;
-	wrect_t* m_prc2;
+	Rect* m_prc1;
+	Rect* m_prc2;
 	int	  m_iBat;
 	int	  m_iBatMax;
 	float m_fFade;
@@ -376,9 +376,9 @@ private:
 		HSPRITE m_hSprite1 = 0;
 		HSPRITE m_hSprite2 = 0;
 		HSPRITE m_hBeam = 0;
-		wrect_t* m_prc1 = nullptr;
-		wrect_t* m_prc2 = nullptr;
-		wrect_t* m_prcBeam = nullptr;
+		Rect* m_prc1 = nullptr;
+		Rect* m_prc2 = nullptr;
+		Rect* m_prcBeam = nullptr;
 		int	  m_iWidth = 0;		// width of the battery innards
 	};
 
@@ -514,7 +514,7 @@ public:
 	void EnableIcon(const char* pszIconName, const RGB24& color);
 	void DisableIcon(const char* pszIconName);
 
-	void EnableCustomIcon(int nIndex, char* pszIconName, const RGB24& color, const wrect_t& aRect);
+	void EnableCustomIcon(int nIndex, char* pszIconName, const RGB24& color, const Rect& aRect);
 	void DisableCustomIcon(int nIndex);
 
 private:
@@ -523,7 +523,7 @@ private:
 	{
 		char szSpriteName[MAX_ICONSPRITENAME_LENGTH];
 		HSPRITE spr;
-		wrect_t rc;
+		Rect rc;
 		RGB24 color;
 		int teamnumber; //Not actually used
 	} icon_sprite_t;
@@ -561,7 +561,7 @@ private:
 	{
 		char szSpriteName[MAX_FLAGSPRITENAME_LENGTH];
 		HSPRITE spr;
-		wrect_t rc;
+		Rect rc;
 		unsigned char r;
 		unsigned char g;
 		unsigned char b;
@@ -597,7 +597,7 @@ private:
 	{
 		char szSpriteName[MAX_POWERUPSPRITENAME_LENGTH];
 		HSPRITE spr;
-		wrect_t rc;
+		Rect rc;
 		RGB24 color;
 	};
 
@@ -705,7 +705,7 @@ private:
 	// the memory for these arrays are allocated in the first call to CHud::VidInit(), when the hud.txt and associated sprites are loaded.
 	// freed in ~CHud()
 	HSPRITE* m_rghSprites;	/*[HUD_SPRITE_COUNT]*/			// the sprites loaded from hud.txt
-	wrect_t* m_rgrcRects;	/*[HUD_SPRITE_COUNT]*/
+	Rect* m_rgrcRects;	/*[HUD_SPRITE_COUNT]*/
 	char* m_rgszSpriteNames; /*[HUD_SPRITE_COUNT][MAX_SPRITE_NAME_LENGTH]*/
 
 	struct cvar_s* default_fov;
@@ -715,7 +715,7 @@ public:
 		return (index < 0) ? 0 : m_rghSprites[index];
 	}
 
-	wrect_t& GetSpriteRect(int index)
+	Rect& GetSpriteRect(int index)
 	{
 		return m_rgrcRects[index];
 	}
