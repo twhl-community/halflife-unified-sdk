@@ -294,7 +294,7 @@ BOOL CAGrunt::ShouldSpeak()
 		}
 	}
 
-	return TRUE;
+	return true;
 }
 
 //=========================================================
@@ -896,7 +896,7 @@ BOOL CAGrunt::FCanCheckAttacks()
 {
 	if (!HasConditions(bits_COND_ENEMY_TOOFAR))
 	{
-		return TRUE;
+		return true;
 	}
 	else
 	{
@@ -912,7 +912,7 @@ BOOL CAGrunt::CheckMeleeAttack1(float flDot, float flDist)
 {
 	if (HasConditions(bits_COND_SEE_ENEMY) && flDist <= AGRUNT_MELEE_DIST && flDot >= 0.6 && m_hEnemy != NULL)
 	{
-		return TRUE;
+		return true;
 	}
 	return false;
 }
@@ -946,7 +946,7 @@ BOOL CAGrunt::CheckRangeAttack1(float flDot, float flDist)
 		if (tr.flFraction == 1.0 || tr.pHit == m_hEnemy->edict())
 		{
 			m_flNextHornetAttackCheck = gpGlobals->time + RANDOM_FLOAT(2, 5);
-			m_fCanHornetAttack = TRUE;
+			m_fCanHornetAttack = true;
 			return m_fCanHornetAttack;
 		}
 	}
@@ -1002,7 +1002,7 @@ void CAGrunt::StartTask(Task_t* pTask)
 			if (tr.flFraction == 1.0)
 			{
 				MakeIdealYaw(pev->origin + gpGlobals->v_right * 128);
-				fSkip = TRUE;
+				fSkip = true;
 				TaskComplete();
 			}
 
@@ -1012,7 +1012,7 @@ void CAGrunt::StartTask(Task_t* pTask)
 				if (tr.flFraction == 1.0)
 				{
 					MakeIdealYaw(pev->origin - gpGlobals->v_right * 128);
-					fSkip = TRUE;
+					fSkip = true;
 					TaskComplete();
 				}
 			}
@@ -1023,7 +1023,7 @@ void CAGrunt::StartTask(Task_t* pTask)
 				if (tr.flFraction == 1.0)
 				{
 					MakeIdealYaw(pev->origin + gpGlobals->v_right * 256);
-					fSkip = TRUE;
+					fSkip = true;
 					TaskComplete();
 				}
 			}
@@ -1034,7 +1034,7 @@ void CAGrunt::StartTask(Task_t* pTask)
 				if (tr.flFraction == 1.0)
 				{
 					MakeIdealYaw(pev->origin - gpGlobals->v_right * 256);
-					fSkip = TRUE;
+					fSkip = true;
 					TaskComplete();
 				}
 			}

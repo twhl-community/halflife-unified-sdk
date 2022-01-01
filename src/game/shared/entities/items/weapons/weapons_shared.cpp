@@ -95,7 +95,7 @@ BOOL CBasePlayerWeapon::CanDeploy()
 	if (!pszAmmo1())
 	{
 		// this weapon doesn't use ammo, can always deploy.
-		return TRUE;
+		return true;
 	}
 
 	if (pszAmmo1())
@@ -115,7 +115,7 @@ BOOL CBasePlayerWeapon::CanDeploy()
 		return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
 BOOL CBasePlayerWeapon::DefaultReload(int iClipSize, int iAnim, float fDelay, int body)
@@ -133,10 +133,10 @@ BOOL CBasePlayerWeapon::DefaultReload(int iClipSize, int iAnim, float fDelay, in
 	//!!UNDONE -- reload sound goes here !!!
 	SendWeaponAnim(iAnim, body);
 
-	m_fInReload = TRUE;
+	m_fInReload = true;
 
 	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 3;
-	return TRUE;
+	return true;
 }
 
 void CBasePlayerWeapon::ResetEmptySound()
@@ -152,11 +152,11 @@ BOOL CanAttack(float attack_time, float curtime, BOOL isPredicted)
 	if (1)
 #endif
 	{
-		return (attack_time <= curtime) ? TRUE : false;
+		return (attack_time <= curtime) ? true : false;
 	}
 	else
 	{
-		return ((static_cast<int>(std::floor(attack_time * 1000.0)) * 1000.0) <= 0.0) ? TRUE : false;
+		return ((static_cast<int>(std::floor(attack_time * 1000.0)) * 1000.0) <= 0.0) ? true : false;
 	}
 }
 
@@ -203,7 +203,7 @@ void CBasePlayerWeapon::ItemPostFrame()
 	{
 		if (pszAmmo2() && !m_pPlayer->m_rgAmmo[SecondaryAmmoIndex()])
 		{
-			m_fFireOnEmpty = TRUE;
+			m_fFireOnEmpty = true;
 		}
 
 		m_pPlayer->TabulateAmmo();
@@ -214,7 +214,7 @@ void CBasePlayerWeapon::ItemPostFrame()
 	{
 		if ((m_iClip == 0 && pszAmmo1()) || (iMaxClip() == -1 && !m_pPlayer->m_rgAmmo[PrimaryAmmoIndex()]))
 		{
-			m_fFireOnEmpty = TRUE;
+			m_fFireOnEmpty = true;
 		}
 
 		m_pPlayer->TabulateAmmo();

@@ -106,7 +106,7 @@ int CRecruit::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float 
 				PlaySentence("RC_MAD", 4, VOL_NORM, ATTN_NORM);
 
 				Remember(bits_MEMORY_PROVOKED);
-				StopFollowing(TRUE);
+				StopFollowing(true);
 			}
 			else
 			{

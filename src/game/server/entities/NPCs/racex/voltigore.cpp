@@ -377,7 +377,7 @@ BOOL COFVoltigore::ShouldSpeak()
 		}
 	}
 
-	return TRUE;
+	return true;
 }
 
 //=========================================================
@@ -847,7 +847,7 @@ BOOL COFVoltigore::FCanCheckAttacks()
 {
 	if (!HasConditions(bits_COND_ENEMY_TOOFAR))
 	{
-		return TRUE;
+		return true;
 	}
 	else
 	{
@@ -863,7 +863,7 @@ BOOL COFVoltigore::CheckMeleeAttack1(float flDot, float flDist)
 {
 	if (HasConditions(bits_COND_SEE_ENEMY) && flDist <= VOLTIGORE_MELEE_DIST && flDot >= 0.6 && m_hEnemy != NULL)
 	{
-		return TRUE;
+		return true;
 	}
 	return false;
 }

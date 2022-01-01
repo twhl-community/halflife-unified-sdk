@@ -65,7 +65,7 @@ public:
 	BOOL UseDecrement() override
 	{
 #if defined( CLIENT_WEAPONS )
-		return TRUE;
+		return true;
 #else
 		return false;
 #endif

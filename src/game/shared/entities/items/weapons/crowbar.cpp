@@ -165,7 +165,7 @@ int CCrowbar::Swing(int fFirst)
 #ifndef CLIENT_DLL
 
 		// hit
-		fDidHit = TRUE;
+		fDidHit = true;
 		CBaseEntity* pEntity = CBaseEntity::Instance(tr.pHit);
 
 		ClearMultiDamage();
@@ -189,7 +189,7 @@ int CCrowbar::Swing(int fFirst)
 #ifndef CLIENT_DLL
 		// play thwack, smack, or dong sound
 		float flVol = 1.0;
-		int fHitWorld = TRUE;
+		int fHitWorld = true;
 
 		if (pEntity)
 		{
@@ -207,7 +207,7 @@ int CCrowbar::Swing(int fFirst)
 				}
 				m_pPlayer->m_iWeaponVolume = CROWBAR_BODYHIT_VOLUME;
 				if (!pEntity->IsAlive())
-					return TRUE;
+					return true;
 				else
 					flVol = 0.1;
 

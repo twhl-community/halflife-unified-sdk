@@ -1582,22 +1582,22 @@ void COFPitWormGibShooter::KeyValue(KeyValueData* pkvd)
 	if (FStrEq(pkvd->szKeyName, "m_iGibs"))
 	{
 		m_iGibs = m_iGibCapacity = atoi(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "m_flVelocity"))
 	{
 		m_flGibVelocity = atof(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "m_flVariance"))
 	{
 		m_flVariance = atof(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "m_flDelay"))
 	{
 		m_flDelay = atof(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else
 	{

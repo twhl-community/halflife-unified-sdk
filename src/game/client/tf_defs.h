@@ -33,11 +33,11 @@
 								// increasing it _decreases_ the amount of help the losing team gets
 								// Minimum setting is 1, which would really help the losing team
 
-#define DISPLAY_CLASS_HELP			TRUE            // Change this to #OFF if you don't want the class help to 
+#define DISPLAY_CLASS_HELP			true            // Change this to #OFF if you don't want the class help to 
 													// appear whenever a player connects
 #define NEVER_TEAMFRAGS				false			// teamfrags options always off 
 #define ALWAYS_TEAMFRAGS			false			// teamfrags options always on 
-#define CHECK_SPEEDS				TRUE            // makes sure players aren't moving too fast
+#define CHECK_SPEEDS				true            // makes sure players aren't moving too fast
 #define SNIPER_RIFLE_RELOAD_TIME    1.5				// seconds
 
 #define MAPBRIEFING_MAXTEXTLENGTH	512
@@ -95,7 +95,7 @@
 // TeamFortress State Flags
 #define TFSTATE_GRENPRIMED		1 	// Whether the player has a primed grenade
 #define TFSTATE_RELOADING		2 	// Whether the player is reloading
-#define TFSTATE_ALTKILL			4  	// #TRUE if killed with a weapon not in self.weapon: NOT USED ANYMORE
+#define TFSTATE_ALTKILL			4  	// #true if killed with a weapon not in self.weapon: NOT USED ANYMORE
 #define TFSTATE_RANDOMPC		8   // Whether Playerclass is random, new one each respawn
 #define TFSTATE_INFECTED		16 	// set when player is infected by the bioweapon
 #define TFSTATE_INVINCIBLE		32 	// Player has permanent Invincibility (Usually by GoalItem)
@@ -1017,7 +1017,7 @@ float already_chosen_map;
 // grappling hook variables
 .entity	hook;
 .float	on_hook;
-.float  fire_held_down;// flag - TRUE if player is still holding down the
+.float  fire_held_down;// flag - true if player is still holding down the
 					   // fire button after throwing a hook.
 */
 /*==================================================*/

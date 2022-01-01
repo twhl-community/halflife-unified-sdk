@@ -235,7 +235,7 @@ void CM249::PrimaryAttack()
 
 	int flags;
 #if defined( CLIENT_WEAPONS )
-	flags = TRUE;
+	flags = true;
 #else
 	flags = 0;
 #endif

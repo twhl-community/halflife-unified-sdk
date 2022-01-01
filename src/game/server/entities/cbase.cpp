@@ -121,7 +121,7 @@ extern "C" {
 		}
 
 		memcpy(pFunctionTable, &gFunctionTable, sizeof(DLL_FUNCTIONS));
-		return TRUE;
+		return true;
 	}
 
 	int GetEntityAPI2(DLL_FUNCTIONS* pFunctionTable, int* interfaceVersion)
@@ -134,7 +134,7 @@ extern "C" {
 		}
 
 		memcpy(pFunctionTable, &gFunctionTable, sizeof(DLL_FUNCTIONS));
-		return TRUE;
+		return true;
 	}
 
 	int GetNewDLLFunctions(NEW_DLL_FUNCTIONS* pFunctionTable, int* interfaceVersion)
@@ -146,7 +146,7 @@ extern "C" {
 		}
 
 		memcpy(pFunctionTable, &gNewDLLFunctions, sizeof(gNewDLLFunctions));
-		return TRUE;
+		return true;
 	}
 }
 
@@ -726,7 +726,7 @@ BOOL CBaseEntity::IsInWorld()
 	if (pev->velocity.y <= -2000) return false;
 	if (pev->velocity.z <= -2000) return false;
 
-	return TRUE;
+	return true;
 }
 
 int CBaseEntity::ShouldToggle(USE_TYPE useType, BOOL currentState)

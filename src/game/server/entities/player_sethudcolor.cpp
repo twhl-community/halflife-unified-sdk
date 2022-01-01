@@ -56,12 +56,12 @@ void PlayerSetHudColor::KeyValue(KeyValueData* pkvd)
 	if (FStrEq(pkvd->szKeyName, "hud_color"))
 	{
 		UTIL_StringToVector(m_HudColor, pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "action"))
 	{
 		m_Action = static_cast<Action>(atoi(pkvd->szValue));
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else
 		CPointEntity::KeyValue(pkvd);

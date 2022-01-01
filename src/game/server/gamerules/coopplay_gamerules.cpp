@@ -195,13 +195,13 @@ BOOL CHalfLifeCoopplay::ClientCommand(CBasePlayer* pPlayer, const char* pcmd)
 	if (FStrEq(pcmd, "menuselect"))
 	{
 		if (CMD_ARGC() < 2)
-			return TRUE;
+			return true;
 
 		int slot = atoi(CMD_ARGV(1));
 
 		// select the item from the current menu
 
-		return TRUE;
+		return true;
 	}
 
 	return false;

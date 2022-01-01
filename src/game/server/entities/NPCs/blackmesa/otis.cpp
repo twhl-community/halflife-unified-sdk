@@ -168,7 +168,7 @@ int COtis::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flD
 				PlaySentence("OT_MAD", 4, VOL_NORM, ATTN_NORM);
 
 				Remember(bits_MEMORY_PROVOKED);
-				StopFollowing(TRUE);
+				StopFollowing(true);
 			}
 			else
 			{
@@ -232,7 +232,7 @@ void CDeadOtis::KeyValue(KeyValueData* pkvd)
 	if (FStrEq(pkvd->szKeyName, "pose"))
 	{
 		m_iPose = atoi(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		pkvd->fHandled = true;
 	}
 	else
 		CBaseMonster::KeyValue(pkvd);

@@ -56,8 +56,8 @@ public:
 
 	void Think() override;
 
-	BOOL IsTeamplay() override { return TRUE; }
-	BOOL IsCTF() override { return TRUE; }
+	BOOL IsTeamplay() override { return true; }
+	BOOL IsCTF() override { return true; }
 
 	const char* GetGameDescription() override { return "OpFor CTF"; }
 
