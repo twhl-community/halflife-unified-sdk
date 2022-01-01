@@ -204,7 +204,7 @@ BOOL COsprey::HasDead()
 			m_vecOrigin[i] = m_hGrunt[i]->pev->origin;  // send them to where they died
 		}
 	}
-	return FALSE;
+	return false;
 }
 
 

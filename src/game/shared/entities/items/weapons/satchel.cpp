@@ -166,7 +166,7 @@ int CSatchel::AddDuplicate(CBasePlayerItem* pOriginal)
 		if (pSatchel->m_chargeReady != 0)
 		{
 			// player has some satchels deployed. Refuse to add more.
-			return FALSE;
+			return false;
 		}
 	}
 
@@ -186,7 +186,7 @@ int CSatchel::AddToPlayer(CBasePlayer* pPlayer)
 	{
 		return AddWeapon();
 	}
-	return FALSE;
+	return false;
 }
 
 void CSatchel::Spawn()
@@ -246,7 +246,7 @@ BOOL CSatchel::IsUseable()
 		return TRUE;
 	}
 
-	return FALSE;
+	return false;
 }
 
 BOOL CSatchel::CanDeploy()
@@ -263,7 +263,7 @@ BOOL CSatchel::CanDeploy()
 		return TRUE;
 	}
 
-	return FALSE;
+	return false;
 }
 
 BOOL CSatchel::Deploy()

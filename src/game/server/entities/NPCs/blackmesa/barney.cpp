@@ -266,12 +266,12 @@ BOOL CBarney::CheckRangeAttack1(float flDot, float flDist)
 			if (tr.flFraction == 1.0 || (tr.pHit != NULL && CBaseEntity::Instance(tr.pHit) == pEnemy))
 				m_lastAttackCheck = TRUE;
 			else
-				m_lastAttackCheck = FALSE;
+				m_lastAttackCheck = false;
 			m_checkAttackTime = gpGlobals->time + 1.5;
 		}
 		return m_lastAttackCheck;
 	}
-	return FALSE;
+	return false;
 }
 
 
@@ -684,7 +684,7 @@ Schedule_t* CBarney::GetSchedule()
 			if (!m_hTargetEnt->IsAlive())
 			{
 				// UNDONE: Comment about the recently dead player here?
-				StopFollowing(FALSE);
+				StopFollowing(false);
 				break;
 			}
 			else

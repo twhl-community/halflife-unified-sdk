@@ -14,7 +14,7 @@
 //===========================================================================
 // OLD OPTIONS.QC
 //===========================================================================
-#define DEFAULT_AUTOZOOM		 FALSE
+#define DEFAULT_AUTOZOOM		 false
 #define WEINER_SNIPER                           // autoaiming for sniper rifle
 #define FLAME_MAXWORLDNUM        20             // maximum number of flames in the world. DO NOT PUT BELOW 20.
 
@@ -35,8 +35,8 @@
 
 #define DISPLAY_CLASS_HELP			TRUE            // Change this to #OFF if you don't want the class help to 
 													// appear whenever a player connects
-#define NEVER_TEAMFRAGS				FALSE			// teamfrags options always off 
-#define ALWAYS_TEAMFRAGS			FALSE			// teamfrags options always on 
+#define NEVER_TEAMFRAGS				false			// teamfrags options always off 
+#define ALWAYS_TEAMFRAGS			false			// teamfrags options always on 
 #define CHECK_SPEEDS				TRUE            // makes sure players aren't moving too fast
 #define SNIPER_RIFLE_RELOAD_TIME    1.5				// seconds
 

@@ -314,7 +314,7 @@ BOOL CPitdrone::CheckRangeAttack1(float flDot, float flDist)
 		|| (IsMoving() && flDist >= 512))
 	{
 		// squid will far too far behind if he stops running to spit at this distance from the enemy.
-		return FALSE;
+		return false;
 	}
 
 	if (flDist > 128 && flDist <= 784 && flDot >= 0.5 && gpGlobals->time >= m_flNextSpikeTime)
@@ -324,7 +324,7 @@ BOOL CPitdrone::CheckRangeAttack1(float flDot, float flDist)
 			if (fabs(pev->origin.z - m_hEnemy->pev->origin.z) > 256)
 			{
 				// don't try to spit at someone up really high or down really low.
-				return FALSE;
+				return false;
 			}
 		}
 
@@ -342,7 +342,7 @@ BOOL CPitdrone::CheckRangeAttack1(float flDot, float flDist)
 		return TRUE;
 	}
 
-	return FALSE;
+	return false;
 }
 
 BOOL CPitdrone::CheckMeleeAttack1(float flDot, float flDist)
@@ -351,7 +351,7 @@ BOOL CPitdrone::CheckMeleeAttack1(float flDot, float flDist)
 	{
 		return RANDOM_LONG(0, 3) == 0;
 	}
-	return FALSE;
+	return false;
 }
 
 BOOL CPitdrone::CheckMeleeAttack2(float flDot, float flDist)
@@ -360,7 +360,7 @@ BOOL CPitdrone::CheckMeleeAttack2(float flDot, float flDist)
 	{
 		return TRUE;
 	}
-	return FALSE;
+	return false;
 }
 
 //=========================================================
@@ -384,7 +384,7 @@ BOOL CPitdrone::FValidateHintType(short sHint)
 	}
 
 	ALERT(at_aiconsole, "Couldn't validate hint type");
-	return FALSE;
+	return false;
 }
 
 //=========================================================

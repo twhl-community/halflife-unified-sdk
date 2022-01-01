@@ -190,7 +190,7 @@ CBasePlayerWeapon :: DefaultDeploy
 BOOL CBasePlayerWeapon::DefaultDeploy(const char* szViewModel, const char* szWeaponModel, int iAnim, const char* szAnimExt, int body)
 {
 	if (!CanDeploy())
-		return FALSE;
+		return false;
 
 	gEngfuncs.CL_LoadModel(szViewModel, &m_pPlayer->pev->viewmodel);
 
@@ -228,7 +228,7 @@ Put away weapon
 */
 void CBasePlayerWeapon::Holster()
 {
-	m_fInReload = FALSE; // cancel any reload in progress.
+	m_fInReload = false; // cancel any reload in progress.
 	g_irunninggausspred = false;
 	m_pPlayer->pev->viewmodel = 0;
 }

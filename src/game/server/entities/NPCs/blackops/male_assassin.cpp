@@ -188,7 +188,7 @@ BOOL CMOFAssassin::CheckRangeAttack1(float flDot, float flDist)
 		return CHGrunt::CheckRangeAttack1(flDot, flDist);
 	}
 
-	return FALSE;
+	return false;
 }
 
 //=========================================================
@@ -375,7 +375,7 @@ void CMOFAssassin::Spawn()
 
 	m_afCapability = bits_CAP_SQUAD | bits_CAP_TURN_HEAD | bits_CAP_DOORS_GROUP;
 
-	m_fEnemyEluded = FALSE;
+	m_fEnemyEluded = false;
 	m_fFirstEncounter = TRUE;// this is true when the grunt spawns, because he hasn't encountered an enemy yet.
 
 	m_HackedGunPos = Vector(0, 0, 55);

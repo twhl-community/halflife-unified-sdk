@@ -483,7 +483,7 @@ CWorld::~CWorld()
 
 void CWorld::Spawn()
 {
-	g_fGameOver = FALSE;
+	g_fGameOver = false;
 	Precache();
 	CItemCTF::m_pLastSpawn = nullptr;
 
@@ -672,7 +672,7 @@ void CWorld::Precache()
 	if (pev->spawnflags & SF_WORLD_TITLE)
 		gDisplayTitle = TRUE;		// display the game title if this key is set
 	else
-		gDisplayTitle = FALSE;
+		gDisplayTitle = false;
 
 	if (pev->spawnflags & SF_WORLD_FORCETEAM)
 	{

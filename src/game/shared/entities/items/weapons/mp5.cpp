@@ -113,7 +113,7 @@ int CMP5::AddToPlayer(CBasePlayer* pPlayer)
 		MESSAGE_END();
 		return TRUE;
 	}
-	return FALSE;
+	return false;
 }
 
 BOOL CMP5::Deploy()
@@ -176,7 +176,7 @@ void CMP5::PrimaryAttack()
 
 	if (!m_iClip && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
 		// HEV suit - indicate out of ammo condition
-		m_pPlayer->SetSuitUpdate("!HEV_AMO0", FALSE, 0);
+		m_pPlayer->SetSuitUpdate("!HEV_AMO0", false, 0);
 
 	m_flNextPrimaryAttack = GetNextAttackDelay(0.1);
 
@@ -237,7 +237,7 @@ void CMP5::SecondaryAttack()
 
 	if (!m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType])
 		// HEV suit - indicate out of ammo condition
-		m_pPlayer->SetSuitUpdate("!HEV_AMO0", FALSE, 0);
+		m_pPlayer->SetSuitUpdate("!HEV_AMO0", false, 0);
 }
 
 void CMP5::Reload()

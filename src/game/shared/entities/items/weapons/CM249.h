@@ -67,7 +67,7 @@ public:
 #if defined( CLIENT_WEAPONS )
 		return TRUE;
 #else
-		return FALSE;
+		return false;
 #endif
 	}
 

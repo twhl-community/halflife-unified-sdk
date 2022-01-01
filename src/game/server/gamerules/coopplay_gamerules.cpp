@@ -204,7 +204,7 @@ BOOL CHalfLifeCoopplay::ClientCommand(CBasePlayer* pPlayer, const char* pcmd)
 		return TRUE;
 	}
 
-	return FALSE;
+	return false;
 }
 
 float CHalfLifeCoopplay::FlWeaponTryRespawn(CBasePlayerItem* pWeapon)

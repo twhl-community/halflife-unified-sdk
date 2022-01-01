@@ -871,7 +871,7 @@ Schedule_t* CScientist::GetSchedule()
 			if (!m_hTargetEnt->IsAlive())
 			{
 				// UNDONE: Comment about the recently dead player here?
-				StopFollowing(FALSE);
+				StopFollowing(false);
 				break;
 			}
 
@@ -990,7 +990,7 @@ MONSTERSTATE CScientist::GetIdealState()
 BOOL CScientist::CanHeal()
 {
 	if ((m_healTime > gpGlobals->time) || (m_hTargetEnt == NULL) || (m_hTargetEnt->pev->health > (m_hTargetEnt->pev->max_health * 0.5)))
-		return FALSE;
+		return false;
 
 	return TRUE;
 }
@@ -1220,7 +1220,7 @@ void CSittingScientist::SittingThink()
 			if (!FBitSet(m_bitsSaid, bit_saidHelloPlayer))
 				pent = FindNearestFriend(TRUE);
 			else
-				pent = FindNearestFriend(FALSE);
+				pent = FindNearestFriend(false);
 
 			if (!FIdleSpeak() || !pent)
 			{
@@ -1286,7 +1286,7 @@ int CSittingScientist::FIdleSpeak()
 	int pitch;
 
 	if (!FOkToSpeak())
-		return FALSE;
+		return false;
 
 	// set global min delay for next conversation
 	CTalkMonster::g_talkWaitTime = gpGlobals->time + RANDOM_FLOAT(4.8, 5.2);
@@ -1296,7 +1296,7 @@ int CSittingScientist::FIdleSpeak()
 	// if there is a friend nearby to speak to, play sentence, set friend's response time, return
 
 	// try to talk to any standing or sitting scientists nearby
-	CBaseEntity* pentFriend = FindNearestFriend(FALSE);
+	CBaseEntity* pentFriend = FindNearestFriend(false);
 
 	if (pentFriend && RANDOM_LONG(0, 1))
 	{
@@ -1321,5 +1321,5 @@ int CSittingScientist::FIdleSpeak()
 
 	// never spoke
 	CTalkMonster::g_talkWaitTime = 0;
-	return FALSE;
+	return false;
 }

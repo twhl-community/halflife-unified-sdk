@@ -38,7 +38,7 @@ public:
 	void Precache() override;
 
 	// This is done to fix spawn flag collisions between this class and a derived class
-	virtual BOOL IsTogglePlat() { return (pev->spawnflags & SF_PLAT_TOGGLE) ? TRUE : FALSE; }
+	virtual BOOL IsTogglePlat() { return (pev->spawnflags & SF_PLAT_TOGGLE) ? TRUE : false; }
 
 	int	Save(CSave& save) override;
 	int	Restore(CRestore& restore) override;
@@ -414,7 +414,7 @@ void CFuncPlat::PlatUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE 
 	if (IsTogglePlat())
 	{
 		// Top is off, bottom is on
-		BOOL on = (m_toggle_state == TS_AT_BOTTOM) ? TRUE : FALSE;
+		BOOL on = (m_toggle_state == TS_AT_BOTTOM) ? TRUE : false;
 
 		if (!ShouldToggle(useType, on))
 			return;
@@ -874,7 +874,7 @@ void CFuncTrain::Spawn()
 	UTIL_SetSize(pev, pev->mins, pev->maxs);
 	UTIL_SetOrigin(pev, pev->origin);
 
-	m_activated = FALSE;
+	m_activated = false;
 
 	if (m_volume == 0)
 		m_volume = 0.85;
@@ -1229,7 +1229,7 @@ void CSpriteTrain::Spawn()
 	UTIL_SetSize(pev, pev->mins, pev->maxs);
 	UTIL_SetOrigin(pev, pev->origin);
 
-	m_activated = FALSE;
+	m_activated = false;
 
 	if (m_volume == 0)
 		m_volume = 0.85;
@@ -1697,7 +1697,7 @@ void CFuncTrackTrain::Next()
 			time = distance / m_oldSpeed;
 			pev->velocity = pev->velocity * (m_oldSpeed / distance);
 			SetThink(&CFuncTrackTrain::DeadEnd);
-			NextThink(pev->ltime + time, FALSE);
+			NextThink(pev->ltime + time, false);
 		}
 		else
 		{
@@ -1769,7 +1769,7 @@ BOOL CFuncTrackTrain::OnControls(entvars_t* pevTest)
 	Vector offset = pevTest->origin - pev->origin;
 
 	if (pev->spawnflags & SF_TRACKTRAIN_NOCONTROL)
-		return FALSE;
+		return false;
 
 	// Transform offset into local coordinates
 	UTIL_MakeVectors(pev->angles);
@@ -1782,7 +1782,7 @@ BOOL CFuncTrackTrain::OnControls(entvars_t* pevTest)
 		local.x <= m_controlMaxs.x && local.y <= m_controlMaxs.y && local.z <= m_controlMaxs.z)
 		return TRUE;
 
-	return FALSE;
+	return false;
 }
 
 
@@ -1815,7 +1815,7 @@ void CFuncTrackTrain::Find()
 	if (pev->spawnflags & SF_TRACKTRAIN_NOPITCH)
 		pev->angles.x = 0;
 	UTIL_SetOrigin(pev, nextPos);
-	NextThink(pev->ltime + 0.1, FALSE);
+	NextThink(pev->ltime + 0.1, false);
 	SetThink(&CFuncTrackTrain::Next);
 	pev->speed = m_startSpeed;
 
@@ -1865,7 +1865,7 @@ void CFuncTrackTrain::NearestPath()
 
 	if (pev->speed != 0)
 	{
-		NextThink(pev->ltime + 0.1, FALSE);
+		NextThink(pev->ltime + 0.1, false);
 		SetThink(&CFuncTrackTrain::Next);
 	}
 }
@@ -1873,7 +1873,7 @@ void CFuncTrackTrain::NearestPath()
 
 void CFuncTrackTrain::OverrideReset()
 {
-	NextThink(pev->ltime + 0.1, FALSE);
+	NextThink(pev->ltime + 0.1, false);
 	SetThink(&CFuncTrackTrain::NearestPath);
 }
 
@@ -1932,7 +1932,7 @@ void CFuncTrackTrain::Spawn()
 	m_controlMaxs.z += 72;
 	// start trains on the next frame, to make sure their targets have had
 	// a chance to spawn/activate
-	NextThink(pev->ltime + 0.1, FALSE);
+	NextThink(pev->ltime + 0.1, false);
 	SetThink(&CFuncTrackTrain::Find);
 	Precache();
 }
@@ -2246,7 +2246,7 @@ void CFuncTrackChange::UpdateTrain(Vector& dest)
 
 	m_train->pev->velocity = pev->velocity;
 	m_train->pev->avelocity = pev->avelocity;
-	m_train->NextThink(m_train->pev->ltime + time, FALSE);
+	m_train->NextThink(m_train->pev->ltime + time, false);
 
 	// Attempt at getting the train to rotate properly around the origin of the trackchange
 	if (time <= 0)
@@ -2570,7 +2570,7 @@ void CGunTarget::Spawn()
 	pev->takedamage = DAMAGE_NO;
 	pev->flags |= FL_MONSTER;
 
-	m_on = FALSE;
+	m_on = false;
 	pev->max_health = pev->health;
 
 	if (pev->spawnflags & FGUNTARGET_START_ON)

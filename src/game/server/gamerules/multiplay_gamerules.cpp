@@ -298,7 +298,7 @@ BOOL CHalfLifeMultiplay::FShouldSwitchWeapon(CBasePlayer* pPlayer, CBasePlayerIt
 	if (!pWeapon->CanDeploy())
 	{
 		// that weapon can't deploy anyway.
-		return FALSE;
+		return false;
 	}
 
 	if (!pPlayer->m_pActiveItem)
@@ -310,19 +310,19 @@ BOOL CHalfLifeMultiplay::FShouldSwitchWeapon(CBasePlayer* pPlayer, CBasePlayerIt
 	if (!pPlayer->m_pActiveItem->CanHolster())
 	{
 		// can't put away the active item.
-		return FALSE;
+		return false;
 	}
 
 	//Never switch
 	if (pPlayer->m_iAutoWepSwitch == 0)
 	{
-		return FALSE;
+		return false;
 	}
 
 	//Only switch if not attacking
 	if (pPlayer->m_iAutoWepSwitch == 2 && (pPlayer->m_afButtonLast & (IN_ATTACK | IN_ATTACK2)))
 	{
-		return FALSE;
+		return false;
 	}
 
 	if (pWeapon->iWeight() > pPlayer->m_pActiveItem->iWeight())
@@ -330,7 +330,7 @@ BOOL CHalfLifeMultiplay::FShouldSwitchWeapon(CBasePlayer* pPlayer, CBasePlayerIt
 		return TRUE;
 	}
 
-	return FALSE;
+	return false;
 }
 
 BOOL CHalfLifeMultiplay::GetNextBestWeapon(CBasePlayer* pPlayer, CBasePlayerItem* pCurrentWeapon)
@@ -347,7 +347,7 @@ BOOL CHalfLifeMultiplay::GetNextBestWeapon(CBasePlayer* pPlayer, CBasePlayerItem
 	if (!pCurrentWeapon->CanHolster())
 	{
 		// can't put this gun away right now, so can't switch.
-		return FALSE;
+		return false;
 	}
 
 	for (i = 0; i < MAX_ITEM_TYPES; i++)
@@ -392,7 +392,7 @@ BOOL CHalfLifeMultiplay::GetNextBestWeapon(CBasePlayer* pPlayer, CBasePlayerItem
 	// at least get the crowbar, but ya never know.
 	if (!pBest)
 	{
-		return FALSE;
+		return false;
 	}
 
 	pPlayer->SwitchWeapon(pBest);
@@ -730,7 +730,7 @@ void CHalfLifeMultiplay::PlayerSpawn(CBasePlayer* pPlayer)
 	while (pWeaponEntity = UTIL_FindEntityByClassname(pWeaponEntity, "game_player_equip"))
 	{
 		pWeaponEntity->Touch(pPlayer);
-		addDefault = FALSE;
+		addDefault = false;
 	}
 
 	if (addDefault)
@@ -1149,7 +1149,7 @@ int CHalfLifeMultiplay::WeaponShouldRespawn(CBasePlayerItem* pWeapon)
 }
 
 //=========================================================
-// CanHaveWeapon - returns FALSE if the player is not allowed
+// CanHaveWeapon - returns false if the player is not allowed
 // to pick up this weapon
 //=========================================================
 BOOL CHalfLifeMultiplay::CanHavePlayerItem(CBasePlayer* pPlayer, CBasePlayerItem* pItem)
@@ -1168,7 +1168,7 @@ BOOL CHalfLifeMultiplay::CanHavePlayerItem(CBasePlayer* pPlayer, CBasePlayerItem
 			{
 				if (it->m_iId == pItem->m_iId)
 				{
-					return FALSE;
+					return false;
 				}
 
 				it = it->m_pNext;
@@ -1233,7 +1233,7 @@ void CHalfLifeMultiplay::PlayerGotAmmo(CBasePlayer* pPlayer, char* szName, int i
 BOOL CHalfLifeMultiplay::IsAllowedToSpawn(CBaseEntity* pEntity)
 {
 	//	if ( pEntity->pev->flags & FL_MONSTER )
-	//		return FALSE;
+	//		return false;
 
 	return TRUE;
 }
@@ -1314,12 +1314,12 @@ int CHalfLifeMultiplay::PlayerRelationship(CBaseEntity* pPlayer, CBaseEntity* pT
 BOOL CHalfLifeMultiplay::PlayFootstepSounds(CBasePlayer* pl, float fvol)
 {
 	if (g_footsteps && g_footsteps->value == 0)
-		return FALSE;
+		return false;
 
 	if (pl->IsOnLadder() || pl->pev->velocity.Length2D() > 220)
 		return TRUE;  // only make step sounds in multiplayer if the player is moving fast enough
 
-	return FALSE;
+	return false;
 }
 
 BOOL CHalfLifeMultiplay::FAllowFlashlight()
@@ -1359,7 +1359,7 @@ void CHalfLifeMultiplay::GoToIntermission()
 	g_flIntermissionStartTime = gpGlobals->time;
 
 	g_fGameOver = TRUE;
-	m_iEndIntermissionButtonHit = FALSE;
+	m_iEndIntermissionButtonHit = false;
 }
 
 #define MAX_RULE_BUFFER 1024
@@ -1654,14 +1654,14 @@ void CHalfLifeMultiplay::ChangeLevel()
 		if (!ReloadMapCycleFile(mapcfile, &mapcycle) || (!mapcycle.items))
 		{
 			ALERT(at_console, "Unable to load map cycle file %s\n", mapcfile);
-			do_cycle = FALSE;
+			do_cycle = false;
 		}
 	}
 
 	if (do_cycle && mapcycle.items)
 	{
-		BOOL keeplooking = FALSE;
-		BOOL found = FALSE;
+		BOOL keeplooking = false;
+		BOOL found = false;
 		mapcycle_item_s* item;
 
 		// Assume current map
@@ -1671,7 +1671,7 @@ void CHalfLifeMultiplay::ChangeLevel()
 		// Traverse list
 		for (item = mapcycle.next_item; item->next != mapcycle.next_item; item = item->next)
 		{
-			keeplooking = FALSE;
+			keeplooking = false;
 
 			ASSERT(item != NULL);
 
@@ -1786,7 +1786,7 @@ void CHalfLifeMultiplay::SendMOTDToClient(edict_t* client)
 			*pFileList = 0;
 
 		MESSAGE_BEGIN(MSG_ONE, gmsgMOTD, NULL, client);
-		WRITE_BYTE(*pFileList ? FALSE : TRUE);	// FALSE means there is still more message to come
+		WRITE_BYTE(*pFileList ? false : TRUE);	// false means there is still more message to come
 		WRITE_STRING(chunk);
 		MESSAGE_END();
 	}

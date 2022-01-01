@@ -749,7 +749,7 @@ BOOL CHalfLifeCTFplay::FPlayerCanTakeDamage(CBasePlayer* pPlayer, CBaseEntity* p
 		&& PlayerRelationship(pPlayer, pAttacker) == GR_TEAMMATE
 		&& pAttacker != pPlayer
 		&& friendlyfire.value == 0)
-		return FALSE;
+		return false;
 
 	return CHalfLifeMultiplay::FPlayerCanTakeDamage(pPlayer, pAttacker);
 }
@@ -1365,7 +1365,7 @@ void CHalfLifeCTFplay::ChangePlayerTeam(CBasePlayer* pPlayer, const char* pCharN
 		pPlayer->m_iNewTeamNum = CTFTeam::None;
 		pPlayer->m_iCurrentMenu = MENU_NONE;
 		pPlayer->m_iTeamNum = CTFTeam::None;
-		pPlayer->SetSuitUpdate(nullptr, FALSE, SUIT_REPEAT_OK);
+		pPlayer->SetSuitUpdate(nullptr, false, SUIT_REPEAT_OK);
 		pPlayer->m_iClientHealth = 100;
 
 		g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgHealth, nullptr, pPlayer->edict());

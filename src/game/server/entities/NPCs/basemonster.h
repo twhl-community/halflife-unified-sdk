@@ -243,8 +243,8 @@ public:
 
 	inline void	SetConditions(int iConditions) { m_afConditions |= iConditions; }
 	inline void	ClearConditions(int iConditions) { m_afConditions &= ~iConditions; }
-	inline BOOL HasConditions(int iConditions) { if (m_afConditions & iConditions) return TRUE; return FALSE; }
-	inline BOOL HasAllConditions(int iConditions) { if ((m_afConditions & iConditions) == iConditions) return TRUE; return FALSE; }
+	inline BOOL HasConditions(int iConditions) { if (m_afConditions & iConditions) return TRUE; return false; }
+	inline BOOL HasAllConditions(int iConditions) { if ((m_afConditions & iConditions) == iConditions) return TRUE; return false; }
 
 	virtual BOOL FValidateHintType(short sHint);
 	int FindHintNode();
@@ -326,8 +326,8 @@ public:
 
 	inline void	Remember(int iMemory) { m_afMemory |= iMemory; }
 	inline void	Forget(int iMemory) { m_afMemory &= ~iMemory; }
-	inline BOOL HasMemory(int iMemory) { if (m_afMemory & iMemory) return TRUE; return FALSE; }
-	inline BOOL HasAllMemories(int iMemory) { if ((m_afMemory & iMemory) == iMemory) return TRUE; return FALSE; }
+	inline BOOL HasMemory(int iMemory) { if (m_afMemory & iMemory) return TRUE; return false; }
+	inline BOOL HasAllMemories(int iMemory) { if ((m_afMemory & iMemory) == iMemory) return TRUE; return false; }
 
 	BOOL ExitScriptedSequence();
 	BOOL CineCleanup();
@@ -343,7 +343,7 @@ public:
 	int m_iOldRenderFX = 0;
 	Vector m_OldRenderColor;
 	float m_flOldRenderAmt = 0;
-	BOOL m_fShockEffect = FALSE;
+	BOOL m_fShockEffect = false;
 
 	void AddShockEffect(float r, float g, float b, float size, float flShockDuration);
 	void UpdateShockEffect();

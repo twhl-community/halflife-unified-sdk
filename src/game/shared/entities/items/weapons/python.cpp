@@ -59,7 +59,7 @@ int CPython::AddToPlayer(CBasePlayer* pPlayer)
 		MESSAGE_END();
 		return TRUE;
 	}
-	return FALSE;
+	return false;
 }
 
 void CPython::Spawn()
@@ -110,7 +110,7 @@ BOOL CPython::Deploy()
 
 void CPython::Holster()
 {
-	m_fInReload = FALSE;// cancel any reload in progress.
+	m_fInReload = false;// cancel any reload in progress.
 
 	if (m_pPlayer->m_iFOV != 0)
 	{
@@ -192,7 +192,7 @@ void CPython::PrimaryAttack()
 
 	if (!m_iClip && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
 		// HEV suit - indicate out of ammo condition
-		m_pPlayer->SetSuitUpdate("!HEV_AMO0", FALSE, 0);
+		m_pPlayer->SetSuitUpdate("!HEV_AMO0", false, 0);
 
 	m_flNextPrimaryAttack = 0.75;
 	m_flTimeWeaponIdle = UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10, 15);
@@ -273,7 +273,7 @@ class CPythonAmmo : public CBasePlayerAmmo
 			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
 			return TRUE;
 		}
-		return FALSE;
+		return false;
 	}
 };
 

@@ -136,7 +136,7 @@ public:
 
 	void DetachObject();
 
-	bool IsObjectAttached() const { return m_bObjectAttached != FALSE; }
+	bool IsObjectAttached() const { return m_bObjectAttached != false; }
 
 	bool IsAcceptingAttachment() const;
 
@@ -146,9 +146,9 @@ public:
 
 	CRopeSegment** GetAltSegments() { return altseg; }
 
-	bool GetToggleValue() const { return m_bToggle != FALSE; }
+	bool GetToggleValue() const { return m_bToggle != false; }
 
-	bool IsSoundAllowed() const { return m_bMakeSound != FALSE; }
+	bool IsSoundAllowed() const { return m_bMakeSound != false; }
 
 	void SetSoundAllowed(const bool bAllowed)
 	{
