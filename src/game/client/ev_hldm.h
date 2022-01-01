@@ -5,8 +5,7 @@
 // $NoKeywords: $
 //=============================================================================
 
-#if !defined ( EV_HLDMH )
-#define EV_HLDMH
+#pragma once
 
 void EV_HLDM_GunshotDecalTrace(pmtrace_t* pTrace, char* decalName);
 void EV_HLDM_DecalGunshot(pmtrace_t* pTrace, int iBulletType);
@@ -33,18 +32,16 @@ void EV_HornetGunFire(event_args_t* args);
 void EV_TripmineFire(event_args_t* args);
 void EV_SnarkFire(event_args_t* args);
 
-	void EV_FireEagle(event_args_t* args);
-	void EV_Pipewrench(event_args_t* args);
-	void EV_FireM249(event_args_t* args);
-	void EV_FireDisplacer(event_args_t* args);
-	void EV_FireShockRifle(event_args_t* args);
-	void EV_FireSpore(event_args_t* args);
-	void EV_SniperRifle(event_args_t* args);
-	void EV_Knife(event_args_t* args);
-	void EV_PenguinFire(event_args_t* args);
+void EV_FireEagle(event_args_t* args);
+void EV_Pipewrench(event_args_t* args);
+void EV_FireM249(event_args_t* args);
+void EV_FireDisplacer(event_args_t* args);
+void EV_FireShockRifle(event_args_t* args);
+void EV_FireSpore(event_args_t* args);
+void EV_SniperRifle(event_args_t* args);
+void EV_Knife(event_args_t* args);
+void EV_PenguinFire(event_args_t* args);
 
 void EV_TrainPitchAdjust(event_args_t* args);
 
 void SetLocalBody(int id, int body);
-
-#endif // EV_HLDMH
