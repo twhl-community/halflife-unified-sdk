@@ -116,6 +116,7 @@ using qboolean = int;
 #define strdup _strdup
 
 #define DLLEXPORT __declspec( dllexport )
+#define DLLHIDDEN
 
 #define stackalloc(size) _alloca(size)
 
@@ -140,6 +141,7 @@ typedef int BOOL;
 #define _alloca alloca
 
 #define DLLEXPORT __attribute__ ( ( visibility( "default" ) ) )
+#define DLLHIDDEN __attribute__ ( ( visibility( "hidden" ) ) )
 
 #define stackalloc(size) alloca(size)
 
