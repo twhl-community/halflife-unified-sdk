@@ -292,10 +292,10 @@ int	CGraph::HandleLinkEnt(int iNode, entvars_t* pevLinkEnt, int afCapMask, NODEQ
 // FindNearestLink - finds the connection (line) nearest
 // the given point. Returns false if fails, or true if it
 // has stuffed the index into the nearest link pool connection
-// into the passed int pointer, and a BOOL telling whether or 
-// not the point is along the line into the passed BOOL pointer.
+// into the passed int pointer, and a bool telling whether or 
+// not the point is along the line into the passed bool pointer.
 //=========================================================
-int	CGraph::FindNearestLink(const Vector& vecTestPoint, int* piNearestLink, BOOL* pfAlongLine)
+int	CGraph::FindNearestLink(const Vector& vecTestPoint, int* piNearestLink, bool* pfAlongLine)
 {
 	int			i, j;// loops
 

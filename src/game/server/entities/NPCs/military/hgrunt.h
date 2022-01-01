@@ -112,10 +112,10 @@ public:
 	int  Classify() override;
 	int ISoundMask() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
-	BOOL FCanCheckAttacks() override;
-	BOOL CheckMeleeAttack1(float flDot, float flDist) override;
-	BOOL CheckRangeAttack1(float flDot, float flDist) override;
-	BOOL CheckRangeAttack2(float flDot, float flDist) override;
+	bool FCanCheckAttacks() override;
+	bool CheckMeleeAttack1(float flDot, float flDist) override;
+	bool CheckRangeAttack1(float flDot, float flDist) override;
+	bool CheckRangeAttack2(float flDot, float flDist) override;
 	void CheckAmmo() override;
 	void SetActivity(Activity NewActivity) override;
 	void StartTask(Task_t* pTask) override;
@@ -175,7 +175,7 @@ protected:
 	*/
 	void PrecacheCore(const char* model);
 
-	BOOL CheckRangeAttack2Core(float flDot, float flDist, float grenadeSpeed);
+	bool CheckRangeAttack2Core(float flDot, float flDist, float grenadeSpeed);
 
 	virtual std::tuple<int, Activity> GetSequenceForActivity(Activity NewActivity);
 

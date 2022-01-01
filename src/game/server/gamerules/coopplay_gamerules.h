@@ -18,9 +18,9 @@ class CHalfLifeCoopplay : public CHalfLifeMultiplay
 public:
 	CHalfLifeCoopplay();
 
-	BOOL IsCoOp() override { return true; }
-	BOOL IsTeamplay() override { return true; }
-	BOOL FAllowMonsters() override { return true; }
+	bool IsCoOp() override { return true; }
+	bool IsTeamplay() override { return true; }
+	bool FAllowMonsters() override { return true; }
 
 	void UpdateGameMode(CBasePlayer* pPlayer) override;
 
@@ -30,7 +30,7 @@ public:
 
 	int PlayerRelationship(CBaseEntity* pPlayer, CBaseEntity* pTarget) override;
 
-	BOOL ShouldAutoAim(CBasePlayer* pPlayer, edict_t* target) override;
+	bool ShouldAutoAim(CBasePlayer* pPlayer, edict_t* target) override;
 
 	int IPointsForKill(CBasePlayer* pAttacker, CBasePlayer* pKilled) override;
 
@@ -38,7 +38,7 @@ public:
 
 	float FlPlayerFallDamage(CBasePlayer* pPlayer) override;
 
-	BOOL FPlayerCanRespawn(CBasePlayer* pPlayer) override { return true; }
+	bool FPlayerCanRespawn(CBasePlayer* pPlayer) override { return true; }
 
 	float FlPlayerSpawnTime(CBasePlayer* pPlayer) override;
 
@@ -58,9 +58,9 @@ public:
 	int AmmoShouldRespawn(CBasePlayerAmmo* pAmmo) override;
 	float FlAmmoRespawnTime(CBasePlayerAmmo* pAmmo) override;
 
-	BOOL FPlayerCanTakeDamage(CBasePlayer* pPlayer, CBaseEntity* pAttacker) override;
+	bool FPlayerCanTakeDamage(CBasePlayer* pPlayer, CBaseEntity* pAttacker) override;
 
-	BOOL ClientCommand(CBasePlayer* pPlayer, const char* pcmd) override;
+	bool ClientCommand(CBasePlayer* pPlayer, const char* pcmd) override;
 
 	float FlWeaponTryRespawn(CBasePlayerItem* pWeapon) override;
 

@@ -378,7 +378,7 @@ void CRpg::IncrementAmmo(CBasePlayer* pPlayer)
 	}
 }
 
-int CRpg::AddToPlayer(CBasePlayer* pPlayer)
+bool CRpg::AddToPlayer(CBasePlayer* pPlayer)
 {
 	if (CBasePlayerWeapon::AddToPlayer(pPlayer))
 	{
@@ -390,7 +390,7 @@ int CRpg::AddToPlayer(CBasePlayer* pPlayer)
 	return false;
 }
 
-BOOL CRpg::Deploy()
+bool CRpg::Deploy()
 {
 	if (m_iClip == 0)
 	{
@@ -401,7 +401,7 @@ BOOL CRpg::Deploy()
 }
 
 
-BOOL CRpg::CanHolster()
+bool CRpg::CanHolster()
 {
 	if (m_fSpotActive && m_cActiveRockets)
 	{
@@ -572,7 +572,7 @@ class CRpgAmmo : public CBasePlayerAmmo
 		PRECACHE_MODEL("models/w_rpgammo.mdl");
 		PRECACHE_SOUND("items/9mmclip1.wav");
 	}
-	BOOL AddAmmo(CBaseEntity* pOther) override
+	bool AddAmmo(CBaseEntity* pOther) override
 	{
 		int iGive;
 

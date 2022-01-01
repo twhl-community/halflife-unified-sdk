@@ -49,7 +49,7 @@ class CApache : public CBaseMonster
 	void ShowDamage();
 	void Flight();
 	void FireRocket();
-	BOOL FireGun();
+	bool FireGun();
 
 	int  TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;

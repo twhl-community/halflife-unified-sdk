@@ -38,7 +38,7 @@ public:
 	void Precache() override;
 
 	// This is done to fix spawn flag collisions between this class and a derived class
-	virtual BOOL IsTogglePlat() { return (pev->spawnflags & SF_PLAT_TOGGLE) ? true : false; }
+	virtual bool IsTogglePlat() { return (pev->spawnflags & SF_PLAT_TOGGLE) ? true : false; }
 
 	int	Save(CSave& save) override;
 	int	Restore(CRestore& restore) override;
@@ -1404,7 +1404,7 @@ void CFuncTrackTrain::KeyValue(KeyValueData* pkvd)
 }
 
 
-void CFuncTrackTrain::NextThink(float thinkTime, BOOL alwaysThink)
+void CFuncTrackTrain::NextThink(float thinkTime, bool alwaysThink)
 {
 	if (alwaysThink)
 		pev->flags |= FL_ALWAYSTHINK;
@@ -1764,7 +1764,7 @@ void CFuncTrackTrain::SetControls(entvars_t* pevControls)
 }
 
 
-BOOL CFuncTrackTrain::OnControls(entvars_t* pevTest)
+bool CFuncTrackTrain::OnControls(entvars_t* pevTest)
 {
 	Vector offset = pevTest->origin - pev->origin;
 
@@ -2049,7 +2049,7 @@ public:
 	void	HitTop() override;
 	void			Touch(CBaseEntity* pOther) override;
 	virtual void	UpdateAutoTargets(int toggleState);
-	BOOL	IsTogglePlat() override { return true; }
+	bool	IsTogglePlat() override { return true; }
 
 	void			DisableUse() { m_use = 0; }
 	void			EnableUse() { m_use = 1; }

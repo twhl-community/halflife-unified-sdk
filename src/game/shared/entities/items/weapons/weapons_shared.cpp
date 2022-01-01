@@ -88,7 +88,7 @@ void FindHullIntersection(const Vector& vecSrc, TraceResult& tr, const Vector& m
 	}
 }
 
-BOOL CBasePlayerWeapon::CanDeploy()
+bool CBasePlayerWeapon::CanDeploy()
 {
 	BOOL bHasAmmo = 0;
 
@@ -118,7 +118,7 @@ BOOL CBasePlayerWeapon::CanDeploy()
 	return true;
 }
 
-BOOL CBasePlayerWeapon::DefaultReload(int iClipSize, int iAnim, float fDelay, int body)
+bool CBasePlayerWeapon::DefaultReload(int iClipSize, int iAnim, float fDelay, int body)
 {
 	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
 		return false;
@@ -144,7 +144,7 @@ void CBasePlayerWeapon::ResetEmptySound()
 	m_iPlayEmptySound = 1;
 }
 
-BOOL CanAttack(float attack_time, float curtime, BOOL isPredicted)
+bool CanAttack(float attack_time, float curtime, bool isPredicted)
 {
 #if defined( CLIENT_WEAPONS )
 	if (!isPredicted)

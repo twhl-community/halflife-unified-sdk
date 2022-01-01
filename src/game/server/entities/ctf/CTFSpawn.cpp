@@ -60,7 +60,7 @@ void CTFSpawn::Spawn()
 	m_fState = true;
 }
 
-BOOL CTFSpawn::IsTriggered(CBaseEntity* pEntity)
+bool CTFSpawn::IsTriggered(CBaseEntity* pEntity)
 {
 	if (!FStringNull(pev->targetname) && STRING(pev->targetname))
 		return m_fState;

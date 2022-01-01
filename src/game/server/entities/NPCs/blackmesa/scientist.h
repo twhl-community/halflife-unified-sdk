@@ -82,9 +82,9 @@ public:
 	void DeclineFollowing() override;
 
 	float	CoverRadius() override { return 1200; }		// Need more room for cover because scientists want to get far away!
-	BOOL	DisregardEnemy(CBaseEntity* pEnemy) { return !pEnemy->IsAlive() || (gpGlobals->time - m_fearTime) > 15; }
+	bool	DisregardEnemy(CBaseEntity* pEnemy) { return !pEnemy->IsAlive() || (gpGlobals->time - m_fearTime) > 15; }
 
-	BOOL	CanHeal();
+	bool	CanHeal();
 	virtual void Heal();
 	virtual void Scream();
 

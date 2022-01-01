@@ -41,7 +41,7 @@ public:
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 	int ISoundMask() override;
 
-	void PlayScriptedSentence(const char* pszSentence, float duration, float volume, float attenuation, BOOL bConcurrent, CBaseEntity* pListener) override;
+	void PlayScriptedSentence(const char* pszSentence, float duration, float volume, float attenuation, bool bConcurrent, CBaseEntity* pListener) override;
 
 	void MonsterThink() override;
 	void IdleHeadTurn(Vector& vecFriend);
@@ -172,7 +172,7 @@ void CGenericMonster::Precache()
 	PRECACHE_MODEL((char*)STRING(pev->model));
 }
 
-void CGenericMonster::PlayScriptedSentence(const char* pszSentence, float duration, float volume, float attenuation, BOOL bConcurrent, CBaseEntity* pListener)
+void CGenericMonster::PlayScriptedSentence(const char* pszSentence, float duration, float volume, float attenuation, bool bConcurrent, CBaseEntity* pListener)
 {
 	m_talkTime = gpGlobals->time + duration;
 	PlaySentence(pszSentence, duration, volume, attenuation);

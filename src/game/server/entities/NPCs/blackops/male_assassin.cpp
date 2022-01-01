@@ -85,8 +85,8 @@ public:
 	void Spawn() override;
 	void Precache() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
-	BOOL CheckRangeAttack1(float flDot, float flDist) override;
-	BOOL CheckRangeAttack2(float flDot, float flDist) override;
+	bool CheckRangeAttack1(float flDot, float flDist) override;
+	bool CheckRangeAttack2(float flDot, float flDist) override;
 	void CheckAmmo() override;
 	void PainSound() override;
 	void IdleSound() override;
@@ -176,7 +176,7 @@ void CMOFAssassin::GibMonster()
 // occluded (throw grenade over wall, etc). We must 
 // disqualify the machine gun attack if the enemy is occluded.
 //=========================================================
-BOOL CMOFAssassin::CheckRangeAttack1(float flDot, float flDist)
+bool CMOFAssassin::CheckRangeAttack1(float flDot, float flDist)
 {
 	if (pev->weapons)
 	{
@@ -195,7 +195,7 @@ BOOL CMOFAssassin::CheckRangeAttack1(float flDot, float flDist)
 // CheckRangeAttack2 - this checks the Grunt's grenade
 // attack. 
 //=========================================================
-BOOL CMOFAssassin::CheckRangeAttack2(float flDot, float flDist)
+bool CMOFAssassin::CheckRangeAttack2(float flDot, float flDist)
 {
 	return CheckRangeAttack2Core(flDot, flDist, gSkillData.massassinGrenadeSpeed);
 }

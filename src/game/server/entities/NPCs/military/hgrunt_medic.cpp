@@ -126,7 +126,7 @@ public:
 
 	void MonsterThink() override;
 
-	BOOL HealMe(COFSquadTalkMonster* pTarget) override;
+	bool HealMe(COFSquadTalkMonster* pTarget) override;
 
 	void HealOff();
 
@@ -716,7 +716,7 @@ void COFMedicAlly::MonsterThink()
 	CBaseHGruntAlly::MonsterThink();
 }
 
-BOOL COFMedicAlly::HealMe(COFSquadTalkMonster* pTarget)
+bool COFMedicAlly::HealMe(COFSquadTalkMonster* pTarget)
 {
 	if (pTarget)
 	{

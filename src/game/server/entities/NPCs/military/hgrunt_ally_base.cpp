@@ -130,7 +130,7 @@ int CBaseHGruntAlly::ISoundMask()
 //=========================================================
 // someone else is talking - don't speak
 //=========================================================
-BOOL CBaseHGruntAlly::FOkToSpeak()
+bool CBaseHGruntAlly::FOkToSpeak()
 {
 	// if someone else is talking, don't speak
 	if (gpGlobals->time <= COFSquadTalkMonster::g_talkWaitTime)
@@ -196,7 +196,7 @@ void CBaseHGruntAlly::PrescheduleThink()
 // this is a bad bug. Friendly machine gun fire avoidance
 // will unecessarily prevent the throwing of a grenade as well.
 //=========================================================
-BOOL CBaseHGruntAlly::FCanCheckAttacks()
+bool CBaseHGruntAlly::FCanCheckAttacks()
 {
 	if (!HasConditions(bits_COND_ENEMY_TOOFAR))
 	{
@@ -212,7 +212,7 @@ BOOL CBaseHGruntAlly::FCanCheckAttacks()
 //=========================================================
 // CheckMeleeAttack1
 //=========================================================
-BOOL CBaseHGruntAlly::CheckMeleeAttack1(float flDot, float flDist)
+bool CBaseHGruntAlly::CheckMeleeAttack1(float flDot, float flDist)
 {
 	CBaseMonster* pEnemy;
 
@@ -243,7 +243,7 @@ BOOL CBaseHGruntAlly::CheckMeleeAttack1(float flDot, float flDist)
 // occluded (throw grenade over wall, etc). We must 
 // disqualify the machine gun attack if the enemy is occluded.
 //=========================================================
-BOOL CBaseHGruntAlly::CheckRangeAttack1(float flDot, float flDist)
+bool CBaseHGruntAlly::CheckRangeAttack1(float flDot, float flDist)
 {
 	if (CanRangeAttack())
 	{
@@ -286,7 +286,7 @@ BOOL CBaseHGruntAlly::CheckRangeAttack1(float flDot, float flDist)
 // CheckRangeAttack2 - this checks the Grunt's grenade
 // attack. 
 //=========================================================
-BOOL CBaseHGruntAlly::CheckRangeAttack2(float flDot, float flDist)
+bool CBaseHGruntAlly::CheckRangeAttack2(float flDot, float flDist)
 {
 	if (!CanUseThrownGrenades() && !CanUseGrenadeLauncher())
 	{

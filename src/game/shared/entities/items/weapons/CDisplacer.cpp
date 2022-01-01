@@ -73,7 +73,7 @@ void CDisplacer::Spawn()
 	FallInit();
 }
 
-BOOL CDisplacer::AddToPlayer(CBasePlayer* pPlayer)
+bool CDisplacer::AddToPlayer(CBasePlayer* pPlayer)
 {
 	if (CBasePlayerWeapon::AddToPlayer(pPlayer))
 	{
@@ -85,7 +85,7 @@ BOOL CDisplacer::AddToPlayer(CBasePlayer* pPlayer)
 	return false;
 }
 
-BOOL CDisplacer::Deploy()
+bool CDisplacer::Deploy()
 {
 	return DefaultDeploy("models/v_displacer.mdl", "models/p_displacer.mdl", DISPLACER_DRAW, "egon");
 }

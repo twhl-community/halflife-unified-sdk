@@ -613,7 +613,7 @@ void CBasePlayerItem::DestroyItem()
 	Kill();
 }
 
-int CBasePlayerItem::AddToPlayer(CBasePlayer* pPlayer)
+bool CBasePlayerItem::AddToPlayer(CBasePlayer* pPlayer)
 {
 	m_pPlayer = pPlayer;
 
@@ -654,7 +654,7 @@ void CBasePlayerItem::AttachToPlayer(CBasePlayer* pPlayer)
 }
 
 // CALLED THROUGH the newly-touched weapon's instance. The existing player weapon is pOriginal
-int CBasePlayerWeapon::AddDuplicate(CBasePlayerItem* pOriginal)
+bool CBasePlayerWeapon::AddDuplicate(CBasePlayerItem* pOriginal)
 {
 	if (m_iDefaultAmmo)
 	{
@@ -668,7 +668,7 @@ int CBasePlayerWeapon::AddDuplicate(CBasePlayerItem* pOriginal)
 }
 
 
-int CBasePlayerWeapon::AddToPlayer(CBasePlayer* pPlayer)
+bool CBasePlayerWeapon::AddToPlayer(CBasePlayer* pPlayer)
 {
 	int bResult = CBasePlayerItem::AddToPlayer(pPlayer);
 
@@ -759,7 +759,7 @@ void CBasePlayerWeapon::SendWeaponAnim(int iAnim, int body)
 	MESSAGE_END();
 }
 
-BOOL CBasePlayerWeapon::AddPrimaryAmmo(int iCount, char* szName, int iMaxClip, int iMaxCarry)
+bool CBasePlayerWeapon::AddPrimaryAmmo(int iCount, char* szName, int iMaxClip, int iMaxCarry)
 {
 	int iIdAmmo;
 
@@ -803,7 +803,7 @@ BOOL CBasePlayerWeapon::AddPrimaryAmmo(int iCount, char* szName, int iMaxClip, i
 }
 
 
-BOOL CBasePlayerWeapon::AddSecondaryAmmo(int iCount, char* szName, int iMax)
+bool CBasePlayerWeapon::AddSecondaryAmmo(int iCount, char* szName, int iMax)
 {
 	int iIdAmmo;
 
@@ -825,7 +825,7 @@ BOOL CBasePlayerWeapon::AddSecondaryAmmo(int iCount, char* szName, int iMax)
 // (does it have ammo loaded? do I have any ammo for the 
 // weapon?, etc)
 //=========================================================
-BOOL CBasePlayerWeapon::IsUseable()
+bool CBasePlayerWeapon::IsUseable()
 {
 	if (m_iClip > 0)
 	{
@@ -861,7 +861,7 @@ BOOL CBasePlayerWeapon::IsUseable()
 	return false;
 }
 
-BOOL CBasePlayerWeapon::DefaultDeploy(const char* szViewModel, const char* szWeaponModel, int iAnim, const char* szAnimExt, int body)
+bool CBasePlayerWeapon::DefaultDeploy(const char* szViewModel, const char* szWeaponModel, int iAnim, const char* szAnimExt, int body)
 {
 	if (!CanDeploy())
 		return false;
@@ -879,7 +879,7 @@ BOOL CBasePlayerWeapon::DefaultDeploy(const char* szViewModel, const char* szWea
 	return true;
 }
 
-BOOL CBasePlayerWeapon::PlayEmptySound()
+bool CBasePlayerWeapon::PlayEmptySound()
 {
 	if (m_iPlayEmptySound)
 	{
@@ -986,7 +986,7 @@ void CBasePlayerAmmo::DefaultTouch(CBaseEntity* pOther)
 //=========================================================
 int CBasePlayerWeapon::ExtractAmmo(CBasePlayerWeapon* pWeapon)
 {
-	int			iReturn = 0;
+	bool			iReturn = false;
 
 	if (pszAmmo1() != NULL)
 	{
@@ -1231,7 +1231,7 @@ void CWeaponBox::Touch(CBaseEntity* pOther)
 //=========================================================
 // CWeaponBox - PackWeapon: Add this weapon to the box
 //=========================================================
-BOOL CWeaponBox::PackWeapon(CBasePlayerItem* pWeapon)
+bool CWeaponBox::PackWeapon(CBasePlayerItem* pWeapon)
 {
 	// is one of these weapons already packed in this box?
 	if (HasWeapon(pWeapon))
@@ -1282,7 +1282,7 @@ BOOL CWeaponBox::PackWeapon(CBasePlayerItem* pWeapon)
 //=========================================================
 // CWeaponBox - PackAmmo
 //=========================================================
-BOOL CWeaponBox::PackAmmo(int iszName, int iCount)
+bool CWeaponBox::PackAmmo(int iszName, int iCount)
 {
 	int iMaxCarry;
 
@@ -1347,7 +1347,7 @@ int CWeaponBox::GiveAmmo(int iCount, const char* szName, int iMax, int* pIndex/*
 // CWeaponBox::HasWeapon - is a weapon of this type already
 // packed in this box?
 //=========================================================
-BOOL CWeaponBox::HasWeapon(CBasePlayerItem* pCheckItem)
+bool CWeaponBox::HasWeapon(CBasePlayerItem* pCheckItem)
 {
 	CBasePlayerItem* pItem = m_rgpPlayerItems[pCheckItem->iItemSlot()];
 
@@ -1366,7 +1366,7 @@ BOOL CWeaponBox::HasWeapon(CBasePlayerItem* pCheckItem)
 //=========================================================
 // CWeaponBox::IsEmpty - is there anything in this box?
 //=========================================================
-BOOL CWeaponBox::IsEmpty()
+bool CWeaponBox::IsEmpty()
 {
 	int i;
 

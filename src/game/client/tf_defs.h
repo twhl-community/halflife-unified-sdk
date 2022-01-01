@@ -1239,7 +1239,7 @@ extern ip_storage_t g_IpStorage[32];
 
 class CGhost;
 /*==========================================================================*/
-BOOL ClassIsRestricted(float tno, int pc);
+bool ClassIsRestricted(float tno, int pc);
 char* GetTeamName(int tno);
 int TeamFortress_GetNoPlayers();
 void DestroyBuilding(CBaseEntity* eng, char* bld);
@@ -1247,16 +1247,16 @@ void teamsprint(int tno, CBaseEntity* ignore, int msg_dest, const char* st, cons
 float anglemod(float v);
 
 // Team Funcs
-BOOL TeamFortress_TeamIsCivilian(float tno);
-void TeamFortress_TeamShowScores(BOOL bLong, CBasePlayer* pPlayer);
-BOOL TeamFortress_TeamPutPlayerInTeam();
+bool TeamFortress_TeamIsCivilian(float tno);
+void TeamFortress_TeamShowScores(bool bLong, CBasePlayer* pPlayer);
+bool TeamFortress_TeamPutPlayerInTeam();
 void TeamFortress_TeamSetColor(int tno);
 void TeamFortress_TeamIncreaseScore(int tno, int scoretoadd);
 int TeamFortress_TeamGetScoreFrags(int tno);
 int TeamFortress_TeamGetNoPlayers(int tno);
 float TeamEqualiseDamage(CBaseEntity* targ, CBaseEntity* attacker, float damage);
-BOOL IsSpawnPointValid(Vector& pos);
-BOOL TeamFortress_SortTeams(void);
+bool IsSpawnPointValid(Vector& pos);
+bool TeamFortress_SortTeams(void);
 void DumpClanScores(void);
 void CalculateTeamEqualiser();
 
@@ -1270,15 +1270,15 @@ void RemoveGoal(CBaseEntity* Goal);
 void tfgoalitem_GiveToPlayer(CBaseEntity* Item, CBasePlayer* AP, CBaseEntity* Goal);
 void dremove(CBaseEntity* te);
 void tfgoalitem_RemoveFromPlayer(CBaseEntity* Item, CBasePlayer* AP, int iMethod);
-void tfgoalitem_drop(CBaseEntity* Item, BOOL PAlive, CBasePlayer* P);
+void tfgoalitem_drop(CBaseEntity* Item, bool PAlive, CBasePlayer* P);
 void DisplayItemStatus(CBaseEntity* Goal, CBasePlayer* Player, CBaseEntity* Item);
 void tfgoalitem_checkgoalreturn(CBaseEntity* Item);
 void DoGoalWork(CBaseEntity* Goal, CBasePlayer* AP);
-void DoResults(CBaseEntity* Goal, CBasePlayer* AP, BOOL bAddBonuses);
+void DoResults(CBaseEntity* Goal, CBasePlayer* AP, bool bAddBonuses);
 void DoGroupWork(CBaseEntity* Goal, CBasePlayer* AP);
 // hooks into the mapscript for all entities
-BOOL ActivateDoResults(CBaseEntity* Goal, CBasePlayer* AP, CBaseEntity* ActivatingGoal);
-BOOL ActivationSucceeded(CBaseEntity* Goal, CBasePlayer* AP, CBaseEntity* ActivatingGoal);
+bool ActivateDoResults(CBaseEntity* Goal, CBasePlayer* AP, CBaseEntity* ActivatingGoal);
+bool ActivationSucceeded(CBaseEntity* Goal, CBasePlayer* AP, CBaseEntity* ActivatingGoal);
 
 // prematch & ceasefire
 void Display_Prematch();
@@ -1349,7 +1349,7 @@ public:
 	void	Spawn(void);
 	void	Activate(void);
 	int		Classify(void) { return	CLASS_TFSPAWN; }
-	BOOL	CheckTeam(int iTeamNo);
+	bool	CheckTeam(int iTeamNo);
 
 	EHANDLE m_pTeamCheck;
 };
@@ -1373,7 +1373,7 @@ class CTeamCheck : public CBaseDelay
 public:
 	void Spawn(void);
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-	BOOL TeamMatches(int iTeam);
+	bool TeamMatches(int iTeam);
 };
 
 class CTeamSet : public CBaseDelay

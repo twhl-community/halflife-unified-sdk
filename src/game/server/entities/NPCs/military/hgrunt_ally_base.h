@@ -108,10 +108,10 @@ public:
 	int  Classify() override;
 	int ISoundMask() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
-	BOOL FCanCheckAttacks() override;
-	BOOL CheckMeleeAttack1(float flDot, float flDist) override;
-	BOOL CheckRangeAttack1(float flDot, float flDist) override;
-	BOOL CheckRangeAttack2(float flDot, float flDist) override;
+	bool FCanCheckAttacks() override;
+	bool CheckMeleeAttack1(float flDot, float flDist) override;
+	bool CheckRangeAttack1(float flDot, float flDist) override;
+	bool CheckRangeAttack2(float flDot, float flDist) override;
 	void CheckAmmo() override;
 	void SetActivity(Activity NewActivity) override;
 	void StartTask(Task_t* pTask) override;
@@ -133,7 +133,7 @@ public:
 	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
 	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 
-	BOOL FOkToSpeak();
+	bool FOkToSpeak();
 	void JustSpoke();
 
 	int ObjectCaps() override;

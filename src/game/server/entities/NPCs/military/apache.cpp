@@ -728,7 +728,7 @@ void CApache::FireRocket()
 
 
 
-BOOL CApache::FireGun()
+bool CApache::FireGun()
 {
 	UTIL_MakeAimVectors(pev->angles);
 

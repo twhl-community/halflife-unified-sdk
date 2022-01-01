@@ -32,7 +32,7 @@ enum firemode_e
 
 LINK_ENTITY_TO_CLASS(weapon_hornetgun, CHgun);
 
-BOOL CHgun::IsUseable()
+bool CHgun::IsUseable()
 {
 	return true;
 }
@@ -61,7 +61,7 @@ void CHgun::Precache()
 	UTIL_PrecacheOther("hornet");
 }
 
-int CHgun::AddToPlayer(CBasePlayer* pPlayer)
+bool CHgun::AddToPlayer(CBasePlayer* pPlayer)
 {
 	if (CBasePlayerWeapon::AddToPlayer(pPlayer))
 	{
@@ -100,7 +100,7 @@ int CHgun::GetItemInfo(ItemInfo* p)
 }
 
 
-BOOL CHgun::Deploy()
+bool CHgun::Deploy()
 {
 	return DefaultDeploy("models/v_hgun.mdl", "models/p_hgun.mdl", HGUN_UP, "hive");
 }

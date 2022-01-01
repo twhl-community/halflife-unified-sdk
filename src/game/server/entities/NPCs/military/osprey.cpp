@@ -191,7 +191,7 @@ void COsprey::DeployThink()
 
 
 
-BOOL COsprey::HasDead()
+bool COsprey::HasDead()
 {
 	for (int i = 0; i < m_iUnits; i++)
 	{

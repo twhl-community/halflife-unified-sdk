@@ -69,9 +69,9 @@ public:
 
 	Schedule_t* GetSchedule() override;
 	Schedule_t* GetScheduleOfType(int Type) override;
-	BOOL FCanCheckAttacks() override;
-	BOOL CheckMeleeAttack1(float flDot, float flDist) override;
-	BOOL CheckRangeAttack1(float flDot, float flDist) override;
+	bool FCanCheckAttacks() override;
+	bool CheckMeleeAttack1(float flDot, float flDist) override;
+	bool CheckRangeAttack1(float flDot, float flDist) override;
 	void StartTask(Task_t* pTask) override;
 	void RunTask(Task_t* pTask) override;
 	void AlertSound() override;
@@ -79,7 +79,7 @@ public:
 	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
 	int IRelationship(CBaseEntity* pTarget) override;
 	void StopTalking();
-	BOOL ShouldSpeak();
+	bool ShouldSpeak();
 
 	void ClearBeams();
 

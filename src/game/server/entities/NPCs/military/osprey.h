@@ -34,7 +34,7 @@ public:
 	void Killed(entvars_t* pevAttacker, int iGib) override;
 
 	void UpdateGoal();
-	BOOL HasDead();
+	bool HasDead();
 	void EXPORT FlyThink();
 	void EXPORT DeployThink();
 	void Flight();

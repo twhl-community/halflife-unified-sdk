@@ -95,7 +95,7 @@ class CTalkMonster : public CBaseMonster
 {
 public:
 	virtual void TalkInit();
-	CBaseEntity* FindNearestFriend(BOOL fPlayer);
+	CBaseEntity* FindNearestFriend(bool fPlayer);
 	float			TargetDistance();
 	void			StopTalking() { SentenceStop(); }
 
@@ -105,9 +105,9 @@ public:
 	void			Touch(CBaseEntity* pOther) override;
 	void			Killed(entvars_t* pevAttacker, int iGib) override;
 	int				IRelationship(CBaseEntity* pTarget) override;
-	int		CanPlaySentence(BOOL fDisregardState) override;
+	int		CanPlaySentence(bool fDisregardState) override;
 	void	PlaySentence(const char* pszSentence, float duration, float volume, float attenuation) override;
-	void			PlayScriptedSentence(const char* pszSentence, float duration, float volume, float attenuation, BOOL bConcurrent, CBaseEntity* pListener) override;
+	void			PlayScriptedSentence(const char* pszSentence, float duration, float volume, float attenuation, bool bConcurrent, CBaseEntity* pListener) override;
 	void			KeyValue(KeyValueData* pkvd) override;
 
 	// AI functions
@@ -129,7 +129,7 @@ public:
 	void			TrySmellTalk();
 	void			AlertFriends();
 	void			ShutUpFriends();
-	BOOL			IsTalking();
+	bool			IsTalking();
 	void			Talk(float flDuration);
 
 	/**
@@ -143,9 +143,9 @@ public:
 	void EnumFriends(Callback callback, bool trace);
 
 	// For following
-	BOOL			CanFollow();
-	BOOL			IsFollowing() { return m_hTargetEnt != NULL && m_hTargetEnt->IsPlayer(); }
-	void			StopFollowing(BOOL clearSchedule) override;
+	bool			CanFollow();
+	bool			IsFollowing() { return m_hTargetEnt != NULL && m_hTargetEnt->IsPlayer(); }
+	void			StopFollowing(bool clearSchedule) override;
 	void			StartFollowing(CBaseEntity* pLeader);
 	virtual void	DeclineFollowing() {}
 	void			LimitFollowers(CBaseEntity* pPlayer, int maxFollowers);

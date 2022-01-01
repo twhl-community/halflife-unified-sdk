@@ -75,7 +75,7 @@ void CPipewrench::Precache()
 	m_usPipewrench = PRECACHE_EVENT(1, "events/pipewrench.sc");
 }
 
-BOOL CPipewrench::Deploy()
+bool CPipewrench::Deploy()
 {
 	return DefaultDeploy("models/v_pipe_wrench.mdl", "models/p_pipe_wrench.mdl", PIPEWRENCH_DRAW, "crowbar");
 }

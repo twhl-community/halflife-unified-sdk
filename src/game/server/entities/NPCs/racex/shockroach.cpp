@@ -89,8 +89,8 @@ public:
 	void PrescheduleThink() override;
 	int  Classify() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
-	BOOL CheckRangeAttack1(float flDot, float flDist) override;
-	BOOL CheckRangeAttack2(float flDot, float flDist) override;
+	bool CheckRangeAttack1(float flDot, float flDist) override;
+	bool CheckRangeAttack2(float flDot, float flDist) override;
 	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 
 	virtual float GetDamageAmount() { return gSkillData.shockroachDmgBite; }
@@ -425,7 +425,7 @@ void COFShockRoach::StartTask(Task_t* pTask)
 //=========================================================
 // CheckRangeAttack1
 //=========================================================
-BOOL COFShockRoach::CheckRangeAttack1(float flDot, float flDist)
+bool COFShockRoach::CheckRangeAttack1(float flDot, float flDist)
 {
 	if (FBitSet(pev->flags, FL_ONGROUND) && flDist <= 256 && flDot >= 0.65)
 	{
@@ -437,7 +437,7 @@ BOOL COFShockRoach::CheckRangeAttack1(float flDot, float flDist)
 //=========================================================
 // CheckRangeAttack2
 //=========================================================
-BOOL COFShockRoach::CheckRangeAttack2(float flDot, float flDist)
+bool COFShockRoach::CheckRangeAttack2(float flDot, float flDist)
 {
 	return false;
 	// BUGBUG: Why is this code here?  There is no ACT_RANGE_ATTACK2 animation.  I've disabled it for now.

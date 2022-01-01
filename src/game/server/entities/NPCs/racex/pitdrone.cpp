@@ -241,11 +241,11 @@ public:
 	void AlertSound() override;
 	void StartTask(Task_t* pTask) override;
 	void RunTask(Task_t* pTask) override;
-	BOOL CheckMeleeAttack1(float flDot, float flDist) override;
-	BOOL CheckMeleeAttack2(float flDot, float flDist) override;
-	BOOL CheckRangeAttack1(float flDot, float flDist) override;
+	bool CheckMeleeAttack1(float flDot, float flDist) override;
+	bool CheckMeleeAttack2(float flDot, float flDist) override;
+	bool CheckRangeAttack1(float flDot, float flDist) override;
 	void RunAI() override;
-	BOOL FValidateHintType(short sHint) override;
+	bool FValidateHintType(short sHint) override;
 	Schedule_t* GetSchedule() override;
 	Schedule_t* GetScheduleOfType(int Type) override;
 	int IRelationship(CBaseEntity* pTarget) override;
@@ -307,7 +307,7 @@ int CPitdrone::IRelationship(CBaseEntity* pTarget)
 //=========================================================
 // CheckRangeAttack1
 //=========================================================
-BOOL CPitdrone::CheckRangeAttack1(float flDot, float flDist)
+bool CPitdrone::CheckRangeAttack1(float flDot, float flDist)
 {
 	if (m_iInitialAmmo == -1
 		|| GetBodygroup(PitdroneBodygroup::Weapons) == PitdroneWeapon::Empty
@@ -345,7 +345,7 @@ BOOL CPitdrone::CheckRangeAttack1(float flDot, float flDist)
 	return false;
 }
 
-BOOL CPitdrone::CheckMeleeAttack1(float flDot, float flDist)
+bool CPitdrone::CheckMeleeAttack1(float flDot, float flDist)
 {
 	if (flDist <= 64 && flDot >= 0.7)
 	{
@@ -354,7 +354,7 @@ BOOL CPitdrone::CheckMeleeAttack1(float flDot, float flDist)
 	return false;
 }
 
-BOOL CPitdrone::CheckMeleeAttack2(float flDot, float flDist)
+bool CPitdrone::CheckMeleeAttack2(float flDot, float flDist)
 {
 	if (flDist <= 64 && flDot >= 0.7 && !HasConditions(bits_COND_CAN_MELEE_ATTACK1))
 	{
@@ -366,7 +366,7 @@ BOOL CPitdrone::CheckMeleeAttack2(float flDot, float flDist)
 //=========================================================
 //  FValidateHintType 
 //=========================================================
-BOOL CPitdrone::FValidateHintType(short sHint)
+bool CPitdrone::FValidateHintType(short sHint)
 {
 	int i;
 

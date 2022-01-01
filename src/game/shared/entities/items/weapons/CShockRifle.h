@@ -40,13 +40,13 @@ public:
 
 	void Spawn() override;
 
-	BOOL AddToPlayer(CBasePlayer* pPlayer) override;
+	bool AddToPlayer(CBasePlayer* pPlayer) override;
 
 	void AttachToPlayer(CBasePlayer* pPlayer) override;
 
-	BOOL CanDeploy() override;
+	bool CanDeploy() override;
 
-	BOOL Deploy() override;
+	bool Deploy() override;
 
 	void Holster() override;
 
@@ -64,7 +64,7 @@ public:
 
 	int GetItemInfo(ItemInfo* p) override;
 
-	BOOL UseDecrement() override
+	bool UseDecrement() override
 	{
 #if defined( CLIENT_WEAPONS )
 		return true;

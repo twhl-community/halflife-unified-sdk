@@ -74,7 +74,7 @@ void CM249::Spawn()
 	FallInit(); // get ready to fall down.
 }
 
-BOOL CM249::AddToPlayer(CBasePlayer* pPlayer)
+bool CM249::AddToPlayer(CBasePlayer* pPlayer)
 {
 	if (BaseClass::AddToPlayer(pPlayer))
 	{
@@ -88,7 +88,7 @@ BOOL CM249::AddToPlayer(CBasePlayer* pPlayer)
 	return false;
 }
 
-BOOL CM249::Deploy()
+bool CM249::Deploy()
 {
 	return DefaultDeploy("models/v_saw.mdl", "models/p_saw.mdl", M249_DRAW, "mp5");
 }
@@ -383,7 +383,7 @@ public:
 		BaseClass::Spawn();
 	}
 
-	BOOL AddAmmo(CBaseEntity* pOther) override
+	bool AddAmmo(CBaseEntity* pOther) override
 	{
 		if (pOther->GiveAmmo(AMMO_M249_GIVE, "556", M249_MAX_CARRY) != -1)
 		{

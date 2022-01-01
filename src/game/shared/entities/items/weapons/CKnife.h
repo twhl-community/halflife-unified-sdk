@@ -41,7 +41,7 @@ public:
 
 	void Spawn() override;
 
-	BOOL Deploy() override;
+	bool Deploy() override;
 
 	void Holster() override;
 
@@ -57,7 +57,7 @@ public:
 
 	int GetItemInfo(ItemInfo* p) override;
 
-	BOOL UseDecrement() override
+	bool UseDecrement() override
 	{
 #if defined( CLIENT_WEAPONS )
 		return true;

@@ -247,7 +247,7 @@ void CHGrunt::PrescheduleThink()
 // this is a bad bug. Friendly machine gun fire avoidance
 // will unecessarily prevent the throwing of a grenade as well.
 //=========================================================
-BOOL CHGrunt::FCanCheckAttacks()
+bool CHGrunt::FCanCheckAttacks()
 {
 	if (!HasConditions(bits_COND_ENEMY_TOOFAR))
 	{
@@ -263,7 +263,7 @@ BOOL CHGrunt::FCanCheckAttacks()
 //=========================================================
 // CheckMeleeAttack1
 //=========================================================
-BOOL CHGrunt::CheckMeleeAttack1(float flDot, float flDist)
+bool CHGrunt::CheckMeleeAttack1(float flDot, float flDist)
 {
 	CBaseMonster* pEnemy;
 
@@ -294,7 +294,7 @@ BOOL CHGrunt::CheckMeleeAttack1(float flDot, float flDist)
 // occluded (throw grenade over wall, etc). We must 
 // disqualify the machine gun attack if the enemy is occluded.
 //=========================================================
-BOOL CHGrunt::CheckRangeAttack1(float flDot, float flDist)
+bool CHGrunt::CheckRangeAttack1(float flDot, float flDist)
 {
 	if (!HasConditions(bits_COND_ENEMY_OCCLUDED) && flDist <= 2048 && flDot >= 0.5 && NoFriendlyFire())
 	{
@@ -320,7 +320,7 @@ BOOL CHGrunt::CheckRangeAttack1(float flDot, float flDist)
 	return false;
 }
 
-BOOL CHGrunt::CheckRangeAttack2Core(float flDot, float flDist, float grenadeSpeed)
+bool CHGrunt::CheckRangeAttack2Core(float flDot, float flDist, float grenadeSpeed)
 {
 	if (!FBitSet(pev->weapons, (HGRUNT_HANDGRENADE | HGRUNT_GRENADELAUNCHER)))
 	{
@@ -450,7 +450,7 @@ BOOL CHGrunt::CheckRangeAttack2Core(float flDot, float flDist, float grenadeSpee
 // CheckRangeAttack2 - this checks the Grunt's grenade
 // attack. 
 //=========================================================
-BOOL CHGrunt::CheckRangeAttack2(float flDot, float flDist)
+bool CHGrunt::CheckRangeAttack2(float flDot, float flDist)
 {
 	return CheckRangeAttack2Core(flDot, flDist, gSkillData.hgruntGrenadeSpeed);
 }

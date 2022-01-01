@@ -63,7 +63,7 @@ public:
 	void SecondaryAttack() override;
 	bool Swing(const bool bFirst);
 	void EXPORT BigSwing();
-	BOOL Deploy() override;
+	bool Deploy() override;
 	void Holster() override;
 	void WeaponIdle() override;
 
@@ -75,7 +75,7 @@ public:
 
 	int GetItemInfo(ItemInfo* p) override;
 
-	BOOL UseDecrement() override
+	bool UseDecrement() override
 	{
 #if defined( CLIENT_WEAPONS )
 		return true;
