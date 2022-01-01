@@ -135,7 +135,6 @@ typedef int BOOL;
 #include <alloca.h>
 
 #define stricmp strcasecmp
-#define _strnicmp strncasecmp
 #define strnicmp strncasecmp
 #define _alloca alloca
 
