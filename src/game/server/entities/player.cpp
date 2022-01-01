@@ -50,7 +50,7 @@
 
 // #define DUCKFIX
 
-extern DLL_GLOBAL ULONG		g_ulModelIndexPlayer;
+extern DLL_GLOBAL unsigned int g_ulModelIndexPlayer;
 extern DLL_GLOBAL BOOL		g_fGameOver;
 extern DLL_GLOBAL	BOOL	g_fDrawLines;
 int gEvilImpulse101;
