@@ -17,13 +17,8 @@
 //
 // Misc utility code
 //
-#ifndef ACTIVITY_H
 #include "activity.h"
-#endif
-
-#ifndef ENGINECALLBACK_H
 #include "enginecallback.h"
-#endif
 
 #include "utils/shared_utils.h"
 
