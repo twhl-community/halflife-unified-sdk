@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "archtypes.h"     // DAL
+#include "Platform.h"
 #include "interface.h"
 
 //-----------------------------------------------------------------------------

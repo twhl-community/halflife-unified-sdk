@@ -244,7 +244,6 @@ target_sources(client PRIVATE
 	../../engine/edict.h
 	../../engine/eiface.h
 
-	../../public/archtypes.h
 	../../public/FileSystem.h
 	../../public/interface.cpp
 	../../public/interface.h
