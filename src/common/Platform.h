@@ -133,7 +133,6 @@ typedef int BOOL;
 #include <limits.h>
 #include <stdarg.h>
 #include <alloca.h>
-#define _vsnprintf(a,b,c,d) vsnprintf(a,b,c,d)
 
 #define stricmp strcasecmp
 #define _strnicmp strncasecmp
