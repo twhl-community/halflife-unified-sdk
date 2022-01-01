@@ -38,6 +38,7 @@
 
 // Misc C-runtime library headers
 #include <algorithm>
+#include <cctype>
 #include <cmath>
 #include <cstdint>
 #include <cstdio>

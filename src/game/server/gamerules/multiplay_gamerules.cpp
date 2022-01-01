@@ -31,10 +31,6 @@
 
 #include "ctfplay_gamerules.h"
 
-#if !defined ( WIN32 )
-#include <ctype.h>
-#endif
-
 extern DLL_GLOBAL CGameRules* g_pGameRules;
 extern DLL_GLOBAL BOOL	g_fGameOver;
 
