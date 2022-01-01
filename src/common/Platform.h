@@ -126,8 +126,6 @@ using qboolean = int;
 #define stackfree(address)
 
 #else // WIN32
-#define FALSE 0
-#define TRUE (!FALSE)
 typedef int BOOL;
 #define MAX_PATH PATH_MAX
 #include <alloca.h>
