@@ -13,6 +13,8 @@
 *
 ****/
 
+#pragma once
+
 #include "palette.h"
 
 #define DMG_IMAGE_LIFE		2	// seconds that image is up

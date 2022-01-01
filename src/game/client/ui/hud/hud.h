@@ -20,6 +20,8 @@
 // CHud handles the message, calculation, and drawing the HUD
 //
 
+#pragma once
+
 #ifndef _WIN32
 #define _cdecl 
 #endif
