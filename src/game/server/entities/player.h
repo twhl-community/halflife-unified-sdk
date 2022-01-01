@@ -12,9 +12,8 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#ifndef PLAYER_H
-#define PLAYER_H
 
+#pragma once
 
 #include "pm_materials.h"
 #include "ctf/CTFDefs.h"
@@ -573,5 +572,3 @@ inline CPlayerEnumeratorWithStart UTIL_FindPlayers(CBasePlayer* pStartEntity)
 {
 	return {pStartEntity};
 }
-
-#endif // PLAYER_H

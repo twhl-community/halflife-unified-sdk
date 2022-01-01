@@ -5,11 +5,7 @@
 // $NoKeywords: $
 //=============================================================================
 
-#ifndef FILESYSTEM_H
-#define FILESYSTEM_H
-#ifdef _WIN32
 #pragma once
-#endif
 
 #include "archtypes.h"     // DAL
 #include "interface.h"
@@ -25,7 +21,6 @@ typedef int WaitForResourcesHandle_t;
 //-----------------------------------------------------------------------------
 // Enums used by the interface
 //-----------------------------------------------------------------------------
-#ifndef FILESYSTEM_INTERNAL_H
 typedef enum
 {
 	FILESYSTEM_SEEK_HEAD = 0,
@@ -54,7 +49,6 @@ typedef enum
 } FileWarningLevel_t;
 
 #define FILESYSTEM_INVALID_HANDLE	( FileHandle_t )0
-#endif
 
 // turn off any windows defines
 #undef GetCurrentDirectory
@@ -184,5 +178,3 @@ public:
 #define IBaseFileSystem IFileSystem
 
 #define FILESYSTEM_INTERFACE_VERSION "VFileSystem009"
-
-#endif // FILESYSTEM_H

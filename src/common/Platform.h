@@ -13,8 +13,7 @@
 *
 ****/
 
-#ifndef PLATFORM_H
-#define PLATFORM_H
+#pragma once
 
 /**
 *	@file
@@ -150,5 +149,3 @@ typedef int BOOL;
 
 #define V_min(a,b)  (((a) < (b)) ? (a) : (b))
 #define V_max(a,b)  (((a) > (b)) ? (a) : (b))
-
-#endif //PLATFORM_H

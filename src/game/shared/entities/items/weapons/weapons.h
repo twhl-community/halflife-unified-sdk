@@ -12,8 +12,8 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#ifndef WEAPONS_H
-#define WEAPONS_H
+
+#pragma once
 
 #include "effects.h"
 #include "weaponinfo.h"
@@ -1274,6 +1274,3 @@ public:
 private:
 	unsigned short m_usSnarkFire;
 };
-
-
-#endif // WEAPONS_H

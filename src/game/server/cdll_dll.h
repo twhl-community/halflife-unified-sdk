@@ -17,8 +17,7 @@
 
 // this file is included by both the game-dll and the client-dll,
 
-#ifndef CDLL_DLL_H
-#define CDLL_DLL_H
+#pragma once
 
 #include "palette.h"
 
@@ -182,5 +181,3 @@ constexpr RGB24 RGB_REDISH{255, 16, 16};
 constexpr RGB24 RGB_GREENISH{0, 160, 0};
 
 constexpr RGB24 RGB_HUD_COLOR{RGB_YELLOWISH};
-
-#endif

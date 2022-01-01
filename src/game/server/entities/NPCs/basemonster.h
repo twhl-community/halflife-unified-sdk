@@ -13,8 +13,7 @@
 *
 ****/
 
-#ifndef BASEMONSTER_H
-#define BASEMONSTER_H
+#pragma once
 
 //
 // generic Monster
@@ -350,7 +349,3 @@ public:
 	void UpdateShockEffect();
 	void ClearShockEffect();
 };
-
-
-
-#endif // BASEMONSTER_H

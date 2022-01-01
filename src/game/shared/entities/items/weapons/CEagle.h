@@ -12,8 +12,8 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#ifndef WEAPONS_CEAGLE_H
-#define WEAPONS_CEAGLE_H
+
+#pragma once
 
 class CEagleLaser;
 
@@ -92,5 +92,3 @@ private:
 	BOOL m_bLaserActive;
 	CEagleLaser* m_pLaser;
 };
-
-#endif
