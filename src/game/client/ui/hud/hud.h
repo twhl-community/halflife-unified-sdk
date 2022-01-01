@@ -22,10 +22,6 @@
 
 #pragma once
 
-#ifndef WIN32
-#define _cdecl 
-#endif
-
 #include "common_types.h"
 #include "cl_dll.h"
 #include "ammo.h"
@@ -112,19 +108,19 @@ public:
 	int MsgFunc_HideWeapon(const char* pszName, int iSize, void* pbuf);
 
 	void SlotInput(int iSlot);
-	void _cdecl UserCmd_Slot1();
-	void _cdecl UserCmd_Slot2();
-	void _cdecl UserCmd_Slot3();
-	void _cdecl UserCmd_Slot4();
-	void _cdecl UserCmd_Slot5();
-	void _cdecl UserCmd_Slot6();
-	void _cdecl UserCmd_Slot7();
-	void _cdecl UserCmd_Slot8();
-	void _cdecl UserCmd_Slot9();
-	void _cdecl UserCmd_Slot10();
-	void _cdecl UserCmd_Close();
-	void _cdecl UserCmd_NextWeapon();
-	void _cdecl UserCmd_PrevWeapon();
+	void UserCmd_Slot1();
+	void UserCmd_Slot2();
+	void UserCmd_Slot3();
+	void UserCmd_Slot4();
+	void UserCmd_Slot5();
+	void UserCmd_Slot6();
+	void UserCmd_Slot7();
+	void UserCmd_Slot8();
+	void UserCmd_Slot9();
+	void UserCmd_Slot10();
+	void UserCmd_Close();
+	void UserCmd_NextWeapon();
+	void UserCmd_PrevWeapon();
 
 	bool IsCrosshairDrawn() const { return m_DrawCrosshair; }
 
@@ -755,15 +751,15 @@ public:
 	~CHud();			// destructor, frees allocated memory
 
 	// user messages
-	int _cdecl MsgFunc_Damage(const char* pszName, int iSize, void* pbuf);
-	int _cdecl MsgFunc_GameMode(const char* pszName, int iSize, void* pbuf);
+	int MsgFunc_Damage(const char* pszName, int iSize, void* pbuf);
+	int MsgFunc_GameMode(const char* pszName, int iSize, void* pbuf);
 	int MsgFunc_HudColor(const char* pszName, int iSize, void* pbuf);
-	int _cdecl MsgFunc_Logo(const char* pszName, int iSize, void* pbuf);
-	int _cdecl MsgFunc_ResetHUD(const char* pszName, int iSize, void* pbuf);
-	void _cdecl MsgFunc_InitHUD(const char* pszName, int iSize, void* pbuf);
-	void _cdecl MsgFunc_ViewMode(const char* pszName, int iSize, void* pbuf);
-	int _cdecl MsgFunc_SetFOV(const char* pszName, int iSize, void* pbuf);
-	int  _cdecl MsgFunc_Concuss(const char* pszName, int iSize, void* pbuf);
+	int MsgFunc_Logo(const char* pszName, int iSize, void* pbuf);
+	int MsgFunc_ResetHUD(const char* pszName, int iSize, void* pbuf);
+	void MsgFunc_InitHUD(const char* pszName, int iSize, void* pbuf);
+	void MsgFunc_ViewMode(const char* pszName, int iSize, void* pbuf);
+	int MsgFunc_SetFOV(const char* pszName, int iSize, void* pbuf);
+	int MsgFunc_Concuss(const char* pszName, int iSize, void* pbuf);
 
 	// Screen information
 	SCREENINFO	m_scrinfo;
