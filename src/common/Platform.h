@@ -39,7 +39,9 @@
 // Misc C-runtime library headers
 #include <algorithm>
 #include <cctype>
+#include <climits>
 #include <cmath>
+#include <cstdarg>
 #include <cstddef>
 #include <cstdint>
 #include <cstdio>
@@ -130,8 +132,6 @@ typedef uint32 ULONG;
 typedef unsigned char BYTE;
 typedef int BOOL;
 #define MAX_PATH PATH_MAX
-#include <limits.h>
-#include <stdarg.h>
 #include <alloca.h>
 
 #define stricmp strcasecmp
