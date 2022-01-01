@@ -22,7 +22,7 @@
 
 #pragma once
 
-#ifndef _WIN32
+#ifndef WIN32
 #define _cdecl 
 #endif
 

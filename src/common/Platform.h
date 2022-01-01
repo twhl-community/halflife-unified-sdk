@@ -53,7 +53,7 @@ using qboolean = int;
 #define ARRAYSIZE(p)		(sizeof(p)/sizeof(p[0]))
 
 // Prevent tons of unused windows definitions
-#ifdef _WIN32
+#ifdef WIN32
 #define WIN32_LEAN_AND_MEAN
 
 //Disable all Windows 10 and older APIs otherwise pulled in by Windows.h
@@ -120,7 +120,7 @@ using qboolean = int;
 //Note: an implementation of stackfree must safely ignore null pointers
 #define stackfree(address)
 
-#else // _WIN32
+#else // WIN32
 #define FALSE 0
 #define TRUE (!FALSE)
 typedef uint32 ULONG;
@@ -144,7 +144,7 @@ typedef int BOOL;
 //Note: an implementation of stackfree must safely ignore null pointers
 #define stackfree(address)
 
-#endif //_WIN32
+#endif //WIN32
 
 #define V_min(a,b)  (((a) < (b)) ? (a) : (b))
 #define V_max(a,b)  (((a) > (b)) ? (a) : (b))
