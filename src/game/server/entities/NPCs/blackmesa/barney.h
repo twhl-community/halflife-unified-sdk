@@ -92,7 +92,7 @@ public:
 
 	float	m_painTime;
 	float	m_checkAttackTime;
-	BOOL	m_lastAttackCheck;
+	bool	m_lastAttackCheck;
 
 
 	//Used during spawn to set initial values, not restored

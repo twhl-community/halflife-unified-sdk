@@ -146,7 +146,7 @@ public:
 	EHANDLE m_pChargedBolt;
 
 	int m_iVoltigoreGibs;
-	BOOL m_fDeathCharge;
+	bool m_fDeathCharge;
 	float m_flDeathStartTime;
 
 protected:

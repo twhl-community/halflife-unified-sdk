@@ -95,7 +95,7 @@ public:
 
 	static TYPEDESCRIPTION m_SaveData[];
 
-	BOOL m_fTorchActive;
+	bool m_fTorchActive;
 
 	CBeam* m_pTorchBeam;
 

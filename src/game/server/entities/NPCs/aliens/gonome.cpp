@@ -246,7 +246,7 @@ public:
 
 	//TODO: needs to be EHANDLE, save/restored or a save during a windup will cause problems
 	COFGonomeGuts* m_pGonomeGuts = nullptr;
-	BOOL m_fPlayerLocked = false;
+	bool m_fPlayerLocked = false;
 
 protected:
 	float GetOneSlashDamage() override { return gSkillData.gonomeDmgOneSlash; }

@@ -2457,7 +2457,7 @@ public:
 	void EXPORT PlayerFreezeDelay();
 
 public:
-	BOOL m_bUnFrozen;
+	bool m_bUnFrozen;
 };
 
 TYPEDESCRIPTION CTriggerPlayerFreeze::m_SaveData[] =

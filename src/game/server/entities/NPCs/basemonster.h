@@ -343,7 +343,7 @@ public:
 	int m_iOldRenderFX = 0;
 	Vector m_OldRenderColor;
 	float m_flOldRenderAmt = 0;
-	BOOL m_fShockEffect = false;
+	bool m_fShockEffect = false;
 
 	void AddShockEffect(float r, float g, float b, float size, float flShockDuration);
 	void UpdateShockEffect();

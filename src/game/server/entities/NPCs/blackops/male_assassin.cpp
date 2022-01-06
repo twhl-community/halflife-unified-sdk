@@ -106,7 +106,7 @@ public:
 	static TYPEDESCRIPTION m_SaveData[];
 
 	float m_flLastShot;
-	BOOL m_fStandingGround;
+	bool m_fStandingGround;
 	float m_flStandGroundRange;
 
 	int m_iAssassinHead;

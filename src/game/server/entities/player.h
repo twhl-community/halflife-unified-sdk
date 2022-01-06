@@ -172,18 +172,18 @@ public:
 
 	int					m_bitsHUDDamage;		// Damage bits for the current fame. These get sent to 
 												// the hude via the DAMAGE message
-	BOOL				m_fInitHUD;				// True when deferred HUD restart msg needs to be sent
-	BOOL				m_fGameHUDInitialized;
+	bool				m_fInitHUD;				// True when deferred HUD restart msg needs to be sent
+	bool				m_fGameHUDInitialized;
 	int					m_iTrain;				// Train control position
-	BOOL				m_fWeapon;				// Set this to false to force a reset of the current weapon HUD info
+	bool				m_fWeapon;				// Set this to false to force a reset of the current weapon HUD info
 
 	EHANDLE				m_pTank;				// the tank which the player is currently controlling,  NULL if no tank
 	EHANDLE				m_hViewEntity;			// The view entity being used, or null if the player is using itself as the view entity
 	bool m_bResetViewEntity;					//True if the player's view needs to be set back to the view entity
 	float				m_fDeadTime;			// the time at which the player died  (used in PlayerDeathThink())
 
-	BOOL			m_fNoPlayerSound;	// a debugging feature. Player makes no sound if this is true. 
-	BOOL			m_fLongJump; // does this player have the longjump module?
+	bool			m_fNoPlayerSound;	// a debugging feature. Player makes no sound if this is true. 
+	bool			m_fLongJump; // does this player have the longjump module?
 
 	float       m_tSneaking;
 	int			m_iUpdateTime;		// stores the number of frame ticks before sending HUD update messages
@@ -207,13 +207,13 @@ public:
 	float m_flNextHealthCharge;
 	float m_flNextAmmoCharge;
 	int m_iLastPlayerTrace;
-	BOOL m_fPlayingHChargeSound;
-	BOOL m_fPlayingAChargeSound;
+	bool m_fPlayingHChargeSound;
+	bool m_fPlayingAChargeSound;
 	int m_nLastShotBy;
 	float m_flLastShotTime;
 	int m_iFlagCaptures;
 	int m_iCTFScore;
-	BOOL m_fWONAuthSent;
+	bool m_fWONAuthSent;
 
 	short m_iOffense;
 	short m_iDefense;
@@ -239,7 +239,7 @@ public:
 	int	m_rgAmmoLast[MAX_AMMO_SLOTS];
 
 	Vector				m_vecAutoAim;
-	BOOL				m_fOnTarget;
+	bool				m_fOnTarget;
 	int					m_iDeaths;
 	float				m_iRespawnFrames;	// used in PlayerDeathThink() to make sure players can always respawn
 

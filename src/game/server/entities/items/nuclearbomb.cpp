@@ -76,8 +76,8 @@ public:
 
 	void SetNuclearBombTimer(bool fOn);
 
-	BOOL bPlayBombSound;
-	BOOL bBombSoundPlaying;
+	bool bPlayBombSound;
+	bool bBombSoundPlaying;
 };
 
 LINK_ENTITY_TO_CLASS(item_nuclearbombtimer, COFNuclearBombTimer);
@@ -172,7 +172,7 @@ public:
 
 	COFNuclearBombTimer* m_pTimer;
 	COFNuclearBombButton* m_pButton;
-	BOOL m_fOn;
+	bool m_fOn;
 	float m_flLastPush;
 	int m_iPushCount;
 };

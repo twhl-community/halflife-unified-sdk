@@ -138,20 +138,20 @@ public:
 	static TYPEDESCRIPTION m_SaveData[];
 
 	int m_iHealCharge;
-	BOOL m_fUseHealing;
-	BOOL m_fHealing;
+	bool m_fUseHealing;
+	bool m_fHealing;
 
 	float m_flLastUseTime;
 
-	BOOL m_fHealAudioPlaying;
+	bool m_fHealAudioPlaying;
 
 	float m_flFollowCheckTime;
-	BOOL m_fFollowChecking;
-	BOOL m_fFollowChecked;
+	bool m_fFollowChecking;
+	bool m_fFollowChecked;
 
 	float m_flLastRejectAudio;
 
-	BOOL m_fHealActive;
+	bool m_fHealActive;
 
 	float m_flLastShot;
 

@@ -26,7 +26,7 @@ public:
 	EHANDLE	m_hSquadMember[MAX_SQUAD_MEMBERS - 1];	// valid only for leader
 	int		m_afSquadSlots;
 	float	m_flLastEnemySightTime; // last time anyone in the squad saw the enemy
-	BOOL	m_fEnemyEluded;
+	bool	m_fEnemyEluded;
 
 	EHANDLE m_hWaitMedic;
 	float m_flMedicWaitTime;

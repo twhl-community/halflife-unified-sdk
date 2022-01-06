@@ -2323,9 +2323,9 @@ public:
 	float m_flWarpStart;
 	float m_flDamageDelay;
 	float m_flTargetDelay;
-	BOOL m_fPlaying;
-	BOOL m_fDamageApplied;
-	BOOL m_fBeamsCleared;
+	bool m_fPlaying;
+	bool m_fDamageApplied;
+	bool m_fBeamsCleared;
 };
 
 LINK_ENTITY_TO_CLASS(env_warpball, CWarpBall);

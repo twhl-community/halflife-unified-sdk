@@ -282,7 +282,7 @@ public:
 	int m_iEnemyType;
 	float m_fireDelay;
 	float m_trackDelay;
-	BOOL m_tracking;
+	bool m_tracking;
 	float m_zeroYaw;
 	Vector m_vGunAngle;
 	Vector m_vIdealGunVector;
