@@ -48,7 +48,7 @@
 #include "ctfplay_gamerules.h"
 
 extern DLL_GLOBAL unsigned int		g_ulModelIndexPlayer;
-extern DLL_GLOBAL BOOL		g_fGameOver;
+extern DLL_GLOBAL bool		g_fGameOver;
 extern DLL_GLOBAL int		g_iSkillLevel;
 extern DLL_GLOBAL unsigned int		g_ulFrameCount;
 

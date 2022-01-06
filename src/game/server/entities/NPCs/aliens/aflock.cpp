@@ -506,7 +506,7 @@ bool CFlockingFlyer::FPathBlocked()
 	TraceResult		tr;
 	Vector			vecDist;// used for general measurements
 	Vector			vecDir;// used for general measurements
-	BOOL			fBlocked;
+	bool			fBlocked;
 
 	if (m_flFakeBlockedTime > gpGlobals->time)
 	{

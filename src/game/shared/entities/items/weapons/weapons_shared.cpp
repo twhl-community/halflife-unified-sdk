@@ -90,7 +90,7 @@ void FindHullIntersection(const Vector& vecSrc, TraceResult& tr, const Vector& m
 
 bool CBasePlayerWeapon::CanDeploy()
 {
-	BOOL bHasAmmo = 0;
+	bool bHasAmmo = 0;
 
 	if (!pszAmmo1())
 	{

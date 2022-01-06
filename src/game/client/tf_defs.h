@@ -1186,9 +1186,9 @@ extern float teamadvantage[5];	// only used if the teamplay equalisation bits ar
 extern int   teamallies[5];		// Keeps track of which teams are allied
 extern string_t	team_names[5];
 
-extern BOOL  CTF_Map;
-extern BOOL  birthday;
-extern BOOL  christmas;
+extern bool  CTF_Map;
+extern bool  birthday;
+extern bool  christmas;
 
 extern float num_world_flames;
 
@@ -1203,10 +1203,10 @@ extern float spy_off;
 extern float old_grens;
 extern float flagem_checked;
 extern float flNextEqualisationCalc;
-extern BOOL  cease_fire;
-extern BOOL  no_cease_fire_text;
-extern BOOL  initial_cease_fire;
-extern BOOL  last_cease_fire;
+extern bool  cease_fire;
+extern bool  no_cease_fire_text;
+extern bool  initial_cease_fire;
+extern bool  last_cease_fire;
 // Autokick stuff
 extern float autokick_kills;
 
@@ -1225,7 +1225,7 @@ extern string_t	team_menu_string;
 extern int toggleflags;					// toggleable flags
 
 extern CBaseEntity* g_pLastSpawns[5];
-extern BOOL g_bFirstClient;
+extern bool g_bFirstClient;
 
 extern float g_fNextPrematchAlert;
 
