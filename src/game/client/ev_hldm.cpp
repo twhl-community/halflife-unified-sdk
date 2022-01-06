@@ -490,6 +490,7 @@ void EV_FireGlock2(event_args_t* args)
 	Vector origin;
 	Vector angles;
 	Vector velocity;
+	int empty;
 
 	Vector ShellVelocity;
 	Vector ShellOrigin;
@@ -503,6 +504,7 @@ void EV_FireGlock2(event_args_t* args)
 	VectorCopy(args->angles, angles);
 	VectorCopy(args->velocity, velocity);
 
+	empty = args->bparam1;
 	AngleVectors(angles, forward, right, up);
 
 	shell = gEngfuncs.pEventAPI->EV_FindModelIndex("models/shell.mdl");// brass shell
@@ -511,7 +513,7 @@ void EV_FireGlock2(event_args_t* args)
 	{
 		// Add muzzle flash to current weapon model
 		EV_MuzzleFlash();
-		gEngfuncs.pEventAPI->EV_WeaponAnimation(GLOCK_SHOOT, 2);
+		gEngfuncs.pEventAPI->EV_WeaponAnimation(empty ? GLOCK_SHOOT_EMPTY : GLOCK_SHOOT, 2);
 
 		V_PunchAxis(0, -2.0);
 	}
