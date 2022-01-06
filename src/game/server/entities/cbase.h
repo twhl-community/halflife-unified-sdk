@@ -202,19 +202,19 @@ public:
 	}
 	virtual void Blocked(CBaseEntity* pOther) { if (m_pfnBlocked) (this->*m_pfnBlocked)(pOther); }
 
-	// allow engine to allocate instance data
-	void* operator new(size_t stAllocateBlock, entvars_t* pev)
+	void* operator new(size_t stAllocateBlock)
 	{
-		return (void*)ALLOC_PRIVATE(ENT(pev), stAllocateBlock);
-	};
+		//Allocate zero-initialized memory.
+		auto memory = ::operator new(stAllocateBlock);
+		std::memset(memory, 0, stAllocateBlock);
+		return memory;
+	}
 
-	// don't use this.
-#if _MSC_VER >= 1200 // only build this code if MSVC++ 6.0 or higher
-	void operator delete(void* pMem, entvars_t* pev)
+	//Don't call delete on entities directly, tell the engine to delete it instead.
+	void operator delete(void* pMem)
 	{
-		pev->flags |= FL_KILLME;
-	};
-#endif
+		::operator delete(pMem);
+	}
 
 	void UpdateOnRemove();
 
@@ -645,10 +645,10 @@ public:
 							// to the button's ChangeTarget. This allows you to make a func_train switch paths, etc.
 
 	locksound_t m_ls;			// door lock sounds
-	
+
 	byte	m_bLockedSound;		// ordinals from entity selection
-	byte	m_bLockedSentence;	
-	byte	m_bUnlockedSound;	
+	byte	m_bLockedSentence;
+	byte	m_bUnlockedSound;
 	byte	m_bUnlockedSentence;
 	int		m_sounds;
 };
@@ -677,7 +677,11 @@ template <class T> T* GetClassPtr(T* a)
 	if (a == NULL)
 	{
 		// allocate private data 
-		a = new(pev) T;
+		a = new T;
+
+		//Replicate the ALLOC_PRIVATE engine function's behavior.
+		pev->pContainingEntity->pvPrivateData = a;
+
 		a->pev = pev;
 	}
 	return a;
