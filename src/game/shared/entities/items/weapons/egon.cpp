@@ -267,6 +267,7 @@ void CEgon::Fire(const Vector& vecOrigSrc, const Vector& vecDir)
 
 	switch (m_fireMode)
 	{
+	default:
 	case FIRE_NARROW:
 #ifndef CLIENT_DLL
 		if (pev->dmgtime < gpGlobals->time)
