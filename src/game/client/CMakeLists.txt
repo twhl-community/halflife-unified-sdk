@@ -44,6 +44,7 @@ target_include_directories(client PRIVATE
 	../shared/entities/items/weapons
 	${CMAKE_CURRENT_SOURCE_DIR}
 	input
+	particleman
 	rendering
 	ui
 	ui/hud
@@ -119,7 +120,10 @@ target_sources(client PRIVATE
 	particleman/CMiniMem.cpp
 	particleman/IParticleMan_Active.cpp
 	particleman/IParticleMan_Active.h
+	particleman/particleman.h
 	particleman/particleman_internal.h
+	particleman/pman_particlemem.h
+	particleman/pman_triangleffect.h
 
 	rendering/GameStudioModelRenderer.cpp
 	rendering/GameStudioModelRenderer.h
@@ -255,9 +259,6 @@ target_sources(client PRIVATE
 	../../public/interface.cpp
 	../../public/interface.h
 	../../public/keydefs.h
-	../../public/particleman.h
-	../../public/pman_particlemem.h
-	../../public/pman_triangleffect.h
 	../../public/cl_dll/IGameClientExports.h
 	../../public/steam/steamtypes.h
 )
