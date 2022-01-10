@@ -19,6 +19,7 @@ target_include_directories(hl PRIVATE
 	../../common
 	../shared
 	../shared/player_movement
+	../shared/utils
 	../../public)
 	
 target_compile_definitions(hl PRIVATE

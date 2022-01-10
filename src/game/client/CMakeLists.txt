@@ -53,6 +53,7 @@ target_include_directories(client PRIVATE
 	../../common
 	../shared
 	../shared/player_movement
+	../shared/utils
 	../../engine
 	../../../utils/vgui/include)
 	
