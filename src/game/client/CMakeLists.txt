@@ -119,11 +119,11 @@ target_sources(client PRIVATE
 	particleman/CFrustum.cpp
 	particleman/CFrustum.h
 	particleman/CMiniMem.cpp
+	particleman/CMiniMem.h
 	particleman/IParticleMan_Active.cpp
 	particleman/IParticleMan_Active.h
 	particleman/particleman.h
 	particleman/particleman_internal.h
-	particleman/pman_particlemem.h
 
 	rendering/GameStudioModelRenderer.cpp
 	rendering/GameStudioModelRenderer.h
