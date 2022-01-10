@@ -21,7 +21,6 @@
 
 int gmsgShake = 0;
 int gmsgFade = 0;
-int gmsgSelAmmo = 0;
 int gmsgFlashlight = 0;
 int gmsgFlashBattery = 0;
 int gmsgResetHUD = 0;
@@ -77,12 +76,11 @@ int gmsgCustomIcon = 0;
 void LinkUserMessages()
 {
 	// Already taken care of?
-	if (0 != gmsgSelAmmo)
+	if (0 != gmsgCurWeapon)
 	{
 		return;
 	}
 
-	gmsgSelAmmo = REG_USER_MSG("SelAmmo", sizeof(SelAmmo));
 	gmsgCurWeapon = REG_USER_MSG("CurWeapon", 3);
 	gmsgGeigerRange = REG_USER_MSG("Geiger", 1);
 	gmsgFlashlight = REG_USER_MSG("Flashlight", 3);
