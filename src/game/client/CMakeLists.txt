@@ -224,6 +224,7 @@ target_sources(client PRIVATE
 	../../common/parsemsg.h
 	../../common/particledef.h
 	../../common/Platform.h
+	../../common/PlatformHeaders.h
 	../../common/pmtrace.h
 	../../common/qfont.h
 	../../common/ref_params.h
@@ -235,8 +236,6 @@ target_sources(client PRIVATE
 	../../common/triangleapi.h
 	../../common/usercmd.h
 	../../common/weaponinfo.h
-	../../common/winsani_in.h
-	../../common/winsani_out.h
 
 	../../engine/APIProxy.h
 	../../engine/cdll_int.h
