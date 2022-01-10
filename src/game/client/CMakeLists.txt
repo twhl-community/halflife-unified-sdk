@@ -112,6 +112,14 @@ target_sources(client PRIVATE
 	input/inputw32.cpp
 	input/in_camera.cpp
 	input/kbutton.h
+	
+	particleman/CCoreTriangleEffect.cpp
+	particleman/CFrustum.cpp
+	particleman/CFrustum.h
+	particleman/CMiniMem.cpp
+	particleman/IParticleMan_Active.cpp
+	particleman/IParticleMan_Active.h
+	particleman/particleman_internal.h
 
 	rendering/GameStudioModelRenderer.cpp
 	rendering/GameStudioModelRenderer.h
