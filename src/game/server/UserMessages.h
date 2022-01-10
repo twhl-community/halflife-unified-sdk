@@ -68,5 +68,6 @@ inline int gmsgStatsInfo = 0;
 inline int gmsgStatsPlayer = 0;
 inline int gmsgTeamFull = 0;
 inline int gmsgCustomIcon = 0;
+inline int gmsgWeapons = 0;
 
 void LinkUserMessages();

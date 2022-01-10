@@ -203,7 +203,7 @@ bool CHudHealth::Draw(float flTime)
 	const auto painColor = gHUD.GetHudItemColor(GetPainColor().Scale(a));
 
 	// Only draw health if we have the suit.
-	if ((gHUD.m_iWeaponBits & (1 << (WEAPON_SUIT))) != 0)
+	if (gHUD.HasSuit())
 	{
 		HealthWidth = gHUD.GetSpriteRect(gHUD.m_HUD_number_0).right - gHUD.GetSpriteRect(gHUD.m_HUD_number_0).left;
 		int CrossWidth = gHUD.GetSpriteRect(m_HUD_cross).right - gHUD.GetSpriteRect(m_HUD_cross).left;

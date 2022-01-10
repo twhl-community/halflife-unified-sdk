@@ -758,7 +758,7 @@ void CHalfLifeCTFplay::PlayerSpawn(CBasePlayer* pPlayer)
 		{
 			const int savedAutoWepSwitch = pPlayer->m_iAutoWepSwitch;
 			pPlayer->m_iAutoWepSwitch = 1;
-			pPlayer->pev->weapons |= 1 << WEAPON_SUIT;
+			pPlayer->SetHasSuit(true);
 
 			auto useDefault = true;
 
