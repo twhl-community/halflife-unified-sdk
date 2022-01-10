@@ -17,7 +17,7 @@
 
 #include <string_view>
 
-#include "filesystem_shared.h"
+#include "filesystem_utils.h"
 #include "logging_utils.h"
 
 extern globalvars_t* gpGlobals;

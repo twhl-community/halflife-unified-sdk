@@ -26,7 +26,7 @@
 #include <nlohmann/json.hpp>
 #include <nlohmann/json-schema.hpp>
 
-#include "filesystem_shared.h"
+#include "filesystem_utils.h"
 #include "json_fwd.h"
 
 class CCommandArgs;
