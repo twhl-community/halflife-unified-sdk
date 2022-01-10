@@ -46,7 +46,7 @@ Task_t tlFollow[] =
 	{
 		{TASK_SET_FAIL_SCHEDULE, (float)SCHED_CANT_FOLLOW}, // If you fail, bail out of follow
 		{TASK_MOVE_TO_TARGET_RANGE, (float)128},			// Move within 128 of target ent (client)
-		//	{ TASK_SET_SCHEDULE,		(float)SCHED_TARGET_FACE },
+															//	{ TASK_SET_SCHEDULE,		(float)SCHED_TARGET_FACE },
 };
 
 Schedule_t slFollow[] =
@@ -66,7 +66,7 @@ Task_t tlFollowScared[] =
 	{
 		{TASK_SET_FAIL_SCHEDULE, (float)SCHED_TARGET_CHASE}, // If you fail, follow normally
 		{TASK_MOVE_TO_TARGET_RANGE_SCARED, (float)128},		 // Move within 128 of target ent (client)
-		//	{ TASK_SET_SCHEDULE,		(float)SCHED_TARGET_FACE_SCARED },
+															 //	{ TASK_SET_SCHEDULE,		(float)SCHED_TARGET_FACE_SCARED },
 };
 
 Schedule_t slFollowScared[] =
@@ -387,7 +387,8 @@ void CScientist::StartTask(Task_t* pTask)
 		m_movementActivity = ACT_RUN_SCARED;
 		break;
 
-	case TASK_MOVE_TO_TARGET_RANGE_SCARED: {
+	case TASK_MOVE_TO_TARGET_RANGE_SCARED:
+	{
 		if ((m_hTargetEnt->pev->origin - pev->origin).Length() < 1)
 			TaskComplete();
 		else
@@ -416,7 +417,8 @@ void CScientist::RunTask(Task_t* pTask)
 			Scream();
 		break;
 
-	case TASK_MOVE_TO_TARGET_RANGE_SCARED: {
+	case TASK_MOVE_TO_TARGET_RANGE_SCARED:
+	{
 		if (RANDOM_LONG(0, 63) < 8)
 			Scream();
 
@@ -522,11 +524,13 @@ void CScientist::HandleAnimEvent(MonsterEvent_t* pEvent)
 	case SCIENTIST_AE_HEAL: // Heal my target (if within range)
 		Heal();
 		break;
-	case SCIENTIST_AE_NEEDLEON: {
+	case SCIENTIST_AE_NEEDLEON:
+	{
 		SetBodygroup(ScientistBodygroup::Needle, 1);
 	}
 	break;
-	case SCIENTIST_AE_NEEDLEOFF: {
+	case SCIENTIST_AE_NEEDLEOFF:
+	{
 		SetBodygroup(ScientistBodygroup::Needle, 0);
 	}
 	break;
@@ -942,7 +946,8 @@ MONSTERSTATE CScientist::GetIdealState()
 		}
 		break;
 
-	case MONSTERSTATE_COMBAT: {
+	case MONSTERSTATE_COMBAT:
+	{
 		CBaseEntity* pEnemy = m_hEnemy;
 		if (pEnemy != NULL)
 		{

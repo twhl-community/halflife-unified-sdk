@@ -498,7 +498,7 @@ void SaveReadFields(SAVERESTOREDATA* pSaveData, const char* pname, void* pBaseDa
 	if (0 == strcmp(pname, "ETABLE"))
 	{
 		g_Server.CheckForNewMapStart(true);
-	}	
+	}
 
 	CRestore restoreHelper(*pSaveData);
 	restoreHelper.ReadFields(pname, pBaseData, pFields, fieldCount);

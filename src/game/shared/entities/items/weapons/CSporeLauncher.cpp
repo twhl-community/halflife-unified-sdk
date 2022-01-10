@@ -477,14 +477,16 @@ public:
 	{
 		switch (pev->sequence)
 		{
-		case SPOREAMMO_SPAWNDN: {
+		case SPOREAMMO_SPAWNDN:
+		{
 			pev->sequence = SPOREAMMO_IDLE1;
 			pev->animtime = gpGlobals->time;
 			pev->frame = 0;
 			break;
 		}
 
-		case SPOREAMMO_SNATCHDN: {
+		case SPOREAMMO_SNATCHDN:
+		{
 			pev->sequence = SPOREAMMO_IDLE;
 			pev->animtime = gpGlobals->time;
 			pev->frame = 0;
@@ -492,7 +494,8 @@ public:
 			break;
 		}
 
-		case SPOREAMMO_IDLE: {
+		case SPOREAMMO_IDLE:
+		{
 			pev->body = SPOREAMMOBODY_FULL;
 			pev->sequence = SPOREAMMO_SPAWNDN;
 			pev->animtime = gpGlobals->time;

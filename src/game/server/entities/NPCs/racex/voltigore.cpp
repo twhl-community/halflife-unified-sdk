@@ -451,7 +451,8 @@ void COFVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 	case VOLTIGORE_AE_BOLT2:
 	case VOLTIGORE_AE_BOLT3:
 	case VOLTIGORE_AE_BOLT4:
-	case VOLTIGORE_AE_BOLT5: {
+	case VOLTIGORE_AE_BOLT5:
+	{
 		if (m_pChargedBolt)
 		{
 			UTIL_MakeVectors(pev->angles);
@@ -475,7 +476,8 @@ void COFVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 	break;
 
-	case VOLTIGORE_AE_LEFT_PUNCH: {
+	case VOLTIGORE_AE_LEFT_PUNCH:
+	{
 		CBaseEntity* pHurt = CheckTraceHullAttack(VOLTIGORE_MELEE_DIST, gSkillData.voltigoreDmgPunch, DMG_CLUB);
 
 		if (pHurt)
@@ -504,7 +506,8 @@ void COFVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 	break;
 
-	case VOLTIGORE_AE_RIGHT_PUNCH: {
+	case VOLTIGORE_AE_RIGHT_PUNCH:
+	{
 		CBaseEntity* pHurt = CheckTraceHullAttack(VOLTIGORE_MELEE_DIST, gSkillData.voltigoreDmgPunch, DMG_CLUB);
 
 		if (pHurt)
@@ -895,7 +898,8 @@ void COFVoltigore::StartTask(Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
-	case TASK_VOLTIGORE_GET_PATH_TO_ENEMY_CORPSE: {
+	case TASK_VOLTIGORE_GET_PATH_TO_ENEMY_CORPSE:
+	{
 		ClearBeams();
 
 		UTIL_MakeVectors(pev->angles);
@@ -911,7 +915,8 @@ void COFVoltigore::StartTask(Task_t* pTask)
 	}
 	break;
 
-	case TASK_DIE: {
+	case TASK_DIE:
+	{
 		if (BlowsUpOnDeath())
 		{
 			SetThink(&COFVoltigore::CallDeathGibThink);
@@ -921,7 +926,8 @@ void COFVoltigore::StartTask(Task_t* pTask)
 	}
 	break;
 
-	case TASK_RANGE_ATTACK1_NOTURN: {
+	case TASK_RANGE_ATTACK1_NOTURN:
+	{
 		ClearBeams();
 
 		UTIL_MakeVectors(pev->angles);
@@ -969,7 +975,8 @@ void COFVoltigore::RunTask(Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
-	case TASK_DIE: {
+	case TASK_DIE:
+	{
 		if (m_fSequenceFinished)
 		{
 			if (pev->frame >= 255)
@@ -1031,7 +1038,8 @@ Schedule_t* COFVoltigore::GetSchedule()
 
 	switch (m_MonsterState)
 	{
-	case MONSTERSTATE_COMBAT: {
+	case MONSTERSTATE_COMBAT:
+	{
 		// dead enemy
 		if (HasConditions(bits_COND_ENEMY_DEAD))
 		{

@@ -304,7 +304,8 @@ void CMOFAssassin::HandleAnimEvent(MonsterEvent_t* pEvent)
 	//Override grunt events that require assassin-specific behavior
 	switch (pEvent->event)
 	{
-	case HGRUNT_AE_DROP_GUN: {
+	case HGRUNT_AE_DROP_GUN:
+	{
 		Vector vecGunPos;
 		Vector vecGunAngles;
 
@@ -329,7 +330,8 @@ void CMOFAssassin::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 	break;
 
-	case HGRUNT_AE_KICK: {
+	case HGRUNT_AE_KICK:
+	{
 		CBaseEntity* pHurt = Kick();
 
 		if (pHurt)

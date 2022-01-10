@@ -189,47 +189,47 @@ Vector VecVelocityForDamage(float flDamage)
 	return vec;
 }
 
-#if 0 /*                                                               \
-static void ThrowGib(entvars_t *pev, char *szGibModel, float flDamage) \
-{                                                                      \
-	edict_t *pentNew = CREATE_ENTITY();                                \
-	entvars_t *pevNew = VARS(pentNew);                                 \
-                                                                       \
-	pevNew->origin = pev->origin;                                      \
-	SET_MODEL(ENT(pevNew), szGibModel);                                \
-	UTIL_SetSize(pevNew, g_vecZero, g_vecZero);                        \
-                                                                       \
-	pevNew->velocity		= VecVelocityForDamage(flDamage);                \
-	pevNew->movetype		= MOVETYPE_BOUNCE;                               \
-	pevNew->solid			= SOLID_NOT;                                       \
-	pevNew->avelocity.x		= RANDOM_FLOAT(0,600);                        \
-	pevNew->avelocity.y		= RANDOM_FLOAT(0,600);                        \
-	pevNew->avelocity.z		= RANDOM_FLOAT(0,600);                        \
-	CHANGE_METHOD(ENT(pevNew), em_think, SUB_Remove);                  \
-	pevNew->ltime		= gpGlobals->time;                                  \
-	pevNew->nextthink	= gpGlobals->time + RANDOM_FLOAT(10,20);         \
-	pevNew->frame		= 0;                                                \
-	pevNew->flags		= 0;                                                \
-}                                                                      \
-                                                                       \
-                                                                       \
-static void ThrowHead(entvars_t *pev, char *szGibModel, floatflDamage) \
-{                                                                      \
-	SET_MODEL(ENT(pev), szGibModel);                                   \
-	pev->frame			= 0;                                                  \
-	pev->nextthink		= -1;                                              \
-	pev->movetype		= MOVETYPE_BOUNCE;                                  \
-	pev->takedamage		= DAMAGE_NO;                                      \
-	pev->solid			= SOLID_NOT;                                          \
-	pev->view_ofs		= Vector(0,0,8);                                    \
-	UTIL_SetSize(pev, Vector(-16,-16,0), Vector(16,16,56));            \
-	pev->velocity		= VecVelocityForDamage(flDamage);                   \
-	pev->avelocity		= RANDOM_FLOAT(-1,1) * Vector(0,600,0);            \
-	pev->origin.z -= 24;                                               \
-	ClearBits(pev->flags, FL_ONGROUND);                                \
-}                                                                      \
-                                                                       \
-                                                                       \
+#if 0 /*                                                                 \
+static void ThrowGib(entvars_t *pev, char *szGibModel, float flDamage)   \
+{                                                                        \
+	edict_t *pentNew = CREATE_ENTITY();                                  \
+	entvars_t *pevNew = VARS(pentNew);                                   \
+																	   \ \
+	pevNew->origin = pev->origin;                                        \
+	SET_MODEL(ENT(pevNew), szGibModel);                                  \
+	UTIL_SetSize(pevNew, g_vecZero, g_vecZero);                          \
+																	   \ \
+	pevNew->velocity		= VecVelocityForDamage(flDamage);                  \
+	pevNew->movetype		= MOVETYPE_BOUNCE;                                 \
+	pevNew->solid			= SOLID_NOT;                                         \
+	pevNew->avelocity.x		= RANDOM_FLOAT(0,600);                          \
+	pevNew->avelocity.y		= RANDOM_FLOAT(0,600);                          \
+	pevNew->avelocity.z		= RANDOM_FLOAT(0,600);                          \
+	CHANGE_METHOD(ENT(pevNew), em_think, SUB_Remove);                    \
+	pevNew->ltime		= gpGlobals->time;                                    \
+	pevNew->nextthink	= gpGlobals->time + RANDOM_FLOAT(10,20);           \
+	pevNew->frame		= 0;                                                  \
+	pevNew->flags		= 0;                                                  \
+}                                                                        \
+																	   \ \
+																	   \ \
+static void ThrowHead(entvars_t *pev, char *szGibModel, floatflDamage)   \
+{                                                                        \
+	SET_MODEL(ENT(pev), szGibModel);                                     \
+	pev->frame			= 0;                                                    \
+	pev->nextthink		= -1;                                                \
+	pev->movetype		= MOVETYPE_BOUNCE;                                    \
+	pev->takedamage		= DAMAGE_NO;                                        \
+	pev->solid			= SOLID_NOT;                                            \
+	pev->view_ofs		= Vector(0,0,8);                                      \
+	UTIL_SetSize(pev, Vector(-16,-16,0), Vector(16,16,56));              \
+	pev->velocity		= VecVelocityForDamage(flDamage);                     \
+	pev->avelocity		= RANDOM_FLOAT(-1,1) * Vector(0,600,0);              \
+	pev->origin.z -= 24;                                                 \
+	ClearBits(pev->flags, FL_ONGROUND);                                  \
+}                                                                        \
+																	   \ \
+																	   \ \
 */
 #endif
 
@@ -965,7 +965,8 @@ void CBasePlayer::SetAnimation(PLAYER_ANIM playerAnim)
 		}
 		break;
 
-	case PLAYER_GRAPPLE: {
+	case PLAYER_GRAPPLE:
+	{
 		if (FBitSet(pev->flags, FL_ONGROUND))
 		{
 			if (pev->waterlevel > 1)
@@ -3695,7 +3696,8 @@ void CBasePlayer::ImpulseCommands()
 	int iImpulse = (int)pev->impulse;
 	switch (iImpulse)
 	{
-	case 99: {
+	case 99:
+	{
 
 		bool iOn;
 
@@ -3751,7 +3753,8 @@ void CBasePlayer::ImpulseCommands()
 
 		break;
 
-	case 205: {
+	case 205:
+	{
 		DropPlayerCTFPowerup(this);
 		break;
 	}
@@ -3779,7 +3782,8 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse)
 
 	switch (iImpulse)
 	{
-	case 76: {
+	case 76:
+	{
 		if (!giPrecacheGrunt)
 		{
 			giPrecacheGrunt = true;
@@ -3895,7 +3899,8 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse)
 		}
 		break;
 
-	case 107: {
+	case 107:
+	{
 		TraceResult tr;
 
 		edict_t* pWorld = g_engfuncs.pfnPEntityOfEntIndex(0);

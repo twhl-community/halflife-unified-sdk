@@ -225,13 +225,15 @@ void CHGruntAlly::Shoot(bool firstShotInBurst)
 	{
 		switch (RANDOM_LONG(0, 1))
 		{
-		case 0: {
+		case 0:
+		{
 			const auto vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(75, 200) + gpGlobals->v_up * RANDOM_FLOAT(150, 200) + gpGlobals->v_forward * 25.0;
 			EjectBrass(vecShootOrigin - vecShootDir * 6, vecShellVelocity, pev->angles.y, m_iSawLink, TE_BOUNCE_SHELL);
 			break;
 		}
 
-		case 1: {
+		case 1:
+		{
 			const auto vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(100, 250) + gpGlobals->v_up * RANDOM_FLOAT(100, 150) + gpGlobals->v_forward * 25.0;
 			EjectBrass(vecShootOrigin - vecShootDir * 6, vecShellVelocity, pev->angles.y, m_iSawShell, TE_BOUNCE_SHELL);
 			break;

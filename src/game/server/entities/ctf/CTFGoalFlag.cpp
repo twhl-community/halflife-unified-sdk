@@ -784,7 +784,8 @@ void CTFGoalFlag::DisplayFlagStatus(CBasePlayer* pPlayer)
 			ClientPrint(pPlayer->pev, HUD_PRINTNOTIFY, "#CTFInfoFlagAtBaseOF");
 		break;
 
-	case 2: {
+	case 2:
+	{
 		auto owner = CBaseEntity::Instance(pev->owner);
 
 		if (owner)

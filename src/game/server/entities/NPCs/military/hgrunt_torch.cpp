@@ -227,22 +227,26 @@ void COFTorchAlly::HandleAnimEvent(MonsterEvent_t* pEvent)
 		Shoot();
 		break;
 
-	case TORCH_AE_HOLSTER_TORCH: {
+	case TORCH_AE_HOLSTER_TORCH:
+	{
 		SetBodygroup(TorchAllyBodygroup::Weapons, TorchAllyWeapon::DesertEagle);
 		break;
 	}
 
-	case TORCH_AE_HOLSTER_GUN: {
+	case TORCH_AE_HOLSTER_GUN:
+	{
 		SetBodygroup(TorchAllyBodygroup::Weapons, TorchAllyWeapon::Torch);
 		break;
 	}
 
-	case TORCH_AE_HOLSTER_BOTH: {
+	case TORCH_AE_HOLSTER_BOTH:
+	{
 		SetBodygroup(TorchAllyBodygroup::Weapons, TorchAllyWeapon::None);
 		break;
 	}
 
-	case TORCH_AE_ACTIVATE_TORCH: {
+	case TORCH_AE_ACTIVATE_TORCH:
+	{
 		m_fTorchActive = true;
 		m_pTorchBeam = CBeam::BeamCreate(TORCH_BEAM_SPRITE, 5);
 
@@ -268,7 +272,8 @@ void COFTorchAlly::HandleAnimEvent(MonsterEvent_t* pEvent)
 		break;
 	}
 
-	case TORCH_AE_DEACTIVATE_TORCH: {
+	case TORCH_AE_DEACTIVATE_TORCH:
+	{
 		if (m_pTorchBeam)
 		{
 			m_fTorchActive = false;

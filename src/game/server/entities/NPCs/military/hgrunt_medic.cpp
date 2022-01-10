@@ -283,7 +283,8 @@ void COFMedicAlly::HandleAnimEvent(MonsterEvent_t* pEvent)
 		ClearConditions(bits_COND_NO_AMMO_LOADED);
 		break;
 
-	case HGRUNT_AE_BURST1: {
+	case HGRUNT_AE_BURST1:
+	{
 		Shoot();
 	}
 	break;
@@ -406,7 +407,8 @@ void COFMedicAlly::StartTask(Task_t* pTask)
 
 	switch (pTask->iTask)
 	{
-	case TASK_MELEE_ATTACK2: {
+	case TASK_MELEE_ATTACK2:
+	{
 		m_IdealActivity = ACT_MELEE_ATTACK2;
 
 		if (!m_fHealAudioPlaying)
@@ -417,7 +419,8 @@ void COFMedicAlly::StartTask(Task_t* pTask)
 		break;
 	}
 
-	case TASK_WAIT_FOR_MOVEMENT: {
+	case TASK_WAIT_FOR_MOVEMENT:
+	{
 		if (!m_fHealing)
 			return CBaseHGruntAlly::StartTask(pTask);
 
@@ -476,7 +479,8 @@ void COFMedicAlly::RunTask(Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
-	case TASK_MELEE_ATTACK2: {
+	case TASK_MELEE_ATTACK2:
+	{
 		if (m_fSequenceFinished)
 		{
 			if (m_fUseHealing)
@@ -515,7 +519,8 @@ void COFMedicAlly::RunTask(Task_t* pTask)
 		break;
 	}
 
-	default: {
+	default:
+	{
 		CBaseHGruntAlly::RunTask(pTask);
 		break;
 	}

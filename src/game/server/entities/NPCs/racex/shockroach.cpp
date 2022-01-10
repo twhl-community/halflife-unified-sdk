@@ -216,7 +216,8 @@ void COFShockRoach::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
 	switch (pEvent->event)
 	{
-	case SR_AE_JUMPATTACK: {
+	case SR_AE_JUMPATTACK:
+	{
 		ClearBits(pev->flags, FL_ONGROUND);
 
 		UTIL_SetOrigin(pev, pev->origin + Vector(0, 0, 1)); // take him off ground so engine doesn't instantly reset onground
@@ -325,7 +326,8 @@ void COFShockRoach::RunTask(Task_t* pTask)
 	switch (pTask->iTask)
 	{
 	case TASK_RANGE_ATTACK1:
-	case TASK_RANGE_ATTACK2: {
+	case TASK_RANGE_ATTACK2:
+	{
 		if (m_fSequenceFinished)
 		{
 			TaskComplete();
@@ -334,7 +336,8 @@ void COFShockRoach::RunTask(Task_t* pTask)
 		}
 		break;
 	}
-	default: {
+	default:
+	{
 		CBaseMonster::RunTask(pTask);
 	}
 	}
@@ -399,13 +402,15 @@ void COFShockRoach::StartTask(Task_t* pTask)
 
 	switch (pTask->iTask)
 	{
-	case TASK_RANGE_ATTACK1: {
+	case TASK_RANGE_ATTACK1:
+	{
 		EMIT_SOUND_DYN(edict(), CHAN_WEAPON, pAttackSounds[0], GetSoundVolue(), ATTN_IDLE, 0, GetVoicePitch());
 		m_IdealActivity = ACT_RANGE_ATTACK1;
 		SetTouch(&COFShockRoach::LeapTouch);
 		break;
 	}
-	default: {
+	default:
+	{
 		CBaseMonster::StartTask(pTask);
 	}
 	}
@@ -486,7 +491,8 @@ Schedule_t* COFShockRoach::GetScheduleOfType(int Type)
 {
 	switch (Type)
 	{
-	case SCHED_RANGE_ATTACK1: {
+	case SCHED_RANGE_ATTACK1:
+	{
 		return &slRCRangeAttack1[0];
 	}
 	break;

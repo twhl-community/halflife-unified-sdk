@@ -721,7 +721,8 @@ void CHGrunt::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 	switch (pEvent->event)
 	{
-	case HGRUNT_AE_DROP_GUN: {
+	case HGRUNT_AE_DROP_GUN:
+	{
 		Vector vecGunPos;
 		Vector vecGunAngles;
 
@@ -752,7 +753,8 @@ void CHGrunt::HandleAnimEvent(MonsterEvent_t* pEvent)
 		ClearConditions(bits_COND_NO_AMMO_LOADED);
 		break;
 
-	case HGRUNT_AE_GREN_TOSS: {
+	case HGRUNT_AE_GREN_TOSS:
+	{
 		UTIL_MakeVectors(pev->angles);
 		// CGrenade::ShootTimed( pev, pev->origin + gpGlobals->v_forward * 34 + Vector (0, 0, 32), m_vecTossVelocity, 3.5 );
 		CGrenade::ShootTimed(pev, GetGunPosition(), m_vecTossVelocity, 3.5);
@@ -763,7 +765,8 @@ void CHGrunt::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 	break;
 
-	case HGRUNT_AE_GREN_LAUNCH: {
+	case HGRUNT_AE_GREN_LAUNCH:
+	{
 		EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/glauncher.wav", 0.8, ATTN_NORM);
 		CGrenade::ShootContact(pev, GetGunPosition(), m_vecTossVelocity);
 		m_fThrowGrenade = false;
@@ -774,7 +777,8 @@ void CHGrunt::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 	break;
 
-	case HGRUNT_AE_GREN_DROP: {
+	case HGRUNT_AE_GREN_DROP:
+	{
 		UTIL_MakeVectors(pev->angles);
 		CGrenade::ShootTimed(pev, pev->origin + gpGlobals->v_forward * 17 - gpGlobals->v_right * 27 + gpGlobals->v_up * 6, g_vecZero, 3);
 	}
@@ -786,7 +790,8 @@ void CHGrunt::HandleAnimEvent(MonsterEvent_t* pEvent)
 		Shoot(pEvent->event == HGRUNT_AE_BURST1);
 		break;
 
-	case HGRUNT_AE_KICK: {
+	case HGRUNT_AE_KICK:
+	{
 		CBaseEntity* pHurt = Kick();
 
 		if (pHurt)
@@ -800,7 +805,8 @@ void CHGrunt::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 	break;
 
-	case HGRUNT_AE_CAUGHT_ENEMY: {
+	case HGRUNT_AE_CAUGHT_ENEMY:
+	{
 		if (FOkToSpeak())
 		{
 			SENTENCEG_PlayRndSz(ENT(pev), "HG_ALERT", HGRUNT_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
@@ -983,7 +989,8 @@ void CHGrunt::RunTask(Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
-	case TASK_GRUNT_FACE_TOSS_DIR: {
+	case TASK_GRUNT_FACE_TOSS_DIR:
+	{
 		// project a point along the toss vector and turn to face that point.
 		MakeIdealYaw(pev->origin + m_vecTossVelocity * 64);
 		ChangeYaw(pev->yaw_speed);
@@ -994,7 +1001,8 @@ void CHGrunt::RunTask(Task_t* pTask)
 		}
 		break;
 	}
-	default: {
+	default:
+	{
 		CSquadMonster::RunTask(pTask);
 		break;
 	}
@@ -1841,7 +1849,8 @@ Schedule_t* CHGrunt::GetSchedule()
 	}
 	switch (m_MonsterState)
 	{
-	case MONSTERSTATE_COMBAT: {
+	case MONSTERSTATE_COMBAT:
+	{
 		// dead enemy
 		if (HasConditions(bits_COND_ENEMY_DEAD))
 		{
@@ -2031,7 +2040,8 @@ Schedule_t* CHGrunt::GetScheduleOfType(int Type)
 {
 	switch (Type)
 	{
-	case SCHED_TAKE_COVER_FROM_ENEMY: {
+	case SCHED_TAKE_COVER_FROM_ENEMY:
+	{
 		if (InSquad())
 		{
 			if (g_iSkillLevel == SKILL_HARD && HasConditions(bits_COND_CAN_RANGE_ATTACK2) && OccupySlot(bits_SLOTS_HGRUNT_GRENADE))
@@ -2060,10 +2070,12 @@ Schedule_t* CHGrunt::GetScheduleOfType(int Type)
 			}
 		}
 	}
-	case SCHED_TAKE_COVER_FROM_BEST_SOUND: {
+	case SCHED_TAKE_COVER_FROM_BEST_SOUND:
+	{
 		return &slGruntTakeCoverFromBestSound[0];
 	}
-	case SCHED_GRUNT_TAKECOVER_FAILED: {
+	case SCHED_GRUNT_TAKECOVER_FAILED:
+	{
 		if (HasConditions(bits_COND_CAN_RANGE_ATTACK1) && OccupySlot(bits_SLOTS_HGRUNT_ENGAGE))
 		{
 			return GetScheduleOfType(SCHED_RANGE_ATTACK1);
@@ -2072,16 +2084,19 @@ Schedule_t* CHGrunt::GetScheduleOfType(int Type)
 		return GetScheduleOfType(SCHED_FAIL);
 	}
 	break;
-	case SCHED_GRUNT_ELOF_FAIL: {
+	case SCHED_GRUNT_ELOF_FAIL:
+	{
 		// human grunt is unable to move to a position that allows him to attack the enemy.
 		return GetScheduleOfType(SCHED_TAKE_COVER_FROM_ENEMY);
 	}
 	break;
-	case SCHED_GRUNT_ESTABLISH_LINE_OF_FIRE: {
+	case SCHED_GRUNT_ESTABLISH_LINE_OF_FIRE:
+	{
 		return &slGruntEstablishLineOfFire[0];
 	}
 	break;
-	case SCHED_RANGE_ATTACK1: {
+	case SCHED_RANGE_ATTACK1:
+	{
 		// randomly stand or crouch
 		if (RANDOM_LONG(0, 9) == 0)
 			m_fStanding = RANDOM_LONG(0, 1);
@@ -2091,25 +2106,32 @@ Schedule_t* CHGrunt::GetScheduleOfType(int Type)
 		else
 			return &slGruntRangeAttack1A[0];
 	}
-	case SCHED_RANGE_ATTACK2: {
+	case SCHED_RANGE_ATTACK2:
+	{
 		return &slGruntRangeAttack2[0];
 	}
-	case SCHED_COMBAT_FACE: {
+	case SCHED_COMBAT_FACE:
+	{
 		return &slGruntCombatFace[0];
 	}
-	case SCHED_GRUNT_WAIT_FACE_ENEMY: {
+	case SCHED_GRUNT_WAIT_FACE_ENEMY:
+	{
 		return &slGruntWaitInCover[0];
 	}
-	case SCHED_GRUNT_SWEEP: {
+	case SCHED_GRUNT_SWEEP:
+	{
 		return &slGruntSweep[0];
 	}
-	case SCHED_GRUNT_COVER_AND_RELOAD: {
+	case SCHED_GRUNT_COVER_AND_RELOAD:
+	{
 		return &slGruntHideReload[0];
 	}
-	case SCHED_GRUNT_FOUND_ENEMY: {
+	case SCHED_GRUNT_FOUND_ENEMY:
+	{
 		return &slGruntFoundEnemy[0];
 	}
-	case SCHED_VICTORY_DANCE: {
+	case SCHED_VICTORY_DANCE:
+	{
 		if (InSquad())
 		{
 			if (!IsLeader())
@@ -2120,7 +2142,8 @@ Schedule_t* CHGrunt::GetScheduleOfType(int Type)
 
 		return &slGruntVictoryDance[0];
 	}
-	case SCHED_GRUNT_SUPPRESS: {
+	case SCHED_GRUNT_SUPPRESS:
+	{
 		if (m_hEnemy->IsPlayer() && m_fFirstEncounter)
 		{
 			m_fFirstEncounter = false; // after first encounter, leader won't issue handsigns anymore when he has a new enemy
@@ -2131,7 +2154,8 @@ Schedule_t* CHGrunt::GetScheduleOfType(int Type)
 			return &slGruntSuppress[0];
 		}
 	}
-	case SCHED_FAIL: {
+	case SCHED_FAIL:
+	{
 		if (m_hEnemy != NULL)
 		{
 			// grunt has an enemy, so pick a different default fail schedule most likely to help recover.
@@ -2140,20 +2164,24 @@ Schedule_t* CHGrunt::GetScheduleOfType(int Type)
 
 		return &slGruntFail[0];
 	}
-	case SCHED_GRUNT_REPEL: {
+	case SCHED_GRUNT_REPEL:
+	{
 		if (pev->velocity.z > -128)
 			pev->velocity.z -= 32;
 		return &slGruntRepel[0];
 	}
-	case SCHED_GRUNT_REPEL_ATTACK: {
+	case SCHED_GRUNT_REPEL_ATTACK:
+	{
 		if (pev->velocity.z > -128)
 			pev->velocity.z -= 32;
 		return &slGruntRepelAttack[0];
 	}
-	case SCHED_GRUNT_REPEL_LAND: {
+	case SCHED_GRUNT_REPEL_LAND:
+	{
 		return &slGruntRepelLand[0];
 	}
-	default: {
+	default:
+	{
 		return CSquadMonster::GetScheduleOfType(Type);
 	}
 	}

@@ -111,7 +111,8 @@ void COFBabyVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 		}
 		break;
 
-	case VOLTIGORE_AE_LEFT_PUNCH: {
+	case VOLTIGORE_AE_LEFT_PUNCH:
+	{
 		CBaseEntity* pHurt = CheckTraceHullAttack(VOLTIGORE_MELEE_DIST, gSkillData.babyvoltigoreDmgPunch, DMG_CLUB);
 
 		if (pHurt)
@@ -140,7 +141,8 @@ void COFBabyVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 	break;
 
-	case VOLTIGORE_AE_RIGHT_PUNCH: {
+	case VOLTIGORE_AE_RIGHT_PUNCH:
+	{
 		CBaseEntity* pHurt = CheckTraceHullAttack(VOLTIGORE_MELEE_DIST, gSkillData.babyvoltigoreDmgPunch, DMG_CLUB);
 
 		if (pHurt)

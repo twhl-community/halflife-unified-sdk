@@ -1817,7 +1817,8 @@ void EV_FireDisplacer(event_args_t* args)
 
 	switch (mode)
 	{
-	case DisplacerMode::SPINNING_UP: {
+	case DisplacerMode::SPINNING_UP:
+	{
 		int iAttach = 0;
 
 		int iStartAttach, iEndAttach;
@@ -1846,7 +1847,8 @@ void EV_FireDisplacer(event_args_t* args)
 		break;
 	}
 
-	case DisplacerMode::FIRED: {
+	case DisplacerMode::FIRED:
+	{
 		//bparam1 indicates whether it's a primary or secondary attack. - Solokiller
 		if (0 == args->bparam1)
 		{

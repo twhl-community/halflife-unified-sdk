@@ -832,7 +832,8 @@ void CShockTrooper::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 	switch (pEvent->event)
 	{
-	case STROOPER_AE_DROP_GUN: {
+	case STROOPER_AE_DROP_GUN:
+	{
 		if (GetBodygroup(STrooperBodyGroup::Weapons) != STrooperWeapon::None)
 		{
 			Vector vecGunPos;
@@ -860,7 +861,8 @@ void CShockTrooper::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 	break;
 
-	case STROOPER_AE_GREN_TOSS: {
+	case STROOPER_AE_GREN_TOSS:
+	{
 		UTIL_MakeVectors(pev->angles);
 		// CGrenade::ShootTimed( pev, pev->origin + gpGlobals->v_forward * 34 + Vector (0, 0, 32), m_vecTossVelocity, 3.5 );
 		CSpore::CreateSpore(pev->origin + Vector(0, 0, 98), m_vecTossVelocity, this, CSpore::SporeType::GRENADE, true, false);
@@ -871,7 +873,8 @@ void CShockTrooper::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 	break;
 
-	case STROOPER_AE_SHOOT: {
+	case STROOPER_AE_SHOOT:
+	{
 		Vector vecArmPos;
 		Vector vecArmAngles;
 
@@ -895,7 +898,8 @@ void CShockTrooper::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 	break;
 
-	case STROOPER_AE_KICK: {
+	case STROOPER_AE_KICK:
+	{
 		CBaseEntity* pHurt = Kick();
 
 		if (pHurt)
@@ -909,7 +913,8 @@ void CShockTrooper::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 	break;
 
-	case STROOPER_AE_CAUGHT_ENEMY: {
+	case STROOPER_AE_CAUGHT_ENEMY:
+	{
 		if (FOkToSpeak())
 		{
 			SENTENCEG_PlayRndSz(ENT(pev), "ST_ALERT", ShockTrooper_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
@@ -1060,7 +1065,8 @@ void CShockTrooper::RunTask(Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
-	case TASK_GRUNT_FACE_TOSS_DIR: {
+	case TASK_GRUNT_FACE_TOSS_DIR:
+	{
 		// project a point along the toss vector and turn to face that point.
 		MakeIdealYaw(pev->origin + m_vecTossVelocity * 64);
 		ChangeYaw(pev->yaw_speed);
@@ -1071,7 +1077,8 @@ void CShockTrooper::RunTask(Task_t* pTask)
 		}
 		break;
 	}
-	default: {
+	default:
+	{
 		CSquadMonster::RunTask(pTask);
 		break;
 	}
@@ -1869,7 +1876,8 @@ Schedule_t* CShockTrooper::GetSchedule()
 	}
 	switch (m_MonsterState)
 	{
-	case MONSTERSTATE_COMBAT: {
+	case MONSTERSTATE_COMBAT:
+	{
 		// dead enemy
 		if (HasConditions(bits_COND_ENEMY_DEAD))
 		{
@@ -2052,7 +2060,8 @@ Schedule_t* CShockTrooper::GetScheduleOfType(int Type)
 {
 	switch (Type)
 	{
-	case SCHED_TAKE_COVER_FROM_ENEMY: {
+	case SCHED_TAKE_COVER_FROM_ENEMY:
+	{
 		if (InSquad())
 		{
 			if (g_iSkillLevel == SKILL_HARD && HasConditions(bits_COND_CAN_RANGE_ATTACK2) && OccupySlot(bits_SLOTS_HGRUNT_GRENADE))
@@ -2081,10 +2090,12 @@ Schedule_t* CShockTrooper::GetScheduleOfType(int Type)
 			}
 		}
 	}
-	case SCHED_TAKE_COVER_FROM_BEST_SOUND: {
+	case SCHED_TAKE_COVER_FROM_BEST_SOUND:
+	{
 		return &slShockTrooperTakeCoverFromBestSound[0];
 	}
-	case SCHED_GRUNT_TAKECOVER_FAILED: {
+	case SCHED_GRUNT_TAKECOVER_FAILED:
+	{
 		if (HasConditions(bits_COND_CAN_RANGE_ATTACK1) && OccupySlot(bits_SLOTS_HGRUNT_ENGAGE))
 		{
 			return GetScheduleOfType(SCHED_RANGE_ATTACK1);
@@ -2093,16 +2104,19 @@ Schedule_t* CShockTrooper::GetScheduleOfType(int Type)
 		return GetScheduleOfType(SCHED_FAIL);
 	}
 	break;
-	case SCHED_GRUNT_ELOF_FAIL: {
+	case SCHED_GRUNT_ELOF_FAIL:
+	{
 		// human grunt is unable to move to a position that allows him to attack the enemy.
 		return GetScheduleOfType(SCHED_TAKE_COVER_FROM_ENEMY);
 	}
 	break;
-	case SCHED_GRUNT_ESTABLISH_LINE_OF_FIRE: {
+	case SCHED_GRUNT_ESTABLISH_LINE_OF_FIRE:
+	{
 		return &slShockTrooperEstablishLineOfFire[0];
 	}
 	break;
-	case SCHED_RANGE_ATTACK1: {
+	case SCHED_RANGE_ATTACK1:
+	{
 		// randomly stand or crouch
 		if (RANDOM_LONG(0, 9) == 0)
 			m_fStanding = RANDOM_LONG(0, 1);
@@ -2112,25 +2126,32 @@ Schedule_t* CShockTrooper::GetScheduleOfType(int Type)
 		else
 			return &slShockTrooperRangeAttack1A[0];
 	}
-	case SCHED_RANGE_ATTACK2: {
+	case SCHED_RANGE_ATTACK2:
+	{
 		return &slShockTrooperRangeAttack2[0];
 	}
-	case SCHED_COMBAT_FACE: {
+	case SCHED_COMBAT_FACE:
+	{
 		return &slShockTrooperCombatFace[0];
 	}
-	case SCHED_GRUNT_WAIT_FACE_ENEMY: {
+	case SCHED_GRUNT_WAIT_FACE_ENEMY:
+	{
 		return &slShockTrooperWaitInCover[0];
 	}
-	case SCHED_GRUNT_SWEEP: {
+	case SCHED_GRUNT_SWEEP:
+	{
 		return &slShockTrooperSweep[0];
 	}
-	case SCHED_GRUNT_COVER_AND_RELOAD: {
+	case SCHED_GRUNT_COVER_AND_RELOAD:
+	{
 		return &slShockTrooperHideReload[0];
 	}
-	case SCHED_GRUNT_FOUND_ENEMY: {
+	case SCHED_GRUNT_FOUND_ENEMY:
+	{
 		return &slShockTrooperFoundEnemy[0];
 	}
-	case SCHED_VICTORY_DANCE: {
+	case SCHED_VICTORY_DANCE:
+	{
 		if (InSquad())
 		{
 			if (!IsLeader())
@@ -2141,7 +2162,8 @@ Schedule_t* CShockTrooper::GetScheduleOfType(int Type)
 
 		return &slShockTrooperVictoryDance[0];
 	}
-	case SCHED_GRUNT_SUPPRESS: {
+	case SCHED_GRUNT_SUPPRESS:
+	{
 		if (m_hEnemy->IsPlayer() && m_fFirstEncounter)
 		{
 			m_fFirstEncounter = false; // after first encounter, leader won't issue handsigns anymore when he has a new enemy
@@ -2152,7 +2174,8 @@ Schedule_t* CShockTrooper::GetScheduleOfType(int Type)
 			return &slShockTrooperSuppress[0];
 		}
 	}
-	case SCHED_FAIL: {
+	case SCHED_FAIL:
+	{
 		if (m_hEnemy != NULL)
 		{
 			// grunt has an enemy, so pick a different default fail schedule most likely to help recover.
@@ -2161,20 +2184,24 @@ Schedule_t* CShockTrooper::GetScheduleOfType(int Type)
 
 		return &slShockTrooperFail[0];
 	}
-	case SCHED_GRUNT_REPEL: {
+	case SCHED_GRUNT_REPEL:
+	{
 		if (pev->velocity.z > -128)
 			pev->velocity.z -= 32;
 		return &slShockTrooperRepel[0];
 	}
-	case SCHED_GRUNT_REPEL_ATTACK: {
+	case SCHED_GRUNT_REPEL_ATTACK:
+	{
 		if (pev->velocity.z > -128)
 			pev->velocity.z -= 32;
 		return &slShockTrooperRepelAttack[0];
 	}
-	case SCHED_GRUNT_REPEL_LAND: {
+	case SCHED_GRUNT_REPEL_LAND:
+	{
 		return &slShockTrooperRepelLand[0];
 	}
-	default: {
+	default:
+	{
 		return CSquadMonster::GetScheduleOfType(Type);
 	}
 	}
