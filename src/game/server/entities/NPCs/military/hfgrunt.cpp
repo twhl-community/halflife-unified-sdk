@@ -16,14 +16,14 @@
 // friendly hgrunt
 //=========================================================
 
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"monsters.h"
-#include	"squadmonster.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
+#include "squadmonster.h"
 #include "hgrunt.h"
 
-int g_fFGruntQuestion;				// true if an idle grunt asked a question. Cleared when someone answers.
+int g_fFGruntQuestion; // true if an idle grunt asked a question. Cleared when someone answers.
 
 class CHFGrunt : public CHGrunt
 {

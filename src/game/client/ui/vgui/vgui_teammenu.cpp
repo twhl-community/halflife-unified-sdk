@@ -27,26 +27,26 @@
 #include "vgui_TeamFortressViewport.h"
 
 // Team Menu Dimensions
-#define TEAMMENU_TITLE_X				XRES(40)
-#define TEAMMENU_TITLE_Y				YRES(32)
-#define TEAMMENU_TOPLEFT_BUTTON_X		XRES(40)
-#define TEAMMENU_TOPLEFT_BUTTON_Y		YRES(80)
-#define TEAMMENU_BUTTON_SIZE_X			XRES(124)
-#define TEAMMENU_BUTTON_SIZE_Y			YRES(24)
-#define TEAMMENU_BUTTON_SPACER_Y		YRES(8)
-#define TEAMMENU_WINDOW_X				XRES(176)
-#define TEAMMENU_WINDOW_Y				YRES(80)
-#define TEAMMENU_WINDOW_SIZE_X			XRES(424)
-#define TEAMMENU_WINDOW_SIZE_Y			YRES(312)
-#define TEAMMENU_WINDOW_TITLE_X			XRES(16)
-#define TEAMMENU_WINDOW_TITLE_Y			YRES(16)
-#define TEAMMENU_WINDOW_TEXT_X			XRES(16)
-#define TEAMMENU_WINDOW_TEXT_Y			YRES(48)
-#define TEAMMENU_WINDOW_TEXT_SIZE_Y		YRES(178)
-#define TEAMMENU_WINDOW_INFO_X			XRES(16)
-#define TEAMMENU_WINDOW_INFO_Y			YRES(234)
-#define TEAMMENU_FULL_TOPLEFT_X			XRES(215)
-#define TEAMMENU_FULL_TOPLEFT_Y			YRES(42)
+#define TEAMMENU_TITLE_X XRES(40)
+#define TEAMMENU_TITLE_Y YRES(32)
+#define TEAMMENU_TOPLEFT_BUTTON_X XRES(40)
+#define TEAMMENU_TOPLEFT_BUTTON_Y YRES(80)
+#define TEAMMENU_BUTTON_SIZE_X XRES(124)
+#define TEAMMENU_BUTTON_SIZE_Y YRES(24)
+#define TEAMMENU_BUTTON_SPACER_Y YRES(8)
+#define TEAMMENU_WINDOW_X XRES(176)
+#define TEAMMENU_WINDOW_Y YRES(80)
+#define TEAMMENU_WINDOW_SIZE_X XRES(424)
+#define TEAMMENU_WINDOW_SIZE_Y YRES(312)
+#define TEAMMENU_WINDOW_TITLE_X XRES(16)
+#define TEAMMENU_WINDOW_TITLE_Y YRES(16)
+#define TEAMMENU_WINDOW_TEXT_X XRES(16)
+#define TEAMMENU_WINDOW_TEXT_Y YRES(48)
+#define TEAMMENU_WINDOW_TEXT_SIZE_Y YRES(178)
+#define TEAMMENU_WINDOW_INFO_X XRES(16)
+#define TEAMMENU_WINDOW_INFO_Y YRES(234)
+#define TEAMMENU_FULL_TOPLEFT_X XRES(215)
+#define TEAMMENU_FULL_TOPLEFT_Y YRES(42)
 
 // Creation
 CTeamMenuPanel::CTeamMenuPanel(int iTrans, bool iRemoveMe, int x, int y, int wide, int tall) : CMenuPanel(iTrans, iRemoveMe, x, y, wide, tall)
@@ -187,7 +187,7 @@ void CTeamMenuPanel::Initialize()
 //-----------------------------------------------------------------------------
 void CTeamMenuPanel::Update()
 {
-	int	 iYPos = TEAMMENU_TOPLEFT_BUTTON_Y;
+	int iYPos = TEAMMENU_TOPLEFT_BUTTON_Y;
 
 	// Set the team buttons
 	for (int i = 1; i <= 2; i++)

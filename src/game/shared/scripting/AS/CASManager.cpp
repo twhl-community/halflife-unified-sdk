@@ -180,14 +180,16 @@ bool CASManager::ExecuteContext(asIScriptContext& context)
 
 void CASManager::OnMessageCallback(const asSMessageInfo* msg)
 {
-	const auto level = [&]()
-	{
+	const auto level = [&]() {
 		switch (msg->type)
 		{
-		case asEMsgType::asMSGTYPE_ERROR: return spdlog::level::err;
-		case asEMsgType::asMSGTYPE_WARNING: return spdlog::level::warn;
+		case asEMsgType::asMSGTYPE_ERROR:
+			return spdlog::level::err;
+		case asEMsgType::asMSGTYPE_WARNING:
+			return spdlog::level::warn;
 		default:
-		case asEMsgType::asMSGTYPE_INFORMATION: return spdlog::level::info;
+		case asEMsgType::asMSGTYPE_INFORMATION:
+			return spdlog::level::info;
 		}
 	}();
 

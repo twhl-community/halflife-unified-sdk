@@ -1,18 +1,18 @@
 //========= Copyright © 1996-2002, Valve LLC, All rights reserved. ============
 //
-// Purpose: 
+// Purpose:
 //
 // $NoKeywords: $
 //=============================================================================
 
-#include"vgui_int.h"
-#include<VGUI_Label.h>
-#include<VGUI_BorderLayout.h>
-#include<VGUI_LineBorder.h>
-#include<VGUI_SurfaceBase.h>
-#include<VGUI_TextEntry.h>
-#include<VGUI_ActionSignal.h>
-#include<string.h>
+#include "vgui_int.h"
+#include <VGUI_Label.h>
+#include <VGUI_BorderLayout.h>
+#include <VGUI_LineBorder.h>
+#include <VGUI_SurfaceBase.h>
+#include <VGUI_TextEntry.h>
+#include <VGUI_ActionSignal.h>
+#include <string.h>
 #include "hud.h"
 #include "cl_util.h"
 #include "camera.h"
@@ -32,6 +32,7 @@ class TexturePanel : public Panel, public ActionSignal
 private:
 	int _bindIndex;
 	TextEntry* _textEntry;
+
 public:
 	TexturePanel() : Panel(0, 0, 256, 276)
 	{
@@ -40,11 +41,13 @@ public:
 		_textEntry->setParent(this);
 		_textEntry->addActionSignal(this);
 	}
+
 public:
 	bool isWithin(int x, int y) override
 	{
 		return _textEntry->isWithin(x, y);
 	}
+
 public:
 	void actionPerformed(Panel* panel) override
 	{
@@ -52,6 +55,7 @@ public:
 		_textEntry->getText(0, buf, 256);
 		sscanf(buf, "%d", &_bindIndex);
 	}
+
 protected:
 	void paintBackground() override
 	{
@@ -64,7 +68,6 @@ protected:
 		drawSetTexture(_bindIndex);
 		drawTexturedRect(0, 19, 257, 257);
 	}
-
 };
 
 }
@@ -96,7 +99,7 @@ void VGui_Startup()
 	{
 		//		root->removeChild(gViewPort);
 
-				// free the memory
+		// free the memory
 		//		delete gViewPort;
 		//		gViewPort = NULL;
 
@@ -112,7 +115,6 @@ void VGui_Startup()
 	TexturePanel* texturePanel=new TexturePanel();
 	texturePanel->setParent(gViewPort);
 	*/
-
 }
 
 void VGui_Shutdown()
@@ -120,8 +122,3 @@ void VGui_Shutdown()
 	delete gViewPort;
 	gViewPort = NULL;
 }
-
-
-
-
-

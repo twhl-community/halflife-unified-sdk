@@ -23,8 +23,8 @@
 
 #include "CKnife.h"
 
-#define	KNIFE_BODYHIT_VOLUME 128
-#define	KNIFE_WALLHIT_VOLUME 512
+#define KNIFE_BODYHIT_VOLUME 128
+#define KNIFE_WALLHIT_VOLUME 512
 
 LINK_ENTITY_TO_CLASS(weapon_knife, CKnife);
 
@@ -106,7 +106,7 @@ bool CKnife::Swing(const bool bFirst)
 			CBaseEntity* pHit = CBaseEntity::Instance(tr.pHit);
 			if (!pHit || pHit->IsBSPModel())
 				FindHullIntersection(vecSrc, tr, VEC_DUCK_HULL_MIN, VEC_DUCK_HULL_MAX, m_pPlayer->edict());
-			vecEnd = tr.vecEndPos;	// This is the point on the actual surface (the hull could have hit space)
+			vecEnd = tr.vecEndPos; // This is the point on the actual surface (the hull could have hit space)
 		}
 	}
 #endif
@@ -135,11 +135,14 @@ bool CKnife::Swing(const bool bFirst)
 		switch (((m_iSwing++) % 2) + 1)
 		{
 		case 0:
-			SendWeaponAnim(KNIFE_ATTACK1); break;
+			SendWeaponAnim(KNIFE_ATTACK1);
+			break;
 		case 1:
-			SendWeaponAnim(KNIFE_ATTACK2HIT); break;
+			SendWeaponAnim(KNIFE_ATTACK2HIT);
+			break;
 		case 2:
-			SendWeaponAnim(KNIFE_ATTACK3HIT); break;
+			SendWeaponAnim(KNIFE_ATTACK3HIT);
+			break;
 		}
 
 		// player "shoot" animation
@@ -203,9 +206,11 @@ bool CKnife::Swing(const bool bFirst)
 				switch (RANDOM_LONG(0, 1))
 				{
 				case 0:
-					EMIT_SOUND(m_pPlayer->edict(), CHAN_ITEM, "weapons/knife_hit_flesh1.wav", 1, ATTN_NORM); break;
+					EMIT_SOUND(m_pPlayer->edict(), CHAN_ITEM, "weapons/knife_hit_flesh1.wav", 1, ATTN_NORM);
+					break;
 				case 1:
-					EMIT_SOUND(m_pPlayer->edict(), CHAN_ITEM, "weapons/knife_hit_flesh2.wav", 1, ATTN_NORM); break;
+					EMIT_SOUND(m_pPlayer->edict(), CHAN_ITEM, "weapons/knife_hit_flesh2.wav", 1, ATTN_NORM);
+					break;
 				}
 				m_pPlayer->m_iWeaponVolume = KNIFE_BODYHIT_VOLUME;
 				if (!pEntity->IsAlive())
@@ -226,7 +231,7 @@ bool CKnife::Swing(const bool bFirst)
 
 			if (g_pGameRules->IsMultiplayer())
 			{
-				// override the volume here, cause we don't play texture sounds in multiplayer, 
+				// override the volume here, cause we don't play texture sounds in multiplayer,
 				// and fvolbar is going to be 0 from the above call.
 
 				fvolbar = 1;

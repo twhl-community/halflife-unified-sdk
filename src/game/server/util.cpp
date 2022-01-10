@@ -34,7 +34,7 @@
 
 float UTIL_WeaponTimeBase()
 {
-#if defined( CLIENT_WEAPONS )
+#if defined(CLIENT_WEAPONS)
 	return 0.0;
 #else
 	return gpGlobals->time;
@@ -58,24 +58,23 @@ CBaseEntity* UTIL_FindEntityForward(CBaseEntity* pMe)
 static unsigned int glSeed = 0;
 
 unsigned int seed_table[256] =
-{
-	28985, 27138, 26457, 9451, 17764, 10909, 28790, 8716, 6361, 4853, 17798, 21977, 19643, 20662, 10834, 20103,
-	27067, 28634, 18623, 25849, 8576, 26234, 23887, 18228, 32587, 4836, 3306, 1811, 3035, 24559, 18399, 315,
-	26766, 907, 24102, 12370, 9674, 2972, 10472, 16492, 22683, 11529, 27968, 30406, 13213, 2319, 23620, 16823,
-	10013, 23772, 21567, 1251, 19579, 20313, 18241, 30130, 8402, 20807, 27354, 7169, 21211, 17293, 5410, 19223,
-	10255, 22480, 27388, 9946, 15628, 24389, 17308, 2370, 9530, 31683, 25927, 23567, 11694, 26397, 32602, 15031,
-	18255, 17582, 1422, 28835, 23607, 12597, 20602, 10138, 5212, 1252, 10074, 23166, 19823, 31667, 5902, 24630,
-	18948, 14330, 14950, 8939, 23540, 21311, 22428, 22391, 3583, 29004, 30498, 18714, 4278, 2437, 22430, 3439,
-	28313, 23161, 25396, 13471, 19324, 15287, 2563, 18901, 13103, 16867, 9714, 14322, 15197, 26889, 19372, 26241,
-	31925, 14640, 11497, 8941, 10056, 6451, 28656, 10737, 13874, 17356, 8281, 25937, 1661, 4850, 7448, 12744,
-	21826, 5477, 10167, 16705, 26897, 8839, 30947, 27978, 27283, 24685, 32298, 3525, 12398, 28726, 9475, 10208,
-	617, 13467, 22287, 2376, 6097, 26312, 2974, 9114, 21787, 28010, 4725, 15387, 3274, 10762, 31695, 17320,
-	18324, 12441, 16801, 27376, 22464, 7500, 5666, 18144, 15314, 31914, 31627, 6495, 5226, 31203, 2331, 4668,
-	12650, 18275, 351, 7268, 31319, 30119, 7600, 2905, 13826, 11343, 13053, 15583, 30055, 31093, 5067, 761,
-	9685, 11070, 21369, 27155, 3663, 26542, 20169, 12161, 15411, 30401, 7580, 31784, 8985, 29367, 20989, 14203,
-	29694, 21167, 10337, 1706, 28578, 887, 3373, 19477, 14382, 675, 7033, 15111, 26138, 12252, 30996, 21409,
-	25678, 18555, 13256, 23316, 22407, 16727, 991, 9236, 5373, 29402, 6117, 15241, 27715, 19291, 19888, 19847
-};
+	{
+		28985, 27138, 26457, 9451, 17764, 10909, 28790, 8716, 6361, 4853, 17798, 21977, 19643, 20662, 10834, 20103,
+		27067, 28634, 18623, 25849, 8576, 26234, 23887, 18228, 32587, 4836, 3306, 1811, 3035, 24559, 18399, 315,
+		26766, 907, 24102, 12370, 9674, 2972, 10472, 16492, 22683, 11529, 27968, 30406, 13213, 2319, 23620, 16823,
+		10013, 23772, 21567, 1251, 19579, 20313, 18241, 30130, 8402, 20807, 27354, 7169, 21211, 17293, 5410, 19223,
+		10255, 22480, 27388, 9946, 15628, 24389, 17308, 2370, 9530, 31683, 25927, 23567, 11694, 26397, 32602, 15031,
+		18255, 17582, 1422, 28835, 23607, 12597, 20602, 10138, 5212, 1252, 10074, 23166, 19823, 31667, 5902, 24630,
+		18948, 14330, 14950, 8939, 23540, 21311, 22428, 22391, 3583, 29004, 30498, 18714, 4278, 2437, 22430, 3439,
+		28313, 23161, 25396, 13471, 19324, 15287, 2563, 18901, 13103, 16867, 9714, 14322, 15197, 26889, 19372, 26241,
+		31925, 14640, 11497, 8941, 10056, 6451, 28656, 10737, 13874, 17356, 8281, 25937, 1661, 4850, 7448, 12744,
+		21826, 5477, 10167, 16705, 26897, 8839, 30947, 27978, 27283, 24685, 32298, 3525, 12398, 28726, 9475, 10208,
+		617, 13467, 22287, 2376, 6097, 26312, 2974, 9114, 21787, 28010, 4725, 15387, 3274, 10762, 31695, 17320,
+		18324, 12441, 16801, 27376, 22464, 7500, 5666, 18144, 15314, 31914, 31627, 6495, 5226, 31203, 2331, 4668,
+		12650, 18275, 351, 7268, 31319, 30119, 7600, 2905, 13826, 11343, 13053, 15583, 30055, 31093, 5067, 761,
+		9685, 11070, 21369, 27155, 3663, 26542, 20169, 12161, 15411, 30401, 7580, 31784, 8985, 29367, 20989, 14203,
+		29694, 21167, 10337, 1706, 28578, 887, 3373, 19477, 14382, 675, 7033, 15111, 26138, 12252, 30996, 21409,
+		25678, 18555, 13256, 23316, 22407, 16727, 991, 9236, 5373, 29402, 6117, 15241, 27715, 19291, 19888, 19847};
 
 unsigned int U_Random()
 {
@@ -212,121 +211,121 @@ UTIL_GroupTrace::~UTIL_GroupTrace()
 	ENGINE_SETGROUPMASK(g_groupmask, g_groupop);
 }
 
-TYPEDESCRIPTION	gEntvarsDescription[] =
-{
-	DEFINE_ENTITY_FIELD(classname, FIELD_STRING),
-	DEFINE_ENTITY_GLOBAL_FIELD(globalname, FIELD_STRING),
+TYPEDESCRIPTION gEntvarsDescription[] =
+	{
+		DEFINE_ENTITY_FIELD(classname, FIELD_STRING),
+		DEFINE_ENTITY_GLOBAL_FIELD(globalname, FIELD_STRING),
 
-	DEFINE_ENTITY_FIELD(origin, FIELD_POSITION_VECTOR),
-	DEFINE_ENTITY_FIELD(oldorigin, FIELD_POSITION_VECTOR),
-	DEFINE_ENTITY_FIELD(velocity, FIELD_VECTOR),
-	DEFINE_ENTITY_FIELD(basevelocity, FIELD_VECTOR),
-	DEFINE_ENTITY_FIELD(movedir, FIELD_VECTOR),
+		DEFINE_ENTITY_FIELD(origin, FIELD_POSITION_VECTOR),
+		DEFINE_ENTITY_FIELD(oldorigin, FIELD_POSITION_VECTOR),
+		DEFINE_ENTITY_FIELD(velocity, FIELD_VECTOR),
+		DEFINE_ENTITY_FIELD(basevelocity, FIELD_VECTOR),
+		DEFINE_ENTITY_FIELD(movedir, FIELD_VECTOR),
 
-	DEFINE_ENTITY_FIELD(angles, FIELD_VECTOR),
-	DEFINE_ENTITY_FIELD(avelocity, FIELD_VECTOR),
-	DEFINE_ENTITY_FIELD(punchangle, FIELD_VECTOR),
-	DEFINE_ENTITY_FIELD(v_angle, FIELD_VECTOR),
-	DEFINE_ENTITY_FIELD(fixangle, FIELD_FLOAT),
-	DEFINE_ENTITY_FIELD(idealpitch, FIELD_FLOAT),
-	DEFINE_ENTITY_FIELD(pitch_speed, FIELD_FLOAT),
-	DEFINE_ENTITY_FIELD(ideal_yaw, FIELD_FLOAT),
-	DEFINE_ENTITY_FIELD(yaw_speed, FIELD_FLOAT),
+		DEFINE_ENTITY_FIELD(angles, FIELD_VECTOR),
+		DEFINE_ENTITY_FIELD(avelocity, FIELD_VECTOR),
+		DEFINE_ENTITY_FIELD(punchangle, FIELD_VECTOR),
+		DEFINE_ENTITY_FIELD(v_angle, FIELD_VECTOR),
+		DEFINE_ENTITY_FIELD(fixangle, FIELD_FLOAT),
+		DEFINE_ENTITY_FIELD(idealpitch, FIELD_FLOAT),
+		DEFINE_ENTITY_FIELD(pitch_speed, FIELD_FLOAT),
+		DEFINE_ENTITY_FIELD(ideal_yaw, FIELD_FLOAT),
+		DEFINE_ENTITY_FIELD(yaw_speed, FIELD_FLOAT),
 
-	DEFINE_ENTITY_FIELD(modelindex, FIELD_INTEGER),
-	DEFINE_ENTITY_GLOBAL_FIELD(model, FIELD_MODELNAME),
+		DEFINE_ENTITY_FIELD(modelindex, FIELD_INTEGER),
+		DEFINE_ENTITY_GLOBAL_FIELD(model, FIELD_MODELNAME),
 
-	DEFINE_ENTITY_FIELD(viewmodel, FIELD_MODELNAME),
-	DEFINE_ENTITY_FIELD(weaponmodel, FIELD_MODELNAME),
+		DEFINE_ENTITY_FIELD(viewmodel, FIELD_MODELNAME),
+		DEFINE_ENTITY_FIELD(weaponmodel, FIELD_MODELNAME),
 
-	DEFINE_ENTITY_FIELD(absmin, FIELD_POSITION_VECTOR),
-	DEFINE_ENTITY_FIELD(absmax, FIELD_POSITION_VECTOR),
-	DEFINE_ENTITY_GLOBAL_FIELD(mins, FIELD_VECTOR),
-	DEFINE_ENTITY_GLOBAL_FIELD(maxs, FIELD_VECTOR),
-	DEFINE_ENTITY_GLOBAL_FIELD(size, FIELD_VECTOR),
+		DEFINE_ENTITY_FIELD(absmin, FIELD_POSITION_VECTOR),
+		DEFINE_ENTITY_FIELD(absmax, FIELD_POSITION_VECTOR),
+		DEFINE_ENTITY_GLOBAL_FIELD(mins, FIELD_VECTOR),
+		DEFINE_ENTITY_GLOBAL_FIELD(maxs, FIELD_VECTOR),
+		DEFINE_ENTITY_GLOBAL_FIELD(size, FIELD_VECTOR),
 
-	DEFINE_ENTITY_FIELD(ltime, FIELD_TIME),
-	DEFINE_ENTITY_FIELD(nextthink, FIELD_TIME),
+		DEFINE_ENTITY_FIELD(ltime, FIELD_TIME),
+		DEFINE_ENTITY_FIELD(nextthink, FIELD_TIME),
 
-	DEFINE_ENTITY_FIELD(solid, FIELD_INTEGER),
-	DEFINE_ENTITY_FIELD(movetype, FIELD_INTEGER),
+		DEFINE_ENTITY_FIELD(solid, FIELD_INTEGER),
+		DEFINE_ENTITY_FIELD(movetype, FIELD_INTEGER),
 
-	DEFINE_ENTITY_FIELD(skin, FIELD_INTEGER),
-	DEFINE_ENTITY_FIELD(body, FIELD_INTEGER),
-	DEFINE_ENTITY_FIELD(effects, FIELD_INTEGER),
+		DEFINE_ENTITY_FIELD(skin, FIELD_INTEGER),
+		DEFINE_ENTITY_FIELD(body, FIELD_INTEGER),
+		DEFINE_ENTITY_FIELD(effects, FIELD_INTEGER),
 
-	DEFINE_ENTITY_FIELD(gravity, FIELD_FLOAT),
-	DEFINE_ENTITY_FIELD(friction, FIELD_FLOAT),
-	DEFINE_ENTITY_FIELD(light_level, FIELD_FLOAT),
+		DEFINE_ENTITY_FIELD(gravity, FIELD_FLOAT),
+		DEFINE_ENTITY_FIELD(friction, FIELD_FLOAT),
+		DEFINE_ENTITY_FIELD(light_level, FIELD_FLOAT),
 
-	DEFINE_ENTITY_FIELD(frame, FIELD_FLOAT),
-	DEFINE_ENTITY_FIELD(scale, FIELD_FLOAT),
-	DEFINE_ENTITY_FIELD(sequence, FIELD_INTEGER),
-	DEFINE_ENTITY_FIELD(animtime, FIELD_TIME),
-	DEFINE_ENTITY_FIELD(framerate, FIELD_FLOAT),
-	DEFINE_ENTITY_FIELD(controller, FIELD_INTEGER),
-	DEFINE_ENTITY_FIELD(blending, FIELD_INTEGER),
+		DEFINE_ENTITY_FIELD(frame, FIELD_FLOAT),
+		DEFINE_ENTITY_FIELD(scale, FIELD_FLOAT),
+		DEFINE_ENTITY_FIELD(sequence, FIELD_INTEGER),
+		DEFINE_ENTITY_FIELD(animtime, FIELD_TIME),
+		DEFINE_ENTITY_FIELD(framerate, FIELD_FLOAT),
+		DEFINE_ENTITY_FIELD(controller, FIELD_INTEGER),
+		DEFINE_ENTITY_FIELD(blending, FIELD_INTEGER),
 
-	DEFINE_ENTITY_FIELD(rendermode, FIELD_INTEGER),
-	DEFINE_ENTITY_FIELD(renderamt, FIELD_FLOAT),
-	DEFINE_ENTITY_FIELD(rendercolor, FIELD_VECTOR),
-	DEFINE_ENTITY_FIELD(renderfx, FIELD_INTEGER),
+		DEFINE_ENTITY_FIELD(rendermode, FIELD_INTEGER),
+		DEFINE_ENTITY_FIELD(renderamt, FIELD_FLOAT),
+		DEFINE_ENTITY_FIELD(rendercolor, FIELD_VECTOR),
+		DEFINE_ENTITY_FIELD(renderfx, FIELD_INTEGER),
 
-	DEFINE_ENTITY_FIELD(health, FIELD_FLOAT),
-	DEFINE_ENTITY_FIELD(frags, FIELD_FLOAT),
-	DEFINE_ENTITY_FIELD(weapons, FIELD_INTEGER),
-	DEFINE_ENTITY_FIELD(takedamage, FIELD_FLOAT),
+		DEFINE_ENTITY_FIELD(health, FIELD_FLOAT),
+		DEFINE_ENTITY_FIELD(frags, FIELD_FLOAT),
+		DEFINE_ENTITY_FIELD(weapons, FIELD_INTEGER),
+		DEFINE_ENTITY_FIELD(takedamage, FIELD_FLOAT),
 
-	DEFINE_ENTITY_FIELD(deadflag, FIELD_FLOAT),
-	DEFINE_ENTITY_FIELD(view_ofs, FIELD_VECTOR),
-	DEFINE_ENTITY_FIELD(button, FIELD_INTEGER),
-	DEFINE_ENTITY_FIELD(impulse, FIELD_INTEGER),
+		DEFINE_ENTITY_FIELD(deadflag, FIELD_FLOAT),
+		DEFINE_ENTITY_FIELD(view_ofs, FIELD_VECTOR),
+		DEFINE_ENTITY_FIELD(button, FIELD_INTEGER),
+		DEFINE_ENTITY_FIELD(impulse, FIELD_INTEGER),
 
-	DEFINE_ENTITY_FIELD(chain, FIELD_EDICT),
-	DEFINE_ENTITY_FIELD(dmg_inflictor, FIELD_EDICT),
-	DEFINE_ENTITY_FIELD(enemy, FIELD_EDICT),
-	DEFINE_ENTITY_FIELD(aiment, FIELD_EDICT),
-	DEFINE_ENTITY_FIELD(owner, FIELD_EDICT),
-	DEFINE_ENTITY_FIELD(groundentity, FIELD_EDICT),
+		DEFINE_ENTITY_FIELD(chain, FIELD_EDICT),
+		DEFINE_ENTITY_FIELD(dmg_inflictor, FIELD_EDICT),
+		DEFINE_ENTITY_FIELD(enemy, FIELD_EDICT),
+		DEFINE_ENTITY_FIELD(aiment, FIELD_EDICT),
+		DEFINE_ENTITY_FIELD(owner, FIELD_EDICT),
+		DEFINE_ENTITY_FIELD(groundentity, FIELD_EDICT),
 
-	DEFINE_ENTITY_FIELD(spawnflags, FIELD_INTEGER),
-	DEFINE_ENTITY_FIELD(flags, FIELD_FLOAT),
+		DEFINE_ENTITY_FIELD(spawnflags, FIELD_INTEGER),
+		DEFINE_ENTITY_FIELD(flags, FIELD_FLOAT),
 
-	DEFINE_ENTITY_FIELD(colormap, FIELD_INTEGER),
-	DEFINE_ENTITY_FIELD(team, FIELD_INTEGER),
+		DEFINE_ENTITY_FIELD(colormap, FIELD_INTEGER),
+		DEFINE_ENTITY_FIELD(team, FIELD_INTEGER),
 
-	DEFINE_ENTITY_FIELD(max_health, FIELD_FLOAT),
-	DEFINE_ENTITY_FIELD(teleport_time, FIELD_TIME),
-	DEFINE_ENTITY_FIELD(armortype, FIELD_FLOAT),
-	DEFINE_ENTITY_FIELD(armorvalue, FIELD_FLOAT),
-	DEFINE_ENTITY_FIELD(waterlevel, FIELD_INTEGER),
-	DEFINE_ENTITY_FIELD(watertype, FIELD_INTEGER),
+		DEFINE_ENTITY_FIELD(max_health, FIELD_FLOAT),
+		DEFINE_ENTITY_FIELD(teleport_time, FIELD_TIME),
+		DEFINE_ENTITY_FIELD(armortype, FIELD_FLOAT),
+		DEFINE_ENTITY_FIELD(armorvalue, FIELD_FLOAT),
+		DEFINE_ENTITY_FIELD(waterlevel, FIELD_INTEGER),
+		DEFINE_ENTITY_FIELD(watertype, FIELD_INTEGER),
 
-	// Having these fields be local to the individual levels makes it easier to test those levels individually.
-	DEFINE_ENTITY_GLOBAL_FIELD(target, FIELD_STRING),
-	DEFINE_ENTITY_GLOBAL_FIELD(targetname, FIELD_STRING),
-	DEFINE_ENTITY_FIELD(netname, FIELD_STRING),
-	DEFINE_ENTITY_FIELD(message, FIELD_STRING),
+		// Having these fields be local to the individual levels makes it easier to test those levels individually.
+		DEFINE_ENTITY_GLOBAL_FIELD(target, FIELD_STRING),
+		DEFINE_ENTITY_GLOBAL_FIELD(targetname, FIELD_STRING),
+		DEFINE_ENTITY_FIELD(netname, FIELD_STRING),
+		DEFINE_ENTITY_FIELD(message, FIELD_STRING),
 
-	DEFINE_ENTITY_FIELD(dmg_take, FIELD_FLOAT),
-	DEFINE_ENTITY_FIELD(dmg_save, FIELD_FLOAT),
-	DEFINE_ENTITY_FIELD(dmg, FIELD_FLOAT),
-	DEFINE_ENTITY_FIELD(dmgtime, FIELD_TIME),
+		DEFINE_ENTITY_FIELD(dmg_take, FIELD_FLOAT),
+		DEFINE_ENTITY_FIELD(dmg_save, FIELD_FLOAT),
+		DEFINE_ENTITY_FIELD(dmg, FIELD_FLOAT),
+		DEFINE_ENTITY_FIELD(dmgtime, FIELD_TIME),
 
-	DEFINE_ENTITY_FIELD(noise, FIELD_SOUNDNAME),
-	DEFINE_ENTITY_FIELD(noise1, FIELD_SOUNDNAME),
-	DEFINE_ENTITY_FIELD(noise2, FIELD_SOUNDNAME),
-	DEFINE_ENTITY_FIELD(noise3, FIELD_SOUNDNAME),
-	DEFINE_ENTITY_FIELD(speed, FIELD_FLOAT),
-	DEFINE_ENTITY_FIELD(air_finished, FIELD_TIME),
-	DEFINE_ENTITY_FIELD(pain_finished, FIELD_TIME),
-	DEFINE_ENTITY_FIELD(radsuit_finished, FIELD_TIME),
+		DEFINE_ENTITY_FIELD(noise, FIELD_SOUNDNAME),
+		DEFINE_ENTITY_FIELD(noise1, FIELD_SOUNDNAME),
+		DEFINE_ENTITY_FIELD(noise2, FIELD_SOUNDNAME),
+		DEFINE_ENTITY_FIELD(noise3, FIELD_SOUNDNAME),
+		DEFINE_ENTITY_FIELD(speed, FIELD_FLOAT),
+		DEFINE_ENTITY_FIELD(air_finished, FIELD_TIME),
+		DEFINE_ENTITY_FIELD(pain_finished, FIELD_TIME),
+		DEFINE_ENTITY_FIELD(radsuit_finished, FIELD_TIME),
 };
 
-#define ENTVARS_COUNT		(sizeof(gEntvarsDescription)/sizeof(gEntvarsDescription[0]))
+#define ENTVARS_COUNT (sizeof(gEntvarsDescription) / sizeof(gEntvarsDescription[0]))
 
 
-#ifdef	DEBUG
+#ifdef DEBUG
 edict_t* DBG_EntOfVars(const entvars_t* pev)
 {
 	if (pev->pContainingEntity != NULL)
@@ -341,13 +340,12 @@ edict_t* DBG_EntOfVars(const entvars_t* pev)
 #endif //DEBUG
 
 
-#ifdef	DEBUG
-void
-DBG_AssertFunction(
-	bool		fExpr,
+#ifdef DEBUG
+void DBG_AssertFunction(
+	bool fExpr,
 	const char* szExpr,
 	const char* szFile,
-	int			szLine,
+	int szLine,
 	const char* szMessage)
 {
 	if (fExpr)
@@ -359,7 +357,7 @@ DBG_AssertFunction(
 		sprintf(szOut, "ASSERT FAILED:\n %s \n(%s@%d)", szExpr, szFile, szLine);
 	ALERT(at_console, szOut);
 }
-#endif	// DEBUG
+#endif // DEBUG
 
 bool UTIL_GetNextBestWeapon(CBasePlayer* pPlayer, CBasePlayerItem* pCurrentWeapon)
 {
@@ -367,7 +365,7 @@ bool UTIL_GetNextBestWeapon(CBasePlayer* pPlayer, CBasePlayerItem* pCurrentWeapo
 }
 
 // ripped this out of the engine
-float	UTIL_AngleMod(float a)
+float UTIL_AngleMod(float a)
 {
 	if (a < 0)
 	{
@@ -411,7 +409,7 @@ void UTIL_MoveToOrigin(edict_t* pent, const Vector& vecGoal, float flDist, int i
 {
 	float rgfl[3];
 	vecGoal.CopyToArray(rgfl);
-	//		return MOVE_TO_ORIGIN ( pent, rgfl, flDist, iMoveType ); 
+	//		return MOVE_TO_ORIGIN ( pent, rgfl, flDist, iMoveType );
 	MOVE_TO_ORIGIN(pent, rgfl, flDist, iMoveType);
 }
 
@@ -420,7 +418,7 @@ int UTIL_EntitiesInBox(CBaseEntity** pList, int listMax, const Vector& mins, con
 {
 	edict_t* pEdict = g_engfuncs.pfnPEntityOfEntIndex(1);
 	CBaseEntity* pEntity;
-	int			count;
+	int count;
 
 	count = 0;
 
@@ -429,10 +427,10 @@ int UTIL_EntitiesInBox(CBaseEntity** pList, int listMax, const Vector& mins, con
 
 	for (int i = 1; i < gpGlobals->maxEntities; i++, pEdict++)
 	{
-		if (0 != pEdict->free)	// Not in use
+		if (0 != pEdict->free) // Not in use
 			continue;
 
-		if (0 != flagMask && (pEdict->v.flags & flagMask) == 0)	// Does it meet the criteria?
+		if (0 != flagMask && (pEdict->v.flags & flagMask) == 0) // Does it meet the criteria?
 			continue;
 
 		if (mins.x > pEdict->v.absmax.x ||
@@ -462,8 +460,8 @@ int UTIL_MonstersInSphere(CBaseEntity** pList, int listMax, const Vector& center
 {
 	edict_t* pEdict = g_engfuncs.pfnPEntityOfEntIndex(1);
 	CBaseEntity* pEntity;
-	int			count;
-	float		distance, delta;
+	int count;
+	float distance, delta;
 
 	count = 0;
 	float radiusSquared = radius * radius;
@@ -473,15 +471,15 @@ int UTIL_MonstersInSphere(CBaseEntity** pList, int listMax, const Vector& center
 
 	for (int i = 1; i < gpGlobals->maxEntities; i++, pEdict++)
 	{
-		if (0 != pEdict->free)	// Not in use
+		if (0 != pEdict->free) // Not in use
 			continue;
 
-		if ((pEdict->v.flags & (FL_CLIENT | FL_MONSTER)) == 0)	// Not a client/monster ?
+		if ((pEdict->v.flags & (FL_CLIENT | FL_MONSTER)) == 0) // Not a client/monster ?
 			continue;
 
 		// Use origin for X & Y since they are centered for all monsters
 		// Now X
-		delta = center.x - pEdict->v.origin.x;//(pEdict->v.absmin.x + pEdict->v.absmax.x)*0.5;
+		delta = center.x - pEdict->v.origin.x; //(pEdict->v.absmin.x + pEdict->v.absmax.x)*0.5;
 		delta *= delta;
 
 		if (delta > radiusSquared)
@@ -489,7 +487,7 @@ int UTIL_MonstersInSphere(CBaseEntity** pList, int listMax, const Vector& center
 		distance = delta;
 
 		// Now Y
-		delta = center.y - pEdict->v.origin.y;//(pEdict->v.absmin.y + pEdict->v.absmax.y)*0.5;
+		delta = center.y - pEdict->v.origin.y; //(pEdict->v.absmin.y + pEdict->v.absmax.y)*0.5;
 		delta *= delta;
 
 		distance += delta;
@@ -623,7 +621,7 @@ void UTIL_MakeAimVectors(const Vector& vecAngles)
 }
 
 
-#define SWAP(a,b,temp)	((temp)=(a),(a)=(b),(b)=(temp))
+#define SWAP(a, b, temp) ((temp) = (a), (a) = (b), (b) = (temp))
 
 void UTIL_MakeInvVectors(const Vector& vec, globalvars_t* pgv)
 {
@@ -688,18 +686,18 @@ static short FixedSigned16(float value, float scale)
 // UNDONE: Affect user controls?
 void UTIL_ScreenShake(const Vector& center, float amplitude, float frequency, float duration, float radius)
 {
-	int			i;
-	float		localAmplitude;
-	ScreenShake	shake;
+	int i;
+	float localAmplitude;
+	ScreenShake shake;
 
-	shake.duration = FixedUnsigned16(duration, 1 << 12);		// 4.12 fixed
-	shake.frequency = FixedUnsigned16(frequency, 1 << 8);	// 8.8 fixed
+	shake.duration = FixedUnsigned16(duration, 1 << 12);  // 4.12 fixed
+	shake.frequency = FixedUnsigned16(frequency, 1 << 8); // 8.8 fixed
 
 	for (i = 1; i <= gpGlobals->maxClients; i++)
 	{
 		CBaseEntity* pPlayer = UTIL_PlayerByIndex(i);
 
-		if (!pPlayer || (pPlayer->pev->flags & FL_ONGROUND) == 0)	// Don't shake if not onground
+		if (!pPlayer || (pPlayer->pev->flags & FL_ONGROUND) == 0) // Don't shake if not onground
 			continue;
 
 		localAmplitude = 0;
@@ -713,17 +711,17 @@ void UTIL_ScreenShake(const Vector& center, float amplitude, float frequency, fl
 
 			// Had to get rid of this falloff - it didn't work well
 			if (distance < radius)
-				localAmplitude = amplitude;//radius - distance;
+				localAmplitude = amplitude; //radius - distance;
 		}
 		if (0 != localAmplitude)
 		{
-			shake.amplitude = FixedUnsigned16(localAmplitude, 1 << 12);		// 4.12 fixed
+			shake.amplitude = FixedUnsigned16(localAmplitude, 1 << 12); // 4.12 fixed
 
-			MESSAGE_BEGIN(MSG_ONE, gmsgShake, NULL, pPlayer->edict());		// use the magic #1 for "one client"
+			MESSAGE_BEGIN(MSG_ONE, gmsgShake, NULL, pPlayer->edict()); // use the magic #1 for "one client"
 
-			WRITE_SHORT(shake.amplitude);				// shake amount
-			WRITE_SHORT(shake.duration);				// shake lasts this long
-			WRITE_SHORT(shake.frequency);				// shake noise frequency
+			WRITE_SHORT(shake.amplitude); // shake amount
+			WRITE_SHORT(shake.duration);  // shake lasts this long
+			WRITE_SHORT(shake.frequency); // shake noise frequency
 
 			MESSAGE_END();
 		}
@@ -740,8 +738,8 @@ void UTIL_ScreenShakeAll(const Vector& center, float amplitude, float frequency,
 
 void UTIL_ScreenFadeBuild(ScreenFade& fade, const Vector& color, float fadeTime, float fadeHold, int alpha, int flags)
 {
-	fade.duration = FixedUnsigned16(fadeTime, 1 << 12);		// 4.12 fixed
-	fade.holdTime = FixedUnsigned16(fadeHold, 1 << 12);		// 4.12 fixed
+	fade.duration = FixedUnsigned16(fadeTime, 1 << 12); // 4.12 fixed
+	fade.holdTime = FixedUnsigned16(fadeHold, 1 << 12); // 4.12 fixed
 	fade.r = (int)color.x;
 	fade.g = (int)color.y;
 	fade.b = (int)color.z;
@@ -755,15 +753,15 @@ void UTIL_ScreenFadeWrite(const ScreenFade& fade, CBaseEntity* pEntity)
 	if (!pEntity || !pEntity->IsNetClient())
 		return;
 
-	MESSAGE_BEGIN(MSG_ONE, gmsgFade, NULL, pEntity->edict());		// use the magic #1 for "one client"
+	MESSAGE_BEGIN(MSG_ONE, gmsgFade, NULL, pEntity->edict()); // use the magic #1 for "one client"
 
-	WRITE_SHORT(fade.duration);		// fade lasts this long
-	WRITE_SHORT(fade.holdTime);		// fade lasts this long
-	WRITE_SHORT(fade.fadeFlags);		// fade type (in / out)
-	WRITE_BYTE(fade.r);				// fade red
-	WRITE_BYTE(fade.g);				// fade green
-	WRITE_BYTE(fade.b);				// fade blue
-	WRITE_BYTE(fade.a);				// fade blue
+	WRITE_SHORT(fade.duration);	 // fade lasts this long
+	WRITE_SHORT(fade.holdTime);	 // fade lasts this long
+	WRITE_SHORT(fade.fadeFlags); // fade type (in / out)
+	WRITE_BYTE(fade.r);			 // fade red
+	WRITE_BYTE(fade.g);			 // fade green
+	WRITE_BYTE(fade.b);			 // fade blue
+	WRITE_BYTE(fade.a);			 // fade blue
 
 	MESSAGE_END();
 }
@@ -771,8 +769,8 @@ void UTIL_ScreenFadeWrite(const ScreenFade& fade, CBaseEntity* pEntity)
 
 void UTIL_ScreenFadeAll(const Vector& color, float fadeTime, float fadeHold, int alpha, int flags)
 {
-	int			i;
-	ScreenFade	fade;
+	int i;
+	ScreenFade fade;
 
 
 	UTIL_ScreenFadeBuild(fade, color, fadeTime, fadeHold, alpha, flags);
@@ -788,7 +786,7 @@ void UTIL_ScreenFadeAll(const Vector& color, float fadeTime, float fadeHold, int
 
 void UTIL_ScreenFade(CBaseEntity* pEntity, const Vector& color, float fadeTime, float fadeHold, int alpha, int flags)
 {
-	ScreenFade	fade;
+	ScreenFade fade;
 
 	UTIL_ScreenFadeBuild(fade, color, fadeTime, fadeHold, alpha, flags);
 	UTIL_ScreenFadeWrite(fade, pEntity);
@@ -841,7 +839,7 @@ void UTIL_HudMessage(CBaseEntity* pEntity, const hudtextparms_t& textparms, cons
 
 void UTIL_HudMessageAll(const hudtextparms_t& textparms, const char* pMessage)
 {
-	int			i;
+	int i;
 
 	for (i = 1; i <= gpGlobals->maxClients; i++)
 	{
@@ -948,7 +946,7 @@ void UTIL_ShowMessage(const char* pString, CBaseEntity* pEntity)
 
 void UTIL_ShowMessageAll(const char* pString)
 {
-	int		i;
+	int i;
 
 	// loop through all players
 
@@ -1095,8 +1093,8 @@ float UTIL_SplineFraction(float value, float scale)
 
 char* UTIL_VarArgs(const char* format, ...)
 {
-	va_list		argptr;
-	static char		string[1024];
+	va_list argptr;
+	static char string[1024];
 
 	va_start(argptr, format);
 	vsprintf(string, format, argptr);
@@ -1199,13 +1197,13 @@ void UTIL_BloodDrips(const Vector& origin, const Vector& direction, int color, i
 
 	MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, origin);
 	WRITE_BYTE(TE_BLOODSPRITE);
-	WRITE_COORD(origin.x);								// pos
+	WRITE_COORD(origin.x); // pos
 	WRITE_COORD(origin.y);
 	WRITE_COORD(origin.z);
-	WRITE_SHORT(g_sModelIndexBloodSpray);				// initial sprite model
-	WRITE_SHORT(g_sModelIndexBloodDrop);				// droplet sprite models
-	WRITE_BYTE(color);								// color index into host_basepal
-	WRITE_BYTE(V_min(V_max(3, amount / 10), 16));		// size
+	WRITE_SHORT(g_sModelIndexBloodSpray);		  // initial sprite model
+	WRITE_SHORT(g_sModelIndexBloodDrop);		  // droplet sprite models
+	WRITE_BYTE(color);							  // color index into host_basepal
+	WRITE_BYTE(V_min(V_max(3, amount / 10), 16)); // size
 	MESSAGE_END();
 }
 
@@ -1385,7 +1383,7 @@ bool UTIL_TeamsMatch(const char* pTeamName1, const char* pTeamName2)
 	// Both on a team?
 	if (*pTeamName1 != 0 && *pTeamName2 != 0)
 	{
-		if (!stricmp(pTeamName1, pTeamName2))	// Same Team?
+		if (!stricmp(pTeamName1, pTeamName2)) // Same Team?
 			return true;
 	}
 
@@ -1395,13 +1393,13 @@ bool UTIL_TeamsMatch(const char* pTeamName1, const char* pTeamName2)
 
 void UTIL_StringToVector(float* pVector, const char* pString)
 {
-	char* pstr, * pfront, tempString[128];
-	int	j;
+	char *pstr, *pfront, tempString[128];
+	int j;
 
 	strcpy(tempString, pString);
 	pstr = pfront = tempString;
 
-	for (j = 0; j < 3; j++)			// lifted from pr_edict.c
+	for (j = 0; j < 3; j++) // lifted from pr_edict.c
 	{
 		pVector[j] = atof(pfront);
 
@@ -1426,13 +1424,13 @@ void UTIL_StringToVector(float* pVector, const char* pString)
 
 void UTIL_StringToIntArray(int* pVector, int count, const char* pString)
 {
-	char* pstr, * pfront, tempString[128];
-	int	j;
+	char *pstr, *pfront, tempString[128];
+	int j;
 
 	strcpy(tempString, pString);
 	pstr = pfront = tempString;
 
-	for (j = 0; j < count; j++)			// lifted from pr_edict.c
+	for (j = 0; j < count; j++) // lifted from pr_edict.c
 	{
 		pVector[j] = atoi(pfront);
 
@@ -1510,7 +1508,7 @@ float UTIL_WaterLevel(const Vector& position, float minz, float maxz)
 }
 
 
-extern DLL_GLOBAL	short	g_sModelIndexBubbles;// holds the index for the bubbles model
+extern DLL_GLOBAL short g_sModelIndexBubbles; // holds the index for the bubbles model
 
 void UTIL_Bubbles(Vector mins, Vector maxs, int count)
 {
@@ -1521,16 +1519,16 @@ void UTIL_Bubbles(Vector mins, Vector maxs, int count)
 
 	MESSAGE_BEGIN(MSG_PAS, SVC_TEMPENTITY, mid);
 	WRITE_BYTE(TE_BUBBLES);
-	WRITE_COORD(mins.x);	// mins
+	WRITE_COORD(mins.x); // mins
 	WRITE_COORD(mins.y);
 	WRITE_COORD(mins.z);
-	WRITE_COORD(maxs.x);	// maxz
+	WRITE_COORD(maxs.x); // maxz
 	WRITE_COORD(maxs.y);
 	WRITE_COORD(maxs.z);
-	WRITE_COORD(flHeight);			// height
+	WRITE_COORD(flHeight); // height
 	WRITE_SHORT(g_sModelIndexBubbles);
 	WRITE_BYTE(count); // count
-	WRITE_COORD(8); // speed
+	WRITE_COORD(8);	   // speed
 	MESSAGE_END();
 }
 
@@ -1555,16 +1553,16 @@ void UTIL_BubbleTrail(Vector from, Vector to, int count)
 
 	MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
 	WRITE_BYTE(TE_BUBBLETRAIL);
-	WRITE_COORD(from.x);	// mins
+	WRITE_COORD(from.x); // mins
 	WRITE_COORD(from.y);
 	WRITE_COORD(from.z);
-	WRITE_COORD(to.x);	// maxz
+	WRITE_COORD(to.x); // maxz
 	WRITE_COORD(to.y);
 	WRITE_COORD(to.z);
-	WRITE_COORD(flHeight);			// height
+	WRITE_COORD(flHeight); // height
 	WRITE_SHORT(g_sModelIndexBubbles);
 	WRITE_BYTE(count); // count
-	WRITE_COORD(8); // speed
+	WRITE_COORD(8);	   // speed
 	MESSAGE_END();
 }
 
@@ -1611,8 +1609,8 @@ void UTIL_PrecacheOther(const char* szClassname)
 //=========================================================
 void UTIL_LogPrintf(const char* fmt, ...)
 {
-	va_list			argptr;
-	static char		string[1024];
+	va_list argptr;
+	static char string[1024];
 
 	va_start(argptr, fmt);
 	vsprintf(string, fmt, argptr);
@@ -1628,7 +1626,7 @@ void UTIL_LogPrintf(const char* fmt, ...)
 //=========================================================
 float UTIL_DotPoints(const Vector& vecSrc, const Vector& vecCheck, const Vector& vecDir)
 {
-	Vector2D	vec2LOS;
+	Vector2D vec2LOS;
 
 	vec2LOS = (vecCheck - vecSrc).Make2D();
 	vec2LOS = vec2LOS.Normalize();
@@ -1659,29 +1657,29 @@ void UTIL_StripToken(const char* pKey, char* pDest)
 //
 // --------------------------------------------------------------
 static int gSizes[FIELD_TYPECOUNT] =
-{
-	sizeof(float),		// FIELD_FLOAT
-	sizeof(int),		// FIELD_STRING
-	sizeof(int),		// FIELD_ENTITY
-	sizeof(int),		// FIELD_CLASSPTR
-	sizeof(int),		// FIELD_EHANDLE
-	sizeof(int),		// FIELD_entvars_t
-	sizeof(int),		// FIELD_EDICT
-	sizeof(float) * 3,	// FIELD_VECTOR
-	sizeof(float) * 3,	// FIELD_POSITION_VECTOR
-	sizeof(int*),		// FIELD_POINTER
-	sizeof(int),		// FIELD_INTEGER
+	{
+		sizeof(float),	   // FIELD_FLOAT
+		sizeof(int),	   // FIELD_STRING
+		sizeof(int),	   // FIELD_ENTITY
+		sizeof(int),	   // FIELD_CLASSPTR
+		sizeof(int),	   // FIELD_EHANDLE
+		sizeof(int),	   // FIELD_entvars_t
+		sizeof(int),	   // FIELD_EDICT
+		sizeof(float) * 3, // FIELD_VECTOR
+		sizeof(float) * 3, // FIELD_POSITION_VECTOR
+		sizeof(int*),	   // FIELD_POINTER
+		sizeof(int),	   // FIELD_INTEGER
 #ifdef GNUC
-	sizeof(int*) * 2,		// FIELD_FUNCTION
+		sizeof(int*) * 2, // FIELD_FUNCTION
 #else
-	sizeof(int*),		// FIELD_FUNCTION	
+		sizeof(int*), // FIELD_FUNCTION
 #endif
-	sizeof(byte),		// FIELD_BOOLEAN
-	sizeof(short),		// FIELD_SHORT
-	sizeof(char),		// FIELD_CHARACTER
-	sizeof(float),		// FIELD_TIME
-	sizeof(int),		// FIELD_MODELNAME
-	sizeof(int),		// FIELD_SOUNDNAME
+		sizeof(byte),  // FIELD_BOOLEAN
+		sizeof(short), // FIELD_SHORT
+		sizeof(char),  // FIELD_CHARACTER
+		sizeof(float), // FIELD_TIME
+		sizeof(int),   // FIELD_MODELNAME
+		sizeof(int),   // FIELD_SOUNDNAME
 };
 
 
@@ -1698,11 +1696,11 @@ CSaveRestoreBuffer::CSaveRestoreBuffer(SAVERESTOREDATA* pdata)
 }
 
 
-CSaveRestoreBuffer :: ~CSaveRestoreBuffer()
+CSaveRestoreBuffer ::~CSaveRestoreBuffer()
 {
 }
 
-int	CSaveRestoreBuffer::EntityIndex(CBaseEntity* pEntity)
+int CSaveRestoreBuffer::EntityIndex(CBaseEntity* pEntity)
 {
 	if (pEntity == NULL)
 		return -1;
@@ -1710,20 +1708,20 @@ int	CSaveRestoreBuffer::EntityIndex(CBaseEntity* pEntity)
 }
 
 
-int	CSaveRestoreBuffer::EntityIndex(entvars_t* pevLookup)
+int CSaveRestoreBuffer::EntityIndex(entvars_t* pevLookup)
 {
 	if (pevLookup == NULL)
 		return -1;
 	return EntityIndex(ENT(pevLookup));
 }
 
-int	CSaveRestoreBuffer::EntityIndex(EOFFSET eoLookup)
+int CSaveRestoreBuffer::EntityIndex(EOFFSET eoLookup)
 {
 	return EntityIndex(ENT(eoLookup));
 }
 
 
-int	CSaveRestoreBuffer::EntityIndex(edict_t* pentLookup)
+int CSaveRestoreBuffer::EntityIndex(edict_t* pentLookup)
 {
 	if (!m_pdata || pentLookup == NULL)
 		return -1;
@@ -1759,7 +1757,7 @@ edict_t* CSaveRestoreBuffer::EntityFromIndex(int entityIndex)
 }
 
 
-int	CSaveRestoreBuffer::EntityFlagsSet(int entityIndex, int flags)
+int CSaveRestoreBuffer::EntityFlagsSet(int entityIndex, int flags)
 {
 	if (!m_pdata || entityIndex < 0)
 		return 0;
@@ -1786,29 +1784,30 @@ void CSaveRestoreBuffer::BufferRewind(int size)
 
 #ifndef WIN32
 extern "C" {
-	unsigned _rotr(unsigned val, int shift)
-	{
-		register unsigned lobit;        /* non-zero means lo bit set */
-		register unsigned num = val;    /* number to rotate */
+unsigned _rotr(unsigned val, int shift)
+{
+	register unsigned lobit;	 /* non-zero means lo bit set */
+	register unsigned num = val; /* number to rotate */
 
-		shift &= 0x1f;                  /* modulo 32 -- this will also make
+	shift &= 0x1f; /* modulo 32 -- this will also make
 										   negative shifts work */
 
-		while (shift--) {
-			lobit = num & 1;        /* get high bit */
-			num >>= 1;              /* shift right one bit */
-			if (lobit)
-				num |= 0x80000000;  /* set hi bit if lo bit was set */
-		}
-
-		return num;
+	while (shift--)
+	{
+		lobit = num & 1; /* get high bit */
+		num >>= 1;		 /* shift right one bit */
+		if (lobit)
+			num |= 0x80000000; /* set hi bit if lo bit was set */
 	}
+
+	return num;
+}
 }
 #endif
 
 unsigned int CSaveRestoreBuffer::HashString(const char* pszToken)
 {
-	unsigned int	hash = 0;
+	unsigned int hash = 0;
 
 	while ('\0' != *pszToken)
 		hash = _rotr(hash, 4) ^ *pszToken++;
@@ -1818,7 +1817,7 @@ unsigned int CSaveRestoreBuffer::HashString(const char* pszToken)
 
 unsigned short CSaveRestoreBuffer::TokenHash(const char* pszToken)
 {
-	unsigned short	hash = (unsigned short)(HashString(pszToken) % (unsigned)m_pdata->tokenCount);
+	unsigned short hash = (unsigned short)(HashString(pszToken) % (unsigned)m_pdata->tokenCount);
 
 #if _DEBUG
 	static int tokensparsed = 0;
@@ -1838,7 +1837,7 @@ unsigned short CSaveRestoreBuffer::TokenHash(const char* pszToken)
 		}
 #endif
 
-		int	index = hash + i;
+		int index = hash + i;
 		if (index >= m_pdata->tokenCount)
 			index -= m_pdata->tokenCount;
 
@@ -1849,7 +1848,7 @@ unsigned short CSaveRestoreBuffer::TokenHash(const char* pszToken)
 		}
 	}
 
-	// Token hash table full!!! 
+	// Token hash table full!!!
 	// [Consider doing overflow table(s) after the main table & limiting linear hash table search]
 	ALERT(at_error, "CSaveRestoreBuffer :: TokenHash() is COMPLETELY FULL!");
 	return 0;
@@ -1903,7 +1902,7 @@ void CSave::WriteTime(const char* pname, const float* data, int count)
 void CSave::WriteString(const char* pname, const char* pdata)
 {
 #ifdef TOKENIZE
-	short	token = (short)TokenHash(pdata);
+	short token = (short)TokenHash(pdata);
 	WriteShort(pname, &token, 1);
 #else
 	BufferField(pname, strlen(pdata) + 1, pdata);
@@ -1916,7 +1915,7 @@ void CSave::WriteString(const char* pname, const int* stringId, int count)
 	int i, size;
 
 #ifdef TOKENIZE
-	short	token = (short)TokenHash(STRING(*stringId));
+	short token = (short)TokenHash(STRING(*stringId));
 	WriteShort(pname, &token, 1);
 #else
 #if 0
@@ -2056,9 +2055,9 @@ bool CSave::WriteEntVars(const char* pname, entvars_t* pev)
 
 bool CSave::WriteFields(const char* pname, void* pBaseData, TYPEDESCRIPTION* pFields, int fieldCount)
 {
-	int				i, j, actualCount, emptyCount;
+	int i, j, actualCount, emptyCount;
 	TYPEDESCRIPTION* pTest;
-	int				entityArray[MAX_ENTITYARRAY];
+	int entityArray[MAX_ENTITYARRAY];
 	byte boolArray[MAX_ENTITYARRAY];
 
 	// Precalculate the number of empty fields
@@ -2135,8 +2134,7 @@ bool CSave::WriteFields(const char* pname, void* pBaseData, TYPEDESCRIPTION* pFi
 			WriteVector(pTest->fieldName, (float*)pOutputData, pTest->fieldSize);
 			break;
 
-		case FIELD_BOOLEAN:
-		{
+		case FIELD_BOOLEAN: {
 			//TODO: need to refactor save game stuff to make this cleaner and reusable
 			//Convert booleans to bytes
 			for (j = 0; j < pTest->fieldSize; j++)
@@ -2181,8 +2179,8 @@ void CSave::BufferString(char* pdata, int len)
 {
 	char c = 0;
 
-	BufferData(pdata, len);		// Write the string
-	BufferData(&c, 1);			// Write a null terminator
+	BufferData(pdata, len); // Write the string
+	BufferData(&c, 1);		// Write a null terminator
 }
 
 
@@ -2206,7 +2204,7 @@ void CSave::BufferField(const char* pname, int size, const char* pdata)
 
 void CSave::BufferHeader(const char* pname, int size)
 {
-	short	hashvalue = TokenHash(pname);
+	short hashvalue = TokenHash(pname);
 	if (size > 1 << (sizeof(short) * 8))
 		ALERT(at_error, "CSave :: BufferHeader() size parameter exceeds 'short'!");
 	BufferData((const char*)&size, sizeof(short));
@@ -2243,8 +2241,8 @@ int CRestore::ReadField(void* pBaseData, TYPEDESCRIPTION* pFields, int fieldCoun
 {
 	int i, j, stringCount, fieldNumber, entityIndex;
 	TYPEDESCRIPTION* pTest;
-	float	time, timeData;
-	Vector	position;
+	float time, timeData;
+	Vector position;
 	edict_t* pent;
 	char* pString;
 
@@ -2289,7 +2287,7 @@ int CRestore::ReadField(void* pBaseData, TYPEDESCRIPTION* pFields, int fieldCoun
 						pString = (char*)pData;
 						for (stringCount = 0; stringCount < j; stringCount++)
 						{
-							while ('\0' !=  *pString)
+							while ('\0' != *pString)
 								pString++;
 							pString++;
 						}
@@ -2363,8 +2361,7 @@ int CRestore::ReadField(void* pBaseData, TYPEDESCRIPTION* pFields, int fieldCoun
 						((float*)pOutputData)[2] = ((float*)pInputData)[2] + position.z;
 						break;
 
-					case FIELD_BOOLEAN:
-					{
+					case FIELD_BOOLEAN: {
 						// Input and Output sizes are different!
 						pOutputData = (char*)pOutputData + j * (sizeof(bool) - gSizes[pTest->fieldType]);
 						const bool value = *((byte*)pInputData) != 0;
@@ -2422,17 +2419,17 @@ bool CRestore::ReadEntVars(const char* pname, entvars_t* pev)
 
 bool CRestore::ReadFields(const char* pname, void* pBaseData, TYPEDESCRIPTION* pFields, int fieldCount)
 {
-	unsigned short	i, token;
-	int		lastField, fileCount;
-	HEADER	header;
+	unsigned short i, token;
+	int lastField, fileCount;
+	HEADER header;
 
 	i = ReadShort();
-	ASSERT(i == sizeof(int));			// First entry should be an int
+	ASSERT(i == sizeof(int)); // First entry should be an int
 
 	token = ReadShort();
 
 	// Check the struct name
-	if (token != TokenHash(pname))			// Field Set marker
+	if (token != TokenHash(pname)) // Field Set marker
 	{
 		//		ALERT( at_error, "Expected %s found %s!\n", pname, BufferPointer() );
 		BufferRewind(2 * sizeof(short));
@@ -2440,9 +2437,9 @@ bool CRestore::ReadFields(const char* pname, void* pBaseData, TYPEDESCRIPTION* p
 	}
 
 	// Skip over the struct name
-	fileCount = ReadInt();						// Read field count
+	fileCount = ReadInt(); // Read field count
 
-	lastField = 0;								// Make searches faster, most data is read/written in the same order
+	lastField = 0; // Make searches faster, most data is read/written in the same order
 
 	// Clear out base data
 	for (i = 0; i < fieldCount; i++)
@@ -2466,14 +2463,14 @@ bool CRestore::ReadFields(const char* pname, void* pBaseData, TYPEDESCRIPTION* p
 void CRestore::BufferReadHeader(HEADER* pheader)
 {
 	ASSERT(pheader != NULL);
-	pheader->size = ReadShort();				// Read field size
-	pheader->token = ReadShort();				// Read field name token
-	pheader->pData = BufferPointer();			// Field Data is next
-	BufferSkipBytes(pheader->size);			// Advance to next field
+	pheader->size = ReadShort();	  // Read field size
+	pheader->token = ReadShort();	  // Read field name token
+	pheader->pData = BufferPointer(); // Field Data is next
+	BufferSkipBytes(pheader->size);	  // Advance to next field
 }
 
 
-short	CRestore::ReadShort()
+short CRestore::ReadShort()
 {
 	short tmp = 0;
 
@@ -2482,7 +2479,7 @@ short	CRestore::ReadShort()
 	return tmp;
 }
 
-int	CRestore::ReadInt()
+int CRestore::ReadInt()
 {
 	int tmp = 0;
 
@@ -2549,7 +2546,7 @@ void CRestore::BufferSkipBytes(int bytes)
 int CRestore::BufferSkipZString()
 {
 	char* pszSearch;
-	int	 len;
+	int len;
 
 	if (!m_pdata)
 		return 0;
@@ -2568,7 +2565,7 @@ int CRestore::BufferSkipZString()
 	return len;
 }
 
-bool	CRestore::BufferCheckZString(const char* string)
+bool CRestore::BufferCheckZString(const char* string)
 {
 	if (!m_pdata)
 		return false;

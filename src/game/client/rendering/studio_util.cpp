@@ -1,6 +1,6 @@
 //========= Copyright © 1996-2002, Valve LLC, All rights reserved. ============
 //
-// Purpose: 
+// Purpose:
 //
 // $NoKeywords: $
 //=============================================================================
@@ -22,8 +22,8 @@ AngleQuaternion
 */
 void AngleQuaternion(float* angles, vec4_t quaternion)
 {
-	float		angle;
-	float		sr, sp, sy, cr, cp, cy;
+	float angle;
+	float sr, sp, sy, cr, cp, cy;
 
 	// FIXME: rescale the inputs to 1/2 angle
 	angle = angles[2] * 0.5;
@@ -51,7 +51,7 @@ QuaternionSlerp
 void QuaternionSlerp(vec4_t p, vec4_t q, float t, vec4_t qt)
 {
 	int i;
-	float	omega, cosom, sinom, sclp, sclq;
+	float omega, cosom, sinom, sclp, sclq;
 
 	// decide if one of the quaternions is backwards
 	float a = 0;
@@ -86,7 +86,8 @@ void QuaternionSlerp(vec4_t p, vec4_t q, float t, vec4_t qt)
 			sclp = 1.0 - t;
 			sclq = t;
 		}
-		for (i = 0; i < 4; i++) {
+		for (i = 0; i < 4; i++)
+		{
 			qt[i] = sclp * p[i] + sclq * q[i];
 		}
 	}
@@ -111,7 +112,7 @@ QuaternionMatrix
 
 ====================
 */
-void QuaternionMatrix(vec4_t quaternion, float(*matrix)[4])
+void QuaternionMatrix(vec4_t quaternion, float (*matrix)[4])
 {
 	matrix[0][0] = 1.0 - 2.0 * quaternion[1] * quaternion[1] - 2.0 * quaternion[2] * quaternion[2];
 	matrix[1][0] = 2.0 * quaternion[0] * quaternion[1] + 2.0 * quaternion[3] * quaternion[2];

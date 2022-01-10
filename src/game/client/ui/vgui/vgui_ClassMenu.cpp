@@ -5,7 +5,7 @@
 // Valve, L.L.C., or in accordance with the terms and conditions stipulated in
 // the agreement/contract under which the contents have been supplied.
 //
-// Purpose: TFC Class Menu 
+// Purpose: TFC Class Menu
 //
 // $Workfile:     $
 // $Date:         $
@@ -35,22 +35,22 @@
 #include "vgui_StatsMenuPanel.h"
 
 // Class Menu Dimensions
-#define CLASSMENU_TITLE_X				XRES(40)
-#define CLASSMENU_TITLE_Y				YRES(32)
-#define CLASSMENU_TOPLEFT_BUTTON_X		XRES(40)
-#define CLASSMENU_TOPLEFT_BUTTON_Y		YRES(80)
-#define CLASSMENU_BUTTON_SIZE_X			XRES(124)
-#define CLASSMENU_BUTTON_SIZE_Y			YRES(24)
-#define CLASSMENU_BUTTON_SPACER_Y		YRES(8)
-#define CLASSMENU_WINDOW_X				XRES(176)
-#define CLASSMENU_WINDOW_Y				YRES(80)
-#define CLASSMENU_WINDOW_SIZE_X			XRES(424)
-#define CLASSMENU_WINDOW_SIZE_Y			YRES(312)
-#define CLASSMENU_WINDOW_TEXT_X			XRES(150)
-#define CLASSMENU_WINDOW_TEXT_Y			YRES(80)
-#define CLASSMENU_WINDOW_NAME_X			XRES(150)
-#define CLASSMENU_WINDOW_NAME_Y			YRES(8)
-#define CLASSMENU_WINDOW_PLAYERS_Y		YRES(42)
+#define CLASSMENU_TITLE_X XRES(40)
+#define CLASSMENU_TITLE_Y YRES(32)
+#define CLASSMENU_TOPLEFT_BUTTON_X XRES(40)
+#define CLASSMENU_TOPLEFT_BUTTON_Y YRES(80)
+#define CLASSMENU_BUTTON_SIZE_X XRES(124)
+#define CLASSMENU_BUTTON_SIZE_Y YRES(24)
+#define CLASSMENU_BUTTON_SPACER_Y YRES(8)
+#define CLASSMENU_WINDOW_X XRES(176)
+#define CLASSMENU_WINDOW_Y YRES(80)
+#define CLASSMENU_WINDOW_SIZE_X XRES(424)
+#define CLASSMENU_WINDOW_SIZE_Y YRES(312)
+#define CLASSMENU_WINDOW_TEXT_X XRES(150)
+#define CLASSMENU_WINDOW_TEXT_Y YRES(80)
+#define CLASSMENU_WINDOW_NAME_X XRES(150)
+#define CLASSMENU_WINDOW_NAME_Y YRES(8)
+#define CLASSMENU_WINDOW_PLAYERS_Y YRES(42)
 
 // Creation
 CClassMenuPanel::CClassMenuPanel(int iTrans, bool iRemoveMe, int x, int y, int wide, int tall) : CMenuPanel(iTrans, iRemoveMe, x, y, wide, tall)
@@ -211,9 +211,9 @@ CClassMenuPanel::CClassMenuPanel(int iTrans, bool iRemoveMe, int x, int y, int w
 			}
 
 			m_pClassInfoPanel[team][i]->setSize(maxX, maxY);
-			if (pfile) gEngfuncs.COM_FreeFile(pfile);
+			if (pfile)
+				gEngfuncs.COM_FreeFile(pfile);
 			//m_pClassInfoPanel[i]->setBorder(new LineBorder());
-
 		}
 	}
 
@@ -224,7 +224,6 @@ CClassMenuPanel::CClassMenuPanel(int iTrans, bool iRemoveMe, int x, int y, int w
 	m_pCancelButton->addActionSignal(new CMenuHandler_StringCommandWatch("cancelmenu", true));
 
 	m_iCurrentInfo = 0;
-
 }
 
 
@@ -237,7 +236,7 @@ void CClassMenuPanel::Update()
 
 	const auto teamIndex = gViewPort->m_iCTFTeamNumber - 1;
 
-	int	 iYPos = CLASSMENU_TOPLEFT_BUTTON_Y;
+	int iYPos = CLASSMENU_TOPLEFT_BUTTON_Y;
 
 	// Cycle through the rest of the buttons
 	for (int team = 0; team < PC_MAX_TEAMS; ++team)
@@ -344,4 +343,3 @@ void CClassMenuPanel::SetActiveInfo(int iInput)
 	m_pScrollPanel->setScrollValue(0, 0);
 	m_pScrollPanel->validate();
 }
-

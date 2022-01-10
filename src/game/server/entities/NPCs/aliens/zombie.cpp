@@ -18,22 +18,22 @@
 
 // UNDONE: Don't flinch every time you get hit
 
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"monsters.h"
-#include	"schedule.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
+#include "schedule.h"
 #include "zombie.h"
 
 LINK_ENTITY_TO_CLASS(monster_zombie, CZombie);
 
 //=========================================================
-// Classify - indicates this monster's place in the 
+// Classify - indicates this monster's place in the
 // relationship table.
 //=========================================================
-int	CZombie::Classify()
+int CZombie::Classify()
 {
-	return	CLASS_ALIEN_MONSTER;
+	return CLASS_ALIEN_MONSTER;
 }
 
 //=========================================================
@@ -116,7 +116,7 @@ float CZombie::GetBothSlashDamage()
 void CZombie::ZombieSlashAttack(float damage, const Vector& punchAngle, const Vector& velocity, bool playAttackSound)
 {
 	// do stuff for this event.
-//		ALERT( at_console, "Slash!\n" );
+	//		ALERT( at_console, "Slash!\n" );
 	CBaseEntity* pHurt = CheckTraceHullAttack(70, damage, DMG_SLASH);
 	if (pHurt)
 	{
@@ -172,8 +172,8 @@ void CZombie::SpawnCore(const char* model, float health)
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_GREEN;
 	pev->health = health;
-	pev->view_ofs = VEC_VIEW;// position of the eyes relative to monster's origin.
-	m_flFieldOfView = 0.5;// indicates the width of this monster's forward view cone ( as a dotproduct result )
+	pev->view_ofs = VEC_VIEW; // position of the eyes relative to monster's origin.
+	m_flFieldOfView = 0.5;	  // indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
 	m_afCapability = bits_CAP_DOORS_GROUP;
 
@@ -237,9 +237,9 @@ int CZombie::IgnoreConditions()
 		if (pev->health < 20)
 			iIgnore |= (bits_COND_LIGHT_DAMAGE | bits_COND_HEAVY_DAMAGE);
 		else
-#endif			
-			if (m_flNextFlinch >= gpGlobals->time)
-				iIgnore |= (bits_COND_LIGHT_DAMAGE | bits_COND_HEAVY_DAMAGE);
+#endif
+		if (m_flNextFlinch >= gpGlobals->time)
+			iIgnore |= (bits_COND_LIGHT_DAMAGE | bits_COND_HEAVY_DAMAGE);
 	}
 
 	if ((m_Activity == ACT_SMALL_FLINCH) || (m_Activity == ACT_BIG_FLINCH))
@@ -249,5 +249,4 @@ int CZombie::IgnoreConditions()
 	}
 
 	return iIgnore;
-
 }

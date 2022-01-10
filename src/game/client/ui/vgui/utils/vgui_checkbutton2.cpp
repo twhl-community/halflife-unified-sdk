@@ -1,6 +1,6 @@
 //========= Copyright © 1996-2002, Valve LLC, All rights reserved. ============
 //
-// Purpose: 
+// Purpose:
 //
 // $NoKeywords: $
 //=============================================================================
@@ -12,19 +12,18 @@
 #include "vgui_loadtga.h"
 
 
-#define EXTRA_X	5
+#define EXTRA_X 5
 
 
 using namespace vgui;
 
 
 
-CCheckButton2::CCheckButton2() :
-	m_Label(""),
-	m_pChecked(NULL),
-	m_pUnchecked(NULL),
-	m_pHandler(NULL),
-	m_CheckboxPanel(NULL)
+CCheckButton2::CCheckButton2() : m_Label(""),
+								 m_pChecked(NULL),
+								 m_pUnchecked(NULL),
+								 m_pHandler(NULL),
+								 m_CheckboxPanel(NULL)
 {
 	m_bOwnImages = false;
 	m_bChecked = false;
@@ -33,7 +32,7 @@ CCheckButton2::CCheckButton2() :
 
 	m_Label.setParent(this);
 	m_Label.setFgColor(255, 255, 255, 0);
-	m_Label.setBgColor(0, 0, 0, 255);	// background is not drawn and foreground is white
+	m_Label.setBgColor(0, 0, 0, 255); // background is not drawn and foreground is white
 	m_Label.addInputSignal(this);
 
 	m_CheckboxPanel.setParent(this);
@@ -192,8 +191,3 @@ void CCheckButton2::mousePressed(MouseCode code, Panel* panel)
 {
 	internalMousePressed(code);
 }
-
-
-
-
-

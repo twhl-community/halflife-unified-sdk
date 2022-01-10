@@ -19,29 +19,29 @@
 #include "effects.h"
 
 
-#define XEN_PLANT_GLOW_SPRITE		"sprites/flare3.spr"
-#define XEN_PLANT_HIDE_TIME			5
+#define XEN_PLANT_GLOW_SPRITE "sprites/flare3.spr"
+#define XEN_PLANT_HIDE_TIME 5
 
 
 class CActAnimating : public CBaseAnimating
 {
 public:
-	void			SetActivity(Activity act);
-	inline Activity	GetActivity() { return m_Activity; }
+	void SetActivity(Activity act);
+	inline Activity GetActivity() { return m_Activity; }
 
-	int	ObjectCaps() override { return CBaseAnimating::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+	int ObjectCaps() override { return CBaseAnimating::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 
 	bool Save(CSave& save) override;
 	bool Restore(CRestore& restore) override;
-	static	TYPEDESCRIPTION m_SaveData[];
+	static TYPEDESCRIPTION m_SaveData[];
 
 private:
-	Activity	m_Activity;
+	Activity m_Activity;
 };
 
-TYPEDESCRIPTION	CActAnimating::m_SaveData[] =
-{
-	DEFINE_FIELD(CActAnimating, m_Activity, FIELD_INTEGER),
+TYPEDESCRIPTION CActAnimating::m_SaveData[] =
+	{
+		DEFINE_FIELD(CActAnimating, m_Activity, FIELD_INTEGER),
 };
 
 IMPLEMENT_SAVERESTORE(CActAnimating, CBaseAnimating);
@@ -64,17 +64,17 @@ void CActAnimating::SetActivity(Activity act)
 class CXenPLight : public CActAnimating
 {
 public:
-	void		Spawn() override;
-	void		Precache() override;
-	void		Touch(CBaseEntity* pOther) override;
-	void		Think() override;
+	void Spawn() override;
+	void Precache() override;
+	void Touch(CBaseEntity* pOther) override;
+	void Think() override;
 
-	void		LightOn();
-	void		LightOff();
+	void LightOn();
+	void LightOff();
 
 	bool Save(CSave& save) override;
 	bool Restore(CRestore& restore) override;
-	static	TYPEDESCRIPTION m_SaveData[];
+	static TYPEDESCRIPTION m_SaveData[];
 
 private:
 	CSprite* m_pGlow;
@@ -82,9 +82,9 @@ private:
 
 LINK_ENTITY_TO_CLASS(xen_plantlight, CXenPLight);
 
-TYPEDESCRIPTION	CXenPLight::m_SaveData[] =
-{
-	DEFINE_FIELD(CXenPLight, m_pGlow, FIELD_CLASSPTR),
+TYPEDESCRIPTION CXenPLight::m_SaveData[] =
+	{
+		DEFINE_FIELD(CXenPLight, m_pGlow, FIELD_CLASSPTR),
 };
 
 IMPLEMENT_SAVERESTORE(CXenPLight, CActAnimating);
@@ -183,14 +183,14 @@ void CXenPLight::LightOff()
 class CXenHair : public CActAnimating
 {
 public:
-	void		Spawn() override;
-	void		Precache() override;
-	void		Think() override;
+	void Spawn() override;
+	void Precache() override;
+	void Think() override;
 };
 
 LINK_ENTITY_TO_CLASS(xen_hair, CXenHair);
 
-#define SF_HAIR_SYNC		0x0001
+#define SF_HAIR_SYNC 0x0001
 
 void CXenHair::Spawn()
 {
@@ -208,7 +208,7 @@ void CXenHair::Spawn()
 
 	pev->solid = SOLID_NOT;
 	pev->movetype = MOVETYPE_NONE;
-	pev->nextthink = gpGlobals->time + RANDOM_FLOAT(0.1, 0.4);	// Load balance these a bit
+	pev->nextthink = gpGlobals->time + RANDOM_FLOAT(0.1, 0.4); // Load balance these a bit
 }
 
 
@@ -228,7 +228,7 @@ void CXenHair::Precache()
 class CXenTreeTrigger : public CBaseEntity
 {
 public:
-	void		Touch(CBaseEntity* pOther) override;
+	void Touch(CBaseEntity* pOther) override;
 	static CXenTreeTrigger* TriggerCreate(edict_t* pOwner, const Vector& position);
 };
 LINK_ENTITY_TO_CLASS(xen_ttrigger, CXenTreeTrigger);
@@ -256,23 +256,27 @@ void CXenTreeTrigger::Touch(CBaseEntity* pOther)
 }
 
 
-#define TREE_AE_ATTACK		1
+#define TREE_AE_ATTACK 1
 
 class CXenTree : public CActAnimating
 {
 public:
-	void		Spawn() override;
-	void		Precache() override;
-	void		Touch(CBaseEntity* pOther) override;
-	void		Think() override;
-	bool		TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override { Attack(); return false; }
-	void		HandleAnimEvent(MonsterEvent_t* pEvent) override;
-	void		Attack();
-	int			Classify() override { return CLASS_BARNACLE; }
+	void Spawn() override;
+	void Precache() override;
+	void Touch(CBaseEntity* pOther) override;
+	void Think() override;
+	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override
+	{
+		Attack();
+		return false;
+	}
+	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
+	void Attack();
+	int Classify() override { return CLASS_BARNACLE; }
 
 	bool Save(CSave& save) override;
 	bool Restore(CRestore& restore) override;
-	static	TYPEDESCRIPTION m_SaveData[];
+	static TYPEDESCRIPTION m_SaveData[];
 
 	static const char* pAttackHitSounds[];
 	static const char* pAttackMissSounds[];
@@ -283,9 +287,9 @@ private:
 
 LINK_ENTITY_TO_CLASS(xen_tree, CXenTree);
 
-TYPEDESCRIPTION	CXenTree::m_SaveData[] =
-{
-	DEFINE_FIELD(CXenTree, m_pTrigger, FIELD_CLASSPTR),
+TYPEDESCRIPTION CXenTree::m_SaveData[] =
+	{
+		DEFINE_FIELD(CXenTree, m_pTrigger, FIELD_CLASSPTR),
 };
 
 IMPLEMENT_SAVERESTORE(CXenTree, CActAnimating);
@@ -315,16 +319,16 @@ void CXenTree::Spawn()
 }
 
 const char* CXenTree::pAttackHitSounds[] =
-{
-	"zombie/claw_strike1.wav",
-	"zombie/claw_strike2.wav",
-	"zombie/claw_strike3.wav",
+	{
+		"zombie/claw_strike1.wav",
+		"zombie/claw_strike2.wav",
+		"zombie/claw_strike3.wav",
 };
 
 const char* CXenTree::pAttackMissSounds[] =
-{
-	"zombie/claw_miss1.wav",
-	"zombie/claw_miss2.wav",
+	{
+		"zombie/claw_miss1.wav",
+		"zombie/claw_miss2.wav",
 };
 
 void CXenTree::Precache()
@@ -360,8 +364,7 @@ void CXenTree::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
 	switch (pEvent->event)
 	{
-	case TREE_AE_ATTACK:
-	{
+	case TREE_AE_ATTACK: {
 		CBaseEntity* pList[8];
 		bool sound = false;
 		int count = UTIL_EntitiesInBox(pList, 8, m_pTrigger->pev->absmin, m_pTrigger->pev->absmax, FL_MONSTER | FL_CLIENT);
@@ -388,7 +391,7 @@ void CXenTree::HandleAnimEvent(MonsterEvent_t* pEvent)
 			EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackHitSounds);
 		}
 	}
-	return;
+		return;
 	}
 
 	CActAnimating::HandleAnimEvent(pEvent);
@@ -413,7 +416,6 @@ void CXenTree::Think()
 	default:
 	case ACT_IDLE:
 		break;
-
 	}
 }
 
@@ -428,30 +430,34 @@ void CXenTree::Think()
 class CXenSpore : public CActAnimating
 {
 public:
-	void		Spawn() override;
-	void		Precache() override;
-	void		Touch(CBaseEntity* pOther) override;
-	void		Think() override;
-	bool		TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override { Attack(); return false; }
+	void Spawn() override;
+	void Precache() override;
+	void Touch(CBaseEntity* pOther) override;
+	void Think() override;
+	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override
+	{
+		Attack();
+		return false;
+	}
 	//	void		HandleAnimEvent( MonsterEvent_t *pEvent );
-	void		Attack() {}
+	void Attack() {}
 
 	static const char* pModelNames[];
 };
 
 class CXenSporeSmall : public CXenSpore
 {
-	void		Spawn() override;
+	void Spawn() override;
 };
 
 class CXenSporeMed : public CXenSpore
 {
-	void		Spawn() override;
+	void Spawn() override;
 };
 
 class CXenSporeLarge : public CXenSpore
 {
-	void		Spawn() override;
+	void Spawn() override;
 
 	static const Vector m_hullSizes[];
 };
@@ -461,7 +467,7 @@ class CXenHull : public CPointEntity
 {
 public:
 	static CXenHull* CreateHull(CBaseEntity* source, const Vector& mins, const Vector& maxs, const Vector& offset);
-	int			Classify() override { return CLASS_BARNACLE; }
+	int Classify() override { return CLASS_BARNACLE; }
 };
 
 CXenHull* CXenHull::CreateHull(CBaseEntity* source, const Vector& mins, const Vector& maxs, const Vector& offset)
@@ -504,12 +510,12 @@ void CXenSporeMed::Spawn()
 
 // I just eyeballed these -- fill in hulls for the legs
 const Vector CXenSporeLarge::m_hullSizes[] =
-{
-	Vector(90, -25, 0),
-	Vector(25, 75, 0),
-	Vector(-15, -100, 0),
-	Vector(-90, -35, 0),
-	Vector(-90, 60, 0),
+	{
+		Vector(90, -25, 0),
+		Vector(25, 75, 0),
+		Vector(-15, -100, 0),
+		Vector(-90, -35, 0),
+		Vector(-90, 60, 0),
 };
 
 void CXenSporeLarge::Spawn()
@@ -541,14 +547,14 @@ void CXenSpore::Spawn()
 	pev->frame = RANDOM_FLOAT(0, 255);
 	pev->framerate = RANDOM_FLOAT(0.7, 1.4);
 	ResetSequenceInfo();
-	pev->nextthink = gpGlobals->time + RANDOM_FLOAT(0.1, 0.4);	// Load balance these a bit
+	pev->nextthink = gpGlobals->time + RANDOM_FLOAT(0.1, 0.4); // Load balance these a bit
 }
 
 const char* CXenSpore::pModelNames[] =
-{
-	"models/fungus(small).mdl",
-	"models/fungus.mdl",
-	"models/fungus(large).mdl",
+	{
+		"models/fungus(small).mdl",
+		"models/fungus.mdl",
+		"models/fungus(large).mdl",
 };
 
 
@@ -580,5 +586,3 @@ void CXenSpore::Think()
 	}
 #endif
 }
-
-

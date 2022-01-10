@@ -24,11 +24,10 @@
 #define MAX_LOGO_FRAMES 56
 
 int grgLogoFrame[MAX_LOGO_FRAMES] =
-{
-	1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 13, 13, 13, 13, 13, 12, 11, 10, 9, 8, 14, 15,
-	16, 17, 18, 19, 20, 20, 20, 20, 20, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
-	29, 29, 29, 29, 29, 28, 27, 26, 25, 24, 30, 31
-};
+	{
+		1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 13, 13, 13, 13, 13, 12, 11, 10, 9, 8, 14, 15,
+		16, 17, 18, 19, 20, 20, 20, 20, 20, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
+		29, 29, 29, 29, 29, 28, 27, 26, 25, 24, 30, 31};
 
 
 extern bool g_iVisibleMouse;
@@ -79,13 +78,13 @@ void CHud::Think()
 
 	// think about default fov
 	if (m_iFOV == 0)
-	{  // only let players adjust up in fov,  and only if they are not overriden by something else
+	{ // only let players adjust up in fov,  and only if they are not overriden by something else
 		m_iFOV = V_max(default_fov->value, 90);
 	}
 
 	if (0 != gEngfuncs.IsSpectateOnly())
 	{
-		m_iFOV = gHUD.m_Spectator.GetFOV();	// default_fov->value;
+		m_iFOV = gHUD.m_Spectator.GetFOV(); // default_fov->value;
 	}
 }
 
@@ -94,7 +93,7 @@ void CHud::Think()
 // returns 1 if they've changed, 0 otherwise
 bool CHud::Redraw(float flTime, bool intermission)
 {
-	m_fOldTime = m_flTime;	// save time of previous redraw
+	m_fOldTime = m_flTime; // save time of previous redraw
 	m_flTime = flTime;
 	m_flTimeDelta = (double)m_flTime - m_fOldTime;
 	static float m_flShotTime = 0;
@@ -128,7 +127,7 @@ bool CHud::Redraw(float flTime, bool intermission)
 
 			// Take a screenshot if the client's got the cvar set
 			if (CVAR_GET_FLOAT("hud_takesshots") != 0)
-				m_flShotTime = flTime + 1.0;	// Take a screenshot in a second
+				m_flShotTime = flTime + 1.0; // Take a screenshot in a second
 		}
 	}
 
@@ -156,7 +155,7 @@ bool CHud::Redraw(float flTime, bool intermission)
 					pList->p->Draw(flTime);
 			}
 			else
-			{  // it's an intermission,  so only draw hud elements that are set to draw during intermissions
+			{ // it's an intermission,  so only draw hud elements that are set to draw during intermissions
 				if ((pList->p->m_iFlags & HUD_INTERMISSION) != 0)
 					pList->p->Draw(flTime);
 			}
@@ -229,7 +228,6 @@ int CHud::DrawHudNumberString(int xpos, int ypos, int iMinX, int iNumber, const 
 	char szString[32];
 	sprintf(szString, "%d", iNumber);
 	return DrawHudStringReverse(xpos, ypos, iMinX, szString, color);
-
 }
 
 // draws a string from right to left (right-aligned)
@@ -372,7 +370,6 @@ int CHud::GetNumWidth(int iNumber, int iFlags)
 		return 2;
 
 	return 3;
-
 }
 
 int CHud::GetHudNumberWidth(int number, int width, int flags)
@@ -415,10 +412,8 @@ int CHud::DrawHudNumberReverse(int x, int y, int number, int flags, const RGB24&
 			SPR_DrawAdditive(0, x, y, &GetSpriteRect(digitSpriteIndex));
 
 			remainder /= 10;
-		}
-		while (remainder > 0);
+		} while (remainder > 0);
 	}
 
 	return x;
 }
-

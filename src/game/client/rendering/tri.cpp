@@ -1,6 +1,6 @@
 //========= Copyright © 1996-2002, Valve LLC, All rights reserved. ============
 //
-// Purpose: 
+// Purpose:
 //
 // $NoKeywords: $
 //=============================================================================
@@ -36,7 +36,7 @@ void DLLEXPORT HUD_DrawNormalTriangles()
 	gHUD.m_Spectator.DrawOverview();
 }
 
-#if defined( _TFC )
+#if defined(_TFC)
 void RunEventList();
 #endif
 
@@ -51,7 +51,7 @@ void DLLEXPORT HUD_DrawTransparentTriangles()
 {
 	//	RecClDrawTransparentTriangles();
 
-#if defined( _TFC )
+#if defined(_TFC)
 	RunEventList();
 #endif
 

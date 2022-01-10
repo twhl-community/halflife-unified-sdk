@@ -16,24 +16,24 @@
 // GameRules.cpp
 //=========================================================
 
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"player.h"
-#include	"weapons.h"
-#include	"gamerules.h"
-#include	"teamplay_gamerules.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "player.h"
+#include "weapons.h"
+#include "gamerules.h"
+#include "teamplay_gamerules.h"
 #include "ctfplay_gamerules.h"
 #include "coopplay_gamerules.h"
-#include	"skill.h"
-#include	"game.h"
+#include "skill.h"
+#include "game.h"
 #include "world.h"
 #include "UserMessages.h"
 
 extern edict_t* EntSelectSpawnPoint(CBasePlayer* pPlayer);
 
 DLL_GLOBAL CGameRules* g_pGameRules = NULL;
-extern DLL_GLOBAL bool	g_fGameOver;
+extern DLL_GLOBAL bool g_fGameOver;
 
 bool g_teamplay = false;
 
@@ -88,7 +88,7 @@ bool CGameRules::CanHavePlayerItem(CBasePlayer* pPlayer, CBasePlayerItem* pWeapo
 	{
 		if (!CanHaveAmmo(pPlayer, pWeapon->pszAmmo1(), pWeapon->iMaxAmmo1()))
 		{
-			// we can't carry anymore ammo for this gun. We can only 
+			// we can't carry anymore ammo for this gun. We can only
 			// have the gun if we aren't already carrying one of this type
 			if (pPlayer->HasPlayerItem(pWeapon))
 			{
@@ -114,7 +114,7 @@ bool CGameRules::CanHavePlayerItem(CBasePlayer* pPlayer, CBasePlayerItem* pWeapo
 //=========================================================
 void CGameRules::RefreshSkillData()
 {
-	int	iSkill;
+	int iSkill;
 
 	iSkill = (int)CVAR_GET_FLOAT("skill");
 	g_iSkillLevel = iSkill;
@@ -132,11 +132,11 @@ void CGameRules::RefreshSkillData()
 
 	ALERT(at_console, "\nGAME SKILL LEVEL:%d\n", iSkill);
 
-	//Agrunt		
+	//Agrunt
 	gSkillData.agruntHealth = GetSkillCvar("sk_agrunt_health");
 	gSkillData.agruntDmgPunch = GetSkillCvar("sk_agrunt_dmg_punch");
 
-	// Apache 
+	// Apache
 	gSkillData.apacheHealth = GetSkillCvar("sk_apache_health");
 
 	// Barney
@@ -181,7 +181,7 @@ void CGameRules::RefreshSkillData()
 	gSkillData.shockroachDmgBite = GetSkillCvar("sk_shockroach_dmg_bite");
 	gSkillData.shockroachLifespan = GetSkillCvar("sk_shockroach_lifespan");
 
-	// Hgrunt 
+	// Hgrunt
 	gSkillData.hgruntHealth = GetSkillCvar("sk_hgrunt_health");
 	gSkillData.hgruntDmgKick = GetSkillCvar("sk_hgrunt_kick");
 	gSkillData.hgruntShotgunPellets = GetSkillCvar("sk_hgrunt_pellets");
@@ -307,7 +307,7 @@ void CGameRules::RefreshSkillData()
 
 	// PLAYER WEAPONS
 
-		// Crowbar whack
+	// Crowbar whack
 	gSkillData.plrDmgCrowbar = GetSkillCvar("sk_plr_crowbar");
 
 	// Glock Round
@@ -461,6 +461,3 @@ CGameRules* InstallGameRules(CBaseEntity* pWorld)
 		}
 	}
 }
-
-
-

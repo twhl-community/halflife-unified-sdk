@@ -27,10 +27,10 @@
 #include "CShockRifle.h"
 
 #ifndef CLIENT_DLL
-TYPEDESCRIPTION	CShockRifle::m_SaveData[] =
-{
-	//This isn't restored in the original
-	DEFINE_FIELD(CShockRifle, m_flRechargeTime, FIELD_TIME),
+TYPEDESCRIPTION CShockRifle::m_SaveData[] =
+	{
+		//This isn't restored in the original
+		DEFINE_FIELD(CShockRifle, m_flRechargeTime, FIELD_TIME),
 };
 
 IMPLEMENT_SAVERESTORE(CShockRifle, CShockRifle::BaseClass);
@@ -211,7 +211,7 @@ void CShockRifle::PrimaryAttack()
 
 	int flags;
 
-#if defined( CLIENT_WEAPONS )
+#if defined(CLIENT_WEAPONS)
 	flags = FEV_NOTHOST;
 #else
 	flags = 0;

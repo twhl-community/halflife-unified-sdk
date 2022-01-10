@@ -21,7 +21,7 @@
 #include "effects.h"
 #include "gamerules.h"
 
-#define	TRIPMINE_PRIMARY_VOLUME		450
+#define TRIPMINE_PRIMARY_VOLUME 450
 
 #ifndef CLIENT_DLL
 
@@ -30,10 +30,10 @@ class CTripmineGrenade : public CGrenade
 	void Spawn() override;
 	void Precache() override;
 
-	bool	Save(CSave& save) override;
-	bool	Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 
-	static	TYPEDESCRIPTION m_SaveData[];
+	static TYPEDESCRIPTION m_SaveData[];
 
 	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 
@@ -46,31 +46,31 @@ class CTripmineGrenade : public CGrenade
 	void MakeBeam();
 	void KillBeam();
 
-	float		m_flPowerUp;
-	Vector		m_vecDir;
-	Vector		m_vecEnd;
-	float		m_flBeamLength;
+	float m_flPowerUp;
+	Vector m_vecDir;
+	Vector m_vecEnd;
+	float m_flBeamLength;
 
-	EHANDLE		m_hOwner;
+	EHANDLE m_hOwner;
 	CBeam* m_pBeam;
-	Vector		m_posOwner;
-	Vector		m_angleOwner;
-	edict_t* m_pRealOwner;// tracelines don't hit PEV->OWNER, which means a player couldn't detonate his own trip mine, so we store the owner here.
+	Vector m_posOwner;
+	Vector m_angleOwner;
+	edict_t* m_pRealOwner; // tracelines don't hit PEV->OWNER, which means a player couldn't detonate his own trip mine, so we store the owner here.
 };
 
 LINK_ENTITY_TO_CLASS(monster_tripmine, CTripmineGrenade);
 
-TYPEDESCRIPTION	CTripmineGrenade::m_SaveData[] =
-{
-	DEFINE_FIELD(CTripmineGrenade, m_flPowerUp, FIELD_TIME),
-	DEFINE_FIELD(CTripmineGrenade, m_vecDir, FIELD_VECTOR),
-	DEFINE_FIELD(CTripmineGrenade, m_vecEnd, FIELD_POSITION_VECTOR),
-	DEFINE_FIELD(CTripmineGrenade, m_flBeamLength, FIELD_FLOAT),
-	DEFINE_FIELD(CTripmineGrenade, m_hOwner, FIELD_EHANDLE),
-	DEFINE_FIELD(CTripmineGrenade, m_pBeam, FIELD_CLASSPTR),
-	DEFINE_FIELD(CTripmineGrenade, m_posOwner, FIELD_POSITION_VECTOR),
-	DEFINE_FIELD(CTripmineGrenade, m_angleOwner, FIELD_VECTOR),
-	DEFINE_FIELD(CTripmineGrenade, m_pRealOwner, FIELD_EDICT),
+TYPEDESCRIPTION CTripmineGrenade::m_SaveData[] =
+	{
+		DEFINE_FIELD(CTripmineGrenade, m_flPowerUp, FIELD_TIME),
+		DEFINE_FIELD(CTripmineGrenade, m_vecDir, FIELD_VECTOR),
+		DEFINE_FIELD(CTripmineGrenade, m_vecEnd, FIELD_POSITION_VECTOR),
+		DEFINE_FIELD(CTripmineGrenade, m_flBeamLength, FIELD_FLOAT),
+		DEFINE_FIELD(CTripmineGrenade, m_hOwner, FIELD_EHANDLE),
+		DEFINE_FIELD(CTripmineGrenade, m_pBeam, FIELD_CLASSPTR),
+		DEFINE_FIELD(CTripmineGrenade, m_posOwner, FIELD_POSITION_VECTOR),
+		DEFINE_FIELD(CTripmineGrenade, m_angleOwner, FIELD_VECTOR),
+		DEFINE_FIELD(CTripmineGrenade, m_pRealOwner, FIELD_EDICT),
 };
 
 IMPLEMENT_SAVERESTORE(CTripmineGrenade, CGrenade);
@@ -118,7 +118,7 @@ void CTripmineGrenade::Spawn()
 		EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/mine_deploy.wav", 1.0, ATTN_NORM);
 		EMIT_SOUND(ENT(pev), CHAN_BODY, "weapons/mine_charge.wav", 0.2, ATTN_NORM); // chargeup
 
-		m_pRealOwner = pev->owner;// see CTripmineGrenade for why.
+		m_pRealOwner = pev->owner; // see CTripmineGrenade for why.
 	}
 
 	UTIL_MakeAimVectors(pev->angles);
@@ -259,12 +259,12 @@ void CTripmineGrenade::BeamBreakThink()
 
 	// ALERT( at_console, "%f : %f\n", tr.flFraction, m_flBeamLength );
 
-	// respawn detect. 
+	// respawn detect.
 	if (!m_pBeam)
 	{
 		MakeBeam();
 		if (tr.pHit)
-			m_hOwner = CBaseEntity::Instance(tr.pHit);	// reset owner too
+			m_hOwner = CBaseEntity::Instance(tr.pHit); // reset owner too
 	}
 
 	if (fabs(m_flBeamLength - tr.flFraction) > 0.001)
@@ -285,7 +285,7 @@ void CTripmineGrenade::BeamBreakThink()
 	{
 		// a bit of a hack, but all CGrenade code passes pev->owner along to make sure the proper player gets credit for the kill
 		// so we have to restore pev->owner from pRealOwner, because an entity's tracelines don't strike it's pev->owner which meant
-		// that a player couldn't trigger his own tripmine. Now that the mine is exploding, it's safe the restore the owner so the 
+		// that a player couldn't trigger his own tripmine. Now that the mine is exploding, it's safe the restore the owner so the
 		// CGrenade code knows who the explosive really belongs to.
 		pev->owner = m_pRealOwner;
 		pev->health = 0;
@@ -350,7 +350,7 @@ void CTripmine::Spawn()
 	// ResetSequenceInfo( );
 	pev->framerate = 0;
 
-	FallInit();// get ready to fall down
+	FallInit(); // get ready to fall down
 
 	m_iDefaultAmmo = TRIPMINE_DEFAULT_GIVE;
 
@@ -447,24 +447,23 @@ void CTripmine::PrimaryAttack()
 
 			if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
 			{
-				// no more mines! 
+				// no more mines!
 				RetireWeapon();
 				return;
 			}
-			}
+		}
 		else
 		{
 			// ALERT( at_console, "no deploy\n" );
 		}
-		}
+	}
 	else
 	{
-
 	}
 
 	m_flNextPrimaryAttack = GetNextAttackDelay(0.3);
 	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10, 15);
-	}
+}
 
 void CTripmine::WeaponIdle()
 {
@@ -504,7 +503,3 @@ void CTripmine::WeaponIdle()
 
 	SendWeaponAnim(iAnim);
 }
-
-
-
-

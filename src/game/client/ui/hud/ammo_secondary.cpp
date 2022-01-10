@@ -36,7 +36,7 @@ bool CHudAmmoSecondary::Init()
 	m_HUD_ammoicon = 0;
 
 	for (int i = 0; i < MAX_SEC_AMMO_VALUES; i++)
-		m_iAmmoAmounts[i] = -1;  // -1 means don't draw this value
+		m_iAmmoAmounts[i] = -1; // -1 means don't draw this value
 
 	Reset();
 
@@ -63,13 +63,13 @@ bool CHudAmmoSecondary::Draw(float flTime)
 
 	const int a = (int)V_max(MIN_ALPHA, m_fFade);
 	if (m_fFade > 0)
-		m_fFade -= (gHUD.m_flTimeDelta * 20);  // slowly lower alpha to fade out icons
+		m_fFade -= (gHUD.m_flTimeDelta * 20); // slowly lower alpha to fade out icons
 
 	const auto color = gHUD.m_HudColor.Scale(a);
 
 	AmmoWidth = gHUD.GetSpriteRect(gHUD.m_HUD_number_0).right - gHUD.GetSpriteRect(gHUD.m_HUD_number_0).left;
 
-	y = ScreenHeight - (gHUD.m_iFontHeight * 4);  // this is one font height higher than the weapon ammo values
+	y = ScreenHeight - (gHUD.m_iFontHeight * 4); // this is one font height higher than the weapon ammo values
 	x = ScreenWidth - AmmoWidth;
 
 	if (0 != m_HUD_ammoicon)
@@ -82,7 +82,7 @@ bool CHudAmmoSecondary::Draw(float flTime)
 		SPR_DrawAdditive(0, x, y, &gHUD.GetSpriteRect(m_HUD_ammoicon));
 	}
 	else
-	{  // move the cursor by the '0' char instead, since we don't have an icon to work with
+	{ // move the cursor by the '0' char instead, since we don't have an icon to work with
 		x -= AmmoWidth;
 		y -= (gHUD.GetSpriteRect(gHUD.m_HUD_number_0).top - gHUD.GetSpriteRect(gHUD.m_HUD_number_0).bottom);
 	}
@@ -146,7 +146,7 @@ bool CHudAmmoSecondary::MsgFunc_SecAmmoVal(const char* pszName, int iSize, void*
 	}
 
 	if (count == 0)
-	{	// the ammo fields are all empty, so turn off this hud area
+	{ // the ammo fields are all empty, so turn off this hud area
 		m_iFlags &= ~HUD_ACTIVE;
 		return true;
 	}
@@ -156,5 +156,3 @@ bool CHudAmmoSecondary::MsgFunc_SecAmmoVal(const char* pszName, int iSize, void*
 
 	return true;
 }
-
-

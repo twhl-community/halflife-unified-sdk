@@ -19,5 +19,5 @@ typedef enum netsrc_s
 {
 	NS_CLIENT,
 	NS_SERVER,
-	NS_MULTICAST	// xxxMO
+	NS_MULTICAST // xxxMO
 } netsrc_t;

@@ -15,8 +15,14 @@
 
 #pragma once
 
-#define		NUM_SCIENTIST_HEADS		4 // four heads available for scientist model
-enum { HEAD_GLASSES = 0, HEAD_EINSTEIN = 1, HEAD_LUTHER = 2, HEAD_SLICK = 3 };
+#define NUM_SCIENTIST_HEADS 4 // four heads available for scientist model
+enum
+{
+	HEAD_GLASSES = 0,
+	HEAD_EINSTEIN = 1,
+	HEAD_LUTHER = 2,
+	HEAD_SLICK = 3
+};
 
 namespace ScientistBodygroup
 {
@@ -54,9 +60,9 @@ const int SF_SCIENTIST_NO_USE = 1 << 8;
 //=========================================================
 // Monster's Anim Events Go Here
 //=========================================================
-#define		SCIENTIST_AE_HEAL		( 1 )
-#define		SCIENTIST_AE_NEEDLEON	( 2 )
-#define		SCIENTIST_AE_NEEDLEOFF	( 3 )
+#define SCIENTIST_AE_HEAL (1)
+#define SCIENTIST_AE_NEEDLEON (2)
+#define SCIENTIST_AE_NEEDLEOFF (3)
 
 //=======================================================
 // Scientist
@@ -69,11 +75,11 @@ public:
 	void Precache() override;
 
 	void SetYawSpeed() override;
-	int  Classify() override;
+	int Classify() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 	void RunTask(Task_t* pTask) override;
 	void StartTask(Task_t* pTask) override;
-	int	ObjectCaps() override { return CTalkMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
+	int ObjectCaps() override { return CTalkMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
 	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 	int FriendNumber(int arrayNumber) override;
 	void SetActivity(Activity newActivity) override;
@@ -81,10 +87,10 @@ public:
 	int ISoundMask() override;
 	void DeclineFollowing() override;
 
-	float	CoverRadius() override { return 1200; }		// Need more room for cover because scientists want to get far away!
-	bool	DisregardEnemy(CBaseEntity* pEnemy) { return !pEnemy->IsAlive() || (gpGlobals->time - m_fearTime) > 15; }
+	float CoverRadius() override { return 1200; } // Need more room for cover because scientists want to get far away!
+	bool DisregardEnemy(CBaseEntity* pEnemy) { return !pEnemy->IsAlive() || (gpGlobals->time - m_fearTime) > 15; }
 
-	bool	CanHeal();
+	bool CanHeal();
 	virtual void Heal();
 	virtual void Scream();
 
@@ -98,11 +104,11 @@ public:
 
 	void TalkInit() override;
 
-	void			Killed(entvars_t* pevAttacker, int iGib) override;
+	void Killed(entvars_t* pevAttacker, int iGib) override;
 
-	bool	Save(CSave& save) override;
-	bool	Restore(CRestore& restore) override;
-	static	TYPEDESCRIPTION m_SaveData[];
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
+	static TYPEDESCRIPTION m_SaveData[];
 
 	CUSTOM_SCHEDULES;
 
@@ -132,21 +138,21 @@ class CSittingScientist : public CScientist // kdb: changed from public CBaseMon
 {
 public:
 	void Spawn() override;
-	void  Precache() override;
+	void Precache() override;
 
 	void EXPORT SittingThink();
-	int	Classify() override;
-	bool	Save(CSave& save) override;
-	bool	Restore(CRestore& restore) override;
-	static	TYPEDESCRIPTION m_SaveData[];
+	int Classify() override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
+	static TYPEDESCRIPTION m_SaveData[];
 
 	void SetAnswerQuestion(CTalkMonster* pSpeaker) override;
 	int FriendNumber(int arrayNumber) override;
 
 	bool FIdleSpeak();
-	int		m_baseSequence;
-	int		m_headTurn;
-	float	m_flResponseDelay;
+	int m_baseSequence;
+	int m_headTurn;
+	float m_flResponseDelay;
 
 protected:
 	/**

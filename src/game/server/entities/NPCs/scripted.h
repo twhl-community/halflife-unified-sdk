@@ -17,14 +17,14 @@
 
 #include "scriptevent.h"
 
-#define SF_SCRIPT_WAITTILLSEEN		1
-#define SF_SCRIPT_EXITAGITATED		2
-#define SF_SCRIPT_REPEATABLE		4
-#define SF_SCRIPT_LEAVECORPSE		8
+#define SF_SCRIPT_WAITTILLSEEN 1
+#define SF_SCRIPT_EXITAGITATED 2
+#define SF_SCRIPT_REPEATABLE 4
+#define SF_SCRIPT_LEAVECORPSE 8
 //#define SF_SCRIPT_INTERPOLATE		16 // don't use, old bug
-#define SF_SCRIPT_NOINTERRUPT		32
-#define SF_SCRIPT_OVERRIDESTATE		64
-#define SF_SCRIPT_NOSCRIPTMOVEMENT	128
+#define SF_SCRIPT_NOINTERRUPT 32
+#define SF_SCRIPT_OVERRIDESTATE 64
+#define SF_SCRIPT_NOSCRIPTMOVEMENT 128
 
 /**
 *	@brief Don't reset the entity's state after completing the script
@@ -32,7 +32,7 @@
 */
 constexpr auto SF_SCRIPT_NORESETENTITY = 256;
 
-#define SCRIPT_BREAK_CONDITIONS		(bits_COND_LIGHT_DAMAGE|bits_COND_HEAVY_DAMAGE)
+#define SCRIPT_BREAK_CONDITIONS (bits_COND_LIGHT_DAMAGE | bits_COND_HEAVY_DAMAGE)
 
 enum SS_INTERRUPT
 {
@@ -44,8 +44,8 @@ enum SS_INTERRUPT
 // when a monster finishes an AI scripted sequence, we can choose
 // a schedule to place them in. These defines are the aliases to
 // resolve worldcraft input to real schedules (sjb)
-#define SCRIPT_FINISHSCHED_DEFAULT	0
-#define SCRIPT_FINISHSCHED_AMBUSH	1
+#define SCRIPT_FINISHSCHED_DEFAULT 0
+#define SCRIPT_FINISHSCHED_AMBUSH 1
 
 class CCineMonster : public CBaseMonster
 {
@@ -55,13 +55,13 @@ public:
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 	void Blocked(CBaseEntity* pOther) override;
 	void Touch(CBaseEntity* pOther) override;
-	int	 ObjectCaps() override { return (CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
+	int ObjectCaps() override { return (CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
 	void Activate() override;
 
-	bool	Save(CSave& save) override;
-	bool	Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 
-	static	TYPEDESCRIPTION m_SaveData[];
+	static TYPEDESCRIPTION m_SaveData[];
 
 	// void EXPORT CineSpawnThink();
 	void EXPORT CineThink();
@@ -77,23 +77,23 @@ public:
 	virtual bool FCanOverrideState();
 	void SequenceDone(CBaseMonster* pMonster);
 	virtual void FixScriptMonsterSchedule(CBaseMonster* pMonster);
-	bool	CanInterrupt();
-	void	AllowInterrupt(bool fAllow);
-	int		IgnoreConditions() override;
+	bool CanInterrupt();
+	void AllowInterrupt(bool fAllow);
+	int IgnoreConditions() override;
 
-	int	m_iszIdle;		// string index for idle animation
-	int	m_iszPlay;		// string index for scripted animation
-	int m_iszEntity;	// entity that is wanted for this script
+	int m_iszIdle;	 // string index for idle animation
+	int m_iszPlay;	 // string index for scripted animation
+	int m_iszEntity; // entity that is wanted for this script
 	int m_fMoveTo;
 	int m_iFinishSchedule;
-	float m_flRadius;		// range to search
-	float m_flRepeat;	// repeat rate
+	float m_flRadius; // range to search
+	float m_flRepeat; // repeat rate
 
 	int m_iDelay;
 	float m_startTime;
 
-	int	m_saved_movetype;
-	int	m_saved_solid;
+	int m_saved_movetype;
+	int m_saved_solid;
 	int m_saved_effects;
 	//	Vector m_vecOrigOrigin;
 	bool m_interruptable;

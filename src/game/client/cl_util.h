@@ -25,19 +25,21 @@
 #include "utils/shared_utils.h"
 
 // Macros to hook function calls into the HUD object
-#define HOOK_MESSAGE(x) gEngfuncs.pfnHookUserMsg(#x, __MsgFunc_##x );
+#define HOOK_MESSAGE(x) gEngfuncs.pfnHookUserMsg(#x, __MsgFunc_##x);
 
-#define DECLARE_MESSAGE(y, x) int __MsgFunc_##x(const char *pszName, int iSize, void *pbuf) \
-							{ \
-							return gHUD.y.MsgFunc_##x(pszName, iSize, pbuf ); \
-							}
+#define DECLARE_MESSAGE(y, x)                                     \
+	int __MsgFunc_##x(const char* pszName, int iSize, void* pbuf) \
+	{                                                             \
+		return gHUD.y.MsgFunc_##x(pszName, iSize, pbuf);          \
+	}
 
 
-#define HOOK_COMMAND(x, y) gEngfuncs.pfnAddCommand( x, __CmdFunc_##y );
-#define DECLARE_COMMAND(y, x) void __CmdFunc_##x() \
-							{ \
-								gHUD.y.UserCmd_##x( ); \
-							}
+#define HOOK_COMMAND(x, y) gEngfuncs.pfnAddCommand(x, __CmdFunc_##y);
+#define DECLARE_COMMAND(y, x) \
+	void __CmdFunc_##x()      \
+	{                         \
+		gHUD.y.UserCmd_##x(); \
+	}
 
 inline float CVAR_GET_FLOAT(const char* x) { return gEngfuncs.pfnGetCvarFloat((char*)x); }
 inline const char* CVAR_GET_STRING(const char* x) { return gEngfuncs.pfnGetCvarString((char*)x); }
@@ -78,11 +80,11 @@ inline void FillRGBA(int x, int y, int width, int height, const RGB24& color, in
 #define BASE_XRES 640.f
 
 // use this to project world coordinates to screen coordinates
-#define XPROJECT(x)	( (1.0f+(x))*ScreenWidth*0.5f )
-#define YPROJECT(y) ( (1.0f-(y))*ScreenHeight*0.5f )
+#define XPROJECT(x) ((1.0f + (x)) * ScreenWidth * 0.5f)
+#define YPROJECT(y) ((1.0f - (y)) * ScreenHeight * 0.5f)
 
-#define XRES(x)					(x  * ((float)ScreenWidth / 640))
-#define YRES(y)					(y  * ((float)ScreenHeight / 480))
+#define XRES(x) (x * ((float)ScreenWidth / 640))
+#define YRES(y) (y * ((float)ScreenHeight / 480))
 
 #define GetScreenInfo (*gEngfuncs.pfnGetScreenInfo)
 #define ServerCmd (*gEngfuncs.pfnServerCmd)
@@ -94,8 +96,8 @@ inline void FillRGBA(int x, int y, int width, int height, const RGB24& color, in
 inline int SPR_Height(HSPRITE x, int f) { return gEngfuncs.pfnSPR_Height(x, f); }
 inline int SPR_Width(HSPRITE x, int f) { return gEngfuncs.pfnSPR_Width(x, f); }
 
-inline 	client_textmessage_t* TextMessageGet(const char* pName) { return gEngfuncs.pfnTextMessageGet(pName); }
-inline 	int						TextMessageDrawChar(int x, int y, int number, int r, int g, int b)
+inline client_textmessage_t* TextMessageGet(const char* pName) { return gEngfuncs.pfnTextMessageGet(pName); }
+inline int TextMessageDrawChar(int x, int y, int number, int r, int g, int b)
 {
 	return gEngfuncs.pfnDrawCharacter(x, y, number, r, g, b);
 }
@@ -172,8 +174,8 @@ float VectorNormalize(float* v);
 void VectorInverse(float* v);
 
 // disable 'possible loss of data converting float to int' warning message
-#pragma warning( disable: 4244 )
+#pragma warning(disable : 4244)
 // disable 'truncation from 'const double' to 'float' warning message
-#pragma warning( disable: 4305 )
+#pragma warning(disable : 4305)
 
 HSPRITE LoadSprite(const char* pszName);

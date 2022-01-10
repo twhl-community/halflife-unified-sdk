@@ -16,16 +16,16 @@
 // human scientist (passive lab worker)
 //=========================================================
 
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"monsters.h"
-#include	"talkmonster.h"
-#include	"schedule.h"
-#include	"defaultai.h"
-#include	"scripted.h"
-#include	"animation.h"
-#include	"soundent.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
+#include "talkmonster.h"
+#include "schedule.h"
+#include "defaultai.h"
+#include "scripted.h"
+#include "animation.h"
+#include "soundent.h"
 #include "scientist.h"
 
 //=======================================================
@@ -168,10 +168,20 @@ void CRosenberg::PainSound()
 
 	switch (RANDOM_LONG(0, 4))
 	{
-	case 0: EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "rosenberg/ro_pain1.wav", 1, ATTN_NORM, 0, 100); break;
-	case 1: EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "rosenberg/ro_pain2.wav", 1, ATTN_NORM, 0, 100); break;
-	case 2: EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "rosenberg/ro_pain3.wav", 1, ATTN_NORM, 0, 100); break;
-	case 3: EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "rosenberg/ro_pain4.wav", 1, ATTN_NORM, 0, 100); break;
-	case 4: EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "rosenberg/ro_pain5.wav", 1, ATTN_NORM, 0, 100); break;
+	case 0:
+		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "rosenberg/ro_pain1.wav", 1, ATTN_NORM, 0, 100);
+		break;
+	case 1:
+		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "rosenberg/ro_pain2.wav", 1, ATTN_NORM, 0, 100);
+		break;
+	case 2:
+		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "rosenberg/ro_pain3.wav", 1, ATTN_NORM, 0, 100);
+		break;
+	case 3:
+		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "rosenberg/ro_pain4.wav", 1, ATTN_NORM, 0, 100);
+		break;
+	case 4:
+		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "rosenberg/ro_pain5.wav", 1, ATTN_NORM, 0, 100);
+		break;
 	}
 }

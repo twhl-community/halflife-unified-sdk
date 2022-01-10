@@ -38,22 +38,22 @@ extern void PlayerCustomization(edict_t* pEntity, customization_t* pCust);
 extern void Sys_Error(const char* error_string);
 
 extern void SetupVisibility(edict_t* pViewEntity, edict_t* pClient, unsigned char** pvs, unsigned char** pas);
-extern void	UpdateClientData(const struct edict_s* ent, int sendweapons, struct clientdata_s* cd);
+extern void UpdateClientData(const struct edict_s* ent, int sendweapons, struct clientdata_s* cd);
 extern int AddToFullPack(struct entity_state_s* state, int e, edict_t* ent, edict_t* host, int hostflags, int player, unsigned char* pSet);
 extern void CreateBaseline(int player, int eindex, struct entity_state_s* baseline, struct edict_s* entity, int playermodelindex, Vector* player_mins, Vector* player_maxs);
 extern void RegisterEncoders();
 
 extern int GetWeaponData(struct edict_s* player, struct weapon_data_s* info);
 
-extern void	CmdStart(const edict_t* player, const struct usercmd_s* cmd, unsigned int random_seed);
-extern void	CmdEnd(const edict_t* player);
+extern void CmdStart(const edict_t* player, const struct usercmd_s* cmd, unsigned int random_seed);
+extern void CmdEnd(const edict_t* player);
 
-extern int	ConnectionlessPacket(const struct netadr_s* net_from, const char* args, char* response_buffer, int* response_buffer_size);
+extern int ConnectionlessPacket(const struct netadr_s* net_from, const char* args, char* response_buffer, int* response_buffer_size);
 
 extern int GetHullBounds(int hullnumber, float* mins, float* maxs);
 
-extern void	CreateInstancedBaselines();
+extern void CreateInstancedBaselines();
 
-extern int	InconsistentFile(const edict_t* player, const char* filename, char* disconnect_message);
+extern int InconsistentFile(const edict_t* player, const char* filename, char* disconnect_message);
 
 extern int AllowLagCompensation();

@@ -126,7 +126,6 @@ void COFNuclearBombTimer::NuclearBombTimerThink()
 	{
 		EMIT_SOUND(edict(), CHAN_BODY, "common/nuke_ticking.wav", 0.75, ATTN_IDLE);
 		bBombSoundPlaying = true;
-
 	}
 
 	pev->nextthink = gpGlobals->time + 0.1;
@@ -177,11 +176,11 @@ public:
 	int m_iPushCount;
 };
 
-TYPEDESCRIPTION	COFNuclearBomb::m_SaveData[] =
-{
-	DEFINE_FIELD(COFNuclearBomb, m_fOn, FIELD_BOOLEAN),
-	DEFINE_FIELD(COFNuclearBomb, m_flLastPush, FIELD_TIME),
-	DEFINE_FIELD(COFNuclearBomb, m_iPushCount, FIELD_INTEGER),
+TYPEDESCRIPTION COFNuclearBomb::m_SaveData[] =
+	{
+		DEFINE_FIELD(COFNuclearBomb, m_fOn, FIELD_BOOLEAN),
+		DEFINE_FIELD(COFNuclearBomb, m_flLastPush, FIELD_TIME),
+		DEFINE_FIELD(COFNuclearBomb, m_iPushCount, FIELD_INTEGER),
 };
 
 IMPLEMENT_SAVERESTORE(COFNuclearBomb, CBaseToggle);
@@ -262,9 +261,7 @@ void COFNuclearBomb::Spawn()
 
 void COFNuclearBomb::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
-	if ((m_flWait != -1.0 || m_iPushCount <= 0)
-		&& m_flWait <= gpGlobals->time - m_flLastPush
-		&& ShouldToggle(useType, m_fOn))
+	if ((m_flWait != -1.0 || m_iPushCount <= 0) && m_flWait <= gpGlobals->time - m_flLastPush && ShouldToggle(useType, m_fOn))
 	{
 		if (m_fOn)
 		{

@@ -32,15 +32,13 @@ public:
 
 	std::tuple<std::string, std::string> GetSchema() const override final
 	{
-		return
-		{
+		return {
 			fmt::format(R"(
 "Message": {{
 	"type": "string"
 }}
 )"),
-			{"\"Message\""}
-		};
+			{"\"Message\""}};
 	}
 
 	bool TryParse(GameConfigContext& context) const override final

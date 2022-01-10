@@ -16,10 +16,10 @@
 // Zombie Soldier
 //=========================================================
 
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"monsters.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
 #include "zombie.h"
 
 class CZombieSoldier : public CZombie
@@ -49,11 +49,11 @@ class CDeadZombieSoldier : public CBaseMonster
 {
 public:
 	void Spawn() override;
-	int	Classify() override { return	CLASS_ALIEN_MONSTER; }
+	int Classify() override { return CLASS_ALIEN_MONSTER; }
 
 	bool KeyValue(KeyValueData* pkvd) override;
 
-	int	m_iPose;// which sequence to display	-- temporary, don't need to save
+	int m_iPose; // which sequence to display	-- temporary, don't need to save
 	static const char* m_szPoses[2];
 };
 

@@ -46,7 +46,7 @@ void CHgun::Spawn()
 	m_iDefaultAmmo = HIVEHAND_DEFAULT_GIVE;
 	m_iFirePhase = 0;
 
-	FallInit();// get ready to fall down.
+	FallInit(); // get ready to fall down.
 }
 
 
@@ -69,7 +69,7 @@ bool CHgun::AddToPlayer(CBasePlayer* pPlayer)
 #ifndef CLIENT_DLL
 		if (g_pGameRules->IsMultiplayer())
 		{
-			// in multiplayer, all hivehands come full. 
+			// in multiplayer, all hivehands come full.
 			pPlayer->m_rgAmmo[PrimaryAmmoIndex()] = HORNET_MAX_CARRY;
 		}
 #endif
@@ -143,7 +143,7 @@ void CHgun::PrimaryAttack()
 	m_pPlayer->m_iWeaponFlash = DIM_GUN_FLASH;
 
 	int flags;
-#if defined( CLIENT_WEAPONS )
+#if defined(CLIENT_WEAPONS)
 	flags = FEV_NOTHOST;
 #else
 	flags = 0;
@@ -230,7 +230,7 @@ void CHgun::SecondaryAttack()
 #endif
 
 	int flags;
-#if defined( CLIENT_WEAPONS )
+#if defined(CLIENT_WEAPONS)
 	flags = FEV_NOTHOST;
 #else
 	flags = 0;

@@ -13,16 +13,16 @@
 *
 ****/
 
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"monsters.h"
-#include	"talkmonster.h"
-#include	"schedule.h"
-#include	"defaultai.h"
-#include	"scripted.h"
-#include	"weapons.h"
-#include	"soundent.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
+#include "talkmonster.h"
+#include "schedule.h"
+#include "defaultai.h"
+#include "scripted.h"
+#include "weapons.h"
+#include "soundent.h"
 #include "blackmesa/barney.h"
 
 /**
@@ -150,9 +150,9 @@ void CRecruit::TalkInit()
 	m_szGrp[TLK_PLHURT2] = "!RC_CUREB";
 	m_szGrp[TLK_PLHURT3] = "!RC_CUREC";
 
-	m_szGrp[TLK_PHELLO] = NULL;	//"BA_PHELLO";		// UNDONE
-	m_szGrp[TLK_PIDLE] = NULL;	//"BA_PIDLE";			// UNDONE
-	m_szGrp[TLK_PQUESTION] = "RC_PQUEST";		// UNDONE
+	m_szGrp[TLK_PHELLO] = NULL;			  //"BA_PHELLO";		// UNDONE
+	m_szGrp[TLK_PIDLE] = NULL;			  //"BA_PIDLE";			// UNDONE
+	m_szGrp[TLK_PQUESTION] = "RC_PQUEST"; // UNDONE
 
 	m_szGrp[TLK_SMELL] = "RC_SMELL";
 

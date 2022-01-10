@@ -1,6 +1,6 @@
 //========= Copyright © 1996-2002, Valve LLC, All rights reserved. ============
 //
-// Purpose: 
+// Purpose:
 //
 // $NoKeywords: $
 //=============================================================================
@@ -32,8 +32,8 @@ extern cl_enginefunc_t gEngfuncs;
 #define MAX_ANGLE_DIFF 10.0
 #define PITCH_MAX 90.0
 #define PITCH_MIN 0
-#define YAW_MAX  135.0
-#define YAW_MIN	 -135.0
+#define YAW_MAX 135.0
+#define YAW_MIN -135.0
 
 enum ECAM_Command
 {
@@ -67,9 +67,9 @@ bool cam_thirdperson;
 bool cam_mousemove; //true if we are moving the cam with the mouse, False if not
 bool iMouseInUse = false;
 bool cam_distancemove;
-extern int mouse_x, mouse_y;  //used to determine what the current x and y values are
+extern int mouse_x, mouse_y;		  //used to determine what the current x and y values are
 int cam_old_mouse_x, cam_old_mouse_y; //holds the last ticks mouse movement
-Point		cam_mouse;
+Point cam_mouse;
 //-------------------------------------------------- Local Variables
 
 static kbutton_t cam_pitchup, cam_pitchdown, cam_yawleft, cam_yawright;
@@ -137,14 +137,14 @@ float MoveToward(float cur, float goal, float maxspeed)
 
 typedef struct
 {
-	Vector		boxmins, boxmaxs;// enclose the test object along entire move
-	float* mins, * maxs;	// size of the moving object
-	Vector		mins2, maxs2;	// size when clipping against mosnters
-	float* start, * end;
-	trace_t		trace;
-	int			type;
+	Vector boxmins, boxmaxs; // enclose the test object along entire move
+	float *mins, *maxs;		 // size of the moving object
+	Vector mins2, maxs2;	 // size when clipping against mosnters
+	float *start, *end;
+	trace_t trace;
+	int type;
 	edict_t* passedict;
-	qboolean	monsterclip;
+	qboolean monsterclip;
 } moveclip_t;
 
 extern trace_t SV_ClipMoveToEntity(edict_t* ent, Vector start, Vector mins, Vector maxs, Vector end);
@@ -155,7 +155,7 @@ void DLLEXPORT CAM_Think()
 
 	Vector origin;
 	Vector ext, pnt, camForward, camRight, camUp;
-	moveclip_t	clip;
+	moveclip_t clip;
 	float dist;
 	Vector camAngles;
 	float flSensitivity;
@@ -202,11 +202,11 @@ void DLLEXPORT CAM_Think()
 		SDL_GetCursorPos(&cam_mouse);
 		//check for X delta values and adjust accordingly
 		//eventually adjust YAW based on amount of movement
-	  //don't do any movement of the cam using YAW/PITCH if we are zooming in/out the camera	
+		//don't do any movement of the cam using YAW/PITCH if we are zooming in/out the camera
 		if (!cam_distancemove)
 		{
 
-			//keep the camera within certain limits around the player (ie avoid certain bad viewing angles)  
+			//keep the camera within certain limits around the player (ie avoid certain bad viewing angles)
 			if (cam_mouse.x > gEngfuncs.GetWindowCenterX())
 			{
 				//if ((camAngles[YAW]>=225.0)||(camAngles[YAW]<135.0))
@@ -226,12 +226,10 @@ void DLLEXPORT CAM_Think()
 				if (camAngles[YAW] > c_minyaw->value)
 				{
 					camAngles[YAW] -= (CAM_ANGLE_MOVE) * ((gEngfuncs.GetWindowCenterX() - cam_mouse.x) / 2);
-
 				}
 				if (camAngles[YAW] < c_minyaw->value)
 				{
 					camAngles[YAW] = c_minyaw->value;
-
 				}
 			}
 
@@ -299,7 +297,6 @@ void DLLEXPORT CAM_Think()
 			camAngles[YAW] = 0;
 			dist = CAM_MIN_DIST;
 		}
-
 	}
 	else if (0 != CL_KeyState(&cam_out))
 		dist += CAM_DIST_DELTA;
@@ -412,8 +409,8 @@ void DLLEXPORT CAM_Think()
 	cam_ofs[2] = dist;
 }
 
-extern void KeyDown(kbutton_t* b);	// HACK
-extern void KeyUp(kbutton_t* b);	// HACK
+extern void KeyDown(kbutton_t* b); // HACK
+extern void KeyUp(kbutton_t* b);   // HACK
 
 void CAM_PitchUpDown() { KeyDown(&cam_pitchup); }
 void CAM_PitchUpUp() { KeyUp(&cam_pitchup); }
@@ -432,7 +429,7 @@ void CAM_ToThirdPerson()
 {
 	Vector viewangles;
 
-#if !defined( _DEBUG )
+#if !defined(_DEBUG)
 	if (gEngfuncs.GetMaxClients() > 1)
 	{
 		// no thirdperson in multiplayer.
@@ -488,12 +485,12 @@ void CAM_Init()
 	gEngfuncs.pfnAddCommand("-camdistance", CAM_EndDistance);
 	gEngfuncs.pfnAddCommand("snapto", CAM_ToggleSnapto);
 
-	cam_command = gEngfuncs.pfnRegisterVariable("cam_command", "0", 0);	 // tells camera to go to thirdperson
-	cam_snapto = gEngfuncs.pfnRegisterVariable("cam_snapto", "0", 0);	 // snap to thirdperson view
-	cam_idealyaw = gEngfuncs.pfnRegisterVariable("cam_idealyaw", "90", 0);	 // thirdperson yaw
-	cam_idealpitch = gEngfuncs.pfnRegisterVariable("cam_idealpitch", "0", 0);	 // thirperson pitch
-	cam_idealdist = gEngfuncs.pfnRegisterVariable("cam_idealdist", "64", 0);	 // thirdperson distance
-	cam_contain = gEngfuncs.pfnRegisterVariable("cam_contain", "0", 0);	// contain camera to world
+	cam_command = gEngfuncs.pfnRegisterVariable("cam_command", "0", 0);		  // tells camera to go to thirdperson
+	cam_snapto = gEngfuncs.pfnRegisterVariable("cam_snapto", "0", 0);		  // snap to thirdperson view
+	cam_idealyaw = gEngfuncs.pfnRegisterVariable("cam_idealyaw", "90", 0);	  // thirdperson yaw
+	cam_idealpitch = gEngfuncs.pfnRegisterVariable("cam_idealpitch", "0", 0); // thirperson pitch
+	cam_idealdist = gEngfuncs.pfnRegisterVariable("cam_idealdist", "64", 0);  // thirdperson distance
+	cam_contain = gEngfuncs.pfnRegisterVariable("cam_contain", "0", 0);		  // contain camera to world
 
 	c_maxpitch = gEngfuncs.pfnRegisterVariable("c_maxpitch", "90.0", 0);
 	c_minpitch = gEngfuncs.pfnRegisterVariable("c_minpitch", "0.0", 0);
@@ -577,7 +574,7 @@ void CAM_EndMouseMove()
 
 
 //----------------------------------------------------------
-//routines to start the process of moving the cam in or out 
+//routines to start the process of moving the cam in or out
 //using the mouse
 //----------------------------------------------------------
 void CAM_StartDistance()

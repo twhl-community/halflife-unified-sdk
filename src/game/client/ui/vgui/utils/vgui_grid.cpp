@@ -1,6 +1,6 @@
 //========= Copyright © 1996-2002, Valve LLC, All rights reserved. ============
 //
-// Purpose: 
+// Purpose:
 //
 // $NoKeywords: $
 //=============================================================================
@@ -13,10 +13,10 @@ using namespace vgui;
 
 
 #define AssertCheck(expr, msg) \
-	if(!(expr))\
-	{\
-		assert(!msg);\
-		return 0;\
+	if (!(expr))               \
+	{                          \
+		assert(!msg);          \
+		return 0;              \
 	}
 
 
@@ -224,7 +224,7 @@ void CGrid::AutoSetRowHeights()
 bool CGrid::GetEntryBox(
 	int col, int row, int& x, int& y, int& w, int& h)
 {
-	AssertCheck(col >= 0 && col < m_xCols&& row >= 0 && row < m_yRows, "CGrid::GetEntryBox: invalid location specified");
+	AssertCheck(col >= 0 && col < m_xCols && row >= 0 && row < m_yRows, "CGrid::GetEntryBox: invalid location specified");
 
 	x = m_ColOffsets[col];
 	w = m_Widths[col];
@@ -340,7 +340,7 @@ void CGrid::Clear()
 
 CGrid::CGridEntry* CGrid::GridEntry(int x, int y)
 {
-	AssertCheck(x >= 0 && x < m_xCols&& y >= 0 && y < m_yRows, "CGrid::GridEntry: invalid location specified");
+	AssertCheck(x >= 0 && x < m_xCols && y >= 0 && y < m_yRows, "CGrid::GridEntry: invalid location specified");
 	return &m_GridEntries[y * m_xCols + x];
 }
 
@@ -374,7 +374,8 @@ void CGrid::CalcRowOffsets(int iStart)
 
 bool CGrid::getCellAtPoint(int worldX, int worldY, int& row, int& col)
 {
-	row = -1; col = -1;
+	row = -1;
+	col = -1;
 	for (int x = 0; x < m_xCols; x++)
 	{
 		for (int y = 0; y < m_yRows; y++)
@@ -394,5 +395,3 @@ bool CGrid::getCellAtPoint(int worldX, int worldY, int& row, int& col)
 
 	return false;
 }
-
-

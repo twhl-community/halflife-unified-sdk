@@ -16,17 +16,17 @@
 // Bloater
 //=========================================================
 
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"monsters.h"
-#include	"schedule.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
+#include "schedule.h"
 
 
 //=========================================================
 // Monster's Anim Events Go Here
 //=========================================================
-#define	BLOATER_AE_ATTACK_MELEE1		0x01
+#define BLOATER_AE_ATTACK_MELEE1 0x01
 
 
 class CBloater : public CBaseMonster
@@ -35,7 +35,7 @@ public:
 	void Spawn() override;
 	void Precache() override;
 	void SetYawSpeed() override;
-	int  Classify() override;
+	int Classify() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 
 	void PainSound() override;
@@ -52,12 +52,12 @@ public:
 LINK_ENTITY_TO_CLASS(monster_bloater, CBloater);
 
 //=========================================================
-// Classify - indicates this monster's place in the 
+// Classify - indicates this monster's place in the
 // relationship table.
 //=========================================================
-int	CBloater::Classify()
+int CBloater::Classify()
 {
-	return	CLASS_ALIEN_MONSTER;
+	return CLASS_ALIEN_MONSTER;
 }
 
 //=========================================================
@@ -170,8 +170,7 @@ void CBloater::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
 	switch (pEvent->event)
 	{
-	case BLOATER_AE_ATTACK_MELEE1:
-	{
+	case BLOATER_AE_ATTACK_MELEE1: {
 		// do stuff for this event.
 		AttackSnd();
 	}
@@ -198,8 +197,8 @@ void CBloater::Spawn()
 	pev->spawnflags |= FL_FLY;
 	m_bloodColor = BLOOD_COLOR_GREEN;
 	pev->health = 40;
-	pev->view_ofs = VEC_VIEW;// position of the eyes relative to monster's origin.
-	m_flFieldOfView = 0.5;// indicates the width of this monster's forward view cone ( as a dotproduct result )
+	pev->view_ofs = VEC_VIEW; // position of the eyes relative to monster's origin.
+	m_flFieldOfView = 0.5;	  // indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
 
 	MonsterInit();
@@ -216,4 +215,3 @@ void CBloater::Precache()
 //=========================================================
 // AI Schedules Specific to this monster
 //=========================================================
-

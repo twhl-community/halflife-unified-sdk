@@ -1,6 +1,6 @@
 //========= Copyright © 1996-2002, Valve LLC, All rights reserved. ============
 //
-// Purpose: 
+// Purpose:
 //
 // $NoKeywords: $
 //=============================================================================
@@ -11,7 +11,7 @@
 #include "voice_banmgr.h"
 
 
-#define BANMGR_FILEVERSION	1
+#define BANMGR_FILEVERSION 1
 char const* g_pBanMgrFilename = "voice_ban.dt";
 
 
@@ -199,4 +199,3 @@ CVoiceBanMgr::BannedPlayer* CVoiceBanMgr::AddBannedPlayer(char const playerID[16
 	pNew->m_pPrev->m_pNext = pNew->m_pNext->m_pPrev = pNew;
 	return pNew;
 }
-

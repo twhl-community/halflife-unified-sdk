@@ -15,20 +15,20 @@
 
 #pragma once
 
-#define SF_BEAM_STARTON			0x0001
-#define SF_BEAM_TOGGLE			0x0002
-#define SF_BEAM_RANDOM			0x0004
-#define SF_BEAM_RING			0x0008
-#define SF_BEAM_SPARKSTART		0x0010
-#define SF_BEAM_SPARKEND		0x0020
-#define SF_BEAM_DECALS			0x0040
-#define SF_BEAM_SHADEIN			0x0080
-#define SF_BEAM_SHADEOUT		0x0100
-#define SF_BEAM_TEMPORARY		0x8000
+#define SF_BEAM_STARTON 0x0001
+#define SF_BEAM_TOGGLE 0x0002
+#define SF_BEAM_RANDOM 0x0004
+#define SF_BEAM_RING 0x0008
+#define SF_BEAM_SPARKSTART 0x0010
+#define SF_BEAM_SPARKEND 0x0020
+#define SF_BEAM_DECALS 0x0040
+#define SF_BEAM_SHADEIN 0x0080
+#define SF_BEAM_SHADEOUT 0x0100
+#define SF_BEAM_TEMPORARY 0x8000
 
-#define SF_SPRITE_STARTON		0x0001
-#define SF_SPRITE_ONCE			0x0002
-#define SF_SPRITE_TEMPORARY		0x8000
+#define SF_SPRITE_STARTON 0x0001
+#define SF_SPRITE_ONCE 0x0002
+#define SF_SPRITE_TEMPORARY 0x8000
 
 class CSprite : public CPointEntity
 {
@@ -36,7 +36,7 @@ public:
 	void Spawn() override;
 	void Precache() override;
 
-	int		ObjectCaps() override
+	int ObjectCaps() override
 	{
 		int flags = 0;
 		if (pev->spawnflags & SF_SPRITE_TEMPORARY)
@@ -74,7 +74,12 @@ public:
 	}
 	inline void SetTexture(int spriteIndex) { pev->modelindex = spriteIndex; }
 	inline void SetScale(float scale) { pev->scale = scale; }
-	inline void SetColor(int r, int g, int b) { pev->rendercolor.x = r; pev->rendercolor.y = g; pev->rendercolor.z = b; }
+	inline void SetColor(int r, int g, int b)
+	{
+		pev->rendercolor.x = r;
+		pev->rendercolor.y = g;
+		pev->rendercolor.z = b;
+	}
 	inline void SetBrightness(int brightness) { pev->renderamt = brightness; }
 
 	inline void AnimateAndDie(float framerate)
@@ -87,24 +92,23 @@ public:
 
 	void EXPORT AnimateUntilDead();
 
-	bool	Save(CSave& save) override;
-	bool	Restore(CRestore& restore) override;
-	static	TYPEDESCRIPTION m_SaveData[];
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
+	static TYPEDESCRIPTION m_SaveData[];
 	static CSprite* SpriteCreate(const char* pSpriteName, const Vector& origin, bool animate);
 
 private:
-
-	float		m_lastTime;
-	float		m_maxFrame;
+	float m_lastTime;
+	float m_maxFrame;
 };
 
 
 class CBeam : public CBaseEntity
 {
 public:
-	void	Spawn() override;
-	void	Precache() override;
-	int		ObjectCaps() override
+	void Spawn() override;
+	void Precache() override;
+	int ObjectCaps() override
 	{
 		int flags = 0;
 		if (pev->spawnflags & SF_BEAM_TEMPORARY)
@@ -116,8 +120,8 @@ public:
 
 	// These functions are here to show the way beams are encoded as entities.
 	// Encoding beams as entities simplifies their management in the client/server architecture
-	inline void	SetType(int type) { pev->rendermode = (pev->rendermode & 0xF0) | (type & 0x0F); }
-	inline void	SetFlags(int flags) { pev->rendermode = (pev->rendermode & 0x0F) | (flags & 0xF0); }
+	inline void SetType(int type) { pev->rendermode = (pev->rendermode & 0xF0) | (type & 0x0F); }
+	inline void SetFlags(int flags) { pev->rendermode = (pev->rendermode & 0x0F) | (flags & 0xF0); }
 	inline void SetStartPos(const Vector& pos) { pev->origin = pos; }
 	inline void SetEndPos(const Vector& pos) { pev->angles = pos; }
 	void SetStartEntity(int entityIndex);
@@ -129,47 +133,56 @@ public:
 	inline void SetTexture(int spriteIndex) { pev->modelindex = spriteIndex; }
 	inline void SetWidth(int width) { pev->scale = width; }
 	inline void SetNoise(int amplitude) { pev->body = amplitude; }
-	inline void SetColor(int r, int g, int b) { pev->rendercolor.x = r; pev->rendercolor.y = g; pev->rendercolor.z = b; }
+	inline void SetColor(int r, int g, int b)
+	{
+		pev->rendercolor.x = r;
+		pev->rendercolor.y = g;
+		pev->rendercolor.z = b;
+	}
 	inline void SetBrightness(int brightness) { pev->renderamt = brightness; }
 	inline void SetFrame(float frame) { pev->frame = frame; }
 	inline void SetScrollRate(int speed) { pev->animtime = speed; }
 
-	inline int	GetType() { return pev->rendermode & 0x0F; }
-	inline int	GetFlags() { return pev->rendermode & 0xF0; }
-	inline int	GetStartEntity() { return pev->sequence & 0xFFF; }
-	inline int	GetEndEntity() { return pev->skin & 0xFFF; }
+	inline int GetType() { return pev->rendermode & 0x0F; }
+	inline int GetFlags() { return pev->rendermode & 0xF0; }
+	inline int GetStartEntity() { return pev->sequence & 0xFFF; }
+	inline int GetEndEntity() { return pev->skin & 0xFFF; }
 
 	const Vector& GetStartPos();
 	const Vector& GetEndPos();
 
 	Vector Center() override { return (GetStartPos() + GetEndPos()) * 0.5; } // center point of beam
 
-	inline int  GetTexture() { return pev->modelindex; }
-	inline int  GetWidth() { return pev->scale; }
-	inline int  GetNoise() { return pev->body; }
+	inline int GetTexture() { return pev->modelindex; }
+	inline int GetWidth() { return pev->scale; }
+	inline int GetNoise() { return pev->body; }
 	// inline void GetColor( int r, int g, int b ) { pev->rendercolor.x = r; pev->rendercolor.y = g; pev->rendercolor.z = b; }
-	inline int  GetBrightness() { return pev->renderamt; }
-	inline int  GetFrame() { return pev->frame; }
-	inline int  GetScrollRate() { return pev->animtime; }
+	inline int GetBrightness() { return pev->renderamt; }
+	inline int GetFrame() { return pev->frame; }
+	inline int GetScrollRate() { return pev->animtime; }
 
 	// Call after you change start/end positions
-	void		RelinkBeam();
+	void RelinkBeam();
 	//	void		SetObjectCollisionBox();
 
-	void		DoSparks(const Vector& start, const Vector& end);
+	void DoSparks(const Vector& start, const Vector& end);
 	CBaseEntity* RandomTargetname(const char* szName);
-	void		BeamDamage(TraceResult* ptr);
+	void BeamDamage(TraceResult* ptr);
 	// Init after BeamCreate()
-	void		BeamInit(const char* pSpriteName, int width);
-	void		PointsInit(const Vector& start, const Vector& end);
-	void		PointEntInit(const Vector& start, int endIndex);
-	void		EntsInit(int startIndex, int endIndex);
-	void		HoseInit(const Vector& start, const Vector& direction);
+	void BeamInit(const char* pSpriteName, int width);
+	void PointsInit(const Vector& start, const Vector& end);
+	void PointEntInit(const Vector& start, int endIndex);
+	void EntsInit(int startIndex, int endIndex);
+	void HoseInit(const Vector& start, const Vector& direction);
 
 	static CBeam* BeamCreate(const char* pSpriteName, int width);
 
-	inline void LiveForTime(float time) { SetThink(&CBeam::SUB_Remove); pev->nextthink = gpGlobals->time + time; }
-	inline void	BeamDamageInstant(TraceResult* ptr, float damage)
+	inline void LiveForTime(float time)
+	{
+		SetThink(&CBeam::SUB_Remove);
+		pev->nextthink = gpGlobals->time + time;
+	}
+	inline void BeamDamageInstant(TraceResult* ptr, float damage)
 	{
 		pev->dmg = damage;
 		pev->dmgtime = gpGlobals->time - 1;
@@ -178,30 +191,30 @@ public:
 };
 
 
-#define SF_MESSAGE_ONCE			0x0001		// Fade in, not out
-#define SF_MESSAGE_ALL			0x0002		// Send to all clients
+#define SF_MESSAGE_ONCE 0x0001 // Fade in, not out
+#define SF_MESSAGE_ALL 0x0002  // Send to all clients
 
 
 class CLaser : public CBeam
 {
 public:
-	void	Spawn() override;
-	void	Precache() override;
-	bool	KeyValue(KeyValueData* pkvd) override;
+	void Spawn() override;
+	void Precache() override;
+	bool KeyValue(KeyValueData* pkvd) override;
 
-	void	TurnOn();
-	void	TurnOff();
-	bool	IsOn();
+	void TurnOn();
+	void TurnOff();
+	bool IsOn();
 
-	void	FireAtPoint(TraceResult& point);
+	void FireAtPoint(TraceResult& point);
 
-	void	EXPORT StrikeThink();
-	void	Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
-	bool	Save(CSave& save) override;
-	bool	Restore(CRestore& restore) override;
-	static	TYPEDESCRIPTION m_SaveData[];
+	void EXPORT StrikeThink();
+	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
+	static TYPEDESCRIPTION m_SaveData[];
 
 	CSprite* m_pSprite;
-	int		m_iszSpriteName;
-	Vector  m_firePosition;
+	int m_iszSpriteName;
+	Vector m_firePosition;
 };

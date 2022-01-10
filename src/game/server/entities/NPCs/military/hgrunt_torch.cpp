@@ -16,25 +16,25 @@
 // hgrunt
 //=========================================================
 
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"monsters.h"
-#include	"animation.h"
-#include	"squadmonster.h"
-#include	"weapons.h"
-#include	"talkmonster.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
+#include "animation.h"
+#include "squadmonster.h"
+#include "weapons.h"
+#include "talkmonster.h"
 #include "COFSquadTalkMonster.h"
-#include	"soundent.h"
-#include	"effects.h"
-#include	"customentity.h"
+#include "soundent.h"
+#include "effects.h"
+#include "customentity.h"
 #include "explode.h"
 #include "hgrunt_ally_base.h"
 
 //=========================================================
 // monster-specific DEFINE's
 //=========================================================
-#define	TORCH_DEAGLE_CLIP_SIZE			8 // how many bullets in a clip?
+#define TORCH_DEAGLE_CLIP_SIZE 8 // how many bullets in a clip?
 #define TORCH_BEAM_SPRITE "sprites/xbeam3.spr"
 
 namespace TorchAllyBodygroup
@@ -69,11 +69,11 @@ enum TorchAllyWeaponFlag
 //=========================================================
 // Monster's Anim Events Go Here
 //=========================================================
-#define TORCH_AE_HOLSTER_TORCH		17
-#define TORCH_AE_HOLSTER_GUN		18
-#define TORCH_AE_HOLSTER_BOTH		19
-#define TORCH_AE_ACTIVATE_TORCH		20
-#define TORCH_AE_DEACTIVATE_TORCH	21
+#define TORCH_AE_HOLSTER_TORCH 17
+#define TORCH_AE_HOLSTER_GUN 18
+#define TORCH_AE_HOLSTER_BOTH 19
+#define TORCH_AE_ACTIVATE_TORCH 20
+#define TORCH_AE_DEACTIVATE_TORCH 21
 
 class COFTorchAlly : public CBaseHGruntAlly
 {
@@ -115,10 +115,10 @@ protected:
 
 LINK_ENTITY_TO_CLASS(monster_human_torch_ally, COFTorchAlly);
 
-TYPEDESCRIPTION	COFTorchAlly::m_SaveData[] =
-{
-	DEFINE_FIELD(COFTorchAlly, m_fTorchActive, FIELD_BOOLEAN),
-	DEFINE_FIELD(COFTorchAlly, m_flLastShot, FIELD_TIME),
+TYPEDESCRIPTION COFTorchAlly::m_SaveData[] =
+	{
+		DEFINE_FIELD(COFTorchAlly, m_fTorchActive, FIELD_BOOLEAN),
+		DEFINE_FIELD(COFTorchAlly, m_flLastShot, FIELD_TIME),
 };
 
 IMPLEMENT_SAVERESTORE(COFTorchAlly, CBaseHGruntAlly);
@@ -126,7 +126,7 @@ IMPLEMENT_SAVERESTORE(COFTorchAlly, CBaseHGruntAlly);
 void COFTorchAlly::DropWeapon(bool applyVelocity)
 {
 	if (GetBodygroup(TorchAllyBodygroup::Weapons) == TorchAllyWeapon::DesertEagle)
-	{// throw a gun if the grunt has one
+	{ // throw a gun if the grunt has one
 		Vector vecGunPos, vecGunAngles;
 		GetAttachment(0, vecGunPos, vecGunAngles);
 
@@ -200,7 +200,7 @@ void COFTorchAlly::Shoot()
 
 	pev->effects |= EF_MUZZLEFLASH;
 
-	m_cAmmoLoaded--;// take away a bullet!
+	m_cAmmoLoaded--; // take away a bullet!
 
 	Vector angDir = UTIL_VecToAngles(vecShootDir);
 	SetBlending(0, angDir.x);
@@ -227,26 +227,22 @@ void COFTorchAlly::HandleAnimEvent(MonsterEvent_t* pEvent)
 		Shoot();
 		break;
 
-	case TORCH_AE_HOLSTER_TORCH:
-	{
+	case TORCH_AE_HOLSTER_TORCH: {
 		SetBodygroup(TorchAllyBodygroup::Weapons, TorchAllyWeapon::DesertEagle);
 		break;
 	}
 
-	case TORCH_AE_HOLSTER_GUN:
-	{
+	case TORCH_AE_HOLSTER_GUN: {
 		SetBodygroup(TorchAllyBodygroup::Weapons, TorchAllyWeapon::Torch);
 		break;
 	}
 
-	case TORCH_AE_HOLSTER_BOTH:
-	{
+	case TORCH_AE_HOLSTER_BOTH: {
 		SetBodygroup(TorchAllyBodygroup::Weapons, TorchAllyWeapon::None);
 		break;
 	}
 
-	case TORCH_AE_ACTIVATE_TORCH:
-	{
+	case TORCH_AE_ACTIVATE_TORCH: {
 		m_fTorchActive = true;
 		m_pTorchBeam = CBeam::BeamCreate(TORCH_BEAM_SPRITE, 5);
 
@@ -272,8 +268,7 @@ void COFTorchAlly::HandleAnimEvent(MonsterEvent_t* pEvent)
 		break;
 	}
 
-	case TORCH_AE_DEACTIVATE_TORCH:
-	{
+	case TORCH_AE_DEACTIVATE_TORCH: {
 		if (m_pTorchBeam)
 		{
 			m_fTorchActive = false;
@@ -349,7 +344,7 @@ void COFTorchAlly::Precache()
 
 std::tuple<int, Activity> COFTorchAlly::GetSequenceForActivity(Activity NewActivity)
 {
-	int	iSequence = ACTIVITY_NOT_AVAILABLE;
+	int iSequence = ACTIVITY_NOT_AVAILABLE;
 
 	switch (NewActivity)
 	{

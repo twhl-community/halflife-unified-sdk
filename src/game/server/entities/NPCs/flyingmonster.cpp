@@ -12,15 +12,15 @@
 *   use or distribution of this code by or to any unlicensed person is illegal.
 *
 ****/
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"monsters.h"
-#include	"schedule.h"
-#include	"flyingmonster.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
+#include "schedule.h"
+#include "flyingmonster.h"
 
-#define FLYING_AE_FLAP		(8)
-#define FLYING_AE_FLAPSOUND	(9)
+#define FLYING_AE_FLAP (8)
+#define FLYING_AE_FLAPSOUND (9)
 
 
 extern DLL_GLOBAL edict_t* g_pBodyQueueHead;
@@ -43,7 +43,7 @@ int CFlyingMonster::CheckLocalMove(const Vector& vecStart, const Vector& vecEnd,
 
 	if (pflDist)
 	{
-		*pflDist = ((tr.vecEndPos - Vector(0, 0, 32)) - vecStart).Length();// get the distance.
+		*pflDist = ((tr.vecEndPos - Vector(0, 0, 32)) - vecStart).Length(); // get the distance.
 	}
 
 	// ALERT( at_console, "check %d %d %f\n", tr.fStartSolid, tr.fAllSolid, tr.flFraction );
@@ -66,7 +66,7 @@ bool CFlyingMonster::FTriangulate(const Vector& vecStart, const Vector& vecEnd, 
 
 Activity CFlyingMonster::GetStoppedActivity()
 {
-	if (pev->movetype != MOVETYPE_FLY)		// UNDONE: Ground idle here, IDLE may be something else
+	if (pev->movetype != MOVETYPE_FLY) // UNDONE: Ground idle here, IDLE may be something else
 		return ACT_IDLE;
 
 	return ACT_HOVER;
@@ -293,4 +293,3 @@ float CFlyingMonster::FloorZ(const Vector& position)
 
 	return down.z;
 }
-

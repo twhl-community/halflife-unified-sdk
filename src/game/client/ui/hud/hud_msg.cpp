@@ -31,13 +31,13 @@ extern int giTeamplay;
 
 #define MAX_CLIENTS 32
 
-#if !defined( _TFC )
+#if !defined(_TFC)
 extern BEAM* pBeam;
 extern BEAM* pBeam2;
-extern TEMPENTITY* pFlare;	// Vit_amiN
-#endif 
+extern TEMPENTITY* pFlare; // Vit_amiN
+#endif
 
-#if defined( _TFC )
+#if defined(_TFC)
 void ClearEventList();
 #endif
 
@@ -85,7 +85,7 @@ void CHud::MsgFunc_InitHUD(const char* pszName, int iSize, void* pbuf)
 		pList = pList->pNext;
 	}
 
-#if defined( _TFC )
+#if defined(_TFC)
 	ClearEventList();
 
 	// catch up on any building events that are going on
@@ -95,10 +95,10 @@ void CHud::MsgFunc_InitHUD(const char* pszName, int iSize, void* pbuf)
 	if (g_pParticleMan)
 		g_pParticleMan->ResetParticles();
 
-#if !defined( _TFC )
+#if !defined(_TFC)
 	//Probably not a good place to put this.
 	pBeam = pBeam2 = NULL;
-	pFlare = NULL;	// Vit_amiN: clear egon's beam flare
+	pFlare = NULL; // Vit_amiN: clear egon's beam flare
 #endif
 }
 
@@ -125,10 +125,10 @@ bool CHud::MsgFunc_GameMode(const char* pszName, int iSize, void* pbuf)
 
 bool CHud::MsgFunc_Damage(const char* pszName, int iSize, void* pbuf)
 {
-	int		armor, blood;
-	Vector	from;
-	int		i;
-	float	count;
+	int armor, blood;
+	Vector from;
+	int i;
+	float count;
 
 	BEGIN_READ(pbuf, iSize);
 	armor = READ_BYTE();

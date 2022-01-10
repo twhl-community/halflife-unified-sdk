@@ -16,59 +16,55 @@
 // headcrab.cpp - tiny, jumpy alien parasite
 //=========================================================
 
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"monsters.h"
-#include	"schedule.h"
-#include	"game.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
+#include "schedule.h"
+#include "game.h"
 #include "player.h"
 
 //=========================================================
 // Monster's Anim Events Go Here
 //=========================================================
-#define		SR_AE_JUMPATTACK	( 2 )
+#define SR_AE_JUMPATTACK (2)
 
-Task_t	tlSRRangeAttack1[] =
-{
-	{ TASK_STOP_MOVING,			(float)0		},
-	{ TASK_FACE_IDEAL,			(float)0		},
-	{ TASK_RANGE_ATTACK1,		(float)0		},
-	{ TASK_SET_ACTIVITY,		(float)ACT_IDLE	},
-	{ TASK_FACE_IDEAL,			(float)0		},
-	{ TASK_WAIT_RANDOM,			(float)0.5		},
-};
-
-Schedule_t	slRCRangeAttack1[] =
-{
+Task_t tlSRRangeAttack1[] =
 	{
-		tlSRRangeAttack1,
-		ARRAYSIZE(tlSRRangeAttack1),
-		bits_COND_ENEMY_OCCLUDED |
-		bits_COND_NO_AMMO_LOADED,
-		0,
-		"HCRangeAttack1"
-	},
+		{TASK_STOP_MOVING, (float)0},
+		{TASK_FACE_IDEAL, (float)0},
+		{TASK_RANGE_ATTACK1, (float)0},
+		{TASK_SET_ACTIVITY, (float)ACT_IDLE},
+		{TASK_FACE_IDEAL, (float)0},
+		{TASK_WAIT_RANDOM, (float)0.5},
 };
 
-Task_t	tlSRRangeAttack1Fast[] =
-{
-	{ TASK_STOP_MOVING,			(float)0		},
-	{ TASK_FACE_IDEAL,			(float)0		},
-	{ TASK_RANGE_ATTACK1,		(float)0		},
-	{ TASK_SET_ACTIVITY,		(float)ACT_IDLE	},
-};
-
-Schedule_t	slRCRangeAttack1Fast[] =
-{
+Schedule_t slRCRangeAttack1[] =
 	{
-		tlSRRangeAttack1Fast,
-		ARRAYSIZE(tlSRRangeAttack1Fast),
-		bits_COND_ENEMY_OCCLUDED |
-		bits_COND_NO_AMMO_LOADED,
-		0,
-		"HCRAFast"
-	},
+		{tlSRRangeAttack1,
+			ARRAYSIZE(tlSRRangeAttack1),
+			bits_COND_ENEMY_OCCLUDED |
+				bits_COND_NO_AMMO_LOADED,
+			0,
+			"HCRangeAttack1"},
+};
+
+Task_t tlSRRangeAttack1Fast[] =
+	{
+		{TASK_STOP_MOVING, (float)0},
+		{TASK_FACE_IDEAL, (float)0},
+		{TASK_RANGE_ATTACK1, (float)0},
+		{TASK_SET_ACTIVITY, (float)ACT_IDLE},
+};
+
+Schedule_t slRCRangeAttack1Fast[] =
+	{
+		{tlSRRangeAttack1Fast,
+			ARRAYSIZE(tlSRRangeAttack1Fast),
+			bits_COND_ENEMY_OCCLUDED |
+				bits_COND_NO_AMMO_LOADED,
+			0,
+			"HCRAFast"},
 };
 
 class COFShockRoach : public CBaseMonster
@@ -87,7 +83,7 @@ public:
 	void IdleSound() override;
 	void AlertSound() override;
 	void PrescheduleThink() override;
-	int  Classify() override;
+	int Classify() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 	bool CheckRangeAttack1(float flDot, float flDist) override;
 	bool CheckRangeAttack2(float flDot, float flDist) override;
@@ -118,63 +114,62 @@ public:
 };
 LINK_ENTITY_TO_CLASS(monster_shockroach, COFShockRoach);
 
-TYPEDESCRIPTION	COFShockRoach::m_SaveData[] =
-{
-	DEFINE_FIELD(COFShockRoach, m_flBirthTime, FIELD_TIME),
+TYPEDESCRIPTION COFShockRoach::m_SaveData[] =
+	{
+		DEFINE_FIELD(COFShockRoach, m_flBirthTime, FIELD_TIME),
 };
 
 IMPLEMENT_SAVERESTORE(COFShockRoach, CBaseMonster);
 
-DEFINE_CUSTOM_SCHEDULES(COFShockRoach)
-{
+DEFINE_CUSTOM_SCHEDULES(COFShockRoach){
 	slRCRangeAttack1,
-		slRCRangeAttack1Fast,
+	slRCRangeAttack1Fast,
 };
 
 IMPLEMENT_CUSTOM_SCHEDULES(COFShockRoach, CBaseMonster);
 
 const char* COFShockRoach::pIdleSounds[] =
-{
-	"shockroach/shock_idle1.wav",
-	"shockroach/shock_idle2.wav",
-	"shockroach/shock_idle3.wav",
+	{
+		"shockroach/shock_idle1.wav",
+		"shockroach/shock_idle2.wav",
+		"shockroach/shock_idle3.wav",
 };
 const char* COFShockRoach::pAlertSounds[] =
-{
-	"shockroach/shock_angry.wav",
+	{
+		"shockroach/shock_angry.wav",
 };
 const char* COFShockRoach::pPainSounds[] =
-{
-	"shockroach/shock_flinch.wav",
+	{
+		"shockroach/shock_flinch.wav",
 };
 const char* COFShockRoach::pAttackSounds[] =
-{
-	"shockroach/shock_jump1.wav",
-	"shockroach/shock_jump2.wav",
+	{
+		"shockroach/shock_jump1.wav",
+		"shockroach/shock_jump2.wav",
 };
 
 const char* COFShockRoach::pDeathSounds[] =
-{
-	"shockroach/shock_die.wav",
+	{
+		"shockroach/shock_die.wav",
 };
 
 const char* COFShockRoach::pBiteSounds[] =
-{
-	"shockroach/shock_bite.wav",
+	{
+		"shockroach/shock_bite.wav",
 };
 
 //=========================================================
-// Classify - indicates this monster's place in the 
+// Classify - indicates this monster's place in the
 // relationship table.
 //=========================================================
-int	COFShockRoach::Classify()
+int COFShockRoach::Classify()
 {
-	return	CLASS_ALIEN_PREY;
+	return CLASS_ALIEN_PREY;
 }
 
 //=========================================================
-// Center - returns the real center of the headcrab.  The 
-// bounding box is much larger than the actual creature so 
+// Center - returns the real center of the headcrab.  The
+// bounding box is much larger than the actual creature so
 // this is needed for targeting
 //=========================================================
 Vector COFShockRoach::Center()
@@ -221,11 +216,10 @@ void COFShockRoach::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
 	switch (pEvent->event)
 	{
-	case SR_AE_JUMPATTACK:
-	{
+	case SR_AE_JUMPATTACK: {
 		ClearBits(pev->flags, FL_ONGROUND);
 
-		UTIL_SetOrigin(pev, pev->origin + Vector(0, 0, 1));// take him off ground so engine doesn't instantly reset onground 
+		UTIL_SetOrigin(pev, pev->origin + Vector(0, 0, 1)); // take him off ground so engine doesn't instantly reset onground
 		UTIL_MakeVectors(pev->angles);
 
 		Vector vecJumpDir;
@@ -294,9 +288,9 @@ void COFShockRoach::Spawn()
 	m_bloodColor = BLOOD_COLOR_GREEN;
 	pev->effects = 0;
 	pev->health = gSkillData.shockroachHealth;
-	pev->view_ofs = Vector(0, 0, 20);// position of the eyes relative to monster's origin.
-	pev->yaw_speed = 5;//!!! should we put this in the monster's changeanim function since turn rates may vary with state/anim?
-	m_flFieldOfView = 0.5;// indicates the width of this monster's forward view cone ( as a dotproduct result )
+	pev->view_ofs = Vector(0, 0, 20); // position of the eyes relative to monster's origin.
+	pev->yaw_speed = 5;				  //!!! should we put this in the monster's changeanim function since turn rates may vary with state/anim?
+	m_flFieldOfView = 0.5;			  // indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
 
 	m_fRoachSolid = false;
@@ -324,15 +318,14 @@ void COFShockRoach::Precache()
 
 
 //=========================================================
-// RunTask 
+// RunTask
 //=========================================================
 void COFShockRoach::RunTask(Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
 	case TASK_RANGE_ATTACK1:
-	case TASK_RANGE_ATTACK2:
-	{
+	case TASK_RANGE_ATTACK2: {
 		if (m_fSequenceFinished)
 		{
 			TaskComplete();
@@ -341,8 +334,7 @@ void COFShockRoach::RunTask(Task_t* pTask)
 		}
 		break;
 	}
-	default:
-	{
+	default: {
 		CBaseMonster::RunTask(pTask);
 	}
 	}
@@ -407,15 +399,13 @@ void COFShockRoach::StartTask(Task_t* pTask)
 
 	switch (pTask->iTask)
 	{
-	case TASK_RANGE_ATTACK1:
-	{
+	case TASK_RANGE_ATTACK1: {
 		EMIT_SOUND_DYN(edict(), CHAN_WEAPON, pAttackSounds[0], GetSoundVolue(), ATTN_IDLE, 0, GetVoicePitch());
 		m_IdealActivity = ACT_RANGE_ATTACK1;
 		SetTouch(&COFShockRoach::LeapTouch);
 		break;
 	}
-	default:
-	{
+	default: {
 		CBaseMonster::StartTask(pTask);
 	}
 	}
@@ -472,21 +462,21 @@ void COFShockRoach::IdleSound()
 }
 
 //=========================================================
-// AlertSound 
+// AlertSound
 //=========================================================
 void COFShockRoach::AlertSound()
 {
 }
 
 //=========================================================
-// AlertSound 
+// AlertSound
 //=========================================================
 void COFShockRoach::PainSound()
 {
 }
 
 //=========================================================
-// DeathSound 
+// DeathSound
 //=========================================================
 void COFShockRoach::DeathSound()
 {
@@ -496,8 +486,7 @@ Schedule_t* COFShockRoach::GetScheduleOfType(int Type)
 {
 	switch (Type)
 	{
-	case SCHED_RANGE_ATTACK1:
-	{
+	case SCHED_RANGE_ATTACK1: {
 		return &slRCRangeAttack1[0];
 	}
 	break;

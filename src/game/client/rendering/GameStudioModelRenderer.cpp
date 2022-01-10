@@ -1,6 +1,6 @@
 //========= Copyright © 1996-2002, Valve LLC, All rights reserved. ============
 //
-// Purpose: 
+// Purpose:
 //
 // $NoKeywords: $
 //=============================================================================
@@ -86,10 +86,10 @@ void R_StudioInit()
 
 // The simple drawing interface we'll pass back to the engine
 r_studio_interface_t studio =
-{
-	STUDIO_INTERFACE_VERSION,
-	R_StudioDrawModel,
-	R_StudioDrawPlayer,
+	{
+		STUDIO_INTERFACE_VERSION,
+		R_StudioDrawModel,
+		R_StudioDrawPlayer,
 };
 
 /*

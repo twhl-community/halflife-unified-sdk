@@ -22,13 +22,13 @@
 
 #include "CRopeSegment.h"
 
-TYPEDESCRIPTION	CRopeSegment::m_SaveData[] =
-{
-	DEFINE_FIELD(CRopeSegment, m_pSample, FIELD_CLASSPTR),
-	DEFINE_FIELD(CRopeSegment, m_iszModelName, FIELD_STRING),
-	DEFINE_FIELD(CRopeSegment, m_flDefaultMass, FIELD_FLOAT),
-	DEFINE_FIELD(CRopeSegment, m_bCauseDamage, FIELD_BOOLEAN),
-	DEFINE_FIELD(CRopeSegment, m_bCanBeGrabbed, FIELD_BOOLEAN),
+TYPEDESCRIPTION CRopeSegment::m_SaveData[] =
+	{
+		DEFINE_FIELD(CRopeSegment, m_pSample, FIELD_CLASSPTR),
+		DEFINE_FIELD(CRopeSegment, m_iszModelName, FIELD_STRING),
+		DEFINE_FIELD(CRopeSegment, m_flDefaultMass, FIELD_FLOAT),
+		DEFINE_FIELD(CRopeSegment, m_bCauseDamage, FIELD_BOOLEAN),
+		DEFINE_FIELD(CRopeSegment, m_bCanBeGrabbed, FIELD_BOOLEAN),
 };
 
 LINK_ENTITY_TO_CLASS(rope_segment, CRopeSegment);

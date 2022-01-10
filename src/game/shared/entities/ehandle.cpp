@@ -38,7 +38,7 @@ edict_t* EHANDLE::Set(edict_t* pent)
 	return pent;
 }
 
-EHANDLE::operator CBaseEntity* ()
+EHANDLE::operator CBaseEntity*()
 {
 	return (CBaseEntity*)GET_PRIVATE(Get());
 }

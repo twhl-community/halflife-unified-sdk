@@ -23,15 +23,15 @@
 #include "CM249.h"
 
 #ifndef CLIENT_DLL
-TYPEDESCRIPTION	CM249::m_SaveData[] =
-{
-	DEFINE_FIELD(CM249, m_flReloadStartTime, FIELD_FLOAT),
-	DEFINE_FIELD(CM249, m_flReloadStart, FIELD_FLOAT),
-	DEFINE_FIELD(CM249, m_bReloading, FIELD_BOOLEAN),
-	DEFINE_FIELD(CM249, m_iFire, FIELD_INTEGER),
-	DEFINE_FIELD(CM249, m_iSmoke, FIELD_INTEGER),
-	DEFINE_FIELD(CM249, m_iLink, FIELD_INTEGER),
-	DEFINE_FIELD(CM249, m_iShell, FIELD_INTEGER),
+TYPEDESCRIPTION CM249::m_SaveData[] =
+	{
+		DEFINE_FIELD(CM249, m_flReloadStartTime, FIELD_FLOAT),
+		DEFINE_FIELD(CM249, m_flReloadStart, FIELD_FLOAT),
+		DEFINE_FIELD(CM249, m_bReloading, FIELD_BOOLEAN),
+		DEFINE_FIELD(CM249, m_iFire, FIELD_INTEGER),
+		DEFINE_FIELD(CM249, m_iSmoke, FIELD_INTEGER),
+		DEFINE_FIELD(CM249, m_iLink, FIELD_INTEGER),
+		DEFINE_FIELD(CM249, m_iShell, FIELD_INTEGER),
 };
 
 IMPLEMENT_SAVERESTORE(CM249, CM249::BaseClass);
@@ -197,9 +197,9 @@ void CM249::PrimaryAttack()
 			vecSpread = VECTOR_CONE_3DEGREES;
 		}
 		else if ((m_pPlayer->pev->button & (IN_MOVERIGHT |
-			IN_MOVELEFT |
-			IN_FORWARD |
-			IN_BACK)) != 0)
+											   IN_MOVELEFT |
+											   IN_FORWARD |
+											   IN_BACK)) != 0)
 		{
 			vecSpread = VECTOR_CONE_15DEGREES;
 		}
@@ -215,9 +215,9 @@ void CM249::PrimaryAttack()
 			vecSpread = VECTOR_CONE_4DEGREES;
 		}
 		else if ((m_pPlayer->pev->button & (IN_MOVERIGHT |
-			IN_MOVELEFT |
-			IN_FORWARD |
-			IN_BACK)) != 0)
+											   IN_MOVELEFT |
+											   IN_FORWARD |
+											   IN_BACK)) != 0)
 		{
 			vecSpread = VECTOR_CONE_10DEGREES;
 		}
@@ -234,7 +234,7 @@ void CM249::PrimaryAttack()
 		m_pPlayer->pev, m_pPlayer->random_seed);
 
 	int flags;
-#if defined( CLIENT_WEAPONS )
+#if defined(CLIENT_WEAPONS)
 	flags = FEV_NOTHOST;
 #else
 	flags = 0;

@@ -17,9 +17,9 @@
 
 typedef struct con_nprint_s
 {
-	int		index;			// Row #
-	float	time_to_live;	// # of seconds before it dissappears
-	float	color[3];		// RGB colors ( 0.0 -> 1.0 scale )
+	int index;			// Row #
+	float time_to_live; // # of seconds before it dissappears
+	float color[3];		// RGB colors ( 0.0 -> 1.0 scale )
 } con_nprint_t;
 
 void Con_NPrintf(int idx, char* fmt, ...);

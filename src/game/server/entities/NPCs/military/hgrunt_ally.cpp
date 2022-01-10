@@ -16,26 +16,26 @@
 // hgrunt
 //=========================================================
 
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"monsters.h"
-#include	"animation.h"
-#include	"squadmonster.h"
-#include	"weapons.h"
-#include	"talkmonster.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
+#include "animation.h"
+#include "squadmonster.h"
+#include "weapons.h"
+#include "talkmonster.h"
 #include "COFSquadTalkMonster.h"
-#include	"soundent.h"
-#include	"effects.h"
-#include	"customentity.h"
+#include "soundent.h"
+#include "effects.h"
+#include "customentity.h"
 #include "hgrunt_ally_base.h"
 
 //=========================================================
 // monster-specific DEFINE's
 //=========================================================
-#define	GRUNT_MP5_CLIP_SIZE				36 // how many bullets in a clip? - NOTE: 3 round burst sound, so keep as 3 * x!
-#define GRUNT_SHOTGUN_CLIP_SIZE			8
-#define GRUNT_SAW_CLIP_SIZE				36
+#define GRUNT_MP5_CLIP_SIZE 36 // how many bullets in a clip? - NOTE: 3 round burst sound, so keep as 3 * x!
+#define GRUNT_SHOTGUN_CLIP_SIZE 8
+#define GRUNT_SAW_CLIP_SIZE 36
 
 namespace HGruntAllyWeaponFlag
 {
@@ -146,7 +146,7 @@ LINK_ENTITY_TO_CLASS(monster_human_grunt_ally, CHGruntAlly);
 void CHGruntAlly::DropWeapon(bool applyVelocity)
 {
 	if (GetBodygroup(HGruntAllyBodygroup::Weapons) != HGruntAllyWeapon::None)
-	{// throw a gun if the grunt has one
+	{ // throw a gun if the grunt has one
 		Vector vecGunPos, vecGunAngles;
 		GetAttachment(0, vecGunPos, vecGunAngles);
 
@@ -225,15 +225,13 @@ void CHGruntAlly::Shoot(bool firstShotInBurst)
 	{
 		switch (RANDOM_LONG(0, 1))
 		{
-		case 0:
-		{
+		case 0: {
 			const auto vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(75, 200) + gpGlobals->v_up * RANDOM_FLOAT(150, 200) + gpGlobals->v_forward * 25.0;
 			EjectBrass(vecShootOrigin - vecShootDir * 6, vecShellVelocity, pev->angles.y, m_iSawLink, TE_BOUNCE_SHELL);
 			break;
 		}
 
-		case 1:
-		{
+		case 1: {
 			const auto vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(100, 250) + gpGlobals->v_up * RANDOM_FLOAT(100, 150) + gpGlobals->v_forward * 25.0;
 			EjectBrass(vecShootOrigin - vecShootDir * 6, vecShellVelocity, pev->angles.y, m_iSawShell, TE_BOUNCE_SHELL);
 			break;
@@ -244,9 +242,15 @@ void CHGruntAlly::Shoot(bool firstShotInBurst)
 
 		switch (RANDOM_LONG(0, 2))
 		{
-		case 0: EMIT_SOUND_DYN(edict(), CHAN_WEAPON, "weapons/saw_fire1.wav", VOL_NORM, ATTN_NORM, 0, RANDOM_LONG(0, 15) + 94); break;
-		case 1: EMIT_SOUND_DYN(edict(), CHAN_WEAPON, "weapons/saw_fire2.wav", VOL_NORM, ATTN_NORM, 0, RANDOM_LONG(0, 15) + 94); break;
-		case 2: EMIT_SOUND_DYN(edict(), CHAN_WEAPON, "weapons/saw_fire3.wav", VOL_NORM, ATTN_NORM, 0, RANDOM_LONG(0, 15) + 94); break;
+		case 0:
+			EMIT_SOUND_DYN(edict(), CHAN_WEAPON, "weapons/saw_fire1.wav", VOL_NORM, ATTN_NORM, 0, RANDOM_LONG(0, 15) + 94);
+			break;
+		case 1:
+			EMIT_SOUND_DYN(edict(), CHAN_WEAPON, "weapons/saw_fire2.wav", VOL_NORM, ATTN_NORM, 0, RANDOM_LONG(0, 15) + 94);
+			break;
+		case 2:
+			EMIT_SOUND_DYN(edict(), CHAN_WEAPON, "weapons/saw_fire3.wav", VOL_NORM, ATTN_NORM, 0, RANDOM_LONG(0, 15) + 94);
+			break;
 		}
 
 		firedShot = true;
@@ -270,7 +274,7 @@ void CHGruntAlly::Shoot(bool firstShotInBurst)
 	{
 		pev->effects |= EF_MUZZLEFLASH;
 
-		m_cAmmoLoaded--;// take away a bullet!
+		m_cAmmoLoaded--; // take away a bullet!
 
 		Vector angDir = UTIL_VecToAngles(vecShootDir);
 		SetBlending(0, angDir.x);
@@ -397,7 +401,7 @@ void CHGruntAlly::Precache()
 
 	PRECACHE_SOUND("weapons/glauncher.wav");
 
-	m_iBrassShell = PRECACHE_MODEL("models/shell.mdl");// brass shell
+	m_iBrassShell = PRECACHE_MODEL("models/shell.mdl"); // brass shell
 	m_iShotgunShell = PRECACHE_MODEL("models/shotgunshell.mdl");
 	m_iSawShell = PRECACHE_MODEL("models/saw_shell.mdl");
 	m_iSawLink = PRECACHE_MODEL("models/saw_link.mdl");
@@ -485,11 +489,11 @@ class CDeadHGruntAlly : public CBaseMonster
 {
 public:
 	void Spawn() override;
-	int	Classify() override { return	CLASS_HUMAN_MILITARY_FRIENDLY; }
+	int Classify() override { return CLASS_HUMAN_MILITARY_FRIENDLY; }
 
 	bool KeyValue(KeyValueData* pkvd) override;
 
-	int	m_iPose;// which sequence to display	-- temporary, don't need to save
+	int m_iPose; // which sequence to display	-- temporary, don't need to save
 	int m_iGruntHead;
 	static const char* m_szPoses[7];
 };

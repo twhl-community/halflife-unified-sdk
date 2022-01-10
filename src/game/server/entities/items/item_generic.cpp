@@ -53,7 +53,7 @@ bool CGenericItem::KeyValue(KeyValueData* pkvd)
 		pev->body = atoi(pkvd->szValue);
 		return true;
 	}
-	
+
 	return CBaseDelay::KeyValue(pkvd);
 }
 

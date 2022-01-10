@@ -33,11 +33,11 @@
 #ifndef CLIENT_DLL
 extern cvar_t oldgrapple;
 
-TYPEDESCRIPTION	CGrapple::m_SaveData[] =
-{
-	DEFINE_FIELD(CGrapple, m_pBeam, FIELD_CLASSPTR),
-	DEFINE_FIELD(CGrapple, m_flShootTime, FIELD_TIME),
-	DEFINE_FIELD(CGrapple, m_FireState, FIELD_INTEGER),
+TYPEDESCRIPTION CGrapple::m_SaveData[] =
+	{
+		DEFINE_FIELD(CGrapple, m_pBeam, FIELD_CLASSPTR),
+		DEFINE_FIELD(CGrapple, m_flShootTime, FIELD_TIME),
+		DEFINE_FIELD(CGrapple, m_FireState, FIELD_INTEGER),
 };
 
 IMPLEMENT_SAVERESTORE(CGrapple, CGrapple::BaseClass);
@@ -198,7 +198,8 @@ void CGrapple::PrimaryAttack()
 
 			switch (m_pTip->GetGrappleType())
 			{
-			case CGrappleTip::TargetClass::NOT_A_TARGET: break;
+			case CGrappleTip::TargetClass::NOT_A_TARGET:
+				break;
 
 			case CGrappleTip::TargetClass::SMALL:
 				//pTarget->BarnacleVictimGrabbed( this );
@@ -382,9 +383,15 @@ void CGrapple::PrimaryAttack()
 						switch (RANDOM_LONG(0, 2))
 						{
 						default:
-						case 0: pszSample = "barnacle/bcl_chew1.wav"; break;
-						case 1: pszSample = "barnacle/bcl_chew2.wav"; break;
-						case 2: pszSample = "barnacle/bcl_chew3.wav"; break;
+						case 0:
+							pszSample = "barnacle/bcl_chew1.wav";
+							break;
+						case 1:
+							pszSample = "barnacle/bcl_chew2.wav";
+							break;
+						case 2:
+							pszSample = "barnacle/bcl_chew3.wav";
+							break;
 						}
 
 						EMIT_SOUND_DYN(m_pPlayer->edict(), CHAN_VOICE, pszSample, VOL_NORM, ATTN_NORM, 0, 125);

@@ -15,7 +15,7 @@
 
 #pragma once
 
-#define ACTIVITY_NOT_AVAILABLE		-1
+#define ACTIVITY_NOT_AVAILABLE -1
 
 #include "monsterevent.h"
 
@@ -39,4 +39,4 @@ int GetAnimationEvent(void* pmodel, entvars_t* pev, MonsterEvent_t* pMonsterEven
 bool ExtractBbox(void* pmodel, int sequence, float* mins, float* maxs);
 
 // From /engine/studio.h
-#define STUDIO_LOOPING		0x0001
+#define STUDIO_LOOPING 0x0001

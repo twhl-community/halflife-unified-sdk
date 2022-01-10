@@ -26,37 +26,36 @@
 #include "CRope.h"
 
 static const char* const g_pszCreakSounds[] =
-{
-	"items/rope1.wav",
-	"items/rope2.wav",
-	"items/rope3.wav"
-};
+	{
+		"items/rope1.wav",
+		"items/rope2.wav",
+		"items/rope3.wav"};
 
 //TODO: make sure boolean types are correctly used here
-TYPEDESCRIPTION	CRope::m_SaveData[] =
-{
-	DEFINE_FIELD(CRope, m_uiSegments, FIELD_INTEGER),
-	DEFINE_FIELD(CRope, m_bToggle, FIELD_BOOLEAN),
-	DEFINE_FIELD(CRope, m_bInitialDeltaTime, FIELD_BOOLEAN),
-	DEFINE_FIELD(CRope, m_flLastTime, FIELD_TIME),
-	DEFINE_FIELD(CRope, m_vecLastEndPos, FIELD_POSITION_VECTOR),
-	DEFINE_FIELD(CRope, m_vecGravity, FIELD_VECTOR),
-	DEFINE_FIELD(CRope, m_flHookConstant, FIELD_FLOAT),
-	DEFINE_FIELD(CRope, m_flSpringDampning, FIELD_FLOAT),
-	DEFINE_FIELD(CRope, m_uiNumSamples, FIELD_INTEGER),
-	DEFINE_FIELD(CRope, m_SpringCnt, FIELD_INTEGER),
-	DEFINE_FIELD(CRope, m_bObjectAttached, FIELD_BOOLEAN),
-	DEFINE_FIELD(CRope, m_uiAttachedObjectsSegment, FIELD_INTEGER),
-	DEFINE_FIELD(CRope, m_flDetachTime, FIELD_TIME),
-	DEFINE_ARRAY(CRope, seg, FIELD_CLASSPTR, CRope::MAX_SEGMENTS),
-	DEFINE_ARRAY(CRope, altseg, FIELD_CLASSPTR, CRope::MAX_SEGMENTS),
-	DEFINE_ARRAY(CRope, m_CurrentSys, FIELD_CLASSPTR, CRope::MAX_SAMPLES),
-	DEFINE_ARRAY(CRope, m_TargetSys, FIELD_CLASSPTR, CRope::MAX_SAMPLES),
-	DEFINE_FIELD(CRope, m_bDisallowPlayerAttachment, FIELD_BOOLEAN),
-	DEFINE_FIELD(CRope, m_iszBodyModel, FIELD_STRING),
-	DEFINE_FIELD(CRope, m_iszEndingModel, FIELD_STRING),
-	DEFINE_FIELD(CRope, m_flAttachedObjectsOffset, FIELD_FLOAT),
-	DEFINE_FIELD(CRope, m_bMakeSound, FIELD_BOOLEAN),
+TYPEDESCRIPTION CRope::m_SaveData[] =
+	{
+		DEFINE_FIELD(CRope, m_uiSegments, FIELD_INTEGER),
+		DEFINE_FIELD(CRope, m_bToggle, FIELD_BOOLEAN),
+		DEFINE_FIELD(CRope, m_bInitialDeltaTime, FIELD_BOOLEAN),
+		DEFINE_FIELD(CRope, m_flLastTime, FIELD_TIME),
+		DEFINE_FIELD(CRope, m_vecLastEndPos, FIELD_POSITION_VECTOR),
+		DEFINE_FIELD(CRope, m_vecGravity, FIELD_VECTOR),
+		DEFINE_FIELD(CRope, m_flHookConstant, FIELD_FLOAT),
+		DEFINE_FIELD(CRope, m_flSpringDampning, FIELD_FLOAT),
+		DEFINE_FIELD(CRope, m_uiNumSamples, FIELD_INTEGER),
+		DEFINE_FIELD(CRope, m_SpringCnt, FIELD_INTEGER),
+		DEFINE_FIELD(CRope, m_bObjectAttached, FIELD_BOOLEAN),
+		DEFINE_FIELD(CRope, m_uiAttachedObjectsSegment, FIELD_INTEGER),
+		DEFINE_FIELD(CRope, m_flDetachTime, FIELD_TIME),
+		DEFINE_ARRAY(CRope, seg, FIELD_CLASSPTR, CRope::MAX_SEGMENTS),
+		DEFINE_ARRAY(CRope, altseg, FIELD_CLASSPTR, CRope::MAX_SEGMENTS),
+		DEFINE_ARRAY(CRope, m_CurrentSys, FIELD_CLASSPTR, CRope::MAX_SAMPLES),
+		DEFINE_ARRAY(CRope, m_TargetSys, FIELD_CLASSPTR, CRope::MAX_SAMPLES),
+		DEFINE_FIELD(CRope, m_bDisallowPlayerAttachment, FIELD_BOOLEAN),
+		DEFINE_FIELD(CRope, m_iszBodyModel, FIELD_STRING),
+		DEFINE_FIELD(CRope, m_iszEndingModel, FIELD_STRING),
+		DEFINE_FIELD(CRope, m_flAttachedObjectsOffset, FIELD_FLOAT),
+		DEFINE_FIELD(CRope, m_bMakeSound, FIELD_BOOLEAN),
 };
 
 LINK_ENTITY_TO_CLASS(env_rope, CRope);
@@ -531,12 +530,11 @@ void CRope::ComputeSpringForce(RopeSampleData& first, RopeSampleData& second, co
 void CRope::RK4Integrate(const float flDeltaTime, CRopeSample** ppSampleSource, CRopeSample** ppSampleTarget)
 {
 	const float flDeltas[MAX_TEMP_SAMPLES - 1] =
-	{
-		flDeltaTime * 0.5f,
-		flDeltaTime * 0.5f,
-		flDeltaTime * 0.5f,
-		flDeltaTime
-	};
+		{
+			flDeltaTime * 0.5f,
+			flDeltaTime * 0.5f,
+			flDeltaTime * 0.5f,
+			flDeltaTime};
 
 	{
 		RopeSampleData* pTemp1 = m_TempSys[0];
@@ -607,9 +605,9 @@ void CRope::RK4Integrate(const float flDeltaTime, CRopeSample** ppSampleSource, 
 
 		const Vector vecVelChange = 1.0f / 6.0f * (pTemp1->mForce + (pTemp2->mForce + pTemp3->mForce) * 2 + pTemp4->mForce);
 
-		pTarget->GetData().mPosition = pSource->GetData().mPosition + (vecPosChange);//* flDeltaTime );
+		pTarget->GetData().mPosition = pSource->GetData().mPosition + (vecPosChange); //* flDeltaTime );
 
-		pTarget->GetData().mVelocity = pSource->GetData().mVelocity + (vecVelChange);//* flDeltaTime );
+		pTarget->GetData().mVelocity = pSource->GetData().mVelocity + (vecVelChange); //* flDeltaTime );
 	}
 }
 
@@ -1132,7 +1130,7 @@ Vector CRope::GetAttachedObjectsPosition() const
 		vecResult = m_CurrentSys[m_uiAttachedObjectsSegment]->GetData().mPosition;
 
 	vecResult = vecResult +
-		(m_flAttachedObjectsOffset * GetSegmentDirFromOrigin(m_uiAttachedObjectsSegment));
+				(m_flAttachedObjectsOffset * GetSegmentDirFromOrigin(m_uiAttachedObjectsSegment));
 
 	return vecResult;
 }

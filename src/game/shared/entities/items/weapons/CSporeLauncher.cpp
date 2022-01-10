@@ -26,9 +26,9 @@
 #include "CSporeLauncher.h"
 
 #ifndef CLIENT_DLL
-TYPEDESCRIPTION	CSporeLauncher::m_SaveData[] =
-{
-	DEFINE_FIELD(CSporeLauncher, m_ReloadState, FIELD_INTEGER),
+TYPEDESCRIPTION CSporeLauncher::m_SaveData[] =
+	{
+		DEFINE_FIELD(CSporeLauncher, m_ReloadState, FIELD_INTEGER),
 };
 
 IMPLEMENT_SAVERESTORE(CSporeLauncher, CSporeLauncher::BaseClass);
@@ -198,7 +198,7 @@ void CSporeLauncher::PrimaryAttack()
 
 		int flags;
 
-#if defined( CLIENT_WEAPONS )
+#if defined(CLIENT_WEAPONS)
 		flags = FEV_NOTHOST;
 #else
 		flags = 0;
@@ -248,7 +248,7 @@ void CSporeLauncher::SecondaryAttack()
 
 		int flags;
 
-#if defined( CLIENT_WEAPONS )
+#if defined(CLIENT_WEAPONS)
 		flags = FEV_NOTHOST;
 #else
 		flags = 0;
@@ -477,16 +477,14 @@ public:
 	{
 		switch (pev->sequence)
 		{
-		case SPOREAMMO_SPAWNDN:
-		{
+		case SPOREAMMO_SPAWNDN: {
 			pev->sequence = SPOREAMMO_IDLE1;
 			pev->animtime = gpGlobals->time;
 			pev->frame = 0;
 			break;
 		}
 
-		case SPOREAMMO_SNATCHDN:
-		{
+		case SPOREAMMO_SNATCHDN: {
 			pev->sequence = SPOREAMMO_IDLE;
 			pev->animtime = gpGlobals->time;
 			pev->frame = 0;
@@ -494,8 +492,7 @@ public:
 			break;
 		}
 
-		case SPOREAMMO_IDLE:
-		{
+		case SPOREAMMO_IDLE: {
 			pev->body = SPOREAMMOBODY_FULL;
 			pev->sequence = SPOREAMMO_SPAWNDN;
 			pev->animtime = gpGlobals->time;
@@ -504,7 +501,8 @@ public:
 			break;
 		}
 
-		default: break;
+		default:
+			break;
 		}
 	}
 

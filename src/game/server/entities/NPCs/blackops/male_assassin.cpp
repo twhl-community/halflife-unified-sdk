@@ -17,7 +17,7 @@
 //=========================================================
 
 //=========================================================
-// Hit groups!	
+// Hit groups!
 //=========================================================
 /*
 
@@ -27,16 +27,16 @@
 
 */
 
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"monsters.h"
-#include	"schedule.h"
-#include	"animation.h"
-#include	"squadmonster.h"
-#include	"weapons.h"
-#include	"talkmonster.h"
-#include	"soundent.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
+#include "schedule.h"
+#include "animation.h"
+#include "squadmonster.h"
+#include "weapons.h"
+#include "talkmonster.h"
+#include "soundent.h"
 #include "military/hgrunt.h"
 
 constexpr int MASSN_SNIPER_CLIP_SIZE = 1;
@@ -93,7 +93,7 @@ public:
 	void Shoot(bool firstShotInBurst) override;
 	void GibMonster() override;
 
-	bool	Save(CSave& save) override;
+	bool Save(CSave& save) override;
 	bool Restore(CRestore& restore) override;
 
 	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
@@ -117,12 +117,12 @@ protected:
 
 LINK_ENTITY_TO_CLASS(monster_male_assassin, CMOFAssassin);
 
-TYPEDESCRIPTION	CMOFAssassin::m_SaveData[] =
-{
-	DEFINE_FIELD(CMOFAssassin, m_iAssassinHead, FIELD_INTEGER),
-	DEFINE_FIELD(CMOFAssassin, m_flLastShot, FIELD_TIME),
-	DEFINE_FIELD(CMOFAssassin, m_fStandingGround, FIELD_BOOLEAN),
-	DEFINE_FIELD(CMOFAssassin, m_flStandGroundRange, FIELD_FLOAT),
+TYPEDESCRIPTION CMOFAssassin::m_SaveData[] =
+	{
+		DEFINE_FIELD(CMOFAssassin, m_iAssassinHead, FIELD_INTEGER),
+		DEFINE_FIELD(CMOFAssassin, m_flLastShot, FIELD_TIME),
+		DEFINE_FIELD(CMOFAssassin, m_fStandingGround, FIELD_BOOLEAN),
+		DEFINE_FIELD(CMOFAssassin, m_flStandGroundRange, FIELD_FLOAT),
 };
 
 IMPLEMENT_SAVERESTORE(CMOFAssassin, CHGrunt);
@@ -132,11 +132,11 @@ IMPLEMENT_SAVERESTORE(CMOFAssassin, CHGrunt);
 //=========================================================
 void CMOFAssassin::GibMonster()
 {
-	Vector	vecGunPos;
-	Vector	vecGunAngles;
+	Vector vecGunPos;
+	Vector vecGunAngles;
 
 	if (GetBodygroup(2) != 2)
-	{// throw a gun if the grunt has one
+	{ // throw a gun if the grunt has one
 		GetAttachment(0, vecGunPos, vecGunAngles);
 
 		CBaseEntity* pGun;
@@ -169,11 +169,11 @@ void CMOFAssassin::GibMonster()
 }
 
 //=========================================================
-// CheckRangeAttack1 - overridden for HGrunt, cause 
+// CheckRangeAttack1 - overridden for HGrunt, cause
 // FCanCheckAttacks() doesn't disqualify all attacks based
 // on whether or not the enemy is occluded because unlike
 // the base class, the HGrunt can attack when the enemy is
-// occluded (throw grenade over wall, etc). We must 
+// occluded (throw grenade over wall, etc). We must
 // disqualify the machine gun attack if the enemy is occluded.
 //=========================================================
 bool CMOFAssassin::CheckRangeAttack1(float flDot, float flDist)
@@ -193,7 +193,7 @@ bool CMOFAssassin::CheckRangeAttack1(float flDot, float flDist)
 
 //=========================================================
 // CheckRangeAttack2 - this checks the Grunt's grenade
-// attack. 
+// attack.
 //=========================================================
 bool CMOFAssassin::CheckRangeAttack2(float flDot, float flDist)
 {
@@ -254,7 +254,7 @@ void CMOFAssassin::Shoot(bool firstShotInBurst)
 
 	if (FBitSet(pev->weapons, HGRUNT_9MMAR))
 	{
-		Vector	vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40, 90) + gpGlobals->v_up * RANDOM_FLOAT(75, 200) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
+		Vector vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40, 90) + gpGlobals->v_up * RANDOM_FLOAT(75, 200) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
 		EjectBrass(vecShootOrigin - vecShootDir * 24, vecShellVelocity, pev->angles.y, m_iBrassShell, TE_BOUNCE_SHELL);
 		FireBullets(1, vecShootOrigin, vecShootDir, VECTOR_CONE_10DEGREES, 2048, BULLET_MONSTER_MP5); // shoot +-5 degrees
 
@@ -284,7 +284,7 @@ void CMOFAssassin::Shoot(bool firstShotInBurst)
 
 	pev->effects |= EF_MUZZLEFLASH;
 
-	m_cAmmoLoaded--;// take away a bullet!
+	m_cAmmoLoaded--; // take away a bullet!
 
 	Vector angDir = UTIL_VecToAngles(vecShootDir);
 	SetBlending(0, angDir.x);
@@ -304,10 +304,9 @@ void CMOFAssassin::HandleAnimEvent(MonsterEvent_t* pEvent)
 	//Override grunt events that require assassin-specific behavior
 	switch (pEvent->event)
 	{
-	case HGRUNT_AE_DROP_GUN:
-	{
-		Vector	vecGunPos;
-		Vector	vecGunAngles;
+	case HGRUNT_AE_DROP_GUN: {
+		Vector vecGunPos;
+		Vector vecGunAngles;
 
 		GetAttachment(0, vecGunPos, vecGunAngles);
 
@@ -327,12 +326,10 @@ void CMOFAssassin::HandleAnimEvent(MonsterEvent_t* pEvent)
 		{
 			DropItem("ammo_ARgrenades", BodyTarget(pev->origin), vecGunAngles);
 		}
-
 	}
 	break;
 
-	case HGRUNT_AE_KICK:
-	{
+	case HGRUNT_AE_KICK: {
 		CBaseEntity* pHurt = Kick();
 
 		if (pHurt)
@@ -367,7 +364,7 @@ void CMOFAssassin::Spawn()
 	m_bloodColor = BLOOD_COLOR_RED;
 	pev->effects = 0;
 	pev->health = gSkillData.massassinHealth;
-	m_flFieldOfView = 0.2;// indicates the width of this monster's forward view cone ( as a dotproduct result )
+	m_flFieldOfView = 0.2; // indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
 	m_flNextGrenadeCheck = gpGlobals->time + 1;
 	m_flNextPainTime = gpGlobals->time;
@@ -376,7 +373,7 @@ void CMOFAssassin::Spawn()
 	m_afCapability = bits_CAP_SQUAD | bits_CAP_TURN_HEAD | bits_CAP_DOORS_GROUP;
 
 	m_fEnemyEluded = false;
-	m_fFirstEncounter = true;// this is true when the grunt spawns, because he hasn't encountered an enemy yet.
+	m_fFirstEncounter = true; // this is true when the grunt spawns, because he hasn't encountered an enemy yet.
 
 	m_HackedGunPos = Vector(0, 0, 55);
 
@@ -445,7 +442,7 @@ void CMOFAssassin::PainSound()
 
 std::tuple<int, Activity> CMOFAssassin::GetSequenceForActivity(Activity NewActivity)
 {
-	int	iSequence = ACTIVITY_NOT_AVAILABLE;
+	int iSequence = ACTIVITY_NOT_AVAILABLE;
 	void* pmodel = GET_MODEL_PTR(ENT(pev));
 
 	switch (NewActivity)

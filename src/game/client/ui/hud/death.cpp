@@ -26,10 +26,11 @@
 
 DECLARE_MESSAGE(m_DeathNotice, DeathMsg);
 
-struct DeathNoticeItem {
+struct DeathNoticeItem
+{
 	char szKiller[MAX_PLAYER_NAME_LENGTH * 2];
 	char szVictim[MAX_PLAYER_NAME_LENGTH * 2];
-	int iId;	// the index number of the associated sprite
+	int iId; // the index number of the associated sprite
 	bool iSuicide;
 	bool iTeamKill;
 	bool iNonPlayerKill;
@@ -38,10 +39,10 @@ struct DeathNoticeItem {
 	float* VictimColor;
 };
 
-#define MAX_DEATHNOTICES	4
+#define MAX_DEATHNOTICES 4
 static int DEATHNOTICE_DISPLAY_TIME = 6;
 
-#define DEATHNOTICE_TOP		64
+#define DEATHNOTICE_TOP 64
 
 DeathNoticeItem rgDeathNoticeList[MAX_DEATHNOTICES + 1];
 
@@ -55,13 +56,19 @@ float* GetClientColor(int clientIndex)
 {
 	switch (g_PlayerExtraInfo[clientIndex].teamnumber)
 	{
-	case 1:	return g_ColorBlue;
-	case 2: return g_ColorRed;
-	case 3: return g_ColorYellow;
-	case 4: return g_ColorGreen;
-	case 0: return g_ColorYellow;
+	case 1:
+		return g_ColorBlue;
+	case 2:
+		return g_ColorRed;
+	case 3:
+		return g_ColorYellow;
+	case 4:
+		return g_ColorGreen;
+	case 0:
+		return g_ColorYellow;
 
-	default: return g_ColorGrey;
+	default:
+		return g_ColorGrey;
 	}
 
 	return NULL;
@@ -99,13 +106,13 @@ bool CHudDeathNotice::Draw(float flTime)
 	for (int i = 0; i < MAX_DEATHNOTICES; i++)
 	{
 		if (rgDeathNoticeList[i].iId == 0)
-			break;  // we've gone through them all
+			break; // we've gone through them all
 
 		if (rgDeathNoticeList[i].flDisplayTime < flTime)
 		{ // display time has expired
 			// remove the current item from the list
 			memmove(&rgDeathNoticeList[i], &rgDeathNoticeList[i + 1], sizeof(DeathNoticeItem) * (MAX_DEATHNOTICES - i));
-			i--;  // continue on the next item;  stop the counter getting incremented
+			i--; // continue on the next item;  stop the counter getting incremented
 			continue;
 		}
 
@@ -115,7 +122,7 @@ bool CHudDeathNotice::Draw(float flTime)
 		if (gViewPort && gViewPort->AllowedToPrintText())
 		{
 			// Draw the death notice
-			y = DEATHNOTICE_TOP + 2 + (20 * i);  //!!!
+			y = DEATHNOTICE_TOP + 2 + (20 * i); //!!!
 
 			int id = (rgDeathNoticeList[i].iId == -1) ? m_HUD_d_skull : rgDeathNoticeList[i].iId;
 			x = ScreenWidth - ConsoleStringLen(rgDeathNoticeList[i].szVictim) - (gHUD.GetSpriteRect(id).right - gHUD.GetSpriteRect(id).left);
@@ -295,7 +302,3 @@ bool CHudDeathNotice::MsgFunc_DeathMsg(const char* pszName, int iSize, void* pbu
 
 	return true;
 }
-
-
-
-

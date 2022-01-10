@@ -61,7 +61,6 @@ bool CHudTrain::Draw(float fTime)
 		x = ScreenWidth / 3 + SPR_Width(m_hSprite, 0) / 4;
 
 		SPR_DrawAdditive(m_iPos - 1, x, y, NULL);
-
 	}
 
 	return true;

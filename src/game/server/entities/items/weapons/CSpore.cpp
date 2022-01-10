@@ -22,13 +22,12 @@
 
 #include "CSpore.h"
 
-TYPEDESCRIPTION	CSpore::m_SaveData[] =
-{
-	DEFINE_FIELD(CSpore, m_SporeType, FIELD_INTEGER),
-	DEFINE_FIELD(CSpore, m_flIgniteTime, FIELD_TIME),
-	DEFINE_FIELD(CSpore, m_bIsAI, FIELD_BOOLEAN),
-	DEFINE_FIELD(CSpore, m_hSprite, FIELD_EHANDLE)
-};
+TYPEDESCRIPTION CSpore::m_SaveData[] =
+	{
+		DEFINE_FIELD(CSpore, m_SporeType, FIELD_INTEGER),
+		DEFINE_FIELD(CSpore, m_flIgniteTime, FIELD_TIME),
+		DEFINE_FIELD(CSpore, m_bIsAI, FIELD_BOOLEAN),
+		DEFINE_FIELD(CSpore, m_hSprite, FIELD_EHANDLE)};
 
 IMPLEMENT_SAVERESTORE(CSpore, CSpore::BaseClass);
 

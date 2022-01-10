@@ -36,12 +36,12 @@ public:
 	bool KeyValue(KeyValueData* pkvd) override;
 
 	// Bmodels don't go across transitions
-	int	ObjectCaps() override { return CBaseToggle::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+	int ObjectCaps() override { return CBaseToggle::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 
 	bool Save(CSave& save) override;
 	bool Restore(CRestore& restore) override;
 
-	static	TYPEDESCRIPTION m_SaveData[];
+	static TYPEDESCRIPTION m_SaveData[];
 
 	void EXPORT FieldUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
@@ -55,14 +55,14 @@ public:
 
 LINK_ENTITY_TO_CLASS(func_mortar_field, CFuncMortarField);
 
-TYPEDESCRIPTION	CFuncMortarField::m_SaveData[] =
-{
-	DEFINE_FIELD(CFuncMortarField, m_iszXController, FIELD_STRING),
-	DEFINE_FIELD(CFuncMortarField, m_iszYController, FIELD_STRING),
-	DEFINE_FIELD(CFuncMortarField, m_flSpread, FIELD_FLOAT),
-	DEFINE_FIELD(CFuncMortarField, m_flDelay, FIELD_FLOAT),
-	DEFINE_FIELD(CFuncMortarField, m_iCount, FIELD_INTEGER),
-	DEFINE_FIELD(CFuncMortarField, m_fControl, FIELD_INTEGER),
+TYPEDESCRIPTION CFuncMortarField::m_SaveData[] =
+	{
+		DEFINE_FIELD(CFuncMortarField, m_iszXController, FIELD_STRING),
+		DEFINE_FIELD(CFuncMortarField, m_iszYController, FIELD_STRING),
+		DEFINE_FIELD(CFuncMortarField, m_flSpread, FIELD_FLOAT),
+		DEFINE_FIELD(CFuncMortarField, m_flDelay, FIELD_FLOAT),
+		DEFINE_FIELD(CFuncMortarField, m_iCount, FIELD_INTEGER),
+		DEFINE_FIELD(CFuncMortarField, m_fControl, FIELD_INTEGER),
 };
 
 IMPLEMENT_SAVERESTORE(CFuncMortarField, CBaseToggle);
@@ -104,7 +104,7 @@ bool CFuncMortarField::KeyValue(KeyValueData* pkvd)
 void CFuncMortarField::Spawn()
 {
 	pev->solid = SOLID_NOT;
-	SET_MODEL(ENT(pev), STRING(pev->model));    // set size and link into world
+	SET_MODEL(ENT(pev), STRING(pev->model)); // set size and link into world
 	pev->movetype = MOVETYPE_NONE;
 	SetBits(pev->effects, EF_NODRAW);
 	SetUse(&CFuncMortarField::FieldUse);
@@ -131,7 +131,7 @@ void CFuncMortarField::FieldUse(CBaseEntity* pActivator, CBaseEntity* pCaller, U
 
 	switch (m_fControl)
 	{
-	case 0:	// random
+	case 0: // random
 		break;
 	case 1: // Trigger Activator
 		if (pActivator != NULL)
@@ -179,7 +179,8 @@ void CFuncMortarField::FieldUse(CBaseEntity* pActivator, CBaseEntity* pCaller, U
 		UTIL_TraceLine(vecSpot, vecSpot + Vector(0, 0, -1) * 4096, ignore_monsters, ENT(pev), &tr);
 
 		edict_t* pentOwner = NULL;
-		if (pActivator)	pentOwner = pActivator->edict();
+		if (pActivator)
+			pentOwner = pActivator->edict();
 
 		CBaseEntity* pMortar = Create("monster_mortar", tr.vecEndPos, Vector(0, 0, 0), pentOwner);
 		pMortar->pev->nextthink = gpGlobals->time + t;
@@ -215,8 +216,6 @@ void CMortar::Spawn()
 	pev->nextthink = 0;
 
 	Precache();
-
-
 }
 
 
@@ -238,16 +237,16 @@ void CMortar::MortarExplode()
 	WRITE_COORD(pev->origin.y);
 	WRITE_COORD(pev->origin.z + 1024);
 	WRITE_SHORT(m_spriteTexture);
-	WRITE_BYTE(0); // framerate
-	WRITE_BYTE(0); // framerate
-	WRITE_BYTE(1); // life
-	WRITE_BYTE(40);  // width
-	WRITE_BYTE(0);   // noise
-	WRITE_BYTE(255);   // r, g, b
-	WRITE_BYTE(160);   // r, g, b
-	WRITE_BYTE(100);   // r, g, b
-	WRITE_BYTE(128);	// brightness
-	WRITE_BYTE(0);		// speed
+	WRITE_BYTE(0);	 // framerate
+	WRITE_BYTE(0);	 // framerate
+	WRITE_BYTE(1);	 // life
+	WRITE_BYTE(40);	 // width
+	WRITE_BYTE(0);	 // noise
+	WRITE_BYTE(255); // r, g, b
+	WRITE_BYTE(160); // r, g, b
+	WRITE_BYTE(100); // r, g, b
+	WRITE_BYTE(128); // brightness
+	WRITE_BYTE(0);	 // speed
 	MESSAGE_END();
 #endif
 
@@ -305,7 +304,6 @@ void CMortar::MortarExplode()
 	SetThink(&CMortar::SUB_Remove);
 	pev->nextthink = gpGlobals->time + 0.1;
 #endif
-
 }
 
 

@@ -19,17 +19,17 @@
 #pragma once
 
 // this is the max number of items in each bucket
-#define MAX_WEAPON_POSITIONS		MAX_WEAPON_SLOTS
+#define MAX_WEAPON_POSITIONS MAX_WEAPON_SLOTS
 
 class WeaponsResource
 {
 private:
 	// Information about weapons & ammo
-	WEAPON		rgWeapons[MAX_WEAPONS];	// Weapons Array
+	WEAPON rgWeapons[MAX_WEAPONS]; // Weapons Array
 
 	// counts of weapons * ammo
-	WEAPON* rgSlots[MAX_WEAPON_SLOTS + 1][MAX_WEAPON_POSITIONS + 1];	// The slots currently in use by weapons.  The value is a pointer to the weapon;  if it's NULL, no weapon is there
-	int			riAmmo[MAX_AMMO_TYPES];							// count of each ammo type
+	WEAPON* rgSlots[MAX_WEAPON_SLOTS + 1][MAX_WEAPON_POSITIONS + 1]; // The slots currently in use by weapons.  The value is a pointer to the weapon;  if it's NULL, no weapon is there
+	int riAmmo[MAX_AMMO_TYPES];										 // count of each ammo type
 
 public:
 	void Init()
@@ -46,7 +46,7 @@ public:
 	}
 
 	///// WEAPON /////
-	int			iOldWeaponBits;
+	int iOldWeaponBits;
 
 	WEAPON* GetWeapon(int iId) { return &rgWeapons[iId]; }
 	void AddWeapon(WEAPON* wp)
@@ -98,7 +98,8 @@ extern WeaponsResource gWR;
 
 
 #define MAX_HISTORY 12
-enum {
+enum
+{
 	HISTSLOT_EMPTY,
 	HISTSLOT_AMMO,
 	HISTSLOT_WEAP,
@@ -108,9 +109,10 @@ enum {
 class HistoryResource
 {
 private:
-	struct HIST_ITEM {
+	struct HIST_ITEM
+	{
 		int type;
-		float DisplayTime;  // the time at which this item should be removed from the history
+		float DisplayTime; // the time at which this item should be removed from the history
 		int iCount;
 		int iId;
 	};
@@ -118,7 +120,6 @@ private:
 	HIST_ITEM rgAmmoHistory[MAX_HISTORY];
 
 public:
-
 	void Init()
 	{
 		Reset();
@@ -140,6 +141,3 @@ public:
 };
 
 extern HistoryResource gHR;
-
-
-

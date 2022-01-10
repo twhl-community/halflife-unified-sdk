@@ -17,13 +17,13 @@
 //=========================================================
 // UNDONE: Holster weapon?
 
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"monsters.h"
-#include	"talkmonster.h"
-#include	"weapons.h"
-#include	"soundent.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
+#include "talkmonster.h"
+#include "weapons.h"
+#include "soundent.h"
 #include "barney.h"
 
 //TODO: work out a way to abstract sentences out so we don't need to override here to change just those
@@ -93,7 +93,7 @@ void COtis::GuardFirePistol()
 	CSoundEnt::InsertSound(bits_SOUND_COMBAT, pev->origin, 384, 0.3);
 
 	// UNDONE: Reload?
-	m_cAmmoLoaded--;// take away a bullet!
+	m_cAmmoLoaded--; // take away a bullet!
 }
 
 //=========================================================
@@ -135,9 +135,9 @@ void COtis::TalkInit()
 	m_szGrp[TLK_PLHURT2] = "!BA_CUREB";
 	m_szGrp[TLK_PLHURT3] = "!BA_CUREC";
 
-	m_szGrp[TLK_PHELLO] = NULL;	//"OT_PHELLO";		// UNDONE
-	m_szGrp[TLK_PIDLE] = NULL;	//"OT_PIDLE";			// UNDONE
-	m_szGrp[TLK_PQUESTION] = "OT_PQUEST";		// UNDONE
+	m_szGrp[TLK_PHELLO] = NULL;			  //"OT_PHELLO";		// UNDONE
+	m_szGrp[TLK_PIDLE] = NULL;			  //"OT_PIDLE";			// UNDONE
+	m_szGrp[TLK_PQUESTION] = "OT_PQUEST"; // UNDONE
 
 	m_szGrp[TLK_SMELL] = "OT_SMELL";
 
@@ -217,11 +217,11 @@ class CDeadOtis : public CBaseMonster
 {
 public:
 	void Spawn() override;
-	int	Classify() override { return	CLASS_PLAYER_ALLY; }
+	int Classify() override { return CLASS_PLAYER_ALLY; }
 
 	bool KeyValue(KeyValueData* pkvd) override;
 
-	int	m_iPose;// which sequence to display	-- temporary, don't need to save
+	int m_iPose; // which sequence to display	-- temporary, don't need to save
 	static const char* m_szPoses[5];
 };
 
@@ -259,7 +259,7 @@ void CDeadOtis::Spawn()
 		ALERT(at_console, "Dead otis with bad pose\n");
 	}
 	// Corpses have less health
-	pev->health = 8;//gSkillData.otisHealth;
+	pev->health = 8; //gSkillData.otisHealth;
 
 	MonsterInitDead();
 }

@@ -110,36 +110,33 @@ void CServerLibrary::PostMapActivate()
 
 void CServerLibrary::CreateConfigDefinitions()
 {
-	m_ServerConfigDefinition = g_GameConfigLoader.CreateDefinition("ServerGameConfig", []()
-		{
-			std::vector<std::unique_ptr<const GameConfigSection>> sections;
+	m_ServerConfigDefinition = g_GameConfigLoader.CreateDefinition("ServerGameConfig", []() {
+		std::vector<std::unique_ptr<const GameConfigSection>> sections;
 
-			AddCommonConfigSections(sections);
-			sections.push_back(std::make_unique<CommandsSection>());
+		AddCommonConfigSections(sections);
+		sections.push_back(std::make_unique<CommandsSection>());
 
-			return sections;
-		}());
+		return sections;
+	}());
 
-	m_MapConfigDefinition = g_GameConfigLoader.CreateDefinition("MapGameConfig", [this]()
-		{
-			std::vector<std::unique_ptr<const GameConfigSection>> sections;
+	m_MapConfigDefinition = g_GameConfigLoader.CreateDefinition("MapGameConfig", [this]() {
+		std::vector<std::unique_ptr<const GameConfigSection>> sections;
 
-			AddCommonConfigSections(sections);
-			sections.push_back(std::make_unique<CommandsSection>(GetMapConfigCommandWhitelist()));
+		AddCommonConfigSections(sections);
+		sections.push_back(std::make_unique<CommandsSection>(GetMapConfigCommandWhitelist()));
 
-			return sections;
-		}());
+		return sections;
+	}());
 
-	m_MapChangeConfigDefinition = g_GameConfigLoader.CreateDefinition("MapChangeGameConfig", []()
-		{
-			std::vector<std::unique_ptr<const GameConfigSection>> sections;
+	m_MapChangeConfigDefinition = g_GameConfigLoader.CreateDefinition("MapChangeGameConfig", []() {
+		std::vector<std::unique_ptr<const GameConfigSection>> sections;
 
-			//Limit the map change config to commands only, configuration should be handled by other cfg files
-			AddCommonConfigSections(sections);
-			sections.push_back(std::make_unique<CommandsSection>());
+		//Limit the map change config to commands only, configuration should be handled by other cfg files
+		AddCommonConfigSections(sections);
+		sections.push_back(std::make_unique<CommandsSection>());
 
-			return sections;
-		}());
+		return sections;
+	}());
 }
 
 void CServerLibrary::LoadConfigFile(const char* fileName, const GameConfigDefinition& definition, const GameConfigLoadParameters& parameters)
@@ -206,8 +203,7 @@ std::unordered_set<std::string> CServerLibrary::GetMapConfigCommandWhitelist()
 	auto whitelist = g_JSON.ParseJSONFile(
 		MapConfigCommandWhitelistFileName,
 		m_MapConfigCommandWhitelistValidator,
-		[](const json& input)
-		{
+		[](const json& input) {
 			std::unordered_set<std::string> list;
 
 			if (input.is_array())

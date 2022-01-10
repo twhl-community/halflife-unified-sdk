@@ -48,7 +48,7 @@ std::filesystem::path FileSystem_GetGameDirectory()
 bool FileSystem_LoadFileSystem()
 {
 	// Determine which filesystem to use.
-#if defined ( WIN32 )
+#if defined(WIN32)
 	const char* szFsModule = "filesystem_stdio.dll";
 #elif defined(OSX)
 	const char* szFsModule = "filesystem_stdio.dylib";

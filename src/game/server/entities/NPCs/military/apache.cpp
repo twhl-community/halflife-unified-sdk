@@ -21,27 +21,27 @@
 #include "effects.h"
 #include "apache.h"
 
-extern DLL_GLOBAL int		g_iSkillLevel;
+extern DLL_GLOBAL int g_iSkillLevel;
 
 LINK_ENTITY_TO_CLASS(monster_apache, CApache);
 
-TYPEDESCRIPTION	CApache::m_SaveData[] =
-{
-	DEFINE_FIELD(CApache, m_iRockets, FIELD_INTEGER),
-	DEFINE_FIELD(CApache, m_flForce, FIELD_FLOAT),
-	DEFINE_FIELD(CApache, m_flNextRocket, FIELD_TIME),
-	DEFINE_FIELD(CApache, m_vecTarget, FIELD_VECTOR),
-	DEFINE_FIELD(CApache, m_posTarget, FIELD_POSITION_VECTOR),
-	DEFINE_FIELD(CApache, m_vecDesired, FIELD_VECTOR),
-	DEFINE_FIELD(CApache, m_posDesired, FIELD_POSITION_VECTOR),
-	DEFINE_FIELD(CApache, m_vecGoal, FIELD_VECTOR),
-	DEFINE_FIELD(CApache, m_angGun, FIELD_VECTOR),
-	DEFINE_FIELD(CApache, m_flLastSeen, FIELD_TIME),
-	DEFINE_FIELD(CApache, m_flPrevSeen, FIELD_TIME),
-	//	DEFINE_FIELD( CApache, m_iSoundState, FIELD_INTEGER ),		// Don't save, precached
-	//	DEFINE_FIELD( CApache, m_iSpriteTexture, FIELD_INTEGER ),
-	//	DEFINE_FIELD( CApache, m_iExplode, FIELD_INTEGER ),
-	//	DEFINE_FIELD( CApache, m_iBodyGibs, FIELD_INTEGER ),
+TYPEDESCRIPTION CApache::m_SaveData[] =
+	{
+		DEFINE_FIELD(CApache, m_iRockets, FIELD_INTEGER),
+		DEFINE_FIELD(CApache, m_flForce, FIELD_FLOAT),
+		DEFINE_FIELD(CApache, m_flNextRocket, FIELD_TIME),
+		DEFINE_FIELD(CApache, m_vecTarget, FIELD_VECTOR),
+		DEFINE_FIELD(CApache, m_posTarget, FIELD_POSITION_VECTOR),
+		DEFINE_FIELD(CApache, m_vecDesired, FIELD_VECTOR),
+		DEFINE_FIELD(CApache, m_posDesired, FIELD_POSITION_VECTOR),
+		DEFINE_FIELD(CApache, m_vecGoal, FIELD_VECTOR),
+		DEFINE_FIELD(CApache, m_angGun, FIELD_VECTOR),
+		DEFINE_FIELD(CApache, m_flLastSeen, FIELD_TIME),
+		DEFINE_FIELD(CApache, m_flPrevSeen, FIELD_TIME),
+		//	DEFINE_FIELD( CApache, m_iSoundState, FIELD_INTEGER ),		// Don't save, precached
+		//	DEFINE_FIELD( CApache, m_iSpriteTexture, FIELD_INTEGER ),
+		//	DEFINE_FIELD( CApache, m_iExplode, FIELD_INTEGER ),
+		//	DEFINE_FIELD( CApache, m_iBodyGibs, FIELD_INTEGER ),
 		DEFINE_FIELD(CApache, m_pBeam, FIELD_CLASSPTR),
 		DEFINE_FIELD(CApache, m_flGoalSpeed, FIELD_FLOAT),
 		DEFINE_FIELD(CApache, m_iDoSmokePuff, FIELD_INTEGER),
@@ -170,13 +170,13 @@ void CApache::DyingThink()
 	{
 		// random explosions
 		MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, pev->origin);
-		WRITE_BYTE(TE_EXPLOSION);		// This just makes a dynamic light now
+		WRITE_BYTE(TE_EXPLOSION); // This just makes a dynamic light now
 		WRITE_COORD(pev->origin.x + RANDOM_FLOAT(-150, 150));
 		WRITE_COORD(pev->origin.y + RANDOM_FLOAT(-150, 150));
 		WRITE_COORD(pev->origin.z + RANDOM_FLOAT(-150, -50));
 		WRITE_SHORT(g_sModelIndexFireball);
 		WRITE_BYTE(RANDOM_LONG(0, 29) + 30); // scale * 10
-		WRITE_BYTE(12); // framerate
+		WRITE_BYTE(12);						 // framerate
 		WRITE_BYTE(TE_EXPLFLAG_NONE);
 		MESSAGE_END();
 
@@ -188,7 +188,7 @@ void CApache::DyingThink()
 		WRITE_COORD(pev->origin.z + RANDOM_FLOAT(-150, -50));
 		WRITE_SHORT(g_sModelIndexSmoke);
 		WRITE_BYTE(100); // scale * 10
-		WRITE_BYTE(10); // framerate
+		WRITE_BYTE(10);	 // framerate
 		MESSAGE_END();
 
 		Vector vecSpot = pev->origin + (pev->mins + pev->maxs) * 0.5;
@@ -214,13 +214,13 @@ void CApache::DyingThink()
 		WRITE_BYTE(50);
 
 		// Model
-		WRITE_SHORT(m_iBodyGibs);	//model id#
+		WRITE_SHORT(m_iBodyGibs); //model id#
 
 		// # of shards
-		WRITE_BYTE(4);	// let client decide
+		WRITE_BYTE(4); // let client decide
 
 		// duration
-		WRITE_BYTE(30);// 3.0 seconds
+		WRITE_BYTE(30); // 3.0 seconds
 
 		// flags
 
@@ -267,7 +267,7 @@ void CApache::DyingThink()
 		WRITE_COORD(vecSpot.z + 512);
 		WRITE_SHORT(g_sModelIndexSmoke);
 		WRITE_BYTE(250); // scale * 10
-		WRITE_BYTE(5); // framerate
+		WRITE_BYTE(5);	 // framerate
 		MESSAGE_END();
 
 		// blast circle
@@ -280,23 +280,23 @@ void CApache::DyingThink()
 		WRITE_COORD(pev->origin.y);
 		WRITE_COORD(pev->origin.z + 2000); // reach damage radius over .2 seconds
 		WRITE_SHORT(m_iSpriteTexture);
-		WRITE_BYTE(0); // startframe
-		WRITE_BYTE(0); // framerate
-		WRITE_BYTE(4); // life
-		WRITE_BYTE(32);  // width
-		WRITE_BYTE(0);   // noise
-		WRITE_BYTE(255);   // r, g, b
-		WRITE_BYTE(255);   // r, g, b
-		WRITE_BYTE(192);   // r, g, b
+		WRITE_BYTE(0);	 // startframe
+		WRITE_BYTE(0);	 // framerate
+		WRITE_BYTE(4);	 // life
+		WRITE_BYTE(32);	 // width
+		WRITE_BYTE(0);	 // noise
+		WRITE_BYTE(255); // r, g, b
+		WRITE_BYTE(255); // r, g, b
+		WRITE_BYTE(192); // r, g, b
 		WRITE_BYTE(128); // brightness
-		WRITE_BYTE(0);		// speed
+		WRITE_BYTE(0);	 // speed
 		MESSAGE_END();
 
 		EMIT_SOUND(ENT(pev), CHAN_STATIC, "weapons/mortarhit.wav", 1.0, 0.3);
 
 		RadiusDamage(pev->origin, pev, pev, 300, CLASS_NONE, DMG_BLAST);
 
-		if (/*(pev->spawnflags & SF_NOWRECKAGE) == 0 && */(pev->flags & FL_ONGROUND) != 0)
+		if (/*(pev->spawnflags & SF_NOWRECKAGE) == 0 && */ (pev->flags & FL_ONGROUND) != 0)
 		{
 			CBaseEntity* pWreckage = Create("cycler_wreckage", pev->origin, pev->angles);
 			// SET_MODEL( ENT(pWreckage->pev), STRING(pev->model) );
@@ -331,13 +331,13 @@ void CApache::DyingThink()
 		WRITE_BYTE(30);
 
 		// Model
-		WRITE_SHORT(m_iBodyGibs);	//model id#
+		WRITE_SHORT(m_iBodyGibs); //model id#
 
 		// # of shards
 		WRITE_BYTE(200);
 
 		// duration
-		WRITE_BYTE(200);// 10.0 seconds
+		WRITE_BYTE(200); // 10.0 seconds
 
 		// flags
 
@@ -378,7 +378,7 @@ void CApache::CrashTouch(CBaseEntity* pOther)
 
 void CApache::GibMonster()
 {
-	// EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "common/bodysplat.wav", 0.75, ATTN_NORM, 0, 200);		
+	// EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "common/bodysplat.wav", 0.75, ATTN_NORM, 0, 200);
 }
 
 
@@ -391,7 +391,7 @@ void CApache::HuntThink()
 
 	ShowDamage();
 
-	if (m_pGoalEnt == NULL && !FStringNull(pev->target))// this monster has a target
+	if (m_pGoalEnt == NULL && !FStringNull(pev->target)) // this monster has a target
 	{
 		m_pGoalEnt = UTIL_FindEntityByTargetname(NULL, STRING(pev->target));
 		if (m_pGoalEnt)
@@ -643,8 +643,8 @@ void CApache::Flight()
 		pev->avelocity.x += 4.0;
 	}
 
-	// ALERT( at_console, "%.0f %.0f : %.0f %.0f : %.0f %.0f : %.0f\n", pev->origin.x, pev->velocity.x, flDist, flSpeed, pev->angles.x, pev->avelocity.x, m_flForce ); 
-	// ALERT( at_console, "%.0f %.0f : %.0f %0.f : %.0f\n", pev->origin.z, pev->velocity.z, vecEst.z, m_posDesired.z, m_flForce ); 
+	// ALERT( at_console, "%.0f %.0f : %.0f %.0f : %.0f %.0f : %.0f\n", pev->origin.x, pev->velocity.x, flDist, flSpeed, pev->angles.x, pev->avelocity.x, m_flForce );
+	// ALERT( at_console, "%.0f %.0f : %.0f %0.f : %.0f\n", pev->origin.z, pev->velocity.z, vecEst.z, m_posDesired.z, m_flForce );
 
 	// make rotor, engine sounds
 	if (m_iSoundState == 0)
@@ -659,7 +659,7 @@ void CApache::Flight()
 		CBaseEntity* pPlayer = NULL;
 
 		pPlayer = UTIL_FindEntityByClassname(NULL, "player");
-		// UNDONE: this needs to send different sounds to every player for multiplayer.	
+		// UNDONE: this needs to send different sounds to every player for multiplayer.
 		if (pPlayer)
 		{
 
@@ -700,11 +700,20 @@ void CApache::FireRocket()
 
 	switch (m_iRockets % 5)
 	{
-	case 0:	vecSrc = vecSrc + gpGlobals->v_right * 10; break;
-	case 1: vecSrc = vecSrc - gpGlobals->v_right * 10; break;
-	case 2: vecSrc = vecSrc + gpGlobals->v_up * 10; break;
-	case 3: vecSrc = vecSrc - gpGlobals->v_up * 10; break;
-	case 4: break;
+	case 0:
+		vecSrc = vecSrc + gpGlobals->v_right * 10;
+		break;
+	case 1:
+		vecSrc = vecSrc - gpGlobals->v_right * 10;
+		break;
+	case 2:
+		vecSrc = vecSrc + gpGlobals->v_up * 10;
+		break;
+	case 3:
+		vecSrc = vecSrc - gpGlobals->v_up * 10;
+		break;
+	case 4:
+		break;
 	}
 
 	MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, vecSrc);
@@ -822,7 +831,7 @@ void CApache::ShowDamage()
 		WRITE_COORD(pev->origin.z - 32);
 		WRITE_SHORT(g_sModelIndexSmoke);
 		WRITE_BYTE(RANDOM_LONG(0, 9) + 20); // scale * 10
-		WRITE_BYTE(12); // framerate
+		WRITE_BYTE(12);						// framerate
 		MESSAGE_END();
 	}
 	if (m_iDoSmokePuff > 0)
@@ -888,18 +897,18 @@ class CApacheHVR : public CGrenade
 	void EXPORT IgniteThink();
 	void EXPORT AccelerateThink();
 
-	bool	Save(CSave& save) override;
-	bool	Restore(CRestore& restore) override;
-	static	TYPEDESCRIPTION m_SaveData[];
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
+	static TYPEDESCRIPTION m_SaveData[];
 
 	int m_iTrail;
 	Vector m_vecForward;
 };
 LINK_ENTITY_TO_CLASS(hvr_rocket, CApacheHVR);
 
-TYPEDESCRIPTION	CApacheHVR::m_SaveData[] =
-{
-	//	DEFINE_FIELD( CApacheHVR, m_iTrail, FIELD_INTEGER ),	// Dont' save, precache
+TYPEDESCRIPTION CApacheHVR::m_SaveData[] =
+	{
+		//	DEFINE_FIELD( CApacheHVR, m_iTrail, FIELD_INTEGER ),	// Dont' save, precache
 		DEFINE_FIELD(CApacheHVR, m_vecForward, FIELD_VECTOR),
 };
 
@@ -951,16 +960,16 @@ void CApacheHVR::IgniteThink()
 	MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
 
 	WRITE_BYTE(TE_BEAMFOLLOW);
-	WRITE_SHORT(entindex());	// entity
-	WRITE_SHORT(m_iTrail);	// model
-	WRITE_BYTE(15); // life
-	WRITE_BYTE(5);  // width
-	WRITE_BYTE(224);   // r, g, b
-	WRITE_BYTE(224);   // r, g, b
-	WRITE_BYTE(255);   // r, g, b
-	WRITE_BYTE(255);	// brightness
+	WRITE_SHORT(entindex()); // entity
+	WRITE_SHORT(m_iTrail);	 // model
+	WRITE_BYTE(15);			 // life
+	WRITE_BYTE(5);			 // width
+	WRITE_BYTE(224);		 // r, g, b
+	WRITE_BYTE(224);		 // r, g, b
+	WRITE_BYTE(255);		 // r, g, b
+	WRITE_BYTE(255);		 // brightness
 
-	MESSAGE_END();  // move PHS/PVS data sending into here (SEND_ALL, SEND_PVS, SEND_PHS)
+	MESSAGE_END(); // move PHS/PVS data sending into here (SEND_ALL, SEND_PVS, SEND_PHS)
 
 	// set to accelerate
 	SetThink(&CApacheHVR::AccelerateThink);

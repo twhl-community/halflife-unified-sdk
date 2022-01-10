@@ -49,27 +49,25 @@ const auto PITWORM_UP_NUM_LEVELS = 4;
 const auto PITWORM_UP_EYE_HEIGHT = 300.0f;
 
 const float PITWORM_UP_LEVELS[PITWORM_UP_NUM_LEVELS] =
-{
-	PITWORM_UP_EYE_HEIGHT,
-	PITWORM_UP_EYE_HEIGHT,
-	PITWORM_UP_EYE_HEIGHT,
-	PITWORM_UP_EYE_HEIGHT + 50
-};
+	{
+		PITWORM_UP_EYE_HEIGHT,
+		PITWORM_UP_EYE_HEIGHT,
+		PITWORM_UP_EYE_HEIGHT,
+		PITWORM_UP_EYE_HEIGHT + 50};
 
 const char* const PITWORM_UP_LEVEL_NAMES[PITWORM_UP_NUM_LEVELS] =
-{
-	"pw_tleveldead",
-	"pw_tlevel1",
-	"pw_tlevel2",
-	"pw_tlevel3"
-};
+	{
+		"pw_tleveldead",
+		"pw_tlevel1",
+		"pw_tlevel2",
+		"pw_tlevel3"};
 
 class COFPitWormUp : public CBaseMonster
 {
 public:
 	bool Save(CSave& save) override;
 	bool Restore(CRestore& restore) override;
-	static	TYPEDESCRIPTION m_SaveData[];
+	static TYPEDESCRIPTION m_SaveData[];
 
 	void Precache() override;
 
@@ -195,101 +193,95 @@ public:
 
 LINK_ENTITY_TO_CLASS(monster_pitworm_up, COFPitWormUp);
 
-TYPEDESCRIPTION	COFPitWormUp::m_SaveData[] =
-{
-	DEFINE_FIELD(COFPitWormUp, m_flNextPainSound, FIELD_TIME),
-	DEFINE_FIELD(COFPitWormUp, m_vecTarget, FIELD_VECTOR),
-	DEFINE_FIELD(COFPitWormUp, m_posTarget, FIELD_POSITION_VECTOR),
-	DEFINE_FIELD(COFPitWormUp, m_vecDesired, FIELD_VECTOR),
-	DEFINE_FIELD(COFPitWormUp, m_posDesired, FIELD_POSITION_VECTOR),
+TYPEDESCRIPTION COFPitWormUp::m_SaveData[] =
+	{
+		DEFINE_FIELD(COFPitWormUp, m_flNextPainSound, FIELD_TIME),
+		DEFINE_FIELD(COFPitWormUp, m_vecTarget, FIELD_VECTOR),
+		DEFINE_FIELD(COFPitWormUp, m_posTarget, FIELD_POSITION_VECTOR),
+		DEFINE_FIELD(COFPitWormUp, m_vecDesired, FIELD_VECTOR),
+		DEFINE_FIELD(COFPitWormUp, m_posDesired, FIELD_POSITION_VECTOR),
 
-	DEFINE_FIELD(COFPitWormUp, m_offsetBeam, FIELD_FLOAT),
-	DEFINE_FIELD(COFPitWormUp, m_posBeam, FIELD_POSITION_VECTOR),
-	DEFINE_FIELD(COFPitWormUp, m_vecBeam, FIELD_VECTOR),
-	DEFINE_FIELD(COFPitWormUp, m_angleBeam, FIELD_VECTOR),
-	DEFINE_FIELD(COFPitWormUp, m_flBeamExpireTime, FIELD_FLOAT),
-	DEFINE_FIELD(COFPitWormUp, m_flBeamDir, FIELD_FLOAT),
+		DEFINE_FIELD(COFPitWormUp, m_offsetBeam, FIELD_FLOAT),
+		DEFINE_FIELD(COFPitWormUp, m_posBeam, FIELD_POSITION_VECTOR),
+		DEFINE_FIELD(COFPitWormUp, m_vecBeam, FIELD_VECTOR),
+		DEFINE_FIELD(COFPitWormUp, m_angleBeam, FIELD_VECTOR),
+		DEFINE_FIELD(COFPitWormUp, m_flBeamExpireTime, FIELD_FLOAT),
+		DEFINE_FIELD(COFPitWormUp, m_flBeamDir, FIELD_FLOAT),
 
-	DEFINE_FIELD(COFPitWormUp, m_flTorsoYaw, FIELD_FLOAT),
-	DEFINE_FIELD(COFPitWormUp, m_flHeadYaw, FIELD_FLOAT),
-	DEFINE_FIELD(COFPitWormUp, m_flHeadPitch, FIELD_FLOAT),
-	DEFINE_FIELD(COFPitWormUp, m_flIdealTorsoYaw, FIELD_FLOAT),
-	DEFINE_FIELD(COFPitWormUp, m_flIdealHeadYaw, FIELD_FLOAT),
-	DEFINE_FIELD(COFPitWormUp, m_flIdealHeadPitch,	FIELD_FLOAT),
+		DEFINE_FIELD(COFPitWormUp, m_flTorsoYaw, FIELD_FLOAT),
+		DEFINE_FIELD(COFPitWormUp, m_flHeadYaw, FIELD_FLOAT),
+		DEFINE_FIELD(COFPitWormUp, m_flHeadPitch, FIELD_FLOAT),
+		DEFINE_FIELD(COFPitWormUp, m_flIdealTorsoYaw, FIELD_FLOAT),
+		DEFINE_FIELD(COFPitWormUp, m_flIdealHeadYaw, FIELD_FLOAT),
+		DEFINE_FIELD(COFPitWormUp, m_flIdealHeadPitch, FIELD_FLOAT),
 
-	DEFINE_ARRAY(COFPitWormUp, m_flLevels, FIELD_FLOAT, PITWORM_UP_NUM_LEVELS),
-	DEFINE_ARRAY(COFPitWormUp, m_flTargetLevels,FIELD_FLOAT, PITWORM_UP_NUM_LEVELS),
+		DEFINE_ARRAY(COFPitWormUp, m_flLevels, FIELD_FLOAT, PITWORM_UP_NUM_LEVELS),
+		DEFINE_ARRAY(COFPitWormUp, m_flTargetLevels, FIELD_FLOAT, PITWORM_UP_NUM_LEVELS),
 
-	DEFINE_FIELD(COFPitWormUp, m_flLastSeen, FIELD_TIME),
-	DEFINE_FIELD(COFPitWormUp, m_flPrevSeen, FIELD_TIME),
+		DEFINE_FIELD(COFPitWormUp, m_flLastSeen, FIELD_TIME),
+		DEFINE_FIELD(COFPitWormUp, m_flPrevSeen, FIELD_TIME),
 
-	DEFINE_FIELD(COFPitWormUp, m_iLevel, FIELD_INTEGER),
-	DEFINE_FIELD(COFPitWormUp, m_flLevelSpeed, FIELD_FLOAT),
+		DEFINE_FIELD(COFPitWormUp, m_iLevel, FIELD_INTEGER),
+		DEFINE_FIELD(COFPitWormUp, m_flLevelSpeed, FIELD_FLOAT),
 
-	DEFINE_FIELD(COFPitWormUp, m_pBeam, FIELD_CLASSPTR),
-	DEFINE_FIELD(COFPitWormUp, m_pSprite, FIELD_CLASSPTR),
+		DEFINE_FIELD(COFPitWormUp, m_pBeam, FIELD_CLASSPTR),
+		DEFINE_FIELD(COFPitWormUp, m_pSprite, FIELD_CLASSPTR),
 
-	DEFINE_FIELD(COFPitWormUp, m_fAttacking, FIELD_BOOLEAN),
-	DEFINE_FIELD(COFPitWormUp, m_fLockHeight, FIELD_BOOLEAN),
-	DEFINE_FIELD(COFPitWormUp, m_fLockYaw, FIELD_BOOLEAN),
+		DEFINE_FIELD(COFPitWormUp, m_fAttacking, FIELD_BOOLEAN),
+		DEFINE_FIELD(COFPitWormUp, m_fLockHeight, FIELD_BOOLEAN),
+		DEFINE_FIELD(COFPitWormUp, m_fLockYaw, FIELD_BOOLEAN),
 
-	DEFINE_FIELD(COFPitWormUp, m_iWasHit, FIELD_INTEGER),
+		DEFINE_FIELD(COFPitWormUp, m_iWasHit, FIELD_INTEGER),
 
-	DEFINE_FIELD(COFPitWormUp, m_flTakeHitTime, FIELD_TIME),
-	DEFINE_FIELD(COFPitWormUp, m_flHitTime, FIELD_TIME),
-	DEFINE_FIELD(COFPitWormUp, m_flNextMeleeTime, FIELD_TIME),
-	DEFINE_FIELD(COFPitWormUp, m_flNextRangeTime, FIELD_TIME),
-	DEFINE_FIELD(COFPitWormUp, m_flDeathStartTime,	FIELD_TIME),
+		DEFINE_FIELD(COFPitWormUp, m_flTakeHitTime, FIELD_TIME),
+		DEFINE_FIELD(COFPitWormUp, m_flHitTime, FIELD_TIME),
+		DEFINE_FIELD(COFPitWormUp, m_flNextMeleeTime, FIELD_TIME),
+		DEFINE_FIELD(COFPitWormUp, m_flNextRangeTime, FIELD_TIME),
+		DEFINE_FIELD(COFPitWormUp, m_flDeathStartTime, FIELD_TIME),
 
-	DEFINE_FIELD(COFPitWormUp, m_fFirstSighting, FIELD_BOOLEAN),
+		DEFINE_FIELD(COFPitWormUp, m_fFirstSighting, FIELD_BOOLEAN),
 
-	DEFINE_FIELD(COFPitWormUp, m_fTopLevelLocked, FIELD_BOOLEAN),
+		DEFINE_FIELD(COFPitWormUp, m_fTopLevelLocked, FIELD_BOOLEAN),
 
-	DEFINE_FIELD(COFPitWormUp, m_flLastBlinkTime, FIELD_FLOAT),
-	DEFINE_FIELD(COFPitWormUp, m_flLastBlinkInterval, FIELD_FLOAT),
-	DEFINE_FIELD(COFPitWormUp, m_flLastEventTime, FIELD_FLOAT),
+		DEFINE_FIELD(COFPitWormUp, m_flLastBlinkTime, FIELD_FLOAT),
+		DEFINE_FIELD(COFPitWormUp, m_flLastBlinkInterval, FIELD_FLOAT),
+		DEFINE_FIELD(COFPitWormUp, m_flLastEventTime, FIELD_FLOAT),
 };
 
 IMPLEMENT_SAVERESTORE(COFPitWormUp, CBaseMonster);
 
 const char* COFPitWormUp::pAttackSounds[] =
-{
-	"zombie/claw_strike1.wav",
-	"zombie/claw_strike2.wav",
-	"zombie/claw_strike3.wav"
-};
+	{
+		"zombie/claw_strike1.wav",
+		"zombie/claw_strike2.wav",
+		"zombie/claw_strike3.wav"};
 
 const char* COFPitWormUp::pAttackVoiceSounds[] =
-{
-	"pitworm/pit_worm_attack_swipe1.wav",
-	"pitworm/pit_worm_attack_swipe2.wav",
-	"pitworm/pit_worm_attack_swipe3.wav"
-};
+	{
+		"pitworm/pit_worm_attack_swipe1.wav",
+		"pitworm/pit_worm_attack_swipe2.wav",
+		"pitworm/pit_worm_attack_swipe3.wav"};
 
 const char* COFPitWormUp::pShootSounds[] =
-{
-	"debris/beamstart3.wav",
-	"debris/beamstart8.wav"
-};
+	{
+		"debris/beamstart3.wav",
+		"debris/beamstart8.wav"};
 
 const char* COFPitWormUp::pPainSounds[] =
-{
-	"pitworm/pit_worm_flinch1.wav",
-	"pitworm/pit_worm_flinch2.wav"
-};
+	{
+		"pitworm/pit_worm_flinch1.wav",
+		"pitworm/pit_worm_flinch2.wav"};
 
 const char* COFPitWormUp::pHitGroundSounds[] =
-{
-	"tentacle/te_strike1.wav",
-	"tentacle/te_strike2.wav"
-};
+	{
+		"tentacle/te_strike1.wav",
+		"tentacle/te_strike2.wav"};
 
 const char* COFPitWormUp::pIdleSounds[] =
-{
-	"pitworm/pit_worm_idle1.wav",
-	"pitworm/pit_worm_idle2.wav",
-	"pitworm/pit_worm_idle3.wav"
-};
+	{
+		"pitworm/pit_worm_idle1.wav",
+		"pitworm/pit_worm_idle2.wav",
+		"pitworm/pit_worm_idle3.wav"};
 
 void COFPitWormUp::Precache()
 {
@@ -491,8 +483,7 @@ void COFPitWormUp::HuntThink()
 	{
 		const auto blinkInterval = gpGlobals->time - m_flLastBlinkTime;
 
-		if (blinkInterval >= 6.0 && !m_pBeam
-			&& blinkInterval >= g_engfuncs.pfnRandomFloat(6.0, 9.0))
+		if (blinkInterval >= 6.0 && !m_pBeam && blinkInterval >= g_engfuncs.pfnRandomFloat(6.0, 9.0))
 		{
 			pev->skin = 1;
 			m_flLastBlinkInterval = gpGlobals->time;
@@ -661,11 +652,7 @@ void COFPitWormUp::HitTouch(CBaseEntity* pOther)
 {
 	auto tr = UTIL_GetGlobalTrace();
 
-	if (pOther->pev->modelindex != pev->modelindex
-		&& m_flHitTime <= gpGlobals->time
-		&& tr.pHit
-		&& pev->modelindex == tr.pHit->v.modelindex
-		&& pOther->pev->takedamage != DAMAGE_NO)
+	if (pOther->pev->modelindex != pev->modelindex && m_flHitTime <= gpGlobals->time && tr.pHit && pev->modelindex == tr.pHit->v.modelindex && pOther->pev->takedamage != DAMAGE_NO)
 	{
 		pOther->TakeDamage(pev, pev, 20, DMG_CRUSH | DMG_SLASH);
 
@@ -1061,9 +1048,7 @@ void COFPitWormUp::NextActivity()
 
 bool COFPitWormUp::ClawAttack()
 {
-	if (!m_hEnemy
-		|| pev->origin.z != m_posDesired.z
-		|| m_flNextMeleeTime > gpGlobals->time)
+	if (!m_hEnemy || pev->origin.z != m_posDesired.z || m_flNextMeleeTime > gpGlobals->time)
 		return false;
 
 	const auto distance = (pev->origin - m_hEnemy->pev->origin).Length2D();
@@ -1356,7 +1341,8 @@ void COFPitWormUp::HandleAnimEvent(MonsterEvent_t* pEvent)
 		m_fLockYaw = true;
 		break;
 
-	default: break;
+	default:
+		break;
 	}
 }
 
@@ -1409,7 +1395,7 @@ class COFInfoPW : public CPointEntity
 public:
 	bool Save(CSave& save) override;
 	bool Restore(CRestore& restore) override;
-	static	TYPEDESCRIPTION m_SaveData[];
+	static TYPEDESCRIPTION m_SaveData[];
 
 	bool KeyValue(KeyValueData* pkvd) override;
 
@@ -1420,9 +1406,9 @@ public:
 	int m_preSequence;
 };
 
-TYPEDESCRIPTION	COFInfoPW::m_SaveData[] =
-{
-	DEFINE_FIELD(COFInfoPW, m_preSequence, FIELD_STRING),
+TYPEDESCRIPTION COFInfoPW::m_SaveData[] =
+	{
+		DEFINE_FIELD(COFInfoPW, m_preSequence, FIELD_STRING),
 };
 
 IMPLEMENT_SAVERESTORE(COFInfoPW, CPointEntity);
@@ -1537,20 +1523,20 @@ void COFPitWormGib::GibFloat()
 class COFPitWormGibShooter : public CBaseEntity
 {
 public:
-	void	Spawn() override;
-	void	Precache() override;
-	bool	KeyValue(KeyValueData* pkvd) override;
+	void Spawn() override;
+	void Precache() override;
+	bool KeyValue(KeyValueData* pkvd) override;
 	void EXPORT ShootThink();
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
 	virtual COFPitWormGib* CreateGib();
 
-	bool	Save(CSave& save) override;
-	bool	Restore(CRestore& restore) override;
-	static	TYPEDESCRIPTION m_SaveData[];
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
+	static TYPEDESCRIPTION m_SaveData[];
 
 	float m_flDelay;
-	int	m_iGibs;
+	int m_iGibs;
 	int m_iGibCapacity;
 	int m_iGibMaterial;
 	int m_iGibModelIndex;
@@ -1559,12 +1545,12 @@ public:
 };
 
 TYPEDESCRIPTION COFPitWormGibShooter::m_SaveData[] =
-{
-	DEFINE_FIELD(COFPitWormGibShooter, m_iGibs, FIELD_INTEGER),
-	DEFINE_FIELD(COFPitWormGibShooter, m_iGibCapacity, FIELD_INTEGER),
-	DEFINE_FIELD(COFPitWormGibShooter, m_iGibMaterial, FIELD_INTEGER),
-	DEFINE_FIELD(COFPitWormGibShooter, m_flGibVelocity, FIELD_FLOAT),
-	DEFINE_FIELD(COFPitWormGibShooter, m_flVariance, FIELD_FLOAT),
+	{
+		DEFINE_FIELD(COFPitWormGibShooter, m_iGibs, FIELD_INTEGER),
+		DEFINE_FIELD(COFPitWormGibShooter, m_iGibCapacity, FIELD_INTEGER),
+		DEFINE_FIELD(COFPitWormGibShooter, m_iGibMaterial, FIELD_INTEGER),
+		DEFINE_FIELD(COFPitWormGibShooter, m_flGibVelocity, FIELD_FLOAT),
+		DEFINE_FIELD(COFPitWormGibShooter, m_flVariance, FIELD_FLOAT),
 };
 
 IMPLEMENT_SAVERESTORE(COFPitWormGibShooter, CBaseEntity);
@@ -1637,7 +1623,7 @@ COFPitWormGib* COFPitWormGibShooter::CreateGib()
 		ALERT(at_aiconsole, "GibShooter Body is <= 1!\n");
 	}
 
-	pGib->pev->body = RANDOM_LONG(1, pev->body - 1);// avoid throwing random amounts of the 0th gib. (skull).
+	pGib->pev->body = RANDOM_LONG(1, pev->body - 1); // avoid throwing random amounts of the 0th gib. (skull).
 
 	return pGib;
 }
@@ -1651,9 +1637,12 @@ void COFPitWormGibShooter::ShootThink()
 
 	vecShootDir = pev->movedir;
 
-	vecShootDir = vecShootDir + gpGlobals->v_right * RANDOM_FLOAT(-1, 1) * m_flVariance;;
-	vecShootDir = vecShootDir + gpGlobals->v_forward * RANDOM_FLOAT(-1, 1) * m_flVariance;;
-	vecShootDir = vecShootDir + gpGlobals->v_up * RANDOM_FLOAT(-1, 1) * m_flVariance;;
+	vecShootDir = vecShootDir + gpGlobals->v_right * RANDOM_FLOAT(-1, 1) * m_flVariance;
+	;
+	vecShootDir = vecShootDir + gpGlobals->v_forward * RANDOM_FLOAT(-1, 1) * m_flVariance;
+	;
+	vecShootDir = vecShootDir + gpGlobals->v_up * RANDOM_FLOAT(-1, 1) * m_flVariance;
+	;
 
 	vecShootDir = vecShootDir.Normalize();
 	COFPitWormGib* pGib = CreateGib();
@@ -1669,8 +1658,8 @@ void COFPitWormGibShooter::ShootThink()
 	pev->nextthink = gpGlobals->time + 0.1;
 }
 
-#define bits_MEMORY_ADVANCE_NODE	(bits_MEMORY_CUSTOM2)
-#define bits_MEMORY_COMPLETED_NODE	(bits_MEMORY_CUSTOM3)
+#define bits_MEMORY_ADVANCE_NODE (bits_MEMORY_CUSTOM2)
+#define bits_MEMORY_COMPLETED_NODE (bits_MEMORY_CUSTOM3)
 
 int gSpikeSprite, gSpikeDebrisSprite;
 
@@ -1682,7 +1671,7 @@ class COFPitWorm : public CBaseMonster
 public:
 	bool Save(CSave& save) override;
 	bool Restore(CRestore& restore) override;
-	static	TYPEDESCRIPTION m_SaveData[];
+	static TYPEDESCRIPTION m_SaveData[];
 
 	int Classify() override
 	{
@@ -1709,7 +1698,7 @@ public:
 	void Activate() override
 	{
 		if (m_hTargetEnt == NULL)
-			Remember(bits_MEMORY_ADVANCE_NODE);	// Start 'er up
+			Remember(bits_MEMORY_ADVANCE_NODE); // Start 'er up
 	}
 
 	void StartMonster() override;
@@ -1796,88 +1785,87 @@ public:
 };
 
 TYPEDESCRIPTION COFPitWorm::m_SaveData[] =
-{
-	DEFINE_FIELD(COFPitWorm, m_nodeTime, FIELD_TIME),
-	DEFINE_FIELD(COFPitWorm, m_spikeTime, FIELD_TIME),
-	DEFINE_FIELD(COFPitWorm, m_painSoundTime, FIELD_TIME),
-	DEFINE_FIELD(COFPitWorm, m_slowMode, FIELD_INTEGER),
-	DEFINE_FIELD(COFPitWorm, m_slowTime, FIELD_TIME),
-	DEFINE_FIELD(COFPitWorm, m_flHeadYaw, FIELD_FLOAT),
-	DEFINE_FIELD(COFPitWorm, m_flHeadPitch, FIELD_FLOAT),
-	DEFINE_FIELD(COFPitWorm, m_flIdealHeadYaw, FIELD_FLOAT),
-	DEFINE_FIELD(COFPitWorm, m_flIdealHeadPitch, FIELD_FLOAT),
-	DEFINE_FIELD(COFPitWorm, m_posTarget, FIELD_VECTOR),
-	DEFINE_FIELD(COFPitWorm, m_vecTarget, FIELD_VECTOR),
-	DEFINE_FIELD(COFPitWorm, m_pBeam, FIELD_CLASSPTR),
-	DEFINE_FIELD(COFPitWorm, m_posBeam, FIELD_VECTOR),
-	DEFINE_FIELD(COFPitWorm, m_vecBeam, FIELD_VECTOR),
-	DEFINE_FIELD(COFPitWorm, m_angleBeam, FIELD_VECTOR),
-	DEFINE_FIELD(COFPitWorm, m_offsetBeam, FIELD_FLOAT),
-	DEFINE_FIELD(COFPitWorm, m_flBeamExpireTime, FIELD_FLOAT),
-	DEFINE_FIELD(COFPitWorm, m_flBeamDir, FIELD_FLOAT),
-	DEFINE_FIELD(COFPitWorm, m_NextActivity, FIELD_INTEGER)
-};
+	{
+		DEFINE_FIELD(COFPitWorm, m_nodeTime, FIELD_TIME),
+		DEFINE_FIELD(COFPitWorm, m_spikeTime, FIELD_TIME),
+		DEFINE_FIELD(COFPitWorm, m_painSoundTime, FIELD_TIME),
+		DEFINE_FIELD(COFPitWorm, m_slowMode, FIELD_INTEGER),
+		DEFINE_FIELD(COFPitWorm, m_slowTime, FIELD_TIME),
+		DEFINE_FIELD(COFPitWorm, m_flHeadYaw, FIELD_FLOAT),
+		DEFINE_FIELD(COFPitWorm, m_flHeadPitch, FIELD_FLOAT),
+		DEFINE_FIELD(COFPitWorm, m_flIdealHeadYaw, FIELD_FLOAT),
+		DEFINE_FIELD(COFPitWorm, m_flIdealHeadPitch, FIELD_FLOAT),
+		DEFINE_FIELD(COFPitWorm, m_posTarget, FIELD_VECTOR),
+		DEFINE_FIELD(COFPitWorm, m_vecTarget, FIELD_VECTOR),
+		DEFINE_FIELD(COFPitWorm, m_pBeam, FIELD_CLASSPTR),
+		DEFINE_FIELD(COFPitWorm, m_posBeam, FIELD_VECTOR),
+		DEFINE_FIELD(COFPitWorm, m_vecBeam, FIELD_VECTOR),
+		DEFINE_FIELD(COFPitWorm, m_angleBeam, FIELD_VECTOR),
+		DEFINE_FIELD(COFPitWorm, m_offsetBeam, FIELD_FLOAT),
+		DEFINE_FIELD(COFPitWorm, m_flBeamExpireTime, FIELD_FLOAT),
+		DEFINE_FIELD(COFPitWorm, m_flBeamDir, FIELD_FLOAT),
+		DEFINE_FIELD(COFPitWorm, m_NextActivity, FIELD_INTEGER)};
 
 IMPLEMENT_SAVERESTORE(COFPitWorm, CBaseMonster);
 
 const char* COFPitWorm::pChildDieSounds[] =
-{
-	"gonarch/gon_childdie1.wav",
-	"gonarch/gon_childdie2.wav",
-	"gonarch/gon_childdie3.wav",
+	{
+		"gonarch/gon_childdie1.wav",
+		"gonarch/gon_childdie2.wav",
+		"gonarch/gon_childdie3.wav",
 };
 
 const char* COFPitWorm::pSackSounds[] =
-{
-	"gonarch/gon_sack1.wav",
-	"gonarch/gon_sack2.wav",
-	"gonarch/gon_sack3.wav",
+	{
+		"gonarch/gon_sack1.wav",
+		"gonarch/gon_sack2.wav",
+		"gonarch/gon_sack3.wav",
 };
 
 const char* COFPitWorm::pDeathSounds[] =
-{
-	"gonarch/gon_die1.wav",
+	{
+		"gonarch/gon_die1.wav",
 };
 
 const char* COFPitWorm::pAttackSounds[] =
-{
-	"gonarch/gon_attack1.wav",
-	"gonarch/gon_attack2.wav",
-	"gonarch/gon_attack3.wav",
+	{
+		"gonarch/gon_attack1.wav",
+		"gonarch/gon_attack2.wav",
+		"gonarch/gon_attack3.wav",
 };
 const char* COFPitWorm::pAttackHitSounds[] =
-{
-	"zombie/claw_strike1.wav",
-	"zombie/claw_strike2.wav",
-	"zombie/claw_strike3.wav",
+	{
+		"zombie/claw_strike1.wav",
+		"zombie/claw_strike2.wav",
+		"zombie/claw_strike3.wav",
 };
 
 const char* COFPitWorm::pBirthSounds[] =
-{
-	"gonarch/gon_birth1.wav",
-	"gonarch/gon_birth2.wav",
-	"gonarch/gon_birth3.wav",
+	{
+		"gonarch/gon_birth1.wav",
+		"gonarch/gon_birth2.wav",
+		"gonarch/gon_birth3.wav",
 };
 
 const char* COFPitWorm::pAlertSounds[] =
-{
-	"gonarch/gon_alert1.wav",
-	"gonarch/gon_alert2.wav",
-	"gonarch/gon_alert3.wav",
+	{
+		"gonarch/gon_alert1.wav",
+		"gonarch/gon_alert2.wav",
+		"gonarch/gon_alert3.wav",
 };
 
 const char* COFPitWorm::pPainSounds[] =
-{
-	"gonarch/gon_pain2.wav",
-	"gonarch/gon_pain4.wav",
-	"gonarch/gon_pain5.wav",
+	{
+		"gonarch/gon_pain2.wav",
+		"gonarch/gon_pain4.wav",
+		"gonarch/gon_pain5.wav",
 };
 
 const char* COFPitWorm::pFootSounds[] =
-{
-	"gonarch/gon_step1.wav",
-	"gonarch/gon_step2.wav",
-	"gonarch/gon_step3.wav",
+	{
+		"gonarch/gon_step1.wav",
+		"gonarch/gon_step2.wav",
+		"gonarch/gon_step3.wav",
 };
 
 LINK_ENTITY_TO_CLASS(monster_pitworm, COFPitWorm);
@@ -1959,7 +1947,7 @@ void COFPitWorm::StartMonster()
 		pev->flags &= ~FL_ONGROUND;
 	}
 
-	if (!FStringNull(pev->target))// this monster has a target
+	if (!FStringNull(pev->target)) // this monster has a target
 	{
 		// Find the monster's initial target entity, stash it
 		m_pGoalEnt = CBaseEntity::Instance(FIND_ENTITY_BY_TARGETNAME(NULL, STRING(pev->target)));
@@ -1982,7 +1970,7 @@ void COFPitWorm::StartMonster()
 			}
 #endif
 
-			// set the monster up to walk a path corner path. 
+			// set the monster up to walk a path corner path.
 			// !!!BUGBUG - this is a minor bit of a hack.
 			// JAYJAY
 			m_movementGoal = MOVEGOAL_PATHCORNER;
@@ -2022,8 +2010,8 @@ void COFPitWorm::Spawn()
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_GREEN;
 	pev->health = 150 * gSkillData.bigmommaHealthFactor;
-	pev->view_ofs = Vector(0, 0, 128);// position of the eyes relative to monster's origin.
-	m_flFieldOfView = 0.3;// indicates the width of this monster's forward view cone ( as a dotproduct result )
+	pev->view_ofs = Vector(0, 0, 128); // position of the eyes relative to monster's origin.
+	m_flFieldOfView = 0.3;			   // indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
 	m_afCapability = bits_CAP_RANGE_ATTACK1 | bits_CAP_MELEE_ATTACK1 | bits_CAP_TURN_HEAD;
 	m_slowMode = ACT_RUN;
@@ -2079,15 +2067,15 @@ void COFPitWorm::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecD
 	CBaseMonster::TraceAttack(pevAttacker, flDamage, vecDir, ptr, bitsDamageType);
 }
 
-#define DIST_TO_CHECK	200
+#define DIST_TO_CHECK 200
 
 void COFPitWorm::Move(float flInterval)
 {
-	float		flWaypointDist;
-	float		flCheckDist;
-	float		flDist;// how far the lookahead check got before hitting an object.
-	Vector		vecDir;
-	Vector		vecApex;
+	float flWaypointDist;
+	float flCheckDist;
+	float flDist; // how far the lookahead check got before hitting an object.
+	Vector vecDir;
+	Vector vecApex;
 	CBaseEntity* pTargetEnt;
 
 	// Don't move if no valid route
@@ -2106,7 +2094,7 @@ void COFPitWorm::Move(float flInterval)
 	if (m_flMoveWaitFinished > gpGlobals->time)
 		return;
 
-	// Debug, test movement code
+		// Debug, test movement code
 #if 0
 //	if ( CVAR_GET_FLOAT("stopmove" ) != 0 )
 	{
@@ -2200,7 +2188,7 @@ void COFPitWorm::Move(float flInterval)
 
 	// close enough to the target, now advance to the next target. This is done before actually reaching
 	// the target so that we get a nice natural turn while moving.
-	if (ShouldAdvanceRoute(flWaypointDist))///!!!BUGBUG- magic number
+	if (ShouldAdvanceRoute(flWaypointDist)) ///!!!BUGBUG- magic number
 	{
 		AdvanceRoute(flWaypointDist);
 	}
@@ -2291,8 +2279,7 @@ void COFPitWorm::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
 	switch (pEvent->event)
 	{
-	case 1:
-	{
+	case 1: {
 		UTIL_ScreenShake(pev->origin, 4.0, 3.0, 1.0, 750.0);
 
 		Vector forward, right;
@@ -2329,8 +2316,7 @@ void COFPitWorm::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 	break;
 
-	case 2:
-	{
+	case 2: {
 		m_posTarget = m_hEnemy->pev->origin;
 		m_posTarget.z += 24;
 
@@ -2346,8 +2332,7 @@ void COFPitWorm::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 	break;
 
-	case 3:
-	{
+	case 3: {
 		pev->flags &= ~FL_ONGROUND;
 
 		UTIL_SetOrigin(pev, pev->origin + Vector(0, 0, 1));

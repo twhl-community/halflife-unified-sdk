@@ -54,8 +54,7 @@ void CHudFlashlight::Reset()
 
 bool CHudFlashlight::VidInit()
 {
-	auto setup = [](const char* empty, const char* full, const char* beam)
-	{
+	auto setup = [](const char* empty, const char* full, const char* beam) {
 		const int HUD_flash_empty = gHUD.GetSpriteIndex(empty);
 		const int HUD_flash_full = gHUD.GetSpriteIndex(full);
 		const int HUD_flash_beam = gHUD.GetSpriteIndex(beam);
@@ -133,7 +132,7 @@ bool CHudFlashlight::Draw(float flTime)
 	SPR_DrawAdditive(0, x, y, data->m_prc1);
 
 	if (m_fOn)
-	{  // draw the flashlight beam
+	{ // draw the flashlight beam
 		x = ScreenWidth - data->m_iWidth / 2;
 
 		SPR_Set(data->m_hBeam, color);

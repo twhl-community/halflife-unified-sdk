@@ -1,6 +1,6 @@
 //========= Copyright © 1996-2002, Valve LLC, All rights reserved. ============
 //
-// Purpose: 
+// Purpose:
 //
 // $NoKeywords: $
 //=============================================================================
@@ -32,10 +32,10 @@ bool g_iVisibleMouse = false;
 extern cl_enginefunc_t gEngfuncs;
 extern bool iMouseInUse;
 
-extern kbutton_t	in_strafe;
-extern kbutton_t	in_mlook;
-extern kbutton_t	in_speed;
-extern kbutton_t	in_jlook;
+extern kbutton_t in_strafe;
+extern kbutton_t in_mlook;
+extern kbutton_t in_speed;
+extern kbutton_t in_jlook;
 
 extern cvar_t* m_pitch;
 extern cvar_t* m_yaw;
@@ -76,29 +76,29 @@ static cvar_t* m_customaccel_exponent;
 // if threaded mouse is enabled then the time to sleep between polls
 static cvar_t* m_mousethread_sleep;
 
-int			mouse_buttons;
-int			mouse_oldbuttonstate;
-int			old_mouse_x, old_mouse_y, mx_accum, my_accum;
-float		mouse_x, mouse_y;
+int mouse_buttons;
+int mouse_oldbuttonstate;
+int old_mouse_x, old_mouse_y, mx_accum, my_accum;
+float mouse_x, mouse_y;
 
-static bool	restore_spi;
-static int	originalmouseparms[3], newmouseparms[3] = {0, 0, 1};
-static bool	mouseactive = false;
-bool		mouseinitialized;
-static bool	mouseparmsvalid;
-static bool	mouseshowtoggle = true;
+static bool restore_spi;
+static int originalmouseparms[3], newmouseparms[3] = {0, 0, 1};
+static bool mouseactive = false;
+bool mouseinitialized;
+static bool mouseparmsvalid;
+static bool mouseshowtoggle = true;
 
 // joystick defines and variables
 // where should defines be moved?
-#define JOY_ABSOLUTE_AXIS	0x00000000		// control like a joystick
-#define JOY_RELATIVE_AXIS	0x00000010		// control like a mouse, spinner, trackball
-#define	JOY_MAX_AXES		6				// X, Y, Z, R, U, V
-#define JOY_AXIS_X			0
-#define JOY_AXIS_Y			1
-#define JOY_AXIS_Z			2
-#define JOY_AXIS_R			3
-#define JOY_AXIS_U			4
-#define JOY_AXIS_V			5
+#define JOY_ABSOLUTE_AXIS 0x00000000 // control like a joystick
+#define JOY_RELATIVE_AXIS 0x00000010 // control like a mouse, spinner, trackball
+#define JOY_MAX_AXES 6				 // X, Y, Z, R, U, V
+#define JOY_AXIS_X 0
+#define JOY_AXIS_Y 1
+#define JOY_AXIS_Z 2
+#define JOY_AXIS_R 3
+#define JOY_AXIS_U 4
+#define JOY_AXIS_V 5
 
 enum _ControlList
 {
@@ -113,10 +113,10 @@ enum _ControlList
 
 std::uint32_t dwAxisMap[JOY_MAX_AXES];
 std::uint32_t dwControlMap[JOY_MAX_AXES];
-int	pdwRawValue[JOY_MAX_AXES];
+int pdwRawValue[JOY_MAX_AXES];
 std::uint32_t joy_oldbuttonstate, joy_oldpovstate;
 
-int			joy_id;
+int joy_id;
 std::uint32_t joy_numbuttons;
 
 SDL_GameController* s_pJoystick = NULL;
@@ -146,13 +146,13 @@ cvar_t* joy_yawsensitivity;
 cvar_t* joy_wwhack1;
 cvar_t* joy_wwhack2;
 
-bool		joy_avail, joy_advancedinit, joy_haspov;
+bool joy_avail, joy_advancedinit, joy_haspov;
 
 #ifdef WIN32
-DWORD	s_hMouseThreadId = 0;
-HANDLE	s_hMouseThread = 0;
-HANDLE	s_hMouseQuitEvent = 0;
-HANDLE	s_hMouseDoneQuitEvent = 0;
+DWORD s_hMouseThreadId = 0;
+HANDLE s_hMouseThread = 0;
+HANDLE s_hMouseQuitEvent = 0;
+HANDLE s_hMouseDoneQuitEvent = 0;
 SDL_bool mouseRelative = SDL_TRUE;
 #endif
 
@@ -176,8 +176,8 @@ void Force_CenterView_f()
 #ifdef WIN32
 long s_mouseDeltaX = 0;
 long s_mouseDeltaY = 0;
-POINT		current_pos;
-POINT		old_mouse_pos;
+POINT current_pos;
+POINT old_mouse_pos;
 
 long ThreadInterlockedExchange(long* pDest, long value)
 {
@@ -198,7 +198,7 @@ DWORD WINAPI MousePos_ThreadFunction(LPVOID p)
 
 		if (mouseactive)
 		{
-			POINT		mouse_pos;
+			POINT mouse_pos;
 			GetCursorPos(&mouse_pos);
 
 			volatile int mx = mouse_pos.x - old_mouse_pos.x + s_mouseDeltaX;
@@ -407,7 +407,7 @@ IN_MouseEvent
 */
 void DLLEXPORT IN_MouseEvent(int mstate)
 {
-	int		i;
+	int i;
 
 	if (iMouseInUse || g_iVisibleMouse)
 		return;
@@ -434,8 +434,8 @@ void DLLEXPORT IN_MouseEvent(int mstate)
 //-----------------------------------------------------------------------------
 // Purpose: Allows modulation of mouse scaling/senstivity value and application
 //  of custom algorithms.
-// Input  : *x - 
-//			*y - 
+// Input  : *x -
+//			*y -
 //-----------------------------------------------------------------------------
 void IN_ScaleMouse(float* x, float* y)
 {
@@ -487,7 +487,7 @@ IN_MouseMove
 */
 void IN_MouseMove(float frametime, usercmd_t* cmd)
 {
-	int		mx, my;
+	int mx, my;
 	Vector viewangles;
 
 	gEngfuncs.GetViewAngles((float*)viewangles);
@@ -497,7 +497,7 @@ void IN_MouseMove(float frametime, usercmd_t* cmd)
 		V_StopPitchDrift();
 	}
 
-	//jjb - this disbles normal mouse control if the user is trying to 
+	//jjb - this disbles normal mouse control if the user is trying to
 	//      move the camera, or if the mouse cursor is visible or if we're in intermission
 	if (!iMouseInUse && !gHUD.m_iIntermission && !g_iVisibleMouse)
 	{
@@ -662,10 +662,8 @@ void DLLEXPORT IN_Accumulate()
 			}
 			// force the mouse to the center, so there's room to move
 			IN_ResetMouse();
-
 		}
 	}
-
 }
 
 /*
@@ -721,7 +719,6 @@ void IN_StartupJoystick()
 					joy_advancedinit = false;
 					break;
 				}
-
 			}
 		}
 	}
@@ -729,7 +726,6 @@ void IN_StartupJoystick()
 	{
 		gEngfuncs.Con_DPrintf("joystick not found -- driver not present\n\n");
 	}
-
 }
 
 
@@ -746,7 +742,6 @@ int RawValuePointer(int axis)
 		return SDL_GameControllerGetAxis(s_pJoystick, SDL_CONTROLLER_AXIS_RIGHTX);
 	case JOY_AXIS_R:
 		return SDL_GameControllerGetAxis(s_pJoystick, SDL_CONTROLLER_AXIS_RIGHTY);
-
 	}
 }
 
@@ -760,7 +755,7 @@ void Joy_AdvancedUpdate_f()
 
 	// called once by IN_ReadJoystick and by user whenever an update is needed
 	// cvars are now available
-	int	i;
+	int i;
 	std::uint32_t dwTemp;
 
 	// initialize all the maps
@@ -819,7 +814,7 @@ IN_Commands
 */
 void IN_Commands()
 {
-	int		i, key_index;
+	int i, key_index;
 
 	if (!joy_avail)
 	{
@@ -903,9 +898,9 @@ IN_JoyMove
 */
 void IN_JoyMove(float frametime, usercmd_t* cmd)
 {
-	float	speed, aspeed;
-	float	fAxisValue, fTemp;
-	int		i;
+	float speed, aspeed;
+	float fAxisValue, fTemp;
+	int i;
 	Vector viewangles;
 
 	gEngfuncs.GetViewAngles((float*)viewangles);
@@ -960,7 +955,7 @@ void IN_JoyMove(float frametime, usercmd_t* cmd)
 			}
 		}
 
-		// convert range from -32768..32767 to -1..1 
+		// convert range from -32768..32767 to -1..1
 		fAxisValue /= 32768.0;
 
 		switch (dwAxisMap[i])
@@ -1034,7 +1029,6 @@ void IN_JoyMove(float frametime, usercmd_t* cmd)
 					{
 						viewangles[YAW] += (fAxisValue * joy_yawsensitivity->value) * speed * 180.0;
 					}
-
 				}
 			}
 			break;

@@ -26,7 +26,7 @@
 
 #include "vgui_TeamFortressViewport.h"
 
-#define MAX_MENU_STRING	512
+#define MAX_MENU_STRING 512
 char g_szMenuString[MAX_MENU_STRING];
 char g_szPrelocalisedMenuString[MAX_MENU_STRING];
 
@@ -126,7 +126,7 @@ bool CHudMenu::Draw(float flTime)
 	if (m_flShutoffTime > 0)
 	{
 		if (m_flShutoffTime <= gHUD.m_flTime)
-		{  // times up, shutoff
+		{ // times up, shutoff
 			m_fMenuDisplayed = false;
 			m_iFlags &= ~HUD_ACTIVE;
 			return true;
@@ -144,9 +144,9 @@ bool CHudMenu::Draw(float flTime)
 		return true;
 		*/
 
-		// draw the menu, along the left-hand side of the screen
+	// draw the menu, along the left-hand side of the screen
 
-		// count the number of newlines
+	// count the number of newlines
 	int nlc = 0;
 	int i;
 	for (i = 0; i < MAX_MENU_STRING && g_szMenuString[i] != '\0'; i++)
@@ -250,13 +250,13 @@ bool CHudMenu::MsgFunc_ShowMenu(const char* pszName, int iSize, void* pbuf)
 			strncpy(g_szPrelocalisedMenuString, READ_STRING(), MAX_MENU_STRING);
 		}
 		else
-		{  // append to the current menu string
+		{ // append to the current menu string
 			strncat(g_szPrelocalisedMenuString, READ_STRING(), MAX_MENU_STRING - strlen(g_szPrelocalisedMenuString));
 		}
-		g_szPrelocalisedMenuString[MAX_MENU_STRING - 1] = 0;  // ensure null termination (strncat/strncpy does not)
+		g_szPrelocalisedMenuString[MAX_MENU_STRING - 1] = 0; // ensure null termination (strncat/strncpy does not)
 
 		if (!NeedMore)
-		{  // we have the whole string, so we can localise it now
+		{ // we have the whole string, so we can localise it now
 			strcpy(g_szMenuString, gHUD.m_TextMessage.BufferedLocaliseTextString(g_szPrelocalisedMenuString));
 
 			// Swap in characters

@@ -19,10 +19,10 @@
 #include "CTFSpawn.h"
 
 const char* const sTeamSpawnNames[] =
-{
-	"ctfs0",
-	"ctfs1",
-	"ctfs2",
+	{
+		"ctfs0",
+		"ctfs1",
+		"ctfs2",
 };
 
 LINK_ENTITY_TO_CLASS(info_ctfspawn, CTFSpawn);

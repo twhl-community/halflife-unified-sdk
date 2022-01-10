@@ -17,19 +17,19 @@
 
 class CBeam;
 
-#define SF_WAITFORTRIGGER	(0x04 | 0x40) // UNDONE: Fix!
-#define SF_NOWRECKAGE		0x08
+#define SF_WAITFORTRIGGER (0x04 | 0x40) // UNDONE: Fix!
+#define SF_NOWRECKAGE 0x08
 
 class CApache : public CBaseMonster
 {
-	bool	Save(CSave& save) override;
-	bool	Restore(CRestore& restore) override;
-	static	TYPEDESCRIPTION m_SaveData[];
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
+	static TYPEDESCRIPTION m_SaveData[];
 
 	void Spawn() override;
 	void Precache() override;
-	int  Classify() override { return CLASS_HUMAN_MILITARY; }
-	int  BloodColor() override { return DONT_BLEED; }
+	int Classify() override { return CLASS_HUMAN_MILITARY; }
+	int BloodColor() override { return DONT_BLEED; }
 	void Killed(entvars_t* pevAttacker, int iGib) override;
 	void GibMonster() override;
 

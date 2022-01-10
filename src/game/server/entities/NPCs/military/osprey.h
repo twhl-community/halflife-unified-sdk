@@ -15,22 +15,22 @@
 
 #pragma once
 
-#define SF_WAITFORTRIGGER	0x40
+#define SF_WAITFORTRIGGER 0x40
 
-#define MAX_CARRY	24
+#define MAX_CARRY 24
 
 class COsprey : public CBaseMonster
 {
 public:
-	bool	Save(CSave& save) override;
-	bool	Restore(CRestore& restore) override;
-	static	TYPEDESCRIPTION m_SaveData[];
-	int		ObjectCaps() override { return CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
+	static TYPEDESCRIPTION m_SaveData[];
+	int ObjectCaps() override { return CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 
 	void Spawn() override;
 	void Precache() override;
-	int  Classify() override { return CLASS_MACHINE; }
-	int  BloodColor() override { return DONT_BLEED; }
+	int Classify() override { return CLASS_MACHINE; }
+	int BloodColor() override { return DONT_BLEED; }
 	void Killed(entvars_t* pevAttacker, int iGib) override;
 
 	void UpdateGoal();
@@ -70,7 +70,7 @@ public:
 	float m_flRightHealth;
 	float m_flLeftHealth;
 
-	int	m_iUnits;
+	int m_iUnits;
 	EHANDLE m_hGrunt[MAX_CARRY];
 	Vector m_vecOrigin[MAX_CARRY];
 	EHANDLE m_hRepel[4];
@@ -81,9 +81,9 @@ public:
 	int m_iPitch;
 
 	int m_iExplode;
-	int	m_iTailGibs;
-	int	m_iBodyGibs;
-	int	m_iEngineGibs;
+	int m_iTailGibs;
+	int m_iBodyGibs;
+	int m_iEngineGibs;
 
 	int m_iDoLeftSmokePuff;
 	int m_iDoRightSmokePuff;

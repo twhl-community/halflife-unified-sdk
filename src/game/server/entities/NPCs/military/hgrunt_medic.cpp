@@ -17,7 +17,7 @@
 //=========================================================
 
 //=========================================================
-// Hit groups!	
+// Hit groups!
 //=========================================================
 /*
 
@@ -28,25 +28,25 @@
 */
 
 
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"monsters.h"
-#include	"animation.h"
-#include	"squadmonster.h"
-#include	"weapons.h"
-#include	"talkmonster.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
+#include "animation.h"
+#include "squadmonster.h"
+#include "weapons.h"
+#include "talkmonster.h"
 #include "COFSquadTalkMonster.h"
-#include	"soundent.h"
-#include	"effects.h"
-#include	"customentity.h"
+#include "soundent.h"
+#include "effects.h"
+#include "customentity.h"
 #include "hgrunt_ally_base.h"
 
 //=========================================================
 // monster-specific DEFINE's
 //=========================================================
-#define	MEDIC_DEAGLE_CLIP_SIZE			9 // how many bullets in a clip?
-#define	MEDIC_GLOCK_CLIP_SIZE			9 // how many bullets in a clip?
+#define MEDIC_DEAGLE_CLIP_SIZE 9 // how many bullets in a clip?
+#define MEDIC_GLOCK_CLIP_SIZE 9	 // how many bullets in a clip?
 
 namespace MedicAllyBodygroup
 {
@@ -92,10 +92,10 @@ enum MedicAllyWeaponFlag
 //=========================================================
 // Monster's Anim Events Go Here
 //=========================================================
-#define MEDIC_AE_HOLSTER_GUN	15
-#define MEDIC_AE_EQUIP_NEEDLE	16
-#define MEDIC_AE_HOLSTER_NEEDLE	17
-#define MEDIC_AE_EQUIP_GUN		18
+#define MEDIC_AE_HOLSTER_GUN 15
+#define MEDIC_AE_EQUIP_NEEDLE 16
+#define MEDIC_AE_HOLSTER_NEEDLE 17
+#define MEDIC_AE_EQUIP_GUN 18
 
 //=========================================================
 // monster-specific schedule types
@@ -167,18 +167,18 @@ protected:
 
 LINK_ENTITY_TO_CLASS(monster_human_medic_ally, COFMedicAlly);
 
-TYPEDESCRIPTION	COFMedicAlly::m_SaveData[] =
-{
-	DEFINE_FIELD(COFMedicAlly, m_flFollowCheckTime, FIELD_FLOAT),
-	DEFINE_FIELD(COFMedicAlly, m_fFollowChecking, FIELD_BOOLEAN),
-	DEFINE_FIELD(COFMedicAlly, m_fFollowChecked, FIELD_BOOLEAN),
-	DEFINE_FIELD(COFMedicAlly, m_flLastRejectAudio, FIELD_FLOAT),
-	DEFINE_FIELD(COFMedicAlly, m_iHealCharge, FIELD_INTEGER),
-	DEFINE_FIELD(COFMedicAlly, m_fUseHealing, FIELD_BOOLEAN),
-	DEFINE_FIELD(COFMedicAlly, m_fHealing, FIELD_BOOLEAN),
-	DEFINE_FIELD(COFMedicAlly, m_flLastUseTime, FIELD_TIME),
-	DEFINE_FIELD(COFMedicAlly, m_fHealActive, FIELD_BOOLEAN),
-	DEFINE_FIELD(COFMedicAlly, m_flLastShot, FIELD_TIME),
+TYPEDESCRIPTION COFMedicAlly::m_SaveData[] =
+	{
+		DEFINE_FIELD(COFMedicAlly, m_flFollowCheckTime, FIELD_FLOAT),
+		DEFINE_FIELD(COFMedicAlly, m_fFollowChecking, FIELD_BOOLEAN),
+		DEFINE_FIELD(COFMedicAlly, m_fFollowChecked, FIELD_BOOLEAN),
+		DEFINE_FIELD(COFMedicAlly, m_flLastRejectAudio, FIELD_FLOAT),
+		DEFINE_FIELD(COFMedicAlly, m_iHealCharge, FIELD_INTEGER),
+		DEFINE_FIELD(COFMedicAlly, m_fUseHealing, FIELD_BOOLEAN),
+		DEFINE_FIELD(COFMedicAlly, m_fHealing, FIELD_BOOLEAN),
+		DEFINE_FIELD(COFMedicAlly, m_flLastUseTime, FIELD_TIME),
+		DEFINE_FIELD(COFMedicAlly, m_fHealActive, FIELD_BOOLEAN),
+		DEFINE_FIELD(COFMedicAlly, m_flLastShot, FIELD_TIME),
 };
 
 IMPLEMENT_SAVERESTORE(COFMedicAlly, CBaseHGruntAlly);
@@ -186,7 +186,7 @@ IMPLEMENT_SAVERESTORE(COFMedicAlly, CBaseHGruntAlly);
 void COFMedicAlly::DropWeapon(bool applyVelocity)
 {
 	if (GetBodygroup(MedicAllyBodygroup::Weapons) != MedicAllyWeapon::None)
-	{// throw a gun if the grunt has one
+	{ // throw a gun if the grunt has one
 
 		Vector vecGunPos, vecGunAngles;
 		GetAttachment(0, vecGunPos, vecGunAngles);
@@ -252,7 +252,7 @@ void COFMedicAlly::Shoot()
 
 	pev->effects |= EF_MUZZLEFLASH;
 
-	m_cAmmoLoaded--;// take away a bullet!
+	m_cAmmoLoaded--; // take away a bullet!
 
 	Vector angDir = UTIL_VecToAngles(vecShootDir);
 	SetBlending(0, angDir.x);
@@ -283,8 +283,7 @@ void COFMedicAlly::HandleAnimEvent(MonsterEvent_t* pEvent)
 		ClearConditions(bits_COND_NO_AMMO_LOADED);
 		break;
 
-	case HGRUNT_AE_BURST1:
-	{
+	case HGRUNT_AE_BURST1: {
 		Shoot();
 	}
 	break;
@@ -407,8 +406,7 @@ void COFMedicAlly::StartTask(Task_t* pTask)
 
 	switch (pTask->iTask)
 	{
-	case TASK_MELEE_ATTACK2:
-	{
+	case TASK_MELEE_ATTACK2: {
 		m_IdealActivity = ACT_MELEE_ATTACK2;
 
 		if (!m_fHealAudioPlaying)
@@ -419,8 +417,7 @@ void COFMedicAlly::StartTask(Task_t* pTask)
 		break;
 	}
 
-	case TASK_WAIT_FOR_MOVEMENT:
-	{
+	case TASK_WAIT_FOR_MOVEMENT: {
 		if (!m_fHealing)
 			return CBaseHGruntAlly::StartTask(pTask);
 
@@ -479,8 +476,7 @@ void COFMedicAlly::RunTask(Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
-	case TASK_MELEE_ATTACK2:
-	{
+	case TASK_MELEE_ATTACK2: {
 		if (m_fSequenceFinished)
 		{
 			if (m_fUseHealing)
@@ -519,8 +515,7 @@ void COFMedicAlly::RunTask(Task_t* pTask)
 		break;
 	}
 
-	default:
-	{
+	default: {
 		CBaseHGruntAlly::RunTask(pTask);
 		break;
 	}
@@ -531,83 +526,76 @@ void COFMedicAlly::RunTask(Task_t* pTask)
 // AI Schedules Specific to this monster
 //=========================================================
 
-Task_t	tlMedicAllyNewHealTarget[] =
-{
-	{ TASK_SET_FAIL_SCHEDULE, SCHED_TARGET_CHASE },
-	{ TASK_MOVE_TO_TARGET_RANGE, 50 },
-	{ TASK_FACE_IDEAL, 0 },
-	{ TASK_GRUNT_SPEAK_SENTENCE, 0 },
-};
-
-Schedule_t	slMedicAllyNewHealTarget[] =
-{
+Task_t tlMedicAllyNewHealTarget[] =
 	{
-		tlMedicAllyNewHealTarget,
-		ARRAYSIZE(tlMedicAllyNewHealTarget),
-		0,
-		0,
-		"Draw Needle"
-	},
+		{TASK_SET_FAIL_SCHEDULE, SCHED_TARGET_CHASE},
+		{TASK_MOVE_TO_TARGET_RANGE, 50},
+		{TASK_FACE_IDEAL, 0},
+		{TASK_GRUNT_SPEAK_SENTENCE, 0},
 };
 
-Task_t	tlMedicAllyDrawNeedle[] =
-{
-	{ TASK_STOP_MOVING, 0 },
-	{ TASK_PLAY_SEQUENCE_FACE_TARGET, ACT_ARM },
-	{ TASK_SET_FAIL_SCHEDULE, SCHED_TARGET_CHASE },
-	{ TASK_MOVE_TO_TARGET_RANGE, 50 },
-	{ TASK_FACE_IDEAL, 0, },
-	{ TASK_GRUNT_SPEAK_SENTENCE, 0 }
-};
-
-Schedule_t	slMedicAllyDrawNeedle[] =
-{
+Schedule_t slMedicAllyNewHealTarget[] =
 	{
-		tlMedicAllyDrawNeedle,
-		ARRAYSIZE(tlMedicAllyDrawNeedle),
-		0,
-		0,
-		"Draw Needle"
-	},
+		{tlMedicAllyNewHealTarget,
+			ARRAYSIZE(tlMedicAllyNewHealTarget),
+			0,
+			0,
+			"Draw Needle"},
 };
 
-Task_t	tlMedicAllyDrawGun[] =
-{
-	{ TASK_PLAY_SEQUENCE, ACT_DISARM },
-	{ TASK_WAIT_FOR_MOVEMENT, 0 },
-};
-
-Schedule_t	slMedicAllyDrawGun[] =
-{
+Task_t tlMedicAllyDrawNeedle[] =
 	{
-		tlMedicAllyDrawGun,
-		ARRAYSIZE(tlMedicAllyDrawGun),
-		0,
-		0,
-		"Draw Gun"
-	},
-};
+		{TASK_STOP_MOVING, 0},
+		{TASK_PLAY_SEQUENCE_FACE_TARGET, ACT_ARM},
+		{TASK_SET_FAIL_SCHEDULE, SCHED_TARGET_CHASE},
+		{TASK_MOVE_TO_TARGET_RANGE, 50},
+		{
+			TASK_FACE_IDEAL,
+			0,
+		},
+		{TASK_GRUNT_SPEAK_SENTENCE, 0}};
 
-Task_t	tlMedicAllyHealTarget[] =
-{
-	{ TASK_MELEE_ATTACK2, 0 },
-	{ TASK_WAIT, 0.2f },
-	{ TASK_TLK_HEADRESET, 0 },
-};
-
-Schedule_t	slMedicAllyHealTarget[] =
-{
+Schedule_t slMedicAllyDrawNeedle[] =
 	{
-		tlMedicAllyHealTarget,
-		ARRAYSIZE(tlMedicAllyHealTarget),
-		0,
-		0,
-		"Medic Ally Heal Target"
-	},
+		{tlMedicAllyDrawNeedle,
+			ARRAYSIZE(tlMedicAllyDrawNeedle),
+			0,
+			0,
+			"Draw Needle"},
 };
 
-DEFINE_CUSTOM_SCHEDULES(COFMedicAlly)
-{
+Task_t tlMedicAllyDrawGun[] =
+	{
+		{TASK_PLAY_SEQUENCE, ACT_DISARM},
+		{TASK_WAIT_FOR_MOVEMENT, 0},
+};
+
+Schedule_t slMedicAllyDrawGun[] =
+	{
+		{tlMedicAllyDrawGun,
+			ARRAYSIZE(tlMedicAllyDrawGun),
+			0,
+			0,
+			"Draw Gun"},
+};
+
+Task_t tlMedicAllyHealTarget[] =
+	{
+		{TASK_MELEE_ATTACK2, 0},
+		{TASK_WAIT, 0.2f},
+		{TASK_TLK_HEADRESET, 0},
+};
+
+Schedule_t slMedicAllyHealTarget[] =
+	{
+		{tlMedicAllyHealTarget,
+			ARRAYSIZE(tlMedicAllyHealTarget),
+			0,
+			0,
+			"Medic Ally Heal Target"},
+};
+
+DEFINE_CUSTOM_SCHEDULES(COFMedicAlly){
 	slMedicAllyNewHealTarget,
 	slMedicAllyDrawNeedle,
 	slMedicAllyDrawGun,
@@ -618,7 +606,7 @@ IMPLEMENT_CUSTOM_SCHEDULES(COFMedicAlly, CBaseHGruntAlly);
 
 std::tuple<int, Activity> COFMedicAlly::GetSequenceForActivity(Activity NewActivity)
 {
-	int	iSequence = ACTIVITY_NOT_AVAILABLE;
+	int iSequence = ACTIVITY_NOT_AVAILABLE;
 
 	switch (NewActivity)
 	{
@@ -650,11 +638,7 @@ Schedule_t* COFMedicAlly::GetHealSchedule()
 		{
 			auto pHealTarget = m_hTargetEnt.Entity<CBaseEntity>();
 
-			if ((pHealTarget->pev->origin - pev->origin).Make2D().Length() <= 50.0
-				&& (!m_fUseHealing || gpGlobals->time - m_flLastUseTime <= 0.25)
-				&& 0 != m_iHealCharge
-				&& pHealTarget->IsAlive()
-				&& pHealTarget->pev->health != pHealTarget->pev->max_health)
+			if ((pHealTarget->pev->origin - pev->origin).Make2D().Length() <= 50.0 && (!m_fUseHealing || gpGlobals->time - m_flLastUseTime <= 0.25) && 0 != m_iHealCharge && pHealTarget->IsAlive() && pHealTarget->pev->health != pHealTarget->pev->max_health)
 			{
 				return slMedicAllyHealTarget;
 			}
@@ -798,10 +782,7 @@ void COFMedicAlly::HealerActivate(CBaseMonster* pTarget)
 
 		ChangeSchedule(slMedicAllyNewHealTarget);
 	}
-	else if (m_iHealCharge > 0
-		&& pTarget->IsAlive()
-		&& pTarget->pev->max_health > pTarget->pev->health
-		&& !m_fHealing)
+	else if (m_iHealCharge > 0 && pTarget->IsAlive() && pTarget->pev->max_health > pTarget->pev->health && !m_fHealing)
 	{
 		if (m_hTargetEnt && m_hTargetEnt->IsPlayer())
 		{
@@ -827,9 +808,7 @@ void COFMedicAlly::HealerActivate(CBaseMonster* pTarget)
 
 void COFMedicAlly::HealerUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
-	if (m_useTime > gpGlobals->time
-		|| m_flLastUseTime > gpGlobals->time
-		|| pActivator == m_hEnemy)
+	if (m_useTime > gpGlobals->time || m_flLastUseTime > gpGlobals->time || pActivator == m_hEnemy)
 	{
 		return;
 	}
@@ -860,9 +839,7 @@ void COFMedicAlly::HealerUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_
 				pMonster->m_hWaitMedic = nullptr;
 		}
 
-		if (m_iHealCharge > 0
-			&& pActivator->IsAlive()
-			&& pActivator->pev->max_health > pActivator->pev->health)
+		if (m_iHealCharge > 0 && pActivator->IsAlive() && pActivator->pev->max_health > pActivator->pev->health)
 		{
 			if (!m_fHealing)
 			{

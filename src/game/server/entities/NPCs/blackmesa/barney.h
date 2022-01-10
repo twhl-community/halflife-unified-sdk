@@ -19,9 +19,9 @@
 // Monster's Anim Events Go Here
 //=========================================================
 // first flag is barney dying for scripted sequences?
-#define		BARNEY_AE_DRAW		( 2 )
-#define		BARNEY_AE_SHOOT		( 3 )
-#define		BARNEY_AE_HOLSTER	( 4 )
+#define BARNEY_AE_DRAW (2)
+#define BARNEY_AE_SHOOT (3)
+#define BARNEY_AE_HOLSTER (4)
 
 namespace GuardBodyGroup
 {
@@ -57,15 +57,15 @@ public:
 	void Spawn() override;
 	void Precache() override;
 	void SetYawSpeed() override;
-	int  ISoundMask() override;
+	int ISoundMask() override;
 	virtual void GuardFirePistol();
 	void AlertSound() override;
-	int  Classify() override;
+	int Classify() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 
 	void RunTask(Task_t* pTask) override;
 	void StartTask(Task_t* pTask) override;
-	int	ObjectCaps() override { return CTalkMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
+	int ObjectCaps() override { return CTalkMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
 	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 	bool CheckRangeAttack1(float flDot, float flDist) override;
 
@@ -86,13 +86,13 @@ public:
 
 	bool KeyValue(KeyValueData* pkvd) override;
 
-	bool	Save(CSave& save) override;
-	bool	Restore(CRestore& restore) override;
-	static	TYPEDESCRIPTION m_SaveData[];
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
+	static TYPEDESCRIPTION m_SaveData[];
 
-	float	m_painTime;
-	float	m_checkAttackTime;
-	bool	m_lastAttackCheck;
+	float m_painTime;
+	float m_checkAttackTime;
+	bool m_lastAttackCheck;
 
 
 	//Used during spawn to set initial values, not restored

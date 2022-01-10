@@ -34,21 +34,21 @@ enum
 //=========================================================
 // Monster's Anim Events Go Here
 //=========================================================
-#define		VOLTIGORE_AE_BOLT1	( 1 )
-#define		VOLTIGORE_AE_BOLT2	( 2 )
-#define		VOLTIGORE_AE_BOLT3	( 3 )
-#define		VOLTIGORE_AE_BOLT4	( 4 )
-#define		VOLTIGORE_AE_BOLT5	( 5 )
+#define VOLTIGORE_AE_BOLT1 (1)
+#define VOLTIGORE_AE_BOLT2 (2)
+#define VOLTIGORE_AE_BOLT3 (3)
+#define VOLTIGORE_AE_BOLT4 (4)
+#define VOLTIGORE_AE_BOLT5 (5)
 // some events are set up in the QC file that aren't recognized by the code yet.
-#define		VOLTIGORE_AE_PUNCH		( 6 )
-#define		VOLTIGORE_AE_BITE		( 7 )
+#define VOLTIGORE_AE_PUNCH (6)
+#define VOLTIGORE_AE_BITE (7)
 
-#define		VOLTIGORE_AE_LEFT_PUNCH ( 12 )
-#define		VOLTIGORE_AE_RIGHT_PUNCH ( 13 )
+#define VOLTIGORE_AE_LEFT_PUNCH (12)
+#define VOLTIGORE_AE_RIGHT_PUNCH (13)
 
 
 
-#define		VOLTIGORE_MELEE_DIST	128
+#define VOLTIGORE_MELEE_DIST 128
 
 constexpr int VOLTIGORE_BEAM_COUNT = 8;
 
@@ -58,8 +58,8 @@ public:
 	void Spawn() override;
 	void Precache() override;
 	void SetYawSpeed() override;
-	int  Classify() override;
-	int  ISoundMask() override;
+	int Classify() override;
+	int ISoundMask() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 	void SetObjectCollisionBox() override
 	{
@@ -93,55 +93,55 @@ public:
 
 	CUSTOM_SCHEDULES;
 
-	bool	Save(CSave& save) override;
-	bool	Restore(CRestore& restore) override;
-	static	TYPEDESCRIPTION m_SaveData[];
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
+	static TYPEDESCRIPTION m_SaveData[];
 
 	static constexpr const char* pAttackHitSounds[] =
-	{
-		"zombie/claw_strike1.wav",
-		"zombie/claw_strike2.wav",
-		"zombie/claw_strike3.wav",
-	};
+		{
+			"zombie/claw_strike1.wav",
+			"zombie/claw_strike2.wav",
+			"zombie/claw_strike3.wav",
+		};
 
 	static constexpr const char* pAttackMissSounds[] =
-	{
-		"zombie/claw_miss1.wav",
-		"zombie/claw_miss2.wav",
-	};
+		{
+			"zombie/claw_miss1.wav",
+			"zombie/claw_miss2.wav",
+		};
 
 	static constexpr const char* pAttackSounds[] =
-	{
-		"voltigore/voltigore_attack_melee1.wav",
-		"voltigore/voltigore_attack_melee2.wav",
-	};
+		{
+			"voltigore/voltigore_attack_melee1.wav",
+			"voltigore/voltigore_attack_melee2.wav",
+		};
 
 	static constexpr const char* pPainSounds[] =
-	{
-		"voltigore/voltigore_pain1.wav",
-		"voltigore/voltigore_pain2.wav",
-		"voltigore/voltigore_pain3.wav",
-		"voltigore/voltigore_pain4.wav",
-	};
+		{
+			"voltigore/voltigore_pain1.wav",
+			"voltigore/voltigore_pain2.wav",
+			"voltigore/voltigore_pain3.wav",
+			"voltigore/voltigore_pain4.wav",
+		};
 
 	static constexpr const char* pAlertSounds[] =
-	{
-		"voltigore/voltigore_alert1.wav",
-		"voltigore/voltigore_alert2.wav",
-		"voltigore/voltigore_alert3.wav",
-	};
+		{
+			"voltigore/voltigore_alert1.wav",
+			"voltigore/voltigore_alert2.wav",
+			"voltigore/voltigore_alert3.wav",
+		};
 
 	EHANDLE m_pBeam[VOLTIGORE_BEAM_COUNT];
 	int m_iBeams;
 
-	float	m_flNextBeamAttackCheck;
+	float m_flNextBeamAttackCheck;
 
 	float m_flNextPainTime;
 
 	// three hacky fields for speech stuff. These don't really need to be saved.
-	float	m_flNextSpeakTime;
-	float	m_flNextWordTime;
-	int		m_iLastWord;
+	float m_flNextSpeakTime;
+	float m_flNextWordTime;
+	int m_iLastWord;
 
 	EHANDLE m_pChargedBolt;
 

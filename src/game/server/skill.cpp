@@ -15,23 +15,23 @@
 //=========================================================
 // skill.cpp - code for skill level concerns
 //=========================================================
-#include	"extdll.h"
-#include	"util.h"
-#include	"skill.h"
+#include "extdll.h"
+#include "util.h"
+#include "skill.h"
 
 
-skilldata_t	gSkillData;
+skilldata_t gSkillData;
 
 
 //=========================================================
 // take the name of a cvar, tack a digit for the skill level
-// on, and return the value.of that Cvar 
+// on, and return the value.of that Cvar
 //=========================================================
 float GetSkillCvar(const char* pName)
 {
-	int		iCount;
-	float	flValue;
-	char	szBuffer[64];
+	int iCount;
+	float flValue;
+	char szBuffer[64];
 
 	iCount = sprintf(szBuffer, "%s%d", pName, gSkillData.iSkillLevel);
 
@@ -44,4 +44,3 @@ float GetSkillCvar(const char* pName)
 
 	return flValue;
 }
-

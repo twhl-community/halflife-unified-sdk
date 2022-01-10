@@ -21,10 +21,9 @@ class IParticleMan : public IBaseInterface
 {
 
 protected:
-	virtual			~IParticleMan() {}
+	virtual ~IParticleMan() {}
 
 public:
-
 	virtual void SetUp(cl_enginefunc_t* pEnginefuncs) = 0;
 	virtual void Update(void) = 0;
 	virtual void SetVariables(float flGravity, Vector vViewAngles) = 0;
@@ -86,12 +85,12 @@ public:
 
 	void* operator new(size_t size) //this asks for a new block of memory from the MiniMem class
 	{
-		return(g_pParticleMan->RequestNewMemBlock(size));
+		return (g_pParticleMan->RequestNewMemBlock(size));
 	}
 #ifdef POSIX
 	void* operator new(size_t size, const std::nothrow_t&) throw() //this asks for a new block of memory from the MiniMem class
 	{
-		return(g_pParticleMan->RequestNewMemBlock(size));
+		return (g_pParticleMan->RequestNewMemBlock(size));
 	}
 #endif
 };

@@ -29,15 +29,15 @@
 
 struct TransparentEqual : public std::equal_to<>
 {
-    using is_transparent = void;
+	using is_transparent = void;
 };
 
 struct TransparentStringHash
 {
-    using is_transparent = void;
-    using hash_type = std::hash<std::string_view>;  // just a helper local type
+	using is_transparent = void;
+	using hash_type = std::hash<std::string_view>; // just a helper local type
 
-    [[nodiscard]] size_t operator()(std::string_view txt) const { return hash_type{}(txt); }
-    [[nodiscard]] size_t operator()(const std::string& txt) const { return hash_type{}(txt); }
-    [[nodiscard]] size_t operator()(const char* txt) const { return hash_type{}(txt); }
+	[[nodiscard]] size_t operator()(std::string_view txt) const { return hash_type{}(txt); }
+	[[nodiscard]] size_t operator()(const std::string& txt) const { return hash_type{}(txt); }
+	[[nodiscard]] size_t operator()(const char* txt) const { return hash_type{}(txt); }
 };

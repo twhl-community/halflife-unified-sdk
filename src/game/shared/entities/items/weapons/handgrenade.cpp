@@ -20,7 +20,7 @@
 #include "player.h"
 
 
-#define	HANDGRENADE_PRIMARY_VOLUME		450
+#define HANDGRENADE_PRIMARY_VOLUME 450
 
 LINK_ENTITY_TO_CLASS(weapon_handgrenade, CHandGrenade);
 
@@ -37,7 +37,7 @@ void CHandGrenade::Spawn()
 
 	m_iDefaultAmmo = HANDGRENADE_DEFAULT_GIVE;
 
-	FallInit();// get ready to fall down.
+	FallInit(); // get ready to fall down.
 }
 
 
@@ -187,7 +187,7 @@ void CHandGrenade::WeaponIdle()
 			// just threw last grenade
 			// set attack times in the future, and weapon idle in the future so we can see the whole throw
 			// animation, weapon idle will automatically retire the weapon for us.
-			m_flTimeWeaponIdle = m_flNextSecondaryAttack = m_flNextPrimaryAttack = GetNextAttackDelay(0.5);// ensure that the animation can finish playing
+			m_flTimeWeaponIdle = m_flNextSecondaryAttack = m_flNextPrimaryAttack = GetNextAttackDelay(0.5); // ensure that the animation can finish playing
 		}
 		return;
 	}
@@ -218,7 +218,7 @@ void CHandGrenade::WeaponIdle()
 		if (flRand <= 0.75)
 		{
 			iAnim = HANDGRENADE_IDLE;
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10, 15);// how long till we do this again.
+			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10, 15); // how long till we do this again.
 		}
 		else
 		{
@@ -229,7 +229,3 @@ void CHandGrenade::WeaponIdle()
 		SendWeaponAnim(iAnim);
 	}
 }
-
-
-
-

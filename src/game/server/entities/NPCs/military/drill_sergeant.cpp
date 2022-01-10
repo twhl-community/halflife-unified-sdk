@@ -13,13 +13,13 @@
 *
 ****/
 
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"monsters.h"
-#include	"talkmonster.h"
-#include	"weapons.h"
-#include	"soundent.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
+#include "talkmonster.h"
+#include "weapons.h"
+#include "soundent.h"
 #include "blackmesa/barney.h"
 
 /**
@@ -147,9 +147,9 @@ void CDrillSergeant::TalkInit()
 	m_szGrp[TLK_PLHURT2] = "!DR_CUREB";
 	m_szGrp[TLK_PLHURT3] = "!DR_CUREC";
 
-	m_szGrp[TLK_PHELLO] = NULL;	//"BA_PHELLO";		// UNDONE
-	m_szGrp[TLK_PIDLE] = NULL;	//"BA_PIDLE";			// UNDONE
-	m_szGrp[TLK_PQUESTION] = "DR_PQUEST";		// UNDONE
+	m_szGrp[TLK_PHELLO] = NULL;			  //"BA_PHELLO";		// UNDONE
+	m_szGrp[TLK_PIDLE] = NULL;			  //"BA_PIDLE";			// UNDONE
+	m_szGrp[TLK_PQUESTION] = "DR_PQUEST"; // UNDONE
 
 	m_szGrp[TLK_SMELL] = "DR_SMELL";
 

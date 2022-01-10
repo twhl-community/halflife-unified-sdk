@@ -22,7 +22,8 @@
 #include "soundent.h"
 #include "gamerules.h"
 
-enum w_squeak_e {
+enum w_squeak_e
+{
 	WSQUEAK_IDLE1 = 0,
 	WSQUEAK_FIDGET,
 	WSQUEAK_JUMP,
@@ -35,17 +36,17 @@ class CSqueakGrenade : public CGrenade
 {
 	void Spawn() override;
 	void Precache() override;
-	int  Classify() override;
+	int Classify() override;
 	void EXPORT SuperBounceTouch(CBaseEntity* pOther);
 	void EXPORT HuntThink();
-	int  BloodColor() override { return BLOOD_COLOR_YELLOW; }
+	int BloodColor() override { return BLOOD_COLOR_YELLOW; }
 	void Killed(entvars_t* pevAttacker, int iGib) override;
 	void GibMonster() override;
 
-	bool	Save(CSave& save) override;
-	bool	Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 
-	static	TYPEDESCRIPTION m_SaveData[];
+	static TYPEDESCRIPTION m_SaveData[];
 
 	static float m_flNextBounceSoundTime;
 
@@ -56,25 +57,25 @@ class CSqueakGrenade : public CGrenade
 	float m_flNextHit;
 	Vector m_posPrev;
 	EHANDLE m_hOwner;
-	int  m_iMyClass;
+	int m_iMyClass;
 };
 
 float CSqueakGrenade::m_flNextBounceSoundTime = 0;
 
 LINK_ENTITY_TO_CLASS(monster_snark, CSqueakGrenade);
-TYPEDESCRIPTION	CSqueakGrenade::m_SaveData[] =
-{
-	DEFINE_FIELD(CSqueakGrenade, m_flDie, FIELD_TIME),
-	DEFINE_FIELD(CSqueakGrenade, m_vecTarget, FIELD_VECTOR),
-	DEFINE_FIELD(CSqueakGrenade, m_flNextHunt, FIELD_TIME),
-	DEFINE_FIELD(CSqueakGrenade, m_flNextHit, FIELD_TIME),
-	DEFINE_FIELD(CSqueakGrenade, m_posPrev, FIELD_POSITION_VECTOR),
-	DEFINE_FIELD(CSqueakGrenade, m_hOwner, FIELD_EHANDLE),
+TYPEDESCRIPTION CSqueakGrenade::m_SaveData[] =
+	{
+		DEFINE_FIELD(CSqueakGrenade, m_flDie, FIELD_TIME),
+		DEFINE_FIELD(CSqueakGrenade, m_vecTarget, FIELD_VECTOR),
+		DEFINE_FIELD(CSqueakGrenade, m_flNextHunt, FIELD_TIME),
+		DEFINE_FIELD(CSqueakGrenade, m_flNextHit, FIELD_TIME),
+		DEFINE_FIELD(CSqueakGrenade, m_posPrev, FIELD_POSITION_VECTOR),
+		DEFINE_FIELD(CSqueakGrenade, m_hOwner, FIELD_EHANDLE),
 };
 
 IMPLEMENT_SAVERESTORE(CSqueakGrenade, CGrenade);
 
-#define SQUEEK_DETONATE_DELAY	15.0
+#define SQUEEK_DETONATE_DELAY 15.0
 
 int CSqueakGrenade::Classify()
 {
@@ -129,7 +130,7 @@ void CSqueakGrenade::Spawn()
 	if (pev->owner)
 		m_hOwner = Instance(pev->owner);
 
-	m_flNextBounceSoundTime = gpGlobals->time;// reset each time a snark is spawned.
+	m_flNextBounceSoundTime = gpGlobals->time; // reset each time a snark is spawned.
 
 	pev->sequence = WSQUEAK_RUN;
 	ResetSequenceInfo();
@@ -150,7 +151,7 @@ void CSqueakGrenade::Precache()
 
 void CSqueakGrenade::Killed(entvars_t* pevAttacker, int iGib)
 {
-	pev->model = iStringNull;// make invisible
+	pev->model = iStringNull; // make invisible
 	SetThink(&CSqueakGrenade::SUB_Remove);
 	SetTouch(NULL);
 	pev->nextthink = gpGlobals->time + 0.1;
@@ -308,7 +309,7 @@ void CSqueakGrenade::HuntThink()
 
 void CSqueakGrenade::SuperBounceTouch(CBaseEntity* pOther)
 {
-	float	flpitch;
+	float flpitch;
 
 	TraceResult tr = UTIL_GetGlobalTrace();
 
@@ -393,7 +394,7 @@ void CSqueakGrenade::SuperBounceTouch(CBaseEntity* pOther)
 		CSoundEnt::InsertSound(bits_SOUND_COMBAT, pev->origin, 100, 0.1);
 	}
 
-	m_flNextBounceSoundTime = gpGlobals->time + 0.5;// half second.
+	m_flNextBounceSoundTime = gpGlobals->time + 0.5; // half second.
 }
 
 #endif
@@ -407,7 +408,7 @@ void CSqueak::Spawn()
 	m_iId = WEAPON_SNARK;
 	SET_MODEL(ENT(pev), "models/w_sqknest.mdl");
 
-	FallInit();//get ready to fall down.
+	FallInit(); //get ready to fall down.
 
 	m_iDefaultAmmo = SNARK_DEFAULT_GIVE;
 
@@ -550,7 +551,6 @@ void CSqueak::PrimaryAttack()
 
 void CSqueak::SecondaryAttack()
 {
-
 }
 
 

@@ -26,10 +26,10 @@
 #include "CEagle.h"
 
 #ifndef CLIENT_DLL
-TYPEDESCRIPTION	CEagle::m_SaveData[] =
-{
-	DEFINE_FIELD(CEagle, m_bSpotVisible, FIELD_INTEGER),
-	DEFINE_FIELD(CEagle, m_bLaserActive, FIELD_INTEGER),
+TYPEDESCRIPTION CEagle::m_SaveData[] =
+	{
+		DEFINE_FIELD(CEagle, m_bSpotVisible, FIELD_INTEGER),
+		DEFINE_FIELD(CEagle, m_bLaserActive, FIELD_INTEGER),
 };
 
 IMPLEMENT_SAVERESTORE(CEagle, CEagle::BaseClass);
@@ -229,7 +229,7 @@ void CEagle::PrimaryAttack()
 	m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + (m_bLaserActive ? 0.5 : 0.22);
 
 	int flags;
-#if defined( CLIENT_WEAPONS )
+#if defined(CLIENT_WEAPONS)
 	flags = FEV_NOTHOST;
 #else
 	flags = 0;

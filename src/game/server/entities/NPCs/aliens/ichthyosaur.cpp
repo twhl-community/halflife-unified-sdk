@@ -17,27 +17,27 @@
 // icthyosaur - evin, satan fish monster
 //=========================================================
 
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"monsters.h"
-#include	"schedule.h"
-#include    "flyingmonster.h"
-#include	"nodes.h"
-#include	"soundent.h"
-#include	"animation.h"
-#include	"effects.h"
-#include	"weapons.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
+#include "schedule.h"
+#include "flyingmonster.h"
+#include "nodes.h"
+#include "soundent.h"
+#include "animation.h"
+#include "effects.h"
+#include "weapons.h"
 
-#define SEARCH_RETRY	16
+#define SEARCH_RETRY 16
 
 #define ICHTHYOSAUR_SPEED 150
 
-#define EYE_MAD		0
-#define EYE_BASE	1
-#define EYE_CLOSED	2
-#define EYE_BACK	3
-#define EYE_LOOK	4
+#define EYE_MAD 0
+#define EYE_BASE 1
+#define EYE_CLOSED 2
+#define EYE_BACK 3
+#define EYE_LOOK 4
 
 
 
@@ -49,11 +49,11 @@
 class CIchthyosaur : public CFlyingMonster
 {
 public:
-	void  Spawn() override;
-	void  Precache() override;
-	void  SetYawSpeed() override;
-	int   Classify() override;
-	void  HandleAnimEvent(MonsterEvent_t* pEvent) override;
+	void Spawn() override;
+	void Precache() override;
+	void SetYawSpeed() override;
+	int Classify() override;
+	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 	CUSTOM_SCHEDULES;
 
 	bool Save(CSave& save) override;
@@ -69,20 +69,20 @@ public:
 	void EXPORT CombatUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 	void EXPORT BiteTouch(CBaseEntity* pOther);
 
-	void  StartTask(Task_t* pTask) override;
-	void  RunTask(Task_t* pTask) override;
+	void StartTask(Task_t* pTask) override;
+	void RunTask(Task_t* pTask) override;
 
-	bool  CheckMeleeAttack1(float flDot, float flDist) override;
-	bool  CheckRangeAttack1(float flDot, float flDist) override;
+	bool CheckMeleeAttack1(float flDot, float flDist) override;
+	bool CheckRangeAttack1(float flDot, float flDist) override;
 
 	float ChangeYaw(int speed) override;
 	Activity GetStoppedActivity() override;
 
-	void  Move(float flInterval) override;
-	void  MoveExecute(CBaseEntity* pTargetEnt, const Vector& vecDir, float flInterval) override;
-	void  MonsterThink() override;
-	void  Stop() override;
-	void  Swim();
+	void Move(float flInterval) override;
+	void MoveExecute(CBaseEntity* pTargetEnt, const Vector& vecDir, float flInterval) override;
+	void MonsterThink() override;
+	void Stop() override;
+	void Swim();
 	Vector DoProbe(const Vector& Probe);
 
 	float VectorToPitch(const Vector& vec);
@@ -95,7 +95,7 @@ public:
 	float m_flBlink;
 
 	float m_flEnemyTouched;
-	bool  m_bOnAttack;
+	bool m_bOnAttack;
 
 	float m_flMaxSpeed;
 	float m_flMinSpeed;
@@ -124,63 +124,63 @@ public:
 
 LINK_ENTITY_TO_CLASS(monster_ichthyosaur, CIchthyosaur);
 
-TYPEDESCRIPTION	CIchthyosaur::m_SaveData[] =
-{
-	DEFINE_FIELD(CIchthyosaur, m_SaveVelocity, FIELD_VECTOR),
-	DEFINE_FIELD(CIchthyosaur, m_idealDist, FIELD_FLOAT),
-	DEFINE_FIELD(CIchthyosaur, m_flBlink, FIELD_FLOAT),
-	DEFINE_FIELD(CIchthyosaur, m_flEnemyTouched, FIELD_FLOAT),
-	DEFINE_FIELD(CIchthyosaur, m_bOnAttack, FIELD_BOOLEAN),
-	DEFINE_FIELD(CIchthyosaur, m_flMaxSpeed, FIELD_FLOAT),
-	DEFINE_FIELD(CIchthyosaur, m_flMinSpeed, FIELD_FLOAT),
-	DEFINE_FIELD(CIchthyosaur, m_flMaxDist, FIELD_FLOAT),
-	DEFINE_FIELD(CIchthyosaur, m_flNextAlert, FIELD_TIME),
+TYPEDESCRIPTION CIchthyosaur::m_SaveData[] =
+	{
+		DEFINE_FIELD(CIchthyosaur, m_SaveVelocity, FIELD_VECTOR),
+		DEFINE_FIELD(CIchthyosaur, m_idealDist, FIELD_FLOAT),
+		DEFINE_FIELD(CIchthyosaur, m_flBlink, FIELD_FLOAT),
+		DEFINE_FIELD(CIchthyosaur, m_flEnemyTouched, FIELD_FLOAT),
+		DEFINE_FIELD(CIchthyosaur, m_bOnAttack, FIELD_BOOLEAN),
+		DEFINE_FIELD(CIchthyosaur, m_flMaxSpeed, FIELD_FLOAT),
+		DEFINE_FIELD(CIchthyosaur, m_flMinSpeed, FIELD_FLOAT),
+		DEFINE_FIELD(CIchthyosaur, m_flMaxDist, FIELD_FLOAT),
+		DEFINE_FIELD(CIchthyosaur, m_flNextAlert, FIELD_TIME),
 };
 
 IMPLEMENT_SAVERESTORE(CIchthyosaur, CFlyingMonster);
 
 
 const char* CIchthyosaur::pIdleSounds[] =
-{
-	"ichy/ichy_idle1.wav",
-	"ichy/ichy_idle2.wav",
-	"ichy/ichy_idle3.wav",
-	"ichy/ichy_idle4.wav",
+	{
+		"ichy/ichy_idle1.wav",
+		"ichy/ichy_idle2.wav",
+		"ichy/ichy_idle3.wav",
+		"ichy/ichy_idle4.wav",
 };
 
 const char* CIchthyosaur::pAlertSounds[] =
-{
-	"ichy/ichy_alert2.wav",
-	"ichy/ichy_alert3.wav",
+	{
+		"ichy/ichy_alert2.wav",
+		"ichy/ichy_alert3.wav",
 };
 
 const char* CIchthyosaur::pAttackSounds[] =
-{
-	"ichy/ichy_attack1.wav",
-	"ichy/ichy_attack2.wav",
+	{
+		"ichy/ichy_attack1.wav",
+		"ichy/ichy_attack2.wav",
 };
 
 const char* CIchthyosaur::pBiteSounds[] =
-{
-	"ichy/ichy_bite1.wav",
-	"ichy/ichy_bite2.wav",
+	{
+		"ichy/ichy_bite1.wav",
+		"ichy/ichy_bite2.wav",
 };
 
 const char* CIchthyosaur::pPainSounds[] =
-{
-	"ichy/ichy_pain2.wav",
-	"ichy/ichy_pain3.wav",
-	"ichy/ichy_pain5.wav",
+	{
+		"ichy/ichy_pain2.wav",
+		"ichy/ichy_pain3.wav",
+		"ichy/ichy_pain5.wav",
 };
 
 const char* CIchthyosaur::pDieSounds[] =
-{
-	"ichy/ichy_die2.wav",
-	"ichy/ichy_die4.wav",
+	{
+		"ichy/ichy_die2.wav",
+		"ichy/ichy_die4.wav",
 };
 
-#define EMIT_ICKY_SOUND( chan, array ) \
-	EMIT_SOUND_DYN ( ENT(pev), chan , array [ RANDOM_LONG(0,ARRAYSIZE( array )-1) ], 1.0, 0.6, 0, RANDOM_LONG(95,105) ); 
+#define EMIT_ICKY_SOUND(chan, array) \
+	EMIT_SOUND_DYN(ENT(pev), chan, array[RANDOM_LONG(0, ARRAYSIZE(array) - 1)], 1.0, 0.6, 0, RANDOM_LONG(95, 105));
 
 
 void CIchthyosaur::IdleSound()
@@ -227,105 +227,96 @@ enum
 // AI Schedules Specific to this monster
 //=========================================================
 
-static Task_t	tlSwimAround[] =
-{
-	{ TASK_SET_ACTIVITY,			(float)ACT_WALK },
-	{ TASK_ICHTHYOSAUR_SWIM,		0.0 },
-};
-
-static Schedule_t	slSwimAround[] =
-{
+static Task_t tlSwimAround[] =
 	{
-		tlSwimAround,
-		ARRAYSIZE(tlSwimAround),
-		bits_COND_LIGHT_DAMAGE |
-		bits_COND_HEAVY_DAMAGE |
-		bits_COND_SEE_ENEMY |
-		bits_COND_NEW_ENEMY |
-		bits_COND_HEAR_SOUND,
-		bits_SOUND_PLAYER |
-		bits_SOUND_COMBAT,
-		"SwimAround"
-	},
+		{TASK_SET_ACTIVITY, (float)ACT_WALK},
+		{TASK_ICHTHYOSAUR_SWIM, 0.0},
 };
 
-static Task_t	tlSwimAgitated[] =
-{
-	{ TASK_STOP_MOVING,				(float)0 },
-	{ TASK_SET_ACTIVITY,			(float)ACT_RUN },
-	{ TASK_WAIT,					(float)2.0 },
-};
-
-static Schedule_t	slSwimAgitated[] =
-{
+static Schedule_t slSwimAround[] =
 	{
-		tlSwimAgitated,
-		ARRAYSIZE(tlSwimAgitated),
-		0,
-		0,
-		"SwimAgitated"
-	},
+		{tlSwimAround,
+			ARRAYSIZE(tlSwimAround),
+			bits_COND_LIGHT_DAMAGE |
+				bits_COND_HEAVY_DAMAGE |
+				bits_COND_SEE_ENEMY |
+				bits_COND_NEW_ENEMY |
+				bits_COND_HEAR_SOUND,
+			bits_SOUND_PLAYER |
+				bits_SOUND_COMBAT,
+			"SwimAround"},
 };
 
-
-static Task_t	tlCircleEnemy[] =
-{
-	{ TASK_SET_ACTIVITY,			(float)ACT_WALK },
-	{ TASK_ICHTHYOSAUR_CIRCLE_ENEMY, 0.0 },
-};
-
-static Schedule_t	slCircleEnemy[] =
-{
+static Task_t tlSwimAgitated[] =
 	{
-		tlCircleEnemy,
-		ARRAYSIZE(tlCircleEnemy),
-		bits_COND_NEW_ENEMY |
-		bits_COND_LIGHT_DAMAGE |
-		bits_COND_HEAVY_DAMAGE |
-		bits_COND_CAN_MELEE_ATTACK1 |
-		bits_COND_CAN_RANGE_ATTACK1,
-		0,
-		"CircleEnemy"
-	},
+		{TASK_STOP_MOVING, (float)0},
+		{TASK_SET_ACTIVITY, (float)ACT_RUN},
+		{TASK_WAIT, (float)2.0},
+};
+
+static Schedule_t slSwimAgitated[] =
+	{
+		{tlSwimAgitated,
+			ARRAYSIZE(tlSwimAgitated),
+			0,
+			0,
+			"SwimAgitated"},
+};
+
+
+static Task_t tlCircleEnemy[] =
+	{
+		{TASK_SET_ACTIVITY, (float)ACT_WALK},
+		{TASK_ICHTHYOSAUR_CIRCLE_ENEMY, 0.0},
+};
+
+static Schedule_t slCircleEnemy[] =
+	{
+		{tlCircleEnemy,
+			ARRAYSIZE(tlCircleEnemy),
+			bits_COND_NEW_ENEMY |
+				bits_COND_LIGHT_DAMAGE |
+				bits_COND_HEAVY_DAMAGE |
+				bits_COND_CAN_MELEE_ATTACK1 |
+				bits_COND_CAN_RANGE_ATTACK1,
+			0,
+			"CircleEnemy"},
 };
 
 
 Task_t tlTwitchDie[] =
-{
-	{ TASK_STOP_MOVING,			0		 },
-	{ TASK_SOUND_DIE,			(float)0 },
-	{ TASK_DIE,					(float)0 },
-	{ TASK_ICHTHYOSAUR_FLOAT,	(float)0 },
+	{
+		{TASK_STOP_MOVING, 0},
+		{TASK_SOUND_DIE, (float)0},
+		{TASK_DIE, (float)0},
+		{TASK_ICHTHYOSAUR_FLOAT, (float)0},
 };
 
 Schedule_t slTwitchDie[] =
-{
 	{
-		tlTwitchDie,
-		ARRAYSIZE(tlTwitchDie),
-		0,
-		0,
-		"Die"
-	},
+		{tlTwitchDie,
+			ARRAYSIZE(tlTwitchDie),
+			0,
+			0,
+			"Die"},
 };
 
 
-DEFINE_CUSTOM_SCHEDULES(CIchthyosaur)
-{
+DEFINE_CUSTOM_SCHEDULES(CIchthyosaur){
 	slSwimAround,
-		slSwimAgitated,
-		slCircleEnemy,
-		slTwitchDie,
+	slSwimAgitated,
+	slCircleEnemy,
+	slTwitchDie,
 };
 IMPLEMENT_CUSTOM_SCHEDULES(CIchthyosaur, CFlyingMonster);
 
 //=========================================================
-// Classify - indicates this monster's place in the 
+// Classify - indicates this monster's place in the
 // relationship table.
 //=========================================================
-int	CIchthyosaur::Classify()
+int CIchthyosaur::Classify()
 {
-	return	CLASS_ALIEN_MONSTER;
+	return CLASS_ALIEN_MONSTER;
 }
 
 
@@ -395,15 +386,15 @@ void CIchthyosaur::Killed(entvars_t* pevAttacker, int iGib)
 
 void CIchthyosaur::BecomeDead()
 {
-	pev->takedamage = DAMAGE_YES;// don't let autoaim aim at corpses.
+	pev->takedamage = DAMAGE_YES; // don't let autoaim aim at corpses.
 
-	// give the corpse half of the monster's original maximum health. 
+	// give the corpse half of the monster's original maximum health.
 	pev->health = pev->max_health / 2;
 	pev->max_health = 5; // max_health now becomes a counter for how many blood decals the corpse can place.
 }
 
 #define ICHTHYOSAUR_AE_SHAKE_RIGHT 1
-#define ICHTHYOSAUR_AE_SHAKE_LEFT  2
+#define ICHTHYOSAUR_AE_SHAKE_LEFT 2
 
 
 //=========================================================
@@ -416,13 +407,12 @@ void CIchthyosaur::HandleAnimEvent(MonsterEvent_t* pEvent)
 	switch (pEvent->event)
 	{
 	case ICHTHYOSAUR_AE_SHAKE_RIGHT:
-	case ICHTHYOSAUR_AE_SHAKE_LEFT:
-	{
+	case ICHTHYOSAUR_AE_SHAKE_LEFT: {
 		if (m_hEnemy != NULL && FVisible(m_hEnemy))
 		{
 			CBaseEntity* pHurt = m_hEnemy;
 
-			if (m_flEnemyTouched < gpGlobals->time - 0.2 && (m_hEnemy->BodyTarget(pev->origin) - pev->origin).Length() >(32 + 16 + 32))
+			if (m_flEnemyTouched < gpGlobals->time - 0.2 && (m_hEnemy->BodyTarget(pev->origin) - pev->origin).Length() > (32 + 16 + 32))
 				break;
 
 			Vector vecShootDir = ShootAtEnemy(pev->origin);
@@ -480,7 +470,7 @@ void CIchthyosaur::Spawn()
 	m_MonsterState = MONSTERSTATE_NONE;
 	SetBits(pev->flags, FL_SWIM);
 	SetFlyingSpeed(ICHTHYOSAUR_SPEED);
-	SetFlyingMomentum(2.5);	// Set momentum constant
+	SetFlyingMomentum(2.5); // Set momentum constant
 
 	m_afCapability = bits_CAP_RANGE_ATTACK1 | bits_CAP_SWIM;
 
@@ -762,8 +752,8 @@ void CIchthyosaur::Move(float flInterval)
 
 float CIchthyosaur::FlPitchDiff()
 {
-	float	flPitchDiff;
-	float	flCurrentPitch;
+	float flPitchDiff;
+	float flCurrentPitch;
 
 	flCurrentPitch = UTIL_AngleMod(pev->angles.z);
 
@@ -857,7 +847,7 @@ float CIchthyosaur::ChangeYaw(int speed)
 
 Activity CIchthyosaur::GetStoppedActivity()
 {
-	if (pev->movetype != MOVETYPE_FLY)		// UNDONE: Ground idle here, IDLE may be something else
+	if (pev->movetype != MOVETYPE_FLY) // UNDONE: Ground idle here, IDLE may be something else
 		return ACT_IDLE;
 	return ACT_WALK;
 }
@@ -987,12 +977,12 @@ void CIchthyosaur::Swim()
 
 	// ALERT( at_console, "Steer %f %f %f\n", SteeringVector.x, SteeringVector.y, SteeringVector.z );
 
-/*
+	/*
 	m_pBeam->SetStartPos( pev->origin + pev->velocity );
 	m_pBeam->RelinkBeam( );
 */
 
-// ALERT( at_console, "speed %f\n", m_flightSpeed );
+	// ALERT( at_console, "speed %f\n", m_flightSpeed );
 
 	Angles = UTIL_VecToAngles(m_SaveVelocity);
 
@@ -1001,8 +991,10 @@ void CIchthyosaur::Swim()
 	if (Angles.x > 180)
 		Angles.x = Angles.x - 360;
 	pev->angles.x = UTIL_Approach(Angles.x, pev->angles.x, 50 * 0.1);
-	if (pev->angles.x < -80) pev->angles.x = -80;
-	if (pev->angles.x > 80) pev->angles.x = 80;
+	if (pev->angles.x < -80)
+		pev->angles.x = -80;
+	if (pev->angles.x > 80)
+		pev->angles.x = 80;
 
 	// Smooth Yaw and generate Roll
 	//
@@ -1079,8 +1071,10 @@ void CIchthyosaur::Swim()
 			pev->angles.z += speed;
 		}
 	}
-	if (pev->angles.z < -20) pev->angles.z = -20;
-	if (pev->angles.z > 20) pev->angles.z = 20;
+	if (pev->angles.z < -20)
+		pev->angles.z = -20;
+	if (pev->angles.z > 20)
+		pev->angles.z = 20;
 
 	UTIL_MakeVectorsPrivate(Vector(-Angles.x, Angles.y, Angles.z), Forward, Right, Up);
 
@@ -1098,8 +1092,10 @@ Vector CIchthyosaur::DoProbe(const Vector& Probe)
 	TRACE_MONSTER_HULL(edict(), pev->origin, Probe, dont_ignore_monsters, edict(), &tr);
 	if (0 != tr.fAllSolid || tr.flFraction < 0.99)
 	{
-		if (tr.flFraction < 0.0) tr.flFraction = 0.0;
-		if (tr.flFraction > 1.0) tr.flFraction = 1.0;
+		if (tr.flFraction < 0.0)
+			tr.flFraction = 0.0;
+		if (tr.flFraction > 1.0)
+			tr.flFraction = 1.0;
 		if (tr.flFraction < frac)
 		{
 			frac = tr.flFraction;

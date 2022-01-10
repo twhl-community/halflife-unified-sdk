@@ -32,7 +32,7 @@ void CGlock::Spawn()
 
 	m_iDefaultAmmo = GLOCK_DEFAULT_GIVE;
 
-	FallInit();// get ready to fall down.
+	FallInit(); // get ready to fall down.
 }
 
 
@@ -42,14 +42,14 @@ void CGlock::Precache()
 	PRECACHE_MODEL("models/w_9mmhandgun.mdl");
 	PRECACHE_MODEL("models/p_9mmhandgun.mdl");
 
-	m_iShell = PRECACHE_MODEL("models/shell.mdl");// brass shell
+	m_iShell = PRECACHE_MODEL("models/shell.mdl"); // brass shell
 
 	PRECACHE_SOUND("items/9mmclip1.wav");
 	PRECACHE_SOUND("items/9mmclip2.wav");
 
-	PRECACHE_SOUND("weapons/pl_gun1.wav");//silenced handgun
-	PRECACHE_SOUND("weapons/pl_gun2.wav");//silenced handgun
-	PRECACHE_SOUND("weapons/pl_gun3.wav");//handgun
+	PRECACHE_SOUND("weapons/pl_gun1.wav"); //silenced handgun
+	PRECACHE_SOUND("weapons/pl_gun2.wav"); //silenced handgun
+	PRECACHE_SOUND("weapons/pl_gun3.wav"); //handgun
 
 	m_usFireGlock1 = PRECACHE_EVENT(1, "events/glock1.sc");
 	m_usFireGlock2 = PRECACHE_EVENT(1, "events/glock2.sc");
@@ -115,7 +115,7 @@ void CGlock::GlockFire(float flSpread, float flCycleTime, bool fUseAutoAim)
 
 	int flags;
 
-#if defined( CLIENT_WEAPONS )
+#if defined(CLIENT_WEAPONS)
 	flags = FEV_NOTHOST;
 #else
 	flags = 0;
@@ -161,7 +161,7 @@ void CGlock::GlockFire(float flSpread, float flCycleTime, bool fUseAutoAim)
 		m_pPlayer->SetSuitUpdate("!HEV_AMO0", false, 0);
 
 	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10, 15);
-	}
+}
 
 
 void CGlock::Reload()
@@ -250,18 +250,3 @@ class CGlockAmmo : public CBasePlayerAmmo
 };
 LINK_ENTITY_TO_CLASS(ammo_glockclip, CGlockAmmo);
 LINK_ENTITY_TO_CLASS(ammo_9mmclip, CGlockAmmo);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

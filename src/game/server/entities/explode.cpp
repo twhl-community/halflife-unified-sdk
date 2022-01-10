@@ -49,7 +49,7 @@ void CShower::Spawn()
 	pev->gravity = 0.5;
 	pev->nextthink = gpGlobals->time + 0.1;
 	pev->solid = SOLID_NOT;
-	SET_MODEL(edict(), "models/grenade.mdl");	// Need a model, just use the grenade, we don't draw it anyway
+	SET_MODEL(edict(), "models/grenade.mdl"); // Need a model, just use the grenade, we don't draw it anyway
 	UTIL_SetSize(pev, g_vecZero, g_vecZero);
 	pev->effects |= EF_NODRAW;
 	pev->speed = RANDOM_FLOAT(0.5, 1.5);
@@ -89,18 +89,18 @@ public:
 	bool KeyValue(KeyValueData* pkvd) override;
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
-	bool	Save(CSave& save) override;
-	bool	Restore(CRestore& restore) override;
-	static	TYPEDESCRIPTION m_SaveData[];
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
+	static TYPEDESCRIPTION m_SaveData[];
 
-	int m_iMagnitude;// how large is the fireball? how much damage?
-	int m_spriteScale; // what's the exact fireball sprite scale? 
+	int m_iMagnitude;  // how large is the fireball? how much damage?
+	int m_spriteScale; // what's the exact fireball sprite scale?
 };
 
-TYPEDESCRIPTION	CEnvExplosion::m_SaveData[] =
-{
-	DEFINE_FIELD(CEnvExplosion, m_iMagnitude, FIELD_INTEGER),
-	DEFINE_FIELD(CEnvExplosion, m_spriteScale, FIELD_INTEGER),
+TYPEDESCRIPTION CEnvExplosion::m_SaveData[] =
+	{
+		DEFINE_FIELD(CEnvExplosion, m_iMagnitude, FIELD_INTEGER),
+		DEFINE_FIELD(CEnvExplosion, m_spriteScale, FIELD_INTEGER),
 };
 
 IMPLEMENT_SAVERESTORE(CEnvExplosion, CBaseMonster);
@@ -151,10 +151,10 @@ void CEnvExplosion::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE 
 {
 	TraceResult tr;
 
-	pev->model = iStringNull;//invisible
-	pev->solid = SOLID_NOT;// intangible
+	pev->model = iStringNull; //invisible
+	pev->solid = SOLID_NOT;	  // intangible
 
-	Vector		vecSpot;// trace starts here!
+	Vector vecSpot; // trace starts here!
 
 	vecSpot = pev->origin + Vector(0, 0, 8);
 
@@ -193,7 +193,7 @@ void CEnvExplosion::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE 
 		WRITE_COORD(pev->origin.z);
 		WRITE_SHORT(g_sModelIndexFireball);
 		WRITE_BYTE((byte)m_spriteScale); // scale * 10
-		WRITE_BYTE(15); // framerate
+		WRITE_BYTE(15);					 // framerate
 		WRITE_BYTE(TE_EXPLFLAG_NONE);
 		MESSAGE_END();
 	}
@@ -205,7 +205,7 @@ void CEnvExplosion::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE 
 		WRITE_COORD(pev->origin.y);
 		WRITE_COORD(pev->origin.z);
 		WRITE_SHORT(g_sModelIndexFireball);
-		WRITE_BYTE(0); // no sprite
+		WRITE_BYTE(0);	// no sprite
 		WRITE_BYTE(15); // framerate
 		WRITE_BYTE(TE_EXPLFLAG_NONE);
 		MESSAGE_END();
@@ -243,7 +243,7 @@ void CEnvExplosion::Smoke()
 		WRITE_COORD(pev->origin.z);
 		WRITE_SHORT(g_sModelIndexSmoke);
 		WRITE_BYTE((byte)m_spriteScale); // scale * 10
-		WRITE_BYTE(12); // framerate
+		WRITE_BYTE(12);					 // framerate
 		MESSAGE_END();
 	}
 
@@ -257,8 +257,8 @@ void CEnvExplosion::Smoke()
 // HACKHACK -- create one of these and fake a keyvalue to get the right explosion setup
 void ExplosionCreate(const Vector& center, const Vector& angles, edict_t* pOwner, int magnitude, bool doDamage)
 {
-	KeyValueData	kvd;
-	char			buf[128];
+	KeyValueData kvd;
+	char buf[128];
 
 	CBaseEntity* pExplosion = CBaseEntity::Create("env_explosion", center, angles, pOwner);
 	sprintf(buf, "%3d", magnitude);

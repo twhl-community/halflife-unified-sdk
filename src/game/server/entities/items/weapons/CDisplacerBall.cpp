@@ -36,44 +36,43 @@ namespace
 {
 //TODO: can probably be smarter - Solokiller
 const char* const displace[] =
-{
-	"monster_bloater",
-	"monster_snark",
-	"monster_shockroach",
-	"monster_rat",
-	"monster_alien_babyvoltigore",
-	"monster_babycrab",
-	"monster_cockroach",
-	"monster_flyer_flock",
-	"monster_headcrab",
-	"monster_leech",
-	"monster_alien_controller",
-	"monster_alien_slave",
-	"monster_barney",
-	"monster_bullchicken",
-	"monster_cleansuit_scientist",
-	"monster_houndeye",
-	"monster_human_assassin",
-	"monster_human_grunt",
-	"monster_human_grunt_ally",
-	"monster_human_medic_ally",
-	"monster_human_torch_ally",
-	"monster_male_assassin",
-	"monster_otis",
-	"monster_pitdrone",
-	"monster_scientist",
-	"monster_zombie",
-	"monster_zombie_barney",
-	"monster_zombie_soldier",
-	"monster_alien_grunt",
-	"monster_alien_voltigore",
-	"monster_assassin_repel",
-	"monster_grunt_ally_repel",
-	"monster_gonome",
-	"monster_grunt_repel",
-	"monster_ichthyosaur",
-	"monster_shocktrooper"
-};
+	{
+		"monster_bloater",
+		"monster_snark",
+		"monster_shockroach",
+		"monster_rat",
+		"monster_alien_babyvoltigore",
+		"monster_babycrab",
+		"monster_cockroach",
+		"monster_flyer_flock",
+		"monster_headcrab",
+		"monster_leech",
+		"monster_alien_controller",
+		"monster_alien_slave",
+		"monster_barney",
+		"monster_bullchicken",
+		"monster_cleansuit_scientist",
+		"monster_houndeye",
+		"monster_human_assassin",
+		"monster_human_grunt",
+		"monster_human_grunt_ally",
+		"monster_human_medic_ally",
+		"monster_human_torch_ally",
+		"monster_male_assassin",
+		"monster_otis",
+		"monster_pitdrone",
+		"monster_scientist",
+		"monster_zombie",
+		"monster_zombie_barney",
+		"monster_zombie_soldier",
+		"monster_alien_grunt",
+		"monster_alien_voltigore",
+		"monster_assassin_repel",
+		"monster_grunt_ally_repel",
+		"monster_gonome",
+		"monster_grunt_repel",
+		"monster_ichthyosaur",
+		"monster_shocktrooper"};
 }
 
 LINK_ENTITY_TO_CLASS(displacer_ball, CDisplacerBall);
@@ -126,32 +125,32 @@ void CDisplacerBall::BallTouch(CBaseEntity* pOther)
 
 	MESSAGE_BEGIN(MSG_PAS, SVC_TEMPENTITY, pev->origin);
 	WRITE_BYTE(TE_BEAMCYLINDER);
-	WRITE_COORD_VECTOR(pev->origin);			// coord coord coord (center position) 
-	WRITE_COORD(pev->origin.x);				// coord coord coord (axis and radius) 
+	WRITE_COORD_VECTOR(pev->origin); // coord coord coord (center position)
+	WRITE_COORD(pev->origin.x);		 // coord coord coord (axis and radius)
 	WRITE_COORD(pev->origin.y);
 	WRITE_COORD(pev->origin.z + 800.0);
-	WRITE_SHORT(m_iTrail);					 // short (sprite index) 
-	WRITE_BYTE(0);							 // byte (starting frame) 
-	WRITE_BYTE(0);							 // byte (frame rate in 0.1's) 
-	WRITE_BYTE(3);							 // byte (life in 0.1's) 
-	WRITE_BYTE(16);							 // byte (line width in 0.1's) 
-	WRITE_BYTE(0);							 // byte (noise amplitude in 0.01's) 
-	WRITE_BYTE(255);							 // byte,byte,byte (color)
+	WRITE_SHORT(m_iTrail); // short (sprite index)
+	WRITE_BYTE(0);		   // byte (starting frame)
+	WRITE_BYTE(0);		   // byte (frame rate in 0.1's)
+	WRITE_BYTE(3);		   // byte (life in 0.1's)
+	WRITE_BYTE(16);		   // byte (line width in 0.1's)
+	WRITE_BYTE(0);		   // byte (noise amplitude in 0.01's)
+	WRITE_BYTE(255);	   // byte,byte,byte (color)
 	WRITE_BYTE(255);
 	WRITE_BYTE(255);
-	WRITE_BYTE(255);							 // byte (brightness)
-	WRITE_BYTE(0);							 // byte (scroll speed in 0.1's)
+	WRITE_BYTE(255); // byte (brightness)
+	WRITE_BYTE(0);	 // byte (scroll speed in 0.1's)
 	MESSAGE_END();
 
 	MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, pev->origin);
 	WRITE_BYTE(TE_DLIGHT);
-	WRITE_COORD_VECTOR(pev->origin);			// coord, coord, coord (pos) 
-	WRITE_BYTE(16);							// byte (radius in 10's) 
-	WRITE_BYTE(255);							// byte byte byte (color)
+	WRITE_COORD_VECTOR(pev->origin); // coord, coord, coord (pos)
+	WRITE_BYTE(16);					 // byte (radius in 10's)
+	WRITE_BYTE(255);				 // byte byte byte (color)
 	WRITE_BYTE(180);
 	WRITE_BYTE(96);
-	WRITE_BYTE(10);							// byte (brightness)
-	WRITE_BYTE(10);							// byte (life in 10's)
+	WRITE_BYTE(10); // byte (brightness)
+	WRITE_BYTE(10); // byte (life in 10's)
 	MESSAGE_END();
 
 	m_hDisplacedTarget = nullptr;

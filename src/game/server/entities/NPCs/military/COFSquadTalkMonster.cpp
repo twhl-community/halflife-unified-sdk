@@ -30,16 +30,16 @@
 //=========================================================
 // Save/Restore
 //=========================================================
-TYPEDESCRIPTION	COFSquadTalkMonster::m_SaveData[] =
-{
-	DEFINE_FIELD(COFSquadTalkMonster, m_hSquadLeader, FIELD_EHANDLE),
-	DEFINE_ARRAY(COFSquadTalkMonster, m_hSquadMember, FIELD_EHANDLE, MAX_SQUAD_MEMBERS - 1),
+TYPEDESCRIPTION COFSquadTalkMonster::m_SaveData[] =
+	{
+		DEFINE_FIELD(COFSquadTalkMonster, m_hSquadLeader, FIELD_EHANDLE),
+		DEFINE_ARRAY(COFSquadTalkMonster, m_hSquadMember, FIELD_EHANDLE, MAX_SQUAD_MEMBERS - 1),
 
-	// DEFINE_FIELD( COFSquadTalkMonster, m_afSquadSlots, FIELD_INTEGER ), // these need to be reset after transitions!
-	DEFINE_FIELD(COFSquadTalkMonster, m_fEnemyEluded, FIELD_BOOLEAN),
-	DEFINE_FIELD(COFSquadTalkMonster, m_flLastEnemySightTime, FIELD_TIME),
+		// DEFINE_FIELD( COFSquadTalkMonster, m_afSquadSlots, FIELD_INTEGER ), // these need to be reset after transitions!
+		DEFINE_FIELD(COFSquadTalkMonster, m_fEnemyEluded, FIELD_BOOLEAN),
+		DEFINE_FIELD(COFSquadTalkMonster, m_flLastEnemySightTime, FIELD_TIME),
 
-	DEFINE_FIELD(COFSquadTalkMonster, m_iMySlot, FIELD_INTEGER),
+		DEFINE_FIELD(COFSquadTalkMonster, m_iMySlot, FIELD_INTEGER),
 
 
 };
@@ -48,7 +48,7 @@ IMPLEMENT_SAVERESTORE(COFSquadTalkMonster, CTalkMonster);
 
 
 //=========================================================
-// OccupySlot - if any slots of the passed slots are 
+// OccupySlot - if any slots of the passed slots are
 // available, the monster will be assigned to one.
 //=========================================================
 bool COFSquadTalkMonster::OccupySlot(int iDesiredSlots)
@@ -75,7 +75,7 @@ bool COFSquadTalkMonster::OccupySlot(int iDesiredSlots)
 
 	if ((iDesiredSlots ^ pSquadLeader->m_afSquadSlots) == 0)
 	{
-		// none of the desired slots are available. 
+		// none of the desired slots are available.
 		return false;
 	}
 
@@ -86,7 +86,7 @@ bool COFSquadTalkMonster::OccupySlot(int iDesiredSlots)
 		iMask = 1 << i;
 		if ((iDesiredSlots & iMask) != 0) // am I looking for this bit?
 		{
-			if ((iSquadSlots & iMask) == 0)	// Is it already taken?
+			if ((iSquadSlots & iMask) == 0) // Is it already taken?
 			{
 				// No, use this bit
 				pSquadLeader->m_afSquadSlots |= iMask;
@@ -101,7 +101,7 @@ bool COFSquadTalkMonster::OccupySlot(int iDesiredSlots)
 }
 
 //=========================================================
-// VacateSlot 
+// VacateSlot
 //=========================================================
 void COFSquadTalkMonster::VacateSlot()
 {
@@ -206,9 +206,9 @@ bool COFSquadTalkMonster::SquadAdd(COFSquadTalkMonster* pAdd)
 
 
 //=========================================================
-// 
+//
 // SquadPasteEnemyInfo - called by squad members that have
-// current info on the enemy so that it can be stored for 
+// current info on the enemy so that it can be stored for
 // members who don't have current info.
 //
 //=========================================================
@@ -235,7 +235,7 @@ void COFSquadTalkMonster::SquadCopyEnemyInfo()
 }
 
 //=========================================================
-// 
+//
 // SquadMakeEnemy - makes everyone in the squad angry at
 // the same entity.
 //
@@ -379,7 +379,7 @@ int COFSquadTalkMonster::SquadCount()
 int COFSquadTalkMonster::SquadRecruit(int searchRadius, int maxMembers)
 {
 	int squadCount;
-	int iMyClass = Classify();// cache this monster's class
+	int iMyClass = Classify(); // cache this monster's class
 
 
 	// Don't recruit if I'm already in a group
@@ -407,7 +407,7 @@ int COFSquadTalkMonster::SquadRecruit(int searchRadius, int maxMembers)
 			{
 				if (!pRecruit->InSquad() && pRecruit->Classify() == iMyClass && pRecruit != this)
 				{
-					// minimum protection here against user error.in worldcraft. 
+					// minimum protection here against user error.in worldcraft.
 					if (!SquadAdd(pRecruit))
 						break;
 					squadCount++;
@@ -431,7 +431,7 @@ int COFSquadTalkMonster::SquadRecruit(int searchRadius, int maxMembers)
 					FStringNull(pRecruit->pev->netname))
 				{
 					TraceResult tr;
-					UTIL_TraceLine(pev->origin + pev->view_ofs, pRecruit->pev->origin + pev->view_ofs, ignore_monsters, pRecruit->edict(), &tr);// try to hit recruit with a traceline.
+					UTIL_TraceLine(pev->origin + pev->view_ofs, pRecruit->pev->origin + pev->view_ofs, ignore_monsters, pRecruit->edict(), &tr); // try to hit recruit with a traceline.
 					if (tr.flFraction == 1.0)
 					{
 						if (!SquadAdd(pRecruit))
@@ -514,8 +514,8 @@ void COFSquadTalkMonster::StartMonster()
 //=========================================================
 // NoFriendlyFire - checks for possibility of friendly fire
 //
-// Builds a large box in front of the grunt and checks to see 
-// if any squad members are in that box. 
+// Builds a large box in front of the grunt and checks to see
+// if any squad members are in that box.
 //=========================================================
 bool COFSquadTalkMonster::NoFriendlyFire()
 {
@@ -524,13 +524,13 @@ bool COFSquadTalkMonster::NoFriendlyFire()
 		return true;
 	}
 
-	CPlane	backPlane;
-	CPlane  leftPlane;
-	CPlane	rightPlane;
+	CPlane backPlane;
+	CPlane leftPlane;
+	CPlane rightPlane;
 
-	Vector	vecLeftSide;
-	Vector	vecRightSide;
-	Vector	v_left;
+	Vector vecLeftSide;
+	Vector vecRightSide;
+	Vector v_left;
 
 	//!!!BUGBUG - to fix this, the planes must be aligned to where the monster will be firing its gun, not the direction it is facing!!!
 
@@ -586,7 +586,7 @@ bool COFSquadTalkMonster::NoFriendlyFire()
 //=========================================================
 MONSTERSTATE COFSquadTalkMonster::GetIdealState()
 {
-	int	iConditions;
+	int iConditions;
 
 	iConditions = IScheduleFlags();
 
@@ -628,7 +628,7 @@ bool COFSquadTalkMonster::FValidateCover(const Vector& vecCoverLocation)
 
 //=========================================================
 // SquadEnemySplit- returns true if not all squad members
-// are fighting the same enemy. 
+// are fighting the same enemy.
 //=========================================================
 bool COFSquadTalkMonster::SquadEnemySplit()
 {
@@ -671,15 +671,14 @@ bool COFSquadTalkMonster::SquadMemberInRange(const Vector& vecLocation, float fl
 }
 
 
-extern Schedule_t	slChaseEnemyFailed[];
+extern Schedule_t slChaseEnemyFailed[];
 
 Schedule_t* COFSquadTalkMonster::GetScheduleOfType(int iType)
 {
 	switch (iType)
 	{
 
-	case SCHED_CHASE_ENEMY_FAILED:
-	{
+	case SCHED_CHASE_ENEMY_FAILED: {
 		return &slChaseEnemyFailed[0];
 	}
 
@@ -711,7 +710,7 @@ void COFSquadTalkMonster::FollowerUse(CBaseEntity* pActivator, CBaseEntity* pCal
 			else
 			{
 				StartFollowing(pCaller);
-				SetBits(m_bitsSaid, bit_saidHelloPlayer);	// Don't say hi after you've started following
+				SetBits(m_bitsSaid, bit_saidHelloPlayer); // Don't say hi after you've started following
 			}
 		}
 		else
@@ -738,15 +737,11 @@ COFSquadTalkMonster* COFSquadTalkMonster::MySquadMedic()
 
 COFSquadTalkMonster* COFSquadTalkMonster::FindSquadMedic(int searchRadius)
 {
-	for (CBaseEntity* pEntity = nullptr; (pEntity = UTIL_FindEntityInSphere(pEntity, pev->origin, searchRadius)); )
+	for (CBaseEntity* pEntity = nullptr; (pEntity = UTIL_FindEntityInSphere(pEntity, pev->origin, searchRadius));)
 	{
 		auto pMonster = pEntity->MySquadTalkMonsterPointer();
 
-		if (pMonster
-			&& pMonster != this
-			&& pMonster->IsAlive()
-			&& !pMonster->m_pCine
-			&& FClassnameIs(pMonster->pev, "monster_human_medic_ally"))
+		if (pMonster && pMonster != this && pMonster->IsAlive() && !pMonster->m_pCine && FClassnameIs(pMonster->pev, "monster_human_medic_ally"))
 		{
 			return pMonster;
 		}

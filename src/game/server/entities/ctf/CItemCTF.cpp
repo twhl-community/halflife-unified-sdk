@@ -98,10 +98,7 @@ void CItemCTF::DropPreThink()
 {
 	const auto contents = UTIL_PointContents(pev->origin);
 
-	if (contents == CONTENTS_SLIME
-		|| contents == CONTENTS_LAVA
-		|| contents == CONTENTS_SOLID
-		|| contents == CONTENTS_SKY)
+	if (contents == CONTENTS_SLIME || contents == CONTENTS_LAVA || contents == CONTENTS_SOLID || contents == CONTENTS_SKY)
 	{
 		DropThink();
 	}
@@ -137,17 +134,12 @@ void CItemCTF::DropThink()
 
 			for (auto pCandidate : UTIL_FindEntitiesByClassname<CItemSpawnCTF>("info_ctfspawn_powerup", pFirstSpawn))
 			{
-				if (iScoreDiff == 0
-					|| (iScoreDiff == 1
-						&& ((RANDOM_LONG(0, 1) && pCandidate->team_no == CTFTeam::None)
-							|| (RANDOM_LONG(0, 1) && pCandidate->team_no == static_cast<CTFTeam>(iLosingTeam + 1))))
-					|| (iScoreDiff > 1
-						&& pCandidate->team_no == static_cast<CTFTeam>(iLosingTeam + 1)))
+				if (iScoreDiff == 0 || (iScoreDiff == 1 && ((RANDOM_LONG(0, 1) && pCandidate->team_no == CTFTeam::None) || (RANDOM_LONG(0, 1) && pCandidate->team_no == static_cast<CTFTeam>(iLosingTeam + 1)))) || (iScoreDiff > 1 && pCandidate->team_no == static_cast<CTFTeam>(iLosingTeam + 1)))
 				{
 					++nTested;
 
 					auto nOccupied = false;
-					for (CBaseEntity* pEntity = nullptr; (pEntity = UTIL_FindEntityInSphere(pEntity, pCandidate->pev->origin, 128)); )
+					for (CBaseEntity* pEntity = nullptr; (pEntity = UTIL_FindEntityInSphere(pEntity, pCandidate->pev->origin, 128));)
 					{
 						if (pEntity->Classify() == CLASS_CTFITEM && this != pEntity)
 						{
@@ -182,7 +174,7 @@ void CItemCTF::DropThink()
 		for (auto pCandidate : UTIL_FindEntitiesByClassname<CItemSpawnCTF>("info_ctfspawn_powerup"))
 		{
 			auto nOccupied = false;
-			for (CBaseEntity* pEntity = nullptr; (pEntity = UTIL_FindEntityInSphere(pEntity, pCandidate->pev->origin, 128)); )
+			for (CBaseEntity* pEntity = nullptr; (pEntity = UTIL_FindEntityInSphere(pEntity, pCandidate->pev->origin, 128));)
 			{
 				if (pEntity->Classify() == CLASS_CTFITEM && this != pEntity)
 				{
@@ -247,8 +239,7 @@ void CItemCTF::CarryThink()
 void CItemCTF::ItemTouch(CBaseEntity* pOther)
 {
 	//TODO: really shouldn't be using the index here tbh
-	if (pOther->IsPlayer() && pOther->IsAlive()
-		&& (m_iLastTouched != pOther->entindex() || m_flNextTouchTime <= gpGlobals->time))
+	if (pOther->IsPlayer() && pOther->IsAlive() && (m_iLastTouched != pOther->entindex() || m_flNextTouchTime <= gpGlobals->time))
 	{
 		m_iLastTouched = 0;
 

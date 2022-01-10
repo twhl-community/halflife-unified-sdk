@@ -300,7 +300,7 @@ void CDisplacer::FireThink()
 
 	int flags;
 
-#if defined( CLIENT_WEAPONS )
+#if defined(CLIENT_WEAPONS)
 	flags = FEV_NOTHOST;
 #else
 	flags = 0;

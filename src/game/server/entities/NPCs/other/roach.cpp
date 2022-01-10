@@ -16,20 +16,20 @@
 // cockroach
 //=========================================================
 
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"monsters.h"
-#include	"schedule.h"
-#include	"soundent.h"
-#include	"decals.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
+#include "schedule.h"
+#include "soundent.h"
+#include "decals.h"
 
-#define		ROACH_IDLE				0
-#define		ROACH_BORED				1
-#define		ROACH_SCARED_BY_ENT		2
-#define		ROACH_SCARED_BY_LIGHT	3
-#define		ROACH_SMELL_FOOD		4
-#define		ROACH_EAT				5
+#define ROACH_IDLE 0
+#define ROACH_BORED 1
+#define ROACH_SCARED_BY_ENT 2
+#define ROACH_SCARED_BY_LIGHT 3
+#define ROACH_SMELL_FOOD 4
+#define ROACH_EAT 5
 
 //=========================================================
 // Monster's Anim Events Go Here
@@ -46,15 +46,15 @@ public:
 	void EXPORT Touch(CBaseEntity* pOther) override;
 	void Killed(entvars_t* pevAttacker, int iGib) override;
 
-	float	m_flLastLightLevel;
-	float	m_flNextSmellTime;
-	int		Classify() override;
-	void	Look(int iDistance) override;
-	int		ISoundMask() override;
+	float m_flLastLightLevel;
+	float m_flNextSmellTime;
+	int Classify() override;
+	void Look(int iDistance) override;
+	int ISoundMask() override;
 
 	// UNDONE: These don't necessarily need to be save/restored, but if we add more data, it may
-	bool	m_fLightHacked;
-	int		m_iMode;
+	bool m_fLightHacked;
+	int m_iMode;
 	// -----------------------------
 };
 LINK_ENTITY_TO_CLASS(monster_cockroach, CRoach);
@@ -66,14 +66,14 @@ LINK_ENTITY_TO_CLASS(monster_cockroach, CRoach);
 //=========================================================
 int CRoach::ISoundMask()
 {
-	return	bits_SOUND_CARCASS | bits_SOUND_MEAT;
+	return bits_SOUND_CARCASS | bits_SOUND_MEAT;
 }
 
 //=========================================================
-// Classify - indicates this monster's place in the 
+// Classify - indicates this monster's place in the
 // relationship table.
 //=========================================================
-int	CRoach::Classify()
+int CRoach::Classify()
 {
 	return CLASS_INSECT;
 }
@@ -83,15 +83,15 @@ int	CRoach::Classify()
 //=========================================================
 void CRoach::Touch(CBaseEntity* pOther)
 {
-	Vector		vecSpot;
-	TraceResult	tr;
+	Vector vecSpot;
+	TraceResult tr;
 
 	if (pOther->pev->velocity == g_vecZero || !pOther->IsPlayer())
 	{
 		return;
 	}
 
-	vecSpot = pev->origin + Vector(0, 0, 8);//move up a bit, and trace down.
+	vecSpot = pev->origin + Vector(0, 0, 8); //move up a bit, and trace down.
 	UTIL_TraceLine(vecSpot, vecSpot + Vector(0, 0, -24), ignore_monsters, ENT(pev), &tr);
 
 	// This isn't really blood.  So you don't have to screen it out based on violence levels (UTIL_ShouldShowBlood())
@@ -128,13 +128,13 @@ void CRoach::Spawn()
 	m_bloodColor = BLOOD_COLOR_YELLOW;
 	pev->effects = 0;
 	pev->health = 1;
-	m_flFieldOfView = 0.5;// indicates the width of this monster's forward view cone ( as a dotproduct result )
+	m_flFieldOfView = 0.5; // indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
 
 	MonsterInit();
 	SetActivity(ACT_IDLE);
 
-	pev->view_ofs = Vector(0, 0, 1);// position of the eyes relative to monster's origin.
+	pev->view_ofs = Vector(0, 0, 1); // position of the eyes relative to monster's origin.
 	pev->takedamage = DAMAGE_YES;
 	m_fLightHacked = false;
 	m_flLastLightLevel = -1;
@@ -192,7 +192,7 @@ void CRoach::MonsterThink()
 	if (FNullEnt(FIND_CLIENT_IN_PVS(edict())))
 		pev->nextthink = gpGlobals->time + RANDOM_FLOAT(1, 1.5);
 	else
-		pev->nextthink = gpGlobals->time + 0.1;// keep monster thinking
+		pev->nextthink = gpGlobals->time + 0.1; // keep monster thinking
 
 	float flInterval = StudioFrameAdvance(); // animate
 
@@ -200,7 +200,7 @@ void CRoach::MonsterThink()
 
 	if (!m_fLightHacked)
 	{
-		// if light value hasn't been collection for the first time yet, 
+		// if light value hasn't been collection for the first time yet,
 		// suspend the creature for a second so the world finishes spawning, then we'll collect the light level.
 		pev->nextthink = gpGlobals->time + 1;
 		m_fLightHacked = true;
@@ -214,9 +214,8 @@ void CRoach::MonsterThink()
 
 	switch (m_iMode)
 	{
-	case	ROACH_IDLE:
-	case	ROACH_EAT:
-	{
+	case ROACH_IDLE:
+	case ROACH_EAT: {
 		// if not moving, sample environment to see if anything scary is around. Do a radius search 'look' at random.
 		if (RANDOM_LONG(0, 3) == 1)
 		{
@@ -225,7 +224,7 @@ void CRoach::MonsterThink()
 			{
 				// if see something scary
 				//ALERT ( at_aiconsole, "Scared\n" );
-				Eat(30 + (RANDOM_LONG(0, 14)));// roach will ignore food for 30 to 45 seconds
+				Eat(30 + (RANDOM_LONG(0, 14))); // roach will ignore food for 30 to 45 seconds
 				PickNewDest(ROACH_SCARED_BY_ENT);
 				SetActivity(ACT_WALK);
 			}
@@ -238,7 +237,7 @@ void CRoach::MonsterThink()
 
 				if (m_iMode == ROACH_EAT)
 				{
-					// roach will ignore food for 30 to 45 seconds if it got bored while eating. 
+					// roach will ignore food for 30 to 45 seconds if it got bored while eating.
 					Eat(30 + (RANDOM_LONG(0, 14)));
 				}
 			}
@@ -276,13 +275,12 @@ void CRoach::MonsterThink()
 
 		break;
 	}
-	case	ROACH_SCARED_BY_LIGHT:
-	{
+	case ROACH_SCARED_BY_LIGHT: {
 		// if roach was scared by light, then stop if we're over a spot at least as dark as where we started!
 		if (GETENTITYILLUM(ENT(pev)) <= m_flLastLightLevel)
 		{
 			SetActivity(ACT_IDLE);
-			m_flLastLightLevel = GETENTITYILLUM(ENT(pev));// make this our new light level.
+			m_flLastLightLevel = GETENTITYILLUM(ENT(pev)); // make this our new light level.
 		}
 		break;
 	}
@@ -299,9 +297,9 @@ void CRoach::MonsterThink()
 //=========================================================
 void CRoach::PickNewDest(int iCondition)
 {
-	Vector	vecNewDir;
-	Vector	vecDest;
-	float	flDist;
+	Vector vecNewDir;
+	Vector vecDest;
+	float flDist;
 
 	m_iMode = iCondition;
 
@@ -326,15 +324,14 @@ void CRoach::PickNewDest(int iCondition)
 	do
 	{
 		// picks a random spot, requiring that it be at least 128 units away
-		// else, the roach will pick a spot too close to itself and run in 
+		// else, the roach will pick a spot too close to itself and run in
 		// circles. this is a hack but buys me time to work on the real monsters.
 		vecNewDir.x = RANDOM_FLOAT(-1, 1);
 		vecNewDir.y = RANDOM_FLOAT(-1, 1);
 		flDist = 256 + (RANDOM_LONG(0, 255));
 		vecDest = pev->origin + vecNewDir * flDist;
 
-	}
-	while ((vecDest - pev->origin).Length2D() < 128);
+	} while ((vecDest - pev->origin).Length2D() < 128);
 
 	m_Route[0].vecLocation.x = vecDest.x;
 	m_Route[0].vecLocation.y = vecDest.y;
@@ -354,8 +351,8 @@ void CRoach::PickNewDest(int iCondition)
 //=========================================================
 void CRoach::Move(float flInterval)
 {
-	float		flWaypointDist;
-	Vector		vecApex;
+	float flWaypointDist;
+	Vector vecApex;
 
 	// local move to waypoint.
 	flWaypointDist = (m_Route[m_iRouteIndex].vecLocation - pev->origin).Length2D();
@@ -382,7 +379,7 @@ void CRoach::Move(float flInterval)
 		// take truncated step and stop
 
 		SetActivity(ACT_IDLE);
-		m_flLastLightLevel = GETENTITYILLUM(ENT(pev));// this is roach's new comfortable light level
+		m_flLastLightLevel = GETENTITYILLUM(ENT(pev)); // this is roach's new comfortable light level
 
 		if (m_iMode == ROACH_SMELL_FOOD)
 		{
@@ -402,14 +399,14 @@ void CRoach::Move(float flInterval)
 }
 
 //=========================================================
-// Look - overriden for the roach, which can virtually see 
+// Look - overriden for the roach, which can virtually see
 // 360 degrees.
 //=========================================================
 void CRoach::Look(int iDistance)
 {
-	CBaseEntity* pSightEnt = NULL;// the current visible entity that we're dealing with
-	CBaseEntity* pPreviousEnt;// the last entity added to the link list 
-	int			iSighted = 0;
+	CBaseEntity* pSightEnt = NULL; // the current visible entity that we're dealing with
+	CBaseEntity* pPreviousEnt;	   // the last entity added to the link list
+	int iSighted = 0;
 
 	// DON'T let visibility information from last frame sit around!
 	ClearConditions(bits_COND_SEE_HATE | bits_COND_SEE_DISLIKE | bits_COND_SEE_ENEMY | bits_COND_SEE_FEAR);
@@ -432,7 +429,7 @@ void CRoach::Look(int iDistance)
 		// only consider ents that can be damaged. !!!temporarily only considering other monsters and clients
 		if (pSightEnt->IsPlayer() || FBitSet(pSightEnt->pev->flags, FL_MONSTER))
 		{
-			if ( /*FVisible( pSightEnt ) &&*/ !FBitSet(pSightEnt->pev->flags, FL_NOTARGET) && pSightEnt->pev->health > 0)
+			if (/*FVisible( pSightEnt ) &&*/ !FBitSet(pSightEnt->pev->flags, FL_NOTARGET) && pSightEnt->pev->health > 0)
 			{
 				// NULL the Link pointer for each ent added to the link list. If other ents follow, the will overwrite
 				// this value. If this ent happens to be the last, the list will be properly terminated.
@@ -444,10 +441,10 @@ void CRoach::Look(int iDistance)
 				// we see monsters other than the Enemy.
 				switch (IRelationship(pSightEnt))
 				{
-				case	R_FR:
+				case R_FR:
 					iSighted |= bits_COND_SEE_FEAR;
 					break;
-				case	R_NO:
+				case R_NO:
 					break;
 				default:
 					ALERT(at_console, "%s can't asses %s\n", STRING(pev->classname), STRING(pSightEnt->pev->classname));
@@ -462,4 +459,3 @@ void CRoach::Look(int iDistance)
 //=========================================================
 // AI Schedules Specific to this monster
 //=========================================================
-

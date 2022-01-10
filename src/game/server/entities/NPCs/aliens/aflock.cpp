@@ -15,19 +15,19 @@
 //=========================================================
 //=========================================================
 
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"monsters.h"
-#include	"squadmonster.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
+#include "squadmonster.h"
 
-#define		AFLOCK_MAX_RECRUIT_RADIUS	1024
-#define		AFLOCK_FLY_SPEED			125
-#define		AFLOCK_TURN_RATE			75
-#define		AFLOCK_ACCELERATE			10
-#define		AFLOCK_CHECK_DIST			192
-#define		AFLOCK_TOO_CLOSE			100
-#define		AFLOCK_TOO_FAR				256
+#define AFLOCK_MAX_RECRUIT_RADIUS 1024
+#define AFLOCK_FLY_SPEED 125
+#define AFLOCK_TURN_RATE 75
+#define AFLOCK_ACCELERATE 10
+#define AFLOCK_CHECK_DIST 192
+#define AFLOCK_TOO_CLOSE 100
+#define AFLOCK_TOO_FAR 256
 
 //=========================================================
 //=========================================================
@@ -39,21 +39,21 @@ public:
 	bool KeyValue(KeyValueData* pkvd) override;
 	void SpawnFlock();
 
-	bool	Save(CSave& save) override;
-	bool	Restore(CRestore& restore) override;
-	static	TYPEDESCRIPTION m_SaveData[];
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
+	static TYPEDESCRIPTION m_SaveData[];
 
 	// Sounds are shared by the flock
-	static  void PrecacheFlockSounds();
+	static void PrecacheFlockSounds();
 
-	int		m_cFlockSize;
-	float	m_flFlockRadius;
+	int m_cFlockSize;
+	float m_flFlockRadius;
 };
 
-TYPEDESCRIPTION	CFlockingFlyerFlock::m_SaveData[] =
-{
-	DEFINE_FIELD(CFlockingFlyerFlock, m_cFlockSize, FIELD_INTEGER),
-	DEFINE_FIELD(CFlockingFlyerFlock, m_flFlockRadius, FIELD_FLOAT),
+TYPEDESCRIPTION CFlockingFlyerFlock::m_SaveData[] =
+	{
+		DEFINE_FIELD(CFlockingFlyerFlock, m_cFlockSize, FIELD_INTEGER),
+		DEFINE_FIELD(CFlockingFlyerFlock, m_flFlockRadius, FIELD_FLOAT),
 };
 
 IMPLEMENT_SAVERESTORE(CFlockingFlyerFlock, CBaseMonster);
@@ -82,13 +82,13 @@ public:
 	bool FPathBlocked();
 	//void KeyValue( KeyValueData *pkvd ) override;
 
-	bool	Save(CSave& save) override;
-	bool	Restore(CRestore& restore) override;
-	static	TYPEDESCRIPTION m_SaveData[];
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
+	static TYPEDESCRIPTION m_SaveData[];
 
 	bool IsLeader() { return m_pSquadLeader == this; }
 	bool InSquad() { return m_pSquadLeader != NULL; }
-	int	SquadCount();
+	int SquadCount();
 	void SquadRemove(CFlockingFlyer* pRemove);
 	void SquadUnlink();
 	void SquadAdd(CFlockingFlyer* pAdd);
@@ -96,34 +96,34 @@ public:
 
 	CFlockingFlyer* m_pSquadLeader;
 	CFlockingFlyer* m_pSquadNext;
-	bool	m_fTurning;// is this boid turning?
-	bool	m_fCourseAdjust;// followers set this flag true to override flocking while they avoid something
-	bool	m_fPathBlocked;// true if there is an obstacle ahead
-	Vector	m_vecReferencePoint;// last place we saw leader
-	Vector	m_vecAdjustedVelocity;// adjusted velocity (used when fCourseAdjust is true)
-	float	m_flGoalSpeed;
-	float	m_flLastBlockedTime;
-	float	m_flFakeBlockedTime;
-	float	m_flAlertTime;
-	float	m_flFlockNextSoundTime;
+	bool m_fTurning;			  // is this boid turning?
+	bool m_fCourseAdjust;		  // followers set this flag true to override flocking while they avoid something
+	bool m_fPathBlocked;		  // true if there is an obstacle ahead
+	Vector m_vecReferencePoint;	  // last place we saw leader
+	Vector m_vecAdjustedVelocity; // adjusted velocity (used when fCourseAdjust is true)
+	float m_flGoalSpeed;
+	float m_flLastBlockedTime;
+	float m_flFakeBlockedTime;
+	float m_flAlertTime;
+	float m_flFlockNextSoundTime;
 };
 LINK_ENTITY_TO_CLASS(monster_flyer, CFlockingFlyer);
 LINK_ENTITY_TO_CLASS(monster_flyer_flock, CFlockingFlyerFlock);
 
-TYPEDESCRIPTION	CFlockingFlyer::m_SaveData[] =
-{
-	DEFINE_FIELD(CFlockingFlyer, m_pSquadLeader, FIELD_CLASSPTR),
-	DEFINE_FIELD(CFlockingFlyer, m_pSquadNext, FIELD_CLASSPTR),
-	DEFINE_FIELD(CFlockingFlyer, m_fTurning, FIELD_BOOLEAN),
-	DEFINE_FIELD(CFlockingFlyer, m_fCourseAdjust, FIELD_BOOLEAN),
-	DEFINE_FIELD(CFlockingFlyer, m_fPathBlocked, FIELD_BOOLEAN),
-	DEFINE_FIELD(CFlockingFlyer, m_vecReferencePoint, FIELD_POSITION_VECTOR),
-	DEFINE_FIELD(CFlockingFlyer, m_vecAdjustedVelocity, FIELD_VECTOR),
-	DEFINE_FIELD(CFlockingFlyer, m_flGoalSpeed, FIELD_FLOAT),
-	DEFINE_FIELD(CFlockingFlyer, m_flLastBlockedTime, FIELD_TIME),
-	DEFINE_FIELD(CFlockingFlyer, m_flFakeBlockedTime, FIELD_TIME),
-	DEFINE_FIELD(CFlockingFlyer, m_flAlertTime, FIELD_TIME),
-	//	DEFINE_FIELD( CFlockingFlyer, m_flFlockNextSoundTime, FIELD_TIME ),	// don't need to save
+TYPEDESCRIPTION CFlockingFlyer::m_SaveData[] =
+	{
+		DEFINE_FIELD(CFlockingFlyer, m_pSquadLeader, FIELD_CLASSPTR),
+		DEFINE_FIELD(CFlockingFlyer, m_pSquadNext, FIELD_CLASSPTR),
+		DEFINE_FIELD(CFlockingFlyer, m_fTurning, FIELD_BOOLEAN),
+		DEFINE_FIELD(CFlockingFlyer, m_fCourseAdjust, FIELD_BOOLEAN),
+		DEFINE_FIELD(CFlockingFlyer, m_fPathBlocked, FIELD_BOOLEAN),
+		DEFINE_FIELD(CFlockingFlyer, m_vecReferencePoint, FIELD_POSITION_VECTOR),
+		DEFINE_FIELD(CFlockingFlyer, m_vecAdjustedVelocity, FIELD_VECTOR),
+		DEFINE_FIELD(CFlockingFlyer, m_flGoalSpeed, FIELD_FLOAT),
+		DEFINE_FIELD(CFlockingFlyer, m_flLastBlockedTime, FIELD_TIME),
+		DEFINE_FIELD(CFlockingFlyer, m_flFakeBlockedTime, FIELD_TIME),
+		DEFINE_FIELD(CFlockingFlyer, m_flAlertTime, FIELD_TIME),
+		//	DEFINE_FIELD( CFlockingFlyer, m_flFlockNextSoundTime, FIELD_TIME ),	// don't need to save
 };
 
 IMPLEMENT_SAVERESTORE(CFlockingFlyer, CBaseMonster);
@@ -153,14 +153,14 @@ void CFlockingFlyerFlock::Spawn()
 	Precache();
 	SpawnFlock();
 
-	REMOVE_ENTITY(ENT(pev));		// dump the spawn ent
+	REMOVE_ENTITY(ENT(pev)); // dump the spawn ent
 }
 
 //=========================================================
 //=========================================================
 void CFlockingFlyerFlock::Precache()
 {
-	//PRECACHE_MODEL("models/aflock.mdl");		
+	//PRECACHE_MODEL("models/aflock.mdl");
 	PRECACHE_MODEL("models/boid.mdl");
 
 	PrecacheFlockSounds();
@@ -183,7 +183,7 @@ void CFlockingFlyerFlock::SpawnFlock()
 	float R = m_flFlockRadius;
 	int iCount;
 	Vector vecSpot;
-	CFlockingFlyer* pBoid, * pLeader;
+	CFlockingFlyer *pBoid, *pLeader;
 
 	pLeader = pBoid = NULL;
 
@@ -253,8 +253,12 @@ void CFlockingFlyer::MakeSound()
 		// make agitated sounds
 		switch (RANDOM_LONG(0, 1))
 		{
-		case 0:	EMIT_SOUND(ENT(pev), CHAN_WEAPON, "boid/boid_alert1.wav", 1, ATTN_NORM);	break;
-		case 1:	EMIT_SOUND(ENT(pev), CHAN_WEAPON, "boid/boid_alert2.wav", 1, ATTN_NORM);	break;
+		case 0:
+			EMIT_SOUND(ENT(pev), CHAN_WEAPON, "boid/boid_alert1.wav", 1, ATTN_NORM);
+			break;
+		case 1:
+			EMIT_SOUND(ENT(pev), CHAN_WEAPON, "boid/boid_alert2.wav", 1, ATTN_NORM);
+			break;
 		}
 
 		return;
@@ -263,8 +267,12 @@ void CFlockingFlyer::MakeSound()
 	// make normal sound
 	switch (RANDOM_LONG(0, 1))
 	{
-	case 0:	EMIT_SOUND(ENT(pev), CHAN_WEAPON, "boid/boid_idle1.wav", 1, ATTN_NORM);	break;
-	case 1:	EMIT_SOUND(ENT(pev), CHAN_WEAPON, "boid/boid_idle2.wav", 1, ATTN_NORM);	break;
+	case 0:
+		EMIT_SOUND(ENT(pev), CHAN_WEAPON, "boid/boid_idle1.wav", 1, ATTN_NORM);
+		break;
+	case 1:
+		EMIT_SOUND(ENT(pev), CHAN_WEAPON, "boid/boid_idle2.wav", 1, ATTN_NORM);
+		break;
 	}
 }
 
@@ -329,7 +337,7 @@ void CFlockingFlyer::SpawnCommonCode()
 	pev->takedamage = DAMAGE_NO;
 	pev->health = 1;
 
-	m_fPathBlocked = false;// obstacles will be detected
+	m_fPathBlocked = false; // obstacles will be detected
 	m_flFieldOfView = 0.2;
 
 	//SET_MODEL(ENT(pev), "models/aflock.mdl");
@@ -346,9 +354,12 @@ void CFlockingFlyer::BoidAdvanceFrame()
 	float flapspeed = (pev->speed - pev->armorvalue) / AFLOCK_ACCELERATE;
 	pev->armorvalue = pev->armorvalue * .8 + pev->speed * .2;
 
-	if (flapspeed < 0) flapspeed = -flapspeed;
-	if (flapspeed < 0.25) flapspeed = 0.25;
-	if (flapspeed > 1.9) flapspeed = 1.9;
+	if (flapspeed < 0)
+		flapspeed = -flapspeed;
+	if (flapspeed < 0.25)
+		flapspeed = 0.25;
+	if (flapspeed > 1.9)
+		flapspeed = 1.9;
 
 	pev->framerate = flapspeed;
 
@@ -410,7 +421,7 @@ void CFlockingFlyer::Start()
 	ResetSequenceInfo();
 	BoidAdvanceFrame();
 
-	pev->speed = AFLOCK_FLY_SPEED;// no delay!
+	pev->speed = AFLOCK_FLY_SPEED; // no delay!
 }
 
 //=========================================================
@@ -443,7 +454,7 @@ void CFlockingFlyer::FormFlock()
 		}
 	}
 
-	SetThink(&CFlockingFlyer::IdleThink);// now that flock is formed, go to idle and wait for a player to come along.
+	SetThink(&CFlockingFlyer::IdleThink); // now that flock is formed, go to idle and wait for a player to come along.
 	pev->nextthink = gpGlobals->time;
 }
 
@@ -452,8 +463,8 @@ void CFlockingFlyer::FormFlock()
 //=========================================================
 void CFlockingFlyer::SpreadFlock()
 {
-	Vector		vecDir;
-	float		flSpeed;// holds vector magnitude while we fiddle with the direction
+	Vector vecDir;
+	float flSpeed; // holds vector magnitude while we fiddle with the direction
 
 	CFlockingFlyer* pList = m_pSquadLeader;
 	while (pList)
@@ -477,13 +488,13 @@ void CFlockingFlyer::SpreadFlock()
 }
 
 //=========================================================
-// Alters the caller's course if he's too close to others 
+// Alters the caller's course if he's too close to others
 //
 // This function should **ONLY** be called when Caller's velocity is normalized!!
 //=========================================================
 void CFlockingFlyer::SpreadFlock2()
 {
-	Vector		vecDir;
+	Vector vecDir;
 
 	CFlockingFlyer* pList = m_pSquadLeader;
 	while (pList)
@@ -505,10 +516,10 @@ void CFlockingFlyer::SpreadFlock2()
 //=========================================================
 bool CFlockingFlyer::FPathBlocked()
 {
-	TraceResult		tr;
-	Vector			vecDist;// used for general measurements
-	Vector			vecDir;// used for general measurements
-	bool			fBlocked;
+	TraceResult tr;
+	Vector vecDist; // used for general measurements
+	Vector vecDir;	// used for general measurements
+	bool fBlocked;
 
 	if (m_flFakeBlockedTime > gpGlobals->time)
 	{
@@ -520,7 +531,7 @@ bool CFlockingFlyer::FPathBlocked()
 	//vecDir = UTIL_VecToAngles( pevBoid->velocity );
 	UTIL_MakeVectors(pev->angles);
 
-	fBlocked = false;// assume the way ahead is clear
+	fBlocked = false; // assume the way ahead is clear
 
 	// check for obstacle ahead
 	UTIL_TraceLine(pev->origin, pev->origin + gpGlobals->v_forward * AFLOCK_CHECK_DIST, ignore_monsters, ENT(pev), &tr);
@@ -551,7 +562,7 @@ bool CFlockingFlyer::FPathBlocked()
 		m_flFakeBlockedTime = gpGlobals->time + RANDOM_LONG(1, 3);
 	}
 
-	return	fBlocked;
+	return fBlocked;
 }
 
 
@@ -560,12 +571,12 @@ bool CFlockingFlyer::FPathBlocked()
 //=========================================================
 void CFlockingFlyer::FlockLeaderThink()
 {
-	TraceResult		tr;
-	Vector			vecDist;// used for general measurements
-	Vector			vecDir;// used for general measurements
-	int				cProcessed = 0;// keep track of how many other boids we've processed 
-	float			flLeftSide;
-	float			flRightSide;
+	TraceResult tr;
+	Vector vecDist;		// used for general measurements
+	Vector vecDir;		// used for general measurements
+	int cProcessed = 0; // keep track of how many other boids we've processed
+	float flLeftSide;
+	float flRightSide;
 
 
 	pev->nextthink = gpGlobals->time + 0.1;
@@ -597,7 +608,7 @@ void CFlockingFlyer::FlockLeaderThink()
 	// IF we get this far in the function, the leader's path is blocked!
 	m_fPathBlocked = true;
 
-	if (!m_fTurning)// something in the way and boid is not already turning to avoid
+	if (!m_fTurning) // something in the way and boid is not already turning to avoid
 	{
 		// measure clearance on left and right to pick the best dir to turn
 		UTIL_TraceLine(pev->origin, pev->origin + gpGlobals->v_right * AFLOCK_CHECK_DIST, ignore_monsters, ENT(pev), &tr);
@@ -667,17 +678,17 @@ void CFlockingFlyer::FlockLeaderThink()
 //=========================================================
 void CFlockingFlyer::FlockFollowerThink()
 {
-	TraceResult		tr;
-	Vector			vecDist;
-	Vector			vecDir;
-	Vector			vecDirToLeader;
-	float			flDistToLeader;
+	TraceResult tr;
+	Vector vecDist;
+	Vector vecDir;
+	Vector vecDirToLeader;
+	float flDistToLeader;
 
 	pev->nextthink = gpGlobals->time + 0.1;
 
 	if (IsLeader() || !InSquad())
 	{
-		// the leader has been killed and this flyer suddenly finds himself the leader. 
+		// the leader has been killed and this flyer suddenly finds himself the leader.
 		SetThink(&CFlockingFlyer::FlockLeaderThink);
 		return;
 	}
@@ -849,11 +860,10 @@ void CFlockingFlyer::SquadRemove(CFlockingFlyer* pRemove)
 					pList->m_pSquadLeader = pLeader;
 					pList = pList->m_pSquadNext;
 				}
-
 			}
 			SquadUnlink();
 		}
-		else	// removing a node
+		else // removing a node
 		{
 			CFlockingFlyer* pList = this;
 

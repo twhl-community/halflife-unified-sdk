@@ -15,18 +15,18 @@
 //
 // teamplay_gamerules.cpp
 //
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"player.h"
-#include	"weapons.h"
-#include	"gamerules.h"
-#include	"skill.h"
-#include	"items.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "player.h"
+#include "weapons.h"
+#include "gamerules.h"
+#include "skill.h"
+#include "items.h"
 #include "UserMessages.h"
 
 extern DLL_GLOBAL CGameRules* g_pGameRules;
-extern DLL_GLOBAL bool	g_fGameOver;
+extern DLL_GLOBAL bool g_fGameOver;
 
 //=========================================================
 //=========================================================
@@ -146,7 +146,7 @@ bool CHalfLifeRules::FPlayerCanRespawn(CBasePlayer* pPlayer)
 //=========================================================
 float CHalfLifeRules::FlPlayerSpawnTime(CBasePlayer* pPlayer)
 {
-	return gpGlobals->time;//now!
+	return gpGlobals->time; //now!
 }
 
 //=========================================================
@@ -190,7 +190,7 @@ float CHalfLifeRules::FlWeaponRespawnTime(CBasePlayerItem* pWeapon)
 }
 
 //=========================================================
-// FlWeaponRespawnTime - Returns 0 if the weapon can respawn 
+// FlWeaponRespawnTime - Returns 0 if the weapon can respawn
 // now,  otherwise it returns the time at which it can try
 // to spawn again.
 //=========================================================
@@ -293,7 +293,7 @@ Vector CHalfLifeRules::VecAmmoRespawnSpot(CBasePlayerAmmo* pAmmo)
 //=========================================================
 float CHalfLifeRules::FlHealthChargerRechargeTime()
 {
-	return 0;// don't recharge
+	return 0; // don't recharge
 }
 
 //=========================================================
@@ -314,7 +314,7 @@ int CHalfLifeRules::DeadPlayerAmmo(CBasePlayer* pPlayer)
 //=========================================================
 int CHalfLifeRules::PlayerRelationship(CBaseEntity* pPlayer, CBaseEntity* pTarget)
 {
-	// why would a single player in half life need this? 
+	// why would a single player in half life need this?
 	return GR_NOTTEAMMATE;
 }
 

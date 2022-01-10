@@ -12,14 +12,14 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"saverestore.h"
-#include	"client.h"
-#include	"decals.h"
-#include	"gamerules.h"
-#include	"game.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "saverestore.h"
+#include "client.h"
+#include "decals.h"
+#include "gamerules.h"
+#include "game.h"
 #include "CServerLibrary.h"
 
 void EntvarsKeyvalue(entvars_t* pev, KeyValueData* pkvd);
@@ -36,118 +36,118 @@ void DummySpectatorFunction(edict_t*)
 }
 
 extern Vector VecBModelOrigin(entvars_t* pevBModel);
-extern DLL_GLOBAL Vector		g_vecAttackDir;
-extern DLL_GLOBAL int			g_iSkillLevel;
+extern DLL_GLOBAL Vector g_vecAttackDir;
+extern DLL_GLOBAL int g_iSkillLevel;
 
 static DLL_FUNCTIONS gFunctionTable =
-{
-	GameDLLInit,				//pfnGameInit
-	DispatchSpawn,				//pfnSpawn
-	DispatchThink,				//pfnThink
-	DispatchUse,				//pfnUse
-	DispatchTouch,				//pfnTouch
-	DispatchBlocked,			//pfnBlocked
-	DispatchKeyValue,			//pfnKeyValue
-	DispatchSave,				//pfnSave
-	DispatchRestore,			//pfnRestore
-	DispatchObjectCollsionBox,	//pfnAbsBox
+	{
+		GameDLLInit,			   //pfnGameInit
+		DispatchSpawn,			   //pfnSpawn
+		DispatchThink,			   //pfnThink
+		DispatchUse,			   //pfnUse
+		DispatchTouch,			   //pfnTouch
+		DispatchBlocked,		   //pfnBlocked
+		DispatchKeyValue,		   //pfnKeyValue
+		DispatchSave,			   //pfnSave
+		DispatchRestore,		   //pfnRestore
+		DispatchObjectCollsionBox, //pfnAbsBox
 
-	SaveWriteFields,			//pfnSaveWriteFields
-	SaveReadFields,				//pfnSaveReadFields
+		SaveWriteFields, //pfnSaveWriteFields
+		SaveReadFields,	 //pfnSaveReadFields
 
-	SaveGlobalState,			//pfnSaveGlobalState
-	RestoreGlobalState,			//pfnRestoreGlobalState
-	ResetGlobalState,			//pfnResetGlobalState
+		SaveGlobalState,	//pfnSaveGlobalState
+		RestoreGlobalState, //pfnRestoreGlobalState
+		ResetGlobalState,	//pfnResetGlobalState
 
-	ClientConnect,				//pfnClientConnect
-	ClientDisconnect,			//pfnClientDisconnect
-	ClientKill,					//pfnClientKill
-	ClientPutInServer,			//pfnClientPutInServer
-	ClientCommand,				//pfnClientCommand
-	ClientUserInfoChanged,		//pfnClientUserInfoChanged
-	ServerActivate,				//pfnServerActivate
-	ServerDeactivate,			//pfnServerDeactivate
+		ClientConnect,		   //pfnClientConnect
+		ClientDisconnect,	   //pfnClientDisconnect
+		ClientKill,			   //pfnClientKill
+		ClientPutInServer,	   //pfnClientPutInServer
+		ClientCommand,		   //pfnClientCommand
+		ClientUserInfoChanged, //pfnClientUserInfoChanged
+		ServerActivate,		   //pfnServerActivate
+		ServerDeactivate,	   //pfnServerDeactivate
 
-	PlayerPreThink,				//pfnPlayerPreThink
-	PlayerPostThink,			//pfnPlayerPostThink
+		PlayerPreThink,	 //pfnPlayerPreThink
+		PlayerPostThink, //pfnPlayerPostThink
 
-	StartFrame,					//pfnStartFrame
-	ParmsNewLevel,				//pfnParmsNewLevel
-	ParmsChangeLevel,			//pfnParmsChangeLevel
+		StartFrame,		  //pfnStartFrame
+		ParmsNewLevel,	  //pfnParmsNewLevel
+		ParmsChangeLevel, //pfnParmsChangeLevel
 
-	GetGameDescription,         //pfnGetGameDescription    Returns string describing current .dll game.
-	PlayerCustomization,        //pfnPlayerCustomization   Notifies .dll of new customization for player.
+		GetGameDescription,	 //pfnGetGameDescription    Returns string describing current .dll game.
+		PlayerCustomization, //pfnPlayerCustomization   Notifies .dll of new customization for player.
 
-	DummySpectatorFunction,		//pfnSpectatorConnect      Called when spectator joins server
-	DummySpectatorFunction,     //pfnSpectatorDisconnect   Called when spectator leaves the server
-	DummySpectatorFunction,		//pfnSpectatorThink        Called when spectator sends a command packet (usercmd_t)
+		DummySpectatorFunction, //pfnSpectatorConnect      Called when spectator joins server
+		DummySpectatorFunction, //pfnSpectatorDisconnect   Called when spectator leaves the server
+		DummySpectatorFunction, //pfnSpectatorThink        Called when spectator sends a command packet (usercmd_t)
 
-	Sys_Error,					//pfnSys_Error				Called when engine has encountered an error
+		Sys_Error, //pfnSys_Error				Called when engine has encountered an error
 
-	PM_Move,					//pfnPM_Move
-	PM_Init,					//pfnPM_Init				Server version of player movement initialization
-	PM_FindTextureType,			//pfnPM_FindTextureType
+		PM_Move,			//pfnPM_Move
+		PM_Init,			//pfnPM_Init				Server version of player movement initialization
+		PM_FindTextureType, //pfnPM_FindTextureType
 
-	SetupVisibility,			//pfnSetupVisibility        Set up PVS and PAS for networking for this client
-	UpdateClientData,			//pfnUpdateClientData       Set up data sent only to specific client
-	AddToFullPack,				//pfnAddToFullPack
-	CreateBaseline,				//pfnCreateBaseline			Tweak entity baseline for network encoding, allows setup of player baselines, too.
-	RegisterEncoders,			//pfnRegisterEncoders		Callbacks for network encoding
-	GetWeaponData,				//pfnGetWeaponData
-	CmdStart,					//pfnCmdStart
-	CmdEnd,						//pfnCmdEnd
-	ConnectionlessPacket,		//pfnConnectionlessPacket
-	GetHullBounds,				//pfnGetHullBounds
-	CreateInstancedBaselines,   //pfnCreateInstancedBaselines
-	InconsistentFile,			//pfnInconsistentFile
-	AllowLagCompensation,		//pfnAllowLagCompensation
+		SetupVisibility,		  //pfnSetupVisibility        Set up PVS and PAS for networking for this client
+		UpdateClientData,		  //pfnUpdateClientData       Set up data sent only to specific client
+		AddToFullPack,			  //pfnAddToFullPack
+		CreateBaseline,			  //pfnCreateBaseline			Tweak entity baseline for network encoding, allows setup of player baselines, too.
+		RegisterEncoders,		  //pfnRegisterEncoders		Callbacks for network encoding
+		GetWeaponData,			  //pfnGetWeaponData
+		CmdStart,				  //pfnCmdStart
+		CmdEnd,					  //pfnCmdEnd
+		ConnectionlessPacket,	  //pfnConnectionlessPacket
+		GetHullBounds,			  //pfnGetHullBounds
+		CreateInstancedBaselines, //pfnCreateInstancedBaselines
+		InconsistentFile,		  //pfnInconsistentFile
+		AllowLagCompensation,	  //pfnAllowLagCompensation
 };
 
 NEW_DLL_FUNCTIONS gNewDLLFunctions =
-{
-	OnFreeEntPrivateData,		//pfnOnFreeEntPrivateData
-	GameDLLShutdown,
+	{
+		OnFreeEntPrivateData, //pfnOnFreeEntPrivateData
+		GameDLLShutdown,
 };
 
 static void SetObjectCollisionBox(entvars_t* pev);
 
 extern "C" {
 
-	int GetEntityAPI(DLL_FUNCTIONS* pFunctionTable, int interfaceVersion)
+int GetEntityAPI(DLL_FUNCTIONS* pFunctionTable, int interfaceVersion)
+{
+	if (!pFunctionTable || interfaceVersion != INTERFACE_VERSION)
 	{
-		if (!pFunctionTable || interfaceVersion != INTERFACE_VERSION)
-		{
-			return 0;
-		}
-
-		memcpy(pFunctionTable, &gFunctionTable, sizeof(DLL_FUNCTIONS));
-		return 1;
+		return 0;
 	}
 
-	int GetEntityAPI2(DLL_FUNCTIONS* pFunctionTable, int* interfaceVersion)
-	{
-		if (!pFunctionTable || *interfaceVersion != INTERFACE_VERSION)
-		{
-			// Tell engine what version we had, so it can figure out who is out of date.
-			*interfaceVersion = INTERFACE_VERSION;
-			return 0;
-		}
+	memcpy(pFunctionTable, &gFunctionTable, sizeof(DLL_FUNCTIONS));
+	return 1;
+}
 
-		memcpy(pFunctionTable, &gFunctionTable, sizeof(DLL_FUNCTIONS));
-		return 1;
+int GetEntityAPI2(DLL_FUNCTIONS* pFunctionTable, int* interfaceVersion)
+{
+	if (!pFunctionTable || *interfaceVersion != INTERFACE_VERSION)
+	{
+		// Tell engine what version we had, so it can figure out who is out of date.
+		*interfaceVersion = INTERFACE_VERSION;
+		return 0;
 	}
 
-	int GetNewDLLFunctions(NEW_DLL_FUNCTIONS* pFunctionTable, int* interfaceVersion)
-	{
-		if (!pFunctionTable || *interfaceVersion != NEW_DLL_FUNCTIONS_VERSION)
-		{
-			*interfaceVersion = NEW_DLL_FUNCTIONS_VERSION;
-			return 0;
-		}
+	memcpy(pFunctionTable, &gFunctionTable, sizeof(DLL_FUNCTIONS));
+	return 1;
+}
 
-		memcpy(pFunctionTable, &gNewDLLFunctions, sizeof(gNewDLLFunctions));
-		return 1;
+int GetNewDLLFunctions(NEW_DLL_FUNCTIONS* pFunctionTable, int* interfaceVersion)
+{
+	if (!pFunctionTable || *interfaceVersion != NEW_DLL_FUNCTIONS_VERSION)
+	{
+		*interfaceVersion = NEW_DLL_FUNCTIONS_VERSION;
+		return 0;
 	}
+
+	memcpy(pFunctionTable, &gNewDLLFunctions, sizeof(gNewDLLFunctions));
+	return 1;
+}
 }
 
 
@@ -171,7 +171,7 @@ int DispatchSpawn(edict_t* pent)
 		if (pEntity)
 		{
 			if (g_pGameRules && !g_pGameRules->IsAllowedToSpawn(pEntity))
-				return -1;	// return that this entity should be deleted
+				return -1; // return that this entity should be deleted
 			if ((pEntity->pev->flags & FL_KILLME) != 0)
 				return -1;
 		}
@@ -187,8 +187,8 @@ int DispatchSpawn(edict_t* pent)
 				if (pGlobal->state == GLOBAL_DEAD)
 					return -1;
 				else if (!FStrEq(STRING(gpGlobals->mapname), pGlobal->levelName))
-					pEntity->MakeDormant();	// Hasn't been moved to this level yet, wait but stay alive
-				// In this level & not dead, continue on as normal
+					pEntity->MakeDormant(); // Hasn't been moved to this level yet, wait but stay alive
+											// In this level & not dead, continue on as normal
 			}
 			else
 			{
@@ -197,7 +197,6 @@ int DispatchSpawn(edict_t* pent)
 				//				ALERT( at_console, "Added global entity %s (%s)\n", STRING(pEntity->pev->classname), STRING(pEntity->pev->globalname) );
 			}
 		}
-
 	}
 
 	return 0;
@@ -297,13 +296,13 @@ void DispatchSave(edict_t* pent, SAVERESTOREDATA* pSaveData)
 			pEntity->pev->nextthink = pEntity->pev->ltime + delta;
 		}
 
-		pTable->location = pSaveData->size;		// Remember entity position for file I/O
-		pTable->classname = pEntity->pev->classname;	// Remember entity class for respawn
+		pTable->location = pSaveData->size;			 // Remember entity position for file I/O
+		pTable->classname = pEntity->pev->classname; // Remember entity class for respawn
 
 		CSave saveHelper(pSaveData);
 		pEntity->Save(saveHelper);
 
-		pTable->size = pSaveData->size - pTable->location;	// Size of entity block is data size written to block
+		pTable->size = pSaveData->size - pTable->location; // Size of entity block is data size written to block
 	}
 }
 
@@ -394,10 +393,10 @@ int DispatchRestore(edict_t* pent, SAVERESTOREDATA* pSaveData, int globalEntity)
 			if (pNewEntity)
 			{
 				//				ALERT( at_console, "Overlay %s with %s\n", STRING(pNewEntity->pev->classname), STRING(tmpVars.classname) );
-								// Tell the restore code we're overlaying a global entity from another level
-				restoreHelper.SetGlobalMode(true);	// Don't overwrite global fields
+				// Tell the restore code we're overlaying a global entity from another level
+				restoreHelper.SetGlobalMode(true); // Don't overwrite global fields
 				pSaveData->vecLandmarkOffset = (pSaveData->vecLandmarkOffset - pNewEntity->pev->mins) + tmpVars.mins;
-				pEntity = pNewEntity;// we're going to restore this data OVER the old entity
+				pEntity = pNewEntity; // we're going to restore this data OVER the old entity
 				pent = ENT(pEntity->pev);
 				// Update the global table to say that the global definition of this entity should come from this level
 				gGlobalState.EntityUpdate(pEntity->pev->globalname, gpGlobals->mapname);
@@ -408,7 +407,6 @@ int DispatchRestore(edict_t* pent, SAVERESTOREDATA* pSaveData, int globalEntity)
 				// or call EntityUpdate() to move it to this level, we haven't changed global state at all.
 				return 0;
 			}
-
 		}
 
 		if ((pEntity->ObjectCaps() & FCAP_MUST_SPAWN) != 0)
@@ -453,7 +451,7 @@ int DispatchRestore(edict_t* pent, SAVERESTOREDATA* pSaveData, int globalEntity)
 					return -1;
 				else if (!FStrEq(STRING(gpGlobals->mapname), pGlobal->levelName))
 				{
-					pEntity->MakeDormant();	// Hasn't been moved to this level yet, wait but stay alive
+					pEntity->MakeDormant(); // Hasn't been moved to this level yet, wait but stay alive
 				}
 				// In this level & not dead, continue on as normal
 			}
@@ -523,7 +521,7 @@ bool CBaseEntity::TakeHealth(float flHealth, int bitsDamageType)
 
 bool CBaseEntity::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
-	Vector			vecTemp;
+	Vector vecTemp;
 
 	if (0 == pev->takedamage)
 		return false;
@@ -531,13 +529,13 @@ bool CBaseEntity::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, fl
 	// UNDONE: some entity types may be immune or resistant to some bitsDamageType
 
 	// if Attacker == Inflictor, the attack was a melee or other instant-hit attack.
-	// (that is, no actual entity projectile was involved in the attack so use the shooter's origin). 
+	// (that is, no actual entity projectile was involved in the attack so use the shooter's origin).
 	if (pevAttacker == pevInflictor)
 	{
 		vecTemp = pevInflictor->origin - (VecBModelOrigin(pev));
 	}
 	else
-		// an actual missile was involved.
+	// an actual missile was involved.
 	{
 		vecTemp = pevInflictor->origin - (VecBModelOrigin(pev));
 	}
@@ -592,14 +590,14 @@ CBaseEntity* CBaseEntity::GetNextTarget()
 }
 
 // Global Savedata for Delay
-TYPEDESCRIPTION	CBaseEntity::m_SaveData[] =
-{
-	DEFINE_FIELD(CBaseEntity, m_pGoalEnt, FIELD_CLASSPTR),
+TYPEDESCRIPTION CBaseEntity::m_SaveData[] =
+	{
+		DEFINE_FIELD(CBaseEntity, m_pGoalEnt, FIELD_CLASSPTR),
 
-	DEFINE_FIELD(CBaseEntity, m_pfnThink, FIELD_FUNCTION),		// UNDONE: Build table of these!!!
-	DEFINE_FIELD(CBaseEntity, m_pfnTouch, FIELD_FUNCTION),
-	DEFINE_FIELD(CBaseEntity, m_pfnUse, FIELD_FUNCTION),
-	DEFINE_FIELD(CBaseEntity, m_pfnBlocked, FIELD_FUNCTION),
+		DEFINE_FIELD(CBaseEntity, m_pfnThink, FIELD_FUNCTION), // UNDONE: Build table of these!!!
+		DEFINE_FIELD(CBaseEntity, m_pfnTouch, FIELD_FUNCTION),
+		DEFINE_FIELD(CBaseEntity, m_pfnUse, FIELD_FUNCTION),
+		DEFINE_FIELD(CBaseEntity, m_pfnBlocked, FIELD_FUNCTION),
 };
 
 
@@ -622,13 +620,13 @@ bool CBaseEntity::Restore(CRestore& restore)
 	if (pev->modelindex != 0 && !FStringNull(pev->model))
 	{
 		Vector mins, maxs;
-		mins = pev->mins;	// Set model is about to destroy these
+		mins = pev->mins; // Set model is about to destroy these
 		maxs = pev->maxs;
 
 
 		PRECACHE_MODEL((char*)STRING(pev->model));
 		SET_MODEL(ENT(pev), STRING(pev->model));
-		UTIL_SetSize(pev, mins, maxs);	// Reset them
+		UTIL_SetSize(pev, mins, maxs); // Reset them
 	}
 
 	return status;
@@ -639,9 +637,9 @@ bool CBaseEntity::Restore(CRestore& restore)
 void SetObjectCollisionBox(entvars_t* pev)
 {
 	if ((pev->solid == SOLID_BSP) && pev->angles != g_vecZero)
-	{	// expand for rotation
-		float		max, v;
-		int			i;
+	{ // expand for rotation
+		float max, v;
+		int i;
 
 		max = 0;
 		for (i = 0; i < 3; i++)
@@ -680,7 +678,7 @@ void CBaseEntity::SetObjectCollisionBox()
 }
 
 
-bool	CBaseEntity::Intersects(CBaseEntity* pOther)
+bool CBaseEntity::Intersects(CBaseEntity* pOther)
 {
 	if (pOther->pev->absmin.x > pev->absmax.x ||
 		pOther->pev->absmin.y > pev->absmax.y ||
@@ -715,20 +713,32 @@ bool CBaseEntity::IsDormant()
 
 bool CBaseEntity::IsInWorld()
 {
-	// position 
-	if (pev->origin.x >= 4096) return false;
-	if (pev->origin.y >= 4096) return false;
-	if (pev->origin.z >= 4096) return false;
-	if (pev->origin.x <= -4096) return false;
-	if (pev->origin.y <= -4096) return false;
-	if (pev->origin.z <= -4096) return false;
+	// position
+	if (pev->origin.x >= 4096)
+		return false;
+	if (pev->origin.y >= 4096)
+		return false;
+	if (pev->origin.z >= 4096)
+		return false;
+	if (pev->origin.x <= -4096)
+		return false;
+	if (pev->origin.y <= -4096)
+		return false;
+	if (pev->origin.z <= -4096)
+		return false;
 	// speed
-	if (pev->velocity.x >= 2000) return false;
-	if (pev->velocity.y >= 2000) return false;
-	if (pev->velocity.z >= 2000) return false;
-	if (pev->velocity.x <= -2000) return false;
-	if (pev->velocity.y <= -2000) return false;
-	if (pev->velocity.z <= -2000) return false;
+	if (pev->velocity.x >= 2000)
+		return false;
+	if (pev->velocity.y >= 2000)
+		return false;
+	if (pev->velocity.z >= 2000)
+		return false;
+	if (pev->velocity.x <= -2000)
+		return false;
+	if (pev->velocity.y <= -2000)
+		return false;
+	if (pev->velocity.z <= -2000)
+		return false;
 
 	return true;
 }
@@ -744,7 +754,7 @@ bool CBaseEntity::ShouldToggle(USE_TYPE useType, bool currentState)
 }
 
 
-int	CBaseEntity::DamageDecal(int bitsDamageType)
+int CBaseEntity::DamageDecal(int bitsDamageType)
 {
 	if (pev->rendermode == kRenderTransAlpha)
 		return -1;
@@ -777,5 +787,3 @@ CBaseEntity* CBaseEntity::Create(const char* szName, const Vector& vecOrigin, co
 	DispatchSpawn(pEntity->edict());
 	return pEntity;
 }
-
-

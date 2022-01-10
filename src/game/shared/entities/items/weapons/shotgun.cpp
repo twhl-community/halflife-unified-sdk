@@ -23,8 +23,8 @@
 #include "UserMessages.h"
 
 // special deathmatch shotgun spreads
-#define VECTOR_CONE_DM_SHOTGUN	Vector( 0.08716, 0.04362, 0.00  )// 10 degrees by 5 degrees
-#define VECTOR_CONE_DM_DOUBLESHOTGUN Vector( 0.17365, 0.04362, 0.00 ) // 20 degrees by 5 degrees
+#define VECTOR_CONE_DM_SHOTGUN Vector(0.08716, 0.04362, 0.00)		// 10 degrees by 5 degrees
+#define VECTOR_CONE_DM_DOUBLESHOTGUN Vector(0.17365, 0.04362, 0.00) // 20 degrees by 5 degrees
 
 LINK_ENTITY_TO_CLASS(weapon_shotgun, CShotgun);
 
@@ -36,7 +36,7 @@ void CShotgun::Spawn()
 
 	m_iDefaultAmmo = SHOTGUN_DEFAULT_GIVE;
 
-	FallInit();// get ready to fall
+	FallInit(); // get ready to fall
 }
 
 
@@ -46,21 +46,21 @@ void CShotgun::Precache()
 	PRECACHE_MODEL("models/w_shotgun.mdl");
 	PRECACHE_MODEL("models/p_shotgun.mdl");
 
-	m_iShell = PRECACHE_MODEL("models/shotgunshell.mdl");// shotgun shell
+	m_iShell = PRECACHE_MODEL("models/shotgunshell.mdl"); // shotgun shell
 
 	PRECACHE_SOUND("items/9mmclip1.wav");
 
-	PRECACHE_SOUND("weapons/dbarrel1.wav");//shotgun
-	PRECACHE_SOUND("weapons/sbarrel1.wav");//shotgun
+	PRECACHE_SOUND("weapons/dbarrel1.wav"); //shotgun
+	PRECACHE_SOUND("weapons/sbarrel1.wav"); //shotgun
 
-	PRECACHE_SOUND("weapons/reload1.wav");	// shotgun reload
-	PRECACHE_SOUND("weapons/reload3.wav");	// shotgun reload
+	PRECACHE_SOUND("weapons/reload1.wav"); // shotgun reload
+	PRECACHE_SOUND("weapons/reload3.wav"); // shotgun reload
 
-//	PRECACHE_SOUND ("weapons/sshell1.wav");	// shotgun reload - played on client
-//	PRECACHE_SOUND ("weapons/sshell3.wav");	// shotgun reload - played on client
+	//	PRECACHE_SOUND ("weapons/sshell1.wav");	// shotgun reload - played on client
+	//	PRECACHE_SOUND ("weapons/sshell3.wav");	// shotgun reload - played on client
 
 	PRECACHE_SOUND("weapons/357_cock1.wav"); // gun empty sound
-	PRECACHE_SOUND("weapons/scock1.wav");	// cock gun
+	PRECACHE_SOUND("weapons/scock1.wav");	 // cock gun
 
 	m_usSingleFire = PRECACHE_EVENT(1, "events/shotgun1.sc");
 	m_usDoubleFire = PRECACHE_EVENT(1, "events/shotgun2.sc");
@@ -133,7 +133,7 @@ void CShotgun::PrimaryAttack()
 	m_iClip--;
 
 	int flags;
-#if defined( CLIENT_WEAPONS )
+#if defined(CLIENT_WEAPONS)
 	flags = FEV_NOTHOST;
 #else
 	flags = 0;
@@ -153,7 +153,7 @@ void CShotgun::PrimaryAttack()
 	}
 	else
 	{
-		// regular old, untouched spread. 
+		// regular old, untouched spread.
 		vecDir = m_pPlayer->FireBulletsPlayer(6, vecSrc, vecAiming, VECTOR_CONE_10DEGREES, 2048, BULLET_PLAYER_BUCKSHOT, 0, 0, m_pPlayer->pev, m_pPlayer->random_seed);
 	}
 
@@ -201,7 +201,7 @@ void CShotgun::SecondaryAttack()
 
 
 	int flags;
-#if defined( CLIENT_WEAPONS )
+#if defined(CLIENT_WEAPONS)
 	flags = FEV_NOTHOST;
 #else
 	flags = 0;
@@ -245,7 +245,6 @@ void CShotgun::SecondaryAttack()
 		m_flTimeWeaponIdle = 1.5;
 
 	m_fInSpecialReload = 0;
-
 }
 
 
@@ -356,7 +355,7 @@ void CShotgun::WeaponIdle()
 			if (flRand <= 0.8)
 			{
 				iAnim = SHOTGUN_IDLE_DEEP;
-				m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + (60.0 / 12.0);// * RANDOM_LONG(2, 5);
+				m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + (60.0 / 12.0); // * RANDOM_LONG(2, 5);
 			}
 			else if (flRand <= 0.95)
 			{
@@ -410,5 +409,3 @@ class CShotgunAmmo : public CBasePlayerAmmo
 	}
 };
 LINK_ENTITY_TO_CLASS(ammo_buckshot, CShotgunAmmo);
-
-

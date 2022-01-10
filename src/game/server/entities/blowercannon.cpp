@@ -43,7 +43,7 @@ public:
 
 	bool Save(CSave& save) override;
 	bool Restore(CRestore& restore) override;
-	static	TYPEDESCRIPTION m_SaveData[];
+	static TYPEDESCRIPTION m_SaveData[];
 
 	bool KeyValue(KeyValueData* pkvd) override;
 
@@ -61,12 +61,12 @@ public:
 	FireType m_iFireType;
 };
 
-TYPEDESCRIPTION	CBlowerCannon::m_SaveData[] =
-{
-	DEFINE_FIELD(CBlowerCannon, m_flDelay, FIELD_FLOAT),
-	DEFINE_FIELD(CBlowerCannon, m_iZOffset, FIELD_INTEGER),
-	DEFINE_FIELD(CBlowerCannon, m_iWeaponType, FIELD_INTEGER),
-	DEFINE_FIELD(CBlowerCannon, m_iFireType, FIELD_INTEGER),
+TYPEDESCRIPTION CBlowerCannon::m_SaveData[] =
+	{
+		DEFINE_FIELD(CBlowerCannon, m_flDelay, FIELD_FLOAT),
+		DEFINE_FIELD(CBlowerCannon, m_iZOffset, FIELD_INTEGER),
+		DEFINE_FIELD(CBlowerCannon, m_iWeaponType, FIELD_INTEGER),
+		DEFINE_FIELD(CBlowerCannon, m_iFireType, FIELD_INTEGER),
 };
 
 IMPLEMENT_SAVERESTORE(CBlowerCannon, CBlowerCannon::BaseClass);
@@ -162,7 +162,8 @@ void CBlowerCannon::BlowerCannonThink()
 		CDisplacerBall::CreateDisplacerBall(pev->origin, angles, this);
 		break;
 
-	default: break;
+	default:
+		break;
 	}
 
 	if (m_iFireType == FireType::FireOnTrigger)

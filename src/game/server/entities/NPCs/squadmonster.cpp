@@ -27,16 +27,16 @@
 //=========================================================
 // Save/Restore
 //=========================================================
-TYPEDESCRIPTION	CSquadMonster::m_SaveData[] =
-{
-	DEFINE_FIELD(CSquadMonster, m_hSquadLeader, FIELD_EHANDLE),
-	DEFINE_ARRAY(CSquadMonster, m_hSquadMember, FIELD_EHANDLE, MAX_SQUAD_MEMBERS - 1),
+TYPEDESCRIPTION CSquadMonster::m_SaveData[] =
+	{
+		DEFINE_FIELD(CSquadMonster, m_hSquadLeader, FIELD_EHANDLE),
+		DEFINE_ARRAY(CSquadMonster, m_hSquadMember, FIELD_EHANDLE, MAX_SQUAD_MEMBERS - 1),
 
-	// DEFINE_FIELD( CSquadMonster, m_afSquadSlots, FIELD_INTEGER ), // these need to be reset after transitions!
-	DEFINE_FIELD(CSquadMonster, m_fEnemyEluded, FIELD_BOOLEAN),
-	DEFINE_FIELD(CSquadMonster, m_flLastEnemySightTime, FIELD_TIME),
+		// DEFINE_FIELD( CSquadMonster, m_afSquadSlots, FIELD_INTEGER ), // these need to be reset after transitions!
+		DEFINE_FIELD(CSquadMonster, m_fEnemyEluded, FIELD_BOOLEAN),
+		DEFINE_FIELD(CSquadMonster, m_flLastEnemySightTime, FIELD_TIME),
 
-	DEFINE_FIELD(CSquadMonster, m_iMySlot, FIELD_INTEGER),
+		DEFINE_FIELD(CSquadMonster, m_iMySlot, FIELD_INTEGER),
 
 
 };
@@ -45,7 +45,7 @@ IMPLEMENT_SAVERESTORE(CSquadMonster, CBaseMonster);
 
 
 //=========================================================
-// OccupySlot - if any slots of the passed slots are 
+// OccupySlot - if any slots of the passed slots are
 // available, the monster will be assigned to one.
 //=========================================================
 bool CSquadMonster::OccupySlot(int iDesiredSlots)
@@ -72,7 +72,7 @@ bool CSquadMonster::OccupySlot(int iDesiredSlots)
 
 	if ((iDesiredSlots ^ pSquadLeader->m_afSquadSlots) == 0)
 	{
-		// none of the desired slots are available. 
+		// none of the desired slots are available.
 		return false;
 	}
 
@@ -83,7 +83,7 @@ bool CSquadMonster::OccupySlot(int iDesiredSlots)
 		iMask = 1 << i;
 		if ((iDesiredSlots & iMask) != 0) // am I looking for this bit?
 		{
-			if ((iSquadSlots & iMask) == 0)	// Is it already taken?
+			if ((iSquadSlots & iMask) == 0) // Is it already taken?
 			{
 				// No, use this bit
 				pSquadLeader->m_afSquadSlots |= iMask;
@@ -98,7 +98,7 @@ bool CSquadMonster::OccupySlot(int iDesiredSlots)
 }
 
 //=========================================================
-// VacateSlot 
+// VacateSlot
 //=========================================================
 void CSquadMonster::VacateSlot()
 {
@@ -133,7 +133,7 @@ void CSquadMonster::Killed(entvars_t* pevAttacker, int iGib)
 	CBaseMonster::Killed(pevAttacker, iGib);
 }
 
-// These functions are still awaiting conversion to CSquadMonster 
+// These functions are still awaiting conversion to CSquadMonster
 
 
 //=========================================================
@@ -206,9 +206,9 @@ bool CSquadMonster::SquadAdd(CSquadMonster* pAdd)
 
 
 //=========================================================
-// 
+//
 // SquadPasteEnemyInfo - called by squad members that have
-// current info on the enemy so that it can be stored for 
+// current info on the enemy so that it can be stored for
 // members who don't have current info.
 //
 //=========================================================
@@ -235,7 +235,7 @@ void CSquadMonster::SquadCopyEnemyInfo()
 }
 
 //=========================================================
-// 
+//
 // SquadMakeEnemy - makes everyone in the squad angry at
 // the same entity.
 //
@@ -307,7 +307,7 @@ int CSquadMonster::SquadCount()
 int CSquadMonster::SquadRecruit(int searchRadius, int maxMembers)
 {
 	int squadCount;
-	int iMyClass = Classify();// cache this monster's class
+	int iMyClass = Classify(); // cache this monster's class
 
 
 	// Don't recruit if I'm already in a group
@@ -335,7 +335,7 @@ int CSquadMonster::SquadRecruit(int searchRadius, int maxMembers)
 			{
 				if (!pRecruit->InSquad() && pRecruit->Classify() == iMyClass && pRecruit != this)
 				{
-					// minimum protection here against user error.in worldcraft. 
+					// minimum protection here against user error.in worldcraft.
 					if (!SquadAdd(pRecruit))
 						break;
 					squadCount++;
@@ -359,7 +359,7 @@ int CSquadMonster::SquadRecruit(int searchRadius, int maxMembers)
 					FStringNull(pRecruit->pev->netname))
 				{
 					TraceResult tr;
-					UTIL_TraceLine(pev->origin + pev->view_ofs, pRecruit->pev->origin + pev->view_ofs, ignore_monsters, pRecruit->edict(), &tr);// try to hit recruit with a traceline.
+					UTIL_TraceLine(pev->origin + pev->view_ofs, pRecruit->pev->origin + pev->view_ofs, ignore_monsters, pRecruit->edict(), &tr); // try to hit recruit with a traceline.
 					if (tr.flFraction == 1.0)
 					{
 						if (!SquadAdd(pRecruit))
@@ -439,15 +439,14 @@ void CSquadMonster::StartMonster()
 			SetBodygroup(1, 1); // UNDONE: truly ugly hack
 			pev->skin = 0;
 		}
-
 	}
 }
 
 //=========================================================
 // NoFriendlyFire - checks for possibility of friendly fire
 //
-// Builds a large box in front of the grunt and checks to see 
-// if any squad members are in that box. 
+// Builds a large box in front of the grunt and checks to see
+// if any squad members are in that box.
 //=========================================================
 bool CSquadMonster::NoFriendlyFire()
 {
@@ -456,13 +455,13 @@ bool CSquadMonster::NoFriendlyFire()
 		return true;
 	}
 
-	CPlane	backPlane;
-	CPlane  leftPlane;
-	CPlane	rightPlane;
+	CPlane backPlane;
+	CPlane leftPlane;
+	CPlane rightPlane;
 
-	Vector	vecLeftSide;
-	Vector	vecRightSide;
-	Vector	v_left;
+	Vector vecLeftSide;
+	Vector vecRightSide;
+	Vector v_left;
 
 	//!!!BUGBUG - to fix this, the planes must be aligned to where the monster will be firing its gun, not the direction it is facing!!!
 
@@ -518,7 +517,7 @@ bool CSquadMonster::NoFriendlyFire()
 //=========================================================
 MONSTERSTATE CSquadMonster::GetIdealState()
 {
-	int	iConditions;
+	int iConditions;
 
 	iConditions = IScheduleFlags();
 
@@ -560,7 +559,7 @@ bool CSquadMonster::FValidateCover(const Vector& vecCoverLocation)
 
 //=========================================================
 // SquadEnemySplit- returns true if not all squad members
-// are fighting the same enemy. 
+// are fighting the same enemy.
 //=========================================================
 bool CSquadMonster::SquadEnemySplit()
 {
@@ -603,15 +602,14 @@ bool CSquadMonster::SquadMemberInRange(const Vector& vecLocation, float flDist)
 }
 
 
-extern Schedule_t	slChaseEnemyFailed[];
+extern Schedule_t slChaseEnemyFailed[];
 
 Schedule_t* CSquadMonster::GetScheduleOfType(int iType)
 {
 	switch (iType)
 	{
 
-	case SCHED_CHASE_ENEMY_FAILED:
-	{
+	case SCHED_CHASE_ENEMY_FAILED: {
 		return &slChaseEnemyFailed[0];
 	}
 

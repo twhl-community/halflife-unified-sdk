@@ -15,15 +15,15 @@
 //=========================================================
 // Generic Monster - purely for scripted sequence work.
 //=========================================================
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"monsters.h"
-#include	"schedule.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
+#include "schedule.h"
 #include "soundent.h"
 
 // For holograms, make them not solid so the player can walk through them
-#define	SF_GENERICMONSTER_NOTSOLID					4 
+#define SF_GENERICMONSTER_NOTSOLID 4
 
 const int SF_GENERICMONSTER_CONTROLLER = 8;
 
@@ -37,7 +37,7 @@ public:
 	void Spawn() override;
 	void Precache() override;
 	void SetYawSpeed() override;
-	int  Classify() override;
+	int Classify() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 	int ISoundMask() override;
 
@@ -59,23 +59,23 @@ public:
 LINK_ENTITY_TO_CLASS(monster_generic, CGenericMonster);
 
 TYPEDESCRIPTION CGenericMonster::m_SaveData[] =
-{
-	//TODO: should be FIELD_TIME
-	DEFINE_FIELD(CGenericMonster, m_talkTime, FIELD_FLOAT),
-	DEFINE_FIELD(CGenericMonster, m_hTalkTarget, FIELD_EHANDLE),
-	DEFINE_FIELD(CGenericMonster, m_flIdealYaw, FIELD_FLOAT),
-	DEFINE_FIELD(CGenericMonster, m_flCurrentYaw, FIELD_FLOAT),
+	{
+		//TODO: should be FIELD_TIME
+		DEFINE_FIELD(CGenericMonster, m_talkTime, FIELD_FLOAT),
+		DEFINE_FIELD(CGenericMonster, m_hTalkTarget, FIELD_EHANDLE),
+		DEFINE_FIELD(CGenericMonster, m_flIdealYaw, FIELD_FLOAT),
+		DEFINE_FIELD(CGenericMonster, m_flCurrentYaw, FIELD_FLOAT),
 };
 
 IMPLEMENT_SAVERESTORE(CGenericMonster, CBaseMonster);
 
 //=========================================================
-// Classify - indicates this monster's place in the 
+// Classify - indicates this monster's place in the
 // relationship table.
 //=========================================================
-int	CGenericMonster::Classify()
+int CGenericMonster::Classify()
 {
-	return	CLASS_PLAYER_ALLY;
+	return CLASS_PLAYER_ALLY;
 }
 
 //=========================================================
@@ -116,7 +116,7 @@ void CGenericMonster::HandleAnimEvent(MonsterEvent_t* pEvent)
 //=========================================================
 int CGenericMonster::ISoundMask()
 {
-	return	bits_SOUND_NONE;
+	return bits_SOUND_NONE;
 }
 
 //=========================================================
@@ -144,7 +144,7 @@ void CGenericMonster::Spawn()
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_RED;
 	pev->health = 8;
-	m_flFieldOfView = 0.5;// indicates the width of this monster's forward view cone ( as a dotproduct result )
+	m_flFieldOfView = 0.5; // indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
 
 	MonsterInit();
@@ -223,8 +223,10 @@ void CGenericMonster::IdleHeadTurn(Vector& vecFriend)
 	{
 		float yaw = VecToYaw(vecFriend - pev->origin) - pev->angles.y;
 
-		if (yaw > 180) yaw -= 360;
-		if (yaw < -180) yaw += 360;
+		if (yaw > 180)
+			yaw -= 360;
+		if (yaw < -180)
+			yaw += 360;
 
 		// turn towards vector
 		m_flIdealYaw = yaw;

@@ -15,12 +15,12 @@
 //=========================================================
 // GMan - misunderstood servant of the people
 //=========================================================
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"monsters.h"
-#include	"schedule.h"
-#include	"weapons.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
+#include "schedule.h"
+#include "weapons.h"
 #include "soundent.h"
 
 //=========================================================
@@ -33,11 +33,11 @@ public:
 	void Spawn() override;
 	void Precache() override;
 	void SetYawSpeed() override;
-	int  Classify() override;
+	int Classify() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 	int ISoundMask() override;
 
-	bool	Save(CSave& save) override;
+	bool Save(CSave& save) override;
 	bool Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
@@ -55,21 +55,21 @@ public:
 LINK_ENTITY_TO_CLASS(monster_gman, CGMan);
 
 
-TYPEDESCRIPTION	CGMan::m_SaveData[] =
-{
-	DEFINE_FIELD(CGMan, m_hTalkTarget, FIELD_EHANDLE),
-	DEFINE_FIELD(CGMan, m_flTalkTime, FIELD_TIME),
+TYPEDESCRIPTION CGMan::m_SaveData[] =
+	{
+		DEFINE_FIELD(CGMan, m_hTalkTarget, FIELD_EHANDLE),
+		DEFINE_FIELD(CGMan, m_flTalkTime, FIELD_TIME),
 };
 IMPLEMENT_SAVERESTORE(CGMan, CBaseMonster);
 
 
 //=========================================================
-// Classify - indicates this monster's place in the 
+// Classify - indicates this monster's place in the
 // relationship table.
 //=========================================================
-int	CGMan::Classify()
+int CGMan::Classify()
 {
-	return	CLASS_NONE;
+	return CLASS_NONE;
 }
 
 //=========================================================
@@ -110,7 +110,7 @@ void CGMan::HandleAnimEvent(MonsterEvent_t* pEvent)
 //=========================================================
 int CGMan::ISoundMask()
 {
-	return	bits_SOUND_NONE;
+	return bits_SOUND_NONE;
 }
 
 //=========================================================
@@ -127,7 +127,7 @@ void CGMan::Spawn()
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = DONT_BLEED;
 	pev->health = 100;
-	m_flFieldOfView = 0.5;// indicates the width of this monster's forward view cone ( as a dotproduct result )
+	m_flFieldOfView = 0.5; // indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
 
 	MonsterInit();
@@ -171,8 +171,10 @@ void CGMan::RunTask(Task_t* pTask)
 		{
 			float yaw = VecToYaw(m_hTalkTarget->pev->origin - pev->origin) - pev->angles.y;
 
-			if (yaw > 180) yaw -= 360;
-			if (yaw < -180) yaw += 360;
+			if (yaw > 180)
+				yaw -= 360;
+			if (yaw < -180)
+				yaw += 360;
 
 			// turn towards vector
 			SetBoneController(0, yaw);
@@ -182,8 +184,10 @@ void CGMan::RunTask(Task_t* pTask)
 		{
 			float yaw = VecToYaw(m_hPlayer->pev->origin - pev->origin) - pev->angles.y;
 
-			if (yaw > 180) yaw -= 360;
-			if (yaw < -180) yaw += 360;
+			if (yaw > 180)
+				yaw -= 360;
+			if (yaw < -180)
+				yaw += 360;
 
 			// turn towards vector
 			SetBoneController(0, yaw);

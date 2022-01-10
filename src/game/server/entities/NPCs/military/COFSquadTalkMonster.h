@@ -22,11 +22,11 @@ class COFSquadTalkMonster : public CTalkMonster
 {
 public:
 	// squad leader info
-	EHANDLE	m_hSquadLeader;		// who is my leader
-	EHANDLE	m_hSquadMember[MAX_SQUAD_MEMBERS - 1];	// valid only for leader
-	int		m_afSquadSlots;
-	float	m_flLastEnemySightTime; // last time anyone in the squad saw the enemy
-	bool	m_fEnemyEluded;
+	EHANDLE m_hSquadLeader;						   // who is my leader
+	EHANDLE m_hSquadMember[MAX_SQUAD_MEMBERS - 1]; // valid only for leader
+	int m_afSquadSlots;
+	float m_flLastEnemySightTime; // last time anyone in the squad saw the enemy
+	bool m_fEnemyEluded;
 
 	EHANDLE m_hWaitMedic;
 	float m_flMedicWaitTime;
@@ -34,7 +34,7 @@ public:
 	int m_iPlayerHits;
 
 	// squad member info
-	int		m_iMySlot;// this is the behaviour slot that the monster currently holds in the squad. 
+	int m_iMySlot; // this is the behaviour slot that the monster currently holds in the squad.
 
 	bool CheckEnemy(CBaseEntity* pEnemy) override;
 	void StartMonster() override;
@@ -63,7 +63,7 @@ public:
 	bool IsLeader() { return m_hSquadLeader == this; }
 	int SquadJoin(int searchRadius);
 	int SquadRecruit(int searchRadius, int maxMembers);
-	int	SquadCount();
+	int SquadCount();
 	void SquadRemove(COFSquadTalkMonster* pRemove);
 	void SquadUnlink();
 	bool SquadAdd(COFSquadTalkMonster* pAdd);
@@ -97,4 +97,3 @@ public:
 
 	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 };
-

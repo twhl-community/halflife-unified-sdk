@@ -43,10 +43,10 @@ private:
 
 LINK_ENTITY_TO_CLASS(player_sethudcolor, PlayerSetHudColor);
 
-TYPEDESCRIPTION	PlayerSetHudColor::m_SaveData[] =
-{
-	DEFINE_FIELD(PlayerSetHudColor, m_HudColor, FIELD_VECTOR),
-	DEFINE_FIELD(PlayerSetHudColor, m_Action, FIELD_INTEGER),
+TYPEDESCRIPTION PlayerSetHudColor::m_SaveData[] =
+	{
+		DEFINE_FIELD(PlayerSetHudColor, m_HudColor, FIELD_VECTOR),
+		DEFINE_FIELD(PlayerSetHudColor, m_Action, FIELD_INTEGER),
 };
 
 IMPLEMENT_SAVERESTORE(PlayerSetHudColor, CPointEntity);
@@ -63,7 +63,7 @@ bool PlayerSetHudColor::KeyValue(KeyValueData* pkvd)
 		m_Action = static_cast<Action>(atoi(pkvd->szValue));
 		return true;
 	}
-	
+
 	return CPointEntity::KeyValue(pkvd);
 }
 
@@ -81,18 +81,18 @@ void PlayerSetHudColor::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_T
 		return;
 	}
 
-	const RGB24 color = [this]()
-	{
+	const RGB24 color = [this]() {
 		switch (m_Action)
 		{
-		case Action::Set: return RGB24{
-			static_cast<std::uint8_t>(m_HudColor.x),
-			static_cast<std::uint8_t>(m_HudColor.y),
-			static_cast<std::uint8_t>(m_HudColor.z)
-		};
+		case Action::Set:
+			return RGB24{
+				static_cast<std::uint8_t>(m_HudColor.x),
+				static_cast<std::uint8_t>(m_HudColor.y),
+				static_cast<std::uint8_t>(m_HudColor.z)};
 
 		default:
-		case Action::Reset: return RGB_HUD_COLOR;
+		case Action::Reset:
+			return RGB_HUD_COLOR;
 		}
 	}();
 

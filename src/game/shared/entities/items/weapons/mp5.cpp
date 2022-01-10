@@ -40,7 +40,7 @@ void CMP5::Spawn()
 
 	m_flNextGrenadeLoad = gpGlobals->time;
 
-	FallInit();// get ready to fall down.
+	FallInit(); // get ready to fall down.
 }
 
 
@@ -50,9 +50,9 @@ void CMP5::Precache()
 	PRECACHE_MODEL("models/w_9mmAR.mdl");
 	PRECACHE_MODEL("models/p_9mmAR.mdl");
 
-	m_iShell = PRECACHE_MODEL("models/shell.mdl");// brass shellTE_MODEL
+	m_iShell = PRECACHE_MODEL("models/shell.mdl"); // brass shellTE_MODEL
 
-	PRECACHE_MODEL("models/grenade.mdl");	// grenade
+	PRECACHE_MODEL("models/grenade.mdl"); // grenade
 
 	PRECACHE_MODEL("models/w_9mmARclip.mdl");
 	PRECACHE_SOUND("items/9mmclip1.wav");
@@ -60,9 +60,9 @@ void CMP5::Precache()
 	PRECACHE_SOUND("items/clipinsert1.wav");
 	PRECACHE_SOUND("items/cliprelease1.wav");
 
-	PRECACHE_SOUND("weapons/hks1.wav");// H to the K
-	PRECACHE_SOUND("weapons/hks2.wav");// H to the K
-	PRECACHE_SOUND("weapons/hks3.wav");// H to the K
+	PRECACHE_SOUND("weapons/hks1.wav"); // H to the K
+	PRECACHE_SOUND("weapons/hks2.wav"); // H to the K
+	PRECACHE_SOUND("weapons/hks3.wav"); // H to the K
 
 	PRECACHE_SOUND("weapons/glauncher.wav");
 	PRECACHE_SOUND("weapons/glauncher2.wav");
@@ -166,7 +166,7 @@ void CMP5::PrimaryAttack()
 	}
 
 	int flags;
-#if defined( CLIENT_WEAPONS )
+#if defined(CLIENT_WEAPONS)
 	flags = FEV_NOTHOST;
 #else
 	flags = 0;
@@ -223,7 +223,7 @@ void CMP5::SecondaryAttack()
 		gpGlobals->v_forward * 800);
 
 	int flags;
-#if defined( CLIENT_WEAPONS )
+#if defined(CLIENT_WEAPONS)
 	flags = FEV_NOTHOST;
 #else
 	flags = 0;
@@ -233,7 +233,7 @@ void CMP5::SecondaryAttack()
 
 	m_flNextPrimaryAttack = GetNextAttackDelay(1);
 	m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 1;
-	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 5;// idle pretty soon after shooting.
+	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 5; // idle pretty soon after shooting.
 
 	if (0 == m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType])
 		// HEV suit - indicate out of ammo condition
@@ -358,21 +358,3 @@ class CMP5AmmoGrenade : public CBasePlayerAmmo
 };
 LINK_ENTITY_TO_CLASS(ammo_mp5grenades, CMP5AmmoGrenade);
 LINK_ENTITY_TO_CLASS(ammo_ARgrenades, CMP5AmmoGrenade);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

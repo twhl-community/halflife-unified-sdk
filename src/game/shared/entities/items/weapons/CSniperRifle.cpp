@@ -23,10 +23,10 @@
 #include "CSniperRifle.h"
 
 #ifndef CLIENT_DLL
-TYPEDESCRIPTION	CSniperRifle::m_SaveData[] =
-{
-	DEFINE_FIELD(CSniperRifle, m_flReloadStart, FIELD_TIME),
-	DEFINE_FIELD(CSniperRifle, m_bReloading, FIELD_BOOLEAN),
+TYPEDESCRIPTION CSniperRifle::m_SaveData[] =
+	{
+		DEFINE_FIELD(CSniperRifle, m_flReloadStart, FIELD_TIME),
+		DEFINE_FIELD(CSniperRifle, m_bReloading, FIELD_BOOLEAN),
 };
 
 IMPLEMENT_SAVERESTORE(CSniperRifle, CSniperRifle::BaseClass);
@@ -87,7 +87,7 @@ bool CSniperRifle::Deploy()
 
 void CSniperRifle::Holster()
 {
-	m_fInReload = false;// cancel any reload in progress.
+	m_fInReload = false; // cancel any reload in progress.
 
 	if (m_pPlayer->m_iFOV != 0)
 	{
@@ -213,7 +213,7 @@ void CSniperRifle::Reload()
 
 int CSniperRifle::iItemSlot()
 {
-	return  4;
+	return 4;
 }
 
 bool CSniperRifle::GetItemInfo(ItemInfo* p)

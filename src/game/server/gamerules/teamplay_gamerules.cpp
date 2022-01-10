@@ -15,22 +15,22 @@
 //
 // teamplay_gamerules.cpp
 //
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"player.h"
-#include	"weapons.h"
-#include	"gamerules.h"
-#include	"teamplay_gamerules.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "player.h"
+#include "weapons.h"
+#include "gamerules.h"
+#include "teamplay_gamerules.h"
 #include "ctfplay_gamerules.h"
-#include	"game.h"
+#include "game.h"
 #include "UserMessages.h"
 
 static char team_names[MAX_TEAMS][MAX_TEAMNAME_LENGTH];
 static int team_scores[MAX_TEAMS];
 static int num_teams = 0;
 
-extern DLL_GLOBAL bool		g_fGameOver;
+extern DLL_GLOBAL bool g_fGameOver;
 
 CHalfLifeTeamplay::CHalfLifeTeamplay()
 {
@@ -71,7 +71,7 @@ CHalfLifeTeamplay::CHalfLifeTeamplay()
 extern cvar_t timeleft, fragsleft;
 
 #include "voice_gamemgr.h"
-extern CVoiceGameMgr	g_VoiceGameMgr;
+extern CVoiceGameMgr g_VoiceGameMgr;
 
 void CHalfLifeTeamplay::Think()
 {
@@ -84,7 +84,7 @@ void CHalfLifeTeamplay::Think()
 
 	g_VoiceGameMgr.Update(gpGlobals->frametime);
 
-	if (g_fGameOver)   // someone else quit the game already
+	if (g_fGameOver) // someone else quit the game already
 	{
 		CHalfLifeMultiplay::Think();
 		return;
@@ -168,7 +168,7 @@ bool CHalfLifeTeamplay::ClientCommand(CBasePlayer* pPlayer, const char* pcmd)
 void CHalfLifeTeamplay::UpdateGameMode(CBasePlayer* pPlayer)
 {
 	MESSAGE_BEGIN(MSG_ONE, gmsgGameMode, NULL, pPlayer->edict());
-	WRITE_BYTE(1);  // game mode teamplay
+	WRITE_BYTE(1); // game mode teamplay
 	MESSAGE_END();
 }
 
@@ -367,7 +367,7 @@ void CHalfLifeTeamplay::ClientUserInfoChanged(CBasePlayer* pPlayer, char* infobu
 }
 
 //=========================================================
-// Deathnotice. 
+// Deathnotice.
 //=========================================================
 void CHalfLifeTeamplay::DeathNotice(CBasePlayer* pVictim, entvars_t* pKiller, entvars_t* pevInflictor)
 {
@@ -384,8 +384,8 @@ void CHalfLifeTeamplay::DeathNotice(CBasePlayer* pVictim, entvars_t* pKiller, en
 			{
 				MESSAGE_BEGIN(MSG_ALL, gmsgDeathMsg);
 				WRITE_BYTE(ENTINDEX(ENT(pKiller)));		// the killer
-				WRITE_BYTE(ENTINDEX(pVictim->edict()));	// the victim
-				WRITE_STRING("teammate");		// flag this as a teammate kill
+				WRITE_BYTE(ENTINDEX(pVictim->edict())); // the victim
+				WRITE_STRING("teammate");				// flag this as a teammate kill
 				MESSAGE_END();
 				return;
 			}
@@ -502,7 +502,7 @@ int CHalfLifeTeamplay::GetTeamIndex(const char* pTeamName)
 		}
 	}
 
-	return -1;	// No match
+	return -1; // No match
 }
 
 
@@ -517,7 +517,7 @@ const char* CHalfLifeTeamplay::GetIndexedTeamName(int teamIndex)
 
 bool CHalfLifeTeamplay::IsValidTeam(const char* pTeamName)
 {
-	if (!m_teamLimit)	// Any team is valid if the teamlist isn't set
+	if (!m_teamLimit) // Any team is valid if the teamlist isn't set
 		return true;
 
 	return (GetTeamIndex(pTeamName) != -1) ? true : false;
@@ -541,7 +541,7 @@ const char* CHalfLifeTeamplay::TeamWithFewestPlayers()
 		{
 			int team = GetTeamIndex(plr->TeamID());
 			if (team >= 0)
-				teamCount[team] ++;
+				teamCount[team]++;
 		}
 	}
 
@@ -564,7 +564,7 @@ const char* CHalfLifeTeamplay::TeamWithFewestPlayers()
 void CHalfLifeTeamplay::RecountTeams(bool bResendInfo)
 {
 	char* pName;
-	char	teamlist[TEAMPLAY_TEAMLISTLENGTH];
+	char teamlist[TEAMPLAY_TEAMLISTLENGTH];
 
 	// loop through all teams, recounting everything
 	num_teams = 0;

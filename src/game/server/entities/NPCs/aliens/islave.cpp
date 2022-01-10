@@ -16,28 +16,28 @@
 // Alien slave monster
 //=========================================================
 
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"monsters.h"
-#include	"squadmonster.h"
-#include	"schedule.h"
-#include	"effects.h"
-#include	"weapons.h"
-#include	"soundent.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
+#include "squadmonster.h"
+#include "schedule.h"
+#include "effects.h"
+#include "weapons.h"
+#include "soundent.h"
 
-extern DLL_GLOBAL int		g_iSkillLevel;
+extern DLL_GLOBAL int g_iSkillLevel;
 
 //=========================================================
 // Monster's Anim Events Go Here
 //=========================================================
-#define		ISLAVE_AE_CLAW		( 1 )
-#define		ISLAVE_AE_CLAWRAKE	( 2 )
-#define		ISLAVE_AE_ZAP_POWERUP	( 3 )
-#define		ISLAVE_AE_ZAP_SHOOT		( 4 )
-#define		ISLAVE_AE_ZAP_DONE		( 5 )
+#define ISLAVE_AE_CLAW (1)
+#define ISLAVE_AE_CLAWRAKE (2)
+#define ISLAVE_AE_ZAP_POWERUP (3)
+#define ISLAVE_AE_ZAP_SHOOT (4)
+#define ISLAVE_AE_ZAP_DONE (5)
 
-#define		ISLAVE_MAX_BEAMS	8
+#define ISLAVE_MAX_BEAMS 8
 
 class CISlave : public CSquadMonster
 {
@@ -45,9 +45,9 @@ public:
 	void Spawn() override;
 	void Precache() override;
 	void SetYawSpeed() override;
-	int	 ISoundMask() override;
-	int  Classify() override;
-	int  IRelationship(CBaseEntity* pTarget) override;
+	int ISoundMask() override;
+	int Classify() override;
+	int IRelationship(CBaseEntity* pTarget) override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 	bool CheckRangeAttack1(float flDot, float flDist) override;
 	bool CheckRangeAttack2(float flDot, float flDist) override;
@@ -84,7 +84,7 @@ public:
 	int m_iBeams;
 	float m_flNextAttack;
 
-	int	m_voicePitch;
+	int m_voicePitch;
 
 	EHANDLE m_hDead;
 
@@ -97,17 +97,17 @@ LINK_ENTITY_TO_CLASS(monster_alien_slave, CISlave);
 LINK_ENTITY_TO_CLASS(monster_vortigaunt, CISlave);
 
 
-TYPEDESCRIPTION	CISlave::m_SaveData[] =
-{
-	DEFINE_FIELD(CISlave, m_iBravery, FIELD_INTEGER),
+TYPEDESCRIPTION CISlave::m_SaveData[] =
+	{
+		DEFINE_FIELD(CISlave, m_iBravery, FIELD_INTEGER),
 
-	DEFINE_ARRAY(CISlave, m_pBeam, FIELD_CLASSPTR, ISLAVE_MAX_BEAMS),
-	DEFINE_FIELD(CISlave, m_iBeams, FIELD_INTEGER),
-	DEFINE_FIELD(CISlave, m_flNextAttack, FIELD_TIME),
+		DEFINE_ARRAY(CISlave, m_pBeam, FIELD_CLASSPTR, ISLAVE_MAX_BEAMS),
+		DEFINE_FIELD(CISlave, m_iBeams, FIELD_INTEGER),
+		DEFINE_FIELD(CISlave, m_flNextAttack, FIELD_TIME),
 
-	DEFINE_FIELD(CISlave, m_voicePitch, FIELD_INTEGER),
+		DEFINE_FIELD(CISlave, m_voicePitch, FIELD_INTEGER),
 
-	DEFINE_FIELD(CISlave, m_hDead, FIELD_EHANDLE),
+		DEFINE_FIELD(CISlave, m_hDead, FIELD_EHANDLE),
 
 };
 
@@ -117,37 +117,37 @@ IMPLEMENT_SAVERESTORE(CISlave, CSquadMonster);
 
 
 const char* CISlave::pAttackHitSounds[] =
-{
-	"zombie/claw_strike1.wav",
-	"zombie/claw_strike2.wav",
-	"zombie/claw_strike3.wav",
+	{
+		"zombie/claw_strike1.wav",
+		"zombie/claw_strike2.wav",
+		"zombie/claw_strike3.wav",
 };
 
 const char* CISlave::pAttackMissSounds[] =
-{
-	"zombie/claw_miss1.wav",
-	"zombie/claw_miss2.wav",
+	{
+		"zombie/claw_miss1.wav",
+		"zombie/claw_miss2.wav",
 };
 
 const char* CISlave::pPainSounds[] =
-{
-	"aslave/slv_pain1.wav",
-	"aslave/slv_pain2.wav",
+	{
+		"aslave/slv_pain1.wav",
+		"aslave/slv_pain2.wav",
 };
 
 const char* CISlave::pDeathSounds[] =
-{
-	"aslave/slv_die1.wav",
-	"aslave/slv_die2.wav",
+	{
+		"aslave/slv_die1.wav",
+		"aslave/slv_die2.wav",
 };
 
 //=========================================================
-// Classify - indicates this monster's place in the 
+// Classify - indicates this monster's place in the
 // relationship table.
 //=========================================================
-int	CISlave::Classify()
+int CISlave::Classify()
 {
-	return	CLASS_ALIEN_MILITARY;
+	return CLASS_ALIEN_MILITARY;
 }
 
 
@@ -257,14 +257,14 @@ void CISlave::DeathSound()
 
 //=========================================================
 // ISoundMask - returns a bit mask indicating which types
-// of sounds this monster regards. 
+// of sounds this monster regards.
 //=========================================================
 int CISlave::ISoundMask()
 {
-	return	bits_SOUND_WORLD |
-		bits_SOUND_COMBAT |
-		bits_SOUND_DANGER |
-		bits_SOUND_PLAYER;
+	return bits_SOUND_WORLD |
+		   bits_SOUND_COMBAT |
+		   bits_SOUND_DANGER |
+		   bits_SOUND_PLAYER;
 }
 
 
@@ -312,8 +312,7 @@ void CISlave::HandleAnimEvent(MonsterEvent_t* pEvent)
 	// ALERT( at_console, "event %d : %f\n", pEvent->event, pev->frame );
 	switch (pEvent->event)
 	{
-	case ISLAVE_AE_CLAW:
-	{
+	case ISLAVE_AE_CLAW: {
 		// SOUND HERE!
 		CBaseEntity* pHurt = CheckTraceHullAttack(70, gSkillData.slaveDmgClaw, DMG_SLASH);
 		if (pHurt)
@@ -334,8 +333,7 @@ void CISlave::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 	break;
 
-	case ISLAVE_AE_CLAWRAKE:
-	{
+	case ISLAVE_AE_CLAWRAKE: {
 		CBaseEntity* pHurt = CheckTraceHullAttack(70, gSkillData.slaveDmgClawrake, DMG_SLASH);
 		if (pHurt)
 		{
@@ -353,8 +351,7 @@ void CISlave::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 	break;
 
-	case ISLAVE_AE_ZAP_POWERUP:
-	{
+	case ISLAVE_AE_ZAP_POWERUP: {
 		// speed up attack when on hard
 		if (g_iSkillLevel == SKILL_HARD)
 			pev->framerate = 1.5;
@@ -366,17 +363,16 @@ void CISlave::HandleAnimEvent(MonsterEvent_t* pEvent)
 			Vector vecSrc = pev->origin + gpGlobals->v_forward * 2;
 			MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, vecSrc);
 			WRITE_BYTE(TE_DLIGHT);
-			WRITE_COORD(vecSrc.x);	// X
-			WRITE_COORD(vecSrc.y);	// Y
-			WRITE_COORD(vecSrc.z);	// Z
-			WRITE_BYTE(12);		// radius * 0.1
-			WRITE_BYTE(255);		// r
-			WRITE_BYTE(180);		// g
-			WRITE_BYTE(96);		// b
-			WRITE_BYTE(20 / pev->framerate);		// time * 10
-			WRITE_BYTE(0);		// decay * 0.1
+			WRITE_COORD(vecSrc.x);			 // X
+			WRITE_COORD(vecSrc.y);			 // Y
+			WRITE_COORD(vecSrc.z);			 // Z
+			WRITE_BYTE(12);					 // radius * 0.1
+			WRITE_BYTE(255);				 // r
+			WRITE_BYTE(180);				 // g
+			WRITE_BYTE(96);					 // b
+			WRITE_BYTE(20 / pev->framerate); // time * 10
+			WRITE_BYTE(0);					 // decay * 0.1
 			MESSAGE_END();
-
 		}
 		if (m_hDead != NULL)
 		{
@@ -395,8 +391,7 @@ void CISlave::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 	break;
 
-	case ISLAVE_AE_ZAP_SHOOT:
-	{
+	case ISLAVE_AE_ZAP_SHOOT: {
 		ClearBeams();
 
 		if (m_hDead != NULL)
@@ -437,8 +432,7 @@ void CISlave::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 	break;
 
-	case ISLAVE_AE_ZAP_DONE:
-	{
+	case ISLAVE_AE_ZAP_DONE: {
 		ClearBeams();
 	}
 	break;
@@ -450,7 +444,7 @@ void CISlave::HandleAnimEvent(MonsterEvent_t* pEvent)
 }
 
 //=========================================================
-// CheckRangeAttack1 - normal beam attack 
+// CheckRangeAttack1 - normal beam attack
 //=========================================================
 bool CISlave::CheckRangeAttack1(float flDot, float flDist)
 {
@@ -534,7 +528,7 @@ void CISlave::Spawn()
 	m_bloodColor = BLOOD_COLOR_GREEN;
 	pev->effects = 0;
 	pev->health = gSkillData.slaveHealth;
-	pev->view_ofs = Vector(0, 0, 64);// position of the eyes relative to monster's origin.
+	pev->view_ofs = Vector(0, 0, 64);  // position of the eyes relative to monster's origin.
 	m_flFieldOfView = VIEW_FIELD_WIDE; // NOTE: we need a wide field of view so npc will notice player and say hello
 	m_MonsterState = MONSTERSTATE_NONE;
 	m_afCapability = bits_CAP_HEAR | bits_CAP_TURN_HEAD | bits_CAP_RANGE_ATTACK2 | bits_CAP_DOORS_GROUP;
@@ -608,30 +602,27 @@ void CISlave::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir,
 
 
 // primary range attack
-Task_t	tlSlaveAttack1[] =
-{
-	{ TASK_STOP_MOVING,			0				},
-	{ TASK_FACE_IDEAL,			(float)0		},
-	{ TASK_RANGE_ATTACK1,		(float)0		},
-};
-
-Schedule_t	slSlaveAttack1[] =
-{
+Task_t tlSlaveAttack1[] =
 	{
-		tlSlaveAttack1,
-		ARRAYSIZE(tlSlaveAttack1),
-		bits_COND_CAN_MELEE_ATTACK1 |
-		bits_COND_HEAR_SOUND |
-		bits_COND_HEAVY_DAMAGE,
+		{TASK_STOP_MOVING, 0},
+		{TASK_FACE_IDEAL, (float)0},
+		{TASK_RANGE_ATTACK1, (float)0},
+};
 
-		bits_SOUND_DANGER,
-		"Slave Range Attack1"
-	},
+Schedule_t slSlaveAttack1[] =
+	{
+		{tlSlaveAttack1,
+			ARRAYSIZE(tlSlaveAttack1),
+			bits_COND_CAN_MELEE_ATTACK1 |
+				bits_COND_HEAR_SOUND |
+				bits_COND_HEAVY_DAMAGE,
+
+			bits_SOUND_DANGER,
+			"Slave Range Attack1"},
 };
 
 
-DEFINE_CUSTOM_SCHEDULES(CISlave)
-{
+DEFINE_CUSTOM_SCHEDULES(CISlave){
 	slSlaveAttack1,
 };
 
@@ -879,11 +870,11 @@ class CDeadISlave : public CBaseMonster
 {
 public:
 	void Spawn() override;
-	int	Classify() override { return	CLASS_ALIEN_PASSIVE; }
+	int Classify() override { return CLASS_ALIEN_PASSIVE; }
 
 	bool KeyValue(KeyValueData* pkvd) override;
 
-	int	m_iPose;// which sequence to display	-- temporary, don't need to save
+	int m_iPose; // which sequence to display	-- temporary, don't need to save
 	static const char* m_szPoses[1];
 };
 
@@ -920,7 +911,7 @@ void CDeadISlave::Spawn()
 		ALERT(at_console, "Dead slave with bad pose\n");
 	}
 	// Corpses have less health
-	pev->health = 8;//gSkillData.slaveHealth;
+	pev->health = 8; //gSkillData.slaveHealth;
 
 	MonsterInitDead();
 }

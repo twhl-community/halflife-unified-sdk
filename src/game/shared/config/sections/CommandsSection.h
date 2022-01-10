@@ -97,8 +97,7 @@ public:
 
 	std::tuple<std::string, std::string> GetSchema() const override final
 	{
-		return
-		{
+		return {
 			fmt::format(R"(
 "Commands": {{
 	"type": "array",
@@ -109,8 +108,7 @@ public:
 	}}
 }}
 )"),
-			{"\"Commands\""}
-		};
+			{"\"Commands\""}};
 	}
 
 	bool TryParse(GameConfigContext& context) const override final
@@ -154,8 +152,7 @@ public:
 
 			//Prevent anything screwy from going into names
 			//Prevent commands from being snuck in by appending it to the end of another command
-			if (!std::regex_match(com_token, CommandNameRegex)
-				|| !ValidateCommand(value))
+			if (!std::regex_match(com_token, CommandNameRegex) || !ValidateCommand(value))
 			{
 				context.Loader.GetLogger()->warn(
 					"Command \"{:.10}{}\" contains illegal characters",

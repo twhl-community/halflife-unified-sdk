@@ -19,7 +19,7 @@
 */
 
 //
-// TODO: 
+// TODO:
 //		Take advantage of new monster fields like m_hEnemy and get rid of that OFFSET() stuff
 //		Revisit enemy validation stuff, maybe it's not necessary with the newest monster code
 //
@@ -33,13 +33,13 @@
 
 extern Vector VecBModelOrigin(entvars_t* pevBModel);
 
-#define TURRET_SHOTS	2
-#define TURRET_RANGE	(100 * 12)
-#define TURRET_SPREAD	Vector( 0, 0, 0 )
-#define TURRET_TURNRATE	30		//angles per 0.1 second
-#define TURRET_MAXWAIT	15		// seconds turret will stay active w/o a target
-#define TURRET_MAXSPIN	5		// seconds turret barrel will spin w/o a target
-#define TURRET_MACHINE_VOLUME	0.5
+#define TURRET_SHOTS 2
+#define TURRET_RANGE (100 * 12)
+#define TURRET_SPREAD Vector(0, 0, 0)
+#define TURRET_TURNRATE 30 //angles per 0.1 second
+#define TURRET_MAXWAIT 15  // seconds turret will stay active w/o a target
+#define TURRET_MAXSPIN 5   // seconds turret barrel will spin w/o a target
+#define TURRET_MACHINE_VOLUME 0.5
 
 typedef enum
 {
@@ -61,10 +61,10 @@ public:
 
 	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
 	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
-	int	 Classify() override;
+	int Classify() override;
 
 	int BloodColor() override { return DONT_BLEED; }
-	void GibMonster() override {}	// UNDONE: Throw turret gibs?
+	void GibMonster() override {} // UNDONE: Throw turret gibs?
 
 	// Think functions
 
@@ -91,80 +91,80 @@ public:
 	virtual void EyeOn();
 	virtual void EyeOff();
 
-	bool	Save(CSave& save) override;
-	bool	Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 
-	static	TYPEDESCRIPTION m_SaveData[];
+	static TYPEDESCRIPTION m_SaveData[];
 
 	// other functions
 	void SetTurretAnim(TURRET_ANIM anim);
 	bool MoveTurret();
 	virtual void Shoot(Vector& vecSrc, Vector& vecDirToEnemy) {}
 
-	float m_flMaxSpin;		// Max time to spin the barrel w/o a target
+	float m_flMaxSpin; // Max time to spin the barrel w/o a target
 	bool m_iSpin;
 
 	CSprite* m_pEyeGlow;
-	int		m_eyeBrightness;
+	int m_eyeBrightness;
 
-	int	m_iDeployHeight;
-	int	m_iRetractHeight;
+	int m_iDeployHeight;
+	int m_iRetractHeight;
 	int m_iMinPitch;
 
-	int m_iBaseTurnRate;	// angles per second
-	float m_fTurnRate;		// actual turn rate
-	int m_iOrientation;		// 0 = floor, 1 = Ceiling
+	int m_iBaseTurnRate; // angles per second
+	float m_fTurnRate;	 // actual turn rate
+	int m_iOrientation;	 // 0 = floor, 1 = Ceiling
 	bool m_iOn;
-	bool m_fBeserk;			// Sometimes this bitch will just freak out
-	bool m_iAutoStart;		// true if the turret auto deploys when a target
-							// enters its range
+	bool m_fBeserk;	   // Sometimes this bitch will just freak out
+	bool m_iAutoStart; // true if the turret auto deploys when a target
+					   // enters its range
 
 	Vector m_vecLastSight;
-	float m_flLastSight;	// Last time we saw a target
-	float m_flMaxWait;		// Max time to seach w/o a target
-	int m_iSearchSpeed;		// Not Used!
+	float m_flLastSight; // Last time we saw a target
+	float m_flMaxWait;	 // Max time to seach w/o a target
+	int m_iSearchSpeed;	 // Not Used!
 
 	// movement
-	float	m_flStartYaw;
-	Vector	m_vecCurAngles;
-	Vector	m_vecGoalAngles;
+	float m_flStartYaw;
+	Vector m_vecCurAngles;
+	Vector m_vecGoalAngles;
 
 
-	float	m_flPingTime;	// Time until the next ping, used when searching
-	float	m_flSpinUpTime;	// Amount of time until the barrel should spin down when searching
+	float m_flPingTime;	  // Time until the next ping, used when searching
+	float m_flSpinUpTime; // Amount of time until the barrel should spin down when searching
 };
 
 
-TYPEDESCRIPTION	CBaseTurret::m_SaveData[] =
-{
-	DEFINE_FIELD(CBaseTurret, m_flMaxSpin, FIELD_FLOAT),
-	DEFINE_FIELD(CBaseTurret, m_iSpin, FIELD_BOOLEAN),
+TYPEDESCRIPTION CBaseTurret::m_SaveData[] =
+	{
+		DEFINE_FIELD(CBaseTurret, m_flMaxSpin, FIELD_FLOAT),
+		DEFINE_FIELD(CBaseTurret, m_iSpin, FIELD_BOOLEAN),
 
-	DEFINE_FIELD(CBaseTurret, m_pEyeGlow, FIELD_CLASSPTR),
-	DEFINE_FIELD(CBaseTurret, m_eyeBrightness, FIELD_INTEGER),
-	DEFINE_FIELD(CBaseTurret, m_iDeployHeight, FIELD_INTEGER),
-	DEFINE_FIELD(CBaseTurret, m_iRetractHeight, FIELD_INTEGER),
-	DEFINE_FIELD(CBaseTurret, m_iMinPitch, FIELD_INTEGER),
+		DEFINE_FIELD(CBaseTurret, m_pEyeGlow, FIELD_CLASSPTR),
+		DEFINE_FIELD(CBaseTurret, m_eyeBrightness, FIELD_INTEGER),
+		DEFINE_FIELD(CBaseTurret, m_iDeployHeight, FIELD_INTEGER),
+		DEFINE_FIELD(CBaseTurret, m_iRetractHeight, FIELD_INTEGER),
+		DEFINE_FIELD(CBaseTurret, m_iMinPitch, FIELD_INTEGER),
 
-	DEFINE_FIELD(CBaseTurret, m_iBaseTurnRate, FIELD_INTEGER),
-	DEFINE_FIELD(CBaseTurret, m_fTurnRate, FIELD_FLOAT),
-	DEFINE_FIELD(CBaseTurret, m_iOrientation, FIELD_INTEGER),
-	DEFINE_FIELD(CBaseTurret, m_iOn, FIELD_BOOLEAN),
-	DEFINE_FIELD(CBaseTurret, m_fBeserk, FIELD_BOOLEAN),
-	DEFINE_FIELD(CBaseTurret, m_iAutoStart, FIELD_BOOLEAN),
+		DEFINE_FIELD(CBaseTurret, m_iBaseTurnRate, FIELD_INTEGER),
+		DEFINE_FIELD(CBaseTurret, m_fTurnRate, FIELD_FLOAT),
+		DEFINE_FIELD(CBaseTurret, m_iOrientation, FIELD_INTEGER),
+		DEFINE_FIELD(CBaseTurret, m_iOn, FIELD_BOOLEAN),
+		DEFINE_FIELD(CBaseTurret, m_fBeserk, FIELD_BOOLEAN),
+		DEFINE_FIELD(CBaseTurret, m_iAutoStart, FIELD_BOOLEAN),
 
 
-	DEFINE_FIELD(CBaseTurret, m_vecLastSight, FIELD_POSITION_VECTOR),
-	DEFINE_FIELD(CBaseTurret, m_flLastSight, FIELD_TIME),
-	DEFINE_FIELD(CBaseTurret, m_flMaxWait, FIELD_FLOAT),
-	DEFINE_FIELD(CBaseTurret, m_iSearchSpeed, FIELD_INTEGER),
+		DEFINE_FIELD(CBaseTurret, m_vecLastSight, FIELD_POSITION_VECTOR),
+		DEFINE_FIELD(CBaseTurret, m_flLastSight, FIELD_TIME),
+		DEFINE_FIELD(CBaseTurret, m_flMaxWait, FIELD_FLOAT),
+		DEFINE_FIELD(CBaseTurret, m_iSearchSpeed, FIELD_INTEGER),
 
-	DEFINE_FIELD(CBaseTurret, m_flStartYaw, FIELD_FLOAT),
-	DEFINE_FIELD(CBaseTurret, m_vecCurAngles, FIELD_VECTOR),
-	DEFINE_FIELD(CBaseTurret, m_vecGoalAngles, FIELD_VECTOR),
+		DEFINE_FIELD(CBaseTurret, m_flStartYaw, FIELD_FLOAT),
+		DEFINE_FIELD(CBaseTurret, m_vecCurAngles, FIELD_VECTOR),
+		DEFINE_FIELD(CBaseTurret, m_vecGoalAngles, FIELD_VECTOR),
 
-	DEFINE_FIELD(CBaseTurret, m_flPingTime, FIELD_TIME),
-	DEFINE_FIELD(CBaseTurret, m_flSpinUpTime, FIELD_TIME),
+		DEFINE_FIELD(CBaseTurret, m_flPingTime, FIELD_TIME),
+		DEFINE_FIELD(CBaseTurret, m_flSpinUpTime, FIELD_TIME),
 };
 
 IMPLEMENT_SAVERESTORE(CBaseTurret, CBaseMonster);
@@ -178,21 +178,20 @@ public:
 	void SpinUpCall() override;
 	void SpinDownCall() override;
 
-	bool	Save(CSave& save) override;
-	bool	Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 
-	static	TYPEDESCRIPTION m_SaveData[];
+	static TYPEDESCRIPTION m_SaveData[];
 
 	// other functions
 	void Shoot(Vector& vecSrc, Vector& vecDirToEnemy) override;
 
 private:
 	bool m_iStartSpin;
-
 };
-TYPEDESCRIPTION	CTurret::m_SaveData[] =
-{
-	DEFINE_FIELD(CTurret, m_iStartSpin, FIELD_BOOLEAN),
+TYPEDESCRIPTION CTurret::m_SaveData[] =
+	{
+		DEFINE_FIELD(CTurret, m_iStartSpin, FIELD_BOOLEAN),
 };
 
 IMPLEMENT_SAVERESTORE(CTurret, CBaseTurret);
@@ -222,13 +221,11 @@ bool CBaseTurret::KeyValue(KeyValueData* pkvd)
 	{
 		m_iOrientation = atoi(pkvd->szValue);
 		return true;
-
 	}
 	else if (FStrEq(pkvd->szKeyName, "searchspeed"))
 	{
 		m_iSearchSpeed = atoi(pkvd->szValue);
 		return true;
-
 	}
 	else if (FStrEq(pkvd->szKeyName, "turnrate"))
 	{
@@ -236,10 +233,10 @@ bool CBaseTurret::KeyValue(KeyValueData* pkvd)
 		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "style") ||
-		FStrEq(pkvd->szKeyName, "height") ||
-		FStrEq(pkvd->szKeyName, "value1") ||
-		FStrEq(pkvd->szKeyName, "value2") ||
-		FStrEq(pkvd->szKeyName, "value3"))
+			 FStrEq(pkvd->szKeyName, "height") ||
+			 FStrEq(pkvd->szKeyName, "value1") ||
+			 FStrEq(pkvd->szKeyName, "value2") ||
+			 FStrEq(pkvd->szKeyName, "value3"))
 		return true;
 
 	return CBaseMonster::KeyValue(pkvd);
@@ -259,8 +256,7 @@ void CBaseTurret::Spawn()
 	SetBits(pev->flags, FL_MONSTER);
 	SetUse(&CBaseTurret::TurretUse);
 
-	if ((pev->spawnflags & SF_MONSTER_TURRET_AUTOACTIVATE) != 0
-		&& (pev->spawnflags & SF_MONSTER_TURRET_STARTINACTIVE) == 0)
+	if ((pev->spawnflags & SF_MONSTER_TURRET_AUTOACTIVATE) != 0 && (pev->spawnflags & SF_MONSTER_TURRET_STARTINACTIVE) == 0)
 	{
 		m_iAutoStart = true;
 	}
@@ -362,8 +358,10 @@ void CBaseTurret::Initialize()
 	SetBoneController(0, 0);
 	SetBoneController(1, 0);
 
-	if (m_iBaseTurnRate == 0) m_iBaseTurnRate = TURRET_TURNRATE;
-	if (m_flMaxWait == 0) m_flMaxWait = TURRET_MAXWAIT;
+	if (m_iBaseTurnRate == 0)
+		m_iBaseTurnRate = TURRET_TURNRATE;
+	if (m_flMaxWait == 0)
+		m_flMaxWait = TURRET_MAXWAIT;
 	m_flStartYaw = pev->angles.y;
 	if (m_iOrientation == 1)
 	{
@@ -397,7 +395,7 @@ void CBaseTurret::TurretUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_T
 	{
 		m_hEnemy = NULL;
 		pev->nextthink = gpGlobals->time + 0.1;
-		m_iAutoStart = false;// switching off a turret disables autostart
+		m_iAutoStart = false; // switching off a turret disables autostart
 		//!!!! this should spin down first!!BUGBUG
 		SetThink(&CBaseTurret::Retire);
 	}
@@ -503,7 +501,7 @@ void CBaseTurret::ActiveThink()
 	// Look for our current enemy
 	bool fEnemyVisible = FBoxVisible(pev, m_hEnemy->pev, vecMidEnemy);
 
-	vecDirToEnemy = vecMidEnemy - vecMid;	// calculate dir and dist to enemy
+	vecDirToEnemy = vecMidEnemy - vecMid; // calculate dir and dist to enemy
 	float flDistToEnemy = vecDirToEnemy.Length();
 
 	Vector vec = UTIL_VecToAngles(vecMidEnemy - vecMid);
@@ -610,7 +608,6 @@ void CBaseTurret::ActiveThink()
 
 		m_vecGoalAngles.y = vec.y;
 		m_vecGoalAngles.x = vec.x;
-
 	}
 
 	SpinUpCall();
@@ -632,9 +629,15 @@ void CMiniTurret::Shoot(Vector& vecSrc, Vector& vecDirToEnemy)
 
 	switch (RANDOM_LONG(0, 2))
 	{
-	case 0: EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/hks1.wav", 1, ATTN_NORM); break;
-	case 1: EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/hks2.wav", 1, ATTN_NORM); break;
-	case 2: EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/hks3.wav", 1, ATTN_NORM); break;
+	case 0:
+		EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/hks1.wav", 1, ATTN_NORM);
+		break;
+	case 1:
+		EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/hks2.wav", 1, ATTN_NORM);
+		break;
+	case 2:
+		EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/hks3.wav", 1, ATTN_NORM);
+		break;
 	}
 	pev->effects = pev->effects | EF_MUZZLEFLASH;
 }
@@ -822,7 +825,7 @@ void CBaseTurret::SetTurretAnim(TURRET_ANIM anim)
 
 
 //
-// This search function will sit with the turret deployed and look for a new target. 
+// This search function will sit with the turret deployed and look for a new target.
 // After a set amount of time, the barrel will spin down. After m_flMaxWait, the turret will
 // retact.
 //
@@ -844,7 +847,7 @@ void CBaseTurret::SearchThink()
 	if (m_hEnemy != NULL)
 	{
 		if (!m_hEnemy->IsAlive())
-			m_hEnemy = NULL;// Dead enemy forces a search for new one
+			m_hEnemy = NULL; // Dead enemy forces a search for new one
 	}
 
 
@@ -887,7 +890,7 @@ void CBaseTurret::SearchThink()
 }
 
 
-// 
+//
 // This think function will deploy the turret when something comes into range. This is for
 // automatically activated turrets.
 //
@@ -904,7 +907,7 @@ void CBaseTurret::AutoSearchThink()
 	if (m_hEnemy != NULL)
 	{
 		if (!m_hEnemy->IsAlive())
-			m_hEnemy = NULL;// Dead enemy forces a search for new one
+			m_hEnemy = NULL; // Dead enemy forces a search for new one
 	}
 
 	// Acquire Target
@@ -966,7 +969,7 @@ void CBaseTurret::TurretDeath()
 		WRITE_COORD(RANDOM_FLOAT(pev->absmin.y, pev->absmax.y));
 		WRITE_COORD(pev->origin.z - m_iOrientation * 64);
 		WRITE_SHORT(g_sModelIndexSmoke);
-		WRITE_BYTE(25); // scale * 10
+		WRITE_BYTE(25);						 // scale * 10
 		WRITE_BYTE(10 - m_iOrientation * 5); // framerate
 		MESSAGE_END();
 	}
@@ -1002,7 +1005,7 @@ void CBaseTurret::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vec
 			pev->dmgtime = gpGlobals->time;
 		}
 
-		flDamage = 0.1;// don't hurt the monster much, but allow bits_COND_LIGHT_DAMAGE to be generated
+		flDamage = 0.1; // don't hurt the monster much, but allow bits_COND_LIGHT_DAMAGE to be generated
 	}
 
 	if (0 == pev->takedamage)
@@ -1127,7 +1130,7 @@ bool CBaseTurret::MoveTurret()
 	if (!state)
 		m_fTurnRate = m_iBaseTurnRate;
 
-	//ALERT(at_console, "(%.2f, %.2f)->(%.2f, %.2f)\n", m_vecCurAngles.x, 
+	//ALERT(at_console, "(%.2f, %.2f)->(%.2f, %.2f)\n", m_vecCurAngles.x,
 	//	m_vecCurAngles.y, m_vecGoalAngles.x, m_vecGoalAngles.y);
 	return state;
 }
@@ -1135,10 +1138,10 @@ bool CBaseTurret::MoveTurret()
 //
 // ID as a machine
 //
-int	CBaseTurret::Classify()
+int CBaseTurret::Classify()
 {
 	if (m_iOn || m_iAutoStart)
-		return	CLASS_MACHINE;
+		return CLASS_MACHINE;
 	return CLASS_NONE;
 }
 
@@ -1158,7 +1161,6 @@ public:
 	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 	void EXPORT SentryTouch(CBaseEntity* pOther);
 	void EXPORT SentryDeath();
-
 };
 
 LINK_ENTITY_TO_CLASS(monster_sentry, CSentry);
@@ -1196,9 +1198,15 @@ void CSentry::Shoot(Vector& vecSrc, Vector& vecDirToEnemy)
 
 	switch (RANDOM_LONG(0, 2))
 	{
-	case 0: EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/hks1.wav", 1, ATTN_NORM); break;
-	case 1: EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/hks2.wav", 1, ATTN_NORM); break;
-	case 2: EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/hks3.wav", 1, ATTN_NORM); break;
+	case 0:
+		EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/hks1.wav", 1, ATTN_NORM);
+		break;
+	case 1:
+		EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/hks2.wav", 1, ATTN_NORM);
+		break;
+	case 2:
+		EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/hks3.wav", 1, ATTN_NORM);
+		break;
 	}
 	pev->effects = pev->effects | EF_MUZZLEFLASH;
 }
@@ -1293,7 +1301,7 @@ void CSentry::SentryDeath()
 		WRITE_COORD(vecSrc.z - 32);
 		WRITE_SHORT(g_sModelIndexSmoke);
 		WRITE_BYTE(15); // scale * 10
-		WRITE_BYTE(8); // framerate
+		WRITE_BYTE(8);	// framerate
 		MESSAGE_END();
 	}
 
@@ -1308,4 +1316,3 @@ void CSentry::SentryDeath()
 		SetThink(NULL);
 	}
 }
-

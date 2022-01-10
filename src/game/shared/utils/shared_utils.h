@@ -34,7 +34,7 @@ inline const char* STRING(string_t offset)
 */
 inline string_t MAKE_STRING(const char* str)
 {
-	return ((uint64)(str)-(uint64)(STRING(0)));
+	return ((uint64)(str) - (uint64)(STRING(0)));
 }
 
 string_t ALLOC_STRING(const char* str);

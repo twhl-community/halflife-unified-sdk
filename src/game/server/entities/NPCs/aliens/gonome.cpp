@@ -18,11 +18,11 @@
 
 // UNDONE: Don't flinch every time you get hit
 
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"monsters.h"
-#include	"schedule.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
+#include "schedule.h"
 #include "decals.h"
 #include "soundent.h"
 #include "player.h"
@@ -32,12 +32,12 @@
 //=========================================================
 // Monster's Anim Events Go Here
 //=========================================================
-#define	ZOMBIE_AE_ATTACK_GUTS_GRAB		0x03
-#define ZOMBIE_AE_ATTACK_GUTS_THROW		4
-#define GONOME_AE_ATTACK_BITE_FIRST		19
-#define GONOME_AE_ATTACK_BITE_SECOND	20
-#define GONOME_AE_ATTACK_BITE_THIRD		21
-#define GONOME_AE_ATTACK_BITE_FINISH	22
+#define ZOMBIE_AE_ATTACK_GUTS_GRAB 0x03
+#define ZOMBIE_AE_ATTACK_GUTS_THROW 4
+#define GONOME_AE_ATTACK_BITE_FIRST 19
+#define GONOME_AE_ATTACK_BITE_SECOND 20
+#define GONOME_AE_ATTACK_BITE_THIRD 21
+#define GONOME_AE_ATTACK_BITE_FINISH 22
 
 class COFGonomeGuts : public CBaseEntity
 {
@@ -64,9 +64,9 @@ public:
 	int m_maxFrame;
 };
 
-TYPEDESCRIPTION	COFGonomeGuts::m_SaveData[] =
-{
-	DEFINE_FIELD(COFGonomeGuts, m_maxFrame, FIELD_INTEGER),
+TYPEDESCRIPTION COFGonomeGuts::m_SaveData[] =
+	{
+		DEFINE_FIELD(COFGonomeGuts, m_maxFrame, FIELD_INTEGER),
 };
 
 IMPLEMENT_SAVERESTORE(COFGonomeGuts, COFGonomeGuts::BaseClass);
@@ -214,19 +214,19 @@ public:
 	void IdleSound() override;
 
 	static constexpr const char* pIdleSounds[] =
-	{
-		"gonome/gonome_idle1.wav",
-		"gonome/gonome_idle2.wav",
-		"gonome/gonome_idle3.wav",
-	};
+		{
+			"gonome/gonome_idle1.wav",
+			"gonome/gonome_idle2.wav",
+			"gonome/gonome_idle3.wav",
+		};
 
 	static constexpr const char* pPainSounds[] =
-	{
-		"gonome/gonome_pain1.wav",
-		"gonome/gonome_pain2.wav",
-		"gonome/gonome_pain3.wav",
-		"gonome/gonome_pain4.wav",
-	};
+		{
+			"gonome/gonome_pain1.wav",
+			"gonome/gonome_pain2.wav",
+			"gonome/gonome_pain3.wav",
+			"gonome/gonome_pain4.wav",
+		};
 
 	bool CheckRangeAttack1(float flDot, float flDist) override;
 
@@ -256,10 +256,10 @@ protected:
 	virtual float GetBulletDamageFraction() const override { return 0.15f; }
 };
 
-TYPEDESCRIPTION	COFGonome::m_SaveData[] =
-{
-	DEFINE_FIELD(COFGonome, m_flNextThrowTime, FIELD_TIME),
-	DEFINE_FIELD(COFGonome, m_fPlayerLocked, FIELD_BOOLEAN),
+TYPEDESCRIPTION COFGonome::m_SaveData[] =
+	{
+		DEFINE_FIELD(COFGonome, m_flNextThrowTime, FIELD_TIME),
+		DEFINE_FIELD(COFGonome, m_fPlayerLocked, FIELD_BOOLEAN),
 };
 
 IMPLEMENT_SAVERESTORE(COFGonome, COFGonome::BaseClass);
@@ -267,38 +267,37 @@ IMPLEMENT_SAVERESTORE(COFGonome, COFGonome::BaseClass);
 LINK_ENTITY_TO_CLASS(monster_gonome, COFGonome);
 
 Task_t tlGonomeVictoryDance[] =
-{
-	{ TASK_STOP_MOVING, 0 },
-	{ TASK_SET_FAIL_SCHEDULE, SCHED_IDLE_STAND },
-	{ TASK_WAIT, 0.2 },
-	{ TASK_GONOME_GET_PATH_TO_ENEMY_CORPSE, 0 },
-	{ TASK_WALK_PATH, 0 },
-	{ TASK_WAIT_FOR_MOVEMENT, 0 },
-	{ TASK_FACE_ENEMY, 0 },
-	{ TASK_PLAY_SEQUENCE, ACT_VICTORY_DANCE },
-	{ TASK_PLAY_SEQUENCE, ACT_VICTORY_DANCE },
-	{ TASK_PLAY_SEQUENCE, ACT_VICTORY_DANCE },
-	{ TASK_PLAY_SEQUENCE, ACT_VICTORY_DANCE },
-	{ TASK_PLAY_SEQUENCE, ACT_VICTORY_DANCE },
-	{ TASK_PLAY_SEQUENCE, ACT_VICTORY_DANCE },
-	{ TASK_PLAY_SEQUENCE, ACT_VICTORY_DANCE },
+	{
+		{TASK_STOP_MOVING, 0},
+		{TASK_SET_FAIL_SCHEDULE, SCHED_IDLE_STAND},
+		{TASK_WAIT, 0.2},
+		{TASK_GONOME_GET_PATH_TO_ENEMY_CORPSE, 0},
+		{TASK_WALK_PATH, 0},
+		{TASK_WAIT_FOR_MOVEMENT, 0},
+		{TASK_FACE_ENEMY, 0},
+		{TASK_PLAY_SEQUENCE, ACT_VICTORY_DANCE},
+		{TASK_PLAY_SEQUENCE, ACT_VICTORY_DANCE},
+		{TASK_PLAY_SEQUENCE, ACT_VICTORY_DANCE},
+		{TASK_PLAY_SEQUENCE, ACT_VICTORY_DANCE},
+		{TASK_PLAY_SEQUENCE, ACT_VICTORY_DANCE},
+		{TASK_PLAY_SEQUENCE, ACT_VICTORY_DANCE},
+		{TASK_PLAY_SEQUENCE, ACT_VICTORY_DANCE},
 };
 
 Schedule_t slGonomeVictoryDance[] =
-{
 	{
-		tlGonomeVictoryDance,
-		ARRAYSIZE(tlGonomeVictoryDance),
-		bits_COND_NEW_ENEMY |
-		bits_COND_LIGHT_DAMAGE |
-		bits_COND_HEAVY_DAMAGE,
-		bits_SOUND_NONE,
-		"BabyVoltigoreVictoryDance" //Yup, it's a copy
-	},
+		{
+			tlGonomeVictoryDance,
+			ARRAYSIZE(tlGonomeVictoryDance),
+			bits_COND_NEW_ENEMY |
+				bits_COND_LIGHT_DAMAGE |
+				bits_COND_HEAVY_DAMAGE,
+			bits_SOUND_NONE,
+			"BabyVoltigoreVictoryDance" //Yup, it's a copy
+		},
 };
 
-DEFINE_CUSTOM_SCHEDULES(COFGonome)
-{
+DEFINE_CUSTOM_SCHEDULES(COFGonome){
 	slGonomeVictoryDance,
 };
 
@@ -336,8 +335,7 @@ void COFGonome::HandleAnimEvent(MonsterEvent_t* pEvent)
 		ZombieSlashAttack(GetOneSlashDamage(), {5, 0, 9}, gpGlobals->v_right * 25, false);
 		break;
 
-	case ZOMBIE_AE_ATTACK_GUTS_GRAB:
-	{
+	case ZOMBIE_AE_ATTACK_GUTS_GRAB: {
 		//Only if we still have an enemy at this point
 		if (m_hEnemy)
 		{
@@ -358,17 +356,16 @@ void COFGonome::HandleAnimEvent(MonsterEvent_t* pEvent)
 			auto direction = (m_hEnemy->pev->origin - m_hEnemy->pev->view_ofs - vecGutsPos).Normalize();
 
 			direction = direction + Vector(
-				RANDOM_FLOAT(-0.05, 0.05),
-				RANDOM_FLOAT(-0.05, 0.05),
-				RANDOM_FLOAT(-0.05, 0));
+										RANDOM_FLOAT(-0.05, 0.05),
+										RANDOM_FLOAT(-0.05, 0.05),
+										RANDOM_FLOAT(-0.05, 0));
 
 			UTIL_BloodDrips(vecGutsPos, direction, BLOOD_COLOR_RED, 35);
 		}
 	}
 	break;
 
-	case ZOMBIE_AE_ATTACK_GUTS_THROW:
-	{
+	case ZOMBIE_AE_ATTACK_GUTS_THROW: {
 		//Note: this check wasn't in the original. If an enemy dies during gut throw windup, this can be null and crash
 		if (m_hEnemy)
 		{
@@ -385,9 +382,9 @@ void COFGonome::HandleAnimEvent(MonsterEvent_t* pEvent)
 			auto direction = (m_hEnemy->pev->origin - m_hEnemy->pev->view_ofs - vecGutsPos).Normalize();
 
 			direction = direction + Vector(
-				RANDOM_FLOAT(-0.05, 0.05),
-				RANDOM_FLOAT(-0.05, 0.05),
-				RANDOM_FLOAT(-0.05, 0));
+										RANDOM_FLOAT(-0.05, 0.05),
+										RANDOM_FLOAT(-0.05, 0.05),
+										RANDOM_FLOAT(-0.05, 0));
 
 			UTIL_BloodDrips(vecGutsPos, direction, BLOOD_COLOR_RED, 35);
 
@@ -410,8 +407,7 @@ void COFGonome::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 	case GONOME_AE_ATTACK_BITE_FIRST:
 	case GONOME_AE_ATTACK_BITE_SECOND:
-	case GONOME_AE_ATTACK_BITE_THIRD:
-	{
+	case GONOME_AE_ATTACK_BITE_THIRD: {
 		//TODO: this doesn't check if the enemy is the player, can cause bugs
 		if ((pev->origin - m_hEnemy->pev->origin).Length() < 48)
 		{
@@ -425,7 +421,7 @@ void COFGonome::HandleAnimEvent(MonsterEvent_t* pEvent)
 		}
 
 		// do stuff for this event.
-//		ALERT( at_console, "Slash left!\n" );
+		//		ALERT( at_console, "Slash left!\n" );
 		CBaseEntity* pHurt = CheckTraceHullAttack(70, gSkillData.gonomeDmgOneBite, DMG_SLASH);
 		if (pHurt)
 		{
@@ -441,8 +437,7 @@ void COFGonome::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 	break;
 
-	case GONOME_AE_ATTACK_BITE_FINISH:
-	{
+	case GONOME_AE_ATTACK_BITE_FINISH: {
 		auto pPlayer = static_cast<CBasePlayer*>(UTIL_FindEntityByClassname(nullptr, "player"));
 
 		if (pPlayer && pPlayer->IsAlive())
@@ -453,7 +448,7 @@ void COFGonome::HandleAnimEvent(MonsterEvent_t* pEvent)
 		m_fPlayerLocked = false;
 
 		// do stuff for this event.
-//		ALERT( at_console, "Slash left!\n" );
+		//		ALERT( at_console, "Slash left!\n" );
 		CBaseEntity* pHurt = CheckTraceHullAttack(70, gSkillData.gonomeDmgOneBite, DMG_SLASH);
 		if (pHurt)
 		{
@@ -549,9 +544,9 @@ int COFGonome::IgnoreConditions()
 		if (pev->health < 20)
 			iIgnore |= (bits_COND_LIGHT_DAMAGE | bits_COND_HEAVY_DAMAGE);
 		else
-#endif			
-			if (m_flNextFlinch >= gpGlobals->time)
-				iIgnore |= (bits_COND_LIGHT_DAMAGE | bits_COND_HEAVY_DAMAGE);
+#endif
+		if (m_flNextFlinch >= gpGlobals->time)
+			iIgnore |= (bits_COND_LIGHT_DAMAGE | bits_COND_HEAVY_DAMAGE);
 	}
 
 	if ((m_Activity == ACT_SMALL_FLINCH) || (m_Activity == ACT_BIG_FLINCH))
@@ -561,7 +556,6 @@ int COFGonome::IgnoreConditions()
 	}
 
 	return iIgnore;
-
 }
 
 bool COFGonome::CheckMeleeAttack1(float flDot, float flDist)
@@ -638,8 +632,7 @@ void COFGonome::StartTask(Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
-	case TASK_GONOME_GET_PATH_TO_ENEMY_CORPSE:
-	{
+	case TASK_GONOME_GET_PATH_TO_ENEMY_CORPSE: {
 		if (m_pGonomeGuts)
 		{
 			UTIL_Remove(m_pGonomeGuts);
@@ -668,7 +661,7 @@ void COFGonome::StartTask(Task_t* pTask)
 
 void COFGonome::SetActivity(Activity NewActivity)
 {
-	int	iSequence = ACTIVITY_NOT_AVAILABLE;
+	int iSequence = ACTIVITY_NOT_AVAILABLE;
 	void* pmodel = GET_MODEL_PTR(ENT(pev));
 
 	if (NewActivity != ACT_RANGE_ATTACK1 && m_pGonomeGuts)
@@ -739,7 +732,7 @@ void COFGonome::SetActivity(Activity NewActivity)
 			pev->frame = 0;
 		}
 
-		pev->sequence = iSequence;	// Set to the reset anim (if it's there)
+		pev->sequence = iSequence; // Set to the reset anim (if it's there)
 		ResetSequenceInfo();
 		SetYawSpeed();
 	}
@@ -747,7 +740,7 @@ void COFGonome::SetActivity(Activity NewActivity)
 	{
 		// Not available try to get default anim
 		ALERT(at_console, "%s has no sequence for act:%d\n", STRING(pev->classname), NewActivity);
-		pev->sequence = 0;	// Set to the reset anim (if it's there)
+		pev->sequence = 0; // Set to the reset anim (if it's there)
 	}
 
 	m_Activity = NewActivity; // Go ahead and set this so it doesn't keep trying when the anim is not present
@@ -761,11 +754,11 @@ class CDeadGonome : public CBaseMonster
 {
 public:
 	void Spawn() override;
-	int	Classify() override { return	CLASS_ALIEN_PASSIVE; }
+	int Classify() override { return CLASS_ALIEN_PASSIVE; }
 
 	bool KeyValue(KeyValueData* pkvd) override;
 
-	int	m_iPose;// which sequence to display	-- temporary, don't need to save
+	int m_iPose; // which sequence to display	-- temporary, don't need to save
 	static const char* m_szPoses[3];
 };
 

@@ -41,17 +41,17 @@ void AddAmmoNameToAmmoRegistry(const char* szAmmoname)
 		giAmmoIndex = 0;
 
 	CBasePlayerItem::AmmoInfoArray[giAmmoIndex].pszName = szAmmoname;
-	CBasePlayerItem::AmmoInfoArray[giAmmoIndex].iId = giAmmoIndex;   // yes, this info is redundant
+	CBasePlayerItem::AmmoInfoArray[giAmmoIndex].iId = giAmmoIndex; // yes, this info is redundant
 }
 
 void FindHullIntersection(const Vector& vecSrc, TraceResult& tr, const Vector& mins, const Vector& maxs, edict_t* pEntity)
 {
-	int			i, j, k;
-	float		distance;
+	int i, j, k;
+	float distance;
 	const Vector* minmaxs[2] = {&mins, &maxs};
 	TraceResult tmpTrace;
-	Vector		vecHullEnd = tr.vecEndPos;
-	Vector		vecEnd;
+	Vector vecHullEnd = tr.vecEndPos;
+	Vector vecEnd;
 
 	distance = 1e6f;
 
@@ -146,7 +146,7 @@ void CBasePlayerWeapon::ResetEmptySound()
 
 bool CanAttack(float attack_time, float curtime, bool isPredicted)
 {
-#if defined( CLIENT_WEAPONS )
+#if defined(CLIENT_WEAPONS)
 	if (!isPredicted)
 #else
 	if (1)
@@ -182,7 +182,7 @@ void CBasePlayerWeapon::ItemPostFrame()
 
 	if ((m_fInReload) && (m_pPlayer->m_flNextAttack <= UTIL_WeaponTimeBase()))
 	{
-		// complete the reload. 
+		// complete the reload.
 		int j = V_min(iMaxClip() - m_iClip, m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]);
 
 		// Add them to the clip

@@ -16,25 +16,25 @@
 // human scientist (passive lab worker)
 //=========================================================
 
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"monsters.h"
-#include	"talkmonster.h"
-#include	"schedule.h"
-#include	"defaultai.h"
-#include	"scripted.h"
-#include	"animation.h"
-#include	"soundent.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
+#include "talkmonster.h"
+#include "schedule.h"
+#include "defaultai.h"
+#include "scripted.h"
+#include "animation.h"
+#include "soundent.h"
 #include "scientist.h"
 
 LINK_ENTITY_TO_CLASS(monster_scientist, CScientist);
 
-TYPEDESCRIPTION	CScientist::m_SaveData[] =
-{
-	DEFINE_FIELD(CScientist, m_painTime, FIELD_TIME),
-	DEFINE_FIELD(CScientist, m_healTime, FIELD_TIME),
-	DEFINE_FIELD(CScientist, m_fearTime, FIELD_TIME),
+TYPEDESCRIPTION CScientist::m_SaveData[] =
+	{
+		DEFINE_FIELD(CScientist, m_painTime, FIELD_TIME),
+		DEFINE_FIELD(CScientist, m_healTime, FIELD_TIME),
+		DEFINE_FIELD(CScientist, m_fearTime, FIELD_TIME),
 };
 
 IMPLEMENT_SAVERESTORE(CScientist, CTalkMonster);
@@ -42,297 +42,273 @@ IMPLEMENT_SAVERESTORE(CScientist, CTalkMonster);
 //=========================================================
 // AI Schedules Specific to this monster
 //=========================================================
-Task_t	tlFollow[] =
-{
-	{ TASK_SET_FAIL_SCHEDULE,	(float)SCHED_CANT_FOLLOW },	// If you fail, bail out of follow
-	{ TASK_MOVE_TO_TARGET_RANGE,(float)128		},	// Move within 128 of target ent (client)
-//	{ TASK_SET_SCHEDULE,		(float)SCHED_TARGET_FACE },
-};
-
-Schedule_t	slFollow[] =
-{
+Task_t tlFollow[] =
 	{
-		tlFollow,
-		ARRAYSIZE(tlFollow),
-		bits_COND_NEW_ENEMY |
-		bits_COND_LIGHT_DAMAGE |
-		bits_COND_HEAVY_DAMAGE |
-		bits_COND_HEAR_SOUND,
-		bits_SOUND_COMBAT |
-		bits_SOUND_DANGER,
-		"Follow"
-	},
+		{TASK_SET_FAIL_SCHEDULE, (float)SCHED_CANT_FOLLOW}, // If you fail, bail out of follow
+		{TASK_MOVE_TO_TARGET_RANGE, (float)128},			// Move within 128 of target ent (client)
+		//	{ TASK_SET_SCHEDULE,		(float)SCHED_TARGET_FACE },
 };
 
-Task_t	tlFollowScared[] =
-{
-	{ TASK_SET_FAIL_SCHEDULE,	(float)SCHED_TARGET_CHASE },// If you fail, follow normally
-	{ TASK_MOVE_TO_TARGET_RANGE_SCARED,(float)128		},	// Move within 128 of target ent (client)
-//	{ TASK_SET_SCHEDULE,		(float)SCHED_TARGET_FACE_SCARED },
-};
-
-Schedule_t	slFollowScared[] =
-{
+Schedule_t slFollow[] =
 	{
-		tlFollowScared,
-		ARRAYSIZE(tlFollowScared),
-		bits_COND_NEW_ENEMY |
-		bits_COND_HEAR_SOUND |
-		bits_COND_LIGHT_DAMAGE |
-		bits_COND_HEAVY_DAMAGE,
-		bits_SOUND_DANGER,
-		"FollowScared"
-	},
+		{tlFollow,
+			ARRAYSIZE(tlFollow),
+			bits_COND_NEW_ENEMY |
+				bits_COND_LIGHT_DAMAGE |
+				bits_COND_HEAVY_DAMAGE |
+				bits_COND_HEAR_SOUND,
+			bits_SOUND_COMBAT |
+				bits_SOUND_DANGER,
+			"Follow"},
 };
 
-Task_t	tlFaceTargetScared[] =
-{
-	{ TASK_FACE_TARGET,			(float)0		},
-	{ TASK_SET_ACTIVITY,		(float)ACT_CROUCHIDLE },
-	{ TASK_SET_SCHEDULE,		(float)SCHED_TARGET_CHASE_SCARED },
-};
-
-Schedule_t	slFaceTargetScared[] =
-{
+Task_t tlFollowScared[] =
 	{
-		tlFaceTargetScared,
-		ARRAYSIZE(tlFaceTargetScared),
-		bits_COND_HEAR_SOUND |
-		bits_COND_NEW_ENEMY,
-		bits_SOUND_DANGER,
-		"FaceTargetScared"
-	},
+		{TASK_SET_FAIL_SCHEDULE, (float)SCHED_TARGET_CHASE}, // If you fail, follow normally
+		{TASK_MOVE_TO_TARGET_RANGE_SCARED, (float)128},		 // Move within 128 of target ent (client)
+		//	{ TASK_SET_SCHEDULE,		(float)SCHED_TARGET_FACE_SCARED },
 };
 
-Task_t	tlStopFollowing[] =
-{
-	{ TASK_CANT_FOLLOW,		(float)0 },
-};
-
-Schedule_t	slStopFollowing[] =
-{
+Schedule_t slFollowScared[] =
 	{
-		tlStopFollowing,
-		ARRAYSIZE(tlStopFollowing),
-		0,
-		0,
-		"StopFollowing"
-	},
+		{tlFollowScared,
+			ARRAYSIZE(tlFollowScared),
+			bits_COND_NEW_ENEMY |
+				bits_COND_HEAR_SOUND |
+				bits_COND_LIGHT_DAMAGE |
+				bits_COND_HEAVY_DAMAGE,
+			bits_SOUND_DANGER,
+			"FollowScared"},
 };
 
-
-Task_t	tlHeal[] =
-{
-	{ TASK_MOVE_TO_TARGET_RANGE,(float)50		},	// Move within 60 of target ent (client)
-	{ TASK_SET_FAIL_SCHEDULE,	(float)SCHED_TARGET_CHASE },	// If you fail, catch up with that guy! (change this to put syringe away and then chase)
-	{ TASK_FACE_IDEAL,			(float)0		},
-	{ TASK_SAY_HEAL,			(float)0		},
-	{ TASK_PLAY_SEQUENCE_FACE_TARGET,		(float)ACT_ARM	},			// Whip out the needle
-	{ TASK_HEAL,				(float)0	},	// Put it in the player
-	{ TASK_PLAY_SEQUENCE_FACE_TARGET,		(float)ACT_DISARM	},			// Put away the needle
-};
-
-Schedule_t	slHeal[] =
-{
+Task_t tlFaceTargetScared[] =
 	{
-		tlHeal,
-		ARRAYSIZE(tlHeal),
-		0,	// Don't interrupt or he'll end up running around with a needle all the time
-		0,
-		"Heal"
-	},
+		{TASK_FACE_TARGET, (float)0},
+		{TASK_SET_ACTIVITY, (float)ACT_CROUCHIDLE},
+		{TASK_SET_SCHEDULE, (float)SCHED_TARGET_CHASE_SCARED},
 };
 
-
-Task_t	tlFaceTarget[] =
-{
-	{ TASK_STOP_MOVING,			(float)0		},
-	{ TASK_FACE_TARGET,			(float)0		},
-	{ TASK_SET_ACTIVITY,		(float)ACT_IDLE },
-	{ TASK_SET_SCHEDULE,		(float)SCHED_TARGET_CHASE },
-};
-
-Schedule_t	slFaceTarget[] =
-{
+Schedule_t slFaceTargetScared[] =
 	{
-		tlFaceTarget,
-		ARRAYSIZE(tlFaceTarget),
-		bits_COND_CLIENT_PUSH |
-		bits_COND_NEW_ENEMY |
-		bits_COND_HEAR_SOUND,
-		bits_SOUND_COMBAT |
-		bits_SOUND_DANGER,
-		"FaceTarget"
-	},
+		{tlFaceTargetScared,
+			ARRAYSIZE(tlFaceTargetScared),
+			bits_COND_HEAR_SOUND |
+				bits_COND_NEW_ENEMY,
+			bits_SOUND_DANGER,
+			"FaceTargetScared"},
 };
 
-
-Task_t	tlSciPanic[] =
-{
-	{ TASK_STOP_MOVING,			(float)0		},
-	{ TASK_FACE_ENEMY,			(float)0		},
-	{ TASK_SCREAM,				(float)0		},
-	{ TASK_PLAY_SEQUENCE_FACE_ENEMY,		(float)ACT_EXCITED	},	// This is really fear-stricken excitement
-	{ TASK_SET_ACTIVITY,		(float)ACT_IDLE	},
-};
-
-Schedule_t	slSciPanic[] =
-{
+Task_t tlStopFollowing[] =
 	{
-		tlSciPanic,
-		ARRAYSIZE(tlSciPanic),
-		0,
-		0,
-		"SciPanic"
-	},
+		{TASK_CANT_FOLLOW, (float)0},
 };
 
-
-Task_t	tlIdleSciStand[] =
-{
-	{ TASK_STOP_MOVING,			0				},
-	{ TASK_SET_ACTIVITY,		(float)ACT_IDLE },
-	{ TASK_WAIT,				(float)2		}, // repick IDLESTAND every two seconds.
-	{ TASK_TLK_HEADRESET,		(float)0		}, // reset head position
-};
-
-Schedule_t	slIdleSciStand[] =
-{
+Schedule_t slStopFollowing[] =
 	{
-		tlIdleSciStand,
-		ARRAYSIZE(tlIdleSciStand),
-		bits_COND_NEW_ENEMY |
-		bits_COND_LIGHT_DAMAGE |
-		bits_COND_HEAVY_DAMAGE |
-		bits_COND_HEAR_SOUND |
-		bits_COND_SMELL |
-		bits_COND_CLIENT_PUSH |
-		bits_COND_PROVOKED,
-
-		bits_SOUND_COMBAT |// sound flags
-		//bits_SOUND_PLAYER		|
-		//bits_SOUND_WORLD		|
-		bits_SOUND_DANGER |
-		bits_SOUND_MEAT |// scents
-		bits_SOUND_CARCASS |
-		bits_SOUND_GARBAGE,
-		"IdleSciStand"
-
-	},
+		{tlStopFollowing,
+			ARRAYSIZE(tlStopFollowing),
+			0,
+			0,
+			"StopFollowing"},
 };
 
 
-Task_t	tlScientistCover[] =
-{
-	{ TASK_SET_FAIL_SCHEDULE,		(float)SCHED_PANIC },		// If you fail, just panic!
-	{ TASK_STOP_MOVING,				(float)0					},
-	{ TASK_FIND_COVER_FROM_ENEMY,	(float)0					},
-	{ TASK_RUN_PATH_SCARED,			(float)0					},
-	{ TASK_TURN_LEFT,				(float)179					},
-	{ TASK_SET_SCHEDULE,			(float)SCHED_HIDE			},
-};
-
-Schedule_t	slScientistCover[] =
-{
+Task_t tlHeal[] =
 	{
-		tlScientistCover,
-		ARRAYSIZE(tlScientistCover),
-		bits_COND_NEW_ENEMY,
-		0,
-		"ScientistCover"
-	},
+		{TASK_MOVE_TO_TARGET_RANGE, (float)50},				 // Move within 60 of target ent (client)
+		{TASK_SET_FAIL_SCHEDULE, (float)SCHED_TARGET_CHASE}, // If you fail, catch up with that guy! (change this to put syringe away and then chase)
+		{TASK_FACE_IDEAL, (float)0},
+		{TASK_SAY_HEAL, (float)0},
+		{TASK_PLAY_SEQUENCE_FACE_TARGET, (float)ACT_ARM},	 // Whip out the needle
+		{TASK_HEAL, (float)0},								 // Put it in the player
+		{TASK_PLAY_SEQUENCE_FACE_TARGET, (float)ACT_DISARM}, // Put away the needle
 };
 
-
-
-Task_t	tlScientistHide[] =
-{
-	{ TASK_SET_FAIL_SCHEDULE,		(float)SCHED_PANIC },		// If you fail, just panic!
-	{ TASK_STOP_MOVING,				(float)0					},
-	{ TASK_PLAY_SEQUENCE,			(float)ACT_CROUCH			},
-	{ TASK_SET_ACTIVITY,			(float)ACT_CROUCHIDLE		},	// FIXME: This looks lame
-	{ TASK_WAIT_RANDOM,				(float)10.0					},
-};
-
-Schedule_t	slScientistHide[] =
-{
+Schedule_t slHeal[] =
 	{
-		tlScientistHide,
-		ARRAYSIZE(tlScientistHide),
-		bits_COND_NEW_ENEMY |
-		bits_COND_HEAR_SOUND |
-		bits_COND_SEE_ENEMY |
-		bits_COND_SEE_HATE |
-		bits_COND_SEE_FEAR |
-		bits_COND_SEE_DISLIKE,
-		bits_SOUND_DANGER,
-		"ScientistHide"
-	},
+		{tlHeal,
+			ARRAYSIZE(tlHeal),
+			0, // Don't interrupt or he'll end up running around with a needle all the time
+			0,
+			"Heal"},
 };
 
 
-Task_t	tlScientistStartle[] =
-{
-	{ TASK_SET_FAIL_SCHEDULE,		(float)SCHED_PANIC },		// If you fail, just panic!
-	{ TASK_RANDOM_SCREAM,			(float)0.3 },				// Scream 30% of the time
-	{ TASK_STOP_MOVING,				(float)0					},
-	{ TASK_PLAY_SEQUENCE_FACE_ENEMY,			(float)ACT_CROUCH			},
-	{ TASK_RANDOM_SCREAM,			(float)0.1 },				// Scream again 10% of the time
-	{ TASK_PLAY_SEQUENCE_FACE_ENEMY,			(float)ACT_CROUCHIDLE		},
-	{ TASK_WAIT_RANDOM,				(float)1.0					},
-};
-
-Schedule_t	slScientistStartle[] =
-{
+Task_t tlFaceTarget[] =
 	{
-		tlScientistStartle,
-		ARRAYSIZE(tlScientistStartle),
-		bits_COND_NEW_ENEMY |
-		bits_COND_SEE_ENEMY |
-		bits_COND_SEE_HATE |
-		bits_COND_SEE_FEAR |
-		bits_COND_SEE_DISLIKE,
-		0,
-		"ScientistStartle"
-	},
+		{TASK_STOP_MOVING, (float)0},
+		{TASK_FACE_TARGET, (float)0},
+		{TASK_SET_ACTIVITY, (float)ACT_IDLE},
+		{TASK_SET_SCHEDULE, (float)SCHED_TARGET_CHASE},
 };
 
-
-
-Task_t	tlFear[] =
-{
-	{ TASK_STOP_MOVING,				(float)0					},
-	{ TASK_FACE_ENEMY,				(float)0					},
-	{ TASK_SAY_FEAR,				(float)0					},
-	//	{ TASK_PLAY_SEQUENCE,			(float)ACT_FEAR_DISPLAY		},
-};
-
-Schedule_t	slFear[] =
-{
+Schedule_t slFaceTarget[] =
 	{
-		tlFear,
-		ARRAYSIZE(tlFear),
-		bits_COND_NEW_ENEMY,
-		0,
-		"Fear"
-	},
+		{tlFaceTarget,
+			ARRAYSIZE(tlFaceTarget),
+			bits_COND_CLIENT_PUSH |
+				bits_COND_NEW_ENEMY |
+				bits_COND_HEAR_SOUND,
+			bits_SOUND_COMBAT |
+				bits_SOUND_DANGER,
+			"FaceTarget"},
 };
 
 
-DEFINE_CUSTOM_SCHEDULES(CScientist)
-{
+Task_t tlSciPanic[] =
+	{
+		{TASK_STOP_MOVING, (float)0},
+		{TASK_FACE_ENEMY, (float)0},
+		{TASK_SCREAM, (float)0},
+		{TASK_PLAY_SEQUENCE_FACE_ENEMY, (float)ACT_EXCITED}, // This is really fear-stricken excitement
+		{TASK_SET_ACTIVITY, (float)ACT_IDLE},
+};
+
+Schedule_t slSciPanic[] =
+	{
+		{tlSciPanic,
+			ARRAYSIZE(tlSciPanic),
+			0,
+			0,
+			"SciPanic"},
+};
+
+
+Task_t tlIdleSciStand[] =
+	{
+		{TASK_STOP_MOVING, 0},
+		{TASK_SET_ACTIVITY, (float)ACT_IDLE},
+		{TASK_WAIT, (float)2},			// repick IDLESTAND every two seconds.
+		{TASK_TLK_HEADRESET, (float)0}, // reset head position
+};
+
+Schedule_t slIdleSciStand[] =
+	{
+		{tlIdleSciStand,
+			ARRAYSIZE(tlIdleSciStand),
+			bits_COND_NEW_ENEMY |
+				bits_COND_LIGHT_DAMAGE |
+				bits_COND_HEAVY_DAMAGE |
+				bits_COND_HEAR_SOUND |
+				bits_COND_SMELL |
+				bits_COND_CLIENT_PUSH |
+				bits_COND_PROVOKED,
+
+			bits_SOUND_COMBAT | // sound flags
+				//bits_SOUND_PLAYER		|
+				//bits_SOUND_WORLD		|
+				bits_SOUND_DANGER |
+				bits_SOUND_MEAT | // scents
+				bits_SOUND_CARCASS |
+				bits_SOUND_GARBAGE,
+			"IdleSciStand"
+
+		},
+};
+
+
+Task_t tlScientistCover[] =
+	{
+		{TASK_SET_FAIL_SCHEDULE, (float)SCHED_PANIC}, // If you fail, just panic!
+		{TASK_STOP_MOVING, (float)0},
+		{TASK_FIND_COVER_FROM_ENEMY, (float)0},
+		{TASK_RUN_PATH_SCARED, (float)0},
+		{TASK_TURN_LEFT, (float)179},
+		{TASK_SET_SCHEDULE, (float)SCHED_HIDE},
+};
+
+Schedule_t slScientistCover[] =
+	{
+		{tlScientistCover,
+			ARRAYSIZE(tlScientistCover),
+			bits_COND_NEW_ENEMY,
+			0,
+			"ScientistCover"},
+};
+
+
+
+Task_t tlScientistHide[] =
+	{
+		{TASK_SET_FAIL_SCHEDULE, (float)SCHED_PANIC}, // If you fail, just panic!
+		{TASK_STOP_MOVING, (float)0},
+		{TASK_PLAY_SEQUENCE, (float)ACT_CROUCH},
+		{TASK_SET_ACTIVITY, (float)ACT_CROUCHIDLE}, // FIXME: This looks lame
+		{TASK_WAIT_RANDOM, (float)10.0},
+};
+
+Schedule_t slScientistHide[] =
+	{
+		{tlScientistHide,
+			ARRAYSIZE(tlScientistHide),
+			bits_COND_NEW_ENEMY |
+				bits_COND_HEAR_SOUND |
+				bits_COND_SEE_ENEMY |
+				bits_COND_SEE_HATE |
+				bits_COND_SEE_FEAR |
+				bits_COND_SEE_DISLIKE,
+			bits_SOUND_DANGER,
+			"ScientistHide"},
+};
+
+
+Task_t tlScientistStartle[] =
+	{
+		{TASK_SET_FAIL_SCHEDULE, (float)SCHED_PANIC}, // If you fail, just panic!
+		{TASK_RANDOM_SCREAM, (float)0.3},			  // Scream 30% of the time
+		{TASK_STOP_MOVING, (float)0},
+		{TASK_PLAY_SEQUENCE_FACE_ENEMY, (float)ACT_CROUCH},
+		{TASK_RANDOM_SCREAM, (float)0.1}, // Scream again 10% of the time
+		{TASK_PLAY_SEQUENCE_FACE_ENEMY, (float)ACT_CROUCHIDLE},
+		{TASK_WAIT_RANDOM, (float)1.0},
+};
+
+Schedule_t slScientistStartle[] =
+	{
+		{tlScientistStartle,
+			ARRAYSIZE(tlScientistStartle),
+			bits_COND_NEW_ENEMY |
+				bits_COND_SEE_ENEMY |
+				bits_COND_SEE_HATE |
+				bits_COND_SEE_FEAR |
+				bits_COND_SEE_DISLIKE,
+			0,
+			"ScientistStartle"},
+};
+
+
+
+Task_t tlFear[] =
+	{
+		{TASK_STOP_MOVING, (float)0},
+		{TASK_FACE_ENEMY, (float)0},
+		{TASK_SAY_FEAR, (float)0},
+		//	{ TASK_PLAY_SEQUENCE,			(float)ACT_FEAR_DISPLAY		},
+};
+
+Schedule_t slFear[] =
+	{
+		{tlFear,
+			ARRAYSIZE(tlFear),
+			bits_COND_NEW_ENEMY,
+			0,
+			"Fear"},
+};
+
+
+DEFINE_CUSTOM_SCHEDULES(CScientist){
 	slFollow,
-		slFaceTarget,
-		slIdleSciStand,
-		slFear,
-		slScientistCover,
-		slScientistHide,
-		slScientistStartle,
-		slHeal,
-		slStopFollowing,
-		slSciPanic,
-		slFollowScared,
-		slFaceTargetScared,
+	slFaceTarget,
+	slIdleSciStand,
+	slFear,
+	slScientistCover,
+	slScientistHide,
+	slScientistStartle,
+	slHeal,
+	slStopFollowing,
+	slSciPanic,
+	slFollowScared,
+	slFaceTargetScared,
 };
 
 
@@ -411,8 +387,7 @@ void CScientist::StartTask(Task_t* pTask)
 		m_movementActivity = ACT_RUN_SCARED;
 		break;
 
-	case TASK_MOVE_TO_TARGET_RANGE_SCARED:
-	{
+	case TASK_MOVE_TO_TARGET_RANGE_SCARED: {
 		if ((m_hTargetEnt->pev->origin - pev->origin).Length() < 1)
 			TaskComplete();
 		else
@@ -441,8 +416,7 @@ void CScientist::RunTask(Task_t* pTask)
 			Scream();
 		break;
 
-	case TASK_MOVE_TO_TARGET_RANGE_SCARED:
-	{
+	case TASK_MOVE_TO_TARGET_RANGE_SCARED: {
 		if (RANDOM_LONG(0, 63) < 8)
 			Scream();
 
@@ -468,7 +442,7 @@ void CScientist::RunTask(Task_t* pTask)
 			if (distance < pTask->flData)
 			{
 				TaskComplete();
-				RouteClear();		// Stop moving
+				RouteClear(); // Stop moving
 			}
 			else if (distance < 190 && m_movementActivity != ACT_WALK_SCARED)
 				m_movementActivity = ACT_WALK_SCARED;
@@ -498,12 +472,12 @@ void CScientist::RunTask(Task_t* pTask)
 }
 
 //=========================================================
-// Classify - indicates this monster's place in the 
+// Classify - indicates this monster's place in the
 // relationship table.
 //=========================================================
-int	CScientist::Classify()
+int CScientist::Classify()
 {
-	return	CLASS_HUMAN_PASSIVE;
+	return CLASS_HUMAN_PASSIVE;
 }
 
 
@@ -545,16 +519,14 @@ void CScientist::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
 	switch (pEvent->event)
 	{
-	case SCIENTIST_AE_HEAL:		// Heal my target (if within range)
+	case SCIENTIST_AE_HEAL: // Heal my target (if within range)
 		Heal();
 		break;
-	case SCIENTIST_AE_NEEDLEON:
-	{
+	case SCIENTIST_AE_NEEDLEON: {
 		SetBodygroup(ScientistBodygroup::Needle, 1);
 	}
 	break;
-	case SCIENTIST_AE_NEEDLEOFF:
-	{
+	case SCIENTIST_AE_NEEDLEOFF: {
 		SetBodygroup(ScientistBodygroup::Needle, 0);
 	}
 	break;
@@ -575,7 +547,7 @@ void CScientist::SpawnCore(const char* model, float health)
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_RED;
 	pev->health = health;
-	pev->view_ofs = Vector(0, 0, 50);// position of the eyes relative to monster's origin.
+	pev->view_ofs = Vector(0, 0, 50);  // position of the eyes relative to monster's origin.
 	m_flFieldOfView = VIEW_FIELD_WIDE; // NOTE: we need a wide field of view so scientists will notice player and say hello
 	m_MonsterState = MONSTERSTATE_NONE;
 
@@ -587,8 +559,8 @@ void CScientist::SpawnCore(const char* model, float health)
 	pev->skin = 0;
 
 	if (pev->body == -1)
-	{// -1 chooses a random head
-		SetBodygroup(ScientistBodygroup::Head, RANDOM_LONG(0, GetBodygroupSubmodelCount(ScientistBodygroup::Head)) - 1);// pick a head, any head
+	{																													 // -1 chooses a random head
+		SetBodygroup(ScientistBodygroup::Head, RANDOM_LONG(0, GetBodygroupSubmodelCount(ScientistBodygroup::Head)) - 1); // pick a head, any head
 	}
 
 	// Luther is black, make his hands black
@@ -668,10 +640,18 @@ void CScientist::TalkInit()
 	switch (GetBodygroup(ScientistBodygroup::Head) % 3)
 	{
 	default:
-	case HEAD_GLASSES:	m_voicePitch = 105; break;	//glasses
-	case HEAD_EINSTEIN: m_voicePitch = 100; break;	//einstein
-	case HEAD_LUTHER:	m_voicePitch = 95;  break;	//luther
-	case HEAD_SLICK:	m_voicePitch = 100;  break;//slick
+	case HEAD_GLASSES:
+		m_voicePitch = 105;
+		break; //glasses
+	case HEAD_EINSTEIN:
+		m_voicePitch = 100;
+		break; //einstein
+	case HEAD_LUTHER:
+		m_voicePitch = 95;
+		break; //luther
+	case HEAD_SLICK:
+		m_voicePitch = 100;
+		break; //slick
 	}
 }
 
@@ -696,13 +676,13 @@ bool CScientist::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, flo
 //=========================================================
 int CScientist::ISoundMask()
 {
-	return	bits_SOUND_WORLD |
-		bits_SOUND_COMBAT |
-		bits_SOUND_CARCASS |
-		bits_SOUND_MEAT |
-		bits_SOUND_GARBAGE |
-		bits_SOUND_DANGER |
-		bits_SOUND_PLAYER;
+	return bits_SOUND_WORLD |
+		   bits_SOUND_COMBAT |
+		   bits_SOUND_CARCASS |
+		   bits_SOUND_MEAT |
+		   bits_SOUND_GARBAGE |
+		   bits_SOUND_DANGER |
+		   bits_SOUND_PLAYER;
 }
 
 //=========================================================
@@ -717,16 +697,26 @@ void CScientist::PainSound()
 
 	switch (RANDOM_LONG(0, 4))
 	{
-	case 0: EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "scientist/sci_pain1.wav", 1, ATTN_NORM, 0, GetVoicePitch()); break;
-	case 1: EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "scientist/sci_pain2.wav", 1, ATTN_NORM, 0, GetVoicePitch()); break;
-	case 2: EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "scientist/sci_pain3.wav", 1, ATTN_NORM, 0, GetVoicePitch()); break;
-	case 3: EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "scientist/sci_pain4.wav", 1, ATTN_NORM, 0, GetVoicePitch()); break;
-	case 4: EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "scientist/sci_pain5.wav", 1, ATTN_NORM, 0, GetVoicePitch()); break;
+	case 0:
+		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "scientist/sci_pain1.wav", 1, ATTN_NORM, 0, GetVoicePitch());
+		break;
+	case 1:
+		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "scientist/sci_pain2.wav", 1, ATTN_NORM, 0, GetVoicePitch());
+		break;
+	case 2:
+		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "scientist/sci_pain3.wav", 1, ATTN_NORM, 0, GetVoicePitch());
+		break;
+	case 3:
+		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "scientist/sci_pain4.wav", 1, ATTN_NORM, 0, GetVoicePitch());
+		break;
+	case 4:
+		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "scientist/sci_pain5.wav", 1, ATTN_NORM, 0, GetVoicePitch());
+		break;
 	}
 }
 
 //=========================================================
-// DeathSound 
+// DeathSound
 //=========================================================
 void CScientist::DeathSound()
 {
@@ -743,7 +733,7 @@ void CScientist::Killed(entvars_t* pevAttacker, int iGib)
 
 void CScientist::SetActivity(Activity newActivity)
 {
-	int	iSequence;
+	int iSequence;
 
 	iSequence = LookupActivity(newActivity);
 
@@ -763,11 +753,11 @@ Schedule_t* CScientist::GetScheduleOfType(int Type)
 		// Hook these to make a looping schedule
 	case SCHED_TARGET_FACE:
 		// call base class default so that scientist will talk
-		// when 'used' 
+		// when 'used'
 		psched = CTalkMonster::GetScheduleOfType(Type);
 
 		if (psched == slIdleStand)
-			return slFaceTarget;	// override this for different target face behavior
+			return slFaceTarget; // override this for different target face behavior
 		else
 			return psched;
 
@@ -832,7 +822,7 @@ Schedule_t* CScientist::GetSchedule()
 		{
 			if (HasConditions(bits_COND_SEE_ENEMY))
 				m_fearTime = gpGlobals->time;
-			else if (DisregardEnemy(pEnemy))		// After 15 seconds of being hidden, return to alert
+			else if (DisregardEnemy(pEnemy)) // After 15 seconds of being hidden, return to alert
 			{
 				m_hEnemy = NULL;
 				pEnemy = NULL;
@@ -856,10 +846,10 @@ Schedule_t* CScientist::GetSchedule()
 			{
 				if ((pSound->m_iType & (bits_SOUND_DANGER | bits_SOUND_COMBAT)) != 0)
 				{
-					if (gpGlobals->time - m_fearTime > 3)	// Only cower every 3 seconds or so
+					if (gpGlobals->time - m_fearTime > 3) // Only cower every 3 seconds or so
 					{
-						m_fearTime = gpGlobals->time;		// Update last fear
-						return GetScheduleOfType(SCHED_STARTLE);	// This will just duck for a second
+						m_fearTime = gpGlobals->time;			 // Update last fear
+						return GetScheduleOfType(SCHED_STARTLE); // This will just duck for a second
 					}
 				}
 			}
@@ -887,22 +877,22 @@ Schedule_t* CScientist::GetSchedule()
 				// If I'm already close enough to my target
 				if (TargetDistance() <= 128)
 				{
-					if (CanHeal())	// Heal opportunistically
+					if (CanHeal()) // Heal opportunistically
 						return slHeal;
-					if (HasConditions(bits_COND_CLIENT_PUSH))	// Player wants me to move
+					if (HasConditions(bits_COND_CLIENT_PUSH)) // Player wants me to move
 						return GetScheduleOfType(SCHED_MOVE_AWAY_FOLLOW);
 				}
-				return GetScheduleOfType(SCHED_TARGET_FACE);	// Just face and follow.
+				return GetScheduleOfType(SCHED_TARGET_FACE); // Just face and follow.
 			}
-			else	// UNDONE: When afraid, scientist won't move out of your way.  Keep This?  If not, write move away scared
+			else // UNDONE: When afraid, scientist won't move out of your way.  Keep This?  If not, write move away scared
 			{
-				if (HasConditions(bits_COND_NEW_ENEMY)) // I just saw something new and scary, react
-					return GetScheduleOfType(SCHED_FEAR);					// React to something scary
-				return GetScheduleOfType(SCHED_TARGET_FACE_SCARED);	// face and follow, but I'm scared!
+				if (HasConditions(bits_COND_NEW_ENEMY))				// I just saw something new and scary, react
+					return GetScheduleOfType(SCHED_FEAR);			// React to something scary
+				return GetScheduleOfType(SCHED_TARGET_FACE_SCARED); // face and follow, but I'm scared!
 			}
 		}
 
-		if (HasConditions(bits_COND_CLIENT_PUSH))	// Player wants me to move
+		if (HasConditions(bits_COND_CLIENT_PUSH)) // Player wants me to move
 			return GetScheduleOfType(SCHED_MOVE_AWAY);
 
 		// try to say something about smells
@@ -910,14 +900,14 @@ Schedule_t* CScientist::GetSchedule()
 		break;
 	case MONSTERSTATE_COMBAT:
 		if (HasConditions(bits_COND_NEW_ENEMY))
-			return slFear;					// Point and scream!
+			return slFear; // Point and scream!
 		if (HasConditions(bits_COND_SEE_ENEMY))
-			return slScientistCover;		// Take Cover
+			return slScientistCover; // Take Cover
 
 		if (HasConditions(bits_COND_HEAR_SOUND))
-			return slTakeCoverFromBestSound;	// Cower and panic from the scary sound!
+			return slTakeCoverFromBestSound; // Cower and panic from the scary sound!
 
-		return slScientistCover;			// Run & Cower
+		return slScientistCover; // Run & Cower
 		break;
 	}
 
@@ -952,12 +942,11 @@ MONSTERSTATE CScientist::GetIdealState()
 		}
 		break;
 
-	case MONSTERSTATE_COMBAT:
-	{
+	case MONSTERSTATE_COMBAT: {
 		CBaseEntity* pEnemy = m_hEnemy;
 		if (pEnemy != NULL)
 		{
-			if (DisregardEnemy(pEnemy))		// After 15 seconds of being hidden, return to alert
+			if (DisregardEnemy(pEnemy)) // After 15 seconds of being hidden, return to alert
 			{
 				// Strip enemy when going to alert
 				m_IdealMonsterState = MONSTERSTATE_ALERT;
@@ -977,7 +966,6 @@ MONSTERSTATE CScientist::GetIdealState()
 				m_IdealMonsterState = MONSTERSTATE_COMBAT;
 				return m_IdealMonsterState;
 			}
-
 		}
 	}
 	break;
@@ -1025,10 +1013,10 @@ class CDeadScientist : public CBaseMonster
 {
 public:
 	void Spawn() override;
-	int	Classify() override { return	CLASS_HUMAN_PASSIVE; }
+	int Classify() override { return CLASS_HUMAN_PASSIVE; }
 
 	bool KeyValue(KeyValueData* pkvd) override;
-	int	m_iPose;// which sequence to display
+	int m_iPose; // which sequence to display
 	static const char* m_szPoses[7];
 };
 const char* CDeadScientist::m_szPoses[] = {"lying_on_back", "lying_on_stomach", "dead_sitting", "dead_hang", "dead_table1", "dead_table2", "dead_table3"};
@@ -1056,13 +1044,13 @@ void CDeadScientist::Spawn()
 	pev->effects = 0;
 	pev->sequence = 0;
 	// Corpses have less health
-	pev->health = 8;//gSkillData.scientistHealth;
+	pev->health = 8; //gSkillData.scientistHealth;
 
 	m_bloodColor = BLOOD_COLOR_RED;
 
 	if (pev->body == -1)
-	{// -1 chooses a random head
-		SetBodygroup(ScientistBodygroup::Head, RANDOM_LONG(0, GetBodygroupSubmodelCount(ScientistBodygroup::Head) - 1));// pick a head, any head
+	{																													 // -1 chooses a random head
+		SetBodygroup(ScientistBodygroup::Head, RANDOM_LONG(0, GetBodygroupSubmodelCount(ScientistBodygroup::Head) - 1)); // pick a head, any head
 	}
 	// Luther is black, make his hands black
 	if (GetBodygroup(ScientistBodygroup::Head) == HEAD_LUTHER)
@@ -1081,16 +1069,16 @@ void CDeadScientist::Spawn()
 }
 
 LINK_ENTITY_TO_CLASS(monster_sitting_scientist, CSittingScientist);
-TYPEDESCRIPTION	CSittingScientist::m_SaveData[] =
-{
-	// Don't need to save/restore m_baseSequence (recalced)
-	DEFINE_FIELD(CSittingScientist, m_headTurn, FIELD_INTEGER),
-	DEFINE_FIELD(CSittingScientist, m_flResponseDelay, FIELD_FLOAT),
+TYPEDESCRIPTION CSittingScientist::m_SaveData[] =
+	{
+		// Don't need to save/restore m_baseSequence (recalced)
+		DEFINE_FIELD(CSittingScientist, m_headTurn, FIELD_INTEGER),
+		DEFINE_FIELD(CSittingScientist, m_flResponseDelay, FIELD_FLOAT),
 };
 
 IMPLEMENT_SAVERESTORE(CSittingScientist, CScientist);
 
-// animation sequence aliases 
+// animation sequence aliases
 typedef enum
 {
 	SITTING_ANIM_sitlookleft,
@@ -1122,8 +1110,8 @@ void CSittingScientist::SpawnCore(const char* model)
 	SetBits(pev->spawnflags, SF_MONSTER_PREDISASTER); // predisaster only!
 
 	if (pev->body == -1)
-	{// -1 chooses a random head
-		SetBodygroup(ScientistBodygroup::Head, RANDOM_LONG(0, GetBodygroupSubmodelCount(ScientistBodygroup::Head) - 1));// pick a head, any head
+	{																													 // -1 chooses a random head
+		SetBodygroup(ScientistBodygroup::Head, RANDOM_LONG(0, GetBodygroupSubmodelCount(ScientistBodygroup::Head) - 1)); // pick a head, any head
 	}
 	// Luther is black, make his hands black
 	if (GetBodygroup(ScientistBodygroup::Head) == HEAD_LUTHER)
@@ -1156,9 +1144,9 @@ void CSittingScientist::Precache()
 //=========================================================
 // ID as a passive human
 //=========================================================
-int	CSittingScientist::Classify()
+int CSittingScientist::Classify()
 {
-	return	CLASS_HUMAN_PASSIVE;
+	return CLASS_HUMAN_PASSIVE;
 }
 
 int CSittingScientist::FriendNumber(int arrayNumber)
@@ -1186,8 +1174,10 @@ void CSittingScientist::SittingThink()
 		{
 			float yaw = VecToYaw(pent->pev->origin - pev->origin) - pev->angles.y;
 
-			if (yaw > 180) yaw -= 360;
-			if (yaw < -180) yaw += 360;
+			if (yaw > 180)
+				yaw -= 360;
+			if (yaw < -180)
+				yaw += 360;
 
 			if (yaw > 0)
 				pev->sequence = m_baseSequence + SITTING_ANIM_sitlookleft;
@@ -1232,8 +1222,10 @@ void CSittingScientist::SittingThink()
 				// only turn head if we spoke
 				float yaw = VecToYaw(pent->pev->origin - pev->origin) - pev->angles.y;
 
-				if (yaw > 180) yaw -= 360;
-				if (yaw < -180) yaw += 360;
+				if (yaw > 180)
+					yaw -= 360;
+				if (yaw < -180)
+					yaw += 360;
 
 				if (yaw > 0)
 					pev->sequence = m_baseSequence + SITTING_ANIM_sitlookleft;

@@ -36,26 +36,26 @@ public:
 	void EXPORT Recharge();
 	bool KeyValue(KeyValueData* pkvd) override;
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
-	int	ObjectCaps() override { return (CBaseToggle::ObjectCaps() | FCAP_CONTINUOUS_USE) & ~FCAP_ACROSS_TRANSITION; }
-	bool	Save(CSave& save) override;
-	bool	Restore(CRestore& restore) override;
+	int ObjectCaps() override { return (CBaseToggle::ObjectCaps() | FCAP_CONTINUOUS_USE) & ~FCAP_ACROSS_TRANSITION; }
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 
-	static	TYPEDESCRIPTION m_SaveData[];
+	static TYPEDESCRIPTION m_SaveData[];
 
 	float m_flNextCharge;
-	int		m_iReactivate; // DeathMatch Delay until reactvated
-	int		m_iJuice;
-	int		m_iOn;			// 0 = off, 1 = startup, 2 = going
-	float   m_flSoundTime;
+	int m_iReactivate; // DeathMatch Delay until reactvated
+	int m_iJuice;
+	int m_iOn; // 0 = off, 1 = startup, 2 = going
+	float m_flSoundTime;
 };
 
 TYPEDESCRIPTION CRecharge::m_SaveData[] =
-{
-	DEFINE_FIELD(CRecharge, m_flNextCharge, FIELD_TIME),
-	DEFINE_FIELD(CRecharge, m_iReactivate, FIELD_INTEGER),
-	DEFINE_FIELD(CRecharge, m_iJuice, FIELD_INTEGER),
-	DEFINE_FIELD(CRecharge, m_iOn, FIELD_INTEGER),
-	DEFINE_FIELD(CRecharge, m_flSoundTime, FIELD_TIME),
+	{
+		DEFINE_FIELD(CRecharge, m_flNextCharge, FIELD_TIME),
+		DEFINE_FIELD(CRecharge, m_iReactivate, FIELD_INTEGER),
+		DEFINE_FIELD(CRecharge, m_iJuice, FIELD_INTEGER),
+		DEFINE_FIELD(CRecharge, m_iOn, FIELD_INTEGER),
+		DEFINE_FIELD(CRecharge, m_flSoundTime, FIELD_TIME),
 };
 
 IMPLEMENT_SAVERESTORE(CRecharge, CBaseEntity);
@@ -89,7 +89,7 @@ void CRecharge::Spawn()
 	pev->solid = SOLID_BSP;
 	pev->movetype = MOVETYPE_PUSH;
 
-	UTIL_SetOrigin(pev, pev->origin);		// set size and link into world
+	UTIL_SetOrigin(pev, pev->origin); // set size and link into world
 	UTIL_SetSize(pev, pev->mins, pev->maxs);
 	SET_MODEL(ENT(pev), STRING(pev->model));
 	m_iJuice = gSkillData.suitchargerCapacity;

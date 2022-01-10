@@ -25,7 +25,6 @@
 class COFLoader : public CBaseMonster
 {
 public:
-
 	int Classify() override { return CLASS_PLAYER_ALLY; }
 
 	int ISoundMask() override { return bits_SOUND_NONE; }
@@ -62,8 +61,7 @@ void COFLoader::Spawn()
 
 	SET_MODEL(edict(), "models/loader.mdl");
 
-	if (FStrEq(STRING(pev->model), "models/player.mdl")
-		|| FStrEq(STRING(pev->model), "models/holo.mdl"))
+	if (FStrEq(STRING(pev->model), "models/player.mdl") || FStrEq(STRING(pev->model), "models/holo.mdl"))
 	{
 		UTIL_SetSize(pev, VEC_HULL_MIN, VEC_HULL_MAX);
 	}

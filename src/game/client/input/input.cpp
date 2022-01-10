@@ -40,7 +40,7 @@ int CL_ButtonBits(bool);
 // xxx need client dll function to get and clear impuse
 extern cvar_t* in_joystick;
 
-int	in_impulse = 0;
+int in_impulse = 0;
 bool in_cancel = false;
 
 cvar_t* m_pitch;
@@ -83,31 +83,31 @@ state bit 2 is edge triggered on the down to up transition
 */
 
 
-kbutton_t	in_mlook;
-kbutton_t	in_klook;
-kbutton_t	in_jlook;
-kbutton_t	in_left;
-kbutton_t	in_right;
-kbutton_t	in_forward;
-kbutton_t	in_back;
-kbutton_t	in_lookup;
-kbutton_t	in_lookdown;
-kbutton_t	in_moveleft;
-kbutton_t	in_moveright;
-kbutton_t	in_strafe;
-kbutton_t	in_speed;
-kbutton_t	in_use;
-kbutton_t	in_jump;
-kbutton_t	in_attack;
-kbutton_t	in_attack2;
-kbutton_t	in_up;
-kbutton_t	in_down;
-kbutton_t	in_duck;
-kbutton_t	in_reload;
-kbutton_t	in_alt1;
-kbutton_t	in_score;
-kbutton_t	in_break;
-kbutton_t	in_graph;  // Display the netgraph
+kbutton_t in_mlook;
+kbutton_t in_klook;
+kbutton_t in_jlook;
+kbutton_t in_left;
+kbutton_t in_right;
+kbutton_t in_forward;
+kbutton_t in_back;
+kbutton_t in_lookup;
+kbutton_t in_lookdown;
+kbutton_t in_moveleft;
+kbutton_t in_moveright;
+kbutton_t in_strafe;
+kbutton_t in_speed;
+kbutton_t in_use;
+kbutton_t in_jump;
+kbutton_t in_attack;
+kbutton_t in_attack2;
+kbutton_t in_up;
+kbutton_t in_down;
+kbutton_t in_duck;
+kbutton_t in_reload;
+kbutton_t in_alt1;
+kbutton_t in_score;
+kbutton_t in_break;
+kbutton_t in_graph; // Display the netgraph
 
 typedef struct kblist_s
 {
@@ -271,7 +271,7 @@ Clear kblist
 */
 void KB_Shutdown()
 {
-	kblist_t* p, * n;
+	kblist_t *p, *n;
 	p = g_kbkeys;
 	while (p)
 	{
@@ -289,17 +289,17 @@ KeyDown
 */
 void KeyDown(kbutton_t* b)
 {
-	int		k;
+	int k;
 	const char* c;
 
 	c = gEngfuncs.Cmd_Argv(1);
 	if ('\0' != c[0])
 		k = atoi(c);
 	else
-		k = -1;		// typed manually at the console for continuous down
+		k = -1; // typed manually at the console for continuous down
 
 	if (k == b->down[0] || k == b->down[1])
-		return;		// repeating key
+		return; // repeating key
 
 	if (0 == b->down[0])
 		b->down[0] = k;
@@ -312,8 +312,8 @@ void KeyDown(kbutton_t* b)
 	}
 
 	if ((b->state & 1) != 0)
-		return;		// still down
-	b->state |= 1 + 2;	// down + impulse down
+		return;		   // still down
+	b->state |= 1 + 2; // down + impulse down
 }
 
 /*
@@ -323,7 +323,7 @@ KeyUp
 */
 void KeyUp(kbutton_t* b)
 {
-	int		k;
+	int k;
 	const char* c;
 
 	c = gEngfuncs.Cmd_Argv(1);
@@ -332,7 +332,7 @@ void KeyUp(kbutton_t* b)
 	else
 	{ // typed manually at the console, assume for unsticking, so clear all
 		b->down[0] = b->down[1] = 0;
-		b->state = 4;	// impulse up
+		b->state = 4; // impulse up
 		return;
 	}
 
@@ -341,18 +341,18 @@ void KeyUp(kbutton_t* b)
 	else if (b->down[1] == k)
 		b->down[1] = 0;
 	else
-		return;		// key up without coresponding down (menu pass through)
+		return; // key up without coresponding down (menu pass through)
 	if (0 != b->down[0] || 0 != b->down[1])
 	{
 		//Con_Printf ("Keys down for button: '%c' '%c' '%c' (%d,%d,%d)!\n", b->down[0], b->down[1], c, b->down[0], b->down[1], c);
-		return;		// some other key is still holding it down
+		return; // some other key is still holding it down
 	}
 
 	if ((b->state & 1) == 0)
-		return;		// still up (this should not happen)
+		return; // still up (this should not happen)
 
-	b->state &= ~1;		// now up
-	b->state |= 4; 		// impulse up
+	b->state &= ~1; // now up
+	b->state |= 4;	// impulse up
 }
 
 /*
@@ -468,14 +468,12 @@ void IN_JumpDown()
 {
 	KeyDown(&in_jump);
 	gHUD.m_Spectator.HandleButtonsDown(IN_JUMP);
-
 }
 void IN_JumpUp() { KeyUp(&in_jump); }
 void IN_DuckDown()
 {
 	KeyDown(&in_duck);
 	gHUD.m_Spectator.HandleButtonsDown(IN_DUCK);
-
 }
 void IN_DuckUp() { KeyUp(&in_duck); }
 void IN_ReloadDown() { KeyDown(&in_reload); }
@@ -553,7 +551,7 @@ Returns 0.25 if a key was pressed and released during the frame,
 */
 float CL_KeyState(kbutton_t* key)
 {
-	float		val = 0.0;
+	float val = 0.0;
 
 	const bool impulsedown = (key->state & 2) != 0;
 	const bool impulseup = (key->state & 4) != 0;
@@ -605,8 +603,8 @@ Moves the local angle positions
 */
 void CL_AdjustAngles(float frametime, float* viewangles)
 {
-	float	speed;
-	float	up, down;
+	float speed;
+	float up, down;
 
 	if ((in_speed.state & 1) != 0)
 	{
@@ -1023,7 +1021,7 @@ void ShutdownInput()
 #include "interface.h"
 void CL_UnloadParticleMan();
 
-#if defined( _TFC )
+#if defined(_TFC)
 void ClearEventList();
 #endif
 
@@ -1033,7 +1031,7 @@ void DLLEXPORT HUD_Shutdown()
 
 	ShutdownInput();
 
-#if defined( _TFC )
+#if defined(_TFC)
 	ClearEventList();
 #endif
 

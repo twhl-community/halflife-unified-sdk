@@ -83,7 +83,7 @@ public:
 	*	If any JSON exceptions are thrown they will be logged.
 	*	@return An optional value that contains the result object if no errors occurred, empty otherwise
 	*/
-	template<typename Callable>
+	template <typename Callable>
 	auto ParseJSON(Callable callable, const json& input) -> std::optional<decltype(callable(input))>;
 
 	/**
@@ -96,7 +96,7 @@ public:
 	*	@see LoadJSONFile(const char*, const json_validator& validator const char*)
 	*	@see ParseJSON(Callable, const json&)
 	*/
-	template<typename Callable>
+	template <typename Callable>
 	auto ParseJSONFile(const char* fileName, const json_validator& validator, Callable callable, const char* pathID = nullptr)
 		-> std::optional<decltype(callable(json{}))>;
 
@@ -105,7 +105,7 @@ public:
 	*	@see LoadJSONFile(const char*, const char*)
 	*	@see ParseJSON(Callable, const json&)
 	*/
-	template<typename Callable>
+	template <typename Callable>
 	auto ParseJSONFile(const char* fileName, Callable callable, const char* pathID = nullptr) -> std::optional<decltype(callable(json{}))>;
 
 private:
@@ -127,7 +127,7 @@ private:
 	std::vector<SchemaData> m_Schemas;
 };
 
-template<typename Callable>
+template <typename Callable>
 inline auto JSONSystem::ParseJSON(Callable callable, const json& input) -> std::optional<decltype(callable(input))>
 {
 	if (!m_Logger)
@@ -166,9 +166,9 @@ inline std::optional<json> JSONSystem::ParseJSONSchema(std::string_view schema)
 	}
 }
 
-template<typename Callable>
+template <typename Callable>
 inline auto JSONSystem::ParseJSONFile(const char* fileName, const json_validator& validator, Callable callable, const char* pathID)
--> std::optional<decltype(callable(json{}))>
+	-> std::optional<decltype(callable(json{}))>
 {
 	if (auto data = LoadJSONFile(fileName, validator, pathID); data.has_value())
 	{
@@ -178,7 +178,7 @@ inline auto JSONSystem::ParseJSONFile(const char* fileName, const json_validator
 	return {};
 }
 
-template<typename Callable>
+template <typename Callable>
 inline auto JSONSystem::ParseJSONFile(const char* fileName, Callable callable, const char* pathID) -> std::optional<decltype(callable(json{}))>
 {
 	if (auto data = LoadJSONFile(fileName, pathID); data.has_value())

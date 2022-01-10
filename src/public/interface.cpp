@@ -11,7 +11,7 @@
 #include <dlfcn.h> // dlopen,dlclose, et al
 #include <unistd.h>
 
-#define HMODULE void *
+#define HMODULE void*
 #define GetProcAddress dlsym
 
 // Linux doesn't have this function so this emulates its functionality
@@ -32,7 +32,7 @@ void* GetModuleHandle(const char* name)
 	if ((handle = dlopen(name, RTLD_NOW)) == NULL)
 	{
 		//printf("Error:%s\n",dlerror());
-				// couldn't open this file
+		// couldn't open this file
 		return NULL;
 	}
 
@@ -50,8 +50,7 @@ void* GetModuleHandle(const char* name)
 InterfaceReg* InterfaceReg::s_pInterfaceRegs = NULL;
 
 
-InterfaceReg::InterfaceReg(InstantiateInterfaceFn fn, const char* pName) :
-	m_pName(pName)
+InterfaceReg::InterfaceReg(InstantiateInterfaceFn fn, const char* pName) : m_pName(pName)
 {
 	m_CreateFn = fn;
 	m_pNext = s_pInterfaceRegs;
@@ -115,7 +114,7 @@ static DLLHIDDEN IBaseInterface* CreateInterfaceLocal(const char* pName, int* pR
 // Input  : pModuleName - module name
 //			*pName - proc name
 //-----------------------------------------------------------------------------
-//static hlds_run wants to use this function 
+//static hlds_run wants to use this function
 static void* Sys_GetProcAddress(const char* pModuleName, const char* pName)
 {
 	return GetProcAddress(GetModuleHandle(pModuleName), pName);
@@ -126,7 +125,7 @@ static void* Sys_GetProcAddress(const char* pModuleName, const char* pName)
 // Input  : pModuleName - module name
 //			*pName - proc name
 //-----------------------------------------------------------------------------
-// hlds_run wants to use this function 
+// hlds_run wants to use this function
 void* Sys_GetProcAddress(void* pModuleHandle, const char* pName)
 {
 	return GetProcAddress((HMODULE)pModuleHandle, pName);
@@ -139,7 +138,7 @@ void* Sys_GetProcAddress(void* pModuleHandle, const char* pName)
 //-----------------------------------------------------------------------------
 CSysModule* Sys_LoadModule(const char* pModuleName)
 {
-#if defined ( WIN32 )
+#if defined(WIN32)
 	HMODULE hDLL = LoadLibrary(pModuleName);
 #else
 	HMODULE hDLL = NULL;
@@ -173,7 +172,7 @@ CSysModule* Sys_LoadModule(const char* pModuleName)
 	if (!hDLL)
 	{
 		char str[512];
-#if defined ( WIN32 )
+#if defined(WIN32)
 		snprintf(str, sizeof(str), "%s.dll", pModuleName);
 		hDLL = LoadLibrary(str);
 #elif defined(OSX)
@@ -200,18 +199,17 @@ void Sys_UnloadModule(CSysModule* pModule)
 	if (!pModule)
 		return;
 
-	HMODULE	hDLL = reinterpret_cast<HMODULE>(pModule);
-#if defined ( WIN32 )
+	HMODULE hDLL = reinterpret_cast<HMODULE>(pModule);
+#if defined(WIN32)
 	FreeLibrary(hDLL);
 #else
 	dlclose((void*)hDLL);
 #endif
-
 }
 
 //-----------------------------------------------------------------------------
 // Purpose: returns a pointer to a function, given a module
-// Input  : module - windows HMODULE from Sys_LoadModule() 
+// Input  : module - windows HMODULE from Sys_LoadModule()
 //			*pName - proc name
 // Output : factory for this module
 //-----------------------------------------------------------------------------
@@ -220,7 +218,7 @@ CreateInterfaceFn Sys_GetFactory(CSysModule* pModule)
 	if (!pModule)
 		return NULL;
 
-	HMODULE	hDLL = reinterpret_cast<HMODULE>(pModule);
+	HMODULE hDLL = reinterpret_cast<HMODULE>(pModule);
 
 	//This used to cause problems when compiling with GCC,
 	//but it is now allowed to convert between pointer-to-object to pointer-to-function

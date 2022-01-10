@@ -13,29 +13,29 @@
 *
 ****/
 //=========================================================
-// Houndeye - spooky sonic dog. 
+// Houndeye - spooky sonic dog.
 //=========================================================
 
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"monsters.h"
-#include	"schedule.h"
-#include	"animation.h"
-#include	"nodes.h"
-#include	"squadmonster.h"
-#include	"soundent.h"
-#include	"game.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
+#include "schedule.h"
+#include "animation.h"
+#include "nodes.h"
+#include "squadmonster.h"
+#include "soundent.h"
+#include "game.h"
 
-// houndeye does 20 points of damage spread over a sphere 384 units in diameter, and each additional 
+// houndeye does 20 points of damage spread over a sphere 384 units in diameter, and each additional
 // squad member increases the BASE damage by 110%, per the spec.
-#define HOUNDEYE_MAX_SQUAD_SIZE			4
-#define	HOUNDEYE_MAX_ATTACK_RADIUS		384
-#define	HOUNDEYE_SQUAD_BONUS			(float)1.1
+#define HOUNDEYE_MAX_SQUAD_SIZE 4
+#define HOUNDEYE_MAX_ATTACK_RADIUS 384
+#define HOUNDEYE_SQUAD_BONUS (float)1.1
 
 #define HOUNDEYE_EYE_FRAMES 4 // how many different switchable maps for the eye
 
-#define HOUNDEYE_SOUND_STARTLE_VOLUME	128 // how loud a sound has to be to badly scare a sleeping houndeye
+#define HOUNDEYE_SOUND_STARTLE_VOLUME 128 // how loud a sound has to be to badly scare a sleeping houndeye
 
 //=========================================================
 // monster-specific tasks
@@ -63,20 +63,20 @@ enum
 //=========================================================
 // Monster's Anim Events Go Here
 //=========================================================
-#define		HOUND_AE_WARN			1
-#define		HOUND_AE_STARTATTACK	2
-#define		HOUND_AE_THUMP			3
-#define		HOUND_AE_ANGERSOUND1	4
-#define		HOUND_AE_ANGERSOUND2	5
-#define		HOUND_AE_HOPBACK		6
-#define		HOUND_AE_CLOSE_EYE		7
+#define HOUND_AE_WARN 1
+#define HOUND_AE_STARTATTACK 2
+#define HOUND_AE_THUMP 3
+#define HOUND_AE_ANGERSOUND1 4
+#define HOUND_AE_ANGERSOUND2 5
+#define HOUND_AE_HOPBACK 6
+#define HOUND_AE_CLOSE_EYE 7
 
 class CHoundeye : public CSquadMonster
 {
 public:
 	void Spawn() override;
 	void Precache() override;
-	int  Classify() override;
+	int Classify() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 	void SetYawSpeed() override;
 	void WarmUpSound();
@@ -104,45 +104,45 @@ public:
 	static TYPEDESCRIPTION m_SaveData[];
 
 	int m_iSpriteTexture;
-	bool m_fAsleep;// some houndeyes sleep in idle mode if this is set, the houndeye is lying down
-	bool m_fDontBlink;// don't try to open/close eye if this bit is set!
-	Vector	m_vecPackCenter; // the center of the pack. The leader maintains this by averaging the origins of all pack members.
+	bool m_fAsleep;			// some houndeyes sleep in idle mode if this is set, the houndeye is lying down
+	bool m_fDontBlink;		// don't try to open/close eye if this bit is set!
+	Vector m_vecPackCenter; // the center of the pack. The leader maintains this by averaging the origins of all pack members.
 };
 LINK_ENTITY_TO_CLASS(monster_houndeye, CHoundeye);
 
-TYPEDESCRIPTION	CHoundeye::m_SaveData[] =
-{
-	DEFINE_FIELD(CHoundeye, m_iSpriteTexture, FIELD_INTEGER),
-	DEFINE_FIELD(CHoundeye, m_fAsleep, FIELD_BOOLEAN),
-	DEFINE_FIELD(CHoundeye, m_fDontBlink, FIELD_BOOLEAN),
-	DEFINE_FIELD(CHoundeye, m_vecPackCenter, FIELD_POSITION_VECTOR),
+TYPEDESCRIPTION CHoundeye::m_SaveData[] =
+	{
+		DEFINE_FIELD(CHoundeye, m_iSpriteTexture, FIELD_INTEGER),
+		DEFINE_FIELD(CHoundeye, m_fAsleep, FIELD_BOOLEAN),
+		DEFINE_FIELD(CHoundeye, m_fDontBlink, FIELD_BOOLEAN),
+		DEFINE_FIELD(CHoundeye, m_vecPackCenter, FIELD_POSITION_VECTOR),
 };
 
 IMPLEMENT_SAVERESTORE(CHoundeye, CSquadMonster);
 
 //=========================================================
-// Classify - indicates this monster's place in the 
+// Classify - indicates this monster's place in the
 // relationship table.
 //=========================================================
-int	CHoundeye::Classify()
+int CHoundeye::Classify()
 {
-	return	CLASS_ALIEN_MONSTER;
+	return CLASS_ALIEN_MONSTER;
 }
 
 //=========================================================
-//  FValidateHintType 
+//  FValidateHintType
 //=========================================================
 bool CHoundeye::FValidateHintType(short sHint)
 {
 	int i;
 
 	static short sHoundHints[] =
-	{
-		HINT_WORLD_MACHINERY,
-		HINT_WORLD_BLINKING_LIGHT,
-		HINT_WORLD_HUMAN_BLOOD,
-		HINT_WORLD_ALIEN_BLOOD,
-	};
+		{
+			HINT_WORLD_MACHINERY,
+			HINT_WORLD_BLINKING_LIGHT,
+			HINT_WORLD_HUMAN_BLOOD,
+			HINT_WORLD_ALIEN_BLOOD,
+		};
 
 	for (i = 0; i < ARRAYSIZE(sHoundHints); i++)
 	{
@@ -210,7 +210,7 @@ void CHoundeye::SetYawSpeed()
 
 	switch (m_Activity)
 	{
-	case ACT_CROUCHIDLE://sleeping!
+	case ACT_CROUCHIDLE: //sleeping!
 		ys = 0;
 		break;
 	case ACT_IDLE:
@@ -232,11 +232,11 @@ void CHoundeye::SetYawSpeed()
 }
 
 //=========================================================
-// SetActivity 
+// SetActivity
 //=========================================================
 void CHoundeye::SetActivity(Activity NewActivity)
 {
-	int	iSequence;
+	int iSequence;
 
 	if (NewActivity == m_Activity)
 		return;
@@ -254,8 +254,8 @@ void CHoundeye::SetActivity(Activity NewActivity)
 		// Set to the desired anim, or default anim if the desired is not present
 		if (iSequence > ACTIVITY_NOT_AVAILABLE)
 		{
-			pev->sequence = iSequence;	// Set to the reset anim (if it's there)
-			pev->frame = 0;		// FIX: frame counter shouldn't be reset when its the same activity as before
+			pev->sequence = iSequence; // Set to the reset anim (if it's there)
+			pev->frame = 0;			   // FIX: frame counter shouldn't be reset when its the same activity as before
 			ResetSequenceInfo();
 			SetYawSpeed();
 		}
@@ -283,8 +283,7 @@ void CHoundeye::HandleAnimEvent(MonsterEvent_t* pEvent)
 		WarmUpSound();
 		break;
 
-	case HOUND_AE_HOPBACK:
-	{
+	case HOUND_AE_HOPBACK: {
 		float flGravity = g_psv_gravity->value;
 
 		pev->flags &= ~FL_ONGROUND;
@@ -336,8 +335,8 @@ void CHoundeye::Spawn()
 	m_bloodColor = BLOOD_COLOR_YELLOW;
 	pev->effects = 0;
 	pev->health = gSkillData.houndeyeHealth;
-	pev->yaw_speed = 5;//!!! should we put this in the monster's changeanim function since turn rates may vary with state/anim?
-	m_flFieldOfView = 0.5;// indicates the width of this monster's forward view cone ( as a dotproduct result )
+	pev->yaw_speed = 5;	   //!!! should we put this in the monster's changeanim function since turn rates may vary with state/anim?
+	m_flFieldOfView = 0.5; // indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
 	m_fAsleep = false; // everyone spawns awake
 	m_fDontBlink = false;
@@ -420,7 +419,7 @@ void CHoundeye::WarmUpSound()
 }
 
 //=========================================================
-// WarnSound 
+// WarnSound
 //=========================================================
 void CHoundeye::WarnSound()
 {
@@ -439,7 +438,7 @@ void CHoundeye::WarnSound()
 }
 
 //=========================================================
-// AlertSound 
+// AlertSound
 //=========================================================
 void CHoundeye::AlertSound()
 {
@@ -464,7 +463,7 @@ void CHoundeye::AlertSound()
 }
 
 //=========================================================
-// DeathSound 
+// DeathSound
 //=========================================================
 void CHoundeye::DeathSound()
 {
@@ -483,7 +482,7 @@ void CHoundeye::DeathSound()
 }
 
 //=========================================================
-// PainSound 
+// PainSound
 //=========================================================
 void CHoundeye::PainSound()
 {
@@ -502,12 +501,12 @@ void CHoundeye::PainSound()
 }
 
 //=========================================================
-// WriteBeamColor - writes a color vector to the network 
-// based on the size of the group. 
+// WriteBeamColor - writes a color vector to the network
+// based on the size of the group.
 //=========================================================
 void CHoundeye::WriteBeamColor()
 {
-	byte	bRed, bGreen, bBlue;
+	byte bRed, bGreen, bBlue;
 
 	if (InSquad())
 	{
@@ -556,14 +555,20 @@ void CHoundeye::WriteBeamColor()
 //=========================================================
 void CHoundeye::SonicAttack()
 {
-	float		flAdjustedDamage;
-	float		flDist;
+	float flAdjustedDamage;
+	float flDist;
 
 	switch (RANDOM_LONG(0, 2))
 	{
-	case 0:	EMIT_SOUND(ENT(pev), CHAN_WEAPON, "houndeye/he_blast1.wav", 1, ATTN_NORM);	break;
-	case 1:	EMIT_SOUND(ENT(pev), CHAN_WEAPON, "houndeye/he_blast2.wav", 1, ATTN_NORM);	break;
-	case 2:	EMIT_SOUND(ENT(pev), CHAN_WEAPON, "houndeye/he_blast3.wav", 1, ATTN_NORM);	break;
+	case 0:
+		EMIT_SOUND(ENT(pev), CHAN_WEAPON, "houndeye/he_blast1.wav", 1, ATTN_NORM);
+		break;
+	case 1:
+		EMIT_SOUND(ENT(pev), CHAN_WEAPON, "houndeye/he_blast2.wav", 1, ATTN_NORM);
+		break;
+	case 2:
+		EMIT_SOUND(ENT(pev), CHAN_WEAPON, "houndeye/he_blast3.wav", 1, ATTN_NORM);
+		break;
 	}
 
 	// blast circles
@@ -576,16 +581,16 @@ void CHoundeye::SonicAttack()
 	WRITE_COORD(pev->origin.y);
 	WRITE_COORD(pev->origin.z + 16 + HOUNDEYE_MAX_ATTACK_RADIUS / .2); // reach damage radius over .3 seconds
 	WRITE_SHORT(m_iSpriteTexture);
-	WRITE_BYTE(0); // startframe
-	WRITE_BYTE(0); // framerate
-	WRITE_BYTE(2); // life
-	WRITE_BYTE(16);  // width
-	WRITE_BYTE(0);   // noise
+	WRITE_BYTE(0);	// startframe
+	WRITE_BYTE(0);	// framerate
+	WRITE_BYTE(2);	// life
+	WRITE_BYTE(16); // width
+	WRITE_BYTE(0);	// noise
 
 	WriteBeamColor();
 
 	WRITE_BYTE(255); //brightness
-	WRITE_BYTE(0);		// speed
+	WRITE_BYTE(0);	 // speed
 	MESSAGE_END();
 
 	MESSAGE_BEGIN(MSG_PAS, SVC_TEMPENTITY, pev->origin);
@@ -597,16 +602,16 @@ void CHoundeye::SonicAttack()
 	WRITE_COORD(pev->origin.y);
 	WRITE_COORD(pev->origin.z + 16 + (HOUNDEYE_MAX_ATTACK_RADIUS / 2) / .2); // reach damage radius over .3 seconds
 	WRITE_SHORT(m_iSpriteTexture);
-	WRITE_BYTE(0); // startframe
-	WRITE_BYTE(0); // framerate
-	WRITE_BYTE(2); // life
-	WRITE_BYTE(16);  // width
-	WRITE_BYTE(0);   // noise
+	WRITE_BYTE(0);	// startframe
+	WRITE_BYTE(0);	// framerate
+	WRITE_BYTE(2);	// life
+	WRITE_BYTE(16); // width
+	WRITE_BYTE(0);	// noise
 
 	WriteBeamColor();
 
 	WRITE_BYTE(255); //brightness
-	WRITE_BYTE(0);		// speed
+	WRITE_BYTE(0);	 // speed
 	MESSAGE_END();
 
 
@@ -617,7 +622,7 @@ void CHoundeye::SonicAttack()
 		if (pEntity->pev->takedamage != DAMAGE_NO)
 		{
 			if (!FClassnameIs(pEntity->pev, "monster_houndeye"))
-			{// houndeyes don't hurt other houndeyes with their attack
+			{ // houndeyes don't hurt other houndeyes with their attack
 
 				// houndeyes do FULL damage if the ent in question is visible. Half damage otherwise.
 				// This means that you must get out of the houndeye's attack range entirely to avoid damage.
@@ -642,7 +647,7 @@ void CHoundeye::SonicAttack()
 				{
 					if (pEntity->IsPlayer())
 					{
-						// if this entity is a client, and is not in full view, inflict half damage. We do this so that players still 
+						// if this entity is a client, and is not in full view, inflict half damage. We do this so that players still
 						// take the residual damage if they don't totally leave the houndeye's effective radius. We restrict it to clients
 						// so that monsters in other parts of the level don't take the damage and get pissed.
 						flAdjustedDamage *= 0.5;
@@ -674,42 +679,35 @@ void CHoundeye::StartTask(Task_t* pTask)
 
 	switch (pTask->iTask)
 	{
-	case TASK_HOUND_FALL_ASLEEP:
-	{
+	case TASK_HOUND_FALL_ASLEEP: {
 		m_fAsleep = true; // signal that hound is lying down (must stand again before doing anything else!)
 		m_iTaskStatus = TASKSTATUS_COMPLETE;
 		break;
 	}
-	case TASK_HOUND_WAKE_UP:
-	{
+	case TASK_HOUND_WAKE_UP: {
 		m_fAsleep = false; // signal that hound is standing again
 		m_iTaskStatus = TASKSTATUS_COMPLETE;
 		break;
 	}
-	case TASK_HOUND_OPEN_EYE:
-	{
+	case TASK_HOUND_OPEN_EYE: {
 		m_fDontBlink = false; // turn blinking back on and that code will automatically open the eye
 		m_iTaskStatus = TASKSTATUS_COMPLETE;
 		break;
 	}
-	case TASK_HOUND_CLOSE_EYE:
-	{
+	case TASK_HOUND_CLOSE_EYE: {
 		pev->skin = 0;
 		m_fDontBlink = true; // tell blink code to leave the eye alone.
 		break;
 	}
-	case TASK_HOUND_THREAT_DISPLAY:
-	{
+	case TASK_HOUND_THREAT_DISPLAY: {
 		m_IdealActivity = ACT_IDLE_ANGRY;
 		break;
 	}
-	case TASK_HOUND_HOP_BACK:
-	{
+	case TASK_HOUND_HOP_BACK: {
 		m_IdealActivity = ACT_LEAP;
 		break;
 	}
-	case TASK_RANGE_ATTACK1:
-	{
+	case TASK_RANGE_ATTACK1: {
 		m_IdealActivity = ACT_RANGE_ATTACK1;
 
 		/*
@@ -749,18 +747,15 @@ void CHoundeye::StartTask(Task_t* pTask)
 
 		break;
 	}
-	case TASK_SPECIAL_ATTACK1:
-	{
+	case TASK_SPECIAL_ATTACK1: {
 		m_IdealActivity = ACT_SPECIAL_ATTACK1;
 		break;
 	}
-	case TASK_GUARD:
-	{
+	case TASK_GUARD: {
 		m_IdealActivity = ACT_GUARD;
 		break;
 	}
-	default:
-	{
+	default: {
 		CSquadMonster::StartTask(pTask);
 		break;
 	}
@@ -768,14 +763,13 @@ void CHoundeye::StartTask(Task_t* pTask)
 }
 
 //=========================================================
-// RunTask 
+// RunTask
 //=========================================================
 void CHoundeye::RunTask(Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
-	case TASK_HOUND_THREAT_DISPLAY:
-	{
+	case TASK_HOUND_THREAT_DISPLAY: {
 		MakeIdealYaw(m_vecEnemyLKP);
 		ChangeYaw(pev->yaw_speed);
 
@@ -786,24 +780,21 @@ void CHoundeye::RunTask(Task_t* pTask)
 
 		break;
 	}
-	case TASK_HOUND_CLOSE_EYE:
-	{
+	case TASK_HOUND_CLOSE_EYE: {
 		if (pev->skin < HOUNDEYE_EYE_FRAMES - 1)
 		{
 			pev->skin++;
 		}
 		break;
 	}
-	case TASK_HOUND_HOP_BACK:
-	{
+	case TASK_HOUND_HOP_BACK: {
 		if (m_fSequenceFinished)
 		{
 			TaskComplete();
 		}
 		break;
 	}
-	case TASK_SPECIAL_ATTACK1:
-	{
+	case TASK_SPECIAL_ATTACK1: {
 		pev->skin = RANDOM_LONG(0, HOUNDEYE_EYE_FRAMES - 1);
 
 		MakeIdealYaw(m_vecEnemyLKP);
@@ -811,16 +802,17 @@ void CHoundeye::RunTask(Task_t* pTask)
 
 		float life;
 		life = ((255 - pev->frame) / (pev->framerate * m_flFrameRate));
-		if (life < 0.1) life = 0.1;
+		if (life < 0.1)
+			life = 0.1;
 
 		MESSAGE_BEGIN(MSG_PAS, SVC_TEMPENTITY, pev->origin);
 		WRITE_BYTE(TE_IMPLOSION);
 		WRITE_COORD(pev->origin.x);
 		WRITE_COORD(pev->origin.y);
 		WRITE_COORD(pev->origin.z + 16);
-		WRITE_BYTE(50 * life + 100);  // radius
+		WRITE_BYTE(50 * life + 100);   // radius
 		WRITE_BYTE(pev->frame / 25.0); // count
-		WRITE_BYTE(life * 10); // life
+		WRITE_BYTE(life * 10);		   // life
 		MESSAGE_END();
 
 		if (m_fSequenceFinished)
@@ -831,8 +823,7 @@ void CHoundeye::RunTask(Task_t* pTask)
 
 		break;
 	}
-	default:
-	{
+	default: {
 		CSquadMonster::RunTask(pTask);
 		break;
 	}
@@ -854,11 +845,11 @@ void CHoundeye::PrescheduleThink()
 	if (!m_fDontBlink)
 	{
 		if ((pev->skin == 0) && RANDOM_LONG(0, 0x7F) == 0)
-		{// start blinking!
+		{ // start blinking!
 			pev->skin = HOUNDEYE_EYE_FRAMES - 1;
 		}
 		else if (pev->skin != 0)
-		{// already blinking
+		{ // already blinking
 			pev->skin--;
 		}
 	}
@@ -887,264 +878,241 @@ void CHoundeye::PrescheduleThink()
 //=========================================================
 // AI Schedules Specific to this monster
 //=========================================================
-Task_t	tlHoundGuardPack[] =
-{
-	{ TASK_STOP_MOVING,			(float)0		},
-	{ TASK_GUARD,				(float)0		},
+Task_t tlHoundGuardPack[] =
+	{
+		{TASK_STOP_MOVING, (float)0},
+		{TASK_GUARD, (float)0},
 };
 
-Schedule_t	slHoundGuardPack[] =
-{
+Schedule_t slHoundGuardPack[] =
 	{
-		tlHoundGuardPack,
-		ARRAYSIZE(tlHoundGuardPack),
-		bits_COND_SEE_HATE |
-		bits_COND_LIGHT_DAMAGE |
-		bits_COND_HEAVY_DAMAGE |
-		bits_COND_PROVOKED |
-		bits_COND_HEAR_SOUND,
+		{tlHoundGuardPack,
+			ARRAYSIZE(tlHoundGuardPack),
+			bits_COND_SEE_HATE |
+				bits_COND_LIGHT_DAMAGE |
+				bits_COND_HEAVY_DAMAGE |
+				bits_COND_PROVOKED |
+				bits_COND_HEAR_SOUND,
 
-		bits_SOUND_COMBAT |// sound flags
-		bits_SOUND_WORLD |
-		bits_SOUND_MEAT |
-		bits_SOUND_PLAYER,
-		"GuardPack"
-	},
+			bits_SOUND_COMBAT | // sound flags
+				bits_SOUND_WORLD |
+				bits_SOUND_MEAT |
+				bits_SOUND_PLAYER,
+			"GuardPack"},
 };
 
 // primary range attack
-Task_t	tlHoundYell1[] =
-{
-	{ TASK_STOP_MOVING,			(float)0					},
-	{ TASK_FACE_IDEAL,			(float)0					},
-	{ TASK_RANGE_ATTACK1,		(float)0					},
-	{ TASK_SET_SCHEDULE,		(float)SCHED_HOUND_AGITATED	},
+Task_t tlHoundYell1[] =
+	{
+		{TASK_STOP_MOVING, (float)0},
+		{TASK_FACE_IDEAL, (float)0},
+		{TASK_RANGE_ATTACK1, (float)0},
+		{TASK_SET_SCHEDULE, (float)SCHED_HOUND_AGITATED},
 };
 
-Task_t	tlHoundYell2[] =
-{
-	{ TASK_STOP_MOVING,			(float)0					},
-	{ TASK_FACE_IDEAL,			(float)0					},
-	{ TASK_RANGE_ATTACK1,		(float)0					},
+Task_t tlHoundYell2[] =
+	{
+		{TASK_STOP_MOVING, (float)0},
+		{TASK_FACE_IDEAL, (float)0},
+		{TASK_RANGE_ATTACK1, (float)0},
 };
 
-Schedule_t	slHoundRangeAttack[] =
-{
+Schedule_t slHoundRangeAttack[] =
 	{
-		tlHoundYell1,
-		ARRAYSIZE(tlHoundYell1),
-		bits_COND_LIGHT_DAMAGE |
-		bits_COND_HEAVY_DAMAGE,
-		0,
-		"HoundRangeAttack1"
-	},
-	{
-		tlHoundYell2,
-		ARRAYSIZE(tlHoundYell2),
-		bits_COND_LIGHT_DAMAGE |
-		bits_COND_HEAVY_DAMAGE,
-		0,
-		"HoundRangeAttack2"
-	},
+		{tlHoundYell1,
+			ARRAYSIZE(tlHoundYell1),
+			bits_COND_LIGHT_DAMAGE |
+				bits_COND_HEAVY_DAMAGE,
+			0,
+			"HoundRangeAttack1"},
+		{tlHoundYell2,
+			ARRAYSIZE(tlHoundYell2),
+			bits_COND_LIGHT_DAMAGE |
+				bits_COND_HEAVY_DAMAGE,
+			0,
+			"HoundRangeAttack2"},
 };
 
 // lie down and fall asleep
-Task_t	tlHoundSleep[] =
-{
-	{ TASK_STOP_MOVING,			(float)0		},
-	{ TASK_SET_ACTIVITY,		(float)ACT_IDLE			},
-	{ TASK_WAIT_RANDOM,			(float)5				},
-	{ TASK_PLAY_SEQUENCE,		(float)ACT_CROUCH		},
-	{ TASK_SET_ACTIVITY,		(float)ACT_CROUCHIDLE	},
-	{ TASK_HOUND_FALL_ASLEEP,	(float)0				},
-	{ TASK_WAIT_RANDOM,			(float)25				},
-	{ TASK_HOUND_CLOSE_EYE,		(float)0				},
-	//{ TASK_WAIT,				(float)10				},
-	//{ TASK_WAIT_RANDOM,			(float)10				},
+Task_t tlHoundSleep[] =
+	{
+		{TASK_STOP_MOVING, (float)0},
+		{TASK_SET_ACTIVITY, (float)ACT_IDLE},
+		{TASK_WAIT_RANDOM, (float)5},
+		{TASK_PLAY_SEQUENCE, (float)ACT_CROUCH},
+		{TASK_SET_ACTIVITY, (float)ACT_CROUCHIDLE},
+		{TASK_HOUND_FALL_ASLEEP, (float)0},
+		{TASK_WAIT_RANDOM, (float)25},
+		{TASK_HOUND_CLOSE_EYE, (float)0},
+		//{ TASK_WAIT,				(float)10				},
+		//{ TASK_WAIT_RANDOM,			(float)10				},
 };
 
-Schedule_t	slHoundSleep[] =
-{
+Schedule_t slHoundSleep[] =
 	{
-		tlHoundSleep,
-		ARRAYSIZE(tlHoundSleep),
-		bits_COND_HEAR_SOUND |
-		bits_COND_LIGHT_DAMAGE |
-		bits_COND_HEAVY_DAMAGE |
-		bits_COND_NEW_ENEMY,
+		{tlHoundSleep,
+			ARRAYSIZE(tlHoundSleep),
+			bits_COND_HEAR_SOUND |
+				bits_COND_LIGHT_DAMAGE |
+				bits_COND_HEAVY_DAMAGE |
+				bits_COND_NEW_ENEMY,
 
-		bits_SOUND_COMBAT |
-		bits_SOUND_PLAYER |
-		bits_SOUND_WORLD,
-		"Hound Sleep"
-	},
+			bits_SOUND_COMBAT |
+				bits_SOUND_PLAYER |
+				bits_SOUND_WORLD,
+			"Hound Sleep"},
 };
 
 // wake and stand up lazily
-Task_t	tlHoundWakeLazy[] =
-{
-	{ TASK_STOP_MOVING,			(float)0			},
-	{ TASK_HOUND_OPEN_EYE,		(float)0			},
-	{ TASK_WAIT_RANDOM,			(float)2.5			},
-	{ TASK_PLAY_SEQUENCE,		(float)ACT_STAND	},
-	{ TASK_HOUND_WAKE_UP,		(float)0			},
+Task_t tlHoundWakeLazy[] =
+	{
+		{TASK_STOP_MOVING, (float)0},
+		{TASK_HOUND_OPEN_EYE, (float)0},
+		{TASK_WAIT_RANDOM, (float)2.5},
+		{TASK_PLAY_SEQUENCE, (float)ACT_STAND},
+		{TASK_HOUND_WAKE_UP, (float)0},
 };
 
-Schedule_t	slHoundWakeLazy[] =
-{
+Schedule_t slHoundWakeLazy[] =
 	{
-		tlHoundWakeLazy,
-		ARRAYSIZE(tlHoundWakeLazy),
-		0,
-		0,
-		"WakeLazy"
-	},
+		{tlHoundWakeLazy,
+			ARRAYSIZE(tlHoundWakeLazy),
+			0,
+			0,
+			"WakeLazy"},
 };
 
 // wake and stand up with great urgency!
-Task_t	tlHoundWakeUrgent[] =
-{
-	{ TASK_HOUND_OPEN_EYE,		(float)0			},
-	{ TASK_PLAY_SEQUENCE,		(float)ACT_HOP		},
-	{ TASK_FACE_IDEAL,			(float)0			},
-	{ TASK_HOUND_WAKE_UP,		(float)0			},
-};
-
-Schedule_t	slHoundWakeUrgent[] =
-{
+Task_t tlHoundWakeUrgent[] =
 	{
-		tlHoundWakeUrgent,
-		ARRAYSIZE(tlHoundWakeUrgent),
-		0,
-		0,
-		"WakeUrgent"
-	},
+		{TASK_HOUND_OPEN_EYE, (float)0},
+		{TASK_PLAY_SEQUENCE, (float)ACT_HOP},
+		{TASK_FACE_IDEAL, (float)0},
+		{TASK_HOUND_WAKE_UP, (float)0},
 };
 
-
-Task_t	tlHoundSpecialAttack1[] =
-{
-	{ TASK_STOP_MOVING,			0				},
-	{ TASK_FACE_IDEAL,			(float)0		},
-	{ TASK_SPECIAL_ATTACK1,		(float)0		},
-	{ TASK_PLAY_SEQUENCE,		(float)ACT_IDLE_ANGRY },
-};
-
-Schedule_t	slHoundSpecialAttack1[] =
-{
+Schedule_t slHoundWakeUrgent[] =
 	{
-		tlHoundSpecialAttack1,
-		ARRAYSIZE(tlHoundSpecialAttack1),
-		bits_COND_NEW_ENEMY |
-		bits_COND_LIGHT_DAMAGE |
-		bits_COND_HEAVY_DAMAGE |
-		bits_COND_ENEMY_OCCLUDED,
-
-		0,
-		"Hound Special Attack1"
-	},
+		{tlHoundWakeUrgent,
+			ARRAYSIZE(tlHoundWakeUrgent),
+			0,
+			0,
+			"WakeUrgent"},
 };
 
-Task_t	tlHoundAgitated[] =
-{
-	{ TASK_STOP_MOVING,				0		},
-	{ TASK_HOUND_THREAT_DISPLAY,	0		},
-};
 
-Schedule_t	slHoundAgitated[] =
-{
+Task_t tlHoundSpecialAttack1[] =
 	{
-		tlHoundAgitated,
-		ARRAYSIZE(tlHoundAgitated),
-		bits_COND_NEW_ENEMY |
-		bits_COND_LIGHT_DAMAGE |
-		bits_COND_HEAVY_DAMAGE,
-		0,
-		"Hound Agitated"
-	},
+		{TASK_STOP_MOVING, 0},
+		{TASK_FACE_IDEAL, (float)0},
+		{TASK_SPECIAL_ATTACK1, (float)0},
+		{TASK_PLAY_SEQUENCE, (float)ACT_IDLE_ANGRY},
 };
 
-Task_t	tlHoundHopRetreat[] =
-{
-	{ TASK_STOP_MOVING,				0											},
-	{ TASK_HOUND_HOP_BACK,			0											},
-	{ TASK_SET_SCHEDULE,			(float)SCHED_TAKE_COVER_FROM_ENEMY	},
-};
-
-Schedule_t	slHoundHopRetreat[] =
-{
+Schedule_t slHoundSpecialAttack1[] =
 	{
-		tlHoundHopRetreat,
-		ARRAYSIZE(tlHoundHopRetreat),
-		0,
-		0,
-		"Hound Hop Retreat"
-	},
+		{tlHoundSpecialAttack1,
+			ARRAYSIZE(tlHoundSpecialAttack1),
+			bits_COND_NEW_ENEMY |
+				bits_COND_LIGHT_DAMAGE |
+				bits_COND_HEAVY_DAMAGE |
+				bits_COND_ENEMY_OCCLUDED,
+
+			0,
+			"Hound Special Attack1"},
+};
+
+Task_t tlHoundAgitated[] =
+	{
+		{TASK_STOP_MOVING, 0},
+		{TASK_HOUND_THREAT_DISPLAY, 0},
+};
+
+Schedule_t slHoundAgitated[] =
+	{
+		{tlHoundAgitated,
+			ARRAYSIZE(tlHoundAgitated),
+			bits_COND_NEW_ENEMY |
+				bits_COND_LIGHT_DAMAGE |
+				bits_COND_HEAVY_DAMAGE,
+			0,
+			"Hound Agitated"},
+};
+
+Task_t tlHoundHopRetreat[] =
+	{
+		{TASK_STOP_MOVING, 0},
+		{TASK_HOUND_HOP_BACK, 0},
+		{TASK_SET_SCHEDULE, (float)SCHED_TAKE_COVER_FROM_ENEMY},
+};
+
+Schedule_t slHoundHopRetreat[] =
+	{
+		{tlHoundHopRetreat,
+			ARRAYSIZE(tlHoundHopRetreat),
+			0,
+			0,
+			"Hound Hop Retreat"},
 };
 
 // hound fails in combat with client in the PVS
-Task_t	tlHoundCombatFailPVS[] =
-{
-	{ TASK_STOP_MOVING,				0			},
-	{ TASK_HOUND_THREAT_DISPLAY,	0			},
-	{ TASK_WAIT_FACE_ENEMY,			(float)1	},
+Task_t tlHoundCombatFailPVS[] =
+	{
+		{TASK_STOP_MOVING, 0},
+		{TASK_HOUND_THREAT_DISPLAY, 0},
+		{TASK_WAIT_FACE_ENEMY, (float)1},
 };
 
-Schedule_t	slHoundCombatFailPVS[] =
-{
+Schedule_t slHoundCombatFailPVS[] =
 	{
-		tlHoundCombatFailPVS,
-		ARRAYSIZE(tlHoundCombatFailPVS),
-		bits_COND_NEW_ENEMY |
-		bits_COND_LIGHT_DAMAGE |
-		bits_COND_HEAVY_DAMAGE,
-		0,
-		"HoundCombatFailPVS"
-	},
+		{tlHoundCombatFailPVS,
+			ARRAYSIZE(tlHoundCombatFailPVS),
+			bits_COND_NEW_ENEMY |
+				bits_COND_LIGHT_DAMAGE |
+				bits_COND_HEAVY_DAMAGE,
+			0,
+			"HoundCombatFailPVS"},
 };
 
 // hound fails in combat with no client in the PVS. Don't keep peeping!
-Task_t	tlHoundCombatFailNoPVS[] =
-{
-	{ TASK_STOP_MOVING,				0				},
-	{ TASK_HOUND_THREAT_DISPLAY,	0				},
-	{ TASK_WAIT_FACE_ENEMY,			(float)2		},
-	{ TASK_SET_ACTIVITY,			(float)ACT_IDLE	},
-	{ TASK_WAIT_PVS,				0				},
-};
-
-Schedule_t	slHoundCombatFailNoPVS[] =
-{
+Task_t tlHoundCombatFailNoPVS[] =
 	{
-		tlHoundCombatFailNoPVS,
-		ARRAYSIZE(tlHoundCombatFailNoPVS),
-		bits_COND_NEW_ENEMY |
-		bits_COND_LIGHT_DAMAGE |
-		bits_COND_HEAVY_DAMAGE,
-		0,
-		"HoundCombatFailNoPVS"
-	},
+		{TASK_STOP_MOVING, 0},
+		{TASK_HOUND_THREAT_DISPLAY, 0},
+		{TASK_WAIT_FACE_ENEMY, (float)2},
+		{TASK_SET_ACTIVITY, (float)ACT_IDLE},
+		{TASK_WAIT_PVS, 0},
 };
 
-DEFINE_CUSTOM_SCHEDULES(CHoundeye)
-{
+Schedule_t slHoundCombatFailNoPVS[] =
+	{
+		{tlHoundCombatFailNoPVS,
+			ARRAYSIZE(tlHoundCombatFailNoPVS),
+			bits_COND_NEW_ENEMY |
+				bits_COND_LIGHT_DAMAGE |
+				bits_COND_HEAVY_DAMAGE,
+			0,
+			"HoundCombatFailNoPVS"},
+};
+
+DEFINE_CUSTOM_SCHEDULES(CHoundeye){
 	slHoundGuardPack,
-		slHoundRangeAttack,
-		& slHoundRangeAttack[1],
-		slHoundSleep,
-		slHoundWakeLazy,
-		slHoundWakeUrgent,
-		slHoundSpecialAttack1,
-		slHoundAgitated,
-		slHoundHopRetreat,
-		slHoundCombatFailPVS,
-		slHoundCombatFailNoPVS,
+	slHoundRangeAttack,
+	&slHoundRangeAttack[1],
+	slHoundSleep,
+	slHoundWakeLazy,
+	slHoundWakeUrgent,
+	slHoundSpecialAttack1,
+	slHoundAgitated,
+	slHoundHopRetreat,
+	slHoundCombatFailPVS,
+	slHoundCombatFailNoPVS,
 };
 
 IMPLEMENT_CUSTOM_SCHEDULES(CHoundeye, CSquadMonster);
 
 //=========================================================
-// GetScheduleOfType 
+// GetScheduleOfType
 //=========================================================
 Schedule_t* CHoundeye::GetScheduleOfType(int Type)
 {
@@ -1184,8 +1152,7 @@ Schedule_t* CHoundeye::GetScheduleOfType(int Type)
 	}
 	switch (Type)
 	{
-	case SCHED_IDLE_STAND:
-	{
+	case SCHED_IDLE_STAND: {
 		// we may want to sleep instead of stand!
 		if (InSquad() && !IsLeader() && !m_fAsleep && RANDOM_LONG(0, 29) < 1)
 		{
@@ -1196,8 +1163,7 @@ Schedule_t* CHoundeye::GetScheduleOfType(int Type)
 			return CSquadMonster::GetScheduleOfType(Type);
 		}
 	}
-	case SCHED_RANGE_ATTACK1:
-	{
+	case SCHED_RANGE_ATTACK1: {
 		return &slHoundRangeAttack[0];
 		/*
 					if ( InSquad() )
@@ -1208,24 +1174,19 @@ Schedule_t* CHoundeye::GetScheduleOfType(int Type)
 					return &slHoundRangeAttack[ 1 ];
 		*/
 	}
-	case SCHED_SPECIAL_ATTACK1:
-	{
+	case SCHED_SPECIAL_ATTACK1: {
 		return &slHoundSpecialAttack1[0];
 	}
-	case SCHED_GUARD:
-	{
+	case SCHED_GUARD: {
 		return &slHoundGuardPack[0];
 	}
-	case SCHED_HOUND_AGITATED:
-	{
+	case SCHED_HOUND_AGITATED: {
 		return &slHoundAgitated[0];
 	}
-	case SCHED_HOUND_HOP_RETREAT:
-	{
+	case SCHED_HOUND_HOP_RETREAT: {
 		return &slHoundHopRetreat[0];
 	}
-	case SCHED_FAIL:
-	{
+	case SCHED_FAIL: {
 		if (m_MonsterState == MONSTERSTATE_COMBAT)
 		{
 			if (!FNullEnt(FIND_CLIENT_IN_PVS(edict())))
@@ -1235,7 +1196,7 @@ Schedule_t* CHoundeye::GetScheduleOfType(int Type)
 			}
 			else
 			{
-				// client has taken off! 
+				// client has taken off!
 				return &slHoundCombatFailNoPVS[0];
 			}
 		}
@@ -1244,22 +1205,20 @@ Schedule_t* CHoundeye::GetScheduleOfType(int Type)
 			return CSquadMonster::GetScheduleOfType(Type);
 		}
 	}
-	default:
-	{
+	default: {
 		return CSquadMonster::GetScheduleOfType(Type);
 	}
 	}
 }
 
 //=========================================================
-// GetSchedule 
+// GetSchedule
 //=========================================================
 Schedule_t* CHoundeye::GetSchedule()
 {
 	switch (m_MonsterState)
 	{
-	case MONSTERSTATE_COMBAT:
-	{
+	case MONSTERSTATE_COMBAT: {
 		// dead enemy
 		if (HasConditions(bits_COND_ENEMY_DEAD))
 		{
@@ -1308,11 +1267,11 @@ class CDeadHoundeye : public CBaseMonster
 {
 public:
 	void Spawn() override;
-	int	Classify() override { return	CLASS_ALIEN_PASSIVE; }
+	int Classify() override { return CLASS_ALIEN_PASSIVE; }
 
 	bool KeyValue(KeyValueData* pkvd) override;
 
-	int	m_iPose;// which sequence to display	-- temporary, don't need to save
+	int m_iPose; // which sequence to display	-- temporary, don't need to save
 	static const char* m_szPoses[3];
 };
 

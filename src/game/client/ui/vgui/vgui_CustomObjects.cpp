@@ -35,11 +35,11 @@
 
 // Arrow filenames
 const char* sArrowFilenames[] =
-{
-	"arrowup",
-	"arrowdn",
-	"arrowlt",
-	"arrowrt",
+	{
+		"arrowup",
+		"arrowdn",
+		"arrowlt",
+		"arrowrt",
 };
 
 // Get the name of TGA file, without a gamedir
@@ -259,7 +259,7 @@ void CommandButton::cursorEntered()
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
 void CommandButton::cursorExited()
 {
@@ -283,7 +283,7 @@ CCommandMenu* CommandButton::getParentMenu()
 
 //-----------------------------------------------------------------------------
 // Purpose: Sets the menu that contains this button
-// Input  : *pParentMenu - 
+// Input  : *pParentMenu -
 //-----------------------------------------------------------------------------
 void CommandButton::setParentMenu(CCommandMenu* pParentMenu)
 {
@@ -316,7 +316,7 @@ bool ClassButton::IsNotValid()
 		// Is it the player's current class?
 		if (
 #ifdef _TFC
-		(gViewPort->IsRandomPC() && m_iPlayerClass == PC_RANDOM) ||
+			(gViewPort->IsRandomPC() && m_iPlayerClass == PC_RANDOM) ||
 #endif
 			(!gViewPort->IsRandomPC() && (m_iPlayerClass == g_iPlayerClass)))
 			return true;
@@ -392,7 +392,7 @@ void CImageLabel::LoadImage(const char* pImageName)
 	}
 
 	if (m_pTGA == NULL)
-		return;	// unable to load image
+		return; // unable to load image
 
 	int w, t;
 
@@ -548,7 +548,7 @@ void CMenuHandler_StringCommandClassSelect::actionPerformed(Panel* panel)
 {
 	CMenuHandler_StringCommand::actionPerformed(panel);
 
-	// THIS IS NOW BEING DONE ON THE TFC SERVER TO AVOID KILLING SOMEONE THEN 
+	// THIS IS NOW BEING DONE ON THE TFC SERVER TO AVOID KILLING SOMEONE THEN
 	// HAVE THE SERVER SAY "SORRY...YOU CAN'T BE THAT CLASS".
 
 #if !defined _TFC
@@ -557,4 +557,3 @@ void CMenuHandler_StringCommandClassSelect::actionPerformed(Panel* panel)
 		gEngfuncs.pfnClientCmd("kill");
 #endif
 }
-

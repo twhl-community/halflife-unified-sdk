@@ -27,13 +27,13 @@
 #include "saverestore.h"
 #include "studio.h"
 
-TYPEDESCRIPTION	CBaseAnimating::m_SaveData[] =
-{
-	DEFINE_FIELD(CBaseMonster, m_flFrameRate, FIELD_FLOAT),
-	DEFINE_FIELD(CBaseMonster, m_flGroundSpeed, FIELD_FLOAT),
-	DEFINE_FIELD(CBaseMonster, m_flLastEventCheck, FIELD_TIME),
-	DEFINE_FIELD(CBaseMonster, m_fSequenceFinished, FIELD_BOOLEAN),
-	DEFINE_FIELD(CBaseMonster, m_fSequenceLoops, FIELD_BOOLEAN),
+TYPEDESCRIPTION CBaseAnimating::m_SaveData[] =
+	{
+		DEFINE_FIELD(CBaseMonster, m_flFrameRate, FIELD_FLOAT),
+		DEFINE_FIELD(CBaseMonster, m_flGroundSpeed, FIELD_FLOAT),
+		DEFINE_FIELD(CBaseMonster, m_flLastEventCheck, FIELD_TIME),
+		DEFINE_FIELD(CBaseMonster, m_fSequenceFinished, FIELD_BOOLEAN),
+		DEFINE_FIELD(CBaseMonster, m_fSequenceLoops, FIELD_BOOLEAN),
 };
 
 IMPLEMENT_SAVERESTORE(CBaseAnimating, CBaseDelay);
@@ -66,7 +66,7 @@ float CBaseAnimating::StudioFrameAdvance(float flInterval)
 			pev->frame -= (int)(pev->frame / 256.0) * 256.0;
 		else
 			pev->frame = (pev->frame < 0.0) ? 0 : 255;
-		m_fSequenceFinished = true;	// just in case it wasn't caught in GetEvents
+		m_fSequenceFinished = true; // just in case it wasn't caught in GetEvents
 	}
 
 	return flInterval;
@@ -136,7 +136,7 @@ int CBaseAnimating::GetSequenceFlags()
 //=========================================================
 void CBaseAnimating::DispatchAnimEvents(float flInterval)
 {
-	MonsterEvent_t	event;
+	MonsterEvent_t event;
 
 	void* pmodel = GET_MODEL_PTR(ENT(pev));
 
@@ -234,7 +234,6 @@ int CBaseAnimating::FindTransition(int iEndingSequence, int iGoalSequence, int* 
 //=========================================================
 void CBaseAnimating::GetAutomovement(Vector& origin, Vector& angles, float flInterval)
 {
-
 }
 
 void CBaseAnimating::SetBodygroup(int iGroup, int iValue)
@@ -330,4 +329,3 @@ void CBaseAnimating::SetSequenceBox()
 		UTIL_SetSize(pev, rmin, rmax);
 	}
 }
-

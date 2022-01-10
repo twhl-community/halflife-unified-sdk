@@ -23,11 +23,11 @@ class COFSkeleton : public CBaseMonster
 {
 public:
 	void Spawn() override;
-	int	Classify() override { return	CLASS_HUMAN_MILITARY; }
+	int Classify() override { return CLASS_HUMAN_MILITARY; }
 
 	bool KeyValue(KeyValueData* pkvd) override;
 
-	int	m_iPose;// which sequence to display	-- temporary, don't need to save
+	int m_iPose; // which sequence to display	-- temporary, don't need to save
 	static const char* m_szPoses[4];
 };
 

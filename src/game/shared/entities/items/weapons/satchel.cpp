@@ -36,7 +36,7 @@ public:
 LINK_ENTITY_TO_CLASS(monster_satchel, CSatchelCharge);
 
 //=========================================================
-// Deactivate - do whatever it is we do to an orphaned 
+// Deactivate - do whatever it is we do to an orphaned
 // satchel when we don't want it in the world anymore.
 //=========================================================
 void CSatchelCharge::Deactivate()
@@ -55,7 +55,7 @@ void CSatchelCharge::Spawn()
 
 	SET_MODEL(ENT(pev), "models/w_satchel.mdl");
 	//UTIL_SetSize(pev, Vector( -16, -16, -4), Vector(16, 16, 32));	// Old box -- size of headcrab monsters/players get blocked by this
-	UTIL_SetSize(pev, Vector(-4, -4, -4), Vector(4, 4, 4));	// Uses point-sized, and can be stepped over
+	UTIL_SetSize(pev, Vector(-4, -4, -4), Vector(4, 4, 4)); // Uses point-sized, and can be stepped over
 	UTIL_SetOrigin(pev, pev->origin);
 
 	SetTouch(&CSatchelCharge::SatchelSlide);
@@ -81,7 +81,7 @@ void CSatchelCharge::SatchelSlide(CBaseEntity* pOther)
 		return;
 
 	// pev->avelocity = Vector (300, 300, 300);
-	pev->gravity = 1;// normal gravity now
+	pev->gravity = 1; // normal gravity now
 
 	// HACKHACK - On ground isn't always set, so look for ground underneath
 	TraceResult tr;
@@ -142,9 +142,15 @@ void CSatchelCharge::BounceSound()
 {
 	switch (RANDOM_LONG(0, 2))
 	{
-	case 0:	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/g_bounce1.wav", 1, ATTN_NORM);	break;
-	case 1:	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/g_bounce2.wav", 1, ATTN_NORM);	break;
-	case 2:	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/g_bounce3.wav", 1, ATTN_NORM);	break;
+	case 0:
+		EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/g_bounce1.wav", 1, ATTN_NORM);
+		break;
+	case 1:
+		EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/g_bounce2.wav", 1, ATTN_NORM);
+		break;
+	case 2:
+		EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/g_bounce3.wav", 1, ATTN_NORM);
+		break;
 	}
 }
 
@@ -180,7 +186,7 @@ bool CSatchel::AddToPlayer(CBasePlayer* pPlayer)
 	bool bResult = CBasePlayerItem::AddToPlayer(pPlayer);
 
 	pPlayer->pev->weapons |= (1 << m_iId);
-	m_chargeReady = 0;// this satchel charge weapon now forgets that any satchels are deployed by it.
+	m_chargeReady = 0; // this satchel charge weapon now forgets that any satchels are deployed by it.
 
 	if (bResult)
 	{
@@ -197,7 +203,7 @@ void CSatchel::Spawn()
 
 	m_iDefaultAmmo = SATCHEL_DEFAULT_GIVE;
 
-	FallInit();// get ready to fall down.
+	FallInit(); // get ready to fall down.
 }
 
 
@@ -315,13 +321,11 @@ void CSatchel::PrimaryAttack()
 {
 	switch (m_chargeReady)
 	{
-	case 0:
-	{
+	case 0: {
 		Throw();
 	}
 	break;
-	case 1:
-	{
+	case 1: {
 		SendWeaponAnim(SATCHEL_RADIO_FIRE);
 
 		edict_t* pPlayer = m_pPlayer->edict();
@@ -349,9 +353,9 @@ void CSatchel::PrimaryAttack()
 
 	case 2:
 		// we're reloading, don't allow fire
-	{
-	}
-	break;
+		{
+		}
+		break;
 	}
 }
 
@@ -441,7 +445,7 @@ void CSatchel::WeaponIdle()
 		m_chargeReady = 0;
 		break;
 	}
-	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10, 15);// how long till we do this again.
+	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10, 15); // how long till we do this again.
 }
 
 //=========================================================
@@ -466,9 +470,9 @@ void DeactivateSatchels(CBasePlayer* pOwner)
 			if (pSatchel->pev->owner == pOwner->edict())
 			{
 				pSatchel->Deactivate();
+			}
 		}
-	}
 
 		pFind = FIND_ENTITY_BY_CLASSNAME(pFind, "monster_satchel");
-}
+	}
 }

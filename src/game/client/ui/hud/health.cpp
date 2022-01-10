@@ -36,20 +36,19 @@ DECLARE_MESSAGE(m_Health, Damage)
 int giDmgHeight, giDmgWidth;
 
 int giDmgFlags[NUM_DMG_TYPES] =
-{
-	DMG_POISON,
-	DMG_ACID,
-	DMG_FREEZE | DMG_SLOWFREEZE,
-	DMG_DROWN,
-	DMG_BURN | DMG_SLOWBURN,
-	DMG_NERVEGAS,
-	DMG_RADIATION,
-	DMG_SHOCK,
-	DMG_CALTROP,
-	DMG_TRANQ,
-	DMG_CONCUSS,
-	DMG_HALLUC
-};
+	{
+		DMG_POISON,
+		DMG_ACID,
+		DMG_FREEZE | DMG_SLOWFREEZE,
+		DMG_DROWN,
+		DMG_BURN | DMG_SLOWBURN,
+		DMG_NERVEGAS,
+		DMG_RADIATION,
+		DMG_SHOCK,
+		DMG_CALTROP,
+		DMG_TRANQ,
+		DMG_CONCUSS,
+		DMG_HALLUC};
 
 bool CHudHealth::Init()
 {
@@ -119,8 +118,8 @@ bool CHudHealth::MsgFunc_Damage(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 
-	int armor = READ_BYTE();	// armor
-	int damageTaken = READ_BYTE();	// health
+	int armor = READ_BYTE();	   // armor
+	int damageTaken = READ_BYTE(); // health
 	long bitsDamage = READ_LONG(); // damage bits
 
 	Vector vecFrom;
@@ -193,7 +192,6 @@ bool CHudHealth::Draw(float flTime)
 		// Fade the health number back to dim
 
 		a = MIN_ALPHA + (m_fFade / FADE_TIME) * 128;
-
 	}
 	else
 		a = MIN_ALPHA;
@@ -238,8 +236,8 @@ bool CHudHealth::Draw(float flTime)
 
 void CHudHealth::CalcDamageDirection(Vector vecFrom)
 {
-	Vector	forward, right, up;
-	float	side, front;
+	Vector forward, right, up;
+	float side, front;
 	Vector vecOrigin, vecAngles;
 
 	if (vecFrom == g_vecZero)
@@ -303,7 +301,7 @@ bool CHudHealth::DrawPain(float flTime)
 	int x, y, shade;
 
 	// TODO:  get the shift value of the health
-	const int a = 255;	// max brightness until then
+	const int a = 255; // max brightness until then
 
 	float fFade = gHUD.m_flTimeDelta * 2;
 
@@ -402,8 +400,8 @@ bool CHudHealth::DrawDamage(float flTime)
 		{
 			pdmg->fExpire = V_min(flTime + DMG_IMAGE_LIFE, pdmg->fExpire);
 
-			if (pdmg->fExpire <= flTime		// when the time has expired
-				&& a < 40)						// and the flash is at the low point of the cycle
+			if (pdmg->fExpire <= flTime // when the time has expired
+				&& a < 40)				// and the flash is at the low point of the cycle
 			{
 				pdmg->fExpire = 0;
 
@@ -416,10 +414,9 @@ bool CHudHealth::DrawDamage(float flTime)
 					pdmg = &m_dmg[j];
 					if (0 != pdmg->y && (pdmg->y < y))
 						pdmg->y += giDmgHeight;
-
 				}
 
-				m_bitsDamage &= ~giDmgFlags[i];  // clear the bits
+				m_bitsDamage &= ~giDmgFlags[i]; // clear the bits
 			}
 		}
 	}
@@ -464,7 +461,6 @@ void CHudHealth::UpdateTiles(float flTime, long bitsDamage)
 				pdmg = &m_dmg[j];
 				if (0 != pdmg->y)
 					pdmg->y -= giDmgHeight;
-
 			}
 			pdmg = &m_dmg[i];
 		}

@@ -29,25 +29,25 @@
 class CLight : public CPointEntity
 {
 public:
-	bool	KeyValue(KeyValueData* pkvd) override;
-	void	Spawn() override;
-	void	Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+	bool KeyValue(KeyValueData* pkvd) override;
+	void Spawn() override;
+	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
-	bool	Save(CSave& save) override;
-	bool	Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 
-	static	TYPEDESCRIPTION m_SaveData[];
+	static TYPEDESCRIPTION m_SaveData[];
 
 private:
-	int		m_iStyle;
-	int		m_iszPattern;
+	int m_iStyle;
+	int m_iszPattern;
 };
 LINK_ENTITY_TO_CLASS(light, CLight);
 
-TYPEDESCRIPTION	CLight::m_SaveData[] =
-{
-	DEFINE_FIELD(CLight, m_iStyle, FIELD_INTEGER),
-	DEFINE_FIELD(CLight, m_iszPattern, FIELD_STRING),
+TYPEDESCRIPTION CLight::m_SaveData[] =
+	{
+		DEFINE_FIELD(CLight, m_iStyle, FIELD_INTEGER),
+		DEFINE_FIELD(CLight, m_iszPattern, FIELD_STRING),
 };
 
 IMPLEMENT_SAVERESTORE(CLight, CPointEntity);
@@ -87,7 +87,7 @@ If targeted, it will toggle between on or off.
 void CLight::Spawn()
 {
 	if (FStringNull(pev->targetname))
-	{       // inert light
+	{ // inert light
 		REMOVE_ENTITY(ENT(pev));
 		return;
 	}
@@ -137,8 +137,8 @@ LINK_ENTITY_TO_CLASS(light_spot, CLight);
 class CEnvLight : public CLight
 {
 public:
-	bool	KeyValue(KeyValueData* pkvd) override;
-	void	Spawn() override;
+	bool KeyValue(KeyValueData* pkvd) override;
+	void Spawn() override;
 };
 
 LINK_ENTITY_TO_CLASS(light_environment, CEnvLight);

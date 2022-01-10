@@ -21,7 +21,7 @@ private:
 public:
 	MemoryBlock(long lBlockSize)
 		: next(NULL), prev(NULL)
-		//m_bBlockIsInUse(false) // Initialize block to 'free' state.
+	//m_bBlockIsInUse(false) // Initialize block to 'free' state.
 	{
 		// Allocate memory here.
 		m_pData = new char[lBlockSize];
@@ -67,13 +67,13 @@ public:
 
 	MemoryBlock* Front(void)
 	{
-		return(m_pHead);
+		return (m_pHead);
 	}
 
 	MemoryBlock* Pop(void)
 	{
 		if (!m_pHead)
-			return(NULL);
+			return (NULL);
 
 		MemoryBlock* temp = m_pHead;
 
@@ -85,7 +85,7 @@ public:
 		temp->next = NULL;
 		temp->prev = NULL;
 
-		return(temp);
+		return (temp);
 	}
 
 	void Delete(MemoryBlock* pItem)
@@ -157,8 +157,8 @@ protected:
 	// Find a free block and mark it as "in use".  Return NULL
 	//  if no free blocks found.
 	char* AllocateFreeBlock(void);
-public:
 
+public:
 	// Return a pointer to usable block of memory.
 	char* newBlock(void);
 

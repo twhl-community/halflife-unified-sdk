@@ -42,8 +42,8 @@ extern CSoundEnt* pSoundEnt;
 
 extern CBaseEntity* g_pLastSpawn;
 DLL_GLOBAL edict_t* g_pBodyQueueHead;
-CGlobalState					gGlobalState;
-extern DLL_GLOBAL	bool		gDisplayTitle;
+CGlobalState gGlobalState;
+extern DLL_GLOBAL bool gDisplayTitle;
 
 extern void W_Precache();
 
@@ -51,57 +51,57 @@ extern void W_Precache();
 // This must match the list in util.h
 //
 DLL_DECALLIST gDecals[] = {
-	{ "{shot1",	0 },		// DECAL_GUNSHOT1 
-	{ "{shot2",	0 },		// DECAL_GUNSHOT2
-	{ "{shot3",0 },			// DECAL_GUNSHOT3
-	{ "{shot4",	0 },		// DECAL_GUNSHOT4
-	{ "{shot5",	0 },		// DECAL_GUNSHOT5
-	{ "{lambda01", 0 },		// DECAL_LAMBDA1
-	{ "{lambda02", 0 },		// DECAL_LAMBDA2
-	{ "{lambda03", 0 },		// DECAL_LAMBDA3
-	{ "{lambda04", 0 },		// DECAL_LAMBDA4
-	{ "{lambda05", 0 },		// DECAL_LAMBDA5
-	{ "{lambda06", 0 },		// DECAL_LAMBDA6
-	{ "{scorch1", 0 },		// DECAL_SCORCH1
-	{ "{scorch2", 0 },		// DECAL_SCORCH2
-	{ "{blood1", 0 },		// DECAL_BLOOD1
-	{ "{blood2", 0 },		// DECAL_BLOOD2
-	{ "{blood3", 0 },		// DECAL_BLOOD3
-	{ "{blood4", 0 },		// DECAL_BLOOD4
-	{ "{blood5", 0 },		// DECAL_BLOOD5
-	{ "{blood6", 0 },		// DECAL_BLOOD6
-	{ "{yblood1", 0 },		// DECAL_YBLOOD1
-	{ "{yblood2", 0 },		// DECAL_YBLOOD2
-	{ "{yblood3", 0 },		// DECAL_YBLOOD3
-	{ "{yblood4", 0 },		// DECAL_YBLOOD4
-	{ "{yblood5", 0 },		// DECAL_YBLOOD5
-	{ "{yblood6", 0 },		// DECAL_YBLOOD6
-	{ "{break1", 0 },		// DECAL_GLASSBREAK1
-	{ "{break2", 0 },		// DECAL_GLASSBREAK2
-	{ "{break3", 0 },		// DECAL_GLASSBREAK3
-	{ "{bigshot1", 0 },		// DECAL_BIGSHOT1
-	{ "{bigshot2", 0 },		// DECAL_BIGSHOT2
-	{ "{bigshot3", 0 },		// DECAL_BIGSHOT3
-	{ "{bigshot4", 0 },		// DECAL_BIGSHOT4
-	{ "{bigshot5", 0 },		// DECAL_BIGSHOT5
-	{ "{spit1", 0 },		// DECAL_SPIT1
-	{ "{spit2", 0 },		// DECAL_SPIT2
-	{ "{bproof1", 0 },		// DECAL_BPROOF1
-	{ "{gargstomp", 0 },	// DECAL_GARGSTOMP1,	// Gargantua stomp crack
-	{ "{smscorch1", 0 },	// DECAL_SMALLSCORCH1,	// Small scorch mark
-	{ "{smscorch2", 0 },	// DECAL_SMALLSCORCH2,	// Small scorch mark
-	{ "{smscorch3", 0 },	// DECAL_SMALLSCORCH3,	// Small scorch mark
-	{ "{mommablob", 0 },	// DECAL_MOMMABIRTH		// BM Birth spray
-	{ "{mommablob", 0 },	// DECAL_MOMMASPLAT		// BM Mortar spray?? need decal
-	{ "{spr_splt1", 0 },	// DECAL_SPR_SPLT1
-	{ "{spr_splt2", 0 },	// DECAL_SPR_SPLT2
-	{ "{spr_splt3", 0 },	// DECAL_SPR_SPLT3
-	{ "{ofscorch1", 0 },	// DECAL_OFSCORCH1
-	{ "{ofscorch2", 0 },	// DECAL_OFSCORCH2
-	{ "{ofscorch3", 0 },	// DECAL_OFSCORCH3
-	{ "{ofsmscorch1", 0 },	// DECAL_OFSMSCORCH1
-	{ "{ofsmscorch2", 0 },	// DECAL_OFSMSCORCH2
-	{ "{ofsmscorch3", 0 },	// DECAL_OFSMSCORCH3
+	{"{shot1", 0},		 // DECAL_GUNSHOT1
+	{"{shot2", 0},		 // DECAL_GUNSHOT2
+	{"{shot3", 0},		 // DECAL_GUNSHOT3
+	{"{shot4", 0},		 // DECAL_GUNSHOT4
+	{"{shot5", 0},		 // DECAL_GUNSHOT5
+	{"{lambda01", 0},	 // DECAL_LAMBDA1
+	{"{lambda02", 0},	 // DECAL_LAMBDA2
+	{"{lambda03", 0},	 // DECAL_LAMBDA3
+	{"{lambda04", 0},	 // DECAL_LAMBDA4
+	{"{lambda05", 0},	 // DECAL_LAMBDA5
+	{"{lambda06", 0},	 // DECAL_LAMBDA6
+	{"{scorch1", 0},	 // DECAL_SCORCH1
+	{"{scorch2", 0},	 // DECAL_SCORCH2
+	{"{blood1", 0},		 // DECAL_BLOOD1
+	{"{blood2", 0},		 // DECAL_BLOOD2
+	{"{blood3", 0},		 // DECAL_BLOOD3
+	{"{blood4", 0},		 // DECAL_BLOOD4
+	{"{blood5", 0},		 // DECAL_BLOOD5
+	{"{blood6", 0},		 // DECAL_BLOOD6
+	{"{yblood1", 0},	 // DECAL_YBLOOD1
+	{"{yblood2", 0},	 // DECAL_YBLOOD2
+	{"{yblood3", 0},	 // DECAL_YBLOOD3
+	{"{yblood4", 0},	 // DECAL_YBLOOD4
+	{"{yblood5", 0},	 // DECAL_YBLOOD5
+	{"{yblood6", 0},	 // DECAL_YBLOOD6
+	{"{break1", 0},		 // DECAL_GLASSBREAK1
+	{"{break2", 0},		 // DECAL_GLASSBREAK2
+	{"{break3", 0},		 // DECAL_GLASSBREAK3
+	{"{bigshot1", 0},	 // DECAL_BIGSHOT1
+	{"{bigshot2", 0},	 // DECAL_BIGSHOT2
+	{"{bigshot3", 0},	 // DECAL_BIGSHOT3
+	{"{bigshot4", 0},	 // DECAL_BIGSHOT4
+	{"{bigshot5", 0},	 // DECAL_BIGSHOT5
+	{"{spit1", 0},		 // DECAL_SPIT1
+	{"{spit2", 0},		 // DECAL_SPIT2
+	{"{bproof1", 0},	 // DECAL_BPROOF1
+	{"{gargstomp", 0},	 // DECAL_GARGSTOMP1,	// Gargantua stomp crack
+	{"{smscorch1", 0},	 // DECAL_SMALLSCORCH1,	// Small scorch mark
+	{"{smscorch2", 0},	 // DECAL_SMALLSCORCH2,	// Small scorch mark
+	{"{smscorch3", 0},	 // DECAL_SMALLSCORCH3,	// Small scorch mark
+	{"{mommablob", 0},	 // DECAL_MOMMABIRTH		// BM Birth spray
+	{"{mommablob", 0},	 // DECAL_MOMMASPLAT		// BM Mortar spray?? need decal
+	{"{spr_splt1", 0},	 // DECAL_SPR_SPLT1
+	{"{spr_splt2", 0},	 // DECAL_SPR_SPLT2
+	{"{spr_splt3", 0},	 // DECAL_SPR_SPLT3
+	{"{ofscorch1", 0},	 // DECAL_OFSCORCH1
+	{"{ofscorch2", 0},	 // DECAL_OFSCORCH2
+	{"{ofscorch3", 0},	 // DECAL_OFSCORCH3
+	{"{ofsmscorch1", 0}, // DECAL_OFSMSCORCH1
+	{"{ofsmscorch2", 0}, // DECAL_OFSMSCORCH2
+	{"{ofsmscorch3", 0}, // DECAL_OFSMSCORCH3
 };
 
 /*
@@ -112,15 +112,15 @@ BODY QUE
 ==============================================================================
 */
 
-#define SF_DECAL_NOTINDEATHMATCH		2048
+#define SF_DECAL_NOTINDEATHMATCH 2048
 
 class CDecal : public CBaseEntity
 {
 public:
-	void	Spawn() override;
-	bool	KeyValue(KeyValueData* pkvd) override;
-	void	EXPORT StaticDecal();
-	void	EXPORT TriggerDecal(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void Spawn() override;
+	bool KeyValue(KeyValueData* pkvd) override;
+	void EXPORT StaticDecal();
+	void EXPORT TriggerDecal(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 };
 
 LINK_ENTITY_TO_CLASS(infodecal, CDecal);
@@ -153,7 +153,7 @@ void CDecal::TriggerDecal(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYP
 	// this is set up as a USE function for infodecals that have targetnames, so that the
 	// decal doesn't get applied until it is fired. (usually by a scripted sequence)
 	TraceResult trace;
-	int			entityIndex;
+	int entityIndex;
 
 	UTIL_TraceLine(pev->origin - Vector(5, 5, 5), pev->origin + Vector(5, 5, 5), ignore_monsters, ENT(pev), &trace);
 
@@ -177,7 +177,7 @@ void CDecal::TriggerDecal(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYP
 void CDecal::StaticDecal()
 {
 	TraceResult trace;
-	int			entityIndex, modelIndex;
+	int entityIndex, modelIndex;
 
 	UTIL_TraceLine(pev->origin - Vector(5, 5, 5), pev->origin + Vector(5, 5, 5), ignore_monsters, ENT(pev), &trace);
 
@@ -221,7 +221,7 @@ LINK_ENTITY_TO_CLASS(bodyque, CCorpse);
 
 static void InitBodyQue()
 {
-	string_t	istrClassname = MAKE_STRING("bodyque");
+	string_t istrClassname = MAKE_STRING("bodyque");
 
 	g_pBodyQueueHead = CREATE_NAMED_ENTITY(istrClassname);
 	entvars_t* pev = VARS(g_pBodyQueueHead);
@@ -369,17 +369,17 @@ GLOBALESTATE CGlobalState::EntityGetState(string_t globalname)
 
 
 // Global Savedata for Delay
-TYPEDESCRIPTION	CGlobalState::m_SaveData[] =
-{
-	DEFINE_FIELD(CGlobalState, m_listCount, FIELD_INTEGER),
+TYPEDESCRIPTION CGlobalState::m_SaveData[] =
+	{
+		DEFINE_FIELD(CGlobalState, m_listCount, FIELD_INTEGER),
 };
 
 // Global Savedata for Delay
-TYPEDESCRIPTION	gGlobalEntitySaveData[] =
-{
-	DEFINE_ARRAY(globalentity_t, name, FIELD_CHARACTER, 64),
-	DEFINE_ARRAY(globalentity_t, levelName, FIELD_CHARACTER, 32),
-	DEFINE_FIELD(globalentity_t, state, FIELD_INTEGER),
+TYPEDESCRIPTION gGlobalEntitySaveData[] =
+	{
+		DEFINE_ARRAY(globalentity_t, name, FIELD_CHARACTER, 64),
+		DEFINE_ARRAY(globalentity_t, levelName, FIELD_CHARACTER, 32),
+		DEFINE_FIELD(globalentity_t, state, FIELD_INTEGER),
 };
 
 
@@ -413,8 +413,8 @@ bool CGlobalState::Restore(CRestore& restore)
 	if (!restore.ReadFields("GLOBAL", this, m_SaveData, ARRAYSIZE(m_SaveData)))
 		return false;
 
-	listCount = m_listCount;	// Get new list count
-	m_listCount = 0;				// Clear loaded data
+	listCount = m_listCount; // Get new list count
+	m_listCount = 0;		 // Clear loaded data
 
 	for (i = 0; i < listCount; i++)
 	{
@@ -464,7 +464,7 @@ void RestoreGlobalState(SAVERESTOREDATA* pSaveData)
 void ResetGlobalState()
 {
 	gGlobalState.ClearStates();
-	gInitHUD = true;	// Init the HUD on a new game / load game
+	gInitHUD = true; // Init the HUD on a new game / load game
 }
 
 // moved CWorld class definition to cbase.h
@@ -476,7 +476,7 @@ void ResetGlobalState()
 
 LINK_ENTITY_TO_CLASS(worldspawn, CWorld);
 
-extern DLL_GLOBAL bool		g_fGameOver;
+extern DLL_GLOBAL bool g_fGameOver;
 
 CWorld::~CWorld()
 {
@@ -507,7 +507,7 @@ void CWorld::Precache()
 	CVAR_SET_STRING("sv_stepsize", "24");
 #endif
 
-	CVAR_SET_STRING("room_type", "0");// clear DSP
+	CVAR_SET_STRING("room_type", "0"); // clear DSP
 
 	// Set up game rules
 	if (g_pGameRules)
@@ -517,7 +517,7 @@ void CWorld::Precache()
 
 	g_pGameRules = InstallGameRules(this);
 
-	//!!!UNDONE why is there so much Spawn code in the Precache function? I'll just keep it here 
+	//!!!UNDONE why is there so much Spawn code in the Precache function? I'll just keep it here
 
 	///!!!LATER - do we want a sound ent in deathmatch? (sjb)
 	//pSoundEnt = CBaseEntity::Create( "soundent", g_vecZero, g_vecZero, edict() );
@@ -543,18 +543,18 @@ void CWorld::Precache()
 
 	// the area based ambient sounds MUST be the first precache_sounds
 
-	// player precaches     
-	W_Precache();									// get weapon precaches
+	// player precaches
+	W_Precache(); // get weapon precaches
 
 	ClientPrecache();
 
 	// sounds used from C physics code
-	PRECACHE_SOUND("common/null.wav");				// clears sound channels
+	PRECACHE_SOUND("common/null.wav"); // clears sound channels
 
-	PRECACHE_SOUND("items/suitchargeok1.wav");//!!! temporary sound for respawning weapons.
-	PRECACHE_SOUND("items/gunpickup2.wav");// player picks up a gun.
+	PRECACHE_SOUND("items/suitchargeok1.wav"); //!!! temporary sound for respawning weapons.
+	PRECACHE_SOUND("items/gunpickup2.wav");	   // player picks up a gun.
 
-	PRECACHE_SOUND("common/bodydrop3.wav");// dead bodies hitting the ground (animation events)
+	PRECACHE_SOUND("common/bodydrop3.wav"); // dead bodies hitting the ground (animation events)
 	PRECACHE_SOUND("common/bodydrop4.wav");
 
 	g_Language = (int)CVAR_GET_FLOAT("sv_language");
@@ -577,7 +577,7 @@ void CWorld::Precache()
 	// Setup light animation tables. 'a' is total darkness, 'z' is maxbright.
 	//
 
-		// 0 normal
+	// 0 normal
 	LIGHT_STYLE(0, "m");
 
 	// 1 FLICKER (first variety)
@@ -631,13 +631,13 @@ void CWorld::Precache()
 
 	// make sure the .NOD file is newer than the .BSP file.
 	if (!WorldGraph.CheckNODFile((char*)STRING(gpGlobals->mapname)))
-	{// NOD file is not present, or is older than the BSP file.
+	{ // NOD file is not present, or is older than the BSP file.
 		WorldGraph.AllocNodes();
 	}
 	else
-	{// Load the node graph for this level
+	{ // Load the node graph for this level
 		if (!WorldGraph.FLoadGraph((char*)STRING(gpGlobals->mapname)))
-		{// couldn't load, so alloc and prepare to build a graph.
+		{ // couldn't load, so alloc and prepare to build a graph.
 			ALERT(at_console, "*Error opening .NOD file\n");
 			WorldGraph.AllocNodes();
 		}
@@ -672,7 +672,7 @@ void CWorld::Precache()
 		CVAR_SET_FLOAT("v_dark", 0.0);
 
 	if ((pev->spawnflags & SF_WORLD_TITLE) != 0)
-		gDisplayTitle = true;		// display the game title if this key is set
+		gDisplayTitle = true; // display the game title if this key is set
 	else
 		gDisplayTitle = false;
 
