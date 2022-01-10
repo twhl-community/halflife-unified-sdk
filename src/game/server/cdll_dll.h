@@ -22,7 +22,7 @@
 #include "palette.h"
 
 #define MAX_WEAPONS 64 // ???
-const int SV_MAX_PLAYERS = 32;
+constexpr int MAX_PLAYERS = 32;
 
 #define MAX_WEAPON_SLOTS 7 // hud item selection slots
 #define MAX_ITEM_TYPES 7   // hud item selection slots

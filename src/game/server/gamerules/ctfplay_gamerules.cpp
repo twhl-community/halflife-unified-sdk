@@ -53,7 +53,7 @@ float g_flCaptureAssistTime = 10;
 float g_flPowerupRespawnTime = 30;
 int g_iMapScoreMax = 0;
 
-char* pszPlayerIPs[SV_MAX_PLAYERS * 2];
+char* pszPlayerIPs[MAX_PLAYERS * 2];
 
 static int team_scores[MaxTeams];
 int teamscores[MaxTeams];

@@ -29,8 +29,6 @@ extern IParticleMan* g_pParticleMan;
 
 extern int giTeamplay;
 
-#define MAX_CLIENTS 32
-
 #if !defined(_TFC)
 extern BEAM* pBeam;
 extern BEAM* pBeam2;

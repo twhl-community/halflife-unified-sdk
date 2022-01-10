@@ -129,7 +129,7 @@ private:
 	int m_iStatsPlayer = 1;
 };
 
-extern char* pszPlayerIPs[SV_MAX_PLAYERS * 2];
+extern char* pszPlayerIPs[MAX_PLAYERS * 2];
 
 const char* GetTeamName(edict_t* pEntity);
 
