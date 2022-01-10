@@ -98,7 +98,6 @@ target_sources(client PRIVATE
 	interpolation.h
 	in_defs.h
 	player_info.h
-	tf_defs.h
 	util.cpp
 	view.cpp
 	view.h
