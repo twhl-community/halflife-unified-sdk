@@ -91,7 +91,7 @@ public:
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 	bool CheckRangeAttack1(float flDot, float flDist) override;
 	bool CheckRangeAttack2(float flDot, float flDist) override;
-	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 
 	virtual float GetDamageAmount() { return gSkillData.shockroachDmgBite; }
 	virtual int GetVoicePitch() { return 100; }
@@ -100,8 +100,8 @@ public:
 
 	void MonsterThink() override;
 
-	int Save(CSave& save) override;
-	int Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
 	float m_flBirthTime;
@@ -354,7 +354,7 @@ void COFShockRoach::RunTask(Task_t* pTask)
 //=========================================================
 void COFShockRoach::LeapTouch(CBaseEntity* pOther)
 {
-	if (!pOther->pev->takedamage)
+	if (0 == pOther->pev->takedamage)
 	{
 		return;
 	}
@@ -450,10 +450,10 @@ bool COFShockRoach::CheckRangeAttack2(float flDot, float flDist)
 #endif
 }
 
-int COFShockRoach::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool COFShockRoach::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
 	// Don't take any acid damage -- BigMomma's mortar is acid
-	if (bitsDamageType & DMG_ACID)
+	if ((bitsDamageType & DMG_ACID) != 0)
 		flDamage = 0;
 
 	//Don't take damage while spawning

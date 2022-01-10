@@ -118,7 +118,7 @@ protected:
 	PostureType GetPreferredCombatPosture() const override
 	{
 		//Always stand when using Saw
-		if (pev->weapons & HGruntAllyWeaponFlag::Saw)
+		if ((pev->weapons & HGruntAllyWeaponFlag::Saw) != 0)
 		{
 			return PostureType::Standing;
 		}
@@ -128,7 +128,7 @@ protected:
 
 	float GetMaximumRangeAttackDistance() const override
 	{
-		if (pev->weapons & HGruntAllyWeaponFlag::Shotgun)
+		if ((pev->weapons & HGruntAllyWeaponFlag::Shotgun) != 0)
 		{
 			return 640;
 		}
@@ -323,18 +323,18 @@ void CHGruntAlly::Spawn()
 
 	int weaponIndex = 0;
 
-	if (pev->weapons & HGruntAllyWeaponFlag::MP5)
+	if ((pev->weapons & HGruntAllyWeaponFlag::MP5) != 0)
 	{
 		weaponIndex = HGruntAllyWeapon::MP5;
 		m_cClipSize = GRUNT_MP5_CLIP_SIZE;
 	}
-	else if (pev->weapons & HGruntAllyWeaponFlag::Shotgun)
+	else if ((pev->weapons & HGruntAllyWeaponFlag::Shotgun) != 0)
 	{
 		m_cClipSize = GRUNT_SHOTGUN_CLIP_SIZE;
 		weaponIndex = HGruntAllyWeapon::Shotgun;
 		m_iGruntTorso = HGruntAllyTorso::Shotgun;
 	}
-	else if (pev->weapons & HGruntAllyWeaponFlag::Saw)
+	else if ((pev->weapons & HGruntAllyWeaponFlag::Saw) != 0)
 	{
 		weaponIndex = HGruntAllyWeapon::Saw;
 		m_cClipSize = GRUNT_SAW_CLIP_SIZE;
@@ -350,7 +350,7 @@ void CHGruntAlly::Spawn()
 
 	if (m_iGruntHead == HGruntAllyHead::Default)
 	{
-		if (pev->spawnflags & SF_SQUADMONSTER_LEADER)
+		if ((pev->spawnflags & SF_SQUADMONSTER_LEADER) != 0)
 		{
 			m_iGruntHead = HGruntAllyHead::BeretWhite;
 		}
@@ -487,7 +487,7 @@ public:
 	void Spawn() override;
 	int	Classify() override { return	CLASS_HUMAN_MILITARY_FRIENDLY; }
 
-	void KeyValue(KeyValueData* pkvd) override;
+	bool KeyValue(KeyValueData* pkvd) override;
 
 	int	m_iPose;// which sequence to display	-- temporary, don't need to save
 	int m_iGruntHead;
@@ -496,20 +496,20 @@ public:
 
 const char* CDeadHGruntAlly::m_szPoses[] = {"deadstomach", "deadside", "deadsitting", "dead_on_back", "hgrunt_dead_stomach", "dead_headcrabed", "dead_canyon"};
 
-void CDeadHGruntAlly::KeyValue(KeyValueData* pkvd)
+bool CDeadHGruntAlly::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq(pkvd->szKeyName, "pose"))
 	{
 		m_iPose = atoi(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "head"))
 	{
 		m_iGruntHead = atoi(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
-	else
-		CBaseMonster::KeyValue(pkvd);
+
+	return CBaseMonster::KeyValue(pkvd);
 }
 
 LINK_ENTITY_TO_CLASS(monster_human_grunt_ally_dead, CDeadHGruntAlly);
@@ -537,17 +537,17 @@ void CDeadHGruntAlly::Spawn()
 	// Corpses have less health
 	pev->health = 8;
 
-	if (pev->weapons & HGruntAllyWeaponFlag::MP5)
+	if ((pev->weapons & HGruntAllyWeaponFlag::MP5) != 0)
 	{
 		SetBodygroup(HGruntAllyBodygroup::Torso, HGruntAllyTorso::Normal);
 		SetBodygroup(HGruntAllyBodygroup::Weapons, HGruntAllyWeapon::MP5);
 	}
-	else if (pev->weapons & HGruntAllyWeaponFlag::Shotgun)
+	else if ((pev->weapons & HGruntAllyWeaponFlag::Shotgun) != 0)
 	{
 		SetBodygroup(HGruntAllyBodygroup::Torso, HGruntAllyTorso::Shotgun);
 		SetBodygroup(HGruntAllyBodygroup::Weapons, HGruntAllyWeapon::Shotgun);
 	}
-	else if (pev->weapons & HGruntAllyWeaponFlag::Saw)
+	else if ((pev->weapons & HGruntAllyWeaponFlag::Saw) != 0)
 	{
 		SetBodygroup(HGruntAllyBodygroup::Torso, HGruntAllyTorso::Saw);
 		SetBodygroup(HGruntAllyBodygroup::Weapons, HGruntAllyWeapon::Saw);

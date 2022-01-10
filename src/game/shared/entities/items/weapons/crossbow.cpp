@@ -98,7 +98,7 @@ void CCrossbowBolt::BoltTouch(CBaseEntity* pOther)
 	SetTouch(NULL);
 	SetThink(NULL);
 
-	if (pOther->pev->takedamage)
+	if (0 != pOther->pev->takedamage)
 	{
 		TraceResult tr = UTIL_GetGlobalTrace();
 		entvars_t* pevOwner;
@@ -260,7 +260,7 @@ void CCrossbow::Precache()
 }
 
 
-int CCrossbow::GetItemInfo(ItemInfo* p)
+bool CCrossbow::GetItemInfo(ItemInfo* p)
 {
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo1 = "bolts";
@@ -273,12 +273,12 @@ int CCrossbow::GetItemInfo(ItemInfo* p)
 	p->iId = WEAPON_CROSSBOW;
 	p->iFlags = 0;
 	p->iWeight = CROSSBOW_WEIGHT;
-	return 1;
+	return true;
 }
 
 void CCrossbow::IncrementAmmo(CBasePlayer* pPlayer)
 {
-	if (pPlayer->GiveAmmo(1, "bolts", BOLT_MAX_CARRY))
+	if (0 != pPlayer->GiveAmmo(1, "bolts", BOLT_MAX_CARRY))
 	{
 		EMIT_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
 	}
@@ -286,7 +286,7 @@ void CCrossbow::IncrementAmmo(CBasePlayer* pPlayer)
 
 bool CCrossbow::Deploy()
 {
-	if (m_iClip)
+	if (0 != m_iClip)
 		return DefaultDeploy("models/v_crossbow.mdl", "models/p_crossbow.mdl", CROSSBOW_DRAW1, "bow");
 	return DefaultDeploy("models/v_crossbow.mdl", "models/p_crossbow.mdl", CROSSBOW_DRAW2, "bow");
 }
@@ -301,7 +301,7 @@ void CCrossbow::Holster()
 	}
 
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;
-	if (m_iClip)
+	if (0 != m_iClip)
 		SendWeaponAnim(CROSSBOW_HOLSTER1);
 	else
 		SendWeaponAnim(CROSSBOW_HOLSTER2);
@@ -354,14 +354,14 @@ void CCrossbow::FireSniperBolt()
 	UTIL_TraceLine(vecSrc, vecSrc + vecDir * 8192, dont_ignore_monsters, m_pPlayer->edict(), &tr);
 
 #ifndef CLIENT_DLL
-	if (tr.pHit->v.takedamage)
+	if (0 != tr.pHit->v.takedamage)
 	{
 		ClearMultiDamage();
 		CBaseEntity::Instance(tr.pHit)->TraceAttack(m_pPlayer->pev, 120, vecDir, &tr, DMG_BULLET | DMG_NEVERGIB);
 		ApplyMultiDamage(pev, m_pPlayer->pev);
 	}
 #endif
-}
+	}
 
 void CCrossbow::FireBolt()
 {
@@ -415,7 +415,7 @@ void CCrossbow::FireBolt()
 	pBolt->pev->avelocity.z = 10;
 #endif
 
-	if (!m_iClip && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
+	if (0 == m_iClip && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
 		// HEV suit - indicate out of ammo condition
 		m_pPlayer->SetSuitUpdate("!HEV_AMO0", false, 0);
 
@@ -427,7 +427,7 @@ void CCrossbow::FireBolt()
 		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 5.0;
 	else
 		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.75;
-}
+	}
 
 
 void CCrossbow::SecondaryAttack()
@@ -474,7 +474,7 @@ void CCrossbow::WeaponIdle()
 		float flRand = UTIL_SharedRandomFloat(m_pPlayer->random_seed, 0, 1);
 		if (flRand <= 0.75)
 		{
-			if (m_iClip)
+			if (0 != m_iClip)
 			{
 				SendWeaponAnim(CROSSBOW_IDLE1);
 			}
@@ -486,7 +486,7 @@ void CCrossbow::WeaponIdle()
 		}
 		else
 		{
-			if (m_iClip)
+			if (0 != m_iClip)
 			{
 				SendWeaponAnim(CROSSBOW_FIDGET1);
 				m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 90.0 / 30.0;

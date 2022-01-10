@@ -57,7 +57,7 @@ static globalvars_t	Globals;
 static CBasePlayerWeapon* g_pWpns[32];
 
 float g_flApplyVel = 0.0;
-int   g_irunninggausspred = 0;
+bool   g_irunninggausspred = false;
 
 Vector previousorigin;
 
@@ -155,12 +155,12 @@ void HUD_PrepEntity(CBaseEntity* pEntity, CBasePlayer* pWeaponOwner)
 
 		CBasePlayerItem::ItemInfoArray[info.iId] = info;
 
-		if (info.pszAmmo1 && *info.pszAmmo1)
+		if (info.pszAmmo1 && '\0' != *info.pszAmmo1)
 		{
 			AddAmmoNameToAmmoRegistry(info.pszAmmo1);
 		}
 
-		if (info.pszAmmo2 && *info.pszAmmo2)
+		if (info.pszAmmo2 && '\0' != *info.pszAmmo2)
 		{
 			AddAmmoNameToAmmoRegistry(info.pszAmmo2);
 		}
@@ -213,10 +213,10 @@ bool CBasePlayerWeapon::PlayEmptySound()
 	if (m_iPlayEmptySound)
 	{
 		HUD_PlaySound("weapons/357_cock1.wav", 0.8);
-		m_iPlayEmptySound = 0;
-		return 0;
+		m_iPlayEmptySound = false;
+		return false;
 	}
-	return 0;
+	return false;
 }
 
 /*
@@ -244,7 +244,7 @@ void CBasePlayerWeapon::SendWeaponAnim(int iAnim, int body)
 {
 	m_pPlayer->pev->weaponanim = iAnim;
 
-	HUD_SendWeaponAnim(iAnim, body, 0);
+	HUD_SendWeaponAnim(iAnim, body, false);
 }
 
 /*
@@ -394,7 +394,7 @@ void UTIL_ParticleBoxes()
 	cl_entity_t* player;
 	Vector mins, maxs;
 
-	gEngfuncs.pEventAPI->EV_SetUpPlayerPrediction(false, true);
+	gEngfuncs.pEventAPI->EV_SetUpPlayerPrediction(0, 1);
 
 	// Store off the old count
 	gEngfuncs.pEventAPI->EV_PushPMStates();
@@ -479,11 +479,11 @@ void HUD_SetupServerEngineInterface()
 */
 void HUD_InitClientWeapons()
 {
-	static int initialized = 0;
+	static bool initialized = false;
 	if (initialized)
 		return;
 
-	initialized = 1;
+	initialized = true;
 
 	// Allocate a slot for the local player
 	HUD_PrepEntity(&player, NULL);
@@ -658,7 +658,7 @@ void HUD_WeaponsPostThink(local_state_s* from, local_state_s* to, usercmd_t* cmd
 
 		pfrom = &from->weapondata[i];
 
-		pCurrent->m_fInReload = pfrom->m_fInReload;
+		pCurrent->m_fInReload = 0 != pfrom->m_fInReload;
 		pCurrent->m_fInSpecialReload = pfrom->m_fInSpecialReload;
 		//		pCurrent->m_flPumpTime			= pfrom->m_flPumpTime;
 		pCurrent->m_iClip = pfrom->m_iClip;
@@ -725,21 +725,21 @@ void HUD_WeaponsPostThink(local_state_s* from, local_state_s* to, usercmd_t* cmd
 
 
 	// Point to current weapon object
-	if (from->client.m_iId)
+	if (WEAPON_NONE != from->client.m_iId)
 	{
 		player.m_pActiveItem = g_pWpns[from->client.m_iId];
 	}
 
 	if (player.m_pActiveItem->m_iId == WEAPON_RPG)
 	{
-		((CRpg*)player.m_pActiveItem)->m_fSpotActive = (int)from->client.vuser2[1];
+		((CRpg*)player.m_pActiveItem)->m_fSpotActive = 0 != from->client.vuser2[1];
 		((CRpg*)player.m_pActiveItem)->m_cActiveRockets = (int)from->client.vuser2[2];
 	}
 
 	// Don't go firing anything if we have died or are spectating
 	// Or if we don't have a weapon model deployed
 	if ((player.pev->deadflag != (DEAD_DISCARDBODY + 1)) &&
-		!CL_IsDead() && player.pev->viewmodel && !g_iUser1)
+		!CL_IsDead() && !FStringNull(player.pev->viewmodel) && 0 == g_iUser1)
 	{
 		if (player.m_flNextAttack <= 0)
 		{
@@ -751,7 +751,7 @@ void HUD_WeaponsPostThink(local_state_s* from, local_state_s* to, usercmd_t* cmd
 	to->client.m_iId = from->client.m_iId;
 
 	// Now see if we issued a changeweapon command ( and we're not dead )
-	if (cmd->weaponselect && (player.pev->deadflag != (DEAD_DISCARDBODY + 1)))
+	if (0 != cmd->weaponselect && (player.pev->deadflag != (DEAD_DISCARDBODY + 1)))
 	{
 		// Switched to a different weapon?
 		if (from->weapondata[cmd->weaponselect].m_iId == cmd->weaponselect)
@@ -802,7 +802,7 @@ void HUD_WeaponsPostThink(local_state_s* from, local_state_s* to, usercmd_t* cmd
 
 	if (player.m_pActiveItem->m_iId == WEAPON_RPG)
 	{
-		to->client.vuser2[1] = ((CRpg*)player.m_pActiveItem)->m_fSpotActive;
+		to->client.vuser2[1] = static_cast<float>(((CRpg*)player.m_pActiveItem)->m_fSpotActive);
 		to->client.vuser2[2] = ((CRpg*)player.m_pActiveItem)->m_cActiveRockets;
 	}
 
@@ -814,7 +814,7 @@ void HUD_WeaponsPostThink(local_state_s* from, local_state_s* to, usercmd_t* cmd
 		g_Python.pev->body = UTIL_IsMultiplayer() ? 1 : 0;
 
 		// Force a fixed anim down to viewmodel
-		HUD_SendWeaponAnim(to->client.weaponanim, pWeapon->pev->body, 1);
+		HUD_SendWeaponAnim(to->client.weaponanim, pWeapon->pev->body, true);
 	}
 
 	for (i = 0; i < 32; i++)
@@ -829,7 +829,7 @@ void HUD_WeaponsPostThink(local_state_s* from, local_state_s* to, usercmd_t* cmd
 			continue;
 		}
 
-		pto->m_fInReload = pCurrent->m_fInReload;
+		pto->m_fInReload = static_cast<int>(pCurrent->m_fInReload);
 		pto->m_fInSpecialReload = pCurrent->m_fInSpecialReload;
 		//		pto->m_flPumpTime				= pCurrent->m_flPumpTime;
 		pto->m_iClip = pCurrent->m_iClip;
@@ -937,10 +937,10 @@ void DLLEXPORT HUD_PostRunCmd(struct local_state_s* from, struct local_state_s* 
 {
 	//	RecClPostRunCmd(from, to, cmd, runfuncs, time, random_seed);
 
-	g_runfuncs = runfuncs;
+	g_runfuncs = 0 != runfuncs;
 
 #if defined( CLIENT_WEAPONS )
-	if (cl_lw && cl_lw->value)
+	if (cl_lw && 0 != cl_lw->value)
 	{
 		HUD_WeaponsPostThink(from, to, cmd, time, random_seed);
 	}
@@ -950,7 +950,7 @@ void DLLEXPORT HUD_PostRunCmd(struct local_state_s* from, struct local_state_s* 
 		to->client.fov = g_lastFOV;
 	}
 
-	if (g_irunninggausspred == 1)
+	if (g_irunninggausspred)
 	{
 		Vector forward;
 		gEngfuncs.pfnAngleVectors(v_angles, forward, NULL, NULL);

@@ -69,7 +69,7 @@ public:
 
 	int iItemSlot() override;
 
-	int GetItemInfo(ItemInfo* p) override;
+	bool GetItemInfo(ItemInfo* p) override;
 
 	void IncrementAmmo(CBasePlayer* pPlayer) override;
 

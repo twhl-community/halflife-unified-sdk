@@ -51,7 +51,7 @@ public:
 	CRope();
 	~CRope();
 
-	void KeyValue(KeyValueData* pkvd) override;
+	bool KeyValue(KeyValueData* pkvd) override;
 
 	void Precache() override;
 
@@ -61,8 +61,8 @@ public:
 
 	void Touch(CBaseEntity* pOther) override;
 
-	int Save(CSave& save) override;
-	int Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 
 	static TYPEDESCRIPTION m_SaveData[];
 

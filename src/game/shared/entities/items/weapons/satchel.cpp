@@ -94,7 +94,7 @@ void CSatchelCharge::SatchelSlide(CBaseEntity* pOther)
 		pev->avelocity = pev->avelocity * 0.9;
 		// play sliding sound, volume based on velocity
 	}
-	if (!(pev->flags & FL_ONGROUND) && pev->velocity.Length2D() > 10)
+	if ((pev->flags & FL_ONGROUND) == 0 && pev->velocity.Length2D() > 10)
 	{
 		BounceSound();
 	}
@@ -213,7 +213,7 @@ void CSatchel::Precache()
 }
 
 
-int CSatchel::GetItemInfo(ItemInfo* p)
+bool CSatchel::GetItemInfo(ItemInfo* p)
 {
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo1 = "Satchel Charge";
@@ -227,7 +227,7 @@ int CSatchel::GetItemInfo(ItemInfo* p)
 	p->iId = m_iId = WEAPON_SATCHEL;
 	p->iWeight = SATCHEL_WEIGHT;
 
-	return 1;
+	return true;
 }
 
 //=========================================================
@@ -273,7 +273,7 @@ bool CSatchel::Deploy()
 
 	bool result;
 
-	if (m_chargeReady)
+	if (0 != m_chargeReady)
 		result = DefaultDeploy("models/v_satchel_radio.mdl", "models/p_satchel_radio.mdl", SATCHEL_RADIO_DRAW, "hive");
 	else
 		result = DefaultDeploy("models/v_satchel.mdl", "models/p_satchel.mdl", SATCHEL_DRAW, "trip");
@@ -291,7 +291,7 @@ void CSatchel::Holster()
 {
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;
 
-	if (m_chargeReady)
+	if (0 != m_chargeReady)
 	{
 		SendWeaponAnim(SATCHEL_RADIO_HOLSTER);
 	}
@@ -301,7 +301,7 @@ void CSatchel::Holster()
 	}
 	EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "common/null.wav", 1.0, ATTN_NORM);
 
-	if (!m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] && !m_chargeReady)
+	if (0 == m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] && 0 == m_chargeReady)
 	{
 		m_pPlayer->pev->weapons &= ~(1 << WEAPON_SATCHEL);
 		SetThink(&CSatchel::DestroyItem);
@@ -367,7 +367,7 @@ void CSatchel::SecondaryAttack()
 
 void CSatchel::Throw()
 {
-	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType])
+	if (0 != m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType])
 	{
 		Vector vecSrc = m_pPlayer->pev->origin;
 
@@ -417,7 +417,7 @@ void CSatchel::WeaponIdle()
 		strcpy(m_pPlayer->m_szAnimExtention, "hive");
 		break;
 	case 2:
-		if (!m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType])
+		if (0 == m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType])
 		{
 			m_chargeReady = 0;
 			RetireWeapon();
@@ -466,9 +466,9 @@ void DeactivateSatchels(CBasePlayer* pOwner)
 			if (pSatchel->pev->owner == pOwner->edict())
 			{
 				pSatchel->Deactivate();
-			}
 		}
+	}
 
 		pFind = FIND_ENTITY_BY_CLASSNAME(pFind, "monster_satchel");
-	}
+}
 }

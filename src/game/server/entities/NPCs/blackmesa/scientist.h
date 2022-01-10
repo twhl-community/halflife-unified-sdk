@@ -74,7 +74,7 @@ public:
 	void RunTask(Task_t* pTask) override;
 	void StartTask(Task_t* pTask) override;
 	int	ObjectCaps() override { return CTalkMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
-	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 	int FriendNumber(int arrayNumber) override;
 	void SetActivity(Activity newActivity) override;
 	Activity GetStoppedActivity() override;
@@ -100,8 +100,8 @@ public:
 
 	void			Killed(entvars_t* pevAttacker, int iGib) override;
 
-	int		Save(CSave& save) override;
-	int		Restore(CRestore& restore) override;
+	bool	Save(CSave& save) override;
+	bool	Restore(CRestore& restore) override;
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	CUSTOM_SCHEDULES;
@@ -136,14 +136,14 @@ public:
 
 	void EXPORT SittingThink();
 	int	Classify() override;
-	int		Save(CSave& save) override;
-	int		Restore(CRestore& restore) override;
+	bool	Save(CSave& save) override;
+	bool	Restore(CRestore& restore) override;
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	void SetAnswerQuestion(CTalkMonster* pSpeaker) override;
 	int FriendNumber(int arrayNumber) override;
 
-	int FIdleSpeak();
+	bool FIdleSpeak();
 	int		m_baseSequence;
 	int		m_headTurn;
 	float	m_flResponseDelay;

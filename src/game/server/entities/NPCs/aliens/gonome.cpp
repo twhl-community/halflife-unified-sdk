@@ -44,8 +44,8 @@ class COFGonomeGuts : public CBaseEntity
 public:
 	using BaseClass = CBaseEntity;
 
-	int Save(CSave& save) override;
-	int Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 
 	static TYPEDESCRIPTION m_SaveData[];
 
@@ -123,7 +123,7 @@ void COFGonomeGuts::Touch(CBaseEntity* pOther)
 		break;
 	}
 
-	if (!pOther->pev->takedamage)
+	if (0 == pOther->pev->takedamage)
 	{
 		TraceResult tr;
 		// make a splat on the wall
@@ -144,7 +144,7 @@ void COFGonomeGuts::Animate()
 {
 	pev->nextthink = gpGlobals->time + 0.1;
 
-	if (pev->frame++)
+	if (0 != pev->frame++)
 	{
 		if (pev->frame > m_maxFrame)
 		{
@@ -200,8 +200,8 @@ class COFGonome : public CZombie
 public:
 	using BaseClass = CZombie;
 
-	int Save(CSave& save) override;
-	int Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 
 	static TYPEDESCRIPTION m_SaveData[];
 
@@ -429,7 +429,7 @@ void COFGonome::HandleAnimEvent(MonsterEvent_t* pEvent)
 		CBaseEntity* pHurt = CheckTraceHullAttack(70, gSkillData.gonomeDmgOneBite, DMG_SLASH);
 		if (pHurt)
 		{
-			if (pHurt->pev->flags & (FL_MONSTER | FL_CLIENT))
+			if ((pHurt->pev->flags & (FL_MONSTER | FL_CLIENT)) != 0)
 			{
 				pHurt->pev->punchangle.x = 9;
 				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_forward * 25;
@@ -457,7 +457,7 @@ void COFGonome::HandleAnimEvent(MonsterEvent_t* pEvent)
 		CBaseEntity* pHurt = CheckTraceHullAttack(70, gSkillData.gonomeDmgOneBite, DMG_SLASH);
 		if (pHurt)
 		{
-			if (pHurt->pev->flags & (FL_MONSTER | FL_CLIENT))
+			if ((pHurt->pev->flags & (FL_MONSTER | FL_CLIENT)) != 0)
 			{
 				pHurt->pev->punchangle.x = 9;
 				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_forward * 25;
@@ -763,7 +763,7 @@ public:
 	void Spawn() override;
 	int	Classify() override { return	CLASS_ALIEN_PASSIVE; }
 
-	void KeyValue(KeyValueData* pkvd) override;
+	bool KeyValue(KeyValueData* pkvd) override;
 
 	int	m_iPose;// which sequence to display	-- temporary, don't need to save
 	static const char* m_szPoses[3];
@@ -771,15 +771,15 @@ public:
 
 const char* CDeadGonome::m_szPoses[] = {"dead_on_stomach1", "dead_on_back", "dead_on_side"};
 
-void CDeadGonome::KeyValue(KeyValueData* pkvd)
+bool CDeadGonome::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq(pkvd->szKeyName, "pose"))
 	{
 		m_iPose = atoi(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
-	else
-		CBaseMonster::KeyValue(pkvd);
+
+	return CBaseMonster::KeyValue(pkvd);
 }
 
 LINK_ENTITY_TO_CLASS(monster_gonome_dead, CDeadGonome);

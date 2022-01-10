@@ -72,8 +72,8 @@ public:
 
 	void EXPORT StartTrail();
 
-	int		Save(CSave& save) override;
-	int		Restore(CRestore& restore) override;
+	bool	Save(CSave& save) override;
+	bool	Restore(CRestore& restore) override;
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	int  m_maxFrame;
@@ -137,7 +137,7 @@ void CPitdroneSpike::SpikeTouch(CBaseEntity* pOther)
 	// splat sound
 	int iPitch = RANDOM_FLOAT(120, 140);
 
-	if (!pOther->pev->takedamage)
+	if (0 == pOther->pev->takedamage)
 	{
 		EMIT_SOUND_DYN(edict(), CHAN_VOICE, "weapons/xbow_hit1.wav", VOL_NORM, ATTN_NORM, 0, iPitch);
 	}
@@ -151,7 +151,7 @@ void CPitdroneSpike::SpikeTouch(CBaseEntity* pOther)
 
 	//Stick it in the world for a bit
 	//TODO: maybe stick it on any entity that reports FL_WORLDBRUSH too?
-	if (!strcmp("worldspawn", STRING(pOther->pev->classname)))
+	if (0 == strcmp("worldspawn", STRING(pOther->pev->classname)))
 	{
 		const auto vecDir = pev->velocity.Normalize();
 
@@ -253,10 +253,10 @@ public:
 
 	void CheckAmmo() override;
 	void GibMonster() override;
-	void KeyValue(KeyValueData* pkvd) override;
+	bool KeyValue(KeyValueData* pkvd) override;
 
-	int	Save(CSave& save) override;
-	int Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 
 	CUSTOM_SCHEDULES;
 	static TYPEDESCRIPTION m_SaveData[];
@@ -1230,13 +1230,13 @@ void CPitdrone::GibMonster()
 	pev->nextthink = gpGlobals->time;
 }
 
-void CPitdrone::KeyValue(KeyValueData* pkvd)
+bool CPitdrone::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq("initammo", pkvd->szKeyName))
 	{
 		m_iInitialAmmo = atoi(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
-	else
-		CBaseMonster::KeyValue(pkvd);
+
+	return CBaseMonster::KeyValue(pkvd);
 }

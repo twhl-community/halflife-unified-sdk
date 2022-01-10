@@ -153,7 +153,7 @@ bool CPipewrench::Swing(const bool bFirst)
 	{
 		PLAYBACK_EVENT_FULL(FEV_NOTHOST, m_pPlayer->edict(), m_usPipewrench,
 			0.0, (float*)&g_vecZero, (float*)&g_vecZero, 0, 0, 0,
-			0.0, 0, tr.flFraction < 1);
+			0.0, 0, static_cast<int>(tr.flFraction < 1));
 	}
 
 
@@ -325,7 +325,7 @@ void CPipewrench::BigSwing()
 
 	PLAYBACK_EVENT_FULL(FEV_NOTHOST, m_pPlayer->edict(), m_usPipewrench,
 		0.0, (float*)&g_vecZero, (float*)&g_vecZero, 0, 0, 0,
-		0.0, 1, tr.flFraction < 1);
+		0.0, 1, static_cast<int>(tr.flFraction < 1));
 
 	EMIT_SOUND_DYN(edict(), CHAN_WEAPON, "weapons/pwrench_big_miss.wav", VOL_NORM, ATTN_NORM, 0, 94 + RANDOM_LONG(0, 15));
 
@@ -510,7 +510,7 @@ int CPipewrench::iItemSlot()
 	return 1;
 }
 
-int CPipewrench::GetItemInfo(ItemInfo* p)
+bool CPipewrench::GetItemInfo(ItemInfo* p)
 {
 	p->pszAmmo1 = nullptr;
 	p->iMaxAmmo1 = WEAPON_NOCLIP;

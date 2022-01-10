@@ -158,13 +158,13 @@ void COFNuclearBombTimer::SetNuclearBombTimer(bool fOn)
 class COFNuclearBomb : public CBaseToggle
 {
 public:
-	int	Save(CSave& save) override;
-	int Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
 	int ObjectCaps() override { return CBaseToggle::ObjectCaps() | FCAP_IMPULSE_USE; }
 
-	void KeyValue(KeyValueData* pkvd) override;
+	bool KeyValue(KeyValueData* pkvd) override;
 	void Precache() override;
 	void Spawn() override;
 
@@ -188,22 +188,20 @@ IMPLEMENT_SAVERESTORE(COFNuclearBomb, CBaseToggle);
 
 LINK_ENTITY_TO_CLASS(item_nuclearbomb, COFNuclearBomb);
 
-void COFNuclearBomb::KeyValue(KeyValueData* pkvd)
+bool COFNuclearBomb::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq("initialstate", pkvd->szKeyName))
 	{
 		m_fOn = atoi(pkvd->szValue) != 0;
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq("wait", pkvd->szKeyName))
 	{
 		m_flWait = atof(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
-	else
-	{
-		CBaseToggle::KeyValue(pkvd);
-	}
+
+	return CBaseToggle::KeyValue(pkvd);
 }
 
 void COFNuclearBomb::Precache()
@@ -225,7 +223,7 @@ void COFNuclearBomb::Precache()
 
 	m_pTimer->Spawn();
 
-	m_pTimer->SetNuclearBombTimer(m_fOn == 1);
+	m_pTimer->SetNuclearBombTimer(m_fOn);
 
 	m_pButton = GetClassPtr<COFNuclearBombButton>(nullptr);
 
@@ -234,7 +232,7 @@ void COFNuclearBomb::Precache()
 
 	m_pButton->Spawn();
 
-	m_pButton->pev->skin = m_fOn == 1;
+	m_pButton->pev->skin = static_cast<int>(m_fOn);
 }
 
 void COFNuclearBomb::Spawn()
@@ -283,12 +281,12 @@ void COFNuclearBomb::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE
 
 		if (m_pButton)
 		{
-			m_pButton->SetNuclearBombButton(m_fOn == 1);
+			m_pButton->SetNuclearBombButton(m_fOn);
 		}
 
 		if (m_pTimer)
 		{
-			m_pTimer->SetNuclearBombTimer(m_fOn == 1);
+			m_pTimer->SetNuclearBombTimer(m_fOn);
 		}
 
 		if (!m_pTimer || !m_pTimer->bBombSoundPlaying)

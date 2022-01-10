@@ -36,7 +36,7 @@ public:
 	// squad member info
 	int		m_iMySlot;// this is the behaviour slot that the monster currently holds in the squad. 
 
-	int  CheckEnemy(CBaseEntity* pEnemy) override;
+	bool CheckEnemy(CBaseEntity* pEnemy) override;
 	void StartMonster() override;
 	void VacateSlot();
 	void ScheduleChange() override;
@@ -59,8 +59,8 @@ public:
 		else
 			return (COFSquadTalkMonster*)((CBaseEntity*)m_hSquadMember[i]);
 	}
-	int	InSquad() { return m_hSquadLeader != NULL; }
-	int IsLeader() { return m_hSquadLeader == this; }
+	bool InSquad() { return m_hSquadLeader != NULL; }
+	bool IsLeader() { return m_hSquadLeader == this; }
 	int SquadJoin(int searchRadius);
 	int SquadRecruit(int searchRadius, int maxMembers);
 	int	SquadCount();
@@ -79,8 +79,8 @@ public:
 
 	static TYPEDESCRIPTION m_SaveData[];
 
-	int	Save(CSave& save) override;
-	int Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 
 	bool FValidateCover(const Vector& vecCoverLocation) override;
 
@@ -95,6 +95,6 @@ public:
 
 	virtual bool HealMe(COFSquadTalkMonster* pTarget);
 
-	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 };
 

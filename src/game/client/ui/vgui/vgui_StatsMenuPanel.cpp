@@ -79,7 +79,7 @@ static char szStatsBuf[StatsTeamsCount][1024];
 static int g_iWinningTeam = 0;
 static team_stat_info_t g_TeamStatInfo[3];
 
-CStatsMenuPanel::CStatsMenuPanel(int iTrans, int iRemoveMe, int x, int y, int wide, int tall)
+CStatsMenuPanel::CStatsMenuPanel(int iTrans, bool iRemoveMe, int x, int y, int wide, int tall)
 	: CMenuPanel(iTrans, iRemoveMe, x, y, wide, tall)
 {
 	memset(m_pClassImages, 0, sizeof(m_pClassImages));
@@ -299,7 +299,7 @@ int CStatsMenuPanel::MsgFunc_StatsInfo(const char* pszName, int iSize, void* pbu
 	const int iNumPlayers = READ_BYTE();
 	const int chunkId = READ_BYTE();
 
-	if (!teamNum)
+	if (0 == teamNum)
 	{
 		if (m_pClassImages[0])
 		{
@@ -348,7 +348,7 @@ int CStatsMenuPanel::MsgFunc_StatsInfo(const char* pszName, int iSize, void* pbu
 
 	g_TeamStatInfo[teamNum].bChunksRead |= (1 << chunkId);
 
-	if (g_TeamStatInfo[teamNum].bChunksRead & 3)
+	if ((g_TeamStatInfo[teamNum].bChunksRead & 3) != 0)
 	{
 		char sz[64];
 		sprintf(sz, "stats/stats_%s.ost", sCTFStatsSelection[teamNum]);

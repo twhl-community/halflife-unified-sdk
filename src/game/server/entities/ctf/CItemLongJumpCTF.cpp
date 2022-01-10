@@ -42,17 +42,17 @@ void CItemLongJumpCTF::RemoveEffect(CBasePlayer* pPlayer)
 
 bool CItemLongJumpCTF::MyTouch(CBasePlayer* pPlayer)
 {
-	if (!(pPlayer->m_iItems & CTFItem::LongJump))
+	if ((pPlayer->m_iItems & CTFItem::LongJump) == 0)
 	{
-		if (!multipower.value)
+		if (0 == multipower.value)
 		{
-			if (pPlayer->m_iItems & ~(CTFItem::BlackMesaFlag | CTFItem::OpposingForceFlag))
+			if ((pPlayer->m_iItems & ~(CTFItem::BlackMesaFlag | CTFItem::OpposingForceFlag)) != 0)
 				return false;
 		}
 
 		if (static_cast<int>(team_no) <= 0 || team_no == pPlayer->m_iTeamNum)
 		{
-			if (pPlayer->pev->weapons & (1 << WEAPON_SUIT))
+			if ((pPlayer->pev->weapons & (1 << WEAPON_SUIT)) != 0)
 			{
 				pPlayer->m_fLongJump = true;
 				g_engfuncs.pfnSetPhysicsKeyValue(pPlayer->edict(), "jpj", "1");
@@ -76,7 +76,7 @@ bool CItemLongJumpCTF::MyTouch(CBasePlayer* pPlayer)
 void CItemLongJumpCTF::Spawn()
 {
 	//TODO: precache calls should be in Precache
-	if (pev->model)
+	if (!FStringNull(pev->model))
 		g_engfuncs.pfnPrecacheModel((char*)STRING(pev->model));
 
 	g_engfuncs.pfnPrecacheSound("ctf/itemthrow.wav");

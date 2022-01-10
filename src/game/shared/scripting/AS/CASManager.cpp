@@ -193,7 +193,7 @@ void CASManager::OnMessageCallback(const asSMessageInfo* msg)
 
 	//The engine will often log information not related to a script by passing an empty section string and 0, 0 for the location.
 	//Only prepend this information if it's relevant.
-	if (msg->section && msg->section[0])
+	if (msg->section && '\0' != msg->section[0])
 	{
 		m_Logger->log(level, "In section \"{}\" at line {}, column {}: {}", msg->section, msg->row, msg->col, msg->message);
 	}

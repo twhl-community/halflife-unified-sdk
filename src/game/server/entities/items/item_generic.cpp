@@ -21,7 +21,7 @@ const auto SF_ITEMGENERIC_DROP_TO_FLOOR = 1 << 0;
 class CGenericItem : public CBaseAnimating
 {
 public:
-	void KeyValue(KeyValueData* pkvd) override;
+	bool KeyValue(KeyValueData* pkvd) override;
 	void Precache() override;
 	void Spawn() override;
 
@@ -36,27 +36,25 @@ public:
 
 LINK_ENTITY_TO_CLASS(item_generic, CGenericItem);
 
-void CGenericItem::KeyValue(KeyValueData* pkvd)
+bool CGenericItem::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq("sequencename", pkvd->szKeyName))
 	{
 		m_iSequence = ALLOC_STRING(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq("skin", pkvd->szKeyName))
 	{
 		pev->skin = static_cast<int>(atof(pkvd->szValue));
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq("body", pkvd->szKeyName))
 	{
 		pev->body = atoi(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
-	else
-	{
-		CBaseDelay::KeyValue(pkvd);
-	}
+	
+	return CBaseDelay::KeyValue(pkvd);
 }
 
 void CGenericItem::Precache()
@@ -75,15 +73,15 @@ void CGenericItem::Spawn()
 
 	SET_MODEL(edict(), STRING(pev->model));
 
-	if (m_iSequence)
+	if (!FStringNull(m_iSequence))
 	{
 		SetThink(&CGenericItem::StartItem);
 		pev->nextthink = gpGlobals->time + 0.1;
 	}
 
-	if (pev->spawnflags & SF_ITEMGENERIC_DROP_TO_FLOOR)
+	if ((pev->spawnflags & SF_ITEMGENERIC_DROP_TO_FLOOR) != 0)
 	{
-		if (!g_engfuncs.pfnDropToFloor(pev->pContainingEntity))
+		if (0 == g_engfuncs.pfnDropToFloor(pev->pContainingEntity))
 		{
 			ALERT(at_error, "Item %s fell out of level at %f,%f,%f", STRING(pev->classname), pev->origin.x, pev->origin.y, pev->origin.z);
 			UTIL_Remove(this);

@@ -124,14 +124,14 @@ public:
 	void GibMonster() override;
 	void SpeakSentence();
 
-	int	Save(CSave& save) override;
-	int Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 
 	CBaseEntity* Kick();
 	Schedule_t* GetSchedule() override;
 	Schedule_t* GetScheduleOfType(int Type) override;
 	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
-	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 
 	bool FOkToSpeak();
 	void JustSpoke();
@@ -144,7 +144,7 @@ public:
 
 	void DeclineFollowing() override;
 
-	void KeyValue(KeyValueData* pkvd) override;
+	bool KeyValue(KeyValueData* pkvd) override;
 
 	void Killed(entvars_t* pevAttacker, int iGib) override;
 
@@ -227,7 +227,7 @@ protected:
 class CBaseHGruntAllyRepel : public CBaseMonster
 {
 public:
-	void KeyValue(KeyValueData* pkvd) override;
+	bool KeyValue(KeyValueData* pkvd) override;
 
 	void Spawn() override;
 	void Precache() override;

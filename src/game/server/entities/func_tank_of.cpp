@@ -48,7 +48,7 @@ class COFFuncTank : public CBaseEntity
 public:
 	void	Spawn() override;
 	void	Precache() override;
-	void	KeyValue(KeyValueData* pkvd) override;
+	bool	KeyValue(KeyValueData* pkvd) override;
 	void	Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 	void	Think() override;
 	void	TrackTarget();
@@ -65,7 +65,7 @@ public:
 	// Bmodels don't go across transitions
 	int	ObjectCaps() override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 
-	inline bool IsActive() { return (pev->spawnflags & SF_TANK_ACTIVE) ? true : false; }
+	inline bool IsActive() { return (pev->spawnflags & SF_TANK_ACTIVE) != 0; }
 	inline void TankActivate() { pev->spawnflags |= SF_TANK_ACTIVE; pev->nextthink = pev->ltime + 0.1; m_fireLast = 0; }
 	inline void TankDeactivate() { pev->spawnflags &= ~SF_TANK_ACTIVE; m_fireLast = 0; StopRotSound(); }
 	inline bool CanFire() { return (gpGlobals->time - m_lastSightTime) < m_persist; }
@@ -85,8 +85,8 @@ public:
 
 	void		AdjustAnglesForBarrel(Vector& angles, float distance);
 
-	int	Save(CSave& save) override;
-	int	Restore(CRestore& restore) override;
+	bool	Save(CSave& save) override;
+	bool	Restore(CRestore& restore) override;
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	bool OnControls(entvars_t* pevTest) override;
@@ -212,130 +212,130 @@ void COFFuncTank::Spawn()
 
 void COFFuncTank::Precache()
 {
-	if (m_iszSpriteSmoke)
+	if (!FStringNull(m_iszSpriteSmoke))
 		PRECACHE_MODEL((char*)STRING(m_iszSpriteSmoke));
-	if (m_iszSpriteFlash)
+	if (!FStringNull(m_iszSpriteFlash))
 		PRECACHE_MODEL((char*)STRING(m_iszSpriteFlash));
 
-	if (pev->noise)
+	if (!FStringNull(pev->noise))
 		PRECACHE_SOUND((char*)STRING(pev->noise));
 }
 
 
-void COFFuncTank::KeyValue(KeyValueData* pkvd)
+bool COFFuncTank::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq(pkvd->szKeyName, "yawrate"))
 	{
 		m_yawRate = atof(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "yawrange"))
 	{
 		m_yawRange = atof(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "yawtolerance"))
 	{
 		m_yawTolerance = atof(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "pitchrange"))
 	{
 		m_pitchRange = atof(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "pitchrate"))
 	{
 		m_pitchRate = atof(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "pitchtolerance"))
 	{
 		m_pitchTolerance = atof(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "firerate"))
 	{
 		m_fireRate = atof(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "barrel"))
 	{
 		m_barrelPos.x = atof(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "barrely"))
 	{
 		m_barrelPos.y = atof(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "barrelz"))
 	{
 		m_barrelPos.z = atof(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "spritescale"))
 	{
 		m_spriteScale = atof(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "spritesmoke"))
 	{
 		m_iszSpriteSmoke = ALLOC_STRING(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "spriteflash"))
 	{
 		m_iszSpriteFlash = ALLOC_STRING(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "rotatesound"))
 	{
 		pev->noise = ALLOC_STRING(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "persistence"))
 	{
 		m_persist = atof(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "bullet"))
 	{
 		m_bulletType = (TANKBULLET)atoi(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "bullet_damage"))
 	{
 		m_iBulletDamage = atoi(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "firespread"))
 	{
 		m_spread = atoi(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "minRange"))
 	{
 		m_minRange = atof(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "maxRange"))
 	{
 		m_maxRange = atof(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "master"))
 	{
 		m_iszMaster = ALLOC_STRING(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "enemytype"))
 	{
 		m_iEnemyType = atoi(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
-	else
-		CBaseEntity::KeyValue(pkvd);
+	
+	return CBaseEntity::KeyValue(pkvd);
 }
 
 ////////////// START NEW STUFF //////////////
@@ -344,7 +344,7 @@ void COFFuncTank::KeyValue(KeyValueData* pkvd)
 // TANK CONTROLLING
 bool COFFuncTank::OnControls(entvars_t* pevTest)
 {
-	if (!(pev->spawnflags & SF_TANK_CANCONTROL))
+	if ((pev->spawnflags & SF_TANK_CANCONTROL) == 0)
 		return false;
 
 	Vector offset = pevTest->origin - pev->origin;
@@ -361,7 +361,7 @@ bool COFFuncTank::StartControl(CBasePlayer* pController)
 		return false;
 
 	// Team only or disabled?
-	if (m_iszMaster)
+	if (!FStringNull(m_iszMaster))
 	{
 		if (!UTIL_IsMasterTriggered(m_iszMaster, pController))
 			return false;
@@ -414,7 +414,7 @@ void COFFuncTank::ControllerPostFrame()
 	if (gpGlobals->time < m_flNextAttack)
 		return;
 
-	if (m_pController->pev->button & IN_ATTACK)
+	if ((m_pController->pev->button & IN_ATTACK) != 0)
 	{
 		Vector vecForward;
 		UTIL_MakeVectorsPrivate(pev->angles, vecForward, NULL, NULL);
@@ -435,7 +435,7 @@ void COFFuncTank::ControllerPostFrame()
 
 void COFFuncTank::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
-	if (pev->spawnflags & SF_TANK_CANCONTROL)
+	if ((pev->spawnflags & SF_TANK_CANCONTROL) != 0)
 	{  // player controlled turret
 
 		if (pActivator->Classify() != CLASS_PLAYER)
@@ -490,7 +490,7 @@ CBaseEntity* COFFuncTank::FindTarget()
 
 			if (tr.pHit == pPlayerTarget->pev->pContainingEntity)
 			{
-				if (!m_iEnemyType)
+				if (0 == m_iEnemyType)
 					return pPlayerTarget;
 
 				flIdealDist = distance;
@@ -511,7 +511,7 @@ CBaseEntity* COFFuncTank::FindTarget()
 		if (this == pEntity)
 			continue;
 
-		if (pEntity->pev->spawnflags & SF_MONSTER_PRISONER)
+		if ((pEntity->pev->spawnflags & SF_MONSTER_PRISONER) != 0)
 			continue;
 
 		if (pEntity->pev->health <= 0)
@@ -525,13 +525,13 @@ CBaseEntity* COFFuncTank::FindTarget()
 		if (pMonster->IRelationship(pPlayerTarget) != R_AL)
 			continue;
 
-		if (pEntity->pev->flags & FL_NOTARGET)
+		if ((pEntity->pev->flags & FL_NOTARGET) != 0)
 			continue;
 
 		if (!FVisible(pEntity))
 			continue;
 
-		if (pEntity->IsPlayer() && (pev->spawnflags & SF_TANK_ACTIVE))
+		if (pEntity->IsPlayer() && (pev->spawnflags & SF_TANK_ACTIVE) != 0)
 		{
 			if (pMonster->FInViewCone(this))
 			{
@@ -552,7 +552,7 @@ CBaseEntity* COFFuncTank::FindTarget()
 			TraceResult tr;
 			UTIL_TraceLine(BarrelPosition(), pEntity->pev->origin + pEntity->pev->view_ofs, dont_ignore_monsters, edict(), &tr);
 
-			if (pev->spawnflags & SF_TANK_LINEOFSIGHT)
+			if ((pev->spawnflags & SF_TANK_LINEOFSIGHT) != 0)
 			{
 				if (tr.pHit == pEntity->edict())
 				{
@@ -722,13 +722,13 @@ void COFFuncTank::TrackTarget()
 	if (m_pController)
 		return;
 
-	if (CanFire() && ((fabs(distX) < m_pitchTolerance && fabs(distY) < m_yawTolerance) || (pev->spawnflags & SF_TANK_LINEOFSIGHT)))
+	if (CanFire() && ((fabs(distX) < m_pitchTolerance && fabs(distY) < m_yawTolerance) || (pev->spawnflags & SF_TANK_LINEOFSIGHT) != 0))
 	{
 		bool fire = false;
 		Vector forward;
 		UTIL_MakeVectorsPrivate(pev->angles, forward, NULL, NULL);
 
-		if (pev->spawnflags & SF_TANK_LINEOFSIGHT)
+		if ((pev->spawnflags & SF_TANK_LINEOFSIGHT) != 0)
 		{
 			float length = direction.Length();
 			UTIL_TraceLine(barrelEnd, barrelEnd + forward * length, dont_ignore_monsters, edict(), &tr);
@@ -760,12 +760,12 @@ void COFFuncTank::AdjustAnglesForBarrel(Vector& angles, float distance)
 	{
 		distance -= m_barrelPos.z;
 		d2 = distance * distance;
-		if (m_barrelPos.y)
+		if (0 != m_barrelPos.y)
 		{
 			r2 = m_barrelPos.y * m_barrelPos.y;
 			angles.y += (180.0 / M_PI) * atan2(m_barrelPos.y, sqrt(d2 - r2));
 		}
-		if (m_barrelPos.z)
+		if (0 != m_barrelPos.z)
 		{
 			r2 = m_barrelPos.z * m_barrelPos.z;
 			angles.x += (180.0 / M_PI) * atan2(-m_barrelPos.z, sqrt(d2 - r2));
@@ -779,7 +779,7 @@ void COFFuncTank::Fire(const Vector& barrelEnd, const Vector& forward, entvars_t
 {
 	if (m_fireLast != 0)
 	{
-		if (m_iszSpriteSmoke)
+		if (!FStringNull(m_iszSpriteSmoke))
 		{
 			CSprite* pSprite = CSprite::SpriteCreate(STRING(m_iszSpriteSmoke), barrelEnd, true);
 			pSprite->AnimateAndDie(RANDOM_FLOAT(15.0, 20.0));
@@ -787,7 +787,7 @@ void COFFuncTank::Fire(const Vector& barrelEnd, const Vector& forward, entvars_t
 			pSprite->pev->velocity.z = RANDOM_FLOAT(40, 80);
 			pSprite->SetScale(m_spriteScale);
 		}
-		if (m_iszSpriteFlash)
+		if (!FStringNull(m_iszSpriteFlash))
 		{
 			CSprite* pSprite = CSprite::SpriteCreate(STRING(m_iszSpriteFlash), barrelEnd, true);
 			pSprite->AnimateAndDie(60);
@@ -825,7 +825,7 @@ void COFFuncTank::TankTrace(const Vector& vecStart, const Vector& vecForward, co
 
 void COFFuncTank::StartRotSound()
 {
-	if (!pev->noise || (pev->spawnflags & SF_TANK_SOUNDON))
+	if (FStringNull(pev->noise) || (pev->spawnflags & SF_TANK_SOUNDON) != 0)
 		return;
 	pev->spawnflags |= SF_TANK_SOUNDON;
 	EMIT_SOUND(edict(), CHAN_STATIC, (char*)STRING(pev->noise), 0.85, ATTN_NORM);
@@ -834,7 +834,7 @@ void COFFuncTank::StartRotSound()
 
 void COFFuncTank::StopRotSound()
 {
-	if (pev->spawnflags & SF_TANK_SOUNDON)
+	if ((pev->spawnflags & SF_TANK_SOUNDON) != 0)
 		STOP_SOUND(edict(), CHAN_STATIC, (char*)STRING(pev->noise));
 	pev->spawnflags &= ~SF_TANK_SOUNDON;
 }
@@ -892,13 +892,13 @@ class COFFuncTankLaser : public COFFuncTank
 {
 public:
 	void	Activate() override;
-	void	KeyValue(KeyValueData* pkvd) override;
+	bool	KeyValue(KeyValueData* pkvd) override;
 	void	Fire(const Vector& barrelEnd, const Vector& forward, entvars_t* pevAttacker) override;
 	void	Think() override;
 	CLaser* GetLaser();
 
-	int	Save(CSave& save) override;
-	int	Restore(CRestore& restore) override;
+	bool	Save(CSave& save) override;
+	bool	Restore(CRestore& restore) override;
 	static	TYPEDESCRIPTION m_SaveData[];
 
 private:
@@ -929,15 +929,15 @@ void COFFuncTankLaser::Activate()
 }
 
 
-void COFFuncTankLaser::KeyValue(KeyValueData* pkvd)
+bool COFFuncTankLaser::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq(pkvd->szKeyName, "laserentity"))
 	{
 		pev->message = ALLOC_STRING(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
-	else
-		COFFuncTank::KeyValue(pkvd);
+	
+	return COFFuncTank::KeyValue(pkvd);
 }
 
 
@@ -985,7 +985,7 @@ void COFFuncTankLaser::Fire(const Vector& barrelEnd, const Vector& forward, entv
 		UTIL_MakeAimVectors(pev->angles);
 
 		int bulletCount = (gpGlobals->time - m_fireLast) * m_fireRate;
-		if (bulletCount)
+		if (0 != bulletCount)
 		{
 			for (i = 0; i < bulletCount; i++)
 			{
@@ -1047,21 +1047,21 @@ void COFFuncTankRocket::Fire(const Vector& barrelEnd, const Vector& forward, ent
 class COFFuncTankMortar : public COFFuncTank
 {
 public:
-	void KeyValue(KeyValueData* pkvd) override;
+	bool KeyValue(KeyValueData* pkvd) override;
 	void Fire(const Vector& barrelEnd, const Vector& forward, entvars_t* pevAttacker) override;
 };
 LINK_ENTITY_TO_CLASS(func_tankmortar_of, COFFuncTankMortar);
 
 
-void COFFuncTankMortar::KeyValue(KeyValueData* pkvd)
+bool COFFuncTankMortar::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq(pkvd->szKeyName, "iMagnitude"))
 	{
 		pev->impulse = atoi(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
-	else
-		COFFuncTank::KeyValue(pkvd);
+	
+	return COFFuncTank::KeyValue(pkvd);
 }
 
 
@@ -1102,8 +1102,8 @@ public:
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 	void Think() override;
 
-	int	Save(CSave& save) override;
-	int	Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
 	COFFuncTank* m_pTank;
@@ -1140,7 +1140,7 @@ void COFFuncTankControls::Think()
 	{
 		pTarget = FIND_ENTITY_BY_TARGETNAME(pTarget, STRING(pev->target));
 	}
-	while (!FNullEnt(pTarget) && strncmp(STRING(pTarget->v.classname), "func_tank", 9));
+	while (!FNullEnt(pTarget) && 0 != strncmp(STRING(pTarget->v.classname), "func_tank", 9));
 
 	if (FNullEnt(pTarget))
 	{

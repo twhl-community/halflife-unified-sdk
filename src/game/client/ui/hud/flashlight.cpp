@@ -31,10 +31,10 @@ DECLARE_MESSAGE(m_Flash, Flashlight)
 
 #define BAT_NAME "sprites/%d_Flashlight.spr"
 
-int CHudFlashlight::Init()
+bool CHudFlashlight::Init()
 {
 	m_fFade = 0;
-	m_fOn = 0;
+	m_fOn = false;
 
 	HOOK_MESSAGE(Flashlight);
 	HOOK_MESSAGE(FlashBat);
@@ -43,16 +43,16 @@ int CHudFlashlight::Init()
 
 	gHUD.AddHudElem(this);
 
-	return 1;
+	return true;
 };
 
 void CHudFlashlight::Reset()
 {
 	m_fFade = 0;
-	m_fOn = 0;
+	m_fOn = false;
 }
 
-int CHudFlashlight::VidInit()
+bool CHudFlashlight::VidInit()
 {
 	auto setup = [](const char* empty, const char* full, const char* beam)
 	{
@@ -78,24 +78,24 @@ int CHudFlashlight::VidInit()
 
 	m_nvSprite = LoadSprite("sprites/of_nv_b.spr");
 
-	return 1;
+	return true;
 };
 
-int CHudFlashlight::MsgFunc_FlashBat(const char* pszName, int iSize, void* pbuf)
+bool CHudFlashlight::MsgFunc_FlashBat(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 	int x = READ_BYTE();
 	m_iBat = x;
 	m_flBat = ((float)x) / 100.0;
 
-	return 1;
+	return true;
 }
 
-int CHudFlashlight::MsgFunc_Flashlight(const char* pszName, int iSize, void* pbuf)
+bool CHudFlashlight::MsgFunc_Flashlight(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 	m_SuitLightType = static_cast<SuitLightType>(READ_BYTE());
-	m_fOn = READ_BYTE();
+	m_fOn = 0 != READ_BYTE();
 	int x = READ_BYTE();
 	m_iBat = x;
 	m_flBat = ((float)x) / 100.0;
@@ -103,19 +103,19 @@ int CHudFlashlight::MsgFunc_Flashlight(const char* pszName, int iSize, void* pbu
 	//Always update this, so that changing to flashlight type disables NVG effects
 	gHUD.SetNightVisionState(m_SuitLightType == SuitLightType::Nightvision && m_fOn);
 
-	return 1;
+	return true;
 }
 
-int CHudFlashlight::Draw(float flTime)
+bool CHudFlashlight::Draw(float flTime)
 {
-	if (gHUD.m_iHideHUDDisplay & (HIDEHUD_FLASHLIGHT | HIDEHUD_ALL))
-		return 1;
+	if ((gHUD.m_iHideHUDDisplay & (HIDEHUD_FLASHLIGHT | HIDEHUD_ALL)) != 0)
+		return true;
 
 	int x, y;
 	Rect rc;
 
-	if (!(gHUD.m_iWeaponBits & (1 << (WEAPON_SUIT))))
-		return 1;
+	if ((gHUD.m_iWeaponBits & (1 << (WEAPON_SUIT))) == 0)
+		return true;
 
 	const int a = m_fOn ? 225 : MIN_ALPHA;
 
@@ -158,7 +158,7 @@ int CHudFlashlight::Draw(float flTime)
 	}
 
 
-	return 1;
+	return true;
 }
 
 void CHudFlashlight::DrawNightVision()
@@ -172,7 +172,7 @@ void CHudFlashlight::DrawNightVision()
 
 	lastFrame = frameIndex;
 
-	if (m_nvSprite)
+	if (0 != m_nvSprite)
 	{
 		const auto width = gEngfuncs.pfnSPR_Width(m_nvSprite, 0);
 		const auto height = gEngfuncs.pfnSPR_Height(m_nvSprite, 0);

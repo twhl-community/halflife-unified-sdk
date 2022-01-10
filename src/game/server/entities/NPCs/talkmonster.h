@@ -101,14 +101,14 @@ public:
 
 	// Base Monster functions
 	void			Precache() override;
-	int				TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	bool			TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 	void			Touch(CBaseEntity* pOther) override;
 	void			Killed(entvars_t* pevAttacker, int iGib) override;
 	int				IRelationship(CBaseEntity* pTarget) override;
-	int		CanPlaySentence(bool fDisregardState) override;
+	bool			CanPlaySentence(bool fDisregardState) override;
 	void	PlaySentence(const char* pszSentence, float duration, float volume, float attenuation) override;
 	void			PlayScriptedSentence(const char* pszSentence, float duration, float volume, float attenuation, bool bConcurrent, CBaseEntity* pListener) override;
-	void			KeyValue(KeyValueData* pkvd) override;
+	bool			KeyValue(KeyValueData* pkvd) override;
 
 	// AI functions
 	Schedule_t* GetScheduleOfType(int Type) override;
@@ -121,11 +121,11 @@ public:
 	// Conversations / communication
 	int				GetVoicePitch();
 	void			IdleRespond();
-	int				FIdleSpeak();
-	int				FIdleStare();
-	int				FIdleHello();
+	bool			FIdleSpeak();
+	bool			FIdleStare();
+	bool			FIdleHello();
 	void			IdleHeadTurn(Vector& vecFriend);
-	int				FOkToSpeak();
+	bool				FOkToSpeak();
 	void			TrySmellTalk();
 	void			AlertFriends();
 	void			ShutUpFriends();
@@ -155,8 +155,8 @@ public:
 	virtual void	SetAnswerQuestion(CTalkMonster* pSpeaker);
 	virtual int		FriendNumber(int arrayNumber) { return arrayNumber; }
 
-	int		Save(CSave& save) override;
-	int		Restore(CRestore& restore) override;
+	bool	Save(CSave& save) override;
+	bool	Restore(CRestore& restore) override;
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	static float g_talkWaitTime;

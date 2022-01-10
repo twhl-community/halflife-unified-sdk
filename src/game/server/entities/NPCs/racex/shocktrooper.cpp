@@ -160,14 +160,14 @@ public:
 	void GibMonster() override;
 	void SpeakSentence();
 
-	int	Save(CSave& save) override;
-	int Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 
 	CBaseEntity* Kick();
 	Schedule_t* GetSchedule() override;
 	Schedule_t* GetScheduleOfType(int Type) override;
 	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
-	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 
 	int IRelationship(CBaseEntity* pTarget) override;
 
@@ -356,7 +356,7 @@ bool CShockTrooper::FOkToSpeak()
 	if (gpGlobals->time <= CTalkMonster::g_talkWaitTime)
 		return false;
 
-	if (pev->spawnflags & SF_MONSTER_GAG)
+	if ((pev->spawnflags & SF_MONSTER_GAG) != 0)
 	{
 		if (m_MonsterState != MONSTERSTATE_COMBAT)
 		{
@@ -637,7 +637,7 @@ void CShockTrooper::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector v
 // needs to forget that he is in cover if he's hurt. (Obviously
 // not in a safe place anymore).
 //=========================================================
-int CShockTrooper::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool CShockTrooper::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
 	Forget(bits_MEMORY_INCOVER);
 
@@ -693,9 +693,9 @@ void CShockTrooper::SetYawSpeed()
 
 void CShockTrooper::IdleSound()
 {
-	if (FOkToSpeak() && (g_fShockTrooperQuestion || RANDOM_LONG(0, 1)))
+	if (FOkToSpeak() && (0 != g_fShockTrooperQuestion || RANDOM_LONG(0, 1)))
 	{
-		if (!g_fShockTrooperQuestion)
+		if (0 == g_fShockTrooperQuestion)
 		{
 			// ask question or make statement
 			switch (RANDOM_LONG(0, 2))
@@ -1874,7 +1874,7 @@ Schedule_t* CShockTrooper::GetSchedule()
 	// flying? If PRONE, barnacle has me. IF not, it's assumed I am rapelling. 
 	if (pev->movetype == MOVETYPE_FLY && m_MonsterState != MONSTERSTATE_PRONE)
 	{
-		if (pev->flags & FL_ONGROUND)
+		if ((pev->flags & FL_ONGROUND) != 0)
 		{
 			// just landed
 			pev->movetype = MOVETYPE_STEP;
@@ -1899,7 +1899,7 @@ Schedule_t* CShockTrooper::GetSchedule()
 		ASSERT(pSound != NULL);
 		if (pSound)
 		{
-			if (pSound->m_iType & bits_SOUND_DANGER)
+			if ((pSound->m_iType & bits_SOUND_DANGER) != 0)
 			{
 				// dangerous sound nearby!
 
@@ -2366,7 +2366,7 @@ public:
 	void Spawn() override;
 	int	Classify() override { return	CLASS_HUMAN_MILITARY; }
 
-	void KeyValue(KeyValueData* pkvd) override;
+	bool KeyValue(KeyValueData* pkvd) override;
 
 	int	m_iPose;// which sequence to display	-- temporary, don't need to save
 	static const char* m_szPoses[3];
@@ -2374,15 +2374,15 @@ public:
 
 const char* CDeadShockTrooper::m_szPoses[] = {"deadstomach", "deadside", "deadsitting"};
 
-void CDeadShockTrooper::KeyValue(KeyValueData* pkvd)
+bool CDeadShockTrooper::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq(pkvd->szKeyName, "pose"))
 	{
 		m_iPose = atoi(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
-	else
-		CBaseMonster::KeyValue(pkvd);
+
+	return CBaseMonster::KeyValue(pkvd);
 }
 
 LINK_ENTITY_TO_CLASS(monster_ShockTrooper_dead, CDeadShockTrooper);

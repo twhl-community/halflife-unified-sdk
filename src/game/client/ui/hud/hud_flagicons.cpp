@@ -28,7 +28,7 @@
 DECLARE_MESSAGE(m_FlagIcons, FlagIcon);
 DECLARE_MESSAGE(m_FlagIcons, FlagTimer);
 
-int CHudFlagIcons::Init()
+bool CHudFlagIcons::Init()
 {
 	HOOK_MESSAGE(FlagIcon);
 	HOOK_MESSAGE(FlagTimer);
@@ -41,12 +41,12 @@ int CHudFlagIcons::Init()
 	m_bIsTimer = false;
 	m_bTimerReset = false;
 
-	return 1;
+	return true;
 }
 
-int CHudFlagIcons::VidInit()
+bool CHudFlagIcons::VidInit()
 {
-	return 1;
+	return true;
 }
 
 void CHudFlagIcons::InitHUDData()
@@ -54,7 +54,7 @@ void CHudFlagIcons::InitHUDData()
 	memset(m_FlagList, 0, sizeof(m_FlagList));
 }
 
-int CHudFlagIcons::Draw(float flTime)
+bool CHudFlagIcons::Draw(float flTime)
 {
 	//TODO: can this ever return 2?
 	if (gEngfuncs.IsSpectateOnly() != 2)
@@ -65,7 +65,7 @@ int CHudFlagIcons::Draw(float flTime)
 		{
 			const auto& flag = m_FlagList[i];
 
-			if (flag.spr)
+			if (0 != flag.spr)
 			{
 				y += flag.rc.top - flag.rc.bottom - 5;
 
@@ -99,7 +99,7 @@ int CHudFlagIcons::Draw(float flTime)
 		}
 	}
 
-	return 1;
+	return true;
 }
 
 void CHudFlagIcons::EnableFlag(const char* pszFlagName, unsigned char team_idx, unsigned char red, unsigned char green, unsigned char blue, unsigned char score)
@@ -118,7 +118,7 @@ void CHudFlagIcons::EnableFlag(const char* pszFlagName, unsigned char team_idx, 
 		flag.score = score;
 
 		auto& teamInfo = g_TeamInfo[team_idx + 1];
-		teamInfo.scores_overriden = 1;
+		teamInfo.scores_overriden = true;
 		teamInfo.frags = score;
 
 		strcpy(flag.szSpriteName, pszFlagName);
@@ -137,10 +137,10 @@ void CHudFlagIcons::DisableFlag(const char* pszFlagName, unsigned char team_idx)
 	}
 }
 
-int CHudFlagIcons::MsgFunc_FlagIcon(const char* pszName, int iSize, void* pbuf)
+bool CHudFlagIcons::MsgFunc_FlagIcon(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
-	const int isActive = READ_BYTE();
+	const bool isActive = 0 != READ_BYTE();
 	const char* flagName = READ_STRING();
 	const int team_idx = READ_BYTE();
 
@@ -158,10 +158,10 @@ int CHudFlagIcons::MsgFunc_FlagIcon(const char* pszName, int iSize, void* pbuf)
 		DisableFlag(flagName, team_idx);
 	}
 
-	return 1;
+	return true;
 }
 
-int CHudFlagIcons::MsgFunc_FlagTimer(const char* pszName, int iSize, void* pbuf)
+bool CHudFlagIcons::MsgFunc_FlagTimer(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 	m_bIsTimer = READ_BYTE() != 0;
@@ -172,5 +172,5 @@ int CHudFlagIcons::MsgFunc_FlagTimer(const char* pszName, int iSize, void* pbuf)
 		m_bTimerReset = true;
 	}
 
-	return 1;
+	return true;
 }

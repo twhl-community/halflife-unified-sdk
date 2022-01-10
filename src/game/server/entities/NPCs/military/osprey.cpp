@@ -86,7 +86,7 @@ void COsprey::SpawnCore(const char* model)
 	SetThink(&COsprey::FindAllThink);
 	SetUse(&COsprey::CommandUse);
 
-	if (!(pev->spawnflags & SF_WAITFORTRIGGER))
+	if ((pev->spawnflags & SF_WAITFORTRIGGER) == 0)
 	{
 		pev->nextthink = gpGlobals->time + 1.0;
 	}
@@ -257,7 +257,7 @@ void COsprey::HoverThink()
 	int i;
 	for (i = 0; i < 4; i++)
 	{
-		if (m_hRepel[i] != NULL && m_hRepel[i]->pev->health > 0 && !(m_hRepel[i]->pev->flags & FL_ONGROUND))
+		if (m_hRepel[i] != NULL && m_hRepel[i]->pev->health > 0 && (m_hRepel[i]->pev->flags & FL_ONGROUND) == 0)
 		{
 			break;
 		}

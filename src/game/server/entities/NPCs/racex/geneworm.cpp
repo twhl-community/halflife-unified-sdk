@@ -32,8 +32,8 @@ const int AE_GENEWORM_HIT_WALL = 9;
 class COFGeneWormCloud : public CBaseEntity
 {
 public:
-	int	Save(CSave& save) override;
-	int Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
 	int Classify() override { return CLASS_NONE; }
@@ -102,7 +102,7 @@ void COFGeneWormCloud::Spawn()
 
 	m_maxFrame = MODEL_FRAMES(pev->modelindex) - 1;
 
-	if (pev->angles.y && !pev->angles.z)
+	if (0 != pev->angles.y && 0 == pev->angles.z)
 	{
 		pev->angles.z = pev->angles.y;
 		pev->angles.y = 0;
@@ -173,7 +173,7 @@ void COFGeneWormCloud::TurnOn()
 {
 	pev->effects = 0;
 
-	if (pev->framerate != 0 && m_maxFrame > 1.0 || pev->spawnflags & 2)
+	if (pev->framerate != 0 && m_maxFrame > 1.0 || (pev->spawnflags & 2) != 0)
 	{
 		SetThink(&COFGeneWormCloud::GeneWormCloudThink);
 		pev->nextthink = gpGlobals->time;
@@ -229,8 +229,8 @@ const auto GENEWORM_SPAWN_BEAM_COUNT = 8;
 class COFGeneWormSpawn : public CBaseEntity
 {
 public:
-	int	Save(CSave& save) override;
-	int Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
 	void Precache() override;
@@ -441,7 +441,7 @@ void COFGeneWormSpawn::TurnOn()
 {
 	pev->effects = 0;
 
-	if (pev->framerate != 0 && m_maxFrame > 1.0 || pev->spawnflags & 2)
+	if (pev->framerate != 0 && m_maxFrame > 1.0 || (pev->spawnflags & 2) != 0)
 	{
 		SetThink(&COFGeneWormSpawn::GeneWormSpawnThink);
 		pev->nextthink = gpGlobals->time;
@@ -554,8 +554,8 @@ int iGeneWormSpitSprite;
 class COFGeneWorm : public CBaseMonster
 {
 public:
-	int	Save(CSave& save) override;
-	int Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
 	int Classify() override { return CLASS_ALIEN_MONSTER; }
@@ -574,7 +574,7 @@ public:
 	void Precache() override;
 	void Spawn() override;
 
-	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 
 	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
 
@@ -947,7 +947,7 @@ void COFGeneWorm::HuntThink()
 
 		ResetSequenceInfo();
 
-		m_iWasHit = false;
+		m_iWasHit = 0;
 	}
 
 	if (!m_fRightEyeHit)
@@ -1235,7 +1235,7 @@ void COFGeneWorm::NextActivity()
 			m_hEnemy = nullptr;
 	}
 
-	if (gpGlobals->time > m_flLastSeen + 15.0 && m_hEnemy && (pev->origin - m_hEnemy->pev->origin).Length2D() > 700.0)
+	if (gpGlobals->time > m_flLastSeen + 15.0 && nullptr != m_hEnemy && (pev->origin - m_hEnemy->pev->origin).Length2D() > 700.0)
 	{
 		m_hEnemy = nullptr;
 	}
@@ -1376,7 +1376,7 @@ bool COFGeneWorm::ClawAttack()
 	return false;
 }
 
-int COFGeneWorm::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool COFGeneWorm::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
 	//Never actually die
 	if (flDamage >= pev->health)
@@ -1393,7 +1393,7 @@ int COFGeneWorm::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, flo
 
 void COFGeneWorm::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
 {
-	const auto isLaser = !strcmp("env_laser", STRING(pevAttacker->classname));
+	const auto isLaser = 0 == strcmp("env_laser", STRING(pevAttacker->classname));
 
 	if (ptr->iHitgroup != 4 && ptr->iHitgroup != 5 && ptr->iHitgroup != 6)
 	{
@@ -1403,7 +1403,7 @@ void COFGeneWorm::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vec
 			{
 				UTIL_Sparks(ptr->vecEndPos);
 			}
-			else if (bitsDamageType & DMG_BULLET)
+			else if ((bitsDamageType & DMG_BULLET) != 0)
 			{
 				UTIL_Ricochet(ptr->vecEndPos, RANDOM_FLOAT(1, 2));
 			}
@@ -1425,7 +1425,7 @@ void COFGeneWorm::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vec
 		{
 			if (gpGlobals->time != pev->dmgtime || RANDOM_LONG(0, 10) <= 0)
 			{
-				if (bitsDamageType & DMG_BULLET)
+				if ((bitsDamageType & DMG_BULLET) != 0)
 				{
 					UTIL_Ricochet(ptr->vecEndPos, RANDOM_FLOAT(1, 2));
 				}
@@ -1456,7 +1456,7 @@ void COFGeneWorm::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vec
 	{
 		if (!m_fLeftEyeHit)
 		{
-			if (!strcmp("left_eye_laser", STRING(pevAttacker->targetname)))
+			if (0 == strcmp("left_eye_laser", STRING(pevAttacker->targetname)))
 			{
 				m_fLeftEyeHit = true;
 
@@ -1471,7 +1471,7 @@ void COFGeneWorm::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vec
 					m_fGetMad = true;
 				}
 
-				m_iWasHit = true;
+				m_iWasHit = 1;
 
 				if (m_bloodColor != DONT_BLEED)
 				{
@@ -1490,7 +1490,7 @@ void COFGeneWorm::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vec
 	{
 		if (!m_fRightEyeHit)
 		{
-			if (!strcmp("right_eye_laser", STRING(pevAttacker->targetname)))
+			if (0 == strcmp("right_eye_laser", STRING(pevAttacker->targetname)))
 			{
 				m_fRightEyeHit = true;
 
@@ -1505,7 +1505,7 @@ void COFGeneWorm::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vec
 					pev->skin = 2;
 				}
 
-				m_iWasHit = true;
+				m_iWasHit = 1;
 
 				if (m_bloodColor != DONT_BLEED)
 				{
@@ -1554,9 +1554,9 @@ void COFGeneWorm::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vec
 
 bool COFGeneWorm::FVisible(CBaseEntity* pEntity)
 {
-	if (!(pEntity->pev->flags & FL_NOTARGET))
+	if ((pEntity->pev->flags & FL_NOTARGET) == 0)
 	{
-		if ((pev->waterlevel != 3 && pEntity->pev->waterlevel != 3) || pEntity->pev->waterlevel)
+		if ((pev->waterlevel != 3 && pEntity->pev->waterlevel != 3) || 0 != pEntity->pev->waterlevel)
 		{
 			return FVisible(pEntity->EyePosition());
 		}
@@ -1596,7 +1596,7 @@ void FireHurtTargets(const char* targetName, CBaseEntity* pActivator, CBaseEntit
 		if (pTarget
 			&& !(useType == USE_OFF && pTarget->pev->solid == SOLID_NOT)
 			&& !(useType == USE_ON && pTarget->pev->solid == SOLID_TRIGGER)
-			&& !(pTarget->pev->flags & FL_KILLME))	// Don't use dying ents
+			&& (pTarget->pev->flags & FL_KILLME) == 0)	// Don't use dying ents
 		{
 			ALERT(at_aiconsole, "Found: %s, firing (%s)\n", STRING(pTarget->pev->classname), targetName);
 			pTarget->Use(pActivator, pCaller, useType, value);

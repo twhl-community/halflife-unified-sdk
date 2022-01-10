@@ -93,15 +93,15 @@ public:
 	void Shoot(bool firstShotInBurst) override;
 	void GibMonster() override;
 
-	int	Save(CSave& save) override;
-	int Restore(CRestore& restore) override;
+	bool	Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 
 	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
 
 	// Male Assassin never speaks
 	bool FOkToSpeak() override { return false; }
 
-	void KeyValue(KeyValueData* pkvd) override;
+	bool KeyValue(KeyValueData* pkvd) override;
 
 	static TYPEDESCRIPTION m_SaveData[];
 
@@ -178,7 +178,7 @@ void CMOFAssassin::GibMonster()
 //=========================================================
 bool CMOFAssassin::CheckRangeAttack1(float flDot, float flDist)
 {
-	if (pev->weapons)
+	if (0 != pev->weapons)
 	{
 		if (m_fStandingGround && m_flStandGroundRange >= flDist)
 		{
@@ -226,7 +226,7 @@ void CMOFAssassin::IdleSound()
 //=========================================================
 void CMOFAssassin::CheckAmmo()
 {
-	if (pev->weapons)
+	if (0 != pev->weapons)
 	{
 		CHGrunt::CheckAmmo();
 	}
@@ -471,20 +471,20 @@ std::tuple<int, Activity> CMOFAssassin::GetSequenceForActivity(Activity NewActiv
 	return {iSequence, NewActivity};
 }
 
-void CMOFAssassin::KeyValue(KeyValueData* pkvd)
+bool CMOFAssassin::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq("head", pkvd->szKeyName))
 	{
 		m_iAssassinHead = atoi(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq("standgroundrange", pkvd->szKeyName))
 	{
 		m_flStandGroundRange = atof(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
-	else
-		CHGrunt::KeyValue(pkvd);
+
+	return CHGrunt::KeyValue(pkvd);
 }
 
 class CMOFAssassinRepel : public CHGruntRepel

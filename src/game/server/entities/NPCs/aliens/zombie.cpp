@@ -55,7 +55,7 @@ void CZombie::SetYawSpeed()
 	pev->yaw_speed = ys;
 }
 
-int CZombie::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool CZombie::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
 	if (bitsDamageType == DMG_BULLET)
 	{
@@ -120,7 +120,7 @@ void CZombie::ZombieSlashAttack(float damage, const Vector& punchAngle, const Ve
 	CBaseEntity* pHurt = CheckTraceHullAttack(70, damage, DMG_SLASH);
 	if (pHurt)
 	{
-		if (pHurt->pev->flags & (FL_MONSTER | FL_CLIENT))
+		if ((pHurt->pev->flags & (FL_MONSTER | FL_CLIENT)) != 0)
 		{
 			pHurt->pev->punchangle = punchAngle;
 			pHurt->pev->velocity = pHurt->pev->velocity + velocity;

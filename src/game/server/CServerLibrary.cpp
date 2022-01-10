@@ -161,7 +161,7 @@ void CServerLibrary::LoadServerConfigFiles()
 
 	g_GameConfigLoader.SetConditionals(std::move(conditionals));
 
-	if (const auto cfgFile = servercfgfile.string; cfgFile && cfgFile[0])
+	if (const auto cfgFile = servercfgfile.string; cfgFile && '\0' != cfgFile[0])
 	{
 		LoadConfigFile(cfgFile, *m_ServerConfigDefinition, {.PathID = "GAMECONFIG"});
 	}
@@ -176,7 +176,7 @@ void CServerLibrary::LoadServerConfigFiles()
 
 void CServerLibrary::LoadMapChangeConfigFile()
 {
-	if (const auto cfgFile = mapchangecfgfile.string; cfgFile && cfgFile[0])
+	if (const auto cfgFile = mapchangecfgfile.string; cfgFile && '\0' != cfgFile[0])
 	{
 		LoadConfigFile(cfgFile, *m_MapChangeConfigDefinition, {.PathID = "GAMECONFIG"});
 	}

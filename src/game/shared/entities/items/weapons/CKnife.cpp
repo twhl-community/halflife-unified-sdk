@@ -271,7 +271,7 @@ int CKnife::iItemSlot()
 	return 1;
 }
 
-int CKnife::GetItemInfo(ItemInfo* p)
+bool CKnife::GetItemInfo(ItemInfo* p)
 {
 	p->pszAmmo1 = nullptr;
 	p->iMaxAmmo1 = WEAPON_NOCLIP;

@@ -35,7 +35,7 @@ extern edict_t* EntSelectSpawnPoint(CBasePlayer* pPlayer);
 DLL_GLOBAL CGameRules* g_pGameRules = NULL;
 extern DLL_GLOBAL bool	g_fGameOver;
 
-int g_teamplay = 0;
+bool g_teamplay = false;
 
 //=========================================================
 //=========================================================
@@ -71,7 +71,7 @@ edict_t* CGameRules::GetPlayerSpawnSpot(CBasePlayer* pPlayer)
 	pPlayer->pev->velocity = g_vecZero;
 	pPlayer->pev->angles = VARS(pentSpawnSpot)->angles;
 	pPlayer->pev->punchangle = g_vecZero;
-	pPlayer->pev->fixangle = true;
+	pPlayer->pev->fixangle = 1;
 
 	return pentSpawnSpot;
 }
@@ -422,10 +422,10 @@ CGameRules* InstallGameRules(CBaseEntity* pWorld)
 	SERVER_COMMAND("exec game.cfg\n");
 	SERVER_EXECUTE();
 
-	if (!gpGlobals->deathmatch)
+	if (0 == gpGlobals->deathmatch)
 	{
 		// generic half-life
-		g_teamplay = 0;
+		g_teamplay = false;
 		return new CHalfLifeRules;
 	}
 
@@ -435,7 +435,7 @@ CGameRules* InstallGameRules(CBaseEntity* pWorld)
 	}
 	else
 	{
-		if (pWorld->pev->spawnflags & SF_WORLD_CTF)
+		if ((pWorld->pev->spawnflags & SF_WORLD_CTF) != 0)
 		{
 			return new CHalfLifeCTFplay();
 		}
@@ -444,19 +444,19 @@ CGameRules* InstallGameRules(CBaseEntity* pWorld)
 		{
 			// teamplay
 
-			g_teamplay = 1;
+			g_teamplay = true;
 			return new CHalfLifeTeamplay;
 		}
 		if ((int)gpGlobals->deathmatch == 1)
 		{
 			// vanilla deathmatch
-			g_teamplay = 0;
+			g_teamplay = false;
 			return new CHalfLifeMultiplay;
 		}
 		else
 		{
 			// vanilla deathmatch??
-			g_teamplay = 0;
+			g_teamplay = false;
 			return new CHalfLifeMultiplay;
 		}
 	}

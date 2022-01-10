@@ -38,7 +38,7 @@ public:
 	void Precache() override;
 
 	void StartTask(Task_t* pTask) override;
-	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 	void DeclineFollowing() override;
 
 	void Scream();
@@ -150,7 +150,7 @@ void CRosenberg::TalkInit()
 	m_voicePitch = 100;
 }
 
-int CRosenberg::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool CRosenberg::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
 	//Disable scientist damage handling so Rosenberg keeps following the player
 	return CTalkMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);

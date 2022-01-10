@@ -136,7 +136,7 @@ bool CBaseHGruntAlly::FOkToSpeak()
 	if (gpGlobals->time <= COFSquadTalkMonster::g_talkWaitTime)
 		return false;
 
-	if (pev->spawnflags & SF_MONSTER_GAG)
+	if ((pev->spawnflags & SF_MONSTER_GAG) != 0)
 	{
 		if (m_MonsterState != MONSTERSTATE_COMBAT)
 		{
@@ -420,7 +420,7 @@ void CBaseHGruntAlly::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector
 	{
 		// make sure we're wearing one
 		//TODO: disabled for ally
-		if (/*GetBodygroup( HGruntAllyBodygroup::Head ) == HGruntAllyHead::GasMask &&*/ (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_CLUB)))
+		if (/*GetBodygroup( HGruntAllyBodygroup::Head ) == HGruntAllyHead::GasMask &&*/ (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_CLUB)) != 0)
 		{
 			// absorb damage
 			flDamage -= 20;
@@ -435,7 +435,7 @@ void CBaseHGruntAlly::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector
 	}
 	//PCV absorbs some damage types
 	else if ((ptr->iHitgroup == HITGROUP_CHEST || ptr->iHitgroup == HITGROUP_STOMACH)
-		&& (bitsDamageType & (DMG_BLAST | DMG_BULLET | DMG_SLASH)))
+		&& (bitsDamageType & (DMG_BLAST | DMG_BULLET | DMG_SLASH)) != 0)
 	{
 		flDamage *= 0.5;
 	}
@@ -448,17 +448,17 @@ void CBaseHGruntAlly::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector
 // needs to forget that he is in cover if he's hurt. (Obviously
 // not in a safe place anymore).
 //=========================================================
-int CBaseHGruntAlly::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool CBaseHGruntAlly::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
 	// make sure friends talk about it if player hurts talkmonsters...
-	int ret = COFSquadTalkMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
+	bool ret = COFSquadTalkMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
 
 	if (!IsAlive() || pev->deadflag != DEAD_NO)
 		return ret;
 
 	Forget(bits_MEMORY_INCOVER);
 
-	if (m_MonsterState != MONSTERSTATE_PRONE && (pevAttacker->flags & FL_CLIENT))
+	if (m_MonsterState != MONSTERSTATE_PRONE && (pevAttacker->flags & FL_CLIENT) != 0)
 	{
 		// This is a heurstic to determine if the player intended to harm me
 		// If I have an enemy, we can't establish intent (may just be crossfire)
@@ -466,7 +466,7 @@ int CBaseHGruntAlly::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker,
 		{
 			// If the player was facing directly at me, or I'm already suspicious, get mad
 			if (gpGlobals->time - m_flLastHitByPlayer < 4.0 && m_iPlayerHits > 2
-				&& ((m_afMemory & bits_MEMORY_SUSPICIOUS) || IsFacing(pevAttacker, pev->origin)))
+				&& ((m_afMemory & bits_MEMORY_SUSPICIOUS) != 0 || IsFacing(pevAttacker, pev->origin)))
 			{
 				// Alright, now I'm pissed!
 				PlaySentence("FG_MAD", 4, VOL_NORM, ATTN_NORM);
@@ -549,9 +549,9 @@ void CBaseHGruntAlly::SetYawSpeed()
 
 void CBaseHGruntAlly::IdleSound()
 {
-	if (FOkToSpeak() && (g_fGruntAllyQuestion || RANDOM_LONG(0, 1)))
+	if (FOkToSpeak() && (0 != g_fGruntAllyQuestion || RANDOM_LONG(0, 1)))
 	{
-		if (!g_fGruntAllyQuestion)
+		if (0 == g_fGruntAllyQuestion)
 		{
 			// ask question or make statement
 			switch (RANDOM_LONG(0, 2))
@@ -1776,7 +1776,7 @@ Schedule_t* CBaseHGruntAlly::GetSchedule()
 	// flying? If PRONE, barnacle has me. IF not, it's assumed I am rapelling. 
 	if (pev->movetype == MOVETYPE_FLY && m_MonsterState != MONSTERSTATE_PRONE)
 	{
-		if (pev->flags & FL_ONGROUND)
+		if ((pev->flags & FL_ONGROUND) != 0)
 		{
 			// just landed
 			pev->movetype = MOVETYPE_STEP;
@@ -1806,7 +1806,7 @@ Schedule_t* CBaseHGruntAlly::GetSchedule()
 		ASSERT(pSound != NULL);
 		if (pSound)
 		{
-			if (pSound->m_iType & bits_SOUND_DANGER)
+			if ((pSound->m_iType & bits_SOUND_DANGER) != 0)
 			{
 				// dangerous sound nearby!
 
@@ -2365,15 +2365,15 @@ void CBaseHGruntAlly::DeclineFollowing()
 	PlaySentence("FG_POK", 2, VOL_NORM, ATTN_NORM);
 }
 
-void CBaseHGruntAlly::KeyValue(KeyValueData* pkvd)
+bool CBaseHGruntAlly::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq(pkvd->szKeyName, "head"))
 	{
 		m_iGruntHead = atoi(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
-	else
-		COFSquadTalkMonster::KeyValue(pkvd);
+
+	return COFSquadTalkMonster::KeyValue(pkvd);
 }
 
 void CBaseHGruntAlly::Killed(entvars_t* pevAttacker, int iGib)
@@ -2391,7 +2391,7 @@ void CBaseHGruntAlly::Killed(entvars_t* pevAttacker, int iGib)
 	if (m_hWaitMedic)
 	{
 		auto medic = m_hWaitMedic.Entity<COFSquadTalkMonster>();
-		if (medic->pev->deadflag)
+		if (DEAD_NO != medic->pev->deadflag)
 			m_hWaitMedic = nullptr;
 		else
 			medic->HealMe(nullptr);
@@ -2401,25 +2401,25 @@ void CBaseHGruntAlly::Killed(entvars_t* pevAttacker, int iGib)
 	COFSquadTalkMonster::Killed(pevAttacker, iGib);
 }
 
-void CBaseHGruntAllyRepel::KeyValue(KeyValueData* pkvd)
+bool CBaseHGruntAllyRepel::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq(pkvd->szKeyName, "head"))
 	{
 		m_iGruntHead = atoi(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "UseSentence"))
 	{
 		m_iszUse = ALLOC_STRING(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "UnUseSentence"))
 	{
 		m_iszUnUse = ALLOC_STRING(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
-	else
-		CBaseMonster::KeyValue(pkvd);
+
+	return CBaseMonster::KeyValue(pkvd);
 }
 
 void CBaseHGruntAllyRepel::Spawn()

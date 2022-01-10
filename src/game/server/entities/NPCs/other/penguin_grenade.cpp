@@ -36,8 +36,8 @@ enum MonsterPenguinAnim
 class CPenguinGrenade : public CGrenade
 {
 public:
-	int Save(CSave& save) override;
-	int Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 
 	static TYPEDESCRIPTION m_SaveData[];
 
@@ -118,7 +118,7 @@ void CPenguinGrenade::SuperBounceTouch(CBaseEntity* pOther)
 	// higher pitch as squeeker gets closer to detonation time
 	const float flpitch = 155.0 - 60.0 * ((m_flDie - gpGlobals->time) / PENGUIN_DETONATE_DELAY);
 
-	if (pOther->pev->takedamage && m_flNextAttack < gpGlobals->time)
+	if (0 != pOther->pev->takedamage && m_flNextAttack < gpGlobals->time)
 	{
 		// attack!
 
@@ -140,7 +140,7 @@ void CPenguinGrenade::SuperBounceTouch(CBaseEntity* pOther)
 					hurtTarget = false;
 					if (ownerPlayer != pOther)
 					{
-						hurtTarget = g_pGameRules->FPlayerCanTakeDamage(static_cast<CBasePlayer*>(pOther), ownerPlayer) != 0;
+						hurtTarget = g_pGameRules->FPlayerCanTakeDamage(static_cast<CBasePlayer*>(pOther), ownerPlayer);
 					}
 				}
 			}
@@ -197,7 +197,7 @@ void CPenguinGrenade::SuperBounceTouch(CBaseEntity* pOther)
 		}
 	}
 
-	if (!(pev->flags & FL_ONGROUND))
+	if ((pev->flags & FL_ONGROUND) == 0)
 	{
 		// play bounce sound
 		float flRndSound = RANDOM_FLOAT(0, 1);
@@ -342,6 +342,7 @@ void CPenguinGrenade::HuntThink()
 		pev->velocity = pev->velocity * 0.9;
 		pev->velocity.z += 8.0;
 	}
+	//TODO: fix this
 	else if (pev->movetype = MOVETYPE_FLY)
 	{
 		pev->movetype = MOVETYPE_BOUNCE;
@@ -403,7 +404,7 @@ void CPenguinGrenade::HuntThink()
 		pev->velocity = pev->velocity * flAdj + m_vecTarget * 300;
 	}
 
-	if (pev->flags & FL_ONGROUND)
+	if ((pev->flags & FL_ONGROUND) != 0)
 	{
 		pev->avelocity = Vector(0, 0, 0);
 	}

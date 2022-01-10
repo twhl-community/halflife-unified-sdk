@@ -22,8 +22,8 @@ class CBeam;
 
 class CApache : public CBaseMonster
 {
-	int		Save(CSave& save) override;
-	int		Restore(CRestore& restore) override;
+	bool	Save(CSave& save) override;
+	bool	Restore(CRestore& restore) override;
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	void Spawn() override;
@@ -51,7 +51,7 @@ class CApache : public CBaseMonster
 	void FireRocket();
 	bool FireGun();
 
-	int  TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
 
 	int m_iRockets;

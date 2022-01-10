@@ -125,7 +125,7 @@ skipwhite:
 	// skip // comments
 	if (c == '/' && data[1] == '/')
 	{
-		while (*data && *data != '\n')
+		while ('\0' != *data && *data != '\n')
 			data++;
 		goto skipwhite;
 	}
@@ -135,10 +135,10 @@ skipwhite:
 	if (c == '\"')
 	{
 		data++;
-		while (1)
+		while (true)
 		{
 			c = *data++;
-			if (c == '\"' || !c)
+			if (c == '\"' || '\0' == c)
 			{
 				com_token[len] = 0;
 				return data;
@@ -175,9 +175,9 @@ skipwhite:
 
 bool COM_TokenWaiting(const char* buffer)
 {
-	for (const char* p = buffer; *p && *p != '\n'; ++p)
+	for (const char* p = buffer; '\0' != *p && *p != '\n'; ++p)
 	{
-		if (!isspace(*p) || isalnum(*p))
+		if (0 == isspace(*p) || 0 != isalnum(*p))
 			return true;
 	}
 

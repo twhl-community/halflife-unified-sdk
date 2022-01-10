@@ -32,7 +32,7 @@ client_textmessage_t	g_pCustomMessage;
 const char* g_pCustomName = "Custom";
 char g_pCustomText[1024];
 
-int CHudMessage::Init()
+bool CHudMessage::Init()
 {
 	HOOK_MESSAGE(HudText);
 	HOOK_MESSAGE(GameTitle);
@@ -41,15 +41,15 @@ int CHudMessage::Init()
 
 	Reset();
 
-	return 1;
+	return true;
 };
 
-int CHudMessage::VidInit()
+bool CHudMessage::VidInit()
 {
 	m_HUD_title_half = gHUD.GetSpriteIndex("title_half");
 	m_HUD_title_life = gHUD.GetSpriteIndex("title_life");
 
-	return 1;
+	return true;
 };
 
 
@@ -256,7 +256,7 @@ void CHudMessage::MessageDrawScan(client_textmessage_t* pMessage, float time)
 	length = 0;
 	width = 0;
 	m_parms.totalWidth = 0;
-	while (*pText)
+	while ('\0' != *pText)
 	{
 		if (*pText == '\n')
 		{
@@ -285,7 +285,7 @@ void CHudMessage::MessageDrawScan(client_textmessage_t* pMessage, float time)
 	{
 		m_parms.lineLength = 0;
 		m_parms.width = 0;
-		while (*pText && *pText != '\n')
+		while ('\0' != *pText && *pText != '\n')
 		{
 			unsigned char c = *pText;
 			line[m_parms.lineLength] = c;
@@ -314,7 +314,7 @@ void CHudMessage::MessageDrawScan(client_textmessage_t* pMessage, float time)
 }
 
 
-int CHudMessage::Draw(float fTime)
+bool CHudMessage::Draw(float fTime)
 {
 	int i, drawn;
 	client_textmessage_t* pMessage;
@@ -410,10 +410,10 @@ int CHudMessage::Draw(float fTime)
 	// Remember the time -- to fix up level transitions
 	m_parms.time = gHUD.m_flTime;
 	// Don't call until we get another message
-	if (!drawn)
+	if (0 == drawn)
 		m_iFlags &= ~HUD_ACTIVE;
 
-	return 1;
+	return true;
 }
 
 
@@ -458,7 +458,7 @@ void CHudMessage::MessageAdd(const char* pName, float time)
 				if (m_pMessages[j])
 				{
 					// is this message already in the list
-					if (!strcmp(tempMessage->pMessage, m_pMessages[j]->pMessage))
+					if (0 == strcmp(tempMessage->pMessage, m_pMessages[j]->pMessage))
 					{
 						return;
 					}
@@ -482,7 +482,7 @@ void CHudMessage::MessageAdd(const char* pName, float time)
 }
 
 
-int CHudMessage::MsgFunc_HudText(const char* pszName, int iSize, void* pbuf)
+bool CHudMessage::MsgFunc_HudText(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 
@@ -493,14 +493,14 @@ int CHudMessage::MsgFunc_HudText(const char* pszName, int iSize, void* pbuf)
 	m_parms.time = gHUD.m_flTime;
 
 	// Turn on drawing
-	if (!(m_iFlags & HUD_ACTIVE))
+	if ((m_iFlags & HUD_ACTIVE) == 0)
 		m_iFlags |= HUD_ACTIVE;
 
-	return 1;
+	return true;
 }
 
 
-int CHudMessage::MsgFunc_GameTitle(const char* pszName, int iSize, void* pbuf)
+bool CHudMessage::MsgFunc_GameTitle(const char* pszName, int iSize, void* pbuf)
 {
 	m_pGameTitle = TextMessageGet("GAMETITLE");
 	if (m_pGameTitle != NULL)
@@ -508,11 +508,11 @@ int CHudMessage::MsgFunc_GameTitle(const char* pszName, int iSize, void* pbuf)
 		m_gameTitleTime = gHUD.m_flTime;
 
 		// Turn on drawing
-		if (!(m_iFlags & HUD_ACTIVE))
+		if ((m_iFlags & HUD_ACTIVE) == 0)
 			m_iFlags |= HUD_ACTIVE;
 	}
 
-	return 1;
+	return true;
 }
 
 void CHudMessage::MessageAdd(client_textmessage_t* newMessage)
@@ -520,7 +520,7 @@ void CHudMessage::MessageAdd(client_textmessage_t* newMessage)
 	m_parms.time = gHUD.m_flTime;
 
 	// Turn on drawing
-	if (!(m_iFlags & HUD_ACTIVE))
+	if ((m_iFlags & HUD_ACTIVE) == 0)
 		m_iFlags |= HUD_ACTIVE;
 
 	for (int i = 0; i < maxHUDMessages; i++)

@@ -136,7 +136,7 @@ std::optional<json> JSONSystem::LoadJSONFile(const char* fileName, const json_va
 		return {};
 	}
 
-	if (!fileName || !(fileName[0]))
+	if (!fileName || '\0' == fileName[0])
 	{
 		return {};
 	}
@@ -152,7 +152,7 @@ std::optional<json> JSONSystem::LoadJSONFile(const char* fileName, const json_va
 			auto data = json::parse(text, text + file.size(), nullptr, true, true);
 
 			//Only validate if enabled
-			if (m_JsonSchemaValidation->value && validator)
+			if (0 != m_JsonSchemaValidation->value && validator)
 			{
 				m_Logger->trace("Validating JSON file");
 

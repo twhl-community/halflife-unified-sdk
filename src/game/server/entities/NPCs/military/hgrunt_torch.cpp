@@ -84,8 +84,8 @@ public:
 	void Shoot();
 	void GibMonster() override;
 
-	int	Save(CSave& save) override;
-	int Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 
 	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
 
@@ -298,14 +298,14 @@ void COFTorchAlly::Spawn()
 
 	m_fTorchActive = false;
 
-	if (!pev->weapons)
+	if (0 == pev->weapons)
 	{
 		pev->weapons |= TorchAllyWeaponFlag::DesertEagle;
 	}
 
 	int weaponIndex = TorchAllyWeapon::None;
 
-	if (pev->weapons & TorchAllyWeaponFlag::DesertEagle)
+	if ((pev->weapons & TorchAllyWeaponFlag::DesertEagle) != 0)
 	{
 		weaponIndex = TorchAllyWeapon::DesertEagle;
 		m_cClipSize = TORCH_DEAGLE_CLIP_SIZE;

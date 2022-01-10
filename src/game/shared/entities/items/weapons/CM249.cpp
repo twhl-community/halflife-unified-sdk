@@ -192,14 +192,14 @@ void CM249::PrimaryAttack()
 
 	if (UTIL_IsMultiplayer())
 	{
-		if (m_pPlayer->pev->button & IN_DUCK)
+		if ((m_pPlayer->pev->button & IN_DUCK) != 0)
 		{
 			vecSpread = VECTOR_CONE_3DEGREES;
 		}
-		else if (m_pPlayer->pev->button & (IN_MOVERIGHT |
+		else if ((m_pPlayer->pev->button & (IN_MOVERIGHT |
 			IN_MOVELEFT |
 			IN_FORWARD |
-			IN_BACK))
+			IN_BACK)) != 0)
 		{
 			vecSpread = VECTOR_CONE_15DEGREES;
 		}
@@ -210,14 +210,14 @@ void CM249::PrimaryAttack()
 	}
 	else
 	{
-		if (m_pPlayer->pev->button & IN_DUCK)
+		if ((m_pPlayer->pev->button & IN_DUCK) != 0)
 		{
 			vecSpread = VECTOR_CONE_4DEGREES;
 		}
-		else if (m_pPlayer->pev->button & (IN_MOVERIGHT |
+		else if ((m_pPlayer->pev->button & (IN_MOVERIGHT |
 			IN_MOVELEFT |
 			IN_FORWARD |
-			IN_BACK))
+			IN_BACK)) != 0)
 		{
 			vecSpread = VECTOR_CONE_10DEGREES;
 		}
@@ -235,7 +235,7 @@ void CM249::PrimaryAttack()
 
 	int flags;
 #if defined( CLIENT_WEAPONS )
-	flags = true;
+	flags = FEV_NOTHOST;
 #else
 	flags = 0;
 #endif
@@ -247,7 +247,7 @@ void CM249::PrimaryAttack()
 		pev->body, 0,
 		m_bAlternatingEject ? 1 : 0, 0);
 
-	if (!m_iClip)
+	if (0 == m_iClip)
 	{
 		if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
 		{
@@ -338,7 +338,7 @@ int CM249::iItemSlot()
 	return 4;
 }
 
-int CM249::GetItemInfo(ItemInfo* p)
+bool CM249::GetItemInfo(ItemInfo* p)
 {
 	p->pszAmmo1 = "556";
 	p->iMaxAmmo1 = M249_MAX_CARRY;
@@ -357,7 +357,7 @@ int CM249::GetItemInfo(ItemInfo* p)
 
 void CM249::IncrementAmmo(CBasePlayer* pPlayer)
 {
-	if (pPlayer->GiveAmmo(1, "556", M249_MAX_CARRY))
+	if (0 != pPlayer->GiveAmmo(1, "556", M249_MAX_CARRY))
 	{
 		EMIT_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
 	}

@@ -67,8 +67,8 @@ const char* const PITWORM_UP_LEVEL_NAMES[PITWORM_UP_NUM_LEVELS] =
 class COFPitWormUp : public CBaseMonster
 {
 public:
-	int Save(CSave& save) override;
-	int Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	void Precache() override;
@@ -94,7 +94,7 @@ public:
 
 	void PainSound() override;
 
-	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 
 	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
 
@@ -380,7 +380,7 @@ void COFPitWormUp::Spawn()
 	m_flBeamExpireTime = gpGlobals->time;
 
 	m_iLevel = 0;
-	m_fLockYaw = 0;
+	m_fLockYaw = false;
 	m_iWasHit = 0;
 
 	m_flTakeHitTime = 0;
@@ -531,9 +531,9 @@ void COFPitWormUp::HuntThink()
 
 			if (m_fAttacking)
 			{
-				m_fLockHeight = 0;
-				m_fLockYaw = 0;
-				m_fAttacking = 0;
+				m_fLockHeight = false;
+				m_fLockYaw = false;
+				m_fAttacking = false;
 				m_flNextMeleeTime = gpGlobals->time + 0.25;
 			}
 
@@ -853,7 +853,7 @@ void COFPitWormUp::ShootBeam()
 			WRITE_COORD(2.0);
 			MESSAGE_END();
 
-			m_pSprite = CSprite::SpriteCreate("sprites/tele1.spr", vecEyePos, 1);
+			m_pSprite = CSprite::SpriteCreate("sprites/tele1.spr", vecEyePos, true);
 
 			if (m_pSprite)
 			{
@@ -1187,7 +1187,7 @@ bool COFPitWormUp::ClawAttack()
 		else
 		{
 			pev->sequence = PITWORM_ANIM_Level1AttackLeft;
-			m_flIdealHeadYaw = false;
+			m_flIdealHeadYaw = 0;
 			m_fLockYaw = true;
 		}
 	}
@@ -1236,10 +1236,10 @@ void COFPitWormUp::PainSound()
 	}
 }
 
-int COFPitWormUp::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool COFPitWormUp::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
 	PainSound();
-	return 0;
+	return false;
 }
 
 void COFPitWormUp::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
@@ -1281,7 +1281,7 @@ void COFPitWormUp::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector ve
 				}
 			}
 
-			if (!pev->skin)
+			if (0 == pev->skin)
 			{
 				pev->skin = 1;
 				m_flLastBlinkInterval = gpGlobals->time;
@@ -1298,9 +1298,9 @@ void COFPitWormUp::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector ve
 
 bool COFPitWormUp::FVisible(CBaseEntity* pEntity)
 {
-	if (!(pEntity->pev->flags & FL_NOTARGET))
+	if ((pEntity->pev->flags & FL_NOTARGET) == 0)
 	{
-		if ((pev->waterlevel != 3 && pEntity->pev->waterlevel != 3) || pEntity->pev->waterlevel)
+		if ((pev->waterlevel != 3 && pEntity->pev->waterlevel != 3) || 0 != pEntity->pev->waterlevel)
 		{
 			return FVisible(pEntity->EyePosition());
 		}
@@ -1388,7 +1388,7 @@ void COFPitWormSteamTrigger::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, 
 		{
 			pPitworm->pev->health = pPitworm->pev->max_health;
 
-			pPitworm->m_iWasHit = true;
+			pPitworm->m_iWasHit = 1;
 			pPitworm->m_iLevel = 2;
 
 			pPitworm->m_flTakeHitTime = RANDOM_LONG(2, 4) + gpGlobals->time;
@@ -1407,11 +1407,11 @@ void COFPitWormSteamTrigger::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, 
 class COFInfoPW : public CPointEntity
 {
 public:
-	int Save(CSave& save) override;
-	int Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 	static	TYPEDESCRIPTION m_SaveData[];
 
-	void KeyValue(KeyValueData* pkvd) override;
+	bool KeyValue(KeyValueData* pkvd) override;
 
 	void Spawn() override;
 
@@ -1429,37 +1429,35 @@ IMPLEMENT_SAVERESTORE(COFInfoPW, CPointEntity);
 
 LINK_ENTITY_TO_CLASS(info_pitworm, COFInfoPW);
 
-void COFInfoPW::KeyValue(KeyValueData* pkvd)
+bool COFInfoPW::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq("radius", pkvd->szKeyName))
 	{
 		pev->scale = atof(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq("reachdelay", pkvd->szKeyName))
 	{
 		pev->speed = atof(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq("reachtarget", pkvd->szKeyName))
 	{
 		pev->message = ALLOC_STRING(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq("reachsequence", pkvd->szKeyName))
 	{
 		pev->netname = ALLOC_STRING(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq("presequence", pkvd->szKeyName))
 	{
 		m_preSequence = ALLOC_STRING(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
-	else
-	{
-		CBaseEntity::KeyValue(pkvd);
-	}
+
+	return CBaseEntity::KeyValue(pkvd);
 }
 
 void COFInfoPW::Spawn()
@@ -1541,14 +1539,14 @@ class COFPitWormGibShooter : public CBaseEntity
 public:
 	void	Spawn() override;
 	void	Precache() override;
-	void	KeyValue(KeyValueData* pkvd) override;
+	bool	KeyValue(KeyValueData* pkvd) override;
 	void EXPORT ShootThink();
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
 	virtual COFPitWormGib* CreateGib();
 
-	int		Save(CSave& save) override;
-	int		Restore(CRestore& restore) override;
+	bool	Save(CSave& save) override;
+	bool	Restore(CRestore& restore) override;
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	float m_flDelay;
@@ -1577,32 +1575,30 @@ void COFPitWormGibShooter::Precache()
 	m_iGibModelIndex = PRECACHE_MODEL("models/pit_worm_gibs.mdl");
 }
 
-void COFPitWormGibShooter::KeyValue(KeyValueData* pkvd)
+bool COFPitWormGibShooter::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq(pkvd->szKeyName, "m_iGibs"))
 	{
 		m_iGibs = m_iGibCapacity = atoi(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "m_flVelocity"))
 	{
 		m_flGibVelocity = atof(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "m_flVariance"))
 	{
 		m_flVariance = atof(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "m_flDelay"))
 	{
 		m_flDelay = atof(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
-	else
-	{
-		CBaseEntity::KeyValue(pkvd);
-	}
+
+	return CBaseEntity::KeyValue(pkvd);
 }
 
 void COFPitWormGibShooter::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
@@ -1684,8 +1680,8 @@ int gSpikeSprite, gSpikeDebrisSprite;
 class COFPitWorm : public CBaseMonster
 {
 public:
-	int Save(CSave& save) override;
-	int Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	int Classify() override
@@ -1702,7 +1698,7 @@ public:
 		pev->yaw_speed = yawSpeed;
 	}
 
-	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 	void Precache() override;
 
 	bool CheckMeleeAttack1(float flDot, float flDist) override
@@ -1720,9 +1716,9 @@ public:
 
 	void Spawn() override;
 
-	void KeyValue(KeyValueData* pkvd) override
+	bool KeyValue(KeyValueData* pkvd) override
 	{
-		CBaseMonster::KeyValue(pkvd);
+		return CBaseMonster::KeyValue(pkvd);
 	}
 
 	bool CheckRangeAttack1(float flDot, float flDist) override
@@ -1886,10 +1882,10 @@ const char* COFPitWorm::pFootSounds[] =
 
 LINK_ENTITY_TO_CLASS(monster_pitworm, COFPitWorm);
 
-int COFPitWorm::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool COFPitWorm::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
 	// Don't take any acid damage -- BigMomma's mortar is acid
-	if (bitsDamageType & DMG_ACID)
+	if ((bitsDamageType & DMG_ACID) != 0)
 		flDamage = 0;
 
 	if (!HasMemory(bits_MEMORY_PATH_FINISHED))
@@ -1902,7 +1898,7 @@ int COFPitWorm::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, floa
 		}
 	}
 
-	return 0;
+	return false;
 }
 
 void COFPitWorm::Precache()
@@ -2235,7 +2231,7 @@ void COFPitWorm::ShootBeam()
 {
 	if (m_hEnemy)
 	{
-		const float beamDirection = g_engfuncs.pfnRandomLong(0, 1) ? 1 : -1;
+		const float beamDirection = 0 != g_engfuncs.pfnRandomLong(0, 1) ? 1 : -1;
 
 		m_flBeamDir = -beamDirection;
 		m_offsetBeam = beamDirection * 40.0;
@@ -2526,7 +2522,7 @@ void COFPitWorm::RunAI()
 
 	if (!m_pGoalEnt)
 	{
-		if (pev->target)
+		if (!FStringNull(pev->target))
 		{
 			m_movementGoal = MOVEGOAL_PATHCORNER;
 			m_pGoalEnt = UTIL_FindEntityByTargetname(nullptr, STRING(pev->target));
@@ -2594,7 +2590,7 @@ void COFPitWorm::RunAI()
 	}
 	else if (m_Activity == ACT_MELEE_ATTACK1 || m_Activity == ACT_RANGE_ATTACK1)
 	{
-		if (!m_movementGoal)
+		if (0 == m_movementGoal)
 		{
 			m_IdealActivity = ACT_IDLE;
 		}
@@ -2607,13 +2603,13 @@ void COFPitWorm::RunAI()
 	{
 		if (m_Activity == ACT_IDLE)
 		{
-			if (!m_movementGoal)
+			if (0 == m_movementGoal)
 			{
 				m_IdealActivity = ACT_IDLE;
 				return;
 			}
 		}
-		else if (!m_movementGoal)
+		else if (0 == m_movementGoal)
 		{
 			m_IdealActivity = ACT_IDLE;
 			m_movementActivity = m_IdealActivity;

@@ -65,7 +65,7 @@ bool FileSystem_LoadFileSystem()
 	strncpy(szFSDir, szFsModule, sizeof(szFSDir) - 1);
 	szFSDir[sizeof(szFSDir) - 1] = '\0';
 #else
-	if (gEngfuncs.COM_ExpandFilename(szFsModule, szFSDir, sizeof(szFSDir)) == false)
+	if (gEngfuncs.COM_ExpandFilename(szFsModule, szFSDir, sizeof(szFSDir)) == 0)
 	{
 		return false;
 	}

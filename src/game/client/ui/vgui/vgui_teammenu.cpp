@@ -49,7 +49,7 @@
 #define TEAMMENU_FULL_TOPLEFT_Y			YRES(42)
 
 // Creation
-CTeamMenuPanel::CTeamMenuPanel(int iTrans, int iRemoveMe, int x, int y, int wide, int tall) : CMenuPanel(iTrans, iRemoveMe, x, y, wide, tall)
+CTeamMenuPanel::CTeamMenuPanel(int iTrans, bool iRemoveMe, int x, int y, int wide, int tall) : CMenuPanel(iTrans, iRemoveMe, x, y, wide, tall)
 {
 	// Get the scheme used for the Titles
 	CSchemeManager* pSchemes = gViewPort->GetSchemeManager();
@@ -208,7 +208,7 @@ void CTeamMenuPanel::Update()
 				iYPos += TEAMMENU_BUTTON_SIZE_Y + TEAMMENU_BUTTON_SPACER_Y;
 
 				// Start with the first option up
-				if (!m_iCurrentInfo)
+				if (0 == m_iCurrentInfo)
 					SetActiveInfo(i);
 
 				/*
@@ -277,7 +277,7 @@ void CTeamMenuPanel::Update()
 	}
 
 	// If the player is already in a team, make the cancel button visible
-	if (gViewPort->m_iCTFTeamNumber)
+	if (0 != gViewPort->m_iCTFTeamNumber)
 	{
 		m_pCancelButton->setPos(TEAMMENU_TOPLEFT_BUTTON_X, iYPos);
 		iYPos += TEAMMENU_BUTTON_SIZE_Y + TEAMMENU_BUTTON_SPACER_Y;
@@ -292,7 +292,7 @@ void CTeamMenuPanel::Update()
 	if (!m_bUpdatedMapName)
 	{
 		const char* level = gEngfuncs.pfnGetLevelName();
-		if (level && level[0])
+		if (level && '\0' != level[0])
 		{
 			char sz[256];
 			char szTitle[256];
@@ -381,7 +381,7 @@ void CTeamMenuPanel::paintBackground()
 	if (!m_bUpdatedMapName)
 		Update();
 
-	if (m_flTeamFullReset && m_flTeamFullReset <= gHUD.m_flTime)
+	if (0 != m_flTeamFullReset && m_flTeamFullReset <= gHUD.m_flTime)
 	{
 		m_pTeamFull->setVisible(false);
 		m_flTeamFullReset = 0;
@@ -418,7 +418,7 @@ void CTeamMenuPanel::SetActiveInfo(int iInput)
 	m_pScrollPanel->validate();
 }
 
-int CTeamMenuPanel::MsgFunc_TeamFull(const char* pszName, int iSize, void* pbuf)
+bool CTeamMenuPanel::MsgFunc_TeamFull(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 

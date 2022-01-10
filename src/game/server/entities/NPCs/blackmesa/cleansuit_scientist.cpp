@@ -82,7 +82,7 @@ public:
 	void Spawn() override;
 	int	Classify() override { return	CLASS_HUMAN_PASSIVE; }
 
-	void KeyValue(KeyValueData* pkvd) override;
+	bool KeyValue(KeyValueData* pkvd) override;
 	int	m_iPose;// which sequence to display
 	static const char* m_szPoses[9];
 };
@@ -99,15 +99,15 @@ const char* CDeadCleansuitScientist::m_szPoses[] =
 	"dead_against_wall"
 };
 
-void CDeadCleansuitScientist::KeyValue(KeyValueData* pkvd)
+bool CDeadCleansuitScientist::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq(pkvd->szKeyName, "pose"))
 	{
 		m_iPose = atoi(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
-	else
-		CBaseMonster::KeyValue(pkvd);
+
+	return CBaseMonster::KeyValue(pkvd);
 }
 LINK_ENTITY_TO_CLASS(monster_cleansuit_scientist_dead, CDeadCleansuitScientist);
 

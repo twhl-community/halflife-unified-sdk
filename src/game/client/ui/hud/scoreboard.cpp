@@ -49,7 +49,7 @@ DECLARE_MESSAGE(m_Scoreboard, TeamScore);
 DECLARE_MESSAGE(m_Scoreboard, PlayerIcon);
 DECLARE_MESSAGE(m_Scoreboard, CTFScore);
 
-int CHudScoreboard::Init()
+bool CHudScoreboard::Init()
 {
 	gHUD.AddHudElem(this);
 
@@ -67,15 +67,15 @@ int CHudScoreboard::Init()
 
 	cl_showpacketloss = CVAR_CREATE("cl_showpacketloss", "0", FCVAR_ARCHIVE);
 
-	return 1;
+	return true;
 }
 
 
-int CHudScoreboard::VidInit()
+bool CHudScoreboard::VidInit()
 {
 	// Load sprites here
 
-	return 1;
+	return true;
 }
 
 void CHudScoreboard::InitHUDData()
@@ -123,32 +123,32 @@ int SCOREBOARD_WIDTH = 320;
 #define ROW_RANGE_MIN 15
 #define ROW_RANGE_MAX ( ScreenHeight - 50 )
 
-int CHudScoreboard::Draw(float fTime)
+bool CHudScoreboard::Draw(float fTime)
 {
-	int can_show_packetloss = 0;
+	bool can_show_packetloss = false;
 	int FAR_RIGHT;
 
 	if (!m_iShowscoresHeld && gHUD.m_Health.m_iHealth > 0)
 	{
 		if (!gHUD.m_iIntermission || gHUD.m_Teamplay == 2)
 		{
-			return 1;
+			return true;
 		}
 	}
 	else
 	{
 		if (gHUD.m_iIntermission && gHUD.m_Teamplay == 2)
 		{
-			return 1;
+			return true;
 		}
 	}
 
 	GetAllPlayersInfo();
 
 	//  Packetloss removed on Kelly 'shipping nazi' Bailey's orders
-	if (cl_showpacketloss && cl_showpacketloss->value && (ScreenWidth >= 400))
+	if (cl_showpacketloss && 0 != cl_showpacketloss->value && (ScreenWidth >= 400))
 	{
-		can_show_packetloss = 1;
+		can_show_packetloss = true;
 		SCOREBOARD_WIDTH = 400;
 	}
 	else
@@ -167,7 +167,7 @@ int CHudScoreboard::Draw(float fTime)
 
 	const RGB24 color{255, 140, 0};
 
-	if (!gHUD.m_Teamplay)
+	if (0 == gHUD.m_Teamplay)
 		gHUD.DrawHudString(xpos, ypos, NAME_RANGE_MAX + xpos_rel, "Player", color);
 	else
 		gHUD.DrawHudString(xpos, ypos, NAME_RANGE_MAX + xpos_rel, "Teams", color);
@@ -211,11 +211,11 @@ int CHudScoreboard::Draw(float fTime)
 
 	list_slot += 0.8;
 
-	if (!gHUD.m_Teamplay)
+	if (0 == gHUD.m_Teamplay)
 	{
 		// it's not teamplay,  so just draw a simple player list
 		DrawPlayers(xpos_rel, list_slot);
-		return 1;
+		return true;
 	}
 
 	// clear out team scores
@@ -258,7 +258,7 @@ int CHudScoreboard::Draw(float fTime)
 		g_TeamInfo[j].ping += g_PlayerInfoList[i].ping;
 		g_TeamInfo[j].packetloss += g_PlayerInfoList[i].packetloss;
 
-		if (g_PlayerInfoList[i].thisplayer)
+		if (0 != g_PlayerInfoList[i].thisplayer)
 			g_TeamInfo[j].ownteam = true;
 		else
 			g_TeamInfo[j].ownteam = false;
@@ -277,7 +277,7 @@ int CHudScoreboard::Draw(float fTime)
 	}
 
 	// Draw the teams
-	while (1)
+	while (true)
 	{
 		int highest_frags = -99999; int lowest_deaths = 99999;
 		int best_team = 0;
@@ -299,7 +299,7 @@ int CHudScoreboard::Draw(float fTime)
 		}
 
 		// draw the best team on the scoreboard
-		if (!best_team)
+		if (0 == best_team)
 			break;
 
 		// draw out the best team
@@ -377,19 +377,19 @@ int CHudScoreboard::Draw(float fTime)
 	list_slot += 0.5;
 	DrawPlayers(xpos_rel, list_slot, 0, "");
 
-	return 1;
+	return true;
 }
 
 // returns the ypos where it finishes drawing
 int CHudScoreboard::DrawPlayers(int xpos_rel, float list_slot, int nameoffset, const char* team)
 {
-	int can_show_packetloss = 0;
+	bool can_show_packetloss = false;
 	int FAR_RIGHT;
 
 	//  Packetloss removed on Kelly 'shipping nazi' Bailey's orders
-	if (cl_showpacketloss && cl_showpacketloss->value && (ScreenWidth >= 400))
+	if (cl_showpacketloss && 0 != cl_showpacketloss->value && (ScreenWidth >= 400))
 	{
-		can_show_packetloss = 1;
+		can_show_packetloss = true;
 		SCOREBOARD_WIDTH = 400;
 	}
 	else
@@ -409,7 +409,7 @@ int CHudScoreboard::DrawPlayers(int xpos_rel, float list_slot, int nameoffset, c
 	FAR_RIGHT += 5;
 
 	// draw the players, in order,  and restricted to team if set
-	while (1)
+	while (true)
 	{
 		// Find the top ranking player
 		int highest_frags = -99999;	int lowest_deaths = 99999;
@@ -432,7 +432,7 @@ int CHudScoreboard::DrawPlayers(int xpos_rel, float list_slot, int nameoffset, c
 			}
 		}
 
-		if (!best_player)
+		if (0 == best_player)
 			break;
 
 		// draw out the best player
@@ -450,7 +450,7 @@ int CHudScoreboard::DrawPlayers(int xpos_rel, float list_slot, int nameoffset, c
 		{
 			const auto& sprite = g_PlayerSpriteList[best_player][icon];
 
-			if (sprite.spr)
+			if (0 != sprite.spr)
 			{
 				SPR_Set(sprite.spr, sprite.color);
 				gEngfuncs.pfnSPR_DrawAdditive(0, xpos_icon, ypos, &sprite.rc);
@@ -460,9 +460,9 @@ int CHudScoreboard::DrawPlayers(int xpos_rel, float list_slot, int nameoffset, c
 
 		int xpos = NAME_RANGE_MIN + xpos_rel;
 		RGB24 textColor{255, 255, 255};
-		if (best_player == m_iLastKilledBy && m_fLastKillTime && m_fLastKillTime > gHUD.m_flTime)
+		if (best_player == m_iLastKilledBy && 0 != m_fLastKillTime && m_fLastKillTime > gHUD.m_flTime)
 		{
-			if (pl_info->thisplayer)
+			if (0 != pl_info->thisplayer)
 			{  // green is the suicide color? i wish this could do grey...
 				FillRGBA(NAME_RANGE_MIN + xpos_rel - 5, ypos, FAR_RIGHT, ROW_GAP, {80, 155, 0}, 70);
 			}
@@ -471,7 +471,7 @@ int CHudScoreboard::DrawPlayers(int xpos_rel, float list_slot, int nameoffset, c
 				FillRGBA(NAME_RANGE_MIN + xpos_rel - 5, ypos, FAR_RIGHT, ROW_GAP, {255, 0, 0}, ((float)15 * (float)(m_fLastKillTime - gHUD.m_flTime)));
 			}
 		}
-		else if (pl_info->thisplayer) // if it is their name, draw it a different color
+		else if (0 != pl_info->thisplayer) // if it is their name, draw it a different color
 		{
 			// overlay the background in blue,  then draw the score text over it
 			FillRGBA(NAME_RANGE_MIN + xpos_rel - 5, ypos, FAR_RIGHT, ROW_GAP, {0, 0, 255}, 70);
@@ -550,12 +550,12 @@ void CHudScoreboard::GetAllPlayersInfo()
 	{
 		gEngfuncs.pfnGetPlayerInfo(i, &g_PlayerInfoList[i]);
 
-		if (g_PlayerInfoList[i].thisplayer)
+		if (0 != g_PlayerInfoList[i].thisplayer)
 			m_iPlayerNum = i;  // !!!HACK: this should be initialized elsewhere... maybe gotten from the engine
 	}
 }
 
-int CHudScoreboard::MsgFunc_ScoreInfo(const char* pszName, int iSize, void* pbuf)
+bool CHudScoreboard::MsgFunc_ScoreInfo(const char* pszName, int iSize, void* pbuf)
 {
 	m_iFlags |= HUD_ACTIVE;
 
@@ -576,14 +576,14 @@ int CHudScoreboard::MsgFunc_ScoreInfo(const char* pszName, int iSize, void* pbuf
 		gViewPort->UpdateOnPlayerInfo();
 	}
 
-	return 1;
+	return true;
 }
 
 // Message handler for TeamInfo message
 // accepts two values:
 //		byte: client number
 //		string: client team name
-int CHudScoreboard::MsgFunc_TeamInfo(const char* pszName, int iSize, void* pbuf)
+bool CHudScoreboard::MsgFunc_TeamInfo(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 	short cl = READ_BYTE();
@@ -647,7 +647,7 @@ int CHudScoreboard::MsgFunc_TeamInfo(const char* pszName, int iSize, void* pbuf)
 			memset(&g_TeamInfo[i], 0, sizeof(team_info_t));
 	}
 
-	return 1;
+	return true;
 }
 
 // Message handler for TeamScore message
@@ -656,7 +656,7 @@ int CHudScoreboard::MsgFunc_TeamInfo(const char* pszName, int iSize, void* pbuf)
 //		short: teams kills
 //		short: teams deaths 
 // if this message is never received, then scores will simply be the combined totals of the players.
-int CHudScoreboard::MsgFunc_TeamScore(const char* pszName, int iSize, void* pbuf)
+bool CHudScoreboard::MsgFunc_TeamScore(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 	char* TeamName = READ_STRING();
@@ -669,48 +669,48 @@ int CHudScoreboard::MsgFunc_TeamScore(const char* pszName, int iSize, void* pbuf
 			break;
 	}
 	if (i > m_iNumTeams)
-		return 1;
+		return true;
 
 	// use this new score data instead of combined player scores
 	g_TeamInfo[i].scores_overriden = true;
 	g_TeamInfo[i].frags = READ_SHORT();
 	g_TeamInfo[i].deaths = READ_SHORT();
 
-	return 1;
+	return true;
 }
 
-int CHudScoreboard::MsgFunc_PlayerIcon(const char* pszName, int iSize, void* pbuf)
+bool CHudScoreboard::MsgFunc_PlayerIcon(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 	const short playerIndex = READ_BYTE();
-	const int isActive = READ_BYTE();
+	const bool isActive = 0 != READ_BYTE();
 	const int iconIndex = READ_BYTE();
 	const unsigned char itemId = READ_BYTE();
 
 	if (playerIndex > MAX_PLAYERS)
-		return 1;
+		return true;
 
 	if (!isActive)
 	{
 		for (int i = 0; i < 6; ++i)
 		{
-			if (itemId & g_PlayerSpriteList[playerIndex][i].bFlags)
+			if ((itemId & g_PlayerSpriteList[playerIndex][i].bFlags) != 0)
 			{
 				memset(&g_PlayerSpriteList[playerIndex][i], 0, sizeof(g_PlayerSpriteList[playerIndex][i]));
 			}
 		}
-		return 1;
+		return true;
 	}
 
-	if (!itemId)
+	if (0 == itemId)
 	{
 		memset(&g_PlayerSpriteList[playerIndex][iconIndex], 0, sizeof(g_PlayerSpriteList[playerIndex][iconIndex]));
-		return 1;
+		return true;
 	}
 
 	for (int i = 0, id = CTFItem::BlackMesaFlag; i < 2; ++i, id <<= 1)
 	{
-		if (!(itemId & id))
+		if ((itemId & id) == 0)
 		{
 			continue;
 		}
@@ -726,14 +726,14 @@ int CHudScoreboard::MsgFunc_PlayerIcon(const char* pszName, int iSize, void* pbu
 
 		strcpy(sprite.szSpriteName, "score_flag");
 
-		return 1;
+		return true;
 	}
 
 	for (int i = 1; i < 6; ++i)
 	{
-		if (itemId & g_PlayerSpriteList[playerIndex][i].bFlags)
+		if ((itemId & g_PlayerSpriteList[playerIndex][i].bFlags) != 0)
 		{
-			return 1;
+			return true;
 		}
 	}
 
@@ -742,9 +742,9 @@ int CHudScoreboard::MsgFunc_PlayerIcon(const char* pszName, int iSize, void* pbu
 	{
 		auto& sprite = g_PlayerSpriteList[playerIndex][i];
 
-		if (!sprite.spr)
+		if (0 == sprite.spr)
 		{
-			if (itemId & CTFItem::LongJump)
+			if ((itemId & CTFItem::LongJump) != 0)
 			{
 				const int spriteIndex = gHUD.GetSpriteIndex("score_ctfljump");
 
@@ -755,7 +755,7 @@ int CHudScoreboard::MsgFunc_PlayerIcon(const char* pszName, int iSize, void* pbu
 
 				strcpy(sprite.szSpriteName, "score_ctfljump");
 			}
-			else if (itemId & CTFItem::PortableHEV)
+			else if ((itemId & CTFItem::PortableHEV) != 0)
 			{
 				const int spriteIndex = gHUD.GetSpriteIndex("score_ctfphev");
 
@@ -766,7 +766,7 @@ int CHudScoreboard::MsgFunc_PlayerIcon(const char* pszName, int iSize, void* pbu
 
 				strcpy(sprite.szSpriteName, "score_ctfphev");
 			}
-			else if (itemId & CTFItem::Backpack)
+			else if ((itemId & CTFItem::Backpack) != 0)
 			{
 				const int spriteIndex = gHUD.GetSpriteIndex("score_ctfbpack");
 
@@ -777,7 +777,7 @@ int CHudScoreboard::MsgFunc_PlayerIcon(const char* pszName, int iSize, void* pbu
 
 				strcpy(sprite.szSpriteName, "score_ctfbpack");
 			}
-			else if (itemId & CTFItem::Acceleration)
+			else if ((itemId & CTFItem::Acceleration) != 0)
 			{
 				const int spriteIndex = gHUD.GetSpriteIndex("score_ctfaccel");
 
@@ -788,7 +788,7 @@ int CHudScoreboard::MsgFunc_PlayerIcon(const char* pszName, int iSize, void* pbu
 
 				strcpy(sprite.szSpriteName, "score_ctfaccel");
 			}
-			else if (itemId & CTFItem::Regeneration)
+			else if ((itemId & CTFItem::Regeneration) != 0)
 			{
 				const int spriteIndex = gHUD.GetSpriteIndex("score_ctfregen");
 
@@ -805,10 +805,10 @@ int CHudScoreboard::MsgFunc_PlayerIcon(const char* pszName, int iSize, void* pbu
 
 	m_iFlags |= HUD_ACTIVE;
 
-	return 1;
+	return true;
 }
 
-int CHudScoreboard::MsgFunc_CTFScore(const char* pszName, int iSize, void* pbuf)
+bool CHudScoreboard::MsgFunc_CTFScore(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 	const int playerIndex = READ_BYTE();
@@ -819,7 +819,7 @@ int CHudScoreboard::MsgFunc_CTFScore(const char* pszName, int iSize, void* pbuf)
 		g_PlayerExtraInfo[playerIndex].flagcaptures = score;
 	}
 
-	return 1;
+	return true;
 }
 
 void CHudScoreboard::DeathMsg(int killer, int victim)
@@ -827,7 +827,7 @@ void CHudScoreboard::DeathMsg(int killer, int victim)
 	// if we were the one killed,  or the world killed us, set the scoreboard to indicate suicide
 	if (victim == m_iPlayerNum || killer == 0)
 	{
-		m_iLastKilledBy = killer ? killer : m_iPlayerNum;
+		m_iLastKilledBy = 0 != killer ? killer : m_iPlayerNum;
 		m_fLastKillTime = gHUD.m_flTime + 10;	// display who we were killed by for 10 seconds
 
 		if (killer == m_iPlayerNum)

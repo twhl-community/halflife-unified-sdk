@@ -53,11 +53,11 @@ extern DLL_GLOBAL int		g_iSkillLevel;
 extern DLL_GLOBAL unsigned int		g_ulFrameCount;
 
 extern void CopyToBodyQue(entvars_t* pev);
-extern int giPrecacheGrunt;
+extern bool giPrecacheGrunt;
 
 extern cvar_t allow_spectators;
 
-extern int g_teamplay;
+extern bool g_teamplay;
 
 void LinkUserMessages();
 
@@ -87,7 +87,7 @@ called when a player connects to a server
 */
 qboolean ClientConnect(edict_t* pEntity, const char* pszName, const char* pszAddress, char szRejectReason[128])
 {
-	return g_pGameRules->ClientConnected(pEntity, pszName, pszAddress, szRejectReason);
+	return static_cast<qboolean>(g_pGameRules->ClientConnected(pEntity, pszName, pszAddress, szRejectReason));
 
 	// a client connecting during an intermission can cause problems
 	//	if (intermission_running)
@@ -111,7 +111,7 @@ void ClientDisconnect(edict_t* pEntity)
 		return;
 
 	char text[256] = "";
-	if (pEntity->v.netname)
+	if (!FStringNull(pEntity->v.netname))
 		snprintf(text, sizeof(text), "- %s has left the game\n", STRING(pEntity->v.netname));
 	text[sizeof(text) - 1] = 0;
 	MESSAGE_BEGIN(MSG_ALL, gmsgSayText, NULL);
@@ -152,7 +152,7 @@ void ClientDisconnect(edict_t* pEntity)
 // called by ClientKill and DeadThink
 void respawn(entvars_t* pev, bool fCopyCorpse)
 {
-	if (gpGlobals->coop || gpGlobals->deathmatch)
+	if (0 != gpGlobals->coop || 0 != gpGlobals->deathmatch)
 	{
 		if (fCopyCorpse)
 		{
@@ -185,7 +185,7 @@ void ClientKill(edict_t* pEntity)
 	CBasePlayer* pl = (CBasePlayer*)CBasePlayer::Instance(pev);
 
 	//Only check for teams in CTF gamemode
-	if ((pl->pev->flags & FL_SPECTATOR)
+	if ((pl->pev->flags & FL_SPECTATOR) != 0
 		|| (g_pGameRules->IsCTF() && pl->m_iTeamNum == CTFTeam::None))
 	{
 		return;
@@ -281,7 +281,7 @@ int Q_UTF8ToUChar32(const char* pUTF8_, uchar32& uValueOut, bool& bErrorOut)
 	uMinValue = 0x80;
 
 	// 110..... two-byte lead byte
-	if (!(uValue & (0x20 << 6)))
+	if (0 == (uValue & (0x20 << 6)))
 		goto decodeFinished;
 
 	// Expecting at least a three-byte sequence
@@ -293,7 +293,7 @@ int Q_UTF8ToUChar32(const char* pUTF8_, uchar32& uValueOut, bool& bErrorOut)
 	uMinValue = 0x800;
 
 	// 1110.... three-byte lead byte
-	if (!(uValue & (0x10 << 12)))
+	if (0 == (uValue & (0x10 << 12)))
 		goto decodeFinishedMaybeCESU8;
 
 	// Expecting a four-byte sequence, longest permissible in UTF-8
@@ -339,7 +339,7 @@ decodeFinishedMaybeCESU8:
 bool Q_UnicodeValidate(const char* pUTF8)
 {
 	bool bError = false;
-	while (*pUTF8)
+	while ('\0' != *pUTF8)
 	{
 		uchar32 uVal;
 		// Our UTF-8 decoder silently fixes up 6-byte CESU-8 (improperly re-encoded UTF-16) sequences.
@@ -358,7 +358,7 @@ bool Q_UnicodeValidate(const char* pUTF8)
 // or as
 // blah blah blah
 //
-void Host_Say(edict_t* pEntity, int teamonly)
+void Host_Say(edict_t* pEntity, bool teamonly)
 {
 	CBasePlayer* client;
 	int		j;
@@ -415,7 +415,7 @@ void Host_Say(edict_t* pEntity, int teamonly)
 
 	// make sure the text has content
 
-	if (!p || !p[0] || !Q_UnicodeValidate(p))
+	if (!p || '\0' == p[0] || !Q_UnicodeValidate(p))
 		return;  // no character found, so say nothing
 
 // turn on color set 2  (color on,  no sound)
@@ -514,7 +514,7 @@ void Host_Say(edict_t* pEntity, int teamonly)
 
 bool UTIL_CheatsAllowed(CBasePlayer* pEntity, const char* name)
 {
-	if (!g_psv_cheats->value)
+	if (0 == g_psv_cheats->value)
 	{
 		CLIENT_PRINTF(pEntity->edict(), print_console, UTIL_VarArgs("The command \"%s\" can only be used when cheats are enabled\n", name));
 		return false;
@@ -545,11 +545,11 @@ void ClientCommand(edict_t* pEntity)
 
 	if (FStrEq(pcmd, "say"))
 	{
-		Host_Say(pEntity, 0);
+		Host_Say(pEntity, false);
 	}
 	else if (FStrEq(pcmd, "say_team"))
 	{
-		Host_Say(pEntity, 1);
+		Host_Say(pEntity, true);
 	}
 	else if (FStrEq(pcmd, "fullupdate"))
 	{
@@ -557,7 +557,7 @@ void ClientCommand(edict_t* pEntity)
 	}
 	else if (FStrEq(pcmd, "give"))
 	{
-		if (g_psv_cheats->value)
+		if (0 != g_psv_cheats->value)
 		{
 			int iszItem = ALLOC_STRING(CMD_ARGV(1));	// Make a copy of the classname
 			player->GiveNamedItem(STRING(iszItem));
@@ -571,7 +571,7 @@ void ClientCommand(edict_t* pEntity)
 	}
 	else if (FStrEq(pcmd, "fov"))
 	{
-		if (g_psv_cheats->value && CMD_ARGC() > 1)
+		if (0 != g_psv_cheats->value && CMD_ARGC() > 1)
 		{
 			player->m_iFOV = atoi(CMD_ARGV(1));
 		}
@@ -605,11 +605,11 @@ void ClientCommand(edict_t* pEntity)
 			{
 				const auto type = [](const char* value) -> std::optional<SuitLightType>
 				{
-					if (!strcmp("flashlight", value))
+					if (0 == strcmp("flashlight", value))
 					{
 						return SuitLightType::Flashlight;
 					}
-					else if (!strcmp("nightvision", value))
+					else if (0 == strcmp("nightvision", value))
 					{
 						return SuitLightType::Nightvision;
 					}
@@ -761,7 +761,7 @@ void ClientUserInfoChanged(edict_t* pEntity, char* infobuffer)
 	auto player = GetClassPtr((CBasePlayer*)&pEntity->v);
 
 	// msg everyone if someone changes their name,  and it isn't the first time (changing no name to current name)
-	if (pEntity->v.netname && STRING(pEntity->v.netname)[0] != 0 && !FStrEq(STRING(pEntity->v.netname), g_engfuncs.pfnInfoKeyValue(infobuffer, "name")))
+	if (!FStringNull(pEntity->v.netname) && STRING(pEntity->v.netname)[0] != 0 && !FStrEq(STRING(pEntity->v.netname), g_engfuncs.pfnInfoKeyValue(infobuffer, "name")))
 	{
 		char sName[256];
 		char* pName = g_engfuncs.pfnInfoKeyValue(infobuffer, "name");
@@ -856,7 +856,7 @@ void ServerActivate(edict_t* pEdictList, int edictCount, int clientMax)
 	// Clients have not been initialized yet
 	for (i = 0; i < edictCount; i++)
 	{
-		if (pEdictList[i].free)
+		if (0 != pEdictList[i].free)
 			continue;
 
 		// Clients aren't necessarily initialized until ClientPutInServer()
@@ -865,7 +865,7 @@ void ServerActivate(edict_t* pEdictList, int edictCount, int clientMax)
 
 		pClass = CBaseEntity::Instance(&pEdictList[i]);
 		// Activate this entity if it's got a class & isn't dormant
-		if (pClass && !(pClass->pev->flags & FL_DORMANT))
+		if (pClass && (pClass->pev->flags & FL_DORMANT) == 0)
 		{
 			pClass->Activate();
 		}
@@ -1163,7 +1163,7 @@ void SetupVisibility(edict_t* pViewEntity, edict_t* pClient, unsigned char** pvs
 		pView = pViewEntity;
 	}
 
-	if (pClient->v.flags & FL_PROXY)
+	if ((pClient->v.flags & FL_PROXY) != 0)
 	{
 		*pvs = NULL;	// the spectator proxy sees
 		*pas = NULL;	// and hears everything
@@ -1171,7 +1171,7 @@ void SetupVisibility(edict_t* pViewEntity, edict_t* pClient, unsigned char** pvs
 	}
 
 	org = pView->v.origin + pView->v.view_ofs;
-	if (pView->v.flags & FL_DUCKING)
+	if ((pView->v.flags & FL_DUCKING) != 0)
 	{
 		org = org + (VEC_HULL_MIN - VEC_DUCK_HULL_MIN);
 	}
@@ -1200,16 +1200,16 @@ int AddToFullPack(struct entity_state_s* state, int e, edict_t* ent, edict_t* ho
 	int					i;
 
 	// don't send if flagged for NODRAW and it's not the host getting the message
-	if ((ent->v.effects & EF_NODRAW) &&
+	if ((ent->v.effects & EF_NODRAW) != 0 &&
 		(ent != host))
 		return 0;
 
 	// Ignore ents without valid / visible models
-	if (!ent->v.modelindex || !STRING(ent->v.model))
+	if (0 == ent->v.modelindex || !STRING(ent->v.model))
 		return 0;
 
 	// Don't send spectators to other players
-	if ((ent->v.flags & FL_SPECTATOR) && (ent != host))
+	if ((ent->v.flags & FL_SPECTATOR) != 0 && (ent != host))
 	{
 		return 0;
 	}
@@ -1226,27 +1226,27 @@ int AddToFullPack(struct entity_state_s* state, int e, edict_t* ent, edict_t* ho
 
 
 	// Don't send entity to local client if the client says it's predicting the entity itself.
-	if (ent->v.flags & FL_SKIPLOCALHOST)
+	if ((ent->v.flags & FL_SKIPLOCALHOST) != 0)
 	{
-		if ((hostflags & 1) && (ent->v.owner == host))
+		if ((hostflags & 1) != 0 && (ent->v.owner == host))
 			return 0;
 	}
 
-	if (host->v.groupinfo)
+	if (0 != host->v.groupinfo)
 	{
 		UTIL_SetGroupTrace(host->v.groupinfo, GROUP_OP_AND);
 
 		// Should always be set, of course
-		if (ent->v.groupinfo)
+		if (0 != ent->v.groupinfo)
 		{
 			if (g_groupop == GROUP_OP_AND)
 			{
-				if (!(ent->v.groupinfo & host->v.groupinfo))
+				if ((ent->v.groupinfo & host->v.groupinfo) == 0)
 					return 0;
 			}
 			else if (g_groupop == GROUP_OP_NAND)
 			{
-				if (ent->v.groupinfo & host->v.groupinfo)
+				if ((ent->v.groupinfo & host->v.groupinfo) != 0)
 					return 0;
 			}
 		}
@@ -1262,7 +1262,7 @@ int AddToFullPack(struct entity_state_s* state, int e, edict_t* ent, edict_t* ho
 	state->entityType = ENTITY_NORMAL;
 
 	// Flag custom entities.
-	if (ent->v.flags & FL_CUSTOMENTITY)
+	if ((ent->v.flags & FL_CUSTOMENTITY) != 0)
 	{
 		state->entityType = ENTITY_BEAM;
 	}
@@ -1293,15 +1293,15 @@ int AddToFullPack(struct entity_state_s* state, int e, edict_t* ent, edict_t* ho
 	state->effects = ent->v.effects;
 
 	//Remove the night vision illumination effect so other players don't see it
-	if (player && host != ent)
+	if (0 != player && host != ent)
 	{
 		state->effects &= ~EF_BRIGHTLIGHT;
 	}
 
 	// This non-player entity is being moved by the game .dll and not the physics simulation system
 	//  make sure that we interpolate it's position on the client if it moves
-	if (!player &&
-		ent->v.animtime &&
+	if (0 == player &&
+		0 != ent->v.animtime &&
 		ent->v.velocity[0] == 0 &&
 		ent->v.velocity[1] == 0 &&
 		ent->v.velocity[2] == 0)
@@ -1355,13 +1355,13 @@ int AddToFullPack(struct entity_state_s* state, int e, edict_t* ent, edict_t* ho
 
 	// HACK:  Somewhat...
 	// Class is overridden for non-players to signify a breakable glass object ( sort of a class? )
-	if (!player)
+	if (0 == player)
 	{
 		state->playerclass = ent->v.playerclass;
 	}
 
 	// Special stuff for players only
-	if (player)
+	if (0 != player)
 	{
 		memcpy(state->basevelocity, ent->v.basevelocity, 3 * sizeof(float));
 
@@ -1373,7 +1373,7 @@ int AddToFullPack(struct entity_state_s* state, int e, edict_t* ent, edict_t* ho
 		state->gravity = ent->v.gravity;
 		//		state->team			= ent->v.team;
 		//		
-		state->usehull = (ent->v.flags & FL_DUCKING) ? 1 : 0;
+		state->usehull = (ent->v.flags & FL_DUCKING) != 0 ? 1 : 0;
 		state->health = ent->v.health;
 	}
 
@@ -1402,7 +1402,7 @@ void CreateBaseline(int player, int eindex, struct entity_state_s* baseline, str
 	baseline->rendercolor.b = (byte)entity->v.rendercolor.z;
 	baseline->renderfx = (byte)entity->v.renderfx;
 
-	if (player)
+	if (0 != player)
 	{
 		baseline->mins = *player_mins;
 		baseline->maxs = *player_maxs;
@@ -1478,20 +1478,19 @@ FIXME:  Move to script
 void Entity_Encode(struct delta_s* pFields, const unsigned char* from, const unsigned char* to)
 {
 	entity_state_t* f, * t;
-	int localplayer = 0;
-	static int initialized = 0;
+	static bool initialized = false;
 
 	if (!initialized)
 	{
 		Entity_FieldInit(pFields);
-		initialized = 1;
+		initialized = true;
 	}
 
 	f = (entity_state_t*)from;
 	t = (entity_state_t*)to;
 
 	// Never send origin to local player, it's sent with more resolution in clientdata_t structure
-	localplayer = (t->number - 1) == ENGINE_CURRENT_PLAYER();
+	const bool localplayer = (t->number - 1) == ENGINE_CURRENT_PLAYER();
 	if (localplayer)
 	{
 		DELTA_UNSETBYINDEX(pFields, entity_field_alias[FIELD_ORIGIN0].field);
@@ -1549,20 +1548,19 @@ Callback for sending entity_state_t for players info over network.
 void Player_Encode(struct delta_s* pFields, const unsigned char* from, const unsigned char* to)
 {
 	entity_state_t* f, * t;
-	int localplayer = 0;
-	static int initialized = 0;
+	static bool initialized = false;
 
 	if (!initialized)
 	{
 		Player_FieldInit(pFields);
-		initialized = 1;
+		initialized = true;
 	}
 
 	f = (entity_state_t*)from;
 	t = (entity_state_t*)to;
 
 	// Never send origin to local player, it's sent with more resolution in clientdata_t structure
-	localplayer = (t->number - 1) == ENGINE_CURRENT_PLAYER();
+	const bool localplayer = (t->number - 1) == ENGINE_CURRENT_PLAYER();
 	if (localplayer)
 	{
 		DELTA_UNSETBYINDEX(pFields, entity_field_alias[FIELD_ORIGIN0].field);
@@ -1633,12 +1631,12 @@ void Custom_Encode(struct delta_s* pFields, const unsigned char* from, const uns
 {
 	entity_state_t* f, * t;
 	int beamType;
-	static int initialized = 0;
+	static bool initialized = false;
 
 	if (!initialized)
 	{
 		Custom_Entity_FieldInit(pFields);
-		initialized = 1;
+		initialized = true;
 	}
 
 	f = (entity_state_t*)from;
@@ -1731,7 +1729,7 @@ int GetWeaponData(struct edict_s* player, struct weapon_data_s* info)
 						item->m_flTimeWeaponIdle = V_max(gun->m_flTimeWeaponIdle, -0.001);
 						item->m_flNextPrimaryAttack = V_max(gun->m_flNextPrimaryAttack, -0.001);
 						item->m_flNextSecondaryAttack = V_max(gun->m_flNextSecondaryAttack, -0.001);
-						item->m_fInReload = gun->m_fInReload;
+						item->m_fInReload = static_cast<int>(gun->m_fInReload);
 						item->m_fInSpecialReload = gun->m_fInSpecialReload;
 						item->fuser1 = V_max(gun->pev->fuser1, -0.001);
 						item->fuser2 = gun->m_flStartThrow;
@@ -1827,7 +1825,7 @@ void UpdateClientData(const edict_t* ent, int sendweapons, struct clientdata_s* 
 
 
 #if defined( CLIENT_WEAPONS )
-	if (sendweapons)
+	if (0 != sendweapons)
 	{
 		if (pl)
 		{
@@ -1864,7 +1862,7 @@ void UpdateClientData(const edict_t* ent, int sendweapons, struct clientdata_s* 
 
 					if (pl->m_pActiveItem->m_iId == WEAPON_RPG)
 					{
-						cd->vuser2.y = ((CRpg*)pl->m_pActiveItem)->m_fSpotActive;
+						cd->vuser2.y = static_cast<float>(((CRpg*)pl->m_pActiveItem)->m_fSpotActive);
 						cd->vuser2.z = ((CRpg*)pl->m_pActiveItem)->m_cActiveRockets;
 					}
 				}

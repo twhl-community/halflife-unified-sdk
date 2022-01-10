@@ -82,11 +82,11 @@ void CBaseMonster::ChangeSchedule(Schedule_t* pNewSchedule)
 	m_afConditions = 0;// clear all of the conditions
 	m_failSchedule = SCHED_NONE;
 
-	if (m_pSchedule->iInterruptMask & bits_COND_HEAR_SOUND && !(m_pSchedule->iSoundMask))
+	if ((m_pSchedule->iInterruptMask & bits_COND_HEAR_SOUND) != 0 && 0 == m_pSchedule->iSoundMask)
 	{
 		ALERT(at_aiconsole, "COND_HEAR_SOUND with no sound mask!\n");
 	}
-	else if (m_pSchedule->iSoundMask && !(m_pSchedule->iInterruptMask & bits_COND_HEAR_SOUND))
+	else if (0 != m_pSchedule->iSoundMask && (m_pSchedule->iInterruptMask & bits_COND_HEAR_SOUND) == 0)
 	{
 		ALERT(at_aiconsole, "Sound mask without COND_HEAR_SOUND!\n");
 	}
@@ -235,8 +235,8 @@ void CBaseMonster::MaintainSchedule()
 			if (m_IdealMonsterState != MONSTERSTATE_DEAD &&
 				(m_IdealMonsterState != MONSTERSTATE_SCRIPT || m_IdealMonsterState == m_MonsterState))
 			{
-				if ((m_afConditions && !HasConditions(bits_COND_SCHEDULE_DONE)) ||
-					(m_pSchedule && (m_pSchedule->iInterruptMask & bits_COND_SCHEDULE_DONE)) ||
+				if ((0 != m_afConditions && !HasConditions(bits_COND_SCHEDULE_DONE)) ||
+					(m_pSchedule && (m_pSchedule->iInterruptMask & bits_COND_SCHEDULE_DONE) != 0) ||
 					((m_MonsterState == MONSTERSTATE_COMBAT) && (m_hEnemy == NULL)))
 				{
 					GetIdealState();
@@ -540,7 +540,7 @@ void CBaseMonster::RunTask(Task_t* pTask)
 	}
 
 	case TASK_WAIT_FOR_JUMP:
-		if (pev->flags & FL_ONGROUND)
+		if ((pev->flags & FL_ONGROUND) != 0)
 		{
 			if (!HasConditions(bits_COND_TASK_FAILED))
 				TaskIsComplete();
@@ -913,7 +913,7 @@ void CBaseMonster::StartTask(Task_t* pTask)
 
 	case TASK_WAIT_FOR_JUMP:
 	{
-		if (pev->flags & FL_ONGROUND)
+		if ((pev->flags & FL_ONGROUND) != 0)
 		{
 			if (!HasConditions(bits_COND_TASK_FAILED))
 				TaskIsComplete();
@@ -1284,7 +1284,7 @@ void CBaseMonster::StartTask(Task_t* pTask)
 	}
 	case TASK_WAIT_FOR_SCRIPT:
 	{
-		if (m_pCine->m_iszIdle)
+		if (!FStringNull(m_pCine->m_iszIdle))
 		{
 			m_pCine->StartSequence((CBaseMonster*)this, m_pCine->m_iszIdle, false);
 			if (FStrEq(STRING(m_pCine->m_iszIdle), STRING(m_pCine->m_iszPlay)))
@@ -1306,7 +1306,7 @@ void CBaseMonster::StartTask(Task_t* pTask)
 	}
 	case TASK_ENABLE_SCRIPT:
 	{
-		m_pCine->DelayStart(0);
+		m_pCine->DelayStart(false);
 		TaskComplete();
 		break;
 	}
@@ -1555,7 +1555,7 @@ bool CBaseMonster::JumpToTarget(Activity movementAct, float waitTime)
 
 	pev->origin.z += 1;
 
-	if (pev->flags & FL_ONGROUND)
+	if ((pev->flags & FL_ONGROUND) != 0)
 		pev->flags &= ~FL_ONGROUND;
 
 	//const float flGravity = g_engfuncs.pfnCVarGetFloat("sv_gravity");

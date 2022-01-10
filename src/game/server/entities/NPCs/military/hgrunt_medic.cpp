@@ -115,8 +115,8 @@ public:
 	void RunTask(Task_t* pTask) override;
 	void Shoot();
 
-	int	Save(CSave& save) override;
-	int Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 
 	Schedule_t* GetScheduleOfType(int Type) override;
 
@@ -193,11 +193,11 @@ void COFMedicAlly::DropWeapon(bool applyVelocity)
 
 		CBaseEntity* pGun = nullptr;
 
-		if (pev->weapons & MedicAllyWeaponFlag::Glock)
+		if ((pev->weapons & MedicAllyWeaponFlag::Glock) != 0)
 		{
 			pGun = DropItem("weapon_9mmhandgun", vecGunPos, vecGunAngles);
 		}
-		else if (pev->weapons & MedicAllyWeaponFlag::DesertEagle)
+		else if ((pev->weapons & MedicAllyWeaponFlag::DesertEagle) != 0)
 		{
 			pGun = DropItem("weapon_eagle", vecGunPos, vecGunAngles);
 		}
@@ -230,12 +230,12 @@ void COFMedicAlly::Shoot()
 
 	const char* pszSoundName = nullptr;
 
-	if (pev->weapons & MedicAllyWeaponFlag::Glock)
+	if ((pev->weapons & MedicAllyWeaponFlag::Glock) != 0)
 	{
 		FireBullets(1, vecShootOrigin, vecShootDir, VECTOR_CONE_2DEGREES, 1024, BULLET_MONSTER_9MM); // shoot +-5 degrees
 		pszSoundName = "weapons/pl_gun3.wav";
 	}
-	else if (pev->weapons & MedicAllyWeaponFlag::DesertEagle)
+	else if ((pev->weapons & MedicAllyWeaponFlag::DesertEagle) != 0)
 	{
 		FireBullets(1, vecShootOrigin, vecShootDir, VECTOR_CONE_2DEGREES, 1024, BULLET_PLAYER_357); // shoot +-5 degrees
 		pszSoundName = "weapons/desert_eagle_fire.wav";
@@ -270,7 +270,7 @@ void COFMedicAlly::HandleAnimEvent(MonsterEvent_t* pEvent)
 	{
 	case HGRUNT_AE_RELOAD:
 
-		if (pev->weapons & MedicAllyWeaponFlag::DesertEagle)
+		if ((pev->weapons & MedicAllyWeaponFlag::DesertEagle) != 0)
 		{
 			EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/desert_eagle_reload.wav", 1, ATTN_NORM);
 		}
@@ -302,7 +302,7 @@ void COFMedicAlly::HandleAnimEvent(MonsterEvent_t* pEvent)
 		break;
 
 	case MEDIC_AE_EQUIP_GUN:
-		SetBodygroup(MedicAllyBodygroup::Weapons, pev->weapons & MedicAllyWeaponFlag::Glock ? MedicAllyWeapon::Glock : MedicAllyWeapon::DesertEagle);
+		SetBodygroup(MedicAllyBodygroup::Weapons, (pev->weapons & MedicAllyWeaponFlag::Glock) != 0 ? MedicAllyWeapon::Glock : MedicAllyWeapon::DesertEagle);
 		break;
 
 	default:
@@ -326,7 +326,7 @@ void COFMedicAlly::Spawn()
 	m_fFollowChecked = false;
 	m_fFollowChecking = false;
 
-	if (!pev->weapons)
+	if (0 == pev->weapons)
 	{
 		pev->weapons |= MedicAllyWeaponFlag::Glock;
 	}
@@ -338,17 +338,17 @@ void COFMedicAlly::Spawn()
 
 	int weaponIndex = 0;
 
-	if (pev->weapons & MedicAllyWeaponFlag::Glock)
+	if ((pev->weapons & MedicAllyWeaponFlag::Glock) != 0)
 	{
 		weaponIndex = MedicAllyWeapon::Glock;
 		m_cClipSize = MEDIC_GLOCK_CLIP_SIZE;
 	}
-	else if (pev->weapons & MedicAllyWeaponFlag::DesertEagle)
+	else if ((pev->weapons & MedicAllyWeaponFlag::DesertEagle) != 0)
 	{
 		weaponIndex = MedicAllyWeapon::DesertEagle;
 		m_cClipSize = MEDIC_DEAGLE_CLIP_SIZE;
 	}
-	else if (pev->weapons & MedicAllyWeaponFlag::Needle)
+	else if ((pev->weapons & MedicAllyWeaponFlag::Needle) != 0)
 	{
 		weaponIndex = MedicAllyWeapon::Needle;
 		m_cClipSize = 1;
@@ -652,7 +652,7 @@ Schedule_t* COFMedicAlly::GetHealSchedule()
 
 			if ((pHealTarget->pev->origin - pev->origin).Make2D().Length() <= 50.0
 				&& (!m_fUseHealing || gpGlobals->time - m_flLastUseTime <= 0.25)
-				&& m_iHealCharge
+				&& 0 != m_iHealCharge
 				&& pHealTarget->IsAlive()
 				&& pHealTarget->pev->health != pHealTarget->pev->max_health)
 			{
@@ -735,7 +735,7 @@ bool COFMedicAlly::HealMe(COFSquadTalkMonster* pTarget)
 			}
 		}
 
-		if (m_MonsterState != MONSTERSTATE_COMBAT && m_iHealCharge)
+		if (m_MonsterState != MONSTERSTATE_COMBAT && 0 != m_iHealCharge)
 		{
 			HealerActivate(pTarget);
 			return true;
@@ -845,7 +845,7 @@ void COFMedicAlly::HealerUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_
 			m_fFollowChecking = false;
 		}
 
-		const auto newTarget = !m_fUseHealing && m_hTargetEnt && m_fHealing;
+		const auto newTarget = !m_fUseHealing && nullptr != m_hTargetEnt && m_fHealing;
 
 		if (newTarget)
 		{

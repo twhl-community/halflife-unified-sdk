@@ -28,11 +28,11 @@ public:
 		Reset = 1
 	};
 
-	int Save(CSave& save) override;
-	int Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
-	void KeyValue(KeyValueData* pkvd) override;
+	bool KeyValue(KeyValueData* pkvd) override;
 
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
@@ -51,20 +51,20 @@ TYPEDESCRIPTION	PlayerSetHudColor::m_SaveData[] =
 
 IMPLEMENT_SAVERESTORE(PlayerSetHudColor, CPointEntity);
 
-void PlayerSetHudColor::KeyValue(KeyValueData* pkvd)
+bool PlayerSetHudColor::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq(pkvd->szKeyName, "hud_color"))
 	{
 		UTIL_StringToVector(m_HudColor, pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "action"))
 	{
 		m_Action = static_cast<Action>(atoi(pkvd->szValue));
-		pkvd->fHandled = true;
+		return true;
 	}
-	else
-		CPointEntity::KeyValue(pkvd);
+	
+	return CPointEntity::KeyValue(pkvd);
 }
 
 void PlayerSetHudColor::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)

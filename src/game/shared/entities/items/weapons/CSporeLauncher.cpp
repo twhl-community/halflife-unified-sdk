@@ -111,7 +111,7 @@ void CSporeLauncher::WeaponIdle()
 
 	if (m_flTimeWeaponIdle < UTIL_WeaponTimeBase())
 	{
-		if (m_iClip == 0 && m_ReloadState == ReloadState::NOT_RELOADING && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType])
+		if (m_iClip == 0 && m_ReloadState == ReloadState::NOT_RELOADING && 0 != m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType])
 		{
 			Reload();
 		}
@@ -119,12 +119,12 @@ void CSporeLauncher::WeaponIdle()
 		{
 			int maxClip = SPORELAUNCHER_MAX_CLIP;
 
-			if (m_pPlayer->m_iItems & CTFItem::Backpack)
+			if ((m_pPlayer->m_iItems & CTFItem::Backpack) != 0)
 			{
 				maxClip *= 2;
 			}
 
-			if (m_iClip != maxClip && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType])
+			if (m_iClip != maxClip && 0 != m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType])
 			{
 				Reload();
 			}
@@ -166,7 +166,7 @@ void CSporeLauncher::WeaponIdle()
 
 void CSporeLauncher::PrimaryAttack()
 {
-	if (m_iClip)
+	if (0 != m_iClip)
 	{
 		m_pPlayer->m_iWeaponVolume = LOUD_GUN_VOLUME;
 		m_pPlayer->m_iWeaponFlash = BRIGHT_GUN_FLASH;
@@ -216,7 +216,7 @@ void CSporeLauncher::PrimaryAttack()
 
 void CSporeLauncher::SecondaryAttack()
 {
-	if (m_iClip)
+	if (0 != m_iClip)
 	{
 		m_pPlayer->m_iWeaponVolume = LOUD_GUN_VOLUME;
 		m_pPlayer->m_iWeaponFlash = BRIGHT_GUN_FLASH;
@@ -321,7 +321,7 @@ int CSporeLauncher::iItemSlot()
 	return 4;
 }
 
-int CSporeLauncher::GetItemInfo(ItemInfo* p)
+bool CSporeLauncher::GetItemInfo(ItemInfo* p)
 {
 	p->pszAmmo1 = "spores";
 	p->iMaxAmmo1 = SPORELAUNCHER_MAX_CARRY;
@@ -340,7 +340,7 @@ int CSporeLauncher::GetItemInfo(ItemInfo* p)
 
 void CSporeLauncher::IncrementAmmo(CBasePlayer* pPlayer)
 {
-	if (pPlayer->GiveAmmo(1, "spores", SPORELAUNCHER_MAX_CARRY))
+	if (0 != pPlayer->GiveAmmo(1, "spores", SPORELAUNCHER_MAX_CARRY))
 	{
 		EMIT_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
 	}
@@ -427,11 +427,11 @@ public:
 		SetThink(&CSporeAmmo::Idling);
 	}
 
-	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override
+	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override
 	{
 		if (pev->body == SPOREAMMOBODY_EMPTY)
 		{
-			return 0;
+			return false;
 		}
 
 		pev->body = SPOREAMMOBODY_EMPTY;
@@ -458,7 +458,7 @@ public:
 
 		pSpore->pev->velocity = gpGlobals->v_forward * 800;
 
-		return 0;
+		return false;
 	}
 
 	bool AddAmmo(CBaseEntity* pOther) override

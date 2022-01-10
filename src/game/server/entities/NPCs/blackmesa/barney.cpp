@@ -451,21 +451,21 @@ void CBarney::TalkInit()
 	m_voicePitch = 100;
 }
 
-int CBarney::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool CBarney::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
 	// make sure friends talk about it if player hurts talkmonsters...
-	int ret = CTalkMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
+	bool ret = CTalkMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
 	if (!IsAlive() || pev->deadflag == DEAD_DYING)
 		return ret;
 
-	if (m_MonsterState != MONSTERSTATE_PRONE && (pevAttacker->flags & FL_CLIENT))
+	if (m_MonsterState != MONSTERSTATE_PRONE && (pevAttacker->flags & FL_CLIENT) != 0)
 	{
 		// This is a heurstic to determine if the player intended to harm me
 		// If I have an enemy, we can't establish intent (may just be crossfire)
 		if (m_hEnemy == NULL)
 		{
 			// If the player was facing directly at me, or I'm already suspicious, get mad
-			if ((m_afMemory & bits_MEMORY_SUSPICIOUS) || IsFacing(pevAttacker, pev->origin))
+			if ((m_afMemory & bits_MEMORY_SUSPICIOUS) != 0 || IsFacing(pevAttacker, pev->origin))
 			{
 				// Alright, now I'm pissed!
 				PlaySentence("BA_MAD", 4, VOL_NORM, ATTN_NORM);
@@ -528,14 +528,14 @@ void CBarney::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir,
 	{
 	case HITGROUP_CHEST:
 	case HITGROUP_STOMACH:
-		if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_BLAST))
+		if ((bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_BLAST)) != 0)
 		{
 			flDamage = flDamage / 2;
 		}
 		break;
 		//TODO: Otis doesn't have a helmet, probably don't want his dome being bulletproof
 	case 10:
-		if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_CLUB))
+		if ((bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_CLUB)) != 0)
 		{
 			flDamage -= 20;
 			if (flDamage <= 0)
@@ -639,7 +639,7 @@ Schedule_t* CBarney::GetSchedule()
 		pSound = PBestSound();
 
 		ASSERT(pSound != NULL);
-		if (pSound && (pSound->m_iType & bits_SOUND_DANGER))
+		if (pSound && (pSound->m_iType & bits_SOUND_DANGER) != 0)
 			return GetScheduleOfType(SCHED_TAKE_COVER_FROM_BEST_SOUND);
 	}
 	if (HasConditions(bits_COND_ENEMY_DEAD) && FOkToSpeak())
@@ -720,22 +720,20 @@ void CBarney::DeclineFollowing()
 	PlaySentence("BA_POK", 2, VOL_NORM, ATTN_NORM);
 }
 
-void CBarney::KeyValue(KeyValueData* pkvd)
+bool CBarney::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq("head", pkvd->szKeyName))
 	{
 		m_iGuardHead = atoi(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq("bodystate", pkvd->szKeyName))
 	{
 		m_iGuardBody = atoi(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
-	else
-	{
-		CBaseMonster::KeyValue(pkvd);
-	}
+
+	return CBaseMonster::KeyValue(pkvd);
 }
 
 //=========================================================
@@ -754,7 +752,7 @@ public:
 	void Spawn() override;
 	int	Classify() override { return	CLASS_PLAYER_ALLY; }
 
-	void KeyValue(KeyValueData* pkvd) override;
+	bool KeyValue(KeyValueData* pkvd) override;
 
 	int	m_iPose;// which sequence to display	-- temporary, don't need to save
 	static const char* m_szPoses[3];
@@ -762,15 +760,15 @@ public:
 
 const char* CDeadBarney::m_szPoses[] = {"lying_on_back", "lying_on_side", "lying_on_stomach"};
 
-void CDeadBarney::KeyValue(KeyValueData* pkvd)
+bool CDeadBarney::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq(pkvd->szKeyName, "pose"))
 	{
 		m_iPose = atoi(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
-	else
-		CBaseMonster::KeyValue(pkvd);
+
+	return CBaseMonster::KeyValue(pkvd);
 }
 
 LINK_ENTITY_TO_CLASS(monster_barney_dead, CDeadBarney);

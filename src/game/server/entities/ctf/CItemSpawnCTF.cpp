@@ -19,15 +19,13 @@
 
 LINK_ENTITY_TO_CLASS(info_ctfspawn_pickup, CItemSpawnCTF);
 
-void CItemSpawnCTF::KeyValue(KeyValueData* pkvd)
+bool CItemSpawnCTF::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq("team_no", pkvd->szKeyName))
 	{
 		team_no = static_cast<CTFTeam>(atoi(pkvd->szValue));
-		pkvd->fHandled = true;
+		return true;
 	}
-	else
-	{
-		CPointEntity::KeyValue(pkvd);
-	}
+
+	return CPointEntity::KeyValue(pkvd);
 }

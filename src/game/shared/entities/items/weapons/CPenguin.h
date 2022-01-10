@@ -31,8 +31,8 @@ public:
 	using BaseClass = CBasePlayerWeapon;
 
 #ifndef CLIENT_DLL
-	int Save(CSave& save) override;
-	int Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 
 	static TYPEDESCRIPTION m_SaveData[];
 #endif
@@ -53,7 +53,7 @@ public:
 
 	int iItemSlot() override;
 
-	int GetItemInfo(ItemInfo* p) override;
+	bool GetItemInfo(ItemInfo* p) override;
 
 	bool UseDecrement() override
 	{
@@ -65,6 +65,6 @@ public:
 	}
 
 private:
-	int m_fJustThrown;
+	bool m_fJustThrown;
 	unsigned short m_usPenguinFire;
 };
