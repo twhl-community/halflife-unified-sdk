@@ -38,7 +38,7 @@ struct icon_sprite_t
 };
 
 
-icon_sprite_t g_PlayerSpriteList[MAX_PLAYERS + 1][6];
+icon_sprite_t g_PlayerSpriteList[MAX_PLAYERS_HUD + 1][6];
 
 DECLARE_COMMAND(m_Scoreboard, ShowScores);
 DECLARE_COMMAND(m_Scoreboard, HideScores);
@@ -231,7 +231,7 @@ bool CHudScoreboard::Draw(float fTime)
 	}
 
 	// recalc the team scores, then draw them
-	for (int i = 1; i < MAX_PLAYERS; i++)
+	for (int i = 1; i < MAX_PLAYERS_HUD; i++)
 	{
 		if (g_PlayerInfoList[i].name == NULL)
 			continue; // empty player slot, skip
@@ -417,7 +417,7 @@ int CHudScoreboard::DrawPlayers(int xpos_rel, float list_slot, int nameoffset, c
 		int lowest_deaths = 99999;
 		int best_player = 0;
 
-		for (int i = 1; i < MAX_PLAYERS; i++)
+		for (int i = 1; i < MAX_PLAYERS_HUD; i++)
 		{
 			if (g_PlayerInfoList[i].name && (g_PlayerExtraInfo[i].frags + g_PlayerExtraInfo[i].flagcaptures) >= highest_frags)
 			{
@@ -548,7 +548,7 @@ int CHudScoreboard::DrawPlayers(int xpos_rel, float list_slot, int nameoffset, c
 
 void CHudScoreboard::GetAllPlayersInfo()
 {
-	for (int i = 1; i < MAX_PLAYERS; i++)
+	for (int i = 1; i < MAX_PLAYERS_HUD; i++)
 	{
 		gEngfuncs.pfnGetPlayerInfo(i, &g_PlayerInfoList[i]);
 
@@ -568,7 +568,7 @@ bool CHudScoreboard::MsgFunc_ScoreInfo(const char* pszName, int iSize, void* pbu
 	short playerclass = READ_SHORT();
 	short teamnumber = READ_SHORT();
 
-	if (cl > 0 && cl <= MAX_PLAYERS)
+	if (cl > 0 && cl <= MAX_PLAYERS_HUD)
 	{
 		g_PlayerExtraInfo[cl].frags = frags;
 		g_PlayerExtraInfo[cl].deaths = deaths;
@@ -590,7 +590,7 @@ bool CHudScoreboard::MsgFunc_TeamInfo(const char* pszName, int iSize, void* pbuf
 	BEGIN_READ(pbuf, iSize);
 	short cl = READ_BYTE();
 
-	if (cl > 0 && cl <= MAX_PLAYERS)
+	if (cl > 0 && cl <= MAX_PLAYERS_HUD)
 	{ // set the players team
 		strncpy(g_PlayerExtraInfo[cl].teamname, READ_STRING(), MAX_TEAM_NAME);
 	}
@@ -606,7 +606,7 @@ bool CHudScoreboard::MsgFunc_TeamInfo(const char* pszName, int iSize, void* pbuf
 	// rebuild the team list
 	GetAllPlayersInfo();
 	m_iNumTeams = 0;
-	for (int i = 1; i < MAX_PLAYERS; i++)
+	for (int i = 1; i < MAX_PLAYERS_HUD; i++)
 	{
 		if (g_PlayerInfoList[i].name == NULL)
 			continue;
@@ -689,7 +689,7 @@ bool CHudScoreboard::MsgFunc_PlayerIcon(const char* pszName, int iSize, void* pb
 	const int iconIndex = READ_BYTE();
 	const unsigned char itemId = READ_BYTE();
 
-	if (playerIndex > MAX_PLAYERS)
+	if (playerIndex > MAX_PLAYERS_HUD)
 		return true;
 
 	if (!isActive)
@@ -816,7 +816,7 @@ bool CHudScoreboard::MsgFunc_CTFScore(const char* pszName, int iSize, void* pbuf
 	const int playerIndex = READ_BYTE();
 	const int score = READ_BYTE();
 
-	if (playerIndex >= 1 && playerIndex <= MAX_PLAYERS)
+	if (playerIndex >= 1 && playerIndex <= MAX_PLAYERS_HUD)
 	{
 		g_PlayerExtraInfo[playerIndex].flagcaptures = score;
 	}
