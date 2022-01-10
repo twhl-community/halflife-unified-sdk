@@ -273,7 +273,7 @@ void DispatchSave(edict_t* pent, SAVERESTOREDATA* pSaveData)
 
 	CBaseEntity* pEntity = (CBaseEntity*)GET_PRIVATE(pent);
 
-	if (pEntity && pSaveData)
+	if (pEntity && CSaveRestoreBuffer::IsValidSaveRestoreData(pSaveData))
 	{
 		ENTITYTABLE* pTable = &pSaveData->pTable[pSaveData->currentIndex];
 
@@ -294,7 +294,7 @@ void DispatchSave(edict_t* pent, SAVERESTOREDATA* pSaveData)
 		pTable->location = pSaveData->size;			 // Remember entity position for file I/O
 		pTable->classname = pEntity->pev->classname; // Remember entity class for respawn
 
-		CSave saveHelper(pSaveData);
+		CSave saveHelper(*pSaveData);
 		pEntity->Save(saveHelper);
 
 		pTable->size = pSaveData->size - pTable->location; // Size of entity block is data size written to block
@@ -355,15 +355,15 @@ int DispatchRestore(edict_t* pent, SAVERESTOREDATA* pSaveData, int globalEntity)
 
 	CBaseEntity* pEntity = (CBaseEntity*)GET_PRIVATE(pent);
 
-	if (pEntity && pSaveData)
+	if (pEntity && CSaveRestoreBuffer::IsValidSaveRestoreData(pSaveData))
 	{
 		entvars_t tmpVars;
 		Vector oldOffset;
 
-		CRestore restoreHelper(pSaveData);
+		CRestore restoreHelper(*pSaveData);
 		if (0 != globalEntity)
 		{
-			CRestore tmpRestore(pSaveData);
+			CRestore tmpRestore(*pSaveData);
 			tmpRestore.PrecacheMode(false);
 			tmpRestore.ReadEntVars("ENTVARS", &tmpVars);
 
@@ -476,21 +476,31 @@ void DispatchObjectCollsionBox(edict_t* pent)
 
 void SaveWriteFields(SAVERESTOREDATA* pSaveData, const char* pname, void* pBaseData, TYPEDESCRIPTION* pFields, int fieldCount)
 {
-	CSave saveHelper(pSaveData);
+	if (!CSaveRestoreBuffer::IsValidSaveRestoreData(pSaveData))
+	{
+		return;
+	}
+
+	CSave saveHelper(*pSaveData);
 	saveHelper.WriteFields(pname, pBaseData, pFields, fieldCount);
 }
 
 
 void SaveReadFields(SAVERESTOREDATA* pSaveData, const char* pname, void* pBaseData, TYPEDESCRIPTION* pFields, int fieldCount)
 {
+	if (!CSaveRestoreBuffer::IsValidSaveRestoreData(pSaveData))
+	{
+		return;
+	}
+
 	//Will happen here if we're loading a saved game
 	//ETABLE is the first chunk of data read after the engine has set up some global variables that we need
 	if (0 == strcmp(pname, "ETABLE"))
 	{
 		g_Server.CheckForNewMapStart(true);
-	}
+	}	
 
-	CRestore restoreHelper(pSaveData);
+	CRestore restoreHelper(*pSaveData);
 	restoreHelper.ReadFields(pname, pBaseData, pFields, fieldCount);
 }
 
