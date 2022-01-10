@@ -45,8 +45,6 @@
 
 int g_fGruntQuestion; // true if an idle grunt asked a question. Cleared when someone answers.
 
-extern DLL_GLOBAL int g_iSkillLevel;
-
 LINK_ENTITY_TO_CLASS(monster_human_grunt, CHGrunt);
 
 TYPEDESCRIPTION CHGrunt::m_SaveData[] =

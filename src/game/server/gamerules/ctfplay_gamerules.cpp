@@ -39,8 +39,6 @@
 
 #include "pm_shared.h"
 
-extern DLL_GLOBAL bool g_fGameOver;
-
 const int MaxTeamNameLength = 16;
 const int MaxTeamCharacters = 12;
 const int MaxTeamCharacterNameLength = 16;

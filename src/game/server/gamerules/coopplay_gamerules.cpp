@@ -26,8 +26,6 @@
 #include "items.h"
 #include "UserMessages.h"
 
-extern DLL_GLOBAL bool g_fGameOver;
-
 CHalfLifeCoopplay::CHalfLifeCoopplay()
 	: CHalfLifeMultiplay()
 {

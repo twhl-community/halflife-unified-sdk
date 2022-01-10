@@ -17,12 +17,11 @@
 #include "cbase.h"
 #include "weapons.h"
 #include "gamerules.h"
+#include "game.h"
 
 #include "com_model.h"
 
 #include "CGrappleTip.h"
-
-extern cvar_t oldgrapple;
 
 LINK_ENTITY_TO_CLASS(grapple_tip, CGrappleTip);
 

@@ -21,8 +21,6 @@
 #include "effects.h"
 #include "apache.h"
 
-extern DLL_GLOBAL int g_iSkillLevel;
-
 LINK_ENTITY_TO_CLASS(monster_apache, CApache);
 
 TYPEDESCRIPTION CApache::m_SaveData[] =

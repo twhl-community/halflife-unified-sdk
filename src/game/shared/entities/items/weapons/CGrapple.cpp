@@ -20,6 +20,7 @@
 #include "skill.h"
 #include "customentity.h"
 #include "UserMessages.h"
+#include "game.h"
 
 #ifndef CLIENT_DLL
 #include "weapons/CGrappleTip.h"
@@ -31,8 +32,6 @@
 #include "CGrapple.h"
 
 #ifndef CLIENT_DLL
-extern cvar_t oldgrapple;
-
 TYPEDESCRIPTION CGrapple::m_SaveData[] =
 	{
 		DEFINE_FIELD(CGrapple, m_pBeam, FIELD_CLASSPTR),

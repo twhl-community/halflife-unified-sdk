@@ -45,8 +45,6 @@
 #include "customentity.h"
 #include "hgrunt_ally_base.h"
 
-extern DLL_GLOBAL int g_iSkillLevel;
-
 TYPEDESCRIPTION CBaseHGruntAlly::m_SaveData[] =
 	{
 		DEFINE_FIELD(CBaseHGruntAlly, m_flNextGrenadeCheck, FIELD_TIME),

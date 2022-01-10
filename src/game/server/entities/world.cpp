@@ -38,12 +38,7 @@
 #include "CServerLibrary.h"
 #include "ctf/CItemCTF.h"
 
-extern CSoundEnt* pSoundEnt;
-
-extern CBaseEntity* g_pLastSpawn;
-DLL_GLOBAL edict_t* g_pBodyQueueHead;
 CGlobalState gGlobalState;
-extern DLL_GLOBAL bool gDisplayTitle;
 
 extern void W_Precache();
 
@@ -476,8 +471,6 @@ void ResetGlobalState()
 
 LINK_ENTITY_TO_CLASS(worldspawn, CWorld);
 
-extern DLL_GLOBAL bool g_fGameOver;
-
 CWorld::~CWorld()
 {
 	g_Server.MapIsEnding();
@@ -671,10 +664,8 @@ void CWorld::Precache()
 	else
 		CVAR_SET_FLOAT("v_dark", 0.0);
 
-	if ((pev->spawnflags & SF_WORLD_TITLE) != 0)
-		gDisplayTitle = true; // display the game title if this key is set
-	else
-		gDisplayTitle = false;
+	// display the game title if this key is set
+	gDisplayTitle = (pev->spawnflags & SF_WORLD_TITLE) != 0;
 
 	if ((pev->spawnflags & SF_WORLD_FORCETEAM) != 0)
 	{

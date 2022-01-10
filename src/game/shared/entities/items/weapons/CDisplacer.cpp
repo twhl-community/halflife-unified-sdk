@@ -30,8 +30,6 @@
 #include "gamerules.h"
 
 extern edict_t* EntSelectSpawnPoint(CBasePlayer* pPlayer);
-
-extern CBaseEntity* g_pLastSpawn;
 #endif
 
 #include "CDisplacer.h"
