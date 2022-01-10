@@ -184,7 +184,6 @@ target_sources(hl PRIVATE
 	entities/NPCs/aliens/bullsquid.cpp
 	entities/NPCs/aliens/controller.cpp
 	entities/NPCs/aliens/gargantua.cpp
-	entities/NPCs/aliens/gonome.cpp
 	entities/NPCs/aliens/headcrab.cpp
 	entities/NPCs/aliens/hornet.cpp
 	entities/NPCs/aliens/hornet.h
@@ -194,10 +193,6 @@ target_sources(hl PRIVATE
 	entities/NPCs/aliens/leech.cpp
 	entities/NPCs/aliens/nihilanth.cpp
 	entities/NPCs/aliens/tentacle.cpp
-	entities/NPCs/aliens/zombie.cpp
-	entities/NPCs/aliens/zombie.h
-	entities/NPCs/aliens/zombie_barney.cpp
-	entities/NPCs/aliens/zombie_soldier.cpp
 	
 	entities/NPCs/blackmesa/barney.cpp
 	entities/NPCs/blackmesa/barney.h
@@ -251,6 +246,13 @@ target_sources(hl PRIVATE
 	gamerules/coopplay_gamerules.h
 	gamerules/ctfplay_gamerules.cpp
 	gamerules/ctfplay_gamerules.h
+	
+	entities/NPCs/zombies/gonome.cpp
+	entities/NPCs/zombies/zombie.cpp
+	entities/NPCs/zombies/zombie.h
+	entities/NPCs/zombies/zombie_barney.cpp
+	entities/NPCs/zombies/zombie_soldier.cpp
+
 	gamerules/gamerules.cpp
 	gamerules/gamerules.h
 	gamerules/multiplay_gamerules.cpp
