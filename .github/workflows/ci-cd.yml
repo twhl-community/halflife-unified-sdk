@@ -1,0 +1,36 @@
+name: CI/CD
+
+on: [push, pull_request]
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  linux:
+    name: Linux-x86
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 
+        uses: actions/checkout@v2.4.0
+        with:
+          submodules: recursive
+      - name: Install G++ Multilib
+        run: sudo add-apt-repository ppa:ubuntu-toolchain-r/test && sudo apt update && sudo apt install -y g++-11-multilib
+      - name: Configure
+        run: CC=gcc-11 CXX=g++-11 cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_COLOR_MAKEFILE=OFF -DBUILD_EXAMPLES=OFF -DBUILD_TESTS=OFF
+      - name: Build
+        env:
+          MAKEFLAGS: "-j2"
+        run: CC=gcc-11 CXX=g++-11 cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+  win32:
+    name: Win32
+    runs-on: windows-latest
+    steps:
+      - name: Checkout 
+        uses: actions/checkout@v2.4.0
+        with:
+          submodules: recursive
+      - name: Configure
+        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -AWin32 -DBUILD_EXAMPLES=OFF -DBUILD_TESTS=OFF
+      - name: Build
+        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
