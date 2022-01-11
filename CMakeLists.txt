@@ -5,6 +5,9 @@ project(HalfLifeMod
 	DESCRIPTION "Half-Life CMake Mod Template"
 	LANGUAGES CXX)
 
+# Mods are always 32 bit, so force this to use the i386 architecture
+set(CMAKE_LIBRARY_ARCHITECTURE "i386-linux-gnu")
+
 # Disable the use of absolute paths in library paths even in development builds.
 set(CMAKE_SKIP_BUILD_RPATH ON)
 
