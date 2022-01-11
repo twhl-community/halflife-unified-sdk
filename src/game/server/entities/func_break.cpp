@@ -148,7 +148,7 @@ TYPEDESCRIPTION CBreakable::m_SaveData[] =
 		// Explosion magnitude is stored in pev->impulse
 };
 
-IMPLEMENT_SAVERESTORE(CBreakable, CBaseEntity);
+IMPLEMENT_SAVERESTORE(CBreakable, CBaseDelay);
 
 void CBreakable::Spawn()
 {
