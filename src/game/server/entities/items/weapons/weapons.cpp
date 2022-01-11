@@ -1412,13 +1412,12 @@ TYPEDESCRIPTION CRpgRocket::m_SaveData[] =
 };
 IMPLEMENT_SAVERESTORE(CRpgRocket, CGrenade);
 
-TYPEDESCRIPTION CShotgun::m_SaveData[] =
-	{
-		DEFINE_FIELD(CShotgun, m_flNextReload, FIELD_TIME),
-		DEFINE_FIELD(CShotgun, m_fInSpecialReload, FIELD_INTEGER),
-		DEFINE_FIELD(CShotgun, m_flNextReload, FIELD_TIME),
-		// DEFINE_FIELD( CShotgun, m_iShell, FIELD_INTEGER ),
-		DEFINE_FIELD(CShotgun, m_flPumpTime, FIELD_TIME),
+TYPEDESCRIPTION	CShotgun::m_SaveData[] =
+{
+	DEFINE_FIELD(CShotgun, m_flNextReload, FIELD_TIME),
+	DEFINE_FIELD(CShotgun, m_fInSpecialReload, FIELD_INTEGER),
+	// DEFINE_FIELD( CShotgun, m_iShell, FIELD_INTEGER ),
+	DEFINE_FIELD(CShotgun, m_flPumpTime, FIELD_TIME),
 };
 IMPLEMENT_SAVERESTORE(CShotgun, CBasePlayerWeapon);
 
