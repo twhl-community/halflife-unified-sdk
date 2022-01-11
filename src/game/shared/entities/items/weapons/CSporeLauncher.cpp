@@ -26,9 +26,9 @@
 #include "CSporeLauncher.h"
 
 #ifndef CLIENT_DLL
-TYPEDESCRIPTION	CSporeLauncher::m_SaveData[] =
-{
-	DEFINE_FIELD(CSporeLauncher, m_ReloadState, FIELD_INTEGER),
+TYPEDESCRIPTION CSporeLauncher::m_SaveData[] =
+	{
+		DEFINE_FIELD(CSporeLauncher, m_ReloadState, FIELD_INTEGER),
 };
 
 IMPLEMENT_SAVERESTORE(CSporeLauncher, CSporeLauncher::BaseClass);
@@ -72,7 +72,7 @@ void CSporeLauncher::Spawn()
 	pev->framerate = 1;
 }
 
-BOOL CSporeLauncher::AddToPlayer(CBasePlayer* pPlayer)
+bool CSporeLauncher::AddToPlayer(CBasePlayer* pPlayer)
 {
 	if (CBasePlayerWeapon::AddToPlayer(pPlayer))
 	{
@@ -84,7 +84,7 @@ BOOL CSporeLauncher::AddToPlayer(CBasePlayer* pPlayer)
 	return false;
 }
 
-BOOL CSporeLauncher::Deploy()
+bool CSporeLauncher::Deploy()
 {
 	return DefaultDeploy("models/v_spore_launcher.mdl", "models/p_spore_launcher.mdl", SPLAUNCHER_DRAW1, "rpg");
 }
@@ -98,7 +98,7 @@ void CSporeLauncher::Holster()
 	SendWeaponAnim(SPLAUNCHER_HOLSTER1);
 }
 
-BOOL CSporeLauncher::ShouldWeaponIdle()
+bool CSporeLauncher::ShouldWeaponIdle()
 {
 	return true;
 }
@@ -111,7 +111,7 @@ void CSporeLauncher::WeaponIdle()
 
 	if (m_flTimeWeaponIdle < UTIL_WeaponTimeBase())
 	{
-		if (m_iClip == 0 && m_ReloadState == ReloadState::NOT_RELOADING && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType])
+		if (m_iClip == 0 && m_ReloadState == ReloadState::NOT_RELOADING && 0 != m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType])
 		{
 			Reload();
 		}
@@ -119,12 +119,12 @@ void CSporeLauncher::WeaponIdle()
 		{
 			int maxClip = SPORELAUNCHER_MAX_CLIP;
 
-			if (m_pPlayer->m_iItems & CTFItem::Backpack)
+			if ((m_pPlayer->m_iItems & CTFItem::Backpack) != 0)
 			{
 				maxClip *= 2;
 			}
 
-			if (m_iClip != maxClip && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType])
+			if (m_iClip != maxClip && 0 != m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType])
 			{
 				Reload();
 			}
@@ -166,7 +166,7 @@ void CSporeLauncher::WeaponIdle()
 
 void CSporeLauncher::PrimaryAttack()
 {
-	if (m_iClip)
+	if (0 != m_iClip)
 	{
 		m_pPlayer->m_iWeaponVolume = LOUD_GUN_VOLUME;
 		m_pPlayer->m_iWeaponFlash = BRIGHT_GUN_FLASH;
@@ -198,7 +198,7 @@ void CSporeLauncher::PrimaryAttack()
 
 		int flags;
 
-#if defined( CLIENT_WEAPONS )
+#if defined(CLIENT_WEAPONS)
 		flags = FEV_NOTHOST;
 #else
 		flags = 0;
@@ -216,7 +216,7 @@ void CSporeLauncher::PrimaryAttack()
 
 void CSporeLauncher::SecondaryAttack()
 {
-	if (m_iClip)
+	if (0 != m_iClip)
 	{
 		m_pPlayer->m_iWeaponVolume = LOUD_GUN_VOLUME;
 		m_pPlayer->m_iWeaponFlash = BRIGHT_GUN_FLASH;
@@ -248,7 +248,7 @@ void CSporeLauncher::SecondaryAttack()
 
 		int flags;
 
-#if defined( CLIENT_WEAPONS )
+#if defined(CLIENT_WEAPONS)
 		flags = FEV_NOTHOST;
 #else
 		flags = 0;
@@ -321,7 +321,7 @@ int CSporeLauncher::iItemSlot()
 	return 4;
 }
 
-int CSporeLauncher::GetItemInfo(ItemInfo* p)
+bool CSporeLauncher::GetItemInfo(ItemInfo* p)
 {
 	p->pszAmmo1 = "spores";
 	p->iMaxAmmo1 = SPORELAUNCHER_MAX_CARRY;
@@ -340,7 +340,7 @@ int CSporeLauncher::GetItemInfo(ItemInfo* p)
 
 void CSporeLauncher::IncrementAmmo(CBasePlayer* pPlayer)
 {
-	if (pPlayer->GiveAmmo(1, "spores", SPORELAUNCHER_MAX_CARRY))
+	if (0 != pPlayer->GiveAmmo(1, "spores", SPORELAUNCHER_MAX_CARRY))
 	{
 		EMIT_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
 	}
@@ -427,11 +427,11 @@ public:
 		SetThink(&CSporeAmmo::Idling);
 	}
 
-	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override
+	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override
 	{
 		if (pev->body == SPOREAMMOBODY_EMPTY)
 		{
-			return 0;
+			return false;
 		}
 
 		pev->body = SPOREAMMOBODY_EMPTY;
@@ -458,10 +458,10 @@ public:
 
 		pSpore->pev->velocity = gpGlobals->v_forward * 800;
 
-		return 0;
+		return false;
 	}
 
-	BOOL AddAmmo(CBaseEntity* pOther) override
+	bool AddAmmo(CBaseEntity* pOther) override
 	{
 		if (pOther->GiveAmmo(AMMO_SPORE_GIVE, "spores", SPORELAUNCHER_MAX_CARRY) != -1)
 		{
@@ -504,7 +504,8 @@ public:
 			break;
 		}
 
-		default: break;
+		default:
+			break;
 		}
 	}
 

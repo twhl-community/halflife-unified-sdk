@@ -116,13 +116,11 @@ std::optional<GameConfig> GameConfigLoader::TryLoad(
 	//So you can't get a stack overflow including yourself over and over.
 	includeStack.Add(fileName);
 
-	LoadContext loadContext
-	{
+	LoadContext loadContext{
 		.Definition = definition,
 		.Parameters = parameters,
 		.IncludeStack = includeStack,
-		.Config = config
-	};
+		.Config = config};
 
 	if (TryLoadCore(loadContext, fileName))
 	{
@@ -190,8 +188,7 @@ bool GameConfigLoader::TryLoadCore(LoadContext& loadContext, const char* fileNam
 	auto result = g_JSON.ParseJSONFile(
 		fileName,
 		loadContext.Definition.GetValidator(),
-		[&, this](const json& input)
-		{
+		[&, this](const json& input) {
 			ParseConfig(loadContext, fileName, input);
 			return true; //Just return something so optional doesn't complain.
 		},
@@ -304,14 +301,12 @@ void GameConfigLoader::ParseSections(LoadContext& loadContext, std::string_view 
 						}
 					}
 
-					GameConfigContext context
-					{
+					GameConfigContext context{
 						.ConfigFileName = configFileName,
 						.Input = section,
 						.Definition = loadContext.Definition,
 						.Loader = *this,
-						.Configuration = loadContext.Config
-					};
+						.Configuration = loadContext.Config};
 
 					if (!sectionObj->TryParse(context))
 					{

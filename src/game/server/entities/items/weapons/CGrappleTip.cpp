@@ -17,12 +17,11 @@
 #include "cbase.h"
 #include "weapons.h"
 #include "gamerules.h"
+#include "game.h"
 
 #include "com_model.h"
 
 #include "CGrappleTip.h"
-
-extern cvar_t oldgrapple;
 
 LINK_ENTITY_TO_CLASS(grapple_tip, CGrappleTip);
 
@@ -30,68 +29,64 @@ namespace
 {
 //TODO: this should be handled differently. A method that returns an overall size, another whether it's fixed, etc. - Solokiller
 const char* const grapple_small[] =
-{
-	"monster_bloater",
-	"monster_snark",
-	"monster_shockroach",
-	"monster_rat",
-	"monster_alien_babyvoltigore",
-	"monster_babycrab",
-	"monster_cockroach",
-	"monster_flyer_flock",
-	"monster_headcrab",
-	"monster_leech",
-	"monster_penguin"
-};
+	{
+		"monster_bloater",
+		"monster_snark",
+		"monster_shockroach",
+		"monster_rat",
+		"monster_alien_babyvoltigore",
+		"monster_babycrab",
+		"monster_cockroach",
+		"monster_flyer_flock",
+		"monster_headcrab",
+		"monster_leech",
+		"monster_penguin"};
 
 const char* const grapple_medium[] =
-{
-	"monster_alien_controller",
-	"monster_alien_slave",
-	"monster_barney",
-	"monster_bullchicken",
-	"monster_cleansuit_scientist",
-	"monster_houndeye",
-	"monster_human_assassin",
-	"monster_human_grunt",
-	"monster_human_grunt_ally",
-	"monster_human_medic_ally",
-	"monster_human_torch_ally",
-	"monster_male_assassin",
-	"monster_otis",
-	"monster_pitdrone",
-	"monster_scientist",
-	"monster_zombie",
-	"monster_zombie_barney",
-	"monster_zombie_soldier"
-};
+	{
+		"monster_alien_controller",
+		"monster_alien_slave",
+		"monster_barney",
+		"monster_bullchicken",
+		"monster_cleansuit_scientist",
+		"monster_houndeye",
+		"monster_human_assassin",
+		"monster_human_grunt",
+		"monster_human_grunt_ally",
+		"monster_human_medic_ally",
+		"monster_human_torch_ally",
+		"monster_male_assassin",
+		"monster_otis",
+		"monster_pitdrone",
+		"monster_scientist",
+		"monster_zombie",
+		"monster_zombie_barney",
+		"monster_zombie_soldier"};
 
 const char* const grapple_large[] =
-{
-	"monster_alien_grunt",
-	"monster_alien_voltigore",
-	"monster_assassin_repel",
-	"monster_grunt_ally_repel",
-	"monster_bigmomma",
-	"monster_gargantua",
-	"monster_geneworm",
-	"monster_gonome",
-	"monster_grunt_repel",
-	"monster_ichthyosaur",
-	"monster_nihilanth",
-	"monster_pitworm",
-	"monster_pitworm_up",
-	"monster_shocktrooper"
-};
+	{
+		"monster_alien_grunt",
+		"monster_alien_voltigore",
+		"monster_assassin_repel",
+		"monster_grunt_ally_repel",
+		"monster_bigmomma",
+		"monster_gargantua",
+		"monster_geneworm",
+		"monster_gonome",
+		"monster_grunt_repel",
+		"monster_ichthyosaur",
+		"monster_nihilanth",
+		"monster_pitworm",
+		"monster_pitworm_up",
+		"monster_shocktrooper"};
 
 const char* const grapple_fixed[] =
-{
-	"monster_barnacle",
-	"monster_sitting_cleansuit_scientist",
-	"monster_sitting_scientist",
-	"monster_tentacle",
-	"ammo_spore"
-};
+	{
+		"monster_barnacle",
+		"monster_sitting_cleansuit_scientist",
+		"monster_sitting_scientist",
+		"monster_tentacle",
+		"ammo_spore"};
 }
 
 void CGrappleTip::Precache()

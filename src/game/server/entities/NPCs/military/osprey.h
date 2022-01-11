@@ -15,26 +15,26 @@
 
 #pragma once
 
-#define SF_WAITFORTRIGGER	0x40
+#define SF_WAITFORTRIGGER 0x40
 
-#define MAX_CARRY	24
+#define MAX_CARRY 24
 
 class COsprey : public CBaseMonster
 {
 public:
-	int		Save(CSave& save) override;
-	int		Restore(CRestore& restore) override;
-	static	TYPEDESCRIPTION m_SaveData[];
-	int		ObjectCaps() override { return CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
+	static TYPEDESCRIPTION m_SaveData[];
+	int ObjectCaps() override { return CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 
 	void Spawn() override;
 	void Precache() override;
-	int  Classify() override { return CLASS_MACHINE; }
-	int  BloodColor() override { return DONT_BLEED; }
+	int Classify() override { return CLASS_MACHINE; }
+	int BloodColor() override { return DONT_BLEED; }
 	void Killed(entvars_t* pevAttacker, int iGib) override;
 
 	void UpdateGoal();
-	BOOL HasDead();
+	bool HasDead();
 	void EXPORT FlyThink();
 	void EXPORT DeployThink();
 	void Flight();
@@ -48,7 +48,7 @@ public:
 	void EXPORT DyingThink();
 	void EXPORT CommandUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
-	// int  TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType ) override;
+	// bool  TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType ) override;
 	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
 	void ShowDamage();
 
@@ -70,7 +70,7 @@ public:
 	float m_flRightHealth;
 	float m_flLeftHealth;
 
-	int	m_iUnits;
+	int m_iUnits;
 	EHANDLE m_hGrunt[MAX_CARRY];
 	Vector m_vecOrigin[MAX_CARRY];
 	EHANDLE m_hRepel[4];
@@ -81,9 +81,9 @@ public:
 	int m_iPitch;
 
 	int m_iExplode;
-	int	m_iTailGibs;
-	int	m_iBodyGibs;
-	int	m_iEngineGibs;
+	int m_iTailGibs;
+	int m_iBodyGibs;
+	int m_iEngineGibs;
 
 	int m_iDoLeftSmokePuff;
 	int m_iDoRightSmokePuff;

@@ -41,7 +41,7 @@ LINK_ENTITY_TO_CLASS(item_ctfflag, CTFGoalFlag);
 
 void CTFGoalFlag::Precache()
 {
-	if (pev->model)
+	if (!FStringNull(pev->model))
 	{
 		PRECACHE_MODEL((char*)STRING(pev->model));
 	}
@@ -84,7 +84,7 @@ void CTFGoalFlag::ReturnFlag()
 
 	UTIL_SetOrigin(pev, pev->origin);
 
-	if (pev->model)
+	if (!FStringNull(pev->model))
 	{
 		pev->sequence = LookupSequence("flag_positioned");
 		if (pev->sequence != -1)
@@ -145,7 +145,7 @@ void CTFGoalFlag::FlagCarryThink()
 	{
 		auto player = static_cast<CBasePlayer*>(owner);
 
-		if (player->m_iItems & (CTFItem::BlackMesaFlag | CTFItem::OpposingForceFlag))
+		if ((player->m_iItems & (CTFItem::BlackMesaFlag | CTFItem::OpposingForceFlag)) != 0)
 		{
 			hasFlag = true;
 
@@ -190,10 +190,7 @@ void CTFGoalFlag::goal_item_dropthink()
 
 	int contents = UTIL_PointContents(pev->origin);
 
-	if (contents == CONTENTS_SOLID
-		|| contents == CONTENTS_SLIME
-		|| contents == CONTENTS_LAVA
-		|| contents == CONTENTS_SKY)
+	if (contents == CONTENTS_SOLID || contents == CONTENTS_SLIME || contents == CONTENTS_LAVA || contents == CONTENTS_SKY)
 	{
 		ReturnFlag();
 	}
@@ -209,7 +206,7 @@ void CTFGoalFlag::Spawn()
 {
 	Precache();
 
-	if (m_iGoalNum)
+	if (0 != m_iGoalNum)
 	{
 		pev->movetype = MOVETYPE_TOSS;
 		pev->solid = SOLID_TRIGGER;
@@ -224,7 +221,7 @@ void CTFGoalFlag::Spawn()
 		vecMin.z = 0;
 		UTIL_SetSize(pev, vecMin, vecMax);
 
-		if (!g_engfuncs.pfnDropToFloor(edict()))
+		if (0 == g_engfuncs.pfnDropToFloor(edict()))
 		{
 			ALERT(
 				at_error,
@@ -238,7 +235,7 @@ void CTFGoalFlag::Spawn()
 		}
 		else
 		{
-			if (pev->model)
+			if (!FStringNull(pev->model))
 			{
 				g_engfuncs.pfnSetModel(edict(), STRING(pev->model));
 
@@ -254,7 +251,7 @@ void CTFGoalFlag::Spawn()
 			m_iGoalState = 1;
 			pev->solid = SOLID_TRIGGER;
 
-			if (!pev->netname)
+			if (FStringNull(pev->netname))
 			{
 				pev->netname = MAKE_STRING("goalflag");
 			}
@@ -286,8 +283,10 @@ void CTFGoalFlag::ReturnFlagThink()
 
 	switch (m_iGoalNum)
 	{
-	case 1: name = "ReturnedBlackMesaFlag";
-	case 2: name = "ReturnedOpposingForceFlag";
+	case 1:
+		name = "ReturnedBlackMesaFlag";
+	case 2:
+		name = "ReturnedOpposingForceFlag";
 	}
 
 	UTIL_LogPrintf("World triggered \"%s\"\n", name);
@@ -313,7 +312,7 @@ void CTFGoalFlag::ScoreFlagTouch(CBasePlayer* pPlayer)
 				continue;
 			}
 
-			if (player->pev->flags & FL_SPECTATOR)
+			if ((player->pev->flags & FL_SPECTATOR) != 0)
 			{
 				continue;
 			}
@@ -552,7 +551,7 @@ void CTFGoalFlag::GiveFlagToPlayer(CBasePlayer* pPlayer)
 	pev->movetype = MOVETYPE_FOLLOW;
 	pev->aiment = pPlayer->edict();
 
-	if (pev->model)
+	if (!FStringNull(pev->model))
 	{
 		pev->sequence = LookupSequence("carried");
 
@@ -628,7 +627,7 @@ void CTFGoalFlag::goal_item_touch(CBaseEntity* pOther)
 
 	if (m_iGoalState == 1)
 	{
-		if (!(pPlayer->m_iItems & (CTFItem::BlackMesaFlag | CTFItem::OpposingForceFlag)))
+		if ((pPlayer->m_iItems & (CTFItem::BlackMesaFlag | CTFItem::OpposingForceFlag)) == 0)
 			return;
 
 		auto otherFlag = static_cast<CTFGoalFlag*>(static_cast<CBaseEntity*>(pPlayer->m_pFlag));
@@ -678,7 +677,7 @@ void CTFGoalFlag::goal_item_touch(CBaseEntity* pOther)
 	{
 		auto player = static_cast<CBasePlayer*>(UTIL_PlayerByIndex(i));
 
-		if (!player || player->pev->flags & FL_SPECTATOR)
+		if (!player || (player->pev->flags & FL_SPECTATOR) != 0)
 		{
 			continue;
 		}
@@ -752,7 +751,7 @@ void CTFGoalFlag::DropFlag(CBasePlayer* pPlayer)
 	pev->aiment = nullptr;
 	pev->owner = nullptr;
 
-	if (pev->model)
+	if (!FStringNull(pev->model))
 	{
 		pev->sequence = LookupSequence("not_carried");
 
@@ -763,7 +762,7 @@ void CTFGoalFlag::DropFlag(CBasePlayer* pPlayer)
 		}
 	}
 
-	const float height = (pev->flags & FL_DUCKING) ? 34 : 16;
+	const float height = (pev->flags & FL_DUCKING) != 0 ? 34 : 16;
 
 	pev->origin = pPlayer->pev->origin + Vector(0, 0, height);
 

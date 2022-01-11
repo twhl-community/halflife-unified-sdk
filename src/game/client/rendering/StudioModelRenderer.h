@@ -1,15 +1,11 @@
 //========= Copyright © 1996-2002, Valve LLC, All rights reserved. ============
 //
-// Purpose: 
+// Purpose:
 //
 // $NoKeywords: $
 //=============================================================================
 
-#if !defined ( STUDIOMODELRENDERER_H )
-#define STUDIOMODELRENDERER_H
-#if defined( _WIN32 )
 #pragma once
-#endif
 
 /*
 ====================
@@ -29,8 +25,8 @@ public:
 
 public:
 	// Public Interfaces
-	virtual int StudioDrawModel(int flags);
-	virtual int StudioDrawPlayer(int flags, struct entity_state_s* pplayer);
+	virtual bool StudioDrawModel(int flags);
+	virtual bool StudioDrawPlayer(int flags, struct entity_state_s* pplayer);
 
 public:
 	// Local interfaces
@@ -40,7 +36,7 @@ public:
 	virtual mstudioanim_t* StudioGetAnim(model_t* m_pSubModel, mstudioseqdesc_t* pseqdesc);
 
 	// Interpolate model position and angles and set up matrices
-	virtual void StudioSetUpTransform(int trivial_accept);
+	virtual void StudioSetUpTransform(bool trivial_accept);
 
 	// Set up model bone positions
 	virtual void StudioSetupBones();
@@ -99,19 +95,18 @@ public:
 	virtual void StudioProcessGait(entity_state_t* pplayer);
 
 public:
-
 	// Client clock
-	double			m_clTime;
+	double m_clTime;
 	// Old Client clock
-	double			m_clOldTime;
+	double m_clOldTime;
 
 	// Do interpolation?
-	int				m_fDoInterp;
+	bool m_fDoInterp;
 	// Do gait estimation?
-	int				m_fGaitEstimation;
+	bool m_fGaitEstimation;
 
 	// Current render frame #
-	int				m_nFrameCount;
+	int m_nFrameCount;
 
 	// Cvars that studio model code needs to reference
 	//
@@ -132,10 +127,10 @@ public:
 	player_info_t* m_pPlayerInfo;
 
 	// The index of the player being drawn
-	int				m_nPlayerIndex;
+	int m_nPlayerIndex;
 
 	// The player's gait movement
-	float			m_flGaitMovement;
+	float m_flGaitMovement;
 
 	// Pointer to header block for studio model data
 	studiohdr_t* m_pStudioHeader;
@@ -145,8 +140,8 @@ public:
 	mstudiomodel_t* m_pSubModel;
 
 	// Palette substition for top and bottom of model
-	int				m_nTopColor;
-	int				m_nBottomColor;
+	int m_nTopColor;
+	int m_nBottomColor;
 
 	//
 	// Sprite model used for drawing studio model chrome
@@ -154,22 +149,22 @@ public:
 
 	// Caching
 	// Number of bones in bone cache
-	int				m_nCachedBones;
+	int m_nCachedBones;
 	// Names of cached bones
-	char			m_nCachedBoneNames[MAXSTUDIOBONES][32];
+	char m_nCachedBoneNames[MAXSTUDIOBONES][32];
 	// Cached bone & light transformation matrices
-	float			m_rgCachedBoneTransform[MAXSTUDIOBONES][3][4];
-	float			m_rgCachedLightTransform[MAXSTUDIOBONES][3][4];
+	float m_rgCachedBoneTransform[MAXSTUDIOBONES][3][4];
+	float m_rgCachedLightTransform[MAXSTUDIOBONES][3][4];
 
 	// Software renderer scale factors
-	float			m_fSoftwareXScale, m_fSoftwareYScale;
+	float m_fSoftwareXScale, m_fSoftwareYScale;
 
 	// Current view vectors and render origin
-	float			m_vUp[3];
-	float			m_vRight[3];
-	float			m_vNormal[3];
+	float m_vUp[3];
+	float m_vRight[3];
+	float m_vNormal[3];
 
-	float			m_vRenderOrigin[3];
+	float m_vRenderOrigin[3];
 
 	// Model render counters ( from engine )
 	int* m_pStudioModelCount;
@@ -177,13 +172,11 @@ public:
 
 	// Matrices
 	// Model to world transformation
-	float(*m_protationmatrix)[3][4];
+	float (*m_protationmatrix)[3][4];
 	// Model to view transformation
-	float(*m_paliastransform)[3][4];
+	float (*m_paliastransform)[3][4];
 
 	// Concatenated bone and light transforms
-	float(*m_pbonetransform)[MAXSTUDIOBONES][3][4];
-	float(*m_plighttransform)[MAXSTUDIOBONES][3][4];
+	float (*m_pbonetransform)[MAXSTUDIOBONES][3][4];
+	float (*m_plighttransform)[MAXSTUDIOBONES][3][4];
 };
-
-#endif // STUDIOMODELRENDERER_H

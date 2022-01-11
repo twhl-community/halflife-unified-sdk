@@ -18,11 +18,11 @@
 //=========================================================
 // Monster's Anim Events Go Here
 //=========================================================
-#define	ZOMBIE_AE_ATTACK_RIGHT		0x01
-#define	ZOMBIE_AE_ATTACK_LEFT		0x02
-#define	ZOMBIE_AE_ATTACK_BOTH		0x03
+#define ZOMBIE_AE_ATTACK_RIGHT 0x01
+#define ZOMBIE_AE_ATTACK_LEFT 0x02
+#define ZOMBIE_AE_ATTACK_BOTH 0x03
 
-#define ZOMBIE_FLINCH_DELAY			2		// at most one flinch every n secs
+#define ZOMBIE_FLINCH_DELAY 2 // at most one flinch every n secs
 
 class CZombie : public CBaseMonster
 {
@@ -30,7 +30,7 @@ public:
 	void Spawn() override;
 	void Precache() override;
 	void SetYawSpeed() override;
-	int  Classify() override;
+	int Classify() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 	int IgnoreConditions() override;
 
@@ -42,49 +42,49 @@ public:
 	void AttackSound();
 
 	static constexpr const char* pAttackSounds[] =
-	{
-		"zombie/zo_attack1.wav",
-		"zombie/zo_attack2.wav",
-	};
+		{
+			"zombie/zo_attack1.wav",
+			"zombie/zo_attack2.wav",
+		};
 
 	static constexpr const char* pIdleSounds[] =
-	{
-		"zombie/zo_idle1.wav",
-		"zombie/zo_idle2.wav",
-		"zombie/zo_idle3.wav",
-		"zombie/zo_idle4.wav",
-	};
+		{
+			"zombie/zo_idle1.wav",
+			"zombie/zo_idle2.wav",
+			"zombie/zo_idle3.wav",
+			"zombie/zo_idle4.wav",
+		};
 
 	static constexpr const char* pAlertSounds[] =
-	{
-		"zombie/zo_alert10.wav",
-		"zombie/zo_alert20.wav",
-		"zombie/zo_alert30.wav",
-	};
+		{
+			"zombie/zo_alert10.wav",
+			"zombie/zo_alert20.wav",
+			"zombie/zo_alert30.wav",
+		};
 
 	static constexpr const char* pPainSounds[] =
-	{
-		"zombie/zo_pain1.wav",
-		"zombie/zo_pain2.wav",
-	};
+		{
+			"zombie/zo_pain1.wav",
+			"zombie/zo_pain2.wav",
+		};
 
 	static constexpr const char* pAttackHitSounds[] =
-	{
-		"zombie/claw_strike1.wav",
-		"zombie/claw_strike2.wav",
-		"zombie/claw_strike3.wav",
-	};
+		{
+			"zombie/claw_strike1.wav",
+			"zombie/claw_strike2.wav",
+			"zombie/claw_strike3.wav",
+		};
 
 	static constexpr const char* pAttackMissSounds[] =
-	{
-		"zombie/claw_miss1.wav",
-		"zombie/claw_miss2.wav",
-	};
+		{
+			"zombie/claw_miss1.wav",
+			"zombie/claw_miss2.wav",
+		};
 
 	// No range attacks
-	BOOL CheckRangeAttack1(float flDot, float flDist) override { return FALSE; }
-	BOOL CheckRangeAttack2(float flDot, float flDist) override { return FALSE; }
-	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	bool CheckRangeAttack1(float flDot, float flDist) override { return false; }
+	bool CheckRangeAttack2(float flDot, float flDist) override { return false; }
+	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 
 protected:
 	/**

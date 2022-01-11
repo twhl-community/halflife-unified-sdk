@@ -26,7 +26,7 @@ class CElectrifiedWire : public CRope
 public:
 	using BaseClass = CRope;
 
-	void KeyValue(KeyValueData* pkvd) override;
+	bool KeyValue(KeyValueData* pkvd) override;
 
 	void Precache() override;
 
@@ -36,12 +36,12 @@ public:
 
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float flValue) override;
 
-	int Save(CSave& save) override;
-	int Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 
 	static TYPEDESCRIPTION m_SaveData[];
 
-	bool IsActive() const { return m_bIsActive != FALSE; }
+	bool IsActive() const { return m_bIsActive != false; }
 
 	/**
 	*	@param iFrequency Frequency.
@@ -54,7 +54,7 @@ public:
 	void DoLightning();
 
 public:
-	BOOL m_bIsActive = TRUE;
+	bool m_bIsActive = true;
 
 	int m_iTipSparkFrequency = 3;
 	int m_iBodySparkFrequency = 100;

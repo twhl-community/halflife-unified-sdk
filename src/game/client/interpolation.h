@@ -13,18 +13,12 @@
 **
 ******************************************************************************/
 
-#ifndef INTERPOLATION_H
-#define INTERPOLATION_H
-#ifdef _WIN32
 #pragma once
-#endif
-
 
 //  interpolation class
 class CInterpolation
 {
 public:
-
 	CInterpolation();
 	virtual ~CInterpolation();
 
@@ -37,20 +31,17 @@ public:
 	void Interpolate(float t, Vector& point, Vector& angle, float* fov);
 
 protected:
-
 	void BezierInterpolatePoint(float t, Vector& point);
 	void InterpolateAngle(float t, Vector& angle);
 
-	Vector	m_StartPoint;
-	Vector	m_EndPoint;
-	Vector	m_StartAngle;
-	Vector	m_EndAngle;
-	Vector	m_Center;
-	float	m_StartFov;
-	float	m_EndFov;
+	Vector m_StartPoint;
+	Vector m_EndPoint;
+	Vector m_StartAngle;
+	Vector m_EndAngle;
+	Vector m_Center;
+	float m_StartFov;
+	float m_EndFov;
 
-	bool	m_SmoothStart;
-	bool	m_SmoothEnd;
+	bool m_SmoothStart;
+	bool m_SmoothEnd;
 };
-
-#endif // INTERPOLATION_H

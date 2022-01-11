@@ -20,12 +20,12 @@
 #include "player.h"
 #include "ctf/CTFGoal.h"
 
-void CTFGoal::KeyValue(KeyValueData* pkvd)
+bool CTFGoal::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq("goal_no", pkvd->szKeyName))
 	{
 		m_iGoalNum = strtol(pkvd->szValue, 0, 10);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq("goal_min", pkvd->szKeyName))
 	{
@@ -34,7 +34,7 @@ void CTFGoal::KeyValue(KeyValueData* pkvd)
 		if (tmp != g_vecZero)
 			m_GoalMin = tmp;
 
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq("goal_max", pkvd->szKeyName))
 	{
@@ -43,17 +43,15 @@ void CTFGoal::KeyValue(KeyValueData* pkvd)
 		if (tmp != g_vecZero)
 			m_GoalMax = tmp;
 
-		pkvd->fHandled = true;
+		return true;
 	}
-	else
-	{
-		pkvd->fHandled = false;
-	}
+
+	return false;
 }
 
 void CTFGoal::Spawn()
 {
-	if (pev->model)
+	if (!FStringNull(pev->model))
 	{
 		const char* modelName = STRING(pev->model);
 
@@ -66,7 +64,7 @@ void CTFGoal::Spawn()
 
 	pev->solid = SOLID_TRIGGER;
 
-	if (!m_iGoalState)
+	if (0 == m_iGoalState)
 		m_iGoalState = 1;
 
 	UTIL_SetOrigin(pev, pev->origin);

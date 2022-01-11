@@ -41,11 +41,11 @@ private:
 public:
 	using BaseClass = CBaseToggle;
 
-	int Save(CSave& save) override;
-	int Restore(CRestore& restore) override;
-	static	TYPEDESCRIPTION m_SaveData[];
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
+	static TYPEDESCRIPTION m_SaveData[];
 
-	void KeyValue(KeyValueData* pkvd) override;
+	bool KeyValue(KeyValueData* pkvd) override;
 
 	void Precache() override;
 	void Spawn() override;
@@ -61,43 +61,43 @@ public:
 	FireType m_iFireType;
 };
 
-TYPEDESCRIPTION	CBlowerCannon::m_SaveData[] =
-{
-	DEFINE_FIELD(CBlowerCannon, m_flDelay, FIELD_FLOAT),
-	DEFINE_FIELD(CBlowerCannon, m_iZOffset, FIELD_INTEGER),
-	DEFINE_FIELD(CBlowerCannon, m_iWeaponType, FIELD_INTEGER),
-	DEFINE_FIELD(CBlowerCannon, m_iFireType, FIELD_INTEGER),
+TYPEDESCRIPTION CBlowerCannon::m_SaveData[] =
+	{
+		DEFINE_FIELD(CBlowerCannon, m_flDelay, FIELD_FLOAT),
+		DEFINE_FIELD(CBlowerCannon, m_iZOffset, FIELD_INTEGER),
+		DEFINE_FIELD(CBlowerCannon, m_iWeaponType, FIELD_INTEGER),
+		DEFINE_FIELD(CBlowerCannon, m_iFireType, FIELD_INTEGER),
 };
 
 IMPLEMENT_SAVERESTORE(CBlowerCannon, CBlowerCannon::BaseClass);
 
 LINK_ENTITY_TO_CLASS(env_blowercannon, CBlowerCannon);
 
-void CBlowerCannon::KeyValue(KeyValueData* pkvd)
+bool CBlowerCannon::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq(pkvd->szKeyName, "delay"))
 	{
 		m_flDelay = atof(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "weaptype"))
 	{
 		m_iWeaponType = static_cast<WeaponType>(atoi(pkvd->szValue));
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "firetype"))
 	{
 		m_iFireType = static_cast<FireType>(atoi(pkvd->szValue));
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "zoffset"))
 	{
 		m_iZOffset = atoi(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
-	else
-		//TODO: should call base
-		pkvd->fHandled = false;
+
+	//TODO: should call base
+	return false;
 }
 
 void CBlowerCannon::Precache()
@@ -151,7 +151,7 @@ void CBlowerCannon::BlowerCannonThink()
 	case WeaponType::SporeRocket:
 	case WeaponType::SporeGrenade:
 		//TODO: simplify
-		CSpore::CreateSpore(pev->origin, angles, this, static_cast<CSpore::SporeType>((m_iWeaponType != WeaponType::SporeRocket ? 1 : 0) + static_cast<int>(CSpore::SporeType::ROCKET)), 0, 0);
+		CSpore::CreateSpore(pev->origin, angles, this, static_cast<CSpore::SporeType>((m_iWeaponType != WeaponType::SporeRocket ? 1 : 0) + static_cast<int>(CSpore::SporeType::ROCKET)), false, false);
 		break;
 
 	case WeaponType::ShockBeam:
@@ -162,7 +162,8 @@ void CBlowerCannon::BlowerCannonThink()
 		CDisplacerBall::CreateDisplacerBall(pev->origin, angles, this);
 		break;
 
-	default: break;
+	default:
+		break;
 	}
 
 	if (m_iFireType == FireType::FireOnTrigger)

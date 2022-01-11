@@ -23,11 +23,11 @@
 
 #include "CShockBeam.h"
 
-TYPEDESCRIPTION	CShockBeam::m_SaveData[] =
-{
-	DEFINE_FIELD(CShockBeam, m_pBeam1, FIELD_CLASSPTR),
-	DEFINE_FIELD(CShockBeam, m_pBeam2, FIELD_CLASSPTR),
-	DEFINE_FIELD(CShockBeam, m_pSprite, FIELD_CLASSPTR),
+TYPEDESCRIPTION CShockBeam::m_SaveData[] =
+	{
+		DEFINE_FIELD(CShockBeam, m_pBeam1, FIELD_CLASSPTR),
+		DEFINE_FIELD(CShockBeam, m_pBeam2, FIELD_CLASSPTR),
+		DEFINE_FIELD(CShockBeam, m_pSprite, FIELD_CLASSPTR),
 };
 
 IMPLEMENT_SAVERESTORE(CShockBeam, CShockBeam::BaseClass);

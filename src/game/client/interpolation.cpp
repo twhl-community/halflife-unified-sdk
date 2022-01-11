@@ -18,9 +18,9 @@
 #include "interpolation.h"
 
 // = determinant of matrix a,b,c
-#define Determinant(a,b,c)		( (a)[2] * ( (b)[0]*(c)[1] - (b)[1]*(c)[0] ) + \
-								  (a)[1] * ( (b)[2]*(c)[0] - (b)[0]*(c)[2] ) + \
-								  (a)[0] * ( (b)[1]*(c)[2] - (b)[2]*(c)[1] ) )
+#define Determinant(a, b, c) ((a)[2] * ((b)[0] * (c)[1] - (b)[1] * (c)[0]) + \
+							  (a)[1] * ((b)[2] * (c)[0] - (b)[0] * (c)[2]) + \
+							  (a)[0] * ((b)[1] * (c)[2] - (b)[2] * (c)[1]))
 
 // slove 3 vector linear system of equations v0 = x*v1 + y*v2 + z*v3 (if possible)
 bool SolveLSE(Vector v0, Vector v1, Vector v2, Vector v3, float* x, float* y, float* z)
@@ -62,9 +62,9 @@ bool GetPointBetweenLines(Vector& p, Vector a1, Vector m1, Vector a2, Vector m2)
 }
 
 // Bernstein Poynom B(u) with n = 2, i = 0
-#define BernsteinPolynom20(u)	((1.0f-u)*(1.0f-u))
-#define BernsteinPolynom21(u)	(2.0f*u*(1.0f-u))
-#define BernsteinPolynom22(u)	(u*u)
+#define BernsteinPolynom20(u) ((1.0f - u) * (1.0f - u))
+#define BernsteinPolynom21(u) (2.0f * u * (1.0f - u))
+#define BernsteinPolynom22(u) (u * u)
 
 CInterpolation::CInterpolation()
 {
@@ -112,7 +112,6 @@ void CInterpolation::SetWaypoints(Vector* prev, Vector start, Vector end, Vector
 		c = a - b;
 		c = c.Normalize();
 		m_Center = end + c * dist;
-
 	}
 	else if (!next)
 	{
@@ -188,7 +187,6 @@ void CInterpolation::SetSmoothing(bool start, bool end)
 {
 	m_SmoothStart = start;
 	m_SmoothEnd = end;
-
 }
 
 void CInterpolation::InterpolateAngle(float t, Vector& angle)
@@ -217,6 +215,3 @@ void CInterpolation::InterpolateAngle(float t, Vector& angle)
 
 	NormalizeAngles(angle);
 }
-
-
-

@@ -20,6 +20,7 @@
 #include "skill.h"
 #include "customentity.h"
 #include "UserMessages.h"
+#include "game.h"
 
 #ifndef CLIENT_DLL
 #include "weapons/CGrappleTip.h"
@@ -31,13 +32,11 @@
 #include "CGrapple.h"
 
 #ifndef CLIENT_DLL
-extern cvar_t oldgrapple;
-
-TYPEDESCRIPTION	CGrapple::m_SaveData[] =
-{
-	DEFINE_FIELD(CGrapple, m_pBeam, FIELD_CLASSPTR),
-	DEFINE_FIELD(CGrapple, m_flShootTime, FIELD_TIME),
-	DEFINE_FIELD(CGrapple, m_FireState, FIELD_INTEGER),
+TYPEDESCRIPTION CGrapple::m_SaveData[] =
+	{
+		DEFINE_FIELD(CGrapple, m_pBeam, FIELD_CLASSPTR),
+		DEFINE_FIELD(CGrapple, m_flShootTime, FIELD_TIME),
+		DEFINE_FIELD(CGrapple, m_FireState, FIELD_INTEGER),
 };
 
 IMPLEMENT_SAVERESTORE(CGrapple, CGrapple::BaseClass);
@@ -84,7 +83,7 @@ void CGrapple::Spawn()
 	FallInit();
 }
 
-BOOL CGrapple::AddToPlayer(CBasePlayer* pPlayer)
+bool CGrapple::AddToPlayer(CBasePlayer* pPlayer)
 {
 	if (BaseClass::AddToPlayer(pPlayer))
 	{
@@ -98,7 +97,7 @@ BOOL CGrapple::AddToPlayer(CBasePlayer* pPlayer)
 	return false;
 }
 
-BOOL CGrapple::Deploy()
+bool CGrapple::Deploy()
 {
 	return DefaultDeploy("models/v_bgrap.mdl", "models/p_bgrap.mdl", BGRAPPLE_UP, "gauss");
 }
@@ -198,7 +197,8 @@ void CGrapple::PrimaryAttack()
 
 			switch (m_pTip->GetGrappleType())
 			{
-			case CGrappleTip::TargetClass::NOT_A_TARGET: break;
+			case CGrappleTip::TargetClass::NOT_A_TARGET:
+				break;
 
 			case CGrappleTip::TargetClass::SMALL:
 				//pTarget->BarnacleVictimGrabbed( this );
@@ -382,9 +382,15 @@ void CGrapple::PrimaryAttack()
 						switch (RANDOM_LONG(0, 2))
 						{
 						default:
-						case 0: pszSample = "barnacle/bcl_chew1.wav"; break;
-						case 1: pszSample = "barnacle/bcl_chew2.wav"; break;
-						case 2: pszSample = "barnacle/bcl_chew3.wav"; break;
+						case 0:
+							pszSample = "barnacle/bcl_chew1.wav";
+							break;
+						case 1:
+							pszSample = "barnacle/bcl_chew2.wav";
+							break;
+						case 2:
+							pszSample = "barnacle/bcl_chew3.wav";
+							break;
 						}
 
 						EMIT_SOUND_DYN(m_pPlayer->edict(), CHAN_VOICE, pszSample, VOL_NORM, ATTN_NORM, 0, 125);
@@ -443,7 +449,7 @@ void CGrapple::Fire(const Vector& vecOrigin, const Vector& vecDir)
 
 	UTIL_TraceLine(vecSrc, vecEnd, dont_ignore_monsters, m_pPlayer->edict(), &tr);
 
-	if (!tr.fAllSolid)
+	if (0 == tr.fAllSolid)
 	{
 		auto pHit = Instance(tr.pHit);
 
@@ -569,7 +575,7 @@ int CGrapple::iItemSlot()
 	return 1;
 }
 
-int CGrapple::GetItemInfo(ItemInfo* p)
+bool CGrapple::GetItemInfo(ItemInfo* p)
 {
 	p->pszAmmo1 = nullptr;
 	p->iMaxAmmo1 = WEAPON_NOCLIP;

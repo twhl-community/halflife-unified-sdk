@@ -1,6 +1,6 @@
 //========= Copyright © 1996-2002, Valve LLC, All rights reserved. ============
 //
-// Purpose: 
+// Purpose:
 //
 // $NoKeywords: $
 //=============================================================================
@@ -12,19 +12,18 @@
 #include "vgui_loadtga.h"
 
 
-#define EXTRA_X	5
+#define EXTRA_X 5
 
 
 using namespace vgui;
 
 
 
-CCheckButton2::CCheckButton2() :
-	m_Label(""),
-	m_pChecked(NULL),
-	m_pUnchecked(NULL),
-	m_pHandler(NULL),
-	m_CheckboxPanel(NULL)
+CCheckButton2::CCheckButton2() : m_Label(""),
+								 m_pChecked(NULL),
+								 m_pUnchecked(NULL),
+								 m_pHandler(NULL),
+								 m_CheckboxPanel(NULL)
 {
 	m_bOwnImages = false;
 	m_bChecked = false;
@@ -33,7 +32,7 @@ CCheckButton2::CCheckButton2() :
 
 	m_Label.setParent(this);
 	m_Label.setFgColor(255, 255, 255, 0);
-	m_Label.setBgColor(0, 0, 0, 255);	// background is not drawn and foreground is white
+	m_Label.setBgColor(0, 0, 0, 255); // background is not drawn and foreground is white
 	m_Label.addInputSignal(this);
 
 	m_CheckboxPanel.setParent(this);
@@ -108,7 +107,7 @@ void CCheckButton2::SetText(char const* pText, ...)
 
 	va_list marker;
 	va_start(marker, pText);
-	_vsnprintf(str, sizeof(str), pText, marker);
+	vsnprintf(str, sizeof(str), pText, marker);
 	va_end(marker);
 
 	m_Label.setText(str);
@@ -175,10 +174,11 @@ void CCheckButton2::SetupControls()
 
 
 	// Position the controls.
-	int iLeftControl = !m_bCheckboxLeft;
+	int iLeftControl = m_bCheckboxLeft ? 0 : 1;
+	int rightControl = m_bCheckboxLeft ? 1 : 0;
 	int iBiggestY = controlSizes[0][1] > controlSizes[1][0] ? 0 : 1;
 	controls[iLeftControl]->setPos(0, (controlSizes[iBiggestY][1] - controlSizes[iLeftControl][1]) / 2);
-	controls[!iLeftControl]->setPos(controlSizes[iLeftControl][0] + EXTRA_X, (controlSizes[iBiggestY][1] - controlSizes[!iLeftControl][1]) / 2);
+	controls[rightControl]->setPos(controlSizes[iLeftControl][0] + EXTRA_X, (controlSizes[iBiggestY][1] - controlSizes[rightControl][1]) / 2);
 
 
 	// Fit this control to the sizes of the subcontrols.
@@ -191,8 +191,3 @@ void CCheckButton2::mousePressed(MouseCode code, Panel* panel)
 {
 	internalMousePressed(code);
 }
-
-
-
-
-

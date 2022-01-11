@@ -22,11 +22,11 @@ class COFSquadTalkMonster : public CTalkMonster
 {
 public:
 	// squad leader info
-	EHANDLE	m_hSquadLeader;		// who is my leader
-	EHANDLE	m_hSquadMember[MAX_SQUAD_MEMBERS - 1];	// valid only for leader
-	int		m_afSquadSlots;
-	float	m_flLastEnemySightTime; // last time anyone in the squad saw the enemy
-	BOOL	m_fEnemyEluded;
+	EHANDLE m_hSquadLeader;						   // who is my leader
+	EHANDLE m_hSquadMember[MAX_SQUAD_MEMBERS - 1]; // valid only for leader
+	int m_afSquadSlots;
+	float m_flLastEnemySightTime; // last time anyone in the squad saw the enemy
+	bool m_fEnemyEluded;
 
 	EHANDLE m_hWaitMedic;
 	float m_flMedicWaitTime;
@@ -34,15 +34,15 @@ public:
 	int m_iPlayerHits;
 
 	// squad member info
-	int		m_iMySlot;// this is the behaviour slot that the monster currently holds in the squad. 
+	int m_iMySlot; // this is the behaviour slot that the monster currently holds in the squad.
 
-	int  CheckEnemy(CBaseEntity* pEnemy) override;
+	bool CheckEnemy(CBaseEntity* pEnemy) override;
 	void StartMonster() override;
 	void VacateSlot();
 	void ScheduleChange() override;
 	void Killed(entvars_t* pevAttacker, int iGib) override;
-	BOOL OccupySlot(int iDesiredSlot);
-	BOOL NoFriendlyFire();
+	bool OccupySlot(int iDesiredSlot);
+	bool NoFriendlyFire();
 
 	// squad functions still left in base class
 	COFSquadTalkMonster* MySquadLeader()
@@ -59,30 +59,30 @@ public:
 		else
 			return (COFSquadTalkMonster*)((CBaseEntity*)m_hSquadMember[i]);
 	}
-	int	InSquad() { return m_hSquadLeader != NULL; }
-	int IsLeader() { return m_hSquadLeader == this; }
+	bool InSquad() { return m_hSquadLeader != NULL; }
+	bool IsLeader() { return m_hSquadLeader == this; }
 	int SquadJoin(int searchRadius);
 	int SquadRecruit(int searchRadius, int maxMembers);
-	int	SquadCount();
+	int SquadCount();
 	void SquadRemove(COFSquadTalkMonster* pRemove);
 	void SquadUnlink();
-	BOOL SquadAdd(COFSquadTalkMonster* pAdd);
+	bool SquadAdd(COFSquadTalkMonster* pAdd);
 	void SquadDisband();
 	void SquadAddConditions(int iConditions);
 	void SquadMakeEnemy(CBaseEntity* pEnemy);
 	void SquadPasteEnemyInfo();
 	void SquadCopyEnemyInfo();
-	BOOL SquadEnemySplit();
-	BOOL SquadMemberInRange(const Vector& vecLocation, float flDist);
+	bool SquadEnemySplit();
+	bool SquadMemberInRange(const Vector& vecLocation, float flDist);
 
 	COFSquadTalkMonster* MySquadTalkMonsterPointer() override { return this; }
 
 	static TYPEDESCRIPTION m_SaveData[];
 
-	int	Save(CSave& save) override;
-	int Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 
-	BOOL FValidateCover(const Vector& vecCoverLocation) override;
+	bool FValidateCover(const Vector& vecCoverLocation) override;
 
 	MONSTERSTATE GetIdealState() override;
 	Schedule_t* GetScheduleOfType(int iType) override;
@@ -93,8 +93,7 @@ public:
 
 	COFSquadTalkMonster* FindSquadMedic(int searchRadius);
 
-	virtual BOOL HealMe(COFSquadTalkMonster* pTarget);
+	virtual bool HealMe(COFSquadTalkMonster* pTarget);
 
-	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 };
-

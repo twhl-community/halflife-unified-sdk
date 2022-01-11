@@ -16,14 +16,14 @@
 // Voltigore - Tank like alien
 //=========================================================
 
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"monsters.h"
-#include	"schedule.h"
-#include	"squadmonster.h"
-#include	"weapons.h"
-#include	"soundent.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
+#include "schedule.h"
+#include "squadmonster.h"
+#include "weapons.h"
+#include "soundent.h"
 #include "decals.h"
 #include "voltigore.h"
 
@@ -54,9 +54,9 @@ public:
 
 	void EXPORT ChargedBoltTouch(CBaseEntity* pOther);
 
-	int Save(CSave& save) override;
-	int Restore(CRestore& restore) override;
-	static	TYPEDESCRIPTION m_SaveData[];
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
+	static TYPEDESCRIPTION m_SaveData[];
 
 	int m_iShowerSparks;
 	EHANDLE m_pBeam[VOLTIGORE_BEAM_COUNT];
@@ -67,13 +67,13 @@ public:
 
 LINK_ENTITY_TO_CLASS(charged_bolt, COFChargedBolt);
 
-TYPEDESCRIPTION	COFChargedBolt::m_SaveData[] =
-{
-	DEFINE_FIELD(COFChargedBolt, m_iShowerSparks, FIELD_INTEGER),
-	DEFINE_ARRAY(COFChargedBolt, m_pBeam, FIELD_EHANDLE, VOLTIGORE_BEAM_COUNT),
-	DEFINE_FIELD(COFChargedBolt, m_iBeams, FIELD_INTEGER),
-	DEFINE_FIELD(COFChargedBolt, m_pAttachEnt, FIELD_CLASSPTR),
-	DEFINE_FIELD(COFChargedBolt, m_iAttachIdx, FIELD_INTEGER),
+TYPEDESCRIPTION COFChargedBolt::m_SaveData[] =
+	{
+		DEFINE_FIELD(COFChargedBolt, m_iShowerSparks, FIELD_INTEGER),
+		DEFINE_ARRAY(COFChargedBolt, m_pBeam, FIELD_EHANDLE, VOLTIGORE_BEAM_COUNT),
+		DEFINE_FIELD(COFChargedBolt, m_iBeams, FIELD_INTEGER),
+		DEFINE_FIELD(COFChargedBolt, m_pAttachEnt, FIELD_CLASSPTR),
+		DEFINE_FIELD(COFChargedBolt, m_iAttachIdx, FIELD_INTEGER),
 };
 
 IMPLEMENT_SAVERESTORE(COFChargedBolt, CBaseEntity);
@@ -261,7 +261,7 @@ void COFChargedBolt::ChargedBoltTouch(CBaseEntity* pOther)
 
 	if (pOther->pev->takedamage == DAMAGE_NO)
 	{
-		if (!strcmp("worldspawn", STRING(pOther->pev->classname)))
+		if (0 == strcmp("worldspawn", STRING(pOther->pev->classname)))
 		{
 			TraceResult tr;
 			UTIL_TraceLine(pev->origin, pev->origin + pev->velocity * 10, dont_ignore_monsters, edict(), &tr);
@@ -291,22 +291,22 @@ void COFChargedBolt::ChargedBoltTouch(CBaseEntity* pOther)
 
 LINK_ENTITY_TO_CLASS(monster_alien_voltigore, COFVoltigore);
 
-TYPEDESCRIPTION	COFVoltigore::m_SaveData[] =
-{
-	DEFINE_ARRAY(COFVoltigore, m_pBeam, FIELD_EHANDLE, VOLTIGORE_BEAM_COUNT),
-	DEFINE_FIELD(COFVoltigore, m_iBeams, FIELD_INTEGER),
-	DEFINE_FIELD(COFVoltigore, m_flNextBeamAttackCheck, FIELD_TIME),
-	DEFINE_FIELD(COFVoltigore, m_flNextPainTime, FIELD_TIME),
-	DEFINE_FIELD(COFVoltigore, m_flNextSpeakTime, FIELD_TIME),
-	DEFINE_FIELD(COFVoltigore, m_flNextWordTime, FIELD_TIME),
-	DEFINE_FIELD(COFVoltigore, m_iLastWord, FIELD_INTEGER),
-	DEFINE_FIELD(COFVoltigore, m_pChargedBolt, FIELD_EHANDLE),
+TYPEDESCRIPTION COFVoltigore::m_SaveData[] =
+	{
+		DEFINE_ARRAY(COFVoltigore, m_pBeam, FIELD_EHANDLE, VOLTIGORE_BEAM_COUNT),
+		DEFINE_FIELD(COFVoltigore, m_iBeams, FIELD_INTEGER),
+		DEFINE_FIELD(COFVoltigore, m_flNextBeamAttackCheck, FIELD_TIME),
+		DEFINE_FIELD(COFVoltigore, m_flNextPainTime, FIELD_TIME),
+		DEFINE_FIELD(COFVoltigore, m_flNextSpeakTime, FIELD_TIME),
+		DEFINE_FIELD(COFVoltigore, m_flNextWordTime, FIELD_TIME),
+		DEFINE_FIELD(COFVoltigore, m_iLastWord, FIELD_INTEGER),
+		DEFINE_FIELD(COFVoltigore, m_pChargedBolt, FIELD_EHANDLE),
 };
 
 IMPLEMENT_SAVERESTORE(COFVoltigore, CSquadMonster);
 
 //=========================================================
-// IRelationship - overridden because Human Grunts are 
+// IRelationship - overridden because Human Grunts are
 // Alien Grunt's nemesis.
 //=========================================================
 int COFVoltigore::IRelationship(CBaseEntity* pTarget)
@@ -320,14 +320,14 @@ int COFVoltigore::IRelationship(CBaseEntity* pTarget)
 }
 
 //=========================================================
-// ISoundMask 
+// ISoundMask
 //=========================================================
 int COFVoltigore::ISoundMask()
 {
-	return	bits_SOUND_WORLD |
-		bits_SOUND_COMBAT |
-		bits_SOUND_PLAYER |
-		bits_SOUND_DANGER;
+	return bits_SOUND_WORLD |
+		   bits_SOUND_COMBAT |
+		   bits_SOUND_PLAYER |
+		   bits_SOUND_DANGER;
 }
 
 //=========================================================
@@ -337,9 +337,9 @@ void COFVoltigore::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector ve
 {
 	//Ignore shock damage since we have a shock based attack
 	//TODO: use a filter based on attacker to identify self harm
-	if (!(bitsDamageType & DMG_SHOCK))
+	if ((bitsDamageType & DMG_SHOCK) == 0)
 	{
-		SpawnBlood(ptr->vecEndPos, BloodColor(), flDamage);// a little surface blood.
+		SpawnBlood(ptr->vecEndPos, BloodColor(), flDamage); // a little surface blood.
 		TraceBleed(flDamage, vecDir, ptr, bitsDamageType);
 		AddMultiDamage(pevAttacker, this, flDamage, bitsDamageType);
 	}
@@ -356,28 +356,28 @@ void COFVoltigore::StopTalking()
 //=========================================================
 // ShouldSpeak - Should this voltigore be talking?
 //=========================================================
-BOOL COFVoltigore::ShouldSpeak()
+bool COFVoltigore::ShouldSpeak()
 {
 	if (m_flNextSpeakTime > gpGlobals->time)
 	{
 		// my time to talk is still in the future.
-		return FALSE;
+		return false;
 	}
 
-	if (pev->spawnflags & SF_MONSTER_GAG)
+	if ((pev->spawnflags & SF_MONSTER_GAG) != 0)
 	{
 		if (m_MonsterState != MONSTERSTATE_COMBAT)
 		{
 			// if gagged, don't talk outside of combat.
-			// if not going to talk because of this, put the talk time 
-			// into the future a bit, so we don't talk immediately after 
+			// if not going to talk because of this, put the talk time
+			// into the future a bit, so we don't talk immediately after
 			// going into combat
 			m_flNextSpeakTime = gpGlobals->time + 3;
-			return FALSE;
+			return false;
 		}
 	}
 
-	return TRUE;
+	return true;
 }
 
 //=========================================================
@@ -408,12 +408,12 @@ void COFVoltigore::PainSound()
 }
 
 //=========================================================
-// Classify - indicates this monster's place in the 
+// Classify - indicates this monster's place in the
 // relationship table.
 //=========================================================
-int	COFVoltigore::Classify()
+int COFVoltigore::Classify()
 {
-	return	CLASS_ALIEN_MILITARY;
+	return CLASS_ALIEN_MILITARY;
 }
 
 //=========================================================
@@ -430,7 +430,8 @@ void COFVoltigore::SetYawSpeed()
 	case ACT_TURN_RIGHT:
 		ys = 80;
 		break;
-	default:			ys = 70;
+	default:
+		ys = 70;
 	}
 
 	pev->yaw_speed = ys;
@@ -495,7 +496,7 @@ void COFVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 			Vector vecArmPos, vecArmAng;
 			GetAttachment(0, vecArmPos, vecArmAng);
-			SpawnBlood(vecArmPos, pHurt->BloodColor(), 25);// a little surface blood.
+			SpawnBlood(vecArmPos, pHurt->BloodColor(), 25); // a little surface blood.
 		}
 		else
 		{
@@ -525,7 +526,7 @@ void COFVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 			Vector vecArmPos, vecArmAng;
 			GetAttachment(0, vecArmPos, vecArmAng);
-			SpawnBlood(vecArmPos, pHurt->BloodColor(), 25);// a little surface blood.
+			SpawnBlood(vecArmPos, pHurt->BloodColor(), 25); // a little surface blood.
 		}
 		else
 		{
@@ -553,7 +554,7 @@ void COFVoltigore::SpawnCore(const char* model, const Vector& mins, const Vector
 	m_bloodColor = BLOOD_COLOR_GREEN;
 	pev->effects = 0;
 	pev->health = health;
-	m_flFieldOfView = 0.2;// indicates the width of this monster's forward view cone ( as a dotproduct result )
+	m_flFieldOfView = 0.2; // indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
 	m_afCapability = 0;
 	m_afCapability |= bits_CAP_SQUAD | bits_CAP_TURN_HEAD;
@@ -638,202 +639,186 @@ void COFVoltigore::Precache()
 //=========================================================
 // Fail Schedule
 //=========================================================
-Task_t	tlVoltigoreFail[] =
-{
-	{ TASK_STOP_MOVING,			0				},
-	{ TASK_SET_ACTIVITY,		(float)ACT_IDLE },
-	{ TASK_WAIT,				(float)2		},
-	{ TASK_WAIT_PVS,			(float)0		},
+Task_t tlVoltigoreFail[] =
+	{
+		{TASK_STOP_MOVING, 0},
+		{TASK_SET_ACTIVITY, (float)ACT_IDLE},
+		{TASK_WAIT, (float)2},
+		{TASK_WAIT_PVS, (float)0},
 };
 
-Schedule_t	slVoltigoreFail[] =
-{
+Schedule_t slVoltigoreFail[] =
 	{
-		tlVoltigoreFail,
-		ARRAYSIZE(tlVoltigoreFail),
-		bits_COND_CAN_RANGE_ATTACK1 |
-		bits_COND_CAN_MELEE_ATTACK1,
-		0,
-		"Voltigore Fail"
-	},
+		{tlVoltigoreFail,
+			ARRAYSIZE(tlVoltigoreFail),
+			bits_COND_CAN_RANGE_ATTACK1 |
+				bits_COND_CAN_MELEE_ATTACK1,
+			0,
+			"Voltigore Fail"},
 };
 
 //=========================================================
 // Combat Fail Schedule
 //=========================================================
-Task_t	tlVoltigoreCombatFail[] =
-{
-	{ TASK_STOP_MOVING,			0				},
-	{ TASK_SET_ACTIVITY,		(float)ACT_IDLE },
-	{ TASK_WAIT_FACE_ENEMY,		(float)2		},
-	{ TASK_WAIT_PVS,			(float)0		},
+Task_t tlVoltigoreCombatFail[] =
+	{
+		{TASK_STOP_MOVING, 0},
+		{TASK_SET_ACTIVITY, (float)ACT_IDLE},
+		{TASK_WAIT_FACE_ENEMY, (float)2},
+		{TASK_WAIT_PVS, (float)0},
 };
 
-Schedule_t	slVoltigoreCombatFail[] =
-{
+Schedule_t slVoltigoreCombatFail[] =
 	{
-		tlVoltigoreCombatFail,
-		ARRAYSIZE(tlVoltigoreCombatFail),
-		bits_COND_CAN_RANGE_ATTACK1 |
-		bits_COND_CAN_MELEE_ATTACK1,
-		0,
-		"Voltigore Combat Fail"
-	},
+		{tlVoltigoreCombatFail,
+			ARRAYSIZE(tlVoltigoreCombatFail),
+			bits_COND_CAN_RANGE_ATTACK1 |
+				bits_COND_CAN_MELEE_ATTACK1,
+			0,
+			"Voltigore Combat Fail"},
 };
 
 //=========================================================
-// Standoff schedule. Used in combat when a monster is 
-// hiding in cover or the enemy has moved out of sight. 
+// Standoff schedule. Used in combat when a monster is
+// hiding in cover or the enemy has moved out of sight.
 // Should we look around in this schedule?
 //=========================================================
-Task_t	tlVoltigoreStandoff[] =
-{
-	{ TASK_STOP_MOVING,				(float)0					},
-	{ TASK_SET_ACTIVITY,			(float)ACT_IDLE				},
-	{ TASK_WAIT_FACE_ENEMY,			(float)2					},
+Task_t tlVoltigoreStandoff[] =
+	{
+		{TASK_STOP_MOVING, (float)0},
+		{TASK_SET_ACTIVITY, (float)ACT_IDLE},
+		{TASK_WAIT_FACE_ENEMY, (float)2},
 };
 
 Schedule_t slVoltigoreStandoff[] =
-{
 	{
-		tlVoltigoreStandoff,
-		ARRAYSIZE(tlVoltigoreStandoff),
-		bits_COND_CAN_RANGE_ATTACK1 |
-		bits_COND_CAN_MELEE_ATTACK1 |
-		bits_COND_SEE_ENEMY |
-		bits_COND_NEW_ENEMY |
-		bits_COND_HEAR_SOUND,
+		{tlVoltigoreStandoff,
+			ARRAYSIZE(tlVoltigoreStandoff),
+			bits_COND_CAN_RANGE_ATTACK1 |
+				bits_COND_CAN_MELEE_ATTACK1 |
+				bits_COND_SEE_ENEMY |
+				bits_COND_NEW_ENEMY |
+				bits_COND_HEAR_SOUND,
 
-		bits_SOUND_DANGER,
-		"Voltigore Standoff"
-	}
-};
+			bits_SOUND_DANGER,
+			"Voltigore Standoff"}};
 
 //=========================================================
 // primary range attacks
 //=========================================================
-Task_t	tlVoltigoreRangeAttack1[] =
-{
-	{ TASK_STOP_MOVING,				(float)0		},
-	{ TASK_FACE_ENEMY,				(float)0		},
-	{ TASK_RANGE_ATTACK1_NOTURN,	(float)0		},
-	{ TASK_WAIT,					0.5 },
+Task_t tlVoltigoreRangeAttack1[] =
+	{
+		{TASK_STOP_MOVING, (float)0},
+		{TASK_FACE_ENEMY, (float)0},
+		{TASK_RANGE_ATTACK1_NOTURN, (float)0},
+		{TASK_WAIT, 0.5},
 };
 
-Schedule_t	slVoltigoreRangeAttack1[] =
-{
+Schedule_t slVoltigoreRangeAttack1[] =
 	{
-		tlVoltigoreRangeAttack1,
-		ARRAYSIZE(tlVoltigoreRangeAttack1),
-		bits_COND_NEW_ENEMY |
-		bits_COND_ENEMY_DEAD |
-		bits_COND_ENEMY_OCCLUDED |
-		bits_COND_HEAR_SOUND,
+		{tlVoltigoreRangeAttack1,
+			ARRAYSIZE(tlVoltigoreRangeAttack1),
+			bits_COND_NEW_ENEMY |
+				bits_COND_ENEMY_DEAD |
+				bits_COND_ENEMY_OCCLUDED |
+				bits_COND_HEAR_SOUND,
 
-		0,
-		"Voltigore Range Attack1"
-	},
+			0,
+			"Voltigore Range Attack1"},
 };
 
 //=========================================================
-// Take cover from enemy! Tries lateral cover before node 
-// cover! 
+// Take cover from enemy! Tries lateral cover before node
+// cover!
 //=========================================================
-Task_t	tlVoltigoreTakeCoverFromEnemy[] =
-{
-	{ TASK_STOP_MOVING,				(float)0					},
-	{ TASK_WAIT,					(float)0.2					},
-	{ TASK_FIND_COVER_FROM_ENEMY,	(float)0					},
-	{ TASK_RUN_PATH,				(float)0					},
-	{ TASK_WAIT_FOR_MOVEMENT,		(float)0					},
-	{ TASK_REMEMBER,				(float)bits_MEMORY_INCOVER	},
-	{ TASK_FACE_ENEMY,				(float)0					},
+Task_t tlVoltigoreTakeCoverFromEnemy[] =
+	{
+		{TASK_STOP_MOVING, (float)0},
+		{TASK_WAIT, (float)0.2},
+		{TASK_FIND_COVER_FROM_ENEMY, (float)0},
+		{TASK_RUN_PATH, (float)0},
+		{TASK_WAIT_FOR_MOVEMENT, (float)0},
+		{TASK_REMEMBER, (float)bits_MEMORY_INCOVER},
+		{TASK_FACE_ENEMY, (float)0},
 };
 
-Schedule_t	slVoltigoreTakeCoverFromEnemy[] =
-{
+Schedule_t slVoltigoreTakeCoverFromEnemy[] =
 	{
-		tlVoltigoreTakeCoverFromEnemy,
-		ARRAYSIZE(tlVoltigoreTakeCoverFromEnemy),
-		bits_COND_NEW_ENEMY,
-		0,
-		"VoltigoreTakeCoverFromEnemy"
-	},
+		{tlVoltigoreTakeCoverFromEnemy,
+			ARRAYSIZE(tlVoltigoreTakeCoverFromEnemy),
+			bits_COND_NEW_ENEMY,
+			0,
+			"VoltigoreTakeCoverFromEnemy"},
 };
 
 //=========================================================
 // Victory dance!
 //=========================================================
-Task_t	tlVoltigoreVictoryDance[] =
-{
-	{ TASK_STOP_MOVING,						(float)0					},
-	{ TASK_SET_FAIL_SCHEDULE,				(float)SCHED_VOLTIGORE_THREAT_DISPLAY	},
-	{ TASK_WAIT,							(float)0.2					},
-	{ TASK_VOLTIGORE_GET_PATH_TO_ENEMY_CORPSE,	(float)0					},
-	{ TASK_WALK_PATH,						(float)0					},
-	{ TASK_WAIT_FOR_MOVEMENT,				(float)0					},
-	{ TASK_FACE_ENEMY,						(float)0					},
-	{ TASK_PLAY_SEQUENCE,					(float)ACT_CROUCH			},
-	{ TASK_PLAY_SEQUENCE,					(float)ACT_VICTORY_DANCE	},
-	{ TASK_PLAY_SEQUENCE,					(float)ACT_VICTORY_DANCE	},
-	{ TASK_PLAY_SEQUENCE,					(float)ACT_STAND			},
-	{ TASK_PLAY_SEQUENCE,					(float)ACT_THREAT_DISPLAY	},
-	{ TASK_PLAY_SEQUENCE,					(float)ACT_CROUCH			},
-	{ TASK_PLAY_SEQUENCE,					(float)ACT_VICTORY_DANCE	},
-	{ TASK_PLAY_SEQUENCE,					(float)ACT_VICTORY_DANCE	},
-	{ TASK_PLAY_SEQUENCE,					(float)ACT_VICTORY_DANCE	},
-	{ TASK_PLAY_SEQUENCE,					(float)ACT_VICTORY_DANCE	},
-	{ TASK_PLAY_SEQUENCE,					(float)ACT_VICTORY_DANCE	},
-	{ TASK_PLAY_SEQUENCE,					(float)ACT_STAND			},
+Task_t tlVoltigoreVictoryDance[] =
+	{
+		{TASK_STOP_MOVING, (float)0},
+		{TASK_SET_FAIL_SCHEDULE, (float)SCHED_VOLTIGORE_THREAT_DISPLAY},
+		{TASK_WAIT, (float)0.2},
+		{TASK_VOLTIGORE_GET_PATH_TO_ENEMY_CORPSE, (float)0},
+		{TASK_WALK_PATH, (float)0},
+		{TASK_WAIT_FOR_MOVEMENT, (float)0},
+		{TASK_FACE_ENEMY, (float)0},
+		{TASK_PLAY_SEQUENCE, (float)ACT_CROUCH},
+		{TASK_PLAY_SEQUENCE, (float)ACT_VICTORY_DANCE},
+		{TASK_PLAY_SEQUENCE, (float)ACT_VICTORY_DANCE},
+		{TASK_PLAY_SEQUENCE, (float)ACT_STAND},
+		{TASK_PLAY_SEQUENCE, (float)ACT_THREAT_DISPLAY},
+		{TASK_PLAY_SEQUENCE, (float)ACT_CROUCH},
+		{TASK_PLAY_SEQUENCE, (float)ACT_VICTORY_DANCE},
+		{TASK_PLAY_SEQUENCE, (float)ACT_VICTORY_DANCE},
+		{TASK_PLAY_SEQUENCE, (float)ACT_VICTORY_DANCE},
+		{TASK_PLAY_SEQUENCE, (float)ACT_VICTORY_DANCE},
+		{TASK_PLAY_SEQUENCE, (float)ACT_VICTORY_DANCE},
+		{TASK_PLAY_SEQUENCE, (float)ACT_STAND},
 };
 
-Schedule_t	slVoltigoreVictoryDance[] =
-{
+Schedule_t slVoltigoreVictoryDance[] =
 	{
-		tlVoltigoreVictoryDance,
-		ARRAYSIZE(tlVoltigoreVictoryDance),
-		bits_COND_NEW_ENEMY |
-		bits_COND_LIGHT_DAMAGE |
-		bits_COND_HEAVY_DAMAGE,
-		0,
-		"VoltigoreVictoryDance"
-	},
+		{tlVoltigoreVictoryDance,
+			ARRAYSIZE(tlVoltigoreVictoryDance),
+			bits_COND_NEW_ENEMY |
+				bits_COND_LIGHT_DAMAGE |
+				bits_COND_HEAVY_DAMAGE,
+			0,
+			"VoltigoreVictoryDance"},
 };
 
 //=========================================================
 //=========================================================
-Task_t	tlVoltigoreThreatDisplay[] =
-{
-	{ TASK_STOP_MOVING,			(float)0					},
-	{ TASK_FACE_ENEMY,			(float)0					},
-	{ TASK_PLAY_SEQUENCE,		(float)ACT_THREAT_DISPLAY	},
-};
-
-Schedule_t	slVoltigoreThreatDisplay[] =
-{
+Task_t tlVoltigoreThreatDisplay[] =
 	{
-		tlVoltigoreThreatDisplay,
-		ARRAYSIZE(tlVoltigoreThreatDisplay),
-		bits_COND_NEW_ENEMY |
-		bits_COND_LIGHT_DAMAGE |
-		bits_COND_HEAVY_DAMAGE,
-
-		bits_SOUND_PLAYER |
-		bits_SOUND_COMBAT |
-		bits_SOUND_WORLD,
-		"VoltigoreThreatDisplay"
-	},
+		{TASK_STOP_MOVING, (float)0},
+		{TASK_FACE_ENEMY, (float)0},
+		{TASK_PLAY_SEQUENCE, (float)ACT_THREAT_DISPLAY},
 };
 
-DEFINE_CUSTOM_SCHEDULES(COFVoltigore)
-{
+Schedule_t slVoltigoreThreatDisplay[] =
+	{
+		{tlVoltigoreThreatDisplay,
+			ARRAYSIZE(tlVoltigoreThreatDisplay),
+			bits_COND_NEW_ENEMY |
+				bits_COND_LIGHT_DAMAGE |
+				bits_COND_HEAVY_DAMAGE,
+
+			bits_SOUND_PLAYER |
+				bits_SOUND_COMBAT |
+				bits_SOUND_WORLD,
+			"VoltigoreThreatDisplay"},
+};
+
+DEFINE_CUSTOM_SCHEDULES(COFVoltigore){
 	slVoltigoreFail,
-		slVoltigoreCombatFail,
-		slVoltigoreStandoff,
-		slVoltigoreRangeAttack1,
-		slVoltigoreTakeCoverFromEnemy,
-		slVoltigoreVictoryDance,
-		slVoltigoreThreatDisplay,
+	slVoltigoreCombatFail,
+	slVoltigoreStandoff,
+	slVoltigoreRangeAttack1,
+	slVoltigoreTakeCoverFromEnemy,
+	slVoltigoreVictoryDance,
+	slVoltigoreThreatDisplay,
 };
 
 IMPLEMENT_CUSTOM_SCHEDULES(COFVoltigore, CSquadMonster);
@@ -843,39 +828,39 @@ IMPLEMENT_CUSTOM_SCHEDULES(COFVoltigore, CSquadMonster);
 // because they can use their smart weapons against unseen
 // enemies. Base class doesn't attack anyone it can't see.
 //=========================================================
-BOOL COFVoltigore::FCanCheckAttacks()
+bool COFVoltigore::FCanCheckAttacks()
 {
 	if (!HasConditions(bits_COND_ENEMY_TOOFAR))
 	{
-		return TRUE;
+		return true;
 	}
 	else
 	{
-		return FALSE;
+		return false;
 	}
 }
 
 //=========================================================
-// CheckMeleeAttack1 - alien grunts zap the crap out of 
-// any enemy that gets too close. 
+// CheckMeleeAttack1 - alien grunts zap the crap out of
+// any enemy that gets too close.
 //=========================================================
-BOOL COFVoltigore::CheckMeleeAttack1(float flDot, float flDist)
+bool COFVoltigore::CheckMeleeAttack1(float flDot, float flDist)
 {
 	if (HasConditions(bits_COND_SEE_ENEMY) && flDist <= VOLTIGORE_MELEE_DIST && flDot >= 0.6 && m_hEnemy != NULL)
 	{
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 }
 
 //=========================================================
-// CheckRangeAttack1 
+// CheckRangeAttack1
 //
 // !!!LATER - we may want to load balance this. Several
 // tracelines are done, so we may not want to do this every
-// server frame. Definitely not while firing. 
+// server frame. Definitely not while firing.
 //=========================================================
-BOOL COFVoltigore::CheckRangeAttack1(float flDot, float flDist)
+bool COFVoltigore::CheckRangeAttack1(float flDot, float flDist)
 {
 	if (IsMoving() && flDist >= 512)
 	{
@@ -884,8 +869,8 @@ BOOL COFVoltigore::CheckRangeAttack1(float flDot, float flDist)
 
 	if (flDist >= VOLTIGORE_MELEE_DIST && flDist <= 1024 && flDot >= 0.5 && gpGlobals->time >= m_flNextBeamAttackCheck)
 	{
-		TraceResult	tr;
-		Vector	vecArmPos, vecArmDir;
+		TraceResult tr;
+		Vector vecArmPos, vecArmDir;
 
 		// verify that a shot fired from the gun will hit the enemy before the world.
 		// !!!LATER - we may wish to do something different for projectile weapons as opposed to instant-hit
@@ -900,7 +885,7 @@ BOOL COFVoltigore::CheckRangeAttack1(float flDot, float flDist)
 			return true;
 		}
 
-		m_flNextBeamAttackCheck = gpGlobals->time + 0.2;// don't check for half second if this check wasn't successful
+		m_flNextBeamAttackCheck = gpGlobals->time + 0.2; // don't check for half second if this check wasn't successful
 	}
 
 	return false;
@@ -1044,7 +1029,7 @@ Schedule_t* COFVoltigore::GetSchedule()
 		pSound = PBestSound();
 
 		ASSERT(pSound != NULL);
-		if (pSound && (pSound->m_iType & bits_SOUND_DANGER))
+		if (pSound && (pSound->m_iType & bits_SOUND_DANGER) != 0)
 		{
 			// dangerous sound nearby!
 			return GetScheduleOfType(SCHED_TAKE_COVER_FROM_BEST_SOUND);
@@ -1137,20 +1122,19 @@ Schedule_t* COFVoltigore::GetScheduleOfType(int Type)
 
 	case SCHED_FAIL:
 		// no fail schedule specified, so pick a good generic one.
-	{
-		if (m_hEnemy != NULL)
 		{
-			// I have an enemy
-			// !!!LATER - what if this enemy is really far away and i'm chasing him?
-			// this schedule will make me stop, face his last known position for 2 
-			// seconds, and then try to move again
-			return &slVoltigoreCombatFail[0];
+			if (m_hEnemy != NULL)
+			{
+				// I have an enemy
+				// !!!LATER - what if this enemy is really far away and i'm chasing him?
+				// this schedule will make me stop, face his last known position for 2
+				// seconds, and then try to move again
+				return &slVoltigoreCombatFail[0];
+			}
+
+			return &slVoltigoreFail[0];
 		}
-
-		return &slVoltigoreFail[0];
-	}
-	break;
-
+		break;
 	}
 
 	return CSquadMonster::GetScheduleOfType(Type);
@@ -1197,7 +1181,7 @@ void COFVoltigore::DeathGibThink()
 	{
 		for (auto i = 0; i < 2; ++i)
 		{
-			const auto side = (i % 2) == 0;
+			const int side = static_cast<int>((i % 2) == 0);
 
 			UTIL_MakeAimVectors(pev->angles);
 
@@ -1261,16 +1245,16 @@ void COFVoltigore::DeathGibThink()
 }
 
 const GibLimit VoltigoreGibLimits[] =
-{
-	{ 1 },
-	{ 1 },
-	{ 1 },
-	{ 1 },
-	{ 2 },
-	{ 1 },
-	{ 2 },
-	{ 1 },
-	{ 2 },
+	{
+		{1},
+		{1},
+		{1},
+		{1},
+		{2},
+		{1},
+		{2},
+		{1},
+		{2},
 };
 
 const GibData VoltigoreGibs = {"models/vgibs.mdl", 0, 9, VoltigoreGibLimits};
@@ -1291,10 +1275,10 @@ void COFVoltigore::GibMonster()
 	pev->nextthink = gpGlobals->time + 0.15;
 
 	//Note: the original didn't have the violence check
-	if (CVAR_GET_FLOAT("violence_agibs") != 0)	// Should never get here, but someone might call it directly
+	if (CVAR_GET_FLOAT("violence_agibs") != 0) // Should never get here, but someone might call it directly
 	{
 		//Gib spawning has been rewritten so the logic for limiting gib submodels is generalized
-		CGib::SpawnRandomGibs(pev, 12, VoltigoreGibs);	// Throw alien gibs
+		CGib::SpawnRandomGibs(pev, 12, VoltigoreGibs); // Throw alien gibs
 	}
 }
 

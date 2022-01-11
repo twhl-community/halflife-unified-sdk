@@ -45,9 +45,9 @@ public:
 
 	void Spawn() override;
 
-	BOOL AddToPlayer(CBasePlayer* pPlayer) override;
+	bool AddToPlayer(CBasePlayer* pPlayer) override;
 
-	BOOL Deploy() override;
+	bool Deploy() override;
 
 	void Holster() override;
 
@@ -69,16 +69,16 @@ public:
 
 	int iItemSlot() override;
 
-	int GetItemInfo(ItemInfo* p) override;
+	bool GetItemInfo(ItemInfo* p) override;
 
 	void IncrementAmmo(CBasePlayer* pPlayer) override;
 
-	BOOL UseDecrement() override
+	bool UseDecrement() override
 	{
-#if defined( CLIENT_WEAPONS )
-		return TRUE;
+#if defined(CLIENT_WEAPONS)
+		return true;
 #else
-		return FALSE;
+		return false;
 #endif
 	}
 

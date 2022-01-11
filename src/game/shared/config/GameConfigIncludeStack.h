@@ -27,7 +27,6 @@
 class GameConfigIncludeStack final
 {
 public:
-
 	/**
 	*	@brief Adds a new filename to the set of included filenames.
 	*	@return Whether this was a new filename.

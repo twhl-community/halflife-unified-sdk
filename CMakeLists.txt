@@ -9,6 +9,9 @@ project(HalfLifeMod
 	DESCRIPTION "Half-Life CMake Mod Template"
 	LANGUAGES CXX)
 
+# Disable the use of absolute paths in library paths even in development builds.
+set(CMAKE_SKIP_BUILD_RPATH ON)
+
 # Get the Half-Life directory and mod name from the install path
 cmake_path(HAS_PARENT_PATH CMAKE_INSTALL_PREFIX HAS_HALFLIFE_DIRECTORY)
 cmake_path(HAS_STEM CMAKE_INSTALL_PREFIX HAS_MOD_NAME)
@@ -31,22 +34,26 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 # Link statically with the runtime
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
+# Because we have 2 libraries that use the same symbols we have to default visibility to hidden so there are no collisions,
+# and so the symbols don't merge and cause problems like server code calling the client version of a function.
+set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+
 # Find dependencies
 find_package(Threads REQUIRED)
 
-option(SPDLOG_BUILD_TESTS OFF)
-option(SPDLOG_BUILD_TESTS_HO OFF)
+option(SPDLOG_BUILD_TESTS "" OFF)
+option(SPDLOG_BUILD_TESTS_HO "" OFF)
 add_subdirectory(external/spdlog
 	spdlog-binary-dir
 	EXCLUDE_FROM_ALL)
 	
-option(JSON_BuildTests OFF)
-option(JSON_MultipleHeaders ON)
+option(JSON_BuildTests "" OFF)
+option(JSON_MultipleHeaders "" ON)
 add_subdirectory(external/json
 	json-binary-dir
 	EXCLUDE_FROM_ALL)
 
-option(BUILD_TESTS OFF)
+option(JSON_VALIDATOR_BUILD_TESTS "" OFF)
 add_subdirectory(external/json-schema-validator
 	json-validator-binary-dir
 	EXCLUDE_FROM_ALL)
@@ -63,9 +70,24 @@ set_target_properties(
 	PROPERTIES
 		FOLDER "Dependencies")
 
+if (UNIX)
+	function(set_32bit_compilation TARGET_NAME)
+		target_compile_options(${TARGET_NAME} PRIVATE -m32)
+		target_link_options(${TARGET_NAME} PRIVATE -m32)
+	endfunction()
+
+	set_32bit_compilation(spdlog)
+	#set_32bit_compilation(nlohmann_json) # Don't set it for this one, it's an INTERFACE library (header-only)
+	set_32bit_compilation(nlohmann_json_schema_validator)
+	set_32bit_compilation(angelscript)
+endif()
+
 # Sets properties common to all projects
 function(set_common_properties TARGET_NAME)
 	set_target_properties(${TARGET_NAME} PROPERTIES PREFIX "")
+	
+	# Enable use of Clang-Tidy in code analysis. See [repo_root]/.clang-tidy for the checks used in the project.
+	set_target_properties(${TARGET_NAME} PROPERTIES VS_GLOBAL_EnableClangTidyCodeAnalysis true)
 		
 	target_compile_definitions(${TARGET_NAME} PRIVATE
 		_CRT_SECURE_NO_WARNINGS

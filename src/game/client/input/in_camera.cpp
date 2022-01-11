@@ -1,6 +1,6 @@
 //========= Copyright © 1996-2002, Valve LLC, All rights reserved. ============
 //
-// Purpose: 
+// Purpose:
 //
 // $NoKeywords: $
 //=============================================================================
@@ -17,7 +17,6 @@
 #include "Exports.h"
 
 #include "SDL2/SDL_mouse.h"
-#include "port.h"
 
 float CL_KeyState(kbutton_t* key);
 
@@ -33,8 +32,8 @@ extern cl_enginefunc_t gEngfuncs;
 #define MAX_ANGLE_DIFF 10.0
 #define PITCH_MAX 90.0
 #define PITCH_MIN 0
-#define YAW_MAX  135.0
-#define YAW_MIN	 -135.0
+#define YAW_MAX 135.0
+#define YAW_MIN -135.0
 
 enum ECAM_Command
 {
@@ -64,13 +63,13 @@ Vector cam_ofs;
 
 
 // In third person
-int cam_thirdperson;
-int cam_mousemove; //true if we are moving the cam with the mouse, False if not
-int iMouseInUse = 0;
-int cam_distancemove;
-extern int mouse_x, mouse_y;  //used to determine what the current x and y values are
+bool cam_thirdperson;
+bool cam_mousemove; //true if we are moving the cam with the mouse, False if not
+bool iMouseInUse = false;
+bool cam_distancemove;
+extern int mouse_x, mouse_y;		  //used to determine what the current x and y values are
 int cam_old_mouse_x, cam_old_mouse_y; //holds the last ticks mouse movement
-POINT		cam_mouse;
+Point cam_mouse;
 //-------------------------------------------------- Local Variables
 
 static kbutton_t cam_pitchup, cam_pitchdown, cam_yawleft, cam_yawright;
@@ -83,10 +82,10 @@ void CAM_ToFirstPerson();
 void CAM_StartDistance();
 void CAM_EndDistance();
 
-void SDL_GetCursorPos(POINT* p)
+void SDL_GetCursorPos(Point* p)
 {
-	gEngfuncs.GetMousePosition((int*)&p->x, (int*)&p->y);
-	//	SDL_GetMouseState( (int *)&p->x, (int *)&p->y );
+	gEngfuncs.GetMousePosition(&p->x, &p->y);
+	//	SDL_GetMouseState( &p->x, &p->y );
 }
 
 void SDL_SetCursorPos(const int x, const int y)
@@ -138,14 +137,14 @@ float MoveToward(float cur, float goal, float maxspeed)
 
 typedef struct
 {
-	Vector		boxmins, boxmaxs;// enclose the test object along entire move
-	float* mins, * maxs;	// size of the moving object
-	Vector		mins2, maxs2;	// size when clipping against mosnters
-	float* start, * end;
-	trace_t		trace;
-	int			type;
+	Vector boxmins, boxmaxs; // enclose the test object along entire move
+	float *mins, *maxs;		 // size of the moving object
+	Vector mins2, maxs2;	 // size when clipping against mosnters
+	float *start, *end;
+	trace_t trace;
+	int type;
 	edict_t* passedict;
-	qboolean	monsterclip;
+	qboolean monsterclip;
 } moveclip_t;
 
 extern trace_t SV_ClipMoveToEntity(edict_t* ent, Vector start, Vector mins, Vector maxs, Vector end);
@@ -156,7 +155,7 @@ void DLLEXPORT CAM_Think()
 
 	Vector origin;
 	Vector ext, pnt, camForward, camRight, camUp;
-	moveclip_t	clip;
+	moveclip_t clip;
 	float dist;
 	Vector camAngles;
 	float flSensitivity;
@@ -203,11 +202,11 @@ void DLLEXPORT CAM_Think()
 		SDL_GetCursorPos(&cam_mouse);
 		//check for X delta values and adjust accordingly
 		//eventually adjust YAW based on amount of movement
-	  //don't do any movement of the cam using YAW/PITCH if we are zooming in/out the camera	
+		//don't do any movement of the cam using YAW/PITCH if we are zooming in/out the camera
 		if (!cam_distancemove)
 		{
 
-			//keep the camera within certain limits around the player (ie avoid certain bad viewing angles)  
+			//keep the camera within certain limits around the player (ie avoid certain bad viewing angles)
 			if (cam_mouse.x > gEngfuncs.GetWindowCenterX())
 			{
 				//if ((camAngles[YAW]>=225.0)||(camAngles[YAW]<135.0))
@@ -227,12 +226,10 @@ void DLLEXPORT CAM_Think()
 				if (camAngles[YAW] > c_minyaw->value)
 				{
 					camAngles[YAW] -= (CAM_ANGLE_MOVE) * ((gEngfuncs.GetWindowCenterX() - cam_mouse.x) / 2);
-
 				}
 				if (camAngles[YAW] < c_minyaw->value)
 				{
 					camAngles[YAW] = c_minyaw->value;
-
 				}
 			}
 
@@ -280,17 +277,17 @@ void DLLEXPORT CAM_Think()
 	}
 
 	//Nathan code here
-	if (CL_KeyState(&cam_pitchup))
+	if (0 != CL_KeyState(&cam_pitchup))
 		camAngles[PITCH] += CAM_ANGLE_DELTA;
-	else if (CL_KeyState(&cam_pitchdown))
+	else if (0 != CL_KeyState(&cam_pitchdown))
 		camAngles[PITCH] -= CAM_ANGLE_DELTA;
 
-	if (CL_KeyState(&cam_yawleft))
+	if (0 != CL_KeyState(&cam_yawleft))
 		camAngles[YAW] -= CAM_ANGLE_DELTA;
-	else if (CL_KeyState(&cam_yawright))
+	else if (0 != CL_KeyState(&cam_yawright))
 		camAngles[YAW] += CAM_ANGLE_DELTA;
 
-	if (CL_KeyState(&cam_in))
+	if (0 != CL_KeyState(&cam_in))
 	{
 		dist -= CAM_DIST_DELTA;
 		if (dist < CAM_MIN_DIST)
@@ -300,9 +297,8 @@ void DLLEXPORT CAM_Think()
 			camAngles[YAW] = 0;
 			dist = CAM_MIN_DIST;
 		}
-
 	}
-	else if (CL_KeyState(&cam_out))
+	else if (0 != CL_KeyState(&cam_out))
 		dist += CAM_DIST_DELTA;
 
 	if (cam_distancemove)
@@ -369,7 +365,7 @@ void DLLEXPORT CAM_Think()
 
 	gEngfuncs.GetViewAngles((float*)viewangles);
 
-	if (cam_snapto->value)
+	if (0 != cam_snapto->value)
 	{
 		camAngles[YAW] = cam_idealyaw->value + viewangles[YAW];
 		camAngles[PITCH] = cam_idealpitch->value + viewangles[PITCH];
@@ -413,8 +409,8 @@ void DLLEXPORT CAM_Think()
 	cam_ofs[2] = dist;
 }
 
-extern void KeyDown(kbutton_t* b);	// HACK
-extern void KeyUp(kbutton_t* b);	// HACK
+extern void KeyDown(kbutton_t* b); // HACK
+extern void KeyUp(kbutton_t* b);   // HACK
 
 void CAM_PitchUpDown() { KeyDown(&cam_pitchup); }
 void CAM_PitchUpUp() { KeyUp(&cam_pitchup); }
@@ -433,7 +429,7 @@ void CAM_ToThirdPerson()
 {
 	Vector viewangles;
 
-#if !defined( _DEBUG )
+#if !defined(_DEBUG)
 	if (gEngfuncs.GetMaxClients() > 1)
 	{
 		// no thirdperson in multiplayer.
@@ -445,7 +441,7 @@ void CAM_ToThirdPerson()
 
 	if (!cam_thirdperson)
 	{
-		cam_thirdperson = 1;
+		cam_thirdperson = true;
 
 		cam_ofs[YAW] = viewangles[YAW];
 		cam_ofs[PITCH] = viewangles[PITCH];
@@ -457,14 +453,14 @@ void CAM_ToThirdPerson()
 
 void CAM_ToFirstPerson()
 {
-	cam_thirdperson = 0;
+	cam_thirdperson = false;
 
 	gEngfuncs.Cvar_SetValue("cam_command", 0);
 }
 
 void CAM_ToggleSnapto()
 {
-	cam_snapto->value = !cam_snapto->value;
+	cam_snapto->value = 0 != cam_snapto->value ? 0 : 1;
 }
 
 void CAM_Init()
@@ -489,12 +485,12 @@ void CAM_Init()
 	gEngfuncs.pfnAddCommand("-camdistance", CAM_EndDistance);
 	gEngfuncs.pfnAddCommand("snapto", CAM_ToggleSnapto);
 
-	cam_command = gEngfuncs.pfnRegisterVariable("cam_command", "0", 0);	 // tells camera to go to thirdperson
-	cam_snapto = gEngfuncs.pfnRegisterVariable("cam_snapto", "0", 0);	 // snap to thirdperson view
-	cam_idealyaw = gEngfuncs.pfnRegisterVariable("cam_idealyaw", "90", 0);	 // thirdperson yaw
-	cam_idealpitch = gEngfuncs.pfnRegisterVariable("cam_idealpitch", "0", 0);	 // thirperson pitch
-	cam_idealdist = gEngfuncs.pfnRegisterVariable("cam_idealdist", "64", 0);	 // thirdperson distance
-	cam_contain = gEngfuncs.pfnRegisterVariable("cam_contain", "0", 0);	// contain camera to world
+	cam_command = gEngfuncs.pfnRegisterVariable("cam_command", "0", 0);		  // tells camera to go to thirdperson
+	cam_snapto = gEngfuncs.pfnRegisterVariable("cam_snapto", "0", 0);		  // snap to thirdperson view
+	cam_idealyaw = gEngfuncs.pfnRegisterVariable("cam_idealyaw", "90", 0);	  // thirdperson yaw
+	cam_idealpitch = gEngfuncs.pfnRegisterVariable("cam_idealpitch", "0", 0); // thirperson pitch
+	cam_idealdist = gEngfuncs.pfnRegisterVariable("cam_idealdist", "64", 0);  // thirdperson distance
+	cam_contain = gEngfuncs.pfnRegisterVariable("cam_contain", "0", 0);		  // contain camera to world
 
 	c_maxpitch = gEngfuncs.pfnRegisterVariable("c_maxpitch", "90.0", 0);
 	c_minpitch = gEngfuncs.pfnRegisterVariable("c_minpitch", "0.0", 0);
@@ -517,12 +513,12 @@ void CAM_ClearStates()
 	cam_in.state = 0;
 	cam_out.state = 0;
 
-	cam_thirdperson = 0;
+	cam_thirdperson = false;
 	cam_command->value = 0;
-	cam_mousemove = 0;
+	cam_mousemove = false;
 
 	cam_snapto->value = 0;
-	cam_distancemove = 0;
+	cam_distancemove = false;
 
 	cam_ofs[0] = 0.0;
 	cam_ofs[1] = 0.0;
@@ -544,8 +540,8 @@ void CAM_StartMouseMove()
 		//variables for mouse camera movement
 		if (!cam_mousemove)
 		{
-			cam_mousemove = 1;
-			iMouseInUse = 1;
+			cam_mousemove = true;
+			iMouseInUse = true;
 			SDL_GetCursorPos(&cam_mouse);
 
 			if ((flSensitivity = gHUD.GetSensitivity()) != 0)
@@ -563,8 +559,8 @@ void CAM_StartMouseMove()
 	//we are not in 3rd person view..therefore do not allow camera movement
 	else
 	{
-		cam_mousemove = 0;
-		iMouseInUse = 0;
+		cam_mousemove = false;
+		iMouseInUse = false;
 	}
 }
 
@@ -572,13 +568,13 @@ void CAM_StartMouseMove()
 //tell the engine that mouse camera movement is off
 void CAM_EndMouseMove()
 {
-	cam_mousemove = 0;
-	iMouseInUse = 0;
+	cam_mousemove = false;
+	iMouseInUse = false;
 }
 
 
 //----------------------------------------------------------
-//routines to start the process of moving the cam in or out 
+//routines to start the process of moving the cam in or out
 //using the mouse
 //----------------------------------------------------------
 void CAM_StartDistance()
@@ -590,9 +586,9 @@ void CAM_StartDistance()
 		//variables for mouse camera movement
 		if (!cam_distancemove)
 		{
-			cam_distancemove = 1;
-			cam_mousemove = 1;
-			iMouseInUse = 1;
+			cam_distancemove = true;
+			cam_mousemove = true;
+			iMouseInUse = true;
 			SDL_GetCursorPos(&cam_mouse);
 			cam_old_mouse_x = cam_mouse.x * gHUD.GetSensitivity();
 			cam_old_mouse_y = cam_mouse.y * gHUD.GetSensitivity();
@@ -601,9 +597,9 @@ void CAM_StartDistance()
 	//we are not in 3rd person view..therefore do not allow camera movement
 	else
 	{
-		cam_distancemove = 0;
-		cam_mousemove = 0;
-		iMouseInUse = 0;
+		cam_distancemove = false;
+		cam_mousemove = false;
+		iMouseInUse = false;
 	}
 }
 
@@ -611,16 +607,16 @@ void CAM_StartDistance()
 //tell the engine that mouse camera movement is off
 void CAM_EndDistance()
 {
-	cam_distancemove = 0;
-	cam_mousemove = 0;
-	iMouseInUse = 0;
+	cam_distancemove = false;
+	cam_mousemove = false;
+	iMouseInUse = false;
 }
 
 int DLLEXPORT CL_IsThirdPerson()
 {
 	//	RecClCL_IsThirdPerson();
 
-	return (cam_thirdperson ? 1 : 0) || (g_iUser1 && (g_iUser2 == gEngfuncs.GetLocalPlayer()->index));
+	return static_cast<int>(cam_thirdperson || (0 != g_iUser1 && (g_iUser2 == gEngfuncs.GetLocalPlayer()->index)));
 }
 
 void DLLEXPORT CL_CameraOffset(float* ofs)

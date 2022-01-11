@@ -1,10 +1,10 @@
 include(../shared/game_shared.cmake)
 
 if (UNIX)
-	# Copy libraries provided by the game to the build directory so relative link paths work at build time (matches the SDK's way of doing things)
-	# Copy the files to the root binary directory so this works properly
-	configure_file(../../../utils/vgui/lib/linux/vgui${CMAKE_SHARED_LIBRARY_SUFFIX} ${CMAKE_BINARY_DIR}/vgui${CMAKE_SHARED_LIBRARY_SUFFIX} COPYONLY)
-	configure_file(../../../external/SDL2/lib/libSDL2-2.0${CMAKE_SHARED_LIBRARY_SUFFIX}.0 ${CMAKE_BINARY_DIR}/libSDL2-2.0${CMAKE_SHARED_LIBRARY_SUFFIX}.0 COPYONLY)
+	# Copy libraries provided by the game to the build directory so we can point the compiler and linker to the files.
+	configure_file(../../../utils/vgui/lib/linux/vgui${CMAKE_SHARED_LIBRARY_SUFFIX} ${CMAKE_CURRENT_BINARY_DIR}/vgui${CMAKE_SHARED_LIBRARY_SUFFIX} COPYONLY)
+	
+	configure_file(../../../external/SDL2/lib/libSDL2-2.0${CMAKE_SHARED_LIBRARY_SUFFIX}.0 ${CMAKE_CURRENT_BINARY_DIR}/libSDL2-2.0${CMAKE_SHARED_LIBRARY_SUFFIX}.0 COPYONLY)
 endif()
 
 # Set up vgui library
@@ -13,7 +13,7 @@ add_library(vgui SHARED IMPORTED)
 if (WIN32)
 	set_target_properties(vgui PROPERTIES IMPORTED_IMPLIB "${CMAKE_CURRENT_SOURCE_DIR}/../../../utils/vgui/lib/win32_vc6/vgui.lib")
 else()
-	set_target_properties(vgui PROPERTIES IMPORTED_LOCATION "vgui${CMAKE_SHARED_LIBRARY_SUFFIX}")
+	set_target_properties(vgui PROPERTIES IMPORTED_LOCATION "${CMAKE_CURRENT_BINARY_DIR}/vgui${CMAKE_SHARED_LIBRARY_SUFFIX}")
 endif()
 
 target_include_directories(vgui INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/../../../utils/vgui/include)
@@ -24,7 +24,7 @@ add_library(SDL2 SHARED IMPORTED)
 if (WIN32)
 	set_target_properties(SDL2 PROPERTIES IMPORTED_IMPLIB "${CMAKE_CURRENT_SOURCE_DIR}/../../../external/SDL2/lib/SDL2.lib")
 else()
-	set_target_properties(SDL2 PROPERTIES IMPORTED_LOCATION "libSDL2-2.0${CMAKE_SHARED_LIBRARY_SUFFIX}.0")
+	set_target_properties(SDL2 PROPERTIES IMPORTED_LOCATION "${CMAKE_CURRENT_BINARY_DIR}/libSDL2-2.0${CMAKE_SHARED_LIBRARY_SUFFIX}.0")
 endif()
 
 target_include_directories(SDL2 INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/../../../external/SDL2/include)
@@ -44,6 +44,7 @@ target_include_directories(client PRIVATE
 	../shared/entities/items/weapons
 	${CMAKE_CURRENT_SOURCE_DIR}
 	input
+	particleman
 	rendering
 	ui
 	ui/hud
@@ -53,6 +54,7 @@ target_include_directories(client PRIVATE
 	../../common
 	../shared
 	../shared/player_movement
+	../shared/utils
 	../../engine
 	../../../utils/vgui/include)
 	
@@ -64,6 +66,12 @@ target_link_libraries(client PRIVATE
 	vgui
 	$<$<PLATFORM_ID:Windows>:wsock32>
 	SDL2)
+	
+if (UNIX)
+	# Tell the linker to search for vgui.so and SDL2-2.0.so.0 in here
+	target_link_directories(client PRIVATE
+		${CMAKE_CURRENT_BINARY_DIR})
+endif()
 
 target_link_options(client PRIVATE
 	$<$<PLATFORM_ID:Darwin>:
@@ -91,11 +99,9 @@ target_sources(client PRIVATE
 	interpolation.h
 	in_defs.h
 	player_info.h
-	tf_defs.h
 	util.cpp
 	view.cpp
 	view.h
-	wrect.h
 	
 	hl/hl_baseentity.cpp
 	hl/hl_events.cpp
@@ -107,6 +113,17 @@ target_sources(client PRIVATE
 	input/inputw32.cpp
 	input/in_camera.cpp
 	input/kbutton.h
+	
+	particleman/CBaseParticle.cpp
+	particleman/CBaseParticle.h
+	particleman/CFrustum.cpp
+	particleman/CFrustum.h
+	particleman/CMiniMem.cpp
+	particleman/CMiniMem.h
+	particleman/IParticleMan_Active.cpp
+	particleman/IParticleMan_Active.h
+	particleman/particleman.h
+	particleman/particleman_internal.h
 
 	rendering/GameStudioModelRenderer.cpp
 	rendering/GameStudioModelRenderer.h
@@ -128,7 +145,6 @@ target_sources(client PRIVATE
 	ui/hud/ammohistory.h
 	ui/hud/ammo_secondary.cpp
 	ui/hud/battery.cpp
-	ui/hud/bench.h
 	ui/hud/death.cpp
 	ui/hud/flashlight.cpp
 	ui/hud/geiger.cpp
@@ -136,9 +152,6 @@ target_sources(client PRIVATE
 	ui/hud/health.h
 	ui/hud/hud.cpp
 	ui/hud/hud.h
-	ui/hud/hud_bench.cpp
-	ui/hud/hud_benchtrace.cpp
-	ui/hud/hud_benchtrace.h
 	ui/hud/hud_flagicons.cpp
 	ui/hud/hud_msg.cpp
 	ui/hud/hud_playerbrowse.cpp
@@ -196,6 +209,7 @@ target_sources(client PRIVATE
 	../../common/beamdef.h
 	../../common/cl_entity.h
 	../../common/com_model.h
+	../../common/common_types.h
 	../../common/const.h
 	../../common/con_nprint.h
 	../../common/crc.h
@@ -217,13 +231,12 @@ target_sources(client PRIVATE
 	../../common/mathlib.h
 	../../common/netadr.h
 	../../common/net_api.h
-	../../common/nowin.h
 	../../common/parsemsg.cpp
 	../../common/parsemsg.h
 	../../common/particledef.h
 	../../common/Platform.h
+	../../common/PlatformHeaders.h
 	../../common/pmtrace.h
-	../../common/port.h
 	../../common/qfont.h
 	../../common/ref_params.h
 	../../common/r_efx.h
@@ -234,8 +247,6 @@ target_sources(client PRIVATE
 	../../common/triangleapi.h
 	../../common/usercmd.h
 	../../common/weaponinfo.h
-	../../common/winsani_in.h
-	../../common/winsani_out.h
 
 	../../engine/APIProxy.h
 	../../engine/cdll_int.h
@@ -244,14 +255,10 @@ target_sources(client PRIVATE
 	../../engine/edict.h
 	../../engine/eiface.h
 
-	../../public/archtypes.h
 	../../public/FileSystem.h
 	../../public/interface.cpp
 	../../public/interface.h
 	../../public/keydefs.h
-	../../public/particleman.h
-	../../public/pman_particlemem.h
-	../../public/pman_triangleffect.h
 	../../public/cl_dll/IGameClientExports.h
 	../../public/steam/steamtypes.h
 )

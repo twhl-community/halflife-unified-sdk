@@ -16,30 +16,25 @@
 // GameRules.cpp
 //=========================================================
 
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"player.h"
-#include	"weapons.h"
-#include	"gamerules.h"
-#include	"teamplay_gamerules.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "player.h"
+#include "weapons.h"
+#include "gamerules.h"
+#include "teamplay_gamerules.h"
 #include "ctfplay_gamerules.h"
 #include "coopplay_gamerules.h"
-#include	"skill.h"
-#include	"game.h"
+#include "skill.h"
+#include "game.h"
 #include "world.h"
 #include "UserMessages.h"
 
 extern edict_t* EntSelectSpawnPoint(CBasePlayer* pPlayer);
 
-DLL_GLOBAL CGameRules* g_pGameRules = NULL;
-extern DLL_GLOBAL BOOL	g_fGameOver;
-
-int g_teamplay = 0;
-
 //=========================================================
 //=========================================================
-BOOL CGameRules::CanHaveAmmo(CBasePlayer* pPlayer, const char* pszAmmoName, int iMaxCarry)
+bool CGameRules::CanHaveAmmo(CBasePlayer* pPlayer, const char* pszAmmoName, int iMaxCarry)
 {
 	int iAmmoIndex;
 
@@ -52,12 +47,12 @@ BOOL CGameRules::CanHaveAmmo(CBasePlayer* pPlayer, const char* pszAmmoName, int 
 			if (pPlayer->AmmoInventory(iAmmoIndex) < iMaxCarry)
 			{
 				// player has room for more of this type of ammo
-				return TRUE;
+				return true;
 			}
 		}
 	}
 
-	return FALSE;
+	return false;
 }
 
 //=========================================================
@@ -71,28 +66,28 @@ edict_t* CGameRules::GetPlayerSpawnSpot(CBasePlayer* pPlayer)
 	pPlayer->pev->velocity = g_vecZero;
 	pPlayer->pev->angles = VARS(pentSpawnSpot)->angles;
 	pPlayer->pev->punchangle = g_vecZero;
-	pPlayer->pev->fixangle = TRUE;
+	pPlayer->pev->fixangle = 1;
 
 	return pentSpawnSpot;
 }
 
 //=========================================================
 //=========================================================
-BOOL CGameRules::CanHavePlayerItem(CBasePlayer* pPlayer, CBasePlayerItem* pWeapon)
+bool CGameRules::CanHavePlayerItem(CBasePlayer* pPlayer, CBasePlayerItem* pWeapon)
 {
 	// only living players can have items
 	if (pPlayer->pev->deadflag != DEAD_NO)
-		return FALSE;
+		return false;
 
 	if (pWeapon->pszAmmo1())
 	{
 		if (!CanHaveAmmo(pPlayer, pWeapon->pszAmmo1(), pWeapon->iMaxAmmo1()))
 		{
-			// we can't carry anymore ammo for this gun. We can only 
+			// we can't carry anymore ammo for this gun. We can only
 			// have the gun if we aren't already carrying one of this type
 			if (pPlayer->HasPlayerItem(pWeapon))
 			{
-				return FALSE;
+				return false;
 			}
 		}
 	}
@@ -101,12 +96,12 @@ BOOL CGameRules::CanHavePlayerItem(CBasePlayer* pPlayer, CBasePlayerItem* pWeapo
 		// weapon doesn't use ammo, don't take another if you already have it.
 		if (pPlayer->HasPlayerItem(pWeapon))
 		{
-			return FALSE;
+			return false;
 		}
 	}
 
 	// note: will fall through to here if GetItemInfo doesn't fill the struct!
-	return TRUE;
+	return true;
 }
 
 //=========================================================
@@ -114,7 +109,7 @@ BOOL CGameRules::CanHavePlayerItem(CBasePlayer* pPlayer, CBasePlayerItem* pWeapo
 //=========================================================
 void CGameRules::RefreshSkillData()
 {
-	int	iSkill;
+	int iSkill;
 
 	iSkill = (int)CVAR_GET_FLOAT("skill");
 	g_iSkillLevel = iSkill;
@@ -132,11 +127,11 @@ void CGameRules::RefreshSkillData()
 
 	ALERT(at_console, "\nGAME SKILL LEVEL:%d\n", iSkill);
 
-	//Agrunt		
+	//Agrunt
 	gSkillData.agruntHealth = GetSkillCvar("sk_agrunt_health");
 	gSkillData.agruntDmgPunch = GetSkillCvar("sk_agrunt_dmg_punch");
 
-	// Apache 
+	// Apache
 	gSkillData.apacheHealth = GetSkillCvar("sk_apache_health");
 
 	// Barney
@@ -181,7 +176,7 @@ void CGameRules::RefreshSkillData()
 	gSkillData.shockroachDmgBite = GetSkillCvar("sk_shockroach_dmg_bite");
 	gSkillData.shockroachLifespan = GetSkillCvar("sk_shockroach_lifespan");
 
-	// Hgrunt 
+	// Hgrunt
 	gSkillData.hgruntHealth = GetSkillCvar("sk_hgrunt_health");
 	gSkillData.hgruntDmgKick = GetSkillCvar("sk_hgrunt_kick");
 	gSkillData.hgruntShotgunPellets = GetSkillCvar("sk_hgrunt_pellets");
@@ -307,7 +302,7 @@ void CGameRules::RefreshSkillData()
 
 	// PLAYER WEAPONS
 
-		// Crowbar whack
+	// Crowbar whack
 	gSkillData.plrDmgCrowbar = GetSkillCvar("sk_plr_crowbar");
 
 	// Glock Round
@@ -422,10 +417,10 @@ CGameRules* InstallGameRules(CBaseEntity* pWorld)
 	SERVER_COMMAND("exec game.cfg\n");
 	SERVER_EXECUTE();
 
-	if (!gpGlobals->deathmatch)
+	if (0 == gpGlobals->deathmatch)
 	{
 		// generic half-life
-		g_teamplay = 0;
+		g_teamplay = false;
 		return new CHalfLifeRules;
 	}
 
@@ -435,7 +430,7 @@ CGameRules* InstallGameRules(CBaseEntity* pWorld)
 	}
 	else
 	{
-		if (pWorld->pev->spawnflags & SF_WORLD_CTF)
+		if ((pWorld->pev->spawnflags & SF_WORLD_CTF) != 0)
 		{
 			return new CHalfLifeCTFplay();
 		}
@@ -444,23 +439,20 @@ CGameRules* InstallGameRules(CBaseEntity* pWorld)
 		{
 			// teamplay
 
-			g_teamplay = 1;
+			g_teamplay = true;
 			return new CHalfLifeTeamplay;
 		}
 		if ((int)gpGlobals->deathmatch == 1)
 		{
 			// vanilla deathmatch
-			g_teamplay = 0;
+			g_teamplay = false;
 			return new CHalfLifeMultiplay;
 		}
 		else
 		{
 			// vanilla deathmatch??
-			g_teamplay = 0;
+			g_teamplay = false;
 			return new CHalfLifeMultiplay;
 		}
 	}
 }
-
-
-

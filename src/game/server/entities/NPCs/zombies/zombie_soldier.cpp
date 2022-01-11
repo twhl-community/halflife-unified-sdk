@@ -16,10 +16,10 @@
 // Zombie Soldier
 //=========================================================
 
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"monsters.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
 #include "zombie.h"
 
 class CZombieSoldier : public CZombie
@@ -49,25 +49,25 @@ class CDeadZombieSoldier : public CBaseMonster
 {
 public:
 	void Spawn() override;
-	int	Classify() override { return	CLASS_ALIEN_MONSTER; }
+	int Classify() override { return CLASS_ALIEN_MONSTER; }
 
-	void KeyValue(KeyValueData* pkvd) override;
+	bool KeyValue(KeyValueData* pkvd) override;
 
-	int	m_iPose;// which sequence to display	-- temporary, don't need to save
+	int m_iPose; // which sequence to display	-- temporary, don't need to save
 	static const char* m_szPoses[2];
 };
 
 const char* CDeadZombieSoldier::m_szPoses[] = {"dead_on_stomach", "dead_on_back"};
 
-void CDeadZombieSoldier::KeyValue(KeyValueData* pkvd)
+bool CDeadZombieSoldier::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq(pkvd->szKeyName, "pose"))
 	{
 		m_iPose = atoi(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		return true;
 	}
-	else
-		CBaseMonster::KeyValue(pkvd);
+
+	return CBaseMonster::KeyValue(pkvd);
 }
 
 LINK_ENTITY_TO_CLASS(monster_zombie_soldier_dead, CDeadZombieSoldier);

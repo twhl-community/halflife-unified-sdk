@@ -55,7 +55,7 @@ using ModulePtr = std::unique_ptr<asIScriptModule, ScriptModuleDeleter>;
 /**
 *	@brief Custom deleter for Angelscript objects stored in \c std::unique_ptr
 */
-template<typename T>
+template <typename T>
 struct ObjectDeleter
 {
 	void operator()(T* object) const noexcept
@@ -67,7 +67,7 @@ struct ObjectDeleter
 	}
 };
 
-template<typename T>
+template <typename T>
 using UniquePtr = std::unique_ptr<T, ObjectDeleter<T>>;
 
 inline std::string FormatFunctionName(const asIScriptFunction& function)
@@ -104,8 +104,10 @@ inline const char* GetModuleName(const asIScriptFunction& function)
 
 	switch (function.GetFuncType())
 	{
-	case asFUNC_SYSTEM: return "System";
-	default: return "Unknown";
+	case asFUNC_SYSTEM:
+		return "System";
+	default:
+		return "Unknown";
 	}
 }
 
@@ -130,8 +132,10 @@ inline std::string GetSectionName(const asIScriptFunction& function)
 
 	switch (function.GetFuncType())
 	{
-	case asFUNC_SYSTEM: return "System function";
-	default: return "Unknown section";
+	case asFUNC_SYSTEM:
+		return "System function";
+	default:
+		return "Unknown section";
 	}
 }
 
@@ -163,12 +167,10 @@ inline SectionInfo GetExecutingSectionInfo(asIScriptContext& context, asUINT sta
 		sectionNameString = GetSectionName(context.GetFunction(stackLevel));
 	}
 
-	return
-	{
+	return {
 		.SectionName = std::move(sectionNameString),
 		.Line = lineNumber,
-		.Column = column
-	};
+		.Column = column};
 }
 
 inline SectionInfo GetExceptionSectionInfo(asIScriptContext& context)
@@ -188,11 +190,9 @@ inline SectionInfo GetExceptionSectionInfo(asIScriptContext& context)
 		sectionNameString = GetSectionName(context.GetExceptionFunction());
 	}
 
-	return
-	{
+	return {
 		.SectionName = std::move(sectionNameString),
 		.Line = lineNumber,
-		.Column = column
-	};
+		.Column = column};
 }
 }

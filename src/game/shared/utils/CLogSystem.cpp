@@ -32,7 +32,7 @@
 
 using namespace std::literals;
 
-template<typename Mutex>
+template <typename Mutex>
 class ConsoleLogSink : public spdlog::sinks::base_sink<Mutex>
 {
 protected:
@@ -60,8 +60,7 @@ private:
 static json GetLoggingConfigSchema()
 {
 	//Create json array contents matching spdlog log level names
-	const auto levels = []()
-	{
+	const auto levels = []() {
 		std::ostringstream levels;
 
 		{
@@ -123,7 +122,8 @@ static json GetLoggingConfigSchema()
 		}}
 	}}
 }}
-)", levels, levels);
+)",
+		levels, levels);
 
 	return g_JSON.ParseJSONSchema(schema).value_or(json{});
 }
@@ -185,11 +185,11 @@ bool CLogSystem::PostInitialize()
 	validator.set_root_schema(std::move(jsonSchema));
 
 	m_Settings = g_JSON.ParseJSONFile(
-		"cfg/logging.json",
-		validator,
-		[this](const json& input) { return LoadSettings(input); },
-		"GAMECONFIG")
-		.value_or(Settings{});
+						   "cfg/logging.json",
+						   validator,
+						   [this](const json& input) { return LoadSettings(input); },
+						   "GAMECONFIG")
+					 .value_or(Settings{});
 
 	//TODO: create sinks based on settings
 
@@ -213,7 +213,7 @@ void CLogSystem::Shutdown()
 	m_Initialized = false;
 }
 
-std::shared_ptr<spdlog::logger> CLogSystem::CreateLogger(const std::string & name)
+std::shared_ptr<spdlog::logger> CLogSystem::CreateLogger(const std::string& name)
 {
 	if (!m_Initialized)
 	{
@@ -232,7 +232,7 @@ std::shared_ptr<spdlog::logger> CLogSystem::CreateLogger(const std::string & nam
 	return logger;
 }
 
-void CLogSystem::RemoveLogger(const std::shared_ptr<spdlog::logger>&logger)
+void CLogSystem::RemoveLogger(const std::shared_ptr<spdlog::logger>& logger)
 {
 	if (!logger || logger == m_GlobalLogger)
 	{
@@ -242,10 +242,9 @@ void CLogSystem::RemoveLogger(const std::shared_ptr<spdlog::logger>&logger)
 	spdlog::drop(logger->name());
 }
 
-CLogSystem::Settings CLogSystem::LoadSettings(const json & input)
+CLogSystem::Settings CLogSystem::LoadSettings(const json& input)
 {
-	auto parseLoggerSettings = [](const json& obj, std::optional<spdlog::level::level_enum> defaultLogLevel)
-	{
+	auto parseLoggerSettings = [](const json& obj, std::optional<spdlog::level::level_enum> defaultLogLevel) {
 		LoggerConfigurationSettings settings;
 
 		if (const auto logLevel = obj.value("LogLevel", ""sv); !logLevel.empty())
@@ -309,8 +308,7 @@ CLogSystem::Settings CLogSystem::LoadSettings(const json & input)
 			std::make_move_iterator(configurations.begin()),
 			std::make_move_iterator(configurations.end()),
 			std::back_inserter(settings.Configurations),
-			[](auto&& configuration)
-			{
+			[](auto&& configuration) {
 				return std::move(configuration.second);
 			});
 	}
@@ -318,7 +316,7 @@ CLogSystem::Settings CLogSystem::LoadSettings(const json & input)
 	return settings;
 }
 
-std::shared_ptr<spdlog::logger> CLogSystem::CreateLoggerCore(const std::string & name)
+std::shared_ptr<spdlog::logger> CLogSystem::CreateLoggerCore(const std::string& name)
 {
 	auto logger = std::make_shared<spdlog::logger>(name, m_Sinks.begin(), m_Sinks.end());
 
@@ -336,10 +334,10 @@ void CLogSystem::ApplySettingsToLogger(spdlog::logger& logger)
 
 	const LoggerConfiguration* configuration = &emptyConfiguration;
 
-	if (auto it = std::find_if(m_Settings.Configurations.begin(), m_Settings.Configurations.end(), [&](const auto& configuration)
-		{
+	if (auto it = std::find_if(m_Settings.Configurations.begin(), m_Settings.Configurations.end(), [&](const auto& configuration) {
 			return configuration.Name == logger.name();
-		}); it != m_Settings.Configurations.end())
+		});
+		it != m_Settings.Configurations.end())
 	{
 		configuration = &(*it);
 	}
@@ -357,10 +355,9 @@ void CLogSystem::ListLogLevels()
 
 void CLogSystem::ListLoggers()
 {
-	spdlog::apply_all([](auto logger)
-		{
-			Con_Printf("%s\n", logger->name().c_str());
-		});
+	spdlog::apply_all([](auto logger) {
+		Con_Printf("%s\n", logger->name().c_str());
+	});
 }
 
 void CLogSystem::SetLogLevel(const CCommandArgs& args)

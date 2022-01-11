@@ -22,11 +22,11 @@ class CTFSpawn : public CBaseEntity
 public:
 	int Classify() override { return CLASS_NONE; }
 
-	void KeyValue(KeyValueData* pkvd) override;
+	bool KeyValue(KeyValueData* pkvd) override;
 
 	void Spawn() override;
 
-	BOOL IsTriggered(CBaseEntity* pEntity) override;
+	bool IsTriggered(CBaseEntity* pEntity) override;
 
 	CTFTeam team_no;
 	bool m_fState;

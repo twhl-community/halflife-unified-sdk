@@ -28,8 +28,7 @@
 using namespace std::literals;
 
 GameConfigDefinition::GameConfigDefinition(std::string&& name, std::vector<std::unique_ptr<const GameConfigSection>>&& sections)
-	: m_Name(std::move(name))
-	, m_Sections(std::move(sections))
+	: m_Name(std::move(name)), m_Sections(std::move(sections))
 {
 	m_Validator.set_root_schema(GetSchema());
 }
@@ -38,10 +37,10 @@ GameConfigDefinition::~GameConfigDefinition() = default;
 
 const GameConfigSection* GameConfigDefinition::FindSection(std::string_view name) const
 {
-	if (auto it = std::find_if(m_Sections.begin(), m_Sections.end(), [&](const auto& section)
-		{
+	if (auto it = std::find_if(m_Sections.begin(), m_Sections.end(), [&](const auto& section) {
 			return section->GetName() == name;
-		}); it != m_Sections.end())
+		});
+		it != m_Sections.end())
 	{
 		return it->get();
 	}
@@ -68,8 +67,7 @@ json GameConfigDefinition::GetSchema() const
 
 	//This structure allows for future expansion without making breaking changes
 
-	const auto sections = [this]()
-	{
+	const auto sections = [this]() {
 		std::ostringstream stream;
 
 		bool first = true;
@@ -109,7 +107,8 @@ json GameConfigDefinition::GetSchema() const
 		{3}
 	]
 }}
-)", section->GetName(), definition, required.empty() ? ""sv : ","sv, required);
+)",
+				section->GetName(), definition, required.empty() ? ""sv : ","sv, required);
 		}
 
 		return stream.str();
@@ -142,7 +141,8 @@ json GameConfigDefinition::GetSchema() const
 		}}
 	}}
 }}
-)", this->GetName(), sections);
+)",
+		this->GetName(), sections);
 
 	return g_JSON.ParseJSONSchema(schema).value_or(json{});
 }

@@ -12,8 +12,8 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#ifndef CTFGOALFLAG_H
-#define CTFGOALFLAG_H
+
+#pragma once
 
 #include "CTFGoal.h"
 
@@ -65,5 +65,3 @@ public:
 	int m_nReturnPlayer;
 	float m_flReturnTime;
 };
-
-#endif

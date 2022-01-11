@@ -25,7 +25,7 @@ public:
 	static CItemSpawnCTF* m_pLastSpawn;
 
 public:
-	void KeyValue(KeyValueData* pkvd) override;
+	bool KeyValue(KeyValueData* pkvd) override;
 	void Precache() override;
 	void Spawn() override;
 

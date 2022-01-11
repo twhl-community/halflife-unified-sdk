@@ -18,7 +18,6 @@
 #include "cbase.h"
 #include "monsters.h"
 #include "weapons.h"
-#include "nodes.h"
 #include "player.h"
 #include "gamerules.h"
 #include "UserMessages.h"
@@ -58,7 +57,7 @@ void CLaserSpot::Spawn()
 };
 
 //=========================================================
-// Suspend- make the laser sight invisible. 
+// Suspend- make the laser sight invisible.
 //=========================================================
 void CLaserSpot::Suspend(float flSuspendTime)
 {
@@ -95,8 +94,8 @@ CRpgRocket* CRpgRocket::CreateRpgRocket(Vector vecOrigin, Vector vecAngles, CBas
 	pRocket->pev->angles = vecAngles;
 	pRocket->Spawn();
 	pRocket->SetTouch(&CRpgRocket::RocketTouch);
-	pRocket->m_pLauncher = pLauncher;// remember what RPG fired me. 
-	pLauncher->m_cActiveRockets++;// register this missile as active for the launcher
+	pRocket->m_pLauncher = pLauncher; // remember what RPG fired me.
+	pLauncher->m_cActiveRockets++;	  // register this missile as active for the launcher
 	pRocket->pev->owner = pOwner->edict();
 
 	return pRocket;
@@ -170,16 +169,16 @@ void CRpgRocket::IgniteThink()
 	MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
 
 	WRITE_BYTE(TE_BEAMFOLLOW);
-	WRITE_SHORT(entindex());	// entity
-	WRITE_SHORT(m_iTrail);	// model
-	WRITE_BYTE(40); // life
-	WRITE_BYTE(5);  // width
-	WRITE_BYTE(224);   // r, g, b
-	WRITE_BYTE(224);   // r, g, b
-	WRITE_BYTE(255);   // r, g, b
-	WRITE_BYTE(255);	// brightness
+	WRITE_SHORT(entindex()); // entity
+	WRITE_SHORT(m_iTrail);	 // model
+	WRITE_BYTE(40);			 // life
+	WRITE_BYTE(5);			 // width
+	WRITE_BYTE(224);		 // r, g, b
+	WRITE_BYTE(224);		 // r, g, b
+	WRITE_BYTE(255);		 // r, g, b
+	WRITE_BYTE(255);		 // brightness
 
-	MESSAGE_END();  // move PHS/PVS data sending into here (SEND_ALL, SEND_PVS, SEND_PHS)
+	MESSAGE_END(); // move PHS/PVS data sending into here (SEND_ALL, SEND_PVS, SEND_PHS)
 
 	m_flIgniteTime = gpGlobals->time;
 
@@ -247,7 +246,7 @@ void CRpgRocket::FollowThink()
 	}
 	else
 	{
-		if (pev->effects & EF_LIGHT)
+		if ((pev->effects & EF_LIGHT) != 0)
 		{
 			pev->effects = 0;
 			STOP_SOUND(ENT(pev), CHAN_VOICE, "weapons/rocket1.wav");
@@ -278,7 +277,7 @@ void CRpg::Reload()
 		return;
 
 	// because the RPG waits to autoreload when no missiles are active while  the LTD is on, the
-	// weapons code is constantly calling into this function, but is often denied because 
+	// weapons code is constantly calling into this function, but is often denied because
 	// a) missiles are in flight, but the LTD is on
 	// or
 	// b) player is totally out of ammo and has nothing to switch to, and should be allowed to
@@ -289,10 +288,10 @@ void CRpg::Reload()
 
 	m_flNextPrimaryAttack = GetNextAttackDelay(0.5);
 
-	if (m_cActiveRockets && m_fSpotActive)
+	if (0 != m_cActiveRockets && m_fSpotActive)
 	{
 		// no reloading when there are active missiles tracking the designator.
-		// ward off future autoreload attempts by setting next attack time into the future for a bit. 
+		// ward off future autoreload attempts by setting next attack time into the future for a bit.
 		return;
 	}
 
@@ -306,12 +305,11 @@ void CRpg::Reload()
 
 	if (m_iClip == 0)
 	{
-		const int iResult = DefaultReload(RPG_MAX_CLIP, RPG_RELOAD, 2);
+		const bool iResult = DefaultReload(RPG_MAX_CLIP, RPG_RELOAD, 2);
 
 		if (iResult)
 			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10, 15);
 	}
-
 }
 
 void CRpg::Spawn()
@@ -320,11 +318,11 @@ void CRpg::Spawn()
 	m_iId = WEAPON_RPG;
 
 	SET_MODEL(ENT(pev), "models/w_rpg.mdl");
-	m_fSpotActive = 1;
+	m_fSpotActive = true;
 
 	if (UTIL_IsMultiplayer())
 	{
-		// more default ammo in multiplay. 
+		// more default ammo in multiplay.
 		m_iDefaultAmmo = RPG_DEFAULT_GIVE * 2;
 	}
 	else
@@ -332,7 +330,7 @@ void CRpg::Spawn()
 		m_iDefaultAmmo = RPG_DEFAULT_GIVE;
 	}
 
-	FallInit();// get ready to fall down.
+	FallInit(); // get ready to fall down.
 }
 
 
@@ -354,7 +352,7 @@ void CRpg::Precache()
 }
 
 
-int CRpg::GetItemInfo(ItemInfo* p)
+bool CRpg::GetItemInfo(ItemInfo* p)
 {
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo1 = "rockets";
@@ -368,30 +366,30 @@ int CRpg::GetItemInfo(ItemInfo* p)
 	p->iFlags = 0;
 	p->iWeight = RPG_WEIGHT;
 
-	return 1;
+	return true;
 }
 
 void CRpg::IncrementAmmo(CBasePlayer* pPlayer)
 {
-	if (pPlayer->GiveAmmo(1, "rockets", ROCKET_MAX_CARRY))
+	if (0 != pPlayer->GiveAmmo(1, "rockets", ROCKET_MAX_CARRY))
 	{
 		EMIT_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
 	}
 }
 
-int CRpg::AddToPlayer(CBasePlayer* pPlayer)
+bool CRpg::AddToPlayer(CBasePlayer* pPlayer)
 {
 	if (CBasePlayerWeapon::AddToPlayer(pPlayer))
 	{
 		MESSAGE_BEGIN(MSG_ONE, gmsgWeapPickup, NULL, pPlayer->pev);
 		WRITE_BYTE(m_iId);
 		MESSAGE_END();
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 }
 
-BOOL CRpg::Deploy()
+bool CRpg::Deploy()
 {
 	if (m_iClip == 0)
 	{
@@ -402,20 +400,20 @@ BOOL CRpg::Deploy()
 }
 
 
-BOOL CRpg::CanHolster()
+bool CRpg::CanHolster()
 {
-	if (m_fSpotActive && m_cActiveRockets)
+	if (m_fSpotActive && 0 != m_cActiveRockets)
 	{
 		// can't put away while guiding a missile.
-		return FALSE;
+		return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
 void CRpg::Holster()
 {
-	m_fInReload = FALSE;// cancel any reload in progress.
+	m_fInReload = false; // cancel any reload in progress.
 
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;
 
@@ -428,14 +426,13 @@ void CRpg::Holster()
 		m_pSpot = NULL;
 	}
 #endif
-
 }
 
 
 
 void CRpg::PrimaryAttack()
 {
-	if (m_iClip)
+	if (0 != m_iClip)
 	{
 		m_pPlayer->m_iWeaponVolume = LOUD_GUN_VOLUME;
 		m_pPlayer->m_iWeaponFlash = BRIGHT_GUN_FLASH;
@@ -449,7 +446,7 @@ void CRpg::PrimaryAttack()
 
 		CRpgRocket* pRocket = CRpgRocket::CreateRpgRocket(vecSrc, m_pPlayer->pev->v_angle, m_pPlayer, this);
 
-		UTIL_MakeVectors(m_pPlayer->pev->v_angle);// RpgRocket::Create stomps on globals, so remake.
+		UTIL_MakeVectors(m_pPlayer->pev->v_angle); // RpgRocket::Create stomps on globals, so remake.
 		pRocket->pev->velocity = pRocket->pev->velocity + gpGlobals->v_forward * DotProduct(m_pPlayer->pev->velocity, gpGlobals->v_forward);
 #endif
 
@@ -457,7 +454,7 @@ void CRpg::PrimaryAttack()
 		// Ken signed up for this as a global change (sjb)
 
 		int flags;
-#if defined( CLIENT_WEAPONS )
+#if defined(CLIENT_WEAPONS)
 		flags = FEV_NOTHOST;
 #else
 		flags = 0;
@@ -501,7 +498,7 @@ void CRpg::WeaponIdle()
 	if (m_flTimeWeaponIdle > UTIL_WeaponTimeBase())
 		return;
 
-	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType])
+	if (0 != m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType])
 	{
 		int iAnim;
 		float flRand = UTIL_SharedRandomFloat(m_pPlayer->random_seed, 0, 1);
@@ -556,7 +553,6 @@ void CRpg::UpdateSpot()
 		UTIL_SetOrigin(m_pSpot->pev, tr.vecEndPos);
 	}
 #endif
-
 }
 
 
@@ -573,7 +569,7 @@ class CRpgAmmo : public CBasePlayerAmmo
 		PRECACHE_MODEL("models/w_rpgammo.mdl");
 		PRECACHE_SOUND("items/9mmclip1.wav");
 	}
-	BOOL AddAmmo(CBaseEntity* pOther) override
+	bool AddAmmo(CBaseEntity* pOther) override
 	{
 		int iGive;
 
@@ -590,9 +586,9 @@ class CRpgAmmo : public CBasePlayerAmmo
 		if (pOther->GiveAmmo(iGive, "rockets", ROCKET_MAX_CARRY) != -1)
 		{
 			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
-			return TRUE;
+			return true;
 		}
-		return FALSE;
+		return false;
 	}
 };
 

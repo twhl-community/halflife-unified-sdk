@@ -17,13 +17,13 @@
 //=========================================================
 // UNDONE: Holster weapon?
 
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"monsters.h"
-#include	"talkmonster.h"
-#include	"weapons.h"
-#include	"soundent.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
+#include "talkmonster.h"
+#include "weapons.h"
+#include "soundent.h"
 #include "barney.h"
 
 //TODO: work out a way to abstract sentences out so we don't need to override here to change just those
@@ -36,7 +36,7 @@ public:
 	void GuardFirePistol() override;
 	void AlertSound() override;
 
-	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 
 	void DeclineFollowing() override;
 
@@ -93,7 +93,7 @@ void COtis::GuardFirePistol()
 	CSoundEnt::InsertSound(bits_SOUND_COMBAT, pev->origin, 384, 0.3);
 
 	// UNDONE: Reload?
-	m_cAmmoLoaded--;// take away a bullet!
+	m_cAmmoLoaded--; // take away a bullet!
 }
 
 //=========================================================
@@ -135,9 +135,9 @@ void COtis::TalkInit()
 	m_szGrp[TLK_PLHURT2] = "!BA_CUREB";
 	m_szGrp[TLK_PLHURT3] = "!BA_CUREC";
 
-	m_szGrp[TLK_PHELLO] = NULL;	//"OT_PHELLO";		// UNDONE
-	m_szGrp[TLK_PIDLE] = NULL;	//"OT_PIDLE";			// UNDONE
-	m_szGrp[TLK_PQUESTION] = "OT_PQUEST";		// UNDONE
+	m_szGrp[TLK_PHELLO] = NULL;			  //"OT_PHELLO";		// UNDONE
+	m_szGrp[TLK_PIDLE] = NULL;			  //"OT_PIDLE";			// UNDONE
+	m_szGrp[TLK_PQUESTION] = "OT_PQUEST"; // UNDONE
 
 	m_szGrp[TLK_SMELL] = "OT_SMELL";
 
@@ -148,27 +148,27 @@ void COtis::TalkInit()
 	m_voicePitch = 100;
 }
 
-int COtis::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool COtis::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
 	// make sure friends talk about it if player hurts talkmonsters...
-	int ret = CTalkMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
+	bool ret = CTalkMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
 	if (!IsAlive() || pev->deadflag == DEAD_DYING)
 		return ret;
 
-	if (m_MonsterState != MONSTERSTATE_PRONE && (pevAttacker->flags & FL_CLIENT))
+	if (m_MonsterState != MONSTERSTATE_PRONE && (pevAttacker->flags & FL_CLIENT) != 0)
 	{
 		// This is a heurstic to determine if the player intended to harm me
 		// If I have an enemy, we can't establish intent (may just be crossfire)
 		if (m_hEnemy == NULL)
 		{
 			// If the player was facing directly at me, or I'm already suspicious, get mad
-			if ((m_afMemory & bits_MEMORY_SUSPICIOUS) || IsFacing(pevAttacker, pev->origin))
+			if ((m_afMemory & bits_MEMORY_SUSPICIOUS) != 0 || IsFacing(pevAttacker, pev->origin))
 			{
 				// Alright, now I'm pissed!
 				PlaySentence("OT_MAD", 4, VOL_NORM, ATTN_NORM);
 
 				Remember(bits_MEMORY_PROVOKED);
-				StopFollowing(TRUE);
+				StopFollowing(true);
 			}
 			else
 			{
@@ -217,25 +217,25 @@ class CDeadOtis : public CBaseMonster
 {
 public:
 	void Spawn() override;
-	int	Classify() override { return	CLASS_PLAYER_ALLY; }
+	int Classify() override { return CLASS_PLAYER_ALLY; }
 
-	void KeyValue(KeyValueData* pkvd) override;
+	bool KeyValue(KeyValueData* pkvd) override;
 
-	int	m_iPose;// which sequence to display	-- temporary, don't need to save
+	int m_iPose; // which sequence to display	-- temporary, don't need to save
 	static const char* m_szPoses[5];
 };
 
 const char* CDeadOtis::m_szPoses[] = {"lying_on_back", "lying_on_side", "lying_on_stomach", "stuffed_in_vent", "dead_sitting"};
 
-void CDeadOtis::KeyValue(KeyValueData* pkvd)
+bool CDeadOtis::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq(pkvd->szKeyName, "pose"))
 	{
 		m_iPose = atoi(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		return true;
 	}
-	else
-		CBaseMonster::KeyValue(pkvd);
+
+	return CBaseMonster::KeyValue(pkvd);
 }
 
 LINK_ENTITY_TO_CLASS(monster_otis_dead, CDeadOtis);
@@ -259,7 +259,7 @@ void CDeadOtis::Spawn()
 		ALERT(at_console, "Dead otis with bad pose\n");
 	}
 	// Corpses have less health
-	pev->health = 8;//gSkillData.otisHealth;
+	pev->health = 8; //gSkillData.otisHealth;
 
 	MonsterInitDead();
 }

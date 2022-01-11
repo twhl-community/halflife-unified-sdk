@@ -17,7 +17,7 @@
 //=========================================================
 
 //=========================================================
-// Hit groups!	
+// Hit groups!
 //=========================================================
 /*
 
@@ -28,52 +28,50 @@
 */
 
 
-#include	"extdll.h"
-#include	"plane.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"monsters.h"
-#include	"schedule.h"
-#include	"animation.h"
-#include	"squadmonster.h"
-#include	"weapons.h"
-#include	"talkmonster.h"
-#include	"soundent.h"
-#include	"effects.h"
-#include	"customentity.h"
+#include "extdll.h"
+#include "plane.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
+#include "schedule.h"
+#include "animation.h"
+#include "squadmonster.h"
+#include "weapons.h"
+#include "talkmonster.h"
+#include "soundent.h"
+#include "effects.h"
+#include "customentity.h"
 #include "weapons/CSpore.h"
 #include "weapons/CShockBeam.h"
 
-int g_fShockTrooperQuestion;				// true if an idle grunt asked a question. Cleared when someone answers.
+int g_fShockTrooperQuestion; // true if an idle grunt asked a question. Cleared when someone answers.
 static int iShockTrooperMuzzleFlash;
-
-extern DLL_GLOBAL int		g_iSkillLevel;
 
 //=========================================================
 // monster-specific DEFINE's
 //=========================================================
-#define	GRUNT_CLIP_SIZE					36 // how many bullets in a clip? - NOTE: 3 round burst sound, so keep as 3 * x!
-#define GRUNT_VOL						0.35		// volume of grunt sounds
-#define GRUNT_ATTN						ATTN_NORM	// attenutation of grunt sentences
-#define HGRUNT_LIMP_HEALTH				20
-#define HGRUNT_DMG_HEADSHOT				( DMG_BULLET | DMG_CLUB )	// damage types that can kill a grunt with a single headshot.
-#define HGRUNT_NUM_HEADS				2 // how many grunt heads are there? 
-#define HGRUNT_MINIMUM_HEADSHOT_DAMAGE	15 // must do at least this much damage in one shot to head to score a headshot kill
-#define	ShockTrooper_SENTENCE_VOLUME			(float)0.35 // volume of grunt sentences
+#define GRUNT_CLIP_SIZE 36	 // how many bullets in a clip? - NOTE: 3 round burst sound, so keep as 3 * x!
+#define GRUNT_VOL 0.35		 // volume of grunt sounds
+#define GRUNT_ATTN ATTN_NORM // attenutation of grunt sentences
+#define HGRUNT_LIMP_HEALTH 20
+#define HGRUNT_DMG_HEADSHOT (DMG_BULLET | DMG_CLUB) // damage types that can kill a grunt with a single headshot.
+#define HGRUNT_NUM_HEADS 2							// how many grunt heads are there?
+#define HGRUNT_MINIMUM_HEADSHOT_DAMAGE 15			// must do at least this much damage in one shot to head to score a headshot kill
+#define ShockTrooper_SENTENCE_VOLUME (float)0.35	// volume of grunt sentences
 
-#define HGRUNT_9MMAR				( 1 << 0)
-#define HGRUNT_HANDGRENADE			( 1 << 1)
-#define HGRUNT_SHOTGUN				( 1 << 3)
+#define HGRUNT_9MMAR (1 << 0)
+#define HGRUNT_HANDGRENADE (1 << 1)
+#define HGRUNT_SHOTGUN (1 << 3)
 
-#define HEAD_GROUP					1
-#define HEAD_GRUNT					0
-#define HEAD_COMMANDER				1
-#define HEAD_SHOTGUN				2
-#define HEAD_M203					3
-#define GUN_GROUP					2
-#define GUN_MP5						0
-#define GUN_SHOTGUN					1
-#define GUN_NONE					2
+#define HEAD_GROUP 1
+#define HEAD_GRUNT 0
+#define HEAD_COMMANDER 1
+#define HEAD_SHOTGUN 2
+#define HEAD_M203 3
+#define GUN_GROUP 2
+#define GUN_MP5 0
+#define GUN_SHOTGUN 1
+#define GUN_NONE 2
 
 namespace STrooperBodyGroup
 {
@@ -95,12 +93,12 @@ enum STrooperWeapon
 //=========================================================
 // Monster's Anim Events Go Here
 //=========================================================
-#define		STROOPER_AE_RELOAD		( 2 )
-#define		STROOPER_AE_KICK			( 3 )
-#define		STROOPER_AE_SHOOT		( 4 )
-#define		STROOPER_AE_GREN_TOSS		( 7 )
-#define		STROOPER_AE_CAUGHT_ENEMY	( 10) // grunt established sight with an enemy (player only) that had previously eluded the squad.
-#define		STROOPER_AE_DROP_GUN		( 11) // grunt (probably dead) is dropping his mp5.
+#define STROOPER_AE_RELOAD (2)
+#define STROOPER_AE_KICK (3)
+#define STROOPER_AE_SHOOT (4)
+#define STROOPER_AE_GREN_TOSS (7)
+#define STROOPER_AE_CAUGHT_ENEMY (10) // grunt established sight with an enemy (player only) that had previously eluded the squad.
+#define STROOPER_AE_DROP_GUN (11)	  // grunt (probably dead) is dropping his mp5.
 
 //=========================================================
 // monster-specific schedule types
@@ -108,7 +106,7 @@ enum STrooperWeapon
 enum
 {
 	SCHED_GRUNT_SUPPRESS = LAST_COMMON_SCHEDULE + 1,
-	SCHED_GRUNT_ESTABLISH_LINE_OF_FIRE,// move to a location to set up an attack against the enemy. (usually when a friendly is in the way).
+	SCHED_GRUNT_ESTABLISH_LINE_OF_FIRE, // move to a location to set up an attack against the enemy. (usually when a friendly is in the way).
 	SCHED_GRUNT_COVER_AND_RELOAD,
 	SCHED_GRUNT_SWEEP,
 	SCHED_GRUNT_FOUND_ENEMY,
@@ -116,7 +114,7 @@ enum
 	SCHED_GRUNT_REPEL_ATTACK,
 	SCHED_GRUNT_REPEL_LAND,
 	SCHED_GRUNT_WAIT_FACE_ENEMY,
-	SCHED_GRUNT_TAKECOVER_FAILED,// special schedule type that forces analysis of conditions and picks the best possible schedule to recover from this type of failure.
+	SCHED_GRUNT_TAKECOVER_FAILED, // special schedule type that forces analysis of conditions and picks the best possible schedule to recover from this type of failure.
 	SCHED_GRUNT_ELOF_FAIL,
 };
 
@@ -133,7 +131,7 @@ enum
 //=========================================================
 // monster-specific conditions
 //=========================================================
-#define bits_COND_GRUNT_NOFIRE	( bits_COND_SPECIAL1 )
+#define bits_COND_GRUNT_NOFIRE (bits_COND_SPECIAL1)
 
 class CShockTrooper : public CSquadMonster
 {
@@ -141,13 +139,13 @@ public:
 	void Spawn() override;
 	void Precache() override;
 	void SetYawSpeed() override;
-	int  Classify() override;
+	int Classify() override;
 	int ISoundMask() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
-	BOOL FCanCheckAttacks() override;
-	BOOL CheckMeleeAttack1(float flDot, float flDist) override;
-	BOOL CheckRangeAttack1(float flDot, float flDist) override;
-	BOOL CheckRangeAttack2(float flDot, float flDist) override;
+	bool FCanCheckAttacks() override;
+	bool CheckMeleeAttack1(float flDot, float flDist) override;
+	bool CheckRangeAttack1(float flDot, float flDist) override;
+	bool CheckRangeAttack2(float flDot, float flDist) override;
 	void CheckAmmo() override;
 	void SetActivity(Activity NewActivity) override;
 	void StartTask(Task_t* pTask) override;
@@ -160,18 +158,18 @@ public:
 	void GibMonster() override;
 	void SpeakSentence();
 
-	int	Save(CSave& save) override;
-	int Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 
 	CBaseEntity* Kick();
 	Schedule_t* GetSchedule() override;
 	Schedule_t* GetScheduleOfType(int Type) override;
 	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
-	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 
 	int IRelationship(CBaseEntity* pTarget) override;
 
-	BOOL FOkToSpeak();
+	bool FOkToSpeak();
 	void JustSpoke();
 
 	void MonsterThink() override;
@@ -185,21 +183,21 @@ public:
 	float m_flNextPainTime;
 	float m_flLastEnemySightTime;
 
-	Vector	m_vecTossVelocity;
+	Vector m_vecTossVelocity;
 
-	BOOL	m_fThrowGrenade;
-	BOOL	m_fStanding;
-	BOOL	m_fFirstEncounter;// only put on the handsign show in the squad's first encounter.
-	int		m_cClipSize;
+	bool m_fThrowGrenade;
+	bool m_fStanding;
+	bool m_fFirstEncounter; // only put on the handsign show in the squad's first encounter.
+	int m_cClipSize;
 
 	float m_flLastShot;
 
 	int m_voicePitch;
 
-	int		m_iBrassShell;
-	int		m_iShotgunShell;
+	int m_iBrassShell;
+	int m_iShotgunShell;
 
-	int		m_iSentence;
+	int m_iSentence;
 
 	float m_flLastChargeTime;
 	float m_flLastBlinkTime;
@@ -210,11 +208,11 @@ public:
 
 LINK_ENTITY_TO_CLASS(monster_shocktrooper, CShockTrooper);
 
-TYPEDESCRIPTION	CShockTrooper::m_SaveData[] =
-{
-	DEFINE_FIELD(CShockTrooper, m_flNextGrenadeCheck, FIELD_TIME),
-	DEFINE_FIELD(CShockTrooper, m_flNextPainTime, FIELD_TIME),
-	//	DEFINE_FIELD( CShockTrooper, m_flLastEnemySightTime, FIELD_TIME ), // don't save, go to zero
+TYPEDESCRIPTION CShockTrooper::m_SaveData[] =
+	{
+		DEFINE_FIELD(CShockTrooper, m_flNextGrenadeCheck, FIELD_TIME),
+		DEFINE_FIELD(CShockTrooper, m_flNextPainTime, FIELD_TIME),
+		//	DEFINE_FIELD( CShockTrooper, m_flLastEnemySightTime, FIELD_TIME ), // don't save, go to zero
 		DEFINE_FIELD(CShockTrooper, m_vecTossVelocity, FIELD_VECTOR),
 		DEFINE_FIELD(CShockTrooper, m_fThrowGrenade, FIELD_BOOLEAN),
 		DEFINE_FIELD(CShockTrooper, m_fStanding, FIELD_BOOLEAN),
@@ -223,22 +221,22 @@ TYPEDESCRIPTION	CShockTrooper::m_SaveData[] =
 		DEFINE_FIELD(CShockTrooper, m_voicePitch, FIELD_INTEGER),
 		//  DEFINE_FIELD( CShotgun, m_iBrassShell, FIELD_INTEGER ),
 		//  DEFINE_FIELD( CShotgun, m_iShotgunShell, FIELD_INTEGER ),
-			DEFINE_FIELD(CShockTrooper, m_iSentence, FIELD_INTEGER),
-			DEFINE_FIELD(CShockTrooper, m_flLastChargeTime, FIELD_FLOAT),
-			DEFINE_FIELD(CShockTrooper, m_flLastShot, FIELD_TIME),
+		DEFINE_FIELD(CShockTrooper, m_iSentence, FIELD_INTEGER),
+		DEFINE_FIELD(CShockTrooper, m_flLastChargeTime, FIELD_FLOAT),
+		DEFINE_FIELD(CShockTrooper, m_flLastShot, FIELD_TIME),
 };
 
 IMPLEMENT_SAVERESTORE(CShockTrooper, CSquadMonster);
 
 const char* CShockTrooper::pGruntSentences[] =
-{
-	"ST_GREN", // grenade scared grunt
-	"ST_ALERT", // sees player
-	"ST_MONSTER", // sees monster
-	"ST_COVER", // running to cover
-	"ST_THROW", // about to throw grenade
-	"ST_CHARGE",  // running out to get the enemy
-	"ST_TAUNT", // say rude things
+	{
+		"ST_GREN",	  // grenade scared grunt
+		"ST_ALERT",	  // sees player
+		"ST_MONSTER", // sees monster
+		"ST_COVER",	  // running to cover
+		"ST_THROW",	  // about to throw grenade
+		"ST_CHARGE",  // running out to get the enemy
+		"ST_TAUNT",	  // say rude things
 };
 
 enum
@@ -260,9 +258,9 @@ enum
 // being able to execute the intended action. It's really lame
 // when a grunt says 'COVER ME' and then doesn't move. The problem
 // is that the sentences were played when the decision to TRY
-// to move to cover was made. Now the sentence is played after 
+// to move to cover was made. Now the sentence is played after
 // we know for sure that there is a valid path. The schedule
-// may still fail but in most cases, well after the grunt has 
+// may still fail but in most cases, well after the grunt has
 // started moving.
 //=========================================================
 void CShockTrooper::SpeakSentence()
@@ -281,7 +279,7 @@ void CShockTrooper::SpeakSentence()
 }
 
 //=========================================================
-// IRelationship - overridden because Alien Grunts are 
+// IRelationship - overridden because Alien Grunts are
 // Human Grunt's nemesis.
 //=========================================================
 int CShockTrooper::IRelationship(CBaseEntity* pTarget)
@@ -301,11 +299,11 @@ const GibData ShockTrooperGibs = {"models/strooper_gibs.mdl", 0, 8};
 //=========================================================
 void CShockTrooper::GibMonster()
 {
-	Vector	vecGunPos;
-	Vector	vecGunAngles;
+	Vector vecGunPos;
+	Vector vecGunAngles;
 
 	if (GetBodygroup(STrooperBodyGroup::Weapons) != STrooperWeapon::None)
-	{// throw a gun if the grunt has one
+	{ // throw a gun if the grunt has one
 		GetAttachment(0, vecGunPos, vecGunAngles);
 
 		//Only copy the yaw
@@ -324,9 +322,9 @@ void CShockTrooper::GibMonster()
 
 	EMIT_SOUND(ENT(pev), CHAN_WEAPON, "common/bodysplat.wav", 1, ATTN_NORM);
 
-	if (CVAR_GET_FLOAT("violence_agibs") != 0)	// Should never get here, but someone might call it directly
+	if (CVAR_GET_FLOAT("violence_agibs") != 0) // Should never get here, but someone might call it directly
 	{
-		CGib::SpawnRandomGibs(pev, 6, ShockTrooperGibs);	// Throw alien gibs
+		CGib::SpawnRandomGibs(pev, 6, ShockTrooperGibs); // Throw alien gibs
 	}
 
 	// don't remove players!
@@ -335,41 +333,41 @@ void CShockTrooper::GibMonster()
 }
 
 //=========================================================
-// ISoundMask - Overidden for human grunts because they 
+// ISoundMask - Overidden for human grunts because they
 // hear the DANGER sound that is made by hand grenades and
 // other dangerous items.
 //=========================================================
 int CShockTrooper::ISoundMask()
 {
-	return	bits_SOUND_WORLD |
-		bits_SOUND_COMBAT |
-		bits_SOUND_PLAYER |
-		bits_SOUND_DANGER;
+	return bits_SOUND_WORLD |
+		   bits_SOUND_COMBAT |
+		   bits_SOUND_PLAYER |
+		   bits_SOUND_DANGER;
 }
 
 //=========================================================
 // someone else is talking - don't speak
 //=========================================================
-BOOL CShockTrooper::FOkToSpeak()
+bool CShockTrooper::FOkToSpeak()
 {
 	// if someone else is talking, don't speak
 	if (gpGlobals->time <= CTalkMonster::g_talkWaitTime)
-		return FALSE;
+		return false;
 
-	if (pev->spawnflags & SF_MONSTER_GAG)
+	if ((pev->spawnflags & SF_MONSTER_GAG) != 0)
 	{
 		if (m_MonsterState != MONSTERSTATE_COMBAT)
 		{
 			// no talking outside of combat if gagged.
-			return FALSE;
+			return false;
 		}
 	}
 
 	// if player is not in pvs, don't speak
-//	if (FNullEnt(FIND_CLIENT_IN_PVS(edict())))
-//		return FALSE;
+	//	if (FNullEnt(FIND_CLIENT_IN_PVS(edict())))
+	//		return false;
 
-	return TRUE;
+	return true;
 }
 
 //=========================================================
@@ -398,7 +396,7 @@ void CShockTrooper::PrescheduleThink()
 			if (gpGlobals->time - MySquadLeader()->m_flLastEnemySightTime > 5)
 			{
 				// been a while since we've seen the enemy
-				MySquadLeader()->m_fEnemyEluded = TRUE;
+				MySquadLeader()->m_fEnemyEluded = true;
 			}
 		}
 	}
@@ -411,20 +409,20 @@ void CShockTrooper::PrescheduleThink()
 // cannot see its enemy.
 //
 // !!!BUGBUG - this gets called before a 3-round burst is fired
-// which means that a friendly can still be hit with up to 2 rounds. 
+// which means that a friendly can still be hit with up to 2 rounds.
 // ALSO, grenades will not be tossed if there is a friendly in front,
 // this is a bad bug. Friendly machine gun fire avoidance
 // will unecessarily prevent the throwing of a grenade as well.
 //=========================================================
-BOOL CShockTrooper::FCanCheckAttacks()
+bool CShockTrooper::FCanCheckAttacks()
 {
 	if (!HasConditions(bits_COND_ENEMY_TOOFAR))
 	{
-		return TRUE;
+		return true;
 	}
 	else
 	{
-		return FALSE;
+		return false;
 	}
 }
 
@@ -432,7 +430,7 @@ BOOL CShockTrooper::FCanCheckAttacks()
 //=========================================================
 // CheckMeleeAttack1
 //=========================================================
-BOOL CShockTrooper::CheckMeleeAttack1(float flDot, float flDist)
+bool CShockTrooper::CheckMeleeAttack1(float flDot, float flDist)
 {
 	CBaseMonster* pEnemy;
 
@@ -442,7 +440,7 @@ BOOL CShockTrooper::CheckMeleeAttack1(float flDot, float flDist)
 
 		if (!pEnemy)
 		{
-			return FALSE;
+			return false;
 		}
 	}
 
@@ -450,32 +448,29 @@ BOOL CShockTrooper::CheckMeleeAttack1(float flDot, float flDist)
 		pEnemy->Classify() != CLASS_ALIEN_BIOWEAPON &&
 		pEnemy->Classify() != CLASS_PLAYER_BIOWEAPON)
 	{
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 }
 
 //=========================================================
-// CheckRangeAttack1 - overridden for HGrunt, cause 
+// CheckRangeAttack1 - overridden for HGrunt, cause
 // FCanCheckAttacks() doesn't disqualify all attacks based
 // on whether or not the enemy is occluded because unlike
 // the base class, the HGrunt can attack when the enemy is
-// occluded (throw grenade over wall, etc). We must 
+// occluded (throw grenade over wall, etc). We must
 // disqualify the machine gun attack if the enemy is occluded.
 //=========================================================
-BOOL CShockTrooper::CheckRangeAttack1(float flDot, float flDist)
+bool CShockTrooper::CheckRangeAttack1(float flDot, float flDist)
 {
-	if (gpGlobals->time - m_flLastShot > 0.175
-		&& !HasConditions(bits_COND_ENEMY_OCCLUDED)
-		&& flDist <= 2048 && flDot >= 0.5
-		&& NoFriendlyFire())
+	if (gpGlobals->time - m_flLastShot > 0.175 && !HasConditions(bits_COND_ENEMY_OCCLUDED) && flDist <= 2048 && flDot >= 0.5 && NoFriendlyFire())
 	{
-		TraceResult	tr;
+		TraceResult tr;
 
 		if (!m_hEnemy->IsPlayer() && flDist <= 64)
 		{
 			// kick nonclients, but don't shoot at them.
-			return FALSE;
+			return false;
 		}
 
 		Vector vecSrc = GetGunPosition();
@@ -485,28 +480,28 @@ BOOL CShockTrooper::CheckRangeAttack1(float flDot, float flDist)
 
 		if (tr.flFraction == 1.0)
 		{
-			return TRUE;
+			return true;
 		}
 	}
 
-	return FALSE;
+	return false;
 }
 
 //=========================================================
 // CheckRangeAttack2 - this checks the Grunt's grenade
-// attack. 
+// attack.
 //=========================================================
-BOOL CShockTrooper::CheckRangeAttack2(float flDot, float flDist)
+bool CShockTrooper::CheckRangeAttack2(float flDot, float flDist)
 {
 	if (!FBitSet(pev->weapons, HGRUNT_HANDGRENADE))
 	{
-		return FALSE;
+		return false;
 	}
 
 	// if the grunt isn't moving, it's ok to check.
 	if (m_flGroundSpeed != 0)
 	{
-		m_fThrowGrenade = FALSE;
+		m_fThrowGrenade = false;
 		return m_fThrowGrenade;
 	}
 
@@ -518,10 +513,10 @@ BOOL CShockTrooper::CheckRangeAttack2(float flDot, float flDist)
 
 	if (!FBitSet(m_hEnemy->pev->flags, FL_ONGROUND) && m_hEnemy->pev->waterlevel == 0 && m_vecEnemyLKP.z > pev->absmax.z)
 	{
-		//!!!BUGBUG - we should make this check movetype and make sure it isn't FLY? Players who jump a lot are unlikely to 
+		//!!!BUGBUG - we should make this check movetype and make sure it isn't FLY? Players who jump a lot are unlikely to
 		// be grenaded.
 		// don't throw grenades at anything that isn't on the ground!
-		m_fThrowGrenade = FALSE;
+		m_fThrowGrenade = false;
 		return m_fThrowGrenade;
 	}
 
@@ -561,7 +556,7 @@ BOOL CShockTrooper::CheckRangeAttack2(float flDot, float flDist)
 		{
 			// crap, I might blow my own guy up. Don't throw a grenade and don't check again for a while.
 			m_flNextGrenadeCheck = gpGlobals->time + 1; // one full second.
-			m_fThrowGrenade = FALSE;
+			m_fThrowGrenade = false;
 		}
 	}
 
@@ -569,7 +564,7 @@ BOOL CShockTrooper::CheckRangeAttack2(float flDot, float flDist)
 	{
 		// crap, I don't want to blow myself up
 		m_flNextGrenadeCheck = gpGlobals->time + 1; // one full second.
-		m_fThrowGrenade = FALSE;
+		m_fThrowGrenade = false;
 		return m_fThrowGrenade;
 	}
 
@@ -583,14 +578,14 @@ BOOL CShockTrooper::CheckRangeAttack2(float flDot, float flDist)
 			m_vecTossVelocity = vecToss;
 
 			// throw a hand grenade
-			m_fThrowGrenade = TRUE;
+			m_fThrowGrenade = true;
 			// don't check again for a while.
 			m_flNextGrenadeCheck = gpGlobals->time; // 1/3 second.
 		}
 		else
 		{
 			// don't throw
-			m_fThrowGrenade = FALSE;
+			m_fThrowGrenade = false;
 			// don't check again for a while.
 			m_flNextGrenadeCheck = gpGlobals->time + 1; // one full second.
 		}
@@ -604,14 +599,14 @@ BOOL CShockTrooper::CheckRangeAttack2(float flDot, float flDist)
 			m_vecTossVelocity = vecToss;
 
 			// throw a hand grenade
-			m_fThrowGrenade = TRUE;
+			m_fThrowGrenade = true;
 			// don't check again for a while.
 			m_flNextGrenadeCheck = gpGlobals->time + 0.3; // 1/3 second.
 		}
 		else
 		{
 			// don't throw
-			m_fThrowGrenade = FALSE;
+			m_fThrowGrenade = false;
 			// don't check again for a while.
 			m_flNextGrenadeCheck = gpGlobals->time + 1; // one full second.
 		}
@@ -637,7 +632,7 @@ void CShockTrooper::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector v
 // needs to forget that he is in cover if he's hurt. (Obviously
 // not in a safe place anymore).
 //=========================================================
-int CShockTrooper::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool CShockTrooper::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
 	Forget(bits_MEMORY_INCOVER);
 
@@ -693,9 +688,9 @@ void CShockTrooper::SetYawSpeed()
 
 void CShockTrooper::IdleSound()
 {
-	if (FOkToSpeak() && (g_fShockTrooperQuestion || RANDOM_LONG(0, 1)))
+	if (FOkToSpeak() && (0 != g_fShockTrooperQuestion || RANDOM_LONG(0, 1)))
 	{
-		if (!g_fShockTrooperQuestion)
+		if (0 == g_fShockTrooperQuestion)
 		{
 			// ask question or make statement
 			switch (RANDOM_LONG(0, 2))
@@ -720,7 +715,7 @@ void CShockTrooper::IdleSound()
 			case 1: // check in
 				SENTENCEG_PlayRndSz(ENT(pev), "ST_CLEAR", ShockTrooper_SENTENCE_VOLUME, ATTN_NORM, 0, m_voicePitch);
 				break;
-			case 2: // question 
+			case 2: // question
 				SENTENCEG_PlayRndSz(ENT(pev), "ST_ANSWER", ShockTrooper_SENTENCE_VOLUME, ATTN_NORM, 0, m_voicePitch);
 				break;
 			}
@@ -743,12 +738,12 @@ void CShockTrooper::CheckAmmo()
 }
 
 //=========================================================
-// Classify - indicates this monster's place in the 
+// Classify - indicates this monster's place in the
 // relationship table.
 //=========================================================
-int	CShockTrooper::Classify()
+int CShockTrooper::Classify()
 {
-	return	CLASS_ALIEN_RACE_X;
+	return CLASS_ALIEN_RACE_X;
 }
 
 //=========================================================
@@ -819,7 +814,7 @@ void CShockTrooper::Shoot()
 	pBeam->pev->velocity = vecShootDir * 2000;
 	pBeam->pev->speed = 2000;
 
-	m_cAmmoLoaded--;// take away a bullet!
+	m_cAmmoLoaded--; // take away a bullet!
 
 	SetBlending(0, angDir.x);
 
@@ -832,8 +827,8 @@ void CShockTrooper::Shoot()
 //=========================================================
 void CShockTrooper::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
-	Vector	vecShootDir;
-	Vector	vecShootOrigin;
+	Vector vecShootDir;
+	Vector vecShootOrigin;
 
 	switch (pEvent->event)
 	{
@@ -841,9 +836,9 @@ void CShockTrooper::HandleAnimEvent(MonsterEvent_t* pEvent)
 	{
 		if (GetBodygroup(STrooperBodyGroup::Weapons) != STrooperWeapon::None)
 		{
-			Vector	vecGunPos;
+			Vector vecGunPos;
 			//Zero this out so we don't end up with garbage angles later on
-			Vector	vecGunAngles = g_vecZero;
+			Vector vecGunAngles = g_vecZero;
 
 			GetAttachment(0, vecGunPos, vecGunAngles);
 
@@ -872,16 +867,16 @@ void CShockTrooper::HandleAnimEvent(MonsterEvent_t* pEvent)
 		// CGrenade::ShootTimed( pev, pev->origin + gpGlobals->v_forward * 34 + Vector (0, 0, 32), m_vecTossVelocity, 3.5 );
 		CSpore::CreateSpore(pev->origin + Vector(0, 0, 98), m_vecTossVelocity, this, CSpore::SporeType::GRENADE, true, false);
 
-		m_fThrowGrenade = FALSE;
-		m_flNextGrenadeCheck = gpGlobals->time + 6;// wait six seconds before even looking again to see if a grenade can be thrown.
-		// !!!LATER - when in a group, only try to throw grenade if ordered.
+		m_fThrowGrenade = false;
+		m_flNextGrenadeCheck = gpGlobals->time + 6; // wait six seconds before even looking again to see if a grenade can be thrown.
+													// !!!LATER - when in a group, only try to throw grenade if ordered.
 	}
 	break;
 
 	case STROOPER_AE_SHOOT:
 	{
-		Vector	vecArmPos;
-		Vector	vecArmAngles;
+		Vector vecArmPos;
+		Vector vecArmAngles;
 
 		GetAttachment(0, vecArmPos, vecArmAngles);
 
@@ -925,7 +920,6 @@ void CShockTrooper::HandleAnimEvent(MonsterEvent_t* pEvent)
 			SENTENCEG_PlayRndSz(ENT(pev), "ST_ALERT", ShockTrooper_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
 			JustSpoke();
 		}
-
 	}
 
 	default:
@@ -949,7 +943,7 @@ void CShockTrooper::Spawn()
 	m_bloodColor = BLOOD_COLOR_GREEN;
 	pev->effects = 0;
 	pev->health = gSkillData.shocktrooperHealth;
-	m_flFieldOfView = 0.2;// indicates the width of this monster's forward view cone ( as a dotproduct result )
+	m_flFieldOfView = 0.2; // indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
 	m_flNextGrenadeCheck = gpGlobals->time + 1;
 	m_flNextPainTime = gpGlobals->time;
@@ -957,8 +951,8 @@ void CShockTrooper::Spawn()
 
 	m_afCapability = bits_CAP_SQUAD | bits_CAP_TURN_HEAD | bits_CAP_DOORS_GROUP;
 
-	m_fEnemyEluded = FALSE;
-	m_fFirstEncounter = TRUE;// this is true when the grunt spawns, because he hasn't encountered an enemy yet.
+	m_fEnemyEluded = false;
+	m_fFirstEncounter = true; // this is true when the grunt spawns, because he hasn't encountered an enemy yet.
 
 	m_HackedGunPos = Vector(0, 0, 55);
 
@@ -1109,7 +1103,7 @@ void CShockTrooper::PainSound()
 				return;
 			}
 		}
-#endif 
+#endif
 		switch (RANDOM_LONG(0, 6))
 		{
 		case 0:
@@ -1141,77 +1135,71 @@ void CShockTrooper::PainSound()
 //=========================================================
 // GruntFail
 //=========================================================
-Task_t	tlShockTrooperFail[] =
-{
-	{ TASK_STOP_MOVING,			0				},
-	{ TASK_SET_ACTIVITY,		(float)ACT_IDLE },
-	{ TASK_WAIT,				(float)2		},
-	{ TASK_WAIT_PVS,			(float)0		},
+Task_t tlShockTrooperFail[] =
+	{
+		{TASK_STOP_MOVING, 0},
+		{TASK_SET_ACTIVITY, (float)ACT_IDLE},
+		{TASK_WAIT, (float)2},
+		{TASK_WAIT_PVS, (float)0},
 };
 
-Schedule_t	slShockTrooperFail[] =
-{
+Schedule_t slShockTrooperFail[] =
 	{
-		tlShockTrooperFail,
-		ARRAYSIZE(tlShockTrooperFail),
-		bits_COND_CAN_RANGE_ATTACK1 |
-		bits_COND_CAN_RANGE_ATTACK2 |
-		bits_COND_CAN_MELEE_ATTACK1 |
-		bits_COND_CAN_MELEE_ATTACK2,
-		0,
-		"Grunt Fail"
-	},
+		{tlShockTrooperFail,
+			ARRAYSIZE(tlShockTrooperFail),
+			bits_COND_CAN_RANGE_ATTACK1 |
+				bits_COND_CAN_RANGE_ATTACK2 |
+				bits_COND_CAN_MELEE_ATTACK1 |
+				bits_COND_CAN_MELEE_ATTACK2,
+			0,
+			"Grunt Fail"},
 };
 
 //=========================================================
 // Grunt Combat Fail
 //=========================================================
-Task_t	tlShockTrooperCombatFail[] =
-{
-	{ TASK_STOP_MOVING,			0				},
-	{ TASK_SET_ACTIVITY,		(float)ACT_IDLE },
-	{ TASK_WAIT_FACE_ENEMY,		(float)2		},
-	{ TASK_WAIT_PVS,			(float)0		},
+Task_t tlShockTrooperCombatFail[] =
+	{
+		{TASK_STOP_MOVING, 0},
+		{TASK_SET_ACTIVITY, (float)ACT_IDLE},
+		{TASK_WAIT_FACE_ENEMY, (float)2},
+		{TASK_WAIT_PVS, (float)0},
 };
 
-Schedule_t	slShockTrooperCombatFail[] =
-{
+Schedule_t slShockTrooperCombatFail[] =
 	{
-		tlShockTrooperCombatFail,
-		ARRAYSIZE(tlShockTrooperCombatFail),
-		bits_COND_CAN_RANGE_ATTACK1 |
-		bits_COND_CAN_RANGE_ATTACK2,
-		0,
-		"Grunt Combat Fail"
-	},
+		{tlShockTrooperCombatFail,
+			ARRAYSIZE(tlShockTrooperCombatFail),
+			bits_COND_CAN_RANGE_ATTACK1 |
+				bits_COND_CAN_RANGE_ATTACK2,
+			0,
+			"Grunt Combat Fail"},
 };
 
 //=========================================================
 // Victory dance!
 //=========================================================
-Task_t	tlShockTrooperVictoryDance[] =
-{
-	{ TASK_STOP_MOVING,						(float)0					},
-	{ TASK_FACE_ENEMY,						(float)0					},
-	{ TASK_WAIT,							(float)1.5					},
-	{ TASK_GET_PATH_TO_ENEMY_CORPSE,		(float)0					},
-	{ TASK_WALK_PATH,						(float)0					},
-	{ TASK_WAIT_FOR_MOVEMENT,				(float)0					},
-	{ TASK_FACE_ENEMY,						(float)0					},
-	{ TASK_PLAY_SEQUENCE,					(float)ACT_VICTORY_DANCE	},
+Task_t tlShockTrooperVictoryDance[] =
+	{
+		{TASK_STOP_MOVING, (float)0},
+		{TASK_FACE_ENEMY, (float)0},
+		{TASK_WAIT, (float)1.5},
+		{TASK_GET_PATH_TO_ENEMY_CORPSE, (float)0},
+		{TASK_WALK_PATH, (float)0},
+		{TASK_WAIT_FOR_MOVEMENT, (float)0},
+		{TASK_FACE_ENEMY, (float)0},
+		{TASK_PLAY_SEQUENCE, (float)ACT_VICTORY_DANCE},
 };
 
-Schedule_t	slShockTrooperVictoryDance[] =
-{
+Schedule_t slShockTrooperVictoryDance[] =
 	{
-		tlShockTrooperVictoryDance,
-		ARRAYSIZE(tlShockTrooperVictoryDance),
-		bits_COND_NEW_ENEMY |
-		bits_COND_LIGHT_DAMAGE |
-		bits_COND_HEAVY_DAMAGE,
-		0,
-		"GruntVictoryDance"
-	},
+		{tlShockTrooperVictoryDance,
+			ARRAYSIZE(tlShockTrooperVictoryDance),
+			bits_COND_NEW_ENEMY |
+				bits_COND_LIGHT_DAMAGE |
+				bits_COND_HEAVY_DAMAGE,
+			0,
+			"GruntVictoryDance"},
 };
 
 //=========================================================
@@ -1219,159 +1207,149 @@ Schedule_t	slShockTrooperVictoryDance[] =
 // the grunt to attack.
 //=========================================================
 Task_t tlShockTrooperEstablishLineOfFire[] =
-{
-	{ TASK_SET_FAIL_SCHEDULE,	(float)SCHED_GRUNT_ELOF_FAIL	},
-	{ TASK_GET_PATH_TO_ENEMY,	(float)0						},
-	{ TASK_GRUNT_SPEAK_SENTENCE,(float)0						},
-	{ TASK_RUN_PATH,			(float)0						},
-	{ TASK_WAIT_FOR_MOVEMENT,	(float)0						},
+	{
+		{TASK_SET_FAIL_SCHEDULE, (float)SCHED_GRUNT_ELOF_FAIL},
+		{TASK_GET_PATH_TO_ENEMY, (float)0},
+		{TASK_GRUNT_SPEAK_SENTENCE, (float)0},
+		{TASK_RUN_PATH, (float)0},
+		{TASK_WAIT_FOR_MOVEMENT, (float)0},
 };
 
 Schedule_t slShockTrooperEstablishLineOfFire[] =
-{
 	{
-		tlShockTrooperEstablishLineOfFire,
-		ARRAYSIZE(tlShockTrooperEstablishLineOfFire),
-		bits_COND_NEW_ENEMY |
-		bits_COND_ENEMY_DEAD |
-		bits_COND_CAN_RANGE_ATTACK1 |
-		bits_COND_CAN_MELEE_ATTACK1 |
-		bits_COND_CAN_RANGE_ATTACK2 |
-		bits_COND_CAN_MELEE_ATTACK2 |
-		bits_COND_HEAR_SOUND,
+		{tlShockTrooperEstablishLineOfFire,
+			ARRAYSIZE(tlShockTrooperEstablishLineOfFire),
+			bits_COND_NEW_ENEMY |
+				bits_COND_ENEMY_DEAD |
+				bits_COND_CAN_RANGE_ATTACK1 |
+				bits_COND_CAN_MELEE_ATTACK1 |
+				bits_COND_CAN_RANGE_ATTACK2 |
+				bits_COND_CAN_MELEE_ATTACK2 |
+				bits_COND_HEAR_SOUND,
 
-		bits_SOUND_DANGER,
-		"GruntEstablishLineOfFire"
-	},
+			bits_SOUND_DANGER,
+			"GruntEstablishLineOfFire"},
 };
 
 //=========================================================
 // GruntFoundEnemy - grunt established sight with an enemy
 // that was hiding from the squad.
 //=========================================================
-Task_t	tlShockTrooperFoundEnemy[] =
-{
-	{ TASK_STOP_MOVING,				0							},
-	{ TASK_FACE_ENEMY,				(float)0					},
-	{ TASK_PLAY_SEQUENCE_FACE_ENEMY,(float)ACT_SIGNAL1			},
+Task_t tlShockTrooperFoundEnemy[] =
+	{
+		{TASK_STOP_MOVING, 0},
+		{TASK_FACE_ENEMY, (float)0},
+		{TASK_PLAY_SEQUENCE_FACE_ENEMY, (float)ACT_SIGNAL1},
 };
 
-Schedule_t	slShockTrooperFoundEnemy[] =
-{
+Schedule_t slShockTrooperFoundEnemy[] =
 	{
-		tlShockTrooperFoundEnemy,
-		ARRAYSIZE(tlShockTrooperFoundEnemy),
-		bits_COND_HEAR_SOUND,
+		{tlShockTrooperFoundEnemy,
+			ARRAYSIZE(tlShockTrooperFoundEnemy),
+			bits_COND_HEAR_SOUND,
 
-		bits_SOUND_DANGER,
-		"GruntFoundEnemy"
-	},
+			bits_SOUND_DANGER,
+			"GruntFoundEnemy"},
 };
 
 //=========================================================
 // GruntCombatFace Schedule
 //=========================================================
-Task_t	tlShockTrooperCombatFace1[] =
-{
-	{ TASK_STOP_MOVING,				0							},
-	{ TASK_SET_ACTIVITY,			(float)ACT_IDLE				},
-	{ TASK_FACE_ENEMY,				(float)0					},
-	{ TASK_WAIT,					(float)1.5					},
-	{ TASK_SET_SCHEDULE,			(float)SCHED_GRUNT_SWEEP	},
+Task_t tlShockTrooperCombatFace1[] =
+	{
+		{TASK_STOP_MOVING, 0},
+		{TASK_SET_ACTIVITY, (float)ACT_IDLE},
+		{TASK_FACE_ENEMY, (float)0},
+		{TASK_WAIT, (float)1.5},
+		{TASK_SET_SCHEDULE, (float)SCHED_GRUNT_SWEEP},
 };
 
-Schedule_t	slShockTrooperCombatFace[] =
-{
+Schedule_t slShockTrooperCombatFace[] =
 	{
-		tlShockTrooperCombatFace1,
-		ARRAYSIZE(tlShockTrooperCombatFace1),
-		bits_COND_NEW_ENEMY |
-		bits_COND_ENEMY_DEAD |
-		bits_COND_CAN_RANGE_ATTACK1 |
-		bits_COND_CAN_RANGE_ATTACK2,
-		0,
-		"Combat Face"
-	},
+		{tlShockTrooperCombatFace1,
+			ARRAYSIZE(tlShockTrooperCombatFace1),
+			bits_COND_NEW_ENEMY |
+				bits_COND_ENEMY_DEAD |
+				bits_COND_CAN_RANGE_ATTACK1 |
+				bits_COND_CAN_RANGE_ATTACK2,
+			0,
+			"Combat Face"},
 };
 
 //=========================================================
 // Suppressing fire - don't stop shooting until the clip is
 // empty or grunt gets hurt.
 //=========================================================
-Task_t	tlShockTrooperSignalSuppress[] =
-{
-	{ TASK_STOP_MOVING,					0						},
-	{ TASK_FACE_IDEAL,					(float)0				},
-	{ TASK_PLAY_SEQUENCE_FACE_ENEMY,	(float)ACT_SIGNAL2		},
-	{ TASK_FACE_ENEMY,					(float)0				},
-	{ TASK_GRUNT_CHECK_FIRE,			(float)0				},
-	{ TASK_RANGE_ATTACK1,				(float)0				},
-	{ TASK_FACE_ENEMY,					(float)0				},
-	{ TASK_GRUNT_CHECK_FIRE,			(float)0				},
-	{ TASK_RANGE_ATTACK1,				(float)0				},
-	{ TASK_FACE_ENEMY,					(float)0				},
-	{ TASK_GRUNT_CHECK_FIRE,			(float)0				},
-	{ TASK_RANGE_ATTACK1,				(float)0				},
-	{ TASK_FACE_ENEMY,					(float)0				},
-	{ TASK_GRUNT_CHECK_FIRE,			(float)0				},
-	{ TASK_RANGE_ATTACK1,				(float)0				},
-	{ TASK_FACE_ENEMY,					(float)0				},
-	{ TASK_GRUNT_CHECK_FIRE,			(float)0				},
-	{ TASK_RANGE_ATTACK1,				(float)0				},
-};
-
-Schedule_t	slShockTrooperSignalSuppress[] =
-{
+Task_t tlShockTrooperSignalSuppress[] =
 	{
-		tlShockTrooperSignalSuppress,
-		ARRAYSIZE(tlShockTrooperSignalSuppress),
-		bits_COND_ENEMY_DEAD |
-		bits_COND_LIGHT_DAMAGE |
-		bits_COND_HEAVY_DAMAGE |
-		bits_COND_HEAR_SOUND |
-		bits_COND_GRUNT_NOFIRE |
-		bits_COND_NO_AMMO_LOADED,
-
-		bits_SOUND_DANGER,
-		"SignalSuppress"
-	},
+		{TASK_STOP_MOVING, 0},
+		{TASK_FACE_IDEAL, (float)0},
+		{TASK_PLAY_SEQUENCE_FACE_ENEMY, (float)ACT_SIGNAL2},
+		{TASK_FACE_ENEMY, (float)0},
+		{TASK_GRUNT_CHECK_FIRE, (float)0},
+		{TASK_RANGE_ATTACK1, (float)0},
+		{TASK_FACE_ENEMY, (float)0},
+		{TASK_GRUNT_CHECK_FIRE, (float)0},
+		{TASK_RANGE_ATTACK1, (float)0},
+		{TASK_FACE_ENEMY, (float)0},
+		{TASK_GRUNT_CHECK_FIRE, (float)0},
+		{TASK_RANGE_ATTACK1, (float)0},
+		{TASK_FACE_ENEMY, (float)0},
+		{TASK_GRUNT_CHECK_FIRE, (float)0},
+		{TASK_RANGE_ATTACK1, (float)0},
+		{TASK_FACE_ENEMY, (float)0},
+		{TASK_GRUNT_CHECK_FIRE, (float)0},
+		{TASK_RANGE_ATTACK1, (float)0},
 };
 
-Task_t	tlShockTrooperSuppress[] =
-{
-	{ TASK_STOP_MOVING,			0							},
-	{ TASK_FACE_ENEMY,			(float)0					},
-	{ TASK_GRUNT_CHECK_FIRE,	(float)0					},
-	{ TASK_RANGE_ATTACK1,		(float)0					},
-	{ TASK_FACE_ENEMY,			(float)0					},
-	{ TASK_GRUNT_CHECK_FIRE,	(float)0					},
-	{ TASK_RANGE_ATTACK1,		(float)0					},
-	{ TASK_FACE_ENEMY,			(float)0					},
-	{ TASK_GRUNT_CHECK_FIRE,	(float)0					},
-	{ TASK_RANGE_ATTACK1,		(float)0					},
-	{ TASK_FACE_ENEMY,			(float)0					},
-	{ TASK_GRUNT_CHECK_FIRE,	(float)0					},
-	{ TASK_RANGE_ATTACK1,		(float)0					},
-	{ TASK_FACE_ENEMY,			(float)0					},
-	{ TASK_GRUNT_CHECK_FIRE,	(float)0					},
-	{ TASK_RANGE_ATTACK1,		(float)0					},
-};
-
-Schedule_t	slShockTrooperSuppress[] =
-{
+Schedule_t slShockTrooperSignalSuppress[] =
 	{
-		tlShockTrooperSuppress,
-		ARRAYSIZE(tlShockTrooperSuppress),
-		bits_COND_ENEMY_DEAD |
-		bits_COND_LIGHT_DAMAGE |
-		bits_COND_HEAVY_DAMAGE |
-		bits_COND_HEAR_SOUND |
-		bits_COND_GRUNT_NOFIRE |
-		bits_COND_NO_AMMO_LOADED,
+		{tlShockTrooperSignalSuppress,
+			ARRAYSIZE(tlShockTrooperSignalSuppress),
+			bits_COND_ENEMY_DEAD |
+				bits_COND_LIGHT_DAMAGE |
+				bits_COND_HEAVY_DAMAGE |
+				bits_COND_HEAR_SOUND |
+				bits_COND_GRUNT_NOFIRE |
+				bits_COND_NO_AMMO_LOADED,
 
-		bits_SOUND_DANGER,
-		"Suppress"
-	},
+			bits_SOUND_DANGER,
+			"SignalSuppress"},
+};
+
+Task_t tlShockTrooperSuppress[] =
+	{
+		{TASK_STOP_MOVING, 0},
+		{TASK_FACE_ENEMY, (float)0},
+		{TASK_GRUNT_CHECK_FIRE, (float)0},
+		{TASK_RANGE_ATTACK1, (float)0},
+		{TASK_FACE_ENEMY, (float)0},
+		{TASK_GRUNT_CHECK_FIRE, (float)0},
+		{TASK_RANGE_ATTACK1, (float)0},
+		{TASK_FACE_ENEMY, (float)0},
+		{TASK_GRUNT_CHECK_FIRE, (float)0},
+		{TASK_RANGE_ATTACK1, (float)0},
+		{TASK_FACE_ENEMY, (float)0},
+		{TASK_GRUNT_CHECK_FIRE, (float)0},
+		{TASK_RANGE_ATTACK1, (float)0},
+		{TASK_FACE_ENEMY, (float)0},
+		{TASK_GRUNT_CHECK_FIRE, (float)0},
+		{TASK_RANGE_ATTACK1, (float)0},
+};
+
+Schedule_t slShockTrooperSuppress[] =
+	{
+		{tlShockTrooperSuppress,
+			ARRAYSIZE(tlShockTrooperSuppress),
+			bits_COND_ENEMY_DEAD |
+				bits_COND_LIGHT_DAMAGE |
+				bits_COND_HEAVY_DAMAGE |
+				bits_COND_HEAR_SOUND |
+				bits_COND_GRUNT_NOFIRE |
+				bits_COND_NO_AMMO_LOADED,
+
+			bits_SOUND_DANGER,
+			"Suppress"},
 };
 
 
@@ -1380,228 +1358,211 @@ Schedule_t	slShockTrooperSuppress[] =
 // to attack to break a grunt's run to cover schedule, but
 // when a grunt is in cover, we do want them to attack if they can.
 //=========================================================
-Task_t	tlShockTrooperWaitInCover[] =
-{
-	{ TASK_STOP_MOVING,				(float)0					},
-	{ TASK_SET_ACTIVITY,			(float)ACT_IDLE				},
-	{ TASK_WAIT_FACE_ENEMY,			(float)1					},
+Task_t tlShockTrooperWaitInCover[] =
+	{
+		{TASK_STOP_MOVING, (float)0},
+		{TASK_SET_ACTIVITY, (float)ACT_IDLE},
+		{TASK_WAIT_FACE_ENEMY, (float)1},
 };
 
-Schedule_t	slShockTrooperWaitInCover[] =
-{
+Schedule_t slShockTrooperWaitInCover[] =
 	{
-		tlShockTrooperWaitInCover,
-		ARRAYSIZE(tlShockTrooperWaitInCover),
-		bits_COND_NEW_ENEMY |
-		bits_COND_HEAR_SOUND |
-		bits_COND_CAN_RANGE_ATTACK1 |
-		bits_COND_CAN_RANGE_ATTACK2 |
-		bits_COND_CAN_MELEE_ATTACK1 |
-		bits_COND_CAN_MELEE_ATTACK2,
+		{tlShockTrooperWaitInCover,
+			ARRAYSIZE(tlShockTrooperWaitInCover),
+			bits_COND_NEW_ENEMY |
+				bits_COND_HEAR_SOUND |
+				bits_COND_CAN_RANGE_ATTACK1 |
+				bits_COND_CAN_RANGE_ATTACK2 |
+				bits_COND_CAN_MELEE_ATTACK1 |
+				bits_COND_CAN_MELEE_ATTACK2,
 
-		bits_SOUND_DANGER,
-		"GruntWaitInCover"
-	},
+			bits_SOUND_DANGER,
+			"GruntWaitInCover"},
 };
 
 //=========================================================
 // run to cover.
 // !!!BUGBUG - set a decent fail schedule here.
 //=========================================================
-Task_t	tlShockTrooperTakeCover1[] =
-{
-	{ TASK_STOP_MOVING,				(float)0							},
-	{ TASK_SET_FAIL_SCHEDULE,		(float)SCHED_GRUNT_TAKECOVER_FAILED	},
-	{ TASK_WAIT,					(float)0.2							},
-	{ TASK_FIND_COVER_FROM_ENEMY,	(float)0							},
-	{ TASK_GRUNT_SPEAK_SENTENCE,	(float)0							},
-	{ TASK_RUN_PATH,				(float)0							},
-	{ TASK_WAIT_FOR_MOVEMENT,		(float)0							},
-	{ TASK_REMEMBER,				(float)bits_MEMORY_INCOVER			},
-	{ TASK_SET_SCHEDULE,			(float)SCHED_GRUNT_WAIT_FACE_ENEMY	},
+Task_t tlShockTrooperTakeCover1[] =
+	{
+		{TASK_STOP_MOVING, (float)0},
+		{TASK_SET_FAIL_SCHEDULE, (float)SCHED_GRUNT_TAKECOVER_FAILED},
+		{TASK_WAIT, (float)0.2},
+		{TASK_FIND_COVER_FROM_ENEMY, (float)0},
+		{TASK_GRUNT_SPEAK_SENTENCE, (float)0},
+		{TASK_RUN_PATH, (float)0},
+		{TASK_WAIT_FOR_MOVEMENT, (float)0},
+		{TASK_REMEMBER, (float)bits_MEMORY_INCOVER},
+		{TASK_SET_SCHEDULE, (float)SCHED_GRUNT_WAIT_FACE_ENEMY},
 };
 
-Schedule_t	slShockTrooperTakeCover[] =
-{
+Schedule_t slShockTrooperTakeCover[] =
 	{
-		tlShockTrooperTakeCover1,
-		ARRAYSIZE(tlShockTrooperTakeCover1),
-		0,
-		0,
-		"TakeCover"
-	},
+		{tlShockTrooperTakeCover1,
+			ARRAYSIZE(tlShockTrooperTakeCover1),
+			0,
+			0,
+			"TakeCover"},
 };
 
 //=========================================================
 // drop grenade then run to cover.
 //=========================================================
-Task_t	tlShockTrooperGrenadeCover1[] =
-{
-	{ TASK_STOP_MOVING,						(float)0							},
-	{ TASK_FIND_COVER_FROM_ENEMY,			(float)99							},
-	{ TASK_FIND_FAR_NODE_COVER_FROM_ENEMY,	(float)384							},
-	{ TASK_PLAY_SEQUENCE,					(float)ACT_SPECIAL_ATTACK1			},
-	{ TASK_CLEAR_MOVE_WAIT,					(float)0							},
-	{ TASK_RUN_PATH,						(float)0							},
-	{ TASK_WAIT_FOR_MOVEMENT,				(float)0							},
-	{ TASK_SET_SCHEDULE,					(float)SCHED_GRUNT_WAIT_FACE_ENEMY	},
+Task_t tlShockTrooperGrenadeCover1[] =
+	{
+		{TASK_STOP_MOVING, (float)0},
+		{TASK_FIND_COVER_FROM_ENEMY, (float)99},
+		{TASK_FIND_FAR_NODE_COVER_FROM_ENEMY, (float)384},
+		{TASK_PLAY_SEQUENCE, (float)ACT_SPECIAL_ATTACK1},
+		{TASK_CLEAR_MOVE_WAIT, (float)0},
+		{TASK_RUN_PATH, (float)0},
+		{TASK_WAIT_FOR_MOVEMENT, (float)0},
+		{TASK_SET_SCHEDULE, (float)SCHED_GRUNT_WAIT_FACE_ENEMY},
 };
 
-Schedule_t	slShockTrooperGrenadeCover[] =
-{
+Schedule_t slShockTrooperGrenadeCover[] =
 	{
-		tlShockTrooperGrenadeCover1,
-		ARRAYSIZE(tlShockTrooperGrenadeCover1),
-		0,
-		0,
-		"GrenadeCover"
-	},
+		{tlShockTrooperGrenadeCover1,
+			ARRAYSIZE(tlShockTrooperGrenadeCover1),
+			0,
+			0,
+			"GrenadeCover"},
 };
 
 
 //=========================================================
 // drop grenade then run to cover.
 //=========================================================
-Task_t	tlShockTrooperTossGrenadeCover1[] =
-{
-	{ TASK_FACE_ENEMY,						(float)0							},
-	{ TASK_RANGE_ATTACK2, 					(float)0							},
-	{ TASK_SET_SCHEDULE,					(float)SCHED_TAKE_COVER_FROM_ENEMY	},
+Task_t tlShockTrooperTossGrenadeCover1[] =
+	{
+		{TASK_FACE_ENEMY, (float)0},
+		{TASK_RANGE_ATTACK2, (float)0},
+		{TASK_SET_SCHEDULE, (float)SCHED_TAKE_COVER_FROM_ENEMY},
 };
 
-Schedule_t	slShockTrooperTossGrenadeCover[] =
-{
+Schedule_t slShockTrooperTossGrenadeCover[] =
 	{
-		tlShockTrooperTossGrenadeCover1,
-		ARRAYSIZE(tlShockTrooperTossGrenadeCover1),
-		0,
-		0,
-		"TossGrenadeCover"
-	},
+		{tlShockTrooperTossGrenadeCover1,
+			ARRAYSIZE(tlShockTrooperTossGrenadeCover1),
+			0,
+			0,
+			"TossGrenadeCover"},
 };
 
 //=========================================================
 // hide from the loudest sound source (to run from grenade)
 //=========================================================
-Task_t	tlShockTrooperTakeCoverFromBestSound[] =
-{
-	{ TASK_SET_FAIL_SCHEDULE,			(float)SCHED_COWER			},// duck and cover if cannot move from explosion
-	{ TASK_STOP_MOVING,					(float)0					},
-	{ TASK_FIND_COVER_FROM_BEST_SOUND,	(float)0					},
-	{ TASK_RUN_PATH,					(float)0					},
-	{ TASK_WAIT_FOR_MOVEMENT,			(float)0					},
-	{ TASK_REMEMBER,					(float)bits_MEMORY_INCOVER	},
-	{ TASK_TURN_LEFT,					(float)179					},
+Task_t tlShockTrooperTakeCoverFromBestSound[] =
+	{
+		{TASK_SET_FAIL_SCHEDULE, (float)SCHED_COWER}, // duck and cover if cannot move from explosion
+		{TASK_STOP_MOVING, (float)0},
+		{TASK_FIND_COVER_FROM_BEST_SOUND, (float)0},
+		{TASK_RUN_PATH, (float)0},
+		{TASK_WAIT_FOR_MOVEMENT, (float)0},
+		{TASK_REMEMBER, (float)bits_MEMORY_INCOVER},
+		{TASK_TURN_LEFT, (float)179},
 };
 
-Schedule_t	slShockTrooperTakeCoverFromBestSound[] =
-{
+Schedule_t slShockTrooperTakeCoverFromBestSound[] =
 	{
-		tlShockTrooperTakeCoverFromBestSound,
-		ARRAYSIZE(tlShockTrooperTakeCoverFromBestSound),
-		0,
-		0,
-		"GruntTakeCoverFromBestSound"
-	},
+		{tlShockTrooperTakeCoverFromBestSound,
+			ARRAYSIZE(tlShockTrooperTakeCoverFromBestSound),
+			0,
+			0,
+			"GruntTakeCoverFromBestSound"},
 };
 
 //=========================================================
 // Grunt reload schedule
 //=========================================================
-Task_t	tlShockTrooperHideReload[] =
-{
-	{ TASK_STOP_MOVING,				(float)0					},
-	{ TASK_SET_FAIL_SCHEDULE,		(float)SCHED_RELOAD			},
-	{ TASK_FIND_COVER_FROM_ENEMY,	(float)0					},
-	{ TASK_RUN_PATH,				(float)0					},
-	{ TASK_WAIT_FOR_MOVEMENT,		(float)0					},
-	{ TASK_REMEMBER,				(float)bits_MEMORY_INCOVER	},
-	{ TASK_FACE_ENEMY,				(float)0					},
-	{ TASK_PLAY_SEQUENCE,			(float)ACT_RELOAD			},
+Task_t tlShockTrooperHideReload[] =
+	{
+		{TASK_STOP_MOVING, (float)0},
+		{TASK_SET_FAIL_SCHEDULE, (float)SCHED_RELOAD},
+		{TASK_FIND_COVER_FROM_ENEMY, (float)0},
+		{TASK_RUN_PATH, (float)0},
+		{TASK_WAIT_FOR_MOVEMENT, (float)0},
+		{TASK_REMEMBER, (float)bits_MEMORY_INCOVER},
+		{TASK_FACE_ENEMY, (float)0},
+		{TASK_PLAY_SEQUENCE, (float)ACT_RELOAD},
 };
 
 Schedule_t slShockTrooperHideReload[] =
-{
 	{
-		tlShockTrooperHideReload,
-		ARRAYSIZE(tlShockTrooperHideReload),
-		bits_COND_HEAVY_DAMAGE |
-		bits_COND_HEAR_SOUND,
+		{tlShockTrooperHideReload,
+			ARRAYSIZE(tlShockTrooperHideReload),
+			bits_COND_HEAVY_DAMAGE |
+				bits_COND_HEAR_SOUND,
 
-		bits_SOUND_DANGER,
-		"GruntHideReload"
-	}
-};
+			bits_SOUND_DANGER,
+			"GruntHideReload"}};
 
 //=========================================================
 // Do a turning sweep of the area
 //=========================================================
-Task_t	tlShockTrooperSweep[] =
-{
-	{ TASK_TURN_LEFT,			(float)179	},
-	{ TASK_WAIT,				(float)1	},
-	{ TASK_TURN_LEFT,			(float)179	},
-	{ TASK_WAIT,				(float)1	},
+Task_t tlShockTrooperSweep[] =
+	{
+		{TASK_TURN_LEFT, (float)179},
+		{TASK_WAIT, (float)1},
+		{TASK_TURN_LEFT, (float)179},
+		{TASK_WAIT, (float)1},
 };
 
-Schedule_t	slShockTrooperSweep[] =
-{
+Schedule_t slShockTrooperSweep[] =
 	{
-		tlShockTrooperSweep,
-		ARRAYSIZE(tlShockTrooperSweep),
+		{tlShockTrooperSweep,
+			ARRAYSIZE(tlShockTrooperSweep),
 
-		bits_COND_NEW_ENEMY |
-		bits_COND_LIGHT_DAMAGE |
-		bits_COND_HEAVY_DAMAGE |
-		bits_COND_CAN_RANGE_ATTACK1 |
-		bits_COND_CAN_RANGE_ATTACK2 |
-		bits_COND_HEAR_SOUND,
+			bits_COND_NEW_ENEMY |
+				bits_COND_LIGHT_DAMAGE |
+				bits_COND_HEAVY_DAMAGE |
+				bits_COND_CAN_RANGE_ATTACK1 |
+				bits_COND_CAN_RANGE_ATTACK2 |
+				bits_COND_HEAR_SOUND,
 
-		bits_SOUND_WORLD |// sound flags
-		bits_SOUND_DANGER |
-		bits_SOUND_PLAYER,
+			bits_SOUND_WORLD | // sound flags
+				bits_SOUND_DANGER |
+				bits_SOUND_PLAYER,
 
-		"Grunt Sweep"
-	},
+			"Grunt Sweep"},
 };
 
 //=========================================================
 // primary range attack. Overriden because base class stops attacking when the enemy is occluded.
 // grunt's grenade toss requires the enemy be occluded.
 //=========================================================
-Task_t	tlShockTrooperRangeAttack1A[] =
-{
-	{ TASK_STOP_MOVING,			(float)0		},
-	{ TASK_PLAY_SEQUENCE_FACE_ENEMY,		(float)ACT_CROUCH },
-	{ TASK_GRUNT_CHECK_FIRE,	(float)0		},
-	{ TASK_RANGE_ATTACK1,		(float)0		},
-	{ TASK_FACE_ENEMY,			(float)0		},
-	{ TASK_GRUNT_CHECK_FIRE,	(float)0		},
-	{ TASK_RANGE_ATTACK1,		(float)0		},
-	{ TASK_FACE_ENEMY,			(float)0		},
-	{ TASK_GRUNT_CHECK_FIRE,	(float)0		},
-	{ TASK_RANGE_ATTACK1,		(float)0		},
-	{ TASK_FACE_ENEMY,			(float)0		},
-	{ TASK_GRUNT_CHECK_FIRE,	(float)0		},
-	{ TASK_RANGE_ATTACK1,		(float)0		},
+Task_t tlShockTrooperRangeAttack1A[] =
+	{
+		{TASK_STOP_MOVING, (float)0},
+		{TASK_PLAY_SEQUENCE_FACE_ENEMY, (float)ACT_CROUCH},
+		{TASK_GRUNT_CHECK_FIRE, (float)0},
+		{TASK_RANGE_ATTACK1, (float)0},
+		{TASK_FACE_ENEMY, (float)0},
+		{TASK_GRUNT_CHECK_FIRE, (float)0},
+		{TASK_RANGE_ATTACK1, (float)0},
+		{TASK_FACE_ENEMY, (float)0},
+		{TASK_GRUNT_CHECK_FIRE, (float)0},
+		{TASK_RANGE_ATTACK1, (float)0},
+		{TASK_FACE_ENEMY, (float)0},
+		{TASK_GRUNT_CHECK_FIRE, (float)0},
+		{TASK_RANGE_ATTACK1, (float)0},
 };
 
-Schedule_t	slShockTrooperRangeAttack1A[] =
-{
+Schedule_t slShockTrooperRangeAttack1A[] =
 	{
-		tlShockTrooperRangeAttack1A,
-		ARRAYSIZE(tlShockTrooperRangeAttack1A),
-		bits_COND_NEW_ENEMY |
-		bits_COND_ENEMY_DEAD |
-		bits_COND_HEAVY_DAMAGE |
-		bits_COND_ENEMY_OCCLUDED |
-		bits_COND_HEAR_SOUND |
-		bits_COND_GRUNT_NOFIRE |
-		bits_COND_NO_AMMO_LOADED,
+		{tlShockTrooperRangeAttack1A,
+			ARRAYSIZE(tlShockTrooperRangeAttack1A),
+			bits_COND_NEW_ENEMY |
+				bits_COND_ENEMY_DEAD |
+				bits_COND_HEAVY_DAMAGE |
+				bits_COND_ENEMY_OCCLUDED |
+				bits_COND_HEAR_SOUND |
+				bits_COND_GRUNT_NOFIRE |
+				bits_COND_NO_AMMO_LOADED,
 
-		bits_SOUND_DANGER,
-		"Range Attack1A"
-	},
+			bits_SOUND_DANGER,
+			"Range Attack1A"},
 };
 
 
@@ -1609,180 +1570,169 @@ Schedule_t	slShockTrooperRangeAttack1A[] =
 // primary range attack. Overriden because base class stops attacking when the enemy is occluded.
 // grunt's grenade toss requires the enemy be occluded.
 //=========================================================
-Task_t	tlShockTrooperRangeAttack1B[] =
-{
-	{ TASK_STOP_MOVING,				(float)0		},
-	{ TASK_PLAY_SEQUENCE_FACE_ENEMY,(float)ACT_IDLE_ANGRY  },
-	{ TASK_GRUNT_CHECK_FIRE,	(float)0		},
-	{ TASK_RANGE_ATTACK1,		(float)0		},
-	{ TASK_FACE_ENEMY,			(float)0		},
-	{ TASK_GRUNT_CHECK_FIRE,	(float)0		},
-	{ TASK_RANGE_ATTACK1,		(float)0		},
-	{ TASK_FACE_ENEMY,			(float)0		},
-	{ TASK_GRUNT_CHECK_FIRE,	(float)0		},
-	{ TASK_RANGE_ATTACK1,		(float)0		},
-	{ TASK_FACE_ENEMY,			(float)0		},
-	{ TASK_GRUNT_CHECK_FIRE,	(float)0		},
-	{ TASK_RANGE_ATTACK1,		(float)0		},
+Task_t tlShockTrooperRangeAttack1B[] =
+	{
+		{TASK_STOP_MOVING, (float)0},
+		{TASK_PLAY_SEQUENCE_FACE_ENEMY, (float)ACT_IDLE_ANGRY},
+		{TASK_GRUNT_CHECK_FIRE, (float)0},
+		{TASK_RANGE_ATTACK1, (float)0},
+		{TASK_FACE_ENEMY, (float)0},
+		{TASK_GRUNT_CHECK_FIRE, (float)0},
+		{TASK_RANGE_ATTACK1, (float)0},
+		{TASK_FACE_ENEMY, (float)0},
+		{TASK_GRUNT_CHECK_FIRE, (float)0},
+		{TASK_RANGE_ATTACK1, (float)0},
+		{TASK_FACE_ENEMY, (float)0},
+		{TASK_GRUNT_CHECK_FIRE, (float)0},
+		{TASK_RANGE_ATTACK1, (float)0},
 };
 
-Schedule_t	slShockTrooperRangeAttack1B[] =
-{
+Schedule_t slShockTrooperRangeAttack1B[] =
 	{
-		tlShockTrooperRangeAttack1B,
-		ARRAYSIZE(tlShockTrooperRangeAttack1B),
-		bits_COND_NEW_ENEMY |
-		bits_COND_ENEMY_DEAD |
-		bits_COND_HEAVY_DAMAGE |
-		bits_COND_ENEMY_OCCLUDED |
-		bits_COND_NO_AMMO_LOADED |
-		bits_COND_GRUNT_NOFIRE |
-		bits_COND_HEAR_SOUND,
+		{tlShockTrooperRangeAttack1B,
+			ARRAYSIZE(tlShockTrooperRangeAttack1B),
+			bits_COND_NEW_ENEMY |
+				bits_COND_ENEMY_DEAD |
+				bits_COND_HEAVY_DAMAGE |
+				bits_COND_ENEMY_OCCLUDED |
+				bits_COND_NO_AMMO_LOADED |
+				bits_COND_GRUNT_NOFIRE |
+				bits_COND_HEAR_SOUND,
 
-		bits_SOUND_DANGER,
-		"Range Attack1B"
-	},
+			bits_SOUND_DANGER,
+			"Range Attack1B"},
 };
 
 //=========================================================
 // secondary range attack. Overriden because base class stops attacking when the enemy is occluded.
 // grunt's grenade toss requires the enemy be occluded.
 //=========================================================
-Task_t	tlShockTrooperRangeAttack2[] =
-{
-	{ TASK_STOP_MOVING,				(float)0					},
-	{ TASK_GRUNT_FACE_TOSS_DIR,		(float)0					},
-	{ TASK_PLAY_SEQUENCE,			(float)ACT_RANGE_ATTACK2	},
-	{ TASK_SET_SCHEDULE,			(float)SCHED_GRUNT_WAIT_FACE_ENEMY	},// don't run immediately after throwing grenade.
-};
-
-Schedule_t	slShockTrooperRangeAttack2[] =
-{
+Task_t tlShockTrooperRangeAttack2[] =
 	{
-		tlShockTrooperRangeAttack2,
-		ARRAYSIZE(tlShockTrooperRangeAttack2),
-		0,
-		0,
-		"RangeAttack2"
-	},
+		{TASK_STOP_MOVING, (float)0},
+		{TASK_GRUNT_FACE_TOSS_DIR, (float)0},
+		{TASK_PLAY_SEQUENCE, (float)ACT_RANGE_ATTACK2},
+		{TASK_SET_SCHEDULE, (float)SCHED_GRUNT_WAIT_FACE_ENEMY}, // don't run immediately after throwing grenade.
 };
 
-
-//=========================================================
-// repel 
-//=========================================================
-Task_t	tlShockTrooperRepel[] =
-{
-	{ TASK_STOP_MOVING,			(float)0		},
-	{ TASK_FACE_IDEAL,			(float)0		},
-	{ TASK_PLAY_SEQUENCE,		(float)ACT_GLIDE 	},
-};
-
-Schedule_t	slShockTrooperRepel[] =
-{
+Schedule_t slShockTrooperRangeAttack2[] =
 	{
-		tlShockTrooperRepel,
-		ARRAYSIZE(tlShockTrooperRepel),
-		bits_COND_SEE_ENEMY |
-		bits_COND_NEW_ENEMY |
-		bits_COND_LIGHT_DAMAGE |
-		bits_COND_HEAVY_DAMAGE |
-		bits_COND_HEAR_SOUND,
-
-		bits_SOUND_DANGER |
-		bits_SOUND_COMBAT |
-		bits_SOUND_PLAYER,
-		"Repel"
-	},
+		{tlShockTrooperRangeAttack2,
+			ARRAYSIZE(tlShockTrooperRangeAttack2),
+			0,
+			0,
+			"RangeAttack2"},
 };
 
 
 //=========================================================
-// repel 
+// repel
 //=========================================================
-Task_t	tlShockTrooperRepelAttack[] =
-{
-	{ TASK_STOP_MOVING,			(float)0		},
-	{ TASK_FACE_ENEMY,			(float)0		},
-	{ TASK_PLAY_SEQUENCE,		(float)ACT_FLY 	},
-};
-
-Schedule_t	slShockTrooperRepelAttack[] =
-{
+Task_t tlShockTrooperRepel[] =
 	{
-		tlShockTrooperRepelAttack,
-		ARRAYSIZE(tlShockTrooperRepelAttack),
-		bits_COND_ENEMY_OCCLUDED,
-		0,
-		"Repel Attack"
-	},
+		{TASK_STOP_MOVING, (float)0},
+		{TASK_FACE_IDEAL, (float)0},
+		{TASK_PLAY_SEQUENCE, (float)ACT_GLIDE},
+};
+
+Schedule_t slShockTrooperRepel[] =
+	{
+		{tlShockTrooperRepel,
+			ARRAYSIZE(tlShockTrooperRepel),
+			bits_COND_SEE_ENEMY |
+				bits_COND_NEW_ENEMY |
+				bits_COND_LIGHT_DAMAGE |
+				bits_COND_HEAVY_DAMAGE |
+				bits_COND_HEAR_SOUND,
+
+			bits_SOUND_DANGER |
+				bits_SOUND_COMBAT |
+				bits_SOUND_PLAYER,
+			"Repel"},
+};
+
+
+//=========================================================
+// repel
+//=========================================================
+Task_t tlShockTrooperRepelAttack[] =
+	{
+		{TASK_STOP_MOVING, (float)0},
+		{TASK_FACE_ENEMY, (float)0},
+		{TASK_PLAY_SEQUENCE, (float)ACT_FLY},
+};
+
+Schedule_t slShockTrooperRepelAttack[] =
+	{
+		{tlShockTrooperRepelAttack,
+			ARRAYSIZE(tlShockTrooperRepelAttack),
+			bits_COND_ENEMY_OCCLUDED,
+			0,
+			"Repel Attack"},
 };
 
 //=========================================================
 // repel land
 //=========================================================
-Task_t	tlShockTrooperRepelLand[] =
-{
-	{ TASK_STOP_MOVING,			(float)0		},
-	{ TASK_PLAY_SEQUENCE,		(float)ACT_LAND	},
-	{ TASK_GET_PATH_TO_LASTPOSITION,(float)0				},
-	{ TASK_RUN_PATH,				(float)0				},
-	{ TASK_WAIT_FOR_MOVEMENT,		(float)0				},
-	{ TASK_CLEAR_LASTPOSITION,		(float)0				},
-};
-
-Schedule_t	slShockTrooperRepelLand[] =
-{
+Task_t tlShockTrooperRepelLand[] =
 	{
-		tlShockTrooperRepelLand,
-		ARRAYSIZE(tlShockTrooperRepelLand),
-		bits_COND_SEE_ENEMY |
-		bits_COND_NEW_ENEMY |
-		bits_COND_LIGHT_DAMAGE |
-		bits_COND_HEAVY_DAMAGE |
-		bits_COND_HEAR_SOUND,
+		{TASK_STOP_MOVING, (float)0},
+		{TASK_PLAY_SEQUENCE, (float)ACT_LAND},
+		{TASK_GET_PATH_TO_LASTPOSITION, (float)0},
+		{TASK_RUN_PATH, (float)0},
+		{TASK_WAIT_FOR_MOVEMENT, (float)0},
+		{TASK_CLEAR_LASTPOSITION, (float)0},
+};
 
-		bits_SOUND_DANGER |
-		bits_SOUND_COMBAT |
-		bits_SOUND_PLAYER,
-		"Repel Land"
-	},
+Schedule_t slShockTrooperRepelLand[] =
+	{
+		{tlShockTrooperRepelLand,
+			ARRAYSIZE(tlShockTrooperRepelLand),
+			bits_COND_SEE_ENEMY |
+				bits_COND_NEW_ENEMY |
+				bits_COND_LIGHT_DAMAGE |
+				bits_COND_HEAVY_DAMAGE |
+				bits_COND_HEAR_SOUND,
+
+			bits_SOUND_DANGER |
+				bits_SOUND_COMBAT |
+				bits_SOUND_PLAYER,
+			"Repel Land"},
 };
 
 
-DEFINE_CUSTOM_SCHEDULES(CShockTrooper)
-{
+DEFINE_CUSTOM_SCHEDULES(CShockTrooper){
 	slShockTrooperFail,
-		slShockTrooperCombatFail,
-		slShockTrooperVictoryDance,
-		slShockTrooperEstablishLineOfFire,
-		slShockTrooperFoundEnemy,
-		slShockTrooperCombatFace,
-		slShockTrooperSignalSuppress,
-		slShockTrooperSuppress,
-		slShockTrooperWaitInCover,
-		slShockTrooperTakeCover,
-		slShockTrooperGrenadeCover,
-		slShockTrooperTossGrenadeCover,
-		slShockTrooperTakeCoverFromBestSound,
-		slShockTrooperHideReload,
-		slShockTrooperSweep,
-		slShockTrooperRangeAttack1A,
-		slShockTrooperRangeAttack1B,
-		slShockTrooperRangeAttack2,
-		slShockTrooperRepel,
-		slShockTrooperRepelAttack,
-		slShockTrooperRepelLand,
+	slShockTrooperCombatFail,
+	slShockTrooperVictoryDance,
+	slShockTrooperEstablishLineOfFire,
+	slShockTrooperFoundEnemy,
+	slShockTrooperCombatFace,
+	slShockTrooperSignalSuppress,
+	slShockTrooperSuppress,
+	slShockTrooperWaitInCover,
+	slShockTrooperTakeCover,
+	slShockTrooperGrenadeCover,
+	slShockTrooperTossGrenadeCover,
+	slShockTrooperTakeCoverFromBestSound,
+	slShockTrooperHideReload,
+	slShockTrooperSweep,
+	slShockTrooperRangeAttack1A,
+	slShockTrooperRangeAttack1B,
+	slShockTrooperRangeAttack2,
+	slShockTrooperRepel,
+	slShockTrooperRepelAttack,
+	slShockTrooperRepelLand,
 };
 
 IMPLEMENT_CUSTOM_SCHEDULES(CShockTrooper, CSquadMonster);
 
 //=========================================================
-// SetActivity 
+// SetActivity
 //=========================================================
 void CShockTrooper::SetActivity(Activity NewActivity)
 {
-	int	iSequence = ACTIVITY_NOT_AVAILABLE;
+	int iSequence = ACTIVITY_NOT_AVAILABLE;
 	void* pmodel = GET_MODEL_PTR(ENT(pev));
 
 	switch (NewActivity)
@@ -1801,7 +1751,7 @@ void CShockTrooper::SetActivity(Activity NewActivity)
 		}
 		break;
 	case ACT_RANGE_ATTACK2:
-		// grunt is going to a secondary long range attack. This may be a thrown 
+		// grunt is going to a secondary long range attack. This may be a thrown
 		// grenade or fired grenade, we must determine which and pick proper sequence
 		// get toss anim
 		iSequence = LookupSequence("throwgrenade");
@@ -1850,7 +1800,7 @@ void CShockTrooper::SetActivity(Activity NewActivity)
 			pev->frame = 0;
 		}
 
-		pev->sequence = iSequence;	// Set to the reset anim (if it's there)
+		pev->sequence = iSequence; // Set to the reset anim (if it's there)
 		ResetSequenceInfo();
 		SetYawSpeed();
 	}
@@ -1858,7 +1808,7 @@ void CShockTrooper::SetActivity(Activity NewActivity)
 	{
 		// Not available try to get default anim
 		ALERT(at_console, "%s has no sequence for act:%d\n", STRING(pev->classname), NewActivity);
-		pev->sequence = 0;	// Set to the reset anim (if it's there)
+		pev->sequence = 0; // Set to the reset anim (if it's there)
 	}
 }
 
@@ -1871,10 +1821,10 @@ Schedule_t* CShockTrooper::GetSchedule()
 	// clear old sentence
 	m_iSentence = ShockTrooper_SENT_NONE;
 
-	// flying? If PRONE, barnacle has me. IF not, it's assumed I am rapelling. 
+	// flying? If PRONE, barnacle has me. IF not, it's assumed I am rapelling.
 	if (pev->movetype == MOVETYPE_FLY && m_MonsterState != MONSTERSTATE_PRONE)
 	{
-		if (pev->flags & FL_ONGROUND)
+		if ((pev->flags & FL_ONGROUND) != 0)
 		{
 			// just landed
 			pev->movetype = MOVETYPE_STEP;
@@ -1882,7 +1832,7 @@ Schedule_t* CShockTrooper::GetSchedule()
 		}
 		else
 		{
-			// repel down a rope, 
+			// repel down a rope,
 			if (m_MonsterState == MONSTERSTATE_COMBAT)
 				return GetScheduleOfType(SCHED_GRUNT_REPEL_ATTACK);
 			else
@@ -1899,15 +1849,15 @@ Schedule_t* CShockTrooper::GetSchedule()
 		ASSERT(pSound != NULL);
 		if (pSound)
 		{
-			if (pSound->m_iType & bits_SOUND_DANGER)
+			if ((pSound->m_iType & bits_SOUND_DANGER) != 0)
 			{
 				// dangerous sound nearby!
 
 				//!!!KELLY - currently, this is the grunt's signal that a grenade has landed nearby,
 				// and the grunt should find cover from the blast
 				// good place for "SHIT!" or some other colorful verbal indicator of dismay.
-				// It's not safe to play a verbal order here "Scatter", etc cause 
-				// this may only affect a single individual in a squad. 
+				// It's not safe to play a verbal order here "Scatter", etc cause
+				// this may only affect a single individual in a squad.
 
 				if (FOkToSpeak())
 				{
@@ -1940,7 +1890,7 @@ Schedule_t* CShockTrooper::GetSchedule()
 		{
 			if (InSquad())
 			{
-				MySquadLeader()->m_fEnemyEluded = FALSE;
+				MySquadLeader()->m_fEnemyEluded = false;
 
 				if (!IsLeader())
 				{
@@ -1948,23 +1898,23 @@ Schedule_t* CShockTrooper::GetSchedule()
 				}
 				else
 				{
-					//!!!KELLY - the leader of a squad of grunts has just seen the player or a 
+					//!!!KELLY - the leader of a squad of grunts has just seen the player or a
 					// monster and has made it the squad's enemy. You
 					// can check pev->flags for FL_CLIENT to determine whether this is the player
 					// or a monster. He's going to immediately start
-					// firing, though. If you'd like, we can make an alternate "first sight" 
+					// firing, though. If you'd like, we can make an alternate "first sight"
 					// schedule where the leader plays a handsign anim
 					// that gives us enough time to hear a short sentence or spoken command
 					// before he starts pluggin away.
-					if (FOkToSpeak())// && RANDOM_LONG(0,1))
+					if (FOkToSpeak()) // && RANDOM_LONG(0,1))
 					{
 						if ((m_hEnemy != NULL) && m_hEnemy->IsPlayer())
 							// player
 							SENTENCEG_PlayRndSz(ENT(pev), "ST_ALERT", ShockTrooper_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
 						else if ((m_hEnemy != NULL) &&
-							(m_hEnemy->Classify() != CLASS_PLAYER_ALLY) &&
-							(m_hEnemy->Classify() != CLASS_HUMAN_PASSIVE) &&
-							(m_hEnemy->Classify() != CLASS_MACHINE))
+								 (m_hEnemy->Classify() != CLASS_PLAYER_ALLY) &&
+								 (m_hEnemy->Classify() != CLASS_HUMAN_PASSIVE) &&
+								 (m_hEnemy->Classify() != CLASS_MACHINE))
 							// monster
 							SENTENCEG_PlayRndSz(ENT(pev), "ST_MONST", ShockTrooper_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
 
@@ -1985,9 +1935,9 @@ Schedule_t* CShockTrooper::GetSchedule()
 		// no ammo
 		else if (HasConditions(bits_COND_NO_AMMO_LOADED))
 		{
-			//!!!KELLY - this individual just realized he's out of bullet ammo. 
-			// He's going to try to find cover to run to and reload, but rarely, if 
-			// none is available, he'll drop and reload in the open here. 
+			//!!!KELLY - this individual just realized he's out of bullet ammo.
+			// He's going to try to find cover to run to and reload, but rarely, if
+			// none is available, he'll drop and reload in the open here.
 			return GetScheduleOfType(SCHED_GRUNT_COVER_AND_RELOAD);
 		}
 
@@ -2028,11 +1978,11 @@ Schedule_t* CShockTrooper::GetSchedule()
 			if (InSquad())
 			{
 				// if the enemy has eluded the squad and a squad member has just located the enemy
-				// and the enemy does not see the squad member, issue a call to the squad to waste a 
+				// and the enemy does not see the squad member, issue a call to the squad to waste a
 				// little time and give the player a chance to turn.
 				if (MySquadLeader()->m_fEnemyEluded && !HasConditions(bits_COND_ENEMY_FACING_ME))
 				{
-					MySquadLeader()->m_fEnemyEluded = FALSE;
+					MySquadLeader()->m_fEnemyEluded = false;
 					return GetScheduleOfType(SCHED_GRUNT_FOUND_ENEMY);
 				}
 			}
@@ -2068,9 +2018,9 @@ Schedule_t* CShockTrooper::GetSchedule()
 			}
 			else if (OccupySlot(bits_SLOTS_HGRUNT_ENGAGE))
 			{
-				//!!!KELLY - grunt cannot see the enemy and has just decided to 
-				// charge the enemy's position. 
-				if (FOkToSpeak())// && RANDOM_LONG(0,1))
+				//!!!KELLY - grunt cannot see the enemy and has just decided to
+				// charge the enemy's position.
+				if (FOkToSpeak()) // && RANDOM_LONG(0,1))
 				{
 					//SENTENCEG_PlayRndSz( ENT(pev), "ST_CHARGE", ShockTrooper_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
 					m_iSentence = ShockTrooper_SENT_CHARGE;
@@ -2216,7 +2166,7 @@ Schedule_t* CShockTrooper::GetScheduleOfType(int Type)
 	{
 		if (m_hEnemy->IsPlayer() && m_fFirstEncounter)
 		{
-			m_fFirstEncounter = FALSE;// after first encounter, leader won't issue handsigns anymore when he has a new enemy
+			m_fFirstEncounter = false; // after first encounter, leader won't issue handsigns anymore when he has a new enemy
 			return &slShockTrooperSignalSuppress[0];
 		}
 		else
@@ -2309,7 +2259,7 @@ public:
 	void Spawn() override;
 	void Precache() override;
 	void EXPORT RepelUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-	int m_iSpriteTexture;	// Don't save, precache
+	int m_iSpriteTexture; // Don't save, precache
 };
 
 LINK_ENTITY_TO_CLASS(monster_shocktrooper_repel, CShockTrooperRepel);
@@ -2364,25 +2314,25 @@ class CDeadShockTrooper : public CBaseMonster
 {
 public:
 	void Spawn() override;
-	int	Classify() override { return	CLASS_HUMAN_MILITARY; }
+	int Classify() override { return CLASS_HUMAN_MILITARY; }
 
-	void KeyValue(KeyValueData* pkvd) override;
+	bool KeyValue(KeyValueData* pkvd) override;
 
-	int	m_iPose;// which sequence to display	-- temporary, don't need to save
+	int m_iPose; // which sequence to display	-- temporary, don't need to save
 	static const char* m_szPoses[3];
 };
 
 const char* CDeadShockTrooper::m_szPoses[] = {"deadstomach", "deadside", "deadsitting"};
 
-void CDeadShockTrooper::KeyValue(KeyValueData* pkvd)
+bool CDeadShockTrooper::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq(pkvd->szKeyName, "pose"))
 	{
 		m_iPose = atoi(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		return true;
 	}
-	else
-		CBaseMonster::KeyValue(pkvd);
+
+	return CBaseMonster::KeyValue(pkvd);
 }
 
 LINK_ENTITY_TO_CLASS(monster_ShockTrooper_dead, CDeadShockTrooper);

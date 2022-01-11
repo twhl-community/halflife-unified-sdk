@@ -20,7 +20,7 @@ class CTFGoal : public CBaseAnimating
 public:
 	int Classify() override { return CLASS_NONE; }
 
-	void KeyValue(KeyValueData* pkvd) override;
+	bool KeyValue(KeyValueData* pkvd) override;
 
 	void Spawn() override;
 

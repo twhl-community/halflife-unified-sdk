@@ -29,16 +29,12 @@
 DECLARE_MESSAGE(m_StatusBar, StatusText);
 DECLARE_MESSAGE(m_StatusBar, StatusValue);
 
-#ifdef _TFC
-#define STATUSBAR_ID_LINE		2
-#else
-#define STATUSBAR_ID_LINE		1
-#endif
+#define STATUSBAR_ID_LINE 1
 
 float* GetClientColor(int clientIndex);
 extern float g_ColorYellow[3];
 
-int CHudStatusBar::Init()
+bool CHudStatusBar::Init()
 {
 	gHUD.AddHudElem(this);
 
@@ -49,26 +45,26 @@ int CHudStatusBar::Init()
 
 	CVAR_CREATE("hud_centerid", "0", FCVAR_ARCHIVE);
 
-	return 1;
+	return true;
 }
 
-int CHudStatusBar::VidInit()
+bool CHudStatusBar::VidInit()
 {
 	// Load sprites here
 
-	return 1;
+	return true;
 }
 
 void CHudStatusBar::Reset()
 {
 	int i = 0;
 
-	m_iFlags &= ~HUD_ACTIVE;  // start out inactive
+	m_iFlags &= ~HUD_ACTIVE; // start out inactive
 	for (i = 0; i < MAX_STATUSBAR_LINES; i++)
 		m_szStatusText[i][0] = 0;
 	memset(m_iStatusValues, 0, sizeof m_iStatusValues);
 
-	m_iStatusValues[0] = 1;  // 0 is the special index, which always returns true
+	m_iStatusValues[0] = 1; // 0 is the special index, which always returns true
 
 	// reset our colors for the status bar lines (yellow is default)
 	for (i = 0; i < MAX_STATUSBAR_LINES; i++)
@@ -87,12 +83,12 @@ void CHudStatusBar::ParseStatusString(int line_num)
 	char* src = szBuffer;
 	char* dst = m_szStatusBar[line_num];
 
-	char* src_start = src, * dst_start = dst;
+	char *src_start = src, *dst_start = dst;
 
 	while (*src != 0)
 	{
 		while (*src == '\n')
-			src++;  // skip over any newlines
+			src++; // skip over any newlines
 
 		if (((src - src_start) >= MAX_STATUSTEXT_LENGTH) || ((dst - dst_start) >= MAX_STATUSTEXT_LENGTH))
 			break;
@@ -100,7 +96,7 @@ void CHudStatusBar::ParseStatusString(int line_num)
 		int index = atoi(src);
 		// should we draw this line?
 		if ((index >= 0 && index < MAX_STATUSBAR_VALUES) && (m_iStatusValues[index] != 0))
-		{  // parse this line and append result to the status bar
+		{ // parse this line and append result to the status bar
 			while (*src >= '0' && *src <= '9')
 				src++;
 
@@ -111,7 +107,7 @@ void CHudStatusBar::ParseStatusString(int line_num)
 			while (*src != '\n' && *src != 0)
 			{
 				if (*src != '%')
-				{  // just copy the character
+				{ // just copy the character
 					*dst = *src;
 					dst++, src++;
 				}
@@ -141,7 +137,7 @@ void CHudStatusBar::ParseStatusString(int line_num)
 						char szRepString[MAX_PLAYER_NAME_LENGTH];
 						switch (valtype)
 						{
-						case 'p':  // player name
+						case 'p': // player name
 							gEngfuncs.pfnGetPlayerInfo(indexval, &g_PlayerInfoList[indexval]);
 							if (g_PlayerInfoList[indexval].name != NULL)
 							{
@@ -154,7 +150,7 @@ void CHudStatusBar::ParseStatusString(int line_num)
 							}
 
 							break;
-						case 'i':  // number
+						case 'i': // number
 							sprintf(szRepString, "%d", indexval);
 							break;
 						default:
@@ -176,7 +172,7 @@ void CHudStatusBar::ParseStatusString(int line_num)
 	}
 }
 
-int CHudStatusBar::Draw(float fTime)
+bool CHudStatusBar::Draw(float fTime)
 {
 	if (m_bReparseString)
 	{
@@ -185,7 +181,7 @@ int CHudStatusBar::Draw(float fTime)
 			m_pflNameColors[i] = g_ColorYellow;
 			ParseStatusString(i);
 		}
-		m_bReparseString = FALSE;
+		m_bReparseString = false;
 	}
 
 	int Y_START = ScreenHeight - 52;
@@ -200,7 +196,7 @@ int CHudStatusBar::Draw(float fTime)
 		int y = Y_START - (4 + TextHeight * i); // draw along bottom of screen
 
 		// let user set status ID bar centering
-		if ((i == STATUSBAR_ID_LINE) && CVAR_GET_FLOAT("hud_centerid"))
+		if ((i == STATUSBAR_ID_LINE) && 0 != CVAR_GET_FLOAT("hud_centerid"))
 		{
 			x = V_max(0, V_max(2, (ScreenWidth - TextWidth)) / 2);
 			y = (ScreenHeight / 2) + (TextHeight * CVAR_GET_FLOAT("hud_centerid"));
@@ -212,12 +208,12 @@ int CHudStatusBar::Draw(float fTime)
 		DrawConsoleString(x, y, m_szStatusBar[i]);
 	}
 
-	return 1;
+	return true;
 }
 
 // Message handler for StatusText message
 // accepts two values:
-//		byte: line number of status bar text 
+//		byte: line number of status bar text
 //		string: status bar text
 // this string describes how the status bar should be drawn
 // a semi-regular expression:
@@ -227,39 +223,39 @@ int CHudStatusBar::Draw(float fTime)
 // if StatusValue[slotnum] != 0, the following string is drawn, upto the next newline - otherwise the text is skipped upto next newline
 // %pX, where X is an integer, will substitute a player name here, getting the player index from StatusValue[X]
 // %iX, where X is an integer, will substitute a number here, getting the number from StatusValue[X]
-int CHudStatusBar::MsgFunc_StatusText(const char* pszName, int iSize, void* pbuf)
+bool CHudStatusBar::MsgFunc_StatusText(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 
 	int line = READ_BYTE();
 
 	if (line < 0 || line > MAX_STATUSBAR_LINES)
-		return 1;
+		return true;
 
 	strncpy(m_szStatusText[line], READ_STRING(), MAX_STATUSTEXT_LENGTH);
-	m_szStatusText[line][MAX_STATUSTEXT_LENGTH - 1] = 0;  // ensure it's null terminated ( strncpy() won't null terminate if read string too long)
+	m_szStatusText[line][MAX_STATUSTEXT_LENGTH - 1] = 0; // ensure it's null terminated ( strncpy() won't null terminate if read string too long)
 
 	m_iFlags |= HUD_ACTIVE;
-	m_bReparseString = TRUE;
+	m_bReparseString = true;
 
-	return 1;
+	return true;
 }
 
 // Message handler for StatusText message
 // accepts two values:
 //		byte: index into the status value array
 //		short: value to store
-int CHudStatusBar::MsgFunc_StatusValue(const char* pszName, int iSize, void* pbuf)
+bool CHudStatusBar::MsgFunc_StatusValue(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 
 	int index = READ_BYTE();
 	if (index < 1 || index > MAX_STATUSBAR_VALUES)
-		return 1; // index out of range
+		return true; // index out of range
 
 	m_iStatusValues[index] = READ_SHORT();
 
-	m_bReparseString = TRUE;
+	m_bReparseString = true;
 
-	return 1;
+	return true;
 }

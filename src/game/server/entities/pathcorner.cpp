@@ -26,24 +26,24 @@ class CPathCorner : public CPointEntity
 {
 public:
 	void Spawn() override;
-	void KeyValue(KeyValueData* pkvd) override;
+	bool KeyValue(KeyValueData* pkvd) override;
 	float GetDelay() override { return m_flWait; }
 	//	void Touch( CBaseEntity *pOther ) override;
-	int		Save(CSave& save) override;
-	int		Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 
-	static	TYPEDESCRIPTION m_SaveData[];
+	static TYPEDESCRIPTION m_SaveData[];
 
 private:
-	float	m_flWait;
+	float m_flWait;
 };
 
 LINK_ENTITY_TO_CLASS(path_corner, CPathCorner);
 
 // Global Savedata for Delay
-TYPEDESCRIPTION	CPathCorner::m_SaveData[] =
-{
-	DEFINE_FIELD(CPathCorner, m_flWait, FIELD_FLOAT),
+TYPEDESCRIPTION CPathCorner::m_SaveData[] =
+	{
+		DEFINE_FIELD(CPathCorner, m_flWait, FIELD_FLOAT),
 };
 
 IMPLEMENT_SAVERESTORE(CPathCorner, CPointEntity);
@@ -51,15 +51,15 @@ IMPLEMENT_SAVERESTORE(CPathCorner, CPointEntity);
 //
 // Cache user-entity-field values until spawn is called.
 //
-void CPathCorner::KeyValue(KeyValueData* pkvd)
+bool CPathCorner::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq(pkvd->szKeyName, "wait"))
 	{
 		m_flWait = atof(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		return true;
 	}
-	else
-		CPointEntity::KeyValue(pkvd);
+
+	return CPointEntity::KeyValue(pkvd);
 }
 
 
@@ -118,13 +118,13 @@ void CPathCorner::Touch(CBaseEntity* pOther)
 
 
 
-TYPEDESCRIPTION	CPathTrack::m_SaveData[] =
-{
-	DEFINE_FIELD(CPathTrack, m_length, FIELD_FLOAT),
-	DEFINE_FIELD(CPathTrack, m_pnext, FIELD_CLASSPTR),
-	DEFINE_FIELD(CPathTrack, m_paltpath, FIELD_CLASSPTR),
-	DEFINE_FIELD(CPathTrack, m_pprevious, FIELD_CLASSPTR),
-	DEFINE_FIELD(CPathTrack, m_altName, FIELD_STRING),
+TYPEDESCRIPTION CPathTrack::m_SaveData[] =
+	{
+		DEFINE_FIELD(CPathTrack, m_length, FIELD_FLOAT),
+		DEFINE_FIELD(CPathTrack, m_pnext, FIELD_CLASSPTR),
+		DEFINE_FIELD(CPathTrack, m_paltpath, FIELD_CLASSPTR),
+		DEFINE_FIELD(CPathTrack, m_pprevious, FIELD_CLASSPTR),
+		DEFINE_FIELD(CPathTrack, m_altName, FIELD_STRING),
 };
 
 IMPLEMENT_SAVERESTORE(CPathTrack, CBaseEntity);
@@ -133,20 +133,20 @@ LINK_ENTITY_TO_CLASS(path_track, CPathTrack);
 //
 // Cache user-entity-field values until spawn is called.
 //
-void CPathTrack::KeyValue(KeyValueData* pkvd)
+bool CPathTrack::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq(pkvd->szKeyName, "altpath"))
 	{
 		m_altName = ALLOC_STRING(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		return true;
 	}
-	else
-		CPointEntity::KeyValue(pkvd);
+
+	return CPointEntity::KeyValue(pkvd);
 }
 
 void CPathTrack::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
-	int on;
+	bool on;
 
 	// Use toggles between two paths
 	if (m_paltpath)
@@ -160,7 +160,7 @@ void CPathTrack::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE use
 				ClearBits(pev->spawnflags, SF_PATH_ALTERNATE);
 		}
 	}
-	else	// Use toggles between enabled/disabled
+	else // Use toggles between enabled/disabled
 	{
 		on = !FBitSet(pev->spawnflags, SF_PATH_DISABLED);
 
@@ -186,7 +186,7 @@ void CPathTrack::Link()
 		{
 			m_pnext = CPathTrack::Instance(pentTarget);
 
-			if (m_pnext)		// If no next pointer, this is the end of a path
+			if (m_pnext) // If no next pointer, this is the end of a path
 			{
 				m_pnext->SetPrevious(this);
 			}
@@ -196,14 +196,14 @@ void CPathTrack::Link()
 	}
 
 	// Find "alternate" path
-	if (m_altName)
+	if (!FStringNull(m_altName))
 	{
 		pentTarget = FIND_ENTITY_BY_TARGETNAME(NULL, STRING(m_altName));
 		if (!FNullEnt(pentTarget))
 		{
 			m_paltpath = CPathTrack::Instance(pentTarget);
 
-			if (m_paltpath)		// If no next pointer, this is the end of a path
+			if (m_paltpath) // If no next pointer, this is the end of a path
 			{
 				m_paltpath->SetPrevious(this);
 			}
@@ -229,11 +229,11 @@ void CPathTrack::Spawn()
 
 void CPathTrack::Activate()
 {
-	if (!FStringNull(pev->targetname))		// Link to next, and back-link
+	if (!FStringNull(pev->targetname)) // Link to next, and back-link
 		Link();
 }
 
-CPathTrack* CPathTrack::ValidPath(CPathTrack* ppath, int testFlag)
+CPathTrack* CPathTrack::ValidPath(CPathTrack* ppath, bool testFlag)
 {
 	if (!ppath)
 		return NULL;
@@ -284,7 +284,7 @@ void CPathTrack::SetPrevious(CPathTrack* pprev)
 
 
 // Assumes this is ALWAYS enabled
-CPathTrack* CPathTrack::LookAhead(Vector* origin, float dist, int move)
+CPathTrack* CPathTrack::LookAhead(Vector* origin, float dist, bool move)
 {
 	CPathTrack* pcurrent;
 	float originalDist = dist;
@@ -292,16 +292,16 @@ CPathTrack* CPathTrack::LookAhead(Vector* origin, float dist, int move)
 	pcurrent = this;
 	Vector currentPos = *origin;
 
-	if (dist < 0)		// Travelling backwards through path
+	if (dist < 0) // Travelling backwards through path
 	{
 		dist = -dist;
 		while (dist > 0)
 		{
 			Vector dir = pcurrent->pev->origin - currentPos;
 			float length = dir.Length();
-			if (!length)
+			if (0 == length)
 			{
-				if (!ValidPath(pcurrent->GetPrevious(), move)) 	// If there is no previous node, or it's disabled, return now.
+				if (!ValidPath(pcurrent->GetPrevious(), move)) // If there is no previous node, or it's disabled, return now.
 				{
 					if (!move)
 						Project(pcurrent->GetNext(), pcurrent, origin, dist);
@@ -309,7 +309,7 @@ CPathTrack* CPathTrack::LookAhead(Vector* origin, float dist, int move)
 				}
 				pcurrent = pcurrent->GetPrevious();
 			}
-			else if (length > dist)	// enough left in this path to move
+			else if (length > dist) // enough left in this path to move
 			{
 				*origin = currentPos + (dir * (dist / length));
 				return pcurrent;
@@ -319,7 +319,7 @@ CPathTrack* CPathTrack::LookAhead(Vector* origin, float dist, int move)
 				dist -= length;
 				currentPos = pcurrent->pev->origin;
 				*origin = currentPos;
-				if (!ValidPath(pcurrent->GetPrevious(), move))	// If there is no previous node, or it's disabled, return now.
+				if (!ValidPath(pcurrent->GetPrevious(), move)) // If there is no previous node, or it's disabled, return now.
 					return NULL;
 
 				pcurrent = pcurrent->GetPrevious();
@@ -332,7 +332,7 @@ CPathTrack* CPathTrack::LookAhead(Vector* origin, float dist, int move)
 	{
 		while (dist > 0)
 		{
-			if (!ValidPath(pcurrent->GetNext(), move))	// If there is no next node, or it's disabled, return now.
+			if (!ValidPath(pcurrent->GetNext(), move)) // If there is no next node, or it's disabled, return now.
 			{
 				if (!move)
 					Project(pcurrent->GetPrevious(), pcurrent, origin, dist);
@@ -340,13 +340,13 @@ CPathTrack* CPathTrack::LookAhead(Vector* origin, float dist, int move)
 			}
 			Vector dir = pcurrent->GetNext()->pev->origin - currentPos;
 			float length = dir.Length();
-			if (!length && !ValidPath(pcurrent->GetNext()->GetNext(), move))
+			if (0 == length && !ValidPath(pcurrent->GetNext()->GetNext(), move))
 			{
 				if (dist == originalDist) // HACK -- up against a dead end
 					return NULL;
 				return pcurrent;
 			}
-			if (length > dist)	// enough left in this path to move
+			if (length > dist) // enough left in this path to move
 			{
 				*origin = currentPos + (dir * (dist / length));
 				return pcurrent;
@@ -369,10 +369,10 @@ CPathTrack* CPathTrack::LookAhead(Vector* origin, float dist, int move)
 // Assumes this is ALWAYS enabled
 CPathTrack* CPathTrack::Nearest(Vector origin)
 {
-	int			deadCount;
-	float		minDist, dist;
-	Vector		delta;
-	CPathTrack* ppath, * pnearest;
+	int deadCount;
+	float minDist, dist;
+	Vector delta;
+	CPathTrack *ppath, *pnearest;
 
 
 	delta = origin - pev->origin;
@@ -425,4 +425,3 @@ void CPathTrack::Sparkle()
 		UTIL_ParticleEffect(pev->origin, Vector(0, 0, 100), 84, 10);
 }
 #endif
-

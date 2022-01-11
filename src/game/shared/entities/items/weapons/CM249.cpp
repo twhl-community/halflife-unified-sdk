@@ -23,15 +23,15 @@
 #include "CM249.h"
 
 #ifndef CLIENT_DLL
-TYPEDESCRIPTION	CM249::m_SaveData[] =
-{
-	DEFINE_FIELD(CM249, m_flReloadStartTime, FIELD_FLOAT),
-	DEFINE_FIELD(CM249, m_flReloadStart, FIELD_FLOAT),
-	DEFINE_FIELD(CM249, m_bReloading, FIELD_BOOLEAN),
-	DEFINE_FIELD(CM249, m_iFire, FIELD_INTEGER),
-	DEFINE_FIELD(CM249, m_iSmoke, FIELD_INTEGER),
-	DEFINE_FIELD(CM249, m_iLink, FIELD_INTEGER),
-	DEFINE_FIELD(CM249, m_iShell, FIELD_INTEGER),
+TYPEDESCRIPTION CM249::m_SaveData[] =
+	{
+		DEFINE_FIELD(CM249, m_flReloadStartTime, FIELD_FLOAT),
+		DEFINE_FIELD(CM249, m_flReloadStart, FIELD_FLOAT),
+		DEFINE_FIELD(CM249, m_bReloading, FIELD_BOOLEAN),
+		DEFINE_FIELD(CM249, m_iFire, FIELD_INTEGER),
+		DEFINE_FIELD(CM249, m_iSmoke, FIELD_INTEGER),
+		DEFINE_FIELD(CM249, m_iLink, FIELD_INTEGER),
+		DEFINE_FIELD(CM249, m_iShell, FIELD_INTEGER),
 };
 
 IMPLEMENT_SAVERESTORE(CM249, CM249::BaseClass);
@@ -74,7 +74,7 @@ void CM249::Spawn()
 	FallInit(); // get ready to fall down.
 }
 
-BOOL CM249::AddToPlayer(CBasePlayer* pPlayer)
+bool CM249::AddToPlayer(CBasePlayer* pPlayer)
 {
 	if (BaseClass::AddToPlayer(pPlayer))
 	{
@@ -88,7 +88,7 @@ BOOL CM249::AddToPlayer(CBasePlayer* pPlayer)
 	return false;
 }
 
-BOOL CM249::Deploy()
+bool CM249::Deploy()
 {
 	return DefaultDeploy("models/v_saw.mdl", "models/p_saw.mdl", M249_DRAW, "mp5");
 }
@@ -192,14 +192,14 @@ void CM249::PrimaryAttack()
 
 	if (UTIL_IsMultiplayer())
 	{
-		if (m_pPlayer->pev->button & IN_DUCK)
+		if ((m_pPlayer->pev->button & IN_DUCK) != 0)
 		{
 			vecSpread = VECTOR_CONE_3DEGREES;
 		}
-		else if (m_pPlayer->pev->button & (IN_MOVERIGHT |
-			IN_MOVELEFT |
-			IN_FORWARD |
-			IN_BACK))
+		else if ((m_pPlayer->pev->button & (IN_MOVERIGHT |
+											   IN_MOVELEFT |
+											   IN_FORWARD |
+											   IN_BACK)) != 0)
 		{
 			vecSpread = VECTOR_CONE_15DEGREES;
 		}
@@ -210,14 +210,14 @@ void CM249::PrimaryAttack()
 	}
 	else
 	{
-		if (m_pPlayer->pev->button & IN_DUCK)
+		if ((m_pPlayer->pev->button & IN_DUCK) != 0)
 		{
 			vecSpread = VECTOR_CONE_4DEGREES;
 		}
-		else if (m_pPlayer->pev->button & (IN_MOVERIGHT |
-			IN_MOVELEFT |
-			IN_FORWARD |
-			IN_BACK))
+		else if ((m_pPlayer->pev->button & (IN_MOVERIGHT |
+											   IN_MOVELEFT |
+											   IN_FORWARD |
+											   IN_BACK)) != 0)
 		{
 			vecSpread = VECTOR_CONE_10DEGREES;
 		}
@@ -234,8 +234,8 @@ void CM249::PrimaryAttack()
 		m_pPlayer->pev, m_pPlayer->random_seed);
 
 	int flags;
-#if defined( CLIENT_WEAPONS )
-	flags = TRUE;
+#if defined(CLIENT_WEAPONS)
+	flags = FEV_NOTHOST;
 #else
 	flags = 0;
 #endif
@@ -247,7 +247,7 @@ void CM249::PrimaryAttack()
 		pev->body, 0,
 		m_bAlternatingEject ? 1 : 0, 0);
 
-	if (!m_iClip)
+	if (0 == m_iClip)
 	{
 		if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
 		{
@@ -338,7 +338,7 @@ int CM249::iItemSlot()
 	return 4;
 }
 
-int CM249::GetItemInfo(ItemInfo* p)
+bool CM249::GetItemInfo(ItemInfo* p)
 {
 	p->pszAmmo1 = "556";
 	p->iMaxAmmo1 = M249_MAX_CARRY;
@@ -357,7 +357,7 @@ int CM249::GetItemInfo(ItemInfo* p)
 
 void CM249::IncrementAmmo(CBasePlayer* pPlayer)
 {
-	if (pPlayer->GiveAmmo(1, "556", M249_MAX_CARRY))
+	if (0 != pPlayer->GiveAmmo(1, "556", M249_MAX_CARRY))
 	{
 		EMIT_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
 	}
@@ -383,7 +383,7 @@ public:
 		BaseClass::Spawn();
 	}
 
-	BOOL AddAmmo(CBaseEntity* pOther) override
+	bool AddAmmo(CBaseEntity* pOther) override
 	{
 		if (pOther->GiveAmmo(AMMO_M249_GIVE, "556", M249_MAX_CARRY) != -1)
 		{

@@ -17,7 +17,7 @@
 //=========================================================
 
 //=========================================================
-// Hit groups!	
+// Hit groups!
 //=========================================================
 /*
 
@@ -28,25 +28,25 @@
 */
 
 
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"monsters.h"
-#include	"animation.h"
-#include	"squadmonster.h"
-#include	"weapons.h"
-#include	"talkmonster.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
+#include "animation.h"
+#include "squadmonster.h"
+#include "weapons.h"
+#include "talkmonster.h"
 #include "COFSquadTalkMonster.h"
-#include	"soundent.h"
-#include	"effects.h"
-#include	"customentity.h"
+#include "soundent.h"
+#include "effects.h"
+#include "customentity.h"
 #include "hgrunt_ally_base.h"
 
 //=========================================================
 // monster-specific DEFINE's
 //=========================================================
-#define	MEDIC_DEAGLE_CLIP_SIZE			9 // how many bullets in a clip?
-#define	MEDIC_GLOCK_CLIP_SIZE			9 // how many bullets in a clip?
+#define MEDIC_DEAGLE_CLIP_SIZE 9 // how many bullets in a clip?
+#define MEDIC_GLOCK_CLIP_SIZE 9	 // how many bullets in a clip?
 
 namespace MedicAllyBodygroup
 {
@@ -92,10 +92,10 @@ enum MedicAllyWeaponFlag
 //=========================================================
 // Monster's Anim Events Go Here
 //=========================================================
-#define MEDIC_AE_HOLSTER_GUN	15
-#define MEDIC_AE_EQUIP_NEEDLE	16
-#define MEDIC_AE_HOLSTER_NEEDLE	17
-#define MEDIC_AE_EQUIP_GUN		18
+#define MEDIC_AE_HOLSTER_GUN 15
+#define MEDIC_AE_EQUIP_NEEDLE 16
+#define MEDIC_AE_HOLSTER_NEEDLE 17
+#define MEDIC_AE_EQUIP_GUN 18
 
 //=========================================================
 // monster-specific schedule types
@@ -115,8 +115,8 @@ public:
 	void RunTask(Task_t* pTask) override;
 	void Shoot();
 
-	int	Save(CSave& save) override;
-	int Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 
 	Schedule_t* GetScheduleOfType(int Type) override;
 
@@ -126,7 +126,7 @@ public:
 
 	void MonsterThink() override;
 
-	BOOL HealMe(COFSquadTalkMonster* pTarget) override;
+	bool HealMe(COFSquadTalkMonster* pTarget) override;
 
 	void HealOff();
 
@@ -138,20 +138,20 @@ public:
 	static TYPEDESCRIPTION m_SaveData[];
 
 	int m_iHealCharge;
-	BOOL m_fUseHealing;
-	BOOL m_fHealing;
+	bool m_fUseHealing;
+	bool m_fHealing;
 
 	float m_flLastUseTime;
 
-	BOOL m_fHealAudioPlaying;
+	bool m_fHealAudioPlaying;
 
 	float m_flFollowCheckTime;
-	BOOL m_fFollowChecking;
-	BOOL m_fFollowChecked;
+	bool m_fFollowChecking;
+	bool m_fFollowChecked;
 
 	float m_flLastRejectAudio;
 
-	BOOL m_fHealActive;
+	bool m_fHealActive;
 
 	float m_flLastShot;
 
@@ -167,18 +167,18 @@ protected:
 
 LINK_ENTITY_TO_CLASS(monster_human_medic_ally, COFMedicAlly);
 
-TYPEDESCRIPTION	COFMedicAlly::m_SaveData[] =
-{
-	DEFINE_FIELD(COFMedicAlly, m_flFollowCheckTime, FIELD_FLOAT),
-	DEFINE_FIELD(COFMedicAlly, m_fFollowChecking, FIELD_BOOLEAN),
-	DEFINE_FIELD(COFMedicAlly, m_fFollowChecked, FIELD_BOOLEAN),
-	DEFINE_FIELD(COFMedicAlly, m_flLastRejectAudio, FIELD_FLOAT),
-	DEFINE_FIELD(COFMedicAlly, m_iHealCharge, FIELD_INTEGER),
-	DEFINE_FIELD(COFMedicAlly, m_fUseHealing, FIELD_BOOLEAN),
-	DEFINE_FIELD(COFMedicAlly, m_fHealing, FIELD_BOOLEAN),
-	DEFINE_FIELD(COFMedicAlly, m_flLastUseTime, FIELD_TIME),
-	DEFINE_FIELD(COFMedicAlly, m_fHealActive, FIELD_BOOLEAN),
-	DEFINE_FIELD(COFMedicAlly, m_flLastShot, FIELD_TIME),
+TYPEDESCRIPTION COFMedicAlly::m_SaveData[] =
+	{
+		DEFINE_FIELD(COFMedicAlly, m_flFollowCheckTime, FIELD_FLOAT),
+		DEFINE_FIELD(COFMedicAlly, m_fFollowChecking, FIELD_BOOLEAN),
+		DEFINE_FIELD(COFMedicAlly, m_fFollowChecked, FIELD_BOOLEAN),
+		DEFINE_FIELD(COFMedicAlly, m_flLastRejectAudio, FIELD_FLOAT),
+		DEFINE_FIELD(COFMedicAlly, m_iHealCharge, FIELD_INTEGER),
+		DEFINE_FIELD(COFMedicAlly, m_fUseHealing, FIELD_BOOLEAN),
+		DEFINE_FIELD(COFMedicAlly, m_fHealing, FIELD_BOOLEAN),
+		DEFINE_FIELD(COFMedicAlly, m_flLastUseTime, FIELD_TIME),
+		DEFINE_FIELD(COFMedicAlly, m_fHealActive, FIELD_BOOLEAN),
+		DEFINE_FIELD(COFMedicAlly, m_flLastShot, FIELD_TIME),
 };
 
 IMPLEMENT_SAVERESTORE(COFMedicAlly, CBaseHGruntAlly);
@@ -186,18 +186,18 @@ IMPLEMENT_SAVERESTORE(COFMedicAlly, CBaseHGruntAlly);
 void COFMedicAlly::DropWeapon(bool applyVelocity)
 {
 	if (GetBodygroup(MedicAllyBodygroup::Weapons) != MedicAllyWeapon::None)
-	{// throw a gun if the grunt has one
+	{ // throw a gun if the grunt has one
 
 		Vector vecGunPos, vecGunAngles;
 		GetAttachment(0, vecGunPos, vecGunAngles);
 
 		CBaseEntity* pGun = nullptr;
 
-		if (pev->weapons & MedicAllyWeaponFlag::Glock)
+		if ((pev->weapons & MedicAllyWeaponFlag::Glock) != 0)
 		{
 			pGun = DropItem("weapon_9mmhandgun", vecGunPos, vecGunAngles);
 		}
-		else if (pev->weapons & MedicAllyWeaponFlag::DesertEagle)
+		else if ((pev->weapons & MedicAllyWeaponFlag::DesertEagle) != 0)
 		{
 			pGun = DropItem("weapon_eagle", vecGunPos, vecGunAngles);
 		}
@@ -230,12 +230,12 @@ void COFMedicAlly::Shoot()
 
 	const char* pszSoundName = nullptr;
 
-	if (pev->weapons & MedicAllyWeaponFlag::Glock)
+	if ((pev->weapons & MedicAllyWeaponFlag::Glock) != 0)
 	{
 		FireBullets(1, vecShootOrigin, vecShootDir, VECTOR_CONE_2DEGREES, 1024, BULLET_MONSTER_9MM); // shoot +-5 degrees
 		pszSoundName = "weapons/pl_gun3.wav";
 	}
-	else if (pev->weapons & MedicAllyWeaponFlag::DesertEagle)
+	else if ((pev->weapons & MedicAllyWeaponFlag::DesertEagle) != 0)
 	{
 		FireBullets(1, vecShootOrigin, vecShootDir, VECTOR_CONE_2DEGREES, 1024, BULLET_PLAYER_357); // shoot +-5 degrees
 		pszSoundName = "weapons/desert_eagle_fire.wav";
@@ -252,7 +252,7 @@ void COFMedicAlly::Shoot()
 
 	pev->effects |= EF_MUZZLEFLASH;
 
-	m_cAmmoLoaded--;// take away a bullet!
+	m_cAmmoLoaded--; // take away a bullet!
 
 	Vector angDir = UTIL_VecToAngles(vecShootDir);
 	SetBlending(0, angDir.x);
@@ -270,7 +270,7 @@ void COFMedicAlly::HandleAnimEvent(MonsterEvent_t* pEvent)
 	{
 	case HGRUNT_AE_RELOAD:
 
-		if (pev->weapons & MedicAllyWeaponFlag::DesertEagle)
+		if ((pev->weapons & MedicAllyWeaponFlag::DesertEagle) != 0)
 		{
 			EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/desert_eagle_reload.wav", 1, ATTN_NORM);
 		}
@@ -302,7 +302,7 @@ void COFMedicAlly::HandleAnimEvent(MonsterEvent_t* pEvent)
 		break;
 
 	case MEDIC_AE_EQUIP_GUN:
-		SetBodygroup(MedicAllyBodygroup::Weapons, pev->weapons & MedicAllyWeaponFlag::Glock ? MedicAllyWeapon::Glock : MedicAllyWeapon::DesertEagle);
+		SetBodygroup(MedicAllyBodygroup::Weapons, (pev->weapons & MedicAllyWeaponFlag::Glock) != 0 ? MedicAllyWeapon::Glock : MedicAllyWeapon::DesertEagle);
 		break;
 
 	default:
@@ -326,7 +326,7 @@ void COFMedicAlly::Spawn()
 	m_fFollowChecked = false;
 	m_fFollowChecking = false;
 
-	if (!pev->weapons)
+	if (0 == pev->weapons)
 	{
 		pev->weapons |= MedicAllyWeaponFlag::Glock;
 	}
@@ -338,17 +338,17 @@ void COFMedicAlly::Spawn()
 
 	int weaponIndex = 0;
 
-	if (pev->weapons & MedicAllyWeaponFlag::Glock)
+	if ((pev->weapons & MedicAllyWeaponFlag::Glock) != 0)
 	{
 		weaponIndex = MedicAllyWeapon::Glock;
 		m_cClipSize = MEDIC_GLOCK_CLIP_SIZE;
 	}
-	else if (pev->weapons & MedicAllyWeaponFlag::DesertEagle)
+	else if ((pev->weapons & MedicAllyWeaponFlag::DesertEagle) != 0)
 	{
 		weaponIndex = MedicAllyWeapon::DesertEagle;
 		m_cClipSize = MEDIC_DEAGLE_CLIP_SIZE;
 	}
-	else if (pev->weapons & MedicAllyWeaponFlag::Needle)
+	else if ((pev->weapons & MedicAllyWeaponFlag::Needle) != 0)
 	{
 		weaponIndex = MedicAllyWeapon::Needle;
 		m_cClipSize = 1;
@@ -531,83 +531,76 @@ void COFMedicAlly::RunTask(Task_t* pTask)
 // AI Schedules Specific to this monster
 //=========================================================
 
-Task_t	tlMedicAllyNewHealTarget[] =
-{
-	{ TASK_SET_FAIL_SCHEDULE, SCHED_TARGET_CHASE },
-	{ TASK_MOVE_TO_TARGET_RANGE, 50 },
-	{ TASK_FACE_IDEAL, 0 },
-	{ TASK_GRUNT_SPEAK_SENTENCE, 0 },
-};
-
-Schedule_t	slMedicAllyNewHealTarget[] =
-{
+Task_t tlMedicAllyNewHealTarget[] =
 	{
-		tlMedicAllyNewHealTarget,
-		ARRAYSIZE(tlMedicAllyNewHealTarget),
-		0,
-		0,
-		"Draw Needle"
-	},
+		{TASK_SET_FAIL_SCHEDULE, SCHED_TARGET_CHASE},
+		{TASK_MOVE_TO_TARGET_RANGE, 50},
+		{TASK_FACE_IDEAL, 0},
+		{TASK_GRUNT_SPEAK_SENTENCE, 0},
 };
 
-Task_t	tlMedicAllyDrawNeedle[] =
-{
-	{ TASK_STOP_MOVING, 0 },
-	{ TASK_PLAY_SEQUENCE_FACE_TARGET, ACT_ARM },
-	{ TASK_SET_FAIL_SCHEDULE, SCHED_TARGET_CHASE },
-	{ TASK_MOVE_TO_TARGET_RANGE, 50 },
-	{ TASK_FACE_IDEAL, 0, },
-	{ TASK_GRUNT_SPEAK_SENTENCE, 0 }
-};
-
-Schedule_t	slMedicAllyDrawNeedle[] =
-{
+Schedule_t slMedicAllyNewHealTarget[] =
 	{
-		tlMedicAllyDrawNeedle,
-		ARRAYSIZE(tlMedicAllyDrawNeedle),
-		0,
-		0,
-		"Draw Needle"
-	},
+		{tlMedicAllyNewHealTarget,
+			ARRAYSIZE(tlMedicAllyNewHealTarget),
+			0,
+			0,
+			"Draw Needle"},
 };
 
-Task_t	tlMedicAllyDrawGun[] =
-{
-	{ TASK_PLAY_SEQUENCE, ACT_DISARM },
-	{ TASK_WAIT_FOR_MOVEMENT, 0 },
-};
-
-Schedule_t	slMedicAllyDrawGun[] =
-{
+Task_t tlMedicAllyDrawNeedle[] =
 	{
-		tlMedicAllyDrawGun,
-		ARRAYSIZE(tlMedicAllyDrawGun),
-		0,
-		0,
-		"Draw Gun"
-	},
-};
+		{TASK_STOP_MOVING, 0},
+		{TASK_PLAY_SEQUENCE_FACE_TARGET, ACT_ARM},
+		{TASK_SET_FAIL_SCHEDULE, SCHED_TARGET_CHASE},
+		{TASK_MOVE_TO_TARGET_RANGE, 50},
+		{
+			TASK_FACE_IDEAL,
+			0,
+		},
+		{TASK_GRUNT_SPEAK_SENTENCE, 0}};
 
-Task_t	tlMedicAllyHealTarget[] =
-{
-	{ TASK_MELEE_ATTACK2, 0 },
-	{ TASK_WAIT, 0.2f },
-	{ TASK_TLK_HEADRESET, 0 },
-};
-
-Schedule_t	slMedicAllyHealTarget[] =
-{
+Schedule_t slMedicAllyDrawNeedle[] =
 	{
-		tlMedicAllyHealTarget,
-		ARRAYSIZE(tlMedicAllyHealTarget),
-		0,
-		0,
-		"Medic Ally Heal Target"
-	},
+		{tlMedicAllyDrawNeedle,
+			ARRAYSIZE(tlMedicAllyDrawNeedle),
+			0,
+			0,
+			"Draw Needle"},
 };
 
-DEFINE_CUSTOM_SCHEDULES(COFMedicAlly)
-{
+Task_t tlMedicAllyDrawGun[] =
+	{
+		{TASK_PLAY_SEQUENCE, ACT_DISARM},
+		{TASK_WAIT_FOR_MOVEMENT, 0},
+};
+
+Schedule_t slMedicAllyDrawGun[] =
+	{
+		{tlMedicAllyDrawGun,
+			ARRAYSIZE(tlMedicAllyDrawGun),
+			0,
+			0,
+			"Draw Gun"},
+};
+
+Task_t tlMedicAllyHealTarget[] =
+	{
+		{TASK_MELEE_ATTACK2, 0},
+		{TASK_WAIT, 0.2f},
+		{TASK_TLK_HEADRESET, 0},
+};
+
+Schedule_t slMedicAllyHealTarget[] =
+	{
+		{tlMedicAllyHealTarget,
+			ARRAYSIZE(tlMedicAllyHealTarget),
+			0,
+			0,
+			"Medic Ally Heal Target"},
+};
+
+DEFINE_CUSTOM_SCHEDULES(COFMedicAlly){
 	slMedicAllyNewHealTarget,
 	slMedicAllyDrawNeedle,
 	slMedicAllyDrawGun,
@@ -618,7 +611,7 @@ IMPLEMENT_CUSTOM_SCHEDULES(COFMedicAlly, CBaseHGruntAlly);
 
 std::tuple<int, Activity> COFMedicAlly::GetSequenceForActivity(Activity NewActivity)
 {
-	int	iSequence = ACTIVITY_NOT_AVAILABLE;
+	int iSequence = ACTIVITY_NOT_AVAILABLE;
 
 	switch (NewActivity)
 	{
@@ -650,11 +643,7 @@ Schedule_t* COFMedicAlly::GetHealSchedule()
 		{
 			auto pHealTarget = m_hTargetEnt.Entity<CBaseEntity>();
 
-			if ((pHealTarget->pev->origin - pev->origin).Make2D().Length() <= 50.0
-				&& (!m_fUseHealing || gpGlobals->time - m_flLastUseTime <= 0.25)
-				&& m_iHealCharge
-				&& pHealTarget->IsAlive()
-				&& pHealTarget->pev->health != pHealTarget->pev->max_health)
+			if ((pHealTarget->pev->origin - pev->origin).Make2D().Length() <= 50.0 && (!m_fUseHealing || gpGlobals->time - m_flLastUseTime <= 0.25) && 0 != m_iHealCharge && pHealTarget->IsAlive() && pHealTarget->pev->health != pHealTarget->pev->max_health)
 			{
 				return slMedicAllyHealTarget;
 			}
@@ -716,7 +705,7 @@ void COFMedicAlly::MonsterThink()
 	CBaseHGruntAlly::MonsterThink();
 }
 
-BOOL COFMedicAlly::HealMe(COFSquadTalkMonster* pTarget)
+bool COFMedicAlly::HealMe(COFSquadTalkMonster* pTarget)
 {
 	if (pTarget)
 	{
@@ -735,7 +724,7 @@ BOOL COFMedicAlly::HealMe(COFSquadTalkMonster* pTarget)
 			}
 		}
 
-		if (m_MonsterState != MONSTERSTATE_COMBAT && m_iHealCharge)
+		if (m_MonsterState != MONSTERSTATE_COMBAT && 0 != m_iHealCharge)
 		{
 			HealerActivate(pTarget);
 			return true;
@@ -798,10 +787,7 @@ void COFMedicAlly::HealerActivate(CBaseMonster* pTarget)
 
 		ChangeSchedule(slMedicAllyNewHealTarget);
 	}
-	else if (m_iHealCharge > 0
-		&& pTarget->IsAlive()
-		&& pTarget->pev->max_health > pTarget->pev->health
-		&& !m_fHealing)
+	else if (m_iHealCharge > 0 && pTarget->IsAlive() && pTarget->pev->max_health > pTarget->pev->health && !m_fHealing)
 	{
 		if (m_hTargetEnt && m_hTargetEnt->IsPlayer())
 		{
@@ -827,9 +813,7 @@ void COFMedicAlly::HealerActivate(CBaseMonster* pTarget)
 
 void COFMedicAlly::HealerUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
-	if (m_useTime > gpGlobals->time
-		|| m_flLastUseTime > gpGlobals->time
-		|| pActivator == m_hEnemy)
+	if (m_useTime > gpGlobals->time || m_flLastUseTime > gpGlobals->time || pActivator == m_hEnemy)
 	{
 		return;
 	}
@@ -845,7 +829,7 @@ void COFMedicAlly::HealerUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_
 			m_fFollowChecking = false;
 		}
 
-		const auto newTarget = !m_fUseHealing && m_hTargetEnt && m_fHealing;
+		const auto newTarget = !m_fUseHealing && nullptr != m_hTargetEnt && m_fHealing;
 
 		if (newTarget)
 		{
@@ -860,9 +844,7 @@ void COFMedicAlly::HealerUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_
 				pMonster->m_hWaitMedic = nullptr;
 		}
 
-		if (m_iHealCharge > 0
-			&& pActivator->IsAlive()
-			&& pActivator->pev->max_health > pActivator->pev->health)
+		if (m_iHealCharge > 0 && pActivator->IsAlive() && pActivator->pev->max_health > pActivator->pev->health)
 		{
 			if (!m_fHealing)
 			{

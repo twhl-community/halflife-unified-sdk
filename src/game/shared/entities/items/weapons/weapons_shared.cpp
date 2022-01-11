@@ -19,8 +19,6 @@
 #include "weapons.h"
 #include "gamerules.h"
 
-int giAmmoIndex = 0;
-
 // Precaches the ammo and queues the ammo info for sending to clients
 void AddAmmoNameToAmmoRegistry(const char* szAmmoname)
 {
@@ -41,17 +39,17 @@ void AddAmmoNameToAmmoRegistry(const char* szAmmoname)
 		giAmmoIndex = 0;
 
 	CBasePlayerItem::AmmoInfoArray[giAmmoIndex].pszName = szAmmoname;
-	CBasePlayerItem::AmmoInfoArray[giAmmoIndex].iId = giAmmoIndex;   // yes, this info is redundant
+	CBasePlayerItem::AmmoInfoArray[giAmmoIndex].iId = giAmmoIndex; // yes, this info is redundant
 }
 
 void FindHullIntersection(const Vector& vecSrc, TraceResult& tr, const Vector& mins, const Vector& maxs, edict_t* pEntity)
 {
-	int			i, j, k;
-	float		distance;
+	int i, j, k;
+	float distance;
 	const Vector* minmaxs[2] = {&mins, &maxs};
 	TraceResult tmpTrace;
-	Vector		vecHullEnd = tr.vecEndPos;
-	Vector		vecEnd;
+	Vector vecHullEnd = tr.vecEndPos;
+	Vector vecEnd;
 
 	distance = 1e6f;
 
@@ -88,14 +86,14 @@ void FindHullIntersection(const Vector& vecSrc, TraceResult& tr, const Vector& m
 	}
 }
 
-BOOL CBasePlayerWeapon::CanDeploy()
+bool CBasePlayerWeapon::CanDeploy()
 {
-	BOOL bHasAmmo = 0;
+	bool bHasAmmo = false;
 
 	if (!pszAmmo1())
 	{
 		// this weapon doesn't use ammo, can always deploy.
-		return TRUE;
+		return true;
 	}
 
 	if (pszAmmo1())
@@ -108,55 +106,55 @@ BOOL CBasePlayerWeapon::CanDeploy()
 	}
 	if (m_iClip > 0)
 	{
-		bHasAmmo |= 1;
+		bHasAmmo |= true;
 	}
 	if (!bHasAmmo)
 	{
-		return FALSE;
+		return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
-BOOL CBasePlayerWeapon::DefaultReload(int iClipSize, int iAnim, float fDelay, int body)
+bool CBasePlayerWeapon::DefaultReload(int iClipSize, int iAnim, float fDelay, int body)
 {
 	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
-		return FALSE;
+		return false;
 
 	int j = V_min(iClipSize - m_iClip, m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]);
 
 	if (j == 0)
-		return FALSE;
+		return false;
 
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + fDelay;
 
 	//!!UNDONE -- reload sound goes here !!!
 	SendWeaponAnim(iAnim, body);
 
-	m_fInReload = TRUE;
+	m_fInReload = true;
 
 	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 3;
-	return TRUE;
+	return true;
 }
 
 void CBasePlayerWeapon::ResetEmptySound()
 {
-	m_iPlayEmptySound = 1;
+	m_iPlayEmptySound = true;
 }
 
-BOOL CanAttack(float attack_time, float curtime, BOOL isPredicted)
+bool CanAttack(float attack_time, float curtime, bool isPredicted)
 {
-#if defined( CLIENT_WEAPONS )
+#if defined(CLIENT_WEAPONS)
 	if (!isPredicted)
 #else
 	if (1)
 #endif
 	{
-		return (attack_time <= curtime) ? TRUE : FALSE;
+		return (attack_time <= curtime) ? true : false;
 	}
 	else
 	{
-		return ((static_cast<int>(std::floor(attack_time * 1000.0)) * 1000.0) <= 0.0) ? TRUE : FALSE;
+		return ((static_cast<int>(std::floor(attack_time * 1000.0)) * 1000.0) <= 0.0) ? true : false;
 	}
 }
 
@@ -164,7 +162,7 @@ void CBasePlayerWeapon::ItemPostFrame()
 {
 #ifndef CLIENT_DLL
 	//Reset max clip and max ammo to default values
-	if (!(m_pPlayer->m_iItems & CTFItem::Backpack))
+	if ((m_pPlayer->m_iItems & CTFItem::Backpack) == 0)
 	{
 		if (m_iClip > iMaxClip())
 		{
@@ -182,7 +180,7 @@ void CBasePlayerWeapon::ItemPostFrame()
 
 	if ((m_fInReload) && (m_pPlayer->m_flNextAttack <= UTIL_WeaponTimeBase()))
 	{
-		// complete the reload. 
+		// complete the reload.
 		int j = V_min(iMaxClip() - m_iClip, m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]);
 
 		// Add them to the clip
@@ -191,51 +189,51 @@ void CBasePlayerWeapon::ItemPostFrame()
 
 		m_pPlayer->TabulateAmmo();
 
-		m_fInReload = FALSE;
+		m_fInReload = false;
 	}
 
-	if (!(m_pPlayer->pev->button & IN_ATTACK))
+	if ((m_pPlayer->pev->button & IN_ATTACK) == 0)
 	{
 		m_flLastFireTime = 0.0f;
 	}
 
-	if ((m_pPlayer->pev->button & IN_ATTACK2) && CanAttack(m_flNextSecondaryAttack, gpGlobals->time, UseDecrement()))
+	if ((m_pPlayer->pev->button & IN_ATTACK2) != 0 && CanAttack(m_flNextSecondaryAttack, gpGlobals->time, UseDecrement()))
 	{
-		if (pszAmmo2() && !m_pPlayer->m_rgAmmo[SecondaryAmmoIndex()])
+		if (pszAmmo2() && 0 == m_pPlayer->m_rgAmmo[SecondaryAmmoIndex()])
 		{
-			m_fFireOnEmpty = TRUE;
+			m_fFireOnEmpty = true;
 		}
 
 		m_pPlayer->TabulateAmmo();
 		SecondaryAttack();
 		m_pPlayer->pev->button &= ~IN_ATTACK2;
 	}
-	else if ((m_pPlayer->pev->button & IN_ATTACK) && CanAttack(m_flNextPrimaryAttack, gpGlobals->time, UseDecrement()))
+	else if ((m_pPlayer->pev->button & IN_ATTACK) != 0 && CanAttack(m_flNextPrimaryAttack, gpGlobals->time, UseDecrement()))
 	{
-		if ((m_iClip == 0 && pszAmmo1()) || (iMaxClip() == -1 && !m_pPlayer->m_rgAmmo[PrimaryAmmoIndex()]))
+		if ((m_iClip == 0 && pszAmmo1()) || (iMaxClip() == -1 && 0 == m_pPlayer->m_rgAmmo[PrimaryAmmoIndex()]))
 		{
-			m_fFireOnEmpty = TRUE;
+			m_fFireOnEmpty = true;
 		}
 
 		m_pPlayer->TabulateAmmo();
 		PrimaryAttack();
 	}
-	else if (m_pPlayer->pev->button & IN_RELOAD && iMaxClip() != WEAPON_NOCLIP && !m_fInReload)
+	else if ((m_pPlayer->pev->button & IN_RELOAD) != 0 && iMaxClip() != WEAPON_NOCLIP && !m_fInReload)
 	{
 		// reload when reload is pressed, or if no buttons are down and weapon is empty.
 		Reload();
 	}
-	else if (!(m_pPlayer->pev->button & (IN_ATTACK | IN_ATTACK2)))
+	else if ((m_pPlayer->pev->button & (IN_ATTACK | IN_ATTACK2)) == 0)
 	{
 		// no fire buttons down
 
-		m_fFireOnEmpty = FALSE;
+		m_fFireOnEmpty = false;
 
 #ifndef CLIENT_DLL
 		if (!IsUseable() && m_flNextPrimaryAttack < (UseDecrement() ? 0.0 : gpGlobals->time))
 		{
 			// weapon isn't useable, switch.
-			if (!(iFlags() & ITEM_FLAG_NOAUTOSWITCHEMPTY) && g_pGameRules->GetNextBestWeapon(m_pPlayer, this))
+			if ((iFlags() & ITEM_FLAG_NOAUTOSWITCHEMPTY) == 0 && g_pGameRules->GetNextBestWeapon(m_pPlayer, this))
 			{
 				m_flNextPrimaryAttack = (UseDecrement() ? 0.0 : gpGlobals->time) + 0.3;
 				return;
@@ -245,7 +243,7 @@ void CBasePlayerWeapon::ItemPostFrame()
 #endif
 		{
 			// weapon is useable. Reload if empty and weapon has waited as long as it has to after firing
-			if (m_iClip == 0 && !(iFlags() & ITEM_FLAG_NOAUTORELOAD) && m_flNextPrimaryAttack < (UseDecrement() ? 0.0 : gpGlobals->time))
+			if (m_iClip == 0 && (iFlags() & ITEM_FLAG_NOAUTORELOAD) == 0 && m_flNextPrimaryAttack < (UseDecrement() ? 0.0 : gpGlobals->time))
 			{
 				Reload();
 				return;

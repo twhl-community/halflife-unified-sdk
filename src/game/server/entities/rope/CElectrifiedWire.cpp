@@ -20,70 +20,64 @@
 
 #include "CElectrifiedWire.h"
 
-TYPEDESCRIPTION	CElectrifiedWire::m_SaveData[] =
-{
-	DEFINE_FIELD(CElectrifiedWire, m_bIsActive, FIELD_BOOLEAN),
+TYPEDESCRIPTION CElectrifiedWire::m_SaveData[] =
+	{
+		DEFINE_FIELD(CElectrifiedWire, m_bIsActive, FIELD_BOOLEAN),
 
-	DEFINE_FIELD(CElectrifiedWire, m_iTipSparkFrequency, FIELD_INTEGER),
-	DEFINE_FIELD(CElectrifiedWire, m_iBodySparkFrequency, FIELD_INTEGER),
-	DEFINE_FIELD(CElectrifiedWire, m_iLightningFrequency, FIELD_INTEGER),
+		DEFINE_FIELD(CElectrifiedWire, m_iTipSparkFrequency, FIELD_INTEGER),
+		DEFINE_FIELD(CElectrifiedWire, m_iBodySparkFrequency, FIELD_INTEGER),
+		DEFINE_FIELD(CElectrifiedWire, m_iLightningFrequency, FIELD_INTEGER),
 
-	DEFINE_FIELD(CElectrifiedWire, m_iXJoltForce, FIELD_INTEGER),
-	DEFINE_FIELD(CElectrifiedWire, m_iYJoltForce, FIELD_INTEGER),
-	DEFINE_FIELD(CElectrifiedWire, m_iZJoltForce, FIELD_INTEGER),
+		DEFINE_FIELD(CElectrifiedWire, m_iXJoltForce, FIELD_INTEGER),
+		DEFINE_FIELD(CElectrifiedWire, m_iYJoltForce, FIELD_INTEGER),
+		DEFINE_FIELD(CElectrifiedWire, m_iZJoltForce, FIELD_INTEGER),
 
-	DEFINE_FIELD(CElectrifiedWire, m_uiNumUninsulatedSegments, FIELD_INTEGER),
-	DEFINE_ARRAY(CElectrifiedWire, m_uiUninsulatedSegments, FIELD_INTEGER, CElectrifiedWire::MAX_SEGMENTS),
+		DEFINE_FIELD(CElectrifiedWire, m_uiNumUninsulatedSegments, FIELD_INTEGER),
+		DEFINE_ARRAY(CElectrifiedWire, m_uiUninsulatedSegments, FIELD_INTEGER, CElectrifiedWire::MAX_SEGMENTS),
 
-	//DEFINE_FIELD( CElectrifiedWire, m_iLightningSprite, FIELD_INTEGER ), //Not restored, reset in Precache. - Solokiller
+		//DEFINE_FIELD( CElectrifiedWire, m_iLightningSprite, FIELD_INTEGER ), //Not restored, reset in Precache. - Solokiller
 
-	DEFINE_FIELD(CElectrifiedWire, m_flLastSparkTime, FIELD_TIME),
+		DEFINE_FIELD(CElectrifiedWire, m_flLastSparkTime, FIELD_TIME),
 };
 
 LINK_ENTITY_TO_CLASS(env_electrified_wire, CElectrifiedWire);
 
 IMPLEMENT_SAVERESTORE(CElectrifiedWire, CElectrifiedWire::BaseClass);
 
-void CElectrifiedWire::KeyValue(KeyValueData* pkvd)
+bool CElectrifiedWire::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq(pkvd->szKeyName, "sparkfrequency"))
 	{
 		m_iTipSparkFrequency = strtol(pkvd->szValue, nullptr, 10);
-
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "bodysparkfrequency"))
 	{
 		m_iBodySparkFrequency = strtol(pkvd->szValue, nullptr, 10);
-
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "lightningfrequency"))
 	{
 		m_iLightningFrequency = strtol(pkvd->szValue, nullptr, 10);
-
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "xforce"))
 	{
 		m_iXJoltForce = strtol(pkvd->szValue, nullptr, 10);
-
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "yforce"))
 	{
 		m_iYJoltForce = strtol(pkvd->szValue, nullptr, 10);
-
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "zforce"))
 	{
 		m_iZJoltForce = strtol(pkvd->szValue, nullptr, 10);
-
-		pkvd->fHandled = true;
+		return true;
 	}
-	else
-		BaseClass::KeyValue(pkvd);
+
+	return BaseClass::KeyValue(pkvd);
 }
 
 void CElectrifiedWire::Precache()
@@ -202,8 +196,7 @@ void CElectrifiedWire::DoSpark(const size_t uiSegment, const bool bExertForce)
 		const Vector vecSparkForce(
 			RANDOM_FLOAT(-m_iXJoltForce, m_iXJoltForce),
 			RANDOM_FLOAT(-m_iYJoltForce, m_iYJoltForce),
-			RANDOM_FLOAT(-m_iZJoltForce, m_iZJoltForce)
-		);
+			RANDOM_FLOAT(-m_iZJoltForce, m_iZJoltForce));
 
 		ApplyForceToSegment(vecSparkForce, uiSegment);
 	}

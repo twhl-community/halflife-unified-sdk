@@ -23,10 +23,10 @@
 #include "CSniperRifle.h"
 
 #ifndef CLIENT_DLL
-TYPEDESCRIPTION	CSniperRifle::m_SaveData[] =
-{
-	DEFINE_FIELD(CSniperRifle, m_flReloadStart, FIELD_TIME),
-	DEFINE_FIELD(CSniperRifle, m_bReloading, FIELD_BOOLEAN),
+TYPEDESCRIPTION CSniperRifle::m_SaveData[] =
+	{
+		DEFINE_FIELD(CSniperRifle, m_flReloadStart, FIELD_TIME),
+		DEFINE_FIELD(CSniperRifle, m_bReloading, FIELD_BOOLEAN),
 };
 
 IMPLEMENT_SAVERESTORE(CSniperRifle, CSniperRifle::BaseClass);
@@ -68,7 +68,7 @@ void CSniperRifle::Spawn()
 	FallInit(); // get ready to fall down.
 }
 
-BOOL CSniperRifle::AddToPlayer(CBasePlayer* pPlayer)
+bool CSniperRifle::AddToPlayer(CBasePlayer* pPlayer)
 {
 	if (BaseClass::AddToPlayer(pPlayer))
 	{
@@ -80,14 +80,14 @@ BOOL CSniperRifle::AddToPlayer(CBasePlayer* pPlayer)
 	return false;
 }
 
-BOOL CSniperRifle::Deploy()
+bool CSniperRifle::Deploy()
 {
 	return BaseClass::DefaultDeploy("models/v_m40a1.mdl", "models/p_m40a1.mdl", SNIPERRIFLE_DRAW, "bow");
 }
 
 void CSniperRifle::Holster()
 {
-	m_fInReload = false;// cancel any reload in progress.
+	m_fInReload = false; // cancel any reload in progress.
 
 	if (m_pPlayer->m_iFOV != 0)
 	{
@@ -114,7 +114,7 @@ void CSniperRifle::WeaponIdle()
 
 	if (m_flTimeWeaponIdle < UTIL_WeaponTimeBase())
 	{
-		if (m_iClip)
+		if (0 != m_iClip)
 			SendWeaponAnim(SNIPERRIFLE_SLOWIDLE);
 		else
 			SendWeaponAnim(SNIPERRIFLE_SLOWIDLE2);
@@ -132,7 +132,7 @@ void CSniperRifle::PrimaryAttack()
 		return;
 	}
 
-	if (!m_iClip)
+	if (0 == m_iClip)
 	{
 		PlayEmptySound();
 		return;
@@ -189,7 +189,7 @@ void CSniperRifle::Reload()
 			ToggleZoom();
 		}
 
-		if (m_iClip)
+		if (0 != m_iClip)
 		{
 			if (DefaultReload(SNIPERRIFLE_MAX_CLIP, SNIPERRIFLE_RELOAD3, 2.324, 1))
 			{
@@ -213,10 +213,10 @@ void CSniperRifle::Reload()
 
 int CSniperRifle::iItemSlot()
 {
-	return  4;
+	return 4;
 }
 
-int CSniperRifle::GetItemInfo(ItemInfo* p)
+bool CSniperRifle::GetItemInfo(ItemInfo* p)
 {
 	p->pszAmmo1 = "762";
 	p->iMaxAmmo1 = SNIPERRIFLE_MAX_CARRY;
@@ -234,7 +234,7 @@ int CSniperRifle::GetItemInfo(ItemInfo* p)
 
 void CSniperRifle::IncrementAmmo(CBasePlayer* pPlayer)
 {
-	if (pPlayer->GiveAmmo(1, "762", SNIPERRIFLE_MAX_CARRY))
+	if (0 != pPlayer->GiveAmmo(1, "762", SNIPERRIFLE_MAX_CARRY))
 	{
 		EMIT_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
 	}
@@ -270,7 +270,7 @@ public:
 		PRECACHE_SOUND("items/9mmclip1.wav");
 	}
 
-	BOOL AddAmmo(CBaseEntity* pOther) override
+	bool AddAmmo(CBaseEntity* pOther) override
 	{
 		if (pOther->GiveAmmo(AMMO_SNIPERRIFLE_GIVE, "762", SNIPERRIFLE_MAX_CARRY) != -1)
 		{

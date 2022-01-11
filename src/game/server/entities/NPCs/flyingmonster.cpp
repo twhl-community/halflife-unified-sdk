@@ -12,18 +12,15 @@
 *   use or distribution of this code by or to any unlicensed person is illegal.
 *
 ****/
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"monsters.h"
-#include	"schedule.h"
-#include	"flyingmonster.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
+#include "schedule.h"
+#include "flyingmonster.h"
 
-#define FLYING_AE_FLAP		(8)
-#define FLYING_AE_FLAPSOUND	(9)
-
-
-extern DLL_GLOBAL edict_t* g_pBodyQueueHead;
+#define FLYING_AE_FLAP (8)
+#define FLYING_AE_FLAPSOUND (9)
 
 int CFlyingMonster::CheckLocalMove(const Vector& vecStart, const Vector& vecEnd, CBaseEntity* pTarget, float* pflDist)
 {
@@ -31,7 +28,7 @@ int CFlyingMonster::CheckLocalMove(const Vector& vecStart, const Vector& vecEnd,
 	if (FBitSet(pev->flags, FL_SWIM) && (UTIL_PointContents(vecEnd) != CONTENTS_WATER))
 	{
 		// ALERT(at_aiconsole, "can't swim out of water\n");
-		return FALSE;
+		return LOCALMOVE_INVALID;
 	}
 
 	TraceResult tr;
@@ -43,11 +40,11 @@ int CFlyingMonster::CheckLocalMove(const Vector& vecStart, const Vector& vecEnd,
 
 	if (pflDist)
 	{
-		*pflDist = ((tr.vecEndPos - Vector(0, 0, 32)) - vecStart).Length();// get the distance.
+		*pflDist = ((tr.vecEndPos - Vector(0, 0, 32)) - vecStart).Length(); // get the distance.
 	}
 
 	// ALERT( at_console, "check %d %d %f\n", tr.fStartSolid, tr.fAllSolid, tr.flFraction );
-	if (tr.fStartSolid || tr.flFraction < 1.0)
+	if (0 != tr.fStartSolid || tr.flFraction < 1.0)
 	{
 		if (pTarget && pTarget->edict() == gpGlobals->trace_ent)
 			return LOCALMOVE_VALID;
@@ -58,7 +55,7 @@ int CFlyingMonster::CheckLocalMove(const Vector& vecStart, const Vector& vecEnd,
 }
 
 
-BOOL CFlyingMonster::FTriangulate(const Vector& vecStart, const Vector& vecEnd, float flDist, CBaseEntity* pTargetEnt, Vector* pApex)
+bool CFlyingMonster::FTriangulate(const Vector& vecStart, const Vector& vecEnd, float flDist, CBaseEntity* pTargetEnt, Vector* pApex)
 {
 	return CBaseMonster::FTriangulate(vecStart, vecEnd, flDist, pTargetEnt, pApex);
 }
@@ -66,7 +63,7 @@ BOOL CFlyingMonster::FTriangulate(const Vector& vecStart, const Vector& vecEnd, 
 
 Activity CFlyingMonster::GetStoppedActivity()
 {
-	if (pev->movetype != MOVETYPE_FLY)		// UNDONE: Ground idle here, IDLE may be something else
+	if (pev->movetype != MOVETYPE_FLY) // UNDONE: Ground idle here, IDLE may be something else
 		return ACT_IDLE;
 
 	return ACT_HOVER;
@@ -160,16 +157,16 @@ void CFlyingMonster::Move(float flInterval)
 }
 
 
-BOOL CFlyingMonster::ShouldAdvanceRoute(float flWaypointDist)
+bool CFlyingMonster::ShouldAdvanceRoute(float flWaypointDist)
 {
 	// Get true 3D distance to the goal so we actually reach the correct height
-	if (m_Route[m_iRouteIndex].iType & bits_MF_IS_GOAL)
+	if ((m_Route[m_iRouteIndex].iType & bits_MF_IS_GOAL) != 0)
 		flWaypointDist = (m_Route[m_iRouteIndex].vecLocation - pev->origin).Length();
 
 	if (flWaypointDist <= 64 + (m_flGroundSpeed * gpGlobals->frametime))
-		return TRUE;
+		return true;
 
-	return FALSE;
+	return false;
 }
 
 
@@ -196,7 +193,7 @@ void CFlyingMonster::MoveExecute(CBaseEntity* pTargetEnt, const Vector& vecDir, 
 		else
 			m_flightSpeed = UTIL_Approach(20, m_flightSpeed, 300 * gpGlobals->frametime);
 
-		if (CheckLocalMove(pev->origin, vecMove, pTargetEnt, NULL))
+		if (LOCALMOVE_INVALID != CheckLocalMove(pev->origin, vecMove, pTargetEnt, NULL))
 		{
 			m_vecTravel = (vecMove - pev->origin);
 			m_vecTravel = m_vecTravel.Normalize();
@@ -226,14 +223,14 @@ float CFlyingMonster::CeilingZ(const Vector& position)
 	if (tr.flFraction != 1.0)
 		maxUp.z = tr.vecEndPos.z;
 
-	if ((pev->flags) & FL_SWIM)
+	if ((pev->flags & FL_SWIM) != 0)
 	{
 		return UTIL_WaterLevel(position, minUp.z, maxUp.z);
 	}
 	return maxUp.z;
 }
 
-BOOL CFlyingMonster::ProbeZ(const Vector& position, const Vector& probe, float* pFraction)
+bool CFlyingMonster::ProbeZ(const Vector& position, const Vector& probe, float* pFraction)
 {
 	int conPosition = UTIL_PointContents(position);
 	if ((((pev->flags) & FL_SWIM) == FL_SWIM) ^ (conPosition == CONTENTS_WATER))
@@ -242,7 +239,7 @@ BOOL CFlyingMonster::ProbeZ(const Vector& position, const Vector& probe, float* 
 		// or FLYING  & WATER
 		//
 		*pFraction = 0.0;
-		return TRUE; // We hit a water boundary because we are where we don't belong.
+		return true; // We hit a water boundary because we are where we don't belong.
 	}
 	int conProbe = UTIL_PointContents(probe);
 	if (conProbe == conPosition)
@@ -251,7 +248,7 @@ BOOL CFlyingMonster::ProbeZ(const Vector& position, const Vector& probe, float* 
 		// outside the water (for birds).
 		//
 		*pFraction = 1.0;
-		return FALSE;
+		return false;
 	}
 
 	Vector ProbeUnit = (probe - position).Normalize();
@@ -276,7 +273,7 @@ BOOL CFlyingMonster::ProbeZ(const Vector& position, const Vector& probe, float* 
 	}
 	*pFraction = minProbeLength / ProbeLength;
 
-	return TRUE;
+	return true;
 }
 
 float CFlyingMonster::FloorZ(const Vector& position)
@@ -293,4 +290,3 @@ float CFlyingMonster::FloorZ(const Vector& position)
 
 	return down.z;
 }
-
