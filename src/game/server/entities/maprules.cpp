@@ -812,7 +812,6 @@ bool CGamePlayerEquip::KeyValue(KeyValueData* pkvd)
 		return true;
 	}
 
-
 	for (int i = 0; i < MAX_EQUIP; i++)
 	{
 		if (FStringNull(m_weaponNames[i]))
