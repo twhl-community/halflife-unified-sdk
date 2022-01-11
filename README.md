@@ -1,6 +1,6 @@
 # Half-Life Unified SDK
 
-![master](https://github.com/SamVanheer/halflife-unified-sdk/.github/workflows/ci-cd.yml/badge.svg?branch=master)
+[![CI/CD](https://github.com/SamVanheer/halflife-unified-sdk/actions/workflows/ci-cd.yml/badge.svg?branch=master)](https://github.com/SamVanheer/halflife-unified-sdk/actions/workflows/ci-cd.yml)
 
 [See the wiki for setup instructions](https://github.com/SamVanheer/halflife-unified-sdk/wiki/Setting-up-the-source-code)
 
