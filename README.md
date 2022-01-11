@@ -1,3 +1,7 @@
+# Half-Life Unified SDK
+
+![master](https://github.com/SamVanheer/halflife-unified-sdk/.github/workflows/ci-cd.yml/badge.svg?branch=master)
+
 [See the wiki for setup instructions](https://github.com/SamVanheer/halflife-unified-sdk/wiki/Setting-up-the-source-code)
 
 Half Life 1 SDK LICENSE
