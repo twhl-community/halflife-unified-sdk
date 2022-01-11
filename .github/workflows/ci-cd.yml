@@ -14,8 +14,8 @@ jobs:
         uses: actions/checkout@v2.4.0
         with:
           submodules: recursive
-      - name: Install G++ Multilib
-        run: sudo add-apt-repository ppa:ubuntu-toolchain-r/test && sudo apt update && sudo apt install -y g++-11-multilib
+      - name: Install G++ Multilib & 32 bit OpenGL library
+        run: sudo add-apt-repository ppa:ubuntu-toolchain-r/test && sudo apt update && sudo apt install -y g++-11-multilib libglu1-mesa-dev:i386
       - name: Configure
         run: CC=gcc-11 CXX=g++-11 cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_COLOR_MAKEFILE=OFF -DBUILD_EXAMPLES=OFF -DBUILD_TESTS=OFF
       - name: Build
