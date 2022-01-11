@@ -853,7 +853,7 @@ TYPEDESCRIPTION CEnvSound::m_SaveData[] =
 		DEFINE_FIELD(CEnvSound, m_flRoomtype, FIELD_FLOAT),
 };
 
-IMPLEMENT_SAVERESTORE(CEnvSound, CBaseEntity);
+IMPLEMENT_SAVERESTORE(CEnvSound, CPointEntity);
 
 
 bool CEnvSound::KeyValue(KeyValueData* pkvd)
