@@ -7,6 +7,8 @@ if (UNIX)
 	configure_file(../../../external/SDL2/lib/libSDL2-2.0${CMAKE_SHARED_LIBRARY_SUFFIX}.0 ${CMAKE_CURRENT_BINARY_DIR}/libSDL2-2.0${CMAKE_SHARED_LIBRARY_SUFFIX}.0 COPYONLY)
 endif()
 
+find_package(OpenGL REQUIRED)
+
 # Set up vgui library
 add_library(vgui SHARED IMPORTED)
 
@@ -65,7 +67,8 @@ target_compile_definitions(client PRIVATE
 target_link_libraries(client PRIVATE
 	vgui
 	$<$<PLATFORM_ID:Windows>:wsock32>
-	SDL2)
+	SDL2
+	OpenGL::GL)
 	
 if (UNIX)
 	# Tell the linker to search for vgui.so and SDL2-2.0.so.0 in here
