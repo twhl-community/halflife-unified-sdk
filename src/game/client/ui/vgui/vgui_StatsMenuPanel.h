@@ -5,7 +5,7 @@
 class CStatsMenuPanel : public CMenuPanel
 {
 public:
-	CStatsMenuPanel(int iTrans, int iRemoveMe, int x, int y, int wide, int tall);
+	CStatsMenuPanel(int iTrans, bool iRemoveMe, int x, int y, int wide, int tall);
 
 	void Initialize();
 	void Open() override;

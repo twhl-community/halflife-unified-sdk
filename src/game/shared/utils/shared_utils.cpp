@@ -104,8 +104,8 @@ bool COM_HasParam(const char* name)
 
 const char* COM_Parse(const char* data)
 {
-	int             c;
-	int             len;
+	int c;
+	int len;
 
 	len = 0;
 	com_token[0] = 0;
@@ -118,14 +118,14 @@ skipwhite:
 	while ((c = *data) <= ' ')
 	{
 		if (c == 0)
-			return NULL;                    // end of file;
+			return NULL; // end of file;
 		data++;
 	}
 
 	// skip // comments
 	if (c == '/' && data[1] == '/')
 	{
-		while (*data && *data != '\n')
+		while ('\0' != *data && *data != '\n')
 			data++;
 		goto skipwhite;
 	}
@@ -135,10 +135,10 @@ skipwhite:
 	if (c == '\"')
 	{
 		data++;
-		while (1)
+		while (true)
 		{
 			c = *data++;
-			if (c == '\"' || !c)
+			if (c == '\"' || '\0' == c)
 			{
 				com_token[len] = 0;
 				return data;
@@ -166,8 +166,7 @@ skipwhite:
 		c = *data;
 		if (c == '{' || c == '}' || c == ')' || c == '(' || c == '\'' || c == ',')
 			break;
-	}
-	while (c > 32);
+	} while (c > 32);
 
 	com_token[len] = 0;
 	return data;
@@ -175,9 +174,9 @@ skipwhite:
 
 bool COM_TokenWaiting(const char* buffer)
 {
-	for (const char* p = buffer; *p && *p != '\n'; ++p)
+	for (const char* p = buffer; '\0' != *p && *p != '\n'; ++p)
 	{
-		if (!isspace(*p) || isalnum(*p))
+		if (0 == isspace(*p) || 0 != isalnum(*p))
 			return true;
 	}
 

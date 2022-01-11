@@ -16,19 +16,18 @@
 //=========================================================
 // Gargantua
 //=========================================================
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"nodes.h"
-#include	"monsters.h"
-#include	"schedule.h"
-#include	"customentity.h"
-#include	"weapons.h"
-#include	"effects.h"
-#include	"soundent.h"
-#include	"decals.h"
-#include	"explode.h"
-#include	"func_break.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
+#include "schedule.h"
+#include "customentity.h"
+#include "weapons.h"
+#include "effects.h"
+#include "soundent.h"
+#include "decals.h"
+#include "explode.h"
+#include "func_break.h"
 
 //=========================================================
 // Gargantua Monster
@@ -36,27 +35,27 @@
 const float GARG_ATTACKDIST = 80.0;
 
 // Garg animation events
-#define GARG_AE_SLASH_LEFT			1
+#define GARG_AE_SLASH_LEFT 1
 //#define GARG_AE_BEAM_ATTACK_RIGHT	2		// No longer used
-#define GARG_AE_LEFT_FOOT			3
-#define GARG_AE_RIGHT_FOOT			4
-#define GARG_AE_STOMP				5
-#define GARG_AE_BREATHE				6
+#define GARG_AE_LEFT_FOOT 3
+#define GARG_AE_RIGHT_FOOT 4
+#define GARG_AE_STOMP 5
+#define GARG_AE_BREATHE 6
 
 
 // Gargantua is immune to any damage but this
-#define GARG_DAMAGE					(DMG_ENERGYBEAM|DMG_CRUSH|DMG_MORTAR|DMG_BLAST)
-#define GARG_EYE_SPRITE_NAME		"sprites/gargeye1.spr"
-#define GARG_BEAM_SPRITE_NAME		"sprites/xbeam3.spr"
-#define GARG_BEAM_SPRITE2			"sprites/xbeam3.spr"
-#define GARG_STOMP_SPRITE_NAME		"sprites/gargeye1.spr"
-#define GARG_STOMP_BUZZ_SOUND		"weapons/mine_charge.wav"
-#define GARG_FLAME_LENGTH			330
-#define GARG_GIB_MODEL				"models/metalplategibs.mdl"
+#define GARG_DAMAGE (DMG_ENERGYBEAM | DMG_CRUSH | DMG_MORTAR | DMG_BLAST)
+#define GARG_EYE_SPRITE_NAME "sprites/gargeye1.spr"
+#define GARG_BEAM_SPRITE_NAME "sprites/xbeam3.spr"
+#define GARG_BEAM_SPRITE2 "sprites/xbeam3.spr"
+#define GARG_STOMP_SPRITE_NAME "sprites/gargeye1.spr"
+#define GARG_STOMP_BUZZ_SOUND "weapons/mine_charge.wav"
+#define GARG_FLAME_LENGTH 330
+#define GARG_GIB_MODEL "models/metalplategibs.mdl"
 
-#define ATTN_GARG					(ATTN_NORM)
+#define ATTN_GARG (ATTN_NORM)
 
-#define STOMP_SPRITE_COUNT			10
+#define STOMP_SPRITE_COUNT 10
 
 int gStompSprite = 0, gGargGibModel = 0;
 void SpawnExplosion(Vector center, float randomRange, float time, int magnitude);
@@ -82,9 +81,9 @@ public:
 	void Think() override;
 	static CStomp* StompCreate(const Vector& origin, const Vector& end, float speed);
 
-	int		Save(CSave& save) override;
-	int		Restore(CRestore& restore) override;
-	static	TYPEDESCRIPTION m_SaveData[];
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
+	static TYPEDESCRIPTION m_SaveData[];
 
 	float m_flLastThinkTime;
 
@@ -95,9 +94,9 @@ private:
 
 LINK_ENTITY_TO_CLASS(garg_stomp, CStomp);
 
-TYPEDESCRIPTION	CStomp::m_SaveData[] =
-{
-	DEFINE_FIELD(CStomp, m_flLastThinkTime, FIELD_TIME),
+TYPEDESCRIPTION CStomp::m_SaveData[] =
+	{
+		DEFINE_FIELD(CStomp, m_flLastThinkTime, FIELD_TIME),
 };
 
 IMPLEMENT_SAVERESTORE(CStomp, CBaseEntity);
@@ -130,7 +129,7 @@ void CStomp::Spawn()
 }
 
 
-#define	STOMP_INTERVAL		0.025
+#define STOMP_INTERVAL 0.025
 
 void CStomp::Think()
 {
@@ -176,7 +175,7 @@ void CStomp::Think()
 		pev->origin = pev->origin + pev->movedir * pev->speed * STOMP_INTERVAL;
 		for (int i = 0; i < 2; i++)
 		{
-			CSprite* pSprite = CSprite::SpriteCreate(GARG_STOMP_SPRITE_NAME, pev->origin, TRUE);
+			CSprite* pSprite = CSprite::SpriteCreate(GARG_STOMP_SPRITE_NAME, pev->origin, true);
 			if (pSprite)
 			{
 				UTIL_TraceLine(pev->origin, pev->origin - Vector(0, 0, 500), ignore_monsters, edict(), &tr);
@@ -197,7 +196,6 @@ void CStomp::Think()
 			UTIL_Remove(this);
 			STOP_SOUND(edict(), CHAN_BODY, GARG_STOMP_BUZZ_SOUND);
 		}
-
 	}
 }
 
@@ -206,16 +204,16 @@ void StreakSplash(const Vector& origin, const Vector& direction, int color, int 
 {
 	MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, origin);
 	WRITE_BYTE(TE_STREAK_SPLASH);
-	WRITE_COORD(origin.x);		// origin
+	WRITE_COORD(origin.x); // origin
 	WRITE_COORD(origin.y);
 	WRITE_COORD(origin.z);
-	WRITE_COORD(direction.x);	// direction
+	WRITE_COORD(direction.x); // direction
 	WRITE_COORD(direction.y);
 	WRITE_COORD(direction.z);
 	WRITE_BYTE(color);	// Streak color 6
-	WRITE_SHORT(count);	// count
+	WRITE_SHORT(count); // count
 	WRITE_SHORT(speed);
-	WRITE_SHORT(velocityRange);	// Random velocity modifier
+	WRITE_SHORT(velocityRange); // Random velocity modifier
 	MESSAGE_END();
 }
 
@@ -226,14 +224,14 @@ public:
 	void Spawn() override;
 	void Precache() override;
 	void SetYawSpeed() override;
-	int  Classify() override;
-	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	int Classify() override;
+	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 
-	BOOL CheckMeleeAttack1(float flDot, float flDist) override;		// Swipe
-	BOOL CheckMeleeAttack2(float flDot, float flDist) override;		// Flames
-	BOOL CheckRangeAttack1(float flDot, float flDist) override;		// Stomp attack
+	bool CheckMeleeAttack1(float flDot, float flDist) override; // Swipe
+	bool CheckMeleeAttack2(float flDot, float flDist) override; // Flames
+	bool CheckRangeAttack1(float flDot, float flDist) override; // Stomp attack
 	void SetObjectCollisionBox() override
 	{
 		pev->absmin = pev->origin + Vector(-80, -80, 0);
@@ -258,13 +256,13 @@ public:
 	void FlameUpdate();
 	void FlameControls(float angleX, float angleY);
 	void FlameDestroy();
-	inline BOOL FlameIsOn() { return m_pFlame[0] != NULL; }
+	inline bool FlameIsOn() { return m_pFlame[0] != NULL; }
 
 	void FlameDamage(Vector vecStart, Vector vecEnd, entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int iClassIgnore, int bitsDamageType);
 
-	int		Save(CSave& save) override;
-	int		Restore(CRestore& restore) override;
-	static	TYPEDESCRIPTION m_SaveData[];
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
+	static TYPEDESCRIPTION m_SaveData[];
 
 	CUSTOM_SCHEDULES;
 
@@ -283,58 +281,58 @@ private:
 
 	CBaseEntity* GargantuaCheckTraceHullAttack(float flDist, int iDamage, int iDmgType);
 
-	CSprite* m_pEyeGlow;		// Glow around the eyes
-	CBeam* m_pFlame[4];		// Flame beams
+	CSprite* m_pEyeGlow; // Glow around the eyes
+	CBeam* m_pFlame[4];	 // Flame beams
 
-	int			m_eyeBrightness;	// Brightness target
-	float		m_seeTime;			// Time to attack (when I see the enemy, I set this)
-	float		m_flameTime;		// Time of next flame attack
-	float		m_painSoundTime;	// Time of next pain sound
-	float		m_streakTime;		// streak timer (don't send too many)
-	float		m_flameX;			// Flame thrower aim
-	float		m_flameY;
+	int m_eyeBrightness;   // Brightness target
+	float m_seeTime;	   // Time to attack (when I see the enemy, I set this)
+	float m_flameTime;	   // Time of next flame attack
+	float m_painSoundTime; // Time of next pain sound
+	float m_streakTime;	   // streak timer (don't send too many)
+	float m_flameX;		   // Flame thrower aim
+	float m_flameY;
 };
 
 LINK_ENTITY_TO_CLASS(monster_gargantua, CGargantua);
 
-TYPEDESCRIPTION	CGargantua::m_SaveData[] =
-{
-	DEFINE_FIELD(CGargantua, m_pEyeGlow, FIELD_CLASSPTR),
-	DEFINE_FIELD(CGargantua, m_eyeBrightness, FIELD_INTEGER),
-	DEFINE_FIELD(CGargantua, m_seeTime, FIELD_TIME),
-	DEFINE_FIELD(CGargantua, m_flameTime, FIELD_TIME),
-	DEFINE_FIELD(CGargantua, m_streakTime, FIELD_TIME),
-	DEFINE_FIELD(CGargantua, m_painSoundTime, FIELD_TIME),
-	DEFINE_ARRAY(CGargantua, m_pFlame, FIELD_CLASSPTR, 4),
-	DEFINE_FIELD(CGargantua, m_flameX, FIELD_FLOAT),
-	DEFINE_FIELD(CGargantua, m_flameY, FIELD_FLOAT),
+TYPEDESCRIPTION CGargantua::m_SaveData[] =
+	{
+		DEFINE_FIELD(CGargantua, m_pEyeGlow, FIELD_CLASSPTR),
+		DEFINE_FIELD(CGargantua, m_eyeBrightness, FIELD_INTEGER),
+		DEFINE_FIELD(CGargantua, m_seeTime, FIELD_TIME),
+		DEFINE_FIELD(CGargantua, m_flameTime, FIELD_TIME),
+		DEFINE_FIELD(CGargantua, m_streakTime, FIELD_TIME),
+		DEFINE_FIELD(CGargantua, m_painSoundTime, FIELD_TIME),
+		DEFINE_ARRAY(CGargantua, m_pFlame, FIELD_CLASSPTR, 4),
+		DEFINE_FIELD(CGargantua, m_flameX, FIELD_FLOAT),
+		DEFINE_FIELD(CGargantua, m_flameY, FIELD_FLOAT),
 };
 
 IMPLEMENT_SAVERESTORE(CGargantua, CBaseMonster);
 
 const char* CGargantua::pAttackHitSounds[] =
-{
-	"zombie/claw_strike1.wav",
-	"zombie/claw_strike2.wav",
-	"zombie/claw_strike3.wav",
+	{
+		"zombie/claw_strike1.wav",
+		"zombie/claw_strike2.wav",
+		"zombie/claw_strike3.wav",
 };
 
 const char* CGargantua::pBeamAttackSounds[] =
-{
-	"garg/gar_flameoff1.wav",
-	"garg/gar_flameon1.wav",
-	"garg/gar_flamerun1.wav",
+	{
+		"garg/gar_flameoff1.wav",
+		"garg/gar_flameon1.wav",
+		"garg/gar_flamerun1.wav",
 };
 
 
 const char* CGargantua::pAttackMissSounds[] =
-{
-	"zombie/claw_miss1.wav",
-	"zombie/claw_miss2.wav",
+	{
+		"zombie/claw_miss1.wav",
+		"zombie/claw_miss2.wav",
 };
 
 const char* CGargantua::pRicSounds[] =
-{
+	{
 #if 0
 	"weapons/ric1.wav",
 	"weapons/ric2.wav",
@@ -342,61 +340,61 @@ const char* CGargantua::pRicSounds[] =
 	"weapons/ric4.wav",
 	"weapons/ric5.wav",
 #else
-	"debris/metal4.wav",
-	"debris/metal6.wav",
-	"weapons/ric4.wav",
-	"weapons/ric5.wav",
+		"debris/metal4.wav",
+		"debris/metal6.wav",
+		"weapons/ric4.wav",
+		"weapons/ric5.wav",
 #endif
 };
 
 const char* CGargantua::pFootSounds[] =
-{
-	"garg/gar_step1.wav",
-	"garg/gar_step2.wav",
+	{
+		"garg/gar_step1.wav",
+		"garg/gar_step2.wav",
 };
 
 
 const char* CGargantua::pIdleSounds[] =
-{
-	"garg/gar_idle1.wav",
-	"garg/gar_idle2.wav",
-	"garg/gar_idle3.wav",
-	"garg/gar_idle4.wav",
-	"garg/gar_idle5.wav",
+	{
+		"garg/gar_idle1.wav",
+		"garg/gar_idle2.wav",
+		"garg/gar_idle3.wav",
+		"garg/gar_idle4.wav",
+		"garg/gar_idle5.wav",
 };
 
 
 const char* CGargantua::pAttackSounds[] =
-{
-	"garg/gar_attack1.wav",
-	"garg/gar_attack2.wav",
-	"garg/gar_attack3.wav",
+	{
+		"garg/gar_attack1.wav",
+		"garg/gar_attack2.wav",
+		"garg/gar_attack3.wav",
 };
 
 const char* CGargantua::pAlertSounds[] =
-{
-	"garg/gar_alert1.wav",
-	"garg/gar_alert2.wav",
-	"garg/gar_alert3.wav",
+	{
+		"garg/gar_alert1.wav",
+		"garg/gar_alert2.wav",
+		"garg/gar_alert3.wav",
 };
 
 const char* CGargantua::pPainSounds[] =
-{
-	"garg/gar_pain1.wav",
-	"garg/gar_pain2.wav",
-	"garg/gar_pain3.wav",
+	{
+		"garg/gar_pain1.wav",
+		"garg/gar_pain2.wav",
+		"garg/gar_pain3.wav",
 };
 
 const char* CGargantua::pStompSounds[] =
-{
-	"garg/gar_stomp1.wav",
+	{
+		"garg/gar_stomp1.wav",
 };
 
 const char* CGargantua::pBreatheSounds[] =
-{
-	"garg/gar_breathe1.wav",
-	"garg/gar_breathe2.wav",
-	"garg/gar_breathe3.wav",
+	{
+		"garg/gar_breathe1.wav",
+		"garg/gar_breathe2.wav",
+		"garg/gar_breathe3.wav",
 };
 //=========================================================
 // AI Schedules Specific to this monster
@@ -414,53 +412,48 @@ enum
 	TASK_FLAME_SWEEP,
 };
 
-Task_t	tlGargFlame[] =
-{
-	{ TASK_STOP_MOVING,			(float)0		},
-	{ TASK_FACE_ENEMY,			(float)0		},
-	{ TASK_SOUND_ATTACK,		(float)0		},
-	// { TASK_PLAY_SEQUENCE,		(float)ACT_SIGNAL1	},
-	{ TASK_SET_ACTIVITY,		(float)ACT_MELEE_ATTACK2 },
-	{ TASK_FLAME_SWEEP,			(float)4.5		},
-	{ TASK_SET_ACTIVITY,		(float)ACT_IDLE	},
+Task_t tlGargFlame[] =
+	{
+		{TASK_STOP_MOVING, (float)0},
+		{TASK_FACE_ENEMY, (float)0},
+		{TASK_SOUND_ATTACK, (float)0},
+		// { TASK_PLAY_SEQUENCE,		(float)ACT_SIGNAL1	},
+		{TASK_SET_ACTIVITY, (float)ACT_MELEE_ATTACK2},
+		{TASK_FLAME_SWEEP, (float)4.5},
+		{TASK_SET_ACTIVITY, (float)ACT_IDLE},
 };
 
-Schedule_t	slGargFlame[] =
-{
+Schedule_t slGargFlame[] =
 	{
-		tlGargFlame,
-		ARRAYSIZE(tlGargFlame),
-		0,
-		0,
-		"GargFlame"
-	},
+		{tlGargFlame,
+			ARRAYSIZE(tlGargFlame),
+			0,
+			0,
+			"GargFlame"},
 };
 
 
 // primary melee attack
-Task_t	tlGargSwipe[] =
-{
-	{ TASK_STOP_MOVING,			0				},
-	{ TASK_FACE_ENEMY,			(float)0		},
-	{ TASK_MELEE_ATTACK1,		(float)0		},
-};
-
-Schedule_t	slGargSwipe[] =
-{
+Task_t tlGargSwipe[] =
 	{
-		tlGargSwipe,
-		ARRAYSIZE(tlGargSwipe),
-		bits_COND_CAN_MELEE_ATTACK2,
-		0,
-		"GargSwipe"
-	},
+		{TASK_STOP_MOVING, 0},
+		{TASK_FACE_ENEMY, (float)0},
+		{TASK_MELEE_ATTACK1, (float)0},
+};
+
+Schedule_t slGargSwipe[] =
+	{
+		{tlGargSwipe,
+			ARRAYSIZE(tlGargSwipe),
+			bits_COND_CAN_MELEE_ATTACK2,
+			0,
+			"GargSwipe"},
 };
 
 
-DEFINE_CUSTOM_SCHEDULES(CGargantua)
-{
+DEFINE_CUSTOM_SCHEDULES(CGargantua){
 	slGargFlame,
-		slGargSwipe,
+	slGargSwipe,
 };
 
 IMPLEMENT_CUSTOM_SCHEDULES(CGargantua, CBaseMonster);
@@ -504,7 +497,7 @@ void CGargantua::StompAttack()
 	UTIL_TraceLine(vecStart, vecEnd, ignore_monsters, edict(), &trace);
 	CStomp::StompCreate(vecStart, trace.vecEndPos, 0);
 	UTIL_ScreenShake(pev->origin, 12.0, 100.0, 2.0, 1000);
-	EMIT_SOUND_DYN(edict(), CHAN_WEAPON, pStompSounds[RANDOM_LONG(0, ARRAYSIZE(pStompSounds) - 1)], 1.0, ATTN_GARG, 0, PITCH_NORM + RANDOM_LONG(-10, 10));
+	EMIT_SOUND_DYN(edict(), CHAN_WEAPON, RANDOM_SOUND_ARRAY(pStompSounds), 1.0, ATTN_GARG, 0, PITCH_NORM + RANDOM_LONG(-10, 10));
 
 	UTIL_TraceLine(pev->origin, pev->origin - Vector(0, 0, 20), ignore_monsters, edict(), &trace);
 	if (trace.flFraction < 1.0)
@@ -514,8 +507,8 @@ void CGargantua::StompAttack()
 
 void CGargantua::FlameCreate()
 {
-	int			i;
-	Vector		posGun, angleGun;
+	int i;
+	Vector posGun, angleGun;
 	TraceResult trace;
 
 	UTIL_MakeVectors(pev->angles);
@@ -574,11 +567,11 @@ void CGargantua::FlameControls(float angleX, float angleY)
 
 void CGargantua::FlameUpdate()
 {
-	int				i;
-	static float	offset[2] = {60, -60};
-	TraceResult		trace;
-	Vector			vecStart, angleGun;
-	BOOL			streaks = FALSE;
+	int i;
+	static float offset[2] = {60, -60};
+	TraceResult trace;
+	Vector vecStart, angleGun;
+	bool streaks = false;
 
 	for (i = 0; i < 2; i++)
 	{
@@ -601,7 +594,7 @@ void CGargantua::FlameUpdate()
 			if (trace.flFraction != 1.0 && gpGlobals->time > m_streakTime)
 			{
 				StreakSplash(trace.vecEndPos, trace.vecPlaneNormal, 6, 20, 50, 400);
-				streaks = TRUE;
+				streaks = true;
 				UTIL_DecalTrace(&trace, DECAL_SMALLSCORCH1 + RANDOM_LONG(0, 2));
 			}
 			// RadiusDamage( trace.vecEndPos, pev, pev, gSkillData.gargantuaDmgFire, CLASS_ALIEN_MONSTER, DMG_BURN );
@@ -609,16 +602,16 @@ void CGargantua::FlameUpdate()
 
 			MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
 			WRITE_BYTE(TE_ELIGHT);
-			WRITE_SHORT(entindex() + 0x1000 * (i + 2));		// entity, attachment
-			WRITE_COORD(vecStart.x);		// origin
+			WRITE_SHORT(entindex() + 0x1000 * (i + 2)); // entity, attachment
+			WRITE_COORD(vecStart.x);					// origin
 			WRITE_COORD(vecStart.y);
 			WRITE_COORD(vecStart.z);
-			WRITE_COORD(RANDOM_FLOAT(32, 48));	// radius
-			WRITE_BYTE(255);	// R
-			WRITE_BYTE(255);	// G
-			WRITE_BYTE(255);	// B
-			WRITE_BYTE(2);	// life * 10
-			WRITE_COORD(0); // decay
+			WRITE_COORD(RANDOM_FLOAT(32, 48)); // radius
+			WRITE_BYTE(255);				   // R
+			WRITE_BYTE(255);				   // G
+			WRITE_BYTE(255);				   // B
+			WRITE_BYTE(2);					   // life * 10
+			WRITE_COORD(0);					   // decay
 			MESSAGE_END();
 		}
 	}
@@ -631,9 +624,9 @@ void CGargantua::FlameUpdate()
 void CGargantua::FlameDamage(Vector vecStart, Vector vecEnd, entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int iClassIgnore, int bitsDamageType)
 {
 	CBaseEntity* pEntity = NULL;
-	TraceResult	tr;
-	float		flAdjustedDamage;
-	Vector		vecSpot;
+	TraceResult tr;
+	float flAdjustedDamage;
+	Vector vecSpot;
 
 	Vector vecMid = (vecStart + vecEnd) * 0.5;
 
@@ -648,7 +641,7 @@ void CGargantua::FlameDamage(Vector vecStart, Vector vecEnd, entvars_t* pevInfli
 		{
 			// UNDONE: this should check a damage mask, not an ignore
 			if (iClassIgnore != CLASS_NONE && pEntity->Classify() == iClassIgnore)
-			{// houndeyes don't hurt other houndeyes with their attack
+			{ // houndeyes don't hurt other houndeyes with their attack
 				continue;
 			}
 
@@ -665,7 +658,7 @@ void CGargantua::FlameDamage(Vector vecStart, Vector vecEnd, entvars_t* pevInfli
 			UTIL_TraceLine(vecSrc, vecSpot, dont_ignore_monsters, ENT(pev), &tr);
 
 			if (tr.flFraction == 1.0 || tr.pHit == pEntity->edict())
-			{// the explosion can 'see' this entity, so hurt them!
+			{ // the explosion can 'see' this entity, so hurt them!
 				// decrease damage for an ent that's farther from the flame.
 				dist = (vecSrc - tr.vecEndPos).Length();
 
@@ -728,12 +721,12 @@ void CGargantua::PrescheduleThink()
 
 
 //=========================================================
-// Classify - indicates this monster's place in the 
+// Classify - indicates this monster's place in the
 // relationship table.
 //=========================================================
-int	CGargantua::Classify()
+int CGargantua::Classify()
 {
-	return	CLASS_ALIEN_MONSTER;
+	return CLASS_ALIEN_MONSTER;
 }
 
 //=========================================================
@@ -782,12 +775,12 @@ void CGargantua::Spawn()
 	m_bloodColor = BLOOD_COLOR_GREEN;
 	pev->health = gSkillData.gargantuaHealth;
 	//pev->view_ofs		= Vector ( 0, 0, 96 );// taken from mdl file
-	m_flFieldOfView = -0.2;// width of forward view cone ( as a dotproduct result )
+	m_flFieldOfView = -0.2; // width of forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
 
 	MonsterInit();
 
-	m_pEyeGlow = CSprite::SpriteCreate(GARG_EYE_SPRITE_NAME, pev->origin, FALSE);
+	m_pEyeGlow = CSprite::SpriteCreate(GARG_EYE_SPRITE_NAME, pev->origin, false);
 	m_pEyeGlow->SetTransparency(kRenderGlow, 255, 255, 255, 0, kRenderFxNoDissipation);
 	m_pEyeGlow->SetAttachment(edict(), 1);
 	EyeOff();
@@ -801,8 +794,6 @@ void CGargantua::Spawn()
 //=========================================================
 void CGargantua::Precache()
 {
-	int i;
-
 	PRECACHE_MODEL("models/garg.mdl");
 	PRECACHE_MODEL(GARG_EYE_SPRITE_NAME);
 	PRECACHE_MODEL(GARG_BEAM_SPRITE_NAME);
@@ -811,38 +802,17 @@ void CGargantua::Precache()
 	gGargGibModel = PRECACHE_MODEL(GARG_GIB_MODEL);
 	PRECACHE_SOUND(GARG_STOMP_BUZZ_SOUND);
 
-	for (i = 0; i < ARRAYSIZE(pAttackHitSounds); i++)
-		PRECACHE_SOUND((char*)pAttackHitSounds[i]);
-
-	for (i = 0; i < ARRAYSIZE(pBeamAttackSounds); i++)
-		PRECACHE_SOUND((char*)pBeamAttackSounds[i]);
-
-	for (i = 0; i < ARRAYSIZE(pAttackMissSounds); i++)
-		PRECACHE_SOUND((char*)pAttackMissSounds[i]);
-
-	for (i = 0; i < ARRAYSIZE(pRicSounds); i++)
-		PRECACHE_SOUND((char*)pRicSounds[i]);
-
-	for (i = 0; i < ARRAYSIZE(pFootSounds); i++)
-		PRECACHE_SOUND((char*)pFootSounds[i]);
-
-	for (i = 0; i < ARRAYSIZE(pIdleSounds); i++)
-		PRECACHE_SOUND((char*)pIdleSounds[i]);
-
-	for (i = 0; i < ARRAYSIZE(pAlertSounds); i++)
-		PRECACHE_SOUND((char*)pAlertSounds[i]);
-
-	for (i = 0; i < ARRAYSIZE(pPainSounds); i++)
-		PRECACHE_SOUND((char*)pPainSounds[i]);
-
-	for (i = 0; i < ARRAYSIZE(pAttackSounds); i++)
-		PRECACHE_SOUND((char*)pAttackSounds[i]);
-
-	for (i = 0; i < ARRAYSIZE(pStompSounds); i++)
-		PRECACHE_SOUND((char*)pStompSounds[i]);
-
-	for (i = 0; i < ARRAYSIZE(pBreatheSounds); i++)
-		PRECACHE_SOUND((char*)pBreatheSounds[i]);
+	PRECACHE_SOUND_ARRAY(pAttackHitSounds);
+	PRECACHE_SOUND_ARRAY(pBeamAttackSounds);
+	PRECACHE_SOUND_ARRAY(pAttackMissSounds);
+	PRECACHE_SOUND_ARRAY(pRicSounds);
+	PRECACHE_SOUND_ARRAY(pFootSounds);
+	PRECACHE_SOUND_ARRAY(pIdleSounds);
+	PRECACHE_SOUND_ARRAY(pAlertSounds);
+	PRECACHE_SOUND_ARRAY(pPainSounds);
+	PRECACHE_SOUND_ARRAY(pAttackSounds);
+	PRECACHE_SOUND_ARRAY(pStompSounds);
+	PRECACHE_SOUND_ARRAY(pBreatheSounds);
 }
 
 
@@ -857,11 +827,11 @@ void CGargantua::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecD
 	}
 
 	// UNDONE: Hit group specific damage?
-	if (bitsDamageType & (GARG_DAMAGE | DMG_BLAST))
+	if ((bitsDamageType & (GARG_DAMAGE | DMG_BLAST)) != 0)
 	{
 		if (m_painSoundTime < gpGlobals->time)
 		{
-			EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, pPainSounds[RANDOM_LONG(0, ARRAYSIZE(pPainSounds) - 1)], 1.0, ATTN_GARG, 0, PITCH_NORM);
+			EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pPainSounds), 1.0, ATTN_GARG, 0, PITCH_NORM);
 			m_painSoundTime = gpGlobals->time + RANDOM_FLOAT(2.5, 4);
 		}
 	}
@@ -881,20 +851,19 @@ void CGargantua::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecD
 	}
 
 	CBaseMonster::TraceAttack(pevAttacker, flDamage, vecDir, ptr, bitsDamageType);
-
 }
 
 
 
-int CGargantua::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool CGargantua::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
 	ALERT(at_aiconsole, "CGargantua::TakeDamage\n");
 
 	if (IsAlive())
 	{
-		if (!(bitsDamageType & GARG_DAMAGE))
+		if ((bitsDamageType & GARG_DAMAGE) == 0)
 			flDamage *= 0.01;
-		if (bitsDamageType & DMG_BLAST)
+		if ((bitsDamageType & DMG_BLAST) != 0)
 			SetConditions(bits_COND_LIGHT_DAMAGE);
 	}
 
@@ -920,10 +889,10 @@ void CGargantua::DeathEffect()
 	}
 
 	CBaseEntity* pSmoker = CBaseEntity::Create("env_smoker", pev->origin, g_vecZero, NULL);
-	pSmoker->pev->health = 1;	// 1 smoke balls
-	pSmoker->pev->scale = 46;	// 4.6X normal size
-	pSmoker->pev->dmg = 0;		// 0 radial distribution
-	pSmoker->pev->nextthink = gpGlobals->time + 2.5;	// Start in 2.5 seconds
+	pSmoker->pev->health = 1;						 // 1 smoke balls
+	pSmoker->pev->scale = 46;						 // 4.6X normal size
+	pSmoker->pev->dmg = 0;							 // 0 radial distribution
+	pSmoker->pev->nextthink = gpGlobals->time + 2.5; // Start in 2.5 seconds
 }
 
 
@@ -938,23 +907,23 @@ void CGargantua::Killed(entvars_t* pevAttacker, int iGib)
 //=========================================================
 // CheckMeleeAttack1
 // Garg swipe attack
-// 
+//
 //=========================================================
-BOOL CGargantua::CheckMeleeAttack1(float flDot, float flDist)
+bool CGargantua::CheckMeleeAttack1(float flDot, float flDist)
 {
 	//	ALERT(at_aiconsole, "CheckMelee(%f, %f)\n", flDot, flDist);
 
 	if (flDot >= 0.7)
 	{
 		if (flDist <= GARG_ATTACKDIST)
-			return TRUE;
+			return true;
 	}
-	return FALSE;
+	return false;
 }
 
 
 // Flame thrower madness!
-BOOL CGargantua::CheckMeleeAttack2(float flDot, float flDist)
+bool CGargantua::CheckMeleeAttack2(float flDot, float flDist)
 {
 	//	ALERT(at_aiconsole, "CheckMelee(%f, %f)\n", flDot, flDist);
 
@@ -963,10 +932,10 @@ BOOL CGargantua::CheckMeleeAttack2(float flDot, float flDist)
 		if (flDot >= 0.8 && flDist > GARG_ATTACKDIST)
 		{
 			if (flDist <= GARG_FLAME_LENGTH)
-				return TRUE;
+				return true;
 		}
 	}
-	return FALSE;
+	return false;
 }
 
 
@@ -979,16 +948,16 @@ BOOL CGargantua::CheckMeleeAttack2(float flDot, float flDist)
 // Stomp attack
 //
 //=========================================================
-BOOL CGargantua::CheckRangeAttack1(float flDot, float flDist)
+bool CGargantua::CheckRangeAttack1(float flDot, float flDist)
 {
 	if (gpGlobals->time > m_seeTime)
 	{
 		if (flDot >= 0.7 && flDist > GARG_ATTACKDIST)
 		{
-			return TRUE;
+			return true;
 		}
 	}
-	return FALSE;
+	return false;
 }
 
 
@@ -1008,18 +977,18 @@ void CGargantua::HandleAnimEvent(MonsterEvent_t* pEvent)
 		CBaseEntity* pHurt = GargantuaCheckTraceHullAttack(GARG_ATTACKDIST + 10.0, gSkillData.gargantuaDmgSlash, DMG_SLASH);
 		if (pHurt)
 		{
-			if (pHurt->pev->flags & (FL_MONSTER | FL_CLIENT))
+			if ((pHurt->pev->flags & (FL_MONSTER | FL_CLIENT)) != 0)
 			{
 				pHurt->pev->punchangle.x = -30; // pitch
-				pHurt->pev->punchangle.y = -30;	// yaw
+				pHurt->pev->punchangle.y = -30; // yaw
 				pHurt->pev->punchangle.z = 30;	// roll
 				//UTIL_MakeVectors(pev->angles);	// called by CheckTraceHullAttack
 				pHurt->pev->velocity = pHurt->pev->velocity - gpGlobals->v_right * 100;
 			}
-			EMIT_SOUND_DYN(edict(), CHAN_WEAPON, pAttackHitSounds[RANDOM_LONG(0, ARRAYSIZE(pAttackHitSounds) - 1)], 1.0, ATTN_NORM, 0, 50 + RANDOM_LONG(0, 15));
+			EMIT_SOUND_DYN(edict(), CHAN_WEAPON, RANDOM_SOUND_ARRAY(pAttackHitSounds), 1.0, ATTN_NORM, 0, 50 + RANDOM_LONG(0, 15));
 		}
 		else // Play a random attack miss sound
-			EMIT_SOUND_DYN(edict(), CHAN_WEAPON, pAttackMissSounds[RANDOM_LONG(0, ARRAYSIZE(pAttackMissSounds) - 1)], 1.0, ATTN_NORM, 0, 50 + RANDOM_LONG(0, 15));
+			EMIT_SOUND_DYN(edict(), CHAN_WEAPON, RANDOM_SOUND_ARRAY(pAttackMissSounds), 1.0, ATTN_NORM, 0, 50 + RANDOM_LONG(0, 15));
 
 		Vector forward;
 		UTIL_MakeVectorsPrivate(pev->angles, forward, NULL, NULL);
@@ -1029,7 +998,7 @@ void CGargantua::HandleAnimEvent(MonsterEvent_t* pEvent)
 	case GARG_AE_RIGHT_FOOT:
 	case GARG_AE_LEFT_FOOT:
 		UTIL_ScreenShake(pev->origin, 4.0, 3.0, 1.0, 750);
-		EMIT_SOUND_DYN(edict(), CHAN_BODY, pFootSounds[RANDOM_LONG(0, ARRAYSIZE(pFootSounds) - 1)], 1.0, ATTN_GARG, 0, PITCH_NORM + RANDOM_LONG(-10, 10));
+		EMIT_SOUND_DYN(edict(), CHAN_BODY, RANDOM_SOUND_ARRAY(pFootSounds), 1.0, ATTN_GARG, 0, PITCH_NORM + RANDOM_LONG(-10, 10));
 		break;
 
 	case GARG_AE_STOMP:
@@ -1038,7 +1007,7 @@ void CGargantua::HandleAnimEvent(MonsterEvent_t* pEvent)
 		break;
 
 	case GARG_AE_BREATHE:
-		EMIT_SOUND_DYN(edict(), CHAN_VOICE, pBreatheSounds[RANDOM_LONG(0, ARRAYSIZE(pBreatheSounds) - 1)], 1.0, ATTN_GARG, 0, PITCH_NORM + RANDOM_LONG(-10, 10));
+		EMIT_SOUND_DYN(edict(), CHAN_VOICE, RANDOM_SOUND_ARRAY(pBreatheSounds), 1.0, ATTN_GARG, 0, PITCH_NORM + RANDOM_LONG(-10, 10));
 		break;
 
 	default:
@@ -1049,7 +1018,7 @@ void CGargantua::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 
 //=========================================================
-// CheckTraceHullAttack - expects a length to trace, amount 
+// CheckTraceHullAttack - expects a length to trace, amount
 // of damage to do, and damage type. Returns a pointer to
 // the damaged entity in case the monster wishes to do
 // other stuff to the victim (punchangle, etc)
@@ -1119,14 +1088,14 @@ void CGargantua::StartTask(Task_t* pTask)
 
 	case TASK_SOUND_ATTACK:
 		if (RANDOM_LONG(0, 100) < 30)
-			EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, pAttackSounds[RANDOM_LONG(0, ARRAYSIZE(pAttackSounds) - 1)], 1.0, ATTN_GARG, 0, PITCH_NORM);
+			EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pAttackSounds), 1.0, ATTN_GARG, 0, PITCH_NORM);
 		TaskComplete();
 		break;
 
 	case TASK_DIE:
 		m_flWaitFinished = gpGlobals->time + 1.6;
 		DeathEffect();
-		// FALL THROUGH
+		[[fallthrough]];
 	default:
 		CBaseMonster::StartTask(pTask);
 		break;
@@ -1192,13 +1161,13 @@ void CGargantua::RunTask(Task_t* pTask)
 			WRITE_BYTE(200);
 
 			// Model
-			WRITE_SHORT(gGargGibModel);	//model id#
+			WRITE_SHORT(gGargGibModel); //model id#
 
 			// # of shards
 			WRITE_BYTE(50);
 
 			// duration
-			WRITE_BYTE(20);// 3.0 seconds
+			WRITE_BYTE(20); // 3.0 seconds
 
 			// flags
 
@@ -1222,7 +1191,7 @@ void CGargantua::RunTask(Task_t* pTask)
 		}
 		else
 		{
-			BOOL cancel = FALSE;
+			bool cancel = false;
 
 			Vector angles = g_vecZero;
 
@@ -1237,10 +1206,10 @@ void CGargantua::RunTask(Task_t* pTask)
 				angles.x = -angles.x;
 				angles.y -= pev->angles.y;
 				if (dir.Length() > 400)
-					cancel = TRUE;
+					cancel = true;
 			}
 			if (fabs(angles.y) > 60)
-				cancel = TRUE;
+				cancel = true;
 
 			if (cancel)
 			{
@@ -1329,7 +1298,7 @@ CSpiral* CSpiral::Create(const Vector& origin, float height, float radius, float
 	return pSpiral;
 }
 
-#define SPIRAL_INTERVAL		0.1 //025
+#define SPIRAL_INTERVAL 0.1 //025
 
 void CSpiral::Think()
 {
@@ -1368,8 +1337,8 @@ void CSpiral::Think()
 // HACKHACK Cut and pasted from explode.cpp
 void SpawnExplosion(Vector center, float randomRange, float time, int magnitude)
 {
-	KeyValueData	kvd;
-	char			buf[128];
+	KeyValueData kvd;
+	char buf[128];
 
 	center.x += RANDOM_FLOAT(-randomRange, randomRange);
 	center.y += RANDOM_FLOAT(-randomRange, randomRange);

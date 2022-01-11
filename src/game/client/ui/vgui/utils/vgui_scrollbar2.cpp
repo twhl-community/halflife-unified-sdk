@@ -1,6 +1,6 @@
 //========= Copyright © 1996-2002, Valve LLC, All rights reserved. ============
 //
-// Purpose: 
+// Purpose:
 //
 // $NoKeywords: $
 //=============================================================================
@@ -10,10 +10,10 @@
 #include "vgui_slider2.h"
 #include "vgui_loadtga.h"
 
-#include<VGUI_IntChangeSignal.h>
-#include<VGUI_Button.h>
-#include<VGUI_ActionSignal.h>
-#include<VGUI_LineBorder.h>
+#include <VGUI_IntChangeSignal.h>
+#include <VGUI_Button.h>
+#include <VGUI_ActionSignal.h>
+#include <VGUI_LineBorder.h>
 
 using namespace vgui;
 
@@ -31,6 +31,7 @@ public:
 	{
 		_scrollBar->fireIntChangeSignal();
 	}
+
 protected:
 	ScrollBar2* _scrollBar;
 };
@@ -39,13 +40,15 @@ class FooDefaultButtonSignal : public ActionSignal
 {
 public:
 	ScrollBar2* _scrollBar;
-	int        _buttonIndex;
+	int _buttonIndex;
+
 public:
 	FooDefaultButtonSignal(ScrollBar2* scrollBar, int buttonIndex)
 	{
 		_scrollBar = scrollBar;
 		_buttonIndex = buttonIndex;
 	}
+
 public:
 	void actionPerformed(Panel* panel) override
 	{
@@ -93,11 +96,11 @@ public:
 
 //-----------------------------------------------------------------------------
 // Purpose: Constructor
-// Input  : x - 
-//			y - 
-//			wide - 
-//			tall - 
-//			vertical - 
+// Input  : x -
+//			y -
+//			wide -
+//			tall -
+//			vertical -
 //-----------------------------------------------------------------------------
 ScrollBar2::ScrollBar2(int x, int y, int wide, int tall, bool vertical) : Panel(x, y, wide, tall)
 {
@@ -259,7 +262,6 @@ void ScrollBar2::doButtonPressed(int buttonIndex)
 	{
 		_slider->setValue(_slider->getValue() + _buttonPressedScrollValue);
 	}
-
 }
 
 void ScrollBar2::setButtonPressedScrollValue(int value)

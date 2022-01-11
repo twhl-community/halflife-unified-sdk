@@ -16,26 +16,26 @@
 // hgrunt
 //=========================================================
 
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"monsters.h"
-#include	"animation.h"
-#include	"squadmonster.h"
-#include	"weapons.h"
-#include	"talkmonster.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
+#include "animation.h"
+#include "squadmonster.h"
+#include "weapons.h"
+#include "talkmonster.h"
 #include "COFSquadTalkMonster.h"
-#include	"soundent.h"
-#include	"effects.h"
-#include	"customentity.h"
+#include "soundent.h"
+#include "effects.h"
+#include "customentity.h"
 #include "hgrunt_ally_base.h"
 
 //=========================================================
 // monster-specific DEFINE's
 //=========================================================
-#define	GRUNT_MP5_CLIP_SIZE				36 // how many bullets in a clip? - NOTE: 3 round burst sound, so keep as 3 * x!
-#define GRUNT_SHOTGUN_CLIP_SIZE			8
-#define GRUNT_SAW_CLIP_SIZE				36
+#define GRUNT_MP5_CLIP_SIZE 36 // how many bullets in a clip? - NOTE: 3 round burst sound, so keep as 3 * x!
+#define GRUNT_SHOTGUN_CLIP_SIZE 8
+#define GRUNT_SAW_CLIP_SIZE 36
 
 namespace HGruntAllyWeaponFlag
 {
@@ -118,7 +118,7 @@ protected:
 	PostureType GetPreferredCombatPosture() const override
 	{
 		//Always stand when using Saw
-		if (pev->weapons & HGruntAllyWeaponFlag::Saw)
+		if ((pev->weapons & HGruntAllyWeaponFlag::Saw) != 0)
 		{
 			return PostureType::Standing;
 		}
@@ -128,7 +128,7 @@ protected:
 
 	float GetMaximumRangeAttackDistance() const override
 	{
-		if (pev->weapons & HGruntAllyWeaponFlag::Shotgun)
+		if ((pev->weapons & HGruntAllyWeaponFlag::Shotgun) != 0)
 		{
 			return 640;
 		}
@@ -146,7 +146,7 @@ LINK_ENTITY_TO_CLASS(monster_human_grunt_ally, CHGruntAlly);
 void CHGruntAlly::DropWeapon(bool applyVelocity)
 {
 	if (GetBodygroup(HGruntAllyBodygroup::Weapons) != HGruntAllyWeapon::None)
-	{// throw a gun if the grunt has one
+	{ // throw a gun if the grunt has one
 		Vector vecGunPos, vecGunAngles;
 		GetAttachment(0, vecGunPos, vecGunAngles);
 
@@ -244,9 +244,15 @@ void CHGruntAlly::Shoot(bool firstShotInBurst)
 
 		switch (RANDOM_LONG(0, 2))
 		{
-		case 0: EMIT_SOUND_DYN(edict(), CHAN_WEAPON, "weapons/saw_fire1.wav", VOL_NORM, ATTN_NORM, 0, RANDOM_LONG(0, 15) + 94); break;
-		case 1: EMIT_SOUND_DYN(edict(), CHAN_WEAPON, "weapons/saw_fire2.wav", VOL_NORM, ATTN_NORM, 0, RANDOM_LONG(0, 15) + 94); break;
-		case 2: EMIT_SOUND_DYN(edict(), CHAN_WEAPON, "weapons/saw_fire3.wav", VOL_NORM, ATTN_NORM, 0, RANDOM_LONG(0, 15) + 94); break;
+		case 0:
+			EMIT_SOUND_DYN(edict(), CHAN_WEAPON, "weapons/saw_fire1.wav", VOL_NORM, ATTN_NORM, 0, RANDOM_LONG(0, 15) + 94);
+			break;
+		case 1:
+			EMIT_SOUND_DYN(edict(), CHAN_WEAPON, "weapons/saw_fire2.wav", VOL_NORM, ATTN_NORM, 0, RANDOM_LONG(0, 15) + 94);
+			break;
+		case 2:
+			EMIT_SOUND_DYN(edict(), CHAN_WEAPON, "weapons/saw_fire3.wav", VOL_NORM, ATTN_NORM, 0, RANDOM_LONG(0, 15) + 94);
+			break;
 		}
 
 		firedShot = true;
@@ -270,7 +276,7 @@ void CHGruntAlly::Shoot(bool firstShotInBurst)
 	{
 		pev->effects |= EF_MUZZLEFLASH;
 
-		m_cAmmoLoaded--;// take away a bullet!
+		m_cAmmoLoaded--; // take away a bullet!
 
 		Vector angDir = UTIL_VecToAngles(vecShootDir);
 		SetBlending(0, angDir.x);
@@ -323,18 +329,18 @@ void CHGruntAlly::Spawn()
 
 	int weaponIndex = 0;
 
-	if (pev->weapons & HGruntAllyWeaponFlag::MP5)
+	if ((pev->weapons & HGruntAllyWeaponFlag::MP5) != 0)
 	{
 		weaponIndex = HGruntAllyWeapon::MP5;
 		m_cClipSize = GRUNT_MP5_CLIP_SIZE;
 	}
-	else if (pev->weapons & HGruntAllyWeaponFlag::Shotgun)
+	else if ((pev->weapons & HGruntAllyWeaponFlag::Shotgun) != 0)
 	{
 		m_cClipSize = GRUNT_SHOTGUN_CLIP_SIZE;
 		weaponIndex = HGruntAllyWeapon::Shotgun;
 		m_iGruntTorso = HGruntAllyTorso::Shotgun;
 	}
-	else if (pev->weapons & HGruntAllyWeaponFlag::Saw)
+	else if ((pev->weapons & HGruntAllyWeaponFlag::Saw) != 0)
 	{
 		weaponIndex = HGruntAllyWeapon::Saw;
 		m_cClipSize = GRUNT_SAW_CLIP_SIZE;
@@ -350,7 +356,7 @@ void CHGruntAlly::Spawn()
 
 	if (m_iGruntHead == HGruntAllyHead::Default)
 	{
-		if (pev->spawnflags & SF_SQUADMONSTER_LEADER)
+		if ((pev->spawnflags & SF_SQUADMONSTER_LEADER) != 0)
 		{
 			m_iGruntHead = HGruntAllyHead::BeretWhite;
 		}
@@ -397,7 +403,7 @@ void CHGruntAlly::Precache()
 
 	PRECACHE_SOUND("weapons/glauncher.wav");
 
-	m_iBrassShell = PRECACHE_MODEL("models/shell.mdl");// brass shell
+	m_iBrassShell = PRECACHE_MODEL("models/shell.mdl"); // brass shell
 	m_iShotgunShell = PRECACHE_MODEL("models/shotgunshell.mdl");
 	m_iSawShell = PRECACHE_MODEL("models/saw_shell.mdl");
 	m_iSawLink = PRECACHE_MODEL("models/saw_link.mdl");
@@ -485,31 +491,31 @@ class CDeadHGruntAlly : public CBaseMonster
 {
 public:
 	void Spawn() override;
-	int	Classify() override { return	CLASS_HUMAN_MILITARY_FRIENDLY; }
+	int Classify() override { return CLASS_HUMAN_MILITARY_FRIENDLY; }
 
-	void KeyValue(KeyValueData* pkvd) override;
+	bool KeyValue(KeyValueData* pkvd) override;
 
-	int	m_iPose;// which sequence to display	-- temporary, don't need to save
+	int m_iPose; // which sequence to display	-- temporary, don't need to save
 	int m_iGruntHead;
 	static const char* m_szPoses[7];
 };
 
 const char* CDeadHGruntAlly::m_szPoses[] = {"deadstomach", "deadside", "deadsitting", "dead_on_back", "hgrunt_dead_stomach", "dead_headcrabed", "dead_canyon"};
 
-void CDeadHGruntAlly::KeyValue(KeyValueData* pkvd)
+bool CDeadHGruntAlly::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq(pkvd->szKeyName, "pose"))
 	{
 		m_iPose = atoi(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "head"))
 	{
 		m_iGruntHead = atoi(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		return true;
 	}
-	else
-		CBaseMonster::KeyValue(pkvd);
+
+	return CBaseMonster::KeyValue(pkvd);
 }
 
 LINK_ENTITY_TO_CLASS(monster_human_grunt_ally_dead, CDeadHGruntAlly);
@@ -537,17 +543,17 @@ void CDeadHGruntAlly::Spawn()
 	// Corpses have less health
 	pev->health = 8;
 
-	if (pev->weapons & HGruntAllyWeaponFlag::MP5)
+	if ((pev->weapons & HGruntAllyWeaponFlag::MP5) != 0)
 	{
 		SetBodygroup(HGruntAllyBodygroup::Torso, HGruntAllyTorso::Normal);
 		SetBodygroup(HGruntAllyBodygroup::Weapons, HGruntAllyWeapon::MP5);
 	}
-	else if (pev->weapons & HGruntAllyWeaponFlag::Shotgun)
+	else if ((pev->weapons & HGruntAllyWeaponFlag::Shotgun) != 0)
 	{
 		SetBodygroup(HGruntAllyBodygroup::Torso, HGruntAllyTorso::Shotgun);
 		SetBodygroup(HGruntAllyBodygroup::Weapons, HGruntAllyWeapon::Shotgun);
 	}
-	else if (pev->weapons & HGruntAllyWeaponFlag::Saw)
+	else if ((pev->weapons & HGruntAllyWeaponFlag::Saw) != 0)
 	{
 		SetBodygroup(HGruntAllyBodygroup::Torso, HGruntAllyTorso::Saw);
 		SetBodygroup(HGruntAllyBodygroup::Weapons, HGruntAllyWeapon::Saw);

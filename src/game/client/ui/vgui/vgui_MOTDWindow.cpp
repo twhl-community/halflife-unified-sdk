@@ -5,7 +5,7 @@
 // Valve, L.L.C., or in accordance with the terms and conditions stipulated in
 // the agreement/contract under which the contents have been supplied.
 //
-// Purpose: 
+// Purpose:
 //
 // $Workfile:     $
 // $Date:         $
@@ -20,7 +20,7 @@
 #include "VGUI_ScrollPanel.h"
 #include "VGUI_TextImage.h"
 
-#include<VGUI_StackLayout.h>
+#include <VGUI_StackLayout.h>
 
 #include "hud.h"
 #include "cl_util.h"
@@ -31,13 +31,13 @@
 #include "vgui_int.h"
 #include "vgui_TeamFortressViewport.h"
 
-#define MOTD_TITLE_X		XRES(16)
-#define MOTD_TITLE_Y		YRES(16)
+#define MOTD_TITLE_X XRES(16)
+#define MOTD_TITLE_Y YRES(16)
 
-#define MOTD_WINDOW_X				XRES(112)
-#define MOTD_WINDOW_Y				YRES(80)
-#define MOTD_WINDOW_SIZE_X			XRES(424)
-#define MOTD_WINDOW_SIZE_Y			YRES(312)
+#define MOTD_WINDOW_X XRES(112)
+#define MOTD_WINDOW_Y YRES(80)
+#define MOTD_WINDOW_SIZE_X XRES(424)
+#define MOTD_WINDOW_SIZE_Y YRES(312)
 
 //-----------------------------------------------------------------------------
 // Purpose: Displays the MOTD and basic server information
@@ -45,18 +45,17 @@
 class CMessageWindowPanel : public CMenuPanel
 {
 public:
-	CMessageWindowPanel(const char* szMOTD, const char* szTitle, int iShadeFullScreen, int iRemoveMe, int x, int y, int wide, int tall);
+	CMessageWindowPanel(const char* szMOTD, const char* szTitle, bool iShadeFullScreen, bool iRemoveMe, int x, int y, int wide, int tall);
 
 private:
 	CTransparentPanel* m_pBackgroundPanel;
-
 };
 
 //-----------------------------------------------------------------------------
 // Purpose: Creates a new CMessageWindowPanel
 // Output : CMenuPanel - interface to the panel
 //-----------------------------------------------------------------------------
-CMenuPanel* CMessageWindowPanel_Create(const char* szMOTD, const char* szTitle, int iShadeFullscreen, int iRemoveMe, int x, int y, int wide, int tall)
+CMenuPanel* CMessageWindowPanel_Create(const char* szMOTD, const char* szTitle, bool iShadeFullscreen, bool iRemoveMe, int x, int y, int wide, int tall)
 {
 	return new CMessageWindowPanel(szMOTD, szTitle, iShadeFullscreen, iRemoveMe, x, y, wide, tall);
 }
@@ -64,7 +63,7 @@ CMenuPanel* CMessageWindowPanel_Create(const char* szMOTD, const char* szTitle, 
 //-----------------------------------------------------------------------------
 // Purpose: Constructs a message panel
 //-----------------------------------------------------------------------------
-CMessageWindowPanel::CMessageWindowPanel(const char* szMOTD, const char* szTitle, int iShadeFullscreen, int iRemoveMe, int x, int y, int wide, int tall) : CMenuPanel(iShadeFullscreen ? 100 : 255, iRemoveMe, x, y, wide, tall)
+CMessageWindowPanel::CMessageWindowPanel(const char* szMOTD, const char* szTitle, bool iShadeFullscreen, bool iRemoveMe, int x, int y, int wide, int tall) : CMenuPanel(iShadeFullscreen ? 100 : 255, iRemoveMe, x, y, wide, tall)
 {
 	// Get the scheme used for the Titles
 	CSchemeManager* pSchemes = gViewPort->GetSchemeManager();
@@ -140,14 +139,7 @@ CMessageWindowPanel::CMessageWindowPanel(const char* szMOTD, const char* szTitle
 
 	pScrollPanel->validate();
 
-	CommandButton* pButton = new CommandButton(CHudTextMessage::BufferedLocaliseTextString("#CTFMenu_OK"), iXPos + XRES(16), iYPos + iYSize - YRES(16) - BUTTON_SIZE_Y, CMENU_SIZE_X, BUTTON_SIZE_Y);
+	CommandButton* pButton = new CommandButton(CHudTextMessage::BufferedLocaliseTextString("#Menu_OK"), iXPos + XRES(16), iYPos + iYSize - YRES(16) - BUTTON_SIZE_Y, CMENU_SIZE_X, BUTTON_SIZE_Y);
 	pButton->addActionSignal(new CMenuHandler_TextWindow(HIDE_TEXTWINDOW));
 	pButton->setParent(this);
-
 }
-
-
-
-
-
-

@@ -30,14 +30,14 @@ public:
 	edict_t* Get();
 	edict_t* Set(edict_t* pent);
 
-	operator CBaseEntity* ();
+	operator CBaseEntity*();
 
 	CBaseEntity* operator=(CBaseEntity* pEntity);
 	CBaseEntity* operator->();
 
-	template<typename T>
+	template <typename T>
 	T* Entity()
 	{
-		return static_cast<T*>(operator CBaseEntity * ());
+		return static_cast<T*>(operator CBaseEntity*());
 	}
 };

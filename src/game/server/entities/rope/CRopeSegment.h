@@ -36,8 +36,8 @@ public:
 
 	void Touch(CBaseEntity* pOther) override;
 
-	int Save(CSave& save) override;
-	int Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 
 	static TYPEDESCRIPTION m_SaveData[];
 
@@ -84,6 +84,6 @@ private:
 	CRopeSample* m_pSample;
 	string_t m_iszModelName;
 	float m_flDefaultMass;
-	BOOL m_bCauseDamage;
-	BOOL m_bCanBeGrabbed;
+	bool m_bCauseDamage;
+	bool m_bCanBeGrabbed;
 };

@@ -12,18 +12,15 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#ifndef ITEMS_H
-#define ITEMS_H
 
+#pragma once
 
 class CItem : public CBaseEntity
 {
 public:
-	void	Spawn() override;
+	void Spawn() override;
 	CBaseEntity* Respawn() override;
-	void	EXPORT ItemTouch(CBaseEntity* pOther);
-	void	EXPORT Materialize();
-	virtual BOOL MyTouch(CBasePlayer* pPlayer) { return FALSE; }
+	void EXPORT ItemTouch(CBaseEntity* pOther);
+	void EXPORT Materialize();
+	virtual bool MyTouch(CBasePlayer* pPlayer) { return false; }
 };
-
-#endif // ITEMS_H

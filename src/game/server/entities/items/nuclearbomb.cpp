@@ -76,8 +76,8 @@ public:
 
 	void SetNuclearBombTimer(bool fOn);
 
-	BOOL bPlayBombSound;
-	BOOL bBombSoundPlaying;
+	bool bPlayBombSound;
+	bool bBombSoundPlaying;
 };
 
 LINK_ENTITY_TO_CLASS(item_nuclearbombtimer, COFNuclearBombTimer);
@@ -126,7 +126,6 @@ void COFNuclearBombTimer::NuclearBombTimerThink()
 	{
 		EMIT_SOUND(edict(), CHAN_BODY, "common/nuke_ticking.wav", 0.75, ATTN_IDLE);
 		bBombSoundPlaying = true;
-
 	}
 
 	pev->nextthink = gpGlobals->time + 0.1;
@@ -158,13 +157,13 @@ void COFNuclearBombTimer::SetNuclearBombTimer(bool fOn)
 class COFNuclearBomb : public CBaseToggle
 {
 public:
-	int	Save(CSave& save) override;
-	int Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
 	int ObjectCaps() override { return CBaseToggle::ObjectCaps() | FCAP_IMPULSE_USE; }
 
-	void KeyValue(KeyValueData* pkvd) override;
+	bool KeyValue(KeyValueData* pkvd) override;
 	void Precache() override;
 	void Spawn() override;
 
@@ -172,38 +171,36 @@ public:
 
 	COFNuclearBombTimer* m_pTimer;
 	COFNuclearBombButton* m_pButton;
-	BOOL m_fOn;
+	bool m_fOn;
 	float m_flLastPush;
 	int m_iPushCount;
 };
 
-TYPEDESCRIPTION	COFNuclearBomb::m_SaveData[] =
-{
-	DEFINE_FIELD(COFNuclearBomb, m_fOn, FIELD_BOOLEAN),
-	DEFINE_FIELD(COFNuclearBomb, m_flLastPush, FIELD_TIME),
-	DEFINE_FIELD(COFNuclearBomb, m_iPushCount, FIELD_INTEGER),
+TYPEDESCRIPTION COFNuclearBomb::m_SaveData[] =
+	{
+		DEFINE_FIELD(COFNuclearBomb, m_fOn, FIELD_BOOLEAN),
+		DEFINE_FIELD(COFNuclearBomb, m_flLastPush, FIELD_TIME),
+		DEFINE_FIELD(COFNuclearBomb, m_iPushCount, FIELD_INTEGER),
 };
 
 IMPLEMENT_SAVERESTORE(COFNuclearBomb, CBaseToggle);
 
 LINK_ENTITY_TO_CLASS(item_nuclearbomb, COFNuclearBomb);
 
-void COFNuclearBomb::KeyValue(KeyValueData* pkvd)
+bool COFNuclearBomb::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq("initialstate", pkvd->szKeyName))
 	{
 		m_fOn = atoi(pkvd->szValue) != 0;
-		pkvd->fHandled = true;
+		return true;
 	}
 	else if (FStrEq("wait", pkvd->szKeyName))
 	{
 		m_flWait = atof(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
-	else
-	{
-		CBaseToggle::KeyValue(pkvd);
-	}
+
+	return CBaseToggle::KeyValue(pkvd);
 }
 
 void COFNuclearBomb::Precache()
@@ -225,7 +222,7 @@ void COFNuclearBomb::Precache()
 
 	m_pTimer->Spawn();
 
-	m_pTimer->SetNuclearBombTimer(m_fOn == 1);
+	m_pTimer->SetNuclearBombTimer(m_fOn);
 
 	m_pButton = GetClassPtr<COFNuclearBombButton>(nullptr);
 
@@ -234,7 +231,7 @@ void COFNuclearBomb::Precache()
 
 	m_pButton->Spawn();
 
-	m_pButton->pev->skin = m_fOn == 1;
+	m_pButton->pev->skin = static_cast<int>(m_fOn);
 }
 
 void COFNuclearBomb::Spawn()
@@ -264,9 +261,7 @@ void COFNuclearBomb::Spawn()
 
 void COFNuclearBomb::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
-	if ((m_flWait != -1.0 || m_iPushCount <= 0)
-		&& m_flWait <= gpGlobals->time - m_flLastPush
-		&& ShouldToggle(useType, m_fOn))
+	if ((m_flWait != -1.0 || m_iPushCount <= 0) && m_flWait <= gpGlobals->time - m_flLastPush && ShouldToggle(useType, m_fOn))
 	{
 		if (m_fOn)
 		{
@@ -283,12 +278,12 @@ void COFNuclearBomb::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE
 
 		if (m_pButton)
 		{
-			m_pButton->SetNuclearBombButton(m_fOn == 1);
+			m_pButton->SetNuclearBombButton(m_fOn);
 		}
 
 		if (m_pTimer)
 		{
-			m_pTimer->SetNuclearBombTimer(m_fOn == 1);
+			m_pTimer->SetNuclearBombTimer(m_fOn);
 		}
 
 		if (!m_pTimer || !m_pTimer->bBombSoundPlaying)

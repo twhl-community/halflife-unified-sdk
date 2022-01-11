@@ -27,29 +27,29 @@
 #include "vgui_TeamFortressViewport.h"
 
 // Team Menu Dimensions
-#define TEAMMENU_TITLE_X				XRES(40)
-#define TEAMMENU_TITLE_Y				YRES(32)
-#define TEAMMENU_TOPLEFT_BUTTON_X		XRES(40)
-#define TEAMMENU_TOPLEFT_BUTTON_Y		YRES(80)
-#define TEAMMENU_BUTTON_SIZE_X			XRES(124)
-#define TEAMMENU_BUTTON_SIZE_Y			YRES(24)
-#define TEAMMENU_BUTTON_SPACER_Y		YRES(8)
-#define TEAMMENU_WINDOW_X				XRES(176)
-#define TEAMMENU_WINDOW_Y				YRES(80)
-#define TEAMMENU_WINDOW_SIZE_X			XRES(424)
-#define TEAMMENU_WINDOW_SIZE_Y			YRES(312)
-#define TEAMMENU_WINDOW_TITLE_X			XRES(16)
-#define TEAMMENU_WINDOW_TITLE_Y			YRES(16)
-#define TEAMMENU_WINDOW_TEXT_X			XRES(16)
-#define TEAMMENU_WINDOW_TEXT_Y			YRES(48)
-#define TEAMMENU_WINDOW_TEXT_SIZE_Y		YRES(178)
-#define TEAMMENU_WINDOW_INFO_X			XRES(16)
-#define TEAMMENU_WINDOW_INFO_Y			YRES(234)
-#define TEAMMENU_FULL_TOPLEFT_X			XRES(215)
-#define TEAMMENU_FULL_TOPLEFT_Y			YRES(42)
+#define TEAMMENU_TITLE_X XRES(40)
+#define TEAMMENU_TITLE_Y YRES(32)
+#define TEAMMENU_TOPLEFT_BUTTON_X XRES(40)
+#define TEAMMENU_TOPLEFT_BUTTON_Y YRES(80)
+#define TEAMMENU_BUTTON_SIZE_X XRES(124)
+#define TEAMMENU_BUTTON_SIZE_Y YRES(24)
+#define TEAMMENU_BUTTON_SPACER_Y YRES(8)
+#define TEAMMENU_WINDOW_X XRES(176)
+#define TEAMMENU_WINDOW_Y YRES(80)
+#define TEAMMENU_WINDOW_SIZE_X XRES(424)
+#define TEAMMENU_WINDOW_SIZE_Y YRES(312)
+#define TEAMMENU_WINDOW_TITLE_X XRES(16)
+#define TEAMMENU_WINDOW_TITLE_Y YRES(16)
+#define TEAMMENU_WINDOW_TEXT_X XRES(16)
+#define TEAMMENU_WINDOW_TEXT_Y YRES(48)
+#define TEAMMENU_WINDOW_TEXT_SIZE_Y YRES(178)
+#define TEAMMENU_WINDOW_INFO_X XRES(16)
+#define TEAMMENU_WINDOW_INFO_Y YRES(234)
+#define TEAMMENU_FULL_TOPLEFT_X XRES(215)
+#define TEAMMENU_FULL_TOPLEFT_Y YRES(42)
 
 // Creation
-CTeamMenuPanel::CTeamMenuPanel(int iTrans, int iRemoveMe, int x, int y, int wide, int tall) : CMenuPanel(iTrans, iRemoveMe, x, y, wide, tall)
+CTeamMenuPanel::CTeamMenuPanel(int iTrans, bool iRemoveMe, int x, int y, int wide, int tall) : CMenuPanel(iTrans, iRemoveMe, x, y, wide, tall)
 {
 	// Get the scheme used for the Titles
 	CSchemeManager* pSchemes = gViewPort->GetSchemeManager();
@@ -187,7 +187,7 @@ void CTeamMenuPanel::Initialize()
 //-----------------------------------------------------------------------------
 void CTeamMenuPanel::Update()
 {
-	int	 iYPos = TEAMMENU_TOPLEFT_BUTTON_Y;
+	int iYPos = TEAMMENU_TOPLEFT_BUTTON_Y;
 
 	// Set the team buttons
 	for (int i = 1; i <= 2; i++)
@@ -208,7 +208,7 @@ void CTeamMenuPanel::Update()
 				iYPos += TEAMMENU_BUTTON_SIZE_Y + TEAMMENU_BUTTON_SPACER_Y;
 
 				// Start with the first option up
-				if (!m_iCurrentInfo)
+				if (0 == m_iCurrentInfo)
 					SetActiveInfo(i);
 
 				/*
@@ -217,7 +217,7 @@ void CTeamMenuPanel::Update()
 				// Update the Team Info
 				// Now count the number of teammembers of this class
 				int iTotal = 0;
-				for ( int j = 1; j < MAX_PLAYERS; j++ )
+				for (int j = 1; j < MAX_PLAYERS_HUD; j++)
 				{
 					if ( g_PlayerInfoList[j].name == NULL )
 						continue; // empty player slot, skip
@@ -277,7 +277,7 @@ void CTeamMenuPanel::Update()
 	}
 
 	// If the player is already in a team, make the cancel button visible
-	if (gViewPort->m_iCTFTeamNumber)
+	if (0 != gViewPort->m_iCTFTeamNumber)
 	{
 		m_pCancelButton->setPos(TEAMMENU_TOPLEFT_BUTTON_X, iYPos);
 		iYPos += TEAMMENU_BUTTON_SIZE_Y + TEAMMENU_BUTTON_SPACER_Y;
@@ -292,7 +292,7 @@ void CTeamMenuPanel::Update()
 	if (!m_bUpdatedMapName)
 	{
 		const char* level = gEngfuncs.pfnGetLevelName();
-		if (level && level[0])
+		if (level && '\0' != level[0])
 		{
 			char sz[256];
 			char szTitle[256];
@@ -381,7 +381,7 @@ void CTeamMenuPanel::paintBackground()
 	if (!m_bUpdatedMapName)
 		Update();
 
-	if (m_flTeamFullReset && m_flTeamFullReset <= gHUD.m_flTime)
+	if (0 != m_flTeamFullReset && m_flTeamFullReset <= gHUD.m_flTime)
 	{
 		m_pTeamFull->setVisible(false);
 		m_flTeamFullReset = 0;
@@ -418,7 +418,7 @@ void CTeamMenuPanel::SetActiveInfo(int iInput)
 	m_pScrollPanel->validate();
 }
 
-int CTeamMenuPanel::MsgFunc_TeamFull(const char* pszName, int iSize, void* pbuf)
+bool CTeamMenuPanel::MsgFunc_TeamFull(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 

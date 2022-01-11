@@ -15,8 +15,15 @@
 
 #pragma once
 
+/**
+*	@file
+*
+*	Functions, types and globals to load and use the GoldSource engine filesystem interface to read and write files.
+*	See the VDC for information on which search paths exist to be used as path IDs:
+*	https://developer.valvesoftware.com/wiki/GoldSource_SteamPipe_Directories
+*/
+
 #include <cstddef>
-#include <filesystem>
 #include <vector>
 
 #include "Platform.h"
@@ -24,20 +31,43 @@
 
 inline IFileSystem* g_pFileSystem = nullptr;
 
-std::filesystem::path FileSystem_GetGameDirectory();
-
 bool FileSystem_LoadFileSystem();
 void FileSystem_FreeFileSystem();
 
-std::vector<std::byte> FileSystem_LoadFileIntoBuffer(const char* filename, const char* pathID = nullptr);
+/**
+*	@brief Loads a file from disk into a buffer.
+*
+*	@details If the returned buffer contains text data it is safe to cast the data pointer to char*:
+*	@code{.cpp}
+*	auto text = reinterpret_cast<char*>(buffer.data());
+*	@endcode
+*
+*	@param fileName Name of the file to load.
+*	@param pathID If not null, only looks for the file in this search path.
+*	@return If the file was successfully loaded, the contents of the buffer, with a zero byte (null terminator) appended to it in case it's a text file.
+*		If the file could not be loaded an empty buffer is returned.
+*/
+std::vector<std::byte> FileSystem_LoadFileIntoBuffer(const char* fileName, const char* pathID = nullptr);
 
-bool FileSystem_WriteTextToFile(const char* filename, const char* text, const char* pathID = nullptr);
+/**
+*	@brief Writes a text file to disk.
+*	@param fileName Name of the file to write to.
+*	@param text Null-terminated text to write. The null terminator is not written to disk.
+*	@param pathID If not null, writes to a writable location assigned to the given search path.
+*		Otherwise the first writable location will be used (in practice this will be the mod directory).
+*		If no writable location exists no file will be written to.
+*	@return True if the file was written, false if an error occurred.
+*/
+bool FileSystem_WriteTextToFile(const char* fileName, const char* text, const char* pathID = nullptr);
 
+/**
+*	@brief Helper class to automatically close the file handle associated with a file.
+*/
 class FSFile
 {
 public:
 	FSFile() noexcept = default;
-	FSFile(const char* filename, const char* options, const char* pathID = nullptr);
+	FSFile(const char* fileName, const char* options, const char* pathID = nullptr);
 
 	FSFile(FSFile&& other) noexcept
 		: _handle(other._handle)
@@ -64,6 +94,8 @@ public:
 
 	constexpr bool IsOpen() const { return _handle != FILESYSTEM_INVALID_HANDLE; }
 
+	std::size_t Size() const { return static_cast<std::size_t>(g_pFileSystem->Size(_handle)); }
+
 	bool Open(const char* filename, const char* options, const char* pathID = nullptr);
 	void Close();
 
@@ -73,7 +105,7 @@ public:
 
 	int Write(const void* input, int size);
 
-	template<typename... Args>
+	template <typename... Args>
 	int Printf(const char* format, Args&&... args)
 	{
 		return g_pFileSystem->FPrintf(_handle, format, std::forward<Args>(args)...);

@@ -26,48 +26,28 @@
 #include "player.h"
 #include "monsters.h"
 #include "weapons.h"
-#include "nodes.h"
 #include "soundent.h"
 #include "decals.h"
 #include "gamerules.h"
 #include "UserMessages.h"
 
-extern CGraph	WorldGraph;
-extern int gEvilImpulse101;
-
-
 #define NOT_USED 255
 
-DLL_GLOBAL	short	g_sModelIndexLaser;// holds the index for the laser beam
-DLL_GLOBAL  const char* g_pModelNameLaser = "sprites/laserbeam.spr";
-DLL_GLOBAL	short	g_sModelIndexLaserDot;// holds the index for the laser beam dot
-DLL_GLOBAL	short	g_sModelIndexFireball;// holds the index for the fireball
-DLL_GLOBAL	short	g_sModelIndexSmoke;// holds the index for the smoke cloud
-DLL_GLOBAL	short	g_sModelIndexWExplosion;// holds the index for the underwater explosion
-DLL_GLOBAL	short	g_sModelIndexBubbles;// holds the index for the bubbles model
-DLL_GLOBAL	short	g_sModelIndexBloodDrop;// holds the sprite index for the initial blood
-DLL_GLOBAL	short	g_sModelIndexBloodSpray;// holds the sprite index for splattered blood
-
-ItemInfo CBasePlayerItem::ItemInfoArray[MAX_WEAPONS];
-AmmoInfo CBasePlayerItem::AmmoInfoArray[MAX_AMMO_SLOTS];
-
-MULTIDAMAGE gMultiDamage;
-
-#define TRACER_FREQ		4			// Tracers fire every fourth bullet
+#define TRACER_FREQ 4 // Tracers fire every fourth bullet
 
 
 //=========================================================
 // MaxAmmoCarry - pass in a name and this function will tell
-// you the maximum amount of that type of ammunition that a 
+// you the maximum amount of that type of ammunition that a
 // player can carry.
 //=========================================================
 int MaxAmmoCarry(int iszName)
 {
 	for (int i = 0; i < MAX_WEAPONS; i++)
 	{
-		if (CBasePlayerItem::ItemInfoArray[i].pszAmmo1 && !strcmp(STRING(iszName), CBasePlayerItem::ItemInfoArray[i].pszAmmo1))
+		if (CBasePlayerItem::ItemInfoArray[i].pszAmmo1 && 0 == strcmp(STRING(iszName), CBasePlayerItem::ItemInfoArray[i].pszAmmo1))
 			return CBasePlayerItem::ItemInfoArray[i].iMaxAmmo1;
-		if (CBasePlayerItem::ItemInfoArray[i].pszAmmo2 && !strcmp(STRING(iszName), CBasePlayerItem::ItemInfoArray[i].pszAmmo2))
+		if (CBasePlayerItem::ItemInfoArray[i].pszAmmo2 && 0 == strcmp(STRING(iszName), CBasePlayerItem::ItemInfoArray[i].pszAmmo2))
 			return CBasePlayerItem::ItemInfoArray[i].iMaxAmmo2;
 	}
 
@@ -105,9 +85,9 @@ void ClearMultiDamage()
 
 void ApplyMultiDamage(entvars_t* pevInflictor, entvars_t* pevAttacker)
 {
-	Vector		vecSpot1;//where blood comes from
-	Vector		vecDir;//direction blood should go
-	TraceResult	tr;
+	Vector vecSpot1; //where blood comes from
+	Vector vecDir;	 //direction blood should go
+	TraceResult tr;
 
 	if (!gMultiDamage.pEntity)
 		return;
@@ -212,7 +192,7 @@ void EjectBrass(const Vector& vecOrigin, const Vector& vecVelocity, float rotati
 	WRITE_ANGLE(rotation);
 	WRITE_SHORT(model);
 	WRITE_BYTE(soundtype);
-	WRITE_BYTE(25);// 2.5 seconds
+	WRITE_BYTE(25); // 2.5 seconds
 	MESSAGE_END();
 }
 
@@ -257,12 +237,12 @@ void UTIL_PrecacheOtherWeapon(const char* szClassname)
 		{
 			CBasePlayerItem::ItemInfoArray[II.iId] = II;
 
-			if (II.pszAmmo1 && *II.pszAmmo1)
+			if (II.pszAmmo1 && '\0' != *II.pszAmmo1)
 			{
 				AddAmmoNameToAmmoRegistry(II.pszAmmo1);
 			}
 
-			if (II.pszAmmo2 && *II.pszAmmo2)
+			if (II.pszAmmo2 && '\0' != *II.pszAmmo2)
 			{
 				AddAmmoNameToAmmoRegistry(II.pszAmmo2);
 			}
@@ -369,15 +349,15 @@ void W_Precache()
 
 	if (g_pGameRules->IsDeathmatch())
 	{
-		UTIL_PrecacheOther("weaponbox");// container for dropped deathmatch weapons
+		UTIL_PrecacheOther("weaponbox"); // container for dropped deathmatch weapons
 	}
 
-	g_sModelIndexFireball = PRECACHE_MODEL("sprites/zerogxplode.spr");// fireball
-	g_sModelIndexWExplosion = PRECACHE_MODEL("sprites/WXplo1.spr");// underwater fireball
-	g_sModelIndexSmoke = PRECACHE_MODEL("sprites/steam1.spr");// smoke
-	g_sModelIndexBubbles = PRECACHE_MODEL("sprites/bubble.spr");//bubbles
+	g_sModelIndexFireball = PRECACHE_MODEL("sprites/zerogxplode.spr");	// fireball
+	g_sModelIndexWExplosion = PRECACHE_MODEL("sprites/WXplo1.spr");		// underwater fireball
+	g_sModelIndexSmoke = PRECACHE_MODEL("sprites/steam1.spr");			// smoke
+	g_sModelIndexBubbles = PRECACHE_MODEL("sprites/bubble.spr");		//bubbles
 	g_sModelIndexBloodSpray = PRECACHE_MODEL("sprites/bloodspray.spr"); // initial blood
-	g_sModelIndexBloodDrop = PRECACHE_MODEL("sprites/blood.spr"); // splattered blood 
+	g_sModelIndexBloodDrop = PRECACHE_MODEL("sprites/blood.spr");		// splattered blood
 
 	g_sModelIndexLaser = PRECACHE_MODEL((char*)g_pModelNameLaser);
 	g_sModelIndexLaserDot = PRECACHE_MODEL("sprites/laserdot.spr");
@@ -387,53 +367,52 @@ void W_Precache()
 	PRECACHE_MODEL("models/grenade.mdl");
 	PRECACHE_MODEL("sprites/explode1.spr");
 
-	PRECACHE_SOUND("weapons/debris1.wav");// explosion aftermaths
-	PRECACHE_SOUND("weapons/debris2.wav");// explosion aftermaths
-	PRECACHE_SOUND("weapons/debris3.wav");// explosion aftermaths
+	PRECACHE_SOUND("weapons/debris1.wav"); // explosion aftermaths
+	PRECACHE_SOUND("weapons/debris2.wav"); // explosion aftermaths
+	PRECACHE_SOUND("weapons/debris3.wav"); // explosion aftermaths
 
-	PRECACHE_SOUND("weapons/grenade_hit1.wav");//grenade
-	PRECACHE_SOUND("weapons/grenade_hit2.wav");//grenade
-	PRECACHE_SOUND("weapons/grenade_hit3.wav");//grenade
+	PRECACHE_SOUND("weapons/grenade_hit1.wav"); //grenade
+	PRECACHE_SOUND("weapons/grenade_hit2.wav"); //grenade
+	PRECACHE_SOUND("weapons/grenade_hit3.wav"); //grenade
 
-	PRECACHE_SOUND("weapons/bullet_hit1.wav");	// hit by bullet
-	PRECACHE_SOUND("weapons/bullet_hit2.wav");	// hit by bullet
+	PRECACHE_SOUND("weapons/bullet_hit1.wav"); // hit by bullet
+	PRECACHE_SOUND("weapons/bullet_hit2.wav"); // hit by bullet
 
-	PRECACHE_SOUND("items/weapondrop1.wav");// weapon falls to the ground
-
+	PRECACHE_SOUND("items/weapondrop1.wav"); // weapon falls to the ground
 }
 
 
 
 
-TYPEDESCRIPTION	CBasePlayerItem::m_SaveData[] =
-{
-	DEFINE_FIELD(CBasePlayerItem, m_pPlayer, FIELD_CLASSPTR),
-	DEFINE_FIELD(CBasePlayerItem, m_pNext, FIELD_CLASSPTR),
-	//DEFINE_FIELD( CBasePlayerItem, m_fKnown, FIELD_INTEGER ),Reset to zero on load
-	DEFINE_FIELD(CBasePlayerItem, m_iId, FIELD_INTEGER),
-	// DEFINE_FIELD( CBasePlayerItem, m_iIdPrimary, FIELD_INTEGER ),
-	// DEFINE_FIELD( CBasePlayerItem, m_iIdSecondary, FIELD_INTEGER ),
+TYPEDESCRIPTION CBasePlayerItem::m_SaveData[] =
+	{
+		DEFINE_FIELD(CBasePlayerItem, m_pPlayer, FIELD_CLASSPTR),
+		DEFINE_FIELD(CBasePlayerItem, m_pNext, FIELD_CLASSPTR),
+		//DEFINE_FIELD( CBasePlayerItem, m_fKnown, FIELD_INTEGER ),Reset to zero on load
+		DEFINE_FIELD(CBasePlayerItem, m_iId, FIELD_INTEGER),
+		// DEFINE_FIELD( CBasePlayerItem, m_iIdPrimary, FIELD_INTEGER ),
+		// DEFINE_FIELD( CBasePlayerItem, m_iIdSecondary, FIELD_INTEGER ),
 };
 IMPLEMENT_SAVERESTORE(CBasePlayerItem, CBaseAnimating);
 
 
-TYPEDESCRIPTION	CBasePlayerWeapon::m_SaveData[] =
-{
-#if defined( CLIENT_WEAPONS )
-	DEFINE_FIELD(CBasePlayerWeapon, m_flNextPrimaryAttack, FIELD_FLOAT),
-	DEFINE_FIELD(CBasePlayerWeapon, m_flNextSecondaryAttack, FIELD_FLOAT),
-	DEFINE_FIELD(CBasePlayerWeapon, m_flTimeWeaponIdle, FIELD_FLOAT),
-#else	// CLIENT_WEAPONS
-	DEFINE_FIELD(CBasePlayerWeapon, m_flNextPrimaryAttack, FIELD_TIME),
-	DEFINE_FIELD(CBasePlayerWeapon, m_flNextSecondaryAttack, FIELD_TIME),
-	DEFINE_FIELD(CBasePlayerWeapon, m_flTimeWeaponIdle, FIELD_TIME),
-#endif	// CLIENT_WEAPONS
-	DEFINE_FIELD(CBasePlayerWeapon, m_iPrimaryAmmoType, FIELD_INTEGER),
-	DEFINE_FIELD(CBasePlayerWeapon, m_iSecondaryAmmoType, FIELD_INTEGER),
-	DEFINE_FIELD(CBasePlayerWeapon, m_iClip, FIELD_INTEGER),
-	DEFINE_FIELD(CBasePlayerWeapon, m_iDefaultAmmo, FIELD_INTEGER),
-	//	DEFINE_FIELD( CBasePlayerWeapon, m_iClientClip, FIELD_INTEGER )	 , reset to zero on load so hud gets updated correctly
-	//  DEFINE_FIELD( CBasePlayerWeapon, m_iClientWeaponState, FIELD_INTEGER ), reset to zero on load so hud gets updated correctly
+TYPEDESCRIPTION CBasePlayerWeapon::m_SaveData[] =
+	{
+#if defined(CLIENT_WEAPONS)
+		DEFINE_FIELD(CBasePlayerWeapon, m_flNextPrimaryAttack, FIELD_FLOAT),
+		DEFINE_FIELD(CBasePlayerWeapon, m_flNextSecondaryAttack, FIELD_FLOAT),
+		DEFINE_FIELD(CBasePlayerWeapon, m_flTimeWeaponIdle, FIELD_FLOAT),
+#else  // CLIENT_WEAPONS
+		DEFINE_FIELD(CBasePlayerWeapon, m_flNextPrimaryAttack, FIELD_TIME),
+		DEFINE_FIELD(CBasePlayerWeapon, m_flNextSecondaryAttack, FIELD_TIME),
+		DEFINE_FIELD(CBasePlayerWeapon, m_flTimeWeaponIdle, FIELD_TIME),
+#endif // CLIENT_WEAPONS
+		DEFINE_FIELD(CBasePlayerWeapon, m_iPrimaryAmmoType, FIELD_INTEGER),
+		DEFINE_FIELD(CBasePlayerWeapon, m_iSecondaryAmmoType, FIELD_INTEGER),
+		DEFINE_FIELD(CBasePlayerWeapon, m_iClip, FIELD_INTEGER),
+		DEFINE_FIELD(CBasePlayerWeapon, m_iDefaultAmmo, FIELD_INTEGER),
+		//	DEFINE_FIELD( CBasePlayerWeapon, m_iClientClip, FIELD_INTEGER )	 , reset to zero on load so hud gets updated correctly
+		//  DEFINE_FIELD( CBasePlayerWeapon, m_iClientWeaponState, FIELD_INTEGER ), reset to zero on load so hud gets updated correctly
 };
 
 IMPLEMENT_SAVERESTORE(CBasePlayerWeapon, CBasePlayerItem);
@@ -447,7 +426,7 @@ void CBasePlayerItem::SetObjectCollisionBox()
 
 
 //=========================================================
-// Sets up movetype, size, solidtype for a new weapon. 
+// Sets up movetype, size, solidtype for a new weapon.
 //=========================================================
 void CBasePlayerItem::FallInit()
 {
@@ -455,7 +434,7 @@ void CBasePlayerItem::FallInit()
 	pev->solid = SOLID_BBOX;
 
 	UTIL_SetOrigin(pev, pev->origin);
-	UTIL_SetSize(pev, Vector(0, 0, 0), Vector(0, 0, 0));//pointsize until it lands on the ground.
+	UTIL_SetSize(pev, Vector(0, 0, 0), Vector(0, 0, 0)); //pointsize until it lands on the ground.
 
 	SetTouch(&CBasePlayerItem::DefaultTouch);
 	SetThink(&CBasePlayerItem::FallThink);
@@ -474,7 +453,7 @@ void CBasePlayerItem::FallThink()
 {
 	pev->nextthink = gpGlobals->time + 0.1;
 
-	if (pev->flags & FL_ONGROUND)
+	if ((pev->flags & FL_ONGROUND) != 0)
 	{
 		// clatter if we have an owner (i.e., dropped by someone)
 		// don't clatter if the gun is waiting to respawn (if it's waiting, it is invisible!)
@@ -497,7 +476,7 @@ void CBasePlayerItem::FallThink()
 //=========================================================
 void CBasePlayerItem::Materialize()
 {
-	if (pev->effects & EF_NODRAW)
+	if ((pev->effects & EF_NODRAW) != 0)
 	{
 		// changing from invisible state to visible.
 		EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "items/suitchargeok1.wav", 1, ATTN_NORM, 0, 150);
@@ -507,10 +486,9 @@ void CBasePlayerItem::Materialize()
 
 	pev->solid = SOLID_TRIGGER;
 
-	UTIL_SetOrigin(pev, pev->origin);// link into world.
+	UTIL_SetOrigin(pev, pev->origin); // link into world.
 	SetTouch(&CBasePlayerItem::DefaultTouch);
 	SetThink(NULL);
-
 }
 
 //=========================================================
@@ -531,7 +509,7 @@ void CBasePlayerItem::AttemptToMaterialize()
 }
 
 //=========================================================
-// CheckRespawn - a player is taking this weapon, should 
+// CheckRespawn - a player is taking this weapon, should
 // it respawn?
 //=========================================================
 void CBasePlayerItem::CheckRespawn()
@@ -559,8 +537,8 @@ CBaseEntity* CBasePlayerItem::Respawn()
 
 	if (pNewWeapon)
 	{
-		pNewWeapon->pev->effects |= EF_NODRAW;// invisible for now
-		pNewWeapon->SetTouch(NULL);// no touch
+		pNewWeapon->pev->effects |= EF_NODRAW; // invisible for now
+		pNewWeapon->SetTouch(NULL);			   // no touch
 		pNewWeapon->SetThink(&CBasePlayerItem::AttemptToMaterialize);
 
 		DROP_TO_FLOOR(ENT(pev));
@@ -608,18 +586,18 @@ void CBasePlayerItem::DestroyItem()
 {
 	if (m_pPlayer)
 	{
-		// if attached to a player, remove. 
+		// if attached to a player, remove.
 		m_pPlayer->RemovePlayerItem(this);
 	}
 
 	Kill();
 }
 
-int CBasePlayerItem::AddToPlayer(CBasePlayer* pPlayer)
+bool CBasePlayerItem::AddToPlayer(CBasePlayer* pPlayer)
 {
 	m_pPlayer = pPlayer;
 
-	return TRUE;
+	return true;
 }
 
 void CBasePlayerItem::Drop()
@@ -648,7 +626,7 @@ void CBasePlayerItem::AttachToPlayer(CBasePlayer* pPlayer)
 	pev->solid = SOLID_NOT;
 	pev->aiment = pPlayer->edict();
 	pev->effects = EF_NODRAW; // ??
-	pev->modelindex = 0;// server won't send down to clients if modelindex == 0
+	pev->modelindex = 0;	  // server won't send down to clients if modelindex == 0
 	pev->model = iStringNull;
 	pev->owner = pPlayer->edict();
 	pev->nextthink = gpGlobals->time + .1;
@@ -656,9 +634,9 @@ void CBasePlayerItem::AttachToPlayer(CBasePlayer* pPlayer)
 }
 
 // CALLED THROUGH the newly-touched weapon's instance. The existing player weapon is pOriginal
-int CBasePlayerWeapon::AddDuplicate(CBasePlayerItem* pOriginal)
+bool CBasePlayerWeapon::AddDuplicate(CBasePlayerItem* pOriginal)
 {
-	if (m_iDefaultAmmo)
+	if (0 != m_iDefaultAmmo)
 	{
 		return ExtractAmmo((CBasePlayerWeapon*)pOriginal);
 	}
@@ -670,13 +648,13 @@ int CBasePlayerWeapon::AddDuplicate(CBasePlayerItem* pOriginal)
 }
 
 
-int CBasePlayerWeapon::AddToPlayer(CBasePlayer* pPlayer)
+bool CBasePlayerWeapon::AddToPlayer(CBasePlayer* pPlayer)
 {
-	int bResult = CBasePlayerItem::AddToPlayer(pPlayer);
+	bool bResult = CBasePlayerItem::AddToPlayer(pPlayer);
 
-	pPlayer->pev->weapons |= (1 << m_iId);
+	pPlayer->SetWeaponBit(m_iId);
 
-	if (!m_iPrimaryAmmoType)
+	if (0 == m_iPrimaryAmmoType)
 	{
 		m_iPrimaryAmmoType = pPlayer->GetAmmoIndex(pszAmmo1());
 		m_iSecondaryAmmoType = pPlayer->GetAmmoIndex(pszAmmo2());
@@ -685,12 +663,12 @@ int CBasePlayerWeapon::AddToPlayer(CBasePlayer* pPlayer)
 
 	if (bResult)
 		return AddWeapon();
-	return FALSE;
+	return false;
 }
 
-int CBasePlayerWeapon::UpdateClientData(CBasePlayer* pPlayer)
+bool CBasePlayerWeapon::UpdateClientData(CBasePlayer* pPlayer)
 {
-	BOOL bSend = FALSE;
+	bool bSend = false;
 	int state = 0;
 	if (pPlayer->m_pActiveItem == this)
 	{
@@ -703,7 +681,7 @@ int CBasePlayerWeapon::UpdateClientData(CBasePlayer* pPlayer)
 	// Forcing send of all data!
 	if (!pPlayer->m_fWeapon)
 	{
-		bSend = TRUE;
+		bSend = true;
 	}
 
 	// This is the current or last weapon, so the state will need to be updated
@@ -712,7 +690,7 @@ int CBasePlayerWeapon::UpdateClientData(CBasePlayer* pPlayer)
 	{
 		if (pPlayer->m_pActiveItem != pPlayer->m_pClientActiveItem)
 		{
-			bSend = TRUE;
+			bSend = true;
 		}
 	}
 
@@ -721,7 +699,7 @@ int CBasePlayerWeapon::UpdateClientData(CBasePlayer* pPlayer)
 		state != m_iClientWeaponState ||
 		pPlayer->m_iFOV != pPlayer->m_iClientFOV)
 	{
-		bSend = TRUE;
+		bSend = true;
 	}
 
 	if (bSend)
@@ -734,13 +712,13 @@ int CBasePlayerWeapon::UpdateClientData(CBasePlayer* pPlayer)
 
 		m_iClientClip = m_iClip;
 		m_iClientWeaponState = state;
-		pPlayer->m_fWeapon = TRUE;
+		pPlayer->m_fWeapon = true;
 	}
 
 	if (m_pNext)
 		m_pNext->UpdateClientData(pPlayer);
 
-	return 1;
+	return true;
 }
 
 
@@ -750,23 +728,23 @@ void CBasePlayerWeapon::SendWeaponAnim(int iAnim, int body)
 
 	m_pPlayer->pev->weaponanim = iAnim;
 
-#if defined( CLIENT_WEAPONS )
+#if defined(CLIENT_WEAPONS)
 	if (skiplocal && ENGINE_CANSKIP(m_pPlayer->edict()))
 		return;
 #endif
 
 	MESSAGE_BEGIN(MSG_ONE, SVC_WEAPONANIM, NULL, m_pPlayer->pev);
-	WRITE_BYTE(iAnim);						// sequence number
-	WRITE_BYTE(pev->body);					// weaponmodel bodygroup.
+	WRITE_BYTE(iAnim);	   // sequence number
+	WRITE_BYTE(pev->body); // weaponmodel bodygroup.
 	MESSAGE_END();
 }
 
-BOOL CBasePlayerWeapon::AddPrimaryAmmo(int iCount, char* szName, int iMaxClip, int iMaxCarry)
+bool CBasePlayerWeapon::AddPrimaryAmmo(int iCount, char* szName, int iMaxClip, int iMaxCarry)
 {
 	int iIdAmmo;
 
 	//Don't double for single shot weapons (e.g. RPG)
-	if ((m_pPlayer->m_iItems & CTFItem::Backpack) && iMaxClip > 1)
+	if ((m_pPlayer->m_iItems & CTFItem::Backpack) != 0 && iMaxClip > 1)
 	{
 		iMaxClip *= 2;
 	}
@@ -801,11 +779,11 @@ BOOL CBasePlayerWeapon::AddPrimaryAmmo(int iCount, char* szName, int iMaxClip, i
 		}
 	}
 
-	return iIdAmmo > 0 ? TRUE : FALSE;
+	return iIdAmmo > 0 ? true : false;
 }
 
 
-BOOL CBasePlayerWeapon::AddSecondaryAmmo(int iCount, char* szName, int iMax)
+bool CBasePlayerWeapon::AddSecondaryAmmo(int iCount, char* szName, int iMax)
 {
 	int iIdAmmo;
 
@@ -818,31 +796,31 @@ BOOL CBasePlayerWeapon::AddSecondaryAmmo(int iCount, char* szName, int iMax)
 		m_iSecondaryAmmoType = iIdAmmo;
 		EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
 	}
-	return iIdAmmo > 0 ? TRUE : FALSE;
+	return iIdAmmo > 0 ? true : false;
 }
 
 //=========================================================
-// IsUseable - this function determines whether or not a 
-// weapon is useable by the player in its current state. 
-// (does it have ammo loaded? do I have any ammo for the 
+// IsUseable - this function determines whether or not a
+// weapon is useable by the player in its current state.
+// (does it have ammo loaded? do I have any ammo for the
 // weapon?, etc)
 //=========================================================
-BOOL CBasePlayerWeapon::IsUseable()
+bool CBasePlayerWeapon::IsUseable()
 {
 	if (m_iClip > 0)
 	{
-		return TRUE;
+		return true;
 	}
 
 	//Player has unlimited ammo for this weapon or does not use magazines
 	if (iMaxAmmo1() == WEAPON_NOCLIP)
 	{
-		return TRUE;
+		return true;
 	}
 
 	if (m_pPlayer->m_rgAmmo[PrimaryAmmoIndex()] > 0)
 	{
-		return TRUE;
+		return true;
 	}
 
 	if (pszAmmo2())
@@ -850,23 +828,23 @@ BOOL CBasePlayerWeapon::IsUseable()
 		//Player has unlimited ammo for this weapon or does not use magazines
 		if (iMaxAmmo2() == WEAPON_NOCLIP)
 		{
-			return TRUE;
+			return true;
 		}
 
 		if (m_pPlayer->m_rgAmmo[SecondaryAmmoIndex()] > 0)
 		{
-			return TRUE;
+			return true;
 		}
 	}
 
-	// clip is empty (or nonexistant) and the player has no more ammo of this type. 
-	return FALSE;
+	// clip is empty (or nonexistant) and the player has no more ammo of this type.
+	return false;
 }
 
-BOOL CBasePlayerWeapon::DefaultDeploy(const char* szViewModel, const char* szWeaponModel, int iAnim, const char* szAnimExt, int body)
+bool CBasePlayerWeapon::DefaultDeploy(const char* szViewModel, const char* szWeaponModel, int iAnim, const char* szAnimExt, int body)
 {
 	if (!CanDeploy())
-		return FALSE;
+		return false;
 
 	m_pPlayer->TabulateAmmo();
 	m_pPlayer->pev->viewmodel = MAKE_STRING(szViewModel);
@@ -878,18 +856,18 @@ BOOL CBasePlayerWeapon::DefaultDeploy(const char* szViewModel, const char* szWea
 	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 1.0;
 	m_flLastFireTime = 0.0;
 
-	return TRUE;
+	return true;
 }
 
-BOOL CBasePlayerWeapon::PlayEmptySound()
+bool CBasePlayerWeapon::PlayEmptySound()
 {
 	if (m_iPlayEmptySound)
 	{
 		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/357_cock1.wav", 0.8, ATTN_NORM);
-		m_iPlayEmptySound = 0;
-		return 0;
+		m_iPlayEmptySound = false;
+		return false;
 	}
-	return 0;
+	return false;
 }
 
 //=========================================================
@@ -908,7 +886,7 @@ int CBasePlayerWeapon::SecondaryAmmoIndex()
 
 void CBasePlayerWeapon::Holster()
 {
-	m_fInReload = FALSE; // cancel any reload in progress.
+	m_fInReload = false; // cancel any reload in progress.
 	m_pPlayer->pev->viewmodel = 0;
 	m_pPlayer->pev->weaponmodel = 0;
 }
@@ -928,7 +906,7 @@ CBaseEntity* CBasePlayerAmmo::Respawn()
 	pev->effects |= EF_NODRAW;
 	SetTouch(NULL);
 
-	UTIL_SetOrigin(pev, g_pGameRules->VecAmmoRespawnSpot(this));// move to wherever I'm supposed to repawn.
+	UTIL_SetOrigin(pev, g_pGameRules->VecAmmoRespawnSpot(this)); // move to wherever I'm supposed to repawn.
 
 	SetThink(&CBasePlayerAmmo::Materialize);
 	pev->nextthink = g_pGameRules->FlAmmoRespawnTime(this);
@@ -938,7 +916,7 @@ CBaseEntity* CBasePlayerAmmo::Respawn()
 
 void CBasePlayerAmmo::Materialize()
 {
-	if (pev->effects & EF_NODRAW)
+	if ((pev->effects & EF_NODRAW) != 0)
 	{
 		// changing from invisible state to visible.
 		EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "items/suitchargeok1.wav", 1, ATTN_NORM, 0, 150);
@@ -981,19 +959,19 @@ void CBasePlayerAmmo::DefaultTouch(CBaseEntity* pOther)
 //=========================================================
 // called by the new item with the existing item as parameter
 //
-// if we call ExtractAmmo(), it's because the player is picking up this type of weapon for 
+// if we call ExtractAmmo(), it's because the player is picking up this type of weapon for
 // the first time. If it is spawned by the world, m_iDefaultAmmo will have a default ammo amount in it.
-// if  this is a weapon dropped by a dying player, has 0 m_iDefaultAmmo, which means only the ammo in 
-// the weapon clip comes along. 
+// if  this is a weapon dropped by a dying player, has 0 m_iDefaultAmmo, which means only the ammo in
+// the weapon clip comes along.
 //=========================================================
-int CBasePlayerWeapon::ExtractAmmo(CBasePlayerWeapon* pWeapon)
+bool CBasePlayerWeapon::ExtractAmmo(CBasePlayerWeapon* pWeapon)
 {
-	int			iReturn = 0;
+	bool iReturn = false;
 
 	if (pszAmmo1() != NULL)
 	{
 		// blindly call with m_iDefaultAmmo. It's either going to be a value or zero. If it is zero,
-		// we only get the ammo in the weapon's clip, which is what we want. 
+		// we only get the ammo in the weapon's clip, which is what we want.
 		iReturn = pWeapon->AddPrimaryAmmo(m_iDefaultAmmo, (char*)pszAmmo1(), iMaxClip(), iMaxAmmo1());
 		m_iDefaultAmmo = 0;
 	}
@@ -1009,20 +987,21 @@ int CBasePlayerWeapon::ExtractAmmo(CBasePlayerWeapon* pWeapon)
 //=========================================================
 // called by the new item's class with the existing item as parameter
 //=========================================================
-int CBasePlayerWeapon::ExtractClipAmmo(CBasePlayerWeapon* pWeapon)
+bool CBasePlayerWeapon::ExtractClipAmmo(CBasePlayerWeapon* pWeapon)
 {
-	int			iAmmo;
+	int iAmmo;
 
 	if (m_iClip == WEAPON_NOCLIP)
 	{
-		iAmmo = 0;// guns with no clips always come empty if they are second-hand
+		iAmmo = 0; // guns with no clips always come empty if they are second-hand
 	}
 	else
 	{
 		iAmmo = m_iClip;
 	}
 
-	return pWeapon->m_pPlayer->GiveAmmo(iAmmo, pszAmmo1(), iMaxAmmo1()); // , &m_iPrimaryAmmoType
+	//TODO: should handle -1 return as well (only return true if ammo was taken)
+	return pWeapon->m_pPlayer->GiveAmmo(iAmmo, pszAmmo1(), iMaxAmmo1()) != 0; // , &m_iPrimaryAmmoType
 }
 
 //=========================================================
@@ -1049,7 +1028,7 @@ void CBasePlayerWeapon::RetireWeapon()
 //=========================================================================
 float CBasePlayerWeapon::GetNextAttackDelay(float delay)
 {
-	if (m_flLastFireTime == 0 || m_flNextPrimaryAttack == -1)
+	if (m_flLastFireTime == 0 || m_flNextPrimaryAttack <= -1.1)
 	{
 		// At this point, we are assuming that the client has stopped firing
 		// and we are going to reset our book keeping variables.
@@ -1062,15 +1041,15 @@ float CBasePlayerWeapon::GetNextAttackDelay(float delay)
 	if (flTimeBetweenFires > 0)
 		flCreep = flTimeBetweenFires - m_flPrevPrimaryAttack; // postive or negative
 
-// save the last fire time
+	// save the last fire time
 	m_flLastFireTime = gpGlobals->time;
 
 	float flNextAttack = UTIL_WeaponTimeBase() + delay - flCreep;
-	// we need to remember what the m_flNextPrimaryAttack time is set to for each shot, 
+	// we need to remember what the m_flNextPrimaryAttack time is set to for each shot,
 	// store it as m_flPrevPrimaryAttack.
 	m_flPrevPrimaryAttack = flNextAttack - UTIL_WeaponTimeBase();
 	// 	char szMsg[256];
-	// 	_snprintf( szMsg, sizeof(szMsg), "next attack time: %0.4f\n", gpGlobals->time + flNextAttack );
+	// 	snprintf( szMsg, sizeof(szMsg), "next attack time: %0.4f\n", gpGlobals->time + flNextAttack );
 	// 	OutputDebugString( szMsg );
 	return flNextAttack;
 }
@@ -1082,12 +1061,12 @@ float CBasePlayerWeapon::GetNextAttackDelay(float delay)
 
 LINK_ENTITY_TO_CLASS(weaponbox, CWeaponBox);
 
-TYPEDESCRIPTION	CWeaponBox::m_SaveData[] =
-{
-	DEFINE_ARRAY(CWeaponBox, m_rgAmmo, FIELD_INTEGER, MAX_AMMO_SLOTS),
-	DEFINE_ARRAY(CWeaponBox, m_rgiszAmmo, FIELD_STRING, MAX_AMMO_SLOTS),
-	DEFINE_ARRAY(CWeaponBox, m_rgpPlayerItems, FIELD_CLASSPTR, MAX_ITEM_TYPES),
-	DEFINE_FIELD(CWeaponBox, m_cAmmoTypes, FIELD_INTEGER),
+TYPEDESCRIPTION CWeaponBox::m_SaveData[] =
+	{
+		DEFINE_ARRAY(CWeaponBox, m_rgAmmo, FIELD_INTEGER, MAX_AMMO_SLOTS),
+		DEFINE_ARRAY(CWeaponBox, m_rgiszAmmo, FIELD_STRING, MAX_AMMO_SLOTS),
+		DEFINE_ARRAY(CWeaponBox, m_rgpPlayerItems, FIELD_CLASSPTR, MAX_ITEM_TYPES),
+		DEFINE_FIELD(CWeaponBox, m_cAmmoTypes, FIELD_INTEGER),
 };
 
 IMPLEMENT_SAVERESTORE(CWeaponBox, CBaseEntity);
@@ -1102,23 +1081,25 @@ void CWeaponBox::Precache()
 
 //=========================================================
 //=========================================================
-void CWeaponBox::KeyValue(KeyValueData* pkvd)
+bool CWeaponBox::KeyValue(KeyValueData* pkvd)
 {
 	if (m_cAmmoTypes < MAX_AMMO_SLOTS)
 	{
 		PackAmmo(ALLOC_STRING(pkvd->szKeyName), atoi(pkvd->szValue));
-		m_cAmmoTypes++;// count this new ammo type.
+		m_cAmmoTypes++; // count this new ammo type.
 
-		pkvd->fHandled = TRUE;
+		return true;
 	}
 	else
 	{
 		ALERT(at_console, "WeaponBox too full! only %d ammotypes allowed\n", MAX_AMMO_SLOTS);
 	}
+
+	return false;
 }
 
 //=========================================================
-// CWeaponBox - Spawn 
+// CWeaponBox - Spawn
 //=========================================================
 void CWeaponBox::Spawn()
 {
@@ -1164,7 +1145,7 @@ void CWeaponBox::Kill()
 //=========================================================
 void CWeaponBox::Touch(CBaseEntity* pOther)
 {
-	if (!(pev->flags & FL_ONGROUND))
+	if ((pev->flags & FL_ONGROUND) == 0)
 	{
 		return;
 	}
@@ -1189,7 +1170,7 @@ void CWeaponBox::Touch(CBaseEntity* pOther)
 	{
 		if (!FStringNull(m_rgiszAmmo[i]))
 		{
-			// there's some ammo of this type. 
+			// there's some ammo of this type.
 			pPlayer->GiveAmmo(m_rgAmmo[i], STRING(m_rgiszAmmo[i]), MaxAmmoCarry(m_rgiszAmmo[i]));
 
 			//ALERT ( at_console, "Gave %d rounds of %s\n", m_rgAmmo[i], STRING(m_rgiszAmmo[i]) );
@@ -1200,8 +1181,8 @@ void CWeaponBox::Touch(CBaseEntity* pOther)
 		}
 	}
 
-	// go through my weapons and try to give the usable ones to the player. 
-	// it's important the the player be given ammo first, so the weapons code doesn't refuse 
+	// go through my weapons and try to give the usable ones to the player.
+	// it's important the the player be given ammo first, so the weapons code doesn't refuse
 	// to deploy a better weapon that the player may pick up because he has no ammo for it.
 	for (i = 0; i < MAX_ITEM_TYPES; i++)
 	{
@@ -1215,7 +1196,7 @@ void CWeaponBox::Touch(CBaseEntity* pOther)
 				//ALERT ( at_console, "trying to give %s\n", STRING( m_rgpPlayerItems[ i ]->pev->classname ) );
 
 				pItem = m_rgpPlayerItems[i];
-				m_rgpPlayerItems[i] = m_rgpPlayerItems[i]->m_pNext;// unlink this weapon from the box
+				m_rgpPlayerItems[i] = m_rgpPlayerItems[i]->m_pNext; // unlink this weapon from the box
 
 				if (pPlayer->AddPlayerItem(pItem))
 				{
@@ -1233,12 +1214,12 @@ void CWeaponBox::Touch(CBaseEntity* pOther)
 //=========================================================
 // CWeaponBox - PackWeapon: Add this weapon to the box
 //=========================================================
-BOOL CWeaponBox::PackWeapon(CBasePlayerItem* pWeapon)
+bool CWeaponBox::PackWeapon(CBasePlayerItem* pWeapon)
 {
 	// is one of these weapons already packed in this box?
 	if (HasWeapon(pWeapon))
 	{
-		return FALSE;// box can only hold one of each weapon type
+		return false; // box can only hold one of each weapon type
 	}
 
 	if (pWeapon->m_pPlayer)
@@ -1246,7 +1227,7 @@ BOOL CWeaponBox::PackWeapon(CBasePlayerItem* pWeapon)
 		if (!pWeapon->m_pPlayer->RemovePlayerItem(pWeapon))
 		{
 			// failed to unhook the weapon from the player!
-			return FALSE;
+			return false;
 		}
 	}
 
@@ -1265,26 +1246,26 @@ BOOL CWeaponBox::PackWeapon(CBasePlayerItem* pWeapon)
 		pWeapon->m_pNext = NULL;
 	}
 
-	pWeapon->pev->spawnflags |= SF_NORESPAWN;// never respawn
+	pWeapon->pev->spawnflags |= SF_NORESPAWN; // never respawn
 	pWeapon->pev->movetype = MOVETYPE_NONE;
 	pWeapon->pev->solid = SOLID_NOT;
 	pWeapon->pev->effects = EF_NODRAW;
 	pWeapon->pev->modelindex = 0;
 	pWeapon->pev->model = iStringNull;
 	pWeapon->pev->owner = edict();
-	pWeapon->SetThink(NULL);// crowbar may be trying to swing again, etc.
+	pWeapon->SetThink(NULL); // crowbar may be trying to swing again, etc.
 	pWeapon->SetTouch(NULL);
 	pWeapon->m_pPlayer = NULL;
 
 	//ALERT ( at_console, "packed %s\n", STRING(pWeapon->pev->classname) );
 
-	return TRUE;
+	return true;
 }
 
 //=========================================================
 // CWeaponBox - PackAmmo
 //=========================================================
-BOOL CWeaponBox::PackAmmo(int iszName, int iCount)
+bool CWeaponBox::PackAmmo(int iszName, int iCount)
 {
 	int iMaxCarry;
 
@@ -1292,7 +1273,7 @@ BOOL CWeaponBox::PackAmmo(int iszName, int iCount)
 	{
 		// error here
 		ALERT(at_console, "NULL String in PackAmmo!\n");
-		return FALSE;
+		return false;
 	}
 
 	iMaxCarry = MaxAmmoCarry(iszName);
@@ -1301,16 +1282,16 @@ BOOL CWeaponBox::PackAmmo(int iszName, int iCount)
 	{
 		//ALERT ( at_console, "Packed %d rounds of %s\n", iCount, STRING(iszName) );
 		GiveAmmo(iCount, STRING(iszName), iMaxCarry);
-		return TRUE;
+		return true;
 	}
 
-	return FALSE;
+	return false;
 }
 
 //=========================================================
 // CWeaponBox - GiveAmmo
 //=========================================================
-int CWeaponBox::GiveAmmo(int iCount, const char* szName, int iMax, int* pIndex/* = NULL*/)
+int CWeaponBox::GiveAmmo(int iCount, const char* szName, int iMax, int* pIndex /* = NULL*/)
 {
 	int i;
 
@@ -1349,7 +1330,7 @@ int CWeaponBox::GiveAmmo(int iCount, const char* szName, int iMax, int* pIndex/*
 // CWeaponBox::HasWeapon - is a weapon of this type already
 // packed in this box?
 //=========================================================
-BOOL CWeaponBox::HasWeapon(CBasePlayerItem* pCheckItem)
+bool CWeaponBox::HasWeapon(CBasePlayerItem* pCheckItem)
 {
 	CBasePlayerItem* pItem = m_rgpPlayerItems[pCheckItem->iItemSlot()];
 
@@ -1357,18 +1338,18 @@ BOOL CWeaponBox::HasWeapon(CBasePlayerItem* pCheckItem)
 	{
 		if (FClassnameIs(pItem->pev, STRING(pCheckItem->pev->classname)))
 		{
-			return TRUE;
+			return true;
 		}
 		pItem = pItem->m_pNext;
 	}
 
-	return FALSE;
+	return false;
 }
 
 //=========================================================
 // CWeaponBox::IsEmpty - is there anything in this box?
 //=========================================================
-BOOL CWeaponBox::IsEmpty()
+bool CWeaponBox::IsEmpty()
 {
 	int i;
 
@@ -1376,7 +1357,7 @@ BOOL CWeaponBox::IsEmpty()
 	{
 		if (m_rgpPlayerItems[i])
 		{
-			return FALSE;
+			return false;
 		}
 	}
 
@@ -1385,11 +1366,11 @@ BOOL CWeaponBox::IsEmpty()
 		if (!FStringNull(m_rgiszAmmo[i]))
 		{
 			// still have a bit of this type of ammo
-			return FALSE;
+			return false;
 		}
 	}
 
-	return TRUE;
+	return true;
 }
 
 //=========================================================
@@ -1410,24 +1391,24 @@ void CBasePlayerWeapon::PrintState()
 	//	ALERT( at_console, "nextpum:  %f\n", m_flPumpTime );
 
 	//	ALERT( at_console, "m_frt  :  %f\n", m_fReloadTime );
-	ALERT(at_console, "m_finre:  %i\n", m_fInReload);
+	ALERT(at_console, "m_finre:  %i\n", static_cast<int>(m_fInReload));
 	//	ALERT( at_console, "m_finsr:  %i\n", m_fInSpecialReload );
 
 	ALERT(at_console, "m_iclip:  %i\n", m_iClip);
 }
 
 
-TYPEDESCRIPTION	CRpg::m_SaveData[] =
-{
-	DEFINE_FIELD(CRpg, m_fSpotActive, FIELD_INTEGER),
-	DEFINE_FIELD(CRpg, m_cActiveRockets, FIELD_INTEGER),
+TYPEDESCRIPTION CRpg::m_SaveData[] =
+	{
+		DEFINE_FIELD(CRpg, m_fSpotActive, FIELD_BOOLEAN),
+		DEFINE_FIELD(CRpg, m_cActiveRockets, FIELD_INTEGER),
 };
 IMPLEMENT_SAVERESTORE(CRpg, CBasePlayerWeapon);
 
-TYPEDESCRIPTION	CRpgRocket::m_SaveData[] =
-{
-	DEFINE_FIELD(CRpgRocket, m_flIgniteTime, FIELD_TIME),
-	DEFINE_FIELD(CRpgRocket, m_pLauncher, FIELD_EHANDLE),
+TYPEDESCRIPTION CRpgRocket::m_SaveData[] =
+	{
+		DEFINE_FIELD(CRpgRocket, m_flIgniteTime, FIELD_TIME),
+		DEFINE_FIELD(CRpgRocket, m_pLauncher, FIELD_EHANDLE),
 };
 IMPLEMENT_SAVERESTORE(CRpgRocket, CGrenade);
 
@@ -1440,21 +1421,21 @@ TYPEDESCRIPTION	CShotgun::m_SaveData[] =
 };
 IMPLEMENT_SAVERESTORE(CShotgun, CBasePlayerWeapon);
 
-TYPEDESCRIPTION	CGauss::m_SaveData[] =
-{
-	DEFINE_FIELD(CGauss, m_fInAttack, FIELD_INTEGER),
-	//	DEFINE_FIELD( CGauss, m_flStartCharge, FIELD_TIME ),
-	//	DEFINE_FIELD( CGauss, m_flPlayAftershock, FIELD_TIME ),
-	//	DEFINE_FIELD( CGauss, m_flNextAmmoBurn, FIELD_TIME ),
+TYPEDESCRIPTION CGauss::m_SaveData[] =
+	{
+		DEFINE_FIELD(CGauss, m_fInAttack, FIELD_INTEGER),
+		//	DEFINE_FIELD( CGauss, m_flStartCharge, FIELD_TIME ),
+		//	DEFINE_FIELD( CGauss, m_flPlayAftershock, FIELD_TIME ),
+		//	DEFINE_FIELD( CGauss, m_flNextAmmoBurn, FIELD_TIME ),
 		DEFINE_FIELD(CGauss, m_fPrimaryFire, FIELD_BOOLEAN),
 };
 IMPLEMENT_SAVERESTORE(CGauss, CBasePlayerWeapon);
 
-TYPEDESCRIPTION	CEgon::m_SaveData[] =
-{
-	//	DEFINE_FIELD( CEgon, m_pBeam, FIELD_CLASSPTR ),
-	//	DEFINE_FIELD( CEgon, m_pNoise, FIELD_CLASSPTR ),
-	//	DEFINE_FIELD( CEgon, m_pSprite, FIELD_CLASSPTR ),
+TYPEDESCRIPTION CEgon::m_SaveData[] =
+	{
+		//	DEFINE_FIELD( CEgon, m_pBeam, FIELD_CLASSPTR ),
+		//	DEFINE_FIELD( CEgon, m_pNoise, FIELD_CLASSPTR ),
+		//	DEFINE_FIELD( CEgon, m_pSprite, FIELD_CLASSPTR ),
 		DEFINE_FIELD(CEgon, m_shootTime, FIELD_TIME),
 		DEFINE_FIELD(CEgon, m_fireState, FIELD_INTEGER),
 		DEFINE_FIELD(CEgon, m_fireMode, FIELD_INTEGER),
@@ -1463,9 +1444,8 @@ TYPEDESCRIPTION	CEgon::m_SaveData[] =
 };
 IMPLEMENT_SAVERESTORE(CEgon, CBasePlayerWeapon);
 
-TYPEDESCRIPTION	CSatchel::m_SaveData[] =
-{
-	DEFINE_FIELD(CSatchel, m_chargeReady, FIELD_INTEGER),
+TYPEDESCRIPTION CSatchel::m_SaveData[] =
+	{
+		DEFINE_FIELD(CSatchel, m_chargeReady, FIELD_INTEGER),
 };
 IMPLEMENT_SAVERESTORE(CSatchel, CBasePlayerWeapon);
-

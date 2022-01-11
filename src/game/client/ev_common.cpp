@@ -25,7 +25,7 @@
 #include "event_api.h"
 #include "pm_shared.h"
 
-#define IS_FIRSTPERSON_SPEC ( g_iUser1 == OBS_IN_EYE || (g_iUser1 && (gHUD.m_Spectator.m_pip->value == INSET_IN_EYE)) )
+#define IS_FIRSTPERSON_SPEC (g_iUser1 == OBS_IN_EYE || (g_iUser1 && (gHUD.m_Spectator.m_pip->value == INSET_IN_EYE)))
 /*
 =================
 GetEntity
@@ -69,7 +69,7 @@ EV_IsPlayer
 Is the entity's index in the player range?
 =================
 */
-qboolean EV_IsPlayer(int idx)
+bool EV_IsPlayer(int idx)
 {
 	if (idx >= 1 && idx <= gEngfuncs.GetMaxClients())
 		return true;
@@ -84,13 +84,13 @@ EV_IsLocal
 Is the entity == the local player
 =================
 */
-qboolean EV_IsLocal(int idx)
+bool EV_IsLocal(int idx)
 {
 	// check if we are in some way in first person spec mode
 	if (IS_FIRSTPERSON_SPEC)
 		return (g_iUser2 == idx);
 	else
-		return gEngfuncs.pEventAPI->EV_IsLocal(idx - 1) ? true : false;
+		return gEngfuncs.pEventAPI->EV_IsLocal(idx - 1) != 0;
 }
 
 /*

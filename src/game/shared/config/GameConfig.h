@@ -49,7 +49,7 @@ public:
 	/**
 	*	@brief Gets a data object of type T.
 	*/
-	template<typename T, typename = std::enable_if_t<std::is_base_of_v<GameConfigData, T>>>
+	template <typename T, typename = std::enable_if_t<std::is_base_of_v<GameConfigData, T>>>
 	T* Get()
 	{
 		for (const auto& object : m_Data)
@@ -66,7 +66,7 @@ public:
 	/**
 	*	@brief Adds a new data object to the configuration.
 	*/
-	template<typename T, typename = std::enable_if_t<std::is_base_of_v<GameConfigData, T>>>
+	template <typename T, typename = std::enable_if_t<std::is_base_of_v<GameConfigData, T>>>
 	T* Add(std::unique_ptr<T>&& data)
 	{
 		if (!data)
@@ -83,7 +83,7 @@ public:
 	*	@brief Creates a data object of type T.
 	*	The given arguments will be forwarded to its constructor.
 	*/
-	template<typename T, typename... Args, typename = std::enable_if_t<std::is_base_of_v<GameConfigData, T>>>
+	template <typename T, typename... Args, typename = std::enable_if_t<std::is_base_of_v<GameConfigData, T>>>
 	T* Create(Args&&... args)
 	{
 		return Add(std::make_unique<T>(std::forward<Args>(args)...));
@@ -93,7 +93,7 @@ public:
 	*	@brief Gets or creates a data object of type T.
 	*	If an object has to be created the given arguments will be forwarded to its constructor.
 	*/
-	template<typename T, typename... Args, typename = std::enable_if_t<std::is_base_of_v<GameConfigData, T>>>
+	template <typename T, typename... Args, typename = std::enable_if_t<std::is_base_of_v<GameConfigData, T>>>
 	T* GetOrCreate(Args&&... args)
 	{
 		if (auto candidate = Get<T>(); candidate)

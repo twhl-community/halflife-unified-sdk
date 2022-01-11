@@ -35,11 +35,11 @@
 
 // Arrow filenames
 const char* sArrowFilenames[] =
-{
-	"arrowup",
-	"arrowdn",
-	"arrowlt",
-	"arrowrt",
+	{
+		"arrowup",
+		"arrowdn",
+		"arrowlt",
+		"arrowrt",
 };
 
 // Get the name of TGA file, without a gamedir
@@ -259,7 +259,7 @@ void CommandButton::cursorEntered()
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
 void CommandButton::cursorExited()
 {
@@ -283,7 +283,7 @@ CCommandMenu* CommandButton::getParentMenu()
 
 //-----------------------------------------------------------------------------
 // Purpose: Sets the menu that contains this button
-// Input  : *pParentMenu - 
+// Input  : *pParentMenu -
 //-----------------------------------------------------------------------------
 void CommandButton::setParentMenu(CCommandMenu* pParentMenu)
 {
@@ -292,7 +292,7 @@ void CommandButton::setParentMenu(CCommandMenu* pParentMenu)
 
 
 //===========================================================
-int ClassButton::IsNotValid()
+bool ClassButton::IsNotValid()
 {
 	// If this is the main ChangeClass button, remove it if the player's only able to be civilians
 	if (m_iPlayerClass == -1)
@@ -304,10 +304,6 @@ int ClassButton::IsNotValid()
 	}
 
 	// Is it an illegal class?
-#ifdef _TFC
-	if ((gViewPort->GetValidClasses(0) & sTFValidClassInts[m_iPlayerClass]) || (gViewPort->GetValidClasses(g_iTeamNumber) & sTFValidClassInts[m_iPlayerClass]))
-		return true;
-#endif
 
 	// Only check current class if they've got autokill on
 	bool bAutoKill = CVAR_GET_FLOAT("hud_classautokill") != 0;
@@ -315,9 +311,6 @@ int ClassButton::IsNotValid()
 	{
 		// Is it the player's current class?
 		if (
-#ifdef _TFC
-		(gViewPort->IsRandomPC() && m_iPlayerClass == PC_RANDOM) ||
-#endif
 			(!gViewPort->IsRandomPC() && (m_iPlayerClass == g_iPlayerClass)))
 			return true;
 	}
@@ -373,8 +366,7 @@ int CImageLabel::getImageTall()
 
 void CImageLabel::LoadImage(const char* pImageName)
 {
-	if (m_pTGA)
-		delete m_pTGA;
+	delete m_pTGA;
 
 	// Load the Image
 	m_pTGA = LoadTGAForRes(pImageName);
@@ -392,7 +384,7 @@ void CImageLabel::LoadImage(const char* pImageName)
 	}
 
 	if (m_pTGA == NULL)
-		return;	// unable to load image
+		return; // unable to load image
 
 	int w, t;
 
@@ -548,13 +540,10 @@ void CMenuHandler_StringCommandClassSelect::actionPerformed(Panel* panel)
 {
 	CMenuHandler_StringCommand::actionPerformed(panel);
 
-	// THIS IS NOW BEING DONE ON THE TFC SERVER TO AVOID KILLING SOMEONE THEN 
+	// THIS IS NOW BEING DONE ON THE TFC SERVER TO AVOID KILLING SOMEONE THEN
 	// HAVE THE SERVER SAY "SORRY...YOU CAN'T BE THAT CLASS".
 
-#if !defined _TFC
 	bool bAutoKill = CVAR_GET_FLOAT("hud_classautokill") != 0;
 	if (bAutoKill && g_iPlayerClass != 0)
 		gEngfuncs.pfnClientCmd("kill");
-#endif
 }
-

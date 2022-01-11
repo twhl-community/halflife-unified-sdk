@@ -10,9 +10,8 @@
 #include "r_efx.h"
 #include "event_api.h"
 #include "pm_defs.h"
-#include "pmtrace.h"	
+#include "pmtrace.h"
 #include "pm_shared.h"
-#include "bench.h"
 #include "Exports.h"
 
 #include "particleman.h"
@@ -22,7 +21,7 @@ void Game_AddObjects();
 
 extern Vector v_origin;
 
-int g_iAlive = 1;
+bool g_iAlive = true;
 
 /*
 ========================
@@ -37,7 +36,6 @@ int DLLEXPORT HUD_AddEntity(int type, struct cl_entity_s* ent, const char* model
 	switch (type)
 	{
 	case ET_NORMAL:
-		Bench_CheckEntity(type, ent, modelname);
 		break;
 	case ET_PLAYER:
 	case ET_BEAM:
@@ -48,17 +46,16 @@ int DLLEXPORT HUD_AddEntity(int type, struct cl_entity_s* ent, const char* model
 	}
 	// each frame every entity passes this function, so the overview hooks it to filter the overview entities
 	// in spectator mode:
-	// each frame every entity passes this function, so the overview hooks 
+	// each frame every entity passes this function, so the overview hooks
 	// it to filter the overview entities
 
-	if (g_iUser1)
+	if (0 != g_iUser1)
 	{
 		gHUD.m_Spectator.AddOverviewEntity(type, ent, modelname);
 
 		if ((g_iUser1 == OBS_IN_EYE || gHUD.m_Spectator.m_pip->value == INSET_IN_EYE) &&
 			ent->index == g_iUser2)
-			return 0;	// don't draw the player we are following in eye
-
+			return 0; // don't draw the player we are following in eye
 	}
 
 	return 1;
@@ -102,7 +99,7 @@ void DLLEXPORT HUD_ProcessPlayerState(struct entity_state_s* dst, const struct e
 {
 	//	RecClProcessPlayerState(dst, src);
 
-		// Copy in network data
+	// Copy in network data
 	VectorCopy(src->origin, dst->origin);
 	VectorCopy(src->angles, dst->angles);
 
@@ -143,12 +140,9 @@ void DLLEXPORT HUD_ProcessPlayerState(struct entity_state_s* dst, const struct e
 	dst->team = src->team;
 	dst->colormap = src->colormap;
 
-#if defined( _TFC )
-	dst->fuser1 = src->fuser1;
-#endif
 
 	// Save off some data so other areas of the Client DLL can get to it
-	cl_entity_t* player = gEngfuncs.GetLocalPlayer();	// Get the local player's index
+	cl_entity_t* player = gEngfuncs.GetLocalPlayer(); // Get the local player's index
 	if (dst->number == player->index)
 	{
 		g_iPlayerClass = dst->playerclass;
@@ -194,7 +188,7 @@ void DLLEXPORT HUD_TxferPredictionData(struct entity_state_s* ps, const struct e
 	pcd->deadflag = ppcd->deadflag;
 
 	// Spectating or not dead == get control over view angles.
-	g_iAlive = (ppcd->iuser1 || (pcd->deadflag == DEAD_NO)) ? 1 : 0;
+	g_iAlive = 0 != ppcd->iuser1 || (pcd->deadflag == DEAD_NO);
 
 	// Spectator
 	pcd->iuser1 = ppcd->iuser1;
@@ -203,11 +197,11 @@ void DLLEXPORT HUD_TxferPredictionData(struct entity_state_s* ps, const struct e
 	// Duck prevention
 	pcd->iuser3 = ppcd->iuser3;
 
-	if (gEngfuncs.IsSpectateOnly())
+	if (0 != gEngfuncs.IsSpectateOnly())
 	{
 		// in specator mode we tell the engine who we want to spectate and how
 		// iuser3 is not used for duck prevention (since the spectator can't duck at all)
-		pcd->iuser1 = g_iUser1;	// observer mode
+		pcd->iuser1 = g_iUser1; // observer mode
 		pcd->iuser2 = g_iUser2; // first target
 		pcd->iuser3 = g_iUser3; // second target
 	}
@@ -223,17 +217,17 @@ void DLLEXPORT HUD_TxferPredictionData(struct entity_state_s* ps, const struct e
 	VectorCopy(ppcd->vuser3, pcd->vuser3);
 	VectorCopy(ppcd->vuser4, pcd->vuser4);
 
-	memcpy(wd, pwd, 32 * sizeof(weapon_data_t));
+	memcpy(wd, pwd, MAX_WEAPONS * sizeof(weapon_data_t));
 }
 
-#if defined( BEAM_TEST )
+#if defined(BEAM_TEST)
 // Note can't index beam[ 0 ] in Beam callback, so don't use that index
 // Room for 1 beam ( 0 can't be used )
 static cl_entity_t beams[2];
 
 void BeamEndModel()
 {
-	cl_entity_t* player, * model;
+	cl_entity_t *player, *model;
 	int modelindex;
 	struct model_s* mod;
 
@@ -308,11 +302,9 @@ void DLLEXPORT HUD_CreateEntities()
 {
 	//	RecClCreateEntities();
 
-#if defined( BEAM_TEST )
+#if defined(BEAM_TEST)
 	Beams();
 #endif
-
-	Bench_AddObjects();
 
 	// Add in any game specific objects
 	Game_AddObjects();
@@ -320,9 +312,6 @@ void DLLEXPORT HUD_CreateEntities()
 	GetClientVoiceMgr()->CreateEntities();
 }
 
-#if defined( _TFC )
-extern int g_bACSpinning[33];
-#endif 
 
 /*
 =========================
@@ -336,14 +325,8 @@ void DLLEXPORT HUD_StudioEvent(const struct mstudioevent_s* event, const struct 
 {
 	//	RecClStudioEvent(event, entity);
 
-	int iMuzzleFlash = 1;
+	bool iMuzzleFlash = true;
 
-#if defined( _TFC )
-
-	if (g_bACSpinning[entity->index - 1])
-		iMuzzleFlash = 0;
-
-#endif 
 
 	switch (event->event)
 	{
@@ -383,22 +366,22 @@ Simulation and cleanup of temporary entities
 =================
 */
 void DLLEXPORT HUD_TempEntUpdate(
-	double frametime,   // Simulation time
-	double client_time, // Absolute time on client
-	double cl_gravity,  // True gravity on client
-	TEMPENTITY** ppTempEntFree,   // List of freed temporary ents
-	TEMPENTITY** ppTempEntActive, // List 
-	int		(*Callback_AddVisibleEntity)(cl_entity_t* pEntity),
-	void	(*Callback_TempEntPlaySound)(TEMPENTITY* pTemp, float damp))
+	double frametime,			  // Simulation time
+	double client_time,			  // Absolute time on client
+	double cl_gravity,			  // True gravity on client
+	TEMPENTITY** ppTempEntFree,	  // List of freed temporary ents
+	TEMPENTITY** ppTempEntActive, // List
+	int (*Callback_AddVisibleEntity)(cl_entity_t* pEntity),
+	void (*Callback_TempEntPlaySound)(TEMPENTITY* pTemp, float damp))
 {
 	//	RecClTempEntUpdate(frametime, client_time, cl_gravity, ppTempEntFree, ppTempEntActive, Callback_AddVisibleEntity, Callback_TempEntPlaySound);
 
 	static int gTempEntFrame = 0;
-	int			i;
-	TEMPENTITY* pTemp, * pnext, * pprev;
-	float		freq, gravity, gravitySlow, life, fastFreq;
+	int i;
+	TEMPENTITY *pTemp, *pnext, *pprev;
+	float freq, gravity, gravitySlow, life, fastFreq;
 
-	Vector		vAngles;
+	Vector vAngles;
 
 	gEngfuncs.GetViewAngles((float*)vAngles);
 
@@ -410,10 +393,10 @@ void DLLEXPORT HUD_TempEntUpdate(
 		return;
 
 	// in order to have tents collide with players, we have to run the player prediction code so
-	// that the client has the player list. We run this code once when we detect any COLLIDEALL 
-	// tent, then set this BOOL to true so the code doesn't get run again if there's more than
+	// that the client has the player list. We run this code once when we detect any COLLIDEALL
+	// tent, then set this bool to true so the code doesn't get run again if there's more than
 	// one COLLIDEALL ent for this update. (often are).
-	gEngfuncs.pEventAPI->EV_SetUpPlayerPrediction(false, true);
+	gEngfuncs.pEventAPI->EV_SetUpPlayerPrediction(0, 1);
 
 	// Store off the old count
 	gEngfuncs.pEventAPI->EV_PushPMStates();
@@ -431,7 +414,7 @@ void DLLEXPORT HUD_TempEntUpdate(
 	{
 		while (pTemp)
 		{
-			if (!(pTemp->flags & FTENT_NOMODEL))
+			if ((pTemp->flags & FTENT_NOMODEL) == 0)
 			{
 				Callback_AddVisibleEntity(&pTemp->entity);
 			}
@@ -448,31 +431,30 @@ void DLLEXPORT HUD_TempEntUpdate(
 
 	while (pTemp)
 	{
-		int active;
+		bool active;
 
-		active = 1;
+		active = true;
 
 		life = pTemp->die - client_time;
 		pnext = pTemp->next;
 		if (life < 0)
 		{
-			if (pTemp->flags & FTENT_FADEOUT)
+			if ((pTemp->flags & FTENT_FADEOUT) != 0)
 			{
 				if (pTemp->entity.curstate.rendermode == kRenderNormal)
 					pTemp->entity.curstate.rendermode = kRenderTransTexture;
 				pTemp->entity.curstate.renderamt = pTemp->entity.baseline.renderamt * (1 + life * pTemp->fadeSpeed);
 				if (pTemp->entity.curstate.renderamt <= 0)
-					active = 0;
-
+					active = false;
 			}
 			else
-				active = 0;
+				active = false;
 		}
-		if (!active)		// Kill it
+		if (!active) // Kill it
 		{
 			pTemp->next = *ppTempEntFree;
 			*ppTempEntFree = pTemp;
-			if (!pprev)	// Deleting at head of list
+			if (!pprev) // Deleting at head of list
 				*ppTempEntActive = pnext;
 			else
 				pprev->next = pnext;
@@ -483,7 +465,7 @@ void DLLEXPORT HUD_TempEntUpdate(
 
 			VectorCopy(pTemp->entity.origin, pTemp->entity.prevstate.origin);
 
-			if (pTemp->flags & FTENT_SPARKSHOWER)
+			if ((pTemp->flags & FTENT_SPARKSHOWER) != 0)
 			{
 				// Adjust speed if it's time
 				// Scale is next think time
@@ -509,7 +491,7 @@ void DLLEXPORT HUD_TempEntUpdate(
 					}
 				}
 			}
-			else if (pTemp->flags & FTENT_PLYRATTACHMENT)
+			else if ((pTemp->flags & FTENT_PLYRATTACHMENT) != 0)
 			{
 				cl_entity_t* pClient;
 
@@ -517,7 +499,7 @@ void DLLEXPORT HUD_TempEntUpdate(
 
 				VectorAdd(pClient->origin, pTemp->tentOffset, pTemp->entity.origin);
 			}
-			else if (pTemp->flags & FTENT_SINEWAVE)
+			else if ((pTemp->flags & FTENT_SINEWAVE) != 0)
 			{
 				pTemp->x += pTemp->entity.baseline.origin[0] * frametime;
 				pTemp->y += pTemp->entity.baseline.origin[1] * frametime;
@@ -526,7 +508,7 @@ void DLLEXPORT HUD_TempEntUpdate(
 				pTemp->entity.origin[1] = pTemp->y + sin(pTemp->entity.baseline.origin[2] + fastFreq + 0.7) * (8 * pTemp->entity.curstate.framerate);
 				pTemp->entity.origin[2] += pTemp->entity.baseline.origin[2] * frametime;
 			}
-			else if (pTemp->flags & FTENT_SPIRAL)
+			else if ((pTemp->flags & FTENT_SPIRAL) != 0)
 			{
 				float s, c;
 				s = sin(pTemp->entity.baseline.origin[2] + fastFreq);
@@ -543,14 +525,14 @@ void DLLEXPORT HUD_TempEntUpdate(
 					pTemp->entity.origin[i] += pTemp->entity.baseline.origin[i] * frametime;
 			}
 
-			if (pTemp->flags & FTENT_SPRANIMATE)
+			if ((pTemp->flags & FTENT_SPRANIMATE) != 0)
 			{
 				pTemp->entity.curstate.frame += frametime * pTemp->entity.curstate.framerate;
 				if (pTemp->entity.curstate.frame >= pTemp->frameMax)
 				{
 					pTemp->entity.curstate.frame = pTemp->entity.curstate.frame - (int)(pTemp->entity.curstate.frame);
 
-					if (!(pTemp->flags & FTENT_SPRANIMATELOOP))
+					if ((pTemp->flags & FTENT_SPRANIMATELOOP) == 0)
 					{
 						// this animating sprite isn't set to loop, so destroy it.
 						pTemp->die = client_time;
@@ -559,7 +541,7 @@ void DLLEXPORT HUD_TempEntUpdate(
 					}
 				}
 			}
-			else if (pTemp->flags & FTENT_SPRCYCLE)
+			else if ((pTemp->flags & FTENT_SPRCYCLE) != 0)
 			{
 				pTemp->entity.curstate.frame += frametime * 10;
 				if (pTemp->entity.curstate.frame >= pTemp->frameMax)
@@ -573,7 +555,7 @@ void DLLEXPORT HUD_TempEntUpdate(
 				pTemp->entity.curstate.framerate += 20.0 * (frametime / pTemp->entity.curstate.framerate);
 #endif
 
-			if (pTemp->flags & FTENT_ROTATE)
+			if ((pTemp->flags & FTENT_ROTATE) != 0)
 			{
 				pTemp->entity.angles[0] += pTemp->entity.baseline.angles[0] * frametime;
 				pTemp->entity.angles[1] += pTemp->entity.baseline.angles[1] * frametime;
@@ -582,12 +564,12 @@ void DLLEXPORT HUD_TempEntUpdate(
 				VectorCopy(pTemp->entity.angles, pTemp->entity.latched.prevangles);
 			}
 
-			if (pTemp->flags & (FTENT_COLLIDEALL | FTENT_COLLIDEWORLD))
+			if ((pTemp->flags & (FTENT_COLLIDEALL | FTENT_COLLIDEWORLD)) != 0)
 			{
-				Vector	traceNormal;
-				float	traceFraction = 1;
+				Vector traceNormal;
+				float traceFraction = 1;
 
-				if (pTemp->flags & FTENT_COLLIDEALL)
+				if ((pTemp->flags & FTENT_COLLIDEALL) != 0)
 				{
 					pmtrace_t pmtrace;
 					physent_t* pe;
@@ -601,7 +583,7 @@ void DLLEXPORT HUD_TempEntUpdate(
 					{
 						pe = gEngfuncs.pEventAPI->EV_GetPhysent(pmtrace.ent);
 
-						if (!pmtrace.ent || (pe->info != pTemp->clientIndex))
+						if (0 == pmtrace.ent || (pe->info != pTemp->clientIndex))
 						{
 							traceFraction = pmtrace.fraction;
 							VectorCopy(pmtrace.plane.normal, traceNormal);
@@ -613,7 +595,7 @@ void DLLEXPORT HUD_TempEntUpdate(
 						}
 					}
 				}
-				else if (pTemp->flags & FTENT_COLLIDEWORLD)
+				else if ((pTemp->flags & FTENT_COLLIDEWORLD) != 0)
 				{
 					pmtrace_t pmtrace;
 
@@ -626,7 +608,7 @@ void DLLEXPORT HUD_TempEntUpdate(
 						traceFraction = pmtrace.fraction;
 						VectorCopy(pmtrace.plane.normal, traceNormal);
 
-						if (pTemp->flags & FTENT_SPARKSHOWER)
+						if ((pTemp->flags & FTENT_SPARKSHOWER) != 0)
 						{
 							// Chop spark speeds a bit more
 							//
@@ -645,22 +627,22 @@ void DLLEXPORT HUD_TempEntUpdate(
 					}
 				}
 
-				if (traceFraction != 1)	// Decent collision now, and damping works
+				if (traceFraction != 1) // Decent collision now, and damping works
 				{
-					float  proj, damp;
+					float proj, damp;
 
 					// Place at contact point
 					VectorMA(pTemp->entity.prevstate.origin, traceFraction * frametime, pTemp->entity.baseline.origin, pTemp->entity.origin);
 					// Damp velocity
 					damp = pTemp->bounceFactor;
-					if (pTemp->flags & (FTENT_GRAVITY | FTENT_SLOWGRAVITY))
+					if ((pTemp->flags & (FTENT_GRAVITY | FTENT_SLOWGRAVITY)) != 0)
 					{
 						damp *= 0.5;
-						if (traceNormal[2] > 0.9)		// Hit floor?
+						if (traceNormal[2] > 0.9) // Hit floor?
 						{
 							if (pTemp->entity.baseline.origin[2] <= 0 && pTemp->entity.baseline.origin[2] >= gravity * 3)
 							{
-								damp = 0;		// Stop
+								damp = 0; // Stop
 								pTemp->flags &= ~(FTENT_ROTATE | FTENT_GRAVITY | FTENT_SLOWGRAVITY | FTENT_COLLIDEWORLD | FTENT_SMOKETRAIL);
 								pTemp->entity.angles[0] = 0;
 								pTemp->entity.angles[2] = 0;
@@ -668,12 +650,12 @@ void DLLEXPORT HUD_TempEntUpdate(
 						}
 					}
 
-					if (pTemp->hitSound)
+					if (0 != pTemp->hitSound)
 					{
 						Callback_TempEntPlaySound(pTemp, damp);
 					}
 
-					if (pTemp->flags & FTENT_COLLIDEKILL)
+					if ((pTemp->flags & FTENT_COLLIDEKILL) != 0)
 					{
 						// die on impact
 						pTemp->flags &= ~FTENT_FADEOUT;
@@ -702,7 +684,7 @@ void DLLEXPORT HUD_TempEntUpdate(
 			}
 
 
-			if ((pTemp->flags & FTENT_FLICKER) && gTempEntFrame == pTemp->entity.curstate.effects)
+			if ((pTemp->flags & FTENT_FLICKER) != 0 && gTempEntFrame == pTemp->entity.curstate.effects)
 			{
 				dlight_t* dl = gEngfuncs.pEfxAPI->CL_AllocDlight(0);
 				VectorCopy(pTemp->entity.origin, dl->origin);
@@ -713,17 +695,17 @@ void DLLEXPORT HUD_TempEntUpdate(
 				dl->die = client_time + 0.01;
 			}
 
-			if (pTemp->flags & FTENT_SMOKETRAIL)
+			if ((pTemp->flags & FTENT_SMOKETRAIL) != 0)
 			{
 				gEngfuncs.pEfxAPI->R_RocketTrail(pTemp->entity.prevstate.origin, pTemp->entity.origin, 1);
 			}
 
-			if (pTemp->flags & FTENT_GRAVITY)
+			if ((pTemp->flags & FTENT_GRAVITY) != 0)
 				pTemp->entity.baseline.origin[2] += gravity;
-			else if (pTemp->flags & FTENT_SLOWGRAVITY)
+			else if ((pTemp->flags & FTENT_SLOWGRAVITY) != 0)
 				pTemp->entity.baseline.origin[2] += gravitySlow;
 
-			if (pTemp->flags & FTENT_CLIENTCUSTOM)
+			if ((pTemp->flags & FTENT_CLIENTCUSTOM) != 0)
 			{
 				if (pTemp->callback)
 				{
@@ -732,14 +714,14 @@ void DLLEXPORT HUD_TempEntUpdate(
 			}
 
 			// Cull to PVS (not frustum cull, just PVS)
-			if (!(pTemp->flags & FTENT_NOMODEL))
+			if ((pTemp->flags & FTENT_NOMODEL) == 0)
 			{
-				if (!Callback_AddVisibleEntity(&pTemp->entity))
+				if (0 == Callback_AddVisibleEntity(&pTemp->entity))
 				{
-					if (!(pTemp->flags & FTENT_PERSIST))
+					if ((pTemp->flags & FTENT_PERSIST) == 0)
 					{
-						pTemp->die = client_time;			// If we can't draw it this frame, just dump it.
-						pTemp->flags &= ~FTENT_FADEOUT;	// Don't fade out, just die
+						pTemp->die = client_time;		// If we can't draw it this frame, just dump it.
+						pTemp->flags &= ~FTENT_FADEOUT; // Don't fade out, just die
 					}
 				}
 			}
@@ -767,7 +749,7 @@ cl_entity_t DLLEXPORT* HUD_GetUserEntity(int index)
 {
 	//	RecClGetUserEntity(index);
 
-#if defined( BEAM_TEST )
+#if defined(BEAM_TEST)
 	// None by default, you would return a valic pointer if you create a client side
 	//  beam and attach it to a client side entity.
 	if (index > 0 && index <= 1)
@@ -782,4 +764,3 @@ cl_entity_t DLLEXPORT* HUD_GetUserEntity(int index)
 	return NULL;
 #endif
 }
-

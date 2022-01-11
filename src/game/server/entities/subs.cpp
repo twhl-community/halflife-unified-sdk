@@ -27,12 +27,7 @@
 #include "nodes.h"
 #include "doors.h"
 
-extern CGraph WorldGraph;
-
-extern BOOL FEntIsVisible(entvars_t* pev, entvars_t* pevTarget);
-
-extern DLL_GLOBAL int g_iSkillLevel;
-
+extern bool FEntIsVisible(entvars_t* pev, entvars_t* pevTarget);
 
 // Landmark class
 void CPointEntity::Spawn()
@@ -59,31 +54,31 @@ LINK_ENTITY_TO_CLASS(info_null, CNullEntity);
 class CBaseDMStart : public CPointEntity
 {
 public:
-	void		KeyValue(KeyValueData* pkvd) override;
-	BOOL		IsTriggered(CBaseEntity* pEntity) override;
+	bool KeyValue(KeyValueData* pkvd) override;
+	bool IsTriggered(CBaseEntity* pEntity) override;
 
 private:
 };
 
-// These are the new entry points to entities. 
+// These are the new entry points to entities.
 LINK_ENTITY_TO_CLASS(info_player_deathmatch, CBaseDMStart);
 LINK_ENTITY_TO_CLASS(info_player_start, CPointEntity);
 LINK_ENTITY_TO_CLASS(info_landmark, CPointEntity);
 
-void CBaseDMStart::KeyValue(KeyValueData* pkvd)
+bool CBaseDMStart::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq(pkvd->szKeyName, "master"))
 	{
 		pev->netname = ALLOC_STRING(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		return true;
 	}
-	else
-		CPointEntity::KeyValue(pkvd);
+
+	return CPointEntity::KeyValue(pkvd);
 }
 
-BOOL CBaseDMStart::IsTriggered(CBaseEntity* pEntity)
+bool CBaseDMStart::IsTriggered(CBaseEntity* pEntity)
 {
-	BOOL master = UTIL_IsMasterTriggered(pev->netname, pEntity);
+	bool master = UTIL_IsMasterTriggered(pev->netname, pEntity);
 
 	return master;
 }
@@ -91,7 +86,7 @@ BOOL CBaseDMStart::IsTriggered(CBaseEntity* pEntity)
 // This updates global tables that need to know about entities being removed
 void CBaseEntity::UpdateOnRemove()
 {
-	int	i;
+	int i;
 
 	if (FBitSet(pev->flags, FL_GRAPHED))
 	{
@@ -106,7 +101,7 @@ void CBaseEntity::UpdateOnRemove()
 			}
 		}
 	}
-	if (pev->globalname)
+	if (!FStringNull(pev->globalname))
 		gGlobalState.EntitySetState(pev->globalname, GLOBAL_DEAD);
 }
 
@@ -132,30 +127,28 @@ void CBaseEntity::SUB_DoNothing()
 
 
 // Global Savedata for Delay
-TYPEDESCRIPTION	CBaseDelay::m_SaveData[] =
-{
-	DEFINE_FIELD(CBaseDelay, m_flDelay, FIELD_FLOAT),
-	DEFINE_FIELD(CBaseDelay, m_iszKillTarget, FIELD_STRING),
+TYPEDESCRIPTION CBaseDelay::m_SaveData[] =
+	{
+		DEFINE_FIELD(CBaseDelay, m_flDelay, FIELD_FLOAT),
+		DEFINE_FIELD(CBaseDelay, m_iszKillTarget, FIELD_STRING),
 };
 
 IMPLEMENT_SAVERESTORE(CBaseDelay, CBaseEntity);
 
-void CBaseDelay::KeyValue(KeyValueData* pkvd)
+bool CBaseDelay::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq(pkvd->szKeyName, "delay"))
 	{
 		m_flDelay = atof(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "killtarget"))
 	{
 		m_iszKillTarget = ALLOC_STRING(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		return true;
 	}
-	else
-	{
-		CBaseEntity::KeyValue(pkvd);
-	}
+
+	return CBaseEntity::KeyValue(pkvd);
 }
 
 
@@ -201,7 +194,7 @@ void FireTargets(const char* targetName, CBaseEntity* pActivator, CBaseEntity* p
 			break;
 
 		CBaseEntity* pTarget = CBaseEntity::Instance(pentTarget);
-		if (pTarget && !(pTarget->pev->flags & FL_KILLME))	// Don't use dying ents
+		if (pTarget && (pTarget->pev->flags & FL_KILLME) == 0) // Don't use dying ents
 		{
 			ALERT(at_aiconsole, "Found: %s, firing (%s)\n", STRING(pTarget->pev->classname), targetName);
 			pTarget->Use(pActivator, pCaller, useType, value);
@@ -217,7 +210,7 @@ void CBaseDelay::SUB_UseTargets(CBaseEntity* pActivator, USE_TYPE useType, float
 	//
 	// exit immediatly if we don't have a target or kill target
 	//
-	if (FStringNull(pev->target) && !m_iszKillTarget)
+	if (FStringNull(pev->target) && FStringNull(m_iszKillTarget))
 		return;
 
 	//
@@ -243,7 +236,7 @@ void CBaseDelay::SUB_UseTargets(CBaseEntity* pActivator, USE_TYPE useType, float
 		// This wasn't in the release build of Half-Life.  We should have moved m_hActivator into this class
 		// but changing member variable hierarchy would break save/restore without some ugly code.
 		// This code is not as ugly as that code
-		if (pActivator && pActivator->IsPlayer())		// If a player activates, then save it
+		if (pActivator && pActivator->IsPlayer()) // If a player activates, then save it
 		{
 			pTemp->pev->owner = pActivator->edict();
 		}
@@ -259,7 +252,7 @@ void CBaseDelay::SUB_UseTargets(CBaseEntity* pActivator, USE_TYPE useType, float
 	// kill the killtargets
 	//
 
-	if (m_iszKillTarget)
+	if (!FStringNull(m_iszKillTarget))
 	{
 		edict_t* pentKillTarget = NULL;
 
@@ -321,7 +314,7 @@ void CBaseDelay::DelayThink()
 {
 	CBaseEntity* pActivator = NULL;
 
-	if (pev->owner != NULL)		// A player activated this on delay
+	if (pev->owner != NULL) // A player activated this on delay
 	{
 		pActivator = CBaseEntity::Instance(pev->owner);
 	}
@@ -332,55 +325,55 @@ void CBaseDelay::DelayThink()
 
 
 // Global Savedata for Toggle
-TYPEDESCRIPTION	CBaseToggle::m_SaveData[] =
-{
-	DEFINE_FIELD(CBaseToggle, m_toggle_state, FIELD_INTEGER),
-	DEFINE_FIELD(CBaseToggle, m_flActivateFinished, FIELD_TIME),
-	DEFINE_FIELD(CBaseToggle, m_flMoveDistance, FIELD_FLOAT),
-	DEFINE_FIELD(CBaseToggle, m_flWait, FIELD_FLOAT),
-	DEFINE_FIELD(CBaseToggle, m_flLip, FIELD_FLOAT),
-	DEFINE_FIELD(CBaseToggle, m_flTWidth, FIELD_FLOAT),
-	DEFINE_FIELD(CBaseToggle, m_flTLength, FIELD_FLOAT),
-	DEFINE_FIELD(CBaseToggle, m_vecPosition1, FIELD_POSITION_VECTOR),
-	DEFINE_FIELD(CBaseToggle, m_vecPosition2, FIELD_POSITION_VECTOR),
-	DEFINE_FIELD(CBaseToggle, m_vecAngle1, FIELD_VECTOR),		// UNDONE: Position could go through transition, but also angle?
-	DEFINE_FIELD(CBaseToggle, m_vecAngle2, FIELD_VECTOR),		// UNDONE: Position could go through transition, but also angle?
-	DEFINE_FIELD(CBaseToggle, m_cTriggersLeft, FIELD_INTEGER),
-	DEFINE_FIELD(CBaseToggle, m_flHeight, FIELD_FLOAT),
-	DEFINE_FIELD(CBaseToggle, m_hActivator, FIELD_EHANDLE),
-	DEFINE_FIELD(CBaseToggle, m_pfnCallWhenMoveDone, FIELD_FUNCTION),
-	DEFINE_FIELD(CBaseToggle, m_vecFinalDest, FIELD_POSITION_VECTOR),
-	DEFINE_FIELD(CBaseToggle, m_vecFinalAngle, FIELD_VECTOR),
-	DEFINE_FIELD(CBaseToggle, m_sMaster, FIELD_STRING),
-	DEFINE_FIELD(CBaseToggle, m_bitsDamageInflict, FIELD_INTEGER),	// damage type inflicted
+TYPEDESCRIPTION CBaseToggle::m_SaveData[] =
+	{
+		DEFINE_FIELD(CBaseToggle, m_toggle_state, FIELD_INTEGER),
+		DEFINE_FIELD(CBaseToggle, m_flActivateFinished, FIELD_TIME),
+		DEFINE_FIELD(CBaseToggle, m_flMoveDistance, FIELD_FLOAT),
+		DEFINE_FIELD(CBaseToggle, m_flWait, FIELD_FLOAT),
+		DEFINE_FIELD(CBaseToggle, m_flLip, FIELD_FLOAT),
+		DEFINE_FIELD(CBaseToggle, m_flTWidth, FIELD_FLOAT),
+		DEFINE_FIELD(CBaseToggle, m_flTLength, FIELD_FLOAT),
+		DEFINE_FIELD(CBaseToggle, m_vecPosition1, FIELD_POSITION_VECTOR),
+		DEFINE_FIELD(CBaseToggle, m_vecPosition2, FIELD_POSITION_VECTOR),
+		DEFINE_FIELD(CBaseToggle, m_vecAngle1, FIELD_VECTOR), // UNDONE: Position could go through transition, but also angle?
+		DEFINE_FIELD(CBaseToggle, m_vecAngle2, FIELD_VECTOR), // UNDONE: Position could go through transition, but also angle?
+		DEFINE_FIELD(CBaseToggle, m_cTriggersLeft, FIELD_INTEGER),
+		DEFINE_FIELD(CBaseToggle, m_flHeight, FIELD_FLOAT),
+		DEFINE_FIELD(CBaseToggle, m_hActivator, FIELD_EHANDLE),
+		DEFINE_FIELD(CBaseToggle, m_pfnCallWhenMoveDone, FIELD_FUNCTION),
+		DEFINE_FIELD(CBaseToggle, m_vecFinalDest, FIELD_POSITION_VECTOR),
+		DEFINE_FIELD(CBaseToggle, m_vecFinalAngle, FIELD_VECTOR),
+		DEFINE_FIELD(CBaseToggle, m_sMaster, FIELD_STRING),
+		DEFINE_FIELD(CBaseToggle, m_bitsDamageInflict, FIELD_INTEGER), // damage type inflicted
 };
 IMPLEMENT_SAVERESTORE(CBaseToggle, CBaseAnimating);
 
 
-void CBaseToggle::KeyValue(KeyValueData* pkvd)
+bool CBaseToggle::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq(pkvd->szKeyName, "lip"))
 	{
 		m_flLip = atof(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "wait"))
 	{
 		m_flWait = atof(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "master"))
 	{
 		m_sMaster = ALLOC_STRING(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "distance"))
 	{
 		m_flMoveDistance = atof(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		return true;
 	}
-	else
-		CBaseDelay::KeyValue(pkvd);
+
+	return CBaseDelay::KeyValue(pkvd);
 }
 
 /*
@@ -391,7 +384,7 @@ calculate pev->velocity and pev->nextthink to reach vecDest from
 pev->origin traveling at flSpeed
 ===============
 */
-void CBaseToggle::LinearMove(Vector	vecDest, float flSpeed)
+void CBaseToggle::LinearMove(Vector vecDest, float flSpeed)
 {
 	ASSERTSZ(flSpeed != 0, "LinearMove:  no speed is defined!");
 	//	ASSERTSZ(m_pfnCallWhenMoveDone != NULL, "LinearMove: no post-move function defined");
@@ -442,12 +435,9 @@ void CBaseToggle::LinearMoveDone()
 		(this->*m_pfnCallWhenMoveDone)();
 }
 
-BOOL CBaseToggle::IsLockedByMaster()
+bool CBaseToggle::IsLockedByMaster()
 {
-	if (m_sMaster && !UTIL_IsMasterTriggered(m_sMaster, m_hActivator))
-		return TRUE;
-	else
-		return FALSE;
+	return !FStringNull(m_sMaster) && !UTIL_IsMasterTriggered(m_sMaster, m_hActivator);
 }
 
 /*
@@ -517,11 +507,11 @@ float CBaseToggle::AxisValue(int flags, const Vector& angles)
 void CBaseToggle::AxisDir(entvars_t* pev)
 {
 	if (FBitSet(pev->spawnflags, SF_DOOR_ROTATE_Z))
-		pev->movedir = Vector(0, 0, 1);	// around z-axis
+		pev->movedir = Vector(0, 0, 1); // around z-axis
 	else if (FBitSet(pev->spawnflags, SF_DOOR_ROTATE_X))
-		pev->movedir = Vector(1, 0, 0);	// around x-axis
+		pev->movedir = Vector(1, 0, 0); // around x-axis
 	else
-		pev->movedir = Vector(0, 1, 0);		// around y-axis
+		pev->movedir = Vector(0, 1, 0); // around y-axis
 }
 
 
@@ -541,11 +531,10 @@ float CBaseToggle::AxisDelta(int flags, const Vector& angle1, const Vector& angl
 =============
 FEntIsVisible
 
-returns TRUE if the passed entity is visible to caller, even if not infront ()
+returns true if the passed entity is visible to caller, even if not infront ()
 =============
 */
-BOOL
-FEntIsVisible(
+bool FEntIsVisible(
 	entvars_t* pev,
 	entvars_t* pevTarget)
 {
@@ -555,13 +544,11 @@ FEntIsVisible(
 
 	UTIL_TraceLine(vecSpot1, vecSpot2, ignore_monsters, ENT(pev), &tr);
 
-	if (tr.fInOpen && tr.fInWater)
-		return FALSE;                   // sight line crossed contents
+	if (0 != tr.fInOpen && 0 != tr.fInWater)
+		return false; // sight line crossed contents
 
 	if (tr.flFraction == 1)
-		return TRUE;
+		return true;
 
-	return FALSE;
+	return false;
 }
-
-

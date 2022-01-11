@@ -18,13 +18,12 @@
 #include "cbase.h"
 #include "monsters.h"
 #include "weapons.h"
-#include "nodes.h"
 #include "player.h"
 #include "gamerules.h"
 
 
-#define	CROWBAR_BODYHIT_VOLUME 128
-#define	CROWBAR_WALLHIT_VOLUME 512
+#define CROWBAR_BODYHIT_VOLUME 128
+#define CROWBAR_WALLHIT_VOLUME 512
 
 LINK_ENTITY_TO_CLASS(weapon_crowbar, CCrowbar);
 
@@ -35,7 +34,7 @@ void CCrowbar::Spawn()
 	SET_MODEL(ENT(pev), "models/w_crowbar.mdl");
 	m_iClip = -1;
 
-	FallInit();// get ready to fall down.
+	FallInit(); // get ready to fall down.
 }
 
 
@@ -54,7 +53,7 @@ void CCrowbar::Precache()
 	m_usCrowbar = PRECACHE_EVENT(1, "events/crowbar.sc");
 }
 
-int CCrowbar::GetItemInfo(ItemInfo* p)
+bool CCrowbar::GetItemInfo(ItemInfo* p)
 {
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo1 = NULL;
@@ -66,12 +65,12 @@ int CCrowbar::GetItemInfo(ItemInfo* p)
 	p->iPosition = 0;
 	p->iId = WEAPON_CROWBAR;
 	p->iWeight = CROWBAR_WEIGHT;
-	return 1;
+	return true;
 }
 
 
 
-BOOL CCrowbar::Deploy()
+bool CCrowbar::Deploy()
 {
 	return DefaultDeploy("models/v_crowbar.mdl", "models/p_crowbar.mdl", CROWBAR_DRAW, "crowbar");
 }
@@ -84,7 +83,7 @@ void CCrowbar::Holster()
 
 void CCrowbar::PrimaryAttack()
 {
-	if (!Swing(1))
+	if (!Swing(true))
 	{
 		SetThink(&CCrowbar::SwingAgain);
 		pev->nextthink = gpGlobals->time + 0.1;
@@ -100,13 +99,13 @@ void CCrowbar::Smack()
 
 void CCrowbar::SwingAgain()
 {
-	Swing(0);
+	Swing(false);
 }
 
 
-int CCrowbar::Swing(int fFirst)
+bool CCrowbar::Swing(bool fFirst)
 {
-	int fDidHit = FALSE;
+	bool fDidHit = false;
 
 	TraceResult tr;
 
@@ -127,7 +126,7 @@ int CCrowbar::Swing(int fFirst)
 			CBaseEntity* pHit = CBaseEntity::Instance(tr.pHit);
 			if (!pHit || pHit->IsBSPModel())
 				FindHullIntersection(vecSrc, tr, VEC_DUCK_HULL_MIN, VEC_DUCK_HULL_MAX, m_pPlayer->edict());
-			vecEnd = tr.vecEndPos;	// This is the point on the actual surface (the hull could have hit space)
+			vecEnd = tr.vecEndPos; // This is the point on the actual surface (the hull could have hit space)
 		}
 	}
 #endif
@@ -153,11 +152,14 @@ int CCrowbar::Swing(int fFirst)
 		switch (((m_iSwing++) % 2) + 1)
 		{
 		case 0:
-			SendWeaponAnim(CROWBAR_ATTACK1HIT); break;
+			SendWeaponAnim(CROWBAR_ATTACK1HIT);
+			break;
 		case 1:
-			SendWeaponAnim(CROWBAR_ATTACK2HIT); break;
+			SendWeaponAnim(CROWBAR_ATTACK2HIT);
+			break;
 		case 2:
-			SendWeaponAnim(CROWBAR_ATTACK3HIT); break;
+			SendWeaponAnim(CROWBAR_ATTACK3HIT);
+			break;
 		}
 
 		// player "shoot" animation
@@ -166,7 +168,7 @@ int CCrowbar::Swing(int fFirst)
 #ifndef CLIENT_DLL
 
 		// hit
-		fDidHit = TRUE;
+		fDidHit = true;
 		CBaseEntity* pEntity = CBaseEntity::Instance(tr.pHit);
 
 		ClearMultiDamage();
@@ -190,7 +192,7 @@ int CCrowbar::Swing(int fFirst)
 #ifndef CLIENT_DLL
 		// play thwack, smack, or dong sound
 		float flVol = 1.0;
-		int fHitWorld = TRUE;
+		bool fHitWorld = true;
 
 		if (pEntity)
 		{
@@ -200,19 +202,22 @@ int CCrowbar::Swing(int fFirst)
 				switch (RANDOM_LONG(0, 2))
 				{
 				case 0:
-					EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/cbar_hitbod1.wav", 1, ATTN_NORM); break;
+					EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/cbar_hitbod1.wav", 1, ATTN_NORM);
+					break;
 				case 1:
-					EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/cbar_hitbod2.wav", 1, ATTN_NORM); break;
+					EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/cbar_hitbod2.wav", 1, ATTN_NORM);
+					break;
 				case 2:
-					EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/cbar_hitbod3.wav", 1, ATTN_NORM); break;
+					EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/cbar_hitbod3.wav", 1, ATTN_NORM);
+					break;
 				}
 				m_pPlayer->m_iWeaponVolume = CROWBAR_BODYHIT_VOLUME;
 				if (!pEntity->IsAlive())
-					return TRUE;
+					return true;
 				else
 					flVol = 0.1;
 
-				fHitWorld = FALSE;
+				fHitWorld = false;
 			}
 		}
 
@@ -225,7 +230,7 @@ int CCrowbar::Swing(int fFirst)
 
 			if (g_pGameRules->IsMultiplayer())
 			{
-				// override the volume here, cause we don't play texture sounds in multiplayer, 
+				// override the volume here, cause we don't play texture sounds in multiplayer,
 				// and fvolbar is going to be 0 from the above call.
 
 				fvolbar = 1;
@@ -250,11 +255,6 @@ int CCrowbar::Swing(int fFirst)
 #endif
 		SetThink(&CCrowbar::Smack);
 		pev->nextthink = gpGlobals->time + 0.2;
-
-
 	}
 	return fDidHit;
 }
-
-
-

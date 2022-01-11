@@ -15,12 +15,12 @@
 //
 // $NoKeywords: $
 //=============================================================================
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"player.h"
-#include	"weapons.h"
-#include	"pm_shared.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "player.h"
+#include "weapons.h"
+#include "pm_shared.h"
 #include "UserMessages.h"
 
 // Find the next client in the game for this player to spectate
@@ -29,12 +29,12 @@ void CBasePlayer::Observer_FindNextPlayer(bool bReverse)
 	// MOD AUTHORS: Modify the logic of this function if you want to restrict the observer to watching
 	//				only a subset of the players. e.g. Make it check the target's team.
 
-	int		iStart;
+	int iStart;
 	if (m_hObserverTarget)
 		iStart = ENTINDEX(m_hObserverTarget->edict());
 	else
 		iStart = ENTINDEX(edict());
-	int	    iCurrent = iStart;
+	int iCurrent = iStart;
 	m_hObserverTarget = NULL;
 	int iDir = bReverse ? -1 : 1;
 
@@ -54,7 +54,7 @@ void CBasePlayer::Observer_FindNextPlayer(bool bReverse)
 		if (pEnt == this)
 			continue;
 		// Don't spec observers or players who haven't picked a class yet
-		if (((CBasePlayer*)pEnt)->IsObserver() || (pEnt->pev->effects & EF_NODRAW))
+		if (((CBasePlayer*)pEnt)->IsObserver() || (pEnt->pev->effects & EF_NODRAW) != 0)
 			continue;
 
 		// MOD AUTHORS: Add checks on target here.
@@ -62,8 +62,7 @@ void CBasePlayer::Observer_FindNextPlayer(bool bReverse)
 		m_hObserverTarget = pEnt;
 		break;
 
-	}
-	while (iCurrent != iStart);
+	} while (iCurrent != iStart);
 
 	// Did we find a target?
 	if (m_hObserverTarget)
@@ -76,9 +75,6 @@ void CBasePlayer::Observer_FindNextPlayer(bool bReverse)
 		// Store the target in pev so the physics DLL can get to it
 		if (pev->iuser1 != OBS_ROAMING)
 			pev->iuser2 = ENTINDEX(m_hObserverTarget->edict());
-
-
-
 	}
 }
 
@@ -90,7 +86,7 @@ void CBasePlayer::Observer_HandleButtons()
 		return;
 
 	// Jump changes from modes: Chase to Roaming
-	if (m_afButtonPressed & IN_JUMP)
+	if ((m_afButtonPressed & IN_JUMP) != 0)
 	{
 		if (pev->iuser1 == OBS_CHASE_LOCKED)
 			Observer_SetMode(OBS_CHASE_FREE);
@@ -108,13 +104,13 @@ void CBasePlayer::Observer_HandleButtons()
 			Observer_SetMode(OBS_MAP_CHASE);
 
 		else
-			Observer_SetMode(OBS_CHASE_FREE);	// don't use OBS_CHASE_LOCKED anymore
+			Observer_SetMode(OBS_CHASE_FREE); // don't use OBS_CHASE_LOCKED anymore
 
 		m_flNextObserverInput = gpGlobals->time + 0.2;
 	}
 
 	// Attack moves to the next player
-	if (m_afButtonPressed & IN_ATTACK)//&& pev->iuser1 != OBS_ROAMING )
+	if ((m_afButtonPressed & IN_ATTACK) != 0) //&& pev->iuser1 != OBS_ROAMING )
 	{
 		Observer_FindNextPlayer(false);
 
@@ -122,7 +118,7 @@ void CBasePlayer::Observer_HandleButtons()
 	}
 
 	// Attack2 moves to the prev player
-	if (m_afButtonPressed & IN_ATTACK2)// && pev->iuser1 != OBS_ROAMING )
+	if ((m_afButtonPressed & IN_ATTACK2) != 0) // && pev->iuser1 != OBS_ROAMING )
 	{
 		Observer_FindNextPlayer(true);
 
@@ -142,15 +138,15 @@ void CBasePlayer::Observer_CheckTarget()
 
 		if (m_hObserverTarget == NULL)
 		{
-			// no target found at all 
+			// no target found at all
 
 			int lastMode = pev->iuser1;
 
 			Observer_SetMode(OBS_ROAMING);
 
-			m_iObserverLastMode = lastMode;	// don't overwrite users lastmode
+			m_iObserverLastMode = lastMode; // don't overwrite users lastmode
 
-			return;	// we still have np target return
+			return; // we still have np target return
 		}
 	}
 
@@ -199,9 +195,9 @@ void CBasePlayer::Observer_CheckProperties()
 			m_iObserverWeapon = weapon;
 			//send weapon update
 			MESSAGE_BEGIN(MSG_ONE, gmsgCurWeapon, NULL, pev);
-			WRITE_BYTE(1);	// 1 = current weapon, not on target
+			WRITE_BYTE(1); // 1 = current weapon, not on target
 			WRITE_BYTE(m_iObserverWeapon);
-			WRITE_BYTE(0);	// clip
+			WRITE_BYTE(0); // clip
 			MESSAGE_END();
 		}
 	}
@@ -214,9 +210,9 @@ void CBasePlayer::Observer_CheckProperties()
 			m_iObserverWeapon = 0;
 
 			MESSAGE_BEGIN(MSG_ONE, gmsgCurWeapon, NULL, pev);
-			WRITE_BYTE(1);	// 1 = current weapon
+			WRITE_BYTE(1); // 1 = current weapon
 			WRITE_BYTE(m_iObserverWeapon);
-			WRITE_BYTE(0);	// clip
+			WRITE_BYTE(0); // clip
 			MESSAGE_END();
 		}
 	}
@@ -240,7 +236,7 @@ void CBasePlayer::Observer_SetMode(int iMode)
 
 		if ((pEnt == this) || (pEnt == NULL))
 			m_hObserverTarget = NULL;
-		else if (((CBasePlayer*)pEnt)->IsObserver() || (pEnt->pev->effects & EF_NODRAW))
+		else if (((CBasePlayer*)pEnt)->IsObserver() || (pEnt->pev->effects & EF_NODRAW) != 0)
 			m_hObserverTarget = NULL;
 	}
 
@@ -268,7 +264,7 @@ void CBasePlayer::Observer_SetMode(int iMode)
 	else
 		pev->iuser2 = ENTINDEX(m_hObserverTarget->edict());
 
-	pev->iuser3 = 0;	// clear second target from death cam
+	pev->iuser3 = 0; // clear second target from death cam
 
 	// print spepctaor mode on client screen
 

@@ -17,7 +17,6 @@
 #include "cbase.h"
 #include "monsters.h"
 #include "weapons.h"
-#include "nodes.h"
 #include "player.h"
 
 class CAirtank : public CGrenade
@@ -26,22 +25,22 @@ class CAirtank : public CGrenade
 	void Precache() override;
 	void EXPORT TankThink();
 	void EXPORT TankTouch(CBaseEntity* pOther);
-	int	 BloodColor() override { return DONT_BLEED; }
+	int BloodColor() override { return DONT_BLEED; }
 	void Killed(entvars_t* pevAttacker, int iGib) override;
 
-	int		Save(CSave& save) override;
-	int		Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 
-	static	TYPEDESCRIPTION m_SaveData[];
+	static TYPEDESCRIPTION m_SaveData[];
 
-	int	 m_state;
+	bool m_state;
 };
 
 
 LINK_ENTITY_TO_CLASS(item_airtank, CAirtank);
-TYPEDESCRIPTION	CAirtank::m_SaveData[] =
-{
-	DEFINE_FIELD(CAirtank, m_state, FIELD_INTEGER),
+TYPEDESCRIPTION CAirtank::m_SaveData[] =
+	{
+		DEFINE_FIELD(CAirtank, m_state, FIELD_BOOLEAN),
 };
 
 IMPLEMENT_SAVERESTORE(CAirtank, CGrenade);
@@ -65,7 +64,7 @@ void CAirtank::Spawn()
 	pev->takedamage = DAMAGE_YES;
 	pev->health = 20;
 	pev->dmg = 50;
-	m_state = 1;
+	m_state = true;
 }
 
 void CAirtank::Precache()
@@ -88,7 +87,7 @@ void CAirtank::Killed(entvars_t* pevAttacker, int iGib)
 void CAirtank::TankThink()
 {
 	// Fire trigger
-	m_state = 1;
+	m_state = true;
 	SUB_UseTargets(this, USE_TOGGLE, 0);
 }
 
@@ -113,6 +112,6 @@ void CAirtank::TankTouch(CBaseEntity* pOther)
 
 	// recharge airtank in 30 seconds
 	pev->nextthink = gpGlobals->time + 30;
-	m_state = 0;
+	m_state = false;
 	SUB_UseTargets(this, USE_TOGGLE, 1);
 }

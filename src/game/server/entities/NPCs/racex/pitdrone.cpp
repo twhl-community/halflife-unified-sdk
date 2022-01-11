@@ -16,20 +16,20 @@
 // pit drone - medium sized, fires sharp teeth like spikes and swipes with sharp appendages
 //=========================================================
 
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"monsters.h"
-#include	"schedule.h"
-#include	"nodes.h"
-#include	"effects.h"
-#include	"decals.h"
-#include	"soundent.h"
-#include	"game.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
+#include "schedule.h"
+#include "nodes.h"
+#include "effects.h"
+#include "decals.h"
+#include "soundent.h"
+#include "game.h"
 
-#define		SQUID_SPRINT_DIST	256 // how close the squid has to get before starting to sprint and refusing to swerve
+#define SQUID_SPRINT_DIST 256 // how close the squid has to get before starting to sprint and refusing to swerve
 
-int			   iSpikeTrail;
+int iSpikeTrail;
 int iPitdroneSpitSprite;
 
 
@@ -72,18 +72,18 @@ public:
 
 	void EXPORT StartTrail();
 
-	int		Save(CSave& save) override;
-	int		Restore(CRestore& restore) override;
-	static	TYPEDESCRIPTION m_SaveData[];
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
+	static TYPEDESCRIPTION m_SaveData[];
 
-	int  m_maxFrame;
+	int m_maxFrame;
 };
 
 LINK_ENTITY_TO_CLASS(pitdronespike, CPitdroneSpike);
 
-TYPEDESCRIPTION	CPitdroneSpike::m_SaveData[] =
-{
-	DEFINE_FIELD(CPitdroneSpike, m_maxFrame, FIELD_INTEGER),
+TYPEDESCRIPTION CPitdroneSpike::m_SaveData[] =
+	{
+		DEFINE_FIELD(CPitdroneSpike, m_maxFrame, FIELD_INTEGER),
 };
 
 IMPLEMENT_SAVERESTORE(CPitdroneSpike, CBaseEntity);
@@ -137,7 +137,7 @@ void CPitdroneSpike::SpikeTouch(CBaseEntity* pOther)
 	// splat sound
 	int iPitch = RANDOM_FLOAT(120, 140);
 
-	if (!pOther->pev->takedamage)
+	if (0 == pOther->pev->takedamage)
 	{
 		EMIT_SOUND_DYN(edict(), CHAN_VOICE, "weapons/xbow_hit1.wav", VOL_NORM, ATTN_NORM, 0, iPitch);
 	}
@@ -151,7 +151,7 @@ void CPitdroneSpike::SpikeTouch(CBaseEntity* pOther)
 
 	//Stick it in the world for a bit
 	//TODO: maybe stick it on any entity that reports FL_WORLDBRUSH too?
-	if (!strcmp("worldspawn", STRING(pOther->pev->classname)))
+	if (0 == strcmp("worldspawn", STRING(pOther->pev->classname)))
 	{
 		const auto vecDir = pev->velocity.Normalize();
 
@@ -202,12 +202,12 @@ void CPitdroneSpike::StartTrail()
 //=========================================================
 // Monster's Anim Events Go Here
 //=========================================================
-#define		PITDRONE_AE_SPIT		( 1 )
-#define		PITDRONE_AE_BITE		( 2 )
-#define		PITDRONE_AE_TAILWHIP	( 4 )
-#define		PITDRONE_AE_HOP		( 5 )
-#define		PITDRONE_AE_THROW		( 6 )
-#define PITDRONE_AE_RELOAD	7
+#define PITDRONE_AE_SPIT (1)
+#define PITDRONE_AE_BITE (2)
+#define PITDRONE_AE_TAILWHIP (4)
+#define PITDRONE_AE_HOP (5)
+#define PITDRONE_AE_THROW (6)
+#define PITDRONE_AE_RELOAD 7
 
 namespace PitdroneBodygroup
 {
@@ -233,19 +233,19 @@ public:
 	void Spawn() override;
 	void Precache() override;
 	void SetYawSpeed() override;
-	int  ISoundMask() override;
-	int  Classify() override;
+	int ISoundMask() override;
+	int Classify() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 	void IdleSound() override;
 	void PainSound() override;
 	void AlertSound() override;
 	void StartTask(Task_t* pTask) override;
 	void RunTask(Task_t* pTask) override;
-	BOOL CheckMeleeAttack1(float flDot, float flDist) override;
-	BOOL CheckMeleeAttack2(float flDot, float flDist) override;
-	BOOL CheckRangeAttack1(float flDot, float flDist) override;
+	bool CheckMeleeAttack1(float flDot, float flDist) override;
+	bool CheckMeleeAttack2(float flDot, float flDist) override;
+	bool CheckRangeAttack1(float flDot, float flDist) override;
 	void RunAI() override;
-	BOOL FValidateHintType(short sHint) override;
+	bool FValidateHintType(short sHint) override;
 	Schedule_t* GetSchedule() override;
 	Schedule_t* GetScheduleOfType(int Type) override;
 	int IRelationship(CBaseEntity* pTarget) override;
@@ -253,32 +253,32 @@ public:
 
 	void CheckAmmo() override;
 	void GibMonster() override;
-	void KeyValue(KeyValueData* pkvd) override;
+	bool KeyValue(KeyValueData* pkvd) override;
 
-	int	Save(CSave& save) override;
-	int Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 
 	CUSTOM_SCHEDULES;
 	static TYPEDESCRIPTION m_SaveData[];
 
-	float m_flLastHurtTime;// we keep track of this, because if something hurts a squid, it will forget about its love of headcrabs for a while.
-	float m_flNextSpikeTime;// last time the pit drone used the spike attack.
+	float m_flLastHurtTime;	 // we keep track of this, because if something hurts a squid, it will forget about its love of headcrabs for a while.
+	float m_flNextSpikeTime; // last time the pit drone used the spike attack.
 	int m_iInitialAmmo;
 	float m_flNextEatTime;
 };
 LINK_ENTITY_TO_CLASS(monster_pitdrone, CPitdrone);
 
-TYPEDESCRIPTION	CPitdrone::m_SaveData[] =
-{
-	DEFINE_FIELD(CPitdrone, m_flLastHurtTime, FIELD_TIME),
-	DEFINE_FIELD(CPitdrone, m_flNextSpikeTime, FIELD_TIME),
-	DEFINE_FIELD(CPitdrone, m_flNextEatTime, FIELD_TIME),
+TYPEDESCRIPTION CPitdrone::m_SaveData[] =
+	{
+		DEFINE_FIELD(CPitdrone, m_flLastHurtTime, FIELD_TIME),
+		DEFINE_FIELD(CPitdrone, m_flNextSpikeTime, FIELD_TIME),
+		DEFINE_FIELD(CPitdrone, m_flNextEatTime, FIELD_TIME),
 };
 
 IMPLEMENT_SAVERESTORE(CPitdrone, CBaseMonster);
 
 //=========================================================
-// IgnoreConditions 
+// IgnoreConditions
 //=========================================================
 int CPitdrone::IgnoreConditions()
 {
@@ -286,7 +286,7 @@ int CPitdrone::IgnoreConditions()
 
 	if (gpGlobals->time - m_flLastHurtTime <= 20)
 	{
-		// haven't been hurt in 20 seconds, so let the drone care about stink. 
+		// haven't been hurt in 20 seconds, so let the drone care about stink.
 		iIgnore = bits_COND_SMELL | bits_COND_SMELL_FOOD;
 	}
 
@@ -307,14 +307,12 @@ int CPitdrone::IRelationship(CBaseEntity* pTarget)
 //=========================================================
 // CheckRangeAttack1
 //=========================================================
-BOOL CPitdrone::CheckRangeAttack1(float flDot, float flDist)
+bool CPitdrone::CheckRangeAttack1(float flDot, float flDist)
 {
-	if (m_iInitialAmmo == -1
-		|| GetBodygroup(PitdroneBodygroup::Weapons) == PitdroneWeapon::Empty
-		|| (IsMoving() && flDist >= 512))
+	if (m_iInitialAmmo == -1 || GetBodygroup(PitdroneBodygroup::Weapons) == PitdroneWeapon::Empty || (IsMoving() && flDist >= 512))
 	{
 		// squid will far too far behind if he stops running to spit at this distance from the enemy.
-		return FALSE;
+		return false;
 	}
 
 	if (flDist > 128 && flDist <= 784 && flDot >= 0.5 && gpGlobals->time >= m_flNextSpikeTime)
@@ -324,7 +322,7 @@ BOOL CPitdrone::CheckRangeAttack1(float flDot, float flDist)
 			if (fabs(pev->origin.z - m_hEnemy->pev->origin.z) > 256)
 			{
 				// don't try to spit at someone up really high or down really low.
-				return FALSE;
+				return false;
 			}
 		}
 
@@ -339,52 +337,52 @@ BOOL CPitdrone::CheckRangeAttack1(float flDot, float flDist)
 			m_flNextSpikeTime = gpGlobals->time + 0.5;
 		}
 
-		return TRUE;
+		return true;
 	}
 
-	return FALSE;
+	return false;
 }
 
-BOOL CPitdrone::CheckMeleeAttack1(float flDot, float flDist)
+bool CPitdrone::CheckMeleeAttack1(float flDot, float flDist)
 {
 	if (flDist <= 64 && flDot >= 0.7)
 	{
 		return RANDOM_LONG(0, 3) == 0;
 	}
-	return FALSE;
+	return false;
 }
 
-BOOL CPitdrone::CheckMeleeAttack2(float flDot, float flDist)
+bool CPitdrone::CheckMeleeAttack2(float flDot, float flDist)
 {
 	if (flDist <= 64 && flDot >= 0.7 && !HasConditions(bits_COND_CAN_MELEE_ATTACK1))
 	{
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 }
 
 //=========================================================
-//  FValidateHintType 
+//  FValidateHintType
 //=========================================================
-BOOL CPitdrone::FValidateHintType(short sHint)
+bool CPitdrone::FValidateHintType(short sHint)
 {
 	int i;
 
 	static short sSquidHints[] =
-	{
-		HINT_WORLD_HUMAN_BLOOD,
-	};
+		{
+			HINT_WORLD_HUMAN_BLOOD,
+		};
 
 	for (i = 0; i < ARRAYSIZE(sSquidHints); i++)
 	{
 		if (sSquidHints[i] == sHint)
 		{
-			return TRUE;
+			return true;
 		}
 	}
 
 	ALERT(at_aiconsole, "Couldn't validate hint type");
-	return FALSE;
+	return false;
 }
 
 //=========================================================
@@ -394,32 +392,32 @@ BOOL CPitdrone::FValidateHintType(short sHint)
 //=========================================================
 int CPitdrone::ISoundMask()
 {
-	return	bits_SOUND_WORLD |
-		bits_SOUND_COMBAT |
-		bits_SOUND_CARCASS |
-		bits_SOUND_MEAT |
-		bits_SOUND_GARBAGE |
-		bits_SOUND_PLAYER;
+	return bits_SOUND_WORLD |
+		   bits_SOUND_COMBAT |
+		   bits_SOUND_CARCASS |
+		   bits_SOUND_MEAT |
+		   bits_SOUND_GARBAGE |
+		   bits_SOUND_PLAYER;
 }
 
 //=========================================================
-// Classify - indicates this monster's place in the 
+// Classify - indicates this monster's place in the
 // relationship table.
 //=========================================================
-int	CPitdrone::Classify()
+int CPitdrone::Classify()
 {
-	return	CLASS_ALIEN_PREDATOR;
+	return CLASS_ALIEN_PREDATOR;
 }
 
 //=========================================================
-// IdleSound 
+// IdleSound
 //=========================================================
 void CPitdrone::IdleSound()
 {
 }
 
 //=========================================================
-// PainSound 
+// PainSound
 //=========================================================
 void CPitdrone::PainSound()
 {
@@ -475,10 +473,18 @@ void CPitdrone::SetYawSpeed()
 
 	switch (m_Activity)
 	{
-	case	ACT_WALK:			ys = 90;	break;
-	case	ACT_RUN:			ys = 90;	break;
-	case	ACT_IDLE:			ys = 90;	break;
-	case	ACT_RANGE_ATTACK1:	ys = 90;	break;
+	case ACT_WALK:
+		ys = 90;
+		break;
+	case ACT_RUN:
+		ys = 90;
+		break;
+	case ACT_IDLE:
+		ys = 90;
+		break;
+	case ACT_RANGE_ATTACK1:
+		ys = 90;
+		break;
 	default:
 		ys = 90;
 		break;
@@ -499,8 +505,8 @@ void CPitdrone::HandleAnimEvent(MonsterEvent_t* pEvent)
 	{
 		if (m_iInitialAmmo != -1 && GetBodygroup(PitdroneBodygroup::Weapons) != PitdroneWeapon::Empty)
 		{
-			Vector	vecSpitOffset;
-			Vector	vecSpitDir;
+			Vector vecSpitOffset;
+			Vector vecSpitDir;
 
 			UTIL_MakeVectors(pev->angles);
 
@@ -517,16 +523,16 @@ void CPitdrone::HandleAnimEvent(MonsterEvent_t* pEvent)
 			// spew the spittle temporary ents.
 			MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, vecSpitOffset);
 			WRITE_BYTE(TE_SPRITE_SPRAY);
-			WRITE_COORD(vecSpitOffset.x);	// pos
+			WRITE_COORD(vecSpitOffset.x); // pos
 			WRITE_COORD(vecSpitOffset.y);
 			WRITE_COORD(vecSpitOffset.z);
-			WRITE_COORD(vecSpitDir.x);	// dir
+			WRITE_COORD(vecSpitDir.x); // dir
 			WRITE_COORD(vecSpitDir.y);
 			WRITE_COORD(vecSpitDir.z);
-			WRITE_SHORT(iPitdroneSpitSprite);	// model
-			WRITE_BYTE(10);			// count
-			WRITE_BYTE(110);			// speed
-			WRITE_BYTE(25);			// noise ( client will divide by 100 )
+			WRITE_SHORT(iPitdroneSpitSprite); // model
+			WRITE_BYTE(10);					  // count
+			WRITE_BYTE(110);				  // speed
+			WRITE_BYTE(25);					  // noise ( client will divide by 100 )
 			MESSAGE_END();
 
 			CPitdroneSpike::Shoot(pev, vecSpitOffset, vecSpitDir * 900, UTIL_VecToAngles(vecSpitDir));
@@ -587,7 +593,7 @@ void CPitdrone::HandleAnimEvent(MonsterEvent_t* pEvent)
 		}
 
 		// jump into air for 0.8 (24/30) seconds
-//			pev->velocity.z += (0.875 * flGravity) * 0.5;
+		//			pev->velocity.z += (0.875 * flGravity) * 0.5;
 		pev->velocity.z += (0.625 * flGravity) * 0.5;
 	}
 	break;
@@ -596,7 +602,7 @@ void CPitdrone::HandleAnimEvent(MonsterEvent_t* pEvent)
 	{
 		int iPitch;
 
-		// squid throws its prey IF the prey is a client. 
+		// squid throws its prey IF the prey is a client.
 		CBaseEntity* pHurt = CheckTraceHullAttack(70, 0, 0);
 
 
@@ -667,7 +673,7 @@ void CPitdrone::Spawn()
 	m_bloodColor = BLOOD_COLOR_GREEN;
 	pev->effects = 0;
 	pev->health = gSkillData.pitdroneHealth;
-	m_flFieldOfView = VIEW_FIELD_WIDE;// indicates the width of this monster's forward view cone ( as a dotproduct result )
+	m_flFieldOfView = VIEW_FIELD_WIDE; // indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
 
 	m_flNextSpikeTime = gpGlobals->time;
@@ -707,9 +713,9 @@ void CPitdrone::Precache()
 
 	UTIL_PrecacheOther("pitdronespike");
 
-	iPitdroneSpitSprite = PRECACHE_MODEL("sprites/tinyspit.spr");// client side spittle.
+	iPitdroneSpitSprite = PRECACHE_MODEL("sprites/tinyspit.spr"); // client side spittle.
 
-	PRECACHE_SOUND("zombie/claw_miss2.wav");// because we use the basemonster SWIPE animation event
+	PRECACHE_SOUND("zombie/claw_miss2.wav"); // because we use the basemonster SWIPE animation event
 
 	PRECACHE_SOUND("pitdrone/pit_drone_alert1.wav");
 	PRECACHE_SOUND("pitdrone/pit_drone_alert2.wav");
@@ -738,7 +744,6 @@ void CPitdrone::Precache()
 	PRECACHE_SOUND("pitdrone/pit_drone_run_on_grate.wav");
 	PRECACHE_SOUND("bullchicken/bc_bite2.wav");
 	PRECACHE_SOUND("bullchicken/bc_bite3.wav");
-
 }
 
 //========================================================
@@ -758,7 +763,6 @@ void CPitdrone::RunAI()
 			pev->framerate = 1.25;
 		}
 	}
-
 }
 
 //========================================================
@@ -766,250 +770,226 @@ void CPitdrone::RunAI()
 //=========================================================
 
 // primary range attack
-Task_t	tlPitdroneRangeAttack1[] =
-{
-	{ TASK_STOP_MOVING,			0				},
-	{ TASK_FACE_IDEAL,			(float)0		},
-	{ TASK_RANGE_ATTACK1,		(float)0		},
-	{ TASK_SET_ACTIVITY,		(float)ACT_IDLE	},
+Task_t tlPitdroneRangeAttack1[] =
+	{
+		{TASK_STOP_MOVING, 0},
+		{TASK_FACE_IDEAL, (float)0},
+		{TASK_RANGE_ATTACK1, (float)0},
+		{TASK_SET_ACTIVITY, (float)ACT_IDLE},
 };
 
-Schedule_t	slPitdroneRangeAttack1[] =
-{
+Schedule_t slPitdroneRangeAttack1[] =
 	{
-		tlPitdroneRangeAttack1,
-		ARRAYSIZE(tlPitdroneRangeAttack1),
-		bits_COND_NEW_ENEMY |
-		bits_COND_ENEMY_DEAD |
-		bits_COND_HEAVY_DAMAGE |
-		bits_COND_ENEMY_OCCLUDED |
-		bits_COND_NO_AMMO_LOADED,
-		0,
-		"Squid Range Attack1"
-	},
+		{tlPitdroneRangeAttack1,
+			ARRAYSIZE(tlPitdroneRangeAttack1),
+			bits_COND_NEW_ENEMY |
+				bits_COND_ENEMY_DEAD |
+				bits_COND_HEAVY_DAMAGE |
+				bits_COND_ENEMY_OCCLUDED |
+				bits_COND_NO_AMMO_LOADED,
+			0,
+			"Squid Range Attack1"},
 };
 
 // Chase enemy schedule
 Task_t tlPitdroneChaseEnemy1[] =
-{
-	{ TASK_SET_FAIL_SCHEDULE,	(float)SCHED_RANGE_ATTACK1	},// !!!OEM - this will stop nasty squid oscillation.
-	{ TASK_GET_PATH_TO_ENEMY,	(float)0					},
-	{ TASK_RUN_PATH,			(float)0					},
-	{ TASK_WAIT_FOR_MOVEMENT,	(float)0					},
+	{
+		{TASK_SET_FAIL_SCHEDULE, (float)SCHED_RANGE_ATTACK1}, // !!!OEM - this will stop nasty squid oscillation.
+		{TASK_GET_PATH_TO_ENEMY, (float)0},
+		{TASK_RUN_PATH, (float)0},
+		{TASK_WAIT_FOR_MOVEMENT, (float)0},
 };
 
 Schedule_t slPitdroneChaseEnemy[] =
-{
 	{
-		tlPitdroneChaseEnemy1,
-		ARRAYSIZE(tlPitdroneChaseEnemy1),
-		bits_COND_NEW_ENEMY |
-		bits_COND_ENEMY_DEAD |
-		bits_COND_SMELL_FOOD |
-		bits_COND_CAN_RANGE_ATTACK1 |
-		bits_COND_CAN_MELEE_ATTACK1 |
-		bits_COND_CAN_MELEE_ATTACK2 |
-		bits_COND_TASK_FAILED |
-		bits_COND_HEAR_SOUND,
+		{tlPitdroneChaseEnemy1,
+			ARRAYSIZE(tlPitdroneChaseEnemy1),
+			bits_COND_NEW_ENEMY |
+				bits_COND_ENEMY_DEAD |
+				bits_COND_SMELL_FOOD |
+				bits_COND_CAN_RANGE_ATTACK1 |
+				bits_COND_CAN_MELEE_ATTACK1 |
+				bits_COND_CAN_MELEE_ATTACK2 |
+				bits_COND_TASK_FAILED |
+				bits_COND_HEAR_SOUND,
 
-		bits_SOUND_DANGER |
-		bits_SOUND_MEAT,
-		"Squid Chase Enemy"
-	},
+			bits_SOUND_DANGER |
+				bits_SOUND_MEAT,
+			"Squid Chase Enemy"},
 };
 
 Task_t tlPitdroneHurtHop[] =
-{
-	{ TASK_STOP_MOVING,			(float)0		},
-	{ TASK_SOUND_WAKE,			(float)0		},
-	{ TASK_PITDRONE_HOPTURN,		(float)0		},
-	{ TASK_FACE_ENEMY,			(float)0		},// in case squid didn't turn all the way in the air.
+	{
+		{TASK_STOP_MOVING, (float)0},
+		{TASK_SOUND_WAKE, (float)0},
+		{TASK_PITDRONE_HOPTURN, (float)0},
+		{TASK_FACE_ENEMY, (float)0}, // in case squid didn't turn all the way in the air.
 };
 
 Schedule_t slPitdroneHurtHop[] =
-{
 	{
-		tlPitdroneHurtHop,
-		ARRAYSIZE(tlPitdroneHurtHop),
-		0,
-		0,
-		"SquidHurtHop"
-	}
-};
+		{tlPitdroneHurtHop,
+			ARRAYSIZE(tlPitdroneHurtHop),
+			0,
+			0,
+			"SquidHurtHop"}};
 
 // squid walks to something tasty and eats it.
 Task_t tlPitdroneEat[] =
-{
-	{ TASK_STOP_MOVING,				(float)0				},
-	{ TASK_EAT,						(float)10				},// this is in case the squid can't get to the food
-	{ TASK_STORE_LASTPOSITION,		(float)0				},
-	{ TASK_GET_PATH_TO_BESTSCENT,	(float)0				},
-	{ TASK_WALK_PATH,				(float)0				},
-	{ TASK_WAIT_FOR_MOVEMENT,		(float)0				},
-	{ TASK_PLAY_SEQUENCE,			(float)ACT_EAT			},
-	{ TASK_PLAY_SEQUENCE,			(float)ACT_EAT			},
-	{ TASK_PLAY_SEQUENCE,			(float)ACT_EAT			},
-	{ TASK_EAT,						(float)50				},
-	{ TASK_GET_PATH_TO_LASTPOSITION,(float)0				},
-	{ TASK_WALK_PATH,				(float)0				},
-	{ TASK_WAIT_FOR_MOVEMENT,		(float)0				},
-	{ TASK_CLEAR_LASTPOSITION,		(float)0				},
+	{
+		{TASK_STOP_MOVING, (float)0},
+		{TASK_EAT, (float)10}, // this is in case the squid can't get to the food
+		{TASK_STORE_LASTPOSITION, (float)0},
+		{TASK_GET_PATH_TO_BESTSCENT, (float)0},
+		{TASK_WALK_PATH, (float)0},
+		{TASK_WAIT_FOR_MOVEMENT, (float)0},
+		{TASK_PLAY_SEQUENCE, (float)ACT_EAT},
+		{TASK_PLAY_SEQUENCE, (float)ACT_EAT},
+		{TASK_PLAY_SEQUENCE, (float)ACT_EAT},
+		{TASK_EAT, (float)50},
+		{TASK_GET_PATH_TO_LASTPOSITION, (float)0},
+		{TASK_WALK_PATH, (float)0},
+		{TASK_WAIT_FOR_MOVEMENT, (float)0},
+		{TASK_CLEAR_LASTPOSITION, (float)0},
 };
 
 Schedule_t slPitdroneEat[] =
-{
 	{
-		tlPitdroneEat,
-		ARRAYSIZE(tlPitdroneEat),
-		bits_COND_LIGHT_DAMAGE |
-		bits_COND_HEAVY_DAMAGE |
-		bits_COND_NEW_ENEMY	,
+		{tlPitdroneEat,
+			ARRAYSIZE(tlPitdroneEat),
+			bits_COND_LIGHT_DAMAGE |
+				bits_COND_HEAVY_DAMAGE |
+				bits_COND_NEW_ENEMY,
 
-	// even though HEAR_SOUND/SMELL FOOD doesn't break this schedule, we need this mask
-	// here or the monster won't detect these sounds at ALL while running this schedule.
-	bits_SOUND_MEAT |
-	bits_SOUND_CARCASS,
-	"SquidEat"
-}
-};
+			// even though HEAR_SOUND/SMELL FOOD doesn't break this schedule, we need this mask
+			// here or the monster won't detect these sounds at ALL while running this schedule.
+			bits_SOUND_MEAT |
+				bits_SOUND_CARCASS,
+			"SquidEat"}};
 
 // this is a bit different than just Eat. We use this schedule when the food is far away, occluded, or behind
 // the squid. This schedule plays a sniff animation before going to the source of food.
 Task_t tlPitdroneSniffAndEat[] =
-{
-	{ TASK_STOP_MOVING,				(float)0				},
-	{ TASK_EAT,						(float)10				},// this is in case the squid can't get to the food
-	{ TASK_PLAY_SEQUENCE,			(float)ACT_DETECT_SCENT },
-	{ TASK_STORE_LASTPOSITION,		(float)0				},
-	{ TASK_GET_PATH_TO_BESTSCENT,	(float)0				},
-	{ TASK_WALK_PATH,				(float)0				},
-	{ TASK_WAIT_FOR_MOVEMENT,		(float)0				},
-	{ TASK_PLAY_SEQUENCE,			(float)ACT_EAT			},
-	{ TASK_PLAY_SEQUENCE,			(float)ACT_EAT			},
-	{ TASK_PLAY_SEQUENCE,			(float)ACT_EAT			},
-	{ TASK_EAT,						(float)50				},
-	{ TASK_GET_PATH_TO_LASTPOSITION,(float)0				},
-	{ TASK_WALK_PATH,				(float)0				},
-	{ TASK_WAIT_FOR_MOVEMENT,		(float)0				},
-	{ TASK_CLEAR_LASTPOSITION,		(float)0				},
+	{
+		{TASK_STOP_MOVING, (float)0},
+		{TASK_EAT, (float)10}, // this is in case the squid can't get to the food
+		{TASK_PLAY_SEQUENCE, (float)ACT_DETECT_SCENT},
+		{TASK_STORE_LASTPOSITION, (float)0},
+		{TASK_GET_PATH_TO_BESTSCENT, (float)0},
+		{TASK_WALK_PATH, (float)0},
+		{TASK_WAIT_FOR_MOVEMENT, (float)0},
+		{TASK_PLAY_SEQUENCE, (float)ACT_EAT},
+		{TASK_PLAY_SEQUENCE, (float)ACT_EAT},
+		{TASK_PLAY_SEQUENCE, (float)ACT_EAT},
+		{TASK_EAT, (float)50},
+		{TASK_GET_PATH_TO_LASTPOSITION, (float)0},
+		{TASK_WALK_PATH, (float)0},
+		{TASK_WAIT_FOR_MOVEMENT, (float)0},
+		{TASK_CLEAR_LASTPOSITION, (float)0},
 };
 
 Schedule_t slPitdroneSniffAndEat[] =
-{
 	{
-		tlPitdroneSniffAndEat,
-		ARRAYSIZE(tlPitdroneSniffAndEat),
-		bits_COND_LIGHT_DAMAGE |
-		bits_COND_HEAVY_DAMAGE |
-		bits_COND_NEW_ENEMY	,
+		{tlPitdroneSniffAndEat,
+			ARRAYSIZE(tlPitdroneSniffAndEat),
+			bits_COND_LIGHT_DAMAGE |
+				bits_COND_HEAVY_DAMAGE |
+				bits_COND_NEW_ENEMY,
 
-	// even though HEAR_SOUND/SMELL FOOD doesn't break this schedule, we need this mask
-	// here or the monster won't detect these sounds at ALL while running this schedule.
-	bits_SOUND_MEAT |
-	bits_SOUND_CARCASS,
-	"SquidSniffAndEat"
-}
-};
+			// even though HEAR_SOUND/SMELL FOOD doesn't break this schedule, we need this mask
+			// here or the monster won't detect these sounds at ALL while running this schedule.
+			bits_SOUND_MEAT |
+				bits_SOUND_CARCASS,
+			"SquidSniffAndEat"}};
 
-// squid does this to stinky things. 
+// squid does this to stinky things.
 Task_t tlPitdroneWallow[] =
-{
-	{ TASK_STOP_MOVING,				(float)0				},
-	{ TASK_EAT,						(float)10				},// this is in case the squid can't get to the stinkiness
-	{ TASK_STORE_LASTPOSITION,		(float)0				},
-	{ TASK_GET_PATH_TO_BESTSCENT,	(float)0				},
-	{ TASK_WALK_PATH,				(float)0				},
-	{ TASK_WAIT_FOR_MOVEMENT,		(float)0				},
-	{ TASK_PLAY_SEQUENCE,			(float)ACT_INSPECT_FLOOR},
-	{ TASK_EAT,						(float)50				},// keeps squid from eating or sniffing anything else for a while.
-	{ TASK_GET_PATH_TO_LASTPOSITION,(float)0				},
-	{ TASK_WALK_PATH,				(float)0				},
-	{ TASK_WAIT_FOR_MOVEMENT,		(float)0				},
-	{ TASK_CLEAR_LASTPOSITION,		(float)0				},
+	{
+		{TASK_STOP_MOVING, (float)0},
+		{TASK_EAT, (float)10}, // this is in case the squid can't get to the stinkiness
+		{TASK_STORE_LASTPOSITION, (float)0},
+		{TASK_GET_PATH_TO_BESTSCENT, (float)0},
+		{TASK_WALK_PATH, (float)0},
+		{TASK_WAIT_FOR_MOVEMENT, (float)0},
+		{TASK_PLAY_SEQUENCE, (float)ACT_INSPECT_FLOOR},
+		{TASK_EAT, (float)50}, // keeps squid from eating or sniffing anything else for a while.
+		{TASK_GET_PATH_TO_LASTPOSITION, (float)0},
+		{TASK_WALK_PATH, (float)0},
+		{TASK_WAIT_FOR_MOVEMENT, (float)0},
+		{TASK_CLEAR_LASTPOSITION, (float)0},
 };
 
 Schedule_t slPitdroneWallow[] =
-{
 	{
-		tlPitdroneWallow,
-		ARRAYSIZE(tlPitdroneWallow),
-		bits_COND_LIGHT_DAMAGE |
-		bits_COND_HEAVY_DAMAGE |
-		bits_COND_NEW_ENEMY	,
+		{tlPitdroneWallow,
+			ARRAYSIZE(tlPitdroneWallow),
+			bits_COND_LIGHT_DAMAGE |
+				bits_COND_HEAVY_DAMAGE |
+				bits_COND_NEW_ENEMY,
 
-	// even though HEAR_SOUND/SMELL FOOD doesn't break this schedule, we need this mask
-	// here or the monster won't detect these sounds at ALL while running this schedule.
-	bits_SOUND_GARBAGE,
+			// even though HEAR_SOUND/SMELL FOOD doesn't break this schedule, we need this mask
+			// here or the monster won't detect these sounds at ALL while running this schedule.
+			bits_SOUND_GARBAGE,
 
-	"SquidWallow"
-}
-};
+			"SquidWallow"}};
 
 Task_t tlPitdroneHideReload[] =
-{
-	{ TASK_STOP_MOVING,				(float)0			},
-	{ TASK_SET_FAIL_SCHEDULE,		ACT_MELEE_ATTACK1	},
-	{ TASK_FIND_COVER_FROM_ENEMY,	0					},
-	{ TASK_RUN_PATH,				0					},
-	{ TASK_WAIT_FOR_MOVEMENT,		0					},
-	{ TASK_REMEMBER,				bits_MEMORY_INCOVER	},
-	{ TASK_FACE_ENEMY,				0					},
-	{ TASK_PLAY_SEQUENCE,			ACT_RELOAD			},
+	{
+		{TASK_STOP_MOVING, (float)0},
+		{TASK_SET_FAIL_SCHEDULE, ACT_MELEE_ATTACK1},
+		{TASK_FIND_COVER_FROM_ENEMY, 0},
+		{TASK_RUN_PATH, 0},
+		{TASK_WAIT_FOR_MOVEMENT, 0},
+		{TASK_REMEMBER, bits_MEMORY_INCOVER},
+		{TASK_FACE_ENEMY, 0},
+		{TASK_PLAY_SEQUENCE, ACT_RELOAD},
 };
 
 Schedule_t slPitdroneHideReload[] =
-{
 	{
-		tlPitdroneHideReload,
-		ARRAYSIZE(tlPitdroneHideReload),
-		bits_COND_HEAVY_DAMAGE |
-		bits_COND_HEAR_SOUND,
-		bits_SOUND_DANGER,
+		{tlPitdroneHideReload,
+			ARRAYSIZE(tlPitdroneHideReload),
+			bits_COND_HEAVY_DAMAGE |
+				bits_COND_HEAR_SOUND,
+			bits_SOUND_DANGER,
 
-		"PitdroneHideReload"
-	}
-};
+			"PitdroneHideReload"}};
 
 Task_t tlPitdroneWaitInCover[] =
-{
-	{ TASK_STOP_MOVING,			(float)0		},
-	{ TASK_SET_ACTIVITY,		ACT_IDLE		},
-	{ TASK_WAIT_FACE_ENEMY,		1				},
+	{
+		{TASK_STOP_MOVING, (float)0},
+		{TASK_SET_ACTIVITY, ACT_IDLE},
+		{TASK_WAIT_FACE_ENEMY, 1},
 };
 
 Schedule_t slPitdroneWaitInCover[] =
-{
 	{
-		tlPitdroneWaitInCover,
-		ARRAYSIZE(tlPitdroneWaitInCover),
-		bits_COND_CAN_RANGE_ATTACK1 |
-		bits_COND_CAN_MELEE_ATTACK1 |
-		bits_COND_CAN_RANGE_ATTACK2 |
-		bits_COND_CAN_MELEE_ATTACK2 |
-		bits_COND_NEW_ENEMY |
-		bits_COND_HEAR_SOUND,
-		bits_SOUND_DANGER,
+		{tlPitdroneWaitInCover,
+			ARRAYSIZE(tlPitdroneWaitInCover),
+			bits_COND_CAN_RANGE_ATTACK1 |
+				bits_COND_CAN_MELEE_ATTACK1 |
+				bits_COND_CAN_RANGE_ATTACK2 |
+				bits_COND_CAN_MELEE_ATTACK2 |
+				bits_COND_NEW_ENEMY |
+				bits_COND_HEAR_SOUND,
+			bits_SOUND_DANGER,
 
-		"PitdroneWaitInCover"
-	}
-};
+			"PitdroneWaitInCover"}};
 
-DEFINE_CUSTOM_SCHEDULES(CPitdrone)
-{
+DEFINE_CUSTOM_SCHEDULES(CPitdrone){
 	slPitdroneRangeAttack1,
-		slPitdroneChaseEnemy,
-		slPitdroneHurtHop,
-		slPitdroneEat,
-		slPitdroneSniffAndEat,
-		slPitdroneWallow,
-		slPitdroneHideReload,
-		slPitdroneWaitInCover
-};
+	slPitdroneChaseEnemy,
+	slPitdroneHurtHop,
+	slPitdroneEat,
+	slPitdroneSniffAndEat,
+	slPitdroneWallow,
+	slPitdroneHideReload,
+	slPitdroneWaitInCover};
 
 IMPLEMENT_CUSTOM_SCHEDULES(CPitdrone, CBaseMonster);
 
 //=========================================================
-// GetSchedule 
+// GetSchedule
 //=========================================================
 Schedule_t* CPitdrone::GetSchedule()
 {
@@ -1046,7 +1026,7 @@ Schedule_t* CPitdrone::GetSchedule()
 
 			if (HasConditions(bits_COND_SMELL))
 			{
-				// there's something stinky. 
+				// there's something stinky.
 				CSound* pSound;
 
 				pSound = PBestScent();
@@ -1219,10 +1199,10 @@ void CPitdrone::GibMonster()
 {
 	EMIT_SOUND(ENT(pev), CHAN_WEAPON, "common/bodysplat.wav", 1, ATTN_NORM);
 
-	if (CVAR_GET_FLOAT("violence_agibs") != 0)	// Should never get here, but someone might call it directly
+	if (CVAR_GET_FLOAT("violence_agibs") != 0) // Should never get here, but someone might call it directly
 	{
 		//Note: the original doesn't check for German censorship
-		CGib::SpawnRandomGibs(pev, 6, PitDroneGibs);	// Throw alien gibs
+		CGib::SpawnRandomGibs(pev, 6, PitDroneGibs); // Throw alien gibs
 	}
 
 	// don't remove players!
@@ -1230,13 +1210,13 @@ void CPitdrone::GibMonster()
 	pev->nextthink = gpGlobals->time;
 }
 
-void CPitdrone::KeyValue(KeyValueData* pkvd)
+bool CPitdrone::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq("initammo", pkvd->szKeyName))
 	{
 		m_iInitialAmmo = atoi(pkvd->szValue);
-		pkvd->fHandled = true;
+		return true;
 	}
-	else
-		CBaseMonster::KeyValue(pkvd);
+
+	return CBaseMonster::KeyValue(pkvd);
 }

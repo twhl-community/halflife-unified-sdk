@@ -45,8 +45,8 @@ function(add_game_shared_sources target)
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/entities/items/weapons/CSporeLauncher.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/entities/items/weapons/egon.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/entities/items/weapons/gauss.cpp
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/entities/items/weapons/glock.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/entities/items/weapons/handgrenade.cpp
-			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/entities/items/weapons/hl_wpn_glock.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/entities/items/weapons/hornetgun.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/entities/items/weapons/mp5.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/entities/items/weapons/python.cpp
@@ -79,8 +79,8 @@ function(add_game_shared_sources target)
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/command_utils.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/CStringPool.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/CStringPool.h
-			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/filesystem_shared.cpp
-			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/filesystem_shared.h
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/filesystem_utils.cpp
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/filesystem_utils.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/heterogeneous_lookup.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/ILogSystem.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/json_fwd.h

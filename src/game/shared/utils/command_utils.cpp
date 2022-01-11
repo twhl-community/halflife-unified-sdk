@@ -85,8 +85,7 @@ cvar_t* CConCommandSystem::CreateCVar(std::string_view name, const char* default
 
 	const std::string completeName{fmt::format("{}_{}", GetShortLibraryPrefix(), name)};
 
-	if (std::find_if(m_Cvars.begin(), m_Cvars.end(), [&](const auto& data)
-		{
+	if (std::find_if(m_Cvars.begin(), m_Cvars.end(), [&](const auto& data) {
 			return data.Name.get() == completeName;
 		}) != m_Cvars.end())
 	{

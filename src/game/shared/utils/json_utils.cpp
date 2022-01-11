@@ -33,20 +33,31 @@ constexpr char SchemaIndentCharacter = '\t';
 
 const char* JSONTypeToString(json::value_t type)
 {
-switch (type)
-{
-case json::value_t::null: return "null";
-case json::value_t::object: return "object";
-case json::value_t::array: return "array";
-case json::value_t::string: return "string";
-case json::value_t::boolean: return "boolean";
-case json::value_t::number_integer: return "signed integer";
-case json::value_t::number_unsigned: return "unsigned integer";
-case json::value_t::number_float: return "floating point number";
-case json::value_t::binary: return "binary data";
-case json::value_t::discarded: return "discarded";
-default: return "unknown";
-}
+	switch (type)
+	{
+	case json::value_t::null:
+		return "null";
+	case json::value_t::object:
+		return "object";
+	case json::value_t::array:
+		return "array";
+	case json::value_t::string:
+		return "string";
+	case json::value_t::boolean:
+		return "boolean";
+	case json::value_t::number_integer:
+		return "signed integer";
+	case json::value_t::number_unsigned:
+		return "unsigned integer";
+	case json::value_t::number_float:
+		return "floating point number";
+	case json::value_t::binary:
+		return "binary data";
+	case json::value_t::discarded:
+		return "discarded";
+	default:
+		return "unknown";
+	}
 }
 
 class JSONValidatorErrorHandler : public basic_error_handler
@@ -107,8 +118,7 @@ void JSONSystem::RegisterSchema(std::string&& name, std::function<json()>&& getS
 		return;
 	}
 
-	if (std::find_if(m_Schemas.begin(), m_Schemas.end(), [&](const auto& data)
-		{
+	if (std::find_if(m_Schemas.begin(), m_Schemas.end(), [&](const auto& data) {
 			return data.Name == name;
 		}) != m_Schemas.end())
 	{
@@ -120,7 +130,7 @@ void JSONSystem::RegisterSchema(std::string&& name, std::function<json()>&& getS
 
 std::optional<json> JSONSystem::LoadJSONFile(const char* fileName, const json_validator& validator, const char* pathID)
 {
-	return LoadJSONFile( fileName, &validator, pathID);
+	return LoadJSONFile(fileName, &validator, pathID);
 }
 
 std::optional<json> JSONSystem::LoadJSONFile(const char* fileName, const char* pathID)
@@ -128,7 +138,7 @@ std::optional<json> JSONSystem::LoadJSONFile(const char* fileName, const char* p
 	return LoadJSONFile(fileName, nullptr, pathID);
 }
 
-std::optional<json> JSONSystem::LoadJSONFile(const char* fileName, const json_validator* validator,const char* pathID)
+std::optional<json> JSONSystem::LoadJSONFile(const char* fileName, const json_validator* validator, const char* pathID)
 {
 	if (!m_Logger)
 	{
@@ -136,7 +146,7 @@ std::optional<json> JSONSystem::LoadJSONFile(const char* fileName, const json_va
 		return {};
 	}
 
-	if (!fileName || !(fileName[0]))
+	if (!fileName || '\0' == fileName[0])
 	{
 		return {};
 	}
@@ -152,7 +162,7 @@ std::optional<json> JSONSystem::LoadJSONFile(const char* fileName, const json_va
 			auto data = json::parse(text, text + file.size(), nullptr, true, true);
 
 			//Only validate if enabled
-			if (m_JsonSchemaValidation->value && validator)
+			if (0 != m_JsonSchemaValidation->value && validator)
 			{
 				m_Logger->trace("Validating JSON file");
 
@@ -210,10 +220,10 @@ void JSONSystem::GenerateSchema(const CCommandArgs& args)
 	{
 		const auto schemaName = args.Argument(1);
 
-		if (auto it = std::find_if(m_Schemas.begin(), m_Schemas.end(), [&](const auto& data)
-			{
+		if (auto it = std::find_if(m_Schemas.begin(), m_Schemas.end(), [&](const auto& data) {
 				return data.Name == schemaName;
-			}); it != m_Schemas.end())
+			});
+			it != m_Schemas.end())
 		{
 			WriteSchemaToFile(it->Name.c_str(), it->Callback());
 		}

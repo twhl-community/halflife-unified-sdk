@@ -24,9 +24,9 @@
 #include "saverestore.h"
 
 // Monstermaker spawnflags
-#define	SF_MONSTERMAKER_START_ON	1 // start active ( if has targetname )
-#define	SF_MONSTERMAKER_CYCLIC		4 // drop one monster every time fired.
-#define SF_MONSTERMAKER_MONSTERCLIP	8 // Children are blocked by monsterclip
+#define SF_MONSTERMAKER_START_ON 1	  // start active ( if has targetname )
+#define SF_MONSTERMAKER_CYCLIC 4	  // drop one monster every time fired.
+#define SF_MONSTERMAKER_MONSTERCLIP 8 // Children are blocked by monsterclip
 
 //=========================================================
 // MonsterMaker - this ent creates monsters during the game.
@@ -36,68 +36,68 @@ class CMonsterMaker : public CBaseMonster
 public:
 	void Spawn() override;
 	void Precache() override;
-	void KeyValue(KeyValueData* pkvd) override;
+	bool KeyValue(KeyValueData* pkvd) override;
 	void EXPORT ToggleUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 	void EXPORT CyclicUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 	void EXPORT MakerThink();
-	void DeathNotice(entvars_t* pevChild) override;// monster maker children use this to tell the monster maker that they have died.
+	void DeathNotice(entvars_t* pevChild) override; // monster maker children use this to tell the monster maker that they have died.
 	void MakeMonster();
 
-	int		Save(CSave& save) override;
-	int		Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 
-	static	TYPEDESCRIPTION m_SaveData[];
+	static TYPEDESCRIPTION m_SaveData[];
 
-	string_t m_iszMonsterClassname;// classname of the monster(s) that will be created.
+	string_t m_iszMonsterClassname; // classname of the monster(s) that will be created.
 
-	int	 m_cNumMonsters;// max number of monsters this ent can create
+	int m_cNumMonsters; // max number of monsters this ent can create
 
 
-	int  m_cLiveChildren;// how many monsters made by this monster maker that are currently alive
-	int	 m_iMaxLiveChildren;// max number of monsters that this maker may have out at one time.
+	int m_cLiveChildren;	// how many monsters made by this monster maker that are currently alive
+	int m_iMaxLiveChildren; // max number of monsters that this maker may have out at one time.
 
 	float m_flGround; // z coord of the ground under me, used to make sure no monsters are under the maker when it drops a new child
 
-	BOOL m_fActive;
-	BOOL m_fFadeChildren;// should we make the children fadeout?
+	bool m_fActive;
+	bool m_fFadeChildren; // should we make the children fadeout?
 };
 
 LINK_ENTITY_TO_CLASS(monstermaker, CMonsterMaker);
 
-TYPEDESCRIPTION	CMonsterMaker::m_SaveData[] =
-{
-	DEFINE_FIELD(CMonsterMaker, m_iszMonsterClassname, FIELD_STRING),
-	DEFINE_FIELD(CMonsterMaker, m_cNumMonsters, FIELD_INTEGER),
-	DEFINE_FIELD(CMonsterMaker, m_cLiveChildren, FIELD_INTEGER),
-	DEFINE_FIELD(CMonsterMaker, m_flGround, FIELD_FLOAT),
-	DEFINE_FIELD(CMonsterMaker, m_iMaxLiveChildren, FIELD_INTEGER),
-	DEFINE_FIELD(CMonsterMaker, m_fActive, FIELD_BOOLEAN),
-	DEFINE_FIELD(CMonsterMaker, m_fFadeChildren, FIELD_BOOLEAN),
+TYPEDESCRIPTION CMonsterMaker::m_SaveData[] =
+	{
+		DEFINE_FIELD(CMonsterMaker, m_iszMonsterClassname, FIELD_STRING),
+		DEFINE_FIELD(CMonsterMaker, m_cNumMonsters, FIELD_INTEGER),
+		DEFINE_FIELD(CMonsterMaker, m_cLiveChildren, FIELD_INTEGER),
+		DEFINE_FIELD(CMonsterMaker, m_flGround, FIELD_FLOAT),
+		DEFINE_FIELD(CMonsterMaker, m_iMaxLiveChildren, FIELD_INTEGER),
+		DEFINE_FIELD(CMonsterMaker, m_fActive, FIELD_BOOLEAN),
+		DEFINE_FIELD(CMonsterMaker, m_fFadeChildren, FIELD_BOOLEAN),
 };
 
 
 IMPLEMENT_SAVERESTORE(CMonsterMaker, CBaseMonster);
 
-void CMonsterMaker::KeyValue(KeyValueData* pkvd)
+bool CMonsterMaker::KeyValue(KeyValueData* pkvd)
 {
 
 	if (FStrEq(pkvd->szKeyName, "monstercount"))
 	{
 		m_cNumMonsters = atoi(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "m_imaxlivechildren"))
 	{
 		m_iMaxLiveChildren = atoi(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "monstertype"))
 	{
 		m_iszMonsterClassname = ALLOC_STRING(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		return true;
 	}
-	else
-		CBaseMonster::KeyValue(pkvd);
+
+	return CBaseMonster::KeyValue(pkvd);
 }
 
 
@@ -109,40 +109,40 @@ void CMonsterMaker::Spawn()
 	Precache();
 	if (!FStringNull(pev->targetname))
 	{
-		if (pev->spawnflags & SF_MONSTERMAKER_CYCLIC)
+		if ((pev->spawnflags & SF_MONSTERMAKER_CYCLIC) != 0)
 		{
-			SetUse(&CMonsterMaker::CyclicUse);// drop one monster each time we fire
+			SetUse(&CMonsterMaker::CyclicUse); // drop one monster each time we fire
 		}
 		else
 		{
-			SetUse(&CMonsterMaker::ToggleUse);// so can be turned on/off
+			SetUse(&CMonsterMaker::ToggleUse); // so can be turned on/off
 		}
 
 		if (FBitSet(pev->spawnflags, SF_MONSTERMAKER_START_ON))
-		{// start making monsters as soon as monstermaker spawns
-			m_fActive = TRUE;
+		{ // start making monsters as soon as monstermaker spawns
+			m_fActive = true;
 			SetThink(&CMonsterMaker::MakerThink);
 		}
 		else
-		{// wait to be activated.
-			m_fActive = FALSE;
+		{ // wait to be activated.
+			m_fActive = false;
 			SetThink(&CMonsterMaker::SUB_DoNothing);
 		}
 	}
 	else
-	{// no targetname, just start.
+	{ // no targetname, just start.
 		pev->nextthink = gpGlobals->time + m_flDelay;
-		m_fActive = TRUE;
+		m_fActive = true;
 		SetThink(&CMonsterMaker::MakerThink);
 	}
 
 	if (m_cNumMonsters == 1)
 	{
-		m_fFadeChildren = FALSE;
+		m_fFadeChildren = false;
 	}
 	else
 	{
-		m_fFadeChildren = TRUE;
+		m_fFadeChildren = true;
 	}
 
 	m_flGround = 0;
@@ -164,13 +164,13 @@ void CMonsterMaker::MakeMonster()
 	entvars_t* pevCreate;
 
 	if (m_iMaxLiveChildren > 0 && m_cLiveChildren >= m_iMaxLiveChildren)
-	{// not allowed to make a new one yet. Too many live ones out right now.
+	{ // not allowed to make a new one yet. Too many live ones out right now.
 		return;
 	}
 
-	if (!m_flGround)
+	if (0 == m_flGround)
 	{
-		// set altitude. Now that I'm activated, any breakables, etc should be out from under me. 
+		// set altitude. Now that I'm activated, any breakables, etc should be out from under me.
 		TraceResult tr;
 
 		UTIL_TraceLine(pev->origin, pev->origin - Vector(0, 0, 2048), ignore_monsters, ENT(pev), &tr);
@@ -184,7 +184,7 @@ void CMonsterMaker::MakeMonster()
 
 	CBaseEntity* pList[2];
 	int count = UTIL_EntitiesInBox(pList, 2, mins, maxs, FL_CLIENT | FL_MONSTER);
-	if (count)
+	if (0 != count)
 	{
 		// don't build a stack of monsters!
 		return;
@@ -211,7 +211,7 @@ void CMonsterMaker::MakeMonster()
 	SetBits(pevCreate->spawnflags, SF_MONSTER_FALL_TO_GROUND);
 
 	// Children hit monsterclip brushes
-	if (pev->spawnflags & SF_MONSTERMAKER_MONSTERCLIP)
+	if ((pev->spawnflags & SF_MONSTERMAKER_MONSTERCLIP) != 0)
 		SetBits(pevCreate->spawnflags, SF_MONSTER_HITMONSTERCLIP);
 
 	DispatchSpawn(ENT(pevCreate));
@@ -223,7 +223,7 @@ void CMonsterMaker::MakeMonster()
 		pevCreate->targetname = pev->netname;
 	}
 
-	m_cLiveChildren++;// count this monster
+	m_cLiveChildren++; // count this monster
 	m_cNumMonsters--;
 
 	if (m_cNumMonsters == 0)
@@ -253,12 +253,12 @@ void CMonsterMaker::ToggleUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE
 
 	if (m_fActive)
 	{
-		m_fActive = FALSE;
+		m_fActive = false;
 		SetThink(NULL);
 	}
 	else
 	{
-		m_fActive = TRUE;
+		m_fActive = true;
 		SetThink(&CMonsterMaker::MakerThink);
 	}
 
@@ -288,5 +288,3 @@ void CMonsterMaker::DeathNotice(entvars_t* pevChild)
 		pevChild->owner = NULL;
 	}
 }
-
-

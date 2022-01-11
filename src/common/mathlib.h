@@ -22,40 +22,60 @@ typedef float vec_t;
 
 #include "vector.h"
 
-typedef vec_t vec4_t[4];	// x,y,z,w
+typedef vec_t vec4_t[4]; // x,y,z,w
 typedef vec_t vec5_t[5];
 
 typedef short vec_s_t;
 typedef vec_s_t vec3s_t[3];
-typedef vec_s_t vec4s_t[4];	// x,y,z,w
+typedef vec_s_t vec4s_t[4]; // x,y,z,w
 typedef vec_s_t vec5s_t[5];
 
-typedef	int	fixed4_t;
-typedef	int	fixed8_t;
-typedef	int	fixed16_t;
+typedef int fixed4_t;
+typedef int fixed8_t;
+typedef int fixed16_t;
 #ifndef M_PI
-#define M_PI		3.14159265358979323846	// matches value in gcc v2 math.h
+#define M_PI 3.14159265358979323846 // matches value in gcc v2 math.h
 #endif
 
 struct mplane_s;
 
 constexpr Vector vec3_origin(0, 0, 0);
 constexpr Vector g_vecZero(0, 0, 0);
-extern	int nanmask;
+extern int nanmask;
 
-#define	IS_NAN(x) (((*(int *)&x)&nanmask)==nanmask)
+#define IS_NAN(x) (((*(int*)&x) & nanmask) == nanmask)
 
-#define VectorSubtract(a,b,c) {(c)[0]=(a)[0]-(b)[0];(c)[1]=(a)[1]-(b)[1];(c)[2]=(a)[2]-(b)[2];}
-#define VectorAdd(a,b,c) {(c)[0]=(a)[0]+(b)[0];(c)[1]=(a)[1]+(b)[1];(c)[2]=(a)[2]+(b)[2];}
-#define VectorCopy(a,b) {(b)[0]=(a)[0];(b)[1]=(a)[1];(b)[2]=(a)[2];}
-inline void VectorClear(float* a) { a[0] = 0.0; a[1] = 0.0; a[2] = 0.0; }
+#define VectorSubtract(a, b, c)   \
+	{                             \
+		(c)[0] = (a)[0] - (b)[0]; \
+		(c)[1] = (a)[1] - (b)[1]; \
+		(c)[2] = (a)[2] - (b)[2]; \
+	}
+#define VectorAdd(a, b, c)        \
+	{                             \
+		(c)[0] = (a)[0] + (b)[0]; \
+		(c)[1] = (a)[1] + (b)[1]; \
+		(c)[2] = (a)[2] + (b)[2]; \
+	}
+#define VectorCopy(a, b) \
+	{                    \
+		(b)[0] = (a)[0]; \
+		(b)[1] = (a)[1]; \
+		(b)[2] = (a)[2]; \
+	}
+inline void VectorClear(float* a)
+{
+	a[0] = 0.0;
+	a[1] = 0.0;
+	a[2] = 0.0;
+}
 
 void VectorMA(const float* veca, float scale, const float* vecb, float* vecc);
 
-int VectorCompare(const float* v1, const float* v2);
+bool VectorCompare(const float* v1, const float* v2);
 float Length(const float* v);
 void CrossProduct(const float* v1, const float* v2, float* cross);
-float VectorNormalize(float* v);		// returns vector length
+float VectorNormalize(float* v); // returns vector length
 void VectorInverse(float* v);
 void VectorScale(const float* in, float scale, float* out);
 int Q_log2(int val);
@@ -63,62 +83,18 @@ int Q_log2(int val);
 void R_ConcatRotations(float in1[3][3], float in2[3][3], float out[3][3]);
 void R_ConcatTransforms(float in1[3][4], float in2[3][4], float out[3][4]);
 
-// Here are some "manual" INLINE routines for doing floating point to integer conversions
-extern short new_cw, old_cw;
-
-typedef union DLONG {
-	int		i[2];
-	double	d;
-	float	f;
-} DLONG;
-
-extern DLONG	dlong;
-
-#ifdef _WIN32
-void __inline set_fpu_cw(void)
-{
-	_asm
-	{		wait
-		fnstcw	old_cw
-		wait
-		mov		ax, word ptr old_cw
-		or ah, 0xc
-		mov		word ptr new_cw, ax
-		fldcw	new_cw
-	}
-}
-
-int __inline quick_ftol(float f)
-{
-	_asm {
-		// Assumes that we are already in chop mode, and only need a 32-bit int
-		fld		DWORD PTR f
-		fistp	DWORD PTR dlong
-	}
-	return dlong.i[0];
-}
-
-void __inline restore_fpu_cw(void)
-{
-	_asm	fldcw	old_cw
-}
-#else
-#define set_fpu_cw() /* */
-#define quick_ftol(f) ftol(f)
-#define restore_fpu_cw() /* */
-#endif
-
 void FloorDivMod(double numer, double denom, int* quotient,
 	int* rem);
+
 fixed16_t Invert24To16(fixed16_t val);
 int GreatestCommonDivisor(int i1, int i2);
 
 void AngleVectors(const Vector& angles, Vector* forward, Vector* right, Vector* up);
 void AngleVectorsTranspose(const Vector& angles, Vector* forward, Vector* right, Vector* up);
-#define AngleIVectors	AngleVectorsTranspose
+#define AngleIVectors AngleVectorsTranspose
 
-void AngleMatrix(const float* angles, float(*matrix)[4]);
-void AngleIMatrix(const Vector& angles, float(*matrix)[4]);
+void AngleMatrix(const float* angles, float (*matrix)[4]);
+void AngleIMatrix(const Vector& angles, float (*matrix)[4]);
 void VectorTransform(const float* in1, float in2[3][4], float* out);
 
 void NormalizeAngles(float* angles);
@@ -132,22 +108,14 @@ void VectorAngles(const float* forward, float* angles);
 int InvertMatrix(const float* m, float* out);
 
 int BoxOnPlaneSide(const Vector& emins, const Vector& emaxs, struct mplane_s* plane);
-float	anglemod(float a);
+float anglemod(float a);
 
 
 
-#define BOX_ON_PLANE_SIDE(emins, emaxs, p)	\
-	(((p)->type < 3)?						\
-	(										\
-		((p)->dist <= (emins)[(p)->type])?	\
-			1								\
-		:									\
-		(									\
-			((p)->dist >= (emaxs)[(p)->type])?\
-				2							\
-			:								\
-				3							\
-		)									\
-	)										\
-	:										\
-		BoxOnPlaneSide( (emins), (emaxs), (p)))
+#define BOX_ON_PLANE_SIDE(emins, emaxs, p)                                                                 \
+	(((p)->type < 3) ? (                                                                                   \
+						   ((p)->dist <= (emins)[(p)->type]) ? 1                                           \
+															 : (                                           \
+																   ((p)->dist >= (emaxs)[(p)->type]) ? 2   \
+																									 : 3)) \
+					 : BoxOnPlaneSide((emins), (emaxs), (p)))

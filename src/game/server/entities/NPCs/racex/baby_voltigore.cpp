@@ -16,20 +16,20 @@
 // Voltigore - Tank like alien
 //=========================================================
 
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"monsters.h"
-#include	"squadmonster.h"
-#include	"weapons.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
+#include "squadmonster.h"
+#include "weapons.h"
 #include "voltigore.h"
 
 //=========================================================
 // Monster's Anim Events Go Here
 //=========================================================
-#define		BABYVOLTIGORE_AE_LEFT_FOOT	 ( 10 )
-#define		BABYVOLTIGORE_AE_RIGHT_FOOT ( 11 )
-#define		BABYVOLTIGORE_AE_RUN			14
+#define BABYVOLTIGORE_AE_LEFT_FOOT (10)
+#define BABYVOLTIGORE_AE_RIGHT_FOOT (11)
+#define BABYVOLTIGORE_AE_RUN 14
 
 class COFBabyVoltigore : public COFVoltigore
 {
@@ -99,9 +99,15 @@ void COFBabyVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 		switch (RANDOM_LONG(0, 2))
 		{
 			// left foot
-		case 0:	EMIT_SOUND_DYN(ENT(pev), CHAN_BODY, "voltigore/voltigore_footstep1.wav", 1, ATTN_IDLE, 0, 130);	break;
-		case 1:	EMIT_SOUND_DYN(ENT(pev), CHAN_BODY, "voltigore/voltigore_footstep2.wav", 1, ATTN_IDLE, 0, 130);	break;
-		case 2: EMIT_SOUND_DYN(ENT(pev), CHAN_BODY, "voltigore/voltigore_footstep3.wav", 1, ATTN_IDLE, 0, 130);	break;
+		case 0:
+			EMIT_SOUND_DYN(ENT(pev), CHAN_BODY, "voltigore/voltigore_footstep1.wav", 1, ATTN_IDLE, 0, 130);
+			break;
+		case 1:
+			EMIT_SOUND_DYN(ENT(pev), CHAN_BODY, "voltigore/voltigore_footstep2.wav", 1, ATTN_IDLE, 0, 130);
+			break;
+		case 2:
+			EMIT_SOUND_DYN(ENT(pev), CHAN_BODY, "voltigore/voltigore_footstep3.wav", 1, ATTN_IDLE, 0, 130);
+			break;
 		}
 		break;
 
@@ -125,7 +131,7 @@ void COFBabyVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 			Vector vecArmPos, vecArmAng;
 			GetAttachment(0, vecArmPos, vecArmAng);
-			SpawnBlood(vecArmPos, pHurt->BloodColor(), 25);// a little surface blood.
+			SpawnBlood(vecArmPos, pHurt->BloodColor(), 25); // a little surface blood.
 		}
 		else
 		{
@@ -155,7 +161,7 @@ void COFBabyVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 			Vector vecArmPos, vecArmAng;
 			GetAttachment(0, vecArmPos, vecArmAng);
-			SpawnBlood(vecArmPos, pHurt->BloodColor(), 25);// a little surface blood.
+			SpawnBlood(vecArmPos, pHurt->BloodColor(), 25); // a little surface blood.
 		}
 		else
 		{
@@ -169,8 +175,12 @@ void COFBabyVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 		switch (RANDOM_LONG(0, 1))
 		{
 			// left foot
-		case 0:	EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "voltigore/voltigore_run_grunt1.wav", 1, ATTN_NORM, 0, 180);	break;
-		case 1:	EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "voltigore/voltigore_run_grunt2.wav", 1, ATTN_NORM, 0, 180);	break;
+		case 0:
+			EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "voltigore/voltigore_run_grunt1.wav", 1, ATTN_NORM, 0, 180);
+			break;
+		case 1:
+			EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "voltigore/voltigore_run_grunt2.wav", 1, ATTN_NORM, 0, 180);
+			break;
 		}
 		break;
 
@@ -197,7 +207,7 @@ void COFBabyVoltigore::Precache()
 }
 
 //=========================================================
-// CheckTraceHullAttack - expects a length to trace, amount 
+// CheckTraceHullAttack - expects a length to trace, amount
 // of damage to do, and damage type. Returns a pointer to
 // the damaged entity in case the monster wishes to do
 // other stuff to the victim (punchangle, etc)

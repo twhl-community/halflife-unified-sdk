@@ -51,7 +51,7 @@ public:
 	CRope();
 	~CRope();
 
-	void KeyValue(KeyValueData* pkvd) override;
+	bool KeyValue(KeyValueData* pkvd) override;
 
 	void Precache() override;
 
@@ -61,8 +61,8 @@ public:
 
 	void Touch(CBaseEntity* pOther) override;
 
-	int Save(CSave& save) override;
-	int Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 
 	static TYPEDESCRIPTION m_SaveData[];
 
@@ -136,7 +136,7 @@ public:
 
 	void DetachObject();
 
-	bool IsObjectAttached() const { return m_bObjectAttached != FALSE; }
+	bool IsObjectAttached() const { return m_bObjectAttached != false; }
 
 	bool IsAcceptingAttachment() const;
 
@@ -146,9 +146,9 @@ public:
 
 	CRopeSegment** GetAltSegments() { return altseg; }
 
-	bool GetToggleValue() const { return m_bToggle != FALSE; }
+	bool GetToggleValue() const { return m_bToggle != false; }
 
-	bool IsSoundAllowed() const { return m_bMakeSound != FALSE; }
+	bool IsSoundAllowed() const { return m_bMakeSound != false; }
 
 	void SetSoundAllowed(const bool bAllowed)
 	{
@@ -194,9 +194,9 @@ private:
 	CRopeSegment* seg[MAX_SEGMENTS];
 	CRopeSegment* altseg[MAX_SEGMENTS];
 
-	BOOL m_bToggle;
+	bool m_bToggle;
 
-	BOOL m_bInitialDeltaTime;
+	bool m_bInitialDeltaTime;
 
 	float m_flLastTime;
 
@@ -217,7 +217,7 @@ private:
 
 	bool m_bSpringsInitialized;
 
-	BOOL m_bObjectAttached;
+	bool m_bObjectAttached;
 
 	size_t m_uiAttachedObjectsSegment;
 	float m_flAttachedObjectsOffset;
@@ -226,7 +226,7 @@ private:
 	string_t m_iszBodyModel;
 	string_t m_iszEndingModel;
 
-	BOOL m_bDisallowPlayerAttachment;
+	bool m_bDisallowPlayerAttachment;
 
-	BOOL m_bMakeSound;
+	bool m_bMakeSound;
 };

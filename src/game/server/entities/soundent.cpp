@@ -12,16 +12,14 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"monsters.h"
-#include	"soundent.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
+#include "soundent.h"
 
 
 LINK_ENTITY_TO_CLASS(soundent, CSoundEnt);
-
-CSoundEnt* pSoundEnt;
 
 //=========================================================
 // CSound - Clear - zeros all fields for a sound
@@ -38,7 +36,7 @@ void CSound::Clear()
 
 //=========================================================
 // Reset - clears the volume, origin, and type for a sound,
-// but doesn't expire or unlink it. 
+// but doesn't expire or unlink it.
 //=========================================================
 void CSound::Reset()
 {
@@ -49,33 +47,33 @@ void CSound::Reset()
 }
 
 //=========================================================
-// FIsSound - returns TRUE if the sound is an Audible sound
+// FIsSound - returns true if the sound is an Audible sound
 //=========================================================
-BOOL CSound::FIsSound()
+bool CSound::FIsSound()
 {
-	if (m_iType & (bits_SOUND_COMBAT | bits_SOUND_WORLD | bits_SOUND_PLAYER | bits_SOUND_DANGER))
+	if ((m_iType & (bits_SOUND_COMBAT | bits_SOUND_WORLD | bits_SOUND_PLAYER | bits_SOUND_DANGER)) != 0)
 	{
-		return TRUE;
+		return true;
 	}
 
-	return FALSE;
+	return false;
 }
 
 //=========================================================
-// FIsScent - returns TRUE if the sound is actually a scent
+// FIsScent - returns true if the sound is actually a scent
 //=========================================================
-BOOL CSound::FIsScent()
+bool CSound::FIsScent()
 {
-	if (m_iType & (bits_SOUND_CARCASS | bits_SOUND_MEAT | bits_SOUND_GARBAGE))
+	if ((m_iType & (bits_SOUND_CARCASS | bits_SOUND_MEAT | bits_SOUND_GARBAGE)) != 0)
 	{
-		return TRUE;
+		return true;
 	}
 
-	return FALSE;
+	return false;
 }
 
 //=========================================================
-// Spawn 
+// Spawn
 //=========================================================
 void CSoundEnt::Spawn()
 {
@@ -95,7 +93,7 @@ void CSoundEnt::Think()
 	int iSound;
 	int iPreviousSound;
 
-	pev->nextthink = gpGlobals->time + 0.3;// how often to check the sound list.
+	pev->nextthink = gpGlobals->time + 0.3; // how often to check the sound list.
 
 	iPreviousSound = SOUNDLIST_EMPTY;
 	iSound = m_iActiveSound;
@@ -123,7 +121,6 @@ void CSoundEnt::Think()
 		ALERT(at_aiconsole, "Soundlist: %d / %d  (%d)\n", ISoundsInList(SOUNDLISTTYPE_ACTIVE), ISoundsInList(SOUNDLISTTYPE_FREE), ISoundsInList(SOUNDLISTTYPE_ACTIVE) - m_cLastActiveSounds);
 		m_cLastActiveSounds = ISoundsInList(SOUNDLISTTYPE_ACTIVE);
 	}
-
 }
 
 //=========================================================
@@ -134,7 +131,7 @@ void CSoundEnt::Precache()
 }
 
 //=========================================================
-// FreeSound - clears the passed active sound and moves it 
+// FreeSound - clears the passed active sound and moves it
 // to the top of the free list. TAKE CARE to only call this
 // function for sounds in the Active list!!
 //=========================================================
@@ -150,7 +147,7 @@ void CSoundEnt::FreeSound(int iSound, int iPrevious)
 	{
 		// iSound is not the head of the active list, so
 		// must fix the index for the Previous sound
-//		pSoundEnt->m_SoundPool[ iPrevious ].m_iNext = m_SoundPool[ iSound ].m_iNext;
+		//		pSoundEnt->m_SoundPool[ iPrevious ].m_iNext = m_SoundPool[ iSound ].m_iNext;
 		pSoundEnt->m_SoundPool[iPrevious].m_iNext = pSoundEnt->m_SoundPool[iSound].m_iNext;
 	}
 	else
@@ -165,7 +162,7 @@ void CSoundEnt::FreeSound(int iSound, int iPrevious)
 }
 
 //=========================================================
-// IAllocSound - moves a sound from the Free list to the 
+// IAllocSound - moves a sound from the Free list to the
 // Active list returns the index of the alloc'd sound
 //=========================================================
 int CSoundEnt::IAllocSound()
@@ -182,24 +179,24 @@ int CSoundEnt::IAllocSound()
 	// there is at least one sound available, so move it to the
 	// Active sound list, and return its SoundPool index.
 
-	iNewSound = m_iFreeSound;// copy the index of the next free sound
+	iNewSound = m_iFreeSound; // copy the index of the next free sound
 
-	m_iFreeSound = m_SoundPool[m_iFreeSound].m_iNext;// move the index down into the free list. 
+	m_iFreeSound = m_SoundPool[m_iFreeSound].m_iNext; // move the index down into the free list.
 
-	m_SoundPool[iNewSound].m_iNext = m_iActiveSound;// point the new sound at the top of the active list.
+	m_SoundPool[iNewSound].m_iNext = m_iActiveSound; // point the new sound at the top of the active list.
 
-	m_iActiveSound = iNewSound;// now make the new sound the top of the active list. You're done.
+	m_iActiveSound = iNewSound; // now make the new sound the top of the active list. You're done.
 
 	return iNewSound;
 }
 
 //=========================================================
-// InsertSound - Allocates a free sound and fills it with 
+// InsertSound - Allocates a free sound and fills it with
 // sound info.
 //=========================================================
 void CSoundEnt::InsertSound(int iType, const Vector& vecOrigin, int iVolume, float flDuration)
 {
-	int	iThisSound;
+	int iThisSound;
 
 	if (!pSoundEnt)
 	{
@@ -222,7 +219,7 @@ void CSoundEnt::InsertSound(int iType, const Vector& vecOrigin, int iVolume, flo
 }
 
 //=========================================================
-// Initialize - clears all sounds and moves them into the 
+// Initialize - clears all sounds and moves them into the
 // free sound list.
 //=========================================================
 void CSoundEnt::Initialize()
@@ -235,12 +232,12 @@ void CSoundEnt::Initialize()
 	m_iActiveSound = SOUNDLIST_EMPTY;
 
 	for (i = 0; i < MAX_WORLD_SOUNDS; i++)
-	{// clear all sounds, and link them into the free sound list.
+	{ // clear all sounds, and link them into the free sound list.
 		m_SoundPool[i].Clear();
 		m_SoundPool[i].m_iNext = i + 1;
 	}
 
-	m_SoundPool[i - 1].m_iNext = SOUNDLIST_EMPTY;// terminate the list here.
+	m_SoundPool[i - 1].m_iNext = SOUNDLIST_EMPTY; // terminate the list here.
 
 
 	// now reserve enough sounds for each client
@@ -259,11 +256,11 @@ void CSoundEnt::Initialize()
 
 	if (CVAR_GET_FLOAT("displaysoundlist") == 1)
 	{
-		m_fShowReport = TRUE;
+		m_fShowReport = true;
 	}
 	else
 	{
-		m_fShowReport = FALSE;
+		m_fShowReport = false;
 	}
 }
 
@@ -273,28 +270,19 @@ void CSoundEnt::Initialize()
 //=========================================================
 int CSoundEnt::ISoundsInList(int iListType)
 {
-	int i;
-	int iThisSound;
+	int iThisSound = [=]()
+	{
+		switch (iListType)
+		{
+		case SOUNDLISTTYPE_FREE: return m_iFreeSound;
+		case SOUNDLISTTYPE_ACTIVE: return m_iActiveSound;
+		default:
+			ALERT(at_console, "Unknown Sound List Type!\n");
+			return SOUNDLIST_EMPTY;
+		}
+	}();
 
-	if (iListType == SOUNDLISTTYPE_FREE)
-	{
-		iThisSound = m_iFreeSound;
-	}
-	else if (iListType == SOUNDLISTTYPE_ACTIVE)
-	{
-		iThisSound = m_iActiveSound;
-	}
-	else
-	{
-		ALERT(at_console, "Unknown Sound List Type!\n");
-	}
-
-	if (iThisSound == SOUNDLIST_EMPTY)
-	{
-		return 0;
-	}
-
-	i = 0;
+	int i = 0;
 
 	while (iThisSound != SOUNDLIST_EMPTY)
 	{

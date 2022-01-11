@@ -34,6 +34,10 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 # Link statically with the runtime
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
+# Because we have 2 libraries that use the same symbols we have to default visibility to hidden so there are no collisions,
+# and so the symbols don't merge and cause problems like server code calling the client version of a function.
+set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+
 # Find dependencies
 find_package(Threads REQUIRED)
 
@@ -81,6 +85,9 @@ endif()
 # Sets properties common to all projects
 function(set_common_properties TARGET_NAME)
 	set_target_properties(${TARGET_NAME} PROPERTIES PREFIX "")
+	
+	# Enable use of Clang-Tidy in code analysis. See [repo_root]/.clang-tidy for the checks used in the project.
+	set_target_properties(${TARGET_NAME} PROPERTIES VS_GLOBAL_EnableClangTidyCodeAnalysis true)
 		
 	target_compile_definitions(${TARGET_NAME} PRIVATE
 		_CRT_SECURE_NO_WARNINGS

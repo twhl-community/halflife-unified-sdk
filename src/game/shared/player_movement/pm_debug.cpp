@@ -30,25 +30,25 @@
 extern playermove_t* pmove;
 
 // Expand debugging BBOX particle hulls by this many units.
-#define BOX_GAP 0.0f               
+#define BOX_GAP 0.0f
 
 static int PM_boxpnt[6][4] =
-{
-	{ 0, 4, 6, 2 }, // +X
-	{ 0, 1, 5, 4 }, // +Y
-	{ 0, 2, 3, 1 }, // +Z
-	{ 7, 5, 1, 3 }, // -X
-	{ 7, 3, 2, 6 }, // -Y
-	{ 7, 6, 4, 5 }, // -Z
+	{
+		{0, 4, 6, 2}, // +X
+		{0, 1, 5, 4}, // +Y
+		{0, 2, 3, 1}, // +Z
+		{7, 5, 1, 3}, // -X
+		{7, 3, 2, 6}, // -Y
+		{7, 6, 4, 5}, // -Z
 };
 
 void PM_ShowClipBox()
 {
-#if defined( _DEBUG )
+#if defined(_DEBUG)
 	Vector org;
 	Vector offset = {0, 0, 0};
 
-	if (!pmove->runfuncs)
+	if (0 == pmove->runfuncs)
 		return;
 
 	// More debugging, draw the particle bbox for player and for the entity we are looking directly at.
@@ -63,7 +63,7 @@ void PM_ShowClipBox()
 
 	VectorCopy(pmove->origin, org);
 
-	if (pmove->server)
+	if (0 != pmove->server)
 	{
 		VectorAdd(org, offset, org);
 	}
@@ -73,9 +73,9 @@ void PM_ShowClipBox()
 	}
 
 	// Show our BBOX in particles.
-	PM_DrawBBox(pmove->player_mins[pmove->usehull], pmove->player_maxs[pmove->usehull], org, pmove->server ? 132 : 0, 0.1);
+	PM_DrawBBox(pmove->player_mins[pmove->usehull], pmove->player_maxs[pmove->usehull], org, 0 != pmove->server ? 132 : 0, 0.1);
 
-	PM_ParticleLine(org, org, pmove->server ? 132 : 0, 0.1, 5.0);
+	PM_ParticleLine(org, org, 0 != pmove->server ? 132 : 0, 0.1, 5.0);
 	/*
 		{
 			int i;
@@ -120,7 +120,6 @@ void PM_ParticleLine(Vector start, Vector end, int pcolor, float life, float ver
 		pmove->PM_Particle(curpos, pcolor, life, 0, vert);
 		curdist += linestep;
 	}
-
 }
 
 /*
@@ -149,7 +148,7 @@ void PM_DrawPhysEntBBox(int num, int pcolor, float life)
 	Vector org;
 	int j;
 	Vector tmp;
-	Vector		p[8];
+	Vector p[8];
 	float gap = BOX_GAP;
 	Vector modelmins, modelmaxs;
 
@@ -166,17 +165,17 @@ void PM_DrawPhysEntBBox(int num, int pcolor, float life)
 		pmove->PM_GetModelBounds(pe->model, modelmins, modelmaxs);
 		for (j = 0; j < 8; j++)
 		{
-			tmp[0] = (j & 1) ? modelmins[0] - gap : modelmaxs[0] + gap;
-			tmp[1] = (j & 2) ? modelmins[1] - gap : modelmaxs[1] + gap;
-			tmp[2] = (j & 4) ? modelmins[2] - gap : modelmaxs[2] + gap;
+			tmp[0] = (j & 1) != 0 ? modelmins[0] - gap : modelmaxs[0] + gap;
+			tmp[1] = (j & 2) != 0 ? modelmins[1] - gap : modelmaxs[1] + gap;
+			tmp[2] = (j & 4) != 0 ? modelmins[2] - gap : modelmaxs[2] + gap;
 
 			VectorCopy(tmp, p[j]);
 		}
 
 		// If the bbox should be rotated, do that
-		if (pe->angles[0] || pe->angles[1] || pe->angles[2])
+		if (pe->angles != g_vecZero)
 		{
-			Vector	forward, right, up;
+			Vector forward, right, up;
 
 			AngleVectorsTranspose(pe->angles, &forward, &right, &up);
 			for (j = 0; j < 8; j++)
@@ -206,9 +205,9 @@ void PM_DrawPhysEntBBox(int num, int pcolor, float life)
 	{
 		for (j = 0; j < 8; j++)
 		{
-			tmp[0] = (j & 1) ? pe->mins[0] : pe->maxs[0];
-			tmp[1] = (j & 2) ? pe->mins[1] : pe->maxs[1];
-			tmp[2] = (j & 4) ? pe->mins[2] : pe->maxs[2];
+			tmp[0] = (j & 1) != 0 ? pe->mins[0] : pe->maxs[0];
+			tmp[1] = (j & 2) != 0 ? pe->mins[1] : pe->maxs[1];
+			tmp[2] = (j & 4) != 0 ? pe->mins[2] : pe->maxs[2];
 
 			VectorAdd(tmp, pe->origin, tmp);
 			VectorCopy(tmp, p[j]);
@@ -223,7 +222,6 @@ void PM_DrawPhysEntBBox(int num, int pcolor, float life)
 				p[PM_boxpnt[j][3]],
 				pcolor, life);
 		}
-
 	}
 }
 
@@ -238,14 +236,14 @@ void PM_DrawBBox(Vector mins, Vector maxs, Vector origin, int pcolor, float life
 	int j;
 
 	Vector tmp;
-	Vector		p[8];
+	Vector p[8];
 	float gap = BOX_GAP;
 
 	for (j = 0; j < 8; j++)
 	{
-		tmp[0] = (j & 1) ? mins[0] - gap : maxs[0] + gap;
-		tmp[1] = (j & 2) ? mins[1] - gap : maxs[1] + gap;
-		tmp[2] = (j & 4) ? mins[2] - gap : maxs[2] + gap;
+		tmp[0] = (j & 1) != 0 ? mins[0] - gap : maxs[0] + gap;
+		tmp[1] = (j & 2) != 0 ? mins[1] - gap : maxs[1] + gap;
+		tmp[2] = (j & 4) != 0 ? mins[2] - gap : maxs[2] + gap;
 
 		VectorAdd(tmp, origin, tmp);
 		VectorCopy(tmp, p[j]);
@@ -288,7 +286,7 @@ void PM_ViewEntity()
 		return;
 #endif
 
-	AngleVectors(pmove->angles, &forward, &right, &up);  // Determine movement angles
+	AngleVectors(pmove->angles, &forward, &right, &up); // Determine movement angles
 
 	VectorCopy(pmove->origin, origin);
 
@@ -303,7 +301,7 @@ void PM_ViewEntity()
 
 	trace = pmove->PM_PlayerTrace(origin, end, PM_STUDIO_BOX, -1);
 
-	if (trace.ent > 0)  // Not the world
+	if (trace.ent > 0) // Not the world
 	{
 		pcolor = 111;
 	}

@@ -26,18 +26,16 @@ const auto SF_ITEMCTF_IGNORE_TEAM = 1 << 3;
 
 CItemSpawnCTF* CItemCTF::m_pLastSpawn = nullptr;
 
-void CItemCTF::KeyValue(KeyValueData* pkvd)
+bool CItemCTF::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq("team_no", pkvd->szKeyName))
 	{
 		team_no = static_cast<CTFTeam>(atoi(pkvd->szValue));
-		pkvd->fHandled = true;
+		return true;
 	}
-	else
-	{
-		//TODO: should invoke base class KeyValue here
-		pkvd->fHandled = false;
-	}
+
+	//TODO: should invoke base class KeyValue here
+	return false;
 }
 
 void CItemCTF::Precache()
@@ -80,7 +78,7 @@ void CItemCTF::Spawn()
 		}
 	}
 
-	if (pev->spawnflags & SF_ITEMCTF_RANDOM_SPAWN)
+	if ((pev->spawnflags & SF_ITEMCTF_RANDOM_SPAWN) != 0)
 	{
 		SetThink(&CItemCTF::DropThink);
 		pev->nextthink = gpGlobals->time + 0.1;
@@ -100,10 +98,7 @@ void CItemCTF::DropPreThink()
 {
 	const auto contents = UTIL_PointContents(pev->origin);
 
-	if (contents == CONTENTS_SLIME
-		|| contents == CONTENTS_LAVA
-		|| contents == CONTENTS_SOLID
-		|| contents == CONTENTS_SKY)
+	if (contents == CONTENTS_SLIME || contents == CONTENTS_LAVA || contents == CONTENTS_SOLID || contents == CONTENTS_SKY)
 	{
 		DropThink();
 	}
@@ -126,7 +121,7 @@ void CItemCTF::DropThink()
 
 	auto searchedForSpawns = false;
 
-	if (!(pev->spawnflags & SF_ITEMCTF_IGNORE_TEAM))
+	if ((pev->spawnflags & SF_ITEMCTF_IGNORE_TEAM) == 0)
 	{
 		for (auto i = 0; i <= 1; ++i)
 		{
@@ -139,17 +134,12 @@ void CItemCTF::DropThink()
 
 			for (auto pCandidate : UTIL_FindEntitiesByClassname<CItemSpawnCTF>("info_ctfspawn_powerup", pFirstSpawn))
 			{
-				if (iScoreDiff == 0
-					|| (iScoreDiff == 1
-						&& ((RANDOM_LONG(0, 1) && pCandidate->team_no == CTFTeam::None)
-							|| (RANDOM_LONG(0, 1) && pCandidate->team_no == static_cast<CTFTeam>(iLosingTeam + 1))))
-					|| (iScoreDiff > 1
-						&& pCandidate->team_no == static_cast<CTFTeam>(iLosingTeam + 1)))
+				if (iScoreDiff == 0 || (iScoreDiff == 1 && ((RANDOM_LONG(0, 1) && pCandidate->team_no == CTFTeam::None) || (RANDOM_LONG(0, 1) && pCandidate->team_no == static_cast<CTFTeam>(iLosingTeam + 1)))) || (iScoreDiff > 1 && pCandidate->team_no == static_cast<CTFTeam>(iLosingTeam + 1)))
 				{
 					++nTested;
 
 					auto nOccupied = false;
-					for (CBaseEntity* pEntity = nullptr; (pEntity = UTIL_FindEntityInSphere(pEntity, pCandidate->pev->origin, 128)); )
+					for (CBaseEntity* pEntity = nullptr; (pEntity = UTIL_FindEntityInSphere(pEntity, pCandidate->pev->origin, 128));)
 					{
 						if (pEntity->Classify() == CLASS_CTFITEM && this != pEntity)
 						{
@@ -184,7 +174,7 @@ void CItemCTF::DropThink()
 		for (auto pCandidate : UTIL_FindEntitiesByClassname<CItemSpawnCTF>("info_ctfspawn_powerup"))
 		{
 			auto nOccupied = false;
-			for (CBaseEntity* pEntity = nullptr; (pEntity = UTIL_FindEntityInSphere(pEntity, pCandidate->pev->origin, 128)); )
+			for (CBaseEntity* pEntity = nullptr; (pEntity = UTIL_FindEntityInSphere(pEntity, pCandidate->pev->origin, 128));)
 			{
 				if (pEntity->Classify() == CLASS_CTFITEM && this != pEntity)
 				{
@@ -217,7 +207,7 @@ void CItemCTF::DropThink()
 
 	UTIL_SetOrigin(pev, pev->origin);
 
-	if (!g_engfuncs.pfnDropToFloor(edict()))
+	if (0 == g_engfuncs.pfnDropToFloor(edict()))
 	{
 		ALERT(at_error, "Item %s fell out of level at %f,%f,%f", STRING(pev->classname), pev->origin.x, pev->origin.y, pev->origin.z);
 		UTIL_Remove(this);
@@ -230,7 +220,7 @@ void CItemCTF::CarryThink()
 
 	if (pOwner && pOwner->IsPlayer())
 	{
-		if (m_iItemFlag & pOwner->m_iItems)
+		if ((m_iItemFlag & pOwner->m_iItems) != 0)
 		{
 			pev->nextthink = gpGlobals->time + 20;
 		}
@@ -249,8 +239,7 @@ void CItemCTF::CarryThink()
 void CItemCTF::ItemTouch(CBaseEntity* pOther)
 {
 	//TODO: really shouldn't be using the index here tbh
-	if (pOther->IsPlayer() && pOther->IsAlive()
-		&& (m_iLastTouched != pOther->entindex() || m_flNextTouchTime <= gpGlobals->time))
+	if (pOther->IsPlayer() && pOther->IsAlive() && (m_iLastTouched != pOther->entindex() || m_flNextTouchTime <= gpGlobals->time))
 	{
 		m_iLastTouched = 0;
 
@@ -297,7 +286,7 @@ void CItemCTF::DropItem(CBasePlayer* pPlayer, bool bForceRespawn)
 			GetTeamName(pPlayer->edict()),
 			m_pszItemName);
 
-		pev->origin = pPlayer->pev->origin + Vector(0, 0, (pPlayer->pev->flags & FL_DUCKING) ? 34 : 16);
+		pev->origin = pPlayer->pev->origin + Vector(0, 0, (pPlayer->pev->flags & FL_DUCKING) != 0 ? 34 : 16);
 	}
 
 	UTIL_SetOrigin(pev, pev->origin);
@@ -343,7 +332,7 @@ void CItemCTF::ScatterItem(CBasePlayer* pPlayer)
 	{
 		RemoveEffect(pPlayer);
 
-		pev->origin = pPlayer->pev->origin + Vector(0, 0, (pPlayer->pev->flags & FL_DUCKING) ? 34 : 16);
+		pev->origin = pPlayer->pev->origin + Vector(0, 0, (pPlayer->pev->flags & FL_DUCKING) != 0 ? 34 : 16);
 	}
 
 	UTIL_SetOrigin(pev, pev->origin);
@@ -394,7 +383,7 @@ void CItemCTF::ThrowItem(CBasePlayer* pPlayer)
 	{
 		RemoveEffect(pPlayer);
 
-		pev->origin = pPlayer->pev->origin + Vector(0, 0, (pPlayer->pev->flags & FL_DUCKING) ? 34 : 16);
+		pev->origin = pPlayer->pev->origin + Vector(0, 0, (pPlayer->pev->flags & FL_DUCKING) != 0 ? 34 : 16);
 	}
 
 	UTIL_SetOrigin(pev, pev->origin);

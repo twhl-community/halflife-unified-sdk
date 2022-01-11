@@ -28,11 +28,11 @@ public:
 		Reset = 1
 	};
 
-	int Save(CSave& save) override;
-	int Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
-	void KeyValue(KeyValueData* pkvd) override;
+	bool KeyValue(KeyValueData* pkvd) override;
 
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
@@ -43,28 +43,28 @@ private:
 
 LINK_ENTITY_TO_CLASS(player_sethudcolor, PlayerSetHudColor);
 
-TYPEDESCRIPTION	PlayerSetHudColor::m_SaveData[] =
-{
-	DEFINE_FIELD(PlayerSetHudColor, m_HudColor, FIELD_VECTOR),
-	DEFINE_FIELD(PlayerSetHudColor, m_Action, FIELD_INTEGER),
+TYPEDESCRIPTION PlayerSetHudColor::m_SaveData[] =
+	{
+		DEFINE_FIELD(PlayerSetHudColor, m_HudColor, FIELD_VECTOR),
+		DEFINE_FIELD(PlayerSetHudColor, m_Action, FIELD_INTEGER),
 };
 
 IMPLEMENT_SAVERESTORE(PlayerSetHudColor, CPointEntity);
 
-void PlayerSetHudColor::KeyValue(KeyValueData* pkvd)
+bool PlayerSetHudColor::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq(pkvd->szKeyName, "hud_color"))
 	{
 		UTIL_StringToVector(m_HudColor, pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "action"))
 	{
 		m_Action = static_cast<Action>(atoi(pkvd->szValue));
-		pkvd->fHandled = TRUE;
+		return true;
 	}
-	else
-		CPointEntity::KeyValue(pkvd);
+
+	return CPointEntity::KeyValue(pkvd);
 }
 
 void PlayerSetHudColor::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
@@ -81,18 +81,18 @@ void PlayerSetHudColor::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_T
 		return;
 	}
 
-	const RGB24 color = [this]()
-	{
+	const RGB24 color = [this]() {
 		switch (m_Action)
 		{
-		case Action::Set: return RGB24{
-			static_cast<std::uint8_t>(m_HudColor.x),
-			static_cast<std::uint8_t>(m_HudColor.y),
-			static_cast<std::uint8_t>(m_HudColor.z)
-		};
+		case Action::Set:
+			return RGB24{
+				static_cast<std::uint8_t>(m_HudColor.x),
+				static_cast<std::uint8_t>(m_HudColor.y),
+				static_cast<std::uint8_t>(m_HudColor.z)};
 
 		default:
-		case Action::Reset: return RGB_HUD_COLOR;
+		case Action::Reset:
+			return RGB_HUD_COLOR;
 		}
 	}();
 

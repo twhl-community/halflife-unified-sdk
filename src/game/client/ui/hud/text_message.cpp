@@ -30,7 +30,7 @@
 
 DECLARE_MESSAGE(m_TextMessage, TextMsg);
 
-int CHudTextMessage::Init()
+bool CHudTextMessage::Init()
 {
 	HOOK_MESSAGE(TextMsg);
 
@@ -38,7 +38,7 @@ int CHudTextMessage::Init()
 
 	Reset();
 
-	return 1;
+	return true;
 };
 
 // Searches through the string for any msg names (indicated by a '#')
@@ -53,7 +53,7 @@ char* CHudTextMessage::LocaliseTextString(const char* msg, char* dst_buffer, int
 		{
 			// cut msg name out of string
 			static char word_buf[255];
-			char* wdst = word_buf, * word_start = src;
+			char *wdst = word_buf, *word_start = src;
 			for (++src; (*src >= 'A' && *src <= 'z') || (*src >= '0' && *src <= '9'); wdst++, src++)
 			{
 				*wdst = *src;
@@ -116,14 +116,14 @@ const char* CHudTextMessage::LookupString(const char* msg, int* msg_dest)
 		{
 			// check to see if titles.txt info overrides msg destination
 			// if clmsg->effect is less than 0, then clmsg->effect holds -1 * message_destination
-			if (clmsg->effect < 0)  // 
+			if (clmsg->effect < 0) //
 				*msg_dest = -clmsg->effect;
 		}
 
 		return clmsg->pMessage;
 	}
 	else
-	{  // nothing special about this message, so just return the same string
+	{ // nothing special about this message, so just return the same string
 		return msg;
 	}
 }
@@ -157,7 +157,7 @@ char* ConvertCRtoNL(char* str)
 //   string: message parameter 4
 // any string that starts with the character '#' is a message name, and is used to look up the real message in titles.txt
 // the next (optional) one to four strings are parameters for that string (which can also be message names if they begin with '#')
-int CHudTextMessage::MsgFunc_TextMsg(const char* pszName, int iSize, void* pbuf)
+bool CHudTextMessage::MsgFunc_TextMsg(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 
@@ -171,7 +171,7 @@ int CHudTextMessage::MsgFunc_TextMsg(const char* pszName, int iSize, void* pbuf)
 	// keep reading strings and using C format strings for subsituting the strings into the localised text string
 	const char* tempsstr1 = LookupString(READ_STRING());
 	char* sstr1 = safe_strcpy(szBuf[1], tempsstr1, MSG_BUF_SIZE);
-	StripEndNewlineFromString(sstr1);  // these strings are meant for subsitution into the main strings, so cull the automatic end newlines
+	StripEndNewlineFromString(sstr1); // these strings are meant for subsitution into the main strings, so cull the automatic end newlines
 	const char* tempsstr2 = LookupString(READ_STRING());
 	char* sstr2 = safe_strcpy(szBuf[2], tempsstr2, MSG_BUF_SIZE);
 	StripEndNewlineFromString(sstr2);
@@ -183,8 +183,8 @@ int CHudTextMessage::MsgFunc_TextMsg(const char* pszName, int iSize, void* pbuf)
 	StripEndNewlineFromString(sstr4);
 	char* psz = szBuf[5];
 
-	if (gViewPort && gViewPort->AllowedToPrintText() == FALSE)
-		return 1;
+	if (gViewPort && !gViewPort->AllowedToPrintText())
+		return true;
 
 	switch (msg_dest)
 	{
@@ -194,7 +194,7 @@ int CHudTextMessage::MsgFunc_TextMsg(const char* pszName, int iSize, void* pbuf)
 		break;
 
 	case HUD_PRINTNOTIFY:
-		psz[0] = 1;  // mark this message to go into the notify buffer
+		psz[0] = 1; // mark this message to go into the notify buffer
 		safe_sprintf(psz + 1, MSG_BUF_SIZE, msg_text, sstr1, sstr2, sstr3, sstr4);
 		ConsolePrint(ConvertCRtoNL(psz));
 		break;
@@ -210,5 +210,5 @@ int CHudTextMessage::MsgFunc_TextMsg(const char* pszName, int iSize, void* pbuf)
 		break;
 	}
 
-	return 1;
+	return true;
 }

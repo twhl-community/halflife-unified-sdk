@@ -32,8 +32,8 @@ const int AE_GENEWORM_HIT_WALL = 9;
 class COFGeneWormCloud : public CBaseEntity
 {
 public:
-	int	Save(CSave& save) override;
-	int Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
 	int Classify() override { return CLASS_NONE; }
@@ -56,24 +56,24 @@ public:
 	float m_lastTime;
 	float m_maxFrame;
 
-	BOOL m_bLaunched;
+	bool m_bLaunched;
 
 	float m_fadeScale;
 	float m_fadeRender;
 	float m_damageTimer;
 
-	BOOL m_fSinking;
+	bool m_fSinking;
 };
 
-TYPEDESCRIPTION	COFGeneWormCloud::m_SaveData[] =
-{
-	DEFINE_FIELD(COFGeneWormCloud, m_lastTime, FIELD_FLOAT),
-	DEFINE_FIELD(COFGeneWormCloud, m_maxFrame, FIELD_FLOAT),
-	DEFINE_FIELD(COFGeneWormCloud, m_bLaunched, FIELD_BOOLEAN),
-	DEFINE_FIELD(COFGeneWormCloud, m_fadeScale, FIELD_FLOAT),
-	DEFINE_FIELD(COFGeneWormCloud, m_fadeRender, FIELD_FLOAT),
-	DEFINE_FIELD(COFGeneWormCloud, m_damageTimer, FIELD_FLOAT),
-	DEFINE_FIELD(COFGeneWormCloud, m_fSinking, FIELD_BOOLEAN),
+TYPEDESCRIPTION COFGeneWormCloud::m_SaveData[] =
+	{
+		DEFINE_FIELD(COFGeneWormCloud, m_lastTime, FIELD_FLOAT),
+		DEFINE_FIELD(COFGeneWormCloud, m_maxFrame, FIELD_FLOAT),
+		DEFINE_FIELD(COFGeneWormCloud, m_bLaunched, FIELD_BOOLEAN),
+		DEFINE_FIELD(COFGeneWormCloud, m_fadeScale, FIELD_FLOAT),
+		DEFINE_FIELD(COFGeneWormCloud, m_fadeRender, FIELD_FLOAT),
+		DEFINE_FIELD(COFGeneWormCloud, m_damageTimer, FIELD_FLOAT),
+		DEFINE_FIELD(COFGeneWormCloud, m_fSinking, FIELD_BOOLEAN),
 };
 
 IMPLEMENT_SAVERESTORE(COFGeneWormCloud, CBaseEntity);
@@ -102,7 +102,7 @@ void COFGeneWormCloud::Spawn()
 
 	m_maxFrame = MODEL_FRAMES(pev->modelindex) - 1;
 
-	if (pev->angles.y && !pev->angles.z)
+	if (0 != pev->angles.y && 0 == pev->angles.z)
 	{
 		pev->angles.z = pev->angles.y;
 		pev->angles.y = 0;
@@ -127,8 +127,7 @@ void COFGeneWormCloud::GeneWormCloudThink()
 
 void COFGeneWormCloud::GeneWormCloudTouch(CBaseEntity* pOther)
 {
-	if ((!pev->owner || pOther->pev->modelindex != pev->owner->v.modelindex)
-		&& pev->modelindex != pOther->pev->modelindex)
+	if ((!pev->owner || pOther->pev->modelindex != pev->owner->v.modelindex) && pev->modelindex != pOther->pev->modelindex)
 	{
 		if (pOther->pev->takedamage != DAMAGE_NO)
 		{
@@ -173,7 +172,7 @@ void COFGeneWormCloud::TurnOn()
 {
 	pev->effects = 0;
 
-	if (pev->framerate != 0 && m_maxFrame > 1.0 || pev->spawnflags & 2)
+	if (pev->framerate != 0 && m_maxFrame > 1.0 || (pev->spawnflags & 2) != 0)
 	{
 		SetThink(&COFGeneWormCloud::GeneWormCloudThink);
 		pev->nextthink = gpGlobals->time;
@@ -229,8 +228,8 @@ const auto GENEWORM_SPAWN_BEAM_COUNT = 8;
 class COFGeneWormSpawn : public CBaseEntity
 {
 public:
-	int	Save(CSave& save) override;
-	int Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
 	void Precache() override;
@@ -255,26 +254,26 @@ public:
 	float m_flBirthTime;
 	float m_flWarpTime;
 
-	BOOL m_bLaunched;
-	BOOL m_bWarping;
-	BOOL m_bTrooperDropped;
+	bool m_bLaunched;
+	bool m_bWarping;
+	bool m_bTrooperDropped;
 
 	CBeam* m_pBeam[GENEWORM_SPAWN_BEAM_COUNT];
 
 	int m_iBeams;
 };
 
-TYPEDESCRIPTION	COFGeneWormSpawn::m_SaveData[] =
-{
-	DEFINE_FIELD(COFGeneWormSpawn, m_lastTime, FIELD_FLOAT),
-	DEFINE_FIELD(COFGeneWormSpawn, m_maxFrame, FIELD_FLOAT),
-	DEFINE_FIELD(COFGeneWormSpawn, m_flBirthTime, FIELD_FLOAT),
-	DEFINE_FIELD(COFGeneWormSpawn, m_flWarpTime, FIELD_FLOAT),
-	DEFINE_FIELD(COFGeneWormSpawn, m_bLaunched, FIELD_BOOLEAN),
-	DEFINE_FIELD(COFGeneWormSpawn, m_bWarping, FIELD_BOOLEAN),
-	DEFINE_FIELD(COFGeneWormSpawn, m_bTrooperDropped, FIELD_BOOLEAN),
-	DEFINE_ARRAY(COFGeneWormSpawn, m_pBeam, FIELD_CLASSPTR, GENEWORM_SPAWN_BEAM_COUNT),
-	DEFINE_FIELD(COFGeneWormSpawn, m_iBeams, FIELD_INTEGER),
+TYPEDESCRIPTION COFGeneWormSpawn::m_SaveData[] =
+	{
+		DEFINE_FIELD(COFGeneWormSpawn, m_lastTime, FIELD_FLOAT),
+		DEFINE_FIELD(COFGeneWormSpawn, m_maxFrame, FIELD_FLOAT),
+		DEFINE_FIELD(COFGeneWormSpawn, m_flBirthTime, FIELD_FLOAT),
+		DEFINE_FIELD(COFGeneWormSpawn, m_flWarpTime, FIELD_FLOAT),
+		DEFINE_FIELD(COFGeneWormSpawn, m_bLaunched, FIELD_BOOLEAN),
+		DEFINE_FIELD(COFGeneWormSpawn, m_bWarping, FIELD_BOOLEAN),
+		DEFINE_FIELD(COFGeneWormSpawn, m_bTrooperDropped, FIELD_BOOLEAN),
+		DEFINE_ARRAY(COFGeneWormSpawn, m_pBeam, FIELD_CLASSPTR, GENEWORM_SPAWN_BEAM_COUNT),
+		DEFINE_FIELD(COFGeneWormSpawn, m_iBeams, FIELD_INTEGER),
 };
 
 IMPLEMENT_SAVERESTORE(COFGeneWormSpawn, CBaseEntity);
@@ -441,7 +440,7 @@ void COFGeneWormSpawn::TurnOn()
 {
 	pev->effects = 0;
 
-	if (pev->framerate != 0 && m_maxFrame > 1.0 || pev->spawnflags & 2)
+	if (pev->framerate != 0 && m_maxFrame > 1.0 || (pev->spawnflags & 2) != 0)
 	{
 		SetThink(&COFGeneWormSpawn::GeneWormSpawnThink);
 		pev->nextthink = gpGlobals->time;
@@ -554,8 +553,8 @@ int iGeneWormSpitSprite;
 class COFGeneWorm : public CBaseMonster
 {
 public:
-	int	Save(CSave& save) override;
-	int Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
 	int Classify() override { return CLASS_ALIEN_MONSTER; }
@@ -574,7 +573,7 @@ public:
 	void Precache() override;
 	void Spawn() override;
 
-	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 
 	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
 
@@ -583,9 +582,9 @@ public:
 		CBaseMonster::Killed(pevAttacker, iGib);
 	}
 
-	BOOL FVisible(CBaseEntity* pEntity) override;
+	bool FVisible(CBaseEntity* pEntity) override;
 
-	BOOL FVisible(const Vector& vecOrigin) override;
+	bool FVisible(const Vector& vecOrigin) override;
 
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 
@@ -603,7 +602,7 @@ public:
 
 	void NextActivity();
 
-	BOOL ClawAttack();
+	bool ClawAttack();
 
 	void SpewCloud();
 
@@ -626,15 +625,15 @@ public:
 	float m_flNextMeleeTime;
 	float m_flNextRangeTime;
 
-	BOOL m_fRightEyeHit;
-	BOOL m_fLeftEyeHit;
-	BOOL m_fGetMad;
+	bool m_fRightEyeHit;
+	bool m_fLeftEyeHit;
+	bool m_fGetMad;
 
-	BOOL m_fOrificeHit;
+	bool m_fOrificeHit;
 	float m_flOrificeOpenTime;
 	COFGeneWormSpawn* m_orificeGlow;
 
-	BOOL m_fSpawningTrooper;
+	bool m_fSpawningTrooper;
 	float m_flSpawnTrooperTime;
 
 	int m_iHitTimes;
@@ -648,44 +647,44 @@ public:
 	float m_flBeamExpireTime;
 	float m_flBeamDir;
 
-	BOOL m_fSpitting;
+	bool m_fSpitting;
 	float m_flSpitStartTime;
 
-	BOOL m_fActivated;
+	bool m_fActivated;
 	float m_flDeathStart;
-	BOOL m_fHasEntered;
+	bool m_fHasEntered;
 
 	float m_flMadDelayTime;
 };
 
-TYPEDESCRIPTION	COFGeneWorm::m_SaveData[] =
-{
-	DEFINE_FIELD(COFGeneWorm, m_flNextPainSound, FIELD_TIME),
-	DEFINE_FIELD(COFGeneWorm, m_posTarget, FIELD_POSITION_VECTOR),
-	DEFINE_FIELD(COFGeneWorm, m_flLastSeen, FIELD_TIME),
-	DEFINE_FIELD(COFGeneWorm, m_flPrevSeen, FIELD_TIME),
-	DEFINE_FIELD(COFGeneWorm, m_pCloud, FIELD_CLASSPTR),
-	DEFINE_FIELD(COFGeneWorm, m_iWasHit, FIELD_INTEGER),
-	DEFINE_FIELD(COFGeneWorm, m_flTakeHitTime, FIELD_FLOAT),
-	DEFINE_FIELD(COFGeneWorm, m_flHitTime, FIELD_FLOAT),
-	DEFINE_FIELD(COFGeneWorm, m_flNextMeleeTime, FIELD_FLOAT),
-	DEFINE_FIELD(COFGeneWorm, m_flNextRangeTime, FIELD_FLOAT),
-	DEFINE_FIELD(COFGeneWorm, m_fRightEyeHit, FIELD_BOOLEAN),
-	DEFINE_FIELD(COFGeneWorm, m_fLeftEyeHit, FIELD_BOOLEAN),
-	DEFINE_FIELD(COFGeneWorm, m_fGetMad, FIELD_BOOLEAN),
-	DEFINE_FIELD(COFGeneWorm, m_fOrificeHit, FIELD_BOOLEAN),
-	DEFINE_FIELD(COFGeneWorm, m_flOrificeOpenTime, FIELD_FLOAT),
-	DEFINE_FIELD(COFGeneWorm, m_orificeGlow, FIELD_CLASSPTR),
-	DEFINE_FIELD(COFGeneWorm, m_fSpawningTrooper, FIELD_BOOLEAN),
-	DEFINE_FIELD(COFGeneWorm, m_flSpawnTrooperTime, FIELD_FLOAT),
-	DEFINE_FIELD(COFGeneWorm, m_iHitTimes, FIELD_INTEGER),
-	DEFINE_FIELD(COFGeneWorm, m_iMaxHitTimes, FIELD_INTEGER),
-	DEFINE_FIELD(COFGeneWorm, m_fSpitting, FIELD_BOOLEAN),
-	DEFINE_FIELD(COFGeneWorm, m_flSpitStartTime, FIELD_TIME),
-	DEFINE_FIELD(COFGeneWorm, m_fActivated, FIELD_BOOLEAN),
-	DEFINE_FIELD(COFGeneWorm, m_flDeathStart, FIELD_TIME),
-	DEFINE_FIELD(COFGeneWorm, m_fHasEntered, FIELD_BOOLEAN),
-	DEFINE_FIELD(COFGeneWorm, m_flMadDelayTime, FIELD_FLOAT),
+TYPEDESCRIPTION COFGeneWorm::m_SaveData[] =
+	{
+		DEFINE_FIELD(COFGeneWorm, m_flNextPainSound, FIELD_TIME),
+		DEFINE_FIELD(COFGeneWorm, m_posTarget, FIELD_POSITION_VECTOR),
+		DEFINE_FIELD(COFGeneWorm, m_flLastSeen, FIELD_TIME),
+		DEFINE_FIELD(COFGeneWorm, m_flPrevSeen, FIELD_TIME),
+		DEFINE_FIELD(COFGeneWorm, m_pCloud, FIELD_CLASSPTR),
+		DEFINE_FIELD(COFGeneWorm, m_iWasHit, FIELD_INTEGER),
+		DEFINE_FIELD(COFGeneWorm, m_flTakeHitTime, FIELD_FLOAT),
+		DEFINE_FIELD(COFGeneWorm, m_flHitTime, FIELD_FLOAT),
+		DEFINE_FIELD(COFGeneWorm, m_flNextMeleeTime, FIELD_FLOAT),
+		DEFINE_FIELD(COFGeneWorm, m_flNextRangeTime, FIELD_FLOAT),
+		DEFINE_FIELD(COFGeneWorm, m_fRightEyeHit, FIELD_BOOLEAN),
+		DEFINE_FIELD(COFGeneWorm, m_fLeftEyeHit, FIELD_BOOLEAN),
+		DEFINE_FIELD(COFGeneWorm, m_fGetMad, FIELD_BOOLEAN),
+		DEFINE_FIELD(COFGeneWorm, m_fOrificeHit, FIELD_BOOLEAN),
+		DEFINE_FIELD(COFGeneWorm, m_flOrificeOpenTime, FIELD_FLOAT),
+		DEFINE_FIELD(COFGeneWorm, m_orificeGlow, FIELD_CLASSPTR),
+		DEFINE_FIELD(COFGeneWorm, m_fSpawningTrooper, FIELD_BOOLEAN),
+		DEFINE_FIELD(COFGeneWorm, m_flSpawnTrooperTime, FIELD_FLOAT),
+		DEFINE_FIELD(COFGeneWorm, m_iHitTimes, FIELD_INTEGER),
+		DEFINE_FIELD(COFGeneWorm, m_iMaxHitTimes, FIELD_INTEGER),
+		DEFINE_FIELD(COFGeneWorm, m_fSpitting, FIELD_BOOLEAN),
+		DEFINE_FIELD(COFGeneWorm, m_flSpitStartTime, FIELD_TIME),
+		DEFINE_FIELD(COFGeneWorm, m_fActivated, FIELD_BOOLEAN),
+		DEFINE_FIELD(COFGeneWorm, m_flDeathStart, FIELD_TIME),
+		DEFINE_FIELD(COFGeneWorm, m_fHasEntered, FIELD_BOOLEAN),
+		DEFINE_FIELD(COFGeneWorm, m_flMadDelayTime, FIELD_FLOAT),
 };
 
 IMPLEMENT_SAVERESTORE(COFGeneWorm, CBaseMonster);
@@ -693,17 +692,15 @@ IMPLEMENT_SAVERESTORE(COFGeneWorm, CBaseMonster);
 LINK_ENTITY_TO_CLASS(monster_geneworm, COFGeneWorm);
 
 const char* COFGeneWorm::pIdleSounds[] =
-{
-	"geneworm/geneworm_idle1.wav",
-	"geneworm/geneworm_idle2.wav",
-	"geneworm/geneworm_idle3.wav",
-	"geneworm/geneworm_idle4.wav"
-};
+	{
+		"geneworm/geneworm_idle1.wav",
+		"geneworm/geneworm_idle2.wav",
+		"geneworm/geneworm_idle3.wav",
+		"geneworm/geneworm_idle4.wav"};
 
 const char* COFGeneWorm::pSpawnSounds[] =
-{
-	"debris/beamstart7.wav"
-};
+	{
+		"debris/beamstart7.wav"};
 
 void COFGeneWorm::Precache()
 {
@@ -947,7 +944,7 @@ void COFGeneWorm::HuntThink()
 
 		ResetSequenceInfo();
 
-		m_iWasHit = false;
+		m_iWasHit = 0;
 	}
 
 	if (!m_fRightEyeHit)
@@ -1173,19 +1170,22 @@ void COFGeneWorm::HitTouch(CBaseEntity* pOther)
 {
 	auto tr = UTIL_GetGlobalTrace();
 
-	if (pOther->pev->modelindex != pev->modelindex
-		&& m_flHitTime <= gpGlobals->time
-		&& tr.pHit
-		&& pev->modelindex == tr.pHit->v.modelindex)
+	if (pOther->pev->modelindex != pev->modelindex && m_flHitTime <= gpGlobals->time && tr.pHit && pev->modelindex == tr.pHit->v.modelindex)
 	{
 		m_flHitTime = gpGlobals->time + 0.5;
 
 		//Apply damage to to the toucher based on what was hit
 		switch (tr.iHitgroup)
 		{
-		case 1: pOther->TakeDamage(pev, pev, 10, DMG_CRUSH | DMG_SLASH); break;
-		case 2: pOther->TakeDamage(pev, pev, 15, DMG_CRUSH | DMG_SLASH); break;
-		case 3: pOther->TakeDamage(pev, pev, 20, DMG_CRUSH | DMG_SLASH); break;
+		case 1:
+			pOther->TakeDamage(pev, pev, 10, DMG_CRUSH | DMG_SLASH);
+			break;
+		case 2:
+			pOther->TakeDamage(pev, pev, 15, DMG_CRUSH | DMG_SLASH);
+			break;
+		case 3:
+			pOther->TakeDamage(pev, pev, 20, DMG_CRUSH | DMG_SLASH);
+			break;
 
 		default:
 			pOther->TakeDamage(pev, pev, pOther->pev->health, DMG_CRUSH | DMG_SLASH);
@@ -1235,7 +1235,7 @@ void COFGeneWorm::NextActivity()
 			m_hEnemy = nullptr;
 	}
 
-	if (gpGlobals->time > m_flLastSeen + 15.0 && m_hEnemy && (pev->origin - m_hEnemy->pev->origin).Length2D() > 700.0)
+	if (gpGlobals->time > m_flLastSeen + 15.0 && nullptr != m_hEnemy && (pev->origin - m_hEnemy->pev->origin).Length2D() > 700.0)
 	{
 		m_hEnemy = nullptr;
 	}
@@ -1284,11 +1284,7 @@ void COFGeneWorm::NextActivity()
 		if (ClawAttack())
 			return;
 
-		if (m_iHitTimes > 1
-			&& gpGlobals->time > m_flMadDelayTime
-			&& !RANDOM_LONG(0, m_iMaxHitTimes - m_iHitTimes)
-			&& m_hEnemy
-			&& FVisible(m_hEnemy))
+		if (m_iHitTimes > 1 && gpGlobals->time > m_flMadDelayTime && !RANDOM_LONG(0, m_iMaxHitTimes - m_iHitTimes) && m_hEnemy && FVisible(m_hEnemy))
 		{
 			pev->sequence = LookupSequence("mad");
 			m_flMadDelayTime = gpGlobals->time + 15.0;
@@ -1298,16 +1294,23 @@ void COFGeneWorm::NextActivity()
 
 	switch (m_iHitTimes)
 	{
-	case 0: pev->sequence = LookupSequence("idlepain"); break;
-	case 1: pev->sequence = LookupSequence("idlepain2"); break;
-	case 2: pev->sequence = LookupSequence("idlepain3"); break;
-	default: break;
+	case 0:
+		pev->sequence = LookupSequence("idlepain");
+		break;
+	case 1:
+		pev->sequence = LookupSequence("idlepain2");
+		break;
+	case 2:
+		pev->sequence = LookupSequence("idlepain3");
+		break;
+	default:
+		break;
 	}
 
 	EMIT_SOUND_DYN(edict(), CHAN_BODY, pIdleSounds[RANDOM_LONG(0, ARRAYSIZE(pIdleSounds) - 1)], VOL_NORM, 0.1, 0, RANDOM_LONG(-5, 5) + 100);
 }
 
-BOOL COFGeneWorm::ClawAttack()
+bool COFGeneWorm::ClawAttack()
 {
 	auto pEnemy = m_hEnemy.Entity<CBaseEntity>();
 
@@ -1376,7 +1379,7 @@ BOOL COFGeneWorm::ClawAttack()
 	return false;
 }
 
-int COFGeneWorm::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool COFGeneWorm::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
 	//Never actually die
 	if (flDamage >= pev->health)
@@ -1393,7 +1396,7 @@ int COFGeneWorm::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, flo
 
 void COFGeneWorm::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
 {
-	const auto isLaser = !strcmp("env_laser", STRING(pevAttacker->classname));
+	const auto isLaser = 0 == strcmp("env_laser", STRING(pevAttacker->classname));
 
 	if (ptr->iHitgroup != 4 && ptr->iHitgroup != 5 && ptr->iHitgroup != 6)
 	{
@@ -1403,7 +1406,7 @@ void COFGeneWorm::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vec
 			{
 				UTIL_Sparks(ptr->vecEndPos);
 			}
-			else if (bitsDamageType & DMG_BULLET)
+			else if ((bitsDamageType & DMG_BULLET) != 0)
 			{
 				UTIL_Ricochet(ptr->vecEndPos, RANDOM_FLOAT(1, 2));
 			}
@@ -1425,7 +1428,7 @@ void COFGeneWorm::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vec
 		{
 			if (gpGlobals->time != pev->dmgtime || RANDOM_LONG(0, 10) <= 0)
 			{
-				if (bitsDamageType & DMG_BULLET)
+				if ((bitsDamageType & DMG_BULLET) != 0)
 				{
 					UTIL_Ricochet(ptr->vecEndPos, RANDOM_FLOAT(1, 2));
 				}
@@ -1456,7 +1459,7 @@ void COFGeneWorm::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vec
 	{
 		if (!m_fLeftEyeHit)
 		{
-			if (!strcmp("left_eye_laser", STRING(pevAttacker->targetname)))
+			if (0 == strcmp("left_eye_laser", STRING(pevAttacker->targetname)))
 			{
 				m_fLeftEyeHit = true;
 
@@ -1471,7 +1474,7 @@ void COFGeneWorm::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vec
 					m_fGetMad = true;
 				}
 
-				m_iWasHit = true;
+				m_iWasHit = 1;
 
 				if (m_bloodColor != DONT_BLEED)
 				{
@@ -1490,7 +1493,7 @@ void COFGeneWorm::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vec
 	{
 		if (!m_fRightEyeHit)
 		{
-			if (!strcmp("right_eye_laser", STRING(pevAttacker->targetname)))
+			if (0 == strcmp("right_eye_laser", STRING(pevAttacker->targetname)))
 			{
 				m_fRightEyeHit = true;
 
@@ -1505,7 +1508,7 @@ void COFGeneWorm::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vec
 					pev->skin = 2;
 				}
 
-				m_iWasHit = true;
+				m_iWasHit = 1;
 
 				if (m_bloodColor != DONT_BLEED)
 				{
@@ -1548,15 +1551,16 @@ void COFGeneWorm::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vec
 		break;
 	}
 
-	default: break;
+	default:
+		break;
 	}
 }
 
-BOOL COFGeneWorm::FVisible(CBaseEntity* pEntity)
+bool COFGeneWorm::FVisible(CBaseEntity* pEntity)
 {
-	if (!(pEntity->pev->flags & FL_NOTARGET))
+	if ((pEntity->pev->flags & FL_NOTARGET) == 0)
 	{
-		if ((pev->waterlevel != 3 && pEntity->pev->waterlevel != 3) || pEntity->pev->waterlevel)
+		if ((pev->waterlevel != 3 && pEntity->pev->waterlevel != 3) || 0 != pEntity->pev->waterlevel)
 		{
 			return FVisible(pEntity->EyePosition());
 		}
@@ -1565,7 +1569,7 @@ BOOL COFGeneWorm::FVisible(CBaseEntity* pEntity)
 	return false;
 }
 
-BOOL COFGeneWorm::FVisible(const Vector& vecOrigin)
+bool COFGeneWorm::FVisible(const Vector& vecOrigin)
 {
 	Vector vecLookerOrigin, vecLookerAngle;
 	GetAttachment(0, vecLookerOrigin, vecLookerAngle);
@@ -1593,10 +1597,7 @@ void FireHurtTargets(const char* targetName, CBaseEntity* pActivator, CBaseEntit
 		CBaseEntity* pTarget = CBaseEntity::Instance(pentTarget);
 
 		//Fire only those targets that were toggled by the last hurt event
-		if (pTarget
-			&& !(useType == USE_OFF && pTarget->pev->solid == SOLID_NOT)
-			&& !(useType == USE_ON && pTarget->pev->solid == SOLID_TRIGGER)
-			&& !(pTarget->pev->flags & FL_KILLME))	// Don't use dying ents
+		if (pTarget && !(useType == USE_OFF && pTarget->pev->solid == SOLID_NOT) && !(useType == USE_ON && pTarget->pev->solid == SOLID_TRIGGER) && (pTarget->pev->flags & FL_KILLME) == 0) // Don't use dying ents
 		{
 			ALERT(at_aiconsole, "Found: %s, firing (%s)\n", STRING(pTarget->pev->classname), targetName);
 			pTarget->Use(pActivator, pCaller, useType, value);
@@ -1657,7 +1658,8 @@ void COFGeneWorm::HandleAnimEvent(MonsterEvent_t* pEvent)
 		UTIL_ScreenShake(pev->origin, 24, 3, 5, 2048);
 		break;
 
-	default: break;
+	default:
+		break;
 	}
 }
 

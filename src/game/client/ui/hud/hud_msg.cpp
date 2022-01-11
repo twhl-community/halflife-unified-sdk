@@ -29,21 +29,14 @@ extern IParticleMan* g_pParticleMan;
 
 extern int giTeamplay;
 
-#define MAX_CLIENTS 32
-
-#if !defined( _TFC )
 extern BEAM* pBeam;
 extern BEAM* pBeam2;
-extern TEMPENTITY* pFlare;	// Vit_amiN
-#endif 
+extern TEMPENTITY* pFlare; // Vit_amiN
 
-#if defined( _TFC )
-void ClearEventList();
-#endif
 
 /// USER-DEFINED SERVER MESSAGE HANDLERS
 
-int CHud::MsgFunc_ResetHUD(const char* pszName, int iSize, void* pbuf)
+bool CHud::MsgFunc_ResetHUD(const char* pszName, int iSize, void* pbuf)
 {
 	ASSERT(iSize == 0);
 
@@ -57,13 +50,16 @@ int CHud::MsgFunc_ResetHUD(const char* pszName, int iSize, void* pbuf)
 		pList = pList->pNext;
 	}
 
+	//Reset weapon bits.
+	m_iWeaponBits = 0ULL;
+
 	// reset sensitivity
 	m_flMouseSensitivity = 0;
 
 	// reset concussion effect
 	m_iConcussionEffect = 0;
 
-	return 1;
+	return true;
 }
 
 void CAM_ToFirstPerson();
@@ -85,25 +81,18 @@ void CHud::MsgFunc_InitHUD(const char* pszName, int iSize, void* pbuf)
 		pList = pList->pNext;
 	}
 
-#if defined( _TFC )
-	ClearEventList();
 
-	// catch up on any building events that are going on
-	gEngfuncs.pfnServerCmd("sendevents");
-#endif
-
+	//TODO: needs to be called on every map change, not just when starting a new game
 	if (g_pParticleMan)
 		g_pParticleMan->ResetParticles();
 
-#if !defined( _TFC )
 	//Probably not a good place to put this.
 	pBeam = pBeam2 = NULL;
-	pFlare = NULL;	// Vit_amiN: clear egon's beam flare
-#endif
+	pFlare = NULL; // Vit_amiN: clear egon's beam flare
 }
 
 
-int CHud::MsgFunc_GameMode(const char* pszName, int iSize, void* pbuf)
+bool CHud::MsgFunc_GameMode(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 	m_Teamplay = giTeamplay = READ_BYTE();
@@ -119,16 +108,16 @@ int CHud::MsgFunc_GameMode(const char* pszName, int iSize, void* pbuf)
 		}
 	}
 
-	return 1;
+	return true;
 }
 
 
-int CHud::MsgFunc_Damage(const char* pszName, int iSize, void* pbuf)
+bool CHud::MsgFunc_Damage(const char* pszName, int iSize, void* pbuf)
 {
-	int		armor, blood;
-	Vector	from;
-	int		i;
-	float	count;
+	int armor, blood;
+	Vector from;
+	int i;
+	float count;
 
 	BEGIN_READ(pbuf, iSize);
 	armor = READ_BYTE();
@@ -144,18 +133,30 @@ int CHud::MsgFunc_Damage(const char* pszName, int iSize, void* pbuf)
 
 	// TODO: kick viewangles,  show damage visually
 
-	return 1;
+	return true;
 }
 
-int CHud::MsgFunc_Concuss(const char* pszName, int iSize, void* pbuf)
+bool CHud::MsgFunc_Concuss(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 	m_iConcussionEffect = READ_BYTE();
-	if (m_iConcussionEffect)
+	if (0 != m_iConcussionEffect)
 	{
 		this->m_StatusIcons.EnableIcon("dmg_concuss", gHUD.m_HudColor);
 	}
 	else
 		this->m_StatusIcons.DisableIcon("dmg_concuss");
-	return 1;
+	return true;
+}
+
+bool CHud::MsgFunc_Weapons(const char* pszName, int iSize, void* pbuf)
+{
+	BEGIN_READ(pbuf, iSize);
+
+	const std::uint64_t lowerBits = READ_LONG();
+	const std::uint64_t upperBits = READ_LONG();
+
+	m_iWeaponBits = lowerBits | (upperBits << 32ULL);
+
+	return true;
 }

@@ -1,15 +1,11 @@
 //========= Copyright © 1996-2002, Valve LLC, All rights reserved. ============
 //
-// Purpose: 
+// Purpose:
 //
 // $NoKeywords: $
 //=============================================================================
 
-#if !defined( GAMESTUDIOMODELRENDERER_H )
-#define GAMESTUDIOMODELRENDERER_H
-#if defined( _WIN32 )
 #pragma once
-#endif
 
 /*
 ====================
@@ -22,5 +18,3 @@ class CGameStudioModelRenderer : public CStudioModelRenderer
 public:
 	CGameStudioModelRenderer();
 };
-
-#endif // GAMESTUDIOMODELRENDERER_H

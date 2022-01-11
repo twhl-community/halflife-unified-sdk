@@ -15,39 +15,28 @@
 //
 // teamplay_gamerules.cpp
 //
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"player.h"
-#include	"weapons.h"
-#include	"gamerules.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "player.h"
+#include "weapons.h"
+#include "gamerules.h"
 
-#include	"skill.h"
-#include	"game.h"
-#include	"items.h"
-#include	"voice_gamemgr.h"
-#include	"hltv.h"
+#include "skill.h"
+#include "game.h"
+#include "items.h"
+#include "voice_gamemgr.h"
+#include "hltv.h"
 #include "UserMessages.h"
 
 #include "ctfplay_gamerules.h"
 
-#if !defined ( _WIN32 )
-#include <ctype.h>
-#endif
-
-extern DLL_GLOBAL CGameRules* g_pGameRules;
-extern DLL_GLOBAL BOOL	g_fGameOver;
-
-extern int g_teamplay;
-
-float g_flIntermissionStartTime = 0;
-
-CVoiceGameMgr	g_VoiceGameMgr;
+CVoiceGameMgr g_VoiceGameMgr;
 
 class CMultiplayGameMgrHelper : public IVoiceGameMgrHelper
 {
 public:
-	bool		CanPlayerHearPlayer(CBasePlayer* pListener, CBasePlayer* pTalker) override
+	bool CanPlayerHearPlayer(CBasePlayer* pListener, CBasePlayer* pTalker) override
 	{
 		if (g_teamplay)
 		{
@@ -71,11 +60,9 @@ CHalfLifeMultiplay::CHalfLifeMultiplay()
 	g_VoiceGameMgr.Init(&g_GameMgrHelper, gpGlobals->maxClients);
 
 	RefreshSkillData();
-	m_flIntermissionEndTime = 0;
-	g_flIntermissionStartTime = 0;
 
 	// 11/8/98
-	// Modified by YWB:  Server .cfg file is now a cvar, so that 
+	// Modified by YWB:  Server .cfg file is now a cvar, so that
 	//  server ops can run multiple game servers, with different server .cfg files,
 	//  from a single installed directory.
 	// Mapcyclefile is already a cvar.
@@ -83,7 +70,7 @@ CHalfLifeMultiplay::CHalfLifeMultiplay()
 	// 3/31/99
 	// Added lservercfg file cvar, since listen and dedicated servers should not
 	// share a single config file. (sjb)
-	
+
 	// This has been deprecated and replaced with JSON-based config files.
 	// See CServerLibrary::LoadServerConfigFiles
 	/*
@@ -108,10 +95,10 @@ CHalfLifeMultiplay::CHalfLifeMultiplay()
 	*/
 }
 
-BOOL CHalfLifeMultiplay::ClientCommand(CBasePlayer* pPlayer, const char* pcmd)
+bool CHalfLifeMultiplay::ClientCommand(CBasePlayer* pPlayer, const char* pcmd)
 {
 	if (g_VoiceGameMgr.ClientCommand(pPlayer, pcmd))
-		return TRUE;
+		return true;
 
 	return CGameRules::ClientCommand(pPlayer, pcmd);
 }
@@ -130,7 +117,7 @@ void CHalfLifeMultiplay::RefreshSkillData()
 
 	// override some values for multiplay.
 
-		// suitcharger
+	// suitcharger
 	gSkillData.suitchargerCapacity = 30;
 
 	// Crowbar whack
@@ -149,7 +136,7 @@ void CHalfLifeMultiplay::RefreshSkillData()
 	gSkillData.plrDmgM203Grenade = 100;
 
 	// Shotgun buckshot
-	gSkillData.plrDmgBuckshot = 20;// fewer pellets in deathmatch
+	gSkillData.plrDmgBuckshot = 20; // fewer pellets in deathmatch
 
 	// Crossbow
 	gSkillData.plrDmgCrossbowClient = 20;
@@ -175,11 +162,7 @@ void CHalfLifeMultiplay::RefreshSkillData()
 }
 
 // longest the intermission can last, in seconds
-#define MAX_INTERMISSION_TIME		120
-
-extern cvar_t timeleft, fragsleft;
-
-extern cvar_t mp_chattime;
+#define MAX_INTERMISSION_TIME 120
 
 //=========================================================
 //=========================================================
@@ -194,7 +177,7 @@ void CHalfLifeMultiplay::Think()
 	int frags_remaining = 0;
 	int time_remaining = 0;
 
-	if (g_fGameOver)   // someone else quit the game already
+	if (g_fGameOver) // someone else quit the game already
 	{
 		// bounds check
 		int time = (int)CVAR_GET_FLOAT("mp_chattime");
@@ -203,13 +186,13 @@ void CHalfLifeMultiplay::Think()
 		else if (time > MAX_INTERMISSION_TIME)
 			CVAR_SET_STRING("mp_chattime", UTIL_dtos1(MAX_INTERMISSION_TIME));
 
-		m_flIntermissionEndTime = g_flIntermissionStartTime + mp_chattime.value;
+		m_flIntermissionEndTime = m_flIntermissionStartTime + mp_chattime.value;
 
 		// check to see if we should change levels now
 		if (m_flIntermissionEndTime < gpGlobals->time)
 		{
-			if (m_iEndIntermissionButtonHit  // check that someone has pressed a key, or the max intermission time is over
-				|| ((g_flIntermissionStartTime + MAX_INTERMISSION_TIME) < gpGlobals->time))
+			if (m_iEndIntermissionButtonHit // check that someone has pressed a key, or the max intermission time is over
+				|| ((m_flIntermissionStartTime + MAX_INTERMISSION_TIME) < gpGlobals->time))
 				ChangeLevel(); // intermission is over
 		}
 
@@ -219,7 +202,7 @@ void CHalfLifeMultiplay::Think()
 	float flTimeLimit = timelimit.value * 60;
 	float flFragLimit = fraglimit.value;
 
-	time_remaining = (int)(flTimeLimit ? (flTimeLimit - gpGlobals->time) : 0);
+	time_remaining = (int)(0 != flTimeLimit ? (flTimeLimit - gpGlobals->time) : 0);
 
 	if (flTimeLimit != 0 && gpGlobals->time >= flTimeLimit)
 	{
@@ -227,7 +210,7 @@ void CHalfLifeMultiplay::Think()
 		return;
 	}
 
-	if (flFragLimit)
+	if (0 != flFragLimit)
 	{
 		int bestfrags = 9999;
 		int remain;
@@ -252,7 +235,6 @@ void CHalfLifeMultiplay::Think()
 					bestfrags = remain;
 				}
 			}
-
 		}
 		frags_remaining = bestfrags;
 	}
@@ -276,82 +258,82 @@ void CHalfLifeMultiplay::Think()
 
 //=========================================================
 //=========================================================
-BOOL CHalfLifeMultiplay::IsMultiplayer()
+bool CHalfLifeMultiplay::IsMultiplayer()
 {
-	return TRUE;
+	return true;
 }
 
 //=========================================================
 //=========================================================
-BOOL CHalfLifeMultiplay::IsDeathmatch()
+bool CHalfLifeMultiplay::IsDeathmatch()
 {
-	return TRUE;
+	return true;
 }
 
 //=========================================================
 //=========================================================
-BOOL CHalfLifeMultiplay::IsCoOp()
+bool CHalfLifeMultiplay::IsCoOp()
 {
-	return gpGlobals->coop;
+	return 0 != gpGlobals->coop;
 }
 
 //=========================================================
 //=========================================================
-BOOL CHalfLifeMultiplay::FShouldSwitchWeapon(CBasePlayer* pPlayer, CBasePlayerItem* pWeapon)
+bool CHalfLifeMultiplay::FShouldSwitchWeapon(CBasePlayer* pPlayer, CBasePlayerItem* pWeapon)
 {
 	if (!pWeapon->CanDeploy())
 	{
 		// that weapon can't deploy anyway.
-		return FALSE;
+		return false;
 	}
 
 	if (!pPlayer->m_pActiveItem)
 	{
 		// player doesn't have an active item!
-		return TRUE;
+		return true;
 	}
 
 	if (!pPlayer->m_pActiveItem->CanHolster())
 	{
 		// can't put away the active item.
-		return FALSE;
+		return false;
 	}
 
 	//Never switch
 	if (pPlayer->m_iAutoWepSwitch == 0)
 	{
-		return FALSE;
+		return false;
 	}
 
 	//Only switch if not attacking
-	if (pPlayer->m_iAutoWepSwitch == 2 && (pPlayer->m_afButtonLast & (IN_ATTACK | IN_ATTACK2)))
+	if (pPlayer->m_iAutoWepSwitch == 2 && (pPlayer->m_afButtonLast & (IN_ATTACK | IN_ATTACK2)) != 0)
 	{
-		return FALSE;
+		return false;
 	}
 
 	if (pWeapon->iWeight() > pPlayer->m_pActiveItem->iWeight())
 	{
-		return TRUE;
+		return true;
 	}
 
-	return FALSE;
+	return false;
 }
 
-BOOL CHalfLifeMultiplay::GetNextBestWeapon(CBasePlayer* pPlayer, CBasePlayerItem* pCurrentWeapon)
+bool CHalfLifeMultiplay::GetNextBestWeapon(CBasePlayer* pPlayer, CBasePlayerItem* pCurrentWeapon)
 {
 
 	CBasePlayerItem* pCheck;
-	CBasePlayerItem* pBest;// this will be used in the event that we don't find a weapon in the same category.
+	CBasePlayerItem* pBest; // this will be used in the event that we don't find a weapon in the same category.
 	int iBestWeight;
 	int i;
 
-	iBestWeight = -1;// no weapon lower than -1 can be autoswitched to
+	iBestWeight = -1; // no weapon lower than -1 can be autoswitched to
 	pBest = NULL;
 
 	if (!pCurrentWeapon->CanHolster())
 	{
 		// can't put this gun away right now, so can't switch.
-		return FALSE;
+		return false;
 	}
 
 	for (i = 0; i < MAX_ITEM_TYPES; i++)
@@ -362,21 +344,21 @@ BOOL CHalfLifeMultiplay::GetNextBestWeapon(CBasePlayer* pPlayer, CBasePlayerItem
 		{
 			if (pCheck->iWeight() > -1 && pCheck->iWeight() == pCurrentWeapon->iWeight() && pCheck != pCurrentWeapon)
 			{
-				// this weapon is from the same category. 
+				// this weapon is from the same category.
 				if (pCheck->CanDeploy())
 				{
 					if (pPlayer->SwitchWeapon(pCheck))
 					{
-						return TRUE;
+						return true;
 					}
 				}
 			}
-			else if (pCheck->iWeight() > iBestWeight && pCheck != pCurrentWeapon)// don't reselect the weapon we're trying to get rid of
+			else if (pCheck->iWeight() > iBestWeight && pCheck != pCurrentWeapon) // don't reselect the weapon we're trying to get rid of
 			{
 				//ALERT ( at_console, "Considering %s\n", STRING( pCheck->pev->classname ) );
 				// we keep updating the 'best' weapon just in case we can't find a weapon of the same weight
-				// that the player was using. This will end up leaving the player with his heaviest-weighted 
-				// weapon. 
+				// that the player was using. This will end up leaving the player with his heaviest-weighted
+				// weapon.
 				if (pCheck->CanDeploy())
 				{
 					// if this weapon is useable, flag it as the best
@@ -389,24 +371,24 @@ BOOL CHalfLifeMultiplay::GetNextBestWeapon(CBasePlayer* pPlayer, CBasePlayerItem
 		}
 	}
 
-	// if we make it here, we've checked all the weapons and found no useable 
-	// weapon in the same catagory as the current weapon. 
+	// if we make it here, we've checked all the weapons and found no useable
+	// weapon in the same catagory as the current weapon.
 
-	// if pBest is null, we didn't find ANYTHING. Shouldn't be possible- should always 
+	// if pBest is null, we didn't find ANYTHING. Shouldn't be possible- should always
 	// at least get the crowbar, but ya never know.
 	if (!pBest)
 	{
-		return FALSE;
+		return false;
 	}
 
 	pPlayer->SwitchWeapon(pBest);
 
-	return TRUE;
+	return true;
 }
 
 //=========================================================
 //=========================================================
-BOOL CHalfLifeMultiplay::ClientConnected(edict_t* pEntity, const char* pszName, const char* pszAddress, char szRejectReason[128])
+bool CHalfLifeMultiplay::ClientConnected(edict_t* pEntity, const char* pszName, const char* pszAddress, char szRejectReason[128])
 {
 	g_VoiceGameMgr.ClientConnected(pEntity);
 
@@ -433,7 +415,7 @@ BOOL CHalfLifeMultiplay::ClientConnected(edict_t* pEntity, const char* pszName, 
 
 			if (pPlayer && pPlayer->m_iItems != CTFItem::None)
 			{
-				if (pPlayer->m_iItems & CTFItem::ItemsMask)
+				if ((pPlayer->m_iItems & CTFItem::ItemsMask) != 0)
 				{
 					RespawnPlayerCTFPowerups(pPlayer, true);
 				}
@@ -454,13 +436,13 @@ BOOL CHalfLifeMultiplay::ClientConnected(edict_t* pEntity, const char* pszName, 
 		pszPlayerIPs[ENTINDEX(pEntity)] = strdup(pszAddress);
 	}
 
-	return TRUE;
+	return true;
 }
 
 void CHalfLifeMultiplay::UpdateGameMode(CBasePlayer* pPlayer)
 {
 	MESSAGE_BEGIN(MSG_ONE, gmsgGameMode, NULL, pPlayer->edict());
-	WRITE_BYTE(0);  // game mode none
+	WRITE_BYTE(0); // game mode none
 	MESSAGE_END();
 }
 
@@ -468,7 +450,7 @@ void CHalfLifeMultiplay::InitHUD(CBasePlayer* pl)
 {
 	// notify other clients of player joining the game
 	UTIL_ClientPrintAll(HUD_PRINTNOTIFY, UTIL_VarArgs("%s has joined the game\n",
-		(pl->pev->netname && STRING(pl->pev->netname)[0] != 0) ? STRING(pl->pev->netname) : "unconnected"));
+											 (!FStringNull(pl->pev->netname) && STRING(pl->pev->netname)[0] != 0) ? STRING(pl->pev->netname) : "unconnected"));
 
 	// team match?
 	if (g_teamplay)
@@ -517,7 +499,7 @@ void CHalfLifeMultiplay::InitHUD(CBasePlayer* pl)
 		if (plr)
 		{
 			MESSAGE_BEGIN(MSG_ONE, gmsgScoreInfo, NULL, pl->edict());
-			WRITE_BYTE(i);	// client number
+			WRITE_BYTE(i); // client number
 			WRITE_SHORT(plr->pev->frags);
 			WRITE_SHORT(plr->m_iDeaths);
 			WRITE_SHORT(0);
@@ -543,7 +525,7 @@ void CHalfLifeMultiplay::ClientDisconnected(edict_t* pClient)
 
 		if (pPlayer)
 		{
-			if (!g_fGameOver && pPlayer->m_iItems & CTFItem::ItemsMask)
+			if (!g_fGameOver && (pPlayer->m_iItems & CTFItem::ItemsMask) != 0)
 				ScatterPlayerCTFPowerups(pPlayer);
 
 			FireTargets("game_playerleave", pPlayer, pPlayer, USE_TOGGLE, 0);
@@ -579,7 +561,7 @@ void CHalfLifeMultiplay::ClientDisconnected(edict_t* pClient)
 			free(pszPlayerIPs[playerIndex]);
 			pszPlayerIPs[playerIndex] = nullptr;
 
-			pPlayer->RemoveAllItems(TRUE);// destroy all of the players weapons and items
+			pPlayer->RemoveAllItems(true); // destroy all of the players weapons and items
 
 			g_engfuncs.pfnMessageBegin(MSG_ALL, gmsgSpectator, 0, 0);
 			g_engfuncs.pfnWriteByte(ENTINDEX(pClient));
@@ -608,12 +590,12 @@ float CHalfLifeMultiplay::FlPlayerFallDamage(CBasePlayer* pPlayer)
 
 	switch (iFallDamage)
 	{
-	case 1://progressive
+	case 1: //progressive
 		pPlayer->m_flFallVelocity -= PLAYER_MAX_SAFE_FALL_SPEED;
 		return pPlayer->m_flFallVelocity * DAMAGE_FOR_FALL_SPEED;
 		break;
 	default:
-	case 0:// fixed
+	case 0: // fixed
 		return 10;
 		break;
 	}
@@ -621,16 +603,16 @@ float CHalfLifeMultiplay::FlPlayerFallDamage(CBasePlayer* pPlayer)
 
 //=========================================================
 //=========================================================
-BOOL CHalfLifeMultiplay::FPlayerCanTakeDamage(CBasePlayer* pPlayer, CBaseEntity* pAttacker)
+bool CHalfLifeMultiplay::FPlayerCanTakeDamage(CBasePlayer* pPlayer, CBaseEntity* pAttacker)
 {
-	return TRUE;
+	return true;
 }
 
 //=========================================================
 //=========================================================
 void CHalfLifeMultiplay::PlayerThink(CBasePlayer* pPlayer)
 {
-	if (pPlayer->m_iItems & CTFItem::PortableHEV)
+	if ((pPlayer->m_iItems & CTFItem::PortableHEV) != 0)
 	{
 		if (pPlayer->m_flNextHEVCharge <= gpGlobals->time)
 		{
@@ -659,7 +641,7 @@ void CHalfLifeMultiplay::PlayerThink(CBasePlayer* pPlayer)
 		pPlayer->m_flNextHEVCharge = gpGlobals->time + 0.5;
 	}
 
-	if (pPlayer->m_iItems & CTFItem::Regeneration)
+	if ((pPlayer->m_iItems & CTFItem::Regeneration) != 0)
 	{
 		if (pPlayer->m_flNextHealthCharge <= gpGlobals->time)
 		{
@@ -688,7 +670,7 @@ void CHalfLifeMultiplay::PlayerThink(CBasePlayer* pPlayer)
 		pPlayer->m_flNextHealthCharge = gpGlobals->time + 0.5;
 	}
 
-	if (pPlayer->m_pActiveItem && pPlayer->m_flNextAmmoCharge <= gpGlobals->time && (pPlayer->m_iItems & CTFItem::Backpack))
+	if (pPlayer->m_pActiveItem && pPlayer->m_flNextAmmoCharge <= gpGlobals->time && (pPlayer->m_iItems & CTFItem::Backpack) != 0)
 	{
 		pPlayer->m_pActiveItem->IncrementAmmo(pPlayer);
 		pPlayer->m_flNextAmmoCharge = gpGlobals->time + 0.75;
@@ -706,8 +688,8 @@ void CHalfLifeMultiplay::PlayerThink(CBasePlayer* pPlayer)
 	if (g_fGameOver)
 	{
 		// check for button presses
-		if (pPlayer->m_afButtonPressed & (IN_DUCK | IN_ATTACK | IN_ATTACK2 | IN_USE | IN_JUMP))
-			m_iEndIntermissionButtonHit = TRUE;
+		if ((pPlayer->m_afButtonPressed & (IN_DUCK | IN_ATTACK | IN_ATTACK2 | IN_USE | IN_JUMP)) != 0)
+			m_iEndIntermissionButtonHit = true;
 
 		// clear attack/use commands from player
 		pPlayer->m_afButtonPressed = 0;
@@ -720,28 +702,28 @@ void CHalfLifeMultiplay::PlayerThink(CBasePlayer* pPlayer)
 //=========================================================
 void CHalfLifeMultiplay::PlayerSpawn(CBasePlayer* pPlayer)
 {
-	BOOL		addDefault;
+	bool addDefault;
 	CBaseEntity* pWeaponEntity = NULL;
 
 	//Ensure the player switches to the Glock on spawn regardless of setting
 	const int originalAutoWepSwitch = pPlayer->m_iAutoWepSwitch;
 	pPlayer->m_iAutoWepSwitch = 1;
 
-	pPlayer->pev->weapons |= (1 << WEAPON_SUIT);
+	pPlayer->SetHasSuit(true);
 
-	addDefault = TRUE;
+	addDefault = true;
 
 	while (pWeaponEntity = UTIL_FindEntityByClassname(pWeaponEntity, "game_player_equip"))
 	{
 		pWeaponEntity->Touch(pPlayer);
-		addDefault = FALSE;
+		addDefault = false;
 	}
 
 	if (addDefault)
 	{
 		pPlayer->GiveNamedItem("weapon_crowbar");
 		pPlayer->GiveNamedItem("weapon_9mmhandgun");
-		pPlayer->GiveAmmo(68, "9mm", _9MM_MAX_CARRY);// 4 full reloads
+		pPlayer->GiveAmmo(68, "9mm", _9MM_MAX_CARRY); // 4 full reloads
 	}
 
 	InitItemsForPlayer(pPlayer);
@@ -751,19 +733,19 @@ void CHalfLifeMultiplay::PlayerSpawn(CBasePlayer* pPlayer)
 
 //=========================================================
 //=========================================================
-BOOL CHalfLifeMultiplay::FPlayerCanRespawn(CBasePlayer* pPlayer)
+bool CHalfLifeMultiplay::FPlayerCanRespawn(CBasePlayer* pPlayer)
 {
-	return TRUE;
+	return true;
 }
 
 //=========================================================
 //=========================================================
 float CHalfLifeMultiplay::FlPlayerSpawnTime(CBasePlayer* pPlayer)
 {
-	return gpGlobals->time;//now!
+	return gpGlobals->time; //now!
 }
 
-BOOL CHalfLifeMultiplay::AllowAutoTargetCrosshair()
+bool CHalfLifeMultiplay::AllowAutoTargetCrosshair()
 {
 	return (aimcrosshair.value != 0);
 }
@@ -795,7 +777,7 @@ void CHalfLifeMultiplay::PlayerKilled(CBasePlayer* pVictim, entvars_t* pKiller, 
 		peKiller = (CBasePlayer*)ktmp;
 
 	if (pVictim->pev == pKiller)
-	{  // killed self
+	{ // killed self
 		pKiller->frags -= 1;
 	}
 	else if (ktmp && ktmp->IsPlayer())
@@ -806,7 +788,7 @@ void CHalfLifeMultiplay::PlayerKilled(CBasePlayer* pVictim, entvars_t* pKiller, 
 		FireTargets("game_playerkill", ktmp, ktmp, USE_TOGGLE, 0);
 	}
 	else
-	{  // killed by the world
+	{ // killed by the world
 		pKiller->frags -= 1;
 	}
 
@@ -843,28 +825,28 @@ void CHalfLifeMultiplay::PlayerKilled(CBasePlayer* pVictim, entvars_t* pKiller, 
 		DeactivateSatchels(pVictim);
 	}
 
-	if (pVictim->IsPlayer() && !g_fGameOver && (pVictim->m_iItems & CTFItem::ItemsMask))
+	if (pVictim->IsPlayer() && !g_fGameOver && (pVictim->m_iItems & CTFItem::ItemsMask) != 0)
 	{
 		ScatterPlayerCTFPowerups(pVictim);
 	}
 }
 
 //=========================================================
-// Deathnotice. 
+// Deathnotice.
 //=========================================================
 void CHalfLifeMultiplay::DeathNotice(CBasePlayer* pVictim, entvars_t* pKiller, entvars_t* pevInflictor)
 {
 	// Work out what killed the player, and send a message to all clients about it
 	CBaseEntity* Killer = CBaseEntity::Instance(pKiller);
 
-	const char* killer_weapon_name = "world";		// by default, the player is killed by the world
+	const char* killer_weapon_name = "world"; // by default, the player is killed by the world
 	int killer_index = 0;
 
 	// Hack to fix name change
 	const char* tau = "tau_cannon";
 	const char* gluon = "gluon gun";
 
-	if (pKiller->flags & FL_CLIENT)
+	if ((pKiller->flags & FL_CLIENT) != 0)
 	{
 		killer_index = ENTINDEX(ENT(pKiller));
 
@@ -882,7 +864,7 @@ void CHalfLifeMultiplay::DeathNotice(CBasePlayer* pVictim, entvars_t* pKiller, e
 			}
 			else
 			{
-				killer_weapon_name = STRING(pevInflictor->classname);  // it's just that easy
+				killer_weapon_name = STRING(pevInflictor->classname); // it's just that easy
 			}
 		}
 	}
@@ -902,15 +884,15 @@ void CHalfLifeMultiplay::DeathNotice(CBasePlayer* pVictim, entvars_t* pKiller, e
 		killer_weapon_name += 5;
 
 	MESSAGE_BEGIN(MSG_ALL, gmsgDeathMsg);
-	WRITE_BYTE(killer_index);						// the killer
-	WRITE_BYTE(ENTINDEX(pVictim->edict()));		// the victim
+	WRITE_BYTE(killer_index);				// the killer
+	WRITE_BYTE(ENTINDEX(pVictim->edict())); // the victim
 	WRITE_STRING(killer_weapon_name);		// what they were killed by (should this be a string?)
 	MESSAGE_END();
 
 	// replace the code names with the 'real' names
-	if (!strcmp(killer_weapon_name, "egon"))
+	if (0 == strcmp(killer_weapon_name, "egon"))
 		killer_weapon_name = gluon;
-	else if (!strcmp(killer_weapon_name, "gauss"))
+	else if (0 == strcmp(killer_weapon_name, "gauss"))
 		killer_weapon_name = tau;
 
 	if (pVictim->pev == pKiller)
@@ -946,7 +928,7 @@ void CHalfLifeMultiplay::DeathNotice(CBasePlayer* pVictim, entvars_t* pKiller, e
 				killer_weapon_name);
 		}
 	}
-	else if (pKiller->flags & FL_CLIENT)
+	else if ((pKiller->flags & FL_CLIENT) != 0)
 	{
 		if (IsCTF())
 		{
@@ -1024,20 +1006,20 @@ void CHalfLifeMultiplay::DeathNotice(CBasePlayer* pVictim, entvars_t* pKiller, e
 	}
 
 	MESSAGE_BEGIN(MSG_SPEC, SVC_DIRECTOR);
-	WRITE_BYTE(9);	// command length in bytes
-	WRITE_BYTE(DRC_CMD_EVENT);	// player killed
-	WRITE_SHORT(ENTINDEX(pVictim->edict()));	// index number of primary entity
+	WRITE_BYTE(9);							 // command length in bytes
+	WRITE_BYTE(DRC_CMD_EVENT);				 // player killed
+	WRITE_SHORT(ENTINDEX(pVictim->edict())); // index number of primary entity
 	if (pevInflictor)
-		WRITE_SHORT(ENTINDEX(ENT(pevInflictor)));	// index number of secondary entity
+		WRITE_SHORT(ENTINDEX(ENT(pevInflictor))); // index number of secondary entity
 	else
-		WRITE_SHORT(ENTINDEX(ENT(pKiller)));	// index number of secondary entity
-	WRITE_LONG(7 | DRC_FLAG_DRAMATIC);   // eventflags (priority and flags)
+		WRITE_SHORT(ENTINDEX(ENT(pKiller))); // index number of secondary entity
+	WRITE_LONG(7 | DRC_FLAG_DRAMATIC);		 // eventflags (priority and flags)
 	MESSAGE_END();
 
 	//  Print a standard message
-		// TODO: make this go direct to console
+	// TODO: make this go direct to console
 	return; // just remove for now
-/*
+			/*
 	char	szText[ 128 ];
 
 	if ( pKiller->flags & FL_MONSTER )
@@ -1101,9 +1083,9 @@ float CHalfLifeMultiplay::FlWeaponRespawnTime(CBasePlayerItem* pWeapon)
 	if (weaponstay.value > 0)
 	{
 		// make sure it's only certain weapons
-		if (!(pWeapon->iFlags() & ITEM_FLAG_LIMITINWORLD))
+		if ((pWeapon->iFlags() & ITEM_FLAG_LIMITINWORLD) == 0)
 		{
-			return gpGlobals->time + 0;		// weapon respawns almost instantly
+			return gpGlobals->time + 0; // weapon respawns almost instantly
 		}
 	}
 
@@ -1111,13 +1093,13 @@ float CHalfLifeMultiplay::FlWeaponRespawnTime(CBasePlayerItem* pWeapon)
 }
 
 //=========================================================
-// FlWeaponRespawnTime - Returns 0 if the weapon can respawn 
+// FlWeaponRespawnTime - Returns 0 if the weapon can respawn
 // now,  otherwise it returns the time at which it can try
 // to spawn again.
 //=========================================================
 float CHalfLifeMultiplay::FlWeaponTryRespawn(CBasePlayerItem* pWeapon)
 {
-	if (pWeapon && pWeapon->m_iId && (pWeapon->iFlags() & ITEM_FLAG_LIMITINWORLD))
+	if (pWeapon && WEAPON_NONE != pWeapon->m_iId && (pWeapon->iFlags() & ITEM_FLAG_LIMITINWORLD) != 0)
 	{
 		if (NUMBER_OF_ENTITIES() < (gpGlobals->maxEntities - ENTITY_INTOLERANCE))
 			return 0;
@@ -1144,7 +1126,7 @@ Vector CHalfLifeMultiplay::VecWeaponRespawnSpot(CBasePlayerItem* pWeapon)
 //=========================================================
 int CHalfLifeMultiplay::WeaponShouldRespawn(CBasePlayerItem* pWeapon)
 {
-	if (pWeapon->pev->spawnflags & SF_NORESPAWN)
+	if ((pWeapon->pev->spawnflags & SF_NORESPAWN) != 0)
 	{
 		return GR_WEAPON_RESPAWN_NO;
 	}
@@ -1153,14 +1135,14 @@ int CHalfLifeMultiplay::WeaponShouldRespawn(CBasePlayerItem* pWeapon)
 }
 
 //=========================================================
-// CanHaveWeapon - returns FALSE if the player is not allowed
+// CanHaveWeapon - returns false if the player is not allowed
 // to pick up this weapon
 //=========================================================
-BOOL CHalfLifeMultiplay::CanHavePlayerItem(CBasePlayer* pPlayer, CBasePlayerItem* pItem)
+bool CHalfLifeMultiplay::CanHavePlayerItem(CBasePlayer* pPlayer, CBasePlayerItem* pItem)
 {
 	if (weaponstay.value > 0)
 	{
-		if (pItem->iFlags() & ITEM_FLAG_LIMITINWORLD)
+		if ((pItem->iFlags() & ITEM_FLAG_LIMITINWORLD) != 0)
 			return CGameRules::CanHavePlayerItem(pPlayer, pItem);
 
 		// check if the player already has this weapon
@@ -1172,7 +1154,7 @@ BOOL CHalfLifeMultiplay::CanHavePlayerItem(CBasePlayer* pPlayer, CBasePlayerItem
 			{
 				if (it->m_iId == pItem->m_iId)
 				{
-					return FALSE;
+					return false;
 				}
 
 				it = it->m_pNext;
@@ -1185,9 +1167,9 @@ BOOL CHalfLifeMultiplay::CanHavePlayerItem(CBasePlayer* pPlayer, CBasePlayerItem
 
 //=========================================================
 //=========================================================
-BOOL CHalfLifeMultiplay::CanHaveItem(CBasePlayer* pPlayer, CItem* pItem)
+bool CHalfLifeMultiplay::CanHaveItem(CBasePlayer* pPlayer, CItem* pItem)
 {
-	return TRUE;
+	return true;
 }
 
 //=========================================================
@@ -1200,7 +1182,7 @@ void CHalfLifeMultiplay::PlayerGotItem(CBasePlayer* pPlayer, CItem* pItem)
 //=========================================================
 int CHalfLifeMultiplay::ItemShouldRespawn(CItem* pItem)
 {
-	if (pItem->pev->spawnflags & SF_NORESPAWN)
+	if ((pItem->pev->spawnflags & SF_NORESPAWN) != 0)
 	{
 		return GR_ITEM_RESPAWN_NO;
 	}
@@ -1234,19 +1216,19 @@ void CHalfLifeMultiplay::PlayerGotAmmo(CBasePlayer* pPlayer, char* szName, int i
 
 //=========================================================
 //=========================================================
-BOOL CHalfLifeMultiplay::IsAllowedToSpawn(CBaseEntity* pEntity)
+bool CHalfLifeMultiplay::IsAllowedToSpawn(CBaseEntity* pEntity)
 {
 	//	if ( pEntity->pev->flags & FL_MONSTER )
-	//		return FALSE;
+	//		return false;
 
-	return TRUE;
+	return true;
 }
 
 //=========================================================
 //=========================================================
 int CHalfLifeMultiplay::AmmoShouldRespawn(CBasePlayerAmmo* pAmmo)
 {
-	if (pAmmo->pev->spawnflags & SF_NORESPAWN)
+	if ((pAmmo->pev->spawnflags & SF_NORESPAWN) != 0)
 	{
 		return GR_AMMO_RESPAWN_NO;
 	}
@@ -1298,7 +1280,7 @@ int CHalfLifeMultiplay::DeadPlayerAmmo(CBasePlayer* pPlayer)
 edict_t* CHalfLifeMultiplay::GetPlayerSpawnSpot(CBasePlayer* pPlayer)
 {
 	edict_t* pentSpawnSpot = CGameRules::GetPlayerSpawnSpot(pPlayer);
-	if (IsMultiplayer() && pentSpawnSpot->v.target)
+	if (IsMultiplayer() && !FStringNull(pentSpawnSpot->v.target))
 	{
 		FireTargets(STRING(pentSpawnSpot->v.target), pPlayer, pPlayer, USE_TOGGLE, 0);
 	}
@@ -1315,37 +1297,37 @@ int CHalfLifeMultiplay::PlayerRelationship(CBaseEntity* pPlayer, CBaseEntity* pT
 	return GR_NOTTEAMMATE;
 }
 
-BOOL CHalfLifeMultiplay::PlayFootstepSounds(CBasePlayer* pl, float fvol)
+bool CHalfLifeMultiplay::PlayFootstepSounds(CBasePlayer* pl, float fvol)
 {
 	if (g_footsteps && g_footsteps->value == 0)
-		return FALSE;
+		return false;
 
 	if (pl->IsOnLadder() || pl->pev->velocity.Length2D() > 220)
-		return TRUE;  // only make step sounds in multiplayer if the player is moving fast enough
+		return true; // only make step sounds in multiplayer if the player is moving fast enough
 
-	return FALSE;
+	return false;
 }
 
-BOOL CHalfLifeMultiplay::FAllowFlashlight()
+bool CHalfLifeMultiplay::FAllowFlashlight()
 {
 	return flashlight.value != 0;
 }
 
 //=========================================================
 //=========================================================
-BOOL CHalfLifeMultiplay::FAllowMonsters()
+bool CHalfLifeMultiplay::FAllowMonsters()
 {
 	return (allowmonsters.value != 0);
 }
 
 //=========================================================
 //======== CHalfLifeMultiplay private functions ===========
-#define INTERMISSION_TIME		6
+#define INTERMISSION_TIME 6
 
 void CHalfLifeMultiplay::GoToIntermission()
 {
 	if (g_fGameOver)
-		return;  // intermission has already been triggered, so ignore.
+		return; // intermission has already been triggered, so ignore.
 
 	FlushCTFPowerupTimes();
 
@@ -1360,10 +1342,10 @@ void CHalfLifeMultiplay::GoToIntermission()
 		CVAR_SET_STRING("mp_chattime", UTIL_dtos1(MAX_INTERMISSION_TIME));
 
 	m_flIntermissionEndTime = gpGlobals->time + ((int)mp_chattime.value);
-	g_flIntermissionStartTime = gpGlobals->time;
+	m_flIntermissionStartTime = gpGlobals->time;
 
-	g_fGameOver = TRUE;
-	m_iEndIntermissionButtonHit = FALSE;
+	g_fGameOver = true;
+	m_iEndIntermissionButtonHit = false;
 }
 
 #define MAX_RULE_BUFFER 1024
@@ -1373,7 +1355,7 @@ typedef struct mapcycle_item_s
 	struct mapcycle_item_s* next;
 
 	char mapname[32];
-	int  minplayers, maxplayers;
+	int minplayers, maxplayers;
 	char rulebuffer[MAX_RULE_BUFFER];
 } mapcycle_item_t;
 
@@ -1392,7 +1374,7 @@ Clean up memory used by mapcycle when switching it
 */
 void DestroyMapCycle(mapcycle_t* cycle)
 {
-	mapcycle_item_t* p, * n, * start;
+	mapcycle_item_t *p, *n, *start;
 	p = cycle->items;
 	if (p)
 	{
@@ -1419,22 +1401,22 @@ ReloadMapCycleFile
 Parses mapcycle.txt file into mapcycle_t structure
 ==============
 */
-int ReloadMapCycleFile(char* filename, mapcycle_t* cycle)
+bool ReloadMapCycleFile(char* filename, mapcycle_t* cycle)
 {
 	char szBuffer[MAX_RULE_BUFFER];
 	char szMap[32];
 	int length;
 	char* aFileList = (char*)LOAD_FILE_FOR_ME(filename, &length);
 	const char* pFileList = aFileList;
-	int hasbuffer;
-	mapcycle_item_s* item, * newlist = NULL, * next;
+	bool hasbuffer;
+	mapcycle_item_s *item, *newlist = NULL, *next;
 
-	if (pFileList && length)
+	if (pFileList && 0 != length)
 	{
 		// the first map name in the file becomes the default
-		while (1)
+		while (true)
 		{
-			hasbuffer = 0;
+			hasbuffer = false;
 			memset(szBuffer, 0, MAX_RULE_BUFFER);
 
 			pFileList = COM_Parse(pFileList);
@@ -1449,7 +1431,7 @@ int ReloadMapCycleFile(char* filename, mapcycle_t* cycle)
 				pFileList = COM_Parse(pFileList);
 				if (strlen(com_token) > 0)
 				{
-					hasbuffer = 1;
+					hasbuffer = true;
 					strcpy(szBuffer, com_token);
 				}
 			}
@@ -1472,14 +1454,14 @@ int ReloadMapCycleFile(char* filename, mapcycle_t* cycle)
 				if (hasbuffer)
 				{
 					s = g_engfuncs.pfnInfoKeyValue(szBuffer, "minplayers");
-					if (s && s[0])
+					if (s && '\0' != s[0])
 					{
 						item->minplayers = atoi(s);
 						item->minplayers = V_max(item->minplayers, 0);
 						item->minplayers = V_min(item->minplayers, gpGlobals->maxClients);
 					}
 					s = g_engfuncs.pfnInfoKeyValue(szBuffer, "maxplayers");
-					if (s && s[0])
+					if (s && '\0' != s[0])
 					{
 						item->maxplayers = atoi(s);
 						item->maxplayers = V_max(item->maxplayers, 0);
@@ -1501,7 +1483,6 @@ int ReloadMapCycleFile(char* filename, mapcycle_t* cycle)
 			{
 				ALERT(at_console, "Skipping %s from mapcycle, not a valid map\n", szMap);
 			}
-
 		}
 
 		FREE_FILE(aFileList);
@@ -1524,7 +1505,7 @@ int ReloadMapCycleFile(char* filename, mapcycle_t* cycle)
 	// Didn't parse anything
 	if (!item)
 	{
-		return 0;
+		return false;
 	}
 
 	while (item->next)
@@ -1535,7 +1516,7 @@ int ReloadMapCycleFile(char* filename, mapcycle_t* cycle)
 
 	cycle->next_item = item->next;
 
-	return 1;
+	return true;
 }
 
 /*
@@ -1547,7 +1528,7 @@ Determine the current # of active players on the server for map cycling logic
 */
 int CountPlayers()
 {
-	int	num = 0;
+	int num = 0;
 
 	for (int i = 1; i <= gpGlobals->maxClients; i++)
 	{
@@ -1573,20 +1554,20 @@ Parse commands/key value pairs to issue right after map xxx command is issued on
 void ExtractCommandString(char* s, char* szCommand)
 {
 	// Now make rules happen
-	char	pkey[512];
-	char	value[512];	// use two buffers so compares
-								// work without stomping on each other
+	char pkey[512];
+	char value[512]; // use two buffers so compares
+					 // work without stomping on each other
 	char* o;
 
 	if (*s == '\\')
 		s++;
 
-	while (1)
+	while (true)
 	{
 		o = pkey;
 		while (*s != '\\')
 		{
-			if (!*s)
+			if ('\0' == *s)
 				return;
 			*o++ = *s++;
 		}
@@ -1595,9 +1576,9 @@ void ExtractCommandString(char* s, char* szCommand)
 
 		o = value;
 
-		while (*s != '\\' && *s)
+		while (*s != '\\' && '\0' != *s)
 		{
-			if (!*s)
+			if ('\0' == *s)
 				return;
 			*o++ = *s++;
 		}
@@ -1611,7 +1592,7 @@ void ExtractCommandString(char* s, char* szCommand)
 		}
 		strcat(szCommand, "\n");
 
-		if (!*s)
+		if ('\0' == *s)
 			return;
 		s++;
 	}
@@ -1634,10 +1615,10 @@ void CHalfLifeMultiplay::ChangeLevel()
 	char szCommands[1500];
 	char szRules[1500];
 	int minplayers = 0, maxplayers = 0;
-	strcpy(szFirstMapInList, "hldm1");  // the absolute default level is hldm1
+	strcpy(szFirstMapInList, "hldm1"); // the absolute default level is hldm1
 
-	int	curplayers;
-	BOOL do_cycle = TRUE;
+	int curplayers;
+	bool do_cycle = true;
 
 	// find the map to change to
 	char* mapcfile = (char*)CVAR_GET_STRING("mapcyclefile");
@@ -1658,14 +1639,14 @@ void CHalfLifeMultiplay::ChangeLevel()
 		if (!ReloadMapCycleFile(mapcfile, &mapcycle) || (!mapcycle.items))
 		{
 			ALERT(at_console, "Unable to load map cycle file %s\n", mapcfile);
-			do_cycle = FALSE;
+			do_cycle = false;
 		}
 	}
 
 	if (do_cycle && mapcycle.items)
 	{
-		BOOL keeplooking = FALSE;
-		BOOL found = FALSE;
+		bool keeplooking = false;
+		bool found = false;
 		mapcycle_item_s* item;
 
 		// Assume current map
@@ -1675,7 +1656,7 @@ void CHalfLifeMultiplay::ChangeLevel()
 		// Traverse list
 		for (item = mapcycle.next_item; item->next != mapcycle.next_item; item = item->next)
 		{
-			keeplooking = FALSE;
+			keeplooking = false;
 
 			ASSERT(item != NULL);
 
@@ -1683,12 +1664,12 @@ void CHalfLifeMultiplay::ChangeLevel()
 			{
 				if (curplayers >= item->minplayers)
 				{
-					found = TRUE;
+					found = true;
 					minplayers = item->minplayers;
 				}
 				else
 				{
-					keeplooking = TRUE;
+					keeplooking = true;
 				}
 			}
 
@@ -1696,19 +1677,19 @@ void CHalfLifeMultiplay::ChangeLevel()
 			{
 				if (curplayers <= item->maxplayers)
 				{
-					found = TRUE;
+					found = true;
 					maxplayers = item->maxplayers;
 				}
 				else
 				{
-					keeplooking = TRUE;
+					keeplooking = true;
 				}
 			}
 
 			if (keeplooking)
 				continue;
 
-			found = TRUE;
+			found = true;
 			break;
 		}
 
@@ -1732,10 +1713,10 @@ void CHalfLifeMultiplay::ChangeLevel()
 		strcpy(szNextMap, szFirstMapInList);
 	}
 
-	g_fGameOver = TRUE;
+	g_fGameOver = true;
 
 	ALERT(at_console, "CHANGE LEVEL: %s\n", szNextMap);
-	if (minplayers || maxplayers)
+	if (0 != minplayers || 0 != maxplayers)
 	{
 		ALERT(at_console, "PLAYER COUNT:  min %i max %i current %i\n", minplayers, maxplayers, curplayers);
 	}
@@ -1751,8 +1732,8 @@ void CHalfLifeMultiplay::ChangeLevel()
 	}
 }
 
-#define MAX_MOTD_CHUNK	  60
-#define MAX_MOTD_LENGTH   1536 // (MAX_MOTD_CHUNK * 4)
+#define MAX_MOTD_CHUNK 60
+#define MAX_MOTD_LENGTH 1536 // (MAX_MOTD_CHUNK * 4)
 
 void CHalfLifeMultiplay::SendMOTDToClient(edict_t* client)
 {
@@ -1769,7 +1750,7 @@ void CHalfLifeMultiplay::SendMOTDToClient(edict_t* client)
 	// Send the message of the day
 	// read it chunk-by-chunk,  and send it in parts
 
-	while (pFileList && *pFileList && char_count < MAX_MOTD_LENGTH)
+	while (pFileList && '\0' != *pFileList && char_count < MAX_MOTD_LENGTH)
 	{
 		char chunk[MAX_MOTD_CHUNK + 1];
 
@@ -1780,7 +1761,7 @@ void CHalfLifeMultiplay::SendMOTDToClient(edict_t* client)
 		else
 		{
 			strncpy(chunk, pFileList, MAX_MOTD_CHUNK);
-			chunk[MAX_MOTD_CHUNK] = 0;		// strncpy doesn't always append the null terminator
+			chunk[MAX_MOTD_CHUNK] = 0; // strncpy doesn't always append the null terminator
 		}
 
 		char_count += strlen(chunk);
@@ -1790,12 +1771,10 @@ void CHalfLifeMultiplay::SendMOTDToClient(edict_t* client)
 			*pFileList = 0;
 
 		MESSAGE_BEGIN(MSG_ONE, gmsgMOTD, NULL, client);
-		WRITE_BYTE(*pFileList ? FALSE : TRUE);	// FALSE means there is still more message to come
+		WRITE_BYTE(static_cast<int>('\0' == *pFileList)); // false means there is still more message to come
 		WRITE_STRING(chunk);
 		MESSAGE_END();
 	}
 
 	FREE_FILE(aFileList);
 }
-
-

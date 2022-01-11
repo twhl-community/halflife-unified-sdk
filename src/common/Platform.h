@@ -13,8 +13,7 @@
 *
 ****/
 
-#ifndef PLATFORM_H
-#define PLATFORM_H
+#pragma once
 
 /**
 *	@file
@@ -28,42 +27,37 @@
 #endif
 
 // Silence certain warnings
-#pragma warning(disable : 4244)		// int or float down-conversion
-#pragma warning(disable : 4305)		// int or float data truncation
-#pragma warning(disable : 4201)		// nameless struct/union
-#pragma warning(disable : 4514)		// unreferenced inline function removed
-#pragma warning(disable : 4100)		// unreferenced formal parameter
+#pragma warning(disable : 4244)	 // int or float down-conversion
+#pragma warning(disable : 4305)	 // int or float data truncation
+#pragma warning(disable : 4201)	 // nameless struct/union
+#pragma warning(disable : 4514)	 // unreferenced inline function removed
+#pragma warning(disable : 4100)	 // unreferenced formal parameter
+#pragma warning(disable : 26495) // Variable is uninitialized
+#pragma warning(disable : 26451) // Arithmetic overflow
+#pragma warning(disable : 26812) // The enum type is unscoped
 
-#include "archtypes.h"     // DAL
+#include "steam/steamtypes.h" // DAL
+#include "common_types.h"
 
 // Misc C-runtime library headers
 #include <algorithm>
+#include <cctype>
+#include <climits>
 #include <cmath>
+#include <cstdarg>
+#include <cstddef>
+#include <cstdint>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
 
 using byte = unsigned char;
-using word = unsigned short;
-using func_t = unsigned int;
 using string_t = unsigned int;
 using qboolean = int;
 
-#define ARRAYSIZE(p)		(sizeof(p)/sizeof(p[0]))
+#define ARRAYSIZE(p) (sizeof(p) / sizeof(p[0]))
 
-// Prevent tons of unused windows definitions
-#ifdef _WIN32
-#define WIN32_LEAN_AND_MEAN
-#define NOWINRES
-#define NOSERVICE
-#define NOMCX
-#define NOIME
-#define NOMINMAX
-#include "winsani_in.h"
-#include <Windows.h>
-#include "winsani_out.h"
-#include <malloc.h>
-
+#ifdef WIN32
 //Avoid the ISO conformant warning
 #define stricmp _stricmp
 #define strnicmp _strnicmp
@@ -71,41 +65,30 @@ using qboolean = int;
 #define strupr _strupr
 #define strdup _strdup
 
-#define DLLEXPORT __declspec( dllexport )
+#define DLLEXPORT __declspec(dllexport)
+#define DLLHIDDEN
 
 #define stackalloc(size) _alloca(size)
 
 //Note: an implementation of stackfree must safely ignore null pointers
 #define stackfree(address)
 
-#else // _WIN32
-#define FALSE 0
-#define TRUE (!FALSE)
-typedef uint32 ULONG;
-typedef unsigned char BYTE;
-typedef int BOOL;
-#define MAX_PATH PATH_MAX
-#include <limits.h>
-#include <stdarg.h>
+#else // WIN32
 #include <alloca.h>
-#define _vsnprintf(a,b,c,d) vsnprintf(a,b,c,d)
 
 #define stricmp strcasecmp
-#define _strnicmp strncasecmp
 #define strnicmp strncasecmp
-#define _snprintf snprintf
 #define _alloca alloca
 
-#define DLLEXPORT __attribute__ ( ( visibility( "default" ) ) )
+#define DLLEXPORT __attribute__((visibility("default")))
+#define DLLHIDDEN __attribute__((visibility("hidden")))
 
 #define stackalloc(size) alloca(size)
 
 //Note: an implementation of stackfree must safely ignore null pointers
 #define stackfree(address)
 
-#endif //_WIN32
+#endif //WIN32
 
-#define V_min(a,b)  (((a) < (b)) ? (a) : (b))
-#define V_max(a,b)  (((a) > (b)) ? (a) : (b))
-
-#endif //PLATFORM_H
+#define V_min(a, b) (((a) < (b)) ? (a) : (b))
+#define V_max(a, b) (((a) > (b)) ? (a) : (b))

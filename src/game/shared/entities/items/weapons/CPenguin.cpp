@@ -22,9 +22,9 @@
 
 #ifndef CLIENT_DLL
 //TODO: this isn't in vanilla Op4 so it won't save properly there
-TYPEDESCRIPTION	CPenguin::m_SaveData[] =
-{
-	DEFINE_FIELD(CPenguin, m_fJustThrown, FIELD_INTEGER),
+TYPEDESCRIPTION CPenguin::m_SaveData[] =
+	{
+		DEFINE_FIELD(CPenguin, m_fJustThrown, FIELD_BOOLEAN),
 };
 
 IMPLEMENT_SAVERESTORE(CPenguin, CPenguin::BaseClass);
@@ -57,7 +57,7 @@ void CPenguin::Spawn()
 	pev->framerate = 1;
 }
 
-BOOL CPenguin::Deploy()
+bool CPenguin::Deploy()
 {
 	if (g_engfuncs.pfnRandomFloat(0.0, 1.0) <= 0.5)
 		EMIT_SOUND(edict(), CHAN_VOICE, "squeek/sqk_hunt2.wav", VOL_NORM, ATTN_NORM);
@@ -73,7 +73,7 @@ void CPenguin::Holster()
 {
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;
 
-	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType])
+	if (0 != m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType])
 	{
 		SendWeaponAnim(PENGUIN_DOWN);
 
@@ -96,7 +96,7 @@ void CPenguin::WeaponIdle()
 	{
 		m_fJustThrown = false;
 
-		if (m_pPlayer->m_rgAmmo[PrimaryAmmoIndex()])
+		if (0 != m_pPlayer->m_rgAmmo[PrimaryAmmoIndex()])
 		{
 			SendWeaponAnim(PENGUIN_UP);
 			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10, 15);
@@ -134,13 +134,13 @@ void CPenguin::WeaponIdle()
 
 void CPenguin::PrimaryAttack()
 {
-	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType])
+	if (0 != m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType])
 	{
 		UTIL_MakeVectors(m_pPlayer->pev->v_angle);
 
 		Vector vecSrc = m_pPlayer->pev->origin;
 
-		if (m_pPlayer->pev->flags & FL_DUCKING)
+		if ((m_pPlayer->pev->flags & FL_DUCKING) != 0)
 		{
 			vecSrc.z += 18;
 		}
@@ -152,7 +152,7 @@ void CPenguin::PrimaryAttack()
 		UTIL_TraceLine(vecStart, vecEnd, dont_ignore_monsters, nullptr, &tr);
 
 		int flags;
-#if defined( CLIENT_WEAPONS )
+#if defined(CLIENT_WEAPONS)
 		flags = FEV_NOTHOST;
 #else
 		flags = 0;
@@ -160,7 +160,7 @@ void CPenguin::PrimaryAttack()
 
 		PLAYBACK_EVENT(flags, edict(), m_usPenguinFire);
 
-		if (!tr.fAllSolid && !tr.fStartSolid && tr.flFraction > 0.25)
+		if (0 == tr.fAllSolid && 0 == tr.fStartSolid && tr.flFraction > 0.25)
 		{
 			m_pPlayer->SetAnimation(PLAYER_ATTACK1);
 
@@ -195,7 +195,7 @@ int CPenguin::iItemSlot()
 	return 5;
 }
 
-int CPenguin::GetItemInfo(ItemInfo* p)
+bool CPenguin::GetItemInfo(ItemInfo* p)
 {
 	p->pszAmmo1 = "Penguins";
 	p->iMaxAmmo1 = PENGUIN_MAX_CARRY;
@@ -209,5 +209,5 @@ int CPenguin::GetItemInfo(ItemInfo* p)
 	p->iWeight = PENGUIN_WEIGHT;
 	p->iFlags = ITEM_FLAG_LIMITINWORLD | ITEM_FLAG_EXHAUSTIBLE;
 
-	return 1;
+	return true;
 }

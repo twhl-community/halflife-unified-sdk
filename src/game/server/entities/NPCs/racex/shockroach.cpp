@@ -16,59 +16,55 @@
 // headcrab.cpp - tiny, jumpy alien parasite
 //=========================================================
 
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"monsters.h"
-#include	"schedule.h"
-#include	"game.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
+#include "schedule.h"
+#include "game.h"
 #include "player.h"
 
 //=========================================================
 // Monster's Anim Events Go Here
 //=========================================================
-#define		SR_AE_JUMPATTACK	( 2 )
+#define SR_AE_JUMPATTACK (2)
 
-Task_t	tlSRRangeAttack1[] =
-{
-	{ TASK_STOP_MOVING,			(float)0		},
-	{ TASK_FACE_IDEAL,			(float)0		},
-	{ TASK_RANGE_ATTACK1,		(float)0		},
-	{ TASK_SET_ACTIVITY,		(float)ACT_IDLE	},
-	{ TASK_FACE_IDEAL,			(float)0		},
-	{ TASK_WAIT_RANDOM,			(float)0.5		},
-};
-
-Schedule_t	slRCRangeAttack1[] =
-{
+Task_t tlSRRangeAttack1[] =
 	{
-		tlSRRangeAttack1,
-		ARRAYSIZE(tlSRRangeAttack1),
-		bits_COND_ENEMY_OCCLUDED |
-		bits_COND_NO_AMMO_LOADED,
-		0,
-		"HCRangeAttack1"
-	},
+		{TASK_STOP_MOVING, (float)0},
+		{TASK_FACE_IDEAL, (float)0},
+		{TASK_RANGE_ATTACK1, (float)0},
+		{TASK_SET_ACTIVITY, (float)ACT_IDLE},
+		{TASK_FACE_IDEAL, (float)0},
+		{TASK_WAIT_RANDOM, (float)0.5},
 };
 
-Task_t	tlSRRangeAttack1Fast[] =
-{
-	{ TASK_STOP_MOVING,			(float)0		},
-	{ TASK_FACE_IDEAL,			(float)0		},
-	{ TASK_RANGE_ATTACK1,		(float)0		},
-	{ TASK_SET_ACTIVITY,		(float)ACT_IDLE	},
-};
-
-Schedule_t	slRCRangeAttack1Fast[] =
-{
+Schedule_t slRCRangeAttack1[] =
 	{
-		tlSRRangeAttack1Fast,
-		ARRAYSIZE(tlSRRangeAttack1Fast),
-		bits_COND_ENEMY_OCCLUDED |
-		bits_COND_NO_AMMO_LOADED,
-		0,
-		"HCRAFast"
-	},
+		{tlSRRangeAttack1,
+			ARRAYSIZE(tlSRRangeAttack1),
+			bits_COND_ENEMY_OCCLUDED |
+				bits_COND_NO_AMMO_LOADED,
+			0,
+			"HCRangeAttack1"},
+};
+
+Task_t tlSRRangeAttack1Fast[] =
+	{
+		{TASK_STOP_MOVING, (float)0},
+		{TASK_FACE_IDEAL, (float)0},
+		{TASK_RANGE_ATTACK1, (float)0},
+		{TASK_SET_ACTIVITY, (float)ACT_IDLE},
+};
+
+Schedule_t slRCRangeAttack1Fast[] =
+	{
+		{tlSRRangeAttack1Fast,
+			ARRAYSIZE(tlSRRangeAttack1Fast),
+			bits_COND_ENEMY_OCCLUDED |
+				bits_COND_NO_AMMO_LOADED,
+			0,
+			"HCRAFast"},
 };
 
 class COFShockRoach : public CBaseMonster
@@ -87,11 +83,11 @@ public:
 	void IdleSound() override;
 	void AlertSound() override;
 	void PrescheduleThink() override;
-	int  Classify() override;
+	int Classify() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
-	BOOL CheckRangeAttack1(float flDot, float flDist) override;
-	BOOL CheckRangeAttack2(float flDot, float flDist) override;
-	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	bool CheckRangeAttack1(float flDot, float flDist) override;
+	bool CheckRangeAttack2(float flDot, float flDist) override;
+	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 
 	virtual float GetDamageAmount() { return gSkillData.shockroachDmgBite; }
 	virtual int GetVoicePitch() { return 100; }
@@ -100,12 +96,12 @@ public:
 
 	void MonsterThink() override;
 
-	int Save(CSave& save) override;
-	int Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
 	float m_flBirthTime;
-	BOOL m_fRoachSolid;
+	bool m_fRoachSolid;
 
 	CUSTOM_SCHEDULES;
 
@@ -118,63 +114,62 @@ public:
 };
 LINK_ENTITY_TO_CLASS(monster_shockroach, COFShockRoach);
 
-TYPEDESCRIPTION	COFShockRoach::m_SaveData[] =
-{
-	DEFINE_FIELD(COFShockRoach, m_flBirthTime, FIELD_TIME),
+TYPEDESCRIPTION COFShockRoach::m_SaveData[] =
+	{
+		DEFINE_FIELD(COFShockRoach, m_flBirthTime, FIELD_TIME),
 };
 
 IMPLEMENT_SAVERESTORE(COFShockRoach, CBaseMonster);
 
-DEFINE_CUSTOM_SCHEDULES(COFShockRoach)
-{
+DEFINE_CUSTOM_SCHEDULES(COFShockRoach){
 	slRCRangeAttack1,
-		slRCRangeAttack1Fast,
+	slRCRangeAttack1Fast,
 };
 
 IMPLEMENT_CUSTOM_SCHEDULES(COFShockRoach, CBaseMonster);
 
 const char* COFShockRoach::pIdleSounds[] =
-{
-	"shockroach/shock_idle1.wav",
-	"shockroach/shock_idle2.wav",
-	"shockroach/shock_idle3.wav",
+	{
+		"shockroach/shock_idle1.wav",
+		"shockroach/shock_idle2.wav",
+		"shockroach/shock_idle3.wav",
 };
 const char* COFShockRoach::pAlertSounds[] =
-{
-	"shockroach/shock_angry.wav",
+	{
+		"shockroach/shock_angry.wav",
 };
 const char* COFShockRoach::pPainSounds[] =
-{
-	"shockroach/shock_flinch.wav",
+	{
+		"shockroach/shock_flinch.wav",
 };
 const char* COFShockRoach::pAttackSounds[] =
-{
-	"shockroach/shock_jump1.wav",
-	"shockroach/shock_jump2.wav",
+	{
+		"shockroach/shock_jump1.wav",
+		"shockroach/shock_jump2.wav",
 };
 
 const char* COFShockRoach::pDeathSounds[] =
-{
-	"shockroach/shock_die.wav",
+	{
+		"shockroach/shock_die.wav",
 };
 
 const char* COFShockRoach::pBiteSounds[] =
-{
-	"shockroach/shock_bite.wav",
+	{
+		"shockroach/shock_bite.wav",
 };
 
 //=========================================================
-// Classify - indicates this monster's place in the 
+// Classify - indicates this monster's place in the
 // relationship table.
 //=========================================================
-int	COFShockRoach::Classify()
+int COFShockRoach::Classify()
 {
-	return	CLASS_ALIEN_PREY;
+	return CLASS_ALIEN_PREY;
 }
 
 //=========================================================
-// Center - returns the real center of the headcrab.  The 
-// bounding box is much larger than the actual creature so 
+// Center - returns the real center of the headcrab.  The
+// bounding box is much larger than the actual creature so
 // this is needed for targeting
 //=========================================================
 Vector COFShockRoach::Center()
@@ -225,7 +220,7 @@ void COFShockRoach::HandleAnimEvent(MonsterEvent_t* pEvent)
 	{
 		ClearBits(pev->flags, FL_ONGROUND);
 
-		UTIL_SetOrigin(pev, pev->origin + Vector(0, 0, 1));// take him off ground so engine doesn't instantly reset onground 
+		UTIL_SetOrigin(pev, pev->origin + Vector(0, 0, 1)); // take him off ground so engine doesn't instantly reset onground
 		UTIL_MakeVectors(pev->angles);
 
 		Vector vecJumpDir;
@@ -294,9 +289,9 @@ void COFShockRoach::Spawn()
 	m_bloodColor = BLOOD_COLOR_GREEN;
 	pev->effects = 0;
 	pev->health = gSkillData.shockroachHealth;
-	pev->view_ofs = Vector(0, 0, 20);// position of the eyes relative to monster's origin.
-	pev->yaw_speed = 5;//!!! should we put this in the monster's changeanim function since turn rates may vary with state/anim?
-	m_flFieldOfView = 0.5;// indicates the width of this monster's forward view cone ( as a dotproduct result )
+	pev->view_ofs = Vector(0, 0, 20); // position of the eyes relative to monster's origin.
+	pev->yaw_speed = 5;				  //!!! should we put this in the monster's changeanim function since turn rates may vary with state/anim?
+	m_flFieldOfView = 0.5;			  // indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
 
 	m_fRoachSolid = false;
@@ -324,7 +319,7 @@ void COFShockRoach::Precache()
 
 
 //=========================================================
-// RunTask 
+// RunTask
 //=========================================================
 void COFShockRoach::RunTask(Task_t* pTask)
 {
@@ -354,7 +349,7 @@ void COFShockRoach::RunTask(Task_t* pTask)
 //=========================================================
 void COFShockRoach::LeapTouch(CBaseEntity* pOther)
 {
-	if (!pOther->pev->takedamage)
+	if (0 == pOther->pev->takedamage)
 	{
 		return;
 	}
@@ -425,35 +420,35 @@ void COFShockRoach::StartTask(Task_t* pTask)
 //=========================================================
 // CheckRangeAttack1
 //=========================================================
-BOOL COFShockRoach::CheckRangeAttack1(float flDot, float flDist)
+bool COFShockRoach::CheckRangeAttack1(float flDot, float flDist)
 {
 	if (FBitSet(pev->flags, FL_ONGROUND) && flDist <= 256 && flDot >= 0.65)
 	{
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 }
 
 //=========================================================
 // CheckRangeAttack2
 //=========================================================
-BOOL COFShockRoach::CheckRangeAttack2(float flDot, float flDist)
+bool COFShockRoach::CheckRangeAttack2(float flDot, float flDist)
 {
-	return FALSE;
+	return false;
 	// BUGBUG: Why is this code here?  There is no ACT_RANGE_ATTACK2 animation.  I've disabled it for now.
 #if 0
 	if (FBitSet(pev->flags, FL_ONGROUND) && flDist > 64 && flDist <= 256 && flDot >= 0.5)
 	{
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 #endif
 }
 
-int COFShockRoach::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool COFShockRoach::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
 	// Don't take any acid damage -- BigMomma's mortar is acid
-	if (bitsDamageType & DMG_ACID)
+	if ((bitsDamageType & DMG_ACID) != 0)
 		flDamage = 0;
 
 	//Don't take damage while spawning
@@ -472,21 +467,21 @@ void COFShockRoach::IdleSound()
 }
 
 //=========================================================
-// AlertSound 
+// AlertSound
 //=========================================================
 void COFShockRoach::AlertSound()
 {
 }
 
 //=========================================================
-// AlertSound 
+// AlertSound
 //=========================================================
 void COFShockRoach::PainSound()
 {
 }
 
 //=========================================================
-// DeathSound 
+// DeathSound
 //=========================================================
 void COFShockRoach::DeathSound()
 {

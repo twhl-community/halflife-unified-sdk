@@ -27,10 +27,10 @@
 #include "CShockRifle.h"
 
 #ifndef CLIENT_DLL
-TYPEDESCRIPTION	CShockRifle::m_SaveData[] =
-{
-	//This isn't restored in the original
-	DEFINE_FIELD(CShockRifle, m_flRechargeTime, FIELD_TIME),
+TYPEDESCRIPTION CShockRifle::m_SaveData[] =
+	{
+		//This isn't restored in the original
+		DEFINE_FIELD(CShockRifle, m_flRechargeTime, FIELD_TIME),
 };
 
 IMPLEMENT_SAVERESTORE(CShockRifle, CShockRifle::BaseClass);
@@ -79,7 +79,7 @@ void CShockRifle::Spawn()
 	pev->framerate = 1;
 }
 
-BOOL CShockRifle::AddToPlayer(CBasePlayer* pPlayer)
+bool CShockRifle::AddToPlayer(CBasePlayer* pPlayer)
 {
 	if (BaseClass::AddToPlayer(pPlayer))
 	{
@@ -94,18 +94,18 @@ BOOL CShockRifle::AddToPlayer(CBasePlayer* pPlayer)
 
 void CShockRifle::AttachToPlayer(CBasePlayer* pPlayer)
 {
-	if (!m_iDefaultAmmo)
+	if (0 == m_iDefaultAmmo)
 		m_iDefaultAmmo = 1;
 
 	BaseClass::AttachToPlayer(pPlayer);
 }
 
-BOOL CShockRifle::CanDeploy()
+bool CShockRifle::CanDeploy()
 {
 	return true;
 }
 
-BOOL CShockRifle::Deploy()
+bool CShockRifle::Deploy()
 {
 	if (UTIL_IsMultiplayer())
 	{
@@ -129,7 +129,7 @@ void CShockRifle::Holster()
 
 	SendWeaponAnim(SHOCKRIFLE_HOLSTER);
 
-	if (!m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType])
+	if (0 == m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType])
 	{
 		m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] = 1;
 	}
@@ -211,7 +211,7 @@ void CShockRifle::PrimaryAttack()
 
 	int flags;
 
-#if defined( CLIENT_WEAPONS )
+#if defined(CLIENT_WEAPONS)
 	flags = FEV_NOTHOST;
 #else
 	flags = 0;
@@ -303,7 +303,7 @@ int CShockRifle::iItemSlot()
 	return 4;
 }
 
-int CShockRifle::GetItemInfo(ItemInfo* p)
+bool CShockRifle::GetItemInfo(ItemInfo* p)
 {
 	p->pszAmmo1 = "shock";
 	p->iMaxAmmo1 = SHOCKRIFLE_MAX_CLIP;
@@ -316,5 +316,5 @@ int CShockRifle::GetItemInfo(ItemInfo* p)
 	p->iPosition = 1;
 	p->iId = m_iId = WEAPON_SHOCKRIFLE;
 	p->iWeight = SHOCKRIFLE_WEIGHT;
-	return 1;
+	return true;
 }

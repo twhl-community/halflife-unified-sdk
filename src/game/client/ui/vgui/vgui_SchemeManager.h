@@ -1,9 +1,11 @@
 //========= Copyright © 1996-2002, Valve LLC, All rights reserved. ============
 //
-// Purpose: 
+// Purpose:
 //
 // $NoKeywords: $
 //=============================================================================
+
+#pragma once
 
 #include <VGUI_Font.h>
 
@@ -18,7 +20,7 @@ void Scheme_Init();
 
 //-----------------------------------------------------------------------------
 // Purpose: Handles the loading of text scheme description from disk
-//			supports different font/color/size schemes at different resolutions 
+//			supports different font/color/size schemes at different resolutions
 //-----------------------------------------------------------------------------
 class CSchemeManager
 {
@@ -46,9 +48,7 @@ private:
 	int m_iNumSchemes;
 
 	// Resolution we were initted at.
-	int		m_xRes;
+	int m_xRes;
 
 	CScheme* getSafeScheme(SchemeHandle_t schemeHandle);
 };
-
-

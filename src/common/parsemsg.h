@@ -18,10 +18,9 @@
 //  in this dll. (and C++ifying it)
 //
 
-#ifndef PARSEMSG_H
-#define PARSEMSG_H
+#pragma once
 
-#define ASSERT( x )
+#define ASSERT(x)
 //--------------------------------------------------------------------------------------------------------------
 void BEGIN_READ(void* buf, int size);
 int READ_CHAR();
@@ -34,7 +33,7 @@ char* READ_STRING();
 float READ_COORD();
 float READ_ANGLE();
 float READ_HIRESANGLE();
-int READ_OK();
+bool READ_OK();
 
 //--------------------------------------------------------------------------------------------------------------
 class BufferWriter
@@ -59,8 +58,3 @@ protected:
 };
 
 //--------------------------------------------------------------------------------------------------------------
-
-#endif // PARSEMSG_H
-
-
-

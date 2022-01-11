@@ -1,20 +1,12 @@
 //========= Copyright � 1996-2001, Valve LLC, All rights reserved. ============
 //
-// Purpose: 
+// Purpose:
 //
 // $NoKeywords: $
 //=============================================================================
 
 // There are hud.h's coming out of the woodwork so this ensures that we get the right one.
-#if defined(THREEWAVE) || defined(DMC_BUILD)
-#include "../dmc/cl_dll/hud.h"
-#elif defined(CSTRIKE)
-#include "../cstrike/cl_dll/hud.h"
-#elif defined(DOD)
-#include "../dod/cl_dll/hud.h"
-#else
 #include "hud.h"
-#endif
 
 #include "cl_util.h"
 #include <assert.h>
@@ -38,12 +30,12 @@
 using namespace vgui;
 
 
-extern int cam_thirdperson;
+extern bool cam_thirdperson;
 
 
-#define VOICE_MODEL_INTERVAL		0.3
-#define SCOREBOARD_BLINK_FREQUENCY	0.3	// How often to blink the scoreboard icons.
-#define SQUELCHOSCILLATE_PER_SECOND	2.0f
+#define VOICE_MODEL_INTERVAL 0.3
+#define SCOREBOARD_BLINK_FREQUENCY 0.3 // How often to blink the scoreboard icons.
+#define SQUELCHOSCILLATE_PER_SECOND 2.0f
 
 
 extern BitmapTGA* LoadTGA(const char* pImageName);
@@ -89,16 +81,13 @@ int g_BannedPlayerPrintCount;
 void ForEachBannedPlayer(char id[16])
 {
 	char str[256];
-	sprintf(str, "Ban %d: %2x%2x%2x%2x%2x%2x%2x%2x%2x%2x%2x%2x%2x%2x%2x%2x\n",
+	sprintf(str, "Ban %d: %2X%2X%2X%2X%2X%2X%2X%2X%2X%2X%2X%2X%2X%2X%2X%2X\n",
 		g_BannedPlayerPrintCount++,
 		id[0], id[1], id[2], id[3],
 		id[4], id[5], id[6], id[7],
 		id[8], id[9], id[10], id[11],
-		id[12], id[13], id[14], id[15]
-	);
-#ifdef _WIN32
-	strupr(str);
-#endif
+		id[12], id[13], id[14], id[15]);
+
 	gEngfuncs.pfnConsolePrint(str);
 }
 
@@ -248,7 +237,7 @@ int CVoiceStatus::Init(
 }
 
 
-int CVoiceStatus::VidInit()
+bool CVoiceStatus::VidInit()
 {
 	FreeBitmaps();
 
@@ -260,7 +249,7 @@ int CVoiceStatus::VidInit()
 
 	if (m_pAckBitmap = vgui_LoadTGA("gfx/vgui/icntlk_sv.tga"))
 	{
-		m_pAckBitmap->setColor(Color(255, 255, 255, 135));	// Give just a tiny bit of translucency so software draws correctly.
+		m_pAckBitmap->setColor(Color(255, 255, 255, 135)); // Give just a tiny bit of translucency so software draws correctly.
 	}
 
 	m_pLocalLabel->setImage(m_pLocalBitmap);
@@ -268,25 +257,25 @@ int CVoiceStatus::VidInit()
 
 
 	if (m_pSpeakerLabelIcon = vgui_LoadTGANoInvertAlpha("gfx/vgui/speaker4.tga"))
-		m_pSpeakerLabelIcon->setColor(Color(255, 255, 255, 1));		// Give just a tiny bit of translucency so software draws correctly.
+		m_pSpeakerLabelIcon->setColor(Color(255, 255, 255, 1)); // Give just a tiny bit of translucency so software draws correctly.
 
 	if (m_pScoreboardNeverSpoken = vgui_LoadTGANoInvertAlpha("gfx/vgui/640_speaker1.tga"))
-		m_pScoreboardNeverSpoken->setColor(Color(255, 255, 255, 1));	// Give just a tiny bit of translucency so software draws correctly.
+		m_pScoreboardNeverSpoken->setColor(Color(255, 255, 255, 1)); // Give just a tiny bit of translucency so software draws correctly.
 
 	if (m_pScoreboardNotSpeaking = vgui_LoadTGANoInvertAlpha("gfx/vgui/640_speaker2.tga"))
-		m_pScoreboardNotSpeaking->setColor(Color(255, 255, 255, 1));	// Give just a tiny bit of translucency so software draws correctly.
+		m_pScoreboardNotSpeaking->setColor(Color(255, 255, 255, 1)); // Give just a tiny bit of translucency so software draws correctly.
 
 	if (m_pScoreboardSpeaking = vgui_LoadTGANoInvertAlpha("gfx/vgui/640_speaker3.tga"))
-		m_pScoreboardSpeaking->setColor(Color(255, 255, 255, 1));	// Give just a tiny bit of translucency so software draws correctly.
+		m_pScoreboardSpeaking->setColor(Color(255, 255, 255, 1)); // Give just a tiny bit of translucency so software draws correctly.
 
 	if (m_pScoreboardSpeaking2 = vgui_LoadTGANoInvertAlpha("gfx/vgui/640_speaker4.tga"))
-		m_pScoreboardSpeaking2->setColor(Color(255, 255, 255, 1));	// Give just a tiny bit of translucency so software draws correctly.
+		m_pScoreboardSpeaking2->setColor(Color(255, 255, 255, 1)); // Give just a tiny bit of translucency so software draws correctly.
 
 	if (m_pScoreboardSquelch = vgui_LoadTGA("gfx/vgui/icntlk_squelch.tga"))
-		m_pScoreboardSquelch->setColor(Color(255, 255, 255, 1));	// Give just a tiny bit of translucency so software draws correctly.
+		m_pScoreboardSquelch->setColor(Color(255, 255, 255, 1)); // Give just a tiny bit of translucency so software draws correctly.
 
 	if (m_pScoreboardBanned = vgui_LoadTGA("gfx/vgui/640_voiceblocked.tga"))
-		m_pScoreboardBanned->setColor(Color(255, 255, 255, 1));	// Give just a tiny bit of translucency so software draws correctly.
+		m_pScoreboardBanned->setColor(Color(255, 255, 255, 1)); // Give just a tiny bit of translucency so software draws correctly.
 
 	// Figure out the voice head model height.
 	m_VoiceHeadModelHeight = 45;
@@ -304,7 +293,7 @@ int CVoiceStatus::VidInit()
 	}
 
 	m_VoiceHeadModel = gEngfuncs.pfnSPR_Load("sprites/voiceicon.spr");
-	return TRUE;
+	return true;
 }
 
 
@@ -330,20 +319,20 @@ void CVoiceStatus::Frame(double frametime)
 			m_Labels[i].m_pBackground->setVisible(false);
 	}
 
-	for (int i = 0; i < VOICE_MAX_PLAYERS; i++)
+	for (int i = 0; i < MAX_PLAYERS; i++)
 		UpdateBanButton(i);
 }
 
 
 void CVoiceStatus::CreateEntities()
 {
-	if (!m_VoiceHeadModel)
+	if (0 == m_VoiceHeadModel)
 		return;
 
 	cl_entity_t* localPlayer = gEngfuncs.GetLocalPlayer();
 
 	int iOutModel = 0;
-	for (int i = 0; i < VOICE_MAX_PLAYERS; i++)
+	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
 		if (!m_VoicePlayers[i])
 			continue;
@@ -355,7 +344,7 @@ void CVoiceStatus::CreateEntities()
 			continue;
 
 		// Don't show an icon for dead or spectating players (ie: invisible entities).
-		if (pClient->curstate.effects & EF_NODRAW)
+		if ((pClient->curstate.effects & EF_NODRAW) != 0)
 			continue;
 
 		// Don't show an icon for the local player unless we're in thirdperson mode.
@@ -388,7 +377,7 @@ void CVoiceStatus::CreateEntities()
 }
 
 
-void CVoiceStatus::UpdateSpeakerStatus(int entindex, qboolean bTalking)
+void CVoiceStatus::UpdateSpeakerStatus(int entindex, bool bTalking)
 {
 	cvar_t* pVoiceLoopback = NULL;
 
@@ -397,10 +386,10 @@ void CVoiceStatus::UpdateSpeakerStatus(int entindex, qboolean bTalking)
 		return;
 	}
 
-	if (gEngfuncs.pfnGetCvarFloat("voice_clientdebug"))
+	if (0 != gEngfuncs.pfnGetCvarFloat("voice_clientdebug"))
 	{
 		char msg[256];
-		_snprintf(msg, sizeof(msg), "CVoiceStatus::UpdateSpeakerStatus: ent %d talking = %d\n", entindex, bTalking);
+		snprintf(msg, sizeof(msg), "CVoiceStatus::UpdateSpeakerStatus: ent %d talking = %d\n", entindex, static_cast<int>(bTalking));
 		gEngfuncs.pfnConsolePrint(msg);
 	}
 
@@ -409,7 +398,7 @@ void CVoiceStatus::UpdateSpeakerStatus(int entindex, qboolean bTalking)
 	// Is it the local player talking?
 	if (entindex == -1)
 	{
-		m_bTalking = !!bTalking;
+		m_bTalking = bTalking;
 		if (bTalking)
 		{
 			// Enable voice for them automatically if they try to talk.
@@ -424,10 +413,10 @@ void CVoiceStatus::UpdateSpeakerStatus(int entindex, qboolean bTalking)
 	}
 	else if (entindex == -2)
 	{
-		m_bServerAcked = !!bTalking;
+		m_bServerAcked = bTalking;
 	}
 
-	if (entindex >= 0 && entindex <= VOICE_MAX_PLAYERS)
+	if (entindex >= 0 && entindex <= MAX_PLAYERS)
 	{
 		int iClient = entindex - 1;
 		if (iClient < 0)
@@ -445,7 +434,7 @@ void CVoiceStatus::UpdateSpeakerStatus(int entindex, qboolean bTalking)
 			if (!pLabel)
 			{
 				// if this isn't the local player (unless they have voice_loopback on)
-				if ((entindex != iLocalPlayerIndex) || (pVoiceLoopback && pVoiceLoopback->value))
+				if ((entindex != iLocalPlayerIndex) || (pVoiceLoopback && 0 != pVoiceLoopback->value))
 				{
 					if (pLabel = GetFreeVoiceLabel())
 					{
@@ -455,7 +444,7 @@ void CVoiceStatus::UpdateSpeakerStatus(int entindex, qboolean bTalking)
 						gEngfuncs.pfnGetPlayerInfo(entindex, &info);
 
 						char paddedName[512];
-						_snprintf(paddedName, sizeof(paddedName), "%s   ", info.name);
+						snprintf(paddedName, sizeof(paddedName), "%s   ", info.name);
 
 						int color[3];
 						m_pHelper->GetPlayerTextColor(entindex, color);
@@ -502,7 +491,7 @@ void CVoiceStatus::UpdateServerState(bool bForce)
 	char const* pLevelName = gEngfuncs.pfnGetLevelName();
 	if (pLevelName[0] == 0)
 	{
-		if (gEngfuncs.pfnGetCvarFloat("voice_clientdebug"))
+		if (0 != gEngfuncs.pfnGetCvarFloat("voice_clientdebug"))
 		{
 			gEngfuncs.pfnConsolePrint("CVoiceStatus::UpdateServerState: pLevelName[0]==0\n");
 		}
@@ -510,16 +499,16 @@ void CVoiceStatus::UpdateServerState(bool bForce)
 		return;
 	}
 
-	int bCVarModEnable = !!gEngfuncs.pfnGetCvarFloat("voice_modenable");
+	int bCVarModEnable = static_cast<int>(0 != gEngfuncs.pfnGetCvarFloat("voice_modenable"));
 	if (bForce || m_bServerModEnable != bCVarModEnable)
 	{
 		m_bServerModEnable = bCVarModEnable;
 
 		char str[256];
-		_snprintf(str, sizeof(str), "VModEnable %d", m_bServerModEnable);
+		snprintf(str, sizeof(str), "VModEnable %d", m_bServerModEnable);
 		ServerCmd(str);
 
-		if (gEngfuncs.pfnGetCvarFloat("voice_clientdebug"))
+		if (0 != gEngfuncs.pfnGetCvarFloat("voice_clientdebug"))
 		{
 			char msg[256];
 			sprintf(msg, "CVoiceStatus::UpdateServerState: Sending '%s'\n", str);
@@ -533,18 +522,22 @@ void CVoiceStatus::UpdateServerState(bool bForce)
 
 	for (unsigned long dw = 0; dw < VOICE_MAX_PLAYERS_DW; dw++)
 	{
+		//The ban mask is a 32 bit int, so make sure this doesn't silently break.
+		//Note that the server will also need updating.
+		static_assert(MAX_PLAYERS <= 32, "The voice ban bit vector only supports up to 32 players");
+
 		unsigned long serverBanMask = 0;
 		unsigned long banMask = 0;
-		for (unsigned long i = 0; i < 32; i++)
+		for (unsigned long i = 0; i < MAX_PLAYERS; i++)
 		{
 			char playerID[16];
-			if (!gEngfuncs.GetPlayerUniqueID(i + 1, playerID))
+			if (0 == gEngfuncs.GetPlayerUniqueID(i + 1, playerID))
 				continue;
 
 			if (m_BanMgr.GetPlayerBan(playerID))
 				banMask |= 1 << i;
 
-			if (m_ServerBannedPlayers[dw * 32 + i])
+			if (m_ServerBannedPlayers[dw * MAX_PLAYERS + i])
 				serverBanMask |= 1 << i;
 		}
 
@@ -559,18 +552,18 @@ void CVoiceStatus::UpdateServerState(bool bForce)
 
 	if (bChange || bForce)
 	{
-		if (gEngfuncs.pfnGetCvarFloat("voice_clientdebug"))
+		if (0 != gEngfuncs.pfnGetCvarFloat("voice_clientdebug"))
 		{
 			char msg[256];
 			sprintf(msg, "CVoiceStatus::UpdateServerState: Sending '%s'\n", str);
 			gEngfuncs.pfnConsolePrint(msg);
 		}
 
-		gEngfuncs.pfnServerCmdUnreliable(str);	// Tell the server..
+		gEngfuncs.pfnServerCmdUnreliable(str); // Tell the server..
 	}
 	else
 	{
-		if (gEngfuncs.pfnGetCvarFloat("voice_clientdebug"))
+		if (0 != gEngfuncs.pfnGetCvarFloat("voice_clientdebug"))
 		{
 			gEngfuncs.pfnConsolePrint("CVoiceStatus::UpdateServerState: no change\n");
 		}
@@ -642,7 +635,7 @@ void CVoiceStatus::HandleVoiceMaskMsg(int iSize, void* pbuf)
 		m_AudiblePlayers.SetDWord(dw, (unsigned long)READ_LONG());
 		m_ServerBannedPlayers.SetDWord(dw, (unsigned long)READ_LONG());
 
-		if (gEngfuncs.pfnGetCvarFloat("voice_clientdebug"))
+		if (0 != gEngfuncs.pfnGetCvarFloat("voice_clientdebug"))
 		{
 			char str[256];
 			gEngfuncs.pfnConsolePrint("CVoiceStatus::HandleVoiceMaskMsg\n");
@@ -660,7 +653,7 @@ void CVoiceStatus::HandleVoiceMaskMsg(int iSize, void* pbuf)
 
 void CVoiceStatus::HandleReqStateMsg(int iSize, void* pbuf)
 {
-	if (gEngfuncs.pfnGetCvarFloat("voice_clientdebug"))
+	if (0 != gEngfuncs.pfnGetCvarFloat("voice_clientdebug"))
 	{
 		gEngfuncs.pfnConsolePrint("CVoiceStatus::HandleReqStateMsg\n");
 	}
@@ -763,7 +756,7 @@ void CVoiceStatus::RepositionLabels()
 		m_pLocalLabel->setParent(*m_pParentPanel);
 		m_pLocalLabel->setVisible(true);
 
-		if (m_bServerAcked && !!gEngfuncs.pfnGetCvarFloat("voice_clientdebug"))
+		if (m_bServerAcked && 0 != gEngfuncs.pfnGetCvarFloat("voice_clientdebug"))
 			m_pLocalLabel->setImage(m_pAckBitmap);
 		else
 			m_pLocalLabel->setImage(m_pLocalBitmap);
@@ -814,7 +807,7 @@ void CVoiceStatus::FreeBitmaps()
 	m_pScoreboardBanned = NULL;
 
 	// Clear references to the images in panels.
-	for (int i = 0; i < VOICE_MAX_PLAYERS; i++)
+	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
 		if (m_pBanButtons[i])
 		{
@@ -828,13 +821,13 @@ void CVoiceStatus::FreeBitmaps()
 
 //-----------------------------------------------------------------------------
 // Purpose: returns true if the target client has been banned
-// Input  : playerID - 
+// Input  : playerID -
 // Output : Returns true on success, false on failure.
 //-----------------------------------------------------------------------------
 bool CVoiceStatus::IsPlayerBlocked(int iPlayer)
 {
 	char playerID[16];
-	if (!gEngfuncs.GetPlayerUniqueID(iPlayer, playerID))
+	if (0 == gEngfuncs.GetPlayerUniqueID(iPlayer, playerID))
 		return false;
 
 	return m_BanMgr.GetPlayerBan(playerID);
@@ -842,7 +835,7 @@ bool CVoiceStatus::IsPlayerBlocked(int iPlayer)
 
 //-----------------------------------------------------------------------------
 // Purpose: returns true if the player can't hear the other client due to game rules (eg. the other team)
-// Input  : playerID - 
+// Input  : playerID -
 // Output : Returns true on success, false on failure.
 //-----------------------------------------------------------------------------
 bool CVoiceStatus::IsPlayerAudible(int iPlayer)
@@ -852,30 +845,30 @@ bool CVoiceStatus::IsPlayerAudible(int iPlayer)
 
 //-----------------------------------------------------------------------------
 // Purpose: blocks/unblocks the target client from being heard
-// Input  : playerID - 
+// Input  : playerID -
 // Output : Returns true on success, false on failure.
 //-----------------------------------------------------------------------------
 void CVoiceStatus::SetPlayerBlockedState(int iPlayer, bool blocked)
 {
-	if (gEngfuncs.pfnGetCvarFloat("voice_clientdebug"))
+	if (0 != gEngfuncs.pfnGetCvarFloat("voice_clientdebug"))
 	{
 		gEngfuncs.pfnConsolePrint("CVoiceStatus::SetPlayerBlockedState part 1\n");
 	}
 
 	char playerID[16];
-	if (!gEngfuncs.GetPlayerUniqueID(iPlayer, playerID))
+	if (0 == gEngfuncs.GetPlayerUniqueID(iPlayer, playerID))
 		return;
 
-	if (gEngfuncs.pfnGetCvarFloat("voice_clientdebug"))
+	if (0 != gEngfuncs.pfnGetCvarFloat("voice_clientdebug"))
 	{
 		gEngfuncs.pfnConsolePrint("CVoiceStatus::SetPlayerBlockedState part 2\n");
 	}
 
 	// Squelch or (try to) unsquelch this player.
-	if (gEngfuncs.pfnGetCvarFloat("voice_clientdebug"))
+	if (0 != gEngfuncs.pfnGetCvarFloat("voice_clientdebug"))
 	{
 		char str[256];
-		sprintf(str, "CVoiceStatus::SetPlayerBlockedState: setting player %d ban to %d\n", iPlayer, !m_BanMgr.GetPlayerBan(playerID));
+		sprintf(str, "CVoiceStatus::SetPlayerBlockedState: setting player %d ban to %d\n", iPlayer, static_cast<int>(!m_BanMgr.GetPlayerBan(playerID)));
 		gEngfuncs.pfnConsolePrint(str);
 	}
 

@@ -17,32 +17,32 @@
 
 #include <tuple>
 
-inline int g_fGruntAllyQuestion;				// true if an idle grunt asked a question. Cleared when someone answers.
+inline int g_fGruntAllyQuestion; // true if an idle grunt asked a question. Cleared when someone answers.
 
 //=========================================================
 // monster-specific DEFINE's
 //=========================================================
-#define GRUNT_VOL						0.35		// volume of grunt sounds
-#define GRUNT_ATTN						ATTN_NORM	// attenutation of grunt sentences
-#define HGRUNT_LIMP_HEALTH				20
-#define HGRUNT_DMG_HEADSHOT				( DMG_BULLET | DMG_CLUB )	// damage types that can kill a grunt with a single headshot.
-#define HGRUNT_NUM_HEADS				2 // how many grunt heads are there? 
-#define HGRUNT_MINIMUM_HEADSHOT_DAMAGE	15 // must do at least this much damage in one shot to head to score a headshot kill
-#define	HGRUNT_SENTENCE_VOLUME			(float)0.35 // volume of grunt sentences
+#define GRUNT_VOL 0.35		 // volume of grunt sounds
+#define GRUNT_ATTN ATTN_NORM // attenutation of grunt sentences
+#define HGRUNT_LIMP_HEALTH 20
+#define HGRUNT_DMG_HEADSHOT (DMG_BULLET | DMG_CLUB) // damage types that can kill a grunt with a single headshot.
+#define HGRUNT_NUM_HEADS 2							// how many grunt heads are there?
+#define HGRUNT_MINIMUM_HEADSHOT_DAMAGE 15			// must do at least this much damage in one shot to head to score a headshot kill
+#define HGRUNT_SENTENCE_VOLUME (float)0.35			// volume of grunt sentences
 
 //=========================================================
 // Monster's Anim Events Go Here
 //=========================================================
-#define		HGRUNT_AE_RELOAD		( 2 )
-#define		HGRUNT_AE_KICK			( 3 )
-#define		HGRUNT_AE_BURST1		( 4 )
-#define		HGRUNT_AE_BURST2		( 5 ) 
-#define		HGRUNT_AE_BURST3		( 6 ) 
-#define		HGRUNT_AE_GREN_TOSS		( 7 )
-#define		HGRUNT_AE_GREN_LAUNCH	( 8 )
-#define		HGRUNT_AE_GREN_DROP		( 9 )
-#define		HGRUNT_AE_CAUGHT_ENEMY	( 10) // grunt established sight with an enemy (player only) that had previously eluded the squad.
-#define		HGRUNT_AE_DROP_GUN		( 11) // grunt (probably dead) is dropping his mp5.
+#define HGRUNT_AE_RELOAD (2)
+#define HGRUNT_AE_KICK (3)
+#define HGRUNT_AE_BURST1 (4)
+#define HGRUNT_AE_BURST2 (5)
+#define HGRUNT_AE_BURST3 (6)
+#define HGRUNT_AE_GREN_TOSS (7)
+#define HGRUNT_AE_GREN_LAUNCH (8)
+#define HGRUNT_AE_GREN_DROP (9)
+#define HGRUNT_AE_CAUGHT_ENEMY (10) // grunt established sight with an enemy (player only) that had previously eluded the squad.
+#define HGRUNT_AE_DROP_GUN (11)		// grunt (probably dead) is dropping his mp5.
 
 //=========================================================
 // monster-specific schedule types
@@ -50,7 +50,7 @@ inline int g_fGruntAllyQuestion;				// true if an idle grunt asked a question. C
 enum
 {
 	SCHED_GRUNT_SUPPRESS = LAST_TALKMONSTER_SCHEDULE + 1,
-	SCHED_GRUNT_ESTABLISH_LINE_OF_FIRE,// move to a location to set up an attack against the enemy. (usually when a friendly is in the way).
+	SCHED_GRUNT_ESTABLISH_LINE_OF_FIRE, // move to a location to set up an attack against the enemy. (usually when a friendly is in the way).
 	SCHED_GRUNT_COVER_AND_RELOAD,
 	SCHED_GRUNT_SWEEP,
 	SCHED_GRUNT_FOUND_ENEMY,
@@ -58,7 +58,7 @@ enum
 	SCHED_GRUNT_REPEL_ATTACK,
 	SCHED_GRUNT_REPEL_LAND,
 	SCHED_GRUNT_WAIT_FACE_ENEMY,
-	SCHED_GRUNT_TAKECOVER_FAILED,// special schedule type that forces analysis of conditions and picks the best possible schedule to recover from this type of failure.
+	SCHED_GRUNT_TAKECOVER_FAILED, // special schedule type that forces analysis of conditions and picks the best possible schedule to recover from this type of failure.
 	SCHED_GRUNT_ELOF_FAIL,
 
 	LAST_GRUNT_SCHEDULE,
@@ -79,7 +79,7 @@ enum
 //=========================================================
 // monster-specific conditions
 //=========================================================
-#define bits_COND_GRUNT_NOFIRE	( bits_COND_SPECIAL1 )
+#define bits_COND_GRUNT_NOFIRE (bits_COND_SPECIAL1)
 
 enum HGRUNT_ALLY_SENTENCE_TYPES
 {
@@ -105,13 +105,13 @@ class CBaseHGruntAlly : public COFSquadTalkMonster
 public:
 	void Precache() override;
 	void SetYawSpeed() override;
-	int  Classify() override;
+	int Classify() override;
 	int ISoundMask() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
-	BOOL FCanCheckAttacks() override;
-	BOOL CheckMeleeAttack1(float flDot, float flDist) override;
-	BOOL CheckRangeAttack1(float flDot, float flDist) override;
-	BOOL CheckRangeAttack2(float flDot, float flDist) override;
+	bool FCanCheckAttacks() override;
+	bool CheckMeleeAttack1(float flDot, float flDist) override;
+	bool CheckRangeAttack1(float flDot, float flDist) override;
+	bool CheckRangeAttack2(float flDot, float flDist) override;
 	void CheckAmmo() override;
 	void SetActivity(Activity NewActivity) override;
 	void StartTask(Task_t* pTask) override;
@@ -124,16 +124,16 @@ public:
 	void GibMonster() override;
 	void SpeakSentence();
 
-	int	Save(CSave& save) override;
-	int Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 
 	CBaseEntity* Kick();
 	Schedule_t* GetSchedule() override;
 	Schedule_t* GetScheduleOfType(int Type) override;
 	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
-	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 
-	BOOL FOkToSpeak();
+	bool FOkToSpeak();
 	void JustSpoke();
 
 	int ObjectCaps() override;
@@ -144,7 +144,7 @@ public:
 
 	void DeclineFollowing() override;
 
-	void KeyValue(KeyValueData* pkvd) override;
+	bool KeyValue(KeyValueData* pkvd) override;
 
 	void Killed(entvars_t* pevAttacker, int iGib) override;
 
@@ -156,7 +156,7 @@ public:
 	CUSTOM_SCHEDULES;
 	static TYPEDESCRIPTION m_SaveData[];
 
-	BOOL m_lastAttackCheck;
+	bool m_lastAttackCheck;
 
 	// checking the feasibility of a grenade toss is kind of costly, so we do it every couple of seconds,
 	// not every server frame.
@@ -166,9 +166,9 @@ public:
 
 	Vector m_vecTossVelocity;
 
-	BOOL m_fThrowGrenade;
-	BOOL m_fStanding;
-	BOOL m_fFirstEncounter;// only put on the handsign show in the squad's first encounter.
+	bool m_fThrowGrenade;
+	bool m_fStanding;
+	bool m_fFirstEncounter; // only put on the handsign show in the squad's first encounter.
 	int m_cClipSize;
 
 	int m_iSentence;
@@ -177,15 +177,15 @@ public:
 	int m_iGruntTorso;
 
 	static constexpr const char* pGruntSentences[] =
-	{
-		"FG_GREN", // grenade scared grunt
-		"FG_ALERT", // sees player
-		"FG_MONSTER", // sees monster
-		"FG_COVER", // running to cover
-		"FG_THROW", // about to throw grenade
-		"FG_CHARGE",  // running out to get the enemy
-		"FG_TAUNT", // say rude things
-	};
+		{
+			"FG_GREN",	  // grenade scared grunt
+			"FG_ALERT",	  // sees player
+			"FG_MONSTER", // sees monster
+			"FG_COVER",	  // running to cover
+			"FG_THROW",	  // about to throw grenade
+			"FG_CHARGE",  // running out to get the enemy
+			"FG_TAUNT",	  // say rude things
+		};
 
 protected:
 	virtual void DropWeapon(bool applyVelocity) {}
@@ -227,12 +227,12 @@ protected:
 class CBaseHGruntAllyRepel : public CBaseMonster
 {
 public:
-	void KeyValue(KeyValueData* pkvd) override;
+	bool KeyValue(KeyValueData* pkvd) override;
 
 	void Spawn() override;
 	void Precache() override;
 	void EXPORT RepelUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-	int m_iSpriteTexture;	// Don't save, precache
+	int m_iSpriteTexture; // Don't save, precache
 
 	//TODO: needs save/restore (not in op4)
 	int m_iGruntHead;

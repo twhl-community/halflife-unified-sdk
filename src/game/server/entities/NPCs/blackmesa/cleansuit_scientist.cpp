@@ -16,16 +16,16 @@
 // human scientist (passive lab worker)
 //=========================================================
 
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"monsters.h"
-#include	"talkmonster.h"
-#include	"schedule.h"
-#include	"defaultai.h"
-#include	"scripted.h"
-#include	"animation.h"
-#include	"soundent.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
+#include "talkmonster.h"
+#include "schedule.h"
+#include "defaultai.h"
+#include "scripted.h"
+#include "animation.h"
+#include "soundent.h"
 #include "scientist.h"
 
 //=======================================================
@@ -80,34 +80,33 @@ class CDeadCleansuitScientist : public CBaseMonster
 {
 public:
 	void Spawn() override;
-	int	Classify() override { return	CLASS_HUMAN_PASSIVE; }
+	int Classify() override { return CLASS_HUMAN_PASSIVE; }
 
-	void KeyValue(KeyValueData* pkvd) override;
-	int	m_iPose;// which sequence to display
+	bool KeyValue(KeyValueData* pkvd) override;
+	int m_iPose; // which sequence to display
 	static const char* m_szPoses[9];
 };
 const char* CDeadCleansuitScientist::m_szPoses[] =
-{
-	"lying_on_back",
-	"lying_on_stomach",
-	"dead_sitting",
-	"dead_hang",
-	"dead_table1",
-	"dead_table2",
-	"dead_table3",
-	"scientist_deadpose1",
-	"dead_against_wall"
-};
+	{
+		"lying_on_back",
+		"lying_on_stomach",
+		"dead_sitting",
+		"dead_hang",
+		"dead_table1",
+		"dead_table2",
+		"dead_table3",
+		"scientist_deadpose1",
+		"dead_against_wall"};
 
-void CDeadCleansuitScientist::KeyValue(KeyValueData* pkvd)
+bool CDeadCleansuitScientist::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq(pkvd->szKeyName, "pose"))
 	{
 		m_iPose = atoi(pkvd->szValue);
-		pkvd->fHandled = TRUE;
+		return true;
 	}
-	else
-		CBaseMonster::KeyValue(pkvd);
+
+	return CBaseMonster::KeyValue(pkvd);
 }
 LINK_ENTITY_TO_CLASS(monster_cleansuit_scientist_dead, CDeadCleansuitScientist);
 
@@ -122,13 +121,13 @@ void CDeadCleansuitScientist::Spawn()
 	pev->effects = 0;
 	pev->sequence = 0;
 	// Corpses have less health
-	pev->health = 8;//gSkillData.scientistHealth;
+	pev->health = 8; //gSkillData.scientistHealth;
 
 	m_bloodColor = BLOOD_COLOR_RED;
 
 	if (pev->body == -1)
-	{// -1 chooses a random head
-		pev->body = RANDOM_LONG(0, NUM_SCIENTIST_HEADS - 1);// pick a head, any head
+	{														 // -1 chooses a random head
+		pev->body = RANDOM_LONG(0, NUM_SCIENTIST_HEADS - 1); // pick a head, any head
 	}
 	// Luther is black, make his hands black
 	if (pev->body == HEAD_LUTHER)

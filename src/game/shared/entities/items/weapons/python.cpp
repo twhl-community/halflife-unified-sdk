@@ -25,7 +25,7 @@
 LINK_ENTITY_TO_CLASS(weapon_python, CPython);
 LINK_ENTITY_TO_CLASS(weapon_357, CPython);
 
-int CPython::GetItemInfo(ItemInfo* p)
+bool CPython::GetItemInfo(ItemInfo* p)
 {
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo1 = "357";
@@ -39,27 +39,27 @@ int CPython::GetItemInfo(ItemInfo* p)
 	p->iId = m_iId = WEAPON_PYTHON;
 	p->iWeight = PYTHON_WEIGHT;
 
-	return 1;
+	return true;
 }
 
 void CPython::IncrementAmmo(CBasePlayer* pPlayer)
 {
-	if (pPlayer->GiveAmmo(1, "357", _357_MAX_CARRY))
+	if (0 != pPlayer->GiveAmmo(1, "357", _357_MAX_CARRY))
 	{
 		EMIT_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
 	}
 }
 
-int CPython::AddToPlayer(CBasePlayer* pPlayer)
+bool CPython::AddToPlayer(CBasePlayer* pPlayer)
 {
 	if (CBasePlayerWeapon::AddToPlayer(pPlayer))
 	{
 		MESSAGE_BEGIN(MSG_ONE, gmsgWeapPickup, NULL, pPlayer->pev);
 		WRITE_BYTE(m_iId);
 		MESSAGE_END();
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 }
 
 void CPython::Spawn()
@@ -71,7 +71,7 @@ void CPython::Spawn()
 
 	m_iDefaultAmmo = PYTHON_DEFAULT_GIVE;
 
-	FallInit();// get ready to fall down.
+	FallInit(); // get ready to fall down.
 }
 
 
@@ -92,7 +92,7 @@ void CPython::Precache()
 	m_usFirePython = PRECACHE_EVENT(1, "events/python.sc");
 }
 
-BOOL CPython::Deploy()
+bool CPython::Deploy()
 {
 	if (UTIL_IsMultiplayer())
 	{
@@ -110,7 +110,7 @@ BOOL CPython::Deploy()
 
 void CPython::Holster()
 {
-	m_fInReload = FALSE;// cancel any reload in progress.
+	m_fInReload = false; // cancel any reload in progress.
 
 	if (m_pPlayer->m_iFOV != 0)
 	{
@@ -131,7 +131,7 @@ void CPython::SecondaryAttack()
 
 	if (m_pPlayer->m_iFOV != 0)
 	{
-		m_pPlayer->m_iFOV = 0;  // 0 means reset to default fov
+		m_pPlayer->m_iFOV = 0; // 0 means reset to default fov
 	}
 	else if (m_pPlayer->m_iFOV != 40)
 	{
@@ -182,7 +182,7 @@ void CPython::PrimaryAttack()
 	vecDir = m_pPlayer->FireBulletsPlayer(1, vecSrc, vecAiming, VECTOR_CONE_1DEGREES, 8192, BULLET_PLAYER_357, 0, 0, m_pPlayer->pev, m_pPlayer->random_seed);
 
 	int flags;
-#if defined( CLIENT_WEAPONS )
+#if defined(CLIENT_WEAPONS)
 	flags = FEV_NOTHOST;
 #else
 	flags = 0;
@@ -190,9 +190,9 @@ void CPython::PrimaryAttack()
 
 	PLAYBACK_EVENT_FULL(flags, m_pPlayer->edict(), m_usFirePython, 0.0, g_vecZero, g_vecZero, vecDir.x, vecDir.y, 0, 0, 0, 0);
 
-	if (!m_iClip && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
+	if (0 == m_iClip && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
 		// HEV suit - indicate out of ammo condition
-		m_pPlayer->SetSuitUpdate("!HEV_AMO0", FALSE, 0);
+		m_pPlayer->SetSuitUpdate("!HEV_AMO0", false, 0);
 
 	m_flNextPrimaryAttack = 0.75;
 	m_flTimeWeaponIdle = UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10, 15);
@@ -206,12 +206,12 @@ void CPython::Reload()
 
 	if (m_pPlayer->m_iFOV != 0)
 	{
-		m_pPlayer->m_iFOV = 0;  // 0 means reset to default fov
+		m_pPlayer->m_iFOV = 0; // 0 means reset to default fov
 	}
 
-	const int bUseScope = UTIL_IsMultiplayer() ? 1 : 0;
+	const bool bUseScope = UTIL_IsMultiplayer();
 
-	DefaultReload(6, PYTHON_RELOAD, 2.0, bUseScope);
+	DefaultReload(6, PYTHON_RELOAD, 2.0, bUseScope ? 1 : 0);
 }
 
 
@@ -247,9 +247,9 @@ void CPython::WeaponIdle()
 		m_flTimeWeaponIdle = (170.0 / 30.0);
 	}
 
-	const int bUseScope = UTIL_IsMultiplayer() ? 1 : 0;
+	const bool bUseScope = UTIL_IsMultiplayer();
 
-	SendWeaponAnim(iAnim, bUseScope);
+	SendWeaponAnim(iAnim, bUseScope ? 1 : 0);
 }
 
 
@@ -266,14 +266,14 @@ class CPythonAmmo : public CBasePlayerAmmo
 		PRECACHE_MODEL("models/w_357ammobox.mdl");
 		PRECACHE_SOUND("items/9mmclip1.wav");
 	}
-	BOOL AddAmmo(CBaseEntity* pOther) override
+	bool AddAmmo(CBaseEntity* pOther) override
 	{
 		if (pOther->GiveAmmo(AMMO_357BOX_GIVE, "357", _357_MAX_CARRY) != -1)
 		{
 			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
-			return TRUE;
+			return true;
 		}
-		return FALSE;
+		return false;
 	}
 };
 

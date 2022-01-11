@@ -1,11 +1,10 @@
 //========= Copyright © 1996-2002, Valve LLC, All rights reserved. ============
 //
-// Purpose: 
+// Purpose:
 //
 // $NoKeywords: $
 //=============================================================================
 
-#include "wrect.h"
 #include "cl_dll.h"
 #include "VGUI.h"
 #include "vgui_loadtga.h"
@@ -24,10 +23,26 @@ public:
 		m_DataLen = m_ReadPos = 0;
 	}
 
-	void  seekStart(bool& success) override { m_ReadPos = 0; success = true; }
-	void  seekRelative(int count, bool& success) override { m_ReadPos += count; success = true; }
-	void  seekEnd(bool& success) override { m_ReadPos = m_DataLen; success = true; }
-	int   getAvailable(bool& success) override { success = false; return 0; } // This is what vgui does for files...
+	void seekStart(bool& success) override
+	{
+		m_ReadPos = 0;
+		success = true;
+	}
+	void seekRelative(int count, bool& success) override
+	{
+		m_ReadPos += count;
+		success = true;
+	}
+	void seekEnd(bool& success) override
+	{
+		m_ReadPos = m_DataLen;
+		success = true;
+	}
+	int getAvailable(bool& success) override
+	{
+		success = false;
+		return 0;
+	} // This is what vgui does for files...
 
 	uchar readUChar(bool& success) override
 	{
@@ -45,21 +60,21 @@ public:
 		}
 	}
 
-	void  readUChar(uchar* buf, int count, bool& success) override
+	void readUChar(uchar* buf, int count, bool& success) override
 	{
 		for (int i = 0; i < count; i++)
 			buf[i] = readUChar(success);
 	}
 
-	void  close(bool& success) override
+	void close(bool& success) override
 	{
 		m_pData = NULL;
 		m_DataLen = m_ReadPos = 0;
 	}
 
 	uchar* m_pData;
-	int			m_DataLen;
-	int			m_ReadPos;
+	int m_DataLen;
+	int m_ReadPos;
 };
 
 vgui::BitmapTGA* vgui_LoadTGA(char const* pFilename)

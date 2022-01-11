@@ -44,6 +44,7 @@ target_include_directories(client PRIVATE
 	../shared/entities/items/weapons
 	${CMAKE_CURRENT_SOURCE_DIR}
 	input
+	particleman
 	rendering
 	ui
 	ui/hud
@@ -53,6 +54,7 @@ target_include_directories(client PRIVATE
 	../../common
 	../shared
 	../shared/player_movement
+	../shared/utils
 	../../engine
 	../../../utils/vgui/include)
 	
@@ -97,11 +99,9 @@ target_sources(client PRIVATE
 	interpolation.h
 	in_defs.h
 	player_info.h
-	tf_defs.h
 	util.cpp
 	view.cpp
 	view.h
-	wrect.h
 	
 	hl/hl_baseentity.cpp
 	hl/hl_events.cpp
@@ -113,6 +113,17 @@ target_sources(client PRIVATE
 	input/inputw32.cpp
 	input/in_camera.cpp
 	input/kbutton.h
+	
+	particleman/CBaseParticle.cpp
+	particleman/CBaseParticle.h
+	particleman/CFrustum.cpp
+	particleman/CFrustum.h
+	particleman/CMiniMem.cpp
+	particleman/CMiniMem.h
+	particleman/IParticleMan_Active.cpp
+	particleman/IParticleMan_Active.h
+	particleman/particleman.h
+	particleman/particleman_internal.h
 
 	rendering/GameStudioModelRenderer.cpp
 	rendering/GameStudioModelRenderer.h
@@ -134,7 +145,6 @@ target_sources(client PRIVATE
 	ui/hud/ammohistory.h
 	ui/hud/ammo_secondary.cpp
 	ui/hud/battery.cpp
-	ui/hud/bench.h
 	ui/hud/death.cpp
 	ui/hud/flashlight.cpp
 	ui/hud/geiger.cpp
@@ -142,9 +152,6 @@ target_sources(client PRIVATE
 	ui/hud/health.h
 	ui/hud/hud.cpp
 	ui/hud/hud.h
-	ui/hud/hud_bench.cpp
-	ui/hud/hud_benchtrace.cpp
-	ui/hud/hud_benchtrace.h
 	ui/hud/hud_flagicons.cpp
 	ui/hud/hud_msg.cpp
 	ui/hud/hud_playerbrowse.cpp
@@ -202,6 +209,7 @@ target_sources(client PRIVATE
 	../../common/beamdef.h
 	../../common/cl_entity.h
 	../../common/com_model.h
+	../../common/common_types.h
 	../../common/const.h
 	../../common/con_nprint.h
 	../../common/crc.h
@@ -223,13 +231,12 @@ target_sources(client PRIVATE
 	../../common/mathlib.h
 	../../common/netadr.h
 	../../common/net_api.h
-	../../common/nowin.h
 	../../common/parsemsg.cpp
 	../../common/parsemsg.h
 	../../common/particledef.h
 	../../common/Platform.h
+	../../common/PlatformHeaders.h
 	../../common/pmtrace.h
-	../../common/port.h
 	../../common/qfont.h
 	../../common/ref_params.h
 	../../common/r_efx.h
@@ -240,8 +247,6 @@ target_sources(client PRIVATE
 	../../common/triangleapi.h
 	../../common/usercmd.h
 	../../common/weaponinfo.h
-	../../common/winsani_in.h
-	../../common/winsani_out.h
 
 	../../engine/APIProxy.h
 	../../engine/cdll_int.h
@@ -250,14 +255,10 @@ target_sources(client PRIVATE
 	../../engine/edict.h
 	../../engine/eiface.h
 
-	../../public/archtypes.h
 	../../public/FileSystem.h
 	../../public/interface.cpp
 	../../public/interface.h
 	../../public/keydefs.h
-	../../public/particleman.h
-	../../public/pman_particlemem.h
-	../../public/pman_triangleffect.h
 	../../public/cl_dll/IGameClientExports.h
 	../../public/steam/steamtypes.h
 )

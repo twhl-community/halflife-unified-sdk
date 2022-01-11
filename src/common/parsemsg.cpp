@@ -18,16 +18,13 @@
 //--------------------------------------------------------------------------------------------------------------
 #include "extdll.h"
 #include "parsemsg.h"
-#include <port.h>
-
-#define true 1
 
 static byte* gpBuf;
 static int giSize;
 static int giRead;
-static int giBadRead;
+static bool giBadRead;
 
-int READ_OK()
+bool READ_OK()
 {
 	return !giBadRead;
 }
@@ -35,7 +32,7 @@ int READ_OK()
 void BEGIN_READ(void* buf, int size)
 {
 	giRead = 0;
-	giBadRead = 0;
+	giBadRead = false;
 	giSize = size;
 	gpBuf = (byte*)buf;
 }
@@ -43,7 +40,7 @@ void BEGIN_READ(void* buf, int size)
 
 int READ_CHAR()
 {
-	int     c;
+	int c;
 
 	if (giRead + 1 > giSize)
 	{
@@ -59,7 +56,7 @@ int READ_CHAR()
 
 int READ_BYTE()
 {
-	int     c;
+	int c;
 
 	if (giRead + 1 > giSize)
 	{
@@ -75,7 +72,7 @@ int READ_BYTE()
 
 int READ_SHORT()
 {
-	int     c;
+	int c;
 
 	if (giRead + 2 > giSize)
 	{
@@ -98,7 +95,7 @@ int READ_WORD()
 
 int READ_LONG()
 {
-	int     c;
+	int c;
 
 	if (giRead + 4 > giSize)
 	{
@@ -117,9 +114,9 @@ float READ_FLOAT()
 {
 	union
 	{
-		byte    b[4];
-		float   f;
-		int     l;
+		byte b[4];
+		float f;
+		int l;
 	} dat;
 
 	dat.b[0] = gpBuf[giRead];
@@ -135,8 +132,8 @@ float READ_FLOAT()
 
 char* READ_STRING()
 {
-	static char     string[2048];
-	int             l, c;
+	static char string[2048];
+	int l, c;
 
 	string[0] = 0;
 
@@ -151,8 +148,7 @@ char* READ_STRING()
 			break;
 		string[l] = c;
 		l++;
-	}
-	while (l < sizeof(string) - 1);
+	} while (l < sizeof(string) - 1);
 
 	string[l] = 0;
 
@@ -198,7 +194,7 @@ void BufferWriter::Init(unsigned char* buffer, int bufferLen)
 //--------------------------------------------------------------------------------------------------------------
 void BufferWriter::WriteByte(unsigned char data)
 {
-	if (!m_buffer || !m_remaining)
+	if (!m_buffer || 0 == m_remaining)
 	{
 		m_overflow = true;
 		return;
@@ -229,7 +225,7 @@ void BufferWriter::WriteLong(int data)
 //--------------------------------------------------------------------------------------------------------------
 void BufferWriter::WriteString(const char* str)
 {
-	if (!m_buffer || !m_remaining)
+	if (!m_buffer || 0 == m_remaining)
 	{
 		m_overflow = true;
 		return;

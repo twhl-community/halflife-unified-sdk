@@ -15,12 +15,12 @@
 //=========================================================
 // GMan - misunderstood servant of the people
 //=========================================================
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"monsters.h"
-#include	"schedule.h"
-#include	"weapons.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
+#include "schedule.h"
+#include "weapons.h"
 #include "soundent.h"
 
 //=========================================================
@@ -33,20 +33,20 @@ public:
 	void Spawn() override;
 	void Precache() override;
 	void SetYawSpeed() override;
-	int  Classify() override;
+	int Classify() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 	int ISoundMask() override;
 
-	int	Save(CSave& save) override;
-	int Restore(CRestore& restore) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
 	void StartTask(Task_t* pTask) override;
 	void RunTask(Task_t* pTask) override;
-	int  TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
 
-	void PlayScriptedSentence(const char* pszSentence, float duration, float volume, float attenuation, BOOL bConcurrent, CBaseEntity* pListener) override;
+	void PlayScriptedSentence(const char* pszSentence, float duration, float volume, float attenuation, bool bConcurrent, CBaseEntity* pListener) override;
 
 	EHANDLE m_hPlayer;
 	EHANDLE m_hTalkTarget;
@@ -55,21 +55,21 @@ public:
 LINK_ENTITY_TO_CLASS(monster_gman, CGMan);
 
 
-TYPEDESCRIPTION	CGMan::m_SaveData[] =
-{
-	DEFINE_FIELD(CGMan, m_hTalkTarget, FIELD_EHANDLE),
-	DEFINE_FIELD(CGMan, m_flTalkTime, FIELD_TIME),
+TYPEDESCRIPTION CGMan::m_SaveData[] =
+	{
+		DEFINE_FIELD(CGMan, m_hTalkTarget, FIELD_EHANDLE),
+		DEFINE_FIELD(CGMan, m_flTalkTime, FIELD_TIME),
 };
 IMPLEMENT_SAVERESTORE(CGMan, CBaseMonster);
 
 
 //=========================================================
-// Classify - indicates this monster's place in the 
+// Classify - indicates this monster's place in the
 // relationship table.
 //=========================================================
-int	CGMan::Classify()
+int CGMan::Classify()
 {
-	return	CLASS_NONE;
+	return CLASS_NONE;
 }
 
 //=========================================================
@@ -110,7 +110,7 @@ void CGMan::HandleAnimEvent(MonsterEvent_t* pEvent)
 //=========================================================
 int CGMan::ISoundMask()
 {
-	return	bits_SOUND_NONE;
+	return bits_SOUND_NONE;
 }
 
 //=========================================================
@@ -127,7 +127,7 @@ void CGMan::Spawn()
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = DONT_BLEED;
 	pev->health = 100;
-	m_flFieldOfView = 0.5;// indicates the width of this monster's forward view cone ( as a dotproduct result )
+	m_flFieldOfView = 0.5; // indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
 
 	MonsterInit();
@@ -171,8 +171,10 @@ void CGMan::RunTask(Task_t* pTask)
 		{
 			float yaw = VecToYaw(m_hTalkTarget->pev->origin - pev->origin) - pev->angles.y;
 
-			if (yaw > 180) yaw -= 360;
-			if (yaw < -180) yaw += 360;
+			if (yaw > 180)
+				yaw -= 360;
+			if (yaw < -180)
+				yaw += 360;
 
 			// turn towards vector
 			SetBoneController(0, yaw);
@@ -182,8 +184,10 @@ void CGMan::RunTask(Task_t* pTask)
 		{
 			float yaw = VecToYaw(m_hPlayer->pev->origin - pev->origin) - pev->angles.y;
 
-			if (yaw > 180) yaw -= 360;
-			if (yaw < -180) yaw += 360;
+			if (yaw > 180)
+				yaw -= 360;
+			if (yaw < -180)
+				yaw += 360;
 
 			// turn towards vector
 			SetBoneController(0, yaw);
@@ -205,7 +209,7 @@ void CGMan::RunTask(Task_t* pTask)
 //=========================================================
 // Override all damage
 //=========================================================
-int CGMan::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool CGMan::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
 	pev->health = pev->max_health / 2; // always trigger the 50% damage aitrigger
 
@@ -218,7 +222,7 @@ int CGMan::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flD
 	{
 		SetConditions(bits_COND_HEAVY_DAMAGE);
 	}
-	return TRUE;
+	return true;
 }
 
 
@@ -229,7 +233,7 @@ void CGMan::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, T
 }
 
 
-void CGMan::PlayScriptedSentence(const char* pszSentence, float duration, float volume, float attenuation, BOOL bConcurrent, CBaseEntity* pListener)
+void CGMan::PlayScriptedSentence(const char* pszSentence, float duration, float volume, float attenuation, bool bConcurrent, CBaseEntity* pListener)
 {
 	CBaseMonster::PlayScriptedSentence(pszSentence, duration, volume, attenuation, bConcurrent, pListener);
 
