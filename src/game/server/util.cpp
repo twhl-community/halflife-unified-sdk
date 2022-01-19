@@ -356,11 +356,6 @@ void DBG_AssertFunction(
 }
 #endif // DEBUG
 
-bool UTIL_GetNextBestWeapon(CBasePlayer* pPlayer, CBasePlayerItem* pCurrentWeapon)
-{
-	return g_pGameRules->GetNextBestWeapon(pPlayer, pCurrentWeapon);
-}
-
 // ripped this out of the engine
 float UTIL_AngleMod(float a)
 {
@@ -1774,7 +1769,7 @@ unsigned _rotr(unsigned val, int shift)
 	register unsigned num = val; /* number to rotate */
 
 	shift &= 0x1f; /* modulo 32 -- this will also make
-                                           negative shifts work */
+										   negative shifts work */
 
 	while (shift--)
 	{
