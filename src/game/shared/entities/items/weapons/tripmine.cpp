@@ -354,6 +354,11 @@ void CTripmine::Spawn()
 
 	m_iDefaultAmmo = TRIPMINE_DEFAULT_GIVE;
 
+	//HACK: force the body to the first person view by default so it doesn't show up as a huge tripmine for a second.
+#ifdef CLIENT_DLL
+	pev->body = 0;
+#endif
+
 	if (!UTIL_IsMultiplayer())
 	{
 		UTIL_SetSize(pev, Vector(-16, -16, 0), Vector(16, 16, 28));
