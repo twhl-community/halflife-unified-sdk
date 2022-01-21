@@ -275,6 +275,10 @@ target_sources(hl PRIVATE
 
 add_game_shared_sources(hl)
 
+target_precompile_headers(hl
+	PRIVATE
+		entities/cbase.h)
+
 # Create filters
 get_target_property(SERVER_SOURCES hl SOURCES)
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/../../.. FILES ${SERVER_SOURCES})
