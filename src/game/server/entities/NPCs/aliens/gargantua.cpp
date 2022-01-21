@@ -18,7 +18,6 @@
 //=========================================================
 #include "cbase.h"
 #include "monsters.h"
-#include "schedule.h"
 #include "customentity.h"
 #include "weapons.h"
 #include "effects.h"

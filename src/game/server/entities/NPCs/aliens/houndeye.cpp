@@ -18,7 +18,6 @@
 
 #include "cbase.h"
 #include "monsters.h"
-#include "schedule.h"
 #include "animation.h"
 #include "nodes.h"
 #include "squadmonster.h"

@@ -14,7 +14,6 @@
 ****/
 #include "cbase.h"
 #include "basemonster.h"
-#include "schedule.h"
 #include "soundent.h"
 
 /**

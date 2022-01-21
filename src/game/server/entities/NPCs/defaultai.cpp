@@ -17,7 +17,6 @@
 //=========================================================
 #include "cbase.h"
 #include "monsters.h"
-#include "schedule.h"
 #include "defaultai.h"
 #include "soundent.h"
 #include "scripted.h"

@@ -16,7 +16,6 @@
 #include "cbase.h"
 #include "monsters.h"
 #include "talkmonster.h"
-#include "schedule.h"
 #include "defaultai.h"
 #include "scripted.h"
 #include "weapons.h"

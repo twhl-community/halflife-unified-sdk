@@ -14,7 +14,6 @@
 ****/
 #include "cbase.h"
 #include "monsters.h"
-#include "schedule.h"
 #include "flyingmonster.h"
 
 #define FLYING_AE_FLAP (8)

@@ -31,7 +31,6 @@
 #include "cbase.h"
 #include "plane.h"
 #include "monsters.h"
-#include "schedule.h"
 #include "defaultai.h"
 #include "animation.h"
 #include "squadmonster.h"

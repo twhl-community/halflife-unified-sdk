@@ -20,7 +20,6 @@
 
 #include "cbase.h"
 #include "monsters.h"
-#include "schedule.h"
 #include "zombie.h"
 
 LINK_ENTITY_TO_CLASS(monster_zombie, CZombie);

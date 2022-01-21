@@ -17,7 +17,6 @@
 //=========================================================
 #include "cbase.h"
 #include "monsters.h"
-#include "schedule.h"
 #include "weapons.h"
 #include "soundent.h"
 

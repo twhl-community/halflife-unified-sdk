@@ -19,7 +19,6 @@
 #include "cbase.h"
 #include "monsters.h"
 #include "squadmonster.h"
-#include "schedule.h"
 #include "effects.h"
 #include "weapons.h"
 #include "soundent.h"

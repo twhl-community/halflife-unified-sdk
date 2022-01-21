@@ -20,7 +20,6 @@
 
 #include "cbase.h"
 #include "monsters.h"
-#include "schedule.h"
 #include "decals.h"
 #include "soundent.h"
 #include "player.h"

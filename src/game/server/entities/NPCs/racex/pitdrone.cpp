@@ -18,7 +18,6 @@
 
 #include "cbase.h"
 #include "monsters.h"
-#include "schedule.h"
 #include "nodes.h"
 #include "effects.h"
 #include "decals.h"

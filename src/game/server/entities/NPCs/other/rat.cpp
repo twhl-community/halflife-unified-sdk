@@ -18,7 +18,6 @@
 
 #include "cbase.h"
 #include "monsters.h"
-#include "schedule.h"
 
 //=========================================================
 // Monster's Anim Events Go Here

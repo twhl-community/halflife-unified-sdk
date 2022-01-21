@@ -19,7 +19,6 @@
 
 #include "cbase.h"
 #include "monsters.h"
-#include "schedule.h"
 #include "flyingmonster.h"
 #include "nodes.h"
 #include "soundent.h"
