@@ -146,7 +146,6 @@ target_sources(client PRIVATE
 	ui/hud/ammo.h
 	ui/hud/ammohistory.cpp
 	ui/hud/ammohistory.h
-	ui/hud/ammo_secondary.cpp
 	ui/hud/battery.cpp
 	ui/hud/death.cpp
 	ui/hud/flashlight.cpp

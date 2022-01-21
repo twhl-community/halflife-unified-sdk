@@ -407,7 +407,6 @@ void CHud::Init()
 	m_Scoreboard.Init();
 	m_StatusBar.Init();
 	m_DeathNotice.Init();
-	m_AmmoSecondary.Init();
 	m_TextMessage.Init();
 	m_StatusIcons.Init();
 	m_FlagIcons.Init();
@@ -559,7 +558,6 @@ void CHud::VidInit()
 	m_DeathNotice.VidInit();
 	m_SayText.VidInit();
 	m_Menu.VidInit();
-	m_AmmoSecondary.VidInit();
 	m_TextMessage.VidInit();
 	m_StatusIcons.VidInit();
 	m_FlagIcons.VidInit();

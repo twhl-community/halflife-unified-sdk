@@ -158,32 +158,6 @@ private:
 	cvar_t* m_pCvarCrosshairScale = nullptr;
 };
 
-//
-//-----------------------------------------------------
-//
-
-class CHudAmmoSecondary : public CHudBase
-{
-public:
-	bool Init() override;
-	bool VidInit() override;
-	void Reset() override;
-	bool Draw(float flTime) override;
-
-	bool MsgFunc_SecAmmoVal(const char* pszName, int iSize, void* pbuf);
-	bool MsgFunc_SecAmmoIcon(const char* pszName, int iSize, void* pbuf);
-
-private:
-	enum
-	{
-		MAX_SEC_AMMO_VALUES = 4
-	};
-
-	int m_HUD_ammoicon; // sprite indices
-	int m_iAmmoAmounts[MAX_SEC_AMMO_VALUES];
-	float m_fFade;
-};
-
 
 #include "health.h"
 
@@ -749,7 +723,6 @@ public:
 	CHudDeathNotice m_DeathNotice;
 	CHudSayText m_SayText;
 	CHudMenu m_Menu;
-	CHudAmmoSecondary m_AmmoSecondary;
 	CHudTextMessage m_TextMessage;
 	CHudStatusIcons m_StatusIcons;
 
