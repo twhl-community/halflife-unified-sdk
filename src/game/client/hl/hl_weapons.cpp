@@ -371,7 +371,7 @@ void UTIL_ParticleBox(CBasePlayer* player, float* mins, float* maxs, float life,
 		mmax[i] = player->pev->origin[i] + maxs[i];
 	}
 
-	gEngfuncs.pEfxAPI->R_ParticleBox((float*)&mmin, (float*)&mmax, 5.0, 0, 255, 0);
+	gEngfuncs.pEfxAPI->R_ParticleBox(mmin, mmax, 5.0, 0, 255, 0);
 }
 
 /*
@@ -408,7 +408,7 @@ void UTIL_ParticleBoxes()
 			mins = pe->origin + pe->mins;
 			maxs = pe->origin + pe->maxs;
 
-			gEngfuncs.pEfxAPI->R_ParticleBox((float*)&mins, (float*)&maxs, 0, 0, 255, 2.0);
+			gEngfuncs.pEfxAPI->R_ParticleBox(mins, maxs, 0, 0, 255, 2.0);
 		}
 	}
 
@@ -517,15 +517,10 @@ HUD_GetLastOrg
 Retruns the last position that we stored for egon beam endpoint.
 =====================
 */
-void HUD_GetLastOrg(float* org)
+Vector HUD_GetLastOrg()
 {
-	int i;
-
 	// Return last origin
-	for (i = 0; i < 3; i++)
-	{
-		org[i] = previousorigin[i];
-	}
+	return previousorigin;
 }
 
 /*

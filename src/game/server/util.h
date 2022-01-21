@@ -29,10 +29,6 @@ inline void MESSAGE_BEGIN(int msg_dest, int msg_type, const float* pOrigin, entv
 
 inline globalvars_t* gpGlobals = nullptr;
 
-// Use this instead of ALLOC_STRING on constant strings
-#define STRING(offset) ((const char*)(gpGlobals->pStringBase + (unsigned int)(offset)))
-#define MAKE_STRING(str) ((uint64)(str) - (uint64)(STRING(0)))
-
 inline edict_t* FIND_ENTITY_BY_CLASSNAME(edict_t* entStart, const char* pszName)
 {
 	return FIND_ENTITY_BY_STRING(entStart, "classname", pszName);
@@ -521,7 +517,7 @@ void EMIT_GROUPNAME_SUIT(edict_t* entity, const char* groupname);
 #define PRECACHE_SOUND_ARRAY(a)                \
 	{                                          \
 		for (int i = 0; i < ARRAYSIZE(a); i++) \
-			PRECACHE_SOUND((char*)a[i]);       \
+			PRECACHE_SOUND(a[i]);	           \
 	}
 
 #define EMIT_SOUND_ARRAY_DYN(chan, array) \

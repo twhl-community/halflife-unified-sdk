@@ -234,7 +234,7 @@ void CEagle::PrimaryAttack()
 
 	PLAYBACK_EVENT_FULL(
 		flags, m_pPlayer->edict(), m_usFireEagle, 0,
-		(float*)&g_vecZero, (float*)&g_vecZero,
+		g_vecZero, g_vecZero,
 		vecSpread.x, vecSpread.y,
 		0, 0,
 		static_cast<int>(m_iClip == 0), 0);

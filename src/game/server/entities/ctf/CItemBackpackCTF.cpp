@@ -80,7 +80,7 @@ void CItemBackpackCTF::Spawn()
 {
 	//TODO: precache calls should be in Precache
 	if (!FStringNull(pev->model))
-		g_engfuncs.pfnPrecacheModel((char*)STRING(pev->model));
+		g_engfuncs.pfnPrecacheModel(STRING(pev->model));
 
 	g_engfuncs.pfnPrecacheSound("ctf/itemthrow.wav");
 	g_engfuncs.pfnPrecacheSound("items/ammopickup1.wav");

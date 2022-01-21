@@ -382,12 +382,12 @@ void Host_Say(edict_t* pEntity, bool teamonly)
 	{
 		if (CMD_ARGC() >= 2)
 		{
-			sprintf(szTemp, "%s %s", (char*)pcmd, (char*)CMD_ARGS());
+			sprintf(szTemp, "%s %s", pcmd, CMD_ARGS());
 		}
 		else
 		{
 			// Just a one word command, use the first word...sigh
-			sprintf(szTemp, "%s", (char*)pcmd);
+			sprintf(szTemp, "%s", pcmd);
 		}
 		p = szTemp;
 	}
@@ -552,7 +552,7 @@ void ClientCommand(edict_t* pEntity)
 	else if (FStrEq(pcmd, "drop"))
 	{
 		// player is dropping an item.
-		player->DropPlayerItem((char*)CMD_ARGV(1));
+		player->DropPlayerItem(CMD_ARGV(1));
 	}
 	else if (FStrEq(pcmd, "fov"))
 	{
@@ -612,7 +612,7 @@ void ClientCommand(edict_t* pEntity)
 	}
 	else if (FStrEq(pcmd, "use"))
 	{
-		player->SelectItem((char*)CMD_ARGV(1));
+		player->SelectItem(CMD_ARGV(1));
 	}
 	else if (((pstr = strstr(pcmd, "weapon_")) != NULL) && (pstr == pcmd))
 	{
@@ -1158,8 +1158,8 @@ void SetupVisibility(edict_t* pViewEntity, edict_t* pClient, unsigned char** pvs
 		org = org + (VEC_HULL_MIN - VEC_DUCK_HULL_MIN);
 	}
 
-	*pvs = ENGINE_SET_PVS((float*)&org);
-	*pas = ENGINE_SET_PAS((float*)&org);
+	*pvs = ENGINE_SET_PVS(org);
+	*pas = ENGINE_SET_PAS(org);
 }
 
 #include "entity_state.h"

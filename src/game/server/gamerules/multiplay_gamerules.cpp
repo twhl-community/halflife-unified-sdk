@@ -78,7 +78,7 @@ CHalfLifeMultiplay::CHalfLifeMultiplay()
 	else
 	{
 		// listen server
-		char* lservercfgfile = (char*)CVAR_GET_STRING("lservercfgfile");
+		const char* lservercfgfile = CVAR_GET_STRING("lservercfgfile");
 
 		if (lservercfgfile && lservercfgfile[0])
 		{
@@ -1398,7 +1398,7 @@ ReloadMapCycleFile
 Parses mapcycle.txt file into mapcycle_t structure
 ==============
 */
-bool ReloadMapCycleFile(char* filename, mapcycle_t* cycle)
+bool ReloadMapCycleFile(const char* filename, mapcycle_t* cycle)
 {
 	char szBuffer[MAX_RULE_BUFFER];
 	char szMap[32];
@@ -1618,7 +1618,7 @@ void CHalfLifeMultiplay::ChangeLevel()
 	bool do_cycle = true;
 
 	// find the map to change to
-	char* mapcfile = (char*)CVAR_GET_STRING("mapcyclefile");
+	const char* mapcfile = CVAR_GET_STRING("mapcyclefile");
 	ASSERT(mapcfile != NULL);
 
 	szCommands[0] = '\0';

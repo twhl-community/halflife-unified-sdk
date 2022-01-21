@@ -576,22 +576,12 @@ void COFVoltigore::Spawn()
 
 void COFVoltigore::PrecacheCore(const char* model)
 {
-	int i;
-
 	PRECACHE_MODEL(model);
 
-	for (i = 0; i < ARRAYSIZE(pAttackHitSounds); i++)
-		PRECACHE_SOUND((char*)pAttackHitSounds[i]);
-
-	for (i = 0; i < ARRAYSIZE(pAttackMissSounds); i++)
-		PRECACHE_SOUND((char*)pAttackMissSounds[i]);
-
-	for (i = 0; i < ARRAYSIZE(pPainSounds); i++)
-		PRECACHE_SOUND((char*)pPainSounds[i]);
-
-	for (i = 0; i < ARRAYSIZE(pAlertSounds); i++)
-		PRECACHE_SOUND((char*)pAlertSounds[i]);
-
+	PRECACHE_SOUND_ARRAY(pAttackHitSounds);
+	PRECACHE_SOUND_ARRAY(pAttackMissSounds);
+	PRECACHE_SOUND_ARRAY(pPainSounds);
+	PRECACHE_SOUND_ARRAY(pAlertSounds);
 	PRECACHE_SOUND_ARRAY(pAttackSounds);
 
 	PRECACHE_SOUND("voltigore/voltigore_attack_shock.wav");

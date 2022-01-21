@@ -1897,7 +1897,7 @@ void CSave::WriteString(const char* pname, const int* stringId, int count)
 #if 0
 	if (count != 1)
 		ALERT(at_error, "No string arrays!\n");
-	WriteString(pname, (char*)STRING(*stringId));
+	WriteString(pname, STRING(*stringId));
 #endif
 
 	size = 0;
@@ -2277,9 +2277,9 @@ int CRestore::ReadField(void* pBaseData, TYPEDESCRIPTION* pFields, int fieldCoun
 							if (!FStringNull(string) && m_precache)
 							{
 								if (pTest->fieldType == FIELD_MODELNAME)
-									PRECACHE_MODEL((char*)STRING(string));
+									PRECACHE_MODEL(STRING(string));
 								else if (pTest->fieldType == FIELD_SOUNDNAME)
-									PRECACHE_SOUND((char*)STRING(string));
+									PRECACHE_SOUND(STRING(string));
 							}
 						}
 						break;

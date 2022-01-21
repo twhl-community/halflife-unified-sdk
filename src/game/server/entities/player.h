@@ -195,7 +195,7 @@ public:
 
 	// Opposing Force specific
 
-	char* m_szTeamModel;
+	const char* m_szTeamModel;
 	CTFTeam m_iTeamNum;
 	CTFTeam m_iNewTeamNum;
 	CTFItem::CTFItem m_iItems;
@@ -332,7 +332,7 @@ public:
 	void AddPointsToTeam(int score, bool bAllowNegativeScore) override;
 	bool AddPlayerItem(CBasePlayerItem* pItem) override;
 	bool RemovePlayerItem(CBasePlayerItem* pItem) override;
-	void DropPlayerItem(char* pszItemName);
+	void DropPlayerItem(const char* pszItemName);
 	bool HasPlayerItem(CBasePlayerItem* pCheckItem);
 	bool HasNamedPlayerItem(const char* pszItemName);
 	bool HasWeapons(); // do I have ANY weapons?

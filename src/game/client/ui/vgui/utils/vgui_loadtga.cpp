@@ -81,7 +81,7 @@ vgui::BitmapTGA* vgui_LoadTGA(char const* pFilename)
 {
 	MemoryInputStream stream;
 
-	stream.m_pData = gEngfuncs.COM_LoadFile((char*)pFilename, 5, &stream.m_DataLen);
+	stream.m_pData = gEngfuncs.COM_LoadFile(pFilename, 5, &stream.m_DataLen);
 	if (!stream.m_pData)
 		return NULL;
 
@@ -96,7 +96,7 @@ vgui::BitmapTGA* vgui_LoadTGANoInvertAlpha(char const* pFilename)
 {
 	MemoryInputStream stream;
 
-	stream.m_pData = gEngfuncs.COM_LoadFile((char*)pFilename, 5, &stream.m_DataLen);
+	stream.m_pData = gEngfuncs.COM_LoadFile(pFilename, 5, &stream.m_DataLen);
 	if (!stream.m_pData)
 		return NULL;
 

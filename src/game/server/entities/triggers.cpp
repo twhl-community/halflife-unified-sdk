@@ -1162,7 +1162,7 @@ void CBaseTrigger::ActivateMultiTrigger(CBaseEntity* pActivator)
 	}
 
 	if (!FStringNull(pev->noise))
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, (char*)STRING(pev->noise), 1, ATTN_NORM);
+		EMIT_SOUND(ENT(pev), CHAN_VOICE, STRING(pev->noise), 1, ATTN_NORM);
 
 	// don't trigger again until reset
 	// pev->takedamage = DAMAGE_NO;
@@ -2845,7 +2845,7 @@ void CTriggerCTFGeneric::Touch(CBaseEntity* pOther)
 			//TOOD: not sure why this check is here since pev must be valid if the entity exists
 			if (!pOther && 0 == score && pev)
 			{
-				UTIL_LogPrintf((char*)"World triggered \"%s\"\n", STRING(pev->targetname));
+				UTIL_LogPrintf("World triggered \"%s\"\n", STRING(pev->targetname));
 			}
 
 			DisplayTeamFlags(nullptr);

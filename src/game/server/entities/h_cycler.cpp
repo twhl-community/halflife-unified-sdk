@@ -215,7 +215,7 @@ void CCyclerSprite::Spawn()
 	m_animate = true;
 	m_lastTime = gpGlobals->time;
 
-	PRECACHE_MODEL((char*)STRING(pev->model));
+	PRECACHE_MODEL(STRING(pev->model));
 	SET_MODEL(ENT(pev), STRING(pev->model));
 
 	m_maxFrame = (float)MODEL_FRAMES(pev->modelindex) - 1;
@@ -283,7 +283,7 @@ void CWeaponCycler::Spawn()
 	pev->solid = SOLID_SLIDEBOX;
 	pev->movetype = MOVETYPE_NONE;
 
-	PRECACHE_MODEL((char*)STRING(pev->model));
+	PRECACHE_MODEL(STRING(pev->model));
 	SET_MODEL(ENT(pev), STRING(pev->model));
 	m_iszModel = pev->model;
 	m_iModel = pev->modelindex;
@@ -377,7 +377,7 @@ void CWreckage::Spawn()
 
 	if (!FStringNull(pev->model))
 	{
-		PRECACHE_MODEL((char*)STRING(pev->model));
+		PRECACHE_MODEL(STRING(pev->model));
 		SET_MODEL(ENT(pev), STRING(pev->model));
 	}
 	// pev->scale = 5.0;
@@ -388,7 +388,7 @@ void CWreckage::Spawn()
 void CWreckage::Precache()
 {
 	if (!FStringNull(pev->model))
-		PRECACHE_MODEL((char*)STRING(pev->model));
+		PRECACHE_MODEL(STRING(pev->model));
 }
 
 void CWreckage::Think()

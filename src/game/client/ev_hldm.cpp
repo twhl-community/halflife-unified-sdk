@@ -71,7 +71,7 @@ float EV_HLDM_PlayTextureSound(int idx, pmtrace_t* ptr, float* vecSrc, float* ve
 	int cnt;
 	float fattn = ATTN_NORM;
 	int entity;
-	char* pTextureName;
+	const char* pTextureName;
 	char texname[64];
 	char szbuffer[64];
 
@@ -91,7 +91,7 @@ float EV_HLDM_PlayTextureSound(int idx, pmtrace_t* ptr, float* vecSrc, float* ve
 	else if (entity == 0)
 	{
 		// get texture from entity or world (world is ent(0))
-		pTextureName = (char*)gEngfuncs.pEventAPI->EV_TraceTexture(ptr->ent, vecSrc, vecEnd);
+		pTextureName = gEngfuncs.pEventAPI->EV_TraceTexture(ptr->ent, vecSrc, vecEnd);
 
 		if (pTextureName)
 		{

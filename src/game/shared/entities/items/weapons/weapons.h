@@ -329,8 +329,8 @@ public:
 	} // Return true if you want to add yourself to the player
 
 	// generic "shared" ammo handlers
-	bool AddPrimaryAmmo(int iCount, char* szName, int iMaxClip, int iMaxCarry);
-	bool AddSecondaryAmmo(int iCount, char* szName, int iMaxCarry);
+	bool AddPrimaryAmmo(int iCount, const char* szName, int iMaxClip, int iMaxCarry);
+	bool AddSecondaryAmmo(int iCount, const char* szName, int iMaxCarry);
 
 	void UpdateItemInfo() override {} // updates HUD state
 

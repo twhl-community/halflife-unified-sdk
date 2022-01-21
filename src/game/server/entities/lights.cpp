@@ -96,7 +96,7 @@ void CLight::Spawn()
 		if (FBitSet(pev->spawnflags, SF_LIGHT_START_OFF))
 			LIGHT_STYLE(m_iStyle, "a");
 		else if (!FStringNull(m_iszPattern))
-			LIGHT_STYLE(m_iStyle, (char*)STRING(m_iszPattern));
+			LIGHT_STYLE(m_iStyle, STRING(m_iszPattern));
 		else
 			LIGHT_STYLE(m_iStyle, "m");
 	}
@@ -113,7 +113,7 @@ void CLight::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType
 		if (FBitSet(pev->spawnflags, SF_LIGHT_START_OFF))
 		{
 			if (!FStringNull(m_iszPattern))
-				LIGHT_STYLE(m_iStyle, (char*)STRING(m_iszPattern));
+				LIGHT_STYLE(m_iStyle, STRING(m_iszPattern));
 			else
 				LIGHT_STYLE(m_iStyle, "m");
 			ClearBits(pev->spawnflags, SF_LIGHT_START_OFF);

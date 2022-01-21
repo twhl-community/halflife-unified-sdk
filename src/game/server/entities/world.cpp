@@ -627,13 +627,13 @@ void CWorld::Precache()
 	WorldGraph.InitGraph();
 
 	// make sure the .NOD file is newer than the .BSP file.
-	if (!WorldGraph.CheckNODFile((char*)STRING(gpGlobals->mapname)))
+	if (!WorldGraph.CheckNODFile(STRING(gpGlobals->mapname)))
 	{ // NOD file is not present, or is older than the BSP file.
 		WorldGraph.AllocNodes();
 	}
 	else
 	{ // Load the node graph for this level
-		if (!WorldGraph.FLoadGraph((char*)STRING(gpGlobals->mapname)))
+		if (!WorldGraph.FLoadGraph(STRING(gpGlobals->mapname)))
 		{ // couldn't load, so alloc and prepare to build a graph.
 			ALERT(at_console, "*Error opening .NOD file\n");
 			WorldGraph.AllocNodes();

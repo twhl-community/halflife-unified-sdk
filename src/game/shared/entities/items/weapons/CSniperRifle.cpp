@@ -156,7 +156,7 @@ void CSniperRifle::PrimaryAttack()
 
 	PLAYBACK_EVENT_FULL(FEV_NOTHOST,
 		m_pPlayer->edict(), m_usSniper, 0,
-		(float*)&g_vecZero, (float*)&g_vecZero,
+		g_vecZero, g_vecZero,
 		vecShot.x, vecShot.y,
 		m_iClip, m_pPlayer->m_rgAmmo[PrimaryAmmoIndex()],
 		0, 0);

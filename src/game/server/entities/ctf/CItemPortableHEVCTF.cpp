@@ -69,7 +69,7 @@ bool CItemPortableHEVCTF::MyTouch(CBasePlayer* pPlayer)
 void CItemPortableHEVCTF::Spawn()
 {
 	if (!FStringNull(pev->model))
-		g_engfuncs.pfnPrecacheModel((char*)STRING(pev->model));
+		g_engfuncs.pfnPrecacheModel(STRING(pev->model));
 
 	g_engfuncs.pfnPrecacheSound("ctf/itemthrow.wav");
 	g_engfuncs.pfnPrecacheSound("items/ammopickup1.wav");

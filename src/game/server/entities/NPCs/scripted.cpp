@@ -1215,7 +1215,7 @@ void CFurniture::Die()
 //=========================================================
 void CFurniture::Spawn()
 {
-	PRECACHE_MODEL((char*)STRING(pev->model));
+	PRECACHE_MODEL(STRING(pev->model));
 	SET_MODEL(ENT(pev), STRING(pev->model));
 
 	pev->movetype = MOVETYPE_NONE;

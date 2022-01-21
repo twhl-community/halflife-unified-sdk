@@ -85,7 +85,7 @@ void CTFGoalBase::Spawn()
 	{
 		if (!FStringNull(pev->model))
 		{
-			g_engfuncs.pfnPrecacheModel((char*)STRING(pev->model));
+			g_engfuncs.pfnPrecacheModel(STRING(pev->model));
 			g_engfuncs.pfnSetModel(edict(), STRING(pev->model));
 
 			pev->sequence = LookupSequence("on_ground");

@@ -1286,9 +1286,9 @@ void CHalfLifeCTFplay::ChangePlayerTeam(CBasePlayer* pPlayer, const char* pCharN
 		pPlayer->m_afPhysicsFlags &= ~PFLAG_OBSERVER;
 		strncpy(pPlayer->m_szTeamName, team_names[(int)team - 1], sizeof(pPlayer->m_szTeamName));
 
-		pPlayer->m_szTeamModel = (char*)pCharName;
+		pPlayer->m_szTeamModel = pCharName;
 
-		g_engfuncs.pfnSetClientKeyValue(v5, g_engfuncs.pfnGetInfoKeyBuffer(pPlayer->edict()), "model", (char*)pCharName);
+		g_engfuncs.pfnSetClientKeyValue(v5, g_engfuncs.pfnGetInfoKeyBuffer(pPlayer->edict()), "model", pCharName);
 		g_engfuncs.pfnSetClientKeyValue(v5, g_engfuncs.pfnGetInfoKeyBuffer(pPlayer->edict()), "team", pPlayer->m_szTeamName);
 
 		MESSAGE_BEGIN(MSG_ALL, gmsgTeamInfo);

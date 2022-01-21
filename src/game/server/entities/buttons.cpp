@@ -449,7 +449,7 @@ bool CBaseButton::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, fl
 
 	if (code == BUTTON_RETURN)
 	{
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, (char*)STRING(pev->noise), 1, ATTN_NORM);
+		EMIT_SOUND(ENT(pev), CHAN_VOICE, STRING(pev->noise), 1, ATTN_NORM);
 
 		// Toggle buttons fire when they get back to their "home" position
 		if ((pev->spawnflags & SF_BUTTON_TOGGLE) == 0)
@@ -686,7 +686,7 @@ void CBaseButton::ButtonUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_T
 	{
 		if (!m_fStayPushed && FBitSet(pev->spawnflags, SF_BUTTON_TOGGLE))
 		{
-			EMIT_SOUND(ENT(pev), CHAN_VOICE, (char*)STRING(pev->noise), 1, ATTN_NORM);
+			EMIT_SOUND(ENT(pev), CHAN_VOICE, STRING(pev->noise), 1, ATTN_NORM);
 
 			//SUB_UseTargets( m_eoActivator );
 			ButtonReturn();
@@ -747,7 +747,7 @@ void CBaseButton::ButtonTouch(CBaseEntity* pOther)
 
 	if (code == BUTTON_RETURN)
 	{
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, (char*)STRING(pev->noise), 1, ATTN_NORM);
+		EMIT_SOUND(ENT(pev), CHAN_VOICE, STRING(pev->noise), 1, ATTN_NORM);
 		SUB_UseTargets(m_hActivator, USE_TOGGLE, 0);
 		ButtonReturn();
 	}
@@ -760,7 +760,7 @@ void CBaseButton::ButtonTouch(CBaseEntity* pOther)
 //
 void CBaseButton::ButtonActivate()
 {
-	EMIT_SOUND(ENT(pev), CHAN_VOICE, (char*)STRING(pev->noise), 1, ATTN_NORM);
+	EMIT_SOUND(ENT(pev), CHAN_VOICE, STRING(pev->noise), 1, ATTN_NORM);
 
 	if (!UTIL_IsMasterTriggered(m_sMaster, m_hActivator))
 	{
@@ -849,7 +849,7 @@ void CBaseButton::ButtonBackHome()
 
 	if (FBitSet(pev->spawnflags, SF_BUTTON_TOGGLE))
 	{
-		//EMIT_SOUND(ENT(pev), CHAN_VOICE, (char*)STRING(pev->noise), 1, ATTN_NORM);
+		//EMIT_SOUND(ENT(pev), CHAN_VOICE, STRING(pev->noise), 1, ATTN_NORM);
 
 		SUB_UseTargets(m_hActivator, USE_TOGGLE, 0);
 	}
@@ -1072,7 +1072,7 @@ bool CMomentaryRotButton::KeyValue(KeyValueData* pkvd)
 
 void CMomentaryRotButton::PlaySound()
 {
-	EMIT_SOUND(ENT(pev), CHAN_VOICE, (char*)STRING(pev->noise), 1, ATTN_NORM);
+	EMIT_SOUND(ENT(pev), CHAN_VOICE, STRING(pev->noise), 1, ATTN_NORM);
 }
 
 // BUGBUG: This design causes a latentcy.  When the button is retriggered, the first impulse
