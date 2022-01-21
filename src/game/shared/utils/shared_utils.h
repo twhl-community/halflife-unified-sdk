@@ -19,6 +19,8 @@
 
 #include "filesystem_utils.h"
 #include "logging_utils.h"
+#include "extdll.h"
+#include "enginecallback.h"
 
 extern globalvars_t* gpGlobals;
 
@@ -107,3 +109,7 @@ const char* COM_Parse(const char* data);
 *	@brief Returns true if additional data is waiting to be processed on this line
 */
 bool COM_TokenWaiting(const char* buffer);
+
+//The client also provides these functions, so use them to make this cross-library.
+inline float CVAR_GET_FLOAT(const char* x) { return g_engfuncs.pfnCVarGetFloat(x); }
+inline const char* CVAR_GET_STRING(const char* x) { return g_engfuncs.pfnCVarGetString(x); }

@@ -83,8 +83,6 @@ inline void MESSAGE_BEGIN(int msg_dest, int msg_type, const float* pOrigin = NUL
 #define WRITE_STRING (*g_engfuncs.pfnWriteString)
 #define WRITE_ENTITY (*g_engfuncs.pfnWriteEntity)
 #define CVAR_REGISTER (*g_engfuncs.pfnCVarRegister)
-#define CVAR_GET_FLOAT (*g_engfuncs.pfnCVarGetFloat)
-#define CVAR_GET_STRING (*g_engfuncs.pfnCVarGetString)
 #define CVAR_SET_FLOAT (*g_engfuncs.pfnCVarSetFloat)
 #define CVAR_SET_STRING (*g_engfuncs.pfnCVarSetString)
 #define CVAR_GET_POINTER (*g_engfuncs.pfnCVarGetPointer)
