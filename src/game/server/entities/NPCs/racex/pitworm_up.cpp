@@ -18,7 +18,6 @@
 #include "soundent.h"
 #include "weapons.h"
 #include "decals.h"
-#include "animation.h"
 
 const auto PITWORM_UP_AE_HITGROUND = 1;
 const auto PITWORM_UP_AE_SHOOTBEAM = 2;

@@ -22,7 +22,6 @@
 #include "decals.h"
 #include "soundent.h"
 #include "player.h"
-#include "animation.h"
 #include "zombie.h"
 
 //=========================================================

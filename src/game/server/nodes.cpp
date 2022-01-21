@@ -22,7 +22,6 @@
 
 #include "cbase.h"
 #include "nodes.h"
-#include "animation.h"
 #include "doors.h"
 #include "filesystem_utils.h"
 

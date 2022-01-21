@@ -13,7 +13,6 @@
 *
 ****/
 #include "cbase.h"
-#include "animation.h"
 #include "effects.h"
 
 

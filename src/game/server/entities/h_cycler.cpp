@@ -21,7 +21,6 @@
 */
 
 #include "cbase.h"
-#include "animation.h"
 #include "weapons.h"
 #include "player.h"
 

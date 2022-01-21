@@ -17,7 +17,6 @@
 // monsters' AI scheduling system.
 //=========================================================
 #include "cbase.h"
-#include "animation.h"
 #include "scripted.h"
 #include "nodes.h"
 #include "defaultai.h"

@@ -29,7 +29,6 @@
 
 #include "cbase.h"
 #include "plane.h"
-#include "animation.h"
 #include "squadmonster.h"
 #include "weapons.h"
 #include "talkmonster.h"
