@@ -26,7 +26,6 @@
 #include <optional>
 
 #include "cbase.h"
-#include "saverestore.h"
 #include "player.h"
 #include "client.h"
 #include "soundent.h"

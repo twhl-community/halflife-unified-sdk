@@ -21,7 +21,6 @@
 */
 
 #include "cbase.h"
-#include "saverestore.h"
 #include "doors.h"
 
 #define SF_BUTTON_DONTMOVE 1

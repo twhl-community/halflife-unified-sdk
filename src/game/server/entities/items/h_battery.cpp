@@ -21,7 +21,6 @@
 */
 
 #include "cbase.h"
-#include "saverestore.h"
 #include "player.h"
 #include "skill.h"
 #include "gamerules.h"

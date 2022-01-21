@@ -21,7 +21,6 @@
 */
 
 #include "cbase.h"
-#include "saverestore.h"
 #include "weapons.h"
 #include "decals.h"
 #include "soundent.h"

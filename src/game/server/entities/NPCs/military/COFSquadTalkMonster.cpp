@@ -19,7 +19,6 @@
 #include "nodes.h"
 #include "monsters.h"
 #include "animation.h"
-#include "saverestore.h"
 #include "talkmonster.h"
 #include "squadmonster.h"
 #include "COFSquadTalkMonster.h"

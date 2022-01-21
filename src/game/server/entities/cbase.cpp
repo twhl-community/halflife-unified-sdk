@@ -14,7 +14,6 @@
 ****/
 #include "cbase.h"
 #include "monsters.h"
-#include "saverestore.h"
 #include "client.h"
 #include "decals.h"
 #include "gamerules.h"

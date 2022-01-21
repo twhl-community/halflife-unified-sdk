@@ -18,7 +18,6 @@
 
 #include "cbase.h"
 #include "trains.h"
-#include "saverestore.h"
 
 class CPathCorner : public CPointEntity
 {

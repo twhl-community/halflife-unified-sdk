@@ -22,7 +22,6 @@
 
 #include "cbase.h"
 #include "animation.h"
-#include "saverestore.h"
 #include "studio.h"
 
 TYPEDESCRIPTION	CBaseAnimating::m_SaveData[] =
