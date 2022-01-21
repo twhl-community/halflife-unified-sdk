@@ -21,7 +21,6 @@
 #include "cbase.h"
 #include "decals.h"
 #include "soundent.h"
-#include "player.h"
 #include "zombie.h"
 
 //=========================================================

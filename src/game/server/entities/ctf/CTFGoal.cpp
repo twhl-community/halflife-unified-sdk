@@ -15,7 +15,6 @@
 
 #include "cbase.h"
 #include "basemonster.h"
-#include "player.h"
 #include "ctf/CTFGoal.h"
 
 bool CTFGoal::KeyValue(KeyValueData* pkvd)

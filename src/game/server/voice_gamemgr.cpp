@@ -8,7 +8,6 @@
 #include "cbase.h"
 #include "voice_gamemgr.h"
 #include <assert.h>
-#include "player.h"
 
 
 

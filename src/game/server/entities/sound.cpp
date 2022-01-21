@@ -18,7 +18,6 @@
 
 #include "cbase.h"
 #include "weapons.h"
-#include "player.h"
 #include "talkmonster.h"
 #include "gamerules.h"
 

@@ -13,7 +13,6 @@
 *
 ****/
 #include "cbase.h"
-#include "player.h"
 
 #include "CRopeSample.h"
 #include "CRope.h"

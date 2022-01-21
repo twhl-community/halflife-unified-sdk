@@ -13,7 +13,6 @@
 *
 ****/
 #include "cbase.h"
-#include "player.h"
 #include "game.h"
 #include "UserMessages.h"
 #include "CItemAcceleratorCTF.h"

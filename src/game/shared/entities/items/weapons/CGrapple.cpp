@@ -14,7 +14,6 @@
 ****/
 #include "cbase.h"
 #include "weapons.h"
-#include "player.h"
 #include "skill.h"
 #include "customentity.h"
 #include "UserMessages.h"

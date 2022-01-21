@@ -15,7 +15,6 @@
 
 #include "cbase.h"
 #include "weapons.h"
-#include "player.h"
 #include "soundent.h"
 #include "gamerules.h"
 

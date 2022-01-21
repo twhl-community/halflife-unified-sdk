@@ -15,7 +15,6 @@
 
 #include "cbase.h"
 #include "basemonster.h"
-#include "player.h"
 
 class PlayerSetHudColor : public CPointEntity
 {

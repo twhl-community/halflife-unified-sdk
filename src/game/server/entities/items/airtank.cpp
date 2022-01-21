@@ -14,7 +14,6 @@
 ****/
 #include "cbase.h"
 #include "weapons.h"
-#include "player.h"
 
 class CAirtank : public CGrenade
 {

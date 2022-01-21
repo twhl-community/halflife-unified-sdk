@@ -17,7 +17,6 @@
 #include "defaultai.h"
 #include "scripted.h"
 #include "soundent.h"
-#include "player.h"
 
 #include <limits>
 

@@ -18,7 +18,6 @@
 #include "cbase.h"
 #include "client.h"
 #include "basemonster.h"
-#include "player.h"
 #include "weapons.h"
 #include "game.h"
 #include "gamerules.h"

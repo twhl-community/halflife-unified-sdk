@@ -21,7 +21,6 @@
 */
 
 #include "cbase.h"
-#include "player.h"
 #include "trains.h" // trigger_camera has train functionality
 #include "gamerules.h"
 #include "skill.h"

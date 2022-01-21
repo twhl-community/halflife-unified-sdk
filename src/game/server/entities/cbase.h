@@ -631,8 +631,9 @@ class CBaseMonster;
 class CCineMonster;
 class CSound;
 
+//TODO: refactor this header so there are only header includes, then these will be at the top with the others
 #include "basemonster.h"
-
+#include "player.h"
 
 const char* ButtonSound(int sound); // get string of button sound number
 

@@ -18,7 +18,6 @@
 
 #include "cbase.h"
 #include "game.h"
-#include "player.h"
 
 //=========================================================
 // Monster's Anim Events Go Here

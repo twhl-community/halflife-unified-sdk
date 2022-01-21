@@ -22,7 +22,6 @@
 
 #include "cbase.h"
 #include "weapons.h"
-#include "player.h"
 
 class CCycler : public CBaseMonster
 {

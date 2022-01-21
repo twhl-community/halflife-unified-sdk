@@ -14,7 +14,6 @@
 ****/
 
 #include "cbase.h"
-#include "player.h"
 #include "UserMessages.h"
 #include "CHUDIconTrigger.h"
 

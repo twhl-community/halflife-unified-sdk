@@ -17,8 +17,6 @@
 #include "weapons.h"
 #include "explode.h"
 
-#include "player.h"
-
 
 #define SF_TANK_ACTIVE 0x0001
 #define SF_TANK_PLAYER 0x0002
