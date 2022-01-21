@@ -12,7 +12,7 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#include "extdll.h"
+#include "cbase.h"
 #include "plane.h"
 
 //=========================================================

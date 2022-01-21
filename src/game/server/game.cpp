@@ -12,9 +12,7 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#include "extdll.h"
-#include "eiface.h"
-#include "util.h"
+#include "cbase.h"
 #include "game.h"
 #include "CServerLibrary.h"
 

@@ -15,8 +15,7 @@
 
 #include <string>
 
-#include "extdll.h"
-#include "enginecallback.h"
+#include "cbase.h"
 #include "shared_utils.h"
 #include "CStringPool.h"
 

@@ -24,8 +24,6 @@
 //		Revisit enemy validation stuff, maybe it's not necessary with the newest monster code
 //
 
-#include "extdll.h"
-#include "util.h"
 #include "cbase.h"
 #include "monsters.h"
 #include "weapons.h"

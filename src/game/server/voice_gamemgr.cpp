@@ -5,12 +5,9 @@
 // $NoKeywords: $
 //=============================================================================
 
-#include "extdll.h"
+#include "cbase.h"
 #include "voice_gamemgr.h"
 #include <assert.h>
-#include "extdll.h"
-#include "util.h"
-#include "cbase.h"
 #include "player.h"
 
 

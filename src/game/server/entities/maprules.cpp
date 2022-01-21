@@ -22,12 +22,9 @@
 //
 //	-------------------------------------------
 
-#include "extdll.h"
-#include "eiface.h"
-#include "util.h"
+#include "cbase.h"
 #include "gamerules.h"
 #include "maprules.h"
-#include "cbase.h"
 #include "player.h"
 
 class CRuleEntity : public CBaseEntity

@@ -13,8 +13,7 @@
 *
 ****/
 
-#include "extdll.h"
-#include "util.h"
+#include "cbase.h"
 #include "CLogSystem.h"
 #include "logging_utils.h"
 

@@ -29,6 +29,17 @@ CBaseEntity
 				CBaseGroup
 */
 
+//Include common headers here.
+#include "Platform.h"
+
+#include "extdll.h"
+#include "util.h"
+
+#include "saverestore.h"
+#include "schedule.h"
+#include "monsterevent.h"
+#include "ehandle.h"
+
 #define MAX_PATH_SIZE 10 // max number of nodes available for a path.
 
 // These are caps bits to indicate what an object's capabilities (currently used for save/restore and level transitions)
@@ -45,11 +56,6 @@ CBaseEntity
 // UNDONE: This will ignore transition volumes (trigger_transition), but not the PVS!!!
 #define FCAP_FORCE_TRANSITION 0x00000080 // ALWAYS goes across transitions
 
-#include "Platform.h"
-#include "saverestore.h"
-#include "schedule.h"
-#include "monsterevent.h"
-#include "ehandle.h"
 // C functions for external declarations that call the appropriate C++ methods
 
 #define EXPORT DLLEXPORT

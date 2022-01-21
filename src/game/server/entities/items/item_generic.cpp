@@ -12,8 +12,6 @@
 *   use or distribution of this code by or to any unlicensed person is illegal.
 *
 ****/
-#include "extdll.h"
-#include "util.h"
 #include "cbase.h"
 
 const auto SF_ITEMGENERIC_DROP_TO_FLOOR = 1 << 0;

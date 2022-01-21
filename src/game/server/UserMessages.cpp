@@ -13,8 +13,6 @@
 *
 ****/
 
-#include "extdll.h"
-#include "util.h"
 #include "cbase.h"
 #include "shake.h"
 #include "UserMessages.h"

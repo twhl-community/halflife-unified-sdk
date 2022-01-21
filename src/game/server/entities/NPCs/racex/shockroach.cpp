@@ -16,8 +16,6 @@
 // headcrab.cpp - tiny, jumpy alien parasite
 //=========================================================
 
-#include "extdll.h"
-#include "util.h"
 #include "cbase.h"
 #include "monsters.h"
 #include "schedule.h"

@@ -20,8 +20,6 @@
 #include <limits>
 #include <string>
 
-#include "extdll.h"
-#include "util.h"
 #include "cbase.h"
 #include "monsters.h"
 #include "nodes.h"

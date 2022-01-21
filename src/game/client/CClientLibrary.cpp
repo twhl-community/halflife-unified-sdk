@@ -14,8 +14,7 @@
 ****/
 
 #include "hud.h"
-#include "extdll.h"
-#include "util.h"
+#include "cbase.h"
 #include "CClientLibrary.h"
 
 bool CClientLibrary::Initialize()

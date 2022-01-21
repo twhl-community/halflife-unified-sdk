@@ -16,7 +16,7 @@
 //  parsemsg.cpp
 //
 //--------------------------------------------------------------------------------------------------------------
-#include "extdll.h"
+#include "Platform.h"
 #include "parsemsg.h"
 
 static byte* gpBuf;

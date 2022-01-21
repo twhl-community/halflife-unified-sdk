@@ -23,8 +23,7 @@
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/base_sink.h>
 
-#include "extdll.h"
-#include "util.h"
+#include "cbase.h"
 #include "CLogSystem.h"
 #include "command_utils.h"
 #include "heterogeneous_lookup.h"

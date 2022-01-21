@@ -16,8 +16,6 @@
 // pit drone - medium sized, fires sharp teeth like spikes and swipes with sharp appendages
 //=========================================================
 
-#include "extdll.h"
-#include "util.h"
 #include "cbase.h"
 #include "monsters.h"
 #include "schedule.h"

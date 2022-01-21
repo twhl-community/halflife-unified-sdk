@@ -20,8 +20,7 @@
 
 #include <angelscript.h>
 
-#include "extdll.h"
-#include "util.h"
+#include "cbase.h"
 
 #include "GameConfigDefinition.h"
 #include "GameConfigIncludeStack.h"

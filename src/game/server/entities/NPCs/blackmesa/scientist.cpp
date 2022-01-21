@@ -16,8 +16,6 @@
 // human scientist (passive lab worker)
 //=========================================================
 
-#include "extdll.h"
-#include "util.h"
 #include "cbase.h"
 #include "monsters.h"
 #include "talkmonster.h"

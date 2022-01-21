@@ -25,8 +25,6 @@
 
 #include <optional>
 
-#include "extdll.h"
-#include "util.h"
 #include "cbase.h"
 #include "saverestore.h"
 #include "player.h"

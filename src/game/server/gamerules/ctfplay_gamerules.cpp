@@ -15,10 +15,8 @@
 #include <algorithm>
 #include <array>
 
-#include "extdll.h"
-#include "util.h"
-#include "client.h"
 #include "cbase.h"
+#include "client.h"
 #include "basemonster.h"
 #include "player.h"
 #include "weapons.h"

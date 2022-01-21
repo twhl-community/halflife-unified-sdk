@@ -17,8 +17,6 @@
 //=========================================================
 // UNDONE: Holster weapon?
 
-#include "extdll.h"
-#include "util.h"
 #include "cbase.h"
 #include "monsters.h"
 #include "talkmonster.h"

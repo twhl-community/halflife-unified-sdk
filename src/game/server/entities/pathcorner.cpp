@@ -16,8 +16,6 @@
 // ========================== PATH_CORNER ===========================
 //
 
-#include "extdll.h"
-#include "util.h"
 #include "cbase.h"
 #include "trains.h"
 #include "saverestore.h"

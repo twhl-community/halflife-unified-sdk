@@ -17,8 +17,6 @@
 // in the game.
 //=========================================================
 
-#include "extdll.h"
-#include "util.h"
 #include "cbase.h"
 #include "monsters.h"
 #include "saverestore.h"
