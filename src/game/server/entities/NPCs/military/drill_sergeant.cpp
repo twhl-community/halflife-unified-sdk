@@ -14,7 +14,6 @@
 ****/
 
 #include "cbase.h"
-#include "monsters.h"
 #include "talkmonster.h"
 #include "weapons.h"
 #include "soundent.h"

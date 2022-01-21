@@ -15,6 +15,8 @@
 
 #pragma once
 
+#include "monsters.h"
+
 //
 // generic Monster
 //

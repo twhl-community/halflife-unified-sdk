@@ -17,7 +17,6 @@
 //=========================================================
 
 #include "cbase.h"
-#include "monsters.h"
 #include "squadmonster.h"
 #include "effects.h"
 #include "weapons.h"

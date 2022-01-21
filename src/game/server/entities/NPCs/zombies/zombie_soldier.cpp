@@ -17,7 +17,6 @@
 //=========================================================
 
 #include "cbase.h"
-#include "monsters.h"
 #include "zombie.h"
 
 class CZombieSoldier : public CZombie

@@ -20,7 +20,6 @@
 */
 
 #include "cbase.h"
-#include "monsters.h"
 #include "animation.h"
 #include "scripted.h"
 #include "defaultai.h"

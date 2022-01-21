@@ -17,7 +17,6 @@
 //=========================================================
 
 #include "cbase.h"
-#include "monsters.h"
 #include "talkmonster.h"
 #include "defaultai.h"
 #include "scripted.h"

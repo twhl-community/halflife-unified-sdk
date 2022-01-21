@@ -22,7 +22,6 @@
 
 #include "cbase.h"
 #include "nodes.h"
-#include "monsters.h"
 #include "animation.h"
 #include "weapons.h"
 #include "scripted.h"

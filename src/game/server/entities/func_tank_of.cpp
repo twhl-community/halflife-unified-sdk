@@ -16,7 +16,6 @@
 #include "effects.h"
 #include "weapons.h"
 #include "explode.h"
-#include "monsters.h"
 #include "player.h"
 
 

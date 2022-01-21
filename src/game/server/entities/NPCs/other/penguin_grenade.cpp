@@ -13,7 +13,6 @@
 *
 ****/
 #include "cbase.h"
-#include "monsters.h"
 #include "player.h"
 #include "weapons.h"
 #include "nodes.h"

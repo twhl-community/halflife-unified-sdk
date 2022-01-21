@@ -16,7 +16,6 @@
 // GMan - misunderstood servant of the people
 //=========================================================
 #include "cbase.h"
-#include "monsters.h"
 #include "weapons.h"
 #include "soundent.h"
 

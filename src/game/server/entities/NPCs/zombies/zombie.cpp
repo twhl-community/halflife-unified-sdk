@@ -19,7 +19,6 @@
 // UNDONE: Don't flinch every time you get hit
 
 #include "cbase.h"
-#include "monsters.h"
 #include "zombie.h"
 
 LINK_ENTITY_TO_CLASS(monster_zombie, CZombie);

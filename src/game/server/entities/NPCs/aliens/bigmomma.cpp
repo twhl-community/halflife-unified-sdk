@@ -17,7 +17,6 @@
 // monster template
 //=========================================================
 #include "cbase.h"
-#include "monsters.h"
 #include "decals.h"
 #include "weapons.h"
 #include "game.h"

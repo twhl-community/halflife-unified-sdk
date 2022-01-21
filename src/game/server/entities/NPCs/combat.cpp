@@ -21,7 +21,6 @@
 */
 
 #include "cbase.h"
-#include "monsters.h"
 #include "soundent.h"
 #include "decals.h"
 #include "animation.h"

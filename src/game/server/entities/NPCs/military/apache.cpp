@@ -14,7 +14,6 @@
 ****/
 
 #include "cbase.h"
-#include "monsters.h"
 #include "weapons.h"
 #include "effects.h"
 #include "apache.h"

@@ -15,8 +15,6 @@
 
 #pragma once
 
-#include "monsters.h"
-
 //=========================================================
 // Talking monster base class
 // Used for scientists and barneys

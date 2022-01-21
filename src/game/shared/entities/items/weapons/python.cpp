@@ -15,7 +15,6 @@
 
 #include "cbase.h"
 #include "weapons.h"
-#include "monsters.h"
 #include "player.h"
 #include "gamerules.h"
 #include "UserMessages.h"

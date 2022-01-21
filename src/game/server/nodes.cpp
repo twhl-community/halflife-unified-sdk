@@ -21,7 +21,6 @@
 #include <string>
 
 #include "cbase.h"
-#include "monsters.h"
 #include "nodes.h"
 #include "animation.h"
 #include "doors.h"

@@ -38,7 +38,6 @@
 //TODO: why include float.h?
 #include "float.h"
 #include "cbase.h"
-#include "monsters.h"
 
 
 

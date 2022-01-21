@@ -13,7 +13,6 @@
 *
 ****/
 #include "cbase.h"
-#include "monsters.h"
 #include "weapons.h"
 #include "soundent.h"
 #include "decals.h"

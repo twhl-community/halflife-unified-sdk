@@ -19,7 +19,6 @@
 // UNDONE: Don't flinch every time you get hit
 
 #include "cbase.h"
-#include "monsters.h"
 #include "decals.h"
 #include "soundent.h"
 #include "player.h"

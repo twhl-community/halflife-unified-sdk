@@ -18,7 +18,6 @@
 //=========================================================
 
 #include "cbase.h"
-#include "monsters.h"
 #include "flyingmonster.h"
 #include "nodes.h"
 #include "soundent.h"

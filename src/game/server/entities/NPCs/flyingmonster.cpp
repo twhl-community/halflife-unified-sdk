@@ -13,7 +13,6 @@
 *
 ****/
 #include "cbase.h"
-#include "monsters.h"
 #include "flyingmonster.h"
 
 #define FLYING_AE_FLAP (8)

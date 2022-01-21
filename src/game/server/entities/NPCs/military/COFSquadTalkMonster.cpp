@@ -17,7 +17,6 @@
 //=========================================================
 #include "cbase.h"
 #include "nodes.h"
-#include "monsters.h"
 #include "animation.h"
 #include "talkmonster.h"
 #include "squadmonster.h"
