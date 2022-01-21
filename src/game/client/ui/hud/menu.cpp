@@ -17,6 +17,9 @@
 //
 // generic menu handler
 //
+
+#include <string>
+
 #include "hud.h"
 #include "cl_util.h"
 #include "parsemsg.h"
@@ -27,7 +30,7 @@
 char g_szMenuString[MAX_MENU_STRING];
 char g_szPrelocalisedMenuString[MAX_MENU_STRING];
 
-bool KB_ConvertString(char* in, char** ppout);
+std::string KB_ConvertString(const char* in);
 
 DECLARE_MESSAGE(m_Menu, ShowMenu);
 
@@ -227,8 +230,6 @@ void CHudMenu::SelectMenuItem(int menu_item)
 // if this message is never received, then scores will simply be the combined totals of the players.
 bool CHudMenu::MsgFunc_ShowMenu(const char* pszName, int iSize, void* pbuf)
 {
-	char* temp = NULL;
-
 	BEGIN_READ(pbuf, iSize);
 
 	m_bitsValidSlots = READ_SHORT();
@@ -257,11 +258,9 @@ bool CHudMenu::MsgFunc_ShowMenu(const char* pszName, int iSize, void* pbuf)
 			strcpy(g_szMenuString, gHUD.m_TextMessage.BufferedLocaliseTextString(g_szPrelocalisedMenuString));
 
 			// Swap in characters
-			if (KB_ConvertString(g_szMenuString, &temp))
-			{
-				strcpy(g_szMenuString, temp);
-				free(temp);
-			}
+			//TODO: bounds check
+			const auto temp = KB_ConvertString(g_szMenuString);
+			strcpy(g_szMenuString, temp.c_str());
 		}
 
 		m_fMenuDisplayed = true;

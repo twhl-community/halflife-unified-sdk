@@ -4,6 +4,10 @@
 
 // Quake is a trademark of Id Software, Inc., (c) 1996 Id Software, Inc. All
 // rights reserved.
+
+#include <sstream>
+#include <string>
+
 #include "hud.h"
 #include "cl_util.h"
 #include "CClientLibrary.h"
@@ -125,21 +129,16 @@ Removes references to +use and replaces them with the keyname in the output stri
 NOTE:  Only works for text with +word in it.
 ============
 */
-bool KB_ConvertString(char* in, char** ppout)
+std::string KB_ConvertString(const char* in)
 {
-	char sz[4096];
 	char binding[64];
-	char* p;
-	char* pOut;
+	const char* p;
 	char* pEnd;
 	const char* pBinding;
 
-	if (!ppout)
-		return false;
+	std::ostringstream buffer;
 
-	*ppout = NULL;
 	p = in;
-	pOut = sz;
 	while ('\0' != *p)
 	{
 		if (*p == '+')
@@ -161,7 +160,7 @@ bool KB_ConvertString(char* in, char** ppout)
 
 			if (pBinding)
 			{
-				*pOut++ = '[';
+				buffer << '[';
 				pEnd = (char*)pBinding;
 			}
 			else
@@ -171,27 +170,21 @@ bool KB_ConvertString(char* in, char** ppout)
 
 			while ('\0' != *pEnd)
 			{
-				*pOut++ = *pEnd++;
+				buffer << *pEnd++;
 			}
 
 			if (pBinding)
 			{
-				*pOut++ = ']';
+				buffer << ']';
 			}
 		}
 		else
 		{
-			*pOut++ = *p++;
+			buffer << *p++;
 		}
 	}
 
-	*pOut = '\0';
-
-	pOut = (char*)malloc(strlen(sz) + 1);
-	strcpy(pOut, sz);
-	*ppout = pOut;
-
-	return true;
+	return buffer.str();
 }
 
 /*
