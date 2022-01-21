@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include <string>
+
 #include "VGUI_Label.h"
 #include "VGUI_LineBorder.h"
 #include "VGUI_ImagePanel.h"
@@ -210,7 +212,7 @@ public:
 	CVoiceLabel m_Labels[MAX_VOICE_SPEAKERS];
 
 	// Cache the game directory for use when we shut down
-	char* m_pchGameDir;
+	std::string m_pchGameDir;
 };
 
 
