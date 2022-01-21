@@ -25,8 +25,6 @@
 // fall over
 #define ROLL 2
 
-#pragma warning(disable : 4244)
-
 int nanmask = 255 << 23;
 
 float anglemod(float a)

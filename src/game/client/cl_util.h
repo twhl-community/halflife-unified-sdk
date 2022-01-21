@@ -173,9 +173,4 @@ void VectorScale(const float* in, float scale, float* out);
 float VectorNormalize(float* v);
 void VectorInverse(float* v);
 
-// disable 'possible loss of data converting float to int' warning message
-#pragma warning(disable : 4244)
-// disable 'truncation from 'const double' to 'float' warning message
-#pragma warning(disable : 4305)
-
 HSPRITE LoadSprite(const char* pszName);

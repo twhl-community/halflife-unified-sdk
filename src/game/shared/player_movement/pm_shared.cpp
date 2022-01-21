@@ -33,8 +33,6 @@ float vJumpAngles[3];
 
 static bool pm_shared_initialized = false;
 
-#pragma warning(disable : 4305)
-
 typedef enum
 {
 	mod_brush,
@@ -112,8 +110,6 @@ typedef struct hull_s
 
 #define PLAYER_DUCKING_MULTIPLIER 0.333
 
-// double to float warning
-#pragma warning(disable : 4244)
 // up / down
 #define PITCH 0
 // left / right

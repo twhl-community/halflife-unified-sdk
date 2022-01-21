@@ -21,8 +21,6 @@
 #include "animation.h"
 #include "scriptevent.h"
 
-#pragma warning(disable : 4244)
-
 
 
 bool ExtractBbox(void* pmodel, int sequence, float* mins, float* maxs)
