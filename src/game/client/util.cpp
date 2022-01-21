@@ -19,7 +19,6 @@
 //
 
 #include "hud.h"
-#include "cl_util.h"
 
 HSPRITE LoadSprite(const char* pszName)
 {

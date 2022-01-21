@@ -14,7 +14,6 @@
 ****/
 
 #include "hud.h"
-#include "cl_util.h"
 
 #undef clamp
 

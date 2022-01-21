@@ -13,7 +13,6 @@
 #include <VGUI_TextEntry.h>
 #include <VGUI_ActionSignal.h>
 #include "hud.h"
-#include "cl_util.h"
 #include "camera.h"
 #include "kbutton.h"
 #include "cvardef.h"

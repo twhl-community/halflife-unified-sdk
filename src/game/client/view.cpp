@@ -1,7 +1,6 @@
 // view/refresh setup functions
 
 #include "hud.h"
-#include "cl_util.h"
 #include "cvardef.h"
 #include "usercmd.h"
 #include "const.h"

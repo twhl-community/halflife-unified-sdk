@@ -19,7 +19,6 @@
 //
 
 #include "hud.h"
-#include "cl_util.h"
 #include "parsemsg.h"
 #include "pm_shared.h"
 #include "triangleapi.h"

@@ -9,7 +9,6 @@
 #include <string>
 
 #include "hud.h"
-#include "cl_util.h"
 #include "CClientLibrary.h"
 #include "camera.h"
 #include "kbutton.h"

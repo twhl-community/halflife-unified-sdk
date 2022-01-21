@@ -16,7 +16,6 @@
 // hud_redraw.cpp
 //
 #include "hud.h"
-#include "cl_util.h"
 
 #include "vgui_TeamFortressViewport.h"
 #include "vgui_StatsMenuPanel.h"

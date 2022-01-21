@@ -8,7 +8,6 @@
 // There are hud.h's coming out of the woodwork so this ensures that we get the right one.
 #include "hud.h"
 
-#include "cl_util.h"
 #include "parsemsg.h"
 #include "demo.h"
 #include "demo_api.h"

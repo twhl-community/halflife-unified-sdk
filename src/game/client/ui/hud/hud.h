@@ -26,6 +26,7 @@
 #include "cl_dll.h"
 #include "ammo.h"
 #include "palette.h"
+#include "cl_util.h"
 
 #define DHN_DRAWZERO 1
 #define DHN_2DIGITS 2

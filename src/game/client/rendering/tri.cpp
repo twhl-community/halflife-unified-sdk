@@ -8,7 +8,6 @@
 // Triangle rendering, if any
 
 #include "hud.h"
-#include "cl_util.h"
 
 // Triangle rendering apis are in gEngfuncs.pTriAPI
 

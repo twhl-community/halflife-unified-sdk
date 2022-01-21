@@ -16,7 +16,6 @@
 #include <vector>
 
 #include "hud.h"
-#include "cl_util.h"
 #include "triangleapi.h"
 #include "particleman.h"
 #include "particleman_internal.h"

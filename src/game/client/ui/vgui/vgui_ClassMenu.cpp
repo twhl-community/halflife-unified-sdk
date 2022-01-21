@@ -20,7 +20,6 @@
 #include <VGUI_TextImage.h>
 
 #include "hud.h"
-#include "cl_util.h"
 #include "camera.h"
 #include "kbutton.h"
 #include "cvardef.h"

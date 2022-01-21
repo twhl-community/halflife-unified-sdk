@@ -19,7 +19,6 @@
 //
 
 #include "hud.h"
-#include "cl_util.h"
 #include "utils/shared_utils.h"
 #include "netadr.h"
 #include "interface.h"
