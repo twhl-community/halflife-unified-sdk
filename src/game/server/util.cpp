@@ -21,7 +21,6 @@
 */
 
 #include "cbase.h"
-#include <time.h>
 #include "shake.h"
 #include "decals.h"
 #include "weapons.h"

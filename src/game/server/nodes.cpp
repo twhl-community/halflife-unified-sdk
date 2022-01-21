@@ -16,7 +16,6 @@
 // nodes.cpp - AI node tree stuff.
 //=========================================================
 
-#include <cassert>
 #include <limits>
 #include <string>
 

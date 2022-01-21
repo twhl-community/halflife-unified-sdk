@@ -13,7 +13,6 @@
 *
 ****/
 
-#include <algorithm>
 #include <string_view>
 
 #include <spdlog/fmt/fmt.h>

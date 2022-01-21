@@ -1,6 +1,7 @@
 #pragma once
 
-#include <cstddef>
+#include "Platform.h"
+
 #include <memory_resource>
 #include <vector>
 

@@ -13,7 +13,6 @@
 *
 ****/
 
-#include <algorithm>
 #include <stdexcept>
 #include <string_view>
 

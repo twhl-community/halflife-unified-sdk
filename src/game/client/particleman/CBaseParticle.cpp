@@ -18,8 +18,6 @@
 
 #undef clamp
 
-#include <algorithm>
-
 #include "event_api.h"
 #include "triangleapi.h"
 

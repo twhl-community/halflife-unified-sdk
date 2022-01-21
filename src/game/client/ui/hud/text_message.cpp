@@ -22,8 +22,6 @@
 
 #include "hud.h"
 #include "cl_util.h"
-#include <string.h>
-#include <stdio.h>
 #include "parsemsg.h"
 
 #include "vgui_TeamFortressViewport.h"

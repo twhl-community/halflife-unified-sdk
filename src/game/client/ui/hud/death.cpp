@@ -19,9 +19,6 @@
 #include "cl_util.h"
 #include "parsemsg.h"
 
-#include <string.h>
-#include <stdio.h>
-
 #include "vgui_TeamFortressViewport.h"
 
 DECLARE_MESSAGE(m_DeathNotice, DeathMsg);

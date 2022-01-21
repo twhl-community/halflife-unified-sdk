@@ -18,8 +18,6 @@
 // implementation of CHudAmmo class
 //
 
-#include <algorithm>
-
 #include "hud.h"
 #include "cl_util.h"
 #include "parsemsg.h"
@@ -27,9 +25,6 @@
 #include "triangleapi.h"
 #include "com_model.h"
 #include "r_studioint.h"
-
-#include <string.h>
-#include <stdio.h>
 
 #include "ammohistory.h"
 #include "vgui_TeamFortressViewport.h"

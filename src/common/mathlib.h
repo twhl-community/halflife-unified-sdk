@@ -16,7 +16,7 @@
 
 #pragma once
 
-#include <cmath>
+#include "Platform.h"
 
 typedef float vec_t;
 

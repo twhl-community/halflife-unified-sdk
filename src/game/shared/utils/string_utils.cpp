@@ -13,8 +13,7 @@
 *
 ****/
 
-#include <algorithm>
-#include <cctype>
+#include "Platform.h"
 
 #include "string_utils.h"
 

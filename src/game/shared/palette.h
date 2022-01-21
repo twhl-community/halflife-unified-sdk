@@ -15,7 +15,7 @@
 
 #pragma once
 
-#include <cstdint>
+#include "Platform.h"
 
 struct RGB24
 {

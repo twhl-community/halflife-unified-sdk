@@ -13,7 +13,6 @@
 *
 ****/
 
-#include <cassert>
 #include <limits>
 
 #include "Platform.h"

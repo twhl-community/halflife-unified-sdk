@@ -15,7 +15,6 @@
 
 #include "Platform.h"
 
-#include <assert.h>
 #include "mathlib.h"
 #include "cdll_dll.h"
 #include "const.h"
@@ -24,10 +23,6 @@
 #include "pm_shared.h"
 #include "pm_movevars.h"
 #include "pm_debug.h"
-#include <stdio.h>	// NULL
-#include <string.h> // strcpy
-#include <stdlib.h> // atoi
-#include <ctype.h>	// isspace
 
 #ifdef CLIENT_DLL
 // Spectator Mode

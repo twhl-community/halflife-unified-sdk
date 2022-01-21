@@ -12,7 +12,7 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#include <algorithm>
+
 #include <array>
 
 #include "cbase.h"

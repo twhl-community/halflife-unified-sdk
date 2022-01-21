@@ -23,7 +23,6 @@
 *	https://developer.valvesoftware.com/wiki/GoldSource_SteamPipe_Directories
 */
 
-#include <cstddef>
 #include <vector>
 
 #include "Platform.h"

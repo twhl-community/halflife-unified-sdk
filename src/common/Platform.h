@@ -41,6 +41,7 @@
 
 // Misc C-runtime library headers
 #include <algorithm>
+#include <cassert>
 #include <cctype>
 #include <climits>
 #include <cmath>

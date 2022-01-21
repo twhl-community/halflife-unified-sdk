@@ -15,8 +15,6 @@
 #include <VGUI_TextImage.h>
 #include "vgui_listbox.h"
 
-#include <ctype.h>
-
 #define MAX_SCORES 10
 #define MAX_SCOREBOARD_TEAMS 5
 
