@@ -14,7 +14,6 @@
 ****/
 #include "cbase.h"
 #include "effects.h"
-#include "skill.h"
 #include "gamerules.h"
 
 #include "ctf/CTFDefs.h"

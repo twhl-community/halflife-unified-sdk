@@ -17,7 +17,6 @@
 //
 #include "cbase.h"
 #include "gamerules.h"
-#include "skill.h"
 #include "items.h"
 #include "UserMessages.h"
 

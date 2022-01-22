@@ -13,7 +13,6 @@
 *
 ****/
 #include "cbase.h"
-#include "skill.h"
 
 #include "gamerules.h"
 

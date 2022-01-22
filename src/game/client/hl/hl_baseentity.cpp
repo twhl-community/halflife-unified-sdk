@@ -23,7 +23,6 @@ This file contains "stubs" of class member implementations so that we can predic
 */
 #include "cbase.h"
 #include "nodes.h"
-#include "skill.h"
 
 void EMIT_SOUND_DYN(edict_t* entity, int channel, const char* sample, float volume, float attenuation, int flags, int pitch) {}
 

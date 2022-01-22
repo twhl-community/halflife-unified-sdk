@@ -21,7 +21,6 @@
 */
 
 #include "cbase.h"
-#include "skill.h"
 #include "items.h"
 #include "gamerules.h"
 #include "UserMessages.h"
