@@ -68,7 +68,7 @@ GameConfigLoader::~GameConfigLoader() = default;
 
 bool GameConfigLoader::Initialize()
 {
-	m_Logger = g_Logging->CreateLogger("gamecfg");
+	m_Logger = g_Logging.CreateLogger("gamecfg");
 
 	m_ScriptEngine = g_ASManager.CreateEngine();
 

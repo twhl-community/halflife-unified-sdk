@@ -15,17 +15,19 @@
 
 #pragma once
 
+#include <memory>
 #include <optional>
 #include <string>
 #include <string_view>
 #include <vector>
 
-#include "ILogSystem.h"
+#include <spdlog/logger.h>
+
 #include "json_fwd.h"
 
 class CCommandArgs;
 
-class CLogSystem final : public ILogSystem
+class CLogSystem final
 {
 private:
 	static constexpr spdlog::level::level_enum DefaultLogLevel = spdlog::level::info;
@@ -54,15 +56,15 @@ public:
 	CLogSystem(const CLogSystem&) = delete;
 	CLogSystem& operator=(const CLogSystem&) = delete;
 
-	bool Initialize() override;
-	bool PostInitialize() override;
-	void Shutdown() override;
+	bool Initialize();
+	bool PostInitialize();
+	void Shutdown();
 
-	std::shared_ptr<spdlog::logger> CreateLogger(const std::string& name) override;
+	std::shared_ptr<spdlog::logger> CreateLogger(const std::string& name);
 
-	void RemoveLogger(const std::shared_ptr<spdlog::logger>& logger) override;
+	void RemoveLogger(const std::shared_ptr<spdlog::logger>& logger);
 
-	std::shared_ptr<spdlog::logger> GetGlobalLogger() override { return m_GlobalLogger; }
+	std::shared_ptr<spdlog::logger> GetGlobalLogger() { return m_GlobalLogger; }
 
 private:
 	Settings LoadSettings(const json& input);

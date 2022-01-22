@@ -47,7 +47,7 @@ CConCommandSystem::~CConCommandSystem() = default;
 bool CConCommandSystem::Initialize()
 {
 	//Use global logger during startup
-	m_Logger = g_Logging->GetGlobalLogger();
+	m_Logger = g_Logging.GetGlobalLogger();
 
 	return true;
 }
@@ -55,7 +55,7 @@ bool CConCommandSystem::Initialize()
 bool CConCommandSystem::PostInitialize()
 {
 	//Create the logger using user-provided configuration
-	m_Logger = g_Logging->CreateLogger("cvar");
+	m_Logger = g_Logging.CreateLogger("cvar");
 
 	return true;
 }
@@ -64,7 +64,7 @@ void CConCommandSystem::Shutdown()
 {
 	m_Commands.clear();
 	m_Cvars.clear();
-	g_Logging->RemoveLogger(m_Logger);
+	g_Logging.RemoveLogger(m_Logger);
 	m_Logger.reset();
 }
 

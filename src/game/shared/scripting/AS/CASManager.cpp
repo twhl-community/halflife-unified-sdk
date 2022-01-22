@@ -30,7 +30,7 @@ CASManager::~CASManager() = default;
 
 bool CASManager::Initialize()
 {
-	m_Logger = g_Logging->CreateLogger("angelscript");
+	m_Logger = g_Logging.CreateLogger("angelscript");
 	return true;
 }
 

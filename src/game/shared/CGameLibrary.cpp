@@ -36,7 +36,7 @@ bool CGameLibrary::InitializeCommon()
 
 	//These systems have to initialize in a specific order because they depend on each-other
 	{
-		if (!g_Logging->Initialize())
+		if (!g_Logging.Initialize())
 		{
 			Con_Printf("Could not initialize logging system\n");
 			return false;
@@ -54,7 +54,7 @@ bool CGameLibrary::InitializeCommon()
 			return false;
 		}
 
-		if (!g_Logging->PostInitialize())
+		if (!g_Logging.PostInitialize())
 		{
 			Con_Printf("Could not post-initialize logging system\n");
 			return false;
@@ -95,6 +95,6 @@ void CGameLibrary::ShutdownCommon()
 	g_ASManager.Shutdown();
 	g_JSON.Shutdown();
 	g_ConCommands.Shutdown();
-	g_Logging->Shutdown();
+	g_Logging.Shutdown();
 	FileSystem_FreeFileSystem();
 }

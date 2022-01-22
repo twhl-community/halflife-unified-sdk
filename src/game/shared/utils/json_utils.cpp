@@ -87,7 +87,7 @@ bool JSONSystem::Initialize()
 	g_ConCommands.CreateCommand("json_generateallschemas", [this](const auto& args) { GenerateAllSchemas(args); });
 
 	//Use the global logger during startup
-	m_Logger = g_Logging->GetGlobalLogger();
+	m_Logger = g_Logging.GetGlobalLogger();
 
 	return true;
 }
@@ -95,7 +95,7 @@ bool JSONSystem::Initialize()
 bool JSONSystem::PostInitialize()
 {
 	//Create the logger using user-provided configuration
-	m_Logger = g_Logging->CreateLogger("json");
+	m_Logger = g_Logging.CreateLogger("json");
 
 	return true;
 }
@@ -103,7 +103,7 @@ bool JSONSystem::PostInitialize()
 void JSONSystem::Shutdown()
 {
 	m_Schemas.clear();
-	g_Logging->RemoveLogger(m_Logger);
+	g_Logging.RemoveLogger(m_Logger);
 	m_Logger.reset();
 	m_JsonSchemaValidation = nullptr;
 	m_JsonDebug = nullptr;
