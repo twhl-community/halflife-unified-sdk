@@ -1,12 +1,16 @@
 [submodule "external/json"]
 	path = external/json
 	url = https://github.com/nlohmann/json.git
+	shallow = 1
 [submodule "external/json-schema-validator"]
 	path = external/json-schema-validator
 	url = https://github.com/pboettch/json-schema-validator.git
+	shallow = 1
 [submodule "external/spdlog"]
 	path = external/spdlog
 	url = https://github.com/gabime/spdlog.git
+	shallow = 1
 [submodule "external/Angelscript"]
 	path = external/Angelscript
 	url = https://github.com/codecat/angelscript-mirror.git
+	shallow = 1
