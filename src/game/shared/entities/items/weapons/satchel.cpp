@@ -14,7 +14,6 @@
 ****/
 
 #include "cbase.h"
-#include "gamerules.h"
 
 class CSatchelCharge : public CGrenade
 {

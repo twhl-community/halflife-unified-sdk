@@ -14,7 +14,6 @@
 ****/
 
 #include "cbase.h"
-#include "gamerules.h"
 
 
 #define CROWBAR_BODYHIT_VOLUME 128

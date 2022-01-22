@@ -22,7 +22,6 @@
 
 #include "cbase.h"
 #include "items.h"
-#include "gamerules.h"
 #include "UserMessages.h"
 
 class CWorldItem : public CBaseEntity

@@ -14,7 +14,6 @@
 ****/
 #include "cbase.h"
 #include "customentity.h"
-#include "gamerules.h"
 
 #include "CShockBeam.h"
 

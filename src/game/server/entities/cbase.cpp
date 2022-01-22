@@ -14,7 +14,6 @@
 ****/
 #include "cbase.h"
 #include "client.h"
-#include "gamerules.h"
 #include "CServerLibrary.h"
 
 void EntvarsKeyvalue(entvars_t* pev, KeyValueData* pkvd);

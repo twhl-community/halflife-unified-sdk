@@ -23,7 +23,6 @@
 //	-------------------------------------------
 
 #include "cbase.h"
-#include "gamerules.h"
 #include "maprules.h"
 
 class CRuleEntity : public CBaseEntity

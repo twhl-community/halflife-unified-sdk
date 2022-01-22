@@ -13,7 +13,6 @@
 *
 ****/
 #include "cbase.h"
-#include "gamerules.h"
 
 #include "com_model.h"
 

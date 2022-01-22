@@ -18,7 +18,6 @@
 
 #ifndef CLIENT_DLL
 #include "weapons/CGrappleTip.h"
-#include "gamerules.h"
 #else
 #include "cl_dll.h"
 #endif

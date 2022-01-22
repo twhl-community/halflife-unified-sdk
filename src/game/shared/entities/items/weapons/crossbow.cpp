@@ -14,7 +14,6 @@
 ****/
 
 #include "cbase.h"
-#include "gamerules.h"
 #include "UserMessages.h"
 
 #ifndef CLIENT_DLL

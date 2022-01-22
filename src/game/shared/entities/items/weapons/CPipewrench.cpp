@@ -15,7 +15,6 @@
 
 #include "cbase.h"
 #include "CPipewrench.h"
-#include "gamerules.h"
 
 #define PIPEWRENCH_BODYHIT_VOLUME 128
 #define PIPEWRENCH_WALLHIT_VOLUME 512

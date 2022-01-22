@@ -15,7 +15,6 @@
 
 #include "cbase.h"
 #include "shake.h"
-#include "gamerules.h"
 #include "UserMessages.h"
 
 LINK_ENTITY_TO_CLASS(weapon_gauss, CGauss);

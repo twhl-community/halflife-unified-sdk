@@ -14,8 +14,6 @@
 ****/
 #include "cbase.h"
 
-#include "gamerules.h"
-
 #include "CKnife.h"
 
 #define KNIFE_BODYHIT_VOLUME 128

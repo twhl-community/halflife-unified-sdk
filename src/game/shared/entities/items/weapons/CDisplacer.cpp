@@ -23,8 +23,6 @@
 #include "ctf/CTFGoal.h"
 #include "ctf/CTFGoalFlag.h"
 
-#include "gamerules.h"
-
 extern edict_t* EntSelectSpawnPoint(CBasePlayer* pPlayer);
 #endif
 

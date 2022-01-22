@@ -18,7 +18,6 @@
 
 #include "cbase.h"
 #include "hornet.h"
-#include "gamerules.h"
 
 
 int iHornetTrail;

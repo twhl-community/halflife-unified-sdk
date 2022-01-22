@@ -18,7 +18,6 @@
 
 #include "cbase.h"
 #include "talkmonster.h"
-#include "gamerules.h"
 
 static char* memfgets(byte* pMemFile, int fileSize, int& filePos, char* pBuffer, int bufferSize);
 

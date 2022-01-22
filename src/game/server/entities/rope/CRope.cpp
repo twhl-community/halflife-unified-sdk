@@ -16,8 +16,6 @@
 
 #include "cbase.h"
 
-#include "gamerules.h"
-
 #include "CRopeSample.h"
 #include "CRopeSegment.h"
 

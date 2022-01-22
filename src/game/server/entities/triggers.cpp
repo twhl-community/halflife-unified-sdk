@@ -22,7 +22,6 @@
 
 #include "cbase.h"
 #include "trains.h" // trigger_camera has train functionality
-#include "gamerules.h"
 #include "ctfplay_gamerules.h"
 #include "ctf/CTFGoalFlag.h"
 #include "UserMessages.h"

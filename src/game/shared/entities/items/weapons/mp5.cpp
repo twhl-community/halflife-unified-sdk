@@ -14,7 +14,6 @@
 ****/
 
 #include "cbase.h"
-#include "gamerules.h"
 #include "UserMessages.h"
 
 LINK_ENTITY_TO_CLASS(weapon_mp5, CMP5);

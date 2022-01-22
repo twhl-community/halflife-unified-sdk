@@ -43,6 +43,7 @@ CBaseEntity
 #include "decals.h"
 #include "skill.h"
 #include "game.h"
+#include "gamerules.h"
 
 #define MAX_PATH_SIZE 10 // max number of nodes available for a path.
 

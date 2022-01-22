@@ -22,7 +22,6 @@
 
 #include "cbase.h"
 #include "shake.h"
-#include "gamerules.h"
 #include "UserMessages.h"
 
 float UTIL_WeaponTimeBase()

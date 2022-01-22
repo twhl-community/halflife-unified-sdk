@@ -17,7 +17,6 @@
 
 #ifndef CLIENT_DLL
 #include "weapons/CShockBeam.h"
-#include "gamerules.h"
 #endif
 
 #include "CShockRifle.h"

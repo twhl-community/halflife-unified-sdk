@@ -16,7 +16,6 @@
 // coopplay_gamerules.cpp
 //
 #include "cbase.h"
-#include "gamerules.h"
 #include "coopplay_gamerules.h"
 #include "items.h"
 #include "UserMessages.h"

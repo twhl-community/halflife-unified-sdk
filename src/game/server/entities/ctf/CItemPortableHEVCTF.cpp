@@ -16,7 +16,6 @@
 #include "cbase.h"
 #include "CItemCTF.h"
 #include "CItemPortableHEVCTF.h"
-#include "gamerules.h"
 #include "ctfplay_gamerules.h"
 #include "UserMessages.h"
 

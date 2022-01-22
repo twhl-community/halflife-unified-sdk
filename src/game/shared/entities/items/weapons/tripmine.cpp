@@ -14,7 +14,6 @@
 ****/
 #include "cbase.h"
 #include "effects.h"
-#include "gamerules.h"
 
 #define TRIPMINE_PRIMARY_VOLUME 450
 

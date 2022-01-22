@@ -16,7 +16,6 @@
 #include "cbase.h"
 #include "effects.h"
 #include "customentity.h"
-#include "gamerules.h"
 #include "UserMessages.h"
 
 #define EGON_SWITCH_NARROW_TIME 0.75 // Time it takes to switch fire modes

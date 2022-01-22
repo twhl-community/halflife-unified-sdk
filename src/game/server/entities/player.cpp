@@ -30,7 +30,6 @@
 #include "squadmonster.h"
 #include "military/COFSquadTalkMonster.h"
 #include "shake.h"
-#include "gamerules.h"
 #include "ctfplay_gamerules.h"
 #include "ctf/CHUDIconTrigger.h"
 #include "pm_shared.h"

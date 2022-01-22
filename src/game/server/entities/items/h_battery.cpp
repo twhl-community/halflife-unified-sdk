@@ -21,7 +21,6 @@
 */
 
 #include "cbase.h"
-#include "gamerules.h"
 
 class CRecharge : public CBaseToggle
 {
