@@ -15,7 +15,6 @@
 #include "cbase.h"
 #include "skill.h"
 #include "effects.h"
-#include "weapons.h"
 
 const int AE_GENEWORM_SPIT_START = 0;
 const int AE_GENEWORM_LAUNCH_SPAWN = 2;

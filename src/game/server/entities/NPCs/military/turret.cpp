@@ -25,7 +25,6 @@
 //
 
 #include "cbase.h"
-#include "weapons.h"
 #include "effects.h"
 
 extern Vector VecBModelOrigin(entvars_t* pevBModel);

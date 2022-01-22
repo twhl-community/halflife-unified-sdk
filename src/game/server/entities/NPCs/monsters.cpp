@@ -22,7 +22,6 @@
 
 #include "cbase.h"
 #include "nodes.h"
-#include "weapons.h"
 #include "scripted.h"
 #include "squadmonster.h"
 #include "decals.h"

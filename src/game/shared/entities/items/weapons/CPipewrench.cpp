@@ -14,7 +14,6 @@
 ****/
 
 #include "cbase.h"
-#include "weapons.h"
 #include "CPipewrench.h"
 #include "gamerules.h"
 

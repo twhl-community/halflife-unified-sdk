@@ -16,7 +16,6 @@
 // teamplay_gamerules.cpp
 //
 #include "cbase.h"
-#include "weapons.h"
 #include "gamerules.h"
 #include "skill.h"
 #include "items.h"

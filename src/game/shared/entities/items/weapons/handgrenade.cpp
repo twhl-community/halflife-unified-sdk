@@ -13,7 +13,6 @@
 *
 ****/
 #include "cbase.h"
-#include "weapons.h"
 
 
 #define HANDGRENADE_PRIMARY_VOLUME 450

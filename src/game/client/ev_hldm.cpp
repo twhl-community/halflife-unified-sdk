@@ -15,7 +15,6 @@
 #include "hud.h"
 
 #include "cbase.h"
-#include "weapons.h"
 
 #include "CDisplacer.h"
 #include "CEagle.h"

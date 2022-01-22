@@ -13,7 +13,6 @@
 *
 ****/
 #include "cbase.h"
-#include "weapons.h"
 #include "customentity.h"
 #include "skill.h"
 #include "decals.h"

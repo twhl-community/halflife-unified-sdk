@@ -16,7 +16,6 @@
 // coopplay_gamerules.cpp
 //
 #include "cbase.h"
-#include "weapons.h"
 #include "gamerules.h"
 #include "coopplay_gamerules.h"
 #include "game.h"

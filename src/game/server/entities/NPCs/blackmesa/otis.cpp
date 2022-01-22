@@ -19,7 +19,6 @@
 
 #include "cbase.h"
 #include "talkmonster.h"
-#include "weapons.h"
 #include "barney.h"
 
 //TODO: work out a way to abstract sentences out so we don't need to override here to change just those

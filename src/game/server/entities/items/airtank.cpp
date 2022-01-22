@@ -13,7 +13,6 @@
 *
 ****/
 #include "cbase.h"
-#include "weapons.h"
 
 class CAirtank : public CGrenade
 {

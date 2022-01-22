@@ -30,7 +30,6 @@
 #include "cbase.h"
 #include "plane.h"
 #include "squadmonster.h"
-#include "weapons.h"
 #include "talkmonster.h"
 #include "effects.h"
 #include "customentity.h"

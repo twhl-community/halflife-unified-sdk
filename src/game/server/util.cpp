@@ -23,7 +23,6 @@
 #include "cbase.h"
 #include "shake.h"
 #include "decals.h"
-#include "weapons.h"
 #include "gamerules.h"
 #include "UserMessages.h"
 

@@ -13,7 +13,6 @@
 *
 ****/
 #include "cbase.h"
-#include "weapons.h"
 #include "gamerules.h"
 #include "UserMessages.h"
 

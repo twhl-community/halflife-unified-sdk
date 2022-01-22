@@ -16,7 +16,6 @@
 // $NoKeywords: $
 //=============================================================================
 #include "cbase.h"
-#include "weapons.h"
 #include "pm_shared.h"
 #include "UserMessages.h"
 

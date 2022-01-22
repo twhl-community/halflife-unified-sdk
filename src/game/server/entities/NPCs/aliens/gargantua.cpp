@@ -18,7 +18,6 @@
 //=========================================================
 #include "cbase.h"
 #include "customentity.h"
-#include "weapons.h"
 #include "effects.h"
 #include "decals.h"
 #include "explode.h"

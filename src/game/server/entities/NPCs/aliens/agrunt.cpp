@@ -18,7 +18,6 @@
 
 #include "cbase.h"
 #include "squadmonster.h"
-#include "weapons.h"
 #include "hornet.h"
 
 //=========================================================

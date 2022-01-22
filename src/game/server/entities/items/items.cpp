@@ -21,7 +21,6 @@
 */
 
 #include "cbase.h"
-#include "weapons.h"
 #include "skill.h"
 #include "items.h"
 #include "gamerules.h"

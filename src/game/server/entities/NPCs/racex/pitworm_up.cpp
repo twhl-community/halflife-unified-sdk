@@ -15,7 +15,6 @@
 
 #include "cbase.h"
 #include "effects.h"
-#include "weapons.h"
 #include "decals.h"
 
 const auto PITWORM_UP_AE_HITGROUND = 1;

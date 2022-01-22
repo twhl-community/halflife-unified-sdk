@@ -17,7 +17,6 @@
 #include "talkmonster.h"
 #include "defaultai.h"
 #include "scripted.h"
-#include "weapons.h"
 #include "blackmesa/barney.h"
 
 /**

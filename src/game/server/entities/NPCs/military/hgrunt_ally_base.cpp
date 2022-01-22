@@ -32,7 +32,6 @@
 #include "plane.h"
 #include "defaultai.h"
 #include "squadmonster.h"
-#include "weapons.h"
 #include "talkmonster.h"
 #include "COFSquadTalkMonster.h"
 #include "effects.h"

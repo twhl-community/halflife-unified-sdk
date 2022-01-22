@@ -13,7 +13,6 @@
 *
 ****/
 #include "cbase.h"
-#include "weapons.h"
 #include "UserMessages.h"
 
 #ifndef CLIENT_DLL

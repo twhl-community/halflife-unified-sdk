@@ -15,7 +15,6 @@
 
 #include "cbase.h"
 #include "talkmonster.h"
-#include "weapons.h"
 #include "blackmesa/barney.h"
 
 /**

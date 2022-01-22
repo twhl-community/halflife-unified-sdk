@@ -26,7 +26,6 @@
 #include "decals.h"
 #include "skill.h"
 #include "effects.h"
-#include "weapons.h"
 #include "gamerules.h"
 #include "teamplay_gamerules.h"
 #include "ctfplay_gamerules.h"

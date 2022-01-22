@@ -21,7 +21,6 @@
 */
 
 #include "cbase.h"
-#include "weapons.h"
 #include "decals.h"
 
 class CFuncMortarField : public CBaseToggle

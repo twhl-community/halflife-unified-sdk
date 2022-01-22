@@ -20,7 +20,6 @@
 */
 
 #include "cbase.h"
-#include "weapons.h"
 
 
 #define ACT_T_IDLE 1010

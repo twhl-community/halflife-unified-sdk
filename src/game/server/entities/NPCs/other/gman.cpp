@@ -16,7 +16,6 @@
 // GMan - misunderstood servant of the people
 //=========================================================
 #include "cbase.h"
-#include "weapons.h"
 
 //=========================================================
 // Monster's Anim Events Go Here
