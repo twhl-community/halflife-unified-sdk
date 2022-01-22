@@ -87,7 +87,6 @@ inline void FillRGBA(int x, int y, int width, int height, const RGB24& color, in
 #define GetScreenInfo (*gEngfuncs.pfnGetScreenInfo)
 #define ServerCmd (*gEngfuncs.pfnServerCmd)
 #define EngineClientCmd (*gEngfuncs.pfnClientCmd)
-#define AngleVectors (*gEngfuncs.pfnAngleVectors)
 
 
 // Gets the height & width of a sprite,  at the specified frame

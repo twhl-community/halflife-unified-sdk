@@ -987,7 +987,7 @@ bool CHudAmmo::Draw(float flTime)
 		{
 			const Vector angles = v_angles + v_crosshairangle;
 			Vector forward;
-			AngleVectors(angles, forward, nullptr, nullptr);
+			AngleVectors(angles, &forward, nullptr, nullptr);
 
 			Vector point = v_origin + forward;
 			Vector screen;

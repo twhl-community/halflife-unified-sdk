@@ -21,9 +21,9 @@ typedef struct ref_params_s
 	float vieworg[3];
 	float viewangles[3];
 
-	float forward[3];
-	float right[3];
-	float up[3];
+	Vector forward;
+	Vector right;
+	Vector up;
 
 	// Client frametime;
 	float frametime;

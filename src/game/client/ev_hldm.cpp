@@ -1532,7 +1532,7 @@ void EV_TripmineFire(event_args_t* args)
 	VectorCopy(args->origin, vecSrc);
 	VectorCopy(args->angles, angles);
 
-	AngleVectors(angles, forward, nullptr, nullptr);
+	AngleVectors(angles, &forward, nullptr, nullptr);
 
 	if (!EV_IsLocal(idx))
 		return;
@@ -1573,7 +1573,7 @@ void EV_SnarkFire(event_args_t* args)
 	VectorCopy(args->origin, vecSrc);
 	VectorCopy(args->angles, angles);
 
-	AngleVectors(angles, forward, nullptr, nullptr);
+	AngleVectors(angles, &forward, nullptr, nullptr);
 
 	if (!EV_IsLocal(idx))
 		return;
@@ -1898,7 +1898,7 @@ void EV_FireSpore(event_args_t* args)
 
 			Vector forward;
 
-			AngleVectors(args->angles, forward, nullptr, nullptr);
+			AngleVectors(args->angles, &forward, nullptr, nullptr);
 
 			gEngfuncs.pEfxAPI->R_Sprite_Spray(
 				vecSrc, forward,
