@@ -16,7 +16,6 @@
 #include "cbase.h"
 #include "weapons.h"
 #include "CPipewrench.h"
-#include "nodes.h"
 #include "gamerules.h"
 
 #define PIPEWRENCH_BODYHIT_VOLUME 128

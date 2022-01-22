@@ -14,7 +14,6 @@
 ****/
 #include "cbase.h"
 #include "weapons.h"
-#include "nodes.h"
 #include "decals.h"
 #include "gamerules.h"
 

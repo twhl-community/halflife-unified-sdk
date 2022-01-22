@@ -16,7 +16,6 @@
 // Squadmonster  functions
 //=========================================================
 #include "cbase.h"
-#include "nodes.h"
 #include "talkmonster.h"
 #include "squadmonster.h"
 #include "COFSquadTalkMonster.h"
