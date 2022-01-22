@@ -14,7 +14,6 @@
 ****/
 #include "cbase.h"
 #include "client.h"
-#include "decals.h"
 #include "gamerules.h"
 #include "game.h"
 #include "CServerLibrary.h"

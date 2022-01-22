@@ -20,7 +20,6 @@
 
 */
 #include "cbase.h"
-#include "decals.h"
 #include "explode.h"
 
 // Spark Shower

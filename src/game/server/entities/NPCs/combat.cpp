@@ -21,7 +21,6 @@
 */
 
 #include "cbase.h"
-#include "decals.h"
 #include "func_break.h"
 
 extern Vector VecBModelOrigin(entvars_t* pevBModel);

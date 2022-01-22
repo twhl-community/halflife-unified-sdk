@@ -18,7 +18,6 @@
 
 #include "cbase.h"
 #include "squadmonster.h"
-#include "decals.h"
 #include "voltigore.h"
 
 class COFChargedBolt : public CBaseEntity

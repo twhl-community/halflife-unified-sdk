@@ -19,7 +19,6 @@
 */
 
 #include "cbase.h"
-#include "decals.h"
 
 
 //===================grenade

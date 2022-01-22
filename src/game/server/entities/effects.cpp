@@ -15,7 +15,6 @@
 #include "cbase.h"
 #include "customentity.h"
 #include "effects.h"
-#include "decals.h"
 #include "func_break.h"
 #include "shake.h"
 

@@ -22,7 +22,6 @@
 
 #include "cbase.h"
 #include "shake.h"
-#include "decals.h"
 #include "gamerules.h"
 #include "UserMessages.h"
 

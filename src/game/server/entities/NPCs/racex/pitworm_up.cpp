@@ -15,7 +15,6 @@
 
 #include "cbase.h"
 #include "effects.h"
-#include "decals.h"
 
 const auto PITWORM_UP_AE_HITGROUND = 1;
 const auto PITWORM_UP_AE_SHOOTBEAM = 2;

@@ -40,6 +40,7 @@ CBaseEntity
 #include "monsterevent.h"
 #include "ehandle.h"
 #include "animation.h"
+#include "decals.h"
 
 #define MAX_PATH_SIZE 10 // max number of nodes available for a path.
 

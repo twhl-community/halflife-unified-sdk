@@ -23,7 +23,6 @@
 #include "cbase.h"
 #include "nodes.h"
 #include "client.h"
-#include "decals.h"
 #include "skill.h"
 #include "effects.h"
 #include "gamerules.h"

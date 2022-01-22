@@ -14,7 +14,6 @@
 ****/
 #include "cbase.h"
 #include "skill.h"
-#include "decals.h"
 
 #include "CSpore.h"
 

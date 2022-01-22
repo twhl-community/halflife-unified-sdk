@@ -17,7 +17,6 @@
 //=========================================================
 
 #include "cbase.h"
-#include "decals.h"
 
 #define ROACH_IDLE 0
 #define ROACH_BORED 1

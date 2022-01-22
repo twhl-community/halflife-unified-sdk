@@ -17,7 +17,6 @@
 // monster template
 //=========================================================
 #include "cbase.h"
-#include "decals.h"
 #include "game.h"
 
 #define SF_INFOBM_RUN 0x0001

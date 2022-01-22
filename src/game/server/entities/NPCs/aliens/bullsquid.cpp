@@ -19,7 +19,6 @@
 #include "cbase.h"
 #include "nodes.h"
 #include "effects.h"
-#include "decals.h"
 #include "game.h"
 
 #define SQUID_SPRINT_DIST 256 // how close the squid has to get before starting to sprint and refusing to swerve

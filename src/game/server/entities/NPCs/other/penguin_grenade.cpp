@@ -13,7 +13,6 @@
 *
 ****/
 #include "cbase.h"
-#include "decals.h"
 #include "gamerules.h"
 
 #define PENGUIN_DETONATE_DELAY 15.0

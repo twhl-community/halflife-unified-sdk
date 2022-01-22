@@ -19,7 +19,6 @@
 // UNDONE: Don't flinch every time you get hit
 
 #include "cbase.h"
-#include "decals.h"
 #include "zombie.h"
 
 //=========================================================
