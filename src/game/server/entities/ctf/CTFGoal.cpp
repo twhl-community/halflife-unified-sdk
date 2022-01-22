@@ -21,7 +21,7 @@ bool CTFGoal::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq("goal_no", pkvd->szKeyName))
 	{
-		m_iGoalNum = strtol(pkvd->szValue, 0, 10);
+		m_iGoalNum = atoi(pkvd->szValue);
 		return true;
 	}
 	else if (FStrEq("goal_min", pkvd->szKeyName))

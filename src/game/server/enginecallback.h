@@ -69,7 +69,7 @@ inline enginefuncs_t g_engfuncs;
 #define RANDOM_FLOAT (*g_engfuncs.pfnRandomFloat)
 #define GETPLAYERAUTHID (*g_engfuncs.pfnGetPlayerAuthId)
 
-inline void MESSAGE_BEGIN(int msg_dest, int msg_type, const float* pOrigin = NULL, edict_t* ed = NULL)
+inline void MESSAGE_BEGIN(int msg_dest, int msg_type, const float* pOrigin = nullptr, edict_t* ed = nullptr)
 {
 	(*g_engfuncs.pfnMessageBegin)(msg_dest, msg_type, pOrigin, ed);
 }
@@ -93,7 +93,7 @@ inline void* GET_PRIVATE(edict_t* pent)
 {
 	if (pent)
 		return pent->pvPrivateData;
-	return NULL;
+	return nullptr;
 }
 
 template <typename T>

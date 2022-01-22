@@ -20,7 +20,7 @@ class VGUIAPI ImagePanel : public Panel
 public:
 	inline ImagePanel()
 	{
-		_image=null;
+		_image= nullptr;
 	}
 
 	ImagePanel(Image* image);

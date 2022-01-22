@@ -832,7 +832,7 @@ bool COFVoltigore::FCanCheckAttacks()
 //=========================================================
 bool COFVoltigore::CheckMeleeAttack1(float flDot, float flDist)
 {
-	if (HasConditions(bits_COND_SEE_ENEMY) && flDist <= VOLTIGORE_MELEE_DIST && flDot >= 0.6 && m_hEnemy != NULL)
+	if (HasConditions(bits_COND_SEE_ENEMY) && flDist <= VOLTIGORE_MELEE_DIST && flDot >= 0.6 && m_hEnemy != nullptr)
 	{
 		return true;
 	}
@@ -889,7 +889,7 @@ void COFVoltigore::StartTask(Task_t* pTask)
 		ClearBeams();
 
 		UTIL_MakeVectors(pev->angles);
-		if (BuildRoute(m_vecEnemyLKP - gpGlobals->v_forward * 50, bits_MF_TO_LOCATION, NULL))
+		if (BuildRoute(m_vecEnemyLKP - gpGlobals->v_forward * 50, bits_MF_TO_LOCATION, nullptr))
 		{
 			TaskComplete();
 		}
@@ -1014,7 +1014,7 @@ Schedule_t* COFVoltigore::GetSchedule()
 		CSound* pSound;
 		pSound = PBestSound();
 
-		ASSERT(pSound != NULL);
+		ASSERT(pSound != nullptr);
 		if (pSound && (pSound->m_iType & bits_SOUND_DANGER) != 0)
 		{
 			// dangerous sound nearby!
@@ -1109,7 +1109,7 @@ Schedule_t* COFVoltigore::GetScheduleOfType(int Type)
 	case SCHED_FAIL:
 		// no fail schedule specified, so pick a good generic one.
 		{
-			if (m_hEnemy != NULL)
+			if (m_hEnemy != nullptr)
 			{
 				// I have an enemy
 				// !!!LATER - what if this enemy is really far away and i'm chasing him?

@@ -176,7 +176,7 @@ void COFTorchAlly::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector ve
 void COFTorchAlly::Shoot()
 {
 	//Limit fire rate
-	if (m_hEnemy == NULL || gpGlobals->time - m_flLastShot <= 0.11)
+	if (m_hEnemy == nullptr || gpGlobals->time - m_flLastShot <= 0.11)
 	{
 		return;
 	}

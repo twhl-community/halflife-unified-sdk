@@ -335,7 +335,7 @@ bool CEagle::GetItemInfo(ItemInfo* p)
 	p->pszAmmo1 = "357";
 	p->iMaxAmmo1 = _357_MAX_CARRY;
 	p->pszName = STRING(pev->classname);
-	p->pszAmmo2 = 0;
+	p->pszAmmo2 = nullptr;
 	p->iMaxAmmo2 = WEAPON_NOCLIP;
 	p->iMaxClip = EAGLE_MAX_CLIP;
 	p->iSlot = 1;

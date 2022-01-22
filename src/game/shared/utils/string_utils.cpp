@@ -21,7 +21,7 @@ std::string_view TrimStart(std::string_view text)
 {
 	std::size_t index = 0;
 
-	while (index < text.size() && std::isspace(text[index]))
+	while (index < text.size() && 0 != std::isspace(text[index]))
 	{
 		++index;
 	}

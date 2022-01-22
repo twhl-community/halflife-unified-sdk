@@ -1,4 +1,6 @@
-Checks: '-*,readability-delete-null-pointer,readability-implicit-bool-conversion'
+Checks: '-*,modernize-use-nullptr,readability-delete-null-pointer,readability-implicit-bool-conversion'
 CheckOptions:
+    - key: modernize-use-nullptr.NullMacros
+      value: 'null'
     - key: readability-implicit-bool-conversion.AllowPointerConditions
       value: '1'

@@ -214,7 +214,7 @@ void COFMedicAlly::DropWeapon(bool applyVelocity)
 void COFMedicAlly::Shoot()
 {
 	//Limit fire rate
-	if (m_hEnemy == NULL || gpGlobals->time - m_flLastShot <= 0.11)
+	if (m_hEnemy == nullptr || gpGlobals->time - m_flLastShot <= 0.11)
 	{
 		return;
 	}

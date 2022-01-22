@@ -56,7 +56,7 @@ void CHUDIconTrigger::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYP
 			break;
 		}
 
-		g_engfuncs.pfnMessageBegin(MSG_ALL, gmsgCustomIcon, 0, 0);
+		g_engfuncs.pfnMessageBegin(MSG_ALL, gmsgCustomIcon, nullptr, nullptr);
 		g_engfuncs.pfnWriteByte(static_cast<int>(m_fIsActive));
 		g_engfuncs.pfnWriteByte(m_nCustomIndex);
 
@@ -126,7 +126,7 @@ bool CHUDIconTrigger::KeyValue(KeyValueData* pkvd)
 
 void CHUDIconTrigger::UpdateUser(CBaseEntity* pPlayer)
 {
-	g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgCustomIcon, 0, pPlayer->edict());
+	g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgCustomIcon, nullptr, pPlayer->edict());
 	g_engfuncs.pfnWriteByte(static_cast<int>(m_fIsActive));
 	g_engfuncs.pfnWriteByte(m_nCustomIndex);
 

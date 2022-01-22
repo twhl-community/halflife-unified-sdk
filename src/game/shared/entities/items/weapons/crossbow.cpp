@@ -46,7 +46,7 @@ LINK_ENTITY_TO_CLASS(crossbow_bolt, CCrossbowBolt);
 CCrossbowBolt* CCrossbowBolt::BoltCreate()
 {
 	// Create a new entity with CCrossbowBolt private data
-	CCrossbowBolt* pBolt = GetClassPtr((CCrossbowBolt*)NULL);
+	CCrossbowBolt* pBolt = GetClassPtr((CCrossbowBolt*)nullptr);
 	pBolt->pev->classname = MAKE_STRING("bolt");
 	pBolt->Spawn();
 
@@ -91,8 +91,8 @@ int CCrossbowBolt::Classify()
 
 void CCrossbowBolt::BoltTouch(CBaseEntity* pOther)
 {
-	SetTouch(NULL);
-	SetThink(NULL);
+	SetTouch(nullptr);
+	SetThink(nullptr);
 
 	if (0 != pOther->pev->takedamage)
 	{
@@ -207,9 +207,9 @@ void CCrossbowBolt::ExplodeThink()
 	if (pev->owner)
 		pevOwner = VARS(pev->owner);
 	else
-		pevOwner = NULL;
+		pevOwner = nullptr;
 
-	pev->owner = NULL; // can't traceline attack owner if this is set
+	pev->owner = nullptr; // can't traceline attack owner if this is set
 
 	::RadiusDamage(pev->origin, pev, pevOwner, pev->dmg, 128, CLASS_NONE, DMG_BLAST | DMG_ALWAYSGIB);
 
@@ -234,7 +234,7 @@ bool CCrossbow::AddToPlayer(CBasePlayer* pPlayer)
 {
 	if (CBasePlayerWeapon::AddToPlayer(pPlayer))
 	{
-		MESSAGE_BEGIN(MSG_ONE, gmsgWeapPickup, NULL, pPlayer->pev);
+		MESSAGE_BEGIN(MSG_ONE, gmsgWeapPickup, nullptr, pPlayer->pev);
 		WRITE_BYTE(m_iId);
 		MESSAGE_END();
 		return true;
@@ -263,7 +263,7 @@ bool CCrossbow::GetItemInfo(ItemInfo* p)
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo1 = "bolts";
 	p->iMaxAmmo1 = BOLT_MAX_CARRY;
-	p->pszAmmo2 = NULL;
+	p->pszAmmo2 = nullptr;
 	p->iMaxAmmo2 = -1;
 	p->iMaxClip = CROSSBOW_MAX_CLIP;
 	p->iSlot = 2;

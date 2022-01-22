@@ -613,13 +613,13 @@ void CHalfLifeCTFplay::InitHUD(CBasePlayer* pPlayer)
 	auto v25 = pPlayer->edict();
 	if (v2 == 0)
 	{
-		g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgFlagTimer, 0, v25);
+		g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgFlagTimer, nullptr, v25);
 		g_engfuncs.pfnWriteByte(0);
 		g_engfuncs.pfnMessageEnd();
 	}
 	else
 	{
-		g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgFlagTimer, 0, v25);
+		g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgFlagTimer, nullptr, v25);
 		g_engfuncs.pfnWriteByte(1);
 		g_engfuncs.pfnWriteShort((int)(v2 - gpGlobals->time));
 		g_engfuncs.pfnMessageEnd();
@@ -695,7 +695,7 @@ void CHalfLifeCTFplay::ClientDisconnected(edict_t* pClient)
 
 			v2->RemoveAllItems(true);
 
-			g_engfuncs.pfnMessageBegin(2, gmsgSpectator, 0, 0);
+			g_engfuncs.pfnMessageBegin(2, gmsgSpectator, nullptr, nullptr);
 			g_engfuncs.pfnWriteByte(g_engfuncs.pfnIndexOfEdict(pClient));
 			g_engfuncs.pfnWriteByte(0);
 			g_engfuncs.pfnMessageEnd();
@@ -1749,7 +1749,7 @@ void CHalfLifeCTFplay::SendTeamStatInfo(CTFTeam iTeamNum)
 		}
 	}
 
-	g_engfuncs.pfnMessageBegin(2, gmsgStatsInfo, 0, 0);
+	g_engfuncs.pfnMessageBegin(2, gmsgStatsInfo, nullptr, nullptr);
 	g_engfuncs.pfnWriteByte(static_cast<int>(iTeamNum));
 
 	g_engfuncs.pfnWriteByte((int)GetWinningTeam());
@@ -1765,7 +1765,7 @@ void CHalfLifeCTFplay::SendTeamStatInfo(CTFTeam iTeamNum)
 	SendTeamStat(iMostBarnacle, "Most Barnacle Kills", iBarnacleVal);
 	g_engfuncs.pfnMessageEnd();
 
-	g_engfuncs.pfnMessageBegin(2, gmsgStatsInfo, 0, 0);
+	g_engfuncs.pfnMessageBegin(2, gmsgStatsInfo, nullptr, nullptr);
 	g_engfuncs.pfnWriteByte(static_cast<int>(iTeamNum));
 
 	g_engfuncs.pfnWriteByte((int)GetWinningTeam());
@@ -1785,11 +1785,7 @@ void CHalfLifeCTFplay::SendTeamStatInfo(CTFTeam iTeamNum)
 
 void CHalfLifeCTFplay::SendPlayerStatInfo(CBasePlayer* pPlayer)
 {
-	g_engfuncs.pfnMessageBegin(
-		MSG_ONE,
-		gmsgStatsPlayer,
-		0,
-		pPlayer->edict());
+	g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgStatsPlayer, nullptr, pPlayer->edict());
 
 	g_engfuncs.pfnWriteByte(pPlayer->entindex());
 

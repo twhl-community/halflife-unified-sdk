@@ -25,7 +25,7 @@ void CTFGoalBase::BaseThink()
 	Vector vecLightPos, vecLightAng;
 	GetAttachment(0, vecLightPos, vecLightAng);
 
-	g_engfuncs.pfnMessageBegin(MSG_BROADCAST, SVC_TEMPENTITY, 0, 0);
+	g_engfuncs.pfnMessageBegin(MSG_BROADCAST, SVC_TEMPENTITY, nullptr, nullptr);
 	g_engfuncs.pfnWriteByte(TE_ELIGHT);
 	g_engfuncs.pfnWriteShort(entindex() + 0x1000);
 	g_engfuncs.pfnWriteCoord(vecLightPos.x);
@@ -106,7 +106,7 @@ void CTFGoalBase::TurnOnLight(CBasePlayer* pPlayer)
 {
 	Vector vecLightPos, vecLightAng;
 	GetAttachment(0, vecLightPos, vecLightAng);
-	g_engfuncs.pfnMessageBegin(MSG_ONE, SVC_TEMPENTITY, 0, pPlayer->edict());
+	g_engfuncs.pfnMessageBegin(MSG_ONE, SVC_TEMPENTITY, nullptr, pPlayer->edict());
 	g_engfuncs.pfnWriteByte(TE_ELIGHT);
 
 	g_engfuncs.pfnWriteShort(entindex() + 0x1000);

@@ -114,7 +114,7 @@ void CPitdroneSpike::Spawn()
 
 void CPitdroneSpike::Shoot(entvars_t* pevOwner, Vector vecStart, Vector vecVelocity, Vector vecAngles)
 {
-	CPitdroneSpike* pSpit = GetClassPtr((CPitdroneSpike*)NULL);
+	CPitdroneSpike* pSpit = GetClassPtr((CPitdroneSpike*)nullptr);
 
 	pSpit->pev->angles = vecAngles;
 	UTIL_SetOrigin(pSpit->pev, vecStart);
@@ -313,7 +313,7 @@ bool CPitdrone::CheckRangeAttack1(float flDot, float flDist)
 
 	if (flDist > 128 && flDist <= 784 && flDot >= 0.5 && gpGlobals->time >= m_flNextSpikeTime)
 	{
-		if (m_hEnemy != NULL)
+		if (m_hEnemy != nullptr)
 		{
 			if (fabs(pev->origin.z - m_hEnemy->pev->origin.z) > 256)
 			{
@@ -751,7 +751,7 @@ void CPitdrone::RunAI()
 	// first, do base class stuff
 	CBaseMonster::RunAI();
 
-	if (m_hEnemy != NULL && m_Activity == ACT_RUN)
+	if (m_hEnemy != nullptr && m_Activity == ACT_RUN)
 	{
 		// chasing enemy. Sprint for last bit
 		if ((pev->origin - m_hEnemy->pev->origin).Length2D() < SQUID_SPRINT_DIST)

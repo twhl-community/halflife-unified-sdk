@@ -23,9 +23,9 @@ edict_t* EHANDLE::Get()
 		if (m_pent->serialnumber == m_serialnumber)
 			return m_pent;
 		else
-			return NULL;
+			return nullptr;
 	}
-	return NULL;
+	return nullptr;
 };
 
 edict_t* EHANDLE::Set(edict_t* pent)
@@ -51,7 +51,7 @@ CBaseEntity* EHANDLE::operator=(CBaseEntity* pEntity)
 	}
 	else
 	{
-		m_pent = NULL;
+		m_pent = nullptr;
 		m_serialnumber = 0;
 	}
 	return pEntity;

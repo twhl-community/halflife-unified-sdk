@@ -159,7 +159,7 @@ void CBaseHGruntAlly::JustSpoke()
 //=========================================================
 void CBaseHGruntAlly::PrescheduleThink()
 {
-	if (InSquad() && m_hEnemy != NULL)
+	if (InSquad() && m_hEnemy != nullptr)
 	{
 		if (HasConditions(bits_COND_SEE_ENEMY))
 		{
@@ -209,7 +209,7 @@ bool CBaseHGruntAlly::CheckMeleeAttack1(float flDot, float flDist)
 {
 	CBaseMonster* pEnemy;
 
-	if (m_hEnemy != NULL)
+	if (m_hEnemy != nullptr)
 	{
 		pEnemy = m_hEnemy->MyMonsterPointer();
 
@@ -454,7 +454,7 @@ bool CBaseHGruntAlly::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker
 	{
 		// This is a heurstic to determine if the player intended to harm me
 		// If I have an enemy, we can't establish intent (may just be crossfire)
-		if (m_hEnemy == NULL)
+		if (m_hEnemy == nullptr)
 		{
 			// If the player was facing directly at me, or I'm already suspicious, get mad
 			if (gpGlobals->time - m_flLastHitByPlayer < 4.0 && m_iPlayerHits > 2 && ((m_afMemory & bits_MEMORY_SUSPICIOUS) != 0 || IsFacing(pevAttacker, pev->origin)))
@@ -617,7 +617,7 @@ CBaseEntity* CBaseHGruntAlly::Kick()
 		return pEntity;
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 //=========================================================
@@ -1744,7 +1744,7 @@ Schedule_t* CBaseHGruntAlly::GetSchedule()
 		CSound* pSound;
 		pSound = PBestSound();
 
-		ASSERT(pSound != NULL);
+		ASSERT(pSound != nullptr);
 		if (pSound)
 		{
 			if ((pSound->m_iType & bits_SOUND_DANGER) != 0)
@@ -1829,10 +1829,10 @@ Schedule_t* CBaseHGruntAlly::GetSchedule()
 					// before he starts pluggin away.
 					if (FOkToSpeak()) // && RANDOM_LONG(0,1))
 					{
-						if ((m_hEnemy != NULL) && m_hEnemy->IsPlayer())
+						if ((m_hEnemy != nullptr) && m_hEnemy->IsPlayer())
 							// player
 							SENTENCEG_PlayRndSz(ENT(pev), "FG_ALERT", HGRUNT_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
-						else if ((m_hEnemy != NULL) &&
+						else if ((m_hEnemy != nullptr) &&
 								 (m_hEnemy->Classify() != CLASS_PLAYER_ALLY) &&
 								 (m_hEnemy->Classify() != CLASS_HUMAN_PASSIVE) &&
 								 (m_hEnemy->Classify() != CLASS_MACHINE))
@@ -1876,7 +1876,7 @@ Schedule_t* CBaseHGruntAlly::GetSchedule()
 			// 10% chance of flinch.
 			int iPercent = RANDOM_LONG(0, 99);
 
-			if (iPercent <= 90 && m_hEnemy != NULL)
+			if (iPercent <= 90 && m_hEnemy != nullptr)
 			{
 				// only try to take cover if we actually have an enemy!
 
@@ -2027,7 +2027,7 @@ Schedule_t* CBaseHGruntAlly::GetSchedule()
 			}
 		}
 
-		if (m_hEnemy == NULL && IsFollowing())
+		if (m_hEnemy == nullptr && IsFollowing())
 		{
 			if (!m_hTargetEnt->IsAlive())
 			{
@@ -2195,7 +2195,7 @@ Schedule_t* CBaseHGruntAlly::GetScheduleOfType(int Type)
 	}
 	case SCHED_FAIL:
 	{
-		if (m_hEnemy != NULL)
+		if (m_hEnemy != nullptr)
 		{
 			// grunt has an enemy, so pick a different default fail schedule most likely to help recover.
 			return &slGruntAllyCombatFail[0];
@@ -2275,8 +2275,8 @@ void CBaseHGruntAlly::TalkInit()
 	m_szGrp[TLK_PLHURT2] = "!FG_CUREB";
 	m_szGrp[TLK_PLHURT3] = "!FG_CUREC";
 
-	m_szGrp[TLK_PHELLO] = NULL;			  //"BA_PHELLO";		// UNDONE
-	m_szGrp[TLK_PIDLE] = NULL;			  //"BA_PIDLE";			// UNDONE
+	m_szGrp[TLK_PHELLO] = nullptr;			  //"BA_PHELLO";		// UNDONE
+	m_szGrp[TLK_PIDLE] = nullptr;			  //"BA_PIDLE";			// UNDONE
 	m_szGrp[TLK_PQUESTION] = "FG_PQUEST"; // UNDONE
 
 	m_szGrp[TLK_SMELL] = "FG_SMELL";
@@ -2381,7 +2381,7 @@ void CBaseHGruntAllyRepel::RepelUse(CBaseEntity* pActivator, CBaseEntity* pCalle
 	UTIL_TraceLine(pev->origin, pev->origin + Vector(0, 0, -4096.0), dont_ignore_monsters, ENT(pev), &tr);
 	/*
 	if ( tr.pHit && Instance( tr.pHit )->pev->solid != SOLID_BSP)
-		return NULL;
+		return nullptr;
 	*/
 
 	CBaseEntity* pEntity = Create(GetMonsterClassname(), pev->origin, pev->angles);

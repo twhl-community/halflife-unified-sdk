@@ -62,7 +62,7 @@ class VoiceImagePanel : public vgui::ImagePanel
 {
 	virtual void paintBackground()
 	{
-		if (_image != null)
+		if (_image != nullptr)
 		{
 			vgui::Color col;
 			getFgColor(col);
@@ -132,9 +132,9 @@ public:
 
 public:
 	CVoiceLabel* FindVoiceLabel(int clientindex); // Find a CVoiceLabel representing the specified speaker.
-												  // Returns NULL if none.
+												  // Returns nullptr if none.
 												  // entindex can be -1 if you want a currently-unused voice label.
-	CVoiceLabel* GetFreeVoiceLabel();			  // Get an unused voice label. Returns NULL if none.
+	CVoiceLabel* GetFreeVoiceLabel();			  // Get an unused voice label. Returns nullptr if none.
 
 	void RepositionLabels();
 

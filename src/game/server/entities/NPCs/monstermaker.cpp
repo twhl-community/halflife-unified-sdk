@@ -190,7 +190,7 @@ void CMonsterMaker::MakeMonster()
 
 	if (FNullEnt(pent))
 	{
-		ALERT(at_console, "NULL Ent in MonsterMaker!\n");
+		ALERT(at_console, "nullptr Ent in MonsterMaker!\n");
 		return;
 	}
 
@@ -225,8 +225,8 @@ void CMonsterMaker::MakeMonster()
 	if (m_cNumMonsters == 0)
 	{
 		// Disable this forever.  Don't kill it because it still gets death notices
-		SetThink(NULL);
-		SetUse(NULL);
+		SetThink(nullptr);
+		SetUse(nullptr);
 	}
 }
 
@@ -250,7 +250,7 @@ void CMonsterMaker::ToggleUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE
 	if (m_fActive)
 	{
 		m_fActive = false;
-		SetThink(NULL);
+		SetThink(nullptr);
 	}
 	else
 	{
@@ -281,6 +281,6 @@ void CMonsterMaker::DeathNotice(entvars_t* pevChild)
 
 	if (!m_fFadeChildren)
 	{
-		pevChild->owner = NULL;
+		pevChild->owner = nullptr;
 	}
 }

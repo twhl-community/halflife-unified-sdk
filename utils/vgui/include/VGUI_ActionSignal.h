@@ -34,7 +34,7 @@ DefaultButtonModel would implement:
 
 virtual void addActionSignal(ActionSignal* s)
 {
-	if(s!=null)
+	if(s!=nullptr)
 	{
 		_actionSignalDar.putElement(s);
 	}
@@ -47,13 +47,13 @@ virtual void fireActionSignal()
 		ActionSignal* signal=_actionSignalDar[i];
 		
 		ActionSignalSimple* ss=dynamic_cast<ActionSignalSimple*>(signal);
-		if(ss!=null)
+		if(ss!=nullptr)
 		{
 			ss->actionPerformed(this);
 		}
 	
 		ActionSignalCommand* si=dynamic_cast<ActionSignalInt*>(signal);
-		if(si!=null)
+		if(si!=nullptr)
 		{
 			si->actionPerformed(_intValue,this);
 		}

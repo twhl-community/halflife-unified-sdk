@@ -423,7 +423,7 @@ public:
 	bool Init() override;
 	static char* LocaliseTextString(const char* msg, char* dst_buffer, int buffer_size);
 	static char* BufferedLocaliseTextString(const char* msg);
-	const char* LookupString(const char* msg_name, int* msg_dest = NULL);
+	const char* LookupString(const char* msg_name, int* msg_dest = nullptr);
 	bool MsgFunc_TextMsg(const char* pszName, int iSize, void* pbuf);
 };
 
@@ -602,7 +602,7 @@ public:
 	void InitHUDData();
 	bool VidInit();
 	bool Draw(float flTime);
-	int DrawPlayers(int xoffset, float listslot, int nameoffset = 0, const char* team = NULL); // returns the ypos where it finishes drawing
+	int DrawPlayers(int xoffset, float listslot, int nameoffset = 0, const char* team = nullptr); // returns the ypos where it finishes drawing
 	void UserCmd_ShowScores();
 	void UserCmd_HideScores();
 	bool MsgFunc_ScoreInfo(const char* pszName, int iSize, void* pbuf);
@@ -736,7 +736,7 @@ public:
 	bool Redraw(float flTime, bool intermission);
 	bool UpdateClientData(client_data_t* cdata, float time);
 
-	CHud() : m_iSpriteCount(0), m_pHudList(NULL) {}
+	CHud() : m_iSpriteCount(0), m_pHudList(nullptr) {}
 	~CHud(); // destructor, frees allocated memory
 
 	// user messages

@@ -115,14 +115,14 @@ bool CBaseMonster::Restore(CRestore& restore)
 	RouteClear();
 
 	// We don't save/restore schedules yet
-	m_pSchedule = NULL;
+	m_pSchedule = nullptr;
 	m_iTaskStatus = TASKSTATUS_NEW;
 
 	// Reset animation
 	m_Activity = ACT_RESET;
 
 	// If we don't have an enemy, clear conditions like see enemy, etc.
-	if (m_hEnemy == NULL)
+	if (m_hEnemy == nullptr)
 		m_afConditions = 0;
 
 	return status;
@@ -296,9 +296,9 @@ void CBaseMonster::Look(int iDistance)
 	// DON'T let visibility information from last frame sit around!
 	ClearConditions(bits_COND_SEE_HATE | bits_COND_SEE_DISLIKE | bits_COND_SEE_ENEMY | bits_COND_SEE_FEAR | bits_COND_SEE_NEMESIS | bits_COND_SEE_CLIENT);
 
-	m_pLink = NULL;
+	m_pLink = nullptr;
 
-	CBaseEntity* pSightEnt = NULL; // the current visible entity that we're dealing with
+	CBaseEntity* pSightEnt = nullptr; // the current visible entity that we're dealing with
 
 	// See no evil if prisoner is set
 	if (!FBitSet(pev->spawnflags, SF_MONSTER_PRISONER))
@@ -414,9 +414,9 @@ CSound* CBaseMonster::PBestSound()
 	{
 		ALERT(at_aiconsole, "ERROR! monster %s has no audible sounds!\n", STRING(pev->classname));
 #if _DEBUG
-		ALERT(at_error, "NULL Return from PBestSound\n");
+		ALERT(at_error, "nullptr Return from PBestSound\n");
 #endif
-		return NULL;
+		return nullptr;
 	}
 
 	while (iThisSound != SOUNDLIST_EMPTY)
@@ -442,9 +442,9 @@ CSound* CBaseMonster::PBestSound()
 		return pSound;
 	}
 #if _DEBUG
-	ALERT(at_error, "NULL Return from PBestSound\n");
+	ALERT(at_error, "nullptr Return from PBestSound\n");
 #endif
-	return NULL;
+	return nullptr;
 }
 
 //=========================================================
@@ -465,9 +465,9 @@ CSound* CBaseMonster::PBestScent()
 	{
 		ALERT(at_aiconsole, "ERROR! PBestScent() has empty soundlist!\n");
 #if _DEBUG
-		ALERT(at_error, "NULL Return from PBestSound\n");
+		ALERT(at_error, "nullptr Return from PBestSound\n");
 #endif
-		return NULL;
+		return nullptr;
 	}
 
 	while (iThisScent != SOUNDLIST_EMPTY)
@@ -494,9 +494,9 @@ CSound* CBaseMonster::PBestScent()
 		return pSound;
 	}
 #if _DEBUG
-	ALERT(at_error, "NULL Return from PBestScent\n");
+	ALERT(at_error, "nullptr Return from PBestScent\n");
 #endif
-	return NULL;
+	return nullptr;
 }
 
 
@@ -667,11 +667,11 @@ bool CBaseMonster::FRefreshRoute()
 		break;
 
 	case MOVEGOAL_LOCATION:
-		returnCode = BuildRoute(m_vecMoveGoal, bits_MF_TO_LOCATION, NULL);
+		returnCode = BuildRoute(m_vecMoveGoal, bits_MF_TO_LOCATION, nullptr);
 		break;
 
 	case MOVEGOAL_TARGETENT:
-		if (m_hTargetEnt != NULL)
+		if (m_hTargetEnt != nullptr)
 		{
 			returnCode = BuildRoute(m_hTargetEnt->pev->origin, bits_MF_TO_TARGETENT, m_hTargetEnt);
 		}
@@ -680,7 +680,7 @@ bool CBaseMonster::FRefreshRoute()
 	case MOVEGOAL_NODE:
 		returnCode = FGetNodeRoute(m_vecMoveGoal);
 		//			if ( returnCode )
-		//				RouteSimplify( NULL );
+		//				RouteSimplify( nullptr );
 		break;
 	}
 
@@ -850,7 +850,7 @@ void CBaseMonster::RouteSimplify(CBaseEntity* pTargetEnt)
 			outRoute[outCount] = m_Route[m_iRouteIndex + i];
 			outCount++;
 		}
-		else if (CheckLocalMove(vecStart, m_Route[m_iRouteIndex + i + 1].vecLocation, pTargetEnt, NULL) == LOCALMOVE_VALID)
+		else if (CheckLocalMove(vecStart, m_Route[m_iRouteIndex + i + 1].vecLocation, pTargetEnt, nullptr) == LOCALMOVE_VALID)
 		{
 			// Skip vert
 			continue;
@@ -866,12 +866,12 @@ void CBaseMonster::RouteSimplify(CBaseEntity* pTargetEnt)
 			vecSplit = (m_Route[m_iRouteIndex + i].vecLocation + vecStart) * 0.5;
 
 			int iType = (m_Route[m_iRouteIndex + i].iType | bits_MF_TO_DETOUR) & ~bits_MF_NOT_TO_MASK;
-			if (CheckLocalMove(vecStart, vecTest, pTargetEnt, NULL) == LOCALMOVE_VALID)
+			if (CheckLocalMove(vecStart, vecTest, pTargetEnt, nullptr) == LOCALMOVE_VALID)
 			{
 				outRoute[outCount].iType = iType;
 				outRoute[outCount].vecLocation = vecTest;
 			}
-			else if (CheckLocalMove(vecSplit, vecTest, pTargetEnt, NULL) == LOCALMOVE_VALID)
+			else if (CheckLocalMove(vecSplit, vecTest, pTargetEnt, nullptr) == LOCALMOVE_VALID)
 			{
 				outRoute[outCount].iType = iType;
 				outRoute[outCount].vecLocation = vecSplit;
@@ -962,7 +962,7 @@ bool CBaseMonster::CheckRangeAttack2(float flDot, float flDist)
 bool CBaseMonster::CheckMeleeAttack1(float flDot, float flDist)
 {
 	// Decent fix to keep folks from kicking/punching hornets and snarks is to check the onground flag(sjb)
-	if (flDist <= 64 && flDot >= 0.7 && m_hEnemy != NULL && FBitSet(m_hEnemy->pev->flags, FL_ONGROUND))
+	if (flDist <= 64 && flDot >= 0.7 && m_hEnemy != nullptr && FBitSet(m_hEnemy->pev->flags, FL_ONGROUND))
 	{
 		return true;
 	}
@@ -1163,7 +1163,7 @@ void CBaseMonster::PushEnemy(CBaseEntity* pEnemy, Vector& vecLastKnownPos)
 {
 	int i;
 
-	if (pEnemy == NULL)
+	if (pEnemy == nullptr)
 		return;
 
 	// UNDONE: blah, this is bad, we should use a stack but I'm too lazy to code one.
@@ -1171,7 +1171,7 @@ void CBaseMonster::PushEnemy(CBaseEntity* pEnemy, Vector& vecLastKnownPos)
 	{
 		if (m_hOldEnemy[i] == pEnemy)
 			return;
-		if (m_hOldEnemy[i] == NULL) // someone died, reuse their slot
+		if (m_hOldEnemy[i] == nullptr) // someone died, reuse their slot
 			break;
 	}
 	if (i >= MAX_OLD_ENEMIES)
@@ -1189,7 +1189,7 @@ bool CBaseMonster::PopEnemy()
 	// UNDONE: blah, this is bad, we should use a stack but I'm too lazy to code one.
 	for (int i = MAX_OLD_ENEMIES - 1; i >= 0; i--)
 	{
-		if (m_hOldEnemy[i] != NULL)
+		if (m_hOldEnemy[i] != nullptr)
 		{
 			if (m_hOldEnemy[i]->IsAlive()) // cheat and know when they die
 			{
@@ -1200,7 +1200,7 @@ bool CBaseMonster::PopEnemy()
 			}
 			else
 			{
-				m_hOldEnemy[i] = NULL;
+				m_hOldEnemy[i] = nullptr;
 			}
 		}
 	}
@@ -1338,7 +1338,7 @@ int CBaseMonster::CheckLocalMove(const Vector& vecStart, const Vector& vecEnd, C
 		if (!WALK_MOVE(ENT(pev), flYaw, stepSize, WALKMOVE_CHECKONLY))
 		{ // can't take the next step, fail!
 
-			if (pflDist != NULL)
+			if (pflDist != nullptr)
 			{
 				*pflDist = flStep;
 			}
@@ -1406,7 +1406,7 @@ float CBaseMonster::OpenDoorAndWait(entvars_t* pevDoor)
 		//ALERT(at_aiconsole, "Waiting %d ms\n", (int)(1000*flTravelTime));
 		if (!FStringNull(pcbeDoor->pev->targetname))
 		{
-			edict_t* pentTarget = NULL;
+			edict_t* pentTarget = nullptr;
 			for (;;)
 			{
 				pentTarget = FIND_ENTITY_BY_TARGETNAME(pentTarget, STRING(pcbeDoor->pev->targetname));
@@ -1467,7 +1467,7 @@ void CBaseMonster::AdvanceRoute(float distance)
 				int iLink;
 				WorldGraph.HashSearch(iSrcNode, iDestNode, iLink);
 
-				if (iLink >= 0 && WorldGraph.m_pLinkPool[iLink].m_pLinkEnt != NULL)
+				if (iLink >= 0 && WorldGraph.m_pLinkPool[iLink].m_pLinkEnt != nullptr)
 				{
 					//ALERT(at_aiconsole, "A link. ");
 					if (WorldGraph.HandleLinkEnt(iSrcNode, WorldGraph.m_pLinkPool[iLink].m_pLinkEnt, m_afCapability, CGraph::NODEGRAPH_DYNAMIC))
@@ -1708,9 +1708,9 @@ bool CBaseMonster::FTriangulate(const Vector& vecStart, const Vector& vecEnd, fl
 }
 #endif
 
-		if (CheckLocalMove(pev->origin, vecRight, pTargetEnt, NULL) == LOCALMOVE_VALID)
+		if (CheckLocalMove(pev->origin, vecRight, pTargetEnt, nullptr) == LOCALMOVE_VALID)
 		{
-			if (CheckLocalMove(vecRight, vecFarSide, pTargetEnt, NULL) == LOCALMOVE_VALID)
+			if (CheckLocalMove(vecRight, vecFarSide, pTargetEnt, nullptr) == LOCALMOVE_VALID)
 			{
 				if (pApex)
 				{
@@ -1720,9 +1720,9 @@ bool CBaseMonster::FTriangulate(const Vector& vecStart, const Vector& vecEnd, fl
 				return true;
 			}
 		}
-		if (CheckLocalMove(pev->origin, vecLeft, pTargetEnt, NULL) == LOCALMOVE_VALID)
+		if (CheckLocalMove(pev->origin, vecLeft, pTargetEnt, nullptr) == LOCALMOVE_VALID)
 		{
-			if (CheckLocalMove(vecLeft, vecFarSide, pTargetEnt, NULL) == LOCALMOVE_VALID)
+			if (CheckLocalMove(vecLeft, vecFarSide, pTargetEnt, nullptr) == LOCALMOVE_VALID)
 			{
 				if (pApex)
 				{
@@ -1735,9 +1735,9 @@ bool CBaseMonster::FTriangulate(const Vector& vecStart, const Vector& vecEnd, fl
 
 		if (pev->movetype == MOVETYPE_FLY)
 		{
-			if (CheckLocalMove(pev->origin, vecTop, pTargetEnt, NULL) == LOCALMOVE_VALID)
+			if (CheckLocalMove(pev->origin, vecTop, pTargetEnt, nullptr) == LOCALMOVE_VALID)
 			{
-				if (CheckLocalMove(vecTop, vecFarSide, pTargetEnt, NULL) == LOCALMOVE_VALID)
+				if (CheckLocalMove(vecTop, vecFarSide, pTargetEnt, nullptr) == LOCALMOVE_VALID)
 				{
 					if (pApex)
 					{
@@ -1749,9 +1749,9 @@ bool CBaseMonster::FTriangulate(const Vector& vecStart, const Vector& vecEnd, fl
 				}
 			}
 #if 1
-			if (CheckLocalMove(pev->origin, vecBottom, pTargetEnt, NULL) == LOCALMOVE_VALID)
+			if (CheckLocalMove(pev->origin, vecBottom, pTargetEnt, nullptr) == LOCALMOVE_VALID)
 			{
-				if (CheckLocalMove(vecBottom, vecFarSide, pTargetEnt, NULL) == LOCALMOVE_VALID)
+				if (CheckLocalMove(vecBottom, vecFarSide, pTargetEnt, nullptr) == LOCALMOVE_VALID)
 				{
 					if (pApex)
 					{
@@ -1825,7 +1825,7 @@ void CBaseMonster::Move(float flInterval)
 
 	// if the monster is moving directly towards an entity (enemy for instance), we'll set this pointer
 	// to that entity for the CheckLocalMove and Triangulate functions.
-	pTargetEnt = NULL;
+	pTargetEnt = nullptr;
 
 	// local move to waypoint.
 	vecDir = (m_Route[m_iRouteIndex].vecLocation - pev->origin).Normalize();
@@ -2023,7 +2023,7 @@ void CBaseMonster::MonsterInit()
 
 	m_afMemory = MEMORY_CLEAR;
 
-	m_hEnemy = NULL;
+	m_hEnemy = nullptr;
 
 	m_flDistTooFar = 1024.0;
 	m_flDistLook = 2048.0;
@@ -2089,7 +2089,7 @@ void CBaseMonster::StartMonster()
 	if (!FStringNull(pev->target)) // this monster has a target
 	{
 		// Find the monster's initial target entity, stash it
-		m_pGoalEnt = CBaseEntity::Instance(FIND_ENTITY_BY_TARGETNAME(NULL, STRING(pev->target)));
+		m_pGoalEnt = CBaseEntity::Instance(FIND_ENTITY_BY_TARGETNAME(nullptr, STRING(pev->target)));
 
 		if (!m_pGoalEnt)
 		{
@@ -2388,7 +2388,7 @@ bool CBaseMonster::BuildNearestRoute(Vector vecThreat, Vector vecViewOffset, flo
 				if (tr.flFraction == 1.0)
 				{
 					// try to actually get there
-					if (BuildRoute(node.m_vecOrigin, bits_MF_TO_LOCATION, NULL))
+					if (BuildRoute(node.m_vecOrigin, bits_MF_TO_LOCATION, nullptr))
 					{
 						flMaxDist = flDist;
 						m_vecMoveGoal = node.m_vecOrigin;
@@ -2423,10 +2423,10 @@ CBaseEntity* CBaseMonster::BestVisibleEnemy()
 
 	iNearest = 8192; // so first visible entity will become the closest.
 	pNextEnt = m_pLink;
-	pReturn = NULL;
+	pReturn = nullptr;
 	iBestRelationship = R_NO;
 
-	while (pNextEnt != NULL)
+	while (pNextEnt != nullptr)
 	{
 		if (pNextEnt->IsAlive())
 		{
@@ -2917,7 +2917,7 @@ void CBaseMonster::ReportAIState()
 
 	if (m_pSchedule)
 	{
-		const char* pName = NULL;
+		const char* pName = nullptr;
 		pName = m_pSchedule->pName;
 		if (!pName)
 			pName = "Unknown";
@@ -2929,7 +2929,7 @@ void CBaseMonster::ReportAIState()
 	else
 		ALERT(level, "No Schedule, ");
 
-	if (m_hEnemy != NULL)
+	if (m_hEnemy != nullptr)
 		ALERT(level, "\nEnemy is %s", STRING(m_hEnemy->pev->classname));
 	else
 		ALERT(level, "No enemy");
@@ -3014,7 +3014,7 @@ bool CBaseMonster::FCheckAITrigger()
 	switch (m_iTriggerCondition)
 	{
 	case AITRIGGER_SEEPLAYER_ANGRY_AT_PLAYER:
-		if (m_hEnemy != NULL && m_hEnemy->IsPlayer() && HasConditions(bits_COND_SEE_ENEMY))
+		if (m_hEnemy != nullptr && m_hEnemy->IsPlayer() && HasConditions(bits_COND_SEE_ENEMY))
 		{
 			fFireTarget = true;
 		}
@@ -3162,7 +3162,7 @@ bool CBaseMonster::FindLateralCover(const Vector& vecThreat, const Vector& vecVi
 
 		if (tr.flFraction != 1.0)
 		{
-			if (FValidateCover(vecLeftTest) && CheckLocalMove(pev->origin, vecLeftTest, NULL, NULL) == LOCALMOVE_VALID)
+			if (FValidateCover(vecLeftTest) && CheckLocalMove(pev->origin, vecLeftTest, nullptr, nullptr) == LOCALMOVE_VALID)
 			{
 				if (MoveToLocation(ACT_RUN, 0, vecLeftTest))
 				{
@@ -3176,7 +3176,7 @@ bool CBaseMonster::FindLateralCover(const Vector& vecThreat, const Vector& vecVi
 
 		if (tr.flFraction != 1.0)
 		{
-			if (FValidateCover(vecRightTest) && CheckLocalMove(pev->origin, vecRightTest, NULL, NULL) == LOCALMOVE_VALID)
+			if (FValidateCover(vecRightTest) && CheckLocalMove(pev->origin, vecRightTest, nullptr, nullptr) == LOCALMOVE_VALID)
 			{
 				if (MoveToLocation(ACT_RUN, 0, vecRightTest))
 				{
@@ -3264,7 +3264,7 @@ void CBaseMonster::CorpseFallThink()
 {
 	if ((pev->flags & FL_ONGROUND) != 0)
 	{
-		SetThink(NULL);
+		SetThink(nullptr);
 
 		SetSequenceBox();
 		UTIL_SetOrigin(pev, pev->origin); // link into world.
@@ -3366,7 +3366,7 @@ bool CBaseMonster::GetEnemy()
 	{
 		pNewEnemy = BestVisibleEnemy();
 
-		if (pNewEnemy != m_hEnemy && pNewEnemy != NULL)
+		if (pNewEnemy != m_hEnemy && pNewEnemy != nullptr)
 		{
 			// DO NOT mess with the monster's m_hEnemy pointer unless the schedule the monster is currently running will be interrupted
 			// by COND_NEW_ENEMY. This will eliminate the problem of monsters getting a new enemy while they are in a schedule that doesn't care,
@@ -3382,7 +3382,7 @@ bool CBaseMonster::GetEnemy()
 					m_vecEnemyLKP = m_hEnemy->pev->origin;
 				}
 				// if the new enemy has an owner, take that one as well
-				if (pNewEnemy->pev->owner != NULL)
+				if (pNewEnemy->pev->owner != nullptr)
 				{
 					CBaseEntity* pOwner = GetMonsterPointer(pNewEnemy->pev->owner);
 					if (pOwner && (pOwner->pev->flags & FL_MONSTER) != 0 && IRelationship(pOwner) != R_NO)
@@ -3393,7 +3393,7 @@ bool CBaseMonster::GetEnemy()
 	}
 
 	// remember old enemies
-	if (m_hEnemy == NULL && PopEnemy())
+	if (m_hEnemy == nullptr && PopEnemy())
 	{
 		if (m_pSchedule)
 		{
@@ -3404,7 +3404,7 @@ bool CBaseMonster::GetEnemy()
 		}
 	}
 
-	if (m_hEnemy != NULL)
+	if (m_hEnemy != nullptr)
 	{
 		// monster has an enemy.
 		return true;
@@ -3422,7 +3422,7 @@ CBaseEntity* CBaseMonster::DropItem(const char* pszItemName, const Vector& vecPo
 	if (!pszItemName)
 	{
 		ALERT(at_console, "DropItem() - No item name!\n");
-		return NULL;
+		return nullptr;
 	}
 
 	CBaseEntity* pItem = CBaseEntity::Create(pszItemName, vecPos, vecAng, edict());
@@ -3521,7 +3521,7 @@ bool IsFacing(entvars_t* pevTest, const Vector& reference)
 	Vector forward, angle;
 	angle = pevTest->v_angle;
 	angle.x = 0;
-	UTIL_MakeVectorsPrivate(angle, forward, NULL, NULL);
+	UTIL_MakeVectorsPrivate(angle, forward, nullptr, nullptr);
 	// He's facing me, he meant it
 	if (DotProduct(forward, vecDir) > 0.96) // +/- 15 degrees or so
 	{

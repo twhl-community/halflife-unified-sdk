@@ -208,7 +208,7 @@ void CMultiSource::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE u
 		USE_TYPE useType = USE_TOGGLE;
 		if (!FStringNull(m_globalstate))
 			useType = USE_ON;
-		SUB_UseTargets(NULL, useType, 0);
+		SUB_UseTargets(nullptr, useType, 0);
 	}
 }
 
@@ -240,7 +240,7 @@ bool CMultiSource::IsTriggered(CBaseEntity*)
 
 void CMultiSource::Register()
 {
-	edict_t* pentTarget = NULL;
+	edict_t* pentTarget = nullptr;
 
 	m_iTotal = 0;
 	memset(m_rgEntities, 0, MS_MAX_TARGETS * sizeof(EHANDLE));
@@ -249,7 +249,7 @@ void CMultiSource::Register()
 
 	// search for all entities which target this multisource (pev->targetname)
 
-	pentTarget = FIND_ENTITY_BY_STRING(NULL, "target", STRING(pev->targetname));
+	pentTarget = FIND_ENTITY_BY_STRING(nullptr, "target", STRING(pev->targetname));
 
 	while (!FNullEnt(pentTarget) && (m_iTotal < MS_MAX_TARGETS))
 	{
@@ -260,7 +260,7 @@ void CMultiSource::Register()
 		pentTarget = FIND_ENTITY_BY_STRING(pentTarget, "target", STRING(pev->targetname));
 	}
 
-	pentTarget = FIND_ENTITY_BY_STRING(NULL, "classname", "multi_manager");
+	pentTarget = FIND_ENTITY_BY_STRING(nullptr, "classname", "multi_manager");
 	while (!FNullEnt(pentTarget) && (m_iTotal < MS_MAX_TARGETS))
 	{
 		CBaseEntity* pTarget = CBaseEntity::Instance(pentTarget);
@@ -441,10 +441,10 @@ bool CBaseButton::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, fl
 	if (code == BUTTON_NOTHING)
 		return false;
 	// Temporarily disable the touch function, until movement is finished.
-	SetTouch(NULL);
+	SetTouch(nullptr);
 
 	m_hActivator = CBaseEntity::Instance(pevAttacker);
-	if (m_hActivator == NULL)
+	if (m_hActivator == nullptr)
 		return false;
 
 	if (code == BUTTON_RETURN)
@@ -542,7 +542,7 @@ void CBaseButton::Spawn()
 	}
 	else
 	{
-		SetTouch(NULL);
+		SetTouch(nullptr);
 		SetUse(&CBaseButton::ButtonUse);
 	}
 }
@@ -743,7 +743,7 @@ void CBaseButton::ButtonTouch(CBaseEntity* pOther)
 	}
 
 	// Temporarily disable the touch function, until movement is finished.
-	SetTouch(NULL);
+	SetTouch(nullptr);
 
 	if (code == BUTTON_RETURN)
 	{
@@ -803,7 +803,7 @@ void CBaseButton::TriggerAndWait()
 		if (!FBitSet(pev->spawnflags, SF_BUTTON_TOUCH_ONLY)) // this button only works if USED, not touched!
 		{
 			// ALL buttons are now use only
-			SetTouch(NULL);
+			SetTouch(nullptr);
 		}
 		else
 			SetTouch(&CBaseButton::ButtonTouch);
@@ -857,7 +857,7 @@ void CBaseButton::ButtonBackHome()
 
 	if (!FStringNull(pev->target))
 	{
-		edict_t* pentTarget = NULL;
+		edict_t* pentTarget = nullptr;
 		for (;;)
 		{
 			pentTarget = FIND_ENTITY_BY_TARGETNAME(pentTarget, STRING(pev->target));
@@ -878,7 +878,7 @@ void CBaseButton::ButtonBackHome()
 	if (!FBitSet(pev->spawnflags, SF_BUTTON_TOUCH_ONLY)) // this button only works if USED, not touched!
 	{
 		// All buttons are now use only
-		SetTouch(NULL);
+		SetTouch(nullptr);
 	}
 	else
 		SetTouch(&CBaseButton::ButtonTouch);
@@ -953,7 +953,7 @@ void CRotButton::Spawn()
 	// if the button is flagged for USE button activation only, take away it's touch function and add a use function
 	if (!FBitSet(pev->spawnflags, SF_BUTTON_TOUCH_ONLY))
 	{
-		SetTouch(NULL);
+		SetTouch(nullptr);
 		SetUse(&CRotButton::ButtonUse);
 	}
 	else // touchable button
@@ -1093,7 +1093,7 @@ void CMomentaryRotButton::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE
 void CMomentaryRotButton::UpdateAllButtons(float value, bool start)
 {
 	// Update all rot buttons attached to the same target
-	edict_t* pentTarget = NULL;
+	edict_t* pentTarget = nullptr;
 	for (;;)
 	{
 
@@ -1157,7 +1157,7 @@ void CMomentaryRotButton::UpdateTarget(float value)
 {
 	if (!FStringNull(pev->target))
 	{
-		edict_t* pentTarget = NULL;
+		edict_t* pentTarget = nullptr;
 		for (;;)
 		{
 			pentTarget = FIND_ENTITY_BY_TARGETNAME(pentTarget, STRING(pev->target));
@@ -1183,7 +1183,7 @@ void CMomentaryRotButton::Off()
 		m_direction = -1;
 	}
 	else
-		SetThink(NULL);
+		SetThink(nullptr);
 }
 
 void CMomentaryRotButton::Return()
@@ -1203,7 +1203,7 @@ void CMomentaryRotButton::UpdateSelfReturn(float value)
 		pev->avelocity = g_vecZero;
 		pev->angles = m_start;
 		pev->nextthink = -1;
-		SetThink(NULL);
+		SetThink(nullptr);
 	}
 	else
 	{
@@ -1248,8 +1248,8 @@ LINK_ENTITY_TO_CLASS(env_debris, CEnvSpark);
 
 void CEnvSpark::Spawn()
 {
-	SetThink(NULL);
-	SetUse(NULL);
+	SetThink(nullptr);
+	SetUse(nullptr);
 
 	if (FBitSet(pev->spawnflags, 32)) // Use for on/off
 	{
@@ -1319,7 +1319,7 @@ void EXPORT CEnvSpark::SparkStart(CBaseEntity* pActivator, CBaseEntity* pCaller,
 void EXPORT CEnvSpark::SparkStop(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
 	SetUse(&CEnvSpark::SparkStart);
-	SetThink(NULL);
+	SetThink(nullptr);
 }
 
 #define SF_BTARGET_USE 0x0001

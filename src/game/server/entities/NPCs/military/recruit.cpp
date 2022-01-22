@@ -73,7 +73,7 @@ void CRecruit::Spawn()
 
 void CRecruit::AlertSound()
 {
-	if (m_hEnemy != NULL)
+	if (m_hEnemy != nullptr)
 	{
 		if (FOkToSpeak())
 		{
@@ -93,7 +93,7 @@ bool CRecruit::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float
 	{
 		// This is a heurstic to determine if the player intended to harm me
 		// If I have an enemy, we can't establish intent (may just be crossfire)
-		if (m_hEnemy == NULL)
+		if (m_hEnemy == nullptr)
 		{
 			// If the player was facing directly at me, or I'm already suspicious, get mad
 			if ((m_afMemory & bits_MEMORY_SUSPICIOUS) != 0 || IsFacing(pevAttacker, pev->origin))
@@ -146,8 +146,8 @@ void CRecruit::TalkInit()
 	m_szGrp[TLK_PLHURT2] = "!RC_CUREB";
 	m_szGrp[TLK_PLHURT3] = "!RC_CUREC";
 
-	m_szGrp[TLK_PHELLO] = NULL;			  //"BA_PHELLO";		// UNDONE
-	m_szGrp[TLK_PIDLE] = NULL;			  //"BA_PIDLE";			// UNDONE
+	m_szGrp[TLK_PHELLO] = nullptr;			  //"BA_PHELLO";		// UNDONE
+	m_szGrp[TLK_PIDLE] = nullptr;			  //"BA_PIDLE";			// UNDONE
 	m_szGrp[TLK_PQUESTION] = "RC_PQUEST"; // UNDONE
 
 	m_szGrp[TLK_SMELL] = "RC_SMELL";

@@ -196,7 +196,7 @@ CStatsMenuPanel::CStatsMenuPanel(int iTrans, bool iRemoveMe, int x, int y, int w
 		int maxY = yy + tall;
 
 		//check to see if the image goes lower than the text
-		if (m_pClassImages[i] != null)
+		if (m_pClassImages[i] != nullptr)
 		{
 			m_pClassImages[i]->getPos(xx, yy);
 			if ((yy + m_pClassImages[i]->getTall()) > maxY)

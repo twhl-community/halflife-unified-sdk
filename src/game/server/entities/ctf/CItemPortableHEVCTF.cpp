@@ -53,7 +53,7 @@ bool CItemPortableHEVCTF::MyTouch(CBasePlayer* pPlayer)
 				pPlayer->m_fPlayingAChargeSound = false;
 
 				//TODO: use proper constant for msg dest
-				g_engfuncs.pfnMessageBegin(1, gmsgItemPickup, 0, pPlayer->edict());
+				g_engfuncs.pfnMessageBegin(1, gmsgItemPickup, nullptr, pPlayer->edict());
 				g_engfuncs.pfnWriteString(STRING(pev->classname));
 				g_engfuncs.pfnMessageEnd();
 

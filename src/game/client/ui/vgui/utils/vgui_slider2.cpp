@@ -412,7 +412,7 @@ void Slider2::privateMousePressed(MouseCode code, Panel* panel)
 void Slider2::privateMouseReleased(MouseCode code, Panel* panel)
 {
 	_dragging = false;
-	getApp()->setMouseCapture(null);
+	getApp()->setMouseCapture(nullptr);
 }
 
 void Slider2::getNobPos(int& min, int& max)

@@ -232,7 +232,7 @@ void CMOFAssassin::CheckAmmo()
 //=========================================================
 void CMOFAssassin::Shoot(bool firstShotInBurst)
 {
-	if (m_hEnemy == NULL)
+	if (m_hEnemy == nullptr)
 	{
 		return;
 	}

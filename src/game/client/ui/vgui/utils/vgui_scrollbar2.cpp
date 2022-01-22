@@ -104,9 +104,9 @@ public:
 //-----------------------------------------------------------------------------
 ScrollBar2::ScrollBar2(int x, int y, int wide, int tall, bool vertical) : Panel(x, y, wide, tall)
 {
-	_slider = null;
-	_button[0] = null;
-	_button[1] = null;
+	_slider = nullptr;
+	_button[0] = nullptr;
+	_button[1] = nullptr;
 
 	if (vertical)
 	{
@@ -134,17 +134,17 @@ void ScrollBar2::setSize(int wide, int tall)
 {
 	Panel::setSize(wide, tall);
 
-	if (_slider == null)
+	if (_slider == nullptr)
 	{
 		return;
 	}
 
-	if (_button[0] == null)
+	if (_button[0] == nullptr)
 	{
 		return;
 	}
 
-	if (_button[1] == null)
+	if (_button[1] == nullptr)
 	{
 		return;
 	}
@@ -213,7 +213,7 @@ bool ScrollBar2::hasFullRange()
 //LEAK: new and old slider will leak
 void ScrollBar2::setButton(Button* button, int index)
 {
-	if (_button[index] != null)
+	if (_button[index] != nullptr)
 	{
 		removeChild(_button[index]);
 	}
@@ -235,7 +235,7 @@ Button* ScrollBar2::getButton(int index)
 //LEAK: new and old slider will leak
 void ScrollBar2::setSlider(Slider2* slider)
 {
-	if (_slider != null)
+	if (_slider != nullptr)
 	{
 		removeChild(_slider);
 	}
@@ -281,13 +281,13 @@ void ScrollBar2::setRangeWindowEnabled(bool state)
 
 void ScrollBar2::validate()
 {
-	if (_slider != null)
+	if (_slider != nullptr)
 	{
 		int buttonOffset = 0;
 
 		for (int i = 0; i < 2; i++)
 		{
-			if (_button[i] != null)
+			if (_button[i] != nullptr)
 			{
 				if (_button[i]->isVisible())
 				{

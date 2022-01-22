@@ -86,8 +86,6 @@
 #include <sys/types.h> // size_t define
 #endif
 
-#define null 0L
-
 typedef unsigned char  uchar;
 typedef unsigned short ushort;
 typedef unsigned int   uint;

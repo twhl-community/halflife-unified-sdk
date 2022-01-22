@@ -239,5 +239,5 @@ CBaseEntity* COFBabyVoltigore::CheckTraceHullAttack(float flDist, int iDamage, i
 		return pEntity;
 	}
 
-	return NULL;
+	return nullptr;
 }

@@ -22,14 +22,14 @@ public:
 	{
 		_count=0;
 		_capacity=0;
-		_data=null;
+		_data= nullptr;
 		ensureCapacity(4);
 	}
 	Dar(int initialCapacity)
 	{
 		_count=0;
 		_capacity=0;
-		_data=null;
+		_data= nullptr;
 		ensureCapacity(initialCapacity);
 	}
 public:
@@ -45,7 +45,7 @@ public:
 
 		//allocate and zero newData
 		ELEMTYPE* newData=new ELEMTYPE[newCapacity]; 
-		if(newData==null){exit(0);return;}
+		if(newData== nullptr){exit(0);return;}
 		memset(newData,0,sizeof(ELEMTYPE)*newCapacity);
 		_capacity=newCapacity;
    
@@ -153,7 +153,7 @@ public:
 	{
 		if((index<0)||(index>=_count))
 		{
-			return null;
+			return {};
 		}
 		return _data[index];
 	}

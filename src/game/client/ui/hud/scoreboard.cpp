@@ -230,7 +230,7 @@ bool CHudScoreboard::Draw(float fTime)
 	// recalc the team scores, then draw them
 	for (int i = 1; i < MAX_PLAYERS_HUD; i++)
 	{
-		if (g_PlayerInfoList[i].name == NULL)
+		if (g_PlayerInfoList[i].name == nullptr)
 			continue; // empty player slot, skip
 
 		if (g_PlayerExtraInfo[i].teamname[0] == 0)
@@ -535,7 +535,7 @@ int CHudScoreboard::DrawPlayers(int xpos_rel, float list_slot, int nameoffset, c
 			gHUD.DrawHudString(xpos, ypos, xpos + 50, buf, textColor);
 		}
 
-		pl_info->name = NULL; // set the name to be NULL, so this client won't get drawn again
+		pl_info->name = nullptr; // set the name to be nullptr, so this client won't get drawn again
 		list_slot++;
 	}
 
@@ -605,7 +605,7 @@ bool CHudScoreboard::MsgFunc_TeamInfo(const char* pszName, int iSize, void* pbuf
 	m_iNumTeams = 0;
 	for (int i = 1; i < MAX_PLAYERS_HUD; i++)
 	{
-		if (g_PlayerInfoList[i].name == NULL)
+		if (g_PlayerInfoList[i].name == nullptr)
 			continue;
 
 		if (g_PlayerExtraInfo[i].teamname[0] == 0)

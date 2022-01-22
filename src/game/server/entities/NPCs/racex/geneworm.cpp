@@ -1580,7 +1580,7 @@ bool COFGeneWorm::FVisible(const Vector& vecOrigin)
 
 void FireHurtTargets(const char* targetName, CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
-	edict_t* pentTarget = NULL;
+	edict_t* pentTarget = nullptr;
 	if (!targetName)
 		return;
 

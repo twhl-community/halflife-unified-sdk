@@ -184,7 +184,7 @@ void CHGruntAlly::DropWeapon(bool applyVelocity)
 //=========================================================
 void CHGruntAlly::Shoot(bool firstShotInBurst)
 {
-	if (m_hEnemy == NULL)
+	if (m_hEnemy == nullptr)
 	{
 		return;
 	}
