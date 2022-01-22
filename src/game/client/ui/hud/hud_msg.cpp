@@ -36,8 +36,6 @@ extern TEMPENTITY* pFlare; // Vit_amiN
 
 bool CHud::MsgFunc_ResetHUD(const char* pszName, int iSize, void* pbuf)
 {
-	assert(iSize == 0);
-
 	// clear all hud data
 	HUDLIST* pList = m_pHudList;
 
