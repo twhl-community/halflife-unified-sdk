@@ -19,7 +19,6 @@
 #include "gamerules.h"
 #include "teamplay_gamerules.h"
 #include "ctfplay_gamerules.h"
-#include "game.h"
 #include "UserMessages.h"
 
 //TODO: these should be members of CHalfLifeTeamplay

@@ -28,7 +28,6 @@
 #include "cbase.h"
 #include "client.h"
 #include "gamerules.h"
-#include "game.h"
 #include "customentity.h"
 #include "weaponinfo.h"
 #include "usercmd.h"

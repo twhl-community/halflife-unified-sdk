@@ -14,7 +14,6 @@
 ****/
 #include "cbase.h"
 #include "gamerules.h"
-#include "game.h"
 
 #include "com_model.h"
 

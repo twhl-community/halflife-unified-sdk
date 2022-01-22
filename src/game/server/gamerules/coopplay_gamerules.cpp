@@ -18,7 +18,6 @@
 #include "cbase.h"
 #include "gamerules.h"
 #include "coopplay_gamerules.h"
-#include "game.h"
 #include "items.h"
 #include "UserMessages.h"
 

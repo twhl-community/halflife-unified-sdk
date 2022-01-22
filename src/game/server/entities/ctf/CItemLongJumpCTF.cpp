@@ -14,7 +14,6 @@
 ****/
 
 #include "cbase.h"
-#include "game.h"
 #include "CItemCTF.h"
 #include "CItemLongJumpCTF.h"
 #include "gamerules.h"

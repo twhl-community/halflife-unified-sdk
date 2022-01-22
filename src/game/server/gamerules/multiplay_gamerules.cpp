@@ -18,7 +18,6 @@
 #include "cbase.h"
 #include "gamerules.h"
 
-#include "game.h"
 #include "items.h"
 #include "voice_gamemgr.h"
 #include "hltv.h"

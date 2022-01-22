@@ -21,7 +21,6 @@
 #include "teamplay_gamerules.h"
 #include "ctfplay_gamerules.h"
 #include "coopplay_gamerules.h"
-#include "game.h"
 #include "world.h"
 #include "UserMessages.h"
 

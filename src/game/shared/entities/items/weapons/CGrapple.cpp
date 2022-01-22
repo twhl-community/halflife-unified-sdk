@@ -15,7 +15,6 @@
 #include "cbase.h"
 #include "customentity.h"
 #include "UserMessages.h"
-#include "game.h"
 
 #ifndef CLIENT_DLL
 #include "weapons/CGrappleTip.h"

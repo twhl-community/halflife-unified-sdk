@@ -14,7 +14,6 @@
 ****/
 
 #include "cbase.h"
-#include "game.h"
 #include "CItemCTF.h"
 #include "CItemBackpackCTF.h"
 #include "gamerules.h"

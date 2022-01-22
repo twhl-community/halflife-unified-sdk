@@ -19,7 +19,6 @@
 
 #include "cbase.h"
 #include "squadmonster.h"
-#include "game.h"
 
 //=========================================================
 // monster-specific schedule types
