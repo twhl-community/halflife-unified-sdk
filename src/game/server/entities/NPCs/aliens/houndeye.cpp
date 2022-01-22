@@ -19,7 +19,6 @@
 #include "cbase.h"
 #include "nodes.h"
 #include "squadmonster.h"
-#include "soundent.h"
 #include "game.h"
 
 // houndeye does 20 points of damage spread over a sphere 384 units in diameter, and each additional

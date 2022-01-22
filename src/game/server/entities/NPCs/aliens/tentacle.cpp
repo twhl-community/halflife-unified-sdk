@@ -21,7 +21,6 @@
 
 #include "cbase.h"
 #include "weapons.h"
-#include "soundent.h"
 
 
 #define ACT_T_IDLE 1010

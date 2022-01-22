@@ -22,7 +22,6 @@
 
 #include "cbase.h"
 #include "nodes.h"
-#include "soundent.h"
 #include "client.h"
 #include "decals.h"
 #include "skill.h"

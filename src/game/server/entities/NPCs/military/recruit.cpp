@@ -18,7 +18,6 @@
 #include "defaultai.h"
 #include "scripted.h"
 #include "weapons.h"
-#include "soundent.h"
 #include "blackmesa/barney.h"
 
 /**

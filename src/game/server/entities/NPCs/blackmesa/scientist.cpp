@@ -20,7 +20,6 @@
 #include "talkmonster.h"
 #include "defaultai.h"
 #include "scripted.h"
-#include "soundent.h"
 #include "scientist.h"
 
 LINK_ENTITY_TO_CLASS(monster_scientist, CScientist);

@@ -27,7 +27,6 @@
 #include "trains.h"
 #include "nodes.h"
 #include "weapons.h"
-#include "soundent.h"
 #include "talkmonster.h"
 #include "squadmonster.h"
 #include "military/COFSquadTalkMonster.h"

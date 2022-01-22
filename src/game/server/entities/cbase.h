@@ -632,6 +632,7 @@ class CCineMonster;
 class CSound;
 
 //TODO: refactor this header so there are only header includes, then these will be at the top with the others
+#include "soundent.h"
 #include "basemonster.h"
 #include "player.h"
 

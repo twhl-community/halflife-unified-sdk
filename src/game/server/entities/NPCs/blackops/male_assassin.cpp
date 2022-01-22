@@ -31,7 +31,6 @@
 #include "squadmonster.h"
 #include "weapons.h"
 #include "talkmonster.h"
-#include "soundent.h"
 #include "military/hgrunt.h"
 
 constexpr int MASSN_SNIPER_CLIP_SIZE = 1;

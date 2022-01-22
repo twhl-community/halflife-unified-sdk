@@ -15,7 +15,6 @@
 
 #include "cbase.h"
 #include "effects.h"
-#include "soundent.h"
 #include "weapons.h"
 #include "decals.h"
 

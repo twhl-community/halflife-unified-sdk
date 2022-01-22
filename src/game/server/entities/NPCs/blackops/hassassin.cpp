@@ -20,7 +20,6 @@
 #include "cbase.h"
 #include "squadmonster.h"
 #include "weapons.h"
-#include "soundent.h"
 #include "game.h"
 
 //=========================================================

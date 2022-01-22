@@ -17,7 +17,6 @@
 //=========================================================
 
 #include "cbase.h"
-#include "soundent.h"
 #include "decals.h"
 
 #define ROACH_IDLE 0

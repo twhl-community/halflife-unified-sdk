@@ -17,7 +17,6 @@
 //=========================================================
 #include "cbase.h"
 #include "weapons.h"
-#include "soundent.h"
 
 //=========================================================
 // Monster's Anim Events Go Here

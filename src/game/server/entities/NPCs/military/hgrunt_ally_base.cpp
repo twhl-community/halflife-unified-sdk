@@ -35,7 +35,6 @@
 #include "weapons.h"
 #include "talkmonster.h"
 #include "COFSquadTalkMonster.h"
-#include "soundent.h"
 #include "effects.h"
 #include "customentity.h"
 #include "hgrunt_ally_base.h"

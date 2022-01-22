@@ -27,7 +27,6 @@
 
 #include "cbase.h"
 #include "client.h"
-#include "soundent.h"
 #include "gamerules.h"
 #include "game.h"
 #include "customentity.h"

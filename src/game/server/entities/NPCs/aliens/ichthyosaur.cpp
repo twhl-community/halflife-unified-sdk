@@ -20,7 +20,6 @@
 #include "cbase.h"
 #include "flyingmonster.h"
 #include "nodes.h"
-#include "soundent.h"
 #include "effects.h"
 #include "weapons.h"
 

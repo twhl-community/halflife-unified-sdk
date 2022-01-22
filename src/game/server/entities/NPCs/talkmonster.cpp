@@ -16,7 +16,6 @@
 #include "talkmonster.h"
 #include "defaultai.h"
 #include "scripted.h"
-#include "soundent.h"
 
 #include <limits>
 

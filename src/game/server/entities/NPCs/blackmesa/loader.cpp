@@ -14,7 +14,6 @@
 ****/
 #include "cbase.h"
 #include "basemonster.h"
-#include "soundent.h"
 
 /**
 *	@brief Opposing Force loader

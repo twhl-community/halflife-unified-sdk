@@ -18,7 +18,6 @@
 
 #include "cbase.h"
 #include "weapons.h"
-#include "soundent.h"
 #include "hornet.h"
 #include "gamerules.h"
 

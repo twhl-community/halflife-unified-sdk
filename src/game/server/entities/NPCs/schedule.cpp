@@ -20,7 +20,6 @@
 #include "scripted.h"
 #include "nodes.h"
 #include "defaultai.h"
-#include "soundent.h"
 
 //=========================================================
 // FHaveSchedule - Returns true if monster's m_pSchedule

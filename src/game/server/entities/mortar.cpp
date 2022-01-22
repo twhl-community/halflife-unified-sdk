@@ -23,7 +23,6 @@
 #include "cbase.h"
 #include "weapons.h"
 #include "decals.h"
-#include "soundent.h"
 
 class CFuncMortarField : public CBaseToggle
 {

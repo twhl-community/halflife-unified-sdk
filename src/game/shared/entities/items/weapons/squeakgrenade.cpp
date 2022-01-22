@@ -15,7 +15,6 @@
 
 #include "cbase.h"
 #include "weapons.h"
-#include "soundent.h"
 #include "gamerules.h"
 
 enum w_squeak_e

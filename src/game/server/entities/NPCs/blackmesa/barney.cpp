@@ -22,7 +22,6 @@
 #include "defaultai.h"
 #include "scripted.h"
 #include "weapons.h"
-#include "soundent.h"
 #include "barney.h"
 
 LINK_ENTITY_TO_CLASS(monster_barney, CBarney);

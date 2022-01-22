@@ -33,7 +33,6 @@
 #include "squadmonster.h"
 #include "weapons.h"
 #include "talkmonster.h"
-#include "soundent.h"
 #include "effects.h"
 #include "customentity.h"
 #include "weapons/CSpore.h"

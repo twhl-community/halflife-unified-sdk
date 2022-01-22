@@ -14,7 +14,6 @@
 ****/
 #include "cbase.h"
 #include "weapons.h"
-#include "soundent.h"
 #include "decals.h"
 
 class CMortarShell : public CGrenade

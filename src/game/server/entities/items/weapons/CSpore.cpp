@@ -15,7 +15,6 @@
 #include "cbase.h"
 #include "weapons.h"
 #include "skill.h"
-#include "soundent.h"
 #include "decals.h"
 
 #include "CSpore.h"
