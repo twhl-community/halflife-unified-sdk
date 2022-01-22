@@ -327,41 +327,95 @@ public:
 	}
 
 
+	// Ugly technique to override base member functions
+	// Normally it's illegal to cast a pointer to a member function of a derived class to a pointer to a
+	// member function of a base class.  static_cast is a sleezy way around that problem.
+
+private:
 	// Ugly code to lookup all functions to make sure they are exported when set.
-#ifdef _DEBUG
-	void FunctionCheck(void* pFunction, const char* name)
+	void FunctionCheck(const void* pFunction, const char* name)
 	{
 		if (pFunction && !NAME_FOR_FUNCTION((uint32)pFunction))
 			ALERT(at_error, "No EXPORT: %s:%s (%08lx)\n", STRING(pev->classname), name, (uint32)pFunction);
 	}
 
-	BASEPTR ThinkSet(BASEPTR func, const char* name)
+	template<typename T, typename Dest, typename Source>
+	Dest FunctionSet(Dest& pointer, Source func, const char* name)
 	{
-		m_pfnThink = func;
-		FunctionCheck((void*)*((int*)((char*)this + (offsetof(CBaseEntity, m_pfnThink)))), name);
-		return func;
-	}
-	ENTITYFUNCPTR TouchSet(ENTITYFUNCPTR func, const char* name)
-	{
-		m_pfnTouch = func;
-		FunctionCheck((void*)*((int*)((char*)this + (offsetof(CBaseEntity, m_pfnTouch)))), name);
-		return func;
-	}
-	USEPTR UseSet(USEPTR func, const char* name)
-	{
-		m_pfnUse = func;
-		FunctionCheck((void*)*((int*)((char*)this + (offsetof(CBaseEntity, m_pfnUse)))), name);
-		return func;
-	}
-	ENTITYFUNCPTR BlockedSet(ENTITYFUNCPTR func, const char* name)
-	{
-		m_pfnBlocked = func;
-		FunctionCheck((void*)*((int*)((char*)this + (offsetof(CBaseEntity, m_pfnBlocked)))), name);
-		return func;
-	}
-
+#ifdef _DEBUG
+		if (nullptr == dynamic_cast<T*>(this))
+		{
+			//If this happens, it means you tried to set a function from a class that this entity doesn't inherit from.
+			ALERT(at_error, "Trying to set function that is not a member of this entity's class hierarchy: %s:%s\n",
+				STRING(pev->classname), name);
+		}
 #endif
 
+		pointer = static_cast<Dest>(func);
+
+#ifdef _DEBUG
+		//Pointer to member functions store the function address as a pointer at the start of the variable,
+		//so this extracts that and turns it into an address we can use.
+		//This only works if the function is non-virtual.
+		//Note that this is incredibly ugly and should be changed when possible to not rely on implementation details.
+		const void* address = reinterpret_cast<const void*>(*reinterpret_cast<const int*>(&pointer));
+
+		FunctionCheck(address, name);
+#endif
+
+		return pointer;
+	}
+
+public:
+
+	template<typename T>
+	BASEPTR ThinkSet(TBASEPTR<T> func, const char* name)
+	{
+		return FunctionSet<T>(m_pfnThink, func, name);
+	}
+
+	template<typename T>
+	ENTITYFUNCPTR TouchSet(TENTITYFUNCPTR<T> func, const char* name)
+	{
+		return FunctionSet<T>(m_pfnTouch, func, name);
+	}
+
+	template<typename T>
+	USEPTR UseSet(TUSEPTR<T> func, const char* name)
+	{
+		return FunctionSet<T>(m_pfnUse, func, name);
+	}
+
+	template<typename T>
+	ENTITYFUNCPTR BlockedSet(TENTITYFUNCPTR<T> func, const char* name)
+	{
+		return FunctionSet<T>(m_pfnBlocked, func, name);
+	}
+
+	//Overloads to catch explicit setting to null.
+	BASEPTR ThinkSet(std::nullptr_t, const char* name)
+	{
+		m_pfnThink = nullptr;
+		return m_pfnThink;
+	}
+
+	ENTITYFUNCPTR TouchSet(std::nullptr_t, const char* name)
+	{
+		m_pfnTouch = nullptr;
+		return m_pfnTouch;
+	}
+
+	USEPTR UseSet(std::nullptr_t, const char* name)
+	{
+		m_pfnUse = nullptr;
+		return m_pfnUse;
+	}
+
+	ENTITYFUNCPTR BlockedSet(std::nullptr_t, const char* name)
+	{
+		m_pfnBlocked = nullptr;
+		return m_pfnBlocked;
+	}
 
 	// virtual functions used by a few classes
 
@@ -409,27 +463,10 @@ public:
 
 inline bool FNullEnt(CBaseEntity* ent) { return (ent == nullptr) || FNullEnt(ent->edict()); }
 
-
-// Ugly technique to override base member functions
-// Normally it's illegal to cast a pointer to a member function of a derived class to a pointer to a
-// member function of a base class.  static_cast is a sleezy way around that problem.
-
-#ifdef _DEBUG
-
-#define SetThink(a) ThinkSet(static_cast<BASEPTR>(a), #a)
-#define SetTouch(a) TouchSet(static_cast<ENTITYFUNCPTR>(a), #a)
-#define SetUse(a) UseSet(static_cast<USEPTR>(a), #a)
-#define SetBlocked(a) BlockedSet(static_cast<ENTITYFUNCPTR>(a), #a)
-
-#else
-
-#define SetThink(a) m_pfnThink = static_cast<BASEPTR>(a)
-#define SetTouch(a) m_pfnTouch = static_cast<ENTITYFUNCPTR>(a)
-#define SetUse(a) m_pfnUse = static_cast<USEPTR>(a)
-#define SetBlocked(a) m_pfnBlocked = static_cast<ENTITYFUNCPTR>(a)
-
-#endif
-
+#define SetThink(a) ThinkSet(a, #a)
+#define SetTouch(a) TouchSet(a, #a)
+#define SetUse(a) UseSet(a, #a)
+#define SetBlocked(a) BlockedSet(a, #a)
 
 class CPointEntity : public CBaseEntity
 {
