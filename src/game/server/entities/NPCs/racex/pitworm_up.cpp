@@ -817,7 +817,7 @@ void COFPitWormUp::ShootBeam()
 
 			m_flIdealHeadYaw += m_flBeamDir * 50.0;
 
-			EMIT_SOUND_DYN(edict(), CHAN_WEAPON, pShootSounds[RANDOM_LONG(0, ARRAYSIZE(pShootSounds) - 1)], VOL_NORM, ATTN_NORM, 0, RANDOM_LONG(-5, 5) + 100);
+			EMIT_SOUND_DYN(edict(), CHAN_WEAPON, pShootSounds[RANDOM_LONG(0, std::size(pShootSounds) - 1)], VOL_NORM, ATTN_NORM, 0, RANDOM_LONG(-5, 5) + 100);
 			MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
 			WRITE_BYTE(TE_ELIGHT);
 			WRITE_SHORT(entindex() | (1 << 12));
@@ -1080,7 +1080,7 @@ bool COFPitWormUp::ClawAttack()
 			}
 		}
 
-		EMIT_SOUND(edict(), CHAN_VOICE, pAttackVoiceSounds[RANDOM_LONG(0, ARRAYSIZE(pAttackVoiceSounds) - 1)], VOL_NORM, 0.1);
+		EMIT_SOUND(edict(), CHAN_VOICE, pAttackVoiceSounds[RANDOM_LONG(0, std::size(pAttackVoiceSounds) - 1)], VOL_NORM, 0.1);
 
 		m_fLockHeight = true;
 		m_fLockYaw = true;
@@ -1175,7 +1175,7 @@ bool COFPitWormUp::ClawAttack()
 	}
 	else
 	{
-		EMIT_SOUND(edict(), CHAN_VOICE, pAttackVoiceSounds[RANDOM_LONG(0, ARRAYSIZE(pAttackVoiceSounds) - 1)], VOL_NORM, 0.1);
+		EMIT_SOUND(edict(), CHAN_VOICE, pAttackVoiceSounds[RANDOM_LONG(0, std::size(pAttackVoiceSounds) - 1)], VOL_NORM, 0.1);
 	}
 
 	m_fAttacking = true;
@@ -1200,7 +1200,7 @@ void COFPitWormUp::LockTopLevel()
 
 void COFPitWormUp::IdleSound()
 {
-	EMIT_SOUND(edict(), CHAN_VOICE, pPainSounds[RANDOM_LONG(0, ARRAYSIZE(pPainSounds) - 1)], VOL_NORM, 0.1);
+	EMIT_SOUND(edict(), CHAN_VOICE, pPainSounds[RANDOM_LONG(0, std::size(pPainSounds) - 1)], VOL_NORM, 0.1);
 }
 
 void COFPitWormUp::PainSound()
@@ -1209,7 +1209,7 @@ void COFPitWormUp::PainSound()
 	{
 		m_flNextPainSound = RANDOM_FLOAT(2, 5) + gpGlobals->time;
 
-		EMIT_SOUND(edict(), CHAN_VOICE, pPainSounds[RANDOM_LONG(0, ARRAYSIZE(pPainSounds) - 1)], VOL_NORM, 0.1);
+		EMIT_SOUND(edict(), CHAN_VOICE, pPainSounds[RANDOM_LONG(0, std::size(pPainSounds) - 1)], VOL_NORM, 0.1);
 	}
 }
 
@@ -1302,7 +1302,7 @@ void COFPitWormUp::HandleAnimEvent(MonsterEvent_t* pEvent)
 	switch (pEvent->event)
 	{
 	case PITWORM_UP_AE_HITGROUND:
-		EMIT_SOUND_DYN(edict(), CHAN_WEAPON, pHitGroundSounds[RANDOM_LONG(0, ARRAYSIZE(pHitGroundSounds) - 1)], VOL_NORM, ATTN_NORM, 0, RANDOM_LONG(-5, 5) + 100);
+		EMIT_SOUND_DYN(edict(), CHAN_WEAPON, pHitGroundSounds[RANDOM_LONG(0, std::size(pHitGroundSounds) - 1)], VOL_NORM, ATTN_NORM, 0, RANDOM_LONG(-5, 5) + 100);
 
 		if (pev->sequence == PITWORM_ANIM_Level2AttackCenter)
 			UTIL_ScreenShake(pev->origin, 12.0, 100.0, 2.0, 1000.0);

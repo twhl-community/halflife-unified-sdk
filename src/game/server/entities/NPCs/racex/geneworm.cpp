@@ -1302,7 +1302,7 @@ void COFGeneWorm::NextActivity()
 		break;
 	}
 
-	EMIT_SOUND_DYN(edict(), CHAN_BODY, pIdleSounds[RANDOM_LONG(0, ARRAYSIZE(pIdleSounds) - 1)], VOL_NORM, 0.1, 0, RANDOM_LONG(-5, 5) + 100);
+	EMIT_SOUND_DYN(edict(), CHAN_BODY, pIdleSounds[RANDOM_LONG(0, std::size(pIdleSounds) - 1)], VOL_NORM, 0.1, 0, RANDOM_LONG(-5, 5) + 100);
 }
 
 bool COFGeneWorm::ClawAttack()
@@ -1616,7 +1616,7 @@ void COFGeneWorm::HandleAnimEvent(MonsterEvent_t* pEvent)
 			GetAttachment(1, vecPos, vecAng);
 			UTIL_MakeVectors(pev->angles);
 
-			EMIT_SOUND_DYN(edict(), CHAN_WEAPON, pSpawnSounds[RANDOM_LONG(0, ARRAYSIZE(pSpawnSounds) - 1)], VOL_NORM, 0.1, 0, RANDOM_LONG(-5, 5) + 100);
+			EMIT_SOUND_DYN(edict(), CHAN_WEAPON, pSpawnSounds[RANDOM_LONG(0, std::size(pSpawnSounds) - 1)], VOL_NORM, 0.1, 0, RANDOM_LONG(-5, 5) + 100);
 
 			m_orificeGlow->LaunchSpawn(vecPos, gpGlobals->v_forward, RANDOM_LONG(0, 50) + 300, edict(), 2);
 

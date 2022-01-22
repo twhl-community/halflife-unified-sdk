@@ -46,7 +46,7 @@ Task_t tlFollow[] =
 Schedule_t slFollow[] =
 	{
 		{tlFollow,
-			ARRAYSIZE(tlFollow),
+			std::size(tlFollow),
 			bits_COND_NEW_ENEMY |
 				bits_COND_LIGHT_DAMAGE |
 				bits_COND_HEAVY_DAMAGE |
@@ -66,7 +66,7 @@ Task_t tlFollowScared[] =
 Schedule_t slFollowScared[] =
 	{
 		{tlFollowScared,
-			ARRAYSIZE(tlFollowScared),
+			std::size(tlFollowScared),
 			bits_COND_NEW_ENEMY |
 				bits_COND_HEAR_SOUND |
 				bits_COND_LIGHT_DAMAGE |
@@ -85,7 +85,7 @@ Task_t tlFaceTargetScared[] =
 Schedule_t slFaceTargetScared[] =
 	{
 		{tlFaceTargetScared,
-			ARRAYSIZE(tlFaceTargetScared),
+			std::size(tlFaceTargetScared),
 			bits_COND_HEAR_SOUND |
 				bits_COND_NEW_ENEMY,
 			bits_SOUND_DANGER,
@@ -100,7 +100,7 @@ Task_t tlStopFollowing[] =
 Schedule_t slStopFollowing[] =
 	{
 		{tlStopFollowing,
-			ARRAYSIZE(tlStopFollowing),
+			std::size(tlStopFollowing),
 			0,
 			0,
 			"StopFollowing"},
@@ -121,7 +121,7 @@ Task_t tlHeal[] =
 Schedule_t slHeal[] =
 	{
 		{tlHeal,
-			ARRAYSIZE(tlHeal),
+			std::size(tlHeal),
 			0, // Don't interrupt or he'll end up running around with a needle all the time
 			0,
 			"Heal"},
@@ -139,7 +139,7 @@ Task_t tlFaceTarget[] =
 Schedule_t slFaceTarget[] =
 	{
 		{tlFaceTarget,
-			ARRAYSIZE(tlFaceTarget),
+			std::size(tlFaceTarget),
 			bits_COND_CLIENT_PUSH |
 				bits_COND_NEW_ENEMY |
 				bits_COND_HEAR_SOUND,
@@ -161,7 +161,7 @@ Task_t tlSciPanic[] =
 Schedule_t slSciPanic[] =
 	{
 		{tlSciPanic,
-			ARRAYSIZE(tlSciPanic),
+			std::size(tlSciPanic),
 			0,
 			0,
 			"SciPanic"},
@@ -179,7 +179,7 @@ Task_t tlIdleSciStand[] =
 Schedule_t slIdleSciStand[] =
 	{
 		{tlIdleSciStand,
-			ARRAYSIZE(tlIdleSciStand),
+			std::size(tlIdleSciStand),
 			bits_COND_NEW_ENEMY |
 				bits_COND_LIGHT_DAMAGE |
 				bits_COND_HEAVY_DAMAGE |
@@ -214,7 +214,7 @@ Task_t tlScientistCover[] =
 Schedule_t slScientistCover[] =
 	{
 		{tlScientistCover,
-			ARRAYSIZE(tlScientistCover),
+			std::size(tlScientistCover),
 			bits_COND_NEW_ENEMY,
 			0,
 			"ScientistCover"},
@@ -234,7 +234,7 @@ Task_t tlScientistHide[] =
 Schedule_t slScientistHide[] =
 	{
 		{tlScientistHide,
-			ARRAYSIZE(tlScientistHide),
+			std::size(tlScientistHide),
 			bits_COND_NEW_ENEMY |
 				bits_COND_HEAR_SOUND |
 				bits_COND_SEE_ENEMY |
@@ -260,7 +260,7 @@ Task_t tlScientistStartle[] =
 Schedule_t slScientistStartle[] =
 	{
 		{tlScientistStartle,
-			ARRAYSIZE(tlScientistStartle),
+			std::size(tlScientistStartle),
 			bits_COND_NEW_ENEMY |
 				bits_COND_SEE_ENEMY |
 				bits_COND_SEE_HATE |
@@ -283,7 +283,7 @@ Task_t tlFear[] =
 Schedule_t slFear[] =
 	{
 		{tlFear,
-			ARRAYSIZE(tlFear),
+			std::size(tlFear),
 			bits_COND_NEW_ENEMY,
 			0,
 			"Fear"},

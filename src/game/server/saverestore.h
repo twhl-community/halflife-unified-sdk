@@ -124,20 +124,20 @@ private:
 
 #define MAX_ENTITYARRAY 64
 
-//#define ARRAYSIZE(p)		(sizeof(p)/sizeof(p[0]))
+//#define std::size(p)		(sizeof(p)/sizeof(p[0]))
 
 #define IMPLEMENT_SAVERESTORE(derivedClass, baseClass)                                     \
 	bool derivedClass::Save(CSave& save)                                                   \
 	{                                                                                      \
 		if (!baseClass::Save(save))                                                        \
 			return false;                                                                  \
-		return save.WriteFields(#derivedClass, this, m_SaveData, ARRAYSIZE(m_SaveData));   \
+		return save.WriteFields(#derivedClass, this, m_SaveData, std::size(m_SaveData));   \
 	}                                                                                      \
 	bool derivedClass::Restore(CRestore& restore)                                          \
 	{                                                                                      \
 		if (!baseClass::Restore(restore))                                                  \
 			return false;                                                                  \
-		return restore.ReadFields(#derivedClass, this, m_SaveData, ARRAYSIZE(m_SaveData)); \
+		return restore.ReadFields(#derivedClass, this, m_SaveData, std::size(m_SaveData)); \
 	}
 
 

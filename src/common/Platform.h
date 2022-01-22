@@ -51,12 +51,11 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <iterator>
 
 using byte = unsigned char;
 using string_t = unsigned int;
 using qboolean = int;
-
-#define ARRAYSIZE(p) (sizeof(p) / sizeof(p[0]))
 
 #ifdef WIN32
 //Avoid the ISO conformant warning

@@ -535,7 +535,7 @@ Task_t tlMedicAllyNewHealTarget[] =
 Schedule_t slMedicAllyNewHealTarget[] =
 	{
 		{tlMedicAllyNewHealTarget,
-			ARRAYSIZE(tlMedicAllyNewHealTarget),
+			std::size(tlMedicAllyNewHealTarget),
 			0,
 			0,
 			"Draw Needle"},
@@ -556,7 +556,7 @@ Task_t tlMedicAllyDrawNeedle[] =
 Schedule_t slMedicAllyDrawNeedle[] =
 	{
 		{tlMedicAllyDrawNeedle,
-			ARRAYSIZE(tlMedicAllyDrawNeedle),
+			std::size(tlMedicAllyDrawNeedle),
 			0,
 			0,
 			"Draw Needle"},
@@ -571,7 +571,7 @@ Task_t tlMedicAllyDrawGun[] =
 Schedule_t slMedicAllyDrawGun[] =
 	{
 		{tlMedicAllyDrawGun,
-			ARRAYSIZE(tlMedicAllyDrawGun),
+			std::size(tlMedicAllyDrawGun),
 			0,
 			0,
 			"Draw Gun"},
@@ -587,7 +587,7 @@ Task_t tlMedicAllyHealTarget[] =
 Schedule_t slMedicAllyHealTarget[] =
 	{
 		{tlMedicAllyHealTarget,
-			ARRAYSIZE(tlMedicAllyHealTarget),
+			std::size(tlMedicAllyHealTarget),
 			0,
 			0,
 			"Medic Ally Heal Target"},

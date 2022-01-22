@@ -380,7 +380,7 @@ void COFVoltigore::AlertSound()
 {
 	StopTalking();
 
-	EMIT_SOUND(ENT(pev), CHAN_VOICE, pAlertSounds[RANDOM_LONG(0, ARRAYSIZE(pAlertSounds) - 1)], 1.0, ATTN_NORM);
+	EMIT_SOUND(ENT(pev), CHAN_VOICE, pAlertSounds[RANDOM_LONG(0, std::size(pAlertSounds) - 1)], 1.0, ATTN_NORM);
 }
 
 //=========================================================
@@ -397,7 +397,7 @@ void COFVoltigore::PainSound()
 
 	StopTalking();
 
-	EMIT_SOUND(ENT(pev), CHAN_VOICE, pPainSounds[RANDOM_LONG(0, ARRAYSIZE(pPainSounds) - 1)], 1.0, ATTN_NORM);
+	EMIT_SOUND(ENT(pev), CHAN_VOICE, pPainSounds[RANDOM_LONG(0, std::size(pPainSounds) - 1)], 1.0, ATTN_NORM);
 }
 
 //=========================================================
@@ -485,7 +485,7 @@ void COFVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_right * 250;
 			}
 
-			EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, pAttackHitSounds[RANDOM_LONG(0, ARRAYSIZE(pAttackHitSounds) - 1)], 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5, 5));
+			EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, pAttackHitSounds[RANDOM_LONG(0, std::size(pAttackHitSounds) - 1)], 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5, 5));
 
 			Vector vecArmPos, vecArmAng;
 			GetAttachment(0, vecArmPos, vecArmAng);
@@ -494,7 +494,7 @@ void COFVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 		else
 		{
 			// Play a random attack miss sound
-			EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, pAttackMissSounds[RANDOM_LONG(0, ARRAYSIZE(pAttackMissSounds) - 1)], 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5, 5));
+			EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, pAttackMissSounds[RANDOM_LONG(0, std::size(pAttackMissSounds) - 1)], 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5, 5));
 		}
 	}
 	break;
@@ -515,7 +515,7 @@ void COFVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_right * -250;
 			}
 
-			EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, pAttackHitSounds[RANDOM_LONG(0, ARRAYSIZE(pAttackHitSounds) - 1)], 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5, 5));
+			EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, pAttackHitSounds[RANDOM_LONG(0, std::size(pAttackHitSounds) - 1)], 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5, 5));
 
 			Vector vecArmPos, vecArmAng;
 			GetAttachment(0, vecArmPos, vecArmAng);
@@ -524,7 +524,7 @@ void COFVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 		else
 		{
 			// Play a random attack miss sound
-			EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, pAttackMissSounds[RANDOM_LONG(0, ARRAYSIZE(pAttackMissSounds) - 1)], 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5, 5));
+			EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, pAttackMissSounds[RANDOM_LONG(0, std::size(pAttackMissSounds) - 1)], 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5, 5));
 		}
 	}
 	break;
@@ -633,7 +633,7 @@ Task_t tlVoltigoreFail[] =
 Schedule_t slVoltigoreFail[] =
 	{
 		{tlVoltigoreFail,
-			ARRAYSIZE(tlVoltigoreFail),
+			std::size(tlVoltigoreFail),
 			bits_COND_CAN_RANGE_ATTACK1 |
 				bits_COND_CAN_MELEE_ATTACK1,
 			0,
@@ -654,7 +654,7 @@ Task_t tlVoltigoreCombatFail[] =
 Schedule_t slVoltigoreCombatFail[] =
 	{
 		{tlVoltigoreCombatFail,
-			ARRAYSIZE(tlVoltigoreCombatFail),
+			std::size(tlVoltigoreCombatFail),
 			bits_COND_CAN_RANGE_ATTACK1 |
 				bits_COND_CAN_MELEE_ATTACK1,
 			0,
@@ -676,7 +676,7 @@ Task_t tlVoltigoreStandoff[] =
 Schedule_t slVoltigoreStandoff[] =
 	{
 		{tlVoltigoreStandoff,
-			ARRAYSIZE(tlVoltigoreStandoff),
+			std::size(tlVoltigoreStandoff),
 			bits_COND_CAN_RANGE_ATTACK1 |
 				bits_COND_CAN_MELEE_ATTACK1 |
 				bits_COND_SEE_ENEMY |
@@ -700,7 +700,7 @@ Task_t tlVoltigoreRangeAttack1[] =
 Schedule_t slVoltigoreRangeAttack1[] =
 	{
 		{tlVoltigoreRangeAttack1,
-			ARRAYSIZE(tlVoltigoreRangeAttack1),
+			std::size(tlVoltigoreRangeAttack1),
 			bits_COND_NEW_ENEMY |
 				bits_COND_ENEMY_DEAD |
 				bits_COND_ENEMY_OCCLUDED |
@@ -728,7 +728,7 @@ Task_t tlVoltigoreTakeCoverFromEnemy[] =
 Schedule_t slVoltigoreTakeCoverFromEnemy[] =
 	{
 		{tlVoltigoreTakeCoverFromEnemy,
-			ARRAYSIZE(tlVoltigoreTakeCoverFromEnemy),
+			std::size(tlVoltigoreTakeCoverFromEnemy),
 			bits_COND_NEW_ENEMY,
 			0,
 			"VoltigoreTakeCoverFromEnemy"},
@@ -763,7 +763,7 @@ Task_t tlVoltigoreVictoryDance[] =
 Schedule_t slVoltigoreVictoryDance[] =
 	{
 		{tlVoltigoreVictoryDance,
-			ARRAYSIZE(tlVoltigoreVictoryDance),
+			std::size(tlVoltigoreVictoryDance),
 			bits_COND_NEW_ENEMY |
 				bits_COND_LIGHT_DAMAGE |
 				bits_COND_HEAVY_DAMAGE,
@@ -783,7 +783,7 @@ Task_t tlVoltigoreThreatDisplay[] =
 Schedule_t slVoltigoreThreatDisplay[] =
 	{
 		{tlVoltigoreThreatDisplay,
-			ARRAYSIZE(tlVoltigoreThreatDisplay),
+			std::size(tlVoltigoreThreatDisplay),
 			bits_COND_NEW_ENEMY |
 				bits_COND_LIGHT_DAMAGE |
 				bits_COND_HEAVY_DAMAGE,

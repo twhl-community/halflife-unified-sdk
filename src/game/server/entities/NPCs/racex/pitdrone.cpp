@@ -358,14 +358,12 @@ bool CPitdrone::CheckMeleeAttack2(float flDot, float flDist)
 //=========================================================
 bool CPitdrone::FValidateHintType(short sHint)
 {
-	int i;
-
 	static short sSquidHints[] =
 		{
 			HINT_WORLD_HUMAN_BLOOD,
 		};
 
-	for (i = 0; i < ARRAYSIZE(sSquidHints); i++)
+	for (std::size_t i = 0; i < std::size(sSquidHints); i++)
 	{
 		if (sSquidHints[i] == sHint)
 		{
@@ -773,7 +771,7 @@ Task_t tlPitdroneRangeAttack1[] =
 Schedule_t slPitdroneRangeAttack1[] =
 	{
 		{tlPitdroneRangeAttack1,
-			ARRAYSIZE(tlPitdroneRangeAttack1),
+			std::size(tlPitdroneRangeAttack1),
 			bits_COND_NEW_ENEMY |
 				bits_COND_ENEMY_DEAD |
 				bits_COND_HEAVY_DAMAGE |
@@ -795,7 +793,7 @@ Task_t tlPitdroneChaseEnemy1[] =
 Schedule_t slPitdroneChaseEnemy[] =
 	{
 		{tlPitdroneChaseEnemy1,
-			ARRAYSIZE(tlPitdroneChaseEnemy1),
+			std::size(tlPitdroneChaseEnemy1),
 			bits_COND_NEW_ENEMY |
 				bits_COND_ENEMY_DEAD |
 				bits_COND_SMELL_FOOD |
@@ -821,7 +819,7 @@ Task_t tlPitdroneHurtHop[] =
 Schedule_t slPitdroneHurtHop[] =
 	{
 		{tlPitdroneHurtHop,
-			ARRAYSIZE(tlPitdroneHurtHop),
+			std::size(tlPitdroneHurtHop),
 			0,
 			0,
 			"SquidHurtHop"}};
@@ -848,7 +846,7 @@ Task_t tlPitdroneEat[] =
 Schedule_t slPitdroneEat[] =
 	{
 		{tlPitdroneEat,
-			ARRAYSIZE(tlPitdroneEat),
+			std::size(tlPitdroneEat),
 			bits_COND_LIGHT_DAMAGE |
 				bits_COND_HEAVY_DAMAGE |
 				bits_COND_NEW_ENEMY,
@@ -883,7 +881,7 @@ Task_t tlPitdroneSniffAndEat[] =
 Schedule_t slPitdroneSniffAndEat[] =
 	{
 		{tlPitdroneSniffAndEat,
-			ARRAYSIZE(tlPitdroneSniffAndEat),
+			std::size(tlPitdroneSniffAndEat),
 			bits_COND_LIGHT_DAMAGE |
 				bits_COND_HEAVY_DAMAGE |
 				bits_COND_NEW_ENEMY,
@@ -914,7 +912,7 @@ Task_t tlPitdroneWallow[] =
 Schedule_t slPitdroneWallow[] =
 	{
 		{tlPitdroneWallow,
-			ARRAYSIZE(tlPitdroneWallow),
+			std::size(tlPitdroneWallow),
 			bits_COND_LIGHT_DAMAGE |
 				bits_COND_HEAVY_DAMAGE |
 				bits_COND_NEW_ENEMY,
@@ -940,7 +938,7 @@ Task_t tlPitdroneHideReload[] =
 Schedule_t slPitdroneHideReload[] =
 	{
 		{tlPitdroneHideReload,
-			ARRAYSIZE(tlPitdroneHideReload),
+			std::size(tlPitdroneHideReload),
 			bits_COND_HEAVY_DAMAGE |
 				bits_COND_HEAR_SOUND,
 			bits_SOUND_DANGER,
@@ -957,7 +955,7 @@ Task_t tlPitdroneWaitInCover[] =
 Schedule_t slPitdroneWaitInCover[] =
 	{
 		{tlPitdroneWaitInCover,
-			ARRAYSIZE(tlPitdroneWaitInCover),
+			std::size(tlPitdroneWaitInCover),
 			bits_COND_CAN_RANGE_ATTACK1 |
 				bits_COND_CAN_MELEE_ATTACK1 |
 				bits_COND_CAN_RANGE_ATTACK2 |

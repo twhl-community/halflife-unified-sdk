@@ -175,7 +175,7 @@ static Vector gTankSpread[] =
 		Vector(0.1, 0.1, 0.1),		 // large cone
 		Vector(0.25, 0.25, 0.25),	 // extra-large cone
 };
-#define MAX_FIRING_SPREADS ARRAYSIZE(gTankSpread)
+#define MAX_FIRING_SPREADS std::size(gTankSpread)
 
 
 void CFuncTank::Spawn()
@@ -196,7 +196,8 @@ void CFuncTank::Spawn()
 
 	if (m_fireRate <= 0)
 		m_fireRate = 1;
-	if (m_spread > MAX_FIRING_SPREADS)
+	//TODO: needs to be >=
+	if (static_cast<std::size_t>(m_spread) > MAX_FIRING_SPREADS)
 		m_spread = 0;
 
 	pev->oldorigin = pev->origin;

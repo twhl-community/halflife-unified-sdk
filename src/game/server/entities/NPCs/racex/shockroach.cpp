@@ -36,7 +36,7 @@ Task_t tlSRRangeAttack1[] =
 Schedule_t slRCRangeAttack1[] =
 	{
 		{tlSRRangeAttack1,
-			ARRAYSIZE(tlSRRangeAttack1),
+			std::size(tlSRRangeAttack1),
 			bits_COND_ENEMY_OCCLUDED |
 				bits_COND_NO_AMMO_LOADED,
 			0,
@@ -54,7 +54,7 @@ Task_t tlSRRangeAttack1Fast[] =
 Schedule_t slRCRangeAttack1Fast[] =
 	{
 		{tlSRRangeAttack1Fast,
-			ARRAYSIZE(tlSRRangeAttack1Fast),
+			std::size(tlSRRangeAttack1Fast),
 			bits_COND_ENEMY_OCCLUDED |
 				bits_COND_NO_AMMO_LOADED,
 			0,

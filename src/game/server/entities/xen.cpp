@@ -526,7 +526,7 @@ void CXenSporeLarge::Spawn()
 	UTIL_MakeVectorsPrivate(pev->angles, forward, right, nullptr);
 
 	// Rotate the leg hulls into position
-	for (int i = 0; i < ARRAYSIZE(m_hullSizes); i++)
+	for (std::size_t i = 0; i < std::size(m_hullSizes); i++)
 		CXenHull::CreateHull(this, Vector(-12, -12, 0), Vector(12, 12, 120), (m_hullSizes[i].x * forward) + (m_hullSizes[i].y * right));
 }
 

@@ -57,18 +57,12 @@
 #define NOWINRES
 #define NOIME
 
-//Fix problems with ARRAYSIZE and HSPRITE SDK definitions conflicting with Windows header definitions
-//TODO: ARRAYSIZE should be replaced with std::size, which is a superior replacement
-#pragma push_macro("ARRAYSIZE")
-#ifdef ARRAYSIZE
-#undef ARRAYSIZE
-#endif
+//Fix problems with HSPRITE SDK definitions conflicting with Windows header definitions
 #define HSPRITE WINDOWS_HSPRITE
 
 #include <Windows.h>
 
 #undef HSPRITE
-#pragma pop_macro("ARRAYSIZE")
 #else
 //Add core Linux headers here if you need them
 #endif

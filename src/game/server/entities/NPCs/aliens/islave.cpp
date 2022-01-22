@@ -599,7 +599,7 @@ Task_t tlSlaveAttack1[] =
 Schedule_t slSlaveAttack1[] =
 	{
 		{tlSlaveAttack1,
-			ARRAYSIZE(tlSlaveAttack1),
+			std::size(tlSlaveAttack1),
 			bits_COND_CAN_MELEE_ATTACK1 |
 				bits_COND_HEAR_SOUND |
 				bits_COND_HEAVY_DAMAGE,

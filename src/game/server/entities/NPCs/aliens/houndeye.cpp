@@ -127,8 +127,6 @@ int CHoundeye::Classify()
 //=========================================================
 bool CHoundeye::FValidateHintType(short sHint)
 {
-	int i;
-
 	static short sHoundHints[] =
 		{
 			HINT_WORLD_MACHINERY,
@@ -137,7 +135,7 @@ bool CHoundeye::FValidateHintType(short sHint)
 			HINT_WORLD_ALIEN_BLOOD,
 		};
 
-	for (i = 0; i < ARRAYSIZE(sHoundHints); i++)
+	for (std::size_t i = 0; i < std::size(sHoundHints); i++)
 	{
 		if (sHoundHints[i] == sHint)
 		{
@@ -896,7 +894,7 @@ Task_t tlHoundGuardPack[] =
 Schedule_t slHoundGuardPack[] =
 	{
 		{tlHoundGuardPack,
-			ARRAYSIZE(tlHoundGuardPack),
+			std::size(tlHoundGuardPack),
 			bits_COND_SEE_HATE |
 				bits_COND_LIGHT_DAMAGE |
 				bits_COND_HEAVY_DAMAGE |
@@ -929,13 +927,13 @@ Task_t tlHoundYell2[] =
 Schedule_t slHoundRangeAttack[] =
 	{
 		{tlHoundYell1,
-			ARRAYSIZE(tlHoundYell1),
+			std::size(tlHoundYell1),
 			bits_COND_LIGHT_DAMAGE |
 				bits_COND_HEAVY_DAMAGE,
 			0,
 			"HoundRangeAttack1"},
 		{tlHoundYell2,
-			ARRAYSIZE(tlHoundYell2),
+			std::size(tlHoundYell2),
 			bits_COND_LIGHT_DAMAGE |
 				bits_COND_HEAVY_DAMAGE,
 			0,
@@ -960,7 +958,7 @@ Task_t tlHoundSleep[] =
 Schedule_t slHoundSleep[] =
 	{
 		{tlHoundSleep,
-			ARRAYSIZE(tlHoundSleep),
+			std::size(tlHoundSleep),
 			bits_COND_HEAR_SOUND |
 				bits_COND_LIGHT_DAMAGE |
 				bits_COND_HEAVY_DAMAGE |
@@ -985,7 +983,7 @@ Task_t tlHoundWakeLazy[] =
 Schedule_t slHoundWakeLazy[] =
 	{
 		{tlHoundWakeLazy,
-			ARRAYSIZE(tlHoundWakeLazy),
+			std::size(tlHoundWakeLazy),
 			0,
 			0,
 			"WakeLazy"},
@@ -1003,7 +1001,7 @@ Task_t tlHoundWakeUrgent[] =
 Schedule_t slHoundWakeUrgent[] =
 	{
 		{tlHoundWakeUrgent,
-			ARRAYSIZE(tlHoundWakeUrgent),
+			std::size(tlHoundWakeUrgent),
 			0,
 			0,
 			"WakeUrgent"},
@@ -1021,7 +1019,7 @@ Task_t tlHoundSpecialAttack1[] =
 Schedule_t slHoundSpecialAttack1[] =
 	{
 		{tlHoundSpecialAttack1,
-			ARRAYSIZE(tlHoundSpecialAttack1),
+			std::size(tlHoundSpecialAttack1),
 			bits_COND_NEW_ENEMY |
 				bits_COND_LIGHT_DAMAGE |
 				bits_COND_HEAVY_DAMAGE |
@@ -1040,7 +1038,7 @@ Task_t tlHoundAgitated[] =
 Schedule_t slHoundAgitated[] =
 	{
 		{tlHoundAgitated,
-			ARRAYSIZE(tlHoundAgitated),
+			std::size(tlHoundAgitated),
 			bits_COND_NEW_ENEMY |
 				bits_COND_LIGHT_DAMAGE |
 				bits_COND_HEAVY_DAMAGE,
@@ -1058,7 +1056,7 @@ Task_t tlHoundHopRetreat[] =
 Schedule_t slHoundHopRetreat[] =
 	{
 		{tlHoundHopRetreat,
-			ARRAYSIZE(tlHoundHopRetreat),
+			std::size(tlHoundHopRetreat),
 			0,
 			0,
 			"Hound Hop Retreat"},
@@ -1075,7 +1073,7 @@ Task_t tlHoundCombatFailPVS[] =
 Schedule_t slHoundCombatFailPVS[] =
 	{
 		{tlHoundCombatFailPVS,
-			ARRAYSIZE(tlHoundCombatFailPVS),
+			std::size(tlHoundCombatFailPVS),
 			bits_COND_NEW_ENEMY |
 				bits_COND_LIGHT_DAMAGE |
 				bits_COND_HEAVY_DAMAGE,
@@ -1096,7 +1094,7 @@ Task_t tlHoundCombatFailNoPVS[] =
 Schedule_t slHoundCombatFailNoPVS[] =
 	{
 		{tlHoundCombatFailNoPVS,
-			ARRAYSIZE(tlHoundCombatFailNoPVS),
+			std::size(tlHoundCombatFailNoPVS),
 			bits_COND_NEW_ENEMY |
 				bits_COND_LIGHT_DAMAGE |
 				bits_COND_HEAVY_DAMAGE,

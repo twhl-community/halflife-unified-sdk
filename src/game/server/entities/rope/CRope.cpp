@@ -258,7 +258,7 @@ bool CRope::Save(CSave& save)
 	if (!BaseClass::Save(save))
 		return false;
 
-	return save.WriteFields("CRope", this, m_SaveData, ARRAYSIZE(m_SaveData));
+	return save.WriteFields("CRope", this, m_SaveData, std::size(m_SaveData));
 }
 
 bool CRope::Restore(CRestore& restore)
@@ -268,7 +268,7 @@ bool CRope::Restore(CRestore& restore)
 		return false;
 	}
 
-	auto status = restore.ReadFields("CRope", this, m_SaveData, ARRAYSIZE(m_SaveData));
+	auto status = restore.ReadFields("CRope", this, m_SaveData, std::size(m_SaveData));
 
 	for (size_t uiIndex = 0; uiIndex < MAX_TEMP_SAMPLES; ++uiIndex)
 	{
@@ -1020,7 +1020,7 @@ bool CRope::ShouldCreak() const
 void CRope::Creak()
 {
 	EMIT_SOUND(edict(), CHAN_BODY,
-		g_pszCreakSounds[RANDOM_LONG(0, ARRAYSIZE(g_pszCreakSounds) - 1)],
+		g_pszCreakSounds[RANDOM_LONG(0, std::size(g_pszCreakSounds) - 1)],
 		VOL_NORM, ATTN_NORM);
 }
 

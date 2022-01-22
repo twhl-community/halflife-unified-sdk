@@ -418,7 +418,7 @@ Task_t tlGargFlame[] =
 Schedule_t slGargFlame[] =
 	{
 		{tlGargFlame,
-			ARRAYSIZE(tlGargFlame),
+			std::size(tlGargFlame),
 			0,
 			0,
 			"GargFlame"},
@@ -436,7 +436,7 @@ Task_t tlGargSwipe[] =
 Schedule_t slGargSwipe[] =
 	{
 		{tlGargSwipe,
-			ARRAYSIZE(tlGargSwipe),
+			std::size(tlGargSwipe),
 			bits_COND_CAN_MELEE_ATTACK2,
 			0,
 			"GargSwipe"},
@@ -837,7 +837,7 @@ void CGargantua::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecD
 			UTIL_Ricochet(ptr->vecEndPos, RANDOM_FLOAT(0.5, 1.5));
 			pev->dmgtime = gpGlobals->time;
 			//			if ( RANDOM_LONG(0,100) < 25 )
-			//				EMIT_SOUND_DYN( ENT(pev), CHAN_BODY, pRicSounds[ RANDOM_LONG(0,ARRAYSIZE(pRicSounds)-1) ], 1.0, ATTN_NORM, 0, PITCH_NORM );
+			//				EMIT_SOUND_DYN( ENT(pev), CHAN_BODY, pRicSounds[ RANDOM_LONG(0,std::size(pRicSounds)-1) ], 1.0, ATTN_NORM, 0, PITCH_NORM );
 		}
 		flDamage = 0;
 	}

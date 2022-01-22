@@ -184,7 +184,7 @@ static Vector gTankSpread[] =
 		Vector(0.1, 0.1, 0.1),		 // large cone
 		Vector(0.25, 0.25, 0.25),	 // extra-large cone
 };
-#define MAX_FIRING_SPREADS ARRAYSIZE(gTankSpread)
+#define MAX_FIRING_SPREADS std::size(gTankSpread)
 
 
 void COFFuncTank::Spawn()
@@ -205,7 +205,8 @@ void COFFuncTank::Spawn()
 
 	if (m_fireRate <= 0)
 		m_fireRate = 1;
-	if (m_spread > MAX_FIRING_SPREADS)
+	//TODO: needs to be >=
+	if (static_cast<std::size_t>(m_spread) > MAX_FIRING_SPREADS)
 		m_spread = 0;
 
 	pev->oldorigin = pev->origin;
@@ -505,7 +506,7 @@ CBaseEntity* COFFuncTank::FindTarget()
 	Vector size(2048, 2048, 2048);
 
 	CBaseEntity* pList[100];
-	const auto count = UTIL_EntitiesInBox(pList, ARRAYSIZE(pList), pev->origin - size, pev->origin + size, FL_MONSTER | FL_CLIENT);
+	const auto count = UTIL_EntitiesInBox(pList, std::size(pList), pev->origin - size, pev->origin + size, FL_MONSTER | FL_CLIENT);
 
 	for (auto i = 0; i < count; ++i)
 	{

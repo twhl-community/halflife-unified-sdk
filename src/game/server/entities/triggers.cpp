@@ -2476,7 +2476,7 @@ bool CTriggerPlayerFreeze::Save(CSave& save)
 	if (!CBaseDelay::Save(save))
 		return false;
 
-	return save.WriteFields("CTriggerPlayerFreeze", this, m_SaveData, ARRAYSIZE(m_SaveData));
+	return save.WriteFields("CTriggerPlayerFreeze", this, m_SaveData, std::size(m_SaveData));
 }
 
 bool CTriggerPlayerFreeze::Restore(CRestore& restore)
@@ -2484,7 +2484,7 @@ bool CTriggerPlayerFreeze::Restore(CRestore& restore)
 	if (!CBaseDelay::Restore(restore))
 		return false;
 
-	if (!restore.ReadFields("CTriggerPlayerFreeze", this, m_SaveData, ARRAYSIZE(m_SaveData)))
+	if (!restore.ReadFields("CTriggerPlayerFreeze", this, m_SaveData, std::size(m_SaveData)))
 		return false;
 
 	if (!m_bUnFrozen)
@@ -2737,7 +2737,7 @@ void COFTriggerGeneWormHit::GeneWormHitTouch(CBaseEntity* pOther)
 
 			pOther->TakeDamage(pev, pev, pev->dmg, DMG_CRUSH);
 
-			EMIT_SOUND_DYN(pOther->edict(), CHAN_BODY, pAttackSounds[RANDOM_LONG(0, ARRAYSIZE(pAttackSounds) - 1)], VOL_NORM, 0.1, 0, RANDOM_LONG(-5, 5) + 100);
+			EMIT_SOUND_DYN(pOther->edict(), CHAN_BODY, pAttackSounds[RANDOM_LONG(0, std::size(pAttackSounds) - 1)], VOL_NORM, 0.1, 0, RANDOM_LONG(-5, 5) + 100);
 
 			pev->pain_finished = gpGlobals->time;
 			m_flLastDamageTime = gpGlobals->time;

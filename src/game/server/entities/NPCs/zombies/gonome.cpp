@@ -280,7 +280,7 @@ Schedule_t slGonomeVictoryDance[] =
 	{
 		{
 			tlGonomeVictoryDance,
-			ARRAYSIZE(tlGonomeVictoryDance),
+			std::size(tlGonomeVictoryDance),
 			bits_COND_NEW_ENEMY |
 				bits_COND_LIGHT_DAMAGE |
 				bits_COND_HEAVY_DAMAGE,

@@ -624,7 +624,7 @@ CBaseEntity* COp4Mortar::FindTarget()
 	const Vector maxRange{m_maxRange, m_maxRange, m_maxRange};
 
 	CBaseEntity* pList[100];
-	const auto count = UTIL_EntitiesInBox(pList, ARRAYSIZE(pList), pev->origin - maxRange, pev->origin + maxRange, FL_MONSTER | FL_CLIENT);
+	const auto count = UTIL_EntitiesInBox(pList, std::size(pList), pev->origin - maxRange, pev->origin + maxRange, FL_MONSTER | FL_CLIENT);
 
 	for (auto i = 0; i < count; ++i)
 	{

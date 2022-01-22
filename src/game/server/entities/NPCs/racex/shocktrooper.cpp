@@ -1138,7 +1138,7 @@ Task_t tlShockTrooperFail[] =
 Schedule_t slShockTrooperFail[] =
 	{
 		{tlShockTrooperFail,
-			ARRAYSIZE(tlShockTrooperFail),
+			std::size(tlShockTrooperFail),
 			bits_COND_CAN_RANGE_ATTACK1 |
 				bits_COND_CAN_RANGE_ATTACK2 |
 				bits_COND_CAN_MELEE_ATTACK1 |
@@ -1161,7 +1161,7 @@ Task_t tlShockTrooperCombatFail[] =
 Schedule_t slShockTrooperCombatFail[] =
 	{
 		{tlShockTrooperCombatFail,
-			ARRAYSIZE(tlShockTrooperCombatFail),
+			std::size(tlShockTrooperCombatFail),
 			bits_COND_CAN_RANGE_ATTACK1 |
 				bits_COND_CAN_RANGE_ATTACK2,
 			0,
@@ -1186,7 +1186,7 @@ Task_t tlShockTrooperVictoryDance[] =
 Schedule_t slShockTrooperVictoryDance[] =
 	{
 		{tlShockTrooperVictoryDance,
-			ARRAYSIZE(tlShockTrooperVictoryDance),
+			std::size(tlShockTrooperVictoryDance),
 			bits_COND_NEW_ENEMY |
 				bits_COND_LIGHT_DAMAGE |
 				bits_COND_HEAVY_DAMAGE,
@@ -1210,7 +1210,7 @@ Task_t tlShockTrooperEstablishLineOfFire[] =
 Schedule_t slShockTrooperEstablishLineOfFire[] =
 	{
 		{tlShockTrooperEstablishLineOfFire,
-			ARRAYSIZE(tlShockTrooperEstablishLineOfFire),
+			std::size(tlShockTrooperEstablishLineOfFire),
 			bits_COND_NEW_ENEMY |
 				bits_COND_ENEMY_DEAD |
 				bits_COND_CAN_RANGE_ATTACK1 |
@@ -1237,7 +1237,7 @@ Task_t tlShockTrooperFoundEnemy[] =
 Schedule_t slShockTrooperFoundEnemy[] =
 	{
 		{tlShockTrooperFoundEnemy,
-			ARRAYSIZE(tlShockTrooperFoundEnemy),
+			std::size(tlShockTrooperFoundEnemy),
 			bits_COND_HEAR_SOUND,
 
 			bits_SOUND_DANGER,
@@ -1259,7 +1259,7 @@ Task_t tlShockTrooperCombatFace1[] =
 Schedule_t slShockTrooperCombatFace[] =
 	{
 		{tlShockTrooperCombatFace1,
-			ARRAYSIZE(tlShockTrooperCombatFace1),
+			std::size(tlShockTrooperCombatFace1),
 			bits_COND_NEW_ENEMY |
 				bits_COND_ENEMY_DEAD |
 				bits_COND_CAN_RANGE_ATTACK1 |
@@ -1297,7 +1297,7 @@ Task_t tlShockTrooperSignalSuppress[] =
 Schedule_t slShockTrooperSignalSuppress[] =
 	{
 		{tlShockTrooperSignalSuppress,
-			ARRAYSIZE(tlShockTrooperSignalSuppress),
+			std::size(tlShockTrooperSignalSuppress),
 			bits_COND_ENEMY_DEAD |
 				bits_COND_LIGHT_DAMAGE |
 				bits_COND_HEAVY_DAMAGE |
@@ -1332,7 +1332,7 @@ Task_t tlShockTrooperSuppress[] =
 Schedule_t slShockTrooperSuppress[] =
 	{
 		{tlShockTrooperSuppress,
-			ARRAYSIZE(tlShockTrooperSuppress),
+			std::size(tlShockTrooperSuppress),
 			bits_COND_ENEMY_DEAD |
 				bits_COND_LIGHT_DAMAGE |
 				bits_COND_HEAVY_DAMAGE |
@@ -1360,7 +1360,7 @@ Task_t tlShockTrooperWaitInCover[] =
 Schedule_t slShockTrooperWaitInCover[] =
 	{
 		{tlShockTrooperWaitInCover,
-			ARRAYSIZE(tlShockTrooperWaitInCover),
+			std::size(tlShockTrooperWaitInCover),
 			bits_COND_NEW_ENEMY |
 				bits_COND_HEAR_SOUND |
 				bits_COND_CAN_RANGE_ATTACK1 |
@@ -1392,7 +1392,7 @@ Task_t tlShockTrooperTakeCover1[] =
 Schedule_t slShockTrooperTakeCover[] =
 	{
 		{tlShockTrooperTakeCover1,
-			ARRAYSIZE(tlShockTrooperTakeCover1),
+			std::size(tlShockTrooperTakeCover1),
 			0,
 			0,
 			"TakeCover"},
@@ -1416,7 +1416,7 @@ Task_t tlShockTrooperGrenadeCover1[] =
 Schedule_t slShockTrooperGrenadeCover[] =
 	{
 		{tlShockTrooperGrenadeCover1,
-			ARRAYSIZE(tlShockTrooperGrenadeCover1),
+			std::size(tlShockTrooperGrenadeCover1),
 			0,
 			0,
 			"GrenadeCover"},
@@ -1436,7 +1436,7 @@ Task_t tlShockTrooperTossGrenadeCover1[] =
 Schedule_t slShockTrooperTossGrenadeCover[] =
 	{
 		{tlShockTrooperTossGrenadeCover1,
-			ARRAYSIZE(tlShockTrooperTossGrenadeCover1),
+			std::size(tlShockTrooperTossGrenadeCover1),
 			0,
 			0,
 			"TossGrenadeCover"},
@@ -1459,7 +1459,7 @@ Task_t tlShockTrooperTakeCoverFromBestSound[] =
 Schedule_t slShockTrooperTakeCoverFromBestSound[] =
 	{
 		{tlShockTrooperTakeCoverFromBestSound,
-			ARRAYSIZE(tlShockTrooperTakeCoverFromBestSound),
+			std::size(tlShockTrooperTakeCoverFromBestSound),
 			0,
 			0,
 			"GruntTakeCoverFromBestSound"},
@@ -1483,7 +1483,7 @@ Task_t tlShockTrooperHideReload[] =
 Schedule_t slShockTrooperHideReload[] =
 	{
 		{tlShockTrooperHideReload,
-			ARRAYSIZE(tlShockTrooperHideReload),
+			std::size(tlShockTrooperHideReload),
 			bits_COND_HEAVY_DAMAGE |
 				bits_COND_HEAR_SOUND,
 
@@ -1504,7 +1504,7 @@ Task_t tlShockTrooperSweep[] =
 Schedule_t slShockTrooperSweep[] =
 	{
 		{tlShockTrooperSweep,
-			ARRAYSIZE(tlShockTrooperSweep),
+			std::size(tlShockTrooperSweep),
 
 			bits_COND_NEW_ENEMY |
 				bits_COND_LIGHT_DAMAGE |
@@ -1544,7 +1544,7 @@ Task_t tlShockTrooperRangeAttack1A[] =
 Schedule_t slShockTrooperRangeAttack1A[] =
 	{
 		{tlShockTrooperRangeAttack1A,
-			ARRAYSIZE(tlShockTrooperRangeAttack1A),
+			std::size(tlShockTrooperRangeAttack1A),
 			bits_COND_NEW_ENEMY |
 				bits_COND_ENEMY_DEAD |
 				bits_COND_HEAVY_DAMAGE |
@@ -1582,7 +1582,7 @@ Task_t tlShockTrooperRangeAttack1B[] =
 Schedule_t slShockTrooperRangeAttack1B[] =
 	{
 		{tlShockTrooperRangeAttack1B,
-			ARRAYSIZE(tlShockTrooperRangeAttack1B),
+			std::size(tlShockTrooperRangeAttack1B),
 			bits_COND_NEW_ENEMY |
 				bits_COND_ENEMY_DEAD |
 				bits_COND_HEAVY_DAMAGE |
@@ -1610,7 +1610,7 @@ Task_t tlShockTrooperRangeAttack2[] =
 Schedule_t slShockTrooperRangeAttack2[] =
 	{
 		{tlShockTrooperRangeAttack2,
-			ARRAYSIZE(tlShockTrooperRangeAttack2),
+			std::size(tlShockTrooperRangeAttack2),
 			0,
 			0,
 			"RangeAttack2"},
@@ -1630,7 +1630,7 @@ Task_t tlShockTrooperRepel[] =
 Schedule_t slShockTrooperRepel[] =
 	{
 		{tlShockTrooperRepel,
-			ARRAYSIZE(tlShockTrooperRepel),
+			std::size(tlShockTrooperRepel),
 			bits_COND_SEE_ENEMY |
 				bits_COND_NEW_ENEMY |
 				bits_COND_LIGHT_DAMAGE |
@@ -1657,7 +1657,7 @@ Task_t tlShockTrooperRepelAttack[] =
 Schedule_t slShockTrooperRepelAttack[] =
 	{
 		{tlShockTrooperRepelAttack,
-			ARRAYSIZE(tlShockTrooperRepelAttack),
+			std::size(tlShockTrooperRepelAttack),
 			bits_COND_ENEMY_OCCLUDED,
 			0,
 			"Repel Attack"},
@@ -1679,7 +1679,7 @@ Task_t tlShockTrooperRepelLand[] =
 Schedule_t slShockTrooperRepelLand[] =
 	{
 		{tlShockTrooperRepelLand,
-			ARRAYSIZE(tlShockTrooperRepelLand),
+			std::size(tlShockTrooperRepelLand),
 			bits_COND_SEE_ENEMY |
 				bits_COND_NEW_ENEMY |
 				bits_COND_LIGHT_DAMAGE |
