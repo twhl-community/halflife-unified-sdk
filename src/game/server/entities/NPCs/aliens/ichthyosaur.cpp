@@ -20,7 +20,6 @@
 #include "cbase.h"
 #include "flyingmonster.h"
 #include "nodes.h"
-#include "effects.h"
 
 #define SEARCH_RETRY 16
 

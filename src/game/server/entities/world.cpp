@@ -23,7 +23,6 @@
 #include "cbase.h"
 #include "nodes.h"
 #include "client.h"
-#include "effects.h"
 #include "teamplay_gamerules.h"
 #include "ctfplay_gamerules.h"
 #include "world.h"

@@ -14,7 +14,6 @@
 ****/
 
 #include "cbase.h"
-#include "effects.h"
 #include "customentity.h"
 #include "UserMessages.h"
 

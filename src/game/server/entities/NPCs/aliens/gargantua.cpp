@@ -18,7 +18,6 @@
 //=========================================================
 #include "cbase.h"
 #include "customentity.h"
-#include "effects.h"
 #include "explode.h"
 #include "func_break.h"
 

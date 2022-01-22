@@ -20,7 +20,6 @@
 #include "squadmonster.h"
 #include "talkmonster.h"
 #include "COFSquadTalkMonster.h"
-#include "effects.h"
 #include "customentity.h"
 #include "explode.h"
 #include "hgrunt_ally_base.h"

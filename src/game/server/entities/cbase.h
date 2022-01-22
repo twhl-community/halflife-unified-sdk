@@ -640,6 +640,7 @@ class CSound;
 #include "basemonster.h"
 #include "player.h"
 #include "weapons.h"
+#include "effects.h"
 
 const char* ButtonSound(int sound); // get string of button sound number
 

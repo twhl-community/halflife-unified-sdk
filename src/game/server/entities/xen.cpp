@@ -13,7 +13,6 @@
 *
 ****/
 #include "cbase.h"
-#include "effects.h"
 
 
 #define XEN_PLANT_GLOW_SPRITE "sprites/flare3.spr"

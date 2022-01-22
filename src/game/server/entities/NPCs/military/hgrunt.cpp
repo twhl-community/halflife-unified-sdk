@@ -31,7 +31,6 @@
 #include "plane.h"
 #include "squadmonster.h"
 #include "talkmonster.h"
-#include "effects.h"
 #include "customentity.h"
 #include "hgrunt.h"
 

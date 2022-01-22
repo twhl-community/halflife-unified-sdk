@@ -18,7 +18,6 @@
 
 #include "cbase.h"
 #include "squadmonster.h"
-#include "effects.h"
 
 //=========================================================
 // Monster's Anim Events Go Here

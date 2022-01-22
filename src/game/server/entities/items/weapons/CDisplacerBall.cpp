@@ -13,7 +13,6 @@
 *
 ****/
 #include "cbase.h"
-#include "effects.h"
 
 #include "ctf/CTFDefs.h"
 #include "ctf/CTFGoal.h"

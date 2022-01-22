@@ -13,7 +13,6 @@
 *
 ****/
 #include "cbase.h"
-#include "effects.h"
 
 #define TRIPMINE_PRIMARY_VOLUME 450
 

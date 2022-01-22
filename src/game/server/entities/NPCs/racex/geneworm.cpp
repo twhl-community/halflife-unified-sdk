@@ -13,7 +13,6 @@
 *
 ****/
 #include "cbase.h"
-#include "effects.h"
 
 const int AE_GENEWORM_SPIT_START = 0;
 const int AE_GENEWORM_LAUNCH_SPAWN = 2;

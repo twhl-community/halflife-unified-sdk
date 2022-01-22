@@ -13,7 +13,6 @@
 *
 ****/
 #include "cbase.h"
-#include "effects.h"
 #include "customentity.h"
 #include "osprey.h"
 

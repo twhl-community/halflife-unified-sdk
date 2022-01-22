@@ -14,7 +14,6 @@
 ****/
 
 #include "cbase.h"
-#include "effects.h"
 #include "apache.h"
 
 LINK_ENTITY_TO_CLASS(monster_apache, CApache);
