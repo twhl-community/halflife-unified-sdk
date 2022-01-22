@@ -692,7 +692,7 @@ void CHalfLifeCTFplay::ClientDisconnected(edict_t* pClient)
 
 			v2->RemoveAllItems(true);
 
-			g_engfuncs.pfnMessageBegin(2, gmsgSpectator, nullptr, nullptr);
+			g_engfuncs.pfnMessageBegin(MSG_ALL, gmsgSpectator, nullptr, nullptr);
 			g_engfuncs.pfnWriteByte(g_engfuncs.pfnIndexOfEdict(pClient));
 			g_engfuncs.pfnWriteByte(0);
 			g_engfuncs.pfnMessageEnd();
@@ -1746,7 +1746,7 @@ void CHalfLifeCTFplay::SendTeamStatInfo(CTFTeam iTeamNum)
 		}
 	}
 
-	g_engfuncs.pfnMessageBegin(2, gmsgStatsInfo, nullptr, nullptr);
+	g_engfuncs.pfnMessageBegin(MSG_ALL, gmsgStatsInfo, nullptr, nullptr);
 	g_engfuncs.pfnWriteByte(static_cast<int>(iTeamNum));
 
 	g_engfuncs.pfnWriteByte((int)GetWinningTeam());
@@ -1762,7 +1762,7 @@ void CHalfLifeCTFplay::SendTeamStatInfo(CTFTeam iTeamNum)
 	SendTeamStat(iMostBarnacle, "Most Barnacle Kills", iBarnacleVal);
 	g_engfuncs.pfnMessageEnd();
 
-	g_engfuncs.pfnMessageBegin(2, gmsgStatsInfo, nullptr, nullptr);
+	g_engfuncs.pfnMessageBegin(MSG_ALL, gmsgStatsInfo, nullptr, nullptr);
 	g_engfuncs.pfnWriteByte(static_cast<int>(iTeamNum));
 
 	g_engfuncs.pfnWriteByte((int)GetWinningTeam());
