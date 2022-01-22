@@ -20,7 +20,6 @@
 
 #pragma once
 
-#define ASSERT(x)
 //--------------------------------------------------------------------------------------------------------------
 void BEGIN_READ(void* buf, int size);
 int READ_CHAR();

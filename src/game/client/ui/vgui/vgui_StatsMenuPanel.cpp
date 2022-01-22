@@ -19,7 +19,6 @@
 #include <VGUI_TextImage.h>
 
 #include "hud.h"
-#include "parsemsg.h"
 #include "vgui_StatsMenuPanel.h"
 
 struct team_stat_info_t

@@ -15,7 +15,6 @@
 #include "pm_shared.h"
 #include "pm_defs.h"
 #include "pmtrace.h"
-#include "parsemsg.h"
 #include "entity_types.h"
 
 // these are included for the math functions

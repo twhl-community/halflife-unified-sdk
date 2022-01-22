@@ -18,7 +18,6 @@
 
 
 #include "hud.h"
-#include "parsemsg.h"
 
 #include "ammohistory.h"
 

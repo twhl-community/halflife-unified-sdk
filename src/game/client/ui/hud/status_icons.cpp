@@ -19,7 +19,6 @@
 #include "const.h"
 #include "entity_state.h"
 #include "cl_entity.h"
-#include "parsemsg.h"
 #include "event_api.h"
 
 DECLARE_MESSAGE(m_StatusIcons, StatusIcon);

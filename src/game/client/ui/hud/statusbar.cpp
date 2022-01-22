@@ -20,7 +20,6 @@
 //
 
 #include "hud.h"
-#include "parsemsg.h"
 
 DECLARE_MESSAGE(m_StatusBar, StatusText);
 DECLARE_MESSAGE(m_StatusBar, StatusValue);

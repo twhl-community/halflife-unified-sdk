@@ -17,7 +17,6 @@
 //
 
 #include "hud.h"
-#include "parsemsg.h"
 #include "r_efx.h"
 
 #include "vgui_TeamFortressViewport.h"
@@ -37,7 +36,7 @@ extern TEMPENTITY* pFlare; // Vit_amiN
 
 bool CHud::MsgFunc_ResetHUD(const char* pszName, int iSize, void* pbuf)
 {
-	ASSERT(iSize == 0);
+	assert(iSize == 0);
 
 	// clear all hud data
 	HUDLIST* pList = m_pHudList;
