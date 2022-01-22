@@ -102,9 +102,18 @@ typedef enum
 
 extern void FireTargets(const char* targetName, CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
-typedef void (CBaseEntity::*BASEPTR)();
-typedef void (CBaseEntity::*ENTITYFUNCPTR)(CBaseEntity* pOther);
-typedef void (CBaseEntity::*USEPTR)(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+template<typename T>
+using TBASEPTR = void (T::*)();
+
+template<typename T>
+using TENTITYFUNCPTR = void (T::*)(CBaseEntity* pOther);
+
+template<typename T>
+using TUSEPTR = void (T::*)(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+
+using BASEPTR = TBASEPTR<CBaseEntity>;
+using ENTITYFUNCPTR = TENTITYFUNCPTR<CBaseEntity>;
+using USEPTR = TUSEPTR<CBaseEntity>;
 
 // For CLASSIFY
 #define CLASS_NONE 0
@@ -211,10 +220,10 @@ public:
 	virtual CBaseEntity* GetNextTarget();
 
 	// fundamental callbacks
-	void (CBaseEntity ::*m_pfnThink)();
-	void (CBaseEntity ::*m_pfnTouch)(CBaseEntity* pOther);
-	void (CBaseEntity ::*m_pfnUse)(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-	void (CBaseEntity ::*m_pfnBlocked)(CBaseEntity* pOther);
+	BASEPTR m_pfnThink;
+	ENTITYFUNCPTR m_pfnTouch;
+	USEPTR m_pfnUse;
+	ENTITYFUNCPTR m_pfnBlocked;
 
 	virtual void Think()
 	{
@@ -407,17 +416,17 @@ inline bool FNullEnt(CBaseEntity* ent) { return (ent == nullptr) || FNullEnt(ent
 
 #ifdef _DEBUG
 
-#define SetThink(a) ThinkSet(static_cast<void (CBaseEntity::*)()>(a), #a)
-#define SetTouch(a) TouchSet(static_cast<void (CBaseEntity::*)(CBaseEntity*)>(a), #a)
-#define SetUse(a) UseSet(static_cast<void (CBaseEntity::*)(CBaseEntity * pActivator, CBaseEntity * pCaller, USE_TYPE useType, float value)>(a), #a)
-#define SetBlocked(a) BlockedSet(static_cast<void (CBaseEntity::*)(CBaseEntity*)>(a), #a)
+#define SetThink(a) ThinkSet(static_cast<BASEPTR>(a), #a)
+#define SetTouch(a) TouchSet(static_cast<ENTITYFUNCPTR>(a), #a)
+#define SetUse(a) UseSet(static_cast<USEPTR>(a), #a)
+#define SetBlocked(a) BlockedSet(static_cast<ENTITYFUNCPTR>(a), #a)
 
 #else
 
-#define SetThink(a) m_pfnThink = static_cast<void (CBaseEntity::*)()>(a)
-#define SetTouch(a) m_pfnTouch = static_cast<void (CBaseEntity::*)(CBaseEntity*)>(a)
-#define SetUse(a) m_pfnUse = static_cast<void (CBaseEntity::*)(CBaseEntity * pActivator, CBaseEntity * pCaller, USE_TYPE useType, float value)>(a)
-#define SetBlocked(a) m_pfnBlocked = static_cast<void (CBaseEntity::*)(CBaseEntity*)>(a)
+#define SetThink(a) m_pfnThink = static_cast<BASEPTR>(a)
+#define SetTouch(a) m_pfnTouch = static_cast<ENTITYFUNCPTR>(a)
+#define SetUse(a) m_pfnUse = static_cast<USEPTR>(a)
+#define SetBlocked(a) m_pfnBlocked = static_cast<ENTITYFUNCPTR>(a)
 
 #endif
 
@@ -564,7 +573,7 @@ public:
 	int m_cTriggersLeft; // trigger_counter only, # of activations remaining
 	float m_flHeight;
 	EHANDLE m_hActivator;
-	void (CBaseToggle::*m_pfnCallWhenMoveDone)();
+	TBASEPTR<CBaseToggle> m_pfnCallWhenMoveDone;
 	Vector m_vecFinalDest;
 	Vector m_vecFinalAngle;
 
@@ -595,7 +604,7 @@ public:
 						// the button will be allowed to operate. Otherwise, it will be
 						// deactivated.
 };
-#define SetMoveDone(a) m_pfnCallWhenMoveDone = static_cast<void (CBaseToggle::*)()>(a)
+#define SetMoveDone(a) m_pfnCallWhenMoveDone = static_cast<decltype(CBaseToggle::m_pfnCallWhenMoveDone)>(a)
 
 
 // people gib if their health is <= this at the time of death
