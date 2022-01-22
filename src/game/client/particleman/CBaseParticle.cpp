@@ -15,8 +15,6 @@
 
 #include "hud.h"
 
-#undef clamp
-
 #include "event_api.h"
 #include "triangleapi.h"
 

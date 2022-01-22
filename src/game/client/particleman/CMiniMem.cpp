@@ -13,8 +13,6 @@
 *
 ****/
 
-#undef clamp
-
 #include "hud.h"
 #include "particleman.h"
 #include "particleman_internal.h"
