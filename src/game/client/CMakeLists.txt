@@ -267,6 +267,10 @@ target_sources(client PRIVATE
 
 add_game_shared_sources(client)
 
+target_precompile_headers(client
+	PRIVATE
+		ui/hud/hud.h)
+
 # Create filters
 get_target_property(CLIENT_SOURCES client SOURCES)
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}../../../.. FILES ${CLIENT_SOURCES})
