@@ -2895,7 +2895,9 @@ void CBaseMonster::ReportAIState()
 {
 	ALERT_TYPE level = at_console;
 
-	static const char* pStateNames[] = {"None", "Idle", "Combat", "Alert", "Hunt", "Prone", "Scripted", "Dead"};
+	static constexpr const char* pStateNames[] = {"None", "Idle", "Combat", "Alert", "Hunt", "Prone", "Scripted", "PlayDead", "Dead"};
+
+	static_assert(std::size(pStateNames) == MONSTERSTATE_COUNT, "You forgot to update the array of monster state names");
 
 	ALERT(level, "%s: ", STRING(pev->classname));
 	if ((std::size_t)m_MonsterState < std::size(pStateNames))
