@@ -349,7 +349,7 @@ bool CEagle::GetItemInfo(ItemInfo* p)
 
 void CEagle::IncrementAmmo(CBasePlayer* pPlayer)
 {
-	if (pPlayer->GiveAmmo(1, "357", _357_MAX_CARRY) != 0)
+	if (pPlayer->GiveAmmo(1, "357", _357_MAX_CARRY) >= 0)
 	{
 		EMIT_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
 	}
