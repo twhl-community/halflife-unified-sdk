@@ -732,3 +732,12 @@ inline CEntityEnumeratorWithStart<T, FindByTargetnameFunctor<T>> UTIL_FindEntiti
 {
 	return {pszName, pStartEntity};
 }
+
+inline bool UTIL_IsServer()
+{
+#ifndef CLIENT_DLL
+	return false;
+#else
+	return true;
+#endif
+}
