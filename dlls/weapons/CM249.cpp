@@ -363,6 +363,16 @@ void CM249::IncrementAmmo(CBasePlayer* pPlayer)
 	}
 }
 
+void CM249::GetWeaponData(weapon_data_t& data)
+{
+	data.iuser1 = pev->body;
+}
+
+void CM249::SetWeaponData(const weapon_data_t& data)
+{
+	pev->body = data.iuser1;
+}
+
 class CAmmo556 : public CBasePlayerAmmo
 {
 public:
