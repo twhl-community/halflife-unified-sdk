@@ -1318,6 +1318,14 @@ void CHalfLifeCTFplay::ChangePlayerTeam(CBasePlayer* pPlayer, const char* pCharN
 		g_engfuncs.pfnWriteByte((int)pPlayer->m_iTeamNum);
 		g_engfuncs.pfnMessageEnd();
 
+		//Reset FOV (could have been inherited from observer mode)
+		pPlayer->m_iClientFOV = 0;
+		pPlayer->m_iFOV = 0;
+
+		g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgSetFOV, nullptr, pPlayer->edict());
+		g_engfuncs.pfnWriteByte(0);
+		g_engfuncs.pfnMessageEnd();
+
 		const auto pszTeamName = GetTeamName(pPlayer->edict());
 
 		UTIL_LogPrintf(
