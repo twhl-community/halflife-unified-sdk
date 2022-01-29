@@ -359,7 +359,7 @@ bool CStatsMenuPanel::MsgFunc_StatsInfo(const char* pszName, int iSize, void* pb
 		{
 			if (iNumPlayers <= 0)
 			{
-				strncpy(szStatsBuf[teamNum], "No players on this team\n", sizeof(szStatsBuf) - 1);
+				strncpy(szStatsBuf[teamNum], "No players on this team\n", sizeof(szStatsBuf[teamNum]) - 1);
 			}
 			else
 			{
