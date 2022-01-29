@@ -113,10 +113,12 @@ bool CHud::Redraw(float flTime, bool intermission)
 			gViewPort->HideScoreBoard();
 			if (gViewPort->m_pStatsMenu && gViewPort->m_pStatsMenu->isVisible())
 			{
-				gViewPort->m_pStatsMenu->setVisible(true);
+				gViewPort->m_pStatsMenu->setVisible(false);
 			}
 			gViewPort->UpdateSpectatorPanel();
 		}
+		//Disabled in Opposing Force.
+		/*
 		else if (!m_iIntermission && intermission)
 		{
 			m_iIntermission = intermission;
@@ -129,6 +131,7 @@ bool CHud::Redraw(float flTime, bool intermission)
 			if (CVAR_GET_FLOAT("hud_takesshots") != 0)
 				m_flShotTime = flTime + 1.0; // Take a screenshot in a second
 		}
+		*/
 	}
 
 	if (0 != m_flShotTime && m_flShotTime < flTime)
