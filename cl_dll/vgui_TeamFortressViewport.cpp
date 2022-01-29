@@ -1568,10 +1568,11 @@ void TeamFortressViewport::ShowVGUIMenu(int iMenu)
 	if (0 != gEngfuncs.pDemoAPI->IsPlayingback())
 		return;
 
-	// Don't open any menus except the MOTD during intermission
+	// Don't open any menus except the MOTD or stats menu during intermission
 	// MOTD needs to be accepted because it's sent down to the client
 	// after map change, before intermission's turned off
-	if (gHUD.m_iIntermission && iMenu != MENU_INTRO)
+	// Stats menu is displayed during intermission.
+	if (gHUD.m_iIntermission && (iMenu != MENU_INTRO && iMenu != MENU_STATSMENU))
 		return;
 
 	// Don't create one if it's already in the list
