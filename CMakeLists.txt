@@ -48,6 +48,7 @@ find_package(Threads REQUIRED)
 
 option(SPDLOG_BUILD_TESTS "" OFF)
 option(SPDLOG_BUILD_TESTS_HO "" OFF)
+option(SPDLOG_ENABLE_PCH "" ON)
 add_subdirectory(external/spdlog
 	spdlog-binary-dir
 	EXCLUDE_FROM_ALL)
