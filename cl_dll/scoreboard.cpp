@@ -25,6 +25,7 @@
 #include <string.h>
 #include <stdio.h>
 #include "vgui_TeamFortressViewport.h"
+#include "vgui_ScorePanel.h"
 
 #include "ctf/CTFDefs.h"
 
@@ -591,6 +592,17 @@ bool CHudScoreboard::MsgFunc_TeamInfo(const char* pszName, int iSize, void* pbuf
 	if (cl > 0 && cl <= MAX_PLAYERS_HUD)
 	{ // set the players team
 		strncpy(g_PlayerExtraInfo[cl].teamname, READ_STRING(), MAX_TEAM_NAME);
+
+		if (gHUD.m_Teamplay == 2)
+		{
+			g_PlayerExtraInfo[cl].teamid = READ_BYTE();
+		}
+	}
+
+	if (gViewPort && gViewPort->m_pScoreBoard)
+	{
+		gViewPort->m_pScoreBoard->RebuildTeams();
+		return true;
 	}
 
 	// rebuild the list of teams

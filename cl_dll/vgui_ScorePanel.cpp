@@ -290,21 +290,19 @@ void ScorePanel::Update()
 	else
 		SortTeams();
 
-	/*
 	// set scrollbar range
 	m_PlayerList.SetScrollRange(m_iRows);
 
 	FillGrid();
 
-	if ( gViewPort->m_pSpectatorPanel->m_menuVisible )
+	if (gViewPort->m_pSpectatorPanel->m_menuVisible)
 	{
-		 m_pCloseButton->setVisible ( true );
+		m_pCloseButton->setVisible(true);
 	}
-	else 
+	else
 	{
-		 m_pCloseButton->setVisible ( false );
+		m_pCloseButton->setVisible(false);
 	}
-	*/
 }
 
 //-----------------------------------------------------------------------------
@@ -355,7 +353,7 @@ void ScorePanel::SortTeams()
 			g_TeamInfo[j].ownteam = false;
 
 		// Set the team's number (used for team colors)
-		g_TeamInfo[j].teamnumber = g_PlayerExtraInfo[i].teamnumber;
+		g_TeamInfo[j].teamnumber = g_PlayerExtraInfo[i].teamid;
 	}
 
 	// find team ping/packetloss averages
@@ -532,17 +530,16 @@ void ScorePanel::RebuildTeams()
 	Update();
 }
 
-#if 0
 void ScorePanel::FillGrid()
 {
-	CSchemeManager *pSchemes = gViewPort->GetSchemeManager();
+	CSchemeManager* pSchemes = gViewPort->GetSchemeManager();
 	SchemeHandle_t hScheme = pSchemes->getSchemeHandle("Scoreboard Text");
 	SchemeHandle_t hTitleScheme = pSchemes->getSchemeHandle("Scoreboard Title Text");
 	SchemeHandle_t hSmallScheme = pSchemes->getSchemeHandle("Scoreboard Small Text");
 
-	Font *sfont = pSchemes->getFont(hScheme);
-	Font *tfont = pSchemes->getFont(hTitleScheme);
-	Font *smallfont = pSchemes->getFont(hSmallScheme);
+	Font* sfont = pSchemes->getFont(hScheme);
+	Font* tfont = pSchemes->getFont(hTitleScheme);
+	Font* smallfont = pSchemes->getFont(hSmallScheme);
 
 	// update highlight position
 	int x, y;
@@ -557,16 +554,16 @@ void ScorePanel::FillGrid()
 
 	bool bNextRowIsGap = false;
 	int row;
-	for(row=0; row < NUM_ROWS; row++)
+	for (row = 0; row < NUM_ROWS; row++)
 	{
-		CGrid *pGridRow = &m_PlayerGrids[row];
+		CGrid* pGridRow = &m_PlayerGrids[row];
 		pGridRow->SetRowUnderline(0, false, 0, 0, 0, 0, 0);
 
-		if(row >= m_iRows)
+		if (row >= m_iRows)
 		{
-			for(int col=0; col < NUM_COLUMNS; col++)
+			for (int col = 0; col < NUM_COLUMNS; col++)
 				m_PlayerEntries[col][row].setVisible(false);
-		
+
 			continue;
 		}
 
@@ -577,16 +574,16 @@ void ScorePanel::FillGrid()
 			bRowIsGap = true;
 		}
 
-		for(int col=0; col < NUM_COLUMNS; col++)
+		for (int col = 0; col < NUM_COLUMNS; col++)
 		{
-			CLabelHeader *pLabel = &m_PlayerEntries[col][row];
+			CLabelHeader* pLabel = &m_PlayerEntries[col][row];
 
 			pLabel->setVisible(true);
 			pLabel->setText2("");
 			pLabel->setImage(NULL);
 			pLabel->setFont(sfont);
 			pLabel->setTextOffset(0, 0);
-			
+
 			int rowheight = 13;
 			if (ScreenHeight > 480)
 			{
@@ -599,26 +596,26 @@ void ScorePanel::FillGrid()
 			}
 			pLabel->setSize(pLabel->getWide(), rowheight);
 			pLabel->setBgColor(0, 0, 0, 255);
-			
+
 			char sz[128];
-			hud_player_info_t *pl_info = NULL;
-			team_info_t *team_info = NULL;
+			hud_player_info_t* pl_info = NULL;
+			team_info_t* team_info = NULL;
 
 			if (m_iIsATeam[row] == TEAM_BLANK)
 			{
 				pLabel->setText(" ");
 				continue;
 			}
-			else if ( m_iIsATeam[row] == TEAM_YES )
+			else if (m_iIsATeam[row] == TEAM_YES)
 			{
 				// Get the team's data
-				team_info = &g_TeamInfo[ m_iSortedRows[row] ];
+				team_info = &g_TeamInfo[m_iSortedRows[row]];
 
 				// team color text for team names
-				pLabel->setFgColor(	iTeamColors[team_info->teamnumber % iNumberOfTeamColors][0],
-									iTeamColors[team_info->teamnumber % iNumberOfTeamColors][1],
-									iTeamColors[team_info->teamnumber % iNumberOfTeamColors][2],
-									0 );
+				pLabel->setFgColor(iTeamColors[team_info->teamnumber % iNumberOfTeamColors][0],
+					iTeamColors[team_info->teamnumber % iNumberOfTeamColors][1],
+					iTeamColors[team_info->teamnumber % iNumberOfTeamColors][2],
+					0);
 
 				// different height for team header rows
 				rowheight = 20;
@@ -629,15 +626,15 @@ void ScorePanel::FillGrid()
 				pLabel->setSize(pLabel->getWide(), rowheight);
 				pLabel->setFont(tfont);
 
-				pGridRow->SetRowUnderline(	0,
-											true,
-											YRES(3),
-											iTeamColors[team_info->teamnumber % iNumberOfTeamColors][0],
-											iTeamColors[team_info->teamnumber % iNumberOfTeamColors][1],
-											iTeamColors[team_info->teamnumber % iNumberOfTeamColors][2],
-											0 );
+				pGridRow->SetRowUnderline(0,
+					true,
+					YRES(3),
+					iTeamColors[team_info->teamnumber % iNumberOfTeamColors][0],
+					iTeamColors[team_info->teamnumber % iNumberOfTeamColors][1],
+					iTeamColors[team_info->teamnumber % iNumberOfTeamColors][2],
+					0);
 			}
-			else if ( m_iIsATeam[row] == TEAM_SPECTATORS )
+			else if (m_iIsATeam[row] == TEAM_SPECTATORS)
 			{
 				// grey text for spectators
 				pLabel->setFgColor(100, 100, 100, 0);
@@ -656,75 +653,75 @@ void ScorePanel::FillGrid()
 			else
 			{
 				// team color text for player names
-				pLabel->setFgColor(	iTeamColors[ g_PlayerExtraInfo[ m_iSortedRows[row] ].teamnumber % iNumberOfTeamColors ][0],
-									iTeamColors[ g_PlayerExtraInfo[ m_iSortedRows[row] ].teamnumber % iNumberOfTeamColors ][1],
-									iTeamColors[ g_PlayerExtraInfo[ m_iSortedRows[row] ].teamnumber % iNumberOfTeamColors ][2],
-									0 );
+				pLabel->setFgColor(iTeamColors[g_PlayerExtraInfo[m_iSortedRows[row]].teamnumber % iNumberOfTeamColors][0],
+					iTeamColors[g_PlayerExtraInfo[m_iSortedRows[row]].teamnumber % iNumberOfTeamColors][1],
+					iTeamColors[g_PlayerExtraInfo[m_iSortedRows[row]].teamnumber % iNumberOfTeamColors][2],
+					0);
 
 				// Get the player's data
-				pl_info = &g_PlayerInfoList[ m_iSortedRows[row] ];
+				pl_info = &g_PlayerInfoList[m_iSortedRows[row]];
 
 				// Set background color
-				if (0 != pl_info->thisplayer ) // if it is their name, draw it a different color
+				if (0 != pl_info->thisplayer) // if it is their name, draw it a different color
 				{
 					// Highlight this player
 					pLabel->setFgColor(Scheme::sc_white);
-					pLabel->setBgColor(	iTeamColors[ g_PlayerExtraInfo[ m_iSortedRows[row] ].teamnumber % iNumberOfTeamColors ][0],
-										iTeamColors[ g_PlayerExtraInfo[ m_iSortedRows[row] ].teamnumber % iNumberOfTeamColors ][1],
-										iTeamColors[ g_PlayerExtraInfo[ m_iSortedRows[row] ].teamnumber % iNumberOfTeamColors ][2],
-										196 );
+					pLabel->setBgColor(iTeamColors[g_PlayerExtraInfo[m_iSortedRows[row]].teamnumber % iNumberOfTeamColors][0],
+						iTeamColors[g_PlayerExtraInfo[m_iSortedRows[row]].teamnumber % iNumberOfTeamColors][1],
+						iTeamColors[g_PlayerExtraInfo[m_iSortedRows[row]].teamnumber % iNumberOfTeamColors][2],
+						196);
 				}
-				else if ( m_iSortedRows[row] == m_iLastKilledBy && 0 != m_fLastKillTime && m_fLastKillTime > gHUD.m_flTime )
+				else if (m_iSortedRows[row] == m_iLastKilledBy && 0 != m_fLastKillTime && m_fLastKillTime > gHUD.m_flTime)
 				{
 					// Killer's name
-					pLabel->setBgColor( 255,0,0, 255 - ((float)15 * (float)(m_fLastKillTime - gHUD.m_flTime)) );
+					pLabel->setBgColor(255, 0, 0, 255 - ((float)15 * (float)(m_fLastKillTime - gHUD.m_flTime)));
 				}
-			}				
+			}
 
-			// Align 
+			// Align
 			if (col == COLUMN_NAME || col == COLUMN_CLASS)
 			{
-				pLabel->setContentAlignment( vgui::Label::a_west );
+				pLabel->setContentAlignment(vgui::Label::a_west);
 			}
 			else if (col == COLUMN_TRACKER)
 			{
-				pLabel->setContentAlignment( vgui::Label::a_center );
+				pLabel->setContentAlignment(vgui::Label::a_center);
 			}
 			else
 			{
-				pLabel->setContentAlignment( vgui::Label::a_east );
+				pLabel->setContentAlignment(vgui::Label::a_east);
 			}
 
 			// Fill out with the correct data
 			strcpy(sz, "");
-			if (TEAM_NO != m_iIsATeam[row] )
+			if (TEAM_NO != m_iIsATeam[row])
 			{
 				char sz2[128];
 
 				switch (col)
 				{
 				case COLUMN_NAME:
-					if ( m_iIsATeam[row] == TEAM_SPECTATORS )
+					if (m_iIsATeam[row] == TEAM_SPECTATORS)
 					{
-						sprintf( sz2, "%s", CHudTextMessage::BufferedLocaliseTextString( "#Spectators" ) );
+						sprintf(sz2, "%s", CHudTextMessage::BufferedLocaliseTextString("#Spectators"));
 					}
 					else
 					{
-						sprintf( sz2, "%s", gViewPort->GetTeamName(team_info->teamnumber) );
+						sprintf(sz2, "%s", gViewPort->GetTeamName(team_info->teamnumber));
 					}
 
 					strcpy(sz, sz2);
 
 					// Append the number of players
-					if ( m_iIsATeam[row] == TEAM_YES )
+					if (m_iIsATeam[row] == TEAM_YES)
 					{
 						if (team_info->players == 1)
 						{
-							sprintf(sz2, "(%d %s)", team_info->players, CHudTextMessage::BufferedLocaliseTextString( "#Player" ) );
+							sprintf(sz2, "(%d %s)", team_info->players, CHudTextMessage::BufferedLocaliseTextString("#Player"));
 						}
 						else
 						{
-							sprintf(sz2, "(%d %s)", team_info->players, CHudTextMessage::BufferedLocaliseTextString( "#Player_plural" ) );
+							sprintf(sz2, "(%d %s)", team_info->players, CHudTextMessage::BufferedLocaliseTextString("#Player_plural"));
 						}
 
 						pLabel->setText2(sz2);
@@ -736,16 +733,16 @@ void ScorePanel::FillGrid()
 				case COLUMN_CLASS:
 					break;
 				case COLUMN_KILLS:
-					if ( m_iIsATeam[row] == TEAM_YES )
-						sprintf(sz, "%d",  team_info->frags );
+					if (m_iIsATeam[row] == TEAM_YES)
+						sprintf(sz, "%d", team_info->frags);
 					break;
 				case COLUMN_DEATHS:
-					if ( m_iIsATeam[row] == TEAM_YES )
-						sprintf(sz, "%d",  team_info->deaths );
+					if (m_iIsATeam[row] == TEAM_YES)
+						sprintf(sz, "%d", team_info->deaths);
 					break;
 				case COLUMN_LATENCY:
-					if ( m_iIsATeam[row] == TEAM_YES )
-						sprintf(sz, "%d", team_info->ping );
+					if (m_iIsATeam[row] == TEAM_YES)
+						sprintf(sz, "%d", team_info->ping);
 					break;
 				default:
 					break;
@@ -777,6 +774,7 @@ void ScorePanel::FillGrid()
 					sz[0] = 0;
 					GetClientVoiceMgr()->UpdateSpeakerImage(pLabel, m_iSortedRows[row]);
 					break;
+					/*
 				case COLUMN_CLASS:
 					// No class for other team's members (unless allied or spectator)
 					if ( gViewPort && EV_TFC_IsAllyTeam( g_iTeamNumber, g_PlayerExtraInfo[ m_iSortedRows[row] ].teamnumber )  )
@@ -805,7 +803,7 @@ void ScorePanel::FillGrid()
 						strcpy(sz, "");
 					}
 					break;
-
+					*/
 				case COLUMN_TRACKER:
 					/*
 					if (g_pTrackerUser)
@@ -824,13 +822,13 @@ void ScorePanel::FillGrid()
 					break;
 
 				case COLUMN_KILLS:
-					sprintf(sz, "%d",  g_PlayerExtraInfo[ m_iSortedRows[row] ].frags );
+					sprintf(sz, "%d", g_PlayerExtraInfo[m_iSortedRows[row]].frags);
 					break;
 				case COLUMN_DEATHS:
-					sprintf(sz, "%d",  g_PlayerExtraInfo[ m_iSortedRows[row] ].deaths );
+					sprintf(sz, "%d", g_PlayerExtraInfo[m_iSortedRows[row]].deaths);
 					break;
 				case COLUMN_LATENCY:
-					sprintf(sz, "%d", g_PlayerInfoList[ m_iSortedRows[row] ].ping );
+					sprintf(sz, "%d", g_PlayerInfoList[m_iSortedRows[row]].ping);
 					break;
 				default:
 					break;
@@ -841,9 +839,9 @@ void ScorePanel::FillGrid()
 		}
 	}
 
-	for(row=0; row < NUM_ROWS; row++)
+	for (row = 0; row < NUM_ROWS; row++)
 	{
-		CGrid *pGridRow = &m_PlayerGrids[row];
+		CGrid* pGridRow = &m_PlayerGrids[row];
 
 		pGridRow->AutoSetRowHeights();
 		pGridRow->setSize(PanelWidth(pGridRow), pGridRow->CalcDrawHeight());
@@ -854,7 +852,6 @@ void ScorePanel::FillGrid()
 	m_PlayerList.getSize(x, y);
 	m_PlayerList.setSize(x, y);
 }
-#endif
 
 //-----------------------------------------------------------------------------
 // Purpose: Setup highlights for player names in scoreboard
