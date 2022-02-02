@@ -68,6 +68,10 @@ add_subdirectory(external/Angelscript/sdk/angelscript/projects/cmake
 	Angelscript-binary-dir
 	EXCLUDE_FROM_ALL)
 
+# Enable multithreaded building to speed up building these a bit.
+target_compile_options(nlohmann_json_schema_validator PRIVATE $<$<CXX_COMPILER_ID:MSVC>:/MP>)
+target_compile_options(angelscript PRIVATE $<$<CXX_COMPILER_ID:MSVC>:/MP>)
+
 set_target_properties(
 	spdlog
 	nlohmann_json
