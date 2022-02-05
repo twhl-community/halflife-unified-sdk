@@ -5273,7 +5273,7 @@ bool CBasePlayer::Menu_Char_Input(int inp)
 
 	if (OBS_NONE != pev->iuser1)
 	{
-		pev->effects &= EF_NODRAW;
+		pev->effects &= ~EF_NODRAW;
 		pev->flags = FL_CLIENT;
 		pev->takedamage = DAMAGE_YES;
 		m_iHideHUD &= ~(HIDEHUD_HEALTH | HIDEHUD_WEAPONS);
