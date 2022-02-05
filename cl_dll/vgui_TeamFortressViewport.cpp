@@ -597,7 +597,7 @@ TeamFortressViewport::TeamFortressViewport(int x, int y, int wide, int tall) : P
 	CreateClassMenu();
 	CreateSpectatorMenu();
 	CreateStatsMenu();
-	CreateScoreBoard();
+	//CreateScoreBoard();
 	// Init command menus
 	m_iNumMenus = 0;
 	m_iCurrentTeamNumber = m_iUser1 = m_iUser2 = m_iUser3 = 0;
@@ -1436,6 +1436,13 @@ void TeamFortressViewport::UpdateSpectatorPanel()
 void TeamFortressViewport::CreateScoreBoard()
 {
 	int xdent = SBOARD_INDENT_X, ydent = SBOARD_INDENT_Y;
+
+	if (gHUD.m_Teamplay == 2)
+	{
+		xdent = XRES(52);
+	}
+
+	/*
 	if (ScreenWidth == 512)
 	{
 		xdent = SBOARD_INDENT_X_512;
@@ -1446,6 +1453,7 @@ void TeamFortressViewport::CreateScoreBoard()
 		xdent = SBOARD_INDENT_X_400;
 		ydent = SBOARD_INDENT_Y_400;
 	}
+	*/
 
 	m_pScoreBoard = new ScorePanel(xdent, ydent, ScreenWidth - (xdent * 2), ScreenHeight - (ydent * 2));
 	m_pScoreBoard->setParent(this);
