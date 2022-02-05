@@ -46,6 +46,7 @@ bool CHudFlagIcons::Init()
 
 bool CHudFlagIcons::VidInit()
 {
+	m_bIsTimer = false;
 	return true;
 }
 
