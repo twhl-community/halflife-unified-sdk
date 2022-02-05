@@ -250,7 +250,7 @@ bool CHudScoreboard::Draw(float fTime)
 		if (j > m_iNumTeams) // player is not in a team, skip to the next guy
 			continue;
 
-		if (!g_TeamInfo[j].scores_overriden)
+		if (gHUD.m_Teamplay != 2 && !g_TeamInfo[j].scores_overriden)
 		{
 			g_TeamInfo[j].frags += g_PlayerExtraInfo[i].frags;
 			g_TeamInfo[j].deaths += g_PlayerExtraInfo[i].deaths;
@@ -282,7 +282,7 @@ bool CHudScoreboard::Draw(float fTime)
 
 		for (int i = 1; i <= m_iNumTeams; i++)
 		{
-			if (g_TeamInfo[i].players < 0)
+			if (g_TeamInfo[i].players <= 0)
 				continue;
 
 			if (!g_TeamInfo[i].already_drawn && g_TeamInfo[i].frags >= highest_frags)

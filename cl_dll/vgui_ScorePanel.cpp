@@ -503,17 +503,35 @@ int ScorePanel::RebuildTeams()
 		}
 
 		if (j > m_iNumTeams)
-		{ // they aren't in a listed team, so make a new one
-			// search through for an empty team slot
-			for (j = 1; j <= m_iNumTeams; j++)
+		{
+			if (gHUD.m_Teamplay == 2)
 			{
-				if (g_TeamInfo[j].name[0] == '\0')
-					break;
-			}
-			m_iNumTeams = V_max(j, m_iNumTeams);
+				//CTF uses predefined teams with fixed team ids
+				j = g_PlayerExtraInfo[i].teamid;
 
-			strncpy(g_TeamInfo[j].name, g_PlayerExtraInfo[i].teamname, MAX_TEAM_NAME);
-			g_TeamInfo[j].players = 0;
+				if (g_TeamInfo[j].name[0] == '\0')
+				{
+					strncpy(g_TeamInfo[j].name, g_PlayerExtraInfo[i].teamname, MAX_TEAM_NAME);
+					g_TeamInfo[j].players = 0;
+				}
+
+				m_iNumTeams = V_max(j, m_iNumTeams);
+			}
+			else
+			{
+				// they aren't in a listed team, so make a new one
+				// search through for an empty team slot
+				for (j = 1; j <= m_iNumTeams; j++)
+				{
+					if (g_TeamInfo[j].name[0] == '\0')
+						break;
+				}
+
+				m_iNumTeams = V_max(j, m_iNumTeams);
+
+				strncpy(g_TeamInfo[j].name, g_PlayerExtraInfo[i].teamname, MAX_TEAM_NAME);
+				g_TeamInfo[j].players = 0;
+			}
 		}
 
 		g_TeamInfo[j].players++;
