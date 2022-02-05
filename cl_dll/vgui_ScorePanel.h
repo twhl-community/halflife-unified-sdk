@@ -281,7 +281,7 @@ public:
 
 	void SortTeams();
 	void SortPlayers(int iTeam, char* team);
-	void RebuildTeams();
+	int RebuildTeams();
 
 	void FillGrid();
 

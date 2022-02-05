@@ -471,7 +471,7 @@ void ScorePanel::SortPlayers(int iTeam, char* team)
 //-----------------------------------------------------------------------------
 // Purpose: Recalculate the existing teams in the match
 //-----------------------------------------------------------------------------
-void ScorePanel::RebuildTeams()
+int ScorePanel::RebuildTeams()
 {
 	// clear out player counts from teams
 	int i;
@@ -528,6 +528,8 @@ void ScorePanel::RebuildTeams()
 
 	// Update the scoreboard
 	Update();
+
+	return m_iNumTeams;
 }
 
 void ScorePanel::FillGrid()
