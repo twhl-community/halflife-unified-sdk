@@ -1,0 +1,12 @@
+//General
+#define EXPOSE_INTERFACE_FN
+#define EXPOSE_INTERFACE
+#define EXPOSE_SINGLE_INTERFACE_GLOBALVAR
+#define EXPOSE_SINGLE_INTERFACE
+
+//Server side macros
+#define LINK_ENTITY_TO_CLASS(mapCLassName, DLLClassName) extern "C" DLLEXPORT void mapClassName(entvars_t*) {}
+#define IMPLEMENT_SAVERESTORE(derivedClass, baseClass) bool derivedClass::Save(CSave&) {} bool derivedClass::Restore(CRestore&) {}
+
+//Client side macros
+#define DECLARE_MESSAGE(y, x) int __MsgFunc_##x(const char* pszName, int iSize, void* pbuf) {}
