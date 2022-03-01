@@ -2613,6 +2613,8 @@ pt_end:
 						gun->pev->fuser1 = V_max(gun->pev->fuser1 - gpGlobals->frametime, -0.001);
 					}
 
+					gun->DecrementTimers();
+
 					// Only decrement if not flagged as NO_DECREMENT
 					//					if ( gun->m_flPumpTime != 1000 )
 					//	{
@@ -2770,6 +2772,16 @@ ReturnSpot:
 
 void CBasePlayer::Spawn()
 {
+	m_bIsSpawning = true;
+
+	//Make sure this gets reset even if somebody adds an early return or throws an exception.
+	const CallOnDestroy resetIsSpawning{[this]()
+		{
+			//Done spawning; reset.
+			m_bIsSpawning = false;
+		}
+	};
+
 	pev->classname = MAKE_STRING("player");
 	pev->health = 100;
 	pev->armorvalue = 0;
@@ -3777,19 +3789,34 @@ void CBasePlayer::SendAmmoUpdate()
 {
 	for (int i = 0; i < MAX_AMMO_SLOTS; i++)
 	{
-		if (m_rgAmmo[i] != m_rgAmmoLast[i])
-		{
-			m_rgAmmoLast[i] = m_rgAmmo[i];
+		InternalSendSingleAmmoUpdate(i);
+	}
+}
 
-			ASSERT(m_rgAmmo[i] >= 0);
-			ASSERT(m_rgAmmo[i] < 255);
+void CBasePlayer::SendSingleAmmoUpdate(int ammoIndex)
+{
+	if (ammoIndex < 0 || ammoIndex >= MAX_AMMO_SLOTS)
+	{
+		return;
+	}
 
-			// send "Ammo" update message
-			MESSAGE_BEGIN(MSG_ONE, gmsgAmmoX, NULL, pev);
-			WRITE_BYTE(i);
-			WRITE_BYTE(V_max(V_min(m_rgAmmo[i], 254), 0)); // clamp the value to one byte
-			MESSAGE_END();
-		}
+	InternalSendSingleAmmoUpdate(ammoIndex);
+}
+
+void CBasePlayer::InternalSendSingleAmmoUpdate(int ammoIndex)
+{
+	if (m_rgAmmo[ammoIndex] != m_rgAmmoLast[ammoIndex])
+	{
+		m_rgAmmoLast[ammoIndex] = m_rgAmmo[ammoIndex];
+
+		ASSERT(m_rgAmmo[ammoIndex] >= 0);
+		ASSERT(m_rgAmmo[ammoIndex] < 255);
+
+		// send "Ammo" update message
+		MESSAGE_BEGIN(MSG_ONE, gmsgAmmoX, NULL, pev);
+		WRITE_BYTE(ammoIndex);
+		WRITE_BYTE(V_max(V_min(m_rgAmmo[ammoIndex], 254), 0)); // clamp the value to one byte
+		MESSAGE_END();
 	}
 }
 
