@@ -79,19 +79,6 @@ void CShockRifle::Spawn()
 	pev->framerate = 1;
 }
 
-bool CShockRifle::AddToPlayer(CBasePlayer* pPlayer)
-{
-	if (BaseClass::AddToPlayer(pPlayer))
-	{
-		MESSAGE_BEGIN(MSG_ONE, gmsgWeapPickup, nullptr, pPlayer->edict());
-		WRITE_BYTE(m_iId);
-		MESSAGE_END();
-		return true;
-	}
-
-	return false;
-}
-
 void CShockRifle::AttachToPlayer(CBasePlayer* pPlayer)
 {
 	if (0 == m_iDefaultAmmo)

@@ -50,18 +50,6 @@ void CPython::IncrementAmmo(CBasePlayer* pPlayer)
 	}
 }
 
-bool CPython::AddToPlayer(CBasePlayer* pPlayer)
-{
-	if (CBasePlayerWeapon::AddToPlayer(pPlayer))
-	{
-		MESSAGE_BEGIN(MSG_ONE, gmsgWeapPickup, NULL, pPlayer->pev);
-		WRITE_BYTE(m_iId);
-		MESSAGE_END();
-		return true;
-	}
-	return false;
-}
-
 void CPython::Spawn()
 {
 	pev->classname = MAKE_STRING("weapon_357"); // hack to allow for old names

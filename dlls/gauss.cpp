@@ -78,18 +78,6 @@ void CGauss::Precache()
 	m_usGaussSpin = PRECACHE_EVENT(1, "events/gaussspin.sc");
 }
 
-bool CGauss::AddToPlayer(CBasePlayer* pPlayer)
-{
-	if (CBasePlayerWeapon::AddToPlayer(pPlayer))
-	{
-		MESSAGE_BEGIN(MSG_ONE, gmsgWeapPickup, NULL, pPlayer->pev);
-		WRITE_BYTE(m_iId);
-		MESSAGE_END();
-		return true;
-	}
-	return false;
-}
-
 bool CGauss::GetItemInfo(ItemInfo* p)
 {
 	p->pszName = STRING(pev->classname);
@@ -168,6 +156,8 @@ void CGauss::SecondaryAttack()
 		if (m_fInAttack != 0)
 		{
 			EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/electro4.wav", 1.0, ATTN_NORM, 0, 80 + RANDOM_LONG(0, 0x3f));
+			//Have to send to the host as well because the client will predict the frame with m_fInAttack == 0
+			SendStopEvent(true);
 			SendWeaponAnim(GAUSS_IDLE);
 			m_fInAttack = 0;
 		}
@@ -280,6 +270,8 @@ void CGauss::SecondaryAttack()
 			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 1.0;
 			m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 1.0;
 
+			SendStopEvent(false);
+
 #ifndef CLIENT_DLL
 			m_pPlayer->TakeDamage(VARS(eoNullEntity), VARS(eoNullEntity), 50, DMG_SHOCK);
 			UTIL_ScreenFade(m_pPlayer, Vector(255, 128, 0), 2, 0.5, 128, FFADE_IN);
@@ -379,12 +371,7 @@ void CGauss::Fire(Vector vecOrigSrc, Vector vecDir, float flDamage)
 	PLAYBACK_EVENT_FULL(UTIL_DefaultPlaybackFlags(), m_pPlayer->edict(), m_usGaussFire, 0.0,
 		m_pPlayer->pev->origin, m_pPlayer->pev->angles, flDamage, 0.0, 0, 0, m_fPrimaryFire ? 1 : 0, 0);
 
-	// This reliable event is used to stop the spinning sound
-	// It's delayed by a fraction of second to make sure it is delayed by 1 frame on the client
-	// It's sent reliably anyway, which could lead to other delays
-
-	PLAYBACK_EVENT_FULL(UTIL_DefaultPlaybackFlags() | FEV_RELIABLE | FEV_GLOBAL, m_pPlayer->edict(), m_usGaussFire, 0.01,
-		m_pPlayer->pev->origin, m_pPlayer->pev->angles, 0.0, 0.0, 0, 0, 0, 1);
+	SendStopEvent(false);
 
 
 	/*ALERT( at_console, "%f %f %f\n%f %f %f\n", 
@@ -592,8 +579,21 @@ void CGauss::WeaponIdle()
 	}
 }
 
+void CGauss::SendStopEvent(bool sendToHost)
+{
+	// This reliable event is used to stop the spinning sound
+	// It's delayed by a fraction of second to make sure it is delayed by 1 frame on the client
+	// It's sent reliably anyway, which could lead to other delays
 
+	int flags = FEV_RELIABLE | FEV_GLOBAL;
 
+	if (!sendToHost)
+	{
+		flags |= UTIL_DefaultPlaybackFlags();
+	}
+
+	PLAYBACK_EVENT_FULL(flags, m_pPlayer->edict(), m_usGaussFire, 0.01, m_pPlayer->pev->origin, m_pPlayer->pev->angles, 0.0, 0.0, 0, 0, 0, 1);
+}
 
 
 

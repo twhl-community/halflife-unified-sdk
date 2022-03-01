@@ -74,20 +74,6 @@ void CM249::Spawn()
 	FallInit(); // get ready to fall down.
 }
 
-bool CM249::AddToPlayer(CBasePlayer* pPlayer)
-{
-	if (BaseClass::AddToPlayer(pPlayer))
-	{
-		MESSAGE_BEGIN(MSG_ONE, gmsgWeapPickup, nullptr, pPlayer->edict());
-		WRITE_BYTE(m_iId);
-		MESSAGE_END();
-
-		return true;
-	}
-
-	return false;
-}
-
 bool CM249::Deploy()
 {
 	return DefaultDeploy("models/v_saw.mdl", "models/p_saw.mdl", M249_DRAW, "mp5");

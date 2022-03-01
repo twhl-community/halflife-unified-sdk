@@ -420,6 +420,10 @@ private:
 	bool m_bIsClimbing = false;
 
 	bool m_bRestored;
+
+public:
+	//True if the player is currently spawning.
+	bool m_bIsSpawning = false;
 };
 
 inline void CBasePlayer::SetWeaponBit(int id)
