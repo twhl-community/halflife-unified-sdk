@@ -336,7 +336,12 @@ public:
 
 	int GiveAmmo(int iAmount, const char* szName, int iMax) override;
 	void SendAmmoUpdate();
+	void SendSingleAmmoUpdate(int ammoIndex);
 
+private:
+	void InternalSendSingleAmmoUpdate(int ammoIndex);
+
+public:
 	void WaterMove();
 	void EXPORT PlayerDeathThink();
 	void PlayerUse();
