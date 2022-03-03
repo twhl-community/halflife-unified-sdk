@@ -758,7 +758,7 @@ struct CallOnDestroy
 {
 	const Func Function;
 
-	CallOnDestroy(Func&& function)
+	explicit CallOnDestroy(Func&& function)
 		: Function(function)
 	{
 	}
