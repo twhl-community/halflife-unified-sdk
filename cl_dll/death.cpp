@@ -67,6 +67,11 @@ float* GetClientColor(int clientIndex)
 	case 0:
 		return g_ColorYellow;
 
+		//Opposing Force doesn't send the teamnumber in ScoreInfo, so a -1 is read by the client.
+		//Make sure this uses the correct color.
+	case -1:
+		return nullptr;
+
 	default:
 		return g_ColorGrey;
 	}
