@@ -653,16 +653,16 @@ void CHalfLifeCTFplay::InitHUD(CBasePlayer* pPlayer)
 
 	for (int iPlayer = 1; iPlayer <= gpGlobals->maxClients; ++iPlayer)
 	{
-		auto pPlayer = static_cast<CBasePlayer*>(UTIL_PlayerByIndex(iPlayer));
+		auto otherPlayer = static_cast<CBasePlayer*>(UTIL_PlayerByIndex(iPlayer));
 
-		if (pPlayer)
+		if (otherPlayer)
 		{
-			if (IsValidTeam(pPlayer->TeamID()))
+			if (IsValidTeam(otherPlayer->TeamID()))
 			{
 				MESSAGE_BEGIN(MSG_ONE, gmsgTeamInfo, nullptr, pPlayer->edict());
-				g_engfuncs.pfnWriteByte(pPlayer->entindex());
-				g_engfuncs.pfnWriteString(pPlayer->TeamID());
-				g_engfuncs.pfnWriteByte((int)pPlayer->m_iTeamNum);
+				g_engfuncs.pfnWriteByte(otherPlayer->entindex());
+				g_engfuncs.pfnWriteString(otherPlayer->TeamID());
+				g_engfuncs.pfnWriteByte((int)otherPlayer->m_iTeamNum);
 				g_engfuncs.pfnMessageEnd();
 			}
 		}
