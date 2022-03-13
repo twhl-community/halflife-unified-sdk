@@ -5093,6 +5093,27 @@ bool CBasePlayer::SwitchWeapon(CBasePlayerItem* pWeapon)
 	return true;
 }
 
+void CBasePlayer::EquipWeapon()
+{
+	if (m_pActiveItem && (!FStringNull(pev->viewmodel) || !FStringNull(pev->weaponmodel)))
+	{
+		if ((!FStringNull(pev->viewmodel) || !FStringNull(pev->weaponmodel)))
+		{
+			//Already have a weapon equipped and deployed.
+			return;
+		}
+
+		//Have a weapon equipped, but not deployed.
+		if (m_pActiveItem->CanDeploy() && m_pActiveItem->Deploy())
+		{
+			return;
+		}
+	}
+
+	//No weapon equipped or couldn't deploy it, find a suitable alternative.
+	g_pGameRules->GetNextBestWeapon(this, m_pActiveItem, true);
+}
+
 void CBasePlayer::Player_Menu()
 {
 	if (g_pGameRules->IsCTF())
