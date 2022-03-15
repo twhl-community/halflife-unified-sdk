@@ -814,7 +814,7 @@ void CBlackOpsOsprey::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector
 			return;
 		else
 			m_flRightHealth -= flDamage;
-		m_iDoLeftSmokePuff = 3 + (flDamage / 5.0);
+		m_iDoRightSmokePuff = 3 + (flDamage / 5.0);
 	}
 
 	if (ptr->iHitgroup == 2)
@@ -823,7 +823,7 @@ void CBlackOpsOsprey::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector
 			return;
 		else
 			m_flLeftHealth -= flDamage;
-		m_iDoRightSmokePuff = 3 + (flDamage / 5.0);
+		m_iDoLeftSmokePuff = 3 + (flDamage / 5.0);
 	}
 
 	// hit hard, hits cockpit, hits engines
