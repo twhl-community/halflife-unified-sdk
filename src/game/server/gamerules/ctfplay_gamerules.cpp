@@ -1246,6 +1246,10 @@ void CHalfLifeCTFplay::ChangePlayerTeam(CBasePlayer* pPlayer, const char* pCharN
 		{
 			team = CTFTeam::OpposingForce;
 		}
+		else
+		{
+			return;
+		}
 
 		if (pPlayer->m_iTeamNum != team)
 		{
