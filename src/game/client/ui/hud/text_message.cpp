@@ -43,7 +43,10 @@ bool CHudTextMessage::Init()
 char* CHudTextMessage::LocaliseTextString(const char* msg, char* dst_buffer, int buffer_size)
 {
 	char* dst = dst_buffer;
-	for (const char* src = msg; *src != 0 && buffer_size > 0; buffer_size--)
+	int remainingBufferSize = buffer_size;
+
+	for (const char* src = msg; *src != 0 && remainingBufferSize > 0; remainingBufferSize--)
+
 	{
 		if (*src == '#')
 		{
