@@ -1337,7 +1337,7 @@ void CHalfLifeCTFplay::ChangePlayerTeam(CBasePlayer* pPlayer, const char* pCharN
 		pPlayer->m_iClientHealth = 100;
 
 		g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgHealth, nullptr, pPlayer->edict());
-		g_engfuncs.pfnWriteByte(pPlayer->m_iClientHealth);
+		g_engfuncs.pfnWriteShort(pPlayer->m_iClientHealth);
 		g_engfuncs.pfnMessageEnd();
 
 		g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgCurWeapon, nullptr, pPlayer->edict());
