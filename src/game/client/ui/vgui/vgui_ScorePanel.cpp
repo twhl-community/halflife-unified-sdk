@@ -36,6 +36,22 @@ extern extra_player_info_t g_PlayerExtraInfo[MAX_PLAYERS_HUD + 1]; // additional
 team_info_t g_TeamInfo[MAX_TEAMS + 1];
 int g_IsSpectator[MAX_PLAYERS_HUD + 1];
 
+constexpr int ScoreColorsFG[5][3] =
+	{
+		{255, 255, 255},
+		{246, 151, 0},
+		{0, 151, 0},
+		{227, 203, 46},
+		{143, 215, 142}};
+
+constexpr int ScoreColorsBG[5][3] =
+	{
+		{0, 0, 0},
+		{255, 160, 0},
+		{0, 160, 0},
+		{236, 212, 48},
+		{68, 199, 42}};
+
 bool HUD_IsGame(const char* game);
 bool EV_TFC_IsAllyTeam(int iTeam1, int iTeam2);
 
@@ -654,9 +670,9 @@ void ScorePanel::FillGrid()
 				team_info = &g_TeamInfo[m_iSortedRows[row]];
 
 				// team color text for team names
-				pLabel->setFgColor(iTeamColors[team_info->teamnumber % iNumberOfTeamColors][0],
-					iTeamColors[team_info->teamnumber % iNumberOfTeamColors][1],
-					iTeamColors[team_info->teamnumber % iNumberOfTeamColors][2],
+				pLabel->setFgColor(ScoreColorsBG[team_info->teamnumber % iNumberOfTeamColors][0],
+					ScoreColorsBG[team_info->teamnumber % iNumberOfTeamColors][1],
+					ScoreColorsBG[team_info->teamnumber % iNumberOfTeamColors][2],
 					0);
 
 				// different height for team header rows
@@ -671,9 +687,9 @@ void ScorePanel::FillGrid()
 				pGridRow->SetRowUnderline(0,
 					true,
 					YRES(3),
-					iTeamColors[team_info->teamnumber % iNumberOfTeamColors][0],
-					iTeamColors[team_info->teamnumber % iNumberOfTeamColors][1],
-					iTeamColors[team_info->teamnumber % iNumberOfTeamColors][2],
+					ScoreColorsBG[team_info->teamnumber % iNumberOfTeamColors][0],
+					ScoreColorsBG[team_info->teamnumber % iNumberOfTeamColors][1],
+					ScoreColorsBG[team_info->teamnumber % iNumberOfTeamColors][2],
 					0);
 			}
 			else if (m_iIsATeam[row] == TEAM_SPECTATORS)
@@ -695,9 +711,9 @@ void ScorePanel::FillGrid()
 			else
 			{
 				// team color text for player names
-				pLabel->setFgColor(iTeamColors[g_PlayerExtraInfo[m_iSortedRows[row]].teamnumber % iNumberOfTeamColors][0],
-					iTeamColors[g_PlayerExtraInfo[m_iSortedRows[row]].teamnumber % iNumberOfTeamColors][1],
-					iTeamColors[g_PlayerExtraInfo[m_iSortedRows[row]].teamnumber % iNumberOfTeamColors][2],
+				pLabel->setFgColor(ScoreColorsBG[g_PlayerExtraInfo[m_iSortedRows[row]].teamid % iNumberOfTeamColors][0],
+					ScoreColorsBG[g_PlayerExtraInfo[m_iSortedRows[row]].teamid % iNumberOfTeamColors][1],
+					ScoreColorsBG[g_PlayerExtraInfo[m_iSortedRows[row]].teamid % iNumberOfTeamColors][2],
 					0);
 
 				// Get the player's data
@@ -708,9 +724,9 @@ void ScorePanel::FillGrid()
 				{
 					// Highlight this player
 					pLabel->setFgColor(Scheme::sc_white);
-					pLabel->setBgColor(iTeamColors[g_PlayerExtraInfo[m_iSortedRows[row]].teamnumber % iNumberOfTeamColors][0],
-						iTeamColors[g_PlayerExtraInfo[m_iSortedRows[row]].teamnumber % iNumberOfTeamColors][1],
-						iTeamColors[g_PlayerExtraInfo[m_iSortedRows[row]].teamnumber % iNumberOfTeamColors][2],
+					pLabel->setBgColor(ScoreColorsBG[g_PlayerExtraInfo[m_iSortedRows[row]].teamid % iNumberOfTeamColors][0],
+						ScoreColorsBG[g_PlayerExtraInfo[m_iSortedRows[row]].teamid % iNumberOfTeamColors][1],
+						ScoreColorsBG[g_PlayerExtraInfo[m_iSortedRows[row]].teamid % iNumberOfTeamColors][2],
 						196);
 				}
 				else if (m_iSortedRows[row] == m_iLastKilledBy && 0 != m_fLastKillTime && m_fLastKillTime > gHUD.m_flTime)
