@@ -426,7 +426,60 @@ void CTFGoalFlag::ScoreFlagTouch(CBasePlayer* pPlayer)
 		}
 		else
 		{
-			if (static_cast<int>(pPlayer->m_iTeamNum) != m_iGoalNum)
+			if (static_cast<int>(pPlayer->m_iTeamNum) == m_iGoalNum)
+			{
+				UTIL_ClientPrintAll(HUD_PRINTNOTIFY, STRING(pPlayer->pev->netname));
+				UTIL_ClientPrintAll(HUD_PRINTNOTIFY, "#CTFFlagScorerBM");
+				UTIL_ClientPrintAll(HUD_PRINTNOTIFY, "\n");
+
+				UTIL_LogPrintf("\"%s<%i><%u><%s>\" triggered \"CapturedFlag\"\n",
+					STRING(pPlayer->pev->netname),
+					g_engfuncs.pfnGetPlayerUserId(pPlayer->edict()),
+					g_engfuncs.pfnGetPlayerWONId(pPlayer->edict()),
+					GetTeamName(pPlayer->edict()));
+
+				++teamscores[static_cast<int>(pPlayer->m_iTeamNum) - 1];
+
+				++pPlayer->m_iFlagCaptures;
+				pPlayer->m_iCTFScore += 10;
+				pPlayer->m_iOffense += 10;
+
+			g_engfuncs.pfnMessageBegin(MSG_ALL, gmsgCTFScore, nullptr, nullptr);
+				g_engfuncs.pfnWriteByte(pPlayer->entindex());
+				g_engfuncs.pfnWriteByte(pPlayer->m_iCTFScore);
+				g_engfuncs.pfnMessageEnd();
+
+				ClientPrint(pPlayer->pev, HUD_PRINTTALK, "#CTFScorePoints");
+
+			g_engfuncs.pfnMessageBegin(MSG_ALL, gmsgScoreInfo, nullptr, nullptr);
+				g_engfuncs.pfnWriteByte(pPlayer->entindex());
+				g_engfuncs.pfnWriteShort(pPlayer->pev->frags);
+				g_engfuncs.pfnWriteShort(pPlayer->m_iDeaths);
+				g_engfuncs.pfnMessageEnd();
+
+				UTIL_ClientPrintAll(HUD_PRINTNOTIFY, "#CTFTeamBM");
+				UTIL_ClientPrintAll(HUD_PRINTNOTIFY, UTIL_VarArgs(": %d\n", teamscores[0]));
+				UTIL_ClientPrintAll(HUD_PRINTNOTIFY, "#CTFTeamOF");
+				UTIL_ClientPrintAll(HUD_PRINTNOTIFY, UTIL_VarArgs(": %d\n", teamscores[1]));
+
+				if (m_nReturnPlayer > 0 && g_flCaptureAssistTime > gpGlobals->time - m_flReturnTime)
+				{
+					auto returnPlayer = UTIL_PlayerByIndex(m_nReturnPlayer);
+
+					++pPlayer->m_iCTFScore;
+					++pPlayer->m_iOffense;
+
+				g_engfuncs.pfnMessageBegin(MSG_ALL, gmsgCTFScore, nullptr, nullptr);
+					g_engfuncs.pfnWriteByte(pPlayer->entindex());
+					g_engfuncs.pfnWriteByte(pPlayer->m_iCTFScore);
+					g_engfuncs.pfnMessageEnd();
+
+					ClientPrint(returnPlayer->pev, HUD_PRINTTALK, "#CTFScorePoint");
+					UTIL_ClientPrintAll(HUD_PRINTNOTIFY, UTIL_VarArgs("%s", STRING(returnPlayer->pev->netname)));
+					UTIL_ClientPrintAll(HUD_PRINTNOTIFY, "#CTFFlagAssistOF");
+				}
+			}
+			else
 			{
 				UTIL_ClientPrintAll(HUD_PRINTNOTIFY, STRING(pPlayer->pev->netname));
 				UTIL_ClientPrintAll(HUD_PRINTNOTIFY, "#CTFFlagGetOF");
@@ -437,57 +490,6 @@ void CTFGoalFlag::ScoreFlagTouch(CBasePlayer* pPlayer)
 					g_engfuncs.pfnGetPlayerUserId(pPlayer->edict()),
 					g_engfuncs.pfnGetPlayerWONId(pPlayer->edict()),
 					GetTeamName(pPlayer->edict()));
-			}
-
-			UTIL_ClientPrintAll(HUD_PRINTNOTIFY, STRING(pPlayer->pev->netname));
-			UTIL_ClientPrintAll(HUD_PRINTNOTIFY, "#CTFFlagScorerBM");
-			UTIL_ClientPrintAll(HUD_PRINTNOTIFY, "\n");
-
-			UTIL_LogPrintf("\"%s<%i><%u><%s>\" triggered \"CapturedFlag\"\n",
-				STRING(pPlayer->pev->netname),
-				g_engfuncs.pfnGetPlayerUserId(pPlayer->edict()),
-				g_engfuncs.pfnGetPlayerWONId(pPlayer->edict()),
-				GetTeamName(pPlayer->edict()));
-
-			++teamscores[static_cast<int>(pPlayer->m_iTeamNum) - 1];
-
-			++pPlayer->m_iFlagCaptures;
-			pPlayer->m_iCTFScore += 10;
-			pPlayer->m_iOffense += 10;
-
-			g_engfuncs.pfnMessageBegin(MSG_ALL, gmsgCTFScore, nullptr, nullptr);
-			g_engfuncs.pfnWriteByte(pPlayer->entindex());
-			g_engfuncs.pfnWriteByte(pPlayer->m_iCTFScore);
-			g_engfuncs.pfnMessageEnd();
-
-			ClientPrint(pPlayer->pev, HUD_PRINTTALK, "#CTFScorePoints");
-
-			g_engfuncs.pfnMessageBegin(MSG_ALL, gmsgScoreInfo, nullptr, nullptr);
-			g_engfuncs.pfnWriteByte(pPlayer->entindex());
-			g_engfuncs.pfnWriteShort(pPlayer->pev->frags);
-			g_engfuncs.pfnWriteShort(pPlayer->m_iDeaths);
-			g_engfuncs.pfnMessageEnd();
-
-			UTIL_ClientPrintAll(HUD_PRINTNOTIFY, "#CTFTeamBM");
-			UTIL_ClientPrintAll(HUD_PRINTNOTIFY, UTIL_VarArgs(": %d\n", teamscores[0]));
-			UTIL_ClientPrintAll(HUD_PRINTNOTIFY, "#CTFTeamOF");
-			UTIL_ClientPrintAll(HUD_PRINTNOTIFY, UTIL_VarArgs(": %d\n", teamscores[1]));
-
-			if (m_nReturnPlayer > 0 && g_flCaptureAssistTime > gpGlobals->time - m_flReturnTime)
-			{
-				auto returnPlayer = UTIL_PlayerByIndex(m_nReturnPlayer);
-
-				++pPlayer->m_iCTFScore;
-				++pPlayer->m_iOffense;
-
-				g_engfuncs.pfnMessageBegin(MSG_ALL, gmsgCTFScore, nullptr, nullptr);
-				g_engfuncs.pfnWriteByte(pPlayer->entindex());
-				g_engfuncs.pfnWriteByte(pPlayer->m_iCTFScore);
-				g_engfuncs.pfnMessageEnd();
-
-				ClientPrint(returnPlayer->pev, HUD_PRINTTALK, "#CTFScorePoint");
-				UTIL_ClientPrintAll(HUD_PRINTNOTIFY, UTIL_VarArgs("%s", STRING(returnPlayer->pev->netname)));
-				UTIL_ClientPrintAll(HUD_PRINTNOTIFY, "#CTFFlagAssistOF");
 			}
 		}
 	}
