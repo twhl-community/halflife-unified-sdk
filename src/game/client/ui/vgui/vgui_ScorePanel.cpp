@@ -29,6 +29,7 @@
 #include "vgui_loadtga.h"
 #include "voice_status.h"
 #include "vgui_SpectatorPanel.h"
+#include "vgui_StatsMenuPanel.h"
 
 extern hud_player_info_t g_PlayerInfoList[MAX_PLAYERS_HUD + 1];	   // player info from the engine
 extern extra_player_info_t g_PlayerExtraInfo[MAX_PLAYERS_HUD + 1]; // additional player info sent directly to the client dll
@@ -221,6 +222,7 @@ ScorePanel::ScorePanel(int x, int y, int wide, int tall) : Panel(x, y, wide, tal
 	m_HitTestPanel.setBounds(0, 0, wide, tall);
 	m_HitTestPanel.addInputSignal(this);
 
+	/*
 	m_pCloseButton = new CommandButton("x", wide - XRES(12 + 4), YRES(2), XRES(12), YRES(12));
 	m_pCloseButton->setParent(this);
 	m_pCloseButton->addActionSignal(new CMenuHandler_StringCommandWatch("-showscores", true));
@@ -229,7 +231,11 @@ ScorePanel::ScorePanel(int x, int y, int wide, int tall) : Panel(x, y, wide, tal
 	m_pCloseButton->setFont(tfont);
 	m_pCloseButton->setBoundKey((char)255);
 	m_pCloseButton->setContentAlignment(Label::a_center);
+	*/
 
+	m_pStatsButton = new CommandButton(CHudTextMessage::BufferedLocaliseTextString("#CTFMenu_Stats"), wide - XRES(124), YRES(0), XRES(124), YRES(24));
+	m_pStatsButton->setParent(this);
+	m_pStatsButton->addActionSignal(new CMenuHandler_ScoreStatWindow(MENU_STATSMENU));
 
 	Initialize();
 }
@@ -294,6 +300,7 @@ void ScorePanel::Update()
 
 	FillGrid();
 
+	/*
 	if (gViewPort->m_pSpectatorPanel->m_menuVisible)
 	{
 		m_pCloseButton->setVisible(true);
@@ -302,6 +309,7 @@ void ScorePanel::Update()
 	{
 		m_pCloseButton->setVisible(false);
 	}
+	*/
 }
 
 //-----------------------------------------------------------------------------
@@ -474,9 +482,21 @@ int ScorePanel::RebuildTeams()
 {
 	// clear out player counts from teams
 	int i;
-	for (i = 1; i <= m_iNumTeams; i++)
+
+	if (gHUD.m_Teamplay == 2)
 	{
-		g_TeamInfo[i].players = 0;
+		//Hardcoded to 2 because m_iNumTeams may not be the correct value at this time
+		for (i = 1; i <= 2; i++)
+		{
+			g_TeamInfo[i].players = 0;
+		}
+	}
+	else
+	{
+		for (i = 1; i <= m_iNumTeams; i++)
+		{
+			g_TeamInfo[i].players = 0;
+		}
 	}
 
 	// rebuild the team list
@@ -490,33 +510,34 @@ int ScorePanel::RebuildTeams()
 		if (g_PlayerExtraInfo[i].teamname[0] == 0)
 			continue; // skip over players who are not in a team
 
-		// is this player in an existing team?
 		int j;
-		for (j = 1; j <= m_iNumTeams; j++)
+
+		if (gHUD.m_Teamplay == 2)
 		{
+			//CTF uses predefined teams with fixed team ids
+			j = g_PlayerExtraInfo[i].teamid;
+
 			if (g_TeamInfo[j].name[0] == '\0')
-				break;
-
-			if (!stricmp(g_PlayerExtraInfo[i].teamname, g_TeamInfo[j].name))
-				break;
-		}
-
-		if (j > m_iNumTeams)
-		{
-			if (gHUD.m_Teamplay == 2)
 			{
-				//CTF uses predefined teams with fixed team ids
-				j = g_PlayerExtraInfo[i].teamid;
-
-				if (g_TeamInfo[j].name[0] == '\0')
-				{
-					strncpy(g_TeamInfo[j].name, g_PlayerExtraInfo[i].teamname, MAX_TEAM_NAME);
-					g_TeamInfo[j].players = 0;
-				}
-
-				m_iNumTeams = V_max(j, m_iNumTeams);
+				strncpy(g_TeamInfo[j].name, g_PlayerExtraInfo[i].teamname, MAX_TEAM_NAME);
+				g_TeamInfo[j].players = 0;
 			}
-			else
+
+			m_iNumTeams = V_max(j, m_iNumTeams);
+		}
+		else
+		{
+			// is this player in an existing team?
+			for (j = 1; j <= m_iNumTeams; j++)
+			{
+				if (g_TeamInfo[j].name[0] == '\0')
+					break;
+
+				if (!stricmp(g_PlayerExtraInfo[i].teamname, g_TeamInfo[j].name))
+					break;
+			}
+
+			if (j > m_iNumTeams)
 			{
 				// they aren't in a listed team, so make a new one
 				// search through for an empty team slot
@@ -536,8 +557,10 @@ int ScorePanel::RebuildTeams()
 		g_TeamInfo[j].players++;
 	}
 
+	const int teamsToCheck = gHUD.m_Teamplay == 2 ? 2 : m_iNumTeams;
+
 	// clear out any empty teams
-	for (i = 1; i <= m_iNumTeams; i++)
+	for (i = 1; i <= teamsToCheck; i++)
 	{
 		if (g_TeamInfo[i].players < 1)
 			memset(&g_TeamInfo[i], 0, sizeof(team_info_t));
