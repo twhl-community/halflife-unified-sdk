@@ -626,10 +626,12 @@ void HUD_WeaponsPostThink(local_state_s* from, local_state_s* to, usercmd_t* cmd
 
 	memset(&nulldata, 0, sizeof(nulldata));
 
-	HUD_InitClientWeapons();
-
 	// Get current clock
-	gpGlobals->time = time;
+	//Use actual time instead of prediction frame time because that time value breaks anything that uses absolute time values.
+	gpGlobals->time = gEngfuncs.GetClientTime(); //time;
+
+	//Lets weapons code use frametime to decrement timers and stuff.
+	gpGlobals->frametime = cmd->msec / 1000.0f;
 
 	// Fill in data based on selected weapon
 	// FIXME, make this a method in each weapon?  where you pass in an entity_state_t *?
@@ -868,6 +870,8 @@ void HUD_WeaponsPostThink(local_state_s* from, local_state_s* to, usercmd_t* cmd
 		to->client.vuser4[1] = player.m_rgAmmo[pCurrent->m_iPrimaryAmmoType];
 		to->client.vuser4[2] = player.m_rgAmmo[pCurrent->m_iSecondaryAmmoType];
 
+		pCurrent->DecrementTimers();
+
 		pCurrent->GetWeaponData(*pto);
 
 		/*		if ( pto->m_flPumpTime != -9999 )
@@ -950,6 +954,9 @@ void DLLEXPORT HUD_PostRunCmd(struct local_state_s* from, struct local_state_s* 
 	//	RecClPostRunCmd(from, to, cmd, runfuncs, time, random_seed);
 
 	g_runfuncs = 0 != runfuncs;
+
+	//Event code depends on this stuff, so always initialize it.
+	HUD_InitClientWeapons();
 
 #if defined(CLIENT_WEAPONS)
 	if (cl_lw && 0 != cl_lw->value)

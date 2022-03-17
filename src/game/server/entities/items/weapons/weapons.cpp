@@ -643,6 +643,14 @@ bool CBasePlayerWeapon::AddDuplicate(CBasePlayerItem* pOriginal)
 
 bool CBasePlayerWeapon::AddToPlayer(CBasePlayer* pPlayer)
 {
+	if ((iFlags() & ITEM_FLAG_EXHAUSTIBLE) != 0 && m_iDefaultAmmo == 0 && m_iClip <= 0)
+	{
+		//This is an exhaustible weapon that has no ammo left. Don't add it, queue it up for destruction instead.
+		SetThink(&CSatchel::DestroyItem);
+		pev->nextthink = gpGlobals->time + 0.1;
+		return false;
+	}
+
 	bool bResult = CBasePlayerItem::AddToPlayer(pPlayer);
 
 	pPlayer->SetWeaponBit(m_iId);
@@ -653,10 +661,36 @@ bool CBasePlayerWeapon::AddToPlayer(CBasePlayer* pPlayer)
 		m_iSecondaryAmmoType = pPlayer->GetAmmoIndex(pszAmmo2());
 	}
 
+	if (!bResult)
+	{
+		return false;
+	}
 
-	if (bResult)
-		return AddWeapon();
-	return false;
+	if (!AddWeapon())
+	{
+		return false;
+	}
+
+	//Immediately update the ammo HUD so weapon pickup isn't sometimes red because the HUD doesn't know about regenerating/free ammo yet.
+	if (-1 != m_iPrimaryAmmoType)
+	{
+		m_pPlayer->SendSingleAmmoUpdate(CBasePlayer::GetAmmoIndex(pszAmmo1()));
+	}
+
+	if (-1 != m_iSecondaryAmmoType)
+	{
+		m_pPlayer->SendSingleAmmoUpdate(CBasePlayer::GetAmmoIndex(pszAmmo2()));
+	}
+
+	//Don't show weapon pickup if we're spawning or if it's an exhaustible weapon (will show ammo pickup instead).
+	if (!m_pPlayer->m_bIsSpawning && (iFlags() & ITEM_FLAG_EXHAUSTIBLE) == 0)
+	{
+		MESSAGE_BEGIN(MSG_ONE, gmsgWeapPickup, NULL, pPlayer->pev);
+		WRITE_BYTE(m_iId);
+		MESSAGE_END();
+	}
+
+	return true;
 }
 
 bool CBasePlayerWeapon::UpdateClientData(CBasePlayer* pPlayer)

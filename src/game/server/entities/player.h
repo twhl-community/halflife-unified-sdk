@@ -287,6 +287,11 @@ public:
 	void RemoveAllItems(bool removeSuit);
 	bool SwitchWeapon(CBasePlayerItem* pWeapon);
 
+	/**
+	*	@brief Equips an appropriate weapon for the player if they don't have one equipped already.
+	*/
+	void EquipWeapon();
+
 	void SetWeaponBit(int id);
 	void ClearWeaponBit(int id);
 
@@ -347,7 +352,12 @@ public:
 
 	int GiveAmmo(int iAmount, const char* szName, int iMax) override;
 	void SendAmmoUpdate();
+	void SendSingleAmmoUpdate(int ammoIndex);
 
+private:
+	void InternalSendSingleAmmoUpdate(int ammoIndex);
+
+public:
 	void WaterMove();
 	void EXPORT PlayerDeathThink();
 	void PlayerUse();
@@ -406,6 +416,9 @@ public:
 	int m_iAutoWepSwitch;
 
 	bool m_bRestored;
+
+	//True if the player is currently spawning.
+	bool m_bIsSpawning = false;
 
 	bool IsOnRope() const { return (m_afPhysicsFlags & PFLAG_ONROPE) != 0; }
 
