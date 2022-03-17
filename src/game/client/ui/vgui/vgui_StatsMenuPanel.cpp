@@ -301,7 +301,7 @@ bool CStatsMenuPanel::MsgFunc_StatsInfo(const char* pszName, int iSize, void* pb
 	{
 		if (m_pClassImages[0])
 		{
-			m_pClassImages[0]->setImage(sCTFStatsSelection[g_iWinningTeam]);
+			m_pClassImages[0]->LoadImage(sCTFStatsSelection[g_iWinningTeam]);
 		}
 	}
 
