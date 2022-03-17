@@ -75,6 +75,10 @@ bool CPipewrench::Deploy()
 
 void CPipewrench::Holster()
 {
+	//Cancel any swing in progress.
+	m_iSwingMode = SWING_NONE;
+	SetThink(nullptr);
+
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;
 	SendWeaponAnim(PIPEWRENCH_HOLSTER);
 }
