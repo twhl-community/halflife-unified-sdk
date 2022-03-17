@@ -86,7 +86,7 @@ bool CGauss::GetItemInfo(ItemInfo* p)
 
 void CGauss::IncrementAmmo(CBasePlayer* pPlayer)
 {
-	if (0 != pPlayer->GiveAmmo(1, "uranium", URANIUM_MAX_CARRY))
+	if (pPlayer->GiveAmmo(1, "uranium", URANIUM_MAX_CARRY) >= 0)
 	{
 		EMIT_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
 	}

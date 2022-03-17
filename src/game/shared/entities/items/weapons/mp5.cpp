@@ -85,7 +85,7 @@ bool CMP5::GetItemInfo(ItemInfo* p)
 
 void CMP5::IncrementAmmo(CBasePlayer* pPlayer)
 {
-	if (0 != pPlayer->GiveAmmo(1, "9mm", _9MM_MAX_CARRY))
+	if (pPlayer->GiveAmmo(1, "9mm", _9MM_MAX_CARRY) >= 0)
 	{
 		EMIT_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
 	}
