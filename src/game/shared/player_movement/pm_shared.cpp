@@ -2613,7 +2613,8 @@ void PM_Jump()
 	}
 
 	// See if user can super long jump?
-	const bool cansuperjump = atoi(pmove->PM_Info_ValueForKey(pmove->physinfo, "slj")) == 1 || atoi(pmove->PM_Info_ValueForKey(pmove->physinfo, "jpj")) == 1;
+	const bool cansuperjump = atoi(pmove->PM_Info_ValueForKey(pmove->physinfo, "slj")) == 1;
+	const bool canjumppackjump = atoi(pmove->PM_Info_ValueForKey(pmove->physinfo, "jpj")) == 1;
 
 	// Acclerate upward
 	// If we are ducking...
@@ -2621,7 +2622,7 @@ void PM_Jump()
 	{
 		// Adjust for super long jump module
 		// UNDONE -- note this should be based on forward angles, not current velocity.
-		if (cansuperjump &&
+		if ((cansuperjump || canjumppackjump) &&
 			(pmove->cmd.buttons & IN_DUCK) != 0 &&
 			(pmove->flDuckTime > 0) &&
 			Length(pmove->velocity) > 50)
@@ -2634,6 +2635,11 @@ void PM_Jump()
 			}
 
 			pmove->velocity[2] = sqrt(2 * 800 * 56.0);
+
+			if (canjumppackjump)
+			{
+				pmove->PM_PlaySound(CHAN_STATIC, "ctf/pow_big_jump.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+			}
 		}
 		else
 		{

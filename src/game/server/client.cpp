@@ -1039,6 +1039,8 @@ void ClientPrecache()
 	PRECACHE_SOUND("player/geiger2.wav");
 	PRECACHE_SOUND("player/geiger1.wav");
 
+	PRECACHE_SOUND("ctf/pow_big_jump.wav");
+
 	if (giPrecacheGrunt)
 		UTIL_PrecacheOther("monster_human_grunt");
 }
