@@ -77,7 +77,7 @@ CMessageWindowPanel::CMessageWindowPanel(const char* szMOTD, const char* szTitle
 	// Create the window
 	m_pBackgroundPanel = new CTransparentPanel(iShadeFullscreen ? 255 : 100, MOTD_WINDOW_X, MOTD_WINDOW_Y, MOTD_WINDOW_SIZE_X, MOTD_WINDOW_SIZE_Y);
 	m_pBackgroundPanel->setParent(this);
-	m_pBackgroundPanel->setBorder(new LineBorder(Color(255 * 0.7, 170 * 0.7, 0, 0)));
+	m_pBackgroundPanel->setBorder(new LineBorder(Color(0, 112, 0, 0)));
 	m_pBackgroundPanel->setVisible(true);
 
 	int iXSize, iYSize, iXPos, iYPos;

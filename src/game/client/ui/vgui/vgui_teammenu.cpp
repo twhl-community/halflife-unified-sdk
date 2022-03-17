@@ -75,7 +75,7 @@ CTeamMenuPanel::CTeamMenuPanel(int iTrans, bool iRemoveMe, int x, int y, int wid
 	// Create the Info Window
 	m_pTeamWindow = new CTransparentPanel(255, TEAMMENU_WINDOW_X, TEAMMENU_WINDOW_Y, TEAMMENU_WINDOW_SIZE_X, TEAMMENU_WINDOW_SIZE_Y);
 	m_pTeamWindow->setParent(this);
-	m_pTeamWindow->setBorder(new LineBorder(Color(255 * 0.7, 170 * 0.7, 0, 0)));
+	m_pTeamWindow->setBorder(new LineBorder(Color(0, 112, 0, 0)));
 
 	// Create the Map Name Label
 	m_pMapTitle = new Label("", TEAMMENU_WINDOW_TITLE_X, TEAMMENU_WINDOW_TITLE_Y);
