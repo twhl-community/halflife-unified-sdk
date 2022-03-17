@@ -467,11 +467,12 @@ void CHalfLifeCTFplay::Think()
 			break;
 		case StatsPhase::OpenMenu:
 			MESSAGE_BEGIN(MSG_ALL, gmsgVGUIMenu);
-			g_engfuncs.pfnWriteByte(9);
+			g_engfuncs.pfnWriteByte(MENU_STATSMENU);
 			MESSAGE_END();
 			m_iStatsPhase = StatsPhase::Nothing;
 			break;
 		case StatsPhase::SendPlayers:
+			//Send up to 5 players worth of stats at a time until we've sent everything.
 			for (int iStat = 0; iStat <= 5 && m_iStatsPlayer <= gpGlobals->maxClients; ++m_iStatsPlayer)
 			{
 				auto pPlayer = UTIL_PlayerByIndex(m_iStatsPlayer);
