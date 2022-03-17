@@ -830,7 +830,7 @@ bool CBasePlayerWeapon::PlayEmptySound()
 {
 	if (m_iPlayEmptySound)
 	{
-		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/357_cock1.wav", 0.8, ATTN_NORM);
+		EMIT_SOUND_PREDICTED(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/357_cock1.wav", 0.8, ATTN_NORM, 0, PITCH_NORM);
 		m_iPlayEmptySound = false;
 		return false;
 	}
