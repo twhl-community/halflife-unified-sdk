@@ -144,6 +144,7 @@ CTeamMenuPanel::CTeamMenuPanel(int iTrans, bool iRemoveMe, int x, int y, int wid
 	m_pCancelButton = new CommandButton(CHudTextMessage::BufferedLocaliseTextString("#CTFMenu_Cancel"), TEAMMENU_TOPLEFT_BUTTON_X, 0, TEAMMENU_BUTTON_SIZE_X, TEAMMENU_BUTTON_SIZE_Y);
 	m_pCancelButton->setParent(this);
 	m_pCancelButton->addActionSignal(new CMenuHandler_TextWindow(HIDE_TEXTWINDOW));
+	m_pCancelButton->addActionSignal(new CMenuHandler_StringCommand("cancelmenu", true));
 
 	// Create the Spectate button
 	m_pSpectateButton = new SpectateButton(CHudTextMessage::BufferedLocaliseTextString("#CTFMenu_Spectate"), TEAMMENU_TOPLEFT_BUTTON_X, 0, TEAMMENU_BUTTON_SIZE_X, TEAMMENU_BUTTON_SIZE_Y, true);
