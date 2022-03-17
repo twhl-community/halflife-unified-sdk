@@ -69,6 +69,7 @@ void COsprey::SpawnCore(const char* model)
 	m_flRightHealth = 200;
 	m_flLeftHealth = 200;
 	pev->health = 400;
+	pev->max_health = pev->health;
 
 	m_flFieldOfView = 0; // 180 degrees
 
@@ -266,7 +267,7 @@ void COsprey::HoverThink()
 
 	pev->nextthink = gpGlobals->time + 0.1;
 	UTIL_MakeAimVectors(pev->angles);
-	ShowDamage();
+	Update();
 }
 
 
@@ -321,35 +322,44 @@ void COsprey::FlyThink()
 
 	if (gpGlobals->time > m_startTime + m_dTime)
 	{
-		if (m_pGoalEnt->pev->speed == 0)
+		if (m_pGoalEnt != nullptr)
 		{
-			SetThink(&COsprey::DeployThink);
+			if (m_pGoalEnt->pev->speed == 0)
+			{
+				SetThink(&COsprey::DeployThink);
+			}
+			do
+			{
+				m_pGoalEnt = CBaseEntity::Instance(FIND_ENTITY_BY_TARGETNAME(nullptr, STRING(m_pGoalEnt->pev->target)));
+			} while (m_pGoalEnt->pev->speed < 400 && !HasDead());
+			UpdateGoal();
 		}
-		do
-		{
-			m_pGoalEnt = CBaseEntity::Instance(FIND_ENTITY_BY_TARGETNAME(nullptr, STRING(m_pGoalEnt->pev->target)));
-		} while (m_pGoalEnt->pev->speed < 400 && !HasDead());
-		UpdateGoal();
 	}
 
 	Flight();
-	ShowDamage();
+	Update();
 }
 
 
 void COsprey::Flight()
 {
 	float t = (gpGlobals->time - m_startTime);
-	float scale = 1.0 / m_dTime;
 
-	float f = UTIL_SplineFraction(t * scale, 1.0);
+	//Only update if delta time is non-zero. It's zero if we're not moving at all (usually because we have no target).
+	if (m_dTime != 0)
+	{
+		float scale = 1.0 / m_dTime;
 
-	Vector pos = (m_pos1 + m_vel1 * t) * (1.0 - f) + (m_pos2 - m_vel2 * (m_dTime - t)) * f;
-	Vector ang = (m_ang1) * (1.0 - f) + (m_ang2)*f;
-	m_velocity = m_vel1 * (1.0 - f) + m_vel2 * f;
+		float f = UTIL_SplineFraction(t * scale, 1.0);
 
-	UTIL_SetOrigin(pev, pos);
-	pev->angles = ang;
+		Vector pos = (m_pos1 + m_vel1 * t) * (1.0 - f) + (m_pos2 - m_vel2 * (m_dTime - t)) * f;
+		Vector ang = (m_ang1) * (1.0 - f) + (m_ang2)*f;
+		m_velocity = m_vel1 * (1.0 - f) + m_vel2 * f;
+
+		UTIL_SetOrigin(pev, pos);
+		pev->angles = ang;
+	}
+
 	UTIL_MakeAimVectors(pev->angles);
 	float flSpeed = DotProduct(gpGlobals->v_forward, m_velocity);
 
@@ -452,6 +462,7 @@ void COsprey::Killed(entvars_t* pevAttacker, int iGib)
 	pev->nextthink = gpGlobals->time + 0.1;
 	pev->health = 0;
 	pev->takedamage = DAMAGE_NO;
+	pev->deadflag = DEAD_DYING;
 
 	m_startTime = gpGlobals->time + 4.0;
 }
@@ -480,7 +491,7 @@ void COsprey::DyingThink()
 	if (m_startTime > gpGlobals->time)
 	{
 		UTIL_MakeAimVectors(pev->angles);
-		ShowDamage();
+		Update();
 
 		Vector vecSpot = pev->origin + pev->velocity * 0.2;
 
@@ -692,6 +703,29 @@ void COsprey::ShowDamage()
 	}
 }
 
+void COsprey::Update()
+{
+	//Look around so AI triggers work.
+	Look(4092);
+
+	//Listen for sounds so AI triggers work.
+	Listen();
+
+	ShowDamage();
+	FCheckAITrigger();
+}
+
+bool COsprey::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+{
+	//Set enemy to last attacker.
+	//Ospreys are not capable of fighting so they'll get angry at whatever shoots at them, not whatever looks like an enemy.
+	m_hEnemy = Instance(pevAttacker);
+
+	//It's on now!
+	m_MonsterState = MONSTERSTATE_COMBAT;
+
+	return CBaseMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
+}
 
 void COsprey::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
 {
@@ -704,7 +738,7 @@ void COsprey::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir,
 			return;
 		else
 			m_flRightHealth -= flDamage;
-		m_iDoLeftSmokePuff = 3 + (flDamage / 5.0);
+		m_iDoRightSmokePuff = 3 + (flDamage / 5.0);
 	}
 
 	if (ptr->iHitgroup == 2)
@@ -713,7 +747,7 @@ void COsprey::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir,
 			return;
 		else
 			m_flLeftHealth -= flDamage;
-		m_iDoRightSmokePuff = 3 + (flDamage / 5.0);
+		m_iDoLeftSmokePuff = 3 + (flDamage / 5.0);
 	}
 
 	// hit hard, hits cockpit, hits engines
