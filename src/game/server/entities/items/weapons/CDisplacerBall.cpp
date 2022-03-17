@@ -158,8 +158,9 @@ void CDisplacerBall::BallTouch(CBaseEntity* pOther)
 	{
 		CBasePlayer* pPlayer = static_cast<CBasePlayer*>(pOther);
 
-		//TODO: what is this for? - Solokiller
-		pPlayer->pev->flags = FL_CLIENT;
+		//Clear any flags set on player (onground, using grapple, etc).
+		pPlayer->pev->flags &= FL_FAKECLIENT;
+		pPlayer->pev->flags |= FL_CLIENT;
 		pPlayer->m_flFallVelocity = 0;
 
 		if (g_pGameRules->IsCTF() && pPlayer->m_pFlag)

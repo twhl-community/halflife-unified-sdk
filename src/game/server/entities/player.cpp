@@ -5327,7 +5327,8 @@ bool CBasePlayer::Menu_Char_Input(int inp)
 	if (0 != pev->iuser1)
 	{
 		pev->effects &= ~EF_NODRAW;
-		pev->flags = FL_CLIENT;
+		pev->flags &= FL_FAKECLIENT;
+		pev->flags |= FL_CLIENT;
 		pev->takedamage = DAMAGE_YES;
 		m_iHideHUD &= ~(HIDEHUD_HEALTH | HIDEHUD_WEAPONS);
 		m_afPhysicsFlags &= PFLAG_OBSERVER;
