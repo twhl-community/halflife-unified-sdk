@@ -397,7 +397,7 @@ int CHudScoreboard::DrawPlayers(int xpos_rel, float list_slot, int nameoffset, c
 
 	if (gHUD.m_Teamplay == 2)
 	{
-		FAR_RIGHT = can_show_packetloss ? PL_CTF_RANGE_MIN : PL_CTF_RANGE_MAX;
+		FAR_RIGHT = can_show_packetloss ? PL_CTF_RANGE_MAX : PL_CTF_RANGE_MIN;
 	}
 	else
 	{
@@ -599,7 +599,7 @@ bool CHudScoreboard::MsgFunc_TeamInfo(const char* pszName, int iSize, void* pbuf
 
 	if (gViewPort && gViewPort->m_pScoreBoard)
 	{
-		gViewPort->m_pScoreBoard->RebuildTeams();
+		m_iNumTeams = gViewPort->m_pScoreBoard->RebuildTeams();
 		return true;
 	}
 
