@@ -60,10 +60,14 @@ extern cvar_t* cl_pitchspeed;
 extern cvar_t* cl_movespeedkey;
 
 
-static double s_flRawInputUpdateTime = 0.0f;
-static bool m_bRawInput = false;
+static cvar_t* m_rawinput = nullptr;
+
+static bool IN_UseRawInput()
+{
+	return m_rawinput->value != 0;
+}
+
 static bool m_bMouseThread = false;
-extern globalvars_t* gpGlobals;
 
 // mouse variables
 cvar_t* m_filter;
@@ -253,7 +257,7 @@ void DLLEXPORT IN_ActivateMouse()
 	}
 
 #ifdef WIN32
-	if (!m_bRawInput)
+	if (!IN_UseRawInput())
 	{
 		SDL_SetRelativeMouseMode(SDL_FALSE);
 		mouseRelative = SDL_FALSE;
@@ -288,7 +292,7 @@ void DLLEXPORT IN_DeactivateMouse()
 	}
 
 #ifdef WIN32
-	if (m_bRawInput)
+	if (IN_UseRawInput())
 	{
 		mouseRelative = SDL_FALSE;
 	}
@@ -381,19 +385,13 @@ void IN_ResetMouse()
 {
 	// no work to do in SDL
 #ifdef WIN32
-	if (gpGlobals && (gpGlobals->time - s_flRawInputUpdateTime > 1.0f || s_flRawInputUpdateTime == 0.0f))
+	if (IN_UseRawInput())
 	{
-		s_flRawInputUpdateTime = gpGlobals->time;
-		m_bRawInput = CVAR_GET_FLOAT("m_rawinput") != 0;
-
-		if (m_bRawInput)
-		{
-			mouseRelative = SDL_TRUE;
-			SDL_SetRelativeMouseMode(SDL_TRUE);
-		}
+		mouseRelative = SDL_TRUE;
+		SDL_SetRelativeMouseMode(SDL_TRUE);
 	}
 
-	if (!m_bRawInput && mouseactive && gEngfuncs.GetWindowCenterX && gEngfuncs.GetWindowCenterY)
+	if (!IN_UseRawInput() && mouseactive && gEngfuncs.GetWindowCenterX && gEngfuncs.GetWindowCenterY)
 	{
 		SetCursorPos(gEngfuncs.GetWindowCenterX(), gEngfuncs.GetWindowCenterY());
 
@@ -506,7 +504,7 @@ void IN_MouseMove(float frametime, usercmd_t* cmd)
 	{
 		int deltaX, deltaY;
 #ifdef WIN32
-		if (!m_bRawInput)
+		if (!IN_UseRawInput())
 		{
 			if (m_bMouseThread)
 			{
@@ -528,7 +526,7 @@ void IN_MouseMove(float frametime, usercmd_t* cmd)
 		}
 
 #ifdef WIN32
-		if (!m_bRawInput)
+		if (!IN_UseRawInput())
 		{
 			pos = current_pos.load();
 
@@ -601,12 +599,12 @@ void IN_MouseMove(float frametime, usercmd_t* cmd)
 	gEngfuncs.SetViewAngles((float*)viewangles);
 
 #ifdef WIN32
-	if (!m_bRawInput && SDL_FALSE != mouseRelative)
+	if (!IN_UseRawInput() && SDL_FALSE != mouseRelative)
 	{
 		SDL_SetRelativeMouseMode(SDL_FALSE);
 		mouseRelative = SDL_FALSE;
 	}
-	else if (m_bRawInput && SDL_FALSE == mouseRelative)
+	else if (IN_UseRawInput() && SDL_FALSE == mouseRelative)
 	{
 		SDL_SetRelativeMouseMode(SDL_TRUE);
 		mouseRelative = SDL_TRUE;
@@ -639,7 +637,7 @@ void DLLEXPORT IN_Accumulate()
 		if (mouseactive)
 		{
 #ifdef WIN32
-			if (!m_bRawInput)
+			if (!IN_UseRawInput())
 			{
 				if (!m_bMouseThread)
 				{
@@ -1126,11 +1124,11 @@ void IN_Init()
 	m_customaccel_exponent = gEngfuncs.pfnRegisterVariable("m_customaccel_exponent", "1", FCVAR_ARCHIVE);
 
 #ifdef WIN32
-	m_bRawInput = CVAR_GET_FLOAT("m_rawinput") > 0;
+	m_rawinput = gEngfuncs.pfnGetCvarPointer("m_rawinput");
 	m_bMouseThread = gEngfuncs.CheckParm("-mousethread", NULL) != NULL;
 	m_mousethread_sleep = gEngfuncs.pfnRegisterVariable("m_mousethread_sleep", "10", FCVAR_ARCHIVE);
 
-	if (!m_bRawInput && m_bMouseThread && m_mousethread_sleep)
+	if (!IN_UseRawInput() && m_bMouseThread && m_mousethread_sleep)
 	{
 		s_mouseDelta = Point{};
 

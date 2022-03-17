@@ -563,11 +563,31 @@ float UTIL_WeaponTimeBase();
 
 CBaseEntity* UTIL_FindEntityForward(CBaseEntity* pMe);
 
-inline bool UTIL_IsServer()
+constexpr bool UTIL_IsServer()
 {
-#ifndef CLIENT_DLL
+#ifdef CLIENT_DLL
 	return false;
 #else
 	return true;
 #endif
 }
+
+/**
+*	@brief Helper type to run a function when the helper is destroyed.
+*	Useful for running cleanup on scope exit and function return.
+*/
+template<typename Func>
+struct CallOnDestroy
+{
+	const Func Function;
+
+	explicit CallOnDestroy(Func&& function)
+		: Function(function)
+	{
+	}
+
+	~CallOnDestroy()
+	{
+		Function();
+	}
+};
