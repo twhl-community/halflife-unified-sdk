@@ -19,20 +19,20 @@
     <ClInclude Include="..\..\utils\qbsp2\bsp5.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\utils\common\bsplib.c" />
-    <ClCompile Include="..\..\utils\common\cmdlib.c" />
-    <ClCompile Include="..\..\utils\common\mathlib.c" />
-    <ClCompile Include="..\..\utils\common\scriplib.c" />
-    <ClCompile Include="..\..\utils\common\threads.c" />
-    <ClCompile Include="..\..\utils\qbsp2\gldraw.c" />
-    <ClCompile Include="..\..\utils\qbsp2\merge.c" />
-    <ClCompile Include="..\..\utils\qbsp2\outside.c" />
-    <ClCompile Include="..\..\utils\qbsp2\portals.c" />
-    <ClCompile Include="..\..\utils\qbsp2\qbsp.c" />
-    <ClCompile Include="..\..\utils\qbsp2\solidbsp.c" />
-    <ClCompile Include="..\..\utils\qbsp2\surfaces.c" />
-    <ClCompile Include="..\..\utils\qbsp2\tjunc.c" />
-    <ClCompile Include="..\..\utils\qbsp2\writebsp.c" />
+    <ClCompile Include="..\..\utils\common\bsplib.cpp" />
+    <ClCompile Include="..\..\utils\common\cmdlib.cpp" />
+    <ClCompile Include="..\..\utils\common\mathlib.cpp" />
+    <ClCompile Include="..\..\utils\common\scriplib.cpp" />
+    <ClCompile Include="..\..\utils\common\threads.cpp" />
+    <ClCompile Include="..\..\utils\qbsp2\gldraw.cpp" />
+    <ClCompile Include="..\..\utils\qbsp2\merge.cpp" />
+    <ClCompile Include="..\..\utils\qbsp2\outside.cpp" />
+    <ClCompile Include="..\..\utils\qbsp2\portals.cpp" />
+    <ClCompile Include="..\..\utils\qbsp2\qbsp.cpp" />
+    <ClCompile Include="..\..\utils\qbsp2\solidbsp.cpp" />
+    <ClCompile Include="..\..\utils\qbsp2\surfaces.cpp" />
+    <ClCompile Include="..\..\utils\qbsp2\tjunc.cpp" />
+    <ClCompile Include="..\..\utils\qbsp2\writebsp.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{415A5B85-BEA0-4F96-BBB6-5447E4CF726F}</ProjectGuid>
@@ -78,34 +78,38 @@
     <ClCompile>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;DOUBLEVEC_T;_NOENUMQBOOL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;_DEBUG;_CONSOLE;DOUBLEVEC_T;_NOENUMQBOOL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>../../utils/common;..\..\external</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4244;4305;26451</DisableSpecificWarnings>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;glaux.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;../../lib/public/SDL2.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;DOUBLEVEC_T;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;NDEBUG;_CONSOLE;DOUBLEVEC_T;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>../../utils/common;..\..\external</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4244;4305;26451</DisableSpecificWarnings>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;glaux.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;../../lib/public/SDL2.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

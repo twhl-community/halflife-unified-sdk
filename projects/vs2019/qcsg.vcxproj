@@ -11,18 +11,18 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\utils\common\bspfile.c" />
-    <ClCompile Include="..\..\utils\common\cmdlib.c" />
-    <ClCompile Include="..\..\utils\common\mathlib.c" />
-    <ClCompile Include="..\..\utils\common\polylib.c" />
-    <ClCompile Include="..\..\utils\common\scriplib.c" />
-    <ClCompile Include="..\..\utils\common\threads.c" />
-    <ClCompile Include="..\..\utils\qcsg\brush.c" />
-    <ClCompile Include="..\..\utils\qcsg\gldraw.c" />
-    <ClCompile Include="..\..\utils\qcsg\hullfile.c" />
-    <ClCompile Include="..\..\utils\qcsg\map.c" />
-    <ClCompile Include="..\..\utils\qcsg\qcsg.c" />
-    <ClCompile Include="..\..\utils\qcsg\textures.c" />
+    <ClCompile Include="..\..\utils\common\bspfile.cpp" />
+    <ClCompile Include="..\..\utils\common\cmdlib.cpp" />
+    <ClCompile Include="..\..\utils\common\mathlib.cpp" />
+    <ClCompile Include="..\..\utils\common\polylib.cpp" />
+    <ClCompile Include="..\..\utils\common\scriplib.cpp" />
+    <ClCompile Include="..\..\utils\common\threads.cpp" />
+    <ClCompile Include="..\..\utils\qcsg\brush.cpp" />
+    <ClCompile Include="..\..\utils\qcsg\gldraw.cpp" />
+    <ClCompile Include="..\..\utils\qcsg\hullfile.cpp" />
+    <ClCompile Include="..\..\utils\qcsg\map.cpp" />
+    <ClCompile Include="..\..\utils\qcsg\qcsg.cpp" />
+    <ClCompile Include="..\..\utils\qcsg\textures.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\utils\common\bspfile.h" />
@@ -77,34 +77,38 @@
     <ClCompile>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;DOUBLEVEC_T;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;_DEBUG;_CONSOLE;DOUBLEVEC_T;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>../../utils/common;../../external</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4244;4305;26451</DisableSpecificWarnings>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;glaux.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;../../lib/public/SDL2.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;DOUBLEVEC_T;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;NDEBUG;_CONSOLE;DOUBLEVEC_T;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>../../utils/common;../../external</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4244;4305;26451</DisableSpecificWarnings>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;glaux.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;../../lib/public/SDL2.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
