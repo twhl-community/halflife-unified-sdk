@@ -289,7 +289,6 @@ void ScorePanel::Update()
 	else
 		SortTeams();
 
-	/*
 	// set scrollbar range
 	m_PlayerList.SetScrollRange(m_iRows);
 
@@ -303,7 +302,6 @@ void ScorePanel::Update()
 	{
 		m_pCloseButton->setVisible(false);
 	}
-	*/
 }
 
 //-----------------------------------------------------------------------------
@@ -354,7 +352,7 @@ void ScorePanel::SortTeams()
 			g_TeamInfo[j].ownteam = false;
 
 		// Set the team's number (used for team colors)
-		g_TeamInfo[j].teamnumber = g_PlayerExtraInfo[i].teamnumber;
+		g_TeamInfo[j].teamnumber = g_PlayerExtraInfo[i].teamid;
 	}
 
 	// find team ping/packetloss averages
@@ -531,7 +529,6 @@ void ScorePanel::RebuildTeams()
 	Update();
 }
 
-#if 0
 void ScorePanel::FillGrid()
 {
 	CSchemeManager* pSchemes = gViewPort->GetSchemeManager();
@@ -776,6 +773,7 @@ void ScorePanel::FillGrid()
 					sz[0] = 0;
 					GetClientVoiceMgr()->UpdateSpeakerImage(pLabel, m_iSortedRows[row]);
 					break;
+					/*
 				case COLUMN_CLASS:
 					// No class for other team's members (unless allied or spectator)
 					if (gViewPort && EV_TFC_IsAllyTeam(g_iTeamNumber, g_PlayerExtraInfo[m_iSortedRows[row]].teamnumber))
@@ -804,7 +802,7 @@ void ScorePanel::FillGrid()
 						strcpy(sz, "");
 					}
 					break;
-
+					*/
 				case COLUMN_TRACKER:
 					/*
 					if (g_pTrackerUser)
@@ -853,7 +851,6 @@ void ScorePanel::FillGrid()
 	m_PlayerList.getSize(x, y);
 	m_PlayerList.setSize(x, y);
 }
-#endif
 
 //-----------------------------------------------------------------------------
 // Purpose: Setup highlights for player names in scoreboard
