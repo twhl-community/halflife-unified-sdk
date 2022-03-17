@@ -1830,7 +1830,7 @@ void TeamFortressViewport::GetAllPlayersInfo()
 	{
 		gEngfuncs.pfnGetPlayerInfo(i, &g_PlayerInfoList[i]);
 
-		if (0 != g_PlayerInfoList[i].thisplayer)
+		if (m_pScoreBoard && 0 != g_PlayerInfoList[i].thisplayer)
 			m_pScoreBoard->m_iPlayerNum = i; // !!!HACK: this should be initialized elsewhere... maybe gotten from the engine
 	}
 }
@@ -2246,7 +2246,10 @@ bool TeamFortressViewport::MsgFunc_TeamInfo(const char* pszName, int iSize, void
 
 void TeamFortressViewport::DeathMsg(int killer, int victim)
 {
-	m_pScoreBoard->DeathMsg(killer, victim);
+	if (m_pScoreBoard)
+	{
+		m_pScoreBoard->DeathMsg(killer, victim);
+	}
 }
 
 bool TeamFortressViewport::MsgFunc_Spectator(const char* pszName, int iSize, void* pbuf)
