@@ -1810,7 +1810,7 @@ void UpdateClientData(const edict_t* ent, int sendweapons, struct clientdata_s* 
 		cd->iuser2 = pev->iuser2;
 	}
 
-
+	cd->iuser4 = pl->m_iItems;
 
 #if defined(CLIENT_WEAPONS)
 	if (0 != sendweapons)

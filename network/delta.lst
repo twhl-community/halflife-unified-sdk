@@ -46,6 +46,7 @@ clientdata_t none
 	
 	DEFINE_DELTA( iuser1, DT_INTEGER, 3, 1.0 ),
 	DEFINE_DELTA( iuser2, DT_INTEGER, 6, 1.0 ),
+	DEFINE_DELTA( iuser4, DT_INTEGER, 8, 1.0 ),
 
 	DEFINE_DELTA( vuser1[0], DT_SIGNED | DT_FLOAT, 10, 1.0 ),
 	DEFINE_DELTA( vuser1[1], DT_SIGNED | DT_FLOAT, 10, 1.0 ),
