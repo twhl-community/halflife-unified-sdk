@@ -186,7 +186,7 @@ bool CHudSpectator::Init()
 	gEngfuncs.pfnAddCommand("spec_decal", SpectatorSpray);
 	gEngfuncs.pfnAddCommand("spec_help", SpectatorHelp);
 	gEngfuncs.pfnAddCommand("spec_menu", SpectatorMenu);
-	gEngfuncs.pfnAddCommand("togglescores", ToggleScores);
+	//gEngfuncs.pfnAddCommand("togglescores", ToggleScores);
 
 	m_drawnames = gEngfuncs.pfnRegisterVariable("spec_drawnames", "1", 0);
 	m_drawcone = gEngfuncs.pfnRegisterVariable("spec_drawcone", "1", 0);
