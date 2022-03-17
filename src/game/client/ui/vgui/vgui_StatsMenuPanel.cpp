@@ -285,7 +285,7 @@ void CStatsMenuPanel::SetPlayerImage(const char* szImage)
 
 	if (image)
 	{
-		image->setImage(szImage);
+		image->LoadImage(szImage);
 	}
 }
 
