@@ -144,26 +144,6 @@ winding_t* BaseWindingForPlane(dplane_t* p)
 	return w;
 }
 
-
-
-/*
-==================
-CopyWinding
-==================
-*/
-winding_t* CopyWinding(winding_t* w)
-{
-	int size;
-	winding_t* c;
-
-	size = (int)((winding_t*)0)->points[w->numpoints];
-	c = reinterpret_cast<winding_t*>(malloc(size));
-	memcpy(c, w, size);
-	return c;
-}
-
-
-
 /*
 ==================
 ClipWinding
@@ -583,15 +563,6 @@ winding_t* NewWinding(int points)
 
 	return w;
 }
-
-
-void FreeWinding(winding_t* w)
-{
-	c_activewindings--;
-	free(w);
-}
-
-
 
 /*
 ===========

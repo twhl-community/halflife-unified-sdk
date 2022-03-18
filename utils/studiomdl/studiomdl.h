@@ -377,7 +377,7 @@ typedef struct s_model_s
 	struct s_model_s* next;
 } s_model_t;
 
-EXTERN int nummodels;
+EXTERN int numstudiomodels;
 EXTERN s_model_t* model[MAXSTUDIOMODELS];
 
 

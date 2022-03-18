@@ -118,7 +118,7 @@ bface_t* ClipFace(brush_t* /*b*/, bface_t* f, bface_t** outside,
 
 	for (int i=0 ; i<f->w->numpoints ; i++)
 	{
-		d = DotProduct (f->w->p[i], split->normal) - split->dist;
+		d = DotProduct (f->w->points[i], split->normal) - split->dist;
 		if (d < -SPLIT_EPSILON)
 			count[1]++;
 		else if (d > SPLIT_EPSILON)
@@ -191,9 +191,9 @@ void WriteFace(int hull, bface_t* f)
 		for (i = 0; i < w->numpoints; i++)
 		{
 			fprintf(out[hull], "%5.2f %5.2f %5.2f %5.3f %5.3f %5.3f\n",
-				w->p[i][0],
-				w->p[i][1],
-				w->p[i][2],
+				w->points[i][0],
+				w->points[i][1],
+				w->points[i][2],
 				light,
 				light,
 				light);
@@ -208,9 +208,9 @@ void WriteFace(int hull, bface_t* f)
 		for (i = 0; i < w->numpoints; i++)
 		{
 			fprintf(out[hull], "%5.2f %5.2f %5.2f\n",
-				w->p[i][0],
-				w->p[i][1],
-				w->p[i][2]);
+				w->points[i][0],
+				w->points[i][1],
+				w->points[i][2]);
 		}
 		fprintf(out[hull], "\n");
 	}
@@ -274,9 +274,9 @@ void SaveOutside(brush_t* b, int hull, bface_t* outside, int mirrorcontents)
 			// swap point orders
 			for (i = 0; i < f->w->numpoints / 2; i++) // add points backwards
 			{
-				VectorCopy(f->w->p[i], temp);
-				VectorCopy(f->w->p[f->w->numpoints - 1 - i], f->w->p[i]);
-				VectorCopy(temp, f->w->p[f->w->numpoints - 1 - i]);
+				VectorCopy(f->w->points[i], temp);
+				VectorCopy(f->w->points[f->w->numpoints - 1 - i], f->w->points[i]);
+				VectorCopy(temp, f->w->points[f->w->numpoints - 1 - i]);
 			}
 			WriteFace(hull, f);
 		}

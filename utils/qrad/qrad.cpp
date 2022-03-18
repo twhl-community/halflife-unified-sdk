@@ -272,7 +272,7 @@ winding_t* WindingFromFace(dface_t* f)
 			v = dedges[se].v[0];
 
 		dv = &dvertexes[v];
-		VectorCopy(dv->point, w->p[i]);
+		VectorCopy(dv->point, w->points[i]);
 	}
 
 	RemoveColinearPoints(w);
@@ -509,7 +509,7 @@ void MakePatches(void)
 			w = WindingFromFace(f);
 			for (k = 0; k < w->numpoints; k++)
 			{
-				VectorAdd(w->p[k], origin, w->p[k]);
+				VectorAdd(w->points[k], origin, w->points[k]);
 			}
 			MakePatchForFace(fn, w);
 		}
@@ -814,9 +814,9 @@ void WriteWorld(char* name)
 		for (i = 0; i < w->numpoints; i++)
 		{
 			fprintf(out, "%5.2f %5.2f %5.2f %5.3f %5.3f %5.3f\n",
-				w->p[i][0],
-				w->p[i][1],
-				w->p[i][2],
+				w->points[i][0],
+				w->points[i][1],
+				w->points[i][2],
 				patch->totallight[0] / 256,
 				patch->totallight[1] / 256,
 				patch->totallight[2] / 256);

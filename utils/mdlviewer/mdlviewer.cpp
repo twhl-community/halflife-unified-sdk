@@ -19,11 +19,11 @@
 #define SDL_MAIN_HANDLED
 #include <SDL2/SDL.h>
 
-#include "mathlib.h"
+#include "../common/mathlib.h"
 #undef DotProduct
-#include "../../dlls/vector.h"
-#include "../../public/steam/steamtypes.h" // defines int32, required by studio.h
-#include "..\..\engine\studio.h"
+#include "../../src/game/server/vector.h"
+#include "../../src/public/steam/steamtypes.h" // defines int32, required by studio.h
+#include "../../src/engine/studio.h"
 #include "mdlviewer.h"
 
 
