@@ -14,3 +14,5 @@ target_link_options(smdlexp
 		"/DEF:smdlexp.def")
 
 set_target_properties(smdlexp PROPERTIES EXCLUDE_FROM_DEFAULT_BUILD ON)
+
+create_source_groups(smdlexp)

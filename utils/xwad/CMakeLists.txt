@@ -8,3 +8,5 @@ target_link_libraries(xwad
 	PRIVATE
 		hl_sdk_utils_shared
 		hl_sdk_utils_common)
+
+create_source_groups(xwad)

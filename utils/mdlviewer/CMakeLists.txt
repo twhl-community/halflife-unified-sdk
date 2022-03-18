@@ -17,3 +17,5 @@ target_link_libraries(mdlviewer
 		OpenGL::GL
 		OpenGL::GLU
 		SDL2)
+
+create_source_groups(mdlviewer)

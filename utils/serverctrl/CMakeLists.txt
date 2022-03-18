@@ -22,3 +22,5 @@ target_link_libraries(serverctrl
 	PRIVATE
 		hl_sdk_utils_shared
 		winmm.lib)
+
+create_source_groups(serverctrl)

@@ -10,3 +10,5 @@ target_link_libraries(makefont
 		hl_sdk_utils_shared
 		hl_sdk_utils_common
 		winmm.lib)
+
+create_source_groups(makefont)

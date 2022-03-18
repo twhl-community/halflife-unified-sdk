@@ -9,3 +9,5 @@ target_sources(procinfo
 target_link_libraries(procinfo
 	INTERFACE
 		hl_sdk_utils_shared)
+
+create_source_groups(procinfo)

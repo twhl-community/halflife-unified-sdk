@@ -24,6 +24,15 @@ endif()
 
 target_include_directories(SDL2 INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/../external/SDL2/include)
 
+# Function to simplify generation of source groups.
+function(create_source_groups target)
+	get_target_property(TARGET_SOURCES hl_sdk_utils_common INTERFACE_SOURCES)
+	source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/.. FILES ${TARGET_SOURCES})
+
+	get_target_property(TARGET_SOURCES ${target} SOURCES)
+	source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/.. FILES ${TARGET_SOURCES})
+endfunction()
+
 # Library to provide shared project properties.
 add_library(hl_sdk_utils_shared INTERFACE)
 
