@@ -23,7 +23,7 @@
 #include "cmdlib.h"
 #include "lbmlib.h"
 #include "scriplib.h"
-#include "mathlib.h"
+#include "../common/mathlib.h"
 #define Vector vec3_t
 #include "..\..\engine\studio.h"
 #include "studiomdl.h"

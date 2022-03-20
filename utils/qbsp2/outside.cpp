@@ -52,25 +52,6 @@ qboolean PlaceOccupant(int num, vec3_t point, node_t* headnode)
 	return true;
 }
 
-
-/*
-=============
-WindingCenter
-=============
-*/
-void WindingCenter(winding_t* w, vec3_t center)
-{
-	int i;
-	float scale;
-
-	VectorCopy(vec3_origin, center);
-	for (i = 0; i < w->numpoints; i++)
-		VectorAdd(w->points[i], center, center);
-
-	scale = 1.0 / w->numpoints;
-	VectorScale(center, scale, center);
-}
-
 /*
 ==============
 MarkLeakTrail

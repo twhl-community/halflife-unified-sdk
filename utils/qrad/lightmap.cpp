@@ -1043,7 +1043,7 @@ GatherSampleLight
 */
 #define NUMVERTEXNORMALS 162
 float r_avertexnormals[NUMVERTEXNORMALS][3] = {
-#include "..\..\engine\anorms.h"
+#include "anorms.h"
 };
 
 #define VectorMaximum(a) (max((a)[0], max((a)[1], (a)[2])))

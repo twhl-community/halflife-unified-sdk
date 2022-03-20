@@ -11,34 +11,19 @@
 #include <chrono>
 
 #include "csg.h"
+#include "wadlib.h"
 
-typedef struct
+struct csglumpinfo_t : public lumpinfo_t
 {
-	char identification[4]; // should be WAD2/WAD3
-	int numlumps;
-	int infotableofs;
-} wadinfo_t;
-
-
-typedef struct
-{
-	int filepos;
-	int disksize;
-	int size; // uncompressed
-	char type;
-	char compression;
-	char pad1, pad2;
-	char name[16]; // must be null terminated
-
 	int iTexFile; // index of the wad this texture is located in
 
-} lumpinfo_t;
+};
 
 int nummiptex;
-lumpinfo_t miptex[MAX_MAP_TEXTURES];
+csglumpinfo_t miptex[MAX_MAP_TEXTURES];
 
 int nTexLumps = 0;
-lumpinfo_t* lumpinfo = NULL;
+csglumpinfo_t* csg_lumpinfo = NULL;
 
 int nTexFiles = 0;
 FILE* texfiles[128];
@@ -46,22 +31,6 @@ FILE* texfiles[128];
 int nWadInclude;
 char* pszWadInclude[128];
 qboolean wadInclude[128]; // include the textures from this WAD in the BSP
-
-void CleanupName(char* in, char* out)
-{
-	int i;
-
-	for (i = 0; i < 16; i++)
-	{
-		if (!in[i])
-			break;
-
-		out[i] = toupper(in[i]);
-	}
-
-	for (; i < 16; i++)
-		out[i] = 0;
-}
 
 /*
 =================
@@ -71,8 +40,8 @@ lump_sorters
 
 int lump_sorter_by_wad_and_name(const void* lump1, const void* lump2)
 {
-	lumpinfo_t* plump1 = (lumpinfo_t*)lump1;
-	lumpinfo_t* plump2 = (lumpinfo_t*)lump2;
+	csglumpinfo_t* plump1 = (csglumpinfo_t*)lump1;
+	csglumpinfo_t* plump2 = (csglumpinfo_t*)lump2;
 	if (plump1->iTexFile == plump2->iTexFile)
 		return strcmp(plump1->name, plump2->name);
 	else
@@ -81,8 +50,8 @@ int lump_sorter_by_wad_and_name(const void* lump1, const void* lump2)
 
 int lump_sorter_by_name(const void* lump1, const void* lump2)
 {
-	lumpinfo_t* plump1 = (lumpinfo_t*)lump1;
-	lumpinfo_t* plump2 = (lumpinfo_t*)lump2;
+	csglumpinfo_t* plump1 = (csglumpinfo_t*)lump1;
+	csglumpinfo_t* plump2 = (csglumpinfo_t*)lump2;
 	return strcmp(plump1->name, plump2->name);
 }
 
@@ -152,15 +121,15 @@ qboolean TEX_InitFromWad(char* path)
 		wadinfo.numlumps = LittleLong(wadinfo.numlumps);
 		wadinfo.infotableofs = LittleLong(wadinfo.infotableofs);
 		fseek(texfile, wadinfo.infotableofs, SEEK_SET);
-		lumpinfo = reinterpret_cast<lumpinfo_t*>(realloc(lumpinfo, (nTexLumps + wadinfo.numlumps) * sizeof(lumpinfo_t)));
+		csg_lumpinfo = reinterpret_cast<csglumpinfo_t*>(realloc(csg_lumpinfo, (nTexLumps + wadinfo.numlumps) * sizeof(csglumpinfo_t)));
 
 		for (i = 0; i < wadinfo.numlumps; i++)
 		{
-			SafeRead(texfile, &lumpinfo[nTexLumps], sizeof(lumpinfo_t) - sizeof(int)); // iTexFile is NOT read from file
-			CleanupName(lumpinfo[nTexLumps].name, lumpinfo[nTexLumps].name);
-			lumpinfo[nTexLumps].filepos = LittleLong(lumpinfo[nTexLumps].filepos);
-			lumpinfo[nTexLumps].disksize = LittleLong(lumpinfo[nTexLumps].disksize);
-			lumpinfo[nTexLumps].iTexFile = nTexFiles - 1;
+			SafeRead(texfile, &csg_lumpinfo[nTexLumps], sizeof(csglumpinfo_t) - sizeof(int)); // iTexFile is NOT read from file
+			CleanupName(csg_lumpinfo[nTexLumps].name, csg_lumpinfo[nTexLumps].name);
+			csg_lumpinfo[nTexLumps].filepos = LittleLong(csg_lumpinfo[nTexLumps].filepos);
+			csg_lumpinfo[nTexLumps].disksize = LittleLong(csg_lumpinfo[nTexLumps].disksize);
+			csg_lumpinfo[nTexLumps].iTexFile = nTexFiles - 1;
 
 			++nTexLumps;
 		}
@@ -169,7 +138,7 @@ qboolean TEX_InitFromWad(char* path)
 		pszWadFile = strtok(NULL, ";");
 	}
 
-	qsort((void*)lumpinfo, (size_t)nTexLumps, sizeof(lumpinfo[0]), lump_sorter_by_name);
+	qsort((void*)csg_lumpinfo, (size_t)nTexLumps, sizeof(csg_lumpinfo[0]), lump_sorter_by_name);
 
 	return true;
 }
@@ -180,11 +149,11 @@ FindTexture
 ==================
 */
 
-lumpinfo_t*
-FindTexture(lumpinfo_t* source)
+csglumpinfo_t*
+FindTexture(csglumpinfo_t* source)
 {
-	lumpinfo_t* found = NULL;
-	if ((found = reinterpret_cast<lumpinfo_t*>(bsearch(source, (void*)lumpinfo, (size_t)nTexLumps, sizeof(lumpinfo[0]), lump_sorter_by_name))) == nullptr)
+	csglumpinfo_t* found = NULL;
+	if ((found = reinterpret_cast<csglumpinfo_t*>(bsearch(source, (void*)csg_lumpinfo, (size_t)nTexLumps, sizeof(csg_lumpinfo[0]), lump_sorter_by_name))) == nullptr)
 		printf("WARNING: texture %s not found in BSP's wad file list!\n", source->name);
 
 	return found;
@@ -195,7 +164,7 @@ FindTexture(lumpinfo_t* source)
 LoadLump
 ==================
 */
-int LoadLump(lumpinfo_t* source, byte* dest, int* texsize)
+int LoadLump(csglumpinfo_t* source, byte* dest, int* texsize)
 {
 	*texsize = 0;
 	if (source->filepos)
@@ -257,7 +226,7 @@ void AddAnimatingTextures(void)
 
 			// see if this name exists in the wadfile
 			for (k = 0; k < nTexLumps; k++)
-				if (!strcmp(name, lumpinfo[k].name))
+				if (!strcmp(name, csg_lumpinfo[k].name))
 				{
 					FindMiptex(name); // add to the miptex list
 					break;
@@ -312,7 +281,7 @@ void WriteMiptex(void)
 	{
 		for (int i = 0; i < nummiptex; i++)
 		{
-			lumpinfo_t* found;
+			csglumpinfo_t* found;
 			if (found = FindTexture(miptex + i); found != nullptr)
 				miptex[i] = *found;
 			else

@@ -285,17 +285,17 @@ winding_t* BaseWindingForIPlane(plane_t* p)
 
 	w = AllocWinding(4);
 
-	VectorSubtract(org, vright, w->p[0]);
-	VectorAdd(w->p[0], vup, w->p[0]);
+	VectorSubtract(org, vright, w->points[0]);
+	VectorAdd(w->points[0], vup, w->points[0]);
 
-	VectorAdd(org, vright, w->p[1]);
-	VectorAdd(w->p[1], vup, w->p[1]);
+	VectorAdd(org, vright, w->points[1]);
+	VectorAdd(w->points[1], vup, w->points[1]);
 
-	VectorAdd(org, vright, w->p[2]);
-	VectorSubtract(w->p[2], vup, w->p[2]);
+	VectorAdd(org, vright, w->points[2]);
+	VectorSubtract(w->points[2], vup, w->points[2]);
 
-	VectorSubtract(org, vright, w->p[3]);
-	VectorSubtract(w->p[3], vup, w->p[3]);
+	VectorSubtract(org, vright, w->points[3]);
+	VectorSubtract(w->points[3], vup, w->points[3]);
 
 	w->numpoints = 4;
 
@@ -682,7 +682,7 @@ void ExpandBrush(brush_t* b, int hullnum)
 	{
 		for (int i=0 ; i<f->w->numpoints ; i++)
 		{
-			AddHullPoint (&ex, f->w->p[i]);
+			AddHullPoint (&ex, f->w->points[i]);
 		}
 	}
 
@@ -691,7 +691,7 @@ void ExpandBrush(brush_t* b, int hullnum)
 	{
 		for (int i=0 ; i<f->w->numpoints ; i++)
 		{
-			AddHullEdge (&ex, f->w->p[i], f->w->p[(i+1)%f->w->numpoints]);
+			AddHullEdge (&ex, f->w->points[i], f->w->points[(i+1)%f->w->numpoints]);
 		}
 	}
 #endif
@@ -752,8 +752,8 @@ restart:
 			{
 				for (j = 0; j < 3; j++)
 				{
-					v = w->p[i][j];
-					//					w->p[i][j] = floor (v+0.5);	// round to int
+					v = w->points[i][j];
+					//					w->points[i][j] = floor (v+0.5);	// round to int
 					if (v < h->mins[j])
 						h->mins[j] = v;
 					if (v > h->maxs[j])

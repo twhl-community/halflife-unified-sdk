@@ -29,13 +29,13 @@
 #include "cmdlib.h"
 #include "lbmlib.h"
 #include "scriplib.h"
-#include "mathlib.h"
+#include "../common/mathlib.h"
 #define Vector vec3_t
 #define EXTERN
-#include "../../engine/studio.h"
+#include "studio.h"
 #include "studiomdl.h"
-#include "../../dlls/activity.h"
-#include "../../dlls/activitymap.h"
+#include "activity.h"
+#include "activitymap.h"
 
 
 static int force_powerof2_textures = 0;
@@ -389,7 +389,7 @@ void SimplifyModel(void)
 	MakeTransitions();
 
 	// find used bones
-	for (i = 0; i < nummodels; i++)
+	for (i = 0; i < numstudiomodels; i++)
 	{
 		for (k = 0; k < MAXSTUDIOSRCBONES; k++)
 		{
@@ -415,7 +415,7 @@ void SimplifyModel(void)
 	}
 
 	// rename model bones if needed
-	for (i = 0; i < nummodels; i++)
+	for (i = 0; i < numstudiomodels; i++)
 	{
 		for (j = 0; j < model[i]->numbones; j++)
 		{
@@ -432,7 +432,7 @@ void SimplifyModel(void)
 
 	// union of all used bones
 	numbones = 0;
-	for (i = 0; i < nummodels; i++)
+	for (i = 0; i < numstudiomodels; i++)
 	{
 		for (k = 0; k < MAXSTUDIOSRCBONES; k++)
 		{
@@ -597,7 +597,7 @@ void SimplifyModel(void)
 	}
 
 	// relink model
-	for (i = 0; i < nummodels; i++)
+	for (i = 0; i < numstudiomodels; i++)
 	{
 		for (j = 0; j < model[i]->numverts; j++)
 		{
@@ -650,7 +650,7 @@ void SimplifyModel(void)
 			}
 		}
 		// try all the connect vertices
-		for (i = 0; i < nummodels; i++)
+		for (i = 0; i < numstudiomodels; i++)
 		{
 			vec3_t p;
 			for (j = 0; j < model[i]->numverts; j++)
@@ -892,7 +892,7 @@ void SimplifyModel(void)
 					}
 				}
 
-				for (k = 0; k < nummodels; k++)
+				for (k = 0; k < numstudiomodels; k++)
 				{
 					for (j = 0; j < model[k]->numverts; j++)
 					{
@@ -1718,7 +1718,7 @@ void SetSkinValues()
 		texture[i].min_t = 9999999;
 	}
 
-	for (i = 0; i < nummodels; i++)
+	for (i = 0; i < numstudiomodels; i++)
 	{
 		for (j = 0; j < model[i]->nummesh; j++)
 		{
@@ -1751,7 +1751,7 @@ void SetSkinValues()
 		ResizeTexture(&texture[i]);
 	}
 
-	for (i = 0; i < nummodels; i++)
+	for (i = 0; i < numstudiomodels; i++)
 	{
 		for (j = 0; j < model[i]->nummesh; j++)
 		{
@@ -2283,10 +2283,10 @@ void Option_Studio()
 	if (!GetToken(false))
 		return;
 
-	model[nummodels] = reinterpret_cast<s_model_t*>(kalloc(1, sizeof(s_model_t)));
-	bodypart[numbodyparts].pmodel[bodypart[numbodyparts].nummodels] = model[nummodels];
+	model[numstudiomodels] = reinterpret_cast<s_model_t*>(kalloc(1, sizeof(s_model_t)));
+	bodypart[numbodyparts].pmodel[bodypart[numbodyparts].nummodels] = model[numstudiomodels];
 
-	strcpyn(model[nummodels]->name, token);
+	strcpyn(model[numstudiomodels]->name, token);
 
 	flip_triangles = 1;
 
@@ -2306,10 +2306,10 @@ void Option_Studio()
 		}
 	}
 
-	Grab_Studio(model[nummodels]);
+	Grab_Studio(model[numstudiomodels]);
 
 	bodypart[numbodyparts].nummodels++;
-	nummodels++;
+	numstudiomodels++;
 
 	scale_up = default_scale;
 }
@@ -2317,13 +2317,13 @@ void Option_Studio()
 
 int Option_Blank()
 {
-	model[nummodels] = reinterpret_cast<s_model_t*>(kalloc(1, sizeof(s_model_t)));
-	bodypart[numbodyparts].pmodel[bodypart[numbodyparts].nummodels] = model[nummodels];
+	model[numstudiomodels] = reinterpret_cast<s_model_t*>(kalloc(1, sizeof(s_model_t)));
+	bodypart[numbodyparts].pmodel[bodypart[numbodyparts].nummodels] = model[numstudiomodels];
 
-	strcpyn(model[nummodels]->name, "blank");
+	strcpyn(model[numstudiomodels]->name, "blank");
 
 	bodypart[numbodyparts].nummodels++;
-	nummodels++;
+	numstudiomodels++;
 	return 0;
 }
 

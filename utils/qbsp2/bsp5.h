@@ -13,6 +13,7 @@
 #include "cmdlib.h"
 #include "mathlib.h"
 #include "bspfile.h"
+#include "polylib.h"
 #include "threads.h"
 
 //#define	ON_EPSILON	0.05
@@ -24,19 +25,8 @@
 
 //============================================================================
 
-
-typedef struct
-{
-	int numpoints;
-	vec3_t points[8]; // variable sized
-} winding_t;
-
-#define MAX_POINTS_ON_WINDING 128
-
 winding_t* BaseWindingForPlane(dplane_t* p);
 winding_t* NewWinding(int points);
-void FreeWinding(winding_t* w);
-winding_t* CopyWinding(winding_t* w);
 winding_t* ClipWinding(winding_t* in, dplane_t* split, qboolean keepon);
 void DivideWinding(winding_t* in, dplane_t* split, winding_t** front, winding_t** back);
 

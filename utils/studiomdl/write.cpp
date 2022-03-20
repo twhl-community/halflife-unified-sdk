@@ -27,7 +27,7 @@
 #include "cmdlib.h"
 #include "lbmlib.h"
 #include "scriplib.h"
-#include "mathlib.h"
+#include "../common/mathlib.h"
 #define Vector vec3_t
 #include "..\..\engine\studio.h"
 #include "studiomdl.h"
@@ -405,7 +405,7 @@ void WriteModel()
 	pData += numbodyparts * sizeof(mstudiobodyparts_t);
 
 	pmodel = (mstudiomodel_t*)pData;
-	pData += nummodels * sizeof(mstudiomodel_t);
+	pData += numstudiomodels * sizeof(mstudiomodel_t);
 
 	for (i = 0, j = 0; i < numbodyparts; i++)
 	{
@@ -418,7 +418,7 @@ void WriteModel()
 	ALIGN(pData);
 
 	cur = pData;
-	for (i = 0; i < nummodels; i++)
+	for (i = 0; i < numstudiomodels; i++)
 	{
 		int normmap[MAXSTUDIOVERTS];
 		int normimap[MAXSTUDIOVERTS];
