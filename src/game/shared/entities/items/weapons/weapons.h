@@ -847,6 +847,8 @@ private:
 class CRpgRocket : public CGrenade
 {
 public:
+	~CRpgRocket() override;
+
 	bool Save(CSave& save) override;
 	bool Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
