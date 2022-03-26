@@ -30,6 +30,8 @@
 
 using namespace std::literals;
 
+constexpr std::string_view LoggingConfigSchemaName{"LoggingConfig"sv};
+
 template <typename Mutex>
 class ConsoleLogSink : public spdlog::sinks::base_sink<Mutex>
 {
@@ -140,7 +142,7 @@ bool CLogSystem::Initialize()
 	g_ConCommands.CreateCommand("log_listloggers", [this](const auto&) { ListLoggers(); });
 	g_ConCommands.CreateCommand("log_setlevel", [this](const auto& args) { SetLogLevel(args); });
 
-	g_JSON.RegisterSchema("LoggingConfig", &GetLoggingConfigSchema);
+	g_JSON.RegisterSchema(LoggingConfigSchemaName, &GetLoggingConfigSchema);
 
 	m_Sinks.push_back(std::make_shared<ConsoleLogSink<spdlog::details::null_mutex>>());
 
@@ -171,22 +173,10 @@ bool CLogSystem::Initialize()
 
 bool CLogSystem::PostInitialize()
 {
-	json jsonSchema = GetLoggingConfigSchema();
-
-	if (jsonSchema.is_null())
-	{
-		return false;
-	}
-
-	json_validator validator{};
-
-	validator.set_root_schema(std::move(jsonSchema));
-
 	m_Settings = g_JSON.ParseJSONFile(
 						   "cfg/logging.json",
-						   validator,
-						   [this](const json& input) { return LoadSettings(input); },
-						   "GAMECONFIG")
+						   {.SchemaName = LoggingConfigSchemaName, .PathID = "GAMECONFIG"},
+						   [this](const json& input) { return LoadSettings(input); })
 					 .value_or(Settings{});
 
 	//TODO: create sinks based on settings

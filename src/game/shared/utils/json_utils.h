@@ -33,6 +33,24 @@ class CCommandArgs;
 
 const char* JSONTypeToString(json::value_t type);
 
+struct JSONLoadParameters final
+{
+	/**
+	*	@brief If not empty, use the validator for this schema to validate the JSON before parsing it.
+	*/
+	const std::string_view SchemaName;
+
+	/**
+	* @brief If provided, use this validator. If this is not null then JSONLoadParameters::SchemaName must be empty.
+	*/
+	const json_validator* Validator = nullptr;
+
+	/**
+	*	@brief If not null, only files in this search path.
+	*/
+	const char* PathID = nullptr;
+};
+
 class JSONSystem final
 {
 private:
@@ -41,6 +59,7 @@ private:
 	{
 		std::string Name;
 		std::function<json()> Callback;
+		std::optional<json_validator> Validator;
 	};
 
 public:
@@ -68,14 +87,30 @@ public:
 	void RegisterSchema(std::string&& name, std::function<json()>&& getSchemaFunction);
 
 	/**
-	*	@brief Loads a file using the engine's filesystem, parses it as JSON, and validates it using the given validator.
+	*	@copydoc RegisterSchema(std::string&&, std::function<json()>&&)
 	*/
-	std::optional<json> LoadJSONFile(const char* fileName, const json_validator& validator, const char* pathID = nullptr);
+	void RegisterSchema(std::string_view name, std::function<json()>&& getSchemaFunction)
+	{
+		RegisterSchema(std::string{name}, std::move(getSchemaFunction));
+	}
+
+	/**
+	*	@brief Gets the validator for the given schema.
+	*	@return If no schema by that name exists or the validator has not been created yet, returns null.
+	*/
+	const json_validator* GetValidator(std::string_view schemaName) const;
+
+	/**
+	*	@brief Gets or creates the validator for the given schema.
+	*	If the schema exists and the validator has not been created yet, creates the validator.
+	*	@return If no schema by that name exists or the schema is invalid, returns null.
+	*/
+	const json_validator* GetOrCreateValidator(std::string_view schemaName);
 
 	/**
 	*	@brief Loads a file using the engine's filesystem and parses it as JSON.
 	*/
-	std::optional<json> LoadJSONFile(const char* fileName, const char* pathID = nullptr);
+	std::optional<json> LoadJSONFile(const char* fileName, const JSONLoadParameters& parameters = {});
 
 	/**
 	*	@brief Helper function to parse JSON.
@@ -93,24 +128,14 @@ public:
 
 	/**
 	*	@brief Loads a JSON file and parses it into an object.
-	*	@see LoadJSONFile(const char*, const json_validator& validator const char*)
+	*	@see LoadJSONFile(const char*, const JSONLoadParameters& parameters)
 	*	@see ParseJSON(Callable, const json&)
 	*/
 	template <typename Callable>
-	auto ParseJSONFile(const char* fileName, const json_validator& validator, Callable callable, const char* pathID = nullptr)
+	auto ParseJSONFile(const char* fileName, const JSONLoadParameters& parameters, Callable callable)
 		-> std::optional<decltype(callable(json{}))>;
 
-	/**
-	*	@brief Loads a JSON file and parses it into an object.
-	*	@see LoadJSONFile(const char*, const char*)
-	*	@see ParseJSON(Callable, const json&)
-	*/
-	template <typename Callable>
-	auto ParseJSONFile(const char* fileName, Callable callable, const char* pathID = nullptr) -> std::optional<decltype(callable(json{}))>;
-
 private:
-	std::optional<json> LoadJSONFile(const char* fileName, const json_validator* validator, const char* pathID);
-
 	void ListSchemas(const CCommandArgs& args);
 
 	void GenerateSchema(const CCommandArgs& args);
@@ -167,21 +192,10 @@ inline std::optional<json> JSONSystem::ParseJSONSchema(std::string_view schema)
 }
 
 template <typename Callable>
-inline auto JSONSystem::ParseJSONFile(const char* fileName, const json_validator& validator, Callable callable, const char* pathID)
+inline auto JSONSystem::ParseJSONFile(const char* fileName, const JSONLoadParameters& parameters, Callable callable)
 	-> std::optional<decltype(callable(json{}))>
 {
-	if (auto data = LoadJSONFile(fileName, validator, pathID); data.has_value())
-	{
-		return ParseJSON(callable, data.value());
-	}
-
-	return {};
-}
-
-template <typename Callable>
-inline auto JSONSystem::ParseJSONFile(const char* fileName, Callable callable, const char* pathID) -> std::optional<decltype(callable(json{}))>
-{
-	if (auto data = LoadJSONFile(fileName, pathID); data.has_value())
+	if (auto data = LoadJSONFile(fileName, parameters); data.has_value())
 	{
 		return ParseJSON(callable, data.value());
 	}

@@ -31,9 +31,28 @@ using namespace std::literals;
 
 constexpr const char* const MapConfigCommandWhitelistFileName = "cfg/MapConfigCommandWhitelist.json";
 const std::regex MapConfigCommandWhitelistRegex{"^[\\w]+$"};
+constexpr std::string_view MapConfigCommandWhitelistSchemaName{"MapConfigCommandWhitelist"sv};
 
 cvar_t servercfgfile = {"sv_servercfgfile", "cfg/server/server.json", FCVAR_NOEXTRAWHITEPACE | FCVAR_ISPATH};
 cvar_t mapchangecfgfile = {"sv_mapchangecfgfile", "", FCVAR_NOEXTRAWHITEPACE | FCVAR_ISPATH};
+
+static json GetMapConfigCommandWhitelistSchema()
+{
+	auto schema = fmt::format(R"(
+{{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"title": "Map Configuration Command Whitelist",
+	"type": "array",
+	"items": {{
+		"title": "Command Name",
+		"type": "string",
+		"pattern": "^[\\w]+$"
+	}}
+}}
+)");
+
+	return g_JSON.ParseJSONSchema(schema).value_or(json{});
+}
 
 static void AddCommonConfigSections(std::vector<std::unique_ptr<const GameConfigSection>>& sections)
 {
@@ -54,25 +73,9 @@ bool CServerLibrary::Initialize()
 	g_engfuncs.pfnCVarRegister(&servercfgfile);
 	g_engfuncs.pfnCVarRegister(&mapchangecfgfile);
 
-	g_JSON.RegisterSchema("MapConfigCommandWhitelist", &CServerLibrary::GetMapConfigCommandWhitelistSchema);
+	g_JSON.RegisterSchema(MapConfigCommandWhitelistSchemaName, &GetMapConfigCommandWhitelistSchema);
 
-	try
-	{
-		auto whitelistSchema = GetMapConfigCommandWhitelistSchema();
-
-		if (whitelistSchema.is_null())
-		{
-			return false;
-		}
-
-		m_MapConfigCommandWhitelistValidator.set_root_schema(std::move(whitelistSchema));
-		CreateConfigDefinitions();
-	}
-	catch (const std::invalid_argument& e)
-	{
-		g_GameConfigLoader.GetLogger()->error("{}", e.what());
-		return false;
-	}
+	CreateConfigDefinitions();
 
 	return true;
 }
@@ -177,31 +180,14 @@ void CServerLibrary::LoadMapChangeConfigFile()
 	}
 }
 
-json CServerLibrary::GetMapConfigCommandWhitelistSchema()
-{
-	auto schema = fmt::format(R"(
-{{
-	"$schema": "http://json-schema.org/draft-07/schema#",
-	"title": "Map Configuration Command Whitelist",
-	"type": "array",
-	"items": {{
-		"title": "Command Name",
-		"type": "string",
-		"pattern": "^[\\w]+$"
-	}}
-}}
-)");
-
-	return g_JSON.ParseJSONSchema(schema).value_or(json{});
-}
-
 std::unordered_set<std::string> CServerLibrary::GetMapConfigCommandWhitelist()
 {
 	//Load the whitelist from a file
 	auto whitelist = g_JSON.ParseJSONFile(
 		MapConfigCommandWhitelistFileName,
-		m_MapConfigCommandWhitelistValidator,
-		[](const json& input) {
+		{.SchemaName = MapConfigCommandWhitelistSchemaName, .PathID = "GAMECONFIG"},
+		[](const json& input)
+		{
 			std::unordered_set<std::string> list;
 
 			if (input.is_array())
@@ -227,8 +213,7 @@ std::unordered_set<std::string> CServerLibrary::GetMapConfigCommandWhitelist()
 			}
 
 			return list;
-		},
-		"GAMECONFIG");
+		});
 
 	return whitelist.value_or(std::unordered_set<std::string>{});
 }

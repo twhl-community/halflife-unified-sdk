@@ -126,17 +126,61 @@ void JSONSystem::RegisterSchema(std::string&& name, std::function<json()>&& getS
 	m_Schemas.push_back({std::move(name), std::move(getSchemaFunction)});
 }
 
-std::optional<json> JSONSystem::LoadJSONFile(const char* fileName, const json_validator& validator, const char* pathID)
+const json_validator* JSONSystem::GetValidator(std::string_view schemaName) const
 {
-	return LoadJSONFile(fileName, &validator, pathID);
+	if (auto it = std::find_if(m_Schemas.begin(), m_Schemas.end(), [&](const auto& schema)
+			{ return schema.Name == schemaName; });
+		it != m_Schemas.end() && it->Validator.has_value())
+	{
+		return &it->Validator.value();
+	}
+
+	return nullptr;
 }
 
-std::optional<json> JSONSystem::LoadJSONFile(const char* fileName, const char* pathID)
+const json_validator* JSONSystem::GetOrCreateValidator(std::string_view schemaName)
 {
-	return LoadJSONFile(fileName, nullptr, pathID);
+	if (auto it = std::find_if(m_Schemas.begin(), m_Schemas.end(), [&](const auto& schema)
+		{ return schema.Name == schemaName;
+		}); it != m_Schemas.end())
+	{
+		//Create validator on demand.
+		if (!it->Validator.has_value())
+		{
+			m_Logger->trace("Creating validator for schema \"{}\"", schemaName);
+
+			try
+			{
+				auto schema = it->Callback();
+
+				if (schema.is_null())
+				{
+					m_Logger->error("Error creating validator for schema \"{}\": schema is invalid", schemaName);
+					return nullptr;
+				}
+
+				json_validator validator;
+
+				validator.set_root_schema(std::move(schema));
+
+				it->Validator = std::move(validator);
+			}
+			catch(const std::invalid_argument& e)
+			{
+				m_Logger->error("Error creating validator for schema \"{}\": {}", schemaName, e.what());
+				return nullptr;
+			}
+		}
+
+		return &it->Validator.value();
+	}
+
+	m_Logger->error("Error creating validator for schema \"{}\": schema does not exist", schemaName);
+
+	return nullptr;
 }
 
-std::optional<json> JSONSystem::LoadJSONFile(const char* fileName, const json_validator* validator, const char* pathID)
+std::optional<json> JSONSystem::LoadJSONFile(const char* fileName, const JSONLoadParameters& parameters)
 {
 	if (!m_Logger)
 	{
@@ -149,9 +193,26 @@ std::optional<json> JSONSystem::LoadJSONFile(const char* fileName, const json_va
 		return {};
 	}
 
+	auto validator = [&]() -> const json_validator*
+	{
+		//Only validate if enabled.
+		if (0 == m_JsonSchemaValidation->value)
+		{
+			return nullptr;
+		}
+
+		if (parameters.Validator)
+		{
+			assert(parameters.SchemaName.empty());
+			return parameters.Validator;
+		}
+
+		return GetOrCreateValidator(parameters.SchemaName);
+	}();
+
 	m_Logger->trace("Loading JSON file \"{}\"", fileName);
 
-	if (const auto file = FileSystem_LoadFileIntoBuffer(fileName, pathID); !file.empty())
+	if (const auto file = FileSystem_LoadFileIntoBuffer(fileName, parameters.PathID); !file.empty())
 	{
 		try
 		{
@@ -159,8 +220,7 @@ std::optional<json> JSONSystem::LoadJSONFile(const char* fileName, const json_va
 
 			auto data = json::parse(text, text + file.size(), nullptr, true, true);
 
-			//Only validate if enabled
-			if (0 != m_JsonSchemaValidation->value && validator)
+			if (validator)
 			{
 				m_Logger->trace("Validating JSON file");
 

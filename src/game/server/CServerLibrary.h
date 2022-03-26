@@ -24,8 +24,6 @@
 
 #include "config/GameConfigLoader.h"
 
-#include "utils/json_utils.h"
-
 class GameConfigDefinition;
 
 /**
@@ -101,13 +99,9 @@ private:
 
 	void LoadMapChangeConfigFile();
 
-	static json GetMapConfigCommandWhitelistSchema();
-
 	std::unordered_set<std::string> GetMapConfigCommandWhitelist();
 
 private:
-	json_validator m_MapConfigCommandWhitelistValidator;
-
 	std::shared_ptr<const GameConfigDefinition> m_ServerConfigDefinition;
 	std::shared_ptr<const GameConfigDefinition> m_MapConfigDefinition;
 	std::shared_ptr<const GameConfigDefinition> m_MapChangeConfigDefinition;

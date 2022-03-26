@@ -186,12 +186,12 @@ bool GameConfigLoader::TryLoadCore(LoadContext& loadContext, const char* fileNam
 
 	auto result = g_JSON.ParseJSONFile(
 		fileName,
-		loadContext.Definition.GetValidator(),
-		[&, this](const json& input) {
+		{.Validator = &loadContext.Definition.GetValidator(), .PathID = loadContext.Parameters.PathID},
+		[&, this](const json& input)
+		{
 			ParseConfig(loadContext, fileName, input);
 			return true; //Just return something so optional doesn't complain.
-		},
-		loadContext.Parameters.PathID);
+		});
 
 	if (result.has_value())
 	{
