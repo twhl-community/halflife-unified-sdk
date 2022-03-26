@@ -28,7 +28,6 @@ using namespace std::literals;
 GameConfigDefinition::GameConfigDefinition(std::string&& name, std::vector<std::unique_ptr<const GameConfigSection>>&& sections)
 	: m_Name(std::move(name)), m_Sections(std::move(sections))
 {
-	m_Validator.set_root_schema(GetSchema());
 }
 
 GameConfigDefinition::~GameConfigDefinition() = default;

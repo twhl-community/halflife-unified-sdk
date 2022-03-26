@@ -186,7 +186,7 @@ bool GameConfigLoader::TryLoadCore(LoadContext& loadContext, const char* fileNam
 
 	auto result = g_JSON.ParseJSONFile(
 		fileName,
-		{.Validator = &loadContext.Definition.GetValidator(), .PathID = loadContext.Parameters.PathID},
+		{.SchemaName = loadContext.Definition.GetName(), .PathID = loadContext.Parameters.PathID},
 		[&, this](const json& input)
 		{
 			ParseConfig(loadContext, fileName, input);

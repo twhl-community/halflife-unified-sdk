@@ -52,10 +52,7 @@ public:
 	*/
 	json GetSchema() const;
 
-	const json_validator& GetValidator() const { return m_Validator; }
-
 private:
 	std::string m_Name;
 	std::vector<std::unique_ptr<const GameConfigSection>> m_Sections;
-	json_validator m_Validator;
 };
