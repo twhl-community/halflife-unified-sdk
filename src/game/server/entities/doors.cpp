@@ -1094,4 +1094,5 @@ void CMomentaryDoor::StopMoveSound()
 {
 	STOP_SOUND(ENT(pev), CHAN_STATIC, STRING(pev->noiseMoving));
 	EMIT_SOUND(ENT(pev), CHAN_STATIC, STRING(pev->noiseArrived), 1, ATTN_NORM);
+	SetThink(nullptr);
 }
