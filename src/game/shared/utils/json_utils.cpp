@@ -220,6 +220,8 @@ std::optional<json> JSONSystem::LoadJSONFile(const char* fileName, const JSONLoa
 
 			auto data = json::parse(text, text + file.size(), nullptr, true, true);
 
+			m_Logger->trace("Successfully loaded JSON file");
+
 			if (validator)
 			{
 				m_Logger->trace("Validating JSON file");
@@ -231,11 +233,8 @@ std::optional<json> JSONSystem::LoadJSONFile(const char* fileName, const JSONLoa
 				if (errorHandler)
 				{
 					m_Logger->trace("JSON file failed validation");
-					return {};
 				}
 			}
-
-			m_Logger->trace("Successfully loaded JSON file");
 
 			return data;
 		}
