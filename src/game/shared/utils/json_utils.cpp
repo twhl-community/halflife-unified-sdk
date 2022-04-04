@@ -212,7 +212,7 @@ std::optional<json> JSONSystem::LoadJSONFile(const char* fileName, const JSONLoa
 
 	m_Logger->trace("Loading JSON file \"{}\"", fileName);
 
-	if (const auto file = FileSystem_LoadFileIntoBuffer(fileName, parameters.PathID); !file.empty())
+	if (const auto file = FileSystem_LoadFileIntoBuffer(fileName, FileContentFormat::Text, parameters.PathID); !file.empty())
 	{
 		try
 		{
