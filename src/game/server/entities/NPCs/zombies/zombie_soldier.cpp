@@ -24,7 +24,7 @@ class CZombieSoldier : public CZombie
 public:
 	void Spawn() override
 	{
-		SpawnCore("models/zombie_soldier.mdl", gSkillData.zombieSoldierHealth);
+		SpawnCore("models/zombie_soldier.mdl", GetSkillFloat("sk_zombie_soldier_health"sv));
 	}
 
 	void Precache() override
@@ -33,8 +33,8 @@ public:
 	}
 
 protected:
-	float GetOneSlashDamage() override { return gSkillData.zombieSoldierDmgOneSlash; }
-	float GetBothSlashDamage() override { return gSkillData.zombieSoldierDmgBothSlash; }
+	float GetOneSlashDamage() override { return GetSkillFloat("sk_zombie_soldier_dmg_one_slash"sv); }
+	float GetBothSlashDamage() override { return GetSkillFloat("sk_zombie_soldier_dmg_both_slash"sv); }
 };
 
 LINK_ENTITY_TO_CLASS(monster_zombie_soldier, CZombieSoldier);

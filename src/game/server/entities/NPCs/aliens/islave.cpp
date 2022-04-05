@@ -306,7 +306,7 @@ void CISlave::HandleAnimEvent(MonsterEvent_t* pEvent)
 	case ISLAVE_AE_CLAW:
 	{
 		// SOUND HERE!
-		CBaseEntity* pHurt = CheckTraceHullAttack(70, gSkillData.slaveDmgClaw, DMG_SLASH);
+		CBaseEntity* pHurt = CheckTraceHullAttack(70, GetSkillFloat("sk_islave_dmg_claw"sv), DMG_SLASH);
 		if (pHurt)
 		{
 			if ((pHurt->pev->flags & (FL_MONSTER | FL_CLIENT)) != 0)
@@ -327,7 +327,7 @@ void CISlave::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 	case ISLAVE_AE_CLAWRAKE:
 	{
-		CBaseEntity* pHurt = CheckTraceHullAttack(70, gSkillData.slaveDmgClawrake, DMG_SLASH);
+		CBaseEntity* pHurt = CheckTraceHullAttack(70, GetSkillFloat("sk_islave_dmg_clawrake"sv), DMG_SLASH);
 		if (pHurt)
 		{
 			if ((pHurt->pev->flags & (FL_MONSTER | FL_CLIENT)) != 0)
@@ -523,7 +523,7 @@ void CISlave::Spawn()
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_GREEN;
 	pev->effects = 0;
-	pev->health = gSkillData.slaveHealth;
+	pev->health = GetSkillFloat("sk_islave_health"sv);
 	pev->view_ofs = Vector(0, 0, 64);  // position of the eyes relative to monster's origin.
 	m_flFieldOfView = VIEW_FIELD_WIDE; // NOTE: we need a wide field of view so npc will notice player and say hello
 	m_MonsterState = MONSTERSTATE_NONE;
@@ -818,7 +818,7 @@ void CISlave::ZapBeam(int side)
 	pEntity = CBaseEntity::Instance(tr.pHit);
 	if (pEntity != nullptr && 0 != pEntity->pev->takedamage)
 	{
-		pEntity->TraceAttack(pev, gSkillData.slaveDmgZap, vecAim, &tr, DMG_SHOCK);
+		pEntity->TraceAttack(pev, GetSkillFloat("sk_islave_dmg_zap"sv), vecAim, &tr, DMG_SHOCK);
 	}
 	UTIL_EmitAmbientSound(ENT(pev), tr.vecEndPos, "weapons/electro4.wav", 0.5, ATTN_NORM, 0, RANDOM_LONG(140, 160));
 }
@@ -898,7 +898,7 @@ void CDeadISlave::Spawn()
 		ALERT(at_console, "Dead slave with bad pose\n");
 	}
 	// Corpses have less health
-	pev->health = 8; //gSkillData.slaveHealth;
+	pev->health = 8; //GetSkillFloat("sk_islave_health"sv);
 
 	MonsterInitDead();
 }

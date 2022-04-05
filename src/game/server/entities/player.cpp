@@ -311,21 +311,21 @@ void CBasePlayer::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vec
 		case HITGROUP_GENERIC:
 			break;
 		case HITGROUP_HEAD:
-			flDamage *= gSkillData.plrHead;
+			flDamage *= GetSkillFloat("sk_player_head"sv);
 			break;
 		case HITGROUP_CHEST:
-			flDamage *= gSkillData.plrChest;
+			flDamage *= GetSkillFloat("sk_player_chest"sv);
 			break;
 		case HITGROUP_STOMACH:
-			flDamage *= gSkillData.plrStomach;
+			flDamage *= GetSkillFloat("sk_player_stomach"sv);
 			break;
 		case HITGROUP_LEFTARM:
 		case HITGROUP_RIGHTARM:
-			flDamage *= gSkillData.plrArm;
+			flDamage *= GetSkillFloat("sk_player_arm"sv);
 			break;
 		case HITGROUP_LEFTLEG:
 		case HITGROUP_RIGHTLEG:
-			flDamage *= gSkillData.plrLeg;
+			flDamage *= GetSkillFloat("sk_player_leg"sv);
 			break;
 		default:
 			break;

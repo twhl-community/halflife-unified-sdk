@@ -54,7 +54,7 @@ void CApache::SpawnCore(const char* model)
 
 	pev->flags |= FL_MONSTER;
 	pev->takedamage = DAMAGE_AIM;
-	pev->health = gSkillData.apacheHealth;
+	pev->health = GetSkillFloat("sk_apache_health"sv);
 	pev->max_health = pev->health;
 
 	m_flFieldOfView = -0.707; // 270 degrees

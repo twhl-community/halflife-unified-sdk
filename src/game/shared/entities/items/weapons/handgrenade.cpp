@@ -27,7 +27,7 @@ void CHandGrenade::Spawn()
 	SET_MODEL(ENT(pev), "models/w_grenade.mdl");
 
 #ifndef CLIENT_DLL
-	pev->dmg = gSkillData.plrDmgHandGrenade;
+	pev->dmg = GetSkillFloat("sk_plr_hand_grenade"sv);
 #endif
 
 	m_iDefaultAmmo = HANDGRENADE_DEFAULT_GIVE;

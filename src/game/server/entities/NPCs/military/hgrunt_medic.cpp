@@ -309,10 +309,10 @@ void COFMedicAlly::HandleAnimEvent(MonsterEvent_t* pEvent)
 //=========================================================
 void COFMedicAlly::Spawn()
 {
-	SpawnCore("models/hgrunt_medic.mdl", gSkillData.medicAllyHealth);
+	SpawnCore("models/hgrunt_medic.mdl", GetSkillFloat("sk_medic_ally_health"sv));
 
 	m_flLastUseTime = 0;
-	m_iHealCharge = gSkillData.medicAllyHeal;
+	m_iHealCharge = GetSkillFloat("sk_medic_ally_heal"sv);
 	m_fHealActive = false;
 	m_fUseHealing = false;
 	m_fHealing = false;

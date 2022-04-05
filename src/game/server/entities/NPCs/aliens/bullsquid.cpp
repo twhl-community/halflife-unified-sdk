@@ -161,7 +161,7 @@ void CSquidSpit::Touch(CBaseEntity* pOther)
 	}
 	else
 	{
-		pOther->TakeDamage(pev, pev, gSkillData.bullsquidDmgSpit, DMG_GENERIC);
+		pOther->TakeDamage(pev, pev, GetSkillFloat("sk_bullsquid_dmg_spit"sv), DMG_GENERIC);
 	}
 
 	SetThink(&CSquidSpit::SUB_Remove);
@@ -350,7 +350,7 @@ bool CBullsquid::CheckRangeAttack1(float flDot, float flDist)
 //=========================================================
 bool CBullsquid::CheckMeleeAttack1(float flDot, float flDist)
 {
-	if (m_hEnemy->pev->health <= gSkillData.bullsquidDmgWhip && flDist <= 85 && flDot >= 0.7)
+	if (m_hEnemy->pev->health <= GetSkillFloat("sk_bullsquid_dmg_whip"sv) && flDist <= 85 && flDot >= 0.7)
 	{
 		return true;
 	}
@@ -572,7 +572,7 @@ void CBullsquid::HandleAnimEvent(MonsterEvent_t* pEvent)
 	case BSQUID_AE_BITE:
 	{
 		// SOUND HERE!
-		CBaseEntity* pHurt = CheckTraceHullAttack(70, gSkillData.bullsquidDmgBite, DMG_SLASH);
+		CBaseEntity* pHurt = CheckTraceHullAttack(70, GetSkillFloat("sk_bullsquid_dmg_bite"sv), DMG_SLASH);
 
 		if (pHurt)
 		{
@@ -586,7 +586,7 @@ void CBullsquid::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 	case BSQUID_AE_TAILWHIP:
 	{
-		CBaseEntity* pHurt = CheckTraceHullAttack(70, gSkillData.bullsquidDmgWhip, DMG_CLUB | DMG_ALWAYSGIB);
+		CBaseEntity* pHurt = CheckTraceHullAttack(70, GetSkillFloat("sk_bullsquid_dmg_whip"sv), DMG_CLUB | DMG_ALWAYSGIB);
 		if (pHurt)
 		{
 			pHurt->pev->punchangle.z = -20;
@@ -678,7 +678,7 @@ void CBullsquid::Spawn()
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_GREEN;
 	pev->effects = 0;
-	pev->health = gSkillData.bullsquidHealth;
+	pev->health = GetSkillFloat("sk_bullsquid_health"sv);
 	m_flFieldOfView = 0.2; // indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
 

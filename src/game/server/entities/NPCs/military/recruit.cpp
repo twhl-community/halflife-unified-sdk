@@ -66,7 +66,7 @@ void CRecruit::DropWeapon()
 
 void CRecruit::Spawn()
 {
-	SpawnCore("models/recruit.mdl", gSkillData.barneyHealth);
+	SpawnCore("models/recruit.mdl", GetSkillFloat("sk_barney_health"sv));
 }
 
 void CRecruit::AlertSound()

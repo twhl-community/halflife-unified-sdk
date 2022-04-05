@@ -60,7 +60,7 @@ void CSatchelCharge::Spawn()
 	pev->gravity = 0.5;
 	pev->friction = 0.8;
 
-	pev->dmg = gSkillData.plrDmgSatchel;
+	pev->dmg = GetSkillFloat("sk_plr_satchel"sv);
 	// ResetSequenceInfo( );
 	pev->sequence = 1;
 }

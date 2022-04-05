@@ -367,7 +367,7 @@ void CBarney::SpawnCore(const char* model, float health)
 //=========================================================
 void CBarney::Spawn()
 {
-	SpawnCore("models/barney.mdl", gSkillData.barneyHealth);
+	SpawnCore("models/barney.mdl", GetSkillFloat("sk_barney_health"sv));
 }
 
 void CBarney::PrecacheCore(const char* model)
@@ -787,7 +787,7 @@ void CDeadBarney::Spawn()
 		ALERT(at_console, "Dead barney with bad pose\n");
 	}
 	// Corpses have less health
-	pev->health = 8; //gSkillData.barneyHealth;
+	pev->health = 8; //GetSkillFloat("sk_barney_health"sv);
 
 	MonsterInitDead();
 }

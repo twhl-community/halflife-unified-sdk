@@ -135,7 +135,7 @@ void CPitdroneSpike::SpikeTouch(CBaseEntity* pOther)
 	}
 	else
 	{
-		pOther->TakeDamage(pev, pev, gSkillData.pitdroneDmgSpit, DMG_GENERIC);
+		pOther->TakeDamage(pev, pev, GetSkillFloat("sk_pitdrone_dmg_spit"sv), DMG_GENERIC);
 		EMIT_SOUND_DYN(edict(), CHAN_VOICE, "weapons/xbow_hitbod1.wav", VOL_NORM, ATTN_NORM, 0, iPitch);
 	}
 
@@ -547,7 +547,7 @@ void CPitdrone::HandleAnimEvent(MonsterEvent_t* pEvent)
 	case PITDRONE_AE_BITE:
 	{
 		// SOUND HERE!
-		CBaseEntity* pHurt = CheckTraceHullAttack(70, gSkillData.pitdroneDmgBite, DMG_SLASH);
+		CBaseEntity* pHurt = CheckTraceHullAttack(70, GetSkillFloat("sk_pitdrone_dmg_bite"sv), DMG_SLASH);
 
 		if (pHurt)
 		{
@@ -561,7 +561,7 @@ void CPitdrone::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 	case PITDRONE_AE_TAILWHIP:
 	{
-		CBaseEntity* pHurt = CheckTraceHullAttack(70, gSkillData.pitdroneDmgWhip, DMG_CLUB | DMG_ALWAYSGIB);
+		CBaseEntity* pHurt = CheckTraceHullAttack(70, GetSkillFloat("sk_pitdrone_dmg_whip"sv), DMG_CLUB | DMG_ALWAYSGIB);
 		if (pHurt)
 		{
 			pHurt->pev->punchangle.z = -20;
@@ -662,7 +662,7 @@ void CPitdrone::Spawn()
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_GREEN;
 	pev->effects = 0;
-	pev->health = gSkillData.pitdroneHealth;
+	pev->health = GetSkillFloat("sk_pitdrone_health"sv);
 	m_flFieldOfView = VIEW_FIELD_WIDE; // indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
 

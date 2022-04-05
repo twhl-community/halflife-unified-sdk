@@ -64,7 +64,7 @@ bool CHealthKit::MyTouch(CBasePlayer* pPlayer)
 		return false;
 	}
 
-	if (pPlayer->TakeHealth(gSkillData.healthkitCapacity, DMG_GENERIC))
+	if (pPlayer->TakeHealth(GetSkillFloat("sk_healthkit"sv), DMG_GENERIC))
 	{
 		MESSAGE_BEGIN(MSG_ONE, gmsgItemPickup, nullptr, pPlayer->pev);
 		WRITE_STRING(STRING(pev->classname));
@@ -158,7 +158,7 @@ void CWallHealth::Spawn()
 	UTIL_SetOrigin(pev, pev->origin); // set size and link into world
 	UTIL_SetSize(pev, pev->mins, pev->maxs);
 	SET_MODEL(ENT(pev), STRING(pev->model));
-	m_iJuice = gSkillData.healthchargerCapacity;
+	m_iJuice = GetSkillFloat("sk_healthcharger"sv);
 	pev->frame = 0;
 }
 
@@ -234,7 +234,7 @@ void CWallHealth::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE us
 void CWallHealth::Recharge()
 {
 	EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/medshot4.wav", 1.0, ATTN_NORM);
-	m_iJuice = gSkillData.healthchargerCapacity;
+	m_iJuice = GetSkillFloat("sk_healthcharger"sv);
 	pev->frame = 0;
 	SetThink(&CWallHealth::SUB_DoNothing);
 }

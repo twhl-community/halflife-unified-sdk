@@ -57,7 +57,7 @@ bool CItemRegenerationCTF::MyTouch(CBasePlayer* pPlayer)
 
 				if (pPlayer->pev->health < 100.0)
 				{
-					pPlayer->TakeHealth(gSkillData.healthkitCapacity, DMG_GENERIC);
+					pPlayer->TakeHealth(GetSkillFloat("sk_healthkit"sv), DMG_GENERIC);
 				}
 
 				return true;

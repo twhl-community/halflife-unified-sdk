@@ -103,7 +103,7 @@ void CTripmineGrenade::Spawn()
 	pev->nextthink = gpGlobals->time + 0.2;
 
 	pev->takedamage = DAMAGE_YES;
-	pev->dmg = gSkillData.plrDmgTripmine;
+	pev->dmg = GetSkillFloat("sk_plr_tripmine"sv);
 	pev->health = 1; // don't let die normally
 
 	if (pev->owner != nullptr)

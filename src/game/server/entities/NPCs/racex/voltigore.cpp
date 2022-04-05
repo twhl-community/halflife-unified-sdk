@@ -264,7 +264,7 @@ void COFChargedBolt::ChargedBoltTouch(CBaseEntity* pOther)
 	else
 	{
 		ClearMultiDamage();
-		pOther->TakeDamage(pev, pev, gSkillData.voltigoreDmgBeam, DMG_ALWAYSGIB | DMG_SHOCK);
+		pOther->TakeDamage(pev, pev, GetSkillFloat("sk_voltigore_dmg_beam"sv), DMG_ALWAYSGIB | DMG_SHOCK);
 	}
 
 	pev->velocity = g_vecZero;
@@ -276,7 +276,7 @@ void COFChargedBolt::ChargedBoltTouch(CBaseEntity* pOther)
 
 	ClearMultiDamage();
 
-	RadiusDamage(pev->origin, pev, pevOwner, gSkillData.voltigoreDmgBeam, 128.0, CLASS_NONE, DMG_ALWAYSGIB | DMG_SHOCK);
+	RadiusDamage(pev->origin, pev, pevOwner, GetSkillFloat("sk_voltigore_dmg_beam"sv), 128.0, CLASS_NONE, DMG_ALWAYSGIB | DMG_SHOCK);
 
 	SetThink(&COFChargedBolt::ShutdownChargedBolt);
 	pev->nextthink = gpGlobals->time + 0.5;
@@ -471,7 +471,7 @@ void COFVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 	case VOLTIGORE_AE_LEFT_PUNCH:
 	{
-		CBaseEntity* pHurt = CheckTraceHullAttack(VOLTIGORE_MELEE_DIST, gSkillData.voltigoreDmgPunch, DMG_CLUB);
+		CBaseEntity* pHurt = CheckTraceHullAttack(VOLTIGORE_MELEE_DIST, GetSkillFloat("sk_voltigore_dmg_punch"sv), DMG_CLUB);
 
 		if (pHurt)
 		{
@@ -501,7 +501,7 @@ void COFVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 	case VOLTIGORE_AE_RIGHT_PUNCH:
 	{
-		CBaseEntity* pHurt = CheckTraceHullAttack(VOLTIGORE_MELEE_DIST, gSkillData.voltigoreDmgPunch, DMG_CLUB);
+		CBaseEntity* pHurt = CheckTraceHullAttack(VOLTIGORE_MELEE_DIST, GetSkillFloat("sk_voltigore_dmg_punch"sv), DMG_CLUB);
 
 		if (pHurt)
 		{
@@ -568,7 +568,7 @@ void COFVoltigore::SpawnCore(const char* model, const Vector& mins, const Vector
 //=========================================================
 void COFVoltigore::Spawn()
 {
-	SpawnCore("models/voltigore.mdl", {-80, -80, 0}, {80, 80, 90}, gSkillData.voltigoreHealth);
+	SpawnCore("models/voltigore.mdl", {-80, -80, 0}, {80, 80, 90}, GetSkillFloat("sk_voltigore_health"sv));
 }
 
 void COFVoltigore::PrecacheCore(const char* model)
@@ -1223,7 +1223,7 @@ void COFVoltigore::DeathGibThink()
 
 		ClearMultiDamage();
 
-		::RadiusDamage(pev->origin, pev, pev, gSkillData.voltigoreDmgBeam, 160.0, CLASS_NONE, DMG_ALWAYSGIB | DMG_SHOCK);
+		::RadiusDamage(pev->origin, pev, pev, GetSkillFloat("sk_voltigore_dmg_beam"sv), 160.0, CLASS_NONE, DMG_ALWAYSGIB | DMG_SHOCK);
 	}
 }
 

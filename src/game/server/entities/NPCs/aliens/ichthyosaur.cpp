@@ -424,7 +424,7 @@ void CIchthyosaur::HandleAnimEvent(MonsterEvent_t* pEvent)
 					pHurt->pev->angles.z = 0;
 					pHurt->pev->fixangle = 1;
 				}
-				pHurt->TakeDamage(pev, pev, gSkillData.ichthyosaurDmgShake, DMG_SLASH);
+				pHurt->TakeDamage(pev, pev, GetSkillFloat("sk_ichthyosaur_shake"sv), DMG_SLASH);
 			}
 		}
 		BiteSound();
@@ -457,7 +457,7 @@ void CIchthyosaur::Spawn()
 	pev->solid = SOLID_BBOX;
 	pev->movetype = MOVETYPE_FLY;
 	m_bloodColor = BLOOD_COLOR_GREEN;
-	pev->health = gSkillData.ichthyosaurHealth;
+	pev->health = GetSkillFloat("sk_ichthyosaur_health"sv);
 	pev->view_ofs = Vector(0, 0, 16);
 	m_flFieldOfView = VIEW_FIELD_WIDE;
 	m_MonsterState = MONSTERSTATE_NONE;

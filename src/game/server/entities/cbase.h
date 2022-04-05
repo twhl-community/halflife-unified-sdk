@@ -30,6 +30,8 @@ CBaseEntity
 */
 
 //Include common headers here.
+#include <string_view>
+
 #include "Platform.h"
 
 #include "extdll.h"
@@ -44,6 +46,8 @@ CBaseEntity
 #include "skill.h"
 #include "game.h"
 #include "gamerules.h"
+
+using namespace std::string_view_literals;
 
 #define MAX_PATH_SIZE 10 // max number of nodes available for a path.
 
@@ -445,6 +449,11 @@ public:
 
 	virtual bool FVisible(CBaseEntity* pEntity);
 	virtual bool FVisible(const Vector& vecOrigin);
+
+	static float GetSkillFloat(std::string_view name)
+	{
+		return g_Skill.GetValue(name);
+	}
 
 	//We use this variables to store each ammo count.
 	int ammo_9mm;

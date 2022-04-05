@@ -381,7 +381,7 @@ CGrenade* CGrenade::ShootContact(entvars_t* pevOwner, Vector vecStart, Vector ve
 	// Explode on contact
 	pGrenade->SetTouch(&CGrenade::ExplodeTouch);
 
-	pGrenade->pev->dmg = gSkillData.plrDmgM203Grenade;
+	pGrenade->pev->dmg = GetSkillFloat("sk_plr_9mmAR_grenade"sv);
 
 	return pGrenade;
 }

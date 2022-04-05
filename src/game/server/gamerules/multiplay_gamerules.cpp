@@ -112,47 +112,47 @@ void CHalfLifeMultiplay::RefreshSkillData()
 	// override some values for multiplay.
 
 	// suitcharger
-	gSkillData.suitchargerCapacity = 30;
+	g_Skill.SetValue("sk_suitcharger"sv, 30);
 
 	// Crowbar whack
-	gSkillData.plrDmgCrowbar = 25;
+	g_Skill.SetValue("sk_plr_crowbar"sv, 25);
 
 	// Glock Round
-	gSkillData.plrDmg9MM = 12;
+	g_Skill.SetValue("sk_plr_9mm_bullet"sv, 12);
 
 	// 357 Round
-	gSkillData.plrDmg357 = 40;
+	g_Skill.SetValue("sk_plr_357_bullet"sv, 40);
 
 	// MP5 Round
-	gSkillData.plrDmgMP5 = 12;
+	g_Skill.SetValue("sk_plr_9mmAR_bullet"sv, 12);
 
 	// M203 grenade
-	gSkillData.plrDmgM203Grenade = 100;
+	g_Skill.SetValue("sk_plr_9mmAR_grenade"sv, 100);
 
 	// Shotgun buckshot
-	gSkillData.plrDmgBuckshot = 20; // fewer pellets in deathmatch
+	g_Skill.SetValue("sk_plr_buckshot"sv, 20); // fewer pellets in deathmatch
 
 	// Crossbow
-	gSkillData.plrDmgCrossbowClient = 20;
+	g_Skill.SetValue("sk_plr_xbow_bolt_client"sv, 20);
 
 	// RPG
-	gSkillData.plrDmgRPG = 120;
+	g_Skill.SetValue("sk_plr_rpg"sv, 120);
 
 	// Egon
-	gSkillData.plrDmgEgonWide = 20;
-	gSkillData.plrDmgEgonNarrow = 10;
+	g_Skill.SetValue("sk_plr_egon_wide"sv, 20);
+	g_Skill.SetValue("sk_plr_egon_narrow"sv, 10);
 
 	// Hand Grendade
-	gSkillData.plrDmgHandGrenade = 100;
+	g_Skill.SetValue("sk_plr_hand_grenade"sv, 100);
 
 	// Satchel Charge
-	gSkillData.plrDmgSatchel = 120;
+	g_Skill.SetValue("sk_plr_satchel"sv, 120);
 
 	// Tripmine
-	gSkillData.plrDmgTripmine = 150;
+	g_Skill.SetValue("sk_plr_tripmine"sv, 150);
 
 	// hornet
-	gSkillData.plrDmgHornet = 10;
+	g_Skill.SetValue("sk_plr_hornet_dmg"sv, 10);
 }
 
 // longest the intermission can last, in seconds

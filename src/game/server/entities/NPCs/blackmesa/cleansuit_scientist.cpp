@@ -42,7 +42,7 @@ LINK_ENTITY_TO_CLASS(monster_cleansuit_scientist, CCleansuitScientist);
 //=========================================================
 void CCleansuitScientist::Spawn()
 {
-	SpawnCore("models/cleansuit_scientist.mdl", gSkillData.cleansuitScientistHealth);
+	SpawnCore("models/cleansuit_scientist.mdl", GetSkillFloat("sk_cleansuit_scientist_health"sv));
 }
 
 //=========================================================
@@ -62,7 +62,7 @@ void CCleansuitScientist::Heal()
 	if (target.Length() > 100)
 		return;
 
-	m_hTargetEnt->TakeHealth(gSkillData.cleansuitScientistHeal, DMG_GENERIC);
+	m_hTargetEnt->TakeHealth(GetSkillFloat("sk_cleansuit_scientist_heal"sv), DMG_GENERIC);
 	// Don't heal again for 1 minute
 	m_healTime = gpGlobals->time + 60;
 }
@@ -115,7 +115,7 @@ void CDeadCleansuitScientist::Spawn()
 	pev->effects = 0;
 	pev->sequence = 0;
 	// Corpses have less health
-	pev->health = 8; //gSkillData.scientistHealth;
+	pev->health = 8; //GetSkillFloat("sk_scientist_health"sv);
 
 	m_bloodColor = BLOOD_COLOR_RED;
 

@@ -90,7 +90,7 @@ void CSpore::Spawn()
 		pev->friction = 0.7;
 	}
 
-	pev->dmg = gSkillData.plrDmgSpore;
+	pev->dmg = GetSkillFloat("sk_plr_spore"sv);
 
 	m_flIgniteTime = gpGlobals->time;
 
@@ -218,7 +218,7 @@ void CSpore::RocketTouch(CBaseEntity* pOther)
 {
 	if (pOther->pev->takedamage != DAMAGE_NO)
 	{
-		pOther->TakeDamage(pev, VARS(pev->owner), gSkillData.plrDmgSpore, DMG_GENERIC);
+		pOther->TakeDamage(pev, VARS(pev->owner), GetSkillFloat("sk_plr_spore"sv), DMG_GENERIC);
 	}
 
 	IgniteThink();
@@ -249,7 +249,7 @@ void CSpore::MyBounceTouch(CBaseEntity* pOther)
 	}
 	else
 	{
-		pOther->TakeDamage(pev, VARS(pev->owner), gSkillData.plrDmgSpore, DMG_GENERIC);
+		pOther->TakeDamage(pev, VARS(pev->owner), GetSkillFloat("sk_plr_spore"sv), DMG_GENERIC);
 
 		IgniteThink();
 	}

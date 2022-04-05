@@ -101,12 +101,12 @@ void CZombie::AttackSound()
 
 float CZombie::GetOneSlashDamage()
 {
-	return gSkillData.zombieDmgOneSlash;
+	return GetSkillFloat("sk_zombie_dmg_one_slash"sv);
 }
 
 float CZombie::GetBothSlashDamage()
 {
-	return gSkillData.zombieDmgBothSlash;
+	return GetSkillFloat("sk_zombie_dmg_both_slash"sv);
 }
 
 void CZombie::ZombieSlashAttack(float damage, const Vector& punchAngle, const Vector& velocity, bool playAttackSound)
@@ -181,7 +181,7 @@ void CZombie::SpawnCore(const char* model, float health)
 //=========================================================
 void CZombie::Spawn()
 {
-	SpawnCore("models/zombie.mdl", gSkillData.zombieHealth);
+	SpawnCore("models/zombie.mdl", GetSkillFloat("sk_zombie_health"sv));
 }
 
 void CZombie::PrecacheCore(const char* model)

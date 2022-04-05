@@ -151,7 +151,7 @@ bool CKnife::Swing(const bool bFirst)
 		{
 			ClearMultiDamage();
 
-			float damage = gSkillData.plrDmgKnife;
+			float damage = GetSkillFloat("sk_plr_knife"sv);
 
 			int damageTypes = DMG_CLUB;
 

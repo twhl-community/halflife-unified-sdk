@@ -144,7 +144,7 @@ void CPenguinGrenade::SuperBounceTouch(CBaseEntity* pOther)
 			{
 				// ALERT( at_console, "hit enemy\n");
 				ClearMultiDamage();
-				pOther->TraceAttack(pev, gSkillData.snarkDmgBite, gpGlobals->v_forward, &tr, DMG_SLASH);
+				pOther->TraceAttack(pev, GetSkillFloat("sk_snark_dmg_bite"sv), gpGlobals->v_forward, &tr, DMG_SLASH);
 				if (m_hOwner != nullptr)
 					ApplyMultiDamage(pev, m_hOwner->pev);
 				else
@@ -152,9 +152,9 @@ void CPenguinGrenade::SuperBounceTouch(CBaseEntity* pOther)
 
 				// add more explosion damage
 				if (hurtTarget)
-					pev->dmg += gSkillData.plrDmgHandGrenade;
+					pev->dmg += GetSkillFloat("sk_plr_hand_grenade"sv);
 				else
-					pev->dmg += gSkillData.plrDmgHandGrenade / 5.0;
+					pev->dmg += GetSkillFloat("sk_plr_hand_grenade"sv) / 5.0;
 
 				if (pev->dmg > 500.0)
 				{
@@ -227,11 +227,11 @@ void CPenguinGrenade::Spawn()
 
 	pev->flags |= FL_MONSTER;
 	pev->takedamage = DAMAGE_AIM;
-	pev->health = gSkillData.snarkHealth;
+	pev->health = GetSkillFloat("sk_snark_health"sv);
 	pev->gravity = 0.5;
 	pev->friction = 0.5;
 
-	pev->dmg = gSkillData.plrDmgHandGrenade;
+	pev->dmg = GetSkillFloat("sk_plr_hand_grenade"sv);
 
 	m_flDie = gpGlobals->time + PENGUIN_DETONATE_DELAY;
 

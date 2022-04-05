@@ -578,7 +578,7 @@ void CScientist::SpawnCore(const char* model, float health)
 //=========================================================
 void CScientist::Spawn()
 {
-	SpawnCore("models/scientist.mdl", gSkillData.scientistHealth);
+	SpawnCore("models/scientist.mdl", GetSkillFloat("sk_scientist_health"sv));
 }
 
 void CScientist::PrecacheCore(const char* model)
@@ -991,7 +991,7 @@ void CScientist::Heal()
 	if (target.Length() > 100)
 		return;
 
-	m_hTargetEnt->TakeHealth(gSkillData.scientistHeal, DMG_GENERIC);
+	m_hTargetEnt->TakeHealth(GetSkillFloat("sk_scientist_heal"sv), DMG_GENERIC);
 	// Don't heal again for 1 minute
 	m_healTime = gpGlobals->time + 60;
 }
@@ -1043,7 +1043,7 @@ void CDeadScientist::Spawn()
 	pev->effects = 0;
 	pev->sequence = 0;
 	// Corpses have less health
-	pev->health = 8; //gSkillData.scientistHealth;
+	pev->health = 8; //GetSkillFloat("sk_scientist_health"sv);
 
 	m_bloodColor = BLOOD_COLOR_RED;
 

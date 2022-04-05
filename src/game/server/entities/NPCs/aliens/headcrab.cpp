@@ -83,7 +83,7 @@ public:
 	bool CheckRangeAttack2(float flDot, float flDist) override;
 	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 
-	virtual float GetDamageAmount() { return gSkillData.headcrabDmgBite; }
+	virtual float GetDamageAmount() { return GetSkillFloat("headcrabDmgBite"sv); }
 	virtual int GetVoicePitch() { return 100; }
 	virtual float GetSoundVolue() { return 1.0; }
 	Schedule_t* GetScheduleOfType(int Type) override;
@@ -276,7 +276,7 @@ void CHeadCrab::Spawn()
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_GREEN;
 	pev->effects = 0;
-	pev->health = gSkillData.headcrabHealth;
+	pev->health = GetSkillFloat("sk_headcrab_health"sv);
 	pev->view_ofs = Vector(0, 0, 20); // position of the eyes relative to monster's origin.
 	pev->yaw_speed = 5;				  //!!! should we put this in the monster's changeanim function since turn rates may vary with state/anim?
 	m_flFieldOfView = 0.5;			  // indicates the width of this monster's forward view cone ( as a dotproduct result )
@@ -477,7 +477,7 @@ public:
 	void Spawn() override;
 	void Precache() override;
 	void SetYawSpeed() override;
-	float GetDamageAmount() override { return gSkillData.headcrabDmgBite * 0.3; }
+	float GetDamageAmount() override { return GetSkillFloat("headcrabDmgBite"sv) * 0.3; }
 	bool CheckRangeAttack1(float flDot, float flDist) override;
 	Schedule_t* GetScheduleOfType(int Type) override;
 	int GetVoicePitch() override { return PITCH_NORM + RANDOM_LONG(40, 50); }
@@ -493,7 +493,7 @@ void CBabyCrab::Spawn()
 	pev->renderamt = 192;
 	UTIL_SetSize(pev, Vector(-12, -12, 0), Vector(12, 12, 24));
 
-	pev->health = gSkillData.headcrabHealth * 0.25; // less health than full grown
+	pev->health = GetSkillFloat("sk_headcrab_health"sv) * 0.25; // less health than full grown
 }
 
 void CBabyCrab::Precache()

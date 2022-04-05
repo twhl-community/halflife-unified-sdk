@@ -257,7 +257,7 @@ void CHGruntAlly::Shoot(bool firstShotInBurst)
 		{
 			const Vector vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40, 90) + gpGlobals->v_up * RANDOM_FLOAT(75, 200) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
 			EjectBrass(vecShootOrigin - vecShootDir * 24, vecShellVelocity, pev->angles.y, m_iShotgunShell, TE_BOUNCE_SHOTSHELL);
-			FireBullets(gSkillData.hgruntAllyShotgunPellets, vecShootOrigin, vecShootDir, VECTOR_CONE_15DEGREES, 2048, BULLET_PLAYER_BUCKSHOT, 0); // shoot +-7.5 degrees
+			FireBullets(GetSkillFloat("sk_hgrunt_ally_pellets"sv), vecShootOrigin, vecShootDir, VECTOR_CONE_15DEGREES, 2048, BULLET_PLAYER_BUCKSHOT, 0); // shoot +-7.5 degrees
 
 			EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/sbarrel1.wav", 1, ATTN_NORM);
 
@@ -315,7 +315,7 @@ void CHGruntAlly::HandleAnimEvent(MonsterEvent_t* pEvent)
 //=========================================================
 void CHGruntAlly::Spawn()
 {
-	SpawnCore("models/hgrunt_opfor.mdl", gSkillData.hgruntAllyHealth);
+	SpawnCore("models/hgrunt_opfor.mdl", GetSkillFloat("sk_hgrunt_ally_health"sv));
 
 	//TODO: make torso customizable
 	m_iGruntTorso = HGruntAllyTorso::Normal;

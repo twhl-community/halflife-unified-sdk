@@ -96,7 +96,7 @@ void COtis::GuardFirePistol()
 //=========================================================
 void COtis::Spawn()
 {
-	SpawnCore("models/otis.mdl", gSkillData.otisHealth);
+	SpawnCore("models/otis.mdl", GetSkillFloat("sk_otis_health"sv));
 }
 
 //=========================================================
@@ -254,7 +254,7 @@ void CDeadOtis::Spawn()
 		ALERT(at_console, "Dead otis with bad pose\n");
 	}
 	// Corpses have less health
-	pev->health = 8; //gSkillData.otisHealth;
+	pev->health = 8; //GetSkillFloat("sk_otis_health"sv);
 
 	MonsterInitDead();
 }

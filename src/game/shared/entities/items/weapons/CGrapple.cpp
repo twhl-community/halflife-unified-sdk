@@ -356,7 +356,7 @@ void CGrapple::PrimaryAttack()
 #ifndef CLIENT_DLL
 						ClearMultiDamage();
 
-						float flDamage = gSkillData.plrDmgGrapple;
+						float flDamage = GetSkillFloat("sk_plr_grapple"sv);
 
 						if (g_pGameRules->IsMultiplayer())
 						{
