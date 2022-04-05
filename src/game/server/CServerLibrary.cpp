@@ -21,6 +21,7 @@
 
 #include "cbase.h"
 #include "CServerLibrary.h"
+#include "skill.h"
 
 #include "config/GameConfigDefinition.h"
 #include "config/GameConfigLoader.h"
@@ -73,9 +74,17 @@ bool CServerLibrary::Initialize()
 	g_engfuncs.pfnCVarRegister(&servercfgfile);
 	g_engfuncs.pfnCVarRegister(&mapchangecfgfile);
 
+	if (!g_Skill.Initialize())
+	{
+		Con_Printf("Could not initialize skill system\n");
+		return false;
+	}
+
 	g_JSON.RegisterSchema(MapConfigCommandWhitelistSchemaName, &GetMapConfigCommandWhitelistSchema);
 
 	CreateConfigDefinitions();
+
+	g_Skill.LoadSkillConfigFile();
 
 	return true;
 }
@@ -85,6 +94,8 @@ void CServerLibrary::Shutdown()
 	m_MapConfigDefinition.reset();
 	m_MapChangeConfigDefinition.reset();
 	m_ServerConfigDefinition.reset();
+
+	g_Skill.Shutdown();
 
 	ShutdownCommon();
 }

@@ -704,8 +704,6 @@ void GameDLLInit()
 		SERVER_COMMAND("quit\n");
 		return;
 	}
-
-	SERVER_COMMAND("exec skill.cfg\n");
 }
 
 void GameDLLShutdown()

@@ -18,6 +18,12 @@
 
 #pragma once
 
+#include <memory>
+
+#include <spdlog/logger.h>
+
+#include "json_fwd.h"
+
 struct skilldata_t
 {
 
@@ -226,3 +232,21 @@ inline DLL_GLOBAL int g_iSkillLevel;
 #define SKILL_EASY 1
 #define SKILL_MEDIUM 2
 #define SKILL_HARD 3
+
+class SkillSystem final
+{
+public:
+
+	bool Initialize();
+	void Shutdown();
+
+	void LoadSkillConfigFile();
+
+private:
+	bool ParseConfiguration(const json& input);
+
+private:
+	std::shared_ptr<spdlog::logger> m_Logger;
+};
+
+inline SkillSystem g_Skill;
