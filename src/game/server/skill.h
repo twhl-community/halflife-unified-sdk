@@ -54,6 +54,8 @@ public:
 	bool Initialize();
 	void Shutdown();
 
+	void NewMapStarted();
+
 	void LoadSkillConfigFile();
 
 	constexpr int GetSkillLevel() const { return m_SkillLevel; }

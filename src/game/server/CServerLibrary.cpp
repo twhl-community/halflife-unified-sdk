@@ -109,6 +109,8 @@ void CServerLibrary::NewMapStarted(bool loadGame)
 
 	//Load the config files, which will initialize the map state as needed
 	LoadServerConfigFiles();
+
+	g_Skill.NewMapStarted();
 }
 
 void CServerLibrary::PreMapActivate()

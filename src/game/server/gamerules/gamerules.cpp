@@ -169,16 +169,8 @@ bool CGameRules::CanHavePlayerItem(CBasePlayer* pPlayer, CBasePlayerItem* pWeapo
 	return true;
 }
 
-//=========================================================
-// load the SkillData struct with the proper values based on the skill level.
-//=========================================================
 void CGameRules::RefreshSkillData()
 {
-	int iSkill = (int)CVAR_GET_FLOAT("skill");
-
-	iSkill = std::clamp(iSkill, static_cast<int>(SkillLevel::Easy), static_cast<int>(SkillLevel::Hard));
-
-	g_Skill.SetSkillLevel(iSkill);
 }
 
 //=========================================================

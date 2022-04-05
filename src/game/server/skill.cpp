@@ -66,6 +66,15 @@ void SkillSystem::Shutdown()
 	m_Logger.reset();
 }
 
+void SkillSystem::NewMapStarted()
+{
+	int iSkill = (int)CVAR_GET_FLOAT("skill");
+
+	iSkill = std::clamp(iSkill, static_cast<int>(SkillLevel::Easy), static_cast<int>(SkillLevel::Hard));
+
+	g_Skill.SetSkillLevel(iSkill);
+}
+
 void SkillSystem::LoadSkillConfigFile()
 {
 	//Erase all previous data.
