@@ -18,7 +18,11 @@
 
 #pragma once
 
+#include <array>
 #include <memory>
+#include <string>
+#include <string_view>
+#include <vector>
 
 #include <spdlog/logger.h>
 
@@ -26,9 +30,6 @@
 
 struct skilldata_t
 {
-
-	int iSkillLevel; // game skill level
-
 	// Monster Health & Damage
 	float agruntHealth;
 	float agruntDmgPunch;
@@ -225,16 +226,28 @@ struct skilldata_t
 };
 
 inline DLL_GLOBAL skilldata_t gSkillData;
-float GetSkillCvar(const char* pName);
 
-inline DLL_GLOBAL int g_iSkillLevel;
+namespace SkillLevel
+{
+enum SkillLevel
+{
+	Easy = 1,
+	Medium = 2,
+	Hard = 3
+};
+}
 
-#define SKILL_EASY 1
-#define SKILL_MEDIUM 2
-#define SKILL_HARD 3
+constexpr int SkillLevelCount = SkillLevel::Hard;
 
 class SkillSystem final
 {
+private:
+	struct SkillVariable
+	{
+		std::string Name;
+		std::array<float, SkillLevelCount> Values;
+	};
+
 public:
 
 	bool Initialize();
@@ -242,11 +255,46 @@ public:
 
 	void LoadSkillConfigFile();
 
+	constexpr int GetSkillLevel() const { return m_SkillLevel; }
+
+	void SetSkillLevel(int skillLevel);
+
+	/**
+	*	@brief take the name of a variable, tack a digit for the skill level on, and return the value of that variable
+	*/
+	float GetValue(std::string_view name) const;
+
+	void SetValue(std::string_view name, int skillLevel, float value);
+
+	void SetValue(std::string_view name, float value);
+
 private:
 	bool ParseConfiguration(const json& input);
 
 private:
 	std::shared_ptr<spdlog::logger> m_Logger;
+
+	int m_SkillLevel = SkillLevel::Easy;
+
+	std::vector<SkillVariable> m_SkillVariables;
 };
 
 inline SkillSystem g_Skill;
+
+inline void SkillSystem::SetSkillLevel(int skillLevel)
+{
+	if (skillLevel < SkillLevel::Easy || skillLevel > SkillLevel::Hard)
+	{
+		m_Logger->error("SetSkillLevel: new level \"{}\" out of range", skillLevel);
+		return;
+	}
+
+	m_SkillLevel = skillLevel;
+
+	m_Logger->info("GAME SKILL LEVEL: {}", m_SkillLevel);
+}
+
+inline void SkillSystem::SetValue(std::string_view name, float value)
+{
+	SetValue(name, m_SkillLevel, value);
+}

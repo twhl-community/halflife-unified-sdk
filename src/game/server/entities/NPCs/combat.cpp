@@ -851,7 +851,7 @@ When a monster is poisoned via an arrow etc it takes all the poison damage at on
 
 
 
-GLOBALS ASSUMED SET:  g_iSkillLevel
+GLOBALS ASSUMED SET:  g_Skill.GetSkillLevel()
 ============
 */
 bool CBaseMonster::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)

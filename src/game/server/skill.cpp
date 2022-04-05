@@ -16,7 +16,9 @@
 // skill.cpp - code for skill level concerns
 //=========================================================
 
-#include <string_view>
+#include <algorithm>
+#include <cctype>
+#include <charconv>
 
 #include "cbase.h"
 #include "skill.h"
@@ -28,28 +30,6 @@ using namespace std::literals;
 
 constexpr std::string_view SkillConfigSchemaName{"SkillConfig"sv};
 constexpr const char* const SkillConfigName = "cfg/skill.json";
-
-//=========================================================
-// take the name of a cvar, tack a digit for the skill level
-// on, and return the value.of that Cvar
-//=========================================================
-float GetSkillCvar(const char* pName)
-{
-	int iCount;
-	float flValue;
-	char szBuffer[64];
-
-	iCount = sprintf(szBuffer, "%s%d", pName, gSkillData.iSkillLevel);
-
-	flValue = CVAR_GET_FLOAT(szBuffer);
-
-	if (flValue <= 0)
-	{
-		ALERT(at_console, "\n\n** GetSkillCVar Got a zero for %s **\n\n", szBuffer);
-	}
-
-	return flValue;
-}
 
 static json GetSkillConfigSchema()
 {
@@ -88,12 +68,57 @@ void SkillSystem::Shutdown()
 
 void SkillSystem::LoadSkillConfigFile()
 {
+	//Erase all previous data.
+	m_SkillVariables.clear();
+
 	if (const auto result = g_JSON.ParseJSONFile(SkillConfigName,
 		{.SchemaName = SkillConfigSchemaName, .PathID = "GAMECONFIG"},
 		[this](const json& input){ return ParseConfiguration(input); }); !result.value_or(false))
 	{
 		m_Logger->error("Error loading skill configuration file \"{}\"", SkillConfigName);
 	}
+}
+
+float SkillSystem::GetValue(std::string_view name) const
+{
+	float value = 0;
+
+	if (const auto it = std::find_if(m_SkillVariables.begin(), m_SkillVariables.end(), [&](const auto& variable)
+			{ return variable.Name == name; }); it != m_SkillVariables.end())
+	{
+		value = it->Values[m_SkillLevel - 1];
+
+		if ( value > 0)
+		{
+			return value;
+		}
+	}
+
+	m_Logger->debug("Got a zero for {}{}", name, m_SkillLevel);
+
+	return value;
+}
+
+void SkillSystem::SetValue(std::string_view name, int skillLevel, float value)
+{
+	if (skillLevel < SkillLevel::Easy || skillLevel > SkillLevel::Hard)
+	{
+		return;
+	}
+
+	auto it = std::find_if(m_SkillVariables.begin(), m_SkillVariables.end(), [&](const auto& variable)
+		{ return variable.Name == name; });
+
+	if (it == m_SkillVariables.end())
+	{
+		m_SkillVariables.emplace_back(std::string{name}, decltype(SkillVariable::Values){});
+
+		it = m_SkillVariables.end() - 1;
+	}
+
+	m_Logger->debug("Skill value \"{}{}\" changed to \"{}\"", name, skillLevel, value);
+
+	it->Values[skillLevel - 1] = value;
 }
 
 bool SkillSystem::ParseConfiguration(const json& input)
@@ -105,25 +130,77 @@ bool SkillSystem::ParseConfiguration(const json& input)
 
 	for (const auto& item : input.items())
 	{
-		const std::string key = item.key();
-
-		const json value = item.value();
-
-		if (value.is_string())
+		[&]()
 		{
+			const json value = item.value();
+
+			if (!value.is_string())
+			{
+				//Already validated by schema.
+				return;
+			}
+
+			const std::string_view key = item.key();
+
+			if (key.empty())
+			{
+				m_Logger->error("Invalid skill variable name \"{}\": Key is empty", key);
+				return;
+			}
+
+			if (std::find_if(key.begin(), key.end(), [](const auto c) { return 0 != std::isspace(c); }) != key.end())
+			{
+				m_Logger->error("Invalid skill variable name \"{}\": Key contains whitespace", key);
+				return;
+			}
+
+			//Get the skill variable base name and skill level.
+			const auto endIndex = key.find_last_not_of("0123456789");
+
+			if (endIndex == std::string::npos)
+			{
+				m_Logger->error("Invalid skill variable name \"{}\": Key contains only digits", key);
+				return;
+			}
+
+			if (endIndex + 1 >= key.length())
+			{
+				m_Logger->error("Invalid skill variable name \"{}\": Key contains no skill level at the end", key);
+				return;
+			}
+
+			const std::string_view baseName{key.substr(0, endIndex + 1)};
+			const std::string_view skillLevelString{key.substr(endIndex + 1)};
+
+			int skillLevel = 0;
+			if (const auto result = std::from_chars(skillLevelString.data(), skillLevelString.data() + skillLevelString.length(), skillLevel);
+				result.ec != std::errc())
+			{
+				//Should only happen if the skill level is a really large number.
+				if (result.ec == std::errc::result_out_of_range)
+				{
+					m_Logger->error("Invalid skill variable name \"{}\": skill level is out of range", key);
+				}
+				else
+				{
+					//In case something else goes wrong.
+					m_Logger->error("Invalid skill variable name \"{}\": {}", key, std::make_error_code(result.ec).message());
+				}
+				
+				return;
+			}
+
+			if (skillLevel < SkillLevel::Easy || skillLevel > SkillLevel::Hard)
+			{
+				m_Logger->error("Invalid skill variable name \"{}\": skill level is out of range", key);
+				return;
+			}
+
 			const std::string valueString = value.get<std::string>();
+			const auto valueFloat = std::stof(valueString);
 
-			m_Logger->debug("Setting skill value for \"{}\" to \"{}\"", key, valueString);
-
-			if (const auto cvar = CVAR_GET_POINTER(key.c_str()); cvar != nullptr)
-			{
-				g_engfuncs.pfnCvar_DirectSet(cvar, valueString.c_str());
-			}
-			else
-			{
-				m_Logger->error("No skill cvar for \"{}\"", key);
-			}
-		}
+			SetValue(baseName, skillLevel, valueFloat);
+		}();
 	}
 
 	return true;

@@ -347,7 +347,7 @@ void CISlave::HandleAnimEvent(MonsterEvent_t* pEvent)
 	case ISLAVE_AE_ZAP_POWERUP:
 	{
 		// speed up attack when on hard
-		if (g_iSkillLevel == SKILL_HARD)
+		if (g_Skill.GetSkillLevel() == SkillLevel::Hard)
 			pev->framerate = 1.5;
 
 		UTIL_MakeAimVectors(pev->angles);
