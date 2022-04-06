@@ -86,7 +86,8 @@ bool SkillSystem::Initialize()
 					}
 				}
 			}
-		});
+		},
+		CommandLibraryPrefix::No);
 
 	g_ConCommands.CreateCommand("sk_set", [this](const CCommandArgs& args)
 		{
@@ -117,7 +118,8 @@ bool SkillSystem::Initialize()
 			}
 
 			SetValue(name, skillLevel, value);
-		});
+		},
+		CommandLibraryPrefix::No);
 
 	g_ConCommands.CreateCommand("sk_remove", [this](const CCommandArgs& args)
 		{
@@ -128,7 +130,8 @@ bool SkillSystem::Initialize()
 			}
 
 			RemoveValue(args.Argument(1));
-		});
+		},
+		CommandLibraryPrefix::No);
 
 	//Don't name this sk_remove_all because the console will always autocomplete sk_remove to that.
 	g_ConCommands.CreateCommand("sk_reset", [this](const CCommandArgs& args)
@@ -140,7 +143,8 @@ bool SkillSystem::Initialize()
 			}
 
 			m_SkillVariables.clear();
-		});
+		},
+		CommandLibraryPrefix::No);
 
 	g_ConCommands.CreateCommand("sk_reload", [this](const CCommandArgs& args)
 		{
@@ -148,7 +152,8 @@ bool SkillSystem::Initialize()
 			{
 				g_pGameRules->RefreshSkillData();
 			}
-		});
+		},
+		CommandLibraryPrefix::No);
 
 	return true;
 }
