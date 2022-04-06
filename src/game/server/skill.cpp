@@ -215,12 +215,7 @@ bool SkillSystem::Initialize()
 		CommandLibraryPrefix::No);
 
 	g_ConCommands.CreateCommand("sk_reload", [this](const CCommandArgs& args)
-		{
-			if (g_pGameRules != nullptr)
-			{
-				g_pGameRules->RefreshSkillData();
-			}
-		},
+		{ LoadSkillConfigFile(); },
 		CommandLibraryPrefix::No);
 
 	return true;
@@ -233,11 +228,13 @@ void SkillSystem::Shutdown()
 
 void SkillSystem::NewMapStarted()
 {
+	LoadSkillConfigFile();
+
 	int iSkill = (int)CVAR_GET_FLOAT("skill");
 
 	iSkill = std::clamp(iSkill, static_cast<int>(SkillLevel::Easy), static_cast<int>(SkillLevel::Hard));
 
-	g_Skill.SetSkillLevel(iSkill);
+	SetSkillLevel(iSkill);
 }
 
 void SkillSystem::LoadSkillConfigFile()

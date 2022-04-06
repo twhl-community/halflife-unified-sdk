@@ -169,11 +169,6 @@ bool CGameRules::CanHavePlayerItem(CBasePlayer* pPlayer, CBasePlayerItem* pWeapo
 	return true;
 }
 
-void CGameRules::RefreshSkillData()
-{
-	g_Skill.LoadSkillConfigFile();
-}
-
 //=========================================================
 // instantiate the proper game rules object
 //=========================================================

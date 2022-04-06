@@ -68,7 +68,6 @@ enum
 class CGameRules
 {
 public:
-	virtual void RefreshSkillData();						 // fill skill data struct with proper values
 	virtual void Think() = 0;								 // GR_Think - runs every server frame, should handle any timer tasks, periodic events, etc.
 	virtual bool IsAllowedToSpawn(CBaseEntity* pEntity) = 0; // Can this item spawn (eg monsters don't spawn in deathmatch).
 
