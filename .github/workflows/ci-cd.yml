@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
         with:
           submodules: recursive
       - name: Install G++ Multilib & 32 bit OpenGL library
@@ -31,7 +31,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Checkout 
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
         with:
           submodules: recursive
       - name: Configure
