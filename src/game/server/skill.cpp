@@ -290,7 +290,10 @@ void SkillSystem::SetValue(std::string_view name, int skillLevel, float value)
 		it = m_SkillVariables.end() - 1;
 	}
 
-	m_Logger->debug("Skill value \"{}{}\" changed to \"{}\"", name, skillLevel, value);
+	if (it->Values[skillLevel - 1] != value)
+	{
+		m_Logger->debug("Skill value \"{}{}\" changed to \"{}\"", name, skillLevel, value);
+	}
 
 	it->Values[skillLevel - 1] = value;
 }
