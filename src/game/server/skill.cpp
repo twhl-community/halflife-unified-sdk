@@ -54,7 +54,7 @@ static json GetSkillConfigSchema()
 				"type": "object",
 				"patternProperties": {{
 					"^[a-zA-Z_]+[a-zA-Z_0-9]*[a-zA-Z_]+[123]?$": {{
-						"type": "string"
+						"type": "number"
 					}}
 				}},
 				"additionalProperties": false
@@ -377,7 +377,7 @@ bool SkillSystem::ParseConfiguration(const json& input)
 			{
 				const json value = item.value();
 
-				if (!value.is_string())
+				if (!value.is_number())
 				{
 					//Already validated by schema.
 					return;
@@ -393,8 +393,7 @@ bool SkillSystem::ParseConfiguration(const json& input)
 
 				const auto& variableName = maybeVariableName.value();
 
-				const std::string valueString = value.get<std::string>();
-				const auto valueFloat = std::stof(valueString);
+				const auto valueFloat = value.get<float>();
 
 				const auto& skillLevel = std::get<1>(variableName);
 
