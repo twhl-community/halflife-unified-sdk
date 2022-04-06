@@ -19,6 +19,8 @@
 #include <algorithm>
 #include <cctype>
 #include <charconv>
+#include <optional>
+#include <tuple>
 
 #include "cbase.h"
 #include "skill.h"
@@ -51,7 +53,7 @@ static json GetSkillConfigSchema()
 			"Variables": {{
 				"type": "object",
 				"patternProperties": {{
-					".*": {{
+					"^[a-zA-Z_]+[a-zA-Z_0-9]*[a-zA-Z_]+[123]?$": {{
 						"type": "string"
 					}}
 				}},
@@ -64,6 +66,56 @@ static json GetSkillConfigSchema()
 )");
 
 	return g_JSON.ParseJSONSchema(schema).value_or(json{});
+}
+
+static std::optional<std::tuple<std::string_view, std::optional<int>>> TryParseSkillVariableName(std::string_view key, spdlog::logger& logger)
+{
+	if (key.empty())
+	{
+		return {};
+	}
+
+	if (std::find_if(key.begin(), key.end(), [](const auto c)
+			{ return 0 != std::isspace(c); }) != key.end())
+	{
+		return {};
+	}
+
+	const auto endIndex = key.find_last_not_of("0123456789");
+
+	if (endIndex == std::string::npos)
+	{
+		return {};
+	}
+
+	if (endIndex + 1 >= key.length())
+	{
+		//Only a name, no skill level.
+		return {{key, {}}};
+	}
+
+	const std::string_view baseName{key.substr(0, endIndex + 1)};
+	const std::string_view skillLevelString{key.substr(endIndex + 1)};
+
+	int skillLevel = 0;
+	if (const auto result = std::from_chars(skillLevelString.data(), skillLevelString.data() + skillLevelString.length(), skillLevel);
+		result.ec != std::errc())
+	{
+		if (result.ec != std::errc::result_out_of_range)
+		{
+			//In case something else goes wrong.
+			logger.error("Invalid skill variable name \"{}\": {}", key, std::make_error_code(result.ec).message());
+		}
+
+		return {};
+	}
+
+	if (!IsValidSkillLevel(skillLevel))
+	{
+		return {};
+	}
+
+	return {{baseName, skillLevel}};
 }
 
 bool SkillSystem::Initialize()
@@ -327,67 +379,34 @@ bool SkillSystem::ParseConfiguration(const json& input)
 					return;
 				}
 
-				const std::string_view key = item.key();
-
-				if (key.empty())
-				{
-					m_Logger->error("Invalid skill variable name \"{}\": Key is empty", key);
-					return;
-				}
-
-				if (std::find_if(key.begin(), key.end(), [](const auto c)
-						{ return 0 != std::isspace(c); }) != key.end())
-				{
-					m_Logger->error("Invalid skill variable name \"{}\": Key contains whitespace", key);
-					return;
-				}
-
 				//Get the skill variable base name and skill level.
-				const auto endIndex = key.find_last_not_of("0123456789");
+				const auto maybeVariableName = TryParseSkillVariableName(item.key(), *m_Logger);
 
-				if (endIndex == std::string::npos)
+				if (!maybeVariableName.has_value())
 				{
-					m_Logger->error("Invalid skill variable name \"{}\": Key contains only digits", key);
 					return;
 				}
 
-				if (endIndex + 1 >= key.length())
-				{
-					m_Logger->error("Invalid skill variable name \"{}\": Key contains no skill level at the end", key);
-					return;
-				}
-
-				const std::string_view baseName{key.substr(0, endIndex + 1)};
-				const std::string_view skillLevelString{key.substr(endIndex + 1)};
-
-				int skillLevel = 0;
-				if (const auto result = std::from_chars(skillLevelString.data(), skillLevelString.data() + skillLevelString.length(), skillLevel);
-					result.ec != std::errc())
-				{
-					//Should only happen if the skill level is a really large number.
-					if (result.ec == std::errc::result_out_of_range)
-					{
-						m_Logger->error("Invalid skill variable name \"{}\": skill level is out of range", key);
-					}
-					else
-					{
-						//In case something else goes wrong.
-						m_Logger->error("Invalid skill variable name \"{}\": {}", key, std::make_error_code(result.ec).message());
-					}
-
-					return;
-				}
-
-				if (!IsValidSkillLevel(skillLevel))
-				{
-					m_Logger->error("Invalid skill variable name \"{}\": skill level is out of range", key);
-					return;
-				}
+				const auto& variableName = maybeVariableName.value();
 
 				const std::string valueString = value.get<std::string>();
 				const auto valueFloat = std::stof(valueString);
 
-				SetValue(baseName, skillLevel, valueFloat);
+				const auto& skillLevel = std::get<1>(variableName);
+
+				//Skill level explicitly specified.
+				if (skillLevel.has_value())
+				{
+					SetValue(std::get<0>(variableName), skillLevel.value(), valueFloat);
+				}
+				else
+				{
+					//Set for all skill levels.
+					for (int i = SkillLevel::Easy; i <= SkillLevel::Hard; ++i)
+					{
+						SetValue(std::get<0>(variableName), i, valueFloat);
+					}
+				}
 			}();
 		}
 	}
