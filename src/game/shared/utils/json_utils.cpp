@@ -28,6 +28,7 @@ using namespace nlohmann::json_schema;
 constexpr std::string_view SchemasDirectory{"schemas"sv};
 constexpr int SchemaIndentLevel = 1;
 constexpr char SchemaIndentCharacter = '\t';
+constexpr std::size_t MaxValidationContentsLogLength = 100;
 
 const char* JSONTypeToString(json::value_t type)
 {
@@ -70,7 +71,21 @@ public:
 		const std::string& message) override
 	{
 		basic_error_handler::error(pointer, instance, message);
-		m_Logger.error("Error validating JSON \"{}\" with value \"{}\": {}", pointer.to_string(), instance.dump(), message);
+
+		const auto formatContents = [](std::string&& contents)
+		{
+			//Trim contents to a reasonable size.
+			if (contents.length() > MaxValidationContentsLogLength)
+			{
+				contents.resize(MaxValidationContentsLogLength);
+				contents += "...";
+			}
+
+			return contents;
+		};
+
+		m_Logger.error("Error validating JSON \"{}\" with value \"{}\": {}",
+			formatContents(pointer.to_string()), formatContents(instance.dump()), message);
 	}
 
 private:
