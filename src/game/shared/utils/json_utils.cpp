@@ -249,6 +249,10 @@ std::optional<json> JSONSystem::LoadJSONFile(const char* fileName, const JSONLoa
 				{
 					m_Logger->trace("JSON file failed validation");
 				}
+				else
+				{
+					m_Logger->trace("JSON file passed validation");
+				}
 			}
 
 			return data;
