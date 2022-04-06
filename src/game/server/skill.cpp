@@ -56,7 +56,13 @@ bool SkillSystem::Initialize()
 
 	g_JSON.RegisterSchema(SkillConfigSchemaName, &GetSkillConfigSchema);
 
-	g_ConCommands.CreateCommand("reload_skill", [this](const CCommandArgs& args) { LoadSkillConfigFile(); });
+	g_ConCommands.CreateCommand("reload_skill", [this](const CCommandArgs& args)
+		{
+			if (g_pGameRules != nullptr)
+			{
+				g_pGameRules->RefreshSkillData();
+			}
+		});
 
 	return true;
 }

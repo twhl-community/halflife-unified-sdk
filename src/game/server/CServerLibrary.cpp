@@ -84,8 +84,6 @@ bool CServerLibrary::Initialize()
 
 	CreateConfigDefinitions();
 
-	g_Skill.LoadSkillConfigFile();
-
 	return true;
 }
 
