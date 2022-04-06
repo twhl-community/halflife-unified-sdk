@@ -25,6 +25,7 @@
 
 #include "command_utils.h"
 #include "json_utils.h"
+#include "config/GameConfigLoader.h"
 
 using namespace std::literals;
 
@@ -37,13 +38,28 @@ static json GetSkillConfigSchema()
 {{
 	"$schema": "http://json-schema.org/draft-07/schema#",
 	"title": "Skill System Configuration",
-	"type": "object",
-	"patternProperties": {{
-		".*": {{
-			"type": "string"
-		}}
-	}},
-	"additionalProperties": false
+	"type": "array",
+	"items": {{
+		"type": "object",
+		"properties": {{
+			"Description": {{
+				"type": "string"
+			}},
+			"Condition": {{
+				"type": "string"
+			}},
+			"Variables": {{
+				"type": "object",
+				"patternProperties": {{
+					".*": {{
+						"type": "string"
+					}}
+				}},
+				"additionalProperties": false
+			}}
+		}},
+		"required": ["Variables"]
+	}}
 }}
 )");
 
@@ -239,84 +255,141 @@ void SkillSystem::RemoveValue(std::string_view name)
 
 bool SkillSystem::ParseConfiguration(const json& input)
 {
-	if (!input.is_object())
+	if (!input.is_array())
 	{
 		return false;
 	}
 
-	for (const auto& item : input.items())
+	//Apply each section in order of occurrence.
+	for (const auto& section : input)
 	{
-		[&]()
+		if (!section.is_object())
 		{
-			const json value = item.value();
+			continue;
+		}
 
-			if (!value.is_string())
+		if (m_Logger->should_log(spdlog::level::trace))
+		{
+			const auto description = section.value<std::string>("Description", "Skill configuration section");
+
+			m_Logger->trace("Processing section \"{}\"", description);
+		}
+
+		if (const auto it = section.find("Condition"); it != section.end())
+		{
+			//Evaluate condition to determine whether to apply this section.
+
+			if (!it->is_string())
 			{
-				//Already validated by schema.
-				return;
+				continue;
 			}
 
-			const std::string_view key = item.key();
+			const auto result = g_GameConfigLoader.EvaluateConditional(it->get<std::string>());
 
-			if (key.empty())
+			if (!result.has_value())
 			{
-				m_Logger->error("Invalid skill variable name \"{}\": Key is empty", key);
-				return;
+				m_Logger->error("Error evaluating condition");
+				continue;
 			}
 
-			if (std::find_if(key.begin(), key.end(), [](const auto c) { return 0 != std::isspace(c); }) != key.end())
+			if (!result.value())
 			{
-				m_Logger->error("Invalid skill variable name \"{}\": Key contains whitespace", key);
-				return;
+				m_Logger->debug("Skipping section because condition evaluated false");
+				continue;
 			}
 
-			//Get the skill variable base name and skill level.
-			const auto endIndex = key.find_last_not_of("0123456789");
+			m_Logger->debug("Applying section because condition evaluated true");
+		}
 
-			if (endIndex == std::string::npos)
+		const auto it = section.find("Variables");
+
+		if (it == section.end())
+		{
+			continue;
+		}
+
+		const auto& variables = *it;
+
+		if (!variables.is_object())
+		{
+			continue;
+		}
+
+		for (const auto& item : variables.items())
+		{
+			[&]()
 			{
-				m_Logger->error("Invalid skill variable name \"{}\": Key contains only digits", key);
-				return;
-			}
+				const json value = item.value();
 
-			if (endIndex + 1 >= key.length())
-			{
-				m_Logger->error("Invalid skill variable name \"{}\": Key contains no skill level at the end", key);
-				return;
-			}
+				if (!value.is_string())
+				{
+					//Already validated by schema.
+					return;
+				}
 
-			const std::string_view baseName{key.substr(0, endIndex + 1)};
-			const std::string_view skillLevelString{key.substr(endIndex + 1)};
+				const std::string_view key = item.key();
 
-			int skillLevel = 0;
-			if (const auto result = std::from_chars(skillLevelString.data(), skillLevelString.data() + skillLevelString.length(), skillLevel);
-				result.ec != std::errc())
-			{
-				//Should only happen if the skill level is a really large number.
-				if (result.ec == std::errc::result_out_of_range)
+				if (key.empty())
+				{
+					m_Logger->error("Invalid skill variable name \"{}\": Key is empty", key);
+					return;
+				}
+
+				if (std::find_if(key.begin(), key.end(), [](const auto c)
+						{ return 0 != std::isspace(c); }) != key.end())
+				{
+					m_Logger->error("Invalid skill variable name \"{}\": Key contains whitespace", key);
+					return;
+				}
+
+				//Get the skill variable base name and skill level.
+				const auto endIndex = key.find_last_not_of("0123456789");
+
+				if (endIndex == std::string::npos)
+				{
+					m_Logger->error("Invalid skill variable name \"{}\": Key contains only digits", key);
+					return;
+				}
+
+				if (endIndex + 1 >= key.length())
+				{
+					m_Logger->error("Invalid skill variable name \"{}\": Key contains no skill level at the end", key);
+					return;
+				}
+
+				const std::string_view baseName{key.substr(0, endIndex + 1)};
+				const std::string_view skillLevelString{key.substr(endIndex + 1)};
+
+				int skillLevel = 0;
+				if (const auto result = std::from_chars(skillLevelString.data(), skillLevelString.data() + skillLevelString.length(), skillLevel);
+					result.ec != std::errc())
+				{
+					//Should only happen if the skill level is a really large number.
+					if (result.ec == std::errc::result_out_of_range)
+					{
+						m_Logger->error("Invalid skill variable name \"{}\": skill level is out of range", key);
+					}
+					else
+					{
+						//In case something else goes wrong.
+						m_Logger->error("Invalid skill variable name \"{}\": {}", key, std::make_error_code(result.ec).message());
+					}
+
+					return;
+				}
+
+				if (!IsValidSkillLevel(skillLevel))
 				{
 					m_Logger->error("Invalid skill variable name \"{}\": skill level is out of range", key);
+					return;
 				}
-				else
-				{
-					//In case something else goes wrong.
-					m_Logger->error("Invalid skill variable name \"{}\": {}", key, std::make_error_code(result.ec).message());
-				}
-				
-				return;
-			}
 
-			if (!IsValidSkillLevel(skillLevel))
-			{
-				m_Logger->error("Invalid skill variable name \"{}\": skill level is out of range", key);
-				return;
-			}
+				const std::string valueString = value.get<std::string>();
+				const auto valueFloat = std::stof(valueString);
 
-			const std::string valueString = value.get<std::string>();
-			const auto valueFloat = std::stof(valueString);
-
-			SetValue(baseName, skillLevel, valueFloat);
-		}();
+				SetValue(baseName, skillLevel, valueFloat);
+			}();
+		}
 	}
 
 	return true;
