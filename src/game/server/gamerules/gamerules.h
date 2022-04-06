@@ -280,7 +280,6 @@ public:
 
 	// GR_Think
 	void Think() override;
-	void RefreshSkillData() override;
 	bool IsAllowedToSpawn(CBaseEntity* pEntity) override;
 	bool FAllowFlashlight() override;
 

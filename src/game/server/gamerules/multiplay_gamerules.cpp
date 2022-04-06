@@ -102,59 +102,6 @@ void CHalfLifeMultiplay::ClientUserInfoChanged(CBasePlayer* pPlayer, char* infob
 	pPlayer->SetPrefsFromUserinfo(infobuffer);
 }
 
-//=========================================================
-//=========================================================
-void CHalfLifeMultiplay::RefreshSkillData()
-{
-	// load all default values
-	CGameRules::RefreshSkillData();
-
-	// override some values for multiplay.
-
-	// suitcharger
-	g_Skill.SetValue("sk_suitcharger"sv, 30);
-
-	// Crowbar whack
-	g_Skill.SetValue("sk_plr_crowbar"sv, 25);
-
-	// Glock Round
-	g_Skill.SetValue("sk_plr_9mm_bullet"sv, 12);
-
-	// 357 Round
-	g_Skill.SetValue("sk_plr_357_bullet"sv, 40);
-
-	// MP5 Round
-	g_Skill.SetValue("sk_plr_9mmAR_bullet"sv, 12);
-
-	// M203 grenade
-	g_Skill.SetValue("sk_plr_9mmAR_grenade"sv, 100);
-
-	// Shotgun buckshot
-	g_Skill.SetValue("sk_plr_buckshot"sv, 20); // fewer pellets in deathmatch
-
-	// Crossbow
-	g_Skill.SetValue("sk_plr_xbow_bolt_client"sv, 20);
-
-	// RPG
-	g_Skill.SetValue("sk_plr_rpg"sv, 120);
-
-	// Egon
-	g_Skill.SetValue("sk_plr_egon_wide"sv, 20);
-	g_Skill.SetValue("sk_plr_egon_narrow"sv, 10);
-
-	// Hand Grendade
-	g_Skill.SetValue("sk_plr_hand_grenade"sv, 100);
-
-	// Satchel Charge
-	g_Skill.SetValue("sk_plr_satchel"sv, 120);
-
-	// Tripmine
-	g_Skill.SetValue("sk_plr_tripmine"sv, 150);
-
-	// hornet
-	g_Skill.SetValue("sk_plr_hornet_dmg"sv, 10);
-}
-
 // longest the intermission can last, in seconds
 #define MAX_INTERMISSION_TIME 120
 
