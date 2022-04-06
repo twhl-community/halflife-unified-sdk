@@ -56,6 +56,92 @@ bool SkillSystem::Initialize()
 
 	g_JSON.RegisterSchema(SkillConfigSchemaName, &GetSkillConfigSchema);
 
+	g_ConCommands.CreateCommand("sk_find", [this](const CCommandArgs& args)
+		{
+			if (args.Count() != 2)
+			{
+				Con_Printf("Usage: %s <search_term>\nUse * to list all keys\n", args.Argument(0));
+				return;
+			}
+
+			const std::string_view searchTerm{args.Argument(1)};
+
+			//TODO: maybe replace this with proper wildcard searching at some point.
+			if (searchTerm == "*")
+			{
+				//List all keys.
+				for (const auto& variable : m_SkillVariables)
+				{
+					Con_Printf("%s\n", variable.Name.c_str());
+				}
+			}
+			else
+			{
+				//List all keys that are a full or partial match.
+				for (const auto& variable : m_SkillVariables)
+				{
+					if (variable.Name.find(searchTerm) != std::string::npos)
+					{
+						Con_Printf("%s\n", variable.Name.c_str());
+					}
+				}
+			}
+		});
+
+	g_ConCommands.CreateCommand("sk_set", [this](const CCommandArgs& args)
+		{
+			if (args.Count() != 4)
+			{
+				Con_Printf("Usage: %s <name> <skill_level> <value>\n", args.Argument(0));
+				return;
+			}
+
+			const std::string_view name{args.Argument(1)};
+			const std::string_view skillLevelString{args.Argument(2)};
+			const std::string_view valueString{args.Argument(3)};
+
+			int skillLevel = 0;
+			if (const auto result = std::from_chars(skillLevelString.data(), skillLevelString.data() + skillLevelString.length(), skillLevel);
+				result.ec != std::errc() || !IsValidSkillLevel(skillLevel))
+			{
+				Con_Printf("Invalid skill level\n");
+				return;
+			}
+
+			float value = 0;
+			if (const auto result = std::from_chars(valueString.data(), valueString.data() + valueString.length(), value);
+				result.ec != std::errc())
+			{
+				Con_Printf("Invalid value\n");
+				return;
+			}
+
+			SetValue(name, skillLevel, value);
+		});
+
+	g_ConCommands.CreateCommand("sk_remove", [this](const CCommandArgs& args)
+		{
+			if (args.Count() != 2)
+			{
+				Con_Printf("Usage: %s <name>\n", args.Argument(0));
+				return;
+			}
+
+			RemoveValue(args.Argument(1));
+		});
+
+	//Don't name this sk_remove_all because the console will always autocomplete sk_remove to that.
+	g_ConCommands.CreateCommand("sk_reset", [this](const CCommandArgs& args)
+		{
+			if (args.Count() != 1)
+			{
+				Con_Printf("Usage: %s\n", args.Argument(0));
+				return;
+			}
+
+			m_SkillVariables.clear();
+		});
+
 	g_ConCommands.CreateCommand("sk_reload", [this](const CCommandArgs& args)
 		{
 			if (g_pGameRules != nullptr)
@@ -116,7 +202,7 @@ float SkillSystem::GetValue(std::string_view name) const
 
 void SkillSystem::SetValue(std::string_view name, int skillLevel, float value)
 {
-	if (skillLevel < SkillLevel::Easy || skillLevel > SkillLevel::Hard)
+	if (!IsValidSkillLevel(skillLevel))
 	{
 		return;
 	}
@@ -134,6 +220,16 @@ void SkillSystem::SetValue(std::string_view name, int skillLevel, float value)
 	m_Logger->debug("Skill value \"{}{}\" changed to \"{}\"", name, skillLevel, value);
 
 	it->Values[skillLevel - 1] = value;
+}
+
+void SkillSystem::RemoveValue(std::string_view name)
+{
+	if (const auto it = std::find_if(m_SkillVariables.begin(), m_SkillVariables.end(), [&](const auto& variable)
+		{ return variable.Name == name; });
+		it != m_SkillVariables.end())
+	{
+		m_SkillVariables.erase(it);
+	}
 }
 
 bool SkillSystem::ParseConfiguration(const json& input)
@@ -205,7 +301,7 @@ bool SkillSystem::ParseConfiguration(const json& input)
 				return;
 			}
 
-			if (skillLevel < SkillLevel::Easy || skillLevel > SkillLevel::Hard)
+			if (!IsValidSkillLevel(skillLevel))
 			{
 				m_Logger->error("Invalid skill variable name \"{}\": skill level is out of range", key);
 				return;

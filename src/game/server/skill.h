@@ -40,6 +40,11 @@ enum SkillLevel
 
 constexpr int SkillLevelCount = SkillLevel::Hard;
 
+constexpr bool IsValidSkillLevel(int skillLevel)
+{
+	return skillLevel >= SkillLevel::Easy && skillLevel <= SkillLevel::Hard;
+}
+
 class SkillSystem final
 {
 private:
@@ -71,6 +76,8 @@ public:
 
 	void SetValue(std::string_view name, float value);
 
+	void RemoveValue(std::string_view name);
+
 private:
 	bool ParseConfiguration(const json& input);
 
@@ -86,7 +93,7 @@ inline SkillSystem g_Skill;
 
 inline void SkillSystem::SetSkillLevel(int skillLevel)
 {
-	if (skillLevel < SkillLevel::Easy || skillLevel > SkillLevel::Hard)
+	if (!IsValidSkillLevel(skillLevel))
 	{
 		m_Logger->error("SetSkillLevel: new level \"{}\" out of range", skillLevel);
 		return;
