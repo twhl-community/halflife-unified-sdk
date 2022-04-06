@@ -10,7 +10,7 @@ jobs:
     name: Linux-x86
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout 
+      - name: Checkout
         uses: actions/checkout@v3
         with:
           submodules: recursive
@@ -26,11 +26,24 @@ jobs:
         env:
           MAKEFLAGS: "-j2"
         run: CC=gcc-11 CXX=g++-11 cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+      - name: Prepare artifacts
+        run: |
+          mkdir cl_dlls
+          mkdir dlls
+          mv build/src/game/client/client.so cl_dlls
+          mv build/src/game/server/hl.so dlls
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: Linux-x86
+          path: |
+            cl_dlls
+            dlls
   win32:
     name: Win32
     runs-on: windows-latest
     steps:
-      - name: Checkout 
+      - name: Checkout
         uses: actions/checkout@v3
         with:
           submodules: recursive
@@ -38,3 +51,16 @@ jobs:
         run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -AWin32 -DBUILD_EXAMPLES=OFF -DBUILD_TESTS=OFF
       - name: Build
         run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} -j2
+      - name: Prepare artifacts
+        run: |
+          mkdir cl_dlls
+          mkdir dlls
+          mv build/src/game/client/Release/client.dll cl_dlls
+          mv build/src/game/server/Release/hl.dll dlls
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: Win32
+          path: |
+            cl_dlls
+            dlls
