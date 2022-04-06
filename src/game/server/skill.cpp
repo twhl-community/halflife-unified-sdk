@@ -355,6 +355,10 @@ bool SkillSystem::ParseConfiguration(const json& input)
 
 			m_Logger->debug("Applying section because condition evaluated true");
 		}
+		else
+		{
+			m_Logger->debug("Applying section unconditionally");
+		}
 
 		const auto it = section.find("Variables");
 
