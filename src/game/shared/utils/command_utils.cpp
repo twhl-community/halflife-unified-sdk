@@ -73,7 +73,7 @@ cvar_t* CConCommandSystem::GetCVar(const char* name) const
 	return g_engfuncs.pfnCVarGetPointer(name);
 }
 
-cvar_t* CConCommandSystem::CreateCVar(std::string_view name, const char* defaultValue, int flags)
+cvar_t* CConCommandSystem::CreateCVar(std::string_view name, const char* defaultValue, int flags, CommandLibraryPrefix useLibraryPrefix)
 {
 	if (name.empty() || !defaultValue)
 	{
@@ -81,7 +81,7 @@ cvar_t* CConCommandSystem::CreateCVar(std::string_view name, const char* default
 		return nullptr;
 	}
 
-	const std::string completeName{fmt::format("{}_{}", GetShortLibraryPrefix(), name)};
+	const std::string completeName{useLibraryPrefix == CommandLibraryPrefix::Yes ? fmt::format("{}_{}", GetShortLibraryPrefix(), name) : name};
 
 	if (std::find_if(m_Cvars.begin(), m_Cvars.end(), [&](const auto& data) {
 			return data.Name.get() == completeName;
@@ -138,7 +138,7 @@ cvar_t* CConCommandSystem::CreateCVar(std::string_view name, const char* default
 	return cvar.CVar;
 }
 
-void CConCommandSystem::CreateCommand(std::string_view name, std::function<void(const CCommandArgs&)>&& callback)
+void CConCommandSystem::CreateCommand(std::string_view name, std::function<void(const CCommandArgs&)>&& callback, CommandLibraryPrefix useLibraryPrefix)
 {
 	if (name.empty() || !callback)
 	{
@@ -146,7 +146,7 @@ void CConCommandSystem::CreateCommand(std::string_view name, std::function<void(
 		return;
 	}
 
-	const std::string completeName{fmt::format("{}_{}", GetShortLibraryPrefix(), name)};
+	const std::string completeName{useLibraryPrefix == CommandLibraryPrefix::Yes ? fmt::format("{}_{}", GetShortLibraryPrefix(), name) : name};
 
 	if (m_Commands.contains(completeName))
 	{

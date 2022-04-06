@@ -42,6 +42,12 @@ public:
 	const char* Argument(int index) const;
 };
 
+enum class CommandLibraryPrefix
+{
+	No = 0,
+	Yes
+};
+
 /**
 *	@brief Manages console commands and cvars with client/server prefixes and stateful callbacks
 */
@@ -84,14 +90,16 @@ public:
 	cvar_t* GetCVar(const char* name) const;
 
 	/**
-	*	@brief Creates a cvar with a library-specific prefix
+	*	@brief Creates a cvar, with a library-specific prefix if @c useLibraryPrefix is CommandLibraryPrefix::Yes
 	*/
-	cvar_t* CreateCVar(std::string_view name, const char* defaultValue, int flags = 0);
+	cvar_t* CreateCVar(std::string_view name, const char* defaultValue, int flags = 0,
+		CommandLibraryPrefix useLibraryPrefix = CommandLibraryPrefix::Yes);
 
 	/**
-	*	@brief Creates a command with a library-specific prefix
+	*	@brief Creates a command, with a library-specific prefix if @c useLibraryPrefix is CommandLibraryPrefix::Yes
 	*/
-	void CreateCommand(std::string_view name, std::function<void(const CCommandArgs&)>&& callback);
+	void CreateCommand(std::string_view name, std::function<void(const CCommandArgs&)>&& callback,
+		CommandLibraryPrefix useLibraryPrefix = CommandLibraryPrefix::Yes);
 
 private:
 	static void CommandCallbackWrapper();
