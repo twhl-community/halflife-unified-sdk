@@ -20,6 +20,7 @@
 #include <cctype>
 #include <charconv>
 #include <optional>
+#include <regex>
 #include <tuple>
 
 #include "cbase.h"
@@ -33,6 +34,9 @@ using namespace std::literals;
 
 constexpr std::string_view SkillConfigSchemaName{"SkillConfig"sv};
 constexpr const char* const SkillConfigName = "cfg/skill.json";
+
+constexpr std::string_view SkillVariableNameRegexPattern{"^([a-zA-Z_]+[a-zA-Z_0-9]*[a-zA-Z_]+)([123]?)$"};
+const std::regex SkillVariableNameRegex{SkillVariableNameRegexPattern.data(), SkillVariableNameRegexPattern.length()};
 
 static json GetSkillConfigSchema()
 {
@@ -53,7 +57,7 @@ static json GetSkillConfigSchema()
 			"Variables": {{
 				"type": "object",
 				"patternProperties": {{
-					"^[a-zA-Z_]+[a-zA-Z_0-9]*[a-zA-Z_]+[123]?$": {{
+					"{}": {{
 						"type": "number"
 					}}
 				}},
@@ -63,39 +67,29 @@ static json GetSkillConfigSchema()
 		"required": ["Variables"]
 	}}
 }}
-)");
+)",
+		SkillVariableNameRegexPattern);
 
 	return g_JSON.ParseJSONSchema(schema).value_or(json{});
 }
 
 static std::optional<std::tuple<std::string_view, std::optional<int>>> TryParseSkillVariableName(std::string_view key, spdlog::logger& logger)
 {
-	if (key.empty())
+	std::match_results<std::string_view::const_iterator> matches;
+
+	if (!std::regex_match(key.begin(), key.end(), matches, SkillVariableNameRegex))
 	{
 		return {};
 	}
 
-	if (std::find_if(key.begin(), key.end(), [](const auto c)
-			{ return 0 != std::isspace(c); }) != key.end())
-	{
-		return {};
-	}
+	const std::string_view baseName{matches[1].first, matches[1].second};
+	const std::string_view skillLevelString{matches[2].first, matches[2].second};
 
-	const auto endIndex = key.find_last_not_of("0123456789");
-
-	if (endIndex == std::string::npos)
-	{
-		return {};
-	}
-
-	if (endIndex + 1 >= key.length())
+	if (skillLevelString.empty())
 	{
 		//Only a name, no skill level.
-		return {{key, {}}};
+		return {{baseName, {}}};
 	}
-
-	const std::string_view baseName{key.substr(0, endIndex + 1)};
-	const std::string_view skillLevelString{key.substr(endIndex + 1)};
 
 	int skillLevel = 0;
 	if (const auto result = std::from_chars(skillLevelString.data(), skillLevelString.data() + skillLevelString.length(), skillLevel);
@@ -107,11 +101,6 @@ static std::optional<std::tuple<std::string_view, std::optional<int>>> TryParseS
 			logger.error("Invalid skill variable name \"{}\": {}", key, std::make_error_code(result.ec).message());
 		}
 
-		return {};
-	}
-
-	if (!IsValidSkillLevel(skillLevel))
-	{
 		return {};
 	}
 
