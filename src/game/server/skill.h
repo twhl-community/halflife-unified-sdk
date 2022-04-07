@@ -51,7 +51,7 @@ private:
 	struct SkillVariable
 	{
 		std::string Name;
-		std::array<float, SkillLevelCount> Values;
+		float Value = 0;
 	};
 
 public:
@@ -71,8 +71,6 @@ public:
 	*	@brief take the name of a variable, tack a digit for the skill level on, and return the value of that variable
 	*/
 	float GetValue(std::string_view name) const;
-
-	void SetValue(std::string_view name, int skillLevel, float value);
 
 	void SetValue(std::string_view name, float value);
 
@@ -102,9 +100,4 @@ inline void SkillSystem::SetSkillLevel(int skillLevel)
 	m_SkillLevel = skillLevel;
 
 	m_Logger->info("GAME SKILL LEVEL: {}", m_SkillLevel);
-}
-
-inline void SkillSystem::SetValue(std::string_view name, float value)
-{
-	SetValue(name, m_SkillLevel, value);
 }

@@ -159,23 +159,14 @@ bool SkillSystem::Initialize()
 
 	g_ConCommands.CreateCommand("sk_set", [this](const CCommandArgs& args)
 		{
-			if (args.Count() != 4)
+			if (args.Count() != 3)
 			{
-				Con_Printf("Usage: %s <name> <skill_level> <value>\n", args.Argument(0));
+				Con_Printf("Usage: %s <name> <value>\n", args.Argument(0));
 				return;
 			}
 
 			const std::string_view name{args.Argument(1)};
-			const std::string_view skillLevelString{args.Argument(2)};
-			const std::string_view valueString{args.Argument(3)};
-
-			int skillLevel = 0;
-			if (const auto result = std::from_chars(skillLevelString.data(), skillLevelString.data() + skillLevelString.length(), skillLevel);
-				result.ec != std::errc() || !IsValidSkillLevel(skillLevel))
-			{
-				Con_Printf("Invalid skill level\n");
-				return;
-			}
+			const std::string_view valueString{args.Argument(2)};
 
 			float value = 0;
 			if (const auto result = std::from_chars(valueString.data(), valueString.data() + valueString.length(), value);
@@ -185,7 +176,7 @@ bool SkillSystem::Initialize()
 				return;
 			}
 
-			SetValue(name, skillLevel, value);
+			SetValue(name, value);
 		},
 		CommandLibraryPrefix::No);
 
@@ -229,16 +220,17 @@ void SkillSystem::Shutdown()
 void SkillSystem::NewMapStarted()
 {
 	LoadSkillConfigFile();
+}
 
+void SkillSystem::LoadSkillConfigFile()
+{
+	//Refresh skill level setting first.
 	int iSkill = (int)CVAR_GET_FLOAT("skill");
 
 	iSkill = std::clamp(iSkill, static_cast<int>(SkillLevel::Easy), static_cast<int>(SkillLevel::Hard));
 
 	SetSkillLevel(iSkill);
-}
 
-void SkillSystem::LoadSkillConfigFile()
-{
 	//Erase all previous data.
 	m_SkillVariables.clear();
 
@@ -257,7 +249,7 @@ float SkillSystem::GetValue(std::string_view name) const
 	if (const auto it = std::find_if(m_SkillVariables.begin(), m_SkillVariables.end(), [&](const auto& variable)
 			{ return variable.Name == name; }); it != m_SkillVariables.end())
 	{
-		value = it->Values[m_SkillLevel - 1];
+		value = it->Value;
 
 		if ( value > 0)
 		{
@@ -270,29 +262,23 @@ float SkillSystem::GetValue(std::string_view name) const
 	return value;
 }
 
-void SkillSystem::SetValue(std::string_view name, int skillLevel, float value)
+void SkillSystem::SetValue(std::string_view name,  float value)
 {
-	if (!IsValidSkillLevel(skillLevel))
-	{
-		return;
-	}
-
 	auto it = std::find_if(m_SkillVariables.begin(), m_SkillVariables.end(), [&](const auto& variable)
 		{ return variable.Name == name; });
 
 	if (it == m_SkillVariables.end())
 	{
-		m_SkillVariables.emplace_back(std::string{name}, decltype(SkillVariable::Values){});
+		m_SkillVariables.emplace_back(std::string{name}, float{});
 
 		it = m_SkillVariables.end() - 1;
 	}
 
-	if (it->Values[skillLevel - 1] != value)
+	if (it->Value != value)
 	{
-		m_Logger->debug("Skill value \"{}{}\" changed to \"{}\"", name, skillLevel, value);
+		m_Logger->debug("Skill value \"{}\" changed to \"{}\"", name, value);
+		it->Value = value;
 	}
-
-	it->Values[skillLevel - 1] = value;
 }
 
 void SkillSystem::RemoveValue(std::string_view name)
@@ -398,17 +384,14 @@ bool SkillSystem::ParseConfiguration(const json& input)
 				const auto& skillLevel = std::get<1>(variableName);
 
 				//Skill level explicitly specified.
-				if (skillLevel.has_value())
+				if (skillLevel.has_value() && skillLevel.value() == GetSkillLevel())
 				{
-					SetValue(std::get<0>(variableName), skillLevel.value(), valueFloat);
+					SetValue(std::get<0>(variableName), valueFloat);
 				}
 				else
 				{
 					//Set for all skill levels.
-					for (int i = SkillLevel::Easy; i <= SkillLevel::Hard; ++i)
-					{
-						SetValue(std::get<0>(variableName), i, valueFloat);
-					}
+					SetValue(std::get<0>(variableName), valueFloat);
 				}
 			}();
 		}
