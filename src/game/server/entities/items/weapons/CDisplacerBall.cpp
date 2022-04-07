@@ -262,7 +262,7 @@ void CDisplacerBall::FizzleThink()
 {
 	ClearBeams();
 
-	pev->dmg = GetSkillFloat("sk_plr_displacer_other"sv);
+	pev->dmg = GetSkillFloat("plr_displacer_other"sv);
 
 	MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, pev->origin);
 	WRITE_BYTE(TE_DLIGHT);
@@ -290,13 +290,13 @@ void CDisplacerBall::ExplodeThink()
 {
 	ClearBeams();
 
-	pev->dmg = GetSkillFloat("sk_plr_displacer_other"sv);
+	pev->dmg = GetSkillFloat("plr_displacer_other"sv);
 
 	auto pOwner = VARS(pev->owner);
 
 	pev->owner = nullptr;
 
-	RadiusDamage(pev->origin, pev, pOwner, pev->dmg, GetSkillFloat("sk_plr_displacer_radius"sv), CLASS_NONE, DMG_ALWAYSGIB | DMG_BLAST);
+	RadiusDamage(pev->origin, pev, pOwner, pev->dmg, GetSkillFloat("plr_displacer_radius"sv), CLASS_NONE, DMG_ALWAYSGIB | DMG_BLAST);
 
 	EMIT_SOUND(edict(), CHAN_WEAPON, "weapons/displacer_teleport.wav", RANDOM_FLOAT(0.8, 0.9), ATTN_NORM);
 

@@ -331,7 +331,7 @@ bool CBaseHGruntAlly::CheckRangeAttack2(float flDot, float flDist)
 		vecTarget = m_vecEnemyLKP + (m_hEnemy->BodyTarget(pev->origin) - m_hEnemy->pev->origin);
 		// estimate position
 		if (HasConditions(bits_COND_SEE_ENEMY))
-			vecTarget = vecTarget + ((vecTarget - pev->origin).Length() / GetSkillFloat("sk_hgrunt_ally_gspeed"sv)) * m_hEnemy->pev->velocity;
+			vecTarget = vecTarget + ((vecTarget - pev->origin).Length() / GetSkillFloat("hgrunt_ally_gspeed"sv)) * m_hEnemy->pev->velocity;
 	}
 
 	// are any of my squad members near the intended grenade impact area?
@@ -377,7 +377,7 @@ bool CBaseHGruntAlly::CheckRangeAttack2(float flDot, float flDist)
 	}
 	else
 	{
-		Vector vecToss = VecCheckThrow(pev, GetGunPosition(), vecTarget, GetSkillFloat("sk_hgrunt_ally_gspeed"sv), 0.5);
+		Vector vecToss = VecCheckThrow(pev, GetGunPosition(), vecTarget, GetSkillFloat("hgrunt_ally_gspeed"sv), 0.5);
 
 		if (vecToss != g_vecZero)
 		{
@@ -695,7 +695,7 @@ void CBaseHGruntAlly::HandleAnimEvent(MonsterEvent_t* pEvent)
 			UTIL_MakeVectors(pev->angles);
 			pHurt->pev->punchangle.x = 15;
 			pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_forward * 100 + gpGlobals->v_up * 50;
-			pHurt->TakeDamage(pev, pev, GetSkillFloat("sk_hgrunt_ally_kick"sv), DMG_CLUB);
+			pHurt->TakeDamage(pev, pev, GetSkillFloat("hgrunt_ally_kick"sv), DMG_CLUB);
 		}
 	}
 	break;

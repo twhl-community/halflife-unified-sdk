@@ -328,7 +328,7 @@ void COFPitWormUp::Spawn()
 	pev->flags |= FL_MONSTER;
 	pev->takedamage = DAMAGE_AIM;
 
-	pev->max_health = pev->health = GetSkillFloat("sk_pitworm_health"sv);
+	pev->max_health = pev->health = GetSkillFloat("pitworm_health"sv);
 
 	pev->view_ofs = {0, 0, PITWORM_UP_EYE_HEIGHT};
 
@@ -795,8 +795,8 @@ void COFPitWormUp::ShootBeam()
 			if (pHit && pHit->pev->takedamage != DAMAGE_NO)
 			{
 				ClearMultiDamage();
-				pHit->TraceAttack(pev, GetSkillFloat("sk_pitworm_dmg_beam"sv), m_vecBeam, &tr, 1024);
-				pHit->TakeDamage(pev, pev, GetSkillFloat("sk_pitworm_dmg_beam"sv), 1024);
+				pHit->TraceAttack(pev, GetSkillFloat("pitworm_dmg_beam"sv), m_vecBeam, &tr, 1024);
+				pHit->TakeDamage(pev, pev, GetSkillFloat("pitworm_dmg_beam"sv), 1024);
 			}
 			else if (tr.flFraction != 1.0)
 			{
@@ -877,8 +877,8 @@ void COFPitWormUp::StrafeBeam()
 	{
 		ClearMultiDamage();
 
-		pHit->TraceAttack(pev, GetSkillFloat("sk_pitworm_dmg_beam"sv), m_vecBeam, &tr, DMG_ENERGYBEAM);
-		pHit->TakeDamage(pev, pev, GetSkillFloat("sk_pitworm_dmg_beam"sv), DMG_ENERGYBEAM);
+		pHit->TraceAttack(pev, GetSkillFloat("pitworm_dmg_beam"sv), m_vecBeam, &tr, DMG_ENERGYBEAM);
+		pHit->TakeDamage(pev, pev, GetSkillFloat("pitworm_dmg_beam"sv), DMG_ENERGYBEAM);
 
 		//TODO: missing an ApplyMultiDamage call here
 		//Should probably replace the TakeDamage call
@@ -2001,7 +2001,7 @@ void COFPitWorm::Spawn()
 	pev->solid = SOLID_SLIDEBOX;
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_GREEN;
-	pev->health = 150 * GetSkillFloat("sk_bigmomma_health_factor"sv);
+	pev->health = 150 * GetSkillFloat("bigmomma_health_factor"sv);
 	pev->view_ofs = Vector(0, 0, 128); // position of the eyes relative to monster's origin.
 	m_flFieldOfView = 0.3;			   // indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
@@ -2298,7 +2298,7 @@ void COFPitWorm::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 		if (pHurt)
 		{
-			pHurt->TakeDamage(pev, pev, GetSkillFloat("sk_bigmomma_dmg_slash"sv), DMG_CRUSH | DMG_SLASH);
+			pHurt->TakeDamage(pev, pev, GetSkillFloat("bigmomma_dmg_slash"sv), DMG_CRUSH | DMG_SLASH);
 			pHurt->pev->punchangle.x = 15;
 
 			pHurt->pev->velocity = pHurt->pev->velocity + (forward * 220) + Vector(0, 0, 200);

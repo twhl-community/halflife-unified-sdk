@@ -126,7 +126,7 @@ void COFGeneWormCloud::GeneWormCloudTouch(CBaseEntity* pOther)
 	{
 		if (pOther->pev->takedamage != DAMAGE_NO)
 		{
-			pOther->TakeDamage(pev, pev, GetSkillFloat("sk_geneworm_dmg_spit"sv), DMG_ACID);
+			pOther->TakeDamage(pev, pev, GetSkillFloat("geneworm_dmg_spit"sv), DMG_ACID);
 		}
 
 		pev->nextthink = gpGlobals->time;
@@ -759,7 +759,7 @@ void COFGeneWorm::Spawn()
 
 	pev->effects = 0;
 
-	pev->max_health = pev->health = GetSkillFloat("sk_geneworm_health"sv);
+	pev->max_health = pev->health = GetSkillFloat("geneworm_health"sv);
 
 	pev->view_ofs = {0, 0, 300};
 
@@ -1540,7 +1540,7 @@ void COFGeneWorm::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vec
 					m_iWasHit = 1;
 				}
 
-				pev->health = GetSkillFloat("sk_geneworm_health"sv);
+				pev->health = GetSkillFloat("geneworm_health"sv);
 			}
 		}
 		break;

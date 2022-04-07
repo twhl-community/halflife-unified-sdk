@@ -109,7 +109,7 @@ void COFBabyVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 	case VOLTIGORE_AE_LEFT_PUNCH:
 	{
-		CBaseEntity* pHurt = CheckTraceHullAttack(VOLTIGORE_MELEE_DIST, GetSkillFloat("sk_babyvoltigore_dmg_punch"sv), DMG_CLUB);
+		CBaseEntity* pHurt = CheckTraceHullAttack(VOLTIGORE_MELEE_DIST, GetSkillFloat("babyvoltigore_dmg_punch"sv), DMG_CLUB);
 
 		if (pHurt)
 		{
@@ -139,7 +139,7 @@ void COFBabyVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 	case VOLTIGORE_AE_RIGHT_PUNCH:
 	{
-		CBaseEntity* pHurt = CheckTraceHullAttack(VOLTIGORE_MELEE_DIST, GetSkillFloat("sk_babyvoltigore_dmg_punch"sv), DMG_CLUB);
+		CBaseEntity* pHurt = CheckTraceHullAttack(VOLTIGORE_MELEE_DIST, GetSkillFloat("babyvoltigore_dmg_punch"sv), DMG_CLUB);
 
 		if (pHurt)
 		{
@@ -191,7 +191,7 @@ void COFBabyVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 //=========================================================
 void COFBabyVoltigore::Spawn()
 {
-	SpawnCore("models/baby_voltigore.mdl", {-16, -16, 0}, {16, 16, 32}, GetSkillFloat("sk_babyvoltigore_health"sv));
+	SpawnCore("models/baby_voltigore.mdl", {-16, -16, 0}, {16, 16, 32}, GetSkillFloat("babyvoltigore_health"sv));
 }
 
 //=========================================================

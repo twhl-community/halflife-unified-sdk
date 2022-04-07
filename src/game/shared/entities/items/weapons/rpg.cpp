@@ -131,7 +131,7 @@ void CRpgRocket::Spawn()
 
 	pev->nextthink = gpGlobals->time + 0.4;
 
-	pev->dmg = GetSkillFloat("sk_plr_rpg"sv);
+	pev->dmg = GetSkillFloat("plr_rpg"sv);
 }
 
 //=========================================================

@@ -538,7 +538,7 @@ bool CShockTrooper::CheckRangeAttack2(float flDot, float flDist)
 		vecTarget = m_vecEnemyLKP + (m_hEnemy->BodyTarget(pev->origin) - m_hEnemy->pev->origin);
 		// estimate position
 		if (HasConditions(bits_COND_SEE_ENEMY))
-			vecTarget = vecTarget + ((vecTarget - pev->origin).Length() / GetSkillFloat("sk_shocktrooper_gspeed"sv)) * m_hEnemy->pev->velocity;
+			vecTarget = vecTarget + ((vecTarget - pev->origin).Length() / GetSkillFloat("shocktrooper_gspeed"sv)) * m_hEnemy->pev->velocity;
 	}
 
 	// are any of my squad members near the intended grenade impact area?
@@ -584,7 +584,7 @@ bool CShockTrooper::CheckRangeAttack2(float flDot, float flDist)
 	}
 	else
 	{
-		Vector vecToss = VecCheckThrow(pev, GetGunPosition(), vecTarget, GetSkillFloat("sk_shocktrooper_gspeed"sv), 0.5);
+		Vector vecToss = VecCheckThrow(pev, GetGunPosition(), vecTarget, GetSkillFloat("shocktrooper_gspeed"sv), 0.5);
 
 		if (vecToss != g_vecZero)
 		{
@@ -900,7 +900,7 @@ void CShockTrooper::HandleAnimEvent(MonsterEvent_t* pEvent)
 			UTIL_MakeVectors(pev->angles);
 			pHurt->pev->punchangle.x = 15;
 			pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_forward * 100 + gpGlobals->v_up * 50;
-			pHurt->TakeDamage(pev, pev, GetSkillFloat("sk_shocktrooper_kick"sv), DMG_CLUB);
+			pHurt->TakeDamage(pev, pev, GetSkillFloat("shocktrooper_kick"sv), DMG_CLUB);
 		}
 	}
 	break;
@@ -934,7 +934,7 @@ void CShockTrooper::Spawn()
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_GREEN;
 	pev->effects = 0;
-	pev->health = GetSkillFloat("sk_shocktrooper_health"sv);
+	pev->health = GetSkillFloat("shocktrooper_health"sv);
 	m_flFieldOfView = 0.2; // indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
 	m_flNextGrenadeCheck = gpGlobals->time + 1;
@@ -952,7 +952,7 @@ void CShockTrooper::Spawn()
 
 	pev->weapons = HGRUNT_9MMAR | HGRUNT_HANDGRENADE;
 
-	m_cClipSize = GetSkillFloat("sk_shocktrooper_maxcharge"sv);
+	m_cClipSize = GetSkillFloat("shocktrooper_maxcharge"sv);
 	m_cAmmoLoaded = m_cClipSize;
 
 	m_flLastChargeTime = m_flLastBlinkTime = m_flLastBlinkInterval = gpGlobals->time;
@@ -2201,7 +2201,7 @@ Schedule_t* CShockTrooper::GetScheduleOfType(int Type)
 
 void CShockTrooper::MonsterThink()
 {
-	if (gpGlobals->time - m_flLastChargeTime >= GetSkillFloat("sk_shocktrooper_rchgspeed"sv))
+	if (gpGlobals->time - m_flLastChargeTime >= GetSkillFloat("shocktrooper_rchgspeed"sv))
 	{
 		if (m_cAmmoLoaded < m_cClipSize)
 		{

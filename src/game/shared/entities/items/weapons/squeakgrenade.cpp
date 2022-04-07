@@ -110,11 +110,11 @@ void CSqueakGrenade::Spawn()
 
 	pev->flags |= FL_MONSTER;
 	pev->takedamage = DAMAGE_AIM;
-	pev->health = GetSkillFloat("sk_snark_health"sv);
+	pev->health = GetSkillFloat("snark_health"sv);
 	pev->gravity = 0.5;
 	pev->friction = 0.5;
 
-	pev->dmg = GetSkillFloat("sk_snark_dmg_pop"sv);
+	pev->dmg = GetSkillFloat("snark_dmg_pop"sv);
 
 	m_flDie = gpGlobals->time + SQUEEK_DETONATE_DELAY;
 
@@ -335,13 +335,13 @@ void CSqueakGrenade::SuperBounceTouch(CBaseEntity* pOther)
 			{
 				// ALERT( at_console, "hit enemy\n");
 				ClearMultiDamage();
-				pOther->TraceAttack(pev, GetSkillFloat("sk_snark_dmg_bite"sv), gpGlobals->v_forward, &tr, DMG_SLASH);
+				pOther->TraceAttack(pev, GetSkillFloat("snark_dmg_bite"sv), gpGlobals->v_forward, &tr, DMG_SLASH);
 				if (m_hOwner != nullptr)
 					ApplyMultiDamage(pev, m_hOwner->pev);
 				else
 					ApplyMultiDamage(pev, pev);
 
-				pev->dmg += GetSkillFloat("sk_snark_dmg_pop"sv); // add more explosion damage
+				pev->dmg += GetSkillFloat("snark_dmg_pop"sv); // add more explosion damage
 				// m_flDie += 2.0; // add more life
 
 				// make bite sound

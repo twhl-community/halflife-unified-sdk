@@ -360,7 +360,7 @@ void CController::Spawn()
 	pev->movetype = MOVETYPE_FLY;
 	pev->flags |= FL_FLY;
 	m_bloodColor = BLOOD_COLOR_GREEN;
-	pev->health = GetSkillFloat("sk_controller_health"sv);
+	pev->health = GetSkillFloat("controller_health"sv);
 	pev->view_ofs = Vector(0, 0, -2);  // position of the eyes relative to monster's origin.
 	m_flFieldOfView = VIEW_FIELD_FULL; // indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
@@ -632,9 +632,9 @@ void CController::RunTask(Task_t* pTask)
 				{
 					m_vecEstVelocity = m_vecEstVelocity * 0.8;
 				}
-				vecDir = Intersect(vecSrc, m_hEnemy->BodyTarget(pev->origin), m_vecEstVelocity, GetSkillFloat("sk_controller_speedball"sv));
+				vecDir = Intersect(vecSrc, m_hEnemy->BodyTarget(pev->origin), m_vecEstVelocity, GetSkillFloat("controller_speedball"sv));
 				float delta = 0.03490; // +-2 degree
-				vecDir = vecDir + Vector(RANDOM_FLOAT(-delta, delta), RANDOM_FLOAT(-delta, delta), RANDOM_FLOAT(-delta, delta)) * GetSkillFloat("sk_controller_speedball"sv);
+				vecDir = vecDir + Vector(RANDOM_FLOAT(-delta, delta), RANDOM_FLOAT(-delta, delta), RANDOM_FLOAT(-delta, delta)) * GetSkillFloat("controller_speedball"sv);
 
 				vecSrc = vecSrc + vecDir * (gpGlobals->time - m_flShootTime);
 				CBaseMonster* pBall = (CBaseMonster*)Create("controller_energy_ball", vecSrc, pev->angles, edict());
@@ -1212,7 +1212,7 @@ void CControllerHeadBall::HuntThink()
 		if (pEntity != nullptr && 0 != pEntity->pev->takedamage)
 		{
 			ClearMultiDamage();
-			pEntity->TraceAttack(m_hOwner->pev, GetSkillFloat("sk_controller_dmgzap"sv), pev->velocity, &tr, DMG_SHOCK);
+			pEntity->TraceAttack(m_hOwner->pev, GetSkillFloat("controller_dmgzap"sv), pev->velocity, &tr, DMG_SHOCK);
 			ApplyMultiDamage(pev, m_hOwner->pev);
 		}
 
@@ -1394,7 +1394,7 @@ void CControllerZapBall::ExplodeTouch(CBaseEntity* pOther)
 		}
 
 		ClearMultiDamage();
-		pOther->TraceAttack(pevOwner, GetSkillFloat("sk_controller_dmgball"sv), pev->velocity.Normalize(), &tr, DMG_ENERGYBEAM);
+		pOther->TraceAttack(pevOwner, GetSkillFloat("controller_dmgball"sv), pev->velocity.Normalize(), &tr, DMG_ENERGYBEAM);
 		ApplyMultiDamage(pevOwner, pevOwner);
 
 		UTIL_EmitAmbientSound(ENT(pev), tr.vecEndPos, "weapons/electro4.wav", 0.3, ATTN_NORM, 0, RANDOM_LONG(90, 99));

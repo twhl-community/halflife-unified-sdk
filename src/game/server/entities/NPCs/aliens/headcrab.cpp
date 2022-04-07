@@ -276,7 +276,7 @@ void CHeadCrab::Spawn()
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_GREEN;
 	pev->effects = 0;
-	pev->health = GetSkillFloat("sk_headcrab_health"sv);
+	pev->health = GetSkillFloat("headcrab_health"sv);
 	pev->view_ofs = Vector(0, 0, 20); // position of the eyes relative to monster's origin.
 	pev->yaw_speed = 5;				  //!!! should we put this in the monster's changeanim function since turn rates may vary with state/anim?
 	m_flFieldOfView = 0.5;			  // indicates the width of this monster's forward view cone ( as a dotproduct result )
@@ -493,7 +493,7 @@ void CBabyCrab::Spawn()
 	pev->renderamt = 192;
 	UTIL_SetSize(pev, Vector(-12, -12, 0), Vector(12, 12, 24));
 
-	pev->health = GetSkillFloat("sk_headcrab_health"sv) * 0.25; // less health than full grown
+	pev->health = GetSkillFloat("headcrab_health"sv) * 0.25; // less health than full grown
 }
 
 void CBabyCrab::Precache()

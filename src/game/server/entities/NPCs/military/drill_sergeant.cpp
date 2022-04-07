@@ -64,7 +64,7 @@ void CDrillSergeant::DropWeapon()
 
 void CDrillSergeant::Spawn()
 {
-	SpawnCore("models/drill.mdl", GetSkillFloat("sk_barney_health"sv));
+	SpawnCore("models/drill.mdl", GetSkillFloat("barney_health"sv));
 }
 
 void CDrillSergeant::AlertSound()

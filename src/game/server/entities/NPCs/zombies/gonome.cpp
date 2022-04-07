@@ -125,7 +125,7 @@ void COFGonomeGuts::Touch(CBaseEntity* pOther)
 	}
 	else
 	{
-		pOther->TakeDamage(pev, pev, GetSkillFloat("sk_gonome_dmg_guts"sv), DMG_GENERIC);
+		pOther->TakeDamage(pev, pev, GetSkillFloat("gonome_dmg_guts"sv), DMG_GENERIC);
 	}
 
 	SetThink(&COFGonomeGuts::SUB_Remove);
@@ -241,7 +241,7 @@ public:
 	bool m_fPlayerLocked = false;
 
 protected:
-	float GetOneSlashDamage() override { return GetSkillFloat("sk_gonome_dmg_one_slash"sv); }
+	float GetOneSlashDamage() override { return GetSkillFloat("gonome_dmg_one_slash"sv); }
 	float GetBothSlashDamage() override { return 0; } //Not used, so just return 0
 
 	// Take 15% damage from bullets
@@ -417,7 +417,7 @@ void COFGonome::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 		// do stuff for this event.
 		//		ALERT( at_console, "Slash left!\n" );
-		CBaseEntity* pHurt = CheckTraceHullAttack(70, GetSkillFloat("sk_gonome_dmg_one_bite"sv), DMG_SLASH);
+		CBaseEntity* pHurt = CheckTraceHullAttack(70, GetSkillFloat("gonome_dmg_one_bite"sv), DMG_SLASH);
 		if (pHurt)
 		{
 			if ((pHurt->pev->flags & (FL_MONSTER | FL_CLIENT)) != 0)
@@ -445,7 +445,7 @@ void COFGonome::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 		// do stuff for this event.
 		//		ALERT( at_console, "Slash left!\n" );
-		CBaseEntity* pHurt = CheckTraceHullAttack(70, GetSkillFloat("sk_gonome_dmg_one_bite"sv), DMG_SLASH);
+		CBaseEntity* pHurt = CheckTraceHullAttack(70, GetSkillFloat("gonome_dmg_one_bite"sv), DMG_SLASH);
 		if (pHurt)
 		{
 			if ((pHurt->pev->flags & (FL_MONSTER | FL_CLIENT)) != 0)
@@ -475,7 +475,7 @@ void COFGonome::Spawn()
 	m_pGonomeGuts = nullptr;
 	m_fPlayerLocked = false;
 
-	SpawnCore("models/gonome.mdl", GetSkillFloat("sk_gonome_health"sv));
+	SpawnCore("models/gonome.mdl", GetSkillFloat("gonome_health"sv));
 }
 
 //=========================================================

@@ -190,7 +190,7 @@ bool CMOFAssassin::CheckRangeAttack1(float flDot, float flDist)
 //=========================================================
 bool CMOFAssassin::CheckRangeAttack2(float flDot, float flDist)
 {
-	return CheckRangeAttack2Core(flDot, flDist, GetSkillFloat("sk_massassin_gspeed"sv));
+	return CheckRangeAttack2Core(flDot, flDist, GetSkillFloat("massassin_gspeed"sv));
 }
 
 //=========================================================
@@ -333,7 +333,7 @@ void CMOFAssassin::HandleAnimEvent(MonsterEvent_t* pEvent)
 			UTIL_MakeVectors(pev->angles);
 			pHurt->pev->punchangle.x = 15;
 			pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_forward * 100 + gpGlobals->v_up * 50;
-			pHurt->TakeDamage(pev, pev, GetSkillFloat("sk_massassin_kick"sv), DMG_CLUB);
+			pHurt->TakeDamage(pev, pev, GetSkillFloat("massassin_kick"sv), DMG_CLUB);
 		}
 	}
 	break;
@@ -358,7 +358,7 @@ void CMOFAssassin::Spawn()
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_RED;
 	pev->effects = 0;
-	pev->health = GetSkillFloat("sk_massassin_health"sv);
+	pev->health = GetSkillFloat("massassin_health"sv);
 	m_flFieldOfView = 0.2; // indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
 	m_flNextGrenadeCheck = gpGlobals->time + 1;

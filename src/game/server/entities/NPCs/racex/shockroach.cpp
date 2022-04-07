@@ -83,7 +83,7 @@ public:
 	bool CheckRangeAttack2(float flDot, float flDist) override;
 	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 
-	virtual float GetDamageAmount() { return GetSkillFloat("sk_shockroach_dmg_bite"sv); }
+	virtual float GetDamageAmount() { return GetSkillFloat("shockroach_dmg_bite"sv); }
 	virtual int GetVoicePitch() { return 100; }
 	virtual float GetSoundVolue() { return 1.0; }
 	Schedule_t* GetScheduleOfType(int Type) override;
@@ -282,7 +282,7 @@ void COFShockRoach::Spawn()
 	pev->movetype = MOVETYPE_FLY;
 	m_bloodColor = BLOOD_COLOR_GREEN;
 	pev->effects = 0;
-	pev->health = GetSkillFloat("sk_shockroach_health"sv);
+	pev->health = GetSkillFloat("shockroach_health"sv);
 	pev->view_ofs = Vector(0, 0, 20); // position of the eyes relative to monster's origin.
 	pev->yaw_speed = 5;				  //!!! should we put this in the monster's changeanim function since turn rates may vary with state/anim?
 	m_flFieldOfView = 0.5;			  // indicates the width of this monster's forward view cone ( as a dotproduct result )
@@ -510,7 +510,7 @@ void COFShockRoach::MonsterThink()
 		m_fRoachSolid = true;
 	}
 
-	if (lifeTime >= GetSkillFloat("sk_shockroach_lifespan"sv))
+	if (lifeTime >= GetSkillFloat("shockroach_lifespan"sv))
 		TakeDamage(pev, pev, pev->health, DMG_NEVERGIB);
 
 	CBaseMonster::MonsterThink();

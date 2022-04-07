@@ -287,7 +287,7 @@ void COFTorchAlly::HandleAnimEvent(MonsterEvent_t* pEvent)
 //=========================================================
 void COFTorchAlly::Spawn()
 {
-	SpawnCore("models/hgrunt_torch.mdl", GetSkillFloat("sk_torch_ally_health"sv));
+	SpawnCore("models/hgrunt_torch.mdl", GetSkillFloat("torch_ally_health"sv));
 
 	m_fTorchActive = false;
 

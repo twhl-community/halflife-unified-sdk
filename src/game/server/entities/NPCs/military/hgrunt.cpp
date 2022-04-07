@@ -441,7 +441,7 @@ bool CHGrunt::CheckRangeAttack2Core(float flDot, float flDist, float grenadeSpee
 //=========================================================
 bool CHGrunt::CheckRangeAttack2(float flDot, float flDist)
 {
-	return CheckRangeAttack2Core(flDot, flDist, GetSkillFloat("sk_hgrunt_gspeed"sv));
+	return CheckRangeAttack2Core(flDot, flDist, GetSkillFloat("hgrunt_gspeed"sv));
 }
 
 //=========================================================
@@ -682,7 +682,7 @@ void CHGrunt::Shoot(bool firstShotInBurst)
 
 			Vector vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40, 90) + gpGlobals->v_up * RANDOM_FLOAT(75, 200) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
 			EjectBrass(vecShootOrigin - vecShootDir * 24, vecShellVelocity, pev->angles.y, m_iShotgunShell, TE_BOUNCE_SHOTSHELL);
-			FireBullets(GetSkillFloat("sk_hgrunt_pellets"sv), vecShootOrigin, vecShootDir, VECTOR_CONE_15DEGREES, 2048, BULLET_PLAYER_BUCKSHOT, 0); // shoot +-7.5 degrees
+			FireBullets(GetSkillFloat("hgrunt_pellets"sv), vecShootOrigin, vecShootDir, VECTOR_CONE_15DEGREES, 2048, BULLET_PLAYER_BUCKSHOT, 0); // shoot +-7.5 degrees
 
 			pev->effects |= EF_MUZZLEFLASH;
 
@@ -791,7 +791,7 @@ void CHGrunt::HandleAnimEvent(MonsterEvent_t* pEvent)
 			UTIL_MakeVectors(pev->angles);
 			pHurt->pev->punchangle.x = 15;
 			pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_forward * 100 + gpGlobals->v_up * 50;
-			pHurt->TakeDamage(pev, pev, GetSkillFloat("sk_hgrunt_kick"sv), DMG_CLUB);
+			pHurt->TakeDamage(pev, pev, GetSkillFloat("hgrunt_kick"sv), DMG_CLUB);
 		}
 	}
 	break;
@@ -826,7 +826,7 @@ void CHGrunt::Spawn()
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_RED;
 	pev->effects = 0;
-	pev->health = GetSkillFloat("sk_hgrunt_health"sv);
+	pev->health = GetSkillFloat("hgrunt_health"sv);
 	m_flFieldOfView = 0.2; // indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
 	m_flNextGrenadeCheck = gpGlobals->time + 1;

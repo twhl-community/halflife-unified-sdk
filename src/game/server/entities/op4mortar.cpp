@@ -79,7 +79,7 @@ void CMortarShell::Spawn()
 	pev->gravity = 1;
 
 	//Deal twice the damage that the RPG does
-	pev->dmg = 2 * GetSkillFloat("sk_plr_rpg"sv);
+	pev->dmg = 2 * GetSkillFloat("plr_rpg"sv);
 
 	pev->nextthink = gpGlobals->time + 0.01;
 	m_flIgniteTime = gpGlobals->time;

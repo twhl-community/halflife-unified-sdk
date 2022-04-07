@@ -284,7 +284,7 @@ void CNihilanth::Spawn()
 
 	pev->flags |= FL_MONSTER | FL_FLY;
 	pev->takedamage = DAMAGE_AIM;
-	pev->health = GetSkillFloat("sk_nihilanth_health"sv);
+	pev->health = GetSkillFloat("nihilanth_health"sv);
 	pev->view_ofs = Vector(0, 0, 300);
 
 	m_flFieldOfView = -1; // 360 degrees
@@ -353,7 +353,7 @@ void CNihilanth::PainSound()
 
 	m_flNextPainSound = gpGlobals->time + RANDOM_FLOAT(2, 5);
 
-	if (pev->health > GetSkillFloat("sk_nihilanth_health"sv) / 2)
+	if (pev->health > GetSkillFloat("nihilanth_health"sv) / 2)
 	{
 		EMIT_SOUND(edict(), CHAN_VOICE, RANDOM_SOUND_ARRAY(pLaughSounds), 1.0, 0.2);
 	}
@@ -712,7 +712,7 @@ void CNihilanth::NextActivity()
 		}
 	}
 
-	if ((pev->health < GetSkillFloat("sk_nihilanth_health"sv) / 2 || m_iActiveSpheres < N_SPHERES / 2) && m_hRecharger == nullptr && m_iLevel <= 9)
+	if ((pev->health < GetSkillFloat("nihilanth_health"sv) / 2 || m_iActiveSpheres < N_SPHERES / 2) && m_hRecharger == nullptr && m_iLevel <= 9)
 	{
 		char szName[128];
 
@@ -798,7 +798,7 @@ void CNihilanth::NextActivity()
 	{
 		if (m_flLastSeen + 5 > gpGlobals->time && flDist < 256 && flDot > 0)
 		{
-			if (m_irritation >= 2 && pev->health < GetSkillFloat("sk_nihilanth_health"sv) / 2.0)
+			if (m_irritation >= 2 && pev->health < GetSkillFloat("nihilanth_health"sv) / 2.0)
 			{
 				pev->sequence = LookupSequence("attack1_open");
 			}
@@ -857,9 +857,9 @@ void CNihilanth::HuntThink()
 	// ALERT( at_console, "health %.0f\n", pev->health );
 
 	// if damaged, try to abosorb some spheres
-	if (pev->health < GetSkillFloat("sk_nihilanth_health"sv) && AbsorbSphere())
+	if (pev->health < GetSkillFloat("nihilanth_health"sv) && AbsorbSphere())
 	{
-		pev->health += GetSkillFloat("sk_nihilanth_health"sv) / N_SPHERES;
+		pev->health += GetSkillFloat("nihilanth_health"sv) / N_SPHERES;
 	}
 
 	// get new sequence
@@ -869,7 +869,7 @@ void CNihilanth::HuntThink()
 		pev->frame = 0;
 		NextActivity();
 		ResetSequenceInfo();
-		pev->framerate = 2.0 - 1.0 * (pev->health / GetSkillFloat("sk_nihilanth_health"sv));
+		pev->framerate = 2.0 - 1.0 * (pev->health / GetSkillFloat("nihilanth_health"sv));
 	}
 
 	// look for current enemy
@@ -1266,7 +1266,7 @@ void CNihilanth::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecD
 	{
 		Vector vecBlood = (ptr->vecEndPos - pev->origin).Normalize();
 
-		UTIL_BloodStream(ptr->vecEndPos, vecBlood, BloodColor(), flDamage + (100 - 100 * (pev->health / GetSkillFloat("sk_nihilanth_health"sv))));
+		UTIL_BloodStream(ptr->vecEndPos, vecBlood, BloodColor(), flDamage + (100 - 100 * (pev->health / GetSkillFloat("nihilanth_health"sv))));
 	}
 
 	// SpawnBlood(ptr->vecEndPos, BloodColor(), flDamage * 5.0);// a little surface blood.
@@ -1489,7 +1489,7 @@ void CNihilanthHVR::ZapThink()
 		if (pEntity != nullptr && 0 != pEntity->pev->takedamage)
 		{
 			ClearMultiDamage();
-			pEntity->TraceAttack(pev, GetSkillFloat("sk_nihilanth_zap"sv), pev->velocity, &tr, DMG_SHOCK);
+			pEntity->TraceAttack(pev, GetSkillFloat("nihilanth_zap"sv), pev->velocity, &tr, DMG_SHOCK);
 			ApplyMultiDamage(pev, pev);
 		}
 

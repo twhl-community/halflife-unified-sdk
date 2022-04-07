@@ -286,7 +286,7 @@ void CTurret::Spawn()
 {
 	Precache();
 	SET_MODEL(ENT(pev), "models/turret.mdl");
-	pev->health = GetSkillFloat("sk_turret_health"sv);
+	pev->health = GetSkillFloat("turret_health"sv);
 	m_HackedGunPos = Vector(0, 0, 12.75);
 	m_flMaxSpin = TURRET_MAXSPIN;
 	pev->view_ofs.z = 12.75;
@@ -319,7 +319,7 @@ void CMiniTurret::Spawn()
 {
 	Precache();
 	SET_MODEL(ENT(pev), "models/miniturret.mdl");
-	pev->health = GetSkillFloat("sk_miniturret_health"sv);
+	pev->health = GetSkillFloat("miniturret_health"sv);
 	m_HackedGunPos = Vector(0, 0, 12.75);
 	m_flMaxSpin = 0;
 	pev->view_ofs.z = 12.75;
@@ -1170,7 +1170,7 @@ void CSentry::Spawn()
 {
 	Precache();
 	SET_MODEL(ENT(pev), "models/sentry.mdl");
-	pev->health = GetSkillFloat("sk_sentry_health"sv);
+	pev->health = GetSkillFloat("sentry_health"sv);
 	m_HackedGunPos = Vector(0, 0, 48);
 	pev->view_ofs.z = 48;
 	m_flMaxWait = 1E6;
