@@ -388,14 +388,8 @@ bool SkillSystem::ParseConfiguration(const json& input)
 
 				const auto& skillLevel = std::get<1>(variableName);
 
-				//Skill level explicitly specified.
-				if (skillLevel.has_value() && skillLevel.value() == GetSkillLevel())
+				if (!skillLevel.has_value() || skillLevel.value() == GetSkillLevel())
 				{
-					SetValue(std::get<0>(variableName), valueFloat);
-				}
-				else
-				{
-					//Set for all skill levels.
 					SetValue(std::get<0>(variableName), valueFloat);
 				}
 			}();
