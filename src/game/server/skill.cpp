@@ -134,13 +134,18 @@ bool SkillSystem::Initialize()
 
 			const std::string_view searchTerm{args.Argument(1)};
 
+			const auto printer = [](const SkillVariable& variable)
+			{
+				Con_Printf("%s = %.2f\n", variable.Name.c_str(), variable.Value);
+			};
+
 			//TODO: maybe replace this with proper wildcard searching at some point.
 			if (searchTerm == "*")
 			{
 				//List all keys.
 				for (const auto& variable : m_SkillVariables)
 				{
-					Con_Printf("%s\n", variable.Name.c_str());
+					printer(variable);
 				}
 			}
 			else
@@ -150,7 +155,7 @@ bool SkillSystem::Initialize()
 				{
 					if (variable.Name.find(searchTerm) != std::string::npos)
 					{
-						Con_Printf("%s\n", variable.Name.c_str());
+						printer(variable);
 					}
 				}
 			}
