@@ -69,8 +69,6 @@ public:
 
 	void RemoveLogger(const std::shared_ptr<spdlog::logger>& logger);
 
-	std::shared_ptr<spdlog::logger> GetGlobalLogger() { return m_GlobalLogger; }
-
 private:
 	Settings LoadSettings(const json& input);
 
@@ -85,7 +83,7 @@ private:
 private:
 	std::vector<std::shared_ptr<spdlog::sinks::sink>> m_Sinks;
 
-	std::shared_ptr<spdlog::logger> m_GlobalLogger;
+	std::shared_ptr<spdlog::logger> m_Logger;
 
 	Settings m_Settings;
 };

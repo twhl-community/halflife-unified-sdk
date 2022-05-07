@@ -150,9 +150,9 @@ void CLogSystem::PreInitialize()
 
 	m_Settings.Defaults.Level = startupLogLevel;
 
-	m_GlobalLogger = CreateLogger("global");
+	m_Logger = CreateLogger("logging");
 
-	spdlog::set_default_logger(m_GlobalLogger);
+	spdlog::set_default_logger(m_Logger);
 }
 
 bool CLogSystem::Initialize()
@@ -172,7 +172,7 @@ bool CLogSystem::Initialize()
 
 	//TODO: create sinks based on settings
 
-	m_GlobalLogger->trace("Updating loggers with configuration settings");
+	m_Logger->trace("Updating loggers with configuration settings");
 
 	spdlog::apply_all([this](std::shared_ptr<spdlog::logger> logger)
 		{ ApplySettingsToLogger(*logger); });
@@ -187,7 +187,7 @@ void CLogSystem::PostInitialize()
 
 void CLogSystem::Shutdown()
 {
-	m_GlobalLogger.reset();
+	m_Logger.reset();
 	m_Sinks.clear();
 	spdlog::shutdown();
 }
@@ -207,7 +207,7 @@ std::shared_ptr<spdlog::logger> CLogSystem::CreateLogger(const std::string& name
 
 void CLogSystem::RemoveLogger(const std::shared_ptr<spdlog::logger>& logger)
 {
-	if (!logger || logger == m_GlobalLogger)
+	if (!logger)
 	{
 		return;
 	}
@@ -262,7 +262,7 @@ CLogSystem::Settings CLogSystem::LoadSettings(const json& input)
 			//Can't be validated by schema
 			if (configurations.contains(name))
 			{
-				m_GlobalLogger->error("Duplicate logger configuration \"{}\", ignoring", name);
+				m_Logger->error("Duplicate logger configuration \"{}\", ignoring", name);
 				continue;
 			}
 
