@@ -59,6 +59,8 @@ public:
 
 	const char* GetName() const override { return "Logging"; }
 
+	void PreInitialize();
+
 	bool Initialize() override;
 	void PostInitialize() override;
 	void Shutdown() override;

@@ -131,14 +131,8 @@ static json GetLoggingConfigSchema()
 CLogSystem::CLogSystem() = default;
 CLogSystem::~CLogSystem() = default;
 
-bool CLogSystem::Initialize()
+void CLogSystem::PreInitialize()
 {
-	g_ConCommands.CreateCommand("log_listloglevels", [this](const auto&) { ListLogLevels(); });
-	g_ConCommands.CreateCommand("log_listloggers", [this](const auto&) { ListLoggers(); });
-	g_ConCommands.CreateCommand("log_setlevel", [this](const auto& args) { SetLogLevel(args); });
-
-	g_JSON.RegisterSchema(LoggingConfigSchemaName, &GetLoggingConfigSchema);
-
 	m_Sinks.push_back(std::make_shared<ConsoleLogSink<spdlog::details::null_mutex>>());
 
 	spdlog::level::level_enum startupLogLevel = DefaultLogLevel;
@@ -159,16 +153,21 @@ bool CLogSystem::Initialize()
 	m_GlobalLogger = CreateLogger("global");
 
 	spdlog::set_default_logger(m_GlobalLogger);
-
-	return true;
 }
 
-void CLogSystem::PostInitialize()
+bool CLogSystem::Initialize()
 {
+	g_ConCommands.CreateCommand("log_listloglevels", [this](const auto&) { ListLogLevels(); });
+	g_ConCommands.CreateCommand("log_listloggers", [this](const auto&) { ListLoggers(); });
+	g_ConCommands.CreateCommand("log_setlevel", [this](const auto& args) { SetLogLevel(args); });
+
+	g_JSON.RegisterSchema(LoggingConfigSchemaName, &GetLoggingConfigSchema);
+
 	m_Settings = g_JSON.ParseJSONFile(
 						   "cfg/logging.json",
 						   {.SchemaName = LoggingConfigSchemaName, .PathID = "GAMECONFIG"},
-						   [this](const json& input) { return LoadSettings(input); })
+						   [this](const json& input)
+						   { return LoadSettings(input); })
 					 .value_or(Settings{});
 
 	//TODO: create sinks based on settings
@@ -176,9 +175,14 @@ void CLogSystem::PostInitialize()
 	m_GlobalLogger->trace("Updating loggers with configuration settings");
 
 	spdlog::apply_all([this](std::shared_ptr<spdlog::logger> logger)
-	{
-		ApplySettingsToLogger(*logger);
-	});
+		{ ApplySettingsToLogger(*logger); });
+
+	return true;
+}
+
+void CLogSystem::PostInitialize()
+{
+	//Nothing.
 }
 
 void CLogSystem::Shutdown()

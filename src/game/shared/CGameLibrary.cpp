@@ -35,10 +35,15 @@ bool CGameLibrary::InitializeCommon()
 
 	g_pDeveloper = g_ConCommands.GetCVar("developer");
 
-	//These systems have to initialize in a specific order because they depend on each-other
-	g_GameSystems.Add(&g_Logging);
+	//Done separately before game systems to avoid tightly coupling logging to json.
+	g_Logging.PreInitialize();
+
+	//Logging must initialize after JSON so that it can load the config file immediately.
+	//It must also initialize after concommands since it creates a few of those.
+	//It is safe to use loggers after logging has shut down so having it shut down first is not an issue.
 	g_GameSystems.Add(&g_ConCommands);
 	g_GameSystems.Add(&g_JSON);
+	g_GameSystems.Add(&g_Logging);
 
 	if (!g_GameSystems.Initialize())
 	{
