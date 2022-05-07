@@ -523,7 +523,7 @@ int COFGonome::IgnoreConditions()
 	{
 		iIgnore |= bits_COND_LIGHT_DAMAGE | bits_COND_HEAVY_DAMAGE | bits_COND_ENEMY_TOOFAR | bits_COND_ENEMY_OCCLUDED;
 	}
-	else if ((m_Activity == ACT_MELEE_ATTACK1) || (m_Activity == ACT_MELEE_ATTACK1))
+	else if (m_Activity == ACT_MELEE_ATTACK1)
 	{
 #if 0
 		if (pev->health < 20)
