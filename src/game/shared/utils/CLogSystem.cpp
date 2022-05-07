@@ -172,6 +172,13 @@ void CLogSystem::PostInitialize()
 					 .value_or(Settings{});
 
 	//TODO: create sinks based on settings
+
+	m_GlobalLogger->trace("Updating loggers with configuration settings");
+
+	spdlog::apply_all([this](std::shared_ptr<spdlog::logger> logger)
+	{
+		ApplySettingsToLogger(*logger);
+	});
 }
 
 void CLogSystem::Shutdown()
@@ -183,13 +190,13 @@ void CLogSystem::Shutdown()
 
 std::shared_ptr<spdlog::logger> CLogSystem::CreateLogger(const std::string& name)
 {
-	auto logger = CreateLoggerCore(name);
+	auto logger = std::make_shared<spdlog::logger>(name, m_Sinks.begin(), m_Sinks.end());
 
 	spdlog::register_logger(logger);
 
 	ApplySettingsToLogger(*logger);
 
-	FinishCreateLogger(*logger);
+	logger->trace("Logger initialized");
 
 	return logger;
 }
@@ -276,18 +283,6 @@ CLogSystem::Settings CLogSystem::LoadSettings(const json& input)
 	}
 
 	return settings;
-}
-
-std::shared_ptr<spdlog::logger> CLogSystem::CreateLoggerCore(const std::string& name)
-{
-	auto logger = std::make_shared<spdlog::logger>(name, m_Sinks.begin(), m_Sinks.end());
-
-	return logger;
-}
-
-void CLogSystem::FinishCreateLogger(spdlog::logger& logger)
-{
-	logger.trace("Logger initialized");
 }
 
 void CLogSystem::ApplySettingsToLogger(spdlog::logger& logger)

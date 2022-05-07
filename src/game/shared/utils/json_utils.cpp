@@ -101,16 +101,14 @@ bool JSONSystem::Initialize()
 	g_ConCommands.CreateCommand("json_generateschema", [this](const auto& args) { GenerateSchema(args); });
 	g_ConCommands.CreateCommand("json_generateallschemas", [this](const auto& args) { GenerateAllSchemas(args); });
 
-	//Use the global logger during startup
-	m_Logger = g_Logging.GetGlobalLogger();
+	m_Logger = g_Logging.CreateLogger("json");
 
 	return true;
 }
 
 void JSONSystem::PostInitialize()
 {
-	//Create the logger using user-provided configuration
-	m_Logger = g_Logging.CreateLogger("json");
+	//Nothing.
 }
 
 void JSONSystem::Shutdown()

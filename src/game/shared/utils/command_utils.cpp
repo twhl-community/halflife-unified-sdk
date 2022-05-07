@@ -46,16 +46,14 @@ CConCommandSystem::~CConCommandSystem() = default;
 
 bool CConCommandSystem::Initialize()
 {
-	//Use global logger during startup
-	m_Logger = g_Logging.GetGlobalLogger();
+	m_Logger = g_Logging.CreateLogger("cvar");
 
 	return true;
 }
 
 void CConCommandSystem::PostInitialize()
 {
-	//Create the logger using user-provided configuration
-	m_Logger = g_Logging.CreateLogger("cvar");
+	//Nothing.
 }
 
 void CConCommandSystem::Shutdown()

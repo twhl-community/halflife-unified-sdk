@@ -72,10 +72,6 @@ public:
 private:
 	Settings LoadSettings(const json& input);
 
-	std::shared_ptr<spdlog::logger> CreateLoggerCore(const std::string& name);
-
-	static void FinishCreateLogger(spdlog::logger& logger);
-
 	void ApplySettingsToLogger(spdlog::logger& logger);
 
 	void ListLogLevels();
