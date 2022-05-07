@@ -33,7 +33,7 @@ class CLogSystem final : public IGameSystem
 {
 private:
 	static constexpr spdlog::level::level_enum DefaultLogLevel = spdlog::level::info;
-	static constexpr std::string DefaultBaseFileName{"L"};
+	static const inline std::string DefaultBaseFileName{"L"};
 	static constexpr std::size_t MaxBaseFileNameLength{16};
 	static constexpr std::uint16_t DefaultMaxFiles{8}; //Have a finite limit for files by default.
 
