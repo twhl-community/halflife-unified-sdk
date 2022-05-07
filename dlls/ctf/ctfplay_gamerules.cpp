@@ -80,7 +80,7 @@ static const std::array<const char*, MaxTeamCharacters> team_chars =
 		"drill",
 		"grunt",
 		"recruit",
-		"shepard",
+		"shephard",
 		"tower",
 };
 
