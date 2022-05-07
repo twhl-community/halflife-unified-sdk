@@ -168,7 +168,7 @@ void CLogSystem::PreInitialize()
 
 	m_Settings.Defaults.Level = startupLogLevel;
 
-	m_Settings.LogFile.Enabled = COM_HasParam("-log_filelogging_enable");
+	m_Settings.LogFile.Enabled = COM_HasParam("-log_file_on");
 
 	m_Logger = CreateLogger("logging");
 
@@ -180,7 +180,8 @@ bool CLogSystem::Initialize()
 	g_ConCommands.CreateCommand("log_listloglevels", [this](const auto&) { ListLogLevels(); });
 	g_ConCommands.CreateCommand("log_listloggers", [this](const auto&) { ListLoggers(); });
 	g_ConCommands.CreateCommand("log_setlevel", [this](const auto& args) { SetLogLevel(args); });
-	g_ConCommands.CreateCommand("log_filelogging", [this](const auto& args) { FileLogging(args); });
+	g_ConCommands.CreateCommand("log_file", [this](const auto& args)
+		{ FileCommand(args); });
 
 	g_JSON.RegisterSchema(LoggingConfigSchemaName, &GetLoggingConfigSchema);
 
@@ -455,7 +456,7 @@ void CLogSystem::SetLogLevel(const CCommandArgs& args)
 	}
 }
 
-void CLogSystem::FileLogging(const CCommandArgs& args)
+void CLogSystem::FileCommand(const CCommandArgs& args)
 {
 	if (args.Count() == 2)
 	{
@@ -469,13 +470,13 @@ void CLogSystem::FileLogging(const CCommandArgs& args)
 		}
 		else
 		{
-			Con_Printf("log_filelogging: unknown parameter %s, 'on' and 'off' are valid\n", args.Argument(1));
+			Con_Printf("log_file: unknown parameter %s, 'on' and 'off' are valid\n", args.Argument(1));
 			return;
 		}
 	}
 	else
 	{
-		Con_Printf("usage: log_filelogging < on | off >\n");
+		Con_Printf("usage: log_file < on | off >\n");
 
 		if (m_Settings.LogFile.Enabled)
 		{

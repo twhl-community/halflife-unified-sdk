@@ -95,7 +95,7 @@ private:
 
 	void SetLogLevel(const CCommandArgs& args);
 
-	void FileLogging(const CCommandArgs& args);
+	void FileCommand(const CCommandArgs& args);
 
 private:
 	std::vector<std::shared_ptr<spdlog::sinks::sink>> m_Sinks;
