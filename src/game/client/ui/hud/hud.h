@@ -440,7 +440,6 @@ public:
 	bool VidInit() override;
 	bool Draw(float flTime) override;
 	bool MsgFunc_HudText(const char* pszName, int iSize, void* pbuf);
-	bool MsgFunc_HudTextPro(const char* pszName, int iSize, void* pbuf);
 	bool MsgFunc_GameTitle(const char* pszName, int iSize, void* pbuf);
 
 	float FadeBlend(float fadein, float fadeout, float hold, float localTime);

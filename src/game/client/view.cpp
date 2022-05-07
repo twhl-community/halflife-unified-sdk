@@ -24,13 +24,11 @@ void CL_CameraOffset(float* ofs);
 
 void DLLEXPORT V_CalcRefdef(struct ref_params_s* pparams);
 
-void PM_ParticleLine(float* start, float* end, int pcolor, float life, float vert);
 int PM_GetVisEntInfo(int ent);
 int PM_GetPhysEntInfo(int ent);
 void InterpolateAngles(float* start, float* end, float* output, float frac);
 void NormalizeAngles(float* angles);
 float Distance(const float* v1, const float* v2);
-float AngleBetweenVectors(const float* v1, const float* v2);
 
 extern float vJumpOrigin[3];
 extern float vJumpAngles[3];

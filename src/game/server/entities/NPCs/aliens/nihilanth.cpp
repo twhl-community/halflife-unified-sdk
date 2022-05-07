@@ -198,9 +198,6 @@ public:
 	void MovetoTarget(Vector vecTarget);
 	virtual void Crawl();
 
-	void Zap();
-	void Teleport();
-
 	float m_flIdealVel;
 	Vector m_vecIdeal;
 	CNihilanth* m_pNihilanth;

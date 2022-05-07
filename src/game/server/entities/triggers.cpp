@@ -523,7 +523,6 @@ public:
 	bool KeyValue(KeyValueData* pkvd) override;
 	void EXPORT MultiTouch(CBaseEntity* pOther);
 	void EXPORT HurtTouch(CBaseEntity* pOther);
-	void EXPORT CDAudioTouch(CBaseEntity* pOther);
 	void ActivateMultiTrigger(CBaseEntity* pActivator);
 	void EXPORT MultiWaitOver();
 	void EXPORT CounterUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);

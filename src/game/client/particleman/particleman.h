@@ -25,4 +25,4 @@ public:
 	virtual void SetRender(int iRender) = 0;
 };
 
-extern IParticleMan* g_pParticleMan;
+inline IParticleMan* g_pParticleMan = nullptr;

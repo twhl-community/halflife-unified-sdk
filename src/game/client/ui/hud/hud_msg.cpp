@@ -23,7 +23,6 @@
 #include "vgui_ScorePanel.h"
 
 #include "particleman.h"
-extern IParticleMan* g_pParticleMan;
 
 extern int giTeamplay;
 

@@ -25,8 +25,6 @@
 
 #include "utils/shared_utils.h"
 
-inline void MESSAGE_BEGIN(int msg_dest, int msg_type, const float* pOrigin, entvars_t* ent); // implementation later in this file
-
 inline globalvars_t* gpGlobals = nullptr;
 
 inline edict_t* FIND_ENTITY_BY_CLASSNAME(edict_t* entStart, const char* pszName)
@@ -44,15 +42,6 @@ inline edict_t* FIND_ENTITY_BY_TARGET(edict_t* entStart, const char* pszName)
 {
 	return FIND_ENTITY_BY_STRING(entStart, "target", pszName);
 }
-
-// Keeps clutter down a bit, when writing key-value pairs
-#define WRITEKEY_INT(pf, szKeyName, iKeyValue) ENGINE_FPRINTF(pf, "\"%s\" \"%d\"\n", szKeyName, iKeyValue)
-#define WRITEKEY_FLOAT(pf, szKeyName, flKeyValue) \
-	ENGINE_FPRINTF(pf, "\"%s\" \"%f\"\n", szKeyName, flKeyValue)
-#define WRITEKEY_STRING(pf, szKeyName, szKeyValue) \
-	ENGINE_FPRINTF(pf, "\"%s\" \"%s\"\n", szKeyName, szKeyValue)
-#define WRITEKEY_VECTOR(pf, szKeyName, flX, flY, flZ) \
-	ENGINE_FPRINTF(pf, "\"%s\" \"%f %f %f\"\n", szKeyName, flX, flY, flZ)
 
 // Keeps clutter down a bit, when using a float as a bit-vector
 #define SetBits(flBitVector, bits) ((flBitVector) = (int)(flBitVector) | (bits))
@@ -72,10 +61,6 @@ typedef int EOFFSET;
 
 // In case this ever changes
 #define M_PI 3.14159265358979323846
-
-// Keeps clutter down a bit, when declaring external entity/global method prototypes
-#define DECLARE_GLOBAL_METHOD(MethodName) extern void DLLEXPORT MethodName()
-#define GLOBAL_METHOD(funcname) void DLLEXPORT funcname()
 
 // This is the glue that hooks .MAP entity class names to our CPP classes
 // The _declspec forces them to be exported by name so we can do a lookup with GetProcAddress()
@@ -386,10 +371,7 @@ void DBG_AssertFunction(bool fExpr, const char* szExpr, const char* szFile, int 
 //
 // Un-comment only as needed
 //
-#define LANGUAGE_ENGLISH 0
 #define LANGUAGE_GERMAN 1
-#define LANGUAGE_FRENCH 2
-#define LANGUAGE_BRITISH 3
 
 inline DLL_GLOBAL int g_Language;
 
@@ -426,9 +408,6 @@ inline DLL_GLOBAL int g_Language;
 #define SF_BRUSH_ROTATE_MEDIUMRADIUS 256
 #define SF_BRUSH_ROTATE_LARGERADIUS 512
 
-#define PUSH_BLOCK_ONLY_X 1
-#define PUSH_BLOCK_ONLY_Y 2
-
 #define SVC_TEMPENTITY 23
 #define SVC_INTERMISSION 30
 #define SVC_CDTRACK 32
@@ -456,12 +435,6 @@ inline DLL_GLOBAL int g_Language;
 
 #define SPAWNFLAG_NOMESSAGE 1
 #define SPAWNFLAG_NOTOUCH 1
-#define SPAWNFLAG_DROIDONLY 4
-
-#define SPAWNFLAG_USEONLY 1 // can't be touched, must be used (buttons)
-
-#define TELE_PLAYER_ONLY 1
-#define TELE_SILENT 2
 
 #define SF_TRIG_PUSH_ONCE 1
 

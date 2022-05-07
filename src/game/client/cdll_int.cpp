@@ -42,7 +42,6 @@ TeamFortressViewport* gViewPort = nullptr;
 
 
 #include "particleman.h"
-IParticleMan* g_pParticleMan = nullptr;
 
 void CL_LoadParticleMan();
 void CL_UnloadParticleMan();

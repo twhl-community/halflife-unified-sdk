@@ -87,7 +87,6 @@ inline void MESSAGE_BEGIN(int msg_dest, int msg_type, const float* pOrigin = nul
 #define CVAR_SET_STRING (*g_engfuncs.pfnCVarSetString)
 #define CVAR_GET_POINTER (*g_engfuncs.pfnCVarGetPointer)
 #define ALERT (*g_engfuncs.pfnAlertMessage)
-#define ENGINE_FPRINTF (*g_engfuncs.pfnEngineFprintf)
 #define ALLOC_PRIVATE (*g_engfuncs.pfnPvAllocEntPrivateData)
 inline void* GET_PRIVATE(edict_t* pent)
 {

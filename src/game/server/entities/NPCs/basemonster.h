@@ -120,7 +120,6 @@ public:
 
 	// monster use function
 	void EXPORT MonsterUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-	void EXPORT CorpseUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
 	// overrideable Monster member functions
 
@@ -294,7 +293,6 @@ public:
 	bool FacingIdeal();
 
 	bool FCheckAITrigger(); // checks and, if necessary, fires the monster's trigger target.
-	bool NoFriendlyFire();
 
 	bool BBoxFlat();
 
@@ -306,7 +304,6 @@ public:
 	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
 
 	// combat functions
-	float UpdateTarget(entvars_t* pevTarget);
 	virtual Activity GetDeathActivity();
 	Activity GetSmallFlinchActivity();
 	void Killed(entvars_t* pevAttacker, int iGib) override;

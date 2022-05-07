@@ -323,7 +323,6 @@ public:
 
 	int Classify() override;
 	void SetAnimation(PLAYER_ANIM playerAnim);
-	void SetWeaponAnimType(const char* szExtention);
 	char m_szAnimExtention[32];
 
 	// custom player functions
@@ -380,8 +379,6 @@ public:
 	Vector AutoaimDeflection(const Vector& vecSrc, float flDist, float flDelta);
 
 	void ForceClientDllUpdate(); // Forces all client .dll specific data to be resent to client.
-
-	void DeathMessage(entvars_t* pevKiller);
 
 	void SetCustomDecalFrames(int nFrames);
 	int GetCustomDecalFrames();

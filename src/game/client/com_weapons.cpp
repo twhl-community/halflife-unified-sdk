@@ -22,51 +22,6 @@
 #include "entity_state.h"
 #include "r_efx.h"
 
-// g_runfuncs is true if this is the first time we've "predicated" a particular movement/firing
-//  command.  If it is 1, then we should play events/sounds etc., otherwise, we just will be
-//  updating state info, but not firing events
-bool g_runfuncs = false;
-
-// During our weapon prediction processing, we'll need to reference some data that is part of
-//  the final state passed into the postthink functionality.  We'll set this pointer and then
-//  reset it to nullptr as appropriate
-struct local_state_s* g_finalstate = nullptr;
-
-/*
-====================
-COM_Log
-
-Log debug messages to file ( appends )
-====================
-*/
-void COM_Log(const char* pszFile, const char* fmt, ...)
-{
-	va_list argptr;
-	char string[1024];
-	FILE* fp;
-	const char* pfilename;
-
-	if (!pszFile)
-	{
-		pfilename = "c:\\hllog.txt";
-	}
-	else
-	{
-		pfilename = pszFile;
-	}
-
-	va_start(argptr, fmt);
-	vsprintf(string, fmt, argptr);
-	va_end(argptr);
-
-	fp = fopen(pfilename, "a+t");
-	if (fp)
-	{
-		fprintf(fp, "%s", string);
-		fclose(fp);
-	}
-}
-
 // remember the current animation for the view model, in case we get out of sync with
 //  server.
 static int g_currentanim;

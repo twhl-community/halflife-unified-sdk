@@ -71,11 +71,9 @@ public:
 	void EXPORT FlockFollowerThink();
 	void EXPORT FallHack();
 	void MakeSound();
-	void AlertFlock();
 	void SpreadFlock();
 	void SpreadFlock2();
 	void Killed(entvars_t* pevAttacker, int iGib) override;
-	void Poop();
 	bool FPathBlocked();
 	//void KeyValue( KeyValueData *pkvd ) override;
 

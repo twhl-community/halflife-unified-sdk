@@ -12,11 +12,7 @@
 
 #include "Exports.h"
 
-void COM_Log(const char* pszFile, const char* fmt, ...);
 bool CL_IsDead();
-
-float UTIL_SharedRandomFloat(unsigned int seed, float low, float high);
-int UTIL_SharedRandomLong(unsigned int seed, int low, int high);
 
 int HUD_GetWeaponAnim();
 void HUD_SendWeaponAnim(int iAnim, int body, bool force);
@@ -38,8 +34,16 @@ void stub_SetModel(struct edict_s* e, const char* m);
 
 extern cvar_t* cl_lw;
 
-extern bool g_runfuncs;
+// g_runfuncs is true if this is the first time we've "predicated" a particular movement/firing
+//  command.  If it is 1, then we should play events/sounds etc., otherwise, we just will be
+//  updating state info, but not firing events
+inline bool g_runfuncs = false;
+
 extern Vector v_angles;
 extern Vector v_client_aimangles;
 extern float g_lastFOV;
-extern struct local_state_s* g_finalstate;
+
+// During our weapon prediction processing, we'll need to reference some data that is part of
+//  the final state passed into the postthink functionality.  We'll set this pointer and then
+//  reset it to nullptr as appropriate
+inline struct local_state_s* g_finalstate = nullptr;

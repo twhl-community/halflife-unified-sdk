@@ -713,13 +713,10 @@ class CBaseButton : public CBaseToggle
 public:
 	void Spawn() override;
 	void Precache() override;
-	void RotSpawn();
 	bool KeyValue(KeyValueData* pkvd) override;
 
 	void ButtonActivate();
-	void SparkSoundCache();
 
-	void EXPORT ButtonShot();
 	void EXPORT ButtonTouch(CBaseEntity* pOther);
 	void EXPORT ButtonSpark();
 	void EXPORT TriggerAndWait();
@@ -757,12 +754,6 @@ public:
 	byte m_bUnlockedSentence;
 	int m_sounds;
 };
-
-//
-// Weapons
-//
-
-#define BAD_WEAPON 0x00007FFF
 
 //
 // Converts a entvars_t * to a class pointer
@@ -817,6 +808,7 @@ env_sound_data
 push_trigger_data
 */
 
+//TODO: 4 is used as a magic number in FireBullets(Player) above. Refactor.
 #define TRACER_FREQ 4 // Tracers fire every 4 bullets
 
 // this moved here from world.cpp, to allow classes to be derived from it

@@ -86,7 +86,6 @@ extern void EjectBrass(const Vector& vecOrigin, const Vector& vecVelocity, float
 extern void ExplodeModel(const Vector& vecOrigin, float speed, int model, int count);
 bool IsFacing(entvars_t* pevTest, const Vector& reference);
 
-bool FBoxVisible(entvars_t* pevLooker, entvars_t* pevTarget);
 bool FBoxVisible(entvars_t* pevLooker, entvars_t* pevTarget, Vector& vecTargetOrigin, float flSize = 0.0);
 
 // monster to monster relationship types
