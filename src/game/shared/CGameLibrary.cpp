@@ -22,6 +22,7 @@
 #include "scripting/AS/CASManager.h"
 
 #include "utils/command_utils.h"
+#include "utils/GameSystem.h"
 #include "utils/json_utils.h"
 
 bool CGameLibrary::InitializeCommon()
@@ -35,43 +36,16 @@ bool CGameLibrary::InitializeCommon()
 	g_pDeveloper = g_ConCommands.GetCVar("developer");
 
 	//These systems have to initialize in a specific order because they depend on each-other
+	g_GameSystems.Add(&g_Logging);
+	g_GameSystems.Add(&g_ConCommands);
+	g_GameSystems.Add(&g_JSON);
+
+	if (!g_GameSystems.Initialize())
 	{
-		if (!g_Logging.Initialize())
-		{
-			Con_Printf("Could not initialize logging system\n");
-			return false;
-		}
-
-		if (!g_ConCommands.Initialize())
-		{
-			Con_Printf("Could not initialize console command system\n");
-			return false;
-		}
-
-		if (!g_JSON.Initialize())
-		{
-			Con_Printf("Could not initialize JSON system\n");
-			return false;
-		}
-
-		if (!g_Logging.PostInitialize())
-		{
-			Con_Printf("Could not post-initialize logging system\n");
-			return false;
-		}
-
-		if (!g_ConCommands.PostInitialize())
-		{
-			Con_Printf("Could not post-initialize console command system\n");
-			return false;
-		}
-
-		if (!g_JSON.PostInitialize())
-		{
-			Con_Printf("Could not post-initialize JSON system\n");
-			return false;
-		}
+		return false;
 	}
+
+	g_GameSystems.Invoke(&IGameSystem::PostInitialize);
 
 	if (!g_ASManager.Initialize())
 	{
@@ -93,8 +67,12 @@ void CGameLibrary::ShutdownCommon()
 {
 	g_GameConfigLoader.Shutdown();
 	g_ASManager.Shutdown();
-	g_JSON.Shutdown();
-	g_ConCommands.Shutdown();
-	g_Logging.Shutdown();
+
+	g_GameSystems.InvokeReverse(&IGameSystem::Shutdown);
+
+	g_GameSystems.Remove(&g_Logging);
+	g_GameSystems.Remove(&g_ConCommands);
+	g_GameSystems.Remove(&g_JSON);
+
 	FileSystem_FreeFileSystem();
 }

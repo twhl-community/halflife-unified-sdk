@@ -24,6 +24,8 @@
 
 #include <spdlog/logger.h>
 
+#include "GameSystem.h"
+
 /**
 *	@brief Provides an interface to get command arguments without explicitly depending on library interfaces
 */
@@ -51,7 +53,7 @@ enum class CommandLibraryPrefix
 /**
 *	@brief Manages console commands and cvars with client/server prefixes and stateful callbacks
 */
-class CConCommandSystem final
+class CConCommandSystem final : public IGameSystem
 {
 private:
 	struct CVarData
@@ -79,9 +81,11 @@ public:
 	CConCommandSystem(const CConCommandSystem&) = delete;
 	CConCommandSystem& operator=(const CConCommandSystem&) = delete;
 
-	bool Initialize();
-	bool PostInitialize();
-	void Shutdown();
+	const char* GetName() const override { return "ConCommands"; }
+
+	bool Initialize() override;
+	void PostInitialize() override;
+	void Shutdown() override;
 
 	/**
 	*	@brief Gets a cvar by name

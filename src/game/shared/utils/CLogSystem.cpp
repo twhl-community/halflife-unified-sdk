@@ -171,7 +171,7 @@ bool CLogSystem::Initialize()
 	return true;
 }
 
-bool CLogSystem::PostInitialize()
+void CLogSystem::PostInitialize()
 {
 	m_Settings = g_JSON.ParseJSONFile(
 						   "cfg/logging.json",
@@ -188,8 +188,6 @@ bool CLogSystem::PostInitialize()
 
 	//Replace the startup logger
 	spdlog::set_default_logger(m_GlobalLogger);
-
-	return true;
 }
 
 void CLogSystem::Shutdown()

@@ -23,11 +23,12 @@
 
 #include <spdlog/logger.h>
 
+#include "GameSystem.h"
 #include "json_fwd.h"
 
 class CCommandArgs;
 
-class CLogSystem final
+class CLogSystem final : public IGameSystem
 {
 private:
 	static constexpr spdlog::level::level_enum DefaultLogLevel = spdlog::level::info;
@@ -56,9 +57,11 @@ public:
 	CLogSystem(const CLogSystem&) = delete;
 	CLogSystem& operator=(const CLogSystem&) = delete;
 
-	bool Initialize();
-	bool PostInitialize();
-	void Shutdown();
+	const char* GetName() const override { return "Logging"; }
+
+	bool Initialize() override;
+	void PostInitialize() override;
+	void Shutdown() override;
 
 	std::shared_ptr<spdlog::logger> CreateLogger(const std::string& name);
 

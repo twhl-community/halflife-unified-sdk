@@ -26,6 +26,8 @@
 #include <nlohmann/json.hpp>
 #include <nlohmann/json-schema.hpp>
 
+#include "GameSystem.h"
+
 #include "filesystem_utils.h"
 #include "json_fwd.h"
 
@@ -51,7 +53,7 @@ struct JSONLoadParameters final
 	const char* PathID = nullptr;
 };
 
-class JSONSystem final
+class JSONSystem final : public IGameSystem
 {
 private:
 	//Schemas are created on-demand to reduce memory usage
@@ -68,9 +70,11 @@ public:
 	JSONSystem(const JSONSystem&) = delete;
 	JSONSystem& operator=(const JSONSystem&) = delete;
 
-	bool Initialize();
-	bool PostInitialize();
-	void Shutdown();
+	const char* GetName() const override { return "JSON"; }
+
+	bool Initialize() override;
+	void PostInitialize() override;
+	void Shutdown() override;
 
 	/**
 	*	@brief Used to check if debug functionality is enabled.

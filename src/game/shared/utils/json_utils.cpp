@@ -107,12 +107,10 @@ bool JSONSystem::Initialize()
 	return true;
 }
 
-bool JSONSystem::PostInitialize()
+void JSONSystem::PostInitialize()
 {
 	//Create the logger using user-provided configuration
 	m_Logger = g_Logging.CreateLogger("json");
-
-	return true;
 }
 
 void JSONSystem::Shutdown()

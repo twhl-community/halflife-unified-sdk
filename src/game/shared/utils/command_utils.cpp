@@ -52,12 +52,10 @@ bool CConCommandSystem::Initialize()
 	return true;
 }
 
-bool CConCommandSystem::PostInitialize()
+void CConCommandSystem::PostInitialize()
 {
 	//Create the logger using user-provided configuration
 	m_Logger = g_Logging.CreateLogger("cvar");
-
-	return true;
 }
 
 void CConCommandSystem::Shutdown()
