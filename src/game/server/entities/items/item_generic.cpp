@@ -15,6 +15,7 @@
 #include "cbase.h"
 
 const auto SF_ITEMGENERIC_DROP_TO_FLOOR = 1 << 0;
+const auto SF_ITEMGENERIC_SOLID = 1 << 1;
 
 class CGenericItem : public CBaseAnimating
 {
@@ -84,6 +85,26 @@ void CGenericItem::Spawn()
 			ALERT(at_error, "Item %s fell out of level at %f,%f,%f", STRING(pev->classname), pev->origin.x, pev->origin.y, pev->origin.z);
 			UTIL_Remove(this);
 		}
+	}
+
+	if ((pev->spawnflags & SF_ITEMGENERIC_SOLID) != 0)
+	{
+		Vector mins, maxs;
+
+		pev->solid = SOLID_SLIDEBOX;
+		int sequence = LookupSequence(STRING(m_iSequence));
+
+		if (sequence == -1)
+		{
+			ALERT(at_console, "ERROR! FIX ME: item generic: %s, model: %s, does not have animation: %s\n", STRING(pev->targetname), STRING(pev->model), STRING(m_iSequence));
+
+			sequence = 0;
+		}
+
+		ExtractBbox(sequence, mins, maxs);
+
+		UTIL_SetSize(pev, mins, maxs);
+		UTIL_SetOrigin(pev, pev->origin);
 	}
 }
 
