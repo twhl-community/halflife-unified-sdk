@@ -84,6 +84,9 @@ public:
 	*/
 	void PostMapActivate();
 
+protected:
+	void AddGameSystems() override;
+
 private:
 	/**
 	*	@brief Called when a new map has started

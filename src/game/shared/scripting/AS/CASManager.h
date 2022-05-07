@@ -24,20 +24,24 @@
 #include <angelscript.h>
 
 #include "as_utils.h"
+#include "utils/GameSystem.h"
 
 /**
 *	@brief Creates Angelscript objects used by the game.
 *	The use of a factory ensures that things like engine settings, error handling,
 *	etc are consistent between all instances.
 */
-class CASManager final
+class CASManager final : public IGameSystem
 {
 public:
 	CASManager();
 	~CASManager();
 
-	bool Initialize();
-	void Shutdown();
+	const char* GetName() const override { return "Angelscript manager"; }
+
+	bool Initialize() override;
+	void PostInitialize() override {}
+	void Shutdown() override;
 
 	std::shared_ptr<spdlog::logger> GetLogger() { return m_Logger; }
 

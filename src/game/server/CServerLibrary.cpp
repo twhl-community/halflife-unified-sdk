@@ -74,12 +74,6 @@ bool CServerLibrary::Initialize()
 	g_engfuncs.pfnCVarRegister(&servercfgfile);
 	g_engfuncs.pfnCVarRegister(&mapchangecfgfile);
 
-	if (!g_Skill.Initialize())
-	{
-		Con_Printf("Could not initialize skill system\n");
-		return false;
-	}
-
 	g_JSON.RegisterSchema(MapConfigCommandWhitelistSchemaName, &GetMapConfigCommandWhitelistSchema);
 
 	CreateConfigDefinitions();
@@ -92,8 +86,6 @@ void CServerLibrary::Shutdown()
 	m_MapConfigDefinition.reset();
 	m_MapChangeConfigDefinition.reset();
 	m_ServerConfigDefinition.reset();
-
-	g_Skill.Shutdown();
 
 	ShutdownCommon();
 }
@@ -118,6 +110,12 @@ void CServerLibrary::PreMapActivate()
 void CServerLibrary::PostMapActivate()
 {
 	LoadMapChangeConfigFile();
+}
+
+void CServerLibrary::AddGameSystems()
+{
+	CGameLibrary::AddGameSystems();
+	g_GameSystems.Add(&g_Skill);
 }
 
 void CServerLibrary::CreateConfigDefinitions()

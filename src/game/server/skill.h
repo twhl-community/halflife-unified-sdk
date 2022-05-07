@@ -27,6 +27,7 @@
 #include <spdlog/logger.h>
 
 #include "json_fwd.h"
+#include "utils/GameSystem.h"
 
 namespace SkillLevel
 {
@@ -45,7 +46,7 @@ constexpr bool IsValidSkillLevel(int skillLevel)
 	return skillLevel >= SkillLevel::Easy && skillLevel <= SkillLevel::Hard;
 }
 
-class SkillSystem final
+class SkillSystem final : public IGameSystem
 {
 private:
 	struct SkillVariable
@@ -55,9 +56,11 @@ private:
 	};
 
 public:
+	const char* GetName() const override { return "Skill"; }
 
-	bool Initialize();
-	void Shutdown();
+	bool Initialize() override;
+	void PostInitialize() override {}
+	void Shutdown() override;
 
 	void NewMapStarted();
 

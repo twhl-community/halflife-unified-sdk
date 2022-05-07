@@ -24,7 +24,7 @@ protected:
 	CGameLibrary() = default;
 
 public:
-	~CGameLibrary() = default;
+	virtual ~CGameLibrary() = default;
 
 	CGameLibrary(const CGameLibrary&) = delete;
 	CGameLibrary& operator=(const CGameLibrary&) = delete;
@@ -32,6 +32,8 @@ public:
 	CGameLibrary& operator=(CGameLibrary&&) = delete;
 
 protected:
+	virtual void AddGameSystems();
+
 	/**
 	*	@brief Handles client-side initialization
 	*	@return Whether initialization succeeded

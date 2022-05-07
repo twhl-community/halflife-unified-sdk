@@ -25,6 +25,22 @@
 #include "utils/GameSystem.h"
 #include "utils/json_utils.h"
 
+void CGameLibrary::AddGameSystems()
+{
+	//Done separately before game systems to avoid tightly coupling logging to json.
+	g_Logging.PreInitialize();
+
+	//Logging must initialize after JSON so that it can load the config file immediately.
+	//It must also initialize after concommands since it creates a few of those.
+	//It is safe to use loggers after logging has shut down so having it shut down first is not an issue.
+	g_GameSystems.Add(&g_ConCommands);
+	g_GameSystems.Add(&g_JSON);
+	g_GameSystems.Add(&g_Logging);
+	g_GameSystems.Add(&g_ASManager);
+	//Depends on Angelscript
+	g_GameSystems.Add(&g_GameConfigLoader);
+}
+
 bool CGameLibrary::InitializeCommon()
 {
 	if (!FileSystem_LoadFileSystem())
@@ -35,15 +51,7 @@ bool CGameLibrary::InitializeCommon()
 
 	g_pDeveloper = g_ConCommands.GetCVar("developer");
 
-	//Done separately before game systems to avoid tightly coupling logging to json.
-	g_Logging.PreInitialize();
-
-	//Logging must initialize after JSON so that it can load the config file immediately.
-	//It must also initialize after concommands since it creates a few of those.
-	//It is safe to use loggers after logging has shut down so having it shut down first is not an issue.
-	g_GameSystems.Add(&g_ConCommands);
-	g_GameSystems.Add(&g_JSON);
-	g_GameSystems.Add(&g_Logging);
+	AddGameSystems();
 
 	if (!g_GameSystems.Initialize())
 	{
@@ -52,32 +60,13 @@ bool CGameLibrary::InitializeCommon()
 
 	g_GameSystems.Invoke(&IGameSystem::PostInitialize);
 
-	if (!g_ASManager.Initialize())
-	{
-		Con_Printf("Could not initialize Angelscript engine manager\n");
-		return false;
-	}
-
-	//Depends on Angelscript
-	if (!g_GameConfigLoader.Initialize())
-	{
-		Con_Printf("Could not initialize game configuration loader\n");
-		return false;
-	}
-
 	return true;
 }
 
 void CGameLibrary::ShutdownCommon()
 {
-	g_GameConfigLoader.Shutdown();
-	g_ASManager.Shutdown();
-
 	g_GameSystems.InvokeReverse(&IGameSystem::Shutdown);
-
-	g_GameSystems.Remove(&g_Logging);
-	g_GameSystems.Remove(&g_ConCommands);
-	g_GameSystems.Remove(&g_JSON);
+	g_GameSystems.RemoveAll();
 
 	FileSystem_FreeFileSystem();
 }

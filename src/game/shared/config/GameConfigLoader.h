@@ -25,6 +25,7 @@
 
 #include "scripting/AS/as_utils.h"
 
+#include "utils/GameSystem.h"
 #include "utils/json_fwd.h"
 
 #include "GameConfig.h"
@@ -55,7 +56,7 @@ struct GameConfigContext final
 /**
 *	@brief Loads JSON-based configuration files and processes them according to a provided definition.
 */
-class GameConfigLoader final
+class GameConfigLoader final : public IGameSystem
 {
 private:
 	struct LoadContext
@@ -73,8 +74,11 @@ public:
 	GameConfigLoader();
 	~GameConfigLoader();
 
-	bool Initialize();
-	void Shutdown();
+	const char* GetName() const override { return "GameConfig"; }
+
+	bool Initialize() override;
+	void PostInitialize() override {}
+	void Shutdown() override;
 
 	std::shared_ptr<spdlog::logger> GetLogger() { return m_Logger; }
 

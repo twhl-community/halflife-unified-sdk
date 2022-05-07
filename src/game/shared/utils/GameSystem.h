@@ -38,6 +38,7 @@ struct GameSystemRegistry final
 
 	void Add(IGameSystem* system);
 	void Remove(IGameSystem* system);
+	void RemoveAll();
 
 	/**
 	*	@brief Invokes @c func on each registered system in the order that the systems were registered.
@@ -62,6 +63,11 @@ private:
 };
 
 inline GameSystemRegistry g_GameSystems;
+
+inline void GameSystemRegistry::RemoveAll()
+{
+	m_GameSystems.clear();
+}
 
 template <typename Func, typename... Args>
 void GameSystemRegistry::Invoke(Func func, Args&&... args)

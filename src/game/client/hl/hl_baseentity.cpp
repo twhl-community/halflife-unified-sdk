@@ -26,6 +26,8 @@ This file contains "stubs" of class member implementations so that we can predic
 
 void EMIT_SOUND_DYN(edict_t* entity, int channel, const char* sample, float volume, float attenuation, int flags, int pitch) {}
 
+bool SkillSystem::Initialize() { return true; }
+void SkillSystem::Shutdown() {}
 float SkillSystem::GetValue(std::string_view) const { return 0; }
 
 // CBaseEntity Stubs
