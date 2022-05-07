@@ -61,7 +61,7 @@ private:
 	std::vector<IGameSystem*> m_GameSystems;
 };
 
-static inline GameSystemRegistry g_GameSystems;
+inline GameSystemRegistry g_GameSystems;
 
 template <typename Func, typename... Args>
 void GameSystemRegistry::Invoke(Func func, Args&&... args)
