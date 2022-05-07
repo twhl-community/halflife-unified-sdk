@@ -7,6 +7,8 @@
 //Server side macros
 #define LINK_ENTITY_TO_CLASS(mapCLassName, DLLClassName) extern "C" DLLEXPORT void mapClassName(entvars_t*) {}
 #define IMPLEMENT_SAVERESTORE(derivedClass, baseClass) bool derivedClass::Save(CSave&) {} bool derivedClass::Restore(CRestore&) {}
+#define IMPLEMENT_CUSTOM_SCHEDULES(derivedClass, baseClass) Schedule_t* derivedClass::ScheduleFromName(const char* pName) {}
 
 //Client side macros
 #define DECLARE_MESSAGE(y, x) int __MsgFunc_##x(const char* pszName, int iSize, void* pbuf) {}
+#define DECLARE_COMMAND(y, x) void __CmdFunc_##x() {}
