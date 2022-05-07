@@ -88,6 +88,19 @@ void FileSystem_FreeFileSystem()
 	}
 }
 
+std::string FileSystem_GetGameDirectory()
+{
+#ifdef CLIENT_DLL
+	return gEngfuncs.pfnGetGameDirectory();
+#else
+	char gameDir[MAX_PATH_SIZE];
+	g_engfuncs.pfnGetGameDir(gameDir);
+	gameDir[sizeof(gameDir) - 1] = '\0';
+
+	return gameDir;
+#endif
+}
+
 std::vector<std::byte> FileSystem_LoadFileIntoBuffer(const char* fileName, FileContentFormat format, const char* pathID)
 {
 	assert(nullptr != g_pFileSystem);

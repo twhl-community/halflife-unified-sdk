@@ -23,6 +23,7 @@
 *	https://developer.valvesoftware.com/wiki/GoldSource_SteamPipe_Directories
 */
 
+#include <string>
 #include <vector>
 
 #include "Platform.h"
@@ -38,6 +39,8 @@ enum class FileContentFormat
 	Binary = 0,
 	Text = 1
 };
+
+std::string FileSystem_GetGameDirectory();
 
 /**
 *	@brief Loads a file from disk into a buffer.

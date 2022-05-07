@@ -90,5 +90,7 @@ using qboolean = int;
 
 #endif //WIN32
 
+constexpr std::size_t MAX_PATH_SIZE = 260;
+
 #define V_min(a, b) (((a) < (b)) ? (a) : (b))
 #define V_max(a, b) (((a) > (b)) ? (a) : (b))

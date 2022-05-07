@@ -119,6 +119,24 @@ static json GetLoggingConfigSchema()
 					"Name"
 				]
 			}}
+		}},
+		"LogFile": {{
+			"type": "object",
+			"properties": {{
+				"Enabled": {{
+					"type": "boolean"
+				}},
+				"BaseFileName": {{
+					"type": "string"
+				}},
+				"MaxFiles": {{
+					"type": "integer",
+					"pattern": "^\\d+$"
+				}}
+			}},
+			"required": [
+				"Enabled"
+			]
 		}}
 	}}
 }}
@@ -150,6 +168,8 @@ void CLogSystem::PreInitialize()
 
 	m_Settings.Defaults.Level = startupLogLevel;
 
+	m_Settings.LogFile.Enabled = COM_HasParam("-log_filelogging_enable");
+
 	m_Logger = CreateLogger("logging");
 
 	spdlog::set_default_logger(m_Logger);
@@ -160,6 +180,7 @@ bool CLogSystem::Initialize()
 	g_ConCommands.CreateCommand("log_listloglevels", [this](const auto&) { ListLogLevels(); });
 	g_ConCommands.CreateCommand("log_listloggers", [this](const auto&) { ListLoggers(); });
 	g_ConCommands.CreateCommand("log_setlevel", [this](const auto& args) { SetLogLevel(args); });
+	g_ConCommands.CreateCommand("log_filelogging", [this](const auto& args) { FileLogging(args); });
 
 	g_JSON.RegisterSchema(LoggingConfigSchemaName, &GetLoggingConfigSchema);
 
@@ -170,7 +191,7 @@ bool CLogSystem::Initialize()
 						   { return LoadSettings(input); })
 					 .value_or(Settings{});
 
-	//TODO: create sinks based on settings
+	SetFileLoggingEnabled(m_Settings.LogFile.Enabled);
 
 	m_Logger->trace("Updating loggers with configuration settings");
 
@@ -187,6 +208,9 @@ void CLogSystem::PostInitialize()
 
 void CLogSystem::Shutdown()
 {
+	//Close log file if it's open.
+	SetFileLoggingEnabled(false);
+
 	m_Logger.reset();
 	m_Sinks.clear();
 	spdlog::shutdown();
@@ -286,6 +310,42 @@ CLogSystem::Settings CLogSystem::LoadSettings(const json& input)
 			});
 	}
 
+	if (auto logFile = input.find("LogFile"); logFile != input.end() && logFile->is_object())
+	{
+		if (auto enabled = logFile->find("Enabled"); enabled != logFile->end() && enabled->is_boolean())
+		{
+			settings.LogFile.Enabled = enabled->get<bool>();
+		}
+		else
+		{
+			//Leave setting as-is, in case it was enabled through command line.
+			//The setting is marked as required so it should always be there if there is a LogFile object at all.
+		}
+
+		if (auto enabled = logFile->find("BaseFileName"); enabled != logFile->end() && enabled->is_string())
+		{
+			settings.LogFile.BaseFileName = enabled->get<std::string>();
+
+			if (settings.LogFile.BaseFileName->size() > MaxBaseFileNameLength)
+			{
+				settings.LogFile.BaseFileName->resize(MaxBaseFileNameLength);
+			}
+		}
+		else
+		{
+			settings.LogFile.BaseFileName.reset();
+		}
+
+		if (auto enabled = logFile->find("MaxFiles"); enabled != logFile->end() && enabled->is_number_integer())
+		{
+			settings.LogFile.MaxFiles = static_cast<std::uint16_t>(std::max(0, enabled->get<int>()));
+		}
+		else
+		{
+			settings.LogFile.MaxFiles = DefaultMaxFiles;
+		}
+	}
+
 	return settings;
 }
 
@@ -304,6 +364,49 @@ void CLogSystem::ApplySettingsToLogger(spdlog::logger& logger)
 	}
 
 	logger.set_level(configuration->Settings.Level.value_or(m_Settings.Defaults.Level.value_or(DefaultLogLevel)));
+}
+
+void CLogSystem::SetFileLoggingEnabled(bool enable)
+{
+	if (enable && !m_FileSink)
+	{
+		//Separate log files into client and server files to avoid races between the two.
+		const std::string gameDir = FileSystem_GetGameDirectory();
+		const std::string baseFileName = fmt::format("{}/logs/{}/{}.log",
+			gameDir, GetShortLibraryPrefix(), m_Settings.LogFile.BaseFileName.value_or(DefaultBaseFileName));
+
+		m_FileSink = std::make_shared<spdlog::sinks::daily_file_sink_st>(baseFileName, 0, 0, false, m_Settings.LogFile.MaxFiles);
+
+		m_Sinks.push_back(m_FileSink);
+
+		const auto fileName = m_FileSink->filename();
+
+		spdlog::apply_all([this](std::shared_ptr<spdlog::logger> logger)
+			{ logger->sinks().push_back(m_FileSink); });
+
+		Con_Printf("Logging data to file %s\n", fileName.c_str());
+
+		m_Logger->info("Log file started (file \"{}\") (game \"{}\")", fileName, gameDir);
+	}
+	else if (!enable && m_FileSink)
+	{
+		m_Logger->info("Log file closed.");
+
+		Con_Printf("Logging disabled\n");
+
+		//Flush any pending data before removing the sink to avoid race conditions.
+		m_FileSink->flush();
+
+		m_Sinks.erase(std::find(m_Sinks.begin(), m_Sinks.end(), m_FileSink));
+
+		spdlog::apply_all([this](std::shared_ptr<spdlog::logger> logger)
+			{
+				auto& sinks = logger->sinks();
+				sinks.erase(std::find(sinks.begin(), sinks.end(), m_FileSink));
+			});
+
+		m_FileSink.reset();
+	}
 }
 
 void CLogSystem::ListLogLevels()
@@ -349,5 +452,38 @@ void CLogSystem::SetLogLevel(const CCommandArgs& args)
 	else
 	{
 		Con_Printf("No such logger\n");
+	}
+}
+
+void CLogSystem::FileLogging(const CCommandArgs& args)
+{
+	if (args.Count() == 2)
+	{
+		if (stricmp("off", args.Argument(1)))
+		{
+			SetFileLoggingEnabled(false);
+		}
+		else if (stricmp("on", args.Argument(1)))
+		{
+			SetFileLoggingEnabled(true);
+		}
+		else
+		{
+			Con_Printf("log_filelogging: unknown parameter %s, 'on' and 'off' are valid\n", args.Argument(1));
+			return;
+		}
+	}
+	else
+	{
+		Con_Printf("usage: log_filelogging < on | off >\n");
+
+		if (m_Settings.LogFile.Enabled)
+		{
+			Con_Printf("currently logging\n");
+		}
+		else
+		{
+			Con_Printf("not currently logging\n");
+		}
 	}
 }
