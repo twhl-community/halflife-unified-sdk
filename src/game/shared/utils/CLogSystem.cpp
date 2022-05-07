@@ -133,11 +133,6 @@ CLogSystem::~CLogSystem() = default;
 
 bool CLogSystem::Initialize()
 {
-	if (m_Initialized)
-	{
-		return true;
-	}
-
 	g_ConCommands.CreateCommand("log_listloglevels", [this](const auto&) { ListLogLevels(); });
 	g_ConCommands.CreateCommand("log_listloggers", [this](const auto&) { ListLoggers(); });
 	g_ConCommands.CreateCommand("log_setlevel", [this](const auto& args) { SetLogLevel(args); });
@@ -146,10 +141,7 @@ bool CLogSystem::Initialize()
 
 	m_Sinks.push_back(std::make_shared<ConsoleLogSink<spdlog::details::null_mutex>>());
 
-	//Create a logger to use during startup
-	m_GlobalLogger = CreateLoggerCore("startup");
-
-	spdlog::level::level_enum startupLogLevel = spdlog::level::info;
+	spdlog::level::level_enum startupLogLevel = DefaultLogLevel;
 
 	//Allow a custom level to be specified on the command line for debugging purposes
 	if (const char* logLevel = SPDLOG_LEVEL_NAME_TRACE.data(); COM_GetParam("-log_startup_level", &logLevel))
@@ -162,9 +154,9 @@ bool CLogSystem::Initialize()
 		startupLogLevel = spdlog::level::debug;
 	}
 
-	m_GlobalLogger->set_level(startupLogLevel);
+	m_Settings.Defaults.Level = startupLogLevel;
 
-	FinishCreateLogger(*m_GlobalLogger);
+	m_GlobalLogger = CreateLogger("global");
 
 	spdlog::set_default_logger(m_GlobalLogger);
 
@@ -180,14 +172,6 @@ void CLogSystem::PostInitialize()
 					 .value_or(Settings{});
 
 	//TODO: create sinks based on settings
-
-	m_Initialized = true;
-
-	//Recreate the global logger with configuration settings
-	m_GlobalLogger = CreateLogger("global");
-
-	//Replace the startup logger
-	spdlog::set_default_logger(m_GlobalLogger);
 }
 
 void CLogSystem::Shutdown()
@@ -195,18 +179,10 @@ void CLogSystem::Shutdown()
 	m_GlobalLogger.reset();
 	m_Sinks.clear();
 	spdlog::shutdown();
-
-	m_Initialized = false;
 }
 
 std::shared_ptr<spdlog::logger> CLogSystem::CreateLogger(const std::string& name)
 {
-	if (!m_Initialized)
-	{
-		Con_Printf("CLogSystem::CreateLogger: Tried to create logger before log system was initialized!\n");
-		return {};
-	}
-
 	auto logger = CreateLoggerCore(name);
 
 	spdlog::register_logger(logger);

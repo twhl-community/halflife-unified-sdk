@@ -85,8 +85,6 @@ private:
 	void SetLogLevel(const CCommandArgs& args);
 
 private:
-	bool m_Initialized = false;
-
 	std::vector<std::shared_ptr<spdlog::sinks::sink>> m_Sinks;
 
 	std::shared_ptr<spdlog::logger> m_GlobalLogger;
