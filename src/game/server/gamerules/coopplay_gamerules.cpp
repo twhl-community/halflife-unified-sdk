@@ -57,11 +57,7 @@ void CHalfLifeCoopplay::MonsterKilled(CBaseMonster* pVictim, entvars_t* pKiller,
 
 		killerPlayer->pev->frags += points;
 
-		g_engfuncs.pfnMessageBegin(MSG_ALL, gmsgScoreInfo, nullptr, nullptr);
-		g_engfuncs.pfnWriteByte(killerPlayer->entindex());
-		g_engfuncs.pfnWriteShort(killerPlayer->pev->frags);
-		g_engfuncs.pfnWriteShort(killerPlayer->m_iDeaths);
-		g_engfuncs.pfnMessageEnd();
+		killerPlayer->SendScoreInfoAll();
 	}
 }
 

@@ -2822,11 +2822,7 @@ void CTriggerCTFGeneric::Touch(CBaseEntity* pOther)
 			g_engfuncs.pfnWriteByte(pOtherPlayer->m_iCTFScore);
 			g_engfuncs.pfnMessageEnd();
 
-			g_engfuncs.pfnMessageBegin(MSG_ALL, gmsgScoreInfo, nullptr, nullptr);
-			g_engfuncs.pfnWriteByte(pOtherPlayer->entindex());
-			g_engfuncs.pfnWriteShort(pev->frags);
-			g_engfuncs.pfnWriteShort(pOtherPlayer->m_iDeaths);
-			g_engfuncs.pfnMessageEnd();
+			pOtherPlayer->SendScoreInfoAll();
 
 			UTIL_LogPrintf(
 				"\"%s<%i><%u><%s>\" triggered \"%s\"\n",

@@ -453,6 +453,9 @@ public:
 	*	@details The player must be fully connected and ready to receive user messages for this to work
 	*/
 	void SetHudColor(RGB24 color);
+
+	void SendScoreInfo(CBasePlayer* destination);
+	void SendScoreInfoAll();
 };
 
 inline void CBasePlayer::SetWeaponBit(int id)

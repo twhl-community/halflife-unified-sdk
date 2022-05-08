@@ -343,13 +343,7 @@ void CHalfLifeMultiplay::InitHUD(CBasePlayer* pl)
 
 	// sending just one score makes the hud scoreboard active;  otherwise
 	// it is just disabled for single play
-	MESSAGE_BEGIN(MSG_ONE, gmsgScoreInfo, nullptr, pl->edict());
-	WRITE_BYTE(ENTINDEX(pl->edict()));
-	WRITE_SHORT(0);
-	WRITE_SHORT(0);
-	WRITE_SHORT(0);
-	WRITE_SHORT(0);
-	MESSAGE_END();
+	pl->SendScoreInfo(pl);
 
 	SendMOTDToClient(pl->edict());
 
@@ -367,13 +361,7 @@ void CHalfLifeMultiplay::InitHUD(CBasePlayer* pl)
 
 		if (plr)
 		{
-			MESSAGE_BEGIN(MSG_ONE, gmsgScoreInfo, nullptr, pl->edict());
-			WRITE_BYTE(i); // client number
-			WRITE_SHORT(plr->pev->frags);
-			WRITE_SHORT(plr->m_iDeaths);
-			WRITE_SHORT(0);
-			WRITE_SHORT(GetTeamIndex(plr->m_szTeamName) + 1);
-			MESSAGE_END();
+			plr->SendScoreInfo(pl);
 		}
 	}
 
@@ -663,13 +651,7 @@ void CHalfLifeMultiplay::PlayerKilled(CBasePlayer* pVictim, entvars_t* pKiller, 
 
 	// update the scores
 	// killed scores
-	MESSAGE_BEGIN(MSG_ALL, gmsgScoreInfo);
-	WRITE_BYTE(ENTINDEX(pVictim->edict()));
-	WRITE_SHORT(pVictim->pev->frags);
-	WRITE_SHORT(pVictim->m_iDeaths);
-	WRITE_SHORT(0);
-	WRITE_SHORT(GetTeamIndex(pVictim->m_szTeamName) + 1);
-	MESSAGE_END();
+	pVictim->SendScoreInfoAll();
 
 	// killers score, if it's a player
 	CBaseEntity* ep = CBaseEntity::Instance(pKiller);
@@ -677,13 +659,7 @@ void CHalfLifeMultiplay::PlayerKilled(CBasePlayer* pVictim, entvars_t* pKiller, 
 	{
 		CBasePlayer* PK = (CBasePlayer*)ep;
 
-		MESSAGE_BEGIN(MSG_ALL, gmsgScoreInfo);
-		WRITE_BYTE(ENTINDEX(PK->edict()));
-		WRITE_SHORT(PK->pev->frags);
-		WRITE_SHORT(PK->m_iDeaths);
-		WRITE_SHORT(0);
-		WRITE_SHORT(GetTeamIndex(PK->m_szTeamName) + 1);
-		MESSAGE_END();
+		PK->SendScoreInfoAll();
 
 		// let the killer paint another decal as soon as he'd like.
 		PK->m_flNextDecalTime = gpGlobals->time;

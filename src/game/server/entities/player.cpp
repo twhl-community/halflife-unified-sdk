@@ -1700,13 +1700,7 @@ void CBasePlayer::AddPoints(int score, bool bAllowNegativeScore)
 
 	pev->frags += score;
 
-	MESSAGE_BEGIN(MSG_ALL, gmsgScoreInfo);
-	WRITE_BYTE(ENTINDEX(edict()));
-	WRITE_SHORT(pev->frags);
-	WRITE_SHORT(m_iDeaths);
-	WRITE_SHORT(0);
-	WRITE_SHORT(g_pGameRules->GetTeamIndex(m_szTeamName) + 1);
-	MESSAGE_END();
+	SendScoreInfoAll();
 }
 
 
@@ -5408,6 +5402,39 @@ void CBasePlayer::SetHudColor(RGB24 color)
 	g_engfuncs.pfnWriteByte(color.Green);
 	g_engfuncs.pfnWriteByte(color.Blue);
 	g_engfuncs.pfnMessageEnd();
+}
+
+static void SendScoreInfoMessage(CBasePlayer* owner)
+{
+	WRITE_BYTE(owner->entindex());
+	WRITE_SHORT(owner->pev->frags);
+	WRITE_SHORT(owner->m_iDeaths);
+	
+	//To properly emulate Opposing Force's behavior we need to write -1 for these 2 in CTF.
+	if (g_pGameRules->IsCTF())
+	{
+		WRITE_SHORT(-1);
+		WRITE_SHORT(-1);
+	}
+	else
+	{
+		WRITE_SHORT(0);
+		WRITE_SHORT(g_pGameRules->GetTeamIndex(owner->m_szTeamName) + 1);
+	}
+
+	MESSAGE_END();
+}
+
+void CBasePlayer::SendScoreInfo(CBasePlayer* destination)
+{
+	MESSAGE_BEGIN(MSG_ONE, gmsgScoreInfo, nullptr, destination->edict());
+	SendScoreInfoMessage(this);
+}
+
+void CBasePlayer::SendScoreInfoAll()
+{
+	MESSAGE_BEGIN(MSG_ALL, gmsgScoreInfo);
+	SendScoreInfoMessage(this);
 }
 
 //=========================================================

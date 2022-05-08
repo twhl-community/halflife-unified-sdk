@@ -1323,11 +1323,7 @@ void CHalfLifeCTFplay::ChangePlayerTeam(CBasePlayer* pPlayer, const char* pCharN
 		g_engfuncs.pfnSetClientKeyValue(v5, g_engfuncs.pfnGetInfoKeyBuffer(pPlayer->edict()), "team", pPlayer->m_szTeamName);
 
 		//Send a ScoreInfo message so all clients have all of this client's info.
-		MESSAGE_BEGIN(MSG_ALL, gmsgScoreInfo);
-		g_engfuncs.pfnWriteByte(v5);
-		g_engfuncs.pfnWriteShort((int)pPlayer->pev->frags);
-		g_engfuncs.pfnWriteShort(pPlayer->m_iDeaths);
-		g_engfuncs.pfnMessageEnd();
+		pPlayer->SendScoreInfoAll();
 
 		MESSAGE_BEGIN(MSG_ALL, gmsgTeamInfo);
 		g_engfuncs.pfnWriteByte(v5);
@@ -1439,11 +1435,7 @@ void CHalfLifeCTFplay::ChangePlayerTeam(CBasePlayer* pPlayer, const char* pCharN
 		pPlayer->m_iFlagCaptures = 0;
 		pPlayer->pev->frags = 0;
 
-		MESSAGE_BEGIN(MSG_ALL, gmsgScoreInfo);
-		g_engfuncs.pfnWriteByte(pPlayer->entindex());
-		g_engfuncs.pfnWriteShort((int)pPlayer->pev->frags);
-		g_engfuncs.pfnWriteShort(pPlayer->m_iDeaths);
-		g_engfuncs.pfnMessageEnd();
+		pPlayer->SendScoreInfoAll();
 
 		pPlayer->m_szTeamName[0] = 0;
 
