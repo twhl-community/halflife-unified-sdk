@@ -498,6 +498,47 @@ CHalfLifeCTFplay::CHalfLifeCTFplay()
 				player->Menu_Char_Input(atoi(args.Argument(1)));
 			}
 		});
+
+	m_ChangeTeamCommand = std::make_unique<CClientCommand>("changeteam", [](CBasePlayer* player, const CCommandArgs& args)
+		{
+			if (player->m_iCurrentMenu == MENU_TEAM)
+			{
+				ClientPrint(player->pev, HUD_PRINTCONSOLE, "Already in team selection menu.\n");
+			}
+			else
+			{
+				player->m_iCurrentMenu = MENU_TEAM;
+				player->Player_Menu();
+			}
+		});
+
+	m_ChangeClassCommand = std::make_unique<CClientCommand>("changeclass", [](CBasePlayer* player, const CCommandArgs& args)
+		{
+			if (player->m_iNewTeamNum != CTFTeam::None || player->m_iTeamNum != CTFTeam::None)
+			{
+				if (player->m_iCurrentMenu == MENU_CLASS)
+				{
+					ClientPrint(player->pev, HUD_PRINTCONSOLE, "Already in character selection menu.\n");
+				}
+				else
+				{
+					if (player->m_iNewTeamNum == CTFTeam::None)
+						player->m_iNewTeamNum = player->m_iTeamNum;
+
+					player->m_iCurrentMenu = MENU_CLASS;
+					player->Player_Menu();
+				}
+			}
+			else
+			{
+				ClientPrint(player->pev, HUD_PRINTCONSOLE, "No Team Selected.  Use \"changeteam\".\n");
+			}
+		});
+
+	m_FlagInfoCommand = std::make_unique<CClientCommand>("flaginfo", [](CBasePlayer* player, const CCommandArgs& args)
+		{
+			DumpCTFFlagInfo(player);
+		});
 }
 
 void CHalfLifeCTFplay::Think()

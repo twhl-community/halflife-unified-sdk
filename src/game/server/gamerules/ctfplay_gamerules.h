@@ -137,6 +137,9 @@ private:
 	std::unique_ptr<CClientCommand> m_EndMotdCommand;
 	std::unique_ptr<CClientCommand> m_JoinTeamCommand;
 	std::unique_ptr<CClientCommand> m_SelectCharCommand;
+	std::unique_ptr<CClientCommand> m_ChangeTeamCommand;
+	std::unique_ptr<CClientCommand> m_ChangeClassCommand;
+	std::unique_ptr<CClientCommand> m_FlagInfoCommand;
 };
 
 extern char* pszPlayerIPs[MAX_PLAYERS * 2];

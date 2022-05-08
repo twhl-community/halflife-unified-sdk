@@ -614,57 +614,6 @@ static const CClientCommand g_FollowNextCommand{"follownext", [](CBasePlayer* pl
 			player->Observer_FindNextPlayer(atoi(args.Argument(1)) ? true : false);
 	}};
 
-//TODO: these 3 should be handled by CTF gamerules.
-static const CClientCommand g_ChangeTeamCommand{"changeteam", [](CBasePlayer* player, const CCommandArgs& args)
-	{
-		if (g_pGameRules->IsCTF())
-		{
-			if (player->m_iCurrentMenu == MENU_TEAM)
-			{
-				ClientPrint(player->pev, HUD_PRINTCONSOLE, "Already in team selection menu.\n");
-			}
-			else
-			{
-				player->m_iCurrentMenu = MENU_TEAM;
-				player->Player_Menu();
-			}
-		}
-	}};
-
-static const CClientCommand g_ChangeClassCommand{"changeclass", [](CBasePlayer* player, const CCommandArgs& args)
-	{
-		if (g_pGameRules->IsCTF())
-		{
-			if (player->m_iNewTeamNum != CTFTeam::None || player->m_iTeamNum != CTFTeam::None)
-			{
-				if (player->m_iCurrentMenu == MENU_CLASS)
-				{
-					ClientPrint(player->pev, HUD_PRINTCONSOLE, "Already in character selection menu.\n");
-				}
-				else
-				{
-					if (player->m_iNewTeamNum == CTFTeam::None)
-						player->m_iNewTeamNum = player->m_iTeamNum;
-
-					player->m_iCurrentMenu = MENU_CLASS;
-					player->Player_Menu();
-				}
-			}
-			else
-			{
-				ClientPrint(player->pev, HUD_PRINTCONSOLE, "No Team Selected.  Use \"changeteam\".\n");
-			}
-		}
-	}};
-
-static const CClientCommand g_FlagInfoCommand{"flaginfo", [](CBasePlayer* player, const CCommandArgs& args)
-	{
-		if (g_pGameRules->IsCTF())
-		{
-			DumpCTFFlagInfo(player);
-		}
-	}};
-
 bool UTIL_CheatsAllowed(CBasePlayer* pEntity, std::string_view name)
 {
 	if (0 == g_psv_cheats->value)
