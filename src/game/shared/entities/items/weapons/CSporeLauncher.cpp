@@ -264,12 +264,10 @@ void CSporeLauncher::Reload()
 {
 	int maxClip = SPORELAUNCHER_MAX_CLIP;
 
-#if false
-	if (m_pPlayer->m_iItems & CTFItem::Backpack)
+	if ((m_pPlayer->m_iItems & CTFItem::Backpack) != 0)
 	{
 		maxClip *= 2;
 	}
-#endif
 
 	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0 || m_iClip == maxClip)
 		return;
