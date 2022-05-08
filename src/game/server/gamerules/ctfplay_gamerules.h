@@ -15,6 +15,10 @@
 
 #pragma once
 
+#include <memory>
+
+#include "CClientCommandRegistry.h"
+
 #include "ctf/CTFDefs.h"
 
 const int MaxTeams = 2;
@@ -77,8 +81,6 @@ public:
 
 	void PlayerThink(CBasePlayer* pPlayer) override;
 
-	bool ClientCommand(CBasePlayer* pPlayer, const char* pcmd) override;
-
 	void ClientUserInfoChanged(CBasePlayer* pPlayer, char* infobuffer) override;
 
 	int IPointsForKill(CBasePlayer* pAttacker, CBasePlayer* pKilled) override;
@@ -127,6 +129,12 @@ private:
 	StatsPhase m_iStatsPhase = StatsPhase::Nothing;
 	//Use a sane default to avoid lockups
 	int m_iStatsPlayer = 1;
+
+	std::unique_ptr<CClientCommand> m_CancelMenuCommand;
+	std::unique_ptr<CClientCommand> m_EndMotdCommand;
+	std::unique_ptr<CClientCommand> m_JoinTeamCommand;
+	std::unique_ptr<CClientCommand> m_SpectateCommand;
+	std::unique_ptr<CClientCommand> m_SelectCharCommand;
 };
 
 extern char* pszPlayerIPs[MAX_PLAYERS * 2];

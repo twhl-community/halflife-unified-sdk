@@ -35,6 +35,16 @@ CHalfLifeTeamplay::CHalfLifeTeamplay()
 	memset(team_scores, 0, sizeof(team_scores));
 	num_teams = 0;
 
+	m_MenuSelectCommand = std::make_unique<CClientCommand>("menuselect", [](CBasePlayer* player, const CCommandArgs& args)
+		{
+			if (CMD_ARGC() < 2)
+				return;
+
+			int slot = atoi(CMD_ARGV(1));
+
+			// select the item from the current menu
+		});
+
 	// Copy over the team from the server config
 	m_szTeamList[0] = 0;
 
@@ -130,31 +140,6 @@ void CHalfLifeTeamplay::Think()
 
 	last_frags = frags_remaining;
 	last_time = time_remaining;
-}
-
-//=========================================================
-// ClientCommand
-// the user has typed a command which is unrecognized by everything else;
-// this check to see if the gamerules knows anything about the command
-//=========================================================
-bool CHalfLifeTeamplay::ClientCommand(CBasePlayer* pPlayer, const char* pcmd)
-{
-	if (g_VoiceGameMgr.ClientCommand(pPlayer, pcmd))
-		return true;
-
-	if (FStrEq(pcmd, "menuselect"))
-	{
-		if (CMD_ARGC() < 2)
-			return true;
-
-		int slot = atoi(CMD_ARGV(1));
-
-		// select the item from the current menu
-
-		return true;
-	}
-
-	return false;
 }
 
 void CHalfLifeTeamplay::UpdateGameMode(CBasePlayer* pPlayer)

@@ -18,6 +18,10 @@
 
 #pragma once
 
+#include <memory>
+
+#include "CClientCommandRegistry.h"
+
 #define MAX_TEAMNAME_LENGTH 16
 #define MAX_TEAMS 32
 
@@ -28,7 +32,6 @@ class CHalfLifeTeamplay : public CHalfLifeMultiplay
 public:
 	CHalfLifeTeamplay();
 
-	bool ClientCommand(CBasePlayer* pPlayer, const char* pcmd) override;
 	void ClientUserInfoChanged(CBasePlayer* pPlayer, char* infobuffer) override;
 	bool IsTeamplay() override;
 	bool FPlayerCanTakeDamage(CBasePlayer* pPlayer, CBaseEntity* pAttacker) override;
@@ -56,4 +59,6 @@ private:
 	bool m_DisableDeathPenalty;
 	bool m_teamLimit; // This means the server set only some teams as valid
 	char m_szTeamList[TEAMPLAY_TEAMLISTLENGTH];
+
+	std::unique_ptr<CClientCommand> m_MenuSelectCommand;
 };

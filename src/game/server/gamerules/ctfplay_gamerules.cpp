@@ -455,6 +455,54 @@ CHalfLifeCTFplay::CHalfLifeCTFplay()
 			}
 		}
 	}
+
+	m_CancelMenuCommand = std::make_unique<CClientCommand>("cancelmenu", [](CBasePlayer* player, const CCommandArgs& args)
+		{
+			if (player->m_iCurrentMenu == MENU_CLASS)
+			{
+				player->m_iCurrentMenu = MENU_TEAM;
+				g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgTeamFull, nullptr, player->edict());
+				g_engfuncs.pfnWriteByte(0);
+				g_engfuncs.pfnMessageEnd();
+				player->m_iNewTeamNum = CTFTeam::None;
+				player->Player_Menu();
+			}
+			else if (player->m_iCurrentMenu == MENU_TEAM)
+			{
+				if (player->m_iNewTeamNum != CTFTeam::None || player->m_iTeamNum != CTFTeam::None)
+				{
+					player->m_iCurrentMenu = MENU_NONE;
+				}
+				else
+				{
+					player->Menu_Team_Input(-1);
+				}
+			}
+		});
+
+	m_EndMotdCommand = std::make_unique<CClientCommand>("endmotd", [](CBasePlayer* player, const CCommandArgs& args)
+		{
+			player->m_iCurrentMenu = MENU_TEAM;
+			player->Player_Menu();
+		});
+
+	m_JoinTeamCommand = std::make_unique<CClientCommand>("jointeam", [](CBasePlayer* player, const CCommandArgs& args)
+		{
+			player->Menu_Team_Input(atoi(CMD_ARGV(1)));
+		});
+
+	m_SpectateCommand = std::make_unique<CClientCommand>("spectate", [](CBasePlayer* player, const CCommandArgs& args)
+		{
+			player->Menu_Team_Input(-1);
+		});
+
+	m_SelectCharCommand = std::make_unique<CClientCommand>("selectchar", [](CBasePlayer* player, const CCommandArgs& args)
+		{
+			if (args.Count() > 1)
+			{
+				player->Menu_Char_Input(atoi(args.Argument(1)));
+			}
+		});
 }
 
 void CHalfLifeCTFplay::Think()
@@ -858,62 +906,6 @@ void CHalfLifeCTFplay::PlayerThink(CBasePlayer* pPlayer)
 		pPlayer->m_iLastPlayerTrace = g_engfuncs.pfnIndexOfEdict(tr.pHit);
 	}
 	CHalfLifeMultiplay::PlayerThink(pPlayer);
-}
-
-bool CHalfLifeCTFplay::ClientCommand(CBasePlayer* pPlayer, const char* pcmd)
-{
-	if (0 == strcmp("cancelmenu", pcmd))
-	{
-		if (pPlayer->m_iCurrentMenu == MENU_CLASS)
-		{
-			pPlayer->m_iCurrentMenu = MENU_TEAM;
-			g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgTeamFull, nullptr, pPlayer->edict());
-			g_engfuncs.pfnWriteByte(0);
-			g_engfuncs.pfnMessageEnd();
-			pPlayer->m_iNewTeamNum = CTFTeam::None;
-			pPlayer->Player_Menu();
-		}
-		else if (pPlayer->m_iCurrentMenu == MENU_TEAM)
-		{
-			if (pPlayer->m_iNewTeamNum != CTFTeam::None || pPlayer->m_iTeamNum != CTFTeam::None)
-			{
-				pPlayer->m_iCurrentMenu = MENU_NONE;
-			}
-			else
-			{
-				pPlayer->Menu_Team_Input(-1);
-			}
-		}
-
-		return true;
-	}
-	else if (0 == strcmp("endmotd", pcmd))
-	{
-		pPlayer->m_iCurrentMenu = MENU_TEAM;
-		pPlayer->Player_Menu();
-		return true;
-	}
-	else if (0 == strcmp("jointeam", pcmd))
-	{
-		pPlayer->Menu_Team_Input(atoi(CMD_ARGV(1)));
-		return true;
-	}
-	else if (0 == strcmp("spectate", pcmd))
-	{
-		pPlayer->Menu_Team_Input(-1);
-		return true;
-	}
-	else if (0 == strcmp("selectchar", pcmd))
-	{
-		if (g_engfuncs.pfnCmd_Argc() > 1)
-		{
-			pPlayer->Menu_Char_Input(atoi(CMD_ARGV(1)));
-		}
-
-		return true;
-	}
-
-	return false;
 }
 
 void CHalfLifeCTFplay::ClientUserInfoChanged(CBasePlayer* pPlayer, char* infobuffer)

@@ -110,9 +110,69 @@ bool CVoiceGameMgr::Init(
 	if (!CVAR_GET_POINTER("sv_alltalk"))
 		CVAR_REGISTER(&sv_alltalk);
 
+	m_VBanCommand = std::make_unique<CClientCommand>("vban", [this](CBasePlayer* player, const CCommandArgs& args)
+		{
+			const auto playerClientIndex = GetAndValidatePlayerIndex(player, args.Argument(0));
+
+			if (!playerClientIndex)
+			{
+				return;
+			}
+
+			if (args.Count() < 2)
+			{
+				return;
+			}
+
+			for (int i = 1; i < args.Count(); i++)
+			{
+				uint32 mask = 0;
+
+				if (1 == sscanf(CMD_ARGV(i), "%x", &mask) && i <= VOICE_MAX_PLAYERS_DW)
+				{
+					VoiceServerDebug("CVoiceGameMgr::ClientCommand: vban (0x%x) from %d\n", mask, *playerClientIndex);
+					g_BanMasks[*playerClientIndex].SetDWord(i - 1, mask);
+				}
+				else
+				{
+					VoiceServerDebug("CVoiceGameMgr::ClientCommand: invalid index (%d)\n", i);
+				}
+			}
+
+			// Force it to update the masks now.
+			//UpdateMasks();
+		});
+
+	m_VModEnableCommand = std::make_unique<CClientCommand>("VModEnable", [this](CBasePlayer* player, const CCommandArgs& args)
+		{
+			const auto playerClientIndex = GetAndValidatePlayerIndex(player, args.Argument(0));
+
+			if (!playerClientIndex)
+			{
+				return;
+			}
+
+			if (args.Count() < 2)
+			{
+				return;
+			}
+
+			const bool enable = 0 != atoi(CMD_ARGV(1));
+
+			VoiceServerDebug("CVoiceGameMgr::ClientCommand: VModEnable (%s)\n", enable ? "true" : "false");
+			g_PlayerModEnable[*playerClientIndex] = enable;
+			g_bWantModEnable[*playerClientIndex] = false;
+			//UpdateMasks();
+		});
+
 	return true;
 }
 
+void CVoiceGameMgr::Shutdown()
+{
+	m_VModEnableCommand.reset();
+	m_VBanCommand.reset();
+}
 
 void CVoiceGameMgr::SetHelper(IVoiceGameMgrHelper* pHelper)
 {
@@ -158,54 +218,6 @@ bool CVoiceGameMgr::PlayerHasBlockedPlayer(CBasePlayer* pReceiver, CBasePlayer* 
 
 	return (g_BanMasks[iReceiverIndex][iSenderIndex] ? true : false);
 }
-
-bool CVoiceGameMgr::ClientCommand(CBasePlayer* pPlayer, const char* cmd)
-{
-	int playerClientIndex = pPlayer->entindex() - 1;
-	if (playerClientIndex < 0 || playerClientIndex >= m_nMaxPlayers)
-	{
-		VoiceServerDebug("CVoiceGameMgr::ClientCommand: cmd %s from invalid client (%d)\n", cmd, playerClientIndex);
-		return true;
-	}
-
-	bool bBan = stricmp(cmd, "vban") == 0;
-	if (bBan && CMD_ARGC() >= 2)
-	{
-		for (int i = 1; i < CMD_ARGC(); i++)
-		{
-			uint32 mask = 0;
-
-			if (1 == sscanf(CMD_ARGV(i), "%x", &mask) && i <= VOICE_MAX_PLAYERS_DW)
-			{
-				VoiceServerDebug("CVoiceGameMgr::ClientCommand: vban (0x%x) from %d\n", mask, playerClientIndex);
-				g_BanMasks[playerClientIndex].SetDWord(i - 1, mask);
-			}
-			else
-			{
-				VoiceServerDebug("CVoiceGameMgr::ClientCommand: invalid index (%d)\n", i);
-			}
-		}
-
-		// Force it to update the masks now.
-		//UpdateMasks();
-		return true;
-	}
-	else if (stricmp(cmd, "VModEnable") == 0 && CMD_ARGC() >= 2)
-	{
-		const bool enable = 0 != atoi(CMD_ARGV(1));
-
-		VoiceServerDebug("CVoiceGameMgr::ClientCommand: VModEnable (%s)\n", enable ? "true" : "false");
-		g_PlayerModEnable[playerClientIndex] = enable;
-		g_bWantModEnable[playerClientIndex] = false;
-		//UpdateMasks();
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-}
-
 
 void CVoiceGameMgr::UpdateMasks()
 {
@@ -266,4 +278,17 @@ void CVoiceGameMgr::UpdateMasks()
 			g_engfuncs.pfnVoice_SetClientListening(iClient + 1, iOtherClient + 1, bCanHear ? 1 : 0);
 		}
 	}
+}
+
+
+std::optional<int> CVoiceGameMgr::GetAndValidatePlayerIndex(CBasePlayer* player, const char* cmd)
+{
+	int playerClientIndex = player->entindex() - 1;
+	if (playerClientIndex < 0 || playerClientIndex >= m_nMaxPlayers)
+	{
+		VoiceServerDebug("CVoiceGameMgr::ClientCommand: cmd %s from invalid client (%d)\n", cmd, playerClientIndex);
+		return {};
+	}
+
+	return playerClientIndex;
 }

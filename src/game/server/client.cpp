@@ -33,6 +33,7 @@
 #include "netadr.h"
 #include "pm_shared.h"
 #include "UserMessages.h"
+#include "CClientCommandRegistry.h"
 #include "CServerLibrary.h"
 
 #include "ctf/CTFGoal.h"
@@ -493,11 +494,182 @@ void Host_Say(edict_t* pEntity, bool teamonly)
 	}
 }
 
-bool UTIL_CheatsAllowed(CBasePlayer* pEntity, const char* name)
+static const CClientCommand g_SayCommand{"say", [](CBasePlayer* player, const CCommandArgs& args)
+	{
+		Host_Say(player->edict(), false);
+	}};
+
+static const CClientCommand g_SayTeamCommand{"say_team", [](CBasePlayer* player, const CCommandArgs& args)
+	{
+		Host_Say(player->edict(), true);
+	}};
+
+static const CClientCommand g_FullUpdateCommand{"fullupdate", [](CBasePlayer* player, const CCommandArgs& args)
+	{
+		player->ForceClientDllUpdate();
+	}};
+
+static const CClientCommand g_GiveCommand{"give", [](CBasePlayer* player, const CCommandArgs& args)
+	{
+		int iszItem = ALLOC_STRING(args.Argument(1)); // Make a copy of the classname
+		player->GiveNamedItem(STRING(iszItem));
+	}, ClientCommandFlag::Cheat};
+
+static const CClientCommand g_DropCommand{"drop", [](CBasePlayer* player, const CCommandArgs& args)
+	{
+		// player is dropping an item.
+		player->DropPlayerItem(args.Argument(1));
+	}};
+
+static const CClientCommand g_FovCommand{"fov", [](CBasePlayer* player, const CCommandArgs& args)
+	{
+		if (0 != g_psv_cheats->value && args.Count() > 1)
+		{
+			player->m_iFOV = atoi(args.Argument(1));
+		}
+		else
+		{
+			CLIENT_PRINTF(player->edict(), print_console, UTIL_VarArgs("\"fov\" is \"%d\"\n", (int)player->m_iFOV));
+		}
+	}};
+
+static const CClientCommand g_SetHudColorCommand{"set_hud_color", [](CBasePlayer* player, const CCommandArgs& args)
+	{
+		if (args.Count() >= 4)
+		{
+			Vector color{255, 255, 255};
+			UTIL_StringToVector(color, CMD_ARGS());
+
+			player->SetHudColor({static_cast<std::uint8_t>(color.x),
+				static_cast<std::uint8_t>(color.y),
+				static_cast<std::uint8_t>(color.z)});
+		}
+		else
+		{
+			CLIENT_PRINTF(player->edict(), print_console, "Usage: set_hud_color <r> <g> <b> (values in range 0-255)\n");
+		}
+	}, ClientCommandFlag::Cheat};
+
+static const CClientCommand g_SetLightTypeCommand{"set_light_type", [](CBasePlayer* player, const CCommandArgs& args)
+	{
+		if (args.Count() > 1)
+		{
+			const auto type = [](const char* value) -> std::optional<SuitLightType>
+			{
+				if (0 == strcmp("flashlight", value))
+				{
+					return SuitLightType::Flashlight;
+				}
+				else if (0 == strcmp("nightvision", value))
+				{
+					return SuitLightType::Nightvision;
+				}
+
+				return {};
+			}(args.Argument(1));
+
+			if (type.has_value())
+			{
+				player->SetSuitLightType(type.value());
+			}
+			else
+			{
+				CLIENT_PRINTF(player->edict(), print_console, UTIL_VarArgs("Unknown light type \"%s\"\n", args.Argument(1)));
+			}
+		}
+	},
+	ClientCommandFlag::Cheat};
+
+static const CClientCommand g_UseCommand{"use", [](CBasePlayer* player, const CCommandArgs& args)
+	{
+		player->SelectItem(args.Argument(1));
+	}};
+
+static const CClientCommand g_SelectWeaponCommand{"selectweapon", [](CBasePlayer* player, const CCommandArgs& args)
+	{
+		if (args.Count() > 1)
+		{
+			player->SelectItem(args.Argument(1));
+		}
+		else
+		{
+			CLIENT_PRINTF(player->edict(), print_console, "usage: selectweapon <weapon name>\n");
+		}
+	}};
+
+static const CClientCommand g_LastInvCommand{"lastinv", [](CBasePlayer* player, const CCommandArgs& args)
+	{
+		player->SelectLastItem();
+	}};
+
+static const CClientCommand g_CloseMenusCommand{"closemenus", [](CBasePlayer* player, const CCommandArgs& args)
+	{
+		// just ignore it
+	}};
+
+static const CClientCommand g_FollowNextCommand{"follownext", [](CBasePlayer* player, const CCommandArgs& args)
+	{
+		// follow next player
+		if (player->IsObserver())
+			player->Observer_FindNextPlayer(atoi(args.Argument(1)) ? true : false);
+	}};
+
+//TODO: these 3 should be handled by CTF gamerules.
+static const CClientCommand g_ChangeTeamCommand{"changeteam", [](CBasePlayer* player, const CCommandArgs& args)
+	{
+		if (g_pGameRules->IsCTF())
+		{
+			if (player->m_iCurrentMenu == MENU_TEAM)
+			{
+				ClientPrint(player->pev, HUD_PRINTCONSOLE, "Already in team selection menu.\n");
+			}
+			else
+			{
+				player->m_iCurrentMenu = MENU_TEAM;
+				player->Player_Menu();
+			}
+		}
+	}};
+
+static const CClientCommand g_ChangeClassCommand{"changeclass", [](CBasePlayer* player, const CCommandArgs& args)
+	{
+		if (g_pGameRules->IsCTF())
+		{
+			if (player->m_iNewTeamNum != CTFTeam::None || player->m_iTeamNum != CTFTeam::None)
+			{
+				if (player->m_iCurrentMenu == MENU_CLASS)
+				{
+					ClientPrint(player->pev, HUD_PRINTCONSOLE, "Already in character selection menu.\n");
+				}
+				else
+				{
+					if (player->m_iNewTeamNum == CTFTeam::None)
+						player->m_iNewTeamNum = player->m_iTeamNum;
+
+					player->m_iCurrentMenu = MENU_CLASS;
+					player->Player_Menu();
+				}
+			}
+			else
+			{
+				ClientPrint(player->pev, HUD_PRINTCONSOLE, "No Team Selected.  Use \"changeteam\".\n");
+			}
+		}
+	}};
+
+static const CClientCommand g_FlagInfoCommand{"flaginfo", [](CBasePlayer* player, const CCommandArgs& args)
+	{
+		if (g_pGameRules->IsCTF())
+		{
+			DumpCTFFlagInfo(player);
+		}
+	}};
+
+bool UTIL_CheatsAllowed(CBasePlayer* pEntity, std::string_view name)
 {
 	if (0 == g_psv_cheats->value)
 	{
-		CLIENT_PRINTF(pEntity->edict(), print_console, UTIL_VarArgs("The command \"%s\" can only be used when cheats are enabled\n", name));
+		CLIENT_PRINTF(pEntity->edict(), print_console, fmt::format("The command \"{}\" can only be used when cheats are enabled\n", name).c_str());
 		return false;
 	}
 
@@ -513,202 +685,18 @@ called each time a player uses a "cmd" command
 // Use CMD_ARGV,  CMD_ARGV, and CMD_ARGC to get pointers the character string command.
 void ClientCommand(edict_t* pEntity)
 {
-	const char* pcmd = CMD_ARGV(0);
-
 	// Is the client spawned yet?
 	if (!pEntity->pvPrivateData)
 		return;
 
-	entvars_t* pev = &pEntity->v;
-
+	const char* pcmd = CMD_ARGV(0);
 	auto player = GetClassPtr<CBasePlayer>(reinterpret_cast<CBasePlayer*>(&pEntity->v));
 
-	if (FStrEq(pcmd, "say"))
+	if (auto clientCommand = GetClientCommandRegistry()->Find(pcmd); clientCommand)
 	{
-		Host_Say(pEntity, false);
-	}
-	else if (FStrEq(pcmd, "say_team"))
-	{
-		Host_Say(pEntity, true);
-	}
-	else if (FStrEq(pcmd, "fullupdate"))
-	{
-		player->ForceClientDllUpdate();
-	}
-	else if (FStrEq(pcmd, "give"))
-	{
-		if (0 != g_psv_cheats->value)
+		if ((clientCommand->Flags & ClientCommandFlag::Cheat) == 0 || UTIL_CheatsAllowed(player, clientCommand->Name))
 		{
-			int iszItem = ALLOC_STRING(CMD_ARGV(1)); // Make a copy of the classname
-			player->GiveNamedItem(STRING(iszItem));
-		}
-	}
-
-	else if (FStrEq(pcmd, "drop"))
-	{
-		// player is dropping an item.
-		player->DropPlayerItem(CMD_ARGV(1));
-	}
-	else if (FStrEq(pcmd, "fov"))
-	{
-		if (0 != g_psv_cheats->value && CMD_ARGC() > 1)
-		{
-			player->m_iFOV = atoi(CMD_ARGV(1));
-		}
-		else
-		{
-			CLIENT_PRINTF(pEntity, print_console, UTIL_VarArgs("\"fov\" is \"%d\"\n", (int)player->m_iFOV));
-		}
-	}
-	else if (FStrEq(pcmd, "set_hud_color"))
-	{
-		if (UTIL_CheatsAllowed(player, "set_hud_color"))
-		{
-			if (CMD_ARGC() >= 4)
-			{
-				Vector color{255, 255, 255};
-				UTIL_StringToVector(color, CMD_ARGS());
-
-				player->SetHudColor({static_cast<std::uint8_t>(color.x),
-					static_cast<std::uint8_t>(color.y),
-					static_cast<std::uint8_t>(color.z)});
-			}
-		}
-	}
-	else if (FStrEq(pcmd, "set_light_type"))
-	{
-		if (UTIL_CheatsAllowed(player, "set_light_type"))
-		{
-			if (CMD_ARGC() > 1)
-			{
-				const auto type = [](const char* value) -> std::optional<SuitLightType> {
-					if (0 == strcmp("flashlight", value))
-					{
-						return SuitLightType::Flashlight;
-					}
-					else if (0 == strcmp("nightvision", value))
-					{
-						return SuitLightType::Nightvision;
-					}
-
-					return {};
-				}(CMD_ARGV(1));
-
-				if (type.has_value())
-				{
-					player->SetSuitLightType(type.value());
-				}
-				else
-				{
-					CLIENT_PRINTF(pEntity, print_console, UTIL_VarArgs("Unknown light type \"%s\"\n", CMD_ARGV(1)));
-				}
-			}
-		}
-	}
-	else if (FStrEq(pcmd, "use"))
-	{
-		player->SelectItem(CMD_ARGV(1));
-	}
-	else if (FStrEq(pcmd, "selectweapon"))
-	{
-		if (CMD_ARGC() > 1)
-		{
-			player->SelectItem(CMD_ARGV(1));
-		}
-		else
-		{
-			CLIENT_PRINTF(pEntity, print_console, "usage: selectweapon <weapon name>\n");
-		}
-	}
-	else if (FStrEq(pcmd, "lastinv"))
-	{
-		player->SelectLastItem();
-	}
-	//In Opposing Force this is handled only by the CTF gamerules
-#if false
-	else if (FStrEq(pcmd, "spectate"))	// clients wants to become a spectator
-	{
-		// always allow proxies to become a spectator
-		if ((pev->flags & FL_PROXY) || allow_spectators.value)
-		{
-			edict_t* pentSpawnSpot = g_pGameRules->GetPlayerSpawnSpot(player);
-			player->StartObserver(pev->origin, VARS(pentSpawnSpot)->angles);
-
-			// notify other clients of player switching to spectator mode
-			UTIL_ClientPrintAll(HUD_PRINTNOTIFY, UTIL_VarArgs("%s switched to spectator mode\n",
-				(pev->netname && STRING(pev->netname)[0] != 0) ? STRING(pev->netname) : "unconnected"));
-		}
-		else
-			ClientPrint(pev, HUD_PRINTCONSOLE, "Spectator mode is disabled.\n");
-
-	}
-	else if (FStrEq(pcmd, "specmode"))	// new spectator mode
-	{
-		if (player->IsObserver())
-			player->Observer_SetMode(atoi(CMD_ARGV(1)));
-	}
-#endif
-	else if (FStrEq(pcmd, "closemenus"))
-	{
-		// just ignore it
-	}
-	else if (FStrEq(pcmd, "follownext")) // follow next player
-	{
-		if (player->IsObserver())
-			player->Observer_FindNextPlayer(atoi(CMD_ARGV(1)) ? true : false);
-	}
-	else if (g_pGameRules->ClientCommand(player, pcmd))
-	{
-		// MenuSelect returns true only if the command is properly handled,  so don't print a warning
-	}
-	else if (FStrEq(pcmd, "changeteam"))
-	{
-		if (g_pGameRules->IsCTF())
-		{
-			auto pPlayer = GetClassPtr((CBasePlayer*)pev);
-			if (pPlayer->m_iCurrentMenu == MENU_TEAM)
-			{
-				ClientPrint(pev, HUD_PRINTCONSOLE, "Already in team selection menu.\n");
-			}
-			else
-			{
-				pPlayer->m_iCurrentMenu = MENU_TEAM;
-				pPlayer->Player_Menu();
-			}
-		}
-	}
-	else if (FStrEq(pcmd, "changeclass"))
-	{
-		if (g_pGameRules->IsCTF())
-		{
-			auto pPlayer = GetClassPtr((CBasePlayer*)pev);
-
-			if (pPlayer->m_iNewTeamNum != CTFTeam::None || pPlayer->m_iTeamNum != CTFTeam::None)
-			{
-				if (pPlayer->m_iCurrentMenu == MENU_CLASS)
-				{
-					ClientPrint(pev, HUD_PRINTCONSOLE, "Already in character selection menu.\n");
-				}
-				else
-				{
-					if (pPlayer->m_iNewTeamNum == CTFTeam::None)
-						pPlayer->m_iNewTeamNum = pPlayer->m_iTeamNum;
-
-					pPlayer->m_iCurrentMenu = MENU_CLASS;
-					pPlayer->Player_Menu();
-				}
-			}
-			else
-			{
-				ClientPrint(pev, HUD_PRINTCONSOLE, "No Team Selected.  Use \"changeteam\".\n");
-			}
-		}
-	}
-	else if (FStrEq(pcmd, "flaginfo"))
-	{
-		if (g_pGameRules->IsCTF())
-		{
-			DumpCTFFlagInfo(reinterpret_cast<CBasePlayer*>(GET_PRIVATE(pEntity)));
+			clientCommand->Function(player, CCommandArgs{});
 		}
 	}
 	else
@@ -722,8 +710,34 @@ void ClientCommand(edict_t* pEntity)
 		command[127] = '\0';
 
 		// tell the user they entered an unknown command
-		ClientPrint(&pEntity->v, HUD_PRINTCONSOLE, UTIL_VarArgs("Unknown command: %s\n", command));
+		ClientPrint(player->pev, HUD_PRINTCONSOLE, UTIL_VarArgs("Unknown command: %s\n", command));
 	}
+
+	//In Opposing Force this is handled only by the CTF gamerules
+	//TODO: make this work for all multiplayer modes
+#if false
+	else if (FStrEq(pcmd, "spectate"))	// clients wants to become a spectator
+	{
+		// always allow proxies to become a spectator
+		if ((player->pev->flags & FL_PROXY) || allow_spectators.value)
+		{
+			edict_t* pentSpawnSpot = g_pGameRules->GetPlayerSpawnSpot(player);
+			player->StartObserver(player->pev->origin, VARS(pentSpawnSpot)->angles);
+
+			// notify other clients of player switching to spectator mode
+			UTIL_ClientPrintAll(HUD_PRINTNOTIFY, UTIL_VarArgs("%s switched to spectator mode\n",
+				(player->pev->netname && STRING(player->pev->netname)[0] != 0) ? STRING(player->pev->netname) : "unconnected"));
+		}
+		else
+			ClientPrint(player->pev, HUD_PRINTCONSOLE, "Spectator mode is disabled.\n");
+
+	}
+	else if (FStrEq(pcmd, "specmode"))	// new spectator mode
+	{
+		if (player->IsObserver())
+			player->Observer_SetMode(atoi(CMD_ARGV(1)));
+	}
+#endif
 }
 
 

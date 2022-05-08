@@ -13,6 +13,10 @@
 *
 ****/
 
+#include <memory>
+
+#include "CClientCommandRegistry.h"
+
 class CHalfLifeCoopplay : public CHalfLifeMultiplay
 {
 public:
@@ -60,8 +64,6 @@ public:
 
 	bool FPlayerCanTakeDamage(CBasePlayer* pPlayer, CBaseEntity* pAttacker) override;
 
-	bool ClientCommand(CBasePlayer* pPlayer, const char* pcmd) override;
-
 	float FlWeaponTryRespawn(CBasePlayerItem* pWeapon) override;
 
 	float FlWeaponRespawnTime(CBasePlayerItem* pWeapon) override;
@@ -71,4 +73,6 @@ public:
 private:
 	bool m_DisableDeathMessages;
 	bool m_DisableDeathPenalty;
+
+	std::unique_ptr<CClientCommand> m_MenuSelectCommand;
 };

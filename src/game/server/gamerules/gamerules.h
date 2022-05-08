@@ -104,7 +104,6 @@ public:
 	virtual edict_t* GetPlayerSpawnSpot(CBasePlayer* pPlayer); // Place this player on their spawnspot and face them the proper direction.
 
 	virtual bool AllowAutoTargetCrosshair() { return true; }
-	virtual bool ClientCommand(CBasePlayer* pPlayer, const char* pcmd) { return false; } // handles the user commands;  returns true if command handled properly
 	virtual void ClientUserInfoChanged(CBasePlayer* pPlayer, char* infobuffer) {}		 // the player has changed userinfo;  can change it now
 
 	// Client kills/scoring
@@ -278,6 +277,7 @@ class CHalfLifeMultiplay : public CGameRules
 {
 public:
 	CHalfLifeMultiplay();
+	~CHalfLifeMultiplay() override;
 
 	// GR_Think
 	void Think() override;
@@ -313,7 +313,6 @@ public:
 	edict_t* GetPlayerSpawnSpot(CBasePlayer* pPlayer) override;
 
 	bool AllowAutoTargetCrosshair() override;
-	bool ClientCommand(CBasePlayer* pPlayer, const char* pcmd) override;
 	void ClientUserInfoChanged(CBasePlayer* pPlayer, char* infobuffer) override;
 
 	// Client kills/scoring

@@ -31,6 +31,8 @@ target_sources(hl PRIVATE
 	cdll_dll.h
 	client.cpp
 	client.h
+	CClientCommandRegistry.cpp
+	CClientCommandRegistry.h
 	CMapState.cpp
 	CMapState.h
 	CServerLibrary.cpp

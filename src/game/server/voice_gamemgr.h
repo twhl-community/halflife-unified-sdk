@@ -7,6 +7,10 @@
 
 #pragma once
 
+#include <memory>
+#include <optional>
+
+#include "CClientCommandRegistry.h"
 #include "voice_common.h"
 
 
@@ -36,6 +40,8 @@ public:
 		IVoiceGameMgrHelper* m_pHelper,
 		int maxClients);
 
+	void Shutdown();
+
 	void SetHelper(IVoiceGameMgrHelper* pHelper);
 
 	// Updates which players can hear which other players.
@@ -47,10 +53,6 @@ public:
 	// Called when a new client connects (unsquelches its entity for everyone).
 	void ClientConnected(struct edict_s* pEdict);
 
-	// Called on ClientCommand. Checks for the squelch and unsquelch commands.
-	// Returns true if it handled the command.
-	bool ClientCommand(CBasePlayer* pPlayer, const char* cmd);
-
 	// Called to determine if the Receiver has muted (blocked) the Sender
 	// Returns true if the receiver has blocked the sender
 	bool PlayerHasBlockedPlayer(CBasePlayer* pReceiver, CBasePlayer* pSender);
@@ -60,6 +62,7 @@ private:
 	// Force it to update the client masks.
 	void UpdateMasks();
 
+	std::optional<int> GetAndValidatePlayerIndex(CBasePlayer* player, const char* cmd);
 
 private:
 	int m_msgPlayerVoiceMask;
@@ -68,4 +71,7 @@ private:
 	IVoiceGameMgrHelper* m_pHelper;
 	int m_nMaxPlayers;
 	double m_UpdateInterval; // How long since the last update.
+
+	std::unique_ptr<CClientCommand> m_VBanCommand;
+	std::unique_ptr<CClientCommand> m_VModEnableCommand;
 };

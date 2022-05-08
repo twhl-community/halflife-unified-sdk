@@ -26,6 +26,16 @@ CHalfLifeCoopplay::CHalfLifeCoopplay()
 	m_DisableDeathMessages = false;
 	m_DisableDeathPenalty = false;
 	g_engfuncs.pfnCVarSetFloat("mp_allowmonsters", 1);
+
+	m_MenuSelectCommand = std::make_unique<CClientCommand>("menuselect", [](CBasePlayer* player, const CCommandArgs& args)
+		{
+			if (CMD_ARGC() < 2)
+				return;
+
+			int slot = atoi(CMD_ARGV(1));
+
+			// select the item from the current menu
+		});
 }
 
 void CHalfLifeCoopplay::UpdateGameMode(CBasePlayer* pPlayer)
@@ -180,23 +190,6 @@ bool CHalfLifeCoopplay::FPlayerCanTakeDamage(CBasePlayer* pPlayer, CBaseEntity* 
 		return false;
 
 	return CHalfLifeMultiplay::FPlayerCanTakeDamage(pPlayer, pAttacker);
-}
-
-bool CHalfLifeCoopplay::ClientCommand(CBasePlayer* pPlayer, const char* pcmd)
-{
-	if (FStrEq(pcmd, "menuselect"))
-	{
-		if (CMD_ARGC() < 2)
-			return true;
-
-		int slot = atoi(CMD_ARGV(1));
-
-		// select the item from the current menu
-
-		return true;
-	}
-
-	return false;
 }
 
 float CHalfLifeCoopplay::FlWeaponTryRespawn(CBasePlayerItem* pWeapon)

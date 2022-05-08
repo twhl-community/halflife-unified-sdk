@@ -87,12 +87,9 @@ CHalfLifeMultiplay::CHalfLifeMultiplay()
 	*/
 }
 
-bool CHalfLifeMultiplay::ClientCommand(CBasePlayer* pPlayer, const char* pcmd)
+CHalfLifeMultiplay::~CHalfLifeMultiplay()
 {
-	if (g_VoiceGameMgr.ClientCommand(pPlayer, pcmd))
-		return true;
-
-	return CGameRules::ClientCommand(pPlayer, pcmd);
+	g_VoiceGameMgr.Shutdown();
 }
 
 void CHalfLifeMultiplay::ClientUserInfoChanged(CBasePlayer* pPlayer, char* infobuffer)
