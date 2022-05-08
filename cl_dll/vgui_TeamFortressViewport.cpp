@@ -1354,19 +1354,29 @@ void TeamFortressViewport::UpdateSpectatorPanel()
 			pBottomText = CHudTextMessage::BufferedLocaliseTextString(bottomText);
 		}
 
+		bool useTeamColor = false;
+
 		// in first person mode colorize player names
 		if ((g_iUser1 == OBS_IN_EYE) && 0 != player)
 		{
 			float* color = GetClientColor(player);
-			int r = color[0] * 255;
-			int g = color[1] * 255;
-			int b = color[2] * 255;
 
-			// set team color, a bit transparent
-			m_pSpectatorPanel->m_BottomMainLabel->setFgColor(r, g, b, 0);
-			m_pSpectatorPanel->m_BottomMainButton->setFgColor(r, g, b, 0);
+			//Color is null in CTF.
+			if (color)
+			{
+				int r = color[0] * 255;
+				int g = color[1] * 255;
+				int b = color[2] * 255;
+
+				// set team color, a bit transparent
+				m_pSpectatorPanel->m_BottomMainLabel->setFgColor(r, g, b, 0);
+				m_pSpectatorPanel->m_BottomMainButton->setFgColor(r, g, b, 0);
+
+				useTeamColor = true;
+			}
 		}
-		else
+
+		if (!useTeamColor)
 		{ // restore GUI color
 			m_pSpectatorPanel->m_BottomMainLabel->setFgColor(143, 143, 54, 0);
 			m_pSpectatorPanel->m_BottomMainButton->setFgColor(143, 143, 54, 0);
