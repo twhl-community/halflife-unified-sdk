@@ -116,6 +116,7 @@ TYPEDESCRIPTION CBasePlayer::m_playerSaveData[] =
 		//Vanilla Op4 doesn't restore this. Not a big deal but it can cause you to teleport to the wrong area after a restore
 		DEFINE_FIELD(CBasePlayer, m_DisplacerReturn, FIELD_POSITION_VECTOR),
 		DEFINE_FIELD(CBasePlayer, m_flDisplacerSndRoomtype, FIELD_FLOAT),
+		DEFINE_FIELD(CBasePlayer, m_HudColor, FIELD_INTEGER),
 
 		//DEFINE_FIELD( CBasePlayer, m_fDeadTime, FIELD_FLOAT ), // only used in multiplayer games
 		//DEFINE_FIELD( CBasePlayer, m_fGameHUDInitialized, FIELD_INTEGER ), // only used in multiplayer games
@@ -4405,6 +4406,9 @@ void CBasePlayer::UpdateClientData()
 			WRITE_BYTE(m_iFlashBattery);
 			MESSAGE_END();
 		}
+
+		//Reinitialize hud color to saved off value.
+		SetHudColor(RGB24::FromInteger(m_HudColor));
 	}
 
 	// Update Flashlight
@@ -5397,6 +5401,8 @@ void CBasePlayer::SetPrefsFromUserinfo(char* infobuffer)
 
 void CBasePlayer::SetHudColor(RGB24 color)
 {
+	m_HudColor = color.ToInteger();
+
 	g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgHudColor, nullptr, edict());
 	g_engfuncs.pfnWriteByte(color.Red);
 	g_engfuncs.pfnWriteByte(color.Green);

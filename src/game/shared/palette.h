@@ -36,4 +36,18 @@ struct RGB24
 
 		return {r, g, b};
 	}
+
+	constexpr int ToInteger() const
+	{
+		return Red | (Green << 8) | (Blue << 16);
+	}
+
+	static constexpr RGB24 FromInteger(int color)
+	{
+		return {
+			static_cast<std::uint8_t>(color & 0xFF),
+			static_cast<std::uint8_t>((color & 0xFF00) >> 8),
+			static_cast<std::uint8_t>((color & 0XFF0000) >> 16)
+		};
+	}
 };

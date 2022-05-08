@@ -444,6 +444,9 @@ private:
 	float m_flLastClimbTime = 0;
 	bool m_bIsClimbing = false;
 
+	//For saving and level changes.
+	int m_HudColor = RGB_HUD_COLOR.ToInteger();
+
 public:
 	/**
 	*	@brief Sets the player's hud color
