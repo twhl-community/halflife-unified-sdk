@@ -514,7 +514,6 @@ called each time a player uses a "cmd" command
 void ClientCommand(edict_t* pEntity)
 {
 	const char* pcmd = CMD_ARGV(0);
-	const char* pstr;
 
 	// Is the client spawned yet?
 	if (!pEntity->pvPrivateData)
@@ -610,9 +609,16 @@ void ClientCommand(edict_t* pEntity)
 	{
 		player->SelectItem(CMD_ARGV(1));
 	}
-	else if (((pstr = strstr(pcmd, "weapon_")) != nullptr) && (pstr == pcmd))
+	else if (FStrEq(pcmd, "selectweapon"))
 	{
-		player->SelectItem(pcmd);
+		if (CMD_ARGC() > 1)
+		{
+			player->SelectItem(CMD_ARGV(1));
+		}
+		else
+		{
+			CLIENT_PRINTF(pEntity, print_console, "usage: selectweapon <weapon name>\n");
+		}
 	}
 	else if (FStrEq(pcmd, "lastinv"))
 	{

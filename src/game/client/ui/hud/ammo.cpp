@@ -260,6 +260,22 @@ DECLARE_COMMAND(m_Ammo, PrevWeapon);
 
 #define HISTORY_DRAW_TIME "5"
 
+void SendWeaponSelectCommand(const char* weaponName)
+{
+	char command[512];
+
+	const int result = snprintf(command, sizeof(command), "selectweapon %s", weaponName);
+
+	if (result >= 0 && result < sizeof(command))
+	{
+		ServerCmd(command);
+	}
+	else
+	{
+		gEngfuncs.Con_Printf("Error formatting selectweapon command\n");
+	}
+}
+
 bool CHudAmmo::Init()
 {
 	gHUD.AddHudElem(this);
@@ -376,7 +392,7 @@ void CHudAmmo::Think()
 	{
 		if (gpActiveSel != (WEAPON*)1)
 		{
-			ServerCmd(gpActiveSel->szName);
+			SendWeaponSelectCommand(gpActiveSel->szName);
 			g_weaponselect = gpActiveSel->iId;
 		}
 
@@ -449,7 +465,7 @@ void WeaponsResource::SelectSlot(int iSlot, bool fAdvance, int iDirection)
 			WEAPON* p2 = GetNextActivePos(p->iSlot, p->iSlotPos);
 			if (!p2)
 			{ // only one active item in bucket, so change directly to weapon
-				ServerCmd(p->szName);
+				SendWeaponSelectCommand(p->szName);
 				g_weaponselect = p->iId;
 				return;
 			}
