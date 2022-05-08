@@ -26,6 +26,22 @@
 
 extern edict_t* EntSelectSpawnPoint(CBasePlayer* pPlayer);
 
+CGameRules::CGameRules()
+{
+	m_SpectateCommand = std::make_unique<CClientCommand>("spectate", [this](CBasePlayer* player, const CCommandArgs& args)
+		{
+			// clients wants to become a spectator
+			BecomeSpectator(player, args);
+		});
+
+	m_SpecModeCommand = std::make_unique<CClientCommand>("specmode", [this](CBasePlayer* player, const CCommandArgs& args)
+		{
+			// new spectator mode
+			if (player->IsObserver())
+				player->Observer_SetMode(atoi(CMD_ARGV(1)));
+		});
+}
+
 CBasePlayerItem* CGameRules::FindNextBestWeapon(CBasePlayer* pPlayer, CBasePlayerItem* pCurrentWeapon)
 {
 	if (pCurrentWeapon != nullptr && !pCurrentWeapon->CanHolster())
@@ -167,6 +183,24 @@ bool CGameRules::CanHavePlayerItem(CBasePlayer* pPlayer, CBasePlayerItem* pWeapo
 
 	// note: will fall through to here if GetItemInfo doesn't fill the struct!
 	return true;
+}
+
+void CGameRules::BecomeSpectator(CBasePlayer* player, const CCommandArgs& args)
+{
+	//Default implementation: applies to all game modes, even singleplayer.
+
+	// always allow proxies to become a spectator
+	if ((player->pev->flags & FL_PROXY) || allow_spectators.value)
+	{
+		edict_t* pentSpawnSpot = g_pGameRules->GetPlayerSpawnSpot(player);
+		player->StartObserver(player->pev->origin, VARS(pentSpawnSpot)->angles);
+
+		// notify other clients of player switching to spectator mode
+		UTIL_ClientPrintAll(HUD_PRINTNOTIFY, UTIL_VarArgs("%s switched to spectator mode\n",
+			(player->pev->netname && STRING(player->pev->netname)[0] != 0) ? STRING(player->pev->netname) : "unconnected"));
+	}
+	else
+		ClientPrint(player->pev, HUD_PRINTCONSOLE, "Spectator mode is disabled.\n");
 }
 
 //=========================================================

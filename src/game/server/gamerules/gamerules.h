@@ -18,6 +18,10 @@
 
 #pragma once
 
+#include <memory>
+
+#include "CClientCommandRegistry.h"
+
 class CBasePlayerItem;
 class CBasePlayer;
 class CItem;
@@ -68,6 +72,7 @@ enum
 class CGameRules
 {
 public:
+	CGameRules();
 	virtual ~CGameRules() = default;
 
 	virtual void Think() = 0;								 // GR_Think - runs every server frame, should handle any timer tasks, periodic events, etc.
@@ -177,6 +182,12 @@ public:
 
 protected:
 	CBasePlayerItem* FindNextBestWeapon(CBasePlayer* pPlayer, CBasePlayerItem* pCurrentWeapon);
+
+	virtual void BecomeSpectator(CBasePlayer* player, const CCommandArgs& args);
+
+private:
+	std::unique_ptr<CClientCommand> m_SpectateCommand;
+	std::unique_ptr<CClientCommand> m_SpecModeCommand;
 };
 
 extern CGameRules* InstallGameRules(CBaseEntity* pWorld);

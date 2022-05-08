@@ -491,11 +491,6 @@ CHalfLifeCTFplay::CHalfLifeCTFplay()
 			player->Menu_Team_Input(atoi(CMD_ARGV(1)));
 		});
 
-	m_SpectateCommand = std::make_unique<CClientCommand>("spectate", [](CBasePlayer* player, const CCommandArgs& args)
-		{
-			player->Menu_Team_Input(-1);
-		});
-
 	m_SelectCharCommand = std::make_unique<CClientCommand>("selectchar", [](CBasePlayer* player, const CCommandArgs& args)
 		{
 			if (args.Count() > 1)
@@ -1331,6 +1326,7 @@ void CHalfLifeCTFplay::ChangePlayerTeam(CBasePlayer* pPlayer, const char* pCharN
 	}
 	else
 	{
+		//TODO: check how much of this is handled by newer observer code.
 		if (pPlayer->pev->health <= 0.0)
 		{
 			respawn(pPlayer->pev, false);
@@ -1838,4 +1834,10 @@ void CHalfLifeCTFplay::RecountTeams()
 			}
 		}
 	}
+}
+
+void CHalfLifeCTFplay::BecomeSpectator(CBasePlayer* player, const CCommandArgs& args)
+{
+	//CTF game mode: make sure player has gamemode settings applied properly.
+	player->Menu_Team_Input(-1);
 }

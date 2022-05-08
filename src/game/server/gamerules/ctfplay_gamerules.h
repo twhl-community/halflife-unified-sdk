@@ -115,6 +115,9 @@ public:
 
 	void GoToIntermission() override;
 
+protected:
+	void BecomeSpectator(CBasePlayer* player, const CCommandArgs& args) override;
+
 private:
 	void SendTeamStatInfo(CTFTeam iTeamNum);
 	void SendPlayerStatInfo(CBasePlayer* pPlayer);
@@ -133,7 +136,6 @@ private:
 	std::unique_ptr<CClientCommand> m_CancelMenuCommand;
 	std::unique_ptr<CClientCommand> m_EndMotdCommand;
 	std::unique_ptr<CClientCommand> m_JoinTeamCommand;
-	std::unique_ptr<CClientCommand> m_SpectateCommand;
 	std::unique_ptr<CClientCommand> m_SelectCharCommand;
 };
 
