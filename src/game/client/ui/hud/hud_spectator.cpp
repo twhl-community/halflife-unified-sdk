@@ -40,6 +40,9 @@ extern Vector v_angles;	   // last view angle
 extern Vector v_cl_angles; // last client/mouse angle
 extern Vector v_sim_org;   // last sim origin
 
+//Same color as in TeamFortressViewport::UpdateSpectatorPanel
+float DefaultPlayerColor[3] = {143 / 255.f, 143 / 255.f, 54 / 255.f};
+
 void UnpackRGB(int& r, int& g, int& b, unsigned long ulRGB)
 {
 	r = (ulRGB & 0xFF0000) >> 16;
@@ -662,6 +665,12 @@ bool CHudSpectator::Draw(float flTime)
 		}
 
 		color = GetClientColor(i + 1);
+
+		//TODO: this is pretty ugly, need a better way.
+		if (!color)
+		{
+			color = DefaultPlayerColor;
+		}
 
 		// draw the players name and health underneath
 		sprintf(string, "%s", g_PlayerInfoList[i + 1].name);
