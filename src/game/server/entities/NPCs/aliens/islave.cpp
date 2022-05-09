@@ -863,6 +863,7 @@ void CISlave::ClearBeams()
 class CDeadISlave : public CBaseMonster
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	int Classify() override { return CLASS_ALIEN_PASSIVE; }
 
@@ -887,6 +888,14 @@ bool CDeadISlave::KeyValue(KeyValueData* pkvd)
 
 LINK_ENTITY_TO_CLASS(monster_alien_slave_dead, CDeadISlave);
 
+void CDeadISlave::OnCreate()
+{
+	CBaseMonster::OnCreate();
+
+	// Corpses have less health
+	pev->health = 8; //GetSkillFloat("islave_health"sv);
+}
+
 //=========================================================
 // ********** DeadISlave SPAWN **********
 //=========================================================
@@ -904,8 +913,6 @@ void CDeadISlave::Spawn()
 	{
 		ALERT(at_console, "Dead slave with bad pose\n");
 	}
-	// Corpses have less health
-	pev->health = 8; //GetSkillFloat("islave_health"sv);
 
 	MonsterInitDead();
 }
