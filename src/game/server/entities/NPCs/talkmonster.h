@@ -98,6 +98,8 @@ public:
 	void StopTalking() { SentenceStop(); }
 
 	// Base Monster functions
+	void OnCreate() override;
+
 	void Precache() override;
 	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 	void Touch(CBaseEntity* pOther) override;

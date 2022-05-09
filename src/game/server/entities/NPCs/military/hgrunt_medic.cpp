@@ -101,6 +101,8 @@ enum
 class COFMedicAlly : public CBaseHGruntAlly
 {
 public:
+	void OnCreate() override;
+
 	void Spawn() override;
 	void Precache() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
@@ -175,6 +177,14 @@ TYPEDESCRIPTION COFMedicAlly::m_SaveData[] =
 };
 
 IMPLEMENT_SAVERESTORE(COFMedicAlly, CBaseHGruntAlly);
+
+void COFMedicAlly::OnCreate()
+{
+	CBaseHGruntAlly::OnCreate();
+
+	// get voice pitch
+	m_voicePitch = 105;
+}
 
 void COFMedicAlly::DropWeapon(bool applyVelocity)
 {
@@ -383,12 +393,6 @@ void COFMedicAlly::Precache()
 	m_iBrassShell = PRECACHE_MODEL("models/shell.mdl");
 
 	CBaseHGruntAlly::Precache();
-
-	// get voice pitch
-	if (!UTIL_IsRestoring())
-	{
-		m_voicePitch = 105;
-	}
 }
 
 //=========================================================

@@ -73,8 +73,6 @@ extern "C" DLLEXPORT int GetEntityAPI(DLL_FUNCTIONS* pFunctionTable, int interfa
 extern "C" DLLEXPORT int GetEntityAPI2(DLL_FUNCTIONS* pFunctionTable, int* interfaceVersion);
 extern "C" DLLEXPORT int GetNewDLLFunctions(NEW_DLL_FUNCTIONS* pFunctionTable, int* interfaceVersion);
 
-bool UTIL_IsRestoring();
-
 /**
 *	@brief HACKHACK -- this is a hack to keep the node graph entity from "touching" things (like triggers)
 *	while it builds the graph

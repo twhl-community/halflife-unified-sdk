@@ -327,25 +327,8 @@ CBaseEntity* FindGlobalEntity(string_t classname, string_t globalname)
 	return pReturn;
 }
 
-static bool g_IsRestoring = false;
-
-bool UTIL_IsRestoring()
-{
-	return g_IsRestoring;
-}
-
 int DispatchRestore(edict_t* pent, SAVERESTOREDATA* pSaveData, int globalEntity)
 {
-	g_IsRestoring = true;
-
-	struct DisableRestoreFlag
-	{
-		~DisableRestoreFlag()
-		{
-			g_IsRestoring = false;
-		}
-	} cleanup;
-
 	gpGlobals->time = pSaveData->time;
 
 	CBaseEntity* pEntity = (CBaseEntity*)GET_PRIVATE(pent);

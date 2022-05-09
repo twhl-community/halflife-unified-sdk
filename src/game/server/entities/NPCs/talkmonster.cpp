@@ -320,6 +320,15 @@ DEFINE_CUSTOM_SCHEDULES(CTalkMonster){
 
 IMPLEMENT_CUSTOM_SCHEDULES(CTalkMonster, CBaseMonster);
 
+void CTalkMonster::OnCreate()
+{
+	CBaseMonster::OnCreate();
+
+	// get voice pitch
+	m_voicePitch = 100;
+}
+
+
 void CTalkMonster::StartTask(Task_t* pTask)
 {
 	switch (pTask->iTask)
@@ -678,11 +687,6 @@ void CTalkMonster::TalkInit()
 	// when a level is loaded, nobody will talk (time is reset to 0)
 
 	CTalkMonster::g_talkWaitTime = 0;
-
-	if (!UTIL_IsRestoring())
-	{
-		m_voicePitch = 100;
-	}
 }
 //=========================================================
 // FindNearestFriend

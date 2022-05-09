@@ -54,6 +54,14 @@ TYPEDESCRIPTION CBaseHGruntAlly::m_SaveData[] =
 
 IMPLEMENT_SAVERESTORE(CBaseHGruntAlly, COFSquadTalkMonster);
 
+void CBaseHGruntAlly::OnCreate()
+{
+	COFSquadTalkMonster::OnCreate();
+
+	// get voice pitch
+	m_voicePitch = 100;
+}
+
 //=========================================================
 // Speak Sentence - say your cued up sentence.
 //
@@ -2280,12 +2288,6 @@ void CBaseHGruntAlly::TalkInit()
 
 	m_szGrp[TLK_WOUND] = "FG_WOUND";
 	m_szGrp[TLK_MORTAL] = "FG_MORTAL";
-
-	// get voice for head - just one barney voice for now
-	if (!UTIL_IsRestoring())
-	{
-		m_voicePitch = 100;
-	}
 }
 
 void CBaseHGruntAlly::AlertSound()

@@ -103,6 +103,8 @@ enum class PostureType
 class CBaseHGruntAlly : public COFSquadTalkMonster
 {
 public:
+	void OnCreate() override;
+
 	void Precache() override;
 	void SetYawSpeed() override;
 	int Classify() override;

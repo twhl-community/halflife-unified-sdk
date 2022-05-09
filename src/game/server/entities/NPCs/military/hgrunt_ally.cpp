@@ -402,12 +402,6 @@ void CHGruntAlly::Precache()
 	m_iSawLink = PRECACHE_MODEL("models/saw_link.mdl");
 
 	CBaseHGruntAlly::Precache();
-
-	// get voice pitch
-	if (!UTIL_IsRestoring())
-	{
-		m_voicePitch = 100;
-	}
 }
 
 std::tuple<int, Activity> CHGruntAlly::GetSequenceForActivity(Activity NewActivity)
