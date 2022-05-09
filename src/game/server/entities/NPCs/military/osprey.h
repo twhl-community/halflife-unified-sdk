@@ -27,6 +27,7 @@ public:
 	static TYPEDESCRIPTION m_SaveData[];
 	int ObjectCaps() override { return CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	int Classify() override { return CLASS_MACHINE; }

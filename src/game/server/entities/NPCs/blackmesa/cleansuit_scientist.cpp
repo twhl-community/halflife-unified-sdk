@@ -29,6 +29,7 @@
 class CCleansuitScientist : public CScientist
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 
@@ -37,12 +38,19 @@ public:
 
 LINK_ENTITY_TO_CLASS(monster_cleansuit_scientist, CCleansuitScientist);
 
+void CCleansuitScientist::OnCreate()
+{
+	CScientist::OnCreate();
+
+	pev->health = GetSkillFloat("cleansuit_scientist_health"sv);
+}
+
 //=========================================================
 // Spawn
 //=========================================================
 void CCleansuitScientist::Spawn()
 {
-	SpawnCore("models/cleansuit_scientist.mdl", GetSkillFloat("cleansuit_scientist_health"sv));
+	SpawnCore("models/cleansuit_scientist.mdl");
 }
 
 //=========================================================
@@ -73,6 +81,7 @@ void CCleansuitScientist::Heal()
 class CDeadCleansuitScientist : public CBaseMonster
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	int Classify() override { return CLASS_HUMAN_PASSIVE; }
 
@@ -91,6 +100,14 @@ const char* CDeadCleansuitScientist::m_szPoses[] =
 		"dead_table3",
 		"scientist_deadpose1",
 		"dead_against_wall"};
+
+void CDeadCleansuitScientist::OnCreate()
+{
+	CBaseMonster::OnCreate();
+
+	// Corpses have less health
+	pev->health = 8; //GetSkillFloat("scientist_health"sv);
+}
 
 bool CDeadCleansuitScientist::KeyValue(KeyValueData* pkvd)
 {
@@ -114,8 +131,6 @@ void CDeadCleansuitScientist::Spawn()
 
 	pev->effects = 0;
 	pev->sequence = 0;
-	// Corpses have less health
-	pev->health = 8; //GetSkillFloat("scientist_health"sv);
 
 	m_bloodColor = BLOOD_COLOR_RED;
 

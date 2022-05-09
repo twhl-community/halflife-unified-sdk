@@ -25,6 +25,7 @@ public:
 
 	int ISoundMask() override { return bits_SOUND_NONE; }
 
+	void OnCreate() override;
 	void Precache() override;
 
 	void Spawn() override;
@@ -43,6 +44,13 @@ public:
 };
 
 LINK_ENTITY_TO_CLASS(monster_op4loader, COFLoader);
+
+void COFLoader::OnCreate()
+{
+	CBaseMonster::OnCreate();
+
+	pev->health = 8;
+}
 
 void COFLoader::Precache()
 {
@@ -69,7 +77,6 @@ void COFLoader::Spawn()
 	pev->solid = SOLID_SLIDEBOX;
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = DONT_BLEED;
-	pev->health = 8;
 	m_MonsterState = MONSTERSTATE_NONE;
 	m_flFieldOfView = 0.5f;
 	pev->takedamage = DAMAGE_NO;

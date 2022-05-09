@@ -41,6 +41,13 @@ TYPEDESCRIPTION CApache::m_SaveData[] =
 };
 IMPLEMENT_SAVERESTORE(CApache, CBaseMonster);
 
+void CApache::OnCreate()
+{
+	CBaseMonster::OnCreate();
+
+	pev->health = GetSkillFloat("apache_health"sv);
+}
+
 void CApache::SpawnCore(const char* model)
 {
 	Precache();
@@ -54,7 +61,6 @@ void CApache::SpawnCore(const char* model)
 
 	pev->flags |= FL_MONSTER;
 	pev->takedamage = DAMAGE_AIM;
-	pev->health = GetSkillFloat("apache_health"sv);
 	pev->max_health = pev->health;
 
 	m_flFieldOfView = -0.707; // 270 degrees

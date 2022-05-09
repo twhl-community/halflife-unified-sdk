@@ -30,6 +30,7 @@
 class CBarnacle : public CBaseMonster
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	CBaseEntity* TongueTouchEnt(float* pflLength);
@@ -64,6 +65,12 @@ TYPEDESCRIPTION CBarnacle::m_SaveData[] =
 
 IMPLEMENT_SAVERESTORE(CBarnacle, CBaseMonster);
 
+void CBarnacle::OnCreate()
+{
+	CBaseMonster::OnCreate();
+
+	pev->health = 25;
+}
 
 //=========================================================
 // Classify - indicates this monster's place in the
@@ -108,7 +115,6 @@ void CBarnacle::Spawn()
 	pev->takedamage = DAMAGE_AIM;
 	m_bloodColor = BLOOD_COLOR_RED;
 	pev->effects = EF_INVLIGHT; // take light from the ceiling
-	pev->health = 25;
 	m_flFieldOfView = 0.5; // indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
 	m_flKillVictimTime = 0;

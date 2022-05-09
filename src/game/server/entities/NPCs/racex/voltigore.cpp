@@ -298,6 +298,13 @@ TYPEDESCRIPTION COFVoltigore::m_SaveData[] =
 
 IMPLEMENT_SAVERESTORE(COFVoltigore, CSquadMonster);
 
+void COFVoltigore::OnCreate()
+{
+	CSquadMonster::OnCreate();
+
+	pev->health = GetSkillFloat("voltigore_health"sv);
+}
+
 //=========================================================
 // IRelationship - overridden because Human Grunts are
 // Alien Grunt's nemesis.
@@ -535,7 +542,7 @@ void COFVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 }
 
-void COFVoltigore::SpawnCore(const char* model, const Vector& mins, const Vector& maxs, float health)
+void COFVoltigore::SpawnCore(const char* model, const Vector& mins, const Vector& maxs)
 {
 	Precache();
 
@@ -546,7 +553,6 @@ void COFVoltigore::SpawnCore(const char* model, const Vector& mins, const Vector
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_GREEN;
 	pev->effects = 0;
-	pev->health = health;
 	m_flFieldOfView = 0.2; // indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
 	m_afCapability = 0;
@@ -568,7 +574,7 @@ void COFVoltigore::SpawnCore(const char* model, const Vector& mins, const Vector
 //=========================================================
 void COFVoltigore::Spawn()
 {
-	SpawnCore("models/voltigore.mdl", {-80, -80, 0}, {80, 80, 90}, GetSkillFloat("voltigore_health"sv));
+	SpawnCore("models/voltigore.mdl", {-80, -80, 0}, {80, 80, 90});
 }
 
 void COFVoltigore::PrecacheCore(const char* model)

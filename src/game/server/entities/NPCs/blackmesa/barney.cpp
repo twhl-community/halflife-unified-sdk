@@ -138,6 +138,13 @@ DEFINE_CUSTOM_SCHEDULES(CBarney){
 
 IMPLEMENT_CUSTOM_SCHEDULES(CBarney, CTalkMonster);
 
+void CBarney::OnCreate()
+{
+	CTalkMonster::OnCreate();
+
+	pev->health = GetSkillFloat("barney_health"sv);
+}
+
 void CBarney::StartTask(Task_t* pTask)
 {
 	CTalkMonster::StartTask(pTask);
@@ -326,7 +333,7 @@ void CBarney::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 }
 
-void CBarney::SpawnCore(const char* model, float health)
+void CBarney::SpawnCore(const char* model)
 {
 	Precache();
 
@@ -336,7 +343,6 @@ void CBarney::SpawnCore(const char* model, float health)
 	pev->solid = SOLID_SLIDEBOX;
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_RED;
-	pev->health = health;
 	pev->view_ofs = Vector(0, 0, 50);  // position of the eyes relative to monster's origin.
 	m_flFieldOfView = VIEW_FIELD_WIDE; // NOTE: we need a wide field of view so npc will notice player and say hello
 	m_MonsterState = MONSTERSTATE_NONE;
@@ -367,7 +373,7 @@ void CBarney::SpawnCore(const char* model, float health)
 //=========================================================
 void CBarney::Spawn()
 {
-	SpawnCore("models/barney.mdl", GetSkillFloat("barney_health"sv));
+	SpawnCore("models/barney.mdl");
 }
 
 void CBarney::PrecacheCore(const char* model)
@@ -744,6 +750,7 @@ bool CBarney::KeyValue(KeyValueData* pkvd)
 class CDeadBarney : public CBaseMonster
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	int Classify() override { return CLASS_PLAYER_ALLY; }
 
@@ -754,6 +761,14 @@ public:
 };
 
 const char* CDeadBarney::m_szPoses[] = {"lying_on_back", "lying_on_side", "lying_on_stomach"};
+
+void CDeadBarney::OnCreate()
+{
+	CBaseMonster::OnCreate();
+
+	// Corpses have less health
+	pev->health = 8; //GetSkillFloat("barney_health"sv);
+}
 
 bool CDeadBarney::KeyValue(KeyValueData* pkvd)
 {
@@ -786,8 +801,6 @@ void CDeadBarney::Spawn()
 	{
 		ALERT(at_console, "Dead barney with bad pose\n");
 	}
-	// Corpses have less health
-	pev->health = 8; //GetSkillFloat("barney_health"sv);
 
 	MonsterInitDead();
 }

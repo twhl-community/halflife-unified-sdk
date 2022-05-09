@@ -106,6 +106,7 @@ enum HGRUNT_SENTENCE_TYPES
 class CHGrunt : public CSquadMonster
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	void SetYawSpeed() override;
@@ -216,6 +217,7 @@ protected:
 class CDeadHGrunt : public CBaseMonster
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	int Classify() override { return CLASS_HUMAN_MILITARY; }
 

@@ -22,9 +22,16 @@
 class CZombieSoldier : public CZombie
 {
 public:
+	void OnCreate() override
+	{
+		CZombie::OnCreate();
+
+		pev->health = GetSkillFloat("zombie_soldier_health"sv);
+	}
+
 	void Spawn() override
 	{
-		SpawnCore("models/zombie_soldier.mdl", GetSkillFloat("zombie_soldier_health"sv));
+		SpawnCore("models/zombie_soldier.mdl");
 	}
 
 	void Precache() override
@@ -45,6 +52,7 @@ LINK_ENTITY_TO_CLASS(monster_zombie_soldier, CZombieSoldier);
 class CDeadZombieSoldier : public CBaseMonster
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	int Classify() override { return CLASS_ALIEN_MONSTER; }
 
@@ -55,6 +63,14 @@ public:
 };
 
 const char* CDeadZombieSoldier::m_szPoses[] = {"dead_on_stomach", "dead_on_back"};
+
+void CDeadZombieSoldier::OnCreate()
+{
+	CBaseMonster::OnCreate();
+
+	// Corpses have less health
+	pev->health = 8;
+}
 
 bool CDeadZombieSoldier::KeyValue(KeyValueData* pkvd)
 {
@@ -88,9 +104,6 @@ void CDeadZombieSoldier::Spawn()
 	{
 		ALERT(at_console, "Dead hgrunt with bad pose\n");
 	}
-
-	// Corpses have less health
-	pev->health = 8;
 
 	MonsterInitDead();
 }

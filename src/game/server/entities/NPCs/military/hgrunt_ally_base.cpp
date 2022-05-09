@@ -727,7 +727,7 @@ void CBaseHGruntAlly::HandleAnimEvent(MonsterEvent_t* pEvent)
 //=========================================================
 // Spawn
 //=========================================================
-void CBaseHGruntAlly::SpawnCore(const char* model, float health)
+void CBaseHGruntAlly::SpawnCore(const char* model)
 {
 	Precache();
 
@@ -738,7 +738,6 @@ void CBaseHGruntAlly::SpawnCore(const char* model, float health)
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_RED;
 	pev->effects = 0;
-	pev->health = health;
 	m_flFieldOfView = 0.2; // indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
 	m_flNextGrenadeCheck = gpGlobals->time + 1;

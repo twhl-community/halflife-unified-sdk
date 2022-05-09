@@ -197,6 +197,7 @@ public:
 
 	static TYPEDESCRIPTION m_SaveData[];
 
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
@@ -293,7 +294,15 @@ DEFINE_CUSTOM_SCHEDULES(COFGonome){
 	slGonomeVictoryDance,
 };
 
+//TODO: need to use CZombie instead of CBaseMonster
 IMPLEMENT_CUSTOM_SCHEDULES(COFGonome, CBaseMonster);
+
+void COFGonome::OnCreate()
+{
+	CZombie::OnCreate();
+
+	pev->health = GetSkillFloat("gonome_health"sv);
+}
 
 void COFGonome::PainSound()
 {
@@ -475,7 +484,7 @@ void COFGonome::Spawn()
 	m_pGonomeGuts = nullptr;
 	m_fPlayerLocked = false;
 
-	SpawnCore("models/gonome.mdl", GetSkillFloat("gonome_health"sv));
+	SpawnCore("models/gonome.mdl");
 }
 
 //=========================================================
@@ -739,6 +748,7 @@ void COFGonome::SetActivity(Activity NewActivity)
 class CDeadGonome : public CBaseMonster
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	int Classify() override { return CLASS_ALIEN_PASSIVE; }
 
@@ -749,6 +759,14 @@ public:
 };
 
 const char* CDeadGonome::m_szPoses[] = {"dead_on_stomach1", "dead_on_back", "dead_on_side"};
+
+void CDeadGonome::OnCreate()
+{
+	CBaseMonster::OnCreate();
+
+	// Corpses have less health
+	pev->health = 8;
+}
 
 bool CDeadGonome::KeyValue(KeyValueData* pkvd)
 {
@@ -781,9 +799,6 @@ void CDeadGonome::Spawn()
 	{
 		ALERT(at_console, "Dead gonome with bad pose\n");
 	}
-
-	// Corpses have less health
-	pev->health = 8;
 
 	MonsterInitDead();
 }

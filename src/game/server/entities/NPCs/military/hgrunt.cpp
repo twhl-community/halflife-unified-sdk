@@ -67,6 +67,13 @@ const char* CHGrunt::pGruntSentences[] =
 		"HG_TAUNT",	  // say rude things
 };
 
+void CHGrunt::OnCreate()
+{
+	CSquadMonster::OnCreate();
+
+	pev->health = GetSkillFloat("hgrunt_health"sv);
+}
+
 int& CHGrunt::GetGruntQuestion()
 {
 	return g_fGruntQuestion;
@@ -826,7 +833,6 @@ void CHGrunt::Spawn()
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_RED;
 	pev->effects = 0;
-	pev->health = GetSkillFloat("hgrunt_health"sv);
 	m_flFieldOfView = 0.2; // indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
 	m_flNextGrenadeCheck = gpGlobals->time + 1;
@@ -2231,6 +2237,14 @@ void CHGruntRepel::RepelUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_T
 	CreateMonster("monster_human_grunt");
 }
 
+void CDeadHGrunt::OnCreate()
+{
+	CBaseMonster::OnCreate();
+
+	// Corpses have less health
+	pev->health = 8;
+}
+
 bool CDeadHGrunt::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq(pkvd->szKeyName, "pose"))
@@ -2260,9 +2274,6 @@ void CDeadHGrunt::SpawnCore(const char* model)
 	{
 		ALERT(at_console, "Dead hgrunt with bad pose\n");
 	}
-
-	// Corpses have less health
-	pev->health = 8;
 
 	MonsterInitDead();
 }

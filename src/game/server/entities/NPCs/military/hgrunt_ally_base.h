@@ -195,7 +195,7 @@ protected:
 	/**
 	*	@brief Spawns this grunt
 	*/
-	void SpawnCore(const char* model, float health);
+	void SpawnCore(const char* model);
 
 	virtual std::tuple<int, Activity> GetSequenceForActivity(Activity NewActivity);
 

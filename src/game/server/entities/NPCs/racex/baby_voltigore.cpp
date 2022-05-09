@@ -30,6 +30,7 @@
 class COFBabyVoltigore : public COFVoltigore
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
@@ -52,6 +53,13 @@ protected:
 	bool BlowsUpOnDeath() const override { return false; }
 };
 LINK_ENTITY_TO_CLASS(monster_alien_babyvoltigore, COFBabyVoltigore);
+
+void COFBabyVoltigore::OnCreate()
+{
+	COFVoltigore::OnCreate();
+
+	pev->health = GetSkillFloat("babyvoltigore_health"sv);
+}
 
 //=========================================================
 // AlertSound
@@ -191,7 +199,7 @@ void COFBabyVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 //=========================================================
 void COFBabyVoltigore::Spawn()
 {
-	SpawnCore("models/baby_voltigore.mdl", {-16, -16, 0}, {16, 16, 32}, GetSkillFloat("babyvoltigore_health"sv));
+	SpawnCore("models/baby_voltigore.mdl", {-16, -16, 0}, {16, 16, 32});
 }
 
 //=========================================================

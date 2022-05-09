@@ -22,10 +22,12 @@ class CBeam;
 
 class CApache : public CBaseMonster
 {
+public:
 	bool Save(CSave& save) override;
 	bool Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	int Classify() override { return CLASS_HUMAN_MILITARY; }

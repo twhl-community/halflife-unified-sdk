@@ -31,6 +31,7 @@
 class CRoach : public CBaseMonster
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	void SetYawSpeed() override;
@@ -52,6 +53,13 @@ public:
 	// -----------------------------
 };
 LINK_ENTITY_TO_CLASS(monster_cockroach, CRoach);
+
+void CRoach::OnCreate()
+{
+	CBaseMonster::OnCreate();
+
+	pev->health = 1;
+}
 
 //=========================================================
 // ISoundMask - returns a bit mask indicating which types
@@ -121,7 +129,6 @@ void CRoach::Spawn()
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_YELLOW;
 	pev->effects = 0;
-	pev->health = 1;
 	m_flFieldOfView = 0.5; // indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
 

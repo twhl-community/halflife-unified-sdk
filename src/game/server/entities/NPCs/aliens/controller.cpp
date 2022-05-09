@@ -34,6 +34,7 @@
 class CController : public CSquadMonster
 {
 public:
+	void OnCreate() override;
 	bool Save(CSave& save) override;
 	bool Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
@@ -143,6 +144,12 @@ const char* CController::pDeathSounds[] =
 		"controller/con_die2.wav",
 };
 
+void CController::OnCreate()
+{
+	CSquadMonster::OnCreate();
+
+	pev->health = GetSkillFloat("controller_health"sv);
+}
 
 //=========================================================
 // Classify - indicates this monster's place in the
@@ -360,7 +367,6 @@ void CController::Spawn()
 	pev->movetype = MOVETYPE_FLY;
 	pev->flags |= FL_FLY;
 	m_bloodColor = BLOOD_COLOR_GREEN;
-	pev->health = GetSkillFloat("controller_health"sv);
 	pev->view_ofs = Vector(0, 0, -2);  // position of the eyes relative to monster's origin.
 	m_flFieldOfView = VIEW_FIELD_FULL; // indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;

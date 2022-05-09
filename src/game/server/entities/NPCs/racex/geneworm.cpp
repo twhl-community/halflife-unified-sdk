@@ -565,6 +565,7 @@ public:
 		pev->absmax = pev->origin + Vector(425.29, 164.85, 355.68);
 	}
 
+	void OnCreate() override;
 	void Precache() override;
 	void Spawn() override;
 
@@ -741,6 +742,13 @@ void COFGeneWorm::Precache()
 	PRECACHE_SOUND("geneworm/geneworm_entry.wav");
 }
 
+void COFGeneWorm::OnCreate()
+{
+	CBaseMonster::OnCreate();
+
+	pev->health = GetSkillFloat("geneworm_health"sv);
+}
+
 void COFGeneWorm::Spawn()
 {
 	Precache();
@@ -759,7 +767,7 @@ void COFGeneWorm::Spawn()
 
 	pev->effects = 0;
 
-	pev->max_health = pev->health = GetSkillFloat("geneworm_health"sv);
+	pev->max_health = pev->health;
 
 	pev->view_ofs = {0, 0, 300};
 
@@ -1540,7 +1548,7 @@ void COFGeneWorm::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vec
 					m_iWasHit = 1;
 				}
 
-				pev->health = GetSkillFloat("geneworm_health"sv);
+				pev->health = pev->max_health;
 			}
 		}
 		break;

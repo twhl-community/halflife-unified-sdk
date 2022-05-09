@@ -54,6 +54,7 @@ enum GuardHead
 class CBarney : public CTalkMonster
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	void SetYawSpeed() override;
@@ -112,7 +113,7 @@ protected:
 	*	@brief Spawns the Security Guard
 	*	@param model Must be a string literal
 	*/
-	void SpawnCore(const char* model, float health);
+	void SpawnCore(const char* model);
 
 	virtual void DropWeapon();
 

@@ -181,6 +181,7 @@ void CSquidSpit::Touch(CBaseEntity* pOther)
 class CBullsquid : public CBaseMonster
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	void SetYawSpeed() override;
@@ -227,6 +228,13 @@ TYPEDESCRIPTION CBullsquid::m_SaveData[] =
 };
 
 IMPLEMENT_SAVERESTORE(CBullsquid, CBaseMonster);
+
+void CBullsquid::OnCreate()
+{
+	CBaseMonster::OnCreate();
+
+	pev->health = GetSkillFloat("bullsquid_health"sv);
+}
 
 //=========================================================
 // IgnoreConditions
@@ -678,7 +686,6 @@ void CBullsquid::Spawn()
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_GREEN;
 	pev->effects = 0;
-	pev->health = GetSkillFloat("bullsquid_health"sv);
 	m_flFieldOfView = 0.2; // indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
 

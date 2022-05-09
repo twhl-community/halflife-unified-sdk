@@ -27,6 +27,7 @@ class CCycler : public CBaseMonster
 public:
 	int ObjectCaps() override { return (CBaseEntity::ObjectCaps() | FCAP_IMPULSE_USE); }
 	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	void OnCreate() override;
 	void Spawn() override;
 	void Think() override;
 	//void Pain( float flDamage );
@@ -53,6 +54,13 @@ IMPLEMENT_SAVERESTORE(CCycler, CBaseMonster);
 
 // Cycler member functions
 
+void CCycler::OnCreate()
+{
+	CBaseMonster::OnCreate();
+
+	pev->health = 80000; // no cycler should die
+}
+
 void CCycler::Spawn()
 {
 	const char* szModel = STRING(pev->model);
@@ -75,7 +83,6 @@ void CCycler::Spawn()
 	pev->movetype = MOVETYPE_NONE;
 	pev->takedamage = DAMAGE_YES;
 	pev->effects = 0;
-	pev->health = 80000; // no cycler should die
 	pev->yaw_speed = 5;
 	pev->ideal_yaw = pev->angles.y;
 	ChangeYaw(360);

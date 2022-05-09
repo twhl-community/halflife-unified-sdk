@@ -27,6 +27,7 @@
 class CZombie : public CBaseMonster
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	void SetYawSpeed() override;
@@ -91,7 +92,7 @@ protected:
 	*	@brief Spawns the Zombie
 	*	@param model Must be a string literal
 	*/
-	void SpawnCore(const char* model, float health);
+	void SpawnCore(const char* model);
 
 	/**
 	*	@brief Precaches all Zombie assets

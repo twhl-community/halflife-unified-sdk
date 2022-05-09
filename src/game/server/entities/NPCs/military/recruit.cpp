@@ -29,6 +29,8 @@ public:
 
 	void DeclineFollowing() override;
 
+	void OnCreate() override;
+
 	void Spawn() override;
 
 	void AlertSound() override;
@@ -49,6 +51,13 @@ protected:
 
 LINK_ENTITY_TO_CLASS(monster_recruit, CRecruit);
 
+void CRecruit::OnCreate()
+{
+	CBarney::OnCreate();
+
+	pev->health = GetSkillFloat("barney_health"sv);
+}
+
 void CRecruit::DeclineFollowing()
 {
 	PlaySentence("RC_POK", 2, VOL_NORM, ATTN_NORM);
@@ -66,7 +75,7 @@ void CRecruit::DropWeapon()
 
 void CRecruit::Spawn()
 {
-	SpawnCore("models/recruit.mdl", GetSkillFloat("barney_health"sv));
+	SpawnCore("models/recruit.mdl");
 }
 
 void CRecruit::AlertSound()

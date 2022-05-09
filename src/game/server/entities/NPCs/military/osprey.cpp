@@ -52,6 +52,13 @@ TYPEDESCRIPTION COsprey::m_SaveData[] =
 };
 IMPLEMENT_SAVERESTORE(COsprey, CBaseMonster);
 
+void COsprey::OnCreate()
+{
+	CBaseMonster::OnCreate();
+
+	pev->health = 400;
+}
+
 void COsprey::SpawnCore(const char* model)
 {
 	Precache();
@@ -66,9 +73,8 @@ void COsprey::SpawnCore(const char* model)
 	//Set FL_FLY so the Osprey model is interpolated.
 	pev->flags |= FL_MONSTER | FL_FLY;
 	pev->takedamage = DAMAGE_YES;
-	m_flRightHealth = 200;
-	m_flLeftHealth = 200;
-	pev->health = 400;
+	m_flRightHealth = pev->health / 2;
+	m_flLeftHealth = pev->health / 2;
 	pev->max_health = pev->health;
 
 	m_flFieldOfView = 0; // 180 degrees

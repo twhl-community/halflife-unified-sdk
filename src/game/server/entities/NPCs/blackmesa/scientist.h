@@ -71,6 +71,7 @@ const int SF_SCIENTIST_NO_USE = 1 << 8;
 class CScientist : public CTalkMonster
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 
@@ -122,7 +123,7 @@ protected:
 	*	@brief Spawns the Scientist
 	*	@param model Must be a string literal
 	*/
-	void SpawnCore(const char* model, float health);
+	void SpawnCore(const char* model);
 
 	/**
 	*	@brief Precaches all of the Scientist's assets
@@ -137,6 +138,7 @@ protected:
 class CSittingScientist : public CScientist // kdb: changed from public CBaseMonster so he can speak
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 

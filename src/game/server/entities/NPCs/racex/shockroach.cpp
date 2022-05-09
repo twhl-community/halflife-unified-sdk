@@ -64,6 +64,7 @@ Schedule_t slRCRangeAttack1Fast[] =
 class COFShockRoach : public CBaseMonster
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	void RunTask(Task_t* pTask) override;
@@ -151,6 +152,13 @@ const char* COFShockRoach::pBiteSounds[] =
 	{
 		"shockroach/shock_bite.wav",
 };
+
+void COFShockRoach::OnCreate()
+{
+	CBaseMonster::OnCreate();
+
+	pev->health = GetSkillFloat("shockroach_health"sv);
+}
 
 //=========================================================
 // Classify - indicates this monster's place in the
@@ -282,7 +290,6 @@ void COFShockRoach::Spawn()
 	pev->movetype = MOVETYPE_FLY;
 	m_bloodColor = BLOOD_COLOR_GREEN;
 	pev->effects = 0;
-	pev->health = GetSkillFloat("shockroach_health"sv);
 	pev->view_ofs = Vector(0, 0, 20); // position of the eyes relative to monster's origin.
 	pev->yaw_speed = 5;				  //!!! should we put this in the monster's changeanim function since turn rates may vary with state/anim?
 	m_flFieldOfView = 0.5;			  // indicates the width of this monster's forward view cone ( as a dotproduct result )

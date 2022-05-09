@@ -64,6 +64,7 @@
 class CLeech : public CBaseMonster
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 
@@ -169,6 +170,12 @@ const char* CLeech::pAlertSounds[] =
 		"leech/leech_alert2.wav",
 };
 
+void CLeech::OnCreate()
+{
+	CBaseMonster::OnCreate();
+
+	pev->health = GetSkillFloat("leech_health"sv);
+}
 
 void CLeech::Spawn()
 {
@@ -183,7 +190,6 @@ void CLeech::Spawn()
 	pev->solid = SOLID_SLIDEBOX;
 	pev->movetype = MOVETYPE_FLY;
 	SetBits(pev->flags, FL_SWIM);
-	pev->health = GetSkillFloat("leech_health"sv);
 
 	m_flFieldOfView = -0.5; // 180 degree FOV
 	m_flDistLook = 750;

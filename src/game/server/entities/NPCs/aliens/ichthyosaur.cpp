@@ -41,6 +41,7 @@
 class CIchthyosaur : public CFlyingMonster
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	void SetYawSpeed() override;
@@ -170,6 +171,13 @@ const char* CIchthyosaur::pDieSounds[] =
 		"ichy/ichy_die2.wav",
 		"ichy/ichy_die4.wav",
 };
+
+void CIchthyosaur::OnCreate()
+{
+	CFlyingMonster::OnCreate();
+
+	pev->health = GetSkillFloat("ichthyosaur_health"sv);
+}
 
 #define EMIT_ICKY_SOUND(chan, array) \
 	EMIT_SOUND_DYN(ENT(pev), chan, array[RANDOM_LONG(0, std::size(array) - 1)], 1.0, 0.6, 0, RANDOM_LONG(95, 105));
@@ -457,7 +465,6 @@ void CIchthyosaur::Spawn()
 	pev->solid = SOLID_BBOX;
 	pev->movetype = MOVETYPE_FLY;
 	m_bloodColor = BLOOD_COLOR_GREEN;
-	pev->health = GetSkillFloat("ichthyosaur_health"sv);
 	pev->view_ofs = Vector(0, 0, 16);
 	m_flFieldOfView = VIEW_FIELD_WIDE;
 	m_MonsterState = MONSTERSTATE_NONE;

@@ -32,6 +32,7 @@ class CTentacle : public CBaseMonster
 public:
 	CTentacle();
 
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	bool KeyValue(KeyValueData* pkvd) override;
@@ -226,9 +227,12 @@ typedef enum
 	TENTACLE_ANIM_none
 } TENTACLE_ANIM;
 
+void CTentacle::OnCreate()
+{
+	CBaseMonster::OnCreate();
 
-
-
+	pev->health = 75;
+}
 
 //=========================================================
 // Classify - indicates this monster's place in the
@@ -249,7 +253,7 @@ void CTentacle::Spawn()
 	pev->solid = SOLID_BBOX;
 	pev->movetype = MOVETYPE_FLY;
 	pev->effects = 0;
-	pev->health = 75;
+	pev->max_health = pev->health;
 	pev->sequence = 0;
 
 	//Always interpolate tentacles since they don't actually move.
@@ -564,7 +568,7 @@ void CTentacle::Cycle()
 			m_iGoalAnim = TENTACLE_ANIM_Pit_Idle;
 			if (pev->sequence == TENTACLE_ANIM_Pit_Idle)
 			{
-				pev->health = 75;
+				pev->health = pev->max_health;
 			}
 		}
 		else if (m_flSoundTime > gpGlobals->time)
@@ -1032,11 +1036,19 @@ void CTentacle::Killed(entvars_t* pevAttacker, int iGib)
 class CTentacleMaw : public CBaseMonster
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 };
 
 LINK_ENTITY_TO_CLASS(monster_tentaclemaw, CTentacleMaw);
+
+void CTentacleMaw::OnCreate()
+{
+	CBaseMonster::OnCreate();
+
+	pev->health = 75;
+}
 
 //
 // Tentacle Spawn
@@ -1050,7 +1062,6 @@ void CTentacleMaw::Spawn()
 	pev->solid = SOLID_NOT;
 	pev->movetype = MOVETYPE_STEP;
 	pev->effects = 0;
-	pev->health = 75;
 	pev->yaw_speed = 8;
 	pev->sequence = 0;
 

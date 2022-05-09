@@ -20,6 +20,7 @@
 class COFSkeleton : public CBaseMonster
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	int Classify() override { return CLASS_HUMAN_MILITARY; }
 
@@ -30,6 +31,14 @@ public:
 };
 
 const char* COFSkeleton::m_szPoses[] = {"s_onback", "s_sitting", "dead_against_wall", "dead_stomach"};
+
+void COFSkeleton::OnCreate()
+{
+	CBaseMonster::OnCreate();
+
+	// Corpses have less health
+	pev->health = 8;
+}
 
 bool COFSkeleton::KeyValue(KeyValueData* pkvd)
 {
@@ -63,9 +72,6 @@ void COFSkeleton::Spawn()
 	{
 		ALERT(at_console, "Dead skeleton with bad pose\n");
 	}
-
-	// Corpses have less health
-	pev->health = 8;
 
 	MonsterInitDead();
 }

@@ -213,6 +213,7 @@ void StreakSplash(const Vector& origin, const Vector& direction, int color, int 
 class CGargantua : public CBaseMonster
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	void SetYawSpeed() override;
@@ -449,6 +450,12 @@ DEFINE_CUSTOM_SCHEDULES(CGargantua){
 
 IMPLEMENT_CUSTOM_SCHEDULES(CGargantua, CBaseMonster);
 
+void CGargantua::OnCreate()
+{
+	CBaseMonster::OnCreate();
+
+	pev->health = GetSkillFloat("gargantua_health"sv);
+}
 
 void CGargantua::EyeOn(int level)
 {
@@ -764,7 +771,6 @@ void CGargantua::Spawn()
 	pev->solid = SOLID_SLIDEBOX;
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_GREEN;
-	pev->health = GetSkillFloat("gargantua_health"sv);
 	//pev->view_ofs		= Vector ( 0, 0, 96 );// taken from mdl file
 	m_flFieldOfView = -0.2; // width of forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;

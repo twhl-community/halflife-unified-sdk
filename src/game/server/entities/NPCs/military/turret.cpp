@@ -167,6 +167,7 @@ IMPLEMENT_SAVERESTORE(CBaseTurret, CBaseMonster);
 class CTurret : public CBaseTurret
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	// Think functions
@@ -195,6 +196,7 @@ IMPLEMENT_SAVERESTORE(CTurret, CBaseTurret);
 class CMiniTurret : public CBaseTurret
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	// other functions
@@ -282,11 +284,17 @@ void CBaseTurret::Precache()
 
 #define TURRET_GLOW_SPRITE "sprites/flare3.spr"
 
+void CTurret::OnCreate()
+{
+	CBaseTurret::OnCreate();
+
+	pev->health = GetSkillFloat("turret_health"sv);
+}
+
 void CTurret::Spawn()
 {
 	Precache();
 	SET_MODEL(ENT(pev), "models/turret.mdl");
-	pev->health = GetSkillFloat("turret_health"sv);
 	m_HackedGunPos = Vector(0, 0, 12.75);
 	m_flMaxSpin = TURRET_MAXSPIN;
 	pev->view_ofs.z = 12.75;
@@ -315,11 +323,17 @@ void CTurret::Precache()
 	PRECACHE_MODEL(TURRET_GLOW_SPRITE);
 }
 
+void CMiniTurret::OnCreate()
+{
+	CBaseTurret::OnCreate();
+
+	pev->health = GetSkillFloat("miniturret_health"sv);
+}
+
 void CMiniTurret::Spawn()
 {
 	Precache();
 	SET_MODEL(ENT(pev), "models/miniturret.mdl");
-	pev->health = GetSkillFloat("miniturret_health"sv);
 	m_HackedGunPos = Vector(0, 0, 12.75);
 	m_flMaxSpin = 0;
 	pev->view_ofs.z = 12.75;
@@ -1149,6 +1163,7 @@ int CBaseTurret::Classify()
 class CSentry : public CBaseTurret
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	// other functions
@@ -1160,6 +1175,13 @@ public:
 
 LINK_ENTITY_TO_CLASS(monster_sentry, CSentry);
 
+void CSentry::OnCreate()
+{
+	CBaseTurret::OnCreate();
+
+	pev->health = GetSkillFloat("sentry_health"sv);
+}
+
 void CSentry::Precache()
 {
 	CBaseTurret::Precache();
@@ -1170,7 +1192,6 @@ void CSentry::Spawn()
 {
 	Precache();
 	SET_MODEL(ENT(pev), "models/sentry.mdl");
-	pev->health = GetSkillFloat("sentry_health"sv);
 	m_HackedGunPos = Vector(0, 0, 48);
 	pev->view_ofs.z = 48;
 	m_flMaxWait = 1E6;

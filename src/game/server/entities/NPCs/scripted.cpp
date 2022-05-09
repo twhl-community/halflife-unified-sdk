@@ -1190,6 +1190,7 @@ bool CScriptedSentence::StartSentence(CBaseMonster* pTarget)
 class CFurniture : public CBaseMonster
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Die();
 	int Classify() override;
@@ -1199,6 +1200,12 @@ public:
 
 LINK_ENTITY_TO_CLASS(monster_furniture, CFurniture);
 
+void CFurniture::OnCreate()
+{
+	CBaseMonster::OnCreate();
+
+	pev->health = 80000;
+}
 
 //=========================================================
 // Furniture is killed
@@ -1220,7 +1227,6 @@ void CFurniture::Spawn()
 
 	pev->movetype = MOVETYPE_NONE;
 	pev->solid = SOLID_BBOX;
-	pev->health = 80000;
 	pev->takedamage = DAMAGE_AIM;
 	pev->effects = 0;
 	pev->yaw_speed = 0;

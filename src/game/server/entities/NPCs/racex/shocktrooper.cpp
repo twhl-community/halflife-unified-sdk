@@ -128,6 +128,7 @@ enum
 class CShockTrooper : public CSquadMonster
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	void SetYawSpeed() override;
@@ -242,6 +243,13 @@ enum
 	ShockTrooper_SENT_CHARGE,
 	ShockTrooper_SENT_TAUNT,
 } ShockTrooper_SENTENCE_TYPES;
+
+void CShockTrooper::OnCreate()
+{
+	CSquadMonster::OnCreate();
+
+	pev->health = GetSkillFloat("shocktrooper_health"sv);
+}
 
 //=========================================================
 // Speak Sentence - say your cued up sentence.
@@ -934,7 +942,6 @@ void CShockTrooper::Spawn()
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_GREEN;
 	pev->effects = 0;
-	pev->health = GetSkillFloat("shocktrooper_health"sv);
 	m_flFieldOfView = 0.2; // indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
 	m_flNextGrenadeCheck = gpGlobals->time + 1;
@@ -2305,6 +2312,7 @@ void CShockTrooperRepel::RepelUse(CBaseEntity* pActivator, CBaseEntity* pCaller,
 class CDeadShockTrooper : public CBaseMonster
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	int Classify() override { return CLASS_HUMAN_MILITARY; }
 
@@ -2315,6 +2323,14 @@ public:
 };
 
 const char* CDeadShockTrooper::m_szPoses[] = {"deadstomach", "deadside", "deadsitting"};
+
+void CDeadShockTrooper::OnCreate()
+{
+	CBaseMonster::OnCreate();
+
+	// Corpses have less health
+	pev->health = 8;
+}
 
 bool CDeadShockTrooper::KeyValue(KeyValueData* pkvd)
 {
@@ -2348,9 +2364,6 @@ void CDeadShockTrooper::Spawn()
 	{
 		ALERT(at_console, "Dead ShockTrooper with bad pose\n");
 	}
-
-	// Corpses have less health
-	pev->health = 8;
 
 	pev->skin = 0;
 

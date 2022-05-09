@@ -64,6 +64,7 @@ Schedule_t slHCRangeAttack1Fast[] =
 class CHeadCrab : public CBaseMonster
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	void RunTask(Task_t* pTask) override;
@@ -139,6 +140,13 @@ const char* CHeadCrab::pBiteSounds[] =
 	{
 		"headcrab/hc_headbite.wav",
 };
+
+void CHeadCrab::OnCreate()
+{
+	CBaseMonster::OnCreate();
+
+	pev->health = GetSkillFloat("headcrab_health"sv);
+}
 
 //=========================================================
 // Classify - indicates this monster's place in the
@@ -276,7 +284,6 @@ void CHeadCrab::Spawn()
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_GREEN;
 	pev->effects = 0;
-	pev->health = GetSkillFloat("headcrab_health"sv);
 	pev->view_ofs = Vector(0, 0, 20); // position of the eyes relative to monster's origin.
 	pev->yaw_speed = 5;				  //!!! should we put this in the monster's changeanim function since turn rates may vary with state/anim?
 	m_flFieldOfView = 0.5;			  // indicates the width of this monster's forward view cone ( as a dotproduct result )
@@ -474,6 +481,7 @@ Schedule_t* CHeadCrab::GetScheduleOfType(int Type)
 class CBabyCrab : public CHeadCrab
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	void SetYawSpeed() override;
@@ -485,6 +493,13 @@ public:
 };
 LINK_ENTITY_TO_CLASS(monster_babycrab, CBabyCrab);
 
+void CBabyCrab::OnCreate()
+{
+	CHeadCrab::OnCreate();
+
+	pev->health = GetSkillFloat("headcrab_health"sv) * 0.25; // less health than full grown
+}
+
 void CBabyCrab::Spawn()
 {
 	CHeadCrab::Spawn();
@@ -492,8 +507,6 @@ void CBabyCrab::Spawn()
 	pev->rendermode = kRenderTransTexture;
 	pev->renderamt = 192;
 	UTIL_SetSize(pev, Vector(-12, -12, 0), Vector(12, 12, 24));
-
-	pev->health = GetSkillFloat("headcrab_health"sv) * 0.25; // less health than full grown
 }
 
 void CBabyCrab::Precache()

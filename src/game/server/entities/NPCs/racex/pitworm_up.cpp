@@ -61,6 +61,8 @@ public:
 	bool Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
+	void OnCreate() override;
+
 	void Precache() override;
 
 	void Spawn() override;
@@ -275,6 +277,13 @@ const char* COFPitWormUp::pIdleSounds[] =
 		"pitworm/pit_worm_idle2.wav",
 		"pitworm/pit_worm_idle3.wav"};
 
+void COFPitWormUp::OnCreate()
+{
+	CBaseMonster::OnCreate();
+
+	pev->health = GetSkillFloat("pitworm_health"sv);
+}
+
 void COFPitWormUp::Precache()
 {
 	PRECACHE_MODEL("models/pit_worm_up.mdl");
@@ -328,7 +337,7 @@ void COFPitWormUp::Spawn()
 	pev->flags |= FL_MONSTER;
 	pev->takedamage = DAMAGE_AIM;
 
-	pev->max_health = pev->health = GetSkillFloat("pitworm_health"sv);
+	pev->max_health = pev->health;
 
 	pev->view_ofs = {0, 0, PITWORM_UP_EYE_HEIGHT};
 
@@ -1665,6 +1674,8 @@ public:
 	bool Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
+	void OnCreate() override;
+
 	int Classify() override
 	{
 		return CLASS_ALIEN_MONSTER;
@@ -1862,6 +1873,13 @@ const char* COFPitWorm::pFootSounds[] =
 
 LINK_ENTITY_TO_CLASS(monster_pitworm, COFPitWorm);
 
+void COFPitWorm::OnCreate()
+{
+	CBaseMonster::OnCreate();
+
+	pev->health = 150 * GetSkillFloat("bigmomma_health_factor"sv);
+}
+
 bool COFPitWorm::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
 	// Don't take any acid damage -- BigMomma's mortar is acid
@@ -2001,7 +2019,6 @@ void COFPitWorm::Spawn()
 	pev->solid = SOLID_SLIDEBOX;
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_GREEN;
-	pev->health = 150 * GetSkillFloat("bigmomma_health_factor"sv);
 	pev->view_ofs = Vector(0, 0, 128); // position of the eyes relative to monster's origin.
 	m_flFieldOfView = 0.3;			   // indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;

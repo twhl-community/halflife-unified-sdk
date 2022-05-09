@@ -55,6 +55,7 @@ constexpr int VOLTIGORE_BEAM_COUNT = 8;
 class COFVoltigore : public CSquadMonster
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	void SetYawSpeed() override;
@@ -157,7 +158,7 @@ protected:
 	*	@brief Spawns the Voltigore
 	*	@param model Must be a string literal
 	*/
-	void SpawnCore(const char* model, const Vector& mins, const Vector& maxs, float health);
+	void SpawnCore(const char* model, const Vector& mins, const Vector& maxs);
 
 	/**
 	*	@brief Precaches the Voltigore's assets

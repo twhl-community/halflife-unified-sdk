@@ -67,6 +67,7 @@ enum
 class CHoundeye : public CSquadMonster
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	int Classify() override;
@@ -112,6 +113,13 @@ TYPEDESCRIPTION CHoundeye::m_SaveData[] =
 };
 
 IMPLEMENT_SAVERESTORE(CHoundeye, CSquadMonster);
+
+void CHoundeye::OnCreate()
+{
+	CSquadMonster::OnCreate();
+
+	pev->health = GetSkillFloat("houndeye_health"sv);
+}
 
 //=========================================================
 // Classify - indicates this monster's place in the
@@ -326,7 +334,6 @@ void CHoundeye::Spawn()
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_YELLOW;
 	pev->effects = 0;
-	pev->health = GetSkillFloat("houndeye_health"sv);
 	pev->yaw_speed = 5;	   //!!! should we put this in the monster's changeanim function since turn rates may vary with state/anim?
 	m_flFieldOfView = 0.5; // indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
@@ -1282,6 +1289,7 @@ Schedule_t* CHoundeye::GetSchedule()
 class CDeadHoundeye : public CBaseMonster
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	int Classify() override { return CLASS_ALIEN_PASSIVE; }
 
@@ -1292,6 +1300,14 @@ public:
 };
 
 const char* CDeadHoundeye::m_szPoses[] = {"dead"};
+
+void CDeadHoundeye::OnCreate()
+{
+	CBaseMonster::OnCreate();
+
+	// Corpses have less health
+	pev->health = 8;
+}
 
 bool CDeadHoundeye::KeyValue(KeyValueData* pkvd)
 {
@@ -1325,9 +1341,6 @@ void CDeadHoundeye::Spawn()
 	{
 		ALERT(at_console, "Dead houndeye with bad pose\n");
 	}
-
-	// Corpses have less health
-	pev->health = 8;
 
 	MonsterInitDead();
 }

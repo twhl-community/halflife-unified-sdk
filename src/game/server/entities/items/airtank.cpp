@@ -16,6 +16,8 @@
 
 class CAirtank : public CGrenade
 {
+public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	void EXPORT TankThink();
@@ -40,6 +42,12 @@ TYPEDESCRIPTION CAirtank::m_SaveData[] =
 
 IMPLEMENT_SAVERESTORE(CAirtank, CGrenade);
 
+void CAirtank::OnCreate()
+{
+	CGrenade::OnCreate();
+
+	pev->health = 20;
+}
 
 void CAirtank::Spawn()
 {
@@ -57,7 +65,6 @@ void CAirtank::Spawn()
 
 	pev->flags |= FL_MONSTER;
 	pev->takedamage = DAMAGE_YES;
-	pev->health = 20;
 	pev->dmg = 50;
 	m_state = true;
 }

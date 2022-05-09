@@ -60,6 +60,7 @@ IMPLEMENT_SAVERESTORE(CFlockingFlyerFlock, CBaseMonster);
 class CFlockingFlyer : public CBaseMonster
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	void SpawnCommonCode();
@@ -122,6 +123,13 @@ TYPEDESCRIPTION CFlockingFlyer::m_SaveData[] =
 };
 
 IMPLEMENT_SAVERESTORE(CFlockingFlyer, CBaseMonster);
+
+void CFlockingFlyer::OnCreate()
+{
+	CBaseMonster::OnCreate();
+
+	pev->health = 1;
+}
 
 //=========================================================
 //=========================================================
@@ -330,7 +338,6 @@ void CFlockingFlyer::SpawnCommonCode()
 	pev->solid = SOLID_SLIDEBOX;
 	pev->movetype = MOVETYPE_FLY;
 	pev->takedamage = DAMAGE_NO;
-	pev->health = 1;
 
 	m_fPathBlocked = false; // obstacles will be detected
 	m_flFieldOfView = 0.2;

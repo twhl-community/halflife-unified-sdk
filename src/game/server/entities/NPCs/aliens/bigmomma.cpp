@@ -167,6 +167,7 @@ void MortarSpray(const Vector& position, const Vector& direction, int spriteMode
 class CBigMomma : public CBaseMonster
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	bool KeyValue(KeyValueData* pkvd) override;
@@ -377,7 +378,12 @@ const char* CBigMomma::pFootSounds[] =
 		"gonarch/gon_step3.wav",
 };
 
+void CBigMomma::OnCreate()
+{
+	CBaseMonster::OnCreate();
 
+	pev->health = 150 * GetSkillFloat("bigmomma_health_factor"sv);
+}
 
 bool CBigMomma::KeyValue(KeyValueData* pkvd)
 {
@@ -656,7 +662,6 @@ void CBigMomma::Spawn()
 	pev->solid = SOLID_SLIDEBOX;
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_GREEN;
-	pev->health = 150 * GetSkillFloat("bigmomma_health_factor"sv);
 	pev->view_ofs = Vector(0, 0, 128); // position of the eyes relative to monster's origin.
 	m_flFieldOfView = 0.3;			   // indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;

@@ -93,6 +93,7 @@ enum HGruntAllyWeapon
 class CHGruntAlly : public CBaseHGruntAlly
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
@@ -135,6 +136,13 @@ protected:
 };
 
 LINK_ENTITY_TO_CLASS(monster_human_grunt_ally, CHGruntAlly);
+
+void CHGruntAlly::OnCreate()
+{
+	CBaseHGruntAlly::OnCreate();
+
+	pev->health = GetSkillFloat("hgrunt_ally_health"sv);
+}
 
 void CHGruntAlly::DropWeapon(bool applyVelocity)
 {
@@ -315,7 +323,7 @@ void CHGruntAlly::HandleAnimEvent(MonsterEvent_t* pEvent)
 //=========================================================
 void CHGruntAlly::Spawn()
 {
-	SpawnCore("models/hgrunt_opfor.mdl", GetSkillFloat("hgrunt_ally_health"sv));
+	SpawnCore("models/hgrunt_opfor.mdl");
 
 	//TODO: make torso customizable
 	m_iGruntTorso = HGruntAllyTorso::Normal;
@@ -477,6 +485,7 @@ LINK_ENTITY_TO_CLASS(monster_grunt_ally_repel, CHGruntAllyRepel);
 class CDeadHGruntAlly : public CBaseMonster
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	int Classify() override { return CLASS_HUMAN_MILITARY_FRIENDLY; }
 
@@ -488,6 +497,14 @@ public:
 };
 
 const char* CDeadHGruntAlly::m_szPoses[] = {"deadstomach", "deadside", "deadsitting", "dead_on_back", "hgrunt_dead_stomach", "dead_headcrabed", "dead_canyon"};
+
+void CDeadHGruntAlly::OnCreate()
+{
+	CBaseMonster::OnCreate();
+
+	// Corpses have less health
+	pev->health = 8;
+}
 
 bool CDeadHGruntAlly::KeyValue(KeyValueData* pkvd)
 {
@@ -526,9 +543,6 @@ void CDeadHGruntAlly::Spawn()
 	{
 		ALERT(at_console, "Dead hgrunt with bad pose\n");
 	}
-
-	// Corpses have less health
-	pev->health = 8;
 
 	if ((pev->weapons & HGruntAllyWeaponFlag::MP5) != 0)
 	{

@@ -26,6 +26,7 @@
 class COtis : public CBarney
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	void GuardFirePistol() override;
@@ -43,6 +44,13 @@ protected:
 };
 
 LINK_ENTITY_TO_CLASS(monster_otis, COtis);
+
+void COtis::OnCreate()
+{
+	CBarney::OnCreate();
+
+	pev->health = GetSkillFloat("otis_health"sv);
+}
 
 //=========================================================
 // ALertSound - otis says "Freeze!"
@@ -96,7 +104,7 @@ void COtis::GuardFirePistol()
 //=========================================================
 void COtis::Spawn()
 {
-	SpawnCore("models/otis.mdl", GetSkillFloat("otis_health"sv));
+	SpawnCore("models/otis.mdl");
 }
 
 //=========================================================
@@ -211,6 +219,7 @@ void COtis::DeclineFollowing()
 class CDeadOtis : public CBaseMonster
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	int Classify() override { return CLASS_PLAYER_ALLY; }
 
@@ -221,6 +230,14 @@ public:
 };
 
 const char* CDeadOtis::m_szPoses[] = {"lying_on_back", "lying_on_side", "lying_on_stomach", "stuffed_in_vent", "dead_sitting"};
+
+void CDeadOtis::OnCreate()
+{
+	CBaseMonster::OnCreate();
+
+	// Corpses have less health
+	pev->health = 8; //GetSkillFloat("otis_health"sv);
+}
 
 bool CDeadOtis::KeyValue(KeyValueData* pkvd)
 {
@@ -253,8 +270,6 @@ void CDeadOtis::Spawn()
 	{
 		ALERT(at_console, "Dead otis with bad pose\n");
 	}
-	// Corpses have less health
-	pev->health = 8; //GetSkillFloat("otis_health"sv);
 
 	MonsterInitDead();
 }

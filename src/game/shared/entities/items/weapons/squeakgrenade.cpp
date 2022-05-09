@@ -27,6 +27,8 @@ enum w_squeak_e
 
 class CSqueakGrenade : public CGrenade
 {
+public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	int Classify() override;
@@ -41,6 +43,7 @@ class CSqueakGrenade : public CGrenade
 
 	static TYPEDESCRIPTION m_SaveData[];
 
+private:
 	static float m_flNextBounceSoundTime;
 
 	// CBaseEntity *m_pTarget;
@@ -69,6 +72,13 @@ TYPEDESCRIPTION CSqueakGrenade::m_SaveData[] =
 IMPLEMENT_SAVERESTORE(CSqueakGrenade, CGrenade);
 
 #define SQUEEK_DETONATE_DELAY 15.0
+
+void CSqueakGrenade::OnCreate()
+{
+	CGrenade::OnCreate();
+
+	pev->health = GetSkillFloat("snark_health"sv);
+}
 
 int CSqueakGrenade::Classify()
 {
@@ -110,7 +120,6 @@ void CSqueakGrenade::Spawn()
 
 	pev->flags |= FL_MONSTER;
 	pev->takedamage = DAMAGE_AIM;
-	pev->health = GetSkillFloat("snark_health"sv);
 	pev->gravity = 0.5;
 	pev->friction = 0.5;
 

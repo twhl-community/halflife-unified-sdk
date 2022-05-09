@@ -22,9 +22,16 @@
 class CZombieBarney : public CZombie
 {
 public:
+	void OnCreate() override
+	{
+		CZombie::OnCreate();
+
+		pev->health = GetSkillFloat("zombie_barney_health"sv);
+	}
+
 	void Spawn() override
 	{
-		SpawnCore("models/zombie_barney.mdl", GetSkillFloat("zombie_barney_health"sv));
+		SpawnCore("models/zombie_barney.mdl");
 	}
 
 	void Precache() override

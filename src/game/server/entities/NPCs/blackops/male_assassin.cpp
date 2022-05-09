@@ -75,6 +75,7 @@ enum MAssassinWeaponFlag
 class CMOFAssassin : public CHGrunt
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
@@ -119,6 +120,13 @@ TYPEDESCRIPTION CMOFAssassin::m_SaveData[] =
 };
 
 IMPLEMENT_SAVERESTORE(CMOFAssassin, CHGrunt);
+
+void CMOFAssassin::OnCreate()
+{
+	CHGrunt::OnCreate();
+
+	pev->health = GetSkillFloat("massassin_health"sv);
+}
 
 //=========================================================
 // GibMonster - make gun fly through the air.
@@ -358,7 +366,6 @@ void CMOFAssassin::Spawn()
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_RED;
 	pev->effects = 0;
-	pev->health = GetSkillFloat("massassin_health"sv);
 	m_flFieldOfView = 0.2; // indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
 	m_flNextGrenadeCheck = gpGlobals->time + 1;

@@ -65,6 +65,7 @@ int iAgruntMuzzleFlash;
 class CAGrunt : public CSquadMonster
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	void SetYawSpeed() override;
@@ -181,6 +182,13 @@ const char* CAGrunt::pAlertSounds[] =
 		"agrunt/ag_alert4.wav",
 		"agrunt/ag_alert5.wav",
 };
+
+void CAGrunt::OnCreate()
+{
+	CSquadMonster::OnCreate();
+
+	pev->health = GetSkillFloat("agrunt_health"sv);
+}
 
 //=========================================================
 // IRelationship - overridden because Human Grunts are
@@ -592,7 +600,6 @@ void CAGrunt::Spawn()
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_GREEN;
 	pev->effects = 0;
-	pev->health = GetSkillFloat("agrunt_health"sv);
 	m_flFieldOfView = 0.2; // indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
 	m_afCapability = 0;

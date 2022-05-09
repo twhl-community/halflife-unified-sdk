@@ -32,6 +32,7 @@ public:
 
 	static TYPEDESCRIPTION m_SaveData[];
 
+	void OnCreate() override;
 	void Precache() override;
 	void GibMonster() override;
 	void EXPORT SuperBounceTouch(CBaseEntity* pOther);
@@ -69,6 +70,13 @@ TYPEDESCRIPTION CPenguinGrenade::m_SaveData[] =
 IMPLEMENT_SAVERESTORE(CPenguinGrenade, CGrenade);
 
 LINK_ENTITY_TO_CLASS(monster_penguin, CPenguinGrenade);
+
+void CPenguinGrenade::OnCreate()
+{
+	CGrenade::OnCreate();
+
+	pev->health = GetSkillFloat("snark_health"sv);
+}
 
 void CPenguinGrenade::Precache()
 {
@@ -227,7 +235,6 @@ void CPenguinGrenade::Spawn()
 
 	pev->flags |= FL_MONSTER;
 	pev->takedamage = DAMAGE_AIM;
-	pev->health = GetSkillFloat("snark_health"sv);
 	pev->gravity = 0.5;
 	pev->friction = 0.5;
 

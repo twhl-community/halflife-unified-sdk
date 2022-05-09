@@ -222,6 +222,7 @@ enum PitdroneWeapon
 class CPitdrone : public CBaseMonster
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	void SetYawSpeed() override;
@@ -268,6 +269,13 @@ TYPEDESCRIPTION CPitdrone::m_SaveData[] =
 };
 
 IMPLEMENT_SAVERESTORE(CPitdrone, CBaseMonster);
+
+void CPitdrone::OnCreate()
+{
+	CBaseMonster::OnCreate();
+
+	pev->health = GetSkillFloat("pitdrone_health"sv);
+}
 
 //=========================================================
 // IgnoreConditions
@@ -662,7 +670,6 @@ void CPitdrone::Spawn()
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_GREEN;
 	pev->effects = 0;
-	pev->health = GetSkillFloat("pitdrone_health"sv);
 	m_flFieldOfView = VIEW_FIELD_WIDE; // indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
 

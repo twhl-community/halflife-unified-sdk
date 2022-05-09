@@ -27,6 +27,8 @@ public:
 
 	void DeclineFollowing() override;
 
+	void OnCreate() override;
+
 	void Spawn() override;
 
 	void AlertSound() override;
@@ -47,6 +49,13 @@ protected:
 
 LINK_ENTITY_TO_CLASS(monster_drillsergeant, CDrillSergeant);
 
+void CDrillSergeant::OnCreate()
+{
+	CBarney::OnCreate();
+
+	pev->health = GetSkillFloat("barney_health"sv);
+}
+
 void CDrillSergeant::DeclineFollowing()
 {
 	PlaySentence("DR_POK", 2, VOL_NORM, ATTN_NORM);
@@ -64,7 +73,7 @@ void CDrillSergeant::DropWeapon()
 
 void CDrillSergeant::Spawn()
 {
-	SpawnCore("models/drill.mdl", GetSkillFloat("barney_health"sv));
+	SpawnCore("models/drill.mdl");
 }
 
 void CDrillSergeant::AlertSound()

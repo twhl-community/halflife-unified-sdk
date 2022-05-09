@@ -33,6 +33,7 @@
 class CISlave : public CSquadMonster
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	void SetYawSpeed() override;
@@ -131,6 +132,13 @@ const char* CISlave::pDeathSounds[] =
 		"aslave/slv_die1.wav",
 		"aslave/slv_die2.wav",
 };
+
+void CISlave::OnCreate()
+{
+	CSquadMonster::OnCreate();
+
+	pev->health = GetSkillFloat("islave_health"sv);
+}
 
 //=========================================================
 // Classify - indicates this monster's place in the
@@ -523,7 +531,6 @@ void CISlave::Spawn()
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_GREEN;
 	pev->effects = 0;
-	pev->health = GetSkillFloat("islave_health"sv);
 	pev->view_ofs = Vector(0, 0, 64);  // position of the eyes relative to monster's origin.
 	m_flFieldOfView = VIEW_FIELD_WIDE; // NOTE: we need a wide field of view so npc will notice player and say hello
 	m_MonsterState = MONSTERSTATE_NONE;

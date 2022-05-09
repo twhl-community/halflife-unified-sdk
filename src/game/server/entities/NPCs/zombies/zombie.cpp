@@ -23,6 +23,13 @@
 
 LINK_ENTITY_TO_CLASS(monster_zombie, CZombie);
 
+void CZombie::OnCreate()
+{
+	CBaseMonster::OnCreate();
+
+	pev->health = GetSkillFloat("zombie_health"sv);
+}
+
 //=========================================================
 // Classify - indicates this monster's place in the
 // relationship table.
@@ -157,7 +164,7 @@ void CZombie::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 }
 
-void CZombie::SpawnCore(const char* model, float health)
+void CZombie::SpawnCore(const char* model)
 {
 	Precache();
 
@@ -167,7 +174,6 @@ void CZombie::SpawnCore(const char* model, float health)
 	pev->solid = SOLID_SLIDEBOX;
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_GREEN;
-	pev->health = health;
 	pev->view_ofs = VEC_VIEW; // position of the eyes relative to monster's origin.
 	m_flFieldOfView = 0.5;	  // indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
@@ -181,7 +187,7 @@ void CZombie::SpawnCore(const char* model, float health)
 //=========================================================
 void CZombie::Spawn()
 {
-	SpawnCore("models/zombie.mdl", GetSkillFloat("zombie_health"sv));
+	SpawnCore("models/zombie.mdl");
 }
 
 void CZombie::PrecacheCore(const char* model)

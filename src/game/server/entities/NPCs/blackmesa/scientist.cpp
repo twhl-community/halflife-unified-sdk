@@ -308,6 +308,12 @@ DEFINE_CUSTOM_SCHEDULES(CScientist){
 
 IMPLEMENT_CUSTOM_SCHEDULES(CScientist, CTalkMonster);
 
+void CScientist::OnCreate()
+{
+	CTalkMonster::OnCreate();
+
+	pev->health = GetSkillFloat("scientist_health"sv);
+}
 
 void CScientist::DeclineFollowing()
 {
@@ -534,7 +540,7 @@ void CScientist::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 }
 
-void CScientist::SpawnCore(const char* model, float health)
+void CScientist::SpawnCore(const char* model)
 {
 	Precache();
 
@@ -544,7 +550,6 @@ void CScientist::SpawnCore(const char* model, float health)
 	pev->solid = SOLID_SLIDEBOX;
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_RED;
-	pev->health = health;
 	pev->view_ofs = Vector(0, 0, 50);  // position of the eyes relative to monster's origin.
 	m_flFieldOfView = VIEW_FIELD_WIDE; // NOTE: we need a wide field of view so scientists will notice player and say hello
 	m_MonsterState = MONSTERSTATE_NONE;
@@ -578,7 +583,7 @@ void CScientist::SpawnCore(const char* model, float health)
 //=========================================================
 void CScientist::Spawn()
 {
-	SpawnCore("models/scientist.mdl", GetSkillFloat("scientist_health"sv));
+	SpawnCore("models/scientist.mdl");
 }
 
 void CScientist::PrecacheCore(const char* model)
@@ -1011,6 +1016,7 @@ int CScientist::FriendNumber(int arrayNumber)
 class CDeadScientist : public CBaseMonster
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	int Classify() override { return CLASS_HUMAN_PASSIVE; }
 
@@ -1019,6 +1025,14 @@ public:
 	static const char* m_szPoses[7];
 };
 const char* CDeadScientist::m_szPoses[] = {"lying_on_back", "lying_on_stomach", "dead_sitting", "dead_hang", "dead_table1", "dead_table2", "dead_table3"};
+
+void CDeadScientist::OnCreate()
+{
+	CBaseMonster::OnCreate();
+
+	// Corpses have less health
+	pev->health = 8; //GetSkillFloat("scientist_health"sv);
+}
 
 bool CDeadScientist::KeyValue(KeyValueData* pkvd)
 {
@@ -1042,8 +1056,6 @@ void CDeadScientist::Spawn()
 
 	pev->effects = 0;
 	pev->sequence = 0;
-	// Corpses have less health
-	pev->health = 8; //GetSkillFloat("scientist_health"sv);
 
 	m_bloodColor = BLOOD_COLOR_RED;
 
@@ -1087,6 +1099,13 @@ typedef enum
 	SITTING_ANIM_sitting3
 } SITTING_ANIM;
 
+void CSittingScientist::OnCreate()
+{
+	CScientist::OnCreate();
+
+	pev->health = 50;
+}
+
 void CSittingScientist::SpawnCore(const char* model)
 {
 	PRECACHE_MODEL(model);
@@ -1099,8 +1118,7 @@ void CSittingScientist::SpawnCore(const char* model)
 	pev->solid = SOLID_SLIDEBOX;
 	pev->movetype = MOVETYPE_STEP;
 	pev->effects = 0;
-	pev->health = 50;
-
+	
 	m_bloodColor = BLOOD_COLOR_RED;
 	m_flFieldOfView = VIEW_FIELD_WIDE; // indicates the width of this monster's forward view cone ( as a dotproduct result )
 
