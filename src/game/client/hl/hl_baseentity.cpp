@@ -31,6 +31,16 @@ void SkillSystem::Shutdown() {}
 float SkillSystem::GetValue(std::string_view) const { return 0; }
 
 // CBaseEntity Stubs
+void CBaseEntity::OnCreate()
+{
+	//Nothing.
+}
+
+void CBaseEntity::OnDestroy()
+{
+	//Nothing.
+}
+
 bool CBaseEntity::TakeHealth(float flHealth, int bitsDamageType) { return true; }
 bool CBaseEntity::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) { return true; }
 CBaseEntity* CBaseEntity::GetNextTarget() { return nullptr; }

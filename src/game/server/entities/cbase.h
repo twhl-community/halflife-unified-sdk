@@ -170,6 +170,17 @@ public:
 	virtual ~CBaseEntity() {}
 
 	// initialization functions
+
+	/**
+	*	@brief Called immediately after the constructor has finished to complete initialization.
+	*/
+	virtual void OnCreate();
+
+	/**
+	*	@brief Called immediately before the destructor is executed.
+	*/
+	virtual void OnDestroy();
+
 	virtual void Spawn() {}
 	virtual void Precache() {}
 	virtual bool KeyValue(KeyValueData* pkvd) { return false; }
@@ -780,6 +791,8 @@ T* GetClassPtr(T* a)
 		pev->pContainingEntity->pvPrivateData = a;
 
 		a->pev = pev;
+
+		a->OnCreate();
 	}
 	return a;
 }

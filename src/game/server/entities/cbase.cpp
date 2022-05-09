@@ -300,6 +300,8 @@ void OnFreeEntPrivateData(edict_s* pEdict)
 	{
 		auto entity = reinterpret_cast<CBaseEntity*>(pEdict->pvPrivateData);
 
+		entity->OnDestroy();
+
 		delete entity;
 
 		//Zero this out so the engine doesn't try to free it again.
@@ -495,6 +497,16 @@ void SaveReadFields(SAVERESTOREDATA* pSaveData, const char* pname, void* pBaseDa
 
 	CRestore restoreHelper(*pSaveData);
 	restoreHelper.ReadFields(pname, pBaseData, pFields, fieldCount);
+}
+
+void CBaseEntity::OnCreate()
+{
+	//Nothing.
+}
+
+void CBaseEntity::OnDestroy()
+{
+	//Nothing.
 }
 
 // give health
