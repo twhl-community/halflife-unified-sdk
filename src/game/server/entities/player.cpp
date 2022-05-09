@@ -5443,6 +5443,7 @@ void CBasePlayer::SendScoreInfoAll()
 class CDeadHEV : public CBaseMonster
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	int Classify() override { return CLASS_HUMAN_MILITARY; }
 
@@ -5453,6 +5454,14 @@ public:
 };
 
 const char* CDeadHEV::m_szPoses[] = {"deadback", "deadsitting", "deadstomach", "deadtable"};
+
+void CDeadHEV::OnCreate()
+{
+	CBaseMonster::OnCreate();
+
+	// Corpses have less health
+	pev->health = 8;
+}
 
 bool CDeadHEV::KeyValue(KeyValueData* pkvd)
 {
@@ -5489,9 +5498,6 @@ void CDeadHEV::Spawn()
 		pev->sequence = 0;
 		pev->effects = EF_BRIGHTFIELD;
 	}
-
-	// Corpses have less health
-	pev->health = 8;
 
 	MonsterInitDead();
 }
