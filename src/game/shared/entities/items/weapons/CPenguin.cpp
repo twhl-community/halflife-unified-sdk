@@ -28,9 +28,16 @@ IMPLEMENT_SAVERESTORE(CPenguin, CPenguin::BaseClass);
 
 LINK_ENTITY_TO_CLASS(weapon_penguin, CPenguin);
 
+void CPenguin::OnCreate()
+{
+	CBasePlayerWeapon::OnCreate();
+
+	pev->model = MAKE_STRING("models/w_penguinnest.mdl");
+}
+
 void CPenguin::Precache()
 {
-	g_engfuncs.pfnPrecacheModel("models/w_penguinnest.mdl");
+	g_engfuncs.pfnPrecacheModel(STRING(pev->model));
 	g_engfuncs.pfnPrecacheModel("models/v_penguin.mdl");
 	g_engfuncs.pfnPrecacheModel("models/p_penguin.mdl");
 	g_engfuncs.pfnPrecacheSound("squeek/sqk_hunt2.wav");
@@ -44,7 +51,7 @@ void CPenguin::Spawn()
 	Precache();
 
 	m_iId = WEAPON_PENGUIN;
-	g_engfuncs.pfnSetModel(edict(), "models/w_penguinnest.mdl");
+	g_engfuncs.pfnSetModel(edict(), STRING(pev->model));
 	FallInit();
 
 	m_iDefaultAmmo = PENGUIN_MAX_CLIP;
