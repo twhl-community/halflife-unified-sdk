@@ -158,6 +158,7 @@ void COFShockRoach::OnCreate()
 	CBaseMonster::OnCreate();
 
 	pev->health = GetSkillFloat("shockroach_health"sv);
+	pev->model = MAKE_STRING("models/w_shock_rifle.mdl");
 }
 
 //=========================================================
@@ -283,7 +284,7 @@ void COFShockRoach::Spawn()
 {
 	Precache();
 
-	SET_MODEL(ENT(pev), "models/w_shock_rifle.mdl");
+	SET_MODEL(ENT(pev), STRING(pev->model));
 	UTIL_SetSize(pev, Vector(-12, -12, 0), Vector(12, 12, 4));
 
 	pev->solid = SOLID_SLIDEBOX;
@@ -315,7 +316,7 @@ void COFShockRoach::Precache()
 
 	PRECACHE_SOUND("shockroach/shock_walk.wav");
 
-	PRECACHE_MODEL("models/w_shock_rifle.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
 }
 
 

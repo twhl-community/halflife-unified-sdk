@@ -30,8 +30,6 @@ class CCleansuitScientist : public CScientist
 {
 public:
 	void OnCreate() override;
-	void Spawn() override;
-	void Precache() override;
 
 	void Heal() override;
 };
@@ -43,22 +41,7 @@ void CCleansuitScientist::OnCreate()
 	CScientist::OnCreate();
 
 	pev->health = GetSkillFloat("cleansuit_scientist_health"sv);
-}
-
-//=========================================================
-// Spawn
-//=========================================================
-void CCleansuitScientist::Spawn()
-{
-	SpawnCore("models/cleansuit_scientist.mdl");
-}
-
-//=========================================================
-// Precache - precaches all resources this monster needs
-//=========================================================
-void CCleansuitScientist::Precache()
-{
-	PrecacheCore("models/cleansuit_scientist.mdl");
+	pev->model = MAKE_STRING("models/cleansuit_scientist.mdl");
 }
 
 void CCleansuitScientist::Heal()
@@ -107,6 +90,7 @@ void CDeadCleansuitScientist::OnCreate()
 
 	// Corpses have less health
 	pev->health = 8; //GetSkillFloat("scientist_health"sv);
+	pev->model = MAKE_STRING("models/cleansuit_scientist.mdl");
 }
 
 bool CDeadCleansuitScientist::KeyValue(KeyValueData* pkvd)
@@ -126,8 +110,8 @@ LINK_ENTITY_TO_CLASS(monster_cleansuit_scientist_dead, CDeadCleansuitScientist);
 //
 void CDeadCleansuitScientist::Spawn()
 {
-	PRECACHE_MODEL("models/cleansuit_scientist.mdl");
-	SET_MODEL(ENT(pev), "models/cleansuit_scientist.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
+	SET_MODEL(ENT(pev), STRING(pev->model));
 
 	pev->effects = 0;
 	pev->sequence = 0;
@@ -161,15 +145,12 @@ void CDeadCleansuitScientist::Spawn()
 class CSittingCleansuitScientist : public CSittingScientist // kdb: changed from public CBaseMonster so he can speak
 {
 public:
-	void Spawn() override;
+	void OnCreate()
+	{
+		CSittingScientist::OnCreate();
+
+		pev->model = MAKE_STRING("models/cleansuit_scientist.mdl");
+	}
 };
 
 LINK_ENTITY_TO_CLASS(monster_sitting_cleansuit_scientist, CSittingCleansuitScientist);
-
-//
-// ********** Scientist SPAWN **********
-//
-void CSittingCleansuitScientist::Spawn()
-{
-	SpawnCore("models/cleansuit_scientist.mdl");
-}

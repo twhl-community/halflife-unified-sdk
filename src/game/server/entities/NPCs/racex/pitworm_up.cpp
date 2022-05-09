@@ -282,11 +282,12 @@ void COFPitWormUp::OnCreate()
 	CBaseMonster::OnCreate();
 
 	pev->health = GetSkillFloat("pitworm_health"sv);
+	pev->model = MAKE_STRING("models/pit_worm_up.mdl");
 }
 
 void COFPitWormUp::Precache()
 {
-	PRECACHE_MODEL("models/pit_worm_up.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
 	PRECACHE_MODEL("sprites/tele1.spr");
 
 	PRECACHE_SOUND_ARRAY(pAttackSounds);
@@ -328,7 +329,7 @@ void COFPitWormUp::Spawn()
 	pev->movetype = MOVETYPE_FLY;
 	pev->solid = SOLID_BBOX;
 
-	SET_MODEL(edict(), "models/pit_worm_up.mdl");
+	SET_MODEL(edict(), STRING(pev->model));
 
 	UTIL_SetSize(pev, {-32, -32, 0}, {32, 32, 64});
 
@@ -1878,6 +1879,7 @@ void COFPitWorm::OnCreate()
 	CBaseMonster::OnCreate();
 
 	pev->health = 150 * GetSkillFloat("bigmomma_health_factor"sv);
+	pev->model = MAKE_STRING("models/pit_worm.mdl");
 }
 
 bool COFPitWorm::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
@@ -1901,7 +1903,7 @@ bool COFPitWorm::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, flo
 
 void COFPitWorm::Precache()
 {
-	g_engfuncs.pfnPrecacheModel("models/pit_worm.mdl");
+	g_engfuncs.pfnPrecacheModel(STRING(pev->model));
 	PRECACHE_SOUND_ARRAY(pChildDieSounds);
 	PRECACHE_SOUND_ARRAY(pSackSounds);
 	PRECACHE_SOUND_ARRAY(pDeathSounds);
@@ -2013,7 +2015,7 @@ void COFPitWorm::Spawn()
 {
 	Precache();
 
-	SET_MODEL(ENT(pev), "models/pit_worm.mdl");
+	SET_MODEL(ENT(pev), STRING(pev->model));
 	UTIL_SetSize(pev, Vector(-32, -32, 0), Vector(32, 32, 64));
 
 	pev->solid = SOLID_SLIDEBOX;

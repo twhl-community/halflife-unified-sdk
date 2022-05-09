@@ -18,6 +18,7 @@
 class CItem : public CBaseEntity
 {
 public:
+	void Precache() override;
 	void Spawn() override;
 	CBaseEntity* Respawn() override;
 	void EXPORT ItemTouch(CBaseEntity* pOther);

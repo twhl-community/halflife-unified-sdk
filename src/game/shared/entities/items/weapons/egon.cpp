@@ -22,11 +22,18 @@
 
 LINK_ENTITY_TO_CLASS(weapon_egon, CEgon);
 
+void CEgon::OnCreate()
+{
+	CBasePlayerWeapon::OnCreate();
+
+	pev->model = MAKE_STRING("models/w_egon.mdl");
+}
+
 void CEgon::Spawn()
 {
 	Precache();
 	m_iId = WEAPON_EGON;
-	SET_MODEL(ENT(pev), "models/w_egon.mdl");
+	SET_MODEL(ENT(pev), STRING(pev->model));
 
 	m_iDefaultAmmo = EGON_DEFAULT_GIVE;
 
@@ -36,7 +43,7 @@ void CEgon::Spawn()
 
 void CEgon::Precache()
 {
-	PRECACHE_MODEL("models/w_egon.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
 	PRECACHE_MODEL("models/v_egon.mdl");
 	PRECACHE_MODEL("models/p_egon.mdl");
 
@@ -509,15 +516,17 @@ void CEgon::EndAttack()
 
 class CEgonAmmo : public CBasePlayerAmmo
 {
-	void Spawn() override
+public:
+	void OnCreate() override
 	{
-		Precache();
-		SET_MODEL(ENT(pev), "models/w_chainammo.mdl");
-		CBasePlayerAmmo::Spawn();
+		CBasePlayerAmmo::OnCreate();
+
+		pev->model = MAKE_STRING("models/w_chainammo.mdl");
 	}
+
 	void Precache() override
 	{
-		PRECACHE_MODEL("models/w_chainammo.mdl");
+		CBasePlayerAmmo::Precache();
 		PRECACHE_SOUND("items/9mmclip1.wav");
 	}
 	bool AddAmmo(CBaseEntity* pOther) override

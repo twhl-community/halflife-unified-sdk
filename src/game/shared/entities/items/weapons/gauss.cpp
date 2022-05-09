@@ -33,11 +33,18 @@ float CGauss::GetFullChargeTime()
 extern bool g_irunninggausspred;
 #endif
 
+void CGauss::OnCreate()
+{
+	CBasePlayerWeapon::OnCreate();
+
+	pev->model = MAKE_STRING("models/w_gauss.mdl");
+}
+
 void CGauss::Spawn()
 {
 	Precache();
 	m_iId = WEAPON_GAUSS;
-	SET_MODEL(ENT(pev), "models/w_gauss.mdl");
+	SET_MODEL(ENT(pev), STRING(pev->model));
 
 	m_iDefaultAmmo = GAUSS_DEFAULT_GIVE;
 
@@ -47,7 +54,7 @@ void CGauss::Spawn()
 
 void CGauss::Precache()
 {
-	PRECACHE_MODEL("models/w_gauss.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
 	PRECACHE_MODEL("models/v_gauss.mdl");
 	PRECACHE_MODEL("models/p_gauss.mdl");
 
@@ -581,15 +588,17 @@ void CGauss::SendStopEvent(bool sendToHost)
 
 class CGaussAmmo : public CBasePlayerAmmo
 {
-	void Spawn() override
+public:
+	void OnCreate() override
 	{
-		Precache();
-		SET_MODEL(ENT(pev), "models/w_gaussammo.mdl");
-		CBasePlayerAmmo::Spawn();
+		CBasePlayerAmmo::OnCreate();
+
+		pev->model = MAKE_STRING("models/w_gaussammo.mdl");
 	}
+
 	void Precache() override
 	{
-		PRECACHE_MODEL("models/w_gaussammo.mdl");
+		CBasePlayerAmmo::Precache();
 		PRECACHE_SOUND("items/9mmclip1.wav");
 	}
 	bool AddAmmo(CBaseEntity* pOther) override

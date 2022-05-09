@@ -31,13 +31,9 @@ public:
 
 	void OnCreate() override;
 
-	void Spawn() override;
-
 	void AlertSound() override;
 
 	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
-
-	void Precache() override;
 
 	void TalkInit();
 
@@ -56,6 +52,7 @@ void CRecruit::OnCreate()
 	CBarney::OnCreate();
 
 	pev->health = GetSkillFloat("barney_health"sv);
+	pev->model = MAKE_STRING("models/recruit.mdl");
 }
 
 void CRecruit::DeclineFollowing()
@@ -71,11 +68,6 @@ void CRecruit::SpeakKilledEnemy()
 void CRecruit::DropWeapon()
 {
 	//Nothing to drop
-}
-
-void CRecruit::Spawn()
-{
-	SpawnCore("models/recruit.mdl");
 }
 
 void CRecruit::AlertSound()
@@ -125,11 +117,6 @@ bool CRecruit::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float
 	}
 
 	return ret;
-}
-
-void CRecruit::Precache()
-{
-	PrecacheCore("models/recruit.mdl");
 }
 
 void CRecruit::TalkInit()

@@ -367,11 +367,12 @@ void COp4Mortar::OnCreate()
 	CBaseToggle::OnCreate();
 
 	pev->health = 1;
+	pev->model = MAKE_STRING("models/mortar.mdl");
 }
 
 void COp4Mortar::Precache()
 {
-	PRECACHE_MODEL("models/mortar.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
 	UTIL_PrecacheOther("mortar_shell");
 	PRECACHE_SOUND("weapons/mortarhit.wav");
 	PRECACHE_SOUND("player/pl_grate1.wav");
@@ -383,7 +384,7 @@ void COp4Mortar::Spawn()
 
 	UTIL_SetOrigin(pev, pev->origin);
 
-	SET_MODEL(edict(), "models/mortar.mdl");
+	SET_MODEL(edict(), STRING(pev->model));
 
 	pev->sequence = LookupSequence("idle");
 

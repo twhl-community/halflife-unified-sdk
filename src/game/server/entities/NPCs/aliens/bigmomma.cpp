@@ -383,6 +383,7 @@ void CBigMomma::OnCreate()
 	CBaseMonster::OnCreate();
 
 	pev->health = 150 * GetSkillFloat("bigmomma_health_factor"sv);
+	pev->model = MAKE_STRING("models/big_mom.mdl");
 }
 
 bool CBigMomma::KeyValue(KeyValueData* pkvd)
@@ -656,7 +657,7 @@ void CBigMomma::Spawn()
 {
 	Precache();
 
-	SET_MODEL(ENT(pev), "models/big_mom.mdl");
+	SET_MODEL(ENT(pev), STRING(pev->model));
 	UTIL_SetSize(pev, Vector(-32, -32, 0), Vector(32, 32, 64));
 
 	pev->solid = SOLID_SLIDEBOX;
@@ -674,7 +675,7 @@ void CBigMomma::Spawn()
 //=========================================================
 void CBigMomma::Precache()
 {
-	PRECACHE_MODEL("models/big_mom.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
 
 	PRECACHE_SOUND_ARRAY(pChildDieSounds);
 	PRECACHE_SOUND_ARRAY(pSackSounds);

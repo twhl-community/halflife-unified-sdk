@@ -18,11 +18,18 @@
 
 LINK_ENTITY_TO_CLASS(item_ctfaccelerator, CItemAcceleratorCTF);
 
+void CItemAcceleratorCTF::OnCreate()
+{
+	CItemCTF::OnCreate();
+
+	pev->model = MAKE_STRING("models/w_accelerator.mdl");
+}
+
 void CItemAcceleratorCTF::Precache()
 {
 	CItemCTF::Precache();
 
-	PRECACHE_MODEL("models/w_accelerator.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
 	PRECACHE_SOUND("turret/tu_ping.wav");
 }
 
@@ -30,7 +37,7 @@ void CItemAcceleratorCTF::Spawn()
 {
 	Precache();
 
-	SET_MODEL(edict(), "models/w_accelerator.mdl");
+	SET_MODEL(edict(), STRING(pev->model));
 
 	//TODO: is this actually used?
 	pev->spawnflags |= SF_NORESPAWN;

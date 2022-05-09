@@ -232,6 +232,7 @@ void CTentacle::OnCreate()
 	CBaseMonster::OnCreate();
 
 	pev->health = 75;
+	pev->model = MAKE_STRING("models/tentacle2.mdl");
 }
 
 //=========================================================
@@ -259,7 +260,7 @@ void CTentacle::Spawn()
 	//Always interpolate tentacles since they don't actually move.
 	m_EFlags |= EFLAG_SLERP;
 
-	SET_MODEL(ENT(pev), "models/tentacle2.mdl");
+	SET_MODEL(ENT(pev), STRING(pev->model));
 	UTIL_SetSize(pev, Vector(-32, -32, 0), Vector(32, 32, 64));
 
 	pev->takedamage = DAMAGE_AIM;
@@ -296,7 +297,7 @@ void CTentacle::Spawn()
 
 void CTentacle::Precache()
 {
-	PRECACHE_MODEL("models/tentacle2.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
 
 	PRECACHE_SOUND("ambience/flies.wav");
 	PRECACHE_SOUND("ambience/squirm2.wav");
@@ -1048,6 +1049,7 @@ void CTentacleMaw::OnCreate()
 	CBaseMonster::OnCreate();
 
 	pev->health = 75;
+	pev->model = MAKE_STRING("models/maw.mdl");
 }
 
 //
@@ -1056,7 +1058,7 @@ void CTentacleMaw::OnCreate()
 void CTentacleMaw::Spawn()
 {
 	Precache();
-	SET_MODEL(ENT(pev), "models/maw.mdl");
+	SET_MODEL(ENT(pev), STRING(pev->model));
 	UTIL_SetSize(pev, Vector(-32, -32, 0), Vector(32, 32, 64));
 
 	pev->solid = SOLID_NOT;
@@ -1071,5 +1073,5 @@ void CTentacleMaw::Spawn()
 
 void CTentacleMaw::Precache()
 {
-	PRECACHE_MODEL("models/maw.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
 }

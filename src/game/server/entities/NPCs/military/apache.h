@@ -82,17 +82,4 @@ public:
 
 	int m_iDoSmokePuff;
 	CBeam* m_pBeam;
-
-protected:
-	/**
-	*	@brief Spawns the Apache
-	*	@param model Name of the Apache model. Must be a string literal
-	*/
-	void SpawnCore(const char* model);
-
-	/**
-	*	@brief Precaches all Apache assets
-	*	@param model Name of the Apache model. Must be a string literal
-	*/
-	void PrecacheCore(const char* model);
 };

@@ -103,18 +103,6 @@ public:
 	CUSTOM_SCHEDULES;
 
 protected:
-	/**
-	*	@brief Precaches all Security Guard assets
-	*	@param model Must be a string literal
-	*/
-	void PrecacheCore(const char* model);
-
-	/**
-	*	@brief Spawns the Security Guard
-	*	@param model Must be a string literal
-	*/
-	void SpawnCore(const char* model);
-
 	virtual void DropWeapon();
 
 	virtual void SpeakKilledEnemy();

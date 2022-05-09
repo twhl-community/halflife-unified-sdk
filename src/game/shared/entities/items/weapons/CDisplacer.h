@@ -41,6 +41,8 @@ class CDisplacer : public CBasePlayerWeapon
 public:
 	using BaseClass = CBasePlayerWeapon;
 
+	void OnCreate() override;
+
 	void Precache() override;
 
 	void Spawn() override;

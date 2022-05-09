@@ -913,8 +913,16 @@ void CBasePlayerWeapon::Holster()
 	m_pPlayer->pev->weaponmodel = 0;
 }
 
+void CBasePlayerAmmo::Precache()
+{
+	PRECACHE_MODEL(STRING(pev->model));
+}
+
 void CBasePlayerAmmo::Spawn()
 {
+	Precache();
+
+	SET_MODEL(edict(), STRING(pev->model));
 	pev->movetype = MOVETYPE_TOSS;
 	pev->solid = SOLID_TRIGGER;
 	UTIL_SetSize(pev, Vector(-16, -16, 0), Vector(16, 16, 16));
@@ -1093,12 +1101,19 @@ TYPEDESCRIPTION CWeaponBox::m_SaveData[] =
 
 IMPLEMENT_SAVERESTORE(CWeaponBox, CBaseEntity);
 
+void CWeaponBox::OnCreate()
+{
+	CBaseEntity::OnCreate();
+
+	pev->model = MAKE_STRING("models/w_weaponbox.mdl");
+}
+
 //=========================================================
 //
 //=========================================================
 void CWeaponBox::Precache()
 {
-	PRECACHE_MODEL("models/w_weaponbox.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
 }
 
 //=========================================================
@@ -1132,7 +1147,7 @@ void CWeaponBox::Spawn()
 
 	UTIL_SetSize(pev, g_vecZero, g_vecZero);
 
-	SET_MODEL(ENT(pev), "models/w_weaponbox.mdl");
+	SET_MODEL(ENT(pev), STRING(pev->model));
 }
 
 //=========================================================

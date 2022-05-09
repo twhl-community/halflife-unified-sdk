@@ -234,6 +234,7 @@ void CBullsquid::OnCreate()
 	CBaseMonster::OnCreate();
 
 	pev->health = GetSkillFloat("bullsquid_health"sv);
+	pev->model = MAKE_STRING("models/bullsquid.mdl");
 }
 
 //=========================================================
@@ -679,7 +680,7 @@ void CBullsquid::Spawn()
 {
 	Precache();
 
-	SET_MODEL(ENT(pev), "models/bullsquid.mdl");
+	SET_MODEL(ENT(pev), STRING(pev->model));
 	UTIL_SetSize(pev, Vector(-32, -32, 0), Vector(32, 32, 64));
 
 	pev->solid = SOLID_SLIDEBOX;
@@ -700,7 +701,7 @@ void CBullsquid::Spawn()
 //=========================================================
 void CBullsquid::Precache()
 {
-	PRECACHE_MODEL("models/bullsquid.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
 
 	PRECACHE_MODEL("sprites/bigspit.spr"); // spit projectile.
 

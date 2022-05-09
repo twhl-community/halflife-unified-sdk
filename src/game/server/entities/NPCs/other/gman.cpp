@@ -62,6 +62,7 @@ void CGMan::OnCreate()
 	CBaseMonster::OnCreate();
 
 	pev->health = 100;
+	pev->model = MAKE_STRING("models/gman.mdl");
 }
 
 //=========================================================
@@ -121,7 +122,7 @@ void CGMan::Spawn()
 {
 	Precache();
 
-	SET_MODEL(ENT(pev), "models/gman.mdl");
+	SET_MODEL(ENT(pev), STRING(pev->model));
 	UTIL_SetSize(pev, VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX);
 
 	pev->solid = SOLID_SLIDEBOX;
@@ -138,7 +139,7 @@ void CGMan::Spawn()
 //=========================================================
 void CGMan::Precache()
 {
-	PRECACHE_MODEL("models/gman.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
 }
 
 

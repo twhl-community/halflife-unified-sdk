@@ -18,18 +18,13 @@
 
 class COFBlackOpsApache : public CApache
 {
-	void Spawn() override;
-	void Precache() override;
+public:
+	void OnCreate() override
+	{
+		CApache::OnCreate();
+
+		pev->model = MAKE_STRING("models/blkop_apache.mdl");
+	}
 };
 
 LINK_ENTITY_TO_CLASS(monster_blkop_apache, COFBlackOpsApache);
-
-void COFBlackOpsApache::Spawn()
-{
-	SpawnCore("models/blkop_apache.mdl");
-}
-
-void COFBlackOpsApache::Precache()
-{
-	PrecacheCore("models/blkop_apache.mdl");
-}

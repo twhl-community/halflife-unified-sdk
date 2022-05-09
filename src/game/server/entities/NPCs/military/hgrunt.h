@@ -170,12 +170,6 @@ public:
 	static const char* pGruntSentences[];
 
 protected:
-	/**
-	*	@brief Precaches all grunt assets
-	*	@param model Must be a string literal
-	*/
-	void PrecacheCore(const char* model);
-
 	bool CheckRangeAttack2Core(float flDot, float flDist, float grenadeSpeed);
 
 	virtual std::tuple<int, Activity> GetSequenceForActivity(Activity NewActivity);
@@ -227,5 +221,5 @@ public:
 	static constexpr const char* m_szPoses[3] = {"deadstomach", "deadside", "deadsitting"};
 
 protected:
-	void SpawnCore(const char* model);
+	void SpawnCore();
 };

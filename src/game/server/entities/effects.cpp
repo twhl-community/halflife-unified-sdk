@@ -2209,14 +2209,23 @@ void CEnvBeverage::Spawn()
 class CItemSoda : public CBaseEntity
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	void EXPORT CanThink();
 	void EXPORT CanTouch(CBaseEntity* pOther);
 };
 
+void CItemSoda::OnCreate()
+{
+	CBaseEntity::OnCreate();
+
+	pev->model = MAKE_STRING("models/can.mdl");
+}
+
 void CItemSoda::Precache()
 {
+	PRECACHE_MODEL(STRING(pev->model));
 }
 
 LINK_ENTITY_TO_CLASS(item_sodacan, CItemSoda);
@@ -2227,7 +2236,7 @@ void CItemSoda::Spawn()
 	pev->solid = SOLID_NOT;
 	pev->movetype = MOVETYPE_TOSS;
 
-	SET_MODEL(ENT(pev), "models/can.mdl");
+	SET_MODEL(ENT(pev), STRING(pev->model));
 	UTIL_SetSize(pev, Vector(0, 0, 0), Vector(0, 0, 0));
 
 	SetThink(&CItemSoda::CanThink);

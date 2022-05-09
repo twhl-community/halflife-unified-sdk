@@ -21,9 +21,16 @@
 
 LINK_ENTITY_TO_CLASS(item_ctflongjump, CItemLongJumpCTF);
 
+void CItemLongJumpCTF::OnCreate()
+{
+	CItemCTF::OnCreate();
+
+	pev->model = MAKE_STRING("models/w_jumppack.mdl");
+}
+
 void CItemLongJumpCTF::Precache()
 {
-	g_engfuncs.pfnPrecacheModel("models/w_jumppack.mdl");
+	g_engfuncs.pfnPrecacheModel(STRING(pev->model));
 	g_engfuncs.pfnPrecacheSound("ctf/pow_big_jump.wav");
 }
 
@@ -69,17 +76,12 @@ bool CItemLongJumpCTF::MyTouch(CBasePlayer* pPlayer)
 
 void CItemLongJumpCTF::Spawn()
 {
-	//TODO: precache calls should be in Precache
-	if (!FStringNull(pev->model))
-		g_engfuncs.pfnPrecacheModel(STRING(pev->model));
-
 	g_engfuncs.pfnPrecacheSound("ctf/itemthrow.wav");
 	g_engfuncs.pfnPrecacheSound("items/ammopickup1.wav");
 
 	Precache();
 
-	//TODO: shouldn't this be using pev->model?
-	g_engfuncs.pfnSetModel(edict(), "models/w_jumppack.mdl");
+	g_engfuncs.pfnSetModel(edict(), STRING(pev->model));
 
 	pev->spawnflags |= SF_NORESPAWN;
 	pev->oldorigin = pev->origin;

@@ -28,6 +28,7 @@ void CZombie::OnCreate()
 	CBaseMonster::OnCreate();
 
 	pev->health = GetSkillFloat("zombie_health"sv);
+	pev->model = MAKE_STRING("models/zombie.mdl");
 }
 
 //=========================================================
@@ -164,11 +165,11 @@ void CZombie::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 }
 
-void CZombie::SpawnCore(const char* model)
+void CZombie::Spawn()
 {
 	Precache();
 
-	SET_MODEL(ENT(pev), model);
+	SET_MODEL(ENT(pev), STRING(pev->model));
 	UTIL_SetSize(pev, VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX);
 
 	pev->solid = SOLID_SLIDEBOX;
@@ -182,17 +183,9 @@ void CZombie::SpawnCore(const char* model)
 	MonsterInit();
 }
 
-//=========================================================
-// Spawn
-//=========================================================
-void CZombie::Spawn()
+void CZombie::Precache()
 {
-	SpawnCore("models/zombie.mdl");
-}
-
-void CZombie::PrecacheCore(const char* model)
-{
-	PRECACHE_MODEL(model);
+	PRECACHE_MODEL(STRING(pev->model));
 
 	PRECACHE_SOUND_ARRAY(pAttackHitSounds);
 	PRECACHE_SOUND_ARRAY(pAttackMissSounds);
@@ -200,14 +193,6 @@ void CZombie::PrecacheCore(const char* model)
 	PRECACHE_SOUND_ARRAY(pIdleSounds);
 	PRECACHE_SOUND_ARRAY(pAlertSounds);
 	PRECACHE_SOUND_ARRAY(pPainSounds);
-}
-
-//=========================================================
-// Precache - precaches all resources this monster needs
-//=========================================================
-void CZombie::Precache()
-{
-	PrecacheCore("models/zombie.mdl");
 }
 
 //=========================================================

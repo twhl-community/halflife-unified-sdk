@@ -29,13 +29,9 @@ public:
 
 	void OnCreate() override;
 
-	void Spawn() override;
-
 	void AlertSound() override;
 
 	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
-
-	void Precache() override;
 
 	void TalkInit() override;
 
@@ -54,6 +50,7 @@ void CDrillSergeant::OnCreate()
 	CBarney::OnCreate();
 
 	pev->health = GetSkillFloat("barney_health"sv);
+	pev->model = MAKE_STRING("models/drill.mdl");
 }
 
 void CDrillSergeant::DeclineFollowing()
@@ -69,11 +66,6 @@ void CDrillSergeant::SpeakKilledEnemy()
 void CDrillSergeant::DropWeapon()
 {
 	//Nothing to drop
-}
-
-void CDrillSergeant::Spawn()
-{
-	SpawnCore("models/drill.mdl");
 }
 
 void CDrillSergeant::AlertSound()
@@ -123,11 +115,6 @@ bool CDrillSergeant::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker,
 	}
 
 	return ret;
-}
-
-void CDrillSergeant::Precache()
-{
-	PrecacheCore("models/drill.mdl");
 }
 
 void CDrillSergeant::TalkInit()

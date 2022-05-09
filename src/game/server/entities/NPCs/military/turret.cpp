@@ -268,6 +268,7 @@ void CBaseTurret::Spawn()
 
 void CBaseTurret::Precache()
 {
+	PRECACHE_MODEL(STRING(pev->model));
 	PRECACHE_SOUND("turret/tu_fire1.wav");
 	PRECACHE_SOUND("turret/tu_ping.wav");
 	PRECACHE_SOUND("turret/tu_active2.wav");
@@ -289,12 +290,13 @@ void CTurret::OnCreate()
 	CBaseTurret::OnCreate();
 
 	pev->health = GetSkillFloat("turret_health"sv);
+	pev->model = MAKE_STRING("models/turret.mdl");
 }
 
 void CTurret::Spawn()
 {
 	Precache();
-	SET_MODEL(ENT(pev), "models/turret.mdl");
+	SET_MODEL(ENT(pev), STRING(pev->model));
 	m_HackedGunPos = Vector(0, 0, 12.75);
 	m_flMaxSpin = TURRET_MAXSPIN;
 	pev->view_ofs.z = 12.75;
@@ -319,7 +321,6 @@ void CTurret::Spawn()
 void CTurret::Precache()
 {
 	CBaseTurret::Precache();
-	PRECACHE_MODEL("models/turret.mdl");
 	PRECACHE_MODEL(TURRET_GLOW_SPRITE);
 }
 
@@ -328,12 +329,13 @@ void CMiniTurret::OnCreate()
 	CBaseTurret::OnCreate();
 
 	pev->health = GetSkillFloat("miniturret_health"sv);
+	pev->model = MAKE_STRING("models/miniturret.mdl");
 }
 
 void CMiniTurret::Spawn()
 {
 	Precache();
-	SET_MODEL(ENT(pev), "models/miniturret.mdl");
+	SET_MODEL(ENT(pev), STRING(pev->model));
 	m_HackedGunPos = Vector(0, 0, 12.75);
 	m_flMaxSpin = 0;
 	pev->view_ofs.z = 12.75;
@@ -352,7 +354,6 @@ void CMiniTurret::Spawn()
 void CMiniTurret::Precache()
 {
 	CBaseTurret::Precache();
-	PRECACHE_MODEL("models/miniturret.mdl");
 	PRECACHE_SOUND("weapons/hks1.wav");
 	PRECACHE_SOUND("weapons/hks2.wav");
 	PRECACHE_SOUND("weapons/hks3.wav");
@@ -1165,7 +1166,6 @@ class CSentry : public CBaseTurret
 public:
 	void OnCreate() override;
 	void Spawn() override;
-	void Precache() override;
 	// other functions
 	void Shoot(Vector& vecSrc, Vector& vecDirToEnemy) override;
 	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
@@ -1180,18 +1180,13 @@ void CSentry::OnCreate()
 	CBaseTurret::OnCreate();
 
 	pev->health = GetSkillFloat("sentry_health"sv);
-}
-
-void CSentry::Precache()
-{
-	CBaseTurret::Precache();
-	PRECACHE_MODEL("models/sentry.mdl");
+	pev->model = MAKE_STRING("models/sentry.mdl");
 }
 
 void CSentry::Spawn()
 {
 	Precache();
-	SET_MODEL(ENT(pev), "models/sentry.mdl");
+	SET_MODEL(ENT(pev), STRING(pev->model));
 	m_HackedGunPos = Vector(0, 0, 48);
 	pev->view_ofs.z = 48;
 	m_flMaxWait = 1E6;

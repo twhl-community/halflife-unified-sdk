@@ -21,11 +21,18 @@
 
 LINK_ENTITY_TO_CLASS(weapon_crowbar, CCrowbar);
 
+void CCrowbar::OnCreate()
+{
+	CBasePlayerWeapon::OnCreate();
+
+	pev->model = MAKE_STRING("models/w_crowbar.mdl");
+}
+
 void CCrowbar::Spawn()
 {
 	Precache();
 	m_iId = WEAPON_CROWBAR;
-	SET_MODEL(ENT(pev), "models/w_crowbar.mdl");
+	SET_MODEL(ENT(pev), STRING(pev->model));
 	m_iClip = -1;
 
 	FallInit(); // get ready to fall down.
@@ -35,7 +42,7 @@ void CCrowbar::Spawn()
 void CCrowbar::Precache()
 {
 	PRECACHE_MODEL("models/v_crowbar.mdl");
-	PRECACHE_MODEL("models/w_crowbar.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
 	PRECACHE_MODEL("models/p_crowbar.mdl");
 	PRECACHE_SOUND("weapons/cbar_hit1.wav");
 	PRECACHE_SOUND("weapons/cbar_hit2.wav");

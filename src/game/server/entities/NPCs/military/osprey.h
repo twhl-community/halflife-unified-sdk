@@ -101,11 +101,5 @@ protected:
 	*	@brief Precaches all Osprey assets
 	*	@details Inputs must be string literals
 	*/
-	void PrecacheCore(const char* ospreyModel, const char* tailModel, const char* bodyModel, const char* engineModel);
-
-	/**
-	*	@brief Spawns the Osprey
-	*	@param model Name of the Osprey model. Must be a string literal
-	*/
-	void SpawnCore(const char* model);
+	void PrecacheCore(const char* tailModel, const char* bodyModel, const char* engineModel);
 };

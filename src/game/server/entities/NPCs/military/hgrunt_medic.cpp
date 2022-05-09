@@ -183,6 +183,7 @@ void COFMedicAlly::OnCreate()
 	CBaseHGruntAlly::OnCreate();
 
 	pev->health = GetSkillFloat("medic_ally_health"sv);
+	pev->model = MAKE_STRING("models/hgrunt_medic.mdl");
 
 	// get voice pitch
 	m_voicePitch = 105;
@@ -321,7 +322,7 @@ void COFMedicAlly::HandleAnimEvent(MonsterEvent_t* pEvent)
 //=========================================================
 void COFMedicAlly::Spawn()
 {
-	SpawnCore("models/hgrunt_medic.mdl");
+	SpawnCore();
 
 	m_flLastUseTime = 0;
 	m_iHealCharge = GetSkillFloat("medic_ally_heal"sv);
@@ -384,8 +385,6 @@ void COFMedicAlly::Spawn()
 //=========================================================
 void COFMedicAlly::Precache()
 {
-	PRECACHE_MODEL("models/hgrunt_medic.mdl");
-
 	PRECACHE_SOUND("weapons/desert_eagle_fire.wav");
 	PRECACHE_SOUND("weapons/desert_eagle_reload.wav");
 

@@ -22,6 +22,8 @@ class CItemAcceleratorCTF : public CItemCTF
 public:
 	int Classify() override { return CLASS_CTFITEM; }
 
+	void OnCreate() override;
+
 	void Precache() override;
 
 	void Spawn() override;

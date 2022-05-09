@@ -143,6 +143,7 @@ void CBarney::OnCreate()
 	CTalkMonster::OnCreate();
 
 	pev->health = GetSkillFloat("barney_health"sv);
+	pev->model = MAKE_STRING("models/barney.mdl");
 }
 
 void CBarney::StartTask(Task_t* pTask)
@@ -333,11 +334,11 @@ void CBarney::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 }
 
-void CBarney::SpawnCore(const char* model)
+void CBarney::Spawn()
 {
 	Precache();
 
-	SET_MODEL(ENT(pev), model);
+	SET_MODEL(ENT(pev), STRING(pev->model));
 	UTIL_SetSize(pev, VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX);
 
 	pev->solid = SOLID_SLIDEBOX;
@@ -368,17 +369,9 @@ void CBarney::SpawnCore(const char* model)
 	SetUse(&CBarney::FollowerUse);
 }
 
-//=========================================================
-// Spawn
-//=========================================================
-void CBarney::Spawn()
+void CBarney::Precache()
 {
-	SpawnCore("models/barney.mdl");
-}
-
-void CBarney::PrecacheCore(const char* model)
-{
-	PRECACHE_MODEL(model);
+	PRECACHE_MODEL(STRING(pev->model));
 
 	PRECACHE_SOUND("barney/ba_attack1.wav");
 	PRECACHE_SOUND("barney/ba_attack2.wav");
@@ -395,14 +388,6 @@ void CBarney::PrecacheCore(const char* model)
 	// when a level is loaded, nobody will talk (time is reset to 0)
 	TalkInit();
 	CTalkMonster::Precache();
-}
-
-//=========================================================
-// Precache - precaches all resources this monster needs
-//=========================================================
-void CBarney::Precache()
-{
-	PrecacheCore("models/barney.mdl");
 }
 
 // Init talk data
@@ -768,6 +753,7 @@ void CDeadBarney::OnCreate()
 
 	// Corpses have less health
 	pev->health = 8; //GetSkillFloat("barney_health"sv);
+	pev->model = MAKE_STRING("models/barney.mdl");
 }
 
 bool CDeadBarney::KeyValue(KeyValueData* pkvd)
@@ -788,8 +774,8 @@ LINK_ENTITY_TO_CLASS(monster_barney_dead, CDeadBarney);
 //=========================================================
 void CDeadBarney::Spawn()
 {
-	PRECACHE_MODEL("models/barney.mdl");
-	SET_MODEL(ENT(pev), "models/barney.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
+	SET_MODEL(ENT(pev), STRING(pev->model));
 
 	pev->effects = 0;
 	pev->yaw_speed = 8;

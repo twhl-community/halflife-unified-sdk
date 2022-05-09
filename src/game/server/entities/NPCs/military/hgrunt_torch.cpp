@@ -123,6 +123,7 @@ void COFTorchAlly::OnCreate()
 	CBaseHGruntAlly::OnCreate();
 
 	pev->health = GetSkillFloat("torch_ally_health"sv);
+	pev->model = MAKE_STRING("models/hgrunt_torch.mdl");
 
 	// get voice pitch
 	m_voicePitch = 95;
@@ -299,7 +300,7 @@ void COFTorchAlly::HandleAnimEvent(MonsterEvent_t* pEvent)
 //=========================================================
 void COFTorchAlly::Spawn()
 {
-	SpawnCore("models/hgrunt_torch.mdl");
+	SpawnCore();
 
 	m_fTorchActive = false;
 
@@ -334,7 +335,6 @@ void COFTorchAlly::Spawn()
 //=========================================================
 void COFTorchAlly::Precache()
 {
-	PRECACHE_MODEL("models/hgrunt_torch.mdl");
 	PRECACHE_MODEL(TORCH_BEAM_SPRITE);
 
 	PRECACHE_SOUND("weapons/desert_eagle_fire.wav");

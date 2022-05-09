@@ -302,6 +302,7 @@ void COFGonome::OnCreate()
 	CZombie::OnCreate();
 
 	pev->health = GetSkillFloat("gonome_health"sv);
+	pev->model = MAKE_STRING("models/gonome.mdl");
 }
 
 void COFGonome::PainSound()
@@ -484,7 +485,7 @@ void COFGonome::Spawn()
 	m_pGonomeGuts = nullptr;
 	m_fPlayerLocked = false;
 
-	SpawnCore("models/gonome.mdl");
+	CZombie::Spawn();
 }
 
 //=========================================================
@@ -492,7 +493,8 @@ void COFGonome::Spawn()
 //=========================================================
 void COFGonome::Precache()
 {
-	PRECACHE_MODEL("models/gonome.mdl");
+	//Don't call CZombie::Spawn here!
+	PRECACHE_MODEL(STRING(pev->model));
 	PRECACHE_MODEL("sprites/bigspit.spr");
 
 	PRECACHE_SOUND_ARRAY(pAttackHitSounds);
@@ -766,6 +768,7 @@ void CDeadGonome::OnCreate()
 
 	// Corpses have less health
 	pev->health = 8;
+	pev->model = MAKE_STRING("models/gonome.mdl");
 }
 
 bool CDeadGonome::KeyValue(KeyValueData* pkvd)
@@ -786,8 +789,8 @@ LINK_ENTITY_TO_CLASS(monster_gonome_dead, CDeadGonome);
 //=========================================================
 void CDeadGonome::Spawn()
 {
-	PRECACHE_MODEL("models/gonome.mdl");
-	SET_MODEL(ENT(pev), "models/gonome.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
+	SET_MODEL(ENT(pev), STRING(pev->model));
 
 	pev->effects = 0;
 	pev->sequence = 0;

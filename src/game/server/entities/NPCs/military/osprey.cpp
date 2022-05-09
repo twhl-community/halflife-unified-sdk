@@ -57,16 +57,17 @@ void COsprey::OnCreate()
 	CBaseMonster::OnCreate();
 
 	pev->health = 400;
+	pev->model = MAKE_STRING("models/osprey.mdl");
 }
 
-void COsprey::SpawnCore(const char* model)
+void COsprey::Spawn()
 {
 	Precache();
 	// motor
 	pev->movetype = MOVETYPE_FLY;
 	pev->solid = SOLID_BBOX;
 
-	SET_MODEL(ENT(pev), model);
+	SET_MODEL(ENT(pev), STRING(pev->model));
 	UTIL_SetSize(pev, Vector(-400, -400, -100), Vector(400, 400, 32));
 	UTIL_SetOrigin(pev, pev->origin);
 
@@ -98,16 +99,11 @@ void COsprey::SpawnCore(const char* model)
 	m_vel2 = pev->velocity;
 }
 
-void COsprey::Spawn()
-{
-	SpawnCore("models/osprey.mdl");
-}
-
-void COsprey::PrecacheCore(const char* ospreyModel, const char* tailModel, const char* bodyModel, const char* engineModel)
+void COsprey::PrecacheCore(const char* tailModel, const char* bodyModel, const char* engineModel)
 {
 	UTIL_PrecacheOther(GetMonsterClassname());
 
-	PRECACHE_MODEL(ospreyModel);
+	PRECACHE_MODEL(STRING(pev->model));
 	PRECACHE_MODEL("models/HVR.mdl");
 
 	PRECACHE_SOUND("apache/ap_rotor4.wav");
@@ -123,7 +119,7 @@ void COsprey::PrecacheCore(const char* ospreyModel, const char* tailModel, const
 
 void COsprey::Precache()
 {
-	PrecacheCore("models/osprey.mdl", "models/osprey_tailgibs.mdl", "models/osprey_bodygibs.mdl", "models/osprey_enginegibs.mdl");
+	PrecacheCore("models/osprey_tailgibs.mdl", "models/osprey_bodygibs.mdl", "models/osprey_enginegibs.mdl");
 }
 
 void COsprey::CommandUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)

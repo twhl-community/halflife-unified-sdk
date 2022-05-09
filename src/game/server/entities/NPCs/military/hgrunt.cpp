@@ -72,6 +72,7 @@ void CHGrunt::OnCreate()
 	CSquadMonster::OnCreate();
 
 	pev->health = GetSkillFloat("hgrunt_health"sv);
+	pev->model = MAKE_STRING("models/hgrunt.mdl");
 }
 
 int& CHGrunt::GetGruntQuestion()
@@ -826,7 +827,7 @@ void CHGrunt::Spawn()
 {
 	Precache();
 
-	SET_MODEL(ENT(pev), "models/hgrunt.mdl");
+	SET_MODEL(ENT(pev), STRING(pev->model));
 	UTIL_SetSize(pev, VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX);
 
 	pev->solid = SOLID_SLIDEBOX;
@@ -885,9 +886,9 @@ void CHGrunt::Spawn()
 	MonsterInit();
 }
 
-void CHGrunt::PrecacheCore(const char* model)
+void CHGrunt::Precache()
 {
-	PRECACHE_MODEL(model);
+	PRECACHE_MODEL(STRING(pev->model));
 
 	PRECACHE_SOUND("hgrunt/gr_mgun1.wav");
 	PRECACHE_SOUND("hgrunt/gr_mgun2.wav");
@@ -918,14 +919,6 @@ void CHGrunt::PrecacheCore(const char* model)
 
 	m_iBrassShell = PRECACHE_MODEL("models/shell.mdl"); // brass shell
 	m_iShotgunShell = PRECACHE_MODEL("models/shotgunshell.mdl");
-}
-
-//=========================================================
-// Precache - precaches all resources this monster needs
-//=========================================================
-void CHGrunt::Precache()
-{
-	PrecacheCore("models/hgrunt.mdl");
 }
 
 //=========================================================
@@ -2243,6 +2236,7 @@ void CDeadHGrunt::OnCreate()
 
 	// Corpses have less health
 	pev->health = 8;
+	pev->model = MAKE_STRING("models/hgrunt.mdl");
 }
 
 bool CDeadHGrunt::KeyValue(KeyValueData* pkvd)
@@ -2258,10 +2252,10 @@ bool CDeadHGrunt::KeyValue(KeyValueData* pkvd)
 
 LINK_ENTITY_TO_CLASS(monster_hgrunt_dead, CDeadHGrunt);
 
-void CDeadHGrunt::SpawnCore(const char* model)
+void CDeadHGrunt::SpawnCore()
 {
-	PRECACHE_MODEL(model);
-	SET_MODEL(ENT(pev), model);
+	PRECACHE_MODEL(STRING(pev->model));
+	SET_MODEL(ENT(pev), STRING(pev->model));
 
 	pev->effects = 0;
 	pev->yaw_speed = 8;
@@ -2280,7 +2274,7 @@ void CDeadHGrunt::SpawnCore(const char* model)
 
 void CDeadHGrunt::Spawn()
 {
-	SpawnCore("models/hgrunt.mdl");
+	SpawnCore();
 
 	// map old bodies onto new bodies
 	switch (pev->body)

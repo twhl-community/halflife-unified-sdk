@@ -27,16 +27,7 @@ public:
 		CZombie::OnCreate();
 
 		pev->health = GetSkillFloat("zombie_soldier_health"sv);
-	}
-
-	void Spawn() override
-	{
-		SpawnCore("models/zombie_soldier.mdl");
-	}
-
-	void Precache() override
-	{
-		PrecacheCore("models/zombie_soldier.mdl");
+		pev->model = MAKE_STRING("models/zombie_soldier.mdl");
 	}
 
 protected:
@@ -70,6 +61,7 @@ void CDeadZombieSoldier::OnCreate()
 
 	// Corpses have less health
 	pev->health = 8;
+	pev->model = MAKE_STRING("models/zombie_soldier.mdl");
 }
 
 bool CDeadZombieSoldier::KeyValue(KeyValueData* pkvd)
@@ -90,8 +82,8 @@ LINK_ENTITY_TO_CLASS(monster_zombie_soldier_dead, CDeadZombieSoldier);
 //=========================================================
 void CDeadZombieSoldier::Spawn()
 {
-	PRECACHE_MODEL("models/zombie_soldier.mdl");
-	SET_MODEL(ENT(pev), "models/zombie_soldier.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
+	SET_MODEL(ENT(pev), STRING(pev->model));
 
 	pev->effects = 0;
 	pev->yaw_speed = 8;

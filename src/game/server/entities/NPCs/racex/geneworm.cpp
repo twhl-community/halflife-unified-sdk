@@ -700,7 +700,7 @@ const char* COFGeneWorm::pSpawnSounds[] =
 
 void COFGeneWorm::Precache()
 {
-	PRECACHE_MODEL("models/geneworm.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
 	PRECACHE_MODEL("sprites/lgtning.spr");
 	PRECACHE_MODEL("sprites/tele1.spr");
 	PRECACHE_MODEL("sprites/bigspit.spr");
@@ -747,6 +747,7 @@ void COFGeneWorm::OnCreate()
 	CBaseMonster::OnCreate();
 
 	pev->health = GetSkillFloat("geneworm_health"sv);
+	pev->model = MAKE_STRING("models/geneworm.mdl");
 }
 
 void COFGeneWorm::Spawn()
@@ -756,7 +757,7 @@ void COFGeneWorm::Spawn()
 	pev->movetype = MOVETYPE_FLY;
 	pev->solid = SOLID_NOT;
 
-	SET_MODEL(edict(), "models/geneworm.mdl");
+	SET_MODEL(edict(), STRING(pev->model));
 
 	UTIL_SetSize(pev, {-436.67, -720.49, -331.74}, {425.29, 164.85, 355.68});
 

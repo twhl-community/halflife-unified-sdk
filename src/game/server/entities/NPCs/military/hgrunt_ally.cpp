@@ -142,6 +142,7 @@ void CHGruntAlly::OnCreate()
 	CBaseHGruntAlly::OnCreate();
 
 	pev->health = GetSkillFloat("hgrunt_ally_health"sv);
+	pev->model = MAKE_STRING("models/hgrunt_opfor.mdl");
 }
 
 void CHGruntAlly::DropWeapon(bool applyVelocity)
@@ -323,7 +324,7 @@ void CHGruntAlly::HandleAnimEvent(MonsterEvent_t* pEvent)
 //=========================================================
 void CHGruntAlly::Spawn()
 {
-	SpawnCore("models/hgrunt_opfor.mdl");
+	SpawnCore();
 
 	//TODO: make torso customizable
 	m_iGruntTorso = HGruntAllyTorso::Normal;
@@ -395,8 +396,6 @@ void CHGruntAlly::Spawn()
 //=========================================================
 void CHGruntAlly::Precache()
 {
-	PRECACHE_MODEL("models/hgrunt_opfor.mdl");
-
 	PRECACHE_SOUND("weapons/saw_fire1.wav");
 	PRECACHE_SOUND("weapons/saw_fire2.wav");
 	PRECACHE_SOUND("weapons/saw_fire3.wav");
@@ -504,6 +503,7 @@ void CDeadHGruntAlly::OnCreate()
 
 	// Corpses have less health
 	pev->health = 8;
+	pev->model = MAKE_STRING("models/hgrunt_opfor.mdl");
 }
 
 bool CDeadHGruntAlly::KeyValue(KeyValueData* pkvd)
@@ -529,8 +529,8 @@ LINK_ENTITY_TO_CLASS(monster_human_grunt_ally_dead, CDeadHGruntAlly);
 //=========================================================
 void CDeadHGruntAlly::Spawn()
 {
-	PRECACHE_MODEL("models/hgrunt_opfor.mdl");
-	SET_MODEL(ENT(pev), "models/hgrunt_opfor.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
+	SET_MODEL(ENT(pev), STRING(pev->model));
 
 	pev->effects = 0;
 	pev->yaw_speed = 8;

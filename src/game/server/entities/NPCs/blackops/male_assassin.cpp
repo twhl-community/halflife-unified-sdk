@@ -77,7 +77,6 @@ class CMOFAssassin : public CHGrunt
 public:
 	void OnCreate() override;
 	void Spawn() override;
-	void Precache() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 	bool CheckRangeAttack1(float flDot, float flDist) override;
 	bool CheckRangeAttack2(float flDot, float flDist) override;
@@ -126,6 +125,7 @@ void CMOFAssassin::OnCreate()
 	CHGrunt::OnCreate();
 
 	pev->health = GetSkillFloat("massassin_health"sv);
+	pev->model = MAKE_STRING("models/massn.mdl");
 }
 
 //=========================================================
@@ -359,7 +359,7 @@ void CMOFAssassin::Spawn()
 {
 	Precache();
 
-	SET_MODEL(ENT(pev), "models/massn.mdl");
+	SET_MODEL(ENT(pev), STRING(pev->model));
 	UTIL_SetSize(pev, VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX);
 
 	pev->solid = SOLID_SLIDEBOX;
@@ -424,14 +424,6 @@ void CMOFAssassin::Spawn()
 	CTalkMonster::g_talkWaitTime = 0;
 
 	MonsterInit();
-}
-
-//=========================================================
-// Precache - precaches all resources this monster needs
-//=========================================================
-void CMOFAssassin::Precache()
-{
-	PrecacheCore("models/massn.mdl");
 }
 
 //=========================================================
@@ -507,14 +499,22 @@ void CMOFAssassinRepel::RepelUse(CBaseEntity* pActivator, CBaseEntity* pCaller, 
 class CDeadMOFAssassin : public CDeadHGrunt
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 };
 
 LINK_ENTITY_TO_CLASS(monster_massassin_dead, CDeadMOFAssassin);
 
+void CDeadMOFAssassin::OnCreate()
+{
+	CDeadHGrunt::OnCreate();
+
+	pev->model = MAKE_STRING("models/massn.mdl");
+}
+
 void CDeadMOFAssassin::Spawn()
 {
-	SpawnCore("models/massn.mdl");
+	SpawnCore();
 
 	// map old bodies onto new bodies
 	switch (pev->body)

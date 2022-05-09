@@ -19,6 +19,12 @@
 LINK_ENTITY_TO_CLASS(weapon_mp5, CMP5);
 LINK_ENTITY_TO_CLASS(weapon_9mmAR, CMP5);
 
+void CMP5::OnCreate()
+{
+	CBasePlayerWeapon::OnCreate();
+
+	pev->model = MAKE_STRING("models/w_9mmAR.mdl");
+}
 
 //=========================================================
 //=========================================================
@@ -26,7 +32,7 @@ void CMP5::Spawn()
 {
 	pev->classname = MAKE_STRING("weapon_9mmAR"); // hack to allow for old names
 	Precache();
-	SET_MODEL(ENT(pev), "models/w_9mmAR.mdl");
+	SET_MODEL(ENT(pev), STRING(pev->model));
 	m_iId = WEAPON_MP5;
 
 	m_iDefaultAmmo = MP5_DEFAULT_GIVE;
@@ -40,7 +46,7 @@ void CMP5::Spawn()
 void CMP5::Precache()
 {
 	PRECACHE_MODEL("models/v_9mmAR.mdl");
-	PRECACHE_MODEL("models/w_9mmAR.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
 	PRECACHE_MODEL("models/p_9mmAR.mdl");
 
 	m_iShell = PRECACHE_MODEL("models/shell.mdl"); // brass shellTE_MODEL
@@ -261,15 +267,17 @@ void CMP5::WeaponIdle()
 
 class CMP5AmmoClip : public CBasePlayerAmmo
 {
-	void Spawn() override
+public:
+	void OnCreate() override
 	{
-		Precache();
-		SET_MODEL(ENT(pev), "models/w_9mmARclip.mdl");
-		CBasePlayerAmmo::Spawn();
+		CBasePlayerAmmo::OnCreate();
+
+		pev->model = MAKE_STRING("models/w_9mmARclip.mdl");
 	}
+
 	void Precache() override
 	{
-		PRECACHE_MODEL("models/w_9mmARclip.mdl");
+		CBasePlayerAmmo::Precache();
 		PRECACHE_SOUND("items/9mmclip1.wav");
 	}
 	bool AddAmmo(CBaseEntity* pOther) override
@@ -289,15 +297,17 @@ LINK_ENTITY_TO_CLASS(ammo_9mmAR, CMP5AmmoClip);
 
 class CMP5Chainammo : public CBasePlayerAmmo
 {
-	void Spawn() override
+public:
+	void OnCreate() override
 	{
-		Precache();
-		SET_MODEL(ENT(pev), "models/w_chainammo.mdl");
-		CBasePlayerAmmo::Spawn();
+		CBasePlayerAmmo::OnCreate();
+
+		pev->model = MAKE_STRING("models/w_chainammo.mdl");
 	}
+
 	void Precache() override
 	{
-		PRECACHE_MODEL("models/w_chainammo.mdl");
+		CBasePlayerAmmo::Precache();
 		PRECACHE_SOUND("items/9mmclip1.wav");
 	}
 	bool AddAmmo(CBaseEntity* pOther) override
@@ -315,15 +325,17 @@ LINK_ENTITY_TO_CLASS(ammo_9mmbox, CMP5Chainammo);
 
 class CMP5AmmoGrenade : public CBasePlayerAmmo
 {
-	void Spawn() override
+public:
+	void OnCreate() override
 	{
-		Precache();
-		SET_MODEL(ENT(pev), "models/w_ARgrenade.mdl");
-		CBasePlayerAmmo::Spawn();
+		CBasePlayerAmmo::OnCreate();
+
+		pev->model = MAKE_STRING("models/w_ARgrenade.mdl");
 	}
+
 	void Precache() override
 	{
-		PRECACHE_MODEL("models/w_ARgrenade.mdl");
+		CBasePlayerAmmo::Precache();
 		PRECACHE_SOUND("items/9mmclip1.wav");
 	}
 	bool AddAmmo(CBaseEntity* pOther) override

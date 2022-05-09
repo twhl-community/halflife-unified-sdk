@@ -249,6 +249,7 @@ void CShockTrooper::OnCreate()
 	CSquadMonster::OnCreate();
 
 	pev->health = GetSkillFloat("shocktrooper_health"sv);
+	pev->model = MAKE_STRING("models/strooper.mdl");
 }
 
 //=========================================================
@@ -935,7 +936,7 @@ void CShockTrooper::Spawn()
 {
 	Precache();
 
-	SET_MODEL(ENT(pev), "models/strooper.mdl");
+	SET_MODEL(ENT(pev), STRING(pev->model));
 	UTIL_SetSize(pev, Vector(-24, -24, 0), Vector(24, 24, 72));
 
 	pev->solid = SOLID_SLIDEBOX;
@@ -978,7 +979,7 @@ void CShockTrooper::Spawn()
 //=========================================================
 void CShockTrooper::Precache()
 {
-	PRECACHE_MODEL("models/strooper.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
 	PRECACHE_MODEL("models/strooper_gibs.mdl");
 
 	PRECACHE_SOUND("weapons/shock_fire.wav");
@@ -2330,6 +2331,7 @@ void CDeadShockTrooper::OnCreate()
 
 	// Corpses have less health
 	pev->health = 8;
+	pev->model = MAKE_STRING("models/strooper.mdl");
 }
 
 bool CDeadShockTrooper::KeyValue(KeyValueData* pkvd)
@@ -2350,8 +2352,8 @@ LINK_ENTITY_TO_CLASS(monster_ShockTrooper_dead, CDeadShockTrooper);
 //=========================================================
 void CDeadShockTrooper::Spawn()
 {
-	PRECACHE_MODEL("models/strooper.mdl");
-	SET_MODEL(ENT(pev), "models/strooper.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
+	SET_MODEL(ENT(pev), STRING(pev->model));
 
 	pev->effects = 0;
 	pev->yaw_speed = 8;

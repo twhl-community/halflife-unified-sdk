@@ -19,6 +19,7 @@ class COFNuclearBombButton : public CBaseEntity
 public:
 	int ObjectCaps() override { return FCAP_DONT_SAVE; }
 
+	void OnCreate() override;
 	void Precache() override;
 	void Spawn() override;
 
@@ -27,16 +28,23 @@ public:
 
 LINK_ENTITY_TO_CLASS(item_nuclearbombbutton, COFNuclearBombButton);
 
+void COFNuclearBombButton::OnCreate()
+{
+	CBaseEntity::OnCreate();
+
+	pev->model = MAKE_STRING("models/nuke_button.mdl");
+}
+
 void COFNuclearBombButton::Precache()
 {
-	PRECACHE_MODEL("models/nuke_button.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
 }
 
 void COFNuclearBombButton::Spawn()
 {
 	Precache();
 
-	SET_MODEL(edict(), "models/nuke_button.mdl");
+	SET_MODEL(edict(), STRING(pev->model));
 
 	pev->solid = SOLID_NOT;
 
@@ -67,6 +75,7 @@ class COFNuclearBombTimer : public CBaseEntity
 public:
 	int ObjectCaps() override { return FCAP_DONT_SAVE; }
 
+	void OnCreate() override;
 	void Precache() override;
 	void Spawn() override;
 
@@ -80,9 +89,16 @@ public:
 
 LINK_ENTITY_TO_CLASS(item_nuclearbombtimer, COFNuclearBombTimer);
 
+void COFNuclearBombTimer::OnCreate()
+{
+	CBaseEntity::OnCreate();
+
+	pev->model = MAKE_STRING("models/nuke_timer.mdl");
+}
+
 void COFNuclearBombTimer::Precache()
 {
-	PRECACHE_MODEL("models/nuke_timer.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
 	PRECACHE_SOUND("common/nuke_ticking.wav");
 }
 
@@ -90,7 +106,7 @@ void COFNuclearBombTimer::Spawn()
 {
 	Precache();
 
-	SET_MODEL(edict(), "models/nuke_timer.mdl");
+	SET_MODEL(edict(), STRING(pev->model));
 
 	pev->solid = SOLID_NOT;
 
@@ -162,6 +178,7 @@ public:
 	int ObjectCaps() override { return CBaseToggle::ObjectCaps() | FCAP_IMPULSE_USE; }
 
 	bool KeyValue(KeyValueData* pkvd) override;
+	void OnCreate() override;
 	void Precache() override;
 	void Spawn() override;
 
@@ -201,13 +218,18 @@ bool COFNuclearBomb::KeyValue(KeyValueData* pkvd)
 	return CBaseToggle::KeyValue(pkvd);
 }
 
+void COFNuclearBomb::OnCreate()
+{
+	CBaseToggle::OnCreate();
+
+	pev->model = MAKE_STRING("models/nuke_case.mdl");
+}
+
 void COFNuclearBomb::Precache()
 {
-	PRECACHE_MODEL("models/nuke_case.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
 	UTIL_PrecacheOther("item_nuclearbombtimer");
 	UTIL_PrecacheOther("item_nuclearbombbutton");
-	PRECACHE_MODEL("models/nuke_timer.mdl");
-	PRECACHE_MODEL("models/nuke_button.mdl");
 	PRECACHE_SOUND("buttons/button4.wav");
 	PRECACHE_SOUND("buttons/button6.wav");
 
@@ -236,7 +258,7 @@ void COFNuclearBomb::Spawn()
 {
 	Precache();
 
-	SET_MODEL(edict(), "models/nuke_case.mdl");
+	SET_MODEL(edict(), STRING(pev->model));
 
 	pev->solid = SOLID_BBOX;
 

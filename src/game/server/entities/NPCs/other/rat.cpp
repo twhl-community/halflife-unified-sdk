@@ -38,6 +38,7 @@ void CRat::OnCreate()
 	CBaseMonster::OnCreate();
 
 	pev->health = 8;
+	pev->model = MAKE_STRING("models/bigrat.mdl");
 }
 
 //=========================================================
@@ -75,7 +76,7 @@ void CRat::Spawn()
 {
 	Precache();
 
-	SET_MODEL(ENT(pev), "models/bigrat.mdl");
+	SET_MODEL(ENT(pev), STRING(pev->model));
 	UTIL_SetSize(pev, Vector(0, 0, 0), Vector(0, 0, 0));
 
 	pev->solid = SOLID_SLIDEBOX;
@@ -93,7 +94,7 @@ void CRat::Spawn()
 //=========================================================
 void CRat::Precache()
 {
-	PRECACHE_MODEL("models/bigrat.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
 }
 
 //=========================================================

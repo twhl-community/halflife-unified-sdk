@@ -20,6 +20,8 @@
 class CItemPortableHEVCTF : public CItemCTF
 {
 public:
+	void OnCreate() override;
+
 	void Precache() override;
 
 	void RemoveEffect(CBasePlayer* pPlayer) override;

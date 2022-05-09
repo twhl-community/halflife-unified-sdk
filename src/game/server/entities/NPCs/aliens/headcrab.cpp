@@ -146,6 +146,7 @@ void CHeadCrab::OnCreate()
 	CBaseMonster::OnCreate();
 
 	pev->health = GetSkillFloat("headcrab_health"sv);
+	pev->model = MAKE_STRING("models/headcrab.mdl");
 }
 
 //=========================================================
@@ -277,7 +278,7 @@ void CHeadCrab::Spawn()
 {
 	Precache();
 
-	SET_MODEL(ENT(pev), "models/headcrab.mdl");
+	SET_MODEL(ENT(pev), STRING(pev->model));
 	UTIL_SetSize(pev, Vector(-12, -12, 0), Vector(12, 12, 24));
 
 	pev->solid = SOLID_SLIDEBOX;
@@ -304,7 +305,7 @@ void CHeadCrab::Precache()
 	PRECACHE_SOUND_ARRAY(pDeathSounds);
 	PRECACHE_SOUND_ARRAY(pBiteSounds);
 
-	PRECACHE_MODEL("models/headcrab.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
 }
 
 
@@ -483,7 +484,6 @@ class CBabyCrab : public CHeadCrab
 public:
 	void OnCreate() override;
 	void Spawn() override;
-	void Precache() override;
 	void SetYawSpeed() override;
 	float GetDamageAmount() override { return GetSkillFloat("headcrabDmgBite"sv) * 0.3; }
 	bool CheckRangeAttack1(float flDot, float flDist) override;
@@ -498,23 +498,16 @@ void CBabyCrab::OnCreate()
 	CHeadCrab::OnCreate();
 
 	pev->health = GetSkillFloat("headcrab_health"sv) * 0.25; // less health than full grown
+	pev->model = MAKE_STRING("models/baby_headcrab.mdl");
 }
 
 void CBabyCrab::Spawn()
 {
 	CHeadCrab::Spawn();
-	SET_MODEL(ENT(pev), "models/baby_headcrab.mdl");
 	pev->rendermode = kRenderTransTexture;
 	pev->renderamt = 192;
 	UTIL_SetSize(pev, Vector(-12, -12, 0), Vector(12, 12, 24));
 }
-
-void CBabyCrab::Precache()
-{
-	PRECACHE_MODEL("models/baby_headcrab.mdl");
-	CHeadCrab::Precache();
-}
-
 
 void CBabyCrab::SetYawSpeed()
 {

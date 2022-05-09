@@ -27,7 +27,6 @@ class COtis : public CBarney
 {
 public:
 	void OnCreate() override;
-	void Spawn() override;
 	void Precache() override;
 	void GuardFirePistol() override;
 	void AlertSound() override;
@@ -50,6 +49,7 @@ void COtis::OnCreate()
 	CBarney::OnCreate();
 
 	pev->health = GetSkillFloat("otis_health"sv);
+	pev->model = MAKE_STRING("models/otis.mdl");
 }
 
 //=========================================================
@@ -100,19 +100,11 @@ void COtis::GuardFirePistol()
 }
 
 //=========================================================
-// Spawn
-//=========================================================
-void COtis::Spawn()
-{
-	SpawnCore("models/otis.mdl");
-}
-
-//=========================================================
 // Precache - precaches all resources this monster needs
 //=========================================================
 void COtis::Precache()
 {
-	PrecacheCore("models/otis.mdl");
+	CBarney::Precache();
 	PRECACHE_SOUND("weapons/de_shot1.wav");
 }
 
@@ -237,6 +229,7 @@ void CDeadOtis::OnCreate()
 
 	// Corpses have less health
 	pev->health = 8; //GetSkillFloat("otis_health"sv);
+	pev->model = MAKE_STRING("models/otis.mdl");
 }
 
 bool CDeadOtis::KeyValue(KeyValueData* pkvd)
@@ -257,8 +250,8 @@ LINK_ENTITY_TO_CLASS(monster_otis_dead, CDeadOtis);
 //=========================================================
 void CDeadOtis::Spawn()
 {
-	PRECACHE_MODEL("models/otis.mdl");
-	SET_MODEL(ENT(pev), "models/otis.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
+	SET_MODEL(ENT(pev), STRING(pev->model));
 
 	pev->effects = 0;
 	pev->yaw_speed = 8;

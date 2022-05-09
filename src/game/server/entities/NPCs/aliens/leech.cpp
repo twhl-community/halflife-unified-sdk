@@ -175,14 +175,16 @@ void CLeech::OnCreate()
 	CBaseMonster::OnCreate();
 
 	pev->health = GetSkillFloat("leech_health"sv);
+	pev->model = MAKE_STRING("models/leech.mdl");
+
+	// Just for fun
+	//pev->model = MAKE_STRING("models/icky.mdl");
 }
 
 void CLeech::Spawn()
 {
 	Precache();
-	SET_MODEL(ENT(pev), "models/leech.mdl");
-	// Just for fun
-	//	SET_MODEL(ENT(pev), "models/icky.mdl");
+	SET_MODEL(ENT(pev), STRING(pev->model));
 
 	//	UTIL_SetSize( pev, g_vecZero, g_vecZero );
 	UTIL_SetSize(pev, Vector(-1, -1, 0), Vector(1, 1, 2));
@@ -290,8 +292,7 @@ void CLeech::AlertSound()
 
 void CLeech::Precache()
 {
-	//PRECACHE_MODEL("models/icky.mdl");
-	PRECACHE_MODEL("models/leech.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
 
 	PRECACHE_SOUND_ARRAY(pAttackSounds);
 	PRECACHE_SOUND_ARRAY(pAlertSounds);

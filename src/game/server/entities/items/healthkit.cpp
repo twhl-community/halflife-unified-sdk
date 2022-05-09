@@ -18,7 +18,8 @@
 
 class CHealthKit : public CItem
 {
-	void Spawn() override;
+public:
+	void OnCreate() override;
 	void Precache() override;
 	bool MyTouch(CBasePlayer* pPlayer) override;
 
@@ -43,17 +44,16 @@ TYPEDESCRIPTION	CHealthKit::m_SaveData[] =
 IMPLEMENT_SAVERESTORE( CHealthKit, CItem);
 */
 
-void CHealthKit::Spawn()
+void CHealthKit::OnCreate()
 {
-	Precache();
-	SET_MODEL(ENT(pev), "models/w_medkit.mdl");
+	CItem::OnCreate();
 
-	CItem::Spawn();
+	pev->model = MAKE_STRING("models/w_medkit.mdl");
 }
 
 void CHealthKit::Precache()
 {
-	PRECACHE_MODEL("models/w_medkit.mdl");
+	CItem::Precache();
 	PRECACHE_SOUND("items/smallmedkit1.wav");
 }
 

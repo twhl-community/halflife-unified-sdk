@@ -30,10 +30,17 @@ extern edict_t* EntSelectSpawnPoint(CBasePlayer* pPlayer);
 
 LINK_ENTITY_TO_CLASS(weapon_displacer, CDisplacer);
 
+void CDisplacer::OnCreate()
+{
+	BaseClass::OnCreate();
+
+	pev->model = MAKE_STRING("models/w_displacer.mdl");
+}
+
 void CDisplacer::Precache()
 {
 	PRECACHE_MODEL("models/v_displacer.mdl");
-	PRECACHE_MODEL("models/w_displacer.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
 	PRECACHE_MODEL("models/p_displacer.mdl");
 
 	PRECACHE_SOUND("weapons/displacer_fire.wav");
@@ -58,7 +65,7 @@ void CDisplacer::Spawn()
 
 	m_iId = WEAPON_DISPLACER;
 
-	SET_MODEL(edict(), "models/w_displacer.mdl");
+	SET_MODEL(edict(), STRING(pev->model));
 
 	m_iDefaultAmmo = DISPLACER_DEFAULT_GIVE;
 

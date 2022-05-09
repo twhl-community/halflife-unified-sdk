@@ -76,11 +76,12 @@ void CPenguinGrenade::OnCreate()
 	CGrenade::OnCreate();
 
 	pev->health = GetSkillFloat("snark_health"sv);
+	pev->model = MAKE_STRING("models/w_penguin.mdl");
 }
 
 void CPenguinGrenade::Precache()
 {
-	g_engfuncs.pfnPrecacheModel("models/w_penguin.mdl");
+	g_engfuncs.pfnPrecacheModel(STRING(pev->model));
 	g_engfuncs.pfnPrecacheSound("squeek/sqk_blast1.wav");
 	g_engfuncs.pfnPrecacheSound("common/bodysplat.wav");
 	g_engfuncs.pfnPrecacheSound("squeek/sqk_die1.wav");
@@ -224,7 +225,7 @@ void CPenguinGrenade::Spawn()
 	pev->movetype = MOVETYPE_BOUNCE;
 	pev->solid = SOLID_BBOX;
 
-	SET_MODEL(ENT(pev), "models/w_penguin.mdl");
+	SET_MODEL(ENT(pev), STRING(pev->model));
 	UTIL_SetSize(pev, Vector(-4, -4, 0), Vector(4, 4, 8));
 	UTIL_SetOrigin(pev, pev->origin);
 

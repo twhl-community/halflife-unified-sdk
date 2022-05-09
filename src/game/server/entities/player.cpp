@@ -5461,6 +5461,7 @@ void CDeadHEV::OnCreate()
 
 	// Corpses have less health
 	pev->health = 8;
+	pev->model = MAKE_STRING("models/deadhaz.mdl");
 }
 
 bool CDeadHEV::KeyValue(KeyValueData* pkvd)
@@ -5481,8 +5482,8 @@ LINK_ENTITY_TO_CLASS(monster_hevsuit_dead, CDeadHEV);
 //=========================================================
 void CDeadHEV::Spawn()
 {
-	PRECACHE_MODEL("models/deadhaz.mdl");
-	SET_MODEL(ENT(pev), "models/deadhaz.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
+	SET_MODEL(ENT(pev), STRING(pev->model));
 
 	pev->effects = 0;
 	pev->yaw_speed = 8;

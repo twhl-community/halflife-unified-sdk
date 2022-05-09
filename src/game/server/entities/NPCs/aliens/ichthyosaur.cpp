@@ -177,6 +177,7 @@ void CIchthyosaur::OnCreate()
 	CFlyingMonster::OnCreate();
 
 	pev->health = GetSkillFloat("ichthyosaur_health"sv);
+	pev->model = MAKE_STRING("models/icky.mdl");
 }
 
 #define EMIT_ICKY_SOUND(chan, array) \
@@ -459,7 +460,7 @@ void CIchthyosaur::Spawn()
 {
 	Precache();
 
-	SET_MODEL(ENT(pev), "models/icky.mdl");
+	SET_MODEL(ENT(pev), STRING(pev->model));
 	UTIL_SetSize(pev, Vector(-32, -32, -32), Vector(32, 32, 32));
 
 	pev->solid = SOLID_BBOX;
@@ -495,7 +496,7 @@ void CIchthyosaur::Spawn()
 //=========================================================
 void CIchthyosaur::Precache()
 {
-	PRECACHE_MODEL("models/icky.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
 
 	PRECACHE_SOUND_ARRAY(pIdleSounds);
 	PRECACHE_SOUND_ARRAY(pAlertSounds);

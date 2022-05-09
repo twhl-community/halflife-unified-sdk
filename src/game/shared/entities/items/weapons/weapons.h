@@ -26,6 +26,8 @@ void DeactivateSatchels(CBasePlayer* pOwner);
 class CGrenade : public CBaseMonster
 {
 public:
+	void OnCreate() override;
+	void Precache() override;
 	void Spawn() override;
 
 	typedef enum
@@ -392,6 +394,7 @@ public:
 class CBasePlayerAmmo : public CBaseEntity
 {
 public:
+	void Precache() override;
 	void Spawn() override;
 	void EXPORT DefaultTouch(CBaseEntity* pOther); // default weapon touch
 	virtual bool AddAmmo(CBaseEntity* pOther) { return true; }
@@ -465,6 +468,8 @@ void FindHullIntersection(const Vector& vecSrc, TraceResult& tr, const Vector& m
 //=========================================================
 class CWeaponBox : public CBaseEntity
 {
+public:
+	void OnCreate() override;
 	void Precache() override;
 	void Spawn() override;
 	void Touch(CBaseEntity* pOther) override;
@@ -473,7 +478,6 @@ class CWeaponBox : public CBaseEntity
 	int GiveAmmo(int iCount, const char* szName, int iMax, int* pIndex = nullptr);
 	void SetObjectCollisionBox() override;
 
-public:
 	void EXPORT Kill();
 	bool Save(CSave& save) override;
 	bool Restore(CRestore& restore) override;
@@ -512,6 +516,7 @@ enum glock_e
 class CGlock : public CBasePlayerWeapon
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	int iItemSlot() override { return 2; }
@@ -559,6 +564,7 @@ enum crowbar_e
 class CCrowbar : public CBasePlayerWeapon
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	int iItemSlot() override { return 1; }
@@ -601,6 +607,7 @@ enum python_e
 class CPython : public CBasePlayerWeapon
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	int iItemSlot() override { return 2; }
@@ -641,6 +648,7 @@ enum mp5_e
 class CMP5 : public CBasePlayerWeapon
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	int iItemSlot() override { return 3; }
@@ -689,6 +697,7 @@ enum crossbow_e
 class CCrossbow : public CBasePlayerWeapon
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	int iItemSlot() override { return 3; }
@@ -741,7 +750,7 @@ public:
 	static TYPEDESCRIPTION m_SaveData[];
 #endif
 
-
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	int iItemSlot() override { return 3; }
@@ -809,6 +818,7 @@ public:
 	static TYPEDESCRIPTION m_SaveData[];
 #endif
 
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	void Reload() override;
@@ -852,6 +862,7 @@ public:
 	bool Save(CSave& save) override;
 	bool Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
+
 	void Spawn() override;
 	void Precache() override;
 	void EXPORT FollowThink();
@@ -889,6 +900,7 @@ public:
 	static TYPEDESCRIPTION m_SaveData[];
 #endif
 
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	int iItemSlot() override { return 4; }
@@ -974,6 +986,7 @@ public:
 	static TYPEDESCRIPTION m_SaveData[];
 #endif
 
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	int iItemSlot() override { return 4; }
@@ -1042,6 +1055,7 @@ enum hgun_e
 class CHgun : public CBasePlayerWeapon
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	int iItemSlot() override { return 4; }
@@ -1089,6 +1103,7 @@ enum handgrenade_e
 class CHandGrenade : public CBasePlayerWeapon
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	int iItemSlot() override { return 5; }
@@ -1137,6 +1152,7 @@ public:
 	static TYPEDESCRIPTION m_SaveData[];
 #endif
 
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	int iItemSlot() override { return 5; }
@@ -1179,6 +1195,7 @@ enum tripmine_e
 class CTripmine : public CBasePlayerWeapon
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	int iItemSlot() override { return 5; }
@@ -1221,6 +1238,7 @@ enum squeak_e
 class CSqueak : public CBasePlayerWeapon
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	int iItemSlot() override { return 5; }

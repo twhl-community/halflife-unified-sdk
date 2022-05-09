@@ -50,11 +50,12 @@ void COFLoader::OnCreate()
 	CBaseMonster::OnCreate();
 
 	pev->health = 8;
+	pev->model = MAKE_STRING("models/loader.mdl");
 }
 
 void COFLoader::Precache()
 {
-	PRECACHE_MODEL("models/loader.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
 	PRECACHE_SOUND("ambience/loader_step1.wav");
 	PRECACHE_SOUND("ambience/loader_hydra1.wav");
 }
@@ -63,7 +64,7 @@ void COFLoader::Spawn()
 {
 	Precache();
 
-	SET_MODEL(edict(), "models/loader.mdl");
+	SET_MODEL(edict(), STRING(pev->model));
 
 	if (FStrEq(STRING(pev->model), "models/player.mdl") || FStrEq(STRING(pev->model), "models/holo.mdl"))
 	{

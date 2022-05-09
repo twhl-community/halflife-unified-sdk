@@ -129,6 +129,8 @@ void CFlockingFlyer::OnCreate()
 	CBaseMonster::OnCreate();
 
 	pev->health = 1;
+	//pev->model = MAKE_STRING("models/aflock.mdl");
+	pev->model = MAKE_STRING("models/boid.mdl");
 }
 
 //=========================================================
@@ -163,8 +165,7 @@ void CFlockingFlyerFlock::Spawn()
 //=========================================================
 void CFlockingFlyerFlock::Precache()
 {
-	//PRECACHE_MODEL("models/aflock.mdl");
-	PRECACHE_MODEL("models/boid.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
 
 	PrecacheFlockSounds();
 }
@@ -342,8 +343,7 @@ void CFlockingFlyer::SpawnCommonCode()
 	m_fPathBlocked = false; // obstacles will be detected
 	m_flFieldOfView = 0.2;
 
-	//SET_MODEL(ENT(pev), "models/aflock.mdl");
-	SET_MODEL(ENT(pev), "models/boid.mdl");
+	SET_MODEL(ENT(pev), STRING(pev->model));
 
 	//	UTIL_SetSize(pev, Vector(0,0,0), Vector(0,0,0));
 	UTIL_SetSize(pev, Vector(-5, -5, 0), Vector(5, 5, 2));

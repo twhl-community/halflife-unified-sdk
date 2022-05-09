@@ -33,10 +33,17 @@ IMPLEMENT_SAVERESTORE(CEagle, CEagle::BaseClass);
 
 LINK_ENTITY_TO_CLASS(weapon_eagle, CEagle);
 
+void CEagle::OnCreate()
+{
+	BaseClass::OnCreate();
+
+	pev->model = MAKE_STRING("models/w_desert_eagle.mdl");
+}
+
 void CEagle::Precache()
 {
 	PRECACHE_MODEL("models/v_desert_eagle.mdl");
-	PRECACHE_MODEL("models/w_desert_eagle.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
 	PRECACHE_MODEL("models/p_desert_eagle.mdl");
 	m_iShell = PRECACHE_MODEL("models/shell.mdl");
 	PRECACHE_SOUND("weapons/desert_eagle_fire.wav");
@@ -54,7 +61,7 @@ void CEagle::Spawn()
 
 	m_iId = WEAPON_EAGLE;
 
-	SET_MODEL(edict(), "models/w_desert_eagle.mdl");
+	SET_MODEL(edict(), STRING(pev->model));
 
 	m_iDefaultAmmo = DEAGLE_DEFAULT_GIVE;
 
@@ -369,17 +376,18 @@ void CEagle::SetWeaponData(const weapon_data_t& data)
 
 class CEagleAmmo : public CBasePlayerAmmo
 {
-	void Spawn() override
+public:
+	void OnCreate() override
 	{
-		Precache();
+		CBasePlayerAmmo::OnCreate();
+
 		//TODO: could probably use a better model
-		SET_MODEL(ENT(pev), "models/w_9mmclip.mdl");
-		CBasePlayerAmmo::Spawn();
+		pev->model = MAKE_STRING("models/w_9mmclip.mdl");
 	}
 
 	void Precache() override
 	{
-		PRECACHE_MODEL("models/w_9mmclip.mdl");
+		CBasePlayerAmmo::Precache();
 		PRECACHE_SOUND("items/9mmclip1.wav");
 	}
 

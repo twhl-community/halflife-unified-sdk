@@ -18,21 +18,20 @@
 class CBlackOpsOsprey : public COsprey
 {
 public:
-	void Spawn() override;
-	void Precache() override;
+	void OnCreate() override
+	{
+		COsprey::OnCreate();
+
+		pev->model = MAKE_STRING("models/blkop_osprey.mdl");
+	}
+
+	void Precache() override
+	{
+		PrecacheCore("models/blkop_tailgibs.mdl", "models/blkop_bodygibs.mdl", "models/blkop_enginegibs.mdl");
+	}
 
 protected:
 	const char* GetMonsterClassname() const override { return "monster_male_assassin"; }
 };
 
 LINK_ENTITY_TO_CLASS(monster_blkop_osprey, CBlackOpsOsprey);
-
-void CBlackOpsOsprey::Spawn()
-{
-	SpawnCore("models/blkop_osprey.mdl");
-}
-
-void CBlackOpsOsprey::Precache()
-{
-	PrecacheCore("models/blkop_osprey.mdl", "models/blkop_tailgibs.mdl", "models/blkop_bodygibs.mdl", "models/blkop_enginegibs.mdl");
-}

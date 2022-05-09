@@ -303,6 +303,7 @@ void COFVoltigore::OnCreate()
 	CSquadMonster::OnCreate();
 
 	pev->health = GetSkillFloat("voltigore_health"sv);
+	pev->model = MAKE_STRING("models/voltigore.mdl");
 }
 
 //=========================================================
@@ -542,11 +543,11 @@ void COFVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 }
 
-void COFVoltigore::SpawnCore(const char* model, const Vector& mins, const Vector& maxs)
+void COFVoltigore::SpawnCore(const Vector& mins, const Vector& maxs)
 {
 	Precache();
 
-	SET_MODEL(ENT(pev), model);
+	SET_MODEL(ENT(pev), STRING(pev->model));
 	UTIL_SetSize(pev, mins, maxs);
 
 	pev->solid = SOLID_SLIDEBOX;
@@ -574,12 +575,12 @@ void COFVoltigore::SpawnCore(const char* model, const Vector& mins, const Vector
 //=========================================================
 void COFVoltigore::Spawn()
 {
-	SpawnCore("models/voltigore.mdl", {-80, -80, 0}, {80, 80, 90});
+	SpawnCore({-80, -80, 0}, {80, 80, 90});
 }
 
-void COFVoltigore::PrecacheCore(const char* model)
+void COFVoltigore::Precache()
 {
-	PRECACHE_MODEL(model);
+	PRECACHE_MODEL(STRING(pev->model));
 
 	PRECACHE_SOUND_ARRAY(pAttackHitSounds);
 	PRECACHE_SOUND_ARRAY(pAttackMissSounds);
@@ -611,14 +612,6 @@ void COFVoltigore::PrecacheCore(const char* model)
 	UTIL_PrecacheOther("charged_bolt");
 
 	m_iVoltigoreGibs = PRECACHE_MODEL("models/vgibs.mdl");
-}
-
-//=========================================================
-// Precache - precaches all resources this monster needs
-//=========================================================
-void COFVoltigore::Precache()
-{
-	PrecacheCore("models/voltigore.mdl");
 }
 
 //=========================================================

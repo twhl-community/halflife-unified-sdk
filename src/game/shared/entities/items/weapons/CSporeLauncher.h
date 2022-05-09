@@ -48,6 +48,8 @@ public:
 	static TYPEDESCRIPTION m_SaveData[];
 #endif
 
+	void OnCreate() override;
+
 	void Precache() override;
 
 	void Spawn() override;

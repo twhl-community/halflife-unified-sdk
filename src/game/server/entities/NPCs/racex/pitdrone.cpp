@@ -275,6 +275,7 @@ void CPitdrone::OnCreate()
 	CBaseMonster::OnCreate();
 
 	pev->health = GetSkillFloat("pitdrone_health"sv);
+	pev->model = MAKE_STRING("models/pit_drone.mdl");
 }
 
 //=========================================================
@@ -663,7 +664,7 @@ void CPitdrone::Spawn()
 {
 	Precache();
 
-	SET_MODEL(ENT(pev), "models/pit_drone.mdl");
+	SET_MODEL(ENT(pev), STRING(pev->model));
 	UTIL_SetSize(pev, Vector(-16, -16, 0), Vector(16, 16, 48));
 
 	pev->solid = SOLID_SLIDEBOX;
@@ -705,7 +706,7 @@ void CPitdrone::Spawn()
 //=========================================================
 void CPitdrone::Precache()
 {
-	PRECACHE_MODEL("models/pit_drone.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
 	PRECACHE_MODEL("models/pit_drone_gibs.mdl");
 
 	UTIL_PrecacheOther("pitdronespike");

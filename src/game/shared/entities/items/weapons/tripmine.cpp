@@ -20,6 +20,8 @@
 
 class CTripmineGrenade : public CGrenade
 {
+public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 
@@ -69,6 +71,12 @@ TYPEDESCRIPTION CTripmineGrenade::m_SaveData[] =
 
 IMPLEMENT_SAVERESTORE(CTripmineGrenade, CGrenade);
 
+void CTripmineGrenade::OnCreate()
+{
+	CGrenade::OnCreate();
+
+	pev->model = MAKE_STRING("models/v_tripmine.mdl");
+}
 
 void CTripmineGrenade::Spawn()
 {
@@ -77,7 +85,7 @@ void CTripmineGrenade::Spawn()
 	pev->movetype = MOVETYPE_FLY;
 	pev->solid = SOLID_NOT;
 
-	SET_MODEL(ENT(pev), "models/v_tripmine.mdl");
+	SET_MODEL(ENT(pev), STRING(pev->model));
 	pev->frame = 0;
 	pev->body = 3;
 	pev->sequence = TRIPMINE_WORLD;
@@ -124,7 +132,7 @@ void CTripmineGrenade::Spawn()
 
 void CTripmineGrenade::Precache()
 {
-	PRECACHE_MODEL("models/v_tripmine.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
 	PRECACHE_SOUND("weapons/mine_deploy.wav");
 	PRECACHE_SOUND("weapons/mine_activate.wav");
 	PRECACHE_SOUND("weapons/mine_charge.wav");
@@ -337,11 +345,18 @@ void CTripmineGrenade::DelayDeathThink()
 
 LINK_ENTITY_TO_CLASS(weapon_tripmine, CTripmine);
 
+void CTripmine::OnCreate()
+{
+	CBasePlayerWeapon::OnCreate();
+
+	pev->model = MAKE_STRING("models/v_tripmine.mdl");
+}
+
 void CTripmine::Spawn()
 {
 	Precache();
 	m_iId = WEAPON_TRIPMINE;
-	SET_MODEL(ENT(pev), "models/v_tripmine.mdl");
+	SET_MODEL(ENT(pev), STRING(pev->model));
 	pev->frame = 0;
 	pev->body = 3;
 	pev->sequence = TRIPMINE_GROUND;
@@ -365,6 +380,7 @@ void CTripmine::Spawn()
 
 void CTripmine::Precache()
 {
+	PRECACHE_MODEL(STRING(pev->model));
 	PRECACHE_MODEL("models/v_tripmine.mdl");
 	PRECACHE_MODEL("models/p_tripmine.mdl");
 	UTIL_PrecacheOther("monster_tripmine");

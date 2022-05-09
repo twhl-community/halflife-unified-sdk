@@ -29,6 +29,18 @@ LINK_ENTITY_TO_CLASS(grenade, CGrenade);
 // Grenades flagged with this will be triggered when the owner calls detonateSatchelCharges
 #define SF_DETONATE 0x0001
 
+void CGrenade::OnCreate()
+{
+	CBaseMonster::OnCreate();
+
+	pev->model = MAKE_STRING("models/grenade.mdl");
+}
+
+void CGrenade::Precache()
+{
+	PRECACHE_MODEL(STRING(pev->model));
+}
+
 //
 // Grenade Explode
 //
@@ -347,12 +359,14 @@ void CGrenade::TumbleThink()
 
 void CGrenade::Spawn()
 {
+	Precache();
+
 	pev->movetype = MOVETYPE_BOUNCE;
 	pev->classname = MAKE_STRING("grenade");
 
 	pev->solid = SOLID_BBOX;
 
-	SET_MODEL(ENT(pev), "models/grenade.mdl");
+	SET_MODEL(ENT(pev), STRING(pev->model));
 	UTIL_SetSize(pev, Vector(0, 0, 0), Vector(0, 0, 0));
 
 	pev->dmg = 100;

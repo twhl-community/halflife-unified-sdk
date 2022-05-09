@@ -117,19 +117,6 @@ protected:
 	float m_painTime;
 	float m_healTime;
 	float m_fearTime;
-
-protected:
-	/**
-	*	@brief Spawns the Scientist
-	*	@param model Must be a string literal
-	*/
-	void SpawnCore(const char* model);
-
-	/**
-	*	@brief Precaches all of the Scientist's assets
-	*	@param model Must be a string literal
-	*/
-	void PrecacheCore(const char* model);
 };
 
 /**
@@ -155,11 +142,4 @@ public:
 	int m_baseSequence;
 	int m_headTurn;
 	float m_flResponseDelay;
-
-protected:
-	/**
-	*	@brief Spawns the Scientist
-	*	@param model Must be a string literal
-	*/
-	void SpawnCore(const char* model);
 };

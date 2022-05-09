@@ -88,18 +88,6 @@ public:
 	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 
 protected:
-	/**
-	*	@brief Spawns the Zombie
-	*	@param model Must be a string literal
-	*/
-	void SpawnCore(const char* model);
-
-	/**
-	*	@brief Precaches all Zombie assets
-	*	@param model Must be a string literal
-	*/
-	void PrecacheCore(const char* model);
-
 	virtual float GetOneSlashDamage();
 	virtual float GetBothSlashDamage();
 

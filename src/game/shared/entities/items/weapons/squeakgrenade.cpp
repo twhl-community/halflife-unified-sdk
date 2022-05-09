@@ -78,6 +78,7 @@ void CSqueakGrenade::OnCreate()
 	CGrenade::OnCreate();
 
 	pev->health = GetSkillFloat("snark_health"sv);
+	pev->model = MAKE_STRING("models/w_squeak.mdl");
 }
 
 int CSqueakGrenade::Classify()
@@ -109,7 +110,7 @@ void CSqueakGrenade::Spawn()
 	pev->movetype = MOVETYPE_BOUNCE;
 	pev->solid = SOLID_BBOX;
 
-	SET_MODEL(ENT(pev), "models/w_squeak.mdl");
+	SET_MODEL(ENT(pev), STRING(pev->model));
 	UTIL_SetSize(pev, Vector(-4, -4, 0), Vector(4, 4, 8));
 	UTIL_SetOrigin(pev, pev->origin);
 
@@ -140,7 +141,7 @@ void CSqueakGrenade::Spawn()
 
 void CSqueakGrenade::Precache()
 {
-	PRECACHE_MODEL("models/w_squeak.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
 	PRECACHE_SOUND("squeek/sqk_blast1.wav");
 	PRECACHE_SOUND("common/bodysplat.wav");
 	PRECACHE_SOUND("squeek/sqk_die1.wav");
@@ -403,12 +404,18 @@ void CSqueakGrenade::SuperBounceTouch(CBaseEntity* pOther)
 
 LINK_ENTITY_TO_CLASS(weapon_snark, CSqueak);
 
+void CSqueak::OnCreate()
+{
+	CBasePlayerWeapon::OnCreate();
+
+	pev->model = MAKE_STRING("models/w_sqknest.mdl");
+}
 
 void CSqueak::Spawn()
 {
 	Precache();
 	m_iId = WEAPON_SNARK;
-	SET_MODEL(ENT(pev), "models/w_sqknest.mdl");
+	SET_MODEL(ENT(pev), STRING(pev->model));
 
 	FallInit(); //get ready to fall down.
 
@@ -422,7 +429,7 @@ void CSqueak::Spawn()
 
 void CSqueak::Precache()
 {
-	PRECACHE_MODEL("models/w_sqknest.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
 	PRECACHE_MODEL("models/v_squeak.mdl");
 	PRECACHE_MODEL("models/p_squeak.mdl");
 	PRECACHE_SOUND("squeek/sqk_hunt2.wav");

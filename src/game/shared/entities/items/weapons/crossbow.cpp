@@ -217,11 +217,18 @@ void CCrossbowBolt::ExplodeThink()
 
 LINK_ENTITY_TO_CLASS(weapon_crossbow, CCrossbow);
 
+void CCrossbow::OnCreate()
+{
+	CBasePlayerWeapon::OnCreate();
+
+	pev->model = MAKE_STRING("models/w_crossbow.mdl");
+}
+
 void CCrossbow::Spawn()
 {
 	Precache();
 	m_iId = WEAPON_CROSSBOW;
-	SET_MODEL(ENT(pev), "models/w_crossbow.mdl");
+	SET_MODEL(ENT(pev), STRING(pev->model));
 
 	m_iDefaultAmmo = CROSSBOW_DEFAULT_GIVE;
 
@@ -230,7 +237,7 @@ void CCrossbow::Spawn()
 
 void CCrossbow::Precache()
 {
-	PRECACHE_MODEL("models/w_crossbow.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
 	PRECACHE_MODEL("models/v_crossbow.mdl");
 	PRECACHE_MODEL("models/p_crossbow.mdl");
 
@@ -488,15 +495,17 @@ void CCrossbow::WeaponIdle()
 
 class CCrossbowAmmo : public CBasePlayerAmmo
 {
-	void Spawn() override
+public:
+	void OnCreate() override
 	{
-		Precache();
-		SET_MODEL(ENT(pev), "models/w_crossbow_clip.mdl");
-		CBasePlayerAmmo::Spawn();
+		CBasePlayerAmmo::OnCreate();
+
+		pev->model = MAKE_STRING("models/w_crossbow_clip.mdl");
 	}
+
 	void Precache() override
 	{
-		PRECACHE_MODEL("models/w_crossbow_clip.mdl");
+		CBasePlayerAmmo::Precache();
 		PRECACHE_SOUND("items/9mmclip1.wav");
 	}
 	bool AddAmmo(CBaseEntity* pOther) override

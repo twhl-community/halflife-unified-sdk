@@ -34,12 +34,19 @@ IMPLEMENT_SAVERESTORE(CShockRifle, CShockRifle::BaseClass);
 LINK_ENTITY_TO_CLASS(weapon_shockrifle, CShockRifle);
 LINK_ENTITY_TO_CLASS(weapon_shockroach, CShockRifle);
 
+void CShockRifle::OnCreate()
+{
+	CBasePlayerWeapon::OnCreate();
+
+	pev->model = MAKE_STRING("models/w_shock_rifle.mdl");
+}
+
 void CShockRifle::Precache()
 {
 	BaseClass::Precache();
 
 	PRECACHE_MODEL("models/v_shock.mdl");
-	PRECACHE_MODEL("models/w_shock_rifle.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
 	PRECACHE_MODEL("models/p_shock.mdl");
 	m_iSpriteTexture = PRECACHE_MODEL("sprites/shockwave.spr");
 	PRECACHE_MODEL("sprites/lgtning.spr");
@@ -63,7 +70,7 @@ void CShockRifle::Spawn()
 
 	Precache();
 
-	SET_MODEL(edict(), "models/w_shock_rifle.mdl");
+	SET_MODEL(edict(), STRING(pev->model));
 
 	m_iDefaultAmmo = SHOCKRIFLE_DEFAULT_GIVE;
 

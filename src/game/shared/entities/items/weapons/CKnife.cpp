@@ -21,10 +21,17 @@
 
 LINK_ENTITY_TO_CLASS(weapon_knife, CKnife);
 
+void CKnife::OnCreate()
+{
+	BaseClass::OnCreate();
+
+	pev->model = MAKE_STRING("models/w_knife.mdl");
+}
+
 void CKnife::Precache()
 {
 	PRECACHE_MODEL("models/v_knife.mdl");
-	PRECACHE_MODEL("models/w_knife.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
 	PRECACHE_MODEL("models/p_knife.mdl");
 
 	PRECACHE_SOUND("weapons/knife1.wav");
@@ -44,7 +51,7 @@ void CKnife::Spawn()
 
 	m_iId = WEAPON_KNIFE;
 
-	SET_MODEL(edict(), "models/w_knife.mdl");
+	SET_MODEL(edict(), STRING(pev->model));
 
 	m_iClip = WEAPON_NOCLIP;
 

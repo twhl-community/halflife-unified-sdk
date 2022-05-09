@@ -27,16 +27,7 @@ public:
 		CZombie::OnCreate();
 
 		pev->health = GetSkillFloat("zombie_barney_health"sv);
-	}
-
-	void Spawn() override
-	{
-		SpawnCore("models/zombie_barney.mdl");
-	}
-
-	void Precache() override
-	{
-		PrecacheCore("models/zombie_barney.mdl");
+		pev->model = MAKE_STRING("models/zombie_barney.mdl");
 	}
 
 protected:

@@ -455,6 +455,7 @@ void CGargantua::OnCreate()
 	CBaseMonster::OnCreate();
 
 	pev->health = GetSkillFloat("gargantua_health"sv);
+	pev->model = MAKE_STRING("models/garg.mdl");
 }
 
 void CGargantua::EyeOn(int level)
@@ -765,7 +766,7 @@ void CGargantua::Spawn()
 {
 	Precache();
 
-	SET_MODEL(ENT(pev), "models/garg.mdl");
+	SET_MODEL(ENT(pev), STRING(pev->model));
 	UTIL_SetSize(pev, Vector(-32, -32, 0), Vector(32, 32, 64));
 
 	pev->solid = SOLID_SLIDEBOX;
@@ -791,7 +792,7 @@ void CGargantua::Spawn()
 //=========================================================
 void CGargantua::Precache()
 {
-	PRECACHE_MODEL("models/garg.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
 	PRECACHE_MODEL(GARG_EYE_SPRITE_NAME);
 	PRECACHE_MODEL(GARG_BEAM_SPRITE_NAME);
 	PRECACHE_MODEL(GARG_BEAM_SPRITE2);

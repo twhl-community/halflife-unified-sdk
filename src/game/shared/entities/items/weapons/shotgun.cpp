@@ -22,11 +22,18 @@
 
 LINK_ENTITY_TO_CLASS(weapon_shotgun, CShotgun);
 
+void CShotgun::OnCreate()
+{
+	CBasePlayerWeapon::OnCreate();
+
+	pev->model = MAKE_STRING("models/w_shotgun.mdl");
+}
+
 void CShotgun::Spawn()
 {
 	Precache();
 	m_iId = WEAPON_SHOTGUN;
-	SET_MODEL(ENT(pev), "models/w_shotgun.mdl");
+	SET_MODEL(ENT(pev), STRING(pev->model));
 
 	m_iDefaultAmmo = SHOTGUN_DEFAULT_GIVE;
 
@@ -37,7 +44,7 @@ void CShotgun::Spawn()
 void CShotgun::Precache()
 {
 	PRECACHE_MODEL("models/v_shotgun.mdl");
-	PRECACHE_MODEL("models/w_shotgun.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
 	PRECACHE_MODEL("models/p_shotgun.mdl");
 
 	m_iShell = PRECACHE_MODEL("models/shotgunshell.mdl"); // shotgun shell
@@ -368,15 +375,17 @@ void CShotgun::ItemPostFrame()
 
 class CShotgunAmmo : public CBasePlayerAmmo
 {
-	void Spawn() override
+public:
+	void OnCreate() override
 	{
-		Precache();
-		SET_MODEL(ENT(pev), "models/w_shotbox.mdl");
-		CBasePlayerAmmo::Spawn();
+		CBasePlayerAmmo::OnCreate();
+
+		pev->model = MAKE_STRING("models/w_shotbox.mdl");
 	}
+
 	void Precache() override
 	{
-		PRECACHE_MODEL("models/w_shotbox.mdl");
+		CBasePlayerAmmo::Precache();
 		PRECACHE_SOUND("items/9mmclip1.wav");
 	}
 	bool AddAmmo(CBaseEntity* pOther) override

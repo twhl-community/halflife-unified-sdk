@@ -19,6 +19,13 @@
 LINK_ENTITY_TO_CLASS(weapon_python, CPython);
 LINK_ENTITY_TO_CLASS(weapon_357, CPython);
 
+void CPython::OnCreate()
+{
+	CBasePlayerWeapon::OnCreate();
+
+	pev->model = MAKE_STRING("models/w_357.mdl");
+}
+
 bool CPython::GetItemInfo(ItemInfo* p)
 {
 	p->pszName = STRING(pev->classname);
@@ -49,7 +56,7 @@ void CPython::Spawn()
 	pev->classname = MAKE_STRING("weapon_357"); // hack to allow for old names
 	Precache();
 	m_iId = WEAPON_PYTHON;
-	SET_MODEL(ENT(pev), "models/w_357.mdl");
+	SET_MODEL(ENT(pev), STRING(pev->model));
 
 	m_iDefaultAmmo = PYTHON_DEFAULT_GIVE;
 
@@ -60,7 +67,7 @@ void CPython::Spawn()
 void CPython::Precache()
 {
 	PRECACHE_MODEL("models/v_357.mdl");
-	PRECACHE_MODEL("models/w_357.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
 	PRECACHE_MODEL("models/p_357.mdl");
 
 	PRECACHE_MODEL("models/w_357ammobox.mdl");
@@ -237,15 +244,17 @@ void CPython::WeaponIdle()
 
 class CPythonAmmo : public CBasePlayerAmmo
 {
-	void Spawn() override
+public:
+	void OnCreate() override
 	{
-		Precache();
-		SET_MODEL(ENT(pev), "models/w_357ammobox.mdl");
-		CBasePlayerAmmo::Spawn();
+		CBasePlayerAmmo::OnCreate();
+
+		pev->model = MAKE_STRING("models/w_357ammobox.mdl");
 	}
+
 	void Precache() override
 	{
-		PRECACHE_MODEL("models/w_357ammobox.mdl");
+		CBasePlayerAmmo::Precache();
 		PRECACHE_SOUND("items/9mmclip1.wav");
 	}
 	bool AddAmmo(CBaseEntity* pOther) override

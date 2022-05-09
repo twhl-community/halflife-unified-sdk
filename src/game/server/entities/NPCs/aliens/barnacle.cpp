@@ -70,6 +70,7 @@ void CBarnacle::OnCreate()
 	CBaseMonster::OnCreate();
 
 	pev->health = 25;
+	pev->model = MAKE_STRING("models/barnacle.mdl");
 }
 
 //=========================================================
@@ -107,7 +108,7 @@ void CBarnacle::Spawn()
 {
 	Precache();
 
-	SET_MODEL(ENT(pev), "models/barnacle.mdl");
+	SET_MODEL(ENT(pev), STRING(pev->model));
 	UTIL_SetSize(pev, Vector(-16, -16, -32), Vector(16, 16, 0));
 
 	pev->solid = SOLID_SLIDEBOX;
@@ -396,7 +397,7 @@ void CBarnacle::WaitTillDead()
 //=========================================================
 void CBarnacle::Precache()
 {
-	PRECACHE_MODEL("models/barnacle.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
 
 	PRECACHE_SOUND("barnacle/bcl_alert2.wav"); //happy, lifting food up
 	PRECACHE_SOUND("barnacle/bcl_bite3.wav");  //just got food to mouth

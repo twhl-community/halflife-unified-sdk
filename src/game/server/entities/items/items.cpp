@@ -79,9 +79,23 @@ void CWorldItem::Spawn()
 	REMOVE_ENTITY(edict());
 }
 
+void CItem::Precache()
+{
+	if (!FStringNull(pev->model))
+	{
+		PRECACHE_MODEL(STRING(pev->model));
+	}
+}
 
 void CItem::Spawn()
 {
+	Precache();
+
+	if (!FStringNull(pev->model))
+	{
+		SET_MODEL(ENT(pev), STRING(pev->model));
+	}
+
 	pev->movetype = MOVETYPE_TOSS;
 	pev->solid = SOLID_TRIGGER;
 	UTIL_SetOrigin(pev, pev->origin);
@@ -164,15 +178,12 @@ void CItem::Materialize()
 
 class CItemSuit : public CItem
 {
-	void Spawn() override
+public:
+	void OnCreate() override
 	{
-		Precache();
-		SET_MODEL(ENT(pev), "models/w_suit.mdl");
-		CItem::Spawn();
-	}
-	void Precache() override
-	{
-		PRECACHE_MODEL("models/w_suit.mdl");
+		CItem::OnCreate();
+
+		pev->model = MAKE_STRING("models/w_suit.mdl");
 	}
 	bool MyTouch(CBasePlayer* pPlayer) override
 	{
@@ -196,15 +207,16 @@ LINK_ENTITY_TO_CLASS(item_vest, CItemSuit);
 
 class CItemBattery : public CItem
 {
-	void Spawn() override
+public:
+	void OnCreate() override
 	{
-		Precache();
-		SET_MODEL(ENT(pev), "models/w_battery.mdl");
-		CItem::Spawn();
+		CItem::OnCreate();
+
+		pev->model = MAKE_STRING("models/w_battery.mdl");
 	}
 	void Precache() override
 	{
-		PRECACHE_MODEL("models/w_battery.mdl");
+		CItem::Precache();
 		PRECACHE_SOUND("items/gunpickup2.wav");
 	}
 	bool MyTouch(CBasePlayer* pPlayer) override
@@ -252,15 +264,12 @@ LINK_ENTITY_TO_CLASS(item_battery, CItemBattery);
 
 class CItemAntidote : public CItem
 {
-	void Spawn() override
+public:
+	void OnCreate() override
 	{
-		Precache();
-		SET_MODEL(ENT(pev), "models/w_antidote.mdl");
-		CItem::Spawn();
-	}
-	void Precache() override
-	{
-		PRECACHE_MODEL("models/w_antidote.mdl");
+		CItem::OnCreate();
+
+		pev->model = MAKE_STRING("models/w_antidote.mdl");
 	}
 	bool MyTouch(CBasePlayer* pPlayer) override
 	{
@@ -276,15 +285,12 @@ LINK_ENTITY_TO_CLASS(item_antidote, CItemAntidote);
 
 class CItemSecurity : public CItem
 {
-	void Spawn() override
+public:
+	void OnCreate() override
 	{
-		Precache();
-		SET_MODEL(ENT(pev), "models/w_security.mdl");
-		CItem::Spawn();
-	}
-	void Precache() override
-	{
-		PRECACHE_MODEL("models/w_security.mdl");
+		CItem::OnCreate();
+
+		pev->model = MAKE_STRING("models/w_security.mdl");
 	}
 	bool MyTouch(CBasePlayer* pPlayer) override
 	{
@@ -297,15 +303,12 @@ LINK_ENTITY_TO_CLASS(item_security, CItemSecurity);
 
 class CItemLongJump : public CItem
 {
-	void Spawn() override
+public:
+	void OnCreate() override
 	{
-		Precache();
-		SET_MODEL(ENT(pev), "models/w_longjump.mdl");
-		CItem::Spawn();
-	}
-	void Precache() override
-	{
-		PRECACHE_MODEL("models/w_longjump.mdl");
+		CItem::OnCreate();
+
+		pev->model = MAKE_STRING("models/w_longjump.mdl");
 	}
 	bool MyTouch(CBasePlayer* pPlayer) override
 	{
@@ -335,15 +338,16 @@ LINK_ENTITY_TO_CLASS(item_longjump, CItemLongJump);
 
 class CItemHelmet : public CItem
 {
-	void Spawn() override
+public:
+	void OnCreate() override
 	{
-		Precache();
-		SET_MODEL(ENT(pev), "models/Barney_Helmet.mdl");
-		CItem::Spawn();
+		CItem::OnCreate();
+
+		pev->model = MAKE_STRING("models/Barney_Helmet.mdl");
 	}
 	void Precache() override
 	{
-		PRECACHE_MODEL("models/Barney_Helmet.mdl");
+		CItem::Precache();
 		PRECACHE_SOUND("items/gunpickup2.wav");
 	}
 	bool MyTouch(CBasePlayer* pPlayer) override
@@ -385,15 +389,16 @@ LINK_ENTITY_TO_CLASS(item_helmet, CItemHelmet);
 
 class CItemArmorVest : public CItem
 {
-	void Spawn() override
+public:
+	void OnCreate() override
 	{
-		Precache();
-		SET_MODEL(ENT(pev), "models/Barney_Vest.mdl");
-		CItem::Spawn();
+		CItem::OnCreate();
+
+		pev->model = MAKE_STRING("models/Barney_Vest.mdl");
 	}
 	void Precache() override
 	{
-		PRECACHE_MODEL("models/Barney_Vest.mdl");
+		CItem::Precache();
 		PRECACHE_SOUND("items/gunpickup2.wav");
 	}
 	bool MyTouch(CBasePlayer* pPlayer) override

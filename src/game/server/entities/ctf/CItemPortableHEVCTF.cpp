@@ -21,9 +21,16 @@
 
 LINK_ENTITY_TO_CLASS(item_ctfportablehev, CItemPortableHEVCTF);
 
+void CItemPortableHEVCTF::OnCreate()
+{
+	CItemCTF::OnCreate();
+
+	pev->model = MAKE_STRING("models/w_porthev.mdl");
+}
+
 void CItemPortableHEVCTF::Precache()
 {
-	g_engfuncs.pfnPrecacheModel("models/w_porthev.mdl");
+	g_engfuncs.pfnPrecacheModel(STRING(pev->model));
 	g_engfuncs.pfnPrecacheSound("ctf/pow_armor_charge.wav");
 }
 
@@ -64,16 +71,12 @@ bool CItemPortableHEVCTF::MyTouch(CBasePlayer* pPlayer)
 
 void CItemPortableHEVCTF::Spawn()
 {
-	if (!FStringNull(pev->model))
-		g_engfuncs.pfnPrecacheModel(STRING(pev->model));
-
 	g_engfuncs.pfnPrecacheSound("ctf/itemthrow.wav");
 	g_engfuncs.pfnPrecacheSound("items/ammopickup1.wav");
 
 	Precache();
 
-	//TODO: shouldn't this be using pev->model?
-	g_engfuncs.pfnSetModel(edict(), "models/w_porthev.mdl");
+	g_engfuncs.pfnSetModel(edict(), STRING(pev->model));
 
 	pev->spawnflags |= SF_NORESPAWN;
 	pev->oldorigin = pev->origin;

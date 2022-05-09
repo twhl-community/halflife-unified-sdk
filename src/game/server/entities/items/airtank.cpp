@@ -47,6 +47,7 @@ void CAirtank::OnCreate()
 	CGrenade::OnCreate();
 
 	pev->health = 20;
+	pev->model = MAKE_STRING("models/w_oxygen.mdl");
 }
 
 void CAirtank::Spawn()
@@ -56,7 +57,7 @@ void CAirtank::Spawn()
 	pev->movetype = MOVETYPE_FLY;
 	pev->solid = SOLID_BBOX;
 
-	SET_MODEL(ENT(pev), "models/w_oxygen.mdl");
+	SET_MODEL(ENT(pev), STRING(pev->model));
 	UTIL_SetSize(pev, Vector(-16, -16, 0), Vector(16, 16, 36));
 	UTIL_SetOrigin(pev, pev->origin);
 
@@ -71,7 +72,7 @@ void CAirtank::Spawn()
 
 void CAirtank::Precache()
 {
-	PRECACHE_MODEL("models/w_oxygen.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
 	PRECACHE_SOUND("doors/aliendoor3.wav");
 }
 

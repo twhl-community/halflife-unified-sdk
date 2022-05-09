@@ -313,6 +313,7 @@ void CScientist::OnCreate()
 	CTalkMonster::OnCreate();
 
 	pev->health = GetSkillFloat("scientist_health"sv);
+	pev->model = MAKE_STRING("models/scientist.mdl");
 }
 
 void CScientist::DeclineFollowing()
@@ -540,11 +541,11 @@ void CScientist::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 }
 
-void CScientist::SpawnCore(const char* model)
+void CScientist::Spawn()
 {
 	Precache();
 
-	SET_MODEL(ENT(pev), model);
+	SET_MODEL(ENT(pev), STRING(pev->model));
 	UTIL_SetSize(pev, VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX);
 
 	pev->solid = SOLID_SLIDEBOX;
@@ -578,17 +579,9 @@ void CScientist::SpawnCore(const char* model)
 	}
 }
 
-//=========================================================
-// Spawn
-//=========================================================
-void CScientist::Spawn()
+void CScientist::Precache()
 {
-	SpawnCore("models/scientist.mdl");
-}
-
-void CScientist::PrecacheCore(const char* model)
-{
-	PRECACHE_MODEL(model);
+	PRECACHE_MODEL(STRING(pev->model));
 	PRECACHE_SOUND("scientist/sci_pain1.wav");
 	PRECACHE_SOUND("scientist/sci_pain2.wav");
 	PRECACHE_SOUND("scientist/sci_pain3.wav");
@@ -600,14 +593,6 @@ void CScientist::PrecacheCore(const char* model)
 	TalkInit();
 
 	CTalkMonster::Precache();
-}
-
-//=========================================================
-// Precache - precaches all resources this monster needs
-//=========================================================
-void CScientist::Precache()
-{
-	PrecacheCore("models/scientist.mdl");
 }
 
 // Init talk data
@@ -1032,6 +1017,7 @@ void CDeadScientist::OnCreate()
 
 	// Corpses have less health
 	pev->health = 8; //GetSkillFloat("scientist_health"sv);
+	pev->model = MAKE_STRING("models/scientist.mdl");
 }
 
 bool CDeadScientist::KeyValue(KeyValueData* pkvd)
@@ -1051,8 +1037,8 @@ LINK_ENTITY_TO_CLASS(monster_scientist_dead, CDeadScientist);
 //
 void CDeadScientist::Spawn()
 {
-	PRECACHE_MODEL("models/scientist.mdl");
-	SET_MODEL(ENT(pev), "models/scientist.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
+	SET_MODEL(ENT(pev), STRING(pev->model));
 
 	pev->effects = 0;
 	pev->sequence = 0;
@@ -1104,12 +1090,13 @@ void CSittingScientist::OnCreate()
 	CScientist::OnCreate();
 
 	pev->health = 50;
+	pev->model = MAKE_STRING("models/scientist.mdl");
 }
 
-void CSittingScientist::SpawnCore(const char* model)
+void CSittingScientist::Spawn()
 {
-	PRECACHE_MODEL(model);
-	SET_MODEL(ENT(pev), model);
+	PRECACHE_MODEL(STRING(pev->model));
+	SET_MODEL(ENT(pev), STRING(pev->model));
 	Precache();
 	InitBoneControllers();
 
@@ -1142,14 +1129,6 @@ void CSittingScientist::SpawnCore(const char* model)
 	pev->nextthink = gpGlobals->time + 0.1;
 
 	DROP_TO_FLOOR(ENT(pev));
-}
-
-//
-// ********** Scientist SPAWN **********
-//
-void CSittingScientist::Spawn()
-{
-	SpawnCore("models/scientist.mdl");
 }
 
 void CSittingScientist::Precache()

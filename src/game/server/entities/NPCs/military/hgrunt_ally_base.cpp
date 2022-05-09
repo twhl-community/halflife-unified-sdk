@@ -727,11 +727,11 @@ void CBaseHGruntAlly::HandleAnimEvent(MonsterEvent_t* pEvent)
 //=========================================================
 // Spawn
 //=========================================================
-void CBaseHGruntAlly::SpawnCore(const char* model)
+void CBaseHGruntAlly::SpawnCore()
 {
 	Precache();
 
-	SET_MODEL(ENT(pev), model);
+	SET_MODEL(ENT(pev), STRING(pev->model));
 	UTIL_SetSize(pev, VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX);
 
 	pev->solid = SOLID_SLIDEBOX;
@@ -769,6 +769,8 @@ void CBaseHGruntAlly::SpawnCore(const char* model)
 void CBaseHGruntAlly::Precache()
 {
 	TalkInit();
+
+	PRECACHE_MODEL(STRING(pev->model));
 
 	PRECACHE_SOUND("hgrunt/gr_mgun1.wav");
 	PRECACHE_SOUND("hgrunt/gr_mgun2.wav");

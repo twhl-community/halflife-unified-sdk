@@ -46,16 +46,17 @@ void CApache::OnCreate()
 	CBaseMonster::OnCreate();
 
 	pev->health = GetSkillFloat("apache_health"sv);
+	pev->model = MAKE_STRING("models/apache.mdl");
 }
 
-void CApache::SpawnCore(const char* model)
+void CApache::Spawn()
 {
 	Precache();
 	// motor
 	pev->movetype = MOVETYPE_FLY;
 	pev->solid = SOLID_BBOX;
 
-	SET_MODEL(ENT(pev), model);
+	SET_MODEL(ENT(pev), STRING(pev->model));
 	UTIL_SetSize(pev, Vector(-32, -32, -64), Vector(32, 32, 0));
 	UTIL_SetOrigin(pev, pev->origin);
 
@@ -87,14 +88,9 @@ void CApache::SpawnCore(const char* model)
 	m_iRockets = 10;
 }
 
-void CApache::Spawn()
+void CApache::Precache()
 {
-	SpawnCore("models/apache.mdl");
-}
-
-void CApache::PrecacheCore(const char* model)
-{
-	PRECACHE_MODEL(model);
+	PRECACHE_MODEL(STRING(pev->model));
 
 	PRECACHE_SOUND("apache/ap_rotor1.wav");
 	PRECACHE_SOUND("apache/ap_rotor2.wav");
@@ -113,11 +109,6 @@ void CApache::PrecacheCore(const char* model)
 	m_iBodyGibs = PRECACHE_MODEL("models/metalplategibs_green.mdl");
 
 	UTIL_PrecacheOther("hvr_rocket");
-}
-
-void CApache::Precache()
-{
-	PrecacheCore("models/apache.mdl");
 }
 
 void CApache::NullThink()

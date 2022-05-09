@@ -37,10 +37,17 @@ IMPLEMENT_SAVERESTORE(CGrapple, CGrapple::BaseClass);
 
 LINK_ENTITY_TO_CLASS(weapon_grapple, CGrapple);
 
+void CGrapple::OnCreate()
+{
+	BaseClass::OnCreate();
+
+	pev->model = MAKE_STRING("models/w_bgrap.mdl");
+}
+
 void CGrapple::Precache()
 {
 	PRECACHE_MODEL("models/v_bgrap.mdl");
-	PRECACHE_MODEL("models/w_bgrap.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
 	PRECACHE_MODEL("models/p_bgrap.mdl");
 
 	PRECACHE_SOUND("weapons/bgrapple_release.wav");
@@ -65,7 +72,7 @@ void CGrapple::Spawn()
 
 	m_iId = WEAPON_GRAPPLE;
 
-	SET_MODEL(edict(), "models/w_bgrap.mdl");
+	SET_MODEL(edict(), STRING(pev->model));
 
 	m_iClip = WEAPON_NOCLIP;
 

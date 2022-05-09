@@ -29,6 +29,13 @@ IMPLEMENT_SAVERESTORE(CSniperRifle, CSniperRifle::BaseClass);
 
 LINK_ENTITY_TO_CLASS(weapon_sniperrifle, CSniperRifle);
 
+void CSniperRifle::OnCreate()
+{
+	CBasePlayerWeapon::OnCreate();
+
+	pev->model = MAKE_STRING("models/w_m40a1.mdl");
+}
+
 void CSniperRifle::Precache()
 {
 	pev->classname = MAKE_STRING("weapon_sniperrifle");
@@ -37,7 +44,7 @@ void CSniperRifle::Precache()
 
 	m_iId = WEAPON_SNIPERRIFLE;
 
-	PRECACHE_MODEL("models/w_m40a1.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
 	PRECACHE_MODEL("models/v_m40a1.mdl");
 	PRECACHE_MODEL("models/p_m40a1.mdl");
 
@@ -56,7 +63,7 @@ void CSniperRifle::Spawn()
 {
 	Precache();
 
-	SET_MODEL(edict(), "models/w_m40a1.mdl");
+	SET_MODEL(edict(), STRING(pev->model));
 
 	m_iDefaultAmmo = SNIPERRIFLE_DEFAULT_GIVE;
 
@@ -252,16 +259,16 @@ class CSniperRifleAmmo : public CBasePlayerAmmo
 public:
 	using BaseClass = CBasePlayerAmmo;
 
-	void Spawn() override
+	void OnCreate() override
 	{
-		Precache();
-		SET_MODEL(edict(), "models/w_m40a1clip.mdl");
-		CBasePlayerAmmo::Spawn();
+		CBasePlayerAmmo::OnCreate();
+
+		pev->model = MAKE_STRING("models/w_m40a1clip.mdl");
 	}
 
 	void Precache() override
 	{
-		PRECACHE_MODEL("models/w_m40a1clip.mdl");
+		BaseClass::Precache();
 		PRECACHE_SOUND("items/9mmclip1.wav");
 	}
 

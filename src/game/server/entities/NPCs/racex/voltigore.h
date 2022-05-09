@@ -156,13 +156,6 @@ protected:
 
 	/**
 	*	@brief Spawns the Voltigore
-	*	@param model Must be a string literal
 	*/
-	void SpawnCore(const char* model, const Vector& mins, const Vector& maxs);
-
-	/**
-	*	@brief Precaches the Voltigore's assets
-	*	@param model Must be a string literal
-	*/
-	void PrecacheCore(const char* model);
+	void SpawnCore(const Vector& mins, const Vector& maxs);
 };

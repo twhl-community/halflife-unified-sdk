@@ -32,7 +32,6 @@ class COFBabyVoltigore : public COFVoltigore
 public:
 	void OnCreate() override;
 	void Spawn() override;
-	void Precache() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 	void SetObjectCollisionBox() override
 	{
@@ -59,6 +58,7 @@ void COFBabyVoltigore::OnCreate()
 	COFVoltigore::OnCreate();
 
 	pev->health = GetSkillFloat("babyvoltigore_health"sv);
+	pev->model = MAKE_STRING("models/baby_voltigore.mdl");
 }
 
 //=========================================================
@@ -199,17 +199,8 @@ void COFBabyVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 //=========================================================
 void COFBabyVoltigore::Spawn()
 {
-	SpawnCore("models/baby_voltigore.mdl", {-16, -16, 0}, {16, 16, 32});
+	SpawnCore({-16, -16, 0}, {16, 16, 32});
 }
-
-//=========================================================
-// Precache - precaches all resources this monster needs
-//=========================================================
-void COFBabyVoltigore::Precache()
-{
-	PrecacheCore("models/baby_voltigore.mdl");
-}
-
 //=========================================================
 // CheckTraceHullAttack - expects a length to trace, amount
 // of damage to do, and damage type. Returns a pointer to

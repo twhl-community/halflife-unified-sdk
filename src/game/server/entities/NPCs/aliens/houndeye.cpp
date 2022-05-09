@@ -119,6 +119,7 @@ void CHoundeye::OnCreate()
 	CSquadMonster::OnCreate();
 
 	pev->health = GetSkillFloat("houndeye_health"sv);
+	pev->model = MAKE_STRING("models/houndeye.mdl");
 }
 
 //=========================================================
@@ -327,7 +328,7 @@ void CHoundeye::Spawn()
 {
 	Precache();
 
-	SET_MODEL(ENT(pev), "models/houndeye.mdl");
+	SET_MODEL(ENT(pev), STRING(pev->model));
 	UTIL_SetSize(pev, Vector(-16, -16, 0), Vector(16, 16, 36));
 
 	pev->solid = SOLID_SLIDEBOX;
@@ -349,7 +350,7 @@ void CHoundeye::Spawn()
 //=========================================================
 void CHoundeye::Precache()
 {
-	PRECACHE_MODEL("models/houndeye.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
 
 	PRECACHE_SOUND("houndeye/he_alert1.wav");
 	PRECACHE_SOUND("houndeye/he_alert2.wav");
@@ -1307,6 +1308,7 @@ void CDeadHoundeye::OnCreate()
 
 	// Corpses have less health
 	pev->health = 8;
+	pev->model = MAKE_STRING("models/houndeye_dead.mdl");
 }
 
 bool CDeadHoundeye::KeyValue(KeyValueData* pkvd)
@@ -1327,8 +1329,8 @@ LINK_ENTITY_TO_CLASS(monster_houndeye_dead, CDeadHoundeye);
 //=========================================================
 void CDeadHoundeye::Spawn()
 {
-	PRECACHE_MODEL("models/houndeye_dead.mdl");
-	SET_MODEL(ENT(pev), "models/houndeye_dead.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
+	SET_MODEL(ENT(pev), STRING(pev->model));
 
 	pev->effects = 0;
 	pev->yaw_speed = 8;

@@ -54,6 +54,7 @@ public:
 	static TYPEDESCRIPTION m_SaveData[];
 #endif
 
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	void EXPORT SwingAgain();

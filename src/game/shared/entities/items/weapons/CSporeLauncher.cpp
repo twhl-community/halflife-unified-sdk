@@ -32,9 +32,16 @@ IMPLEMENT_SAVERESTORE(CSporeLauncher, CSporeLauncher::BaseClass);
 
 LINK_ENTITY_TO_CLASS(weapon_sporelauncher, CSporeLauncher);
 
+void CSporeLauncher::OnCreate()
+{
+	CBasePlayerWeapon::OnCreate();
+
+	pev->model = MAKE_STRING("models/w_spore_launcher.mdl");
+}
+
 void CSporeLauncher::Precache()
 {
-	PRECACHE_MODEL("models/w_spore_launcher.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
 	PRECACHE_MODEL("models/v_spore_launcher.mdl");
 	PRECACHE_MODEL("models/p_spore_launcher.mdl");
 
@@ -55,7 +62,7 @@ void CSporeLauncher::Spawn()
 
 	m_iId = WEAPON_SPORELAUNCHER;
 
-	SET_MODEL(edict(), "models/w_spore_launcher.mdl");
+	SET_MODEL(edict(), STRING(pev->model));
 
 	m_iDefaultAmmo = SPORELAUNCHER_DEFAULT_GIVE;
 
@@ -378,9 +385,16 @@ class CSporeAmmo : public CBasePlayerAmmo
 public:
 	using BaseClass = CBasePlayerAmmo;
 
+	void OnCreate() override
+	{
+		CBasePlayerAmmo::OnCreate();
+
+		pev->model = MAKE_STRING("models/spore_ammo.mdl");
+	}
+
 	void Precache() override
 	{
-		PRECACHE_MODEL("models/spore_ammo.mdl");
+		CBasePlayerAmmo::Precache();
 		PRECACHE_SOUND("weapons/spore_ammo.wav");
 	}
 
@@ -388,7 +402,7 @@ public:
 	{
 		Precache();
 
-		SET_MODEL(edict(), "models/spore_ammo.mdl");
+		SET_MODEL(edict(), STRING(pev->model));
 
 		pev->movetype = MOVETYPE_FLY;
 

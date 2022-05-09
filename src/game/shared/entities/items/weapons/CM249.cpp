@@ -34,10 +34,17 @@ IMPLEMENT_SAVERESTORE(CM249, CM249::BaseClass);
 
 LINK_ENTITY_TO_CLASS(weapon_m249, CM249);
 
+void CM249::OnCreate()
+{
+	BaseClass::OnCreate();
+
+	pev->model = MAKE_STRING("models/w_saw.mdl");
+}
+
 void CM249::Precache()
 {
 	PRECACHE_MODEL("models/v_saw.mdl");
-	PRECACHE_MODEL("models/w_saw.mdl");
+	PRECACHE_MODEL(STRING(pev->model));
 	PRECACHE_MODEL("models/p_saw.mdl");
 
 	m_iShell = PRECACHE_MODEL("models/saw_shell.mdl");
@@ -60,7 +67,7 @@ void CM249::Spawn()
 
 	m_iId = WEAPON_M249;
 
-	SET_MODEL(edict(), "models/w_saw.mdl");
+	SET_MODEL(edict(), STRING(pev->model));
 
 	m_iDefaultAmmo = M249_DEFAULT_GIVE;
 
@@ -373,19 +380,17 @@ class CAmmo556 : public CBasePlayerAmmo
 public:
 	using BaseClass = CBasePlayerAmmo;
 
-	void Precache() override
+	void OnCreate() override
 	{
-		PRECACHE_MODEL("models/w_saw_clip.mdl");
-		PRECACHE_SOUND("items/9mmclip1.wav");
+		BaseClass::OnCreate();
+
+		pev->model = MAKE_STRING("models/w_saw_clip.mdl");
 	}
 
-	void Spawn() override
+	void Precache() override
 	{
-		Precache();
-
-		SET_MODEL(edict(), "models/w_saw_clip.mdl");
-
-		BaseClass::Spawn();
+		CBasePlayerAmmo::Precache();
+		PRECACHE_SOUND("items/9mmclip1.wav");
 	}
 
 	bool AddAmmo(CBaseEntity* pOther) override

@@ -25,6 +25,9 @@
 // Spark Shower
 class CShower : public CBaseEntity
 {
+public:
+	void OnCreate() override;
+	void Precache() override;
 	void Spawn() override;
 	void Think() override;
 	void Touch(CBaseEntity* pOther) override;
@@ -33,8 +36,23 @@ class CShower : public CBaseEntity
 
 LINK_ENTITY_TO_CLASS(spark_shower, CShower);
 
+void CShower::OnCreate()
+{
+	CBaseEntity::OnCreate();
+
+	// Need a model, just use the grenade, we don't draw it anyway
+	pev->model = MAKE_STRING("models/grenade.mdl");
+}
+
+void CShower::Precache()
+{
+	PRECACHE_MODEL(STRING(pev->model));
+}
+
 void CShower::Spawn()
 {
+	Precache();
+
 	pev->velocity = RANDOM_FLOAT(200, 300) * pev->angles;
 	pev->velocity.x += RANDOM_FLOAT(-100.f, 100.f);
 	pev->velocity.y += RANDOM_FLOAT(-100.f, 100.f);
@@ -46,7 +64,7 @@ void CShower::Spawn()
 	pev->gravity = 0.5;
 	pev->nextthink = gpGlobals->time + 0.1;
 	pev->solid = SOLID_NOT;
-	SET_MODEL(edict(), "models/grenade.mdl"); // Need a model, just use the grenade, we don't draw it anyway
+	SET_MODEL(edict(), STRING(pev->model));
 	UTIL_SetSize(pev, g_vecZero, g_vecZero);
 	pev->effects |= EF_NODRAW;
 	pev->speed = RANDOM_FLOAT(0.5, 1.5);

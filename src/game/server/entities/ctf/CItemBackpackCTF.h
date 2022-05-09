@@ -20,6 +20,8 @@
 class CItemBackpackCTF : public CItemCTF
 {
 public:
+	void OnCreate() override;
+
 	void Precache() override;
 
 	void RemoveEffect(CBasePlayer* pPlayer) override;
