@@ -173,11 +173,13 @@ public:
 
 	/**
 	*	@brief Called immediately after the constructor has finished to complete initialization.
+	*	@details Call the base class version at the start when overriding this function.
 	*/
 	virtual void OnCreate();
 
 	/**
 	*	@brief Called immediately before the destructor is executed.
+	*	@details Call the base class version at the end when overriding this function.
 	*/
 	virtual void OnDestroy();
 
