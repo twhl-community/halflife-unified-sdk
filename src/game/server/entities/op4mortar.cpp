@@ -243,6 +243,8 @@ public:
 
 	bool KeyValue(KeyValueData* pkvd) override;
 
+	void OnCreate() override;
+
 	void Precache() override;
 
 	void Spawn() override;
@@ -360,6 +362,13 @@ bool COp4Mortar::KeyValue(KeyValueData* pkvd)
 	return CBaseToggle::KeyValue(pkvd);
 }
 
+void COp4Mortar::OnCreate()
+{
+	CBaseToggle::OnCreate();
+
+	pev->health = 1;
+}
+
 void COp4Mortar::Precache()
 {
 	PRECACHE_MODEL("models/mortar.mdl");
@@ -376,7 +385,6 @@ void COp4Mortar::Spawn()
 
 	SET_MODEL(edict(), "models/mortar.mdl");
 
-	pev->health = 1;
 	pev->sequence = LookupSequence("idle");
 
 	ResetSequenceInfo();
