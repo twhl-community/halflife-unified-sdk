@@ -87,7 +87,7 @@ void COFChargedBolt::Spawn()
 
 	pev->gravity = 0.5;
 
-	SET_MODEL(edict(), "sprites/blueflare2.spr");
+	SetModel("sprites/blueflare2.spr");
 
 	UTIL_SetOrigin(pev, pev->origin);
 
@@ -547,7 +547,7 @@ void COFVoltigore::SpawnCore(const Vector& mins, const Vector& maxs)
 {
 	Precache();
 
-	SET_MODEL(ENT(pev), STRING(pev->model));
+	SetModel(STRING(pev->model));
 	UTIL_SetSize(pev, mins, maxs);
 
 	pev->solid = SOLID_SLIDEBOX;

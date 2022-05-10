@@ -260,7 +260,7 @@ void CTentacle::Spawn()
 	//Always interpolate tentacles since they don't actually move.
 	m_EFlags |= EFLAG_SLERP;
 
-	SET_MODEL(ENT(pev), STRING(pev->model));
+	SetModel(STRING(pev->model));
 	UTIL_SetSize(pev, Vector(-32, -32, 0), Vector(32, 32, 64));
 
 	pev->takedamage = DAMAGE_AIM;
@@ -1058,7 +1058,7 @@ void CTentacleMaw::OnCreate()
 void CTentacleMaw::Spawn()
 {
 	Precache();
-	SET_MODEL(ENT(pev), STRING(pev->model));
+	SetModel(STRING(pev->model));
 	UTIL_SetSize(pev, Vector(-32, -32, 0), Vector(32, 32, 64));
 
 	pev->solid = SOLID_NOT;

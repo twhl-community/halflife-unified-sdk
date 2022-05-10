@@ -233,7 +233,7 @@ void CTFGoalFlag::Spawn()
 		{
 			if (!FStringNull(pev->model))
 			{
-				g_engfuncs.pfnSetModel(edict(), STRING(pev->model));
+				SetModel(STRING(pev->model));
 
 				pev->sequence = LookupSequence("flag_positioned");
 

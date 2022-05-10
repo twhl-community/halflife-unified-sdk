@@ -170,6 +170,7 @@ public:
 	//Common helper functions
 
 	int PrecacheModel(const char* s);
+	void SetModel(const char* s);
 
 	// initialization functions
 

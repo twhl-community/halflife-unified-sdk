@@ -65,7 +65,7 @@ void CDisplacer::Spawn()
 
 	m_iId = WEAPON_DISPLACER;
 
-	SET_MODEL(edict(), STRING(pev->model));
+	SetModel(STRING(pev->model));
 
 	m_iDefaultAmmo = DISPLACER_DEFAULT_GIVE;
 

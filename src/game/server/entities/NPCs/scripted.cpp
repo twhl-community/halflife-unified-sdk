@@ -1223,7 +1223,7 @@ void CFurniture::Die()
 void CFurniture::Spawn()
 {
 	PrecacheModel(STRING(pev->model));
-	SET_MODEL(ENT(pev), STRING(pev->model));
+	SetModel(STRING(pev->model));
 
 	pev->movetype = MOVETYPE_NONE;
 	pev->solid = SOLID_BBOX;

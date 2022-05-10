@@ -67,7 +67,7 @@ IMPLEMENT_SAVERESTORE(CBubbling, CBaseEntity);
 void CBubbling::Spawn()
 {
 	Precache();
-	SET_MODEL(ENT(pev), STRING(pev->model)); // Set size
+	SetModel(STRING(pev->model)); // Set size
 
 	pev->solid = SOLID_NOT; // Remove model & collisions
 	pev->renderamt = 0;		// The engine won't draw this model if this is set to 0 and blending is on
@@ -1145,7 +1145,7 @@ void CGlow::Spawn()
 	pev->frame = 0;
 
 	PrecacheModel(STRING(pev->model));
-	SET_MODEL(ENT(pev), STRING(pev->model));
+	SetModel(STRING(pev->model));
 
 	m_maxFrame = (float)MODEL_FRAMES(pev->modelindex) - 1;
 	if (m_maxFrame > 1.0 && pev->framerate != 0)
@@ -1189,7 +1189,7 @@ void CSprite::Spawn()
 	pev->frame = 0;
 
 	Precache();
-	SET_MODEL(ENT(pev), STRING(pev->model));
+	SetModel(STRING(pev->model));
 
 	m_maxFrame = (float)MODEL_FRAMES(pev->modelindex) - 1;
 	if (!FStringNull(pev->targetname) && (pev->spawnflags & SF_SPRITE_STARTON) == 0)
@@ -2236,7 +2236,7 @@ void CItemSoda::Spawn()
 	pev->solid = SOLID_NOT;
 	pev->movetype = MOVETYPE_TOSS;
 
-	SET_MODEL(ENT(pev), STRING(pev->model));
+	SetModel(STRING(pev->model));
 	UTIL_SetSize(pev, Vector(0, 0, 0), Vector(0, 0, 0));
 
 	SetThink(&CItemSoda::CanThink);
@@ -2411,7 +2411,7 @@ void CWarpBall::WarpBallUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_T
 				UTIL_SetOrigin(pev, targetEntity->v.origin);
 		}
 
-		SET_MODEL(pev->pContainingEntity, "sprites/XFlare1.spr");
+		SetModel("sprites/XFlare1.spr");
 
 		m_flMaxFrame = MODEL_FRAMES(pev->modelindex) - 1;
 
@@ -2502,7 +2502,7 @@ void CWarpBall::BallThink()
 
 	if (pev->frame > m_flMaxFrame)
 	{
-		SET_MODEL(edict(), "");
+		SetModel("");
 
 		SetThink(nullptr);
 

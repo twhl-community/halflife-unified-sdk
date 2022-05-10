@@ -89,7 +89,7 @@ void COFGeneWormCloud::Spawn()
 	pev->effects = 0;
 	pev->frame = 0;
 
-	SET_MODEL(edict(), "sprites/ballsmoke.spr");
+	SetModel("sprites/ballsmoke.spr");
 
 	UTIL_SetOrigin(pev, pev->origin);
 
@@ -291,7 +291,7 @@ void COFGeneWormSpawn::Spawn()
 
 	Precache();
 
-	SET_MODEL(edict(), "sprites/boss_glow.spr");
+	SetModel("sprites/boss_glow.spr");
 
 	UTIL_SetOrigin(pev, pev->origin);
 
@@ -476,7 +476,7 @@ void COFGeneWormSpawn::LaunchSpawn(const Vector& origin, const Vector& aim, int 
 	pev->aiment = nullptr;
 	pev->movetype = MOVETYPE_FLY;
 
-	SET_MODEL(edict(), "sprites/tele1.spr");
+	SetModel("sprites/tele1.spr");
 
 	m_maxFrame = MODEL_FRAMES(pev->modelindex) - 1;
 
@@ -757,7 +757,7 @@ void COFGeneWorm::Spawn()
 	pev->movetype = MOVETYPE_FLY;
 	pev->solid = SOLID_NOT;
 
-	SET_MODEL(edict(), STRING(pev->model));
+	SetModel(STRING(pev->model));
 
 	UTIL_SetSize(pev, {-436.67, -720.49, -331.74}, {425.29, 164.85, 355.68});
 

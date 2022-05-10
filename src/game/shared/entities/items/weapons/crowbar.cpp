@@ -32,7 +32,7 @@ void CCrowbar::Spawn()
 {
 	Precache();
 	m_iId = WEAPON_CROWBAR;
-	SET_MODEL(ENT(pev), STRING(pev->model));
+	SetModel(STRING(pev->model));
 	m_iClip = -1;
 
 	FallInit(); // get ready to fall down.

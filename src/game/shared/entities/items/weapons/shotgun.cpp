@@ -33,7 +33,7 @@ void CShotgun::Spawn()
 {
 	Precache();
 	m_iId = WEAPON_SHOTGUN;
-	SET_MODEL(ENT(pev), STRING(pev->model));
+	SetModel(STRING(pev->model));
 
 	m_iDefaultAmmo = SHOTGUN_DEFAULT_GIVE;
 

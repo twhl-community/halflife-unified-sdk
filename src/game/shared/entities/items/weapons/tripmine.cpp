@@ -85,7 +85,7 @@ void CTripmineGrenade::Spawn()
 	pev->movetype = MOVETYPE_FLY;
 	pev->solid = SOLID_NOT;
 
-	SET_MODEL(ENT(pev), STRING(pev->model));
+	SetModel(STRING(pev->model));
 	pev->frame = 0;
 	pev->body = 3;
 	pev->sequence = TRIPMINE_WORLD;
@@ -356,7 +356,7 @@ void CTripmine::Spawn()
 {
 	Precache();
 	m_iId = WEAPON_TRIPMINE;
-	SET_MODEL(ENT(pev), STRING(pev->model));
+	SetModel(STRING(pev->model));
 	pev->frame = 0;
 	pev->body = 3;
 	pev->sequence = TRIPMINE_GROUND;

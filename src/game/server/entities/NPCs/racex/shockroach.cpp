@@ -284,7 +284,7 @@ void COFShockRoach::Spawn()
 {
 	Precache();
 
-	SET_MODEL(ENT(pev), STRING(pev->model));
+	SetModel(STRING(pev->model));
 	UTIL_SetSize(pev, Vector(-12, -12, 0), Vector(12, 12, 4));
 
 	pev->solid = SOLID_SLIDEBOX;

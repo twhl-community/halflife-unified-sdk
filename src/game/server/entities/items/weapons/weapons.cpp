@@ -924,7 +924,7 @@ void CBasePlayerAmmo::Spawn()
 {
 	Precache();
 
-	SET_MODEL(edict(), STRING(pev->model));
+	SetModel(STRING(pev->model));
 	pev->movetype = MOVETYPE_TOSS;
 	pev->solid = SOLID_TRIGGER;
 	UTIL_SetSize(pev, Vector(-16, -16, 0), Vector(16, 16, 16));
@@ -1149,7 +1149,7 @@ void CWeaponBox::Spawn()
 
 	UTIL_SetSize(pev, g_vecZero, g_vecZero);
 
-	SET_MODEL(ENT(pev), STRING(pev->model));
+	SetModel(STRING(pev->model));
 }
 
 //=========================================================

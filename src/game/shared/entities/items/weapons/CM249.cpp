@@ -67,7 +67,7 @@ void CM249::Spawn()
 
 	m_iId = WEAPON_M249;
 
-	SET_MODEL(edict(), STRING(pev->model));
+	SetModel(STRING(pev->model));
 
 	m_iDefaultAmmo = M249_DEFAULT_GIVE;
 

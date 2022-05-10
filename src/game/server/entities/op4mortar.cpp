@@ -64,7 +64,7 @@ void CMortarShell::Spawn()
 	pev->movetype = MOVETYPE_BOUNCE;
 	pev->solid = SOLID_BBOX;
 
-	SET_MODEL(edict(), "models/mortarshell.mdl");
+	SetModel("models/mortarshell.mdl");
 
 	UTIL_SetSize(pev, g_vecZero, g_vecZero);
 	UTIL_SetOrigin(pev, pev->origin);
@@ -384,7 +384,7 @@ void COp4Mortar::Spawn()
 
 	UTIL_SetOrigin(pev, pev->origin);
 
-	SET_MODEL(edict(), STRING(pev->model));
+	SetModel(STRING(pev->model));
 
 	pev->sequence = LookupSequence("idle");
 
@@ -844,7 +844,7 @@ void COp4MortarController::Spawn()
 
 	UTIL_SetOrigin(pev, pev->origin);
 
-	SET_MODEL(edict(), STRING(pev->model));
+	SetModel(STRING(pev->model));
 
 	m_direction = 1;
 	m_lastpush = gpGlobals->time;

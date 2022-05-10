@@ -329,7 +329,7 @@ void COFPitWormUp::Spawn()
 	pev->movetype = MOVETYPE_FLY;
 	pev->solid = SOLID_BBOX;
 
-	SET_MODEL(edict(), STRING(pev->model));
+	SetModel(STRING(pev->model));
 
 	UTIL_SetSize(pev, {-32, -32, 0}, {32, 32, 64});
 
@@ -1491,7 +1491,7 @@ void COFPitWormGib::Spawn()
 
 	pev->classname = MAKE_STRING("pitworm_gib");
 
-	SET_MODEL(edict(), "models/pit_worm_gibs.mdl");
+	SetModel("models/pit_worm_gibs.mdl");
 
 	UTIL_SetSize(pev, {-8, -8, -4}, {8, 8, 16});
 
@@ -2015,7 +2015,7 @@ void COFPitWorm::Spawn()
 {
 	Precache();
 
-	SET_MODEL(ENT(pev), STRING(pev->model));
+	SetModel(STRING(pev->model));
 	UTIL_SetSize(pev, Vector(-32, -32, 0), Vector(32, 32, 64));
 
 	pev->solid = SOLID_SLIDEBOX;

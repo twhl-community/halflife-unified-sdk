@@ -93,7 +93,7 @@ void CItem::Spawn()
 
 	if (!FStringNull(pev->model))
 	{
-		SET_MODEL(ENT(pev), STRING(pev->model));
+		SetModel(STRING(pev->model));
 	}
 
 	pev->movetype = MOVETYPE_TOSS;

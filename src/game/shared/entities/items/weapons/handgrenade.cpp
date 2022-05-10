@@ -30,7 +30,7 @@ void CHandGrenade::Spawn()
 {
 	Precache();
 	m_iId = WEAPON_HANDGRENADE;
-	SET_MODEL(ENT(pev), STRING(pev->model));
+	SetModel(STRING(pev->model));
 
 #ifndef CLIENT_DLL
 	pev->dmg = GetSkillFloat("plr_hand_grenade"sv);

@@ -61,7 +61,7 @@ void CEagle::Spawn()
 
 	m_iId = WEAPON_EAGLE;
 
-	SET_MODEL(edict(), STRING(pev->model));
+	SetModel(STRING(pev->model));
 
 	m_iDefaultAmmo = DEAGLE_DEFAULT_GIVE;
 

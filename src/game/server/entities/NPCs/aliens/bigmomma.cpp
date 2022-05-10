@@ -657,7 +657,7 @@ void CBigMomma::Spawn()
 {
 	Precache();
 
-	SET_MODEL(ENT(pev), STRING(pev->model));
+	SetModel(STRING(pev->model));
 	UTIL_SetSize(pev, Vector(-32, -32, 0), Vector(32, 32, 64));
 
 	pev->solid = SOLID_SLIDEBOX;
@@ -1153,7 +1153,7 @@ void CBMortar::Spawn()
 	pev->rendermode = kRenderTransAlpha;
 	pev->renderamt = 255;
 
-	SET_MODEL(ENT(pev), "sprites/mommaspit.spr");
+	SetModel("sprites/mommaspit.spr");
 	pev->frame = 0;
 	pev->scale = 0.5;
 

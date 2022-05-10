@@ -72,7 +72,7 @@ void CGrapple::Spawn()
 
 	m_iId = WEAPON_GRAPPLE;
 
-	SET_MODEL(edict(), STRING(pev->model));
+	SetModel(STRING(pev->model));
 
 	m_iClip = WEAPON_NOCLIP;
 

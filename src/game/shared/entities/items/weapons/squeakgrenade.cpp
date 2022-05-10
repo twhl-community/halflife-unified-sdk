@@ -110,7 +110,7 @@ void CSqueakGrenade::Spawn()
 	pev->movetype = MOVETYPE_BOUNCE;
 	pev->solid = SOLID_BBOX;
 
-	SET_MODEL(ENT(pev), STRING(pev->model));
+	SetModel(STRING(pev->model));
 	UTIL_SetSize(pev, Vector(-4, -4, 0), Vector(4, 4, 8));
 	UTIL_SetOrigin(pev, pev->origin);
 
@@ -415,7 +415,7 @@ void CSqueak::Spawn()
 {
 	Precache();
 	m_iId = WEAPON_SNARK;
-	SET_MODEL(ENT(pev), STRING(pev->model));
+	SetModel(STRING(pev->model));
 
 	FallInit(); //get ready to fall down.
 

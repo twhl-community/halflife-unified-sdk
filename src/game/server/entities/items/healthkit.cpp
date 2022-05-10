@@ -157,7 +157,7 @@ void CWallHealth::Spawn()
 
 	UTIL_SetOrigin(pev, pev->origin); // set size and link into world
 	UTIL_SetSize(pev, pev->mins, pev->maxs);
-	SET_MODEL(ENT(pev), STRING(pev->model));
+	SetModel(STRING(pev->model));
 	m_iJuice = GetSkillFloat("healthcharger"sv);
 	pev->frame = 0;
 }

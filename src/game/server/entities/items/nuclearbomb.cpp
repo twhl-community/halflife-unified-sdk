@@ -44,7 +44,7 @@ void COFNuclearBombButton::Spawn()
 {
 	Precache();
 
-	SET_MODEL(edict(), STRING(pev->model));
+	SetModel(STRING(pev->model));
 
 	pev->solid = SOLID_NOT;
 
@@ -106,7 +106,7 @@ void COFNuclearBombTimer::Spawn()
 {
 	Precache();
 
-	SET_MODEL(edict(), STRING(pev->model));
+	SetModel(STRING(pev->model));
 
 	pev->solid = SOLID_NOT;
 
@@ -258,7 +258,7 @@ void COFNuclearBomb::Spawn()
 {
 	Precache();
 
-	SET_MODEL(edict(), STRING(pev->model));
+	SetModel(STRING(pev->model));
 
 	pev->solid = SOLID_BBOX;
 

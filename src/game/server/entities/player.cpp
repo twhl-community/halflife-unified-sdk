@@ -208,7 +208,7 @@ static void ThrowGib(entvars_t *pev, char *szGibModel, float flDamage)   \
 																	   \ \
 static void ThrowHead(entvars_t *pev, char *szGibModel, floatflDamage)   \
 {                                                                        \
-	SET_MODEL(ENT(pev), szGibModel);                                     \
+	SetModel(szGibModel);                                     \
 	pev->frame			= 0;                                                    \
 	pev->nextthink		= -1;                                                \
 	pev->movetype		= MOVETYPE_BOUNCE;                                    \
@@ -3126,7 +3126,7 @@ void CBasePlayer::Spawn()
 
 	g_pGameRules->GetPlayerSpawnSpot(this);
 
-	SET_MODEL(ENT(pev), "models/player.mdl");
+	SetModel("models/player.mdl");
 	g_ulModelIndexPlayer = pev->modelindex;
 	pev->sequence = LookupActivity(ACT_IDLE);
 
@@ -5483,7 +5483,7 @@ LINK_ENTITY_TO_CLASS(monster_hevsuit_dead, CDeadHEV);
 void CDeadHEV::Spawn()
 {
 	PrecacheModel(STRING(pev->model));
-	SET_MODEL(ENT(pev), STRING(pev->model));
+	SetModel(STRING(pev->model));
 
 	pev->effects = 0;
 	pev->yaw_speed = 8;

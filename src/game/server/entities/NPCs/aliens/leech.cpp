@@ -184,7 +184,7 @@ void CLeech::OnCreate()
 void CLeech::Spawn()
 {
 	Precache();
-	SET_MODEL(ENT(pev), STRING(pev->model));
+	SetModel(STRING(pev->model));
 
 	//	UTIL_SetSize( pev, g_vecZero, g_vecZero );
 	UTIL_SetSize(pev, Vector(-1, -1, 0), Vector(1, 1, 2));

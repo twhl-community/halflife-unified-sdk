@@ -70,7 +70,7 @@ void CShockRifle::Spawn()
 
 	Precache();
 
-	SET_MODEL(edict(), STRING(pev->model));
+	SetModel(STRING(pev->model));
 
 	m_iDefaultAmmo = SHOCKRIFLE_DEFAULT_GIVE;
 

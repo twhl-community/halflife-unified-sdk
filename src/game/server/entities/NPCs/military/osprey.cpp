@@ -67,7 +67,7 @@ void COsprey::Spawn()
 	pev->movetype = MOVETYPE_FLY;
 	pev->solid = SOLID_BBOX;
 
-	SET_MODEL(ENT(pev), STRING(pev->model));
+	SetModel(STRING(pev->model));
 	UTIL_SetSize(pev, Vector(-400, -400, -100), Vector(400, 400, 32));
 	UTIL_SetOrigin(pev, pev->origin);
 

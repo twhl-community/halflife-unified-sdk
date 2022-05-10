@@ -64,7 +64,7 @@ void CShower::Spawn()
 	pev->gravity = 0.5;
 	pev->nextthink = gpGlobals->time + 0.1;
 	pev->solid = SOLID_NOT;
-	SET_MODEL(edict(), STRING(pev->model));
+	SetModel(STRING(pev->model));
 	UTIL_SetSize(pev, g_vecZero, g_vecZero);
 	pev->effects |= EF_NODRAW;
 	pev->speed = RANDOM_FLOAT(0.5, 1.5);

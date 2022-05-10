@@ -56,7 +56,7 @@ void CApache::Spawn()
 	pev->movetype = MOVETYPE_FLY;
 	pev->solid = SOLID_BBOX;
 
-	SET_MODEL(ENT(pev), STRING(pev->model));
+	SetModel(STRING(pev->model));
 	UTIL_SetSize(pev, Vector(-32, -32, -64), Vector(32, 32, 0));
 	UTIL_SetOrigin(pev, pev->origin);
 
@@ -296,7 +296,7 @@ void CApache::DyingThink()
 		if (/*(pev->spawnflags & SF_NOWRECKAGE) == 0 && */ (pev->flags & FL_ONGROUND) != 0)
 		{
 			CBaseEntity* pWreckage = Create("cycler_wreckage", pev->origin, pev->angles);
-			// SET_MODEL( ENT(pWreckage->pev), STRING(pev->model) );
+			// pWreckage->SetModel(STRING(pev->model));
 			UTIL_SetSize(pWreckage->pev, Vector(-200, -200, -128), Vector(200, 200, -32));
 			pWreckage->pev->frame = pev->frame;
 			pWreckage->pev->sequence = pev->sequence;
@@ -959,7 +959,7 @@ void CApacheHVR::Spawn()
 	pev->movetype = MOVETYPE_FLY;
 	pev->solid = SOLID_BBOX;
 
-	SET_MODEL(ENT(pev), "models/HVR.mdl");
+	SetModel("models/HVR.mdl");
 	UTIL_SetSize(pev, Vector(0, 0, 0), Vector(0, 0, 0));
 	UTIL_SetOrigin(pev, pev->origin);
 

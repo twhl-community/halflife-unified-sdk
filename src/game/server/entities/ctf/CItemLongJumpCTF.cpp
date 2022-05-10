@@ -81,7 +81,7 @@ void CItemLongJumpCTF::Spawn()
 
 	Precache();
 
-	g_engfuncs.pfnSetModel(edict(), STRING(pev->model));
+	SetModel(STRING(pev->model));
 
 	pev->spawnflags |= SF_NORESPAWN;
 	pev->oldorigin = pev->origin;

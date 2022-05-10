@@ -506,7 +506,7 @@ void CBaseButton::Spawn()
 
 	pev->movetype = MOVETYPE_PUSH;
 	pev->solid = SOLID_BSP;
-	SET_MODEL(ENT(pev), STRING(pev->model));
+	SetModel(STRING(pev->model));
 
 	if (pev->speed == 0)
 		pev->speed = 40;
@@ -929,7 +929,7 @@ void CRotButton::Spawn()
 	else
 		pev->solid = SOLID_BSP;
 
-	SET_MODEL(ENT(pev), STRING(pev->model));
+	SetModel(STRING(pev->model));
 
 	if (pev->speed == 0)
 		pev->speed = 40;
@@ -1046,7 +1046,7 @@ void CMomentaryRotButton::Spawn()
 
 	pev->movetype = MOVETYPE_PUSH;
 	UTIL_SetOrigin(pev, pev->origin);
-	SET_MODEL(ENT(pev), STRING(pev->model));
+	SetModel(STRING(pev->model));
 
 	const char* pszSound = ButtonSound(m_sounds);
 	PRECACHE_SOUND(pszSound);
@@ -1340,7 +1340,7 @@ void CButtonTarget::Spawn()
 {
 	pev->movetype = MOVETYPE_PUSH;
 	pev->solid = SOLID_BSP;
-	SET_MODEL(ENT(pev), STRING(pev->model));
+	SetModel(STRING(pev->model));
 	pev->takedamage = DAMAGE_YES;
 
 	if (FBitSet(pev->spawnflags, SF_BTARGET_ON))

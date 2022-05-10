@@ -129,7 +129,7 @@ void CGenericMonster::Spawn()
 {
 	Precache();
 
-	SET_MODEL(ENT(pev), STRING(pev->model));
+	SetModel(STRING(pev->model));
 
 	/*
 		if ( FStrEq( STRING(pev->model), "models/player.mdl" ) )

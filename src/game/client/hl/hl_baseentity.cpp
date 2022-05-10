@@ -36,6 +36,11 @@ int CBaseEntity::PrecacheModel(const char* s)
 	return UTIL_PrecacheModel(s);
 }
 
+void CBaseEntity::SetModel(const char* s)
+{
+	//Nothing.
+}
+
 void CBaseEntity::OnCreate()
 {
 	//Nothing.

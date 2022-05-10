@@ -460,7 +460,7 @@ void CIchthyosaur::Spawn()
 {
 	Precache();
 
-	SET_MODEL(ENT(pev), STRING(pev->model));
+	SetModel(STRING(pev->model));
 	UTIL_SetSize(pev, Vector(-32, -32, -32), Vector(32, 32, 32));
 
 	pev->solid = SOLID_BBOX;

@@ -296,7 +296,7 @@ void CTurret::OnCreate()
 void CTurret::Spawn()
 {
 	Precache();
-	SET_MODEL(ENT(pev), STRING(pev->model));
+	SetModel(STRING(pev->model));
 	m_HackedGunPos = Vector(0, 0, 12.75);
 	m_flMaxSpin = TURRET_MAXSPIN;
 	pev->view_ofs.z = 12.75;
@@ -335,7 +335,7 @@ void CMiniTurret::OnCreate()
 void CMiniTurret::Spawn()
 {
 	Precache();
-	SET_MODEL(ENT(pev), STRING(pev->model));
+	SetModel(STRING(pev->model));
 	m_HackedGunPos = Vector(0, 0, 12.75);
 	m_flMaxSpin = 0;
 	pev->view_ofs.z = 12.75;
@@ -1186,7 +1186,7 @@ void CSentry::OnCreate()
 void CSentry::Spawn()
 {
 	Precache();
-	SET_MODEL(ENT(pev), STRING(pev->model));
+	SetModel(STRING(pev->model));
 	m_HackedGunPos = Vector(0, 0, 48);
 	pev->view_ofs.z = 48;
 	m_flMaxWait = 1E6;

@@ -84,7 +84,7 @@ void CHornet::Spawn()
 		m_flFlySpeed = HORNET_ORANGE_SPEED;
 	}
 
-	SET_MODEL(ENT(pev), "models/hornet.mdl");
+	SetModel("models/hornet.mdl");
 	UTIL_SetSize(pev, Vector(-4, -4, -4), Vector(4, 4, 4));
 
 	SetTouch(&CHornet::DieTouch);

@@ -51,7 +51,7 @@ void CSpore::Spawn()
 
 	pev->solid = SOLID_BBOX;
 
-	SET_MODEL(edict(), "models/spore.mdl");
+	SetModel("models/spore.mdl");
 
 	UTIL_SetSize(pev, g_vecZero, g_vecZero);
 

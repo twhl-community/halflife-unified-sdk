@@ -328,7 +328,7 @@ void CHoundeye::Spawn()
 {
 	Precache();
 
-	SET_MODEL(ENT(pev), STRING(pev->model));
+	SetModel(STRING(pev->model));
 	UTIL_SetSize(pev, Vector(-16, -16, 0), Vector(16, 16, 36));
 
 	pev->solid = SOLID_SLIDEBOX;
@@ -1330,7 +1330,7 @@ LINK_ENTITY_TO_CLASS(monster_houndeye_dead, CDeadHoundeye);
 void CDeadHoundeye::Spawn()
 {
 	PrecacheModel(STRING(pev->model));
-	SET_MODEL(ENT(pev), STRING(pev->model));
+	SetModel(STRING(pev->model));
 
 	pev->effects = 0;
 	pev->yaw_speed = 8;

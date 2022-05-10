@@ -49,7 +49,7 @@ void CRopeSegment::Spawn()
 {
 	Precache();
 
-	SET_MODEL(edict(), STRING(m_iszModelName));
+	SetModel(STRING(m_iszModelName));
 
 	pev->movetype = MOVETYPE_NOCLIP;
 	pev->solid = SOLID_TRIGGER;

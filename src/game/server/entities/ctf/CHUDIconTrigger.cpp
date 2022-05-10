@@ -22,7 +22,7 @@ LINK_ENTITY_TO_CLASS(ctf_hudicon, CHUDIconTrigger);
 void CHUDIconTrigger::Spawn()
 {
 	pev->solid = SOLID_TRIGGER;
-	g_engfuncs.pfnSetModel(edict(), STRING(pev->model));
+	SetModel(STRING(pev->model));
 	pev->movetype = MOVETYPE_NONE;
 	m_fIsActive = false;
 }

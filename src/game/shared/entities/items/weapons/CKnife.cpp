@@ -51,7 +51,7 @@ void CKnife::Spawn()
 
 	m_iId = WEAPON_KNIFE;
 
-	SET_MODEL(edict(), STRING(pev->model));
+	SetModel(STRING(pev->model));
 
 	m_iClip = WEAPON_NOCLIP;
 

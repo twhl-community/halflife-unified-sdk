@@ -251,7 +251,7 @@ LINK_ENTITY_TO_CLASS(monster_otis_dead, CDeadOtis);
 void CDeadOtis::Spawn()
 {
 	PrecacheModel(STRING(pev->model));
-	SET_MODEL(ENT(pev), STRING(pev->model));
+	SetModel(STRING(pev->model));
 
 	pev->effects = 0;
 	pev->yaw_speed = 8;

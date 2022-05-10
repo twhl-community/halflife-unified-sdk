@@ -51,7 +51,7 @@ void CPenguin::Spawn()
 	Precache();
 
 	m_iId = WEAPON_PENGUIN;
-	g_engfuncs.pfnSetModel(edict(), STRING(pev->model));
+	SetModel(STRING(pev->model));
 	FallInit();
 
 	m_iDefaultAmmo = PENGUIN_MAX_CLIP;

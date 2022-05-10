@@ -99,7 +99,7 @@ void CPitdroneSpike::Spawn()
 	pev->flags |= FL_MONSTER;
 	pev->health = 1;
 
-	SET_MODEL(ENT(pev), "models/pit_drone_spike.mdl");
+	SetModel("models/pit_drone_spike.mdl");
 	pev->frame = 0;
 	pev->scale = 0.5;
 
@@ -664,7 +664,7 @@ void CPitdrone::Spawn()
 {
 	Precache();
 
-	SET_MODEL(ENT(pev), STRING(pev->model));
+	SetModel(STRING(pev->model));
 	UTIL_SetSize(pev, Vector(-16, -16, 0), Vector(16, 16, 48));
 
 	pev->solid = SOLID_SLIDEBOX;

@@ -338,7 +338,7 @@ void CBarney::Spawn()
 {
 	Precache();
 
-	SET_MODEL(ENT(pev), STRING(pev->model));
+	SetModel(STRING(pev->model));
 	UTIL_SetSize(pev, VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX);
 
 	pev->solid = SOLID_SLIDEBOX;
@@ -775,7 +775,7 @@ LINK_ENTITY_TO_CLASS(monster_barney_dead, CDeadBarney);
 void CDeadBarney::Spawn()
 {
 	PrecacheModel(STRING(pev->model));
-	SET_MODEL(ENT(pev), STRING(pev->model));
+	SetModel(STRING(pev->model));
 
 	pev->effects = 0;
 	pev->yaw_speed = 8;

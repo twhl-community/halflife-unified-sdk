@@ -343,7 +343,7 @@ void CFlockingFlyer::SpawnCommonCode()
 	m_fPathBlocked = false; // obstacles will be detected
 	m_flFieldOfView = 0.2;
 
-	SET_MODEL(ENT(pev), STRING(pev->model));
+	SetModel(STRING(pev->model));
 
 	//	UTIL_SetSize(pev, Vector(0,0,0), Vector(0,0,0));
 	UTIL_SetSize(pev, Vector(-5, -5, 0), Vector(5, 5, 2));

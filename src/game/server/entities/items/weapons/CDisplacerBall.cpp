@@ -84,7 +84,7 @@ void CDisplacerBall::Spawn()
 	pev->movetype = MOVETYPE_FLY;
 	pev->solid = SOLID_BBOX;
 
-	SET_MODEL(edict(), "sprites/exit1.spr");
+	SetModel("sprites/exit1.spr");
 
 	UTIL_SetOrigin(pev, pev->origin);
 

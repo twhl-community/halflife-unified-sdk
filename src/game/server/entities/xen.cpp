@@ -97,7 +97,7 @@ void CXenPLight::Spawn()
 {
 	Precache();
 
-	SET_MODEL(ENT(pev), STRING(pev->model));
+	SetModel(STRING(pev->model));
 	pev->movetype = MOVETYPE_NONE;
 	pev->solid = SOLID_TRIGGER;
 
@@ -207,7 +207,7 @@ void CXenHair::OnCreate()
 void CXenHair::Spawn()
 {
 	Precache();
-	SET_MODEL(edict(), STRING(pev->model));
+	SetModel(STRING(pev->model));
 	UTIL_SetSize(pev, Vector(-4, -4, 0), Vector(4, 4, 32));
 	pev->sequence = 0;
 
@@ -318,7 +318,7 @@ void CXenTree::Spawn()
 {
 	Precache();
 
-	SET_MODEL(ENT(pev), STRING(pev->model));
+	SetModel(STRING(pev->model));
 	pev->movetype = MOVETYPE_NONE;
 	pev->solid = SOLID_BBOX;
 
@@ -496,7 +496,7 @@ CXenHull* CXenHull::CreateHull(CBaseEntity* source, const Vector& mins, const Ve
 	CXenHull* pHull = GetClassPtr((CXenHull*)nullptr);
 
 	UTIL_SetOrigin(pHull->pev, source->pev->origin + offset);
-	SET_MODEL(pHull->edict(), STRING(source->pev->model));
+	pHull->SetModel(STRING(source->pev->model));
 	pHull->pev->solid = SOLID_BBOX;
 	pHull->pev->classname = MAKE_STRING("xen_hull");
 	pHull->pev->movetype = MOVETYPE_NONE;
@@ -559,11 +559,11 @@ void CXenSpore::Spawn()
 	Precache();
 	if (FStringNull(pev->model))
 	{
-		SET_MODEL(ENT(pev), pModelNames[pev->skin]);
+		SetModel(pModelNames[pev->skin]);
 	}
 	else
 	{
-		SET_MODEL(ENT(pev), STRING(pev->model));
+		SetModel(STRING(pev->model));
 	}
 
 	pev->movetype = MOVETYPE_NONE;

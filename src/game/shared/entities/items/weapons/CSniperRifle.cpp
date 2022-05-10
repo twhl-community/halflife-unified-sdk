@@ -63,7 +63,7 @@ void CSniperRifle::Spawn()
 {
 	Precache();
 
-	SET_MODEL(edict(), STRING(pev->model));
+	SetModel(STRING(pev->model));
 
 	m_iDefaultAmmo = SNIPERRIFLE_DEFAULT_GIVE;
 

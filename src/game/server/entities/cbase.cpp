@@ -487,6 +487,11 @@ int CBaseEntity::PrecacheModel(const char* s)
 	return UTIL_PrecacheModel(s);
 }
 
+void CBaseEntity::SetModel(const char* s)
+{
+	g_engfuncs.pfnSetModel(edict(), s);
+}
+
 void CBaseEntity::OnCreate()
 {
 	//Nothing.
@@ -624,7 +629,7 @@ bool CBaseEntity::Restore(CRestore& restore)
 
 		//Don't use the per-entity precache function here because we're restoring an already-replaced name.
 		UTIL_PrecacheModel(STRING(pev->model));
-		SET_MODEL(ENT(pev), STRING(pev->model));
+		SetModel(STRING(pev->model));
 		UTIL_SetSize(pev, mins, maxs); // Reset them
 	}
 

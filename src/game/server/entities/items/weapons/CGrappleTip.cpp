@@ -96,7 +96,7 @@ void CGrappleTip::Spawn()
 	pev->movetype = MOVETYPE_FLY;
 	pev->solid = SOLID_BBOX;
 
-	SET_MODEL(edict(), "models/shock_effect.mdl");
+	SetModel("models/shock_effect.mdl");
 
 	UTIL_SetSize(pev, g_vecZero, g_vecZero);
 

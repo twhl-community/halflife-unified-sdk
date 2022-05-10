@@ -123,7 +123,7 @@ void CRoach::Spawn()
 {
 	Precache();
 
-	SET_MODEL(ENT(pev), STRING(pev->model));
+	SetModel(STRING(pev->model));
 	UTIL_SetSize(pev, Vector(-1, -1, 0), Vector(1, 1, 2));
 
 	pev->solid = SOLID_SLIDEBOX;

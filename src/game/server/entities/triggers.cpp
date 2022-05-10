@@ -67,7 +67,7 @@ IMPLEMENT_SAVERESTORE(CFrictionModifier, CBaseEntity);
 void CFrictionModifier::Spawn()
 {
 	pev->solid = SOLID_TRIGGER;
-	SET_MODEL(ENT(pev), STRING(pev->model)); // set size and link into world
+	SetModel(STRING(pev->model)); // set size and link into world
 	pev->movetype = MOVETYPE_NONE;
 	SetTouch(&CFrictionModifier::ChangeFriction);
 }
@@ -547,7 +547,7 @@ void CBaseTrigger::InitTrigger()
 		SetMovedir(pev);
 	pev->solid = SOLID_TRIGGER;
 	pev->movetype = MOVETYPE_NONE;
-	SET_MODEL(ENT(pev), STRING(pev->model)); // set size and link into world
+	SetModel(STRING(pev->model)); // set size and link into world
 	if (CVAR_GET_FLOAT("showtriggers") == 0)
 		SetBits(pev->effects, EF_NODRAW);
 }
@@ -1064,7 +1064,7 @@ void CTriggerMultiple::Spawn()
 
 	ASSERTSZ(pev->health == 0, "trigger_multiple with health");
 	//	UTIL_SetOrigin(pev, pev->origin);
-	//	SET_MODEL( ENT(pev), STRING(pev->model) );
+	//	SetModel(STRING(pev->model));
 	//	if (pev->health > 0)
 	//		{
 	//		if (FBitSet(pev->spawnflags, SPAWNFLAG_NOTOUCH))
@@ -1290,7 +1290,7 @@ void CTriggerVolume::Spawn()
 {
 	pev->solid = SOLID_NOT;
 	pev->movetype = MOVETYPE_NONE;
-	SET_MODEL(ENT(pev), STRING(pev->model)); // set size and link into world
+	SetModel(STRING(pev->model)); // set size and link into world
 	pev->model = iStringNull;
 	pev->modelindex = 0;
 }
@@ -1784,7 +1784,7 @@ void CLadder::Spawn()
 {
 	Precache();
 
-	SET_MODEL(ENT(pev), STRING(pev->model)); // set size and link into world
+	SetModel(STRING(pev->model)); // set size and link into world
 	pev->movetype = MOVETYPE_PUSH;
 }
 
@@ -2324,7 +2324,7 @@ void CTriggerCamera::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE
 
 	player->m_hViewEntity = this;
 
-	SET_MODEL(ENT(pev), STRING(pActivator->pev->model));
+	SetModel(STRING(pActivator->pev->model));
 
 	// follow the player down
 	SetThink(&CTriggerCamera::FollowTarget);

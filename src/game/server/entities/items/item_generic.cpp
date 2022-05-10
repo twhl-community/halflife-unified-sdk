@@ -70,7 +70,7 @@ void CGenericItem::Spawn()
 
 	Precache();
 
-	SET_MODEL(edict(), STRING(pev->model));
+	SetModel(STRING(pev->model));
 
 	if (!FStringNull(m_iSequence))
 	{

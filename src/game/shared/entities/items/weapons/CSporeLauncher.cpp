@@ -62,7 +62,7 @@ void CSporeLauncher::Spawn()
 
 	m_iId = WEAPON_SPORELAUNCHER;
 
-	SET_MODEL(edict(), STRING(pev->model));
+	SetModel(STRING(pev->model));
 
 	m_iDefaultAmmo = SPORELAUNCHER_DEFAULT_GIVE;
 
@@ -402,7 +402,7 @@ public:
 	{
 		Precache();
 
-		SET_MODEL(edict(), STRING(pev->model));
+		SetModel(STRING(pev->model));
 
 		pev->movetype = MOVETYPE_FLY;
 

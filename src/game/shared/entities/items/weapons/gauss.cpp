@@ -44,7 +44,7 @@ void CGauss::Spawn()
 {
 	Precache();
 	m_iId = WEAPON_GAUSS;
-	SET_MODEL(ENT(pev), STRING(pev->model));
+	SetModel(STRING(pev->model));
 
 	m_iDefaultAmmo = GAUSS_DEFAULT_GIVE;
 
