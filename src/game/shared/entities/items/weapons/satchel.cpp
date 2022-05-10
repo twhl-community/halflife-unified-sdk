@@ -385,8 +385,8 @@ void CSatchel::Throw()
 		pSatchel->pev->velocity = vecThrow;
 		pSatchel->pev->avelocity.y = 400;
 
-		m_pPlayer->pev->viewmodel = MAKE_STRING("models/v_satchel_radio.mdl");
-		m_pPlayer->pev->weaponmodel = MAKE_STRING("models/p_satchel_radio.mdl");
+		m_pPlayer->pev->viewmodel = MAKE_STRING(UTIL_CheckForGlobalModelReplacement("models/v_satchel_radio.mdl"));
+		m_pPlayer->pev->weaponmodel = MAKE_STRING(UTIL_CheckForGlobalModelReplacement("models/p_satchel_radio.mdl"));
 #else
 		LoadVModel("models/v_satchel_radio.mdl", m_pPlayer);
 #endif

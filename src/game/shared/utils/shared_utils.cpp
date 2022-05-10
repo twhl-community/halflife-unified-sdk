@@ -19,6 +19,11 @@
 #include "shared_utils.h"
 #include "CStringPool.h"
 
+#ifndef CLIENT_DLL
+#include "CMapState.h"
+#include "CServerLibrary.h"
+#endif
+
 CStringPool g_StringPool;
 
 string_t ALLOC_STRING(const char* str)
@@ -278,7 +283,24 @@ float UTIL_SharedRandomFloat(unsigned int seed, float low, float high)
 	}
 }
 
+const char* UTIL_CheckForGlobalModelReplacement(const char* s)
+{
+#ifndef CLIENT_DLL
+	//Check if there is global model replacement needed.
+	const auto& map = g_Server.GetMapState()->m_GlobalModelReplacement;
+
+	if (auto it = map.find(s); it != map.end())
+	{
+		s = it->second.c_str();
+	}
+#endif
+
+	return s;
+}
+
 int UTIL_PrecacheModel(const char* s)
 {
+	s = UTIL_CheckForGlobalModelReplacement(s);
+
 	return g_engfuncs.pfnPrecacheModel(s);
 }

@@ -489,6 +489,8 @@ int CBaseEntity::PrecacheModel(const char* s)
 
 void CBaseEntity::SetModel(const char* s)
 {
+	s = UTIL_CheckForGlobalModelReplacement(s);
+
 	g_engfuncs.pfnSetModel(edict(), s);
 }
 

@@ -117,4 +117,6 @@ float UTIL_SharedRandomFloat(unsigned int seed, float low, float high);
 inline float CVAR_GET_FLOAT(const char* x) { return g_engfuncs.pfnCVarGetFloat(x); }
 inline const char* CVAR_GET_STRING(const char* x) { return g_engfuncs.pfnCVarGetString(x); }
 
+const char* UTIL_CheckForGlobalModelReplacement(const char* s);
+
 int UTIL_PrecacheModel(const char* s);

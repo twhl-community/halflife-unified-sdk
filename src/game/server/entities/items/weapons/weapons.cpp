@@ -872,8 +872,8 @@ bool CBasePlayerWeapon::DefaultDeploy(const char* szViewModel, const char* szWea
 		return false;
 
 	m_pPlayer->TabulateAmmo();
-	m_pPlayer->pev->viewmodel = MAKE_STRING(szViewModel);
-	m_pPlayer->pev->weaponmodel = MAKE_STRING(szWeaponModel);
+	m_pPlayer->pev->viewmodel = MAKE_STRING(UTIL_CheckForGlobalModelReplacement(szViewModel));
+	m_pPlayer->pev->weaponmodel = MAKE_STRING(UTIL_CheckForGlobalModelReplacement(szWeaponModel));
 	strcpy(m_pPlayer->m_szAnimExtention, szAnimExt);
 	SendWeaponAnim(iAnim, body);
 

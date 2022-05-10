@@ -15,6 +15,8 @@
 
 #pragma once
 
+#include "utils/ModelReplacement.h"
+
 /**
 *	@brief Contains per-map state
 *	@details This class should default construct into a valid state and should be move constructible and assignable
@@ -30,4 +32,6 @@ public:
 
 	CMapState(CMapState&&) = default;
 	CMapState& operator=(CMapState&&) = default;
+
+	ModelReplacementMap m_GlobalModelReplacement;
 };
