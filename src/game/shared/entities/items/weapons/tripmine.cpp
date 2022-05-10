@@ -349,7 +349,7 @@ void CTripmine::OnCreate()
 {
 	CBasePlayerWeapon::OnCreate();
 
-	pev->model = MAKE_STRING("models/v_tripmine.mdl");
+	m_WorldModel = pev->model = MAKE_STRING("models/v_tripmine.mdl");
 }
 
 void CTripmine::Spawn()
@@ -380,7 +380,7 @@ void CTripmine::Spawn()
 
 void CTripmine::Precache()
 {
-	PrecacheModel(STRING(pev->model));
+	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/v_tripmine.mdl");
 	PrecacheModel("models/p_tripmine.mdl");
 	UTIL_PrecacheOther("monster_tripmine");

@@ -22,7 +22,7 @@ void CGlock::OnCreate()
 {
 	CBasePlayerWeapon::OnCreate();
 
-	pev->model = MAKE_STRING("models/w_9mmhandgun.mdl");
+	m_WorldModel = pev->model = MAKE_STRING("models/w_9mmhandgun.mdl");
 }
 
 void CGlock::Spawn()
@@ -41,7 +41,7 @@ void CGlock::Spawn()
 void CGlock::Precache()
 {
 	PrecacheModel("models/v_9mmhandgun.mdl");
-	PrecacheModel(STRING(pev->model));
+	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/p_9mmhandgun.mdl");
 
 	m_iShell = PrecacheModel("models/shell.mdl"); // brass shell

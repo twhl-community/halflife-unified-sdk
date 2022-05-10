@@ -26,7 +26,7 @@ void CShotgun::OnCreate()
 {
 	CBasePlayerWeapon::OnCreate();
 
-	pev->model = MAKE_STRING("models/w_shotgun.mdl");
+	m_WorldModel = pev->model = MAKE_STRING("models/w_shotgun.mdl");
 }
 
 void CShotgun::Spawn()
@@ -44,7 +44,7 @@ void CShotgun::Spawn()
 void CShotgun::Precache()
 {
 	PrecacheModel("models/v_shotgun.mdl");
-	PrecacheModel(STRING(pev->model));
+	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/p_shotgun.mdl");
 
 	m_iShell = PrecacheModel("models/shotgunshell.mdl"); // shotgun shell

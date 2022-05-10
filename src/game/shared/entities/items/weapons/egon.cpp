@@ -26,7 +26,7 @@ void CEgon::OnCreate()
 {
 	CBasePlayerWeapon::OnCreate();
 
-	pev->model = MAKE_STRING("models/w_egon.mdl");
+	m_WorldModel = pev->model = MAKE_STRING("models/w_egon.mdl");
 }
 
 void CEgon::Spawn()
@@ -43,7 +43,7 @@ void CEgon::Spawn()
 
 void CEgon::Precache()
 {
-	PrecacheModel(STRING(pev->model));
+	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/v_egon.mdl");
 	PrecacheModel("models/p_egon.mdl");
 

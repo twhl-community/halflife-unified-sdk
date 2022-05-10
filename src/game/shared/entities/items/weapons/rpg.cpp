@@ -264,7 +264,7 @@ void CRpg::OnCreate()
 {
 	CBasePlayerWeapon::OnCreate();
 
-	pev->model = MAKE_STRING("models/w_rpg.mdl");
+	m_WorldModel = pev->model = MAKE_STRING("models/w_rpg.mdl");
 }
 
 void CRpg::Reload()
@@ -338,7 +338,7 @@ void CRpg::Spawn()
 
 void CRpg::Precache()
 {
-	PrecacheModel(STRING(pev->model));
+	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/v_rpg.mdl");
 	PrecacheModel("models/p_rpg.mdl");
 

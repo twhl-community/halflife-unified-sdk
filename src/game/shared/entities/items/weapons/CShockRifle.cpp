@@ -38,7 +38,7 @@ void CShockRifle::OnCreate()
 {
 	CBasePlayerWeapon::OnCreate();
 
-	pev->model = MAKE_STRING("models/w_shock_rifle.mdl");
+	m_WorldModel = pev->model = MAKE_STRING("models/w_shock_rifle.mdl");
 }
 
 void CShockRifle::Precache()
@@ -46,7 +46,7 @@ void CShockRifle::Precache()
 	BaseClass::Precache();
 
 	PrecacheModel("models/v_shock.mdl");
-	PrecacheModel(STRING(pev->model));
+	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/p_shock.mdl");
 	m_iSpriteTexture = PrecacheModel("sprites/shockwave.spr");
 	PrecacheModel("sprites/lgtning.spr");

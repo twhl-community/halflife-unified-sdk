@@ -23,7 +23,7 @@ void CHandGrenade::OnCreate()
 {
 	CBasePlayerWeapon::OnCreate();
 
-	pev->model = MAKE_STRING("models/w_grenade.mdl");
+	m_WorldModel = pev->model = MAKE_STRING("models/w_grenade.mdl");
 }
 
 void CHandGrenade::Spawn()
@@ -44,7 +44,7 @@ void CHandGrenade::Spawn()
 
 void CHandGrenade::Precache()
 {
-	PrecacheModel(STRING(pev->model));
+	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/v_grenade.mdl");
 	PrecacheModel("models/p_grenade.mdl");
 }

@@ -25,13 +25,13 @@ void CKnife::OnCreate()
 {
 	BaseClass::OnCreate();
 
-	pev->model = MAKE_STRING("models/w_knife.mdl");
+	m_WorldModel = pev->model = MAKE_STRING("models/w_knife.mdl");
 }
 
 void CKnife::Precache()
 {
 	PrecacheModel("models/v_knife.mdl");
-	PrecacheModel(STRING(pev->model));
+	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/p_knife.mdl");
 
 	PRECACHE_SOUND("weapons/knife1.wav");

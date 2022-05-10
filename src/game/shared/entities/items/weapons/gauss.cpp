@@ -37,7 +37,7 @@ void CGauss::OnCreate()
 {
 	CBasePlayerWeapon::OnCreate();
 
-	pev->model = MAKE_STRING("models/w_gauss.mdl");
+	m_WorldModel = pev->model = MAKE_STRING("models/w_gauss.mdl");
 }
 
 void CGauss::Spawn()
@@ -54,7 +54,7 @@ void CGauss::Spawn()
 
 void CGauss::Precache()
 {
-	PrecacheModel(STRING(pev->model));
+	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/v_gauss.mdl");
 	PrecacheModel("models/p_gauss.mdl");
 

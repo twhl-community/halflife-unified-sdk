@@ -37,13 +37,13 @@ void CEagle::OnCreate()
 {
 	BaseClass::OnCreate();
 
-	pev->model = MAKE_STRING("models/w_desert_eagle.mdl");
+	m_WorldModel = pev->model = MAKE_STRING("models/w_desert_eagle.mdl");
 }
 
 void CEagle::Precache()
 {
 	PrecacheModel("models/v_desert_eagle.mdl");
-	PrecacheModel(STRING(pev->model));
+	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/p_desert_eagle.mdl");
 	m_iShell = PrecacheModel("models/shell.mdl");
 	PRECACHE_SOUND("weapons/desert_eagle_fire.wav");

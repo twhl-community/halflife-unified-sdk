@@ -221,7 +221,7 @@ void CCrossbow::OnCreate()
 {
 	CBasePlayerWeapon::OnCreate();
 
-	pev->model = MAKE_STRING("models/w_crossbow.mdl");
+	m_WorldModel = pev->model = MAKE_STRING("models/w_crossbow.mdl");
 }
 
 void CCrossbow::Spawn()
@@ -237,7 +237,7 @@ void CCrossbow::Spawn()
 
 void CCrossbow::Precache()
 {
-	PrecacheModel(STRING(pev->model));
+	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/v_crossbow.mdl");
 	PrecacheModel("models/p_crossbow.mdl");
 

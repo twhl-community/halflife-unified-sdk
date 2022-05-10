@@ -25,7 +25,7 @@ void CCrowbar::OnCreate()
 {
 	CBasePlayerWeapon::OnCreate();
 
-	pev->model = MAKE_STRING("models/w_crowbar.mdl");
+	m_WorldModel = pev->model = MAKE_STRING("models/w_crowbar.mdl");
 }
 
 void CCrowbar::Spawn()
@@ -42,7 +42,7 @@ void CCrowbar::Spawn()
 void CCrowbar::Precache()
 {
 	PrecacheModel("models/v_crowbar.mdl");
-	PrecacheModel(STRING(pev->model));
+	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/p_crowbar.mdl");
 	PRECACHE_SOUND("weapons/cbar_hit1.wav");
 	PRECACHE_SOUND("weapons/cbar_hit2.wav");

@@ -34,13 +34,13 @@ void CDisplacer::OnCreate()
 {
 	BaseClass::OnCreate();
 
-	pev->model = MAKE_STRING("models/w_displacer.mdl");
+	m_WorldModel = pev->model = MAKE_STRING("models/w_displacer.mdl");
 }
 
 void CDisplacer::Precache()
 {
 	PrecacheModel("models/v_displacer.mdl");
-	PrecacheModel(STRING(pev->model));
+	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/p_displacer.mdl");
 
 	PRECACHE_SOUND("weapons/displacer_fire.wav");

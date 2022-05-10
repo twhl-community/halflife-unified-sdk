@@ -164,7 +164,7 @@ void CSatchel::OnCreate()
 {
 	CBasePlayerWeapon::OnCreate();
 
-	pev->model = MAKE_STRING("models/w_satchel.mdl");
+	m_WorldModel = pev->model = MAKE_STRING("models/w_satchel.mdl");
 }
 
 //=========================================================
@@ -212,7 +212,7 @@ void CSatchel::Precache()
 {
 	PrecacheModel("models/v_satchel.mdl");
 	PrecacheModel("models/v_satchel_radio.mdl");
-	PrecacheModel(STRING(pev->model));
+	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/p_satchel.mdl");
 	PrecacheModel("models/p_satchel_radio.mdl");
 

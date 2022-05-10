@@ -23,7 +23,7 @@ void CMP5::OnCreate()
 {
 	CBasePlayerWeapon::OnCreate();
 
-	pev->model = MAKE_STRING("models/w_9mmAR.mdl");
+	m_WorldModel = pev->model = MAKE_STRING("models/w_9mmAR.mdl");
 }
 
 //=========================================================
@@ -46,7 +46,7 @@ void CMP5::Spawn()
 void CMP5::Precache()
 {
 	PrecacheModel("models/v_9mmAR.mdl");
-	PrecacheModel(STRING(pev->model));
+	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/p_9mmAR.mdl");
 
 	m_iShell = PrecacheModel("models/shell.mdl"); // brass shellTE_MODEL

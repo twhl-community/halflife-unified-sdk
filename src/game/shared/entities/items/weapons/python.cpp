@@ -23,7 +23,7 @@ void CPython::OnCreate()
 {
 	CBasePlayerWeapon::OnCreate();
 
-	pev->model = MAKE_STRING("models/w_357.mdl");
+	m_WorldModel = pev->model = MAKE_STRING("models/w_357.mdl");
 }
 
 bool CPython::GetItemInfo(ItemInfo* p)
@@ -67,7 +67,7 @@ void CPython::Spawn()
 void CPython::Precache()
 {
 	PrecacheModel("models/v_357.mdl");
-	PrecacheModel(STRING(pev->model));
+	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/p_357.mdl");
 
 	PrecacheModel("models/w_357ammobox.mdl");

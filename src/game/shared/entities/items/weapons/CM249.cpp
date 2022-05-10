@@ -38,13 +38,13 @@ void CM249::OnCreate()
 {
 	BaseClass::OnCreate();
 
-	pev->model = MAKE_STRING("models/w_saw.mdl");
+	m_WorldModel = pev->model = MAKE_STRING("models/w_saw.mdl");
 }
 
 void CM249::Precache()
 {
 	PrecacheModel("models/v_saw.mdl");
-	PrecacheModel(STRING(pev->model));
+	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/p_saw.mdl");
 
 	m_iShell = PrecacheModel("models/saw_shell.mdl");

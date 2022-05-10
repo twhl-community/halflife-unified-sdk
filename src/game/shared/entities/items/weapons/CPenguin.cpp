@@ -32,12 +32,12 @@ void CPenguin::OnCreate()
 {
 	CBasePlayerWeapon::OnCreate();
 
-	pev->model = MAKE_STRING("models/w_penguinnest.mdl");
+	m_WorldModel = pev->model = MAKE_STRING("models/w_penguinnest.mdl");
 }
 
 void CPenguin::Precache()
 {
-	PrecacheModel(STRING(pev->model));
+	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/v_penguin.mdl");
 	PrecacheModel("models/p_penguin.mdl");
 	g_engfuncs.pfnPrecacheSound("squeek/sqk_hunt2.wav");

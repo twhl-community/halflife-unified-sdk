@@ -408,7 +408,7 @@ void CSqueak::OnCreate()
 {
 	CBasePlayerWeapon::OnCreate();
 
-	pev->model = MAKE_STRING("models/w_sqknest.mdl");
+	m_WorldModel = pev->model = MAKE_STRING("models/w_sqknest.mdl");
 }
 
 void CSqueak::Spawn()
@@ -429,7 +429,7 @@ void CSqueak::Spawn()
 
 void CSqueak::Precache()
 {
-	PrecacheModel(STRING(pev->model));
+	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/v_squeak.mdl");
 	PrecacheModel("models/p_squeak.mdl");
 	PRECACHE_SOUND("squeek/sqk_hunt2.wav");

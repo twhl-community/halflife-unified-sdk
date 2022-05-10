@@ -41,13 +41,13 @@ void CGrapple::OnCreate()
 {
 	BaseClass::OnCreate();
 
-	pev->model = MAKE_STRING("models/w_bgrap.mdl");
+	m_WorldModel = pev->model = MAKE_STRING("models/w_bgrap.mdl");
 }
 
 void CGrapple::Precache()
 {
 	PrecacheModel("models/v_bgrap.mdl");
-	PrecacheModel(STRING(pev->model));
+	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/p_bgrap.mdl");
 
 	PRECACHE_SOUND("weapons/bgrapple_release.wav");

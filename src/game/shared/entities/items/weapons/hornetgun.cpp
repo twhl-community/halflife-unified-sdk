@@ -35,7 +35,7 @@ void CHgun::OnCreate()
 {
 	CBasePlayerWeapon::OnCreate();
 
-	pev->model = MAKE_STRING("models/w_hgun.mdl");
+	m_WorldModel = pev->model = MAKE_STRING("models/w_hgun.mdl");
 }
 
 void CHgun::Spawn()
@@ -54,7 +54,7 @@ void CHgun::Spawn()
 void CHgun::Precache()
 {
 	PrecacheModel("models/v_hgun.mdl");
-	PrecacheModel(STRING(pev->model));
+	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/p_hgun.mdl");
 
 	m_usHornetFire = PRECACHE_EVENT(1, "events/firehornet.sc");

@@ -33,7 +33,7 @@ void CSniperRifle::OnCreate()
 {
 	CBasePlayerWeapon::OnCreate();
 
-	pev->model = MAKE_STRING("models/w_m40a1.mdl");
+	m_WorldModel = pev->model = MAKE_STRING("models/w_m40a1.mdl");
 }
 
 void CSniperRifle::Precache()
@@ -44,7 +44,7 @@ void CSniperRifle::Precache()
 
 	m_iId = WEAPON_SNIPERRIFLE;
 
-	PrecacheModel(STRING(pev->model));
+	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/v_m40a1.mdl");
 	PrecacheModel("models/p_m40a1.mdl");
 

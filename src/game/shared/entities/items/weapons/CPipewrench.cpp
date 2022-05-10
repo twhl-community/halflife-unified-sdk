@@ -36,7 +36,7 @@ void CPipewrench::OnCreate()
 {
 	BaseClass::OnCreate();
 
-	pev->model = MAKE_STRING("models/w_pipe_wrench.mdl");
+	m_WorldModel = pev->model = MAKE_STRING("models/w_pipe_wrench.mdl");
 }
 
 void CPipewrench::Spawn()
@@ -54,7 +54,7 @@ void CPipewrench::Spawn()
 void CPipewrench::Precache()
 {
 	PrecacheModel("models/v_pipe_wrench.mdl");
-	PrecacheModel(STRING(pev->model));
+	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/p_pipe_wrench.mdl");
 	// Shepard - The commented sounds below are unused
 	// in Opposing Force, if you wish to use them,
