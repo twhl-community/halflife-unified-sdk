@@ -134,6 +134,7 @@ void HUD_PrepEntity(CBaseEntity* pEntity, CBasePlayer* pWeaponOwner)
 	memset(&ev[num_ents], 0, sizeof(entvars_t));
 	pEntity->pev = &ev[num_ents++];
 
+	pEntity->OnCreate();
 	pEntity->Precache();
 	pEntity->Spawn();
 
