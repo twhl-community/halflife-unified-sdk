@@ -30,7 +30,7 @@ static json GetModelReplacementSchema()
 	"type": "object",
 	"patternProperties": {{
 		".*": {{
-			"type": "string",
+			"type": "string"
 		}}
 	}}
 }}
