@@ -35,7 +35,7 @@ using namespace std::literals;
 constexpr std::string_view SkillConfigSchemaName{"SkillConfig"sv};
 constexpr const char* const SkillConfigName = "cfg/skill.json";
 
-constexpr std::string_view SkillVariableNameRegexPattern{"^([a-zA-Z_]+[a-zA-Z_0-9]*[a-zA-Z_]+)([123]?)$"};
+constexpr std::string_view SkillVariableNameRegexPattern{"^([a-zA-Z_](?:[a-zA-Z_0-9]*[a-zA-Z_]))([123]?)$"};
 const std::regex SkillVariableNameRegex{SkillVariableNameRegexPattern.data(), SkillVariableNameRegexPattern.length()};
 
 static json GetSkillConfigSchema()
