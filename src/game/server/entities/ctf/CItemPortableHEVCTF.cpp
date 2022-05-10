@@ -30,7 +30,7 @@ void CItemPortableHEVCTF::OnCreate()
 
 void CItemPortableHEVCTF::Precache()
 {
-	g_engfuncs.pfnPrecacheModel(STRING(pev->model));
+	PrecacheModel(STRING(pev->model));
 	g_engfuncs.pfnPrecacheSound("ctf/pow_armor_charge.wav");
 }
 

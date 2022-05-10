@@ -494,8 +494,8 @@ void COFGonome::Spawn()
 void COFGonome::Precache()
 {
 	//Don't call CZombie::Spawn here!
-	PRECACHE_MODEL(STRING(pev->model));
-	PRECACHE_MODEL("sprites/bigspit.spr");
+	PrecacheModel(STRING(pev->model));
+	PrecacheModel("sprites/bigspit.spr");
 
 	PRECACHE_SOUND_ARRAY(pAttackHitSounds);
 	PRECACHE_SOUND_ARRAY(pAttackMissSounds);
@@ -789,7 +789,7 @@ LINK_ENTITY_TO_CLASS(monster_gonome_dead, CDeadGonome);
 //=========================================================
 void CDeadGonome::Spawn()
 {
-	PRECACHE_MODEL(STRING(pev->model));
+	PrecacheModel(STRING(pev->model));
 	SET_MODEL(ENT(pev), STRING(pev->model));
 
 	pev->effects = 0;

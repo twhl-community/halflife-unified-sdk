@@ -675,7 +675,7 @@ void CBigMomma::Spawn()
 //=========================================================
 void CBigMomma::Precache()
 {
-	PRECACHE_MODEL(STRING(pev->model));
+	PrecacheModel(STRING(pev->model));
 
 	PRECACHE_SOUND_ARRAY(pChildDieSounds);
 	PRECACHE_SOUND_ARRAY(pSackSounds);
@@ -690,9 +690,9 @@ void CBigMomma::Precache()
 	UTIL_PrecacheOther(BIG_CHILDCLASS);
 
 	// TEMP: Squid
-	PRECACHE_MODEL("sprites/mommaspit.spr");				// spit projectile.
-	gSpitSprite = PRECACHE_MODEL("sprites/mommaspout.spr"); // client side spittle.
-	gSpitDebrisSprite = PRECACHE_MODEL("sprites/mommablob.spr");
+	PrecacheModel("sprites/mommaspit.spr");				// spit projectile.
+	gSpitSprite = PrecacheModel("sprites/mommaspout.spr"); // client side spittle.
+	gSpitDebrisSprite = PrecacheModel("sprites/mommablob.spr");
 
 	PRECACHE_SOUND("bullchicken/bc_acid1.wav");
 	PRECACHE_SOUND("bullchicken/bc_spithit1.wav");

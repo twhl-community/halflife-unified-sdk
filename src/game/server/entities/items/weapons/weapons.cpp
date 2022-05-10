@@ -340,20 +340,20 @@ void W_Precache()
 		UTIL_PrecacheOther("weaponbox"); // container for dropped deathmatch weapons
 	}
 
-	g_sModelIndexFireball = PRECACHE_MODEL("sprites/zerogxplode.spr");	// fireball
-	g_sModelIndexWExplosion = PRECACHE_MODEL("sprites/WXplo1.spr");		// underwater fireball
-	g_sModelIndexSmoke = PRECACHE_MODEL("sprites/steam1.spr");			// smoke
-	g_sModelIndexBubbles = PRECACHE_MODEL("sprites/bubble.spr");		//bubbles
-	g_sModelIndexBloodSpray = PRECACHE_MODEL("sprites/bloodspray.spr"); // initial blood
-	g_sModelIndexBloodDrop = PRECACHE_MODEL("sprites/blood.spr");		// splattered blood
+	g_sModelIndexFireball = UTIL_PrecacheModel("sprites/zerogxplode.spr");	// fireball
+	g_sModelIndexWExplosion = UTIL_PrecacheModel("sprites/WXplo1.spr");	   // underwater fireball
+	g_sModelIndexSmoke = UTIL_PrecacheModel("sprites/steam1.spr");			// smoke
+	g_sModelIndexBubbles = UTIL_PrecacheModel("sprites/bubble.spr");	   //bubbles
+	g_sModelIndexBloodSpray = UTIL_PrecacheModel("sprites/bloodspray.spr"); // initial blood
+	g_sModelIndexBloodDrop = UTIL_PrecacheModel("sprites/blood.spr");		// splattered blood
 
-	g_sModelIndexLaser = PRECACHE_MODEL(g_pModelNameLaser);
-	g_sModelIndexLaserDot = PRECACHE_MODEL("sprites/laserdot.spr");
+	g_sModelIndexLaser = UTIL_PrecacheModel(g_pModelNameLaser);
+	g_sModelIndexLaserDot = UTIL_PrecacheModel("sprites/laserdot.spr");
 
 
 	// used by explosions
-	PRECACHE_MODEL("models/grenade.mdl");
-	PRECACHE_MODEL("sprites/explode1.spr");
+	UTIL_PrecacheModel("models/grenade.mdl");
+	UTIL_PrecacheModel("sprites/explode1.spr");
 
 	PRECACHE_SOUND("weapons/debris1.wav"); // explosion aftermaths
 	PRECACHE_SOUND("weapons/debris2.wav"); // explosion aftermaths
@@ -917,7 +917,7 @@ void CBasePlayerWeapon::Holster()
 
 void CBasePlayerAmmo::Precache()
 {
-	PRECACHE_MODEL(STRING(pev->model));
+	PrecacheModel(STRING(pev->model));
 }
 
 void CBasePlayerAmmo::Spawn()
@@ -1115,7 +1115,7 @@ void CWeaponBox::OnCreate()
 //=========================================================
 void CWeaponBox::Precache()
 {
-	PRECACHE_MODEL(STRING(pev->model));
+	PrecacheModel(STRING(pev->model));
 }
 
 //=========================================================

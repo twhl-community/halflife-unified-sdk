@@ -42,10 +42,10 @@ void CEagle::OnCreate()
 
 void CEagle::Precache()
 {
-	PRECACHE_MODEL("models/v_desert_eagle.mdl");
-	PRECACHE_MODEL(STRING(pev->model));
-	PRECACHE_MODEL("models/p_desert_eagle.mdl");
-	m_iShell = PRECACHE_MODEL("models/shell.mdl");
+	PrecacheModel("models/v_desert_eagle.mdl");
+	PrecacheModel(STRING(pev->model));
+	PrecacheModel("models/p_desert_eagle.mdl");
+	m_iShell = PrecacheModel("models/shell.mdl");
 	PRECACHE_SOUND("weapons/desert_eagle_fire.wav");
 	PRECACHE_SOUND("weapons/desert_eagle_reload.wav");
 	PRECACHE_SOUND("weapons/desert_eagle_sight.wav");

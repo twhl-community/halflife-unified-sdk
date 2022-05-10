@@ -51,8 +51,8 @@ LINK_ENTITY_TO_CLASS(mortar_shell, CMortarShell);
 
 void CMortarShell::Precache()
 {
-	PRECACHE_MODEL("models/mortarshell.mdl");
-	m_iTrail = PRECACHE_MODEL("sprites/wep_smoke_01.spr");
+	PrecacheModel("models/mortarshell.mdl");
+	m_iTrail = PrecacheModel("sprites/wep_smoke_01.spr");
 	PRECACHE_SOUND("weapons/gauss2.wav");
 	PRECACHE_SOUND("weapons/ofmortar.wav");
 }
@@ -372,7 +372,7 @@ void COp4Mortar::OnCreate()
 
 void COp4Mortar::Precache()
 {
-	PRECACHE_MODEL(STRING(pev->model));
+	PrecacheModel(STRING(pev->model));
 	UTIL_PrecacheOther("mortar_shell");
 	PRECACHE_SOUND("weapons/mortarhit.wav");
 	PRECACHE_SOUND("player/pl_grate1.wav");

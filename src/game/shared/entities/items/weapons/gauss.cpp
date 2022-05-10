@@ -54,9 +54,9 @@ void CGauss::Spawn()
 
 void CGauss::Precache()
 {
-	PRECACHE_MODEL(STRING(pev->model));
-	PRECACHE_MODEL("models/v_gauss.mdl");
-	PRECACHE_MODEL("models/p_gauss.mdl");
+	PrecacheModel(STRING(pev->model));
+	PrecacheModel("models/v_gauss.mdl");
+	PrecacheModel("models/p_gauss.mdl");
 
 	PRECACHE_SOUND("items/9mmclip1.wav");
 
@@ -66,9 +66,9 @@ void CGauss::Precache()
 	PRECACHE_SOUND("weapons/electro6.wav");
 	PRECACHE_SOUND("ambience/pulsemachine.wav");
 
-	m_iGlow = PRECACHE_MODEL("sprites/hotglow.spr");
-	m_iBalls = PRECACHE_MODEL("sprites/hotglow.spr");
-	m_iBeam = PRECACHE_MODEL("sprites/smoke.spr");
+	m_iGlow = PrecacheModel("sprites/hotglow.spr");
+	m_iBalls = PrecacheModel("sprites/hotglow.spr");
+	m_iBeam = PrecacheModel("sprites/smoke.spr");
 
 	m_usGaussFire = PRECACHE_EVENT(1, "events/gauss.sc");
 	m_usGaussSpin = PRECACHE_EVENT(1, "events/gaussspin.sc");

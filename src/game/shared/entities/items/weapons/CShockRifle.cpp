@@ -45,11 +45,11 @@ void CShockRifle::Precache()
 {
 	BaseClass::Precache();
 
-	PRECACHE_MODEL("models/v_shock.mdl");
-	PRECACHE_MODEL(STRING(pev->model));
-	PRECACHE_MODEL("models/p_shock.mdl");
-	m_iSpriteTexture = PRECACHE_MODEL("sprites/shockwave.spr");
-	PRECACHE_MODEL("sprites/lgtning.spr");
+	PrecacheModel("models/v_shock.mdl");
+	PrecacheModel(STRING(pev->model));
+	PrecacheModel("models/p_shock.mdl");
+	m_iSpriteTexture = PrecacheModel("sprites/shockwave.spr");
+	PrecacheModel("sprites/lgtning.spr");
 
 	PRECACHE_SOUND("weapons/shock_fire.wav");
 	PRECACHE_SOUND("weapons/shock_draw.wav");

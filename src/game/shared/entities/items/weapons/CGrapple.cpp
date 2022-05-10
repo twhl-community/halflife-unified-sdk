@@ -46,9 +46,9 @@ void CGrapple::OnCreate()
 
 void CGrapple::Precache()
 {
-	PRECACHE_MODEL("models/v_bgrap.mdl");
-	PRECACHE_MODEL(STRING(pev->model));
-	PRECACHE_MODEL("models/p_bgrap.mdl");
+	PrecacheModel("models/v_bgrap.mdl");
+	PrecacheModel(STRING(pev->model));
+	PrecacheModel("models/p_bgrap.mdl");
 
 	PRECACHE_SOUND("weapons/bgrapple_release.wav");
 	PRECACHE_SOUND("weapons/bgrapple_impact.wav");
@@ -61,7 +61,7 @@ void CGrapple::Precache()
 	PRECACHE_SOUND("barnacle/bcl_chew2.wav");
 	PRECACHE_SOUND("barnacle/bcl_chew3.wav");
 
-	PRECACHE_MODEL("sprites/tongue.spr");
+	PrecacheModel("sprites/tongue.spr");
 
 	UTIL_PrecacheOther("grapple_tip");
 }

@@ -110,7 +110,7 @@ LINK_ENTITY_TO_CLASS(monster_cleansuit_scientist_dead, CDeadCleansuitScientist);
 //
 void CDeadCleansuitScientist::Spawn()
 {
-	PRECACHE_MODEL(STRING(pev->model));
+	PrecacheModel(STRING(pev->model));
 	SET_MODEL(ENT(pev), STRING(pev->model));
 
 	pev->effects = 0;

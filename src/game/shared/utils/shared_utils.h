@@ -116,3 +116,5 @@ float UTIL_SharedRandomFloat(unsigned int seed, float low, float high);
 //The client also provides these functions, so use them to make this cross-library.
 inline float CVAR_GET_FLOAT(const char* x) { return g_engfuncs.pfnCVarGetFloat(x); }
 inline const char* CVAR_GET_STRING(const char* x) { return g_engfuncs.pfnCVarGetString(x); }
+
+int UTIL_PrecacheModel(const char* s);

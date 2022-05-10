@@ -38,7 +38,7 @@ void CGrenade::OnCreate()
 
 void CGrenade::Precache()
 {
-	PRECACHE_MODEL(STRING(pev->model));
+	PrecacheModel(STRING(pev->model));
 }
 
 //

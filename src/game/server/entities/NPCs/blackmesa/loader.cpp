@@ -55,7 +55,7 @@ void COFLoader::OnCreate()
 
 void COFLoader::Precache()
 {
-	PRECACHE_MODEL(STRING(pev->model));
+	PrecacheModel(STRING(pev->model));
 	PRECACHE_SOUND("ambience/loader_step1.wav");
 	PRECACHE_SOUND("ambience/loader_hydra1.wav");
 }

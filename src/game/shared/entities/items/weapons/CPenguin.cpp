@@ -37,9 +37,9 @@ void CPenguin::OnCreate()
 
 void CPenguin::Precache()
 {
-	g_engfuncs.pfnPrecacheModel(STRING(pev->model));
-	g_engfuncs.pfnPrecacheModel("models/v_penguin.mdl");
-	g_engfuncs.pfnPrecacheModel("models/p_penguin.mdl");
+	PrecacheModel(STRING(pev->model));
+	PrecacheModel("models/v_penguin.mdl");
+	PrecacheModel("models/p_penguin.mdl");
 	g_engfuncs.pfnPrecacheSound("squeek/sqk_hunt2.wav");
 	g_engfuncs.pfnPrecacheSound("squeek/sqk_hunt3.wav");
 	UTIL_PrecacheOther("monster_penguin");

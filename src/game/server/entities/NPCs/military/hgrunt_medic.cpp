@@ -391,7 +391,7 @@ void COFMedicAlly::Precache()
 	PRECACHE_SOUND("fgrunt/medic_give_shot.wav");
 	PRECACHE_SOUND("fgrunt/medical.wav");
 
-	m_iBrassShell = PRECACHE_MODEL("models/shell.mdl");
+	m_iBrassShell = PrecacheModel("models/shell.mdl");
 
 	CBaseHGruntAlly::Precache();
 }

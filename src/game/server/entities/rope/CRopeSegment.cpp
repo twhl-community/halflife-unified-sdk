@@ -41,7 +41,7 @@ void CRopeSegment::Precache()
 {
 	BaseClass::Precache();
 
-	PRECACHE_MODEL(const_cast<char*>(STRING(m_iszModelName)));
+	PrecacheModel(const_cast<char*>(STRING(m_iszModelName)));
 	PRECACHE_SOUND("items/grab_rope.wav");
 }
 

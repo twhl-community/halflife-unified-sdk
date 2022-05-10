@@ -496,7 +496,7 @@ void CIchthyosaur::Spawn()
 //=========================================================
 void CIchthyosaur::Precache()
 {
-	PRECACHE_MODEL(STRING(pev->model));
+	PrecacheModel(STRING(pev->model));
 
 	PRECACHE_SOUND_ARRAY(pIdleSounds);
 	PRECACHE_SOUND_ARRAY(pAlertSounds);

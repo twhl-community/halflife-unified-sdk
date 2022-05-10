@@ -29,12 +29,12 @@ LINK_ENTITY_TO_CLASS(spore, CSpore);
 
 void CSpore::Precache()
 {
-	PRECACHE_MODEL("models/spore.mdl");
-	PRECACHE_MODEL("sprites/glow01.spr");
+	PrecacheModel("models/spore.mdl");
+	PrecacheModel("sprites/glow01.spr");
 
-	m_iBlow = PRECACHE_MODEL("sprites/spore_exp_01.spr");
-	m_iBlowSmall = PRECACHE_MODEL("sprites/spore_exp_c_01.spr");
-	m_iSpitSprite = m_iTrail = PRECACHE_MODEL("sprites/tinyspit.spr");
+	m_iBlow = PrecacheModel("sprites/spore_exp_01.spr");
+	m_iBlowSmall = PrecacheModel("sprites/spore_exp_c_01.spr");
+	m_iSpitSprite = m_iTrail = PrecacheModel("sprites/tinyspit.spr");
 
 	PRECACHE_SOUND("weapons/splauncher_impact.wav");
 	PRECACHE_SOUND("weapons/splauncher_bounce.wav");

@@ -98,7 +98,7 @@ void CRosenberg::StartTask(Task_t* pTask)
 //=========================================================
 void CRosenberg::Precache()
 {
-	PRECACHE_MODEL("models/scientist.mdl");
+	PrecacheModel("models/scientist.mdl");
 	PRECACHE_SOUND("rosenberg/ro_pain1.wav");
 	PRECACHE_SOUND("rosenberg/ro_pain2.wav");
 	PRECACHE_SOUND("rosenberg/ro_pain3.wav");

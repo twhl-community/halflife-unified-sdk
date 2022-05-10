@@ -888,7 +888,7 @@ void CHGrunt::Spawn()
 
 void CHGrunt::Precache()
 {
-	PRECACHE_MODEL(STRING(pev->model));
+	PrecacheModel(STRING(pev->model));
 
 	PRECACHE_SOUND("hgrunt/gr_mgun1.wav");
 	PRECACHE_SOUND("hgrunt/gr_mgun2.wav");
@@ -917,8 +917,8 @@ void CHGrunt::Precache()
 	else
 		m_voicePitch = 100;
 
-	m_iBrassShell = PRECACHE_MODEL("models/shell.mdl"); // brass shell
-	m_iShotgunShell = PRECACHE_MODEL("models/shotgunshell.mdl");
+	m_iBrassShell = PrecacheModel("models/shell.mdl"); // brass shell
+	m_iShotgunShell = PrecacheModel("models/shotgunshell.mdl");
 }
 
 //=========================================================
@@ -2190,7 +2190,7 @@ void CHGruntRepel::Spawn()
 void CHGruntRepel::PrecacheCore(const char* classname)
 {
 	UTIL_PrecacheOther(classname);
-	m_iSpriteTexture = PRECACHE_MODEL("sprites/rope.spr");
+	m_iSpriteTexture = PrecacheModel("sprites/rope.spr");
 }
 
 void CHGruntRepel::Precache()
@@ -2254,7 +2254,7 @@ LINK_ENTITY_TO_CLASS(monster_hgrunt_dead, CDeadHGrunt);
 
 void CDeadHGrunt::SpawnCore()
 {
-	PRECACHE_MODEL(STRING(pev->model));
+	PrecacheModel(STRING(pev->model));
 	SET_MODEL(ENT(pev), STRING(pev->model));
 
 	pev->effects = 0;

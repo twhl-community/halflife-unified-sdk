@@ -380,7 +380,7 @@ void CController::Spawn()
 //=========================================================
 void CController::Precache()
 {
-	PRECACHE_MODEL(STRING(pev->model));
+	PrecacheModel(STRING(pev->model));
 
 	PRECACHE_SOUND_ARRAY(pAttackSounds);
 	PRECACHE_SOUND_ARRAY(pIdleSounds);
@@ -388,7 +388,7 @@ void CController::Precache()
 	PRECACHE_SOUND_ARRAY(pPainSounds);
 	PRECACHE_SOUND_ARRAY(pDeathSounds);
 
-	PRECACHE_MODEL("sprites/xspark4.spr");
+	PrecacheModel("sprites/xspark4.spr");
 
 	UTIL_PrecacheOther("controller_energy_ball");
 	UTIL_PrecacheOther("controller_head_ball");
@@ -1173,7 +1173,7 @@ void CControllerHeadBall::Spawn()
 
 void CControllerHeadBall::Precache()
 {
-	PRECACHE_MODEL("sprites/xspark1.spr");
+	PrecacheModel("sprites/xspark1.spr");
 	PRECACHE_SOUND("debris/zap4.wav");
 	PRECACHE_SOUND("weapons/electro4.wav");
 }
@@ -1364,7 +1364,7 @@ void CControllerZapBall::Spawn()
 
 void CControllerZapBall::Precache()
 {
-	PRECACHE_MODEL("sprites/xspark4.spr");
+	PrecacheModel("sprites/xspark4.spr");
 	// PRECACHE_SOUND("debris/zap4.wav");
 	// PRECACHE_SOUND("weapons/electro4.wav");
 }

@@ -277,3 +277,8 @@ float UTIL_SharedRandomFloat(unsigned int seed, float low, float high)
 		return (low + offset * range);
 	}
 }
+
+int UTIL_PrecacheModel(const char* s)
+{
+	return g_engfuncs.pfnPrecacheModel(s);
+}

@@ -619,7 +619,7 @@ void CAGrunt::Spawn()
 //=========================================================
 void CAGrunt::Precache()
 {
-	PRECACHE_MODEL(STRING(pev->model));
+	PrecacheModel(STRING(pev->model));
 
 	PRECACHE_SOUND_ARRAY(pAttackHitSounds);
 	PRECACHE_SOUND_ARRAY(pAttackMissSounds);
@@ -631,7 +631,7 @@ void CAGrunt::Precache()
 
 	PRECACHE_SOUND("hassault/hw_shoot1.wav");
 
-	iAgruntMuzzleFlash = PRECACHE_MODEL("sprites/muz4.spr");
+	iAgruntMuzzleFlash = PrecacheModel("sprites/muz4.spr");
 
 	UTIL_PrecacheOther("hornet");
 }

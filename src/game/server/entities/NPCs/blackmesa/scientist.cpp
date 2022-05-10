@@ -581,7 +581,7 @@ void CScientist::Spawn()
 
 void CScientist::Precache()
 {
-	PRECACHE_MODEL(STRING(pev->model));
+	PrecacheModel(STRING(pev->model));
 	PRECACHE_SOUND("scientist/sci_pain1.wav");
 	PRECACHE_SOUND("scientist/sci_pain2.wav");
 	PRECACHE_SOUND("scientist/sci_pain3.wav");
@@ -1037,7 +1037,7 @@ LINK_ENTITY_TO_CLASS(monster_scientist_dead, CDeadScientist);
 //
 void CDeadScientist::Spawn()
 {
-	PRECACHE_MODEL(STRING(pev->model));
+	PrecacheModel(STRING(pev->model));
 	SET_MODEL(ENT(pev), STRING(pev->model));
 
 	pev->effects = 0;
@@ -1095,7 +1095,7 @@ void CSittingScientist::OnCreate()
 
 void CSittingScientist::Spawn()
 {
-	PRECACHE_MODEL(STRING(pev->model));
+	PrecacheModel(STRING(pev->model));
 	SET_MODEL(ENT(pev), STRING(pev->model));
 	Precache();
 	InitBoneControllers();

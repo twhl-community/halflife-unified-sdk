@@ -77,7 +77,7 @@ LINK_ENTITY_TO_CLASS(env_genewormcloud, COFGeneWormCloud);
 
 void COFGeneWormCloud::Precache()
 {
-	PRECACHE_MODEL("sprites/ballsmoke.spr");
+	PrecacheModel("sprites/ballsmoke.spr");
 }
 
 void COFGeneWormCloud::Spawn()
@@ -277,9 +277,9 @@ LINK_ENTITY_TO_CLASS(env_genewormspawn, COFGeneWormSpawn);
 
 void COFGeneWormSpawn::Precache()
 {
-	PRECACHE_MODEL("sprites/tele1.spr");
-	PRECACHE_MODEL("sprites/lgtning.spr");
-	PRECACHE_MODEL("sprites/boss_glow.spr");
+	PrecacheModel("sprites/tele1.spr");
+	PrecacheModel("sprites/lgtning.spr");
+	PrecacheModel("sprites/boss_glow.spr");
 }
 
 void COFGeneWormSpawn::Spawn()
@@ -700,15 +700,15 @@ const char* COFGeneWorm::pSpawnSounds[] =
 
 void COFGeneWorm::Precache()
 {
-	PRECACHE_MODEL(STRING(pev->model));
-	PRECACHE_MODEL("sprites/lgtning.spr");
-	PRECACHE_MODEL("sprites/tele1.spr");
-	PRECACHE_MODEL("sprites/bigspit.spr");
-	PRECACHE_MODEL("sprites/boss_glow.spr");
+	PrecacheModel(STRING(pev->model));
+	PrecacheModel("sprites/lgtning.spr");
+	PrecacheModel("sprites/tele1.spr");
+	PrecacheModel("sprites/bigspit.spr");
+	PrecacheModel("sprites/boss_glow.spr");
 
-	iGeneWormSpitSprite = PRECACHE_MODEL("sprites/tinyspit.spr");
+	iGeneWormSpitSprite = PrecacheModel("sprites/tinyspit.spr");
 
-	PRECACHE_MODEL("sprites/xbeam3.spr");
+	PrecacheModel("sprites/xbeam3.spr");
 
 	UTIL_PrecacheOther("monster_shocktrooper");
 
@@ -722,8 +722,8 @@ void COFGeneWorm::Precache()
 	PRECACHE_SOUND("debris/beamstart7.wav");
 	PRECACHE_SOUND("debris/beamstart2.wav");
 
-	PRECACHE_MODEL("sprites/xspark4.spr");
-	PRECACHE_MODEL("sprites/ballsmoke.spr");
+	PrecacheModel("sprites/xspark4.spr");
+	PrecacheModel("sprites/ballsmoke.spr");
 
 	PRECACHE_SOUND("geneworm/geneworm_attack_mounted_gun.wav");
 	PRECACHE_SOUND("geneworm/geneworm_attack_mounted_rocket.wav");

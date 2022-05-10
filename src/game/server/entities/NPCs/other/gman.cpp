@@ -139,7 +139,7 @@ void CGMan::Spawn()
 //=========================================================
 void CGMan::Precache()
 {
-	PRECACHE_MODEL(STRING(pev->model));
+	PrecacheModel(STRING(pev->model));
 }
 
 

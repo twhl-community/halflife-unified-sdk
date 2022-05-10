@@ -72,13 +72,13 @@ void CCrossbowBolt::Spawn()
 
 void CCrossbowBolt::Precache()
 {
-	PRECACHE_MODEL("models/crossbow_bolt.mdl");
+	PrecacheModel("models/crossbow_bolt.mdl");
 	PRECACHE_SOUND("weapons/xbow_hitbod1.wav");
 	PRECACHE_SOUND("weapons/xbow_hitbod2.wav");
 	PRECACHE_SOUND("weapons/xbow_fly1.wav");
 	PRECACHE_SOUND("weapons/xbow_hit1.wav");
 	PRECACHE_SOUND("fvox/beep.wav");
-	m_iTrail = PRECACHE_MODEL("sprites/streak.spr");
+	m_iTrail = PrecacheModel("sprites/streak.spr");
 }
 
 
@@ -237,9 +237,9 @@ void CCrossbow::Spawn()
 
 void CCrossbow::Precache()
 {
-	PRECACHE_MODEL(STRING(pev->model));
-	PRECACHE_MODEL("models/v_crossbow.mdl");
-	PRECACHE_MODEL("models/p_crossbow.mdl");
+	PrecacheModel(STRING(pev->model));
+	PrecacheModel("models/v_crossbow.mdl");
+	PrecacheModel("models/p_crossbow.mdl");
 
 	PRECACHE_SOUND("weapons/xbow_fire1.wav");
 	PRECACHE_SOUND("weapons/xbow_reload1.wav");

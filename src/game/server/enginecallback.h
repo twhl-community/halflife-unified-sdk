@@ -23,7 +23,6 @@ inline enginefuncs_t g_engfuncs;
 
 // The actual engine callbacks
 #define GETPLAYERUSERID (*g_engfuncs.pfnGetPlayerUserId)
-#define PRECACHE_MODEL (*g_engfuncs.pfnPrecacheModel)
 #define PRECACHE_SOUND (*g_engfuncs.pfnPrecacheSound)
 #define PRECACHE_GENERIC (*g_engfuncs.pfnPrecacheGeneric)
 #define SET_MODEL (*g_engfuncs.pfnSetModel)

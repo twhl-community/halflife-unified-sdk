@@ -268,7 +268,7 @@ void CBaseTurret::Spawn()
 
 void CBaseTurret::Precache()
 {
-	PRECACHE_MODEL(STRING(pev->model));
+	PrecacheModel(STRING(pev->model));
 	PRECACHE_SOUND("turret/tu_fire1.wav");
 	PRECACHE_SOUND("turret/tu_ping.wav");
 	PRECACHE_SOUND("turret/tu_active2.wav");
@@ -321,7 +321,7 @@ void CTurret::Spawn()
 void CTurret::Precache()
 {
 	CBaseTurret::Precache();
-	PRECACHE_MODEL(TURRET_GLOW_SPRITE);
+	PrecacheModel(TURRET_GLOW_SPRITE);
 }
 
 void CMiniTurret::OnCreate()

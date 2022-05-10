@@ -297,7 +297,7 @@ void CTentacle::Spawn()
 
 void CTentacle::Precache()
 {
-	PRECACHE_MODEL(STRING(pev->model));
+	PrecacheModel(STRING(pev->model));
 
 	PRECACHE_SOUND("ambience/flies.wav");
 	PRECACHE_SOUND("ambience/squirm2.wav");
@@ -1073,5 +1073,5 @@ void CTentacleMaw::Spawn()
 
 void CTentacleMaw::Precache()
 {
-	PRECACHE_MODEL(STRING(pev->model));
+	PrecacheModel(STRING(pev->model));
 }

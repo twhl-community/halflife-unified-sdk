@@ -55,7 +55,7 @@ void CTFGoal::Spawn()
 		if (*modelName == '*')
 			pev->effects |= EF_NODRAW;
 
-		g_engfuncs.pfnPrecacheModel(modelName);
+		PrecacheModel(modelName);
 		g_engfuncs.pfnSetModel(edict(), STRING(pev->model));
 	}
 

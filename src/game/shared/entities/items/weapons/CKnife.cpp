@@ -30,9 +30,9 @@ void CKnife::OnCreate()
 
 void CKnife::Precache()
 {
-	PRECACHE_MODEL("models/v_knife.mdl");
-	PRECACHE_MODEL(STRING(pev->model));
-	PRECACHE_MODEL("models/p_knife.mdl");
+	PrecacheModel("models/v_knife.mdl");
+	PrecacheModel(STRING(pev->model));
+	PrecacheModel("models/p_knife.mdl");
 
 	PRECACHE_SOUND("weapons/knife1.wav");
 	PRECACHE_SOUND("weapons/knife2.wav");

@@ -30,7 +30,7 @@ void CItemBackpackCTF::OnCreate()
 
 void CItemBackpackCTF::Precache()
 {
-	g_engfuncs.pfnPrecacheModel(STRING(pev->model));
+	PrecacheModel(STRING(pev->model));
 	g_engfuncs.pfnPrecacheSound("ctf/pow_backpack.wav");
 }
 

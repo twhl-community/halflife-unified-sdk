@@ -1244,7 +1244,7 @@ void CSpriteTrain::Spawn()
 
 void CSpriteTrain::Precache()
 {
-	PRECACHE_MODEL(const_cast<char*>(STRING(pev->model)));
+	PrecacheModel(const_cast<char*>(STRING(pev->model)));
 
 	CBasePlatTrain::Precache();
 

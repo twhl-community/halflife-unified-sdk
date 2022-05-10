@@ -350,7 +350,7 @@ void CHoundeye::Spawn()
 //=========================================================
 void CHoundeye::Precache()
 {
-	PRECACHE_MODEL(STRING(pev->model));
+	PrecacheModel(STRING(pev->model));
 
 	PRECACHE_SOUND("houndeye/he_alert1.wav");
 	PRECACHE_SOUND("houndeye/he_alert2.wav");
@@ -380,7 +380,7 @@ void CHoundeye::Precache()
 	PRECACHE_SOUND("houndeye/he_blast2.wav");
 	PRECACHE_SOUND("houndeye/he_blast3.wav");
 
-	m_iSpriteTexture = PRECACHE_MODEL("sprites/shockwave.spr");
+	m_iSpriteTexture = PrecacheModel("sprites/shockwave.spr");
 }
 
 //=========================================================
@@ -1329,7 +1329,7 @@ LINK_ENTITY_TO_CLASS(monster_houndeye_dead, CDeadHoundeye);
 //=========================================================
 void CDeadHoundeye::Spawn()
 {
-	PRECACHE_MODEL(STRING(pev->model));
+	PrecacheModel(STRING(pev->model));
 	SET_MODEL(ENT(pev), STRING(pev->model));
 
 	pev->effects = 0;

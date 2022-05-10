@@ -53,9 +53,9 @@ void CPipewrench::Spawn()
 
 void CPipewrench::Precache()
 {
-	PRECACHE_MODEL("models/v_pipe_wrench.mdl");
-	PRECACHE_MODEL(STRING(pev->model));
-	PRECACHE_MODEL("models/p_pipe_wrench.mdl");
+	PrecacheModel("models/v_pipe_wrench.mdl");
+	PrecacheModel(STRING(pev->model));
+	PrecacheModel("models/p_pipe_wrench.mdl");
 	// Shepard - The commented sounds below are unused
 	// in Opposing Force, if you wish to use them,
 	// uncomment all the appropriate lines.

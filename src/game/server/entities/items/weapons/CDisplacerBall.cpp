@@ -69,9 +69,9 @@ LINK_ENTITY_TO_CLASS(displacer_ball, CDisplacerBall);
 
 void CDisplacerBall::Precache()
 {
-	PRECACHE_MODEL("sprites/exit1.spr");
-	PRECACHE_MODEL("sprites/lgtning.spr");
-	m_iTrail = PRECACHE_MODEL("sprites/disp_ring.spr");
+	PrecacheModel("sprites/exit1.spr");
+	PrecacheModel("sprites/lgtning.spr");
+	m_iTrail = PrecacheModel("sprites/disp_ring.spr");
 
 	PRECACHE_SOUND("weapons/displacer_impact.wav");
 	PRECACHE_SOUND("weapons/displacer_teleport.wav");

@@ -316,7 +316,7 @@ void COFShockRoach::Precache()
 
 	PRECACHE_SOUND("shockroach/shock_walk.wav");
 
-	PRECACHE_MODEL(STRING(pev->model));
+	PrecacheModel(STRING(pev->model));
 }
 
 

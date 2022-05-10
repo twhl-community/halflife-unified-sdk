@@ -132,7 +132,7 @@ void CTripmineGrenade::Spawn()
 
 void CTripmineGrenade::Precache()
 {
-	PRECACHE_MODEL(STRING(pev->model));
+	PrecacheModel(STRING(pev->model));
 	PRECACHE_SOUND("weapons/mine_deploy.wav");
 	PRECACHE_SOUND("weapons/mine_activate.wav");
 	PRECACHE_SOUND("weapons/mine_charge.wav");
@@ -380,9 +380,9 @@ void CTripmine::Spawn()
 
 void CTripmine::Precache()
 {
-	PRECACHE_MODEL(STRING(pev->model));
-	PRECACHE_MODEL("models/v_tripmine.mdl");
-	PRECACHE_MODEL("models/p_tripmine.mdl");
+	PrecacheModel(STRING(pev->model));
+	PrecacheModel("models/v_tripmine.mdl");
+	PrecacheModel("models/p_tripmine.mdl");
 	UTIL_PrecacheOther("monster_tripmine");
 
 	m_usTripFire = PRECACHE_EVENT(1, "events/tripfire.sc");

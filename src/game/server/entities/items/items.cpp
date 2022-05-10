@@ -83,7 +83,7 @@ void CItem::Precache()
 {
 	if (!FStringNull(pev->model))
 	{
-		PRECACHE_MODEL(STRING(pev->model));
+		PrecacheModel(STRING(pev->model));
 	}
 }
 

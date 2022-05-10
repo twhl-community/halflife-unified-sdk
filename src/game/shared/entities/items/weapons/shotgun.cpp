@@ -43,11 +43,11 @@ void CShotgun::Spawn()
 
 void CShotgun::Precache()
 {
-	PRECACHE_MODEL("models/v_shotgun.mdl");
-	PRECACHE_MODEL(STRING(pev->model));
-	PRECACHE_MODEL("models/p_shotgun.mdl");
+	PrecacheModel("models/v_shotgun.mdl");
+	PrecacheModel(STRING(pev->model));
+	PrecacheModel("models/p_shotgun.mdl");
 
-	m_iShell = PRECACHE_MODEL("models/shotgunshell.mdl"); // shotgun shell
+	m_iShell = PrecacheModel("models/shotgunshell.mdl"); // shotgun shell
 
 	PRECACHE_SOUND("items/9mmclip1.wav");
 

@@ -94,7 +94,7 @@ void CRat::Spawn()
 //=========================================================
 void CRat::Precache()
 {
-	PRECACHE_MODEL(STRING(pev->model));
+	PrecacheModel(STRING(pev->model));
 }
 
 //=========================================================

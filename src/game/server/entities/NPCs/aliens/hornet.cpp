@@ -111,7 +111,7 @@ void CHornet::Spawn()
 
 void CHornet::Precache()
 {
-	PRECACHE_MODEL("models/hornet.mdl");
+	PrecacheModel("models/hornet.mdl");
 
 	PRECACHE_SOUND("agrunt/ag_fire1.wav");
 	PRECACHE_SOUND("agrunt/ag_fire2.wav");
@@ -125,8 +125,8 @@ void CHornet::Precache()
 	PRECACHE_SOUND("hornet/ag_hornethit2.wav");
 	PRECACHE_SOUND("hornet/ag_hornethit3.wav");
 
-	iHornetPuff = PRECACHE_MODEL("sprites/muz1.spr");
-	iHornetTrail = PRECACHE_MODEL("sprites/laserbeam.spr");
+	iHornetPuff = PrecacheModel("sprites/muz1.spr");
+	iHornetTrail = PrecacheModel("sprites/laserbeam.spr");
 }
 
 //=========================================================

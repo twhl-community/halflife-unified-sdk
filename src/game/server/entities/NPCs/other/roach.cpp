@@ -149,7 +149,7 @@ void CRoach::Spawn()
 //=========================================================
 void CRoach::Precache()
 {
-	PRECACHE_MODEL(STRING(pev->model));
+	PrecacheModel(STRING(pev->model));
 
 	PRECACHE_SOUND("roach/rch_die.wav");
 	PRECACHE_SOUND("roach/rch_walk.wav");

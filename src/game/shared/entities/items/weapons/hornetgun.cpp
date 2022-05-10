@@ -53,9 +53,9 @@ void CHgun::Spawn()
 
 void CHgun::Precache()
 {
-	PRECACHE_MODEL("models/v_hgun.mdl");
-	PRECACHE_MODEL(STRING(pev->model));
-	PRECACHE_MODEL("models/p_hgun.mdl");
+	PrecacheModel("models/v_hgun.mdl");
+	PrecacheModel(STRING(pev->model));
+	PrecacheModel("models/p_hgun.mdl");
 
 	m_usHornetFire = PRECACHE_EVENT(1, "events/firehornet.sc");
 

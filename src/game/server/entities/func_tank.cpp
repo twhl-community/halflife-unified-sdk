@@ -207,9 +207,9 @@ void CFuncTank::Spawn()
 void CFuncTank::Precache()
 {
 	if (!FStringNull(m_iszSpriteSmoke))
-		PRECACHE_MODEL(STRING(m_iszSpriteSmoke));
+		PrecacheModel(STRING(m_iszSpriteSmoke));
 	if (!FStringNull(m_iszSpriteFlash))
-		PRECACHE_MODEL(STRING(m_iszSpriteFlash));
+		PrecacheModel(STRING(m_iszSpriteFlash));
 
 	if (!FStringNull(pev->noise))
 		PRECACHE_SOUND(STRING(pev->noise));

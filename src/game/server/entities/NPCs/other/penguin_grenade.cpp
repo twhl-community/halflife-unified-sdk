@@ -81,7 +81,7 @@ void CPenguinGrenade::OnCreate()
 
 void CPenguinGrenade::Precache()
 {
-	g_engfuncs.pfnPrecacheModel(STRING(pev->model));
+	PrecacheModel(STRING(pev->model));
 	g_engfuncs.pfnPrecacheSound("squeek/sqk_blast1.wav");
 	g_engfuncs.pfnPrecacheSound("common/bodysplat.wav");
 	g_engfuncs.pfnPrecacheSound("squeek/sqk_die1.wav");

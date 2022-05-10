@@ -482,6 +482,11 @@ void SaveReadFields(SAVERESTOREDATA* pSaveData, const char* pname, void* pBaseDa
 	restoreHelper.ReadFields(pname, pBaseData, pFields, fieldCount);
 }
 
+int CBaseEntity::PrecacheModel(const char* s)
+{
+	return UTIL_PrecacheModel(s);
+}
+
 void CBaseEntity::OnCreate()
 {
 	//Nothing.
@@ -617,8 +622,8 @@ bool CBaseEntity::Restore(CRestore& restore)
 		mins = pev->mins; // Set model is about to destroy these
 		maxs = pev->maxs;
 
-
-		PRECACHE_MODEL(STRING(pev->model));
+		//Don't use the per-entity precache function here because we're restoring an already-replaced name.
+		UTIL_PrecacheModel(STRING(pev->model));
 		SET_MODEL(ENT(pev), STRING(pev->model));
 		UTIL_SetSize(pev, mins, maxs); // Reset them
 	}

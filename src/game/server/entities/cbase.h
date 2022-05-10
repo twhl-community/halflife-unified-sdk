@@ -167,6 +167,10 @@ public:
 
 	virtual ~CBaseEntity() {}
 
+	//Common helper functions
+
+	int PrecacheModel(const char* s);
+
 	// initialization functions
 
 	/**

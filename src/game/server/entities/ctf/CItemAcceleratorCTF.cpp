@@ -29,7 +29,7 @@ void CItemAcceleratorCTF::Precache()
 {
 	CItemCTF::Precache();
 
-	PRECACHE_MODEL(STRING(pev->model));
+	PrecacheModel(STRING(pev->model));
 	PRECACHE_SOUND("turret/tu_ping.wav");
 }
 

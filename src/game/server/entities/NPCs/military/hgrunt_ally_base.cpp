@@ -770,7 +770,7 @@ void CBaseHGruntAlly::Precache()
 {
 	TalkInit();
 
-	PRECACHE_MODEL(STRING(pev->model));
+	PrecacheModel(STRING(pev->model));
 
 	PRECACHE_SOUND("hgrunt/gr_mgun1.wav");
 	PRECACHE_SOUND("hgrunt/gr_mgun2.wav");
@@ -2372,7 +2372,7 @@ void CBaseHGruntAllyRepel::Spawn()
 void CBaseHGruntAllyRepel::Precache()
 {
 	UTIL_PrecacheOther(GetMonsterClassname());
-	m_iSpriteTexture = PRECACHE_MODEL("sprites/rope.spr");
+	m_iSpriteTexture = PrecacheModel("sprites/rope.spr");
 }
 
 void CBaseHGruntAllyRepel::RepelUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)

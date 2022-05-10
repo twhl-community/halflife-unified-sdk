@@ -43,14 +43,14 @@ void CM249::OnCreate()
 
 void CM249::Precache()
 {
-	PRECACHE_MODEL("models/v_saw.mdl");
-	PRECACHE_MODEL(STRING(pev->model));
-	PRECACHE_MODEL("models/p_saw.mdl");
+	PrecacheModel("models/v_saw.mdl");
+	PrecacheModel(STRING(pev->model));
+	PrecacheModel("models/p_saw.mdl");
 
-	m_iShell = PRECACHE_MODEL("models/saw_shell.mdl");
-	m_iLink = PRECACHE_MODEL("models/saw_link.mdl");
-	m_iSmoke = PRECACHE_MODEL("sprites/wep_smoke_01.spr");
-	m_iFire = PRECACHE_MODEL("sprites/xfire.spr");
+	m_iShell = PrecacheModel("models/saw_shell.mdl");
+	m_iLink = PrecacheModel("models/saw_link.mdl");
+	m_iSmoke = PrecacheModel("sprites/wep_smoke_01.spr");
+	m_iFire = PrecacheModel("sprites/xfire.spr");
 
 	PRECACHE_SOUND("weapons/saw_reload.wav");
 	PRECACHE_SOUND("weapons/saw_reload2.wav");

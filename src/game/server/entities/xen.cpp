@@ -114,8 +114,8 @@ void CXenPLight::Spawn()
 
 void CXenPLight::Precache()
 {
-	PRECACHE_MODEL(STRING(pev->model));
-	PRECACHE_MODEL(XEN_PLANT_GLOW_SPRITE);
+	PrecacheModel(STRING(pev->model));
+	PrecacheModel(XEN_PLANT_GLOW_SPRITE);
 }
 
 
@@ -233,7 +233,7 @@ void CXenHair::Think()
 
 void CXenHair::Precache()
 {
-	PRECACHE_MODEL(STRING(pev->model));
+	PrecacheModel(STRING(pev->model));
 }
 
 
@@ -353,8 +353,8 @@ const char* CXenTree::pAttackMissSounds[] =
 
 void CXenTree::Precache()
 {
-	PRECACHE_MODEL(STRING(pev->model));
-	PRECACHE_MODEL(XEN_PLANT_GLOW_SPRITE);
+	PrecacheModel(STRING(pev->model));
+	PrecacheModel(XEN_PLANT_GLOW_SPRITE);
 	PRECACHE_SOUND_ARRAY(pAttackHitSounds);
 	PRECACHE_SOUND_ARRAY(pAttackMissSounds);
 }
@@ -591,11 +591,11 @@ void CXenSpore::Precache()
 	if (FStringNull(pev->model))
 	{
 		//TODO: bound check
-		PRECACHE_MODEL(pModelNames[pev->skin]);
+		PrecacheModel(pModelNames[pev->skin]);
 	}
 	else
 	{
-		PRECACHE_MODEL(STRING(pev->model));
+		PrecacheModel(STRING(pev->model));
 	}
 }
 

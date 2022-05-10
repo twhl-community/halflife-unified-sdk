@@ -43,19 +43,19 @@ void CEgon::Spawn()
 
 void CEgon::Precache()
 {
-	PRECACHE_MODEL(STRING(pev->model));
-	PRECACHE_MODEL("models/v_egon.mdl");
-	PRECACHE_MODEL("models/p_egon.mdl");
+	PrecacheModel(STRING(pev->model));
+	PrecacheModel("models/v_egon.mdl");
+	PrecacheModel("models/p_egon.mdl");
 
-	PRECACHE_MODEL("models/w_9mmclip.mdl");
+	PrecacheModel("models/w_9mmclip.mdl");
 	PRECACHE_SOUND("items/9mmclip1.wav");
 
 	PRECACHE_SOUND(EGON_SOUND_OFF);
 	PRECACHE_SOUND(EGON_SOUND_RUN);
 	PRECACHE_SOUND(EGON_SOUND_STARTUP);
 
-	PRECACHE_MODEL(EGON_BEAM_SPRITE);
-	PRECACHE_MODEL(EGON_FLARE_SPRITE);
+	PrecacheModel(EGON_BEAM_SPRITE);
+	PrecacheModel(EGON_FLARE_SPRITE);
 
 	PRECACHE_SOUND("weapons/357_cock1.wav");
 

@@ -72,7 +72,7 @@ void CAirtank::Spawn()
 
 void CAirtank::Precache()
 {
-	PRECACHE_MODEL(STRING(pev->model));
+	PrecacheModel(STRING(pev->model));
 	PRECACHE_SOUND("doors/aliendoor3.wav");
 }
 

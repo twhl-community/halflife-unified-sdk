@@ -82,11 +82,11 @@ IMPLEMENT_SAVERESTORE(CPitdroneSpike, CBaseEntity);
 
 void CPitdroneSpike::Precache()
 {
-	PRECACHE_MODEL("models/pit_drone_spike.mdl");
+	PrecacheModel("models/pit_drone_spike.mdl");
 	PRECACHE_SOUND("weapons/xbow_hitbod1.wav");
 	PRECACHE_SOUND("weapons/xbox_hit1.wav");
 
-	iSpikeTrail = PRECACHE_MODEL("sprites/spike_trail.spr");
+	iSpikeTrail = PrecacheModel("sprites/spike_trail.spr");
 }
 
 void CPitdroneSpike::Spawn()
@@ -706,12 +706,12 @@ void CPitdrone::Spawn()
 //=========================================================
 void CPitdrone::Precache()
 {
-	PRECACHE_MODEL(STRING(pev->model));
-	PRECACHE_MODEL("models/pit_drone_gibs.mdl");
+	PrecacheModel(STRING(pev->model));
+	PrecacheModel("models/pit_drone_gibs.mdl");
 
 	UTIL_PrecacheOther("pitdronespike");
 
-	iPitdroneSpitSprite = PRECACHE_MODEL("sprites/tinyspit.spr"); // client side spittle.
+	iPitdroneSpitSprite = PrecacheModel("sprites/tinyspit.spr"); // client side spittle.
 
 	PRECACHE_SOUND("zombie/claw_miss2.wav"); // because we use the basemonster SWIPE animation event
 

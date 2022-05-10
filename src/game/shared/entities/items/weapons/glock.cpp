@@ -40,11 +40,11 @@ void CGlock::Spawn()
 
 void CGlock::Precache()
 {
-	PRECACHE_MODEL("models/v_9mmhandgun.mdl");
-	PRECACHE_MODEL(STRING(pev->model));
-	PRECACHE_MODEL("models/p_9mmhandgun.mdl");
+	PrecacheModel("models/v_9mmhandgun.mdl");
+	PrecacheModel(STRING(pev->model));
+	PrecacheModel("models/p_9mmhandgun.mdl");
 
-	m_iShell = PRECACHE_MODEL("models/shell.mdl"); // brass shell
+	m_iShell = PrecacheModel("models/shell.mdl"); // brass shell
 
 	PRECACHE_SOUND("items/9mmclip1.wav");
 	PRECACHE_SOUND("items/9mmclip2.wav");

@@ -30,10 +30,10 @@ LINK_ENTITY_TO_CLASS(shock_beam, CShockBeam);
 
 void CShockBeam::Precache()
 {
-	PRECACHE_MODEL("sprites/flare3.spr");
-	PRECACHE_MODEL("sprites/lgtning.spr");
-	PRECACHE_MODEL("sprites/glow01.spr");
-	PRECACHE_MODEL("models/shock_effect.mdl");
+	PrecacheModel("sprites/flare3.spr");
+	PrecacheModel("sprites/lgtning.spr");
+	PrecacheModel("sprites/glow01.spr");
+	PrecacheModel("models/shock_effect.mdl");
 	PRECACHE_SOUND("weapons/shock_impact.wav");
 }
 

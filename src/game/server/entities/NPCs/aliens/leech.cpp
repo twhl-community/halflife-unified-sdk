@@ -292,7 +292,7 @@ void CLeech::AlertSound()
 
 void CLeech::Precache()
 {
-	PRECACHE_MODEL(STRING(pev->model));
+	PrecacheModel(STRING(pev->model));
 
 	PRECACHE_SOUND_ARRAY(pAttackSounds);
 	PRECACHE_SOUND_ARRAY(pAlertSounds);

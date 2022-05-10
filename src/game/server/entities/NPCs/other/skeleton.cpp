@@ -59,7 +59,7 @@ LINK_ENTITY_TO_CLASS(monster_skeleton_dead, COFSkeleton);
 //=========================================================
 void COFSkeleton::Spawn()
 {
-	PRECACHE_MODEL(STRING(pev->model));
+	PrecacheModel(STRING(pev->model));
 	SET_MODEL(ENT(pev), STRING(pev->model));
 
 	pev->effects = 0;

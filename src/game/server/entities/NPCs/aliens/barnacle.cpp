@@ -397,7 +397,7 @@ void CBarnacle::WaitTillDead()
 //=========================================================
 void CBarnacle::Precache()
 {
-	PRECACHE_MODEL(STRING(pev->model));
+	PrecacheModel(STRING(pev->model));
 
 	PRECACHE_SOUND("barnacle/bcl_alert2.wav"); //happy, lifting food up
 	PRECACHE_SOUND("barnacle/bcl_bite3.wav");  //just got food to mouth

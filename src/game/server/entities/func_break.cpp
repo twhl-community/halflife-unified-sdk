@@ -348,7 +348,7 @@ void CBreakable::Precache()
 	if (!FStringNull(m_iszGibModel))
 		pGibName = STRING(m_iszGibModel);
 
-	m_idShard = PRECACHE_MODEL(pGibName);
+	m_idShard = PrecacheModel(pGibName);
 
 	// Precache the spawn item's data
 	if (!FStringNull(m_iszSpawnObject))

@@ -73,9 +73,9 @@ IMPLEMENT_SAVERESTORE(COFChargedBolt, CBaseEntity);
 
 void COFChargedBolt::Precache()
 {
-	PRECACHE_MODEL("sprites/blueflare2.spr");
-	PRECACHE_MODEL("sprites/lgtning.spr");
-	m_iShowerSparks = PRECACHE_MODEL("sprites/spark1.spr");
+	PrecacheModel("sprites/blueflare2.spr");
+	PrecacheModel("sprites/lgtning.spr");
+	m_iShowerSparks = PrecacheModel("sprites/spark1.spr");
 }
 
 void COFChargedBolt::Spawn()
@@ -580,7 +580,7 @@ void COFVoltigore::Spawn()
 
 void COFVoltigore::Precache()
 {
-	PRECACHE_MODEL(STRING(pev->model));
+	PrecacheModel(STRING(pev->model));
 
 	PRECACHE_SOUND_ARRAY(pAttackHitSounds);
 	PRECACHE_SOUND_ARRAY(pAttackMissSounds);
@@ -611,7 +611,7 @@ void COFVoltigore::Precache()
 
 	UTIL_PrecacheOther("charged_bolt");
 
-	m_iVoltigoreGibs = PRECACHE_MODEL("models/vgibs.mdl");
+	m_iVoltigoreGibs = PrecacheModel("models/vgibs.mdl");
 }
 
 //=========================================================

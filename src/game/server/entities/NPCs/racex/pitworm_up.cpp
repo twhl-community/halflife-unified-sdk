@@ -287,8 +287,8 @@ void COFPitWormUp::OnCreate()
 
 void COFPitWormUp::Precache()
 {
-	PRECACHE_MODEL(STRING(pev->model));
-	PRECACHE_MODEL("sprites/tele1.spr");
+	PrecacheModel(STRING(pev->model));
+	PrecacheModel("sprites/tele1.spr");
 
 	PRECACHE_SOUND_ARRAY(pAttackSounds);
 	PRECACHE_SOUND_ARRAY(pAttackVoiceSounds);
@@ -317,7 +317,7 @@ void COFPitWormUp::Precache()
 	PRECACHE_SOUND("pitworm/pit_worm_flinch1.wav");
 	PRECACHE_SOUND("pitworm/pit_worm_flinch2.wav");
 
-	PRECACHE_MODEL("models/pit_worm_gibs.mdl");
+	PrecacheModel("models/pit_worm_gibs.mdl");
 
 	UTIL_PrecacheOther("pitworm_gib");
 }
@@ -1473,7 +1473,7 @@ LINK_ENTITY_TO_CLASS(pitworm_gib, COFPitWormGib);
 
 void COFPitWormGib::Precache()
 {
-	PRECACHE_MODEL("models/pit_worm_gibs.mdl");
+	PrecacheModel("models/pit_worm_gibs.mdl");
 }
 
 void COFPitWormGib::Spawn()
@@ -1560,7 +1560,7 @@ LINK_ENTITY_TO_CLASS(pitworm_gibshooter, COFPitWormGibShooter);
 
 void COFPitWormGibShooter::Precache()
 {
-	m_iGibModelIndex = PRECACHE_MODEL("models/pit_worm_gibs.mdl");
+	m_iGibModelIndex = PrecacheModel("models/pit_worm_gibs.mdl");
 }
 
 bool COFPitWormGibShooter::KeyValue(KeyValueData* pkvd)
@@ -1903,7 +1903,7 @@ bool COFPitWorm::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, flo
 
 void COFPitWorm::Precache()
 {
-	g_engfuncs.pfnPrecacheModel(STRING(pev->model));
+	PrecacheModel(STRING(pev->model));
 	PRECACHE_SOUND_ARRAY(pChildDieSounds);
 	PRECACHE_SOUND_ARRAY(pSackSounds);
 	PRECACHE_SOUND_ARRAY(pDeathSounds);
@@ -1914,9 +1914,9 @@ void COFPitWorm::Precache()
 	PRECACHE_SOUND_ARRAY(pPainSounds);
 	PRECACHE_SOUND_ARRAY(pFootSounds);
 
-	g_engfuncs.pfnPrecacheModel("sprites/xspark1.spr");
-	gSpikeSprite = g_engfuncs.pfnPrecacheModel("sprites/mommaspout.spr");
-	gSpikeDebrisSprite = g_engfuncs.pfnPrecacheModel("sprites/mommablob.spr");
+	PrecacheModel("sprites/xspark1.spr");
+	gSpikeSprite = PrecacheModel("sprites/mommaspout.spr");
+	gSpikeDebrisSprite = PrecacheModel("sprites/mommablob.spr");
 	g_engfuncs.pfnPrecacheSound("bullchicken/bc_acid1.wav");
 	g_engfuncs.pfnPrecacheSound("bullchicken/bc_spithit1.wav");
 	g_engfuncs.pfnPrecacheSound("bullchicken/bc_spithit2.wav");

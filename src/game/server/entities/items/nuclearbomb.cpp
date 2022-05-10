@@ -37,7 +37,7 @@ void COFNuclearBombButton::OnCreate()
 
 void COFNuclearBombButton::Precache()
 {
-	PRECACHE_MODEL(STRING(pev->model));
+	PrecacheModel(STRING(pev->model));
 }
 
 void COFNuclearBombButton::Spawn()
@@ -98,7 +98,7 @@ void COFNuclearBombTimer::OnCreate()
 
 void COFNuclearBombTimer::Precache()
 {
-	PRECACHE_MODEL(STRING(pev->model));
+	PrecacheModel(STRING(pev->model));
 	PRECACHE_SOUND("common/nuke_ticking.wav");
 }
 
@@ -227,7 +227,7 @@ void COFNuclearBomb::OnCreate()
 
 void COFNuclearBomb::Precache()
 {
-	PRECACHE_MODEL(STRING(pev->model));
+	PrecacheModel(STRING(pev->model));
 	UTIL_PrecacheOther("item_nuclearbombtimer");
 	UTIL_PrecacheOther("item_nuclearbombbutton");
 	PRECACHE_SOUND("buttons/button4.wav");

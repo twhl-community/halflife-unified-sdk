@@ -73,7 +73,7 @@ void CLaserSpot::Revive()
 
 void CLaserSpot::Precache()
 {
-	PRECACHE_MODEL("sprites/laserdot.spr");
+	PrecacheModel("sprites/laserdot.spr");
 };
 
 LINK_ENTITY_TO_CLASS(rpg_rocket, CRpgRocket);
@@ -146,8 +146,8 @@ void CRpgRocket::RocketTouch(CBaseEntity* pOther)
 //=========================================================
 void CRpgRocket::Precache()
 {
-	PRECACHE_MODEL("models/rpgrocket.mdl");
-	m_iTrail = PRECACHE_MODEL("sprites/smoke.spr");
+	PrecacheModel("models/rpgrocket.mdl");
+	m_iTrail = PrecacheModel("sprites/smoke.spr");
 	PRECACHE_SOUND("weapons/rocket1.wav");
 }
 
@@ -338,9 +338,9 @@ void CRpg::Spawn()
 
 void CRpg::Precache()
 {
-	PRECACHE_MODEL(STRING(pev->model));
-	PRECACHE_MODEL("models/v_rpg.mdl");
-	PRECACHE_MODEL("models/p_rpg.mdl");
+	PrecacheModel(STRING(pev->model));
+	PrecacheModel("models/v_rpg.mdl");
+	PrecacheModel("models/p_rpg.mdl");
 
 	PRECACHE_SOUND("items/9mmclip1.wav");
 

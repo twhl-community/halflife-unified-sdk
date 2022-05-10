@@ -403,10 +403,10 @@ void CHGruntAlly::Precache()
 
 	PRECACHE_SOUND("weapons/glauncher.wav");
 
-	m_iBrassShell = PRECACHE_MODEL("models/shell.mdl"); // brass shell
-	m_iShotgunShell = PRECACHE_MODEL("models/shotgunshell.mdl");
-	m_iSawShell = PRECACHE_MODEL("models/saw_shell.mdl");
-	m_iSawLink = PRECACHE_MODEL("models/saw_link.mdl");
+	m_iBrassShell = PrecacheModel("models/shell.mdl"); // brass shell
+	m_iShotgunShell = PrecacheModel("models/shotgunshell.mdl");
+	m_iSawShell = PrecacheModel("models/saw_shell.mdl");
+	m_iSawLink = PrecacheModel("models/saw_link.mdl");
 
 	CBaseHGruntAlly::Precache();
 }
@@ -529,7 +529,7 @@ LINK_ENTITY_TO_CLASS(monster_human_grunt_ally_dead, CDeadHGruntAlly);
 //=========================================================
 void CDeadHGruntAlly::Spawn()
 {
-	PRECACHE_MODEL(STRING(pev->model));
+	PrecacheModel(STRING(pev->model));
 	SET_MODEL(ENT(pev), STRING(pev->model));
 
 	pev->effects = 0;

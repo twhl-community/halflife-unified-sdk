@@ -547,8 +547,8 @@ void CISlave::Spawn()
 //=========================================================
 void CISlave::Precache()
 {
-	PRECACHE_MODEL(STRING(pev->model));
-	PRECACHE_MODEL("sprites/lgtning.spr");
+	PrecacheModel(STRING(pev->model));
+	PrecacheModel("sprites/lgtning.spr");
 	PRECACHE_SOUND("debris/zap1.wav");
 	PRECACHE_SOUND("debris/zap4.wav");
 	PRECACHE_SOUND("weapons/electro4.wav");
@@ -903,7 +903,7 @@ void CDeadISlave::OnCreate()
 //=========================================================
 void CDeadISlave::Spawn()
 {
-	PRECACHE_MODEL(STRING(pev->model));
+	PrecacheModel(STRING(pev->model));
 	SET_MODEL(ENT(pev), STRING(pev->model));
 
 	pev->effects = 0;

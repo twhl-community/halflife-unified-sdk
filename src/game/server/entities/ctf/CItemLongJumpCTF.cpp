@@ -30,7 +30,7 @@ void CItemLongJumpCTF::OnCreate()
 
 void CItemLongJumpCTF::Precache()
 {
-	g_engfuncs.pfnPrecacheModel(STRING(pev->model));
+	PrecacheModel(STRING(pev->model));
 	g_engfuncs.pfnPrecacheSound("ctf/pow_big_jump.wav");
 }
 

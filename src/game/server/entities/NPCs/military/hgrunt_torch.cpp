@@ -335,7 +335,7 @@ void COFTorchAlly::Spawn()
 //=========================================================
 void COFTorchAlly::Precache()
 {
-	PRECACHE_MODEL(TORCH_BEAM_SPRITE);
+	PrecacheModel(TORCH_BEAM_SPRITE);
 
 	PRECACHE_SOUND("weapons/desert_eagle_fire.wav");
 	PRECACHE_SOUND("weapons/desert_eagle_reload.wav");

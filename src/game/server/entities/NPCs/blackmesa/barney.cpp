@@ -371,7 +371,7 @@ void CBarney::Spawn()
 
 void CBarney::Precache()
 {
-	PRECACHE_MODEL(STRING(pev->model));
+	PrecacheModel(STRING(pev->model));
 
 	PRECACHE_SOUND("barney/ba_attack1.wav");
 	PRECACHE_SOUND("barney/ba_attack2.wav");
@@ -774,7 +774,7 @@ LINK_ENTITY_TO_CLASS(monster_barney_dead, CDeadBarney);
 //=========================================================
 void CDeadBarney::Spawn()
 {
-	PRECACHE_MODEL(STRING(pev->model));
+	PrecacheModel(STRING(pev->model));
 	SET_MODEL(ENT(pev), STRING(pev->model));
 
 	pev->effects = 0;

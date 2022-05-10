@@ -82,7 +82,7 @@ void CElectrifiedWire::Precache()
 {
 	BaseClass::Precache();
 
-	m_iLightningSprite = PRECACHE_MODEL("sprites/lgtning.spr");
+	m_iLightningSprite = PrecacheModel("sprites/lgtning.spr");
 }
 
 void CElectrifiedWire::Spawn()

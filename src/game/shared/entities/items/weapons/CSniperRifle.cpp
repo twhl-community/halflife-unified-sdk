@@ -44,9 +44,9 @@ void CSniperRifle::Precache()
 
 	m_iId = WEAPON_SNIPERRIFLE;
 
-	PRECACHE_MODEL(STRING(pev->model));
-	PRECACHE_MODEL("models/v_m40a1.mdl");
-	PRECACHE_MODEL("models/p_m40a1.mdl");
+	PrecacheModel(STRING(pev->model));
+	PrecacheModel("models/v_m40a1.mdl");
+	PrecacheModel("models/p_m40a1.mdl");
 
 	PRECACHE_SOUND("weapons/sniper_fire.wav");
 	PRECACHE_SOUND("weapons/sniper_zoom.wav");

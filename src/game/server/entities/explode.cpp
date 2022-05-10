@@ -46,7 +46,7 @@ void CShower::OnCreate()
 
 void CShower::Precache()
 {
-	PRECACHE_MODEL(STRING(pev->model));
+	PrecacheModel(STRING(pev->model));
 }
 
 void CShower::Spawn()

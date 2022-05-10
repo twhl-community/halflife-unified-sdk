@@ -41,9 +41,9 @@ void CCrowbar::Spawn()
 
 void CCrowbar::Precache()
 {
-	PRECACHE_MODEL("models/v_crowbar.mdl");
-	PRECACHE_MODEL(STRING(pev->model));
-	PRECACHE_MODEL("models/p_crowbar.mdl");
+	PrecacheModel("models/v_crowbar.mdl");
+	PrecacheModel(STRING(pev->model));
+	PrecacheModel("models/p_crowbar.mdl");
 	PRECACHE_SOUND("weapons/cbar_hit1.wav");
 	PRECACHE_SOUND("weapons/cbar_hit2.wav");
 	PRECACHE_SOUND("weapons/cbar_hitbod1.wav");

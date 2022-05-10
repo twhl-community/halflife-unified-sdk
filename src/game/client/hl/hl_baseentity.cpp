@@ -31,6 +31,11 @@ void SkillSystem::Shutdown() {}
 float SkillSystem::GetValue(std::string_view) const { return 0; }
 
 // CBaseEntity Stubs
+int CBaseEntity::PrecacheModel(const char* s)
+{
+	return UTIL_PrecacheModel(s);
+}
+
 void CBaseEntity::OnCreate()
 {
 	//Nothing.
