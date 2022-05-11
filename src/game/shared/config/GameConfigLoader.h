@@ -15,6 +15,7 @@
 
 #pragma once
 
+#include <any>
 #include <memory>
 #include <optional>
 #include <string>
@@ -28,7 +29,6 @@
 #include "utils/GameSystem.h"
 #include "utils/json_fwd.h"
 
-#include "GameConfig.h"
 #include "GameConfigConditionals.h"
 
 class asIScriptContext;
@@ -41,6 +41,7 @@ class GameConfigSection;
 struct GameConfigLoadParameters final
 {
 	const char* PathID = nullptr;
+	std::any UserData;
 };
 
 struct GameConfigContext final
@@ -50,7 +51,7 @@ struct GameConfigContext final
 	const GameConfigDefinition& Definition;
 
 	GameConfigLoader& Loader;
-	GameConfig& Configuration;
+	std::any UserData;
 };
 
 /**
@@ -65,7 +66,6 @@ private:
 		const GameConfigLoadParameters& Parameters;
 
 		GameConfigIncludeStack& IncludeStack;
-		GameConfig& Config;
 
 		int Depth = 1;
 	};
@@ -89,7 +89,7 @@ public:
 
 	std::shared_ptr<const GameConfigDefinition> CreateDefinition(std::string&& name, std::vector<std::unique_ptr<const GameConfigSection>>&& sections);
 
-	std::optional<GameConfig> TryLoad(const char* fileName, const GameConfigDefinition& definition, const GameConfigLoadParameters& parameters = {});
+	bool TryLoad(const char* fileName, const GameConfigDefinition& definition, const GameConfigLoadParameters& parameters = {});
 
 	/**
 	*	@brief Evaluate a conditional expression

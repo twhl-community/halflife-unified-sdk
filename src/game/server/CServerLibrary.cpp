@@ -176,13 +176,12 @@ void CServerLibrary::CreateConfigDefinitions()
 	}());
 }
 
-void CServerLibrary::LoadConfigFile(const char* fileName, const GameConfigDefinition& definition, const GameConfigLoadParameters& parameters)
+void CServerLibrary::LoadConfigFile(const char* fileName, const GameConfigDefinition& definition, GameConfigLoadParameters parameters)
 {
-	if (const auto config = g_GameConfigLoader.TryLoad(fileName, definition, parameters); config.has_value())
-	{
-		//Configuration will apply to the map state object
-		config->Apply(&m_MapState);
-	}
+	//Configuration will apply to the map state object
+	parameters.UserData = &m_MapState;
+
+	g_GameConfigLoader.TryLoad(fileName, definition, parameters);
 }
 
 void CServerLibrary::LoadServerConfigFiles()

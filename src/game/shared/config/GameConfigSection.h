@@ -48,7 +48,7 @@ public:
 	virtual std::tuple<std::string, std::string> GetSchema() const = 0;
 
 	/**
-	*	@brief Tries to parse the given configuration into the given configuration object.
+	*	@brief Tries to parse the given configuration.
 	*/
 	virtual bool TryParse(GameConfigContext& context) const = 0;
 };

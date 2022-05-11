@@ -17,48 +17,10 @@
 
 #include "CMapState.h"
 
-#include "config/GameConfigLoader.h"
 #include "config/GameConfigSection.h"
 
 #include "utils/json_utils.h"
 #include "utils/ModelReplacement.h"
-
-/**
-*	@brief Global model replacement map.
-*/
-class GlobalModelReplacementData final : public GameConfigData
-{
-public:
-	GlobalModelReplacementData() = default;
-
-	void Apply(const std::any& userData) const override final
-	{
-		auto mapState = std::any_cast<CMapState*>(userData);
-
-		//Need to make a copy here because configuration data needs to be applyable multiple times, so we can't just move it over.
-		ModelReplacementMap temp = m_Map;
-
-		MergeMaps(mapState->m_GlobalModelReplacement, temp);
-	}
-
-	void AddMap(ModelReplacementMap&& map)
-	{
-		MergeMaps(m_Map, map);
-	}
-
-private:
-	static void MergeMaps(ModelReplacementMap& dest, ModelReplacementMap& source)
-	{
-		//Append replacement mappings from other to my map.
-		//To ensure that existing keys are overwritten this is done by appending to the new map and then moving it to ours.
-		source.insert(dest.begin(), dest.end());
-
-		dest = std::move(source);
-	}
-
-private:
-	ModelReplacementMap m_Map;
-};
 
 /**
 *	@brief Allows a configuration file to specify a global model replacement file.
@@ -91,9 +53,13 @@ public:
 
 			if (!map.empty())
 			{
-				auto data = context.Configuration.GetOrCreate<GlobalModelReplacementData>();
+				auto mapState = std::any_cast<CMapState*>(context.UserData);
 
-				data->AddMap(std::move(map));
+				//Append replacement mappings from other to my map.
+				//To ensure that existing keys are overwritten this is done by appending to the new map and then moving it to ours.
+				map.insert(mapState->m_GlobalModelReplacement.begin(), mapState->m_GlobalModelReplacement.end());
+
+				mapState->m_GlobalModelReplacement = std::move(map);
 			}
 		}
 

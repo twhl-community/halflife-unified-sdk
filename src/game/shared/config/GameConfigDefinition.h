@@ -29,7 +29,6 @@ class GameConfigSection;
 *	Contains a set of sections that configuration files can use.
 *	Instances should be created with GameConfigLoader::CreateDefinition.
 *	@details Each section specifies what kind of data it supports, and provides a means of parsing it.
-*	Sections may add GameConfigData objects to the resulting GameConfig object to apply changes at a later time.
 */
 class GameConfigDefinition
 {

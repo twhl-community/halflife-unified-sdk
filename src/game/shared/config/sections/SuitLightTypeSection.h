@@ -20,29 +20,10 @@
 #include "cdll_dll.h"
 #include "CMapState.h"
 
-#include "config/GameConfigLoader.h"
 #include "config/GameConfigSection.h"
 
 #include "utils/json_utils.h"
 #include "utils/shared_utils.h"
-
-/**
-*	@brief Suit light type setting.
-*/
-class SuitLightTypeData final : public GameConfigData
-{
-public:
-	explicit SuitLightTypeData() = default;
-
-	void Apply(const std::any& userData) const override final
-	{
-		auto mapState = std::any_cast<CMapState*>(userData);
-
-		mapState->m_LightType = m_Type;
-	}
-
-	SuitLightType m_Type = SuitLightType::Flashlight;
-};
 
 /**
 *	@brief Allows a configuration file to specify the player's suit light type.
@@ -98,9 +79,9 @@ public:
 		{
 			if (auto value = SuitLightTypeFromString(type); value)
 			{
-				auto data = context.Configuration.GetOrCreate<SuitLightTypeData>();
+				auto mapState = std::any_cast<CMapState*>(context.UserData);
 
-				data->m_Type = *value;
+				mapState->m_LightType = *value;
 			}
 		}
 

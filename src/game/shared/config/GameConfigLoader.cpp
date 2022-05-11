@@ -106,11 +106,10 @@ std::shared_ptr<const GameConfigDefinition> GameConfigLoader::CreateDefinition(
 	return definition;
 }
 
-std::optional<GameConfig> GameConfigLoader::TryLoad(
+bool GameConfigLoader::TryLoad(
 	const char* fileName, const GameConfigDefinition& definition, const GameConfigLoadParameters& parameters)
 {
 	GameConfigIncludeStack includeStack;
-	GameConfig config;
 
 	//So you can't get a stack overflow including yourself over and over.
 	includeStack.Add(fileName);
@@ -118,15 +117,9 @@ std::optional<GameConfig> GameConfigLoader::TryLoad(
 	LoadContext loadContext{
 		.Definition = definition,
 		.Parameters = parameters,
-		.IncludeStack = includeStack,
-		.Config = config};
+		.IncludeStack = includeStack};
 
-	if (TryLoadCore(loadContext, fileName))
-	{
-		return config;
-	}
-
-	return {};
+	return TryLoadCore(loadContext, fileName);
 }
 
 std::optional<bool> GameConfigLoader::EvaluateConditional(std::string_view conditional)
@@ -305,7 +298,7 @@ void GameConfigLoader::ParseSections(LoadContext& loadContext, std::string_view 
 						.Input = section,
 						.Definition = loadContext.Definition,
 						.Loader = *this,
-						.Configuration = loadContext.Config};
+						.UserData = loadContext.Parameters.UserData};
 
 					if (!sectionObj->TryParse(context))
 					{

@@ -25,56 +25,7 @@
 #include <spdlog/logger.h>
 #include <spdlog/fmt/fmt.h>
 
-#include "config/GameConfig.h"
 #include "config/GameConfigSection.h"
-
-/**
-*	@brief A list of command strings that will be executed when applied.
-*/
-class CommandsData final : public GameConfigData
-{
-public:
-	CommandsData(std::shared_ptr<spdlog::logger>&& logger)
-		: m_Logger(std::move(logger))
-	{
-	}
-
-	void Apply(const std::any& userData) const override final
-	{
-		std::string buffer;
-
-		for (const auto& command : m_Commands)
-		{
-			m_Logger->trace("Executing command \"{}\"", command);
-
-			buffer.clear();
-			fmt::format_to(std::back_inserter(buffer), "{}\n", command);
-
-			g_engfuncs.pfnServerCommand(buffer.c_str());
-		}
-	}
-
-	void AddCommands(std::vector<std::string>&& commands)
-	{
-		//Prevent accidental self-append
-		if (&m_Commands == &commands)
-		{
-			return;
-		}
-
-		//Append commands from other into my list.
-		m_Commands.insert(
-			m_Commands.end(),
-			std::make_move_iterator(commands.begin()),
-			std::make_move_iterator(commands.end()));
-
-		commands.clear();
-	}
-
-private:
-	std::shared_ptr<spdlog::logger> m_Logger;
-	std::vector<std::string> m_Commands;
-};
 
 /**
 *	@brief Defines a section containing an array of console command strings.
@@ -129,6 +80,20 @@ public:
 			return false;
 		}
 
+		std::string buffer;
+
+		auto logger = context.Loader.GetLogger();
+
+		auto executor = [&](const std::string& command) 
+		{
+			logger->trace("Executing command \"{}\"", command);
+
+			buffer.clear();
+			fmt::format_to(std::back_inserter(buffer), "{}\n", command);
+
+			g_engfuncs.pfnServerCommand(buffer.c_str());
+		};
+
 		std::vector<std::string> commands;
 
 		commands.reserve(commandsInput.size());
@@ -162,17 +127,13 @@ public:
 
 			if (!m_CommandWhitelist || m_CommandWhitelist->contains(com_token))
 			{
-				commands.emplace_back(std::move(value));
+				executor(value);
 			}
 			else
 			{
 				context.Loader.GetLogger()->warn("Command \"{}\" is not whitelisted, ignoring", com_token);
 			}
 		}
-
-		auto data = context.Configuration.GetOrCreate<CommandsData>(context.Loader.GetLogger());
-
-		data->AddCommands(std::move(commands));
 
 		return true;
 	}

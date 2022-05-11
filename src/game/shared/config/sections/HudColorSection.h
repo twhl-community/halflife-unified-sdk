@@ -18,29 +18,10 @@
 #include "CMapState.h"
 #include "palette.h"
 
-#include "config/GameConfigLoader.h"
 #include "config/GameConfigSection.h"
 
 #include "utils/json_utils.h"
 #include "utils/shared_utils.h"
-
-/**
-*	@brief Global model replacement map.
-*/
-class HudColorData final : public GameConfigData
-{
-public:
-	explicit HudColorData() = default;
-
-	void Apply(const std::any& userData) const override final
-	{
-		auto mapState = std::any_cast<CMapState*>(userData);
-
-		mapState->m_HudColor = m_HudColor;
-	}
-
-	RGB24 m_HudColor{255, 255, 255};
-};
 
 /**
 *	@brief Allows a configuration file to specify the player's hud color.
@@ -70,18 +51,16 @@ public:
 
 		if (!color.empty())
 		{
-			auto data = context.Configuration.GetOrCreate<HudColorData>();
-
 			Vector colorValue{255, 255, 255};
 
 			UTIL_StringToVector(colorValue, color);
 
-			data->m_HudColor =
-			{
-					static_cast<std::uint8_t>(colorValue.x),
-					static_cast<std::uint8_t>(colorValue.y),
-					static_cast<std::uint8_t>(colorValue.z)
-			};
+			auto mapState = std::any_cast<CMapState*>(context.UserData);
+
+			mapState->m_HudColor = {
+				static_cast<std::uint8_t>(colorValue.x),
+				static_cast<std::uint8_t>(colorValue.y),
+				static_cast<std::uint8_t>(colorValue.z)};
 		}
 
 		return true;

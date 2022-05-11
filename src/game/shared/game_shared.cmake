@@ -6,7 +6,6 @@ function(add_game_shared_sources target)
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/palette.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/voice_common.h
 			
-			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/GameConfig.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/GameConfigConditionals.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/GameConfigConditionals.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/GameConfigDefinition.cpp

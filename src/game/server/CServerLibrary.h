@@ -102,7 +102,7 @@ private:
 
 	void CreateConfigDefinitions();
 
-	void LoadConfigFile(const char* fileName, const GameConfigDefinition& definition, const GameConfigLoadParameters& parameters = {});
+	void LoadConfigFile(const char* fileName, const GameConfigDefinition& definition, GameConfigLoadParameters parameters = {});
 
 	void LoadServerConfigFiles();
 
