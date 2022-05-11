@@ -3306,6 +3306,17 @@ bool CBasePlayer::Restore(CRestore& restore)
 	m_flNextAttack = UTIL_WeaponTimeBase();
 #endif
 
+	//If we have an active item and it has valid model strings, reset the models now.
+	//Otherwise the weapon will do this itself.
+	if (m_pActiveItem)
+	{
+		if (auto weapon = static_cast<CBasePlayerWeapon*>(m_pActiveItem->GetWeaponPtr());
+			weapon && !FStringNull(weapon->m_ViewModel) && !FStringNull(weapon->m_PlayerModel))
+		{
+			weapon->SetWeaponModels(STRING(weapon->m_ViewModel), STRING(weapon->m_PlayerModel));
+		}
+	}
+
 	m_bResetViewEntity = true;
 
 	m_bRestored = true;

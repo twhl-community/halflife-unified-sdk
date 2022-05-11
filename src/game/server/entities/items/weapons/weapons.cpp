@@ -402,10 +402,33 @@ TYPEDESCRIPTION CBasePlayerWeapon::m_SaveData[] =
 		//	DEFINE_FIELD( CBasePlayerWeapon, m_iClientClip, FIELD_INTEGER )	 , reset to zero on load so hud gets updated correctly
 		//  DEFINE_FIELD( CBasePlayerWeapon, m_iClientWeaponState, FIELD_INTEGER ), reset to zero on load so hud gets updated correctly
 		DEFINE_FIELD(CBasePlayerWeapon, m_WorldModel, FIELD_STRING),
+		DEFINE_FIELD(CBasePlayerWeapon, m_ViewModel, FIELD_STRING),
+		DEFINE_FIELD(CBasePlayerWeapon, m_PlayerModel, FIELD_STRING),
 };
 
-IMPLEMENT_SAVERESTORE(CBasePlayerWeapon, CBasePlayerItem);
+bool CBasePlayerWeapon::Save(CSave& save)
+{
+	if (!CBasePlayerItem::Save(save))
+		return false;
+	return save.WriteFields("CBasePlayerWeapon", this, m_SaveData, std::size(m_SaveData));
+}
+bool CBasePlayerWeapon::Restore(CRestore& restore)
+{
+	if (!CBasePlayerItem::Restore(restore))
+		return false;
+	if (!restore.ReadFields("CBasePlayerWeapon", this, m_SaveData, std::size(m_SaveData)))
+	{
+		return false;
+	}
 
+	//If we're part of the player's inventory and we're the active item, reset weapon strings.
+	if (m_pPlayer && m_pPlayer->m_pActiveItem == this)
+	{
+		SetWeaponModels(STRING(m_ViewModel), STRING(m_PlayerModel));
+	}
+
+	return true;
+}
 
 void CBasePlayerItem::SetObjectCollisionBox()
 {
@@ -866,14 +889,23 @@ bool CBasePlayerWeapon::IsUseable()
 	return false;
 }
 
+void CBasePlayerWeapon::SetWeaponModels(const char* viewModel, const char* weaponModel)
+{
+	//These are stored off to restore the models on save game load, so they must not use the replaced name.
+	m_ViewModel = MAKE_STRING(viewModel);
+	m_PlayerModel = MAKE_STRING(weaponModel);
+
+	m_pPlayer->pev->viewmodel = MAKE_STRING(UTIL_CheckForGlobalModelReplacement(viewModel));
+	m_pPlayer->pev->weaponmodel = MAKE_STRING(UTIL_CheckForGlobalModelReplacement(weaponModel));
+}
+
 bool CBasePlayerWeapon::DefaultDeploy(const char* szViewModel, const char* szWeaponModel, int iAnim, const char* szAnimExt, int body)
 {
 	if (!CanDeploy())
 		return false;
 
 	m_pPlayer->TabulateAmmo();
-	m_pPlayer->pev->viewmodel = MAKE_STRING(UTIL_CheckForGlobalModelReplacement(szViewModel));
-	m_pPlayer->pev->weaponmodel = MAKE_STRING(UTIL_CheckForGlobalModelReplacement(szWeaponModel));
+	SetWeaponModels(szViewModel, szWeaponModel);
 	strcpy(m_pPlayer->m_szAnimExtention, szAnimExt);
 	SendWeaponAnim(iAnim, body);
 

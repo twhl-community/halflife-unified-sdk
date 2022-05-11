@@ -348,6 +348,9 @@ public:
 
 	bool CanDeploy() override;
 	virtual bool IsUseable();
+
+	void SetWeaponModels(const char* viewModel, const char* weaponModel);
+
 	bool DefaultDeploy(const char* szViewModel, const char* szWeaponModel, int iAnim, const char* szAnimExt, int body = 0);
 	bool DefaultReload(int iClipSize, int iAnim, float fDelay, int body = 0);
 
@@ -390,6 +393,8 @@ public:
 	float m_flLastFireTime;
 
 	string_t m_WorldModel;
+	string_t m_ViewModel;
+	string_t m_PlayerModel;
 };
 
 
