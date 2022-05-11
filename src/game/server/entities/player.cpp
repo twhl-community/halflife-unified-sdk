@@ -42,8 +42,8 @@
 
 // #define DUCKFIX
 
-extern void CopyToBodyQue(entvars_t* pev);
-extern edict_t* EntSelectSpawnPoint(CBasePlayer* pPlayer);
+void CopyToBodyQue(entvars_t* pev);
+edict_t* EntSelectSpawnPoint(CBasePlayer* pPlayer);
 
 #define TRAIN_ACTIVE 0x80
 #define TRAIN_NEW 0xc0

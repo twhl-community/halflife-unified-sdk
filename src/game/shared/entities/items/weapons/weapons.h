@@ -422,14 +422,14 @@ inline DLL_GLOBAL short g_sModelIndexBubbles;	 // holds the index for the bubble
 inline DLL_GLOBAL short g_sModelIndexBloodDrop;	 // holds the sprite index for blood drops
 inline DLL_GLOBAL short g_sModelIndexBloodSpray; // holds the sprite index for blood spray (bigger)
 
-extern void ClearMultiDamage();
-extern void ApplyMultiDamage(entvars_t* pevInflictor, entvars_t* pevAttacker);
-extern void AddMultiDamage(entvars_t* pevInflictor, CBaseEntity* pEntity, float flDamage, int bitsDamageType);
+void ClearMultiDamage();
+void ApplyMultiDamage(entvars_t* pevInflictor, entvars_t* pevAttacker);
+void AddMultiDamage(entvars_t* pevInflictor, CBaseEntity* pEntity, float flDamage, int bitsDamageType);
 
-extern void DecalGunshot(TraceResult* pTrace, int iBulletType);
-extern void SpawnBlood(Vector vecSpot, int bloodColor, float flDamage);
-extern int DamageDecal(CBaseEntity* pEntity, int bitsDamageType);
-extern void RadiusDamage(Vector vecSrc, entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, float flRadius, int iClassIgnore, int bitsDamageType);
+void DecalGunshot(TraceResult* pTrace, int iBulletType);
+void SpawnBlood(Vector vecSpot, int bloodColor, float flDamage);
+int DamageDecal(CBaseEntity* pEntity, int bitsDamageType);
+void RadiusDamage(Vector vecSrc, entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, float flRadius, int iClassIgnore, int bitsDamageType);
 
 typedef struct
 {

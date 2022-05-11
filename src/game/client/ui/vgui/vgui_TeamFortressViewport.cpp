@@ -76,8 +76,8 @@ int g_iUser3 = 0;
 #define SBOARD_INDENT_Y_400 20
 
 void IN_ResetMouse();
-extern CMenuPanel* CMessageWindowPanel_Create(const char* szMOTD, const char* szTitle, bool iShadeFullscreen, bool iRemoveMe, int x, int y, int wide, int tall);
-extern float* GetClientColor(int clientIndex);
+CMenuPanel* CMessageWindowPanel_Create(const char* szMOTD, const char* szTitle, bool iShadeFullscreen, bool iRemoveMe, int x, int y, int wide, int tall);
+float* GetClientColor(int clientIndex);
 
 using namespace vgui;
 

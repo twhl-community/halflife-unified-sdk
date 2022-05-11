@@ -98,7 +98,7 @@ DLLEXPORT IBaseInterface* CreateInterface(const char* pName, int* pReturnCode);
 };
 
 
-extern CreateInterfaceFn Sys_GetFactoryThis(void);
+CreateInterfaceFn Sys_GetFactoryThis(void);
 
 // load/unload components
 class CSysModule;
@@ -108,9 +108,9 @@ class CSysModule;
 // The factory for that module should be passed on to dependent components for
 // proper versioning.
 //-----------------------------------------------------------------------------
-extern CSysModule* Sys_LoadModule(const char* pModuleName);
-extern void Sys_UnloadModule(CSysModule* pModule);
+CSysModule* Sys_LoadModule(const char* pModuleName);
+void Sys_UnloadModule(CSysModule* pModule);
 
-extern CreateInterfaceFn Sys_GetFactory(CSysModule* pModule);
+CreateInterfaceFn Sys_GetFactory(CSysModule* pModule);
 
 //#endif // MSVC 6.0

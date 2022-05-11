@@ -31,7 +31,7 @@
 
 CGlobalState gGlobalState;
 
-extern void W_Precache();
+void W_Precache();
 
 //
 // This must match the list in util.h

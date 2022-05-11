@@ -24,7 +24,7 @@
 #include "world.h"
 #include "UserMessages.h"
 
-extern edict_t* EntSelectSpawnPoint(CBasePlayer* pPlayer);
+edict_t* EntSelectSpawnPoint(CBasePlayer* pPlayer);
 
 CGameRules::CGameRules()
 {

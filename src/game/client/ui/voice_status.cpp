@@ -572,7 +572,7 @@ void CVoiceStatus::UpdateBanButton(int iClient)
 		return;
 
 	char playerID[16];
-	extern bool HACK_GetPlayerUniqueID(int iPlayer, char playerID[16]);
+	bool HACK_GetPlayerUniqueID(int iPlayer, char playerID[16]);
 	if (!HACK_GetPlayerUniqueID(iClient + 1, playerID))
 		return;
 

@@ -23,7 +23,7 @@
 #include "ctf/CTFGoal.h"
 #include "ctf/CTFGoalFlag.h"
 
-extern edict_t* EntSelectSpawnPoint(CBasePlayer* pPlayer);
+edict_t* EntSelectSpawnPoint(CBasePlayer* pPlayer);
 #endif
 
 #include "CDisplacer.h"

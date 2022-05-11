@@ -190,7 +190,7 @@ private:
 	std::unique_ptr<CClientCommand> m_SpecModeCommand;
 };
 
-extern CGameRules* InstallGameRules(CBaseEntity* pWorld);
+CGameRules* InstallGameRules(CBaseEntity* pWorld);
 
 
 //=========================================================

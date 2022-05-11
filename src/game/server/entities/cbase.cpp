@@ -29,7 +29,7 @@ void DummySpectatorFunction(edict_t*)
 	//Nothing
 }
 
-extern Vector VecBModelOrigin(entvars_t* pevBModel);
+Vector VecBModelOrigin(entvars_t* pevBModel);
 
 static DLL_FUNCTIONS gFunctionTable =
 	{

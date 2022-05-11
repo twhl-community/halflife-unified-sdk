@@ -33,8 +33,8 @@
 #define SF_TRIGGER_HURT_CLIENTONLYFIRE 16  // trigger hurt will only fire its target if it is hurting a client
 #define SF_TRIGGER_HURT_CLIENTONLYTOUCH 32 // only clients may touch this trigger.
 
-extern void SetMovedir(entvars_t* pev);
-extern Vector VecBModelOrigin(entvars_t* pevBModel);
+void SetMovedir(entvars_t* pev);
+Vector VecBModelOrigin(entvars_t* pevBModel);
 
 class CFrictionModifier : public CBaseEntity
 {

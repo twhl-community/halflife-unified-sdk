@@ -26,7 +26,7 @@
 
 #include "cbase.h"
 
-extern Vector VecBModelOrigin(entvars_t* pevBModel);
+Vector VecBModelOrigin(entvars_t* pevBModel);
 
 #define TURRET_SHOTS 2
 #define TURRET_RANGE (100 * 12)

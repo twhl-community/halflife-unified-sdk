@@ -434,7 +434,7 @@ void IN_StrafeDown() { KeyDown(&in_strafe); }
 void IN_StrafeUp() { KeyUp(&in_strafe); }
 
 // needs capture by hud/vgui also
-extern void __CmdFunc_InputPlayerSpecial();
+void __CmdFunc_InputPlayerSpecial();
 
 void IN_Attack2Down()
 {

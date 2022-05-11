@@ -19,7 +19,7 @@
 
 #include "monsterevent.h"
 
-extern bool IsSoundEvent(int eventNumber);
+bool IsSoundEvent(int eventNumber);
 
 int LookupActivity(void* pmodel, entvars_t* pev, int activity);
 int LookupActivityHeaviest(void* pmodel, entvars_t* pev, int activity);

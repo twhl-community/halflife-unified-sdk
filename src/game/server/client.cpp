@@ -42,7 +42,7 @@
 
 DLL_GLOBAL unsigned int g_ulFrameCount;
 
-extern void CopyToBodyQue(entvars_t* pev);
+void CopyToBodyQue(entvars_t* pev);
 
 void LinkUserMessages();
 

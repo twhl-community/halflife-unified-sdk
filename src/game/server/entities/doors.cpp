@@ -22,7 +22,7 @@
 #include "doors.h"
 
 
-extern void SetMovedir(entvars_t* ev);
+void SetMovedir(entvars_t* ev);
 
 #define noiseMoving noise1
 #define noiseArrived noise2
@@ -591,7 +591,7 @@ bool CBaseDoor::DoorActivate()
 	return true;
 }
 
-extern Vector VecBModelOrigin(entvars_t* pevBModel);
+Vector VecBModelOrigin(entvars_t* pevBModel);
 
 //
 // Starts the door going to its "up" position (simply ToggleData->vecPosition2).

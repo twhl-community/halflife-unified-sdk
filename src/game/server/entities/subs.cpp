@@ -24,7 +24,7 @@
 #include "nodes.h"
 #include "doors.h"
 
-extern bool FEntIsVisible(entvars_t* pev, entvars_t* pevTarget);
+bool FEntIsVisible(entvars_t* pev, entvars_t* pevTarget);
 
 // Landmark class
 void CPointEntity::Spawn()
