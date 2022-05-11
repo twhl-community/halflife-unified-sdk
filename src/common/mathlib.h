@@ -41,9 +41,6 @@ struct mplane_s;
 
 constexpr Vector vec3_origin(0, 0, 0);
 constexpr Vector g_vecZero(0, 0, 0);
-extern int nanmask;
-
-#define IS_NAN(x) (((*(int*)&x) & nanmask) == nanmask)
 
 #define VectorSubtract(a, b, c)   \
 	{                             \

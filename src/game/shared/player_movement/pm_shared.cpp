@@ -740,12 +740,12 @@ void PM_CheckVelocity()
 	for (i = 0; i < 3; i++)
 	{
 		// See if it's bogus.
-		if (IS_NAN(pmove->velocity[i]))
+		if (std::isnan(pmove->velocity[i]))
 		{
 			pmove->Con_Printf("PM  Got a NaN velocity %i\n", i);
 			pmove->velocity[i] = 0;
 		}
-		if (IS_NAN(pmove->origin[i]))
+		if (std::isnan(pmove->origin[i]))
 		{
 			pmove->Con_Printf("PM  Got a NaN origin on %i\n", i);
 			pmove->origin[i] = 0;
