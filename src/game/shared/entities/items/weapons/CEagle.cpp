@@ -24,8 +24,8 @@
 #ifndef CLIENT_DLL
 TYPEDESCRIPTION CEagle::m_SaveData[] =
 	{
-		DEFINE_FIELD(CEagle, m_bSpotVisible, FIELD_INTEGER),
-		DEFINE_FIELD(CEagle, m_bLaserActive, FIELD_INTEGER),
+		DEFINE_FIELD(CEagle, m_bSpotVisible, FIELD_BOOLEAN),
+		DEFINE_FIELD(CEagle, m_bLaserActive, FIELD_BOOLEAN),
 };
 
 IMPLEMENT_SAVERESTORE(CEagle, CEagle::BaseClass);
