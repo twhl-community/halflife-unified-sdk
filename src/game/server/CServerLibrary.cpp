@@ -28,6 +28,7 @@
 #include "config/sections/CommandsSection.h"
 #include "config/sections/EchoSection.h"
 #include "config/sections/GlobalModelReplacementSection.h"
+#include "config/sections/HudColorSection.h"
 
 #include "utils/ModelReplacement.h"
 
@@ -115,6 +116,15 @@ void CServerLibrary::PostMapActivate()
 	LoadMapChangeConfigFile();
 }
 
+void CServerLibrary::PlayerActivating(CBasePlayer* player)
+{
+	//Override the hud color.
+	if (m_MapState.m_HudColor)
+	{
+		player->SetHudColor(*m_MapState.m_HudColor);
+	}
+}
+
 void CServerLibrary::AddGameSystems()
 {
 	CGameLibrary::AddGameSystems();
@@ -130,6 +140,7 @@ void CServerLibrary::CreateConfigDefinitions()
 		AddCommonConfigSections(sections);
 		sections.push_back(std::make_unique<CommandsSection>());
 		sections.push_back(std::make_unique<GlobalModelReplacementSection>());
+		sections.push_back(std::make_unique<HudColorSection>());
 
 		return sections;
 	}());
@@ -140,6 +151,7 @@ void CServerLibrary::CreateConfigDefinitions()
 		AddCommonConfigSections(sections);
 		sections.push_back(std::make_unique<CommandsSection>(GetMapConfigCommandWhitelist()));
 		sections.push_back(std::make_unique<GlobalModelReplacementSection>());
+		sections.push_back(std::make_unique<HudColorSection>());
 
 		return sections;
 	}());

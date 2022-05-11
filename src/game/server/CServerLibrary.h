@@ -24,6 +24,7 @@
 
 #include "config/GameConfigLoader.h"
 
+class CBasePlayer;
 class GameConfigDefinition;
 
 /**
@@ -83,6 +84,11 @@ public:
 	*	@brief Called right after entities are activated
 	*/
 	void PostMapActivate();
+
+	/**
+	*	@brief Called when the player activates (first UpdateClientData call after ClientPutInServer or Restore).
+	*/
+	void PlayerActivating(CBasePlayer* player);
 
 protected:
 	void AddGameSystems() override;

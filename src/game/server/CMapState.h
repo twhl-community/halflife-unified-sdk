@@ -15,6 +15,9 @@
 
 #pragma once
 
+#include <optional>
+
+#include "palette.h"
 #include "utils/ModelReplacement.h"
 
 /**
@@ -32,6 +35,8 @@ public:
 
 	CMapState(CMapState&&) = default;
 	CMapState& operator=(CMapState&&) = default;
+
+	std::optional<RGB24> m_HudColor;
 
 	ModelReplacementMap m_GlobalModelReplacement;
 };

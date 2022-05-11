@@ -36,6 +36,7 @@
 #include "hltv.h"
 #include "UserMessages.h"
 #include "client.h"
+#include "CServerLibrary.h"
 
 #include "rope/CRope.h"
 
@@ -4257,6 +4258,11 @@ reflecting all of the HUD state info.
 void CBasePlayer::UpdateClientData()
 {
 	const bool fullHUDInitRequired = m_fInitHUD != false;
+
+	if (fullHUDInitRequired || m_bRestored)
+	{
+		g_Server.PlayerActivating(this);
+	}
 
 	if (m_fInitHUD)
 	{
