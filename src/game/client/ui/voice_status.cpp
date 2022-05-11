@@ -32,11 +32,6 @@ extern bool cam_thirdperson;
 #define SCOREBOARD_BLINK_FREQUENCY 0.3 // How often to blink the scoreboard icons.
 #define SQUELCHOSCILLATE_PER_SECOND 2.0f
 
-
-extern BitmapTGA* LoadTGA(const char* pImageName);
-
-
-
 // ---------------------------------------------------------------------- //
 // The voice manager for the client.
 // ---------------------------------------------------------------------- //
