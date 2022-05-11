@@ -27,12 +27,12 @@
 #include "utils/shared_utils.h"
 
 /**
-*	@brief Global model replacement map.
+*	@brief Suit light type setting.
 */
-class LightTypeData final : public GameConfigData
+class SuitLightTypeData final : public GameConfigData
 {
 public:
-	explicit LightTypeData() = default;
+	explicit SuitLightTypeData() = default;
 
 	void Apply(const std::any& userData) const override final
 	{
@@ -45,14 +45,14 @@ public:
 };
 
 /**
-*	@brief Allows a configuration file to specify the player's light type.
+*	@brief Allows a configuration file to specify the player's suit light type.
 */
-class LightTypeSection final : public GameConfigSection
+class SuitLightTypeSection final : public GameConfigSection
 {
 public:
-	explicit LightTypeSection() = default;
+	explicit SuitLightTypeSection() = default;
 
-	std::string_view GetName() const override final { return "LightType"; }
+	std::string_view GetName() const override final { return "SuitLightType"; }
 
 	std::tuple<std::string, std::string> GetSchema() const override final
 	{
@@ -98,7 +98,7 @@ public:
 		{
 			if (auto value = SuitLightTypeFromString(type); value)
 			{
-				auto data = context.Configuration.GetOrCreate<LightTypeData>();
+				auto data = context.Configuration.GetOrCreate<SuitLightTypeData>();
 
 				data->m_Type = *value;
 			}

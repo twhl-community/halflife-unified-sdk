@@ -29,7 +29,7 @@
 #include "config/sections/EchoSection.h"
 #include "config/sections/GlobalModelReplacementSection.h"
 #include "config/sections/HudColorSection.h"
-#include "config/sections/LightTypeSection.h"
+#include "config/sections/SuitLightTypeSection.h"
 
 #include "utils/ModelReplacement.h"
 
@@ -148,7 +148,7 @@ void CServerLibrary::CreateConfigDefinitions()
 		sections.push_back(std::make_unique<CommandsSection>());
 		sections.push_back(std::make_unique<GlobalModelReplacementSection>());
 		sections.push_back(std::make_unique<HudColorSection>());
-		sections.push_back(std::make_unique<LightTypeSection>());
+		sections.push_back(std::make_unique<SuitLightTypeSection>());
 
 		return sections;
 	}());
@@ -160,7 +160,7 @@ void CServerLibrary::CreateConfigDefinitions()
 		sections.push_back(std::make_unique<CommandsSection>(GetMapConfigCommandWhitelist()));
 		sections.push_back(std::make_unique<GlobalModelReplacementSection>());
 		sections.push_back(std::make_unique<HudColorSection>());
-		sections.push_back(std::make_unique<LightTypeSection>());
+		sections.push_back(std::make_unique<SuitLightTypeSection>());
 
 		return sections;
 	}());
