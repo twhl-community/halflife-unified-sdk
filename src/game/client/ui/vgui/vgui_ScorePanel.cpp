@@ -23,6 +23,7 @@
 #include "const.h"
 #include "entity_state.h"
 #include "cl_entity.h"
+#include "player_info.h"
 #include "vgui_TeamFortressViewport.h"
 #include "vgui_ScorePanel.h"
 #include "vgui_helpers.h"
@@ -30,11 +31,6 @@
 #include "voice_status.h"
 #include "vgui_SpectatorPanel.h"
 #include "vgui_StatsMenuPanel.h"
-
-extern hud_player_info_t g_PlayerInfoList[MAX_PLAYERS_HUD + 1];	   // player info from the engine
-extern extra_player_info_t g_PlayerExtraInfo[MAX_PLAYERS_HUD + 1]; // additional player info sent directly to the client dll
-team_info_t g_TeamInfo[MAX_TEAMS + 1];
-int g_IsSpectator[MAX_PLAYERS_HUD + 1];
 
 constexpr int ScoreColorsFG[5][3] =
 	{

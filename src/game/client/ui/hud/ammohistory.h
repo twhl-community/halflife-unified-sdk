@@ -92,7 +92,7 @@ public:
 	HSPRITE* GetAmmoPicFromWeapon(int iAmmoId, Rect& rect);
 };
 
-extern WeaponsResource gWR;
+inline WeaponsResource gWR;
 
 
 #define MAX_HISTORY 12
@@ -138,4 +138,4 @@ public:
 	bool DrawAmmoHistory(float flTime);
 };
 
-extern HistoryResource gHR;
+inline HistoryResource gHR;

@@ -19,8 +19,6 @@
 
 float CL_KeyState(kbutton_t* key);
 
-extern cl_enginefunc_t gEngfuncs;
-
 //-------------------------------------------------- Constants
 
 #define CAM_DIST_DELTA 1.0

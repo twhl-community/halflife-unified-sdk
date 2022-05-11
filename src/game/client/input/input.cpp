@@ -26,7 +26,6 @@
 extern bool g_iAlive;
 
 extern int g_weaponselect;
-extern cl_enginefunc_t gEngfuncs;
 
 // Defined in pm_math.c
 float anglemod(float a);

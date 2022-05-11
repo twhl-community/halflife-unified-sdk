@@ -35,7 +35,6 @@
 // Set this to 1 to show mouse cursor.  Experimental
 bool g_iVisibleMouse = false;
 
-extern cl_enginefunc_t gEngfuncs;
 extern bool iMouseInUse;
 
 extern kbutton_t in_strafe;

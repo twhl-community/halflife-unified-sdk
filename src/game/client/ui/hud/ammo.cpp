@@ -38,8 +38,6 @@ WEAPON* gpLastSel;	 // Last weapon menu selection
 
 client_sprite_t* GetSpriteList(client_sprite_t* pList, const char* psz, int iRes, int iCount);
 
-WeaponsResource gWR;
-
 int g_weaponselect = 0;
 
 void WeaponsResource::LoadAllWeaponSprites()

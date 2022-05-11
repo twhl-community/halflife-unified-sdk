@@ -36,10 +36,6 @@
 #include "tri.h"
 #include "vgui_TeamFortressViewport.h"
 
-cl_enginefunc_t gEngfuncs;
-CHud gHUD;
-TeamFortressViewport* gViewPort = nullptr;
-
 
 #include "particleman.h"
 

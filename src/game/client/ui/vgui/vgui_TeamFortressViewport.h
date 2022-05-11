@@ -60,7 +60,7 @@ extern const char* sLocalisedStatsTeams[StatsTeamsCount];
 extern const char* sCTFStatsSelection[StatsTeamsCount];
 extern int iTeamColors[5][3];
 extern int iNumberOfTeamColors;
-extern TeamFortressViewport* gViewPort;
+inline TeamFortressViewport* gViewPort = nullptr;
 
 
 // Command Menu positions
