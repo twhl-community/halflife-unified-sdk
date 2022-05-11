@@ -629,8 +629,8 @@ bool CBaseEntity::Restore(CRestore& restore)
 		mins = pev->mins; // Set model is about to destroy these
 		maxs = pev->maxs;
 
-		//Don't use the per-entity precache function here because we're restoring an already-replaced name.
-		UTIL_PrecacheModel(STRING(pev->model));
+		//Don't use UTIL_PrecacheModel here because we're restoring an already-replaced name.
+		g_engfuncs.pfnPrecacheModel(STRING(pev->model));
 		SetModel(STRING(pev->model));
 		UTIL_SetSize(pev, mins, maxs); // Reset them
 	}
