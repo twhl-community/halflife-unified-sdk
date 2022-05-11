@@ -4401,23 +4401,19 @@ void CBasePlayer::UpdateClientData()
 		m_bitsDamageType &= DMG_TIMEBASED;
 	}
 
-	if (m_bRestored)
+	if (fullHUDInitRequired || m_bRestored)
 	{
 		//Always tell client about battery state
 		MESSAGE_BEGIN(MSG_ONE, gmsgFlashBattery, nullptr, pev);
 		WRITE_BYTE(m_iFlashBattery);
 		MESSAGE_END();
 
-		//Tell client the flashlight is on
-		if (FlashlightIsOn())
-		{
-			MESSAGE_BEGIN(MSG_ONE, gmsgFlashlight, nullptr, pev);
-			WRITE_BYTE(static_cast<int>(m_SuitLightType));
-			WRITE_BYTE(1);
-			WRITE_BYTE(m_iFlashBattery);
-			MESSAGE_END();
-		}
+		//Sync up client flashlight state.
+		UpdateFlashlight(this, FlashlightIsOn());
+	}
 
+	if (m_bRestored)
+	{
 		//Reinitialize hud color to saved off value.
 		SetHudColor(RGB24::FromInteger(m_HudColor));
 	}
