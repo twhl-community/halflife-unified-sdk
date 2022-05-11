@@ -15,8 +15,10 @@
 
 #pragma once
 
+#include <sstream>
+
+#include "cdll_dll.h"
 #include "CMapState.h"
-#include "palette.h"
 
 #include "config/GameConfigLoader.h"
 #include "config/GameConfigSection.h"
@@ -27,61 +29,79 @@
 /**
 *	@brief Global model replacement map.
 */
-class HudColorData final : public GameConfigData
+class LightTypeData final : public GameConfigData
 {
 public:
-	explicit HudColorData() = default;
+	explicit LightTypeData() = default;
 
 	void Apply(const std::any& userData) const override final
 	{
 		auto mapState = std::any_cast<CMapState*>(userData);
 
-		mapState->m_HudColor = m_HudColor;
+		mapState->m_LightType = m_Type;
 	}
 
-	RGB24 m_HudColor{255, 255, 255};
+	SuitLightType m_Type = SuitLightType::Flashlight;
 };
 
 /**
-*	@brief Allows a configuration file to specify the player's hud color.
+*	@brief Allows a configuration file to specify the player's light type.
 */
-class HudColorSection final : public GameConfigSection
+class LightTypeSection final : public GameConfigSection
 {
 public:
-	explicit HudColorSection() = default;
+	explicit LightTypeSection() = default;
 
-	std::string_view GetName() const override final { return "HudColor"; }
+	std::string_view GetName() const override final { return "LightType"; }
 
 	std::tuple<std::string, std::string> GetSchema() const override final
 	{
+		const auto types = []()
+		{
+			std::ostringstream types;
+
+			{
+				bool first = true;
+
+				for (const auto& type : SuitLightTypes)
+				{
+					if (!first)
+					{
+						types << ',';
+					}
+
+					first = false;
+
+					types << '"' << type.Name << '"';
+				}
+			}
+
+			return types.str();
+		}();
+
 		return {
 			fmt::format(R"(
-"Color": {{
+"Type": {{
 	"type": "string",
-	"pattern": "^\d\d?\d? \d\d?\d? \d\d?\d?$"
+	"enum": [{}]
 }}
-)"),
-			{"\"Color\""}};
+)",
+				types),
+			{"\"Type\""}};
 	}
 
 	bool TryParse(GameConfigContext& context) const override final
 	{
-		const auto color = context.Input.value("Color", std::string{});
+		const auto type = context.Input.value("Type", std::string{});
 
-		if (!color.empty())
+		if (!type.empty())
 		{
-			auto data = context.Configuration.GetOrCreate<HudColorData>();
-
-			Vector colorValue{255, 255, 255};
-
-			UTIL_StringToVector(colorValue, color);
-
-			data->m_HudColor =
+			if (auto value = SuitLightTypeFromString(type); value)
 			{
-					static_cast<std::uint8_t>(colorValue.x),
-					static_cast<std::uint8_t>(colorValue.y),
-					static_cast<std::uint8_t>(colorValue.z)
-			};
+				auto data = context.Configuration.GetOrCreate<LightTypeData>();
+
+				data->m_Type = *value;
+			}
 		}
 
 		return true;

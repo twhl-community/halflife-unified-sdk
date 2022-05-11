@@ -29,6 +29,7 @@
 #include "config/sections/EchoSection.h"
 #include "config/sections/GlobalModelReplacementSection.h"
 #include "config/sections/HudColorSection.h"
+#include "config/sections/LightTypeSection.h"
 
 #include "utils/ModelReplacement.h"
 
@@ -123,6 +124,12 @@ void CServerLibrary::PlayerActivating(CBasePlayer* player)
 	{
 		player->SetHudColor(*m_MapState.m_HudColor);
 	}
+
+	//Override the light type.
+	if (m_MapState.m_LightType)
+	{
+		player->SetSuitLightType(*m_MapState.m_LightType);
+	}
 }
 
 void CServerLibrary::AddGameSystems()
@@ -141,6 +148,7 @@ void CServerLibrary::CreateConfigDefinitions()
 		sections.push_back(std::make_unique<CommandsSection>());
 		sections.push_back(std::make_unique<GlobalModelReplacementSection>());
 		sections.push_back(std::make_unique<HudColorSection>());
+		sections.push_back(std::make_unique<LightTypeSection>());
 
 		return sections;
 	}());
@@ -152,6 +160,7 @@ void CServerLibrary::CreateConfigDefinitions()
 		sections.push_back(std::make_unique<CommandsSection>(GetMapConfigCommandWhitelist()));
 		sections.push_back(std::make_unique<GlobalModelReplacementSection>());
 		sections.push_back(std::make_unique<HudColorSection>());
+		sections.push_back(std::make_unique<LightTypeSection>());
 
 		return sections;
 	}());

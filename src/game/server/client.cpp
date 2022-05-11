@@ -554,19 +554,7 @@ static const CClientCommand g_SetLightTypeCommand{"set_light_type", [](CBasePlay
 	{
 		if (args.Count() > 1)
 		{
-			const auto type = [](const char* value) -> std::optional<SuitLightType>
-			{
-				if (0 == strcmp("flashlight", value))
-				{
-					return SuitLightType::Flashlight;
-				}
-				else if (0 == strcmp("nightvision", value))
-				{
-					return SuitLightType::Nightvision;
-				}
-
-				return {};
-			}(args.Argument(1));
+			const auto type = SuitLightTypeFromString(args.Argument(1));
 
 			if (type.has_value())
 			{

@@ -83,7 +83,6 @@ public:
 
 	bool TryParse(GameConfigContext& context) const override final
 	{
-		using namespace std::literals;
 		const auto fileName = context.Input.value("FileName", std::string{});
 
 		if (!fileName.empty())

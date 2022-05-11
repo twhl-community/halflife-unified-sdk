@@ -19,6 +19,9 @@
 
 #pragma once
 
+#include <optional>
+#include <string_view>
+
 #include "palette.h"
 
 #define MAX_WEAPONS 64 // ???
@@ -80,6 +83,31 @@ enum class SuitLightType
 	Flashlight = 0,
 	Nightvision
 };
+
+struct SuitLightTypeInfo
+{
+	const std::string_view Name;
+};
+
+constexpr SuitLightTypeInfo SuitLightTypes[] =
+	{
+		{"flashlight"},
+		{"nightvision"}};
+
+constexpr std::optional<SuitLightType> SuitLightTypeFromString(std::string_view value)
+{
+	for (int i = 0; const auto& type : SuitLightTypes)
+	{
+		if (type.Name == value)
+		{
+			return static_cast<SuitLightType>(i);
+		}
+
+		++i;
+	}
+
+	return {};
+}
 
 // used by suit voice to indicate damage sustained and repaired type to player
 
