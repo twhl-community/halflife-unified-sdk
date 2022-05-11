@@ -1278,38 +1278,6 @@ bool UTIL_TeamsMatch(const char* pTeamName1, const char* pTeamName2)
 	return false;
 }
 
-
-void UTIL_StringToVector(float* pVector, const char* pString)
-{
-	char *pstr, *pfront, tempString[128];
-	int j;
-
-	strcpy(tempString, pString);
-	pstr = pfront = tempString;
-
-	for (j = 0; j < 3; j++) // lifted from pr_edict.c
-	{
-		pVector[j] = atof(pfront);
-
-		while ('\0' != *pstr && *pstr != ' ')
-			pstr++;
-		if ('\0' == *pstr)
-			break;
-		pstr++;
-		pfront = pstr;
-	}
-	if (j < 2)
-	{
-		/*
-		ALERT( at_error, "Bad field in entity!! %s:%s == \"%s\"\n",
-			pkvd->szClassName, pkvd->szKeyName, pkvd->szValue );
-		*/
-		for (j = j + 1; j < 3; j++)
-			pVector[j] = 0;
-	}
-}
-
-
 void UTIL_StringToIntArray(int* pVector, int count, const char* pString)
 {
 	char *pstr, *pfront, tempString[128];

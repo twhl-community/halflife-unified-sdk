@@ -19,6 +19,7 @@
 
 #include "filesystem_utils.h"
 #include "logging_utils.h"
+#include "string_utils.h"
 #include "extdll.h"
 #include "enginecallback.h"
 

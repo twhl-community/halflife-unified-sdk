@@ -13,6 +13,8 @@
 *
 ****/
 
+#include <charconv>
+
 #include "Platform.h"
 
 #include "string_utils.h"
@@ -78,4 +80,41 @@ std::string ToUpper(std::string_view text)
 	std::transform(result.begin(), result.end(), result.begin(), [](auto c) { return std::toupper(c); });
 
 	return result;
+}
+
+void UTIL_StringToVector(float* pVector, std::string_view pString)
+{
+	std::size_t index = 0;
+
+	int j;
+
+	const char* const end = pString.data() + pString.size();
+
+	for (j = 0; j < 3; j++) // lifted from pr_edict.c
+	{
+		const auto result = std::from_chars(pString.data() + index, end, pVector[j]);
+
+		if (result.ec != std::errc())
+		{
+			break;
+		}
+
+		//Continue after parsed value.
+		index = result.ptr - pString.data();
+
+		//Skip all whitespace.
+		while (index < pString.size() && std::isspace(pString[index]))
+			++index;
+		if (index >= pString.size())
+			break;
+	}
+	if (j < 2)
+	{
+		/*
+		ALERT( at_error, "Bad field in entity!! %s:%s == \"%s\"\n",
+			pkvd->szClassName, pkvd->szKeyName, pkvd->szValue );
+		*/
+		for (j = j + 1; j < 3; j++)
+			pVector[j] = 0;
+	}
 }
