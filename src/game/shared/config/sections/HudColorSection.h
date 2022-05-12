@@ -39,7 +39,7 @@ public:
 			fmt::format(R"(
 "Color": {{
 	"type": "string",
-	"pattern": "^\d\d?\d? \d\d?\d? \d\d?\d?$"
+	"pattern": "^\\d\\d?\\d? \\d\\d?\\d? \\d\\d?\\d?$"
 }}
 )"),
 			{"\"Color\""}};
