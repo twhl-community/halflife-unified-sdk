@@ -38,9 +38,9 @@ constexpr const char* const SkillConfigName = "cfg/skill.json";
 constexpr std::string_view SkillVariableNameRegexPattern{"^([a-zA-Z_](?:[a-zA-Z_0-9]*[a-zA-Z_]))([123]?)$"};
 const std::regex SkillVariableNameRegex{SkillVariableNameRegexPattern.data(), SkillVariableNameRegexPattern.length()};
 
-static json GetSkillConfigSchema()
+static std::string GetSkillConfigSchema()
 {
-	auto schema = fmt::format(R"(
+	return fmt::format(R"(
 {{
 	"$schema": "http://json-schema.org/draft-07/schema#",
 	"title": "Skill System Configuration",
@@ -69,8 +69,6 @@ static json GetSkillConfigSchema()
 }}
 )",
 		SkillVariableNameRegexPattern);
-
-	return g_JSON.ParseJSONSchema(schema).value_or(json{});
 }
 
 static std::optional<std::tuple<std::string_view, std::optional<int>>> TryParseSkillVariableName(std::string_view key, spdlog::logger& logger)

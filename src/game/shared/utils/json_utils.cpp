@@ -120,7 +120,7 @@ void JSONSystem::Shutdown()
 	m_JsonDebug = nullptr;
 }
 
-void JSONSystem::RegisterSchema(std::string&& name, std::function<json()>&& getSchemaFunction)
+void JSONSystem::RegisterSchema(std::string&& name, std::function<std::string()>&& getSchemaFunction)
 {
 	if (name.empty() || !getSchemaFunction)
 	{
@@ -162,7 +162,7 @@ const json_validator* JSONSystem::GetOrCreateValidator(std::string_view schemaNa
 
 			try
 			{
-				auto schema = it->Callback();
+				auto schema = g_JSON.ParseJSONSchema(it->Callback()).value_or(json{});
 
 				if (schema.is_null())
 				{

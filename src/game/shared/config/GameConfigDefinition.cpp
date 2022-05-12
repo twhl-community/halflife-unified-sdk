@@ -45,7 +45,7 @@ const GameConfigSection* GameConfigDefinition::FindSection(std::string_view name
 	return nullptr;
 }
 
-json GameConfigDefinition::GetSchema() const
+std::string GameConfigDefinition::GetSchema() const
 {
 	//A configuration is structured like this:
 	/*
@@ -111,7 +111,7 @@ json GameConfigDefinition::GetSchema() const
 		return stream.str();
 	}();
 
-	const auto schema = fmt::format(R"(
+	return fmt::format(R"(
 {{
 	"$schema": "http://json-schema.org/draft-07/schema#",
 	"title": "{} Game Configuration",
@@ -140,6 +140,4 @@ json GameConfigDefinition::GetSchema() const
 }}
 )",
 		this->GetName(), sections);
-
-	return g_JSON.ParseJSONSchema(schema).value_or(json{});
 }

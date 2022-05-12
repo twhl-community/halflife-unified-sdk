@@ -42,9 +42,9 @@ constexpr std::string_view MapConfigCommandWhitelistSchemaName{"MapConfigCommand
 cvar_t servercfgfile = {"sv_servercfgfile", "cfg/server/server.json", FCVAR_NOEXTRAWHITEPACE | FCVAR_ISPATH};
 cvar_t mapchangecfgfile = {"sv_mapchangecfgfile", "", FCVAR_NOEXTRAWHITEPACE | FCVAR_ISPATH};
 
-static json GetMapConfigCommandWhitelistSchema()
+static std::string GetMapConfigCommandWhitelistSchema()
 {
-	auto schema = fmt::format(R"(
+	return fmt::format(R"(
 {{
 	"$schema": "http://json-schema.org/draft-07/schema#",
 	"title": "Map Configuration Command Whitelist",
@@ -56,8 +56,6 @@ static json GetMapConfigCommandWhitelistSchema()
 	}}
 }}
 )");
-
-	return g_JSON.ParseJSONSchema(schema).value_or(json{});
 }
 
 static void AddCommonConfigSections(std::vector<std::unique_ptr<const GameConfigSection>>& sections)

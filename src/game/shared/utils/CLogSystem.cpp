@@ -57,7 +57,7 @@ private:
 	}
 };
 
-static json GetLoggingConfigSchema()
+static std::string GetLoggingConfigSchema()
 {
 	//Create json array contents matching spdlog log level names
 	const auto levels = []() {
@@ -82,7 +82,7 @@ static json GetLoggingConfigSchema()
 		return levels.str();
 	}();
 
-	auto schema = fmt::format(R"(
+	return fmt::format(R"(
 {{
 	"$schema": "http://json-schema.org/draft-07/schema#",
 	"title": "Logging System Configuration",
@@ -142,8 +142,6 @@ static json GetLoggingConfigSchema()
 }}
 )",
 		levels, levels);
-
-	return g_JSON.ParseJSONSchema(schema).value_or(json{});
 }
 
 CLogSystem::CLogSystem() = default;

@@ -20,8 +20,6 @@
 #include <string_view>
 #include <vector>
 
-#include "utils/json_utils.h"
-
 class GameConfigSection;
 
 /**
@@ -49,7 +47,7 @@ public:
 	*	@brief Gets the complete JSON Schema for this definition.
 	*	This includes all of the sections.
 	*/
-	json GetSchema() const;
+	std::string GetSchema() const;
 
 private:
 	std::string m_Name;

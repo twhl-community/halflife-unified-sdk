@@ -60,7 +60,7 @@ private:
 	struct SchemaData
 	{
 		std::string Name;
-		std::function<json()> Callback;
+		std::function<std::string()> Callback;
 		std::optional<json_validator> Validator;
 	};
 
@@ -88,12 +88,12 @@ public:
 	/**
 	*	@brief Registers a schema with a function to get the schema.
 	*/
-	void RegisterSchema(std::string&& name, std::function<json()>&& getSchemaFunction);
+	void RegisterSchema(std::string&& name, std::function<std::string()>&& getSchemaFunction);
 
 	/**
 	*	@copydoc RegisterSchema(std::string&&, std::function<json()>&&)
 	*/
-	void RegisterSchema(std::string_view name, std::function<json()>&& getSchemaFunction)
+	void RegisterSchema(std::string_view name, std::function<std::string()>&& getSchemaFunction)
 	{
 		RegisterSchema(std::string{name}, std::move(getSchemaFunction));
 	}

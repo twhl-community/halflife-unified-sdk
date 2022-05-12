@@ -21,9 +21,9 @@ using namespace std::literals;
 
 constexpr std::string_view ModelReplacementSchemaName{"ModelReplacement"sv};
 
-static json GetModelReplacementSchema()
+static std::string GetModelReplacementSchema()
 {
-	auto schema = fmt::format(R"(
+	return fmt::format(R"(
 {{
 	"$schema": "http://json-schema.org/draft-07/schema#",
 	"title": "Model Replacement File",
@@ -35,8 +35,6 @@ static json GetModelReplacementSchema()
 	}}
 }}
 )");
-
-	return g_JSON.ParseJSONSchema(schema).value_or(json{});
 }
 
 bool ModelReplacementSystem::Initialize()
