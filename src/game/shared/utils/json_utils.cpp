@@ -59,6 +59,11 @@ const char* JSONTypeToString(json::value_t type)
 	}
 }
 
+static json GetSchemaAsJson(const std::string& schema)
+{
+	return g_JSON.ParseJSONSchema(schema).value_or(json{});
+}
+
 class JSONValidatorErrorHandler : public basic_error_handler
 {
 public:
@@ -162,7 +167,7 @@ const json_validator* JSONSystem::GetOrCreateValidator(std::string_view schemaNa
 
 			try
 			{
-				auto schema = g_JSON.ParseJSONSchema(it->Callback()).value_or(json{});
+				auto schema = GetSchemaAsJson(it->Callback());
 
 				if (schema.is_null())
 				{
@@ -297,7 +302,7 @@ void JSONSystem::GenerateSchema(const CCommandArgs& args)
 			});
 			it != m_Schemas.end())
 		{
-			WriteSchemaToFile(it->Name.c_str(), it->Callback());
+			WriteSchemaToFile(it->Name.c_str(), GetSchemaAsJson(it->Callback()));
 		}
 		else
 		{
@@ -325,7 +330,7 @@ void JSONSystem::GenerateAllSchemas(const CCommandArgs& args)
 
 	for (const auto& data : m_Schemas)
 	{
-		WriteSchemaToFile(data.Name, data.Callback());
+		WriteSchemaToFile(data.Name, GetSchemaAsJson(data.Callback()));
 	}
 }
 
