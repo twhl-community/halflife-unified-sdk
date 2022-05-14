@@ -39,12 +39,19 @@ static std::string GetModelReplacementSchema()
 
 bool ModelReplacementSystem::Initialize()
 {
+	m_Logger = g_Logging.CreateLogger("replacementmap");
+
 	g_JSON.RegisterSchema(ModelReplacementSchemaName, &GetModelReplacementSchema);
 
 	return true;
 }
 
-static ModelReplacementMap ParseModelReplacement(const json& input)
+void ModelReplacementSystem::Shutdown()
+{
+	m_Logger.reset();
+}
+
+ModelReplacementMap ModelReplacementSystem::ParseModelReplacement(const json& input) const
 {
 	ModelReplacementMap map;
 
@@ -54,7 +61,24 @@ static ModelReplacementMap ParseModelReplacement(const json& input)
 
 		for (const auto& kv : input.items())
 		{
-			map.emplace(kv.key(), kv.value().get<std::string>());
+			std::string key = kv.key();
+			auto value = kv.value().get<std::string>();
+
+			ToLower(key);
+			ToLower(value);
+
+			if (const auto result = map.emplace(std::move(key), std::move(value)); !result.second)
+			{
+				if (value != result.first->second)
+				{
+					m_Logger->warn("Ignoring duplicate replacement \"{}\" => \"{}\" (existing replacement is \"{}\")",
+						kv.key(), value, result.first->second);
+				}
+				else
+				{
+					m_Logger->debug("Ignoring duplicate replacement \"{}\"", kv.key());
+				}
+			}
 		}
 	}
 

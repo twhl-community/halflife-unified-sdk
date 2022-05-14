@@ -64,11 +64,23 @@ std::string_view Trim(std::string_view text)
 
 //TODO: need to use ICU for Unicode-compliant conversion
 
+void ToLower(std::string& text)
+{
+	std::transform(text.begin(), text.end(), text.begin(), [](auto c)
+		{ return std::tolower(c); });
+}
+
+void ToUpper(std::string& text)
+{
+	std::transform(text.begin(), text.end(), text.begin(), [](auto c)
+		{ return std::toupper(c); });
+}
+
 std::string ToLower(std::string_view text)
 {
 	std::string result{text};
 
-	std::transform(result.begin(), result.end(), result.begin(), [](auto c) { return std::tolower(c); });
+	ToLower(result);
 
 	return result;
 }
@@ -77,7 +89,7 @@ std::string ToUpper(std::string_view text)
 {
 	std::string result{text};
 
-	std::transform(result.begin(), result.end(), result.begin(), [](auto c) { return std::toupper(c); });
+	ToUpper(result);
 
 	return result;
 }

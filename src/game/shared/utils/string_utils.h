@@ -33,8 +33,10 @@ std::string_view TrimEnd(std::string_view text);
 */
 std::string_view Trim(std::string_view text);
 
-std::string ToLower(std::string_view text);
+void ToLower(std::string& text);
+void ToUpper(std::string& text);
 
+std::string ToLower(std::string_view text);
 std::string ToUpper(std::string_view text);
 
 void UTIL_StringToVector(float* pVector, std::string_view pString);
