@@ -2685,7 +2685,14 @@
 @PointClass base(Weapon, Targetx, RenderFields) studio("models/w_9mmar.mdl") = weapon_9mmAR : "9mm Assault Rifle" []
 @PointClass base(Weapon, Targetx, RenderFields) studio("models/w_shotgun.mdl") = weapon_shotgun : "Shotgun" []
 @PointClass base(Weapon, Targetx, RenderFields) studio("models/w_rpg.mdl") = weapon_rpg : "RPG" []
-@PointClass base(Weapon, Targetx, RenderFields) studio("models/w_gauss.mdl") = weapon_gauss : "Gauss Gun" []
+@PointClass base(Weapon, Targetx, RenderFields) studio("models/w_gauss.mdl") = weapon_gauss : "Gauss Gun" 
+[
+  sequence(choices) : "Placement" : 0 =
+  [
+    0 : "Normal (flat)"
+    1 : "Realistic (tilted)"
+  ]
+]
 @PointClass base(Weapon, Targetx, RenderFields) studio("models/w_crossbow.mdl") = weapon_crossbow : "Crossbow" 
 [
   sequence(choices) : "Placement" : 0 =
