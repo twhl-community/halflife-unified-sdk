@@ -470,7 +470,7 @@ void COFGonome::HandleAnimEvent(MonsterEvent_t* pEvent)
 			m_pGonomeGuts->pev->aiment = edict();
 			m_pGonomeGuts->pev->movetype = MOVETYPE_FOLLOW;
 
-			auto direction = (m_hEnemy->pev->origin - m_hEnemy->pev->view_ofs - vecGutsPos).Normalize();
+			auto direction = (m_hEnemy->pev->origin + m_hEnemy->pev->view_ofs - vecGutsPos).Normalize();
 
 			direction = direction + Vector(
 										RANDOM_FLOAT(-0.05, 0.05),
@@ -497,7 +497,7 @@ void COFGonome::HandleAnimEvent(MonsterEvent_t* pEvent)
 				m_pGonomeGuts = COFGonomeGuts::GonomeGutsCreate(vecGutsPos);
 			}
 
-			auto direction = (m_hEnemy->pev->origin - m_hEnemy->pev->view_ofs - vecGutsPos).Normalize();
+			auto direction = (m_hEnemy->pev->origin + m_hEnemy->pev->view_ofs - vecGutsPos).Normalize();
 
 			direction = direction + Vector(
 										RANDOM_FLOAT(-0.05, 0.05),
