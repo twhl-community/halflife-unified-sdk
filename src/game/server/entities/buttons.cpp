@@ -667,7 +667,7 @@ void CBaseButton::ButtonSpark()
 	SetThink(&CBaseButton::ButtonSpark);
 	pev->nextthink = pev->ltime + (0.1 + RANDOM_FLOAT(0, 1.5)); // spark again at random interval
 
-	DoSpark(pev, pev->mins);
+	DoSpark(pev, pev->absmin);
 }
 
 
@@ -884,10 +884,11 @@ void CBaseButton::ButtonBackHome()
 		SetTouch(&CBaseButton::ButtonTouch);
 
 	// reset think for a sparking button
-	if (FBitSet(pev->spawnflags, SF_BUTTON_SPARK_IF_OFF))
+	//func_rot_button's X Axis spawnflag overlaps with this one so don't use it here.
+	if (!FClassnameIs(pev, "func_rot_button") && FBitSet(pev->spawnflags, SF_BUTTON_SPARK_IF_OFF))
 	{
 		SetThink(&CBaseButton::ButtonSpark);
-		pev->nextthink = gpGlobals->time + 0.5; // no hurry.
+		pev->nextthink = pev->ltime + 0.5; // no hurry.
 	}
 }
 
