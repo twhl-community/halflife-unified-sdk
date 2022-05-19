@@ -31,6 +31,7 @@
 class CFlockingFlyerFlock : public CBaseMonster
 {
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	bool KeyValue(KeyValueData* pkvd) override;
@@ -133,6 +134,13 @@ void CFlockingFlyer::OnCreate()
 	pev->model = MAKE_STRING("models/boid.mdl");
 }
 
+void CFlockingFlyerFlock::OnCreate()
+{
+	CBaseMonster::OnCreate();
+
+	pev->model = MAKE_STRING("models/boid.mdl");
+}
+
 //=========================================================
 //=========================================================
 bool CFlockingFlyerFlock::KeyValue(KeyValueData* pkvd)
@@ -209,6 +217,7 @@ void CFlockingFlyerFlock::SpawnFlock()
 		vecSpot.z = RANDOM_FLOAT(0, 16);
 		vecSpot = pev->origin + vecSpot;
 
+		pBoid->pev->model = pev->model;
 		UTIL_SetOrigin(pBoid->pev, vecSpot);
 		pBoid->pev->movetype = MOVETYPE_FLY;
 		pBoid->SpawnCommonCode();
