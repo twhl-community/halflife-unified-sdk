@@ -541,6 +541,17 @@ void CScientist::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 }
 
+bool CScientist::KeyValue(KeyValueData* pkvd)
+{
+	if (FStrEq(pkvd->szKeyName, "item"))
+	{
+		m_Item = static_cast<ScientistItem>(atoi(pkvd->szValue));
+		return true;
+	}
+
+	return CTalkMonster::KeyValue(pkvd);
+}
+
 void CScientist::Spawn()
 {
 	Precache();
@@ -570,6 +581,8 @@ void CScientist::Spawn()
 	// Luther is black, make his hands black
 	if (GetBodygroup(ScientistBodygroup::Head) == HEAD_LUTHER)
 		pev->skin = 1;
+
+	SetBodygroup(ScientistBodygroup::Item, static_cast<int>(m_Item));
 
 	MonsterInit();
 

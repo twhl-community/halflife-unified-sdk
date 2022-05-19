@@ -31,8 +31,16 @@ enum ScientistBodygroup
 	Body = 0,
 	Head = 1,
 	Needle = 2,
+	Item = 3,
 };
 }
+
+enum class ScientistItem
+{
+	None = 0,
+	Clipboard,
+	Stick
+};
 
 enum
 {
@@ -72,6 +80,7 @@ class CScientist : public CTalkMonster
 {
 public:
 	void OnCreate() override;
+	bool KeyValue(KeyValueData* pkvd) override;
 	void Spawn() override;
 	void Precache() override;
 
@@ -117,6 +126,9 @@ protected:
 	float m_painTime;
 	float m_healTime;
 	float m_fearTime;
+
+	//Don't save, only used during spawn.
+	ScientistItem m_Item = ScientistItem::None;
 };
 
 /**
