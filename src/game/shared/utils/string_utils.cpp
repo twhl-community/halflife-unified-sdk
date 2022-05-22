@@ -130,3 +130,49 @@ void UTIL_StringToVector(float* pVector, std::string_view pString)
 			pVector[j] = 0;
 	}
 }
+
+bool UTIL_ParseStringWithArrayIndex(std::string_view input, std::string_view& name, int& index)
+{
+	const std::size_t endOfName = input.find_last_not_of("0123456789");
+
+	if (endOfName == std::string_view::npos)
+	{
+		//No name.
+		return false;
+	}
+
+	if (endOfName == (input.length() - 1))
+	{
+		//No index.
+		return false;
+	}
+
+	const auto indexPart = input.substr(endOfName + 1);
+
+	const auto end = indexPart.data() + indexPart.length();
+
+	int possibleIndex;
+	const auto result = std::from_chars(indexPart.data(), end, possibleIndex);
+
+	if (result.ec != std::errc())
+	{
+		return false;
+	}
+
+	if (result.ptr != end)
+	{
+		//Shouldn't happen since we've already verified that there is at least one number at the end.
+		return false;
+	}
+
+	if (possibleIndex < 0)
+	{
+		//Shouldn't happen since from_chars isn't supposed to parse numbers too big to be stored correctly.
+		return false;
+	}
+
+	name = input.substr(0, endOfName + 1);
+	index = possibleIndex;
+
+	return true;
+}

@@ -21,11 +21,17 @@
 
 #include "cbase.h"
 
-
 #define ACT_T_IDLE 1010
 #define ACT_T_TAP 1020
 #define ACT_T_STRIKE 1030
 #define ACT_T_REARIDLE 1040
+
+constexpr int TENTACLE_NUM_HEIGHTS = 4;
+
+/**
+*	@brief Amount of units to subtract from a height value to get its equivalent level.
+*/
+constexpr float TENTACLE_HEIGHT_LEVEL_OFFSET = 40;
 
 class CTentacle : public CBaseMonster
 {
@@ -99,6 +105,13 @@ public:
 	Vector m_vecPrevSound;
 	float m_flPrevSoundTime;
 
+	float m_Heights[TENTACLE_NUM_HEIGHTS] =
+		{
+			0,
+			256,
+			448,
+			640};
+
 	static const char* pHitSilo[];
 	static const char* pHitDirt[];
 	static const char* pHitWater[];
@@ -159,6 +172,7 @@ TYPEDESCRIPTION CTentacle::m_SaveData[] =
 		DEFINE_FIELD(CTentacle, m_flMaxYaw, FIELD_FLOAT),
 		DEFINE_FIELD(CTentacle, m_vecPrevSound, FIELD_POSITION_VECTOR),
 		DEFINE_FIELD(CTentacle, m_flPrevSoundTime, FIELD_TIME),
+		DEFINE_ARRAY(CTentacle, m_Heights, FIELD_FLOAT, TENTACLE_NUM_HEIGHTS),
 };
 IMPLEMENT_SAVERESTORE(CTentacle, CBaseMonster);
 
@@ -250,6 +264,9 @@ int CTentacle::Classify()
 void CTentacle::Spawn()
 {
 	Precache();
+
+	//Sort the list to ensure it's in the correct order, since it is expected that each value is larger than the last.
+	std::sort(std::begin(m_Heights), std::end(m_Heights));
 
 	pev->solid = SOLID_BBOX;
 	pev->movetype = MOVETYPE_FLY;
@@ -343,6 +360,28 @@ bool CTentacle::KeyValue(KeyValueData* pkvd)
 		m_iTapSound = atoi(pkvd->szValue);
 		return true;
 	}
+	else
+	{
+		std::string_view name;
+		int index;
+
+		if (UTIL_ParseStringWithArrayIndex(pkvd->szKeyName, name, index))
+		{
+			if (name == "height")
+			{
+				if (index < TENTACLE_NUM_HEIGHTS)
+				{
+					m_Heights[index] = atof(pkvd->szValue);
+				}
+				else
+				{
+					ALERT(at_console, "Invalid tentacle height index \"%s\"\n", pkvd->szKeyName);
+				}
+
+				return true;
+			}
+		}
+	}
 
 	return CBaseMonster::KeyValue(pkvd);
 }
@@ -351,28 +390,28 @@ bool CTentacle::KeyValue(KeyValueData* pkvd)
 
 int CTentacle::Level(float dz)
 {
-	if (dz < 216)
-		return 0;
-	if (dz < 408)
-		return 1;
-	if (dz < 600)
-		return 2;
+	for (std::size_t level = 1; level < std::size(m_Heights); ++level)
+	{
+		if (dz < (m_Heights[level] - TENTACLE_HEIGHT_LEVEL_OFFSET))
+		{
+			return level - 1;
+		}
+	}
+
 	return 3;
 }
 
 
 float CTentacle::MyHeight()
 {
-	switch (MyLevel())
+	const int level = MyLevel();
+
+	if (level >= 1 && level <= 3)
 	{
-	case 1:
-		return 256;
-	case 2:
-		return 448;
-	case 3:
-		return 640;
+		return m_Heights[level];
 	}
-	return 0;
+
+	return m_Heights[0];
 }
 
 

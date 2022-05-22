@@ -40,3 +40,9 @@ std::string ToLower(std::string_view text);
 std::string ToUpper(std::string_view text);
 
 void UTIL_StringToVector(float* pVector, std::string_view pString);
+
+/**
+*	@brief Parses a string that ends with an array index.
+*		The parsed index is always <tt>&gt;= 0</tt>.
+*/
+bool UTIL_ParseStringWithArrayIndex(std::string_view input, std::string_view& name, int& index);
