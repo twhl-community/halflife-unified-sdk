@@ -362,11 +362,11 @@ bool CTentacle::KeyValue(KeyValueData* pkvd)
 
 int CTentacle::Level(float dz)
 {
-	if (dz < 216)
+	if (dz < 96)
 		return 0;
-	if (dz < 408)
+	if (dz < 150)
 		return 1;
-	if (dz < 600)
+	if (dz < 288)
 		return 2;
 	return 3;
 }
@@ -377,11 +377,11 @@ float CTentacle::MyHeight()
 	switch (MyLevel())
 	{
 	case 1:
-		return 256;
+		return 136;
 	case 2:
-		return 448;
+		return 190;
 	case 3:
-		return 640;
+		return 328;
 	}
 	return 0;
 }
