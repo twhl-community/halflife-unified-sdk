@@ -350,20 +350,12 @@ void CBarney::Spawn()
 
 	m_afCapability = bits_CAP_HEAR | bits_CAP_TURN_HEAD | bits_CAP_DOORS_GROUP;
 
-	if (m_iGuardHead == GuardHead::Random)
-	{
-		m_iGuardHead = RANDOM_LONG(0, 1);
-	}
-
 	if (m_iGuardBody == GuardWeapon::Random)
 	{
 		m_iGuardBody = GuardWeapon::None;
 	}
 
 	SetBodygroup(GuardBodyGroup::Weapons, m_iGuardBody);
-
-	//Only applicable if the model has a head bodygroup
-	SetBodygroup(GuardBodyGroup::Heads, m_iGuardHead);
 
 	MonsterInit();
 	SetUse(&CBarney::FollowerUse);
@@ -708,12 +700,7 @@ void CBarney::DeclineFollowing()
 
 bool CBarney::KeyValue(KeyValueData* pkvd)
 {
-	if (FStrEq("head", pkvd->szKeyName))
-	{
-		m_iGuardHead = atoi(pkvd->szValue);
-		return true;
-	}
-	else if (FStrEq("bodystate", pkvd->szKeyName))
+	if (FStrEq("bodystate", pkvd->szKeyName))
 	{
 		m_iGuardBody = atoi(pkvd->szValue);
 		return true;

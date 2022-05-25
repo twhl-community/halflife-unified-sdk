@@ -27,8 +27,7 @@ namespace GuardBodyGroup
 {
 enum GuardBodyGroup
 {
-	Weapons = 1,
-	Heads = 2
+	Weapons = 1
 };
 }
 
@@ -39,15 +38,6 @@ enum GuardWeapon
 	Random = -1,
 	None = 0,
 	Gun,
-};
-}
-
-namespace GuardHead
-{
-enum GuardHead
-{
-	Random = -1,
-	Default = 0,
 };
 }
 
@@ -98,7 +88,6 @@ public:
 
 	//Used during spawn to set initial values, not restored
 	int m_iGuardBody;
-	int m_iGuardHead;
 
 	CUSTOM_SCHEDULES;
 

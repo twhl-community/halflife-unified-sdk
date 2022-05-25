@@ -21,13 +21,36 @@
 #include "talkmonster.h"
 #include "barney.h"
 
+namespace OtisBodyGroup
+{
+/**
+*	@brief See GuardBodyGroup::GuardBodyGroup for the enum that this extends.
+*/
+enum OtisBodyGroup
+{
+	Weapons = GuardBodyGroup::Weapons,
+	Heads = 2
+};
+}
+
+namespace GuardHead
+{
+enum GuardHead
+{
+	Random = -1,
+	Default = 0,
+};
+}
+
 //TODO: work out a way to abstract sentences out so we don't need to override here to change just those
 
 class COtis : public CBarney
 {
 public:
 	void OnCreate() override;
+	bool KeyValue(KeyValueData* pkvd) override;
 	void Precache() override;
+	void Spawn() override;
 	void GuardFirePistol() override;
 	void AlertSound() override;
 
@@ -40,6 +63,9 @@ public:
 protected:
 	void DropWeapon() override;
 	void SpeakKilledEnemy() override;
+
+private:
+	int m_iGuardHead;
 };
 
 LINK_ENTITY_TO_CLASS(monster_otis, COtis);
@@ -99,6 +125,17 @@ void COtis::GuardFirePistol()
 	m_cAmmoLoaded--; // take away a bullet!
 }
 
+bool COtis::KeyValue(KeyValueData* pkvd)
+{
+	if (FStrEq("head", pkvd->szKeyName))
+	{
+		m_iGuardHead = atoi(pkvd->szValue);
+		return true;
+	}
+
+	return CBarney::KeyValue(pkvd);
+}
+
 //=========================================================
 // Precache - precaches all resources this monster needs
 //=========================================================
@@ -106,6 +143,18 @@ void COtis::Precache()
 {
 	CBarney::Precache();
 	PRECACHE_SOUND("weapons/de_shot1.wav");
+}
+
+void COtis::Spawn()
+{
+	CBarney::Spawn();
+
+	if (m_iGuardHead == GuardHead::Random)
+	{
+		m_iGuardHead = RANDOM_LONG(0, 1);
+	}
+
+	SetBodygroup(OtisBodyGroup::Heads, m_iGuardHead);
 }
 
 // Init talk data
