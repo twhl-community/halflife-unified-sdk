@@ -29,16 +29,39 @@ namespace OtisBodyGroup
 enum OtisBodyGroup
 {
 	Weapons = GuardBodyGroup::Weapons,
-	Heads = 2
+	Sleeves,
+	Items
 };
 }
 
-namespace GuardHead
+namespace OtisSleeves
 {
-enum GuardHead
+enum OtisSleeves
 {
 	Random = -1,
-	Default = 0,
+	Long = 0,
+	Short
+};
+}
+
+namespace OtisItem
+{
+enum OtisItem
+{
+	None = 0,
+	Clipboard,
+	Donut
+};
+}
+
+namespace OtisSkin
+{
+enum OtisSkin
+{
+	Random = -1,
+	HeadWithHair = 0,
+	Bald,
+	BlackHeadWithHair
 };
 }
 
@@ -65,7 +88,8 @@ protected:
 	void SpeakKilledEnemy() override;
 
 private:
-	int m_iGuardHead;
+	int m_Sleeves;
+	int m_Item;
 };
 
 LINK_ENTITY_TO_CLASS(monster_otis, COtis);
@@ -127,9 +151,14 @@ void COtis::GuardFirePistol()
 
 bool COtis::KeyValue(KeyValueData* pkvd)
 {
-	if (FStrEq("head", pkvd->szKeyName))
+	if (FStrEq("sleeves", pkvd->szKeyName))
 	{
-		m_iGuardHead = atoi(pkvd->szValue);
+		m_Sleeves = atoi(pkvd->szValue);
+		return true;
+	}
+	else if (FStrEq("item", pkvd->szKeyName))
+	{
+		m_Item = atoi(pkvd->szValue);
 		return true;
 	}
 
@@ -149,12 +178,18 @@ void COtis::Spawn()
 {
 	CBarney::Spawn();
 
-	if (m_iGuardHead == GuardHead::Random)
+	if (pev->skin == OtisSkin::Random)
 	{
-		m_iGuardHead = RANDOM_LONG(0, 1);
+		pev->skin = RANDOM_LONG(OtisSkin::HeadWithHair, OtisSkin::BlackHeadWithHair);
 	}
 
-	SetBodygroup(OtisBodyGroup::Heads, m_iGuardHead);
+	if (m_Sleeves == OtisSleeves::Random)
+	{
+		m_Sleeves = RANDOM_LONG(OtisSleeves::Long, OtisSleeves::Short);
+	}
+
+	SetBodygroup(OtisBodyGroup::Sleeves, m_Sleeves);
+	SetBodygroup(OtisBodyGroup::Items, m_Item);
 }
 
 // Init talk data
