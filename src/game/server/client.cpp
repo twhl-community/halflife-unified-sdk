@@ -550,7 +550,7 @@ static const CClientCommand g_SetHudColorCommand{"set_hud_color", [](CBasePlayer
 		}
 	}, ClientCommandFlag::Cheat};
 
-static const CClientCommand g_SetLightTypeCommand{"set_light_type", [](CBasePlayer* player, const CCommandArgs& args)
+static const CClientCommand g_SetLightTypeCommand{"set_suit_light_type", [](CBasePlayer* player, const CCommandArgs& args)
 	{
 		if (args.Count() > 1)
 		{
@@ -562,7 +562,7 @@ static const CClientCommand g_SetLightTypeCommand{"set_light_type", [](CBasePlay
 			}
 			else
 			{
-				CLIENT_PRINTF(player->edict(), print_console, UTIL_VarArgs("Unknown light type \"%s\"\n", args.Argument(1)));
+				CLIENT_PRINTF(player->edict(), print_console, UTIL_VarArgs("Unknown suit light type \"%s\"\n", args.Argument(1)));
 			}
 		}
 	},
