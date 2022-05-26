@@ -253,7 +253,7 @@ void CFlockingFlyer::Spawn()
 void CFlockingFlyer::Precache()
 {
 	//PrecacheModel("models/aflock.mdl");
-	PrecacheModel("models/boid.mdl");
+	PrecacheModel(STRING(pev->model));
 	CFlockingFlyerFlock::PrecacheFlockSounds();
 }
 
