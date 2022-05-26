@@ -36,8 +36,9 @@ namespace GuardWeapon
 enum GuardWeapon
 {
 	Random = -1,
-	None = 0,
-	Gun,
+	Holstered = 0,
+	Equipped,
+	Gone
 };
 }
 
