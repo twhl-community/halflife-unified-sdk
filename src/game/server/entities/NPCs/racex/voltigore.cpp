@@ -605,6 +605,8 @@ void COFVoltigore::Precache()
 	PRECACHE_SOUND("voltigore/voltigore_run_grunt1.wav");
 	PRECACHE_SOUND("voltigore/voltigore_run_grunt2.wav");
 
+	PRECACHE_SOUND("voltigore/voltigore_eat.wav");
+
 	PRECACHE_SOUND("hassault/hw_shoot1.wav");
 
 	PRECACHE_SOUND("debris/beamstart2.wav");
