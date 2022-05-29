@@ -15,7 +15,7 @@
 #include "cbase.h"
 #include "CItemSpawnCTF.h"
 
-LINK_ENTITY_TO_CLASS(info_ctfspawn_pickup, CItemSpawnCTF);
+LINK_ENTITY_TO_CLASS(info_ctfspawn_powerup, CItemSpawnCTF);
 
 bool CItemSpawnCTF::KeyValue(KeyValueData* pkvd)
 {
