@@ -269,7 +269,7 @@ void CBaseDelay::SUB_UseTargets(CBaseEntity* pActivator, USE_TYPE useType, float
 	//
 	if (!FStringNull(pev->target))
 	{
-		FireTargets(STRING(pev->target), pActivator, this, useType, value);
+		FireTargets(GetTarget(), pActivator, this, useType, value);
 	}
 }
 

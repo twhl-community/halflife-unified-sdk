@@ -645,7 +645,7 @@ void CWorld::Precache()
 
 	if (!FStringNull(pev->netname))
 	{
-		ALERT(at_aiconsole, "Chapter title: %s\n", STRING(pev->netname));
+		ALERT(at_aiconsole, "Chapter title: %s\n", GetNetname());
 		CBaseEntity* pEntity = CBaseEntity::Create("env_message", g_vecZero, g_vecZero, nullptr);
 		if (pEntity)
 		{

@@ -160,6 +160,7 @@ function(set_common_properties TARGET_NAME)
 	
 	target_sources(${TARGET_NAME}
 		PRIVATE
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/src/game/UnifiedSDK.natvis
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/external/Angelscript/sdk/add_on/scriptstdstring/scriptstdstring.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/external/Angelscript/sdk/add_on/scriptstdstring/scriptstdstring.h)
 endfunction()

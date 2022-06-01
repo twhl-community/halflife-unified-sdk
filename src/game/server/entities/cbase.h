@@ -169,6 +169,20 @@ public:
 
 	//Common helper functions
 
+	const char* GetClassname() const { return STRING(pev->classname); }
+
+	const char* GetGlobalname() const { return STRING(pev->globalname); }
+
+	const char* GetTargetname() const { return STRING(pev->targetname); }
+
+	const char* GetTarget() const { return STRING(pev->target); }
+
+	const char* GetModelName() const { return STRING(pev->model); }
+
+	const char* GetNetname() const { return STRING(pev->netname); }
+
+	const char* GetMessage() const { return STRING(pev->message); }
+
 	int PrecacheModel(const char* s);
 	void SetModel(const char* s);
 
@@ -234,7 +248,7 @@ public:
 	virtual bool IsAlive() { return (pev->deadflag == DEAD_NO) && pev->health > 0; }
 	virtual bool IsBSPModel() { return pev->solid == SOLID_BSP || pev->movetype == MOVETYPE_PUSHSTEP; }
 	virtual bool ReflectGauss() { return (IsBSPModel() && !pev->takedamage); }
-	virtual bool HasTarget(string_t targetname) { return FStrEq(STRING(targetname), STRING(pev->target)); }
+	virtual bool HasTarget(string_t targetname) { return FStrEq(STRING(targetname), GetTarget()); }
 	virtual bool IsInWorld();
 	virtual bool IsPlayer() { return false; }
 	virtual bool IsNetClient() { return false; }
@@ -361,7 +375,7 @@ private:
 	void FunctionCheck(const void* pFunction, const char* name)
 	{
 		if (pFunction && !NAME_FOR_FUNCTION((uint32)pFunction))
-			ALERT(at_error, "No EXPORT: %s:%s (%08lx)\n", STRING(pev->classname), name, (uint32)pFunction);
+			ALERT(at_error, "No EXPORT: %s:%s (%08lx)\n", GetClassname(), name, (uint32)pFunction);
 	}
 
 	template<typename T, typename Dest, typename Source>
@@ -372,7 +386,7 @@ private:
 		{
 			//If this happens, it means you tried to set a function from a class that this entity doesn't inherit from.
 			ALERT(at_error, "Trying to set function that is not a member of this entity's class hierarchy: %s:%s\n",
-				STRING(pev->classname), name);
+				GetClassname(), name);
 		}
 #endif
 

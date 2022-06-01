@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+	<Type Name="CBaseEntity">
+		<DisplayString>{{ classname={GetClassname()} }}</DisplayString>
+		<Expand>
+			<Item Name="[classname]">GetClassname()</Item>
+			<Item Name="[targetname]">GetTargetname()</Item>
+			<Item Name="[target]">GetTarget()</Item>
+			<Item Name="[model]">GetModelName()</Item>
+			<Item Name="[netname]">GetNetname()</Item>
+			<Item Name="[message]">GetMessage()</Item>
+		</Expand>
+	</Type>
+</AutoVisualizer>

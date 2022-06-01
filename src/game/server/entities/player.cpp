@@ -3902,20 +3902,20 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse)
 		pEntity = UTIL_FindEntityForward(this);
 		if (pEntity)
 		{
-			ALERT(at_console, "Classname: %s", STRING(pEntity->pev->classname));
+			ALERT(at_console, "Classname: %s", pEntity->GetClassname());
 
 			if (!FStringNull(pEntity->pev->targetname))
 			{
-				ALERT(at_console, " - Targetname: %s\n", STRING(pEntity->pev->targetname));
+				ALERT(at_console, " - Targetname: %s\n", pEntity->GetTargetname());
 			}
 			else
 			{
 				ALERT(at_console, " - TargetName: No Targetname\n");
 			}
 
-			ALERT(at_console, "Model: %s\n", STRING(pEntity->pev->model));
+			ALERT(at_console, "Model: %s\n", pEntity->GetModelName());
 			if (!FStringNull(pEntity->pev->globalname))
-				ALERT(at_console, "Globalname: %s\n", STRING(pEntity->pev->globalname));
+				ALERT(at_console, "Globalname: %s\n", pEntity->GetGlobalname());
 		}
 		break;
 
@@ -5618,7 +5618,7 @@ void CRevertSaved::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE u
 
 void CRevertSaved::MessageThink()
 {
-	UTIL_ShowMessageAll(STRING(pev->message));
+	UTIL_ShowMessageAll(GetMessage());
 	float nextThink = LoadTime() - MessageTime();
 	if (nextThink > 0)
 	{
