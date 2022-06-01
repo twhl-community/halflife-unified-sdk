@@ -1,8 +1,12 @@
 # Server library
 include(../shared/game_shared.cmake)
 
+if (WIN32)
+	configure_file(server.def.in ${CMAKE_CURRENT_BINARY_DIR}/server.def @ONLY)
+endif()
+
 # Add the def file as well
-add_library(${HalfLife_SERVER_LIB_NAME} SHARED $<$<PLATFORM_ID:Windows>:hl.def>)
+add_library(${HalfLife_SERVER_LIB_NAME} SHARED $<$<PLATFORM_ID:Windows>:${CMAKE_CURRENT_BINARY_DIR}/server.def>)
 
 set_common_properties(${HalfLife_SERVER_LIB_NAME})
 add_json_dependencies(${HalfLife_SERVER_LIB_NAME})
