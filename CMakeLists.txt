@@ -216,6 +216,11 @@ install(TARGETS hl
 	LIBRARY DESTINATION dlls
 )
 
+install(FILES 
+	config/network/delta.lst
+	config/liblist.gam
+	DESTINATION .)
+
 if (MSVC)
 	install(FILES $<TARGET_PDB_FILE:client> DESTINATION cl_dlls OPTIONAL)
 	install(FILES $<TARGET_PDB_FILE:hl> DESTINATION dlls OPTIONAL)
