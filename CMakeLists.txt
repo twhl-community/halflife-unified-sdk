@@ -1,5 +1,16 @@
 cmake_minimum_required(VERSION 3.21)
 
+#
+# Mod-specific configuration.
+#
+
+# Controls the name of the server library. You should leave this as its default unless you need a different name (e.g. conflict with another library name).
+set(HalfLife_SERVER_LIB_NAME server)
+
+#
+# End mod-specific configuration.
+#
+
 project(HalfLifeMod
 	VERSION 1.0
 	DESCRIPTION "Half-Life CMake Mod Template"
@@ -195,7 +206,7 @@ if (MSVC)
 		VS_DEBUGGER_WORKING_DIRECTORY "${HALFLIFE_DIRECTORY}")
 
 	# If HalfLife_HLDS_DIRECTORY is not specified it will leave a non-functional "default" setting
-	set_target_properties(hl PROPERTIES
+	set_target_properties(${HalfLife_SERVER_LIB_NAME} PROPERTIES
 		VS_DEBUGGER_COMMAND "${HalfLife_HLDS_DIRECTORY}/${HLDS_EXECUTABLE}"
 		VS_DEBUGGER_COMMAND_ARGUMENTS "${COMMAND_ARGUMENTS}"
 		VS_DEBUGGER_WORKING_DIRECTORY "${HalfLife_HLDS_DIRECTORY}")
@@ -207,19 +218,21 @@ install(TARGETS client
 	LIBRARY DESTINATION cl_dlls
 )
 
-install(TARGETS hl
+install(TARGETS ${HalfLife_SERVER_LIB_NAME}
 	RUNTIME DESTINATION dlls
 	LIBRARY DESTINATION dlls
 )
 
+configure_file(config/liblist.gam.in liblist.gam @ONLY)
+
 install(FILES 
 	config/network/delta.lst
-	config/liblist.gam
+	${CMAKE_BINARY_DIR}/liblist.gam
 	DESTINATION .)
 
 if (MSVC)
 	install(FILES $<TARGET_PDB_FILE:client> DESTINATION cl_dlls OPTIONAL)
-	install(FILES $<TARGET_PDB_FILE:hl> DESTINATION dlls OPTIONAL)
+	install(FILES $<TARGET_PDB_FILE:${HalfLife_SERVER_LIB_NAME}> DESTINATION dlls OPTIONAL)
 endif()
 
 # Set up the script that will copy the mod libraries to the HLDS directory
