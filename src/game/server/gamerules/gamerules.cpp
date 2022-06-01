@@ -190,14 +190,14 @@ void CGameRules::BecomeSpectator(CBasePlayer* player, const CCommandArgs& args)
 	//Default implementation: applies to all game modes, even singleplayer.
 
 	// always allow proxies to become a spectator
-	if ((player->pev->flags & FL_PROXY) || allow_spectators.value)
+	if ((player->pev->flags & FL_PROXY) != 0 || allow_spectators.value != 0)
 	{
 		edict_t* pentSpawnSpot = g_pGameRules->GetPlayerSpawnSpot(player);
 		player->StartObserver(player->pev->origin, VARS(pentSpawnSpot)->angles);
 
 		// notify other clients of player switching to spectator mode
 		UTIL_ClientPrintAll(HUD_PRINTNOTIFY, UTIL_VarArgs("%s switched to spectator mode\n",
-			(player->pev->netname && STRING(player->pev->netname)[0] != 0) ? STRING(player->pev->netname) : "unconnected"));
+			(!FStringNull(player->pev->netname) && STRING(player->pev->netname)[0] != 0) ? STRING(player->pev->netname) : "unconnected"));
 	}
 	else
 		ClientPrint(player->pev, HUD_PRINTCONSOLE, "Spectator mode is disabled.\n");

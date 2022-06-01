@@ -599,7 +599,7 @@ static const CClientCommand g_FollowNextCommand{"follownext", [](CBasePlayer* pl
 	{
 		// follow next player
 		if (player->IsObserver())
-			player->Observer_FindNextPlayer(atoi(args.Argument(1)) ? true : false);
+			player->Observer_FindNextPlayer(atoi(args.Argument(1)) != 0);
 	}};
 
 bool UTIL_CheatsAllowed(CBasePlayer* pEntity, std::string_view name)
