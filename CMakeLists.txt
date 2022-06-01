@@ -1,9 +1,5 @@
 cmake_minimum_required(VERSION 3.21)
 
-if (MSVC)
-	set(CMAKE_SYSTEM_VERSION 10.0)
-endif()
-
 project(HalfLifeMod
 	VERSION 1.0
 	DESCRIPTION "Half-Life CMake Mod Template"
