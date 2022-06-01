@@ -5,6 +5,7 @@ cmake_minimum_required(VERSION 3.21)
 #
 
 # Controls the name of the server library. You should leave this as its default unless you need a different name (e.g. conflict with another library name).
+# You will need to manually update the Github Actions workflow configuration file (.github/worksflows/ci-cd.yml) to use this name.
 set(HalfLife_SERVER_LIB_NAME server)
 
 #
