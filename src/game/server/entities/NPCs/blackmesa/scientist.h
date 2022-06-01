@@ -63,8 +63,6 @@ enum
 	TASK_MOVE_TO_TARGET_RANGE_SCARED,
 };
 
-const int SF_SCIENTIST_NO_USE = 1 << 8;
-
 //=========================================================
 // Monster's Anim Events Go Here
 //=========================================================
@@ -129,6 +127,7 @@ protected:
 
 	//Don't save, only used during spawn.
 	ScientistItem m_Item = ScientistItem::None;
+	bool m_AllowFollow = true;
 };
 
 /**

@@ -548,6 +548,11 @@ bool CScientist::KeyValue(KeyValueData* pkvd)
 		m_Item = static_cast<ScientistItem>(atoi(pkvd->szValue));
 		return true;
 	}
+	else if (FStrEq(pkvd->szKeyName, "allow_follow"))
+	{
+		m_AllowFollow = atoi(pkvd->szValue) != 0;
+		return true;
+	}
 
 	return CTalkMonster::KeyValue(pkvd);
 }
@@ -586,7 +591,7 @@ void CScientist::Spawn()
 
 	MonsterInit();
 
-	if ((pev->spawnflags & SF_SCIENTIST_NO_USE) == 0)
+	if (m_AllowFollow)
 	{
 		SetUse(&CScientist::FollowerUse);
 	}
