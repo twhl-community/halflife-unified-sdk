@@ -470,11 +470,11 @@ void CLogSystem::FileCommand(const CCommandArgs& args)
 {
 	if (args.Count() == 2)
 	{
-		if (stricmp("off", args.Argument(1)))
+		if (0 == stricmp("off", args.Argument(1)))
 		{
 			SetFileLoggingEnabled(false);
 		}
-		else if (stricmp("on", args.Argument(1)))
+		else if (0 == stricmp("on", args.Argument(1)))
 		{
 			SetFileLoggingEnabled(true);
 		}
