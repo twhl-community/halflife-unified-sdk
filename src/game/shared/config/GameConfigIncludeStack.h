@@ -19,7 +19,15 @@
 #include <string_view>
 #include <unordered_set>
 
+#include "utils/filesystem_utils.h"
 #include "utils/string_utils.h"
+
+enum class IncludeAddResult
+{
+	Success = 0,
+	AlreadyIncluded,
+	CouldNotResolvePath
+};
 
 /**
 *	@brief Stores a set of filenames included in a load context.
@@ -29,14 +37,29 @@ class GameConfigIncludeStack final
 public:
 	/**
 	*	@brief Adds a new filename to the set of included filenames.
-	*	@return Whether this was a new filename.
+	*	@return One of the IncludeAddResult enum values.
 	*/
-	bool Add(std::string_view fileName)
+	IncludeAddResult Add(const char* fileName)
 	{
-		//Use lowercase filenames so case-insensitive filesystems don't cause problems.
-		auto lowered = ToLower(fileName);
+		char localPath[MAX_PATH_LENGTH]{};
 
-		return m_Included.insert(std::move(lowered)).second;
+		//This also normalizes slashes.
+		if (!g_pFileSystem->GetLocalPath(fileName, localPath, std::size(localPath)))
+		{
+			return IncludeAddResult::CouldNotResolvePath;
+		}
+
+		//Use lowercase filenames so case-insensitive filesystems don't cause problems.
+		auto lowered = ToLower(localPath);
+
+		if ( m_Included.insert(std::move(lowered)).second)
+		{
+			return IncludeAddResult::Success;
+		}
+		else
+		{
+			return IncludeAddResult::AlreadyIncluded;
+		}
 	}
 
 private:

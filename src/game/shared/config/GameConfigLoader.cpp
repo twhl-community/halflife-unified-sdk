@@ -231,7 +231,9 @@ void GameConfigLoader::ParseIncludedFiles(LoadContext& loadContext, const json& 
 
 			includeFileName = Trim(includeFileName);
 
-			if (loadContext.IncludeStack.Add(includeFileName))
+			switch (loadContext.IncludeStack.Add(includeFileName.c_str()))
+			{
+			case IncludeAddResult::Success:
 			{
 				m_Logger->trace("Including file \"{}\"", includeFileName);
 
@@ -240,10 +242,21 @@ void GameConfigLoader::ParseIncludedFiles(LoadContext& loadContext, const json& 
 				TryLoadCore(loadContext, includeFileName.c_str());
 
 				--loadContext.Depth;
+				break;
 			}
-			else
+
+			case IncludeAddResult::AlreadyIncluded:
 			{
 				m_Logger->debug("Included file \"{}\" already included before", includeFileName);
+				break;
+			}
+
+
+			case IncludeAddResult::CouldNotResolvePath:
+			{
+				m_Logger->error("Couldn't resolve path for included configuration file \"{}\"", includeFileName);
+				break;
+			}
 			}
 		}
 	}
