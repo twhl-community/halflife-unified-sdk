@@ -88,6 +88,10 @@ static std::string GetLoggingConfigSchema()
 	"title": "Logging System Configuration",
 	"type": "object",
 	"properties": {{
+		"Reset": {{
+			"description": "Whether to reset all logging settings before applying the current settings",
+			"type": "boolean"
+		}},
 		"Defaults": {{
 			"type": "object",
 			"properties": {{
@@ -183,12 +187,15 @@ bool CLogSystem::Initialize()
 
 	g_JSON.RegisterSchema(LoggingConfigSchemaName, &GetLoggingConfigSchema);
 
-	m_Settings = g_JSON.ParseJSONFile(
-						   "cfg/logging.json",
-						   {.SchemaName = LoggingConfigSchemaName, .PathID = "GAMECONFIG"},
-						   [this](const json& input)
-						   { return LoadSettings(input); })
-					 .value_or(Settings{});
+	if (auto settings = g_JSON.ParseJSONFile(
+			"cfg/logging.json",
+			{.SchemaName = LoggingConfigSchemaName, .PathID = "GAMECONFIG"},
+			[this](const json& input)
+			{ return LoadSettings(input); });
+		settings.has_value())
+	{
+		m_Settings = settings.value();
+	}
 
 	SetFileLoggingEnabled(m_Settings.LogFile.Enabled);
 
@@ -257,9 +264,14 @@ CLogSystem::Settings CLogSystem::LoadSettings(const json& input)
 
 	Settings settings;
 
+	if (auto reset = input.find("Reset"); !(reset != input.end() && reset->is_boolean() && reset->get<bool>()))
+	{
+		settings = m_Settings;
+	}
+
 	if (auto defaults = input.find("Defaults"); defaults != input.end())
 	{
-		settings.Defaults = parseLoggerSettings(*defaults, DefaultLogLevel);
+		settings.Defaults = parseLoggerSettings(*defaults, settings.Defaults.Level);
 	}
 
 	if (auto configs = input.find("LoggerConfigurations"); configs != input.end() && configs->is_array())
