@@ -93,7 +93,7 @@ std::string FileSystem_GetGameDirectory()
 #ifdef CLIENT_DLL
 	return gEngfuncs.pfnGetGameDirectory();
 #else
-	char gameDir[MAX_PATH_SIZE];
+	char gameDir[MAX_PATH_LENGTH];
 	g_engfuncs.pfnGetGameDir(gameDir);
 	gameDir[sizeof(gameDir) - 1] = '\0';
 
