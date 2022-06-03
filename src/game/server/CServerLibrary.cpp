@@ -192,6 +192,8 @@ void CServerLibrary::LoadServerConfigFiles()
 	GameConfigConditionals conditionals;
 	conditionals.Singleplayer = gpGlobals->deathmatch == 0;
 	conditionals.Multiplayer = gpGlobals->deathmatch != 0;
+	conditionals.DedicatedServer = IS_DEDICATED_SERVER() != 0;
+	conditionals.ListenServer = !conditionals.DedicatedServer;
 
 	g_GameConfigLoader.SetConditionals(std::move(conditionals));
 

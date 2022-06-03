@@ -27,4 +27,6 @@ void RegisterGameConfigConditionalsScriptAPI(asIScriptEngine& engine, GameConfig
 	//Register everything as globals to keep conditional strings short and easy to read
 	engine.RegisterGlobalProperty("const bool Singleplayer", &conditionals.Singleplayer);
 	engine.RegisterGlobalProperty("const bool Multiplayer", &conditionals.Multiplayer);
+	engine.RegisterGlobalProperty("const bool ListenServer", &conditionals.ListenServer);
+	engine.RegisterGlobalProperty("const bool DedicatedServer", &conditionals.DedicatedServer);
 }

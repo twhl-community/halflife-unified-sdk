@@ -21,6 +21,8 @@ struct GameConfigConditionals
 {
 	bool Singleplayer = true;
 	bool Multiplayer = false;
+	bool ListenServer = true;
+	bool DedicatedServer = false;
 };
 
 void RegisterGameConfigConditionalsScriptAPI(asIScriptEngine& engine, GameConfigConditionals& conditionals);
