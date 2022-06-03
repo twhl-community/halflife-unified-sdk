@@ -35,7 +35,7 @@ CHalfLifeTeamplay::CHalfLifeTeamplay()
 	memset(team_scores, 0, sizeof(team_scores));
 	num_teams = 0;
 
-	m_MenuSelectCommand = std::make_unique<CClientCommand>("menuselect", [](CBasePlayer* player, const CCommandArgs& args)
+	m_MenuSelectCommand = g_ClientCommands.CreateScoped("menuselect", [](CBasePlayer* player, const CCommandArgs& args)
 		{
 			if (CMD_ARGC() < 2)
 				return;

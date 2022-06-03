@@ -186,8 +186,8 @@ protected:
 	virtual void BecomeSpectator(CBasePlayer* player, const CCommandArgs& args);
 
 private:
-	std::unique_ptr<CClientCommand> m_SpectateCommand;
-	std::unique_ptr<CClientCommand> m_SpecModeCommand;
+	CScopedClientCommand m_SpectateCommand;
+	CScopedClientCommand m_SpecModeCommand;
 };
 
 CGameRules* InstallGameRules(CBaseEntity* pWorld);

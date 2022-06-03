@@ -20,6 +20,7 @@
 #include <spdlog/fmt/fmt.h>
 
 #include "cbase.h"
+#include "client.h"
 #include "CServerLibrary.h"
 #include "skill.h"
 
@@ -73,6 +74,8 @@ bool CServerLibrary::Initialize()
 	{
 		return false;
 	}
+
+	SV_CreateClientCommands();
 
 	g_engfuncs.pfnCVarRegister(&servercfgfile);
 	g_engfuncs.pfnCVarRegister(&mapchangecfgfile);

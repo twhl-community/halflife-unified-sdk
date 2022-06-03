@@ -74,5 +74,5 @@ private:
 	bool m_DisableDeathMessages;
 	bool m_DisableDeathPenalty;
 
-	std::unique_ptr<CClientCommand> m_MenuSelectCommand;
+	CScopedClientCommand m_MenuSelectCommand;
 };

@@ -133,13 +133,13 @@ private:
 	//Use a sane default to avoid lockups
 	int m_iStatsPlayer = 1;
 
-	std::unique_ptr<CClientCommand> m_CancelMenuCommand;
-	std::unique_ptr<CClientCommand> m_EndMotdCommand;
-	std::unique_ptr<CClientCommand> m_JoinTeamCommand;
-	std::unique_ptr<CClientCommand> m_SelectCharCommand;
-	std::unique_ptr<CClientCommand> m_ChangeTeamCommand;
-	std::unique_ptr<CClientCommand> m_ChangeClassCommand;
-	std::unique_ptr<CClientCommand> m_FlagInfoCommand;
+	CScopedClientCommand m_CancelMenuCommand;
+	CScopedClientCommand m_EndMotdCommand;
+	CScopedClientCommand m_JoinTeamCommand;
+	CScopedClientCommand m_SelectCharCommand;
+	CScopedClientCommand m_ChangeTeamCommand;
+	CScopedClientCommand m_ChangeClassCommand;
+	CScopedClientCommand m_FlagInfoCommand;
 };
 
 extern char* pszPlayerIPs[MAX_PLAYERS * 2];

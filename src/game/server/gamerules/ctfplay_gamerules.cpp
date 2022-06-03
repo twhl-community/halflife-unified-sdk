@@ -456,7 +456,7 @@ CHalfLifeCTFplay::CHalfLifeCTFplay()
 		}
 	}
 
-	m_CancelMenuCommand = std::make_unique<CClientCommand>("cancelmenu", [](CBasePlayer* player, const CCommandArgs& args)
+	m_CancelMenuCommand = g_ClientCommands.CreateScoped("cancelmenu", [](CBasePlayer* player, const CCommandArgs& args)
 		{
 			if (player->m_iCurrentMenu == MENU_CLASS)
 			{
@@ -480,18 +480,18 @@ CHalfLifeCTFplay::CHalfLifeCTFplay()
 			}
 		});
 
-	m_EndMotdCommand = std::make_unique<CClientCommand>("endmotd", [](CBasePlayer* player, const CCommandArgs& args)
+	m_EndMotdCommand = g_ClientCommands.CreateScoped("endmotd", [](CBasePlayer* player, const CCommandArgs& args)
 		{
 			player->m_iCurrentMenu = MENU_TEAM;
 			player->Player_Menu();
 		});
 
-	m_JoinTeamCommand = std::make_unique<CClientCommand>("jointeam", [](CBasePlayer* player, const CCommandArgs& args)
+	m_JoinTeamCommand = g_ClientCommands.CreateScoped("jointeam", [](CBasePlayer* player, const CCommandArgs& args)
 		{
 			player->Menu_Team_Input(atoi(CMD_ARGV(1)));
 		});
 
-	m_SelectCharCommand = std::make_unique<CClientCommand>("selectchar", [](CBasePlayer* player, const CCommandArgs& args)
+	m_SelectCharCommand = g_ClientCommands.CreateScoped("selectchar", [](CBasePlayer* player, const CCommandArgs& args)
 		{
 			if (args.Count() > 1)
 			{
@@ -499,7 +499,7 @@ CHalfLifeCTFplay::CHalfLifeCTFplay()
 			}
 		});
 
-	m_ChangeTeamCommand = std::make_unique<CClientCommand>("changeteam", [](CBasePlayer* player, const CCommandArgs& args)
+	m_ChangeTeamCommand = g_ClientCommands.CreateScoped("changeteam", [](CBasePlayer* player, const CCommandArgs& args)
 		{
 			if (player->m_iCurrentMenu == MENU_TEAM)
 			{
@@ -512,7 +512,7 @@ CHalfLifeCTFplay::CHalfLifeCTFplay()
 			}
 		});
 
-	m_ChangeClassCommand = std::make_unique<CClientCommand>("changeclass", [](CBasePlayer* player, const CCommandArgs& args)
+	m_ChangeClassCommand = g_ClientCommands.CreateScoped("changeclass", [](CBasePlayer* player, const CCommandArgs& args)
 		{
 			if (player->m_iNewTeamNum != CTFTeam::None || player->m_iTeamNum != CTFTeam::None)
 			{
@@ -535,7 +535,7 @@ CHalfLifeCTFplay::CHalfLifeCTFplay()
 			}
 		});
 
-	m_FlagInfoCommand = std::make_unique<CClientCommand>("flaginfo", [](CBasePlayer* player, const CCommandArgs& args)
+	m_FlagInfoCommand = g_ClientCommands.CreateScoped("flaginfo", [](CBasePlayer* player, const CCommandArgs& args)
 		{
 			DumpCTFFlagInfo(player);
 		});

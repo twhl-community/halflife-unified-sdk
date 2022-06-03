@@ -28,13 +28,13 @@ edict_t* EntSelectSpawnPoint(CBasePlayer* pPlayer);
 
 CGameRules::CGameRules()
 {
-	m_SpectateCommand = std::make_unique<CClientCommand>("spectate", [this](CBasePlayer* player, const CCommandArgs& args)
+	m_SpectateCommand = g_ClientCommands.CreateScoped("spectate", [this](CBasePlayer* player, const CCommandArgs& args)
 		{
 			// clients wants to become a spectator
 			BecomeSpectator(player, args);
 		});
 
-	m_SpecModeCommand = std::make_unique<CClientCommand>("specmode", [this](CBasePlayer* player, const CCommandArgs& args)
+	m_SpecModeCommand = g_ClientCommands.CreateScoped("specmode", [this](CBasePlayer* player, const CCommandArgs& args)
 		{
 			// new spectator mode
 			if (player->IsObserver())

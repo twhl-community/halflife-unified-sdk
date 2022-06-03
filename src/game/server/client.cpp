@@ -494,113 +494,119 @@ void Host_Say(edict_t* pEntity, bool teamonly)
 	}
 }
 
-static const CClientCommand g_SayCommand{"say", [](CBasePlayer* player, const CCommandArgs& args)
-	{
-		Host_Say(player->edict(), false);
-	}};
-
-static const CClientCommand g_SayTeamCommand{"say_team", [](CBasePlayer* player, const CCommandArgs& args)
-	{
-		Host_Say(player->edict(), true);
-	}};
-
-static const CClientCommand g_FullUpdateCommand{"fullupdate", [](CBasePlayer* player, const CCommandArgs& args)
-	{
-		player->ForceClientDllUpdate();
-	}};
-
-static const CClientCommand g_GiveCommand{"give", [](CBasePlayer* player, const CCommandArgs& args)
-	{
-		int iszItem = ALLOC_STRING(args.Argument(1)); // Make a copy of the classname
-		player->GiveNamedItem(STRING(iszItem));
-	}, ClientCommandFlag::Cheat};
-
-static const CClientCommand g_DropCommand{"drop", [](CBasePlayer* player, const CCommandArgs& args)
-	{
-		// player is dropping an item.
-		player->DropPlayerItem(args.Argument(1));
-	}};
-
-static const CClientCommand g_FovCommand{"fov", [](CBasePlayer* player, const CCommandArgs& args)
-	{
-		if (0 != g_psv_cheats->value && args.Count() > 1)
+void SV_CreateClientCommands()
+{
+	g_ClientCommands.Create("say", [](CBasePlayer* player, const CCommandArgs& args)
 		{
-			player->m_iFOV = atoi(args.Argument(1));
-		}
-		else
-		{
-			CLIENT_PRINTF(player->edict(), print_console, UTIL_VarArgs("\"fov\" is \"%d\"\n", (int)player->m_iFOV));
-		}
-	}};
+			Host_Say(player->edict(), false);
+		});
 
-static const CClientCommand g_SetHudColorCommand{"set_hud_color", [](CBasePlayer* player, const CCommandArgs& args)
-	{
-		if (args.Count() >= 4)
+	
+	g_ClientCommands.Create("say_team", [](CBasePlayer* player, const CCommandArgs& args)
 		{
-			Vector color{255, 255, 255};
-			UTIL_StringToVector(color, CMD_ARGS());
+			Host_Say(player->edict(), true);
+		});
 
-			player->SetHudColor({static_cast<std::uint8_t>(color.x),
-				static_cast<std::uint8_t>(color.y),
-				static_cast<std::uint8_t>(color.z)});
-		}
-		else
+	g_ClientCommands.Create("fullupdate", [](CBasePlayer* player, const CCommandArgs& args)
 		{
-			CLIENT_PRINTF(player->edict(), print_console, "Usage: set_hud_color <r> <g> <b> (values in range 0-255)\n");
-		}
-	}, ClientCommandFlag::Cheat};
+			player->ForceClientDllUpdate();
+		});
 
-static const CClientCommand g_SetLightTypeCommand{"set_suit_light_type", [](CBasePlayer* player, const CCommandArgs& args)
-	{
-		if (args.Count() > 1)
+	g_ClientCommands.Create("give", [](CBasePlayer* player, const CCommandArgs& args)
 		{
-			const auto type = SuitLightTypeFromString(args.Argument(1));
+			int iszItem = ALLOC_STRING(args.Argument(1)); // Make a copy of the classname
+			player->GiveNamedItem(STRING(iszItem));
+		},
+		{.Flags = ClientCommandFlag::Cheat});
 
-			if (type.has_value())
+	g_ClientCommands.Create("drop", [](CBasePlayer* player, const CCommandArgs& args)
+		{
+			// player is dropping an item.
+			player->DropPlayerItem(args.Argument(1));
+		});
+
+	g_ClientCommands.Create("fov", [](CBasePlayer* player, const CCommandArgs& args)
+		{
+			if (0 != g_psv_cheats->value && args.Count() > 1)
 			{
-				player->SetSuitLightType(type.value());
+				player->m_iFOV = atoi(args.Argument(1));
 			}
 			else
 			{
-				CLIENT_PRINTF(player->edict(), print_console, UTIL_VarArgs("Unknown suit light type \"%s\"\n", args.Argument(1)));
+				CLIENT_PRINTF(player->edict(), print_console, UTIL_VarArgs("\"fov\" is \"%d\"\n", (int)player->m_iFOV));
 			}
-		}
-	},
-	ClientCommandFlag::Cheat};
+		});
 
-static const CClientCommand g_UseCommand{"use", [](CBasePlayer* player, const CCommandArgs& args)
-	{
-		player->SelectItem(args.Argument(1));
-	}};
+	g_ClientCommands.Create("set_hud_color", [](CBasePlayer* player, const CCommandArgs& args)
+		{
+			if (args.Count() >= 4)
+			{
+				Vector color{255, 255, 255};
+				UTIL_StringToVector(color, CMD_ARGS());
 
-static const CClientCommand g_SelectWeaponCommand{"selectweapon", [](CBasePlayer* player, const CCommandArgs& args)
-	{
-		if (args.Count() > 1)
+				player->SetHudColor({static_cast<std::uint8_t>(color.x),
+					static_cast<std::uint8_t>(color.y),
+					static_cast<std::uint8_t>(color.z)});
+			}
+			else
+			{
+				CLIENT_PRINTF(player->edict(), print_console, "Usage: set_hud_color <r> <g> <b> (values in range 0-255)\n");
+			}
+		},
+		{.Flags = ClientCommandFlag::Cheat});
+
+	g_ClientCommands.Create("set_suit_light_type", [](CBasePlayer* player, const CCommandArgs& args)
+		{
+			if (args.Count() > 1)
+			{
+				const auto type = SuitLightTypeFromString(args.Argument(1));
+
+				if (type.has_value())
+				{
+					player->SetSuitLightType(type.value());
+				}
+				else
+				{
+					CLIENT_PRINTF(player->edict(), print_console, UTIL_VarArgs("Unknown suit light type \"%s\"\n", args.Argument(1)));
+				}
+			}
+		},
+		{.Flags = ClientCommandFlag::Cheat});
+
+	g_ClientCommands.Create("use", [](CBasePlayer* player, const CCommandArgs& args)
 		{
 			player->SelectItem(args.Argument(1));
-		}
-		else
+		});
+
+	g_ClientCommands.Create("selectweapon", [](CBasePlayer* player, const CCommandArgs& args)
 		{
-			CLIENT_PRINTF(player->edict(), print_console, "usage: selectweapon <weapon name>\n");
-		}
-	}};
+			if (args.Count() > 1)
+			{
+				player->SelectItem(args.Argument(1));
+			}
+			else
+			{
+				CLIENT_PRINTF(player->edict(), print_console, "usage: selectweapon <weapon name>\n");
+			}
+		});
 
-static const CClientCommand g_LastInvCommand{"lastinv", [](CBasePlayer* player, const CCommandArgs& args)
-	{
-		player->SelectLastItem();
-	}};
+	g_ClientCommands.Create("lastinv", [](CBasePlayer* player, const CCommandArgs& args)
+		{
+			player->SelectLastItem();
+		});
 
-static const CClientCommand g_CloseMenusCommand{"closemenus", [](CBasePlayer* player, const CCommandArgs& args)
-	{
-		// just ignore it
-	}};
+	g_ClientCommands.Create("closemenus", [](CBasePlayer* player, const CCommandArgs& args)
+		{
+			// just ignore it
+		});
 
-static const CClientCommand g_FollowNextCommand{"follownext", [](CBasePlayer* player, const CCommandArgs& args)
-	{
-		// follow next player
-		if (player->IsObserver())
-			player->Observer_FindNextPlayer(atoi(args.Argument(1)) != 0);
-	}};
+	g_ClientCommands.Create("follownext", [](CBasePlayer* player, const CCommandArgs& args)
+		{
+			// follow next player
+			if (player->IsObserver())
+				player->Observer_FindNextPlayer(atoi(args.Argument(1)) != 0);
+		});
+}
 
 bool UTIL_CheatsAllowed(CBasePlayer* pEntity, std::string_view name)
 {
@@ -629,7 +635,7 @@ void ClientCommand(edict_t* pEntity)
 	const char* pcmd = CMD_ARGV(0);
 	auto player = GetClassPtr<CBasePlayer>(reinterpret_cast<CBasePlayer*>(&pEntity->v));
 
-	if (auto clientCommand = GetClientCommandRegistry()->Find(pcmd); clientCommand)
+	if (auto clientCommand = g_ClientCommands.Find(pcmd); clientCommand)
 	{
 		if ((clientCommand->Flags & ClientCommandFlag::Cheat) == 0 || UTIL_CheatsAllowed(player, clientCommand->Name))
 		{

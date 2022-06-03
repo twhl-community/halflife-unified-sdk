@@ -60,5 +60,5 @@ private:
 	bool m_teamLimit; // This means the server set only some teams as valid
 	char m_szTeamList[TEAMPLAY_TEAMLISTLENGTH];
 
-	std::unique_ptr<CClientCommand> m_MenuSelectCommand;
+	CScopedClientCommand m_MenuSelectCommand;
 };
