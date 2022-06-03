@@ -19,6 +19,13 @@ std::shared_ptr<const CClientCommand> CClientCommandRegistry::Create(
 		return {};
 	}
 
+	if (std::find_if(name.begin(), name.end(), [](int c)
+			{ return 0 == std::islower(static_cast<unsigned char>(c)) && c != '_'; }) != name.end())
+	{
+		ASSERT(!"Client command name has invalid characters");
+		return {};
+	}
+
 	auto command = std::make_shared<CClientCommand>(this, name, arguments.Flags, std::move(function));
 
 	m_Commands.emplace(command->Name, command);
