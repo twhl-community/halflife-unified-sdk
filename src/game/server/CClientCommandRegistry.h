@@ -64,7 +64,12 @@ public:
 	CScopedClientCommand(CScopedClientCommand&& other) noexcept = default;
 	CScopedClientCommand& operator=(CScopedClientCommand&& other) noexcept = default;
 
-	~CScopedClientCommand() noexcept;
+	~CScopedClientCommand() noexcept
+	{
+		Remove();
+	}
+
+	void Remove() noexcept;
 
 private:
 	std::shared_ptr<const CClientCommand> Command;
@@ -103,10 +108,11 @@ private:
 
 inline CClientCommandRegistry g_ClientCommands;
 
-inline CScopedClientCommand::~CScopedClientCommand()
+inline void CScopedClientCommand::Remove() noexcept
 {
 	if (Command)
 	{
 		Command->Registry->Remove(Command);
+		Command.reset();
 	}
 }
