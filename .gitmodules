@@ -17,3 +17,6 @@
 [submodule "external/openal-soft"]
 	path = external/openal-soft
 	url = https://github.com/kcat/openal-soft.git
+[submodule "external/libnyquist"]
+	path = external/libnyquist
+	url = https://github.com/ddiakopoulos/libnyquist.git
