@@ -1,6 +1,6 @@
 /***
 *
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
 *	This product contains software technology licensed from Id
 *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
@@ -13,29 +13,21 @@
 *
 ****/
 
-#include "hud.h"
-#include "cbase.h"
-#include "CClientLibrary.h"
+#pragma once
 
-bool CClientLibrary::Initialize()
+#include <string>
+
+class CCommandArgs;
+
+/**
+*	@brief Handles music playback.
+*/
+struct IMusicSystem
 {
-	if (!InitializeCommon())
-	{
-		return false;
-	}
+	virtual ~IMusicSystem() = default;
 
-	return true;
-}
-
-void CClientLibrary::HudInit()
-{
-	//Has to be done here because music cvars don't exist at Initialize time.
-	m_SoundSystem = CreateSoundSystem();
-}
-
-void CClientLibrary::Shutdown()
-{
-	m_SoundSystem.reset();
-
-	ShutdownCommon();
-}
+	virtual void Play(std::string&& fileName, bool looping) = 0;
+	virtual void Stop() = 0;
+	virtual void Pause() = 0;
+	virtual void Resume() = 0;
+};

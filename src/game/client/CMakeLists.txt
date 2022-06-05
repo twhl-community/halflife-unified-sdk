@@ -66,10 +66,16 @@ target_compile_definitions(client PRIVATE
 	
 target_link_libraries(client PRIVATE
 	vgui
+	$<$<PLATFORM_ID:Windows>:delayimp>
 	$<$<PLATFORM_ID:Windows>:wsock32>
 	SDL2
-	OpenGL::GL)
-	
+	OpenGL::GL
+	OpenAL
+	libnyquist)
+
+target_link_options(client PRIVATE
+	$<$<PLATFORM_ID:Windows>:/DELAYLOAD:OpenAL32.dll>)
+
 if (UNIX)
 	# Tell the linker to search for vgui.so and SDL2-2.0.so.0 in here
 	target_link_directories(client PRIVATE
@@ -88,6 +94,7 @@ target_sources(client PRIVATE
 	cl_util.h
 	com_weapons.cpp
 	com_weapons.h
+	$<$<PLATFORM_ID:Windows>:DelayLoad.cpp>
 	demo.cpp
 	demo.h
 	entity.cpp
@@ -136,6 +143,14 @@ target_sources(client PRIVATE
 	rendering/studio_util.h
 	rendering/tri.cpp
 	rendering/tri.h
+	
+	sound/IMusicSystem.h
+	sound/ISoundSystem.h
+	sound/DummySoundSystem.h
+	sound/OpenALMusicSystem.cpp
+	sound/OpenALMusicSystem.h
+	sound/OpenALSoundSystem.cpp
+	sound/OpenALSoundSystem.h
 
 	ui/voice_banmgr.cpp
 	ui/voice_banmgr.h

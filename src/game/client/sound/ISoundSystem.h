@@ -1,0 +1,38 @@
+/***
+*
+*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+*
+*	This product contains software technology licensed from Id
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*	All Rights Reserved.
+*
+*   Use, distribution, and modification of this source code and/or resulting
+*   object code is restricted to non-commercial enhancements to products from
+*   Valve LLC.  All other use, distribution, or modification is prohibited
+*   without written permission from Valve LLC.
+*
+****/
+
+#pragma once
+
+#include <memory>
+
+struct IMusicSystem;
+
+/**
+*	@brief Provides access to high-level sound system interfaces.
+*/
+struct ISoundSystem
+{
+	virtual ~ISoundSystem() = default;
+
+	/**
+	*	@brief Gets the music system.
+	*/
+	virtual IMusicSystem* GetMusicSystem() = 0;
+};
+
+/**
+*	@brief Creates an instance of the sound system using an available implementation.
+*/
+std::unique_ptr<ISoundSystem> CreateSoundSystem();

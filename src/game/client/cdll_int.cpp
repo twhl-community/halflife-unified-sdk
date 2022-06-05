@@ -162,6 +162,7 @@ the hud variables.
 void DLLEXPORT HUD_Init()
 {
 	//	RecClHudInit();
+	g_Client.HudInit();
 	InitInput();
 	gHUD.Init();
 	Scheme_Init();

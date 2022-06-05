@@ -15,7 +15,10 @@
 
 #pragma once
 
+#include <memory>
+
 #include "CGameLibrary.h"
+#include "sound/ISoundSystem.h"
 
 /**
 *	@brief Handles core client actions
@@ -38,10 +41,18 @@ public:
 	bool Initialize();
 
 	/**
+	*	@brief Called when the engine finishes up client initialization.
+	*/
+	void HudInit();
+
+	/**
 	*	@brief Handles client-side shutdown
 	*	@details Called even if @see Initialize returned false
 	*/
 	void Shutdown();
+
+private:
+	std::unique_ptr<ISoundSystem> m_SoundSystem;
 };
 
 inline CClientLibrary g_Client;
