@@ -1335,8 +1335,6 @@ public:
 	void Spawn() override;
 	bool KeyValue(KeyValueData* pkvd) override;
 	void EXPORT UseChangeLevel(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-	void EXPORT TriggerChangeLevel();
-	void EXPORT ExecuteChangeLevel();
 	void EXPORT TouchChangeLevel(CBaseEntity* pOther);
 	void ChangeLevelNow(CBaseEntity* pActivator);
 
@@ -1424,19 +1422,6 @@ void CChangeLevel::Spawn()
 		SetTouch(&CChangeLevel::TouchChangeLevel);
 	//	ALERT( at_console, "TRANSITION: %s (%s)\n", m_szMapName, m_szLandmarkName );
 }
-
-
-void CChangeLevel::ExecuteChangeLevel()
-{
-	MESSAGE_BEGIN(MSG_ALL, SVC_CDTRACK);
-	WRITE_BYTE(3);
-	WRITE_BYTE(3);
-	MESSAGE_END();
-
-	MESSAGE_BEGIN(MSG_ALL, SVC_INTERMISSION);
-	MESSAGE_END();
-}
-
 
 FILE_GLOBAL char st_szNextMap[cchMapNameMost];
 FILE_GLOBAL char st_szNextSpot[cchMapNameMost];
@@ -1711,39 +1696,6 @@ int CChangeLevel::ChangeList(LEVELLIST* pLevelList, int maxList)
 
 	return count;
 }
-
-/*
-go to the next level for deathmatch
-only called if a time or frag limit has expired
-*/
-void NextLevel()
-{
-	edict_t* pent;
-	CChangeLevel* pChange;
-
-	// find a trigger_changelevel
-	pent = FIND_ENTITY_BY_CLASSNAME(nullptr, "trigger_changelevel");
-
-	// go back to start if no trigger_changelevel
-	if (FNullEnt(pent))
-	{
-		gpGlobals->mapname = ALLOC_STRING("start");
-		pChange = GetClassPtr((CChangeLevel*)nullptr);
-		strcpy(pChange->m_szMapName, "start");
-	}
-	else
-		pChange = GetClassPtr((CChangeLevel*)VARS(pent));
-
-	strcpy(st_szNextMap, pChange->m_szMapName);
-	g_fGameOver = true;
-
-	if (pChange->pev->nextthink < gpGlobals->time)
-	{
-		pChange->SetThink(&CChangeLevel::ExecuteChangeLevel);
-		pChange->pev->nextthink = gpGlobals->time + 0.1;
-	}
-}
-
 
 // ============================== LADDER =======================================
 
