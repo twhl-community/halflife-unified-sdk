@@ -84,7 +84,12 @@ option(ALSOFT_UTILS "" OFF)
 add_subdirectory(external/openal-soft
 	openal-soft-binary-dir
 	EXCLUDE_FROM_ALL)
-	
+
+option(LIBNYQUIST_BUILD_EXAMPLE "" OFF)
+add_subdirectory(external/libnyquist
+	libnyquist-binary-dir
+	EXCLUDE_FROM_ALL)
+
 # Enable multithreaded building to speed up building these a bit.
 target_compile_options(nlohmann_json_schema_validator PRIVATE $<$<CXX_COMPILER_ID:MSVC>:/MP>)
 target_compile_options(angelscript PRIVATE $<$<CXX_COMPILER_ID:MSVC>:/MP>)
@@ -98,6 +103,7 @@ set_target_properties(
 	build_version
 	common
 	OpenAL
+	libnyquist
 	PROPERTIES
 		FOLDER "Dependencies")
 
