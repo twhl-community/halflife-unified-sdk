@@ -14,3 +14,6 @@
 	path = external/Angelscript
 	url = https://github.com/codecat/angelscript-mirror.git
 	shallow = 1
+[submodule "external/openal-soft"]
+	path = external/openal-soft
+	url = https://github.com/kcat/openal-soft.git
