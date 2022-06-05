@@ -80,7 +80,7 @@ add_subdirectory(external/Angelscript/sdk/angelscript/projects/cmake
 	Angelscript-binary-dir
 	EXCLUDE_FROM_ALL)
 
-option(ALSOFT_UTILS  "" OFF)
+option(ALSOFT_UTILS "" OFF)
 add_subdirectory(external/openal-soft
 	openal-soft-binary-dir
 	EXCLUDE_FROM_ALL)
@@ -249,6 +249,10 @@ if (MSVC)
 	install(FILES $<TARGET_PDB_FILE:client> DESTINATION cl_dlls OPTIONAL)
 	install(FILES $<TARGET_PDB_FILE:${HalfLife_SERVER_LIB_NAME}> DESTINATION dlls OPTIONAL)
 endif()
+
+install(TARGETS OpenAL
+	RUNTIME DESTINATION cl_dlls
+	LIBRARY DESTINATION cl_dlls)
 
 # Set up the script that will copy the mod libraries to the HLDS directory
 if (NOT ${HalfLife_HLDS_DIRECTORY} STREQUAL "")
