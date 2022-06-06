@@ -142,6 +142,7 @@ void OpenALMusicSystem::StartPlaying(bool looping, FileWrapper file)
 	}
 
 	m_FadeStartTime = std::chrono::system_clock::time_point{};
+	m_Volume = -1; //Force recalculation so volume resets.
 
 	m_Info = {};
 
