@@ -4262,6 +4262,7 @@ void CBasePlayer::UpdateClientData()
 	if (fullHUDInitRequired || m_bRestored)
 	{
 		g_Server.PlayerActivating(this);
+		FireTargets("game_playeractivate", this, this, USE_TOGGLE, 0);
 	}
 
 	if (m_fInitHUD)
