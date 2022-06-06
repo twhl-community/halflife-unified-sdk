@@ -16,6 +16,8 @@
 // sound.cpp
 //=========================================================
 
+#include <spdlog/fmt/fmt.h>
+
 #include "cbase.h"
 #include "talkmonster.h"
 #include "gamerules.h"
@@ -825,6 +827,199 @@ bool CAmbientGeneric::KeyValue(KeyValueData* pkvd)
 	return CBaseEntity::KeyValue(pkvd);
 }
 
+//if you change this, also change CAmbientMusic::KeyValue!
+enum class AmbientMusicCommand
+{
+	Play = 0,
+	Loop,
+	Pause,
+	Resume,
+	Fadeout,
+	Stop
+};
+
+enum class AmbientMusicTargetSelector
+{
+	AllPlayers = 0,
+	Activator,
+	LocalPlayer,
+	Radius
+};
+
+//Used internally only, level designers should not use this flag directly!
+constexpr int SF_AMBIENTMUSIC_REMOVEONFIRE = 1 << 0;
+
+/**
+*	@brief Plays music.
+*/
+class CAmbientMusic : public CBaseEntity
+{
+public:
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
+	static TYPEDESCRIPTION m_SaveData[];
+
+	int ObjectCaps() override { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
+
+	bool KeyValue(KeyValueData* pkvd) override;
+	void Spawn() override;
+	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+
+private:
+	string_t m_FileName;
+	AmbientMusicCommand m_Command = AmbientMusicCommand::Play;
+	AmbientMusicTargetSelector m_TargetSelector = AmbientMusicTargetSelector::AllPlayers;
+	float m_Radius = 0;
+};
+
+LINK_ENTITY_TO_CLASS(ambient_music, CAmbientMusic);
+TYPEDESCRIPTION CAmbientMusic::m_SaveData[] =
+	{
+		DEFINE_FIELD(CAmbientMusic, m_FileName, FIELD_STRING),
+		DEFINE_FIELD(CAmbientMusic, m_Command, FIELD_INTEGER),
+		DEFINE_FIELD(CAmbientMusic, m_TargetSelector, FIELD_INTEGER),
+		DEFINE_FIELD(CAmbientMusic, m_Radius, FIELD_FLOAT),
+};
+
+IMPLEMENT_SAVERESTORE(CAmbientMusic, CBaseEntity);
+
+bool CAmbientMusic::KeyValue(KeyValueData* pkvd)
+{
+	if (FStrEq(pkvd->szKeyName, "filename"))
+	{
+		m_FileName = ALLOC_STRING(pkvd->szValue);
+		return true;
+	}
+	else if (FStrEq(pkvd->szKeyName, "command"))
+	{
+		m_Command = static_cast<AmbientMusicCommand>(atoi(pkvd->szValue));
+
+		if (std::clamp(m_Command, AmbientMusicCommand::Play, AmbientMusicCommand::Stop) != m_Command)
+		{
+			ALERT(at_console, "Invalid ambient_music command %d, falling back to \"Stop\"\n", m_Command);
+			m_Command = AmbientMusicCommand::Stop;
+		}
+
+		return true;
+	}
+	else if (FStrEq(pkvd->szKeyName, "target_selector"))
+	{
+		m_TargetSelector = static_cast<AmbientMusicTargetSelector>(atoi(pkvd->szValue));
+
+		if (std::clamp(m_TargetSelector, AmbientMusicTargetSelector::AllPlayers, AmbientMusicTargetSelector::Radius) != m_TargetSelector)
+		{
+			ALERT(at_console, "Invalid ambient_music target selector %d, falling back to \"All Players\"\n", m_TargetSelector);
+			m_TargetSelector = AmbientMusicTargetSelector::AllPlayers;
+		}
+
+		return true;
+	}
+	else if (FStrEq(pkvd->szKeyName, "radius"))
+	{
+		m_Radius = atof(pkvd->szValue);
+
+		if (const float absolute = abs(m_Radius); absolute != m_Radius)
+		{
+			ALERT(at_console, "Negative ambient_music radius %f, using absolute value %f\n", m_Radius, absolute);
+			m_Radius = absolute;
+		}
+
+		return true;
+	}
+	else if (FStrEq(pkvd->szKeyName, "remove_on_fire"))
+	{
+		if (atoi(pkvd->szValue) == 1)
+		{
+			pev->spawnflags |= SF_AMBIENTMUSIC_REMOVEONFIRE;
+		}
+		else
+		{
+			pev->spawnflags &= ~SF_AMBIENTMUSIC_REMOVEONFIRE;
+		}
+	}
+
+	return CBaseEntity::KeyValue(pkvd);
+}
+
+void CAmbientMusic::Spawn()
+{
+	//Nothing.
+}
+
+void CAmbientMusic::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
+{
+	//Compute the command now in case mappers change the keyvalues after spawn.
+	const std::string command = [this]()
+	{
+		switch (m_Command)
+		{
+		case AmbientMusicCommand::Play: return fmt::format("music play \"{}\"\n", STRING(m_FileName));
+		case AmbientMusicCommand::Loop: return fmt::format("music loop \"{}\"\n", STRING(m_FileName));
+		case AmbientMusicCommand::Pause: return fmt::format("music pause\n");
+		case AmbientMusicCommand::Resume: return fmt::format("music resume\n");
+		case AmbientMusicCommand::Fadeout: return fmt::format("music fadeout\n");
+		default:
+		case AmbientMusicCommand::Stop: return fmt::format("music stop\n");
+		}
+	}();
+
+	auto executor = [&](CBaseEntity* player)
+	{
+		if (player)
+		{
+			CLIENT_COMMAND(player->edict(), "%s", command.c_str());
+		}
+	};
+
+	switch (m_TargetSelector)
+	{
+	case AmbientMusicTargetSelector::AllPlayers:
+	{
+		for (int i = 1; i <= gpGlobals->maxClients; ++i)
+		{
+			executor(UTIL_PlayerByIndex(i));
+		}
+		break;
+	}
+
+	case AmbientMusicTargetSelector::Activator:
+	{
+		if (pActivator && pActivator->IsPlayer())
+		{
+			executor(pActivator);
+		}
+		break;
+	}
+
+	case AmbientMusicTargetSelector::LocalPlayer:
+	{
+		auto localPlayer = g_engfuncs.pfnPEntityOfEntIndex(1);
+
+		if (localPlayer)
+		{
+			executor(GET_PRIVATE<CBaseEntity>(localPlayer));
+		}
+		break;
+	}
+
+	case AmbientMusicTargetSelector::Radius:
+	{
+		for (CBaseEntity* entity = nullptr; (entity = UTIL_FindEntityInSphere(entity, pev->origin, m_Radius)) != nullptr;)
+		{
+			if (entity->IsPlayer())
+			{
+				executor(entity);
+			}
+		}
+		break;
+	}
+	}
+
+	if ((pev->spawnflags & SF_AMBIENTMUSIC_REMOVEONFIRE) != 0)
+	{
+		UTIL_Remove(this);
+	}
+}
 
 // =================== ROOM SOUND FX ==========================================
 
