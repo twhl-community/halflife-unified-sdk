@@ -289,7 +289,7 @@ bool OpenALMusicSystem::RunOnWorkerThread(Func func, Args&&... args)
 	//Queue up for execution on the worker thread.
 	const std::lock_guard guard{m_JobMutex};
 
-	m_Jobs.emplace_back([=]()
+	m_Jobs.emplace_back([=, this]()
 		{ (this->*func)(args...); });
 
 	return true;
