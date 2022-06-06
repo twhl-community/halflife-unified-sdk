@@ -31,6 +31,7 @@ jobs:
           mkdir cl_dlls
           mkdir dlls
           mv build/src/game/client/client.so cl_dlls
+          mv build/src/game/client/libopenal.so cl_dlls
           mv build/src/game/server/server.so dlls
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
@@ -56,6 +57,7 @@ jobs:
           mkdir cl_dlls
           mkdir dlls
           mv build/src/game/client/Release/client.dll cl_dlls
+          mv build/src/game/client/Release/OpenAL32.dll cl_dlls
           mv build/src/game/server/Release/server.dll dlls
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
