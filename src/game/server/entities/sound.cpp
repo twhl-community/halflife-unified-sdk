@@ -863,7 +863,12 @@ public:
 
 	bool KeyValue(KeyValueData* pkvd) override;
 	void Spawn() override;
-	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+	void EXPORT TriggerUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+
+	void EXPORT RadiusThink();
+
+private:
+	std::string GetCommand() const;
 
 private:
 	string_t m_FileName;
@@ -943,25 +948,26 @@ bool CAmbientMusic::KeyValue(KeyValueData* pkvd)
 
 void CAmbientMusic::Spawn()
 {
-	//Nothing.
+	pev->solid = SOLID_NOT;
+	pev->movetype = MOVETYPE_NONE;
+
+	if (m_TargetSelector == AmbientMusicTargetSelector::Radius)
+	{
+		if (m_Radius > 0)
+		{
+			SetThink(&CAmbientMusic::RadiusThink);
+			pev->nextthink = gpGlobals->time + 1.0;
+		}
+	}
+	else
+	{
+		SetUse(&CAmbientMusic::TriggerUse);
+	}
 }
 
-void CAmbientMusic::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
+void CAmbientMusic::TriggerUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
-	//Compute the command now in case mappers change the keyvalues after spawn.
-	const std::string command = [this]()
-	{
-		switch (m_Command)
-		{
-		case AmbientMusicCommand::Play: return fmt::format("music play \"{}\"\n", STRING(m_FileName));
-		case AmbientMusicCommand::Loop: return fmt::format("music loop \"{}\"\n", STRING(m_FileName));
-		case AmbientMusicCommand::Pause: return fmt::format("music pause\n");
-		case AmbientMusicCommand::Resume: return fmt::format("music resume\n");
-		case AmbientMusicCommand::Fadeout: return fmt::format("music fadeout\n");
-		default:
-		case AmbientMusicCommand::Stop: return fmt::format("music stop\n");
-		}
-	}();
+	const std::string command = GetCommand();
 
 	auto executor = [&](CBaseEntity* player)
 	{
@@ -1004,13 +1010,7 @@ void CAmbientMusic::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE 
 
 	case AmbientMusicTargetSelector::Radius:
 	{
-		for (CBaseEntity* entity = nullptr; (entity = UTIL_FindEntityInSphere(entity, pev->origin, m_Radius)) != nullptr;)
-		{
-			if (entity->IsPlayer())
-			{
-				executor(entity);
-			}
-		}
+		ALERT(at_console, "Invalid target selector for ambient_music \"%s\"\n", GetTargetname());
 		break;
 	}
 	}
@@ -1019,6 +1019,53 @@ void CAmbientMusic::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE 
 	{
 		UTIL_Remove(this);
 	}
+}
+
+void CAmbientMusic::RadiusThink()
+{
+	const std::string command = GetCommand();
+
+	const float radiusSquared = m_Radius * m_Radius;
+
+	bool touchedAPlayer = false;
+
+	for (int i = 1; i <= gpGlobals->maxClients; ++i)
+	{
+		auto player = UTIL_PlayerByIndex(i);
+
+		if (player && (player->pev->origin - pev->origin).LengthSquared() <= radiusSquared)
+		{
+			CLIENT_COMMAND(player->edict(), "%s", command.c_str());
+			touchedAPlayer = true;
+		}
+	}
+
+	if ((pev->spawnflags & SF_AMBIENTMUSIC_REMOVEONFIRE) != 0 && touchedAPlayer)
+	{
+		UTIL_Remove(this);
+	}
+	else
+	{
+		pev->nextthink = gpGlobals->time + 0.5;
+	}
+}
+
+std::string CAmbientMusic::GetCommand() const
+{
+	//Compute the command now in case mappers change the keyvalues after spawn.
+	return [this]()
+	{
+		switch (m_Command)
+		{
+		case AmbientMusicCommand::Play: return fmt::format("music play \"{}\"\n", STRING(m_FileName));
+		case AmbientMusicCommand::Loop: return fmt::format("music loop \"{}\"\n", STRING(m_FileName));
+		case AmbientMusicCommand::Pause: return fmt::format("music pause\n");
+		case AmbientMusicCommand::Resume: return fmt::format("music resume\n");
+		case AmbientMusicCommand::Fadeout: return fmt::format("music fadeout\n");
+		default:
+		case AmbientMusicCommand::Stop: return fmt::format("music stop\n");
+		}
+	}();
 }
 
 // =================== ROOM SOUND FX ==========================================
