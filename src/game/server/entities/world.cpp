@@ -696,11 +696,6 @@ bool CWorld::KeyValue(KeyValueData* pkvd)
 		CVAR_SET_STRING("sv_skyname", pkvd->szValue);
 		return true;
 	}
-	else if (FStrEq(pkvd->szKeyName, "sounds"))
-	{
-		gpGlobals->cdAudioTrack = atoi(pkvd->szValue);
-		return true;
-	}
 	else if (FStrEq(pkvd->szKeyName, "WaveHeight"))
 	{
 		// Sent over net now.
