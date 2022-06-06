@@ -81,6 +81,11 @@ add_subdirectory(external/Angelscript/sdk/angelscript/projects/cmake
 	EXCLUDE_FROM_ALL)
 
 option(ALSOFT_UTILS "" OFF)
+# Disable SSE because it interferes with cross-compiling.
+option(ALSOFT_CPUEXT_SSE "" OFF)
+option(ALSOFT_CPUEXT_SSE2 "" OFF)
+option(ALSOFT_CPUEXT_SSE3 "" OFF)
+option(ALSOFT_CPUEXT_SSE4_1 "" OFF)
 add_subdirectory(external/openal-soft
 	openal-soft-binary-dir
 	EXCLUDE_FROM_ALL)
