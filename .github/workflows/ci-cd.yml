@@ -23,7 +23,7 @@ jobs:
           && sudo apt update
           && sudo apt install -y g++-11-multilib libgl1-mesa-dev:i386
       - name: Configure
-        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_INSTALL_PREFIX=${{env.GAME_NAME}}/${{env.GAME_NAME}} -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/cmake/LinuxToolchain.cmake -DCMAKE_COLOR_MAKEFILE=OFF -DBUILD_EXAMPLES=OFF -DBUILD_TESTS=OFF
+        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_INSTALL_PREFIX=${{env.GAME_NAME}}/${{env.MOD_NAME}} -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/cmake/LinuxToolchain.cmake -DCMAKE_COLOR_MAKEFILE=OFF -DBUILD_EXAMPLES=OFF -DBUILD_TESTS=OFF
       - name: Build
         env:
           MAKEFLAGS: "-j2"
@@ -44,7 +44,7 @@ jobs:
         with:
           submodules: recursive
       - name: Configure
-        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_INSTALL_PREFIX=${{env.GAME_NAME}}/${{env.GAME_NAME}} -AWin32 -DBUILD_EXAMPLES=OFF -DBUILD_TESTS=OFF
+        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_INSTALL_PREFIX=${{env.GAME_NAME}}/${{env.MOD_NAME}} -AWin32 -DBUILD_EXAMPLES=OFF -DBUILD_TESTS=OFF
       - name: Build
         run: >
           cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} -j2
