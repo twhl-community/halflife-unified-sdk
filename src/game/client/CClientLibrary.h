@@ -51,8 +51,14 @@ public:
 	*/
 	void Shutdown();
 
+	/**
+	*	@brief Called every frame.
+	*/
+	void Frame();
+
 private:
 	std::unique_ptr<ISoundSystem> m_SoundSystem;
+	bool m_PreviousPausedState = false;
 };
 
 inline CClientLibrary g_Client;

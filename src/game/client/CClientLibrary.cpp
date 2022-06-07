@@ -16,6 +16,8 @@
 #include "hud.h"
 #include "cbase.h"
 #include "CClientLibrary.h"
+#include "view.h"
+#include "sound/IMusicSystem.h"
 
 bool CClientLibrary::Initialize()
 {
@@ -38,4 +40,22 @@ void CClientLibrary::Shutdown()
 	m_SoundSystem.reset();
 
 	ShutdownCommon();
+}
+
+void CClientLibrary::Frame()
+{
+	//Only do this on change to prevent problems from constantly calling a threaded function.
+	if (m_PreviousPausedState != g_Paused)
+	{
+		m_PreviousPausedState = g_Paused;
+
+		if (g_Paused)
+		{
+			m_SoundSystem->GetMusicSystem()->Pause();
+		}
+		else
+		{
+			m_SoundSystem->GetMusicSystem()->Resume();
+		}
+	}
 }

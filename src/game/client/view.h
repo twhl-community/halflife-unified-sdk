@@ -7,5 +7,7 @@
 
 #pragma once
 
+inline bool g_Paused = false;
+
 void V_StartPitchDrift();
 void V_StopPitchDrift();

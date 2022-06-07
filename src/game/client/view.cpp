@@ -18,6 +18,7 @@
 #include "shake.h"
 #include "hltv.h"
 #include "Exports.h"
+#include "view.h"
 
 int CL_IsThirdPerson();
 void CL_CameraOffset(float* ofs);
@@ -1612,8 +1613,8 @@ void V_CalcSpectatorRefdef(struct ref_params_s* pparams)
 
 	// write back new values into pparams
 	VectorCopy(v_cl_angles, pparams->cl_viewangles);
-	VectorCopy(v_angles, pparams->viewangles)
-		VectorCopy(v_origin, pparams->vieworg);
+	VectorCopy(v_angles, pparams->viewangles);
+	VectorCopy(v_origin, pparams->vieworg);
 }
 
 
@@ -1621,6 +1622,8 @@ void V_CalcSpectatorRefdef(struct ref_params_s* pparams)
 void DLLEXPORT V_CalcRefdef(struct ref_params_s* pparams)
 {
 	//	RecClCalcRefdef(pparams);
+
+	g_Paused = pparams->paused != 0;
 
 	// intermission / finale rendering
 	if (0 != pparams->intermission)

@@ -372,7 +372,7 @@ void OpenALMusicSystem::Update()
 				bytesRead = Read(dataBuffer, sizeof(dataBuffer));
 			}
 
-			if (bytesRead <= 0)
+			if (bytesRead == 0)
 			{
 				Stop();
 				return;
