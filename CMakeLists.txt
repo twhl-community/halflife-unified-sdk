@@ -112,18 +112,6 @@ set_target_properties(
 	PROPERTIES
 		FOLDER "Dependencies")
 
-if (UNIX)
-	function(set_32bit_compilation TARGET_NAME)
-		target_compile_options(${TARGET_NAME} PRIVATE -m32)
-		target_link_options(${TARGET_NAME} PRIVATE -m32)
-	endfunction()
-
-	set_32bit_compilation(spdlog)
-	#set_32bit_compilation(nlohmann_json) # Don't set it for this one, it's an INTERFACE library (header-only)
-	set_32bit_compilation(nlohmann_json_schema_validator)
-	set_32bit_compilation(angelscript)
-endif()
-
 # Sets properties common to all projects
 function(set_common_properties TARGET_NAME)
 	set_target_properties(${TARGET_NAME} PROPERTIES PREFIX "")
@@ -166,7 +154,7 @@ function(set_common_properties TARGET_NAME)
 		# Since the arch settings used are i686 this means including the setting ensures original settings are used,
 		# but it could cause problems for AMD targets
 		$<$<CXX_COMPILER_ID:Clang,AppleClang,GNU>:
-			-m32 -fpermissive -fno-strict-aliasing -Wno-invalid-offsetof -gdwarf-2 -g2 -march=pentium-m -mfpmath=387>
+			-fpermissive -fno-strict-aliasing -Wno-invalid-offsetof -gdwarf-2 -g2 -march=pentium-m -mfpmath=387>
 			
 		$<$<CXX_COMPILER_ID:MSVC>:
 			/W3 /MP>
@@ -178,7 +166,7 @@ function(set_common_properties TARGET_NAME)
 
 	target_link_options(${TARGET_NAME} PRIVATE
 		$<$<CXX_COMPILER_ID:Clang,AppleClang,GNU>:
-			-m32 -gdwarf-2 -g2>
+			-gdwarf-2 -g2>
 		$<$<PLATFORM_ID:Linux>:
 			-Wl,-Map,${TARGET_NAME}_map.txt>)
 	
