@@ -23,26 +23,18 @@ jobs:
           && sudo apt update
           && sudo apt install -y g++-11-multilib libgl1-mesa-dev:i386
       - name: Configure
-        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/cmake/LinuxToolchain.cmake -DCMAKE_COLOR_MAKEFILE=OFF -DBUILD_EXAMPLES=OFF -DBUILD_TESTS=OFF
+        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_INSTALL_PREFIX=${{env.GAME_NAME}}/${{env.GAME_NAME}} -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/cmake/LinuxToolchain.cmake -DCMAKE_COLOR_MAKEFILE=OFF -DBUILD_EXAMPLES=OFF -DBUILD_TESTS=OFF
       - name: Build
         env:
           MAKEFLAGS: "-j2"
-        run: CC=gcc-11 CXX=g++-11 cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
-      - name: Prepare artifacts
-        run: |
-          mkdir ${{env.GAME_NAME}}
-          mkdir ${{env.GAME_NAME}}/${{env.MOD_NAME}}
-          mkdir ${{env.GAME_NAME}}/${{env.MOD_NAME}}/cl_dlls
-          mkdir ${{env.GAME_NAME}}/${{env.MOD_NAME}}/dlls
-          mv build/src/game/client/client.so ${{env.GAME_NAME}}/${{env.MOD_NAME}}/cl_dlls
-          mv build/openal-soft-binary-dir/libopenal-${{env.MOD_NAME}}.so ${{env.GAME_NAME}}
-          mv build/src/game/server/server.so ${{env.GAME_NAME}}/${{env.MOD_NAME}}/dlls
+        run: >
+          cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+          && cmake --install ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
           name: Linux-x86
-          path: |
-            ${{env.GAME_NAME}}
+          path: ${{env.GAME_NAME}}
   win32:
     name: Win32
     runs-on: windows-latest
@@ -52,20 +44,13 @@ jobs:
         with:
           submodules: recursive
       - name: Configure
-        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -AWin32 -DBUILD_EXAMPLES=OFF -DBUILD_TESTS=OFF
+        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_INSTALL_PREFIX=${{env.GAME_NAME}}/${{env.GAME_NAME}} -AWin32 -DBUILD_EXAMPLES=OFF -DBUILD_TESTS=OFF
       - name: Build
-        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} -j2
-      - name: Prepare artifacts
-        run: |
-          mkdir ${{env.GAME_NAME}}/${{env.MOD_NAME}}
-          mkdir ${{env.GAME_NAME}}/${{env.MOD_NAME}}/cl_dlls
-          mkdir ${{env.GAME_NAME}}/${{env.MOD_NAME}}/dlls
-          mv build/src/game/client/Release/client.dll ${{env.GAME_NAME}}/${{env.MOD_NAME}}/cl_dlls
-          mv build/openal-soft-binary-dir/Release/openal-${{env.MOD_NAME}}.dll ${{env.GAME_NAME}}
-          mv build/src/game/server/Release/server.dll ${{env.GAME_NAME}}/${{env.MOD_NAME}}/dlls
+        run: >
+          cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} -j2
+          && cmake --install ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
           name: Win32
-          path: |
-            ${{env.GAME_NAME}}
+          path: ${{env.GAME_NAME}}
