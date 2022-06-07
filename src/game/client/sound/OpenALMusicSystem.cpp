@@ -256,7 +256,7 @@ void OpenALMusicSystem::Pause()
 
 	alSourcePause(m_Source.Id);
 
-	m_Paused = m_Playing.load();
+	m_Paused = true;
 	m_Playing = false;
 }
 
@@ -275,6 +275,7 @@ void OpenALMusicSystem::Resume()
 
 	alSourcePlay(m_Source.Id);
 
+	m_Paused = false;
 	m_Playing = true;
 }
 
