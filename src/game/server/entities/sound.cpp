@@ -832,8 +832,6 @@ enum class AmbientMusicCommand
 {
 	Play = 0,
 	Loop,
-	Pause,
-	Resume,
 	Fadeout,
 	Stop
 };
@@ -1059,8 +1057,6 @@ std::string CAmbientMusic::GetCommand() const
 		{
 		case AmbientMusicCommand::Play: return fmt::format("music play \"{}\"\n", STRING(m_FileName));
 		case AmbientMusicCommand::Loop: return fmt::format("music loop \"{}\"\n", STRING(m_FileName));
-		case AmbientMusicCommand::Pause: return fmt::format("music pause\n");
-		case AmbientMusicCommand::Resume: return fmt::format("music resume\n");
 		case AmbientMusicCommand::Fadeout: return fmt::format("music fadeout\n");
 		default:
 		case AmbientMusicCommand::Stop: return fmt::format("music stop\n");
