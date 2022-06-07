@@ -80,6 +80,9 @@ add_subdirectory(external/openal-soft
 	openal-soft-binary-dir
 	EXCLUDE_FROM_ALL)
 
+# Change the name to something that can't conflict with other things in the Half-Life directory.
+set_target_properties(OpenAL PROPERTIES OUTPUT_NAME "openal-${MOD_NAME}")
+
 option(LIBNYQUIST_BUILD_EXAMPLE "" OFF)
 add_subdirectory(external/libnyquist
 	libnyquist-binary-dir
@@ -240,8 +243,8 @@ if (MSVC)
 endif()
 
 install(TARGETS OpenAL
-	RUNTIME DESTINATION cl_dlls
-	LIBRARY DESTINATION cl_dlls)
+	RUNTIME DESTINATION ..
+	LIBRARY DESTINATION ..)
 
 # Set up the script that will copy the mod libraries to the HLDS directory
 if (NOT ${HalfLife_HLDS_DIRECTORY} STREQUAL "")
