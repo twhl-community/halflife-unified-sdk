@@ -21,11 +21,6 @@ project(HalfLifeMod
 	DESCRIPTION "Half-Life CMake Mod Template"
 	LANGUAGES CXX)
 
-if (UNIX)
-	# Mods are always 32 bit, so force this to use the i386 architecture
-	set(CMAKE_LIBRARY_ARCHITECTURE "i386-linux-gnu")
-endif()
-
 # Disable the use of absolute paths in library paths even in development builds.
 set(CMAKE_SKIP_BUILD_RPATH ON)
 
@@ -81,11 +76,6 @@ add_subdirectory(external/Angelscript/sdk/angelscript/projects/cmake
 	EXCLUDE_FROM_ALL)
 
 option(ALSOFT_UTILS "" OFF)
-# Disable SSE because it interferes with cross-compiling.
-option(ALSOFT_CPUEXT_SSE "" OFF)
-option(ALSOFT_CPUEXT_SSE2 "" OFF)
-option(ALSOFT_CPUEXT_SSE3 "" OFF)
-option(ALSOFT_CPUEXT_SSE4_1 "" OFF)
 add_subdirectory(external/openal-soft
 	openal-soft-binary-dir
 	EXCLUDE_FROM_ALL)
