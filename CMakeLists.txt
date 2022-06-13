@@ -78,7 +78,13 @@ add_subdirectory(external/Angelscript/sdk/angelscript/projects/cmake
 	Angelscript-binary-dir
 	EXCLUDE_FROM_ALL)
 
+# Turn off all non-essential stuff so it doesn't clog up the configuration log.
 option(ALSOFT_UTILS "" OFF)
+option(ALSOFT_EXAMPLES "" OFF)
+option(ALSOFT_INSTALL_CONFIG "" OFF)
+option(ALSOFT_INSTALL_HRTF_DATA "" OFF)
+option(ALSOFT_INSTALL_AMBDEC_PRESETS "" OFF)
+option(ALSOFT_INSTALL_EXAMPLES "" OFF)
 add_subdirectory(external/openal-soft
 	openal-soft-binary-dir
 	EXCLUDE_FROM_ALL)
