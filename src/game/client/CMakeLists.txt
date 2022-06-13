@@ -58,7 +58,8 @@ target_include_directories(client PRIVATE
 	../shared/player_movement
 	../shared/utils
 	../../engine
-	../../../utils/vgui/include)
+	../../../utils/vgui/include
+	${OPENGL_INCLUDE_DIR})
 	
 target_compile_definitions(client PRIVATE
 	CLIENT_DLL
@@ -68,7 +69,6 @@ target_link_libraries(client PRIVATE
 	vgui
 	$<$<PLATFORM_ID:Windows>:wsock32>
 	SDL2
-	OpenGL::GL
 	OpenAL
 	libnyquist)
 
