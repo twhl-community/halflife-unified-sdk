@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.21)
 
 # See https://cmake.org/cmake/help/latest/policy/CMP0063.html
-cmake_policy(SET CMP0063 NEW)
+set(CMAKE_POLICY_DEFAULT_CMP0063 NEW)
 
 if (MSVC)
 	set(CMAKE_SYSTEM_VERSION 10.0)
