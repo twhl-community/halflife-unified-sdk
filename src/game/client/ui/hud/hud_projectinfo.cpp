@@ -122,8 +122,5 @@ bool CHudProjectInfo::MsgFunc_ProjectInfo(const char* pszName, int iSize, void* 
 	m_ServerInfo.TagName = READ_STRING();
 	m_ServerInfo.CommitHash = READ_STRING();
 
-	m_ServerInfo.MajorVersion = 2;
-	m_ServerInfo.CommitHash[0] = 'f';
-
 	return true;
 }
