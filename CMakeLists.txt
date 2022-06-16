@@ -152,6 +152,17 @@ execute_process(
     OUTPUT_VARIABLE UNIFIED_SDK_GIT_COMMIT_HASH
     OUTPUT_STRIP_TRAILING_WHITESPACE)
 
+execute_process(
+    COMMAND git status --porcelain=v1
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    OUTPUT_VARIABLE UNIFIED_SDK_GIT_STATUS_RESULT
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+# Mark commit as dirty if there are uncommitted changes.
+if (NOT UNIFIED_SDK_GIT_STATUS_RESULT STREQUAL "")
+	set(UNIFIED_SDK_GIT_COMMIT_HASH "${UNIFIED_SDK_GIT_COMMIT_HASH}-dirty")
+endif()
+
 configure_file(
 	src/game/shared/ProjectInfo.h.in
 	${CMAKE_BINARY_DIR}/ProjectInfo.h
