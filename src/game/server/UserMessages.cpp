@@ -78,4 +78,6 @@ void LinkUserMessages()
 	gmsgTeamFull = g_engfuncs.pfnRegUserMsg("TeamFull", 1);
 	gmsgCustomIcon = g_engfuncs.pfnRegUserMsg("CustomIcon", -1);
 	gmsgWeapons = REG_USER_MSG("Weapons", 8);
+	
+	gmsgProjectInfo = REG_USER_MSG("ProjectInfo", -1);
 }

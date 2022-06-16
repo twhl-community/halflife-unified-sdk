@@ -22,7 +22,9 @@
 #include "cbase.h"
 #include "client.h"
 #include "CServerLibrary.h"
+#include "ProjectInfo.h"
 #include "skill.h"
+#include "UserMessages.h"
 
 #include "config/GameConfigDefinition.h"
 #include "config/GameConfigLoader.h"
@@ -120,6 +122,16 @@ void CServerLibrary::PostMapActivate()
 
 void CServerLibrary::PlayerActivating(CBasePlayer* player)
 {
+	MESSAGE_BEGIN(MSG_ONE, gmsgProjectInfo, nullptr, player->edict());
+	WRITE_LONG(UnifiedSDKVersionMajor);
+	WRITE_LONG(UnifiedSDKVersionMinor);
+	WRITE_LONG(UnifiedSDKVersionPatch);
+
+	WRITE_STRING(UnifiedSDKGitBranchName);
+	WRITE_STRING(UnifiedSDKGitTagName);
+	WRITE_STRING(UnifiedSDKGitCommitHash);
+	MESSAGE_END();
+
 	//Override the hud color.
 	if (m_MapState.m_HudColor)
 	{

@@ -627,6 +627,36 @@ public:
 	void GetAllPlayersInfo();
 };
 
+/**
+*	@brief Displays info about this project on the HUD.
+*/
+class CHudProjectInfo : public CHudBase
+{
+public:
+	bool Init() override;
+	bool VidInit() override;
+	bool Draw(float flTime) override;
+
+	bool MsgFunc_ProjectInfo(const char* pszName, int iSize, void* pbuf);
+
+private:
+	struct LibraryInfo
+	{
+		int MajorVersion = -1;
+		int MinorVersion = -1;
+		int PatchVersion = -1;
+
+		std::string BranchName;
+		std::string TagName;
+		std::string CommitHash;
+	};
+
+	cvar_t* m_ShowProjectInfo = nullptr;
+
+	LibraryInfo m_ClientInfo;
+	LibraryInfo m_ServerInfo;
+};
+
 class CHud
 {
 private:
@@ -730,6 +760,8 @@ public:
 
 	CHudFlagIcons m_FlagIcons;
 	CHudPlayerBrowse m_PlayerBrowse;
+
+	CHudProjectInfo m_ProjectInfo;
 
 	void Init();
 	void VidInit();

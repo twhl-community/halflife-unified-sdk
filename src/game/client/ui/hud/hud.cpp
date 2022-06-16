@@ -406,6 +406,7 @@ void CHud::Init()
 	m_StatusIcons.Init();
 	m_FlagIcons.Init();
 	m_PlayerBrowse.Init();
+	m_ProjectInfo.Init();
 	GetClientVoiceMgr()->Init(&g_VoiceStatusHelper, (vgui::Panel**)&gViewPort);
 
 	m_Menu.Init();
@@ -557,6 +558,7 @@ void CHud::VidInit()
 	m_StatusIcons.VidInit();
 	m_FlagIcons.VidInit();
 	m_PlayerBrowse.VidInit();
+	m_ProjectInfo.VidInit();
 	GetClientVoiceMgr()->VidInit();
 }
 

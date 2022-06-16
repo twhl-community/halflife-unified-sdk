@@ -20,7 +20,7 @@ set(HalfLife_SERVER_LIB_NAME server)
 #
 
 project(HalfLifeMod
-	VERSION 1.0
+	VERSION 1.0.0
 	DESCRIPTION "Half-Life CMake Mod Template"
 	LANGUAGES CXX)
 
@@ -40,6 +40,16 @@ cmake_path(GET CMAKE_INSTALL_PREFIX STEM MOD_NAME)
 
 # All Half-Life specific commands are prefixed with HalfLife so they show up in the same group in the CMake GUI
 set(HalfLife_HLDS_DIRECTORY "" CACHE PATH "Path to the Half-Life Dedicated Server directory. Must be specified to automatically set up dedicated server debugging settings and to copy libraries")
+
+# Default to Release so this doesn't confuse people when they're making quick mods.
+set(RELEASE_TYPE Alpha Beta Release)
+set(HalfLife_RELEASE_TYPE "Release" CACHE STRING "What type of release you're building")
+set_property(CACHE HalfLife_RELEASE_TYPE PROPERTY STRINGS ${RELEASE_TYPE})
+
+list(FIND RELEASE_TYPE "${HalfLife_RELEASE_TYPE}" RELEASE_TYPE_INDEX)
+if(RELEASE_TYPE_INDEX EQUAL -1)
+	message(FATAL_ERROR "HalfLife_RELEASE_TYPE must be one of: ${RELEASE_TYPE}")
+endif()
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -114,6 +124,39 @@ set_target_properties(
 	PROPERTIES
 		FOLDER "Dependencies")
 
+# Generate DebugInfo.h with appropriate information.
+
+# Get the current working branch
+execute_process(
+    COMMAND git rev-parse --abbrev-ref HEAD
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    OUTPUT_VARIABLE UNIFIED_SDK_GIT_BRANCH
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+# Get the latest tag name
+execute_process(
+    COMMAND git describe --abbrev=0 --tags
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    OUTPUT_VARIABLE UNIFIED_SDK_GIT_TAG
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+# This can happen if there are no tags in the repository, so provide a suitable fallback.
+if (UNIFIED_SDK_GIT_TAG STREQUAL "")
+	set(UNIFIED_SDK_GIT_TAG "None (No tags found)")
+endif()
+
+# Get the latest commit hash
+execute_process(
+    COMMAND git rev-parse HEAD
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    OUTPUT_VARIABLE UNIFIED_SDK_GIT_COMMIT_HASH
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+configure_file(
+	src/game/shared/ProjectInfo.h.in
+	${CMAKE_BINARY_DIR}/ProjectInfo.h
+	@ONLY)
+
 # Sets properties common to all projects
 function(set_common_properties TARGET_NAME)
 	set_target_properties(${TARGET_NAME} PROPERTIES PREFIX "")
@@ -136,7 +179,8 @@ function(set_common_properties TARGET_NAME)
 		$<$<PLATFORM_ID:Darwin>:
 			OSX
 			_OSX
-		>)
+		>
+		UNIFIED_SDK_CONFIG="$<CONFIG>")
 		
 	target_link_libraries(${TARGET_NAME} PRIVATE
 		angelscript
@@ -146,6 +190,7 @@ function(set_common_properties TARGET_NAME)
 	
 	# TODO: should be fixed in Angelscript's CMake project
 	target_include_directories(${TARGET_NAME} PRIVATE
+		${CMAKE_BINARY_DIR}
 		${CMAKE_CURRENT_FUNCTION_LIST_DIR}/external/Angelscript/sdk/angelscript/include
 		${CMAKE_CURRENT_FUNCTION_LIST_DIR}/external/Angelscript/sdk/add_on)
 
@@ -187,6 +232,10 @@ endfunction()
 
 add_subdirectory(src/game/client)
 add_subdirectory(src/game/server)
+
+# Add generated files now so it doesn't cause source_group to fail.
+target_sources(client PRIVATE ${CMAKE_BINARY_DIR}/ProjectInfo.h)
+target_sources(${HalfLife_SERVER_LIB_NAME} PRIVATE ${CMAKE_BINARY_DIR}/ProjectInfo.h)
 
 # Set Visual Studio starting project
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT client)
