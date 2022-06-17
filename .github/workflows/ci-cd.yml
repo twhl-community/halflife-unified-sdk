@@ -25,10 +25,8 @@ jobs:
       - name: Configure
         run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_INSTALL_PREFIX=${{env.GAME_NAME}}/${{env.MOD_NAME}} -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/cmake/LinuxToolchain.cmake
       - name: Build
-        env:
-          MAKEFLAGS: "-j2"
         run: >
-          cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+          cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} -j2
           && cmake --install ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
