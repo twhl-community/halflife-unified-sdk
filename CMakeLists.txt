@@ -65,6 +65,7 @@ set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 
 # Find dependencies
 find_package(Threads REQUIRED)
+find_package(Git REQUIRED)
 
 option(SPDLOG_BUILD_TESTS "" OFF)
 option(SPDLOG_BUILD_TESTS_HO "" OFF)
@@ -128,14 +129,14 @@ set_target_properties(
 
 # Get the current working branch
 execute_process(
-    COMMAND git rev-parse --abbrev-ref HEAD
+    COMMAND ${GIT_EXECUTABLE} rev-parse --abbrev-ref HEAD
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
     OUTPUT_VARIABLE UNIFIED_SDK_GIT_BRANCH
     OUTPUT_STRIP_TRAILING_WHITESPACE)
 
 # Get the latest tag name
 execute_process(
-    COMMAND git describe --abbrev=0 --tags
+    COMMAND ${GIT_EXECUTABLE} describe --abbrev=0 --tags
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
     OUTPUT_VARIABLE UNIFIED_SDK_GIT_TAG
     OUTPUT_STRIP_TRAILING_WHITESPACE)
@@ -147,13 +148,13 @@ endif()
 
 # Get the latest commit hash
 execute_process(
-    COMMAND git rev-parse HEAD
+    COMMAND ${GIT_EXECUTABLE} rev-parse HEAD
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
     OUTPUT_VARIABLE UNIFIED_SDK_GIT_COMMIT_HASH
     OUTPUT_STRIP_TRAILING_WHITESPACE)
 
 execute_process(
-    COMMAND git status --porcelain=v1
+    COMMAND ${GIT_EXECUTABLE} status --porcelain=v1
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
     OUTPUT_VARIABLE UNIFIED_SDK_GIT_STATUS_RESULT
     OUTPUT_STRIP_TRAILING_WHITESPACE)
