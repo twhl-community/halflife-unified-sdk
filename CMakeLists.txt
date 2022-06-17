@@ -73,14 +73,15 @@ option(SPDLOG_ENABLE_PCH "" ON)
 add_subdirectory(external/spdlog
 	spdlog-binary-dir
 	EXCLUDE_FROM_ALL)
-	
+
 option(JSON_BuildTests "" OFF)
 option(JSON_MultipleHeaders "" ON)
 add_subdirectory(external/json
 	json-binary-dir
 	EXCLUDE_FROM_ALL)
 
-option(JSON_VALIDATOR_BUILD_TESTS "" OFF)
+option(BUILD_EXAMPLES "" OFF)
+option(BUILD_TESTS "" OFF)
 add_subdirectory(external/json-schema-validator
 	json-validator-binary-dir
 	EXCLUDE_FROM_ALL)
