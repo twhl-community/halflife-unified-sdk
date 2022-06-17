@@ -17,11 +17,11 @@ jobs:
         with:
           submodules: recursive
       - name: Install G++ Multilib & 32 bit OpenGL library
-        run: >
+        run: |
           sudo dpkg --add-architecture i386
-          && sudo add-apt-repository ppa:ubuntu-toolchain-r/test
-          && sudo apt update
-          && sudo apt install -y g++-11-multilib libgl1-mesa-dev:i386
+          sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+          sudo apt update
+          sudo apt install -y g++-11-multilib libgl1-mesa-dev:i386
       - name: Configure
         run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_INSTALL_PREFIX=${{env.GAME_NAME}}/${{env.MOD_NAME}} -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/cmake/LinuxToolchain.cmake
       - name: Build
