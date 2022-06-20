@@ -6,7 +6,7 @@
 	"dependencies": [
 		{
 			"name": "spdlog",
-			"version>=": "1.10.0",
+			"version>=": "1.10.0#1",
 			"default-features": false
 		},
 		{
@@ -16,7 +16,7 @@
 		},
 		{
 			"name": "angelscript",
-			"version>=": "2.35.1",
+			"version>=": "2.35.1#1",
 			"default-features": false,
 			"features": ["addons"]
 		},

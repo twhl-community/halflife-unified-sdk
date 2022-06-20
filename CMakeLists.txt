@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.21)
+cmake_minimum_required(VERSION 3.23)
 
 # See https://cmake.org/cmake/help/latest/policy/CMP0063.html
 set(CMAKE_POLICY_DEFAULT_CMP0063 NEW)
@@ -7,7 +7,6 @@ if (MSVC)
 	set(CMAKE_SYSTEM_VERSION 10.0)
 endif()
 
-set(VCPKG_MANIFEST_DIR ${CMAKE_SOURCE_DIR}/vcpkg_config)
 set(VCPKG_OVERLAY_TRIPLETS ${CMAKE_SOURCE_DIR}/vcpkg_config/triplets)
 
 #
