@@ -276,6 +276,8 @@ if (MSVC)
 	install(FILES $<TARGET_PDB_FILE:client> DESTINATION cl_dlls OPTIONAL)
 	install(FILES $<TARGET_PDB_FILE:${HalfLife_SERVER_LIB_NAME}> DESTINATION dlls OPTIONAL)
 	
+	# Copy the OpenAL library on Windows only.
+	# On Linux OpenAL is loaded by Miles Sound System, and the Steam runtime provides this library.
 	# CMake doesn't currently support installing imported libraries of type UNKNOWN.
 	# See https://gitlab.kitware.com/cmake/cmake/-/issues/22406
 	#install(IMPORTED_RUNTIME_ARTIFACTS OpenAL::OpenAL
