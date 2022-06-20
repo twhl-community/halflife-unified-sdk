@@ -67,6 +67,7 @@ target_compile_definitions(client PRIVATE
 	
 target_link_libraries(client PRIVATE
 	vgui
+	$<$<PLATFORM_ID:Windows>:delayimp>
 	$<$<PLATFORM_ID:Windows>:wsock32>
 	SDL2
 	OpenAL::OpenAL
@@ -79,8 +80,8 @@ if (UNIX)
 endif()
 
 target_link_options(client PRIVATE
-	$<$<PLATFORM_ID:Darwin>:
-		-framework Carbon>)
+	$<$<PLATFORM_ID:Windows>:/DELAYLOAD:OpenAL32.dll>
+	$<$<PLATFORM_ID:Darwin>:-framework Carbon>)
 
 target_sources(client PRIVATE
 	CClientLibrary.cpp
@@ -90,6 +91,7 @@ target_sources(client PRIVATE
 	cl_util.h
 	com_weapons.cpp
 	com_weapons.h
+	$<$<PLATFORM_ID:Windows>:DelayLoad.cpp>
 	demo.cpp
 	demo.h
 	entity.cpp
