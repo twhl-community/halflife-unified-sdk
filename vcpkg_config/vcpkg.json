@@ -1,0 +1,29 @@
+{
+	"$schema": "https://raw.githubusercontent.com/microsoft/vcpkg/master/scripts/vcpkg.schema.json",
+	"name": "halflife-unified-sdk",
+	"version-semver": "0.1.0",
+	"builtin-baseline": "b49b2bdf22559c89eddbf29a29621a1dc6929320",
+	"dependencies": [
+		{
+			"name": "spdlog",
+			"version>=": "1.10.0",
+			"default-features": false
+		},
+		{
+			"name": "nlohmann-json",
+			"version>=": "3.10.5#3",
+			"default-features": false
+		},
+		{
+			"name": "angelscript",
+			"version>=": "2.35.1",
+			"default-features": false,
+			"features": ["addons"]
+		},
+		{
+			"name": "openal-soft",
+			"version>=": "1.21.1#5",
+			"default-features": false
+		}
+  ]
+}

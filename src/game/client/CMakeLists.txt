@@ -69,7 +69,7 @@ target_link_libraries(client PRIVATE
 	vgui
 	$<$<PLATFORM_ID:Windows>:wsock32>
 	SDL2
-	OpenAL
+	OpenAL::OpenAL
 	libnyquist)
 
 if (UNIX)

@@ -7,6 +7,9 @@ if (MSVC)
 	set(CMAKE_SYSTEM_VERSION 10.0)
 endif()
 
+set(VCPKG_MANIFEST_DIR ${CMAKE_SOURCE_DIR}/vcpkg_config)
+set(VCPKG_OVERLAY_TRIPLETS ${CMAKE_SOURCE_DIR}/vcpkg_config/triplets)
+
 #
 # Mod-specific configuration.
 #
@@ -67,42 +70,16 @@ set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 find_package(Threads REQUIRED)
 find_package(Git REQUIRED)
 
-option(SPDLOG_BUILD_TESTS "" OFF)
-option(SPDLOG_BUILD_TESTS_HO "" OFF)
-option(SPDLOG_ENABLE_PCH "" ON)
-add_subdirectory(external/spdlog
-	spdlog-binary-dir
-	EXCLUDE_FROM_ALL)
-
-option(JSON_BuildTests "" OFF)
-option(JSON_MultipleHeaders "" ON)
-add_subdirectory(external/json
-	json-binary-dir
-	EXCLUDE_FROM_ALL)
+find_package(spdlog CONFIG REQUIRED)
+find_package(nlohmann_json CONFIG REQUIRED)
+find_package(Angelscript CONFIG REQUIRED)
+find_package(OpenAL CONFIG REQUIRED)
 
 option(BUILD_EXAMPLES "" OFF)
 option(BUILD_TESTS "" OFF)
 add_subdirectory(external/json-schema-validator
 	json-validator-binary-dir
 	EXCLUDE_FROM_ALL)
-
-add_subdirectory(external/Angelscript/sdk/angelscript/projects/cmake
-	Angelscript-binary-dir
-	EXCLUDE_FROM_ALL)
-
-# Turn off all non-essential stuff so it doesn't clog up the configuration log.
-option(ALSOFT_UTILS "" OFF)
-option(ALSOFT_EXAMPLES "" OFF)
-option(ALSOFT_INSTALL_CONFIG "" OFF)
-option(ALSOFT_INSTALL_HRTF_DATA "" OFF)
-option(ALSOFT_INSTALL_AMBDEC_PRESETS "" OFF)
-option(ALSOFT_INSTALL_EXAMPLES "" OFF)
-add_subdirectory(external/openal-soft
-	openal-soft-binary-dir
-	EXCLUDE_FROM_ALL)
-
-# Change the name to something that can't conflict with other things in the Half-Life directory.
-set_target_properties(OpenAL PROPERTIES OUTPUT_NAME "openal-${MOD_NAME}")
 
 option(LIBNYQUIST_BUILD_EXAMPLE "" OFF)
 add_subdirectory(external/libnyquist
@@ -111,17 +88,9 @@ add_subdirectory(external/libnyquist
 
 # Enable multithreaded building to speed up building these a bit.
 target_compile_options(nlohmann_json_schema_validator PRIVATE $<$<CXX_COMPILER_ID:MSVC>:/MP>)
-target_compile_options(angelscript PRIVATE $<$<CXX_COMPILER_ID:MSVC>:/MP>)
-target_compile_options(OpenAL PRIVATE $<$<CXX_COMPILER_ID:MSVC>:/MP>)
 
 set_target_properties(
-	spdlog
-	nlohmann_json
 	nlohmann_json_schema_validator
-	angelscript
-	build_version
-	common
-	OpenAL
 	libnyquist
 	PROPERTIES
 		FOLDER "Dependencies")
@@ -196,16 +165,13 @@ function(set_common_properties TARGET_NAME)
 		UNIFIED_SDK_CONFIG="$<CONFIG>")
 		
 	target_link_libraries(${TARGET_NAME} PRIVATE
-		angelscript
+		Angelscript::angelscript
 		spdlog::spdlog
 		Threads::Threads
 		${CMAKE_DL_LIBS})
 	
-	# TODO: should be fixed in Angelscript's CMake project
 	target_include_directories(${TARGET_NAME} PRIVATE
-		${CMAKE_BINARY_DIR}
-		${CMAKE_CURRENT_FUNCTION_LIST_DIR}/external/Angelscript/sdk/angelscript/include
-		${CMAKE_CURRENT_FUNCTION_LIST_DIR}/external/Angelscript/sdk/add_on)
+		${CMAKE_BINARY_DIR})
 
 	# TODO: review Linux compiler flags
 	target_compile_options(${TARGET_NAME} PRIVATE
@@ -232,9 +198,7 @@ function(set_common_properties TARGET_NAME)
 	
 	target_sources(${TARGET_NAME}
 		PRIVATE
-			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/src/game/UnifiedSDK.natvis
-			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/external/Angelscript/sdk/add_on/scriptstdstring/scriptstdstring.cpp
-			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/external/Angelscript/sdk/add_on/scriptstdstring/scriptstdstring.h)
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/src/game/UnifiedSDK.natvis)
 endfunction()
 
 function(add_json_dependencies target)
@@ -311,11 +275,14 @@ install(FILES
 if (MSVC)
 	install(FILES $<TARGET_PDB_FILE:client> DESTINATION cl_dlls OPTIONAL)
 	install(FILES $<TARGET_PDB_FILE:${HalfLife_SERVER_LIB_NAME}> DESTINATION dlls OPTIONAL)
+	
+	# CMake doesn't currently support installing imported libraries of type UNKNOWN.
+	# See https://gitlab.kitware.com/cmake/cmake/-/issues/22406
+	#install(IMPORTED_RUNTIME_ARTIFACTS OpenAL::OpenAL
+	#	RUNTIME DESTINATION cl_dlls)
+	
+	install(FILES $<TARGET_FILE:OpenAL::OpenAL> DESTINATION cl_dlls)
 endif()
-
-install(TARGETS OpenAL
-	RUNTIME DESTINATION ..
-	LIBRARY DESTINATION ..)
 
 # Set up the script that will copy the mod libraries to the HLDS directory
 if (NOT ${HalfLife_HLDS_DIRECTORY} STREQUAL "")

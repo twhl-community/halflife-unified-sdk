@@ -15,7 +15,7 @@
 
 #include <angelscript.h>
 
-#include <scriptstdstring/scriptstdstring.h>
+#include <angelscript/scriptstdstring/scriptstdstring.h>
 
 #include "GameConfigConditionals.h"
 
