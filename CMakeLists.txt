@@ -134,8 +134,8 @@ execute_process(
     OUTPUT_VARIABLE UNIFIED_SDK_GIT_STATUS_RESULT
     OUTPUT_STRIP_TRAILING_WHITESPACE)
 
-# Mark commit as dirty if there are uncommitted changes.
-if (NOT UNIFIED_SDK_GIT_STATUS_RESULT STREQUAL "")
+# If not performing a CI build, mark commit as dirty if there are uncommitted changes.
+if (NOT "$ENV{CI}" AND NOT UNIFIED_SDK_GIT_STATUS_RESULT STREQUAL "")
 	set(UNIFIED_SDK_GIT_COMMIT_HASH "${UNIFIED_SDK_GIT_COMMIT_HASH}-dirty")
 endif()
 
