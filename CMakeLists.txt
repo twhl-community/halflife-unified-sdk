@@ -177,7 +177,6 @@ function(set_common_properties TARGET_NAME)
 		$<$<PLATFORM_ID:Darwin>:-Qunused-arguments -mmacosx-version-min=10.5 -fasm-blocks -arch i386 -march=prescott -momit-leaf-frame-pointer -mtune=core2>)
 
 	target_link_options(${TARGET_NAME} PRIVATE
-		$<$<CXX_COMPILER_ID:Clang,AppleClang,GNU>:-gdwarf-2 -g2>
 		$<$<PLATFORM_ID:Linux>:-Wl,-Map,${TARGET_NAME}_map.txt>)
 	
 	target_sources(${TARGET_NAME}
