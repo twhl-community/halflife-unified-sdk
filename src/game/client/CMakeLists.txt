@@ -3,13 +3,11 @@ include(../shared/game_shared.cmake)
 if (UNIX)
 	# Copy libraries provided by the game to the build directory so we can point the compiler and linker to the files.
 	configure_file(../../../utils/vgui/lib/linux/vgui${CMAKE_SHARED_LIBRARY_SUFFIX} ${CMAKE_CURRENT_BINARY_DIR}/vgui${CMAKE_SHARED_LIBRARY_SUFFIX} COPYONLY)
-	
 	configure_file(../../../external/SDL2/lib/libSDL2-2.0${CMAKE_SHARED_LIBRARY_SUFFIX}.0 ${CMAKE_CURRENT_BINARY_DIR}/libSDL2-2.0${CMAKE_SHARED_LIBRARY_SUFFIX}.0 COPYONLY)
 endif()
 
 find_package(OpenGL REQUIRED)
 
-# Set up vgui library
 add_library(vgui SHARED IMPORTED)
 
 if (WIN32)
@@ -20,7 +18,6 @@ endif()
 
 target_include_directories(vgui INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/../../../utils/vgui/include)
 
-# Set up SDL2 library
 add_library(SDL2 SHARED IMPORTED)
 
 if (WIN32)
@@ -31,7 +28,6 @@ endif()
 
 target_include_directories(SDL2 INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/../../../external/SDL2/include)
 
-# Client library
 add_library(client SHARED)
 
 set_common_properties(client)
@@ -74,8 +70,7 @@ target_link_libraries(client PRIVATE
 
 if (UNIX)
 	# Tell the linker to search for vgui.so and SDL2-2.0.so.0 in here
-	target_link_directories(client PRIVATE
-		${CMAKE_CURRENT_BINARY_DIR})
+	target_link_directories(client PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 endif()
 
 target_link_options(client PRIVATE
@@ -279,10 +274,7 @@ target_sources(client PRIVATE
 
 add_game_shared_sources(client)
 
-target_precompile_headers(client
-	PRIVATE
-		ui/hud/hud.h)
+target_precompile_headers(client PRIVATE ui/hud/hud.h)
 
-# Create filters
 get_target_property(CLIENT_SOURCES client SOURCES)
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}../../../.. FILES ${CLIENT_SOURCES})

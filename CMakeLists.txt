@@ -1,8 +1,5 @@
 cmake_minimum_required(VERSION 3.23)
 
-# See https://cmake.org/cmake/help/latest/policy/CMP0063.html
-set(CMAKE_POLICY_DEFAULT_CMP0063 NEW)
-
 if (MSVC)
 	set(CMAKE_SYSTEM_VERSION 10.0)
 endif()
@@ -127,10 +124,7 @@ if (NOT "$ENV{CI}" AND NOT UNIFIED_SDK_GIT_STATUS_RESULT STREQUAL "")
 	set(UNIFIED_SDK_GIT_COMMIT_HASH "${UNIFIED_SDK_GIT_COMMIT_HASH}-dirty")
 endif()
 
-configure_file(
-	src/game/shared/ProjectInfo.h.in
-	${CMAKE_BINARY_DIR}/ProjectInfo.h
-	@ONLY)
+configure_file(src/game/shared/ProjectInfo.h.in ${CMAKE_BINARY_DIR}/ProjectInfo.h @ONLY)
 
 # Sets properties common to all projects
 function(set_common_properties TARGET_NAME)
@@ -174,22 +168,17 @@ function(set_common_properties TARGET_NAME)
 		# Note: the pentium-m arch setting is not used for AMD systems in the original makefile
 		# Since the arch settings used are i686 this means including the setting ensures original settings are used,
 		# but it could cause problems for AMD targets
-		$<$<CXX_COMPILER_ID:Clang,AppleClang,GNU>:
-			-fpermissive -fno-strict-aliasing -Wno-invalid-offsetof -gdwarf-2 -g2 -march=pentium-m -mfpmath=387>
+		$<$<CXX_COMPILER_ID:Clang,AppleClang,GNU>:-fpermissive -fno-strict-aliasing -Wno-invalid-offsetof -gdwarf-2 -g2 -march=pentium-m -mfpmath=387>
 			
-		$<$<CXX_COMPILER_ID:MSVC>:
-			/W3 /MP>
+		$<$<CXX_COMPILER_ID:MSVC>:/W3 /MP>
 			
 		# These are all from the original Makefile
 		# They have not been tested with CMake since there is no Mac system available to test on, so this might not work
-		$<$<PLATFORM_ID:Darwin>:
-			-fvisibility=hidden -Qunused-arguments -mmacosx-version-min=10.5 -fasm-blocks -arch i386 -march=prescott -momit-leaf-frame-pointer -mtune=core2>)
+		$<$<PLATFORM_ID:Darwin>:-fvisibility=hidden -Qunused-arguments -mmacosx-version-min=10.5 -fasm-blocks -arch i386 -march=prescott -momit-leaf-frame-pointer -mtune=core2>)
 
 	target_link_options(${TARGET_NAME} PRIVATE
-		$<$<CXX_COMPILER_ID:Clang,AppleClang,GNU>:
-			-gdwarf-2 -g2>
-		$<$<PLATFORM_ID:Linux>:
-			-Wl,-Map,${TARGET_NAME}_map.txt>)
+		$<$<CXX_COMPILER_ID:Clang,AppleClang,GNU>:-gdwarf-2 -g2>
+		$<$<PLATFORM_ID:Linux>:-Wl,-Map,${TARGET_NAME}_map.txt>)
 	
 	target_sources(${TARGET_NAME}
 		PRIVATE

@@ -1,7 +1,5 @@
-# Server library
 include(../shared/game_shared.cmake)
 
-# Add the def file as well
 add_library(server SHARED $<$<PLATFORM_ID:Windows>:server.def>)
 
 set_common_properties(server)
@@ -276,10 +274,7 @@ target_sources(server PRIVATE
 
 add_game_shared_sources(server)
 
-target_precompile_headers(server
-	PRIVATE
-		entities/cbase.h)
+target_precompile_headers(server PRIVATE entities/cbase.h)
 
-# Create filters
 get_target_property(SERVER_SOURCES server SOURCES)
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/../../.. FILES ${SERVER_SOURCES})
