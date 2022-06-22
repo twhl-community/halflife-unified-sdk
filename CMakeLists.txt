@@ -11,8 +11,17 @@ project(HalfLifeMod
 	DESCRIPTION "Half-Life CMake Mod Template"
 	LANGUAGES CXX)
 
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
 # Disable the use of absolute paths in library paths even in development builds.
 set(CMAKE_SKIP_BUILD_RPATH ON)
+
+# Link statically with the runtime
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+
+# Because we have 2 libraries that use the same symbols we have to default visibility to hidden so there are no collisions,
+# and so the symbols don't merge and cause problems like server code calling the client version of a function.
+set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 
 # Get the Half-Life directory and mod name from the install path
 cmake_path(HAS_PARENT_PATH CMAKE_INSTALL_PREFIX HAS_HALFLIFE_DIRECTORY)
@@ -37,15 +46,6 @@ list(FIND RELEASE_TYPE "${HalfLife_RELEASE_TYPE}" RELEASE_TYPE_INDEX)
 if(RELEASE_TYPE_INDEX EQUAL -1)
 	message(FATAL_ERROR "HalfLife_RELEASE_TYPE must be one of: ${RELEASE_TYPE}")
 endif()
-
-set_property(GLOBAL PROPERTY USE_FOLDERS ON)
-
-# Link statically with the runtime
-set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-
-# Because we have 2 libraries that use the same symbols we have to default visibility to hidden so there are no collisions,
-# and so the symbols don't merge and cause problems like server code calling the client version of a function.
-set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 
 # Find dependencies
 find_package(Threads REQUIRED)
