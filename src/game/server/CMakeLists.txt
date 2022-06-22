@@ -9,7 +9,6 @@ endif()
 add_library(${HalfLife_SERVER_LIB_NAME} SHARED $<$<PLATFORM_ID:Windows>:${CMAKE_CURRENT_BINARY_DIR}/server.def>)
 
 set_common_properties(${HalfLife_SERVER_LIB_NAME})
-add_json_dependencies(${HalfLife_SERVER_LIB_NAME})
 
 target_include_directories(${HalfLife_SERVER_LIB_NAME} PRIVATE
 	${CMAKE_CURRENT_SOURCE_DIR}

@@ -167,7 +167,9 @@ function(set_common_properties TARGET_NAME)
 		Angelscript::angelscript
 		spdlog::spdlog
 		Threads::Threads
-		${CMAKE_DL_LIBS})
+		${CMAKE_DL_LIBS}
+		nlohmann_json
+		nlohmann_json_schema_validator)
 	
 	target_include_directories(${TARGET_NAME} PRIVATE
 		${CMAKE_BINARY_DIR})
@@ -198,12 +200,6 @@ function(set_common_properties TARGET_NAME)
 	target_sources(${TARGET_NAME}
 		PRIVATE
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/src/game/UnifiedSDK.natvis)
-endfunction()
-
-function(add_json_dependencies target)
-	target_link_libraries(${target}
-		PRIVATE
-			nlohmann_json_schema_validator)
 endfunction()
 
 add_subdirectory(src/game/client)
