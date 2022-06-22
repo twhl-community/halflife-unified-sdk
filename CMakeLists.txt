@@ -113,7 +113,6 @@ else()
 		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 		OUTPUT_VARIABLE UNIFIED_SDK_GIT_TAG
 		OUTPUT_STRIP_TRAILING_WHITESPACE
-		OUTPUT_QUIET
 		ERROR_QUIET)
 		
 	# This can happen if there are no tags in the repository, so provide a suitable fallback.
