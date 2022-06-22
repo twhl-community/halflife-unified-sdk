@@ -1,4 +1,4 @@
-LIBRARY @HalfLife_SERVER_LIB_NAME@
+LIBRARY server
 EXPORTS
 	GiveFnptrsToDll			@1
 SECTIONS

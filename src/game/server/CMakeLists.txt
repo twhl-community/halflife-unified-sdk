@@ -1,12 +1,8 @@
 # Server library
 include(../shared/game_shared.cmake)
 
-if (WIN32)
-	configure_file(server.def.in ${CMAKE_CURRENT_BINARY_DIR}/server.def @ONLY)
-endif()
-
 # Add the def file as well
-add_library(server SHARED $<$<PLATFORM_ID:Windows>:${CMAKE_CURRENT_BINARY_DIR}/server.def>)
+add_library(server SHARED $<$<PLATFORM_ID:Windows>:server.def>)
 
 set_common_properties(server)
 
