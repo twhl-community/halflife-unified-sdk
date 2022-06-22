@@ -103,21 +103,23 @@ execute_process(
     OUTPUT_VARIABLE UNIFIED_SDK_GIT_BRANCH
     OUTPUT_STRIP_TRAILING_WHITESPACE)
 
-# Get the latest tag name
-execute_process(
-    COMMAND ${GIT_EXECUTABLE} describe --abbrev=0 --tags
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-    OUTPUT_VARIABLE UNIFIED_SDK_GIT_TAG
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-	OUTPUT_QUIET
-	ERROR_QUIET)
-
 # CI builds don't fetch tags so this should have a sensible value.
 if ($ENV{CI})
 	set(UNIFIED_SDK_GIT_TAG "CI build")
-# This can happen if there are no tags in the repository, so provide a suitable fallback.
-elseif (UNIFIED_SDK_GIT_TAG STREQUAL "")
-	set(UNIFIED_SDK_GIT_TAG "None (No tags found)")
+else()
+	# Get the latest tag name
+	execute_process(
+		COMMAND ${GIT_EXECUTABLE} describe --abbrev=0 --tags
+		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+		OUTPUT_VARIABLE UNIFIED_SDK_GIT_TAG
+		OUTPUT_STRIP_TRAILING_WHITESPACE
+		OUTPUT_QUIET
+		ERROR_QUIET)
+		
+	# This can happen if there are no tags in the repository, so provide a suitable fallback.
+	if (UNIFIED_SDK_GIT_TAG STREQUAL "")
+		set(UNIFIED_SDK_GIT_TAG "None (No tags found)")
+	endif()
 endif()
 
 # Get the latest commit hash
