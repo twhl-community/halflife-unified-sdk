@@ -267,7 +267,7 @@ void CSoundEnt::Initialize()
 //=========================================================
 int CSoundEnt::ISoundsInList(int iListType)
 {
-	int iThisSound = [=]()
+	int iThisSound = [=, this]()
 	{
 		switch (iListType)
 		{
