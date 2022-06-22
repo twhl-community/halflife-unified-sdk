@@ -113,7 +113,7 @@ execute_process(
 	ERROR_QUIET)
 
 # CI builds don't fetch tags so this should have a sensible value.
-if ($ENV{CI} EQUAL 1)
+if (DEFINED $ENV{CI} AND $ENV{CI} EQUAL 1)
 	set(UNIFIED_SDK_GIT_TAG "CI build")
 # This can happen if there are no tags in the repository, so provide a suitable fallback.
 elseif (UNIFIED_SDK_GIT_TAG STREQUAL "")
