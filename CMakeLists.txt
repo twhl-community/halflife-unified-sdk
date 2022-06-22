@@ -113,6 +113,7 @@ execute_process(
 	ERROR_QUIET)
 
 # CI builds don't fetch tags so this should have a sensible value.
+message(STATUS "CI is $ENV{CI}")
 if (DEFINED $ENV{CI} AND $ENV{CI} STREQUAL "true")
 	set(UNIFIED_SDK_GIT_TAG "CI build")
 # This can happen if there are no tags in the repository, so provide a suitable fallback.
