@@ -108,10 +108,15 @@ execute_process(
     COMMAND ${GIT_EXECUTABLE} describe --abbrev=0 --tags
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
     OUTPUT_VARIABLE UNIFIED_SDK_GIT_TAG
-    OUTPUT_STRIP_TRAILING_WHITESPACE)
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+	OUTPUT_QUIET
+	ERROR_QUIET)
 
+# CI builds don't fetch tags so this should have a sensible value.
+if ($ENV{CI} EQUAL 1)
+	set(UNIFIED_SDK_GIT_TAG "CI build")
 # This can happen if there are no tags in the repository, so provide a suitable fallback.
-if (UNIFIED_SDK_GIT_TAG STREQUAL "")
+elseif (UNIFIED_SDK_GIT_TAG STREQUAL "")
 	set(UNIFIED_SDK_GIT_TAG "None (No tags found)")
 endif()
 
