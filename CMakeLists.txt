@@ -38,9 +38,6 @@ if(RELEASE_TYPE_INDEX EQUAL -1)
 	message(FATAL_ERROR "HalfLife_RELEASE_TYPE must be one of: ${RELEASE_TYPE}")
 endif()
 
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 # Link statically with the runtime
@@ -132,6 +129,8 @@ function(set_common_properties TARGET_NAME)
 	
 	# Enable use of Clang-Tidy in code analysis. See [repo_root]/.clang-tidy for the checks used in the project.
 	set_target_properties(${TARGET_NAME} PROPERTIES VS_GLOBAL_EnableClangTidyCodeAnalysis true)
+	
+	target_compile_features(${TARGET_NAME} PRIVATE cxx_std_20)
 		
 	target_compile_definitions(${TARGET_NAME} PRIVATE
 		_CRT_SECURE_NO_WARNINGS
