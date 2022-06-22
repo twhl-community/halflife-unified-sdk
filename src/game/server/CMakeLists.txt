@@ -6,11 +6,11 @@ if (WIN32)
 endif()
 
 # Add the def file as well
-add_library(${HalfLife_SERVER_LIB_NAME} SHARED $<$<PLATFORM_ID:Windows>:${CMAKE_CURRENT_BINARY_DIR}/server.def>)
+add_library(server SHARED $<$<PLATFORM_ID:Windows>:${CMAKE_CURRENT_BINARY_DIR}/server.def>)
 
-set_common_properties(${HalfLife_SERVER_LIB_NAME})
+set_common_properties(server)
 
-target_include_directories(${HalfLife_SERVER_LIB_NAME} PRIVATE
+target_include_directories(server PRIVATE
 	${CMAKE_CURRENT_SOURCE_DIR}
 	entities
 	entities/items
@@ -25,10 +25,10 @@ target_include_directories(${HalfLife_SERVER_LIB_NAME} PRIVATE
 	../shared/utils
 	../../public)
 	
-target_compile_definitions(${HalfLife_SERVER_LIB_NAME} PRIVATE
+target_compile_definitions(server PRIVATE
 	VALVE_DLL)
 
-target_sources(${HalfLife_SERVER_LIB_NAME} PRIVATE
+target_sources(server PRIVATE
 	activity.h
 	activitymap.h
 	cdll_dll.h
@@ -278,12 +278,12 @@ target_sources(${HalfLife_SERVER_LIB_NAME} PRIVATE
 	../../public/interface.h
 	../../public/steam/steamtypes.h)
 
-add_game_shared_sources(${HalfLife_SERVER_LIB_NAME})
+add_game_shared_sources(server)
 
-target_precompile_headers(${HalfLife_SERVER_LIB_NAME}
+target_precompile_headers(server
 	PRIVATE
 		entities/cbase.h)
 
 # Create filters
-get_target_property(SERVER_SOURCES ${HalfLife_SERVER_LIB_NAME} SOURCES)
+get_target_property(SERVER_SOURCES server SOURCES)
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/../../.. FILES ${SERVER_SOURCES})

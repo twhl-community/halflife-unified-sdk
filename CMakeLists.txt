@@ -9,18 +9,6 @@ endif()
 
 set(VCPKG_OVERLAY_TRIPLETS ${CMAKE_SOURCE_DIR}/vcpkg_config/triplets)
 
-#
-# Mod-specific configuration.
-#
-
-# Controls the name of the server library. You should leave this as its default unless you need a different name (e.g. conflict with another library name).
-# You will need to manually update the Github Actions workflow configuration file (.github/worksflows/ci-cd.yml) to use this name.
-set(HalfLife_SERVER_LIB_NAME server)
-
-#
-# End mod-specific configuration.
-#
-
 project(HalfLifeMod
 	VERSION 1.0.0
 	DESCRIPTION "Half-Life CMake Mod Template"
@@ -213,7 +201,7 @@ add_subdirectory(src/game/server)
 
 # Add generated files now so it doesn't cause source_group to fail.
 target_sources(client PRIVATE ${CMAKE_BINARY_DIR}/ProjectInfo.h)
-target_sources(${HalfLife_SERVER_LIB_NAME} PRIVATE ${CMAKE_BINARY_DIR}/ProjectInfo.h)
+target_sources(server PRIVATE ${CMAKE_BINARY_DIR}/ProjectInfo.h)
 
 # Set Visual Studio starting project
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT client)
@@ -249,7 +237,7 @@ if (MSVC)
 		VS_DEBUGGER_WORKING_DIRECTORY "${HALFLIFE_DIRECTORY}")
 
 	# If HalfLife_HLDS_DIRECTORY is not specified it will leave a non-functional "default" setting
-	set_target_properties(${HalfLife_SERVER_LIB_NAME} PROPERTIES
+	set_target_properties(server PROPERTIES
 		VS_DEBUGGER_COMMAND "${HalfLife_HLDS_DIRECTORY}/${HLDS_EXECUTABLE}"
 		VS_DEBUGGER_COMMAND_ARGUMENTS "${COMMAND_ARGUMENTS}"
 		VS_DEBUGGER_WORKING_DIRECTORY "${HalfLife_HLDS_DIRECTORY}")
@@ -261,7 +249,7 @@ install(TARGETS client
 	LIBRARY DESTINATION cl_dlls
 )
 
-install(TARGETS ${HalfLife_SERVER_LIB_NAME}
+install(TARGETS server
 	RUNTIME DESTINATION dlls
 	LIBRARY DESTINATION dlls
 )
@@ -275,7 +263,7 @@ install(FILES
 
 if (MSVC)
 	install(FILES $<TARGET_PDB_FILE:client> DESTINATION cl_dlls OPTIONAL)
-	install(FILES $<TARGET_PDB_FILE:${HalfLife_SERVER_LIB_NAME}> DESTINATION dlls OPTIONAL)
+	install(FILES $<TARGET_PDB_FILE:server> DESTINATION dlls OPTIONAL)
 	
 	# Copy the OpenAL library on Windows only.
 	# On Linux OpenAL is loaded by Miles Sound System, and the Steam runtime provides this library.
