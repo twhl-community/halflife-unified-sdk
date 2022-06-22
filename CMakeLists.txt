@@ -168,7 +168,7 @@ function(set_common_properties TARGET_NAME)
 		# Note: the pentium-m arch setting is not used for AMD systems in the original makefile
 		# Since the arch settings used are i686 this means including the setting ensures original settings are used,
 		# but it could cause problems for AMD targets
-		$<$<CXX_COMPILER_ID:Clang,AppleClang,GNU>:-fpermissive -fno-strict-aliasing -Wno-invalid-offsetof -gdwarf-2 -g2 -march=pentium-m -mfpmath=387>
+		$<$<CXX_COMPILER_ID:Clang,AppleClang,GNU>:-fpermissive -fno-strict-aliasing -Wno-invalid-offsetof -march=pentium-m -mfpmath=387>
 			
 		$<$<CXX_COMPILER_ID:MSVC>:/W3 /MP>
 			
