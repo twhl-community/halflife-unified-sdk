@@ -16,9 +16,6 @@ execute_process(COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_INSTALL_PREF
 # Add more commands here if you want to copy other files, or copy the entire mod directory
 # Prefer copy_if_different to avoid a lot of unnecessary copying
 
-# Copy the OpenAL library.
-execute_process(COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_INSTALL_PREFIX}/../${CMAKE_SHARED_LIBRARY_PREFIX}openal-${MOD_NAME}${LIB_EXT}" ${MOD_DIR}/..)
-
 # Copy liblist.gam and delta.lst.
 execute_process(COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_INSTALL_PREFIX}/liblist.gam" ${MOD_DIR})
 execute_process(COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_INSTALL_PREFIX}/delta.lst" ${MOD_DIR})
