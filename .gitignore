@@ -2,3 +2,4 @@
 !utils/procinfo/lib/win32_vc6/procinfo.lib
 debug_build
 .idea
+vcpkg
