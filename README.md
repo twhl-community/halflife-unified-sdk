@@ -1,8 +1,28 @@
-# Half-Life Unified SDK
+# The Whole Mesa
 
 [![CI/CD](https://github.com/ENDERZOMBI102/TheWholeMesa/actions/workflows/ci-cd.yml/badge.svg?branch=dev)](https://github.com/ENDERZOMBI102/TheWholeMesa/actions/workflows/ci-cd.yml)
 
-[See the wiki for setup instructions](https://github.com/SamVanheer/halflife-unified-sdk/wiki/Setting-up-the-source-code)
+Setting up dev environment
+-
+#### Using CLion on Windows
+ - Clone the repo
+ - If you don't have vcpkg installed:
+   - Install vcpkg
+ - Create a symlink to the vcpkg directory in the repo dir
+ - Upon importing the project with CLion
+   - If the current toolchain is not set to a Visual Studio x86 one
+     - Set it to one
+   - If the current CMake is set to a version lower than `3.23`
+     - Set it to at least cmake `3.23`
+   - Add `--toolchain $CMakeProjectDir$/cmake/WindowsToolchain.cmake` to the cmake arguments
+   - Set generator to Visual Studio 2022|2019
+   - Press ok and wait for it to finish setting up the environment
+#### Using Visual Studio
+  - TODO
+#### Using Visual Studio Code
+  - TODO
+
+[sdk wiki](https://github.com/SamVanheer/halflife-unified-sdk/wiki)
 
 Half Life 1 SDK LICENSE
 ======================
