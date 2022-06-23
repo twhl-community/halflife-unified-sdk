@@ -38,7 +38,8 @@ class ConsoleLogSink : public spdlog::sinks::base_sink<Mutex>
 protected:
 	void sink_it_(const spdlog::details::log_msg& msg) override final
 	{
-		Con_Printf("[%.*s] [%s] %.*s\n",
+		Con_Printf("[%s] [%.*s] [%s] %.*s\n",
+			GetShortLibraryPrefix().data(),
 			GetSafePayloadSize(msg.logger_name), msg.logger_name.data(),
 			spdlog::level::to_string_view(msg.level).data(),
 			GetSafePayloadSize(msg.payload), msg.payload.data());
