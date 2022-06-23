@@ -5,6 +5,3 @@
 [submodule "external/libnyquist"]
 	path = external/libnyquist
 	url = https://github.com/ddiakopoulos/libnyquist.git
-[submodule "vcpkg"]
-	path = vcpkg
-	url = https://github.com/microsoft/vcpkg.git

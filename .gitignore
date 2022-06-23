@@ -1,2 +1,4 @@
 # Allow Half-Life-specific files that would otherwise be ignored
 !utils/procinfo/lib/win32_vc6/procinfo.lib
+debug_build
+.idea
