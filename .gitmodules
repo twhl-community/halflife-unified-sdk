@@ -1,3 +1,6 @@
 [submodule "vcpkg"]
 	path = vcpkg
 	url = https://github.com/microsoft/vcpkg.git
+[submodule "external/GameNetworkingSockets"]
+	path = external/GameNetworkingSockets
+	url = https://github.com/ValveSoftware/GameNetworkingSockets.git
