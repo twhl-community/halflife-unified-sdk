@@ -70,6 +70,9 @@ add_subdirectory(external/libnyquist
 # Enable multithreaded building to speed up building these a bit.
 target_compile_options(nlohmann_json_schema_validator PRIVATE $<$<CXX_COMPILER_ID:MSVC>:/MP>)
 
+# Silence warnings coming from this library.
+target_compile_options(libnyquist PRIVATE $<$<CXX_COMPILER_ID:Clang,AppleClang,GNU>:-w>)
+
 set_target_properties(
 	nlohmann_json_schema_validator
 	libnyquist
