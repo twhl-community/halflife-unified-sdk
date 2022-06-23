@@ -44,6 +44,16 @@
 			"name": "libnyquist",
 			"version>=": "0.1.0",
 			"default-features": false
+		},
+		{
+			"name": "protobuf",
+			"version>=": "3.19.4",
+			"default-features": false
+		},
+		{
+			"name": "openssl",
+			"version>=": "3.0.3#2",
+			"default-features": false
 		}
   ]
 }

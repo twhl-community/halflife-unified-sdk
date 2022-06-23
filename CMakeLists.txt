@@ -67,6 +67,32 @@ find_package(EASTL CONFIG REQUIRED)
 find_package(nlohmann_json_schema_validator REQUIRED)
 find_package(libnyquist REQUIRED)
 
+option(BUILD_STATIC_LIB "" ON)
+option(BUILD_SHARED_LIB "" OFF)
+option(BUILD_EXAMPLES "" OFF)
+option(BUILD_TESTS "" OFF)
+option(BUILD_TOOLS "" OFF)
+option(ENABLE_ICE "" OFF)
+option(Protobuf_USE_STATIC_LIBS "" ON)
+option(MSVC_CRT_STATIC "" ON)
+add_subdirectory(external/GameNetworkingSockets
+	GameNetworkingSockets-binary-dir
+	EXCLUDE_FROM_ALL)
+
+function(set_dependency_common_properties TARGET_NAME)
+	target_compile_features(${TARGET_NAME} PRIVATE cxx_std_20)
+	
+	# Enable multithreaded building to speed up building these a bit.
+	target_compile_options(${TARGET_NAME} PRIVATE $<$<CXX_COMPILER_ID:MSVC>:/MP>)
+
+	# Silence warnings coming from this library.
+	target_compile_options(${TARGET_NAME} PRIVATE $<$<CXX_COMPILER_ID:Clang,AppleClang,GNU>:-w>)
+	
+	set_target_properties(${TARGET_NAME} PROPERTIES FOLDER "Dependencies")
+endfunction()
+
+set_dependency_common_properties(GameNetworkingSockets_s)
+
 # Sets properties common to all projects
 function(set_common_properties TARGET_NAME)
 	set_target_properties(${TARGET_NAME} PROPERTIES PREFIX "")
@@ -96,7 +122,8 @@ function(set_common_properties TARGET_NAME)
 		${CMAKE_DL_LIBS}
 		nlohmann_json
 		nlohmann_json_schema_validator
-		EASTL)
+		EASTL
+		GameNetworkingSockets::GameNetworkingSockets_s)
 	
 	target_include_directories(${TARGET_NAME} PRIVATE
 		${CMAKE_BINARY_DIR})

@@ -4,6 +4,9 @@
 //
 //=============================================================================
 
+//This header requires an include guard because SteamNetworkingSockets provides the same header.
+#ifndef STEAMTYPES_H
+#define STEAMTYPES_H
 #pragma once
 
 // Steam-specific types. Defined here so this header file can be included in other code bases.
@@ -168,4 +171,6 @@ typedef uint32 PartnerId_t;
 const PartnerId_t k_uPartnerIdInvalid = 0;
 #else
 #define k_uPartnerIdInvalid 0x0;
+#endif
+
 #endif
