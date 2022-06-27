@@ -84,7 +84,7 @@ public:
 	bool CheckRangeAttack2(float flDot, float flDist) override;
 	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 
-	virtual float GetDamageAmount() { return GetSkillFloat("headcrabDmgBite"sv); }
+	virtual float GetDamageAmount() { return GetSkillFloat("headcrab_dmg_bite"sv); }
 	virtual int GetVoicePitch() { return 100; }
 	virtual float GetSoundVolue() { return 1.0; }
 	Schedule_t* GetScheduleOfType(int Type) override;
@@ -485,7 +485,7 @@ public:
 	void OnCreate() override;
 	void Spawn() override;
 	void SetYawSpeed() override;
-	float GetDamageAmount() override { return GetSkillFloat("headcrabDmgBite"sv) * 0.3; }
+	float GetDamageAmount() override { return GetSkillFloat("headcrab_dmg_bite"sv) * 0.3; }
 	bool CheckRangeAttack1(float flDot, float flDist) override;
 	Schedule_t* GetScheduleOfType(int Type) override;
 	int GetVoicePitch() override { return PITCH_NORM + RANDOM_LONG(40, 50); }
