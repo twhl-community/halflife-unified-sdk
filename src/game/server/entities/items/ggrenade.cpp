@@ -38,6 +38,12 @@ void CGrenade::OnCreate()
 
 void CGrenade::Precache()
 {
+	// Grenade exploded after save, but hasn't been removed yet. Don't precache.
+	if (pev->model == iStringNull)
+	{
+		return;
+	}
+
 	PrecacheModel(STRING(pev->model));
 }
 
