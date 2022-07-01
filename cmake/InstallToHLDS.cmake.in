@@ -8,6 +8,8 @@ set(HalfLife_HLDS_DIRECTORY "@HalfLife_HLDS_DIRECTORY@")
 set(LIB_EXT @CMAKE_SHARED_LIBRARY_SUFFIX@)
 
 set(MOD_DIR ${HalfLife_HLDS_DIRECTORY}/${MOD_NAME})
+
+message(STATUS "Installing to dedicated server directory at ${MOD_DIR}")
 	
 # These will copy every file in the cl_dlls and dlls directories, including anything not built by this project.
 execute_process(COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_INSTALL_PREFIX}/cl_dlls" ${MOD_DIR}/cl_dlls)
