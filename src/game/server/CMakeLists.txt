@@ -304,6 +304,9 @@ target_sources(server PRIVATE
 	gamerules/PlayerInventory.h
 	gamerules/SpawnInventorySystem.h
 	
+	networking/CServerNetworkSystem.cpp
+	networking/CServerNetworkSystem.h
+	
 	sound/SentencesSystem.cpp
 	sound/SentencesSystem.h
 	sound/ServerSoundSystem.cpp

@@ -81,6 +81,8 @@ function(add_game_shared_sources target)
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/models/BspLoader.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/models/BspLoader.h
 			
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/networking/CNetworkSystem.cpp
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/networking/CNetworkSystem.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/networking/NetworkDataSystem.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/networking/NetworkDataSystem.h
 			

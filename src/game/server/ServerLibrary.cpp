@@ -60,6 +60,7 @@
 
 #include "models/BspLoader.h"
 
+#include "networking/CServerNetworkSystem.h"
 #include "networking/NetworkDataSystem.h"
 
 #include "sound/MaterialSystem.h"
@@ -199,6 +200,8 @@ void ServerLibrary::RunFrame()
 	ForceCvarToValue(m_SendResources, 1);
 	ForceCvarToValue(m_AllowDLFile, 1);
 
+	g_ServerNetworking.RunFrame();
+
 	g_Bots.RunFrame();
 
 	// If we're loading all maps then change maps after 3 seconds (time starts at 1)
@@ -284,6 +287,8 @@ void ServerLibrary::NewMapStarted(bool loadGame)
 	}
 
 	ClearStringPool();
+
+	g_ServerNetworking.OnNewMapStarted();
 
 	// Initialize map state to its default state
 	*m_MapState = MapState{};
@@ -386,6 +391,7 @@ void ServerLibrary::AddGameSystems()
 	// Depends on Angelscript
 	g_GameSystems.Add(&g_ConditionEvaluator);
 	g_GameSystems.Add(&g_GameConfigSystem);
+	g_GameSystems.Add(&g_ServerNetworking);
 	g_GameSystems.Add(&sound::g_ServerSound);
 	g_GameSystems.Add(&sentences::g_Sentences);
 	g_GameSystems.Add(&g_MapCycleSystem);

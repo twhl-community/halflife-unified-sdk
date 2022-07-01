@@ -171,6 +171,11 @@ constexpr std::string_view GetLongLibraryPrefix()
 	}
 }
 
+/**
+*	@brief Returns true if this is a server and is running in dedicated mode.
+*/
+bool UTIL_IsDedicatedServer();
+
 inline char com_token[1500];
 
 /**

@@ -425,6 +425,27 @@ CBaseEntity* UTIL_FindEntityForward(CBaseEntity* pMe);
 
 bool UTIL_IsMultiplayer();
 
+inline void UTIL_ShutdownServer()
+{
+	SERVER_COMMAND("shutdownserver\n");
+}
+
+inline void UTIL_KickPlayer(edict_t* entity, const char* kickMessage = nullptr)
+{
+	std::string command;
+
+	if (kickMessage)
+	{
+		command = fmt::format("kick \"%s\" \"{}\"\n", STRING(entity->v.netname), kickMessage);
+	}
+	else
+	{
+		command = fmt::format("kick \"%s\"\n", STRING(entity->v.netname));
+	}
+
+	SERVER_COMMAND(command.c_str());
+}
+
 inline void WRITE_COORD_VECTOR(const Vector& vec)
 {
 	WRITE_COORD(vec.x);

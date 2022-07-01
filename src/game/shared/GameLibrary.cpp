@@ -23,6 +23,7 @@
 
 #include "entities/EntityClassificationSystem.h"
 
+#include "networking/CNetworkSystem.h"
 #include "networking/NetworkDataSystem.h"
 
 #include "scripting/AS/ASManager.h"
@@ -82,6 +83,7 @@ void GameLibrary::Shutdown()
 void GameLibrary::RunFrame()
 {
 	g_ConCommands.RunFrame();
+	g_Networking.RunFrame();
 }
 
 void GameLibrary::AddGameSystems()
@@ -97,6 +99,7 @@ void GameLibrary::AddGameSystems()
 	g_GameSystems.Add(&g_Logging);
 	g_GameSystems.Add(&g_NetworkData);
 	g_GameSystems.Add(&g_ASManager);
+	g_GameSystems.Add(&g_Networking);
 	g_GameSystems.Add(&g_ReplacementMaps);
 	g_GameSystems.Add(&g_MaterialSystem);
 	g_GameSystems.Add(&g_ProjectInfo);

@@ -27,6 +27,7 @@
 #include "ProjectInfoSystem.h"
 #include "view.h"
 
+#include "networking/CClientNetworkSystem.h"
 #include "networking/ClientUserMessages.h"
 #include "networking/NetworkDataSystem.h"
 
@@ -128,6 +129,8 @@ void ClientLibrary::RunFrame()
 		gEngfuncs.Cvar_Set(m_AllowDownload->name, "1");
 	}
 
+	GameLibrary::RunFrame();
+
 	// Check connection status.
 	net_status_t status;
 	gEngfuncs.pNetAPI->Status(&status);
@@ -221,6 +224,8 @@ void ClientLibrary::RunFrame()
 	{
 		TempEntity_UpdateTargetLaser();
 	}
+
+	g_ClientNetworking.RunFrame();
 }
 
 void ClientLibrary::OnUserMessageReceived()
@@ -262,6 +267,7 @@ void ClientLibrary::AddGameSystems()
 	g_GameSystems.Add(&sound::g_ClientSoundReplacement);
 	g_GameSystems.Add(&g_HudSpriteConfig);
 	g_GameSystems.Add(&g_CampaignSelect);
+	g_GameSystems.Add(&g_ClientNetworking);
 }
 
 SDL_Window* ClientLibrary::FindWindow()

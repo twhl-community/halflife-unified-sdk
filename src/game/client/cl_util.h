@@ -171,3 +171,8 @@ inline bool UTIL_IsMapLoaded()
 
 	return levelName != nullptr && levelName[0] != '\0';
 }
+
+inline void UTIL_DisconnectFromServer()
+{
+	gEngfuncs.pfnClientCmd("disconnect\n");
+}

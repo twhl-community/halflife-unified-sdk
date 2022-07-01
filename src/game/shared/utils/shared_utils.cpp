@@ -175,6 +175,15 @@ void Con_SetPrintBufferingEnabled(bool enabled)
 	}
 }
 
+bool UTIL_IsDedicatedServer()
+{
+#ifdef CLIENT_DLL
+	return false;
+#else
+	return IS_DEDICATED_SERVER();
+#endif
+}
+
 void Con_VPrintf(const char* format, va_list list)
 {
 	static char buffer[8192];

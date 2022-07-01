@@ -42,6 +42,8 @@
 
 #include "ctf/ctf_goals.h"
 
+#include "networking/CServerNetworkSystem.h"
+
 unsigned int g_ulFrameCount;
 
 /**
@@ -49,11 +51,25 @@ unsigned int g_ulFrameCount;
  */
 qboolean ClientConnect(edict_t* pEntity, const char* pszName, const char* pszAddress, char szRejectReason[128])
 {
-	return static_cast<qboolean>(g_pGameRules->ClientConnected(pEntity, pszName, pszAddress, szRejectReason));
+	const bool allowedToConnect = g_pGameRules->ClientConnected(pEntity, pszName, pszAddress, szRejectReason);
+
+	if (!allowedToConnect)
+	{
+		return 0;
+	}
+
+	if (!g_ServerNetworking.OnClientConnect(pEntity, pszAddress))
+	{
+		strncpy(szRejectReason, "Error setting up GNS connection", 127);
+		szRejectReason[127] = '\0';
+		return 0;
+	}
 
 	// a client connecting during an intermission can cause problems
 	//	if (intermission_running)
 	//		ExitIntermission ();
+
+	return 1;
 }
 
 
@@ -62,6 +78,8 @@ qboolean ClientConnect(edict_t* pEntity, const char* pszName, const char* pszAdd
  */
 void ClientDisconnect(edict_t* pEntity)
 {
+	g_ServerNetworking.OnClientDisconnect(pEntity);
+
 	if (g_fGameOver)
 		return;
 
@@ -1199,6 +1217,8 @@ void StartFrame()
 		return;
 
 	g_ulFrameCount++;
+
+	g_Server.RunFrame();
 }
 
 void ClientPrecache()
