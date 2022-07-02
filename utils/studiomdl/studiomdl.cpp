@@ -1484,8 +1484,8 @@ void TextureCoordRanges(s_mesh_t* pmesh, s_texture_t* ptexture)
 		for (j = 0; j < 3; j++)
 		{
 			// FIXME losing texture coord resultion!
-			pmesh->triangle[i][j].s = pmesh->triangle[i][j].u * ptexture->srcwidth;
-			pmesh->triangle[i][j].t = pmesh->triangle[i][j].v * ptexture->srcheight;
+			pmesh->triangle[i][j].s = lroundf(pmesh->triangle[i][j].u * ptexture->srcwidth);
+			pmesh->triangle[i][j].t = lroundf(pmesh->triangle[i][j].v * ptexture->srcheight);
 		}
 	}
 
