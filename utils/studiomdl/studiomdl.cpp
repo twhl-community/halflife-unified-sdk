@@ -2154,13 +2154,14 @@ int Grab_Nodes(s_node_t* pnodes)
 
 
 
-void Grab_Studio(s_model_t* pmodel)
+void Grab_Studio(char* filepath, s_model_t* pmodel)
 {
 	int time1;
 	char cmd[1024];
 	int option;
+	char modelname[_MAX_FNAME];
 
-	sprintf(filename, "%s/%s.smd", cddir, pmodel->name);
+	sprintf(filename, "%s/%s.smd", cddir, filepath);
 	time1 = FileTime(filename);
 	if (time1 == -1)
 		Error("%s doesn't exist", filename);
@@ -2172,6 +2173,11 @@ void Grab_Studio(s_model_t* pmodel)
 		Error("reader: could not open file '%s'\n", filename);
 	}
 	linecount = 0;
+
+	// Extract the file name and set it as model name.
+	memset(modelname, 0, sizeof(modelname));
+	ExtractFileBase(filename, modelname);
+	strcpyn(model[numstudiomodels]->name, modelname);
 
 	while (fgets(line, sizeof(line), input) != NULL)
 	{
@@ -2280,13 +2286,17 @@ void Cmd_Modelname(void)
 
 void Option_Studio()
 {
+	char smdfilepath[_MAX_PATH];
+
 	if (!GetToken(false))
 		return;
 
 	model[numstudiomodels] = reinterpret_cast<s_model_t*>(kalloc(1, sizeof(s_model_t)));
 	bodypart[numbodyparts].pmodel[bodypart[numbodyparts].nummodels] = model[numstudiomodels];
 
-	strcpyn(model[numstudiomodels]->name, token);
+	// Store the smd file path.
+	memset(smdfilepath, 0, sizeof(smdfilepath));
+	strcpyn(smdfilepath, token);
 
 	flip_triangles = 1;
 
@@ -2306,7 +2316,7 @@ void Option_Studio()
 		}
 	}
 
-	Grab_Studio(model[numstudiomodels]);
+	Grab_Studio(smdfilepath, model[numstudiomodels]);
 
 	bodypart[numbodyparts].nummodels++;
 	numstudiomodels++;
@@ -2510,10 +2520,9 @@ void Option_Animation(char* name, s_animation_t* panim)
 	int time1;
 	char cmd[1024];
 	int option;
+	char animname[_MAX_FNAME];
 
-	strcpyn(panim->name, name);
-
-	sprintf(filename, "%s/%s.smd", cddir, panim->name);
+	sprintf(filename, "%s/%s.smd", cddir, name);
 	time1 = FileTime(filename);
 	if (time1 == -1)
 		Error("%s doesn't exist", filename);
@@ -2526,6 +2535,11 @@ void Option_Animation(char* name, s_animation_t* panim)
 		Error(0);
 	}
 	linecount = 0;
+
+	// Extract the file name and set it as animation name.
+	memset(animname, 0, sizeof(animname));
+	ExtractFileBase(filename, animname);
+	strcpyn(panim->name, animname);
 
 	while (fgets(line, sizeof(line), input) != NULL)
 	{
