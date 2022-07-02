@@ -1371,7 +1371,7 @@ void TextureCoordRanges(s_mesh_t* pmesh, s_texture_t* ptexture)
 	}
 	// pack texture coords
 
-	if (!clip_texcoords)
+	if (clip_texcoords)
 	{
 		int k, n;
 		do
@@ -1490,7 +1490,7 @@ void TextureCoordRanges(s_mesh_t* pmesh, s_texture_t* ptexture)
 	}
 
 	// find the range
-	if (!clip_texcoords)
+	if (clip_texcoords)
 	{
 		for (i = 0; i < pmesh->numtris; i++)
 		{
@@ -3436,7 +3436,7 @@ void ParseScript(void)
 		}
 		else if (!strcmp(token, "$cliptotextures"))
 		{
-			clip_texcoords = 0;
+			clip_texcoords = 1;
 		}
 		else if (!strcmp(token, "$renamebone"))
 		{
