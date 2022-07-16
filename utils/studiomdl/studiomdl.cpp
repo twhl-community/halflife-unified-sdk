@@ -1610,7 +1610,14 @@ void ResizeTexture(s_texture_t* ptexture)
 	ptexture->skinleft = ptexture->min_s;
 
 	ptexture->skinwidth = GetSkinWidth(ptexture->max_s - ptexture->min_s);
+  
+  if (0 == ptexture->skinwidth)
+		Error("%s final skin width is 0\n", ptexture->name);
+  
 	ptexture->skinheight = GetSkinHeight(ptexture->max_t - ptexture->min_t);
+  
+	if (0 == ptexture->skinheight)
+		Error("%s final skin height is 0\n", ptexture->name);
 
 	ptexture->size = ptexture->skinwidth * ptexture->skinheight + 256 * 3;
 
