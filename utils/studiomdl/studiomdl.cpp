@@ -1484,8 +1484,8 @@ void TextureCoordRanges(s_mesh_t* pmesh, s_texture_t* ptexture)
 		for (j = 0; j < 3; j++)
 		{
 			// FIXME losing texture coord resultion!
-			pmesh->triangle[i][j].s = pmesh->triangle[i][j].u * (ptexture->srcwidth - 1);
-			pmesh->triangle[i][j].t = pmesh->triangle[i][j].v * (ptexture->srcheight - 1);
+			pmesh->triangle[i][j].s = lroundf(pmesh->triangle[i][j].u * ptexture->srcwidth);
+			pmesh->triangle[i][j].t = lroundf(pmesh->triangle[i][j].v * ptexture->srcheight);
 		}
 	}
 
@@ -1505,9 +1505,9 @@ void TextureCoordRanges(s_mesh_t* pmesh, s_texture_t* ptexture)
 	}
 	else
 	{
-		ptexture->max_s = ptexture->srcwidth - 1;
+		ptexture->max_s = ptexture->srcwidth;
 		ptexture->min_s = 0;
-		ptexture->max_t = ptexture->srcheight - 1;
+		ptexture->max_t = ptexture->srcheight;
 		ptexture->min_t = 0;
 	}
 	//printf("%d %d : ", ptexture->srcwidth, ptexture->srcheight );
@@ -1609,8 +1609,8 @@ void ResizeTexture(s_texture_t* ptexture)
 	ptexture->skintop = ptexture->min_t;
 	ptexture->skinleft = ptexture->min_s;
 
-	ptexture->skinwidth = GetSkinWidth(ptexture->max_s - ptexture->min_s + 1);
-	ptexture->skinheight = GetSkinHeight(ptexture->max_t - ptexture->min_t + 1);
+	ptexture->skinwidth = GetSkinWidth(ptexture->max_s - ptexture->min_s);
+	ptexture->skinheight = GetSkinHeight(ptexture->max_t - ptexture->min_t);
 
 	ptexture->size = ptexture->skinwidth * ptexture->skinheight + 256 * 3;
 
