@@ -35,7 +35,7 @@ jobs:
          
       - name: Configure
         run: >
-          cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_INSTALL_PREFIX=${{env.GAME_NAME}}/${{env.MOD_NAME}} -DHalfLife_RELEASE_TYPE=Alpha
+          cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_INSTALL_PREFIX=${{env.GAME_NAME}}/${{env.MOD_NAME}}
           -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/cmake/LinuxToolchain.cmake
         
       - name: Build
@@ -69,7 +69,7 @@ jobs:
         
       - name: Configure
         run: >
-          cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_INSTALL_PREFIX=${{env.GAME_NAME}}/${{env.MOD_NAME}} -DHalfLife_RELEASE_TYPE=Alpha
+          cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_INSTALL_PREFIX=${{env.GAME_NAME}}/${{env.MOD_NAME}}
           -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/cmake/WindowsToolchain.cmake -A Win32
         
       - name: Build

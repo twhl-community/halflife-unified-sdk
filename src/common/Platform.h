@@ -52,6 +52,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <iterator>
+#include <string>
 
 using byte = unsigned char;
 using string_t = unsigned int;

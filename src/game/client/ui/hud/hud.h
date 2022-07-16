@@ -653,6 +653,8 @@ private:
 
 	cvar_t* m_ShowProjectInfo = nullptr;
 
+	bool m_IsAlphaBuild = false;
+
 	LibraryInfo m_ClientInfo;
 	LibraryInfo m_ServerInfo;
 };

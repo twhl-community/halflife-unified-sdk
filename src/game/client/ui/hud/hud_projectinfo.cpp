@@ -26,16 +26,17 @@ bool CHudProjectInfo::Init()
 
 	m_iFlags |= HUD_ACTIVE;
 
-	const char* showProjectInfoDefault = "0";
-
-	//Turn this on by default if this is an alpha build.
-	//Users will easily know they're running an alpha build and screenshots and videos will include important information.
-	if (0 == stricmp(UnifiedSDKReleaseType, "Alpha"))
 	{
-		showProjectInfoDefault = "1";
+		std::string releaseType{UnifiedSDKReleaseType};
+
+		ToLower(releaseType);
+
+		m_IsAlphaBuild = releaseType.find("alpha") != std::string::npos;
 	}
 
-	m_ShowProjectInfo = CVAR_CREATE("cl_showprojectinfo", showProjectInfoDefault, 0);
+	// Turn this on by default if this is a (pre-)alpha build.
+	// Users will easily know they're running a (pre-)alpha build and screenshots and videos will include important information.
+	m_ShowProjectInfo = CVAR_CREATE("cl_showprojectinfo", m_IsAlphaBuild ? "1" : "0", 0);
 
 	m_ClientInfo.MajorVersion = UnifiedSDKVersionMajor;
 	m_ClientInfo.MinorVersion = UnifiedSDKVersionMinor;
@@ -95,6 +96,11 @@ bool CHudProjectInfo::Draw(float flTime)
 		libraryDrawer(m_ServerInfo, "Server", {255, 128, 128});
 
 		yPos += lineHeight;
+
+		if (m_IsAlphaBuild)
+		{
+			lineDrawer("WIP build not suited for use (testing only)");
+		}
 
 		if (m_ClientInfo.MajorVersion != m_ServerInfo.MajorVersion || m_ClientInfo.MinorVersion != m_ServerInfo.MinorVersion || m_ClientInfo.PatchVersion != m_ServerInfo.PatchVersion)
 		{
