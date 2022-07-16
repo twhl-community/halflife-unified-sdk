@@ -1371,7 +1371,7 @@ void TextureCoordRanges(s_mesh_t* pmesh, s_texture_t* ptexture)
 	}
 	// pack texture coords
 
-	if (!clip_texcoords)
+	if (clip_texcoords)
 	{
 		int k, n;
 		do
@@ -1484,13 +1484,13 @@ void TextureCoordRanges(s_mesh_t* pmesh, s_texture_t* ptexture)
 		for (j = 0; j < 3; j++)
 		{
 			// FIXME losing texture coord resultion!
-			pmesh->triangle[i][j].s = pmesh->triangle[i][j].u * (ptexture->srcwidth - 1);
-			pmesh->triangle[i][j].t = pmesh->triangle[i][j].v * (ptexture->srcheight - 1);
+			pmesh->triangle[i][j].s = lroundf(pmesh->triangle[i][j].u * ptexture->srcwidth);
+			pmesh->triangle[i][j].t = lroundf(pmesh->triangle[i][j].v * ptexture->srcheight);
 		}
 	}
 
 	// find the range
-	if (!clip_texcoords)
+	if (clip_texcoords)
 	{
 		for (i = 0; i < pmesh->numtris; i++)
 		{
@@ -1505,9 +1505,9 @@ void TextureCoordRanges(s_mesh_t* pmesh, s_texture_t* ptexture)
 	}
 	else
 	{
-		ptexture->max_s = ptexture->srcwidth - 1;
+		ptexture->max_s = ptexture->srcwidth;
 		ptexture->min_s = 0;
-		ptexture->max_t = ptexture->srcheight - 1;
+		ptexture->max_t = ptexture->srcheight;
 		ptexture->min_t = 0;
 	}
 	//printf("%d %d : ", ptexture->srcwidth, ptexture->srcheight );
@@ -1609,13 +1609,13 @@ void ResizeTexture(s_texture_t* ptexture)
 	ptexture->skintop = ptexture->min_t;
 	ptexture->skinleft = ptexture->min_s;
 
-	ptexture->skinwidth = GetSkinWidth(ptexture->max_s - ptexture->min_s + 1);
-	
-	if (0 == ptexture->skinwidth)
+	ptexture->skinwidth = GetSkinWidth(ptexture->max_s - ptexture->min_s);
+  
+  if (0 == ptexture->skinwidth)
 		Error("%s final skin width is 0\n", ptexture->name);
-
-	ptexture->skinheight = GetSkinHeight(ptexture->max_t - ptexture->min_t + 1);
-
+  
+	ptexture->skinheight = GetSkinHeight(ptexture->max_t - ptexture->min_t);
+  
 	if (0 == ptexture->skinheight)
 		Error("%s final skin height is 0\n", ptexture->name);
 
@@ -2161,13 +2161,14 @@ int Grab_Nodes(s_node_t* pnodes)
 
 
 
-void Grab_Studio(s_model_t* pmodel)
+void Grab_Studio(char* filepath, s_model_t* pmodel)
 {
 	int time1;
 	char cmd[1024];
 	int option;
+	char modelname[_MAX_FNAME];
 
-	sprintf(filename, "%s/%s.smd", cddir, pmodel->name);
+	sprintf(filename, "%s/%s.smd", cddir, filepath);
 	time1 = FileTime(filename);
 	if (time1 == -1)
 		Error("%s doesn't exist", filename);
@@ -2179,6 +2180,11 @@ void Grab_Studio(s_model_t* pmodel)
 		Error("reader: could not open file '%s'\n", filename);
 	}
 	linecount = 0;
+
+	// Extract the file name and set it as model name.
+	memset(modelname, 0, sizeof(modelname));
+	ExtractFileBase(filename, modelname);
+	strcpyn(model[numstudiomodels]->name, modelname);
 
 	while (fgets(line, sizeof(line), input) != NULL)
 	{
@@ -2287,13 +2293,17 @@ void Cmd_Modelname(void)
 
 void Option_Studio()
 {
+	char smdfilepath[_MAX_PATH];
+
 	if (!GetToken(false))
 		return;
 
 	model[numstudiomodels] = reinterpret_cast<s_model_t*>(kalloc(1, sizeof(s_model_t)));
 	bodypart[numbodyparts].pmodel[bodypart[numbodyparts].nummodels] = model[numstudiomodels];
 
-	strcpyn(model[numstudiomodels]->name, token);
+	// Store the smd file path.
+	memset(smdfilepath, 0, sizeof(smdfilepath));
+	strcpyn(smdfilepath, token);
 
 	flip_triangles = 1;
 
@@ -2313,7 +2323,7 @@ void Option_Studio()
 		}
 	}
 
-	Grab_Studio(model[numstudiomodels]);
+	Grab_Studio(smdfilepath, model[numstudiomodels]);
 
 	bodypart[numbodyparts].nummodels++;
 	numstudiomodels++;
@@ -2517,10 +2527,9 @@ void Option_Animation(char* name, s_animation_t* panim)
 	int time1;
 	char cmd[1024];
 	int option;
+	char animname[_MAX_FNAME];
 
-	strcpyn(panim->name, name);
-
-	sprintf(filename, "%s/%s.smd", cddir, panim->name);
+	sprintf(filename, "%s/%s.smd", cddir, name);
 	time1 = FileTime(filename);
 	if (time1 == -1)
 		Error("%s doesn't exist", filename);
@@ -2533,6 +2542,11 @@ void Option_Animation(char* name, s_animation_t* panim)
 		Error(0);
 	}
 	linecount = 0;
+
+	// Extract the file name and set it as animation name.
+	memset(animname, 0, sizeof(animname));
+	ExtractFileBase(filename, animname);
+	strcpyn(panim->name, animname);
 
 	while (fgets(line, sizeof(line), input) != NULL)
 	{
@@ -3443,7 +3457,7 @@ void ParseScript(void)
 		}
 		else if (!strcmp(token, "$cliptotextures"))
 		{
-			clip_texcoords = 0;
+			clip_texcoords = 1;
 		}
 		else if (!strcmp(token, "$renamebone"))
 		{
