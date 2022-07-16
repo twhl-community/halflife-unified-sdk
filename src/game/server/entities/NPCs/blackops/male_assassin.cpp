@@ -417,8 +417,6 @@ void CMOFAssassin::Spawn()
 
 	m_flLastShot = gpGlobals->time;
 
-	pev->skin = 0;
-
 	m_fStandingGround = m_flStandGroundRange != 0;
 
 	CTalkMonster::g_talkWaitTime = 0;
