@@ -209,6 +209,7 @@ if (MSVC)
 	
 	option(HalfLife_ENABLE_CHEATS "When launching from Visual Studio, enable cheats as well" OFF)
 	option(HalfLife_ENABLE_CONSOLE "When launching from Visual Studio, enable the console on startup" OFF)
+	option(HalfLife_ENABLE_DEV_MODE "When launching from Visual Studio, enables developer mode. The engine will enable the console on startup, sets developer to 1 during startup and sets sv_cheats to 1" OFF)
 	
 	set(HalfLife_ADDITIONAL_COMMAND_ARGUMENTS "" CACHE STRING "When launching from Visual Studio, additional command line arguments to add")
 	
@@ -220,6 +221,10 @@ if (MSVC)
 	
 	if (HalfLife_ENABLE_CONSOLE)
 		set(COMMAND_ARGUMENTS "${COMMAND_ARGUMENTS} -console")
+	endif()
+	
+	if (HalfLife_ENABLE_DEV_MODE)
+		set(COMMAND_ARGUMENTS "${COMMAND_ARGUMENTS} -dev")
 	endif()
 	
 	set(COMMAND_ARGUMENTS "${COMMAND_ARGUMENTS} ${HalfLife_ADDITIONAL_COMMAND_ARGUMENTS}")
