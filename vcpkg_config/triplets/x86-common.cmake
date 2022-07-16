@@ -8,3 +8,6 @@ set(VCPKG_LIBRARY_LINKAGE static)
 if(PORT MATCHES "openal-soft")
     set(VCPKG_LIBRARY_LINKAGE dynamic)
 endif()
+
+set(VCPKG_C_FLAGS "")
+set(VCPKG_CXX_FLAGS "-std=c++20")

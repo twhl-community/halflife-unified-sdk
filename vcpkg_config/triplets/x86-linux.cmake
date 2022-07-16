@@ -4,4 +4,4 @@ set(VCPKG_CRT_LINKAGE dynamic)
 set(VCPKG_CMAKE_SYSTEM_NAME Linux)
 set(VCPKG_CHAINLOAD_TOOLCHAIN_FILE ${CMAKE_CURRENT_LIST_DIR}/../../cmake/LinuxToolchainConfig.cmake)
 
-include(${CMAKE_CURRENT_LIST_DIR}/x86-linkage.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/x86-common.cmake)
