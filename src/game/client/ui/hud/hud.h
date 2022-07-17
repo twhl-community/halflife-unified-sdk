@@ -460,8 +460,17 @@ private:
 	float m_gameTitleTime;
 	client_textmessage_t* m_pGameTitle;
 
-	int m_HUD_title_life;
-	int m_HUD_title_half;
+	struct GameTitle
+	{
+		int Left = 0;
+		int Right = 0;
+	};
+
+	GameTitle m_HUD_title_halflife;
+	GameTitle m_HUD_title_opposingforce;
+	GameTitle m_HUD_title_blueshift;
+
+	GameTitle* m_TitleToDisplay = nullptr;
 };
 
 //

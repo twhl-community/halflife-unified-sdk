@@ -852,7 +852,7 @@ push_trigger_data
 class CWorld : public CBaseEntity
 {
 public:
-	CWorld() = default;
+	CWorld();
 	~CWorld() override;
 
 	void Spawn() override;

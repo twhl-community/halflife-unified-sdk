@@ -4320,12 +4320,12 @@ void CBasePlayer::UpdateClientData()
 
 	// HACKHACK -- send the message to display the game title
 	//TODO: will not work properly in multiplayer
-	if (gDisplayTitle)
+	if (!g_DisplayTitleName.empty())
 	{
 		MESSAGE_BEGIN(MSG_ONE, gmsgShowGameTitle, nullptr, pev);
-		WRITE_BYTE(0);
+		WRITE_STRING(g_DisplayTitleName.c_str());
 		MESSAGE_END();
-		gDisplayTitle = false;
+		g_DisplayTitleName.clear();
 	}
 
 	if (pev->health != m_iClientHealth)

@@ -472,6 +472,12 @@ void ResetGlobalState()
 
 LINK_ENTITY_TO_CLASS(worldspawn, CWorld);
 
+CWorld::CWorld()
+{
+	//Clear previous map's title if it wasn't cleared already.
+	g_DisplayTitleName.clear();
+}
+
 CWorld::~CWorld()
 {
 	g_Server.MapIsEnding();
@@ -662,9 +668,6 @@ void CWorld::Precache()
 	else
 		CVAR_SET_FLOAT("v_dark", 0.0);
 
-	// display the game title if this key is set
-	gDisplayTitle = (pev->spawnflags & SF_WORLD_TITLE) != 0;
-
 	if ((pev->spawnflags & SF_WORLD_FORCETEAM) != 0)
 	{
 		CVAR_SET_FLOAT("mp_defaultteam", 1);
@@ -731,9 +734,8 @@ bool CWorld::KeyValue(KeyValueData* pkvd)
 	}
 	else if (FStrEq(pkvd->szKeyName, "gametitle"))
 	{
-		if (0 != atoi(pkvd->szValue))
-			pev->spawnflags |= SF_WORLD_TITLE;
-
+		//No need to save, only displayed on startup. Bugged in vanilla, loading a save game shows it again.
+		g_DisplayTitleName = pkvd->szValue;
 		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "mapteams"))

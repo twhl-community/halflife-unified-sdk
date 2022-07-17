@@ -40,7 +40,7 @@ void LinkUserMessages()
 	gmsgWeaponList = REG_USER_MSG("WeaponList", -1);
 	gmsgResetHUD = REG_USER_MSG("ResetHUD", 1); // called every respawn
 	gmsgInitHUD = REG_USER_MSG("InitHUD", 0);	// called every time a new player joins the server
-	gmsgShowGameTitle = REG_USER_MSG("GameTitle", 1);
+	gmsgShowGameTitle = REG_USER_MSG("GameTitle", -1);
 	gmsgDeathMsg = REG_USER_MSG("DeathMsg", -1);
 	gmsgScoreInfo = REG_USER_MSG("ScoreInfo", 9);
 	gmsgTeamInfo = REG_USER_MSG("TeamInfo", -1);   // sets the name of a player's team

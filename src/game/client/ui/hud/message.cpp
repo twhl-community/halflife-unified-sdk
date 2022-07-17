@@ -42,8 +42,14 @@ bool CHudMessage::Init()
 
 bool CHudMessage::VidInit()
 {
-	m_HUD_title_half = gHUD.GetSpriteIndex("title_half");
-	m_HUD_title_life = gHUD.GetSpriteIndex("title_life");
+	m_HUD_title_halflife.Left = gHUD.GetSpriteIndex("title_half");
+	m_HUD_title_halflife.Right = gHUD.GetSpriteIndex("title_life");
+
+	m_HUD_title_opposingforce.Left = gHUD.GetSpriteIndex("title_opposing");
+	m_HUD_title_opposingforce.Right = gHUD.GetSpriteIndex("title_force");
+
+	m_HUD_title_blueshift.Left = gHUD.GetSpriteIndex("title_blue");
+	m_HUD_title_blueshift.Right = gHUD.GetSpriteIndex("title_shift");
 
 	return true;
 };
@@ -56,6 +62,7 @@ void CHudMessage::Reset()
 
 	m_gameTitleTime = 0;
 	m_pGameTitle = nullptr;
+	m_TitleToDisplay = nullptr;
 }
 
 
@@ -333,20 +340,20 @@ bool CHudMessage::Draw(float fTime)
 		{
 			brightness = FadeBlend(m_pGameTitle->fadein, m_pGameTitle->fadeout, m_pGameTitle->holdtime, localTime);
 
-			int halfWidth = gHUD.GetSpriteRect(m_HUD_title_half).right - gHUD.GetSpriteRect(m_HUD_title_half).left;
-			int fullWidth = halfWidth + gHUD.GetSpriteRect(m_HUD_title_life).right - gHUD.GetSpriteRect(m_HUD_title_life).left;
-			int fullHeight = gHUD.GetSpriteRect(m_HUD_title_half).bottom - gHUD.GetSpriteRect(m_HUD_title_half).top;
+			int halfWidth = gHUD.GetSpriteRect(m_TitleToDisplay->Left).right - gHUD.GetSpriteRect(m_TitleToDisplay->Left).left;
+			int fullWidth = halfWidth + gHUD.GetSpriteRect(m_TitleToDisplay->Right).right - gHUD.GetSpriteRect(m_TitleToDisplay->Right).left;
+			int fullHeight = gHUD.GetSpriteRect(m_TitleToDisplay->Left).bottom - gHUD.GetSpriteRect(m_TitleToDisplay->Left).top;
 
 			int x = XPosition(m_pGameTitle->x, fullWidth, fullWidth);
 			int y = YPosition(m_pGameTitle->y, fullHeight);
 
 			const auto color = RGB24{m_pGameTitle->r1, m_pGameTitle->g1, m_pGameTitle->b1}.Scale(brightness * 255);
 
-			SPR_Set(gHUD.GetSprite(m_HUD_title_half), color);
-			SPR_DrawAdditive(0, x, y, &gHUD.GetSpriteRect(m_HUD_title_half));
+			SPR_Set(gHUD.GetSprite(m_TitleToDisplay->Left), color);
+			SPR_DrawAdditive(0, x, y, &gHUD.GetSpriteRect(m_TitleToDisplay->Left));
 
-			SPR_Set(gHUD.GetSprite(m_HUD_title_life), color);
-			SPR_DrawAdditive(0, x + halfWidth, y, &gHUD.GetSpriteRect(m_HUD_title_life));
+			SPR_Set(gHUD.GetSprite(m_TitleToDisplay->Right), color);
+			SPR_DrawAdditive(0, x + halfWidth, y, &gHUD.GetSpriteRect(m_TitleToDisplay->Right));
 
 			drawn = 1;
 		}
@@ -499,9 +506,41 @@ bool CHudMessage::MsgFunc_HudText(const char* pszName, int iSize, void* pbuf)
 
 bool CHudMessage::MsgFunc_GameTitle(const char* pszName, int iSize, void* pbuf)
 {
-	m_pGameTitle = TextMessageGet("GAMETITLE");
+	BEGIN_READ(pbuf, iSize);
+
+	// Pick the right title.
+	// This is a temporary hack. The UI needs to be rewritten so this supports the official games and uses the HL1 title for everything else.
+	const std::string gameName = READ_STRING();
+
+	std::string titleName = gameName;
+
+	ToUpper(titleName);
+
+	titleName += "_GAMETITLE";
+
+	m_pGameTitle = TextMessageGet(titleName.c_str());
+
+	if (!m_pGameTitle)
+	{
+		//Fallback.
+		m_pGameTitle = TextMessageGet("VALVE_GAMETITLE");
+	}
+
 	if (m_pGameTitle != nullptr)
 	{
+		if (0 == strcmp("gearbox", gameName.c_str()))
+		{
+			m_TitleToDisplay = &m_HUD_title_opposingforce;
+		}
+		else if (0 == strcmp("bshift", gameName.c_str()))
+		{
+			m_TitleToDisplay = &m_HUD_title_blueshift;
+		}
+		else
+		{
+			m_TitleToDisplay = &m_HUD_title_halflife;
+		}
+
 		m_gameTitleTime = gHUD.m_flTime;
 
 		// Turn on drawing
