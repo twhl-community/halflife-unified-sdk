@@ -340,7 +340,7 @@ bool CHudMessage::Draw(float fTime)
 			int x = XPosition(m_pGameTitle->x, fullWidth, fullWidth);
 			int y = YPosition(m_pGameTitle->y, fullHeight);
 
-			const auto color = RGB24{m_pGameTitle->r1, m_pGameTitle->g1, m_pGameTitle->b1}.Scale(brightness);
+			const auto color = RGB24{m_pGameTitle->r1, m_pGameTitle->g1, m_pGameTitle->b1}.Scale(brightness * 255);
 
 			SPR_Set(gHUD.GetSprite(m_HUD_title_half), color);
 			SPR_DrawAdditive(0, x, y, &gHUD.GetSpriteRect(m_HUD_title_half));
