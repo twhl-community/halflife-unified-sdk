@@ -43,14 +43,9 @@ const char* sArrowFilenames[] =
 // Get the name of TGA file, without a gamedir
 char* GetTGANameForRes(const char* pszName)
 {
-	int i;
 	char sz[256];
 	static char gd[256];
-	if (ScreenWidth < 640)
-		i = 320;
-	else
-		i = 640;
-	sprintf(sz, pszName, i);
+	sprintf(sz, pszName, CHud::m_iRes);
 	sprintf(gd, "gfx/vgui/%s.tga", sz);
 	return gd;
 }

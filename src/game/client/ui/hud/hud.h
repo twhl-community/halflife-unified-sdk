@@ -684,7 +684,7 @@ public:
 	int m_iHideHUDDisplay;
 	int m_iFOV;
 	int m_Teamplay;
-	int m_iRes;
+	static constexpr int m_iRes = 640;
 	cvar_t* m_pCvarStealMouse;
 	cvar_t* m_pCvarDraw;
 	cvar_t* m_pCvarCrosshair;

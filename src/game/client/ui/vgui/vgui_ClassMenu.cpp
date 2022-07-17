@@ -53,13 +53,6 @@
 // Creation
 CClassMenuPanel::CClassMenuPanel(int iTrans, bool iRemoveMe, int x, int y, int wide, int tall) : CMenuPanel(iTrans, iRemoveMe, x, y, wide, tall)
 {
-	// don't show class graphics at below 640x480 resolution
-	bool bShowClassGraphic = true;
-	if (ScreenWidth < 640)
-	{
-		bShowClassGraphic = false;
-	}
-
 	memset(m_pClassImages, 0, sizeof(m_pClassImages));
 
 	// Get the scheme used for the Titles
@@ -129,12 +122,7 @@ CClassMenuPanel::CClassMenuPanel(int iTrans, bool iRemoveMe, int x, int y, int w
 			//m_pClassInfoPanel[i]->setVisible( false );
 
 			// don't show class pic in lower resolutions
-			int textOffs = XRES(8);
-
-			if (bShowClassGraphic)
-			{
-				textOffs = CLASSMENU_WINDOW_NAME_X;
-			}
+			const int textOffs = CLASSMENU_WINDOW_NAME_X;
 
 			// Create the Class Name Label
 			sprintf(sz, "#CTFTitle_%s", sCTFClassSelection[team][i]);
@@ -151,23 +139,20 @@ CClassMenuPanel::CClassMenuPanel(int iTrans, bool iRemoveMe, int x, int y, int w
 			pNameLabel->setText("%s", localName);
 
 			// Create the Class Image
-			if (bShowClassGraphic)
-			{
-				sprintf(sz, "%s", sCTFClassSelection[team][i]);
+			sprintf(sz, "%s", sCTFClassSelection[team][i]);
 
-				m_pClassImages[team][i] = new CImageLabel(sz, 0, 0, CLASSMENU_WINDOW_TEXT_X, CLASSMENU_WINDOW_TEXT_Y);
+			m_pClassImages[team][i] = new CImageLabel(sz, 0, 0, CLASSMENU_WINDOW_TEXT_X, CLASSMENU_WINDOW_TEXT_Y);
 
-				CImageLabel* pLabel = m_pClassImages[team][i];
-				pLabel->setParent(m_pClassInfoPanel[team][i]);
-				//pLabel->setBorder(new LineBorder());
+			CImageLabel* pLabel = m_pClassImages[team][i];
+			pLabel->setParent(m_pClassInfoPanel[team][i]);
+			//pLabel->setBorder(new LineBorder());
 
-				pLabel->setVisible(false);
+			pLabel->setVisible(false);
 
-				// Reposition it based upon it's size
-				int xOut, yOut;
-				pNameLabel->getTextSize(xOut, yOut);
-				pLabel->setPos((CLASSMENU_WINDOW_TEXT_X - pLabel->getWide()) / 2, yOut / 2);
-			}
+			// Reposition it based upon it's size
+			int xOut, yOut;
+			pNameLabel->getTextSize(xOut, yOut);
+			pLabel->setPos((CLASSMENU_WINDOW_TEXT_X - pLabel->getWide()) / 2, yOut / 2);
 
 			// Open up the Class Briefing File
 			sprintf(sz, "classes/short_%s.txt", sCTFClassSelection[team][i]);

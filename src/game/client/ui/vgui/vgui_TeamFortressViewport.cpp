@@ -162,16 +162,11 @@ const char* sCTFStatsSelection[StatsTeamsCount] =
 // Get the name of TGA file, based on GameDir
 char* GetVGUITGAName(const char* pszName)
 {
-	int i;
 	char sz[256];
 	static char gd[256];
 	const char* gamedir;
 
-	if (ScreenWidth < 640)
-		i = 320;
-	else
-		i = 640;
-	sprintf(sz, pszName, i);
+	sprintf(sz, pszName, CHud::m_iRes);
 
 	gamedir = gEngfuncs.pfnGetGameDirectory();
 	sprintf(gd, "%s/gfx/vgui/%s.tga", gamedir, sz);
