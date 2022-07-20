@@ -337,6 +337,7 @@ public:
 	void ItemPreFrame();
 	void ItemPostFrame();
 	void GiveNamedItem(const char* szName);
+	void GiveNamedItem(const char* szName, int defaultAmmo);
 	void EnableControl(bool fControl);
 
 	int GiveAmmo(int iAmount, const char* szName, int iMax) override;

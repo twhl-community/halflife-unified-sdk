@@ -226,15 +226,20 @@ typedef struct
 	int iWeight; // this value used to determine this weapon's importance in autoselection.
 } ItemInfo;
 
-typedef struct
+struct AmmoInfo
 {
 	const char* pszName;
 	int iId;
-} AmmoInfo;
+
+	/**
+	*	@brief For exhaustible weapons. If provided, and the player does not have this weapon in their inventory yet it will be given to them.
+	*/
+	const char* WeaponName = nullptr;
+};
 
 inline int giAmmoIndex = 0;
 
-void AddAmmoNameToAmmoRegistry(const char* szAmmoname);
+void AddAmmoNameToAmmoRegistry(const char* szAmmoname, const char* weaponName);
 
 // Items that the player has in their inventory that they can use
 class CBasePlayerItem : public CBaseAnimating
@@ -392,6 +397,9 @@ public:
 	// hle time creep vars
 	float m_flPrevPrimaryAttack;
 	float m_flLastFireTime;
+
+	//Hack so deploy animations work when weapon prediction is enabled.
+	bool m_ForceSendAnimations = false;
 };
 
 

@@ -257,14 +257,16 @@ void UTIL_PrecacheOtherWeapon(const char* szClassname)
 		{
 			CBasePlayerItem::ItemInfoArray[II.iId] = II;
 
+			const char* weaponName = ((II.iFlags & ITEM_FLAG_EXHAUSTIBLE) != 0) ? STRING(pEntity->pev->classname) : nullptr;
+
 			if (II.pszAmmo1 && '\0' != *II.pszAmmo1)
 			{
-				AddAmmoNameToAmmoRegistry(II.pszAmmo1);
+				AddAmmoNameToAmmoRegistry(II.pszAmmo1, weaponName);
 			}
 
 			if (II.pszAmmo2 && '\0' != *II.pszAmmo2)
 			{
-				AddAmmoNameToAmmoRegistry(II.pszAmmo2);
+				AddAmmoNameToAmmoRegistry(II.pszAmmo2, weaponName);
 			}
 
 			memset(&II, 0, sizeof II);
@@ -670,6 +672,7 @@ bool CBasePlayerWeapon::AddDuplicate(CBasePlayerItem* pOriginal)
 
 bool CBasePlayerWeapon::AddToPlayer(CBasePlayer* pPlayer)
 {
+	/*
 	if ((iFlags() & ITEM_FLAG_EXHAUSTIBLE) != 0 && m_iDefaultAmmo == 0 && m_iClip <= 0)
 	{
 		//This is an exhaustible weapon that has no ammo left. Don't add it, queue it up for destruction instead.
@@ -677,6 +680,7 @@ bool CBasePlayerWeapon::AddToPlayer(CBasePlayer* pPlayer)
 		pev->nextthink = gpGlobals->time + 0.1;
 		return false;
 	}
+	*/
 
 	bool bResult = CBasePlayerItem::AddToPlayer(pPlayer);
 
@@ -778,7 +782,7 @@ bool CBasePlayerWeapon::UpdateClientData(CBasePlayer* pPlayer)
 
 void CBasePlayerWeapon::SendWeaponAnim(int iAnim, int body)
 {
-	const bool skiplocal = UseDecrement() != false;
+	const bool skiplocal = !m_ForceSendAnimations && UseDecrement() != false;
 
 	m_pPlayer->pev->weaponanim = iAnim;
 

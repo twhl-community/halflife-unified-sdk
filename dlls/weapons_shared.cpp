@@ -20,7 +20,7 @@
 #include "gamerules.h"
 
 // Precaches the ammo and queues the ammo info for sending to clients
-void AddAmmoNameToAmmoRegistry(const char* szAmmoname)
+void AddAmmoNameToAmmoRegistry(const char* szAmmoname, const char* weaponName)
 {
 	// make sure it's not already in the registry
 	for (int i = 0; i < MAX_AMMO_SLOTS; i++)
@@ -38,8 +38,11 @@ void AddAmmoNameToAmmoRegistry(const char* szAmmoname)
 	if (giAmmoIndex >= MAX_AMMO_SLOTS)
 		giAmmoIndex = 0;
 
-	CBasePlayerItem::AmmoInfoArray[giAmmoIndex].pszName = szAmmoname;
-	CBasePlayerItem::AmmoInfoArray[giAmmoIndex].iId = giAmmoIndex; // yes, this info is redundant
+	auto& ammoType = CBasePlayerItem::AmmoInfoArray[giAmmoIndex];
+
+	ammoType.pszName = szAmmoname;
+	ammoType.iId = giAmmoIndex; // yes, this info is redundant
+	ammoType.WeaponName = weaponName;
 }
 
 bool CBasePlayerWeapon::CanDeploy()
@@ -252,6 +255,20 @@ void CBasePlayer::SelectLastItem()
 	CBasePlayerItem* pTemp = m_pActiveItem;
 	m_pActiveItem = m_pLastItem;
 	m_pLastItem = pTemp;
+
+	auto weapon = static_cast<CBasePlayerWeapon*>(m_pActiveItem->GetWeaponPtr());
+
+	if (weapon)
+	{
+		weapon->m_ForceSendAnimations = true;
+	}
+
 	m_pActiveItem->Deploy();
+
+	if (weapon)
+	{
+		weapon->m_ForceSendAnimations = false;
+	}
+
 	m_pActiveItem->UpdateItemInfo();
 }
