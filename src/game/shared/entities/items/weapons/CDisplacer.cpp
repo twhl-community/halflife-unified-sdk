@@ -72,18 +72,6 @@ void CDisplacer::Spawn()
 	FallInit();
 }
 
-bool CDisplacer::AddToPlayer(CBasePlayer* pPlayer)
-{
-	if (CBasePlayerWeapon::AddToPlayer(pPlayer))
-	{
-		MESSAGE_BEGIN(MSG_ONE, gmsgWeapPickup, nullptr, pPlayer->edict());
-		WRITE_BYTE(m_iId);
-		MESSAGE_END();
-		return true;
-	}
-	return false;
-}
-
 bool CDisplacer::Deploy()
 {
 	return DefaultDeploy("models/v_displacer.mdl", "models/p_displacer.mdl", DISPLACER_DRAW, "egon");

@@ -83,20 +83,6 @@ void CGrapple::Spawn()
 	FallInit();
 }
 
-bool CGrapple::AddToPlayer(CBasePlayer* pPlayer)
-{
-	if (BaseClass::AddToPlayer(pPlayer))
-	{
-		MESSAGE_BEGIN(MSG_ONE, gmsgWeapPickup, nullptr, pPlayer->edict());
-		WRITE_BYTE(m_iId);
-		MESSAGE_END();
-
-		return true;
-	}
-
-	return false;
-}
-
 bool CGrapple::Deploy()
 {
 	return DefaultDeploy("models/v_bgrap.mdl", "models/p_bgrap.mdl", BGRAPPLE_UP, "gauss");

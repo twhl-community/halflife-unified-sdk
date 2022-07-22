@@ -54,8 +54,6 @@ public:
 
 	void Spawn() override;
 
-	bool AddToPlayer(CBasePlayer* pPlayer) override;
-
 	bool Deploy() override;
 
 	void Holster() override;
