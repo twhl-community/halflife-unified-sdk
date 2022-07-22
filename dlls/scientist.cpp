@@ -641,6 +641,11 @@ void CScientist::HandleAnimEvent(MonsterEvent_t* pEvent)
 //=========================================================
 void CScientist::Spawn()
 {
+	if (pev->body == -1)
+	{														 // -1 chooses a random head
+		pev->body = RANDOM_LONG(0, NUM_SCIENTIST_HEADS - 1); // pick a head, any head
+	}
+
 	Precache();
 
 	SET_MODEL(ENT(pev), "models/scientist.mdl");
@@ -660,11 +665,6 @@ void CScientist::Spawn()
 
 	// White hands
 	pev->skin = 0;
-
-	if (pev->body == -1)
-	{														 // -1 chooses a random head
-		pev->body = RANDOM_LONG(0, NUM_SCIENTIST_HEADS - 1); // pick a head, any head
-	}
 
 	// Luther is black, make his hands black
 	if (pev->body == HEAD_LUTHER)
@@ -730,7 +730,7 @@ void CScientist::TalkInit()
 	m_szGrp[TLK_MORTAL] = "SC_MORTAL";
 
 	// get voice for head
-	switch (pev->body % 3)
+	switch (pev->body % NUM_SCIENTIST_HEADS)
 	{
 	default:
 	case HEAD_GLASSES:
