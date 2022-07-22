@@ -55,6 +55,7 @@ find_package(spdlog CONFIG REQUIRED)
 find_package(nlohmann_json CONFIG REQUIRED)
 find_package(Angelscript CONFIG REQUIRED)
 find_package(OpenAL CONFIG REQUIRED)
+find_package(EASTL CONFIG REQUIRED)
 
 option(BUILD_EXAMPLES "" OFF)
 option(BUILD_TESTS "" OFF)
@@ -163,7 +164,8 @@ function(set_common_properties TARGET_NAME)
 		Threads::Threads
 		${CMAKE_DL_LIBS}
 		nlohmann_json
-		nlohmann_json_schema_validator)
+		nlohmann_json_schema_validator
+		EASTL)
 	
 	target_include_directories(${TARGET_NAME} PRIVATE
 		${CMAKE_BINARY_DIR})
@@ -187,6 +189,7 @@ function(set_common_properties TARGET_NAME)
 	
 	target_sources(${TARGET_NAME}
 		PRIVATE
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/src/public/eastl_allocator.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/src/game/UnifiedSDK.natvis)
 endfunction()
 

@@ -24,6 +24,11 @@
 			"name": "openal-soft",
 			"version>=": "1.21.1#5",
 			"default-features": false
+		},
+		{
+			"name": "eastl",
+			"version>=": "3.18.00#3",
+			"default-features": false
 		}
   ]
 }
