@@ -2830,9 +2830,7 @@ pt_end:
 
 			while (pPlayerItem)
 			{
-				CBasePlayerWeapon* gun;
-
-				gun = (CBasePlayerWeapon*)pPlayerItem->GetWeaponPtr();
+				CBasePlayerWeapon* gun = pPlayerItem->GetWeaponPtr();
 
 				if (gun && gun->UseDecrement())
 				{
@@ -3999,13 +3997,40 @@ bool CBasePlayer::AddPlayerItem(CBasePlayerItem* pItem)
 	}
 
 
-	if (pItem->AddToPlayer(this))
+	if (pItem->CanAddToPlayer(this))
 	{
+		pItem->AddToPlayer(this);
+
 		g_pGameRules->PlayerGotWeapon(this, pItem);
 		pItem->CheckRespawn();
 
+		// Add to the list before extracting ammo so weapon ownership checks work properly.
 		pItem->m_pNext = m_rgpPlayerItems[pItem->iItemSlot()];
 		m_rgpPlayerItems[pItem->iItemSlot()] = pItem;
+
+		if (auto weapon = pItem->GetWeaponPtr(); weapon)
+		{
+			weapon->ExtractAmmo(weapon);
+
+			//Immediately update the ammo HUD so weapon pickup isn't sometimes red because the HUD doesn't know about regenerating/free ammo yet.
+			if (-1 != weapon->m_iPrimaryAmmoType)
+			{
+				SendSingleAmmoUpdate(CBasePlayer::GetAmmoIndex(weapon->pszAmmo1()));
+			}
+
+			if (-1 != weapon->m_iSecondaryAmmoType)
+			{
+				SendSingleAmmoUpdate(CBasePlayer::GetAmmoIndex(weapon->pszAmmo2()));
+			}
+
+			//Don't show weapon pickup if we're spawning or if it's an exhaustible weapon (will show ammo pickup instead).
+			if (!m_bIsSpawning && (weapon->iFlags() & ITEM_FLAG_EXHAUSTIBLE) == 0)
+			{
+				MESSAGE_BEGIN(MSG_ONE, gmsgWeapPickup, NULL, pev);
+				WRITE_BYTE(weapon->m_iId);
+				MESSAGE_END();
+			}
+		}
 
 		// should we switch to this item?
 		if (g_pGameRules->FShouldSwitchWeapon(this, pItem))
@@ -4096,7 +4121,6 @@ int CBasePlayer::GiveAmmo(int iCount, const char* szName, int iMax)
 	{
 		if (!HasNamedPlayerItem(ammoType.WeaponName))
 		{
-			//Note: this must set default ammo to 0 or we'll end up in an infinite loop.
 			GiveNamedItem(ammoType.WeaponName, 0);
 		}
 	}
