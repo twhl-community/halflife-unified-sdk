@@ -559,6 +559,11 @@ bool CScientist::KeyValue(KeyValueData* pkvd)
 
 void CScientist::Spawn()
 {
+	if (pev->body == -1)
+	{														 // -1 chooses a random head
+		SetBodygroup(ScientistBodygroup::Head, RANDOM_LONG(0, GetBodygroupSubmodelCount(ScientistBodygroup::Head)) - 1); // pick a head, any head
+	}
+
 	Precache();
 
 	SetModel(STRING(pev->model));
@@ -577,11 +582,6 @@ void CScientist::Spawn()
 
 	// White hands
 	pev->skin = 0;
-
-	if (pev->body == -1)
-	{																													 // -1 chooses a random head
-		SetBodygroup(ScientistBodygroup::Head, RANDOM_LONG(0, GetBodygroupSubmodelCount(ScientistBodygroup::Head)) - 1); // pick a head, any head
-	}
 
 	// Luther is black, make his hands black
 	if (GetBodygroup(ScientistBodygroup::Head) == HEAD_LUTHER)
@@ -643,7 +643,7 @@ void CScientist::TalkInit()
 	m_szGrp[TLK_MORTAL] = "SC_MORTAL";
 
 	// get voice for head
-	switch (GetBodygroup(ScientistBodygroup::Head) % 3)
+	switch (GetBodygroup(ScientistBodygroup::Head) % GetBodygroupSubmodelCount(ScientistBodygroup::Head))
 	{
 	default:
 	case HEAD_GLASSES:
