@@ -19,6 +19,7 @@
 #include "weaponinfo.h"
 
 class CBasePlayer;
+class CBasePlayerWeapon;
 
 void DeactivateSatchels(CBasePlayer* pOwner);
 
@@ -215,7 +216,9 @@ public:
 
 	static TYPEDESCRIPTION m_SaveData[];
 
-	virtual bool AddToPlayer(CBasePlayer* pPlayer);						// return true if the item you want the item added to the player inventory
+	virtual bool CanAddToPlayer(CBasePlayer* player) { return true; } // return true if the item you want the item added to the player inventory
+
+	virtual void AddToPlayer(CBasePlayer* pPlayer);						
 	virtual bool AddDuplicate(CBasePlayerItem* pItem) { return false; } // return true if you want your duplicate removed from world
 	void EXPORT DestroyItem();
 	void EXPORT DefaultTouch(CBaseEntity* pOther); // default weapon touch
@@ -248,7 +251,7 @@ public:
 
 	virtual bool UpdateClientData(CBasePlayer* pPlayer) { return false; }
 
-	virtual CBasePlayerItem* GetWeaponPtr() { return NULL; }
+	virtual CBasePlayerWeapon* GetWeaponPtr() { return NULL; }
 
 	virtual void GetWeaponData(weapon_data_t& data) {}
 
@@ -290,17 +293,11 @@ public:
 	static TYPEDESCRIPTION m_SaveData[];
 
 	// generic weapon versions of CBasePlayerItem calls
-	bool AddToPlayer(CBasePlayer* pPlayer) override;
+	void AddToPlayer(CBasePlayer* pPlayer) override;
 	bool AddDuplicate(CBasePlayerItem* pItem) override;
 
 	virtual bool ExtractAmmo(CBasePlayerWeapon* pWeapon);	  //{ return true; }			// Return true if you can add ammo to yourself when picked up
 	virtual bool ExtractClipAmmo(CBasePlayerWeapon* pWeapon); // { return true; }			// Return true if you can add ammo to yourself when picked up
-
-	virtual bool AddWeapon()
-	{
-		ExtractAmmo(this);
-		return true;
-	} // Return true if you want to add yourself to the player
 
 	// generic "shared" ammo handlers
 	bool AddPrimaryAmmo(int iCount, char* szName, int iMaxClip, int iMaxCarry);
@@ -338,7 +335,7 @@ public:
 
 	void PrintState();
 
-	CBasePlayerItem* GetWeaponPtr() override { return (CBasePlayerItem*)this; }
+	CBasePlayerWeapon* GetWeaponPtr() override { return this; }
 	float GetNextAttackDelay(float delay);
 
 	float m_flPumpTime;
@@ -1011,7 +1008,7 @@ public:
 	void Precache() override;
 	int iItemSlot() override { return 4; }
 	bool GetItemInfo(ItemInfo* p) override;
-	bool AddToPlayer(CBasePlayer* pPlayer) override;
+	void AddToPlayer(CBasePlayer* pPlayer) override;
 
 	void PrimaryAttack() override;
 	void SecondaryAttack() override;
@@ -1105,7 +1102,7 @@ public:
 	void Precache() override;
 	int iItemSlot() override { return 5; }
 	bool GetItemInfo(ItemInfo* p) override;
-	bool AddToPlayer(CBasePlayer* pPlayer) override;
+	void AddToPlayer(CBasePlayer* pPlayer) override;
 	void PrimaryAttack() override;
 	void SecondaryAttack() override;
 	bool AddDuplicate(CBasePlayerItem* pOriginal) override;
