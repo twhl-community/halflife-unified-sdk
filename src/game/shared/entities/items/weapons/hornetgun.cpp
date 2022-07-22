@@ -62,7 +62,7 @@ void CHgun::Precache()
 	UTIL_PrecacheOther("hornet");
 }
 
-bool CHgun::AddToPlayer(CBasePlayer* pPlayer)
+void CHgun::AddToPlayer(CBasePlayer* pPlayer)
 {
 #ifndef CLIENT_DLL
 	if (g_pGameRules->IsMultiplayer())
@@ -72,7 +72,7 @@ bool CHgun::AddToPlayer(CBasePlayer* pPlayer)
 	}
 #endif
 
-	return CBasePlayerWeapon::AddToPlayer(pPlayer);
+	CBasePlayerWeapon::AddToPlayer(pPlayer);
 }
 
 bool CHgun::GetItemInfo(ItemInfo* p)
