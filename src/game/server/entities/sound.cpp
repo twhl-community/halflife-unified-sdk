@@ -23,6 +23,7 @@
 #include "gamerules.h"
 #include "pm_defs.h"
 #include "pm_shared.h"
+#include "sound/sentence_utils.h"
 
 static char* memfgets(byte* pMemFile, int fileSize, int& filePos, char* pBuffer, int bufferSize);
 
@@ -1228,26 +1229,9 @@ void CEnvSound::Spawn()
 
 // ==================== SENTENCE GROUPS, UTILITY FUNCTIONS  ======================================
 
-#define CSENTENCE_LRU_MAX 32 // max number of elements per sentence group
-
-// group of related sentences
-
-typedef struct sentenceg
-{
-	char szgroupname[CBSENTENCENAME_MAX];
-	int count;
-	unsigned char rgblru[CSENTENCE_LRU_MAX];
-
-} SENTENCEG;
-
-#define CSENTENCEG_MAX CVOXFILESENTENCEMAX // max number of sentence groups
 // globals
 
-SENTENCEG rgsentenceg[CSENTENCEG_MAX];
 bool fSentencesInit = false;
-
-char gszallsentencenames[CVOXFILESENTENCEMAX][CBSENTENCENAME_MAX];
-int gcallsentences = 0;
 
 // randomize list of sentence name indices
 
@@ -1259,8 +1243,8 @@ void USENTENCEG_InitLRU(unsigned char* plru, int count)
 	if (!fSentencesInit)
 		return;
 
-	if (count > CSENTENCE_LRU_MAX)
-		count = CSENTENCE_LRU_MAX;
+	if (count > sentences::CSENTENCE_LRU_MAX)
+		count = sentences::CSENTENCE_LRU_MAX;
 
 	for (i = 0; i < count; i++)
 		plru[i] = (unsigned char)i;
@@ -1284,8 +1268,6 @@ void USENTENCEG_InitLRU(unsigned char* plru, int count)
 
 int USENTENCEG_PickSequential(int isentenceg, char* szfound, int ipick, bool freset)
 {
-	char* szgroupname;
-	unsigned char count;
 	char sznum[8];
 
 	if (!fSentencesInit)
@@ -1294,27 +1276,26 @@ int USENTENCEG_PickSequential(int isentenceg, char* szfound, int ipick, bool fre
 	if (isentenceg < 0)
 		return -1;
 
-	szgroupname = rgsentenceg[isentenceg].szgroupname;
-	count = rgsentenceg[isentenceg].count;
+	const auto& group = sentences::g_SentenceGroups[isentenceg];
 
-	if (count == 0)
+	if (group.count == 0)
 		return -1;
 
-	if (ipick >= count)
-		ipick = count - 1;
+	if (ipick >= group.count)
+		ipick = group.count - 1;
 
 	strcpy(szfound, "!");
-	strcat(szfound, szgroupname);
+	strcat(szfound, group.GroupName.c_str());
 	sprintf(sznum, "%d", ipick);
 	strcat(szfound, sznum);
 
-	if (ipick >= count)
+	if (ipick >= group.count)
 	{
 		if (freset)
 			// reset at end of list
 			return 0;
 		else
-			return count;
+			return group.count;
 	}
 
 	return ipick + 1;
@@ -1332,10 +1313,7 @@ int USENTENCEG_PickSequential(int isentenceg, char* szfound, int ipick, bool fre
 
 int USENTENCEG_Pick(int isentenceg, char* szfound)
 {
-	char* szgroupname;
-	unsigned char* plru;
 	unsigned char i;
-	unsigned char count;
 	char sznum[8];
 	unsigned char ipick;
 	bool ffound = false;
@@ -1346,27 +1324,25 @@ int USENTENCEG_Pick(int isentenceg, char* szfound)
 	if (isentenceg < 0)
 		return -1;
 
-	szgroupname = rgsentenceg[isentenceg].szgroupname;
-	count = rgsentenceg[isentenceg].count;
-	plru = rgsentenceg[isentenceg].rgblru;
+	auto& group = sentences::g_SentenceGroups[isentenceg];
 
 	while (!ffound)
 	{
-		for (i = 0; i < count; i++)
-			if (plru[i] != 0xFF)
+		for (i = 0; i < group.count; i++)
+			if (group.rgblru[i] != 0xFF)
 			{
-				ipick = plru[i];
-				plru[i] = 0xFF;
+				ipick = group.rgblru[i];
+				group.rgblru[i] = 0xFF;
 				ffound = true;
 				break;
 			}
 
 		if (!ffound)
-			USENTENCEG_InitLRU(plru, count);
+			USENTENCEG_InitLRU(group.rgblru, group.count);
 		else
 		{
 			strcpy(szfound, "!");
-			strcat(szfound, szgroupname);
+			strcat(szfound, group.GroupName.c_str());
 			sprintf(sznum, "%d", ipick);
 			strcat(szfound, sznum);
 			return ipick;
@@ -1382,19 +1358,17 @@ int USENTENCEG_Pick(int isentenceg, char* szfound)
 
 int SENTENCEG_GetIndex(const char* szgroupname)
 {
-	int i;
-
 	if (!fSentencesInit || !szgroupname)
 		return -1;
 
 	// search rgsentenceg for match on szgroupname
+	int i = 0;
 
-	i = 0;
-	while (0 != rgsentenceg[i].count)
+	for (const auto& group : sentences::g_SentenceGroups)
 	{
-		if (0 == strcmp(szgroupname, rgsentenceg[i].szgroupname))
+		if (szgroupname == sentences::g_SentenceGroups[i].GroupName)
 			return i;
-		i++;
+		++i;
 	}
 
 	return -1;
@@ -1490,7 +1464,7 @@ void SENTENCEG_Stop(edict_t* entity, int isentenceg, int ipick)
 		return;
 
 	strcpy(buffer, "!");
-	strcat(buffer, rgsentenceg[isentenceg].szgroupname);
+	strcat(buffer, sentences::g_SentenceGroups[isentenceg].GroupName.c_str());
 	sprintf(sznum, "%d", ipick);
 	strcat(buffer, sznum);
 
@@ -1503,119 +1477,97 @@ void SENTENCEG_Stop(edict_t* entity, int isentenceg, int ipick)
 
 void SENTENCEG_Init()
 {
-	char buffer[512]{};
-	char szgroup[64]{};
-	int i, j;
-	int isentencegs;
-
 	if (fSentencesInit)
 		return;
 
-	memset(gszallsentencenames, 0, CVOXFILESENTENCEMAX * CBSENTENCENAME_MAX);
-	gcallsentences = 0;
+	sentences::g_SentenceNames.clear();
+	sentences::g_SentenceGroups.clear();
 
-	memset(rgsentenceg, 0, CSENTENCEG_MAX * sizeof(SENTENCEG));
-	isentencegs = -1;
+	sentences::g_SentenceNames.reserve(sentences::CVOXFILESENTENCEMAX);
 
+	const auto fileContents = FileSystem_LoadFileIntoBuffer("sound/sentences.txt", FileContentFormat::Text);
 
-	int filePos = 0, fileSize;
-	byte* pMemFile = g_engfuncs.pfnLoadFileForMe("sound/sentences.txt", &fileSize);
-	if (!pMemFile)
+	if (fileContents.empty())
+	{
 		return;
+	}
+
+	std::string_view contents{reinterpret_cast<const char*>(fileContents.data())};
 
 	// for each line in the file...
-	while (memfgets(pMemFile, fileSize, filePos, buffer, 511) != nullptr)
+	while (true)
 	{
-		// skip whitespace
-		i = 0;
-		while ('\0' != buffer[i] && buffer[i] == ' ')
-			i++;
+		const auto line = GetLine(contents);
 
-		if ('\0' == buffer[i])
+		if (line.empty())
+		{
+			break;
+		}
+
+		const auto sentence = sentences::ParseSentence(line);
+
+		const std::string_view name = std::get<0>(sentence);
+
+		if (name.empty())
+		{
 			continue;
+		}
 
-		if (buffer[i] == '/' || 0 == isalpha(buffer[i]))
+		if (0 == std::isalpha(name.front()))
+		{
 			continue;
+		}
 
-		// get sentence name
-		j = i;
-		while ('\0' != buffer[j] && buffer[j] != ' ')
-			j++;
-
-		if ('\0' == buffer[j])
+		if (name.size() >= sentences::CBSENTENCENAME_MAX)
+		{
+			ALERT(at_warning, "Sentence %.*s longer than %d letters\n", static_cast<int>(name.size()), name.data(), sentences::CBSENTENCENAME_MAX - 1);
 			continue;
+		}
 
-		if (gcallsentences >= CVOXFILESENTENCEMAX)
+		if (sentences::g_SentenceNames.size() >= sentences::CVOXFILESENTENCEMAX)
 		{
 			ALERT(at_error, "Too many sentences in sentences.txt!\n");
 			break;
 		}
 
-		// null-terminate name and save in sentences array
-		buffer[j] = 0;
-		const char* pString = buffer + i;
+		sentences::g_SentenceNames.push_back(sentences::SentenceName{name.data(), name.size()});
 
-		if (strlen(pString) >= CBSENTENCENAME_MAX)
-			ALERT(at_warning, "Sentence %s longer than %d letters\n", pString, CBSENTENCENAME_MAX - 1);
+		const auto groupData = sentences::ParseGroupData(name);
 
-		strcpy(gszallsentencenames[gcallsentences++], pString);
-
-		j--;
-		if (j <= i)
+		if (!groupData)
+		{
 			continue;
-		if (0 == isdigit(buffer[j]))
-			continue;
+		}
 
-		// cut out suffix numbers
-		while (j > i && 0 != isdigit(buffer[j]))
-			j--;
-
-		if (j <= i)
-			continue;
-
-		buffer[j + 1] = 0;
+		const std::string_view groupName = std::get<0>(*groupData);
 
 		// if new name doesn't match previous group name,
 		// make a new group.
 
-		if (0 != strcmp(szgroup, &(buffer[i])))
+		if (!sentences::g_SentenceGroups.empty() && sentences::g_SentenceGroups.back().GroupName.c_str() == groupName)
 		{
-			// name doesn't match with prev name,
-			// copy name into group, init count to 1
-			isentencegs++;
-			if (isentencegs >= CSENTENCEG_MAX)
-			{
-				ALERT(at_error, "Too many sentence groups in sentences.txt!\n");
-				break;
-			}
-
-			strcpy(rgsentenceg[isentencegs].szgroupname, &(buffer[i]));
-			rgsentenceg[isentencegs].count = 1;
-
-			strcpy(szgroup, &(buffer[i]));
-
-			continue;
+			// name matches with previous, increment group count
+			++sentences::g_SentenceGroups.back().count;
 		}
 		else
 		{
-			//name matches with previous, increment group count
-			if (isentencegs >= 0)
-				rgsentenceg[isentencegs].count++;
+			// name doesn't match with prev name,
+			// copy name into group, init count to 1
+
+			sentences::SENTENCEG group;
+
+			group.GroupName.assign(groupName.data(), groupName.size());
+
+			sentences::g_SentenceGroups.push_back(group);
 		}
 	}
-
-	g_engfuncs.pfnFreeFile(pMemFile);
 
 	fSentencesInit = true;
 
 	// init lru lists
-
-	i = 0;
-
-	while (0 != rgsentenceg[i].count && i < CSENTENCEG_MAX)
+	for (auto& group : sentences::g_SentenceGroups)
 	{
-		USENTENCEG_InitLRU(&(rgsentenceg[i].rgblru[0]), rgsentenceg[i].count);
-		i++;
+		USENTENCEG_InitLRU(group.rgblru, group.count);
 	}
 }
 
@@ -1625,20 +1577,22 @@ int SENTENCEG_Lookup(const char* sample, char* sentencenum)
 {
 	char sznum[32];
 
-	int i;
 	// this is a sentence name; lookup sentence number
 	// and give to engine as string.
-	for (i = 0; i < gcallsentences; i++)
-		if (!stricmp(gszallsentencenames[i], sample + 1))
+	for (size_t i = 0; i < sentences::g_SentenceNames.size(); i++)
+	{
+		if (!stricmp(sentences::g_SentenceNames[i].c_str(), sample + 1))
 		{
 			if (sentencenum)
 			{
 				strcpy(sentencenum, "!");
-				sprintf(sznum, "%d", i);
+				sprintf(sznum, "%u", i);
 				strcat(sentencenum, sznum);
 			}
-			return i;
+			return static_cast<int>(i);
 		}
+	}
+
 	// sentence name not found!
 	return -1;
 }

@@ -23,6 +23,7 @@
 #include "activity.h"
 #include "enginecallback.h"
 
+#include "sound/sentence_utils.h"
 #include "utils/shared_utils.h"
 
 inline globalvars_t* gpGlobals = nullptr;
@@ -441,13 +442,6 @@ inline DLL_GLOBAL int g_Language;
 // Sound Utilities
 
 // sentence groups
-#define CBSENTENCENAME_MAX 16
-#define CVOXFILESENTENCEMAX 1536 // max number of sentences in game. NOTE: this must match \
-								 // CVOXFILESENTENCEMAX in engine\sound.h!!!
-
-extern char gszallsentencenames[CVOXFILESENTENCEMAX][CBSENTENCENAME_MAX];
-extern int gcallsentences;
-
 int USENTENCEG_Pick(int isentenceg, char* szfound);
 int USENTENCEG_PickSequential(int isentenceg, char* szfound, int ipick, bool freset);
 void USENTENCEG_InitLRU(unsigned char* plru, int count);

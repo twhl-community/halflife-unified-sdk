@@ -176,3 +176,23 @@ bool UTIL_ParseStringWithArrayIndex(std::string_view input, std::string_view& na
 
 	return true;
 }
+
+std::string_view GetLine(std::string_view& text)
+{
+	auto end = text.find('\n');
+
+	if (end == text.npos)
+	{
+		end = text.size();
+	}
+	else
+	{
+		++end;
+	}
+
+	const auto line = text.substr(0, end);
+
+	text = text.substr(end);
+
+	return line;
+}

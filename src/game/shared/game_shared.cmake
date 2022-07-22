@@ -76,6 +76,9 @@ function(add_game_shared_sources target)
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripting/AS/CASManager.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripting/AS/CASManager.h
 			
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/sound/sentence_utils.cpp
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/sound/sentence_utils.h
+			
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/CLogSystem.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/CLogSystem.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/command_utils.cpp

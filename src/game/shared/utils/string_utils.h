@@ -46,3 +46,5 @@ void UTIL_StringToVector(float* pVector, std::string_view pString);
 *		The parsed index is always <tt>&gt;= 0</tt>.
 */
 bool UTIL_ParseStringWithArrayIndex(std::string_view input, std::string_view& name, int& index);
+
+std::string_view GetLine(std::string_view& text);

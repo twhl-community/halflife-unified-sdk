@@ -2456,9 +2456,9 @@ void CBasePlayer::CheckSuitUpdate()
 			{
 				// play sentence number
 
-				char sentence[CBSENTENCENAME_MAX + 1];
+				char sentence[sentences::CBSENTENCENAME_MAX + 1];
 				strcpy(sentence, "!");
-				strcat(sentence, gszallsentencenames[isentence]);
+				strcat(sentence, sentences::g_SentenceNames[isentence].c_str());
 				EMIT_SOUND_SUIT(ENT(pev), sentence);
 			}
 			else
