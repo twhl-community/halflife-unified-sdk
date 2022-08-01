@@ -2,7 +2,7 @@
 	"$schema": "https://raw.githubusercontent.com/microsoft/vcpkg/master/scripts/vcpkg.schema.json",
 	"name": "halflife-unified-sdk",
 	"version-semver": "0.1.0",
-	"builtin-baseline": "b49b2bdf22559c89eddbf29a29621a1dc6929320",
+	"builtin-baseline": "66045de4dcc5da3d1029c02b606307f5951dcb22",
 	"dependencies": [
 		{
 			"name": "spdlog",
