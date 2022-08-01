@@ -22,7 +22,7 @@
 		},
 		{
 			"name": "openal-soft",
-			"version>=": "1.21.1#5",
+			"version>=": "1.22.2#1",
 			"default-features": false
 		},
 		{
