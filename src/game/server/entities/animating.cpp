@@ -248,10 +248,10 @@ int CBaseAnimating::GetBodygroupSubmodelCount(int group)
 	auto pstudiohdr = reinterpret_cast<studiohdr_t*>(GET_MODEL_PTR(ENT(pev)));
 
 	if (!pstudiohdr)
-		return 0;
+		return 1;
 
 	if (group < 0 || group >= pstudiohdr->numbodyparts)
-		return 0;
+		return 1;
 
 	auto pbodypart = (mstudiobodyparts_t*)((byte*)pstudiohdr + pstudiohdr->bodypartindex) + group;
 
