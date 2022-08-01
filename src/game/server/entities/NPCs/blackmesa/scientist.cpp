@@ -587,6 +587,24 @@ void CScientist::Spawn()
 	if (GetBodygroup(ScientistBodygroup::Head) == HEAD_LUTHER)
 		pev->skin = 1;
 
+	// get voice for head
+	switch (GetBodygroup(ScientistBodygroup::Head) % GetBodygroupSubmodelCount(ScientistBodygroup::Head))
+	{
+	default:
+	case HEAD_GLASSES:
+		m_voicePitch = 105;
+		break; // glasses
+	case HEAD_EINSTEIN:
+		m_voicePitch = 100;
+		break; // einstein
+	case HEAD_LUTHER:
+		m_voicePitch = 95;
+		break; // luther
+	case HEAD_SLICK:
+		m_voicePitch = 100;
+		break; // slick
+	}
+
 	SetBodygroup(ScientistBodygroup::Item, static_cast<int>(m_Item));
 
 	MonsterInit();
@@ -641,24 +659,6 @@ void CScientist::TalkInit()
 
 	m_szGrp[TLK_WOUND] = "SC_WOUND";
 	m_szGrp[TLK_MORTAL] = "SC_MORTAL";
-
-	// get voice for head
-	switch (GetBodygroup(ScientistBodygroup::Head) % GetBodygroupSubmodelCount(ScientistBodygroup::Head))
-	{
-	default:
-	case HEAD_GLASSES:
-		m_voicePitch = 105;
-		break; //glasses
-	case HEAD_EINSTEIN:
-		m_voicePitch = 100;
-		break; //einstein
-	case HEAD_LUTHER:
-		m_voicePitch = 95;
-		break; //luther
-	case HEAD_SLICK:
-		m_voicePitch = 100;
-		break; //slick
-	}
 }
 
 bool CScientist::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
