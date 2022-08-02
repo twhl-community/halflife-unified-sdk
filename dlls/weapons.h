@@ -319,6 +319,9 @@ public:
 
 	// int		m_iIdPrimary;										// Unique Id for primary ammo
 	// int		m_iIdSecondary;										// Unique Id for secondary ammo
+
+	//Hack so deploy animations work when weapon prediction is enabled.
+	bool m_ForceSendAnimations = false;
 };
 
 
@@ -364,7 +367,15 @@ public:
 	virtual void Reload() {}							  // do "+RELOAD"
 	virtual void WeaponIdle() {}						  // called when no buttons pressed
 	bool UpdateClientData(CBasePlayer* pPlayer) override; // sends hud info to client dll, if things have changed
-	virtual void RetireWeapon();
+	void RetireWeapon();
+
+	// Can't use virtual functions as think functions so this wrapper is needed.
+	void EXPORT CallDoRetireWeapon()
+	{
+		DoRetireWeapon();
+	}
+
+	virtual void DoRetireWeapon();
 	virtual bool ShouldWeaponIdle() { return false; }
 	void Holster() override;
 	virtual bool UseDecrement() { return false; }
@@ -394,9 +405,6 @@ public:
 	// hle time creep vars
 	float m_flPrevPrimaryAttack;
 	float m_flLastFireTime;
-
-	//Hack so deploy animations work when weapon prediction is enabled.
-	bool m_ForceSendAnimations = false;
 };
 
 
