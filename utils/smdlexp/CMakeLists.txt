@@ -1,8 +1,12 @@
-option(ENABLE_SMDLEXP "Enable the SMDLexp 3DS Max plugin" OFF)
+cmake_minimum_required(VERSION 3.21)
 
-if (NOT ENABLE_SMDLEXP)
-	return()
-endif()
+project(HalfLifeSMDLExp
+	VERSION 1.0
+	DESCRIPTION "Half-Life StudioModel 3DS Max export plugin"
+	LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if (NOT CMAKE_SIZEOF_VOID_P EQUAL 8)
 	message(FATAL_ERROR "smdlexp plugin can only be built as 64 bit")
@@ -48,7 +52,6 @@ target_include_directories(smdlexp
 
 target_link_libraries(smdlexp
 	PRIVATE
-		hl_sdk_utils_shared
 		${MAX_DEPENDENCIES})
 
 target_link_options(smdlexp
@@ -57,5 +60,7 @@ target_link_options(smdlexp
 
 set_target_properties(smdlexp PROPERTIES SUFFIX ".dle")
 
+get_target_property(TARGET_SOURCES smdlexp SOURCES)
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${TARGET_SOURCES})
 
-create_source_groups(smdlexp)
+set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT smdlexp)
