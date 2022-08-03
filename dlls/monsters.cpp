@@ -100,6 +100,7 @@ TYPEDESCRIPTION CBaseMonster::m_SaveData[] =
 
 		DEFINE_FIELD(CBaseMonster, m_scriptState, FIELD_INTEGER),
 		DEFINE_FIELD(CBaseMonster, m_pCine, FIELD_CLASSPTR),
+		DEFINE_FIELD(CBaseMonster, m_AllowItemDropping, FIELD_BOOLEAN),
 };
 
 //IMPLEMENT_SAVERESTORE( CBaseMonster, CBaseToggle );
@@ -2993,6 +2994,10 @@ bool CBaseMonster::KeyValue(KeyValueData* pkvd)
 		m_iTriggerCondition = atoi(pkvd->szValue);
 		return true;
 	}
+	else if (FStrEq(pkvd->szKeyName, "allow_item_dropping"))
+	{
+		m_AllowItemDropping = atoi(pkvd->szValue) != 0;
+	}
 
 	return CBaseToggle::KeyValue(pkvd);
 }
@@ -3427,7 +3432,12 @@ CBaseEntity* CBaseMonster::DropItem(const char* pszItemName, const Vector& vecPo
 	if (!pszItemName)
 	{
 		ALERT(at_console, "DropItem() - No item name!\n");
-		return NULL;
+		return nullptr;
+	}
+
+	if (!m_AllowItemDropping)
+	{
+		return nullptr;
 	}
 
 	CBaseEntity* pItem = CBaseEntity::Create(pszItemName, vecPos, vecAng, edict());
