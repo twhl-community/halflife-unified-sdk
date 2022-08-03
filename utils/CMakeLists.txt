@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.21)
 
+# Note: some of these projects will only work when built as 32 bit. Since they are largely the same as the original tools from the 1999 SDK they will need further changes to compile as 64 bit.
+
 project(HalfLifeUtils
 	VERSION 1.0
 	DESCRIPTION "Half-Life SDK tools"
@@ -89,7 +91,6 @@ add_subdirectory(qcsg)
 add_subdirectory(qlumpy)
 add_subdirectory(qrad)
 add_subdirectory(serverctrl)
-add_subdirectory(smdlexp)
 add_subdirectory(sprgen)
 add_subdirectory(studiomdl)
 add_subdirectory(visx2)

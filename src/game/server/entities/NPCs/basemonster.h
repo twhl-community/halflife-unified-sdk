@@ -111,6 +111,8 @@ public:
 
 	float m_flLastYawTime;
 
+	bool m_AllowItemDropping = true;
+
 	bool Save(CSave& save) override;
 	bool Restore(CRestore& restore) override;
 
@@ -355,7 +357,11 @@ public:
 	bool ExitScriptedSequence();
 	bool CineCleanup();
 
-	CBaseEntity* DropItem(const char* pszItemName, const Vector& vecPos, const Vector& vecAng); // drop an item.
+	/**
+	 *	@brief Drop an item.
+	 *	Will return @c nullptr if item dropping is disabled for this NPC.
+	 */
+	CBaseEntity* DropItem(const char* pszItemName, const Vector& vecPos, const Vector& vecAng);
 
 	bool JumpToTarget(Activity movementAct, float waitTime);
 

@@ -5203,7 +5203,9 @@ bool CBasePlayer::SwitchWeapon(CBasePlayerItem* pWeapon)
 
 	if (pWeapon)
 	{
+		pWeapon->m_ForceSendAnimations = true;
 		pWeapon->Deploy();
+		pWeapon->m_ForceSendAnimations = false;
 	}
 
 	return true;
