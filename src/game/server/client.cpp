@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 // Robin, 4-22-98: Moved set_suicide_frame() here from player.cpp to allow us to
 //				   have one without a hardcoded player.mdl in tf_client.cpp
 
@@ -168,7 +168,7 @@ void ClientKill(edict_t* pEntity)
 
 	CBasePlayer* pl = (CBasePlayer*)CBasePlayer::Instance(pev);
 
-	//Only check for teams in CTF gamemode
+	// Only check for teams in CTF gamemode
 	if ((pl->pev->flags & FL_SPECTATOR) != 0 || (g_pGameRules->IsCTF() && pl->m_iTeamNum == CTFTeam::None))
 	{
 		return;
@@ -210,7 +210,7 @@ void ClientPutInServer(edict_t* pEntity)
 	// Reset interpolation during first frame
 	pPlayer->pev->effects |= EF_NOINTERP;
 
-	//Player can be made spectator on spawn, so don't do this
+	// Player can be made spectator on spawn, so don't do this
 	/*
 	pPlayer->pev->iuser1 = 0;	// disable any spec modes
 	pPlayer->pev->iuser2 = 0;
@@ -359,7 +359,7 @@ void Host_Say(edict_t* pEntity, bool teamonly)
 	entvars_t* pev = &pEntity->v;
 	CBasePlayer* player = GetClassPtr((CBasePlayer*)pev);
 
-	//Not yet.
+	// Not yet.
 	if (player->m_flNextChatTime > gpGlobals->time)
 		return;
 
@@ -418,7 +418,7 @@ void Host_Say(edict_t* pEntity, bool teamonly)
 	strcat(text, "\n");
 
 
-	//TODO: clamp cvar value so it can't be negative
+	// TODO: clamp cvar value so it can't be negative
 	player->m_flNextChatTime = gpGlobals->time + spamdelay.value;
 
 	// loop through all players
@@ -509,15 +509,13 @@ void SV_CreateClientCommands()
 	g_ClientCommands.Create("give", [](CBasePlayer* player, const CCommandArgs& args)
 		{
 			int iszItem = ALLOC_STRING(args.Argument(1)); // Make a copy of the classname
-			player->GiveNamedItem(STRING(iszItem));
-		},
+			player->GiveNamedItem(STRING(iszItem)); },
 		{.Flags = ClientCommandFlag::Cheat});
 
 	g_ClientCommands.Create("drop", [](CBasePlayer* player, const CCommandArgs& args)
 		{
 			// player is dropping an item.
-			player->DropPlayerItem(args.Argument(1));
-		});
+			player->DropPlayerItem(args.Argument(1)); });
 
 	g_ClientCommands.Create("fov", [](CBasePlayer* player, const CCommandArgs& args)
 		{
@@ -528,8 +526,7 @@ void SV_CreateClientCommands()
 			else
 			{
 				CLIENT_PRINTF(player->edict(), print_console, UTIL_VarArgs("\"fov\" is \"%d\"\n", (int)player->m_iFOV));
-			}
-		});
+			} });
 
 	g_ClientCommands.Create("set_hud_color", [](CBasePlayer* player, const CCommandArgs& args)
 		{
@@ -545,8 +542,7 @@ void SV_CreateClientCommands()
 			else
 			{
 				CLIENT_PRINTF(player->edict(), print_console, "Usage: set_hud_color <r> <g> <b> (values in range 0-255)\n");
-			}
-		},
+			} },
 		{.Flags = ClientCommandFlag::Cheat});
 
 	g_ClientCommands.Create("set_suit_light_type", [](CBasePlayer* player, const CCommandArgs& args)
@@ -563,8 +559,7 @@ void SV_CreateClientCommands()
 				{
 					CLIENT_PRINTF(player->edict(), print_console, UTIL_VarArgs("Unknown suit light type \"%s\"\n", args.Argument(1)));
 				}
-			}
-		},
+			} },
 		{.Flags = ClientCommandFlag::Cheat});
 
 	g_ClientCommands.Create("use", [](CBasePlayer* player, const CCommandArgs& args)
@@ -579,22 +574,20 @@ void SV_CreateClientCommands()
 			else
 			{
 				CLIENT_PRINTF(player->edict(), print_console, "usage: selectweapon <weapon name>\n");
-			}
-		});
+			} });
 
 	g_ClientCommands.Create("lastinv", [](CBasePlayer* player, const CCommandArgs& args)
 		{ player->SelectLastItem(); });
 
 	g_ClientCommands.Create("closemenus", [](CBasePlayer* player, const CCommandArgs& args)
 		{
-			// just ignore it });
+			/* just ignore it*/ });
 
 	g_ClientCommands.Create("follownext", [](CBasePlayer* player, const CCommandArgs& args)
 		{
 			// follow next player
 			if (player->IsObserver())
-				player->Observer_FindNextPlayer(atoi(args.Argument(1)) != 0);
-		});
+				player->Observer_FindNextPlayer(atoi(args.Argument(1)) != 0); });
 }
 
 bool UTIL_CheatsAllowed(CBasePlayer* pEntity, std::string_view name)
@@ -695,7 +688,7 @@ void ClientUserInfoChanged(edict_t* pEntity, char* infobuffer)
 
 		if (g_pGameRules->IsCTF())
 		{
-			//TODO: in vanilla Op4 this code incorrectly skips the above validation logic if the player is already in a team
+			// TODO: in vanilla Op4 this code incorrectly skips the above validation logic if the player is already in a team
 			if (player->m_iTeamNum != CTFTeam::None)
 			{
 				UTIL_LogPrintf("\"%s<%i><%s><%s>\" changed name to \"%s\"\n",
@@ -1200,7 +1193,7 @@ int AddToFullPack(struct entity_state_s* state, int e, edict_t* ent, edict_t* ho
 	state->skin = ent->v.skin;
 	state->effects = ent->v.effects;
 
-	//Remove the night vision illumination effect so other players don't see it
+	// Remove the night vision illumination effect so other players don't see it
 	if (0 != player && host != ent)
 	{
 		state->effects &= ~EF_BRIGHTLIGHT;
@@ -1344,7 +1337,7 @@ void CreateBaseline(int player, int eindex, struct entity_state_s* baseline, str
 		baseline->maxs = entity->v.maxs;
 
 		baseline->colormap = 0;
-		baseline->modelindex = entity->v.modelindex; //SV_ModelIndex(pr_strings + entity->v.model);
+		baseline->modelindex = entity->v.modelindex; // SV_ModelIndex(pr_strings + entity->v.model);
 		baseline->movetype = entity->v.movetype;
 
 		baseline->scale = entity->v.scale;
@@ -1727,7 +1720,7 @@ void UpdateClientData(const edict_t* ent, int sendweapons, struct clientdata_s* 
 
 	cd->pushmsec = pev->pushmsec;
 
-	//Spectator mode
+	// Spectator mode
 	if (pevOrg != nullptr)
 	{
 		// don't use spec vars from chased player
@@ -1886,7 +1879,7 @@ void CreateInstancedBaselines()
 	// iret = ENGINE_INSTANCE_BASELINE( pc->pev->classname, &state );
 
 	// Destroy objects.
-	//UTIL_Remove( pc );
+	// UTIL_Remove( pc );
 }
 
 /*
