@@ -38,22 +38,20 @@ team_info_t g_TeamInfo[MAX_TEAMS + 1];
 int g_IsSpectator[MAX_PLAYERS_HUD + 1];
 
 constexpr int ScoreColorsFG[5][3] =
-{
-	{255, 255, 255},
-	{246, 151, 0},
-	{0, 151, 0},
-	{227, 203, 46},
-	{143, 215, 142}
-};
+	{
+		{255, 255, 255},
+		{246, 151, 0},
+		{0, 151, 0},
+		{227, 203, 46},
+		{143, 215, 142}};
 
 constexpr int ScoreColorsBG[5][3] =
-{
-	{0, 0, 0},
-	{255, 160, 0},
-	{0, 160, 0},
-	{236, 212, 48},
-	{68, 199, 42}
-};
+	{
+		{0, 0, 0},
+		{255, 160, 0},
+		{0, 160, 0},
+		{236, 212, 48},
+		{68, 199, 42}};
 
 bool HUD_IsGame(const char* game);
 bool EV_TFC_IsAllyTeam(int iTeam1, int iTeam2);
