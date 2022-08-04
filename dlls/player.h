@@ -106,8 +106,10 @@ public:
 
 	int random_seed; // See that is shared between client & server for shared weapons code
 
+	string_t m_MapName; // Map the save game was made for, to detect level changes.
+
 	Vector m_DisplacerReturn;
-	float m_flDisplacerSndRoomtype;
+	int m_DisplacerSndRoomtype;
 
 	int m_iPlayerSound;		// the index of the sound list slot reserved for this player
 	int m_iTargetVolume;	// ideal sound volume.
@@ -123,8 +125,9 @@ public:
 	int m_afButtonPressed;
 	int m_afButtonReleased;
 
-	edict_t* m_pentSndLast; // last sound entity to modify player room type
-	float m_flSndRoomtype;	// last roomtype set by sound entity
+	EHANDLE m_SndLast; // last sound entity to modify player room type
+	int m_SndRoomtype = 0;		// last roomtype set by sound entity. Defaults to 0 on new maps to disable it by default.
+	int m_ClientSndRoomtype;
 	float m_flSndRange;		// dist from player to sound entity
 
 	float m_flFallVelocity;
