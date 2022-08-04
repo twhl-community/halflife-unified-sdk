@@ -336,7 +336,7 @@ void CDisplacer::AltFireThink()
 
 	m_pPlayer->m_DisplacerReturn = m_pPlayer->pev->origin;
 
-	m_pPlayer->m_flDisplacerSndRoomtype = m_pPlayer->m_flSndRoomtype;
+	m_pPlayer->m_DisplacerSndRoomtype = m_pPlayer->m_SndRoomtype;
 
 #ifndef CLIENT_DLL
 	if (g_pGameRules->IsCTF() && m_pPlayer->m_pFlag)

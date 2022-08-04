@@ -60,7 +60,10 @@ edict_t* EntSelectSpawnPoint(CBasePlayer* pPlayer);
 // Global Savedata for player
 TYPEDESCRIPTION CBasePlayer::m_playerSaveData[] =
 	{
+		DEFINE_FIELD(CBasePlayer, m_MapName, FIELD_STRING),
+
 		DEFINE_FIELD(CBasePlayer, m_SuitLightType, FIELD_INTEGER),
+
 		DEFINE_FIELD(CBasePlayer, m_flFlashLightTime, FIELD_TIME),
 		DEFINE_FIELD(CBasePlayer, m_iFlashBattery, FIELD_INTEGER),
 
@@ -110,13 +113,17 @@ TYPEDESCRIPTION CBasePlayer::m_playerSaveData[] =
 		DEFINE_FIELD(CBasePlayer, m_iHideHUD, FIELD_INTEGER),
 		DEFINE_FIELD(CBasePlayer, m_iFOV, FIELD_INTEGER),
 
+		DEFINE_FIELD(CBasePlayer, m_SndLast, FIELD_EHANDLE),
+		DEFINE_FIELD(CBasePlayer, m_SndRoomtype, FIELD_INTEGER),
+		DEFINE_FIELD(CBasePlayer, m_flSndRange, FIELD_FLOAT),
+
 		DEFINE_FIELD(CBasePlayer, m_pRope, FIELD_CLASSPTR),
 		DEFINE_FIELD(CBasePlayer, m_flLastClimbTime, FIELD_TIME),
 		DEFINE_FIELD(CBasePlayer, m_bIsClimbing, FIELD_BOOLEAN),
 
 		//Vanilla Op4 doesn't restore this. Not a big deal but it can cause you to teleport to the wrong area after a restore
 		DEFINE_FIELD(CBasePlayer, m_DisplacerReturn, FIELD_POSITION_VECTOR),
-		DEFINE_FIELD(CBasePlayer, m_flDisplacerSndRoomtype, FIELD_FLOAT),
+		DEFINE_FIELD(CBasePlayer, m_DisplacerSndRoomtype, FIELD_INTEGER),
 		DEFINE_FIELD(CBasePlayer, m_HudColor, FIELD_INTEGER),
 
 		//DEFINE_FIELD( CBasePlayer, m_fDeadTime, FIELD_FLOAT ), // only used in multiplayer games
@@ -124,9 +131,6 @@ TYPEDESCRIPTION CBasePlayer::m_playerSaveData[] =
 		//DEFINE_FIELD( CBasePlayer, m_flStopExtraSoundTime, FIELD_TIME ),
 		//DEFINE_FIELD( CBasePlayer, m_fKnownItem, FIELD_BOOLEAN ), // reset to zero on load
 		//DEFINE_FIELD( CBasePlayer, m_iPlayerSound, FIELD_INTEGER ),	// Don't restore, set in Precache()
-		//DEFINE_FIELD( CBasePlayer, m_pentSndLast, FIELD_EDICT ),	// Don't restore, client needs reset
-		//DEFINE_FIELD( CBasePlayer, m_flSndRoomtype, FIELD_FLOAT ),	// Don't restore, client needs reset
-		//DEFINE_FIELD( CBasePlayer, m_flSndRange, FIELD_FLOAT ),	// Don't restore, client needs reset
 		//DEFINE_FIELD( CBasePlayer, m_fNewAmmo, FIELD_INTEGER ), // Don't restore, client needs reset
 		//DEFINE_FIELD( CBasePlayer, m_flgeigerRange, FIELD_FLOAT ),	// Don't restore, reset in Precache()
 		//DEFINE_FIELD( CBasePlayer, m_flgeigerDelay, FIELD_FLOAT ),	// Don't restore, reset in Precache()
@@ -3094,6 +3098,7 @@ void CBasePlayer::Spawn()
 
 	m_iFOV = 0;		   // init field of view.
 	m_iClientFOV = -1; // make sure fov reset is sent
+	m_ClientSndRoomtype = -1;
 
 	m_flNextDecalTime = 0; // let this player decal as soon as he spawns.
 
@@ -3231,6 +3236,8 @@ bool CBasePlayer::Save(CSave& save)
 	if (!CBaseMonster::Save(save))
 		return false;
 
+	m_MapName = ALLOC_STRING(STRING(gpGlobals->mapname));
+
 	return save.WriteFields("PLAYER", this, m_playerSaveData, std::size(m_playerSaveData));
 }
 
@@ -3267,6 +3274,15 @@ bool CBasePlayer::Restore(CRestore& restore)
 	pev->fixangle = 1; // turn this way immediately
 
 	m_iClientFOV = -1; // Make sure the client gets the right FOV value.
+	m_ClientSndRoomtype = -1;
+
+	// Reset room type on level change.
+	if (!FStrEq(STRING(m_MapName), STRING(gpGlobals->mapname)))
+	{
+		m_SndRoomtype = 0;
+
+		m_MapName = ALLOC_STRING(STRING(gpGlobals->mapname));
+	}
 
 	// Copied from spawn() for now
 	m_bloodColor = BLOOD_COLOR_RED;
@@ -3718,6 +3734,7 @@ void CBasePlayer::ForceClientDllUpdate()
 	m_iClientHideHUD = -1;
 	m_iClientFOV = -1;
 	m_ClientWeaponBits = 0;
+	m_ClientSndRoomtype = -1;
 
 	for (int i = 0; i < MAX_AMMO_SLOTS; ++i)
 	{
@@ -4612,6 +4629,16 @@ void CBasePlayer::UpdateClientData()
 	{
 		UpdateStatusBar();
 		m_flNextSBarUpdateTime = gpGlobals->time + 0.2;
+	}
+
+	// Send new room type to client.
+	if (m_ClientSndRoomtype != m_SndRoomtype)
+	{
+		m_ClientSndRoomtype = m_SndRoomtype;
+
+		MESSAGE_BEGIN(MSG_ONE, SVC_ROOMTYPE, nullptr, edict());
+		WRITE_SHORT((short)m_SndRoomtype); // sequence number
+		MESSAGE_END();
 	}
 
 	//Handled anything that needs resetting
