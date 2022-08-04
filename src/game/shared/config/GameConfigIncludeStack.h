@@ -52,7 +52,7 @@ public:
 		//Use lowercase filenames so case-insensitive filesystems don't cause problems.
 		auto lowered = ToLower(localPath);
 
-		if ( m_Included.insert(std::move(lowered)).second)
+		if (m_Included.insert(std::move(lowered)).second)
 		{
 			return IncludeAddResult::Success;
 		}

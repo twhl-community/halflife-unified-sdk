@@ -170,7 +170,7 @@ public:
 	CPlayerBitVec m_ServerBannedPlayers;
 
 	cl_entity_s m_VoiceHeadModels[MAX_PLAYERS]; // These aren't necessarily in the order of players. They are just
-													  // a place for it to put data in during CreateEntities.
+												// a place for it to put data in during CreateEntities.
 
 	IVoiceStatusHelper* m_pHelper; // Each mod provides an implementation of this.
 

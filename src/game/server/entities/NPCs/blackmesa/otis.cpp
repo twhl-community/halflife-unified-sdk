@@ -214,8 +214,8 @@ void COtis::TalkInit()
 	m_szGrp[TLK_PLHURT2] = "!OT_CUREB";
 	m_szGrp[TLK_PLHURT3] = "!OT_CUREC";
 
-	m_szGrp[TLK_PHELLO] = nullptr;			  //"OT_PHELLO";		// UNDONE
-	m_szGrp[TLK_PIDLE] = nullptr;			  //"OT_PIDLE";			// UNDONE
+	m_szGrp[TLK_PHELLO] = nullptr;		  //"OT_PHELLO";		// UNDONE
+	m_szGrp[TLK_PIDLE] = nullptr;		  //"OT_PIDLE";			// UNDONE
 	m_szGrp[TLK_PQUESTION] = "OT_PQUEST"; // UNDONE
 
 	m_szGrp[TLK_SMELL] = "OT_SMELL";

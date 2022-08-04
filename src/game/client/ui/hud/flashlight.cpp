@@ -49,7 +49,8 @@ void CHudFlashlight::Reset()
 
 bool CHudFlashlight::VidInit()
 {
-	auto setup = [](const char* empty, const char* full, const char* beam) {
+	auto setup = [](const char* empty, const char* full, const char* beam)
+	{
 		const int HUD_flash_empty = gHUD.GetSpriteIndex(empty);
 		const int HUD_flash_full = gHUD.GetSpriteIndex(full);
 		const int HUD_flash_beam = gHUD.GetSpriteIndex(beam);

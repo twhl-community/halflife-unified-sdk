@@ -810,7 +810,7 @@ bool CBaseMonster::CineCleanup()
 
 		if (pOldCine && FBitSet(pOldCine->pev->spawnflags, SF_SCRIPT_LEAVECORPSE))
 		{
-			SetUse(nullptr);	// BUGBUG -- This doesn't call Killed()
+			SetUse(nullptr);   // BUGBUG -- This doesn't call Killed()
 			SetThink(nullptr); // This will probably break some stuff
 			SetTouch(nullptr);
 		}

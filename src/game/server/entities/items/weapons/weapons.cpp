@@ -343,9 +343,9 @@ void W_Precache()
 	}
 
 	g_sModelIndexFireball = UTIL_PrecacheModel("sprites/zerogxplode.spr");	// fireball
-	g_sModelIndexWExplosion = UTIL_PrecacheModel("sprites/WXplo1.spr");	   // underwater fireball
+	g_sModelIndexWExplosion = UTIL_PrecacheModel("sprites/WXplo1.spr");		// underwater fireball
 	g_sModelIndexSmoke = UTIL_PrecacheModel("sprites/steam1.spr");			// smoke
-	g_sModelIndexBubbles = UTIL_PrecacheModel("sprites/bubble.spr");	   //bubbles
+	g_sModelIndexBubbles = UTIL_PrecacheModel("sprites/bubble.spr");		//bubbles
 	g_sModelIndexBloodSpray = UTIL_PrecacheModel("sprites/bloodspray.spr"); // initial blood
 	g_sModelIndexBloodDrop = UTIL_PrecacheModel("sprites/blood.spr");		// splattered blood
 
@@ -552,7 +552,7 @@ CBaseEntity* CBasePlayerItem::Respawn()
 	if (pNewWeapon)
 	{
 		pNewWeapon->pev->effects |= EF_NODRAW; // invisible for now
-		pNewWeapon->SetTouch(nullptr);			   // no touch
+		pNewWeapon->SetTouch(nullptr);		   // no touch
 		pNewWeapon->SetThink(&CBasePlayerItem::AttemptToMaterialize);
 
 		pNewWeapon->pev->model = pev->model;
@@ -1467,12 +1467,12 @@ TYPEDESCRIPTION CRpgRocket::m_SaveData[] =
 };
 IMPLEMENT_SAVERESTORE(CRpgRocket, CGrenade);
 
-TYPEDESCRIPTION	CShotgun::m_SaveData[] =
-{
-	DEFINE_FIELD(CShotgun, m_flNextReload, FIELD_TIME),
-	DEFINE_FIELD(CShotgun, m_fInSpecialReload, FIELD_INTEGER),
-	// DEFINE_FIELD( CShotgun, m_iShell, FIELD_INTEGER ),
-	DEFINE_FIELD(CShotgun, m_flPumpTime, FIELD_TIME),
+TYPEDESCRIPTION CShotgun::m_SaveData[] =
+	{
+		DEFINE_FIELD(CShotgun, m_flNextReload, FIELD_TIME),
+		DEFINE_FIELD(CShotgun, m_fInSpecialReload, FIELD_INTEGER),
+		// DEFINE_FIELD( CShotgun, m_iShell, FIELD_INTEGER ),
+		DEFINE_FIELD(CShotgun, m_flPumpTime, FIELD_TIME),
 };
 IMPLEMENT_SAVERESTORE(CShotgun, CBasePlayerWeapon);
 

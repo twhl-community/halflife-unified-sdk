@@ -35,9 +35,8 @@ GameConfigDefinition::~GameConfigDefinition() = default;
 
 const GameConfigSection* GameConfigDefinition::FindSection(std::string_view name) const
 {
-	if (auto it = std::find_if(m_Sections.begin(), m_Sections.end(), [&](const auto& section) {
-			return section->GetName() == name;
-		});
+	if (auto it = std::find_if(m_Sections.begin(), m_Sections.end(), [&](const auto& section)
+			{ return section->GetName() == name; });
 		it != m_Sections.end())
 	{
 		return it->get();
@@ -65,7 +64,8 @@ std::string GameConfigDefinition::GetSchema() const
 
 	//This structure allows for future expansion without making breaking changes
 
-	const auto sections = [this]() {
+	const auto sections = [this]()
+	{
 		std::ostringstream stream;
 
 		bool first = true;

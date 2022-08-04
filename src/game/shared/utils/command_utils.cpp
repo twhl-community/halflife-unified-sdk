@@ -79,9 +79,8 @@ cvar_t* CConCommandSystem::CreateCVar(std::string_view name, const char* default
 
 	const std::string completeName{useLibraryPrefix == CommandLibraryPrefix::Yes ? fmt::format("{}_{}", GetShortLibraryPrefix(), name) : name};
 
-	if (std::find_if(m_Cvars.begin(), m_Cvars.end(), [&](const auto& data) {
-			return data.Name.get() == completeName;
-		}) != m_Cvars.end())
+	if (std::find_if(m_Cvars.begin(), m_Cvars.end(), [&](const auto& data)
+			{ return data.Name.get() == completeName; }) != m_Cvars.end())
 	{
 		m_Logger->warn("CConCommandSystem::CreateCVar: CVar \"{}\" already registered", completeName);
 

@@ -886,7 +886,8 @@ void AdjustSubRect(const int iWidth, const int iHeight, float& left, float& righ
 
 void CHudAmmo::DrawCrosshair(int x, int y)
 {
-	auto renderer = [this](int x, int y, const Crosshair& crosshair, RGB24 color) {
+	auto renderer = [this](int x, int y, const Crosshair& crosshair, RGB24 color)
+	{
 		if (0 != crosshair.sprite)
 		{
 			if (0 == IEngineStudio.IsHardware())

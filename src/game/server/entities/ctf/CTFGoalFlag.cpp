@@ -440,7 +440,7 @@ void CTFGoalFlag::ScoreFlagTouch(CBasePlayer* pPlayer)
 				pPlayer->m_iCTFScore += 10;
 				pPlayer->m_iOffense += 10;
 
-			g_engfuncs.pfnMessageBegin(MSG_ALL, gmsgCTFScore, nullptr, nullptr);
+				g_engfuncs.pfnMessageBegin(MSG_ALL, gmsgCTFScore, nullptr, nullptr);
 				g_engfuncs.pfnWriteByte(pPlayer->entindex());
 				g_engfuncs.pfnWriteByte(pPlayer->m_iCTFScore);
 				g_engfuncs.pfnMessageEnd();
@@ -461,7 +461,7 @@ void CTFGoalFlag::ScoreFlagTouch(CBasePlayer* pPlayer)
 					++pPlayer->m_iCTFScore;
 					++pPlayer->m_iOffense;
 
-				g_engfuncs.pfnMessageBegin(MSG_ALL, gmsgCTFScore, nullptr, nullptr);
+					g_engfuncs.pfnMessageBegin(MSG_ALL, gmsgCTFScore, nullptr, nullptr);
 					g_engfuncs.pfnWriteByte(pPlayer->entindex());
 					g_engfuncs.pfnWriteByte(pPlayer->m_iCTFScore);
 					g_engfuncs.pfnMessageEnd();

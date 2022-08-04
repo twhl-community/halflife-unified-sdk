@@ -78,7 +78,8 @@ void PlayerSetHudColor::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_T
 		return;
 	}
 
-	const RGB24 color = [this]() {
+	const RGB24 color = [this]()
+	{
 		switch (m_Action)
 		{
 		case Action::Set:

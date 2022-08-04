@@ -463,8 +463,10 @@ void HUD_SetupServerEngineInterface()
 	g_engfuncs.pfnCVarGetPointer = gEngfuncs.pfnGetCvarPointer;
 	g_engfuncs.pfnCVarGetString = gEngfuncs.pfnGetCvarString;
 	g_engfuncs.pfnCVarGetFloat = gEngfuncs.pfnGetCvarFloat;
-	g_engfuncs.pfnCvar_DirectSet = [](cvar_t* cvar, const char* value) { gEngfuncs.Cvar_Set(cvar->name, value); };
-	g_engfuncs.pfnServerCommand = [](const char* cmd) { gEngfuncs.pfnClientCmd(cmd); };
+	g_engfuncs.pfnCvar_DirectSet = [](cvar_t* cvar, const char* value)
+	{ gEngfuncs.Cvar_Set(cvar->name, value); };
+	g_engfuncs.pfnServerCommand = [](const char* cmd)
+	{ gEngfuncs.pfnClientCmd(cmd); };
 	g_engfuncs.pfnCheckParm = gEngfuncs.CheckParm;
 	g_engfuncs.pfnCmd_Argc = gEngfuncs.Cmd_Argc;
 	g_engfuncs.pfnCmd_Argv = gEngfuncs.Cmd_Argv;

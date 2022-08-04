@@ -690,7 +690,7 @@ void CBigMomma::Precache()
 	UTIL_PrecacheOther(BIG_CHILDCLASS);
 
 	// TEMP: Squid
-	PrecacheModel("sprites/mommaspit.spr");				// spit projectile.
+	PrecacheModel("sprites/mommaspit.spr");				   // spit projectile.
 	gSpitSprite = PrecacheModel("sprites/mommaspout.spr"); // client side spittle.
 	gSpitDebrisSprite = PrecacheModel("sprites/mommablob.spr");
 

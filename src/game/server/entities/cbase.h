@@ -104,13 +104,13 @@ typedef enum
 
 void FireTargets(const char* targetName, CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
-template<typename T>
+template <typename T>
 using TBASEPTR = void (T::*)();
 
-template<typename T>
+template <typename T>
 using TENTITYFUNCPTR = void (T::*)(CBaseEntity* pOther);
 
-template<typename T>
+template <typename T>
 using TUSEPTR = void (T::*)(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
 using BASEPTR = TBASEPTR<CBaseEntity>;
@@ -378,7 +378,7 @@ private:
 			ALERT(at_error, "No EXPORT: %s:%s (%08lx)\n", GetClassname(), name, (uint32)pFunction);
 	}
 
-	template<typename T, typename Dest, typename Source>
+	template <typename T, typename Dest, typename Source>
 	Dest FunctionSet(Dest& pointer, Source func, const char* name)
 	{
 #ifdef _DEBUG
@@ -406,26 +406,25 @@ private:
 	}
 
 public:
-
-	template<typename T>
+	template <typename T>
 	BASEPTR ThinkSet(TBASEPTR<T> func, const char* name)
 	{
 		return FunctionSet<T>(m_pfnThink, func, name);
 	}
 
-	template<typename T>
+	template <typename T>
 	ENTITYFUNCPTR TouchSet(TENTITYFUNCPTR<T> func, const char* name)
 	{
 		return FunctionSet<T>(m_pfnTouch, func, name);
 	}
 
-	template<typename T>
+	template <typename T>
 	USEPTR UseSet(TUSEPTR<T> func, const char* name)
 	{
 		return FunctionSet<T>(m_pfnUse, func, name);
 	}
 
-	template<typename T>
+	template <typename T>
 	ENTITYFUNCPTR BlockedSet(TENTITYFUNCPTR<T> func, const char* name)
 	{
 		return FunctionSet<T>(m_pfnBlocked, func, name);

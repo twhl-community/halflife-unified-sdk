@@ -495,10 +495,10 @@ void EMIT_SOUND_SUIT(edict_t* entity, const char* sample);
 void EMIT_GROUPID_SUIT(edict_t* entity, int isentenceg);
 void EMIT_GROUPNAME_SUIT(edict_t* entity, const char* groupname);
 
-#define PRECACHE_SOUND_ARRAY(a)							\
-	{													\
-		for (std::size_t i = 0; i < std::size(a); i++)	\
-			PRECACHE_SOUND(a[i]);						\
+#define PRECACHE_SOUND_ARRAY(a)                        \
+	{                                                  \
+		for (std::size_t i = 0; i < std::size(a); i++) \
+			PRECACHE_SOUND(a[i]);                      \
 	}
 
 #define EMIT_SOUND_ARRAY_DYN(chan, array) \

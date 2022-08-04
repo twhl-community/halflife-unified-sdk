@@ -30,7 +30,7 @@
 // be spawned, and still remain fairly flexible
 const char* CBreakable::pSpawnObjects[] =
 	{
-		nullptr,				  // 0
+		nullptr,			  // 0
 		"item_battery",		  // 1
 		"item_healthkit",	  // 2
 		"weapon_9mmhandgun",  // 3

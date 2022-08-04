@@ -101,7 +101,8 @@ std::shared_ptr<const GameConfigDefinition> GameConfigLoader::CreateDefinition(
 {
 	auto definition = std::make_shared<const GameConfigDefinitionImplementation>(std::move(name), std::move(sections));
 
-	g_JSON.RegisterSchema(std::string{definition->GetName()}, [=]() { return definition->GetSchema(); });
+	g_JSON.RegisterSchema(std::string{definition->GetName()}, [=]()
+		{ return definition->GetSchema(); });
 
 	return definition;
 }

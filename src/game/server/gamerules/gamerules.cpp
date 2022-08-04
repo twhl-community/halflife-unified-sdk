@@ -197,7 +197,7 @@ void CGameRules::BecomeSpectator(CBasePlayer* player, const CCommandArgs& args)
 
 		// notify other clients of player switching to spectator mode
 		UTIL_ClientPrintAll(HUD_PRINTNOTIFY, UTIL_VarArgs("%s switched to spectator mode\n",
-			(!FStringNull(player->pev->netname) && STRING(player->pev->netname)[0] != 0) ? STRING(player->pev->netname) : "unconnected"));
+												 (!FStringNull(player->pev->netname) && STRING(player->pev->netname)[0] != 0) ? STRING(player->pev->netname) : "unconnected"));
 	}
 	else
 		ClientPrint(player->pev, HUD_PRINTCONSOLE, "Spectator mode is disabled.\n");

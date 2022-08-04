@@ -111,7 +111,8 @@ bool SkillSystem::Initialize()
 
 	g_JSON.RegisterSchema(SkillConfigSchemaName, &GetSkillConfigSchema);
 
-	g_ConCommands.CreateCommand("sk_find", [this](const CCommandArgs& args)
+	g_ConCommands.CreateCommand(
+		"sk_find", [this](const CCommandArgs& args)
 		{
 			if (args.Count() != 2)
 			{
@@ -149,7 +150,8 @@ bool SkillSystem::Initialize()
 		},
 		CommandLibraryPrefix::No);
 
-	g_ConCommands.CreateCommand("sk_set", [this](const CCommandArgs& args)
+	g_ConCommands.CreateCommand(
+		"sk_set", [this](const CCommandArgs& args)
 		{
 			if (args.Count() != 3)
 			{
@@ -172,7 +174,8 @@ bool SkillSystem::Initialize()
 		},
 		CommandLibraryPrefix::No);
 
-	g_ConCommands.CreateCommand("sk_remove", [this](const CCommandArgs& args)
+	g_ConCommands.CreateCommand(
+		"sk_remove", [this](const CCommandArgs& args)
 		{
 			if (args.Count() != 2)
 			{
@@ -185,7 +188,8 @@ bool SkillSystem::Initialize()
 		CommandLibraryPrefix::No);
 
 	//Don't name this sk_remove_all because the console will always autocomplete sk_remove to that.
-	g_ConCommands.CreateCommand("sk_reset", [this](const CCommandArgs& args)
+	g_ConCommands.CreateCommand(
+		"sk_reset", [this](const CCommandArgs& args)
 		{
 			if (args.Count() != 1)
 			{
@@ -197,7 +201,8 @@ bool SkillSystem::Initialize()
 		},
 		CommandLibraryPrefix::No);
 
-	g_ConCommands.CreateCommand("sk_reload", [this](const CCommandArgs& args)
+	g_ConCommands.CreateCommand(
+		"sk_reload", [this](const CCommandArgs& args)
 		{ LoadSkillConfigFile(); },
 		CommandLibraryPrefix::No);
 
@@ -227,8 +232,10 @@ void SkillSystem::LoadSkillConfigFile()
 	m_SkillVariables.clear();
 
 	if (const auto result = g_JSON.ParseJSONFile(SkillConfigName,
-		{.SchemaName = SkillConfigSchemaName, .PathID = "GAMECONFIG"},
-		[this](const json& input){ return ParseConfiguration(input); }); !result.value_or(false))
+			{.SchemaName = SkillConfigSchemaName, .PathID = "GAMECONFIG"},
+			[this](const json& input)
+			{ return ParseConfiguration(input); });
+		!result.value_or(false))
 	{
 		m_Logger->error("Error loading skill configuration file \"{}\"", SkillConfigName);
 	}
@@ -239,11 +246,12 @@ float SkillSystem::GetValue(std::string_view name) const
 	float value = 0;
 
 	if (const auto it = std::find_if(m_SkillVariables.begin(), m_SkillVariables.end(), [&](const auto& variable)
-			{ return variable.Name == name; }); it != m_SkillVariables.end())
+			{ return variable.Name == name; });
+		it != m_SkillVariables.end())
 	{
 		value = it->Value;
 
-		if ( value > 0)
+		if (value > 0)
 		{
 			return value;
 		}
@@ -254,7 +262,7 @@ float SkillSystem::GetValue(std::string_view name) const
 	return value;
 }
 
-void SkillSystem::SetValue(std::string_view name,  float value)
+void SkillSystem::SetValue(std::string_view name, float value)
 {
 	auto it = std::find_if(m_SkillVariables.begin(), m_SkillVariables.end(), [&](const auto& variable)
 		{ return variable.Name == name; });
@@ -276,7 +284,7 @@ void SkillSystem::SetValue(std::string_view name,  float value)
 void SkillSystem::RemoveValue(std::string_view name)
 {
 	if (const auto it = std::find_if(m_SkillVariables.begin(), m_SkillVariables.end(), [&](const auto& variable)
-		{ return variable.Name == name; });
+			{ return variable.Name == name; });
 		it != m_SkillVariables.end())
 	{
 		m_SkillVariables.erase(it);

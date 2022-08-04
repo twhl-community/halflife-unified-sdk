@@ -405,7 +405,7 @@ void DLLEXPORT CAM_Think()
 }
 
 void KeyDown(kbutton_t* b); // HACK
-void KeyUp(kbutton_t* b);   // HACK
+void KeyUp(kbutton_t* b);	// HACK
 
 void CAM_PitchUpDown() { KeyDown(&cam_pitchup); }
 void CAM_PitchUpUp() { KeyUp(&cam_pitchup); }

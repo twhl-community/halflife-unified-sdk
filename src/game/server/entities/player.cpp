@@ -213,7 +213,7 @@ static void ThrowGib(entvars_t *pev, char *szGibModel, float flDamage)   \
 																	   \ \
 static void ThrowHead(entvars_t *pev, char *szGibModel, floatflDamage)   \
 {                                                                        \
-	SetModel(szGibModel);                                     \
+	SetModel(szGibModel);                                                \
 	pev->frame			= 0;                                                    \
 	pev->nextthink		= -1;                                                \
 	pev->movetype		= MOVETYPE_BOUNCE;                                    \
@@ -1875,7 +1875,7 @@ void CBasePlayer::PreThink()
 			SET_VIEW(edict(), viewEntity->edict());
 		}
 	}
-	
+
 	// in the event that the player JUST spawned, and the level node graph
 	// was loaded, fix all of the node graph pointers before the game starts.
 
@@ -3655,7 +3655,8 @@ void CBasePlayer::FlashlightTurnOn()
 
 	if (HasSuit())
 	{
-		auto onSound = [this]() {
+		auto onSound = [this]()
+		{
 			switch (m_SuitLightType)
 			{
 			default:
@@ -3677,7 +3678,8 @@ void CBasePlayer::FlashlightTurnOn()
 
 void CBasePlayer::FlashlightTurnOff()
 {
-	auto offSound = [this]() {
+	auto offSound = [this]()
+	{
 		switch (m_SuitLightType)
 		{
 		default:
@@ -5520,7 +5522,7 @@ static void SendScoreInfoMessage(CBasePlayer* owner)
 	WRITE_BYTE(owner->entindex());
 	WRITE_SHORT(owner->pev->frags);
 	WRITE_SHORT(owner->m_iDeaths);
-	
+
 	//To properly emulate Opposing Force's behavior we need to write -1 for these 2 in CTF.
 	if (g_pGameRules->IsCTF())
 	{

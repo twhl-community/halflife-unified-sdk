@@ -61,7 +61,8 @@ private:
 static std::string GetLoggingConfigSchema()
 {
 	//Create json array contents matching spdlog log level names
-	const auto levels = []() {
+	const auto levels = []()
+	{
 		std::ostringstream levels;
 
 		{
@@ -180,9 +181,12 @@ void CLogSystem::PreInitialize()
 
 bool CLogSystem::Initialize()
 {
-	g_ConCommands.CreateCommand("log_listloglevels", [this](const auto&) { ListLogLevels(); });
-	g_ConCommands.CreateCommand("log_listloggers", [this](const auto&) { ListLoggers(); });
-	g_ConCommands.CreateCommand("log_setlevel", [this](const auto& args) { SetLogLevel(args); });
+	g_ConCommands.CreateCommand("log_listloglevels", [this](const auto&)
+		{ ListLogLevels(); });
+	g_ConCommands.CreateCommand("log_listloggers", [this](const auto&)
+		{ ListLoggers(); });
+	g_ConCommands.CreateCommand("log_setlevel", [this](const auto& args)
+		{ SetLogLevel(args); });
 	g_ConCommands.CreateCommand("log_file", [this](const auto& args)
 		{ FileCommand(args); });
 
@@ -248,7 +252,8 @@ void CLogSystem::RemoveLogger(const std::shared_ptr<spdlog::logger>& logger)
 
 CLogSystem::Settings CLogSystem::LoadSettings(const json& input)
 {
-	auto parseLoggerSettings = [](const json& obj, std::optional<spdlog::level::level_enum> defaultLogLevel) {
+	auto parseLoggerSettings = [](const json& obj, std::optional<spdlog::level::level_enum> defaultLogLevel)
+	{
 		LoggerConfigurationSettings settings;
 
 		if (const auto logLevel = obj.value("LogLevel", ""sv); !logLevel.empty())
@@ -317,7 +322,8 @@ CLogSystem::Settings CLogSystem::LoadSettings(const json& input)
 			std::make_move_iterator(configurations.begin()),
 			std::make_move_iterator(configurations.end()),
 			std::back_inserter(settings.Configurations),
-			[](auto&& configuration) {
+			[](auto&& configuration)
+			{
 				return std::move(configuration.second);
 			});
 	}
@@ -367,9 +373,8 @@ void CLogSystem::ApplySettingsToLogger(spdlog::logger& logger)
 
 	const LoggerConfiguration* configuration = &emptyConfiguration;
 
-	if (auto it = std::find_if(m_Settings.Configurations.begin(), m_Settings.Configurations.end(), [&](const auto& configuration) {
-			return configuration.Name == logger.name();
-		});
+	if (auto it = std::find_if(m_Settings.Configurations.begin(), m_Settings.Configurations.end(), [&](const auto& configuration)
+			{ return configuration.Name == logger.name(); });
 		it != m_Settings.Configurations.end())
 	{
 		configuration = &(*it);
@@ -431,9 +436,8 @@ void CLogSystem::ListLogLevels()
 
 void CLogSystem::ListLoggers()
 {
-	spdlog::apply_all([](auto logger) {
-		Con_Printf("%s\n", logger->name().c_str());
-	});
+	spdlog::apply_all([](auto logger)
+		{ Con_Printf("%s\n", logger->name().c_str()); });
 }
 
 void CLogSystem::SetLogLevel(const CCommandArgs& args)

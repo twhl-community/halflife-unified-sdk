@@ -409,7 +409,7 @@ void CRoach::Move(float flInterval)
 void CRoach::Look(int iDistance)
 {
 	CBaseEntity* pSightEnt = nullptr; // the current visible entity that we're dealing with
-	CBaseEntity* pPreviousEnt;	   // the last entity added to the link list
+	CBaseEntity* pPreviousEnt;		  // the last entity added to the link list
 	int iSighted = 0;
 
 	// DON'T let visibility information from last frame sit around!

@@ -102,9 +102,12 @@ bool JSONSystem::Initialize()
 	m_JsonDebug = g_ConCommands.CreateCVar("json_debug", "0", FCVAR_PROTECTED);
 	m_JsonSchemaValidation = g_ConCommands.CreateCVar("json_schema_validation", "0", FCVAR_PROTECTED);
 
-	g_ConCommands.CreateCommand("json_listschemas", [this](const auto& args) { ListSchemas(args); });
-	g_ConCommands.CreateCommand("json_generateschema", [this](const auto& args) { GenerateSchema(args); });
-	g_ConCommands.CreateCommand("json_generateallschemas", [this](const auto& args) { GenerateAllSchemas(args); });
+	g_ConCommands.CreateCommand("json_listschemas", [this](const auto& args)
+		{ ListSchemas(args); });
+	g_ConCommands.CreateCommand("json_generateschema", [this](const auto& args)
+		{ GenerateSchema(args); });
+	g_ConCommands.CreateCommand("json_generateallschemas", [this](const auto& args)
+		{ GenerateAllSchemas(args); });
 
 	m_Logger = g_Logging.CreateLogger("json");
 
@@ -132,9 +135,8 @@ void JSONSystem::RegisterSchema(std::string&& name, std::function<std::string()>
 		return;
 	}
 
-	if (std::find_if(m_Schemas.begin(), m_Schemas.end(), [&](const auto& data) {
-			return data.Name == name;
-		}) != m_Schemas.end())
+	if (std::find_if(m_Schemas.begin(), m_Schemas.end(), [&](const auto& data)
+			{ return data.Name == name; }) != m_Schemas.end())
 	{
 		return;
 	}
@@ -157,8 +159,8 @@ const json_validator* JSONSystem::GetValidator(std::string_view schemaName) cons
 const json_validator* JSONSystem::GetOrCreateValidator(std::string_view schemaName)
 {
 	if (auto it = std::find_if(m_Schemas.begin(), m_Schemas.end(), [&](const auto& schema)
-		{ return schema.Name == schemaName;
-		}); it != m_Schemas.end())
+			{ return schema.Name == schemaName; });
+		it != m_Schemas.end())
 	{
 		//Create validator on demand.
 		if (!it->Validator.has_value())
@@ -181,7 +183,7 @@ const json_validator* JSONSystem::GetOrCreateValidator(std::string_view schemaNa
 
 				it->Validator = std::move(validator);
 			}
-			catch(const std::invalid_argument& e)
+			catch (const std::invalid_argument& e)
 			{
 				m_Logger->error("Error creating validator for schema \"{}\": {}", schemaName, e.what());
 				return nullptr;
@@ -297,9 +299,8 @@ void JSONSystem::GenerateSchema(const CCommandArgs& args)
 	{
 		const auto schemaName = args.Argument(1);
 
-		if (auto it = std::find_if(m_Schemas.begin(), m_Schemas.end(), [&](const auto& data) {
-				return data.Name == schemaName;
-			});
+		if (auto it = std::find_if(m_Schemas.begin(), m_Schemas.end(), [&](const auto& data)
+				{ return data.Name == schemaName; });
 			it != m_Schemas.end())
 		{
 			WriteSchemaToFile(it->Name.c_str(), GetSchemaAsJson(it->Callback()));

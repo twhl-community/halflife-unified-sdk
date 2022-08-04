@@ -47,7 +47,6 @@ struct RGB24
 		return {
 			static_cast<std::uint8_t>(color & 0xFF),
 			static_cast<std::uint8_t>((color & 0xFF00) >> 8),
-			static_cast<std::uint8_t>((color & 0XFF0000) >> 16)
-		};
+			static_cast<std::uint8_t>((color & 0XFF0000) >> 16)};
 	}
 };

@@ -602,25 +602,27 @@ void CTalkMonster::Killed(entvars_t* pevAttacker, int iGib)
 void CTalkMonster::AlertFriends()
 {
 	// for each friend in this bsp...
-	EnumFriends([](CBaseEntity* pFriend) {
-		if (CBaseMonster* pMonster = pFriend->MyMonsterPointer(); pMonster->IsAlive())
+	EnumFriends([](CBaseEntity* pFriend)
 		{
-			// don't provoke a friend that's playing a death animation. They're a goner
-			pMonster->m_afMemory |= bits_MEMORY_PROVOKED;
-		}
-	},
+			if (CBaseMonster* pMonster = pFriend->MyMonsterPointer(); pMonster->IsAlive())
+			{
+				// don't provoke a friend that's playing a death animation. They're a goner
+				pMonster->m_afMemory |= bits_MEMORY_PROVOKED;
+			}
+		},
 		true);
 }
 
 void CTalkMonster::ShutUpFriends()
 {
 	// for each friend in this bsp...
-	EnumFriends([](CBaseEntity* pFriend) {
-		if (CBaseMonster* pMonster = pFriend->MyMonsterPointer(); pMonster->IsAlive())
+	EnumFriends([](CBaseEntity* pFriend)
 		{
-			pMonster->SentenceStop();
-		}
-	},
+			if (CBaseMonster* pMonster = pFriend->MyMonsterPointer(); pMonster->IsAlive())
+			{
+				pMonster->SentenceStop();
+			}
+		},
 		true);
 }
 
@@ -631,17 +633,18 @@ void CTalkMonster::LimitFollowers(CBaseEntity* pPlayer, int maxFollowers)
 	int count = 0;
 
 	// for each friend in this bsp...
-	EnumFriends([&](CBaseEntity* pFriend) {
-		if (CBaseMonster* pMonster = pFriend->MyMonsterPointer(); pMonster->IsAlive())
+	EnumFriends([&](CBaseEntity* pFriend)
 		{
-			if (pMonster->m_hTargetEnt == pPlayer)
+			if (CBaseMonster* pMonster = pFriend->MyMonsterPointer(); pMonster->IsAlive())
 			{
-				count++;
-				if (count > maxFollowers)
-					pMonster->StopFollowing(true);
+				if (pMonster->m_hTargetEnt == pPlayer)
+				{
+					count++;
+					if (count > maxFollowers)
+						pMonster->StopFollowing(true);
+				}
 			}
-		}
-	},
+		},
 		true);
 }
 
@@ -702,7 +705,8 @@ CBaseEntity* CTalkMonster::FindNearestFriend(bool fPlayer)
 	const Vector vecStart{pev->origin.x, pev->origin.y, pev->absmax.z};
 
 	// for each type of friend...
-	auto friendHandler = [&, this](CBaseEntity* pFriend) {
+	auto friendHandler = [&, this](CBaseEntity* pFriend)
+	{
 		if (pFriend == this || !pFriend->IsAlive())
 			// don't talk to self or dead people
 			return;

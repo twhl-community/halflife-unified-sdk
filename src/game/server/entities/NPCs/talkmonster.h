@@ -239,7 +239,8 @@ void CTalkMonster::ForEachFriend(Callback callback)
 template <typename Callback>
 void CTalkMonster::EnumFriends(Callback callback, bool trace)
 {
-	auto wrapper = [&](CBaseEntity* pFriend) {
+	auto wrapper = [&](CBaseEntity* pFriend)
+	{
 		if (pFriend == this || !pFriend->IsAlive() || !(pFriend->pev->flags & FL_MONSTER))
 		{
 			// don't talk to self or dead people or non-monster entities

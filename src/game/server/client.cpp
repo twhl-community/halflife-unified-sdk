@@ -497,20 +497,14 @@ void Host_Say(edict_t* pEntity, bool teamonly)
 void SV_CreateClientCommands()
 {
 	g_ClientCommands.Create("say", [](CBasePlayer* player, const CCommandArgs& args)
-		{
-			Host_Say(player->edict(), false);
-		});
+		{ Host_Say(player->edict(), false); });
 
-	
+
 	g_ClientCommands.Create("say_team", [](CBasePlayer* player, const CCommandArgs& args)
-		{
-			Host_Say(player->edict(), true);
-		});
+		{ Host_Say(player->edict(), true); });
 
 	g_ClientCommands.Create("fullupdate", [](CBasePlayer* player, const CCommandArgs& args)
-		{
-			player->ForceClientDllUpdate();
-		});
+		{ player->ForceClientDllUpdate(); });
 
 	g_ClientCommands.Create("give", [](CBasePlayer* player, const CCommandArgs& args)
 		{
@@ -574,9 +568,7 @@ void SV_CreateClientCommands()
 		{.Flags = ClientCommandFlag::Cheat});
 
 	g_ClientCommands.Create("use", [](CBasePlayer* player, const CCommandArgs& args)
-		{
-			player->SelectItem(args.Argument(1));
-		});
+		{ player->SelectItem(args.Argument(1)); });
 
 	g_ClientCommands.Create("selectweapon", [](CBasePlayer* player, const CCommandArgs& args)
 		{
@@ -591,14 +583,11 @@ void SV_CreateClientCommands()
 		});
 
 	g_ClientCommands.Create("lastinv", [](CBasePlayer* player, const CCommandArgs& args)
-		{
-			player->SelectLastItem();
-		});
+		{ player->SelectLastItem(); });
 
 	g_ClientCommands.Create("closemenus", [](CBasePlayer* player, const CCommandArgs& args)
 		{
-			// just ignore it
-		});
+			// just ignore it });
 
 	g_ClientCommands.Create("follownext", [](CBasePlayer* player, const CCommandArgs& args)
 		{

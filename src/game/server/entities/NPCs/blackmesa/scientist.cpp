@@ -560,7 +560,7 @@ bool CScientist::KeyValue(KeyValueData* pkvd)
 void CScientist::Spawn()
 {
 	if (pev->body == -1)
-	{														 // -1 chooses a random head
+	{																													 // -1 chooses a random head
 		SetBodygroup(ScientistBodygroup::Head, RANDOM_LONG(0, GetBodygroupSubmodelCount(ScientistBodygroup::Head)) - 1); // pick a head, any head
 	}
 
@@ -1123,7 +1123,7 @@ void CSittingScientist::Spawn()
 	pev->solid = SOLID_SLIDEBOX;
 	pev->movetype = MOVETYPE_STEP;
 	pev->effects = 0;
-	
+
 	m_bloodColor = BLOOD_COLOR_RED;
 	m_flFieldOfView = VIEW_FIELD_WIDE; // indicates the width of this monster's forward view cone ( as a dotproduct result )
 

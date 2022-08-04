@@ -2281,8 +2281,8 @@ void CBaseHGruntAlly::TalkInit()
 	m_szGrp[TLK_PLHURT2] = "!FG_CUREB";
 	m_szGrp[TLK_PLHURT3] = "!FG_CUREC";
 
-	m_szGrp[TLK_PHELLO] = nullptr;			  //"BA_PHELLO";		// UNDONE
-	m_szGrp[TLK_PIDLE] = nullptr;			  //"BA_PIDLE";			// UNDONE
+	m_szGrp[TLK_PHELLO] = nullptr;		  //"BA_PHELLO";		// UNDONE
+	m_szGrp[TLK_PIDLE] = nullptr;		  //"BA_PIDLE";			// UNDONE
 	m_szGrp[TLK_PQUESTION] = "FG_PQUEST"; // UNDONE
 
 	m_szGrp[TLK_SMELL] = "FG_SMELL";

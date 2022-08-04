@@ -24,13 +24,13 @@
 #include "animation.h"
 #include "studio.h"
 
-TYPEDESCRIPTION	CBaseAnimating::m_SaveData[] =
-{
-	DEFINE_FIELD(CBaseAnimating, m_flFrameRate, FIELD_FLOAT),
-	DEFINE_FIELD(CBaseAnimating, m_flGroundSpeed, FIELD_FLOAT),
-	DEFINE_FIELD(CBaseAnimating, m_flLastEventCheck, FIELD_TIME),
-	DEFINE_FIELD(CBaseAnimating, m_fSequenceFinished, FIELD_BOOLEAN),
-	DEFINE_FIELD(CBaseAnimating, m_fSequenceLoops, FIELD_BOOLEAN),
+TYPEDESCRIPTION CBaseAnimating::m_SaveData[] =
+	{
+		DEFINE_FIELD(CBaseAnimating, m_flFrameRate, FIELD_FLOAT),
+		DEFINE_FIELD(CBaseAnimating, m_flGroundSpeed, FIELD_FLOAT),
+		DEFINE_FIELD(CBaseAnimating, m_flLastEventCheck, FIELD_TIME),
+		DEFINE_FIELD(CBaseAnimating, m_fSequenceFinished, FIELD_BOOLEAN),
+		DEFINE_FIELD(CBaseAnimating, m_fSequenceLoops, FIELD_BOOLEAN),
 };
 
 IMPLEMENT_SAVERESTORE(CBaseAnimating, CBaseDelay);

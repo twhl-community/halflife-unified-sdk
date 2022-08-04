@@ -138,8 +138,8 @@ void CDrillSergeant::TalkInit()
 	m_szGrp[TLK_PLHURT2] = "!DR_CUREB";
 	m_szGrp[TLK_PLHURT3] = "!DR_CUREC";
 
-	m_szGrp[TLK_PHELLO] = nullptr;			  //"BA_PHELLO";		// UNDONE
-	m_szGrp[TLK_PIDLE] = nullptr;			  //"BA_PIDLE";			// UNDONE
+	m_szGrp[TLK_PHELLO] = nullptr;		  //"BA_PHELLO";		// UNDONE
+	m_szGrp[TLK_PIDLE] = nullptr;		  //"BA_PIDLE";			// UNDONE
 	m_szGrp[TLK_PQUESTION] = "DR_PQUEST"; // UNDONE
 
 	m_szGrp[TLK_SMELL] = "DR_SMELL";

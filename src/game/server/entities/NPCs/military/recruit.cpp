@@ -140,8 +140,8 @@ void CRecruit::TalkInit()
 	m_szGrp[TLK_PLHURT2] = "!RC_CUREB";
 	m_szGrp[TLK_PLHURT3] = "!RC_CUREC";
 
-	m_szGrp[TLK_PHELLO] = nullptr;			  //"BA_PHELLO";		// UNDONE
-	m_szGrp[TLK_PIDLE] = nullptr;			  //"BA_PIDLE";			// UNDONE
+	m_szGrp[TLK_PHELLO] = nullptr;		  //"BA_PHELLO";		// UNDONE
+	m_szGrp[TLK_PIDLE] = nullptr;		  //"BA_PIDLE";			// UNDONE
 	m_szGrp[TLK_PQUESTION] = "RC_PQUEST"; // UNDONE
 
 	m_szGrp[TLK_SMELL] = "RC_SMELL";

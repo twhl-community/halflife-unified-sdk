@@ -84,7 +84,7 @@ public:
 
 		auto logger = context.Loader.GetLogger();
 
-		auto executor = [&](const std::string& command) 
+		auto executor = [&](const std::string& command)
 		{
 			logger->trace("Executing command \"{}\"", command);
 

@@ -178,7 +178,8 @@ bool CASManager::ExecuteContext(asIScriptContext& context)
 
 void CASManager::OnMessageCallback(const asSMessageInfo* msg)
 {
-	const auto level = [&]() {
+	const auto level = [&]()
+	{
 		switch (msg->type)
 		{
 		case asEMsgType::asMSGTYPE_ERROR:
