@@ -3067,8 +3067,7 @@ void CBasePlayer::Spawn()
 		{
 			//Done spawning; reset.
 			m_bIsSpawning = false;
-		}
-	};
+		}};
 
 	pev->classname = MAKE_STRING("player");
 	pev->health = 100;
