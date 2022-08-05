@@ -106,8 +106,6 @@ public:
 
 	int random_seed; // See that is shared between client & server for shared weapons code
 
-	string_t m_MapName; // Map the save game was made for, to detect level changes.
-
 	Vector m_DisplacerReturn;
 	int m_DisplacerSndRoomtype;
 
