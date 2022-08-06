@@ -129,7 +129,7 @@ void CFlockingFlyer::OnCreate()
 {
 	CBaseMonster::OnCreate();
 
-	pev->health = 1;
+	pev->health = 10;
 	//pev->model = MAKE_STRING("models/aflock.mdl");
 	pev->model = MAKE_STRING("models/boid.mdl");
 }
@@ -347,7 +347,9 @@ void CFlockingFlyer::SpawnCommonCode()
 	pev->classname = MAKE_STRING("monster_flyer");
 	pev->solid = SOLID_SLIDEBOX;
 	pev->movetype = MOVETYPE_FLY;
-	pev->takedamage = DAMAGE_NO;
+	pev->takedamage = DAMAGE_YES;
+
+	m_bloodColor = BLOOD_COLOR_GREEN;
 
 	m_fPathBlocked = false; // obstacles will be detected
 	m_flFieldOfView = 0.2;
