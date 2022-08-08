@@ -15,10 +15,8 @@
 
 #pragma once
 
-#include <memory>
 
 #include "CGameLibrary.h"
-#include "sound/ISoundSystem.h"
 
 /**
 *	@brief Handles core client actions
@@ -57,8 +55,6 @@ public:
 	void Frame();
 
 private:
-	std::unique_ptr<ISoundSystem> m_SoundSystem;
-	bool m_PreviousPausedState = false;
 };
 
 inline CClientLibrary g_Client;

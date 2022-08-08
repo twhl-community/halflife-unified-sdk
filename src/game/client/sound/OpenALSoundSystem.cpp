@@ -51,17 +51,44 @@ bool OpenALSoundSystem::Create()
 	return true;
 }
 
+void OpenALSoundSystem::Pause()
+{
+	if (m_Paused)
+	{
+		return;
+	}
+
+	m_Paused = true;
+
+	m_MusicSystem->Pause();
+}
+
+void OpenALSoundSystem::Resume()
+{
+	if (!m_Paused)
+	{
+		return;
+	}
+
+	m_Paused = false;
+
+	m_MusicSystem->Resume();
+}
+
 IMusicSystem* OpenALSoundSystem::GetMusicSystem()
 {
 	return m_MusicSystem.get();
 }
 
-std::unique_ptr<ISoundSystem> CreateSoundSystem()
+void CreateSoundSystem()
 {
-	if (auto system = std::make_unique<OpenALSoundSystem>(); system->Create())
+	g_SoundSystem = []() -> std::unique_ptr<ISoundSystem>
 	{
-		return system;
-	}
+		if (auto system = std::make_unique<OpenALSoundSystem>(); system->Create())
+		{
+			return system;
+		}
 
-	return std::make_unique<DummySoundSystem>();
+		return std::make_unique<DummySoundSystem>();
+	}();
 }

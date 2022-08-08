@@ -32,6 +32,10 @@ struct DummySoundSystem final : public ISoundSystem
 {
 	~DummySoundSystem() override = default;
 
+	void Pause() override {}
+
+	void Resume() override {}
+
 	IMusicSystem* GetMusicSystem() override
 	{
 		return m_MusicSystem.get();

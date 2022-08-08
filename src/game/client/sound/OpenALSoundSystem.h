@@ -188,12 +188,18 @@ struct OpenALSource final
 	ALuint Id = NullSource;
 };
 
+class OpenALMusicSystem;
+
 class OpenALSoundSystem final : public ISoundSystem
 {
 public:
 	~OpenALSoundSystem() override;
 
 	bool Create();
+
+	void Pause() override;
+
+	void Resume() override;
 
 	IMusicSystem* GetMusicSystem() override;
 
@@ -205,5 +211,8 @@ private:
 	std::shared_ptr<spdlog::logger> m_Logger;
 
 	std::unique_ptr<ALCdevice, DeleterWrapper<alcCloseDevice>> m_Device;
+
 	std::unique_ptr<OpenALMusicSystem> m_MusicSystem;
+
+	bool m_Paused{false};
 };

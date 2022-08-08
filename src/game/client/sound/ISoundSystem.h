@@ -26,13 +26,16 @@ struct ISoundSystem
 {
 	virtual ~ISoundSystem() = default;
 
-	/**
-	*	@brief Gets the music system.
-	*/
+	virtual void Pause() = 0;
+
+	virtual void Resume() = 0;
+
 	virtual IMusicSystem* GetMusicSystem() = 0;
 };
+
+inline std::unique_ptr<ISoundSystem> g_SoundSystem;
 
 /**
 *	@brief Creates an instance of the sound system using an available implementation.
 */
-std::unique_ptr<ISoundSystem> CreateSoundSystem();
+void CreateSoundSystem();

@@ -18,6 +18,7 @@
 #include "CClientLibrary.h"
 #include "view.h"
 #include "sound/IMusicSystem.h"
+#include "sound/ISoundSystem.h"
 
 bool CClientLibrary::Initialize()
 {
@@ -32,30 +33,26 @@ bool CClientLibrary::Initialize()
 void CClientLibrary::HudInit()
 {
 	//Has to be done here because music cvars don't exist at Initialize time.
-	m_SoundSystem = CreateSoundSystem();
+	CreateSoundSystem();
 }
 
 void CClientLibrary::Shutdown()
 {
-	m_SoundSystem.reset();
+	g_SoundSystem.reset();
 
 	ShutdownCommon();
 }
 
 void CClientLibrary::Frame()
 {
-	//Only do this on change to prevent problems from constantly calling a threaded function.
-	if (m_PreviousPausedState != g_Paused)
-	{
-		m_PreviousPausedState = g_Paused;
 
-		if (g_Paused)
-		{
-			m_SoundSystem->GetMusicSystem()->Pause();
-		}
-		else
-		{
-			m_SoundSystem->GetMusicSystem()->Resume();
-		}
+
+	if (g_Paused)
+	{
+		g_SoundSystem->Pause();
+	}
+	else
+	{
+		g_SoundSystem->Resume();
 	}
 }
