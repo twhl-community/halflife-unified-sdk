@@ -26,6 +26,8 @@
 
 #include "ISoundSystem.h"
 
+class OpenALMusicSystem;
+
 template <auto Function>
 struct DeleterWrapper final
 {
@@ -193,7 +195,7 @@ public:
 
 	bool Create();
 
-	IMusicSystem* GetMusicSystem() override { return m_MusicSystem.get(); }
+	IMusicSystem* GetMusicSystem() override;
 
 	spdlog::logger* GetLogger() { return m_Logger.get(); }
 
@@ -203,5 +205,5 @@ private:
 	std::shared_ptr<spdlog::logger> m_Logger;
 
 	std::unique_ptr<ALCdevice, DeleterWrapper<alcCloseDevice>> m_Device;
-	std::unique_ptr<IMusicSystem> m_MusicSystem;
+	std::unique_ptr<OpenALMusicSystem> m_MusicSystem;
 };

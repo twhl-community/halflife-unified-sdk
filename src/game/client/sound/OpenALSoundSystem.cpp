@@ -39,17 +39,21 @@ bool OpenALSoundSystem::Create()
 
 	m_Logger->trace("OpenAL device created");
 
-	m_MusicSystem = [this]() -> std::unique_ptr<IMusicSystem>
+	if (auto system = std::make_unique<OpenALMusicSystem>(); system->Create(this))
 	{
-		if (auto system = std::make_unique<OpenALMusicSystem>(); system->Create(this))
-		{
-			return system;
-		}
-
-		return std::make_unique<DummyMusicSystem>();
-	}();
+		m_MusicSystem = std::move(system);
+	}
+	else
+	{
+		return false;
+	}
 
 	return true;
+}
+
+IMusicSystem* OpenALSoundSystem::GetMusicSystem()
+{
+	return m_MusicSystem.get();
 }
 
 std::unique_ptr<ISoundSystem> CreateSoundSystem()
