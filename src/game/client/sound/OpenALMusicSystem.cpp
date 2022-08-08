@@ -85,7 +85,7 @@ bool OpenALMusicSystem::Create(OpenALSoundSystem* soundSystem)
 
 	m_Source = OpenALSource::Create();
 
-	if (!m_Source)
+	if (!m_Source.IsValid())
 	{
 		logger.error("Couldn't create OpenAL source");
 		return false;

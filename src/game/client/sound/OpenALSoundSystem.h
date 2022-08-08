@@ -121,7 +121,7 @@ struct OpenALBuffer final
 		return buffer;
 	}
 
-	constexpr operator bool() const { return Id != NullBuffer; }
+	constexpr bool IsValid() const { return Id != NullBuffer; }
 
 	void Delete()
 	{
@@ -172,7 +172,7 @@ struct OpenALSource final
 		return source;
 	}
 
-	constexpr operator bool() const { return Id != NullSource; }
+	constexpr bool IsValid() const { return Id != NullSource; }
 
 	void Delete()
 	{
