@@ -16,6 +16,9 @@
 #include <exception>
 #include <limits>
 
+#include <AL/al.h>
+#include <AL/alc.h>
+
 #define AL_ALEXT_PROTOTYPES
 #include <AL/alext.h>
 

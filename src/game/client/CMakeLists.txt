@@ -142,6 +142,7 @@ target_sources(client PRIVATE
 	sound/OpenALMusicSystem.h
 	sound/OpenALSoundSystem.cpp
 	sound/OpenALSoundSystem.h
+	sound/OpenALUtils.h
 
 	ui/voice_banmgr.cpp
 	ui/voice_banmgr.h
