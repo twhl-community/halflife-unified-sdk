@@ -34,27 +34,31 @@ OpenALMusicSystem::~OpenALMusicSystem()
 	m_Thread.join();
 
 	//Since we switch to this context on-demand we can't rely on the default destructor to clean up.
-	if (const ContextSwitcher switcher{m_Context.get()}; switcher)
+	if (const ContextSwitcher switcher{m_Context.get(), *m_SoundSystem->GetLogger()}; switcher)
 	{
 		m_Source.Delete();
 		m_Buffers.clear();
 	}
 }
 
-bool OpenALMusicSystem::Create(OpenALSoundSystem& soundSystem)
+bool OpenALMusicSystem::Create(OpenALSoundSystem* soundSystem)
 {
+	m_SoundSystem = soundSystem;
+
+	auto& logger = *m_SoundSystem->GetLogger();
+
 	m_VolumeCvar = gEngfuncs.pfnGetCvarPointer("MP3Volume");
 	m_FadeTimeCvar = gEngfuncs.pfnGetCvarPointer("MP3FadeTime");
 
 	if (!m_VolumeCvar)
 	{
-		Con_Printf("Couldn't get bgmvolume cvar\n");
+		logger.error("Couldn't get bgmvolume cvar");
 		return false;
 	}
 
-	auto device = soundSystem.GetDevice();
+	auto device = m_SoundSystem->GetDevice();
 
-	if (!CheckOpenALContextExtension(device, "ALC_EXT_thread_local_context"))
+	if (!CheckOpenALContextExtension(device, "ALC_EXT_thread_local_context", logger))
 	{
 		return false;
 	}
@@ -63,18 +67,18 @@ bool OpenALMusicSystem::Create(OpenALSoundSystem& soundSystem)
 
 	if (!m_Context)
 	{
-		Con_Printf("Couldn't create OpenAL context\n");
+		logger.error("Couldn't create OpenAL context");
 		return false;
 	}
 
-	const ContextSwitcher switcher{m_Context.get()};
+	const ContextSwitcher switcher{m_Context.get(), logger};
 
 	if (!switcher)
 	{
 		return false;
 	}
 
-	if (!CheckOpenALExtension("AL_EXT_FLOAT32"))
+	if (!CheckOpenALExtension("AL_EXT_FLOAT32", logger))
 	{
 		return false;
 	}
@@ -83,7 +87,7 @@ bool OpenALMusicSystem::Create(OpenALSoundSystem& soundSystem)
 
 	if (!m_Source)
 	{
-		Con_Printf("Couldn't create OpenAL source\n");
+		logger.error("Couldn't create OpenAL source");
 		return false;
 	}
 

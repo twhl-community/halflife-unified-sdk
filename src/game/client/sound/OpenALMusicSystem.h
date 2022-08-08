@@ -124,7 +124,7 @@ private:
 public:
 	~OpenALMusicSystem() override;
 
-	bool Create(OpenALSoundSystem& soundSystem);
+	bool Create(OpenALSoundSystem* soundSystem);
 
 	void Play(std::string&& fileName, bool looping) override;
 	void Stop() override;
@@ -149,6 +149,7 @@ private:
 	void Music_Command(const CCommandArgs& args);
 
 private:
+	OpenALSoundSystem* m_SoundSystem{};
 	cvar_t* m_VolumeCvar{};
 	cvar_t* m_FadeTimeCvar{};
 

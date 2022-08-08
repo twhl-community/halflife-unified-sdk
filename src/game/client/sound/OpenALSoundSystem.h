@@ -17,6 +17,8 @@
 
 #include <memory>
 
+#include <spdlog/logger.h>
+
 #include <AL/al.h>
 #include <AL/alc.h>
 
@@ -40,12 +42,12 @@ struct ContextSwitcher
 
 	const bool Success;
 
-	ContextSwitcher(ALCcontext* context)
+	ContextSwitcher(ALCcontext* context, spdlog::logger& logger)
 		: Previous(alcGetCurrentContext()), Success(ALC_FALSE != alcMakeContextCurrent(context))
 	{
 		if (!Success)
 		{
-			Con_Printf("Couldn't make OpenAL context current\n");
+			logger.error("Couldn't make OpenAL context current");
 		}
 	}
 
@@ -57,22 +59,22 @@ struct ContextSwitcher
 	operator bool() const { return Success; }
 };
 
-inline bool CheckOpenALContextExtension(ALCdevice* device, const char* name)
+inline bool CheckOpenALContextExtension(ALCdevice* device, const char* name, spdlog::logger& logger)
 {
 	if (ALC_FALSE == alcIsExtensionPresent(device, name))
 	{
-		Con_Printf("OpenAL does not provide extension \"%s\", required for music playback\n", name);
+		logger.error("OpenAL does not provide extension \"{}\", required for music playback", name);
 		return false;
 	}
 
 	return true;
 }
 
-inline bool CheckOpenALExtension(const char* name)
+inline bool CheckOpenALExtension(const char* name, spdlog::logger& logger)
 {
 	if (ALC_FALSE == alIsExtensionPresent(name))
 	{
-		Con_Printf("OpenAL does not provide extension \"%s\", required for music playback\n", name);
+		logger.error("OpenAL does not provide extension \"{}\", required for music playback", name);
 		return false;
 	}
 
@@ -187,13 +189,19 @@ struct OpenALSource final
 class OpenALSoundSystem final : public ISoundSystem
 {
 public:
+	~OpenALSoundSystem() override;
+
 	bool Create();
 
 	IMusicSystem* GetMusicSystem() override { return m_MusicSystem.get(); }
 
+	spdlog::logger* GetLogger() { return m_Logger.get(); }
+
 	ALCdevice* GetDevice() { return m_Device.get(); }
 
 private:
+	std::shared_ptr<spdlog::logger> m_Logger;
+
 	std::unique_ptr<ALCdevice, DeleterWrapper<alcCloseDevice>> m_Device;
 	std::unique_ptr<IMusicSystem> m_MusicSystem;
 };
