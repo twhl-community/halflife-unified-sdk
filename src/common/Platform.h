@@ -54,6 +54,8 @@
 #include <iterator>
 #include <string>
 
+#include <EASTL/fixed_string.h>
+
 using byte = unsigned char;
 using string_t = unsigned int;
 using qboolean = int;
@@ -95,3 +97,8 @@ constexpr std::size_t MAX_PATH_LENGTH = 260;
 
 #define V_min(a, b) (((a) < (b)) ? (a) : (b))
 #define V_max(a, b) (((a) > (b)) ? (a) : (b))
+
+/**
+*	@brief Type to efficiently store a filename. Stores the string in a buffer with automatic lifetime if possible.
+*/
+using Filename = eastl::fixed_string<char, MAX_PATH_LENGTH>;

@@ -42,6 +42,10 @@ struct mplane_s;
 constexpr Vector vec3_origin(0, 0, 0);
 constexpr Vector g_vecZero(0, 0, 0);
 
+constexpr Vector vec3_forward{1, 0, 0};
+constexpr Vector vec3_right{0, -1, 0};
+constexpr Vector vec3_up{0, 0, 1};
+
 #define VectorSubtract(a, b, c)   \
 	{                             \
 		(c)[0] = (a)[0] - (b)[0]; \

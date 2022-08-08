@@ -20,7 +20,7 @@
 typedef struct event_api_s
 {
 	int version;
-	void (*EV_PlaySound)(int ent, float* origin, int channel, const char* sample, float volume, float attenuation, int fFlags, int pitch);
+	void (*EV_PlaySound)(int ent, const float* origin, int channel, const char* sample, float volume, float attenuation, int fFlags, int pitch);
 	void (*EV_StopSound)(int ent, int channel, const char* sample);
 	int (*EV_FindModelIndex)(const char* pmodel);
 	int (*EV_IsLocal)(int playernum);

@@ -24,44 +24,41 @@
 
 #include "hud.h"
 
-#include "OpenALMusicSystem.h"
-#include "OpenALSoundSystem.h"
+#include "MusicSystem.h"
 
 #include "utils/command_utils.h"
 
-OpenALMusicSystem::~OpenALMusicSystem()
+namespace sound
 {
-	//Stop worker thread and wait until it finishes.
+MusicSystem::~MusicSystem()
+{
+	// Stop worker thread and wait until it finishes.
 	m_Quit = true;
 
 	m_Thread.join();
 
-	//Since we switch to this context on-demand we can't rely on the default destructor to clean up.
-	if (const ContextSwitcher switcher{m_Context.get(), *m_SoundSystem->GetLogger()}; switcher)
+	// Since we switch to this context on-demand we can't rely on the default destructor to clean up.
+	if (const ContextSwitcher switcher{m_Context.get(), *m_Logger}; switcher)
 	{
 		m_Source.Delete();
 		m_Buffers.clear();
 	}
 }
 
-bool OpenALMusicSystem::Create(OpenALSoundSystem* soundSystem)
+bool MusicSystem::Create(std::shared_ptr<spdlog::logger> logger, ALCdevice* device)
 {
-	m_SoundSystem = soundSystem;
-
-	auto& logger = *m_SoundSystem->GetLogger();
+	m_Logger = logger;
 
 	m_VolumeCvar = gEngfuncs.pfnGetCvarPointer("MP3Volume");
 	m_FadeTimeCvar = gEngfuncs.pfnGetCvarPointer("MP3FadeTime");
 
 	if (!m_VolumeCvar)
 	{
-		logger.error("Couldn't get bgmvolume cvar");
+		m_Logger->error("Couldn't get bgmvolume cvar");
 		return false;
 	}
 
-	auto device = m_SoundSystem->GetDevice();
-
-	if (!CheckOpenALContextExtension(device, "ALC_EXT_thread_local_context", logger))
+	if (!CheckOpenALContextExtension(device, "ALC_EXT_thread_local_context", *m_Logger))
 	{
 		return false;
 	}
@@ -70,18 +67,18 @@ bool OpenALMusicSystem::Create(OpenALSoundSystem* soundSystem)
 
 	if (!m_Context)
 	{
-		logger.error("Couldn't create OpenAL context");
+		m_Logger->error("Couldn't create OpenAL context");
 		return false;
 	}
 
-	const ContextSwitcher switcher{m_Context.get(), logger};
+	const ContextSwitcher switcher{m_Context.get(), *m_Logger};
 
 	if (!switcher)
 	{
 		return false;
 	}
 
-	if (!CheckOpenALExtension("AL_EXT_FLOAT32", logger))
+	if (!CheckOpenALExtension("AL_EXT_FLOAT32", *m_Logger))
 	{
 		return false;
 	}
@@ -90,14 +87,14 @@ bool OpenALMusicSystem::Create(OpenALSoundSystem* soundSystem)
 
 	if (!m_Source.IsValid())
 	{
-		logger.error("Couldn't create OpenAL source");
+		m_Logger->error("Couldn't create OpenAL source");
 		return false;
 	}
 
 	m_Loader = std::make_unique<nqr::NyquistIO>();
 
-	//Start the worker thread.
-	m_Thread = std::thread{&OpenALMusicSystem::Run, this};
+	// Start the worker thread.
+	m_Thread = std::thread{&MusicSystem::Run, this};
 
 	g_ConCommands.CreateCommand(
 		"music", [this](const auto& args)
@@ -107,7 +104,7 @@ bool OpenALMusicSystem::Create(OpenALSoundSystem* soundSystem)
 	return true;
 }
 
-void OpenALMusicSystem::Play(std::string&& fileName, bool looping)
+void MusicSystem::Play(std::string&& fileName, bool looping)
 {
 	if (m_Playing || m_Paused)
 	{
@@ -119,7 +116,7 @@ void OpenALMusicSystem::Play(std::string&& fileName, bool looping)
 
 	if (!g_pFileSystem->GetLocalPath(fileName.c_str(), absolutePath, std::size(absolutePath)))
 	{
-		Con_Printf("OpenALMusicSystem: File \"%s\" does not exist.\n", fileName.c_str());
+		Con_Printf("MusicSystem: File \"%s\" does not exist.\n", fileName.c_str());
 		return;
 	}
 
@@ -127,7 +124,7 @@ void OpenALMusicSystem::Play(std::string&& fileName, bool looping)
 
 	if (!file)
 	{
-		Con_Printf("OpenALMusicSystem: Could not open file \"%s\".\n", fileName.c_str());
+		Con_Printf("MusicSystem: Could not open file \"%s\".\n", fileName.c_str());
 		return;
 	}
 
@@ -135,10 +132,10 @@ void OpenALMusicSystem::Play(std::string&& fileName, bool looping)
 
 	FileWrapper deleter{file};
 
-	RunOnWorkerThread(&OpenALMusicSystem::StartPlaying, looping, std::move(deleter));
+	RunOnWorkerThread(&MusicSystem::StartPlaying, looping, std::move(deleter));
 }
 
-void OpenALMusicSystem::StartPlaying(bool looping, FileWrapper file)
+void MusicSystem::StartPlaying(bool looping, FileWrapper file)
 {
 	if (!m_Enabled)
 		return;
@@ -149,7 +146,7 @@ void OpenALMusicSystem::StartPlaying(bool looping, FileWrapper file)
 	}
 
 	m_FadeStartTime = std::chrono::system_clock::time_point{};
-	m_Volume = -1; //Force recalculation so volume resets.
+	m_Volume = -1; // Force recalculation so volume resets.
 
 	m_Info = {};
 
@@ -174,17 +171,17 @@ void OpenALMusicSystem::StartPlaying(bool looping, FileWrapper file)
 	}
 	catch (const std::exception&)
 	{
-		//Can happen if the file was deleted or otherwise rendered inaccessible since queueing this.
-		//Can't log the error since we're on the worker thread.
+		// Can happen if the file was deleted or otherwise rendered inaccessible since queueing this.
+		// Can't log the error since we're on the worker thread.
 		return;
 	}
 
-	//No longer need the file.
+	// No longer need the file.
 	file.reset();
 
 	m_Info.Format = m_Info.Data->channelCount == 1 ? AL_FORMAT_MONO_FLOAT32 : AL_FORMAT_STEREO_FLOAT32;
 
-	//Allocate enough buffers to hold around a second's worth of data.
+	// Allocate enough buffers to hold around a second's worth of data.
 	const std::size_t bytesInASecond = m_Info.Data->sampleRate * m_Info.Data->channelCount * sizeof(short);
 
 	const auto numberOfBuffers = static_cast<std::size_t>(std::ceil(static_cast<float>(bytesInASecond) / BufferSize));
@@ -196,7 +193,7 @@ void OpenALMusicSystem::StartPlaying(bool looping, FileWrapper file)
 		m_Buffers.push_back(OpenALBuffer::Create());
 	}
 
-	//Fill all buffers with data.
+	// Fill all buffers with data.
 	std::byte dataBuffer[BufferSize];
 
 	ALsizei buffersFilled = 0;
@@ -213,7 +210,7 @@ void OpenALMusicSystem::StartPlaying(bool looping, FileWrapper file)
 		++buffersFilled;
 	}
 
-	//Attach all buffers and play.
+	// Attach all buffers and play.
 	static_assert(sizeof(ALuint) == sizeof(OpenALBuffer), "Must create an array to hold buffer ids");
 	alSourceQueueBuffers(m_Source.Id, buffersFilled, reinterpret_cast<const ALuint*>(m_Buffers.data()));
 
@@ -226,9 +223,9 @@ void OpenALMusicSystem::StartPlaying(bool looping, FileWrapper file)
 		Pause();
 }
 
-void OpenALMusicSystem::Stop()
+void MusicSystem::Stop()
 {
-	if (RunOnWorkerThread(&OpenALMusicSystem::Stop))
+	if (RunOnWorkerThread(&MusicSystem::Stop))
 	{
 		return;
 	}
@@ -241,16 +238,16 @@ void OpenALMusicSystem::Stop()
 
 	alSourceStop(m_Source.Id);
 
-	//Unqueue all buffers as well to free them up.
+	// Unqueue all buffers as well to free them up.
 	alSourcei(m_Source.Id, AL_BUFFER, NullBuffer);
 
 	m_Paused = false;
 	m_Playing = false;
 }
 
-void OpenALMusicSystem::Pause()
+void MusicSystem::Pause()
 {
-	if (RunOnWorkerThread(&OpenALMusicSystem::Pause))
+	if (RunOnWorkerThread(&MusicSystem::Pause))
 	{
 		return;
 	}
@@ -267,9 +264,9 @@ void OpenALMusicSystem::Pause()
 	m_Playing = false;
 }
 
-void OpenALMusicSystem::Resume()
+void MusicSystem::Resume()
 {
-	if (RunOnWorkerThread(&OpenALMusicSystem::Resume))
+	if (RunOnWorkerThread(&MusicSystem::Resume))
 	{
 		return;
 	}
@@ -286,9 +283,9 @@ void OpenALMusicSystem::Resume()
 	m_Playing = true;
 }
 
-void OpenALMusicSystem::Block()
+void MusicSystem::Block()
 {
-	if (RunOnWorkerThread(&OpenALMusicSystem::Block))
+	if (RunOnWorkerThread(&MusicSystem::Block))
 	{
 		return;
 	}
@@ -298,9 +295,9 @@ void OpenALMusicSystem::Block()
 	alListenerf(AL_GAIN, 0);
 }
 
-void OpenALMusicSystem::Unblock()
+void MusicSystem::Unblock()
 {
-	if (RunOnWorkerThread(&OpenALMusicSystem::Unblock))
+	if (RunOnWorkerThread(&MusicSystem::Unblock))
 	{
 		return;
 	}
@@ -312,14 +309,14 @@ void OpenALMusicSystem::Unblock()
 }
 
 template <typename Func, typename... Args>
-bool OpenALMusicSystem::RunOnWorkerThread(Func func, Args&&... args)
+bool MusicSystem::RunOnWorkerThread(Func func, Args&&... args)
 {
 	if (std::this_thread::get_id() == m_Thread.get_id())
 	{
 		return false;
 	}
 
-	//Queue up for execution on the worker thread.
+	// Queue up for execution on the worker thread.
 	const std::lock_guard guard{m_JobMutex};
 
 	m_Jobs.emplace_back([=, this]()
@@ -328,7 +325,7 @@ bool OpenALMusicSystem::RunOnWorkerThread(Func func, Args&&... args)
 	return true;
 }
 
-std::size_t OpenALMusicSystem::Read(std::byte* dest, std::size_t bufferSize)
+std::size_t MusicSystem::Read(std::byte* dest, std::size_t bufferSize)
 {
 	const std::size_t startIndex = m_Info.NextSampleIndex;
 	const std::size_t endIndex = std::min(m_Info.Data->samples.size(), m_Info.NextSampleIndex + (bufferSize / sizeof(float)));
@@ -342,14 +339,14 @@ std::size_t OpenALMusicSystem::Read(std::byte* dest, std::size_t bufferSize)
 	return samplesToCopy * sizeof(float);
 }
 
-void OpenALMusicSystem::Run()
+void MusicSystem::Run()
 {
-	//Use our context on our own thread only.
+	// Use our context on our own thread only.
 	alcSetThreadContext(m_Context.get());
 
 	while (!m_Quit)
 	{
-		//Run pending jobs, if any.
+		// Run pending jobs, if any.
 		if (const std::unique_lock guard{m_JobMutex, std::try_to_lock}; guard)
 		{
 			m_Jobs.swap(m_JobsToExecute);
@@ -364,65 +361,71 @@ void OpenALMusicSystem::Run()
 
 		Update();
 
-		//Let other threads do work.
+		// Let other threads do work.
 		std::this_thread::sleep_for(std::chrono::milliseconds{1});
 	}
 
 	alcSetThreadContext(nullptr);
 }
 
-void OpenALMusicSystem::Update()
+void MusicSystem::Update()
 {
 	if (!m_Enabled)
 		return;
 
 	if (m_Playing)
 	{
-		//Fill processed buffers with new data if needed.
-		ALint processed;
+		// Clear error state.
+		alGetError();
+
+		// Fill processed buffers with new data if needed.
+		ALint processed = 0;
 		alGetSourcei(m_Source.Id, AL_BUFFERS_PROCESSED, &processed);
 
-		ALuint bufferId;
-
-		std::byte dataBuffer[BufferSize];
-
-		while (processed-- > 0)
+		if (alGetError() == AL_NO_ERROR)
 		{
-			alSourceUnqueueBuffers(m_Source.Id, 1, &bufferId);
+			ALuint bufferId;
 
-			std::size_t bytesRead = Read(dataBuffer, sizeof(dataBuffer));
+			std::byte dataBuffer[BufferSize];
 
-			if (bytesRead == 0)
+			while (processed-- > 0)
 			{
-				if (!m_Looping)
+				alSourceUnqueueBuffers(m_Source.Id, 1, &bufferId);
+
+				std::size_t bytesRead = Read(dataBuffer, sizeof(dataBuffer));
+
+				if (bytesRead == 0)
+				{
+					if (!m_Looping)
+					{
+						Stop();
+						return;
+					}
+
+					m_Info.NextSampleIndex = 0;
+
+					bytesRead = Read(dataBuffer, sizeof(dataBuffer));
+				}
+
+				if (bytesRead == 0)
 				{
 					Stop();
 					return;
 				}
 
-				m_Info.NextSampleIndex = 0;
+				alBufferData(bufferId, m_Info.Format, dataBuffer, bytesRead, m_Info.Data->sampleRate);
 
-				bytesRead = Read(dataBuffer, sizeof(dataBuffer));
-			}
+				alSourceQueueBuffers(m_Source.Id, 1, &bufferId);
 
-			if (bytesRead == 0)
-			{
-				Stop();
-				return;
-			}
+				ALint state = AL_STOPPED;
+				alGetSourcei(m_Source.Id, AL_SOURCE_STATE, &state);
 
-			alBufferData(bufferId, m_Info.Format, dataBuffer, bytesRead, m_Info.Data->sampleRate);
-
-			alSourceQueueBuffers(m_Source.Id, 1, &bufferId);
-
-			ALint state;
-			alGetSourcei(m_Source.Id, AL_SOURCE_STATE, &state);
-
-			if (state != AL_PLAYING)
-			{
-				//If we're really slow to load samples then playback might have ended already.
-				//Restart it so we at least play it chunk by chunk.
-				alSourcePlay(m_Source.Id);
+				if (state != AL_PLAYING)
+				{
+					// If we're really slow to load samples then playback might have ended already.
+					// Restart it so we at least play it chunk by chunk.
+					alSourcePlay(m_Source.Id);
+				}
 			}
 		}
 	}
@@ -433,7 +436,7 @@ void OpenALMusicSystem::Update()
 	}
 }
 
-void OpenALMusicSystem::UpdateVolume(bool force)
+void MusicSystem::UpdateVolume(bool force)
 {
 	float fadeMultiplier = 1;
 
@@ -476,7 +479,7 @@ void OpenALMusicSystem::UpdateVolume(bool force)
 	}
 }
 
-void OpenALMusicSystem::Music_Command(const CCommandArgs& args)
+void MusicSystem::Music_Command(const CCommandArgs& args)
 {
 	auto command = args.Count() >= 2 ? args.Argument(1) : "";
 
@@ -531,4 +534,5 @@ void OpenALMusicSystem::Music_Command(const CCommandArgs& args)
 	{
 		Con_Printf("Usage: music <on|off|reset|play <filename>|loop <filename>|stop|fadeout|pause|resume|info>\n");
 	}
+}
 }

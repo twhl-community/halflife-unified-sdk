@@ -72,4 +72,6 @@ inline int gmsgWeapons = 0;
 
 inline int gmsgProjectInfo = 0;
 
+inline int gmsgEmitSound = 0;
+
 void LinkUserMessages();

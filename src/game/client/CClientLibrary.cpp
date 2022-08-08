@@ -18,7 +18,9 @@
 #include "hud.h"
 #include "cbase.h"
 #include "CClientLibrary.h"
+#include "net_api.h"
 #include "view.h"
+#include "sound/IGameSoundSystem.h"
 #include "sound/IMusicSystem.h"
 #include "sound/ISoundSystem.h"
 
@@ -35,37 +37,68 @@ bool CClientLibrary::Initialize()
 void CClientLibrary::HudInit()
 {
 	//Has to be done here because music cvars don't exist at Initialize time.
-	CreateSoundSystem();
+	sound::CreateSoundSystem();
+
+	sound::g_SoundSystem->GetGameSoundSystem()->LoadSentences();
 }
 
 void CClientLibrary::Shutdown()
 {
-	g_SoundSystem.reset();
+	sound::g_SoundSystem.reset();
 
 	ShutdownCommon();
 }
 
 void CClientLibrary::Frame()
 {
+	// Check connection status.
+	net_status_t status;
+	gEngfuncs.pNetAPI->Status(&status);
+
+	const bool isConnected = status.connected != 0;
+
+	auto mapName = gEngfuncs.pfnGetLevelName();
+
+	if (!mapName)
+	{
+		mapName = "";
+	}
+
+	// Stop all sounds if we connect, disconnect, start a new map using "map" (resets connection time), change servers or change maps.
+	if (m_IsConnected != isConnected
+		|| m_ConnectionTime > status.connection_time
+		|| m_ServerAddress != status.remote_address
+		|| m_MapName.comparei(mapName) != 0)
+	{
+		sound::g_SoundSystem->GetGameSoundSystem()->StopAllSounds();
+		sound::g_SoundSystem->GetGameSoundSystem()->ClearCaches();
+
+		m_IsConnected = isConnected;
+		m_ConnectionTime = status.connection_time;
+		m_ServerAddress = status.remote_address;
+		m_MapName = mapName;
+	}
+
 	// Unblock audio if we can't find the window.
 	if (auto window = FindWindow(); !window || (SDL_GetWindowFlags(window) & SDL_WINDOW_INPUT_FOCUS) != 0)
 	{
-		g_SoundSystem->Unblock();
+		sound::g_SoundSystem->Unblock();
 	}
 	else
 	{
-		g_SoundSystem->Block();
+		sound::g_SoundSystem->Block();
 	}
 
 	if (g_Paused)
 	{
-		g_SoundSystem->Pause();
+		sound::g_SoundSystem->Pause();
 	}
 	else
 	{
-		g_SoundSystem->Resume();
+		sound::g_SoundSystem->Resume();
 	}
 
+	sound::g_SoundSystem->Update();
 }
 
 SDL_Window* CClientLibrary::FindWindow()

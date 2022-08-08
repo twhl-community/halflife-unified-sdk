@@ -17,14 +17,19 @@
 
 #include <memory>
 
+namespace sound
+{
+struct IGameSoundSystem;
 struct IMusicSystem;
 
 /**
-*	@brief Provides access to high-level sound system interfaces.
-*/
+ *	@brief Provides access to high-level sound system interfaces.
+ */
 struct ISoundSystem
 {
 	virtual ~ISoundSystem() = default;
+
+	virtual void Update() = 0;
 
 	virtual void Block() = 0;
 
@@ -34,12 +39,18 @@ struct ISoundSystem
 
 	virtual void Resume() = 0;
 
+	virtual IGameSoundSystem* GetGameSoundSystem() = 0;
+
 	virtual IMusicSystem* GetMusicSystem() = 0;
 };
 
 inline std::unique_ptr<ISoundSystem> g_SoundSystem;
 
+inline cvar_t* g_cl_snd_openal = nullptr;
+inline cvar_t* g_cl_snd_room_off = nullptr;
+
 /**
-*	@brief Creates an instance of the sound system using an available implementation.
-*/
+ *	@brief Creates an instance of the sound system using an available implementation.
+ */
 void CreateSoundSystem();
+}

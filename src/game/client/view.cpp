@@ -1624,6 +1624,8 @@ void DLLEXPORT V_CalcRefdef(struct ref_params_s* pparams)
 	//	RecClCalcRefdef(pparams);
 
 	g_Paused = pparams->paused != 0;
+	g_MaxEntities = pparams->max_entities;
+	g_WaterLevel = pparams->waterlevel;
 
 	// intermission / finale rendering
 	if (0 != pparams->intermission)

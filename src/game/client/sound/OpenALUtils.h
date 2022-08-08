@@ -126,6 +126,8 @@ struct OpenALBuffer final
 		}
 	}
 
+	constexpr auto operator<=>(const OpenALBuffer&) const = default;
+
 	ALuint Id = NullBuffer;
 };
 
@@ -176,6 +178,8 @@ struct OpenALSource final
 			Id = NullSource;
 		}
 	}
+
+	constexpr auto operator<=>(const OpenALSource&) const = default;
 
 	ALuint Id = NullSource;
 };

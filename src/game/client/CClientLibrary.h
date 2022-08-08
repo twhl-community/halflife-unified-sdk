@@ -19,6 +19,8 @@
 
 #include "CGameLibrary.h"
 
+#include "netadr.h"
+
 /**
 *	@brief Handles core client actions
 */
@@ -59,6 +61,11 @@ private:
 	SDL_Window* FindWindow();
 
 private:
+	bool m_IsConnected = false;
+	float m_ConnectionTime = 0;
+	netadr_t m_ServerAddress;
+	Filename m_MapName;
+
 	Uint32 m_WindowId = 0;
 };
 

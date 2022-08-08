@@ -171,3 +171,10 @@ float VectorNormalize(float* v);
 void VectorInverse(float* v);
 
 HSPRITE LoadSprite(const char* pszName);
+
+inline bool UTIL_IsMapLoaded()
+{
+	const auto levelName = gEngfuncs.pfnGetLevelName();
+
+	return levelName != nullptr && levelName[0] != '\0';
+}

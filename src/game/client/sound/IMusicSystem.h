@@ -17,11 +17,11 @@
 
 #include <string>
 
-class CCommandArgs;
-
+namespace sound
+{
 /**
-*	@brief Handles music playback.
-*/
+ *	@brief Handles music playback.
+ */
 struct IMusicSystem
 {
 	virtual ~IMusicSystem() = default;
@@ -31,3 +31,4 @@ struct IMusicSystem
 	virtual void Pause() = 0;
 	virtual void Resume() = 0;
 };
+}

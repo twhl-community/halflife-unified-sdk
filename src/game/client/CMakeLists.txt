@@ -135,14 +135,25 @@ target_sources(client PRIVATE
 	rendering/tri.cpp
 	rendering/tri.h
 	
+	sound/DummySoundSystem.h
+	sound/GameSoundSystem.cpp
+	sound/GameSoundSystem.h
+	sound/HalfLifeSoundEffects.cpp
+	sound/HalfLifeSoundEffects.h
+	sound/IGameSoundSystem.h
 	sound/IMusicSystem.h
 	sound/ISoundSystem.h
-	sound/DummySoundSystem.h
-	sound/OpenALMusicSystem.cpp
-	sound/OpenALMusicSystem.h
-	sound/OpenALSoundSystem.cpp
-	sound/OpenALSoundSystem.h
+	sound/MusicSystem.cpp
+	sound/MusicSystem.h
 	sound/OpenALUtils.h
+	sound/RiffChunkReader.h
+	sound/SentencesSystem.cpp
+	sound/SentencesSystem.h
+	sound/SoundCache.cpp
+	sound/SoundCache.h
+	sound/SoundInternalDefs.h
+	sound/SoundSystem.cpp
+	sound/SoundSystem.h
 
 	ui/voice_banmgr.cpp
 	ui/voice_banmgr.h

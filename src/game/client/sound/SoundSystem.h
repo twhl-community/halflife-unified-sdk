@@ -21,19 +21,22 @@
 
 #include <AL/alc.h>
 
-#include <libnyquist/Decoders.h>
-
 #include "ISoundSystem.h"
 #include "OpenALUtils.h"
 
-class OpenALMusicSystem;
+namespace sound
+{
+class GameSoundSystem;
+class MusicSystem;
 
-class OpenALSoundSystem final : public ISoundSystem
+class SoundSystem final : public ISoundSystem
 {
 public:
-	~OpenALSoundSystem() override;
+	~SoundSystem() override;
 
 	bool Create();
+
+	void Update() override;
 
 	void Block() override;
 
@@ -43,9 +46,11 @@ public:
 
 	void Resume() override;
 
+	IGameSoundSystem* GetGameSoundSystem() override;
+
 	IMusicSystem* GetMusicSystem() override;
 
-	spdlog::logger* GetLogger() { return m_Logger.get(); }
+	const std::shared_ptr<spdlog::logger>& GetLogger() { return m_Logger; }
 
 	ALCdevice* GetDevice() { return m_Device.get(); }
 
@@ -54,8 +59,10 @@ private:
 
 	std::unique_ptr<ALCdevice, DeleterWrapper<alcCloseDevice>> m_Device;
 
-	std::unique_ptr<OpenALMusicSystem> m_MusicSystem;
+	std::unique_ptr<GameSoundSystem> m_GameSoundSystem;
+	std::unique_ptr<MusicSystem> m_MusicSystem;
 
 	bool m_Blocked{false};
 	bool m_Paused{false};
 };
+}

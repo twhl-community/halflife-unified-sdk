@@ -34,6 +34,8 @@
 #include "config/sections/HudColorSection.h"
 #include "config/sections/SuitLightTypeSection.h"
 
+#include "sound/CSentencesSystem.h"
+
 #include "utils/ModelReplacement.h"
 
 using namespace std::literals;
@@ -150,6 +152,7 @@ void CServerLibrary::AddGameSystems()
 	CGameLibrary::AddGameSystems();
 	g_GameSystems.Add(&g_Skill);
 	g_GameSystems.Add(&g_ModelReplacement);
+	g_GameSystems.Add(&g_Sentences);
 }
 
 void CServerLibrary::CreateConfigDefinitions()

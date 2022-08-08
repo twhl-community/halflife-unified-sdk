@@ -24,6 +24,7 @@
 #include "pm_defs.h"
 #include "pm_shared.h"
 #include "sound/sentence_utils.h"
+#include "UserMessages.h"
 
 static char* memfgets(byte* pMemFile, int fileSize, int& filePos, char* pBuffer, int bufferSize);
 
@@ -1480,95 +1481,7 @@ void SENTENCEG_Init()
 	if (fSentencesInit)
 		return;
 
-	sentences::g_SentenceNames.clear();
-	sentences::g_SentenceGroups.clear();
-
-	sentences::g_SentenceNames.reserve(sentences::CVOXFILESENTENCEMAX);
-
-	const auto fileContents = FileSystem_LoadFileIntoBuffer("sound/sentences.txt", FileContentFormat::Text);
-
-	if (fileContents.empty())
-	{
-		return;
-	}
-
-	std::string_view contents{reinterpret_cast<const char*>(fileContents.data())};
-
-	// for each line in the file...
-	while (true)
-	{
-		const auto line = GetLine(contents);
-
-		if (line.empty())
-		{
-			break;
-		}
-
-		const auto sentence = sentences::ParseSentence(line);
-
-		const std::string_view name = std::get<0>(sentence);
-
-		if (name.empty())
-		{
-			continue;
-		}
-
-		if (0 == std::isalpha(name.front()))
-		{
-			continue;
-		}
-
-		if (name.size() >= sentences::CBSENTENCENAME_MAX)
-		{
-			ALERT(at_warning, "Sentence %.*s longer than %d letters\n", static_cast<int>(name.size()), name.data(), sentences::CBSENTENCENAME_MAX - 1);
-			continue;
-		}
-
-		if (sentences::g_SentenceNames.size() >= sentences::CVOXFILESENTENCEMAX)
-		{
-			ALERT(at_error, "Too many sentences in sentences.txt!\n");
-			break;
-		}
-
-		sentences::g_SentenceNames.push_back(sentences::SentenceName{name.data(), name.size()});
-
-		const auto groupData = sentences::ParseGroupData(name);
-
-		if (!groupData)
-		{
-			continue;
-		}
-
-		const std::string_view groupName = std::get<0>(*groupData);
-
-		// if new name doesn't match previous group name,
-		// make a new group.
-
-		if (!sentences::g_SentenceGroups.empty() && sentences::g_SentenceGroups.back().GroupName.c_str() == groupName)
-		{
-			// name matches with previous, increment group count
-			++sentences::g_SentenceGroups.back().count;
-		}
-		else
-		{
-			// name doesn't match with prev name,
-			// copy name into group, init count to 1
-
-			sentences::SENTENCEG group;
-
-			group.GroupName.assign(groupName.data(), groupName.size());
-
-			sentences::g_SentenceGroups.push_back(group);
-		}
-	}
-
 	fSentencesInit = true;
-
-	// init lru lists
-	for (auto& group : sentences::g_SentenceGroups)
-	{
-		USENTENCEG_InitLRU(group.rgblru, group.count);
-	}
 }
 
 // convert sentence (sample) name to !sentencenum, return !sentencenum
@@ -1597,6 +1510,127 @@ int SENTENCEG_Lookup(const char* sample, char* sentencenum)
 	return -1;
 }
 
+static void EMIT_SOUND_SENTENCE(edict_t* entity, int channel, const char* sample, float volume, float attenuation,
+	int flags, int pitch)
+{
+	if (volume < 0 || volume > 1)
+	{
+		ALERT(at_error, "EMIT_SOUND_SENTENCE: volume = %f\n", volume);
+		return;
+	}
+
+	if (attenuation < 0 || attenuation > 4)
+	{
+		ALERT(at_error, "EMIT_SOUND_SENTENCE: attenuation = %f\n", attenuation);
+		return;
+	}
+
+	if (channel > 7)
+	{
+		ALERT(at_error, "EMIT_SOUND_SENTENCE: channel = %d\n", channel);
+		return;
+	}
+
+	if (pitch > 255)
+	{
+		ALERT(at_error, "EMIT_SOUND_SENTENCE: pitch = %d\n", pitch);
+		return;
+	}
+
+	if ((flags & SND_SPAWNING) != 0)
+	{
+		ALERT(at_error, "EMIT_SOUND_SENTENCE: cannot use SND_SPAWNING with sentences\n");
+		return;
+	}
+
+	const int volumeInt = static_cast<int>(volume * 255);
+
+	const Vector origin = entity->v.origin + (entity->v.mins + entity->v.maxs) * 0.5f;
+
+	int soundIndex = 0;
+
+	if (sample[0] == '!')
+	{
+		flags |= SND_SENTENCE;
+		soundIndex = atoi(sample + 1);
+	}
+	else
+	{
+		ALERT(at_error, "EMIT_SOUND_SENTENCE: regular sounds not supported\n");
+		return;
+	}
+
+	const int entityIndex = ENTINDEX(entity);
+
+	if (volumeInt != 255)
+	{
+		flags |= SND_VOLUME;
+	}
+
+	if (attenuation != 1)
+	{
+		flags |= SND_ATTENUATION;
+	}
+
+	if (pitch != PITCH_NORM)
+	{
+		flags |= SND_PITCH;
+	}
+
+	if (soundIndex > 255)
+	{
+		flags |= SND_LARGE_INDEX;
+	}
+
+	if (channel != CHAN_STATIC && (flags & SND_STOP) == 0)
+	{
+		MESSAGE_BEGIN(MSG_PAS, gmsgEmitSound, origin);
+	}
+	else if (gpGlobals->maxClients == 1)
+	{
+		MESSAGE_BEGIN(MSG_BROADCAST, gmsgEmitSound);
+	}
+	else
+	{
+		MESSAGE_BEGIN(MSG_ALL, gmsgEmitSound);
+	}
+
+	// TODO: can compress this down by writing bits instead of bytes.
+	WRITE_BYTE(flags);
+
+	if ((flags & SND_VOLUME) != 0)
+	{
+		WRITE_BYTE(volumeInt);
+	}
+
+	if ((flags & SND_ATTENUATION) != 0)
+	{
+		WRITE_BYTE(static_cast<int>(attenuation * 64));
+	}
+
+	WRITE_BYTE(channel);
+	WRITE_SHORT(entityIndex);
+
+	if (soundIndex <= 255)
+	{
+		WRITE_BYTE(soundIndex);
+	}
+	else
+	{
+		//TODO: this sets the sentence limit.
+		WRITE_SHORT(soundIndex);
+	}
+
+	WRITE_COORD_VECTOR(origin);
+
+	if ((flags & SND_PITCH) != 0)
+	{
+		WRITE_BYTE(pitch);
+	}
+
+	MESSAGE_END();
+}
+
 void EMIT_SOUND_DYN(edict_t* entity, int channel, const char* sample, float volume, float attenuation,
 	int flags, int pitch)
 {
@@ -1604,7 +1638,7 @@ void EMIT_SOUND_DYN(edict_t* entity, int channel, const char* sample, float volu
 	{
 		char name[32];
 		if (SENTENCEG_Lookup(sample, name) >= 0)
-			EMIT_SOUND_DYN2(entity, channel, name, volume, attenuation, flags, pitch);
+			EMIT_SOUND_SENTENCE(entity, channel, name, volume, attenuation, flags, pitch);
 		else
 			ALERT(at_aiconsole, "Unable to find %s in sentences.txt\n", sample);
 	}

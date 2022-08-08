@@ -15,8 +15,28 @@
 
 #pragma once
 
+#include "IGameSoundSystem.h"
 #include "IMusicSystem.h"
 #include "ISoundSystem.h"
+
+namespace sound
+{
+struct DummyGameSoundSystem final : public IGameSoundSystem
+{
+	~DummyGameSoundSystem() override = default;
+
+	void LoadSentences() override {}
+
+	void StartSound(
+		int entnum, int entchannel,
+		const char* soundOrSentence, const Vector& origin, float fvol, float attenuation, int flags, int pitch) override {}
+
+	void StopAllSounds() override {}
+
+	void ClearCaches() override {}
+
+	void UserMsg_EmitSound(const char* pszName, int iSize, void* pbuf) override {}
+};
 
 struct DummyMusicSystem final : public IMusicSystem
 {
@@ -32,6 +52,8 @@ struct DummySoundSystem final : public ISoundSystem
 {
 	~DummySoundSystem() override = default;
 
+	void Update() override {}
+
 	void Block() override {}
 
 	void Unblock() override {}
@@ -40,11 +62,18 @@ struct DummySoundSystem final : public ISoundSystem
 
 	void Resume() override {}
 
+	IGameSoundSystem* GetGameSoundSystem() override
+	{
+		return m_GameSoundSystem.get();
+	}
+
 	IMusicSystem* GetMusicSystem() override
 	{
 		return m_MusicSystem.get();
 	}
 
 private:
+	const std::unique_ptr<DummyGameSoundSystem> m_GameSoundSystem = std::make_unique<DummyGameSoundSystem>();
 	const std::unique_ptr<IMusicSystem> m_MusicSystem = std::make_unique<DummyMusicSystem>();
 };
+}

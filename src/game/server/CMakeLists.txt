@@ -259,6 +259,9 @@ target_sources(server PRIVATE
 	gamerules/teamplay_gamerules.cpp
 	gamerules/teamplay_gamerules.h
 	
+	sound/CSentencesSystem.cpp
+	sound/CSentencesSystem.h
+	
 	../../common/mathlib.cpp
 	../../common/Platform.h
 	../../common/PlatformHeaders.h

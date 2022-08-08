@@ -25,19 +25,26 @@
 #include <thread>
 #include <vector>
 
+#include <spdlog/logger.h>
+
+#include <AL/alc.h>
+
+#include <libnyquist/Decoders.h>
+
 #include "IMusicSystem.h"
+#include "OpenALUtils.h"
 
-#include "OpenALSoundSystem.h"
-
-class OpenALMusicSystem final : public IMusicSystem
+namespace sound
+{
+class MusicSystem final : public IMusicSystem
 {
 private:
-	//This is tuned to work pretty well with the original Quake soundtrack, but needs testing to make sure it's good for any input.
+	// This is tuned to work pretty well with the original Quake soundtrack, but needs testing to make sure it's good for any input.
 	static constexpr std::size_t BufferSize = 1024 * 4;
 
-	//Wrapper around FILE* that implements copy behavior as move behavior.
-	//This is needed because std::function is copyable, and std::unique_ptr captured by lambda disables the lambda's copy constructor.
-	//C++23 has std::move_only_function which solves this problem, but it's not available yet.
+	// Wrapper around FILE* that implements copy behavior as move behavior.
+	// This is needed because std::function is copyable, and std::unique_ptr captured by lambda disables the lambda's copy constructor.
+	// C++23 has std::move_only_function which solves this problem, but it's not available yet.
 	struct FileWrapper
 	{
 		mutable FILE* File = nullptr;
@@ -122,9 +129,9 @@ private:
 	};
 
 public:
-	~OpenALMusicSystem() override;
+	~MusicSystem() override;
 
-	bool Create(OpenALSoundSystem* soundSystem);
+	bool Create(std::shared_ptr<spdlog::logger> logger, ALCdevice* device);
 
 	void Play(std::string&& fileName, bool looping) override;
 	void Stop() override;
@@ -137,9 +144,9 @@ public:
 
 private:
 	/**
-	*	@brief If the current thread is not the worker thread, queues the given function and arguments for execution on the worker thread.
-	*	@return @c true if the function was queued, false otherwise.
-	*/
+	 *	@brief If the current thread is not the worker thread, queues the given function and arguments for execution on the worker thread.
+	 *	@return @c true if the function was queued, false otherwise.
+	 */
 	template <typename Func, typename... Args>
 	bool RunOnWorkerThread(Func func, Args&&... args);
 
@@ -155,7 +162,7 @@ private:
 	void Music_Command(const CCommandArgs& args);
 
 private:
-	OpenALSoundSystem* m_SoundSystem{};
+	std::shared_ptr<spdlog::logger> m_Logger;
 	cvar_t* m_VolumeCvar{};
 	cvar_t* m_FadeTimeCvar{};
 
@@ -166,7 +173,7 @@ private:
 	std::atomic<bool> m_Paused = false;
 	std::atomic<bool> m_Looping = false;
 
-	std::atomic<float> m_Volume = -1; //Set to -1 to force initialization.
+	std::atomic<float> m_Volume = -1; // Set to -1 to force initialization.
 	std::atomic<std::chrono::system_clock::time_point> m_FadeStartTime;
 	std::atomic<float> m_FadeDuration;
 
@@ -190,3 +197,4 @@ private:
 	std::vector<std::function<void()>> m_Jobs;
 	std::vector<std::function<void()>> m_JobsToExecute;
 };
+}
