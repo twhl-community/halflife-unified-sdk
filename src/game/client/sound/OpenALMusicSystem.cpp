@@ -283,6 +283,31 @@ void OpenALMusicSystem::Resume()
 	m_Playing = true;
 }
 
+void OpenALMusicSystem::Block()
+{
+	if (RunOnWorkerThread(&OpenALMusicSystem::Block))
+	{
+		return;
+	}
+
+	m_Blocked = true;
+
+	alListenerf(AL_GAIN, 0);
+}
+
+void OpenALMusicSystem::Unblock()
+{
+	if (RunOnWorkerThread(&OpenALMusicSystem::Unblock))
+	{
+		return;
+	}
+
+	m_Blocked = false;
+
+	// Unblock to user-set volume immediately.
+	UpdateVolume(true);
+}
+
 template <typename Func, typename... Args>
 bool OpenALMusicSystem::RunOnWorkerThread(Func func, Args&&... args)
 {
@@ -399,11 +424,19 @@ void OpenALMusicSystem::Update()
 		}
 	}
 
+	if (!m_Blocked)
+	{
+		UpdateVolume();
+	}
+}
+
+void OpenALMusicSystem::UpdateVolume(bool force)
+{
 	float fadeMultiplier = 1;
 
-	bool needsVolumeUpdate = false;
+	bool needsVolumeUpdate = force;
 
-	//NOTE: cvar values can potentially change while being read.
+	// NOTE: cvar values can potentially change while being read.
 
 	if (const auto fadeTime = m_FadeStartTime.load(); fadeTime != std::chrono::system_clock::time_point{})
 	{
@@ -411,8 +444,8 @@ void OpenALMusicSystem::Update()
 
 		if (now >= fadeTime)
 		{
-			//Finished fading out.
-			//Volume doesn't need updating now.
+			// Finished fading out.
+			// Volume doesn't need updating now.
 			Stop();
 			return;
 		}
@@ -436,7 +469,7 @@ void OpenALMusicSystem::Update()
 	{
 		const float finalVolume = m_Volume * fadeMultiplier;
 
-		alSourcef(m_Source.Id, AL_GAIN, finalVolume);
+		alListenerf(AL_GAIN, finalVolume);
 	}
 }
 

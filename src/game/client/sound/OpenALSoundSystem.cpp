@@ -51,6 +51,30 @@ bool OpenALSoundSystem::Create()
 	return true;
 }
 
+void OpenALSoundSystem::Block()
+{
+	if (m_Blocked)
+	{
+		return;
+	}
+
+	m_Blocked = true;
+
+	m_MusicSystem->Block();
+}
+
+void OpenALSoundSystem::Unblock()
+{
+	if (!m_Blocked)
+	{
+		return;
+	}
+
+	m_Blocked = false;
+
+	m_MusicSystem->Unblock();
+}
+
 void OpenALSoundSystem::Pause()
 {
 	if (m_Paused)

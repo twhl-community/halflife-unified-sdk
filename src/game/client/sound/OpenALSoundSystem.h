@@ -197,6 +197,10 @@ public:
 
 	bool Create();
 
+	void Block() override;
+
+	void Unblock() override;
+
 	void Pause() override;
 
 	void Resume() override;
@@ -214,5 +218,6 @@ private:
 
 	std::unique_ptr<OpenALMusicSystem> m_MusicSystem;
 
+	bool m_Blocked{false};
 	bool m_Paused{false};
 };

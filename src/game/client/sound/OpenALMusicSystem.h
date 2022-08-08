@@ -131,6 +131,10 @@ public:
 	void Pause() override;
 	void Resume() override;
 
+	void Block();
+
+	void Unblock();
+
 private:
 	/**
 	*	@brief If the current thread is not the worker thread, queues the given function and arguments for execution on the worker thread.
@@ -145,6 +149,8 @@ private:
 
 	void Run();
 	void Update();
+
+	void UpdateVolume(bool force = false);
 
 	void Music_Command(const CCommandArgs& args);
 
@@ -163,6 +169,8 @@ private:
 	std::atomic<float> m_Volume = -1; //Set to -1 to force initialization.
 	std::atomic<std::chrono::system_clock::time_point> m_FadeStartTime;
 	std::atomic<float> m_FadeDuration;
+
+	bool m_Blocked{false};
 
 	std::unique_ptr<ALCcontext, DeleterWrapper<alcDestroyContext>> m_Context;
 

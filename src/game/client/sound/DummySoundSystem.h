@@ -32,6 +32,10 @@ struct DummySoundSystem final : public ISoundSystem
 {
 	~DummySoundSystem() override = default;
 
+	void Block() override {}
+
+	void Unblock() override {}
+
 	void Pause() override {}
 
 	void Resume() override {}

@@ -15,6 +15,7 @@
 
 #pragma once
 
+#include <SDL2/SDL_video.h>
 
 #include "CGameLibrary.h"
 
@@ -55,6 +56,10 @@ public:
 	void Frame();
 
 private:
+	SDL_Window* FindWindow();
+
+private:
+	Uint32 m_WindowId = 0;
 };
 
 inline CClientLibrary g_Client;

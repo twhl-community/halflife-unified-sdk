@@ -26,6 +26,10 @@ struct ISoundSystem
 {
 	virtual ~ISoundSystem() = default;
 
+	virtual void Block() = 0;
+
+	virtual void Unblock() = 0;
+
 	virtual void Pause() = 0;
 
 	virtual void Resume() = 0;

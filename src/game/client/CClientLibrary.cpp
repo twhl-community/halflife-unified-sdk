@@ -13,6 +13,8 @@
 *
 ****/
 
+#include <limits>
+
 #include "hud.h"
 #include "cbase.h"
 #include "CClientLibrary.h"
@@ -45,7 +47,15 @@ void CClientLibrary::Shutdown()
 
 void CClientLibrary::Frame()
 {
-
+	// Unblock audio if we can't find the window.
+	if (auto window = FindWindow(); !window || (SDL_GetWindowFlags(window) & SDL_WINDOW_INPUT_FOCUS) != 0)
+	{
+		g_SoundSystem->Unblock();
+	}
+	else
+	{
+		g_SoundSystem->Block();
+	}
 
 	if (g_Paused)
 	{
@@ -55,4 +65,21 @@ void CClientLibrary::Frame()
 	{
 		g_SoundSystem->Resume();
 	}
+
+}
+
+SDL_Window* CClientLibrary::FindWindow()
+{
+	// Find the game window. The window id is a unique identifier that increments starting from 1, so we can cache the value to speed up lookup.
+	while (m_WindowId < std::numeric_limits<Uint32>::max())
+	{
+		if (auto window = SDL_GetWindowFromID(m_WindowId); window)
+		{
+			return window;
+		}
+
+		++m_WindowId;
+	}
+
+	return nullptr;
 }
