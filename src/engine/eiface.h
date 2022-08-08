@@ -22,6 +22,7 @@
 #include "custom.h"
 #include "cvardef.h"
 #include "Sequence.h"
+#include "netadr.h"
 //
 // Defines entity interface between engine and DLLs.
 // This header file included by engine files and DLL files.
@@ -467,7 +468,7 @@ typedef struct
 
 	// Return 1 if the packet is valid.  Set response_buffer_size if you want to send a response packet.  Incoming, it holds the max
 	//  size of the response_buffer, so you must zero it out if you choose not to respond.
-	int (*pfnConnectionlessPacket)(const struct netadr_s* net_from, const char* args, char* response_buffer, int* response_buffer_size);
+	int (*pfnConnectionlessPacket)(const netadr_t* net_from, const char* args, char* response_buffer, int* response_buffer_size);
 
 	// Enumerates player hulls.  Returns 0 if the hull number doesn't exist, 1 otherwise
 	int (*pfnGetHullBounds)(int hullnumber, float* mins, float* maxs);

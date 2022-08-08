@@ -16,6 +16,8 @@
 
 #pragma once
 
+#include <cstring>
+
 typedef enum
 {
 	NA_UNUSED,
@@ -26,10 +28,12 @@ typedef enum
 	NA_BROADCAST_IPX,
 } netadrtype_t;
 
-typedef struct netadr_s
+struct netadr_t
 {
-	netadrtype_t type;
-	unsigned char ip[4];
-	unsigned char ipx[10];
-	unsigned short port;
-} netadr_t;
+	netadrtype_t type = NA_UNUSED;
+	unsigned char ip[4]{};
+	unsigned char ipx[10]{};
+	unsigned short port = 0;
+
+	auto operator<=>(const netadr_t&) const = default;
+};
