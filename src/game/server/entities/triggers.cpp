@@ -550,6 +550,11 @@ void CBaseTrigger::InitTrigger()
 	SetModel(STRING(pev->model)); // set size and link into world
 	if (CVAR_GET_FLOAT("showtriggers") == 0)
 		SetBits(pev->effects, EF_NODRAW);
+
+	if (!FStringNull(pev->message))
+	{
+		pev->message = ALLOC_ESCAPED_STRING(STRING(pev->message));
+	}
 }
 
 

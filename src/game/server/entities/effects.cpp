@@ -2003,6 +2003,8 @@ void CMessage::Spawn()
 {
 	Precache();
 
+	pev->message = ALLOC_ESCAPED_STRING(STRING(pev->message));
+
 	pev->solid = SOLID_NOT;
 	pev->movetype = MOVETYPE_NONE;
 
