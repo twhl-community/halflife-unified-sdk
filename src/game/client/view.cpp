@@ -64,16 +64,14 @@ extern cvar_t* cl_bobtilt;
 #define CAM_MODE_RELAX 1
 #define CAM_MODE_FOCUS 2
 
-Vector v_origin, v_angles, v_cl_angles, v_sim_org, v_lastAngles;
+Vector v_lastAngles;
 float v_frametime, v_lastDistance;
 float v_cameraRelaxAngle = 5.0f;
 float v_cameraFocusAngle = 35.0f;
 int v_cameraMode = CAM_MODE_FOCUS;
 bool v_resetCamera = true;
 
-Vector v_client_aimangles;
 Vector ev_punchangle;
-Vector v_crosshairangle;
 
 cvar_t* scr_ofsx;
 cvar_t* scr_ofsy;

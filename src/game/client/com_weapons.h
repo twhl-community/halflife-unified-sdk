@@ -39,8 +39,6 @@ extern cvar_t* cl_lw;
 //  updating state info, but not firing events
 inline bool g_runfuncs = false;
 
-extern Vector v_angles;
-extern Vector v_client_aimangles;
 extern float g_lastFOV;
 
 // During our weapon prediction processing, we'll need to reference some data that is part of

@@ -21,6 +21,7 @@
 #include "const.h"
 #include "entity_state.h"
 #include "r_efx.h"
+#include "view.h"
 
 // remember the current animation for the view model, in case we get out of sync with
 //  server.

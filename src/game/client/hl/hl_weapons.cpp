@@ -35,6 +35,7 @@
 #include "cl_dll.h"
 #include "../com_weapons.h"
 #include "../demo.h"
+#include "view.h"
 
 extern int g_iUser1;
 

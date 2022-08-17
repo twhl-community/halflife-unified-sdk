@@ -193,9 +193,9 @@ void GameSoundSystem::Update()
 
 	if (UTIL_IsMapLoaded())
 	{
-		const auto localPlayer = gEngfuncs.GetLocalPlayer();
-		origin = localPlayer->curstate.origin;
-		AngleVectors(localPlayer->curstate.angles, forward, right, up);
+		// Use view entity values here.
+		origin = v_origin;
+		AngleVectors(v_client_aimangles, forward, right, up);
 	}
 	else
 	{

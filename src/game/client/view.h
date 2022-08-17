@@ -12,5 +12,12 @@ inline bool g_Paused = false;
 inline int g_MaxEntities = 0;
 inline int g_WaterLevel = 0;
 
+inline Vector v_origin;
+inline Vector v_angles;
+inline Vector v_cl_angles;
+inline Vector v_sim_org;
+inline Vector v_client_aimangles;
+inline Vector v_crosshairangle;
+
 void V_StartPitchDrift();
 void V_StopPitchDrift();

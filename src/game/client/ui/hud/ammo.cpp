@@ -26,10 +26,8 @@
 
 #include "ammohistory.h"
 #include "vgui_TeamFortressViewport.h"
+#include "view.h"
 
-extern Vector v_origin;
-extern Vector v_angles;
-extern Vector v_crosshairangle;
 extern engine_studio_api_t IEngineStudio;
 
 WEAPON* gpActiveSel; // nullptr means off, 1 means just the menu bar, otherwise

@@ -23,7 +23,7 @@
 #include "event_api.h"
 #include "studio_util.h"
 #include "screenfade.h"
-
+#include "view.h"
 
 extern bool iJumpSpectator;
 extern float vJumpOrigin[3];
@@ -34,11 +34,6 @@ void V_GetInEyePos(int entity, float* origin, float* angles);
 void V_ResetChaseCam();
 void V_GetChasePos(int target, float* cl_angles, float* origin, float* angles);
 float* GetClientColor(int clientIndex);
-
-extern Vector v_origin;	   // last view origin
-extern Vector v_angles;	   // last view angle
-extern Vector v_cl_angles; // last client/mouse angle
-extern Vector v_sim_org;   // last sim origin
 
 //Same color as in TeamFortressViewport::UpdateSpectatorPanel
 float DefaultPlayerColor[3] = {143 / 255.f, 143 / 255.f, 54 / 255.f};

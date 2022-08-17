@@ -12,10 +12,9 @@
 #include "Exports.h"
 
 #include "particleman.h"
+#include "view.h"
 
 void Game_AddObjects();
-
-extern Vector v_origin;
 
 bool g_iAlive = true;
 
