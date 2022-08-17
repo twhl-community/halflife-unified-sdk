@@ -528,11 +528,6 @@ void CWorld::Precache()
 
 	InitBodyQue();
 
-	// init sentence group playback stuff from sentences.txt.
-	// ok to call this multiple times, calls after first are ignored.
-
-	SENTENCEG_Init();
-
 	// init texture type array from materials.txt
 
 	TEXTURETYPE_Init();

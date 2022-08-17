@@ -274,7 +274,7 @@ void CShockTrooper::SpeakSentence()
 
 	if (FOkToSpeak())
 	{
-		SENTENCEG_PlayRndSz(ENT(pev), pGruntSentences[m_iSentence], ShockTrooper_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
+		sentences::g_Sentences.PlayRndSz(ENT(pev), pGruntSentences[m_iSentence], ShockTrooper_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
 		JustSpoke();
 	}
 }
@@ -697,15 +697,15 @@ void CShockTrooper::IdleSound()
 			switch (RANDOM_LONG(0, 2))
 			{
 			case 0: // check in
-				SENTENCEG_PlayRndSz(ENT(pev), "ST_CHECK", ShockTrooper_SENTENCE_VOLUME, ATTN_NORM, 0, m_voicePitch);
+				sentences::g_Sentences.PlayRndSz(ENT(pev), "ST_CHECK", ShockTrooper_SENTENCE_VOLUME, ATTN_NORM, 0, m_voicePitch);
 				g_fShockTrooperQuestion = 1;
 				break;
 			case 1: // question
-				SENTENCEG_PlayRndSz(ENT(pev), "ST_QUEST", ShockTrooper_SENTENCE_VOLUME, ATTN_NORM, 0, m_voicePitch);
+				sentences::g_Sentences.PlayRndSz(ENT(pev), "ST_QUEST", ShockTrooper_SENTENCE_VOLUME, ATTN_NORM, 0, m_voicePitch);
 				g_fShockTrooperQuestion = 2;
 				break;
 			case 2: // statement
-				SENTENCEG_PlayRndSz(ENT(pev), "ST_IDLE", ShockTrooper_SENTENCE_VOLUME, ATTN_NORM, 0, m_voicePitch);
+				sentences::g_Sentences.PlayRndSz(ENT(pev), "ST_IDLE", ShockTrooper_SENTENCE_VOLUME, ATTN_NORM, 0, m_voicePitch);
 				break;
 			}
 		}
@@ -714,10 +714,10 @@ void CShockTrooper::IdleSound()
 			switch (g_fShockTrooperQuestion)
 			{
 			case 1: // check in
-				SENTENCEG_PlayRndSz(ENT(pev), "ST_CLEAR", ShockTrooper_SENTENCE_VOLUME, ATTN_NORM, 0, m_voicePitch);
+				sentences::g_Sentences.PlayRndSz(ENT(pev), "ST_CLEAR", ShockTrooper_SENTENCE_VOLUME, ATTN_NORM, 0, m_voicePitch);
 				break;
 			case 2: // question
-				SENTENCEG_PlayRndSz(ENT(pev), "ST_ANSWER", ShockTrooper_SENTENCE_VOLUME, ATTN_NORM, 0, m_voicePitch);
+				sentences::g_Sentences.PlayRndSz(ENT(pev), "ST_ANSWER", ShockTrooper_SENTENCE_VOLUME, ATTN_NORM, 0, m_voicePitch);
 				break;
 			}
 			g_fShockTrooperQuestion = 0;
@@ -918,7 +918,7 @@ void CShockTrooper::HandleAnimEvent(MonsterEvent_t* pEvent)
 	{
 		if (FOkToSpeak())
 		{
-			SENTENCEG_PlayRndSz(ENT(pev), "ST_ALERT", ShockTrooper_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
+			sentences::g_Sentences.PlayRndSz(ENT(pev), "ST_ALERT", ShockTrooper_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
 			JustSpoke();
 		}
 	}
@@ -1098,7 +1098,7 @@ void CShockTrooper::PainSound()
 			// pain sentences are rare
 			if (FOkToSpeak())
 			{
-				SENTENCEG_PlayRndSz(ENT(pev), "ST_PAIN", ShockTrooper_SENTENCE_VOLUME, ATTN_NORM, 0, PITCH_NORM);
+				sentences::g_Sentences.PlayRndSz(ENT(pev), "ST_PAIN", ShockTrooper_SENTENCE_VOLUME, ATTN_NORM, 0, PITCH_NORM);
 				JustSpoke();
 				return;
 			}
@@ -1861,7 +1861,7 @@ Schedule_t* CShockTrooper::GetSchedule()
 
 				if (FOkToSpeak())
 				{
-					SENTENCEG_PlayRndSz(ENT(pev), "ST_GREN", ShockTrooper_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
+					sentences::g_Sentences.PlayRndSz(ENT(pev), "ST_GREN", ShockTrooper_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
 					JustSpoke();
 				}
 				return GetScheduleOfType(SCHED_TAKE_COVER_FROM_BEST_SOUND);
@@ -1910,13 +1910,13 @@ Schedule_t* CShockTrooper::GetSchedule()
 					{
 						if ((m_hEnemy != nullptr) && m_hEnemy->IsPlayer())
 							// player
-							SENTENCEG_PlayRndSz(ENT(pev), "ST_ALERT", ShockTrooper_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
+							sentences::g_Sentences.PlayRndSz(ENT(pev), "ST_ALERT", ShockTrooper_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
 						else if ((m_hEnemy != nullptr) &&
 								 (m_hEnemy->Classify() != CLASS_PLAYER_ALLY) &&
 								 (m_hEnemy->Classify() != CLASS_HUMAN_PASSIVE) &&
 								 (m_hEnemy->Classify() != CLASS_MACHINE))
 							// monster
-							SENTENCEG_PlayRndSz(ENT(pev), "ST_MONST", ShockTrooper_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
+							sentences::g_Sentences.PlayRndSz(ENT(pev), "ST_MONST", ShockTrooper_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
 
 						JustSpoke();
 					}
@@ -1956,7 +1956,7 @@ Schedule_t* CShockTrooper::GetSchedule()
 				//!!!KELLY - this grunt was hit and is going to run to cover.
 				if (FOkToSpeak()) // && RANDOM_LONG(0,1))
 				{
-					//SENTENCEG_PlayRndSz( ENT(pev), "ST_COVER", ShockTrooper_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
+					//sentences::g_Sentences.PlayRndSz( ENT(pev), "ST_COVER", ShockTrooper_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
 					m_iSentence = ShockTrooper_SENT_COVER;
 					//JustSpoke();
 				}
@@ -2011,7 +2011,7 @@ Schedule_t* CShockTrooper::GetSchedule()
 				//!!!KELLY - this grunt is about to throw or fire a grenade at the player. Great place for "fire in the hole"  "frag out" etc
 				if (FOkToSpeak())
 				{
-					SENTENCEG_PlayRndSz(ENT(pev), "ST_THROW", ShockTrooper_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
+					sentences::g_Sentences.PlayRndSz(ENT(pev), "ST_THROW", ShockTrooper_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
 					JustSpoke();
 				}
 				return GetScheduleOfType(SCHED_RANGE_ATTACK2);
@@ -2022,7 +2022,7 @@ Schedule_t* CShockTrooper::GetSchedule()
 				// charge the enemy's position.
 				if (FOkToSpeak()) // && RANDOM_LONG(0,1))
 				{
-					//SENTENCEG_PlayRndSz( ENT(pev), "ST_CHARGE", ShockTrooper_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
+					//sentences::g_Sentences.PlayRndSz( ENT(pev), "ST_CHARGE", ShockTrooper_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
 					m_iSentence = ShockTrooper_SENT_CHARGE;
 					//JustSpoke();
 				}
@@ -2036,7 +2036,7 @@ Schedule_t* CShockTrooper::GetSchedule()
 				// grunt's covered position. Good place for a taunt, I guess?
 				if (FOkToSpeak() && RANDOM_LONG(0, 1))
 				{
-					SENTENCEG_PlayRndSz(ENT(pev), "ST_TAUNT", ShockTrooper_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
+					sentences::g_Sentences.PlayRndSz(ENT(pev), "ST_TAUNT", ShockTrooper_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
 					JustSpoke();
 				}
 				return GetScheduleOfType(SCHED_STANDOFF);
@@ -2068,7 +2068,7 @@ Schedule_t* CShockTrooper::GetScheduleOfType(int Type)
 			{
 				if (FOkToSpeak())
 				{
-					SENTENCEG_PlayRndSz(ENT(pev), "ST_THROW", ShockTrooper_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
+					sentences::g_Sentences.PlayRndSz(ENT(pev), "ST_THROW", ShockTrooper_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
 					JustSpoke();
 				}
 				return slShockTrooperTossGrenadeCover;

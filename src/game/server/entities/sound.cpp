@@ -1228,288 +1228,6 @@ void CEnvSound::Spawn()
 	pev->nextthink = gpGlobals->time + RANDOM_FLOAT(0.0, 0.5);
 }
 
-// ==================== SENTENCE GROUPS, UTILITY FUNCTIONS  ======================================
-
-// globals
-
-bool fSentencesInit = false;
-
-// randomize list of sentence name indices
-
-void USENTENCEG_InitLRU(unsigned char* plru, int count)
-{
-	int i, j, k;
-	unsigned char temp;
-
-	if (!fSentencesInit)
-		return;
-
-	if (count > sentences::CSENTENCE_LRU_MAX)
-		count = sentences::CSENTENCE_LRU_MAX;
-
-	for (i = 0; i < count; i++)
-		plru[i] = (unsigned char)i;
-
-	// randomize array
-	for (i = 0; i < (count * 4); i++)
-	{
-		j = RANDOM_LONG(0, count - 1);
-		k = RANDOM_LONG(0, count - 1);
-		temp = plru[j];
-		plru[j] = plru[k];
-		plru[k] = temp;
-	}
-}
-
-// ignore lru. pick next sentence from sentence group. Go in order until we hit the last sentence,
-// then repeat list if freset is true.  If freset is false, then repeat last sentence.
-// ipick is passed in as the requested sentence ordinal.
-// ipick 'next' is returned.
-// return of -1 indicates an error.
-
-int USENTENCEG_PickSequential(int isentenceg, char* szfound, int ipick, bool freset)
-{
-	char sznum[8];
-
-	if (!fSentencesInit)
-		return -1;
-
-	if (isentenceg < 0)
-		return -1;
-
-	const auto& group = sentences::g_SentenceGroups[isentenceg];
-
-	if (group.count == 0)
-		return -1;
-
-	if (ipick >= group.count)
-		ipick = group.count - 1;
-
-	strcpy(szfound, "!");
-	strcat(szfound, group.GroupName.c_str());
-	sprintf(sznum, "%d", ipick);
-	strcat(szfound, sznum);
-
-	if (ipick >= group.count)
-	{
-		if (freset)
-			// reset at end of list
-			return 0;
-		else
-			return group.count;
-	}
-
-	return ipick + 1;
-}
-
-
-
-// pick a random sentence from rootname0 to rootnameX.
-// picks from the rgsentenceg[isentenceg] least
-// recently used, modifies lru array. returns the sentencename.
-// note, lru must be seeded with 0-n randomized sentence numbers, with the
-// rest of the lru filled with -1. The first integer in the lru is
-// actually the size of the list.  Returns ipick, the ordinal
-// of the picked sentence within the group.
-
-int USENTENCEG_Pick(int isentenceg, char* szfound)
-{
-	unsigned char i;
-	char sznum[8];
-	unsigned char ipick;
-	bool ffound = false;
-
-	if (!fSentencesInit)
-		return -1;
-
-	if (isentenceg < 0)
-		return -1;
-
-	auto& group = sentences::g_SentenceGroups[isentenceg];
-
-	while (!ffound)
-	{
-		for (i = 0; i < group.count; i++)
-			if (group.rgblru[i] != 0xFF)
-			{
-				ipick = group.rgblru[i];
-				group.rgblru[i] = 0xFF;
-				ffound = true;
-				break;
-			}
-
-		if (!ffound)
-			USENTENCEG_InitLRU(group.rgblru, group.count);
-		else
-		{
-			strcpy(szfound, "!");
-			strcat(szfound, group.GroupName.c_str());
-			sprintf(sznum, "%d", ipick);
-			strcat(szfound, sznum);
-			return ipick;
-		}
-	}
-	return -1;
-}
-
-// ===================== SENTENCE GROUPS, MAIN ROUTINES ========================
-
-// Given sentence group rootname (name without number suffix),
-// get sentence group index (isentenceg). Returns -1 if no such name.
-
-int SENTENCEG_GetIndex(const char* szgroupname)
-{
-	if (!fSentencesInit || !szgroupname)
-		return -1;
-
-	// search rgsentenceg for match on szgroupname
-	int i = 0;
-
-	for (const auto& group : sentences::g_SentenceGroups)
-	{
-		if (szgroupname == sentences::g_SentenceGroups[i].GroupName)
-			return i;
-		++i;
-	}
-
-	return -1;
-}
-
-// given sentence group index, play random sentence for given entity.
-// returns ipick - which sentence was picked to
-// play from the group. Ipick is only needed if you plan on stopping
-// the sound before playback is done (see SENTENCEG_Stop).
-
-int SENTENCEG_PlayRndI(edict_t* entity, int isentenceg,
-	float volume, float attenuation, int flags, int pitch)
-{
-	char name[64];
-	int ipick;
-
-	if (!fSentencesInit)
-		return -1;
-
-	name[0] = 0;
-
-	ipick = USENTENCEG_Pick(isentenceg, name);
-	if (ipick > 0 && name)
-		EMIT_SOUND_DYN(entity, CHAN_VOICE, name, volume, attenuation, flags, pitch);
-	return ipick;
-}
-
-// same as above, but takes sentence group name instead of index
-
-int SENTENCEG_PlayRndSz(edict_t* entity, const char* szgroupname,
-	float volume, float attenuation, int flags, int pitch)
-{
-	char name[64];
-	int ipick;
-	int isentenceg;
-
-	if (!fSentencesInit)
-		return -1;
-
-	name[0] = 0;
-
-	isentenceg = SENTENCEG_GetIndex(szgroupname);
-	if (isentenceg < 0)
-	{
-		ALERT(at_console, "No such sentence group %s\n", szgroupname);
-		return -1;
-	}
-
-	ipick = USENTENCEG_Pick(isentenceg, name);
-	if (ipick >= 0 && '\0' != name[0])
-		EMIT_SOUND_DYN(entity, CHAN_VOICE, name, volume, attenuation, flags, pitch);
-
-	return ipick;
-}
-
-// play sentences in sequential order from sentence group.  Reset after last sentence.
-
-int SENTENCEG_PlaySequentialSz(edict_t* entity, const char* szgroupname,
-	float volume, float attenuation, int flags, int pitch, int ipick, bool freset)
-{
-	char name[64];
-	int ipicknext;
-	int isentenceg;
-
-	if (!fSentencesInit)
-		return -1;
-
-	name[0] = 0;
-
-	isentenceg = SENTENCEG_GetIndex(szgroupname);
-	if (isentenceg < 0)
-		return -1;
-
-	ipicknext = USENTENCEG_PickSequential(isentenceg, name, ipick, freset);
-	if (ipicknext >= 0 && '\0' != name[0])
-		EMIT_SOUND_DYN(entity, CHAN_VOICE, name, volume, attenuation, flags, pitch);
-	return ipicknext;
-}
-
-
-// for this entity, for the given sentence within the sentence group, stop
-// the sentence.
-
-void SENTENCEG_Stop(edict_t* entity, int isentenceg, int ipick)
-{
-	char buffer[64];
-	char sznum[8];
-
-	if (!fSentencesInit)
-		return;
-
-	if (isentenceg < 0 || ipick < 0)
-		return;
-
-	strcpy(buffer, "!");
-	strcat(buffer, sentences::g_SentenceGroups[isentenceg].GroupName.c_str());
-	sprintf(sznum, "%d", ipick);
-	strcat(buffer, sznum);
-
-	STOP_SOUND(entity, CHAN_VOICE, buffer);
-}
-
-// open sentences.txt, scan for groups, build rgsentenceg
-// Should be called from world spawn, only works on the
-// first call and is ignored subsequently.
-
-void SENTENCEG_Init()
-{
-	if (fSentencesInit)
-		return;
-
-	fSentencesInit = true;
-}
-
-// convert sentence (sample) name to !sentencenum, return !sentencenum
-
-int SENTENCEG_Lookup(const char* sample, char* sentencenum)
-{
-	char sznum[32];
-
-	// this is a sentence name; lookup sentence number
-	// and give to engine as string.
-	for (size_t i = 0; i < sentences::g_SentenceNames.size(); i++)
-	{
-		if (!stricmp(sentences::g_SentenceNames[i].c_str(), sample + 1))
-		{
-			if (sentencenum)
-			{
-				strcpy(sentencenum, "!");
-				sprintf(sznum, "%u", i);
-				strcat(sentencenum, sznum);
-			}
-			return static_cast<int>(i);
-		}
-	}
-
-	// sentence name not found!
-	return -1;
-}
-
 static void EMIT_SOUND_SENTENCE(edict_t* entity, int channel, const char* sample, float volume, float attenuation,
 	int flags, int pitch)
 {
@@ -1637,7 +1355,7 @@ void EMIT_SOUND_DYN(edict_t* entity, int channel, const char* sample, float volu
 	if (sample && *sample == '!')
 	{
 		char name[32];
-		if (SENTENCEG_Lookup(sample, name) >= 0)
+		if (sentences::g_Sentences.LookupSentence(sample, name) >= 0)
 			EMIT_SOUND_SENTENCE(entity, channel, name, volume, attenuation, flags, pitch);
 		else
 			ALERT(at_aiconsole, "Unable to find %s in sentences.txt\n", sample);
@@ -1687,7 +1405,7 @@ void EMIT_GROUPID_SUIT(edict_t* entity, int isentenceg)
 		pitch = RANDOM_LONG(0, 6) + 98;
 
 	if (fvol > 0.05)
-		SENTENCEG_PlayRndI(entity, isentenceg, fvol, ATTN_NORM, 0, pitch);
+		sentences::g_Sentences.PlayRndI(entity, isentenceg, fvol, ATTN_NORM, 0, pitch);
 }
 
 // play a sentence, randomly selected from the passed in groupname
@@ -1702,7 +1420,7 @@ void EMIT_GROUPNAME_SUIT(edict_t* entity, const char* groupname)
 		pitch = RANDOM_LONG(0, 6) + 98;
 
 	if (fvol > 0.05)
-		SENTENCEG_PlayRndSz(entity, groupname, fvol, ATTN_NORM, 0, pitch);
+		sentences::g_Sentences.PlayRndSz(entity, groupname, fvol, ATTN_NORM, 0, pitch);
 }
 
 // ===================== MATERIAL TYPE DETECTION, MAIN ROUTINES ========================
@@ -2162,7 +1880,7 @@ void CSpeaker::SpeakerThink()
 	{
 		// make random announcement from sentence group
 
-		if (SENTENCEG_PlayRndSz(ENT(pev), szSoundFile, flvolume, flattenuation, flags, pitch) < 0)
+		if (sentences::g_Sentences.PlayRndSz(ENT(pev), szSoundFile, flvolume, flattenuation, flags, pitch) < 0)
 			ALERT(at_console, "Level Design Error!\nSPEAKER has bad sentence group name: %s\n", szSoundFile);
 
 		// set next announcement time for random 5 to 10 minute delay

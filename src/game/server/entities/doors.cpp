@@ -139,7 +139,7 @@ void PlayLockSounds(entvars_t* pev, locksound_t* pls, bool flocked, bool fbutton
 			// play next 'door locked' sentence in group
 			int iprev = pls->iLockedSentence;
 
-			pls->iLockedSentence = SENTENCEG_PlaySequentialSz(ENT(pev), STRING(pls->sLockedSentence),
+			pls->iLockedSentence = sentences::g_Sentences.PlaySequentialSz(ENT(pev), STRING(pls->sLockedSentence),
 				0.85, ATTN_NORM, 0, 100, pls->iLockedSentence, false);
 			pls->iUnlockedSentence = 0;
 
@@ -175,7 +175,7 @@ void PlayLockSounds(entvars_t* pev, locksound_t* pls, bool flocked, bool fbutton
 		{
 			int iprev = pls->iUnlockedSentence;
 
-			pls->iUnlockedSentence = SENTENCEG_PlaySequentialSz(ENT(pev), STRING(pls->sUnlockedSentence),
+			pls->iUnlockedSentence = sentences::g_Sentences.PlaySequentialSz(ENT(pev), STRING(pls->sUnlockedSentence),
 				0.85, ATTN_NORM, 0, 100, pls->iUnlockedSentence, false);
 			pls->iLockedSentence = 0;
 

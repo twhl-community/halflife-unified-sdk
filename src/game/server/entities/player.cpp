@@ -2458,7 +2458,7 @@ void CBasePlayer::CheckSuitUpdate()
 
 				char sentence[sentences::CBSENTENCENAME_MAX + 1];
 				strcpy(sentence, "!");
-				strcat(sentence, sentences::g_SentenceNames[isentence].c_str());
+				strcat(sentence, sentences::g_Sentences.GetSentenceNameByIndex(isentence));
 				EMIT_SOUND_SUIT(ENT(pev), sentence);
 			}
 			else
@@ -2508,13 +2508,13 @@ void CBasePlayer::SetSuitUpdate(const char* name, bool fgroup, int iNoRepeatTime
 	// get sentence or group number
 	if (!fgroup)
 	{
-		isentence = SENTENCEG_Lookup(name, nullptr);
+		isentence = sentences::g_Sentences.LookupSentence(name, nullptr);
 		if (isentence < 0)
 			return;
 	}
 	else
 		// mark group number as negative
-		isentence = -SENTENCEG_GetIndex(name);
+		isentence = -sentences::g_Sentences.GetGroupIndex(name);
 
 	// check norepeat list - this list lets us cancel
 	// the playback of words or sentences that have already

@@ -42,9 +42,6 @@ constexpr int CSENTENCE_LRU_MAX = 32;
 
 using SentenceName = eastl::fixed_string<char, CBSENTENCENAME_MAX>;
 
-// TODO: don't need this on the client side right now, so it's wasting memory.
-inline std::vector<SentenceName> g_SentenceNames;
-
 /**
 *	@brief group of related sentences
 */
@@ -54,8 +51,6 @@ struct SENTENCEG
 	int count = 1;
 	unsigned char rgblru[CSENTENCE_LRU_MAX]{};
 };
-
-inline std::vector<SENTENCEG> g_SentenceGroups;
 
 /**
  *	@brief Parses a single sentence out of a line of text.

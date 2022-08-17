@@ -26,6 +26,11 @@
 #include "sound/sentence_utils.h"
 #include "utils/shared_utils.h"
 
+// TODO: need a cleaner way to split server and client dependencies to avoid pulling them in with the precompiled header.
+#ifndef CLIENT_DLL
+#include "sound/CSentencesSystem.h"
+#endif
+
 inline globalvars_t* gpGlobals = nullptr;
 
 inline edict_t* FIND_ENTITY_BY_CLASSNAME(edict_t* entStart, const char* pszName)
@@ -445,19 +450,6 @@ constexpr int SND_SPAWNING = 1 << 8;		// duplicated in protocol.h we're spawing,
 
 
 // Sound Utilities
-
-// sentence groups
-int USENTENCEG_Pick(int isentenceg, char* szfound);
-int USENTENCEG_PickSequential(int isentenceg, char* szfound, int ipick, bool freset);
-void USENTENCEG_InitLRU(unsigned char* plru, int count);
-
-void SENTENCEG_Init();
-void SENTENCEG_Stop(edict_t* entity, int isentenceg, int ipick);
-int SENTENCEG_PlayRndI(edict_t* entity, int isentenceg, float volume, float attenuation, int flags, int pitch);
-int SENTENCEG_PlayRndSz(edict_t* entity, const char* szrootname, float volume, float attenuation, int flags, int pitch);
-int SENTENCEG_PlaySequentialSz(edict_t* entity, const char* szrootname, float volume, float attenuation, int flags, int pitch, int ipick, bool freset);
-int SENTENCEG_GetIndex(const char* szrootname);
-int SENTENCEG_Lookup(const char* sample, char* sentencenum);
 
 void TEXTURETYPE_Init();
 char TEXTURETYPE_Find(char* name);
