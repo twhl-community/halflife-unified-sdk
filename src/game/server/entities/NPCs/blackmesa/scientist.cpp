@@ -565,14 +565,18 @@ bool CScientist::KeyValue(KeyValueData* pkvd)
 
 void CScientist::Spawn()
 {
-	if (pev->body == -1)
-	{																													 // -1 chooses a random head
-		SetBodygroup(ScientistBodygroup::Head, RANDOM_LONG(0, GetBodygroupSubmodelCount(ScientistBodygroup::Head)) - 1); // pick a head, any head
-	}
-
 	Precache();
 
 	SetModel(STRING(pev->model));
+
+	// -1 chooses a random head
+	if (pev->body == -1)
+	{
+		// Erase previous value because SetBodygroup won't.
+		pev->body = 0;
+		SetBodygroup(ScientistBodygroup::Head, RANDOM_LONG(0, GetBodygroupSubmodelCount(ScientistBodygroup::Head)) - 1); // pick a head, any head
+	}
+
 	UTIL_SetSize(pev, VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX);
 
 	pev->solid = SOLID_SLIDEBOX;
