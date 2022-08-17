@@ -1335,7 +1335,7 @@ static void EMIT_SOUND_SENTENCE(edict_t* entity, int channel, const char* sample
 	}
 	else
 	{
-		//TODO: this sets the sentence limit.
+		//This controls the maximum number of sounds and sentences.
 		WRITE_SHORT(soundIndex);
 	}
 

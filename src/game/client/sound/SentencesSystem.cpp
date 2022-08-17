@@ -52,6 +52,12 @@ void SentencesSystem::LoadSentences()
 
 	for (auto sentence = parser.Next(); sentence; sentence = parser.Next())
 	{
+		if (m_Sentences.size() >= sentences::MaxSentencesCount)
+		{
+			m_Logger->error("Too many sentences in sentences.txt!");
+			break;
+		}
+
 		const std::string_view name = std::get<0>(*sentence);
 
 		// Parse sentence contents.

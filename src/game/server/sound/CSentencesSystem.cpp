@@ -149,7 +149,7 @@ void CSentencesSystem::LoadSentences()
 	m_SentenceNames.clear();
 	m_SentenceGroups.clear();
 
-	m_SentenceNames.reserve(CVOXFILESENTENCEMAX);
+	m_SentenceNames.reserve(InitialSentencesReserveCount);
 
 	const auto fileContents = FileSystem_LoadFileIntoBuffer("sound/sentences.txt", FileContentFormat::Text);
 
@@ -165,6 +165,12 @@ void CSentencesSystem::LoadSentences()
 	for (auto sentence = parser.Next(); sentence; sentence = parser.Next())
 	{
 		const std::string_view name = std::get<0>(*sentence);
+
+		if (m_SentenceNames.size() >= MaxSentencesCount)
+		{
+			m_Logger->error("Too many sentences in sentences.txt!");
+			break;
+		}
 
 		m_SentenceNames.push_back(SentenceName{name.data(), name.size()});
 

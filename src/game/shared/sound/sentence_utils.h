@@ -15,6 +15,7 @@
 
 #pragma once
 
+#include <limits>
 #include <optional>
 #include <string_view>
 #include <tuple>
@@ -31,9 +32,15 @@ namespace sentences
 constexpr int CBSENTENCENAME_MAX = 16;
 
 /**
-*	@brief max number of sentences in game. NOTE: this must match CVOXFILESENTENCEMAX in engine\sound.h!!!
+*	@brief The amount of sentences to reserve space for on startup.
+*	This is the original engine limit.
 */
-constexpr int CVOXFILESENTENCEMAX = 1536;
+constexpr int InitialSentencesReserveCount = 1536;
+
+/**
+ *	@brief max number of sentences in game. This limit is defined by EMIT_SOUND_SENTENCE's use of fixed size integer writing.
+ */
+constexpr std::size_t MaxSentencesCount = std::numeric_limits<std::uint16_t>::max();
 
 /**
 *	@brief max number of elements per sentence group
