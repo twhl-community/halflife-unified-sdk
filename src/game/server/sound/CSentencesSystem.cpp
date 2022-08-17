@@ -17,6 +17,8 @@
 #include "CSentencesSystem.h"
 #include "sound/sentence_utils.h"
 
+namespace sentences
+{
 bool CSentencesSystem::Initialize()
 {
 	m_Logger = g_Logging.CreateLogger("sentences");
@@ -97,4 +99,5 @@ void CSentencesSystem::LoadSentences()
 	{
 		USENTENCEG_InitLRU(group.rgblru, group.count);
 	}
+}
 }

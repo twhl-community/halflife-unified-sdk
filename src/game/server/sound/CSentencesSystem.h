@@ -21,6 +21,8 @@
 
 #include "utils/GameSystem.h"
 
+namespace sentences
+{
 class CSentencesSystem final : public IGameSystem
 {
 public:
@@ -38,3 +40,4 @@ private:
 };
 
 inline CSentencesSystem g_Sentences;
+}

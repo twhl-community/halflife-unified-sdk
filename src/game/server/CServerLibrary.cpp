@@ -152,7 +152,7 @@ void CServerLibrary::AddGameSystems()
 	CGameLibrary::AddGameSystems();
 	g_GameSystems.Add(&g_Skill);
 	g_GameSystems.Add(&g_ModelReplacement);
-	g_GameSystems.Add(&g_Sentences);
+	g_GameSystems.Add(&sentences::g_Sentences);
 }
 
 void CServerLibrary::CreateConfigDefinitions()
