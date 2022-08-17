@@ -64,14 +64,22 @@ void CClientLibrary::Frame()
 		mapName = "";
 	}
 
-	// Stop all sounds if we connect, disconnect, start a new map using "map" (resets connection time), change servers or change maps.
 	if (m_IsConnected != isConnected
 		|| m_ConnectionTime > status.connection_time
 		|| m_ServerAddress != status.remote_address
 		|| m_MapName.comparei(mapName) != 0)
 	{
+		// Stop all sounds if we connect, disconnect, start a new map using "map" (resets connection time), change servers or change maps.
 		sound::g_SoundSystem->GetGameSoundSystem()->StopAllSounds();
 		sound::g_SoundSystem->GetGameSoundSystem()->ClearCaches();
+
+		if (!isConnected
+			|| m_ConnectionTime > status.connection_time
+			|| m_ServerAddress != status.remote_address)
+		{
+			// Stop music playback if we disconnect or start a new map.
+			sound::g_SoundSystem->GetMusicSystem()->Stop();
+		}
 
 		m_IsConnected = isConnected;
 		m_ConnectionTime = status.connection_time;
