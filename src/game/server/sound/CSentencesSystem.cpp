@@ -13,6 +13,8 @@
  *
  ****/
 
+#include <fmt/format.h>
+
 #include "cbase.h"
 #include "CSentencesSystem.h"
 #include "sound/sentence_utils.h"
@@ -65,10 +67,8 @@ int CSentencesSystem::GetGroupIndex(const char* szgroupname) const
 	return -1;
 }
 
-int CSentencesSystem::LookupSentence(const char* sample, char* sentencenum) const
+int CSentencesSystem::LookupSentence(const char* sample, SentenceIndexName* sentencenum) const
 {
-	char sznum[32];
-
 	// this is a sentence name; lookup sentence number
 	// and give to engine as string.
 	for (size_t i = 0; i < m_SentenceNames.size(); i++)
@@ -77,9 +77,7 @@ int CSentencesSystem::LookupSentence(const char* sample, char* sentencenum) cons
 		{
 			if (sentencenum)
 			{
-				strcpy(sentencenum, "!");
-				sprintf(sznum, "%u", i);
-				strcat(sentencenum, sznum);
+				fmt::format_to(std::back_inserter(*sentencenum), "!{}", i);
 			}
 			return static_cast<int>(i);
 		}
@@ -91,36 +89,29 @@ int CSentencesSystem::LookupSentence(const char* sample, char* sentencenum) cons
 
 int CSentencesSystem::PlayRndI(edict_t* entity, int isentenceg, float volume, float attenuation, int flags, int pitch)
 {
-	char name[64];
-	int ipick;
+	SentenceIndexName name;
 
-	name[0] = 0;
-
-	ipick = Pick(isentenceg, name);
-	if (ipick > 0 && name)
-		EMIT_SOUND_DYN(entity, CHAN_VOICE, name, volume, attenuation, flags, pitch);
+	const int ipick = Pick(isentenceg, name);
+	if (ipick > 0 && !name.empty())
+		EMIT_SOUND_DYN(entity, CHAN_VOICE, name.c_str(), volume, attenuation, flags, pitch);
 	return ipick;
 }
 
 int CSentencesSystem::PlayRndSz(edict_t* entity, const char* szgroupname,
 	float volume, float attenuation, int flags, int pitch)
 {
-	char name[64];
-	int ipick;
-	int isentenceg;
-
-	name[0] = 0;
-
-	isentenceg = GetGroupIndex(szgroupname);
+	const int isentenceg = GetGroupIndex(szgroupname);
 	if (isentenceg < 0)
 	{
 		ALERT(at_console, "No such sentence group %s\n", szgroupname);
 		return -1;
 	}
 
-	ipick = Pick(isentenceg, name);
-	if (ipick >= 0 && '\0' != name[0])
-		EMIT_SOUND_DYN(entity, CHAN_VOICE, name, volume, attenuation, flags, pitch);
+	SentenceIndexName name;
+
+	const int ipick = Pick(isentenceg, name);
+	if (ipick >= 0 && !name.empty())
+		EMIT_SOUND_DYN(entity, CHAN_VOICE, name.c_str(), volume, attenuation, flags, pitch);
 
 	return ipick;
 }
@@ -128,36 +119,27 @@ int CSentencesSystem::PlayRndSz(edict_t* entity, const char* szgroupname,
 int CSentencesSystem::PlaySequentialSz(edict_t* entity, const char* szgroupname,
 	float volume, float attenuation, int flags, int pitch, int ipick, bool freset)
 {
-	char name[64];
-	int ipicknext;
-	int isentenceg;
-
-	name[0] = 0;
-
-	isentenceg = GetGroupIndex(szgroupname);
+	const int isentenceg = GetGroupIndex(szgroupname);
 	if (isentenceg < 0)
 		return -1;
 
-	ipicknext = PickSequential(isentenceg, name, ipick, freset);
-	if (ipicknext >= 0 && '\0' != name[0])
-		EMIT_SOUND_DYN(entity, CHAN_VOICE, name, volume, attenuation, flags, pitch);
+	SentenceIndexName name;
+
+	const int ipicknext = PickSequential(isentenceg, name, ipick, freset);
+	if (ipicknext >= 0 && !name.empty())
+		EMIT_SOUND_DYN(entity, CHAN_VOICE, name.c_str(), volume, attenuation, flags, pitch);
 	return ipicknext;
 }
 
 void CSentencesSystem::Stop(edict_t* entity, int isentenceg, int ipick)
 {
-	char buffer[64];
-	char sznum[8];
-
 	if (isentenceg < 0 || ipick < 0)
 		return;
 
-	strcpy(buffer, "!");
-	strcat(buffer, m_SentenceGroups[isentenceg].GroupName.c_str());
-	sprintf(sznum, "%d", ipick);
-	strcat(buffer, sznum);
+	SentenceIndexName name;
+	fmt::format_to(std::back_inserter(name), "!{}{}", m_SentenceGroups[isentenceg].GroupName.c_str(), ipick);
 
-	STOP_SOUND(entity, CHAN_VOICE, buffer);
+	STOP_SOUND(entity, CHAN_VOICE, name.c_str());
 }
 
 void CSentencesSystem::LoadSentences()
@@ -227,67 +209,51 @@ void CSentencesSystem::LoadSentences()
 
 void CSentencesSystem::InitLRU(unsigned char* plru, int count) const
 {
-	int i, j, k;
-	unsigned char temp;
+	count = std::min(count, sentences::CSENTENCE_LRU_MAX);
 
-	if (count > sentences::CSENTENCE_LRU_MAX)
-		count = sentences::CSENTENCE_LRU_MAX;
-
-	for (i = 0; i < count; i++)
+	for (int i = 0; i < count; ++i)
 		plru[i] = (unsigned char)i;
 
 	// randomize array
-	for (i = 0; i < (count * 4); i++)
+	for (int i = 0; i < (count * 4); i++)
 	{
-		j = RANDOM_LONG(0, count - 1);
-		k = RANDOM_LONG(0, count - 1);
-		temp = plru[j];
-		plru[j] = plru[k];
-		plru[k] = temp;
+		const int j = RANDOM_LONG(0, count - 1);
+		const int k = RANDOM_LONG(0, count - 1);
+		std::swap(plru[j], plru[k]);
 	}
 }
 
-int CSentencesSystem::Pick(int isentenceg, char* szfound)
+int CSentencesSystem::Pick(int isentenceg, SentenceIndexName& found)
 {
-	unsigned char i;
-	char sznum[8];
-	unsigned char ipick;
-	bool ffound = false;
-
 	if (isentenceg < 0)
 		return -1;
 
 	auto& group = m_SentenceGroups[isentenceg];
 
-	while (!ffound)
+	// Make 2 attempts to find a sentence: if we don't find it the first time, reset the LRU array and try again.
+	for (int iteration = 0; iteration < 2; ++iteration)
 	{
-		for (i = 0; i < group.count; i++)
+		for (unsigned char i = 0; i < group.count; ++i)
+		{
 			if (group.rgblru[i] != 0xFF)
 			{
-				ipick = group.rgblru[i];
+				const int ipick = group.rgblru[i];
 				group.rgblru[i] = 0xFF;
-				ffound = true;
-				break;
+				
+				found.clear();
+				fmt::format_to(std::back_inserter(found), "!{}{}", group.GroupName.c_str(), ipick);
+				return ipick;
 			}
-
-		if (!ffound)
-			InitLRU(group.rgblru, group.count);
-		else
-		{
-			strcpy(szfound, "!");
-			strcat(szfound, group.GroupName.c_str());
-			sprintf(sznum, "%d", ipick);
-			strcat(szfound, sznum);
-			return ipick;
 		}
+
+		InitLRU(group.rgblru, group.count);
 	}
+
 	return -1;
 }
 
-int CSentencesSystem::PickSequential(int isentenceg, char* szfound, int ipick, bool freset) const
+int CSentencesSystem::PickSequential(int isentenceg, SentenceIndexName& found, int ipick, bool freset) const
 {
-	char sznum[8];
-
 	if (isentenceg < 0)
 		return -1;
 
@@ -299,10 +265,8 @@ int CSentencesSystem::PickSequential(int isentenceg, char* szfound, int ipick, b
 	if (ipick >= group.count)
 		ipick = group.count - 1;
 
-	strcpy(szfound, "!");
-	strcat(szfound, group.GroupName.c_str());
-	sprintf(sznum, "%d", ipick);
-	strcat(szfound, sznum);
+	found.clear();
+	fmt::format_to(std::back_inserter(found), "!{}{}", group.GroupName.c_str(), ipick);
 
 	if (ipick >= group.count)
 	{

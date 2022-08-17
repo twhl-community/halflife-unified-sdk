@@ -46,7 +46,7 @@ public:
 	 *	@brief convert sentence (sample) name to !sentencenum.
 	 *	@return Sentence index, or -1 if the sentence could not be found.
 	 */
-	int LookupSentence(const char* sample, char* sentencenum) const;
+	int LookupSentence(const char* sample, SentenceIndexName* sentencenum) const;
 
 	/**
 	 *	@brief given sentence group index, play random sentence for given entity.
@@ -83,10 +83,10 @@ private:
 	 *		picks from the rgsentenceg[isentenceg] least recently used, modifies lru array.
 	 *	@details lru must be seeded with 0-n randomized sentence numbers, with the rest of the lru filled with -1.
 	 *		The first integer in the lru is actually the size of the list.
-	 *	@param[out] szfound the sentence name.
+	 *	@param[out] found the sentence name.
 	 *	@return ipick, the ordinal of the picked sentence within the group.
 	 */
-	int Pick(int isentenceg, char* szfound);
+	int Pick(int isentenceg, SentenceIndexName& found);
 
 	/**
 	 *	@brief ignore lru. pick next sentence from sentence group.
@@ -95,7 +95,7 @@ private:
 	 *	@param ipick requested sentence ordinal
 	 *	@return Next value for @p ipick, or -1 if there was an error.
 	 */
-	int PickSequential(int isentenceg, char* szfound, int ipick, bool freset) const;
+	int PickSequential(int isentenceg, SentenceIndexName& found, int ipick, bool freset) const;
 
 private:
 	std::shared_ptr<spdlog::logger> m_Logger;

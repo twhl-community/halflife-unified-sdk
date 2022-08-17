@@ -533,9 +533,9 @@ void UTIL_EmitAmbientSound(edict_t* entity, const Vector& vecOrigin, const char*
 
 	if (samp && *samp == '!')
 	{
-		char name[32];
-		if (sentences::g_Sentences.LookupSentence(samp, name) >= 0)
-			EMIT_AMBIENT_SOUND(entity, rgfl, name, vol, attenuation, fFlags, pitch);
+		sentences::SentenceIndexName name;
+		if (sentences::g_Sentences.LookupSentence(samp, &name) >= 0)
+			EMIT_AMBIENT_SOUND(entity, rgfl, name.c_str(), vol, attenuation, fFlags, pitch);
 	}
 	else
 		EMIT_AMBIENT_SOUND(entity, rgfl, samp, vol, attenuation, fFlags, pitch);

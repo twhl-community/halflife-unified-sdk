@@ -42,6 +42,8 @@ constexpr int CSENTENCE_LRU_MAX = 32;
 
 using SentenceName = eastl::fixed_string<char, CBSENTENCENAME_MAX>;
 
+using SentenceIndexName = eastl::fixed_string<char, CBSENTENCENAME_MAX + 1>;
+
 /**
 *	@brief group of related sentences
 */

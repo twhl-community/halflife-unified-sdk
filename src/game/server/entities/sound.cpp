@@ -1354,9 +1354,9 @@ void EMIT_SOUND_DYN(edict_t* entity, int channel, const char* sample, float volu
 {
 	if (sample && *sample == '!')
 	{
-		char name[32];
-		if (sentences::g_Sentences.LookupSentence(sample, name) >= 0)
-			EMIT_SOUND_SENTENCE(entity, channel, name, volume, attenuation, flags, pitch);
+		sentences::SentenceIndexName name;
+		if (sentences::g_Sentences.LookupSentence(sample, &name) >= 0)
+			EMIT_SOUND_SENTENCE(entity, channel, name.c_str(), volume, attenuation, flags, pitch);
 		else
 			ALERT(at_aiconsole, "Unable to find %s in sentences.txt\n", sample);
 	}
