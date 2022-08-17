@@ -305,6 +305,18 @@ const char* UTIL_CheckForGlobalModelReplacement(const char* s)
 
 int UTIL_PrecacheModel(const char* s)
 {
+	if (s == iStringNull)
+	{
+		ALERT(at_warning, "nullptr string passed to UTIL_PrecacheModel\n");
+		return 0;
+	}
+
+	if (strcmp(s, "") == 0)
+	{
+		ALERT(at_warning, "Empty string passed to UTIL_PrecacheModel\n");
+		return 0;
+	}
+
 	s = UTIL_CheckForGlobalModelReplacement(s);
 
 	return g_engfuncs.pfnPrecacheModel(s);
