@@ -39,7 +39,7 @@ class SoundCache final
 public:
 	explicit SoundCache(std::shared_ptr<spdlog::logger> logger);
 
-	SoundIndex FindName(const Filename& fileName);
+	SoundIndex FindName(const RelativeFilename& fileName);
 
 	Sound* GetSound(SoundIndex index);
 

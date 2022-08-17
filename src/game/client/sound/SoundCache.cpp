@@ -26,7 +26,7 @@ SoundCache::SoundCache(std::shared_ptr<spdlog::logger> logger)
 {
 }
 
-SoundIndex SoundCache::FindName(const Filename& fileName)
+SoundIndex SoundCache::FindName(const RelativeFilename& fileName)
 {
 	for (const auto& sound : m_Sounds)
 	{
@@ -82,7 +82,7 @@ bool SoundCache::LoadSound(Sound& sound)
 		completeFileName += '/';
 	}
 
-	completeFileName += sound.Name;
+	completeFileName.append(sound.Name.begin(), sound.Name.end());
 
 	std::string absolutePath;
 	absolutePath.resize(MAX_PATH_LENGTH);

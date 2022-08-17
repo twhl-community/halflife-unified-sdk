@@ -45,7 +45,7 @@ void SentencesSystem::LoadSentences()
 		return;
 	}
 
-	Filename wordFileName;
+	RelativeFilename wordFileName;
 
 	// for each line in the file...
 	sentences::SentencesListParser parser{{reinterpret_cast<const char*>(fileContents.data())}, *m_Logger};

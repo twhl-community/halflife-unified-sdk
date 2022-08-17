@@ -85,13 +85,13 @@ namespace sound
  */
 struct Sound
 {
-	Filename Name;
+	RelativeFilename Name;
 	OpenALBuffer Buffer;
 	ALenum Format = 0;
 	std::vector<float> Samples; // For sentences, to update mouths.
 	bool IsLooping{false};
 
-	explicit Sound(const Filename& filename)
+	explicit Sound(const RelativeFilename& filename)
 		: Name(filename)
 	{
 	}
