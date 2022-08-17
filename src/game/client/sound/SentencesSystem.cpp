@@ -337,7 +337,8 @@ bool SentencesSystem::UpdateSentencePlayback(Channel& channel, SentenceChannel& 
 
 	if (state != AL_STOPPED)
 	{
-		if (word.Parameters.End == 100)
+		// Time compressed sounds have already been modified to account for end clipping.
+		if (word.Parameters.End == 100 || word.Parameters.TimeCompress != 0)
 		{
 			return false;
 		}

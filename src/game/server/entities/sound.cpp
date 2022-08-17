@@ -1295,7 +1295,7 @@ static void EMIT_SOUND_SENTENCE(edict_t* entity, int channel, const char* sample
 		flags |= SND_PITCH;
 	}
 
-	if (soundIndex > 255)
+	if (soundIndex > std::numeric_limits<std::uint8_t>::max())
 	{
 		flags |= SND_LARGE_INDEX;
 	}
@@ -1329,14 +1329,15 @@ static void EMIT_SOUND_SENTENCE(edict_t* entity, int channel, const char* sample
 	WRITE_BYTE(channel);
 	WRITE_SHORT(entityIndex);
 
-	if (soundIndex <= 255)
+	if (soundIndex > std::numeric_limits<std::uint8_t>::max())
 	{
-		WRITE_BYTE(soundIndex);
+		// This controls the maximum number of sounds and sentences.
+		// The cast to signed short is needed to ensure the engine writes values > 32767 properly.
+		WRITE_SHORT(static_cast<std::int16_t>(soundIndex));
 	}
 	else
 	{
-		//This controls the maximum number of sounds and sentences.
-		WRITE_SHORT(soundIndex);
+		WRITE_BYTE(soundIndex);
 	}
 
 	WRITE_COORD_VECTOR(origin);
