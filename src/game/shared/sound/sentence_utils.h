@@ -29,7 +29,7 @@
 
 namespace sentences
 {
-constexpr int CBSENTENCENAME_MAX = 16;
+constexpr int CBSENTENCENAME_MAX = 32;
 
 /**
 *	@brief The amount of sentences to reserve space for on startup.
