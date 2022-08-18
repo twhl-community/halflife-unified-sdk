@@ -67,7 +67,7 @@ ModelReplacementMap ModelReplacementSystem::ParseModelReplacement(const json& in
 			ToLower(key);
 			ToLower(value);
 
-			if (const auto result = map.emplace(std::move(key), std::move(value)); !result.second)
+			if (const auto result = map.emplace(std::move(key), value); !result.second)
 			{
 				if (value != result.first->second)
 				{
