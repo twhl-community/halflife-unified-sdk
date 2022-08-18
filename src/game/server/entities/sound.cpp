@@ -1365,6 +1365,21 @@ void EMIT_SOUND_DYN(edict_t* entity, int channel, const char* sample, float volu
 		EMIT_SOUND_DYN2(entity, channel, sample, volume, attenuation, flags, pitch);
 }
 
+void UTIL_EmitAmbientSound(edict_t* entity, const Vector& vecOrigin, const char* samp, float vol, float attenuation, int fFlags, int pitch)
+{
+	float rgfl[3];
+	vecOrigin.CopyToArray(rgfl);
+
+	if (samp && *samp == '!')
+	{
+		sentences::SentenceIndexName name;
+		if (sentences::g_Sentences.LookupSentence(samp, &name) >= 0)
+			EMIT_AMBIENT_SOUND(entity, rgfl, name.c_str(), vol, attenuation, fFlags, pitch);
+	}
+	else
+		EMIT_AMBIENT_SOUND(entity, rgfl, samp, vol, attenuation, fFlags, pitch);
+}
+
 void EMIT_SOUND_PREDICTED(edict_t* entity, int channel, const char* sample, float volume, float attenuation,
 	int flags, int pitch)
 {

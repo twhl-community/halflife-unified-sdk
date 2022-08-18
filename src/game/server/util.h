@@ -236,7 +236,6 @@ void UTIL_MakeAimVectors(const Vector& vecAngles); // like MakeVectors, but assu
 void UTIL_MakeInvVectors(const Vector& vec, globalvars_t* pgv);
 
 void UTIL_SetOrigin(entvars_t* pev, const Vector& vecOrigin);
-void UTIL_EmitAmbientSound(edict_t* entity, const Vector& vecOrigin, const char* samp, float vol, float attenuation, int fFlags, int pitch);
 void UTIL_ParticleEffect(const Vector& vecOrigin, const Vector& vecDirection, unsigned int ulColor, unsigned int ulCount);
 void UTIL_ScreenShake(const Vector& center, float amplitude, float frequency, float duration, float radius);
 void UTIL_ScreenShakeAll(const Vector& center, float amplitude, float frequency, float duration);
@@ -464,6 +463,7 @@ float TEXTURETYPE_PlaySound(TraceResult* ptr, Vector vecSrc, Vector vecEnd, int 
 void EMIT_SOUND_DYN(edict_t* entity, int channel, const char* sample, float volume, float attenuation,
 	int flags, int pitch);
 
+void UTIL_EmitAmbientSound(edict_t* entity, const Vector& vecOrigin, const char* samp, float vol, float attenuation, int fFlags, int pitch);
 
 inline void EMIT_SOUND(edict_t* entity, int channel, const char* sample, float volume, float attenuation)
 {
