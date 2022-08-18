@@ -124,7 +124,7 @@ typedef struct enginefuncs_s
 	int (*pfnWalkMove)(edict_t* ent, float yaw, float dist, int iMode);
 	void (*pfnSetOrigin)(edict_t* e, const float* rgflOrigin);
 	void (*pfnEmitSound)(edict_t* entity, int channel, const char* sample, /*int*/ float volume, float attenuation, int fFlags, int pitch);
-	void (*pfnEmitAmbientSound)(edict_t* entity, float* pos, const char* samp, float vol, float attenuation, int fFlags, int pitch);
+	void (*pfnEmitAmbientSound)(edict_t* entity, const float* pos, const char* samp, float vol, float attenuation, int fFlags, int pitch);
 	void (*pfnTraceLine)(const float* v1, const float* v2, int fNoMonsters, edict_t* pentToSkip, TraceResult* ptr);
 	void (*pfnTraceToss)(edict_t* pent, edict_t* pentToIgnore, TraceResult* ptr);
 	int (*pfnTraceMonsterHull)(edict_t* pEdict, const float* v1, const float* v2, int fNoMonsters, edict_t* pentToSkip, TraceResult* ptr);
