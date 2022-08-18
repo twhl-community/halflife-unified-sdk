@@ -34,6 +34,8 @@ public:
 	void PostInitialize() override;
 	void Shutdown() override;
 
+	void NewMapStarted();
+
 	const char* GetSentenceNameByIndex(int index) const;
 
 	/**

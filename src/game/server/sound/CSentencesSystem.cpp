@@ -13,6 +13,8 @@
  *
  ****/
 
+#include <unordered_set>
+
 #include <fmt/format.h>
 
 #include "cbase.h"
@@ -37,6 +39,38 @@ void CSentencesSystem::Shutdown()
 {
 	g_Logging.RemoveLogger(m_Logger);
 	m_Logger.reset();
+}
+
+void CSentencesSystem::NewMapStarted()
+{
+	// Check if the replacement map has any bad data.
+	if (m_Logger->should_log(spdlog::level::debug))
+	{
+		const auto isSentence = [this](const auto& name)
+		{
+			return std::find_if(m_SentenceNames.begin(), m_SentenceNames.end(), [&](const auto& candidate)
+					   { return 0 == stricmp(candidate.c_str(), name.c_str()); }) != m_SentenceNames.end();
+		};
+
+		const auto isGroup = [this](const auto& name)
+		{
+			return std::find_if(m_SentenceGroups.begin(), m_SentenceGroups.end(), [&](const auto& candidate)
+					   { return 0 == strcmp(candidate.GroupName.c_str(), name.c_str()); }) != m_SentenceGroups.end();
+		};
+
+		for (const auto& [original, replacement] : g_Server.GetMapState()->m_GlobalSentenceReplacement)
+		{
+			if (!isSentence(original) && !isGroup(original))
+			{
+				m_Logger->debug("Global sentence replacement key \"{} => {}\" refers to nonexistent sentence or group", original, replacement);
+			}
+
+			if (!isSentence(replacement) && !isGroup(replacement))
+			{
+				m_Logger->debug("Global sentence replacement value in \"{} => {}\" refers to nonexistent sentence or group", original, replacement);
+			}
+		}
+	}
 }
 
 const char* CSentencesSystem::GetSentenceNameByIndex(int index) const
@@ -173,14 +207,22 @@ void CSentencesSystem::LoadSentences()
 	// for each line in the file...
 	SentencesListParser parser{{reinterpret_cast<const char*>(fileContents.data())}, *m_Logger};
 
+	std::unordered_set<std::string_view> duplicateNameCheck;
+	std::unordered_set<std::string_view> groupsWithBadSentenceIndices;
+
 	for (auto sentence = parser.Next(); sentence; sentence = parser.Next())
 	{
 		const std::string_view name = std::get<0>(*sentence);
 
 		if (m_SentenceNames.size() >= MaxSentencesCount)
 		{
-			m_Logger->error("Too many sentences in sentences.txt!");
+			m_Logger->error("Too many sentences in sentences.txt! (maximum {})", MaxSentencesCount);
 			break;
+		}
+
+		if (!duplicateNameCheck.insert(name).second)
+		{
+			m_Logger->warn("Encountered duplicate sentence name \"{}\"", name);
 		}
 
 		m_SentenceNames.push_back(SentenceName{name.data(), name.size()});
@@ -213,9 +255,25 @@ void CSentencesSystem::LoadSentences()
 
 			m_SentenceGroups.push_back(group);
 		}
+
+		const auto& group = m_SentenceGroups.back();
+
+		// Don't report bad indices more than once per group.
+		if (!groupsWithBadSentenceIndices.contains(groupName))
+		{
+			const int expected = group.count - 1;
+
+			if (expected != std::get<1>(*groupData))
+			{
+				m_Logger->warn("Sentence group \"{}\" has sentence \"{}\" with index that does not match order in group (should be {})",
+					group.GroupName.c_str(), name, expected);
+
+				groupsWithBadSentenceIndices.insert(groupName);
+			}
+		}
 	}
 
-	m_Logger->debug("Loaded {} sentences with {} sentence groups", m_SentenceNames.size(), m_SentenceGroups.size());
+	m_Logger->debug("Loaded {} out of max {} sentences with {} sentence groups", m_SentenceNames.size(), MaxSentencesCount, m_SentenceGroups.size());
 
 	// init lru lists
 	for (auto& group : m_SentenceGroups)
@@ -256,7 +314,7 @@ int CSentencesSystem::Pick(int isentenceg, SentenceIndexName& found)
 			{
 				const int ipick = group.rgblru[i];
 				group.rgblru[i] = 0xFF;
-				
+
 				found.clear();
 				fmt::format_to(std::back_inserter(found), "!{}{}", group.GroupName.c_str(), ipick);
 				return ipick;

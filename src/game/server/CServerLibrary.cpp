@@ -112,6 +112,7 @@ void CServerLibrary::NewMapStarted(bool loadGame)
 	LoadServerConfigFiles();
 
 	g_Skill.NewMapStarted();
+	sentences::g_Sentences.NewMapStarted();
 }
 
 void CServerLibrary::PreMapActivate()

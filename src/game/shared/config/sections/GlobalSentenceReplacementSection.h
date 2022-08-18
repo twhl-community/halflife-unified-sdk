@@ -50,6 +50,8 @@ public:
 
 		if (!fileName.empty())
 		{
+			context.Loader.GetLogger()->debug("Adding global sentence replacement file \"{}\"", fileName);
+
 			auto map = g_ReplacementMaps.Load(fileName);
 
 			if (!map.empty())
