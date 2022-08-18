@@ -19,7 +19,7 @@
 
 #include "cdll_dll.h"
 #include "palette.h"
-#include "utils/ModelReplacement.h"
+#include "utils/ReplacementMaps.h"
 
 /**
 *	@brief Contains per-map state
@@ -40,5 +40,5 @@ public:
 	std::optional<RGB24> m_HudColor;
 	std::optional<SuitLightType> m_LightType;
 
-	ModelReplacementMap m_GlobalModelReplacement;
+	ReplacementMap m_GlobalModelReplacement;
 };

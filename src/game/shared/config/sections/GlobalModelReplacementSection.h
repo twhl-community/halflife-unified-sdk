@@ -20,7 +20,7 @@
 #include "config/GameConfigSection.h"
 
 #include "utils/json_utils.h"
-#include "utils/ModelReplacement.h"
+#include "utils/ReplacementMaps.h"
 
 /**
 *	@brief Allows a configuration file to specify a global model replacement file.
@@ -49,7 +49,7 @@ public:
 
 		if (!fileName.empty())
 		{
-			auto map = g_ModelReplacement.LoadReplacementMap(fileName);
+			auto map = g_ReplacementMaps.Load(fileName, {.ConvertToLowercase = true});
 
 			if (!map.empty())
 			{

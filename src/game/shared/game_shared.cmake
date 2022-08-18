@@ -94,8 +94,8 @@ function(add_game_shared_sources target)
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/json_utils.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/json_utils.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/logging_utils.h
-			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/ModelReplacement.cpp
-			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/ModelReplacement.h
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/ReplacementMaps.cpp
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/ReplacementMaps.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/shared_utils.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/shared_utils.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/string_utils.cpp

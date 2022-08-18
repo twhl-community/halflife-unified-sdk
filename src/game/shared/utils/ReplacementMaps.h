@@ -26,18 +26,26 @@
 #include "utils/json_fwd.h"
 
 /**
-*	@brief A map of string to string for model replacements, stored as lowercase filenames.
+*	@brief A map of string to string for replacements.
 *	@details Do not modify these maps after they've been loaded. Any modification will invalidate pointers to values.
 */
-using ModelReplacementMap = std::unordered_map<std::string, std::string, TransparentStringHash, TransparentEqual>;
+using ReplacementMap = std::unordered_map<std::string, std::string, TransparentStringHash, TransparentEqual>;
+
+struct ReplacementMapOptions
+{
+	/**
+	*	@brief If @c true, converts all strings to lowercase.
+	*/
+	bool ConvertToLowercase = false;
+};
 
 /**
-*	@brief Handles the registration of the model replacement schema and the loading of files.
+*	@brief Handles the registration of the replacement map schema and the loading of files.
 */
-class ModelReplacementSystem final : public IGameSystem
+class ReplacementMapSystem final : public IGameSystem
 {
 public:
-	const char* GetName() const override { return "ModelReplacement"; }
+	const char* GetName() const override { return "ReplacementMap"; }
 
 	bool Initialize() override;
 
@@ -45,13 +53,13 @@ public:
 
 	void Shutdown() override;
 
-	ModelReplacementMap LoadReplacementMap(const std::string& fileName) const;
+	ReplacementMap Load(const std::string& fileName, const ReplacementMapOptions& options = {}) const;
 
 private:
-	ModelReplacementMap ParseModelReplacement(const json& input) const;
+	ReplacementMap Parse(const json& input, const ReplacementMapOptions& options) const;
 
 private:
 	std::shared_ptr<spdlog::logger> m_Logger;
 };
 
-inline ModelReplacementSystem g_ModelReplacement;
+inline ReplacementMapSystem g_ReplacementMaps;

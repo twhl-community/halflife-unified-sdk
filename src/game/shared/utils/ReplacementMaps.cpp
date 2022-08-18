@@ -13,20 +13,22 @@
 *
 ****/
 
+#include <fmt/format.h>
+
 #include "cbase.h"
 #include "json_utils.h"
-#include "ModelReplacement.h"
+#include "ReplacementMaps.h"
 
 using namespace std::literals;
 
-constexpr std::string_view ModelReplacementSchemaName{"ModelReplacement"sv};
+constexpr std::string_view ReplacementMapSchemaName{"ReplacementMap"sv};
 
-static std::string GetModelReplacementSchema()
+static std::string GetReplacementMapSchema()
 {
 	return fmt::format(R"(
 {{
 	"$schema": "http://json-schema.org/draft-07/schema#",
-	"title": "Model Replacement File",
+	"title": "Replacement Map File",
 	"type": "object",
 	"patternProperties": {{
 		".*": {{
@@ -37,23 +39,47 @@ static std::string GetModelReplacementSchema()
 )");
 }
 
-bool ModelReplacementSystem::Initialize()
+template <>
+struct fmt::formatter<ReplacementMapOptions>
+{
+	constexpr auto parse(format_parse_context& ctx) -> decltype(ctx.begin())
+	{
+		auto it = ctx.begin();
+
+		if (it != ctx.end() && *it != '}')
+		{
+			throw format_error("invalid format");
+		}
+
+		return it;
+	}
+
+	template <typename FormatContext>
+	auto format(const ReplacementMapOptions& options, FormatContext& ctx) const -> decltype(ctx.out())
+	{
+		return fmt::format_to(ctx.out(), "ConvertToLowercase = {}", options.ConvertToLowercase);
+	}
+};
+
+bool ReplacementMapSystem::Initialize()
 {
 	m_Logger = g_Logging.CreateLogger("replacementmap");
 
-	g_JSON.RegisterSchema(ModelReplacementSchemaName, &GetModelReplacementSchema);
+	g_JSON.RegisterSchema(ReplacementMapSchemaName, &GetReplacementMapSchema);
 
 	return true;
 }
 
-void ModelReplacementSystem::Shutdown()
+void ReplacementMapSystem::Shutdown()
 {
 	m_Logger.reset();
 }
 
-ModelReplacementMap ModelReplacementSystem::ParseModelReplacement(const json& input) const
+ReplacementMap ReplacementMapSystem::Parse(const json& input, const ReplacementMapOptions& options) const
 {
-	ModelReplacementMap map;
+	m_Logger->trace("Parsing replacement map with options:\n{}", options);
+
+	ReplacementMap map;
 
 	if (input.is_object())
 	{
@@ -64,8 +90,11 @@ ModelReplacementMap ModelReplacementSystem::ParseModelReplacement(const json& in
 			std::string key = kv.key();
 			auto value = kv.value().get<std::string>();
 
-			ToLower(key);
-			ToLower(value);
+			if (options.ConvertToLowercase)
+			{
+				ToLower(key);
+				ToLower(value);
+			}
 
 			if (const auto result = map.emplace(std::move(key), value); !result.second)
 			{
@@ -85,12 +114,12 @@ ModelReplacementMap ModelReplacementSystem::ParseModelReplacement(const json& in
 	return map;
 }
 
-ModelReplacementMap ModelReplacementSystem::LoadReplacementMap(const std::string& fileName) const
+ReplacementMap ReplacementMapSystem::Load(const std::string& fileName, const ReplacementMapOptions& options) const
 {
 	return g_JSON.ParseJSONFile(
 					 fileName.c_str(),
-					 {.SchemaName = ModelReplacementSchemaName, .PathID = "GAMECONFIG"},
-					 [this](const json& input)
-					 { return ParseModelReplacement(input); })
-		.value_or(ModelReplacementMap{});
+					 {.SchemaName = ReplacementMapSchemaName, .PathID = "GAMECONFIG"},
+					 [&, this](const json& input)
+					 { return Parse(input, options); })
+		.value_or(ReplacementMap{});
 }
