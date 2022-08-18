@@ -55,6 +55,9 @@ int CSentencesSystem::GetGroupIndex(const char* szgroupname) const
 	if (!szgroupname)
 		return -1;
 
+	// See if the group was replaced.
+	szgroupname = CheckForSentenceReplacement(szgroupname);
+
 	// search rgsentenceg for match on szgroupname
 	int i = 0;
 
