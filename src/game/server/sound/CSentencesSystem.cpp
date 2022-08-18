@@ -17,6 +17,7 @@
 
 #include "cbase.h"
 #include "CSentencesSystem.h"
+#include "CServerLibrary.h"
 #include "sound/sentence_utils.h"
 
 namespace sentences
@@ -71,9 +72,16 @@ int CSentencesSystem::LookupSentence(const char* sample, SentenceIndexName* sent
 {
 	// this is a sentence name; lookup sentence number
 	// and give to engine as string.
+
+	// Skip ! prefix
+	++sample;
+
+	// Handle sentence replacement.
+	sample = CheckForSentenceReplacement(sample);
+
 	for (size_t i = 0; i < m_SentenceNames.size(); i++)
 	{
-		if (!stricmp(m_SentenceNames[i].c_str(), sample + 1))
+		if (!stricmp(m_SentenceNames[i].c_str(), sample))
 		{
 			if (sentencenum)
 			{
@@ -284,5 +292,17 @@ int CSentencesSystem::PickSequential(int isentenceg, SentenceIndexName& found, i
 	}
 
 	return ipick + 1;
+}
+
+const char* CSentencesSystem::CheckForSentenceReplacement(const char* sentenceName) const
+{
+	const auto& map = g_Server.GetMapState()->m_GlobalSentenceReplacement;
+
+	if (auto it = map.find(sentenceName); it != map.end())
+	{
+		sentenceName = it->second.c_str();
+	}
+
+	return sentenceName;
 }
 }

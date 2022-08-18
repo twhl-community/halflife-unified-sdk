@@ -24,14 +24,14 @@
 #include "utils/ReplacementMaps.h"
 
 /**
-*	@brief Allows a configuration file to specify a global model replacement file.
+*	@brief Allows a configuration file to specify a global sentence replacement file.
 */
-class GlobalModelReplacementSection final : public GameConfigSection
+class GlobalSentenceReplacementSection final : public GameConfigSection
 {
 public:
-	explicit GlobalModelReplacementSection() = default;
+	explicit GlobalSentenceReplacementSection() = default;
 
-	std::string_view GetName() const override final { return "GlobalModelReplacement"; }
+	std::string_view GetName() const override final { return "GlobalSentenceReplacement"; }
 
 	std::tuple<std::string, std::string> GetSchema() const override final
 	{
@@ -50,7 +50,7 @@ public:
 
 		if (!fileName.empty())
 		{
-			auto map = g_ReplacementMaps.Load(fileName, {.ConvertToLowercase = true});
+			auto map = g_ReplacementMaps.Load(fileName);
 
 			if (!map.empty())
 			{
@@ -58,9 +58,9 @@ public:
 
 				//Append replacement mappings from other to my map.
 				//To ensure that existing keys are overwritten this is done by appending to the new map and then moving it to ours.
-				map.insert(mapState->m_GlobalModelReplacement.begin(), mapState->m_GlobalModelReplacement.end());
+				map.insert(mapState->m_GlobalSentenceReplacement.begin(), mapState->m_GlobalSentenceReplacement.end());
 
-				mapState->m_GlobalModelReplacement = std::move(map);
+				mapState->m_GlobalSentenceReplacement = std::move(map);
 			}
 		}
 

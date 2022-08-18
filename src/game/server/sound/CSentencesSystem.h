@@ -97,6 +97,8 @@ private:
 	 */
 	int PickSequential(int isentenceg, SentenceIndexName& found, int ipick, bool freset) const;
 
+	const char* CheckForSentenceReplacement(const char* sentenceName) const;
+
 private:
 	std::shared_ptr<spdlog::logger> m_Logger;
 

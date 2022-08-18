@@ -41,4 +41,5 @@ public:
 	std::optional<SuitLightType> m_LightType;
 
 	ReplacementMap m_GlobalModelReplacement;
+	ReplacementMap m_GlobalSentenceReplacement;
 };
