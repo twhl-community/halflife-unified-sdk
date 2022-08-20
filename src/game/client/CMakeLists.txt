@@ -135,6 +135,7 @@ target_sources(client PRIVATE
 	rendering/tri.cpp
 	rendering/tri.h
 	
+	sound/ClientSoundReplacement.h
 	sound/DummySoundSystem.h
 	sound/GameSoundSystem.cpp
 	sound/GameSoundSystem.h

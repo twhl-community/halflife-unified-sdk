@@ -19,10 +19,15 @@
 #include "cbase.h"
 #include "CClientLibrary.h"
 #include "net_api.h"
+#include "parsemsg.h"
 #include "view.h"
+#include "sound/ClientSoundReplacement.h"
 #include "sound/IGameSoundSystem.h"
 #include "sound/IMusicSystem.h"
 #include "sound/ISoundSystem.h"
+#include "utils/ReplacementMaps.h"
+
+int MsgFunc_SoundRpl(const char* pszName, int iSize, void* pbuf);
 
 bool CClientLibrary::Initialize()
 {
@@ -30,6 +35,8 @@ bool CClientLibrary::Initialize()
 	{
 		return false;
 	}
+
+	gEngfuncs.pfnHookUserMsg("SoundRpl", &MsgFunc_SoundRpl);
 
 	return true;
 }
@@ -72,6 +79,9 @@ void CClientLibrary::Frame()
 		// Stop all sounds if we connect, disconnect, start a new map using "map" (resets connection time), change servers or change maps.
 		sound::g_SoundSystem->GetGameSoundSystem()->StopAllSounds();
 		sound::g_SoundSystem->GetGameSoundSystem()->ClearCaches();
+
+		// Clear sound replacement map on any change.
+		sound::g_ClientSoundReplacement.clear();
 
 		if (!isConnected
 			|| m_ConnectionTime > status.connection_time
@@ -123,4 +133,15 @@ SDL_Window* CClientLibrary::FindWindow()
 	}
 
 	return nullptr;
+}
+
+int MsgFunc_SoundRpl(const char* pszName, int iSize, void* pbuf)
+{
+	BEGIN_READ(pbuf, iSize);
+
+	const char* replacementFileName = READ_STRING();
+
+	sound::g_ClientSoundReplacement = g_ReplacementMaps.Load(replacementFileName, {.ConvertToLowercase = true, .LoadFromAllPaths = true});
+
+	return 1;
 }

@@ -32,12 +32,12 @@
 #include "config/sections/EchoSection.h"
 #include "config/sections/GlobalModelReplacementSection.h"
 #include "config/sections/GlobalSentenceReplacementSection.h"
+#include "config/sections/GlobalSoundReplacementSection.h"
 #include "config/sections/HudColorSection.h"
 #include "config/sections/SuitLightTypeSection.h"
 
 #include "sound/CSentencesSystem.h"
-
-#include "utils/ReplacementMaps.h"
+#include "sound/ServerSoundSystem.h"
 
 using namespace std::literals;
 
@@ -113,6 +113,12 @@ void CServerLibrary::NewMapStarted(bool loadGame)
 
 	g_Skill.NewMapStarted();
 	sentences::g_Sentences.NewMapStarted();
+
+	if (!m_MapState.m_GlobalSoundReplacementFileName.empty())
+	{
+		g_engfuncs.pfnPrecacheGeneric(m_MapState.m_GlobalSoundReplacementFileName.c_str());
+		g_engfuncs.pfnForceUnmodified(force_exactfile, nullptr, nullptr, m_MapState.m_GlobalSoundReplacementFileName.c_str());
+	}
 }
 
 void CServerLibrary::PreMapActivate()
@@ -136,6 +142,13 @@ void CServerLibrary::PlayerActivating(CBasePlayer* player)
 	WRITE_STRING(UnifiedSDKGitCommitHash);
 	MESSAGE_END();
 
+	if (!m_MapState.m_GlobalSoundReplacementFileName.empty())
+	{
+		MESSAGE_BEGIN(MSG_ONE, gmsgSoundRpl, nullptr, player->edict());
+		WRITE_STRING(m_MapState.m_GlobalSoundReplacementFileName.c_str());
+		MESSAGE_END();
+	}
+
 	//Override the hud color.
 	if (m_MapState.m_HudColor)
 	{
@@ -153,7 +166,7 @@ void CServerLibrary::AddGameSystems()
 {
 	CGameLibrary::AddGameSystems();
 	g_GameSystems.Add(&g_Skill);
-	g_GameSystems.Add(&g_ReplacementMaps);
+	g_GameSystems.Add(&sound::g_ServerSound);
 	g_GameSystems.Add(&sentences::g_Sentences);
 }
 
@@ -167,6 +180,7 @@ void CServerLibrary::CreateConfigDefinitions()
 			sections.push_back(std::make_unique<CommandsSection>());
 			sections.push_back(std::make_unique<GlobalModelReplacementSection>());
 			sections.push_back(std::make_unique<GlobalSentenceReplacementSection>());
+			sections.push_back(std::make_unique<GlobalSoundReplacementSection>());
 			sections.push_back(std::make_unique<HudColorSection>());
 			sections.push_back(std::make_unique<SuitLightTypeSection>());
 
@@ -181,6 +195,7 @@ void CServerLibrary::CreateConfigDefinitions()
 			sections.push_back(std::make_unique<CommandsSection>(GetMapConfigCommandWhitelist()));
 			sections.push_back(std::make_unique<GlobalModelReplacementSection>());
 			sections.push_back(std::make_unique<GlobalSentenceReplacementSection>());
+			sections.push_back(std::make_unique<GlobalSoundReplacementSection>());
 			sections.push_back(std::make_unique<HudColorSection>());
 			sections.push_back(std::make_unique<SuitLightTypeSection>());
 

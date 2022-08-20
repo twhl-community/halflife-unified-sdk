@@ -24,6 +24,7 @@
 #include "utils/command_utils.h"
 #include "utils/GameSystem.h"
 #include "utils/json_utils.h"
+#include "utils/ReplacementMaps.h"
 
 void CGameLibrary::AddGameSystems()
 {
@@ -39,6 +40,7 @@ void CGameLibrary::AddGameSystems()
 	g_GameSystems.Add(&g_ASManager);
 	//Depends on Angelscript
 	g_GameSystems.Add(&g_GameConfigLoader);
+	g_GameSystems.Add(&g_ReplacementMaps);
 }
 
 bool CGameLibrary::InitializeCommon()

@@ -49,7 +49,10 @@ void ServerSoundSystem::EmitSound(edict_t* entity, int channel, const char* samp
 			m_Logger->debug("Unable to find {} in sentences.txt", sample);
 	}
 	else
+	{
+		sample = CheckForSoundReplacement(sample);
 		EMIT_SOUND_DYN2(entity, channel, sample, volume, attenuation, flags, pitch);
+	}
 }
 
 void ServerSoundSystem::EmitAmbientSound(edict_t* entity, const Vector& vecOrigin, const char* samp, float vol, float attenuation, int fFlags, int pitch)
@@ -61,7 +64,15 @@ void ServerSoundSystem::EmitAmbientSound(edict_t* entity, const Vector& vecOrigi
 			EmitSoundCore(entity, CHAN_STATIC, name.c_str(), vol, attenuation, fFlags, pitch, vecOrigin, true);
 	}
 	else
+	{
+		samp = CheckForSoundReplacement(samp);
 		EMIT_AMBIENT_SOUND(entity, vecOrigin, samp, vol, attenuation, fFlags, pitch);
+	}
+}
+
+const char* ServerSoundSystem::CheckForSoundReplacement(const char* soundName) const
+{
+	return g_ReplacementMaps.CheckForReplacement(soundName, g_Server.GetMapState()->m_GlobalSoundReplacement, true);
 }
 
 void ServerSoundSystem::EmitSoundCore(edict_t* entity, int channel, const char* sample, float volume, float attenuation,

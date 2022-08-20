@@ -37,6 +37,11 @@ struct ReplacementMapOptions
 	*	@brief If @c true, converts all strings to lowercase.
 	*/
 	bool ConvertToLowercase = false;
+
+	/**
+	*	@brief If @c true, searches all paths for the file.
+	*/
+	bool LoadFromAllPaths = false;
 };
 
 /**

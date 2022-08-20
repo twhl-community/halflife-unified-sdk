@@ -22,6 +22,7 @@
 #ifndef CLIENT_DLL
 #include "CMapState.h"
 #include "CServerLibrary.h"
+#include "sound/ServerSoundSystem.h"
 #endif
 
 CStringPool g_StringPool;
@@ -316,6 +317,10 @@ int UTIL_PrecacheSound(const char* s)
 	{
 		return 0;
 	}
+
+#ifndef CLIENT_DLL
+	s = sound::g_ServerSound.CheckForSoundReplacement(s);
+#endif
 
 	return g_engfuncs.pfnPrecacheSound(s);
 }

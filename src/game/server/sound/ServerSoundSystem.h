@@ -32,6 +32,8 @@ public:
 
 	void EmitAmbientSound(edict_t* entity, const Vector& vecOrigin, const char* samp, float vol, float attenuation, int fFlags, int pitch);
 
+	const char* CheckForSoundReplacement(const char* soundName) const;
+
 private:
 	void EmitSoundCore(edict_t* entity, int channel, const char* sample, float volume, float attenuation,
 		int flags, int pitch, const Vector& origin, bool alwaysBroadcast);

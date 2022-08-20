@@ -42,4 +42,7 @@ public:
 
 	ReplacementMap m_GlobalModelReplacement;
 	ReplacementMap m_GlobalSentenceReplacement;
+
+	Filename m_GlobalSoundReplacementFileName;
+	ReplacementMap m_GlobalSoundReplacement;
 };

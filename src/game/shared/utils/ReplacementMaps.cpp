@@ -57,7 +57,11 @@ struct fmt::formatter<ReplacementMapOptions>
 	template <typename FormatContext>
 	auto format(const ReplacementMapOptions& options, FormatContext& ctx) const -> decltype(ctx.out())
 	{
-		return fmt::format_to(ctx.out(), "ConvertToLowercase = {}", options.ConvertToLowercase);
+		return fmt::format_to(ctx.out(), R"(
+ConvertToLowercase = {}
+LoadFromAllPaths = {}
+)",
+			options.ConvertToLowercase, options.LoadFromAllPaths);
 	}
 };
 
@@ -116,9 +120,11 @@ ReplacementMap ReplacementMapSystem::Parse(const json& input, const ReplacementM
 
 ReplacementMap ReplacementMapSystem::Load(const std::string& fileName, const ReplacementMapOptions& options) const
 {
+	const auto pathID = options.LoadFromAllPaths ? nullptr : "GAMECONFIG";
+
 	return g_JSON.ParseJSONFile(
 					 fileName.c_str(),
-					 {.SchemaName = ReplacementMapSchemaName, .PathID = "GAMECONFIG"},
+					 {.SchemaName = ReplacementMapSchemaName, .PathID = pathID},
 					 [&, this](const json& input)
 					 { return Parse(input, options); })
 		.value_or(ReplacementMap{});
