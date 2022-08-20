@@ -396,12 +396,12 @@ void CHGruntAlly::Spawn()
 //=========================================================
 void CHGruntAlly::Precache()
 {
-	PRECACHE_SOUND("weapons/saw_fire1.wav");
-	PRECACHE_SOUND("weapons/saw_fire2.wav");
-	PRECACHE_SOUND("weapons/saw_fire3.wav");
-	PRECACHE_SOUND("weapons/saw_reload.wav");
+	PrecacheSound("weapons/saw_fire1.wav");
+	PrecacheSound("weapons/saw_fire2.wav");
+	PrecacheSound("weapons/saw_fire3.wav");
+	PrecacheSound("weapons/saw_reload.wav");
 
-	PRECACHE_SOUND("weapons/glauncher.wav");
+	PrecacheSound("weapons/glauncher.wav");
 
 	m_iBrassShell = PrecacheModel("models/shell.mdl"); // brass shell
 	m_iShotgunShell = PrecacheModel("models/shotgunshell.mdl");

@@ -337,11 +337,11 @@ void COFTorchAlly::Precache()
 {
 	PrecacheModel(TORCH_BEAM_SPRITE);
 
-	PRECACHE_SOUND("weapons/desert_eagle_fire.wav");
-	PRECACHE_SOUND("weapons/desert_eagle_reload.wav");
+	PrecacheSound("weapons/desert_eagle_fire.wav");
+	PrecacheSound("weapons/desert_eagle_reload.wav");
 
-	PRECACHE_SOUND("fgrunt/torch_light.wav");
-	PRECACHE_SOUND("fgrunt/torch_cut_loop.wav");
+	PrecacheSound("fgrunt/torch_light.wav");
+	PrecacheSound("fgrunt/torch_cut_loop.wav");
 
 	CBaseHGruntAlly::Precache();
 }

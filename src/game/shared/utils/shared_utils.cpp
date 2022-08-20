@@ -316,3 +316,16 @@ int UTIL_PrecacheModel(const char* s)
 
 	return g_engfuncs.pfnPrecacheModel(s);
 }
+
+int UTIL_PrecacheSound(const char* s)
+{
+	ASSERT(s != nullptr);
+	ASSERT(s[0] != '\0');
+
+	if (!s || s[0] == '\0')
+	{
+		return 0;
+	}
+
+	return g_engfuncs.pfnPrecacheSound(s);
+}

@@ -93,9 +93,9 @@ void CRecharge::Spawn()
 
 void CRecharge::Precache()
 {
-	PRECACHE_SOUND("items/suitcharge1.wav");
-	PRECACHE_SOUND("items/suitchargeno1.wav");
-	PRECACHE_SOUND("items/suitchargeok1.wav");
+	PrecacheSound("items/suitcharge1.wav");
+	PrecacheSound("items/suitchargeno1.wav");
+	PrecacheSound("items/suitchargeok1.wav");
 }
 
 

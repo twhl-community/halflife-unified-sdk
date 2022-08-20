@@ -1577,7 +1577,7 @@ bool CEnvShooter::KeyValue(KeyValueData* pkvd)
 void CEnvShooter::Precache()
 {
 	m_iGibModelIndex = PrecacheModel(STRING(pev->model));
-	CBreakable::MaterialSoundPrecache((Materials)m_iGibMaterial);
+	CBreakable::MaterialSoundPrecache(this, (Materials)m_iGibMaterial);
 }
 
 
@@ -2038,7 +2038,7 @@ void CMessage::Spawn()
 void CMessage::Precache()
 {
 	if (!FStringNull(pev->noise))
-		PRECACHE_SOUND(STRING(pev->noise));
+		PrecacheSound(STRING(pev->noise));
 }
 
 bool CMessage::KeyValue(KeyValueData* pkvd)
@@ -2160,7 +2160,7 @@ public:
 void CEnvBeverage::Precache()
 {
 	PrecacheModel("models/can.mdl");
-	PRECACHE_SOUND("weapons/g_bounce3.wav");
+	PrecacheSound("weapons/g_bounce3.wav");
 }
 
 LINK_ENTITY_TO_CLASS(env_beverage, CEnvBeverage);
@@ -2378,7 +2378,7 @@ void CWarpBall::Precache()
 	PrecacheModel("sprites/Fexplo1.spr");
 	PrecacheModel("sprites/XFlare1.spr");
 	PrecacheModel("sprites/lgtning.spr");
-	PRECACHE_SOUND("debris/alien_teleport.wav");
+	PrecacheSound("debris/alien_teleport.wav");
 }
 
 void CWarpBall::Spawn()

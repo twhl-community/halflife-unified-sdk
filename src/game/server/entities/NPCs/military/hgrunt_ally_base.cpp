@@ -772,32 +772,32 @@ void CBaseHGruntAlly::Precache()
 
 	PrecacheModel(STRING(pev->model));
 
-	PRECACHE_SOUND("hgrunt/gr_mgun1.wav");
-	PRECACHE_SOUND("hgrunt/gr_mgun2.wav");
+	PrecacheSound("hgrunt/gr_mgun1.wav");
+	PrecacheSound("hgrunt/gr_mgun2.wav");
 
-	PRECACHE_SOUND("fgrunt/death1.wav");
-	PRECACHE_SOUND("fgrunt/death2.wav");
-	PRECACHE_SOUND("fgrunt/death3.wav");
-	PRECACHE_SOUND("fgrunt/death4.wav");
-	PRECACHE_SOUND("fgrunt/death5.wav");
-	PRECACHE_SOUND("fgrunt/death6.wav");
+	PrecacheSound("fgrunt/death1.wav");
+	PrecacheSound("fgrunt/death2.wav");
+	PrecacheSound("fgrunt/death3.wav");
+	PrecacheSound("fgrunt/death4.wav");
+	PrecacheSound("fgrunt/death5.wav");
+	PrecacheSound("fgrunt/death6.wav");
 
-	PRECACHE_SOUND("fgrunt/pain1.wav");
-	PRECACHE_SOUND("fgrunt/pain2.wav");
-	PRECACHE_SOUND("fgrunt/pain3.wav");
-	PRECACHE_SOUND("fgrunt/pain4.wav");
-	PRECACHE_SOUND("fgrunt/pain5.wav");
-	PRECACHE_SOUND("fgrunt/pain6.wav");
+	PrecacheSound("fgrunt/pain1.wav");
+	PrecacheSound("fgrunt/pain2.wav");
+	PrecacheSound("fgrunt/pain3.wav");
+	PrecacheSound("fgrunt/pain4.wav");
+	PrecacheSound("fgrunt/pain5.wav");
+	PrecacheSound("fgrunt/pain6.wav");
 
-	PRECACHE_SOUND("hgrunt/gr_reload1.wav");
+	PrecacheSound("hgrunt/gr_reload1.wav");
 
-	PRECACHE_SOUND("weapons/glauncher.wav");
+	PrecacheSound("weapons/glauncher.wav");
 
-	PRECACHE_SOUND("weapons/sbarrel1.wav");
+	PrecacheSound("weapons/sbarrel1.wav");
 
-	PRECACHE_SOUND("fgrunt/medic.wav");
+	PrecacheSound("fgrunt/medic.wav");
 
-	PRECACHE_SOUND("zombie/claw_miss2.wav"); // because we use the basemonster SWIPE animation event
+	PrecacheSound("zombie/claw_miss2.wav"); // because we use the basemonster SWIPE animation event
 
 	COFSquadTalkMonster::Precache();
 }

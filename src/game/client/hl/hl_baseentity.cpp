@@ -41,6 +41,11 @@ void CBaseEntity::SetModel(const char* s)
 	//Nothing.
 }
 
+int CBaseEntity::PrecacheSound(const char* s)
+{
+	return UTIL_PrecacheSound(s);
+}
+
 void CBaseEntity::OnCreate()
 {
 	//Nothing.

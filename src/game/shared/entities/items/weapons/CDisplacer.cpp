@@ -43,12 +43,12 @@ void CDisplacer::Precache()
 	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/p_displacer.mdl");
 
-	PRECACHE_SOUND("weapons/displacer_fire.wav");
-	PRECACHE_SOUND("weapons/displacer_self.wav");
-	PRECACHE_SOUND("weapons/displacer_spin.wav");
-	PRECACHE_SOUND("weapons/displacer_spin2.wav");
+	PrecacheSound("weapons/displacer_fire.wav");
+	PrecacheSound("weapons/displacer_self.wav");
+	PrecacheSound("weapons/displacer_spin.wav");
+	PrecacheSound("weapons/displacer_spin2.wav");
 
-	PRECACHE_SOUND("buttons/button11.wav");
+	PrecacheSound("buttons/button11.wav");
 
 	m_iSpriteTexture = PrecacheModel("sprites/shockwave.spr");
 

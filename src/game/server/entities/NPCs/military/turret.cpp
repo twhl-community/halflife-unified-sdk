@@ -269,18 +269,18 @@ void CBaseTurret::Spawn()
 void CBaseTurret::Precache()
 {
 	PrecacheModel(STRING(pev->model));
-	PRECACHE_SOUND("turret/tu_fire1.wav");
-	PRECACHE_SOUND("turret/tu_ping.wav");
-	PRECACHE_SOUND("turret/tu_active2.wav");
-	PRECACHE_SOUND("turret/tu_die.wav");
-	PRECACHE_SOUND("turret/tu_die2.wav");
-	PRECACHE_SOUND("turret/tu_die3.wav");
-	// PRECACHE_SOUND ("turret/tu_retract.wav"); // just use deploy sound to save memory
-	PRECACHE_SOUND("turret/tu_deploy.wav");
-	PRECACHE_SOUND("turret/tu_spinup.wav");
-	PRECACHE_SOUND("turret/tu_spindown.wav");
-	PRECACHE_SOUND("turret/tu_search.wav");
-	PRECACHE_SOUND("turret/tu_alert.wav");
+	PrecacheSound("turret/tu_fire1.wav");
+	PrecacheSound("turret/tu_ping.wav");
+	PrecacheSound("turret/tu_active2.wav");
+	PrecacheSound("turret/tu_die.wav");
+	PrecacheSound("turret/tu_die2.wav");
+	PrecacheSound("turret/tu_die3.wav");
+	// PrecacheSound ("turret/tu_retract.wav"); // just use deploy sound to save memory
+	PrecacheSound("turret/tu_deploy.wav");
+	PrecacheSound("turret/tu_spinup.wav");
+	PrecacheSound("turret/tu_spindown.wav");
+	PrecacheSound("turret/tu_search.wav");
+	PrecacheSound("turret/tu_alert.wav");
 }
 
 #define TURRET_GLOW_SPRITE "sprites/flare3.spr"
@@ -354,9 +354,9 @@ void CMiniTurret::Spawn()
 void CMiniTurret::Precache()
 {
 	CBaseTurret::Precache();
-	PRECACHE_SOUND("weapons/hks1.wav");
-	PRECACHE_SOUND("weapons/hks2.wav");
-	PRECACHE_SOUND("weapons/hks3.wav");
+	PrecacheSound("weapons/hks1.wav");
+	PrecacheSound("weapons/hks2.wav");
+	PrecacheSound("weapons/hks3.wav");
 }
 
 void CBaseTurret::Initialize()

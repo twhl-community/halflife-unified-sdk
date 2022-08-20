@@ -34,7 +34,7 @@ void CShockBeam::Precache()
 	PrecacheModel("sprites/lgtning.spr");
 	PrecacheModel("sprites/glow01.spr");
 	PrecacheModel("models/shock_effect.mdl");
-	PRECACHE_SOUND("weapons/shock_impact.wav");
+	PrecacheSound("weapons/shock_impact.wav");
 }
 
 void CShockBeam::Spawn()

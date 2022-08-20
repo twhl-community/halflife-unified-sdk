@@ -333,9 +333,9 @@ void W_Precache()
 
 	UTIL_PrecacheOtherWeapon("weapon_penguin");
 
-	PRECACHE_SOUND("weapons/spore_hit1.wav");
-	PRECACHE_SOUND("weapons/spore_hit2.wav");
-	PRECACHE_SOUND("weapons/spore_hit3.wav");
+	UTIL_PrecacheSound("weapons/spore_hit1.wav");
+	UTIL_PrecacheSound("weapons/spore_hit2.wav");
+	UTIL_PrecacheSound("weapons/spore_hit3.wav");
 
 	if (g_pGameRules->IsDeathmatch())
 	{
@@ -357,18 +357,18 @@ void W_Precache()
 	UTIL_PrecacheModel("models/grenade.mdl");
 	UTIL_PrecacheModel("sprites/explode1.spr");
 
-	PRECACHE_SOUND("weapons/debris1.wav"); // explosion aftermaths
-	PRECACHE_SOUND("weapons/debris2.wav"); // explosion aftermaths
-	PRECACHE_SOUND("weapons/debris3.wav"); // explosion aftermaths
+	UTIL_PrecacheSound("weapons/debris1.wav"); // explosion aftermaths
+	UTIL_PrecacheSound("weapons/debris2.wav"); // explosion aftermaths
+	UTIL_PrecacheSound("weapons/debris3.wav"); // explosion aftermaths
 
-	PRECACHE_SOUND("weapons/grenade_hit1.wav"); //grenade
-	PRECACHE_SOUND("weapons/grenade_hit2.wav"); //grenade
-	PRECACHE_SOUND("weapons/grenade_hit3.wav"); //grenade
+	UTIL_PrecacheSound("weapons/grenade_hit1.wav"); //grenade
+	UTIL_PrecacheSound("weapons/grenade_hit2.wav"); //grenade
+	UTIL_PrecacheSound("weapons/grenade_hit3.wav"); //grenade
 
-	PRECACHE_SOUND("weapons/bullet_hit1.wav"); // hit by bullet
-	PRECACHE_SOUND("weapons/bullet_hit2.wav"); // hit by bullet
+	UTIL_PrecacheSound("weapons/bullet_hit1.wav"); // hit by bullet
+	UTIL_PrecacheSound("weapons/bullet_hit2.wav"); // hit by bullet
 
-	PRECACHE_SOUND("items/weapondrop1.wav"); // weapon falls to the ground
+	UTIL_PrecacheSound("items/weapondrop1.wav"); // weapon falls to the ground
 }
 
 

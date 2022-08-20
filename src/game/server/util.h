@@ -500,7 +500,7 @@ void EMIT_GROUPNAME_SUIT(edict_t* entity, const char* groupname);
 #define PRECACHE_SOUND_ARRAY(a)                        \
 	{                                                  \
 		for (std::size_t i = 0; i < std::size(a); i++) \
-			PRECACHE_SOUND(a[i]);                      \
+			PrecacheSound(a[i]);                      \
 	}
 
 #define EMIT_SOUND_ARRAY_DYN(chan, array) \

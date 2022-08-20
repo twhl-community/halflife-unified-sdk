@@ -982,19 +982,19 @@ void CShockTrooper::Precache()
 	PrecacheModel(STRING(pev->model));
 	PrecacheModel("models/strooper_gibs.mdl");
 
-	PRECACHE_SOUND("weapons/shock_fire.wav");
+	PrecacheSound("weapons/shock_fire.wav");
 
-	PRECACHE_SOUND("shocktrooper/shock_trooper_attack.wav");
-	PRECACHE_SOUND("shocktrooper/shock_trooper_die1.wav");
-	PRECACHE_SOUND("shocktrooper/shock_trooper_die2.wav");
-	PRECACHE_SOUND("shocktrooper/shock_trooper_die3.wav");
-	PRECACHE_SOUND("shocktrooper/shock_trooper_die4.wav");
+	PrecacheSound("shocktrooper/shock_trooper_attack.wav");
+	PrecacheSound("shocktrooper/shock_trooper_die1.wav");
+	PrecacheSound("shocktrooper/shock_trooper_die2.wav");
+	PrecacheSound("shocktrooper/shock_trooper_die3.wav");
+	PrecacheSound("shocktrooper/shock_trooper_die4.wav");
 
-	PRECACHE_SOUND("shocktrooper/shock_trooper_pain1.wav");
-	PRECACHE_SOUND("shocktrooper/shock_trooper_pain2.wav");
-	PRECACHE_SOUND("shocktrooper/shock_trooper_pain3.wav");
-	PRECACHE_SOUND("shocktrooper/shock_trooper_pain4.wav");
-	PRECACHE_SOUND("shocktrooper/shock_trooper_pain5.wav");
+	PrecacheSound("shocktrooper/shock_trooper_pain1.wav");
+	PrecacheSound("shocktrooper/shock_trooper_pain2.wav");
+	PrecacheSound("shocktrooper/shock_trooper_pain3.wav");
+	PrecacheSound("shocktrooper/shock_trooper_pain4.wav");
+	PrecacheSound("shocktrooper/shock_trooper_pain5.wav");
 
 	// get voice pitch
 	if (RANDOM_LONG(0, 1))

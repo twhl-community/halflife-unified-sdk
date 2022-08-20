@@ -54,19 +54,19 @@ void CMP5::Precache()
 	PrecacheModel("models/grenade.mdl"); // grenade
 
 	PrecacheModel("models/w_9mmARclip.mdl");
-	PRECACHE_SOUND("items/9mmclip1.wav");
+	PrecacheSound("items/9mmclip1.wav");
 
-	PRECACHE_SOUND("items/clipinsert1.wav");
-	PRECACHE_SOUND("items/cliprelease1.wav");
+	PrecacheSound("items/clipinsert1.wav");
+	PrecacheSound("items/cliprelease1.wav");
 
-	PRECACHE_SOUND("weapons/hks1.wav"); // H to the K
-	PRECACHE_SOUND("weapons/hks2.wav"); // H to the K
-	PRECACHE_SOUND("weapons/hks3.wav"); // H to the K
+	PrecacheSound("weapons/hks1.wav"); // H to the K
+	PrecacheSound("weapons/hks2.wav"); // H to the K
+	PrecacheSound("weapons/hks3.wav"); // H to the K
 
-	PRECACHE_SOUND("weapons/glauncher.wav");
-	PRECACHE_SOUND("weapons/glauncher2.wav");
+	PrecacheSound("weapons/glauncher.wav");
+	PrecacheSound("weapons/glauncher2.wav");
 
-	PRECACHE_SOUND("weapons/357_cock1.wav");
+	PrecacheSound("weapons/357_cock1.wav");
 
 	m_usMP5 = PRECACHE_EVENT(1, "events/mp5.sc");
 	m_usMP52 = PRECACHE_EVENT(1, "events/mp52.sc");
@@ -278,7 +278,7 @@ public:
 	void Precache() override
 	{
 		CBasePlayerAmmo::Precache();
-		PRECACHE_SOUND("items/9mmclip1.wav");
+		PrecacheSound("items/9mmclip1.wav");
 	}
 	bool AddAmmo(CBaseEntity* pOther) override
 	{
@@ -308,7 +308,7 @@ public:
 	void Precache() override
 	{
 		CBasePlayerAmmo::Precache();
-		PRECACHE_SOUND("items/9mmclip1.wav");
+		PrecacheSound("items/9mmclip1.wav");
 	}
 	bool AddAmmo(CBaseEntity* pOther) override
 	{
@@ -336,7 +336,7 @@ public:
 	void Precache() override
 	{
 		CBasePlayerAmmo::Precache();
-		PRECACHE_SOUND("items/9mmclip1.wav");
+		PrecacheSound("items/9mmclip1.wav");
 	}
 	bool AddAmmo(CBaseEntity* pOther) override
 	{

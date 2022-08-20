@@ -19,6 +19,8 @@
 
 #include "monsterevent.h"
 
+class CBaseEntity;
+
 bool IsSoundEvent(int eventNumber);
 
 int LookupActivity(void* pmodel, entvars_t* pev, int activity);
@@ -29,7 +31,7 @@ int GetSequenceFlags(void* pmodel, entvars_t* pev);
 float SetController(void* pmodel, entvars_t* pev, int iController, float flValue);
 float SetBlending(void* pmodel, entvars_t* pev, int iBlender, float flValue);
 void GetEyePosition(void* pmodel, float* vecEyePosition);
-void SequencePrecache(void* pmodel, const char* pSequenceName);
+void SequencePrecache(CBaseEntity* self, void* pmodel, const char* pSequenceName);
 int FindTransition(void* pmodel, int iEndingAnim, int iGoalAnim, int* piDir);
 void SetBodygroup(void* pmodel, entvars_t* pev, int iGroup, int iValue);
 int GetBodygroup(void* pmodel, entvars_t* pev, int iGroup);

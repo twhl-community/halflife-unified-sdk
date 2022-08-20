@@ -36,8 +36,8 @@ void CSpore::Precache()
 	m_iBlowSmall = PrecacheModel("sprites/spore_exp_c_01.spr");
 	m_iSpitSprite = m_iTrail = PrecacheModel("sprites/tinyspit.spr");
 
-	PRECACHE_SOUND("weapons/splauncher_impact.wav");
-	PRECACHE_SOUND("weapons/splauncher_bounce.wav");
+	PrecacheSound("weapons/splauncher_impact.wav");
+	PrecacheSound("weapons/splauncher_bounce.wav");
 }
 
 void CSpore::Spawn()

@@ -106,8 +106,8 @@ void COsprey::PrecacheCore(const char* tailModel, const char* bodyModel, const c
 	PrecacheModel(STRING(pev->model));
 	PrecacheModel("models/HVR.mdl");
 
-	PRECACHE_SOUND("apache/ap_rotor4.wav");
-	PRECACHE_SOUND("weapons/mortarhit.wav");
+	PrecacheSound("apache/ap_rotor4.wav");
+	PrecacheSound("weapons/mortarhit.wav");
 
 	m_iSpriteTexture = PrecacheModel("sprites/rope.spr");
 

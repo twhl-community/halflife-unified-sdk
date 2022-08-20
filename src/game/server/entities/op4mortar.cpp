@@ -53,8 +53,8 @@ void CMortarShell::Precache()
 {
 	PrecacheModel("models/mortarshell.mdl");
 	m_iTrail = PrecacheModel("sprites/wep_smoke_01.spr");
-	PRECACHE_SOUND("weapons/gauss2.wav");
-	PRECACHE_SOUND("weapons/ofmortar.wav");
+	PrecacheSound("weapons/gauss2.wav");
+	PrecacheSound("weapons/ofmortar.wav");
 }
 
 void CMortarShell::Spawn()
@@ -374,8 +374,8 @@ void COp4Mortar::Precache()
 {
 	PrecacheModel(STRING(pev->model));
 	UTIL_PrecacheOther("mortar_shell");
-	PRECACHE_SOUND("weapons/mortarhit.wav");
-	PRECACHE_SOUND("player/pl_grate1.wav");
+	PrecacheSound("weapons/mortarhit.wav");
+	PrecacheSound("player/pl_grate1.wav");
 }
 
 void COp4Mortar::Spawn()

@@ -541,13 +541,13 @@ void CWorld::Precache()
 	ClientPrecache();
 
 	// sounds used from C physics code
-	PRECACHE_SOUND("common/null.wav"); // clears sound channels
+	PrecacheSound("common/null.wav"); // clears sound channels
 
-	PRECACHE_SOUND("items/suitchargeok1.wav"); //!!! temporary sound for respawning weapons.
-	PRECACHE_SOUND("items/gunpickup2.wav");	   // player picks up a gun.
+	PrecacheSound("items/suitchargeok1.wav"); //!!! temporary sound for respawning weapons.
+	PrecacheSound("items/gunpickup2.wav");	   // player picks up a gun.
 
-	PRECACHE_SOUND("common/bodydrop3.wav"); // dead bodies hitting the ground (animation events)
-	PRECACHE_SOUND("common/bodydrop4.wav");
+	PrecacheSound("common/bodydrop3.wav"); // dead bodies hitting the ground (animation events)
+	PrecacheSound("common/bodydrop4.wav");
 
 	g_Language = (int)CVAR_GET_FLOAT("sv_language");
 	if (g_Language == LANGUAGE_GERMAN)
@@ -560,11 +560,11 @@ void CWorld::Precache()
 		PrecacheModel("models/agibs.mdl");
 	}
 
-	PRECACHE_SOUND("weapons/ric1.wav");
-	PRECACHE_SOUND("weapons/ric2.wav");
-	PRECACHE_SOUND("weapons/ric3.wav");
-	PRECACHE_SOUND("weapons/ric4.wav");
-	PRECACHE_SOUND("weapons/ric5.wav");
+	PrecacheSound("weapons/ric1.wav");
+	PrecacheSound("weapons/ric2.wav");
+	PrecacheSound("weapons/ric3.wav");
+	PrecacheSound("weapons/ric4.wav");
+	PrecacheSound("weapons/ric5.wav");
 	//
 	// Setup light animation tables. 'a' is total darkness, 'z' is maxbright.
 	//

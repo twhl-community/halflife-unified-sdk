@@ -223,7 +223,7 @@ void COFFuncTank::Precache()
 		PrecacheModel(STRING(m_iszSpriteFlash));
 
 	if (!FStringNull(pev->noise))
-		PRECACHE_SOUND(STRING(pev->noise));
+		PrecacheSound(STRING(pev->noise));
 }
 
 

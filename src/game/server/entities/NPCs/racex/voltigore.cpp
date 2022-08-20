@@ -588,28 +588,28 @@ void COFVoltigore::Precache()
 	PRECACHE_SOUND_ARRAY(pAlertSounds);
 	PRECACHE_SOUND_ARRAY(pAttackSounds);
 
-	PRECACHE_SOUND("voltigore/voltigore_attack_shock.wav");
+	PrecacheSound("voltigore/voltigore_attack_shock.wav");
 
-	PRECACHE_SOUND("voltigore/voltigore_communicate1.wav");
-	PRECACHE_SOUND("voltigore/voltigore_communicate2.wav");
-	PRECACHE_SOUND("voltigore/voltigore_communicate3.wav");
+	PrecacheSound("voltigore/voltigore_communicate1.wav");
+	PrecacheSound("voltigore/voltigore_communicate2.wav");
+	PrecacheSound("voltigore/voltigore_communicate3.wav");
 
-	PRECACHE_SOUND("voltigore/voltigore_die1.wav");
-	PRECACHE_SOUND("voltigore/voltigore_die2.wav");
-	PRECACHE_SOUND("voltigore/voltigore_die3.wav");
+	PrecacheSound("voltigore/voltigore_die1.wav");
+	PrecacheSound("voltigore/voltigore_die2.wav");
+	PrecacheSound("voltigore/voltigore_die3.wav");
 
-	PRECACHE_SOUND("voltigore/voltigore_footstep1.wav");
-	PRECACHE_SOUND("voltigore/voltigore_footstep2.wav");
-	PRECACHE_SOUND("voltigore/voltigore_footstep3.wav");
+	PrecacheSound("voltigore/voltigore_footstep1.wav");
+	PrecacheSound("voltigore/voltigore_footstep2.wav");
+	PrecacheSound("voltigore/voltigore_footstep3.wav");
 
-	PRECACHE_SOUND("voltigore/voltigore_run_grunt1.wav");
-	PRECACHE_SOUND("voltigore/voltigore_run_grunt2.wav");
+	PrecacheSound("voltigore/voltigore_run_grunt1.wav");
+	PrecacheSound("voltigore/voltigore_run_grunt2.wav");
 
-	PRECACHE_SOUND("voltigore/voltigore_eat.wav");
+	PrecacheSound("voltigore/voltigore_eat.wav");
 
-	PRECACHE_SOUND("hassault/hw_shoot1.wav");
+	PrecacheSound("hassault/hw_shoot1.wav");
 
-	PRECACHE_SOUND("debris/beamstart2.wav");
+	PrecacheSound("debris/beamstart2.wav");
 
 	UTIL_PrecacheOther("charged_bolt");
 

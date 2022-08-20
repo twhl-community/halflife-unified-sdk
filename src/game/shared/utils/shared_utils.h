@@ -122,6 +122,8 @@ const char* UTIL_CheckForGlobalModelReplacement(const char* s);
 
 int UTIL_PrecacheModel(const char* s);
 
+int UTIL_PrecacheSound(const char* s);
+
 /**
  *	@brief Helper constant to allow the use of @c static_assert without an actual condition.
  *	Used mainly in <tt>if constexpr else</tt> branches.

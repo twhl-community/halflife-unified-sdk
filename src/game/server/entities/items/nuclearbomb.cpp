@@ -99,7 +99,7 @@ void COFNuclearBombTimer::OnCreate()
 void COFNuclearBombTimer::Precache()
 {
 	PrecacheModel(STRING(pev->model));
-	PRECACHE_SOUND("common/nuke_ticking.wav");
+	PrecacheSound("common/nuke_ticking.wav");
 }
 
 void COFNuclearBombTimer::Spawn()
@@ -230,8 +230,8 @@ void COFNuclearBomb::Precache()
 	PrecacheModel(STRING(pev->model));
 	UTIL_PrecacheOther("item_nuclearbombtimer");
 	UTIL_PrecacheOther("item_nuclearbombbutton");
-	PRECACHE_SOUND("buttons/button4.wav");
-	PRECACHE_SOUND("buttons/button6.wav");
+	PrecacheSound("buttons/button4.wav");
+	PrecacheSound("buttons/button6.wav");
 
 	//The other entities are created here since a restore only calls Precache
 	//TODO: set the classname members for both entities

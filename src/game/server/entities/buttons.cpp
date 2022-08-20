@@ -297,12 +297,12 @@ void CBaseButton::Precache()
 
 	if (FBitSet(pev->spawnflags, SF_BUTTON_SPARK_IF_OFF)) // this button should spark in OFF state
 	{
-		PRECACHE_SOUND("buttons/spark1.wav");
-		PRECACHE_SOUND("buttons/spark2.wav");
-		PRECACHE_SOUND("buttons/spark3.wav");
-		PRECACHE_SOUND("buttons/spark4.wav");
-		PRECACHE_SOUND("buttons/spark5.wav");
-		PRECACHE_SOUND("buttons/spark6.wav");
+		PrecacheSound("buttons/spark1.wav");
+		PrecacheSound("buttons/spark2.wav");
+		PrecacheSound("buttons/spark3.wav");
+		PrecacheSound("buttons/spark4.wav");
+		PrecacheSound("buttons/spark5.wav");
+		PrecacheSound("buttons/spark6.wav");
 	}
 
 	// get door button sounds, for doors which require buttons to open
@@ -310,14 +310,14 @@ void CBaseButton::Precache()
 	if (0 != m_bLockedSound)
 	{
 		pszSound = ButtonSound((int)m_bLockedSound);
-		PRECACHE_SOUND(pszSound);
+		PrecacheSound(pszSound);
 		m_ls.sLockedSound = ALLOC_STRING(pszSound);
 	}
 
 	if (0 != m_bUnlockedSound)
 	{
 		pszSound = ButtonSound((int)m_bUnlockedSound);
-		PRECACHE_SOUND(pszSound);
+		PrecacheSound(pszSound);
 		m_ls.sUnlockedSound = ALLOC_STRING(pszSound);
 	}
 
@@ -491,7 +491,7 @@ void CBaseButton::Spawn()
 	//a sound of 0 should not make a sound
 	//----------------------------------------------------
 	pszSound = ButtonSound(m_sounds);
-	PRECACHE_SOUND(pszSound);
+	PrecacheSound(pszSound);
 	pev->noise = ALLOC_STRING(pszSound);
 
 	Precache();
@@ -913,7 +913,7 @@ void CRotButton::Spawn()
 	//a sound of 0 should not make a sound
 	//----------------------------------------------------
 	pszSound = ButtonSound(m_sounds);
-	PRECACHE_SOUND(pszSound);
+	PrecacheSound(pszSound);
 	pev->noise = ALLOC_STRING(pszSound);
 
 	// set the axis of rotation
@@ -1050,7 +1050,7 @@ void CMomentaryRotButton::Spawn()
 	SetModel(STRING(pev->model));
 
 	const char* pszSound = ButtonSound(m_sounds);
-	PRECACHE_SOUND(pszSound);
+	PrecacheSound(pszSound);
 	pev->noise = ALLOC_STRING(pszSound);
 	m_lastUsed = false;
 }
@@ -1276,12 +1276,12 @@ void CEnvSpark::Spawn()
 
 void CEnvSpark::Precache()
 {
-	PRECACHE_SOUND("buttons/spark1.wav");
-	PRECACHE_SOUND("buttons/spark2.wav");
-	PRECACHE_SOUND("buttons/spark3.wav");
-	PRECACHE_SOUND("buttons/spark4.wav");
-	PRECACHE_SOUND("buttons/spark5.wav");
-	PRECACHE_SOUND("buttons/spark6.wav");
+	PrecacheSound("buttons/spark1.wav");
+	PrecacheSound("buttons/spark2.wav");
+	PrecacheSound("buttons/spark3.wav");
+	PrecacheSound("buttons/spark4.wav");
+	PrecacheSound("buttons/spark5.wav");
+	PrecacheSound("buttons/spark6.wav");
 }
 
 bool CEnvSpark::KeyValue(KeyValueData* pkvd)

@@ -449,7 +449,7 @@ void CFuncRotating::Precache()
 	{
 		// if a path is set for a wave, use it
 
-		PRECACHE_SOUND(szSoundFile);
+		PrecacheSound(szSoundFile);
 
 		pev->noiseRunning = ALLOC_STRING(szSoundFile);
 	}
@@ -459,23 +459,23 @@ void CFuncRotating::Precache()
 		switch (m_sounds)
 		{
 		case 1:
-			PRECACHE_SOUND("fans/fan1.wav");
+			PrecacheSound("fans/fan1.wav");
 			pev->noiseRunning = ALLOC_STRING("fans/fan1.wav");
 			break;
 		case 2:
-			PRECACHE_SOUND("fans/fan2.wav");
+			PrecacheSound("fans/fan2.wav");
 			pev->noiseRunning = ALLOC_STRING("fans/fan2.wav");
 			break;
 		case 3:
-			PRECACHE_SOUND("fans/fan3.wav");
+			PrecacheSound("fans/fan3.wav");
 			pev->noiseRunning = ALLOC_STRING("fans/fan3.wav");
 			break;
 		case 4:
-			PRECACHE_SOUND("fans/fan4.wav");
+			PrecacheSound("fans/fan4.wav");
 			pev->noiseRunning = ALLOC_STRING("fans/fan4.wav");
 			break;
 		case 5:
-			PRECACHE_SOUND("fans/fan5.wav");
+			PrecacheSound("fans/fan5.wav");
 			pev->noiseRunning = ALLOC_STRING("fans/fan5.wav");
 			break;
 
@@ -483,7 +483,7 @@ void CFuncRotating::Precache()
 		default:
 			if (!FStringNull(pev->message) && strlen(szSoundFile) > 0)
 			{
-				PRECACHE_SOUND(szSoundFile);
+				PrecacheSound(szSoundFile);
 
 				pev->noiseRunning = ALLOC_STRING(szSoundFile);
 				break;

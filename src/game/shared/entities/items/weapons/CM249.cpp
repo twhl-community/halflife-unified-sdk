@@ -52,9 +52,9 @@ void CM249::Precache()
 	m_iSmoke = PrecacheModel("sprites/wep_smoke_01.spr");
 	m_iFire = PrecacheModel("sprites/xfire.spr");
 
-	PRECACHE_SOUND("weapons/saw_reload.wav");
-	PRECACHE_SOUND("weapons/saw_reload2.wav");
-	PRECACHE_SOUND("weapons/saw_fire1.wav");
+	PrecacheSound("weapons/saw_reload.wav");
+	PrecacheSound("weapons/saw_reload2.wav");
+	PrecacheSound("weapons/saw_fire1.wav");
 
 	m_usFireM249 = PRECACHE_EVENT(1, "events/m249.sc");
 }
@@ -376,7 +376,7 @@ public:
 	void Precache() override
 	{
 		CBasePlayerAmmo::Precache();
-		PRECACHE_SOUND("items/9mmclip1.wav");
+		PrecacheSound("items/9mmclip1.wav");
 	}
 
 	bool AddAmmo(CBaseEntity* pOther) override

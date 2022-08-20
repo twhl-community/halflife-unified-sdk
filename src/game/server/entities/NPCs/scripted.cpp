@@ -769,8 +769,8 @@ void CCineMonster::Activate()
 		if (pmodel)
 		{
 			// Look through the event list for stuff to precache
-			SequencePrecache(pmodel, STRING(m_iszIdle));
-			SequencePrecache(pmodel, STRING(m_iszPlay));
+			SequencePrecache(pTarget, pmodel, STRING(m_iszIdle));
+			SequencePrecache(pTarget, pmodel, STRING(m_iszPlay));
 		}
 	}
 }

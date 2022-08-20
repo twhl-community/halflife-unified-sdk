@@ -629,7 +629,7 @@ void CAGrunt::Precache()
 	PRECACHE_SOUND_ARRAY(pAttackSounds);
 	PRECACHE_SOUND_ARRAY(pAlertSounds);
 
-	PRECACHE_SOUND("hassault/hw_shoot1.wav");
+	PrecacheSound("hassault/hw_shoot1.wav");
 
 	iAgruntMuzzleFlash = PrecacheModel("sprites/muz4.spr");
 

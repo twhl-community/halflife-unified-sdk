@@ -2108,11 +2108,11 @@ int CRestore::ReadField(void* pBaseData, TYPEDESCRIPTION* pFields, int fieldCoun
 
 							if (!FStringNull(string) && m_precache)
 							{
-								//Don't use UTIL_PrecacheModel here because we're restoring an already-replaced name.
+								//Don't use UTIL_PrecacheModel/Sound here because we're restoring an already-replaced name.
 								if (pTest->fieldType == FIELD_MODELNAME)
 									g_engfuncs.pfnPrecacheModel(STRING(string));
 								else if (pTest->fieldType == FIELD_SOUNDNAME)
-									PRECACHE_SOUND(STRING(string));
+									g_engfuncs.pfnPrecacheSound(STRING(string));
 							}
 						}
 						break;

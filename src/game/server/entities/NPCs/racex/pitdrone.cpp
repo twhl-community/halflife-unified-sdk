@@ -83,8 +83,8 @@ IMPLEMENT_SAVERESTORE(CPitdroneSpike, CBaseEntity);
 void CPitdroneSpike::Precache()
 {
 	PrecacheModel("models/pit_drone_spike.mdl");
-	PRECACHE_SOUND("weapons/xbow_hitbod1.wav");
-	PRECACHE_SOUND("weapons/xbox_hit1.wav");
+	PrecacheSound("weapons/xbow_hitbod1.wav");
+	PrecacheSound("weapons/xbox_hit1.wav");
 
 	iSpikeTrail = PrecacheModel("sprites/spike_trail.spr");
 }
@@ -713,35 +713,35 @@ void CPitdrone::Precache()
 
 	iPitdroneSpitSprite = PrecacheModel("sprites/tinyspit.spr"); // client side spittle.
 
-	PRECACHE_SOUND("zombie/claw_miss2.wav"); // because we use the basemonster SWIPE animation event
+	PrecacheSound("zombie/claw_miss2.wav"); // because we use the basemonster SWIPE animation event
 
-	PRECACHE_SOUND("pitdrone/pit_drone_alert1.wav");
-	PRECACHE_SOUND("pitdrone/pit_drone_alert2.wav");
-	PRECACHE_SOUND("pitdrone/pit_drone_alert3.wav");
-	PRECACHE_SOUND("pitdrone/pit_drone_attack_spike1.wav");
-	PRECACHE_SOUND("pitdrone/pit_drone_attack_spike2.wav");
-	PRECACHE_SOUND("pitdrone/pit_drone_communicate1.wav");
-	PRECACHE_SOUND("pitdrone/pit_drone_communicate2.wav");
-	PRECACHE_SOUND("pitdrone/pit_drone_communicate3.wav");
-	PRECACHE_SOUND("pitdrone/pit_drone_communicate4.wav");
-	PRECACHE_SOUND("pitdrone/pit_drone_die1.wav");
-	PRECACHE_SOUND("pitdrone/pit_drone_die2.wav");
-	PRECACHE_SOUND("pitdrone/pit_drone_die3.wav");
-	PRECACHE_SOUND("pitdrone/pit_drone_hunt1.wav");
-	PRECACHE_SOUND("pitdrone/pit_drone_hunt2.wav");
-	PRECACHE_SOUND("pitdrone/pit_drone_hunt3.wav");
-	PRECACHE_SOUND("pitdrone/pit_drone_idle1.wav");
-	PRECACHE_SOUND("pitdrone/pit_drone_idle2.wav");
-	PRECACHE_SOUND("pitdrone/pit_drone_idle3.wav");
-	PRECACHE_SOUND("pitdrone/pit_drone_melee_attack1.wav");
-	PRECACHE_SOUND("pitdrone/pit_drone_melee_attack2.wav");
-	PRECACHE_SOUND("pitdrone/pit_drone_pain1.wav");
-	PRECACHE_SOUND("pitdrone/pit_drone_pain2.wav");
-	PRECACHE_SOUND("pitdrone/pit_drone_pain3.wav");
-	PRECACHE_SOUND("pitdrone/pit_drone_pain4.wav");
-	PRECACHE_SOUND("pitdrone/pit_drone_run_on_grate.wav");
-	PRECACHE_SOUND("bullchicken/bc_bite2.wav");
-	PRECACHE_SOUND("bullchicken/bc_bite3.wav");
+	PrecacheSound("pitdrone/pit_drone_alert1.wav");
+	PrecacheSound("pitdrone/pit_drone_alert2.wav");
+	PrecacheSound("pitdrone/pit_drone_alert3.wav");
+	PrecacheSound("pitdrone/pit_drone_attack_spike1.wav");
+	PrecacheSound("pitdrone/pit_drone_attack_spike2.wav");
+	PrecacheSound("pitdrone/pit_drone_communicate1.wav");
+	PrecacheSound("pitdrone/pit_drone_communicate2.wav");
+	PrecacheSound("pitdrone/pit_drone_communicate3.wav");
+	PrecacheSound("pitdrone/pit_drone_communicate4.wav");
+	PrecacheSound("pitdrone/pit_drone_die1.wav");
+	PrecacheSound("pitdrone/pit_drone_die2.wav");
+	PrecacheSound("pitdrone/pit_drone_die3.wav");
+	PrecacheSound("pitdrone/pit_drone_hunt1.wav");
+	PrecacheSound("pitdrone/pit_drone_hunt2.wav");
+	PrecacheSound("pitdrone/pit_drone_hunt3.wav");
+	PrecacheSound("pitdrone/pit_drone_idle1.wav");
+	PrecacheSound("pitdrone/pit_drone_idle2.wav");
+	PrecacheSound("pitdrone/pit_drone_idle3.wav");
+	PrecacheSound("pitdrone/pit_drone_melee_attack1.wav");
+	PrecacheSound("pitdrone/pit_drone_melee_attack2.wav");
+	PrecacheSound("pitdrone/pit_drone_pain1.wav");
+	PrecacheSound("pitdrone/pit_drone_pain2.wav");
+	PrecacheSound("pitdrone/pit_drone_pain3.wav");
+	PrecacheSound("pitdrone/pit_drone_pain4.wav");
+	PrecacheSound("pitdrone/pit_drone_run_on_grate.wav");
+	PrecacheSound("bullchicken/bc_bite2.wav");
+	PrecacheSound("bullchicken/bc_bite3.wav");
 }
 
 //========================================================

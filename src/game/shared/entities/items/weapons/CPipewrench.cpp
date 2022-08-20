@@ -59,18 +59,18 @@ void CPipewrench::Precache()
 	// Shepard - The commented sounds below are unused
 	// in Opposing Force, if you wish to use them,
 	// uncomment all the appropriate lines.
-	/*PRECACHE_SOUND("weapons/pwrench_big_hit1.wav");
-	PRECACHE_SOUND("weapons/pwrench_big_hit2.wav");*/
-	PRECACHE_SOUND("weapons/pwrench_big_hitbod1.wav");
-	PRECACHE_SOUND("weapons/pwrench_big_hitbod2.wav");
-	PRECACHE_SOUND("weapons/pwrench_big_miss.wav");
-	PRECACHE_SOUND("weapons/pwrench_hit1.wav");
-	PRECACHE_SOUND("weapons/pwrench_hit2.wav");
-	PRECACHE_SOUND("weapons/pwrench_hitbod1.wav");
-	PRECACHE_SOUND("weapons/pwrench_hitbod2.wav");
-	PRECACHE_SOUND("weapons/pwrench_hitbod3.wav");
-	PRECACHE_SOUND("weapons/pwrench_miss1.wav");
-	PRECACHE_SOUND("weapons/pwrench_miss2.wav");
+	/*PrecacheSound("weapons/pwrench_big_hit1.wav");
+	PrecacheSound("weapons/pwrench_big_hit2.wav");*/
+	PrecacheSound("weapons/pwrench_big_hitbod1.wav");
+	PrecacheSound("weapons/pwrench_big_hitbod2.wav");
+	PrecacheSound("weapons/pwrench_big_miss.wav");
+	PrecacheSound("weapons/pwrench_hit1.wav");
+	PrecacheSound("weapons/pwrench_hit2.wav");
+	PrecacheSound("weapons/pwrench_hitbod1.wav");
+	PrecacheSound("weapons/pwrench_hitbod2.wav");
+	PrecacheSound("weapons/pwrench_hitbod3.wav");
+	PrecacheSound("weapons/pwrench_miss1.wav");
+	PrecacheSound("weapons/pwrench_miss2.wav");
 
 	m_usPipewrench = PRECACHE_EVENT(1, "events/pipewrench.sc");
 }

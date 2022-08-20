@@ -108,8 +108,8 @@ void CFuncMortarField::Spawn()
 
 void CFuncMortarField::Precache()
 {
-	PRECACHE_SOUND("weapons/mortar.wav");
-	PRECACHE_SOUND("weapons/mortarhit.wav");
+	PrecacheSound("weapons/mortar.wav");
+	PrecacheSound("weapons/mortarhit.wav");
 	PrecacheModel("sprites/lgtning.spr");
 }
 

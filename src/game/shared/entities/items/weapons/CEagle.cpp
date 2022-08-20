@@ -46,10 +46,10 @@ void CEagle::Precache()
 	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/p_desert_eagle.mdl");
 	m_iShell = PrecacheModel("models/shell.mdl");
-	PRECACHE_SOUND("weapons/desert_eagle_fire.wav");
-	PRECACHE_SOUND("weapons/desert_eagle_reload.wav");
-	PRECACHE_SOUND("weapons/desert_eagle_sight.wav");
-	PRECACHE_SOUND("weapons/desert_eagle_sight2.wav");
+	PrecacheSound("weapons/desert_eagle_fire.wav");
+	PrecacheSound("weapons/desert_eagle_reload.wav");
+	PrecacheSound("weapons/desert_eagle_sight.wav");
+	PrecacheSound("weapons/desert_eagle_sight2.wav");
 	m_usFireEagle = PRECACHE_EVENT(1, "events/eagle.sc");
 }
 
@@ -375,7 +375,7 @@ public:
 	void Precache() override
 	{
 		CBasePlayerAmmo::Precache();
-		PRECACHE_SOUND("items/9mmclip1.wav");
+		PrecacheSound("items/9mmclip1.wav");
 	}
 
 	bool AddAmmo(CBaseEntity* pOther) override

@@ -798,7 +798,7 @@ void CGargantua::Precache()
 	PrecacheModel(GARG_BEAM_SPRITE2);
 	gStompSprite = PrecacheModel(GARG_STOMP_SPRITE_NAME);
 	gGargGibModel = PrecacheModel(GARG_GIB_MODEL);
-	PRECACHE_SOUND(GARG_STOMP_BUZZ_SOUND);
+	PrecacheSound(GARG_STOMP_BUZZ_SOUND);
 
 	PRECACHE_SOUND_ARRAY(pAttackHitSounds);
 	PRECACHE_SOUND_ARRAY(pBeamAttackSounds);

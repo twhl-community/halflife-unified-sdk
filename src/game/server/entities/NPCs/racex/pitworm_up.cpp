@@ -297,25 +297,25 @@ void COFPitWormUp::Precache()
 	PRECACHE_SOUND_ARRAY(pHitGroundSounds);
 	PRECACHE_SOUND_ARRAY(pIdleSounds);
 
-	PRECACHE_SOUND("debris/beamstart7.wav");
+	PrecacheSound("debris/beamstart7.wav");
 
-	PRECACHE_SOUND("pitworm/clang1.wav");
-	PRECACHE_SOUND("pitworm/clang2.wav");
-	PRECACHE_SOUND("pitworm/clang3.wav");
+	PrecacheSound("pitworm/clang1.wav");
+	PrecacheSound("pitworm/clang2.wav");
+	PrecacheSound("pitworm/clang3.wav");
 
-	PRECACHE_SOUND("pitworm/pit_worm_alert.wav");
+	PrecacheSound("pitworm/pit_worm_alert.wav");
 
-	PRECACHE_SOUND("pitworm/pit_worm_attack_eyeblast.wav");
-	PRECACHE_SOUND("pitworm/pit_worm_attack_eyeblast_impact.wav");
+	PrecacheSound("pitworm/pit_worm_attack_eyeblast.wav");
+	PrecacheSound("pitworm/pit_worm_attack_eyeblast_impact.wav");
 
-	PRECACHE_SOUND("pitworm/pit_worm_attack_swipe1.wav");
-	PRECACHE_SOUND("pitworm/pit_worm_attack_swipe2.wav");
-	PRECACHE_SOUND("pitworm/pit_worm_attack_swipe3.wav");
+	PrecacheSound("pitworm/pit_worm_attack_swipe1.wav");
+	PrecacheSound("pitworm/pit_worm_attack_swipe2.wav");
+	PrecacheSound("pitworm/pit_worm_attack_swipe3.wav");
 
-	PRECACHE_SOUND("pitworm/pit_worm_death.wav");
+	PrecacheSound("pitworm/pit_worm_death.wav");
 
-	PRECACHE_SOUND("pitworm/pit_worm_flinch1.wav");
-	PRECACHE_SOUND("pitworm/pit_worm_flinch2.wav");
+	PrecacheSound("pitworm/pit_worm_flinch1.wav");
+	PrecacheSound("pitworm/pit_worm_flinch2.wav");
 
 	PrecacheModel("models/pit_worm_gibs.mdl");
 

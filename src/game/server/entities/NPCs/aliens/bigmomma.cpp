@@ -694,9 +694,9 @@ void CBigMomma::Precache()
 	gSpitSprite = PrecacheModel("sprites/mommaspout.spr"); // client side spittle.
 	gSpitDebrisSprite = PrecacheModel("sprites/mommablob.spr");
 
-	PRECACHE_SOUND("bullchicken/bc_acid1.wav");
-	PRECACHE_SOUND("bullchicken/bc_spithit1.wav");
-	PRECACHE_SOUND("bullchicken/bc_spithit2.wav");
+	PrecacheSound("bullchicken/bc_acid1.wav");
+	PrecacheSound("bullchicken/bc_spithit1.wav");
+	PrecacheSound("bullchicken/bc_spithit2.wav");
 }
 
 

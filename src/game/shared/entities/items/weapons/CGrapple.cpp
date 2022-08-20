@@ -50,16 +50,16 @@ void CGrapple::Precache()
 	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/p_bgrap.mdl");
 
-	PRECACHE_SOUND("weapons/bgrapple_release.wav");
-	PRECACHE_SOUND("weapons/bgrapple_impact.wav");
-	PRECACHE_SOUND("weapons/bgrapple_fire.wav");
-	PRECACHE_SOUND("weapons/bgrapple_cough.wav");
-	PRECACHE_SOUND("weapons/bgrapple_pull.wav");
-	PRECACHE_SOUND("weapons/bgrapple_wait.wav");
-	PRECACHE_SOUND("weapons/alienweap_draw.wav");
-	PRECACHE_SOUND("barnacle/bcl_chew1.wav");
-	PRECACHE_SOUND("barnacle/bcl_chew2.wav");
-	PRECACHE_SOUND("barnacle/bcl_chew3.wav");
+	PrecacheSound("weapons/bgrapple_release.wav");
+	PrecacheSound("weapons/bgrapple_impact.wav");
+	PrecacheSound("weapons/bgrapple_fire.wav");
+	PrecacheSound("weapons/bgrapple_cough.wav");
+	PrecacheSound("weapons/bgrapple_pull.wav");
+	PrecacheSound("weapons/bgrapple_wait.wav");
+	PrecacheSound("weapons/alienweap_draw.wav");
+	PrecacheSound("barnacle/bcl_chew1.wav");
+	PrecacheSound("barnacle/bcl_chew2.wav");
+	PrecacheSound("barnacle/bcl_chew3.wav");
 
 	PrecacheModel("sprites/tongue.spr");
 

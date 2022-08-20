@@ -45,11 +45,11 @@ void CSporeLauncher::Precache()
 	PrecacheModel("models/v_spore_launcher.mdl");
 	PrecacheModel("models/p_spore_launcher.mdl");
 
-	PRECACHE_SOUND("weapons/splauncher_fire.wav");
-	PRECACHE_SOUND("weapons/splauncher_altfire.wav");
-	PRECACHE_SOUND("weapons/splauncher_bounce.wav");
-	PRECACHE_SOUND("weapons/splauncher_reload.wav");
-	PRECACHE_SOUND("weapons/splauncher_pet.wav");
+	PrecacheSound("weapons/splauncher_fire.wav");
+	PrecacheSound("weapons/splauncher_altfire.wav");
+	PrecacheSound("weapons/splauncher_bounce.wav");
+	PrecacheSound("weapons/splauncher_reload.wav");
+	PrecacheSound("weapons/splauncher_pet.wav");
 
 	UTIL_PrecacheOther("spore");
 
@@ -383,7 +383,7 @@ public:
 	void Precache() override
 	{
 		CBasePlayerAmmo::Precache();
-		PRECACHE_SOUND("weapons/spore_ammo.wav");
+		PrecacheSound("weapons/spore_ammo.wav");
 	}
 
 	void Spawn() override

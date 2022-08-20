@@ -49,19 +49,19 @@ void CShotgun::Precache()
 
 	m_iShell = PrecacheModel("models/shotgunshell.mdl"); // shotgun shell
 
-	PRECACHE_SOUND("items/9mmclip1.wav");
+	PrecacheSound("items/9mmclip1.wav");
 
-	PRECACHE_SOUND("weapons/dbarrel1.wav"); //shotgun
-	PRECACHE_SOUND("weapons/sbarrel1.wav"); //shotgun
+	PrecacheSound("weapons/dbarrel1.wav"); //shotgun
+	PrecacheSound("weapons/sbarrel1.wav"); //shotgun
 
-	PRECACHE_SOUND("weapons/reload1.wav"); // shotgun reload
-	PRECACHE_SOUND("weapons/reload3.wav"); // shotgun reload
+	PrecacheSound("weapons/reload1.wav"); // shotgun reload
+	PrecacheSound("weapons/reload3.wav"); // shotgun reload
 
-	//	PRECACHE_SOUND ("weapons/sshell1.wav");	// shotgun reload - played on client
-	//	PRECACHE_SOUND ("weapons/sshell3.wav");	// shotgun reload - played on client
+	//	PrecacheSound ("weapons/sshell1.wav");	// shotgun reload - played on client
+	//	PrecacheSound ("weapons/sshell3.wav");	// shotgun reload - played on client
 
-	PRECACHE_SOUND("weapons/357_cock1.wav"); // gun empty sound
-	PRECACHE_SOUND("weapons/scock1.wav");	 // cock gun
+	PrecacheSound("weapons/357_cock1.wav"); // gun empty sound
+	PrecacheSound("weapons/scock1.wav");	 // cock gun
 
 	m_usSingleFire = PRECACHE_EVENT(1, "events/shotgun1.sc");
 	m_usDoubleFire = PRECACHE_EVENT(1, "events/shotgun2.sc");
@@ -386,7 +386,7 @@ public:
 	void Precache() override
 	{
 		CBasePlayerAmmo::Precache();
-		PRECACHE_SOUND("items/9mmclip1.wav");
+		PrecacheSound("items/9mmclip1.wav");
 	}
 	bool AddAmmo(CBaseEntity* pOther) override
 	{

@@ -58,13 +58,13 @@ void CGauss::Precache()
 	PrecacheModel("models/v_gauss.mdl");
 	PrecacheModel("models/p_gauss.mdl");
 
-	PRECACHE_SOUND("items/9mmclip1.wav");
+	PrecacheSound("items/9mmclip1.wav");
 
-	PRECACHE_SOUND("weapons/gauss2.wav");
-	PRECACHE_SOUND("weapons/electro4.wav");
-	PRECACHE_SOUND("weapons/electro5.wav");
-	PRECACHE_SOUND("weapons/electro6.wav");
-	PRECACHE_SOUND("ambience/pulsemachine.wav");
+	PrecacheSound("weapons/gauss2.wav");
+	PrecacheSound("weapons/electro4.wav");
+	PrecacheSound("weapons/electro5.wav");
+	PrecacheSound("weapons/electro6.wav");
+	PrecacheSound("ambience/pulsemachine.wav");
 
 	m_iGlow = PrecacheModel("sprites/hotglow.spr");
 	m_iBalls = PrecacheModel("sprites/hotglow.spr");
@@ -599,7 +599,7 @@ public:
 	void Precache() override
 	{
 		CBasePlayerAmmo::Precache();
-		PRECACHE_SOUND("items/9mmclip1.wav");
+		PrecacheSound("items/9mmclip1.wav");
 	}
 	bool AddAmmo(CBaseEntity* pOther) override
 	{

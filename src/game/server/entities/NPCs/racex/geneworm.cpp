@@ -712,34 +712,34 @@ void COFGeneWorm::Precache()
 
 	UTIL_PrecacheOther("monster_shocktrooper");
 
-	PRECACHE_SOUND("bullchicken/bc_acid1.wav");
-	PRECACHE_SOUND("bullchicken/bc_spithit1.wav");
-	PRECACHE_SOUND("bullchicken/bc_spithit2.wav");
+	PrecacheSound("bullchicken/bc_acid1.wav");
+	PrecacheSound("bullchicken/bc_spithit1.wav");
+	PrecacheSound("bullchicken/bc_spithit2.wav");
 
 	PRECACHE_SOUND_ARRAY(pIdleSounds);
 	PRECACHE_SOUND_ARRAY(pSpawnSounds);
 
-	PRECACHE_SOUND("debris/beamstart7.wav");
-	PRECACHE_SOUND("debris/beamstart2.wav");
+	PrecacheSound("debris/beamstart7.wav");
+	PrecacheSound("debris/beamstart2.wav");
 
 	PrecacheModel("sprites/xspark4.spr");
 	PrecacheModel("sprites/ballsmoke.spr");
 
-	PRECACHE_SOUND("geneworm/geneworm_attack_mounted_gun.wav");
-	PRECACHE_SOUND("geneworm/geneworm_attack_mounted_rocket.wav");
+	PrecacheSound("geneworm/geneworm_attack_mounted_gun.wav");
+	PrecacheSound("geneworm/geneworm_attack_mounted_rocket.wav");
 
-	PRECACHE_SOUND("geneworm/geneworm_beam_attack.wav");
-	PRECACHE_SOUND("geneworm/geneworm_big_attack_forward.wav");
+	PrecacheSound("geneworm/geneworm_beam_attack.wav");
+	PrecacheSound("geneworm/geneworm_big_attack_forward.wav");
 
-	PRECACHE_SOUND("geneworm/geneworm_death.wav");
+	PrecacheSound("geneworm/geneworm_death.wav");
 
-	PRECACHE_SOUND("geneworm/geneworm_final_pain1.wav");
-	PRECACHE_SOUND("geneworm/geneworm_final_pain2.wav");
-	PRECACHE_SOUND("geneworm/geneworm_final_pain3.wav");
-	PRECACHE_SOUND("geneworm/geneworm_final_pain4.wav");
-	PRECACHE_SOUND("geneworm/geneworm_shot_in_eye.wav");
+	PrecacheSound("geneworm/geneworm_final_pain1.wav");
+	PrecacheSound("geneworm/geneworm_final_pain2.wav");
+	PrecacheSound("geneworm/geneworm_final_pain3.wav");
+	PrecacheSound("geneworm/geneworm_final_pain4.wav");
+	PrecacheSound("geneworm/geneworm_shot_in_eye.wav");
 
-	PRECACHE_SOUND("geneworm/geneworm_entry.wav");
+	PrecacheSound("geneworm/geneworm_entry.wav");
 }
 
 void COFGeneWorm::OnCreate()

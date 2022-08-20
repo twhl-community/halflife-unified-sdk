@@ -171,7 +171,7 @@ bool COtis::KeyValue(KeyValueData* pkvd)
 void COtis::Precache()
 {
 	CBarney::Precache();
-	PRECACHE_SOUND("weapons/de_shot1.wav");
+	PrecacheSound("weapons/de_shot1.wav");
 }
 
 void COtis::Spawn()

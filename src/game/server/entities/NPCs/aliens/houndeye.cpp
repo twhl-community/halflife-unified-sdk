@@ -353,33 +353,33 @@ void CHoundeye::Precache()
 {
 	PrecacheModel(STRING(pev->model));
 
-	PRECACHE_SOUND("houndeye/he_alert1.wav");
-	PRECACHE_SOUND("houndeye/he_alert2.wav");
-	PRECACHE_SOUND("houndeye/he_alert3.wav");
+	PrecacheSound("houndeye/he_alert1.wav");
+	PrecacheSound("houndeye/he_alert2.wav");
+	PrecacheSound("houndeye/he_alert3.wav");
 
-	PRECACHE_SOUND("houndeye/he_die1.wav");
-	PRECACHE_SOUND("houndeye/he_die2.wav");
-	PRECACHE_SOUND("houndeye/he_die3.wav");
+	PrecacheSound("houndeye/he_die1.wav");
+	PrecacheSound("houndeye/he_die2.wav");
+	PrecacheSound("houndeye/he_die3.wav");
 
-	PRECACHE_SOUND("houndeye/he_idle1.wav");
-	PRECACHE_SOUND("houndeye/he_idle2.wav");
-	PRECACHE_SOUND("houndeye/he_idle3.wav");
+	PrecacheSound("houndeye/he_idle1.wav");
+	PrecacheSound("houndeye/he_idle2.wav");
+	PrecacheSound("houndeye/he_idle3.wav");
 
-	PRECACHE_SOUND("houndeye/he_hunt1.wav");
-	PRECACHE_SOUND("houndeye/he_hunt2.wav");
-	PRECACHE_SOUND("houndeye/he_hunt3.wav");
+	PrecacheSound("houndeye/he_hunt1.wav");
+	PrecacheSound("houndeye/he_hunt2.wav");
+	PrecacheSound("houndeye/he_hunt3.wav");
 
-	PRECACHE_SOUND("houndeye/he_pain1.wav");
-	PRECACHE_SOUND("houndeye/he_pain3.wav");
-	PRECACHE_SOUND("houndeye/he_pain4.wav");
-	PRECACHE_SOUND("houndeye/he_pain5.wav");
+	PrecacheSound("houndeye/he_pain1.wav");
+	PrecacheSound("houndeye/he_pain3.wav");
+	PrecacheSound("houndeye/he_pain4.wav");
+	PrecacheSound("houndeye/he_pain5.wav");
 
-	PRECACHE_SOUND("houndeye/he_attack1.wav");
-	PRECACHE_SOUND("houndeye/he_attack3.wav");
+	PrecacheSound("houndeye/he_attack1.wav");
+	PrecacheSound("houndeye/he_attack3.wav");
 
-	PRECACHE_SOUND("houndeye/he_blast1.wav");
-	PRECACHE_SOUND("houndeye/he_blast2.wav");
-	PRECACHE_SOUND("houndeye/he_blast3.wav");
+	PrecacheSound("houndeye/he_blast1.wav");
+	PrecacheSound("houndeye/he_blast2.wav");
+	PrecacheSound("houndeye/he_blast3.wav");
 
 	m_iSpriteTexture = PrecacheModel("sprites/shockwave.spr");
 }

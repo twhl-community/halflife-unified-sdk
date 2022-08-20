@@ -707,37 +707,37 @@ void CBullsquid::Precache()
 
 	iSquidSpitSprite = PrecacheModel("sprites/tinyspit.spr"); // client side spittle.
 
-	PRECACHE_SOUND("zombie/claw_miss2.wav"); // because we use the basemonster SWIPE animation event
+	PrecacheSound("zombie/claw_miss2.wav"); // because we use the basemonster SWIPE animation event
 
-	PRECACHE_SOUND("bullchicken/bc_attack2.wav");
-	PRECACHE_SOUND("bullchicken/bc_attack3.wav");
+	PrecacheSound("bullchicken/bc_attack2.wav");
+	PrecacheSound("bullchicken/bc_attack3.wav");
 
-	PRECACHE_SOUND("bullchicken/bc_die1.wav");
-	PRECACHE_SOUND("bullchicken/bc_die2.wav");
-	PRECACHE_SOUND("bullchicken/bc_die3.wav");
+	PrecacheSound("bullchicken/bc_die1.wav");
+	PrecacheSound("bullchicken/bc_die2.wav");
+	PrecacheSound("bullchicken/bc_die3.wav");
 
-	PRECACHE_SOUND("bullchicken/bc_idle1.wav");
-	PRECACHE_SOUND("bullchicken/bc_idle2.wav");
-	PRECACHE_SOUND("bullchicken/bc_idle3.wav");
-	PRECACHE_SOUND("bullchicken/bc_idle4.wav");
-	PRECACHE_SOUND("bullchicken/bc_idle5.wav");
+	PrecacheSound("bullchicken/bc_idle1.wav");
+	PrecacheSound("bullchicken/bc_idle2.wav");
+	PrecacheSound("bullchicken/bc_idle3.wav");
+	PrecacheSound("bullchicken/bc_idle4.wav");
+	PrecacheSound("bullchicken/bc_idle5.wav");
 
-	PRECACHE_SOUND("bullchicken/bc_pain1.wav");
-	PRECACHE_SOUND("bullchicken/bc_pain2.wav");
-	PRECACHE_SOUND("bullchicken/bc_pain3.wav");
-	PRECACHE_SOUND("bullchicken/bc_pain4.wav");
+	PrecacheSound("bullchicken/bc_pain1.wav");
+	PrecacheSound("bullchicken/bc_pain2.wav");
+	PrecacheSound("bullchicken/bc_pain3.wav");
+	PrecacheSound("bullchicken/bc_pain4.wav");
 
-	PRECACHE_SOUND("bullchicken/bc_attackgrowl.wav");
-	PRECACHE_SOUND("bullchicken/bc_attackgrowl2.wav");
-	PRECACHE_SOUND("bullchicken/bc_attackgrowl3.wav");
+	PrecacheSound("bullchicken/bc_attackgrowl.wav");
+	PrecacheSound("bullchicken/bc_attackgrowl2.wav");
+	PrecacheSound("bullchicken/bc_attackgrowl3.wav");
 
-	PRECACHE_SOUND("bullchicken/bc_acid1.wav");
+	PrecacheSound("bullchicken/bc_acid1.wav");
 
-	PRECACHE_SOUND("bullchicken/bc_bite2.wav");
-	PRECACHE_SOUND("bullchicken/bc_bite3.wav");
+	PrecacheSound("bullchicken/bc_bite2.wav");
+	PrecacheSound("bullchicken/bc_bite3.wav");
 
-	PRECACHE_SOUND("bullchicken/bc_spithit1.wav");
-	PRECACHE_SOUND("bullchicken/bc_spithit2.wav");
+	PrecacheSound("bullchicken/bc_spithit1.wav");
+	PrecacheSound("bullchicken/bc_spithit2.wav");
 }
 
 //=========================================================

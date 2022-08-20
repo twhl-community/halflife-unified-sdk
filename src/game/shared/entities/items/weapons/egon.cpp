@@ -48,16 +48,16 @@ void CEgon::Precache()
 	PrecacheModel("models/p_egon.mdl");
 
 	PrecacheModel("models/w_9mmclip.mdl");
-	PRECACHE_SOUND("items/9mmclip1.wav");
+	PrecacheSound("items/9mmclip1.wav");
 
-	PRECACHE_SOUND(EGON_SOUND_OFF);
-	PRECACHE_SOUND(EGON_SOUND_RUN);
-	PRECACHE_SOUND(EGON_SOUND_STARTUP);
+	PrecacheSound(EGON_SOUND_OFF);
+	PrecacheSound(EGON_SOUND_RUN);
+	PrecacheSound(EGON_SOUND_STARTUP);
 
 	PrecacheModel(EGON_BEAM_SPRITE);
 	PrecacheModel(EGON_FLARE_SPRITE);
 
-	PRECACHE_SOUND("weapons/357_cock1.wav");
+	PrecacheSound("weapons/357_cock1.wav");
 
 	m_usEgonFire = PRECACHE_EVENT(1, "events/egon_fire.sc");
 	m_usEgonStop = PRECACHE_EVENT(1, "events/egon_stop.sc");
@@ -527,7 +527,7 @@ public:
 	void Precache() override
 	{
 		CBasePlayerAmmo::Precache();
-		PRECACHE_SOUND("items/9mmclip1.wav");
+		PrecacheSound("items/9mmclip1.wav");
 	}
 	bool AddAmmo(CBaseEntity* pOther) override
 	{

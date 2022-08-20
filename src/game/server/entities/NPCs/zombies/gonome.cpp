@@ -503,21 +503,21 @@ void COFGonome::Precache()
 	PRECACHE_SOUND_ARRAY(pAlertSounds);
 	PRECACHE_SOUND_ARRAY(pPainSounds);
 
-	PRECACHE_SOUND("gonome/gonome_death2.wav");
-	PRECACHE_SOUND("gonome/gonome_death3.wav");
-	PRECACHE_SOUND("gonome/gonome_death4.wav");
+	PrecacheSound("gonome/gonome_death2.wav");
+	PrecacheSound("gonome/gonome_death3.wav");
+	PrecacheSound("gonome/gonome_death4.wav");
 
-	PRECACHE_SOUND("gonome/gonome_jumpattack.wav");
+	PrecacheSound("gonome/gonome_jumpattack.wav");
 
-	PRECACHE_SOUND("gonome/gonome_melee1.wav");
-	PRECACHE_SOUND("gonome/gonome_melee2.wav");
+	PrecacheSound("gonome/gonome_melee1.wav");
+	PrecacheSound("gonome/gonome_melee2.wav");
 
-	PRECACHE_SOUND("gonome/gonome_run.wav");
-	PRECACHE_SOUND("gonome/gonome_eat.wav");
+	PrecacheSound("gonome/gonome_run.wav");
+	PrecacheSound("gonome/gonome_eat.wav");
 
-	PRECACHE_SOUND("bullchicken/bc_acid1.wav");
-	PRECACHE_SOUND("bullchicken/bc_spithit1.wav");
-	PRECACHE_SOUND("bullchicken/bc_spithit2.wav");
+	PrecacheSound("bullchicken/bc_acid1.wav");
+	PrecacheSound("bullchicken/bc_spithit1.wav");
+	PrecacheSound("bullchicken/bc_spithit2.wav");
 }
 
 //=========================================================

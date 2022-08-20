@@ -385,11 +385,11 @@ void COFMedicAlly::Spawn()
 //=========================================================
 void COFMedicAlly::Precache()
 {
-	PRECACHE_SOUND("weapons/desert_eagle_fire.wav");
-	PRECACHE_SOUND("weapons/desert_eagle_reload.wav");
+	PrecacheSound("weapons/desert_eagle_fire.wav");
+	PrecacheSound("weapons/desert_eagle_reload.wav");
 
-	PRECACHE_SOUND("fgrunt/medic_give_shot.wav");
-	PRECACHE_SOUND("fgrunt/medical.wav");
+	PrecacheSound("fgrunt/medic_give_shot.wav");
+	PrecacheSound("fgrunt/medical.wav");
 
 	m_iBrassShell = PrecacheModel("models/shell.mdl");
 

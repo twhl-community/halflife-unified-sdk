@@ -51,10 +51,10 @@ void CShockRifle::Precache()
 	m_iSpriteTexture = PrecacheModel("sprites/shockwave.spr");
 	PrecacheModel("sprites/lgtning.spr");
 
-	PRECACHE_SOUND("weapons/shock_fire.wav");
-	PRECACHE_SOUND("weapons/shock_draw.wav");
-	PRECACHE_SOUND("weapons/shock_recharge.wav");
-	PRECACHE_SOUND("weapons/shock_discharge.wav");
+	PrecacheSound("weapons/shock_fire.wav");
+	PrecacheSound("weapons/shock_draw.wav");
+	PrecacheSound("weapons/shock_recharge.wav");
+	PrecacheSound("weapons/shock_discharge.wav");
 
 	UTIL_PrecacheOther("shock_beam");
 

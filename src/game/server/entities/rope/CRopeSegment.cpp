@@ -42,7 +42,7 @@ void CRopeSegment::Precache()
 	BaseClass::Precache();
 
 	PrecacheModel(STRING(m_iszModelName));
-	PRECACHE_SOUND("items/grab_rope.wav");
+	PrecacheSound("items/grab_rope.wav");
 }
 
 void CRopeSegment::Spawn()

@@ -217,7 +217,7 @@ public:
 	void Precache() override
 	{
 		CItem::Precache();
-		PRECACHE_SOUND("items/gunpickup2.wav");
+		PrecacheSound("items/gunpickup2.wav");
 	}
 	bool MyTouch(CBasePlayer* pPlayer) override
 	{
@@ -348,7 +348,7 @@ public:
 	void Precache() override
 	{
 		CItem::Precache();
-		PRECACHE_SOUND("items/gunpickup2.wav");
+		PrecacheSound("items/gunpickup2.wav");
 	}
 	bool MyTouch(CBasePlayer* pPlayer) override
 	{
@@ -399,7 +399,7 @@ public:
 	void Precache() override
 	{
 		CItem::Precache();
-		PRECACHE_SOUND("items/gunpickup2.wav");
+		PrecacheSound("items/gunpickup2.wav");
 	}
 	bool MyTouch(CBasePlayer* pPlayer) override
 	{

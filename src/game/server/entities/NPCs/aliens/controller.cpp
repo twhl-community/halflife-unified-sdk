@@ -1177,8 +1177,8 @@ void CControllerHeadBall::Spawn()
 void CControllerHeadBall::Precache()
 {
 	PrecacheModel("sprites/xspark1.spr");
-	PRECACHE_SOUND("debris/zap4.wav");
-	PRECACHE_SOUND("weapons/electro4.wav");
+	PrecacheSound("debris/zap4.wav");
+	PrecacheSound("weapons/electro4.wav");
 }
 
 
@@ -1368,8 +1368,8 @@ void CControllerZapBall::Spawn()
 void CControllerZapBall::Precache()
 {
 	PrecacheModel("sprites/xspark4.spr");
-	// PRECACHE_SOUND("debris/zap4.wav");
-	// PRECACHE_SOUND("weapons/electro4.wav");
+	// PrecacheSound("debris/zap4.wav");
+	// PrecacheSound("weapons/electro4.wav");
 }
 
 

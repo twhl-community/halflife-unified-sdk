@@ -149,7 +149,7 @@ bool IsSoundEvent(int eventNumber)
 }
 
 
-void SequencePrecache(void* pmodel, const char* pSequenceName)
+void SequencePrecache(CBaseEntity* self, void* pmodel, const char* pSequenceName)
 {
 	int index = LookupSequence(pmodel, pSequenceName);
 	if (index >= 0)
@@ -181,7 +181,7 @@ void SequencePrecache(void* pmodel, const char* pSequenceName)
 					ALERT(at_error, "Bad sound event %d in sequence %s :: %s (sound is \"%s\")\n", pevent[i].event, pstudiohdr->name, pSequenceName, pevent[i].options);
 				}
 
-				PRECACHE_SOUND(STRING(ALLOC_STRING(pevent[i].options)));
+				self->PrecacheSound(STRING(ALLOC_STRING(pevent[i].options)));
 			}
 		}
 	}

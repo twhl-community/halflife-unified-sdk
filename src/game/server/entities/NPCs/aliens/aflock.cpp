@@ -42,7 +42,7 @@ public:
 	static TYPEDESCRIPTION m_SaveData[];
 
 	// Sounds are shared by the flock
-	static void PrecacheFlockSounds();
+	static void PrecacheFlockSounds(CBaseEntity* self);
 
 	int m_cFlockSize;
 	float m_flFlockRadius;
@@ -175,17 +175,17 @@ void CFlockingFlyerFlock::Precache()
 {
 	PrecacheModel(STRING(pev->model));
 
-	PrecacheFlockSounds();
+	PrecacheFlockSounds(this);
 }
 
 
-void CFlockingFlyerFlock::PrecacheFlockSounds()
+void CFlockingFlyerFlock::PrecacheFlockSounds(CBaseEntity* self)
 {
-	PRECACHE_SOUND("boid/boid_alert1.wav");
-	PRECACHE_SOUND("boid/boid_alert2.wav");
+	self->PrecacheSound("boid/boid_alert1.wav");
+	self->PrecacheSound("boid/boid_alert2.wav");
 
-	PRECACHE_SOUND("boid/boid_idle1.wav");
-	PRECACHE_SOUND("boid/boid_idle2.wav");
+	self->PrecacheSound("boid/boid_idle1.wav");
+	self->PrecacheSound("boid/boid_idle2.wav");
 }
 
 //=========================================================
@@ -254,7 +254,7 @@ void CFlockingFlyer::Precache()
 {
 	//PrecacheModel("models/aflock.mdl");
 	PrecacheModel(STRING(pev->model));
-	CFlockingFlyerFlock::PrecacheFlockSounds();
+	CFlockingFlyerFlock::PrecacheFlockSounds(this);
 }
 
 //=========================================================

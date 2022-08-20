@@ -316,25 +316,25 @@ void CTentacle::Precache()
 {
 	PrecacheModel(STRING(pev->model));
 
-	PRECACHE_SOUND("ambience/flies.wav");
-	PRECACHE_SOUND("ambience/squirm2.wav");
+	PrecacheSound("ambience/flies.wav");
+	PrecacheSound("ambience/squirm2.wav");
 
-	PRECACHE_SOUND("tentacle/te_alert1.wav");
-	PRECACHE_SOUND("tentacle/te_alert2.wav");
-	PRECACHE_SOUND("tentacle/te_flies1.wav");
-	PRECACHE_SOUND("tentacle/te_move1.wav");
-	PRECACHE_SOUND("tentacle/te_move2.wav");
-	PRECACHE_SOUND("tentacle/te_roar1.wav");
-	PRECACHE_SOUND("tentacle/te_roar2.wav");
-	PRECACHE_SOUND("tentacle/te_search1.wav");
-	PRECACHE_SOUND("tentacle/te_search2.wav");
-	PRECACHE_SOUND("tentacle/te_sing1.wav");
-	PRECACHE_SOUND("tentacle/te_sing2.wav");
-	PRECACHE_SOUND("tentacle/te_squirm2.wav");
-	PRECACHE_SOUND("tentacle/te_strike1.wav");
-	PRECACHE_SOUND("tentacle/te_strike2.wav");
-	PRECACHE_SOUND("tentacle/te_swing1.wav");
-	PRECACHE_SOUND("tentacle/te_swing2.wav");
+	PrecacheSound("tentacle/te_alert1.wav");
+	PrecacheSound("tentacle/te_alert2.wav");
+	PrecacheSound("tentacle/te_flies1.wav");
+	PrecacheSound("tentacle/te_move1.wav");
+	PrecacheSound("tentacle/te_move2.wav");
+	PrecacheSound("tentacle/te_roar1.wav");
+	PrecacheSound("tentacle/te_roar2.wav");
+	PrecacheSound("tentacle/te_search1.wav");
+	PrecacheSound("tentacle/te_search2.wav");
+	PrecacheSound("tentacle/te_sing1.wav");
+	PrecacheSound("tentacle/te_sing2.wav");
+	PrecacheSound("tentacle/te_squirm2.wav");
+	PrecacheSound("tentacle/te_strike1.wav");
+	PrecacheSound("tentacle/te_strike2.wav");
+	PrecacheSound("tentacle/te_swing1.wav");
+	PrecacheSound("tentacle/te_swing2.wav");
 
 	PRECACHE_SOUND_ARRAY(pHitSilo);
 	PRECACHE_SOUND_ARRAY(pHitDirt);

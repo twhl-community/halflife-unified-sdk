@@ -136,9 +136,9 @@ void CSatchelCharge::SatchelThink()
 void CSatchelCharge::Precache()
 {
 	PrecacheModel(STRING(pev->model));
-	PRECACHE_SOUND("weapons/g_bounce1.wav");
-	PRECACHE_SOUND("weapons/g_bounce2.wav");
-	PRECACHE_SOUND("weapons/g_bounce3.wav");
+	PrecacheSound("weapons/g_bounce1.wav");
+	PrecacheSound("weapons/g_bounce2.wav");
+	PrecacheSound("weapons/g_bounce3.wav");
 }
 
 void CSatchelCharge::BounceSound()

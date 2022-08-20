@@ -48,13 +48,13 @@ void CSniperRifle::Precache()
 	PrecacheModel("models/v_m40a1.mdl");
 	PrecacheModel("models/p_m40a1.mdl");
 
-	PRECACHE_SOUND("weapons/sniper_fire.wav");
-	PRECACHE_SOUND("weapons/sniper_zoom.wav");
-	PRECACHE_SOUND("weapons/sniper_reload_first_seq.wav");
-	PRECACHE_SOUND("weapons/sniper_reload_second_seq.wav");
-	PRECACHE_SOUND("weapons/sniper_miss.wav");
-	PRECACHE_SOUND("weapons/sniper_bolt1.wav");
-	PRECACHE_SOUND("weapons/sniper_bolt2.wav");
+	PrecacheSound("weapons/sniper_fire.wav");
+	PrecacheSound("weapons/sniper_zoom.wav");
+	PrecacheSound("weapons/sniper_reload_first_seq.wav");
+	PrecacheSound("weapons/sniper_reload_second_seq.wav");
+	PrecacheSound("weapons/sniper_miss.wav");
+	PrecacheSound("weapons/sniper_bolt1.wav");
+	PrecacheSound("weapons/sniper_bolt2.wav");
 
 	m_usSniper = PRECACHE_EVENT(1, "events/sniper.sc");
 }
@@ -257,7 +257,7 @@ public:
 	void Precache() override
 	{
 		BaseClass::Precache();
-		PRECACHE_SOUND("items/9mmclip1.wav");
+		PrecacheSound("items/9mmclip1.wav");
 	}
 
 	bool AddAmmo(CBaseEntity* pOther) override

@@ -66,7 +66,7 @@ public:
 	inline int ExplosionMagnitude() { return pev->impulse; }
 	inline void ExplosionSetMagnitude(int magnitude) { pev->impulse = magnitude; }
 
-	static void MaterialSoundPrecache(Materials precacheMaterial);
+	static void MaterialSoundPrecache(CBaseEntity* self, Materials precacheMaterial);
 	static void MaterialSoundRandom(edict_t* pEdict, Materials soundMaterial, float volume);
 	static const char** MaterialSoundList(Materials precacheMaterial, int& soundCount);
 

@@ -148,7 +148,7 @@ void CRpgRocket::Precache()
 {
 	PrecacheModel("models/rpgrocket.mdl");
 	m_iTrail = PrecacheModel("sprites/smoke.spr");
-	PRECACHE_SOUND("weapons/rocket1.wav");
+	PrecacheSound("weapons/rocket1.wav");
 }
 
 
@@ -342,13 +342,13 @@ void CRpg::Precache()
 	PrecacheModel("models/v_rpg.mdl");
 	PrecacheModel("models/p_rpg.mdl");
 
-	PRECACHE_SOUND("items/9mmclip1.wav");
+	PrecacheSound("items/9mmclip1.wav");
 
 	UTIL_PrecacheOther("laser_spot");
 	UTIL_PrecacheOther("rpg_rocket");
 
-	PRECACHE_SOUND("weapons/rocketfire1.wav");
-	PRECACHE_SOUND("weapons/glauncher.wav"); // alternative fire sound
+	PrecacheSound("weapons/rocketfire1.wav");
+	PrecacheSound("weapons/glauncher.wav"); // alternative fire sound
 
 	m_usRpg = PRECACHE_EVENT(1, "events/rpg.sc");
 }
@@ -559,7 +559,7 @@ public:
 	void Precache() override
 	{
 		CBasePlayerAmmo::Precache();
-		PRECACHE_SOUND("items/9mmclip1.wav");
+		PrecacheSound("items/9mmclip1.wav");
 	}
 	bool AddAmmo(CBaseEntity* pOther) override
 	{

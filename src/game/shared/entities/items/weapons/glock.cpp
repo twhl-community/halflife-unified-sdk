@@ -46,12 +46,12 @@ void CGlock::Precache()
 
 	m_iShell = PrecacheModel("models/shell.mdl"); // brass shell
 
-	PRECACHE_SOUND("items/9mmclip1.wav");
-	PRECACHE_SOUND("items/9mmclip2.wav");
+	PrecacheSound("items/9mmclip1.wav");
+	PrecacheSound("items/9mmclip2.wav");
 
-	PRECACHE_SOUND("weapons/pl_gun1.wav"); //silenced handgun
-	PRECACHE_SOUND("weapons/pl_gun2.wav"); //silenced handgun
-	PRECACHE_SOUND("weapons/pl_gun3.wav"); //handgun
+	PrecacheSound("weapons/pl_gun1.wav"); //silenced handgun
+	PrecacheSound("weapons/pl_gun2.wav"); //silenced handgun
+	PrecacheSound("weapons/pl_gun3.wav"); //handgun
 
 	m_usFireGlock1 = PRECACHE_EVENT(1, "events/glock1.sc");
 	m_usFireGlock2 = PRECACHE_EVENT(1, "events/glock2.sc");
@@ -240,7 +240,7 @@ public:
 	void Precache() override
 	{
 		CBasePlayerAmmo::Precache();
-		PRECACHE_SOUND("items/9mmclip1.wav");
+		PrecacheSound("items/9mmclip1.wav");
 	}
 	bool AddAmmo(CBaseEntity* pOther) override
 	{
