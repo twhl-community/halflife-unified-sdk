@@ -123,3 +123,20 @@ ReplacementMap ReplacementMapSystem::Load(const std::string& fileName, const Rep
 					 { return Parse(input, options); })
 		.value_or(ReplacementMap{});
 }
+
+const char* ReplacementMapSystem::CheckForReplacement(const char* value, const ReplacementMap& map, bool lowerCase)
+{
+	RelativeFilename searchString{value};
+
+	if (lowerCase)
+	{
+		searchString.make_lower();
+	}
+
+	if (auto it = map.find(searchString.c_str()); it != map.end())
+	{
+		value = it->second.c_str();
+	}
+
+	return value;
+}

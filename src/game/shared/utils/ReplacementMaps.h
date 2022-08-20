@@ -55,6 +55,8 @@ public:
 
 	ReplacementMap Load(const std::string& fileName, const ReplacementMapOptions& options = {}) const;
 
+	static const char* CheckForReplacement(const char* value, const ReplacementMap& map, bool lowerCase);
+
 private:
 	ReplacementMap Parse(const json& input, const ReplacementMapOptions& options) const;
 

@@ -286,17 +286,7 @@ float UTIL_SharedRandomFloat(unsigned int seed, float low, float high)
 const char* UTIL_CheckForGlobalModelReplacement(const char* s)
 {
 #ifndef CLIENT_DLL
-	//Check if there is global model replacement needed.
-	RelativeFilename searchString{s};
-
-	searchString.make_lower();
-
-	const auto& map = g_Server.GetMapState()->m_GlobalModelReplacement;
-
-	if (auto it = map.find(searchString.c_str()); it != map.end())
-	{
-		s = it->second.c_str();
-	}
+	s = g_ReplacementMaps.CheckForReplacement(s, g_Server.GetMapState()->m_GlobalModelReplacement, true);
 #endif
 
 	return s;

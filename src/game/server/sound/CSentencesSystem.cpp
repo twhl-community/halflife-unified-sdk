@@ -357,13 +357,6 @@ int CSentencesSystem::PickSequential(int isentenceg, SentenceIndexName& found, i
 
 const char* CSentencesSystem::CheckForSentenceReplacement(const char* sentenceName) const
 {
-	const auto& map = g_Server.GetMapState()->m_GlobalSentenceReplacement;
-
-	if (auto it = map.find(sentenceName); it != map.end())
-	{
-		sentenceName = it->second.c_str();
-	}
-
-	return sentenceName;
+	return g_ReplacementMaps.CheckForReplacement(sentenceName, g_Server.GetMapState()->m_GlobalSentenceReplacement, false);
 }
 }
