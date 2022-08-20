@@ -287,14 +287,13 @@ const char* UTIL_CheckForGlobalModelReplacement(const char* s)
 {
 #ifndef CLIENT_DLL
 	//Check if there is global model replacement needed.
-	//TODO: try to avoid allocating here (EASTL fixed_string could help)
-	const std::string searchString{s};
+	RelativeFilename searchString{s};
 
-	ToLower(searchString);
+	searchString.make_lower();
 
 	const auto& map = g_Server.GetMapState()->m_GlobalModelReplacement;
 
-	if (auto it = map.find(searchString); it != map.end())
+	if (auto it = map.find(searchString.c_str()); it != map.end())
 	{
 		s = it->second.c_str();
 	}
