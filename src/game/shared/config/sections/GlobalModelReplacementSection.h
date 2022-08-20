@@ -50,6 +50,8 @@ public:
 
 		if (!fileName.empty())
 		{
+			context.Loader.GetLogger()->debug("Adding global model replacement file \"{}\"", fileName);
+
 			auto map = g_ReplacementMaps.Load(fileName, {.ConvertToLowercase = true});
 
 			if (!map.empty())
