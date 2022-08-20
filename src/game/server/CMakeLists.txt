@@ -261,6 +261,8 @@ target_sources(server PRIVATE
 	
 	sound/CSentencesSystem.cpp
 	sound/CSentencesSystem.h
+	sound/ServerSoundSystem.cpp
+	sound/ServerSoundSystem.h
 	
 	../../common/mathlib.cpp
 	../../common/Platform.h

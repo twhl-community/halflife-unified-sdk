@@ -482,8 +482,19 @@ inline void STOP_SOUND(edict_t* entity, int channel, const char* sample)
 void EMIT_SOUND_PREDICTED(edict_t* entity, int channel, const char* sample, float volume, float attenuation,
 	int flags, int pitch);
 
+/**
+*	@brief play a specific sentence over the HEV suit speaker - just pass player entity, and !sentencename
+*/
 void EMIT_SOUND_SUIT(edict_t* entity, const char* sample);
+
+/**
+*	@brief play a sentence, randomly selected from the passed in group id, over the HEV suit speaker
+*/
 void EMIT_GROUPID_SUIT(edict_t* entity, int isentenceg);
+
+/**
+*	@brief play a sentence, randomly selected from the passed in groupname
+*/
 void EMIT_GROUPNAME_SUIT(edict_t* entity, const char* groupname);
 
 #define PRECACHE_SOUND_ARRAY(a)                        \

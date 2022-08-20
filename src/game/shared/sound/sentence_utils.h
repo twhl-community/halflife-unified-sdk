@@ -38,7 +38,7 @@ constexpr int CBSENTENCENAME_MAX = 32;
 constexpr int InitialSentencesReserveCount = 1536;
 
 /**
- *	@brief max number of sentences in game. This limit is defined by EMIT_SOUND_SENTENCE's use of fixed size integer writing.
+ *	@brief max number of sentences in game. This limit is defined by ServerSoundSystem::EmitSound's use of fixed size integer writing.
  */
 constexpr std::size_t MaxSentencesCount = std::numeric_limits<std::uint16_t>::max();
 

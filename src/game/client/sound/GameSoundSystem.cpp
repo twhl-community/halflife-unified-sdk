@@ -405,7 +405,7 @@ void GameSoundSystem::UserMsg_EmitSound(const char* pszName, int iSize, void* pb
 	if ((flags & SND_LARGE_INDEX) != 0)
 	{
 		// Cast the signed short back to an unsigned short so the index is correct.
-		// See EMIT_SOUND_SENTENCE for why this is needed.
+		// See ServerSoundSystem::EmitSound for why this is needed.
 		soundIndex = static_cast<std::uint16_t>(READ_SHORT());
 	}
 	else
