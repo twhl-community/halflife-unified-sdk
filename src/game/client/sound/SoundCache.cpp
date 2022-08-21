@@ -109,6 +109,9 @@ bool SoundCache::LoadSound(Sound& sound)
 		return false;
 	}
 
+	// Clear error state.
+	alGetError();
+
 	const ALenum format = data.channelCount == 1 ? AL_FORMAT_MONO_FLOAT32 : AL_FORMAT_STEREO_FLOAT32;
 
 	sound.Buffer = OpenALBuffer::Create();
@@ -118,9 +121,7 @@ bool SoundCache::LoadSound(Sound& sound)
 	alBufferData(sound.Buffer.Id, format, data.samples.data(), data.samples.size() * sizeof(float), data.sampleRate);
 
 	// See https://openal-soft.org/openal-extensions/SOFT_loop_points.txt
-	auto cuePoints = TryLoadCuePoints(absolutePath, data.samples.size());
-
-	sound.IsLooping = cuePoints.has_value();
+	const auto cuePoints = TryLoadCuePoints(absolutePath, data.samples.size());
 
 	if (cuePoints)
 	{
@@ -128,8 +129,15 @@ bool SoundCache::LoadSound(Sound& sound)
 		alBufferiv(sound.Buffer.Id, AL_LOOP_POINTS_SOFT, loopPoints);
 	}
 
-	sound.Format = format;
+	if (const auto error = alGetError(); error != AL_NO_ERROR)
+	{
+		m_Logger->error("OpenAL error {} ({}) while initializing buffer", alGetString(error), error);
+		sound.Buffer.Delete();
+		return false;
+	}
 
+	sound.IsLooping = cuePoints.has_value();
+	sound.Format = format;
 	// Cache the samples for future use.
 	sound.Samples = std::move(data.samples);
 

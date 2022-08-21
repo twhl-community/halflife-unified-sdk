@@ -138,7 +138,10 @@ bool SentencesSystem::SetSentenceWord(Channel& channel, SentenceChannel& sentenc
 			// Detach buffer first so it can be modified.
 			alSourcei(channel.Source.Id, AL_BUFFER, NullBuffer);
 
-			CreateTimeCompressedBuffer(channel, sentenceChannel, *wordSound);
+			if (!CreateTimeCompressedBuffer(channel, sentenceChannel, *wordSound))
+			{
+				return false;
+			}
 
 			alSourcei(channel.Source.Id, AL_BUFFER, sentenceChannel.TimeCompressBuffer.Id);
 		}
@@ -266,11 +269,14 @@ void SentencesSystem::MoveMouth(Channel& channel, SentenceChannel& sentenceChann
 	}
 }
 
-void SentencesSystem::CreateTimeCompressedBuffer(const Channel& channel, SentenceChannel& sentenceChannel, const Sound& sound)
+bool SentencesSystem::CreateTimeCompressedBuffer(const Channel& channel, SentenceChannel& sentenceChannel, const Sound& sound)
 {
 	const auto& sentence = m_Sentences[sentenceChannel.Sentence];
 	const auto& word = sentence.Words[sentenceChannel.CurrentWord];
 	const auto& wordSound = *m_SoundCache->GetSound(word.Index);
+
+	m_Logger->trace("Creating time compressed buffer for sentence {}, word {} (index {})",
+		sentence.Name.c_str(), wordSound.Name.c_str(), sentenceChannel.CurrentWord);
 
 	const float skipFraction = word.Parameters.TimeCompress / 100.f;
 	const float writeFraction = 1.f - skipFraction;
@@ -324,7 +330,18 @@ void SentencesSystem::CreateTimeCompressedBuffer(const Channel& channel, Sentenc
 	ALint frequency = -1;
 	alGetBufferi(wordSound.Buffer.Id, AL_FREQUENCY, &frequency);
 
+	// Clear error state.
+	alGetError();
+
 	alBufferData(sentenceChannel.TimeCompressBuffer.Id, wordSound.Format, compressedData.data(), compressedData.size() * sizeof(float), frequency);
+
+	if (const auto error = alGetError(); error != AL_NO_ERROR)
+	{
+		m_Logger->error("OpenAL error {} ({}) while initializing time compressed buffer", alGetString(error), error);
+		return false;
+	}
+
+	return true;
 }
 
 bool SentencesSystem::UpdateSentencePlayback(Channel& channel, SentenceChannel& sentenceChannel)
