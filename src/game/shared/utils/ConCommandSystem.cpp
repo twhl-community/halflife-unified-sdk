@@ -19,7 +19,7 @@
 #include <spdlog/fmt/fmt.h>
 
 #include "cbase.h"
-#include "command_utils.h"
+#include "ConCommandSystem.h"
 
 #ifdef CLIENT_DLL
 #include "hud.h"

@@ -24,7 +24,7 @@
 
 #include "cbase.h"
 #include "LogSystem.h"
-#include "command_utils.h"
+#include "ConCommandSystem.h"
 #include "heterogeneous_lookup.h"
 #include "json_utils.h"
 

@@ -21,7 +21,7 @@
 
 #include "scripting/AS/ASManager.h"
 
-#include "utils/command_utils.h"
+#include "utils/ConCommandSystem.h"
 #include "utils/GameSystem.h"
 #include "utils/json_utils.h"
 #include "utils/ReplacementMaps.h"

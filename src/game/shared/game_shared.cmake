@@ -81,8 +81,8 @@ function(add_game_shared_sources target)
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/sound/sentence_utils.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/sound/sentence_utils.h
 			
-			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/command_utils.cpp
-			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/command_utils.h
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/ConCommandSystem.cpp
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/ConCommandSystem.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/filesystem_utils.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/filesystem_utils.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/GameSystem.cpp

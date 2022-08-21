@@ -6,7 +6,7 @@
 #include <unordered_map>
 
 #include "cbase.h"
-#include "command_utils.h"
+#include "ConCommandSystem.h"
 
 class CBasePlayer;
 class ClientCommandRegistry;

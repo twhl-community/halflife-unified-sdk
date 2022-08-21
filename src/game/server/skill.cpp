@@ -26,7 +26,7 @@
 #include "cbase.h"
 #include "skill.h"
 
-#include "command_utils.h"
+#include "ConCommandSystem.h"
 #include "json_utils.h"
 #include "config/GameConfigLoader.h"
 
