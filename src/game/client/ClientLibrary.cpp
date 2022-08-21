@@ -81,7 +81,7 @@ void ClientLibrary::Frame()
 		sound::g_SoundSystem->GetGameSoundSystem()->ClearCaches();
 
 		// Clear sound replacement map on any change.
-		sound::g_ClientSoundReplacement.clear();
+		sound::g_ClientSoundReplacement = ReplacementMap{};
 
 		if (!isConnected
 			|| m_ConnectionTime > status.connection_time

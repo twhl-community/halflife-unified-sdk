@@ -77,7 +77,7 @@ public:
 			{
 				//Append replacement mappings from other to my map.
 				//To ensure that existing keys are overwritten this is done by appending to the new map and then moving it to ours.
-				map.insert(mapState->m_GlobalSoundReplacement.begin(), mapState->m_GlobalSoundReplacement.end());
+				map.Add(mapState->m_GlobalSoundReplacement);
 
 				mapState->m_GlobalSoundReplacement = std::move(map);
 			}

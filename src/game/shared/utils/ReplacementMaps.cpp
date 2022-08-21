@@ -65,6 +65,28 @@ LoadFromAllPaths = {}
 	}
 };
 
+static const char* LookupReplacement(const Replacements& map, const char* searchString, const char* originalValue)
+{
+	if (auto it = map.find(searchString); it != map.end())
+	{
+		return it->second.c_str();
+	}
+
+	return originalValue;
+}
+
+const char* ReplacementMap::Lookup(const char* value, bool lowercase) const noexcept
+{
+	if (lowercase)
+	{
+		Filename searchString{value};
+		searchString.make_lower();
+		return LookupReplacement(m_Replacements, searchString.c_str(), value);
+	}
+
+	return LookupReplacement(m_Replacements, value, value);
+}
+
 bool ReplacementMapSystem::Initialize()
 {
 	m_Logger = g_Logging.CreateLogger("replacementmap");
@@ -83,7 +105,7 @@ ReplacementMap ReplacementMapSystem::Parse(const json& input, const ReplacementM
 {
 	m_Logger->trace("Parsing replacement map with options:\n{}", options);
 
-	ReplacementMap map;
+	Replacements map;
 
 	if (input.is_object())
 	{
@@ -115,7 +137,7 @@ ReplacementMap ReplacementMapSystem::Parse(const json& input, const ReplacementM
 		}
 	}
 
-	return map;
+	return ReplacementMap{std::move(map)};
 }
 
 ReplacementMap ReplacementMapSystem::Load(const std::string& fileName, const ReplacementMapOptions& options) const
@@ -128,21 +150,4 @@ ReplacementMap ReplacementMapSystem::Load(const std::string& fileName, const Rep
 					 [&, this](const json& input)
 					 { return Parse(input, options); })
 		.value_or(ReplacementMap{});
-}
-
-const char* ReplacementMapSystem::CheckForReplacement(const char* value, const ReplacementMap& map, bool lowerCase)
-{
-	RelativeFilename searchString{value};
-
-	if (lowerCase)
-	{
-		searchString.make_lower();
-	}
-
-	if (auto it = map.find(searchString.c_str()); it != map.end())
-	{
-		value = it->second.c_str();
-	}
-
-	return value;
 }

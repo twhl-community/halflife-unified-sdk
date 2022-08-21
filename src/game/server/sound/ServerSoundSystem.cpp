@@ -79,7 +79,7 @@ const char* ServerSoundSystem::CheckForSoundReplacement(const char* soundName) c
 		++soundName;
 	}
 
-	return g_ReplacementMaps.CheckForReplacement(soundName, g_Server.GetMapState()->m_GlobalSoundReplacement, true);
+	return g_Server.GetMapState()->m_GlobalSoundReplacement.Lookup(soundName, true);
 }
 
 void ServerSoundSystem::EmitSoundCore(edict_t* entity, int channel, const char* sample, float volume, float attenuation,

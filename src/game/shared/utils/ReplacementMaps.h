@@ -25,11 +25,40 @@
 #include "utils/heterogeneous_lookup.h"
 #include "utils/json_fwd.h"
 
+using Replacements = std::unordered_map<std::string, std::string, TransparentStringHash, TransparentEqual>;
+
 /**
-*	@brief A map of string to string for replacements.
-*	@details Do not modify these maps after they've been loaded. Any modification will invalidate pointers to values.
-*/
-using ReplacementMap = std::unordered_map<std::string, std::string, TransparentStringHash, TransparentEqual>;
+ *	@brief A map of string to string for replacements.
+ *	@details Do not modify these maps after they've been loaded. Any modification will invalidate pointers to values.
+ */
+struct ReplacementMap
+{
+	explicit ReplacementMap() = default;
+
+	explicit ReplacementMap(Replacements&& replacements)
+		: m_Replacements(std::move(replacements))
+	{
+	}
+
+	ReplacementMap(const ReplacementMap&) = delete;
+	ReplacementMap& operator=(const ReplacementMap&) = delete;
+	ReplacementMap(ReplacementMap&&) = default;
+	ReplacementMap& operator=(ReplacementMap&&) = default;
+
+	bool empty() const noexcept { return m_Replacements.empty(); }
+
+	const Replacements& GetAll() const noexcept { return m_Replacements; }
+
+	const char* Lookup(const char* value, bool lowercase) const noexcept;
+
+	void Add(const ReplacementMap& other)
+	{
+		m_Replacements.insert(other.m_Replacements.begin(), other.m_Replacements.end());
+	}
+
+private:
+	Replacements m_Replacements;
+};
 
 struct ReplacementMapOptions
 {
@@ -59,8 +88,6 @@ public:
 	void Shutdown() override;
 
 	ReplacementMap Load(const std::string& fileName, const ReplacementMapOptions& options = {}) const;
-
-	static const char* CheckForReplacement(const char* value, const ReplacementMap& map, bool lowerCase);
 
 private:
 	ReplacementMap Parse(const json& input, const ReplacementMapOptions& options) const;

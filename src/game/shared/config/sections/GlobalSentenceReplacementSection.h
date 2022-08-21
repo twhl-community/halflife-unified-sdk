@@ -60,7 +60,7 @@ public:
 
 				//Append replacement mappings from other to my map.
 				//To ensure that existing keys are overwritten this is done by appending to the new map and then moving it to ours.
-				map.insert(mapState->m_GlobalSentenceReplacement.begin(), mapState->m_GlobalSentenceReplacement.end());
+				map.Add(mapState->m_GlobalSentenceReplacement);
 
 				mapState->m_GlobalSentenceReplacement = std::move(map);
 			}
