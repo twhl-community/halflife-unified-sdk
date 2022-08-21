@@ -27,7 +27,7 @@
 #include "scripting/AS/as_utils.h"
 
 #include "utils/GameSystem.h"
-#include "utils/json_utils.h"
+#include "utils/JSONSystem.h"
 
 #include "GameConfigConditionals.h"
 

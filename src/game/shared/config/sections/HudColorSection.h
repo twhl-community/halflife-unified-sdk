@@ -20,7 +20,7 @@
 
 #include "config/GameConfigSection.h"
 
-#include "utils/json_utils.h"
+#include "utils/JSONSystem.h"
 #include "utils/shared_utils.h"
 
 /**

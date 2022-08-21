@@ -89,8 +89,8 @@ function(add_game_shared_sources target)
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/GameSystem.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/heterogeneous_lookup.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/json_fwd.h
-			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/json_utils.cpp
-			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/json_utils.h
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/JSONSystem.cpp
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/JSONSystem.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/logging_utils.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/LogSystem.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/LogSystem.h

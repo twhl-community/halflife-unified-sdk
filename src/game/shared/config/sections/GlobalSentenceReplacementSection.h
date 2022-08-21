@@ -20,7 +20,7 @@
 #include "config/GameConfigLoader.h"
 #include "config/GameConfigSection.h"
 
-#include "utils/json_utils.h"
+#include "utils/JSONSystem.h"
 #include "utils/ReplacementMaps.h"
 
 /**

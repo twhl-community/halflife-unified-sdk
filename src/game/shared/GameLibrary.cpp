@@ -23,7 +23,7 @@
 
 #include "utils/ConCommandSystem.h"
 #include "utils/GameSystem.h"
-#include "utils/json_utils.h"
+#include "utils/JSONSystem.h"
 #include "utils/ReplacementMaps.h"
 
 void GameLibrary::AddGameSystems()

@@ -29,7 +29,7 @@
 
 #include "scripting/AS/ASManager.h"
 
-#include "utils/json_utils.h"
+#include "utils/JSONSystem.h"
 #include "utils/string_utils.h"
 
 using namespace std::literals;
