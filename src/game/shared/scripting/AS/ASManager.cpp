@@ -16,7 +16,7 @@
 #include <exception>
 #include <string>
 
-#include <spdlog/fmt/fmt.h>
+#include <fmt/format.h>
 
 #include "cbase.h"
 

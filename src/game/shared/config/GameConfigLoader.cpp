@@ -16,7 +16,7 @@
 #include <chrono>
 #include <sstream>
 
-#include <spdlog/fmt/fmt.h>
+#include <fmt/format.h>
 
 #include <angelscript.h>
 

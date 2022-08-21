@@ -5,6 +5,11 @@
 	"builtin-baseline": "9259a0719d94c402aae2ab7975bc096afdec15df",
 	"dependencies": [
 		{
+			"name": "fmt",
+			"version>=": "9.0.0",
+			"default-features": false
+		},
+		{
 			"name": "spdlog",
 			"version>=": "1.10.0#1",
 			"default-features": false

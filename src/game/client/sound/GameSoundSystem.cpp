@@ -16,7 +16,7 @@
 #include <exception>
 #include <type_traits>
 
-#include <spdlog/fmt/fmt.h>
+#include <fmt/format.h>
 
 #define AL_ALEXT_PROTOTYPES
 #include <AL/alext.h>

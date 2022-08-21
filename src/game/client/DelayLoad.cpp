@@ -17,7 +17,7 @@
 
 #include <delayimp.h>
 
-#include <spdlog/fmt/fmt.h>
+#include <fmt/format.h>
 
 #include "cbase.h"
 #include "utils/filesystem_utils.h"
