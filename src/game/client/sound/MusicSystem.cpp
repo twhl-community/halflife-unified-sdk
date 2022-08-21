@@ -179,6 +179,9 @@ void MusicSystem::StartPlaying(bool looping, FileWrapper file)
 	// No longer need the file.
 	file.reset();
 
+	// Clear error state.
+	alGetError();
+
 	m_Info.Format = m_Info.Data->channelCount == 1 ? AL_FORMAT_MONO_FLOAT32 : AL_FORMAT_STEREO_FLOAT32;
 
 	// Allocate enough buffers to hold around a second's worth of data.
@@ -218,6 +221,13 @@ void MusicSystem::StartPlaying(bool looping, FileWrapper file)
 
 	m_Looping = looping;
 	m_Playing = true;
+
+	if (const auto error = alGetError(); error != AL_NO_ERROR)
+	{
+		// Can't log an error since we're on a separate thread.
+		Stop();
+		return;
+	}
 
 	if (m_Volume == 0.0)
 		Pause();
@@ -342,7 +352,11 @@ std::size_t MusicSystem::Read(std::byte* dest, std::size_t bufferSize)
 void MusicSystem::Run()
 {
 	// Use our context on our own thread only.
-	alcSetThreadContext(m_Context.get());
+	if (ALC_FALSE == alcSetThreadContext(m_Context.get()))
+	{
+		// Fatal error, can't log it since we're on a separate thread.
+		return;
+	}
 
 	while (!m_Quit)
 	{
@@ -426,6 +440,11 @@ void MusicSystem::Update()
 					// Restart it so we at least play it chunk by chunk.
 					alSourcePlay(m_Source.Id);
 				}
+			}
+
+			if (alGetError() != AL_NO_ERROR)
+			{
+				Stop();
 			}
 		}
 	}
