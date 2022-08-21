@@ -106,3 +106,5 @@ private:
 
 	Settings m_Settings;
 };
+
+inline LogSystem g_Logging;
