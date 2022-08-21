@@ -240,6 +240,8 @@ target_sources(server PRIVATE
 	entities/NPCs/racex/shocktrooper.cpp
 	entities/NPCs/racex/voltigore.cpp
 	entities/NPCs/racex/voltigore.h
+
+	entities/NPCs/gunman/CGunmanCycler.cpp
 	
 	gamerules/coopplay_gamerules.cpp
 	gamerules/coopplay_gamerules.h
