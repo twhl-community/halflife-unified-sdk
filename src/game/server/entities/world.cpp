@@ -26,7 +26,7 @@
 #include "teamplay_gamerules.h"
 #include "ctfplay_gamerules.h"
 #include "world.h"
-#include "CServerLibrary.h"
+#include "ServerLibrary.h"
 #include "ctf/CItemCTF.h"
 
 CGlobalState gGlobalState;

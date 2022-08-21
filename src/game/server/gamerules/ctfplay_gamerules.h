@@ -17,7 +17,7 @@
 
 #include <memory>
 
-#include "CClientCommandRegistry.h"
+#include "ClientCommandRegistry.h"
 
 #include "ctf/CTFDefs.h"
 
@@ -116,7 +116,7 @@ public:
 	void GoToIntermission() override;
 
 protected:
-	void BecomeSpectator(CBasePlayer* player, const CCommandArgs& args) override;
+	void BecomeSpectator(CBasePlayer* player, const CommandArgs& args) override;
 
 private:
 	void SendTeamStatInfo(CTFTeam iTeamNum);
@@ -133,13 +133,13 @@ private:
 	//Use a sane default to avoid lockups
 	int m_iStatsPlayer = 1;
 
-	CScopedClientCommand m_CancelMenuCommand;
-	CScopedClientCommand m_EndMotdCommand;
-	CScopedClientCommand m_JoinTeamCommand;
-	CScopedClientCommand m_SelectCharCommand;
-	CScopedClientCommand m_ChangeTeamCommand;
-	CScopedClientCommand m_ChangeClassCommand;
-	CScopedClientCommand m_FlagInfoCommand;
+	ScopedClientCommand m_CancelMenuCommand;
+	ScopedClientCommand m_EndMotdCommand;
+	ScopedClientCommand m_JoinTeamCommand;
+	ScopedClientCommand m_SelectCharCommand;
+	ScopedClientCommand m_ChangeTeamCommand;
+	ScopedClientCommand m_ChangeClassCommand;
+	ScopedClientCommand m_FlagInfoCommand;
 };
 
 extern char* pszPlayerIPs[MAX_PLAYERS * 2];

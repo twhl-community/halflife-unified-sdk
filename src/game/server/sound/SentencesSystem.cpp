@@ -18,30 +18,30 @@
 #include <fmt/format.h>
 
 #include "cbase.h"
-#include "CSentencesSystem.h"
-#include "CServerLibrary.h"
+#include "SentencesSystem.h"
+#include "ServerLibrary.h"
 #include "sound/sentence_utils.h"
 
 namespace sentences
 {
-bool CSentencesSystem::Initialize()
+bool SentencesSystem::Initialize()
 {
 	m_Logger = g_Logging.CreateLogger("sentences");
 	return true;
 }
 
-void CSentencesSystem::PostInitialize()
+void SentencesSystem::PostInitialize()
 {
 	LoadSentences();
 }
 
-void CSentencesSystem::Shutdown()
+void SentencesSystem::Shutdown()
 {
 	g_Logging.RemoveLogger(m_Logger);
 	m_Logger.reset();
 }
 
-void CSentencesSystem::NewMapStarted()
+void SentencesSystem::NewMapStarted()
 {
 	// Check if the replacement map has any bad data.
 	if (m_Logger->should_log(spdlog::level::debug))
@@ -73,18 +73,18 @@ void CSentencesSystem::NewMapStarted()
 	}
 }
 
-const char* CSentencesSystem::GetSentenceNameByIndex(int index) const
+const char* SentencesSystem::GetSentenceNameByIndex(int index) const
 {
 	if (index < 0 || static_cast<std::size_t>(index) >= m_SentenceNames.size())
 	{
-		ASSERT(!"Invalid index passed to CSentencesSystem::GetSentenceNameByIndex");
+		ASSERT(!"Invalid index passed to SentencesSystem::GetSentenceNameByIndex");
 		return nullptr;
 	}
 
 	return m_SentenceNames[index].c_str();
 }
 
-int CSentencesSystem::GetGroupIndex(const char* szgroupname) const
+int SentencesSystem::GetGroupIndex(const char* szgroupname) const
 {
 	if (!szgroupname)
 		return -1;
@@ -105,7 +105,7 @@ int CSentencesSystem::GetGroupIndex(const char* szgroupname) const
 	return -1;
 }
 
-int CSentencesSystem::LookupSentence(const char* sample, SentenceIndexName* sentencenum) const
+int SentencesSystem::LookupSentence(const char* sample, SentenceIndexName* sentencenum) const
 {
 	// this is a sentence name; lookup sentence number
 	// and give to engine as string.
@@ -132,7 +132,7 @@ int CSentencesSystem::LookupSentence(const char* sample, SentenceIndexName* sent
 	return -1;
 }
 
-int CSentencesSystem::PlayRndI(edict_t* entity, int isentenceg, float volume, float attenuation, int flags, int pitch)
+int SentencesSystem::PlayRndI(edict_t* entity, int isentenceg, float volume, float attenuation, int flags, int pitch)
 {
 	SentenceIndexName name;
 
@@ -142,7 +142,7 @@ int CSentencesSystem::PlayRndI(edict_t* entity, int isentenceg, float volume, fl
 	return ipick;
 }
 
-int CSentencesSystem::PlayRndSz(edict_t* entity, const char* szgroupname,
+int SentencesSystem::PlayRndSz(edict_t* entity, const char* szgroupname,
 	float volume, float attenuation, int flags, int pitch)
 {
 	const int isentenceg = GetGroupIndex(szgroupname);
@@ -161,7 +161,7 @@ int CSentencesSystem::PlayRndSz(edict_t* entity, const char* szgroupname,
 	return ipick;
 }
 
-int CSentencesSystem::PlaySequentialSz(edict_t* entity, const char* szgroupname,
+int SentencesSystem::PlaySequentialSz(edict_t* entity, const char* szgroupname,
 	float volume, float attenuation, int flags, int pitch, int ipick, bool freset)
 {
 	const int isentenceg = GetGroupIndex(szgroupname);
@@ -176,7 +176,7 @@ int CSentencesSystem::PlaySequentialSz(edict_t* entity, const char* szgroupname,
 	return ipicknext;
 }
 
-void CSentencesSystem::Stop(edict_t* entity, int isentenceg, int ipick)
+void SentencesSystem::Stop(edict_t* entity, int isentenceg, int ipick)
 {
 	if (isentenceg < 0 || ipick < 0)
 		return;
@@ -187,7 +187,7 @@ void CSentencesSystem::Stop(edict_t* entity, int isentenceg, int ipick)
 	STOP_SOUND(entity, CHAN_VOICE, name.c_str());
 }
 
-void CSentencesSystem::LoadSentences()
+void SentencesSystem::LoadSentences()
 {
 	m_Logger->trace("Loading sentences.txt");
 
@@ -282,7 +282,7 @@ void CSentencesSystem::LoadSentences()
 	}
 }
 
-void CSentencesSystem::InitLRU(unsigned char* plru, int count) const
+void SentencesSystem::InitLRU(unsigned char* plru, int count) const
 {
 	count = std::min(count, sentences::CSENTENCE_LRU_MAX);
 
@@ -298,7 +298,7 @@ void CSentencesSystem::InitLRU(unsigned char* plru, int count) const
 	}
 }
 
-int CSentencesSystem::Pick(int isentenceg, SentenceIndexName& found)
+int SentencesSystem::Pick(int isentenceg, SentenceIndexName& found)
 {
 	if (isentenceg < 0)
 		return -1;
@@ -327,7 +327,7 @@ int CSentencesSystem::Pick(int isentenceg, SentenceIndexName& found)
 	return -1;
 }
 
-int CSentencesSystem::PickSequential(int isentenceg, SentenceIndexName& found, int ipick, bool freset) const
+int SentencesSystem::PickSequential(int isentenceg, SentenceIndexName& found, int ipick, bool freset) const
 {
 	if (isentenceg < 0)
 		return -1;
@@ -355,7 +355,7 @@ int CSentencesSystem::PickSequential(int isentenceg, SentenceIndexName& found, i
 	return ipick + 1;
 }
 
-const char* CSentencesSystem::CheckForSentenceReplacement(const char* sentenceName) const
+const char* SentencesSystem::CheckForSentenceReplacement(const char* sentenceName) const
 {
 	return g_ReplacementMaps.CheckForReplacement(sentenceName, g_Server.GetMapState()->m_GlobalSentenceReplacement, false);
 }

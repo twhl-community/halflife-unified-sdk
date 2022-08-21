@@ -1,8 +1,8 @@
 function(add_game_shared_sources target)
 	target_sources(${target}
 		PRIVATE
-			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/CGameLibrary.cpp
-			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/CGameLibrary.h
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/GameLibrary.cpp
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/GameLibrary.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/palette.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/voice_common.h
 			
@@ -75,18 +75,14 @@ function(add_game_shared_sources target)
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripting/AS/as_addons.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripting/AS/as_utils.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripting/AS/as_utils.h
-			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripting/AS/CASManager.cpp
-			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripting/AS/CASManager.h
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripting/AS/ASManager.cpp
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripting/AS/ASManager.h
 			
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/sound/sentence_utils.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/sound/sentence_utils.h
 			
-			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/CLogSystem.cpp
-			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/CLogSystem.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/command_utils.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/command_utils.h
-			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/CStringPool.cpp
-			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/CStringPool.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/filesystem_utils.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/filesystem_utils.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/GameSystem.cpp
@@ -96,10 +92,14 @@ function(add_game_shared_sources target)
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/json_utils.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/json_utils.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/logging_utils.h
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/LogSystem.cpp
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/LogSystem.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/ReplacementMaps.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/ReplacementMaps.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/shared_utils.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/shared_utils.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/string_utils.cpp
-			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/string_utils.h)
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/string_utils.h
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/StringPool.cpp
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/StringPool.h)
 endfunction()

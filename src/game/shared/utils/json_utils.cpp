@@ -273,7 +273,7 @@ std::optional<json> JSONSystem::LoadJSONFile(const char* fileName, const JSONLoa
 	return {};
 }
 
-void JSONSystem::ListSchemas(const CCommandArgs& args)
+void JSONSystem::ListSchemas(const CommandArgs& args)
 {
 	if (!IsDebugEnabled())
 	{
@@ -288,7 +288,7 @@ void JSONSystem::ListSchemas(const CCommandArgs& args)
 	}
 }
 
-void JSONSystem::GenerateSchema(const CCommandArgs& args)
+void JSONSystem::GenerateSchema(const CommandArgs& args)
 {
 	if (!IsDebugEnabled())
 	{
@@ -316,7 +316,7 @@ void JSONSystem::GenerateSchema(const CCommandArgs& args)
 	}
 }
 
-void JSONSystem::GenerateAllSchemas(const CCommandArgs& args)
+void JSONSystem::GenerateAllSchemas(const CommandArgs& args)
 {
 	if (!IsDebugEnabled())
 	{

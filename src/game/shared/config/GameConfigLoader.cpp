@@ -27,7 +27,7 @@
 #include "GameConfigLoader.h"
 #include "GameConfigSection.h"
 
-#include "scripting/AS/CASManager.h"
+#include "scripting/AS/ASManager.h"
 
 #include "utils/json_utils.h"
 #include "utils/string_utils.h"

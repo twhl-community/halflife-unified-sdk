@@ -19,8 +19,8 @@
 #include <string>
 #include <unordered_set>
 
-#include "CGameLibrary.h"
-#include "CMapState.h"
+#include "GameLibrary.h"
+#include "MapState.h"
 
 #include "config/GameConfigLoader.h"
 
@@ -30,18 +30,18 @@ class GameConfigDefinition;
 /**
 *	@brief Handles core server actions
 */
-class CServerLibrary final : public CGameLibrary
+class ServerLibrary final : public GameLibrary
 {
 public:
-	CServerLibrary();
-	~CServerLibrary();
+	ServerLibrary();
+	~ServerLibrary();
 
-	CServerLibrary(const CServerLibrary&) = delete;
-	CServerLibrary& operator=(const CServerLibrary&) = delete;
-	CServerLibrary(CServerLibrary&&) = delete;
-	CServerLibrary& operator=(CServerLibrary&&) = delete;
+	ServerLibrary(const ServerLibrary&) = delete;
+	ServerLibrary& operator=(const ServerLibrary&) = delete;
+	ServerLibrary(ServerLibrary&&) = delete;
+	ServerLibrary& operator=(ServerLibrary&&) = delete;
 
-	CMapState* GetMapState() { return &m_MapState; }
+	MapState* GetMapState() { return &m_MapState; }
 
 	/**
 	*	@brief Handles server-side initialization
@@ -117,7 +117,7 @@ private:
 
 	bool m_isStartingNewMap = true;
 
-	CMapState m_MapState;
+	MapState m_MapState;
 };
 
-inline CServerLibrary g_Server;
+inline ServerLibrary g_Server;

@@ -16,7 +16,7 @@
 #include "cbase.h"
 #include "pm_defs.h"
 #include "pm_shared.h"
-#include "CServerLibrary.h"
+#include "ServerLibrary.h"
 #include "ServerSoundSystem.h"
 #include "UserMessages.h"
 

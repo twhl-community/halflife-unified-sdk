@@ -29,15 +29,15 @@
 /**
 *	@brief Provides an interface to get command arguments without explicitly depending on library interfaces
 */
-class CCommandArgs final
+class CommandArgs final
 {
 public:
-	CCommandArgs() = default;
-	~CCommandArgs() = default;
-	CCommandArgs(const CCommandArgs&) = delete;
-	CCommandArgs& operator=(const CCommandArgs&) = delete;
-	CCommandArgs(CCommandArgs&&) = delete;
-	CCommandArgs& operator=(CCommandArgs&&) = delete;
+	CommandArgs() = default;
+	~CommandArgs() = default;
+	CommandArgs(const CommandArgs&) = delete;
+	CommandArgs& operator=(const CommandArgs&) = delete;
+	CommandArgs(CommandArgs&&) = delete;
+	CommandArgs& operator=(CommandArgs&&) = delete;
 
 	int Count() const;
 
@@ -53,7 +53,7 @@ enum class CommandLibraryPrefix
 /**
 *	@brief Manages console commands and cvars with client/server prefixes and stateful callbacks
 */
-class CConCommandSystem final : public IGameSystem
+class ConCommandSystem final : public IGameSystem
 {
 private:
 	struct CVarData
@@ -72,14 +72,14 @@ private:
 		//Store the name in a way that's safe to move construct
 		std::unique_ptr<char[]> Name;
 
-		std::function<void(const CCommandArgs&)> Callback;
+		std::function<void(const CommandArgs&)> Callback;
 	};
 
 public:
-	CConCommandSystem();
-	~CConCommandSystem();
-	CConCommandSystem(const CConCommandSystem&) = delete;
-	CConCommandSystem& operator=(const CConCommandSystem&) = delete;
+	ConCommandSystem();
+	~ConCommandSystem();
+	ConCommandSystem(const ConCommandSystem&) = delete;
+	ConCommandSystem& operator=(const ConCommandSystem&) = delete;
 
 	const char* GetName() const override { return "ConCommands"; }
 
@@ -102,7 +102,7 @@ public:
 	/**
 	*	@brief Creates a command, with a library-specific prefix if @c useLibraryPrefix is CommandLibraryPrefix::Yes
 	*/
-	void CreateCommand(std::string_view name, std::function<void(const CCommandArgs&)>&& callback,
+	void CreateCommand(std::string_view name, std::function<void(const CommandArgs&)>&& callback,
 		CommandLibraryPrefix useLibraryPrefix = CommandLibraryPrefix::Yes);
 
 private:
@@ -119,4 +119,4 @@ private:
 	std::unordered_map<std::string_view, CommandData> m_Commands;
 };
 
-inline CConCommandSystem g_ConCommands;
+inline ConCommandSystem g_ConCommands;

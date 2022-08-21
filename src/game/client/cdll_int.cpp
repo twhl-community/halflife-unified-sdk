@@ -23,7 +23,7 @@
 #include "netadr.h"
 #include "interface.h"
 #include "com_weapons.h"
-#include "CClientLibrary.h"
+#include "ClientLibrary.h"
 //#include "vgui_schememanager.h"
 
 #include "pm_shared.h"

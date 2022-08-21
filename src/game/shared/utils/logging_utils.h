@@ -19,11 +19,11 @@
 
 #include <spdlog/common.h>
 
-#include "CLogSystem.h"
+#include "LogSystem.h"
 
 constexpr std::string_view ToStringView(spdlog::string_view_t view)
 {
 	return {view.data(), view.size()};
 }
 
-inline CLogSystem g_Logging;
+inline LogSystem g_Logging;

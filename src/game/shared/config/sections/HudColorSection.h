@@ -15,7 +15,7 @@
 
 #pragma once
 
-#include "CMapState.h"
+#include "MapState.h"
 #include "palette.h"
 
 #include "config/GameConfigSection.h"
@@ -55,7 +55,7 @@ public:
 
 			UTIL_StringToVector(colorValue, color);
 
-			auto mapState = std::any_cast<CMapState*>(context.UserData);
+			auto mapState = std::any_cast<MapState*>(context.UserData);
 
 			mapState->m_HudColor = {
 				static_cast<std::uint8_t>(colorValue.x),

@@ -25,17 +25,17 @@
 *	@brief Contains per-map state
 *	@details This class should default construct into a valid state and should be move constructible and assignable
 */
-class CMapState final
+class MapState final
 {
 public:
-	CMapState() = default;
-	~CMapState() = default;
+	MapState() = default;
+	~MapState() = default;
 
-	CMapState(const CMapState&) = delete;
-	CMapState& operator=(const CMapState&) = delete;
+	MapState(const MapState&) = delete;
+	MapState& operator=(const MapState&) = delete;
 
-	CMapState(CMapState&&) = default;
-	CMapState& operator=(CMapState&&) = default;
+	MapState(MapState&&) = default;
+	MapState& operator=(MapState&&) = default;
 
 	std::optional<RGB24> m_HudColor;
 	std::optional<SuitLightType> m_LightType;

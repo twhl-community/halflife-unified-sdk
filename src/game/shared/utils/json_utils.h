@@ -31,7 +31,7 @@
 #include "filesystem_utils.h"
 #include "json_fwd.h"
 
-class CCommandArgs;
+class CommandArgs;
 
 const char* JSONTypeToString(json::value_t type);
 
@@ -140,11 +140,11 @@ public:
 		-> std::optional<decltype(callable(json{}))>;
 
 private:
-	void ListSchemas(const CCommandArgs& args);
+	void ListSchemas(const CommandArgs& args);
 
-	void GenerateSchema(const CCommandArgs& args);
+	void GenerateSchema(const CommandArgs& args);
 
-	void GenerateAllSchemas(const CCommandArgs& args);
+	void GenerateAllSchemas(const CommandArgs& args);
 
 	void WriteSchemaToFile(std::string_view schemaName, const json& schema);
 

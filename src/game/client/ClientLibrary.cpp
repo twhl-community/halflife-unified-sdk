@@ -17,7 +17,7 @@
 
 #include "hud.h"
 #include "cbase.h"
-#include "CClientLibrary.h"
+#include "ClientLibrary.h"
 #include "net_api.h"
 #include "parsemsg.h"
 #include "view.h"
@@ -29,7 +29,7 @@
 
 int MsgFunc_SoundRpl(const char* pszName, int iSize, void* pbuf);
 
-bool CClientLibrary::Initialize()
+bool ClientLibrary::Initialize()
 {
 	if (!InitializeCommon())
 	{
@@ -41,7 +41,7 @@ bool CClientLibrary::Initialize()
 	return true;
 }
 
-void CClientLibrary::HudInit()
+void ClientLibrary::HudInit()
 {
 	//Has to be done here because music cvars don't exist at Initialize time.
 	sound::CreateSoundSystem();
@@ -49,14 +49,14 @@ void CClientLibrary::HudInit()
 	sound::g_SoundSystem->GetGameSoundSystem()->LoadSentences();
 }
 
-void CClientLibrary::Shutdown()
+void ClientLibrary::Shutdown()
 {
 	sound::g_SoundSystem.reset();
 
 	ShutdownCommon();
 }
 
-void CClientLibrary::Frame()
+void ClientLibrary::Frame()
 {
 	// Check connection status.
 	net_status_t status;
@@ -119,7 +119,7 @@ void CClientLibrary::Frame()
 	sound::g_SoundSystem->Update();
 }
 
-SDL_Window* CClientLibrary::FindWindow()
+SDL_Window* ClientLibrary::FindWindow()
 {
 	// Find the game window. The window id is a unique identifier that increments starting from 1, so we can cache the value to speed up lookup.
 	while (m_WindowId < std::numeric_limits<Uint32>::max())

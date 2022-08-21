@@ -15,7 +15,7 @@
 
 #pragma once
 
-#include "CMapState.h"
+#include "MapState.h"
 
 #include "config/GameConfigLoader.h"
 #include "config/GameConfigSection.h"
@@ -52,7 +52,7 @@ public:
 		{
 			context.Loader.GetLogger()->debug("Adding global sound replacement file \"{}\"", fileName);
 
-			auto mapState = std::any_cast<CMapState*>(context.UserData);
+			auto mapState = std::any_cast<MapState*>(context.UserData);
 
 			if (!mapState->m_GlobalSoundReplacementFileName.empty())
 			{

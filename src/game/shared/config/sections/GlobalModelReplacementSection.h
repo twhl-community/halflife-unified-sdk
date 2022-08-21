@@ -15,7 +15,7 @@
 
 #pragma once
 
-#include "CMapState.h"
+#include "MapState.h"
 
 #include "config/GameConfigLoader.h"
 #include "config/GameConfigSection.h"
@@ -56,7 +56,7 @@ public:
 
 			if (!map.empty())
 			{
-				auto mapState = std::any_cast<CMapState*>(context.UserData);
+				auto mapState = std::any_cast<MapState*>(context.UserData);
 
 				//Append replacement mappings from other to my map.
 				//To ensure that existing keys are overwritten this is done by appending to the new map and then moving it to ours.
