@@ -19,12 +19,9 @@ class CGunmanCycler : public CBaseMonster
 {
 public:
 	int ObjectCaps() override { return (CBaseEntity::ObjectCaps() | FCAP_IMPULSE_USE); }
-	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 	void OnCreate() override;
 	void Spawn() override;
 	void Think() override;
-	//void Pain( float flDamage );
-	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
 	// Don't treat as a live target
 	bool IsAlive() override { return false; }
@@ -33,17 +30,45 @@ public:
 	bool Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
+	bool KeyValue(KeyValueData* pkvd) override;
+
 	bool m_animate;
+	int m_iSubmodel1;
+	int m_iSubmodel2;
+	int m_iSubmodel3;
 };
 
 LINK_ENTITY_TO_CLASS(gunman_cycler, CGunmanCycler);
 
-TYPEDESCRIPTION CGunmanCycler::m_SaveData[] =
-	{
-		DEFINE_FIELD(CGunmanCycler, m_animate, FIELD_BOOLEAN),
+TYPEDESCRIPTION CGunmanCycler::m_SaveData[] = {
+    DEFINE_FIELD(CGunmanCycler, m_animate, FIELD_BOOLEAN),
+    DEFINE_FIELD(CGunmanCycler, m_iSubmodel1, FIELD_INTEGER),
+    DEFINE_FIELD(CGunmanCycler, m_iSubmodel2, FIELD_INTEGER),
+    DEFINE_FIELD(CGunmanCycler, m_iSubmodel3, FIELD_INTEGER),
 };
 
 IMPLEMENT_SAVERESTORE(CGunmanCycler, CBaseMonster);
+
+bool CGunmanCycler::KeyValue(KeyValueData* pkvd)
+{
+	if (FStrEq(pkvd->szKeyName, "cyc_submodel1"))
+	{
+		m_iSubmodel1 = atoi(pkvd->szValue);
+		return true;
+	}
+	else if(FStrEq(pkvd->szKeyName, "cyc_submodel2"))
+	{
+		m_iSubmodel2 = atoi(pkvd->szValue);
+		return true;
+	}
+	else if (FStrEq(pkvd->szKeyName, "cyc_submodel3"))
+	{
+		m_iSubmodel3 = atoi(pkvd->szValue);
+		return true;
+	}
+
+	return CBaseMonster::KeyValue(pkvd);
+}
 
 void CGunmanCycler::OnCreate()
 {
@@ -55,10 +80,7 @@ void CGunmanCycler::OnCreate()
 void CGunmanCycler::Spawn()
 {
 	const char* szModel = STRING(pev->model);
-
-	const Vector vecMin(-16, -16, 0);
-	const Vector vecMax(16, 16, 72);
-
+    
 	if (!szModel || '\0' == *szModel)
 	{
 		ALERT(at_error, "gunman cycler at %.0f %.0f %0.f missing modelname", pev->origin.x, pev->origin.y, pev->origin.z);
@@ -69,10 +91,14 @@ void CGunmanCycler::Spawn()
 	PrecacheModel(szModel);
 	SetModel(szModel);
 
+    SetBodygroup(1, m_iSubmodel1);
+	SetBodygroup(2, m_iSubmodel2);
+	SetBodygroup(3, m_iSubmodel3);
+
 	InitBoneControllers();
 	pev->solid = SOLID_SLIDEBOX;
 	pev->movetype = MOVETYPE_NONE;
-	pev->takedamage = DAMAGE_YES;
+	pev->takedamage = DAMAGE_NO;
 	pev->effects = 0;
 	pev->yaw_speed = 5;
 	pev->ideal_yaw = pev->angles.y;
@@ -81,7 +107,7 @@ void CGunmanCycler::Spawn()
 	m_flFrameRate = 75;
 	m_flGroundSpeed = 0;
 
-	pev->nextthink += 1.0;
+	pev->nextthink += 1.0f;
 
 	ResetSequenceInfo();
 
@@ -94,13 +120,11 @@ void CGunmanCycler::Spawn()
 	{
 		m_animate = true;
 	}
-
-	UTIL_SetSize(pev, vecMin, vecMax);
 }
 
 void CGunmanCycler::Think()
 {
-	pev->nextthink = gpGlobals->time + 0.1;
+	pev->nextthink = gpGlobals->time + 0.1f;
 
 	if (m_animate)
 	{
@@ -111,8 +135,6 @@ void CGunmanCycler::Think()
 
 	if (m_fSequenceFinished && !m_fSequenceLoops)
 	{
-		// ResetSequenceInfo();
-		// hack to avoid reloading model every frame
 		pev->animtime = gpGlobals->time;
 		pev->framerate = 1.0;
 		m_fSequenceFinished = false;
@@ -121,39 +143,4 @@ void CGunmanCycler::Think()
 		if (!m_animate)
 			pev->framerate = 0.0; // FIX: don't reset framerate
 	}
-}
-
-void CGunmanCycler::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
-{
-	m_animate = !m_animate;
-	if (m_animate)
-		pev->framerate = 1.0;
-	else
-		pev->framerate = 0.0;
-}
-
-bool CGunmanCycler::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
-{
-	if (m_animate)
-	{
-		pev->sequence++;
-
-		ResetSequenceInfo();
-
-		if (m_flFrameRate == 0.0)
-		{
-			pev->sequence = 0;
-			ResetSequenceInfo();
-		}
-		pev->frame = 0;
-	}
-	else
-	{
-		pev->framerate = 1.0;
-		StudioFrameAdvance(0.1);
-		pev->framerate = 0;
-		ALERT(at_console, "sequence: %d, frame %.0f\n", pev->sequence, pev->frame);
-	}
-
-	return false;
 }
