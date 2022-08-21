@@ -72,6 +72,13 @@ void ServerSoundSystem::EmitAmbientSound(edict_t* entity, const Vector& vecOrigi
 
 const char* ServerSoundSystem::CheckForSoundReplacement(const char* soundName) const
 {
+	// Skip stream prefix. This effectively disables all sound streaming.
+	// That's not a problem since streaming has no advantages on modern systems.
+	if (soundName[0] == '*')
+	{
+		++soundName;
+	}
+
 	return g_ReplacementMaps.CheckForReplacement(soundName, g_Server.GetMapState()->m_GlobalSoundReplacement, true);
 }
 
