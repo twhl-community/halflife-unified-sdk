@@ -391,7 +391,7 @@ void CBaseToggle::LinearMove(Vector vecDest, float flSpeed)
 	// Already there?
 	if (vecDest == pev->origin)
 	{
-		LinearMoveDone();
+		LinearMoveDone();	
 		return;
 	}
 

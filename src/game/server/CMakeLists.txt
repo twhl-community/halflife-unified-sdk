@@ -242,7 +242,8 @@ target_sources(server PRIVATE
 	entities/NPCs/racex/voltigore.h
 
 	entities/NPCs/gunman/CGunmanCycler.cpp
-	
+	entities/NPCs/gunman/CGunmanHumanUnarmed.cpp
+
 	gamerules/coopplay_gamerules.cpp
 	gamerules/coopplay_gamerules.h
 	gamerules/ctfplay_gamerules.cpp
