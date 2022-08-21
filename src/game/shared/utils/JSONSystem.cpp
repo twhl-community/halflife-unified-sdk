@@ -72,7 +72,7 @@ public:
 	{
 	}
 
-	void error(const nlohmann::json_pointer<nlohmann::basic_json<>>& pointer, const json& instance,
+	void error(const json::json_pointer& pointer, const json& instance,
 		const std::string& message) override
 	{
 		basic_error_handler::error(pointer, instance, message);
@@ -91,6 +91,8 @@ public:
 
 		m_Logger.error("Error validating JSON \"{}\" with value \"{}\": {}",
 			formatContents(pointer.to_string()), formatContents(instance.dump()), message);
+
+		basic_error_handler::error(pointer, instance, message);
 	}
 
 private:
