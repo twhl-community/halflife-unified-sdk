@@ -60,14 +60,14 @@ public:
 	*/
 	void MapIsEnding()
 	{
-		m_isStartingNewMap = true;
+		m_IsStartingNewMap = true;
 	}
 
 	bool CheckForNewMapStart(bool loadGame)
 	{
-		if (m_isStartingNewMap)
+		if (m_IsStartingNewMap)
 		{
-			m_isStartingNewMap = false;
+			m_IsStartingNewMap = false;
 			NewMapStarted(loadGame);
 			return true;
 		}
@@ -115,7 +115,7 @@ private:
 	std::shared_ptr<const GameConfigDefinition> m_MapConfigDefinition;
 	std::shared_ptr<const GameConfigDefinition> m_MapChangeConfigDefinition;
 
-	bool m_isStartingNewMap = true;
+	bool m_IsStartingNewMap = true;
 
 	MapState m_MapState;
 };
