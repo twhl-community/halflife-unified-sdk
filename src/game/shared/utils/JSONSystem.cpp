@@ -91,8 +91,6 @@ public:
 
 		m_Logger.error("Error validating JSON \"{}\" with value \"{}\": {}",
 			formatContents(pointer.to_string()), formatContents(instance.dump()), message);
-
-		basic_error_handler::error(pointer, instance, message);
 	}
 
 private:
