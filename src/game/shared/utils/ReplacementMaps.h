@@ -29,7 +29,6 @@ using Replacements = std::unordered_map<std::string, std::string, TransparentStr
 
 /**
  *	@brief A map of string to string for replacements.
- *	@details Do not modify these maps after they've been loaded. Any modification will invalidate pointers to values.
  */
 struct ReplacementMap
 {
@@ -50,11 +49,6 @@ struct ReplacementMap
 	const Replacements& GetAll() const noexcept { return m_Replacements; }
 
 	const char* Lookup(const char* value, bool lowercase) const noexcept;
-
-	void Add(const ReplacementMap& other)
-	{
-		m_Replacements.insert(other.m_Replacements.begin(), other.m_Replacements.end());
-	}
 
 private:
 	Replacements m_Replacements;

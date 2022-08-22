@@ -52,18 +52,15 @@ public:
 		{
 			context.Loader.GetLogger()->debug("Adding global sentence replacement file \"{}\"", fileName);
 
-			auto map = g_ReplacementMaps.Load(fileName);
+			auto mapState = std::any_cast<MapState*>(context.UserData);
 
-			if (!map.empty())
+			if (!mapState->m_GlobalSentenceReplacement.empty())
 			{
-				auto mapState = std::any_cast<MapState*>(context.UserData);
-
-				//Append replacement mappings from other to my map.
-				//To ensure that existing keys are overwritten this is done by appending to the new map and then moving it to ours.
-				map.Add(mapState->m_GlobalSentenceReplacement);
-
-				mapState->m_GlobalSentenceReplacement = std::move(map);
+				context.Loader.GetLogger()->error("Only one global sentence replacement file may be specified");
+				return false;
 			}
+
+			mapState->m_GlobalSentenceReplacement = g_ReplacementMaps.Load(fileName);
 		}
 
 		return true;

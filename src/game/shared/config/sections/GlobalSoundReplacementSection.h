@@ -54,9 +54,8 @@ public:
 
 			auto mapState = std::any_cast<MapState*>(context.UserData);
 
-			if (!mapState->m_GlobalSoundReplacementFileName.empty())
+			if (!mapState->m_GlobalSoundReplacement.empty())
 			{
-				// Can't support more than one due to networking limitations.
 				context.Loader.GetLogger()->error("Only one global sound replacement file may be specified");
 				return false;
 			}
@@ -71,16 +70,7 @@ public:
 				return false;
 			}
 
-			auto map = g_ReplacementMaps.Load(fileName, {.ConvertToLowercase = true});
-
-			if (!map.empty())
-			{
-				//Append replacement mappings from other to my map.
-				//To ensure that existing keys are overwritten this is done by appending to the new map and then moving it to ours.
-				map.Add(mapState->m_GlobalSoundReplacement);
-
-				mapState->m_GlobalSoundReplacement = std::move(map);
-			}
+			mapState->m_GlobalSoundReplacement = g_ReplacementMaps.Load(fileName, {.ConvertToLowercase = true});
 		}
 
 		return true;
