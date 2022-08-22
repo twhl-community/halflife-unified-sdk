@@ -58,7 +58,7 @@ void SentencesSystem::NewMapStarted()
 					   { return 0 == strcmp(candidate.GroupName.c_str(), name.c_str()); }) != m_SentenceGroups.end();
 		};
 
-		for (const auto& [original, replacement] : g_Server.GetMapState()->m_GlobalSentenceReplacement.GetAll())
+		for (const auto& [original, replacement] : g_Server.GetMapState()->m_GlobalSentenceReplacement->GetAll())
 		{
 			if (!isSentence(original) && !isGroup(original))
 			{
@@ -357,6 +357,6 @@ int SentencesSystem::PickSequential(int isentenceg, SentenceIndexName& found, in
 
 const char* SentencesSystem::CheckForSentenceReplacement(const char* sentenceName) const
 {
-	return g_Server.GetMapState()->m_GlobalSentenceReplacement.Lookup(sentenceName, false);
+	return g_Server.GetMapState()->m_GlobalSentenceReplacement->Lookup(sentenceName, false);
 }
 }

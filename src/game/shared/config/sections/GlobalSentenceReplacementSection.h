@@ -54,7 +54,7 @@ public:
 
 			auto mapState = std::any_cast<MapState*>(context.UserData);
 
-			if (!mapState->m_GlobalSentenceReplacement.empty())
+			if (!mapState->m_GlobalSentenceReplacement->empty())
 			{
 				context.Loader.GetLogger()->error("Only one global sentence replacement file may be specified");
 				return false;

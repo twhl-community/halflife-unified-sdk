@@ -40,9 +40,9 @@ public:
 	std::optional<RGB24> m_HudColor;
 	std::optional<SuitLightType> m_LightType;
 
-	ReplacementMap m_GlobalModelReplacement;
-	ReplacementMap m_GlobalSentenceReplacement;
+	const ReplacementMap* m_GlobalModelReplacement{&ReplacementMap::Empty};
+	const ReplacementMap* m_GlobalSentenceReplacement{&ReplacementMap::Empty};
 
 	Filename m_GlobalSoundReplacementFileName;
-	ReplacementMap m_GlobalSoundReplacement;
+	const ReplacementMap* m_GlobalSoundReplacement{&ReplacementMap::Empty};
 };

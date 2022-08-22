@@ -287,7 +287,7 @@ float UTIL_SharedRandomFloat(unsigned int seed, float low, float high)
 const char* UTIL_CheckForGlobalModelReplacement(const char* s)
 {
 #ifndef CLIENT_DLL
-	s = g_Server.GetMapState()->m_GlobalModelReplacement.Lookup(s, true);
+	s = g_Server.GetMapState()->m_GlobalModelReplacement->Lookup(s, true);
 #endif
 
 	return s;

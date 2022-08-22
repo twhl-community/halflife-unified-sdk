@@ -108,6 +108,8 @@ void ServerLibrary::NewMapStarted(bool loadGame)
 	//Initialize map state to its default state
 	m_MapState = MapState{};
 
+	g_ReplacementMaps.Clear();
+
 	//Load the config files, which will initialize the map state as needed
 	LoadServerConfigFiles();
 

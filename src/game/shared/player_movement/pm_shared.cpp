@@ -164,7 +164,7 @@ void PM_PlaySound(int channel, const char* sample, float volume, float attenuati
 #ifndef CLIENT_DLL
 	sample = sound::g_ServerSound.CheckForSoundReplacement(sample);
 #else
-	sample = sound::g_ClientSoundReplacement.Lookup(sample, true);
+	sample = sound::g_ClientSoundReplacement->Lookup(sample, true);
 #endif
 
 	pmove->PM_PlaySound(channel, sample, volume, attenuation, fFlags, pitch);

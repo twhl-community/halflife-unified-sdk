@@ -54,7 +54,7 @@ public:
 
 			auto mapState = std::any_cast<MapState*>(context.UserData);
 
-			if (!mapState->m_GlobalSoundReplacement.empty())
+			if (!mapState->m_GlobalSoundReplacement->empty())
 			{
 				context.Loader.GetLogger()->error("Only one global sound replacement file may be specified");
 				return false;

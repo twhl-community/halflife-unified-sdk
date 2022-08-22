@@ -101,6 +101,11 @@ void ReplacementMapSystem::Shutdown()
 	m_Logger.reset();
 }
 
+void ReplacementMapSystem::Clear()
+{
+	m_ReplacementMaps.clear();
+}
+
 ReplacementMap ReplacementMapSystem::Parse(const json& input, const ReplacementMapOptions& options) const
 {
 	m_Logger->trace("Parsing replacement map with options:\n{}", options);
@@ -140,14 +145,27 @@ ReplacementMap ReplacementMapSystem::Parse(const json& input, const ReplacementM
 	return ReplacementMap{std::move(map)};
 }
 
-ReplacementMap ReplacementMapSystem::Load(const std::string& fileName, const ReplacementMapOptions& options) const
+const ReplacementMap* ReplacementMapSystem::Load(const std::string& fileName, const ReplacementMapOptions& options)
 {
+	std::string normalizedFileName{fileName};
+
+	ToLower(normalizedFileName);
+
+	if (auto it = m_ReplacementMaps.find(normalizedFileName); it != m_ReplacementMaps.end())
+	{
+		return it->second.get();
+	}
+
 	const auto pathID = options.LoadFromAllPaths ? nullptr : "GAMECONFIG";
 
-	return g_JSON.ParseJSONFile(
+	auto map = g_JSON.ParseJSONFile(
 					 fileName.c_str(),
 					 {.SchemaName = ReplacementMapSchemaName, .PathID = pathID},
 					 [&, this](const json& input)
 					 { return Parse(input, options); })
 		.value_or(ReplacementMap{});
+
+	const auto result = m_ReplacementMaps.emplace(std::move(normalizedFileName), std::make_unique<ReplacementMap>(std::move(map)));
+
+	return result.first->second.get();
 }

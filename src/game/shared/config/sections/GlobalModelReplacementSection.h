@@ -54,7 +54,7 @@ public:
 
 			auto mapState = std::any_cast<MapState*>(context.UserData);
 
-			if (!mapState->m_GlobalModelReplacement.empty())
+			if (!mapState->m_GlobalModelReplacement->empty())
 			{
 				context.Loader.GetLogger()->error("Only one global model replacement file may be specified");
 				return false;

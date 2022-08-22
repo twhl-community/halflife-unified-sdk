@@ -32,6 +32,8 @@ using Replacements = std::unordered_map<std::string, std::string, TransparentStr
  */
 struct ReplacementMap
 {
+	static const ReplacementMap Empty;
+
 	explicit ReplacementMap() = default;
 
 	explicit ReplacementMap(Replacements&& replacements)
@@ -54,6 +56,8 @@ private:
 	Replacements m_Replacements;
 };
 
+const inline ReplacementMap ReplacementMap::Empty;
+
 struct ReplacementMapOptions
 {
 	/**
@@ -68,7 +72,7 @@ struct ReplacementMapOptions
 };
 
 /**
-*	@brief Handles the registration of the replacement map schema and the loading of files.
+*	@brief Handles the registration of the replacement map schema and the loading and caching of files.
 */
 class ReplacementMapSystem final : public IGameSystem
 {
@@ -81,13 +85,17 @@ public:
 
 	void Shutdown() override;
 
-	ReplacementMap Load(const std::string& fileName, const ReplacementMapOptions& options = {}) const;
+	void Clear();
+
+	const ReplacementMap* Load(const std::string& fileName, const ReplacementMapOptions& options = {});
 
 private:
 	ReplacementMap Parse(const json& input, const ReplacementMapOptions& options) const;
 
 private:
 	std::shared_ptr<spdlog::logger> m_Logger;
+
+	std::unordered_map<std::string, std::unique_ptr<ReplacementMap>> m_ReplacementMaps;
 };
 
 inline ReplacementMapSystem g_ReplacementMaps;
