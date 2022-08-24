@@ -175,7 +175,7 @@ static void S_PlaySound(const CommandArgs& args, int channelIndex)
 	}
 
 	g_SoundSystem->GetGameSoundSystem()->StartSound(
-		entityIndex, channelIndex, name, origin, volume, attenuation, pitch, 0);
+		entityIndex, channelIndex, name, origin, volume, attenuation, pitch, SND_PLAY_WHEN_PAUSED);
 }
 
 static void S_PlayStaticSound(const CommandArgs& args)

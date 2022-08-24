@@ -257,6 +257,13 @@ void GameSoundSystem::Pause()
 		return;
 	}
 
+	if (m_Paused)
+	{
+		return;
+	}
+
+	m_Paused = true;
+
 	for (auto& channel : m_Channels)
 	{
 		alSourcePause(channel.Source.Id);
@@ -269,6 +276,13 @@ void GameSoundSystem::Resume()
 	{
 		return;
 	}
+
+	if (!m_Paused)
+	{
+		return;
+	}
+
+	m_Paused = false;
 
 	for (auto& channel : m_Channels)
 	{
@@ -367,7 +381,10 @@ void GameSoundSystem::StartSound(
 
 	if (SetupChannel(*newChannel, entityIndex, channelIndex, std::move(sound), origin, volume, pitch, attenuation, false))
 	{
-		alSourcePlay(newChannel->Source.Id);
+		if (!m_Paused || (flags & SND_PLAY_WHEN_PAUSED) != 0)
+		{
+			alSourcePlay(newChannel->Source.Id);
+		}
 	}
 	else
 	{

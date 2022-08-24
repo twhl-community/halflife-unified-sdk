@@ -115,6 +115,7 @@ private:
 	std::vector<Channel> m_Channels;
 
 	bool m_Blocked{false};
+	bool m_Paused{false};
 
 	float m_LastKnownVolume{-1};
 };
