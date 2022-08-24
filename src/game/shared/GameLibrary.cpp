@@ -15,18 +15,18 @@
 
 #include "cbase.h"
 
-#include "CGameLibrary.h"
+#include "GameLibrary.h"
 
 #include "config/GameConfigLoader.h"
 
-#include "scripting/AS/CASManager.h"
+#include "scripting/AS/ASManager.h"
 
-#include "utils/command_utils.h"
+#include "utils/ConCommandSystem.h"
 #include "utils/GameSystem.h"
-#include "utils/json_utils.h"
+#include "utils/JSONSystem.h"
 #include "utils/ReplacementMaps.h"
 
-void CGameLibrary::AddGameSystems()
+void GameLibrary::AddGameSystems()
 {
 	//Done separately before game systems to avoid tightly coupling logging to json.
 	g_Logging.PreInitialize();
@@ -43,7 +43,7 @@ void CGameLibrary::AddGameSystems()
 	g_GameSystems.Add(&g_ReplacementMaps);
 }
 
-bool CGameLibrary::InitializeCommon()
+bool GameLibrary::InitializeCommon()
 {
 	if (!FileSystem_LoadFileSystem())
 	{
@@ -65,7 +65,7 @@ bool CGameLibrary::InitializeCommon()
 	return true;
 }
 
-void CGameLibrary::ShutdownCommon()
+void GameLibrary::ShutdownCommon()
 {
 	g_GameSystems.InvokeReverse(&IGameSystem::Shutdown);
 	g_GameSystems.RemoveAll();

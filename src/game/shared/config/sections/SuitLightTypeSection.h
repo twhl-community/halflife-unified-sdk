@@ -18,11 +18,11 @@
 #include <sstream>
 
 #include "cdll_dll.h"
-#include "CMapState.h"
+#include "MapState.h"
 
 #include "config/GameConfigSection.h"
 
-#include "utils/json_utils.h"
+#include "utils/JSONSystem.h"
 #include "utils/shared_utils.h"
 
 /**
@@ -79,7 +79,7 @@ public:
 		{
 			if (auto value = SuitLightTypeFromString(type); value)
 			{
-				auto mapState = std::any_cast<CMapState*>(context.UserData);
+				auto mapState = std::any_cast<MapState*>(context.UserData);
 
 				mapState->m_LightType = *value;
 			}

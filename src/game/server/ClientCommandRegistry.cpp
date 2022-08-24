@@ -1,6 +1,6 @@
-#include "CClientCommandRegistry.h"
+#include "ClientCommandRegistry.h"
 
-std::shared_ptr<const CClientCommand> CClientCommandRegistry::Find(std::string_view name) const
+std::shared_ptr<const ClientCommand> ClientCommandRegistry::Find(std::string_view name) const
 {
 	if (auto it = m_Commands.find(name); it != m_Commands.end())
 	{
@@ -10,8 +10,8 @@ std::shared_ptr<const CClientCommand> CClientCommandRegistry::Find(std::string_v
 	return {};
 }
 
-std::shared_ptr<const CClientCommand> CClientCommandRegistry::Create(
-	std::string_view name, std::function<void(CBasePlayer*, const CCommandArgs&)>&& function, const CClientCommandCreateArguments arguments)
+std::shared_ptr<const ClientCommand> ClientCommandRegistry::Create(
+	std::string_view name, std::function<void(CBasePlayer*, const CommandArgs&)>&& function, const CClientCommandCreateArguments arguments)
 {
 	if (Find(name))
 	{
@@ -26,14 +26,14 @@ std::shared_ptr<const CClientCommand> CClientCommandRegistry::Create(
 		return {};
 	}
 
-	auto command = std::make_shared<CClientCommand>(this, name, arguments.Flags, std::move(function));
+	auto command = std::make_shared<ClientCommand>(this, name, arguments.Flags, std::move(function));
 
 	m_Commands.emplace(command->Name, command);
 
 	return command;
 }
 
-void CClientCommandRegistry::Remove(const std::shared_ptr<const CClientCommand>& command)
+void ClientCommandRegistry::Remove(const std::shared_ptr<const ClientCommand>& command)
 {
 	if (!command)
 	{

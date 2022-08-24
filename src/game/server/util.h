@@ -28,7 +28,7 @@
 
 // TODO: need a cleaner way to split server and client dependencies to avoid pulling them in with the precompiled header.
 #ifndef CLIENT_DLL
-#include "sound/CSentencesSystem.h"
+#include "sound/SentencesSystem.h"
 #endif
 
 inline globalvars_t* gpGlobals = nullptr;

@@ -15,12 +15,12 @@
 
 #include <string_view>
 
-#include <spdlog/fmt/fmt.h>
+#include <fmt/format.h>
 
 #include "cbase.h"
-#include "command_utils.h"
+#include "ConCommandSystem.h"
 
-#include "json_utils.h"
+#include "JSONSystem.h"
 
 using namespace std::literals;
 using namespace nlohmann::json_schema;
@@ -72,7 +72,7 @@ public:
 	{
 	}
 
-	void error(const nlohmann::json_pointer<nlohmann::basic_json<>>& pointer, const json& instance,
+	void error(const json::json_pointer& pointer, const json& instance,
 		const std::string& message) override
 	{
 		basic_error_handler::error(pointer, instance, message);
@@ -273,7 +273,7 @@ std::optional<json> JSONSystem::LoadJSONFile(const char* fileName, const JSONLoa
 	return {};
 }
 
-void JSONSystem::ListSchemas(const CCommandArgs& args)
+void JSONSystem::ListSchemas(const CommandArgs& args)
 {
 	if (!IsDebugEnabled())
 	{
@@ -288,7 +288,7 @@ void JSONSystem::ListSchemas(const CCommandArgs& args)
 	}
 }
 
-void JSONSystem::GenerateSchema(const CCommandArgs& args)
+void JSONSystem::GenerateSchema(const CommandArgs& args)
 {
 	if (!IsDebugEnabled())
 	{
@@ -316,7 +316,7 @@ void JSONSystem::GenerateSchema(const CCommandArgs& args)
 	}
 }
 
-void JSONSystem::GenerateAllSchemas(const CCommandArgs& args)
+void JSONSystem::GenerateAllSchemas(const CommandArgs& args)
 {
 	if (!IsDebugEnabled())
 	{

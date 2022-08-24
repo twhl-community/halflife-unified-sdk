@@ -18,18 +18,18 @@
 /**
 *	@brief Handles core game actions
 */
-class CGameLibrary
+class GameLibrary
 {
 protected:
-	CGameLibrary() = default;
+	GameLibrary() = default;
 
 public:
-	virtual ~CGameLibrary() = default;
+	virtual ~GameLibrary() = default;
 
-	CGameLibrary(const CGameLibrary&) = delete;
-	CGameLibrary& operator=(const CGameLibrary&) = delete;
-	CGameLibrary(CGameLibrary&&) = delete;
-	CGameLibrary& operator=(CGameLibrary&&) = delete;
+	GameLibrary(const GameLibrary&) = delete;
+	GameLibrary& operator=(const GameLibrary&) = delete;
+	GameLibrary(GameLibrary&&) = delete;
+	GameLibrary& operator=(GameLibrary&&) = delete;
 
 protected:
 	virtual void AddGameSystems();

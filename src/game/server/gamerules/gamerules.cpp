@@ -28,13 +28,13 @@ edict_t* EntSelectSpawnPoint(CBasePlayer* pPlayer);
 
 CGameRules::CGameRules()
 {
-	m_SpectateCommand = g_ClientCommands.CreateScoped("spectate", [this](CBasePlayer* player, const CCommandArgs& args)
+	m_SpectateCommand = g_ClientCommands.CreateScoped("spectate", [this](CBasePlayer* player, const auto& args)
 		{
 			// clients wants to become a spectator
 			BecomeSpectator(player, args);
 		});
 
-	m_SpecModeCommand = g_ClientCommands.CreateScoped("specmode", [this](CBasePlayer* player, const CCommandArgs& args)
+	m_SpecModeCommand = g_ClientCommands.CreateScoped("specmode", [this](CBasePlayer* player, const auto& args)
 		{
 			// new spectator mode
 			if (player->IsObserver())
@@ -185,7 +185,7 @@ bool CGameRules::CanHavePlayerItem(CBasePlayer* pPlayer, CBasePlayerItem* pWeapo
 	return true;
 }
 
-void CGameRules::BecomeSpectator(CBasePlayer* player, const CCommandArgs& args)
+void CGameRules::BecomeSpectator(CBasePlayer* player, const CommandArgs& args)
 {
 	//Default implementation: applies to all game modes, even singleplayer.
 

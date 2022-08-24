@@ -9,7 +9,7 @@
 #include <string>
 
 #include "hud.h"
-#include "CClientLibrary.h"
+#include "ClientLibrary.h"
 #include "camera.h"
 #include "kbutton.h"
 #include "cvardef.h"

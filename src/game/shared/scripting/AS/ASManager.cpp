@@ -16,30 +16,30 @@
 #include <exception>
 #include <string>
 
-#include <spdlog/fmt/fmt.h>
+#include <fmt/format.h>
 
 #include "cbase.h"
 
 #include "as_utils.h"
-#include "CASManager.h"
+#include "ASManager.h"
 
 using namespace as;
 
-CASManager::CASManager() = default;
-CASManager::~CASManager() = default;
+ASManager::ASManager() = default;
+ASManager::~ASManager() = default;
 
-bool CASManager::Initialize()
+bool ASManager::Initialize()
 {
 	m_Logger = g_Logging.CreateLogger("angelscript");
 	return true;
 }
 
-void CASManager::Shutdown()
+void ASManager::Shutdown()
 {
 	m_Logger.reset();
 }
 
-EnginePtr CASManager::CreateEngine()
+EnginePtr ASManager::CreateEngine()
 {
 	if (!m_Logger)
 	{
@@ -56,13 +56,13 @@ EnginePtr CASManager::CreateEngine()
 	}
 
 	//Configure engine
-	engine->SetMessageCallback(asMETHOD(CASManager, OnMessageCallback), this, asCALL_THISCALL);
-	engine->SetTranslateAppExceptionCallback(asMETHOD(CASManager, OnTranslateAppExceptionCallback), this, asCALL_THISCALL);
+	engine->SetMessageCallback(asMETHOD(ASManager, OnMessageCallback), this, asCALL_THISCALL);
+	engine->SetTranslateAppExceptionCallback(asMETHOD(ASManager, OnTranslateAppExceptionCallback), this, asCALL_THISCALL);
 
 	return engine;
 }
 
-UniquePtr<asIScriptContext> CASManager::CreateContext(asIScriptEngine& engine)
+UniquePtr<asIScriptContext> ASManager::CreateContext(asIScriptEngine& engine)
 {
 	if (!m_Logger)
 	{
@@ -79,12 +79,12 @@ UniquePtr<asIScriptContext> CASManager::CreateContext(asIScriptEngine& engine)
 	}
 
 	//Configure context
-	context->SetExceptionCallback(asMETHOD(CASManager, OnThrownExceptionCallback), this, asCALL_THISCALL);
+	context->SetExceptionCallback(asMETHOD(ASManager, OnThrownExceptionCallback), this, asCALL_THISCALL);
 
 	return context;
 }
 
-as::ModulePtr CASManager::CreateModule(asIScriptEngine& engine, const char* moduleName)
+as::ModulePtr ASManager::CreateModule(asIScriptEngine& engine, const char* moduleName)
 {
 	as::ModulePtr module{engine.GetModule(moduleName, asGM_ALWAYS_CREATE)};
 
@@ -97,7 +97,7 @@ as::ModulePtr CASManager::CreateModule(asIScriptEngine& engine, const char* modu
 	return module;
 }
 
-bool CASManager::HandleAddScriptSectionResult(int returnCode, std::string_view moduleName, std::string_view sectionName)
+bool ASManager::HandleAddScriptSectionResult(int returnCode, std::string_view moduleName, std::string_view sectionName)
 {
 	if (asSUCCESS < returnCode)
 	{
@@ -108,7 +108,7 @@ bool CASManager::HandleAddScriptSectionResult(int returnCode, std::string_view m
 	return true;
 }
 
-bool CASManager::HandleBuildResult(int returnCode, std::string_view moduleName)
+bool ASManager::HandleBuildResult(int returnCode, std::string_view moduleName)
 {
 	if (asSUCCESS > returnCode)
 	{
@@ -119,7 +119,7 @@ bool CASManager::HandleBuildResult(int returnCode, std::string_view moduleName)
 	return true;
 }
 
-bool CASManager::PrepareContext(asIScriptContext& context, asIScriptFunction* function)
+bool ASManager::PrepareContext(asIScriptContext& context, asIScriptFunction* function)
 {
 	if (!function)
 	{
@@ -138,7 +138,7 @@ bool CASManager::PrepareContext(asIScriptContext& context, asIScriptFunction* fu
 	return true;
 }
 
-void CASManager::UnprepareContext(asIScriptContext& context)
+void ASManager::UnprepareContext(asIScriptContext& context)
 {
 	const int result = context.Unprepare();
 
@@ -148,7 +148,7 @@ void CASManager::UnprepareContext(asIScriptContext& context)
 	}
 }
 
-bool CASManager::ExecuteContext(asIScriptContext& context)
+bool ASManager::ExecuteContext(asIScriptContext& context)
 {
 	if (m_Logger->level() <= spdlog::level::trace)
 	{
@@ -176,7 +176,7 @@ bool CASManager::ExecuteContext(asIScriptContext& context)
 	return true;
 }
 
-void CASManager::OnMessageCallback(const asSMessageInfo* msg)
+void ASManager::OnMessageCallback(const asSMessageInfo* msg)
 {
 	const auto level = [&]()
 	{
@@ -204,7 +204,7 @@ void CASManager::OnMessageCallback(const asSMessageInfo* msg)
 	}
 }
 
-void CASManager::OnTranslateAppExceptionCallback(asIScriptContext* context)
+void ASManager::OnTranslateAppExceptionCallback(asIScriptContext* context)
 {
 	//See https://www.angelcode.com/angelscript/sdk/docs/manual/doc_cpp_exceptions.html
 	try
@@ -223,7 +223,7 @@ void CASManager::OnTranslateAppExceptionCallback(asIScriptContext* context)
 	}
 }
 
-void CASManager::OnThrownExceptionCallback(asIScriptContext* context)
+void ASManager::OnThrownExceptionCallback(asIScriptContext* context)
 {
 	//Log exception info for debugging purposes.
 	assert(m_Logger);

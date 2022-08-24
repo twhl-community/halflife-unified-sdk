@@ -31,11 +31,11 @@
 *	The use of a factory ensures that things like engine settings, error handling,
 *	etc are consistent between all instances.
 */
-class CASManager final : public IGameSystem
+class ASManager final : public IGameSystem
 {
 public:
-	CASManager();
-	~CASManager();
+	ASManager();
+	~ASManager();
 
 	const char* GetName() const override { return "Angelscript manager"; }
 
@@ -71,4 +71,4 @@ private:
 	std::shared_ptr<spdlog::logger> m_Logger;
 };
 
-inline CASManager g_ASManager;
+inline ASManager g_ASManager;

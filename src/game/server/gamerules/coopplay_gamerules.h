@@ -15,7 +15,7 @@
 
 #include <memory>
 
-#include "CClientCommandRegistry.h"
+#include "ClientCommandRegistry.h"
 
 class CHalfLifeCoopplay : public CHalfLifeMultiplay
 {
@@ -74,5 +74,5 @@ private:
 	bool m_DisableDeathMessages;
 	bool m_DisableDeathPenalty;
 
-	CScopedClientCommand m_MenuSelectCommand;
+	ScopedClientCommand m_MenuSelectCommand;
 };

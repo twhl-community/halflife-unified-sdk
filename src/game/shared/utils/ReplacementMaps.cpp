@@ -16,7 +16,7 @@
 #include <fmt/format.h>
 
 #include "cbase.h"
-#include "json_utils.h"
+#include "JSONSystem.h"
 #include "ReplacementMaps.h"
 
 using namespace std::literals;
@@ -65,6 +65,28 @@ LoadFromAllPaths = {}
 	}
 };
 
+static const char* LookupReplacement(const Replacements& map, const char* searchString, const char* originalValue)
+{
+	if (auto it = map.find(searchString); it != map.end())
+	{
+		return it->second.c_str();
+	}
+
+	return originalValue;
+}
+
+const char* ReplacementMap::Lookup(const char* value, bool lowercase) const noexcept
+{
+	if (lowercase)
+	{
+		Filename searchString{value};
+		searchString.make_lower();
+		return LookupReplacement(m_Replacements, searchString.c_str(), value);
+	}
+
+	return LookupReplacement(m_Replacements, value, value);
+}
+
 bool ReplacementMapSystem::Initialize()
 {
 	m_Logger = g_Logging.CreateLogger("replacementmap");
@@ -79,11 +101,16 @@ void ReplacementMapSystem::Shutdown()
 	m_Logger.reset();
 }
 
+void ReplacementMapSystem::Clear()
+{
+	m_ReplacementMaps.clear();
+}
+
 ReplacementMap ReplacementMapSystem::Parse(const json& input, const ReplacementMapOptions& options) const
 {
 	m_Logger->trace("Parsing replacement map with options:\n{}", options);
 
-	ReplacementMap map;
+	Replacements map;
 
 	if (input.is_object())
 	{
@@ -115,34 +142,30 @@ ReplacementMap ReplacementMapSystem::Parse(const json& input, const ReplacementM
 		}
 	}
 
-	return map;
+	return ReplacementMap{std::move(map)};
 }
 
-ReplacementMap ReplacementMapSystem::Load(const std::string& fileName, const ReplacementMapOptions& options) const
+const ReplacementMap* ReplacementMapSystem::Load(const std::string& fileName, const ReplacementMapOptions& options)
 {
+	std::string normalizedFileName{fileName};
+
+	ToLower(normalizedFileName);
+
+	if (auto it = m_ReplacementMaps.find(normalizedFileName); it != m_ReplacementMaps.end())
+	{
+		return it->second.get();
+	}
+
 	const auto pathID = options.LoadFromAllPaths ? nullptr : "GAMECONFIG";
 
-	return g_JSON.ParseJSONFile(
+	auto map = g_JSON.ParseJSONFile(
 					 fileName.c_str(),
 					 {.SchemaName = ReplacementMapSchemaName, .PathID = pathID},
 					 [&, this](const json& input)
 					 { return Parse(input, options); })
 		.value_or(ReplacementMap{});
-}
 
-const char* ReplacementMapSystem::CheckForReplacement(const char* value, const ReplacementMap& map, bool lowerCase)
-{
-	RelativeFilename searchString{value};
+	const auto result = m_ReplacementMaps.emplace(std::move(normalizedFileName), std::make_unique<ReplacementMap>(std::move(map)));
 
-	if (lowerCase)
-	{
-		searchString.make_lower();
-	}
-
-	if (auto it = map.find(searchString.c_str()); it != map.end())
-	{
-		value = it->second.c_str();
-	}
-
-	return value;
+	return result.first->second.get();
 }

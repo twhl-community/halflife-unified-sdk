@@ -26,8 +26,8 @@
 #include "cbase.h"
 #include "skill.h"
 
-#include "command_utils.h"
-#include "json_utils.h"
+#include "ConCommandSystem.h"
+#include "JSONSystem.h"
 #include "config/GameConfigLoader.h"
 
 using namespace std::literals;
@@ -112,7 +112,7 @@ bool SkillSystem::Initialize()
 	g_JSON.RegisterSchema(SkillConfigSchemaName, &GetSkillConfigSchema);
 
 	g_ConCommands.CreateCommand(
-		"sk_find", [this](const CCommandArgs& args)
+		"sk_find", [this](const auto& args)
 		{
 			if (args.Count() != 2)
 			{
@@ -151,7 +151,7 @@ bool SkillSystem::Initialize()
 		CommandLibraryPrefix::No);
 
 	g_ConCommands.CreateCommand(
-		"sk_set", [this](const CCommandArgs& args)
+		"sk_set", [this](const auto& args)
 		{
 			if (args.Count() != 3)
 			{
@@ -175,7 +175,7 @@ bool SkillSystem::Initialize()
 		CommandLibraryPrefix::No);
 
 	g_ConCommands.CreateCommand(
-		"sk_remove", [this](const CCommandArgs& args)
+		"sk_remove", [this](const auto& args)
 		{
 			if (args.Count() != 2)
 			{
@@ -189,7 +189,7 @@ bool SkillSystem::Initialize()
 
 	//Don't name this sk_remove_all because the console will always autocomplete sk_remove to that.
 	g_ConCommands.CreateCommand(
-		"sk_reset", [this](const CCommandArgs& args)
+		"sk_reset", [this](const auto& args)
 		{
 			if (args.Count() != 1)
 			{
@@ -202,7 +202,7 @@ bool SkillSystem::Initialize()
 		CommandLibraryPrefix::No);
 
 	g_ConCommands.CreateCommand(
-		"sk_reload", [this](const CCommandArgs& args)
+		"sk_reload", [this](const auto& args)
 		{ LoadSkillConfigFile(); },
 		CommandLibraryPrefix::No);
 

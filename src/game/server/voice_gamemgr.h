@@ -10,7 +10,7 @@
 #include <memory>
 #include <optional>
 
-#include "CClientCommandRegistry.h"
+#include "ClientCommandRegistry.h"
 #include "voice_common.h"
 
 
@@ -72,6 +72,6 @@ private:
 	int m_nMaxPlayers;
 	double m_UpdateInterval; // How long since the last update.
 
-	std::shared_ptr<const CClientCommand> m_VBanCommand;
-	std::shared_ptr<const CClientCommand> m_VModEnableCommand;
+	std::shared_ptr<const ClientCommand> m_VBanCommand;
+	std::shared_ptr<const ClientCommand> m_VModEnableCommand;
 };

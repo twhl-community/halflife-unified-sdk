@@ -21,7 +21,7 @@ void ClientDisconnect(edict_t* pEntity);
 void ClientKill(edict_t* pEntity);
 void ClientPutInServer(edict_t* pEntity);
 void SV_CreateClientCommands();
-void ClientCommand(edict_t* pEntity);
+void ExecuteClientCommand(edict_t* pEntity);
 void ClientUserInfoChanged(edict_t* pEntity, char* infobuffer);
 void ServerActivate(edict_t* pEdictList, int edictCount, int clientMax);
 void ServerDeactivate();

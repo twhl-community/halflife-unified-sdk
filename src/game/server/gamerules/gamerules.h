@@ -20,7 +20,7 @@
 
 #include <memory>
 
-#include "CClientCommandRegistry.h"
+#include "ClientCommandRegistry.h"
 
 class CBasePlayerItem;
 class CBasePlayer;
@@ -183,11 +183,11 @@ public:
 protected:
 	CBasePlayerItem* FindNextBestWeapon(CBasePlayer* pPlayer, CBasePlayerItem* pCurrentWeapon);
 
-	virtual void BecomeSpectator(CBasePlayer* player, const CCommandArgs& args);
+	virtual void BecomeSpectator(CBasePlayer* player, const CommandArgs& args);
 
 private:
-	CScopedClientCommand m_SpectateCommand;
-	CScopedClientCommand m_SpecModeCommand;
+	ScopedClientCommand m_SpectateCommand;
+	ScopedClientCommand m_SpecModeCommand;
 };
 
 CGameRules* InstallGameRules(CBaseEntity* pWorld);

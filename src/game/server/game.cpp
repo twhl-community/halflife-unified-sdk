@@ -13,7 +13,7 @@
 *
 ****/
 #include "cbase.h"
-#include "CServerLibrary.h"
+#include "ServerLibrary.h"
 
 cvar_t displaysoundlist = {"displaysoundlist", "0"};
 

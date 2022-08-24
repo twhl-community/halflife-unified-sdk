@@ -36,7 +36,7 @@
 #include "hltv.h"
 #include "UserMessages.h"
 #include "client.h"
-#include "CServerLibrary.h"
+#include "ServerLibrary.h"
 
 #include "rope/CRope.h"
 

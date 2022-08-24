@@ -159,7 +159,7 @@ private:
 
 	void UpdateVolume(bool force = false);
 
-	void Music_Command(const CCommandArgs& args);
+	void Music_Command(const CommandArgs& args);
 
 private:
 	std::shared_ptr<spdlog::logger> m_Logger;

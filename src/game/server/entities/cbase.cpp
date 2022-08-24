@@ -14,7 +14,7 @@
 ****/
 #include "cbase.h"
 #include "client.h"
-#include "CServerLibrary.h"
+#include "ServerLibrary.h"
 
 void EntvarsKeyvalue(entvars_t* pev, KeyValueData* pkvd);
 
@@ -55,7 +55,7 @@ static DLL_FUNCTIONS gFunctionTable =
 		ClientDisconnect,	   //pfnClientDisconnect
 		ClientKill,			   //pfnClientKill
 		ClientPutInServer,	   //pfnClientPutInServer
-		ClientCommand,		   //pfnClientCommand
+		ExecuteClientCommand,  // pfnClientCommand
 		ClientUserInfoChanged, //pfnClientUserInfoChanged
 		ServerActivate,		   //pfnServerActivate
 		ServerDeactivate,	   //pfnServerDeactivate

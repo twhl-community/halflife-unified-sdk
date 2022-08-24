@@ -17,11 +17,11 @@
 #include <stdexcept>
 #include <string_view>
 
-#include <spdlog/fmt/fmt.h>
+#include <fmt/format.h>
 
 #include "cbase.h"
 #include "client.h"
-#include "CServerLibrary.h"
+#include "ServerLibrary.h"
 #include "ProjectInfo.h"
 #include "skill.h"
 #include "UserMessages.h"
@@ -36,7 +36,7 @@
 #include "config/sections/HudColorSection.h"
 #include "config/sections/SuitLightTypeSection.h"
 
-#include "sound/CSentencesSystem.h"
+#include "sound/SentencesSystem.h"
 #include "sound/ServerSoundSystem.h"
 
 using namespace std::literals;
@@ -70,10 +70,10 @@ static void AddCommonConfigSections(std::vector<std::unique_ptr<const GameConfig
 	sections.push_back(std::make_unique<EchoSection>());
 }
 
-CServerLibrary::CServerLibrary() = default;
-CServerLibrary::~CServerLibrary() = default;
+ServerLibrary::ServerLibrary() = default;
+ServerLibrary::~ServerLibrary() = default;
 
-bool CServerLibrary::Initialize()
+bool ServerLibrary::Initialize()
 {
 	if (!InitializeCommon())
 	{
@@ -92,7 +92,7 @@ bool CServerLibrary::Initialize()
 	return true;
 }
 
-void CServerLibrary::Shutdown()
+void ServerLibrary::Shutdown()
 {
 	m_MapConfigDefinition.reset();
 	m_MapChangeConfigDefinition.reset();
@@ -101,12 +101,14 @@ void CServerLibrary::Shutdown()
 	ShutdownCommon();
 }
 
-void CServerLibrary::NewMapStarted(bool loadGame)
+void ServerLibrary::NewMapStarted(bool loadGame)
 {
 	ClearStringPool();
 
 	//Initialize map state to its default state
-	m_MapState = CMapState{};
+	m_MapState = MapState{};
+
+	g_ReplacementMaps.Clear();
 
 	//Load the config files, which will initialize the map state as needed
 	LoadServerConfigFiles();
@@ -121,16 +123,16 @@ void CServerLibrary::NewMapStarted(bool loadGame)
 	}
 }
 
-void CServerLibrary::PreMapActivate()
+void ServerLibrary::PreMapActivate()
 {
 }
 
-void CServerLibrary::PostMapActivate()
+void ServerLibrary::PostMapActivate()
 {
 	LoadMapChangeConfigFile();
 }
 
-void CServerLibrary::PlayerActivating(CBasePlayer* player)
+void ServerLibrary::PlayerActivating(CBasePlayer* player)
 {
 	MESSAGE_BEGIN(MSG_ONE, gmsgProjectInfo, nullptr, player->edict());
 	WRITE_LONG(UnifiedSDKVersionMajor);
@@ -162,15 +164,15 @@ void CServerLibrary::PlayerActivating(CBasePlayer* player)
 	}
 }
 
-void CServerLibrary::AddGameSystems()
+void ServerLibrary::AddGameSystems()
 {
-	CGameLibrary::AddGameSystems();
+	GameLibrary::AddGameSystems();
 	g_GameSystems.Add(&g_Skill);
 	g_GameSystems.Add(&sound::g_ServerSound);
 	g_GameSystems.Add(&sentences::g_Sentences);
 }
 
-void CServerLibrary::CreateConfigDefinitions()
+void ServerLibrary::CreateConfigDefinitions()
 {
 	m_ServerConfigDefinition = g_GameConfigLoader.CreateDefinition("ServerGameConfig", []()
 		{
@@ -214,7 +216,7 @@ void CServerLibrary::CreateConfigDefinitions()
 		}());
 }
 
-void CServerLibrary::LoadConfigFile(const char* fileName, const GameConfigDefinition& definition, GameConfigLoadParameters parameters)
+void ServerLibrary::LoadConfigFile(const char* fileName, const GameConfigDefinition& definition, GameConfigLoadParameters parameters)
 {
 	//Configuration will apply to the map state object
 	parameters.UserData = &m_MapState;
@@ -222,7 +224,7 @@ void CServerLibrary::LoadConfigFile(const char* fileName, const GameConfigDefini
 	g_GameConfigLoader.TryLoad(fileName, definition, parameters);
 }
 
-void CServerLibrary::LoadServerConfigFiles()
+void ServerLibrary::LoadServerConfigFiles()
 {
 	//Configure the config conditionals
 	//TODO: need to get this from gamerules
@@ -247,7 +249,7 @@ void CServerLibrary::LoadServerConfigFiles()
 	}
 }
 
-void CServerLibrary::LoadMapChangeConfigFile()
+void ServerLibrary::LoadMapChangeConfigFile()
 {
 	if (const auto cfgFile = mapchangecfgfile.string; cfgFile && '\0' != cfgFile[0])
 	{
@@ -255,7 +257,7 @@ void CServerLibrary::LoadMapChangeConfigFile()
 	}
 }
 
-std::unordered_set<std::string> CServerLibrary::GetMapConfigCommandWhitelist()
+std::unordered_set<std::string> ServerLibrary::GetMapConfigCommandWhitelist()
 {
 	//Load the whitelist from a file
 	auto whitelist = g_JSON.ParseJSONFile(

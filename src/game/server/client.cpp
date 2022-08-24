@@ -33,8 +33,8 @@
 #include "netadr.h"
 #include "pm_shared.h"
 #include "UserMessages.h"
-#include "CClientCommandRegistry.h"
-#include "CServerLibrary.h"
+#include "ClientCommandRegistry.h"
+#include "ServerLibrary.h"
 
 #include "ctf/CTFGoal.h"
 #include "ctf/CTFGoalFlag.h"
@@ -496,28 +496,28 @@ void Host_Say(edict_t* pEntity, bool teamonly)
 
 void SV_CreateClientCommands()
 {
-	g_ClientCommands.Create("say", [](CBasePlayer* player, const CCommandArgs& args)
+	g_ClientCommands.Create("say", [](CBasePlayer* player, const auto& args)
 		{ Host_Say(player->edict(), false); });
 
 
-	g_ClientCommands.Create("say_team", [](CBasePlayer* player, const CCommandArgs& args)
+	g_ClientCommands.Create("say_team", [](CBasePlayer* player, const auto& args)
 		{ Host_Say(player->edict(), true); });
 
-	g_ClientCommands.Create("fullupdate", [](CBasePlayer* player, const CCommandArgs& args)
+	g_ClientCommands.Create("fullupdate", [](CBasePlayer* player, const auto& args)
 		{ player->ForceClientDllUpdate(); });
 
-	g_ClientCommands.Create("give", [](CBasePlayer* player, const CCommandArgs& args)
+	g_ClientCommands.Create("give", [](CBasePlayer* player, const auto& args)
 		{
 			int iszItem = ALLOC_STRING(args.Argument(1)); // Make a copy of the classname
 			player->GiveNamedItem(STRING(iszItem)); },
 		{.Flags = ClientCommandFlag::Cheat});
 
-	g_ClientCommands.Create("drop", [](CBasePlayer* player, const CCommandArgs& args)
+	g_ClientCommands.Create("drop", [](CBasePlayer* player, const auto& args)
 		{
 			// player is dropping an item.
 			player->DropPlayerItem(args.Argument(1)); });
 
-	g_ClientCommands.Create("fov", [](CBasePlayer* player, const CCommandArgs& args)
+	g_ClientCommands.Create("fov", [](CBasePlayer* player, const auto& args)
 		{
 			if (0 != g_psv_cheats->value && args.Count() > 1)
 			{
@@ -528,7 +528,7 @@ void SV_CreateClientCommands()
 				CLIENT_PRINTF(player->edict(), print_console, UTIL_VarArgs("\"fov\" is \"%d\"\n", (int)player->m_iFOV));
 			} });
 
-	g_ClientCommands.Create("set_hud_color", [](CBasePlayer* player, const CCommandArgs& args)
+	g_ClientCommands.Create("set_hud_color", [](CBasePlayer* player, const auto& args)
 		{
 			if (args.Count() >= 4)
 			{
@@ -545,7 +545,7 @@ void SV_CreateClientCommands()
 			} },
 		{.Flags = ClientCommandFlag::Cheat});
 
-	g_ClientCommands.Create("set_suit_light_type", [](CBasePlayer* player, const CCommandArgs& args)
+	g_ClientCommands.Create("set_suit_light_type", [](CBasePlayer* player, const auto& args)
 		{
 			if (args.Count() > 1)
 			{
@@ -562,10 +562,10 @@ void SV_CreateClientCommands()
 			} },
 		{.Flags = ClientCommandFlag::Cheat});
 
-	g_ClientCommands.Create("use", [](CBasePlayer* player, const CCommandArgs& args)
+	g_ClientCommands.Create("use", [](CBasePlayer* player, const auto& args)
 		{ player->SelectItem(args.Argument(1)); });
 
-	g_ClientCommands.Create("selectweapon", [](CBasePlayer* player, const CCommandArgs& args)
+	g_ClientCommands.Create("selectweapon", [](CBasePlayer* player, const auto& args)
 		{
 			if (args.Count() > 1)
 			{
@@ -576,14 +576,14 @@ void SV_CreateClientCommands()
 				CLIENT_PRINTF(player->edict(), print_console, "usage: selectweapon <weapon name>\n");
 			} });
 
-	g_ClientCommands.Create("lastinv", [](CBasePlayer* player, const CCommandArgs& args)
+	g_ClientCommands.Create("lastinv", [](CBasePlayer* player, const auto& args)
 		{ player->SelectLastItem(); });
 
-	g_ClientCommands.Create("closemenus", [](CBasePlayer* player, const CCommandArgs& args)
+	g_ClientCommands.Create("closemenus", [](CBasePlayer* player, const auto& args)
 		{
 			/* just ignore it*/ });
 
-	g_ClientCommands.Create("follownext", [](CBasePlayer* player, const CCommandArgs& args)
+	g_ClientCommands.Create("follownext", [](CBasePlayer* player, const auto& args)
 		{
 			// follow next player
 			if (player->IsObserver())
@@ -608,7 +608,7 @@ called each time a player uses a "cmd" command
 ============
 */
 // Use CMD_ARGV,  CMD_ARGV, and CMD_ARGC to get pointers the character string command.
-void ClientCommand(edict_t* pEntity)
+void ExecuteClientCommand(edict_t* pEntity)
 {
 	// Is the client spawned yet?
 	if (!pEntity->pvPrivateData)
@@ -621,7 +621,7 @@ void ClientCommand(edict_t* pEntity)
 	{
 		if ((clientCommand->Flags & ClientCommandFlag::Cheat) == 0 || UTIL_CheatsAllowed(player, clientCommand->Name))
 		{
-			clientCommand->Function(player, CCommandArgs{});
+			clientCommand->Function(player, CommandArgs{});
 		}
 	}
 	else

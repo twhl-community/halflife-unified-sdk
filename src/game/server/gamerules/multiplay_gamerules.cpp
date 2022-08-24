@@ -64,7 +64,7 @@ CHalfLifeMultiplay::CHalfLifeMultiplay()
 	// share a single config file. (sjb)
 
 	// This has been deprecated and replaced with JSON-based config files.
-	// See CServerLibrary::LoadServerConfigFiles
+	// See ServerLibrary::LoadServerConfigFiles
 	/*
 	if (IS_DEDICATED_SERVER())
 	{

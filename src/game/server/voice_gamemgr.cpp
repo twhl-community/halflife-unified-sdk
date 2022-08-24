@@ -110,7 +110,7 @@ bool CVoiceGameMgr::Init(
 	if (!CVAR_GET_POINTER("sv_alltalk"))
 		CVAR_REGISTER(&sv_alltalk);
 
-	m_VBanCommand = g_ClientCommands.Create("vban", [this](CBasePlayer* player, const CCommandArgs& args)
+	m_VBanCommand = g_ClientCommands.Create("vban", [this](CBasePlayer* player, const auto& args)
 		{
 			const auto playerClientIndex = GetAndValidatePlayerIndex(player, args.Argument(0));
 
@@ -143,7 +143,7 @@ bool CVoiceGameMgr::Init(
 			//UpdateMasks();
 		});
 
-	m_VModEnableCommand = g_ClientCommands.Create("VModEnable", [this](CBasePlayer* player, const CCommandArgs& args)
+	m_VModEnableCommand = g_ClientCommands.Create("VModEnable", [this](CBasePlayer* player, const auto& args)
 		{
 			const auto playerClientIndex = GetAndValidatePlayerIndex(player, args.Argument(0));
 

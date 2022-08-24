@@ -1,13 +1,13 @@
 #include "cbase.h"
 
-#include "CStringPool.h"
+#include "StringPool.h"
 
-const char* CStringPool::Allocate(const char* string)
+const char* StringPool::Allocate(const char* string)
 {
 	//Treat null pointers as empty strings
 	if (!string)
 	{
-		ALERT(at_warning, "nullptr string passed to CStringPool::Allocate\n");
+		ALERT(at_warning, "nullptr string passed to StringPool::Allocate\n");
 		return "";
 	}
 
