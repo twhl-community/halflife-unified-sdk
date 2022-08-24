@@ -26,7 +26,7 @@
 
 #include "MusicSystem.h"
 
-#include "utils/command_utils.h"
+#include "utils/ConCommandSystem.h"
 
 namespace sound
 {
@@ -498,7 +498,7 @@ void MusicSystem::UpdateVolume(bool force)
 	}
 }
 
-void MusicSystem::Music_Command(const CCommandArgs& args)
+void MusicSystem::Music_Command(const CommandArgs& args)
 {
 	auto command = args.Count() >= 2 ? args.Argument(1) : "";
 

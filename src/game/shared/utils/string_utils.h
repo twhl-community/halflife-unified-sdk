@@ -18,6 +18,13 @@
 #include <string>
 #include <string_view>
 
+#include <spdlog/common.h>
+
+constexpr [[nodiscard]] std::string_view ToStringView(spdlog::string_view_t view)
+{
+	return {view.data(), view.size()};
+}
+
 /**
 *	@brief Trims whitespace at the start of the given text.
 */

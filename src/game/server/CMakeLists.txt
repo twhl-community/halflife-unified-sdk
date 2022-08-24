@@ -28,23 +28,22 @@ target_sources(server PRIVATE
 	cdll_dll.h
 	client.cpp
 	client.h
-	CClientCommandRegistry.cpp
-	CClientCommandRegistry.h
-	CMapState.cpp
-	CMapState.h
-	CServerLibrary.cpp
-	CServerLibrary.h
+	ClientCommandRegistry.cpp
+	ClientCommandRegistry.h
 	decals.h
 	enginecallback.h
 	extdll.h
 	game.cpp
 	game.h
 	h_export.cpp
+	MapState.h
 	nodes.cpp
 	nodes.h
 	plane.cpp
 	plane.h
 	saverestore.h
+	ServerLibrary.cpp
+	ServerLibrary.h
 	skill.cpp
 	skill.h
 	UserMessages.cpp
@@ -262,8 +261,8 @@ target_sources(server PRIVATE
 	gamerules/teamplay_gamerules.cpp
 	gamerules/teamplay_gamerules.h
 	
-	sound/CSentencesSystem.cpp
-	sound/CSentencesSystem.h
+	sound/SentencesSystem.cpp
+	sound/SentencesSystem.h
 	sound/ServerSoundSystem.cpp
 	sound/ServerSoundSystem.h
 	

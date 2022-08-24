@@ -17,23 +17,23 @@
 
 #include <SDL2/SDL_video.h>
 
-#include "CGameLibrary.h"
+#include "GameLibrary.h"
 
 #include "netadr.h"
 
 /**
 *	@brief Handles core client actions
 */
-class CClientLibrary final : public CGameLibrary
+class ClientLibrary final : public GameLibrary
 {
 public:
-	CClientLibrary() = default;
-	~CClientLibrary() = default;
+	ClientLibrary() = default;
+	~ClientLibrary() = default;
 
-	CClientLibrary(const CClientLibrary&) = delete;
-	CClientLibrary& operator=(const CClientLibrary&) = delete;
-	CClientLibrary(CClientLibrary&&) = delete;
-	CClientLibrary& operator=(CClientLibrary&&) = delete;
+	ClientLibrary(const ClientLibrary&) = delete;
+	ClientLibrary& operator=(const ClientLibrary&) = delete;
+	ClientLibrary(ClientLibrary&&) = delete;
+	ClientLibrary& operator=(ClientLibrary&&) = delete;
 
 	/**
 	*	@brief Handles client-side initialization
@@ -69,4 +69,4 @@ private:
 	Uint32 m_WindowId = 0;
 };
 
-inline CClientLibrary g_Client;
+inline ClientLibrary g_Client;

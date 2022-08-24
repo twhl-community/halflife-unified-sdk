@@ -19,5 +19,5 @@
 
 namespace sound
 {
-inline ReplacementMap g_ClientSoundReplacement;
+inline const ReplacementMap* g_ClientSoundReplacement{&ReplacementMap::Empty};
 }

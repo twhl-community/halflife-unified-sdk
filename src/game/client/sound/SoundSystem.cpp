@@ -22,7 +22,7 @@
 #include "MusicSystem.h"
 #include "SoundSystem.h"
 
-#include "utils/command_utils.h"
+#include "utils/ConCommandSystem.h"
 
 namespace sound
 {
@@ -144,7 +144,7 @@ static int UserMsg_EmitSound(const char* pszName, int iSize, void* pbuf)
 	return 1;
 }
 
-static void S_PlaySound(const CCommandArgs& args, int channelIndex)
+static void S_PlaySound(const CommandArgs& args, int channelIndex)
 {
 	if (args.Count() < 2)
 	{
@@ -178,12 +178,12 @@ static void S_PlaySound(const CCommandArgs& args, int channelIndex)
 		entityIndex, channelIndex, name, origin, volume, attenuation, pitch, 0);
 }
 
-static void S_PlayStaticSound(const CCommandArgs& args)
+static void S_PlayStaticSound(const CommandArgs& args)
 {
 	S_PlaySound(args, CHAN_STATIC);
 }
 
-static void S_PlayDynamicSound(const CCommandArgs& args)
+static void S_PlayDynamicSound(const CommandArgs& args)
 {
 	S_PlaySound(args, CHAN_VOICE);
 }

@@ -57,8 +57,8 @@ find_package(Angelscript CONFIG REQUIRED)
 find_package(OpenAL CONFIG REQUIRED)
 find_package(EASTL CONFIG REQUIRED)
 
-option(BUILD_EXAMPLES "" OFF)
-option(BUILD_TESTS "" OFF)
+option(JSON_VALIDATOR_BUILD_EXAMPLES "" OFF)
+option(JSON_VALIDATOR_BUILD_TESTS "" OFF)
 add_subdirectory(external/json-schema-validator
 	json-validator-binary-dir
 	EXCLUDE_FROM_ALL)

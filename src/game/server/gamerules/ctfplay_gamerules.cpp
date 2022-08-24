@@ -455,7 +455,7 @@ CHalfLifeCTFplay::CHalfLifeCTFplay()
 		}
 	}
 
-	m_CancelMenuCommand = g_ClientCommands.CreateScoped("cancelmenu", [](CBasePlayer* player, const CCommandArgs& args)
+	m_CancelMenuCommand = g_ClientCommands.CreateScoped("cancelmenu", [](CBasePlayer* player, const auto& args)
 		{
 			if (player->m_iCurrentMenu == MENU_CLASS)
 			{
@@ -479,16 +479,16 @@ CHalfLifeCTFplay::CHalfLifeCTFplay()
 			}
 		});
 
-	m_EndMotdCommand = g_ClientCommands.CreateScoped("endmotd", [](CBasePlayer* player, const CCommandArgs& args)
+	m_EndMotdCommand = g_ClientCommands.CreateScoped("endmotd", [](CBasePlayer* player, const auto& args)
 		{
 			player->m_iCurrentMenu = MENU_TEAM;
 			player->Player_Menu();
 		});
 
-	m_JoinTeamCommand = g_ClientCommands.CreateScoped("jointeam", [](CBasePlayer* player, const CCommandArgs& args)
+	m_JoinTeamCommand = g_ClientCommands.CreateScoped("jointeam", [](CBasePlayer* player, const auto& args)
 		{ player->Menu_Team_Input(atoi(CMD_ARGV(1))); });
 
-	m_SelectCharCommand = g_ClientCommands.CreateScoped("selectchar", [](CBasePlayer* player, const CCommandArgs& args)
+	m_SelectCharCommand = g_ClientCommands.CreateScoped("selectchar", [](CBasePlayer* player, const auto& args)
 		{
 			if (args.Count() > 1)
 			{
@@ -496,7 +496,7 @@ CHalfLifeCTFplay::CHalfLifeCTFplay()
 			}
 		});
 
-	m_ChangeTeamCommand = g_ClientCommands.CreateScoped("changeteam", [](CBasePlayer* player, const CCommandArgs& args)
+	m_ChangeTeamCommand = g_ClientCommands.CreateScoped("changeteam", [](CBasePlayer* player, const auto& args)
 		{
 			if (player->m_iCurrentMenu == MENU_TEAM)
 			{
@@ -509,7 +509,7 @@ CHalfLifeCTFplay::CHalfLifeCTFplay()
 			}
 		});
 
-	m_ChangeClassCommand = g_ClientCommands.CreateScoped("changeclass", [](CBasePlayer* player, const CCommandArgs& args)
+	m_ChangeClassCommand = g_ClientCommands.CreateScoped("changeclass", [](CBasePlayer* player, const auto& args)
 		{
 			if (player->m_iNewTeamNum != CTFTeam::None || player->m_iTeamNum != CTFTeam::None)
 			{
@@ -532,7 +532,7 @@ CHalfLifeCTFplay::CHalfLifeCTFplay()
 			}
 		});
 
-	m_FlagInfoCommand = g_ClientCommands.CreateScoped("flaginfo", [](CBasePlayer* player, const CCommandArgs& args)
+	m_FlagInfoCommand = g_ClientCommands.CreateScoped("flaginfo", [](CBasePlayer* player, const auto& args)
 		{ DumpCTFFlagInfo(player); });
 }
 
@@ -1861,7 +1861,7 @@ void CHalfLifeCTFplay::RecountTeams()
 	}
 }
 
-void CHalfLifeCTFplay::BecomeSpectator(CBasePlayer* player, const CCommandArgs& args)
+void CHalfLifeCTFplay::BecomeSpectator(CBasePlayer* player, const CommandArgs& args)
 {
 	//CTF game mode: make sure player has gamemode settings applied properly.
 	player->Menu_Team_Input(-1);

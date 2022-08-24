@@ -16,10 +16,10 @@
 #include <string>
 #include <string_view>
 
-#include <spdlog/fmt/fmt.h>
+#include <fmt/format.h>
 
 #include "cbase.h"
-#include "command_utils.h"
+#include "ConCommandSystem.h"
 
 #ifdef CLIENT_DLL
 #include "hud.h"
@@ -31,32 +31,32 @@
 */
 constexpr char CommandLineCVarPrefix = ':';
 
-int CCommandArgs::Count() const
+int CommandArgs::Count() const
 {
 	return CMD_ARGC();
 }
 
-const char* CCommandArgs::Argument(int index) const
+const char* CommandArgs::Argument(int index) const
 {
 	return CMD_ARGV(index);
 }
 
-CConCommandSystem::CConCommandSystem() = default;
-CConCommandSystem::~CConCommandSystem() = default;
+ConCommandSystem::ConCommandSystem() = default;
+ConCommandSystem::~ConCommandSystem() = default;
 
-bool CConCommandSystem::Initialize()
+bool ConCommandSystem::Initialize()
 {
 	m_Logger = g_Logging.CreateLogger("cvar");
 
 	return true;
 }
 
-void CConCommandSystem::PostInitialize()
+void ConCommandSystem::PostInitialize()
 {
 	//Nothing.
 }
 
-void CConCommandSystem::Shutdown()
+void ConCommandSystem::Shutdown()
 {
 	m_Commands.clear();
 	m_Cvars.clear();
@@ -64,16 +64,16 @@ void CConCommandSystem::Shutdown()
 	m_Logger.reset();
 }
 
-cvar_t* CConCommandSystem::GetCVar(const char* name) const
+cvar_t* ConCommandSystem::GetCVar(const char* name) const
 {
 	return g_engfuncs.pfnCVarGetPointer(name);
 }
 
-cvar_t* CConCommandSystem::CreateCVar(std::string_view name, const char* defaultValue, int flags, CommandLibraryPrefix useLibraryPrefix)
+cvar_t* ConCommandSystem::CreateCVar(std::string_view name, const char* defaultValue, int flags, CommandLibraryPrefix useLibraryPrefix)
 {
 	if (name.empty() || !defaultValue)
 	{
-		m_Logger->error("CConCommandSystem::CreateCVar: Invalid cvar data");
+		m_Logger->error("ConCommandSystem::CreateCVar: Invalid cvar data");
 		return nullptr;
 	}
 
@@ -82,7 +82,7 @@ cvar_t* CConCommandSystem::CreateCVar(std::string_view name, const char* default
 	if (std::find_if(m_Cvars.begin(), m_Cvars.end(), [&](const auto& data)
 			{ return data.Name.get() == completeName; }) != m_Cvars.end())
 	{
-		m_Logger->warn("CConCommandSystem::CreateCVar: CVar \"{}\" already registered", completeName);
+		m_Logger->warn("ConCommandSystem::CreateCVar: CVar \"{}\" already registered", completeName);
 
 		//Can't guarantee that the cvar is the same so return null
 		return nullptr;
@@ -133,11 +133,11 @@ cvar_t* CConCommandSystem::CreateCVar(std::string_view name, const char* default
 	return cvar.CVar;
 }
 
-void CConCommandSystem::CreateCommand(std::string_view name, std::function<void(const CCommandArgs&)>&& callback, CommandLibraryPrefix useLibraryPrefix)
+void ConCommandSystem::CreateCommand(std::string_view name, std::function<void(const CommandArgs&)>&& callback, CommandLibraryPrefix useLibraryPrefix)
 {
 	if (name.empty() || !callback)
 	{
-		m_Logger->error("CConCommandSystem::CreateCommand: Invalid command data");
+		m_Logger->error("ConCommandSystem::CreateCommand: Invalid command data");
 		return;
 	}
 
@@ -145,7 +145,7 @@ void CConCommandSystem::CreateCommand(std::string_view name, std::function<void(
 
 	if (m_Commands.contains(completeName))
 	{
-		m_Logger->warn("CConCommandSystem::CreateCommand: Command \"{}\" already registered", completeName);
+		m_Logger->warn("ConCommandSystem::CreateCommand: Command \"{}\" already registered", completeName);
 		return;
 	}
 
@@ -161,17 +161,17 @@ void CConCommandSystem::CreateCommand(std::string_view name, std::function<void(
 
 	m_Commands.emplace(key, std::move(data));
 
-	g_engfuncs.pfnAddServerCommand(key.data(), &CConCommandSystem::CommandCallbackWrapper);
+	g_engfuncs.pfnAddServerCommand(key.data(), &ConCommandSystem::CommandCallbackWrapper);
 }
 
-void CConCommandSystem::CommandCallbackWrapper()
+void ConCommandSystem::CommandCallbackWrapper()
 {
 	g_ConCommands.CommandCallback();
 }
 
-void CConCommandSystem::CommandCallback()
+void ConCommandSystem::CommandCallback()
 {
-	const CCommandArgs args{};
+	const CommandArgs args{};
 
 	if (auto it = m_Commands.find(args.Argument(0)); it != m_Commands.end())
 	{
@@ -180,11 +180,11 @@ void CConCommandSystem::CommandCallback()
 	else
 	{
 		//Should never happen
-		m_Logger->error("CConCommandSystem::CommandCallback: Couldn't find command \"{}\"", args.Argument(0));
+		m_Logger->error("ConCommandSystem::CommandCallback: Couldn't find command \"{}\"", args.Argument(0));
 	}
 }
 
-const char* CConCommandSystem::TryGetCVarCommandLineValue(std::string_view name) const
+const char* ConCommandSystem::TryGetCVarCommandLineValue(std::string_view name) const
 {
 	const auto parameter = fmt::format("{}{}", CommandLineCVarPrefix, name);
 

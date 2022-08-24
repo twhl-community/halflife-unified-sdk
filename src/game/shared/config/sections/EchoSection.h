@@ -18,7 +18,7 @@
 #include "config/GameConfigLoader.h"
 #include "config/GameConfigSection.h"
 
-#include "utils/json_utils.h"
+#include "utils/JSONSystem.h"
 
 /**
 *	@brief Simple section that echoes a message provided in the config file.

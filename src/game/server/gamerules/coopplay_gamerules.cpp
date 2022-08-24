@@ -27,7 +27,7 @@ CHalfLifeCoopplay::CHalfLifeCoopplay()
 	m_DisableDeathPenalty = false;
 	g_engfuncs.pfnCVarSetFloat("mp_allowmonsters", 1);
 
-	m_MenuSelectCommand = g_ClientCommands.CreateScoped("menuselect", [](CBasePlayer* player, const CCommandArgs& args)
+	m_MenuSelectCommand = g_ClientCommands.CreateScoped("menuselect", [](CBasePlayer* player, const auto& args)
 		{
 			if (CMD_ARGC() < 2)
 				return;

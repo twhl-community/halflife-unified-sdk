@@ -20,7 +20,7 @@
 
 #include <memory>
 
-#include "CClientCommandRegistry.h"
+#include "ClientCommandRegistry.h"
 
 #define MAX_TEAMNAME_LENGTH 16
 #define MAX_TEAMS 32
@@ -60,5 +60,5 @@ private:
 	bool m_teamLimit; // This means the server set only some teams as valid
 	char m_szTeamList[TEAMPLAY_TEAMLISTLENGTH];
 
-	CScopedClientCommand m_MenuSelectCommand;
+	ScopedClientCommand m_MenuSelectCommand;
 };

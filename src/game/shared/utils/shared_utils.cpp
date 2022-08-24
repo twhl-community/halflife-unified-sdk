@@ -17,15 +17,15 @@
 
 #include "cbase.h"
 #include "shared_utils.h"
-#include "CStringPool.h"
+#include "StringPool.h"
 
 #ifndef CLIENT_DLL
-#include "CMapState.h"
-#include "CServerLibrary.h"
+#include "MapState.h"
+#include "ServerLibrary.h"
 #include "sound/ServerSoundSystem.h"
 #endif
 
-CStringPool g_StringPool;
+StringPool g_StringPool;
 
 string_t ALLOC_STRING(const char* str)
 {
@@ -72,7 +72,7 @@ string_t ALLOC_ESCAPED_STRING(const char* str)
 void ClearStringPool()
 {
 	//This clears the pool and frees memory
-	g_StringPool = CStringPool{};
+	g_StringPool = StringPool{};
 }
 
 void Con_Printf(const char* format, ...)
@@ -287,7 +287,7 @@ float UTIL_SharedRandomFloat(unsigned int seed, float low, float high)
 const char* UTIL_CheckForGlobalModelReplacement(const char* s)
 {
 #ifndef CLIENT_DLL
-	s = g_ReplacementMaps.CheckForReplacement(s, g_Server.GetMapState()->m_GlobalModelReplacement, true);
+	s = g_Server.GetMapState()->m_GlobalModelReplacement->Lookup(s, true);
 #endif
 
 	return s;

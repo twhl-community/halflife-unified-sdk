@@ -78,11 +78,11 @@ target_link_options(client PRIVATE
 	$<$<PLATFORM_ID:Darwin>:-framework Carbon>)
 
 target_sources(client PRIVATE
-	CClientLibrary.cpp
-	CClientLibrary.h
 	cdll_int.cpp
 	cl_dll.h
 	cl_util.h
+	ClientLibrary.cpp
+	ClientLibrary.h
 	com_weapons.cpp
 	com_weapons.h
 	$<$<PLATFORM_ID:Windows>:DelayLoad.cpp>

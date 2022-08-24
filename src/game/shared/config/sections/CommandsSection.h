@@ -22,8 +22,9 @@
 #include <string_view>
 #include <unordered_set>
 
+#include <fmt/format.h>
+
 #include <spdlog/logger.h>
-#include <spdlog/fmt/fmt.h>
 
 #include "config/GameConfigSection.h"
 

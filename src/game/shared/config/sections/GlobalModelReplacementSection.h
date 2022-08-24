@@ -15,12 +15,12 @@
 
 #pragma once
 
-#include "CMapState.h"
+#include "MapState.h"
 
 #include "config/GameConfigLoader.h"
 #include "config/GameConfigSection.h"
 
-#include "utils/json_utils.h"
+#include "utils/JSONSystem.h"
 #include "utils/ReplacementMaps.h"
 
 /**
@@ -52,18 +52,15 @@ public:
 		{
 			context.Loader.GetLogger()->debug("Adding global model replacement file \"{}\"", fileName);
 
-			auto map = g_ReplacementMaps.Load(fileName, {.ConvertToLowercase = true});
+			auto mapState = std::any_cast<MapState*>(context.UserData);
 
-			if (!map.empty())
+			if (!mapState->m_GlobalModelReplacement->empty())
 			{
-				auto mapState = std::any_cast<CMapState*>(context.UserData);
-
-				//Append replacement mappings from other to my map.
-				//To ensure that existing keys are overwritten this is done by appending to the new map and then moving it to ours.
-				map.insert(mapState->m_GlobalModelReplacement.begin(), mapState->m_GlobalModelReplacement.end());
-
-				mapState->m_GlobalModelReplacement = std::move(map);
+				context.Loader.GetLogger()->error("Only one global model replacement file may be specified");
+				return false;
 			}
+
+			mapState->m_GlobalModelReplacement = g_ReplacementMaps.Load(fileName, {.ConvertToLowercase = true});
 		}
 
 		return true;

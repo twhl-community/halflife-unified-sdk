@@ -27,9 +27,9 @@
 #include "GameSystem.h"
 #include "json_fwd.h"
 
-class CCommandArgs;
+class CommandArgs;
 
-class CLogSystem final : public IGameSystem
+class LogSystem final : public IGameSystem
 {
 private:
 	static constexpr spdlog::level::level_enum DefaultLogLevel = spdlog::level::info;
@@ -65,10 +65,10 @@ private:
 	};
 
 public:
-	CLogSystem();
-	~CLogSystem();
-	CLogSystem(const CLogSystem&) = delete;
-	CLogSystem& operator=(const CLogSystem&) = delete;
+	LogSystem();
+	~LogSystem();
+	LogSystem(const LogSystem&) = delete;
+	LogSystem& operator=(const LogSystem&) = delete;
 
 	const char* GetName() const override { return "Logging"; }
 
@@ -93,9 +93,9 @@ private:
 
 	void ListLoggers();
 
-	void SetLogLevel(const CCommandArgs& args);
+	void SetLogLevel(const CommandArgs& args);
 
-	void FileCommand(const CCommandArgs& args);
+	void FileCommand(const CommandArgs& args);
 
 private:
 	std::vector<std::shared_ptr<spdlog::sinks::sink>> m_Sinks;
@@ -106,3 +106,5 @@ private:
 
 	Settings m_Settings;
 };
+
+inline LogSystem g_Logging;

@@ -16,7 +16,7 @@
 #include "cbase.h"
 #include "pm_defs.h"
 #include "pm_shared.h"
-#include "CServerLibrary.h"
+#include "ServerLibrary.h"
 #include "ServerSoundSystem.h"
 #include "UserMessages.h"
 
@@ -79,7 +79,7 @@ const char* ServerSoundSystem::CheckForSoundReplacement(const char* soundName) c
 		++soundName;
 	}
 
-	return g_ReplacementMaps.CheckForReplacement(soundName, g_Server.GetMapState()->m_GlobalSoundReplacement, true);
+	return g_Server.GetMapState()->m_GlobalSoundReplacement->Lookup(soundName, true);
 }
 
 void ServerSoundSystem::EmitSoundCore(edict_t* entity, int channel, const char* sample, float volume, float attenuation,

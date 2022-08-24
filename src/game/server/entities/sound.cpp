@@ -16,7 +16,7 @@
 // sound.cpp
 //=========================================================
 
-#include <spdlog/fmt/fmt.h>
+#include <fmt/format.h>
 
 #include "cbase.h"
 #include "talkmonster.h"

@@ -25,7 +25,7 @@
 
 namespace sentences
 {
-class CSentencesSystem final : public IGameSystem
+class SentencesSystem final : public IGameSystem
 {
 public:
 	const char* GetName() const override { return "Sentences"; }
@@ -108,5 +108,5 @@ private:
 	std::vector<SENTENCEG> m_SentenceGroups;
 };
 
-inline CSentencesSystem g_Sentences;
+inline SentencesSystem g_Sentences;
 }

@@ -16,7 +16,7 @@
 #include <chrono>
 #include <sstream>
 
-#include <spdlog/fmt/fmt.h>
+#include <fmt/format.h>
 
 #include <angelscript.h>
 
@@ -27,9 +27,9 @@
 #include "GameConfigLoader.h"
 #include "GameConfigSection.h"
 
-#include "scripting/AS/CASManager.h"
+#include "scripting/AS/ASManager.h"
 
-#include "utils/json_utils.h"
+#include "utils/JSONSystem.h"
 #include "utils/string_utils.h"
 
 using namespace std::literals;

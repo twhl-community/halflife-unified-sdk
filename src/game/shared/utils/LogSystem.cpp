@@ -23,10 +23,10 @@
 #include <spdlog/sinks/base_sink.h>
 
 #include "cbase.h"
-#include "CLogSystem.h"
-#include "command_utils.h"
+#include "LogSystem.h"
+#include "ConCommandSystem.h"
 #include "heterogeneous_lookup.h"
-#include "json_utils.h"
+#include "JSONSystem.h"
 
 using namespace std::literals;
 
@@ -150,10 +150,10 @@ static std::string GetLoggingConfigSchema()
 		levels, levels);
 }
 
-CLogSystem::CLogSystem() = default;
-CLogSystem::~CLogSystem() = default;
+LogSystem::LogSystem() = default;
+LogSystem::~LogSystem() = default;
 
-void CLogSystem::PreInitialize()
+void LogSystem::PreInitialize()
 {
 	m_Sinks.push_back(std::make_shared<ConsoleLogSink<spdlog::details::null_mutex>>());
 
@@ -179,7 +179,7 @@ void CLogSystem::PreInitialize()
 	spdlog::set_default_logger(m_Logger);
 }
 
-bool CLogSystem::Initialize()
+bool LogSystem::Initialize()
 {
 	g_ConCommands.CreateCommand("log_listloglevels", [this](const auto&)
 		{ ListLogLevels(); });
@@ -212,12 +212,12 @@ bool CLogSystem::Initialize()
 	return true;
 }
 
-void CLogSystem::PostInitialize()
+void LogSystem::PostInitialize()
 {
 	//Nothing.
 }
 
-void CLogSystem::Shutdown()
+void LogSystem::Shutdown()
 {
 	//Close log file if it's open.
 	SetFileLoggingEnabled(false);
@@ -227,7 +227,7 @@ void CLogSystem::Shutdown()
 	spdlog::shutdown();
 }
 
-std::shared_ptr<spdlog::logger> CLogSystem::CreateLogger(const std::string& name)
+std::shared_ptr<spdlog::logger> LogSystem::CreateLogger(const std::string& name)
 {
 	auto logger = std::make_shared<spdlog::logger>(name, m_Sinks.begin(), m_Sinks.end());
 
@@ -240,7 +240,7 @@ std::shared_ptr<spdlog::logger> CLogSystem::CreateLogger(const std::string& name
 	return logger;
 }
 
-void CLogSystem::RemoveLogger(const std::shared_ptr<spdlog::logger>& logger)
+void LogSystem::RemoveLogger(const std::shared_ptr<spdlog::logger>& logger)
 {
 	if (!logger)
 	{
@@ -250,7 +250,7 @@ void CLogSystem::RemoveLogger(const std::shared_ptr<spdlog::logger>& logger)
 	spdlog::drop(logger->name());
 }
 
-CLogSystem::Settings CLogSystem::LoadSettings(const json& input)
+LogSystem::Settings LogSystem::LoadSettings(const json& input)
 {
 	auto parseLoggerSettings = [](const json& obj, std::optional<spdlog::level::level_enum> defaultLogLevel)
 	{
@@ -367,7 +367,7 @@ CLogSystem::Settings CLogSystem::LoadSettings(const json& input)
 	return settings;
 }
 
-void CLogSystem::ApplySettingsToLogger(spdlog::logger& logger)
+void LogSystem::ApplySettingsToLogger(spdlog::logger& logger)
 {
 	const LoggerConfiguration emptyConfiguration;
 
@@ -383,7 +383,7 @@ void CLogSystem::ApplySettingsToLogger(spdlog::logger& logger)
 	logger.set_level(configuration->Settings.Level.value_or(m_Settings.Defaults.Level.value_or(DefaultLogLevel)));
 }
 
-void CLogSystem::SetFileLoggingEnabled(bool enable)
+void LogSystem::SetFileLoggingEnabled(bool enable)
 {
 	if (enable && !m_FileSink)
 	{
@@ -426,7 +426,7 @@ void CLogSystem::SetFileLoggingEnabled(bool enable)
 	}
 }
 
-void CLogSystem::ListLogLevels()
+void LogSystem::ListLogLevels()
 {
 	for (auto level : SPDLOG_LEVEL_NAMES)
 	{
@@ -434,13 +434,13 @@ void CLogSystem::ListLogLevels()
 	}
 }
 
-void CLogSystem::ListLoggers()
+void LogSystem::ListLoggers()
 {
 	spdlog::apply_all([](auto logger)
 		{ Con_Printf("%s\n", logger->name().c_str()); });
 }
 
-void CLogSystem::SetLogLevel(const CCommandArgs& args)
+void LogSystem::SetLogLevel(const CommandArgs& args)
 {
 	const int count = args.Count();
 
@@ -471,7 +471,7 @@ void CLogSystem::SetLogLevel(const CCommandArgs& args)
 	}
 }
 
-void CLogSystem::FileCommand(const CCommandArgs& args)
+void LogSystem::FileCommand(const CommandArgs& args)
 {
 	if (args.Count() == 2)
 	{
