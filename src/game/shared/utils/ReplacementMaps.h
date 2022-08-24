@@ -34,10 +34,10 @@ struct ReplacementMap
 {
 	static const ReplacementMap Empty;
 
-	explicit ReplacementMap() = default;
+	ReplacementMap() = default;
 
-	explicit ReplacementMap(Replacements&& replacements)
-		: m_Replacements(std::move(replacements))
+	ReplacementMap(Replacements&& replacements, bool caseSensitive)
+		: m_Replacements(std::move(replacements)), m_CaseSensitive(caseSensitive)
 	{
 	}
 
@@ -50,10 +50,13 @@ struct ReplacementMap
 
 	const Replacements& GetAll() const noexcept { return m_Replacements; }
 
-	const char* Lookup(const char* value, bool lowercase) const noexcept;
+	bool IsCaseSensitive() const { return m_CaseSensitive; }
+
+	const char* Lookup(const char* value) const noexcept;
 
 private:
 	Replacements m_Replacements;
+	bool m_CaseSensitive = true;
 };
 
 const inline ReplacementMap ReplacementMap::Empty;
@@ -61,9 +64,10 @@ const inline ReplacementMap ReplacementMap::Empty;
 struct ReplacementMapOptions
 {
 	/**
-	*	@brief If @c true, converts all strings to lowercase.
+	*	@brief If @c true, keys and values are stored as-is and looked up using case sensitive lookup.
+	*	If @c false, keys and values are converted to lowercase and looked up by converting values to lowercase before looking them up.
 	*/
-	bool ConvertToLowercase = false;
+	bool CaseSensitive = true;
 
 	/**
 	*	@brief If @c true, searches all paths for the file.

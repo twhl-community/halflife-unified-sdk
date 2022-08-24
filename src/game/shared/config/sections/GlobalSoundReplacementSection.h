@@ -70,7 +70,7 @@ public:
 				return false;
 			}
 
-			mapState->m_GlobalSoundReplacement = g_ReplacementMaps.Load(fileName, {.ConvertToLowercase = true});
+			mapState->m_GlobalSoundReplacement = g_ReplacementMaps.Load(fileName, {.CaseSensitive = false});
 		}
 
 		return true;

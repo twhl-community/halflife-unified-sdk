@@ -141,7 +141,7 @@ int MsgFunc_SoundRpl(const char* pszName, int iSize, void* pbuf)
 
 	const char* replacementFileName = READ_STRING();
 
-	sound::g_ClientSoundReplacement = g_ReplacementMaps.Load(replacementFileName, {.ConvertToLowercase = true, .LoadFromAllPaths = true});
+	sound::g_ClientSoundReplacement = g_ReplacementMaps.Load(replacementFileName, {.CaseSensitive = false, .LoadFromAllPaths = true});
 
 	return 1;
 }

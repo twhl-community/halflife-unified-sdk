@@ -58,10 +58,10 @@ struct fmt::formatter<ReplacementMapOptions>
 	auto format(const ReplacementMapOptions& options, FormatContext& ctx) const -> decltype(ctx.out())
 	{
 		return fmt::format_to(ctx.out(), R"(
-ConvertToLowercase = {}
+CaseSensitive = {}
 LoadFromAllPaths = {}
 )",
-			options.ConvertToLowercase, options.LoadFromAllPaths);
+			options.CaseSensitive, options.LoadFromAllPaths);
 	}
 };
 
@@ -75,9 +75,9 @@ static const char* LookupReplacement(const Replacements& map, const char* search
 	return originalValue;
 }
 
-const char* ReplacementMap::Lookup(const char* value, bool lowercase) const noexcept
+const char* ReplacementMap::Lookup(const char* value) const noexcept
 {
-	if (lowercase)
+	if (!m_CaseSensitive)
 	{
 		Filename searchString{value};
 		searchString.make_lower();
@@ -121,7 +121,7 @@ ReplacementMap ReplacementMapSystem::Parse(const json& input, const ReplacementM
 			std::string key = kv.key();
 			auto value = kv.value().get<std::string>();
 
-			if (options.ConvertToLowercase)
+			if (!options.CaseSensitive)
 			{
 				ToLower(key);
 				ToLower(value);
@@ -142,7 +142,7 @@ ReplacementMap ReplacementMapSystem::Parse(const json& input, const ReplacementM
 		}
 	}
 
-	return ReplacementMap{std::move(map)};
+	return ReplacementMap{std::move(map), options.CaseSensitive};
 }
 
 const ReplacementMap* ReplacementMapSystem::Load(const std::string& fileName, const ReplacementMapOptions& options)
@@ -153,6 +153,13 @@ const ReplacementMap* ReplacementMapSystem::Load(const std::string& fileName, co
 
 	if (auto it = m_ReplacementMaps.find(normalizedFileName); it != m_ReplacementMaps.end())
 	{
+		if (it->second->IsCaseSensitive() != options.CaseSensitive)
+		{
+			m_Logger->warn(
+				"Replacement file \"{}\" was previously loaded with case sensitivity {} and is now being loaded from cache with case sensitivity {}",
+				fileName, it->second->IsCaseSensitive() ? "on" : "off", options.CaseSensitive ? "on" : "off");
+		}
+
 		return it->second.get();
 	}
 
