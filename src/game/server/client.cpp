@@ -679,9 +679,6 @@ void SV_CreateClientCommands()
 
 			for (auto entity : UTIL_FindEntities())
 			{
-				if (!FStrEq(args.Argument(1), entity->GetClassname()))
-					continue;
-
 				ALERT(at_console, "%d - %s - %s - {%f, %f, %f}", entity->entindex(), entity->GetClassname(), entity->GetTargetname(), entity->pev->origin.x, entity->pev->origin.y, entity->pev->origin.z);
 				count++;
 			}
