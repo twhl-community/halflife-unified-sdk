@@ -618,7 +618,7 @@ void SV_CreateClientCommands()
 			}
 			else
 			{
-				CLIENT_PRINTF(player->edict(), print_console, "usage: ent_find_by_classname <classname>\n");
+				CLIENT_PRINTF(player->edict(), print_console, "usage: ent_find_by_classname <classname> [page]\n");
 			} },
 		{.Flags = ClientCommandFlag::Cheat});
 
@@ -628,16 +628,16 @@ void SV_CreateClientCommands()
 			if (args.Count() > 1)
 			{
 				int count = 0;
-				ALERT(at_console, "entindex - classname - targetname - origin");
+				ALERT(at_console, "entindex - classname - targetname - origin\n");
 
 				for (auto entity : UTIL_FindEntities()) {
 					if (!FStrEq(args.Argument(1), entity->GetTargetname()))
 						continue;
 
-					ALERT(at_console, "%d - %s - %s - {%f, %f, %f}", entity->entindex(), entity->GetClassname(), entity->GetTargetname(), entity->pev->origin.x, entity->pev->origin.y, entity->pev->origin.z);
+					ALERT(at_console, "%d - %s - %s - {%f, %f, %f}\n", entity->entindex(), entity->GetClassname(), entity->GetTargetname(), entity->pev->origin.x, entity->pev->origin.y, entity->pev->origin.z);
 				}
 
-				ALERT(at_console, "%d entities having the targetname: \"%s\"", count, args.Argument(1));
+				ALERT(at_console, "%d entities having the targetname: \"%s\"\n", count, args.Argument(1));
 			}
 			else
 			{
@@ -675,11 +675,11 @@ void SV_CreateClientCommands()
 		{
 			// TODO - Pagination
 			int count = 0;
-			ALERT(at_console, "entindex - classname - targetname - origin");
+			ALERT(at_console, "entindex - classname - targetname - origin\n");
 
 			for (auto entity : UTIL_FindEntities())
 			{
-				ALERT(at_console, "%d - %s - %s - {%f, %f, %f}", entity->entindex(), entity->GetClassname(), entity->GetTargetname(), entity->pev->origin.x, entity->pev->origin.y, entity->pev->origin.z);
+				ALERT(at_console, "%d - %s - %s - {%f, %f, %f}\n", entity->entindex(), entity->GetClassname(), entity->GetTargetname(), entity->pev->origin.x, entity->pev->origin.y, entity->pev->origin.z);
 				count++;
 			}
 
