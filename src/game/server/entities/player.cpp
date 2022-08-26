@@ -124,6 +124,9 @@ TYPEDESCRIPTION CBasePlayer::m_playerSaveData[] =
 		DEFINE_FIELD(CBasePlayer, m_DisplacerSndRoomtype, FIELD_INTEGER),
 		DEFINE_FIELD(CBasePlayer, m_HudColor, FIELD_INTEGER),
 
+		DEFINE_FIELD(CBasePlayer, m_bInfiniteAir, FIELD_BOOLEAN),
+		DEFINE_FIELD(CBasePlayer, m_bInfiniteArmor, FIELD_BOOLEAN),
+
 		//DEFINE_FIELD( CBasePlayer, m_fDeadTime, FIELD_FLOAT ), // only used in multiplayer games
 		//DEFINE_FIELD( CBasePlayer, m_fGameHUDInitialized, FIELD_INTEGER ), // only used in multiplayer games
 		//DEFINE_FIELD( CBasePlayer, m_flStopExtraSoundTime, FIELD_TIME ),
@@ -429,9 +432,10 @@ bool CBasePlayer::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, fl
 			flArmor = pev->armorvalue;
 			flArmor *= (1 / flBonus);
 			flNew = flDamage - flArmor;
-			pev->armorvalue = 0;
+			if (!m_bInfiniteArmor)
+				pev->armorvalue = 0;
 		}
-		else
+		else if (!m_bInfiniteArmor)
 			pev->armorvalue -= flArmor;
 
 		flDamage = flNew;
@@ -1173,7 +1177,7 @@ void CBasePlayer::WaterMove()
 		m_bitsDamageType &= ~DMG_DROWNRECOVER;
 		m_rgbTimeBasedDamage[itbd_DrownRecover] = 0;
 
-		if (pev->air_finished < gpGlobals->time) // drown!
+		if (!m_bInfiniteAir && pev->air_finished < gpGlobals->time) // drown!
 		{
 			if (pev->pain_finished < gpGlobals->time)
 			{
@@ -5544,6 +5548,23 @@ void CBasePlayer::SendScoreInfoAll()
 {
 	MESSAGE_BEGIN(MSG_ALL, gmsgScoreInfo);
 	SendScoreInfoMessage(this);
+}
+
+void CBasePlayer::ToggleCheat(Cheat cheat)
+{
+	switch (cheat)
+	{
+	case Cheat::InfiniteAir:
+		ALERT(at_console, "Infinite air: %s\n", m_bInfiniteAir ? "OFF" : "ON");
+		m_bInfiniteAir = !m_bInfiniteAir;
+		break;
+	case Cheat::InfiniteArmor:
+		ALERT(at_console, "Infinite armor: %s\n", m_bInfiniteArmor ? "OFF" : "ON");
+		m_bInfiniteArmor = !m_bInfiniteArmor;
+		break;
+	default:
+		ALERT(at_console, "Bogus cheat value!\n");
+	}
 }
 
 //=========================================================

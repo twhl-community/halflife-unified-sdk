@@ -23,6 +23,7 @@
 
 */
 
+#include <algorithm>
 #include <optional>
 
 #include "cbase.h"
@@ -588,6 +589,105 @@ void SV_CreateClientCommands()
 			// follow next player
 			if (player->IsObserver())
 				player->Observer_FindNextPlayer(atoi(args.Argument(1)) != 0); });
+
+	g_ClientCommands.Create("cheat_infiniteair", [](CBasePlayer* player, const CommandArgs& args)
+		{ player->ToggleCheat(Cheat::InfiniteAir); },
+		{.Flags = ClientCommandFlag::Cheat});
+
+	g_ClientCommands.Create("cheat_infinitearmor", [](CBasePlayer* player, const CommandArgs& args)
+		{ player->ToggleCheat(Cheat::InfiniteArmor); },
+		{.Flags = ClientCommandFlag::Cheat});
+
+	g_ClientCommands.Create("ent_find_by_classname", [](CBasePlayer* player, const CommandArgs& args)
+		{
+			// TODO - Pagination
+			if (args.Count() > 1)
+			{
+				int count = 0;
+				ALERT(at_console, "entindex - classname - targetname - origin");
+
+				for (auto entity : UTIL_FindEntities()) {
+					if (!FStrEq(args.Argument(1), entity->GetClassname()))
+						continue;
+
+					ALERT(at_console, "%d - %s - %s - {%f, %f, %f}", entity->entindex(), entity->GetClassname(), entity->GetTargetname(), entity->pev->origin.x, entity->pev->origin.y, entity->pev->origin.z);
+					count++;
+				}
+
+				ALERT(at_console, "%d entities having the classname: \"%s\"", count, args.Argument(1));
+			}
+			else
+			{
+				CLIENT_PRINTF(player->edict(), print_console, "usage: ent_find_by_classname <classname>\n");
+			} },
+		{.Flags = ClientCommandFlag::Cheat});
+
+	g_ClientCommands.Create("ent_find_by_targetname", [](CBasePlayer* player, const CommandArgs& args)
+		{
+			// TODO - Pagination
+			if (args.Count() > 1)
+			{
+				int count = 0;
+				ALERT(at_console, "entindex - classname - targetname - origin");
+
+				for (auto entity : UTIL_FindEntities()) {
+					if (!FStrEq(args.Argument(1), entity->GetTargetname()))
+						continue;
+
+					ALERT(at_console, "%d - %s - %s - {%f, %f, %f}", entity->entindex(), entity->GetClassname(), entity->GetTargetname(), entity->pev->origin.x, entity->pev->origin.y, entity->pev->origin.z);
+				}
+
+				ALERT(at_console, "%d entities having the targetname: \"%s\"", count, args.Argument(1));
+			}
+			else
+			{
+				CLIENT_PRINTF(player->edict(), print_console, "usage: ent_find_by_targetname <targetname>\n");
+			} },
+		{.Flags = ClientCommandFlag::Cheat});
+
+	g_ClientCommands.Create("ent_fire", [](CBasePlayer* player, const CommandArgs& args)
+		{
+			// TODO - Add "delay" like Source?
+			// TODO - Pagination
+			if (args.Count() > 1)
+			{
+				USE_TYPE useType = USE_TOGGLE;
+				if (args.Count() > 2)
+				{
+					useType = std::clamp(static_cast<USE_TYPE>(atoi(args.Argument(2))), USE_OFF, USE_TOGGLE);
+				}
+
+				float value = 0.f;
+				if (args.Count() > 3)
+				{
+					value = atof(args.Argument(3));
+				}
+
+				FireTargets(args.Argument(1), player, player, useType, value);
+			}
+			else
+			{
+				CLIENT_PRINTF(player->edict(), print_console, "usage: ent_fire <targetname> [usetype] [value]\n");
+			} },
+		{.Flags = ClientCommandFlag::Cheat});
+
+	g_ClientCommands.Create("ent_list", [](CBasePlayer* player, const CommandArgs& args)
+		{
+			// TODO - Pagination
+			int count = 0;
+			ALERT(at_console, "entindex - classname - targetname - origin");
+
+			for (auto entity : UTIL_FindEntities())
+			{
+				if (!FStrEq(args.Argument(1), entity->GetClassname()))
+					continue;
+
+				ALERT(at_console, "%d - %s - %s - {%f, %f, %f}", entity->entindex(), entity->GetClassname(), entity->GetTargetname(), entity->pev->origin.x, entity->pev->origin.y, entity->pev->origin.z);
+				count++;
+			}
+
+			ALERT(at_console, "Total %d / %d entities\n", count, gpGlobals->maxEntities); },
+		{.Flags = ClientCommandFlag::Cheat});
 }
 
 bool UTIL_CheatsAllowed(CBasePlayer* pEntity, std::string_view name)

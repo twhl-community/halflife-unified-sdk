@@ -90,6 +90,12 @@ enum sbar_data
 	SBAR_END,
 };
 
+enum Cheat
+{
+	InfiniteAir = 0,
+	InfiniteArmor,
+};
+
 class CBasePlayer : public CBaseMonster
 {
 public:
@@ -449,6 +455,9 @@ private:
 	//For saving and level changes.
 	int m_HudColor = RGB_HUD_COLOR.ToInteger();
 
+	bool m_bInfiniteAir;
+	bool m_bInfiniteArmor;
+
 public:
 	/**
 	*	@brief Sets the player's hud color
@@ -458,6 +467,8 @@ public:
 
 	void SendScoreInfo(CBasePlayer* destination);
 	void SendScoreInfoAll();
+
+	void ToggleCheat(Cheat cheat);
 };
 
 inline void CBasePlayer::SetWeaponBit(int id)
