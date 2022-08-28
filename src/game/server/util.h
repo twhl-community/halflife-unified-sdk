@@ -340,10 +340,7 @@ void UTIL_HudMessageAll(const hudtextparms_t& textparms, const char* pMessage);
 void UTIL_HudMessage(CBaseEntity* pEntity, const hudtextparms_t& textparms, const char* pMessage);
 
 // for handy use with ClientPrint params
-char* UTIL_dtos1(int d);
-char* UTIL_dtos2(int d);
-char* UTIL_dtos3(int d);
-char* UTIL_dtos4(int d);
+char* UTIL_dtos(int d);
 
 // Writes message to console with timestamp and FragLog header.
 void UTIL_LogPrintf(const char* fmt, ...);

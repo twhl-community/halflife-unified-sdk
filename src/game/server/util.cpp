@@ -779,28 +779,7 @@ void UTIL_SayTextAll(const char* pText, CBaseEntity* pEntity)
 }
 
 
-char* UTIL_dtos1(int d)
-{
-	static char buf[8];
-	sprintf(buf, "%d", d);
-	return buf;
-}
-
-char* UTIL_dtos2(int d)
-{
-	static char buf[8];
-	sprintf(buf, "%d", d);
-	return buf;
-}
-
-char* UTIL_dtos3(int d)
-{
-	static char buf[8];
-	sprintf(buf, "%d", d);
-	return buf;
-}
-
-char* UTIL_dtos4(int d)
+char* UTIL_dtos(int d)
 {
 	static char buf[8];
 	sprintf(buf, "%d", d);
