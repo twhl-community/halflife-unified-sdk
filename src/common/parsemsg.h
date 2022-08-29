@@ -20,6 +20,8 @@
 
 #pragma once
 
+#include "palette.h"
+
 //--------------------------------------------------------------------------------------------------------------
 void BEGIN_READ(void* buf, int size);
 int READ_CHAR();
@@ -33,6 +35,17 @@ float READ_COORD();
 float READ_ANGLE();
 float READ_HIRESANGLE();
 bool READ_OK();
+
+inline RGB24 READ_RGB24()
+{
+	RGB24 color;
+
+	color.Red = READ_BYTE();
+	color.Green = READ_BYTE();
+	color.Blue = READ_BYTE();
+
+	return color;
+}
 
 //--------------------------------------------------------------------------------------------------------------
 class BufferWriter

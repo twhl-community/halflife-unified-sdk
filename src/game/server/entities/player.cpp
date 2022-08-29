@@ -1826,7 +1826,83 @@ void CBasePlayer::UpdateStatusBar()
 	}
 }
 
+static void ClearEntityInfo(CBasePlayer* player)
+{
+	MESSAGE_BEGIN(MSG_ONE, gmsgEntityInfo, nullptr, player->pev);
+	WRITE_STRING("");
+	MESSAGE_END();
+}
 
+void CBasePlayer::UpdateEntityInfo()
+{
+	const bool isEnabled = sv_entityinfo_enabled.value != 0;
+
+	if (m_EntityInfoEnabled != isEnabled)
+	{
+		// Clear out any info that may be drawn.
+		if (m_EntityInfoEnabled)
+		{
+			ClearEntityInfo(this);
+		}
+
+		m_EntityInfoEnabled = isEnabled;
+	}
+
+	if (!isEnabled)
+	{
+		return;
+	}
+
+	if (m_NextEntityInfoUpdateTime > gpGlobals->time)
+	{
+		return;
+	}
+
+	m_NextEntityInfoUpdateTime = gpGlobals->time + EntityInfoUpdateInterval;
+
+	const auto entity = UTIL_FindEntityForward(this);
+
+	if (entity)
+	{
+		// Pick a color based on entity type.
+		RGB24 color{RGB_WHITE};
+
+		// Not all NPCs set the FL_MONSTER flag (e.g. Barnacle).
+		const auto monster = entity->MyMonsterPointer();
+
+		if (monster)
+		{
+			const auto classification = monster->Classify();
+
+			if (classification != CLASS_NONE && classification >= CLASS_FIRST && classification <= CLASS_LAST)
+			{
+				color = [](int relationship)
+				{
+					// Make sure these are colorblind-friendly.
+					switch (relationship)
+					{
+					case R_AL: return RGB_BLUEISH;
+					case R_DL: [[fallthrough]];
+					case R_HT: [[fallthrough]];
+					case R_NM: return RGB_REDISH;
+					default: return RGB_WHITE;
+					}
+				}(monster->IRelationship(this));
+			}
+		}
+
+		MESSAGE_BEGIN(MSG_ONE, gmsgEntityInfo, nullptr, pev);
+		WRITE_STRING(STRING(entity->pev->classname));
+		WRITE_LONG(std::clamp(static_cast<int>(entity->pev->health), std::numeric_limits<int>::lowest(), std::numeric_limits<int>::max()));
+		WRITE_RGB24(color);
+		MESSAGE_END();
+	}
+	// Clear out the previous entity's info if requested. Otherwise the client will clear it after the draw time has passed.
+	else if (sv_entityinfo_eager.value != 0)
+	{
+		ClearEntityInfo(this);
+	}
+}
 
 
 
@@ -4631,6 +4707,8 @@ void CBasePlayer::UpdateClientData()
 		UpdateStatusBar();
 		m_flNextSBarUpdateTime = gpGlobals->time + 0.2;
 	}
+
+	UpdateEntityInfo();
 
 	// Send new room type to client.
 	if (m_ClientSndRoomtype != m_SndRoomtype)

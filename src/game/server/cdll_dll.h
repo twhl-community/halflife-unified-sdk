@@ -237,5 +237,16 @@ constexpr RGB24 RGB_WHITE{255, 255, 255};
 constexpr RGB24 RGB_YELLOWISH{255, 160, 0};
 constexpr RGB24 RGB_REDISH{255, 16, 16};
 constexpr RGB24 RGB_GREENISH{0, 160, 0};
+constexpr RGB24 RGB_BLUEISH{95, 95, 255};
 
 constexpr RGB24 RGB_HUD_COLOR{RGB_YELLOWISH};
+
+/**
+*	@brief Amount of time, in seconds, between entity info update checks.
+*/
+constexpr float EntityInfoUpdateInterval = 0.2f;
+
+/**
+*	@brief Amount of time, in seconds, to draw entity info before disappearing.
+*/
+constexpr float EntityInfoDrawTime = 2.f;

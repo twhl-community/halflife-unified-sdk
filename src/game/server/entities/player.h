@@ -407,6 +407,14 @@ public:
 	char m_SbarString0[SBAR_STRING_SIZE];
 	char m_SbarString1[SBAR_STRING_SIZE];
 
+	void UpdateEntityInfo();
+
+	//Not saved, reset on map change.
+	float m_NextEntityInfoUpdateTime;
+
+	// Assume this is false on map start since the client clears it anyway.
+	bool m_EntityInfoEnabled{false};
+
 	float m_flNextChatTime;
 
 	void Player_Menu();

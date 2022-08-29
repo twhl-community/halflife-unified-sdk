@@ -22,6 +22,8 @@
 
 #pragma once
 
+#include <eastl/fixed_string.h>
+
 #include "common_types.h"
 #include "cl_dll.h"
 #include "ammo.h"
@@ -668,6 +670,33 @@ private:
 	LibraryInfo m_ServerInfo;
 };
 
+/**
+ *	@brief Displays info about a single entity on the HUD.
+ */
+class CHudEntityInfo : public CHudBase
+{
+public:
+	bool Init() override;
+	bool VidInit() override;
+	bool Draw(float flTime) override;
+
+	bool MsgFunc_EntityInfo(const char* pszName, int iSize, void* pbuf);
+
+private:
+	static constexpr int MaxClassnameLengthCount = 64;
+
+	struct EntityInfo
+	{
+		eastl::fixed_string<char, MaxClassnameLengthCount + 1> Classname;
+		int Health = -1;
+		RGB24 Color{RGB_WHITE};
+	};
+
+	EntityInfo m_EntityInfo;
+
+	float m_DrawEndTime{0};
+};
+
 class CHud
 {
 private:
@@ -773,6 +802,7 @@ public:
 	CHudPlayerBrowse m_PlayerBrowse;
 
 	CHudProjectInfo m_ProjectInfo;
+	CHudEntityInfo m_EntityInfo;
 
 	void Init();
 	void VidInit();

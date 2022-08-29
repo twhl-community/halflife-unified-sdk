@@ -79,6 +79,14 @@ inline void MESSAGE_BEGIN(int msg_dest, int msg_type, const float* pOrigin = nul
 #define WRITE_COORD (*g_engfuncs.pfnWriteCoord)
 #define WRITE_STRING (*g_engfuncs.pfnWriteString)
 #define WRITE_ENTITY (*g_engfuncs.pfnWriteEntity)
+
+inline void WRITE_RGB24(RGB24 color)
+{
+	WRITE_BYTE(color.Red);
+	WRITE_BYTE(color.Green);
+	WRITE_BYTE(color.Blue);
+}
+
 #define CVAR_REGISTER (*g_engfuncs.pfnCVarRegister)
 #define CVAR_SET_FLOAT (*g_engfuncs.pfnCVarSetFloat)
 #define CVAR_SET_STRING (*g_engfuncs.pfnCVarSetString)

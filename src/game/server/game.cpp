@@ -57,6 +57,9 @@ cvar_t multipower = {"mp_multipower", "0", FCVAR_SERVER};
 
 // END Opposing Force variables
 
+cvar_t sv_entityinfo_enabled{"sv_entityinfo_enabled", "0", FCVAR_SERVER};
+cvar_t sv_entityinfo_eager{"sv_entityinfo_eager", "1", FCVAR_SERVER};
+
 // Register your console variables here
 // This gets called one time when the game is initialied
 void GameDLLInit()
@@ -105,6 +108,9 @@ void GameDLLInit()
 
 	CVAR_REGISTER(&spamdelay);
 	CVAR_REGISTER(&multipower);
+
+	CVAR_REGISTER(&sv_entityinfo_enabled);
+	CVAR_REGISTER(&sv_entityinfo_eager);
 
 	// END REGISTER CVARS FOR OPPOSING FORCE
 

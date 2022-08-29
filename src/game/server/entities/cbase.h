@@ -137,6 +137,10 @@ using USEPTR = TUSEPTR<CBaseEntity>;
 #define CLASS_CTFITEM 30
 #define CLASS_BARNACLE 99 // special because no one pays attention to it, and it eats a wide cross-section of creatures.
 
+// Defines the range of valid class values for use in IRelationship.
+constexpr int CLASS_FIRST = CLASS_MACHINE;
+constexpr int CLASS_LAST = CLASS_ALIEN_RACE_X;
+
 class CBaseEntity;
 class CBaseMonster;
 class CBasePlayerItem;

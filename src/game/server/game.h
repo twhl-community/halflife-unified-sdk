@@ -49,6 +49,9 @@ extern cvar_t coopweprespawn;
 extern cvar_t oldgrapple;
 extern cvar_t spamdelay;
 
+extern cvar_t sv_entityinfo_enabled;
+extern cvar_t sv_entityinfo_eager;
+
 // Engine Cvars
 inline cvar_t* g_psv_gravity;
 inline cvar_t* g_psv_aim;
