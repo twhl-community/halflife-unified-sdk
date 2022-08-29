@@ -495,6 +495,90 @@ void Host_Say(edict_t* pEntity, bool teamonly)
 	}
 }
 
+const int NumberOfEntitiesPerPage = 10;
+
+struct PageSearchResult
+{
+	bool UsePagination{false};
+	int TotalEntityCount{0};
+	int DesiredPage{0};
+	int PageCount{0};
+};
+
+/**
+ *	@brief Searches for entities using a page based search.
+ *	@param desiredPage Which page to display, or 0 to display all.
+ *	@param filter Callback to filter entities.
+ */
+template <typename Function>
+PageSearchResult PageBasedEntitySearch(int desiredPage, Function&& filter)
+{
+	int pageCount = 0;
+	int totalCount = 0;
+	int currentPage = 1;
+
+	const bool doPagination = desiredPage != 0;
+
+	ALERT(at_console, "entindex - classname - targetname - origin\n");
+
+	for (auto entity : UTIL_FindEntities())
+	{
+		if (!filter(entity))
+		{
+			continue;
+		}
+
+		++totalCount;
+
+		if (!doPagination || currentPage == desiredPage)
+		{
+			ALERT(at_console, "%d - %s - %s - {%f, %f, %f}\n",
+				entity->entindex(), entity->GetClassname(), entity->GetTargetname(),
+				entity->pev->origin.x, entity->pev->origin.y, entity->pev->origin.z);
+
+			if (!doPagination)
+			{
+				continue;
+			}
+		}
+
+		++pageCount;
+		if (pageCount >= NumberOfEntitiesPerPage)
+		{
+			++currentPage;
+			pageCount = 0;
+		}
+	}
+
+	return {.UsePagination = doPagination, .TotalEntityCount = totalCount, .DesiredPage = desiredPage, .PageCount = currentPage};
+}
+
+void PrintPageSearchResult(const PageSearchResult& result, const char* filterName, const char* filterContents)
+{
+	if (result.UsePagination)
+	{
+		ALERT(at_console, "%d entities having the %s: \"%s\" (page %d / %d)\n",
+			result.TotalEntityCount, filterName, filterContents, result.DesiredPage, result.PageCount);
+	}
+	else
+	{
+		ALERT(at_console, "%d entities having the %s: \"%s\"\n",
+			result.TotalEntityCount, filterName, filterContents);
+	}
+}
+
+void PrintPageSearchResult(const PageSearchResult& result)
+{
+	if (result.UsePagination)
+	{
+		ALERT(at_console, "Total %d / %d entities (page %d / %d)\n", result.TotalEntityCount, gpGlobals->maxEntities, result.DesiredPage, result.PageCount);
+	}
+	else
+	{
+		ALERT(at_console, "Total %d / %d entities\n", result.TotalEntityCount, gpGlobals->maxEntities);
+	}
+}
+
 void SV_CreateClientCommands()
 {
 	g_ClientCommands.Create("say", [](CBasePlayer* player, const auto& args)
@@ -602,51 +686,10 @@ void SV_CreateClientCommands()
 		{
 			if (args.Count() > 1)
 			{
-				bool doPagination = true;
-				int pageCount = 0;
-				int totalCount = 0;
-				int currentPage = 1;
-				int desiredPage = 1;
-				if (args.Count() > 2)
-				{
-					desiredPage = std::max(atoi(args.Argument(2)), 0);
-					if (desiredPage == 0)
-					{
-						doPagination = false;
-					}
-				}
+				const auto result = PageBasedEntitySearch(args.Count() > 2 ? atoi(args.Argument(2)) : 1, [&](auto entity)
+					{ return FStrEq(args.Argument(1), entity->GetClassname()); });
 
-				ALERT(at_console, "entindex - classname - targetname - origin\n");
-				for (auto entity : UTIL_FindEntities()) {
-					if (!FStrEq(args.Argument(1), entity->GetClassname()))
-						continue;
-
-					totalCount++;
-					if (!doPagination || currentPage == desiredPage)
-					{
-						ALERT(at_console, "%d - %s - %s - {%f, %f, %f}\n", entity->entindex(), entity->GetClassname(), entity->GetTargetname(), entity->pev->origin.x, entity->pev->origin.y, entity->pev->origin.z);
-						if (!doPagination)
-						{
-							continue;
-						}
-					}
-
-					pageCount++;
-					if (pageCount >= 10)
-					{
-						currentPage++;
-						pageCount = 0;
-					}
-				}
-
-				if (doPagination)
-				{
-					ALERT(at_console, "%d entities having the classname: \"%s\" (page %d / %d)\n", totalCount, args.Argument(1), desiredPage, currentPage);
-				}
-				else
-				{
-					ALERT(at_console, "%d entities having the classname: \"%s\"\n", totalCount, args.Argument(1));
-				}
+				PrintPageSearchResult(result , "classname", args.Argument(1));
 			}
 			else
 			{
@@ -658,51 +701,10 @@ void SV_CreateClientCommands()
 		{
 			if (args.Count() > 1)
 			{
-				bool doPagination = true;
-				int pageCount = 0;
-				int totalCount = 0;
-				int currentPage = 1;
-				int desiredPage = 1;
-				if (args.Count() > 2)
-				{
-					desiredPage = std::max(atoi(args.Argument(2)), 0);
-					if (desiredPage == 0)
-					{
-						doPagination = false;
-					}
-				}
+				const auto result = PageBasedEntitySearch(args.Count() > 2 ? atoi(args.Argument(2)) : 1, [&](auto entity)
+					{ return FStrEq(args.Argument(1), entity->GetTargetname()); });
 
-				ALERT(at_console, "entindex - classname - targetname - origin\n");
-				for (auto entity : UTIL_FindEntities()) {
-					if (!FStrEq(args.Argument(1), entity->GetTargetname()))
-						continue;
-
-					totalCount++;
-					if (!doPagination || currentPage == desiredPage)
-					{
-						ALERT(at_console, "%d - %s - %s - {%f, %f, %f}\n", entity->entindex(), entity->GetClassname(), entity->GetTargetname(), entity->pev->origin.x, entity->pev->origin.y, entity->pev->origin.z);
-						if (!doPagination)
-						{
-							continue;
-						}
-					}
-
-					pageCount++;
-					if (pageCount >= 10)
-					{
-						currentPage++;
-						pageCount = 0;
-					}
-				}
-
-				if (doPagination)
-				{
-					ALERT(at_console, "%d entities having the targetname: \"%s\" (page %d / %d)\n", totalCount, args.Argument(1), desiredPage, currentPage);
-				}
-				else
-				{
-					ALERT(at_console, "%d entities having the targetname: \"%s\"\n", totalCount, args.Argument(1));
-				}
+				PrintPageSearchResult(result , "targetname", args.Argument(1));
 			}
 			else
 			{
@@ -737,48 +739,11 @@ void SV_CreateClientCommands()
 
 	g_ClientCommands.Create("ent_list", [](CBasePlayer* player, const CommandArgs& args)
 		{
-			bool doPagination = false;
-			int pageCount = 0;
-			int totalCount = 0;
-			int currentPage = 1;
-			int desiredPage = 1;
-			if (args.Count() > 1)
-			{
-				desiredPage = std::max(atoi(args.Argument(1)), 0);
-				if (desiredPage > 0)
-				{
-					doPagination = true;
-				}
-			}
+			// Turn pagination off by default for this so player gets a list of all entities by default.
+			const auto result = PageBasedEntitySearch(args.Count() > 1 ? std::max(atoi(args.Argument(1)), 0) : 0, [&](auto entity)
+				{ return true; });
 
-			ALERT(at_console, "entindex - classname - targetname - origin\n");
-			for (auto entity : UTIL_FindEntities()) {
-				totalCount++;
-				if (!doPagination || currentPage == desiredPage)
-				{
-					ALERT(at_console, "%d - %s - %s - {%f, %f, %f}\n", entity->entindex(), entity->GetClassname(), entity->GetTargetname(), entity->pev->origin.x, entity->pev->origin.y, entity->pev->origin.z);
-					if (!doPagination)
-					{
-						continue;
-					}
-				}
-
-				pageCount++;
-				if (pageCount >= 10)
-				{
-					currentPage++;
-					pageCount = 0;
-				}
-			}
-
-			if (doPagination)
-			{
-				ALERT(at_console, "Total %d / %d entities (page %d / %d)\n", totalCount, gpGlobals->maxEntities, desiredPage, currentPage);
-			}
-			else
-			{
-				ALERT(at_console, "Total %d / %d entities\n", totalCount, gpGlobals->maxEntities);
-			} },
+			PrintPageSearchResult(result); },
 		{.Flags = ClientCommandFlag::Cheat});
 }
 
