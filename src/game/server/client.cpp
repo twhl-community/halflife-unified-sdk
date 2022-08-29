@@ -600,55 +600,119 @@ void SV_CreateClientCommands()
 
 	g_ClientCommands.Create("ent_find_by_classname", [](CBasePlayer* player, const CommandArgs& args)
 		{
-			// TODO - Pagination
 			if (args.Count() > 1)
 			{
-				int count = 0;
-				ALERT(at_console, "entindex - classname - targetname - origin");
+				bool doPagination = true;
+				int pageCount = 0;
+				int totalCount = 0;
+				int currentPage = 1;
+				int desiredPage = 1;
+				if (args.Count() > 2)
+				{
+					desiredPage = std::max(atoi(args.Argument(2)), 0);
+					if (desiredPage == 0)
+					{
+						doPagination = false;
+					}
+				}
 
+				ALERT(at_console, "entindex - classname - targetname - origin\n");
 				for (auto entity : UTIL_FindEntities()) {
 					if (!FStrEq(args.Argument(1), entity->GetClassname()))
 						continue;
 
-					ALERT(at_console, "%d - %s - %s - {%f, %f, %f}", entity->entindex(), entity->GetClassname(), entity->GetTargetname(), entity->pev->origin.x, entity->pev->origin.y, entity->pev->origin.z);
-					count++;
+					totalCount++;
+					if (!doPagination || currentPage == desiredPage)
+					{
+						ALERT(at_console, "%d - %s - %s - {%f, %f, %f}\n", entity->entindex(), entity->GetClassname(), entity->GetTargetname(), entity->pev->origin.x, entity->pev->origin.y, entity->pev->origin.z);
+						if (!doPagination)
+						{
+							continue;
+						}
+					}
+
+					pageCount++;
+					if (pageCount >= 10)
+					{
+						currentPage++;
+						pageCount = 0;
+					}
 				}
 
-				ALERT(at_console, "%d entities having the classname: \"%s\"", count, args.Argument(1));
+				if (doPagination)
+				{
+					ALERT(at_console, "%d entities having the classname: \"%s\" (page %d / %d)\n", totalCount, args.Argument(1), desiredPage, currentPage);
+				}
+				else
+				{
+					ALERT(at_console, "%d entities having the classname: \"%s\"\n", totalCount, args.Argument(1));
+				}
 			}
 			else
 			{
-				CLIENT_PRINTF(player->edict(), print_console, "usage: ent_find_by_classname <classname>\n");
+				CLIENT_PRINTF(player->edict(), print_console, "usage: ent_find_by_classname <classname> [page]\n");
 			} },
 		{.Flags = ClientCommandFlag::Cheat});
 
 	g_ClientCommands.Create("ent_find_by_targetname", [](CBasePlayer* player, const CommandArgs& args)
 		{
-			// TODO - Pagination
 			if (args.Count() > 1)
 			{
-				int count = 0;
-				ALERT(at_console, "entindex - classname - targetname - origin");
+				bool doPagination = true;
+				int pageCount = 0;
+				int totalCount = 0;
+				int currentPage = 1;
+				int desiredPage = 1;
+				if (args.Count() > 2)
+				{
+					desiredPage = std::max(atoi(args.Argument(2)), 0);
+					if (desiredPage == 0)
+					{
+						doPagination = false;
+					}
+				}
 
+				ALERT(at_console, "entindex - classname - targetname - origin\n");
 				for (auto entity : UTIL_FindEntities()) {
 					if (!FStrEq(args.Argument(1), entity->GetTargetname()))
 						continue;
 
-					ALERT(at_console, "%d - %s - %s - {%f, %f, %f}", entity->entindex(), entity->GetClassname(), entity->GetTargetname(), entity->pev->origin.x, entity->pev->origin.y, entity->pev->origin.z);
+					totalCount++;
+					if (!doPagination || currentPage == desiredPage)
+					{
+						ALERT(at_console, "%d - %s - %s - {%f, %f, %f}\n", entity->entindex(), entity->GetClassname(), entity->GetTargetname(), entity->pev->origin.x, entity->pev->origin.y, entity->pev->origin.z);
+						if (!doPagination)
+						{
+							continue;
+						}
+					}
+
+					pageCount++;
+					if (pageCount >= 10)
+					{
+						currentPage++;
+						pageCount = 0;
+					}
 				}
 
-				ALERT(at_console, "%d entities having the targetname: \"%s\"", count, args.Argument(1));
+				if (doPagination)
+				{
+					ALERT(at_console, "%d entities having the targetname: \"%s\" (page %d / %d)\n", totalCount, args.Argument(1), desiredPage, currentPage);
+				}
+				else
+				{
+					ALERT(at_console, "%d entities having the targetname: \"%s\"\n", totalCount, args.Argument(1));
+				}
 			}
 			else
 			{
-				CLIENT_PRINTF(player->edict(), print_console, "usage: ent_find_by_targetname <targetname>\n");
+				CLIENT_PRINTF(player->edict(), print_console, "usage: ent_find_by_targetname <targetname> [page]\n");
 			} },
 		{.Flags = ClientCommandFlag::Cheat});
 
 	g_ClientCommands.Create("ent_fire", [](CBasePlayer* player, const CommandArgs& args)
 		{
 			// TODO - Add "delay" like Source?
-			// TODO - Pagination
 			if (args.Count() > 1)
 			{
 				USE_TYPE useType = USE_TOGGLE;
@@ -673,20 +737,48 @@ void SV_CreateClientCommands()
 
 	g_ClientCommands.Create("ent_list", [](CBasePlayer* player, const CommandArgs& args)
 		{
-			// TODO - Pagination
-			int count = 0;
-			ALERT(at_console, "entindex - classname - targetname - origin");
-
-			for (auto entity : UTIL_FindEntities())
+			bool doPagination = false;
+			int pageCount = 0;
+			int totalCount = 0;
+			int currentPage = 1;
+			int desiredPage = 1;
+			if (args.Count() > 1)
 			{
-				if (!FStrEq(args.Argument(1), entity->GetClassname()))
-					continue;
-
-				ALERT(at_console, "%d - %s - %s - {%f, %f, %f}", entity->entindex(), entity->GetClassname(), entity->GetTargetname(), entity->pev->origin.x, entity->pev->origin.y, entity->pev->origin.z);
-				count++;
+				desiredPage = std::max(atoi(args.Argument(1)), 0);
+				if (desiredPage > 0)
+				{
+					doPagination = true;
+				}
 			}
 
-			ALERT(at_console, "Total %d / %d entities\n", count, gpGlobals->maxEntities); },
+			ALERT(at_console, "entindex - classname - targetname - origin\n");
+			for (auto entity : UTIL_FindEntities()) {
+				totalCount++;
+				if (!doPagination || currentPage == desiredPage)
+				{
+					ALERT(at_console, "%d - %s - %s - {%f, %f, %f}\n", entity->entindex(), entity->GetClassname(), entity->GetTargetname(), entity->pev->origin.x, entity->pev->origin.y, entity->pev->origin.z);
+					if (!doPagination)
+					{
+						continue;
+					}
+				}
+
+				pageCount++;
+				if (pageCount >= 10)
+				{
+					currentPage++;
+					pageCount = 0;
+				}
+			}
+
+			if (doPagination)
+			{
+				ALERT(at_console, "Total %d / %d entities (page %d / %d)\n", totalCount, gpGlobals->maxEntities, desiredPage, currentPage);
+			}
+			else
+			{
+				ALERT(at_console, "Total %d / %d entities\n", totalCount, gpGlobals->maxEntities);
+			} },
 		{.Flags = ClientCommandFlag::Cheat});
 }
 
