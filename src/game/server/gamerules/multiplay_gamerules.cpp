@@ -120,7 +120,7 @@ void CHalfLifeMultiplay::Think()
 		if (time < 1)
 			CVAR_SET_STRING("mp_chattime", "1");
 		else if (time > MAX_INTERMISSION_TIME)
-			CVAR_SET_STRING("mp_chattime", UTIL_dtos1(MAX_INTERMISSION_TIME));
+			CVAR_SET_STRING("mp_chattime", UTIL_dtos(MAX_INTERMISSION_TIME).c_str());
 
 		m_flIntermissionEndTime = m_flIntermissionStartTime + mp_chattime.value;
 
@@ -1184,7 +1184,7 @@ void CHalfLifeMultiplay::GoToIntermission()
 	if (time < 1)
 		CVAR_SET_STRING("mp_chattime", "1");
 	else if (time > MAX_INTERMISSION_TIME)
-		CVAR_SET_STRING("mp_chattime", UTIL_dtos1(MAX_INTERMISSION_TIME));
+		CVAR_SET_STRING("mp_chattime", UTIL_dtos(MAX_INTERMISSION_TIME).c_str());
 
 	m_flIntermissionEndTime = gpGlobals->time + ((int)mp_chattime.value);
 	m_flIntermissionStartTime = gpGlobals->time;

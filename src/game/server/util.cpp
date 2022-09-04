@@ -778,33 +778,11 @@ void UTIL_SayTextAll(const char* pText, CBaseEntity* pEntity)
 	MESSAGE_END();
 }
 
-
-char* UTIL_dtos1(int d)
+auto UTIL_dtos(int iValue) -> eastl::fixed_string<char, 20 + 1>
 {
-	static char buf[8];
-	sprintf(buf, "%d", d);
-	return buf;
-}
-
-char* UTIL_dtos2(int d)
-{
-	static char buf[8];
-	sprintf(buf, "%d", d);
-	return buf;
-}
-
-char* UTIL_dtos3(int d)
-{
-	static char buf[8];
-	sprintf(buf, "%d", d);
-	return buf;
-}
-
-char* UTIL_dtos4(int d)
-{
-	static char buf[8];
-	sprintf(buf, "%d", d);
-	return buf;
+	eastl::fixed_string<char, 20 + 1> buffer;
+	fmt::format_to(std::back_inserter(buffer), "{}", iValue);
+	return buffer;
 }
 
 void UTIL_ShowMessage(const char* pString, CBaseEntity* pEntity)
