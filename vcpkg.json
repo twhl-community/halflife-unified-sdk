@@ -32,7 +32,7 @@
 		},
 		{
 			"name": "eastl",
-			"version>=": "3.18.00#3",
+			"version>=": "3.19.00",
 			"default-features": false
 		}
   ]

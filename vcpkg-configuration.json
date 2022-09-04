@@ -1,0 +1,10 @@
+{
+	"registries": [
+		{
+			"kind": "filesystem",
+			"path": "vcpkg_config/registry",
+			"baseline": "2022-09-04",
+			"packages": [ "eastl" ]
+		}
+  ]
+}
