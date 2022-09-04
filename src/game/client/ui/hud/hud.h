@@ -22,7 +22,7 @@
 
 #pragma once
 
-#include <eastl/fixed_string.h>
+#include <EASTL/fixed_string.h>
 
 #include "common_types.h"
 #include "cl_dll.h"
