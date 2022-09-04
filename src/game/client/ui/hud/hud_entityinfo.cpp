@@ -13,6 +13,8 @@
  *
  ****/
 
+#include <tuple>
+
 #include "hud.h"
 
 DECLARE_MESSAGE(m_EntityInfo, EntityInfo);
@@ -53,20 +55,38 @@ bool CHudEntityInfo::Draw(float flTime)
 	const int lineHeight = 20;
 
 	// Start drawing under the crosshair.
-	// Align the fields vertically. This may need adjusting if you add more lines.
 	const int labelXPos = static_cast<int>(ScreenWidth * 0.45);
-	const int fieldXPos = labelXPos + 90;
-	int yPos = static_cast<int>(ScreenHeight * 0.55);
+	const int startingYPos = static_cast<int>(ScreenHeight * 0.55);
 
-	const auto lineDrawer = [&](const char* label, const char* text)
+	const auto healthString = UTIL_ToString(m_EntityInfo.Health);
+
+	// label, text pairs
+	const std::tuple<const char*, const char*> infos[] =
+		{
+			// Include spaces in the label text.
+			{"Classname: ", m_EntityInfo.Classname.c_str()},
+			{"Health: ", healthString.c_str()}
+		};
+
+	// Draw labels first, calculate maximum width needed.
+	int maximumWidth = -1;
+
+	int yPos = startingYPos;
+
+	for (const auto& info : infos)
 	{
-		gHUD.DrawHudString(labelXPos, yPos, ScreenWidth - labelXPos, label, RGB_WHITE);
-		gHUD.DrawHudString(fieldXPos, yPos, ScreenWidth - fieldXPos, text, m_EntityInfo.Color);
+		maximumWidth = std::max(maximumWidth, gHUD.DrawHudString(labelXPos, yPos, ScreenWidth - labelXPos, std::get<0>(info), RGB_WHITE));
 		yPos += lineHeight;
-	};
+	}
 
-	lineDrawer("Classname:", m_EntityInfo.Classname.c_str());
-	lineDrawer("Health:", UTIL_ToString(m_EntityInfo.Health).c_str());
+	// Draw text starting at maximum width.
+	yPos = startingYPos;
+
+	for (const auto& info : infos)
+	{
+		gHUD.DrawHudString(maximumWidth, yPos, ScreenWidth - maximumWidth, std::get<1>(info), m_EntityInfo.Color);
+		yPos += lineHeight;
+	}
 
 	return true;
 }
