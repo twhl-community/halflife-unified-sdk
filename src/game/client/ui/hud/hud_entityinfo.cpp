@@ -51,8 +51,6 @@ bool CHudEntityInfo::Draw(float flTime)
 	}
 
 	const int lineHeight = 20;
-	// Not exactly right, but this is enough to fit even a uint64.
-	const int maxDigitsInIntString = 32;
 
 	// Start drawing under the crosshair.
 	// Align the fields vertically. This may need adjusting if you add more lines.
@@ -67,11 +65,8 @@ bool CHudEntityInfo::Draw(float flTime)
 		yPos += lineHeight;
 	};
 
-	eastl::fixed_string<char, maxDigitsInIntString + 1> healthString;
-	fmt::format_to(std::back_inserter(healthString), "{}", m_EntityInfo.Health);
-
 	lineDrawer("Classname:", m_EntityInfo.Classname.c_str());
-	lineDrawer("Health:", healthString.c_str());
+	lineDrawer("Health:", UTIL_ToString(m_EntityInfo.Health).c_str());
 
 	return true;
 }

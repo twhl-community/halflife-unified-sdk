@@ -131,6 +131,14 @@ void UTIL_StringToVector(float* pVector, std::string_view pString)
 	}
 }
 
+IntegerString UTIL_ToString(int iValue)
+{
+	IntegerString buffer;
+	fmt::format_to(std::back_inserter(buffer), "{}", iValue);
+	return buffer;
+}
+
+
 bool UTIL_ParseStringWithArrayIndex(std::string_view input, std::string_view& name, int& index)
 {
 	const std::size_t endOfName = input.find_last_not_of("0123456789");

@@ -20,6 +20,11 @@
 
 #include <spdlog/common.h>
 
+/**
+*	@brief String type that can store an integer value up to @c (u)int64_t without dynamic memory allocations.
+*/
+using IntegerString = eastl::fixed_string<char, 20 + 1>;
+
 constexpr [[nodiscard]] std::string_view ToStringView(spdlog::string_view_t view)
 {
 	return {view.data(), view.size()};
@@ -47,6 +52,10 @@ void ToUpper(std::string& text);
 [[nodiscard]] std::string ToUpper(std::string_view text);
 
 void UTIL_StringToVector(float* pVector, std::string_view pString);
+
+// for handy use with ClientPrint params
+IntegerString UTIL_ToString(int iValue);
+
 
 /**
 *	@brief Parses a string that ends with an array index.

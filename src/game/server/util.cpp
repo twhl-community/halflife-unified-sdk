@@ -778,13 +778,6 @@ void UTIL_SayTextAll(const char* pText, CBaseEntity* pEntity)
 	MESSAGE_END();
 }
 
-auto UTIL_dtos(int iValue) -> eastl::fixed_string<char, 20 + 1>
-{
-	eastl::fixed_string<char, 20 + 1> buffer;
-	fmt::format_to(std::back_inserter(buffer), "{}", iValue);
-	return buffer;
-}
-
 void UTIL_ShowMessage(const char* pString, CBaseEntity* pEntity)
 {
 	if (!pEntity || !pEntity->IsNetClient())
