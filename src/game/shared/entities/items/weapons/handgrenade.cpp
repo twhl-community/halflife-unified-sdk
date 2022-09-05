@@ -113,7 +113,7 @@ void CHandGrenade::Holster()
 		pev->nextthink = gpGlobals->time + 0.1;
 	}
 
-	EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "common/null.wav", 1.0, ATTN_NORM);
+	STOP_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "common/null.wav");
 }
 
 void CHandGrenade::PrimaryAttack()

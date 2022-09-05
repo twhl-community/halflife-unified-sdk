@@ -495,7 +495,7 @@ void CSqueak::Holster()
 	}
 
 	SendWeaponAnim(SQUEAK_DOWN);
-	EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "common/null.wav", 1.0, ATTN_NORM);
+	STOP_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "common/null.wav");
 }
 
 
