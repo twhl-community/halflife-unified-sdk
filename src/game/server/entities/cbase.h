@@ -143,6 +143,7 @@ constexpr int CLASS_LAST = CLASS_ALIEN_RACE_X;
 
 class CBaseEntity;
 class CBaseMonster;
+class CTalkMonster;
 class CBasePlayerItem;
 class CSquadMonster;
 class COFSquadTalkMonster;
@@ -233,6 +234,7 @@ public:
 	virtual void TraceBleed(float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType);
 	virtual bool IsTriggered(CBaseEntity* pActivator) { return true; }
 	virtual CBaseMonster* MyMonsterPointer() { return nullptr; }
+	virtual CTalkMonster* MyTalkMonsterPointer() { return nullptr; }
 	virtual CSquadMonster* MySquadMonsterPointer() { return nullptr; }
 	virtual COFSquadTalkMonster* MySquadTalkMonsterPointer() { return nullptr; }
 	virtual int GetToggleState() { return TS_AT_TOP; }

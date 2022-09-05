@@ -110,6 +110,8 @@ public:
 	void PlayScriptedSentence(const char* pszSentence, float duration, float volume, float attenuation, bool bConcurrent, CBaseEntity* pListener) override;
 	bool KeyValue(KeyValueData* pkvd) override;
 
+	CTalkMonster* MyTalkMonsterPointer() override { return this; }
+
 	// AI functions
 	Schedule_t* GetScheduleOfType(int Type) override;
 	void StartTask(Task_t* pTask) override;
@@ -172,7 +174,6 @@ public:
 	float m_flLastSaidSmelled; // last time we talked about something that stinks
 	float m_flStopTalkTime;	   // when in the future that I'll be done saying this sentence.
 
-	//TODO: needs save/restore
 	bool m_fStartSuspicious;
 
 	EHANDLE m_hTalkTarget; // who to look at while talking
@@ -182,64 +183,73 @@ public:
 template <typename Callback>
 void CTalkMonster::ForEachFriend(Callback callback)
 {
-	//First pass: check for other NPCs of our own type
-	const auto classname = STRING(pev->classname);
-
-	for (auto friendEntity : UTIL_FindEntitiesByClassname(classname))
-	{
-		callback(friendEntity);
-	}
-
-	//Second pass: check for other NPCs of the same class
+	// First pass: check for other NPCs of the same classification.
+	// This typically includes NPCs with the same entity class, but a modder may implement custom classifications.
 	const auto myClass = Classify();
 
 	for (auto friendEntity : UTIL_FindEntities())
 	{
 		if (friendEntity->IsPlayer())
 		{
-			//No players
+			// No players
 			continue;
 		}
 
-		if (myClass != friendEntity->Classify())
+		auto talkMonster = friendEntity->MyTalkMonsterPointer();
+
+		if (!talkMonster)
+		{
+			// Not a talk monster, can't be a friend.
+			continue;
+		}
+
+		if (myClass != talkMonster->Classify())
 		{
 			continue;
 		}
 
-		callback(friendEntity);
+		callback(talkMonster);
 	}
 
-	//Third pass: check for other NPCs that are friendly to us
+	// Second pass: check for other NPCs that are friendly to us
 	for (auto friendEntity : UTIL_FindEntities())
 	{
 		if (friendEntity->IsPlayer())
 		{
-			//No players
+			// No players
 			continue;
 		}
 
-		if (myClass == friendEntity->Classify())
+		auto talkMonster = friendEntity->MyTalkMonsterPointer();
+
+		if (!talkMonster)
+		{
+			// Not a talk monster, can't be a friend.
+			continue;
+		}
+
+		if (myClass == talkMonster->Classify())
 		{
 			//Already checked these. Includes other NPCs of my type
 			continue;
 		}
 
-		const auto relationship = IRelationship(friendEntity);
+		const auto relationship = IRelationship(talkMonster);
 
 		if (relationship != R_AL && relationship != R_NO)
 		{
-			//Not a friend
+			// Not a friend
 			continue;
 		}
 
-		callback(friendEntity);
+		callback(talkMonster);
 	}
 }
 
 template <typename Callback>
 void CTalkMonster::EnumFriends(Callback callback, bool trace)
 {
-	auto wrapper = [&](CBaseEntity* pFriend)
+	auto wrapper = [&](CTalkMonster* pFriend)
 	{
 		if (pFriend == this || !pFriend->IsAlive() || !(pFriend->pev->flags & FL_MONSTER))
 		{
