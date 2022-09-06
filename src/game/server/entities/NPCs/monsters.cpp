@@ -3259,8 +3259,7 @@ void CBaseMonster::PlayScriptedSentence(const char* pszSentence, float duration,
 
 void CBaseMonster::SentenceStop()
 {
-	// TODO: use common/null.wav here once all sounds are routed through the new sound system.
-	STOP_SOUND(edict(), CHAN_VOICE, "!NULLSENT");
+	EMIT_SOUND(edict(), CHAN_VOICE, "common/null.wav", 1.0, ATTN_IDLE);
 }
 
 

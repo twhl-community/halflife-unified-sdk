@@ -306,7 +306,7 @@ void CSatchel::Holster()
 	{
 		SendWeaponAnim(SATCHEL_DROP);
 	}
-	STOP_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "common/null.wav");
+	EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "common/null.wav", 1.0, ATTN_NORM);
 
 	if (0 == m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] && 0 == m_chargeReady)
 	{

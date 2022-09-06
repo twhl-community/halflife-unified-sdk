@@ -329,7 +329,7 @@ void CTripmineGrenade::Killed(entvars_t* pevAttacker, int iGib)
 	SetThink(&CTripmineGrenade::DelayDeathThink);
 	pev->nextthink = gpGlobals->time + RANDOM_FLOAT(0.1, 0.3);
 
-	STOP_SOUND(ENT(pev), CHAN_BODY, "common/null.wav"); // shut off chargeup
+	EMIT_SOUND(ENT(pev), CHAN_BODY, "common/null.wav", 0.5, ATTN_NORM); // shut off chargeup
 }
 
 
@@ -425,7 +425,7 @@ void CTripmine::Holster()
 	}
 
 	SendWeaponAnim(TRIPMINE_HOLSTER);
-	STOP_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "common/null.wav");
+	EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "common/null.wav", 1.0, ATTN_NORM);
 }
 
 void CTripmine::PrimaryAttack()

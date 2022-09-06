@@ -80,7 +80,7 @@ void CPenguin::Holster()
 	{
 		SendWeaponAnim(PENGUIN_DOWN);
 
-		STOP_SOUND(edict(), CHAN_WEAPON, "common/null.wav");
+		EMIT_SOUND(edict(), CHAN_WEAPON, "common/null.wav", VOL_NORM, ATTN_NORM);
 	}
 	else
 	{
