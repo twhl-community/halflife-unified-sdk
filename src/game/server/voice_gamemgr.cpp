@@ -143,7 +143,7 @@ bool CVoiceGameMgr::Init(
 			//UpdateMasks();
 		});
 
-	m_VModEnableCommand = g_ClientCommands.Create("VModEnable", [this](CBasePlayer* player, const auto& args)
+	m_VModEnableCommand = g_ClientCommands.Create("vmodenable", [this](CBasePlayer* player, const auto& args)
 		{
 			const auto playerClientIndex = GetAndValidatePlayerIndex(player, args.Argument(0));
 
@@ -159,7 +159,7 @@ bool CVoiceGameMgr::Init(
 
 			const bool enable = 0 != atoi(CMD_ARGV(1));
 
-			VoiceServerDebug("CVoiceGameMgr::ClientCommand: VModEnable (%s)\n", enable ? "true" : "false");
+			VoiceServerDebug("CVoiceGameMgr::ClientCommand: vmodenable (%s)\n", enable ? "true" : "false");
 			g_PlayerModEnable[*playerClientIndex] = enable;
 			g_bWantModEnable[*playerClientIndex] = false;
 			//UpdateMasks();
@@ -233,7 +233,7 @@ void CVoiceGameMgr::UpdateMasks()
 		if (!pEnt || !pEnt->IsPlayer())
 			continue;
 
-		// Request the state of their "VModEnable" cvar.
+		// Request the state of their "vmodenable" cvar.
 		if (g_bWantModEnable[iClient])
 		{
 			MESSAGE_BEGIN(MSG_ONE, m_msgRequestState, nullptr, pEnt->pev);
