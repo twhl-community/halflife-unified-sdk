@@ -814,8 +814,6 @@ void CBasePlayer::RemoveAllItems(bool removeSuit)
 }
 
 /*
- * GLOBALS ASSUMED SET:  g_ulModelIndexPlayer
- *
  * ENTITY_METHOD(PlayerDie)
  */
 
@@ -847,8 +845,6 @@ void CBasePlayer::Killed(entvars_t* pevAttacker, int iGib)
 	SetAnimation(PLAYER_DIE);
 
 	m_iRespawnFrames = 0;
-
-	pev->modelindex = g_ulModelIndexPlayer; // don't use eyes
 
 	pev->deadflag = DEAD_DYING;
 	pev->movetype = MOVETYPE_TOSS;
@@ -2652,25 +2648,6 @@ void CBasePlayer::SetSuitUpdate(const char* name, bool fgroup, int iNoRepeatTime
 	}
 }
 
-/*
-================
-CheckPowerups
-
-Check for turning off powerups
-
-GLOBALS ASSUMED SET:  g_ulModelIndexPlayer
-================
-*/
-static void
-CheckPowerups(entvars_t* pev)
-{
-	if (pev->health <= 0)
-		return;
-
-	pev->modelindex = g_ulModelIndexPlayer; // don't use eyes
-}
-
-
 //=========================================================
 // UpdatePlayerSound - updates the position of the player's
 // reserved sound slot in the sound list.
@@ -2880,7 +2857,6 @@ void CBasePlayer::PostThink()
 	}
 
 	StudioFrameAdvance();
-	CheckPowerups(pev);
 
 	UpdatePlayerSound();
 
@@ -3208,7 +3184,6 @@ void CBasePlayer::Spawn()
 	g_pGameRules->GetPlayerSpawnSpot(this);
 
 	SetModel("models/player.mdl");
-	g_ulModelIndexPlayer = pev->modelindex;
 	pev->sequence = LookupActivity(ACT_IDLE);
 
 	if (FBitSet(pev->flags, FL_DUCKING))
@@ -3359,8 +3334,6 @@ bool CBasePlayer::Restore(CRestore& restore)
 
 	// Copied from spawn() for now
 	m_bloodColor = BLOOD_COLOR_RED;
-
-	g_ulModelIndexPlayer = pev->modelindex;
 
 	if (FBitSet(pev->flags, FL_DUCKING))
 	{

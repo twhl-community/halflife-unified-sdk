@@ -651,5 +651,4 @@ inline bool giPrecacheGrunt = false;
 *	@brief Display the game title if this key is set
 */
 inline DLL_GLOBAL std::string g_DisplayTitleName;
-inline DLL_GLOBAL unsigned int g_ulModelIndexPlayer = 0;
 inline DLL_GLOBAL CBaseEntity* g_pLastSpawn = nullptr;
