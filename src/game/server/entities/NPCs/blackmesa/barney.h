@@ -35,7 +35,6 @@ namespace GuardWeapon
 {
 enum GuardWeapon
 {
-	Random = -1,
 	Holstered = 0,
 	Equipped,
 	Gone

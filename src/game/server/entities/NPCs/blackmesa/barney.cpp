@@ -350,11 +350,6 @@ void CBarney::Spawn()
 
 	m_afCapability = bits_CAP_HEAR | bits_CAP_TURN_HEAD | bits_CAP_DOORS_GROUP;
 
-	if (m_iGuardBody == GuardWeapon::Random)
-	{
-		m_iGuardBody = GuardWeapon::Holstered;
-	}
-
 	SetBodygroup(GuardBodyGroup::Weapons, m_iGuardBody);
 
 	MonsterInit();
