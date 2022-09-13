@@ -65,16 +65,6 @@ extern DLL_GLOBAL int g_iSkillLevel;
 #define HGRUNT_HANDGRENADE (1 << 1)
 #define HGRUNT_SHOTGUN (1 << 3)
 
-#define HEAD_GROUP 1
-#define HEAD_GRUNT 0
-#define HEAD_COMMANDER 1
-#define HEAD_SHOTGUN 2
-#define HEAD_M203 3
-#define GUN_GROUP 2
-#define GUN_MP5 0
-#define GUN_SHOTGUN 1
-#define GUN_NONE 2
-
 namespace STrooperBodyGroup
 {
 enum STrooperBodyGroup
@@ -958,7 +948,7 @@ void CShockTrooper::Spawn()
 
 	m_HackedGunPos = Vector(0, 0, 55);
 
-	SetBodygroup(GUN_GROUP, GUN_SHOTGUN);
+	SetBodygroup(STrooperBodyGroup::Weapons, STrooperWeapon::Roach);
 
 	pev->weapons = HGRUNT_9MMAR | HGRUNT_HANDGRENADE;
 
