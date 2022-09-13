@@ -34,15 +34,35 @@
 #define HGRUNT_GRENADELAUNCHER (1 << 2)
 #define HGRUNT_SHOTGUN (1 << 3)
 
-#define HEAD_GROUP 1
-#define HEAD_GRUNT 0
-#define HEAD_COMMANDER 1
-#define HEAD_SHOTGUN 2
-#define HEAD_M203 3
-#define GUN_GROUP 2
-#define GUN_MP5 0
-#define GUN_SHOTGUN 1
-#define GUN_NONE 2
+namespace HGruntBodyGroup
+{
+enum HGruntBodyGroup
+{
+	Head = 1,
+	Weapons = 2
+};
+}
+
+namespace HGruntHead
+{
+enum HGruntHead
+{
+	Grunt = 0,
+	Commander,
+	Shotgun,
+	M203
+};
+}
+
+namespace HGruntWeapon
+{
+enum HGruntWeapon
+{
+	MP5 = 0,
+	Shotgun,
+	Blank
+};
+}
 
 //=========================================================
 // Monster's Anim Events Go Here

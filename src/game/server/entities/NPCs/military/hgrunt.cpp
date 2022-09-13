@@ -129,7 +129,7 @@ void CHGrunt::GibMonster()
 	Vector vecGunPos;
 	Vector vecGunAngles;
 
-	if (GetBodygroup(2) != 2)
+	if (GetBodygroup(HGruntBodyGroup::Weapons) != HGruntWeapon::Blank)
 	{ // throw a gun if the grunt has one
 		GetAttachment(0, vecGunPos, vecGunAngles);
 
@@ -461,7 +461,7 @@ void CHGrunt::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir,
 	if (ptr->iHitgroup == 11)
 	{
 		// make sure we're wearing one
-		if (GetBodygroup(1) == HEAD_GRUNT && (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_BLAST | DMG_CLUB)) != 0)
+		if (GetBodygroup(HGruntBodyGroup::Head) == HGruntHead::Grunt && (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_BLAST | DMG_CLUB)) != 0)
 		{
 			// absorb damage
 			flDamage -= 20;
@@ -728,7 +728,7 @@ void CHGrunt::HandleAnimEvent(MonsterEvent_t* pEvent)
 		GetAttachment(0, vecGunPos, vecGunAngles);
 
 		// switch to body group with no gun.
-		SetBodygroup(GUN_GROUP, GUN_NONE);
+		SetBodygroup(HGruntBodyGroup::Weapons, HGruntWeapon::Blank);
 
 		// now spawn a gun.
 		if (FBitSet(pev->weapons, HGRUNT_SHOTGUN))
@@ -857,7 +857,7 @@ void CHGrunt::Spawn()
 
 	if (FBitSet(pev->weapons, HGRUNT_SHOTGUN))
 	{
-		SetBodygroup(GUN_GROUP, GUN_SHOTGUN);
+		SetBodygroup(HGruntBodyGroup::Weapons, HGruntWeapon::Shotgun);
 		m_cClipSize = 8;
 	}
 	else
@@ -873,11 +873,11 @@ void CHGrunt::Spawn()
 
 	if (FBitSet(pev->weapons, HGRUNT_SHOTGUN))
 	{
-		SetBodygroup(HEAD_GROUP, HEAD_SHOTGUN);
+		SetBodygroup(HGruntBodyGroup::Head, HGruntHead::Shotgun);
 	}
 	else if (FBitSet(pev->weapons, HGRUNT_GRENADELAUNCHER))
 	{
-		SetBodygroup(HEAD_GROUP, HEAD_M203);
+		SetBodygroup(HGruntBodyGroup::Head, HGruntHead::M203);
 		pev->skin = 1; // alway dark skin
 	}
 
@@ -2282,26 +2282,26 @@ void CDeadHGrunt::Spawn()
 	case 0: // Grunt with Gun
 		pev->body = 0;
 		pev->skin = 0;
-		SetBodygroup(HEAD_GROUP, HEAD_GRUNT);
-		SetBodygroup(GUN_GROUP, GUN_MP5);
+		SetBodygroup(HGruntBodyGroup::Head, HGruntHead::Grunt);
+		SetBodygroup(HGruntBodyGroup::Weapons, HGruntWeapon::MP5);
 		break;
 	case 1: // Commander with Gun
 		pev->body = 0;
 		pev->skin = 0;
-		SetBodygroup(HEAD_GROUP, HEAD_COMMANDER);
-		SetBodygroup(GUN_GROUP, GUN_MP5);
+		SetBodygroup(HGruntBodyGroup::Head, HGruntHead::Commander);
+		SetBodygroup(HGruntBodyGroup::Weapons, HGruntWeapon::MP5);
 		break;
 	case 2: // Grunt no Gun
 		pev->body = 0;
 		pev->skin = 0;
-		SetBodygroup(HEAD_GROUP, HEAD_GRUNT);
-		SetBodygroup(GUN_GROUP, GUN_NONE);
+		SetBodygroup(HGruntBodyGroup::Head, HGruntHead::Grunt);
+		SetBodygroup(HGruntBodyGroup::Weapons, HGruntWeapon::Blank);
 		break;
 	case 3: // Commander no Gun
 		pev->body = 0;
 		pev->skin = 0;
-		SetBodygroup(HEAD_GROUP, HEAD_COMMANDER);
-		SetBodygroup(GUN_GROUP, GUN_NONE);
+		SetBodygroup(HGruntBodyGroup::Head, HGruntHead::Commander);
+		SetBodygroup(HGruntBodyGroup::Weapons, HGruntWeapon::Blank);
 		break;
 	}
 }

@@ -533,12 +533,12 @@ void CScientist::HandleAnimEvent(MonsterEvent_t* pEvent)
 		break;
 	case SCIENTIST_AE_NEEDLEON:
 	{
-		SetBodygroup(ScientistBodygroup::Needle, 1);
+		SetBodygroup(ScientistBodygroup::Needle, ScientistNeedle::Drawn);
 	}
 	break;
 	case SCIENTIST_AE_NEEDLEOFF:
 	{
-		SetBodygroup(ScientistBodygroup::Needle, 0);
+		SetBodygroup(ScientistBodygroup::Needle, ScientistNeedle::Blank);
 	}
 	break;
 

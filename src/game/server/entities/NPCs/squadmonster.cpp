@@ -18,6 +18,7 @@
 #include "cbase.h"
 #include "squadmonster.h"
 #include "plane.h"
+#include "military/hgrunt.h"
 
 //=========================================================
 // Save/Restore
@@ -431,7 +432,7 @@ void CSquadMonster::StartMonster()
 
 		if (IsLeader() && FClassnameIs(pev, "monster_human_grunt"))
 		{
-			SetBodygroup(1, 1); // UNDONE: truly ugly hack
+			SetBodygroup(HGruntBodyGroup::Head, HGruntHead::Commander); // UNDONE: truly ugly hack
 			pev->skin = 0;
 		}
 	}

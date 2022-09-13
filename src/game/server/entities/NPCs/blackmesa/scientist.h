@@ -35,6 +35,15 @@ enum ScientistBodygroup
 };
 }
 
+namespace ScientistNeedle
+{
+enum ScientistNeedle
+{
+	Blank = 0,
+	Drawn
+};
+}
+
 enum class ScientistItem
 {
 	None = 0,
