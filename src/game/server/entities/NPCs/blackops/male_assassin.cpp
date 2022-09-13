@@ -58,9 +58,9 @@ namespace MAssassinWeapon
 {
 enum MAssassinWeapon
 {
-	MP5 = 0,
+	Blank = 0,
+	MP5,
 	SniperRifle,
-	None
 };
 }
 
@@ -313,7 +313,7 @@ void CMOFAssassin::HandleAnimEvent(MonsterEvent_t* pEvent)
 		GetAttachment(0, vecGunPos, vecGunAngles);
 
 		// switch to body group with no gun.
-		SetBodygroup(MAssassinBodygroup::Weapons, MAssassinWeapon::None);
+		SetBodygroup(MAssassinBodygroup::Weapons, MAssassinWeapon::Blank);
 
 		// now spawn a gun.
 		if (FBitSet(pev->weapons, HGRUNT_9MMAR))
@@ -392,7 +392,7 @@ void CMOFAssassin::Spawn()
 		m_iAssassinHead = RANDOM_LONG(MAssassinHead::White, MAssassinHead::ThermalVision);
 	}
 
-	auto weaponModel = MAssassinWeapon::None;
+	auto weaponModel = MAssassinWeapon::Blank;
 
 	if (FBitSet(pev->weapons, HGRUNT_9MMAR))
 	{
@@ -406,7 +406,7 @@ void CMOFAssassin::Spawn()
 	}
 	else
 	{
-		weaponModel = MAssassinWeapon::None;
+		weaponModel = MAssassinWeapon::Blank;
 		m_cClipSize = 0;
 	}
 
@@ -533,13 +533,13 @@ void CDeadMOFAssassin::Spawn()
 		pev->body = 0;
 		pev->skin = 0;
 		SetBodygroup(MAssassinBodygroup::Heads, MAssassinHead::Black);
-		SetBodygroup(MAssassinBodygroup::Weapons, MAssassinWeapon::None);
+		SetBodygroup(MAssassinBodygroup::Weapons, MAssassinWeapon::Blank);
 		break;
 	case 3: // Commander no Gun
 		pev->body = 0;
 		pev->skin = 0;
 		SetBodygroup(MAssassinBodygroup::Heads, MAssassinHead::ThermalVision);
-		SetBodygroup(MAssassinBodygroup::Weapons, MAssassinWeapon::None);
+		SetBodygroup(MAssassinBodygroup::Weapons, MAssassinWeapon::Blank);
 		break;
 	}
 }

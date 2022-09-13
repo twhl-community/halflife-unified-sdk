@@ -35,17 +35,17 @@ namespace TorchAllyBodygroup
 enum TorchAllyBodygroup
 {
 	Head = 1,
-	Weapons = 2
+	Weapons = 3,
+	Torch = 4,
 };
 }
 
-namespace TorchAllyWeapon
+namespace TorchTorchState
 {
-enum TorchAllyWeapon
+enum TorchTorchState
 {
-	DesertEagle = 0,
-	Torch,
-	None
+	Blank = 0,
+	Drawn
 };
 }
 
@@ -99,7 +99,7 @@ public:
 protected:
 	void DropWeapon(bool applyVelocity) override;
 
-	bool CanRangeAttack() const override { return GetBodygroup(TorchAllyBodygroup::Weapons) == TorchAllyWeapon::DesertEagle; }
+	bool CanRangeAttack() const override { return GetBodygroup(TorchAllyBodygroup::Weapons) == NPCWeaponState::Drawn; }
 
 	std::tuple<int, Activity> GetSequenceForActivity(Activity NewActivity) override;
 
@@ -131,7 +131,7 @@ void COFTorchAlly::OnCreate()
 
 void COFTorchAlly::DropWeapon(bool applyVelocity)
 {
-	if (GetBodygroup(TorchAllyBodygroup::Weapons) == TorchAllyWeapon::DesertEagle)
+	if (GetBodygroup(TorchAllyBodygroup::Weapons) != NPCWeaponState::Blank)
 	{ // throw a gun if the grunt has one
 		Vector vecGunPos, vecGunAngles;
 		GetAttachment(0, vecGunPos, vecGunAngles);
@@ -144,7 +144,7 @@ void COFTorchAlly::DropWeapon(bool applyVelocity)
 			pGun->pev->avelocity = Vector(0, RANDOM_FLOAT(200, 400), 0);
 		}
 
-		SetBodygroup(TorchAllyBodygroup::Weapons, TorchAllyWeapon::None);
+		SetBodygroup(TorchAllyBodygroup::Weapons, NPCWeaponState::Blank);
 	}
 }
 
@@ -235,19 +235,22 @@ void COFTorchAlly::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 	case TORCH_AE_HOLSTER_TORCH:
 	{
-		SetBodygroup(TorchAllyBodygroup::Weapons, TorchAllyWeapon::DesertEagle);
+		SetBodygroup(TorchAllyBodygroup::Weapons, NPCWeaponState::Drawn);
+		SetBodygroup(TorchAllyBodygroup::Torch, TorchTorchState::Blank);
 		break;
 	}
 
 	case TORCH_AE_HOLSTER_GUN:
 	{
-		SetBodygroup(TorchAllyBodygroup::Weapons, TorchAllyWeapon::Torch);
+		SetBodygroup(TorchAllyBodygroup::Weapons, NPCWeaponState::Holstered);
+		SetBodygroup(TorchAllyBodygroup::Torch, TorchTorchState::Drawn);
 		break;
 	}
 
 	case TORCH_AE_HOLSTER_BOTH:
 	{
-		SetBodygroup(TorchAllyBodygroup::Weapons, TorchAllyWeapon::None);
+		SetBodygroup(TorchAllyBodygroup::Weapons, NPCWeaponState::Holstered);
+		SetBodygroup(TorchAllyBodygroup::Torch, TorchTorchState::Blank);
 		break;
 	}
 
@@ -309,20 +312,17 @@ void COFTorchAlly::Spawn()
 		pev->weapons |= TorchAllyWeaponFlag::DesertEagle;
 	}
 
-	int weaponIndex = TorchAllyWeapon::None;
-
 	if ((pev->weapons & TorchAllyWeaponFlag::DesertEagle) != 0)
 	{
-		weaponIndex = TorchAllyWeapon::DesertEagle;
+		SetBodygroup(TorchAllyBodygroup::Weapons, NPCWeaponState::Drawn);
 		m_cClipSize = TORCH_DEAGLE_CLIP_SIZE;
 	}
 	else
 	{
-		weaponIndex = TorchAllyWeapon::Torch;
+		SetBodygroup(TorchAllyBodygroup::Weapons, NPCWeaponState::Holstered);
+		SetBodygroup(TorchAllyBodygroup::Torch, TorchTorchState::Drawn);
 		m_cClipSize = 0;
 	}
-
-	SetBodygroup(TorchAllyBodygroup::Weapons, weaponIndex);
 
 	m_cAmmoLoaded = m_cClipSize;
 
@@ -374,7 +374,7 @@ std::tuple<int, Activity> COFTorchAlly::GetSequenceForActivity(Activity NewActiv
 
 Schedule_t* COFTorchAlly::GetTorchSchedule()
 {
-	if (GetBodygroup(TorchAllyBodygroup::Weapons) == TorchAllyWeapon::Torch)
+	if (GetBodygroup(TorchAllyBodygroup::Torch) == TorchTorchState::Drawn)
 	{
 		return COFSquadTalkMonster::GetSchedule();
 	}

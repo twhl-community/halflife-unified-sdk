@@ -31,16 +31,6 @@ enum GuardBodyGroup
 };
 }
 
-namespace GuardWeapon
-{
-enum GuardWeapon
-{
-	Holstered = 0,
-	Equipped,
-	Gone
-};
-}
-
 class CBarney : public CTalkMonster
 {
 public:

@@ -58,9 +58,9 @@ namespace HGruntWeapon
 {
 enum HGruntWeapon
 {
-	MP5 = 0,
+	Blank = 0,
+	MP5,
 	Shotgun,
-	Blank
 };
 }
 

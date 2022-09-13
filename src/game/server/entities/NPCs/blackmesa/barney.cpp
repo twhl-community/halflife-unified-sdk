@@ -315,17 +315,17 @@ void CBarney::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 	case BARNEY_AE_DRAW:
 		// guard's bodygroup switches here so he can pull gun from holster
-		if (GetBodygroup(GuardBodyGroup::Weapons) == GuardWeapon::Holstered)
+		if (GetBodygroup(GuardBodyGroup::Weapons) == NPCWeaponState::Holstered)
 		{
-			SetBodygroup(GuardBodyGroup::Weapons, GuardWeapon::Equipped);
+			SetBodygroup(GuardBodyGroup::Weapons, NPCWeaponState::Drawn);
 		}
 		break;
 
 	case BARNEY_AE_HOLSTER:
 		// change bodygroup to replace gun in holster
-		if (GetBodygroup(GuardBodyGroup::Weapons) == GuardWeapon::Equipped)
+		if (GetBodygroup(GuardBodyGroup::Weapons) == NPCWeaponState::Drawn)
 		{
-			SetBodygroup(GuardBodyGroup::Weapons, GuardWeapon::Holstered);
+			SetBodygroup(GuardBodyGroup::Weapons, NPCWeaponState::Holstered);
 		}
 		break;
 
@@ -350,7 +350,7 @@ void CBarney::Spawn()
 
 	m_afCapability = bits_CAP_HEAR | bits_CAP_TURN_HEAD | bits_CAP_DOORS_GROUP;
 
-	SetBodygroup(GuardBodyGroup::Weapons, m_iGuardBody);
+	SetBodygroup(GuardBodyGroup::Weapons, NPCWeaponState::Holstered + m_iGuardBody);
 
 	MonsterInit();
 	SetUse(&CBarney::FollowerUse);
@@ -534,9 +534,9 @@ void CBarney::DropWeapon()
 
 void CBarney::Killed(entvars_t* pevAttacker, int iGib)
 {
-	if (GetBodygroup(GuardBodyGroup::Weapons) != GuardWeapon::Gone)
+	if (GetBodygroup(GuardBodyGroup::Weapons) != NPCWeaponState::Blank)
 	{ // drop the gun!
-		SetBodygroup(GuardBodyGroup::Weapons, GuardWeapon::Gone);
+		SetBodygroup(GuardBodyGroup::Weapons, NPCWeaponState::Blank);
 		DropWeapon();
 	}
 
@@ -636,7 +636,7 @@ Schedule_t* CBarney::GetSchedule()
 			return GetScheduleOfType(SCHED_SMALL_FLINCH);
 
 		// wait for one schedule to draw gun
-		if (GetBodygroup(GuardBodyGroup::Weapons) != GuardWeapon::Equipped)
+		if (GetBodygroup(GuardBodyGroup::Weapons) != NPCWeaponState::Drawn)
 			return GetScheduleOfType(SCHED_ARM_WEAPON);
 
 		if (HasConditions(bits_COND_HEAVY_DAMAGE))

@@ -83,10 +83,10 @@ namespace HGruntAllyWeapon
 {
 enum HGruntAllyWeapon
 {
-	MP5 = 0,
+	Blank = 0,
+	MP5,
 	Shotgun,
-	Saw,
-	None
+	Saw
 };
 }
 
@@ -147,7 +147,7 @@ void CHGruntAlly::OnCreate()
 
 void CHGruntAlly::DropWeapon(bool applyVelocity)
 {
-	if (GetBodygroup(HGruntAllyBodygroup::Weapons) != HGruntAllyWeapon::None)
+	if (GetBodygroup(HGruntAllyBodygroup::Weapons) != HGruntAllyWeapon::Blank)
 	{ // throw a gun if the grunt has one
 		Vector vecGunPos, vecGunAngles;
 		GetAttachment(0, vecGunPos, vecGunAngles);
@@ -181,7 +181,7 @@ void CHGruntAlly::DropWeapon(bool applyVelocity)
 			}
 		}
 
-		SetBodygroup(HGruntAllyBodygroup::Weapons, HGruntAllyWeapon::None);
+		SetBodygroup(HGruntAllyBodygroup::Weapons, HGruntAllyWeapon::Blank);
 	}
 }
 
@@ -350,7 +350,7 @@ void CHGruntAlly::Spawn()
 	}
 	else
 	{
-		weaponIndex = HGruntAllyWeapon::None;
+		weaponIndex = HGruntAllyWeapon::Blank;
 		m_cClipSize = 0;
 	}
 
@@ -370,7 +370,7 @@ void CHGruntAlly::Spawn()
 		{
 			m_iGruntHead = RANDOM_LONG(0, 1) + HGruntAllyHead::BandanaWhite;
 		}
-		else if (weaponIndex == HGruntAllyWeapon::None)
+		else if (weaponIndex == HGruntAllyWeapon::Blank)
 		{
 			m_iGruntHead = HGruntAllyHead::MilitaryPolice;
 		}
@@ -562,7 +562,7 @@ void CDeadHGruntAlly::Spawn()
 	else
 	{
 		SetBodygroup(HGruntAllyBodygroup::Torso, HGruntAllyTorso::Normal);
-		SetBodygroup(HGruntAllyBodygroup::Weapons, HGruntAllyWeapon::None);
+		SetBodygroup(HGruntAllyBodygroup::Weapons, HGruntAllyWeapon::Blank);
 	}
 
 	SetBodygroup(HGruntAllyBodygroup::Head, m_iGruntHead);

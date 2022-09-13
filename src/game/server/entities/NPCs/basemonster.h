@@ -17,6 +17,22 @@
 
 #include "monsters.h"
 
+/**
+*	@brief Enum namespace
+*/
+namespace NPCWeaponState
+{
+/**
+*	@brief Values for NPC weapon equip state.
+*/
+enum NPCWeaponState
+{
+	Blank = 0, //!< Not visible at all.
+	Holstered, //!< In holster.
+	Drawn //!< In hand.
+};
+}
+
 //
 // generic Monster
 //

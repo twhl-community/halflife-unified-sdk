@@ -67,8 +67,8 @@ namespace STrooperWeapon
 {
 enum STrooperWeapon
 {
-	Roach = 0,
-	None = 1
+	Blank = 0,
+	Roach = 1,
 };
 }
 
@@ -293,7 +293,7 @@ void CShockTrooper::GibMonster()
 	Vector vecGunPos;
 	Vector vecGunAngles;
 
-	if (GetBodygroup(STrooperBodyGroup::Weapons) != STrooperWeapon::None)
+	if (GetBodygroup(STrooperBodyGroup::Weapons) != STrooperWeapon::Blank)
 	{ // throw a gun if the grunt has one
 		GetAttachment(0, vecGunPos, vecGunAngles);
 
@@ -825,7 +825,7 @@ void CShockTrooper::HandleAnimEvent(MonsterEvent_t* pEvent)
 	{
 	case STROOPER_AE_DROP_GUN:
 	{
-		if (GetBodygroup(STrooperBodyGroup::Weapons) != STrooperWeapon::None)
+		if (GetBodygroup(STrooperBodyGroup::Weapons) != STrooperWeapon::Blank)
 		{
 			Vector vecGunPos;
 			//Zero this out so we don't end up with garbage angles later on
@@ -837,7 +837,7 @@ void CShockTrooper::HandleAnimEvent(MonsterEvent_t* pEvent)
 			vecGunAngles.x = vecGunAngles.z = 0;
 
 			// switch to body group with no gun.
-			SetBodygroup(STrooperBodyGroup::Weapons, STrooperWeapon::None);
+			SetBodygroup(STrooperBodyGroup::Weapons, STrooperWeapon::Blank);
 
 			// now spawn a gun.
 			auto pRoach = DropItem("monster_shockroach", pev->origin + Vector(0, 0, 48), vecGunAngles);

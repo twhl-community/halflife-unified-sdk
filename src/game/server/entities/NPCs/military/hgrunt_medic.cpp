@@ -34,6 +34,7 @@
 #include "COFSquadTalkMonster.h"
 #include "customentity.h"
 #include "hgrunt_ally_base.h"
+#include "blackmesa/scientist.h"
 
 //=========================================================
 // monster-specific DEFINE's
@@ -45,8 +46,11 @@ namespace MedicAllyBodygroup
 {
 enum MedicAllyBodygroup
 {
+	Invalid = -1,
 	Head = 2,
-	Weapons = 3
+	Deagle = 3,
+	Glock = 4,
+	Needle = 5
 };
 }
 
@@ -60,17 +64,6 @@ enum MedicAllyHead
 };
 }
 
-namespace MedicAllyWeapon
-{
-enum MedicAllyWeapon
-{
-	DesertEagle = 0,
-	Glock,
-	Needle,
-	None
-};
-}
-
 namespace MedicAllyWeaponFlag
 {
 enum MedicAllyWeaponFlag
@@ -81,6 +74,17 @@ enum MedicAllyWeaponFlag
 	HandGrenade = 1 << 3,
 };
 }
+
+struct MedicWeaponData
+{
+	MedicAllyBodygroup::MedicAllyBodygroup Group;
+	const char* ClassName;
+};
+
+static const MedicWeaponData MedicWeaponDatas[] =
+	{
+		{MedicAllyBodygroup::Deagle, "weapon_eagle"},
+		{MedicAllyBodygroup::Glock, "weapon_9mmhandgun"}};
 
 //=========================================================
 // Monster's Anim Events Go Here
@@ -152,6 +156,8 @@ public:
 
 	int m_iBrassShell; //TODO: no shell is being ejected atm
 
+	MedicAllyBodygroup::MedicAllyBodygroup m_WeaponGroup = MedicAllyBodygroup::Invalid;
+
 protected:
 	void DropWeapon(bool applyVelocity) override;
 
@@ -174,6 +180,7 @@ TYPEDESCRIPTION COFMedicAlly::m_SaveData[] =
 		DEFINE_FIELD(COFMedicAlly, m_flLastUseTime, FIELD_TIME),
 		DEFINE_FIELD(COFMedicAlly, m_fHealActive, FIELD_BOOLEAN),
 		DEFINE_FIELD(COFMedicAlly, m_flLastShot, FIELD_TIME),
+		DEFINE_FIELD(COFMedicAlly, m_WeaponGroup, FIELD_INTEGER),
 };
 
 IMPLEMENT_SAVERESTORE(COFMedicAlly, CBaseHGruntAlly);
@@ -191,30 +198,24 @@ void COFMedicAlly::OnCreate()
 
 void COFMedicAlly::DropWeapon(bool applyVelocity)
 {
-	if (GetBodygroup(MedicAllyBodygroup::Weapons) != MedicAllyWeapon::None)
-	{ // throw a gun if the grunt has one
+	for (const auto& weapon : MedicWeaponDatas)
+	{
+		if (GetBodygroup(weapon.Group) != NPCWeaponState::Blank)
+		{ // throw a gun if the grunt has one
 
-		Vector vecGunPos, vecGunAngles;
-		GetAttachment(0, vecGunPos, vecGunAngles);
+			Vector vecGunPos, vecGunAngles;
+			GetAttachment(0, vecGunPos, vecGunAngles);
 
-		CBaseEntity* pGun = nullptr;
+			CBaseEntity* pGun = DropItem(weapon.ClassName, vecGunPos, vecGunAngles);
 
-		if ((pev->weapons & MedicAllyWeaponFlag::Glock) != 0)
-		{
-			pGun = DropItem("weapon_9mmhandgun", vecGunPos, vecGunAngles);
+			if (pGun && applyVelocity)
+			{
+				pGun->pev->velocity = Vector(RANDOM_FLOAT(-100, 100), RANDOM_FLOAT(-100, 100), RANDOM_FLOAT(200, 300));
+				pGun->pev->avelocity = Vector(0, RANDOM_FLOAT(200, 400), 0);
+			}
+
+			SetBodygroup(weapon.Group, NPCWeaponState::Blank);
 		}
-		else if ((pev->weapons & MedicAllyWeaponFlag::DesertEagle) != 0)
-		{
-			pGun = DropItem("weapon_eagle", vecGunPos, vecGunAngles);
-		}
-
-		if (pGun && applyVelocity)
-		{
-			pGun->pev->velocity = Vector(RANDOM_FLOAT(-100, 100), RANDOM_FLOAT(-100, 100), RANDOM_FLOAT(200, 300));
-			pGun->pev->avelocity = Vector(0, RANDOM_FLOAT(200, 400), 0);
-		}
-
-		SetBodygroup(MedicAllyBodygroup::Weapons, MedicAllyWeapon::None);
 	}
 }
 
@@ -296,19 +297,25 @@ void COFMedicAlly::HandleAnimEvent(MonsterEvent_t* pEvent)
 	break;
 
 	case MEDIC_AE_HOLSTER_GUN:
-		SetBodygroup(MedicAllyBodygroup::Weapons, MedicAllyWeapon::None);
+		if (m_WeaponGroup != MedicAllyBodygroup::Invalid)
+		{
+			SetBodygroup(m_WeaponGroup, NPCWeaponState::Holstered);
+		}
 		break;
 
 	case MEDIC_AE_EQUIP_NEEDLE:
-		SetBodygroup(MedicAllyBodygroup::Weapons, MedicAllyWeapon::Needle);
+		SetBodygroup(MedicAllyBodygroup::Needle, ScientistNeedle::Drawn);
 		break;
 
 	case MEDIC_AE_HOLSTER_NEEDLE:
-		SetBodygroup(MedicAllyBodygroup::Weapons, MedicAllyWeapon::None);
+		SetBodygroup(MedicAllyBodygroup::Needle, ScientistNeedle::Blank);
 		break;
 
 	case MEDIC_AE_EQUIP_GUN:
-		SetBodygroup(MedicAllyBodygroup::Weapons, (pev->weapons & MedicAllyWeaponFlag::Glock) != 0 ? MedicAllyWeapon::Glock : MedicAllyWeapon::DesertEagle);
+		if (m_WeaponGroup != MedicAllyBodygroup::Invalid)
+		{
+			SetBodygroup(m_WeaponGroup, NPCWeaponState::Drawn);
+		}
 		break;
 
 	default:
@@ -346,27 +353,30 @@ void COFMedicAlly::Spawn()
 
 	if ((pev->weapons & MedicAllyWeaponFlag::Glock) != 0)
 	{
-		weaponIndex = MedicAllyWeapon::Glock;
+		m_WeaponGroup = MedicAllyBodygroup::Glock;
 		m_cClipSize = MEDIC_GLOCK_CLIP_SIZE;
 	}
 	else if ((pev->weapons & MedicAllyWeaponFlag::DesertEagle) != 0)
 	{
-		weaponIndex = MedicAllyWeapon::DesertEagle;
+		m_WeaponGroup = MedicAllyBodygroup::Deagle;
 		m_cClipSize = MEDIC_DEAGLE_CLIP_SIZE;
 	}
 	else if ((pev->weapons & MedicAllyWeaponFlag::Needle) != 0)
 	{
-		weaponIndex = MedicAllyWeapon::Needle;
+		SetBodygroup(MedicAllyBodygroup::Needle, ScientistNeedle::Drawn);
 		m_cClipSize = 1;
 	}
 	else
 	{
-		weaponIndex = MedicAllyWeapon::None;
 		m_cClipSize = 0;
 	}
 
 	SetBodygroup(MedicAllyBodygroup::Head, m_iGruntHead);
-	SetBodygroup(MedicAllyBodygroup::Weapons, weaponIndex);
+
+	if (m_WeaponGroup != MedicAllyBodygroup::Invalid)
+	{
+		SetBodygroup(m_WeaponGroup, NPCWeaponState::Drawn);
+	}
 
 	m_cAmmoLoaded = m_cClipSize;
 
