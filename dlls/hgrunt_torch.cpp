@@ -260,6 +260,7 @@ TYPEDESCRIPTION COFTorchAlly::m_SaveData[] =
 		DEFINE_FIELD(COFTorchAlly, m_fGunHolstered, FIELD_BOOLEAN),
 		DEFINE_FIELD(COFTorchAlly, m_fTorchHolstered, FIELD_BOOLEAN),
 		DEFINE_FIELD(COFTorchAlly, m_fTorchActive, FIELD_BOOLEAN),
+		DEFINE_FIELD(COFTorchAlly, m_pTorchBeam, FIELD_CLASSPTR),
 		DEFINE_FIELD(COFTorchAlly, m_flLastShot, FIELD_TIME),
 };
 
