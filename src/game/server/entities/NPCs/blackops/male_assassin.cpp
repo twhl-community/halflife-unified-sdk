@@ -136,7 +136,7 @@ void CMOFAssassin::GibMonster()
 	Vector vecGunPos;
 	Vector vecGunAngles;
 
-	if (GetBodygroup(2) != 2)
+	if (GetBodygroup(MAssassinBodygroup::Weapons) != MAssassinWeapon::Blank)
 	{ // throw a gun if the grunt has one
 		GetAttachment(0, vecGunPos, vecGunAngles);
 
