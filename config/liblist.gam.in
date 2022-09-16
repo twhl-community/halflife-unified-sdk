@@ -2,6 +2,7 @@
 //  These are key/value pairs.  Certain mods will use different settings.
 //
 game "Half-Life Unified SDK"
+icon "game"
 startmap "c0a0"
 trainmap "t0a0"
 mpentity "info_player_deathmatch"
