@@ -148,7 +148,7 @@ static void S_PlaySound(const CommandArgs& args, int channelIndex)
 {
 	if (args.Count() < 2)
 	{
-		Con_Printf("Usage: %s <sound name> [volume]\n", args.Argument(0));
+		Con_Printf("Usage: %s <sound name> [volume] [attenuation] [pitch]\n", args.Argument(0));
 		return;
 	}
 
