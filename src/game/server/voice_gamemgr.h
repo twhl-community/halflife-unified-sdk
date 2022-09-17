@@ -7,7 +7,6 @@
 
 #pragma once
 
-#include <memory>
 #include <optional>
 
 #include "ClientCommandRegistry.h"
@@ -72,6 +71,6 @@ private:
 	int m_nMaxPlayers;
 	double m_UpdateInterval; // How long since the last update.
 
-	std::shared_ptr<const ClientCommand> m_VBanCommand;
-	std::shared_ptr<const ClientCommand> m_VModEnableCommand;
+	ScopedClientCommand m_VBanCommand;
+	ScopedClientCommand m_VModEnableCommand;
 };
