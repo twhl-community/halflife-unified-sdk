@@ -862,6 +862,7 @@ void CHGrunt::Spawn()
 	}
 	else
 	{
+		SetBodygroup(HGruntBodyGroup::Weapons, HGruntWeapon::MP5);
 		m_cClipSize = GRUNT_CLIP_SIZE;
 	}
 	m_cAmmoLoaded = m_cClipSize;
