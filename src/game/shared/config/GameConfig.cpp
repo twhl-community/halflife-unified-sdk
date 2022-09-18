@@ -23,7 +23,7 @@
 
 #include "ConditionEvaluator.h"
 #include "GameConfigIncludeStack.h"
-#include "GameConfigLoader.h"
+#include "GameConfig.h"
 
 #include "utils/JSONSystem.h"
 #include "utils/string_utils.h"

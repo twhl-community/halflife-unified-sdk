@@ -15,7 +15,7 @@
 
 #pragma once
 
-#include "config/GameConfigLoader.h"
+#include "config/GameConfig.h"
 
 #include "utils/JSONSystem.h"
 

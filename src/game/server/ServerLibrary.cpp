@@ -27,7 +27,7 @@
 #include "UserMessages.h"
 
 #include "config/ConditionEvaluator.h"
-#include "config/GameConfigLoader.h"
+#include "config/GameConfig.h"
 #include "config/sections/CommandsSection.h"
 #include "config/sections/EchoSection.h"
 #include "config/sections/GlobalModelReplacementSection.h"

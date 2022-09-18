@@ -9,8 +9,8 @@ function(add_game_shared_sources target)
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/ConditionEvaluator.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/ConditionEvaluator.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/GameConfigIncludeStack.h
-			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/GameConfigLoader.cpp
-			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/GameConfigLoader.h
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/GameConfig.cpp
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/GameConfig.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/sections/CommandsSection.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/sections/EchoSection.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/sections/GlobalModelReplacementSection.h

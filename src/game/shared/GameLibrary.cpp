@@ -18,7 +18,7 @@
 #include "GameLibrary.h"
 
 #include "config/ConditionEvaluator.h"
-#include "config/GameConfigLoader.h"
+#include "config/GameConfig.h"
 
 #include "scripting/AS/ASManager.h"
 

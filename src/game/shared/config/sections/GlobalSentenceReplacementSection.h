@@ -17,7 +17,7 @@
 
 #include "MapState.h"
 
-#include "config/GameConfigLoader.h"
+#include "config/GameConfig.h"
 
 #include "utils/JSONSystem.h"
 #include "utils/ReplacementMaps.h"

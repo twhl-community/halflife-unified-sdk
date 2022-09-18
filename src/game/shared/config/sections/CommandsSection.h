@@ -26,7 +26,7 @@
 
 #include <spdlog/logger.h>
 
-#include "config/GameConfigLoader.h"
+#include "config/GameConfig.h"
 
 /**
 *	@brief Defines a section containing an array of console command strings.
