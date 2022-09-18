@@ -41,7 +41,7 @@ void GameLibrary::AddGameSystems()
 	g_GameSystems.Add(&g_ASManager);
 	//Depends on Angelscript
 	g_GameSystems.Add(&g_ConditionEvaluator);
-	g_GameSystems.Add(&g_GameConfigLoader);
+	g_GameSystems.Add(&g_GameConfigSystem);
 	g_GameSystems.Add(&g_ReplacementMaps);
 }
 

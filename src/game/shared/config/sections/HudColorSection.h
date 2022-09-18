@@ -26,7 +26,7 @@
 /**
 *	@brief Allows a configuration file to specify the player's hud color.
 */
-class HudColorSection final : public GameConfigSection
+class HudColorSection final : public GameConfigSection<MapState>
 {
 public:
 	explicit HudColorSection() = default;
@@ -45,7 +45,7 @@ public:
 			{"\"Color\""}};
 	}
 
-	bool TryParse(GameConfigContext& context) const override final
+	bool TryParse(GameConfigContext<MapState>& context) const override final
 	{
 		const auto color = context.Input.value("Color", std::string{});
 
@@ -55,9 +55,7 @@ public:
 
 			UTIL_StringToVector(colorValue, color);
 
-			auto mapState = std::any_cast<MapState*>(context.UserData);
-
-			mapState->m_HudColor = {
+			context.Data.m_HudColor = {
 				static_cast<std::uint8_t>(colorValue.x),
 				static_cast<std::uint8_t>(colorValue.y),
 				static_cast<std::uint8_t>(colorValue.z)};

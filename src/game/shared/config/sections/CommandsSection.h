@@ -31,7 +31,8 @@
 /**
 *	@brief Defines a section containing an array of console command strings.
 */
-class CommandsSection final : public GameConfigSection
+template<typename DataContext>
+class CommandsSection final : public GameConfigSection<DataContext>
 {
 private:
 	static const inline std::regex CommandNameRegex{"^[\\w]+$"};
@@ -63,7 +64,7 @@ public:
 			{"\"Commands\""}};
 	}
 
-	bool TryParse(GameConfigContext& context) const override final
+	bool TryParse(GameConfigContext<DataContext>& context) const override final
 	{
 		using namespace std::literals;
 
@@ -83,11 +84,11 @@ public:
 
 		std::string buffer;
 
-		auto logger = context.Loader.GetLogger();
+		auto& logger = context.Logger;
 
 		auto executor = [&](const std::string& command)
 		{
-			logger->trace("Executing command \"{}\"", command);
+			logger.trace("Executing command \"{}\"", command);
 
 			buffer.clear();
 			fmt::format_to(std::back_inserter(buffer), "{}\n", command);
@@ -120,7 +121,7 @@ public:
 			//Prevent commands from being snuck in by appending it to the end of another command
 			if (!std::regex_match(com_token, CommandNameRegex) || !ValidateCommand(value))
 			{
-				context.Loader.GetLogger()->warn(
+				logger.warn(
 					"Command \"{:.10}{}\" contains illegal characters",
 					value, value.length() > 10 ? "..."sv : ""sv);
 				continue;
@@ -132,7 +133,7 @@ public:
 			}
 			else
 			{
-				context.Loader.GetLogger()->warn("Command \"{}\" is not whitelisted, ignoring", com_token);
+				logger.warn("Command \"{}\" is not whitelisted, ignoring", com_token);
 			}
 		}
 

@@ -25,7 +25,7 @@
 /**
 *	@brief Allows a configuration file to specify a global sound replacement file.
 */
-class GlobalSoundReplacementSection final : public GameConfigSection
+class GlobalSoundReplacementSection final : public GameConfigSection<MapState>
 {
 public:
 	explicit GlobalSoundReplacementSection() = default;
@@ -43,33 +43,31 @@ public:
 			{"\"FileName\""}};
 	}
 
-	bool TryParse(GameConfigContext& context) const override final
+	bool TryParse(GameConfigContext<MapState>& context) const override final
 	{
 		const auto fileName = context.Input.value("FileName", std::string{});
 
 		if (!fileName.empty())
 		{
-			context.Loader.GetLogger()->debug("Adding global sound replacement file \"{}\"", fileName);
+			context.Logger.debug("Adding global sound replacement file \"{}\"", fileName);
 
-			auto mapState = std::any_cast<MapState*>(context.UserData);
-
-			if (!mapState->m_GlobalSoundReplacement->empty())
+			if (!context.Data.m_GlobalSoundReplacement->empty())
 			{
-				context.Loader.GetLogger()->error("Only one global sound replacement file may be specified");
+				context.Logger.error("Only one global sound replacement file may be specified");
 				return false;
 			}
 
-			mapState->m_GlobalSoundReplacementFileName.assign(fileName.data(), fileName.size());
+			context.Data.m_GlobalSoundReplacementFileName.assign(fileName.data(), fileName.size());
 
 			if (fileName.size() > (MaxUserMessageLength - 1))
 			{
-				context.Loader.GetLogger()->error(
+				context.Logger.error(
 					"Global sound replacement file name must be no longer than {} bytes (prefer ASCII characters)",
 					MaxUserMessageLength - 1);
 				return false;
 			}
 
-			mapState->m_GlobalSoundReplacement = g_ReplacementMaps.Load(fileName, {.CaseSensitive = false});
+			context.Data.m_GlobalSoundReplacement = g_ReplacementMaps.Load(fileName, {.CaseSensitive = false});
 		}
 
 		return true;

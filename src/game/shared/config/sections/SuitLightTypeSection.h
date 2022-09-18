@@ -28,7 +28,7 @@
 /**
 *	@brief Allows a configuration file to specify the player's suit light type.
 */
-class SuitLightTypeSection final : public GameConfigSection
+class SuitLightTypeSection final : public GameConfigSection<MapState>
 {
 public:
 	explicit SuitLightTypeSection() = default;
@@ -71,7 +71,7 @@ public:
 			{"\"Type\""}};
 	}
 
-	bool TryParse(GameConfigContext& context) const override final
+	bool TryParse(GameConfigContext<MapState>& context) const override final
 	{
 		const auto type = context.Input.value("Type", std::string{});
 
@@ -79,9 +79,7 @@ public:
 		{
 			if (auto value = SuitLightTypeFromString(type); value)
 			{
-				auto mapState = std::any_cast<MapState*>(context.UserData);
-
-				mapState->m_LightType = *value;
+				context.Data.m_LightType = *value;
 			}
 		}
 

@@ -101,8 +101,6 @@ private:
 
 	void CreateConfigDefinitions();
 
-	void LoadConfigFile(const char* fileName, const GameConfigDefinition& definition, GameConfigLoadParameters parameters = {});
-
 	void LoadServerConfigFiles();
 
 	void LoadMapChangeConfigFile();
@@ -110,9 +108,9 @@ private:
 	std::unordered_set<std::string> GetMapConfigCommandWhitelist();
 
 private:
-	std::shared_ptr<const GameConfigDefinition> m_ServerConfigDefinition;
-	std::shared_ptr<const GameConfigDefinition> m_MapConfigDefinition;
-	std::shared_ptr<const GameConfigDefinition> m_MapChangeConfigDefinition;
+	std::shared_ptr<const GameConfigDefinition<MapState>> m_ServerConfigDefinition;
+	std::shared_ptr<const GameConfigDefinition<MapState>> m_MapConfigDefinition;
+	std::shared_ptr<const GameConfigDefinition<MapState>> m_MapChangeConfigDefinition;
 
 	bool m_IsStartingNewMap = true;
 

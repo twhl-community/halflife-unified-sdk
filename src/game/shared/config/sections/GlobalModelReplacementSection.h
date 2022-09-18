@@ -25,7 +25,7 @@
 /**
 *	@brief Allows a configuration file to specify a global model replacement file.
 */
-class GlobalModelReplacementSection final : public GameConfigSection
+class GlobalModelReplacementSection final : public GameConfigSection<MapState>
 {
 public:
 	explicit GlobalModelReplacementSection() = default;
@@ -43,23 +43,21 @@ public:
 			{"\"FileName\""}};
 	}
 
-	bool TryParse(GameConfigContext& context) const override final
+	bool TryParse(GameConfigContext<MapState>& context) const override final
 	{
 		const auto fileName = context.Input.value("FileName", std::string{});
 
 		if (!fileName.empty())
 		{
-			context.Loader.GetLogger()->debug("Adding global model replacement file \"{}\"", fileName);
+			context.Logger.debug("Adding global model replacement file \"{}\"", fileName);
 
-			auto mapState = std::any_cast<MapState*>(context.UserData);
-
-			if (!mapState->m_GlobalModelReplacement->empty())
+			if (!context.Data.m_GlobalModelReplacement->empty())
 			{
-				context.Loader.GetLogger()->error("Only one global model replacement file may be specified");
+				context.Logger.error("Only one global model replacement file may be specified");
 				return false;
 			}
 
-			mapState->m_GlobalModelReplacement = g_ReplacementMaps.Load(fileName, {.CaseSensitive = false});
+			context.Data.m_GlobalModelReplacement = g_ReplacementMaps.Load(fileName, {.CaseSensitive = false});
 		}
 
 		return true;

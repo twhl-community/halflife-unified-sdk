@@ -22,7 +22,8 @@
 /**
 *	@brief Simple section that echoes a message provided in the config file.
 */
-class EchoSection final : public GameConfigSection
+template <typename DataContext>
+class EchoSection final : public GameConfigSection<DataContext>
 {
 public:
 	explicit EchoSection() = default;
@@ -40,11 +41,11 @@ public:
 			{"\"Message\""}};
 	}
 
-	bool TryParse(GameConfigContext& context) const override final
+	bool TryParse(GameConfigContext<DataContext>& context) const override final
 	{
 		using namespace std::literals;
 		//If developer mode is on then this is a debug message, otherwise it's a trace message. Helps to prevent abuse.
-		context.Loader.GetLogger()->log(g_pDeveloper->value > 0 ? spdlog::level::debug : spdlog::level::trace,
+		context.Logger.log(g_pDeveloper->value > 0 ? spdlog::level::debug : spdlog::level::trace,
 			"{}", context.Input.value("Message", "No message provided"sv));
 		return true;
 	}
