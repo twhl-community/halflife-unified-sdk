@@ -64,6 +64,11 @@ add_subdirectory(external/json-schema-validator
 	EXCLUDE_FROM_ALL)
 
 option(LIBNYQUIST_BUILD_EXAMPLE "" OFF)
+
+if (MSVC)
+	option(LIBNYQUIST_ENABLE_AVX "" OFF)
+endif()
+
 add_subdirectory(external/libnyquist
 	libnyquist-binary-dir
 	EXCLUDE_FROM_ALL)
