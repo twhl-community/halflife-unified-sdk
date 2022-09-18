@@ -1029,7 +1029,7 @@ void CAmbientMusic::RadiusThink()
 	{
 		auto player = UTIL_PlayerByIndex(i);
 
-		if (player && (player->pev->origin - pev->origin).LengthSquared() <= radiusSquared)
+		if (player != nullptr && (player->pev->origin - pev->origin).LengthSquared() <= radiusSquared)
 		{
 			CLIENT_COMMAND(player->edict(), "%s", command.c_str());
 			touchedAPlayer = true;

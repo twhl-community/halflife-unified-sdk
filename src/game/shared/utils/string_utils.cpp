@@ -42,7 +42,7 @@ std::string_view TrimEnd(std::string_view text)
 	//Avoid relying on overflow
 	std::size_t index = text.size();
 
-	while (index > 0 && std::isspace(text[index - 1]))
+	while (index > 0 && std::isspace(text[index - 1]) != 0)
 	{
 		--index;
 	}
@@ -115,7 +115,7 @@ void UTIL_StringToVector(float* pVector, std::string_view pString)
 		index = result.ptr - pString.data();
 
 		//Skip all whitespace.
-		while (index < pString.size() && std::isspace(pString[index]))
+		while (index < pString.size() && std::isspace(pString[index]) != 0)
 			++index;
 		if (index >= pString.size())
 			break;

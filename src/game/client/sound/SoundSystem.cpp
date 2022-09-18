@@ -166,7 +166,7 @@ static void S_PlaySound(const CommandArgs& args, int channelIndex)
 	int entityIndex = 0;
 	Vector origin = vec3_origin;
 
-	if (auto levelName = gEngfuncs.pfnGetLevelName(); levelName && *levelName)
+	if (auto levelName = gEngfuncs.pfnGetLevelName(); levelName != nullptr && *levelName != '\0')
 	{
 		auto localPlayer = gEngfuncs.GetLocalPlayer();
 

@@ -251,7 +251,7 @@ SentenceWordParser::WordParseResult SentenceWordParser::ParseCore()
 
 	for (; m_Next != end; ++m_Next)
 	{
-		if (std::isspace(*m_Next) || *m_Next == '(' || *m_Next == ')' || *m_Next == '.' || *m_Next == ',')
+		if (std::isspace(*m_Next) != 0 || *m_Next == '(' || *m_Next == ')' || *m_Next == '.' || *m_Next == ',')
 		{
 			break;
 		}
