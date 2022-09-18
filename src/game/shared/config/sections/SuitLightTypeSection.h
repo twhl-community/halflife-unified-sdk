@@ -20,7 +20,7 @@
 #include "cdll_dll.h"
 #include "MapState.h"
 
-#include "config/GameConfigSection.h"
+#include "config/GameConfigLoader.h"
 
 #include "utils/JSONSystem.h"
 #include "utils/shared_utils.h"

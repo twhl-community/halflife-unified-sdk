@@ -18,7 +18,7 @@
 #include "MapState.h"
 #include "palette.h"
 
-#include "config/GameConfigSection.h"
+#include "config/GameConfigLoader.h"
 
 #include "utils/JSONSystem.h"
 #include "utils/shared_utils.h"

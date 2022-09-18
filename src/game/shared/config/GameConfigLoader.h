@@ -19,6 +19,7 @@
 #include <memory>
 #include <string>
 #include <string_view>
+#include <tuple>
 #include <vector>
 
 #include <spdlog/logger.h>
@@ -45,6 +46,71 @@ struct GameConfigContext final
 
 	GameConfigLoader& Loader;
 	std::any UserData;
+};
+
+/**
+ *	@brief Defines a section of a game configuration, and the logic to parse it.
+ */
+class GameConfigSection
+{
+protected:
+	GameConfigSection() = default;
+
+public:
+	GameConfigSection(const GameConfigSection&) = delete;
+	GameConfigSection& operator=(const GameConfigSection&) = delete;
+	virtual ~GameConfigSection() = default;
+
+	/**
+	 *	@brief Gets the name of this section
+	 */
+	virtual std::string_view GetName() const = 0;
+
+	/**
+	 *	@brief Gets the partial schema for this section.
+	 *	@details The schema is the part of an object's "properties" definition.
+	 *	Define properties used by this section in it.
+	 *	@return A tuple containing the object definition
+	 *		and the contents of the \c required array applicable to the keys specified in the first element.
+	 */
+	virtual std::tuple<std::string, std::string> GetSchema() const = 0;
+
+	/**
+	 *	@brief Tries to parse the given configuration.
+	 */
+	virtual bool TryParse(GameConfigContext& context) const = 0;
+};
+
+/**
+ *	@brief Immutable definition of a game configuration.
+ *	Contains a set of sections that configuration files can use.
+ *	Instances should be created with GameConfigLoader::CreateDefinition.
+ *	@details Each section specifies what kind of data it supports, and provides a means of parsing it.
+ */
+class GameConfigDefinition
+{
+protected:
+	GameConfigDefinition(std::string&& name, std::vector<std::unique_ptr<const GameConfigSection>>&& sections);
+
+public:
+	GameConfigDefinition(const GameConfigDefinition&) = delete;
+	GameConfigDefinition& operator=(const GameConfigDefinition&) = delete;
+
+	~GameConfigDefinition();
+
+	std::string_view GetName() const { return m_Name; }
+
+	const GameConfigSection* FindSection(std::string_view name) const;
+
+	/**
+	 *	@brief Gets the complete JSON Schema for this definition.
+	 *	This includes all of the sections.
+	 */
+	std::string GetSchema() const;
+
+private:
+	std::string m_Name;
+	std::vector<std::unique_ptr<const GameConfigSection>> m_Sections;
 };
 
 /**
