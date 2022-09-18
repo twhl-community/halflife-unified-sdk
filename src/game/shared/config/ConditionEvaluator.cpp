@@ -16,6 +16,7 @@
 #include <chrono>
 
 #include <angelscript.h>
+#include <angelscript/scriptstdstring/scriptstdstring.h>
 
 #include "cbase.h"
 #include "ConditionEvaluator.h"
@@ -42,6 +43,47 @@ struct TimeoutHandler
 	const Clock::time_point Timeout;
 };
 
+#ifndef CLIENT_DLL
+namespace
+{
+// TODO: need to get this from gamerules
+static bool GetSingleplayer()
+{
+	return gpGlobals->deathmatch == 0;
+}
+
+static bool GetMultiplayer()
+{
+	return gpGlobals->deathmatch != 0;
+}
+
+static bool GetListenServer()
+{
+	return IS_DEDICATED_SERVER() != 0;
+}
+
+static bool GetDedicatedServer()
+{
+	return !GetListenServer();
+}
+}
+#endif
+
+static void RegisterGameConfigConditionalsScriptAPI(asIScriptEngine& engine)
+{
+	// So we can use strings in conditionals
+	RegisterStdString(&engine);
+
+	// Register everything as globals to keep conditional strings short and easy to read
+	// TODO: figure out what to do about the client side.
+#ifndef CLIENT_DLL
+	engine.RegisterGlobalFunction("bool get_Singleplayer() property", asFUNCTION(GetSingleplayer), asCALL_CDECL);
+	engine.RegisterGlobalFunction("bool get_Multiplayer() property", asFUNCTION(GetMultiplayer), asCALL_CDECL);
+	engine.RegisterGlobalFunction("bool get_ListenServer() property", asFUNCTION(GetListenServer), asCALL_CDECL);
+	engine.RegisterGlobalFunction("bool get_DedicatedServer() property", asFUNCTION(GetDedicatedServer), asCALL_CDECL);
+#endif
+}
+
 bool ConditionEvaluator::Initialize()
 {
 	m_Logger = g_Logging.CreateLogger("conditional_evaluation");
@@ -60,7 +102,7 @@ bool ConditionEvaluator::Initialize()
 		return false;
 	}
 
-	RegisterGameConfigConditionalsScriptAPI(*m_ScriptEngine, m_Conditionals);
+	RegisterGameConfigConditionalsScriptAPI(*m_ScriptEngine);
 
 	return true;
 }

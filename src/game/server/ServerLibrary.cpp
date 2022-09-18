@@ -227,16 +227,6 @@ void ServerLibrary::LoadConfigFile(const char* fileName, const GameConfigDefinit
 
 void ServerLibrary::LoadServerConfigFiles()
 {
-	//Configure the config conditionals
-	//TODO: need to get this from gamerules
-	GameConfigConditionals conditionals;
-	conditionals.Singleplayer = gpGlobals->deathmatch == 0;
-	conditionals.Multiplayer = gpGlobals->deathmatch != 0;
-	conditionals.DedicatedServer = IS_DEDICATED_SERVER() != 0;
-	conditionals.ListenServer = !conditionals.DedicatedServer;
-
-	g_ConditionEvaluator.SetConditionals(std::move(conditionals));
-
 	if (const auto cfgFile = servercfgfile.string; cfgFile && '\0' != cfgFile[0])
 	{
 		LoadConfigFile(cfgFile, *m_ServerConfigDefinition, {.PathID = "GAMECONFIG"});

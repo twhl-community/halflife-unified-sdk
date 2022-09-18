@@ -8,8 +8,6 @@ function(add_game_shared_sources target)
 			
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/ConditionEvaluator.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/ConditionEvaluator.h
-			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/GameConfigConditionals.cpp
-			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/GameConfigConditionals.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/GameConfigDefinition.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/GameConfigDefinition.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/GameConfigIncludeStack.h

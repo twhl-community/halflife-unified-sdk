@@ -22,8 +22,6 @@
 
 #include <spdlog/logger.h>
 
-#include "GameConfigConditionals.h"
-
 #include "GameSystem.h"
 
 #include "scripting/AS/as_utils.h"
@@ -41,11 +39,6 @@ struct ConditionEvaluator final : public IGameSystem
 	void PostInitialize() override {}
 	void Shutdown() override;
 
-	void SetConditionals(GameConfigConditionals&& conditionals)
-	{
-		m_Conditionals = std::move(conditionals);
-	}
-
 	/**
 	 *	@brief Evaluate a conditional expression
 	 *	@return If the conditional was successfully evaluated, returns the result.
@@ -58,7 +51,6 @@ private:
 
 	as::EnginePtr m_ScriptEngine;
 	as::UniquePtr<asIScriptContext> m_ScriptContext;
-	GameConfigConditionals m_Conditionals;
 };
 
 inline ConditionEvaluator g_ConditionEvaluator;
