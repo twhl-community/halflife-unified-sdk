@@ -26,6 +26,7 @@
 #include "skill.h"
 #include "UserMessages.h"
 
+#include "config/ConditionEvaluator.h"
 #include "config/GameConfigDefinition.h"
 #include "config/GameConfigLoader.h"
 #include "config/sections/CommandsSection.h"
@@ -234,7 +235,7 @@ void ServerLibrary::LoadServerConfigFiles()
 	conditionals.DedicatedServer = IS_DEDICATED_SERVER() != 0;
 	conditionals.ListenServer = !conditionals.DedicatedServer;
 
-	g_GameConfigLoader.SetConditionals(std::move(conditionals));
+	g_ConditionEvaluator.SetConditionals(std::move(conditionals));
 
 	if (const auto cfgFile = servercfgfile.string; cfgFile && '\0' != cfgFile[0])
 	{

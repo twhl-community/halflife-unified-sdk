@@ -17,6 +17,7 @@
 
 #include "GameLibrary.h"
 
+#include "config/ConditionEvaluator.h"
 #include "config/GameConfigLoader.h"
 
 #include "scripting/AS/ASManager.h"
@@ -39,6 +40,7 @@ void GameLibrary::AddGameSystems()
 	g_GameSystems.Add(&g_Logging);
 	g_GameSystems.Add(&g_ASManager);
 	//Depends on Angelscript
+	g_GameSystems.Add(&g_ConditionEvaluator);
 	g_GameSystems.Add(&g_GameConfigLoader);
 	g_GameSystems.Add(&g_ReplacementMaps);
 }

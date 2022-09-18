@@ -28,7 +28,7 @@
 
 #include "ConCommandSystem.h"
 #include "JSONSystem.h"
-#include "config/GameConfigLoader.h"
+#include "config/ConditionEvaluator.h"
 
 using namespace std::literals;
 
@@ -322,7 +322,7 @@ bool SkillSystem::ParseConfiguration(const json& input)
 				continue;
 			}
 
-			const auto result = g_GameConfigLoader.EvaluateConditional(it->get<std::string>());
+			const auto result = g_ConditionEvaluator.Evaluate(it->get<std::string>());
 
 			if (!result.has_value())
 			{
