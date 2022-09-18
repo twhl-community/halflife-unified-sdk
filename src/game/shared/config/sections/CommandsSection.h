@@ -28,6 +28,8 @@
 
 #include "config/GameConfig.h"
 
+#include "utils/JSONSystem.h"
+
 /**
 *	@brief Defines a section containing an array of console command strings.
 */
