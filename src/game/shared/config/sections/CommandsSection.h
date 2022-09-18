@@ -109,7 +109,7 @@ public:
 				continue;
 			}
 
-			auto value = command.get<std::string>();
+			auto value = command.template get<std::string>();
 
 			//First token is the command name
 			COM_Parse(value.c_str());
