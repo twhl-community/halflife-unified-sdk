@@ -115,7 +115,7 @@ ScorePanel::ScorePanel(int x, int y, int wide, int tall) : Panel(x, y, wide, tal
 	m_pCurrentHighlightLabel = nullptr;
 	m_iHighlightRow = -1;
 
-	//m_pTrackerIcon = vgui_LoadTGANoInvertAlpha("gfx/vgui/640_scoreboardtracker.tga");
+	//m_pTrackerIcon = vgui_LoadTGA("gfx/vgui/640_scoreboardtracker.tga", false);
 
 	// Initialize the top title.
 	m_TitleLabel.setFont(tfont);

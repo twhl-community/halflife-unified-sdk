@@ -242,19 +242,19 @@ bool CVoiceStatus::VidInit()
 	m_pLocalLabel->setVisible(false);
 
 
-	if (m_pSpeakerLabelIcon = vgui_LoadTGANoInvertAlpha("gfx/vgui/speaker4.tga"))
+	if (m_pSpeakerLabelIcon = vgui_LoadTGA("gfx/vgui/speaker4.tga", false))
 		m_pSpeakerLabelIcon->setColor(Color(255, 255, 255, 1)); // Give just a tiny bit of translucency so software draws correctly.
 
-	if (m_pScoreboardNeverSpoken = vgui_LoadTGANoInvertAlpha("gfx/vgui/640_speaker1.tga"))
+	if (m_pScoreboardNeverSpoken = vgui_LoadTGA("gfx/vgui/640_speaker1.tga", false))
 		m_pScoreboardNeverSpoken->setColor(Color(255, 255, 255, 1)); // Give just a tiny bit of translucency so software draws correctly.
 
-	if (m_pScoreboardNotSpeaking = vgui_LoadTGANoInvertAlpha("gfx/vgui/640_speaker2.tga"))
+	if (m_pScoreboardNotSpeaking = vgui_LoadTGA("gfx/vgui/640_speaker2.tga", false))
 		m_pScoreboardNotSpeaking->setColor(Color(255, 255, 255, 1)); // Give just a tiny bit of translucency so software draws correctly.
 
-	if (m_pScoreboardSpeaking = vgui_LoadTGANoInvertAlpha("gfx/vgui/640_speaker3.tga"))
+	if (m_pScoreboardSpeaking = vgui_LoadTGA("gfx/vgui/640_speaker3.tga", false))
 		m_pScoreboardSpeaking->setColor(Color(255, 255, 255, 1)); // Give just a tiny bit of translucency so software draws correctly.
 
-	if (m_pScoreboardSpeaking2 = vgui_LoadTGANoInvertAlpha("gfx/vgui/640_speaker4.tga"))
+	if (m_pScoreboardSpeaking2 = vgui_LoadTGA("gfx/vgui/640_speaker4.tga", false))
 		m_pScoreboardSpeaking2->setColor(Color(255, 255, 255, 1)); // Give just a tiny bit of translucency so software draws correctly.
 
 	if (m_pScoreboardSquelch = vgui_LoadTGA("gfx/vgui/icntlk_squelch.tga"))

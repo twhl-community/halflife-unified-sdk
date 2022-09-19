@@ -77,7 +77,7 @@ public:
 	int m_ReadPos;
 };
 
-vgui::BitmapTGA* vgui_LoadTGA(char const* pFilename)
+vgui::BitmapTGA* vgui_LoadTGA(char const* pFilename, bool invertAlpha)
 {
 	MemoryInputStream stream;
 
@@ -86,22 +86,7 @@ vgui::BitmapTGA* vgui_LoadTGA(char const* pFilename)
 		return nullptr;
 
 	stream.m_ReadPos = 0;
-	vgui::BitmapTGA* pRet = new vgui::BitmapTGA(&stream, true);
-	gEngfuncs.COM_FreeFile(stream.m_pData);
-
-	return pRet;
-}
-
-vgui::BitmapTGA* vgui_LoadTGANoInvertAlpha(char const* pFilename)
-{
-	MemoryInputStream stream;
-
-	stream.m_pData = gEngfuncs.COM_LoadFile(pFilename, 5, &stream.m_DataLen);
-	if (!stream.m_pData)
-		return nullptr;
-
-	stream.m_ReadPos = 0;
-	vgui::BitmapTGA* pRet = new vgui::BitmapTGA(&stream, false);
+	vgui::BitmapTGA* pRet = new vgui::BitmapTGA(&stream, invertAlpha);
 	gEngfuncs.COM_FreeFile(stream.m_pData);
 
 	return pRet;
