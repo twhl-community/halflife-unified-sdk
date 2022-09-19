@@ -32,6 +32,7 @@ jobs:
         with:
           vcpkgDirectory: '${{env.VCPKG_ROOT}}'
           runVcpkgInstall: false
+          vcpkgJsonIgnores: ['**/vcpkg/**', '**/vcpkg_config/**']
          
       - name: Configure
         run: >
@@ -66,6 +67,7 @@ jobs:
         with:
           vcpkgDirectory: '${{env.VCPKG_ROOT}}'
           runVcpkgInstall: false
+          vcpkgJsonIgnores: ['**/vcpkg/**', '**/vcpkg_config/**']
         
       - name: Configure
         run: >
