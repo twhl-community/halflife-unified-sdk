@@ -445,8 +445,6 @@ constexpr int SND_PLAY_WHEN_PAUSED = 1 << 9;	// For client side use only: start 
 
 // Sound Utilities
 
-void TEXTURETYPE_Init();
-char TEXTURETYPE_Find(char* name);
 float TEXTURETYPE_PlaySound(TraceResult* ptr, Vector vecSrc, Vector vecEnd, int iBulletType);
 
 // NOTE: use EMIT_SOUND_DYN to set the pitch of a sound. Pitch of 100

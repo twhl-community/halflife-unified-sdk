@@ -21,6 +21,7 @@
 #include "cbase.h"
 #include "talkmonster.h"
 #include "gamerules.h"
+#include "sound/MaterialSystem.h"
 
 static char* memfgets(byte* pMemFile, int fileSize, int& filePos, char* pBuffer, int bufferSize);
 
@@ -1225,154 +1226,6 @@ void CEnvSound::Spawn()
 }
 
 // ===================== MATERIAL TYPE DETECTION, MAIN ROUTINES ========================
-//
-// Used to detect the texture the player is standing on, map the
-// texture name to a material type.  Play footstep sound based
-// on material type.
-
-bool fTextureTypeInit = false;
-
-#define CTEXTURESMAX 512 // max number of textures loaded
-
-int gcTextures = 0;
-char grgszTextureName[CTEXTURESMAX][CBTEXTURENAMEMAX]; // texture names
-char grgchTextureType[CTEXTURESMAX];				   // parallel array of texture types
-
-// open materials.txt,  get size, alloc space,
-// save in array.  Only works first time called,
-// ignored on subsequent calls.
-
-static char* memfgets(byte* pMemFile, int fileSize, int& filePos, char* pBuffer, int bufferSize)
-{
-	// Bullet-proofing
-	if (!pMemFile || !pBuffer)
-		return nullptr;
-
-	if (filePos >= fileSize)
-		return nullptr;
-
-	int i = filePos;
-	int last = fileSize;
-
-	// fgets always nullptr terminates, so only read bufferSize-1 characters
-	if (last - filePos > (bufferSize - 1))
-		last = filePos + (bufferSize - 1);
-
-	bool stop = false;
-
-	// Stop at the next newline (inclusive) or end of buffer
-	while (i < last && !stop)
-	{
-		if (pMemFile[i] == '\n')
-			stop = true;
-		i++;
-	}
-
-
-	// If we actually advanced the pointer, copy it over
-	if (i != filePos)
-	{
-		// We read in size bytes
-		int size = i - filePos;
-		// copy it out
-		memcpy(pBuffer, pMemFile + filePos, sizeof(byte) * size);
-
-		// If the buffer isn't full, terminate (this is always true)
-		if (size < bufferSize)
-			pBuffer[size] = 0;
-
-		// Update file pointer
-		filePos = i;
-		return pBuffer;
-	}
-
-	// No data read, bail
-	return nullptr;
-}
-
-
-void TEXTURETYPE_Init()
-{
-	char buffer[512];
-	int i, j;
-	byte* pMemFile;
-	int fileSize, filePos = 0;
-
-	if (fTextureTypeInit)
-		return;
-
-	memset(&(grgszTextureName[0][0]), 0, CTEXTURESMAX * CBTEXTURENAMEMAX);
-	memset(grgchTextureType, 0, CTEXTURESMAX);
-
-	gcTextures = 0;
-	memset(buffer, 0, 512);
-
-	pMemFile = g_engfuncs.pfnLoadFileForMe("sound/materials.txt", &fileSize);
-	if (!pMemFile)
-		return;
-
-	// for each line in the file...
-	while (memfgets(pMemFile, fileSize, filePos, buffer, 511) != nullptr && (gcTextures < CTEXTURESMAX))
-	{
-		// skip whitespace
-		i = 0;
-		while ('\0' != buffer[i] && 0 != isspace(buffer[i]))
-			i++;
-
-		if ('\0' == buffer[i])
-			continue;
-
-		// skip comment lines
-		if (buffer[i] == '/' || 0 == isalpha(buffer[i]))
-			continue;
-
-		// get texture type
-		grgchTextureType[gcTextures] = toupper(buffer[i++]);
-
-		// skip whitespace
-		while ('\0' != buffer[i] && 0 != isspace(buffer[i]))
-			i++;
-
-		if ('\0' == buffer[i])
-			continue;
-
-		// get sentence name
-		j = i;
-		while ('\0' != buffer[j] && 0 == isspace(buffer[j]))
-			j++;
-
-		if ('\0' == buffer[j])
-			continue;
-
-		// null-terminate name and save in sentences array
-		j = V_min(j, CBTEXTURENAMEMAX - 1 + i);
-		buffer[j] = 0;
-		strcpy(&(grgszTextureName[gcTextures++][0]), &(buffer[i]));
-	}
-
-	g_engfuncs.pfnFreeFile(pMemFile);
-
-	fTextureTypeInit = true;
-}
-
-// given texture name, find texture type
-// if not found, return type 'concrete'
-
-// NOTE: this routine should ONLY be called if the
-// current texture under the player changes!
-
-char TEXTURETYPE_Find(char* name)
-{
-	// CONSIDER: pre-sort texture names and perform faster binary search here
-
-	for (int i = 0; i < gcTextures; i++)
-	{
-		if (!strnicmp(name, &(grgszTextureName[i][0]), CBTEXTURENAMEMAX - 1))
-			return (grgchTextureType[i]);
-	}
-
-	return CHAR_TEX_CONCRETE;
-}
 
 // play a strike sound based on the texture that was hit by the attack traceline.  VecSrc/VecEnd are the
 // original traceline endpoints used by the attacker, iBulletType is the type of bullet that hit the texture.
@@ -1435,7 +1288,7 @@ float TEXTURETYPE_PlaySound(TraceResult* ptr, Vector vecSrc, Vector vecEnd, int 
 			// ALERT ( at_console, "texture hit: %s\n", szbuffer);
 
 			// get texture type
-			chTextureType = TEXTURETYPE_Find(szbuffer);
+			chTextureType = PM_FindTextureType(szbuffer);
 		}
 	}
 

@@ -20,12 +20,12 @@
 #pragma once
 
 #include "Platform.h"
+#include "sound/MaterialSystem.h"
 
 struct playermove_s;
 
 void PM_Init(playermove_s* ppmove);
 void PM_Move(playermove_s* ppmove, qboolean server);
-char PM_FindTextureType(char* name);
 
 /**
 *	@brief Engine calls this to enumerate player collision hulls, for prediction. Return false if the hullnumber doesn't exist.

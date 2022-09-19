@@ -28,6 +28,7 @@
 #include "world.h"
 #include "ServerLibrary.h"
 #include "ctf/CItemCTF.h"
+#include "sound/MaterialSystem.h"
 
 CGlobalState gGlobalState;
 
@@ -530,7 +531,7 @@ void CWorld::Precache()
 
 	// init texture type array from materials.txt
 
-	TEXTURETYPE_Init();
+	PM_InitTextureTypes();
 
 
 	// the area based ambient sounds MUST be the first precache_sounds
