@@ -1224,8 +1224,6 @@ bool CHudSpectator::ParseOverviewFile()
 	char token[1024];
 	float height;
 
-	char* pfile = nullptr;
-
 	memset(&m_OverviewData, 0, sizeof(m_OverviewData));
 
 	// fill in standrd values
@@ -1249,14 +1247,15 @@ bool CHudSpectator::ParseOverviewFile()
 
 	sprintf(filename, "overviews/%s.txt", levelname);
 
-	pfile = (char*)gEngfuncs.COM_LoadFile(filename, 5, nullptr);
+	const auto fileContents = FileSystem_LoadFileIntoBuffer(filename, FileContentFormat::Text);
 
-	if (!pfile)
+	if (fileContents.empty())
 	{
 		gEngfuncs.Con_DPrintf("Couldn't open file %s. Using default values for overiew mode.\n", filename);
 		return false;
 	}
 
+	auto pfile = reinterpret_cast<const char*>(fileContents.data());
 
 	while (true)
 	{
@@ -1364,8 +1363,6 @@ bool CHudSpectator::ParseOverviewFile()
 			m_OverviewData.layers++;
 		}
 	}
-
-	gEngfuncs.COM_FreeFile(pfile);
 
 	m_mapZoom = m_OverviewData.zoom;
 	m_mapOrigin = m_OverviewData.origin;

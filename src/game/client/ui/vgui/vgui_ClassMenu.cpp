@@ -157,10 +157,10 @@ CClassMenuPanel::CClassMenuPanel(int iTrans, bool iRemoveMe, int x, int y, int w
 			// Open up the Class Briefing File
 			sprintf(sz, "classes/short_%s.txt", sCTFClassSelection[team][i]);
 			const char* cText = "Class Description not available.";
-			char* pfile = (char*)gEngfuncs.COM_LoadFile(sz, 5, nullptr);
-			if (pfile)
+			const auto fileContents = FileSystem_LoadFileIntoBuffer(sz, FileContentFormat::Text);
+			if (!fileContents.empty())
 			{
-				cText = pfile;
+				cText = reinterpret_cast<const char*>(fileContents.data());
 			}
 
 			// Create the Text info window
@@ -194,8 +194,6 @@ CClassMenuPanel::CClassMenuPanel(int iTrans, bool iRemoveMe, int x, int y, int w
 			}
 
 			m_pClassInfoPanel[team][i]->setSize(maxX, maxY);
-			if (pfile)
-				gEngfuncs.COM_FreeFile(pfile);
 			//m_pClassInfoPanel[i]->setBorder(new LineBorder());
 		}
 	}

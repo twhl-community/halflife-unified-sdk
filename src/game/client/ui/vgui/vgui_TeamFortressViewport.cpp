@@ -690,7 +690,8 @@ int TeamFortressViewport::CreateCommandMenu(const char* menuFile, bool direction
 
 	// Read Command Menu from the txt file
 	char token[1024];
-	char* pfile = (char*)gEngfuncs.COM_LoadFile(menuFile, 5, nullptr);
+	const auto fileContents = FileSystem_LoadFileIntoBuffer(menuFile, FileContentFormat::Text);
+	const char* pfile = reinterpret_cast<const char*>(fileContents.data());
 	if (!pfile)
 	{
 		gEngfuncs.Con_DPrintf("Unable to open %s\n", menuFile);
@@ -893,7 +894,6 @@ int TeamFortressViewport::CreateCommandMenu(const char* menuFile, bool direction
 
 	SetCurrentMenu(nullptr);
 	SetCurrentCommandMenu(nullptr);
-	gEngfuncs.COM_FreeFile(pfile);
 
 	m_iInitialized = true;
 	return newIndex;
@@ -1488,9 +1488,10 @@ CMenuPanel* TeamFortressViewport::CreateTextWindow(int iTextToShow)
 {
 	char sz[256];
 	const char* cText = "";
-	char* pfile = nullptr;
 	static const int MAX_TITLE_LENGTH = 64;
 	char cTitle[MAX_TITLE_LENGTH];
+
+	std::vector<std::byte> fileContents;
 
 	if (iTextToShow == SHOW_MOTD)
 	{
@@ -1537,12 +1538,12 @@ CMenuPanel* TeamFortressViewport::CreateTextWindow(int iTextToShow)
 			}
 		}
 
-		pfile = (char*)gEngfuncs.COM_LoadFile(sz, 5, nullptr);
+		fileContents = FileSystem_LoadFileIntoBuffer(sz, FileContentFormat::Text);
 
-		if (!pfile)
+		if (fileContents.empty())
 			return nullptr;
 
-		cText = pfile;
+		cText = reinterpret_cast<const char*>(fileContents.data());
 
 		strncpy(cTitle, m_sMapName, MAX_TITLE_LENGTH);
 		cTitle[MAX_TITLE_LENGTH - 1] = 0;
@@ -1552,19 +1553,12 @@ CMenuPanel* TeamFortressViewport::CreateTextWindow(int iTextToShow)
 		CHudTextMessage::LocaliseTextString("#Spec_Help_Title", cTitle, MAX_TITLE_LENGTH);
 		cTitle[MAX_TITLE_LENGTH - 1] = 0;
 
-		char* pfile = CHudTextMessage::BufferedLocaliseTextString("#Spec_Help_Text");
-		if (pfile)
-		{
-			cText = pfile;
-		}
+		cText = CHudTextMessage::BufferedLocaliseTextString("#Spec_Help_Text");
 	}
 
 	// if we're in the game (ie. have selected a class), flag the menu to be only grayed in the dialog box, instead of full screen
 	CMenuPanel* pMOTDPanel = CMessageWindowPanel_Create(cText, cTitle, g_iPlayerClass == PC_UNDEFINED, false, 0, 0, ScreenWidth, ScreenHeight);
 	pMOTDPanel->setParent(this);
-
-	if (pfile)
-		gEngfuncs.COM_FreeFile(pfile);
 
 	return pMOTDPanel;
 }

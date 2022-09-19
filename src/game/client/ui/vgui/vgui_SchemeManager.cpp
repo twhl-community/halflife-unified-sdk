@@ -93,7 +93,7 @@ CSchemeManager::CScheme::~CScheme()
 // Purpose: resolution information
 //			!! needs to be shared out
 //-----------------------------------------------------------------------------
-static int g_ResArray[] =
+static constexpr int g_ResArray[] =
 	{
 		320,
 		400,
@@ -104,40 +104,34 @@ static int g_ResArray[] =
 		1152,
 		1280,
 		1600};
-static int g_NumReses = sizeof(g_ResArray) / sizeof(int);
 
-static byte* LoadFileByResolution(const char* filePrefix, int xRes, const char* filePostfix)
+static std::vector<std::byte> LoadFileByResolution(const char* filePrefix, int xRes, const char* filePostfix)
 {
 	// find our resolution in the res array
-	int resNum = g_NumReses - 1;
+	int resNum = std::size(g_ResArray) - 1;
 	while (g_ResArray[resNum] > xRes)
 	{
 		resNum--;
 
 		if (resNum < 0)
-			return nullptr;
+		{
+			return {};
+		}
 	}
 
 	// try open the file
-	byte* pFile = nullptr;
-	while (true)
+	for (; resNum >= 0; --resNum)
 	{
-
 		// try load
 		char fname[256];
 		sprintf(fname, "%s%d%s", filePrefix, g_ResArray[resNum], filePostfix);
-		pFile = gEngfuncs.COM_LoadFile(fname, 5, nullptr);
+		auto fileContents = FileSystem_LoadFileIntoBuffer(fname, FileContentFormat::Text);
 
-		if (pFile)
-			break;
-
-		if (resNum == 0)
-			return nullptr;
-
-		resNum--;
+		if (!fileContents.empty())
+			return fileContents;
 	}
 
-	return pFile;
+	return {};
 }
 
 static void ParseRGBAFromString(byte colorArray[4], const char* colorVector)
@@ -174,13 +168,12 @@ CSchemeManager::CSchemeManager(int xRes, int yRes)
 
 	// find the closest matching scheme file to our resolution
 	char token[1024];
-	char* pFile = (char*)LoadFileByResolution("", xRes, "_textscheme.txt");
+	const auto fileContents = LoadFileByResolution("", xRes, "_textscheme.txt");
 	m_xRes = xRes;
 
-	char* pFileStart = pFile;
+	const char* pFileStart = reinterpret_cast<const char*>(fileContents.data());
+	const char* pFile = pFileStart;
 
-	byte* pFontData;
-	int fontFileLength;
 	char fontFilename[512];
 
 	//
@@ -197,7 +190,7 @@ CSchemeManager::CSchemeManager(int xRes, int yRes)
 	int currentScheme = -1;
 	CScheme* pScheme = nullptr;
 
-	if (!pFile)
+	if (fileContents.empty())
 	{
 		gEngfuncs.Con_DPrintf("Unable to find *_textscheme.txt\n");
 		goto buildDefaultFont;
@@ -350,10 +343,6 @@ CSchemeManager::CSchemeManager(int xRes, int yRes)
 		pFile = gEngfuncs.COM_ParseFile(pFile, token);
 	}
 
-	// free the file
-	gEngfuncs.COM_FreeFile(pFileStart);
-
-
 buildDefaultFont:
 
 	// make sure we have at least 1 valid font
@@ -396,8 +385,9 @@ buildDefaultFont:
 		// if we haven't found the font already, load it ourselves
 		if (!m_pSchemeList[i].font)
 		{
-			fontFileLength = -1;
-			pFontData = nullptr;
+			int fontFileLength = -1;
+			byte* pFontData = nullptr;
+			std::vector<std::byte> fontFileContents;
 
 			if (g_CV_BitmapFonts && 0 != g_CV_BitmapFonts->value)
 			{
@@ -414,8 +404,10 @@ buildDefaultFont:
 					fontRes = 800;
 
 				sprintf(fontFilename, "gfx\\vgui\\fonts\\%d_%s.tga", fontRes, m_pSchemeList[i].schemeName);
-				pFontData = gEngfuncs.COM_LoadFile(fontFilename, 5, &fontFileLength);
-				if (!pFontData)
+				fontFileContents = FileSystem_LoadFileIntoBuffer(fontFilename, FileContentFormat::Binary);
+				pFontData = reinterpret_cast<byte*>(fontFileContents.data());
+				fontFileLength = static_cast<int>(fontFileContents.size());
+				if (fontFileContents.empty())
 					gEngfuncs.Con_Printf("Missing bitmap font: %s\n", fontFilename);
 			}
 

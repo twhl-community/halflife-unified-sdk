@@ -351,9 +351,9 @@ bool CStatsMenuPanel::MsgFunc_StatsInfo(const char* pszName, int iSize, void* pb
 		char sz[64];
 		sprintf(sz, "stats/stats_%s.ost", sCTFStatsSelection[teamNum]);
 
-		char* pfile = (char*)gEngfuncs.COM_LoadFile(sz, 5, nullptr);
+		const auto fileContents = FileSystem_LoadFileIntoBuffer(sz, FileContentFormat::Text);
 
-		if (pfile)
+		if (!fileContents.empty())
 		{
 			if (iNumPlayers <= 0)
 			{
@@ -367,7 +367,7 @@ bool CStatsMenuPanel::MsgFunc_StatsInfo(const char* pszName, int iSize, void* pb
 				//Overcomplicated time calculations, can just use modulo instead for seconds
 				sprintf(
 					szStatsBuf[teamNum],
-					pfile,
+					reinterpret_cast<const char*>(fileContents.data()),
 					g_TeamStatInfo[teamNum].szMVP,
 					g_TeamStatInfo[teamNum].iMVPVal,
 					g_TeamStatInfo[teamNum].szMostKills,
@@ -410,9 +410,6 @@ bool CStatsMenuPanel::MsgFunc_StatsInfo(const char* pszName, int iSize, void* pb
 			int wide, tall;
 			m_pStatsWindow[teamNum]->getTextImage()->getSize(wide, tall);
 			m_pStatsWindow[teamNum]->setSize(wide, tall);
-
-			//TODO: missing from vanilla
-			gEngfuncs.COM_FreeFile(pfile);
 		}
 	}
 
@@ -444,15 +441,15 @@ bool CStatsMenuPanel::MsgFunc_StatsPlayer(const char* pszName, int iSize, void* 
 		char sz[64];
 		sprintf(sz, "stats/stats_%s.ost", sCTFStatsSelection[3]);
 
-		char* pfile = (char*)gEngfuncs.COM_LoadFile(sz, 5, nullptr);
+		const auto fileContents = FileSystem_LoadFileIntoBuffer(sz, FileContentFormat::Text);
 
-		if (pfile)
+		if (!fileContents.empty())
 		{
 			//TODO: this passes an arbitrary string as the format string which is incredibly dangerous (also in vanilla)
 			//Overcomplicated time calculations, can just use modulo instead for seconds
 			sprintf(
 				szStatsBuf[3],
-				pfile,
+				reinterpret_cast<const char*>(fileContents.data()),
 				iMVPVal,
 				iKillsVal,
 				iCTFVal,
@@ -479,9 +476,6 @@ bool CStatsMenuPanel::MsgFunc_StatsPlayer(const char* pszName, int iSize, void* 
 			int wide, tall;
 			m_pStatsWindow[3]->getTextImage()->getSize(wide, tall);
 			m_pStatsWindow[3]->setSize(wide, tall);
-
-			//TODO: missing from vanilla
-			gEngfuncs.COM_FreeFile(pfile);
 		}
 	}
 

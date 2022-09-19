@@ -313,16 +313,15 @@ void CTeamMenuPanel::Update()
 			ch = strchr(sz, '.');
 			*ch = '\0';
 			strcat(sz, ".txt");
-			char* pfile = (char*)gEngfuncs.COM_LoadFile(sz, 5, nullptr);
-			if (pfile)
+			const auto fileContents = FileSystem_LoadFileIntoBuffer(sz, FileContentFormat::Text);
+			if (!fileContents.empty())
 			{
-				m_pBriefing->setText(pfile);
+				m_pBriefing->setText(reinterpret_cast<const char*>(fileContents.data()));
 
 				// Get the total size of the Briefing text and resize the text panel
 				int iXSize, iYSize;
 				m_pBriefing->getTextImage()->getTextSize(iXSize, iYSize);
 				m_pBriefing->setSize(iXSize, iYSize);
-				gEngfuncs.COM_FreeFile(pfile);
 			}
 
 			m_bUpdatedMapName = true;

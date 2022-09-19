@@ -17,10 +17,11 @@
 class MemoryInputStream : public vgui::InputStream
 {
 public:
-	MemoryInputStream()
+	MemoryInputStream() = default;
+
+	MemoryInputStream(const uchar* data, std::size_t dataLen)
+		: m_pData(data), m_DataLen(dataLen)
 	{
-		m_pData = nullptr;
-		m_DataLen = m_ReadPos = 0;
 	}
 
 	void seekStart(bool& success) override
@@ -46,7 +47,7 @@ public:
 
 	uchar readUChar(bool& success) override
 	{
-		if (m_ReadPos >= 0 && m_ReadPos < m_DataLen)
+		if (m_ReadPos < m_DataLen)
 		{
 			success = true;
 			uchar ret = m_pData[m_ReadPos];
@@ -72,22 +73,23 @@ public:
 		m_DataLen = m_ReadPos = 0;
 	}
 
-	uchar* m_pData;
-	int m_DataLen;
-	int m_ReadPos;
+	const uchar* m_pData = nullptr;
+	std::size_t m_DataLen = 0;
+	std::size_t m_ReadPos = 0;
 };
 
 vgui::BitmapTGA* vgui_LoadTGA(char const* pFilename, bool invertAlpha)
 {
-	MemoryInputStream stream;
+	const auto fileContents = FileSystem_LoadFileIntoBuffer(pFilename, FileContentFormat::Binary);
 
-	stream.m_pData = gEngfuncs.COM_LoadFile(pFilename, 5, &stream.m_DataLen);
-	if (!stream.m_pData)
+	if (fileContents.empty())
+	{
 		return nullptr;
+	}
 
-	stream.m_ReadPos = 0;
+	MemoryInputStream stream{reinterpret_cast<const uchar*>(fileContents.data()), fileContents.size()};
+
 	vgui::BitmapTGA* pRet = new vgui::BitmapTGA(&stream, invertAlpha);
-	gEngfuncs.COM_FreeFile(stream.m_pData);
 
 	return pRet;
 }
