@@ -7,6 +7,10 @@
 		"json-schema-validator": {
 			"baseline": "2.2.0",
 			"port-version": 0
+		},
+		"libnyquist": {
+			"baseline": "0.1.0",
+			"port-version": 0
 		}
 	}
 }

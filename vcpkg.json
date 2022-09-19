@@ -39,6 +39,11 @@
 			"name": "eastl",
 			"version>=": "3.19.00",
 			"default-features": false
+		},
+		{
+			"name": "libnyquist",
+			"version>=": "0.1.0",
+			"default-features": false
 		}
   ]
 }

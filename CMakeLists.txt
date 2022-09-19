@@ -57,31 +57,7 @@ find_package(Angelscript CONFIG REQUIRED)
 find_package(OpenAL CONFIG REQUIRED)
 find_package(EASTL CONFIG REQUIRED)
 find_package(nlohmann_json_schema_validator REQUIRED)
-
-option(LIBNYQUIST_BUILD_EXAMPLE "" OFF)
-
-if (MSVC)
-	option(LIBNYQUIST_ENABLE_AVX "" OFF)
-endif()
-
-add_subdirectory(external/libnyquist
-	libnyquist-binary-dir
-	EXCLUDE_FROM_ALL)
-
-
-function(set_dependency_common_properties TARGET_NAME)
-	target_compile_features(${TARGET_NAME} PRIVATE cxx_std_20)
-	
-	# Enable multithreaded building to speed up building these a bit.
-	target_compile_options(${TARGET_NAME} PRIVATE $<$<CXX_COMPILER_ID:MSVC>:/MP>)
-
-	# Silence warnings coming from this library.
-	target_compile_options(${TARGET_NAME} PRIVATE $<$<CXX_COMPILER_ID:Clang,AppleClang,GNU>:-w>)
-	
-	set_target_properties(${TARGET_NAME} PROPERTIES FOLDER "Dependencies")
-endfunction()
-
-set_dependency_common_properties(libnyquist)
+find_package(libnyquist REQUIRED)
 
 # Generate DebugInfo.h with appropriate information.
 

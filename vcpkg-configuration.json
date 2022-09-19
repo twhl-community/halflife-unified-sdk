@@ -6,7 +6,8 @@
 			"baseline": "2022-09-19",
 			"packages": [
 				"eastl",
-				"json-schema-validator"
+				"json-schema-validator",
+				"libnyquist"
 			]
 		}
   ]
