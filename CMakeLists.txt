@@ -56,12 +56,7 @@ find_package(nlohmann_json CONFIG REQUIRED)
 find_package(Angelscript CONFIG REQUIRED)
 find_package(OpenAL CONFIG REQUIRED)
 find_package(EASTL CONFIG REQUIRED)
-
-option(JSON_VALIDATOR_BUILD_EXAMPLES "" OFF)
-option(JSON_VALIDATOR_BUILD_TESTS "" OFF)
-add_subdirectory(external/json-schema-validator
-	json-validator-binary-dir
-	EXCLUDE_FROM_ALL)
+find_package(nlohmann_json_schema_validator REQUIRED)
 
 option(LIBNYQUIST_BUILD_EXAMPLE "" OFF)
 
@@ -86,7 +81,6 @@ function(set_dependency_common_properties TARGET_NAME)
 	set_target_properties(${TARGET_NAME} PROPERTIES FOLDER "Dependencies")
 endfunction()
 
-set_dependency_common_properties(nlohmann_json_schema_validator)
 set_dependency_common_properties(libnyquist)
 
 # Generate DebugInfo.h with appropriate information.

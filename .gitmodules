@@ -1,7 +1,3 @@
-[submodule "external/json-schema-validator"]
-	path = external/json-schema-validator
-	url = https://github.com/pboettch/json-schema-validator.git
-	shallow = 1
 [submodule "external/libnyquist"]
 	path = external/libnyquist
 	url = https://github.com/ddiakopoulos/libnyquist.git

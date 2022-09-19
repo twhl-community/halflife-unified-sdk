@@ -3,8 +3,11 @@
 		{
 			"kind": "filesystem",
 			"path": "vcpkg_config/registry",
-			"baseline": "2022-09-04",
-			"packages": [ "eastl" ]
+			"baseline": "2022-09-19",
+			"packages": [
+				"eastl",
+				"json-schema-validator"
+			]
 		}
   ]
 }

@@ -20,6 +20,11 @@
 			"default-features": false
 		},
 		{
+			"name": "json-schema-validator",
+			"version>=": "2.2.0",
+			"default-features": false
+		},
+		{
 			"name": "angelscript",
 			"version>=": "2.35.1#1",
 			"default-features": false,

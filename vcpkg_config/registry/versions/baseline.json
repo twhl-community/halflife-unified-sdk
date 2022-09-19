@@ -1,7 +1,11 @@
 {
-	"2022-09-04": {
+	"2022-09-19": {
 		"eastl": {
 			"baseline": "3.19.00",
+			"port-version": 0
+		},
+		"json-schema-validator": {
+			"baseline": "2.2.0",
 			"port-version": 0
 		}
 	}
