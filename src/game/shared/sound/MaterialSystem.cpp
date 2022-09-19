@@ -124,7 +124,7 @@ void PM_InitTextureTypes()
 	gcTextures = 0;
 	memset(buffer, 0, 512);
 
-	const auto fileContents = FileSystem_LoadFileIntoBuffer("sound/materials.txt", FileContentFormat::Text, "GAMECONFIG");
+	const auto fileContents = FileSystem_LoadFileIntoBuffer("sound/materials.txt", FileContentFormat::Text);
 
 	if (fileContents.empty())
 		return;
