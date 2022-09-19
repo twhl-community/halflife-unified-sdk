@@ -80,9 +80,9 @@ public:
 	FSFile(const char* fileName, const char* options, const char* pathID = nullptr);
 
 	FSFile(FSFile&& other) noexcept
-		: _handle(other._handle)
+		: m_Handle(other.m_Handle)
 	{
-		other._handle = FILESYSTEM_INVALID_HANDLE;
+		other.m_Handle = FILESYSTEM_INVALID_HANDLE;
 	}
 
 	FSFile& operator=(FSFile&& other) noexcept
@@ -90,8 +90,8 @@ public:
 		if (this != &other)
 		{
 			Close();
-			_handle = other._handle;
-			other._handle = FILESYSTEM_INVALID_HANDLE;
+			m_Handle = other.m_Handle;
+			other.m_Handle = FILESYSTEM_INVALID_HANDLE;
 		}
 
 		return *this;
@@ -102,9 +102,9 @@ public:
 
 	~FSFile();
 
-	constexpr bool IsOpen() const { return _handle != FILESYSTEM_INVALID_HANDLE; }
+	constexpr bool IsOpen() const { return m_Handle != FILESYSTEM_INVALID_HANDLE; }
 
-	std::size_t Size() const { return static_cast<std::size_t>(g_pFileSystem->Size(_handle)); }
+	std::size_t Size() const { return static_cast<std::size_t>(g_pFileSystem->Size(m_Handle)); }
 
 	bool Open(const char* filename, const char* options, const char* pathID = nullptr);
 	void Close();
@@ -120,13 +120,13 @@ public:
 	template <typename... Args>
 	int Printf(const char* format, Args&&... args)
 	{
-		return g_pFileSystem->FPrintf(_handle, format, std::forward<Args>(args)...);
+		return g_pFileSystem->FPrintf(m_Handle, format, std::forward<Args>(args)...);
 	}
 
 	constexpr operator bool() const { return IsOpen(); }
 
 private:
-	FileHandle_t _handle = FILESYSTEM_INVALID_HANDLE;
+	FileHandle_t m_Handle = FILESYSTEM_INVALID_HANDLE;
 };
 
 inline FSFile::FSFile(const char* filename, const char* options, const char* pathID)
@@ -143,7 +143,7 @@ inline bool FSFile::Open(const char* filename, const char* options, const char* 
 {
 	Close();
 
-	_handle = g_pFileSystem->Open(filename, options, pathID);
+	m_Handle = g_pFileSystem->Open(filename, options, pathID);
 
 	return IsOpen();
 }
@@ -152,8 +152,8 @@ inline void FSFile::Close()
 {
 	if (IsOpen())
 	{
-		g_pFileSystem->Close(_handle);
-		_handle = FILESYSTEM_INVALID_HANDLE;
+		g_pFileSystem->Close(m_Handle);
+		m_Handle = FILESYSTEM_INVALID_HANDLE;
 	}
 }
 
@@ -161,21 +161,21 @@ inline void FSFile::Seek(int pos, FileSystemSeek_t seekType)
 {
 	if (IsOpen())
 	{
-		g_pFileSystem->Seek(_handle, pos, seekType);
+		g_pFileSystem->Seek(m_Handle, pos, seekType);
 	}
 }
 
 inline std::size_t FSFile::Tell() const
 {
-	return static_cast<std::size_t>(g_pFileSystem->Tell(_handle));
+	return static_cast<std::size_t>(g_pFileSystem->Tell(m_Handle));
 }
 
 inline int FSFile::Read(void* dest, int size)
 {
-	return g_pFileSystem->Read(dest, size, _handle);
+	return g_pFileSystem->Read(dest, size, m_Handle);
 }
 
 inline int FSFile::Write(const void* input, int size)
 {
-	return g_pFileSystem->Write(input, size, _handle);
+	return g_pFileSystem->Write(input, size, m_Handle);
 }
