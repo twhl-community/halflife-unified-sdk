@@ -75,8 +75,8 @@ public:
 	inline bool CanFire() { return (gpGlobals->time - m_lastSightTime) < m_persist; }
 	bool InRange(float range);
 
-	// Acquire a target.  pPlayer is a player in the PVS
-	edict_t* FindTarget(edict_t* pPlayer);
+	// Acquire a target.
+	CBaseEntity* FindTarget(CBaseEntity* pvsPlayer);
 
 	void TankTrace(const Vector& vecStart, const Vector& vecForward, const Vector& vecSpread, TraceResult& tr);
 
@@ -132,6 +132,15 @@ protected:
 	Vector m_sightOrigin; // Last sight of target
 	int m_spread;		  // firing spread
 	int m_iszMaster;	  // Master entity (game_team_master or multisource)
+
+	// Not saved, will reacquire after restore
+	// TODO: could be exploited to make a tank change targets
+	// TODO: never actually written to
+	EHANDLE m_hEnemy;
+
+	// 0 - player only
+	// 1 - all targets allied to player
+	int m_iEnemyType;
 };
 
 
@@ -163,6 +172,7 @@ TYPEDESCRIPTION CFuncTank::m_SaveData[] =
 		DEFINE_FIELD(CFuncTank, m_flNextAttack, FIELD_TIME),
 		DEFINE_FIELD(CFuncTank, m_iBulletDamage, FIELD_INTEGER),
 		DEFINE_FIELD(CFuncTank, m_iszMaster, FIELD_STRING),
+		DEFINE_FIELD(CFuncTank, m_iEnemyType, FIELD_INTEGER),
 };
 
 IMPLEMENT_SAVERESTORE(CFuncTank, CBaseEntity);
@@ -323,6 +333,11 @@ bool CFuncTank::KeyValue(KeyValueData* pkvd)
 		m_iszMaster = ALLOC_STRING(pkvd->szValue);
 		return true;
 	}
+	else if (FStrEq(pkvd->szKeyName, "enemytype"))
+	{
+		m_iEnemyType = atoi(pkvd->szValue);
+		return true;
+	}
 
 	return CBaseEntity::KeyValue(pkvd);
 }
@@ -455,9 +470,109 @@ void CFuncTank::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useT
 }
 
 
-edict_t* CFuncTank::FindTarget(edict_t* pPlayer)
+CBaseEntity* CFuncTank::FindTarget(CBaseEntity* pvsPlayer)
 {
-	return pPlayer;
+	auto pPlayerTarget = pvsPlayer;
+
+	if (!pPlayerTarget)
+		return pPlayerTarget;
+
+	m_pLink = nullptr;
+	auto flIdealDist = m_maxRange;
+	CBaseEntity* pIdealTarget = nullptr;
+
+	if (pPlayerTarget->IsAlive())
+	{
+		const auto distance = (pPlayerTarget->pev->origin - pev->origin).Length2D();
+
+		// TODO: use max range here?
+		if (0 <= distance && distance <= 2048.0)
+		{
+			TraceResult tr;
+			UTIL_TraceLine(BarrelPosition(), pPlayerTarget->pev->origin + pPlayerTarget->pev->view_ofs, dont_ignore_monsters, edict(), &tr);
+
+			if (tr.pHit == pPlayerTarget->pev->pContainingEntity)
+			{
+				if (0 == m_iEnemyType)
+					return pPlayerTarget;
+
+				flIdealDist = distance;
+				pIdealTarget = pPlayerTarget;
+			}
+		}
+	}
+
+	Vector size(2048, 2048, 2048);
+
+	CBaseEntity* pList[100];
+	const auto count = UTIL_EntitiesInBox(pList, std::size(pList), pev->origin - size, pev->origin + size, FL_MONSTER | FL_CLIENT);
+
+	for (auto i = 0; i < count; ++i)
+	{
+		auto pEntity = pList[i];
+
+		if (this == pEntity)
+			continue;
+
+		if ((pEntity->pev->spawnflags & SF_MONSTER_PRISONER) != 0)
+			continue;
+
+		if (pEntity->pev->health <= 0)
+			continue;
+
+		auto pMonster = pEntity->MyMonsterPointer();
+
+		if (!pMonster)
+			continue;
+
+		if (pMonster->IRelationship(pPlayerTarget) != R_AL)
+			continue;
+
+		if ((pEntity->pev->flags & FL_NOTARGET) != 0)
+			continue;
+
+		if (!FVisible(pEntity))
+			continue;
+
+		if (pEntity->IsPlayer() && (pev->spawnflags & SF_TANK_ACTIVE) != 0)
+		{
+			if (pMonster->FInViewCone(this))
+			{
+				pev->spawnflags &= ~SF_TANK_ACTIVE;
+			}
+		}
+
+		pEntity->m_pLink = m_pLink;
+		m_pLink = pEntity;
+	}
+
+	for (auto pEntity = m_pLink; pEntity; pEntity = pEntity->m_pLink)
+	{
+		const auto distance = (pEntity->pev->origin - pev->origin).Length();
+
+		if (distance >= 0 && 2048 >= distance && (!pIdealTarget || flIdealDist > distance))
+		{
+			TraceResult tr;
+			UTIL_TraceLine(BarrelPosition(), pEntity->pev->origin + pEntity->pev->view_ofs, dont_ignore_monsters, edict(), &tr);
+
+			if ((pev->spawnflags & SF_TANK_LINEOFSIGHT) != 0)
+			{
+				if (tr.pHit == pEntity->edict())
+				{
+					flIdealDist = distance;
+				}
+				if (tr.pHit == pEntity->edict())
+					pIdealTarget = pEntity;
+			}
+			else
+			{
+				flIdealDist = distance;
+				pIdealTarget = pEntity;
+			}
+		}
+	}
+
+	return pIdealTarget;
 }
 
 
@@ -490,7 +605,7 @@ void CFuncTank::TrackTarget()
 	edict_t* pPlayer = FIND_CLIENT_IN_PVS(edict());
 	bool updateTime = false, lineOfSight;
 	Vector angles, direction, targetPosition, barrelEnd;
-	edict_t* pTarget;
+	CBaseEntity* pTarget;
 
 	// Get a position to aim for
 	if (m_pController)
@@ -513,13 +628,25 @@ void CFuncTank::TrackTarget()
 				pev->nextthink = pev->ltime + 2; // Wait 2 secs
 			return;
 		}
-		pTarget = FindTarget(pPlayer);
-		if (!pTarget)
-			return;
+
+		// Keep tracking the same target
+		if (m_hEnemy && m_hEnemy->IsAlive())
+		{
+			pTarget = m_hEnemy;
+		}
+		else
+		{
+			pTarget = FindTarget(GET_PRIVATE<CBaseEntity>(pPlayer));
+			if (!pTarget)
+			{
+				m_hEnemy = nullptr;
+				return;
+			}
+		}
 
 		// Calculate angle needed to aim at target
 		barrelEnd = BarrelPosition();
-		targetPosition = pTarget->v.origin + pTarget->v.view_ofs;
+		targetPosition = pTarget->pev->origin + pTarget->pev->view_ofs;
 		float range = (targetPosition - barrelEnd).Length();
 
 		if (!InRange(range))
@@ -529,15 +656,14 @@ void CFuncTank::TrackTarget()
 
 		lineOfSight = false;
 		// No line of sight, don't track
-		if (tr.flFraction == 1.0 || tr.pHit == pTarget)
+		if (tr.flFraction == 1.0 || tr.pHit == pTarget->edict())
 		{
 			lineOfSight = true;
 
-			CBaseEntity* pInstance = CBaseEntity::Instance(pTarget);
-			if (InRange(range) && pInstance && pInstance->IsAlive())
+			if (InRange(range) && pTarget->IsAlive())
 			{
 				updateTime = true;
-				m_sightOrigin = UpdateTargetPosition(pInstance);
+				m_sightOrigin = UpdateTargetPosition(pTarget);
 			}
 		}
 
@@ -609,7 +735,7 @@ void CFuncTank::TrackTarget()
 		{
 			float length = direction.Length();
 			UTIL_TraceLine(barrelEnd, barrelEnd + forward * length, dont_ignore_monsters, edict(), &tr);
-			if (tr.pHit == pTarget)
+			if (tr.pHit == pTarget->edict())
 				fire = true;
 		}
 		else

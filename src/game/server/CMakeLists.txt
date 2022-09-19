@@ -71,7 +71,6 @@ target_sources(server PRIVATE
 	entities/func_break.cpp
 	entities/func_break.h
 	entities/func_tank.cpp
-	entities/func_tank_of.cpp
 	entities/h_cycler.cpp
 	entities/lights.cpp
 	entities/maprules.cpp
