@@ -19,6 +19,8 @@ vcpkg_configure_cmake(
     OPTIONS
         -DLIBNYQUIST_ENABLE_AVX=OFF
         -DLIBNYQUIST_BUILD_EXAMPLE=OFF
+	MAYBE_UNUSED_VARIABLES
+		LIBNYQUIST_ENABLE_AVX
 )
 
 vcpkg_install_cmake()
