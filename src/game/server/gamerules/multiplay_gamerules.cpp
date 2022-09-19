@@ -1250,14 +1250,16 @@ bool ReloadMapCycleFile(const char* filename, mapcycle_t* cycle)
 {
 	char szBuffer[MAX_RULE_BUFFER];
 	char szMap[32];
-	int length;
-	char* aFileList = (char*)LOAD_FILE_FOR_ME(filename, &length);
-	const char* pFileList = aFileList;
+
+	const auto fileContents = FileSystem_LoadFileIntoBuffer(filename, FileContentFormat::Text);
+
 	bool hasbuffer;
 	mapcycle_item_s *item, *newlist = nullptr, *next;
 
-	if (pFileList && 0 != length)
+	if (fileContents.size() > 1)
 	{
+		const char* pFileList = reinterpret_cast<const char*>(fileContents.data());
+
 		// the first map name in the file becomes the default
 		while (true)
 		{
@@ -1329,8 +1331,6 @@ bool ReloadMapCycleFile(const char* filename, mapcycle_t* cycle)
 				ALERT(at_console, "Skipping %s from mapcycle, not a valid map\n", szMap);
 			}
 		}
-
-		FREE_FILE(aFileList);
 	}
 
 	// Fixup circular list pointer
@@ -1583,9 +1583,11 @@ void CHalfLifeMultiplay::ChangeLevel()
 void CHalfLifeMultiplay::SendMOTDToClient(edict_t* client)
 {
 	// read from the MOTD.txt file
-	int length, char_count = 0;
-	char* pFileList;
-	char* aFileList = pFileList = (char*)LOAD_FILE_FOR_ME((char*)CVAR_GET_STRING("motdfile"), &length);
+	const auto fileContents = FileSystem_LoadFileIntoBuffer(CVAR_GET_STRING("motdfile"), FileContentFormat::Text);
+
+	int char_count = 0;
+	const char* const aFileList = reinterpret_cast<const char*>(fileContents.data());
+	const char* pFileList = aFileList;
 
 	// send the server name
 	MESSAGE_BEGIN(MSG_ONE, gmsgServerName, nullptr, client);
@@ -1610,16 +1612,14 @@ void CHalfLifeMultiplay::SendMOTDToClient(edict_t* client)
 		}
 
 		char_count += strlen(chunk);
-		if (char_count < MAX_MOTD_LENGTH)
-			pFileList = aFileList + char_count;
-		else
-			*pFileList = 0;
+
+		pFileList = aFileList + char_count;
+
+		const bool moreToCome = pFileList[0] != '\0' && char_count < MAX_MOTD_LENGTH;
 
 		MESSAGE_BEGIN(MSG_ONE, gmsgMOTD, nullptr, client);
-		WRITE_BYTE(static_cast<int>('\0' == *pFileList)); // false means there is still more message to come
+		WRITE_BYTE(static_cast<int>(!moreToCome)); // false means there is still more message to come
 		WRITE_STRING(chunk);
 		MESSAGE_END();
 	}
-
-	FREE_FILE(aFileList);
 }
