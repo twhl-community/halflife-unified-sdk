@@ -7,8 +7,6 @@
 
 #pragma once
 
-#include <string>
-
 #include "VGUI_Label.h"
 #include "VGUI_LineBorder.h"
 #include "VGUI_ImagePanel.h"
@@ -85,6 +83,8 @@ public:
 	virtual int Init(
 		IVoiceStatusHelper* m_pHelper,
 		vgui::Panel** pParentPanel);
+
+	void Shutdown();
 
 	// ackPosition is the bottom position of where CVoiceStatus will draw the voice acknowledgement labels.
 	virtual bool VidInit();
@@ -210,9 +210,6 @@ public:
 
 	// Labels telling who is speaking.
 	CVoiceLabel m_Labels[MAX_VOICE_SPEAKERS];
-
-	// Cache the game directory for use when we shut down
-	std::string m_pchGameDir;
 };
 
 

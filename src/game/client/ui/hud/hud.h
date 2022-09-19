@@ -805,6 +805,7 @@ public:
 	CHudEntityInfo m_EntityInfo;
 
 	void Init();
+	void Shutdown();
 	void VidInit();
 	void Think();
 	bool Redraw(float flTime, bool intermission);

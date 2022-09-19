@@ -10,7 +10,7 @@
 
 
 #define BANMGR_FILEVERSION 1
-char const* g_pBanMgrFilename = "voice_ban.dt";
+char const* const g_pBanMgrFilename = "voice_ban.dt";
 
 
 
@@ -39,38 +39,31 @@ CVoiceBanMgr::~CVoiceBanMgr()
 }
 
 
-bool CVoiceBanMgr::Init(char const* pGameDir)
+bool CVoiceBanMgr::Init()
 {
 	Term();
 
-	char filename[512];
-	snprintf(filename, sizeof(filename), "%s/%s", pGameDir, g_pBanMgrFilename);
-
 	// Load in the squelch file.
-	FILE* fp = fopen(filename, "rb");
-	if (fp)
+	if (FSFile fp{g_pBanMgrFilename, "rb", "GAMECONFIG"}; fp)
 	{
 		int version;
-		if (sizeof(version) == fread(&version, 1, sizeof(version), fp))
+		if (sizeof(version) == fp.Read(&version, sizeof(version)))
 		{
 			if (version == BANMGR_FILEVERSION)
 			{
-				fseek(fp, 0, SEEK_END);
-				int nIDs = (ftell(fp) - sizeof(version)) / 16;
-				fseek(fp, sizeof(version), SEEK_SET);
+				int nIDs = (fp.Size() - sizeof(version)) / 16;
+				fp.Seek(sizeof(version), FILESYSTEM_SEEK_HEAD);
 
 				for (int i = 0; i < nIDs; i++)
 				{
 					char playerID[16];
-					if (sizeof(playerID) == fread(playerID, 1, sizeof(playerID), fp))
+					if (sizeof(playerID) == fp.Read(playerID, sizeof(playerID)))
 					{
 						AddBannedPlayer(playerID);
 					}
 				}
 			}
 		}
-
-		fclose(fp);
 	}
 
 	return true;
@@ -95,28 +88,22 @@ void CVoiceBanMgr::Term()
 }
 
 
-void CVoiceBanMgr::SaveState(char const* pGameDir)
+void CVoiceBanMgr::SaveState()
 {
 	// Save the file out.
-	char filename[512];
-	snprintf(filename, sizeof(filename), "%s/%s", pGameDir, g_pBanMgrFilename);
-
-	FILE* fp = fopen(filename, "wb");
-	if (fp)
+	if (FSFile fp{g_pBanMgrFilename, "wb", "GAMECONFIG"}; fp)
 	{
-		int version = BANMGR_FILEVERSION;
-		fwrite(&version, 1, sizeof(version), fp);
+		const int version = BANMGR_FILEVERSION;
+		fp.Write(&version, sizeof(version));
 
 		for (int i = 0; i < 256; i++)
 		{
 			BannedPlayer* pListHead = &m_PlayerHash[i];
 			for (BannedPlayer* pCur = pListHead->m_pNext; pCur != pListHead; pCur = pCur->m_pNext)
 			{
-				fwrite(pCur->m_PlayerID, 1, 16, fp);
+				fp.Write(pCur->m_PlayerID, sizeof(pCur->m_PlayerID));
 			}
 		}
-
-		fclose(fp);
 	}
 }
 

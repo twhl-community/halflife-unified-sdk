@@ -111,6 +111,8 @@ public:
 
 	void Seek(int pos, FileSystemSeek_t seekType);
 
+	std::size_t Tell() const;
+
 	int Read(void* dest, int size);
 
 	int Write(const void* input, int size);
@@ -161,6 +163,11 @@ inline void FSFile::Seek(int pos, FileSystemSeek_t seekType)
 	{
 		g_pFileSystem->Seek(_handle, pos, seekType);
 	}
+}
+
+inline std::size_t FSFile::Tell() const
+{
+	return static_cast<std::size_t>(g_pFileSystem->Tell(_handle));
 }
 
 inline int FSFile::Read(void* dest, int size)

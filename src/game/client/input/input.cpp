@@ -1012,6 +1012,8 @@ void DLLEXPORT HUD_Shutdown()
 {
 	//	RecClShutdown();
 
+	gHUD.Shutdown();
+
 	ShutdownInput();
 
 

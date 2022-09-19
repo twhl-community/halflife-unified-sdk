@@ -415,6 +415,11 @@ void CHud::Init()
 	MsgFunc_ResetHUD(nullptr, 0, nullptr);
 }
 
+void CHud::Shutdown()
+{
+	GetClientVoiceMgr()->Shutdown();
+}
+
 // CHud destructor
 // cleans up memory allocated for m_rg* arrays
 CHud ::~CHud()

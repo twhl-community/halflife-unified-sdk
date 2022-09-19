@@ -121,8 +121,6 @@ CVoiceStatus::CVoiceStatus()
 	m_pParentPanel = nullptr;
 
 	m_bServerModEnable = -1;
-
-	m_pchGameDir.clear();
 }
 
 
@@ -146,14 +144,6 @@ CVoiceStatus::~CVoiceStatus()
 	m_pLocalLabel = nullptr;
 
 	FreeBitmaps();
-
-	if (!m_pchGameDir.empty())
-	{
-		if (m_bBanMgrInitialized)
-		{
-			m_BanMgr.SaveState(m_pchGameDir.c_str());
-		}
-	}
 }
 
 
@@ -168,11 +158,8 @@ int CVoiceStatus::Init(
 
 	gEngfuncs.pfnAddCommand("voice_showbanned", ShowBannedCallback);
 
-	if (gEngfuncs.pfnGetGameDirectory())
-	{
-		m_BanMgr.Init(gEngfuncs.pfnGetGameDirectory());
-		m_bBanMgrInitialized = true;
-	}
+	m_BanMgr.Init();
+	m_bBanMgrInitialized = true;
 
 	assert(!g_pInternalVoiceStatus);
 	g_pInternalVoiceStatus = this;
@@ -216,12 +203,17 @@ int CVoiceStatus::Init(
 	HOOK_MESSAGE(VoiceMask);
 	HOOK_MESSAGE(ReqState);
 
-	// Cache the game directory for use when we shut down
-	m_pchGameDir = gEngfuncs.pfnGetGameDirectory();
-
 	return 1;
 }
 
+void CVoiceStatus::Shutdown()
+{
+	if (m_bBanMgrInitialized)
+	{
+		m_BanMgr.SaveState();
+		m_bBanMgrInitialized = false;
+	}
+}
 
 bool CVoiceStatus::VidInit()
 {
