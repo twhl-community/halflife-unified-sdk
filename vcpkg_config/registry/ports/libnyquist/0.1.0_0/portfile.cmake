@@ -28,6 +28,8 @@ vcpkg_install_cmake()
 set(PKG_NAME "libnyquist")
 vcpkg_fixup_cmake_targets(CONFIG_PATH lib/cmake/${PKG_NAME} TARGET_PATH share/${PKG_NAME})
 
+file(REMOVE_RECURSE ${CURRENT_PACKAGES_DIR}/debug/include)
+
 file(INSTALL ${SOURCE_PATH}/LICENSE DESTINATION ${CURRENT_PACKAGES_DIR}/share/${PORT} RENAME copyright)
 file(INSTALL ${CMAKE_CURRENT_LIST_DIR}/usage DESTINATION ${CURRENT_PACKAGES_DIR}/share/${PORT})
 
