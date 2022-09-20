@@ -1,8 +1,8 @@
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO pboettch/json-schema-validator
-    REF 5b3200f83979519a41ffd6a43e6ae1f2a8dff3df
-    SHA512 cd57124b625e9af580664acec968646de44b1a547857f362290db252b1e0480bbf59cb0ec2b69aefb797d5f0519af65d95a6c977882e314557afbb6f2a611137
+    REF 1063c9adbafc25f5a14bae15c3babdb039de86c6
+    SHA512 c60f08c449af7faceac830d5f497d5c9328a3363205123ebd91ed86f20937c7e0bd31c1d7165166cd74ce92be0d2cf7dc0a0f8faeb447dd080682bb8694897da
     HEAD_REF main
 )
 
