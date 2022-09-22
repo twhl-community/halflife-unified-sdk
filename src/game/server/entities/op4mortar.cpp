@@ -758,7 +758,7 @@ void COp4Mortar::UpdatePosition(int direction, int controller)
 
 void COp4Mortar::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
-	if (useType == USE_TOGGLE && (!pActivator || pActivator->Classify() == CLASS_PLAYER))
+	if (useType == USE_TOGGLE && (!pActivator || pActivator->IsPlayer()))
 	{
 		if ((pev->spawnflags & SF_MORTAR_ACTIVE) == 0 && (pev->spawnflags & SF_MORTAR_CONTROLLABLE) != 0)
 		{

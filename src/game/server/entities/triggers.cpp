@@ -1070,7 +1070,7 @@ void CBaseTrigger::CounterUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE
 
 	bool fTellActivator =
 		(m_hActivator != nullptr) &&
-		FClassnameIs(m_hActivator->pev, "player") &&
+		m_hActivator->IsPlayer() &&
 		!FBitSet(pev->spawnflags, SPAWNFLAG_NOMESSAGE);
 	if (m_cTriggersLeft != 0)
 	{
@@ -1375,7 +1375,7 @@ void CChangeLevel::ChangeLevelNow(CBaseEntity* pActivator)
 //
 void CChangeLevel::TouchChangeLevel(CBaseEntity* pOther)
 {
-	if (!FClassnameIs(pOther->pev, "player"))
+	if (!pOther->IsPlayer())
 		return;
 
 	ChangeLevelNow(pOther);

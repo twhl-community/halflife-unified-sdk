@@ -597,7 +597,7 @@ void CTFGoalFlag::GiveFlagToPlayer(CBasePlayer* pPlayer)
 
 void CTFGoalFlag::goal_item_touch(CBaseEntity* pOther)
 {
-	if (pOther->Classify() != CLASS_PLAYER)
+	if (!pOther->IsPlayer())
 		return;
 
 	if (pOther->pev->health <= 0)

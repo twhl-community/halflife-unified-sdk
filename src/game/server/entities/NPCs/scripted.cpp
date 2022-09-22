@@ -1092,7 +1092,7 @@ bool CScriptedSentence::AcceptableSpeaker(CBaseMonster* pMonster)
 	{
 		if ((pev->spawnflags & SF_SENTENCE_FOLLOWERS) != 0)
 		{
-			if (pMonster->m_hTargetEnt == nullptr || !FClassnameIs(pMonster->m_hTargetEnt->pev, "player"))
+			if (pMonster->m_hTargetEnt == nullptr || !pMonster->m_hTargetEnt->IsPlayer())
 				return false;
 		}
 		bool override;

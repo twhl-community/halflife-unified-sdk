@@ -102,7 +102,7 @@ void CRecharge::Precache()
 void CRecharge::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
 	// if it's not a player, ignore
-	if (!FClassnameIs(pActivator->pev, "player"))
+	if (!pActivator->IsPlayer())
 		return;
 
 	auto player = static_cast<CBasePlayer*>(pActivator);
