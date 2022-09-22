@@ -324,7 +324,6 @@ bool Q_UnicodeValidate(const char* pUTF8)
 //
 void Host_Say(edict_t* pEntity, bool teamonly)
 {
-	CBasePlayer* client;
 	int j;
 	char* p;
 	char text[128];
@@ -407,8 +406,7 @@ void Host_Say(edict_t* pEntity, bool teamonly)
 	// This may return the world in single player if the client types something between levels or during spawn
 	// so check it, or it will infinite loop
 
-	client = nullptr;
-	while (((client = (CBasePlayer*)UTIL_FindEntityByClassname(client, "player")) != nullptr) && (!FNullEnt(client->edict())))
+	for (auto client : UTIL_FindPlayers())
 	{
 		if (!client->pev)
 			continue;

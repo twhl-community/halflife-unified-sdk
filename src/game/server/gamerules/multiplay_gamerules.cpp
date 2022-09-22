@@ -425,7 +425,7 @@ void CHalfLifeMultiplay::ClientDisconnected(edict_t* pClient)
 			g_engfuncs.pfnWriteByte(0);
 			g_engfuncs.pfnMessageEnd();
 
-			for (auto entity : UTIL_FindEntitiesByClassname<CBasePlayer>("player"))
+			for (auto entity : UTIL_FindPlayers())
 			{
 				if (entity->pev && entity != pPlayer && entity->m_hObserverTarget == pPlayer)
 				{

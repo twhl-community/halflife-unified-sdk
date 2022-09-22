@@ -777,7 +777,7 @@ void CHalfLifeCTFplay::ClientDisconnected(edict_t* pClient)
 			g_engfuncs.pfnWriteByte(0);
 			g_engfuncs.pfnMessageEnd();
 
-			for (CBasePlayer* pPlayer = nullptr; (pPlayer = static_cast<CBasePlayer*>(UTIL_FindEntityByClassname(pPlayer, "player")));)
+			for (auto pPlayer : UTIL_FindPlayers())
 			{
 				if (FNullEnt(pPlayer->pev))
 					break;
