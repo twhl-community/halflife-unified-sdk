@@ -1057,7 +1057,14 @@ void CBaseMonster::StartTask(Task_t* pTask)
 	break;
 	case TASK_GET_PATH_TO_SPOT:
 	{
-		CBaseEntity* pPlayer = CBaseEntity::Instance(FIND_ENTITY_BY_CLASSNAME(nullptr, "player"));
+		CBaseEntity* pPlayer = UTIL_GetLocalPlayer();
+
+		// Fall back to using the world if no player exists (Matches original behavior).
+		if (!pPlayer)
+		{
+			pPlayer = UTIL_GetWorld();
+		}
+
 		if (BuildRoute(m_vecMoveGoal, bits_MF_TO_LOCATION, pPlayer))
 		{
 			TaskComplete();

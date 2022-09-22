@@ -417,7 +417,7 @@ void COFGonome::HandleAnimEvent(MonsterEvent_t* pEvent)
 		if ((pev->origin - m_hEnemy->pev->origin).Length() < 48)
 		{
 			//TODO: not suited for multiplayer
-			auto pPlayer = static_cast<CBasePlayer*>(UTIL_FindEntityByClassname(nullptr, "player"));
+			auto pPlayer = UTIL_GetLocalPlayer();
 
 			if (pPlayer && pPlayer->IsAlive())
 				pPlayer->EnableControl(false);
@@ -444,7 +444,7 @@ void COFGonome::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 	case GONOME_AE_ATTACK_BITE_FINISH:
 	{
-		auto pPlayer = static_cast<CBasePlayer*>(UTIL_FindEntityByClassname(nullptr, "player"));
+		auto pPlayer = UTIL_GetLocalPlayer();
 
 		if (pPlayer && pPlayer->IsAlive())
 		{
@@ -613,7 +613,7 @@ void COFGonome::Killed(entvars_t* pevAttacker, int iGib)
 	if (m_fPlayerLocked)
 	{
 		//TODO: not suited for multiplayer
-		auto pPlayer = static_cast<CBasePlayer*>(UTIL_FindEntityByClassname(nullptr, "player"));
+		auto pPlayer = UTIL_GetLocalPlayer();
 
 		if (pPlayer && pPlayer->IsAlive())
 			pPlayer->EnableControl(true);
@@ -671,7 +671,7 @@ void COFGonome::SetActivity(Activity NewActivity)
 	{
 		if (NewActivity != ACT_MELEE_ATTACK1)
 		{
-			auto pPlayer = static_cast<CBasePlayer*>(UTIL_FindEntityByClassname(nullptr, "player"));
+			auto pPlayer = UTIL_GetLocalPlayer();
 
 			if (pPlayer && pPlayer->IsAlive())
 				pPlayer->EnableControl(true);

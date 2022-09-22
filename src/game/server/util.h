@@ -201,6 +201,8 @@ inline bool FClassnameIs(entvars_t* pev, const char* szClassname)
 }
 
 class CBaseEntity;
+class CBasePlayerItem;
+class CBasePlayer;
 
 // Misc. Prototypes
 void UTIL_SetSize(entvars_t* pev, const Vector& vecMin, const Vector& vecMax);
@@ -208,6 +210,11 @@ float UTIL_VecToYaw(const Vector& vec);
 Vector UTIL_VecToAngles(const Vector& vec);
 float UTIL_AngleMod(float a);
 float UTIL_AngleDiff(float destAngle, float srcAngle);
+
+/**
+*	@brief Gets @c worldspawn.
+*/
+CBaseEntity* UTIL_GetWorld();
 
 CBaseEntity* UTIL_FindEntityInSphere(CBaseEntity* pStartEntity, const Vector& vecCenter, float flRadius);
 CBaseEntity* UTIL_FindEntityByString(CBaseEntity* pStartEntity, const char* szKeyword, const char* szValue);
@@ -219,6 +226,17 @@ CBaseEntity* UTIL_FindEntityGeneric(const char* szName, Vector& vecSrc, float fl
 // otherwise returns nullptr
 // Index is 1 based
 CBaseEntity* UTIL_PlayerByIndex(int playerIndex);
+
+/**
+ *	@brief In a singleplayer game, gets the local player.
+ *	In a multiplayer game, gets the first valid player.
+ */
+CBasePlayer* UTIL_GetLocalPlayer();
+
+/**
+*	@brief Finds the player nearest to the given origin.
+*/
+CBasePlayer* UTIL_FindNearestPlayer(const Vector& origin);
 
 #define UTIL_EntitiesInPVS(pent) (*g_engfuncs.pfnEntitiesInPVS)(pent)
 void UTIL_MakeVectors(const Vector& vecAngles);
@@ -309,9 +327,6 @@ inline void UTIL_CenterPrintAll(const char* msg_name, const char* param1 = nullp
 {
 	UTIL_ClientPrintAll(HUD_PRINTCENTER, msg_name, param1, param2, param3, param4);
 }
-
-class CBasePlayerItem;
-class CBasePlayer;
 
 // prints messages through the HUD
 void ClientPrint(entvars_t* client, int msg_dest, const char* msg_name, const char* param1 = nullptr, const char* param2 = nullptr, const char* param3 = nullptr, const char* param4 = nullptr);

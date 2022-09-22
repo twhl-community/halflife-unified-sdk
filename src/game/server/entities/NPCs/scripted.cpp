@@ -1164,9 +1164,13 @@ bool CScriptedSentence::StartSentence(CBaseMonster* pTarget)
 		float radius = m_flRadius;
 
 		if (FStrEq(STRING(m_iszListener), "player"))
-			radius = 4096; // Always find the player
-
-		pListener = UTIL_FindEntityGeneric(STRING(m_iszListener), pTarget->pev->origin, radius);
+		{
+			pListener = UTIL_FindNearestPlayer(pTarget->pev->origin); // Always find the player
+		}
+		else
+		{
+			pListener = UTIL_FindEntityGeneric(STRING(m_iszListener), pTarget->pev->origin, radius);
+		}
 	}
 
 	pTarget->PlayScriptedSentence(STRING(m_iszSentence), m_flDuration, m_flVolume, m_flAttenuation, bConcurrent, pListener);

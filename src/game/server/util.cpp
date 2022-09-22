@@ -21,6 +21,7 @@
 */
 
 #include <bit>
+#include <limits>
 
 #include "cbase.h"
 #include "shake.h"
@@ -407,6 +408,10 @@ int UTIL_MonstersInSphere(CBaseEntity** pList, int listMax, const Vector& center
 	return count;
 }
 
+CBaseEntity* UTIL_GetWorld()
+{
+	return static_cast<CBaseEntity*>(GET_PRIVATE(INDEXENT(0)));
+}
 
 CBaseEntity* UTIL_FindEntityInSphere(CBaseEntity* pStartEntity, const Vector& vecCenter, float flRadius)
 {
@@ -475,7 +480,6 @@ CBaseEntity* UTIL_FindEntityGeneric(const char* szWhatever, Vector& vecSrc, floa
 	return pEntity;
 }
 
-
 // returns a CBaseEntity pointer to a player by index.  Only returns if the player is spawned and connected
 // otherwise returns nullptr
 // Index is 1 based
@@ -495,6 +499,31 @@ CBaseEntity* UTIL_PlayerByIndex(int playerIndex)
 	return pPlayer;
 }
 
+CBasePlayer* UTIL_GetLocalPlayer()
+{
+	return CPlayerIterator::FindNextPlayer(CPlayerIterator::FirstPlayerIndex);
+}
+
+CBasePlayer* UTIL_FindNearestPlayer(const Vector& origin)
+{
+	CBasePlayer* player = nullptr;
+
+	float flMaxDist2 = std::numeric_limits<float>::max() * std::numeric_limits<float>::max();
+
+	for (auto search : UTIL_FindPlayers())
+	{
+		float flDist2 = (search->pev->origin - origin).Length();
+		flDist2 = flDist2 * flDist2;
+
+		if (flDist2 < flMaxDist2)
+		{
+			player = search;
+			flMaxDist2 = flDist2;
+		}
+	}
+
+	return player;
+}
 
 void UTIL_MakeVectors(const Vector& vecAngles)
 {

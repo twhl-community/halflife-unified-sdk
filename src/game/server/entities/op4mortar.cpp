@@ -597,7 +597,7 @@ void COp4Mortar::AIUpdatePosition()
 
 CBaseEntity* COp4Mortar::FindTarget()
 {
-	auto pPlayerTarget = UTIL_FindEntityByClassname(nullptr, "player");
+	auto pPlayerTarget = UTIL_GetLocalPlayer();
 
 	if (!pPlayerTarget)
 		return pPlayerTarget;

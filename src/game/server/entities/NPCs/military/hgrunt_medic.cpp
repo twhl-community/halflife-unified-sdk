@@ -705,7 +705,7 @@ void COFMedicAlly::MonsterThink()
 		m_fFollowChecking = false;
 
 		//TODO: not suited for multiplayer
-		auto pPlayer = UTIL_FindEntityByClassname(nullptr, "player");
+		auto pPlayer = UTIL_GetLocalPlayer();
 
 		FollowerUse(pPlayer, pPlayer, USE_TOGGLE, 0);
 	}

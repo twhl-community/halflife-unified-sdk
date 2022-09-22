@@ -1215,7 +1215,7 @@ void CNihilanth::CommandUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_T
 			// if the player is using "notarget", the ending sequence won't fire unless we catch it here
 			else
 			{
-				CBaseEntity* pEntity = UTIL_FindEntityByClassname(nullptr, "player");
+				CBaseEntity* pEntity = UTIL_GetLocalPlayer();
 				if (pEntity != nullptr && pEntity->IsAlive())
 				{
 					pTouch->Touch(pEntity);

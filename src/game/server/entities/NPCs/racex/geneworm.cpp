@@ -1128,7 +1128,7 @@ void COFGeneWorm::DyingThink()
 
 	if (gpGlobals->time - m_flDeathStart >= 15)
 	{
-		auto pPlayer = UTIL_FindEntityByClassname(nullptr, "player");
+		auto pPlayer = UTIL_GetLocalPlayer();
 
 		if (pPlayer)
 		{

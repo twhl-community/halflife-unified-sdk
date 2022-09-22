@@ -155,7 +155,7 @@ void CGMan::StartTask(Task_t* pTask)
 	case TASK_WAIT:
 		if (m_hPlayer == nullptr)
 		{
-			m_hPlayer = UTIL_FindEntityByClassname(nullptr, "player");
+			m_hPlayer = UTIL_GetLocalPlayer();
 		}
 		break;
 	}

@@ -669,7 +669,7 @@ void CApache::Flight()
 	{
 		CBaseEntity* pPlayer = nullptr;
 
-		pPlayer = UTIL_FindEntityByClassname(nullptr, "player");
+		pPlayer = UTIL_GetLocalPlayer();
 		// UNDONE: this needs to send different sounds to every player for multiplayer.
 		if (pPlayer)
 		{

@@ -514,7 +514,7 @@ inline void CBasePlayer::SetHasSuit(bool hasSuit)
 class CPlayerIterator
 {
 public:
-	static const int FirstPlayerIndex = 1;
+	static constexpr int FirstPlayerIndex = 1;
 
 public:
 	CPlayerIterator()
@@ -585,8 +585,8 @@ public:
 	}
 
 private:
-	int m_iNextIndex = 1;
 	CBasePlayer* m_pPlayer;
+	int m_iNextIndex;
 };
 
 class CPlayerEnumerator
