@@ -1111,11 +1111,8 @@ void COFAllyMonster::PlayScriptedSentence(const char* pszSentence, float duratio
 	m_hTalkTarget = pListener;
 }
 
-void COFAllyMonster::PlaySentence(const char* pszSentence, float duration, float volume, float attenuation)
+void COFAllyMonster::PlaySentenceCore(const char* pszSentence, float duration, float volume, float attenuation)
 {
-	if (!pszSentence)
-		return;
-
 	Talk(duration);
 
 	COFAllyMonster::g_talkWaitTime = gpGlobals->time + duration + 2.0;
