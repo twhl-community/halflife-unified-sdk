@@ -9,7 +9,7 @@
 		
 		<!-- Display "Null string" if the offset is the default to differentiate from an empty string. -->
 		<DisplayString Condition="m_Value != 0">{{ {CString()} }}</DisplayString>
-		<DisplayString Condition="m_Value == 0">Null string</DisplayString>
+		<DisplayString Condition="m_Value == 0">Null string_t</DisplayString>
 	</Type>
 	
 	<Type Name="CBaseEntity">		
