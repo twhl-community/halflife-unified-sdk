@@ -115,7 +115,7 @@ public:
 	static TYPEDESCRIPTION m_SaveData[];
 
 private:
-	int m_globalstate;
+	string_t m_globalstate;
 	USE_TYPE triggerType;
 };
 LINK_ENTITY_TO_CLASS(trigger_auto, CAutoTrigger);
@@ -277,11 +277,11 @@ public:
 
 	static TYPEDESCRIPTION m_SaveData[];
 
-	int m_cTargets;							  // the total number of targets in this manager's fire list.
-	int m_index;							  // Current target
-	float m_startTime;						  // Time we started firing
-	int m_iTargetName[MAX_MULTI_TARGETS];	  // list if indexes into global string array
-	float m_flTargetDelay[MAX_MULTI_TARGETS]; // delay (in seconds) from time of manager fire to target fire
+	int m_cTargets;								// the total number of targets in this manager's fire list.
+	int m_index;								// Current target
+	float m_startTime;							// Time we started firing
+	string_t m_iTargetName[MAX_MULTI_TARGETS];	// list if indexes into global string array
+	float m_flTargetDelay[MAX_MULTI_TARGETS];	// delay (in seconds) from time of manager fire to target fire
 private:
 	inline bool IsClone() { return (pev->spawnflags & SF_MULTIMAN_CLONE) != 0; }
 	inline bool ShouldClone()
@@ -357,7 +357,7 @@ void CMultiManager::Spawn()
 			if (m_flTargetDelay[i] < m_flTargetDelay[i - 1])
 			{
 				// Swap out of order elements
-				int name = m_iTargetName[i];
+				string_t name = m_iTargetName[i];
 				float delay = m_flTargetDelay[i];
 				m_iTargetName[i] = m_iTargetName[i - 1];
 				m_flTargetDelay[i] = m_flTargetDelay[i - 1];
@@ -886,7 +886,7 @@ void CBaseTrigger::HurtTouch(CBaseEntity* pOther)
 
 		SUB_UseTargets(pOther, USE_TOGGLE, 0);
 		if ((pev->spawnflags & SF_TRIGGER_HURT_TARGETONCE) != 0)
-			pev->target = 0;
+			pev->target = string_t::Null;
 	}
 }
 
@@ -1144,7 +1144,7 @@ void CTriggerVolume::Spawn()
 	pev->solid = SOLID_NOT;
 	pev->movetype = MOVETYPE_NONE;
 	SetModel(STRING(pev->model)); // set size and link into world
-	pev->model = iStringNull;
+	pev->model = string_t::Null;
 	pev->modelindex = 0;
 }
 
@@ -1203,7 +1203,7 @@ public:
 
 	char m_szMapName[cchMapNameMost];	   // trigger_changelevel only:  next map
 	char m_szLandmarkName[cchMapNameMost]; // trigger_changelevel only:  landmark on next map
-	int m_changeTarget;
+	string_t m_changeTarget;
 	float m_changeTargetDelay;
 };
 LINK_ENTITY_TO_CLASS(trigger_changelevel, CChangeLevel);
@@ -1910,7 +1910,7 @@ public:
 	static TYPEDESCRIPTION m_SaveData[];
 
 private:
-	int m_iszNewTarget;
+	string_t m_iszNewTarget;
 };
 LINK_ENTITY_TO_CLASS(trigger_changetarget, CTriggerChangeTarget);
 
@@ -1976,7 +1976,7 @@ public:
 	EHANDLE m_hPlayer;
 	EHANDLE m_hTarget;
 	CBaseEntity* m_pentPath;
-	int m_sPath;
+	string_t m_sPath;
 	float m_flWait;
 	float m_flReturnTime;
 	float m_flStopTime;
@@ -2224,7 +2224,7 @@ void CTriggerCamera::Move()
 		{
 			FireTargets(STRING(m_pentPath->pev->message), this, this, USE_TOGGLE, 0);
 			if (FBitSet(m_pentPath->pev->spawnflags, SF_CORNER_FIREONCE))
-				m_pentPath->pev->message = 0;
+				m_pentPath->pev->message = string_t::Null;
 		}
 		// Time to go to the next target
 		m_pentPath = m_pentPath->GetNextTarget();
@@ -2556,7 +2556,7 @@ void COFTriggerGeneWormHit::GeneWormHitTouch(CBaseEntity* pOther)
 				SUB_UseTargets(pOther, USE_TOGGLE, 0);
 
 				if ((pev->spawnflags & SF_GENEWORM_HIT_TARGET_ONCE) != 0)
-					pev->target = iStringNull;
+					pev->target = string_t::Null;
 			}
 		}
 	}

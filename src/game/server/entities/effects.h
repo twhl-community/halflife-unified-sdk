@@ -215,6 +215,6 @@ public:
 	static TYPEDESCRIPTION m_SaveData[];
 
 	CSprite* m_pSprite;
-	int m_iszSpriteName;
+	string_t m_iszSpriteName;
 	Vector m_firePosition;
 };

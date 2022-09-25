@@ -1,25 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
-	<Type Name="CBaseEntity">
+	<Type Name="string_t">
 		<!--
 			Intrinsic functions are side-effect free so they don't require manual evaluation in the debugger
 			See https://stackoverflow.com/questions/47041809/is-there-a-way-around-this-expression-has-side-effects-and-will-not-be-evaluate
 		-->
-		<Intrinsic Name="VSClassname" Expression="(gpGlobals->pStringBase + pev->classname)"/>
-		<Intrinsic Name="VSTargetname" Expression="(gpGlobals->pStringBase + pev->targetname)"/>
-		<Intrinsic Name="VSTarget" Expression="(gpGlobals->pStringBase + pev->target)"/>
-		<Intrinsic Name="VSModel" Expression="(gpGlobals->pStringBase + pev->model)"/>
-		<Intrinsic Name="VSNetname" Expression="(gpGlobals->pStringBase + pev->netname)"/>
-		<Intrinsic Name="VSMessage" Expression="(gpGlobals->pStringBase + pev->message)"/>
+		<Intrinsic Name="CString" Expression="(gpGlobals->pStringBase + m_Value)"/>
 		
-		<DisplayString>{{ classname={VSClassname()} }}</DisplayString>
+		<!-- Display "Null string" if the offset is the default to differentiate from an empty string. -->
+		<DisplayString Condition="m_Value != 0">{{ {CString()} }}</DisplayString>
+		<DisplayString Condition="m_Value == 0">Null string</DisplayString>
+	</Type>
+	
+	<Type Name="CBaseEntity">		
+		<DisplayString>{{ classname={pev->classname} }}</DisplayString>
 		<Expand>
-			<Item Name="[classname]">VSClassname()</Item>
-			<Item Name="[targetname]">VSTargetname()</Item>
-			<Item Name="[target]">VSTarget()</Item>
-			<Item Name="[model]">VSModel()</Item>
-			<Item Name="[netname]">VSNetname()</Item>
-			<Item Name="[message]">VSMessage()</Item>
+			<Item Name="[classname]">pev->classname</Item>
+			<Item Name="[targetname]">pev->targetname</Item>
+			<Item Name="[target]">pev->target</Item>
+			<Item Name="[model]">pev->model</Item>
+			<Item Name="[netname]">pev->netname</Item>
+			<Item Name="[message]">pev->message</Item>
 		</Expand>
 	</Type>
 </AutoVisualizer>

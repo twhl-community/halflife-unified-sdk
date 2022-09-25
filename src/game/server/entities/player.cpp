@@ -800,8 +800,8 @@ void CBasePlayer::RemoveAllItems(bool removeSuit)
 	}
 	m_pActiveItem = nullptr;
 
-	pev->viewmodel = 0;
-	pev->weaponmodel = 0;
+	pev->viewmodel = string_t::Null;
+	pev->weaponmodel = string_t::Null;
 
 	m_WeaponBits = 0ULL;
 
@@ -1456,7 +1456,7 @@ void CBasePlayer::StartObserver(Vector vecPosition, Vector vecViewAngle)
 	// Clear out the status bar
 	m_fInitHUD = true;
 
-	pev->team = 0;
+	pev->team = string_t::Null;
 	MESSAGE_BEGIN(MSG_ALL, gmsgTeamInfo);
 	WRITE_BYTE(ENTINDEX(edict()));
 	WRITE_STRING("");
@@ -2780,7 +2780,7 @@ void CBasePlayer::PostThink()
 	// Handle Tank controlling
 	if (m_pTank != nullptr)
 	{ // if they've moved too far from the gun,  or selected a weapon, unuse the gun
-		if (m_pTank->OnControls(pev) && 0 == pev->weaponmodel)
+		if (m_pTank->OnControls(pev) && FStringNull(pev->weaponmodel))
 		{
 			m_pTank->Use(this, this, USE_SET, 2); // try fire the gun
 		}
@@ -3617,7 +3617,7 @@ void CBloodSplat::Spray()
 
 static edict_t* GiveNamedItem_Common(entvars_t* pev, const char* pszName)
 {
-	int istr = MAKE_STRING(pszName);
+	string_t istr = MAKE_STRING(pszName);
 
 	edict_t* pent = CREATE_NAMED_ENTITY(istr);
 	if (FNullEnt(pent))
@@ -4176,8 +4176,8 @@ bool CBasePlayer::RemovePlayerItem(CBasePlayerItem* pItem)
 		pItem->pev->nextthink = 0; // crowbar may be trying to swing again, etc.
 		pItem->SetThink(nullptr);
 		m_pActiveItem = nullptr;
-		pev->viewmodel = 0;
-		pev->weaponmodel = 0;
+		pev->viewmodel = string_t::Null;
+		pev->weaponmodel = string_t::Null;
 	}
 	if (m_pLastItem == pItem)
 		m_pLastItem = nullptr;

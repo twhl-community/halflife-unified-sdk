@@ -92,7 +92,7 @@ bool CHUDIconTrigger::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq("icon_name", pkvd->szKeyName))
 	{
-		m_iszCustomName = g_engfuncs.pfnAllocString(pkvd->szValue);
+		m_iszCustomName = ALLOC_STRING(pkvd->szValue);
 		return true;
 	}
 	else if (FStrEq("icon_index", pkvd->szKeyName))

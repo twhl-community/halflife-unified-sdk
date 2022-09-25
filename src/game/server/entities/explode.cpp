@@ -166,7 +166,7 @@ void CEnvExplosion::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE 
 {
 	TraceResult tr;
 
-	pev->model = iStringNull; //invisible
+	pev->model = string_t::Null;	// invisible
 	pev->solid = SOLID_NOT;	  // intangible
 
 	Vector vecSpot; // trace starts here!

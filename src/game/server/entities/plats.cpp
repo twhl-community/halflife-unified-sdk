@@ -718,7 +718,7 @@ void CFuncTrain::Wait()
 	{
 		FireTargets(STRING(m_pevCurrentTarget->message), this, this, USE_TOGGLE, 0);
 		if (FBitSet(m_pevCurrentTarget->spawnflags, SF_CORNER_FIREONCE))
-			m_pevCurrentTarget->message = 0;
+			m_pevCurrentTarget->message = string_t::Null;
 	}
 
 	// need pointer to LAST target.
@@ -1071,7 +1071,7 @@ void CSpriteTrain::Wait()
 	{
 		FireTargets(STRING(m_pevCurrentTarget->message), this, this, USE_TOGGLE, 0);
 		if (FBitSet(m_pevCurrentTarget->spawnflags, SF_CORNER_FIREONCE))
-			m_pevCurrentTarget->message = 0;
+			m_pevCurrentTarget->message = string_t::Null;
 	}
 
 	// need pointer to LAST target.
@@ -1653,7 +1653,7 @@ void CFuncTrackTrain::Next()
 			{
 				FireTargets(STRING(pFire->pev->message), this, this, USE_TOGGLE, 0);
 				if (FBitSet(pFire->pev->spawnflags, SF_PATH_FIREONCE))
-					pFire->pev->message = 0;
+					pFire->pev->message = string_t::Null;
 			}
 
 			if ((pFire->pev->spawnflags & SF_PATH_DISABLE_TRAIN) != 0)
@@ -1939,7 +1939,7 @@ void CFuncTrackTrain::Precache()
 	{
 	default:
 		// no sound
-		pev->noise = 0;
+		pev->noise = string_t::Null;
 		break;
 	case 1:
 		PrecacheSound("plats/ttrain1.wav");
@@ -2082,9 +2082,9 @@ public:
 
 	CFuncTrackTrain* m_train;
 
-	int m_trackTopName;
-	int m_trackBottomName;
-	int m_trainName;
+	string_t m_trackTopName;
+	string_t m_trackBottomName;
+	string_t m_trainName;
 	TRAIN_CODE m_code;
 	int m_targetState;
 	bool m_use;
@@ -2645,7 +2645,7 @@ void CGunTarget::Wait()
 	{
 		FireTargets(STRING(pTarget->pev->message), this, this, USE_TOGGLE, 0);
 		if (FBitSet(pTarget->pev->spawnflags, SF_CORNER_FIREONCE))
-			pTarget->pev->message = 0;
+			pTarget->pev->message = string_t::Null;
 	}
 
 	m_flWait = pTarget->GetDelay();

@@ -34,7 +34,7 @@ public:
 	bool Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
-	void SetMaster(int iszMaster) { m_iszMaster = iszMaster; }
+	void SetMaster(string_t iszMaster) { m_iszMaster = iszMaster; }
 
 protected:
 	bool CanFireForActivator(CBaseEntity* pActivator);
@@ -96,7 +96,7 @@ void CRulePointEntity::Spawn()
 {
 	CRuleEntity::Spawn();
 	pev->frame = 0;
-	pev->model = 0;
+	pev->model = string_t::Null;
 }
 
 //
@@ -612,12 +612,12 @@ void CGamePlayerZone::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYP
 		}
 	}
 
-	if (0 != m_iszInCount)
+	if (!FStringNull(m_iszInCount))
 	{
 		FireTargets(STRING(m_iszInCount), pActivator, this, USE_SET, playersInCount);
 	}
 
-	if (0 != m_iszOutCount)
+	if (!FStringNull(m_iszOutCount))
 	{
 		FireTargets(STRING(m_iszOutCount), pActivator, this, USE_SET, playersOutCount);
 	}

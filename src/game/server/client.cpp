@@ -571,7 +571,7 @@ void SV_CreateClientCommands()
 
 	g_ClientCommands.Create("give", [](CBasePlayer* player, const auto& args)
 		{
-			int iszItem = ALLOC_STRING(args.Argument(1)); // Make a copy of the classname
+			string_t iszItem = ALLOC_STRING(args.Argument(1)); // Make a copy of the classname
 			player->GiveNamedItem(STRING(iszItem)); },
 		{.Flags = ClientCommandFlag::Cheat});
 

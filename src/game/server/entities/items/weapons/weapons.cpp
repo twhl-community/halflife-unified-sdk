@@ -29,7 +29,7 @@
 // you the maximum amount of that type of ammunition that a
 // player can carry.
 //=========================================================
-int MaxAmmoCarry(int iszName)
+int MaxAmmoCarry(string_t iszName)
 {
 	for (int i = 0; i < MAX_WEAPONS; i++)
 	{
@@ -630,8 +630,8 @@ void CBasePlayerItem::Kill()
 
 void CBasePlayerItem::Holster()
 {
-	m_pPlayer->pev->viewmodel = 0;
-	m_pPlayer->pev->weaponmodel = 0;
+	m_pPlayer->pev->viewmodel = string_t::Null;
+	m_pPlayer->pev->weaponmodel = string_t::Null;
 }
 
 void CBasePlayerItem::AttachToPlayer(CBasePlayer* pPlayer)
@@ -641,7 +641,7 @@ void CBasePlayerItem::AttachToPlayer(CBasePlayer* pPlayer)
 	pev->aiment = pPlayer->edict();
 	pev->effects = EF_NODRAW; // ??
 	pev->modelindex = 0;	  // server won't send down to clients if modelindex == 0
-	pev->model = iStringNull;
+	pev->model = string_t::Null;
 	pev->owner = pPlayer->edict();
 	pev->nextthink = gpGlobals->time + .1;
 	SetTouch(nullptr);
@@ -915,8 +915,8 @@ int CBasePlayerWeapon::SecondaryAmmoIndex()
 void CBasePlayerWeapon::Holster()
 {
 	m_fInReload = false; // cancel any reload in progress.
-	m_pPlayer->pev->viewmodel = 0;
-	m_pPlayer->pev->weaponmodel = 0;
+	m_pPlayer->pev->viewmodel = string_t::Null;
+	m_pPlayer->pev->weaponmodel = string_t::Null;
 }
 
 void CBasePlayerAmmo::Precache()
@@ -1058,9 +1058,9 @@ void CBasePlayerWeapon::DoRetireWeapon()
 	}
 
 	// first, no viewmodel at all.
-	m_pPlayer->pev->viewmodel = iStringNull;
-	m_pPlayer->pev->weaponmodel = iStringNull;
-	//m_pPlayer->pev->viewmodelindex = nullptr;
+	m_pPlayer->pev->viewmodel = string_t::Null;
+	m_pPlayer->pev->weaponmodel = string_t::Null;
+	//m_pPlayer->pev->viewmodelindex = 0;
 
 	g_pGameRules->GetNextBestWeapon(m_pPlayer, this);
 
@@ -1231,7 +1231,7 @@ void CWeaponBox::Touch(CBaseEntity* pOther)
 			//ALERT ( at_console, "Gave %d rounds of %s\n", m_rgAmmo[i], STRING(m_rgiszAmmo[i]) );
 
 			// now empty the ammo from the weaponbox since we just gave it to the player
-			m_rgiszAmmo[i] = iStringNull;
+			m_rgiszAmmo[i] = string_t::Null;
 			m_rgAmmo[i] = 0;
 		}
 	}
@@ -1306,7 +1306,7 @@ bool CWeaponBox::PackWeapon(CBasePlayerItem* pWeapon)
 	pWeapon->pev->solid = SOLID_NOT;
 	pWeapon->pev->effects = EF_NODRAW;
 	pWeapon->pev->modelindex = 0;
-	pWeapon->pev->model = iStringNull;
+	pWeapon->pev->model = string_t::Null;
 	pWeapon->pev->owner = edict();
 	pWeapon->SetThink(nullptr); // crowbar may be trying to swing again, etc.
 	pWeapon->SetTouch(nullptr);
@@ -1320,7 +1320,7 @@ bool CWeaponBox::PackWeapon(CBasePlayerItem* pWeapon)
 //=========================================================
 // CWeaponBox - PackAmmo
 //=========================================================
-bool CWeaponBox::PackAmmo(int iszName, int iCount)
+bool CWeaponBox::PackAmmo(string_t iszName, int iCount)
 {
 	int iMaxCarry;
 

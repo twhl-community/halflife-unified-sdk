@@ -473,7 +473,7 @@ void CCineMonster::CineThink()
 
 
 // lookup a sequence name and setup the target monster to play it
-bool CCineMonster::StartSequence(CBaseMonster* pTarget, int iszSeq, bool completeOnEmpty)
+bool CCineMonster::StartSequence(CBaseMonster* pTarget, string_t iszSeq, bool completeOnEmpty)
 {
 	if (FStringNull(iszSeq) && completeOnEmpty)
 	{
@@ -507,9 +507,9 @@ bool CCineMonster::StartSequence(CBaseMonster* pTarget, int iszSeq, bool complet
 // lookup a sequence name and setup the target monster to play it
 // overridden for CCineAI because it's ok for them to not have an animation sequence
 // for the monster to play. For a regular Scripted Sequence, that situation is an error.
-bool CCineAI::StartSequence(CBaseMonster* pTarget, int iszSeq, bool completeOnEmpty)
+bool CCineAI::StartSequence(CBaseMonster* pTarget, string_t iszSeq, bool completeOnEmpty)
 {
-	if (iszSeq == 0 && completeOnEmpty)
+	if (FStringNull(iszSeq) && completeOnEmpty)
 	{
 		// no sequence was provided. Just let the monster proceed, however, we still have to fire any Sequence target
 		// and remove any non-repeatable CineAI entities here ( because there is code elsewhere that handles those tasks, but
@@ -926,15 +926,15 @@ public:
 
 
 private:
-	int m_iszSentence;	// string index for idle animation
-	int m_iszEntity;	// entity that is wanted for this sentence
-	float m_flRadius;	// range to search
-	float m_flDuration; // How long the sentence lasts
-	float m_flRepeat;	// repeat rate
+	string_t m_iszSentence;	// string index for idle animation
+	string_t m_iszEntity;	// entity that is wanted for this sentence
+	float m_flRadius;		// range to search
+	float m_flDuration;		// How long the sentence lasts
+	float m_flRepeat;		// repeat rate
 	float m_flAttenuation;
 	float m_flVolume;
 	bool m_active;
-	int m_iszListener; // name of entity to look at while talking
+	string_t m_iszListener; // name of entity to look at while talking
 };
 
 #define SF_SENTENCE_ONCE 0x0001

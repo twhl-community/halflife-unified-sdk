@@ -278,7 +278,7 @@ public:
 	void SecondaryAttack() override;
 	bool Deploy() override;
 	void Holster() override;
-	int m_iszModel;
+	string_t m_iszModel;
 	int m_iModel;
 };
 LINK_ENTITY_TO_CLASS(cycler_weapon, CWeaponCycler);

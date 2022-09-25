@@ -139,7 +139,7 @@ void CMortarShell::MortarExplodeTouch(CBaseEntity* pOther)
 	TraceResult tr;
 	UTIL_TraceLine(vecSpot, vecSpot + direction * 64, ignore_monsters, edict(), &tr);
 
-	pev->model = 0;
+	pev->model = string_t::Null;
 
 	pev->solid = SOLID_NOT;
 	pev->takedamage = DAMAGE_NO;

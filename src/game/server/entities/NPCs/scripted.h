@@ -72,7 +72,7 @@ public:
 	virtual void PossessEntity();
 
 	void CancelScript();
-	virtual bool StartSequence(CBaseMonster* pTarget, int iszSeq, bool completeOnEmpty);
+	virtual bool StartSequence(CBaseMonster* pTarget, string_t iszSeq, bool completeOnEmpty);
 	virtual bool FCanOverrideState();
 	void SequenceDone(CBaseMonster* pMonster);
 	virtual void FixScriptMonsterSchedule(CBaseMonster* pMonster);
@@ -80,9 +80,9 @@ public:
 	void AllowInterrupt(bool fAllow);
 	int IgnoreConditions() override;
 
-	int m_iszIdle;	 // string index for idle animation
-	int m_iszPlay;	 // string index for scripted animation
-	int m_iszEntity; // entity that is wanted for this script
+	string_t m_iszIdle;		// string index for idle animation
+	string_t m_iszPlay;		// string index for scripted animation
+	string_t m_iszEntity;	// entity that is wanted for this script
 	int m_fMoveTo;
 	int m_iFinishSchedule;
 	float m_flRadius; // range to search
@@ -100,7 +100,7 @@ public:
 
 class CCineAI : public CCineMonster
 {
-	bool StartSequence(CBaseMonster* pTarget, int iszSeq, bool completeOnEmpty) override;
+	bool StartSequence(CBaseMonster* pTarget, string_t iszSeq, bool completeOnEmpty) override;
 	void PossessEntity() override;
 	bool FCanOverrideState() override;
 	void FixScriptMonsterSchedule(CBaseMonster* pMonster) override;

@@ -755,7 +755,7 @@ void CBreakable::Die()
 	}
 
 	// Don't fire something that could fire myself
-	pev->targetname = 0;
+	pev->targetname = string_t::Null;
 
 	pev->solid = SOLID_NOT;
 	// Fire targets on break

@@ -1413,7 +1413,7 @@ void UTIL_Remove(CBaseEntity* pEntity)
 
 	pEntity->UpdateOnRemove();
 	pEntity->pev->flags |= FL_KILLME;
-	pEntity->pev->targetname = 0;
+	pEntity->pev->targetname = string_t::Null;
 }
 
 
@@ -1718,7 +1718,7 @@ void CSave::WriteString(const char* pname, const char* pdata)
 }
 
 
-void CSave::WriteString(const char* pname, const int* stringId, int count)
+void CSave::WriteString(const char* pname, const string_t* stringId, int count)
 {
 	int i, size;
 
@@ -1819,7 +1819,7 @@ void EntvarsKeyvalue(entvars_t* pev, KeyValueData* pkvd)
 			case FIELD_MODELNAME:
 			case FIELD_SOUNDNAME:
 			case FIELD_STRING:
-				(*(int*)((char*)pev + pField->fieldOffset)) = ALLOC_STRING(pkvd->szValue);
+				(*(string_t*)((char*)pev + pField->fieldOffset)) = ALLOC_STRING(pkvd->szValue);
 				break;
 
 			case FIELD_TIME:
@@ -1902,7 +1902,7 @@ bool CSave::WriteFields(const char* pname, void* pBaseData, TYPEDESCRIPTION* pFi
 		case FIELD_MODELNAME:
 		case FIELD_SOUNDNAME:
 		case FIELD_STRING:
-			WriteString(pTest->fieldName, (int*)pOutputData, pTest->fieldSize);
+			WriteString(pTest->fieldName, (string_t*)pOutputData, pTest->fieldSize);
 			break;
 		case FIELD_CLASSPTR:
 		case FIELD_EVARS:
@@ -2100,11 +2100,9 @@ int CRestore::ReadField(void* pBaseData, TYPEDESCRIPTION* pFields, int fieldCoun
 							*((int*)pOutputData) = 0;
 						else
 						{
-							int string;
+							string_t string = ALLOC_STRING((char*)pInputData);
 
-							string = ALLOC_STRING((char*)pInputData);
-
-							*((int*)pOutputData) = string;
+							*((string_t*)pOutputData) = string;
 
 							if (!FStringNull(string) && m_precache)
 							{

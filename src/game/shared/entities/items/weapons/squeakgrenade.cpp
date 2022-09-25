@@ -154,7 +154,7 @@ void CSqueakGrenade::Precache()
 
 void CSqueakGrenade::Killed(entvars_t* pevAttacker, int iGib)
 {
-	pev->model = iStringNull; // make invisible
+	pev->model = string_t::Null; // make invisible
 	SetThink(&CSqueakGrenade::SUB_Remove);
 	SetTouch(nullptr);
 	pev->nextthink = gpGlobals->time + 0.1;

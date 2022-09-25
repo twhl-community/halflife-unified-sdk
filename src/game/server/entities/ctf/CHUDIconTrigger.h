@@ -30,7 +30,7 @@ public:
 
 	float m_flNextActiveTime;
 	int m_nCustomIndex;
-	int m_iszCustomName;
+	string_t m_iszCustomName;
 	bool m_fIsActive;
 	int m_nLeft;
 	int m_nTop;

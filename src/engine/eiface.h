@@ -117,7 +117,7 @@ typedef struct enginefuncs_s
 	void (*pfnAngleVectors)(const float* rgflVector, float* forward, float* right, float* up);
 	edict_t* (*pfnCreateEntity)();
 	void (*pfnRemoveEntity)(edict_t* e);
-	edict_t* (*pfnCreateNamedEntity)(int className);
+	edict_t* (*pfnCreateNamedEntity)(string_t_value className);
 	void (*pfnMakeStatic)(edict_t* ent);
 	int (*pfnEntIsOnFloor)(edict_t* e);
 	int (*pfnDropToFloor)(edict_t* e);

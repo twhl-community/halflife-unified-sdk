@@ -478,7 +478,7 @@ void CBaseDoor::Precache()
 		break; // broken door
 
 	default:
-		m_ls.sLockedSentence = 0;
+		m_ls.sLockedSentence = string_t::Null;
 		break;
 	}
 
@@ -510,7 +510,7 @@ void CBaseDoor::Precache()
 		break; // maintenance door
 
 	default:
-		m_ls.sUnlockedSentence = 0;
+		m_ls.sUnlockedSentence = string_t::Null;
 		break;
 	}
 }

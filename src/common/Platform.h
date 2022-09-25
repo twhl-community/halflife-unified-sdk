@@ -57,8 +57,39 @@
 #include <EASTL/fixed_string.h>
 
 using byte = unsigned char;
-using string_t = unsigned int;
 using qboolean = int;
+
+enum class string_t_value : unsigned int
+{
+	Null = 0
+};
+
+struct string_t
+{
+	static const string_t Null;
+
+	constexpr string_t() = default;
+
+	explicit constexpr string_t(unsigned int value)
+		: m_Value(static_cast<string_t_value>(value))
+	{
+	}
+
+	constexpr auto operator<=>(const string_t&) const = default;
+
+	// TODO: used for CreateNamedEntity. Remove when that function is no longer used.
+	constexpr operator string_t_value() const { return m_Value; }
+
+	// Never write to this yourself.
+	string_t_value m_Value = string_t_value::Null;
+};
+
+constexpr inline string_t string_t::Null{};
+
+// Make sure string_t doesn't break any code.
+// If these asserts fail then the compiler you're using doesn't support replacing typedefs with structs and enums.
+static_assert(sizeof(string_t_value) == sizeof(unsigned int), "string_t_value must be the size of its underlying type");
+static_assert(sizeof(string_t) == sizeof(string_t_value), "string_t must not contain any compiler-inserted padding");
 
 #ifdef WIN32
 //Avoid the ISO conformant warning

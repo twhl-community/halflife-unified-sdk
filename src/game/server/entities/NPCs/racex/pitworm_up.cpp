@@ -1405,7 +1405,7 @@ public:
 
 	void EXPORT StartNode();
 
-	int m_preSequence;
+	string_t m_preSequence;
 };
 
 TYPEDESCRIPTION COFInfoPW::m_SaveData[] =

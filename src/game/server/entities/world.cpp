@@ -653,7 +653,7 @@ void CWorld::Precache()
 		{
 			pEntity->SetThink(&CBaseEntity::SUB_CallUseToggle);
 			pEntity->pev->message = pev->netname;
-			pev->netname = 0;
+			pev->netname = string_t::Null;
 			pEntity->pev->nextthink = gpGlobals->time + 0.3;
 			pEntity->pev->spawnflags = SF_MESSAGE_ONCE;
 		}

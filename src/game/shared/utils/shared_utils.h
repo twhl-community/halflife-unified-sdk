@@ -27,9 +27,15 @@ extern globalvars_t* gpGlobals;
 
 inline cvar_t* g_pDeveloper;
 
+// Testing strings for nullity
+inline constexpr bool FStringNull(string_t iString)
+{
+	return iString == string_t::Null;
+}
+
 inline const char* STRING(string_t offset)
 {
-	return ((const char*)(gpGlobals->pStringBase + (unsigned int)(offset)));
+	return gpGlobals->pStringBase + static_cast<unsigned int>(offset.m_Value);
 }
 
 /**
@@ -37,7 +43,7 @@ inline const char* STRING(string_t offset)
  */
 inline string_t MAKE_STRING(const char* str)
 {
-	return ((uint64)(str) - (uint64)(STRING(0)));
+	return static_cast<string_t>(reinterpret_cast<uint64>(str) - reinterpret_cast<uint64>(gpGlobals->pStringBase));
 }
 
 string_t ALLOC_STRING(const char* str);

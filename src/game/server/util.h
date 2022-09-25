@@ -137,13 +137,6 @@ inline bool FNullEnt(EOFFSET eoffset)
 inline bool FNullEnt(const edict_t* pent) { return pent == nullptr || FNullEnt(OFFSET(pent)); }
 inline bool FNullEnt(entvars_t* pev) { return pev == nullptr || FNullEnt(OFFSET(pev)); }
 
-// Testing strings for nullity
-#define iStringNull 0
-inline bool FStringNull(int iString)
-{
-	return iString == iStringNull;
-}
-
 #define cchMapNameMost 32
 
 // Dot products for view cone checking

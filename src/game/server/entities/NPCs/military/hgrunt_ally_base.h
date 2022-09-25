@@ -238,8 +238,8 @@ public:
 
 	//TODO: needs save/restore (not in op4)
 	int m_iGruntHead;
-	int m_iszUse;
-	int m_iszUnUse;
+	string_t m_iszUse;
+	string_t m_iszUnUse;
 
 protected:
 	/**

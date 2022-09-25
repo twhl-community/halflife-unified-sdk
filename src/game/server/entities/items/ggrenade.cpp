@@ -61,7 +61,7 @@ void CGrenade::Explode(TraceResult* pTrace, int bitsDamageType)
 {
 	float flRndSound; // sound randomizer
 
-	pev->model = iStringNull; //invisible
+	pev->model = string_t::Null;	// invisible
 	pev->solid = SOLID_NOT;	  // intangible
 
 	pev->takedamage = DAMAGE_NO;
