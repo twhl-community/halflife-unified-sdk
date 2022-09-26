@@ -347,6 +347,7 @@ target_sources(server PRIVATE
 	../../public/steam/steamtypes.h)
 
 add_game_shared_sources(server)
+add_subdirectory(scripting/AS)
 
 target_precompile_headers(server PRIVATE entities/cbase.h)
 

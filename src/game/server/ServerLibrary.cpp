@@ -62,6 +62,10 @@
 
 #include "networking/NetworkDataSystem.h"
 
+#include "scripting/AS/ASScriptingSystem.h"
+#include "scripting/AS/ScriptConsoleCommands.h"
+#include "scripting/AS/ScriptsSection.h"
+
 #include "sound/MaterialSystem.h"
 #include "sound/SentencesSystem.h"
 #include "sound/ServerSoundSystem.h"
@@ -201,6 +205,8 @@ void ServerLibrary::RunFrame()
 
 	g_Bots.RunFrame();
 
+	scripting::g_Scripting.RunFrame();
+
 	// If we're loading all maps then change maps after 3 seconds (time starts at 1)
 	// to give the game time to generate files.
 	if (!m_MapsToLoad.empty() && gpGlobals->time > 4)
@@ -283,6 +289,9 @@ void ServerLibrary::NewMapStarted(bool loadGame)
 		list->Clear();
 	}
 
+// Must be done before loading config files.
+scripting::g_Scripting.NewMapStarted();
+
 	ClearStringPool();
 
 	// Initialize map state to its default state
@@ -318,6 +327,8 @@ void ServerLibrary::NewMapStarted(bool loadGame)
 	// Reset sky name to its default value. If the map specifies its own sky
 	// it will be set in CWorld::KeyValue or restored by the engine on save game load.
 	CVAR_SET_STRING("sv_skyname", DefaultSkyName);
+
+scripting::g_Scripting.PostNewMapStarted();
 }
 
 void ServerLibrary::PreMapActivate()
@@ -391,6 +402,8 @@ void ServerLibrary::AddGameSystems()
 	g_GameSystems.Add(&g_MapCycleSystem);
 	g_GameSystems.Add(&g_EntityTemplates);
 	g_GameSystems.Add(&g_Bots);
+	g_GameSystems.Add(&scripting::g_Scripting);
+	g_GameSystems.Add(scripting::g_ScriptConCommands.get());
 }
 
 void ServerLibrary::SetEntLogLevels(spdlog::level::level_enum level)
@@ -439,6 +452,8 @@ void ServerLibrary::CreateConfigDefinitions()
 			sections.push_back(std::make_unique<GlobalSentenceReplacementSection>());
 			sections.push_back(std::make_unique<GlobalSoundReplacementSection>());
 			sections.push_back(std::make_unique<HudColorSection>());
+			// Only this config can specify scripts. For other configs, use plugins instead.
+			sections.push_back(std::make_unique<scripting::ScriptsSection<ServerConfigContext>>());
 			sections.push_back(std::make_unique<SuitLightTypeSection>());
 			sections.push_back(std::make_unique<SpawnInventorySection>());
 			sections.push_back(std::make_unique<EntityTemplatesSection>());

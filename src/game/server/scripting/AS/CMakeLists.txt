@@ -1,0 +1,39 @@
+target_sources(server
+	PRIVATE
+	ASScriptingSystem.cpp
+	ASScriptingSystem.h
+	EventSystem.cpp
+	EventSystem.h
+	ModuleLoader.cpp
+	ModuleLoader.h
+	Scheduler.cpp
+	Scheduler.h
+	ScriptConsoleCommands.cpp
+	ScriptConsoleCommands.h
+	ScriptingAPI.cpp
+	ScriptingAPI.h
+	ScriptingConstants.cpp
+	ScriptingConstants.h
+	ScriptPluginList.cpp
+	ScriptPluginList.h
+	ScriptsSection.h
+	
+	CustomEntities/CustomEntityConstants.h
+	CustomEntities/CustomEntityDictionary.cpp
+	CustomEntities/CustomEntityDictionary.h
+	CustomEntities/CustomEntityFactory.cpp
+	CustomEntities/CustomEntityScriptClasses.cpp
+	CustomEntities/CustomEntityScriptClasses.h
+	CustomEntities/CustomEntityWrappers.h
+	CustomEntities/ICustomEntity.h
+	
+	Entities/TriggerScript.cpp
+	
+	ScriptAPI/CBaseDelayAPI.h
+	ScriptAPI/CBaseEntityAPI.h
+	ScriptAPI/EntityAPIs.cpp
+	ScriptAPI/EntityAPIs.h
+	ScriptAPI/Events.cpp
+	ScriptAPI/Events.h
+	ScriptAPI/MathAPIs.cpp
+	ScriptAPI/MathAPIs.h)

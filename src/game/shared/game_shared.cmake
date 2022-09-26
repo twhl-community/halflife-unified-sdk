@@ -103,8 +103,10 @@ function(add_game_shared_sources target)
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripting/AS/as_addons.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripting/AS/as_utils.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripting/AS/as_utils.h
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripting/AS/ASGenericCall.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripting/AS/ASManager.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripting/AS/ASManager.h
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripting/AS/CallbackList.h
 			
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/sound/MaterialSystem.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/sound/MaterialSystem.h

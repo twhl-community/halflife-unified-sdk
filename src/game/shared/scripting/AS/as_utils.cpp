@@ -21,6 +21,73 @@ using namespace std::literals;
 
 namespace as
 {
+void RegisterRefCountedClass(asIScriptEngine& engine, const char* name)
+{
+	engine.RegisterObjectBehaviour(name, asBEHAVE_ADDREF, "void AddRef()", asMETHOD(RefCountedClass, AddRef), asCALL_THISCALL);
+	engine.RegisterObjectBehaviour(name, asBEHAVE_RELEASE, "void Release()", asMETHOD(RefCountedClass, Release), asCALL_THISCALL);
+}
+
+asITypeInfo* GetFuncDefByName(asIScriptEngine& engine, const char* name)
+{
+	const auto count = engine.GetFuncdefCount();
+
+	for (asUINT i = 0; i < count; ++i)
+	{
+		auto funcdef = engine.GetFuncdefByIndex(i);
+
+		// TODO: namespaces
+		if (0 == strcmp(name, funcdef->GetName()))
+		{
+			return funcdef;
+		}
+	}
+
+	return nullptr;
+}
+
+const asIScriptFunction* GetUnderlyingFunction(const asIScriptFunction* function)
+{
+	assert(function);
+
+	if (!function)
+	{
+		return nullptr;
+	}
+
+	if (auto delegate = function->GetDelegateFunction(); delegate)
+	{
+		return delegate;
+	}
+
+	return function;
+}
+
+asIScriptFunction* GetUnderlyingFunction(asIScriptFunction* function)
+{
+	return const_cast<asIScriptFunction*>(GetUnderlyingFunction(const_cast<const asIScriptFunction*>(function)));
+}
+
+std::string FormatFunctionName(const asIScriptFunction& function)
+{
+	const auto actualFunction = GetUnderlyingFunction(&function);
+	return actualFunction->GetDeclaration(true, true, false);
+}
+
+std::string FormatTypeName(const asITypeInfo& typeInfo)
+{
+	std::string result;
+
+	if (const auto ns = typeInfo.GetNamespace(); ns && ns[0])
+	{
+		result += ns;
+		result += "::";
+	}
+
+	result += typeInfo.GetName();
+
+	return result;
+}
+
 std::string_view ReturnCodeToString(int code)
 {
 	switch (code)
@@ -113,5 +180,152 @@ std::string_view ContextStateToString(int code)
 	}
 
 	return "Unknown context state"sv;
+}
+
+const char* GetModuleName(const asIScriptFunction& function)
+{
+	const auto actualFunction = GetUnderlyingFunction(&function);
+
+	if (const auto moduleName = actualFunction->GetModuleName(); moduleName)
+	{
+		return moduleName;
+	}
+
+	switch (actualFunction->GetFuncType())
+	{
+	case asFUNC_SYSTEM:
+		return "System";
+	default:
+		return "Unknown";
+	}
+}
+
+asIScriptModule* GetCallingModule()
+{
+	const auto context = asGetActiveContext();
+	
+	assert(context);
+
+	if (!context)
+	{
+		return nullptr;
+	}
+
+	// TODO: if for some reason a system function (native function) is calling us then this won't work.
+	// Maybe walk the stack to find the first actual script function?
+	const auto function = context->GetFunction();
+
+	assert(function);
+
+	if (!function)
+	{
+		return nullptr;
+	}
+
+	const auto module = function->GetModule();
+
+	assert(module);
+
+	return module;
+}
+
+std::string GetSectionName(const asIScriptFunction& function)
+{
+	if (const auto sectionName = function.GetScriptSectionName(); sectionName && sectionName[0])
+	{
+		return sectionName;
+	}
+
+	if (const auto module = function.GetModule(); module)
+	{
+		return fmt::format("Unknown section in module \"{}\"", *module);
+	}
+
+	switch (function.GetFuncType())
+	{
+	case asFUNC_SYSTEM:
+		return "System function";
+	default:
+		return "Unknown section";
+	}
+}
+
+std::string GetSectionName(const asIScriptFunction* function)
+{
+	if (!function)
+	{
+		// Should never happen
+		return "No function to get section";
+	}
+
+	return GetSectionName(*function);
+}
+
+SectionInfo GetExecutingSectionInfo(asIScriptContext& context, asUINT stackLevel)
+{
+	const char* sectionName;
+	int column;
+	const int lineNumber = context.GetLineNumber(stackLevel, &column, &sectionName);
+
+	std::string sectionNameString;
+
+	if (sectionName)
+	{
+		sectionNameString = sectionName;
+	}
+	else
+	{
+		sectionNameString = GetSectionName(context.GetFunction(stackLevel));
+	}
+
+	return {
+		.SectionName = std::move(sectionNameString),
+		.Line = lineNumber,
+		.Column = column};
+}
+
+SectionInfo GetExceptionSectionInfo(asIScriptContext& context)
+{
+	const char* sectionName;
+	int column;
+	const int lineNumber = context.GetExceptionLineNumber(&column, &sectionName);
+
+	std::string sectionNameString;
+
+	if (sectionName)
+	{
+		sectionNameString = sectionName;
+	}
+	else
+	{
+		sectionNameString = GetSectionName(context.GetExceptionFunction());
+	}
+
+	return {
+		.SectionName = std::move(sectionNameString),
+		.Line = lineNumber,
+		.Column = column};
+}
+
+void PrintStackTrace(spdlog::logger& logger, spdlog::level::level_enum level, asIScriptContext& context, asUINT maxDepth)
+{
+	const auto stackLevels = std::min(maxDepth, context.GetCallstackSize());
+
+	if (stackLevels == 0)
+	{
+		logger.error("No function to print");
+		return;
+	}
+
+	logger.log(level, "Stack trace ({} out of {} levels):", stackLevels, context.GetCallstackSize());
+
+	for (asUINT stackLevel = 0; stackLevel < stackLevels; ++stackLevel)
+	{
+		const auto function = context.GetFunction(stackLevel);
+
+		const auto sectionInfo{GetExecutingSectionInfo(context, stackLevel)};
+
+		logger.log(level, "{}: {} at {}:{},{}", stackLevel, *function, sectionInfo.SectionName, sectionInfo.Line, sectionInfo.Column);
+	}
 }
 }

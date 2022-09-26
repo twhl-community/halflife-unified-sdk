@@ -84,9 +84,9 @@ UniquePtr<asIScriptContext> ASManager::CreateContext(asIScriptEngine& engine)
 	return context;
 }
 
-as::ModulePtr ASManager::CreateModule(asIScriptEngine& engine, const char* moduleName)
+ModulePtr ASManager::CreateModule(asIScriptEngine& engine, const char* moduleName)
 {
-	as::ModulePtr module{engine.GetModule(moduleName, asGM_ALWAYS_CREATE)};
+	ModulePtr module{engine.GetModule(moduleName, asGM_ALWAYS_CREATE)};
 
 	if (!module)
 	{
@@ -99,7 +99,7 @@ as::ModulePtr ASManager::CreateModule(asIScriptEngine& engine, const char* modul
 
 bool ASManager::HandleAddScriptSectionResult(int returnCode, std::string_view moduleName, std::string_view sectionName)
 {
-	if (asSUCCESS < returnCode)
+	if (asSUCCESS > returnCode)
 	{
 		m_Logger->error("Error \"{}\" adding script section \"{}\" to module \"{}\"", ReturnCodeToString(returnCode), moduleName, sectionName);
 		return false;
@@ -161,7 +161,7 @@ bool ASManager::ExecuteContext(asIScriptContext& context)
 				moduleName = "System function";
 			}
 
-			m_Logger->trace("Executing function \"{}\" ({})", FormatFunctionName(*function), moduleName);
+			m_Logger->trace("Executing function \"{}\" ({})", *function, moduleName);
 		}
 	}
 
@@ -239,22 +239,15 @@ void ASManager::OnThrownExceptionCallback(asIScriptContext* context)
 	const auto level = context->WillExceptionBeCaught() ? spdlog::level::debug : spdlog::level::err;
 
 	{
-		const auto executingFunctionName = FormatFunctionName(*executingFunction);
-		const auto executingModuleName = GetModuleName(*executingFunction);
-		const auto sectionInfo{GetExecutingSectionInfo(*context)};
-
-		m_Logger->log(level, "Exception thrown while executing function \"{}\" (module \"{}\", section \"{}\" at line {}, column {})",
-			executingFunctionName, executingModuleName, sectionInfo.SectionName, sectionInfo.Line, sectionInfo.Column);
-	}
-
-	{
 		const auto exceptionFunctionName = FormatFunctionName(*exceptionFunction);
 		const auto exceptionModuleName = GetModuleName(*exceptionFunction);
 		const auto sectionInfo{GetExceptionSectionInfo(*context)};
 
-		m_Logger->log(level, "Thrown in function \"{}\" (module \"{}\", section \"{}\" at line {}, column {})",
-			exceptionFunctionName, exceptionModuleName, sectionInfo.SectionName, sectionInfo.Line, sectionInfo.Column);
+		m_Logger->log(level, "Exception thrown in function \"{}\" at {}:{},{}",
+			exceptionFunctionName, sectionInfo.SectionName, sectionInfo.Line, sectionInfo.Column);
 	}
+
+	PrintStackTrace(*m_Logger, level, *context);
 
 	m_Logger->log(level, "Message: \"{}\"", context->GetExceptionString());
 }

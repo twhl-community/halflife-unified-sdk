@@ -19,12 +19,16 @@
 
 #include <spdlog/logger.h>
 
+#include <angelscript/scriptdictionary/scriptdictionary.h>
+
 #include "Platform.h"
 #include "extdll.h"
 #include "util.h"
 #include "DataMap.h"
 #include "EntityClassificationSystem.h"
 #include "skill.h"
+
+#include "scripting/AS/as_utils.h"
 
 class CBaseEntity;
 class CBaseItem;
@@ -37,6 +41,11 @@ class CSquadMonster;
 class CTalkMonster;
 class CItemCTF;
 struct ReplacementMap;
+
+namespace scripting
+{
+class ICustomEntity;
+}
 
 #define MAX_PATH_SIZE 10 // max number of nodes available for a path.
 
@@ -314,12 +323,15 @@ public:
 	virtual int BloodColor() { return DONT_BLEED; }
 	virtual void TraceBleed(float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType);
 	virtual bool IsTriggered(CBaseEntity* pActivator) { return true; }
+
 	virtual CBaseMonster* MyMonsterPointer() { return nullptr; }
 	virtual CTalkMonster* MyTalkMonsterPointer() { return nullptr; }
 	virtual CSquadMonster* MySquadMonsterPointer() { return nullptr; }
 	virtual COFSquadTalkMonster* MySquadTalkMonsterPointer() { return nullptr; }
 	virtual CBaseItem* MyItemPointer() { return nullptr; }
 	virtual CItemCTF* MyItemCTFPointer() { return nullptr; }
+	virtual scripting::ICustomEntity* MyCustomEntityPointer() { return nullptr; }
+
 	virtual float GetDelay() { return 0; }
 	virtual bool IsMoving() { return pev->velocity != g_vecZero; }
 	virtual void OverrideReset() {}
@@ -617,6 +629,10 @@ public:
 	 *	@details The entity's angles affect this offset.
 	 */
 	Vector m_SoundOffset{};
+
+	as::UniquePtr<CScriptDictionary> m_UserDataDictionary;
+
+	CScriptDictionary* GetUserData();
 };
 
 inline bool FNullEnt(CBaseEntity* ent) { return (ent == nullptr) || FNullEnt(ent->edict()); }

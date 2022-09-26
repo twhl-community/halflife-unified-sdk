@@ -42,6 +42,10 @@
 
 #include "ctf/ctf_goals.h"
 
+#include "scripting/AS/ASScriptingSystem.h"
+#include "scripting/AS/EventSystem.h"
+#include "scripting/AS/ScriptAPI/Events.h"
+
 unsigned int g_ulFrameCount;
 
 /**
@@ -364,6 +368,16 @@ void Host_Say(CBasePlayer* player, bool teamonly)
 
 	if (!p || '\0' == p[0] || !Q_UnicodeValidate(p))
 		return; // no character found, so say nothing
+
+	// Inform plugins, see if any of them want to handle it.
+	{
+		const auto event = scripting::g_Scripting.GetEventSystem()->Publish<scripting::SayTextEventArgs>(p, pcmd);
+
+		if (event->Suppress)
+		{
+			return;
+		}
+	}
 
 	// turn on color set 2  (color on,  no sound)
 	// turn on color set 2  (color on,  no sound)
@@ -980,6 +994,79 @@ void SV_CreateClientCommands()
 			const char* className = args.Argument(1);
 
 			auto entity = TryCreateEntity(player, className, player->pev->v_angle, args, 2);
+
+			if (!entity)
+			{
+				return;
+			}
+
+			// Move NPC up based on its bounding box.
+			if (entity->pev->mins.z < 0)
+			{
+				entity->pev->origin.z -= entity->pev->mins.z;
+			}
+
+			if ((entity->pev->flags & FL_FLY) == 0 && entity->pev->movetype != MOVETYPE_FLY)
+			{
+				// See if the NPC is stuck in something.
+				if (DROP_TO_FLOOR(entity->edict()) == 0)
+				{
+					UTIL_ConsolePrint(player, "NPC fell out of level\n");
+					UTIL_Remove(entity);
+				}
+			} },
+		{.Flags = ClientCommandFlag::Cheat});
+
+		g_ClientCommands.Create("ent_create_custom", [](CBasePlayer* player, const CommandArgs& args)
+		{
+			if (args.Count() < 2)
+			{
+				UTIL_ConsolePrint(player, "usage: ent_create_custom <classname>\n");
+				return;
+			}
+
+			UTIL_MakeVectors(player->pev->v_angle);
+
+			const auto start = player->pev->origin + player->pev->view_ofs;
+
+			TraceResult tr;
+
+			UTIL_TraceLine(start, start + gpGlobals->v_forward * 8192, dont_ignore_monsters, player->edict(), &tr);
+
+			if (tr.fStartSolid != 0 || tr.fAllSolid != 0)
+			{
+				UTIL_ConsolePrint(player, "No room to spawn entity\n");
+				return;
+			}
+
+			auto entity = CBaseEntity::Create("custom", tr.vecEndPos, vec3_origin, nullptr, false);
+
+			if (FNullEnt(entity))
+			{
+				CBaseEntity::Logger->debug("NULL Ent in ent_create_custom!\n");
+				return;
+			}
+
+			KeyValueData kvd;
+
+			kvd.szClassName = "custom";
+			kvd.szKeyName = "customclass";
+			kvd.szValue = args.Argument(1);
+			kvd.fHandled = 0;
+
+			// Do not access the CBaseEntity pointer after passing in the class name
+			// The entity object is destroyed and replaced with the C++ wrapper so the pointer will become invalid.
+			auto edict = entity->edict();
+
+			DispatchKeyValue(edict, &kvd);
+			DispatchSpawn(edict);
+
+			if (kvd.fHandled == 0 || (edict->v.flags & FL_KILLME) != 0)
+			{
+				return;
+			}
+
+			entity = GET_PRIVATE<CBaseEntity>(edict);
 
 			if (!entity)
 			{
