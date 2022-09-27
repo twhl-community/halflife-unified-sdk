@@ -75,13 +75,9 @@ void ClearStringPool()
 	g_StringPool = StringPool{};
 }
 
-void Con_Printf(const char* format, ...)
+void Con_VPrintf(const char* format, va_list list)
 {
 	static char buffer[8192];
-
-	va_list list;
-
-	va_start(list, format);
 
 	const int result = vsnprintf(buffer, std::size(buffer), format, list);
 
@@ -93,7 +89,42 @@ void Con_Printf(const char* format, ...)
 	{
 		g_engfuncs.pfnServerPrint("Error logging message\n");
 	}
+}
 
+void Con_VDPrintf(const char* format, va_list list)
+{
+	static char buffer[8192];
+
+	const int result = vsnprintf(buffer, std::size(buffer), format, list);
+
+	if (result >= 0 && static_cast<std::size_t>(result) < std::size(buffer))
+	{
+		g_engfuncs.pfnAlertMessage(at_console, "%s", buffer);
+	}
+	else
+	{
+		g_engfuncs.pfnAlertMessage(at_console, "Error logging message\n");
+	}
+}
+
+void Con_Printf(const char* format, ...)
+{
+	va_list list;
+	va_start(list, format);
+	Con_VPrintf(format, list);
+	va_end(list);
+}
+
+void Con_DPrintf(const char* format, ...)
+{
+	if (g_pDeveloper->value == 0)
+	{
+		return;
+	}
+
+	va_list list;
+	va_start(list, format);
+	Con_VDPrintf(format, list);
 	va_end(list);
 }
 

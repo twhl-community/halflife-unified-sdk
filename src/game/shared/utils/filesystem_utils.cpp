@@ -129,7 +129,7 @@ std::vector<std::byte> FileSystem_LoadFileIntoBuffer(const char* fileName, FileC
 		return buffer;
 	}
 
-	Con_Printf("FileSystem_LoadFileIntoBuffer: couldn't open file \"%s\" for reading\n", fileName);
+	Con_DPrintf("FileSystem_LoadFileIntoBuffer: couldn't open file \"%s\" for reading\n", fileName);
 	return {};
 }
 

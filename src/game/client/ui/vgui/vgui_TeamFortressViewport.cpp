@@ -689,15 +689,17 @@ int TeamFortressViewport::CreateCommandMenu(const char* menuFile, bool direction
 	m_iNumMenus++;
 
 	// Read Command Menu from the txt file
-	char token[1024];
 	const auto fileContents = FileSystem_LoadFileIntoBuffer(menuFile, FileContentFormat::Text);
-	const char* pfile = reinterpret_cast<const char*>(fileContents.data());
-	if (!pfile)
+
+	if (fileContents.empty())
 	{
-		gEngfuncs.Con_DPrintf("Unable to open %s\n", menuFile);
 		SetCurrentCommandMenu(nullptr);
 		return newIndex;
 	}
+
+	const char* pfile = reinterpret_cast<const char*>(fileContents.data());
+
+	char token[1024];
 
 	// First, read in the localisation strings
 

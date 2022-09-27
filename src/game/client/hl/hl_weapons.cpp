@@ -96,14 +96,14 @@ Print debug messages to console
 void AlertMessage(ALERT_TYPE atype, const char* szFmt, ...)
 {
 	va_list argptr;
-	static char string[1024];
+	static char string[8192];
 
 	va_start(argptr, szFmt);
 	vsprintf(string, szFmt, argptr);
 	va_end(argptr);
 
-	gEngfuncs.Con_Printf("cl:  ");
-	gEngfuncs.Con_Printf(string);
+	gEngfuncs.Con_DPrintf("cl:  ");
+	gEngfuncs.Con_DPrintf(string);
 }
 
 void ServerPrint(const char* msg)

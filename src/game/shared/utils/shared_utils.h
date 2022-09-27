@@ -56,6 +56,7 @@ string_t ALLOC_ESCAPED_STRING(const char* str);
 void ClearStringPool();
 
 void Con_Printf(const char* format, ...);
+void Con_DPrintf(const char* format, ...);
 
 /**
  *	@brief Gets the command line value for the given key
