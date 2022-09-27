@@ -263,10 +263,15 @@ void SentencesSystem::LoadSentences()
 		{
 			const int expected = group.count - 1;
 
+			
 			if (expected != std::get<1>(*groupData))
 			{
-				m_Logger->warn("Sentence group \"{}\" has sentence \"{}\" with index that does not match order in group (should be {})",
-					group.GroupName.c_str(), name, expected);
+				// Don't report bad indices if the first sentence is bad since those aren't intended to be groups.
+				if (expected != 0)
+				{
+					m_Logger->warn("Sentence group \"{}\" has sentence \"{}\" with index that does not match order in group (should be {})",
+						group.GroupName.c_str(), name, expected);
+				}
 
 				groupsWithBadSentenceIndices.insert(groupName);
 			}
