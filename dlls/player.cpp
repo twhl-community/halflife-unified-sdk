@@ -2985,7 +2985,7 @@ edict_t* EntSelectSpawnPoint(CBasePlayer* pPlayer)
 			{
 				// if ent is a client, kill em (unless they are ourselves)
 				if (ent->IsPlayer() && !(ent->edict() == player))
-					ent->TakeDamage(VARS(INDEXENT(0)), VARS(INDEXENT(0)), 300, DMG_GENERIC);
+					ent->TakeDamage(CWorld::Instance->pev, CWorld::Instance->pev, 300, DMG_GENERIC);
 			}
 			goto ReturnSpot;
 		}
