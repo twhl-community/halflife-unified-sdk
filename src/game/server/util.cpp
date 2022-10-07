@@ -220,6 +220,15 @@ TYPEDESCRIPTION gEntvarsDescription[] =
 
 #define ENTVARS_COUNT (sizeof(gEntvarsDescription) / sizeof(gEntvarsDescription[0]))
 
+edict_t* UTIL_GetEntityList()
+{
+	return g_engfuncs.pfnPEntityOfEntOffset(0);
+}
+
+CBasePlayer* UTIL_GetLocalPlayer()
+{
+	return static_cast<CBasePlayer*>(UTIL_PlayerByIndex(1));
+}
 
 #ifdef DEBUG
 edict_t* DBG_EntOfVars(const entvars_t* pev)
@@ -307,7 +316,7 @@ void UTIL_MoveToOrigin(edict_t* pent, const Vector& vecGoal, float flDist, int i
 
 int UTIL_EntitiesInBox(CBaseEntity** pList, int listMax, const Vector& mins, const Vector& maxs, int flagMask)
 {
-	edict_t* pEdict = g_engfuncs.pfnPEntityOfEntIndex(1);
+	edict_t* pEdict = UTIL_GetEntityList();
 	CBaseEntity* pEntity;
 	int count;
 
@@ -315,6 +324,9 @@ int UTIL_EntitiesInBox(CBaseEntity** pList, int listMax, const Vector& mins, con
 
 	if (!pEdict)
 		return count;
+
+	// Ignore world.
+	++pEdict;
 
 	for (int i = 1; i < gpGlobals->maxEntities; i++, pEdict++)
 	{
@@ -349,7 +361,7 @@ int UTIL_EntitiesInBox(CBaseEntity** pList, int listMax, const Vector& mins, con
 
 int UTIL_MonstersInSphere(CBaseEntity** pList, int listMax, const Vector& center, float radius)
 {
-	edict_t* pEdict = g_engfuncs.pfnPEntityOfEntIndex(1);
+	edict_t* pEdict = UTIL_GetEntityList();
 	CBaseEntity* pEntity;
 	int count;
 	float distance, delta;
@@ -359,6 +371,9 @@ int UTIL_MonstersInSphere(CBaseEntity** pList, int listMax, const Vector& center
 
 	if (!pEdict)
 		return count;
+
+	// Ignore world.
+	++pEdict;
 
 	for (int i = 1; i < gpGlobals->maxEntities; i++, pEdict++)
 	{
@@ -406,11 +421,6 @@ int UTIL_MonstersInSphere(CBaseEntity** pList, int listMax, const Vector& center
 
 
 	return count;
-}
-
-CBaseEntity* UTIL_GetWorld()
-{
-	return static_cast<CBaseEntity*>(GET_PRIVATE(INDEXENT(0)));
 }
 
 CBaseEntity* UTIL_FindEntityInSphere(CBaseEntity* pStartEntity, const Vector& vecCenter, float flRadius)
@@ -497,11 +507,6 @@ CBaseEntity* UTIL_PlayerByIndex(int playerIndex)
 	}
 
 	return pPlayer;
-}
-
-CBasePlayer* UTIL_GetLocalPlayer()
-{
-	return CPlayerIterator::FindNextPlayer(CPlayerIterator::FirstPlayerIndex);
 }
 
 CBasePlayer* UTIL_FindNearestPlayer(const Vector& origin)

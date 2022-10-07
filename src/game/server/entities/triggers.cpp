@@ -1330,7 +1330,7 @@ void CChangeLevel::ChangeLevelNow(CBaseEntity* pActivator)
 	pev->dmgtime = gpGlobals->time;
 
 
-	CBaseEntity* pPlayer = CBaseEntity::Instance(g_engfuncs.pfnPEntityOfEntIndex(1));
+	CBaseEntity* pPlayer = UTIL_GetLocalPlayer();
 	if (!InTransitionVolume(pPlayer, m_szLandmarkName))
 	{
 		ALERT(at_aiconsole, "Player isn't in the transition volume %s, aborting\n", m_szLandmarkName);
@@ -2066,7 +2066,12 @@ void CTriggerCamera::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE
 	}
 	if (!pActivator || !pActivator->IsPlayer())
 	{
-		pActivator = CBaseEntity::Instance(g_engfuncs.pfnPEntityOfEntIndex(1));
+		pActivator = UTIL_GetLocalPlayer();
+
+		if (!pActivator)
+		{
+			return;
+		}
 	}
 
 	auto player = static_cast<CBasePlayer*>(pActivator);
@@ -2318,7 +2323,12 @@ void CTriggerPlayerFreeze::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, US
 	m_bUnFrozen = !m_bUnFrozen;
 
 	//TODO: not made for multiplayer
-	auto pPlayer = GetClassPtr((CBasePlayer*)&g_engfuncs.pfnPEntityOfEntIndex(1)->v);
+	auto pPlayer = UTIL_GetLocalPlayer();
+
+	if (!pPlayer)
+	{
+		return;
+	}
 
 	pPlayer->EnableControl(m_bUnFrozen);
 }

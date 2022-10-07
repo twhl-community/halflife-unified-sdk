@@ -31,6 +31,10 @@
 #include "sound/SentencesSystem.h"
 #endif
 
+class CBaseEntity;
+class CBasePlayerItem;
+class CBasePlayer;
+
 inline globalvars_t* gpGlobals = nullptr;
 
 inline edict_t* FIND_ENTITY_BY_CLASSNAME(edict_t* entStart, const char* pszName)
@@ -75,6 +79,16 @@ typedef int EOFFSET;
 	extern "C" DLLEXPORT void mapClassName(entvars_t* pev); \
 	void mapClassName(entvars_t* pev) { GetClassPtr((DLLClassName*)pev); }
 
+/**
+*	@brief Gets the list of entities.
+*	Will return @c nullptr if there is no map loaded.
+*/
+edict_t* UTIL_GetEntityList();
+
+/**
+*	@brief Gets the local player in singleplayer, or @c nullptr in multiplayer.
+*/
+CBasePlayer* UTIL_GetLocalPlayer();
 
 //
 // Conversion among the three types of "entity", including identity-conversions.
@@ -93,7 +107,6 @@ inline edict_t* ENT(edict_t* pent)
 	return pent;
 }
 inline edict_t* ENT(EOFFSET eoffset) { return (*g_engfuncs.pfnPEntityOfEntOffset)(eoffset); }
-inline EOFFSET OFFSET(EOFFSET eoffset) { return eoffset; }
 inline EOFFSET OFFSET(const edict_t* pent)
 {
 #if _DEBUG
@@ -110,7 +123,6 @@ inline EOFFSET OFFSET(entvars_t* pev)
 #endif
 	return OFFSET(ENT(pev));
 }
-inline entvars_t* VARS(entvars_t* pev) { return pev; }
 
 inline entvars_t* VARS(edict_t* pent)
 {
@@ -120,7 +132,6 @@ inline entvars_t* VARS(edict_t* pent)
 	return &pent->v;
 }
 
-inline entvars_t* VARS(EOFFSET eoffset) { return VARS(ENT(eoffset)); }
 inline int ENTINDEX(edict_t* pEdict) { return (*g_engfuncs.pfnIndexOfEdict)(pEdict); }
 inline edict_t* INDEXENT(int iEdictNum) { return (*g_engfuncs.pfnPEntityOfEntIndex)(iEdictNum); }
 inline void MESSAGE_BEGIN(int msg_dest, int msg_type, const float* pOrigin, entvars_t* ent)
@@ -193,21 +204,12 @@ inline bool FClassnameIs(entvars_t* pev, const char* szClassname)
 	return FStrEq(STRING(pev->classname), szClassname);
 }
 
-class CBaseEntity;
-class CBasePlayerItem;
-class CBasePlayer;
-
 // Misc. Prototypes
 void UTIL_SetSize(entvars_t* pev, const Vector& vecMin, const Vector& vecMax);
 float UTIL_VecToYaw(const Vector& vec);
 Vector UTIL_VecToAngles(const Vector& vec);
 float UTIL_AngleMod(float a);
 float UTIL_AngleDiff(float destAngle, float srcAngle);
-
-/**
-*	@brief Gets @c worldspawn.
-*/
-CBaseEntity* UTIL_GetWorld();
 
 CBaseEntity* UTIL_FindEntityInSphere(CBaseEntity* pStartEntity, const Vector& vecCenter, float flRadius);
 CBaseEntity* UTIL_FindEntityByString(CBaseEntity* pStartEntity, const char* szKeyword, const char* szValue);
@@ -219,12 +221,6 @@ CBaseEntity* UTIL_FindEntityGeneric(const char* szName, Vector& vecSrc, float fl
 // otherwise returns nullptr
 // Index is 1 based
 CBaseEntity* UTIL_PlayerByIndex(int playerIndex);
-
-/**
- *	@brief In a singleplayer game, gets the local player.
- *	In a multiplayer game, gets the first valid player.
- */
-CBasePlayer* UTIL_GetLocalPlayer();
 
 /**
 *	@brief Finds the player nearest to the given origin.

@@ -1182,7 +1182,7 @@ void CBasePlayer::WaterMove()
 				pev->dmg += 1;
 				if (pev->dmg > 5)
 					pev->dmg = 5;
-				TakeDamage(VARS(eoNullEntity), VARS(eoNullEntity), pev->dmg, DMG_DROWN);
+				TakeDamage(CWorld::Instance->pev, CWorld::Instance->pev, pev->dmg, DMG_DROWN);
 				pev->pain_finished = gpGlobals->time + 1;
 
 				// track drowning damage, give it back when
@@ -1234,12 +1234,12 @@ void CBasePlayer::WaterMove()
 	if (pev->watertype == CONTENT_LAVA) // do damage
 	{
 		if (pev->dmgtime < gpGlobals->time)
-			TakeDamage(VARS(eoNullEntity), VARS(eoNullEntity), 10 * pev->waterlevel, DMG_BURN);
+			TakeDamage(CWorld::Instance->pev, CWorld::Instance->pev, 10 * pev->waterlevel, DMG_BURN);
 	}
 	else if (pev->watertype == CONTENT_SLIME) // do damage
 	{
 		pev->dmgtime = gpGlobals->time + 1;
-		TakeDamage(VARS(eoNullEntity), VARS(eoNullEntity), 4 * pev->waterlevel, DMG_ACID);
+		TakeDamage(CWorld::Instance->pev, CWorld::Instance->pev, 4 * pev->waterlevel, DMG_ACID);
 	}
 
 	if (!FBitSet(pev->flags, FL_INWATER))
@@ -2825,7 +2825,7 @@ void CBasePlayer::PostThink()
 
 			if (flFallDamage > 0)
 			{
-				TakeDamage(VARS(eoNullEntity), VARS(eoNullEntity), flFallDamage, DMG_FALL);
+				TakeDamage(CWorld::Instance->pev, CWorld::Instance->pev, flFallDamage, DMG_FALL);
 				pev->punchangle.x = 0;
 			}
 		}
@@ -3026,7 +3026,7 @@ edict_t* EntSelectSpawnPoint(CBasePlayer* pPlayer)
 			{
 				// if ent is a client, kill em (unless they are ourselves)
 				if (ent->IsPlayer() && !(ent->edict() == player))
-					ent->TakeDamage(VARS(INDEXENT(0)), VARS(INDEXENT(0)), 300, DMG_GENERIC);
+					ent->TakeDamage(CWorld::Instance->pev, CWorld::Instance->pev, 300, DMG_GENERIC);
 			}
 			goto ReturnSpot;
 		}
@@ -3082,7 +3082,7 @@ edict_t* EntSelectSpawnPoint(CBasePlayer* pPlayer)
 			{
 				// if ent is a client, kill em (unless they are ourselves)
 				if (ent->IsPlayer() && !(ent->edict() == player))
-					ent->TakeDamage(VARS(INDEXENT(0)), VARS(INDEXENT(0)), 300, DMG_GENERIC);
+					ent->TakeDamage(CWorld::Instance->pev, CWorld::Instance->pev, 300, DMG_GENERIC);
 			}
 			goto ReturnSpot;
 		}
@@ -3106,7 +3106,7 @@ ReturnSpot:
 	if (FNullEnt(pSpot))
 	{
 		ALERT(at_error, "PutClientInServer: no info_player_start on level");
-		return INDEXENT(0);
+		return CWorld::Instance->edict();
 	}
 
 	g_pLastSpawn = pSpot;
@@ -4024,7 +4024,7 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse)
 	{
 		TraceResult tr;
 
-		edict_t* pWorld = g_engfuncs.pfnPEntityOfEntIndex(0);
+		edict_t* pWorld = CWorld::Instance->edict();
 
 		Vector start = pev->origin + pev->view_ofs;
 		Vector end = start + gpGlobals->v_forward * 1024;
@@ -4963,7 +4963,7 @@ Vector CBasePlayer::GetAutoaimVectorFromPoint(const Vector& vecSrc, float flDelt
 
 Vector CBasePlayer::AutoaimDeflection(const Vector& vecSrc, float flDist, float flDelta)
 {
-	edict_t* pEdict = g_engfuncs.pfnPEntityOfEntIndex(1);
+	edict_t* pEdict = UTIL_GetEntityList() + 1;
 	CBaseEntity* pEntity;
 	float bestdot;
 	Vector bestdir;
@@ -5706,7 +5706,7 @@ void CStripWeapons::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE 
 	}
 	else if (!g_pGameRules->IsDeathmatch())
 	{
-		pPlayer = (CBasePlayer*)CBaseEntity::Instance(g_engfuncs.pfnPEntityOfEntIndex(1));
+		pPlayer = (CBasePlayer*)UTIL_GetLocalPlayer();
 	}
 
 	if (pPlayer)

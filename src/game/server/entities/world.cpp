@@ -475,13 +475,28 @@ LINK_ENTITY_TO_CLASS(worldspawn, CWorld);
 
 CWorld::CWorld()
 {
-	//Clear previous map's title if it wasn't cleared already.
+	if (Instance)
+	{
+		ALERT(at_error, "Do not create multiple instances of worldspawn\n");
+		return;
+	}
+
+	Instance = this;
+
+	// Clear previous map's title if it wasn't cleared already.
 	g_DisplayTitleName.clear();
 }
 
 CWorld::~CWorld()
 {
+	if (Instance != this)
+	{
+		return;
+	}
+
 	g_Server.MapIsEnding();
+
+	Instance = nullptr;
 }
 
 void CWorld::Spawn()
@@ -498,6 +513,13 @@ void CWorld::Spawn()
 
 void CWorld::Precache()
 {
+	// Flag this entity for removal if it's not the actual world entity.
+	if (Instance != this)
+	{
+		UTIL_Remove(this);
+		return;
+	}
+
 	g_pLastSpawn = nullptr;
 
 #if 1

@@ -234,7 +234,7 @@ CGrappleTip::TargetClass CGrappleTip::ClassifyTarget(CBaseEntity* pTarget)
 	auto pHit = tr.pHit;
 
 	if (!tr.pHit)
-		pHit = INDEXENT(0);
+		pHit = CWorld::Instance->edict();
 
 	const auto pszTexture = TRACE_TEXTURE(pHit, pev->origin, vecEnd);
 
