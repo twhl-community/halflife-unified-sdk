@@ -480,6 +480,27 @@ void ResetGlobalState()
 
 LINK_ENTITY_TO_CLASS(worldspawn, CWorld);
 
+CWorld::CWorld()
+{
+	if (Instance)
+	{
+		ALERT(at_error, "Do not create multiple instances of worldspawn\n");
+		return;
+	}
+
+	Instance = this;
+}
+
+CWorld::~CWorld()
+{
+	if (Instance != this)
+	{
+		return;
+	}
+
+	Instance = nullptr;
+}
+
 void CWorld::Spawn()
 {
 	g_fGameOver = false;
@@ -494,6 +515,13 @@ void CWorld::Spawn()
 
 void CWorld::Precache()
 {
+	// Flag this entity for removal if it's not the actual world entity.
+	if (Instance != this)
+	{
+		UTIL_Remove(this);
+		return;
+	}
+
 	g_pLastSpawn = NULL;
 
 #if 1
