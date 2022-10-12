@@ -31,7 +31,7 @@ int MsgFunc_SoundRpl(const char* pszName, int iSize, void* pbuf);
 
 bool ClientLibrary::Initialize()
 {
-	if (!InitializeCommon())
+	if (!GameLibrary::Initialize())
 	{
 		return false;
 	}
@@ -53,10 +53,10 @@ void ClientLibrary::Shutdown()
 {
 	sound::g_SoundSystem.reset();
 
-	ShutdownCommon();
+	GameLibrary::Shutdown();
 }
 
-void ClientLibrary::Frame()
+void ClientLibrary::RunFrame()
 {
 	// Check connection status.
 	net_status_t status;

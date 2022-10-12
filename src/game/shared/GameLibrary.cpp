@@ -27,25 +27,7 @@
 #include "utils/JSONSystem.h"
 #include "utils/ReplacementMaps.h"
 
-void GameLibrary::AddGameSystems()
-{
-	//Done separately before game systems to avoid tightly coupling logging to json.
-	g_Logging.PreInitialize();
-
-	//Logging must initialize after JSON so that it can load the config file immediately.
-	//It must also initialize after concommands since it creates a few of those.
-	//It is safe to use loggers after logging has shut down so having it shut down first is not an issue.
-	g_GameSystems.Add(&g_ConCommands);
-	g_GameSystems.Add(&g_JSON);
-	g_GameSystems.Add(&g_Logging);
-	g_GameSystems.Add(&g_ASManager);
-	//Depends on Angelscript
-	g_GameSystems.Add(&g_ConditionEvaluator);
-	g_GameSystems.Add(&g_GameConfigSystem);
-	g_GameSystems.Add(&g_ReplacementMaps);
-}
-
-bool GameLibrary::InitializeCommon()
+bool GameLibrary::Initialize()
 {
 	if (!FileSystem_LoadFileSystem())
 	{
@@ -67,10 +49,28 @@ bool GameLibrary::InitializeCommon()
 	return true;
 }
 
-void GameLibrary::ShutdownCommon()
+void GameLibrary::Shutdown()
 {
 	g_GameSystems.InvokeReverse(&IGameSystem::Shutdown);
 	g_GameSystems.RemoveAll();
 
 	FileSystem_FreeFileSystem();
+}
+
+void GameLibrary::AddGameSystems()
+{
+	//Done separately before game systems to avoid tightly coupling logging to json.
+	g_Logging.PreInitialize();
+
+	//Logging must initialize after JSON so that it can load the config file immediately.
+	//It must also initialize after concommands since it creates a few of those.
+	//It is safe to use loggers after logging has shut down so having it shut down first is not an issue.
+	g_GameSystems.Add(&g_ConCommands);
+	g_GameSystems.Add(&g_JSON);
+	g_GameSystems.Add(&g_Logging);
+	g_GameSystems.Add(&g_ASManager);
+	//Depends on Angelscript
+	g_GameSystems.Add(&g_ConditionEvaluator);
+	g_GameSystems.Add(&g_GameConfigSystem);
+	g_GameSystems.Add(&g_ReplacementMaps);
 }

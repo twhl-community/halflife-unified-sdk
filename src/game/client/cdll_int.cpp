@@ -239,7 +239,7 @@ void DLLEXPORT HUD_Frame(double time)
 
 	GetClientVoiceMgr()->Frame(time);
 
-	g_Client.Frame();
+	g_Client.RunFrame();
 }
 
 

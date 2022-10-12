@@ -77,7 +77,7 @@ ServerLibrary::~ServerLibrary() = default;
 
 bool ServerLibrary::Initialize()
 {
-	if (!InitializeCommon())
+	if (!GameLibrary::Initialize())
 	{
 		return false;
 	}
@@ -108,7 +108,11 @@ void ServerLibrary::Shutdown()
 	CGraph::Logger.reset();
 	CBaseEntity::IOLogger.reset();
 
-	ShutdownCommon();
+	GameLibrary::Shutdown();
+}
+
+void ServerLibrary::RunFrame()
+{
 }
 
 void ServerLibrary::NewMapStarted(bool loadGame)

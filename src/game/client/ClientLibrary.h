@@ -35,27 +35,16 @@ public:
 	ClientLibrary(ClientLibrary&&) = delete;
 	ClientLibrary& operator=(ClientLibrary&&) = delete;
 
-	/**
-	*	@brief Handles client-side initialization
-	*	@return Whether initialization succeeded
-	*/
-	bool Initialize();
+	bool Initialize() override;
 
 	/**
 	*	@brief Called when the engine finishes up client initialization.
 	*/
 	void HudInit();
 
-	/**
-	*	@brief Handles client-side shutdown
-	*	@details Called even if @see Initialize returned false
-	*/
-	void Shutdown();
+	void Shutdown() override;
 
-	/**
-	*	@brief Called every frame.
-	*/
-	void Frame();
+	void RunFrame() override;
 
 private:
 	SDL_Window* FindWindow();

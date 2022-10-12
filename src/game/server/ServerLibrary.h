@@ -42,17 +42,11 @@ public:
 
 	MapState* GetMapState() { return &m_MapState; }
 
-	/**
-	*	@brief Handles server-side initialization
-	*	@return Whether initialization succeeded
-	*/
-	bool Initialize();
+	bool Initialize() override;
 
-	/**
-	*	@brief Handles server-side shutdown
-	*	@details Called even if @see Initialize returned false
-	*/
-	void Shutdown();
+	void Shutdown() override;
+
+	void RunFrame() override;
 
 	/**
 	*	@brief Should only ever be called by worldspawn's destructor

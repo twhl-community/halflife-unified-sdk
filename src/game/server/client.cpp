@@ -968,6 +968,8 @@ void ParmsChangeLevel()
 //
 void StartFrame()
 {
+	g_Server.RunFrame();
+
 	if (g_pGameRules)
 		g_pGameRules->Think();
 
