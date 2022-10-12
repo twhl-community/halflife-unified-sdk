@@ -154,8 +154,16 @@ static std::string GetLoggingConfigSchema()
 LogSystem::LogSystem() = default;
 LogSystem::~LogSystem() = default;
 
+static void LogErrorHandler(const std::string& msg)
+{
+	assert(!"A error occurred during logging");
+	Con_Printf("[%s] [spdlog] [error]: %s\n", GetShortLibraryPrefix().data(), msg.c_str());
+}
+
 void LogSystem::PreInitialize()
 {
+	spdlog::set_error_handler(&LogErrorHandler);
+
 	m_Sinks.push_back(std::make_shared<ConsoleLogSink<spdlog::details::null_mutex>>());
 
 	spdlog::level::level_enum startupLogLevel = DefaultLogLevel;
@@ -226,11 +234,14 @@ void LogSystem::Shutdown()
 	m_Logger.reset();
 	m_Sinks.clear();
 	spdlog::shutdown();
+	spdlog::set_error_handler(nullptr);
 }
 
 std::shared_ptr<spdlog::logger> LogSystem::CreateLogger(const std::string& name)
 {
 	auto logger = std::make_shared<spdlog::logger>(name, m_Sinks.begin(), m_Sinks.end());
+
+	logger->set_error_handler(&LogErrorHandler);
 
 	spdlog::register_logger(logger);
 
