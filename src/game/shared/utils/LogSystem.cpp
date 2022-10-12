@@ -1,23 +1,24 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 
 #include <functional>
 #include <iterator>
 #include <sstream>
 #include <string_view>
 #include <unordered_map>
+#include <vector>
 
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/base_sink.h>
@@ -47,20 +48,20 @@ protected:
 
 	void flush_() override final
 	{
-		//Nothing
+		// Nothing
 	}
 
 private:
 	static constexpr int GetSafePayloadSize(spdlog::string_view_t payload) noexcept
 	{
-		//Truncate payload if it's too large
+		// Truncate payload if it's too large
 		return std::min(payload.size(), static_cast<std::size_t>(std::numeric_limits<int>::max()));
 	}
 };
 
 static std::string GetLoggingConfigSchema()
 {
-	//Create json array contents matching spdlog log level names
+	// Create json array contents matching spdlog log level names
 	const auto levels = []()
 	{
 		std::ostringstream levels;
@@ -159,12 +160,12 @@ void LogSystem::PreInitialize()
 
 	spdlog::level::level_enum startupLogLevel = DefaultLogLevel;
 
-	//Allow a custom level to be specified on the command line for debugging purposes
+	// Allow a custom level to be specified on the command line for debugging purposes
 	if (const char* logLevel = SPDLOG_LEVEL_NAME_TRACE.data(); COM_GetParam("-log_startup_level", &logLevel))
 	{
 		startupLogLevel = spdlog::level::from_str(logLevel);
 	}
-	//The developer cvar will be > 0 at this point if the -dev parameter was passed on the command line
+	// The developer cvar will be > 0 at this point if the -dev parameter was passed on the command line
 	else if (g_pDeveloper->value > 0)
 	{
 		startupLogLevel = spdlog::level::debug;
@@ -214,12 +215,12 @@ bool LogSystem::Initialize()
 
 void LogSystem::PostInitialize()
 {
-	//Nothing.
+	// Nothing.
 }
 
 void LogSystem::Shutdown()
 {
-	//Close log file if it's open.
+	// Close log file if it's open.
 	SetFileLoggingEnabled(false);
 
 	m_Logger.reset();
@@ -300,7 +301,7 @@ LogSystem::Settings LogSystem::LoadSettings(const json& input)
 				continue;
 			}
 
-			//Can't be validated by schema
+			// Can't be validated by schema
 			if (configurations.contains(name))
 			{
 				m_Logger->error("Duplicate logger configuration \"{}\", ignoring", name);
@@ -315,7 +316,7 @@ LogSystem::Settings LogSystem::LoadSettings(const json& input)
 			configurations.emplace(name, std::move(configuration));
 		}
 
-		//Flatten map into vector
+		// Flatten map into vector
 		settings.Configurations.reserve(configurations.size());
 
 		std::transform(
@@ -336,8 +337,8 @@ LogSystem::Settings LogSystem::LoadSettings(const json& input)
 		}
 		else
 		{
-			//Leave setting as-is, in case it was enabled through command line.
-			//The setting is marked as required so it should always be there if there is a LogFile object at all.
+			// Leave setting as-is, in case it was enabled through command line.
+			// The setting is marked as required so it should always be there if there is a LogFile object at all.
 		}
 
 		if (auto enabled = logFile->find("BaseFileName"); enabled != logFile->end() && enabled->is_string())
@@ -387,7 +388,7 @@ void LogSystem::SetFileLoggingEnabled(bool enable)
 {
 	if (enable && !m_FileSink)
 	{
-		//Separate log files into client and server files to avoid races between the two.
+		// Separate log files into client and server files to avoid races between the two.
 		const std::string gameDir = FileSystem_GetGameDirectory();
 		const std::string baseFileName = fmt::format("{}/logs/{}/{}.log",
 			gameDir, GetShortLibraryPrefix(), m_Settings.LogFile.BaseFileName.value_or(DefaultBaseFileName));
@@ -411,7 +412,7 @@ void LogSystem::SetFileLoggingEnabled(bool enable)
 
 		Con_Printf("Logging disabled\n");
 
-		//Flush any pending data before removing the sink to avoid race conditions.
+		// Flush any pending data before removing the sink to avoid race conditions.
 		m_FileSink->flush();
 
 		m_Sinks.erase(std::find(m_Sinks.begin(), m_Sinks.end(), m_FileSink));
@@ -419,8 +420,7 @@ void LogSystem::SetFileLoggingEnabled(bool enable)
 		spdlog::apply_all([this](std::shared_ptr<spdlog::logger> logger)
 			{
 				auto& sinks = logger->sinks();
-				sinks.erase(std::find(sinks.begin(), sinks.end(), m_FileSink));
-			});
+				sinks.erase(std::find(sinks.begin(), sinks.end(), m_FileSink)); });
 
 		m_FileSink.reset();
 	}
@@ -436,8 +436,18 @@ void LogSystem::ListLogLevels()
 
 void LogSystem::ListLoggers()
 {
-	spdlog::apply_all([](auto logger)
-		{ Con_Printf("%s\n", logger->name().c_str()); });
+	std::vector<spdlog::logger*> loggers;
+
+	spdlog::apply_all([&](auto logger)
+		{ loggers.push_back(logger.get()); });
+
+	std::sort(loggers.begin(), loggers.end(), [](const auto lhs, const auto& rhs)
+		{ return lhs->name() < rhs->name(); });
+
+	for (auto logger : loggers)
+	{
+		Con_Printf("%s\n", logger->name().c_str());
+	}
 }
 
 void LogSystem::SetLogLevel(const CommandArgs& args)
