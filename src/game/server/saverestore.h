@@ -16,11 +16,17 @@
 
 #pragma once
 
+#include <memory>
+
+#include <spdlog/logger.h>
+
 class CBaseEntity;
 
 class CSaveRestoreBuffer
 {
 public:
+	static inline std::shared_ptr<spdlog::logger> Logger;
+
 	CSaveRestoreBuffer(SAVERESTOREDATA& data);
 	~CSaveRestoreBuffer();
 

@@ -1634,7 +1634,7 @@ unsigned short CSaveRestoreBuffer::TokenHash(const char* pszToken)
 	if (0 == m_data.tokenCount || nullptr == m_data.pTokens)
 	{
 		//if we're here it means trigger_changelevel is trying to actually save something when it's not supposed to.
-		ALERT(at_error, "No token table array in TokenHash()!\n");
+		Logger->error("No token table array in TokenHash()!");
 		return 0;
 	}
 
@@ -1647,7 +1647,7 @@ unsigned short CSaveRestoreBuffer::TokenHash(const char* pszToken)
 		if (i > 50 && !beentheredonethat)
 		{
 			beentheredonethat = true;
-			ALERT(at_error, "CSaveRestoreBuffer :: TokenHash() is getting too full!\n");
+			Logger->error("CSaveRestoreBuffer :: TokenHash() is getting too full!");
 		}
 #endif
 
@@ -1664,7 +1664,7 @@ unsigned short CSaveRestoreBuffer::TokenHash(const char* pszToken)
 
 	// Token hash table full!!!
 	// [Consider doing overflow table(s) after the main table & limiting linear hash table search]
-	ALERT(at_error, "CSaveRestoreBuffer :: TokenHash() is COMPLETELY FULL!\n");
+	Logger->error("CSaveRestoreBuffer :: TokenHash() is COMPLETELY FULL!");
 	return 0;
 }
 
@@ -1733,7 +1733,7 @@ void CSave::WriteString(const char* pname, const string_t* stringId, int count)
 #else
 #if 0
 	if (count != 1)
-		ALERT(at_error, "No string arrays!\n");
+		Logger->error("No string arrays!");
 	WriteString(pname, STRING(*stringId));
 #endif
 
@@ -1804,7 +1804,7 @@ void CSave::WriteFunction(const char* pname, void** data, int count)
 	if (functionName)
 		BufferField(pname, strlen(functionName) + 1, functionName);
 	else
-		ALERT(at_error, "Invalid function pointer in entity!\n");
+		Logger->error("Invalid function pointer in entity!");
 }
 
 
@@ -1847,7 +1847,7 @@ void EntvarsKeyvalue(entvars_t* pev, KeyValueData* pkvd)
 			case FIELD_EDICT:
 			case FIELD_ENTITY:
 			case FIELD_POINTER:
-				ALERT(at_error, "Bad field in entity!!\n");
+				CBaseEntity::Logger->error("Bad field in entity!!");
 				break;
 			}
 			pkvd->fHandled = 1;
@@ -1915,7 +1915,7 @@ bool CSave::WriteFields(const char* pname, void* pBaseData, TYPEDESCRIPTION* pFi
 		case FIELD_ENTITY:
 		case FIELD_EHANDLE:
 			if (pTest->fieldSize > MAX_ENTITYARRAY)
-				ALERT(at_error, "Can't save more than %d entities in an array!!!\n", MAX_ENTITYARRAY);
+				Logger->error("Can't save more than {} entities in an array!!!", MAX_ENTITYARRAY);
 			for (j = 0; j < pTest->fieldSize; j++)
 			{
 				switch (pTest->fieldType)
@@ -1984,7 +1984,7 @@ bool CSave::WriteFields(const char* pname, void* pBaseData, TYPEDESCRIPTION* pFi
 			WriteFunction(pTest->fieldName, (void**)pOutputData, pTest->fieldSize);
 			break;
 		default:
-			ALERT(at_error, "Bad field type\n");
+			Logger->error("Bad field type");
 		}
 	}
 
@@ -2023,7 +2023,7 @@ void CSave::BufferHeader(const char* pname, int size)
 {
 	short hashvalue = TokenHash(pname);
 	if (size > 1 << (sizeof(short) * 8))
-		ALERT(at_error, "CSave :: BufferHeader() size parameter exceeds 'short'!\n");
+		Logger->error("CSave :: BufferHeader() size parameter exceeds 'short'!");
 	BufferData((const char*)&size, sizeof(short));
 	BufferData((const char*)&hashvalue, sizeof(short));
 }
@@ -2033,7 +2033,7 @@ void CSave::BufferData(const char* pdata, int size)
 {
 	if (m_data.size + size > m_data.bufferSize)
 	{
-		ALERT(at_error, "Save/Restore overflow!\n");
+		Logger->error("Save/Restore overflow!");
 		m_data.size = m_data.bufferSize;
 		return;
 	}
@@ -2206,7 +2206,7 @@ int CRestore::ReadField(void* pBaseData, TYPEDESCRIPTION* pFields, int fieldCoun
 						break;
 
 					default:
-						ALERT(at_error, "Bad field type\n");
+						Logger->error("Bad field type");
 					}
 				}
 			}
@@ -2244,7 +2244,7 @@ bool CRestore::ReadFields(const char* pname, void* pBaseData, TYPEDESCRIPTION* p
 	// Check the struct name
 	if (token != TokenHash(pname)) // Field Set marker
 	{
-		//		ALERT( at_error, "Expected %s found %s!\n", pname, BufferPointer() );
+		//		Logger->error("Expected {} found {}!", pname, BufferPointer() );
 		BufferRewind(2 * sizeof(short));
 		return false;
 	}
@@ -2334,7 +2334,7 @@ void CRestore::BufferReadBytes(char* pOutput, int size)
 
 	if ((m_data.size + size) > m_data.bufferSize)
 	{
-		ALERT(at_error, "Restore overflow!\n");
+		Logger->error("Restore overflow!");
 		m_data.size = m_data.bufferSize;
 		return;
 	}

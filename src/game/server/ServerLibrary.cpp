@@ -83,6 +83,8 @@ bool ServerLibrary::Initialize()
 	}
 
 	CGraph::Logger = g_Logging.CreateLogger("nodegraph");
+	CSaveRestoreBuffer::Logger = g_Logging.CreateLogger("saverestore");
+
 	SV_CreateClientCommands();
 
 	g_engfuncs.pfnCVarRegister(&servercfgfile);
@@ -101,6 +103,7 @@ void ServerLibrary::Shutdown()
 	m_MapChangeConfigDefinition.reset();
 	m_ServerConfigDefinition.reset();
 
+	CSaveRestoreBuffer::Logger.reset();
 	CGraph::Logger.reset();
 	ShutdownCommon();
 }
