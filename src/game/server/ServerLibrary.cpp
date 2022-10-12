@@ -82,6 +82,7 @@ bool ServerLibrary::Initialize()
 		return false;
 	}
 
+	CBaseEntity::IOLogger = g_Logging.CreateLogger("entities.io");
 	CGraph::Logger = g_Logging.CreateLogger("nodegraph");
 	CSaveRestoreBuffer::Logger = g_Logging.CreateLogger("saverestore");
 
@@ -105,6 +106,8 @@ void ServerLibrary::Shutdown()
 
 	CSaveRestoreBuffer::Logger.reset();
 	CGraph::Logger.reset();
+	CBaseEntity::IOLogger.reset();
+
 	ShutdownCommon();
 }
 

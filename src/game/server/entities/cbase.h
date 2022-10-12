@@ -30,7 +30,10 @@ CBaseEntity
 */
 
 //Include common headers here.
+#include <memory>
 #include <string_view>
+
+#include <spdlog/logger.h>
 
 #include "Platform.h"
 
@@ -157,6 +160,8 @@ class COFSquadTalkMonster;
 class CBaseEntity
 {
 public:
+	static inline std::shared_ptr<spdlog::logger> IOLogger;
+
 	// Constructor.  Set engine to use C/C++ callback functions
 	// pointers to engine data
 	entvars_t* pev; // Don't need to save/restore this pointer, the engine resets it

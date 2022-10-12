@@ -182,7 +182,7 @@ void FireTargets(const char* targetName, CBaseEntity* pActivator, CBaseEntity* p
 	if (!targetName)
 		return;
 
-	ALERT(at_aiconsole, "Firing: (%s)\n", targetName);
+	CBaseEntity::IOLogger->debug("Firing: ({})", targetName);
 
 	for (;;)
 	{
@@ -193,7 +193,7 @@ void FireTargets(const char* targetName, CBaseEntity* pActivator, CBaseEntity* p
 		CBaseEntity* pTarget = CBaseEntity::Instance(pentTarget);
 		if (pTarget && (pTarget->pev->flags & FL_KILLME) == 0) // Don't use dying ents
 		{
-			ALERT(at_aiconsole, "Found: %s, firing (%s)\n", STRING(pTarget->pev->classname), targetName);
+			CBaseEntity::IOLogger->debug("Found: {}, firing ({})", STRING(pTarget->pev->classname), targetName);
 			pTarget->Use(pActivator, pCaller, useType, value);
 		}
 	}
@@ -253,13 +253,13 @@ void CBaseDelay::SUB_UseTargets(CBaseEntity* pActivator, USE_TYPE useType, float
 	{
 		edict_t* pentKillTarget = nullptr;
 
-		ALERT(at_aiconsole, "KillTarget: %s\n", STRING(m_iszKillTarget));
+		CBaseEntity::IOLogger->debug("KillTarget: {}", STRING(m_iszKillTarget));
 		pentKillTarget = FIND_ENTITY_BY_TARGETNAME(nullptr, STRING(m_iszKillTarget));
 		while (!FNullEnt(pentKillTarget))
 		{
 			UTIL_Remove(CBaseEntity::Instance(pentKillTarget));
 
-			ALERT(at_aiconsole, "killing %s\n", STRING(pentKillTarget->v.classname));
+			CBaseEntity::IOLogger->debug("killing {}", STRING(pentKillTarget->v.classname));
 			pentKillTarget = FIND_ENTITY_BY_TARGETNAME(pentKillTarget, STRING(m_iszKillTarget));
 		}
 	}
