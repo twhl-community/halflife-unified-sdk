@@ -1566,7 +1566,7 @@ void CNodeEnt::Spawn()
 
 	if (WorldGraph.m_cNodes >= MAX_NODES)
 	{
-		Logger->error("cNodes >= MAX_NODES");
+		CGraph::Logger->error("cNodes >= MAX_NODES");
 		return;
 	}
 
@@ -1670,7 +1670,7 @@ void CTestHull::BuildNodeGraph()
 	pTempPool = (CLink*)calloc(sizeof(CLink), (WorldGraph.m_cNodes * MAX_NODE_INITIAL_LINKS));
 	if (!pTempPool)
 	{
-		Logger->error("Could not malloc TempPool!");
+		CGraph::Logger->error("Could not malloc TempPool!");
 		return;
 	}
 
@@ -1683,7 +1683,7 @@ void CTestHull::BuildNodeGraph()
 
 	if (!file)
 	{ // file error
-		Logger->error("Couldn't create {}!", nrpFileName.c_str());
+		CGraph::Logger->error("Couldn't create {}!", nrpFileName.c_str());
 
 		if (pTempPool)
 		{
@@ -1766,7 +1766,7 @@ void CTestHull::BuildNodeGraph()
 
 	if (0 == cPoolLinks)
 	{
-		Logger->error("ConnectVisibleNodes FAILED!");
+		CGraph::Logger->error("ConnectVisibleNodes FAILED!");
 
 		SetThink(&CTestHull::ShowBadNode); // send the hull off to show the offending node.
 		//pev->solid = SOLID_NOT;
@@ -1829,13 +1829,13 @@ void CTestHull::BuildNodeGraph()
 
 				if (!FBitSet(pev->flags, FL_ONGROUND))
 				{
-					Logger->trace("OFFGROUND!");
+					CGraph::Logger->trace("OFFGROUND!");
 				}
 
 				// now build a yaw that points to the dest node, and get the distance.
 				if (j < 0)
 				{
-					Logger->trace("**** j = {} ****", j);
+					CGraph::Logger->trace("**** j = {} ****", j);
 					if (pTempPool)
 					{
 						free(pTempPool);
@@ -1948,7 +1948,7 @@ void CTestHull::BuildNodeGraph()
 
 	if (!WorldGraph.m_pLinkPool)
 	{ // couldn't make the link pool!
-		Logger->error("Couldn't malloc LinkPool!");
+		CGraph::Logger->error("Couldn't malloc LinkPool!");
 		if (pTempPool)
 		{
 			free(pTempPool);
@@ -2020,7 +2020,7 @@ void CTestHull::BuildNodeGraph()
 	file.Printf("-------------------------------------------------------------------------------\n");
 
 
-	Logger->trace("{} Nodes, {} Connections", WorldGraph.m_cNodes, cPoolLinks);
+	CGraph::Logger->trace("{} Nodes, {} Connections", WorldGraph.m_cNodes, cPoolLinks);
 
 	// This is used for FindNearestNode
 	//
@@ -2057,7 +2057,7 @@ void CTestHull::BuildNodeGraph()
 
 	// save the node graph for this level
 	WorldGraph.FSaveGraph(STRING(gpGlobals->mapname));
-	Logger->info("Done.");
+	CGraph::Logger->info("Done.");
 }
 
 
@@ -2073,7 +2073,7 @@ void CTestHull::PathFind()
 
 	if (0 == WorldGraph.m_fGraphPresent || 0 == WorldGraph.m_fGraphPointersSet)
 	{ // protect us in the case that the node graph isn't available
-		Logger->error("Graph not ready!");
+		CGraph::Logger->error("Graph not ready!");
 		return;
 	}
 
@@ -2081,11 +2081,11 @@ void CTestHull::PathFind()
 
 	if (0 == iPathSize)
 	{
-		Logger->error("No Path!");
+		CGraph::Logger->error("No Path!");
 		return;
 	}
 
-	Logger->trace("{}", iPathSize);
+	CGraph::Logger->trace("{}", iPathSize);
 
 	pNode = &WorldGraph.m_pNodes[iPath[0]];
 
@@ -3486,7 +3486,7 @@ void CNodeViewer::Spawn()
 {
 	if (0 == WorldGraph.m_fGraphPresent || 0 == WorldGraph.m_fGraphPointersSet)
 	{ // protect us in the case that the node graph isn't available or built
-		Logger->error("Graph not ready!");
+		CGraph::Logger->error("Graph not ready!");
 		UTIL_Remove(this);
 		return;
 	}
@@ -3516,13 +3516,13 @@ void CNodeViewer::Spawn()
 
 	if (m_iBaseNode < 0)
 	{
-		Logger->debug("No nearby node");
+		CGraph::Logger->debug("No nearby node");
 		return;
 	}
 
 	m_nVisited = 0;
 
-	Logger->debug("basenode {}", m_iBaseNode);
+	CGraph::Logger->debug("basenode {}", m_iBaseNode);
 
 	if (WorldGraph.m_cNodes < 128)
 	{
@@ -3550,7 +3550,7 @@ void CNodeViewer::Spawn()
 		} while (end != m_nVisited);
 	}
 
-	Logger->debug("{} nodes", m_nVisited);
+	CGraph::Logger->debug("{} nodes", m_nVisited);
 
 	m_iDraw = 0;
 	SetThink(&CNodeViewer::DrawThink);
