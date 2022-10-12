@@ -1847,7 +1847,7 @@ void EntvarsKeyvalue(entvars_t* pev, KeyValueData* pkvd)
 			case FIELD_EDICT:
 			case FIELD_ENTITY:
 			case FIELD_POINTER:
-				CBaseEntity::Logger->error("Bad field in entity!!");
+				ALERT(at_error, "Bad field in entity!!\n");
 				break;
 			}
 			pkvd->fHandled = 1;
