@@ -18,6 +18,7 @@
 #include <string_view>
 
 #include "filesystem_utils.h"
+#include "mathlib.h"
 #include "LogSystem.h"
 #include "string_utils.h"
 #include "extdll.h"
@@ -130,6 +131,35 @@ const char* UTIL_CheckForGlobalModelReplacement(const char* s);
 int UTIL_PrecacheModel(const char* s);
 
 int UTIL_PrecacheSound(const char* s);
+
+template <>
+struct fmt::formatter<Vector> : public fmt::formatter<float>
+{
+	template <typename FormatContext>
+	auto format(const Vector& p, FormatContext& ctx) const -> decltype(ctx.out())
+	{
+		auto out = fmt::formatter<float>::format(p.x, ctx);
+		*out++ = ' ';
+		ctx.advance_to(out);
+		out = fmt::formatter<float>::format(p.y, ctx);
+		*out++ = ' ';
+		ctx.advance_to(out);
+		return fmt::formatter<float>::format(p.z, ctx);
+	}
+};
+
+template <>
+struct fmt::formatter<Vector2D> : public fmt::formatter<float>
+{
+	template <typename FormatContext>
+	auto format(const Vector2D& p, FormatContext& ctx) const -> decltype(ctx.out())
+	{
+		auto out = fmt::formatter<float>::format(p.x, ctx);
+		*out++ = ' ';
+		ctx.advance_to(out);
+		return fmt::formatter<float>::format(p.y, ctx);
+	}
+};
 
 /**
  *	@brief Helper constant to allow the use of @c static_assert without an actual condition.
