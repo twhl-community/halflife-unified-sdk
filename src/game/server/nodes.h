@@ -18,6 +18,10 @@
 
 #pragma once
 
+#include <memory>
+
+#include <spdlog/logger.h>
+
 class FSFile;
 
 //=========================================================
@@ -112,6 +116,8 @@ typedef struct
 class CGraph
 {
 public:
+	static inline std::shared_ptr<spdlog::logger> Logger;
+
 	// the graph has two flags, and should not be accessed unless both flags are true!
 	qboolean m_fGraphPresent;	  // is the graph in memory?
 	qboolean m_fGraphPointersSet; // are the entity pointers for the graph all set?
@@ -215,7 +221,7 @@ public:
 	{
 #ifdef _DEBUG
 		if (!m_pNodes || i < 0 || i > m_cNodes)
-			ALERT(at_error, "Bad Node!\n");
+			Logger->error("Bad Node!");
 #endif
 		return m_pNodes[i];
 	}
@@ -224,7 +230,7 @@ public:
 	{
 #ifdef _DEBUG
 		if (!m_pLinkPool || i < 0 || i > m_cLinks)
-			ALERT(at_error, "Bad link!\n");
+			Logger->error("Bad link!");
 #endif
 		return m_pLinkPool[i];
 	}

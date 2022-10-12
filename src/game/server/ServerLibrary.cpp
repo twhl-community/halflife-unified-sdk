@@ -21,8 +21,9 @@
 
 #include "cbase.h"
 #include "client.h"
-#include "ServerLibrary.h"
+#include "nodes.h"
 #include "ProjectInfo.h"
+#include "ServerLibrary.h"
 #include "skill.h"
 #include "UserMessages.h"
 
@@ -81,6 +82,7 @@ bool ServerLibrary::Initialize()
 		return false;
 	}
 
+	CGraph::Logger = g_Logging.CreateLogger("nodegraph");
 	SV_CreateClientCommands();
 
 	g_engfuncs.pfnCVarRegister(&servercfgfile);
@@ -99,6 +101,7 @@ void ServerLibrary::Shutdown()
 	m_MapChangeConfigDefinition.reset();
 	m_ServerConfigDefinition.reset();
 
+	CGraph::Logger.reset();
 	ShutdownCommon();
 }
 
