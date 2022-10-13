@@ -59,53 +59,6 @@ find_package(EASTL CONFIG REQUIRED)
 find_package(nlohmann_json_schema_validator REQUIRED)
 find_package(libnyquist REQUIRED)
 
-# Generate DebugInfo.h with appropriate information.
-
-# Get the current working branch
-execute_process(
-    COMMAND ${GIT_EXECUTABLE} rev-parse --abbrev-ref HEAD
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-    OUTPUT_VARIABLE UNIFIED_SDK_GIT_BRANCH
-    OUTPUT_STRIP_TRAILING_WHITESPACE)
-
-# CI builds don't fetch tags so this should have a sensible value.
-if ($ENV{CI})
-	set(UNIFIED_SDK_GIT_TAG "CI build")
-else()
-	# Get the latest tag name
-	execute_process(
-		COMMAND ${GIT_EXECUTABLE} describe --abbrev=0 --tags
-		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-		OUTPUT_VARIABLE UNIFIED_SDK_GIT_TAG
-		OUTPUT_STRIP_TRAILING_WHITESPACE
-		ERROR_QUIET)
-		
-	# This can happen if there are no tags in the repository, so provide a suitable fallback.
-	if (UNIFIED_SDK_GIT_TAG STREQUAL "")
-		set(UNIFIED_SDK_GIT_TAG "None (No tags found)")
-	endif()
-endif()
-
-# Get the latest commit hash
-execute_process(
-    COMMAND ${GIT_EXECUTABLE} rev-parse HEAD
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-    OUTPUT_VARIABLE UNIFIED_SDK_GIT_COMMIT_HASH
-    OUTPUT_STRIP_TRAILING_WHITESPACE)
-
-execute_process(
-    COMMAND ${GIT_EXECUTABLE} status --porcelain=v1
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-    OUTPUT_VARIABLE UNIFIED_SDK_GIT_STATUS_RESULT
-    OUTPUT_STRIP_TRAILING_WHITESPACE)
-
-# If not performing a CI build, mark commit as dirty if there are uncommitted changes.
-if (NOT "$ENV{CI}" AND NOT UNIFIED_SDK_GIT_STATUS_RESULT STREQUAL "")
-	set(UNIFIED_SDK_GIT_COMMIT_HASH "${UNIFIED_SDK_GIT_COMMIT_HASH}-dirty")
-endif()
-
-configure_file(src/game/shared/ProjectInfo.h.in ${CMAKE_BINARY_DIR}/ProjectInfo.h @ONLY)
-
 # Sets properties common to all projects
 function(set_common_properties TARGET_NAME)
 	set_target_properties(${TARGET_NAME} PROPERTIES PREFIX "")
@@ -170,6 +123,19 @@ endfunction()
 
 add_subdirectory(src/game/client)
 add_subdirectory(src/game/server)
+
+add_custom_target(ProjectInfo
+	COMMAND ${CMAKE_COMMAND}
+		-D HalfLifeMod_VERSION_MAJOR=${HalfLifeMod_VERSION_MAJOR}
+		-D HalfLifeMod_VERSION_MINOR=${HalfLifeMod_VERSION_MINOR}
+		-D HalfLifeMod_VERSION_PATCH=${HalfLifeMod_VERSION_PATCH}
+		-D HalfLife_RELEASE_TYPE=${HalfLife_RELEASE_TYPE}
+		-D GIT_EXECUTABLE=${GIT_EXECUTABLE}
+		-P ${CMAKE_CURRENT_SOURCE_DIR}/cmake/UpdateProjectInfo.cmake
+	BYPRODUCTS ${CMAKE_BINARY_DIR}/ProjectInfo.h)
+
+add_dependencies(client ProjectInfo)
+add_dependencies(server ProjectInfo)
 
 # Add generated files now so it doesn't cause source_group to fail.
 target_sources(client PRIVATE ${CMAKE_BINARY_DIR}/ProjectInfo.h)
