@@ -480,6 +480,7 @@ class CMOFAssassinRepel : public CHGruntRepel
 {
 public:
 	void Precache() override;
+	void Spawn() override;
 	void EXPORT RepelUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 };
 
@@ -487,6 +488,12 @@ LINK_ENTITY_TO_CLASS(monster_assassin_repel, CMOFAssassinRepel);
 void CMOFAssassinRepel::Precache()
 {
 	PrecacheCore("monster_male_assassin");
+}
+
+void CMOFAssassinRepel::Spawn()
+{
+	CHGruntRepel::Spawn();
+	SetUse(&CMOFAssassinRepel::RepelUse);
 }
 
 void CMOFAssassinRepel::RepelUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)

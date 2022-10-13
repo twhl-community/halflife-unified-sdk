@@ -51,6 +51,12 @@ public:
 		PrecacheCore("monster_human_friendly_grunt");
 	}
 
+	void Spawn() override
+	{
+		CHGruntRepel::Spawn();
+		SetUse(&CHFGruntRepel::RepelUse);
+	}
+
 	void EXPORT RepelUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 	{
 		CreateMonster("monster_human_friendly_grunt");
