@@ -10,7 +10,7 @@ execute_process(
     OUTPUT_STRIP_TRAILING_WHITESPACE)
 
 # CI builds don't fetch tags so this should have a sensible value.
-if ($ENV{CI})
+if ("$ENV{CI}" STREQUAL "true")
 	set(UNIFIED_SDK_GIT_TAG "CI build")
 else()
 	# Get the latest tag name
@@ -41,7 +41,7 @@ execute_process(
     OUTPUT_STRIP_TRAILING_WHITESPACE)
 
 # If not performing a CI build, mark commit as dirty if there are uncommitted changes.
-if (NOT "$ENV{CI}" AND NOT UNIFIED_SDK_GIT_STATUS_RESULT STREQUAL "")
+if (NOT "$ENV{CI}" STREQUAL "true" AND NOT UNIFIED_SDK_GIT_STATUS_RESULT STREQUAL "")
 	set(UNIFIED_SDK_GIT_COMMIT_HASH "${UNIFIED_SDK_GIT_COMMIT_HASH}-dirty")
 endif()
 
