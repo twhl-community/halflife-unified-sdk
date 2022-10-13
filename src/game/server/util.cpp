@@ -513,7 +513,7 @@ CBasePlayer* UTIL_FindNearestPlayer(const Vector& origin)
 {
 	CBasePlayer* player = nullptr;
 
-	float flMaxDist2 = std::numeric_limits<float>::max() * std::numeric_limits<float>::max();
+	float flMaxDist2 = std::numeric_limits<float>::max();
 
 	for (auto search : UTIL_FindPlayers())
 	{
