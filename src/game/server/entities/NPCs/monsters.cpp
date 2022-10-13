@@ -171,6 +171,7 @@ void CBaseMonster::BarnacleVictimBitten(entvars_t* pevBarnacle)
 void CBaseMonster::BarnacleVictimReleased()
 {
 	m_IdealMonsterState = MONSTERSTATE_IDLE;
+	m_IdealActivity = ACT_RESET; // Force a new activity to be selected so monsters don't remain in the grab state.
 
 	pev->velocity = g_vecZero;
 	pev->movetype = MOVETYPE_STEP;
