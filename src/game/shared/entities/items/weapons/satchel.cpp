@@ -431,8 +431,7 @@ void CSatchel::WeaponIdle()
 		}
 
 #ifndef CLIENT_DLL
-		m_pPlayer->pev->viewmodel = MAKE_STRING("models/v_satchel.mdl");
-		m_pPlayer->pev->weaponmodel = MAKE_STRING("models/p_satchel.mdl");
+		SetWeaponModels("models/v_satchel.mdl", "models/p_satchel.mdl");
 #else
 		LoadVModel("models/v_satchel.mdl", m_pPlayer);
 #endif
