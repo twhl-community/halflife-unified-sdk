@@ -120,7 +120,7 @@ float CZombie::GetBothSlashDamage()
 void CZombie::ZombieSlashAttack(float damage, const Vector& punchAngle, const Vector& velocity, bool playAttackSound)
 {
 	// do stuff for this event.
-	//		ALERT( at_console, "Slash!\n" );
+	// AILogger->debug("Slash!");
 	CBaseEntity* pHurt = CheckTraceHullAttack(70, damage, DMG_SLASH);
 	if (pHurt)
 	{

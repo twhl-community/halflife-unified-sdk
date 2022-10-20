@@ -219,14 +219,7 @@ void CTFGoalFlag::Spawn()
 
 		if (0 == g_engfuncs.pfnDropToFloor(edict()))
 		{
-			ALERT(
-				at_error,
-				"Item %s fell out of level at %f,%f,%f",
-				STRING(pev->classname),
-				pev->origin.x,
-				pev->origin.y,
-				pev->origin.z);
-
+			CBaseEntity::Logger->error("Item {} fell out of level at {}", STRING(pev->classname), pev->origin);
 			UTIL_Remove(this);
 		}
 		else
@@ -264,7 +257,7 @@ void CTFGoalFlag::Spawn()
 	}
 	else
 	{
-		ALERT(at_error, "Invalid goal_no set for CTF flag\n");
+		CBaseEntity::Logger->error("Invalid goal_no set for CTF flag");
 	}
 }
 

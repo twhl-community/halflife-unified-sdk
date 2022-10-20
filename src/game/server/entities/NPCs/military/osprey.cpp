@@ -147,7 +147,7 @@ void COsprey::FindAllThink()
 
 	if (m_iUnits == 0)
 	{
-		ALERT(at_console, "%s error: no grunts to resupply\n", STRING(pev->classname));
+		AILogger->debug("{} error: no grunts to resupply", STRING(pev->classname));
 		UTIL_Remove(this);
 		return;
 	}
@@ -239,13 +239,13 @@ CBaseMonster* COsprey::MakeGrunt(Vector vecSrc)
 			pBeam->SetThink(&CBeam::SUB_Remove);
 			pBeam->pev->nextthink = gpGlobals->time + -4096.0 * tr.flFraction / pGrunt->pev->velocity.z + 0.5;
 
-			// ALERT( at_console, "%d at %.0f %.0f %.0f\n", i, m_vecOrigin[i].x, m_vecOrigin[i].y, m_vecOrigin[i].z );
+			// AILogger->debug("{} at {:.0f}", i, m_vecOrigin[i]);
 			pGrunt->m_vecLastPosition = m_vecOrigin[i];
 			m_hGrunt[i] = pGrunt;
 			return pGrunt;
 		}
 	}
-	// ALERT( at_console, "none dead\n");
+	// AILogger->debug("none dead");
 	return nullptr;
 }
 
@@ -304,7 +304,7 @@ void COsprey::UpdateGoal()
 	}
 	else
 	{
-		ALERT(at_console, "%s missing target\n", STRING(pev->classname));
+		AILogger->debug("{} missing target", STRING(pev->classname));
 	}
 }
 
@@ -369,7 +369,7 @@ void COsprey::Flight()
 
 	float m_flIdealtilt = (160 - flSpeed) / 10.0;
 
-	// ALERT( at_console, "%f %f\n", flSpeed, flIdealtilt );
+	// AILogger->debug("{} {}", flSpeed, flIdealtilt);
 	if (m_flRotortilt < m_flIdealtilt)
 	{
 		m_flRotortilt += 0.5;
@@ -416,7 +416,7 @@ void COsprey::Flight()
 			{
 				m_iPitch = pitch;
 				EMIT_SOUND_DYN(ENT(pev), CHAN_STATIC, "apache/ap_rotor4.wav", 1.0, 0.15, SND_CHANGE_PITCH | SND_CHANGE_VOL, pitch);
-				// ALERT( at_console, "%.0f\n", pitch );
+				// AILogger->debug("{:.0f}", pitch);
 			}
 		}
 		// EMIT_SOUND_DYN(ENT(pev), CHAN_STATIC, "apache/ap_whine1.wav", flVol, 0.2, SND_CHANGE_PITCH | SND_CHANGE_VOL, pitch);
@@ -731,7 +731,7 @@ bool COsprey::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float 
 
 void COsprey::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
 {
-	// ALERT( at_console, "%d %.0f\n", ptr->iHitgroup, flDamage );
+	// AILogger->debug("{} {:.0f}", ptr->iHitgroup, flDamage);
 
 	// only so much per engine
 	if (ptr->iHitgroup == 3)
@@ -755,7 +755,7 @@ void COsprey::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir,
 	// hit hard, hits cockpit, hits engines
 	if (flDamage > 50 || ptr->iHitgroup == 1 || ptr->iHitgroup == 2 || ptr->iHitgroup == 3)
 	{
-		// ALERT( at_console, "%.0f\n", flDamage );
+		// AILogger->debug("{:.0f}", flDamage);
 		AddMultiDamage(pevAttacker, this, flDamage, bitsDamageType);
 	}
 	else

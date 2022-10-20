@@ -1137,7 +1137,7 @@ void COFGeneWorm::DyingThink()
 			for (auto pTeleport : UTIL_FindEntitiesByTargetname("GeneWormTeleport"))
 			{
 				pTeleport->Touch(pPlayer);
-				ALERT(at_console, "Touching Target GeneWormTeleport\n");
+				AILogger->debug("Touching Target GeneWormTeleport");
 			}
 
 			FireTargets("GeneWormTeleport", pPlayer, pPlayer, USE_ON, 1);
@@ -1590,7 +1590,7 @@ void FireHurtTargets(const char* targetName, CBaseEntity* pActivator, CBaseEntit
 	if (!targetName)
 		return;
 
-	ALERT(at_aiconsole, "Firing: (%s)\n", targetName);
+	CBaseMonster::AILogger->debug("Firing: ({})", targetName);
 
 	for (;;)
 	{
@@ -1603,7 +1603,7 @@ void FireHurtTargets(const char* targetName, CBaseEntity* pActivator, CBaseEntit
 		//Fire only those targets that were toggled by the last hurt event
 		if (pTarget && !(useType == USE_OFF && pTarget->pev->solid == SOLID_NOT) && !(useType == USE_ON && pTarget->pev->solid == SOLID_TRIGGER) && (pTarget->pev->flags & FL_KILLME) == 0) // Don't use dying ents
 		{
-			ALERT(at_aiconsole, "Found: %s, firing (%s)\n", STRING(pTarget->pev->classname), targetName);
+			CBaseMonster::AILogger->debug("Found: {}, firing ({})", STRING(pTarget->pev->classname), targetName);
 			pTarget->Use(pActivator, pCaller, useType, value);
 		}
 	}

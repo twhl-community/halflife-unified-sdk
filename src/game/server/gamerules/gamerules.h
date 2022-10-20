@@ -20,6 +20,8 @@
 
 #include <memory>
 
+#include <spdlog/logger.h>
+
 #include "ClientCommandRegistry.h"
 
 class CBasePlayerItem;
@@ -72,6 +74,8 @@ enum
 class CGameRules
 {
 public:
+	static inline std::shared_ptr<spdlog::logger> Logger;
+
 	CGameRules();
 	virtual ~CGameRules() = default;
 

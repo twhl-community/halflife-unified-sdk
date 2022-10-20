@@ -262,7 +262,7 @@ void CGrenade::BounceTouch(CBaseEntity* pOther)
 
 	if (!m_fRegisteredSound && vecTestVelocity.Length() <= 60)
 	{
-		//ALERT( at_console, "Grenade Registered!: %f\n", vecTestVelocity.Length() );
+		//CBaseEntity::Logger->debug("Grenade Registered!: {}", vecTestVelocity.Length());
 
 		// grenade is moving really slow. It's probably very close to where it will ultimately stop moving.
 		// go ahead and emit the danger sound.

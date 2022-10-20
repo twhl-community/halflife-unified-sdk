@@ -83,7 +83,7 @@ void CGenericItem::Spawn()
 	{
 		if (0 == g_engfuncs.pfnDropToFloor(pev->pContainingEntity))
 		{
-			ALERT(at_error, "Item %s fell out of level at %f,%f,%f", STRING(pev->classname), pev->origin.x, pev->origin.y, pev->origin.z);
+			CBaseEntity::Logger->error("Item {} fell out of level at {}", STRING(pev->classname), pev->origin);
 			UTIL_Remove(this);
 		}
 	}
@@ -97,7 +97,8 @@ void CGenericItem::Spawn()
 
 		if (sequence == -1)
 		{
-			ALERT(at_console, "ERROR! FIX ME: item generic: %s, model: %s, does not have animation: %s\n", STRING(pev->targetname), STRING(pev->model), STRING(m_iSequence));
+			CBaseEntity::Logger->debug("ERROR! FIX ME: item generic: {}, model: {}, does not have animation: {}",
+				STRING(pev->targetname), STRING(pev->model), STRING(m_iSequence));
 
 			sequence = 0;
 		}

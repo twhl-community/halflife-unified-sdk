@@ -426,7 +426,7 @@ void COFGonome::HandleAnimEvent(MonsterEvent_t* pEvent)
 		}
 
 		// do stuff for this event.
-		//		ALERT( at_console, "Slash left!\n" );
+		// AILogger->debug("Slash left!");
 		CBaseEntity* pHurt = CheckTraceHullAttack(70, GetSkillFloat("gonome_dmg_one_bite"sv), DMG_SLASH);
 		if (pHurt)
 		{
@@ -454,7 +454,7 @@ void COFGonome::HandleAnimEvent(MonsterEvent_t* pEvent)
 		m_fPlayerLocked = false;
 
 		// do stuff for this event.
-		//		ALERT( at_console, "Slash left!\n" );
+		//AILogger->debug("Slash left!");
 		CBaseEntity* pHurt = CheckTraceHullAttack(70, GetSkillFloat("gonome_dmg_one_bite"sv), DMG_SLASH);
 		if (pHurt)
 		{
@@ -644,7 +644,7 @@ void COFGonome::StartTask(Task_t* pTask)
 		}
 		else
 		{
-			ALERT(at_aiconsole, "GonomeGetPathToEnemyCorpse failed!!\n");
+			AILogger->debug("GonomeGetPathToEnemyCorpse failed!!");
 			TaskFail();
 		}
 	}
@@ -736,7 +736,7 @@ void COFGonome::SetActivity(Activity NewActivity)
 	else
 	{
 		// Not available try to get default anim
-		ALERT(at_console, "%s has no sequence for act:%d\n", STRING(pev->classname), NewActivity);
+		AILogger->debug("{} has no sequence for act:{}", STRING(pev->classname), NewActivity);
 		pev->sequence = 0; // Set to the reset anim (if it's there)
 	}
 
@@ -800,7 +800,7 @@ void CDeadGonome::Spawn()
 
 	if (pev->sequence == -1)
 	{
-		ALERT(at_console, "Dead gonome with bad pose\n");
+		AILogger->debug("Dead gonome with bad pose");
 	}
 
 	MonsterInitDead();

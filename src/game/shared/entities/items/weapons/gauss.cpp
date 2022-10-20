@@ -238,10 +238,10 @@ void CGauss::SecondaryAttack()
 		if (pitch > 250)
 			pitch = 250;
 
-		// ALERT( at_console, "%d %d %d\n", m_fInAttack, m_iSoundState, pitch );
+		// WeaponsLogger->debug("{} {} {}", m_fInAttack, m_iSoundState, pitch);
 
 		if (m_iSoundState == 0)
-			ALERT(at_console, "sound state %d\n", m_iSoundState);
+			WeaponsLogger->debug("sound state {}", m_iSoundState);
 
 		PLAYBACK_EVENT_FULL(FEV_NOTHOST, m_pPlayer->edict(), m_usGaussSpin, 0.0, g_vecZero, g_vecZero, 0.0, 0.0, pitch, 0, (m_iSoundState == SND_CHANGE_PITCH) ? 1 : 0, 0);
 
@@ -309,7 +309,7 @@ void CGauss::StartFire()
 
 	if (m_fInAttack != 3)
 	{
-		//ALERT ( at_console, "Time:%f Damage:%f\n", gpGlobals->time - m_pPlayer->m_flStartCharge, flDamage );
+		//WeaponsLogger->debug("Time:{} Damage:{}", gpGlobals->time - m_pPlayer->m_flStartCharge, flDamage);
 
 #ifndef CLIENT_DLL
 		float flZVel = m_pPlayer->pev->velocity.z;
@@ -362,20 +362,15 @@ void CGauss::Fire(Vector vecOrigSrc, Vector vecDir, float flDamage)
 
 	SendStopEvent(false);
 
-
-	/*ALERT( at_console, "%f %f %f\n%f %f %f\n",
-		vecSrc.x, vecSrc.y, vecSrc.z,
-		vecDest.x, vecDest.y, vecDest.z );*/
-
-
-	//	ALERT( at_console, "%f %f\n", tr.flFraction, flMaxFrac );
+	//WeaponsLogger->debug("{}\n{}", vecSrc, vecDest);
+	//WeaponsLogger->debug("{} {}", tr.flFraction, flMaxFrac);
 
 #ifndef CLIENT_DLL
 	while (flDamage > 10 && nMaxHits > 0)
 	{
 		nMaxHits--;
 
-		// ALERT( at_console, "." );
+		// WeaponsLogger->debug(".");
 		UTIL_TraceLine(vecSrc, vecDest, dont_ignore_monsters, pentIgnore, &tr);
 
 		if (0 != tr.fAllSolid)
@@ -411,7 +406,7 @@ void CGauss::Fire(Vector vecOrigSrc, Vector vecDir, float flDamage)
 
 			if (n < 0.5) // 60 degrees
 			{
-				// ALERT( at_console, "reflect %f\n", n );
+				// WeaponsLogger->debug("reflect {}", n);
 				// reflect
 				Vector r;
 
@@ -457,7 +452,7 @@ void CGauss::Fire(Vector vecOrigSrc, Vector vecDir, float flDamage)
 								n = 1;
 							flDamage -= n;
 
-							// ALERT( at_console, "punch %f\n", n );
+							// WeaponsLogger->debug("punch {}", n);
 							nTotal += 21;
 
 							// exit blast damage
@@ -485,13 +480,13 @@ void CGauss::Fire(Vector vecOrigSrc, Vector vecDir, float flDamage)
 					}
 					else
 					{
-						//ALERT( at_console, "blocked %f\n", n );
+						//WeaponsLogger->debug("blocked {}", n);
 						flDamage = 0;
 					}
 				}
 				else
 				{
-					//ALERT( at_console, "blocked solid\n" );
+					//WeaponsLogger->debug("blocked solid");
 
 					flDamage = 0;
 				}
@@ -504,7 +499,7 @@ void CGauss::Fire(Vector vecOrigSrc, Vector vecDir, float flDamage)
 		}
 	}
 #endif
-	// ALERT( at_console, "%d bytes\n", nTotal );
+	// WeaponsLogger->debug("{} bytes", nTotal);
 }
 
 

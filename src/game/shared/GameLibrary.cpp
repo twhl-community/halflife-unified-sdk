@@ -46,11 +46,17 @@ bool GameLibrary::Initialize()
 
 	g_GameSystems.Invoke(&IGameSystem::PostInitialize);
 
+	CBaseEntity::Logger = g_Logging.CreateLogger("ent");
+	CBasePlayerItem::WeaponsLogger = g_Logging.CreateLogger("ent.weapons");
+
 	return true;
 }
 
 void GameLibrary::Shutdown()
 {
+	CBasePlayerItem::WeaponsLogger.reset();
+	CBaseEntity::Logger.reset();
+
 	g_GameSystems.InvokeReverse(&IGameSystem::Shutdown);
 	g_GameSystems.RemoveAll();
 

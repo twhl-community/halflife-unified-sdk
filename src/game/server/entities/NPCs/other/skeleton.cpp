@@ -71,7 +71,7 @@ void COFSkeleton::Spawn()
 
 	if (pev->sequence == -1)
 	{
-		ALERT(at_console, "Dead skeleton with bad pose\n");
+		AILogger->debug("Dead skeleton with bad pose");
 	}
 
 	MonsterInitDead();

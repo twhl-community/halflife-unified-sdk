@@ -1771,7 +1771,7 @@ void CHGrunt::SetActivity(Activity NewActivity)
 	else
 	{
 		// Not available try to get default anim
-		ALERT(at_console, "%s has no sequence for act:%d\n", STRING(pev->classname), activity);
+		AILogger->debug("{} has no sequence for act:{}", STRING(pev->classname), activity);
 		pev->sequence = 0; // Set to the reset anim (if it's there)
 	}
 }
@@ -2267,7 +2267,7 @@ void CDeadHGrunt::SpawnCore()
 
 	if (pev->sequence == -1)
 	{
-		ALERT(at_console, "Dead hgrunt with bad pose\n");
+		AILogger->debug("Dead hgrunt with bad pose");
 	}
 
 	MonsterInitDead();

@@ -131,7 +131,7 @@ void CDeadCleansuitScientist::Spawn()
 	pev->sequence = LookupSequence(m_szPoses[m_iPose]);
 	if (pev->sequence == -1)
 	{
-		ALERT(at_console, "Dead scientist with bad pose\n");
+		AILogger->debug("Dead scientist with bad pose");
 	}
 
 	//	pev->skin += 2; // use bloody skin -- UNDONE: Turn this back on when we have a bloody skin again!

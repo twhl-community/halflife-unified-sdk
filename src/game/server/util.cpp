@@ -235,10 +235,10 @@ edict_t* DBG_EntOfVars(const entvars_t* pev)
 {
 	if (pev->pContainingEntity != nullptr)
 		return pev->pContainingEntity;
-	ALERT(at_console, "entvars_t pContainingEntity is nullptr, calling into engine");
+	CBaseEntity::Logger->debug("entvars_t pContainingEntity is nullptr, calling into engine");
 	edict_t* pent = (*g_engfuncs.pfnFindEntityByVars)((entvars_t*)pev);
 	if (pent == nullptr)
-		ALERT(at_console, "DAMN!  Even the engine couldn't FindEntityByVars!");
+		CBaseEntity::Logger->debug("DAMN!  Even the engine couldn't FindEntityByVars!");
 	((entvars_t*)pev)->pContainingEntity = pent;
 	return pent;
 }
@@ -1002,7 +1002,7 @@ bool UTIL_IsMasterTriggered(string_t sMaster, CBaseEntity* pActivator)
 				return pMaster->IsTriggered(pActivator);
 		}
 
-		ALERT(at_console, "Master was null or not a master!\n");
+		CBaseEntity::Logger->debug("Master was null or not a master!");
 	}
 
 	// if this isn't a master entity, just say yes.
@@ -1437,7 +1437,7 @@ void UTIL_PrecacheOther(const char* szClassname)
 	pent = CREATE_NAMED_ENTITY(MAKE_STRING(szClassname));
 	if (FNullEnt(pent))
 	{
-		ALERT(at_console, "nullptr Ent in UTIL_PrecacheOther\n");
+		CBaseEntity::Logger->debug("nullptr Ent in UTIL_PrecacheOther");
 		return;
 	}
 
@@ -2213,7 +2213,7 @@ int CRestore::ReadField(void* pBaseData, TYPEDESCRIPTION* pFields, int fieldCoun
 #if 0
 			else
 			{
-				ALERT(at_console, "Skipping global field %s\n", pName);
+				Logger->debug( "Skipping global field {}", pName);
 			}
 #endif
 			return fieldNumber;

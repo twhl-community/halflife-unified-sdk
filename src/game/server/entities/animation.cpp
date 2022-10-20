@@ -112,7 +112,7 @@ void GetEyePosition(void* pmodel, float* vecEyePosition)
 
 	if (!pstudiohdr)
 	{
-		ALERT(at_console, "GetEyePosition() Can't get pstudiohdr ptr!\n");
+		CBaseEntity::Logger->error("GetEyePosition() Can't get pstudiohdr ptr!");
 		return;
 	}
 
@@ -178,7 +178,8 @@ void SequencePrecache(CBaseEntity* self, void* pmodel, const char* pSequenceName
 			{
 				if (0 == strlen(pevent[i].options))
 				{
-					ALERT(at_error, "Bad sound event %d in sequence %s :: %s (sound is \"%s\")\n", pevent[i].event, pstudiohdr->name, pSequenceName, pevent[i].options);
+					CBaseEntity::Logger->error("Bad sound event {} in sequence {} :: {} (sound is \"{}\")",
+						pevent[i].event, pstudiohdr->name, pSequenceName, pevent[i].options);
 				}
 
 				self->PrecacheSound(STRING(ALLOC_STRING(pevent[i].options)));
@@ -406,7 +407,7 @@ int FindTransition(void* pmodel, int iEndingAnim, int iGoalAnim, int* piDir)
 
 	int iEndNode;
 
-	// ALERT( at_console, "from %d to %d: ", pEndNode->iEndNode, pGoalNode->iStartNode );
+	// CBaseEntity::Logger->error("from {} to {}", pEndNode->iEndNode, pGoalNode->iStartNode);
 
 	if (*piDir > 0)
 	{
@@ -450,7 +451,7 @@ int FindTransition(void* pmodel, int iEndingAnim, int iGoalAnim, int* piDir)
 		}
 	}
 
-	ALERT(at_console, "error in transition graph");
+	CBaseEntity::Logger->error("error in transition graph");
 	return iGoalAnim;
 }
 

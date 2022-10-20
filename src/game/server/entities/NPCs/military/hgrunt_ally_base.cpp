@@ -469,7 +469,7 @@ bool CBaseHGruntAlly::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker
 
 				Remember(bits_MEMORY_PROVOKED);
 				StopFollowing(true);
-				ALERT(at_console, "HGrunt Ally is now MAD!\n");
+				AILogger->debug("HGrunt Ally is now MAD!");
 			}
 			else
 			{
@@ -484,7 +484,7 @@ bool CBaseHGruntAlly::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker
 
 				m_flLastHitByPlayer = gpGlobals->time;
 
-				ALERT(at_console, "HGrunt Ally is now SUSPICIOUS!\n");
+				AILogger->debug("HGrunt Ally is now SUSPICIOUS!");
 			}
 		}
 		else if (!m_hEnemy->IsPlayer())
@@ -1707,7 +1707,7 @@ void CBaseHGruntAlly::SetActivity(Activity NewActivity)
 	else
 	{
 		// Not available try to get default anim
-		ALERT(at_console, "%s has no sequence for act:%d\n", STRING(pev->classname), activity);
+		AILogger->debug("{} has no sequence for act:{}", STRING(pev->classname), activity);
 		pev->sequence = 0; // Set to the reset anim (if it's there)
 	}
 }
@@ -2018,11 +2018,11 @@ Schedule_t* CBaseHGruntAlly::GetSchedule()
 			{
 				if (pMedic->pev->deadflag == DEAD_NO)
 				{
-					ALERT(at_aiconsole, "Injured Grunt found Medic\n");
+					AILogger->debug("Injured Grunt found Medic");
 
 					if (pMedic->HealMe(this))
 					{
-						ALERT(at_aiconsole, "Injured Grunt called for Medic\n");
+						AILogger->debug("Injured Grunt called for Medic");
 
 						EMIT_SOUND_DYN(edict(), CHAN_VOICE, "fgrunt/medic.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
 

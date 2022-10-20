@@ -22,6 +22,8 @@
 
 #include <limits>
 
+#include <EASTL/fixed_string.h>
+
 #include "cbase.h"
 #include "player.h"
 #include "trains.h"
@@ -1089,7 +1091,7 @@ void CBasePlayer::SetAnimation(PLAYER_ANIM playerAnim)
 	if (pev->sequence == animDesired)
 		return;
 
-	//ALERT( at_console, "Set animation to %d\n", animDesired );
+	//Logger->debug("Set animation to {}", animDesired);
 	// Reset to first frame of desired animation
 	pev->sequence = animDesired;
 	pev->frame = 0;
@@ -1337,7 +1339,7 @@ void CBasePlayer::PlayerDeathThink()
 	pev->button = 0;
 	m_iRespawnFrames = 0;
 
-	//ALERT(at_console, "Respawn\n");
+	//Logger->debug("Respawn");
 
 	respawn(pev, (m_afPhysicsFlags & PFLAG_OBSERVER) == 0); // don't copy a corpse if we're in deathcam.
 	pev->nextthink = -1;
@@ -1557,9 +1559,9 @@ void CBasePlayer::PlayerUse()
 			{ // only if the item is in front of the user
 				pClosest = pObject;
 				flMaxDot = flDot;
-				//				ALERT( at_console, "%s : %f\n", STRING( pObject->pev->classname ), flDot );
+				//Logger->debug("{} : {}", STRING(pObject->pev->classname), flDot);
 			}
-			//			ALERT( at_console, "%s : %f\n", STRING( pObject->pev->classname ), flDot );
+			//Logger->debug("{} : {}", STRING(pObject->pev->classname), flDot);
 		}
 	}
 	pObject = pClosest;
@@ -1959,11 +1961,11 @@ void CBasePlayer::PreThink()
 	{
 		if (!WorldGraph.FSetGraphPointers())
 		{
-			ALERT(at_console, "**Graph pointers were not set!\n");
+			CGraph::Logger->debug("**Graph pointers were not set!");
 		}
 		else
 		{
-			ALERT(at_console, "**Graph Pointers Set!\n");
+			CGraph::Logger->debug("**Graph Pointers Set!");
 		}
 	}
 
@@ -2146,7 +2148,7 @@ void CBasePlayer::PreThink()
 
 			if (!pTrain || (pTrain->ObjectCaps() & FCAP_DIRECTIONAL_USE) == 0 || !pTrain->OnControls(pev))
 			{
-				//ALERT( at_error, "In train mode with no train!\n" );
+				//Logger->error("In train mode with no train!");
 				m_afPhysicsFlags &= ~PFLAG_ONTRAIN;
 				m_iTrain = TRAIN_NEW | TRAIN_OFF;
 				return;
@@ -2663,7 +2665,7 @@ void CBasePlayer::UpdatePlayerSound()
 
 	if (!pSound)
 	{
-		ALERT(at_console, "Client lost reserved sound!\n");
+		Logger->debug("Client lost reserved sound!");
 		return;
 	}
 
@@ -2765,7 +2767,7 @@ void CBasePlayer::UpdatePlayerSound()
 	// Below are a couple of useful little bits that make it easier to determine just how much noise the
 	// player is making.
 	// UTIL_ParticleEffect ( pev->origin + gpGlobals->v_forward * iVolume, g_vecZero, 255, 25 );
-	//ALERT ( at_console, "%d/%d\n", iVolume, m_iTargetVolume );
+	//Logger->debug("{}/{}", iVolume, m_iTargetVolume);
 }
 
 
@@ -2802,7 +2804,7 @@ void CBasePlayer::PostThink()
 
 	if ((FBitSet(pev->flags, FL_ONGROUND)) && (pev->health > 0) && m_flFallVelocity >= PLAYER_FALL_PUNCH_THRESHHOLD)
 	{
-		// ALERT ( at_console, "%f\n", m_flFallVelocity );
+		// Logger->debug("{}", m_flFallVelocity);
 
 		if (pev->watertype == CONTENT_WATER)
 		{
@@ -2841,7 +2843,7 @@ void CBasePlayer::PostThink()
 		if (m_flFallVelocity > 64 && !g_pGameRules->IsMultiplayer())
 		{
 			CSoundEnt::InsertSound(bits_SOUND_PLAYER, pev->origin, m_flFallVelocity, 0.2);
-			// ALERT( at_console, "fall %f\n", m_flFallVelocity );
+			// Logger->debug("fall {}", m_flFallVelocity);
 		}
 		m_flFallVelocity = 0;
 	}
@@ -3105,7 +3107,7 @@ edict_t* EntSelectSpawnPoint(CBasePlayer* pPlayer)
 ReturnSpot:
 	if (FNullEnt(pSpot))
 	{
-		ALERT(at_error, "PutClientInServer: no info_player_start on level");
+		CBaseEntity::Logger->error("PutClientInServer: no info_player_start on level");
 		return CWorld::Instance->edict();
 	}
 
@@ -3198,7 +3200,7 @@ void CBasePlayer::Spawn()
 
 	if (m_iPlayerSound == SOUNDLIST_EMPTY)
 	{
-		ALERT(at_console, "Couldn't alloc player sound slot!\n");
+		Logger->debug("Couldn't alloc player sound slot!");
 	}
 
 	m_fNoPlayerSound = false; // normal sound behavior.
@@ -3312,7 +3314,7 @@ bool CBasePlayer::Restore(CRestore& restore)
 	// landmark isn't present.
 	if (0 == pSaveData->fUseLandmark)
 	{
-		ALERT(at_console, "No Landmark:%s\n", pSaveData->szLandmarkName);
+		Logger->debug("No Landmark:{}", pSaveData->szLandmarkName);
 
 		// default to normal spawn
 		edict_t* pentSpawnSpot = EntSelectSpawnPoint(this);
@@ -3559,7 +3561,7 @@ void CSprayCan::Think()
 
 	playernum = ENTINDEX(pev->owner);
 
-	// ALERT(at_console, "Spray by player %i, %i of %i\n", playernum, (int)(pev->frame + 1), nFrames);
+	// Logger->debug("Spray by player {}, {} of {}", playernum, (int)(pev->frame + 1), nFrames);
 
 	UTIL_MakeVectors(pev->angles);
 	UTIL_TraceLine(pev->origin, pev->origin + gpGlobals->v_forward * 128, ignore_monsters, pev->owner, &tr);
@@ -3622,7 +3624,7 @@ static edict_t* GiveNamedItem_Common(entvars_t* pev, const char* pszName)
 	edict_t* pent = CREATE_NAMED_ENTITY(istr);
 	if (FNullEnt(pent))
 	{
-		ALERT(at_console, "nullptr Ent in GiveNamedItem!\n");
+		CBaseEntity::Logger->debug("nullptr Ent in GiveNamedItem!");
 		return nullptr;
 	}
 	VARS(pent)->origin = pev->origin;
@@ -3908,7 +3910,7 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse)
 		if (!giPrecacheGrunt)
 		{
 			giPrecacheGrunt = true;
-			ALERT(at_console, "You must now restart to use Grunt-o-matic.\n");
+			Logger->debug("You must now restart to use Grunt-o-matic.");
 		}
 		else
 		{
@@ -3987,12 +3989,12 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse)
 	{
 		if (m_fNoPlayerSound)
 		{
-			ALERT(at_console, "Player is audible\n");
+			Logger->debug("Player is audible");
 			m_fNoPlayerSound = false;
 		}
 		else
 		{
-			ALERT(at_console, "Player is silent\n");
+			Logger->debug("Player is silent");
 			m_fNoPlayerSound = true;
 		}
 		break;
@@ -4003,20 +4005,26 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse)
 		pEntity = UTIL_FindEntityForward(this);
 		if (pEntity)
 		{
-			ALERT(at_console, "Classname: %s", pEntity->GetClassname());
+			eastl::fixed_string<char, 512 + 1> buffer;
+
+			auto inserter = std::back_inserter(buffer);
+
+			fmt::format_to(inserter, "Classname: {}", pEntity->GetClassname());
 
 			if (!FStringNull(pEntity->pev->targetname))
 			{
-				ALERT(at_console, " - Targetname: %s\n", pEntity->GetTargetname());
+				fmt::format_to(inserter, " - Targetname: {}\n", pEntity->GetTargetname());
 			}
 			else
 			{
-				ALERT(at_console, " - TargetName: No Targetname\n");
+				fmt::format_to(inserter, " - TargetName: No Targetname\n");
 			}
 
-			ALERT(at_console, "Model: %s\n", pEntity->GetModelName());
+			fmt::format_to(inserter, "Model: {}\n", pEntity->GetModelName());
 			if (!FStringNull(pEntity->pev->globalname))
-				ALERT(at_console, "Globalname: %s\n", pEntity->GetGlobalname());
+				fmt::format_to(inserter, "Globalname: {}", pEntity->GetGlobalname());
+
+			Logger->debug(spdlog::string_view_t{buffer.c_str(), buffer.size()});
 		}
 		break;
 
@@ -4033,7 +4041,7 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse)
 			pWorld = tr.pHit;
 		const char* pTextureName = TRACE_TEXTURE(pWorld, start, end);
 		if (pTextureName)
-			ALERT(at_console, "Texture: %s\n", pTextureName);
+			Logger->debug("Texture: {}", pTextureName);
 	}
 	break;
 	case 195: // show shortest paths for entire level to nearest node
@@ -4053,7 +4061,7 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse)
 	break;
 	case 199: // show nearest node and all connections
 	{
-		ALERT(at_console, "%d\n", WorldGraph.FindNearestNode(pev->origin, bits_NODE_GROUP_REALM));
+		Logger->debug("{}", WorldGraph.FindNearestNode(pev->origin, bits_NODE_GROUP_REALM));
 		WorldGraph.ShowNodeConnections(WorldGraph.FindNearestNode(pev->origin, bits_NODE_GROUP_REALM));
 	}
 	break;
@@ -4954,7 +4962,7 @@ Vector CBasePlayer::GetAutoaimVectorFromPoint(const Vector& vecSrc, float flDelt
 		ResetAutoaim();
 	}
 
-	// ALERT( at_console, "%f %f\n", angles.x, angles.y );
+	// Logger->debug("{} {}", angles.x, angles.y);
 
 	UTIL_MakeVectors(pev->v_angle + pev->punchangle + m_vecAutoAim);
 	return gpGlobals->v_forward;
@@ -5048,7 +5056,7 @@ Vector CBasePlayer::AutoaimDeflection(const Vector& vecSrc, float flDist, float 
 		UTIL_TraceLine(vecSrc, center, dont_ignore_monsters, edict(), &tr);
 		if (tr.flFraction != 1.0 && tr.pHit != pEdict)
 		{
-			// ALERT( at_console, "hit %s, can't see %s\n", STRING( tr.pHit->v.classname ), STRING( pEdict->v.classname ) );
+			// Logger->debug("hit {}, can't see {}", STRING(tr.pHit->v.classname), STRING(pEdict->v.classname));
 			continue;
 		}
 
@@ -5056,7 +5064,7 @@ Vector CBasePlayer::AutoaimDeflection(const Vector& vecSrc, float flDist, float 
 		if (IRelationship(pEntity) < 0)
 		{
 			if (!pEntity->IsPlayer() && !g_pGameRules->IsDeathmatch())
-				// ALERT( at_console, "friend\n");
+				// Logger->debug("friend");
 				continue;
 		}
 
@@ -5607,15 +5615,15 @@ void CBasePlayer::ToggleCheat(Cheat cheat)
 	switch (cheat)
 	{
 	case Cheat::InfiniteAir:
-		ALERT(at_console, "Infinite air: %s\n", m_bInfiniteAir ? "OFF" : "ON");
+		Logger->debug("Infinite air: {}", m_bInfiniteAir ? "OFF" : "ON");
 		m_bInfiniteAir = !m_bInfiniteAir;
 		break;
 	case Cheat::InfiniteArmor:
-		ALERT(at_console, "Infinite armor: %s\n", m_bInfiniteArmor ? "OFF" : "ON");
+		Logger->debug("Infinite armor: {}", m_bInfiniteArmor ? "OFF" : "ON");
 		m_bInfiniteArmor = !m_bInfiniteArmor;
 		break;
 	default:
-		ALERT(at_console, "Bogus cheat value!\n");
+		Logger->debug("Bogus cheat value!");
 	}
 }
 
@@ -5677,7 +5685,7 @@ void CDeadHEV::Spawn()
 
 	if (pev->sequence == -1)
 	{
-		ALERT(at_console, "Dead hevsuit with bad pose\n");
+		Logger->debug("Dead hevsuit with bad pose");
 		pev->sequence = 0;
 		pev->effects = EF_BRIGHTFIELD;
 	}

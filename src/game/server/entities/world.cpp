@@ -188,7 +188,7 @@ bool CDecal::KeyValue(KeyValueData* pkvd)
 
 		if (pev->skin < 0)
 		{
-			ALERT(at_console, "Can't find decal %s\n", pkvd->szValue);
+			Logger->debug("Can't find decal {}", pkvd->szValue);
 		}
 
 		return true;
@@ -302,11 +302,11 @@ void CGlobalState::DumpGlobals()
 	static const char* estates[] = {"Off", "On", "Dead"};
 	globalentity_t* pTest;
 
-	ALERT(at_console, "-- Globals --\n");
+	CBaseEntity::Logger->debug("-- Globals --");
 	pTest = m_pList;
 	while (pTest)
 	{
-		ALERT(at_console, "%s: %s (%s)\n", pTest->name, pTest->levelName, estates[pTest->state]);
+		CBaseEntity::Logger->debug("{}: {} ({})", pTest->name, pTest->levelName, estates[pTest->state]);
 		pTest = pTest->pNext;
 	}
 }
@@ -546,7 +546,7 @@ void CWorld::Precache()
 
 	if (!pSoundEnt)
 	{
-		ALERT(at_console, "**COULD NOT CREATE SOUNDENT**\n");
+		Logger->debug("**COULD NOT CREATE SOUNDENT**");
 	}
 
 	InitBodyQue();
@@ -653,12 +653,12 @@ void CWorld::Precache()
 	{ // Load the node graph for this level
 		if (!WorldGraph.FLoadGraph(STRING(gpGlobals->mapname)))
 		{ // couldn't load, so alloc and prepare to build a graph.
-			ALERT(at_console, "*Error opening .NOD file\n");
+			CGraph::Logger->debug("*Error opening .NOD file");
 			WorldGraph.AllocNodes();
 		}
 		else
 		{
-			ALERT(at_console, "\n*Graph Loaded!\n");
+			CGraph::Logger->debug("\n*Graph Loaded!");
 		}
 	}
 
@@ -669,7 +669,7 @@ void CWorld::Precache()
 
 	if (!FStringNull(pev->netname))
 	{
-		ALERT(at_aiconsole, "Chapter title: %s\n", GetNetname());
+		Logger->debug("Chapter title: {}", GetNetname());
 		CBaseEntity* pEntity = CBaseEntity::Create("env_message", g_vecZero, g_vecZero, nullptr);
 		if (pEntity)
 		{

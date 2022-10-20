@@ -183,7 +183,7 @@ int DispatchSpawn(edict_t* pent)
 			{
 				// Spawned entities default to 'On'
 				gGlobalState.EntityAdd(pEntity->pev->globalname, gpGlobals->mapname, GLOBAL_ON);
-				//				ALERT( at_console, "Added global entity %s (%s)\n", STRING(pEntity->pev->classname), STRING(pEntity->pev->globalname) );
+				//CBaseEntity::Logger->trace("Added global entity {} ({})", STRING(pEntity->pev->classname), STRING(pEntity->pev->globalname));
 			}
 		}
 	}
@@ -242,7 +242,7 @@ void DispatchThink(edict_t* pent)
 	if (pEntity)
 	{
 		if (FBitSet(pEntity->pev->flags, FL_DORMANT))
-			ALERT(at_error, "Dormant entity %s is thinking!!\n", STRING(pEntity->pev->classname));
+			CBaseEntity::Logger->error("Dormant entity {} is thinking!!", STRING(pEntity->pev->classname));
 
 		pEntity->Think();
 	}
@@ -268,7 +268,7 @@ void DispatchSave(edict_t* pent, SAVERESTOREDATA* pSaveData)
 		ENTITYTABLE* pTable = &pSaveData->pTable[pSaveData->currentIndex];
 
 		if (pTable->pent != pent)
-			ALERT(at_error, "ENTITY TABLE OR INDEX IS WRONG!!!!\n");
+			CBaseEntity::Logger->error("ENTITY TABLE OR INDEX IS WRONG!!!!");
 
 		if ((pEntity->ObjectCaps() & FCAP_DONT_SAVE) != 0)
 			return;
@@ -316,7 +316,7 @@ CBaseEntity* FindGlobalEntity(string_t classname, string_t globalname)
 	{
 		if (!FClassnameIs(pReturn->pev, STRING(classname)))
 		{
-			ALERT(at_console, "Global entity found %s, wrong class %s\n", STRING(globalname), STRING(pReturn->pev->classname));
+			CBaseEntity::Logger->debug("Global entity found {}, wrong class {}", STRING(globalname), STRING(pReturn->pev->classname));
 			pReturn = nullptr;
 		}
 	}
@@ -362,7 +362,7 @@ int DispatchRestore(edict_t* pent, SAVERESTOREDATA* pSaveData, int globalEntity)
 			CBaseEntity* pNewEntity = FindGlobalEntity(tmpVars.classname, tmpVars.globalname);
 			if (pNewEntity)
 			{
-				//				ALERT( at_console, "Overlay %s with %s\n", STRING(pNewEntity->pev->classname), STRING(tmpVars.classname) );
+				//CBaseEntity::Logger->debug("Overlay {} with {}", STRING(pNewEntity->pev->classname), STRING(tmpVars.classname));
 				// Tell the restore code we're overlaying a global entity from another level
 				restoreHelper.SetGlobalMode(true); // Don't overwrite global fields
 				pSaveData->vecLandmarkOffset = (pSaveData->vecLandmarkOffset - pNewEntity->pev->mins) + tmpVars.mins;
@@ -396,14 +396,14 @@ int DispatchRestore(edict_t* pent, SAVERESTOREDATA* pSaveData, int globalEntity)
 #if 0
 		if (pEntity && pEntity->pev->globalname && globalEntity)
 		{
-			ALERT(at_console, "Global %s is %s\n", STRING(pEntity->pev->globalname), STRING(pEntity->pev->model));
+			CBaseEntity::Logger->debug("Global {} is {}", STRING(pEntity->pev->globalname), STRING(pEntity->pev->model));
 		}
 #endif
 
 		// Is this an overriding global entity (coming over the transition), or one restoring in a level
 		if (0 != globalEntity)
 		{
-			//			ALERT( at_console, "After: %f %f %f %s\n", pEntity->pev->origin.x, pEntity->pev->origin.y, pEntity->pev->origin.z, STRING(pEntity->pev->model) );
+			//CBaseEntity::Logger->debug("After: {} {}", pEntity->pev->origin, STRING(pEntity->pev->model));
 			pSaveData->vecLandmarkOffset = oldOffset;
 			if (pEntity)
 			{
@@ -427,7 +427,8 @@ int DispatchRestore(edict_t* pent, SAVERESTOREDATA* pSaveData, int globalEntity)
 			}
 			else
 			{
-				ALERT(at_error, "Global Entity %s (%s) not in table!!!\n", STRING(pEntity->pev->globalname), STRING(pEntity->pev->classname));
+				CBaseEntity::Logger->error("Global Entity {} ({}) not in table!!!\n",
+					STRING(pEntity->pev->globalname), STRING(pEntity->pev->classname));
 				// Spawned entities default to 'On'
 				gGlobalState.EntityAdd(pEntity->pev->globalname, gpGlobals->mapname, GLOBAL_ON);
 			}
@@ -788,7 +789,7 @@ CBaseEntity* CBaseEntity::Create(const char* szName, const Vector& vecOrigin, co
 	pent = CREATE_NAMED_ENTITY(MAKE_STRING(szName));
 	if (FNullEnt(pent))
 	{
-		ALERT(at_console, "nullptr Ent in Create!\n");
+		CBaseEntity::Logger->debug("NULL Ent in Create!");
 		return nullptr;
 	}
 	pEntity = Instance(pent);

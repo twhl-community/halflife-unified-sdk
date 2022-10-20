@@ -407,7 +407,7 @@ void COFPitWormUp::StartupThink()
 
 		if (pTarget)
 		{
-			ALERT(at_console, "level %d node set\n", i);
+			AILogger->debug("level {} node set", i);
 			m_flTargetLevels[i] = pTarget->pev->origin.z;
 			m_flLevels[i] = pTarget->pev->origin.z - PITWORM_UP_LEVELS[i];
 		}
@@ -1622,7 +1622,7 @@ COFPitWormGib* COFPitWormGibShooter::CreateGib()
 
 	if (pev->body <= 1)
 	{
-		ALERT(at_aiconsole, "GibShooter Body is <= 1!\n");
+		CBaseMonster::AILogger->error("GibShooter Body is <= 1!");
 	}
 
 	pGib->pev->body = RANDOM_LONG(1, pev->body - 1); // avoid throwing random amounts of the 0th gib. (skull).
@@ -1894,7 +1894,7 @@ bool COFPitWorm::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, flo
 		{
 			pev->health = flDamage + 1;
 			Remember(bits_MEMORY_ADVANCE_NODE | bits_MEMORY_COMPLETED_NODE);
-			ALERT(at_aiconsole, "BM: Finished node health!!!\n");
+			AILogger->debug("BM: Finished node health!!!");
 		}
 	}
 
@@ -1950,7 +1950,7 @@ void COFPitWorm::StartMonster()
 		// Try to move the monster to make sure it's not stuck in a brush.
 		if (!WALK_MOVE(ENT(pev), 0, 0, WALKMOVE_NORMAL))
 		{
-			ALERT(at_error, "Monster %s stuck in wall--level design error", STRING(pev->classname));
+			Logger->error("Monster {} stuck in wall--level design error", STRING(pev->classname));
 			pev->effects = EF_BRIGHTFIELD;
 		}
 	}
@@ -1966,7 +1966,7 @@ void COFPitWorm::StartMonster()
 
 		if (!m_pGoalEnt)
 		{
-			ALERT(at_error, "ReadyMonster()--%s couldn't find target %s", STRING(pev->classname), STRING(pev->target));
+			Logger->error("ReadyMonster()--{} couldn't find target {}", STRING(pev->classname), STRING(pev->target));
 		}
 		else
 		{
@@ -1978,7 +1978,7 @@ void COFPitWorm::StartMonster()
 			// At this point, we expect only a path_corner as initial goal
 			if (!FClassnameIs(m_pGoalEnt->pev, "path_corner"))
 			{
-				ALERT(at_warning, "ReadyMonster--monster's initial goal '%s' is not a path_corner", STRING(pev->target));
+				Logger->warning("ReadyMonster--monster's initial goal '{}' is not a path_corner", STRING(pev->target));
 			}
 #endif
 
@@ -1990,7 +1990,7 @@ void COFPitWorm::StartMonster()
 
 			if (!FRefreshRoute())
 			{
-				ALERT(at_aiconsole, "Can't Create Route!\n");
+				AILogger->debug("Can't Create Route!");
 			}
 			SetState(MONSTERSTATE_IDLE);
 			//ChangeSchedule(GetScheduleOfType(SCHED_IDLE_WALK));
@@ -2096,7 +2096,7 @@ void COFPitWorm::Move(float flInterval)
 		// so refresh it.
 		if (m_movementGoal == MOVEGOAL_NONE || !FRefreshRoute())
 		{
-			ALERT(at_aiconsole, "Tried to move with no route!\n");
+			AILogger->debug("Tried to move with no route!");
 			TaskFail();
 			return;
 		}
@@ -2215,7 +2215,7 @@ void COFPitWorm::Move(float flInterval)
 	if (flCheckDist < m_flGroundSpeed * flInterval)
 	{
 		flInterval = flCheckDist / m_flGroundSpeed;
-		// ALERT( at_console, "%.02f\n", flInterval );
+		// AILogger->debug("{:.02f}", flInterval);
 	}
 	MoveExecute(pTargetEnt, vecDir, flInterval);
 
@@ -2529,7 +2529,7 @@ void COFPitWorm::RunAI()
 
 			if (!FRefreshRoute())
 			{
-				ALERT(at_aiconsole, "Can't Create Route!\n");
+				AILogger->debug("Can't Create Route!");
 			}
 		}
 	}

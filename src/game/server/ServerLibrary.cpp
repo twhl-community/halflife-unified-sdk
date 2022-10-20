@@ -21,8 +21,10 @@
 
 #include "cbase.h"
 #include "client.h"
+#include "gamerules.h"
 #include "nodes.h"
 #include "ProjectInfo.h"
+#include "scripted.h"
 #include "ServerLibrary.h"
 #include "skill.h"
 #include "UserMessages.h"
@@ -82,9 +84,12 @@ bool ServerLibrary::Initialize()
 		return false;
 	}
 
-	CBaseEntity::IOLogger = g_Logging.CreateLogger("entities.io");
+	CBaseEntity::IOLogger = g_Logging.CreateLogger("ent.io");
+	CBaseMonster::AILogger = g_Logging.CreateLogger("ent.ai");
+	CCineMonster::AIScriptLogger = g_Logging.CreateLogger("ent.ai.script");
 	CGraph::Logger = g_Logging.CreateLogger("nodegraph");
 	CSaveRestoreBuffer::Logger = g_Logging.CreateLogger("saverestore");
+	CGameRules::Logger = g_Logging.CreateLogger("gamerules");
 
 	SV_CreateClientCommands();
 
@@ -104,8 +109,11 @@ void ServerLibrary::Shutdown()
 	m_MapChangeConfigDefinition.reset();
 	m_ServerConfigDefinition.reset();
 
+	CGameRules::Logger.reset();
 	CSaveRestoreBuffer::Logger.reset();
 	CGraph::Logger.reset();
+	CCineMonster::AIScriptLogger.reset();
+	CBaseMonster::AILogger.reset();
 	CBaseEntity::IOLogger.reset();
 
 	GameLibrary::Shutdown();

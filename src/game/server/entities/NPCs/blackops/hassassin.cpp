@@ -258,7 +258,7 @@ void CHAssassin::HandleAnimEvent(MonsterEvent_t* pEvent)
 	break;
 	case ASSASSIN_AE_JUMP:
 	{
-		// ALERT( at_console, "jumping");
+		// AILogger->debug("jumping");
 		UTIL_MakeAimVectors(pev->angles);
 		pev->movetype = MOVETYPE_TOSS;
 		pev->flags &= ~FL_ONGROUND;
@@ -801,7 +801,7 @@ void CHAssassin::RunTask(Task_t* pTask)
 		}
 		if ((pev->flags & FL_ONGROUND) != 0)
 		{
-			// ALERT( at_console, "on ground\n");
+			// AILogger->debug("on ground");
 			TaskComplete();
 		}
 		break;
@@ -856,14 +856,14 @@ Schedule_t* CHAssassin::GetSchedule()
 		{
 			if ((pev->flags & FL_ONGROUND) != 0)
 			{
-				// ALERT( at_console, "landed\n");
+				// AILogger->debug("landed");
 				// just landed
 				pev->movetype = MOVETYPE_STEP;
 				return GetScheduleOfType(SCHED_ASSASSIN_JUMP_LAND);
 			}
 			else
 			{
-				// ALERT( at_console, "jump\n");
+				// AILogger->debug("jump");
 				// jump or jump/shoot
 				if (m_MonsterState == MONSTERSTATE_COMBAT)
 					return GetScheduleOfType(SCHED_ASSASSIN_JUMP);
@@ -896,21 +896,21 @@ Schedule_t* CHAssassin::GetSchedule()
 		// jump player!
 		if (HasConditions(bits_COND_CAN_MELEE_ATTACK1))
 		{
-			// ALERT( at_console, "melee attack 1\n");
+			// AILogger->debug("melee attack 1");
 			return GetScheduleOfType(SCHED_MELEE_ATTACK1);
 		}
 
 		// throw grenade
 		if (HasConditions(bits_COND_CAN_RANGE_ATTACK2))
 		{
-			// ALERT( at_console, "range attack 2\n");
+			// AILogger->debug("range attack 2");
 			return GetScheduleOfType(SCHED_RANGE_ATTACK2);
 		}
 
 		// spotted
 		if (HasConditions(bits_COND_SEE_ENEMY) && HasConditions(bits_COND_ENEMY_FACING_ME))
 		{
-			// ALERT( at_console, "exposed\n");
+			// AILogger->debug("exposed");
 			m_iFrustration++;
 			return GetScheduleOfType(SCHED_ASSASSIN_EXPOSED);
 		}
@@ -918,25 +918,25 @@ Schedule_t* CHAssassin::GetSchedule()
 		// can attack
 		if (HasConditions(bits_COND_CAN_RANGE_ATTACK1))
 		{
-			// ALERT( at_console, "range attack 1\n");
+			// AILogger->debug("range attack 1");
 			m_iFrustration = 0;
 			return GetScheduleOfType(SCHED_RANGE_ATTACK1);
 		}
 
 		if (HasConditions(bits_COND_SEE_ENEMY))
 		{
-			// ALERT( at_console, "face\n");
+			// AILogger->debug("face");
 			return GetScheduleOfType(SCHED_COMBAT_FACE);
 		}
 
 		// new enemy
 		if (HasConditions(bits_COND_NEW_ENEMY))
 		{
-			// ALERT( at_console, "take cover\n");
+			// AILogger->debug("take cover");
 			return GetScheduleOfType(SCHED_TAKE_COVER_FROM_ENEMY);
 		}
 
-		// ALERT( at_console, "stand\n");
+		// AILogger->debug("stand");
 		return GetScheduleOfType(SCHED_ALERT_STAND);
 	}
 	break;
@@ -949,7 +949,7 @@ Schedule_t* CHAssassin::GetSchedule()
 //=========================================================
 Schedule_t* CHAssassin::GetScheduleOfType(int Type)
 {
-	// ALERT( at_console, "%d\n", m_iFrustration );
+	// AILogger->debug("{}", m_iFrustration);
 	switch (Type)
 	{
 	case SCHED_TAKE_COVER_FROM_ENEMY:

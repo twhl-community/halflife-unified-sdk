@@ -1112,7 +1112,7 @@ void RadiusDamage(Vector vecSrc, entvars_t* pevInflictor, entvars_t* pevAttacker
 					flAdjustedDamage = 0;
 				}
 
-				// ALERT( at_console, "hit %s\n", STRING( pEntity->pev->classname ) );
+				// AILogger->debug("hit {}", STRING(pEntity->pev->classname));
 				if (tr.flFraction != 1.0)
 				{
 					ClearMultiDamage();
@@ -1321,7 +1321,7 @@ void CBaseMonster::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector ve
 {
 	Vector vecOrigin = ptr->vecEndPos - vecDir * 4;
 
-	ALERT ( at_console, "%d\n", ptr->iHitgroup );
+	AILogger->debug("{}", ptr->iHitgroup);
 
 
 	if ( pev->takedamage )

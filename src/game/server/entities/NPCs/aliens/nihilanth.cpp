@@ -747,7 +747,7 @@ void CNihilanth::NextActivity()
 		else
 		{
 			m_hRecharger = nullptr;
-			ALERT(at_aiconsole, "nihilanth can't find %s\n", szName);
+			AILogger->debug("nihilanth can't find {}", szName);
 			m_iLevel++;
 			if (m_iLevel > 9)
 				m_irritation = 2;
@@ -771,7 +771,7 @@ void CNihilanth::NextActivity()
 				sprintf(szText, "%s%d", m_szDrawUse, m_iLevel);
 				FireTargets(szText, this, this, USE_ON, 1.0);
 
-				ALERT(at_console, "fireing %s\n", szText);
+				AILogger->debug("fireing {}", szText);
 			}
 			pev->sequence = LookupSequence("recharge");
 		}
@@ -858,7 +858,7 @@ void CNihilanth::HuntThink()
 		return;
 	}
 
-	// ALERT( at_console, "health %.0f\n", pev->health );
+	// AILogger->debug("health {:.0f}", pev->health);
 
 	// if damaged, try to abosorb some spheres
 	if (pev->health < pev->max_health && AbsorbSphere())
@@ -972,7 +972,7 @@ void CNihilanth::Flight()
 	UTIL_SetOrigin(pev, pev->origin + m_velocity * 0.1);
 	pev->angles = pev->angles + m_avelocity * 0.1;
 
-	// ALERT( at_console, "%5.0f %5.0f : %4.0f : %3.0f : %2.0f\n", m_posDesired.z, pev->origin.z, m_velocity.z, m_avelocity.y, m_flForce );
+	// AILogger->debug("{:5.0f} {:5.0f} : {:4.0f} : {:3.0f} : {:2.0f}", m_posDesired.z, pev->origin.z, m_velocity.z, m_avelocity.y, m_flForce);
 }
 
 
@@ -1123,7 +1123,7 @@ void CNihilanth::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 				EMIT_SOUND(edict(), CHAN_WEAPON, RANDOM_SOUND_ARRAY(pBallSounds), 1.0, 0.2);
 
-				ALERT(at_aiconsole, "nihilanth can't target %s\n", szText);
+				AILogger->debug("nihilanth can't target {}", szText);
 
 				MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
 				WRITE_BYTE(TE_ELIGHT);
@@ -1753,12 +1753,12 @@ bool CNihilanthHVR::CircleTarget(Vector vecTarget)
 
 	if (d1 < 0 && d2 <= d1)
 	{
-		// ALERT( at_console, "too close\n");
+		// AILogger->debug("too close");
 		m_vecIdeal = m_vecIdeal - (vecDest - vecSrc).Normalize() * 50;
 	}
 	else if (d1 > 0 && d2 >= d1)
 	{
-		// ALERT( at_console, "too far\n");
+		// AILogger->debug("too far");
 		m_vecIdeal = m_vecIdeal + (vecDest - vecSrc).Normalize() * 50;
 	}
 	pev->avelocity.z = d1 * 20;
@@ -1783,7 +1783,7 @@ bool CNihilanthHVR::CircleTarget(Vector vecTarget)
 
 	pev->velocity = m_vecIdeal;
 
-	// ALERT( at_console, "%.0f %.0f %.0f\n", m_vecIdeal.x, m_vecIdeal.y, m_vecIdeal.z );
+	// AILogger->debug("{:.0f}", m_vecIdeal);
 	return fClose;
 }
 

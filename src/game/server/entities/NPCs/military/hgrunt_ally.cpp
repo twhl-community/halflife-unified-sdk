@@ -541,7 +541,7 @@ void CDeadHGruntAlly::Spawn()
 
 	if (pev->sequence == -1)
 	{
-		ALERT(at_console, "Dead hgrunt with bad pose\n");
+		AILogger->debug("Dead hgrunt with bad pose");
 	}
 
 	if ((pev->weapons & HGruntAllyWeaponFlag::MP5) != 0)

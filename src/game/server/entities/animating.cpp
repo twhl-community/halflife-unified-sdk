@@ -139,7 +139,7 @@ void CBaseAnimating::DispatchAnimEvents(float flInterval)
 
 	if (!pmodel)
 	{
-		ALERT(at_aiconsole, "Gibbed monster is thinking!\n");
+		CBaseEntity::Logger->debug("Gibbed monster is thinking!");
 		return;
 	}
 

@@ -371,7 +371,7 @@ bool CFuncTank::StartControl(CBasePlayer* pController)
 			return false;
 	}
 
-	ALERT(at_console, "using TANK!\n");
+	CBaseEntity::Logger->debug("using TANK!");
 
 	m_pController = pController;
 	if (m_pController->m_pActiveItem)
@@ -397,7 +397,7 @@ void CFuncTank::StopControl()
 
 	m_pController->EquipWeapon();
 
-	ALERT(at_console, "stopped using TANK\n");
+	CBaseEntity::Logger->debug("stopped using TANK");
 
 	m_pController->m_iHideHUD &= ~HIDEHUD_WEAPONS;
 
@@ -928,7 +928,7 @@ void CFuncTankLaser::Activate()
 	if (!GetLaser())
 	{
 		UTIL_Remove(this);
-		ALERT(at_error, "Laser tank with no env_laser!\n");
+		CBaseEntity::Logger->error("Laser tank with no env_laser!");
 	}
 	else
 	{
@@ -1151,7 +1151,7 @@ void CFuncTankControls::Think()
 
 	if (FNullEnt(pTarget))
 	{
-		ALERT(at_console, "No tank %s\n", STRING(pev->target));
+		CBaseEntity::Logger->debug("No tank {}", STRING(pev->target));
 		return;
 	}
 

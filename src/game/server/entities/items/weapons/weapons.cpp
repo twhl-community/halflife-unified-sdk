@@ -39,7 +39,7 @@ int MaxAmmoCarry(string_t iszName)
 			return CBasePlayerItem::ItemInfoArray[i].iMaxAmmo2;
 	}
 
-	ALERT(at_console, "MaxAmmoCarry() doesn't recognize '%s'!\n", STRING(iszName));
+	CBaseEntity::Logger->error("MaxAmmoCarry() doesn't recognize '{}'!", STRING(iszName));
 	return -1;
 }
 
@@ -210,7 +210,7 @@ void UTIL_PrecacheOtherWeapon(const char* szClassname)
 	pent = CREATE_NAMED_ENTITY(MAKE_STRING(szClassname));
 	if (FNullEnt(pent))
 	{
-		ALERT(at_console, "nullptr Ent in UTIL_PrecacheOtherWeapon\n");
+		CBaseEntity::Logger->error("NULL Ent in UTIL_PrecacheOtherWeapon");
 		return;
 	}
 
@@ -565,7 +565,7 @@ CBaseEntity* CBasePlayerItem::Respawn()
 	}
 	else
 	{
-		ALERT(at_console, "Respawn failed to create %s!\n", STRING(pev->classname));
+		CBaseEntity::Logger->error("Respawn failed to create {}!", STRING(pev->classname));
 	}
 
 	return pNewWeapon;
@@ -1147,7 +1147,7 @@ bool CWeaponBox::KeyValue(KeyValueData* pkvd)
 	}
 	else
 	{
-		ALERT(at_console, "WeaponBox too full! only %d ammotypes allowed\n", MAX_AMMO_SLOTS);
+		CBaseEntity::Logger->error("WeaponBox too full! only {} ammotypes allowed", MAX_AMMO_SLOTS);
 	}
 
 	return false;
@@ -1228,7 +1228,7 @@ void CWeaponBox::Touch(CBaseEntity* pOther)
 			// there's some ammo of this type.
 			pPlayer->GiveAmmo(m_rgAmmo[i], STRING(m_rgiszAmmo[i]), MaxAmmoCarry(m_rgiszAmmo[i]));
 
-			//ALERT ( at_console, "Gave %d rounds of %s\n", m_rgAmmo[i], STRING(m_rgiszAmmo[i]) );
+			//Logger->trace("Gave {} rounds of {}", m_rgAmmo[i], STRING(m_rgiszAmmo[i]));
 
 			// now empty the ammo from the weaponbox since we just gave it to the player
 			m_rgiszAmmo[i] = string_t::Null;
@@ -1248,7 +1248,7 @@ void CWeaponBox::Touch(CBaseEntity* pOther)
 			// have at least one weapon in this slot
 			while (m_rgpPlayerItems[i])
 			{
-				//ALERT ( at_console, "trying to give %s\n", STRING( m_rgpPlayerItems[ i ]->pev->classname ) );
+				//Logger->debug("trying to give {}", STRING(m_rgpPlayerItems[i]->pev->classname));
 
 				pItem = m_rgpPlayerItems[i];
 				m_rgpPlayerItems[i] = m_rgpPlayerItems[i]->m_pNext; // unlink this weapon from the box
@@ -1312,7 +1312,7 @@ bool CWeaponBox::PackWeapon(CBasePlayerItem* pWeapon)
 	pWeapon->SetTouch(nullptr);
 	pWeapon->m_pPlayer = nullptr;
 
-	//ALERT ( at_console, "packed %s\n", STRING(pWeapon->pev->classname) );
+	//Logger->debug("packed {}", STRING(pWeapon->pev->classname));
 
 	return true;
 }
@@ -1327,7 +1327,7 @@ bool CWeaponBox::PackAmmo(string_t iszName, int iCount)
 	if (FStringNull(iszName))
 	{
 		// error here
-		ALERT(at_console, "nullptr String in PackAmmo!\n");
+		Logger->error("NULL String in PackAmmo!");
 		return false;
 	}
 
@@ -1335,7 +1335,7 @@ bool CWeaponBox::PackAmmo(string_t iszName, int iCount)
 
 	if (iMaxCarry != -1 && iCount > 0)
 	{
-		//ALERT ( at_console, "Packed %d rounds of %s\n", iCount, STRING(iszName) );
+		//Logger->debug("Packed {} rounds of {}", iCount, STRING(iszName));
 		GiveAmmo(iCount, STRING(iszName), iMaxCarry);
 		return true;
 	}
@@ -1377,7 +1377,7 @@ int CWeaponBox::GiveAmmo(int iCount, const char* szName, int iMax, int* pIndex /
 
 		return i;
 	}
-	ALERT(at_console, "out of named ammo slots\n");
+	CBaseEntity::Logger->error("out of named ammo slots");
 	return i;
 }
 
@@ -1439,17 +1439,17 @@ void CWeaponBox::SetObjectCollisionBox()
 
 void CBasePlayerWeapon::PrintState()
 {
-	ALERT(at_console, "primary:  %f\n", m_flNextPrimaryAttack);
-	ALERT(at_console, "idle   :  %f\n", m_flTimeWeaponIdle);
+	Logger->debug("primary:  {}", m_flNextPrimaryAttack);
+	Logger->debug("idle   :  {}", m_flTimeWeaponIdle);
 
-	//	ALERT( at_console, "nextrl :  %f\n", m_flNextReload );
-	//	ALERT( at_console, "nextpum:  %f\n", m_flPumpTime );
+	//Logger->debug("nextrl :  {}", m_flNextReload);
+	//Logger->debug("nextpum:  {}", m_flPumpTime);
 
-	//	ALERT( at_console, "m_frt  :  %f\n", m_fReloadTime );
-	ALERT(at_console, "m_finre:  %i\n", static_cast<int>(m_fInReload));
-	//	ALERT( at_console, "m_finsr:  %i\n", m_fInSpecialReload );
+	//Logger->debug("m_frt  :  {}", m_fReloadTime);
+	Logger->debug("m_finre:  {}", static_cast<int>(m_fInReload));
+	//Logger->debug("m_finsr:  {}", m_fInSpecialReload);
 
-	ALERT(at_console, "m_iclip:  %i\n", m_iClip);
+	Logger->debug("m_iclip:  {}", m_iClip);
 }
 
 

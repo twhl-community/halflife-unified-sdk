@@ -378,7 +378,7 @@ float CLeech::ObstacleDistance(CBaseEntity* pTarget)
 	if (0 != tr.fStartSolid)
 	{
 		pev->speed = -LEECH_SWIM_SPEED * 0.5;
-		//		ALERT( at_console, "Stuck from (%f %f %f) to (%f %f %f)\n", pev->oldorigin.x, pev->oldorigin.y, pev->oldorigin.z, pev->origin.x, pev->origin.y, pev->origin.z );
+		//		AILogger->debug("Stuck from ({}) to ({})", pev->oldorigin, pev->origin);
 		//		UTIL_SetOrigin( pev, pev->oldorigin );
 	}
 
@@ -688,7 +688,7 @@ void CLeech::Killed(entvars_t* pevAttacker, int iGib)
 	Vector vecSplatDir;
 	TraceResult tr;
 
-	//ALERT(at_aiconsole, "Leech: killed\n");
+	//AILogger->debug("Leech: killed");
 	// tell owner ( if any ) that we're dead.This is mostly for MonsterMaker functionality.
 	CBaseEntity* pOwner = CBaseEntity::Instance(pev->owner);
 	if (pOwner)

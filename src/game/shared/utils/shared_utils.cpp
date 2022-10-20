@@ -36,7 +36,7 @@ string_t ALLOC_ESCAPED_STRING(const char* str)
 {
 	if (!str)
 	{
-		ALERT(at_warning, "nullptr string passed to ALLOC_ESCAPED_STRING\n");
+		ALERT(at_warning, "NULL string passed to ALLOC_ESCAPED_STRING\n");
 		return MAKE_STRING("");
 	}
 

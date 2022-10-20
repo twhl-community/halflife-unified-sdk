@@ -148,7 +148,7 @@ int SentencesSystem::PlayRndSz(edict_t* entity, const char* szgroupname,
 	const int isentenceg = GetGroupIndex(szgroupname);
 	if (isentenceg < 0)
 	{
-		ALERT(at_console, "No such sentence group %s\n", szgroupname);
+		m_Logger->debug("No such sentence group {}", szgroupname);
 		return -1;
 	}
 

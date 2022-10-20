@@ -962,7 +962,7 @@ void EV_FireGauss(event_args_t* args)
 
 			if (n < 0.5) // 60 degrees
 			{
-				// ALERT( at_console, "reflect %f\n", n );
+				// CBasePlayerWeapon::WeaponsLogger->debug("reflect {}", n);
 				// reflect
 				Vector r;
 

@@ -453,7 +453,7 @@ void CMultiManager::ManagerReport()
 
 	for (cIndex = 0; cIndex < m_cTargets; cIndex++)
 	{
-		ALERT(at_console, "%s %f\n", STRING(m_iTargetName[cIndex]), m_flTargetDelay[cIndex]);
+		Logger->debug("{} {}", STRING(m_iTargetName[cIndex]), m_flTargetDelay[cIndex]);
 	}
 }
 #endif
@@ -928,7 +928,7 @@ void CTriggerMultiple::Spawn()
 	//	if (pev->health > 0)
 	//		{
 	//		if (FBitSet(pev->spawnflags, SPAWNFLAG_NOTOUCH))
-	//			ALERT(at_error, "trigger_multiple spawn: health and notouch don't make sense");
+	//			Logger->error("trigger_multiple spawn: health and notouch don't make sense");
 	//		pev->max_health = pev->health;
 	//UNDONE: where to get pfnDie from?
 	//		pev->pfnDie = multi_killed;
@@ -1080,16 +1080,16 @@ void CBaseTrigger::CounterUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE
 			switch (m_cTriggersLeft)
 			{
 			case 1:
-				ALERT(at_console, "Only 1 more to go...");
+				Logger->debug("Only 1 more to go...");
 				break;
 			case 2:
-				ALERT(at_console, "Only 2 more to go...");
+				Logger->debug("Only 2 more to go...");
 				break;
 			case 3:
-				ALERT(at_console, "Only 3 more to go...");
+				Logger->debug("Only 3 more to go...");
 				break;
 			default:
-				ALERT(at_console, "There are more to go...");
+				Logger->debug("There are more to go...");
 				break;
 			}
 		}
@@ -1098,7 +1098,7 @@ void CBaseTrigger::CounterUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE
 
 	// !!!UNDONE: I don't think we want these Quakesque messages
 	if (fTellActivator)
-		ALERT(at_console, "Sequence completed!");
+		Logger->debug("Sequence completed!");
 
 	ActivateMultiTrigger(m_hActivator);
 }
@@ -1228,14 +1228,14 @@ bool CChangeLevel::KeyValue(KeyValueData* pkvd)
 	if (FStrEq(pkvd->szKeyName, "map"))
 	{
 		if (strlen(pkvd->szValue) >= cchMapNameMost)
-			ALERT(at_error, "Map name '%s' too long (32 chars)\n", pkvd->szValue);
+			Logger->error("Map name '{}' too long (32 chars)", pkvd->szValue);
 		strcpy(m_szMapName, pkvd->szValue);
 		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "landmark"))
 	{
 		if (strlen(pkvd->szValue) >= cchMapNameMost)
-			ALERT(at_error, "Landmark name '%s' too long (32 chars)\n", pkvd->szValue);
+			Logger->error("Landmark name '{}' too long (32 chars)", pkvd->szValue);
 		strcpy(m_szLandmarkName, pkvd->szValue);
 		return true;
 	}
@@ -1261,14 +1261,14 @@ When the player touches this, he gets sent to the map listed in the "map" variab
 void CChangeLevel::Spawn()
 {
 	if (FStrEq(m_szMapName, ""))
-		ALERT(at_console, "a trigger_changelevel doesn't have a map");
+		Logger->debug("a trigger_changelevel doesn't have a map");
 
 	if (FStrEq(m_szLandmarkName, ""))
-		ALERT(at_console, "trigger_changelevel to %s doesn't have a landmark", m_szMapName);
+		Logger->debug("trigger_changelevel to {} doesn't have a landmark", m_szMapName);
 
 	if (0 == stricmp(m_szMapName, STRING(gpGlobals->mapname)))
 	{
-		ALERT(at_error, "trigger_changelevel points to the current map (%s), which does not work\n", STRING(gpGlobals->mapname));
+		Logger->error("trigger_changelevel points to the current map ({}), which does not work", STRING(gpGlobals->mapname));
 	}
 
 	if (!FStringNull(pev->targetname))
@@ -1278,7 +1278,7 @@ void CChangeLevel::Spawn()
 	InitTrigger();
 	if ((pev->spawnflags & SF_CHANGELEVEL_USEONLY) == 0)
 		SetTouch(&CChangeLevel::TouchChangeLevel);
-	//	ALERT( at_console, "TRANSITION: %s (%s)\n", m_szMapName, m_szLandmarkName );
+	//	Logger->debug("TRANSITION: {} ({})", m_szMapName, m_szLandmarkName);
 }
 
 FILE_GLOBAL char st_szNextMap[cchMapNameMost];
@@ -1297,7 +1297,7 @@ edict_t* CChangeLevel::FindLandmark(const char* pLandmarkName)
 		else
 			pentLandmark = FIND_ENTITY_BY_STRING(pentLandmark, "targetname", pLandmarkName);
 	}
-	ALERT(at_error, "Can't find landmark %s\n", pLandmarkName);
+	Logger->error("Can't find landmark {}", pLandmarkName);
 	return nullptr;
 }
 
@@ -1333,7 +1333,7 @@ void CChangeLevel::ChangeLevelNow(CBaseEntity* pActivator)
 	CBaseEntity* pPlayer = UTIL_GetLocalPlayer();
 	if (!InTransitionVolume(pPlayer, m_szLandmarkName))
 	{
-		ALERT(at_aiconsole, "Player isn't in the transition volume %s, aborting\n", m_szLandmarkName);
+		Logger->debug("Player isn't in the transition volume {}, aborting", m_szLandmarkName);
 		return;
 	}
 
@@ -1365,8 +1365,8 @@ void CChangeLevel::ChangeLevelNow(CBaseEntity* pActivator)
 		strcpy(st_szNextSpot, m_szLandmarkName);
 		gpGlobals->vecLandmarkOffset = VARS(pentLandmark)->origin;
 	}
-	//	ALERT( at_console, "Level touches %d levels\n", ChangeList( levels, 16 ) );
-	ALERT(at_console, "CHANGE LEVEL: %s %s\n", st_szNextMap, st_szNextSpot);
+	//Logger->debug("Level touches {} levels", ChangeList(levels, std::size(levels)));
+	Logger->debug("CHANGE LEVEL: {} {}", st_szNextMap, st_szNextSpot);
 	CHANGE_LEVEL(st_szNextMap, st_szNextSpot);
 }
 
@@ -1508,7 +1508,7 @@ int CChangeLevel::ChangeList(LEVELLIST* pLevelList, int maxList)
 				CBaseEntity* pEntity = CBaseEntity::Instance(pent);
 				if (pEntity)
 				{
-					//					ALERT( at_console, "Trying %s\n", STRING(pEntity->pev->classname) );
+					// Logger->debug("Trying {}", STRING(pEntity->pev->classname));
 					int caps = pEntity->ObjectCaps();
 					if ((caps & FCAP_DONT_SAVE) == 0)
 					{
@@ -1525,13 +1525,13 @@ int CChangeLevel::ChangeList(LEVELLIST* pLevelList, int maxList)
 							entityFlags[entityCount] = flags;
 							entityCount++;
 							if (entityCount > MAX_ENTITY)
-								ALERT(at_error, "Too many entities across a transition!");
+								Logger->error("Too many entities across a transition!");
 						}
-						//						else
-						//							ALERT( at_console, "Failed %s\n", STRING(pEntity->pev->classname) );
+						//else
+						//	Logger->debug("Failed {}", STRING(pEntity->pev->classname));
 					}
-					//					else
-					//						ALERT( at_console, "DON'T SAVE %s\n", STRING(pEntity->pev->classname) );
+					//else
+					//	Logger->debug("DON'T SAVE {}", STRING(pEntity->pev->classname));
 				}
 				pent = pent->v.chain;
 			}
@@ -1546,8 +1546,8 @@ int CChangeLevel::ChangeList(LEVELLIST* pLevelList, int maxList)
 					// Flag it with the level number
 					saveHelper.EntityFlagsSet(index, entityFlags[j] | (1 << i));
 				}
-				//				else
-				//					ALERT( at_console, "Screened out %s\n", STRING(pEntList[j]->pev->classname) );
+				//else
+				//	Logger->debug("Screened out {}", STRING(pEntList[j]->pev->classname));
 			}
 		}
 	}
@@ -1672,7 +1672,7 @@ void CTriggerPush::Touch(CBaseEntity* pOther)
 			pevToucher->basevelocity = vecPush;
 
 			pevToucher->flags |= FL_BASEVELOCITY;
-			//			ALERT( at_console, "Vel %f, base %f\n", pevToucher->velocity.z, pevToucher->basevelocity.z );
+			// Logger->debug("Vel {}, base {}", pevToucher->velocity.z, pevToucher->basevelocity.z);
 		}
 	}
 }

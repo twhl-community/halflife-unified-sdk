@@ -85,7 +85,7 @@ bool COFSquadTalkMonster::OccupySlot(int iDesiredSlots)
 				// No, use this bit
 				pSquadLeader->m_afSquadSlots |= iMask;
 				m_iMySlot = iMask;
-				//				ALERT ( at_aiconsole, "Took slot %d - %d\n", i, m_hSquadLeader->m_afSquadSlots );
+				//				AILogger->debug("Took slot {} - {}", i, m_hSquadLeader->m_afSquadSlots);
 				return true;
 			}
 		}
@@ -101,7 +101,7 @@ void COFSquadTalkMonster::VacateSlot()
 {
 	if (m_iMySlot != bits_NO_SLOT && InSquad())
 	{
-		//		ALERT ( at_aiconsole, "Vacated Slot %d - %d\n", m_iMySlot, m_hSquadLeader->m_afSquadSlots );
+		//		AILogger->debug("Vacated Slot {} - {}", m_iMySlot, m_hSquadLeader->m_afSquadSlots);
 		MySquadLeader()->m_afSquadSlots &= ~m_iMySlot;
 		m_iMySlot = bits_NO_SLOT;
 	}
@@ -250,7 +250,7 @@ void COFSquadTalkMonster::SquadMakeEnemy(CBaseEntity* pEnemy)
 			PushEnemy(m_hEnemy, m_vecEnemyLKP);
 		}
 
-		ALERT(at_aiconsole, "Non-Squad friendly grunt adopted enemy of type %s\n", STRING(pEnemy->pev->classname));
+		AILogger->debug("Non-Squad friendly grunt adopted enemy of type {}", STRING(pEnemy->pev->classname));
 
 		// give them a new enemy
 		m_hEnemy = pEnemy;
@@ -260,7 +260,7 @@ void COFSquadTalkMonster::SquadMakeEnemy(CBaseEntity* pEnemy)
 
 	if (!pEnemy)
 	{
-		ALERT(at_console, "ERROR: SquadMakeEnemy() - pEnemy is nullptr!\n");
+		AILogger->error("ERROR: SquadMakeEnemy() - pEnemy is nullptr!");
 		return;
 	}
 
@@ -271,7 +271,7 @@ void COFSquadTalkMonster::SquadMakeEnemy(CBaseEntity* pEnemy)
 
 	if (!IsLeader() && fLeaderIsFollowing != fImFollowing)
 	{
-		ALERT(at_aiconsole, "Squad Member is not leader, and following state doesn't match in MakeEnemy\n");
+		AILogger->debug("Squad Member is not leader, and following state doesn't match in MakeEnemy");
 		return;
 	}
 
@@ -292,7 +292,7 @@ void COFSquadTalkMonster::SquadMakeEnemy(CBaseEntity* pEnemy)
 					squadMember->PushEnemy(squadMember->m_hEnemy, squadMember->m_vecEnemyLKP);
 				}
 
-				ALERT(at_aiconsole, "Non-Squad friendly grunt adopted enemy of type %s\n", STRING(pEnemy->pev->classname));
+				AILogger->debug("Non-Squad friendly grunt adopted enemy of type {}", STRING(pEnemy->pev->classname));
 
 				// give them a new enemy
 				squadMember->m_hEnemy = pEnemy;
@@ -314,7 +314,7 @@ void COFSquadTalkMonster::SquadMakeEnemy(CBaseEntity* pEnemy)
 			squadLeader->PushEnemy(squadLeader->m_hEnemy, squadLeader->m_vecEnemyLKP);
 		}
 
-		ALERT(at_aiconsole, "Non-Squad friendly grunt adopted enemy of type %s\n", STRING(pEnemy->pev->classname));
+		AILogger->debug("Non-Squad friendly grunt adopted enemy of type {}", STRING(pEnemy->pev->classname));
 
 		// give them a new enemy
 		squadLeader->m_hEnemy = pEnemy;
@@ -331,7 +331,7 @@ void COFSquadTalkMonster::SquadMakeEnemy(CBaseEntity* pEnemy)
 			squadLeader->PushEnemy(squadLeader->m_hEnemy, squadLeader->m_vecEnemyLKP);
 		}
 
-		ALERT(at_aiconsole, "Squad Leader friendly grunt adopted enemy of type %s\n", STRING(pEnemy->pev->classname));
+		AILogger->debug("Squad Leader friendly grunt adopted enemy of type {}", STRING(pEnemy->pev->classname));
 
 		// give them a new enemy
 		squadLeader->m_hEnemy = pEnemy;
@@ -497,7 +497,7 @@ void COFSquadTalkMonster::StartMonster()
 
 		if (0 != iSquadSize)
 		{
-			ALERT(at_aiconsole, "Squad of %d %s formed\n", iSquadSize, STRING(pev->classname));
+			AILogger->debug("Squad of {} {} formed", iSquadSize, STRING(pev->classname));
 		}
 	}
 
@@ -549,9 +549,9 @@ bool COFSquadTalkMonster::NoFriendlyFire()
 	backPlane.InitializePlane(gpGlobals->v_forward, pev->origin);
 
 	/*
-		ALERT ( at_console, "LeftPlane: %f %f %f : %f\n", leftPlane.m_vecNormal.x, leftPlane.m_vecNormal.y, leftPlane.m_vecNormal.z, leftPlane.m_flDist );
-		ALERT ( at_console, "RightPlane: %f %f %f : %f\n", rightPlane.m_vecNormal.x, rightPlane.m_vecNormal.y, rightPlane.m_vecNormal.z, rightPlane.m_flDist );
-		ALERT ( at_console, "BackPlane: %f %f %f : %f\n", backPlane.m_vecNormal.x, backPlane.m_vecNormal.y, backPlane.m_vecNormal.z, backPlane.m_flDist );
+		AILogger->debug("LeftPlane: {} : {}", leftPlane.m_vecNormal, leftPlane.m_flDist);
+		AILogger->debug("RightPlane: {} : {}", rightPlane.m_vecNormal, rightPlane.m_flDist);
+		AILogger->debug("BackPlane: {} : {}", backPlane.m_vecNormal, backPlane.m_flDist);
 	*/
 
 	COFSquadTalkMonster* pSquadLeader = MySquadLeader();
@@ -701,7 +701,7 @@ void COFSquadTalkMonster::FollowerUse(CBaseEntity* pActivator, CBaseEntity* pCal
 			LimitFollowers(pCaller, 6);
 
 			if ((m_afMemory & bits_MEMORY_PROVOKED) != 0)
-				ALERT(at_console, "I'm not following you, you evil person!\n");
+				AILogger->debug("I'm not following you, you evil person!");
 			else
 			{
 				StartFollowing(pCaller);

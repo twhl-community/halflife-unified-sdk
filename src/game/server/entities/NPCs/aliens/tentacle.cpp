@@ -375,7 +375,7 @@ bool CTentacle::KeyValue(KeyValueData* pkvd)
 				}
 				else
 				{
-					ALERT(at_console, "Invalid tentacle height index \"%s\"\n", pkvd->szKeyName);
+					AILogger->debug("Invalid tentacle height index \"{}\"", pkvd->szKeyName);
 				}
 
 				return true;
@@ -499,10 +499,10 @@ void CTentacle::Test()
 //
 void CTentacle::Cycle()
 {
-	// ALERT( at_console, "%s %.2f %d %d\n", STRING( pev->targetname ), pev->origin.z, m_MonsterState, m_IdealMonsterState );
+	// AILogger->debug("{} {:.2f} {} {}", STRING( pev->targetname ), pev->origin.z, m_MonsterState, m_IdealMonsterState);
 	pev->nextthink = gpGlobals->time + 0.1;
 
-	// ALERT( at_console, "%s %d %d %d %f %f\n", STRING( pev->targetname ), pev->sequence, m_iGoalAnim, m_iDir, pev->framerate, pev->health );
+	// AILogger->debug("{} {} {} {} {} {}", STRING(pev->targetname), pev->sequence, m_iGoalAnim, m_iDir, pev->framerate, pev->health);
 
 	if (m_MonsterState == MONSTERSTATE_SCRIPT || m_IdealMonsterState == MONSTERSTATE_SCRIPT)
 	{
@@ -554,7 +554,7 @@ void CTentacle::Cycle()
 		if (m_flSoundYaw > 180)
 			m_flSoundYaw -= 360;
 
-		// ALERT( at_console, "sound %d %.0f\n", m_iSoundLevel, m_flSoundYaw );
+		// AILogger->debug("sound {} {:.0f}", m_iSoundLevel, m_flSoundYaw);
 		if (m_flSoundTime < gpGlobals->time)
 		{
 			// play "I hear new something" sound
@@ -602,7 +602,7 @@ void CTentacle::Cycle()
 
 	if (m_fSequenceFinished)
 	{
-		// ALERT( at_console, "%s done %d %d\n", STRING( pev->targetname ), pev->sequence, m_iGoalAnim );
+		// AILogger->debug("{} done {} {}", STRING(pev->targetname), pev->sequence, m_iGoalAnim);
 		if (pev->health <= 1)
 		{
 			m_iGoalAnim = TENTACLE_ANIM_Pit_Idle;
@@ -731,7 +731,7 @@ void CTentacle::Cycle()
 			vecSrc = pev->origin + Vector(0, 0, MyHeight() + 8);
 			UTIL_TraceLine(vecSrc, vecSrc + gpGlobals->v_forward * 512, ignore_monsters, ENT(pev), &tr2);
 
-			// ALERT( at_console, "%f %f\n", tr1.flFraction * 512, tr2.flFraction * 512 );
+			// AILogger->debug("{} {}", tr1.flFraction * 512, tr2.flFraction * 512);
 
 			m_flTapRadius = SetBlending(0, RANDOM_FLOAT(tr1.flFraction * 512, tr2.flFraction * 512));
 		}
@@ -741,7 +741,7 @@ void CTentacle::Cycle()
 			break;
 		}
 		pev->view_ofs.z = MyHeight();
-		// ALERT( at_console, "seq %d\n", pev->sequence );
+		// AILogger->debug("seq {}", pev->sequence);
 	}
 
 	if (m_flPrevSoundTime + 2.0 > gpGlobals->time)
@@ -760,7 +760,7 @@ void CTentacle::Cycle()
 
 void CTentacle::CommandUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
-	// ALERT( at_console, "%s triggered %d\n", STRING( pev->targetname ), useType );
+	// AILogger->debug("{} triggered {}", STRING(pev->targetname), useType);
 	switch (useType)
 	{
 	case USE_OFF:
@@ -771,7 +771,7 @@ void CTentacle::CommandUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TY
 	case USE_ON:
 		if (pActivator)
 		{
-			// ALERT( at_console, "insert sound\n");
+			// AILogger->debug("insert sound");
 			CSoundEnt::InsertSound(bits_SOUND_WORLD, pActivator->pev->origin, 1024, 1.0);
 		}
 		break;
@@ -816,9 +816,9 @@ void CTentacle::DieThink()
 			}
 		}
 
-		// ALERT( at_console, "%d : %d => ", pev->sequence, m_iGoalAnim );
+		//const int previousSequence = pev->sequence;
 		pev->sequence = FindTransition(pev->sequence, m_iGoalAnim, &m_iDir);
-		// ALERT( at_console, "%d\n", pev->sequence );
+		// AILogger->debug("{} : {} => {}", previousSequence, m_iGoalAnim, pev->sequence);
 
 		if (m_iDir > 0)
 		{
@@ -1028,12 +1028,12 @@ void CTentacle::HitTouch(CBaseEntity* pOther)
 	if (tr.iHitgroup >= 3)
 	{
 		pOther->TakeDamage(pev, pev, m_iHitDmg, DMG_CRUSH);
-		// ALERT( at_console, "wack %3d : ", m_iHitDmg );
+		// AILogger->debug("wack {:3d} : ", m_iHitDmg);
 	}
 	else if (tr.iHitgroup != 0)
 	{
 		pOther->TakeDamage(pev, pev, 20, DMG_CRUSH);
-		// ALERT( at_console, "tap  %3d : ", 20 );
+		// AILogger->debug("tap  {:3d} : ", 20);
 	}
 	else
 	{
@@ -1042,9 +1042,7 @@ void CTentacle::HitTouch(CBaseEntity* pOther)
 
 	m_flHitTime = gpGlobals->time + 0.5;
 
-	// ALERT( at_console, "%s : ", STRING( tr.pHit->v.classname ) );
-
-	// ALERT( at_console, "%.0f : %s : %d\n", pev->angles.y, STRING( pOther->pev->classname ), tr.iHitgroup );
+	// AILogger->debug("{} : {.0f} : {} : {}", STRING(tr.pHit->v.classname), pev->angles.y, STRING(pOther->pev->classname), tr.iHitgroup);
 }
 
 

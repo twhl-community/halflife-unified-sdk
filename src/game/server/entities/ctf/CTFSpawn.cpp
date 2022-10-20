@@ -45,7 +45,7 @@ void CTFSpawn::Spawn()
 {
 	if (team_no < CTFTeam::None || team_no > CTFTeam::OpposingForce)
 	{
-		ALERT(at_console, "Teamspawnpoint with an invalid team_no of %d\n", team_no);
+		Logger->debug("Teamspawnpoint with an invalid team_no of {}", static_cast<int>(team_no));
 		return;
 	}
 

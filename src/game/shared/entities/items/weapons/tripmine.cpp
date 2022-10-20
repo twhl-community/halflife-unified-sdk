@@ -180,7 +180,7 @@ void CTripmineGrenade::PowerupThink()
 			STOP_SOUND(ENT(pev), CHAN_BODY, "weapons/mine_charge.wav");
 			SetThink(&CTripmineGrenade::SUB_Remove);
 			pev->nextthink = gpGlobals->time + 0.1;
-			ALERT(at_console, "WARNING:Tripmine at %.0f, %.0f, %.0f removed\n", pev->origin.x, pev->origin.y, pev->origin.z);
+			AILogger->debug("WARNING:Tripmine at {:.0f} removed\n", pev->origin);
 			KillBeam();
 			return;
 		}
@@ -198,7 +198,7 @@ void CTripmineGrenade::PowerupThink()
 		pev->nextthink = gpGlobals->time + 0.1;
 		return;
 	}
-	// ALERT( at_console, "%d %.0f %.0f %0.f\n", pev->owner, m_pOwner->pev->origin.x, m_pOwner->pev->origin.y, m_pOwner->pev->origin.z );
+	// AILogger->debug("{} {:.0f}", pev->owner, m_pOwner->pev->origin);
 
 	if (gpGlobals->time > m_flPowerUp)
 	{
@@ -229,7 +229,7 @@ void CTripmineGrenade::MakeBeam()
 {
 	TraceResult tr;
 
-	// ALERT( at_console, "serverflags %f\n", gpGlobals->serverflags );
+	// AIlogger->debug("serverflags {}", gpGlobals->serverflags);
 
 	UTIL_TraceLine(pev->origin, m_vecEnd, dont_ignore_monsters, ENT(pev), &tr);
 
@@ -263,7 +263,7 @@ void CTripmineGrenade::BeamBreakThink()
 	gpGlobals->trace_flags = FTRACE_SIMPLEBOX;
 	UTIL_TraceLine(pev->origin, m_vecEnd, dont_ignore_monsters, ENT(pev), &tr);
 
-	// ALERT( at_console, "%f : %f\n", tr.flFraction, m_flBeamLength );
+	// AILogger->debug("{} : {}", tr.flFraction, m_flBeamLength);
 
 	// respawn detect.
 	if (!m_pBeam)
@@ -480,7 +480,7 @@ void CTripmine::PrimaryAttack()
 		}
 		else
 		{
-			// ALERT( at_console, "no deploy\n" );
+			// WeaponsLogger->debug("no deploy");
 		}
 	}
 	else

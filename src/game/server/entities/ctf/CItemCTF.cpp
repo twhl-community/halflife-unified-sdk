@@ -56,7 +56,7 @@ void CItemCTF::Spawn()
 
 	if (DROP_TO_FLOOR(edict()) == 0)
 	{
-		ALERT(at_error, "Item %s fell out of level at %f,%f,%f", STRING(pev->classname), pev->origin.x, pev->origin.y, pev->origin.z);
+		CBaseEntity::Logger->error("Item {} fell out of level at {}", STRING(pev->classname), pev->origin);
 		UTIL_Remove(this);
 		return;
 	}
@@ -197,7 +197,7 @@ void CItemCTF::DropThink()
 	}
 
 	if (searchedForSpawns && nTested > 0)
-		ALERT(at_console, "Warning: No available spawn points found.  Powerup returned to original coordinates.");
+		CBaseEntity::Logger->debug("Warning: No available spawn points found.  Powerup returned to original coordinates.");
 
 	m_pLastSpawn = pSpawn;
 
@@ -205,7 +205,7 @@ void CItemCTF::DropThink()
 
 	if (0 == g_engfuncs.pfnDropToFloor(edict()))
 	{
-		ALERT(at_error, "Item %s fell out of level at %f,%f,%f", STRING(pev->classname), pev->origin.x, pev->origin.y, pev->origin.z);
+		CBaseEntity::Logger->error("Item {} fell out of level at {}", STRING(pev->classname), pev->origin);
 		UTIL_Remove(this);
 	}
 }

@@ -90,13 +90,13 @@ void CPathCorner::Touch(CBaseEntity* pOther)
 	// UNDONE: support non-zero flWait
 	/*
 	if (m_flWait != 0)
-		ALERT(at_warning, "Non-zero path-cornder waits NYI");
+		Logger->warning("Non-zero path-cornder waits NYI");
 	*/
 
 	// Find the next "stop" on the path, make it the goal of the "toucher".
 	if (FStringNull(pev->target))
 	{
-		ALERT(at_warning, "PathCornerTouch: no next stop specified");
+		Logger->warning("PathCornerTouch: no next stop specified");
 	}
 
 	pOther->m_pGoalEnt = CBaseEntity::Instance(FIND_ENTITY_BY_TARGETNAME(nullptr, STRING(pev->target)));
@@ -104,7 +104,7 @@ void CPathCorner::Touch(CBaseEntity* pOther)
 	// If "next spot" was not found (does not exist - level design error)
 	if (!pOther->m_pGoalEnt)
 	{
-		ALERT(at_console, "PathCornerTouch--%s couldn't find next stop in path: %s", STRING(pev->classname), STRING(pev->target));
+		Logger->debug("PathCornerTouch--{} couldn't find next stop in path: {}", STRING(pev->classname), STRING(pev->target));
 		return;
 	}
 
@@ -189,7 +189,7 @@ void CPathTrack::Link()
 			}
 		}
 		else
-			ALERT(at_console, "Dead end link %s\n", STRING(pev->target));
+			Logger->debug("Dead end link {}", STRING(pev->target));
 	}
 
 	// Find "alternate" path
@@ -385,7 +385,7 @@ CPathTrack* CPathTrack::Nearest(Vector origin)
 		deadCount++;
 		if (deadCount > 9999)
 		{
-			ALERT(at_error, "Bad sequence of path_tracks from %s", STRING(pev->targetname));
+			Logger->error("Bad sequence of path_tracks from {}", STRING(pev->targetname));
 			return nullptr;
 		}
 		delta = origin - ppath->pev->origin;

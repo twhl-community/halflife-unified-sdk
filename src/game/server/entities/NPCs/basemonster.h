@@ -42,6 +42,8 @@ private:
 	int m_afConditions;
 
 public:
+	static inline std::shared_ptr<spdlog::logger> AILogger;
+
 	typedef enum
 	{
 		SCRIPT_PLAYING = 0, // Playing the sequence

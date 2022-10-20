@@ -192,7 +192,7 @@ void CSqueakGrenade::GibMonster()
 
 void CSqueakGrenade::HuntThink()
 {
-	// ALERT( at_console, "think\n" );
+	// AILogger->debug("think");
 
 	if (!IsInWorld())
 	{
@@ -277,9 +277,8 @@ void CSqueakGrenade::HuntThink()
 		if (flAdj > 1.2)
 			flAdj = 1.2;
 
-		// ALERT( at_console, "think : enemy\n");
-
-		// ALERT( at_console, "%.0f %.2f %.2f %.2f\n", flVel, m_vecTarget.x, m_vecTarget.y, m_vecTarget.z );
+		// AILogger->debug("think : enemy");
+		// AILogger->debug("{:.0f} {:.2f}", flVel, m_vecTarget);
 
 		pev->velocity = pev->velocity * flAdj + m_vecTarget * 300;
 	}
@@ -343,7 +342,7 @@ void CSqueakGrenade::SuperBounceTouch(CBaseEntity* pOther)
 			// and it's not another squeakgrenade
 			if (tr.pHit->v.modelindex != pev->modelindex)
 			{
-				// ALERT( at_console, "hit enemy\n");
+				// AILogger->debug("hit enemy");
 				ClearMultiDamage();
 				pOther->TraceAttack(pev, GetSkillFloat("snark_dmg_bite"sv), gpGlobals->v_forward, &tr, DMG_SLASH);
 				if (m_hOwner != nullptr)
@@ -361,7 +360,7 @@ void CSqueakGrenade::SuperBounceTouch(CBaseEntity* pOther)
 		}
 		else
 		{
-			// ALERT( at_console, "been hit\n");
+			// AILogger->debug("been hit");
 		}
 	}
 

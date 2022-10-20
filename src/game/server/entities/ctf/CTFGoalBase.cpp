@@ -71,14 +71,7 @@ void CTFGoalBase::Spawn()
 
 	if (0 == g_engfuncs.pfnDropToFloor(edict()))
 	{
-		ALERT(
-			at_error,
-			"Item %s fell out of level at %f,%f,%f",
-			STRING(pev->classname),
-			pev->origin.x,
-			pev->origin.y,
-			pev->origin.z);
-
+		CBaseEntity::Logger->error("Item {} fell out of level at {}", STRING(pev->classname), pev->origin);
 		UTIL_Remove(this);
 	}
 	else

@@ -15,6 +15,9 @@
 
 #pragma once
 
+#include <memory>
+#include <spdlog/logger.h>
+
 #include "effects.h"
 #include "weaponinfo.h"
 
@@ -242,6 +245,8 @@ void AddAmmoNameToAmmoRegistry(const char* szAmmoname, const char* weaponName);
 class CBasePlayerItem : public CBaseAnimating
 {
 public:
+	static inline std::shared_ptr<spdlog::logger> WeaponsLogger;
+
 	void SetObjectCollisionBox() override;
 
 	bool Save(CSave& save) override;

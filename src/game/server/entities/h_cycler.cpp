@@ -70,7 +70,7 @@ void CCycler::Spawn()
 
 	if (!szModel || '\0' == *szModel)
 	{
-		ALERT(at_error, "cycler at %.0f %.0f %0.f missing modelname", pev->origin.x, pev->origin.y, pev->origin.z);
+		CBaseEntity::Logger->error("cycler at {:.0f} missing modelname", pev->origin);
 		REMOVE_ENTITY(ENT(pev));
 		return;
 	}
@@ -171,7 +171,7 @@ bool CCycler::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float 
 		pev->framerate = 1.0;
 		StudioFrameAdvance(0.1);
 		pev->framerate = 0;
-		ALERT(at_console, "sequence: %d, frame %.0f\n", pev->sequence, pev->frame);
+		CBaseEntity::Logger->debug("sequence: {}, frame {:.0f}", pev->sequence, pev->frame);
 	}
 
 	return false;
@@ -241,7 +241,7 @@ void CCyclerSprite::Think()
 void CCyclerSprite::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
 	m_animate = !m_animate;
-	ALERT(at_console, "Sprite: %s\n", STRING(pev->model));
+	CBaseEntity::Logger->debug("Sprite: {}", STRING(pev->model));
 }
 
 

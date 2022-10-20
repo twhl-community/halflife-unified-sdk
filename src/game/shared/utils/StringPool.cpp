@@ -7,7 +7,7 @@ const char* StringPool::Allocate(const char* string)
 	//Treat null pointers as empty strings
 	if (!string)
 	{
-		ALERT(at_warning, "nullptr string passed to StringPool::Allocate\n");
+		ALERT(at_warning, "NULL string passed to StringPool::Allocate\n");
 		return "";
 	}
 

@@ -15,6 +15,10 @@
 
 #pragma once
 
+#include <memory>
+
+#include <spdlog/logger.h>
+
 #include "scriptevent.h"
 
 #define SF_SCRIPT_WAITTILLSEEN 1
@@ -50,6 +54,8 @@ enum SS_INTERRUPT
 class CCineMonster : public CBaseMonster
 {
 public:
+	static inline std::shared_ptr<spdlog::logger> AIScriptLogger;
+
 	void Spawn() override;
 	bool KeyValue(KeyValueData* pkvd) override;
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;

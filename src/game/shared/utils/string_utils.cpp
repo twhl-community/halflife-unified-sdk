@@ -123,7 +123,7 @@ void UTIL_StringToVector(float* pVector, std::string_view pString)
 	if (j < 2)
 	{
 		/*
-		ALERT( at_error, "Bad field in entity!! %s:%s == \"%s\"\n",
+		CBaseEntity::Logger->error("Bad field in entity!! {}:{} == \"{}\"",
 			pkvd->szClassName, pkvd->szKeyName, pkvd->szValue );
 		*/
 		for (j = j + 1; j < 3; j++)

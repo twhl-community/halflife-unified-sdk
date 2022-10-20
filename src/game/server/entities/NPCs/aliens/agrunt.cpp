@@ -954,7 +954,7 @@ void CAGrunt::StartTask(Task_t* pTask)
 		}
 		else
 		{
-			ALERT(at_aiconsole, "AGruntGetPathToEnemyCorpse failed!!\n");
+			AILogger->debug("AGruntGetPathToEnemyCorpse failed!!");
 			TaskFail();
 		}
 	}
@@ -1028,7 +1028,7 @@ void CAGrunt::StartTask(Task_t* pTask)
 		}
 		else
 		{
-			ALERT(at_aiconsole, "AGRunt - no enemy monster ptr!!!\n");
+			AILogger->debug("AGRunt - no enemy monster ptr!!!");
 			TaskFail();
 		}
 		break;

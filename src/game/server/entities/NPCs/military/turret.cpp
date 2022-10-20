@@ -541,11 +541,7 @@ void CBaseTurret::ActiveThink()
 
 	UTIL_MakeAimVectors(m_vecCurAngles);
 
-	/*
-	ALERT( at_console, "%.0f %.0f : %.2f %.2f %.2f\n",
-		m_vecCurAngles.x, m_vecCurAngles.y,
-		gpGlobals->v_forward.x, gpGlobals->v_forward.y, gpGlobals->v_forward.z );
-	*/
+	// AILogger->debug("{:.0f} {:.0f} : {:.2f}", m_vecCurAngles.x, m_vecCurAngles.y, gpGlobals->v_forward);
 
 	Vector vecLOS = vecDirToEnemy; //vecMid - m_vecLastSight;
 	vecLOS = vecLOS.Normalize();
@@ -588,7 +584,7 @@ void CBaseTurret::ActiveThink()
 		if (vec.y < 0)
 			vec.y += 360;
 
-		//ALERT(at_console, "[%.2f]", vec.x);
+		//const float previousPitch = vec.x;
 
 		if (vec.x < -180)
 			vec.x += 360;
@@ -614,7 +610,7 @@ void CBaseTurret::ActiveThink()
 				vec.x = -m_iMinPitch;
 		}
 
-		// ALERT(at_console, "->[%.2f]\n", vec.x);
+		// AILogger->debug("[{:.2f}]->[{:.2f}]", previousPitch, vec.x);
 
 		m_vecGoalAngles.y = vec.y;
 		m_vecGoalAngles.x = vec.x;
@@ -829,7 +825,7 @@ void CBaseTurret::SetTurretAnim(TURRET_ANIM anim)
 			pev->framerate = 1.0;
 			break;
 		}
-		//ALERT(at_console, "Turret anim #%d\n", anim);
+		//AILogger->debug("Turret anim #{}", anim);
 	}
 }
 
@@ -1129,7 +1125,7 @@ bool CBaseTurret::MoveTurret()
 		if (flDist < (0.05 * m_iBaseTurnRate))
 			m_vecCurAngles.y = m_vecGoalAngles.y;
 
-		//ALERT(at_console, "%.2f -> %.2f\n", m_vecCurAngles.y, y);
+		//AILogger->debug("{:.2f} -> {:.2f}", m_vecCurAngles.y, y);
 		if (m_iOrientation == 0)
 			SetBoneController(0, m_vecCurAngles.y - pev->angles.y);
 		else
@@ -1140,7 +1136,7 @@ bool CBaseTurret::MoveTurret()
 	if (!state)
 		m_fTurnRate = m_iBaseTurnRate;
 
-	//ALERT(at_console, "(%.2f, %.2f)->(%.2f, %.2f)\n", m_vecCurAngles.x,
+	//AILogger->debug("({:.2f}, {:.2f})->({:.2f}, {:.2f})", m_vecCurAngles.x,
 	//	m_vecCurAngles.y, m_vecGoalAngles.x, m_vecGoalAngles.y);
 	return state;
 }

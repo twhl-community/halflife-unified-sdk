@@ -67,7 +67,7 @@ void CWorldItem::Spawn()
 
 	if (!pEntity)
 	{
-		ALERT(at_console, "unable to create world_item %d\n", m_iType);
+		CBaseEntity::Logger->debug("unable to create world_item {}", m_iType);
 	}
 	else
 	{
@@ -104,7 +104,7 @@ void CItem::Spawn()
 
 	if (DROP_TO_FLOOR(ENT(pev)) == 0)
 	{
-		ALERT(at_error, "Item %s fell out of level at %f,%f,%f", STRING(pev->classname), pev->origin.x, pev->origin.y, pev->origin.z);
+		CBaseEntity::Logger->error("Item {} fell out of level at {}", STRING(pev->classname), pev->origin);
 		UTIL_Remove(this);
 		return;
 	}

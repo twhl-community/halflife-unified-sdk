@@ -160,6 +160,7 @@ class COFSquadTalkMonster;
 class CBaseEntity
 {
 public:
+	static inline std::shared_ptr<spdlog::logger> Logger;
 	static inline std::shared_ptr<spdlog::logger> IOLogger;
 
 	// Constructor.  Set engine to use C/C++ callback functions
@@ -374,7 +375,7 @@ private:
 	void FunctionCheck(const void* pFunction, const char* name)
 	{
 		if (pFunction && !NAME_FOR_FUNCTION((uint32)pFunction))
-			ALERT(at_error, "No EXPORT: %s:%s (%08lx)\n", GetClassname(), name, (uint32)pFunction);
+			CBaseEntity::Logger->error("No EXPORT: {}:{} ({:#08X})", GetClassname(), name, (uint32)pFunction);
 	}
 
 	template <typename T, typename Dest, typename Source>
@@ -384,7 +385,7 @@ private:
 		if (nullptr == dynamic_cast<T*>(this))
 		{
 			//If this happens, it means you tried to set a function from a class that this entity doesn't inherit from.
-			ALERT(at_error, "Trying to set function that is not a member of this entity's class hierarchy: %s:%s\n",
+			CBaseEntity::Logger->error("Trying to set function that is not a member of this entity's class hierarchy: {}:{}",
 				GetClassname(), name);
 		}
 #endif

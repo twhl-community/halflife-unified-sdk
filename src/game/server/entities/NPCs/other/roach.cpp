@@ -226,7 +226,7 @@ void CRoach::MonsterThink()
 			if (HasConditions(bits_COND_SEE_FEAR))
 			{
 				// if see something scary
-				//ALERT ( at_aiconsole, "Scared\n" );
+				//AILogger->debug("Scared");
 				Eat(30 + (RANDOM_LONG(0, 14))); // roach will ignore food for 30 to 45 seconds
 				PickNewDest(ROACH_SCARED_BY_ENT);
 				SetActivity(ACT_WALK);
@@ -234,7 +234,7 @@ void CRoach::MonsterThink()
 			else if (RANDOM_LONG(0, 149) == 1)
 			{
 				// if roach doesn't see anything, there's still a chance that it will move. (boredom)
-				//ALERT ( at_aiconsole, "Bored\n" );
+				//AILogger->debug("Bored");
 				PickNewDest(ROACH_BORED);
 				SetActivity(ACT_WALK);
 
@@ -257,7 +257,7 @@ void CRoach::MonsterThink()
 			if (GETENTITYILLUM(ENT(pev)) > m_flLastLightLevel)
 			{
 				// someone turned on lights!
-				//ALERT ( at_console, "Lights!\n" );
+				//AILogger->debug("Lights!");
 				PickNewDest(ROACH_SCARED_BY_LIGHT);
 				SetActivity(ACT_WALK);
 			}
@@ -451,7 +451,7 @@ void CRoach::Look(int iDistance)
 				case R_NO:
 					break;
 				default:
-					ALERT(at_console, "%s can't asses %s\n", STRING(pev->classname), STRING(pSightEnt->pev->classname));
+					AILogger->debug("{} can't asses {}", STRING(pev->classname), STRING(pSightEnt->pev->classname));
 					break;
 				}
 			}

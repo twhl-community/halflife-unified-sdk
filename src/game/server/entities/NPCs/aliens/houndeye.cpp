@@ -153,7 +153,7 @@ bool CHoundeye::FValidateHintType(short sHint)
 		}
 	}
 
-	ALERT(at_aiconsole, "Couldn't validate hint type");
+	AILogger->debug("Couldn't validate hint type");
 	return false;
 }
 
@@ -530,7 +530,7 @@ void CHoundeye::WriteBeamColor()
 			bBlue = 211;
 			break;
 		default:
-			ALERT(at_aiconsole, "Unsupported Houndeye SquadSize!\n");
+			AILogger->debug("Unsupported Houndeye SquadSize!");
 			bRed = 188;
 			bGreen = 220;
 			bBlue = 255;
@@ -660,7 +660,7 @@ void CHoundeye::SonicAttack()
 					}
 				}
 
-				//ALERT ( at_aiconsole, "Damage: %f\n", flAdjustedDamage );
+				//AILogger->debug("Damage: {}", flAdjustedDamage);
 
 				if (flAdjustedDamage > 0)
 				{
@@ -1348,7 +1348,7 @@ void CDeadHoundeye::Spawn()
 
 	if (pev->sequence == -1)
 	{
-		ALERT(at_console, "Dead houndeye with bad pose\n");
+		AILogger->debug("Dead houndeye with bad pose");
 	}
 
 	MonsterInitDead();

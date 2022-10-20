@@ -672,7 +672,7 @@ void CGargantua::FlameDamage(Vector vecStart, Vector vecEnd, entvars_t* pevInfli
 					flAdjustedDamage = flDamage;
 				}
 
-				// ALERT( at_console, "hit %s\n", STRING( pEntity->pev->classname ) );
+				// AILogger->debug("hit {}", STRING(pEntity->pev->classname));
 				if (tr.flFraction != 1.0)
 				{
 					ClearMultiDamage();
@@ -816,7 +816,7 @@ void CGargantua::Precache()
 
 void CGargantua::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
 {
-	ALERT(at_aiconsole, "CGargantua::TraceAttack\n");
+	AILogger->debug("CGargantua::TraceAttack");
 
 	if (!IsAlive())
 	{
@@ -855,7 +855,7 @@ void CGargantua::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecD
 
 bool CGargantua::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
-	ALERT(at_aiconsole, "CGargantua::TakeDamage\n");
+	AILogger->debug("CGargantua::TakeDamage");
 
 	if (IsAlive())
 	{
@@ -909,7 +909,7 @@ void CGargantua::Killed(entvars_t* pevAttacker, int iGib)
 //=========================================================
 bool CGargantua::CheckMeleeAttack1(float flDot, float flDist)
 {
-	//	ALERT(at_aiconsole, "CheckMelee(%f, %f)\n", flDot, flDist);
+	//	AILogger->debug("CheckMelee({}, {})", flDot, flDist);
 
 	if (flDot >= 0.7)
 	{
@@ -923,7 +923,7 @@ bool CGargantua::CheckMeleeAttack1(float flDot, float flDist)
 // Flame thrower madness!
 bool CGargantua::CheckMeleeAttack2(float flDot, float flDist)
 {
-	//	ALERT(at_aiconsole, "CheckMelee(%f, %f)\n", flDot, flDist);
+	//	AILogger->debug("CheckMelee({}, {})", flDot, flDist);
 
 	if (gpGlobals->time > m_flameTime)
 	{

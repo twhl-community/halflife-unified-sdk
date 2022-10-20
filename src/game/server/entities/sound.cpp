@@ -188,7 +188,7 @@ void CAmbientGeneric::Spawn()
 
 	if (FStringNull(pev->message) || strlen(szSoundFile) < 1)
 	{
-		ALERT(at_error, "EMPTY AMBIENT AT: %f, %f, %f\n", pev->origin.x, pev->origin.y, pev->origin.z);
+		Logger->error("EMPTY AMBIENT AT: {}", pev->origin);
 		pev->nextthink = gpGlobals->time + 0.1;
 		SetThink(&CAmbientGeneric::SUB_Remove);
 		return;
@@ -898,7 +898,7 @@ bool CAmbientMusic::KeyValue(KeyValueData* pkvd)
 
 		if (std::clamp(m_Command, AmbientMusicCommand::Play, AmbientMusicCommand::Stop) != m_Command)
 		{
-			ALERT(at_console, "Invalid ambient_music command %d, falling back to \"Stop\"\n", m_Command);
+			Logger->warn("Invalid ambient_music command {}, falling back to \"Stop\"", static_cast<int>(m_Command));
 			m_Command = AmbientMusicCommand::Stop;
 		}
 
@@ -910,7 +910,7 @@ bool CAmbientMusic::KeyValue(KeyValueData* pkvd)
 
 		if (std::clamp(m_TargetSelector, AmbientMusicTargetSelector::AllPlayers, AmbientMusicTargetSelector::Radius) != m_TargetSelector)
 		{
-			ALERT(at_console, "Invalid ambient_music target selector %d, falling back to \"All Players\"\n", m_TargetSelector);
+			Logger->warn("Invalid ambient_music target selector {}, falling back to \"All Players\"", static_cast<int>(m_TargetSelector));
 			m_TargetSelector = AmbientMusicTargetSelector::AllPlayers;
 		}
 
@@ -922,7 +922,7 @@ bool CAmbientMusic::KeyValue(KeyValueData* pkvd)
 
 		if (const float absolute = abs(m_Radius); absolute != m_Radius)
 		{
-			ALERT(at_console, "Negative ambient_music radius %f, using absolute value %f\n", m_Radius, absolute);
+			Logger->warn("Negative ambient_music radius {}, using absolute value {}", m_Radius, absolute);
 			m_Radius = absolute;
 		}
 
@@ -1007,7 +1007,7 @@ void CAmbientMusic::TriggerUse(CBaseEntity* pActivator, CBaseEntity* pCaller, US
 
 	case AmbientMusicTargetSelector::Radius:
 	{
-		ALERT(at_console, "Invalid target selector for ambient_music \"%s\"\n", GetTargetname());
+		Logger->error("Invalid target selector for ambient_music \"{}\"", GetTargetname());
 		break;
 	}
 	}
@@ -1285,7 +1285,7 @@ float TEXTURETYPE_PlaySound(TraceResult* ptr, Vector vecSrc, Vector vecEnd, int 
 			strcpy(szbuffer, pTextureName);
 			szbuffer[CBTEXTURENAMEMAX - 1] = 0;
 
-			// ALERT ( at_console, "texture hit: %s\n", szbuffer);
+			// Logger->debug("texture hit: {}", szbuffer);
 
 			// get texture type
 			chTextureType = PM_FindTextureType(szbuffer);
@@ -1456,7 +1456,7 @@ void CSpeaker::Spawn()
 
 	if (0 == m_preset && (FStringNull(pev->message) || strlen(szSoundFile) < 1))
 	{
-		ALERT(at_error, "SPEAKER with no Level/Sentence! at: %f, %f, %f\n", pev->origin.x, pev->origin.y, pev->origin.z);
+		Logger->error("SPEAKER with no Level/Sentence! at: {}", pev->origin);
 		pev->nextthink = gpGlobals->time + 0.1;
 		SetThink(&CSpeaker::SUB_Remove);
 		return;
@@ -1535,7 +1535,7 @@ void CSpeaker::SpeakerThink()
 		// make random announcement from sentence group
 
 		if (sentences::g_Sentences.PlayRndSz(ENT(pev), szSoundFile, flvolume, flattenuation, flags, pitch) < 0)
-			ALERT(at_console, "Level Design Error!\nSPEAKER has bad sentence group name: %s\n", szSoundFile);
+			Logger->debug("Level Design Error!: SPEAKER has bad sentence group name: {}", szSoundFile);
 
 		// set next announcement time for random 5 to 10 minute delay
 		pev->nextthink = gpGlobals->time +

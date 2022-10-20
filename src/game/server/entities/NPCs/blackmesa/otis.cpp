@@ -345,7 +345,7 @@ void CDeadOtis::Spawn()
 	pev->sequence = LookupSequence(m_szPoses[m_iPose]);
 	if (pev->sequence == -1)
 	{
-		ALERT(at_console, "Dead otis with bad pose\n");
+		AILogger->debug("Dead otis with bad pose");
 	}
 
 	MonsterInitDead();

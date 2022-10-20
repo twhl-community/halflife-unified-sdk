@@ -530,7 +530,7 @@ void CTalkMonster::RunTask(Task_t* pTask)
 	case TASK_TLK_EYECONTACT:
 		if (!IsMoving() && IsTalking() && m_hTalkTarget != nullptr)
 		{
-			// ALERT( at_console, "waiting %f\n", m_flStopTalkTime - gpGlobals->time );
+			// AILogger->debug( "waiting {}", m_flStopTalkTime - gpGlobals->time);
 			IdleHeadTurn(m_hTalkTarget->pev->origin);
 		}
 		else
@@ -556,7 +556,7 @@ void CTalkMonster::RunTask(Task_t* pTask)
 	case TASK_WAIT_FOR_MOVEMENT:
 		if (IsTalking() && m_hTalkTarget != nullptr)
 		{
-			// ALERT(at_console, "walking, talking\n");
+			// AILogger->debug("walking, talking");
 			IdleHeadTurn(m_hTalkTarget->pev->origin);
 		}
 		else
@@ -679,7 +679,7 @@ void CTalkMonster::HandleAnimEvent(MonsterEvent_t* pEvent)
 	case SCRIPT_EVENT_SENTENCE: // Play a named sentence group
 		ShutUpFriends();
 		PlaySentence(pEvent->options, RANDOM_FLOAT(2.8, 3.4), VOL_NORM, ATTN_IDLE);
-		//ALERT(at_console, "script event speak\n");
+		//AILogger->debug("script event speak");
 		break;
 
 	default:
@@ -1117,7 +1117,7 @@ Schedule_t* CTalkMonster::GetScheduleOfType(int Type)
 	case SCHED_TARGET_FACE:
 		// speak during 'use'
 		if (RANDOM_LONG(0, 99) < 2)
-			//ALERT ( at_console, "target chase speak\n" );
+			//AILogger->debug("target chase speak");
 			return slIdleSpeakWait;
 		else
 			return slIdleStand;
@@ -1152,7 +1152,7 @@ Schedule_t* CTalkMonster::GetScheduleOfType(int Type)
 		// talk about world
 		if (FOkToSpeak() && RANDOM_LONG(0, m_nSpeak * 2) == 0)
 		{
-			//ALERT ( at_console, "standing idle speak\n" );
+			//AILogger->debug("standing idle speak");
 			return slIdleSpeak;
 		}
 
@@ -1222,7 +1222,7 @@ void CTalkMonster::PrescheduleThink()
 	{
 		if (!HasMemory(bits_MEMORY_PROVOKED))
 		{
-			ALERT(at_console, "Talk Monster Pre-Provoked\n");
+			AILogger->debug("Talk Monster Pre-Provoked");
 			Remember(bits_MEMORY_PROVOKED);
 		}
 	}
@@ -1237,7 +1237,7 @@ void CTalkMonster::TrySmellTalk()
 	// clear smell bits periodically
 	if (gpGlobals->time > m_flLastSaidSmelled)
 	{
-		//		ALERT ( at_aiconsole, "Clear smell bits\n" );
+		//		AILogger->debug("Clear smell bits");
 		ClearBits(m_bitsSaid, bit_saidSmelled);
 	}
 	// smelled something?
@@ -1330,7 +1330,7 @@ void CTalkMonster::FollowerUse(CBaseEntity* pActivator, CBaseEntity* pCaller, US
 			LimitFollowers(pCaller, 1);
 
 			if ((m_afMemory & bits_MEMORY_PROVOKED) != 0)
-				ALERT(at_console, "I'm not following you, you evil person!\n");
+				AILogger->debug("I'm not following you, you evil person!");
 			else
 			{
 				StartFollowing(pCaller);

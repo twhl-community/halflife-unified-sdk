@@ -202,7 +202,7 @@ void CRpgRocket::FollowThink()
 	while ((pOther = UTIL_FindEntityByClassname(pOther, "laser_spot")) != nullptr)
 	{
 		UTIL_TraceLine(pev->origin, pOther->pev->origin, dont_ignore_monsters, ENT(pev), &tr);
-		// ALERT( at_console, "%f\n", tr.flFraction );
+		// WeaponsLogger->debug("{}", tr.flFraction);
 		if (tr.flFraction >= 0.90)
 		{
 			vecDir = pOther->pev->origin - pev->origin;
@@ -254,7 +254,7 @@ void CRpgRocket::FollowThink()
 			Detonate();
 		}
 	}
-	// ALERT( at_console, "%.0f\n", flSpeed );
+	// WeaponsLogger->debug("{:.0f}", flSpeed);
 
 	pev->nextthink = gpGlobals->time + 0.1;
 }

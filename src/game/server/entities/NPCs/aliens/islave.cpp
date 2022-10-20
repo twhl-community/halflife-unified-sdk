@@ -162,7 +162,7 @@ int CISlave::IRelationship(CBaseEntity* pTarget)
 
 void CISlave::CallForHelp(const char* szClassname, float flDist, EHANDLE hEnemy, Vector& vecLocation)
 {
-	// ALERT( at_aiconsole, "help " );
+	// AILogger->debug("help");
 
 	// skip ones not on my netname
 	if (FStringNull(pev->netname))
@@ -309,7 +309,7 @@ void CISlave::SetYawSpeed()
 //=========================================================
 void CISlave::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
-	// ALERT( at_console, "event %d : %f\n", pEvent->event, pev->frame );
+	// AILogger->debug("event {} : {}", pEvent->event, pev->frame);
 	switch (pEvent->event)
 	{
 	case ISLAVE_AE_CLAW:
@@ -672,7 +672,7 @@ Schedule_t* CISlave::GetSchedule()
 				}
 				if (HasConditions(bits_COND_SEE_ENEMY) && HasConditions(bits_COND_ENEMY_FACING_ME))
 				{
-					// ALERT( at_console, "exposed\n");
+					// AILogger->debug("exposed");
 					return GetScheduleOfType(SCHED_TAKE_COVER_FROM_ENEMY);
 				}
 			}
@@ -913,7 +913,7 @@ void CDeadISlave::Spawn()
 	pev->sequence = LookupSequence(m_szPoses[m_iPose]);
 	if (pev->sequence == -1)
 	{
-		ALERT(at_console, "Dead slave with bad pose\n");
+		AILogger->debug("Dead slave with bad pose");
 	}
 
 	MonsterInitDead();

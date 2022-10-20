@@ -190,7 +190,7 @@ void CMonsterMaker::MakeMonster()
 
 	if (FNullEnt(pent))
 	{
-		ALERT(at_console, "nullptr Ent in MonsterMaker!\n");
+		AILogger->debug("nullptr Ent in MonsterMaker!");
 		return;
 	}
 

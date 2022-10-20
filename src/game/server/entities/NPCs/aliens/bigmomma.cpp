@@ -590,7 +590,7 @@ bool CBigMomma::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, floa
 		{
 			pev->health = flDamage + 1;
 			Remember(bits_MEMORY_ADVANCE_NODE | bits_MEMORY_COMPLETED_NODE);
-			ALERT(at_aiconsole, "BM: Finished node health!!!\n");
+			AILogger->debug("BM: Finished node health!!!");
 		}
 	}
 
@@ -724,7 +724,7 @@ void CBigMomma::NodeStart(string_t iszNextNode)
 
 	if (!pTarget)
 	{
-		ALERT(at_aiconsole, "BM: Finished the path!!\n");
+		AILogger->debug("BM: Finished the path!!");
 		Remember(bits_MEMORY_PATH_FINISHED);
 		return;
 	}
@@ -924,18 +924,18 @@ void CBigMomma::StartTask(Task_t* pTask)
 		}
 		NodeStart(pev->netname);
 		TaskComplete();
-		ALERT(at_aiconsole, "BM: Found node %s\n", STRING(pev->netname));
+		AILogger->debug("BM: Found node {}", STRING(pev->netname));
 	}
 	break;
 
 	case TASK_NODE_DELAY:
 		m_nodeTime = gpGlobals->time + pTask->flData;
 		TaskComplete();
-		ALERT(at_aiconsole, "BM: FAIL! Delay %.2f\n", pTask->flData);
+		AILogger->debug("BM: FAIL! Delay {:.2f}", pTask->flData);
 		break;
 
 	case TASK_PROCESS_NODE:
-		ALERT(at_aiconsole, "BM: Reached node %s\n", STRING(pev->netname));
+		AILogger->debug("BM: Reached node {}", STRING(pev->netname));
 		NodeReach();
 		TaskComplete();
 		break;
@@ -949,7 +949,7 @@ void CBigMomma::StartTask(Task_t* pTask)
 		else
 			sequence = GetNodePresequence();
 
-		ALERT(at_aiconsole, "BM: Playing node sequence %s\n", STRING(sequence));
+		AILogger->debug("BM: Playing node sequence {}", STRING(sequence));
 		if (!FStringNull(sequence))
 		{
 			const int sequenceIndex = LookupSequence(STRING(sequence));
@@ -958,7 +958,7 @@ void CBigMomma::StartTask(Task_t* pTask)
 				pev->sequence = sequenceIndex;
 				pev->frame = 0;
 				ResetSequenceInfo();
-				ALERT(at_aiconsole, "BM: Sequence %s\n", STRING(GetNodeSequence()));
+				AILogger->debug("BM: Sequence {}", STRING(GetNodeSequence()));
 				return;
 			}
 		}
@@ -974,9 +974,9 @@ void CBigMomma::StartTask(Task_t* pTask)
 	case TASK_WAIT_NODE:
 		m_flWait = gpGlobals->time + GetNodeDelay();
 		if ((m_hTargetEnt->pev->spawnflags & SF_INFOBM_WAIT) != 0)
-			ALERT(at_aiconsole, "BM: Wait at node %s forever\n", STRING(pev->netname));
+			AILogger->debug("BM: Wait at node {} forever", STRING(pev->netname));
 		else
-			ALERT(at_aiconsole, "BM: Wait at node %s for %.2f\n", STRING(pev->netname), GetNodeDelay());
+			AILogger->debug("BM: Wait at node {} for {:.2f}", STRING(pev->netname), GetNodeDelay());
 		break;
 
 
@@ -1003,7 +1003,7 @@ void CBigMomma::StartTask(Task_t* pTask)
 			}
 		}
 	}
-		ALERT(at_aiconsole, "BM: Moving to node %s\n", STRING(pev->netname));
+		AILogger->debug("BM: Moving to node {}", STRING(pev->netname));
 
 		break;
 
@@ -1039,7 +1039,7 @@ void CBigMomma::RunTask(Task_t* pTask)
 			// overlap the range to prevent oscillation
 			if ((distance < GetNodeRange()) || MovementIsComplete())
 			{
-				ALERT(at_aiconsole, "BM: Reached node!\n");
+				AILogger->debug("BM: Reached node!");
 				TaskComplete();
 				RouteClear(); // Stop moving
 			}
@@ -1054,7 +1054,7 @@ void CBigMomma::RunTask(Task_t* pTask)
 
 		if (gpGlobals->time > m_flWaitFinished)
 			TaskComplete();
-		ALERT(at_aiconsole, "BM: The WAIT is over!\n");
+		AILogger->debug("BM: The WAIT is over!");
 		break;
 
 	case TASK_PLAY_NODE_PRESEQUENCE:

@@ -223,7 +223,7 @@ void CEgon::Fire(const Vector& vecOrigSrc, const Vector& vecDir)
 	pentIgnore = m_pPlayer->edict();
 	Vector tmpSrc = vecOrigSrc + gpGlobals->v_up * -8 + gpGlobals->v_right * 3;
 
-	// ALERT( at_console, "." );
+	// WeaponsLogger->debug(".");
 
 	UTIL_TraceLine(vecOrigSrc, vecDest, dont_ignore_monsters, pentIgnore, &tr);
 

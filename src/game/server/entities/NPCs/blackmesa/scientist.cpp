@@ -1119,7 +1119,7 @@ void CDeadScientist::Spawn()
 	pev->sequence = LookupSequence(m_szPoses[m_iPose]);
 	if (pev->sequence == -1)
 	{
-		ALERT(at_console, "Dead scientist with bad pose\n");
+		AILogger->debug("Dead scientist with bad pose");
 	}
 
 	//	pev->skin += 2; // use bloody skin -- UNDONE: Turn this back on when we have a bloody skin again!
@@ -1289,7 +1289,7 @@ void CSittingScientist::SittingThink()
 				else
 					pev->sequence = m_baseSequence + SITTING_ANIM_sitlookright;
 
-				//ALERT(at_console, "sitting speak\n");
+				//AILogger->debug("sitting speak");
 			}
 		}
 		else if (i < 60)
@@ -1298,7 +1298,7 @@ void CSittingScientist::SittingThink()
 			m_headTurn = RANDOM_LONG(0, 8) * 10 - 40;
 			if (RANDOM_LONG(0, 99) < 5)
 			{
-				//ALERT(at_console, "sitting speak2\n");
+				//AILogger->debug("sitting speak2");
 				FIdleSpeak();
 			}
 		}

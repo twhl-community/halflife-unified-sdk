@@ -893,7 +893,7 @@ void COFVoltigore::StartTask(Task_t* pTask)
 		}
 		else
 		{
-			ALERT(at_aiconsole, "VoltigoreGetPathToEnemyCorpse failed!!\n");
+			AILogger->debug("VoltigoreGetPathToEnemyCorpse failed!!");
 			TaskFail();
 		}
 	}

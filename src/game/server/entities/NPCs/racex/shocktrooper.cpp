@@ -1797,7 +1797,7 @@ void CShockTrooper::SetActivity(Activity NewActivity)
 	else
 	{
 		// Not available try to get default anim
-		ALERT(at_console, "%s has no sequence for act:%d\n", STRING(pev->classname), NewActivity);
+		AILogger->debug("{} has no sequence for act:{}", STRING(pev->classname), NewActivity);
 		pev->sequence = 0; // Set to the reset anim (if it's there)
 	}
 }
@@ -2205,7 +2205,7 @@ void CShockTrooper::MonsterThink()
 		{
 			++m_cAmmoLoaded;
 			m_flLastChargeTime = gpGlobals->time;
-			ALERT(at_aiconsole, "Shocktrooper Reload: %d\n", m_cAmmoLoaded);
+			AILogger->debug("Shocktrooper Reload: {}", m_cAmmoLoaded);
 		}
 	}
 
@@ -2354,7 +2354,7 @@ void CDeadShockTrooper::Spawn()
 
 	if (pev->sequence == -1)
 	{
-		ALERT(at_console, "Dead ShockTrooper with bad pose\n");
+		AILogger->debug("Dead ShockTrooper with bad pose");
 	}
 
 	pev->skin = 0;

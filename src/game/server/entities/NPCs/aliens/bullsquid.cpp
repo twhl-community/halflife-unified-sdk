@@ -399,7 +399,7 @@ bool CBullsquid::FValidateHintType(short sHint)
 		}
 	}
 
-	ALERT(at_aiconsole, "Couldn't validate hint type");
+	Logger->debug("Couldn't validate hint type");
 	return false;
 }
 
@@ -1185,7 +1185,7 @@ void CBullsquid::StartTask(Task_t* pTask)
 		}
 		else
 		{
-			ALERT(at_aiconsole, "GetPathToEnemy failed!!\n");
+			AILogger->debug("GetPathToEnemy failed!!");
 			TaskFail();
 		}
 		break;
