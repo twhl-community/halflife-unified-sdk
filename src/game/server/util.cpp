@@ -1002,7 +1002,7 @@ bool UTIL_IsMasterTriggered(string_t sMaster, CBaseEntity* pActivator)
 				return pMaster->IsTriggered(pActivator);
 		}
 
-		CBaseEntity::Logger->debug("Master was null or not a master!");
+		CBaseEntity::IOLogger->debug("Master was null or not a master!");
 	}
 
 	// if this isn't a master entity, just say yes.
