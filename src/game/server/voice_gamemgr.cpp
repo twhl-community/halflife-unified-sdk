@@ -26,8 +26,6 @@ CPlayerBitVec g_SentGameRulesMasks[MAX_PLAYERS]; // These store the masks we las
 CPlayerBitVec g_SentBanMasks[MAX_PLAYERS];		 // we need to resend them.
 CPlayerBitVec g_bWantModEnable;
 
-cvar_t voice_serverdebug = {"voice_serverdebug", "0"};
-
 // Set game rules to allow all clients to talk to each other.
 // Muted players still can't talk to each other.
 cvar_t sv_alltalk = {"sv_alltalk", "0", FCVAR_SERVER};
@@ -54,23 +52,6 @@ static CBasePlayer* FindPlayerByName(const char* pTestName)
 
 	return nullptr;
 }
-
-static void VoiceServerDebug(char const* pFmt, ...)
-{
-	char msg[4096];
-	va_list marker;
-
-	if (0 == voice_serverdebug.value)
-		return;
-
-	va_start(marker, pFmt);
-	vsnprintf(msg, sizeof(msg), pFmt, marker);
-	va_end(marker);
-
-	ALERT(at_console, "%s", msg);
-}
-
-
 
 // ------------------------------------------------------------------------ //
 // CVoiceGameMgr.
@@ -99,10 +80,7 @@ bool CVoiceGameMgr::Init(
 	m_msgPlayerVoiceMask = REG_USER_MSG("VoiceMask", VOICE_MAX_PLAYERS_DW * 4 * 2);
 	m_msgRequestState = REG_USER_MSG("ReqState", 0);
 
-	// register voice_serverdebug if it hasn't been registered already
-	if (!CVAR_GET_POINTER("voice_serverdebug"))
-		CVAR_REGISTER(&voice_serverdebug);
-
+	// register sv_alltalk if it hasn't been registered already
 	if (!CVAR_GET_POINTER("sv_alltalk"))
 		CVAR_REGISTER(&sv_alltalk);
 
@@ -126,12 +104,12 @@ bool CVoiceGameMgr::Init(
 
 				if (1 == sscanf(CMD_ARGV(i), "%x", &mask) && i <= VOICE_MAX_PLAYERS_DW)
 				{
-					VoiceServerDebug("CVoiceGameMgr::ClientCommand: vban (0x%x) from %d\n", mask, *playerClientIndex);
+					Logger->debug("CVoiceGameMgr::ClientCommand: vban (0x{:x}) from {}", mask, *playerClientIndex);
 					g_BanMasks[*playerClientIndex].SetDWord(i - 1, mask);
 				}
 				else
 				{
-					VoiceServerDebug("CVoiceGameMgr::ClientCommand: invalid index (%d)\n", i);
+					Logger->debug("CVoiceGameMgr::ClientCommand: invalid index ({})", i);
 				}
 			}
 
@@ -155,7 +133,7 @@ bool CVoiceGameMgr::Init(
 
 			const bool enable = 0 != atoi(CMD_ARGV(1));
 
-			VoiceServerDebug("CVoiceGameMgr::ClientCommand: vmodenable (%s)\n", enable ? "true" : "false");
+			Logger->debug("CVoiceGameMgr::ClientCommand: vmodenable ({})", enable);
 			g_PlayerModEnable[*playerClientIndex] = enable;
 			g_bWantModEnable[*playerClientIndex] = false;
 			//UpdateMasks();
@@ -282,7 +260,7 @@ std::optional<int> CVoiceGameMgr::GetAndValidatePlayerIndex(CBasePlayer* player,
 	int playerClientIndex = player->entindex() - 1;
 	if (playerClientIndex < 0 || playerClientIndex >= m_nMaxPlayers)
 	{
-		VoiceServerDebug("CVoiceGameMgr::ClientCommand: cmd %s from invalid client (%d)\n", cmd, playerClientIndex);
+		Logger->debug("CVoiceGameMgr::ClientCommand: cmd {} from invalid client ({})", cmd, playerClientIndex);
 		return {};
 	}
 

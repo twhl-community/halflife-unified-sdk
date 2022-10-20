@@ -7,7 +7,10 @@
 
 #pragma once
 
+#include <memory>
 #include <optional>
+
+#include <spdlog/logger.h>
 
 #include "ClientCommandRegistry.h"
 #include "voice_common.h"
@@ -32,6 +35,8 @@ public:
 class CVoiceGameMgr
 {
 public:
+	static inline std::shared_ptr<spdlog::logger> Logger;
+
 	CVoiceGameMgr();
 	virtual ~CVoiceGameMgr();
 

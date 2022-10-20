@@ -28,6 +28,7 @@
 #include "ServerLibrary.h"
 #include "skill.h"
 #include "UserMessages.h"
+#include "voice_gamemgr.h"
 
 #include "config/ConditionEvaluator.h"
 #include "config/GameConfig.h"
@@ -90,6 +91,7 @@ bool ServerLibrary::Initialize()
 	CGraph::Logger = g_Logging.CreateLogger("nodegraph");
 	CSaveRestoreBuffer::Logger = g_Logging.CreateLogger("saverestore");
 	CGameRules::Logger = g_Logging.CreateLogger("gamerules");
+	CVoiceGameMgr::Logger = g_Logging.CreateLogger("voice");
 
 	SV_CreateClientCommands();
 
@@ -109,6 +111,7 @@ void ServerLibrary::Shutdown()
 	m_MapChangeConfigDefinition.reset();
 	m_ServerConfigDefinition.reset();
 
+	CVoiceGameMgr::Logger.reset();
 	CGameRules::Logger.reset();
 	CSaveRestoreBuffer::Logger.reset();
 	CGraph::Logger.reset();

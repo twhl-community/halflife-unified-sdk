@@ -477,7 +477,7 @@ CWorld::CWorld()
 {
 	if (Instance)
 	{
-		ALERT(at_error, "Do not create multiple instances of worldspawn\n");
+		Logger->error("Do not create multiple instances of worldspawn");
 		return;
 	}
 

@@ -7,7 +7,7 @@ const char* StringPool::Allocate(const char* string)
 	//Treat null pointers as empty strings
 	if (!string)
 	{
-		ALERT(at_warning, "NULL string passed to StringPool::Allocate\n");
+		CBaseEntity::Logger->warn("NULL string passed to StringPool::Allocate");
 		return "";
 	}
 

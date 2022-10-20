@@ -36,7 +36,7 @@ string_t ALLOC_ESCAPED_STRING(const char* str)
 {
 	if (!str)
 	{
-		ALERT(at_warning, "NULL string passed to ALLOC_ESCAPED_STRING\n");
+		CBaseEntity::Logger->warn("NULL string passed to ALLOC_ESCAPED_STRING");
 		return MAKE_STRING("");
 	}
 
@@ -48,7 +48,7 @@ string_t ALLOC_ESCAPED_STRING(const char* str)
 		{
 			if (index + 1 >= converted.length())
 			{
-				ALERT(at_warning, "Incomplete escape character encountered in ALLOC_ESCAPED_STRING\n\tOriginal string: \"%s\"\n", str);
+				CBaseEntity::Logger->warn("Incomplete escape character encountered in ALLOC_ESCAPED_STRING\n\tOriginal string: \"{}\"", str);
 				break;
 			}
 
