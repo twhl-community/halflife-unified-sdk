@@ -343,9 +343,6 @@ typedef struct hudtextparms_s
 void UTIL_HudMessageAll(const hudtextparms_t& textparms, const char* pMessage);
 void UTIL_HudMessage(CBaseEntity* pEntity, const hudtextparms_t& textparms, const char* pMessage);
 
-// Writes message to console with timestamp and FragLog header.
-void UTIL_LogPrintf(const char* fmt, ...);
-
 // Sorta like FInViewCone, but for nonmonsters.
 float UTIL_DotPoints(const Vector& vecSrc, const Vector& vecCheck, const Vector& vecDir);
 
@@ -556,6 +553,28 @@ inline MinuteSecondTime SecondsToTime(const int seconds)
 	const auto minutes = seconds / 60;
 	return {minutes, seconds - (minutes * 60)};
 }
+
+template <>
+struct fmt::formatter<MinuteSecondTime>
+{
+	constexpr auto parse(format_parse_context& ctx) -> decltype(ctx.begin())
+	{
+		auto it = ctx.begin();
+
+		if (it != ctx.end() && *it != '}')
+		{
+			throw format_error("invalid format");
+		}
+
+		return it;
+	}
+
+	template <typename FormatContext>
+	auto format(const MinuteSecondTime& time, FormatContext& ctx) const -> decltype(ctx.out())
+	{
+		return fmt::format_to(ctx.out(), "{:0d}:{:02d}", time.Minutes, time.Seconds);
+	}
+};
 
 template <typename T>
 struct FindByClassnameFunctor

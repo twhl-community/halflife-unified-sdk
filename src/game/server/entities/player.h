@@ -15,6 +15,7 @@
 
 #pragma once
 
+#include "gamerules.h"
 #include "pm_materials.h"
 #include "ctf/CTFDefs.h"
 #include "palette.h"
@@ -642,6 +643,42 @@ inline CPlayerEnumeratorWithStart UTIL_FindPlayers(CBasePlayer* pStartEntity)
 {
 	return {pStartEntity};
 }
+
+/**
+*	@brief Tag type to log player info in the form <tt>\"netname<userid><steamid><teamname>\"</tt>.
+*/
+struct PlayerLogInfo
+{
+	CBasePlayer& Player;
+};
+
+template <>
+struct fmt::formatter<PlayerLogInfo>
+{
+	constexpr auto parse(format_parse_context& ctx) -> decltype(ctx.begin())
+	{
+		auto it = ctx.begin();
+
+		if (it != ctx.end() && *it != '}')
+		{
+			throw format_error("invalid format");
+		}
+
+		return it;
+	}
+
+	template <typename FormatContext>
+	auto format(const PlayerLogInfo& info, FormatContext& ctx) const -> decltype(ctx.out())
+	{
+		auto edict = info.Player.edict();
+
+		return fmt::format_to(ctx.out(), "\"{}<{}><{}><{}>\"",
+			STRING(info.Player.pev->netname),
+			g_engfuncs.pfnGetPlayerUserId(edict),
+			GETPLAYERAUTHID(edict),
+			GetTeamName(edict));
+	}
+};
 
 inline bool gInitHUD = true;
 inline bool gEvilImpulse101 = false;

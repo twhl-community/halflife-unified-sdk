@@ -275,12 +275,7 @@ void CHalfLifeTeamplay::ChangePlayerTeam(CBasePlayer* pPlayer, const char* pTeam
 
 	if (nickName && '\0' != *nickName)
 	{
-		UTIL_LogPrintf("\"%s<%i><%s><%s>\" changed role to \"%s\"\n",
-			nickName,
-			GETPLAYERUSERID(pPlayer->edict()),
-			GETPLAYERAUTHID(pPlayer->edict()),
-			GetTeamName(pPlayer->edict()),
-			pTeamName);
+		Logger->trace("{} changed role to \"{}\"", PlayerLogInfo{*pPlayer}, pTeamName);
 	}
 }
 
@@ -324,12 +319,7 @@ void CHalfLifeTeamplay::ClientUserInfoChanged(CBasePlayer* pPlayer, char* infobu
 	sprintf(text, "* %s has changed to team \'%s\'\n", STRING(pPlayer->pev->netname), mdls);
 	UTIL_SayTextAll(text, pPlayer);
 
-	UTIL_LogPrintf("\"%s<%i><%s><%s>\" joined team \"%s\"\n",
-		STRING(pPlayer->pev->netname),
-		GETPLAYERUSERID(pPlayer->edict()),
-		GETPLAYERAUTHID(pPlayer->edict()),
-		pPlayer->m_szTeamName,
-		mdls);
+	Logger->trace("{} joined team \"{}\"", PlayerLogInfo{*pPlayer}, mdls);
 
 	ChangePlayerTeam(pPlayer, mdls, true, true);
 	// recound stuff

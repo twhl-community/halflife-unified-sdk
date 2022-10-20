@@ -321,23 +321,7 @@ void CHalfLifeMultiplay::InitHUD(CBasePlayer* pl)
 	UTIL_ClientPrintAll(HUD_PRINTNOTIFY, UTIL_VarArgs("%s has joined the game\n",
 											 (!FStringNull(pl->pev->netname) && STRING(pl->pev->netname)[0] != 0) ? STRING(pl->pev->netname) : "unconnected"));
 
-	// team match?
-	if (g_teamplay)
-	{
-		UTIL_LogPrintf("\"%s<%i><%s><%s>\" entered the game\n",
-			STRING(pl->pev->netname),
-			GETPLAYERUSERID(pl->edict()),
-			GETPLAYERAUTHID(pl->edict()),
-			g_engfuncs.pfnInfoKeyValue(g_engfuncs.pfnGetInfoKeyBuffer(pl->edict()), "model"));
-	}
-	else
-	{
-		UTIL_LogPrintf("\"%s<%i><%s><%i>\" entered the game\n",
-			STRING(pl->pev->netname),
-			GETPLAYERUSERID(pl->edict()),
-			GETPLAYERAUTHID(pl->edict()),
-			GETPLAYERUSERID(pl->edict()));
-	}
+	Logger->trace("{} entered the game", PlayerLogInfo{*pl});
 
 	UpdateGameMode(pl);
 
@@ -387,31 +371,7 @@ void CHalfLifeMultiplay::ClientDisconnected(edict_t* pClient)
 
 			FireTargets("game_playerleave", pPlayer, pPlayer, USE_TOGGLE, 0);
 
-			if (IsCTF())
-			{
-				UTIL_LogPrintf("\"%s<%i><%s><%s>\" disconnected\n",
-					STRING(pPlayer->pev->netname),
-					GETPLAYERUSERID(pPlayer->edict()),
-					GETPLAYERAUTHID(pPlayer->edict()),
-					GetTeamName(pPlayer->edict()));
-			}
-			// team match?
-			else if (g_teamplay)
-			{
-				UTIL_LogPrintf("\"%s<%i><%s><%s>\" disconnected\n",
-					STRING(pPlayer->pev->netname),
-					GETPLAYERUSERID(pPlayer->edict()),
-					GETPLAYERAUTHID(pPlayer->edict()),
-					g_engfuncs.pfnInfoKeyValue(g_engfuncs.pfnGetInfoKeyBuffer(pPlayer->edict()), "model"));
-			}
-			else
-			{
-				UTIL_LogPrintf("\"%s<%i><%s><%i>\" disconnected\n",
-					STRING(pPlayer->pev->netname),
-					GETPLAYERUSERID(pPlayer->edict()),
-					GETPLAYERAUTHID(pPlayer->edict()),
-					GETPLAYERUSERID(pPlayer->edict()));
-			}
+			Logger->trace("{} disconnected", PlayerLogInfo{*pPlayer});
 
 			const int playerIndex = ENTINDEX(pClient);
 
@@ -682,7 +642,7 @@ void CHalfLifeMultiplay::PlayerKilled(CBasePlayer* pVictim, entvars_t* pKiller, 
 void CHalfLifeMultiplay::DeathNotice(CBasePlayer* pVictim, entvars_t* pKiller, entvars_t* pevInflictor)
 {
 	// Work out what killed the player, and send a message to all clients about it
-	CBaseEntity* Killer = CBaseEntity::Instance(pKiller);
+	CBasePlayer* Killer = static_cast<CBasePlayer*>(CBaseEntity::Instance(pKiller));
 
 	const char* killer_weapon_name = "world"; // by default, the player is killed by the world
 	int killer_index = 0;
@@ -743,111 +703,16 @@ void CHalfLifeMultiplay::DeathNotice(CBasePlayer* pVictim, entvars_t* pKiller, e
 	if (pVictim->pev == pKiller)
 	{
 		// killed self
-
-		if (IsCTF())
-		{
-			UTIL_LogPrintf("\"%s<%i><%s><%s>\" committed suicide with \"%s\"\n",
-				STRING(pVictim->pev->netname),
-				GETPLAYERUSERID(pVictim->edict()),
-				GETPLAYERAUTHID(pVictim->edict()),
-				GetTeamName(pKiller->pContainingEntity),
-				killer_weapon_name);
-		}
-		// team match?
-		else if (g_teamplay)
-		{
-			UTIL_LogPrintf("\"%s<%i><%s><%s>\" committed suicide with \"%s\"\n",
-				STRING(pVictim->pev->netname),
-				GETPLAYERUSERID(pVictim->edict()),
-				GETPLAYERAUTHID(pVictim->edict()),
-				g_engfuncs.pfnInfoKeyValue(g_engfuncs.pfnGetInfoKeyBuffer(pVictim->edict()), "model"),
-				killer_weapon_name);
-		}
-		else
-		{
-			UTIL_LogPrintf("\"%s<%i><%s><%i>\" committed suicide with \"%s\"\n",
-				STRING(pVictim->pev->netname),
-				GETPLAYERUSERID(pVictim->edict()),
-				GETPLAYERAUTHID(pVictim->edict()),
-				GETPLAYERUSERID(pVictim->edict()),
-				killer_weapon_name);
-		}
+		Logger->trace("{} committed suicide with \"{}\"", PlayerLogInfo{*pVictim}, killer_weapon_name);
 	}
 	else if ((pKiller->flags & FL_CLIENT) != 0)
 	{
-		if (IsCTF())
-		{
-			UTIL_LogPrintf("\"%s<%i><%s><%s>\" killed \"%s<%i><%s><%s>\" with \"%s\"\n",
-				STRING(pKiller->netname),
-				GETPLAYERUSERID(ENT(pKiller)),
-				GETPLAYERAUTHID(ENT(pKiller)),
-				GetTeamName(pKiller->pContainingEntity),
-				STRING(pVictim->pev->netname),
-				GETPLAYERUSERID(pVictim->edict()),
-				GETPLAYERAUTHID(pVictim->edict()),
-				GetTeamName(pVictim->edict()),
-				killer_weapon_name);
-		}
-		// team match?
-		else if (g_teamplay)
-		{
-			UTIL_LogPrintf("\"%s<%i><%s><%s>\" killed \"%s<%i><%s><%s>\" with \"%s\"\n",
-				STRING(pKiller->netname),
-				GETPLAYERUSERID(ENT(pKiller)),
-				GETPLAYERAUTHID(ENT(pKiller)),
-				g_engfuncs.pfnInfoKeyValue(g_engfuncs.pfnGetInfoKeyBuffer(ENT(pKiller)), "model"),
-				STRING(pVictim->pev->netname),
-				GETPLAYERUSERID(pVictim->edict()),
-				GETPLAYERAUTHID(pVictim->edict()),
-				g_engfuncs.pfnInfoKeyValue(g_engfuncs.pfnGetInfoKeyBuffer(pVictim->edict()), "model"),
-				killer_weapon_name);
-		}
-		else
-		{
-			UTIL_LogPrintf("\"%s<%i><%s><%i>\" killed \"%s<%i><%s><%i>\" with \"%s\"\n",
-				STRING(pKiller->netname),
-				GETPLAYERUSERID(ENT(pKiller)),
-				GETPLAYERAUTHID(ENT(pKiller)),
-				GETPLAYERUSERID(ENT(pKiller)),
-				STRING(pVictim->pev->netname),
-				GETPLAYERUSERID(pVictim->edict()),
-				GETPLAYERAUTHID(pVictim->edict()),
-				GETPLAYERUSERID(pVictim->edict()),
-				killer_weapon_name);
-		}
+		Logger->trace("{} killed {} with \"{}\"", PlayerLogInfo{*Killer}, PlayerLogInfo{*pVictim}, killer_weapon_name);
 	}
 	else
 	{
 		// killed by the world
-
-		if (IsCTF())
-		{
-			UTIL_LogPrintf("\"%s<%i><%s><%s>\" committed suicide with \"%s\" (world)\n",
-				STRING(pVictim->pev->netname),
-				GETPLAYERUSERID(pVictim->edict()),
-				GETPLAYERAUTHID(pVictim->edict()),
-				GetTeamName(pVictim->edict()),
-				killer_weapon_name);
-		}
-		// team match?
-		else if (g_teamplay)
-		{
-			UTIL_LogPrintf("\"%s<%i><%s><%s>\" committed suicide with \"%s\" (world)\n",
-				STRING(pVictim->pev->netname),
-				GETPLAYERUSERID(pVictim->edict()),
-				GETPLAYERAUTHID(pVictim->edict()),
-				g_engfuncs.pfnInfoKeyValue(g_engfuncs.pfnGetInfoKeyBuffer(pVictim->edict()), "model"),
-				killer_weapon_name);
-		}
-		else
-		{
-			UTIL_LogPrintf("\"%s<%i><%s><%i>\" committed suicide with \"%s\" (world)\n",
-				STRING(pVictim->pev->netname),
-				GETPLAYERUSERID(pVictim->edict()),
-				GETPLAYERAUTHID(pVictim->edict()),
-				GETPLAYERUSERID(pVictim->edict()),
-				killer_weapon_name);
-		}
+		Logger->trace("{} committed suicide with committed suicide with \"{}\" (world)", PlayerLogInfo{*pVictim}, killer_weapon_name);
 	}
 
 	MESSAGE_BEGIN(MSG_SPEC, SVC_DIRECTOR);

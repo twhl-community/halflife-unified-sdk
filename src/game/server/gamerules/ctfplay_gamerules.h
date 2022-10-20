@@ -144,8 +144,6 @@ private:
 
 extern char* pszPlayerIPs[MAX_PLAYERS * 2];
 
-const char* GetTeamName(edict_t* pEntity);
-
 void GetLosingTeam(int& iTeamNum, int& iScoreDiff);
 
 void RespawnPlayerCTFPowerups(CBasePlayer* pPlayer, bool bForceRespawn);

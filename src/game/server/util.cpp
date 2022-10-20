@@ -1448,23 +1448,6 @@ void UTIL_PrecacheOther(const char* szClassname)
 }
 
 //=========================================================
-// UTIL_LogPrintf - Prints a logged message to console.
-// Preceded by LOG: ( timestamp ) < message >
-//=========================================================
-void UTIL_LogPrintf(const char* fmt, ...)
-{
-	va_list argptr;
-	static char string[1024];
-
-	va_start(argptr, fmt);
-	vsprintf(string, fmt, argptr);
-	va_end(argptr);
-
-	// Print to server console
-	ALERT(at_logged, "%s", string);
-}
-
-//=========================================================
 // UTIL_DotPoints - returns the dot product of a line from
 // src to check and vecdir.
 //=========================================================

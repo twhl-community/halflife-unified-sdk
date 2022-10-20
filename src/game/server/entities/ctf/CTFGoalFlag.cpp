@@ -278,7 +278,7 @@ void CTFGoalFlag::ReturnFlagThink()
 		name = "ReturnedOpposingForceFlag";
 	}
 
-	UTIL_LogPrintf("World triggered \"%s\"\n", name);
+	CGameRules::Logger->trace("World triggered \"{}\"", name);
 	DisplayTeamFlags(nullptr);
 }
 
@@ -360,11 +360,7 @@ void CTFGoalFlag::ScoreFlagTouch(CBasePlayer* pPlayer)
 				UTIL_ClientPrintAll(HUD_PRINTNOTIFY, "#CTFFlagScorerOF");
 				UTIL_ClientPrintAll(HUD_PRINTNOTIFY, "\n");
 
-				UTIL_LogPrintf("\"%s<%i><%s><%s>\" triggered \"CapturedFlag\"\n",
-					STRING(pPlayer->pev->netname),
-					g_engfuncs.pfnGetPlayerUserId(pPlayer->edict()),
-					GETPLAYERAUTHID(pPlayer->edict()),
-					GetTeamName(pPlayer->edict()));
+				CGameRules::Logger->trace("{} triggered \"CapturedFlag\"", PlayerLogInfo{*pPlayer});
 
 				++teamscores[static_cast<int>(pPlayer->m_iTeamNum) - 1];
 
@@ -406,11 +402,7 @@ void CTFGoalFlag::ScoreFlagTouch(CBasePlayer* pPlayer)
 				UTIL_ClientPrintAll(HUD_PRINTNOTIFY, "#CTFFlagGetBM");
 				UTIL_ClientPrintAll(HUD_PRINTNOTIFY, "\n");
 
-				UTIL_LogPrintf("\"%s<%i><%s><%s>\" triggered \"TookFlag\"\n",
-					STRING(pPlayer->pev->netname),
-					g_engfuncs.pfnGetPlayerUserId(pPlayer->edict()),
-					GETPLAYERAUTHID(pPlayer->edict()),
-					GetTeamName(pPlayer->edict()));
+				CGameRules::Logger->trace("{} triggered \"TookFlag\"", PlayerLogInfo{*pPlayer});
 			}
 		}
 		else
@@ -421,11 +413,7 @@ void CTFGoalFlag::ScoreFlagTouch(CBasePlayer* pPlayer)
 				UTIL_ClientPrintAll(HUD_PRINTNOTIFY, "#CTFFlagScorerBM");
 				UTIL_ClientPrintAll(HUD_PRINTNOTIFY, "\n");
 
-				UTIL_LogPrintf("\"%s<%i><%s><%s>\" triggered \"CapturedFlag\"\n",
-					STRING(pPlayer->pev->netname),
-					g_engfuncs.pfnGetPlayerUserId(pPlayer->edict()),
-					GETPLAYERAUTHID(pPlayer->edict()),
-					GetTeamName(pPlayer->edict()));
+				CGameRules::Logger->trace("{} triggered \"CapturedFlag\"", PlayerLogInfo{*pPlayer});
 
 				++teamscores[static_cast<int>(pPlayer->m_iTeamNum) - 1];
 
@@ -470,11 +458,7 @@ void CTFGoalFlag::ScoreFlagTouch(CBasePlayer* pPlayer)
 				UTIL_ClientPrintAll(HUD_PRINTNOTIFY, "#CTFFlagGetOF");
 				UTIL_ClientPrintAll(HUD_PRINTNOTIFY, "\n");
 
-				UTIL_LogPrintf("\"%s<%i><%s><%s>\" triggered \"TookFlag\"\n",
-					STRING(pPlayer->pev->netname),
-					g_engfuncs.pfnGetPlayerUserId(pPlayer->edict()),
-					GETPLAYERAUTHID(pPlayer->edict()),
-					GetTeamName(pPlayer->edict()));
+				CGameRules::Logger->trace("{} triggered \"TookFlag\"", PlayerLogInfo{*pPlayer});
 			}
 		}
 	}
@@ -632,24 +616,14 @@ void CTFGoalFlag::goal_item_touch(CBaseEntity* pOther)
 		UTIL_ClientPrintAll(HUD_PRINTNOTIFY, STRING(pPlayer->pev->netname));
 		UTIL_ClientPrintAll(HUD_PRINTNOTIFY, "#CTFFlagReturnBM");
 
-		UTIL_LogPrintf(
-			"\"%s<%i><%s><%s>\" triggered \"ReturnedFlag\"\n",
-			STRING(pPlayer->pev->netname),
-			g_engfuncs.pfnGetPlayerUserId(pPlayer->edict()),
-			GETPLAYERAUTHID(pPlayer->edict()),
-			GetTeamName(pPlayer->edict()));
+		CGameRules::Logger->trace("{} triggered \"ReturnedFlag\"", PlayerLogInfo{*pPlayer});
 	}
 	else if (pPlayer->m_iTeamNum == CTFTeam::OpposingForce)
 	{
 		UTIL_ClientPrintAll(HUD_PRINTNOTIFY, STRING(pPlayer->pev->netname));
 		UTIL_ClientPrintAll(HUD_PRINTNOTIFY, "#CTFFlagReturnOF");
 
-		UTIL_LogPrintf(
-			"\"%s<%i><%s><%s>\" triggered \"ReturnedFlag\"\n",
-			STRING(pPlayer->pev->netname),
-			g_engfuncs.pfnGetPlayerUserId(pPlayer->edict()),
-			GETPLAYERAUTHID(pPlayer->edict()),
-			GetTeamName(pPlayer->edict()));
+		CGameRules::Logger->trace("{} triggered \"ReturnedFlag\"", PlayerLogInfo{*pPlayer});
 	}
 
 	for (int i = 1; i <= gpGlobals->maxClients; ++i)

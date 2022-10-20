@@ -239,7 +239,9 @@ void CItemCTF::ItemTouch(CBaseEntity* pOther)
 	{
 		m_iLastTouched = 0;
 
-		if (MyTouch(static_cast<CBasePlayer*>(pOther)))
+		auto player = static_cast<CBasePlayer*>(pOther);
+
+		if (MyTouch(player))
 		{
 			SUB_UseTargets(pOther, USE_TOGGLE, 0);
 			SetTouch(nullptr);
@@ -257,13 +259,7 @@ void CItemCTF::ItemTouch(CBaseEntity* pOther)
 
 			m_flPickupTime = gpGlobals->time;
 
-			UTIL_LogPrintf(
-				"\"%s<%i><%s><%s>\" triggered \"take_%s_Powerup\"\n",
-				STRING(pOther->pev->netname),
-				GETPLAYERUSERID(pOther->edict()),
-				GETPLAYERAUTHID(pOther->edict()),
-				GetTeamName(pOther->edict()),
-				m_pszItemName);
+			CGameRules::Logger->trace("{} triggered \"take_{}_Powerup\"", PlayerLogInfo{*player}, m_pszItemName);
 		}
 	}
 }
@@ -274,13 +270,7 @@ void CItemCTF::DropItem(CBasePlayer* pPlayer, bool bForceRespawn)
 	{
 		RemoveEffect(pPlayer);
 
-		UTIL_LogPrintf(
-			"\"%s<%i><%s><%s>\" triggered \"drop_%s_Powerup\"\n",
-			STRING(pPlayer->pev->netname),
-			GETPLAYERUSERID(pPlayer->edict()),
-			GETPLAYERAUTHID(pPlayer->edict()),
-			GetTeamName(pPlayer->edict()),
-			m_pszItemName);
+		CGameRules::Logger->trace("{} triggered \"drop_{}_Powerup\"", PlayerLogInfo{*pPlayer}, m_pszItemName);
 
 		pev->origin = pPlayer->pev->origin + Vector(0, 0, (pPlayer->pev->flags & FL_DUCKING) != 0 ? 34 : 16);
 	}
@@ -364,13 +354,7 @@ void CItemCTF::ScatterItem(CBasePlayer* pPlayer)
 	m_iLastTouched = pPlayer->entindex();
 	m_flNextTouchTime = 5.0 + gpGlobals->time;
 
-	UTIL_LogPrintf(
-		"\"%s<%i><%s><%s>\" triggered \"drop_%s_Powerup\"\n",
-		STRING(pPlayer->pev->netname),
-		GETPLAYERUSERID(pPlayer->edict()),
-		GETPLAYERAUTHID(pPlayer->edict()),
-		GetTeamName(pPlayer->edict()),
-		m_pszItemName);
+	CGameRules::Logger->trace("{} triggered \"drop_{}_Powerup\"", PlayerLogInfo {*pPlayer}, m_pszItemName);
 }
 
 void CItemCTF::ThrowItem(CBasePlayer* pPlayer)
@@ -415,11 +399,5 @@ void CItemCTF::ThrowItem(CBasePlayer* pPlayer)
 	m_iLastTouched = pPlayer->entindex();
 	m_flNextTouchTime = 5.0 + gpGlobals->time;
 
-	UTIL_LogPrintf(
-		"\"%s<%i><%s><%s>\" triggered \"drop_%s_Powerup\"\n",
-		STRING(pPlayer->pev->netname),
-		GETPLAYERUSERID(pPlayer->edict()),
-		GETPLAYERAUTHID(pPlayer->edict()),
-		GetTeamName(pPlayer->edict()),
-		m_pszItemName);
+	CGameRules::Logger->trace("{} triggered \"drop_{}_Powerup\"", PlayerLogInfo{*pPlayer}, m_pszItemName);
 }

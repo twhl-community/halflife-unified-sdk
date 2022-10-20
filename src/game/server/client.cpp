@@ -450,27 +450,7 @@ void Host_Say(edict_t* pEntity, bool teamonly)
 	else
 		temp = "say";
 
-	// team match?
-	if (g_teamplay)
-	{
-		UTIL_LogPrintf("\"%s<%i><%s><%s>\" %s \"%s\"\n",
-			STRING(pEntity->v.netname),
-			GETPLAYERUSERID(pEntity),
-			GETPLAYERAUTHID(pEntity),
-			g_engfuncs.pfnInfoKeyValue(g_engfuncs.pfnGetInfoKeyBuffer(pEntity), "model"),
-			temp,
-			p);
-	}
-	else
-	{
-		UTIL_LogPrintf("\"%s<%i><%s><%i>\" %s \"%s\"\n",
-			STRING(pEntity->v.netname),
-			GETPLAYERUSERID(pEntity),
-			GETPLAYERAUTHID(pEntity),
-			GETPLAYERUSERID(pEntity),
-			temp,
-			p);
-	}
+	CGameRules::Logger->trace("{} {} \"{}\"", PlayerLogInfo{*player}, temp, p);
 }
 
 const int NumberOfEntitiesPerPage = 10;
@@ -821,38 +801,7 @@ void ClientUserInfoChanged(edict_t* pEntity, char* infobuffer)
 			MESSAGE_END();
 		}
 
-		if (g_pGameRules->IsCTF())
-		{
-			// TODO: in vanilla Op4 this code incorrectly skips the above validation logic if the player is already in a team
-			if (player->m_iTeamNum != CTFTeam::None)
-			{
-				UTIL_LogPrintf("\"%s<%i><%s><%s>\" changed name to \"%s\"\n",
-					STRING(pEntity->v.netname),
-					GETPLAYERUSERID(pEntity),
-					GETPLAYERAUTHID(pEntity),
-					GetTeamName(pEntity),
-					g_engfuncs.pfnInfoKeyValue(infobuffer, "name"));
-			}
-		}
-		// team match?
-		else if (g_teamplay)
-		{
-			UTIL_LogPrintf("\"%s<%i><%s><%s>\" changed name to \"%s\"\n",
-				STRING(pEntity->v.netname),
-				GETPLAYERUSERID(pEntity),
-				GETPLAYERAUTHID(pEntity),
-				g_engfuncs.pfnInfoKeyValue(infobuffer, "model"),
-				g_engfuncs.pfnInfoKeyValue(infobuffer, "name"));
-		}
-		else
-		{
-			UTIL_LogPrintf("\"%s<%i><%s><%i>\" changed name to \"%s\"\n",
-				STRING(pEntity->v.netname),
-				GETPLAYERUSERID(pEntity),
-				GETPLAYERAUTHID(pEntity),
-				GETPLAYERUSERID(pEntity),
-				g_engfuncs.pfnInfoKeyValue(infobuffer, "name"));
-		}
+		CGameRules::Logger->trace("{} changed name to \"{}\"", PlayerLogInfo{*player}, g_engfuncs.pfnInfoKeyValue(infobuffer, "name"));
 	}
 
 	g_pGameRules->ClientUserInfoChanged(player, infobuffer);

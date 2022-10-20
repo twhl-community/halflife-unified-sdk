@@ -2643,13 +2643,7 @@ void CTriggerCTFGeneric::Touch(CBaseEntity* pOther)
 
 			pOtherPlayer->SendScoreInfoAll();
 
-			UTIL_LogPrintf(
-				"\"%s<%i><%s><%s>\" triggered \"%s\"\n",
-				STRING(pOtherPlayer->pev->targetname),
-				g_engfuncs.pfnGetPlayerUserId(pOtherPlayer->edict()),
-				GETPLAYERAUTHID(pOtherPlayer->edict()),
-				GetTeamName(pOtherPlayer->edict()),
-				STRING(pev->targetname));
+			CGameRules::Logger->trace("{} triggered \"{}\"", PlayerLogInfo{*pOtherPlayer}, STRING(pev->targetname));
 		}
 
 		if (0 != team_score)
@@ -2657,7 +2651,7 @@ void CTriggerCTFGeneric::Touch(CBaseEntity* pOther)
 			//TOOD: not sure why this check is here since pev must be valid if the entity exists
 			if (!pOther && 0 == score && pev)
 			{
-				UTIL_LogPrintf("World triggered \"%s\"\n", STRING(pev->targetname));
+				CGameRules::Logger->trace("World triggered \"{}\"", STRING(pev->targetname));
 			}
 
 			DisplayTeamFlags(nullptr);
