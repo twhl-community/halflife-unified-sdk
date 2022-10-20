@@ -2788,7 +2788,7 @@ void CTriggerCTFGeneric::Touch(CBaseEntity* pOther)
 				g_engfuncs.pfnGetPlayerUserId(pOtherPlayer->edict()),
 				g_engfuncs.pfnGetPlayerWONId(pOtherPlayer->edict()),
 				GetTeamName(pOtherPlayer->edict()),
-				STRING(pOtherPlayer->pev->targetname));
+				STRING(pev->targetname));
 		}
 
 		if (0 != team_score)
