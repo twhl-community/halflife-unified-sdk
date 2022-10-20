@@ -756,10 +756,10 @@ void CHalfLifeCTFplay::ClientDisconnected(edict_t* pClient)
 			FireTargets("game_playerleave", v2, v2, USE_TOGGLE, 0.0);
 
 			UTIL_LogPrintf(
-				"\"%s<%i><%u><%s>\" disconnected\n",
+				"\"%s<%i><%s><%s>\" disconnected\n",
 				STRING(v2->pev->netname),
 				g_engfuncs.pfnGetPlayerUserId(v2->edict()),
-				g_engfuncs.pfnGetPlayerWONId(v2->edict()),
+				GETPLAYERAUTHID(v2->edict()),
 				GetTeamName(v2->edict()));
 
 			//TODO: doesn't seem to be used
@@ -956,10 +956,10 @@ void CHalfLifeCTFplay::ClientUserInfoChanged(CBasePlayer* pPlayer, char* infobuf
 					auto pszPlayerName = STRING(pPlayer->pev->netname);
 					if (pszPlayerName && '\0' != *pszPlayerName)
 					{
-						UTIL_LogPrintf("\"%s<%i><%u><%s>\" changed role to \"%s\"\n",
+						UTIL_LogPrintf("\"%s<%i><%s><%s>\" changed role to \"%s\"\n",
 							pszPlayerName,
 							g_engfuncs.pfnGetPlayerUserId(pPlayer->edict()),
-							g_engfuncs.pfnGetPlayerWONId(pPlayer->edict()),
+							GETPLAYERAUTHID(pPlayer->edict()),
 							GetTeamName(pPlayer->edict()),
 							pPlayer->m_szTeamModel);
 					}
@@ -1034,22 +1034,22 @@ void CHalfLifeCTFplay::PlayerKilled(CBasePlayer* pVictim, entvars_t* pKiller, en
 				szTeamName2[sizeof(szTeamName2) - 1] = 0;
 
 				UTIL_LogPrintf(
-					"\"%s<%i><%u><%s>\" triggered \"FlagDefense\" against \"%s<%i><%u><%s>\"\n",
+					"\"%s<%i><%s><%s>\" triggered \"FlagDefense\" against \"%s<%i><%s><%s>\"\n",
 					STRING(pKiller->netname),
 					g_engfuncs.pfnGetPlayerUserId(pKiller->pContainingEntity),
-					g_engfuncs.pfnGetPlayerWONId(pKiller->pContainingEntity),
+					GETPLAYERAUTHID(pKiller->pContainingEntity),
 					szTeamName1,
 					STRING(pVictim->pev->netname),
 					g_engfuncs.pfnGetPlayerUserId(pVictim->edict()),
-					g_engfuncs.pfnGetPlayerWONId(pVictim->edict()),
+					GETPLAYERAUTHID(pVictim->edict()),
 					szTeamName2);
 			}
 
 			UTIL_LogPrintf(
-				"\"%s<%i><%u><%s>\" triggered \"LostFlag\"\n",
+				"\"%s<%i><%s><%s>\" triggered \"LostFlag\"\n",
 				STRING(pVictim->pev->netname),
 				g_engfuncs.pfnGetPlayerUserId(pVictim->edict()),
-				g_engfuncs.pfnGetPlayerWONId(pVictim->edict()),
+				GETPLAYERAUTHID(pVictim->edict()),
 				GetTeamName(pVictim->edict()));
 		}
 
@@ -1330,10 +1330,10 @@ void CHalfLifeCTFplay::ChangePlayerTeam(CBasePlayer* pPlayer, const char* pCharN
 		const auto pszTeamName = GetTeamName(pPlayer->edict());
 
 		UTIL_LogPrintf(
-			"\"%s<%i><%u><%s>\" joined team \"%s\"\n",
+			"\"%s<%i><%s><%s>\" joined team \"%s\"\n",
 			STRING(pPlayer->pev->netname),
 			g_engfuncs.pfnGetPlayerUserId(pPlayer->edict()),
-			g_engfuncs.pfnGetPlayerWONId(pPlayer->edict()),
+			GETPLAYERAUTHID(pPlayer->edict()),
 			pszTeamName,
 			pszTeamName);
 
@@ -1341,10 +1341,10 @@ void CHalfLifeCTFplay::ChangePlayerTeam(CBasePlayer* pPlayer, const char* pCharN
 
 		if (v19 && '\0' != *v19)
 		{
-			UTIL_LogPrintf("\"%s<%i><%u><%s>\" changed role to \"%s\"\n",
+			UTIL_LogPrintf("\"%s<%i><%s><%s>\" changed role to \"%s\"\n",
 				v19,
 				g_engfuncs.pfnGetPlayerUserId(pPlayer->edict()),
-				g_engfuncs.pfnGetPlayerWONId(pPlayer->edict()),
+				GETPLAYERAUTHID(pPlayer->edict()),
 				pszTeamName,
 				pCharName);
 		}
@@ -1441,10 +1441,10 @@ void CHalfLifeCTFplay::ChangePlayerTeam(CBasePlayer* pPlayer, const char* pCharN
 		g_engfuncs.pfnMessageEnd();
 
 		UTIL_LogPrintf(
-			"\"%s<%i><%u><spectator>\" joined team \"spectator\"\n",
+			"\"%s<%i><%s><spectator>\" joined team \"spectator\"\n",
 			STRING(pPlayer->pev->netname),
 			g_engfuncs.pfnGetPlayerUserId(pPlayer->edict()),
-			g_engfuncs.pfnGetPlayerWONId(pPlayer->edict()));
+			GETPLAYERAUTHID(pPlayer->edict()));
 	}
 }
 
@@ -1547,7 +1547,7 @@ static void InternalSendTeamStat(int playerIndex, const char* pszPlayerFormat, c
 			pszStatName,
 			STRING(pPlayer->pev->netname),
 			g_engfuncs.pfnGetPlayerUserId(pEdict),
-			g_engfuncs.pfnGetPlayerWONId(pEdict),
+			GETPLAYERAUTHID(pEdict),
 			GetTeamName(pEdict),
 			args...);
 	}
@@ -1566,7 +1566,7 @@ static void InternalSendTeamStat(int playerIndex, const char* pszPlayerFormat, c
 */
 static void SendTeamStat(int playerIndex, const char* pszStatName, const int value)
 {
-	InternalSendTeamStat(playerIndex, "// %-20s : \"%s<%i><%u><%s>\" for %d\n", "// %-20s : *Nobody* for %d\n", pszStatName, value, value);
+	InternalSendTeamStat(playerIndex, "// %-20s : \"%s<%i><%s><%s>\" for %d\n", "// %-20s : *Nobody* for %d\n", pszStatName, value, value);
 }
 
 /**
@@ -1577,7 +1577,7 @@ static void SendTeamTimeStat(int playerIndex, const char* pszStatName, const flo
 {
 	const auto time = SecondsToTime(value);
 
-	InternalSendTeamStat(playerIndex, "// %-40s : \"%s<%i><%u><%s>\" for %d:%02d\n", "// %-40s : *Nobody* for %d:%02d\n", pszStatName, static_cast<short>(value), time.Minutes, time.Seconds);
+	InternalSendTeamStat(playerIndex, "// %-40s : \"%s<%i><%s><%s>\" for %d:%02d\n", "// %-40s : *Nobody* for %d:%02d\n", pszStatName, static_cast<short>(value), time.Minutes, time.Seconds);
 }
 
 void CHalfLifeCTFplay::SendTeamStatInfo(CTFTeam iTeamNum)
@@ -1718,10 +1718,10 @@ void CHalfLifeCTFplay::SendTeamStatInfo(CTFTeam iTeamNum)
 			const auto jumpTime = SecondsToTime(static_cast<int>(pPlayer->m_flJumpTime));
 
 			UTIL_LogPrintf(
-				"\"%s<%i><%u><%s>\" scored \"%d\" (kills \"%d\") (deaths \"%d\") (suicides \"%d\") (ctf_points \"%d\") (ctf_offense \"%d\") (ctf_defense \"%d\") (snipe_kills \"%d\") (barnacle_kills \"%d\") (best_damage \"%d\") (accel_time \"%0d:%02d\") (ammo_time \"%0d:%02d\") (health_time \"%0d:%02d\") (shield_time \"%0d:%02d\") (jump_time \"%0d:%02d\")\n",
+				"\"%s<%i><%s><%s>\" scored \"%d\" (kills \"%d\") (deaths \"%d\") (suicides \"%d\") (ctf_points \"%d\") (ctf_offense \"%d\") (ctf_defense \"%d\") (snipe_kills \"%d\") (barnacle_kills \"%d\") (best_damage \"%d\") (accel_time \"%0d:%02d\") (ammo_time \"%0d:%02d\") (health_time \"%0d:%02d\") (shield_time \"%0d:%02d\") (jump_time \"%0d:%02d\")\n",
 				STRING(pPlayer->pev->netname),
 				g_engfuncs.pfnGetPlayerUserId(pPlayer->edict()),
-				g_engfuncs.pfnGetPlayerWONId(pPlayer->edict()),
+				GETPLAYERAUTHID(pPlayer->edict()),
 				GetTeamName(pPlayer->edict()),
 				(int)totalScore,
 				(int)pPlayer->pev->frags,

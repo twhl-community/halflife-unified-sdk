@@ -275,10 +275,10 @@ void CHalfLifeTeamplay::ChangePlayerTeam(CBasePlayer* pPlayer, const char* pTeam
 
 	if (nickName && '\0' != *nickName)
 	{
-		UTIL_LogPrintf("\"%s<%i><%u><%s>\" changed role to \"%s\"\n",
+		UTIL_LogPrintf("\"%s<%i><%s><%s>\" changed role to \"%s\"\n",
 			nickName,
 			GETPLAYERUSERID(pPlayer->edict()),
-			g_engfuncs.pfnGetPlayerWONId(pPlayer->edict()),
+			GETPLAYERAUTHID(pPlayer->edict()),
 			GetTeamName(pPlayer->edict()),
 			pTeamName);
 	}

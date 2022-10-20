@@ -258,10 +258,10 @@ void CItemCTF::ItemTouch(CBaseEntity* pOther)
 			m_flPickupTime = gpGlobals->time;
 
 			UTIL_LogPrintf(
-				"\"%s<%i><%u><%s>\" triggered \"take_%s_Powerup\"\n",
+				"\"%s<%i><%s><%s>\" triggered \"take_%s_Powerup\"\n",
 				STRING(pOther->pev->netname),
 				GETPLAYERUSERID(pOther->edict()),
-				g_engfuncs.pfnGetPlayerWONId(pOther->edict()),
+				GETPLAYERAUTHID(pOther->edict()),
 				GetTeamName(pOther->edict()),
 				m_pszItemName);
 		}
@@ -275,10 +275,10 @@ void CItemCTF::DropItem(CBasePlayer* pPlayer, bool bForceRespawn)
 		RemoveEffect(pPlayer);
 
 		UTIL_LogPrintf(
-			"\"%s<%i><%u><%s>\" triggered \"drop_%s_Powerup\"\n",
+			"\"%s<%i><%s><%s>\" triggered \"drop_%s_Powerup\"\n",
 			STRING(pPlayer->pev->netname),
 			GETPLAYERUSERID(pPlayer->edict()),
-			g_engfuncs.pfnGetPlayerWONId(pPlayer->edict()),
+			GETPLAYERAUTHID(pPlayer->edict()),
 			GetTeamName(pPlayer->edict()),
 			m_pszItemName);
 
@@ -365,10 +365,10 @@ void CItemCTF::ScatterItem(CBasePlayer* pPlayer)
 	m_flNextTouchTime = 5.0 + gpGlobals->time;
 
 	UTIL_LogPrintf(
-		"\"%s<%i><%u><%s>\" triggered \"drop_%s_Powerup\"\n",
+		"\"%s<%i><%s><%s>\" triggered \"drop_%s_Powerup\"\n",
 		STRING(pPlayer->pev->netname),
 		GETPLAYERUSERID(pPlayer->edict()),
-		g_engfuncs.pfnGetPlayerWONId(pPlayer->edict()),
+		GETPLAYERAUTHID(pPlayer->edict()),
 		GetTeamName(pPlayer->edict()),
 		m_pszItemName);
 }
@@ -416,10 +416,10 @@ void CItemCTF::ThrowItem(CBasePlayer* pPlayer)
 	m_flNextTouchTime = 5.0 + gpGlobals->time;
 
 	UTIL_LogPrintf(
-		"\"%s<%i><%u><%s>\" triggered \"drop_%s_Powerup\"\n",
+		"\"%s<%i><%s><%s>\" triggered \"drop_%s_Powerup\"\n",
 		STRING(pPlayer->pev->netname),
 		GETPLAYERUSERID(pPlayer->edict()),
-		g_engfuncs.pfnGetPlayerWONId(pPlayer->edict()),
+		GETPLAYERAUTHID(pPlayer->edict()),
 		GetTeamName(pPlayer->edict()),
 		m_pszItemName);
 }

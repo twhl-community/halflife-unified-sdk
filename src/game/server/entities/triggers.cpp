@@ -2644,10 +2644,10 @@ void CTriggerCTFGeneric::Touch(CBaseEntity* pOther)
 			pOtherPlayer->SendScoreInfoAll();
 
 			UTIL_LogPrintf(
-				"\"%s<%i><%u><%s>\" triggered \"%s\"\n",
+				"\"%s<%i><%s><%s>\" triggered \"%s\"\n",
 				STRING(pOtherPlayer->pev->targetname),
 				g_engfuncs.pfnGetPlayerUserId(pOtherPlayer->edict()),
-				g_engfuncs.pfnGetPlayerWONId(pOtherPlayer->edict()),
+				GETPLAYERAUTHID(pOtherPlayer->edict()),
 				GetTeamName(pOtherPlayer->edict()),
 				STRING(pev->targetname));
 		}
