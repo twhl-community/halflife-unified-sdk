@@ -15,7 +15,10 @@
 
 #pragma once
 
+#include <memory>
 #include <string_view>
+
+#include <spdlog/logger.h>
 
 #include "filesystem_utils.h"
 #include "mathlib.h"
@@ -27,6 +30,20 @@
 extern globalvars_t* gpGlobals;
 
 inline cvar_t* g_pDeveloper;
+
+extern std::shared_ptr<spdlog::logger> g_AssertLogger;
+
+//
+// How did I ever live without ASSERT?
+//
+#ifdef DEBUG
+void DBG_AssertFunction(bool fExpr, const char* szExpr, const char* szFile, int szLine, const char* szMessage);
+#define ASSERT(f) DBG_AssertFunction(f, #f, __FILE__, __LINE__, nullptr)
+#define ASSERTSZ(f, sz) DBG_AssertFunction(f, #f, __FILE__, __LINE__, sz)
+#else // !DEBUG
+#define ASSERT(f)
+#define ASSERTSZ(f, sz)
+#endif // !DEBUG
 
 // Testing strings for nullity
 inline constexpr bool FStringNull(string_t iString)

@@ -25,7 +25,27 @@
 #include "sound/ServerSoundSystem.h"
 #endif
 
+std::shared_ptr<spdlog::logger> g_AssertLogger;
 StringPool g_StringPool;
+
+#ifdef DEBUG
+void DBG_AssertFunction(
+	bool fExpr,
+	const char* szExpr,
+	const char* szFile,
+	int szLine,
+	const char* szMessage)
+{
+	if (fExpr)
+		return;
+
+	// Log as critical so it's enabled by default in debug builds.
+	if (szMessage != nullptr)
+		g_AssertLogger->critical("ASSERT FAILED:\n {} \n({}@{})\n{}", szExpr, szFile, szLine, szMessage);
+	else
+		g_AssertLogger->critical("ASSERT FAILED:\n {} \n({}@{})", szExpr, szFile, szLine);
+}
+#endif // DEBUG
 
 string_t ALLOC_STRING(const char* str)
 {

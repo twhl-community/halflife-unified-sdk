@@ -244,26 +244,6 @@ edict_t* DBG_EntOfVars(const entvars_t* pev)
 }
 #endif //DEBUG
 
-
-#ifdef DEBUG
-void DBG_AssertFunction(
-	bool fExpr,
-	const char* szExpr,
-	const char* szFile,
-	int szLine,
-	const char* szMessage)
-{
-	if (fExpr)
-		return;
-	char szOut[512];
-	if (szMessage != nullptr)
-		sprintf(szOut, "ASSERT FAILED:\n %s \n(%s@%d)\n%s", szExpr, szFile, szLine, szMessage);
-	else
-		sprintf(szOut, "ASSERT FAILED:\n %s \n(%s@%d)", szExpr, szFile, szLine);
-	ALERT(at_console, szOut);
-}
-#endif // DEBUG
-
 // ripped this out of the engine
 float UTIL_AngleMod(float a)
 {

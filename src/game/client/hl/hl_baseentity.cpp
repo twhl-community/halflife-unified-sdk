@@ -82,7 +82,6 @@ bool CBaseAnimating::Save(class CSave&) { return true; }
 
 // DEBUG Stubs
 edict_t* DBG_EntOfVars(const entvars_t* pev) { return nullptr; }
-void DBG_AssertFunction(bool fExpr, const char* szExpr, const char* szFile, int szLine, const char* szMessage) {}
 
 // UTIL_* Stubs
 void UTIL_PrecacheOther(const char* szClassname) {}

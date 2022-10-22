@@ -378,18 +378,6 @@ Vector VecBModelOrigin(entvars_t* pevBModel);
 int BuildChangeList(LEVELLIST* pLevelList, int maxList);
 
 //
-// How did I ever live without ASSERT?
-//
-#ifdef DEBUG
-void DBG_AssertFunction(bool fExpr, const char* szExpr, const char* szFile, int szLine, const char* szMessage);
-#define ASSERT(f) DBG_AssertFunction(f, #f, __FILE__, __LINE__, nullptr)
-#define ASSERTSZ(f, sz) DBG_AssertFunction(f, #f, __FILE__, __LINE__, sz)
-#else // !DEBUG
-#define ASSERT(f)
-#define ASSERTSZ(f, sz)
-#endif // !DEBUG
-
-//
 // Constants that were used only by QC (maybe not used at all now)
 //
 // Un-comment only as needed
