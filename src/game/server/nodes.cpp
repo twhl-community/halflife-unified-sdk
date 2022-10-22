@@ -190,7 +190,7 @@ entvars_t* CGraph::LinkEntForLink(CLink* pLink, CNode* pNode)
 	}
 	else
 	{
-		Logger->trace("Unsupported PathEnt: '%s'", STRING(pevLinkEnt->classname));
+		Logger->trace("Unsupported PathEnt: '{}'", STRING(pevLinkEnt->classname));
 		return nullptr;
 	}
 }
