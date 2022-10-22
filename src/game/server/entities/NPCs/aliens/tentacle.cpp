@@ -1042,7 +1042,7 @@ void CTentacle::HitTouch(CBaseEntity* pOther)
 
 	m_flHitTime = gpGlobals->time + 0.5;
 
-	// AILogger->debug("{} : {.0f} : {} : {}", STRING(tr.pHit->v.classname), pev->angles.y, STRING(pOther->pev->classname), tr.iHitgroup);
+	// AILogger->debug("{} : {:.0f} : {} : {}", STRING(tr.pHit->v.classname), pev->angles.y, STRING(pOther->pev->classname), tr.iHitgroup);
 }
 
 

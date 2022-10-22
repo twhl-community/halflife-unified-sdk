@@ -967,7 +967,7 @@ void CIchthyosaur::Swim()
 			SetActivity(ACT_WALK);
 		if (m_IdealActivity == ACT_WALK)
 			pev->framerate = m_flightSpeed / 150.0;
-		// AILogger->debug("walk {.2f}", pev->framerate);
+		// AILogger->debug("walk {:.2f}", pev->framerate);
 	}
 	else
 	{
@@ -975,7 +975,7 @@ void CIchthyosaur::Swim()
 			SetActivity(ACT_RUN);
 		if (m_IdealActivity == ACT_RUN)
 			pev->framerate = m_flightSpeed / 150.0;
-		// AILogger->debug("run  {.2f}", pev->framerate);
+		// AILogger->debug("run  {:.2f}", pev->framerate);
 	}
 
 	/*
@@ -1042,7 +1042,7 @@ void CIchthyosaur::Swim()
 	// Smooth Yaw and generate Roll
 	//
 	float turn = 360;
-	// AILogger->debug("Y {:.0f} {.0f}", Angles.y, pev->angles.y);
+	// AILogger->debug("Y {:.0f} {:.0f}", Angles.y, pev->angles.y);
 
 	if (fabs(Angles.y - pev->angles.y) < fabs(turn))
 	{
