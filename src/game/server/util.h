@@ -113,18 +113,12 @@ inline edict_t* ENT(edict_t* pent)
 inline edict_t* ENT(EOFFSET eoffset) { return (*g_engfuncs.pfnPEntityOfEntOffset)(eoffset); }
 inline EOFFSET OFFSET(const edict_t* pent)
 {
-#if _DEBUG
-	if (!pent)
-		ALERT(at_error, "Bad ent in OFFSET()\n");
-#endif
+	ASSERTSZ(pent, "Bad ent in OFFSET()");
 	return (*g_engfuncs.pfnEntOffsetOfPEntity)(pent);
 }
 inline EOFFSET OFFSET(entvars_t* pev)
 {
-#if _DEBUG
-	if (!pev)
-		ALERT(at_error, "Bad pev in OFFSET()\n");
-#endif
+	ASSERTSZ(pev, "Bad pev in OFFSET()");
 	return OFFSET(ENT(pev));
 }
 

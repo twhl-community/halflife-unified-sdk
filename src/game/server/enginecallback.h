@@ -91,7 +91,6 @@ inline void WRITE_RGB24(RGB24 color)
 #define CVAR_SET_FLOAT (*g_engfuncs.pfnCVarSetFloat)
 #define CVAR_SET_STRING (*g_engfuncs.pfnCVarSetString)
 #define CVAR_GET_POINTER (*g_engfuncs.pfnCVarGetPointer)
-#define ALERT (*g_engfuncs.pfnAlertMessage)
 #define ALLOC_PRIVATE (*g_engfuncs.pfnPvAllocEntPrivateData)
 inline void* GET_PRIVATE(edict_t* pent)
 {
