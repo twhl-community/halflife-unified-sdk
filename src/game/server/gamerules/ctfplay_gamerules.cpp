@@ -1746,7 +1746,7 @@ void CHalfLifeCTFplay::SendTeamStatInfo(CTFTeam iTeamNum)
 		}
 	}
 
-	if ((ToTeamIndex(iTeamNum)) < MaxTeams)
+	if (iTeamNum != CTFTeam::None && (ToTeamIndex(iTeamNum)) < MaxTeams)
 	{
 		UTIL_LogPrintf("// === Team %s Statistics ===\n", team_names[ToTeamIndex(iTeamNum)]);
 	}
