@@ -852,7 +852,7 @@ void ServerActivate(edict_t* pEdictList, int edictCount, int clientMax)
 		}
 		else
 		{
-			ALERT(at_console, "Can't instance %s\n", STRING(pEdictList[i].v.classname));
+			CBaseEntity::Logger->debug("Can't instance {}", STRING(pEdictList[i].v.classname));
 		}
 	}
 
@@ -1093,13 +1093,13 @@ void PlayerCustomization(edict_t* pEntity, customization_t* pCust)
 
 	if (!pPlayer)
 	{
-		ALERT(at_console, "PlayerCustomization:  Couldn't get player!\n");
+		CBaseEntity::Logger->debug("PlayerCustomization:  Couldn't get player!");
 		return;
 	}
 
 	if (!pCust)
 	{
-		ALERT(at_console, "PlayerCustomization:  nullptr customization!\n");
+		CBaseEntity::Logger->debug("PlayerCustomization:  nullptr customization!");
 		return;
 	}
 
@@ -1114,7 +1114,7 @@ void PlayerCustomization(edict_t* pEntity, customization_t* pCust)
 		// Ignore for now.
 		break;
 	default:
-		ALERT(at_console, "PlayerCustomization:  Unknown customization type!\n");
+		CBaseEntity::Logger->debug("PlayerCustomization:  Unknown customization type!");
 		break;
 	}
 }
