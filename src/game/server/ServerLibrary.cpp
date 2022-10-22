@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 
 #include <regex>
 #include <stdexcept>
@@ -68,10 +68,10 @@ static std::string GetMapConfigCommandWhitelistSchema()
 )");
 }
 
-template<typename DataContext>
+template <typename DataContext>
 static void AddCommonConfigSections(std::vector<std::unique_ptr<const GameConfigSection<DataContext>>>& sections)
 {
-	//Always add this
+	// Always add this
 	sections.push_back(std::make_unique<EchoSection<DataContext>>());
 }
 
@@ -130,12 +130,12 @@ void ServerLibrary::NewMapStarted(bool loadGame)
 {
 	ClearStringPool();
 
-	//Initialize map state to its default state
+	// Initialize map state to its default state
 	m_MapState = MapState{};
 
 	g_ReplacementMaps.Clear();
 
-	//Load the config files, which will initialize the map state as needed
+	// Load the config files, which will initialize the map state as needed
 	LoadServerConfigFiles();
 
 	g_Skill.NewMapStarted();
@@ -176,13 +176,13 @@ void ServerLibrary::PlayerActivating(CBasePlayer* player)
 		MESSAGE_END();
 	}
 
-	//Override the hud color.
+	// Override the hud color.
 	if (m_MapState.m_HudColor)
 	{
 		player->SetHudColor(*m_MapState.m_HudColor);
 	}
 
-	//Override the light type.
+	// Override the light type.
 	if (m_MapState.m_LightType)
 	{
 		player->SetSuitLightType(*m_MapState.m_LightType);
@@ -195,6 +195,26 @@ void ServerLibrary::AddGameSystems()
 	g_GameSystems.Add(&g_Skill);
 	g_GameSystems.Add(&sound::g_ServerSound);
 	g_GameSystems.Add(&sentences::g_Sentences);
+}
+
+void ServerLibrary::SetEntLogLevels(spdlog::level::level_enum level)
+{
+	GameLibrary::SetEntLogLevels(level);
+
+	const auto& levelName = spdlog::level::to_string_view(level);
+
+	for (auto& logger : {
+			 CBaseEntity::IOLogger,
+			 CBaseMonster::AILogger,
+			 CCineMonster::AIScriptLogger,
+			 CGraph::Logger,
+			 CSaveRestoreBuffer::Logger,
+			 CGameRules::Logger,
+			 CVoiceGameMgr::Logger})
+	{
+		logger->set_level(level);
+		Con_Printf("Set \"%s\" log level to %s\n", logger->name().c_str(), levelName.data());
+	}
 }
 
 void ServerLibrary::CreateConfigDefinitions()
@@ -211,8 +231,7 @@ void ServerLibrary::CreateConfigDefinitions()
 			sections.push_back(std::make_unique<HudColorSection>());
 			sections.push_back(std::make_unique<SuitLightTypeSection>());
 
-			return sections;
-		}());
+			return sections; }());
 
 	m_MapConfigDefinition = g_GameConfigSystem.CreateDefinition("MapGameConfig", [this]()
 		{
@@ -226,8 +245,7 @@ void ServerLibrary::CreateConfigDefinitions()
 			sections.push_back(std::make_unique<HudColorSection>());
 			sections.push_back(std::make_unique<SuitLightTypeSection>());
 
-			return sections;
-		}());
+			return sections; }());
 
 	m_MapChangeConfigDefinition = g_GameConfigSystem.CreateDefinition("MapChangeGameConfig", []()
 		{
@@ -237,8 +255,7 @@ void ServerLibrary::CreateConfigDefinitions()
 			AddCommonConfigSections(sections);
 			sections.push_back(std::make_unique<CommandsSection<MapState>>());
 
-			return sections;
-		}());
+			return sections; }());
 }
 
 void ServerLibrary::LoadServerConfigFiles()
@@ -248,7 +265,7 @@ void ServerLibrary::LoadServerConfigFiles()
 		m_ServerConfigDefinition->TryLoad(cfgFile, {.Data = m_MapState, .PathID = "GAMECONFIG"});
 	}
 
-	//Check if the file exists so we don't get errors about it during loading
+	// Check if the file exists so we don't get errors about it during loading
 	if (const auto mapCfgFileName = fmt::format("cfg/maps/{}.json", STRING(gpGlobals->mapname));
 		g_pFileSystem->FileExists(mapCfgFileName.c_str()))
 	{
@@ -266,7 +283,7 @@ void ServerLibrary::LoadMapChangeConfigFile()
 
 std::unordered_set<std::string> ServerLibrary::GetMapConfigCommandWhitelist()
 {
-	//Load the whitelist from a file
+	// Load the whitelist from a file
 	auto whitelist = g_JSON.ParseJSONFile(
 		MapConfigCommandWhitelistFileName,
 		{.SchemaName = MapConfigCommandWhitelistSchemaName, .PathID = "GAMECONFIG"},

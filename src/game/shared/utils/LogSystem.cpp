@@ -196,6 +196,8 @@ bool LogSystem::Initialize()
 		{ ListLoggers(); });
 	g_ConCommands.CreateCommand("log_setlevel", [this](const auto& args)
 		{ SetLogLevel(args); });
+	g_ConCommands.CreateCommand("log_setalllevels", [this](const auto& args)
+		{ SetAllLogLevels(args); });
 	g_ConCommands.CreateCommand("log_file", [this](const auto& args)
 		{ FileCommand(args); });
 
@@ -483,13 +485,31 @@ void LogSystem::SetLogLevel(const CommandArgs& args)
 
 			logger->set_level(level);
 
-			Con_Printf("Set log level to %s\n", spdlog::level::to_string_view(level).data());
+			Con_Printf("Set \"%s\" log level to %s\n", logger->name().c_str(), spdlog::level::to_string_view(level).data());
 		}
 	}
 	else
 	{
 		Con_Printf("No such logger\n");
 	}
+}
+
+void LogSystem::SetAllLogLevels(const CommandArgs& args)
+{
+	if (args.Count() != 2)
+	{
+		Con_Printf("Usage: log_setalllevels log_level\n");
+		return;
+	}
+
+	const auto level = spdlog::level::from_str(args.Argument(1));
+	const auto& levelName = spdlog::level::to_string_view(level);
+
+	spdlog::apply_all([&](auto logger)
+		{
+			logger->set_level(level);
+			Con_Printf("Set \"%s\" log level to %s\n", logger->name().c_str(), levelName.data());
+		});
 }
 
 void LogSystem::FileCommand(const CommandArgs& args)

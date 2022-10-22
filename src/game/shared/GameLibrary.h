@@ -15,6 +15,10 @@
 
 #pragma once
 
+#include <spdlog/common.h>
+
+#include "utils/ConCommandSystem.h"
+
 /**
  *	@brief Handles core game actions
  */
@@ -49,4 +53,9 @@ public:
 
 protected:
 	virtual void AddGameSystems();
+
+	virtual void SetEntLogLevels(spdlog::level::level_enum level);
+
+private:
+	void SetEntLogLevels(const CommandArgs& args);
 };

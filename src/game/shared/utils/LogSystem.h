@@ -95,6 +95,8 @@ private:
 
 	void SetLogLevel(const CommandArgs& args);
 
+	void SetAllLogLevels(const CommandArgs& args);
+
 	void FileCommand(const CommandArgs& args);
 
 private:

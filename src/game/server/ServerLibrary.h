@@ -86,6 +86,8 @@ public:
 protected:
 	void AddGameSystems() override;
 
+	void SetEntLogLevels(spdlog::level::level_enum level) override;
+
 private:
 	/**
 	*	@brief Called when a new map has started
