@@ -15,6 +15,10 @@
 
 #pragma once
 
+#include <fmt/core.h>
+
+#include <EASTL/fixed_string.h>
+
 #include "Platform.h"
 
 //
@@ -324,6 +328,26 @@ void ClientPrint(entvars_t* client, int msg_dest, const char* msg_name, const ch
 void UTIL_SayText(const char* pText, CBaseEntity* pEntity);
 void UTIL_SayTextAll(const char* pText, CBaseEntity* pEntity);
 
+/**
+*	@brief Prints to the given player's console.
+*	Uses fmtlib format strings.
+*/
+template <typename... Args>
+void UTIL_ConsolePrint(edict_t* client, fmt::format_string<Args...> fmt, Args&&... args)
+{
+	eastl::fixed_string<char, 256> buf;
+	fmt::format_to(std::back_inserter(buf), fmt, std::forward<Args>(args)...);
+
+	CLIENT_PRINTF(client, print_console, buf.c_str());
+}
+
+/**
+ *	@brief Prints to the given player's console.
+ */
+inline void UTIL_ConsolePrint(edict_t* client, const char* msg)
+{
+	CLIENT_PRINTF(client, print_console, msg);
+}
 
 typedef struct hudtextparms_s
 {

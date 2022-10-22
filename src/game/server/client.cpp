@@ -469,7 +469,7 @@ struct PageSearchResult
  *	@param filter Callback to filter entities.
  */
 template <typename Function>
-PageSearchResult PageBasedEntitySearch(int desiredPage, Function&& filter)
+PageSearchResult PageBasedEntitySearch(CBasePlayer* player, int desiredPage, Function&& filter)
 {
 	int pageCount = 0;
 	int totalCount = 0;
@@ -477,7 +477,7 @@ PageSearchResult PageBasedEntitySearch(int desiredPage, Function&& filter)
 
 	const bool doPagination = desiredPage != 0;
 
-	ALERT(at_console, "entindex - classname - targetname - origin\n");
+	UTIL_ConsolePrint(player->edict(), "entindex - classname - targetname - origin\n");
 
 	for (auto entity : UTIL_FindEntities())
 	{
@@ -490,9 +490,8 @@ PageSearchResult PageBasedEntitySearch(int desiredPage, Function&& filter)
 
 		if (!doPagination || currentPage == desiredPage)
 		{
-			ALERT(at_console, "%d - %s - %s - {%f, %f, %f}\n",
-				entity->entindex(), entity->GetClassname(), entity->GetTargetname(),
-				entity->pev->origin.x, entity->pev->origin.y, entity->pev->origin.z);
+			UTIL_ConsolePrint(player->edict(), "{} - {} - {} - {{{}}}\n",
+				entity->entindex(), entity->GetClassname(), entity->GetTargetname(), entity->pev->origin);
 
 			if (!doPagination)
 			{
@@ -511,29 +510,29 @@ PageSearchResult PageBasedEntitySearch(int desiredPage, Function&& filter)
 	return {.UsePagination = doPagination, .TotalEntityCount = totalCount, .DesiredPage = desiredPage, .PageCount = currentPage};
 }
 
-void PrintPageSearchResult(const PageSearchResult& result, const char* filterName, const char* filterContents)
+void PrintPageSearchResult(CBasePlayer* player, const PageSearchResult& result, const char* filterName, const char* filterContents)
 {
 	if (result.UsePagination)
 	{
-		ALERT(at_console, "%d entities having the %s: \"%s\" (page %d / %d)\n",
+		UTIL_ConsolePrint(player->edict(), "{} entities having the {}: \"{}\" (page {} / {})\n",
 			result.TotalEntityCount, filterName, filterContents, result.DesiredPage, result.PageCount);
 	}
 	else
 	{
-		ALERT(at_console, "%d entities having the %s: \"%s\"\n",
+		UTIL_ConsolePrint(player->edict(), "{} entities having the {}: \"{}\"\n",
 			result.TotalEntityCount, filterName, filterContents);
 	}
 }
 
-void PrintPageSearchResult(const PageSearchResult& result)
+void PrintPageSearchResult(CBasePlayer* player, const PageSearchResult& result)
 {
 	if (result.UsePagination)
 	{
-		ALERT(at_console, "Total %d / %d entities (page %d / %d)\n", result.TotalEntityCount, gpGlobals->maxEntities, result.DesiredPage, result.PageCount);
+		UTIL_ConsolePrint(player->edict(), "Total {} / {} entities (page {} / {})\n", result.TotalEntityCount, gpGlobals->maxEntities, result.DesiredPage, result.PageCount);
 	}
 	else
 	{
-		ALERT(at_console, "Total %d / %d entities\n", result.TotalEntityCount, gpGlobals->maxEntities);
+		UTIL_ConsolePrint(player->edict(), "Total {} / {} entities\n", result.TotalEntityCount, gpGlobals->maxEntities);
 	}
 }
 
@@ -568,7 +567,7 @@ void SV_CreateClientCommands()
 			}
 			else
 			{
-				CLIENT_PRINTF(player->edict(), print_console, UTIL_VarArgs("\"fov\" is \"%d\"\n", (int)player->m_iFOV));
+				UTIL_ConsolePrint(player->edict(), "\"fov\" is \"{}\"\n", player->m_iFOV);
 			} });
 
 	g_ClientCommands.Create("set_hud_color", [](CBasePlayer* player, const auto& args)
@@ -584,7 +583,7 @@ void SV_CreateClientCommands()
 			}
 			else
 			{
-				CLIENT_PRINTF(player->edict(), print_console, "Usage: set_hud_color <r> <g> <b> (values in range 0-255)\n");
+				UTIL_ConsolePrint(player->edict(), "Usage: set_hud_color <r> <g> <b> (values in range 0-255)\n");
 			} },
 		{.Flags = ClientCommandFlag::Cheat});
 
@@ -600,7 +599,7 @@ void SV_CreateClientCommands()
 				}
 				else
 				{
-					CLIENT_PRINTF(player->edict(), print_console, UTIL_VarArgs("Unknown suit light type \"%s\"\n", args.Argument(1)));
+					UTIL_ConsolePrint(player->edict(), "Unknown suit light type \"{}\"\n", args.Argument(1));
 				}
 			} },
 		{.Flags = ClientCommandFlag::Cheat});
@@ -616,7 +615,7 @@ void SV_CreateClientCommands()
 			}
 			else
 			{
-				CLIENT_PRINTF(player->edict(), print_console, "usage: selectweapon <weapon name>\n");
+				UTIL_ConsolePrint(player->edict(), "usage: selectweapon <weapon name>\n");
 			} });
 
 	g_ClientCommands.Create("lastinv", [](CBasePlayer* player, const auto& args)
@@ -644,14 +643,14 @@ void SV_CreateClientCommands()
 		{
 			if (args.Count() > 1)
 			{
-				const auto result = PageBasedEntitySearch(args.Count() > 2 ? atoi(args.Argument(2)) : 1, [&](auto entity)
+				const auto result = PageBasedEntitySearch(player, args.Count() > 2 ? atoi(args.Argument(2)) : 1, [&](auto entity)
 					{ return FStrEq(args.Argument(1), entity->GetClassname()); });
 
-				PrintPageSearchResult(result , "classname", args.Argument(1));
+				PrintPageSearchResult(player, result, "classname", args.Argument(1));
 			}
 			else
 			{
-				CLIENT_PRINTF(player->edict(), print_console, "usage: ent_find_by_classname <classname> [page]\n");
+				UTIL_ConsolePrint(player->edict(), "usage: ent_find_by_classname <classname> [page]\n");
 			} },
 		{.Flags = ClientCommandFlag::Cheat});
 
@@ -659,14 +658,14 @@ void SV_CreateClientCommands()
 		{
 			if (args.Count() > 1)
 			{
-				const auto result = PageBasedEntitySearch(args.Count() > 2 ? atoi(args.Argument(2)) : 1, [&](auto entity)
+				const auto result = PageBasedEntitySearch(player, args.Count() > 2 ? atoi(args.Argument(2)) : 1, [&](auto entity)
 					{ return FStrEq(args.Argument(1), entity->GetTargetname()); });
 
-				PrintPageSearchResult(result , "targetname", args.Argument(1));
+				PrintPageSearchResult(player, result, "targetname", args.Argument(1));
 			}
 			else
 			{
-				CLIENT_PRINTF(player->edict(), print_console, "usage: ent_find_by_targetname <targetname> [page]\n");
+				UTIL_ConsolePrint(player->edict(), "usage: ent_find_by_targetname <targetname> [page]\n");
 			} },
 		{.Flags = ClientCommandFlag::Cheat});
 
@@ -691,25 +690,25 @@ void SV_CreateClientCommands()
 			}
 			else
 			{
-				CLIENT_PRINTF(player->edict(), print_console, "usage: ent_fire <targetname> [usetype] [value]\n");
+				UTIL_ConsolePrint(player->edict(), "usage: ent_fire <targetname> [usetype] [value]\n");
 			} },
 		{.Flags = ClientCommandFlag::Cheat});
 
 	g_ClientCommands.Create("ent_list", [](CBasePlayer* player, const CommandArgs& args)
 		{
 			// Turn pagination off by default for this so player gets a list of all entities by default.
-			const auto result = PageBasedEntitySearch(args.Count() > 1 ? std::max(atoi(args.Argument(1)), 0) : 0, [&](auto entity)
+			const auto result = PageBasedEntitySearch(player, args.Count() > 1 ? std::max(atoi(args.Argument(1)), 0) : 0, [&](auto entity)
 				{ return true; });
 
-			PrintPageSearchResult(result); },
+			PrintPageSearchResult(player, result); },
 		{.Flags = ClientCommandFlag::Cheat});
 }
 
-bool UTIL_CheatsAllowed(CBasePlayer* pEntity, std::string_view name)
+bool UTIL_CheatsAllowed(CBasePlayer* player, std::string_view name)
 {
 	if (0 == g_psv_cheats->value)
 	{
-		CLIENT_PRINTF(pEntity->edict(), print_console, fmt::format("The command \"{}\" can only be used when cheats are enabled\n", name).c_str());
+		UTIL_ConsolePrint(player->edict(), "The command \"{}\" can only be used when cheats are enabled\n", name);
 		return false;
 	}
 
