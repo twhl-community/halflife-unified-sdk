@@ -110,7 +110,7 @@ void CBaseEntity::SUB_Remove()
 	{
 		// this situation can screw up monsters who can't tell their entity pointers are invalid.
 		pev->health = 0;
-		Logger->debug("SUB_Remove called on entity with health > 0");
+		Logger->debug("SUB_Remove called on entity \"{}\" ({}) with health > 0", STRING(pev->targetname), STRING(pev->classname));
 	}
 
 	REMOVE_ENTITY(ENT(pev));
