@@ -839,7 +839,6 @@ enum class AmbientMusicTargetSelector
 {
 	AllPlayers = 0,
 	Activator,
-	LocalPlayer,
 	Radius
 };
 
@@ -990,17 +989,6 @@ void CAmbientMusic::TriggerUse(CBaseEntity* pActivator, CBaseEntity* pCaller, US
 		if (pActivator && pActivator->IsPlayer())
 		{
 			executor(pActivator);
-		}
-		break;
-	}
-
-	case AmbientMusicTargetSelector::LocalPlayer:
-	{
-		auto localPlayer = UTIL_GetLocalPlayer();
-
-		if (localPlayer)
-		{
-			executor(localPlayer);
 		}
 		break;
 	}
