@@ -16,7 +16,6 @@
 #pragma once
 
 #include <memory>
-#include <sstream>
 #include <string>
 #include <string_view>
 
@@ -72,21 +71,23 @@ using UniquePtr = std::unique_ptr<T, ObjectDeleter<T>>;
 
 inline std::string FormatFunctionName(const asIScriptFunction& function)
 {
-	std::ostringstream stream;
+	std::string buffer;
 
 	if (const auto ns = function.GetNamespace(); ns && ns[0])
 	{
-		stream << ns << "::";
+		buffer += ns;
+		buffer += "::";
 	}
 
 	if (const auto clazz = function.GetObjectName(); clazz)
 	{
-		stream << clazz << "::";
+		buffer += clazz;
+		buffer += "::";
 	}
 
-	stream << function.GetName();
+	buffer += function.GetName();
 
-	return stream.str();
+	return buffer;
 }
 
 std::string_view ReturnCodeToString(int code);

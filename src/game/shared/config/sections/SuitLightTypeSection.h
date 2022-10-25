@@ -15,7 +15,7 @@
 
 #pragma once
 
-#include <sstream>
+#include <string>
 
 #include "cdll_dll.h"
 #include "MapState.h"
@@ -39,25 +39,27 @@ public:
 	{
 		const auto types = []()
 		{
-			std::ostringstream types;
+			std::string types;
 
+			bool first = true;
+
+			for (const auto& type : SuitLightTypes)
 			{
-				bool first = true;
-
-				for (const auto& type : SuitLightTypes)
+				if (!first)
 				{
-					if (!first)
-					{
-						types << ',';
-					}
-
-					first = false;
-
-					types << '"' << type.Name << '"';
+					types += ',';
 				}
+				else
+				{
+					first = false;
+				}
+
+				types += '"';
+				types += type.Name;
+				types += '"';
 			}
 
-			return types.str();
+			return types;
 		}();
 
 		return {

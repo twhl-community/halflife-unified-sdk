@@ -16,7 +16,6 @@
 #pragma once
 
 #include <memory>
-#include <sstream>
 #include <stdexcept>
 #include <string>
 #include <string_view>
@@ -211,7 +210,7 @@ inline std::string GameConfigDefinition<DataContext>::GetSchema() const
 
 	const auto sections = [this]()
 	{
-		std::ostringstream stream;
+		std::string buffer;
 
 		bool first = true;
 
@@ -221,14 +220,14 @@ inline std::string GameConfigDefinition<DataContext>::GetSchema() const
 		{
 			if (!first)
 			{
-				stream << ',';
+				buffer += ',';
 			}
 
 			first = false;
 
 			const auto [definition, required] = section->GetSchema();
 
-			stream << fmt::format(R"(
+			buffer += fmt::format(R"(
 {{
 	"title": "{0} Section",
 	"type": "object",
@@ -254,7 +253,7 @@ inline std::string GameConfigDefinition<DataContext>::GetSchema() const
 				section->GetName(), definition, required.empty() ? ""sv : ","sv, required);
 		}
 
-		return stream.str();
+		return buffer;
 	}();
 
 	return fmt::format(R"(

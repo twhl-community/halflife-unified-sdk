@@ -15,7 +15,6 @@
 
 #include <functional>
 #include <iterator>
-#include <sstream>
 #include <string_view>
 #include <unordered_map>
 #include <vector>
@@ -64,7 +63,7 @@ static std::string GetLoggingConfigSchema()
 	// Create json array contents matching spdlog log level names
 	const auto levels = []()
 	{
-		std::ostringstream levels;
+		std::string levels;
 
 		{
 			bool first = true;
@@ -73,16 +72,20 @@ static std::string GetLoggingConfigSchema()
 			{
 				if (!first)
 				{
-					levels << ',';
+					levels += ',';
+				}
+				else
+				{
+					first = false;
 				}
 
-				first = false;
-
-				levels << '"' << ToStringView(level) << '"';
+				levels += '"';
+				levels += ToStringView(level);
+				levels += '"';
 			}
 		}
 
-		return levels.str();
+		return levels;
 	}();
 
 	return fmt::format(R"(

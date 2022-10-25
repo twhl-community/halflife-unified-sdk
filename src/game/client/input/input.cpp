@@ -5,7 +5,6 @@
 // Quake is a trademark of Id Software, Inc., (c) 1996 Id Software, Inc. All
 // rights reserved.
 
-#include <sstream>
 #include <string>
 
 #include "hud.h"
@@ -134,7 +133,7 @@ std::string KB_ConvertString(const char* in)
 	char* pEnd;
 	const char* pBinding;
 
-	std::ostringstream buffer;
+	std::string buffer;
 
 	p = in;
 	while ('\0' != *p)
@@ -158,7 +157,7 @@ std::string KB_ConvertString(const char* in)
 
 			if (pBinding)
 			{
-				buffer << '[';
+				buffer += '[';
 				pEnd = (char*)pBinding;
 			}
 			else
@@ -168,21 +167,21 @@ std::string KB_ConvertString(const char* in)
 
 			while ('\0' != *pEnd)
 			{
-				buffer << *pEnd++;
+				buffer += *pEnd++;
 			}
 
 			if (pBinding)
 			{
-				buffer << ']';
+				buffer += ']';
 			}
 		}
 		else
 		{
-			buffer << *p++;
+			buffer += *p++;
 		}
 	}
 
-	return buffer.str();
+	return buffer;
 }
 
 /*
