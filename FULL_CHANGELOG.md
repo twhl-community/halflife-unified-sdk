@@ -1,3 +1,36 @@
+This is the changelog from Steam Half-Life: Blue Shift to Half-Life: Blue Shift Updated version 1.0.0.
+
+Fixes for bugs introduced in beta builds are not included in this list.
+
+See the full changelog for Half-Life Updated below for changes shared with the base game.
+
+## Weapons
+
+### MP5
+
+* Fixed MP5 shooting animations sometimes playing a deploy animation [#78](https://github.com/SamVanheer/halflife-op4-updated/issues/78)
+
+## Other
+
+* Fixed game potentially crashing when saving and/or loading the game in ba_outro (halflife issue [#1014](https://github.com/ValveSoftware/halflife/issues/1014))
+
+### Code cleanup
+
+* Removed void from functions taking no arguments (clang-tidy modernize-redundant-void-arg)
+* Used override specifier where needed (clang-tidy modernize-use-override)
+
+## Project changes
+
+* Added tool to convert Blue Shift BSP files to standard Half-Life BSP format
+* Added Blue Shift FGD [#2](https://github.com/SamVanheer/halflife-bs-updated/pull/2) (Thanks [Veinhelm](https://github.com/Veinhelm))
+
+## Game installation
+
+* Fixed script in `ba_yard4a` that relied on a bug to break frozen Alien Slaves out of their frozen animation (halflife issue [#3061](https://github.com/ValveSoftware/halflife/issues/3061))
+* Fixed LD and HD Revolver models not playing the reload sound (halflife issue [#2351](https://github.com/ValveSoftware/halflife/issues/2351))
+
+---
+
 This is the changelog from Steam Half-Life to Half-Life Updated version 1.0.0.
 
 Fixes for bugs introduced in beta builds are not included in this list.
