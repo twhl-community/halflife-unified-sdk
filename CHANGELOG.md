@@ -1,3 +1,73 @@
+# Half-Life: Blue Shift Updated changelog
+
+## Changes in V1.0.0 Beta 010
+
+All changes from Half-Life Updated up until Beta 13 are included: https://github.com/SamVanheer/halflife-updated/wiki/Changelog#changes-in-v100-beta-013
+
+* Fixed MP5 shooting animations sometimes playing a deploy animation [#78](https://github.com/SamVanheer/halflife-op4-updated/issues/78) (Thanks to [Ronin4862](https://github.com/Ronin4862) for finding this, and thanks to [malortie](https://github.com/malortie) for fixing this)
+
+## Changes in V1.0.0 Beta 009
+
+All changes from Half-Life Updated up until Beta 12 are included: https://github.com/SamVanheer/halflife-updated/wiki/Changelog#changes-in-v100-beta-012
+
+* Applied bug fixing work done for Half-Life Updated to this project as well
+* Added Blue Shift FGD [#2](https://github.com/SamVanheer/halflife-bs-updated/pull/2) (Thanks [Veinhelm](https://github.com/Veinhelm))
+
+## Changes in V1.0.0 Beta 008
+
+All changes from Half-Life Updated up until Beta 11 are included: https://github.com/SamVanheer/halflife-updated/wiki/Changelog#changes-in-v100-beta-011
+
+* Applied bug fixing work done for Half-Life Updated to this project as well
+
+## Changes in V1.0.0 Beta 007
+
+All changes from Half-Life Updated up until Beta 10 are included: https://github.com/SamVanheer/halflife-updated/wiki/Changelog#changes-in-v100-beta-010
+
+* Applied bug fixing work done for Half-Life Updated to this project as well
+
+## Changes in V1.0.0 Beta 006
+
+All changes from Half-Life Updated up until Beta 9 are included: https://github.com/SamVanheer/halflife-updated/wiki/Changelog#changes-in-v100-beta-009
+
+* Applied bug fixing work done for Half-Life Updated to this project as well
+
+## Changes in V1.0.0 Beta 005
+
+All changes from Half-Life Updated up until Beta 8 are included: https://github.com/SamVanheer/halflife-updated/wiki/Changelog#changes-in-v100-beta-008
+
+* Applied bug fixing work done for Half-Life Updated to this project as well
+
+## Changes in V1.0.0 Beta 004
+
+All changes from Half-Life Updated up until Beta 7 are included: https://github.com/SamVanheer/halflife-updated/wiki/Changelog#changes-in-v100-beta-007
+
+* Applied refactoring work done for Half-Life Updated to this project as well
+
+## Changes in V1.0.0 Beta 003
+
+All changes from Half-Life Updated up until Beta 6 are included: https://github.com/SamVanheer/halflife-updated/wiki/Changelog#changes-in-v100-beta-006
+
+* Added rosenberg.cpp to Linux Makefile
+
+## Changes in V1.0.0 Beta 002
+
+All changes from Half-Life Updated up until Beta 5 are included: https://github.com/Solokiller/halflife-updated/wiki/Changelog
+
+* Implemented monster_generic head turn support (Thanks vasiavasiavasia95)
+* Properly check if player should be frozen on restore
+* Fixed script in `ba_yard4a` that relied on a bug to break frozen Alien Slaves out of their frozen animation (halflife issue [[#3061|https://github.com/ValveSoftware/halflife/issues/3061]])
+* Fixed LD and HD Revolver models not playing the reload sound (halflife issue [[2351|https://github.com/ValveSoftware/halflife/issues/2351]])
+
+### Code cleanup
+
+* Removed void from functions taking no arguments (clang-tidy modernize-redundant-void-arg)
+* Used override specifier where needed (clang-tidy modernize-use-override)
+
+## Changes in V1.0.0 Beta 001
+
+* Added tool to convert Blue Shift BSP files to standard Half-Life BSP format
+* Fixed game potentially crashing when saving and/or loading the game in ba_outro (halflife issue [[#1014|https://github.com/ValveSoftware/halflife/issues/1014]])
+
 # Half-Life Updated changelog
 
 ## Changes in V1.0.0 Beta 014
