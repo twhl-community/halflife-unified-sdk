@@ -1,3 +1,205 @@
+# Half-Life: Opposing Force Updated changelog
+
+Many changes have been made since 2019. All changes made after [[this|https://github.com/Solokiller/halflife-op4/commit/0acdeaea6c27c6b3e1f0ef458f58b98925bc201b]] commit are new.
+
+## Changes in V1.0.0 Beta 011
+
+> Note: this beta has not been released yet.
+
+### Bug fixes
+
+* Fixed trigger_ctfgeneric printing wrong targetname in log [#87](https://github.com/SamVanheer/halflife-op4-updated/issues/87)
+* Fixed incorrect team check in SendTeamStatInfo [#88](https://github.com/SamVanheer/halflife-op4-updated/issues/88)
+
+## Changes in V1.0.0 Beta 010
+
+### Bug fixes
+
+* Fixed Shock Trooper health not matching original game [#74](https://github.com/SamVanheer/halflife-op4-updated/issues/74) (Thanks [Ronin4862](https://github.com/Ronin4862))
+* Fixed MP5 shooting animations sometimes playing a deploy animation [#78](https://github.com/SamVanheer/halflife-op4-updated/issues/78) (Thanks to [Ronin4862](https://github.com/Ronin4862) for finding this, and thanks to [malortie](https://github.com/malortie) for fixing this)
+* Fixed Shock Trooper weapon body being set incorrectly, removed some unused constants
+* Fixed Engineer not shutting off his blow torch properly [#81](https://github.com/SamVanheer/halflife-op4-updated/issues/81) (Thanks [Ronin4862](https://github.com/Ronin4862))
+* Fixed NPC fired 556 and 762 bullets not creating bullet decals half the time (halflife issue [#383](https://github.com/ValveSoftware/halflife/issues/383) and Updated issue [#163](https://github.com/SamVanheer/halflife-updated/issues/163)) (Thanks [Ronin4862](https://github.com/Ronin4862) and [Matthaiks](https://github.com/Matthaiks))
+* Fixed domain errors in func_tank_of (halflife issue [#3303](https://github.com/ValveSoftware/halflife/issues/3303)) (Thanks pat and [a1batross](https://github.com/a1batross))
+
+## Changes in V1.0.0 Beta 009
+
+### Bug fixes
+
+* Fixed Gonome calculating gut throw direction incorrectly [#69](https://github.com/SamVanheer/halflife-op4-updated/issues/69) (Thanks orav104)
+* Fixed tentacle height values being incorrect for Opposing Force [#70](https://github.com/SamVanheer/halflife-op4-updated/issues/70)
+* Fixed info_ctfspawn_pickup not being called info_ctfspawn_powerup [#71](https://github.com/SamVanheer/halflife-op4-updated/issues/71) (Thanks Suparsonik)
+* Changed Displacer room type from float to int
+* Fixed human grunts being able to drop weapons in the intro map
+
+### Project changes
+
+* Added `fgd/halflife-op4.fgd`
+
+## Changes in V1.0.0 Beta 008
+
+### Bug fixes
+
+* Fixed typo in shephard player model name [#66](https://github.com/SamVanheer/halflife-op4-updated/issues/66)
+* Fixed clients not getting ScoreInfo message for new players immediately in CTF [#67](https://github.com/SamVanheer/halflife-op4-updated/issues/67)
+* Fixed crashes when GetClientColor returns null in CTF [#68](https://github.com/SamVanheer/halflife-op4-updated/issues/68)
+
+## Changes in V1.0.0 Beta 007
+
+### Bug fixes
+
+* Fixed not being able to open team menu after a full CTF round has been played [#63](https://github.com/SamVanheer/halflife-op4-updated/issues/63)
+* Fixed npc_gonome trying to play non-existent sounds [#64](https://github.com/SamVanheer/halflife-op4-updated/issues/64)
+* Fixed monster_tentacle missing spawnflag 64 (different model option) [#65](https://github.com/SamVanheer/halflife-op4-updated/issues/65) (Thanks malortie)
+
+## Changes in V1.0.0 Beta 006
+
+### Bug fixes
+
+* Fixed Black Ops Osprey crashing if it has no valid target (halflife issue [#3259](https://github.com/ValveSoftware/halflife/issues/3259))
+* Fixed Black Ops Osprey teleporting to world origin if it isn't moving at all (halflife issue [#3260](https://github.com/ValveSoftware/halflife/issues/3260))
+* Fixed Black Ops Osprey not firing trigger targets Resolves (halflife issue [#3261](https://github.com/ValveSoftware/halflife/issues/3261))
+* Fixed Black Ops Osprey engine damage effects showing on wrong engine (halflife issue [#3263](https://github.com/ValveSoftware/halflife/issues/3263))
+* Fixed Black Ops Apache not firing trigger targets (halflife issue [#3262](https://github.com/ValveSoftware/halflife/issues/3262))
+* Fixed Otis Using Barney Voice Lines [#62](https://github.com/SamVanheer/halflife-op4-updated/issues/62) (Thanks OpenRift412)
+
+## Changes in V1.0.0 Beta 005
+
+* Show pickup icons in HUD for all weapons (halflife issue [#3137](https://github.com/ValveSoftware/halflife/issues/3137))
+* Fixed game crashing when loading singleplayer map due to null scoreboard pointer [#59](https://github.com/SamVanheer/halflife-op4-updated/issues/59)
+* Fixed pipe wrench big swing attack not cancelling when the wrench is unequipped (halflife issue [#3253](https://github.com/ValveSoftware/halflife/issues/3253))
+* Fixed player saytext color being incorrect in deathmatch games [#60](https://github.com/SamVanheer/halflife-op4-updated/issues/60)
+* Fixed FL_FAKECLIENT flag being cleared in some places (halflife issue [#3256](https://github.com/ValveSoftware/halflife/issues/3256))
+* Fixed TeamInfo message being sent to wrong player when initializing player hud in CTF gamemode [#61](https://github.com/SamVanheer/halflife-op4-updated/issues/61)
+* Fixed Black Ops Osprey not interpolating (halflife issue [#3228](https://github.com/ValveSoftware/halflife/issues/3228))
+
+## Changes in V1.0.0 Beta 004
+
+### Bug fixes
+
+#### Bugs that exist in Steam Opposing Force:
+
+* Fixed CTF backpack powerup causing glitches with Shotgun and Spore Launcher reload (halflife issue [#3234](https://github.com/ValveSoftware/halflife/issues/3234))
+* Fixed M249 belt body not syncing between client and server (halflife issue [#3237](https://github.com/ValveSoftware/halflife/issues/3237))
+* Fixed player info bar in CTF gamemode showing incorrect health for dead players (halflife issue [#3243](https://github.com/ValveSoftware/halflife/issues/3243))
+* Fixed CTF time remaining text displaying on non-CTF maps (halflife issue [#842](https://github.com/ValveSoftware/halflife/issues/842))
+
+#### Bugs that only existed in this project
+
+* Fixed CTF gamerules sending health value incorrectly [#36](https://github.com/SamVanheer/halflife-op4-updated/issues/36)
+* Fixed CTF jump pack item not playing sound when long jumping [#37](https://github.com/SamVanheer/halflife-op4-updated/issues/37)
+* Fixed CTF backpack not doubling clip size for most weapons [#38](https://github.com/SamVanheer/halflife-op4-updated/issues/38)
+* Fixed CTF backpack sound still playing when not giving ammo [#39](https://github.com/SamVanheer/halflife-op4-updated/issues/39)
+* Fixed FOV being set to 90 when first spawning in CTF gamemode [#40](https://github.com/SamVanheer/halflife-op4-updated/issues/40)
+* Fixed incorrect strncpy [#45](https://github.com/SamVanheer/halflife-op4-updated/issues/45)
+* Fixed player being invisible on first spawn in CTF gamemode [#48](https://github.com/SamVanheer/halflife-op4-updated/issues/48)
+* Fixed player CTF team being reset [#50](https://github.com/SamVanheer/halflife-op4-updated/issues/50)
+* Fixed Black Mesa team getting 10 points on flag pickup in CTF [#52](https://github.com/SamVanheer/halflife-op4-updated/issues/52)
+* Fixed VGUI1 menus using wrong border color [#56](https://github.com/SamVanheer/halflife-op4-updated/issues/56)
+* Fixed not being able to open team menu after closing it [#57](https://github.com/SamVanheer/halflife-op4-updated/issues/57)
+* Fixed HUD scoreboard not working properly in CTF [#49](https://github.com/SamVanheer/halflife-op4-updated/issues/49) and [#51](https://github.com/SamVanheer/halflife-op4-updated/issues/51)
+* Fixed VGUI1 scoreboard not working properly [#43](https://github.com/SamVanheer/halflife-op4-updated/issues/43), [#44](https://github.com/SamVanheer/halflife-op4-updated/issues/44), [#42](https://github.com/SamVanheer/halflife-op4-updated/issues/42), [#47](https://github.com/SamVanheer/halflife-op4-updated/issues/47), [#53](https://github.com/SamVanheer/halflife-op4-updated/issues/53), [#54](https://github.com/SamVanheer/halflife-op4-updated/issues/54) and [#55](https://github.com/SamVanheer/halflife-op4-updated/issues/55)
+
+### UX improvements
+
+* Added missing titles.txt entries for observer mode [#41](https://github.com/SamVanheer/halflife-op4-updated/issues/41)
+* Added missing options to Create Server Game tab [#46](https://github.com/SamVanheer/halflife-op4-updated/issues/46)
+
+## Changes in V1.0.0 Beta 003
+
+* Fixed incorrect header include guard in CRopeSample.h [#29](https://github.com/SamVanheer/halflife-op4-updated/issues/29)
+* Fixed uses of bool in rope code that should be BOOL [#30](https://github.com/SamVanheer/halflife-op4-updated/issues/30)
+* Fixed "suspicious" keyvalue not being saved (makes certain friendly NPCs hostile) [#31](https://github.com/SamVanheer/halflife-op4-updated/issues/31)
+* Fixed cleansuit scientist using wrong skill value for health [#32](https://github.com/SamVanheer/halflife-op4-updated/issues/32)
+* Fixed cleansuit scientist using wrong skill value to heal characters [#33](https://github.com/SamVanheer/halflife-op4-updated/issues/33)
+    * Note: cleansuit scientists in vanilla Opposing Force cannot heal characters
+* Added missing hud item color checks for when night vision is on
+* Added missing autoaim update to Displacer and Shock Rifle
+* Fixed typo in Black Ops Osprey tail gib debris model
+* Made cleansuit scientist smell carcasses, meat and garbage like regular scientists
+* Fixed COFSquadTalkMonster not chaining save data to COFAllyMonster
+* Removed incorrect precache calls from medic grunt
+* Disabled ally grunt player kicking behavior
+* Removed incorrect class scope specifiers
+* Applied refactoring work done for Half-Life Updated to this project as well
+* Fixed Knife not dealing correct damage amount [#35](https://github.com/SamVanheer/halflife-op4-updated/issues/35)
+
+## Changes in V1.0.0 Beta 002
+
+All changes from Half-Life Updated up until Beta 6 are included: https://github.com/SamVanheer/halflife-updated/wiki/Changelog#changes-in-v100-beta-006
+
+* Updated Linux Makefiles to include all Opposing Force files
+
+## Changes in V1.0.0 Beta 001
+
+All changes from Half-Life Updated up until Beta 5 are included: https://github.com/Solokiller/halflife-updated/wiki/Changelog
+
+* Fixed Pipe Wrench secondary attack delay being 1 second instead of 0.1 seconds (not in vanilla Op4) (Resolves [[#17|https://github.com/Solokiller/halflife-op4-updated/issues/17]]) (Thanks OpenRift412)
+* Fixed scientists changing heads when healing player (not in vanilla) (Thanks OpenRift412)
+* Refactored hud color usage to use RGB_YELLOWISH & RGB_HUD_COLOR constants
+* Removed unnecessary sequence change in spore grenade (halflife issue [[#3074|https://github.com/ValveSoftware/halflife/issues/3074]])
+* Fixed LD and HD Revolver models not playing the reload sound (halflife issue [[2351|https://github.com/ValveSoftware/halflife/issues/2351]])
+
+### Code cleanup
+
+* Removed void from functions taking no arguments (clang-tidy modernize-redundant-void-arg)
+* Used override specifier where needed (clang-tidy modernize-use-override)
+* Removed workarounds for conflicts between server & client code
+
+## Changes in V1.0.0 Alpha 001
+
+### General
+
+* Fixed not being able to commit suicide using the `kill` command when not in a CTF team (halflife issue [[#1587|https://github.com/ValveSoftware/halflife/issues/1587]])
+* Fixed spectators being able to choose characters and subsequently interact with flags and some other items (halflife issue [[#2897|https://github.com/ValveSoftware/halflife/issues/2897]])
+* Don't send `EF_BRIGHTLIGHT` effect flag for players to prevent night vision goggles from lighting things up for everybody (NEEDS PUBLIC TESTING) (halflife issue [[#1858|https://github.com/ValveSoftware/halflife/issues/1858]])
+* Fixed ropes leaking memory (halflife issue [[#3054|https://github.com/ValveSoftware/halflife/issues/3054]])
+* Fixed CBaseEntity::Instance(entvars_t*) crashing the game if given a null pointer (halflife issue [[#3056|https://github.com/ValveSoftware/halflife/issues/3056]])
+
+### Weapons
+
+* Fixed bugs causing zoomed in weapons to restore player state incorrectly (halflife issues [[#3044|https://github.com/ValveSoftware/halflife/issues/3044]] and [[#3045|https://github.com/ValveSoftware/halflife/issues/3045]])
+* Fixed Desert Eagle using wrong time base for underwater attack check (halflife issue [[#1042|https://github.com/ValveSoftware/halflife/issues/1042]])
+* Fixed Glock using old pre-SDK 2.0 code which broke some prediction functionality (halflife issue [[#856|https://github.com/ValveSoftware/halflife/issues/856]])
+* Fixed Glock being able to reload when full (actually caused by outdated code noted by #856) (halflife issue [[#1076|https://github.com/ValveSoftware/halflife/issues/1076]])
+* Fixed Shock Rifle only using idle animations when holding down secondary attack key and ammo regen being blocked by doing so (halflife issue [[#847|https://github.com/ValveSoftware/halflife/issues/847]])
+* Fixed barnacle grapple playing ladder sounds (halflife issue [[#1025|https://github.com/ValveSoftware/halflife/issues/1025]])
+* Fixed spore grenades not saving properly, causing some of them to bounce around forever after loading a save game (halflife issue [[#3038|https://github.com/ValveSoftware/halflife/issues/3038]])
+* Fixed Pipe Wrench playing miss sounds multiple times (halflife issue [[#3041|https://github.com/ValveSoftware/halflife/issues/3041]])
+* Fixed Pipe Wrench playing the wrong animations for primary attacks (halflife issue [[#3042|https://github.com/ValveSoftware/halflife/issues/3042]])
+* Play CTF backpack powerup sound at same volume for all weapons (halflife issue [[#3051|https://github.com/ValveSoftware/halflife/issues/3051]])
+* Fixed chainsaw Pipe wrench and Knife (halflife issue [[#2590|https://github.com/ValveSoftware/halflife/issues/2590]])
+* Fixed Knife and Pipe Wrench using wrong time base for swing think (halflife issue [[#2296|https://github.com/ValveSoftware/halflife/issues/2296]])
+
+### Items
+
+* Fixed Long Jump powerup not working (timeleft issue not fixed) (halflife issue [[#1857|https://github.com/ValveSoftware/halflife/issues/1857]])
+
+### Maps
+* Fixed "Temporal paradox" Xen map displaying a map title (halflife issue [[#963|https://github.com/ValveSoftware/halflife/issues/963]])
+* Fixed Pit Worm's Nest boss death script unlocking the bridge too soon, which could cause players to get stuck with no way to progress (halflife issue [[#3043|https://github.com/ValveSoftware/halflife/issues/3043]])
+
+### Monsters
+
+* Fixed friendly grunts using wrong death sound filenames (thanks hammermaps) (halflife issue [[#3036|https://github.com/ValveSoftware/halflife/issues/3036]])
+* Fixed Shock Troopers not playing death sounds (halflife issue [[#3037|https://github.com/ValveSoftware/halflife/issues/3037]])
+* Fixed Voltigores not playing death sounds (halflife issue [[#3039|https://github.com/ValveSoftware/halflife/issues/3039]])
+* Fixed Voltigore not saving its charge beams (halflife issue [[#3049|https://github.com/ValveSoftware/halflife/issues/3049]])
+* Fixed Voltigore not saving its charged bolt attack correctly (halflife issue [[#3050|https://github.com/ValveSoftware/halflife/issues/3050]])
+* Fixed repel monster entities precaching & spawning wrong entities (halflife issue [[#3052|https://github.com/ValveSoftware/halflife/issues/3052]])
+* Fixed Pit Drone not using third alert sound (halflife issue [[#3053|https://github.com/ValveSoftware/halflife/issues/3053]])
+
+Not fixed:
+* https://github.com/ValveSoftware/halflife/issues/1589: Going to need to compare sdk with op4 for this
+* https://github.com/ValveSoftware/halflife/issues/1256: Probably nodes that can't connect like they do with doors
+* https://github.com/ValveSoftware/halflife/issues/949: Need to know what this looked like, probably HUD_PRINTNOTIFY though
+* https://github.com/ValveSoftware/halflife/issues/1279: Rework the scoreboard code with larger buffers i guess
+
+Can't be fixed:
+* https://github.com/ValveSoftware/halflife/issues/939: Looks like a problem with r_dynamic, or lightmap texture mixing/uploading not working properly
+* https://github.com/ValveSoftware/halflife/issues/912: impossible to fix without adding new attachments to models
+* https://github.com/ValveSoftware/halflife/issues/968: Sounds like an issue with server framerate causing elevators to move too much to get into final position, causing clipping issues with any objects standing on them, no easy fix
+
 # Half-Life Updated changelog
 
 ## Changes in V1.0.0 Beta 014
