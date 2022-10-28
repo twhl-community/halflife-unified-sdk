@@ -116,7 +116,7 @@ void MusicSystem::Play(std::string&& fileName, bool looping)
 
 	if (!g_pFileSystem->GetLocalPath(fileName.c_str(), absolutePath, std::size(absolutePath)))
 	{
-		Con_Printf("MusicSystem: File \"%s\" does not exist.\n", fileName.c_str());
+		m_Logger->error("File \"{}\" does not exist", fileName);
 		return;
 	}
 
@@ -124,9 +124,11 @@ void MusicSystem::Play(std::string&& fileName, bool looping)
 
 	if (!file)
 	{
-		Con_Printf("MusicSystem: Could not open file \"%s\".\n", fileName.c_str());
+		m_Logger->error("Could not open file \"{}\"", fileName.c_str());
 		return;
 	}
+
+	m_Logger->debug("Starting music \"{}\"", fileName);
 
 	m_FileName = std::move(fileName);
 
