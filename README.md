@@ -1,10 +1,102 @@
-# Half-Life Unified SDK
+# **Note**: The Unified SDK is still in development and not ready for use beyond pre-alpha testing and feedback. Do not attempt to use it to make a mod! **Take this warning seriously.**
+
+About
+======================
+
+The [Half-Life Unified SDK](https://github.com/SamVanheer/halflife-unified-sdk) is a project that provides an updated version of the Half-Life SDK, with full support for the expansion packs Opposing Force and Blue Shift as well as new features.
 
 [![CI/CD](https://github.com/SamVanheer/halflife-unified-sdk/actions/workflows/ci-cd.yml/badge.svg?branch=master)](https://github.com/SamVanheer/halflife-unified-sdk/actions/workflows/ci-cd.yml)
 
-This project is still in development and is not ready to be used to create mods.
+Purpose
+======================
 
-[See the wiki for setup instructions](https://github.com/SamVanheer/halflife-unified-sdk/wiki/Setting-up-the-source-code)
+The SDK provides a CMake-based project structure with support for Visual Studio 2019 and 2022 on Windows and GCC 11 on Linux, as well as many bug fixes and improvements. Opposing Force and Blue Shift features have been integrated with code refactored to reduce the amount of code duplication.
+
+The goal of the Unified SDK is to allow modders to make mods based on these games, while providing bug fixes that could be applied to the official games as well in addition to bug fixes that would be a breaking change. A mod installation is also provided to allow players to play these games with all bug fixes applied.
+
+This mod installation includes files that are required when making a mod based on this SDK.
+
+The following types of changes are **in scope** for this project:
+* Bug fixes
+* Features to improve the game's code (refactoring, generalizing, simplifying)
+* Fixing game-breaking bugs in game assets (e.g. soft-locked trigger setups)
+
+The following types of changes are **out of scope**:
+* Graphical upgrades
+* Physics engine changes
+* Other engine changes
+
+If you need help setting up the SDK or developing a mod please ask on the [TWHL website](https://twhl.info/) or on its [Discord server](https://discord.gg/jEw8EqD).
+
+See the `#welcome` channel for more information about the Discord server. Please do not use the `#unified-sdk` channel for general help requests, there are channels for modding help.
+
+See the TWHL thread for status updates about these projects: https://twhl.info/thread/view/20055
+
+Development process
+======================
+
+This project uses terms commonly used in software and game development to label development builds. See this article for more information about the stages that a game's development goes through: https://en.wikipedia.org/wiki/Video_game_development#Milestones
+
+The current milestone is listed in the title of a release and is also visible in-game in the project info overlay.
+
+The repository currently contains a pre-alpha version in the master branch. This is because there is no stable version yet. Once version 1.0.0 has been released the master branch will contain stable releases and a development branch will be created to track the development version.
+
+> **Note for modders**
+> Pre-alpha builds are not ready to be used to develop mods. Features are still being developed and are unfinished and buggy.
+
+> **Note for players and testers**
+> During pre-alpha development testing is limited to individual features if they are noted to be ready for this.
+
+Requirements to run mods built with this SDK
+======================
+
+Only the latest Steam version of Half-Life is supported. For the Opposing Force and Blue Shift campaigns you will need to own the games and have them installed to install and play their maps.
+
+All other assets are permitted by Valve to be used in mods and are included in the mod installation.
+
+The system requirements are mostly the same as Half-Life itself, but for Windows users you will need Windows 7 or newer to run it.
+
+The Half-Life Unified SDK mod installation is currently available only on Windows.
+
+Building this SDK
+======================
+
+See [DEVELOPING.md](DEVELOPING.md) and [BUILDING.md](BUILDING.md)
+
+Mod installation instructions
+======================
+
+See [INSTALL.md](INSTALL.md)
+
+What isn't supported
+======================
+
+Backwards compatibility with WON and older versions of Steam Half-Life is not supported. Xash isn't supported. You cannot use the Unified SDK's client to play on vanilla servers, you also cannot use vanilla clients to play on Unified SDK servers.
+
+Placing Unified SDK game dlls in vanilla installations is not supported.
+
+Metamod and AMXMod are not supported. The changes made to the source code render it incompatible with various parts of their hooking systems.
+
+Deathmatch Classic and Ricochet
+======================
+
+The source code for Deathmatch Classic and Ricochet is in the original Half-Life SDK. The purpose of these updated repositories is to provide updated versions only for Half-Life and its expansion packs, so the source code for these mods has been removed.
+
+Since the vanilla versions don't compile under newer versions of Visual Studio separate repositories have been made that provide the same updates to make them compile:
+* https://github.com/SamVanheer/dmc-updated
+* https://github.com/SamVanheer/ricochet-updated
+
+Unlike the other updated repositories these only provide basic fixes. No further development and support will be provided.
+
+Changelog
+======================
+
+See [CHANGELOG.md](CHANGELOG.md) and [FULL_CHANGELOG.md](FULL_CHANGELOG.md)
+
+Documentation
+======================
+
+See [DOCUMENTATION.md](/docs/DOCUMENTATION.md) for a list of documentation, resources and tutorials.
 
 Half Life 1 SDK LICENSE
 ======================
