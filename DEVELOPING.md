@@ -10,6 +10,15 @@ Various configuration files use JSON so an understanding of its syntax is recomm
 
 Tools and scripts are written in C# so you will need to have an understanding of its syntax to modify them.
 
+Resources to learn these things:
+* [Command line](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/windows-commands)
+* [CMake](https://cliutils.gitlab.io/modern-cmake/)
+* [C++](https://www.learncpp.com/)
+* [C#](https://learn.microsoft.com/en-us/dotnet/csharp/)
+* [JSON](https://www.w3schools.com/js/js_json_syntax.asp)
+
+> **Make sure to learn these things first so you understand how this SDK works!**
+
 ## Overall project structure
 
 The source code for the mod SDK is in [this repository](https://github.com/SamVanheer/halflife-unified-sdk). This also includes the source code for the original tools included with the Half-Life SDK as well as `delta.lst` which is used to configure networking settings for the mod. `liblist.gam` is also included.
