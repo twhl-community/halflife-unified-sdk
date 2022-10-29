@@ -96,7 +96,7 @@ See [CHANGELOG.md](CHANGELOG.md) and [FULL_CHANGELOG.md](FULL_CHANGELOG.md)
 Documentation
 ======================
 
-See [DOCUMENTATION.md](/docs/DOCUMENTATION.md) for a list of documentation, resources and tutorials.
+See [docs/README.md](/docs/README.md) for a list of documentation, resources and tutorials.
 
 Half Life 1 SDK LICENSE
 ======================
