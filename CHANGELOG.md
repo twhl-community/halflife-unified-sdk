@@ -23,47 +23,47 @@ TODO: add all changes here
 
 ## Changes in V1.0.0 Beta 003
 
-* Added CMake project for tools [#28](https://github.com/SamVanheer/halflife-updated-cmake/issues/28)
+* Added CMake project for tools [#408](https://github.com/SamVanheer/halflife-unified-sdk/issues/408)
     * Removed duplicate winding_t, CopyWinding, FreeWinding, WindingCenter, pw functions
     * Resolved conflicts between wadlib & textures.cpp
     * renamed nummodels in studiomdl to numstudiomodels to avoid conflict with bspfile
     * Fixed include paths for tools that reference game SDK files
-* Create source groups for tool projects [#29](https://github.com/SamVanheer/halflife-updated-cmake/issues/29)
+* Create source groups for tool projects [#408](https://github.com/SamVanheer/halflife-unified-sdk/issues/408)
 * Split smdlexp into its own CMake project. This library has been updated to use the 3DS Max 2023 SDK and has to be built as 64 bit
 
 ## Changes in V1.0.0 Beta 002
 
-* Set C++ standard to 17 [#25](https://github.com/SamVanheer/halflife-updated-cmake/issues/25)
-* Use function to add shared game sources [#12](https://github.com/SamVanheer/halflife-updated-cmake/issues/12)
-* Fixed Linux setup not working correctly [#26](https://github.com/SamVanheer/halflife-updated-cmake/issues/26) (Thanks JoelTroch)
-* Fixed Linux libraries having visible symbols [#27](https://github.com/SamVanheer/halflife-updated-cmake/issues/27)
+* Set C++ standard to 17 [#266](https://github.com/SamVanheer/halflife-unified-sdk/issues/266)
+* Use function to add shared game sources [#234](https://github.com/SamVanheer/halflife-unified-sdk/issues/234)
+* Fixed Linux setup not working correctly [#267](https://github.com/SamVanheer/halflife-unified-sdk/issues/267) (Thanks JoelTroch)
+* Fixed Linux libraries having visible symbols [#268](https://github.com/SamVanheer/halflife-unified-sdk/issues/268)
 * Added OpenGL library to client, ensured 32 bit version is used on Linux
 
 ## Changes in V1.0.0 Beta 001
 
 * Made the client link with the VGUI and SDL2 libraries using relative paths to avoid hard-coding developer's paths in the client library (matches the vanilla SDK's behavior)
 * Updated setup instructions to remove Windows XP support and use VS 2019 as the example
-* Removed unused linux files, update linux gitignore to account for out-of-tree builds [#4](https://github.com/SamVanheer/halflife-updated-cmake/issues/4)
-* Removed unused files [#5](https://github.com/SamVanheer/halflife-updated-cmake/issues/5)
-* Removed obsolete CBaseSpecator class [#6](https://github.com/SamVanheer/halflife-updated-cmake/issues/6)
-* Removed obsolete cine entities [#7](https://github.com/SamVanheer/halflife-updated-cmake/issues/7)
-* Removed obsolete cycler entity, refactor cycler classes [#8](https://github.com/SamVanheer/halflife-updated-cmake/issues/8)
-* Removed unused skiplocal parameter from weapon methods [#9](https://github.com/SamVanheer/halflife-updated-cmake/issues/9)
-* Formatted all files to use consistent formatting [#10](https://github.com/SamVanheer/halflife-updated-cmake/issues/10)
-* Removed unused preprocessor definitions [#11](https://github.com/SamVanheer/halflife-updated-cmake/issues/11)
-* Restructured source code directories [#12](https://github.com/SamVanheer/halflife-updated-cmake/issues/12)
-* Restructured SDL2 files to encapsulate it as a CMake library [#13](https://github.com/SamVanheer/halflife-updated-cmake/issues/13)
-* Only copy Linux libraries when building on Linux [#14](https://github.com/SamVanheer/halflife-updated-cmake/issues/14)
-* Added Mac OSX support (.dylib files) [#15](https://github.com/SamVanheer/halflife-updated-cmake/issues/15)
+* Removed unused linux files, update linux gitignore to account for out-of-tree builds [#247](https://github.com/SamVanheer/halflife-unified-sdk/issues/247)
+* Removed unused files [#235](https://github.com/SamVanheer/halflife-unified-sdk/issues/235)
+* Removed obsolete CBaseSpecator class [#248](https://github.com/SamVanheer/halflife-unified-sdk/issues/248)
+* Removed obsolete cine entities [#249](https://github.com/SamVanheer/halflife-unified-sdk/issues/249)
+* Removed obsolete cycler entity, refactor cycler classes [#250](https://github.com/SamVanheer/halflife-unified-sdk/issues/250)
+* Removed unused skiplocal parameter from weapon methods [#251](https://github.com/SamVanheer/halflife-unified-sdk/issues/251)
+* Formatted all files to use consistent formatting [#252](https://github.com/SamVanheer/halflife-unified-sdk/issues/252)
+* Removed unused preprocessor definitions [#253](https://github.com/SamVanheer/halflife-unified-sdk/issues/253)
+* Restructured source code directories [#234](https://github.com/SamVanheer/halflife-unified-sdk/issues/234)
+* Restructured SDL2 files to encapsulate it as a CMake library [#254](https://github.com/SamVanheer/halflife-unified-sdk/issues/254)
+* Only copy Linux libraries when building on Linux [#255](https://github.com/SamVanheer/halflife-unified-sdk/issues/255)
+* Added Mac OSX support (.dylib files) [#256](https://github.com/SamVanheer/halflife-unified-sdk/issues/256)
     * Note that this only concerns linking with the correct libraries. Mac support is untested.
-* Don't add hl.def for non-Windows builds [#16](https://github.com/SamVanheer/halflife-updated-cmake/issues/16)
-* Moved vgui Linux libraries to `utils/vgui/lib/linux` [#18](https://github.com/SamVanheer/halflife-updated-cmake/issues/18)
-* Enabled multi-processor compilation for faster compilation on Windows [#19](https://github.com/SamVanheer/halflife-updated-cmake/issues/19)
-* Use CMAKE_DL_LIBS to link with dl library [#20](https://github.com/SamVanheer/halflife-updated-cmake/issues/20)
-* The mod libraries are now automatically copied to the HLDS directory on install if the HLDS directory has been provided [#21](https://github.com/SamVanheer/halflife-updated-cmake/issues/21)
-* Set CMake version to 3.21 [#22](https://github.com/SamVanheer/halflife-updated-cmake/issues/22)
-* Removed use of `HALFLIFE_DIRECTORY` variable from CMakeLists (now auto-detected from `CMAKE_INSTALL_PREFIX`) [#23](https://github.com/SamVanheer/halflife-updated-cmake/issues/23)
-* Added CMake settings to set up debugging command line arguments more easily [#24](https://github.com/SamVanheer/halflife-updated-cmake/issues/24)
+* Don't add hl.def for non-Windows builds [#257](https://github.com/SamVanheer/halflife-unified-sdk/issues/257)
+* Moved vgui Linux libraries to `utils/vgui/lib/linux` [#259](https://github.com/SamVanheer/halflife-unified-sdk/issues/259)
+* Enabled multi-processor compilation for faster compilation on Windows [#260](https://github.com/SamVanheer/halflife-unified-sdk/issues/260)
+* Use CMAKE_DL_LIBS to link with dl library [#261](https://github.com/SamVanheer/halflife-unified-sdk/issues/261)
+* The mod libraries are now automatically copied to the HLDS directory on install if the HLDS directory has been provided [#262](https://github.com/SamVanheer/halflife-unified-sdk/issues/262)
+* Set CMake version to 3.21 [#263](https://github.com/SamVanheer/halflife-unified-sdk/issues/263)
+* Removed use of `HALFLIFE_DIRECTORY` variable from CMakeLists (now auto-detected from `CMAKE_INSTALL_PREFIX`) [#264](https://github.com/SamVanheer/halflife-unified-sdk/issues/264)
+* Added CMake settings to set up debugging command line arguments more easily [#265](https://github.com/SamVanheer/halflife-unified-sdk/issues/265)
 
 # Half-Life: Blue Shift Updated changelog
 
