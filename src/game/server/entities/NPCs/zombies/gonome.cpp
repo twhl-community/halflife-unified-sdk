@@ -239,7 +239,7 @@ public:
 
 	//TODO: needs to be EHANDLE, save/restored or a save during a windup will cause problems
 	COFGonomeGuts* m_pGonomeGuts = nullptr;
-	bool m_fPlayerLocked = false;
+	EHANDLE m_PlayerLocked;
 
 protected:
 	float GetOneSlashDamage() override { return GetSkillFloat("gonome_dmg_one_slash"sv); }
@@ -252,7 +252,7 @@ protected:
 TYPEDESCRIPTION COFGonome::m_SaveData[] =
 	{
 		DEFINE_FIELD(COFGonome, m_flNextThrowTime, FIELD_TIME),
-		DEFINE_FIELD(COFGonome, m_fPlayerLocked, FIELD_BOOLEAN),
+		DEFINE_FIELD(COFGonome, m_PlayerLocked, FIELD_EHANDLE),
 };
 
 IMPLEMENT_SAVERESTORE(COFGonome, COFGonome::BaseClass);
@@ -413,16 +413,24 @@ void COFGonome::HandleAnimEvent(MonsterEvent_t* pEvent)
 	case GONOME_AE_ATTACK_BITE_SECOND:
 	case GONOME_AE_ATTACK_BITE_THIRD:
 	{
-		//TODO: this doesn't check if the enemy is the player, can cause bugs
 		if ((pev->origin - m_hEnemy->pev->origin).Length() < 48)
 		{
-			//TODO: not suited for multiplayer
-			auto pPlayer = UTIL_GetLocalPlayer();
+			// Unfreeze previous player if they were locked.
+			auto prevPlayer = m_PlayerLocked.Entity<CBasePlayer>();
+			m_PlayerLocked = nullptr;
 
-			if (pPlayer && pPlayer->IsAlive())
-				pPlayer->EnableControl(false);
+			if (prevPlayer && prevPlayer->IsAlive())
+			{
+				prevPlayer->EnableControl(true);
+			}
 
-			m_fPlayerLocked = true;
+			auto enemy = m_hEnemy.Entity<CBaseEntity>();
+
+			if (enemy && enemy->IsPlayer() && enemy->IsAlive())
+			{
+				static_cast<CBasePlayer*>(enemy)->EnableControl(false);
+				m_PlayerLocked = enemy;
+			}
 		}
 
 		// do stuff for this event.
@@ -444,14 +452,14 @@ void COFGonome::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 	case GONOME_AE_ATTACK_BITE_FINISH:
 	{
-		auto pPlayer = UTIL_GetLocalPlayer();
+		auto player = m_PlayerLocked.Entity<CBasePlayer>();
 
-		if (pPlayer && pPlayer->IsAlive())
+		if (player && player->IsAlive())
 		{
-			pPlayer->EnableControl(true);
+			player->EnableControl(true);
 		}
 
-		m_fPlayerLocked = false;
+		m_PlayerLocked = nullptr;
 
 		// do stuff for this event.
 		//AILogger->debug("Slash left!");
@@ -483,7 +491,7 @@ void COFGonome::Spawn()
 {
 	m_flNextThrowTime = gpGlobals->time;
 	m_pGonomeGuts = nullptr;
-	m_fPlayerLocked = false;
+	m_PlayerLocked = nullptr;
 
 	CZombie::Spawn();
 }
@@ -610,15 +618,14 @@ void COFGonome::Killed(entvars_t* pevAttacker, int iGib)
 		m_pGonomeGuts = nullptr;
 	}
 
-	if (m_fPlayerLocked)
+	auto player = m_PlayerLocked.Entity<CBasePlayer>();
+
+	if (player)
 	{
-		//TODO: not suited for multiplayer
-		auto pPlayer = UTIL_GetLocalPlayer();
+		if (player && player->IsAlive())
+			player->EnableControl(true);
 
-		if (pPlayer && pPlayer->IsAlive())
-			pPlayer->EnableControl(true);
-
-		m_fPlayerLocked = false;
+		m_PlayerLocked = nullptr;
 	}
 
 	CBaseMonster::Killed(pevAttacker, iGib);
@@ -667,16 +674,16 @@ void COFGonome::SetActivity(Activity NewActivity)
 		m_pGonomeGuts = nullptr;
 	}
 
-	if (m_fPlayerLocked)
+	auto player = m_PlayerLocked.Entity<CBasePlayer>();
+
+	if (player)
 	{
 		if (NewActivity != ACT_MELEE_ATTACK1)
 		{
-			auto pPlayer = UTIL_GetLocalPlayer();
+			if (player && player->IsAlive())
+				player->EnableControl(true);
 
-			if (pPlayer && pPlayer->IsAlive())
-				pPlayer->EnableControl(true);
-
-			m_fPlayerLocked = false;
+			m_PlayerLocked = nullptr;
 		}
 	}
 
