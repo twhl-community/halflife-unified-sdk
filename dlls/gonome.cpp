@@ -247,14 +247,14 @@ public:
 
 	//TODO: needs to be EHANDLE, save/restored or a save during a windup will cause problems
 	COFGonomeGuts* m_pGonomeGuts;
-	bool m_fPlayerLocked;
+	EHANDLE m_PlayerLocked;
 };
 
 TYPEDESCRIPTION COFGonome::m_SaveData[] =
 	{
 		DEFINE_FIELD(COFGonome, m_flNextFlinch, FIELD_TIME),
 		DEFINE_FIELD(COFGonome, m_flNextThrowTime, FIELD_TIME),
-		DEFINE_FIELD(COFGonome, m_fPlayerLocked, FIELD_BOOLEAN),
+		DEFINE_FIELD(COFGonome, m_PlayerLocked, FIELD_EHANDLE),
 };
 
 IMPLEMENT_SAVERESTORE(COFGonome, COFGonome::BaseClass);
@@ -527,16 +527,24 @@ void COFGonome::HandleAnimEvent(MonsterEvent_t* pEvent)
 	case GONOME_AE_ATTACK_BITE_SECOND:
 	case GONOME_AE_ATTACK_BITE_THIRD:
 	{
-		//TODO: this doesn't check if the enemy is the player, can cause bugs
 		if ((pev->origin - m_hEnemy->pev->origin).Length() < 48)
 		{
-			//TODO: not suited for multiplayer
-			auto pPlayer = static_cast<CBasePlayer*>(UTIL_FindEntityByClassname(nullptr, "player"));
+			// Unfreeze previous player if they were locked.
+			auto prevPlayer = m_PlayerLocked.Entity<CBasePlayer>();
+			m_PlayerLocked = nullptr;
 
-			if (pPlayer && pPlayer->IsAlive())
-				pPlayer->EnableControl(false);
+			if (prevPlayer && prevPlayer->IsAlive())
+			{
+				prevPlayer->EnableControl(true);
+			}
 
-			m_fPlayerLocked = true;
+			auto enemy = m_hEnemy.Entity<CBaseEntity>();
+
+			if (enemy && enemy->IsPlayer() && enemy->IsAlive())
+			{
+				static_cast<CBasePlayer*>(enemy)->EnableControl(false);
+				m_PlayerLocked = enemy;
+			}
 		}
 
 		// do stuff for this event.
@@ -558,14 +566,14 @@ void COFGonome::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 	case GONOME_AE_ATTACK_BITE_FINISH:
 	{
-		auto pPlayer = static_cast<CBasePlayer*>(UTIL_FindEntityByClassname(nullptr, "player"));
+		auto enemy = m_PlayerLocked.Entity<CBasePlayer>();
 
-		if (pPlayer && pPlayer->IsAlive())
+		if (enemy && enemy->IsAlive())
 		{
-			pPlayer->EnableControl(true);
+			static_cast<CBasePlayer*>(enemy)->EnableControl(true);
 		}
 
-		m_fPlayerLocked = false;
+		m_PlayerLocked = nullptr;
 
 		// do stuff for this event.
 		//		ALERT( at_console, "Slash left!\n" );
@@ -611,7 +619,7 @@ void COFGonome::Spawn()
 
 	m_flNextThrowTime = gpGlobals->time;
 	m_pGonomeGuts = nullptr;
-	m_fPlayerLocked = false;
+	m_PlayerLocked = nullptr;
 
 	MonsterInit();
 }
@@ -748,15 +756,14 @@ void COFGonome::Killed(entvars_t* pevAttacker, int iGib)
 		m_pGonomeGuts = nullptr;
 	}
 
-	if (m_fPlayerLocked)
+	auto player = m_PlayerLocked.Entity<CBasePlayer>();
+
+	if (player)
 	{
-		//TODO: not suited for multiplayer
-		auto pPlayer = static_cast<CBasePlayer*>(UTIL_FindEntityByClassname(nullptr, "player"));
+		if (player && player->IsAlive())
+			player->EnableControl(true);
 
-		if (pPlayer && pPlayer->IsAlive())
-			pPlayer->EnableControl(true);
-
-		m_fPlayerLocked = false;
+		m_PlayerLocked = nullptr;
 	}
 
 	CBaseMonster::Killed(pevAttacker, iGib);
@@ -805,16 +812,16 @@ void COFGonome::SetActivity(Activity NewActivity)
 		m_pGonomeGuts = nullptr;
 	}
 
-	if (m_fPlayerLocked)
+	auto player = m_PlayerLocked.Entity<CBasePlayer>();
+
+	if (player)
 	{
 		if (NewActivity != ACT_MELEE_ATTACK1)
 		{
-			auto pPlayer = static_cast<CBasePlayer*>(UTIL_FindEntityByClassname(nullptr, "player"));
+			if (player && player->IsAlive())
+				player->EnableControl(true);
 
-			if (pPlayer && pPlayer->IsAlive())
-				pPlayer->EnableControl(true);
-
-			m_fPlayerLocked = false;
+			m_PlayerLocked = nullptr;
 		}
 	}
 
