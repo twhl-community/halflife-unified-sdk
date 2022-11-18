@@ -12,6 +12,7 @@ Many changes have been made since 2019. All changes made after [[this|https://gi
 * Fixed incorrect team check in SendTeamStatInfo [#88](https://github.com/SamVanheer/halflife-op4-updated/issues/88)
 * Fixed Gonome locking first player on the server when attacking anything [#89](https://github.com/SamVanheer/halflife-op4-updated/issues/89) (Thanks LuckNukeHunter99)
 * Fixed Voltigore beam attack not updating beam attachment positions as it moves [#90](https://github.com/SamVanheer/halflife-op4-updated/issues/90) (Thanks LuckNukeHunter99)
+* Fixed Baby Voltigore melee distance being twice its intended distance [#91](https://github.com/SamVanheer/halflife-op4-updated/issues/91) (Thanks LuckNukeHunter99)
 
 ## Changes in V1.0.0 Beta 010
 
