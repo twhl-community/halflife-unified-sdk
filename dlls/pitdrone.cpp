@@ -92,7 +92,7 @@ void CPitdroneSpike::Precache()
 {
 	PRECACHE_MODEL("models/pit_drone_spike.mdl");
 	PRECACHE_SOUND("weapons/xbow_hitbod1.wav");
-	PRECACHE_SOUND("weapons/xbox_hit1.wav");
+	PRECACHE_SOUND("weapons/xbow_hit1.wav");
 
 	iSpikeTrail = PRECACHE_MODEL("sprites/spike_trail.spr");
 }

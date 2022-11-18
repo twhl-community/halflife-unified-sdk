@@ -13,6 +13,7 @@ Many changes have been made since 2019. All changes made after [[this|https://gi
 * Fixed Gonome locking first player on the server when attacking anything [#89](https://github.com/SamVanheer/halflife-op4-updated/issues/89) (Thanks LuckNukeHunter99)
 * Fixed Voltigore beam attack not updating beam attachment positions as it moves [#90](https://github.com/SamVanheer/halflife-op4-updated/issues/90) (Thanks LuckNukeHunter99)
 * Fixed Baby Voltigore melee distance being twice its intended distance [#91](https://github.com/SamVanheer/halflife-op4-updated/issues/91) (Thanks LuckNukeHunter99)
+* Fixed typo in Pit Drone sound name [#92](https://github.com/SamVanheer/halflife-op4-updated/issues/92) (Thanks λλλλλλ)
 
 ## Changes in V1.0.0 Beta 010
 
