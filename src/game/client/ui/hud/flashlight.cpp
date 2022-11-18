@@ -39,7 +39,7 @@ bool CHudFlashlight::Init()
 	gHUD.AddHudElem(this);
 
 	return true;
-};
+}
 
 void CHudFlashlight::Reset()
 {
@@ -74,7 +74,7 @@ bool CHudFlashlight::VidInit()
 	m_nvSprite = LoadSprite("sprites/of_nv_b.spr");
 
 	return true;
-};
+}
 
 bool CHudFlashlight::MsgFunc_FlashBat(const char* pszName, int iSize, void* pbuf)
 {
