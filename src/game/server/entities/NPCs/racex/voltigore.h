@@ -154,6 +154,8 @@ protected:
 	virtual bool CanUseRangeAttacks() const { return true; }
 	virtual bool BlowsUpOnDeath() const { return true; }
 
+	virtual float GetMeleeDistance() const { return VOLTIGORE_MELEE_DIST; }
+
 	/**
 	*	@brief Spawns the Voltigore
 	*/

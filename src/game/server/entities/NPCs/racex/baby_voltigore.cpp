@@ -27,6 +27,8 @@
 #define BABYVOLTIGORE_AE_RIGHT_FOOT (11)
 #define BABYVOLTIGORE_AE_RUN 14
 
+constexpr float BabyVoltigoreMeleeDist = 64;
+
 class COFBabyVoltigore : public COFVoltigore
 {
 public:
@@ -50,6 +52,8 @@ protected:
 
 	//Babies don't blow up
 	bool BlowsUpOnDeath() const override { return false; }
+
+	float GetMeleeDistance() const override { return BabyVoltigoreMeleeDist; }
 };
 LINK_ENTITY_TO_CLASS(monster_alien_babyvoltigore, COFBabyVoltigore);
 
@@ -117,7 +121,7 @@ void COFBabyVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 	case VOLTIGORE_AE_LEFT_PUNCH:
 	{
-		CBaseEntity* pHurt = CheckTraceHullAttack(VOLTIGORE_MELEE_DIST, GetSkillFloat("babyvoltigore_dmg_punch"sv), DMG_CLUB);
+		CBaseEntity* pHurt = CheckTraceHullAttack(GetMeleeDistance(), GetSkillFloat("babyvoltigore_dmg_punch"sv), DMG_CLUB);
 
 		if (pHurt)
 		{
@@ -147,7 +151,7 @@ void COFBabyVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 	case VOLTIGORE_AE_RIGHT_PUNCH:
 	{
-		CBaseEntity* pHurt = CheckTraceHullAttack(VOLTIGORE_MELEE_DIST, GetSkillFloat("babyvoltigore_dmg_punch"sv), DMG_CLUB);
+		CBaseEntity* pHurt = CheckTraceHullAttack(GetMeleeDistance(), GetSkillFloat("babyvoltigore_dmg_punch"sv), DMG_CLUB);
 
 		if (pHurt)
 		{

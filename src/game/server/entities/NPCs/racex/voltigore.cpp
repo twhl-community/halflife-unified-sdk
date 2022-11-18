@@ -483,7 +483,7 @@ void COFVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 	case VOLTIGORE_AE_LEFT_PUNCH:
 	{
-		CBaseEntity* pHurt = CheckTraceHullAttack(VOLTIGORE_MELEE_DIST, GetSkillFloat("voltigore_dmg_punch"sv), DMG_CLUB);
+		CBaseEntity* pHurt = CheckTraceHullAttack(GetMeleeDistance(), GetSkillFloat("voltigore_dmg_punch"sv), DMG_CLUB);
 
 		if (pHurt)
 		{
@@ -513,7 +513,7 @@ void COFVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 	case VOLTIGORE_AE_RIGHT_PUNCH:
 	{
-		CBaseEntity* pHurt = CheckTraceHullAttack(VOLTIGORE_MELEE_DIST, GetSkillFloat("voltigore_dmg_punch"sv), DMG_CLUB);
+		CBaseEntity* pHurt = CheckTraceHullAttack(GetMeleeDistance(), GetSkillFloat("voltigore_dmg_punch"sv), DMG_CLUB);
 
 		if (pHurt)
 		{
@@ -834,7 +834,7 @@ bool COFVoltigore::FCanCheckAttacks()
 //=========================================================
 bool COFVoltigore::CheckMeleeAttack1(float flDot, float flDist)
 {
-	if (HasConditions(bits_COND_SEE_ENEMY) && flDist <= VOLTIGORE_MELEE_DIST && flDot >= 0.6 && m_hEnemy != nullptr)
+	if (HasConditions(bits_COND_SEE_ENEMY) && flDist <= GetMeleeDistance() && flDot >= 0.6 && m_hEnemy != nullptr)
 	{
 		return true;
 	}
@@ -855,7 +855,7 @@ bool COFVoltigore::CheckRangeAttack1(float flDot, float flDist)
 		return false;
 	}
 
-	if (flDist >= VOLTIGORE_MELEE_DIST && flDist <= 1024 && flDot >= 0.5 && gpGlobals->time >= m_flNextBeamAttackCheck)
+	if (flDist >= GetMeleeDistance() && flDist <= 1024 && flDot >= 0.5 && gpGlobals->time >= m_flNextBeamAttackCheck)
 	{
 		TraceResult tr;
 		Vector vecArmPos, vecArmDir;
