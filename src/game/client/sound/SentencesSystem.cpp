@@ -299,7 +299,8 @@ bool SentencesSystem::CreateTimeCompressedBuffer(const Channel& channel, Sentenc
 
 	const std::size_t chunkSize = numberOfLogicalSamples / TimeCompressChunkCount;
 
-	const std::size_t startIndex = (static_cast<std::size_t>(wordSound.Samples.size() * (word.Parameters.Start / 100.f))) / channelCount;
+	const std::size_t startIndex = static_cast<std::size_t>((wordSound.Samples.size() / static_cast<float>(channelCount))
+		* (word.Parameters.Start / 100.f));
 
 	bool isFirstIteration = true;
 
