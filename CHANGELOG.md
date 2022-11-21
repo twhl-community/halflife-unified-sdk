@@ -4,19 +4,218 @@ This page lists all changes made since the last release in the current developme
 
 # Running changelog
 
-TODO: add all changes here
+## Features
 
-* Upload compiled binaries to archive in GitHub Actions (compiled binaries available for 90 days after automatic build finishes) [#306](https://github.com/SamVanheer/halflife-unified-sdk/pull/306) (Thanks SmileyAG)
-* Removed duplicate conditions in zombie and gonome code. [#308](https://github.com/SamVanheer/halflife-unified-sdk/pull/308)
-* item_generic: added spawnflag to make a entity solid and based on mins/maxs [#307](https://github.com/SamVanheer/halflife-unified-sdk/pull/307) and [#300](https://github.com/SamVanheer/halflife-unified-sdk/issues/300) (Thanks SmileyAG)
-* Handle null or empty strings specially in UTIL_PrecacheModel, don't precache grenade model if it's null [#352](https://github.com/SamVanheer/halflife-unified-sdk/issues/352), [#353](https://github.com/SamVanheer/halflife-unified-sdk/pull/353) and [#354](https://github.com/SamVanheer/halflife-unified-sdk/pull/354) (Thanks [BryanHaley](https://github.com/BryanHaley))
-* Added helper commands for debugging maps [#288](https://github.com/SamVanheer/halflife-unified-sdk/issues/288) (Thanks [JoelTroch](https://github.com/JoelTroch))
-* Renamed UTIL dtos1 - 4 [#370](https://github.com/SamVanheer/halflife-unified-sdk/pull/370) (Thanks [hammermaps](https://github.com/hammermaps))
+### General
+
+* Added all Opposing Force and Blue Shift features
+* Added class `MapState` to contain per-map state
+* Added class `GameLibrary` to manage state shared between client and server
+* Added class `ServerLibrary` to manage server state
+* Added class `ClientLibrary` to manage client state
+* Added helper function to iterate over all entities using range for loop
+* Added special entity targetname `game_playeractivate` for player activation
+* Added virtual destructor to CGameRules
+* Added `OnCreate` & `OnDestroy` virtual functions to CBaseEntity
+	* Call OnCreate when setting up entities on the client side
+* Added item keyvalue to monster_scientist and derived classes, set item bodygroup
+* Added formatter specializations for `Vector` and `Vector2D`
+* Added new keyvalues for Otis submodels & support random skin
+* Replaced `ACT_SIGNAL3` in talk monster schedules with `ACT_IDLE` to fix allied human grunts playing incorrect animations
+* Reworked talk monsters to no longer depend on hard-coded list of friend class names
+* Reworked weapon selection client command to use actual named command `selectweapon`
+* Reworked spectator client command code to allow use of it outside CTF gamemode
+* Reworked "No use" spawnflag for scientists to a keyvalue
+* Reworked game title display to support multiple games
+* Reworked animation body groups for NPCs that use the new structure
+* Renamed UTIL_dtos1 - 4 to UTIL_ToString and remove the duplicate functions with the same code (Thanks [hammermaps](https://github.com/hammermaps))
+* Renamed VModEnable client command to vmodenable to adhere to naming rules
+	* Define dummy vmodenable command when singleplay gamerules are used to silence console errors
+* Fixed `CBaseMonster::ReportAIState` not handling all `MONSTERSTATE` enum values
+* Fixed crashes when GetClientColor returns null in CTF
+* Fixed sentence group percent comment
+* Merged server and player movement material system code, use `IFileSystem` to load file
+* Merged `vgui_LoadTGANoInvertAlpha` into `vgui_LoadTGA`
+* Don't reset skin value for Black Ops
+* Moved scientist voice initialization from TalkInit to Spawn
+* Ensure netadr_t is initialized on construction, add comparison operators
+* Escape hud text strings so newlines are treated correctly
+* Use proper constants for all `SetBodygroup` calls
+* Identify players consistently everywhere using `IsPlayer()`
+* Enumerate players using `UTIL_FindPlayers` instead of searching by classname
+* Use robust means of finding players
+* Forcefully reset monster ideal activity when released from Barnacle
+* Enabled `ASSERT` & `ASSERTSZ` macros in client dll, use spdlog logger to print assert messages
+* Include targetname & classname in `SUB_Remove` debug message
+
+### New features
+
+* Implemented game system API to avoid tight coupling between game systems
+* Implemented command abstraction API to enable registration of console commands and cvars on client and server using the same code
+    * Cvar values are automatically initialized from command line parameters if provided
+* Implemented spdlog logging system
+    * Load logging configuration from JSON file
+	* Initialize default log level to log_startup_level command line argument or developer setting
+	* Update logger settings after loading config file
+* Implemented game configuration system with server, map and map change configuration files
+    * Config files can include other config files
+* Implemented conditional evaluation system using Angelscript
+* Set up client side server engine interfaces on client load to ensure interfaces are initialized immediately
+* Reworked skill cfg to use JSON
+    * Reworked skill system to no longer use cvars, streamline skill level definitions
+	* Removed `skilldata_t` structure, query skill values directly
+	* Removed obsolete RefreshSkillData method, load skill file on new map start
+	* Added console commands to manage skill variables
+	* Reworked skill.json to allow for conditional values
+	* Allow skill.json variables to set values for all levels by omitting skill level
+	* Remove hard-coded skill values for multiplayer
+	* Removed sk_ prefix from skill variables, rename variables that had number as first character
+	* Only store skill value for current skill level
+* Implemented string pool to eliminate out-of-memory issues with `ALLOC_STRING`
+* Implemented engine filesystem support
+	* Replaced `COM_LoadFile` with `IFileSystem`, fixed incorrect buffer free calls
+	* Replaced `pfnLoadFileForMe` with `IFileSystem`
+	* Replaced most `fopen` uses with `IFileSystem`
+* Implemented OpenAL-based music playback
+* Implemented `ambient_music`
+* Implemented better client command system
+	* Validate client command names
+* Implemented game sound system
+	* Raised sentence limit to 65535
+	* Raised sentence group limit to unlimited
+	* Raised maximum sentence name length to 31 characters
+* Implemented custom health feature
+* Implemented custom model feature
+* Implemented global model replacement
+* Implemented global sentence replacement
+* Implemented global sound replacement
+* Added helper commands for debugging maps (Thanks [JoelTroch](https://github.com/JoelTroch))
+* Made `string_t` strongly typed
+
+### Hud changes
+
+* Reworked hud color
+    * Refactored to use dedicated data type
+	* Made hud color configurable by server
+	* Added `player_sethudcolor` entity
+	* Added `set_hud_color` cheat client command
+	* Allow setting hud color from config files
+* Added option to switch between flashlight and night vision
+	* Added `player_setsuitlighttype` entity
+	* Added `set_suit_light_type` cheat client command
+	* Allow setting suit light type from config files
+* Draw crosshair in client library instead of engine
+	* Draw crosshair and autoaim separately to allow coloring crosshair 
+	* Added crosshair scale cvar `crosshair_scale`
+* Added entity info hud
+* Added project info hud
+
+### Tools
+
+* Added Asset Synchronizer
+* Added Map Upgrader
+* Added Packager
+* Added Installer
+
+### Scripts
+
+* Added MapCfgGenerator script
+
+## Project changes
+
+* Replaced Visual Studio projects and Linux Makefiles with CMake config files
+* Restructured source code directories
+* Restructured SDL2 files to encapsulate it as a CMake library
+* Enabled multi-processor compilation for Visual Studio projects
+* Automatically copy mod libraries to HLDS directory on install if specified
+* Provide CMake settings to automatically set up Visual Studio debugging command line arguments
+	* Added option to enable developer mode for additional startup logging
+* Set C++ standard to C++ 20
+* Enabled solution folders for Visual Studio projects
+* Added Github Actions config file to enable automated Windows and Linux builds with downloadable artifacts (Thanks SmileyAG)
+* Link libstdc++ statically on Linux
+* Added toolchain files for Windows and Linux
+* Install `delta.lst` and `liblist.gam` to the mod directory
+* Added icon to `liblist.gam`
+* Only use OpenGL headers, don't link with it (SDL2 provides OpenGL implementation)
+* Renamed server library from `hl` to `server`
+* Added Visual Studio hint file to silence Intellisense warnings about macros that define code
+* Added natvis file with configuration for `CBaseEntity` and `string_t` to allow seeing pooled strings in the Visual Studio debugger
+* Added nlohmann JSON and JSON schema validator libraries
+* Added spdlog library
+* Added OpenAL and libnyquist libraries
+* Added fmtlib library
+* Added EASTL library
+* Ensured all libraries link statically with MSVC runtime
+* Use vcpkg to manage dependencies
+* Use delay loading to load `OpenAL32.dll` from mod directory
+
+## Code cleanup and refactoring
+
+* Improved const correctness
+* Added virtual functions `GetWeaponData` and `SetWeaponData` to simplify the networking of weapon data
+* Added debug-only check in entity method setters to validate usage
+* Moved code used by multiple entities to shared files to clean up code structure
+* Merged NPC classes that were largely copy pasted (mostly Opposing Force NPCs)
+* Resolved conflicts between client and server cvar utility code
+* Include `extdll.h` and `util.h` in `cbase.h` to eliminate the need to include them manually
+* Made `cbase.h` a precompiled header for the server library to speed up builds
+* Made `hud.h` a precompiled header for the client library to speed up builds
+* Include some common headers in precompiled headers and `Platform.h` to reduce header includes and speed up builds
+* Rewrote KB_ConvertString to use std::string
+* Converted CVoiceStatus::m_pchGameDir to std::string
+* Use local `AngleVectors` function instead of engine version
+* Define and use pointer to member function types for use with entities
+* Replaced `ARRAYSIZE` macro with `std::size`
+* Replaced `IS_NAN` macro with `std::isnan`
+* Replaced `_rtor` with `std::rotr`
+* Replaced `clamp` macro with `std::clamp`
+* Replaced `ALERT` macro with spdlog loggers
+* Replaced `pfnGetPlayerWONId` with `pfnGetPlayerAuthId`
+* Replaced `UTIL_LogPrintf` with spdlog loggers
+* Replaced `CLIENT_PRINTF` macro with `UTIL_ConsolePrint`
+* Replaced `PRECACHE_MODEL` macro with `PrecacheModel` and `UTIL_PrecacheModel`
+* Replaced `SET_MODEL` macro with `SetModel`
+* Replaced `PRECACHE_SOUND` macro with `PrecacheSound` and `UTIL_PrecacheSound`
+
+## Clang-tidy checks
+
+* modernize-use-bool-literals
+* modernize-use-nullptr
+* readability-delete-null-pointer
+* readability-implicit-bool-conversion
+
+## Removed code and functionality
+
+* Removed unused preprocessor definitions
+* Removed redundant `interface.h` and `interface.cpp`
+* Removed obsolete `filecopy.bat`
+* Removed unused files
+* Removed unused CHudAmmoSecondary class
+* Removed redundant pragma warning disable statements
+* Removed incorrect assert in `CHud::MsgFunc_ResetHUD`
+* Removed some unused constants
+* Removed some unused functions
+* Removed duplicate shared random function declarations
+* Removed some duplicate and unused global variable forward declarations
+* Removed some function declarations with no definition
+* Removed unnecessary extern keyword from function declarations
+* Removed unnecessary const casts
+* Removed unused `trigger_changelevel` functions
+* Removed obsolete Quake code used to handle powerups & code to handle cloak powerup changing player model
+* Removed `trigger_cdaudio` and `target_cdaudio`
+* Removed `sounds` keyvalue from worldspawn
+* Removed support for resolutions below 640x480
+* Removed superfluous `Random` value from `monster_otis` bodystate keyvalue
+* Removed obsolete trigger_secret check
+* Removed `ALERT` macro
+* Removed obsolete `CBaseSpectator` class
+* Removed obsolete cine entities
+* Removed non-functional `cycler_prdroid` entity
 
 # Notes
 
 * ChangeSchedule workaround from Opposing Force has not been added because the bug this works around was fixed.
-* gmsgScoreInfo has not been changed to omit player class and team as Opposing Force does. This will need reviewing to ensure all data is correct.
 * gmsgOldWeapon from Opposing Force has not been added since the ability to switch weapon prediction behavior is not being added.
 
 # Half-Life Updated CMake changelog
