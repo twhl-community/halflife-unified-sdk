@@ -116,6 +116,8 @@ This page lists all changes made since the last release in the current developme
 * Added Map Upgrader
 * Added Packager
 * Added Installer
+* Added Skill2Json
+* Added Bsp2Obj
 
 ### Scripts
 

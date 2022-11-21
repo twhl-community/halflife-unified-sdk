@@ -15,6 +15,8 @@ The files in this directory and subdirectories contain documentation for the Uni
 * [MapUpgrader](tools/map-upgrader.md)
 * [Packager](tools/packager.md)
 * [Installer](tools/installer.md)
+* [Skill2Json](tools/skill2json.md)
+* [Bsp2Obj](tools/bsp2obj.md)
 
 ## Scripts
 
