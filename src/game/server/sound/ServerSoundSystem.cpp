@@ -109,12 +109,6 @@ void ServerSoundSystem::EmitSoundCore(edict_t* entity, int channel, const char* 
 		return;
 	}
 
-	if ((flags & SND_SPAWNING) != 0)
-	{
-		m_Logger->error("EmitSound: cannot use SND_SPAWNING with sentences");
-		return;
-	}
-
 	const int volumeInt = static_cast<int>(volume * 255);
 
 	int soundIndex = 0;
@@ -152,7 +146,11 @@ void ServerSoundSystem::EmitSoundCore(edict_t* entity, int channel, const char* 
 		flags |= SND_LARGE_INDEX;
 	}
 
-	if (alwaysBroadcast)
+	if ((flags & SND_SPAWNING) != 0)
+	{
+		MESSAGE_BEGIN(MSG_INIT, gmsgEmitSound);
+	}
+	else if (alwaysBroadcast)
 	{
 		MESSAGE_BEGIN(MSG_BROADCAST, gmsgEmitSound);
 	}
