@@ -14,6 +14,8 @@
 #include "particleman.h"
 #include "view.h"
 
+#include "sound/ClientSoundReplacement.h"
+
 void Game_AddObjects();
 
 bool g_iAlive = true;
@@ -346,8 +348,11 @@ void DLLEXPORT HUD_StudioEvent(const struct mstudioevent_s* event, const struct 
 		break;
 		// Client side sound
 	case 5004:
-		gEngfuncs.pfnPlaySoundByNameAtLocation(event->options, 1.0, entity->attachment[0]);
+	{
+		auto sample = sound::g_ClientSoundReplacement->Lookup(event->options);
+		gEngfuncs.pfnPlaySoundByNameAtLocation(sample, 1.0, entity->attachment[0]);
 		break;
+	}
 	default:
 		break;
 	}
