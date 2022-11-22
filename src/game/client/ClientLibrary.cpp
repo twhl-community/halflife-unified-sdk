@@ -81,6 +81,7 @@ void ClientLibrary::RunFrame()
 		sound::g_SoundSystem->GetGameSoundSystem()->ClearCaches();
 
 		// Clear sound replacement map on any change.
+		g_ReplacementMaps.Clear();
 		sound::g_ClientSoundReplacement = &ReplacementMap::Empty;
 
 		if (!isConnected
