@@ -47,6 +47,7 @@ From most to least verbose:
 | json | See [JSON System](json-system.md) |
 | logging | See above |
 | nodegraph | Logs node graph debug output. Will spew much output in trace mode |
+| precache | Logs every call made to model, sound and generic precache functions. Assets precached by the engine are not included in this output |
 | replacementmap | See [Replacement Map System](replacement-map-system.md) |
 | saverestore | Logs errors that occur during saving and loading |
 | sentences | Logs diagnostics, warnings and errors that occur during `sentences.txt` file loading |

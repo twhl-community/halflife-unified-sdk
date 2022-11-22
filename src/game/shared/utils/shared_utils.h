@@ -31,7 +31,8 @@ extern globalvars_t* gpGlobals;
 
 inline cvar_t* g_pDeveloper;
 
-extern std::shared_ptr<spdlog::logger> g_AssertLogger;
+inline std::shared_ptr<spdlog::logger> g_AssertLogger;
+inline std::shared_ptr<spdlog::logger> g_PrecacheLogger;
 
 //
 // How did I ever live without ASSERT?
@@ -145,9 +146,15 @@ inline const char* CVAR_GET_STRING(const char* x) { return g_engfuncs.pfnCVarGet
 
 const char* UTIL_CheckForGlobalModelReplacement(const char* s);
 
+int UTIL_PrecacheModelDirect(const char* s);
+
 int UTIL_PrecacheModel(const char* s);
 
+int UTIL_PrecacheSoundDirect(const char* s);
+
 int UTIL_PrecacheSound(const char* s);
+
+int UTIL_PrecacheGenericDirect(const char* s);
 
 template <>
 struct fmt::formatter<Vector> : public fmt::formatter<float>

@@ -636,7 +636,7 @@ bool CBaseEntity::Restore(CRestore& restore)
 		maxs = pev->maxs;
 
 		//Don't use UTIL_PrecacheModel here because we're restoring an already-replaced name.
-		g_engfuncs.pfnPrecacheModel(STRING(pev->model));
+		UTIL_PrecacheModelDirect(STRING(pev->model));
 		SetModel(STRING(pev->model));
 		UTIL_SetSize(pev, mins, maxs); // Reset them
 	}

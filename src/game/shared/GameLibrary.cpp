@@ -48,6 +48,7 @@ bool GameLibrary::Initialize()
 
 	g_GameLogger = g_Logging.CreateLogger("game");
 	g_AssertLogger = g_Logging.CreateLogger("assert");
+	g_PrecacheLogger = g_Logging.CreateLogger("precache");
 	CBaseEntity::Logger = g_Logging.CreateLogger("ent");
 	CBasePlayerItem::WeaponsLogger = g_Logging.CreateLogger("ent.weapons");
 
@@ -61,6 +62,7 @@ void GameLibrary::Shutdown()
 {
 	CBasePlayerItem::WeaponsLogger.reset();
 	CBaseEntity::Logger.reset();
+	g_PrecacheLogger.reset();
 	g_AssertLogger.reset();
 	g_GameLogger.reset();
 

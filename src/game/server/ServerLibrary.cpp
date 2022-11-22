@@ -145,7 +145,7 @@ void ServerLibrary::NewMapStarted(bool loadGame)
 
 	if (!m_MapState.m_GlobalSoundReplacementFileName.empty())
 	{
-		g_engfuncs.pfnPrecacheGeneric(m_MapState.m_GlobalSoundReplacementFileName.c_str());
+		UTIL_PrecacheGenericDirect(m_MapState.m_GlobalSoundReplacementFileName.c_str());
 		g_engfuncs.pfnForceUnmodified(force_exactfile, nullptr, nullptr, m_MapState.m_GlobalSoundReplacementFileName.c_str());
 	}
 }

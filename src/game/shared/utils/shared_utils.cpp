@@ -25,7 +25,6 @@
 #include "sound/ServerSoundSystem.h"
 #endif
 
-std::shared_ptr<spdlog::logger> g_AssertLogger;
 StringPool g_StringPool;
 
 #ifdef DEBUG
@@ -344,6 +343,20 @@ const char* UTIL_CheckForGlobalModelReplacement(const char* s)
 	return s;
 }
 
+static void UTIL_PrecacheLog(const char* type, const char* fileName)
+{
+	if (g_PrecacheLogger->should_log(spdlog::level::trace))
+	{
+		g_PrecacheLogger->trace("[{}] \"{}\"{}", type, fileName, fileName == gpGlobals->pStringBase ? " (Null string_t)" : "");
+	}
+}
+
+int UTIL_PrecacheModelDirect(const char* s)
+{
+	UTIL_PrecacheLog("model", s);
+	return g_engfuncs.pfnPrecacheModel(s);
+}
+
 int UTIL_PrecacheModel(const char* s)
 {
 	ASSERT(s != nullptr);
@@ -356,7 +369,13 @@ int UTIL_PrecacheModel(const char* s)
 
 	s = UTIL_CheckForGlobalModelReplacement(s);
 
-	return g_engfuncs.pfnPrecacheModel(s);
+	return UTIL_PrecacheModelDirect(s);
+}
+
+int UTIL_PrecacheSoundDirect(const char* s)
+{
+	UTIL_PrecacheLog("sound", s);
+	return g_engfuncs.pfnPrecacheSound(s);
 }
 
 int UTIL_PrecacheSound(const char* s)
@@ -373,5 +392,11 @@ int UTIL_PrecacheSound(const char* s)
 	s = sound::g_ServerSound.CheckForSoundReplacement(s);
 #endif
 
-	return g_engfuncs.pfnPrecacheSound(s);
+	return UTIL_PrecacheSoundDirect(s);
+}
+
+int UTIL_PrecacheGenericDirect(const char* s)
+{
+	UTIL_PrecacheLog("generic", s);
+	return g_engfuncs.pfnPrecacheGeneric(s);
 }
