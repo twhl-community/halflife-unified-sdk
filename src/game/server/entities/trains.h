@@ -121,5 +121,5 @@ public:
 	float m_oldSpeed;
 
 private:
-	unsigned short m_usAdjustPitch;
+	float m_CachedPitch;
 };

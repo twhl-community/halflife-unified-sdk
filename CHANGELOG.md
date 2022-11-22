@@ -22,6 +22,7 @@ This page lists all changes made since the last release in the current developme
 * Added formatter specializations for `Vector` and `Vector2D`
 * Added new keyvalues for Otis submodels & support random skin
 * Replaced `ACT_SIGNAL3` in talk monster schedules with `ACT_IDLE` to fix allied human grunts playing incorrect animations
+* Replaced tracktrain event with proper throttled sound updates (message rate goes from once per frame (possibly 1000 per second) to one per speed change (on average less than one per second))
 * Reworked talk monsters to no longer depend on hard-coded list of friend class names
 * Reworked weapon selection client command to use actual named command `selectweapon`
 * Reworked spectator client command code to allow use of it outside CTF gamemode
@@ -34,6 +35,7 @@ This page lists all changes made since the last release in the current developme
 * Fixed `CBaseMonster::ReportAIState` not handling all `MONSTERSTATE` enum values
 * Fixed crashes when GetClientColor returns null in CTF
 * Fixed sentence group percent comment
+* Fixed momentary_door trying to play null string_t
 * Merged server and player movement material system code, use `IFileSystem` to load file
 * Merged `vgui_LoadTGANoInvertAlpha` into `vgui_LoadTGA`
 * Don't reset skin value for Black Ops

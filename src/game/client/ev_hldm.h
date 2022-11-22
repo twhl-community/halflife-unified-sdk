@@ -42,6 +42,4 @@ void EV_SniperRifle(event_args_t* args);
 void EV_Knife(event_args_t* args);
 void EV_PenguinFire(event_args_t* args);
 
-void EV_TrainPitchAdjust(event_args_t* args);
-
 void SetLocalBody(int id, int body);
