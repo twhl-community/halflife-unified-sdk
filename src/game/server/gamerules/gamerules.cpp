@@ -17,6 +17,7 @@
 //=========================================================
 
 #include "cbase.h"
+#include "GameLibrary.h"
 #include "gamerules.h"
 #include "teamplay_gamerules.h"
 #include "ctfplay_gamerules.h"
@@ -209,11 +210,15 @@ void CGameRules::BecomeSpectator(CBasePlayer* player, const CommandArgs& args)
 
 CGameRules* InstallGameRules(CBaseEntity* pWorld)
 {
+	g_GameLogger->trace("Creating gamerules");
+
 	SERVER_COMMAND("exec game.cfg\n");
 	SERVER_EXECUTE();
 
+	// TODO: need to be able to identify gamerules by name.
 	if (0 == gpGlobals->deathmatch)
 	{
+		g_GameLogger->trace("Creating singleplayer gamerules");
 		// generic half-life
 		g_teamplay = false;
 		return new CHalfLifeRules;
@@ -221,17 +226,20 @@ CGameRules* InstallGameRules(CBaseEntity* pWorld)
 
 	if (coopplay.value > 0)
 	{
+		g_GameLogger->trace("Creating coop gamerules");
 		return new CHalfLifeCoopplay();
 	}
 	else
 	{
 		if ((pWorld->pev->spawnflags & SF_WORLD_CTF) != 0)
 		{
+			g_GameLogger->trace("Creating ctf gamerules");
 			return new CHalfLifeCTFplay();
 		}
 
 		if (teamplay.value > 0)
 		{
+			g_GameLogger->trace("Creating teamplay gamerules");
 			// teamplay
 
 			g_teamplay = true;
@@ -239,12 +247,14 @@ CGameRules* InstallGameRules(CBaseEntity* pWorld)
 		}
 		if ((int)gpGlobals->deathmatch == 1)
 		{
+			g_GameLogger->trace("Creating deathmatch gamerules");
 			// vanilla deathmatch
 			g_teamplay = false;
 			return new CHalfLifeMultiplay;
 		}
 		else
 		{
+			g_GameLogger->trace("Creating deathmatch gamerules");
 			// vanilla deathmatch??
 			g_teamplay = false;
 			return new CHalfLifeMultiplay;

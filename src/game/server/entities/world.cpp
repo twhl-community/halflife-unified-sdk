@@ -481,6 +481,8 @@ CWorld::CWorld()
 		return;
 	}
 
+	g_GameLogger->trace("worldspawn created");
+
 	Instance = this;
 
 	// Clear previous map's title if it wasn't cleared already.
@@ -497,6 +499,8 @@ CWorld::~CWorld()
 	g_Server.MapIsEnding();
 
 	Instance = nullptr;
+
+	g_GameLogger->trace("worldspawn destroyed");
 }
 
 void CWorld::Spawn()
@@ -519,6 +523,8 @@ void CWorld::Precache()
 		UTIL_Remove(this);
 		return;
 	}
+
+	g_GameLogger->trace("Initializing world");
 
 	g_pLastSpawn = nullptr;
 
@@ -562,6 +568,8 @@ void CWorld::Precache()
 	W_Precache(); // get weapon precaches
 
 	ClientPrecache();
+
+	g_GameLogger->trace("Precaching common assets");
 
 	// sounds used from C physics code
 	PrecacheSound("common/null.wav"); // clears sound channels
@@ -640,6 +648,8 @@ void CWorld::Precache()
 
 	for (std::size_t i = 0; i < std::size(gDecals); i++)
 		gDecals[i].index = DECAL_INDEX(gDecals[i].name);
+
+	g_GameLogger->trace("Setting up node graph");
 
 	// init the WorldGraph.
 	WorldGraph.InitGraph();

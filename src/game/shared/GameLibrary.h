@@ -15,7 +15,10 @@
 
 #pragma once
 
+#include <memory>
+
 #include <spdlog/common.h>
+#include <spdlog/logger.h>
 
 #include "utils/ConCommandSystem.h"
 
@@ -59,3 +62,8 @@ protected:
 private:
 	void SetEntLogLevels(const CommandArgs& args);
 };
+
+/**
+*	@brief Logger for general game events.
+*/
+inline std::shared_ptr<spdlog::logger> g_GameLogger;

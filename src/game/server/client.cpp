@@ -931,6 +931,8 @@ void StartFrame()
 
 void ClientPrecache()
 {
+	g_GameLogger->trace("Precaching player assets");
+
 	// setup precaches always needed
 	UTIL_PrecacheSound("player/sprayer.wav"); // spray paint sound for PreAlpha
 

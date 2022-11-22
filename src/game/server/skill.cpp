@@ -27,6 +27,7 @@
 #include "skill.h"
 
 #include "ConCommandSystem.h"
+#include "GameLibrary.h"
 #include "JSONSystem.h"
 #include "config/ConditionEvaluator.h"
 
@@ -221,6 +222,8 @@ void SkillSystem::NewMapStarted()
 
 void SkillSystem::LoadSkillConfigFile()
 {
+	g_GameLogger->trace("Loading skill config file");
+
 	//Refresh skill level setting first.
 	int iSkill = (int)CVAR_GET_FLOAT("skill");
 

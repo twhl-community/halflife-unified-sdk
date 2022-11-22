@@ -41,6 +41,7 @@ From most to least verbose:
 | ent.ai.script | Logs NPC scripted behavior info (`scripted_sequence`, `aiscripted_sequence` & `scripted_sentence`) |
 | ent.io | Logs entity I/O related to target and killtarget |
 | ent.weapons | Logs weapon state info |
+| game | Logs general game events related to map loading and initialization |
 | gamecfg | See [Game Configuration System](game-configuration-system.md) |
 | gamerules | Logs game mode events. This includes log output that was previously routed to the server log file |
 | json | See [JSON System](json-system.md) |

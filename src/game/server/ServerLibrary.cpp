@@ -128,6 +128,8 @@ void ServerLibrary::RunFrame()
 
 void ServerLibrary::NewMapStarted(bool loadGame)
 {
+	g_GameLogger->trace("Starting new map");
+
 	ClearStringPool();
 
 	// Initialize map state to its default state
@@ -262,6 +264,7 @@ void ServerLibrary::LoadServerConfigFiles()
 {
 	if (const auto cfgFile = servercfgfile.string; cfgFile && '\0' != cfgFile[0])
 	{
+		g_GameLogger->trace("Loading server config file");
 		m_ServerConfigDefinition->TryLoad(cfgFile, {.Data = m_MapState, .PathID = "GAMECONFIG"});
 	}
 
@@ -269,6 +272,7 @@ void ServerLibrary::LoadServerConfigFiles()
 	if (const auto mapCfgFileName = fmt::format("cfg/maps/{}.json", STRING(gpGlobals->mapname));
 		g_pFileSystem->FileExists(mapCfgFileName.c_str()))
 	{
+		g_GameLogger->trace("Loading map config file");
 		m_MapConfigDefinition->TryLoad(mapCfgFileName.c_str(), {.Data = m_MapState});
 	}
 }
@@ -277,6 +281,7 @@ void ServerLibrary::LoadMapChangeConfigFile()
 {
 	if (const auto cfgFile = mapchangecfgfile.string; cfgFile && '\0' != cfgFile[0])
 	{
+		g_GameLogger->trace("Loading map change config file");
 		m_MapChangeConfigDefinition->TryLoad(cfgFile, {.Data = m_MapState, .PathID = "GAMECONFIG"});
 	}
 }

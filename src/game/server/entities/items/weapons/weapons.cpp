@@ -21,6 +21,7 @@
 */
 
 #include "cbase.h"
+#include "GameLibrary.h"
 #include "weapons.h"
 #include "UserMessages.h"
 
@@ -247,6 +248,8 @@ void UTIL_PrecacheOtherWeapon(const char* szClassname)
 // called by worldspawn
 void W_Precache()
 {
+	g_GameLogger->trace("Precaching weapon assets");
+
 	memset(CBasePlayerItem::ItemInfoArray, 0, sizeof(CBasePlayerItem::ItemInfoArray));
 	memset(CBasePlayerItem::AmmoInfoArray, 0, sizeof(CBasePlayerItem::AmmoInfoArray));
 	giAmmoIndex = 0;
