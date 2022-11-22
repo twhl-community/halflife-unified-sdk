@@ -29,6 +29,7 @@ This page lists all changes made since the last release in the current developme
 * Reworked "No use" spawnflag for scientists to a keyvalue
 * Reworked game title display to support multiple games
 * Reworked animation body groups for NPCs that use the new structure
+* Converted entities to use sound names instead of indices
 * Renamed UTIL_dtos1 - 4 to UTIL_ToString and remove the duplicate functions with the same code (Thanks [hammermaps](https://github.com/hammermaps))
 * Renamed VModEnable client command to vmodenable to adhere to naming rules
 	* Define dummy vmodenable command when singleplay gamerules are used to silence console errors
