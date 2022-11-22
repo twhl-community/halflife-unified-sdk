@@ -1022,6 +1022,8 @@ void CMomentaryDoor::Precache()
 		pev->noiseMoving = ALLOC_STRING("common/null.wav");
 		break;
 	}
+
+	pev->noiseArrived = ALLOC_STRING("common/null.wav");
 }
 
 bool CMomentaryDoor::KeyValue(KeyValueData* pkvd)
