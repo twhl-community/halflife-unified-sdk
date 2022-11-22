@@ -27,11 +27,6 @@
 #define SF_BRUSH_HURT 32		 // rotating brush that inflicts pain based on rotation speed
 #define SF_ROTATING_NOT_SOLID 64 // some special rotating objects are not solid.
 
-// covering cheesy noise1, noise2, & noise3 fields so they make more sense (for rotating fans)
-#define noiseStart noise1
-#define noiseStop noise2
-#define noiseRunning noise3
-
 #define SF_PENDULUM_SWING 2 // spawnflag that makes a pendulum a rope swing.
 //
 // BModelOrigin - calculates origin of a bmodel from absmin/size because all bmodel origins are 0 0 0
@@ -290,7 +285,7 @@ public:
 	float m_flAttenuation;
 	float m_flVolume;
 	float m_pitch;
-	int m_sounds;
+	string_t m_sounds;
 };
 
 TYPEDESCRIPTION CFuncRotating::m_SaveData[] =
@@ -299,7 +294,7 @@ TYPEDESCRIPTION CFuncRotating::m_SaveData[] =
 		DEFINE_FIELD(CFuncRotating, m_flAttenuation, FIELD_FLOAT),
 		DEFINE_FIELD(CFuncRotating, m_flVolume, FIELD_FLOAT),
 		DEFINE_FIELD(CFuncRotating, m_pitch, FIELD_FLOAT),
-		DEFINE_FIELD(CFuncRotating, m_sounds, FIELD_INTEGER)};
+		DEFINE_FIELD(CFuncRotating, m_sounds, FIELD_SOUNDNAME)};
 
 IMPLEMENT_SAVERESTORE(CFuncRotating, CBaseEntity);
 
@@ -333,7 +328,7 @@ bool CFuncRotating::KeyValue(KeyValueData* pkvd)
 	}
 	else if (FStrEq(pkvd->szKeyName, "sounds"))
 	{
-		m_sounds = atoi(pkvd->szValue);
+		m_sounds = ALLOC_STRING(pkvd->szValue);
 		return true;
 	}
 
@@ -441,60 +436,12 @@ void CFuncRotating::Spawn()
 
 void CFuncRotating::Precache()
 {
-	const char* szSoundFile = STRING(pev->message);
-
-	// set up fan sounds
-
-	if (!FStringNull(pev->message) && strlen(szSoundFile) > 0)
+	if (FStrEq("", STRING(m_sounds)))
 	{
-		// if a path is set for a wave, use it
-
-		PrecacheSound(szSoundFile);
-
-		pev->noiseRunning = ALLOC_STRING(szSoundFile);
+		m_sounds = ALLOC_STRING("common/null.wav");
 	}
-	else
-	{
-		// otherwise use preset sound
-		switch (m_sounds)
-		{
-		case 1:
-			PrecacheSound("fans/fan1.wav");
-			pev->noiseRunning = ALLOC_STRING("fans/fan1.wav");
-			break;
-		case 2:
-			PrecacheSound("fans/fan2.wav");
-			pev->noiseRunning = ALLOC_STRING("fans/fan2.wav");
-			break;
-		case 3:
-			PrecacheSound("fans/fan3.wav");
-			pev->noiseRunning = ALLOC_STRING("fans/fan3.wav");
-			break;
-		case 4:
-			PrecacheSound("fans/fan4.wav");
-			pev->noiseRunning = ALLOC_STRING("fans/fan4.wav");
-			break;
-		case 5:
-			PrecacheSound("fans/fan5.wav");
-			pev->noiseRunning = ALLOC_STRING("fans/fan5.wav");
-			break;
 
-		case 0:
-		default:
-			if (!FStringNull(pev->message) && strlen(szSoundFile) > 0)
-			{
-				PrecacheSound(szSoundFile);
-
-				pev->noiseRunning = ALLOC_STRING(szSoundFile);
-				break;
-			}
-			else
-			{
-				pev->noiseRunning = ALLOC_STRING("common/null.wav");
-				break;
-			}
-		}
-	}
+	PrecacheSound(STRING(m_sounds));
 
 	if (pev->avelocity != g_vecZero)
 	{
@@ -571,7 +518,7 @@ void CFuncRotating::RampPitchVol(bool fUp)
 
 	// change the fan's vol and pitch
 
-	EMIT_SOUND_DYN(ENT(pev), CHAN_STATIC, STRING(pev->noiseRunning),
+	EMIT_SOUND_DYN(ENT(pev), CHAN_STATIC, STRING(m_sounds),
 		fvol, m_flAttenuation, SND_CHANGE_PITCH | SND_CHANGE_VOL, pitch);
 }
 
@@ -593,7 +540,7 @@ void CFuncRotating::SpinUp()
 		fabs(vecAVel.z) >= fabs(pev->movedir.z * pev->speed))
 	{
 		pev->avelocity = pev->movedir * pev->speed; // set speed in case we overshot
-		EMIT_SOUND_DYN(ENT(pev), CHAN_STATIC, STRING(pev->noiseRunning),
+		EMIT_SOUND_DYN(ENT(pev), CHAN_STATIC, STRING(m_sounds),
 			m_flVolume, m_flAttenuation, SND_CHANGE_PITCH | SND_CHANGE_VOL, FANPITCHMAX);
 
 		SetThink(&CFuncRotating::Rotate);
@@ -634,7 +581,7 @@ void CFuncRotating::SpinDown()
 		pev->avelocity = g_vecZero; // set speed in case we overshot
 
 		// stop sound, we're done
-		EMIT_SOUND_DYN(ENT(pev), CHAN_STATIC, STRING(pev->noiseRunning /* Stop */),
+		EMIT_SOUND_DYN(ENT(pev), CHAN_STATIC, STRING(m_sounds /* Stop */),
 			0, 0, SND_STOP, m_pitch);
 
 		SetThink(&CFuncRotating::Rotate);
@@ -663,7 +610,7 @@ void CFuncRotating::RotatingUse(CBaseEntity* pActivator, CBaseEntity* pCaller, U
 		if (pev->avelocity != g_vecZero)
 		{
 			SetThink(&CFuncRotating::SpinDown);
-			//EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, (char *)STRING(pev->noiseStop),
+			//EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, (char *)STRING(pev->noise2),
 			//	m_flVolume, m_flAttenuation, 0, m_pitch);
 
 			pev->nextthink = pev->ltime + 0.1;
@@ -671,7 +618,7 @@ void CFuncRotating::RotatingUse(CBaseEntity* pActivator, CBaseEntity* pCaller, U
 		else // fan is not moving, so start it
 		{
 			SetThink(&CFuncRotating::SpinUp);
-			EMIT_SOUND_DYN(ENT(pev), CHAN_STATIC, STRING(pev->noiseRunning),
+			EMIT_SOUND_DYN(ENT(pev), CHAN_STATIC, STRING(m_sounds),
 				0.01, m_flAttenuation, 0, FANPITCHMIN);
 
 			pev->nextthink = pev->ltime + 0.1;
@@ -684,7 +631,7 @@ void CFuncRotating::RotatingUse(CBaseEntity* pActivator, CBaseEntity* pCaller, U
 			// play stopping sound here
 			SetThink(&CFuncRotating::SpinDown);
 
-			// EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, (char *)STRING(pev->noiseStop),
+			// EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, (char *)STRING(pev->noise2),
 			//	m_flVolume, m_flAttenuation, 0, m_pitch);
 
 			pev->nextthink = pev->ltime + 0.1;
@@ -692,7 +639,7 @@ void CFuncRotating::RotatingUse(CBaseEntity* pActivator, CBaseEntity* pCaller, U
 		}
 		else
 		{
-			EMIT_SOUND_DYN(ENT(pev), CHAN_STATIC, STRING(pev->noiseRunning),
+			EMIT_SOUND_DYN(ENT(pev), CHAN_STATIC, STRING(m_sounds),
 				m_flVolume, m_flAttenuation, 0, FANPITCHMAX);
 			pev->avelocity = pev->movedir * pev->speed;
 

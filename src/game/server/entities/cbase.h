@@ -730,9 +730,6 @@ class CSound;
 #include "weapons.h"
 #include "effects.h"
 
-const char* ButtonSound(int sound); // get string of button sound number
-
-
 //
 // Generic Button
 //
@@ -776,11 +773,11 @@ public:
 
 	locksound_t m_ls; // door lock sounds
 
-	byte m_bLockedSound; // ordinals from entity selection
-	byte m_bLockedSentence;
-	byte m_bUnlockedSound;
-	byte m_bUnlockedSentence;
-	int m_sounds;
+	string_t m_LockedSound; // ordinals from entity selection
+	string_t m_LockedSentence;
+	string_t m_UnlockedSound;
+	string_t m_UnlockedSentence;
+	string_t m_sounds;
 };
 
 //

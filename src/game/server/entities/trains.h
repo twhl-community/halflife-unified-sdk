@@ -115,7 +115,7 @@ public:
 	Vector m_controlMins;
 	Vector m_controlMaxs;
 	bool m_soundPlaying;
-	int m_sounds;
+	string_t m_sounds;
 	float m_flVolume;
 	float m_flBank;
 	float m_oldSpeed;

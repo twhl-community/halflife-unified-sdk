@@ -41,15 +41,15 @@ public:
 	bool Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
-	byte m_bMoveSnd; // sound a plat makes while moving
-	byte m_bStopSnd; // sound a plat makes when it stops
+	string_t m_MoveSound; // sound a plat makes while moving
+	string_t m_StopSound; // sound a plat makes when it stops
 	float m_volume;	 // Sound volume
 };
 
 TYPEDESCRIPTION CBasePlatTrain::m_SaveData[] =
 	{
-		DEFINE_FIELD(CBasePlatTrain, m_bMoveSnd, FIELD_CHARACTER),
-		DEFINE_FIELD(CBasePlatTrain, m_bStopSnd, FIELD_CHARACTER),
+		DEFINE_FIELD(CBasePlatTrain, m_MoveSound, FIELD_SOUNDNAME),
+		DEFINE_FIELD(CBasePlatTrain, m_StopSound, FIELD_SOUNDNAME),
 		DEFINE_FIELD(CBasePlatTrain, m_volume, FIELD_FLOAT),
 };
 
@@ -79,12 +79,12 @@ bool CBasePlatTrain::KeyValue(KeyValueData* pkvd)
 	}
 	else if (FStrEq(pkvd->szKeyName, "movesnd"))
 	{
-		m_bMoveSnd = atof(pkvd->szValue);
+		m_MoveSound = ALLOC_STRING(pkvd->szValue);
 		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "stopsnd"))
 	{
-		m_bStopSnd = atof(pkvd->szValue);
+		m_StopSound = ALLOC_STRING(pkvd->szValue);
 		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "volume"))
@@ -96,126 +96,28 @@ bool CBasePlatTrain::KeyValue(KeyValueData* pkvd)
 	return CBaseToggle::KeyValue(pkvd);
 }
 
-#define noiseMoving noise
-#define noiseArrived noise1
-
 void CBasePlatTrain::Precache()
 {
 	// set the plat's "in-motion" sound
-	switch (m_bMoveSnd)
+	if (FStrEq("", STRING(m_MoveSound)))
 	{
-	case 0:
-		pev->noiseMoving = MAKE_STRING("common/null.wav");
-		break;
-	case 1:
-		PrecacheSound("plats/bigmove1.wav");
-		pev->noiseMoving = MAKE_STRING("plats/bigmove1.wav");
-		break;
-	case 2:
-		PrecacheSound("plats/bigmove2.wav");
-		pev->noiseMoving = MAKE_STRING("plats/bigmove2.wav");
-		break;
-	case 3:
-		PrecacheSound("plats/elevmove1.wav");
-		pev->noiseMoving = MAKE_STRING("plats/elevmove1.wav");
-		break;
-	case 4:
-		PrecacheSound("plats/elevmove2.wav");
-		pev->noiseMoving = MAKE_STRING("plats/elevmove2.wav");
-		break;
-	case 5:
-		PrecacheSound("plats/elevmove3.wav");
-		pev->noiseMoving = MAKE_STRING("plats/elevmove3.wav");
-		break;
-	case 6:
-		PrecacheSound("plats/freightmove1.wav");
-		pev->noiseMoving = MAKE_STRING("plats/freightmove1.wav");
-		break;
-	case 7:
-		PrecacheSound("plats/freightmove2.wav");
-		pev->noiseMoving = MAKE_STRING("plats/freightmove2.wav");
-		break;
-	case 8:
-		PrecacheSound("plats/heavymove1.wav");
-		pev->noiseMoving = MAKE_STRING("plats/heavymove1.wav");
-		break;
-	case 9:
-		PrecacheSound("plats/rackmove1.wav");
-		pev->noiseMoving = MAKE_STRING("plats/rackmove1.wav");
-		break;
-	case 10:
-		PrecacheSound("plats/railmove1.wav");
-		pev->noiseMoving = MAKE_STRING("plats/railmove1.wav");
-		break;
-	case 11:
-		PrecacheSound("plats/squeekmove1.wav");
-		pev->noiseMoving = MAKE_STRING("plats/squeekmove1.wav");
-		break;
-	case 12:
-		PrecacheSound("plats/talkmove1.wav");
-		pev->noiseMoving = MAKE_STRING("plats/talkmove1.wav");
-		break;
-	case 13:
-		PrecacheSound("plats/talkmove2.wav");
-		pev->noiseMoving = MAKE_STRING("plats/talkmove2.wav");
-		break;
-	default:
-		pev->noiseMoving = MAKE_STRING("common/null.wav");
-		break;
+		m_MoveSound = ALLOC_STRING("common/null.wav");
 	}
+
+	PrecacheSound(STRING(m_MoveSound));
 
 	// set the plat's 'reached destination' stop sound
-	switch (m_bStopSnd)
+	if (FStrEq("", STRING(m_StopSound)))
 	{
-	case 0:
-		pev->noiseArrived = MAKE_STRING("common/null.wav");
-		break;
-	case 1:
-		PrecacheSound("plats/bigstop1.wav");
-		pev->noiseArrived = MAKE_STRING("plats/bigstop1.wav");
-		break;
-	case 2:
-		PrecacheSound("plats/bigstop2.wav");
-		pev->noiseArrived = MAKE_STRING("plats/bigstop2.wav");
-		break;
-	case 3:
-		PrecacheSound("plats/freightstop1.wav");
-		pev->noiseArrived = MAKE_STRING("plats/freightstop1.wav");
-		break;
-	case 4:
-		PrecacheSound("plats/heavystop2.wav");
-		pev->noiseArrived = MAKE_STRING("plats/heavystop2.wav");
-		break;
-	case 5:
-		PrecacheSound("plats/rackstop1.wav");
-		pev->noiseArrived = MAKE_STRING("plats/rackstop1.wav");
-		break;
-	case 6:
-		PrecacheSound("plats/railstop1.wav");
-		pev->noiseArrived = MAKE_STRING("plats/railstop1.wav");
-		break;
-	case 7:
-		PrecacheSound("plats/squeekstop1.wav");
-		pev->noiseArrived = MAKE_STRING("plats/squeekstop1.wav");
-		break;
-	case 8:
-		PrecacheSound("plats/talkstop1.wav");
-		pev->noiseArrived = MAKE_STRING("plats/talkstop1.wav");
-		break;
-
-	default:
-		pev->noiseArrived = MAKE_STRING("common/null.wav");
-		break;
+		m_StopSound = ALLOC_STRING("common/null.wav");
 	}
+
+	PrecacheSound(STRING(m_StopSound));
 }
 
 //
 //====================== PLAT code ====================================================
 //
-
-
-#define noiseMovement noise
-#define noiseStopMoving noise1
 
 class CFuncPlat : public CBasePlatTrain
 {
@@ -271,9 +173,6 @@ Set "sounds" to one of the following:
 
 void CFuncPlat::Setup()
 {
-	//pev->noiseMovement = MAKE_STRING("plats/platmove1.wav");
-	//pev->noiseStopMoving = MAKE_STRING("plats/platstop1.wav");
-
 	if (m_flTLength == 0)
 		m_flTLength = 80;
 	if (m_flTWidth == 0)
@@ -435,8 +334,7 @@ void CFuncPlat::PlatUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE 
 //
 void CFuncPlat::GoDown()
 {
-	if (!FStringNull(pev->noiseMovement))
-		EMIT_SOUND(ENT(pev), CHAN_STATIC, STRING(pev->noiseMovement), m_volume, ATTN_NORM);
+	EMIT_SOUND(ENT(pev), CHAN_STATIC, STRING(m_MoveSound), m_volume, ATTN_NORM);
 
 	ASSERT(m_toggle_state == TS_AT_TOP || m_toggle_state == TS_GOING_UP);
 	m_toggle_state = TS_GOING_DOWN;
@@ -450,11 +348,8 @@ void CFuncPlat::GoDown()
 //
 void CFuncPlat::HitBottom()
 {
-	if (!FStringNull(pev->noiseMovement))
-		STOP_SOUND(ENT(pev), CHAN_STATIC, STRING(pev->noiseMovement));
-
-	if (!FStringNull(pev->noiseStopMoving))
-		EMIT_SOUND(ENT(pev), CHAN_WEAPON, STRING(pev->noiseStopMoving), m_volume, ATTN_NORM);
+	STOP_SOUND(ENT(pev), CHAN_STATIC, STRING(m_MoveSound));
+	EMIT_SOUND(ENT(pev), CHAN_WEAPON, STRING(m_StopSound), m_volume, ATTN_NORM);
 
 	ASSERT(m_toggle_state == TS_GOING_DOWN);
 	m_toggle_state = TS_AT_BOTTOM;
@@ -466,8 +361,7 @@ void CFuncPlat::HitBottom()
 //
 void CFuncPlat::GoUp()
 {
-	if (!FStringNull(pev->noiseMovement))
-		EMIT_SOUND(ENT(pev), CHAN_STATIC, STRING(pev->noiseMovement), m_volume, ATTN_NORM);
+	EMIT_SOUND(ENT(pev), CHAN_STATIC, STRING(m_MoveSound), m_volume, ATTN_NORM);
 
 	ASSERT(m_toggle_state == TS_AT_BOTTOM || m_toggle_state == TS_GOING_DOWN);
 	m_toggle_state = TS_GOING_UP;
@@ -481,11 +375,8 @@ void CFuncPlat::GoUp()
 //
 void CFuncPlat::HitTop()
 {
-	if (!FStringNull(pev->noiseMovement))
-		STOP_SOUND(ENT(pev), CHAN_STATIC, STRING(pev->noiseMovement));
-
-	if (!FStringNull(pev->noiseStopMoving))
-		EMIT_SOUND(ENT(pev), CHAN_WEAPON, STRING(pev->noiseStopMoving), m_volume, ATTN_NORM);
+	STOP_SOUND(ENT(pev), CHAN_STATIC, STRING(m_MoveSound));
+	EMIT_SOUND(ENT(pev), CHAN_WEAPON, STRING(m_StopSound), m_volume, ATTN_NORM);
 
 	ASSERT(m_toggle_state == TS_GOING_UP);
 	m_toggle_state = TS_AT_TOP;
@@ -505,8 +396,7 @@ void CFuncPlat::Blocked(CBaseEntity* pOther)
 	// Hurt the blocker a little
 	pOther->TakeDamage(pev, pev, 1, DMG_CRUSH);
 
-	if (!FStringNull(pev->noiseMovement))
-		STOP_SOUND(ENT(pev), CHAN_STATIC, STRING(pev->noiseMovement));
+	STOP_SOUND(ENT(pev), CHAN_STATIC, STRING(m_MoveSound));
 
 	// Send the platform back where it came from
 	ASSERT(m_toggle_state == TS_GOING_UP || m_toggle_state == TS_GOING_DOWN);
@@ -634,7 +524,6 @@ class CFuncTrain : public CBasePlatTrain
 {
 public:
 	void Spawn() override;
-	void Precache() override;
 	void Activate() override;
 	void OverrideReset() override;
 
@@ -705,8 +594,7 @@ void CFuncTrain::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE use
 			pev->target = pev->enemy->v.targetname;
 		pev->nextthink = 0;
 		pev->velocity = g_vecZero;
-		if (!FStringNull(pev->noiseStopMoving))
-			EMIT_SOUND(ENT(pev), CHAN_VOICE, STRING(pev->noiseStopMoving), m_volume, ATTN_NORM);
+		EMIT_SOUND(ENT(pev), CHAN_VOICE, STRING(m_StopSound), m_volume, ATTN_NORM);
 	}
 }
 
@@ -726,10 +614,8 @@ void CFuncTrain::Wait()
 	{
 		pev->spawnflags |= SF_TRAIN_WAIT_RETRIGGER;
 		// clear the sound channel.
-		if (!FStringNull(pev->noiseMovement))
-			STOP_SOUND(edict(), CHAN_STATIC, STRING(pev->noiseMovement));
-		if (!FStringNull(pev->noiseStopMoving))
-			EMIT_SOUND(ENT(pev), CHAN_VOICE, STRING(pev->noiseStopMoving), m_volume, ATTN_NORM);
+		STOP_SOUND(edict(), CHAN_STATIC, STRING(m_MoveSound));
+		EMIT_SOUND(ENT(pev), CHAN_VOICE, STRING(m_StopSound), m_volume, ATTN_NORM);
 		pev->nextthink = 0;
 		return;
 	}
@@ -739,10 +625,8 @@ void CFuncTrain::Wait()
 	if (m_flWait != 0)
 	{ // -1 wait will wait forever!
 		pev->nextthink = pev->ltime + m_flWait;
-		if (!FStringNull(pev->noiseMovement))
-			STOP_SOUND(edict(), CHAN_STATIC, STRING(pev->noiseMovement));
-		if (!FStringNull(pev->noiseStopMoving))
-			EMIT_SOUND(ENT(pev), CHAN_VOICE, STRING(pev->noiseStopMoving), m_volume, ATTN_NORM);
+		STOP_SOUND(edict(), CHAN_STATIC, STRING(m_MoveSound));
+		EMIT_SOUND(ENT(pev), CHAN_VOICE, STRING(m_StopSound), m_volume, ATTN_NORM);
 		SetThink(&CFuncTrain::Next);
 	}
 	else
@@ -765,11 +649,9 @@ void CFuncTrain::Next()
 
 	if (!pTarg)
 	{
-		if (!FStringNull(pev->noiseMovement))
-			STOP_SOUND(edict(), CHAN_STATIC, STRING(pev->noiseMovement));
+		STOP_SOUND(edict(), CHAN_STATIC, STRING(m_MoveSound));
 		// Play stop sound
-		if (!FStringNull(pev->noiseStopMoving))
-			EMIT_SOUND(ENT(pev), CHAN_VOICE, STRING(pev->noiseStopMoving), m_volume, ATTN_NORM);
+		EMIT_SOUND(ENT(pev), CHAN_VOICE, STRING(m_StopSound), m_volume, ATTN_NORM);
 		return;
 	}
 
@@ -802,10 +684,8 @@ void CFuncTrain::Next()
 		// CHANGED this from CHAN_VOICE to CHAN_STATIC around OEM beta time because trains should
 		// use CHAN_STATIC for their movement sounds to prevent sound field problems.
 		// this is not a hack or temporary fix, this is how things should be. (sjb).
-		if (!FStringNull(pev->noiseMovement))
-			STOP_SOUND(edict(), CHAN_STATIC, STRING(pev->noiseMovement));
-		if (!FStringNull(pev->noiseMovement))
-			EMIT_SOUND(ENT(pev), CHAN_STATIC, STRING(pev->noiseMovement), m_volume, ATTN_NORM);
+		STOP_SOUND(edict(), CHAN_STATIC, STRING(m_MoveSound));
+		EMIT_SOUND(ENT(pev), CHAN_STATIC, STRING(m_MoveSound), m_volume, ATTN_NORM);
 		ClearBits(pev->effects, EF_NOINTERP);
 		SetMoveDone(&CFuncTrain::Wait);
 		LinearMove(pTarg->pev->origin - (pev->mins + pev->maxs) * 0.5, pev->speed);
@@ -875,38 +755,6 @@ void CFuncTrain::Spawn()
 	if (m_volume == 0)
 		m_volume = 0.85;
 }
-
-
-void CFuncTrain::Precache()
-{
-	CBasePlatTrain::Precache();
-
-#if 0 // obsolete
-	// otherwise use preset sound
-	switch (m_sounds)
-	{
-	case 0:
-		pev->noise = 0;
-		pev->noise1 = 0;
-		break;
-
-	case 1:
-		PrecacheSound("plats/train2.wav");
-		PrecacheSound("plats/train1.wav");
-		pev->noise = MAKE_STRING("plats/train2.wav");
-		pev->noise1 = MAKE_STRING("plats/train1.wav");
-		break;
-
-	case 2:
-		PrecacheSound("plats/platmove1.wav");
-		PrecacheSound("plats/platstop1.wav");
-		pev->noise = MAKE_STRING("plats/platstop1.wav");
-		pev->noise1 = MAKE_STRING("plats/platmove1.wav");
-		break;
-	}
-#endif
-}
-
 
 void CFuncTrain::OverrideReset()
 {
@@ -1055,8 +903,7 @@ void CSpriteTrain::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE u
 			pev->target = pev->enemy->v.targetname;
 
 		pev->velocity = g_vecZero;
-		if (!FStringNull(pev->noiseStopMoving))
-			EMIT_SOUND(ENT(pev), CHAN_VOICE, STRING(pev->noiseStopMoving), m_volume, ATTN_NORM);
+		EMIT_SOUND(ENT(pev), CHAN_VOICE, STRING(m_StopSound), m_volume, ATTN_NORM);
 
 		m_nexting = true;
 		m_nextTime = pev->ltime + m_flWait;
@@ -1079,10 +926,8 @@ void CSpriteTrain::Wait()
 	{
 		pev->spawnflags |= SF_TRAIN_WAIT_RETRIGGER;
 		// clear the sound channel.
-		if (!FStringNull(pev->noiseMovement))
-			STOP_SOUND(edict(), CHAN_STATIC, STRING(pev->noiseMovement));
-		if (!FStringNull(pev->noiseStopMoving))
-			EMIT_SOUND(ENT(pev), CHAN_VOICE, STRING(pev->noiseStopMoving), m_volume, ATTN_NORM);
+		STOP_SOUND(edict(), CHAN_STATIC, STRING(m_MoveSound));
+		EMIT_SOUND(ENT(pev), CHAN_VOICE, STRING(m_StopSound), m_volume, ATTN_NORM);
 		return;
 	}
 
@@ -1091,10 +936,8 @@ void CSpriteTrain::Wait()
 	if (m_flWait != 0)
 	{ // -1 wait will wait forever!
 		pev->nextthink = pev->ltime + m_flWait;
-		if (!FStringNull(pev->noiseMovement))
-			STOP_SOUND(edict(), CHAN_STATIC, STRING(pev->noiseMovement));
-		if (!FStringNull(pev->noiseStopMoving))
-			EMIT_SOUND(ENT(pev), CHAN_VOICE, STRING(pev->noiseStopMoving), m_volume, ATTN_NORM);
+		STOP_SOUND(edict(), CHAN_STATIC, STRING(m_MoveSound));
+		EMIT_SOUND(ENT(pev), CHAN_VOICE, STRING(m_StopSound), m_volume, ATTN_NORM);
 
 		m_nexting = true;
 		m_nextTime = pev->ltime + m_flWait;
@@ -1119,11 +962,9 @@ void CSpriteTrain::Next()
 
 	if (!pTarg)
 	{
-		if (!FStringNull(pev->noiseMovement))
-			STOP_SOUND(edict(), CHAN_STATIC, STRING(pev->noiseMovement));
+		STOP_SOUND(edict(), CHAN_STATIC, STRING(m_MoveSound));
 		// Play stop sound
-		if (!FStringNull(pev->noiseStopMoving))
-			EMIT_SOUND(ENT(pev), CHAN_VOICE, STRING(pev->noiseStopMoving), m_volume, ATTN_NORM);
+		EMIT_SOUND(ENT(pev), CHAN_VOICE, STRING(m_StopSound), m_volume, ATTN_NORM);
 		return;
 	}
 
@@ -1156,10 +997,8 @@ void CSpriteTrain::Next()
 		// CHANGED this from CHAN_VOICE to CHAN_STATIC around OEM beta time because trains should
 		// use CHAN_STATIC for their movement sounds to prevent sound field problems.
 		// this is not a hack or temporary fix, this is how things should be. (sjb).
-		if (!FStringNull(pev->noiseMovement))
-			STOP_SOUND(edict(), CHAN_STATIC, STRING(pev->noiseMovement));
-		if (!FStringNull(pev->noiseMovement))
-			EMIT_SOUND(ENT(pev), CHAN_STATIC, STRING(pev->noiseMovement), m_volume, ATTN_NORM);
+		STOP_SOUND(edict(), CHAN_STATIC, STRING(m_MoveSound));
+		EMIT_SOUND(ENT(pev), CHAN_STATIC, STRING(m_MoveSound), m_volume, ATTN_NORM);
 		ClearBits(pev->effects, EF_NOINTERP);
 
 		LinearMove(pTarg->pev->origin - (pev->mins + pev->maxs) * 0.5, pev->speed);
@@ -1246,31 +1085,6 @@ void CSpriteTrain::Precache()
 	PrecacheModel(STRING(pev->model));
 
 	CBasePlatTrain::Precache();
-
-#if 0 // obsolete
-	// otherwise use preset sound
-	switch (m_sounds)
-	{
-	case 0:
-		pev->noise = 0;
-		pev->noise1 = 0;
-		break;
-
-	case 1:
-		PrecacheSound("plats/train2.wav");
-		PrecacheSound("plats/train1.wav");
-		pev->noise = MAKE_STRING("plats/train2.wav");
-		pev->noise1 = MAKE_STRING("plats/train1.wav");
-		break;
-
-	case 2:
-		PrecacheSound("plats/platmove1.wav");
-		PrecacheSound("plats/platstop1.wav");
-		pev->noise = MAKE_STRING("plats/platstop1.wav");
-		pev->noise1 = MAKE_STRING("plats/platmove1.wav");
-		break;
-	}
-#endif
 }
 
 
@@ -1353,7 +1167,7 @@ TYPEDESCRIPTION CFuncTrackTrain::m_SaveData[] =
 		DEFINE_FIELD(CFuncTrackTrain, m_startSpeed, FIELD_FLOAT),
 		DEFINE_FIELD(CFuncTrackTrain, m_controlMins, FIELD_VECTOR),
 		DEFINE_FIELD(CFuncTrackTrain, m_controlMaxs, FIELD_VECTOR),
-		DEFINE_FIELD(CFuncTrackTrain, m_sounds, FIELD_INTEGER),
+		DEFINE_FIELD(CFuncTrackTrain, m_sounds, FIELD_SOUNDNAME),
 		DEFINE_FIELD(CFuncTrackTrain, m_flVolume, FIELD_FLOAT),
 		DEFINE_FIELD(CFuncTrackTrain, m_flBank, FIELD_FLOAT),
 		DEFINE_FIELD(CFuncTrackTrain, m_oldSpeed, FIELD_FLOAT),
@@ -1381,7 +1195,7 @@ bool CFuncTrackTrain::KeyValue(KeyValueData* pkvd)
 	}
 	else if (FStrEq(pkvd->szKeyName, "sounds"))
 	{
-		m_sounds = atoi(pkvd->szValue);
+		m_sounds = ALLOC_STRING(pkvd->szValue);
 		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "volume"))
@@ -1504,9 +1318,9 @@ static void FixupAngles(Vector& v)
 void CFuncTrackTrain::StopSound()
 {
 	// if sound playing, stop it
-	if (m_soundPlaying && !FStringNull(pev->noise))
+	if (m_soundPlaying && !FStringNull(m_sounds))
 	{
-		STOP_SOUND(ENT(pev), CHAN_STATIC, STRING(pev->noise));
+		STOP_SOUND(ENT(pev), CHAN_STATIC, STRING(m_sounds));
 		EMIT_SOUND_DYN(ENT(pev), CHAN_ITEM, "plats/ttrain_brake1.wav", m_flVolume, ATTN_NORM, 0, 100);
 	}
 
@@ -1519,7 +1333,7 @@ void CFuncTrackTrain::StopSound()
 
 void CFuncTrackTrain::UpdateSound()
 {
-	if (FStringNull(pev->noise))
+	if (FStringNull(m_sounds))
 		return;
 
 	const float flpitch = TRAIN_STARTPITCH + (fabs(pev->speed) * (TRAIN_MAXPITCH - TRAIN_STARTPITCH) / TRAIN_MAXSPEED);
@@ -1528,13 +1342,13 @@ void CFuncTrackTrain::UpdateSound()
 	{
 		// play startup sound for train
 		EMIT_SOUND_DYN(ENT(pev), CHAN_ITEM, "plats/ttrain_start1.wav", m_flVolume, ATTN_NORM, 0, 100);
-		EMIT_SOUND_DYN(ENT(pev), CHAN_STATIC, STRING(pev->noise), m_flVolume, ATTN_NORM, 0, (int)flpitch);
+		EMIT_SOUND_DYN(ENT(pev), CHAN_STATIC, STRING(m_sounds), m_flVolume, ATTN_NORM, 0, (int)flpitch);
 		m_soundPlaying = true;
 	}
 	else if (flpitch != m_CachedPitch)
 	{
 		// update pitch
-		EMIT_SOUND_DYN(ENT(pev), CHAN_STATIC, STRING(pev->noise), m_flVolume, ATTN_NORM, SND_CHANGE_PITCH, (int) flpitch);
+		EMIT_SOUND_DYN(ENT(pev), CHAN_STATIC, STRING(m_sounds), m_flVolume, ATTN_NORM, SND_CHANGE_PITCH, (int)flpitch);
 	}
 
 	m_CachedPitch = flpitch;
@@ -1911,36 +1725,13 @@ void CFuncTrackTrain::Precache()
 	if (m_flVolume == 0.0)
 		m_flVolume = 1.0;
 
-	switch (m_sounds)
+	if (FStrEq("", STRING(m_sounds)))
 	{
-	default:
-		// no sound
-		pev->noise = string_t::Null;
-		break;
-	case 1:
-		PrecacheSound("plats/ttrain1.wav");
-		pev->noise = MAKE_STRING("plats/ttrain1.wav");
-		break;
-	case 2:
-		PrecacheSound("plats/ttrain2.wav");
-		pev->noise = MAKE_STRING("plats/ttrain2.wav");
-		break;
-	case 3:
-		PrecacheSound("plats/ttrain3.wav");
-		pev->noise = MAKE_STRING("plats/ttrain3.wav");
-		break;
-	case 4:
-		PrecacheSound("plats/ttrain4.wav");
-		pev->noise = MAKE_STRING("plats/ttrain4.wav");
-		break;
-	case 5:
-		PrecacheSound("plats/ttrain6.wav");
-		pev->noise = MAKE_STRING("plats/ttrain6.wav");
-		break;
-	case 6:
-		PrecacheSound("plats/ttrain7.wav");
-		pev->noise = MAKE_STRING("plats/ttrain7.wav");
-		break;
+		m_sounds = string_t::Null;
+	}
+	else
+	{
+		PrecacheSound(STRING(m_sounds));
 	}
 
 	PrecacheSound("plats/ttrain_brake1.wav");
