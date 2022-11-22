@@ -275,7 +275,7 @@ void CBaseAnimating::SetSequenceBox()
 	{
 		// expand box for rotation
 		// find min / max for rotations
-		float yaw = pev->angles.y * (M_PI / 180.0);
+		float yaw = pev->angles.y * (PI / 180.0);
 
 		Vector xvector, yvector;
 		xvector.x = cos(yaw);

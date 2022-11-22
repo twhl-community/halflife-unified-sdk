@@ -358,5 +358,5 @@ typedef struct
 #define STUDIO_HAS_BBOX		0x0004
 #define STUDIO_HAS_CHROME	0x0008	// if any of the textures have chrome on them
 
-#define RAD_TO_STUDIO		(32768.0/M_PI)
-#define STUDIO_TO_RAD		(M_PI/32768.0)
+#define RAD_TO_STUDIO		(32768.0/PI)
+#define STUDIO_TO_RAD		(PI/32768.0)

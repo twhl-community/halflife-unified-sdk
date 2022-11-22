@@ -872,7 +872,7 @@ void CTentacle::HandleAnimEvent(MonsterEvent_t* pEvent)
 		Vector vecSrc, vecAngles;
 		GetAttachment(0, vecSrc, vecAngles);
 
-		// Vector vecSrc = pev->origin + m_flTapRadius * Vector( cos( pev->angles.y * (3.14192653 / 180.0) ), sin( pev->angles.y * (M_PI / 180.0) ), 0.0 );
+		// Vector vecSrc = pev->origin + m_flTapRadius * Vector( cos( pev->angles.y * (3.14192653 / 180.0) ), sin( pev->angles.y * (PI / 180.0) ), 0.0 );
 
 		// vecSrc.z += MyHeight( );
 
@@ -910,7 +910,7 @@ void CTentacle::HandleAnimEvent(MonsterEvent_t* pEvent)
 	case 2: // tap scrape
 	case 6: // light tap
 	{
-		Vector vecSrc = pev->origin + m_flTapRadius * Vector(cos(pev->angles.y * (M_PI / 180.0)), sin(pev->angles.y * (M_PI / 180.0)), 0.0);
+		Vector vecSrc = pev->origin + m_flTapRadius * Vector(cos(pev->angles.y * (PI / 180.0)), sin(pev->angles.y * (PI / 180.0)), 0.0);
 
 		vecSrc.z += MyHeight();
 

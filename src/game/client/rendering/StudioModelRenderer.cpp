@@ -150,7 +150,7 @@ void CStudioModelRenderer::StudioCalcBoneAdj(float dadt, float* adj, const byte*
 		case STUDIO_XR:
 		case STUDIO_YR:
 		case STUDIO_ZR:
-			adj[j] = value * (M_PI / 180.0);
+			adj[j] = value * (PI / 180.0);
 			break;
 		case STUDIO_X:
 		case STUDIO_Y:
@@ -1273,7 +1273,7 @@ void CStudioModelRenderer::StudioEstimateGait(entity_state_t* pplayer)
 	}
 	else
 	{
-		m_pPlayerInfo->gaityaw = (atan2(est_velocity[1], est_velocity[0]) * 180 / M_PI);
+		m_pPlayerInfo->gaityaw = (atan2(est_velocity[1], est_velocity[0]) * 180 / PI);
 		if (m_pPlayerInfo->gaityaw > 180)
 			m_pPlayerInfo->gaityaw = 180;
 		if (m_pPlayerInfo->gaityaw < -180)

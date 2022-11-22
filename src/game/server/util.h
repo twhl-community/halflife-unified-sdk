@@ -73,9 +73,6 @@ inline edict_t* FIND_ENTITY_BY_TARGET(edict_t* entStart, const char* pszName)
 // More explicit than "int"
 typedef int EOFFSET;
 
-// In case this ever changes
-#define M_PI 3.14159265358979323846
-
 // This is the glue that hooks .MAP entity class names to our CPP classes
 // The _declspec forces them to be exported by name so we can do a lookup with GetProcAddress()
 // The function is used to intialize / allocate the object for the entity

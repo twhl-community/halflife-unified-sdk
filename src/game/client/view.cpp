@@ -182,11 +182,11 @@ float V_CalcBob(struct ref_params_s* pparams)
 
 	if (cycle < cl_bobup->value)
 	{
-		cycle = M_PI * cycle / cl_bobup->value;
+		cycle = PI * cycle / cl_bobup->value;
 	}
 	else
 	{
-		cycle = M_PI + M_PI * (cycle - cl_bobup->value) / (1.0 - cl_bobup->value);
+		cycle = PI + PI * (cycle - cl_bobup->value) / (1.0 - cl_bobup->value);
 	}
 
 	// bob is proportional to simulated velocity in the xy plane
@@ -1728,11 +1728,11 @@ float CalcFov(float fov_x, float width, float height)
 	if (fov_x < 1 || fov_x > 179)
 		fov_x = 90; // error, set to 90
 
-	x = width / tan(fov_x / 360 * M_PI);
+	x = width / tan(fov_x / 360 * PI);
 
 	a = atan(height / x);
 
-	a = a * 360 / M_PI;
+	a = a * 360 / PI;
 
 	return a;
 }
