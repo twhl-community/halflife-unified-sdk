@@ -1287,7 +1287,7 @@ bool COFPitWormUp::FVisible(CBaseEntity* pEntity)
 {
 	if ((pEntity->pev->flags & FL_NOTARGET) == 0)
 	{
-		if ((pev->waterlevel != 3 && pEntity->pev->waterlevel != 3) || 0 != pEntity->pev->waterlevel)
+		if ((pev->waterlevel != WaterLevel::Head && pEntity->pev->waterlevel != WaterLevel::Head) || WaterLevel::Dry != pEntity->pev->waterlevel)
 		{
 			return FVisible(pEntity->EyePosition());
 		}
@@ -1501,7 +1501,7 @@ void COFPitWormGib::Spawn()
 
 void COFPitWormGib::GibFloat()
 {
-	if (pev->waterlevel == 3)
+	if (pev->waterlevel == WaterLevel::Head)
 	{
 		pev->movetype = MOVETYPE_FLY;
 
@@ -1509,7 +1509,7 @@ void COFPitWormGib::GibFloat()
 		pev->avelocity = pev->avelocity * 0.9;
 		pev->velocity.z += 8.0;
 	}
-	else if (pev->waterlevel != 0)
+	else if (pev->waterlevel != WaterLevel::Dry)
 	{
 		pev->velocity.z -= 8.0;
 	}

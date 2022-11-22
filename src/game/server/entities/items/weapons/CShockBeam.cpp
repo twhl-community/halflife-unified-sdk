@@ -112,7 +112,7 @@ void CShockBeam::Spawn()
 
 void CShockBeam::FlyThink()
 {
-	if (pev->waterlevel == 3)
+	if (pev->waterlevel == WaterLevel::Head)
 	{
 		SetThink(&CShockBeam::WaterExplodeThink);
 	}

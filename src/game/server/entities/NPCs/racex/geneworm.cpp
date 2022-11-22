@@ -1564,7 +1564,7 @@ bool COFGeneWorm::FVisible(CBaseEntity* pEntity)
 {
 	if ((pEntity->pev->flags & FL_NOTARGET) == 0)
 	{
-		if ((pev->waterlevel != 3 && pEntity->pev->waterlevel != 3) || 0 != pEntity->pev->waterlevel)
+		if ((pev->waterlevel != WaterLevel::Head && pEntity->pev->waterlevel != WaterLevel::Head) || WaterLevel::Dry != pEntity->pev->waterlevel)
 		{
 			return FVisible(pEntity->EyePosition());
 		}

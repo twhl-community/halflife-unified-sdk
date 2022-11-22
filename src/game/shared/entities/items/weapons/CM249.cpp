@@ -135,7 +135,7 @@ void CM249::WeaponIdle()
 
 void CM249::PrimaryAttack()
 {
-	if (m_pPlayer->pev->waterlevel == 3)
+	if (m_pPlayer->pev->waterlevel == WaterLevel::Head)
 	{
 		PlayEmptySound();
 

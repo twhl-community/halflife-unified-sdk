@@ -762,25 +762,25 @@ typedef struct
 *	@brief Constants for entvars_t::waterlevel
 *	@see entvars_t::waterlevel
 */
-enum WaterLevel
+enum class WaterLevel : int
 {
 	/**
 	*	Not in water at all
 	*/
-	WATERLEVEL_DRY = 0,
+	Dry = 0,
 
 	/**
 	*	Standing in water, feet only
 	*/
-	WATERLEVEL_FEET = 1,
+	Feet = 1,
 
 	/**
 	*	Halfway submerged
 	*/
-	WATERLEVEL_WAIST = 2,
+	Waist = 2,
 
 	/**
 	*	Submerged up to eyes or more
 	*/
-	WATERLEVEL_HEAD = 3
+	Head = 3
 };

@@ -42,7 +42,7 @@
 bool FBoxVisible(entvars_t* pevLooker, entvars_t* pevTarget, Vector& vecTargetOrigin, float flSize)
 {
 	// don't look through water
-	if ((pevLooker->waterlevel != 3 && pevTarget->waterlevel == 3) || (pevLooker->waterlevel == 3 && pevTarget->waterlevel == 0))
+	if ((pevLooker->waterlevel != WaterLevel::Head && pevTarget->waterlevel == WaterLevel::Head) || (pevLooker->waterlevel == WaterLevel::Head && pevTarget->waterlevel == WaterLevel::Dry))
 		return false;
 
 	TraceResult tr;

@@ -156,7 +156,7 @@ void CEagle::WeaponIdle()
 
 void CEagle::PrimaryAttack()
 {
-	if (m_pPlayer->pev->waterlevel == 3)
+	if (m_pPlayer->pev->waterlevel == WaterLevel::Head)
 	{
 		PlayEmptySound();
 

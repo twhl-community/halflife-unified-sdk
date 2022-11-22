@@ -129,7 +129,7 @@ typedef struct clientdata_s
 	int viewmodel;
 	Vector punchangle;
 	int flags;
-	int waterlevel;
+	WaterLevel waterlevel;
 	int watertype;
 	Vector view_ofs;
 	float health;

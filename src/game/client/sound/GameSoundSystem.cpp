@@ -684,7 +684,7 @@ void GameSoundSystem::UpdateRoomEffect()
 
 	if (roomOn)
 	{
-		const auto isUnderwater = UTIL_IsMapLoaded() ? g_WaterLevel >= 3 : false;
+		const auto isUnderwater = UTIL_IsMapLoaded() ? g_WaterLevel >= WaterLevel::Head : false;
 
 		const auto cvar = isUnderwater ? m_WaterRoomType : m_RoomType;
 

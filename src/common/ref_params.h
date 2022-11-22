@@ -35,7 +35,7 @@ typedef struct ref_params_s
 	int paused;
 	int spectator;
 	int onground;
-	int waterlevel;
+	WaterLevel waterlevel;
 
 	float simvel[3];
 	float simorg[3];

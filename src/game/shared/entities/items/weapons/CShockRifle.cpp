@@ -163,7 +163,7 @@ void CShockRifle::WeaponIdle()
 
 void CShockRifle::PrimaryAttack()
 {
-	if (m_pPlayer->pev->waterlevel == 3)
+	if (m_pPlayer->pev->waterlevel == WaterLevel::Head)
 	{
 		//Water goes zap.
 		const float flVolume = RANDOM_FLOAT(0.8, 0.9);

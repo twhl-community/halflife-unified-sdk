@@ -331,7 +331,7 @@ void CPenguinGrenade::HuntThink()
 	}
 
 	// float
-	if (pev->waterlevel != 0)
+	if (pev->waterlevel != WaterLevel::Dry)
 	{
 		if (pev->movetype == MOVETYPE_BOUNCE)
 		{

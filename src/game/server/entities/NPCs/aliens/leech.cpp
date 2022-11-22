@@ -254,7 +254,7 @@ void CLeech::SwitchLeechState()
 	{
 		Look(m_flDistLook);
 		CBaseEntity* pEnemy = BestVisibleEnemy();
-		if (pEnemy && pEnemy->pev->waterlevel != 0)
+		if (pEnemy && pEnemy->pev->waterlevel != WaterLevel::Dry)
 		{
 			m_hEnemy = pEnemy;
 			SetState(MONSTERSTATE_COMBAT);
@@ -498,7 +498,7 @@ void CLeech::UpdateMotion()
 		m_IdealActivity = ACT_MELEE_ATTACK1;
 
 	// Out of water check
-	if (0 == pev->waterlevel)
+	if (WaterLevel::Dry == pev->waterlevel)
 	{
 		pev->movetype = MOVETYPE_TOSS;
 		m_IdealActivity = ACT_TWITCH;
@@ -695,7 +695,7 @@ void CLeech::Killed(entvars_t* pevAttacker, int iGib)
 		pOwner->DeathNotice(pev);
 
 	// When we hit the ground, play the "death_end" activity
-	if (0 != pev->waterlevel)
+	if (WaterLevel::Dry != pev->waterlevel)
 	{
 		pev->angles.z = 0;
 		pev->angles.x = 0;

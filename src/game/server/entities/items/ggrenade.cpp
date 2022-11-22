@@ -224,7 +224,7 @@ void CGrenade::DangerSoundThink()
 	CSoundEnt::InsertSound(bits_SOUND_DANGER, pev->origin + pev->velocity * 0.5, pev->velocity.Length(), 0.2);
 	pev->nextthink = gpGlobals->time + 0.2;
 
-	if (pev->waterlevel != 0)
+	if (pev->waterlevel != WaterLevel::Dry)
 	{
 		pev->velocity = pev->velocity * 0.5;
 	}
@@ -353,7 +353,7 @@ void CGrenade::TumbleThink()
 	{
 		SetThink(&CGrenade::Detonate);
 	}
-	if (pev->waterlevel != 0)
+	if (pev->waterlevel != WaterLevel::Dry)
 	{
 		pev->velocity = pev->velocity * 0.5;
 		pev->framerate = 0.2;

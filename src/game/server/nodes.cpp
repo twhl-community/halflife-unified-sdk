@@ -448,7 +448,7 @@ int CGraph::NodeType(const CBaseEntity* pEntity)
 {
 	if (pEntity->pev->movetype == MOVETYPE_FLY)
 	{
-		if (pEntity->pev->waterlevel != 0)
+		if (pEntity->pev->waterlevel != WaterLevel::Dry)
 		{
 			return bits_NODE_WATER;
 		}
