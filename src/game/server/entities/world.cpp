@@ -713,6 +713,8 @@ void CWorld::Precache()
 	{
 		CVAR_SET_FLOAT("mp_defaultcoop", 0);
 	}
+
+	CVAR_SET_FLOAT("sv_wateramp", pev->scale);
 }
 
 
@@ -731,7 +733,6 @@ bool CWorld::KeyValue(KeyValueData* pkvd)
 	{
 		// Sent over net now.
 		pev->scale = atof(pkvd->szValue) * (1.0 / 8.0);
-		CVAR_SET_FLOAT("sv_wateramp", pev->scale);
 		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "MaxRange"))
