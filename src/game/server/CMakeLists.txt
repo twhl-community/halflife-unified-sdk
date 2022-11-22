@@ -262,7 +262,9 @@ target_sources(server PRIVATE
 	sound/ServerSoundSystem.cpp
 	sound/ServerSoundSystem.h
 	
+	../../common/const.h
 	../../common/mathlib.cpp
+	../../common/mathlib.h
 	../../common/Platform.h
 	../../common/PlatformHeaders.h
 	../../common/Sequence.h
