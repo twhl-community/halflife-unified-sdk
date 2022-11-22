@@ -122,4 +122,5 @@ public:
 
 private:
 	float m_CachedPitch;
+	float m_LastPlayerJoinTimeCheck;
 };

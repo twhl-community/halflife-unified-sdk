@@ -130,6 +130,8 @@ void ServerLibrary::NewMapStarted(bool loadGame)
 {
 	g_GameLogger->trace("Starting new map");
 
+	g_LastPlayerJoinTime = 0;
+
 	ClearStringPool();
 
 	// Initialize map state to its default state

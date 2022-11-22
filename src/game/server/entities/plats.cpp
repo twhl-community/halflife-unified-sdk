@@ -21,6 +21,7 @@
 */
 
 #include "cbase.h"
+#include "client.h"
 #include "trains.h"
 
 static void PlatSpawnInsideTrigger(entvars_t* pevPlatform);
@@ -1338,10 +1339,15 @@ void CFuncTrackTrain::UpdateSound()
 
 	const float flpitch = TRAIN_STARTPITCH + (fabs(pev->speed) * (TRAIN_MAXPITCH - TRAIN_STARTPITCH) / TRAIN_MAXSPEED);
 
-	if (!m_soundPlaying)
+	// If a player has joined we need to restart the train sound so they can hear it.
+	if (!m_soundPlaying || m_LastPlayerJoinTimeCheck < g_LastPlayerJoinTime)
 	{
-		// play startup sound for train
-		EMIT_SOUND_DYN(ENT(pev), CHAN_ITEM, "plats/ttrain_start1.wav", m_flVolume, ATTN_NORM, 0, 100);
+		if (!m_soundPlaying)
+		{
+			// play startup sound for train
+			EMIT_SOUND_DYN(ENT(pev), CHAN_ITEM, "plats/ttrain_start1.wav", m_flVolume, ATTN_NORM, 0, 100);
+		}
+
 		EMIT_SOUND_DYN(ENT(pev), CHAN_STATIC, STRING(m_sounds), m_flVolume, ATTN_NORM, 0, (int)flpitch);
 		m_soundPlaying = true;
 	}
@@ -1352,6 +1358,7 @@ void CFuncTrackTrain::UpdateSound()
 	}
 
 	m_CachedPitch = flpitch;
+	m_LastPlayerJoinTimeCheck = g_LastPlayerJoinTime;
 }
 
 

@@ -15,6 +15,8 @@
 
 #pragma once
 
+inline float g_LastPlayerJoinTime;
+
 void respawn(entvars_t* pev, bool fCopyCorpse);
 qboolean ClientConnect(edict_t* pEntity, const char* pszName, const char* pszAddress, char szRejectReason[128]);
 void ClientDisconnect(edict_t* pEntity);

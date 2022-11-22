@@ -196,6 +196,8 @@ void ClientPutInServer(edict_t* pEntity)
 	pPlayer->pev->iuser1 = 0;	// disable any spec modes
 	pPlayer->pev->iuser2 = 0;
 	*/
+
+	g_LastPlayerJoinTime = gpGlobals->time;
 }
 
 #include "voice_gamemgr.h"
