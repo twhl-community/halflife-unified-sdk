@@ -31,7 +31,7 @@ void CItemPortableHEVCTF::OnCreate()
 void CItemPortableHEVCTF::Precache()
 {
 	PrecacheModel(STRING(pev->model));
-	g_engfuncs.pfnPrecacheSound("ctf/pow_armor_charge.wav");
+	PrecacheSound("ctf/pow_armor_charge.wav");
 }
 
 void CItemPortableHEVCTF::RemoveEffect(CBasePlayer* pPlayer)
@@ -71,8 +71,8 @@ bool CItemPortableHEVCTF::MyTouch(CBasePlayer* pPlayer)
 
 void CItemPortableHEVCTF::Spawn()
 {
-	g_engfuncs.pfnPrecacheSound("ctf/itemthrow.wav");
-	g_engfuncs.pfnPrecacheSound("items/ammopickup1.wav");
+	PrecacheSound("ctf/itemthrow.wav");
+	PrecacheSound("items/ammopickup1.wav");
 
 	Precache();
 

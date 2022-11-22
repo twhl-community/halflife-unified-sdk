@@ -82,13 +82,13 @@ void CPenguinGrenade::OnCreate()
 void CPenguinGrenade::Precache()
 {
 	PrecacheModel(STRING(pev->model));
-	g_engfuncs.pfnPrecacheSound("squeek/sqk_blast1.wav");
-	g_engfuncs.pfnPrecacheSound("common/bodysplat.wav");
-	g_engfuncs.pfnPrecacheSound("squeek/sqk_die1.wav");
-	g_engfuncs.pfnPrecacheSound("squeek/sqk_hunt1.wav");
-	g_engfuncs.pfnPrecacheSound("squeek/sqk_hunt2.wav");
-	g_engfuncs.pfnPrecacheSound("squeek/sqk_hunt3.wav");
-	g_engfuncs.pfnPrecacheSound("squeek/sqk_deploy1.wav");
+	PrecacheSound("squeek/sqk_blast1.wav");
+	PrecacheSound("common/bodysplat.wav");
+	PrecacheSound("squeek/sqk_die1.wav");
+	PrecacheSound("squeek/sqk_hunt1.wav");
+	PrecacheSound("squeek/sqk_hunt2.wav");
+	PrecacheSound("squeek/sqk_hunt3.wav");
+	PrecacheSound("squeek/sqk_deploy1.wav");
 }
 
 void CPenguinGrenade::GibMonster()

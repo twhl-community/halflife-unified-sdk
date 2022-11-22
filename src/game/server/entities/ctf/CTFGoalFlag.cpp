@@ -42,10 +42,10 @@ void CTFGoalFlag::Precache()
 		PrecacheModel(STRING(pev->model));
 	}
 
-	g_engfuncs.pfnPrecacheSound("ctf/bm_flagtaken.wav");
-	g_engfuncs.pfnPrecacheSound("ctf/soldier_flagtaken.wav");
-	g_engfuncs.pfnPrecacheSound("ctf/marine_flag_capture.wav");
-	g_engfuncs.pfnPrecacheSound("ctf/civ_flag_capture.wav");
+	PrecacheSound("ctf/bm_flagtaken.wav");
+	PrecacheSound("ctf/soldier_flagtaken.wav");
+	PrecacheSound("ctf/marine_flag_capture.wav");
+	PrecacheSound("ctf/civ_flag_capture.wav");
 }
 
 void CTFGoalFlag::PlaceItem()

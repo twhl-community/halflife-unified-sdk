@@ -31,7 +31,7 @@ void CItemLongJumpCTF::OnCreate()
 void CItemLongJumpCTF::Precache()
 {
 	PrecacheModel(STRING(pev->model));
-	g_engfuncs.pfnPrecacheSound("ctf/pow_big_jump.wav");
+	PrecacheSound("ctf/pow_big_jump.wav");
 }
 
 void CItemLongJumpCTF::RemoveEffect(CBasePlayer* pPlayer)
@@ -76,8 +76,8 @@ bool CItemLongJumpCTF::MyTouch(CBasePlayer* pPlayer)
 
 void CItemLongJumpCTF::Spawn()
 {
-	g_engfuncs.pfnPrecacheSound("ctf/itemthrow.wav");
-	g_engfuncs.pfnPrecacheSound("items/ammopickup1.wav");
+	PrecacheSound("ctf/itemthrow.wav");
+	PrecacheSound("items/ammopickup1.wav");
 
 	Precache();
 

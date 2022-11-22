@@ -1917,9 +1917,9 @@ void COFPitWorm::Precache()
 	PrecacheModel("sprites/xspark1.spr");
 	gSpikeSprite = PrecacheModel("sprites/mommaspout.spr");
 	gSpikeDebrisSprite = PrecacheModel("sprites/mommablob.spr");
-	g_engfuncs.pfnPrecacheSound("bullchicken/bc_acid1.wav");
-	g_engfuncs.pfnPrecacheSound("bullchicken/bc_spithit1.wav");
-	g_engfuncs.pfnPrecacheSound("bullchicken/bc_spithit2.wav");
+	PrecacheSound("bullchicken/bc_acid1.wav");
+	PrecacheSound("bullchicken/bc_spithit1.wav");
+	PrecacheSound("bullchicken/bc_spithit2.wav");
 }
 
 void COFPitWorm::StartMonster()

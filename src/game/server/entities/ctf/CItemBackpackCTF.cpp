@@ -31,7 +31,7 @@ void CItemBackpackCTF::OnCreate()
 void CItemBackpackCTF::Precache()
 {
 	PrecacheModel(STRING(pev->model));
-	g_engfuncs.pfnPrecacheSound("ctf/pow_backpack.wav");
+	PrecacheSound("ctf/pow_backpack.wav");
 }
 
 void CItemBackpackCTF::RemoveEffect(CBasePlayer* pPlayer)
@@ -82,8 +82,8 @@ bool CItemBackpackCTF::MyTouch(CBasePlayer* pPlayer)
 
 void CItemBackpackCTF::Spawn()
 {
-	g_engfuncs.pfnPrecacheSound("ctf/itemthrow.wav");
-	g_engfuncs.pfnPrecacheSound("items/ammopickup1.wav");
+	PrecacheSound("ctf/itemthrow.wav");
+	PrecacheSound("items/ammopickup1.wav");
 
 	Precache();
 

@@ -40,8 +40,8 @@ void CPenguin::Precache()
 	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/v_penguin.mdl");
 	PrecacheModel("models/p_penguin.mdl");
-	g_engfuncs.pfnPrecacheSound("squeek/sqk_hunt2.wav");
-	g_engfuncs.pfnPrecacheSound("squeek/sqk_hunt3.wav");
+	PrecacheSound("squeek/sqk_hunt2.wav");
+	PrecacheSound("squeek/sqk_hunt3.wav");
 	UTIL_PrecacheOther("monster_penguin");
 	m_usPenguinFire = g_engfuncs.pfnPrecacheEvent(1, "events/penguinfire.sc");
 }

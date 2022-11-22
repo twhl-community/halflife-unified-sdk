@@ -32,7 +32,7 @@ void CItemRegenerationCTF::OnCreate()
 void CItemRegenerationCTF::Precache()
 {
 	PrecacheModel(STRING(pev->model));
-	g_engfuncs.pfnPrecacheSound("ctf/pow_health_charge.wav");
+	PrecacheSound("ctf/pow_health_charge.wav");
 }
 
 void CItemRegenerationCTF::RemoveEffect(CBasePlayer* pPlayer)
@@ -78,8 +78,8 @@ bool CItemRegenerationCTF::MyTouch(CBasePlayer* pPlayer)
 
 void CItemRegenerationCTF::Spawn()
 {
-	g_engfuncs.pfnPrecacheSound("ctf/itemthrow.wav");
-	g_engfuncs.pfnPrecacheSound("items/ammopickup1.wav");
+	PrecacheSound("ctf/itemthrow.wav");
+	PrecacheSound("items/ammopickup1.wav");
 
 	Precache();
 
