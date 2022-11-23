@@ -36,6 +36,7 @@ The files in this directory and subdirectories contain documentation for the Uni
 * [Skill configuration system](features/skill-configuration-system.md)
 * [Replacement map system](features/replacement-map-system.md)
 * [Angelscript scripting support](features/angelscript-scripting-support.md)
+* [Sound system](features/sound-system.md)
 
 ## Tutorials
 
