@@ -17,6 +17,7 @@ The files in this directory and subdirectories contain documentation for the Uni
 * [Installer](tools/installer.md)
 * [Skill2Json](tools/skill2json.md)
 * [Bsp2Obj](tools/bsp2obj.md)
+* [KeyValueMatcher](tools/keyvalue-matcher.md)
 
 ## Scripts
 
