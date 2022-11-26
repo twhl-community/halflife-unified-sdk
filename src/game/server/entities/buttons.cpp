@@ -1030,6 +1030,8 @@ void CMomentaryRotButton::UpdateTarget(float value)
 
 void CMomentaryRotButton::Off()
 {
+	STOP_SOUND(ENT(pev), CHAN_VOICE, STRING(m_sounds));
+
 	pev->avelocity = g_vecZero;
 	m_lastUsed = false;
 	if (FBitSet(pev->spawnflags, SF_PENDULUM_AUTO_RETURN) && m_returnSpeed > 0)
