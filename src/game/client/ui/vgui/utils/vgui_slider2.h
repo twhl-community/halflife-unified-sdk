@@ -53,7 +53,7 @@ private:
 	virtual void recomputeNobPosFromValue();
 	virtual void recomputeValueFromNobPos();
 
-public: //bullshit public
+public: // bullshit public
 	virtual void privateCursorMoved(int x, int y, Panel* panel);
 	virtual void privateMousePressed(MouseCode code, Panel* panel);
 	virtual void privateMouseReleased(MouseCode code, Panel* panel);

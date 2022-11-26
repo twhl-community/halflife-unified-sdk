@@ -1,6 +1,6 @@
 //========= Copyright © 1996-2002, Valve LLC, All rights reserved. ============
 //
-// Purpose: 
+// Purpose:
 //
 // $NoKeywords: $
 //=============================================================================
@@ -10,11 +10,11 @@
 namespace vgui
 {
 class Panel;
-	
+
 class RepaintSignal
 {
 public:
-	virtual void panelRepainted(Panel* panel)=0;
+	virtual void panelRepainted(Panel* panel) = 0;
 };
 
 }

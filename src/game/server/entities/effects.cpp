@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 #include "cbase.h"
 #include "customentity.h"
 #include "effects.h"
@@ -2018,7 +2018,7 @@ void CMessage::Spawn()
 		pev->speed = ATTN_NORM;
 		break;
 
-	case 3: //EVERYWHERE
+	case 3: // EVERYWHERE
 		pev->speed = ATTN_NONE;
 		break;
 
@@ -2188,8 +2188,8 @@ void CEnvBeverage::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE u
 	pev->frags = 1;
 	pev->health--;
 
-	//SetThink (SUB_Remove);
-	//pev->nextthink = gpGlobals->time;
+	// SetThink (SUB_Remove);
+	// pev->nextthink = gpGlobals->time;
 }
 
 void CEnvBeverage::Spawn()
@@ -2284,8 +2284,8 @@ const int SF_WARPBALL_FIRE_ONCE = 1 << 0;
 const int SF_WARPBALL_DELAYED_DAMAGE = 1 << 1;
 
 /**
-*	@brief Alien teleportation effect
-*/
+ *	@brief Alien teleportation effect
+ */
 class CWarpBall : public CBaseEntity
 {
 public:
@@ -2518,7 +2518,7 @@ void CWarpBall::BallThink()
 	}
 	else
 	{
-		//TODO: this flag is probably supposed to be a "do radius damage" flag, but it isn't used in the Use method
+		// TODO: this flag is probably supposed to be a "do radius damage" flag, but it isn't used in the Use method
 		if ((pev->spawnflags & SF_WARPBALL_DELAYED_DAMAGE) != 0 && !m_fDamageApplied && (gpGlobals->time - m_flWarpStart) >= m_flDamageDelay)
 		{
 			::RadiusDamage(pev->origin, pev, pev, 300, 48, CLASS_NONE, DMG_SHOCK);

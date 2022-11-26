@@ -1,26 +1,26 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 
 #pragma once
 
 #include "CRope.h"
 
 /**
-*	An electrified wire.
-*	Can be toggled on and off. Starts on.
-*/
+ *	An electrified wire.
+ *	Can be toggled on and off. Starts on.
+ */
 class CElectrifiedWire : public CRope
 {
 public:
@@ -44,9 +44,9 @@ public:
 	bool IsActive() const { return m_bIsActive != false; }
 
 	/**
-	*	@param iFrequency Frequency.
-	*	@return Whether the spark effect should be performed.
-	*/
+	 *	@param iFrequency Frequency.
+	 *	@return Whether the spark effect should be performed.
+	 */
 	bool ShouldDoEffect(const int iFrequency);
 
 	void DoSpark(const size_t uiSegment, const bool bExertForce);

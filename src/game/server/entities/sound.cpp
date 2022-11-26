@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 //=========================================================
 // sound.cpp
 //=========================================================
@@ -826,7 +826,7 @@ bool CAmbientGeneric::KeyValue(KeyValueData* pkvd)
 	return CBaseEntity::KeyValue(pkvd);
 }
 
-//if you change this, also change CAmbientMusic::KeyValue!
+// if you change this, also change CAmbientMusic::KeyValue!
 enum class AmbientMusicCommand
 {
 	Play = 0,
@@ -842,12 +842,12 @@ enum class AmbientMusicTargetSelector
 	Radius
 };
 
-//Used internally only, level designers should not use this flag directly!
+// Used internally only, level designers should not use this flag directly!
 constexpr int SF_AMBIENTMUSIC_REMOVEONFIRE = 1 << 0;
 
 /**
-*	@brief Plays music.
-*/
+ *	@brief Plays music.
+ */
 class CAmbientMusic : public CBaseEntity
 {
 public:
@@ -1037,7 +1037,7 @@ void CAmbientMusic::RadiusThink()
 
 std::string CAmbientMusic::GetCommand() const
 {
-	//Compute the command now in case mappers change the keyvalues after spawn.
+	// Compute the command now in case mappers change the keyvalues after spawn.
 	return [this]()
 	{
 		switch (m_Command)
@@ -1382,7 +1382,7 @@ float TEXTURETYPE_PlaySound(TraceResult* ptr, Vector vecSrc, Vector vecEnd, int 
 		{
 			UTIL_Sparks(ptr->vecEndPos);
 
-			float flVolume = RANDOM_FLOAT(0.7, 1.0); //random volume range
+			float flVolume = RANDOM_FLOAT(0.7, 1.0); // random volume range
 			switch (RANDOM_LONG(0, 1))
 			{
 			case 0:
@@ -1399,7 +1399,7 @@ float TEXTURETYPE_PlaySound(TraceResult* ptr, Vector vecSrc, Vector vecEnd, int 
 
 	// play material hit sound
 	UTIL_EmitAmbientSound(CWorld::Instance->edict(), ptr->vecEndPos, rgsz[RANDOM_LONG(0, cnt - 1)], fvol, fattn, 0, 96 + RANDOM_LONG(0, 0xf));
-	//EMIT_SOUND_DYN( ENT(m_pPlayer->pev), CHAN_WEAPON, rgsz[RANDOM_LONG(0,cnt-1)], fvol, ATTN_NORM, 0, 96 + RANDOM_LONG(0,0xf));
+	// EMIT_SOUND_DYN( ENT(m_pPlayer->pev), CHAN_WEAPON, rgsz[RANDOM_LONG(0,cnt-1)], fvol, ATTN_NORM, 0, 96 + RANDOM_LONG(0,0xf));
 
 	return fvolbar;
 }

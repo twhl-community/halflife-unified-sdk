@@ -1,12 +1,12 @@
 /***
-*
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
-*	All Rights Reserved.
-*
-****/
+ *
+ *	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ ****/
 
 #include "qlumpy.h"
 #include "math.h"
@@ -454,7 +454,7 @@ byte AveragePixels(int count)
 	{
 		if (color_used[i])
 		{
-			pix = i; //pixdata[i];
+			pix = i; // pixdata[i];
 
 			dr = r - linearpalette[i][0];
 			dg = g - linearpalette[i][1];
@@ -709,7 +709,7 @@ void GrabFont(void)
 	memset(header, 0, sizeof(qfont_t));
 
 	GetToken(false);
-	header->width = header->rowheight = atoi(token); //mwh why does width equal rowheight?
+	header->width = header->rowheight = atoi(token); // mwh why does width equal rowheight?
 	header->height = 1;
 	lump_p = (byte*)header->data;
 	pCur = (byte*)lump_p;

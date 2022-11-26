@@ -1,12 +1,12 @@
 /***
-*
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
-*	All Rights Reserved.
-*
-****/
+ *
+ *	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ ****/
 
 #include "qrad.h"
 
@@ -1233,7 +1233,7 @@ void AddSampleToPatch(sample_t* s, int facenum)
 		// add the sample to the patch
 		patch->samples++;
 		VectorAdd(patch->samplelight, s->light, patch->samplelight);
-		//return;
+		// return;
 
 	nextpatch:;
 	}

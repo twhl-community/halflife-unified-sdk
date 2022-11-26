@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 #include "cbase.h"
 
 #define TRIPMINE_PRIMARY_VOLUME 450
@@ -62,8 +62,8 @@ TYPEDESCRIPTION CTripmineGrenade::m_SaveData[] =
 		DEFINE_FIELD(CTripmineGrenade, m_vecEnd, FIELD_POSITION_VECTOR),
 		DEFINE_FIELD(CTripmineGrenade, m_flBeamLength, FIELD_FLOAT),
 		DEFINE_FIELD(CTripmineGrenade, m_hOwner, FIELD_EHANDLE),
-		//Don't save, recreate.
-		//DEFINE_FIELD(CTripmineGrenade, m_pBeam, FIELD_CLASSPTR),
+		// Don't save, recreate.
+		// DEFINE_FIELD(CTripmineGrenade, m_pBeam, FIELD_CLASSPTR),
 		DEFINE_FIELD(CTripmineGrenade, m_posOwner, FIELD_POSITION_VECTOR),
 		DEFINE_FIELD(CTripmineGrenade, m_angleOwner, FIELD_VECTOR),
 		DEFINE_FIELD(CTripmineGrenade, m_pRealOwner, FIELD_EDICT),
@@ -95,7 +95,7 @@ void CTripmineGrenade::Spawn()
 	UTIL_SetSize(pev, Vector(-8, -8, -8), Vector(8, 8, 8));
 	UTIL_SetOrigin(pev, pev->origin);
 
-	//TODO: define constant
+	// TODO: define constant
 	if ((pev->spawnflags & 1) != 0)
 	{
 		// power up quickly
@@ -242,10 +242,10 @@ void CTripmineGrenade::MakeBeam()
 	Vector vecTmpEnd = pev->origin + m_vecDir * 2048 * m_flBeamLength;
 
 	m_pBeam = CBeam::BeamCreate(g_pModelNameLaser, 10);
-	//Mark as temporary so the beam will be recreated on save game load and level transitions.
+	// Mark as temporary so the beam will be recreated on save game load and level transitions.
 	m_pBeam->pev->spawnflags |= SF_BEAM_TEMPORARY;
-	//PointEntInit causes clients to use the position of whatever the previous entity to use this edict had until the server updates them.
-	//m_pBeam->PointEntInit(vecTmpEnd, entindex());
+	// PointEntInit causes clients to use the position of whatever the previous entity to use this edict had until the server updates them.
+	// m_pBeam->PointEntInit(vecTmpEnd, entindex());
 	m_pBeam->PointsInit(pev->origin, vecTmpEnd);
 	m_pBeam->SetColor(0, 214, 198);
 	m_pBeam->SetScrollRate(255);
@@ -374,7 +374,7 @@ void CTripmine::Spawn()
 
 	m_iDefaultAmmo = TRIPMINE_DEFAULT_GIVE;
 
-	//HACK: force the body to the first person view by default so it doesn't show up as a huge tripmine for a second.
+	// HACK: force the body to the first person view by default so it doesn't show up as a huge tripmine for a second.
 #ifdef CLIENT_DLL
 	pev->body = 0;
 #endif
@@ -493,7 +493,7 @@ void CTripmine::PrimaryAttack()
 
 void CTripmine::WeaponIdle()
 {
-	//If we're here then we're in a player's inventory, and need to use this body
+	// If we're here then we're in a player's inventory, and need to use this body
 	pev->body = 0;
 
 	if (m_flTimeWeaponIdle > UTIL_WeaponTimeBase())

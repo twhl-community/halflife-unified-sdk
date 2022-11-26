@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 #include "cbase.h"
 
 // Precaches the ammo and queues the ammo info for sending to clients
@@ -166,7 +166,7 @@ void CBasePlayerWeapon::ItemPostFrame()
 	int maxClip = iMaxClip();
 
 #ifndef CLIENT_DLL
-	//Reset max clip and max ammo to default values
+	// Reset max clip and max ammo to default values
 	if ((m_pPlayer->m_iItems & CTFItem::Backpack) == 0)
 	{
 		if (m_iClip > iMaxClip())

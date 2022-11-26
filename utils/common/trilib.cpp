@@ -1,12 +1,12 @@
 /***
-*
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
-*	All Rights Reserved.
-*
-****/
+ *
+ *	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ ****/
 
 //
 // trilib.c: library for loading triangles from an Alias triangle file
@@ -24,7 +24,7 @@
 #define FLOAT_END -FLOAT_START
 #define MAGIC 123322
 
-//#define NOISY 1
+// #define NOISY 1
 
 typedef struct
 {

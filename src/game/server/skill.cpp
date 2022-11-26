@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 //=========================================================
 // skill.cpp - code for skill level concerns
 //=========================================================
@@ -86,7 +86,7 @@ static std::optional<std::tuple<std::string_view, std::optional<int>>> TryParseS
 
 	if (skillLevelString.empty())
 	{
-		//Only a name, no skill level.
+		// Only a name, no skill level.
 		return {{baseName, {}}};
 	}
 
@@ -96,7 +96,7 @@ static std::optional<std::tuple<std::string_view, std::optional<int>>> TryParseS
 	{
 		if (result.ec != std::errc::result_out_of_range)
 		{
-			//In case something else goes wrong.
+			// In case something else goes wrong.
 			logger.error("Invalid skill variable name \"{}\": {}", key, std::make_error_code(result.ec).message());
 		}
 
@@ -147,8 +147,7 @@ bool SkillSystem::Initialize()
 						printer(variable);
 					}
 				}
-			}
-		},
+			} },
 		CommandLibraryPrefix::No);
 
 	g_ConCommands.CreateCommand(
@@ -171,8 +170,7 @@ bool SkillSystem::Initialize()
 				return;
 			}
 
-			SetValue(name, value);
-		},
+			SetValue(name, value); },
 		CommandLibraryPrefix::No);
 
 	g_ConCommands.CreateCommand(
@@ -184,11 +182,10 @@ bool SkillSystem::Initialize()
 				return;
 			}
 
-			RemoveValue(args.Argument(1));
-		},
+			RemoveValue(args.Argument(1)); },
 		CommandLibraryPrefix::No);
 
-	//Don't name this sk_remove_all because the console will always autocomplete sk_remove to that.
+	// Don't name this sk_remove_all because the console will always autocomplete sk_remove to that.
 	g_ConCommands.CreateCommand(
 		"sk_reset", [this](const auto& args)
 		{
@@ -198,8 +195,7 @@ bool SkillSystem::Initialize()
 				return;
 			}
 
-			m_SkillVariables.clear();
-		},
+			m_SkillVariables.clear(); },
 		CommandLibraryPrefix::No);
 
 	g_ConCommands.CreateCommand(
@@ -224,14 +220,14 @@ void SkillSystem::LoadSkillConfigFile()
 {
 	g_GameLogger->trace("Loading skill config file");
 
-	//Refresh skill level setting first.
+	// Refresh skill level setting first.
 	int iSkill = (int)CVAR_GET_FLOAT("skill");
 
 	iSkill = std::clamp(iSkill, static_cast<int>(SkillLevel::Easy), static_cast<int>(SkillLevel::Hard));
 
 	SetSkillLevel(iSkill);
 
-	//Erase all previous data.
+	// Erase all previous data.
 	m_SkillVariables.clear();
 
 	if (const auto result = g_JSON.ParseJSONFile(SkillConfigName,
@@ -301,7 +297,7 @@ bool SkillSystem::ParseConfiguration(const json& input)
 		return false;
 	}
 
-	//Apply each section in order of occurrence.
+	// Apply each section in order of occurrence.
 	for (const auto& section : input)
 	{
 		if (!section.is_object())
@@ -318,7 +314,7 @@ bool SkillSystem::ParseConfiguration(const json& input)
 
 		if (const auto it = section.find("Condition"); it != section.end())
 		{
-			//Evaluate condition to determine whether to apply this section.
+			// Evaluate condition to determine whether to apply this section.
 
 			if (!it->is_string())
 			{
@@ -368,11 +364,11 @@ bool SkillSystem::ParseConfiguration(const json& input)
 
 				if (!value.is_number())
 				{
-					//Already validated by schema.
+					// Already validated by schema.
 					return;
 				}
 
-				//Get the skill variable base name and skill level.
+				// Get the skill variable base name and skill level.
 				const auto maybeVariableName = TryParseSkillVariableName(item.key(), *m_Logger);
 
 				if (!maybeVariableName.has_value())

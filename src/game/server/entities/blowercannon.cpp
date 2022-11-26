@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   This source code contains proprietary and confidential information of
+ *   Valve LLC and its suppliers.  Access to this code is restricted to
+ *   persons who have executed a written SDK license with Valve.  Any access,
+ *   use or distribution of this code by or to any unlicensed person is illegal.
+ *
+ ****/
 #include "cbase.h"
 
 #include "weapons/CDisplacerBall.h"
@@ -51,7 +51,7 @@ public:
 	void EXPORT BlowerCannonStop(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 	void EXPORT BlowerCannonThink();
 
-	//TODO: probably shadowing CBaseDelay
+	// TODO: probably shadowing CBaseDelay
 	float m_flDelay;
 	int m_iZOffset;
 	WeaponType m_iWeaponType;
@@ -93,7 +93,7 @@ bool CBlowerCannon::KeyValue(KeyValueData* pkvd)
 		return true;
 	}
 
-	//TODO: should call base
+	// TODO: should call base
 	return false;
 }
 
@@ -135,7 +135,7 @@ void CBlowerCannon::BlowerCannonStop(CBaseEntity* pActivator, CBaseEntity* pCall
 
 void CBlowerCannon::BlowerCannonThink()
 {
-	//TODO: can crash if target has been removed
+	// TODO: can crash if target has been removed
 	auto pTarget = GetNextTarget()->pev;
 
 	auto distance = pTarget->origin - pev->origin;
@@ -148,7 +148,7 @@ void CBlowerCannon::BlowerCannonThink()
 	{
 	case WeaponType::SporeRocket:
 	case WeaponType::SporeGrenade:
-		//TODO: simplify
+		// TODO: simplify
 		CSpore::CreateSpore(pev->origin, angles, this, static_cast<CSpore::SporeType>((m_iWeaponType != WeaponType::SporeRocket ? 1 : 0) + static_cast<int>(CSpore::SporeType::ROCKET)), false, false);
 		break;
 

@@ -44,7 +44,7 @@ public:
 	virtual void setButtonPressedScrollValue(int value);
 	virtual void validate();
 
-public: //bullshit public
+public: // bullshit public
 	virtual void fireIntChangeSignal();
 
 protected:

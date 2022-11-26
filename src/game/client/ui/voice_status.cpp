@@ -499,8 +499,8 @@ void CVoiceStatus::UpdateServerState(bool bForce)
 
 	for (unsigned long dw = 0; dw < VOICE_MAX_PLAYERS_DW; dw++)
 	{
-		//The ban mask is a 32 bit int, so make sure this doesn't silently break.
-		//Note that the server will also need updating.
+		// The ban mask is a 32 bit int, so make sure this doesn't silently break.
+		// Note that the server will also need updating.
 		static_assert(MAX_PLAYERS <= 32, "The voice ban bit vector only supports up to 32 players");
 
 		unsigned long serverBanMask = 0;

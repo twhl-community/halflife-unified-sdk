@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 
 #include "cbase.h"
 #include "shake.h"
@@ -152,7 +152,7 @@ void CGauss::SecondaryAttack()
 		if (m_fInAttack != 0)
 		{
 			EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/electro4.wav", 1.0, ATTN_NORM, 0, 80 + RANDOM_LONG(0, 0x3f));
-			//Have to send to the host as well because the client will predict the frame with m_fInAttack == 0
+			// Have to send to the host as well because the client will predict the frame with m_fInAttack == 0
 			SendStopEvent(true);
 			SendWeaponAnim(GAUSS_IDLE);
 			m_fInAttack = 0;
@@ -309,7 +309,7 @@ void CGauss::StartFire()
 
 	if (m_fInAttack != 3)
 	{
-		//WeaponsLogger->debug("Time:{} Damage:{}", gpGlobals->time - m_pPlayer->m_flStartCharge, flDamage);
+		// WeaponsLogger->debug("Time:{} Damage:{}", gpGlobals->time - m_pPlayer->m_flStartCharge, flDamage);
 
 #ifndef CLIENT_DLL
 		float flZVel = m_pPlayer->pev->velocity.z;
@@ -362,8 +362,8 @@ void CGauss::Fire(Vector vecOrigSrc, Vector vecDir, float flDamage)
 
 	SendStopEvent(false);
 
-	//WeaponsLogger->debug("{}\n{}", vecSrc, vecDest);
-	//WeaponsLogger->debug("{} {}", tr.flFraction, flMaxFrac);
+	// WeaponsLogger->debug("{}\n{}", vecSrc, vecDest);
+	// WeaponsLogger->debug("{} {}", tr.flFraction, flMaxFrac);
 
 #ifndef CLIENT_DLL
 	while (flDamage > 10 && nMaxHits > 0)
@@ -456,7 +456,7 @@ void CGauss::Fire(Vector vecOrigSrc, Vector vecDir, float flDamage)
 							nTotal += 21;
 
 							// exit blast damage
-							//m_pPlayer->RadiusDamage( beam_tr.vecEndPos + vecDir * 8, pev, m_pPlayer->pev, flDamage, CLASS_NONE, DMG_BLAST );
+							// m_pPlayer->RadiusDamage( beam_tr.vecEndPos + vecDir * 8, pev, m_pPlayer->pev, flDamage, CLASS_NONE, DMG_BLAST );
 							float damage_radius;
 
 
@@ -480,13 +480,13 @@ void CGauss::Fire(Vector vecOrigSrc, Vector vecDir, float flDamage)
 					}
 					else
 					{
-						//WeaponsLogger->debug("blocked {}", n);
+						// WeaponsLogger->debug("blocked {}", n);
 						flDamage = 0;
 					}
 				}
 				else
 				{
-					//WeaponsLogger->debug("blocked solid");
+					// WeaponsLogger->debug("blocked solid");
 
 					flDamage = 0;
 				}

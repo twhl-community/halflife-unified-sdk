@@ -32,9 +32,9 @@ namespace sentences
 constexpr int CBSENTENCENAME_MAX = 32;
 
 /**
-*	@brief The amount of sentences to reserve space for on startup.
-*	This is the original engine limit.
-*/
+ *	@brief The amount of sentences to reserve space for on startup.
+ *	This is the original engine limit.
+ */
 constexpr int InitialSentencesReserveCount = 1536;
 
 /**
@@ -43,8 +43,8 @@ constexpr int InitialSentencesReserveCount = 1536;
 constexpr std::size_t MaxSentencesCount = std::numeric_limits<std::uint16_t>::max();
 
 /**
-*	@brief max number of elements per sentence group
-*/
+ *	@brief max number of elements per sentence group
+ */
 constexpr int CSENTENCE_LRU_MAX = 32;
 
 using SentenceName = eastl::fixed_string<char, CBSENTENCENAME_MAX>;
@@ -52,8 +52,8 @@ using SentenceName = eastl::fixed_string<char, CBSENTENCENAME_MAX>;
 using SentenceIndexName = eastl::fixed_string<char, CBSENTENCENAME_MAX + 1>;
 
 /**
-*	@brief group of related sentences
-*/
+ *	@brief group of related sentences
+ */
 struct SENTENCEG
 {
 	SentenceName GroupName;
@@ -68,9 +68,9 @@ struct SENTENCEG
 std::tuple<std::string_view, std::string_view> ParseSentence(std::string_view text);
 
 /**
-*	@brief Given a sentence name, parses out the group index if present.
-*	@return If the name is correctly formatted, a tuple containing the group name and group index.
-*/
+ *	@brief Given a sentence name, parses out the group index if present.
+ *	@return If the name is correctly formatted, a tuple containing the group name and group index.
+ */
 std::optional<std::tuple<std::string_view, int>> ParseGroupData(std::string_view name);
 
 /**
@@ -105,8 +105,8 @@ struct SentenceWordParameters
 };
 
 /**
-*	@brief Given a sentence, parses out the words and parameters.
-*/
+ *	@brief Given a sentence, parses out the words and parameters.
+ */
 struct SentenceWordParser final
 {
 	const std::string_view Sentence;
@@ -115,8 +115,7 @@ struct SentenceWordParser final
 	SentenceWordParameters Parameters;
 
 	explicit SentenceWordParser(std::string_view sentence)
-		: Sentence(sentence)
-		, m_Next(Sentence.begin())
+		: Sentence(sentence), m_Next(Sentence.begin())
 	{
 	}
 

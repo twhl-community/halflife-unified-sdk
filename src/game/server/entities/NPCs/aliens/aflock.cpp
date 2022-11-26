@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   This source code contains proprietary and confidential information of
+ *   Valve LLC and its suppliers.  Access to this code is restricted to
+ *   persons who have executed a written SDK license with Valve.  Any access,
+ *   use or distribution of this code by or to any unlicensed person is illegal.
+ *
+ ****/
 //=========================================================
 //=========================================================
 
@@ -77,7 +77,7 @@ public:
 	void SpreadFlock2();
 	void Killed(entvars_t* pevAttacker, int iGib) override;
 	bool FPathBlocked();
-	//void KeyValue( KeyValueData *pkvd ) override;
+	// void KeyValue( KeyValueData *pkvd ) override;
 
 	bool Save(CSave& save) override;
 	bool Restore(CRestore& restore) override;
@@ -130,7 +130,7 @@ void CFlockingFlyer::OnCreate()
 	CBaseMonster::OnCreate();
 
 	pev->health = 10;
-	//pev->model = MAKE_STRING("models/aflock.mdl");
+	// pev->model = MAKE_STRING("models/aflock.mdl");
 	pev->model = MAKE_STRING("models/boid.mdl");
 }
 
@@ -252,7 +252,7 @@ void CFlockingFlyer::Spawn()
 //=========================================================
 void CFlockingFlyer::Precache()
 {
-	//PrecacheModel("models/aflock.mdl");
+	// PrecacheModel("models/aflock.mdl");
 	PrecacheModel(STRING(pev->model));
 	CFlockingFlyerFlock::PrecacheFlockSounds(this);
 }
@@ -541,7 +541,7 @@ bool CFlockingFlyer::FPathBlocked()
 	}
 
 	// use VELOCITY, not angles, not all boids point the direction they are flying
-	//vecDir = UTIL_VecToAngles( pevBoid->velocity );
+	// vecDir = UTIL_VecToAngles( pevBoid->velocity );
 	UTIL_MakeVectors(pev->angles);
 
 	fBlocked = false; // assume the way ahead is clear

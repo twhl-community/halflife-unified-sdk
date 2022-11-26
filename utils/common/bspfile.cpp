@@ -1,12 +1,12 @@
 /***
-*
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
-*	All Rights Reserved.
-*
-****/
+ *
+ *	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ ****/
 
 #include "cmdlib.h"
 #include "mathlib.h"
@@ -508,7 +508,7 @@ Dumps info about current file
 */
 void PrintBSPFileSizes(void)
 {
-	//int	numtextures = texdatasize ? ((dmiptexlump_t*)dtexdata)->nummiptex : 0;
+	// int	numtextures = texdatasize ? ((dmiptexlump_t*)dtexdata)->nummiptex : 0;
 	int totalmemory = 0;
 
 	printf("\n");

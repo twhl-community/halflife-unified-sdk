@@ -1,6 +1,6 @@
 // cl.input.c  -- builds an intended movement command to send to the server
 
-//xxxxxx Move bob and pitch drifting code here and other stuff from view if needed
+// xxxxxx Move bob and pitch drifting code here and other stuff from view if needed
 
 // Quake is a trademark of Id Software, Inc., (c) 1996 Id Software, Inc. All
 // rights reserved.
@@ -332,7 +332,7 @@ void KeyUp(kbutton_t* b)
 		return; // key up without coresponding down (menu pass through)
 	if (0 != b->down[0] || 0 != b->down[1])
 	{
-		//Con_Printf ("Keys down for button: '%c' '%c' '%c' (%d,%d,%d)!\n", b->down[0], b->down[1], c, b->down[0], b->down[1], c);
+		// Con_Printf ("Keys down for button: '%c' '%c' '%c' (%d,%d,%d)!\n", b->down[0], b->down[1], c, b->down[0], b->down[1], c);
 		return; // some other key is still holding it down
 	}
 
@@ -652,8 +652,8 @@ void DLLEXPORT CL_CreateMove(float frametime, struct usercmd_s* cmd, int active)
 
 	if (0 != active)
 	{
-		//memset( viewangles, 0, sizeof( Vector ) );
-		//viewangles[ 0 ] = viewangles[ 1 ] = viewangles[ 2 ] = 0.0;
+		// memset( viewangles, 0, sizeof( Vector ) );
+		// viewangles[ 0 ] = viewangles[ 1 ] = viewangles[ 2 ] = 0.0;
 		gEngfuncs.GetViewAngles(viewangles);
 
 		CL_AdjustAngles(frametime, viewangles);

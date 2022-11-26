@@ -58,8 +58,8 @@ public:
 
 	DropDownButton* m_OptionButton;
 	//	CommandButton     *	m_HideButton;
-	//ColorButton	  *	m_PrevPlayerButton;
-	//ColorButton	  *	m_NextPlayerButton;
+	// ColorButton	  *	m_PrevPlayerButton;
+	// ColorButton	  *	m_NextPlayerButton;
 	CImageButton* m_PrevPlayerButton;
 	CImageButton* m_NextPlayerButton;
 	DropDownButton* m_CamButton;

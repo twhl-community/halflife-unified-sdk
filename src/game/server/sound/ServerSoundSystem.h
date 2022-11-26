@@ -43,7 +43,6 @@ private:
 
 private:
 	std::shared_ptr<spdlog::logger> m_Logger;
-
 };
 
 inline ServerSoundSystem g_ServerSound;

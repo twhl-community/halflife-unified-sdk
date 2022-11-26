@@ -35,7 +35,7 @@ void V_ResetChaseCam();
 void V_GetChasePos(int target, float* cl_angles, float* origin, float* angles);
 float* GetClientColor(int clientIndex);
 
-//Same color as in TeamFortressViewport::UpdateSpectatorPanel
+// Same color as in TeamFortressViewport::UpdateSpectatorPanel
 float DefaultPlayerColor[3] = {143 / 255.f, 143 / 255.f, 54 / 255.f};
 
 void UnpackRGB(int& r, int& g, int& b, unsigned long ulRGB)
@@ -116,8 +116,8 @@ void SpectatorHelp()
 {
 	if (gViewPort)
 	{
-		//TODO: none of this spectator stuff exists in Op4
-		//gViewPort->ShowVGUIMenu( MENU_SPECHELP );
+		// TODO: none of this spectator stuff exists in Op4
+		// gViewPort->ShowVGUIMenu( MENU_SPECHELP );
 	}
 	else
 	{
@@ -184,7 +184,7 @@ bool CHudSpectator::Init()
 	gEngfuncs.pfnAddCommand("spec_decal", SpectatorSpray);
 	gEngfuncs.pfnAddCommand("spec_help", SpectatorHelp);
 	gEngfuncs.pfnAddCommand("spec_menu", SpectatorMenu);
-	//gEngfuncs.pfnAddCommand("togglescores", ToggleScores);
+	// gEngfuncs.pfnAddCommand("togglescores", ToggleScores);
 
 	m_drawnames = gEngfuncs.pfnRegisterVariable("spec_drawnames", "1", 0);
 	m_drawcone = gEngfuncs.pfnRegisterVariable("spec_drawcone", "1", 0);
@@ -629,7 +629,7 @@ bool CHudSpectator::Draw(float flTime)
 
 		color = GetClientColor(i + 1);
 
-		//TODO: this is pretty ugly, need a better way.
+		// TODO: this is pretty ugly, need a better way.
 		if (!color)
 		{
 			color = DefaultPlayerColor;
@@ -993,7 +993,7 @@ void CHudSpectator::HandleButtonsDown(int ButtonPressed)
 	if (!gViewPort)
 		return;
 
-	//Not in intermission.
+	// Not in intermission.
 	if (gHUD.m_iIntermission)
 		return;
 

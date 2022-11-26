@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   This source code contains proprietary and confidential information of
+ *   Valve LLC and its suppliers.  Access to this code is restricted to
+ *   persons who have executed a written SDK license with Valve.  Any access,
+ *   use or distribution of this code by or to any unlicensed person is illegal.
+ *
+ ****/
 
 #pragma once
 
@@ -193,20 +193,20 @@ protected:
 	virtual void DropWeapon(bool applyVelocity) {}
 
 	/**
-	*	@brief Spawns this grunt
-	*/
+	 *	@brief Spawns this grunt
+	 */
 	void SpawnCore();
 
 	virtual std::tuple<int, Activity> GetSequenceForActivity(Activity NewActivity);
 
 	/**
-	*	@brief The posture that this NPC prefers to have while in combat
-	*/
+	 *	@brief The posture that this NPC prefers to have while in combat
+	 */
 	virtual PostureType GetPreferredCombatPosture() const { return PostureType::Random; }
 
 	virtual float GetMaximumRangeAttackDistance() const { return 1024; }
 
-	//Only if we have a weapon
+	// Only if we have a weapon
 	virtual bool CanRangeAttack() const { return !!pev->weapons; }
 
 	virtual bool CanUseThrownGrenades() const { return false; }
@@ -214,13 +214,13 @@ protected:
 	virtual bool CanUseGrenadeLauncher() const { return false; }
 
 	/**
-	*	@brief For medic grunts, lets them provide a schedule to handle healing
-	*/
+	 *	@brief For medic grunts, lets them provide a schedule to handle healing
+	 */
 	virtual Schedule_t* GetHealSchedule() { return nullptr; }
 
 	/**
-	*	@brief For torch grunts, lets them provide a schedule to handle torch use
-	*/
+	 *	@brief For torch grunts, lets them provide a schedule to handle torch use
+	 */
 	virtual Schedule_t* GetTorchSchedule() { return nullptr; }
 
 	virtual bool CanTakeCoverAndReload() const { return !!pev->weapons; }
@@ -236,14 +236,14 @@ public:
 	void EXPORT RepelUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 	int m_iSpriteTexture; // Don't save, precache
 
-	//TODO: needs save/restore (not in op4)
+	// TODO: needs save/restore (not in op4)
 	int m_iGruntHead;
 	string_t m_iszUse;
 	string_t m_iszUnUse;
 
 protected:
 	/**
-	*	@brief Must return a string literal
-	*/
+	 *	@brief Must return a string literal
+	 */
 	virtual const char* GetMonsterClassname() const = 0;
 };

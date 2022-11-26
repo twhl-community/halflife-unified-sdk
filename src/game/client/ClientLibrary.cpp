@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 
 #include <limits>
 
@@ -43,7 +43,7 @@ bool ClientLibrary::Initialize()
 
 void ClientLibrary::HudInit()
 {
-	//Has to be done here because music cvars don't exist at Initialize time.
+	// Has to be done here because music cvars don't exist at Initialize time.
 	sound::CreateSoundSystem();
 
 	sound::g_SoundSystem->GetGameSoundSystem()->LoadSentences();
@@ -71,10 +71,7 @@ void ClientLibrary::RunFrame()
 		mapName = "";
 	}
 
-	if (m_IsConnected != isConnected
-		|| m_ConnectionTime > status.connection_time
-		|| m_ServerAddress != status.remote_address
-		|| m_MapName.comparei(mapName) != 0)
+	if (m_IsConnected != isConnected || m_ConnectionTime > status.connection_time || m_ServerAddress != status.remote_address || m_MapName.comparei(mapName) != 0)
 	{
 		// Stop all sounds if we connect, disconnect, start a new map using "map" (resets connection time), change servers or change maps.
 		sound::g_SoundSystem->GetGameSoundSystem()->StopAllSounds();
@@ -84,9 +81,7 @@ void ClientLibrary::RunFrame()
 		g_ReplacementMaps.Clear();
 		sound::g_ClientSoundReplacement = &ReplacementMap::Empty;
 
-		if (!isConnected
-			|| m_ConnectionTime > status.connection_time
-			|| m_ServerAddress != status.remote_address)
+		if (!isConnected || m_ConnectionTime > status.connection_time || m_ServerAddress != status.remote_address)
 		{
 			// Stop music playback if we disconnect or start a new map.
 			sound::g_SoundSystem->GetMusicSystem()->Stop();

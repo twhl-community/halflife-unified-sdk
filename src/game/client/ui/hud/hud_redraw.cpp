@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1999, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1999, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 //
 // hud_redraw.cpp
 //
@@ -116,7 +116,7 @@ bool CHud::Redraw(float flTime, bool intermission)
 			}
 			gViewPort->UpdateSpectatorPanel();
 		}
-		//Disabled in Opposing Force.
+		// Disabled in Opposing Force.
 		/*
 		else if (!m_iIntermission && intermission)
 		{
@@ -239,7 +239,7 @@ int CHud::DrawHudStringReverse(int xpos, int ypos, int iMinX, const char* szStri
 	return xpos - gEngfuncs.pfnDrawStringReverse( xpos, ypos, szString, r, g, b);
 	*/
 
-	//Op4 uses custom reverse drawing to fix an issue with the letter k overlapping the letter i in the string "kills"
+	// Op4 uses custom reverse drawing to fix an issue with the letter k overlapping the letter i in the string "kills"
 
 	if ('\0' == *szString)
 	{
@@ -298,7 +298,7 @@ int CHud::DrawHudNumber(int x, int y, int iFlags, int iNumber, const RGB24& colo
 		}
 		else if ((iFlags & DHN_3DIGITS) != 0)
 		{
-			//SPR_DrawAdditive( 0, x, y, &rc );
+			// SPR_DrawAdditive( 0, x, y, &rc );
 			x += iWidth;
 		}
 
@@ -312,7 +312,7 @@ int CHud::DrawHudNumber(int x, int y, int iFlags, int iNumber, const RGB24& colo
 		}
 		else if ((iFlags & (DHN_3DIGITS | DHN_2DIGITS)) != 0)
 		{
-			//SPR_DrawAdditive( 0, x, y, &rc );
+			// SPR_DrawAdditive( 0, x, y, &rc );
 			x += iWidth;
 		}
 
@@ -329,13 +329,13 @@ int CHud::DrawHudNumber(int x, int y, int iFlags, int iNumber, const RGB24& colo
 		// SPR_Draw 100's
 		if ((iFlags & DHN_3DIGITS) != 0)
 		{
-			//SPR_DrawAdditive( 0, x, y, &rc );
+			// SPR_DrawAdditive( 0, x, y, &rc );
 			x += iWidth;
 		}
 
 		if ((iFlags & (DHN_3DIGITS | DHN_2DIGITS)) != 0)
 		{
-			//SPR_DrawAdditive( 0, x, y, &rc );
+			// SPR_DrawAdditive( 0, x, y, &rc );
 			x += iWidth;
 		}
 
@@ -407,7 +407,7 @@ int CHud::DrawHudNumberReverse(int x, int y, int number, int flags, const RGB24&
 			const int digit = remainder % 10;
 			const int digitSpriteIndex = m_HUD_number_0 + digit;
 
-			//This has to happen *before* drawing because we're drawing in reverse
+			// This has to happen *before* drawing because we're drawing in reverse
 			x -= digitWidth;
 
 			SPR_Set(GetSprite(digitSpriteIndex), color);

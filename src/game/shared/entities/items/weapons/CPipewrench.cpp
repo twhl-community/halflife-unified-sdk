@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 
 #include "cbase.h"
 #include "CPipewrench.h"
@@ -82,7 +82,7 @@ bool CPipewrench::Deploy()
 
 void CPipewrench::Holster()
 {
-	//Cancel any swing in progress.
+	// Cancel any swing in progress.
 	m_iSwingMode = SWING_NONE;
 	SetThink(nullptr);
 
@@ -432,11 +432,11 @@ void CPipewrench::BigSwing()
 			{
 			case 0:
 				EMIT_SOUND_DYN(m_pPlayer->edict(), CHAN_ITEM, "weapons/pwrench_hit1.wav", fvolbar, ATTN_NORM, 0, 98 + RANDOM_LONG(0, 3));
-				//EMIT_SOUND_DYN( m_pPlayer, CHAN_ITEM, "weapons/pwrench_big_hit1.wav", fvolbar, ATTN_NORM, 0, 98 + RANDOM_LONG(0,3));
+				// EMIT_SOUND_DYN( m_pPlayer, CHAN_ITEM, "weapons/pwrench_big_hit1.wav", fvolbar, ATTN_NORM, 0, 98 + RANDOM_LONG(0,3));
 				break;
 			case 1:
 				EMIT_SOUND_DYN(m_pPlayer->edict(), CHAN_ITEM, "weapons/pwrench_hit2.wav", fvolbar, ATTN_NORM, 0, 98 + RANDOM_LONG(0, 3));
-				//EMIT_SOUND_DYN( m_pPlayer, CHAN_ITEM, "weapons/pwrench_big_hit2.wav", fvolbar, ATTN_NORM, 0, 98 + RANDOM_LONG(0,3));
+				// EMIT_SOUND_DYN( m_pPlayer, CHAN_ITEM, "weapons/pwrench_big_hit2.wav", fvolbar, ATTN_NORM, 0, 98 + RANDOM_LONG(0,3));
 				break;
 			}
 

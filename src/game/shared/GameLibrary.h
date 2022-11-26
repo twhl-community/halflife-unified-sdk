@@ -64,6 +64,6 @@ private:
 };
 
 /**
-*	@brief Logger for general game events.
-*/
+ *	@brief Logger for general game events.
+ */
 inline std::shared_ptr<spdlog::logger> g_GameLogger;

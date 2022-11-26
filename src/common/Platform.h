@@ -1,25 +1,25 @@
 /***
-*
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 
 #pragma once
 
 /**
-*	@file
-*
-*	Platform abstractions, common header includes, workarounds for compiler warnings
-*/
+ *	@file
+ *
+ *	Platform abstractions, common header includes, workarounds for compiler warnings
+ */
 
 // Allow "DEBUG" in addition to default "_DEBUG"
 #ifdef _DEBUG
@@ -92,7 +92,7 @@ static_assert(sizeof(string_t_value) == sizeof(unsigned int), "string_t_value mu
 static_assert(sizeof(string_t) == sizeof(string_t_value), "string_t must not contain any compiler-inserted padding");
 
 #ifdef WIN32
-//Avoid the ISO conformant warning
+// Avoid the ISO conformant warning
 #define stricmp _stricmp
 #define strnicmp _strnicmp
 #define itoa _itoa
@@ -104,7 +104,7 @@ static_assert(sizeof(string_t) == sizeof(string_t_value), "string_t must not con
 
 #define stackalloc(size) _alloca(size)
 
-//Note: an implementation of stackfree must safely ignore null pointers
+// Note: an implementation of stackfree must safely ignore null pointers
 #define stackfree(address)
 
 #else // WIN32
@@ -119,10 +119,10 @@ static_assert(sizeof(string_t) == sizeof(string_t_value), "string_t must not con
 
 #define stackalloc(size) alloca(size)
 
-//Note: an implementation of stackfree must safely ignore null pointers
+// Note: an implementation of stackfree must safely ignore null pointers
 #define stackfree(address)
 
-#endif //WIN32
+#endif // WIN32
 
 constexpr std::size_t MAX_PATH_LENGTH = 260;
 constexpr std::size_t MAX_QPATH = 64; // Must match value in quakedefs.h
@@ -132,11 +132,11 @@ constexpr std::size_t MaxUserMessageLength = 192;
 #define V_max(a, b) (((a) > (b)) ? (a) : (b))
 
 /**
-*	@brief Type to efficiently store an absolute filename. Stores the string in a buffer with automatic lifetime if possible.
-*/
+ *	@brief Type to efficiently store an absolute filename. Stores the string in a buffer with automatic lifetime if possible.
+ */
 using Filename = eastl::fixed_string<char, MAX_PATH_LENGTH>;
 
 /**
-*	@brief Type to efficiently store a relative filename. Stores the string in a buffer with automatic lifetime if possible.
-*/
+ *	@brief Type to efficiently store a relative filename. Stores the string in a buffer with automatic lifetime if possible.
+ */
 using RelativeFilename = eastl::fixed_string<char, MAX_QPATH>;

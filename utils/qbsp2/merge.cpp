@@ -1,12 +1,12 @@
 /***
-*
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
-*	All Rights Reserved.
-*
-****/
+ *
+ *	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ ****/
 
 // merge.c
 
@@ -181,7 +181,7 @@ face_t* MergeFaceToList(face_t* face, face_t* list)
 
 	for (f = list; f; f = f->next)
 	{
-		//CheckColinear (f);
+		// CheckColinear (f);
 		if (mergedebug)
 		{
 			Draw_ClearWindow();

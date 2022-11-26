@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 
 #include "hud.h"
 #include "particleman.h"
@@ -62,11 +62,11 @@ void CMiniMem::ProcessAll()
 {
 	const float time = gEngfuncs.GetClientTime();
 
-	//Clear list of visible particles.
+	// Clear list of visible particles.
 	_visibleParticles = 0;
 
-	//Divide the particle list in two: the list of visible particles and the list of invisible particles.
-	//Remove any particles that have died.
+	// Divide the particle list in two: the list of visible particles and the list of invisible particles.
+	// Remove any particles that have died.
 	std::size_t invisibleCount = 0;
 
 	for (std::size_t i = 0; i < (_particles.size() - invisibleCount);)
@@ -83,7 +83,7 @@ void CMiniMem::ProcessAll()
 			effect->Die();
 			delete effect;
 
-			//Don't do this! operator delete removes the effect from the list.
+			// Don't do this! operator delete removes the effect from the list.
 			//_particles.erase(_particles.begin() + i);
 			continue;
 		}
@@ -99,13 +99,13 @@ void CMiniMem::ProcessAll()
 		{
 			if (i + invisibleCount < _particles.size())
 			{
-				//There is an effect we haven't checked yet.
-				//Put the invisible effect at the end of the list and check the other effect next.
+				// There is an effect we haven't checked yet.
+				// Put the invisible effect at the end of the list and check the other effect next.
 				std::swap(_particles[i], _particles[_particles.size() - 1 - invisibleCount]);
 				++invisibleCount;
 				continue;
 			}
-			//No more unchecked effects in the list.
+			// No more unchecked effects in the list.
 		}
 
 		++i;
@@ -117,8 +117,7 @@ void CMiniMem::ProcessAll()
 			const float lhsDistance = lhs->GetPlayerDistance();
 			const float rhsDistance = rhs->GetPlayerDistance();
 
-			return lhsDistance > rhsDistance;
-		});
+			return lhsDistance > rhsDistance; });
 
 	for (std::size_t i = 0; i < _visibleParticles; ++i)
 	{
@@ -145,7 +144,7 @@ int CMiniMem::ApplyForce(Vector vOrigin, Vector vDirection, float flRadius, floa
 		const Vector mins = effect->m_vOrigin - Vector{size, size, size};
 		const Vector maxs = effect->m_vOrigin + Vector{size, size, size};
 
-		//If the force origin lies outside the effect's bounding box, calculate the distance from the box.
+		// If the force origin lies outside the effect's bounding box, calculate the distance from the box.
 		float totalDistanceSquared = 0;
 
 		for (int i = 0; i < 3; ++i)
@@ -168,7 +167,7 @@ int CMiniMem::ApplyForce(Vector vOrigin, Vector vDirection, float flRadius, floa
 			totalDistanceSquared += (vOrigin[i] - boundingValue) * (vOrigin[i] - boundingValue);
 		}
 
-		//Effect is further away from position than force radius, don't apply force.
+		// Effect is further away from position than force radius, don't apply force.
 		if (totalDistanceSquared > radiusSquared)
 		{
 			continue;
@@ -211,10 +210,10 @@ void CMiniMem::Reset()
 		delete particle;
 	}
 
-	//Cleared by CBaseParticle::operator delete
+	// Cleared by CBaseParticle::operator delete
 	//_particles.clear();
 
-	//Wipe away previously allocated memory so maps with loads of particles don't eat up memory forever.
+	// Wipe away previously allocated memory so maps with loads of particles don't eat up memory forever.
 	_pool.release();
 	_particles.shrink_to_fit();
 }

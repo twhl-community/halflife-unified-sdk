@@ -189,7 +189,7 @@ void CBasePlayer::Observer_CheckProperties()
 
 
 			m_iObserverWeapon = weapon;
-			//send weapon update
+			// send weapon update
 			MESSAGE_BEGIN(MSG_ONE, gmsgCurWeapon, nullptr, pev);
 			WRITE_BYTE(1); // 1 = current weapon, not on target
 			WRITE_BYTE(m_iObserverWeapon);

@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 
 #include "hud.h"
 
@@ -93,7 +93,7 @@ void CBaseParticle::InitializeSprite(Vector org, Vector normal, model_s* sprite,
 
 	m_vLowLeft = org - scaledRight * 0.5 - scaledUp * 0.5;
 
-	//TODO: not sure if these are correct. If low left is half of the scaled directions then the full direction * 2 results in double size particles.
+	// TODO: not sure if these are correct. If low left is half of the scaled directions then the full direction * 2 results in double size particles.
 	m_vLowRight = m_vLowLeft + scaledRight + scaledRight;
 	m_vTopLeft = m_vLowLeft + scaledUp + scaledUp;
 }
@@ -201,7 +201,7 @@ void CBaseParticle::Draw()
 	const Vector width = right * radius * m_flStretchX;
 	const Vector height = up * radius * m_flStretchY;
 
-	//TODO: shouldn't this be accounting for stretch Y?
+	// TODO: shouldn't this be accounting for stretch Y?
 	const Vector lowLeft = m_vOrigin - (width * 0.5) - (up * radius * 0.5);
 
 	const Vector lowRight = lowLeft + width;
@@ -316,8 +316,8 @@ void CBaseParticle::Spin(float time)
 		return;
 	}
 
-	//Superfluous; overwritten below.
-	//m_vAngles = m_vAngles + m_vAVelocity;
+	// Superfluous; overwritten below.
+	// m_vAngles = m_vAngles + m_vAVelocity;
 
 	Vector point = m_vAVelocity;
 
@@ -376,10 +376,10 @@ void CBaseParticle::CheckCollision(float time)
 
 		if (trace.fraction != 1.0)
 		{
-			//Called but never used, probably unfinished code for colliding with other entities.
-			//auto entity = gEngfuncs.pEventAPI->EV_GetPhysent(trace.ent);
+			// Called but never used, probably unfinished code for colliding with other entities.
+			// auto entity = gEngfuncs.pEventAPI->EV_GetPhysent(trace.ent);
 
-			//Collided with something other than world, ignore.
+			// Collided with something other than world, ignore.
 			if (0 == trace.ent)
 			{
 				collided = true;
@@ -438,7 +438,7 @@ void CBaseParticle::CheckCollision(float time)
 		}
 		else
 		{
-			//Particle fell on an (almost) flat surface and has no velocity to bounce back up; disable collisions from now on.
+			// Particle fell on an (almost) flat surface and has no velocity to bounce back up; disable collisions from now on.
 			bounce = 0;
 			m_vVelocity = g_vecZero;
 			m_vAVelocity = g_vecZero;
@@ -473,17 +473,17 @@ void CBaseParticle::CheckCollision(float time)
 
 void CBaseParticle::Touch(Vector pos, Vector normal, int index)
 {
-	//Nothing.
+	// Nothing.
 }
 
 void CBaseParticle::Die()
 {
-	//Nothing.
+	// Nothing.
 }
 
 void CBaseParticle::Force()
 {
-	//Nothing.
+	// Nothing.
 }
 
 void CBaseParticle::Think(float time)

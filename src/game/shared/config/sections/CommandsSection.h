@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 
 #pragma once
 
@@ -31,9 +31,9 @@
 #include "utils/JSONSystem.h"
 
 /**
-*	@brief Defines a section containing an array of console command strings.
-*/
-template<typename DataContext>
+ *	@brief Defines a section containing an array of console command strings.
+ */
+template <typename DataContext>
 class CommandsSection final : public GameConfigSection<DataContext>
 {
 private:
@@ -41,8 +41,8 @@ private:
 
 public:
 	/**
-	*	@param commandWhitelist If provided, only commands listed in this whitelist are allowed to be executed.
-	*/
+	 *	@param commandWhitelist If provided, only commands listed in this whitelist are allowed to be executed.
+	 */
 	explicit CommandsSection(std::optional<std::unordered_set<std::string>>&& commandWhitelist = {})
 		: m_CommandWhitelist(std::move(commandWhitelist))
 	{
@@ -111,7 +111,7 @@ public:
 
 			auto value = command.template get<std::string>();
 
-			//First token is the command name
+			// First token is the command name
 			COM_Parse(value.c_str());
 
 			if (!com_token[0])
@@ -119,8 +119,8 @@ public:
 				continue;
 			}
 
-			//Prevent anything screwy from going into names
-			//Prevent commands from being snuck in by appending it to the end of another command
+			// Prevent anything screwy from going into names
+			// Prevent commands from being snuck in by appending it to the end of another command
 			if (!std::regex_match(com_token, CommandNameRegex) || !ValidateCommand(value))
 			{
 				logger.warn(
@@ -149,7 +149,7 @@ private:
 
 		for (auto c : command)
 		{
-			//This logic matches that of the engine's command parser
+			// This logic matches that of the engine's command parser
 			if (c == '\"')
 			{
 				inQuotes = !inQuotes;

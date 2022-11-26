@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1999, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1999, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 //
 //  hud_msg.cpp
 //
@@ -45,7 +45,7 @@ bool CHud::MsgFunc_ResetHUD(const char* pszName, int iSize, void* pbuf)
 		pList = pList->pNext;
 	}
 
-	//Reset weapon bits.
+	// Reset weapon bits.
 	m_iWeaponBits = 0ULL;
 
 	// reset sensitivity
@@ -77,11 +77,11 @@ void CHud::MsgFunc_InitHUD(const char* pszName, int iSize, void* pbuf)
 	}
 
 
-	//TODO: needs to be called on every map change, not just when starting a new game
+	// TODO: needs to be called on every map change, not just when starting a new game
 	if (g_pParticleMan)
 		g_pParticleMan->ResetParticles();
 
-	//Probably not a good place to put this.
+	// Probably not a good place to put this.
 	pBeam = pBeam2 = nullptr;
 	pFlare = nullptr; // Vit_amiN: clear egon's beam flare
 }

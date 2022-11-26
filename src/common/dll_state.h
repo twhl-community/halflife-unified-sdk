@@ -7,7 +7,7 @@
 
 #pragma once
 
-//DLL State Flags
+// DLL State Flags
 
 #define DLL_INACTIVE 0 // no dll
 #define DLL_ACTIVE 1   // dll is running

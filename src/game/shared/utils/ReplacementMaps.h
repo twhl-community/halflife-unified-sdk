@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 
 #pragma once
 
@@ -64,20 +64,20 @@ const inline ReplacementMap ReplacementMap::Empty;
 struct ReplacementMapOptions
 {
 	/**
-	*	@brief If @c true, keys and values are stored as-is and looked up using case sensitive lookup.
-	*	If @c false, keys and values are converted to lowercase and looked up by converting values to lowercase before looking them up.
-	*/
+	 *	@brief If @c true, keys and values are stored as-is and looked up using case sensitive lookup.
+	 *	If @c false, keys and values are converted to lowercase and looked up by converting values to lowercase before looking them up.
+	 */
 	bool CaseSensitive = true;
 
 	/**
-	*	@brief If @c true, searches all paths for the file.
-	*/
+	 *	@brief If @c true, searches all paths for the file.
+	 */
 	bool LoadFromAllPaths = false;
 };
 
 /**
-*	@brief Handles the registration of the replacement map schema and the loading and caching of files.
-*/
+ *	@brief Handles the registration of the replacement map schema and the loading and caching of files.
+ */
 class ReplacementMapSystem final : public IGameSystem
 {
 public:

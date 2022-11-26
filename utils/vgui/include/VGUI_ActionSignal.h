@@ -1,13 +1,13 @@
 //========= Copyright © 1996-2002, Valve LLC, All rights reserved. ============
 //
-// Purpose: 
+// Purpose:
 //
 // $NoKeywords: $
 //=============================================================================
 
 #pragma once
 
-#include<VGUI.h>
+#include <VGUI.h>
 
 /*
 
@@ -45,13 +45,13 @@ virtual void fireActionSignal()
 	for(int i=0;i<_actionSignalDar.getCount();i++)
 	{
 		ActionSignal* signal=_actionSignalDar[i];
-		
+
 		ActionSignalSimple* ss=dynamic_cast<ActionSignalSimple*>(signal);
 		if(ss!=nullptr)
 		{
 			ss->actionPerformed(this);
 		}
-	
+
 		ActionSignalCommand* si=dynamic_cast<ActionSignalInt*>(signal);
 		if(si!=nullptr)
 		{
@@ -63,7 +63,7 @@ virtual void fireActionSignal()
 
 */
 
-#include<VGUI.h>
+#include <VGUI.h>
 
 namespace vgui
 {
@@ -73,7 +73,7 @@ class Panel;
 class VGUIAPI ActionSignal
 {
 public:
-	virtual void actionPerformed(Panel* panel)=0;
+	virtual void actionPerformed(Panel* panel) = 0;
 };
 
 }

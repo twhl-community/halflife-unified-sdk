@@ -10,8 +10,8 @@ class CBaseParticle;
 #define TRIANGLE_FPS 30
 
 /**
-*	@brief Simple allocator that uses a chunk-based pool to serve requests.
-*/
+ *	@brief Simple allocator that uses a chunk-based pool to serve requests.
+ */
 class CMiniMem
 {
 private:
@@ -32,9 +32,9 @@ public:
 
 	void Deallocate(void* memory, std::size_t sizeInBytes, std::size_t alignment = alignof(std::max_align_t));
 
-	void ProcessAll(); //Processes all
+	void ProcessAll(); // Processes all
 
-	void Reset(); //clears memory, setting all particles to not used.
+	void Reset(); // clears memory, setting all particles to not used.
 
 	void Shutdown();
 

@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   This source code contains proprietary and confidential information of
+ *   Valve LLC and its suppliers.  Access to this code is restricted to
+ *   persons who have executed a written SDK license with Valve.  Any access,
+ *   use or distribution of this code by or to any unlicensed person is illegal.
+ *
+ ****/
 #include "cbase.h"
 #include "talkmonster.h"
 #include "defaultai.h"
@@ -100,9 +100,9 @@ Schedule_t slIdleSpeak[] =
 Task_t tlIdleSpeakWait[] =
 	{
 		{TASK_SET_ACTIVITY, (float)ACT_IDLE}, // Stop and talk
-		{TASK_TLK_SPEAK, (float)0},		 // question or remark
-		{TASK_TLK_EYECONTACT, (float)0}, //
-		{TASK_WAIT, (float)2},			 // wait - used when sci is in 'use' mode to keep head turned
+		{TASK_TLK_SPEAK, (float)0},			  // question or remark
+		{TASK_TLK_EYECONTACT, (float)0},	  //
+		{TASK_WAIT, (float)2},				  // wait - used when sci is in 'use' mode to keep head turned
 };
 
 Schedule_t slIdleSpeakWait[] =
@@ -120,7 +120,7 @@ Schedule_t slIdleSpeakWait[] =
 Task_t tlIdleHello[] =
 	{
 		{TASK_SET_ACTIVITY, (float)ACT_IDLE}, // Stop and talk
-		{TASK_TLK_HELLO, (float)0}, // Try to say hello to player
+		{TASK_TLK_HELLO, (float)0},			  // Try to say hello to player
 		{TASK_TLK_EYECONTACT, (float)0},
 		{TASK_WAIT, (float)0.5},	// wait a bit
 		{TASK_TLK_HELLO, (float)0}, // Try to say hello to player
@@ -257,8 +257,8 @@ Schedule_t slTlkIdleWatchClient[] =
 				bits_COND_PROVOKED,
 
 			bits_SOUND_COMBAT | // sound flags - change these, and you'll break the talking code.
-				//bits_SOUND_PLAYER		|
-				//bits_SOUND_WORLD		|
+								// bits_SOUND_PLAYER		|
+								// bits_SOUND_WORLD		|
 
 				bits_SOUND_DANGER |
 				bits_SOUND_MEAT | // scents
@@ -278,8 +278,8 @@ Schedule_t slTlkIdleWatchClient[] =
 				bits_COND_PROVOKED,
 
 			bits_SOUND_COMBAT | // sound flags - change these, and you'll break the talking code.
-				//bits_SOUND_PLAYER		|
-				//bits_SOUND_WORLD		|
+								// bits_SOUND_PLAYER		|
+								// bits_SOUND_WORLD		|
 
 				bits_SOUND_DANGER |
 				bits_SOUND_MEAT | // scents
@@ -614,8 +614,7 @@ void CTalkMonster::AlertFriends()
 			{
 				// don't provoke a friend that's playing a death animation. They're a goner
 				pMonster->m_afMemory |= bits_MEMORY_PROVOKED;
-			}
-		},
+			} },
 		true);
 }
 
@@ -627,8 +626,7 @@ void CTalkMonster::ShutUpFriends()
 			if (CBaseMonster* pMonster = pFriend->MyMonsterPointer(); pMonster->IsAlive())
 			{
 				pMonster->SentenceStop();
-			}
-		},
+			} },
 		true);
 }
 
@@ -649,8 +647,7 @@ void CTalkMonster::LimitFollowers(CBaseEntity* pPlayer, int maxFollowers)
 					if (count > maxFollowers)
 						pMonster->StopFollowing(true);
 				}
-			}
-		},
+			} },
 		true);
 }
 
@@ -679,7 +676,7 @@ void CTalkMonster::HandleAnimEvent(MonsterEvent_t* pEvent)
 	case SCRIPT_EVENT_SENTENCE: // Play a named sentence group
 		ShutUpFriends();
 		PlaySentence(pEvent->options, RANDOM_FLOAT(2.8, 3.4), VOL_NORM, ATTN_IDLE);
-		//AILogger->debug("script event speak");
+		// AILogger->debug("script event speak");
 		break;
 
 	default:
@@ -959,7 +956,7 @@ bool CTalkMonster::FIdleSpeak()
 				if (!FBitSet(m_bitsSaid, bit_saidDamageHeavy) &&
 					(m_hTargetEnt->pev->health <= m_hTargetEnt->pev->max_health / 8))
 				{
-					//EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, m_szGrp[TLK_PLHURT3], 1.0, ATTN_IDLE, 0, pitch);
+					// EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, m_szGrp[TLK_PLHURT3], 1.0, ATTN_IDLE, 0, pitch);
 					PlaySentence(m_szGrp[TLK_PLHURT3], duration, VOL_NORM, ATTN_IDLE);
 					SetBits(m_bitsSaid, bit_saidDamageHeavy);
 					return true;
@@ -967,7 +964,7 @@ bool CTalkMonster::FIdleSpeak()
 				else if (!FBitSet(m_bitsSaid, bit_saidDamageMedium) &&
 						 (m_hTargetEnt->pev->health <= m_hTargetEnt->pev->max_health / 4))
 				{
-					//EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, m_szGrp[TLK_PLHURT2], 1.0, ATTN_IDLE, 0, pitch);
+					// EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, m_szGrp[TLK_PLHURT2], 1.0, ATTN_IDLE, 0, pitch);
 					PlaySentence(m_szGrp[TLK_PLHURT2], duration, VOL_NORM, ATTN_IDLE);
 					SetBits(m_bitsSaid, bit_saidDamageMedium);
 					return true;
@@ -975,7 +972,7 @@ bool CTalkMonster::FIdleSpeak()
 				else if (!FBitSet(m_bitsSaid, bit_saidDamageLight) &&
 						 (m_hTargetEnt->pev->health <= m_hTargetEnt->pev->max_health / 2))
 				{
-					//EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, m_szGrp[TLK_PLHURT1], 1.0, ATTN_IDLE, 0, pitch);
+					// EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, m_szGrp[TLK_PLHURT1], 1.0, ATTN_IDLE, 0, pitch);
 					PlaySentence(m_szGrp[TLK_PLHURT1], duration, VOL_NORM, ATTN_IDLE);
 					SetBits(m_bitsSaid, bit_saidDamageLight);
 					return true;
@@ -996,7 +993,7 @@ bool CTalkMonster::FIdleSpeak()
 	if (pFriend && !(pFriend->IsMoving()) && (RANDOM_LONG(0, 99) < 75))
 	{
 		PlaySentence(szQuestionGroup, duration, VOL_NORM, ATTN_IDLE);
-		//sentences::g_Sentences.PlayRndSz( ENT(pev), szQuestionGroup, 1.0, ATTN_IDLE, 0, pitch );
+		// sentences::g_Sentences.PlayRndSz( ENT(pev), szQuestionGroup, 1.0, ATTN_IDLE, 0, pitch );
 
 		// force friend to answer
 		CTalkMonster* pTalkMonster = (CTalkMonster*)pFriend;
@@ -1011,7 +1008,7 @@ bool CTalkMonster::FIdleSpeak()
 	// otherwise, play an idle statement, try to face client when making a statement.
 	if (RANDOM_LONG(0, 1))
 	{
-		//sentences::g_Sentences.PlayRndSz( ENT(pev), szIdleGroup, 1.0, ATTN_IDLE, 0, pitch );
+		// sentences::g_Sentences.PlayRndSz( ENT(pev), szIdleGroup, 1.0, ATTN_IDLE, 0, pitch );
 		CBaseEntity* pFriend = FindNearestFriend(true);
 
 		if (pFriend)
@@ -1117,7 +1114,7 @@ Schedule_t* CTalkMonster::GetScheduleOfType(int Type)
 	case SCHED_TARGET_FACE:
 		// speak during 'use'
 		if (RANDOM_LONG(0, 99) < 2)
-			//AILogger->debug("target chase speak");
+			// AILogger->debug("target chase speak");
 			return slIdleSpeakWait;
 		else
 			return slIdleStand;
@@ -1133,8 +1130,8 @@ Schedule_t* CTalkMonster::GetScheduleOfType(int Type)
 		// sustained light wounds?
 		if (!FBitSet(m_bitsSaid, bit_saidWoundLight) && (pev->health <= (pev->max_health * 0.75)))
 		{
-			//sentences::g_Sentences.PlayRndSz( ENT(pev), m_szGrp[TLK_WOUND], 1.0, ATTN_IDLE, 0, GetVoicePitch() );
-			//CTalkMonster::g_talkWaitTime = gpGlobals->time + RANDOM_FLOAT(2.8, 3.2);
+			// sentences::g_Sentences.PlayRndSz( ENT(pev), m_szGrp[TLK_WOUND], 1.0, ATTN_IDLE, 0, GetVoicePitch() );
+			// CTalkMonster::g_talkWaitTime = gpGlobals->time + RANDOM_FLOAT(2.8, 3.2);
 			PlaySentence(m_szGrp[TLK_WOUND], RANDOM_FLOAT(2.8, 3.2), VOL_NORM, ATTN_IDLE);
 			SetBits(m_bitsSaid, bit_saidWoundLight);
 			return slIdleStand;
@@ -1142,8 +1139,8 @@ Schedule_t* CTalkMonster::GetScheduleOfType(int Type)
 		// sustained heavy wounds?
 		else if (!FBitSet(m_bitsSaid, bit_saidWoundHeavy) && (pev->health <= (pev->max_health * 0.5)))
 		{
-			//sentences::g_Sentences.PlayRndSz( ENT(pev), m_szGrp[TLK_MORTAL], 1.0, ATTN_IDLE, 0, GetVoicePitch() );
-			//CTalkMonster::g_talkWaitTime = gpGlobals->time + RANDOM_FLOAT(2.8, 3.2);
+			// sentences::g_Sentences.PlayRndSz( ENT(pev), m_szGrp[TLK_MORTAL], 1.0, ATTN_IDLE, 0, GetVoicePitch() );
+			// CTalkMonster::g_talkWaitTime = gpGlobals->time + RANDOM_FLOAT(2.8, 3.2);
 			PlaySentence(m_szGrp[TLK_MORTAL], RANDOM_FLOAT(2.8, 3.2), VOL_NORM, ATTN_IDLE);
 			SetBits(m_bitsSaid, bit_saidWoundHeavy);
 			return slIdleStand;
@@ -1152,7 +1149,7 @@ Schedule_t* CTalkMonster::GetScheduleOfType(int Type)
 		// talk about world
 		if (FOkToSpeak() && RANDOM_LONG(0, m_nSpeak * 2) == 0)
 		{
-			//AILogger->debug("standing idle speak");
+			// AILogger->debug("standing idle speak");
 			return slIdleSpeak;
 		}
 

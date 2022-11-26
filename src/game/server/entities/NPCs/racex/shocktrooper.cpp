@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   This source code contains proprietary and confidential information of
+ *   Valve LLC and its suppliers.  Access to this code is restricted to
+ *   persons who have executed a written SDK license with Valve.  Any access,
+ *   use or distribution of this code by or to any unlicensed person is illegal.
+ *
+ ****/
 //=========================================================
 // hgrunt
 //=========================================================
@@ -297,7 +297,7 @@ void CShockTrooper::GibMonster()
 	{ // throw a gun if the grunt has one
 		GetAttachment(0, vecGunPos, vecGunAngles);
 
-		//Only copy the yaw
+		// Only copy the yaw
 		vecGunAngles.x = vecGunAngles.z = 0;
 
 		CBaseEntity* pGun = DropItem("monster_shockroach", vecGunPos + Vector(0, 0, 32), vecGunAngles);
@@ -308,7 +308,7 @@ void CShockTrooper::GibMonster()
 			pGun->pev->avelocity = Vector(0, RANDOM_FLOAT(200, 400), 0);
 		}
 
-		//TODO: change body group
+		// TODO: change body group
 	}
 
 	EMIT_SOUND(ENT(pev), CHAN_WEAPON, "common/bodysplat.wav", 1, ATTN_NORM);
@@ -828,12 +828,12 @@ void CShockTrooper::HandleAnimEvent(MonsterEvent_t* pEvent)
 		if (GetBodygroup(STrooperBodyGroup::Weapons) != STrooperWeapon::Blank)
 		{
 			Vector vecGunPos;
-			//Zero this out so we don't end up with garbage angles later on
+			// Zero this out so we don't end up with garbage angles later on
 			Vector vecGunAngles = g_vecZero;
 
 			GetAttachment(0, vecGunPos, vecGunAngles);
 
-			//Only copy yaw
+			// Only copy yaw
 			vecGunAngles.x = vecGunAngles.z = 0;
 
 			// switch to body group with no gun.
@@ -1097,7 +1097,7 @@ void CShockTrooper::PainSound()
 		switch (RANDOM_LONG(0, 6))
 		{
 		case 0:
-			//TODO: the directory names should be lowercase
+			// TODO: the directory names should be lowercase
 			EMIT_SOUND(ENT(pev), CHAN_VOICE, "ShockTrooper/shock_trooper_pain3.wav", 1, ATTN_NORM);
 			break;
 		case 1:
@@ -1946,9 +1946,9 @@ Schedule_t* CShockTrooper::GetSchedule()
 				//!!!KELLY - this grunt was hit and is going to run to cover.
 				if (FOkToSpeak()) // && RANDOM_LONG(0,1))
 				{
-					//sentences::g_Sentences.PlayRndSz( ENT(pev), "ST_COVER", ShockTrooper_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
+					// sentences::g_Sentences.PlayRndSz( ENT(pev), "ST_COVER", ShockTrooper_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
 					m_iSentence = ShockTrooper_SENT_COVER;
-					//JustSpoke();
+					// JustSpoke();
 				}
 				return GetScheduleOfType(SCHED_TAKE_COVER_FROM_ENEMY);
 			}
@@ -2012,9 +2012,9 @@ Schedule_t* CShockTrooper::GetSchedule()
 				// charge the enemy's position.
 				if (FOkToSpeak()) // && RANDOM_LONG(0,1))
 				{
-					//sentences::g_Sentences.PlayRndSz( ENT(pev), "ST_CHARGE", ShockTrooper_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
+					// sentences::g_Sentences.PlayRndSz( ENT(pev), "ST_CHARGE", ShockTrooper_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
 					m_iSentence = ShockTrooper_SENT_CHARGE;
-					//JustSpoke();
+					// JustSpoke();
 				}
 
 				return GetScheduleOfType(SCHED_GRUNT_ESTABLISH_LINE_OF_FIRE);

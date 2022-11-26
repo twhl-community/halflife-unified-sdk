@@ -1,6 +1,6 @@
 //========= Copyright © 1996-2002, Valve LLC, All rights reserved. ============
 //
-// Purpose: 
+// Purpose:
 //
 // $NoKeywords: $
 //=============================================================================
@@ -8,8 +8,8 @@
 #ifndef VGUI_GRIDLAYOUT_H
 #define VGUI_GRIDLAYOUT_H
 
-#include<VGUI.h>
-#include<VGUI_Layout.h>
+#include <VGUI.h>
+#include <VGUI_Layout.h>
 
 namespace vgui
 {

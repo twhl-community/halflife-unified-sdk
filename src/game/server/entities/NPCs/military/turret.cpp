@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   This source code contains proprietary and confidential information of
+ *   Valve LLC and its suppliers.  Access to this code is restricted to
+ *   persons who have executed a written SDK license with Valve.  Any access,
+ *   use or distribution of this code by or to any unlicensed person is illegal.
+ *
+ ****/
 /*
 
 ===== turret.cpp ========================================================
@@ -31,7 +31,7 @@ Vector VecBModelOrigin(entvars_t* pevBModel);
 #define TURRET_SHOTS 2
 #define TURRET_RANGE (100 * 12)
 #define TURRET_SPREAD Vector(0, 0, 0)
-#define TURRET_TURNRATE 30 //angles per 0.1 second
+#define TURRET_TURNRATE 30 // angles per 0.1 second
 #define TURRET_MAXWAIT 15  // seconds turret will stay active w/o a target
 #define TURRET_MAXSPIN 5   // seconds turret barrel will spin w/o a target
 #define TURRET_MACHINE_VOLUME 0.5
@@ -543,7 +543,7 @@ void CBaseTurret::ActiveThink()
 
 	// AILogger->debug("{:.0f} {:.0f} : {:.2f}", m_vecCurAngles.x, m_vecCurAngles.y, gpGlobals->v_forward);
 
-	Vector vecLOS = vecDirToEnemy; //vecMid - m_vecLastSight;
+	Vector vecLOS = vecDirToEnemy; // vecMid - m_vecLastSight;
 	vecLOS = vecLOS.Normalize();
 
 	// Is the Gun looking at the target
@@ -565,7 +565,7 @@ void CBaseTurret::ActiveThink()
 		SetTurretAnim(TURRET_ANIM_SPIN);
 	}
 
-	//move the gun
+	// move the gun
 	if (m_fBeserk)
 	{
 		if (RANDOM_LONG(0, 9) == 0)
@@ -584,7 +584,7 @@ void CBaseTurret::ActiveThink()
 		if (vec.y < 0)
 			vec.y += 360;
 
-		//const float previousPitch = vec.x;
+		// const float previousPitch = vec.x;
 
 		if (vec.x < -180)
 			vec.x += 360;
@@ -825,7 +825,7 @@ void CBaseTurret::SetTurretAnim(TURRET_ANIM anim)
 			pev->framerate = 1.0;
 			break;
 		}
-		//AILogger->debug("Turret anim #{}", anim);
+		// AILogger->debug("Turret anim #{}", anim);
 	}
 }
 
@@ -876,7 +876,7 @@ void CBaseTurret::SearchThink()
 		// Are we out of time, do we need to retract?
 		if (gpGlobals->time > m_flLastSight)
 		{
-			//Before we retrace, make sure that we are spun down.
+			// Before we retrace, make sure that we are spun down.
 			m_flLastSight = 0;
 			m_flSpinUpTime = 0;
 			SetThink(&CBaseTurret::Retire);
@@ -1125,7 +1125,7 @@ bool CBaseTurret::MoveTurret()
 		if (flDist < (0.05 * m_iBaseTurnRate))
 			m_vecCurAngles.y = m_vecGoalAngles.y;
 
-		//AILogger->debug("{:.2f} -> {:.2f}", m_vecCurAngles.y, y);
+		// AILogger->debug("{:.2f} -> {:.2f}", m_vecCurAngles.y, y);
 		if (m_iOrientation == 0)
 			SetBoneController(0, m_vecCurAngles.y - pev->angles.y);
 		else
@@ -1136,7 +1136,7 @@ bool CBaseTurret::MoveTurret()
 	if (!state)
 		m_fTurnRate = m_iBaseTurnRate;
 
-	//AILogger->debug("({:.2f}, {:.2f})->({:.2f}, {:.2f})", m_vecCurAngles.x,
+	// AILogger->debug("({:.2f}, {:.2f})->({:.2f}, {:.2f})", m_vecCurAngles.x,
 	//	m_vecCurAngles.y, m_vecGoalAngles.x, m_vecGoalAngles.y);
 	return state;
 }

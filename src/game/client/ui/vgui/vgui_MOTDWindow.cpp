@@ -102,7 +102,7 @@ CMessageWindowPanel::CMessageWindowPanel(const char* szMOTD, const char* szTitle
 	ScrollPanel* pScrollPanel = new CTFScrollPanel(iXPos + XRES(16), iYPos + MOTD_TITLE_Y * 2 + YRES(16), iXSize - XRES(32), iYSize - (YRES(48) + BUTTON_SIZE_Y * 2));
 	pScrollPanel->setParent(this);
 
-	//force the scrollbars on so clientClip will take them in account after the validate
+	// force the scrollbars on so clientClip will take them in account after the validate
 	pScrollPanel->setScrollBarAutoVisible(false, false);
 	pScrollPanel->setScrollBarVisible(true, true);
 	pScrollPanel->validate();
@@ -132,7 +132,7 @@ CMessageWindowPanel::CMessageWindowPanel(const char* szMOTD, const char* szTitle
 	// Now resize the textpanel to fit the scrolled size
 	pText->setSize(iScrollSizeX, iScrollSizeY);
 
-	//turn the scrollbars back into automode
+	// turn the scrollbars back into automode
 	pScrollPanel->setScrollBarAutoVisible(true, true);
 	pScrollPanel->setScrollBarVisible(false, false);
 

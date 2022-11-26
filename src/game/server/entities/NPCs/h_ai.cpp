@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 /*
 
   h_ai.cpp - halflife specific ai code
@@ -24,7 +24,7 @@
 #define NUM_LATERAL_CHECKS 13	 // how many checks are made on each side of a monster looking for lateral cover
 #define NUM_LATERAL_LOS_CHECKS 6 // how many checks are made on each side of a monster looking for lateral cover
 
-//float flRandom = RANDOM_FLOAT(0,1);
+// float flRandom = RANDOM_FLOAT(0,1);
 
 //=========================================================
 //
@@ -46,7 +46,7 @@ bool FBoxVisible(entvars_t* pevLooker, entvars_t* pevTarget, Vector& vecTargetOr
 		return false;
 
 	TraceResult tr;
-	Vector vecLookerOrigin = pevLooker->origin + pevLooker->view_ofs; //look through the monster's 'eyes'
+	Vector vecLookerOrigin = pevLooker->origin + pevLooker->view_ofs; // look through the monster's 'eyes'
 	for (int i = 0; i < 5; i++)
 	{
 		Vector vecTarget = pevTarget->origin;

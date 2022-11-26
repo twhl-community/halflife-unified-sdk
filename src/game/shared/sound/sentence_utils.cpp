@@ -210,7 +210,8 @@ bool SentenceWordParser::Parse()
 		switch (ParseCore())
 		{
 		case WordParseResult::Done: return false;
-		case WordParseResult::ParsedWord: return true;
+		case WordParseResult::ParsedWord:
+			return true;
 
 			// We parsed the global parameters or there was a syntax error, need to parse the next word.
 		case WordParseResult::SkipWord: break;

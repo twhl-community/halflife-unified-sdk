@@ -174,8 +174,8 @@ float V_CalcBob(struct ref_params_s* pparams)
 
 	lasttime = pparams->time;
 
-	//TODO: bobtime will eventually become a value so large that it will no longer behave properly.
-	//Consider resetting the variable if a level change is detected (pparams->time < lasttime might do the trick).
+	// TODO: bobtime will eventually become a value so large that it will no longer behave properly.
+	// Consider resetting the variable if a level change is detected (pparams->time < lasttime might do the trick).
 	bobtime += pparams->frametime;
 	cycle = bobtime - (int)(bobtime / cl_bobcycle->value) * cl_bobcycle->value;
 	cycle /= cl_bobcycle->value;
@@ -701,7 +701,7 @@ void V_CalcNormalRefdef(struct ref_params_s* pparams)
 
 		steptime = pparams->time - lasttime;
 		if (steptime < 0)
-			//FIXME		I_Error ("steptime < 0");
+			// FIXME		I_Error ("steptime < 0");
 			steptime = 0;
 
 		oldz += steptime * 150;
@@ -795,7 +795,7 @@ void V_CalcNormalRefdef(struct ref_params_s* pparams)
 		VectorCopy(camAngles, pparams->viewangles);
 	}
 
-	//Apply this at all times
+	// Apply this at all times
 	{
 		float pitch = pparams->viewangles[0];
 
@@ -1029,7 +1029,7 @@ void V_GetSingleTargetCam(cl_entity_t* ent1, float* angle, float* origin)
 	if (0 != ent1->player)
 	{
 		if (deadPlayer)
-			newOrigin[2] += 2; //laying on ground
+			newOrigin[2] += 2; // laying on ground
 		else
 			newOrigin[2] += 17; // head level of living player
 	}
@@ -1711,7 +1711,7 @@ void V_Init()
 }
 
 
-//#define TRACE_TEST
+// #define TRACE_TEST
 #if defined(TRACE_TEST)
 
 extern float in_fov;

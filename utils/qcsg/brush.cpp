@@ -1,12 +1,12 @@
 /***
-*
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
-*	All Rights Reserved.
-*
-****/
+ *
+ *	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ ****/
 
 // brush.c
 
@@ -537,7 +537,7 @@ AddHullEdge
 Creates all of the hull planes around the given edge, if not done allready
 =============
 */
-//#define	ANGLEEPSILON	0.00001
+// #define	ANGLEEPSILON	0.00001
 
 #define ANGLEEPSILON ON_EPSILON
 

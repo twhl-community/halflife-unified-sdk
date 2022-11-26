@@ -1,12 +1,12 @@
 /***
-*
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
-*	All Rights Reserved.
-*
-****/
+ *
+ *	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ ****/
 
 // solidbsp.c
 
@@ -221,7 +221,7 @@ surface_t* ChoosePlaneFromList(surface_t* surfaces, vec3_t mins, vec3_t maxs)
 			l = plane->type;
 
 			if (l <= PLANE_Z)
-			{	// axial aligned
+			{ // axial aligned
 				//
 				// calculate the split metric along axis l
 				//

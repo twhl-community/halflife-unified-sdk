@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   This source code contains proprietary and confidential information of
+ *   Valve LLC and its suppliers.  Access to this code is restricted to
+ *   persons who have executed a written SDK license with Valve.  Any access,
+ *   use or distribution of this code by or to any unlicensed person is illegal.
+ *
+ ****/
 /*
 
 ===== monsters.cpp ========================================================
@@ -54,11 +54,11 @@ TYPEDESCRIPTION CBaseMonster::m_SaveData[] =
 		DEFINE_FIELD(CBaseMonster, m_IdealMonsterState, FIELD_INTEGER),
 		DEFINE_FIELD(CBaseMonster, m_iTaskStatus, FIELD_INTEGER),
 
-		//Schedule_t			*m_pSchedule;
+		// Schedule_t			*m_pSchedule;
 
 		DEFINE_FIELD(CBaseMonster, m_iScheduleIndex, FIELD_INTEGER),
 		DEFINE_FIELD(CBaseMonster, m_afConditions, FIELD_INTEGER),
-		//WayPoint_t			m_Route[ ROUTE_SIZE ];
+		// WayPoint_t			m_Route[ ROUTE_SIZE ];
 		//	DEFINE_FIELD( CBaseMonster, m_movementGoal, FIELD_INTEGER ),
 		//	DEFINE_FIELD( CBaseMonster, m_iRouteIndex, FIELD_INTEGER ),
 		//	DEFINE_FIELD( CBaseMonster, m_moveWaitTime, FIELD_FLOAT ),
@@ -96,7 +96,7 @@ TYPEDESCRIPTION CBaseMonster::m_SaveData[] =
 		DEFINE_FIELD(CBaseMonster, m_AllowItemDropping, FIELD_BOOLEAN),
 };
 
-//IMPLEMENT_SAVERESTORE( CBaseMonster, CBaseToggle );
+// IMPLEMENT_SAVERESTORE( CBaseMonster, CBaseToggle );
 bool CBaseMonster::Save(CSave& save)
 {
 	if (!CBaseToggle::Save(save))
@@ -217,10 +217,10 @@ void CBaseMonster::Listen()
 			(pCurrentSound->m_iType & iMySounds) != 0 &&
 			(pCurrentSound->m_vecOrigin - EarPosition()).Length() <= pCurrentSound->m_iVolume * hearingSensitivity)
 
-		//if ( ( g_pSoundEnt->m_SoundPool[ iSound ].m_iType & iMySounds ) && ( g_pSoundEnt->m_SoundPool[ iSound ].m_vecOrigin - EarPosition()).Length () <= g_pSoundEnt->m_SoundPool[ iSound ].m_iVolume * hearingSensitivity )
+		// if ( ( g_pSoundEnt->m_SoundPool[ iSound ].m_iType & iMySounds ) && ( g_pSoundEnt->m_SoundPool[ iSound ].m_vecOrigin - EarPosition()).Length () <= g_pSoundEnt->m_SoundPool[ iSound ].m_iVolume * hearingSensitivity )
 		{
 			// the monster cares about this sound, and it's close enough to hear.
-			//g_pSoundEnt->m_SoundPool[ iSound ].m_iNextAudible = m_iAudibleList;
+			// g_pSoundEnt->m_SoundPool[ iSound ].m_iNextAudible = m_iAudibleList;
 			pCurrentSound->m_iNextAudible = m_iAudibleList;
 
 			if (pCurrentSound->FIsSound())
@@ -562,8 +562,8 @@ void CBaseMonster::MonsterThink()
 //=========================================================
 void CBaseMonster::MonsterUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
-	//Don't do this because it can resurrect dying monsters
-	//m_IdealMonsterState = MONSTERSTATE_ALERT;
+	// Don't do this because it can resurrect dying monsters
+	// m_IdealMonsterState = MONSTERSTATE_ALERT;
 }
 
 //=========================================================
@@ -802,7 +802,7 @@ bool ShouldSimplify(int routeType)
 {
 	routeType &= ~bits_MF_IS_GOAL;
 
-	//TODO: verify this this needs to be a comparison and not a bit check
+	// TODO: verify this this needs to be a comparison and not a bit check
 	if ((routeType == bits_MF_TO_PATHCORNER) || (routeType & bits_MF_DONT_SIMPLIFY) != 0)
 		return false;
 	return true;
@@ -1306,10 +1306,10 @@ int CBaseMonster::CheckLocalMove(const Vector& vecStart, const Vector& vecEnd, C
 
 	if ((pev->flags & (FL_FLY | FL_SWIM)) == 0)
 	{
-		DROP_TO_FLOOR(ENT(pev)); //make sure monster is on the floor!
+		DROP_TO_FLOOR(ENT(pev)); // make sure monster is on the floor!
 	}
 
-	//pev->origin.z = vecStartPos.z;//!!!HACKHACK
+	// pev->origin.z = vecStartPos.z;//!!!HACKHACK
 
 	//	pev->origin = vecStart;
 
@@ -1392,18 +1392,18 @@ float CBaseMonster::OpenDoorAndWait(entvars_t* pevDoor)
 {
 	float flTravelTime = 0;
 
-	//AILogger->trace("A door.");
+	// AILogger->trace("A door.");
 	CBaseEntity* pcbeDoor = CBaseEntity::Instance(pevDoor);
 	if (pcbeDoor && !pcbeDoor->IsLockedByMaster())
 	{
-		//AILogger->trace("unlocked!");
+		// AILogger->trace("unlocked!");
 		pcbeDoor->Use(this, this, USE_ON, 0.0);
-		//AILogger->trace("pevDoor->nextthink = {} ms", (int)(1000*pevDoor->nextthink));
-		//AILogger->trace("pevDoor->ltime = {} ms", (int)(1000*pevDoor->ltime));
-		//AILogger->trace("pev-> nextthink = {} ms", (int)(1000*pev->nextthink));
-		//AILogger->trace("pev->ltime = {} ms", (int)(1000*pev->ltime));
+		// AILogger->trace("pevDoor->nextthink = {} ms", (int)(1000*pevDoor->nextthink));
+		// AILogger->trace("pevDoor->ltime = {} ms", (int)(1000*pevDoor->ltime));
+		// AILogger->trace("pev-> nextthink = {} ms", (int)(1000*pev->nextthink));
+		// AILogger->trace("pev->ltime = {} ms", (int)(1000*pev->ltime));
 		flTravelTime = pevDoor->nextthink - pevDoor->ltime;
-		//AILogger->trace("Waiting {} ms", (int)(1000*flTravelTime));
+		// AILogger->trace("Waiting {} ms", (int)(1000*flTravelTime));
 		if (!FStringNull(pcbeDoor->pev->targetname))
 		{
 			edict_t* pentTarget = nullptr;
@@ -1459,7 +1459,7 @@ void CBaseMonster::AdvanceRoute(float distance)
 			//
 			if ((m_Route[m_iRouteIndex].iType & bits_MF_TO_NODE) == bits_MF_TO_NODE && (m_Route[m_iRouteIndex + 1].iType & bits_MF_TO_NODE) == bits_MF_TO_NODE)
 			{
-				//AILogger->trace("SVD: Two nodes.");
+				// AILogger->trace("SVD: Two nodes.");
 
 				int iSrcNode = WorldGraph.FindNearestNode(m_Route[m_iRouteIndex].vecLocation, this);
 				int iDestNode = WorldGraph.FindNearestNode(m_Route[m_iRouteIndex + 1].vecLocation, this);
@@ -1469,10 +1469,10 @@ void CBaseMonster::AdvanceRoute(float distance)
 
 				if (iLink >= 0 && WorldGraph.m_pLinkPool[iLink].m_pLinkEnt != nullptr)
 				{
-					//AILogger->trace("A link.");
+					// AILogger->trace("A link.");
 					if (WorldGraph.HandleLinkEnt(iSrcNode, WorldGraph.m_pLinkPool[iLink].m_pLinkEnt, m_afCapability, CGraph::NODEGRAPH_DYNAMIC))
 					{
-						//AILogger->trace("usable.");
+						// AILogger->trace("usable.");
 						entvars_t* pevDoor = WorldGraph.m_pLinkPool[iLink].m_pLinkEnt;
 						if (pevDoor)
 						{
@@ -1629,7 +1629,7 @@ bool CBaseMonster::FTriangulate(const Vector& vecStart, const Vector& vecEnd, fl
 	else if (sizeX > 48.0)
 		sizeX = 48.0;
 	sizeZ = pev->size.z;
-	//if (sizeZ < 24.0)
+	// if (sizeZ < 24.0)
 	//	sizeZ = 24.0;
 
 	vecForward = (vecEnd - vecStart).Normalize();
@@ -1741,7 +1741,7 @@ bool CBaseMonster::FTriangulate(const Vector& vecStart, const Vector& vecEnd, fl
 					if (pApex)
 					{
 						*pApex = vecTop;
-						//AILogger->trace("triangulate over");
+						// AILogger->trace("triangulate over");
 					}
 
 					return true;
@@ -1755,7 +1755,7 @@ bool CBaseMonster::FTriangulate(const Vector& vecStart, const Vector& vecEnd, fl
 					if (pApex)
 					{
 						*pApex = vecBottom;
-						//AILogger->trace("triangulate under");
+						// AILogger->trace("triangulate under");
 					}
 
 					return true;
@@ -1914,7 +1914,7 @@ void CBaseMonster::Move(float flInterval)
 				{
 					TaskFail();
 					AILogger->debug("{} Failed to move ({})!", STRING(pev->classname), static_cast<int>(HasMemory(bits_MEMORY_MOVE_FAILED)));
-					//AILogger->debug("{}, {}, {}", pev->origin.z, (pev->origin + (vecDir * flCheckDist)).z, m_Route[m_iRouteIndex].vecLocation.z);
+					// AILogger->debug("{}, {}, {}", pev->origin.z, (pev->origin + (vecDir * flCheckDist)).z, m_Route[m_iRouteIndex].vecLocation.z);
 				}
 				return;
 			}
@@ -2127,8 +2127,8 @@ void CBaseMonster::StartMonster()
 		}
 	}
 
-	//SetState ( m_IdealMonsterState );
-	//SetActivity ( m_IdealActivity );
+	// SetState ( m_IdealMonsterState );
+	// SetActivity ( m_IdealActivity );
 
 	// Delay drop to floor to make sure each door in the level has had its chance to spawn
 	// Spread think times so that they don't all happen at the same time (Carmack)
@@ -2217,7 +2217,7 @@ int CBaseMonster::IRelationship(CBaseEntity* pTarget)
 //=========================================================
 // UNDONE: Should this find the nearest node?
 
-//float CGraph::PathLength( int iStart, int iDest, int iHull, int afCapMask )
+// float CGraph::PathLength( int iStart, int iDest, int iHull, int afCapMask )
 
 bool CBaseMonster::FindCover(Vector vecThreat, Vector vecViewOffset, float flMinDist, float flMaxDist)
 {
@@ -2732,8 +2732,8 @@ Vector CBaseMonster::GetGunPosition()
 	UTIL_MakeVectors(pev->angles);
 
 	// Vector vecSrc = pev->origin + gpGlobals->v_forward * 10;
-	//vecSrc.z = pevShooter->absmin.z + pevShooter->size.z * 0.7;
-	//vecSrc.z = pev->origin.z + (pev->view_ofs.z - 4);
+	// vecSrc.z = pevShooter->absmin.z + pevShooter->size.z * 0.7;
+	// vecSrc.z = pev->origin.z + (pev->view_ofs.z - 4);
 	Vector vecSrc = pev->origin + gpGlobals->v_forward * m_HackedGunPos.y + gpGlobals->v_right * m_HackedGunPos.x + gpGlobals->v_up * m_HackedGunPos.z;
 
 	return vecSrc;
@@ -2972,7 +2972,7 @@ void CBaseMonster::ReportAIState()
 		fmt::format_to(inserter, " PRISONER! ");
 	if ((pev->spawnflags & SF_MONSTER_PREDISASTER) != 0)
 		fmt::format_to(inserter, " Pre-Disaster! ");
-	
+
 	AILogger->log(level, spdlog::string_view_t{buffer.c_str(), buffer.size()});
 }
 

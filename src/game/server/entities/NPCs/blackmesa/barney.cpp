@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   This source code contains proprietary and confidential information of
+ *   Valve LLC and its suppliers.  Access to this code is restricted to
+ *   persons who have executed a written SDK license with Valve.  Any access,
+ *   use or distribution of this code by or to any unlicensed person is illegal.
+ *
+ ****/
 //=========================================================
 // monster template
 //=========================================================
@@ -118,8 +118,8 @@ Schedule_t slIdleBaStand[] =
 				bits_COND_PROVOKED,
 
 			bits_SOUND_COMBAT | // sound flags - change these, and you'll break the talking code.
-				//bits_SOUND_PLAYER		|
-				//bits_SOUND_WORLD		|
+								// bits_SOUND_PLAYER		|
+								// bits_SOUND_WORLD		|
 
 				bits_SOUND_DANGER |
 				bits_SOUND_MEAT | // scents
@@ -506,7 +506,7 @@ void CBarney::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir,
 			flDamage = flDamage / 2;
 		}
 		break;
-		//TODO: Otis doesn't have a helmet, probably don't want his dome being bulletproof
+		// TODO: Otis doesn't have a helmet, probably don't want his dome being bulletproof
 	case 10:
 		if ((bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_CLUB)) != 0)
 		{
@@ -734,7 +734,7 @@ void CDeadBarney::OnCreate()
 	CBaseMonster::OnCreate();
 
 	// Corpses have less health
-	pev->health = 8; //GetSkillFloat("barney_health"sv);
+	pev->health = 8; // GetSkillFloat("barney_health"sv);
 	pev->model = MAKE_STRING("models/barney.mdl");
 }
 

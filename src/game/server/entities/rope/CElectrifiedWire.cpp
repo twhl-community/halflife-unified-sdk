@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 #include "cbase.h"
 
 #include "CRopeSegment.h"
@@ -33,7 +33,7 @@ TYPEDESCRIPTION CElectrifiedWire::m_SaveData[] =
 		DEFINE_FIELD(CElectrifiedWire, m_uiNumUninsulatedSegments, FIELD_INTEGER),
 		DEFINE_ARRAY(CElectrifiedWire, m_uiUninsulatedSegments, FIELD_INTEGER, CElectrifiedWire::MAX_SEGMENTS),
 
-		//DEFINE_FIELD( CElectrifiedWire, m_iLightningSprite, FIELD_INTEGER ), //Not restored, reset in Precache. - Solokiller
+		// DEFINE_FIELD( CElectrifiedWire, m_iLightningSprite, FIELD_INTEGER ), //Not restored, reset in Precache. - Solokiller
 
 		DEFINE_FIELD(CElectrifiedWire, m_flLastSparkTime, FIELD_TIME),
 };
@@ -208,7 +208,7 @@ void CElectrifiedWire::DoLightning()
 
 	size_t uiIndex;
 
-	//Try to get a random segment.
+	// Try to get a random segment.
 	for (uiIndex = 0; uiIndex < 10; ++uiIndex)
 	{
 		uiSegment2 = RANDOM_LONG(0, GetNumSegments() - 1);

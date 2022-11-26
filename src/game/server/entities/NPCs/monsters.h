@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   This source code contains proprietary and confidential information of
+ *   Valve LLC and its suppliers.  Access to this code is restricted to
+ *   persons who have executed a written SDK license with Valve.  Any access,
+ *   use or distribution of this code by or to any unlicensed person is illegal.
+ *
+ ****/
 
 #pragma once
 
@@ -47,8 +47,8 @@
 #define SF_MONSTER_PRISONER 16 // monster won't attack anyone, no one will attacke him.
 //										32
 //										64
-#define SF_MONSTER_WAIT_FOR_SCRIPT 128 //spawnflag that makes monsters wait to check for attacking until the script is done or they've been attacked
-#define SF_MONSTER_PREDISASTER 256	   //this is a predisaster scientist or barney. Influences how they speak.
+#define SF_MONSTER_WAIT_FOR_SCRIPT 128 // spawnflag that makes monsters wait to check for attacking until the script is done or they've been attacked
+#define SF_MONSTER_PREDISASTER 256	   // this is a predisaster scientist or barney. Influences how they speak.
 #define SF_MONSTER_FADECORPSE 512	   // Fade out corpse after death
 #define SF_MONSTER_FALL_TO_GROUND 0x80000000
 
@@ -71,9 +71,9 @@
 inline DLL_GLOBAL Vector g_vecAttackDir;
 
 /**
-*	@brief Set in combat.cpp.  Used to pass the damage inflictor for death messages.
-*	Better solution:  Add as parameter to all Killed() functions.
-*/
+ *	@brief Set in combat.cpp.  Used to pass the damage inflictor for death messages.
+ *	Better solution:  Add as parameter to all Killed() functions.
+ */
 inline entvars_t* g_pevLastInflictor = nullptr;
 inline DLL_GLOBAL bool g_fDrawLines = false;
 
@@ -148,8 +148,8 @@ struct GibLimit
 };
 
 /**
-*	@brief Data used to spawn gibs
-*/
+ *	@brief Data used to spawn gibs
+ */
 struct GibData
 {
 	const char* const ModelName;
@@ -157,10 +157,10 @@ struct GibData
 	const int SubModelCount;
 
 	/**
-	*	@brief Optional list of limits to apply to each submodel
-	*	Must be SubModelCount elements large
-	*	If used, instead of randomly selecting a submodel each submodel is used until the requested number of gibs have been spawned
-	*/
+	 *	@brief Optional list of limits to apply to each submodel
+	 *	Must be SubModelCount elements large
+	 *	If used, instead of randomly selecting a submodel each submodel is used until the requested number of gibs have been spawned
+	 */
 	const GibLimit* const Limits = nullptr;
 };
 

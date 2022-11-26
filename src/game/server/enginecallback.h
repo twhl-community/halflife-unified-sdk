@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 
 #pragma once
 
@@ -107,8 +107,8 @@ inline T* GET_PRIVATE(edict_t* pent)
 }
 
 #define FREE_PRIVATE (*g_engfuncs.pfnFreeEntPrivateData)
-//#define STRING			(*g_engfuncs.pfnSzFromIndex)
-//#define ALLOC_STRING	(*g_engfuncs.pfnAllocString)
+// #define STRING			(*g_engfuncs.pfnSzFromIndex)
+// #define ALLOC_STRING	(*g_engfuncs.pfnAllocString)
 #define FIND_ENTITY_BY_STRING (*g_engfuncs.pfnFindEntityByString)
 #define GETENTITYILLUM (*g_engfuncs.pfnGetEntityIllum)
 #define FIND_ENTITY_IN_SPHERE (*g_engfuncs.pfnFindEntityInSphere)

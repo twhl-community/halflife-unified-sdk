@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 //
 // hud_playerbrowse.cpp
 //
@@ -53,7 +53,7 @@ void CHudFlagIcons::InitHUDData()
 
 bool CHudFlagIcons::Draw(float flTime)
 {
-	//TODO: can this ever return 2?
+	// TODO: can this ever return 2?
 	if (gEngfuncs.IsSpectateOnly() != 2)
 	{
 		int y = ScreenHeight - 64;
@@ -89,7 +89,7 @@ bool CHudFlagIcons::Draw(float flTime)
 			const int minutesLeft = V_max(0, totalSecondsLeft / 60.0);
 			const int secondsLeft = V_max(0, totalSecondsLeft - (60 * minutesLeft));
 
-			//TODO: this buffer is static in vanilla Op4
+			// TODO: this buffer is static in vanilla Op4
 			char szBuf[40];
 			sprintf(szBuf, "%s %d:%02d", CHudTextMessage::BufferedLocaliseTextString("#CTFTimeRemain"), minutesLeft, secondsLeft);
 			gHUD.DrawHudString(5, ScreenHeight - 60, 200, szBuf, gHUD.m_HudColor);

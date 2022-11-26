@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   This source code contains proprietary and confidential information of
+ *   Valve LLC and its suppliers.  Access to this code is restricted to
+ *   persons who have executed a written SDK license with Valve.  Any access,
+ *   use or distribution of this code by or to any unlicensed person is illegal.
+ *
+ ****/
 //=========================================================
 // hgrunt
 //=========================================================
@@ -680,7 +680,7 @@ void CHGrunt::Shoot(bool firstShotInBurst)
 	}
 	else
 	{
-		//Check this so shotgunners don't shoot bursts if the animation happens to have the events
+		// Check this so shotgunners don't shoot bursts if the animation happens to have the events
 		if (firstShotInBurst)
 		{
 			Vector vecShootOrigin = GetGunPosition();
@@ -1920,9 +1920,9 @@ Schedule_t* CHGrunt::GetSchedule()
 				//!!!KELLY - this grunt was hit and is going to run to cover.
 				if (FOkToSpeak()) // && RANDOM_LONG(0,1))
 				{
-					//sentences::g_Sentences.PlayRndSz( ENT(pev), "HG_COVER", HGRUNT_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
+					// sentences::g_Sentences.PlayRndSz( ENT(pev), "HG_COVER", HGRUNT_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
 					m_iSentence = HGRUNT_SENT_COVER;
-					//JustSpoke();
+					// JustSpoke();
 				}
 				return GetScheduleOfType(SCHED_TAKE_COVER_FROM_ENEMY);
 			}
@@ -1993,9 +1993,9 @@ Schedule_t* CHGrunt::GetSchedule()
 				// charge the enemy's position.
 				if (FOkToSpeak()) // && RANDOM_LONG(0,1))
 				{
-					//sentences::g_Sentences.PlayRndSz( ENT(pev), "HG_CHARGE", HGRUNT_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
+					// sentences::g_Sentences.PlayRndSz( ENT(pev), "HG_CHARGE", HGRUNT_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
 					m_iSentence = HGRUNT_SENT_CHARGE;
-					//JustSpoke();
+					// JustSpoke();
 				}
 
 				return GetScheduleOfType(SCHED_GRUNT_ESTABLISH_LINE_OF_FIRE);

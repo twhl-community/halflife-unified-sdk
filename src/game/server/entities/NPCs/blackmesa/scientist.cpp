@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   This source code contains proprietary and confidential information of
+ *   Valve LLC and its suppliers.  Access to this code is restricted to
+ *   persons who have executed a written SDK license with Valve.  Any access,
+ *   use or distribution of this code by or to any unlicensed person is illegal.
+ *
+ ****/
 //=========================================================
 // human scientist (passive lab worker)
 //=========================================================
@@ -189,8 +189,8 @@ Schedule_t slIdleSciStand[] =
 				bits_COND_PROVOKED,
 
 			bits_SOUND_COMBAT | // sound flags
-				//bits_SOUND_PLAYER		|
-				//bits_SOUND_WORLD		|
+								// bits_SOUND_PLAYER		|
+								// bits_SOUND_WORLD		|
 				bits_SOUND_DANGER |
 				bits_SOUND_MEAT | // scents
 				bits_SOUND_CARCASS |
@@ -327,7 +327,7 @@ void CScientist::DeclineFollowing()
 void CScientist::Scream()
 {
 	// Marphy Fact Files Fix - This speech check always fails during combat, so removing
-	//if ( FOkToSpeak() )
+	// if ( FOkToSpeak() )
 	//{
 	Talk(10);
 	m_hTalkTarget = m_hEnemy;
@@ -370,7 +370,7 @@ void CScientist::StartTask(Task_t* pTask)
 
 	case TASK_SAY_FEAR:
 		// Marphy Fact FIles Fix - This speech check always fails during combat, so removing
-		//if ( FOkToSpeak() )
+		// if ( FOkToSpeak() )
 		//{
 		Talk(2);
 		m_hTalkTarget = m_hEnemy;
@@ -418,7 +418,7 @@ void CScientist::RunTask(Task_t* pTask)
 			TaskComplete();
 
 		// Marphy Fact Files Fix - Reducing scream (which didn't work before) chance significantly
-		//if ( RANDOM_LONG(0,31) < 8 )
+		// if ( RANDOM_LONG(0,31) < 8 )
 		if (RANDOM_LONG(0, 63) < 1)
 			Scream();
 		break;
@@ -426,8 +426,8 @@ void CScientist::RunTask(Task_t* pTask)
 	case TASK_MOVE_TO_TARGET_RANGE_SCARED:
 	{
 		// Marphy Fact Files Fix - Removing redundant scream
-		//if ( RANDOM_LONG(0,63)< 8 )
-		//Scream();
+		// if ( RANDOM_LONG(0,63)< 8 )
+		// Scream();
 
 		if (m_hEnemy == nullptr)
 		{
@@ -1077,7 +1077,7 @@ void CDeadScientist::OnCreate()
 	CBaseMonster::OnCreate();
 
 	// Corpses have less health
-	pev->health = 8; //GetSkillFloat("scientist_health"sv);
+	pev->health = 8; // GetSkillFloat("scientist_health"sv);
 	pev->model = MAKE_STRING("models/scientist.mdl");
 }
 
@@ -1289,7 +1289,7 @@ void CSittingScientist::SittingThink()
 				else
 					pev->sequence = m_baseSequence + SITTING_ANIM_sitlookright;
 
-				//AILogger->debug("sitting speak");
+				// AILogger->debug("sitting speak");
 			}
 		}
 		else if (i < 60)
@@ -1298,7 +1298,7 @@ void CSittingScientist::SittingThink()
 			m_headTurn = RANDOM_LONG(0, 8) * 10 - 40;
 			if (RANDOM_LONG(0, 99) < 5)
 			{
-				//AILogger->debug("sitting speak2");
+				// AILogger->debug("sitting speak2");
 				FIdleSpeak();
 			}
 		}

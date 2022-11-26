@@ -1,12 +1,12 @@
 /***
-*
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
-*	All Rights Reserved.
-*
-****/
+ *
+ *	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ ****/
 
 // qbsp.c
 
@@ -262,7 +262,7 @@ new windings will be created.
 ==================
 */
 
-//#define	DIVIDE_EPSILON	0.5
+// #define	DIVIDE_EPSILON	0.5
 #define DIVIDE_EPSILON ON_EPSILON
 
 

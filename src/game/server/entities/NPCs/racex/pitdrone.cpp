@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   This source code contains proprietary and confidential information of
+ *   Valve LLC and its suppliers.  Access to this code is restricted to
+ *   persons who have executed a written SDK license with Valve.  Any access,
+ *   use or distribution of this code by or to any unlicensed person is illegal.
+ *
+ ****/
 //=========================================================
 // pit drone - medium sized, fires sharp teeth like spikes and swipes with sharp appendages
 //=========================================================
@@ -141,8 +141,8 @@ void CPitdroneSpike::SpikeTouch(CBaseEntity* pOther)
 
 	SetTouch(nullptr);
 
-	//Stick it in the world for a bit
-	//TODO: maybe stick it on any entity that reports FL_WORLDBRUSH too?
+	// Stick it in the world for a bit
+	// TODO: maybe stick it on any entity that reports FL_WORLDBRUSH too?
 	if (0 == strcmp("worldspawn", STRING(pOther->pev->classname)))
 	{
 		const auto vecDir = pev->velocity.Normalize();
@@ -167,7 +167,7 @@ void CPitdroneSpike::SpikeTouch(CBaseEntity* pOther)
 	}
 	else
 	{
-		//Hit something else, remove
+		// Hit something else, remove
 		SetThink(&CBaseEntity::SUB_Remove);
 		pev->nextthink = gpGlobals->time + 0.1;
 	}
@@ -296,7 +296,7 @@ int CPitdrone::IgnoreConditions()
 
 int CPitdrone::IRelationship(CBaseEntity* pTarget)
 {
-	//Always mark pit drones as allies
+	// Always mark pit drones as allies
 	if (FClassnameIs(pTarget->pev, "monster_pitdrone"))
 	{
 		return R_AL;
@@ -560,8 +560,8 @@ void CPitdrone::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 		if (pHurt)
 		{
-			//pHurt->pev->punchangle.z = -15;
-			//pHurt->pev->punchangle.x = -45;
+			// pHurt->pev->punchangle.z = -15;
+			// pHurt->pev->punchangle.x = -45;
 			pHurt->pev->velocity = pHurt->pev->velocity - gpGlobals->v_forward * 100;
 			pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_up * 100;
 		}
@@ -620,9 +620,9 @@ void CPitdrone::HandleAnimEvent(MonsterEvent_t* pEvent)
 			}
 
 
-			//pHurt->pev->punchangle.x = RANDOM_LONG(0,34) - 5;
-			//pHurt->pev->punchangle.z = RANDOM_LONG(0,49) - 25;
-			//pHurt->pev->punchangle.y = RANDOM_LONG(0,89) - 45;
+			// pHurt->pev->punchangle.x = RANDOM_LONG(0,34) - 5;
+			// pHurt->pev->punchangle.z = RANDOM_LONG(0,49) - 25;
+			// pHurt->pev->punchangle.y = RANDOM_LONG(0,89) - 45;
 
 			// screeshake transforms the viewmodel as well as the viewangle. No problems with seeing the ends of the viewmodels.
 			UTIL_ScreenShake(pHurt->pev->origin, 25.0, 1.5, 0.7, 2);
@@ -687,7 +687,7 @@ void CPitdrone::Spawn()
 	}
 	else
 	{
-		//TODO: constrain value to valid range
+		// TODO: constrain value to valid range
 		SetBodygroup(PitdroneBodygroup::Weapons, (PitdroneWeapon::One + 1) - m_iInitialAmmo);
 	}
 
@@ -1199,7 +1199,7 @@ void CPitdrone::GibMonster()
 
 	if (CVAR_GET_FLOAT("violence_agibs") != 0) // Should never get here, but someone might call it directly
 	{
-		//Note: the original doesn't check for German censorship
+		// Note: the original doesn't check for German censorship
 		CGib::SpawnRandomGibs(pev, 6, PitDroneGibs); // Throw alien gibs
 	}
 

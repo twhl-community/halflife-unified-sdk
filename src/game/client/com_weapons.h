@@ -21,8 +21,8 @@ void HUD_PlaybackEvent(int flags, const struct edict_s* pInvoker, unsigned short
 void HUD_SetMaxSpeed(const struct edict_s* ed, float speed);
 
 /**
-*	@brief Set up functions needed to run weapons code client-side.
-*/
+ *	@brief Set up functions needed to run weapons code client-side.
+ */
 void HUD_SetupServerEngineInterface();
 
 int stub_PrecacheModel(const char* s);

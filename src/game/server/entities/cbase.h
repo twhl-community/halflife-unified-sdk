@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 
 #pragma once
 
@@ -29,7 +29,7 @@ CBaseEntity
 				CBaseGroup
 */
 
-//Include common headers here.
+// Include common headers here.
 #include <memory>
 #include <string_view>
 
@@ -77,9 +77,9 @@ extern "C" DLLEXPORT int GetEntityAPI2(DLL_FUNCTIONS* pFunctionTable, int* inter
 extern "C" DLLEXPORT int GetNewDLLFunctions(NEW_DLL_FUNCTIONS* pFunctionTable, int* interfaceVersion);
 
 /**
-*	@brief HACKHACK -- this is a hack to keep the node graph entity from "touching" things (like triggers)
-*	while it builds the graph
-*/
+ *	@brief HACKHACK -- this is a hack to keep the node graph entity from "touching" things (like triggers)
+ *	while it builds the graph
+ */
 inline bool gTouchDisabled = false;
 
 int DispatchSpawn(edict_t* pent);
@@ -172,13 +172,13 @@ public:
 	CBaseEntity* m_pLink;	 // used for temporary link-list operations.
 
 	/**
-	*	@brief Entity flags sent to the client in ::AddToFullPack
-	*/
+	 *	@brief Entity flags sent to the client in ::AddToFullPack
+	 */
 	byte m_EFlags = 0;
 
 	virtual ~CBaseEntity() {}
 
-	//Common helper functions
+	// Common helper functions
 
 	const char* GetClassname() const { return STRING(pev->classname); }
 
@@ -202,15 +202,15 @@ public:
 	// initialization functions
 
 	/**
-	*	@brief Called immediately after the constructor has finished to complete initialization.
-	*	@details Call the base class version at the start when overriding this function.
-	*/
+	 *	@brief Called immediately after the constructor has finished to complete initialization.
+	 *	@details Call the base class version at the start when overriding this function.
+	 */
 	virtual void OnCreate();
 
 	/**
-	*	@brief Called immediately before the destructor is executed.
-	*	@details Call the base class version at the end when overriding this function.
-	*/
+	 *	@brief Called immediately before the destructor is executed.
+	 *	@details Call the base class version at the end when overriding this function.
+	 */
 	virtual void OnDestroy();
 
 	virtual void Spawn() {}
@@ -301,13 +301,13 @@ public:
 
 	void* operator new(size_t stAllocateBlock)
 	{
-		//Allocate zero-initialized memory.
+		// Allocate zero-initialized memory.
 		auto memory = ::operator new(stAllocateBlock);
 		std::memset(memory, 0, stAllocateBlock);
 		return memory;
 	}
 
-	//Don't call delete on entities directly, tell the engine to delete it instead.
+	// Don't call delete on entities directly, tell the engine to delete it instead.
 	void operator delete(void* pMem)
 	{
 		::operator delete(pMem);
@@ -384,7 +384,7 @@ private:
 #ifdef _DEBUG
 		if (nullptr == dynamic_cast<T*>(this))
 		{
-			//If this happens, it means you tried to set a function from a class that this entity doesn't inherit from.
+			// If this happens, it means you tried to set a function from a class that this entity doesn't inherit from.
 			CBaseEntity::Logger->error("Trying to set function that is not a member of this entity's class hierarchy: {}:{}",
 				GetClassname(), name);
 		}
@@ -393,10 +393,10 @@ private:
 		pointer = static_cast<Dest>(func);
 
 #ifdef _DEBUG
-		//Pointer to member functions store the function address as a pointer at the start of the variable,
-		//so this extracts that and turns it into an address we can use.
-		//This only works if the function is non-virtual.
-		//Note that this is incredibly ugly and should be changed when possible to not rely on implementation details.
+		// Pointer to member functions store the function address as a pointer at the start of the variable,
+		// so this extracts that and turns it into an address we can use.
+		// This only works if the function is non-virtual.
+		// Note that this is incredibly ugly and should be changed when possible to not rely on implementation details.
 		const void* address = reinterpret_cast<const void*>(*reinterpret_cast<const int*>(&pointer));
 
 		FunctionCheck(address, name);
@@ -430,7 +430,7 @@ public:
 		return FunctionSet<T>(m_pfnBlocked, func, name);
 	}
 
-	//Overloads to catch explicit setting to null.
+	// Overloads to catch explicit setting to null.
 	BASEPTR ThinkSet(std::nullptr_t, const char* name)
 	{
 		m_pfnThink = nullptr;
@@ -483,7 +483,7 @@ public:
 		return g_Skill.GetValue(name);
 	}
 
-	//We use this variables to store each ammo count.
+	// We use this variables to store each ammo count.
 	int ammo_9mm;
 	int ammo_357;
 	int ammo_bolts;
@@ -494,7 +494,7 @@ public:
 	int ammo_argrens;
 	int ammo_spores;
 	int ammo_762;
-	//Special stuff for grenades and satchels.
+	// Special stuff for grenades and satchels.
 	float m_flStartThrow;
 	float m_flReleaseThrow;
 	int m_chargeReady;
@@ -637,7 +637,7 @@ public:
 	bool KeyValue(KeyValueData* pkvd) override;
 
 	TOGGLE_STATE m_toggle_state;
-	float m_flActivateFinished; //like attack_finished, but for doors
+	float m_flActivateFinished; // like attack_finished, but for doors
 	float m_flMoveDistance;		// how far a door should slide or rotate
 	float m_flWait;
 	float m_flLip;
@@ -723,7 +723,7 @@ class CBaseMonster;
 class CCineMonster;
 class CSound;
 
-//TODO: refactor this header so there are only header includes, then these will be at the top with the others
+// TODO: refactor this header so there are only header includes, then these will be at the top with the others
 #include "soundent.h"
 #include "basemonster.h"
 #include "player.h"
@@ -801,7 +801,7 @@ T* GetClassPtr(T* a)
 		// allocate private data
 		a = new T;
 
-		//Replicate the ALLOC_PRIVATE engine function's behavior.
+		// Replicate the ALLOC_PRIVATE engine function's behavior.
 		pev->pContainingEntity->pvPrivateData = a;
 
 		a->pev = pev;
@@ -835,7 +835,7 @@ env_sound_data
 push_trigger_data
 */
 
-//TODO: 4 is used as a magic number in FireBullets(Player) above. Refactor.
+// TODO: 4 is used as a magic number in FireBullets(Player) above. Refactor.
 #define TRACER_FREQ 4 // Tracers fire every 4 bullets
 
 // this moved here from world.cpp, to allow classes to be derived from it

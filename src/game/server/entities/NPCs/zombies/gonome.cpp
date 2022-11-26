@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   This source code contains proprietary and confidential information of
+ *   Valve LLC and its suppliers.  Access to this code is restricted to
+ *   persons who have executed a written SDK license with Valve.  Any access,
+ *   use or distribution of this code by or to any unlicensed person is illegal.
+ *
+ ****/
 //=========================================================
 // Zombie
 //=========================================================
@@ -74,7 +74,7 @@ void COFGonomeGuts::Spawn()
 	pev->rendermode = kRenderTransAlpha;
 	pev->renderamt = 255;
 
-	//TODO: probably shouldn't be assinging to x every time
+	// TODO: probably shouldn't be assinging to x every time
 	if (g_Language == LANGUAGE_GERMAN)
 	{
 		SetModel("sprites/bigspit.spr");
@@ -237,13 +237,13 @@ public:
 
 	float m_flNextThrowTime = 0;
 
-	//TODO: needs to be EHANDLE, save/restored or a save during a windup will cause problems
+	// TODO: needs to be EHANDLE, save/restored or a save during a windup will cause problems
 	COFGonomeGuts* m_pGonomeGuts = nullptr;
 	EHANDLE m_PlayerLocked;
 
 protected:
 	float GetOneSlashDamage() override { return GetSkillFloat("gonome_dmg_one_slash"sv); }
-	float GetBothSlashDamage() override { return 0; } //Not used, so just return 0
+	float GetBothSlashDamage() override { return 0; } // Not used, so just return 0
 
 	// Take 15% damage from bullets
 	virtual float GetBulletDamageFraction() const override { return 0.15f; }
@@ -286,7 +286,7 @@ Schedule_t slGonomeVictoryDance[] =
 				bits_COND_LIGHT_DAMAGE |
 				bits_COND_HEAVY_DAMAGE,
 			bits_SOUND_NONE,
-			"BabyVoltigoreVictoryDance" //Yup, it's a copy
+			"BabyVoltigoreVictoryDance" // Yup, it's a copy
 		},
 };
 
@@ -294,7 +294,7 @@ DEFINE_CUSTOM_SCHEDULES(COFGonome){
 	slGonomeVictoryDance,
 };
 
-//TODO: need to use CZombie instead of CBaseMonster
+// TODO: need to use CZombie instead of CBaseMonster
 IMPLEMENT_CUSTOM_SCHEDULES(COFGonome, CBaseMonster);
 
 void COFGonome::OnCreate()
@@ -339,7 +339,7 @@ void COFGonome::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 	case ZOMBIE_AE_ATTACK_GUTS_GRAB:
 	{
-		//Only if we still have an enemy at this point
+		// Only if we still have an enemy at this point
 		if (m_hEnemy)
 		{
 			Vector vecGutsPos, vecGutsAngles;
@@ -350,7 +350,7 @@ void COFGonome::HandleAnimEvent(MonsterEvent_t* pEvent)
 				m_pGonomeGuts = COFGonomeGuts::GonomeGutsCreate(vecGutsPos);
 			}
 
-			//Attach to hand for throwing
+			// Attach to hand for throwing
 			m_pGonomeGuts->pev->skin = entindex();
 			m_pGonomeGuts->pev->body = 1;
 			m_pGonomeGuts->pev->aiment = edict();
@@ -370,7 +370,7 @@ void COFGonome::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 	case ZOMBIE_AE_ATTACK_GUTS_THROW:
 	{
-		//Note: this check wasn't in the original. If an enemy dies during gut throw windup, this can be null and crash
+		// Note: this check wasn't in the original. If an enemy dies during gut throw windup, this can be null and crash
 		if (m_hEnemy)
 		{
 			Vector vecGutsPos, vecGutsAngles;
@@ -392,7 +392,7 @@ void COFGonome::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 			UTIL_BloodDrips(vecGutsPos, direction, BLOOD_COLOR_RED, 35);
 
-			//Detach from owner
+			// Detach from owner
 			m_pGonomeGuts->pev->skin = 0;
 			m_pGonomeGuts->pev->body = 0;
 			m_pGonomeGuts->pev->aiment = nullptr;
@@ -462,7 +462,7 @@ void COFGonome::HandleAnimEvent(MonsterEvent_t* pEvent)
 		m_PlayerLocked = nullptr;
 
 		// do stuff for this event.
-		//AILogger->debug("Slash left!");
+		// AILogger->debug("Slash left!");
 		CBaseEntity* pHurt = CheckTraceHullAttack(70, GetSkillFloat("gonome_dmg_one_bite"sv), DMG_SLASH);
 		if (pHurt)
 		{
@@ -501,7 +501,7 @@ void COFGonome::Spawn()
 //=========================================================
 void COFGonome::Precache()
 {
-	//Don't call CZombie::Spawn here!
+	// Don't call CZombie::Spawn here!
 	PrecacheModel(STRING(pev->model));
 	PrecacheModel("sprites/bigspit.spr");
 

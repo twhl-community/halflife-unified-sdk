@@ -1,12 +1,12 @@
 /***
-*
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
-*	All Rights Reserved.
-*
-****/
+ *
+ *	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ ****/
 
 // divide.h
 
@@ -84,7 +84,7 @@ void SubdivideFace(face_t* f, face_t** prevptr)
 			SplitFace(f, &plane, &front, &back);
 			if (!front || !back)
 			{
-				//PrintMemory();
+				// PrintMemory();
 				printf("SubdivideFace: didn't split the %d-sided polygon @(%.0f,%.0f,%.0f)",
 					f->numpoints, f->pts[0][0], f->pts[0][1], f->pts[0][2]);
 				break;
@@ -118,7 +118,7 @@ int TexelDelta(face_t* f, dplane_t* plane)
 			delta = 0;
 		else
 		{
-			delta = 0;		 //TexelSize( front ) + TexelSize( back ) - current;		// Change in texel size
+			delta = 0;		 // TexelSize( front ) + TexelSize( back ) - current;		// Change in texel size
 			FreeFace(front); // Free new faces
 			FreeFace(back);
 		}

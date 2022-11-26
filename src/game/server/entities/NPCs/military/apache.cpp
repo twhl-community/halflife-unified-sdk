@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   This source code contains proprietary and confidential information of
+ *   Valve LLC and its suppliers.  Access to this code is restricted to
+ *   persons who have executed a written SDK license with Valve.  Any access,
+ *   use or distribution of this code by or to any unlicensed person is illegal.
+ *
+ ****/
 
 #include "cbase.h"
 #include "apache.h"
@@ -211,7 +211,7 @@ void CApache::DyingThink()
 		WRITE_BYTE(50);
 
 		// Model
-		WRITE_SHORT(m_iBodyGibs); //model id#
+		WRITE_SHORT(m_iBodyGibs); // model id#
 
 		// # of shards
 		WRITE_BYTE(4); // let client decide
@@ -328,7 +328,7 @@ void CApache::DyingThink()
 		WRITE_BYTE(30);
 
 		// Model
-		WRITE_SHORT(m_iBodyGibs); //model id#
+		WRITE_SHORT(m_iBodyGibs); // model id#
 
 		// # of shards
 		WRITE_BYTE(200);
@@ -404,7 +404,7 @@ void CApache::HuntThink()
 		Look(4092);
 		m_hEnemy = BestVisibleEnemy();
 
-		//If i have an enemy i'm in combat, otherwise i'm patrolling.
+		// If i have an enemy i'm in combat, otherwise i'm patrolling.
 		if (m_hEnemy != nullptr)
 		{
 			m_MonsterState = MONSTERSTATE_COMBAT;
@@ -873,26 +873,26 @@ bool CApache::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float 
 	// AILogger->debug("{:.0f}", flDamage);
 	const bool result = CBaseEntity::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
 
-	//Are we damaged at all?
+	// Are we damaged at all?
 	if (pev->health < pev->max_health)
 	{
-		//Took some damage.
+		// Took some damage.
 		SetConditions(bits_COND_LIGHT_DAMAGE);
 
 		if (pev->health < (pev->max_health / 2))
 		{
-			//Seriously damaged now.
+			// Seriously damaged now.
 			SetConditions(bits_COND_HEAVY_DAMAGE);
 		}
 		else
 		{
-			//Maybe somebody healed us somehow (trigger_hurt with negative damage?), clear this.
+			// Maybe somebody healed us somehow (trigger_hurt with negative damage?), clear this.
 			ClearConditions(bits_COND_HEAVY_DAMAGE);
 		}
 	}
 	else
 	{
-		//Maybe somebody healed us somehow (trigger_hurt with negative damage?), clear this.
+		// Maybe somebody healed us somehow (trigger_hurt with negative damage?), clear this.
 		ClearConditions(bits_COND_LIGHT_DAMAGE);
 	}
 

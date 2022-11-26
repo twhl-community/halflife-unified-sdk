@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   This source code contains proprietary and confidential information of
+ *   Valve LLC and its suppliers.  Access to this code is restricted to
+ *   persons who have executed a written SDK license with Valve.  Any access,
+ *   use or distribution of this code by or to any unlicensed person is illegal.
+ *
+ ****/
 //=========================================================
 // Squadmonster  functions
 //=========================================================
@@ -243,7 +243,7 @@ void COFSquadTalkMonster::SquadMakeEnemy(CBaseEntity* pEnemy)
 
 	if (!InSquad())
 	{
-		//TODO: pEnemy could be null here
+		// TODO: pEnemy could be null here
 		if (m_hEnemy != nullptr)
 		{
 			// remember their current enemy
@@ -302,7 +302,7 @@ void COFSquadTalkMonster::SquadMakeEnemy(CBaseEntity* pEnemy)
 		}
 	}
 
-	//Seems a bit redundant to recalculate this now
+	// Seems a bit redundant to recalculate this now
 	const bool leaderIsStillFollowing = squadLeader->m_hTargetEnt != nullptr && squadLeader->m_hTargetEnt->IsPlayer();
 
 	// reset members who aren't activly engaged in fighting
@@ -538,7 +538,7 @@ bool COFSquadTalkMonster::NoFriendlyFire()
 		return false;
 	}
 
-	//UTIL_MakeVectors ( pev->angles );
+	// UTIL_MakeVectors ( pev->angles );
 
 	vecLeftSide = pev->origin - (gpGlobals->v_right * (pev->size.x * 1.5));
 	vecRightSide = pev->origin + (gpGlobals->v_right * (pev->size.x * 1.5));
@@ -697,7 +697,7 @@ void COFSquadTalkMonster::FollowerUse(CBaseEntity* pActivator, CBaseEntity* pCal
 		}
 		else if (CanFollow())
 		{
-			//Player can form squads of up to 6 NPCs
+			// Player can form squads of up to 6 NPCs
 			LimitFollowers(pCaller, 6);
 
 			if ((m_afMemory & bits_MEMORY_PROVOKED) != 0)
@@ -757,26 +757,26 @@ bool COFSquadTalkMonster::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAtta
 		return CTalkMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
 	}
 
-	//If this attack deals enough damage to instakill me...
+	// If this attack deals enough damage to instakill me...
 	if (pev->deadflag == DEAD_NO && flDamage >= pev->max_health)
 	{
-		//Tell my squad mates...
+		// Tell my squad mates...
 		auto pSquadLeader = MySquadLeader();
 
 		for (int i = 0; i < MAX_SQUAD_MEMBERS; i++)
 		{
 			COFSquadTalkMonster* pSquadMember = pSquadLeader->MySquadMember(i);
 
-			//If they're alive and have no enemy...
+			// If they're alive and have no enemy...
 			if (pSquadMember && pSquadMember->IsAlive() && !pSquadMember->m_hEnemy)
 			{
-				//If they're not being eaten by a barnacle and the attacker is a player...
+				// If they're not being eaten by a barnacle and the attacker is a player...
 				if (m_MonsterState != MONSTERSTATE_PRONE && (pevAttacker->flags & FL_CLIENT) != 0)
 				{
-					//Friendly fire!
+					// Friendly fire!
 					pSquadMember->Remember(bits_MEMORY_PROVOKED);
 				}
-				//Attacked by an NPC...
+				// Attacked by an NPC...
 				else
 				{
 					g_vecAttackDir = ((pevAttacker->origin + pevAttacker->view_ofs) - (pSquadMember->pev->origin + pSquadMember->pev->view_ofs)).Normalize();
@@ -787,16 +787,16 @@ bool COFSquadTalkMonster::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAtta
 
 					UTIL_TraceLine(vecStart, vecEnd, dont_ignore_monsters, pSquadMember->edict(), &tr);
 
-					//If they didn't see any enemy...
+					// If they didn't see any enemy...
 					if (tr.flFraction == 1.0)
 					{
-						//Hunt for enemies
+						// Hunt for enemies
 						m_IdealMonsterState = MONSTERSTATE_HUNT;
 					}
-					//They can see an enemy
+					// They can see an enemy
 					else
 					{
-						//Make the enemy an enemy of my squadmate
+						// Make the enemy an enemy of my squadmate
 						pSquadMember->m_hEnemy = CBaseEntity::Instance(tr.pHit);
 						pSquadMember->m_vecEnemyLKP = pevAttacker->origin;
 						pSquadMember->SetConditions(bits_COND_NEW_ENEMY);

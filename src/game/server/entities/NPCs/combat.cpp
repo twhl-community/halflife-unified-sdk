@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 /*
 
 ===== combat.cpp ========================================================
@@ -171,7 +171,7 @@ void CGib::SpawnHeadGib(entvars_t* pevVictim)
 
 void CGib::SpawnRandomGibs(entvars_t* pevVictim, int cGibs, const GibData& gibData)
 {
-	//Track the number of uses of a particular submodel so we can avoid spawning too many of the same
+	// Track the number of uses of a particular submodel so we can avoid spawning too many of the same
 	auto pLimitTracking = gibData.Limits != nullptr ? reinterpret_cast<int*>(stackalloc(sizeof(int) * gibData.SubModelCount)) : nullptr;
 
 	if (pLimitTracking)
@@ -542,10 +542,10 @@ void CBaseMonster::BecomeDead()
 
 	// make the corpse fly away from the attack vector
 	pev->movetype = MOVETYPE_TOSS;
-	//pev->flags &= ~FL_ONGROUND;
-	//pev->origin.z += 2;
-	//pev->velocity = g_vecAttackDir * -1;
-	//pev->velocity = pev->velocity * RANDOM_FLOAT( 300, 400 );
+	// pev->flags &= ~FL_ONGROUND;
+	// pev->origin.z += 2;
+	// pev->velocity = g_vecAttackDir * -1;
+	// pev->velocity = pev->velocity * RANDOM_FLOAT( 300, 400 );
 }
 
 
@@ -649,7 +649,7 @@ void CBaseMonster::Killed(entvars_t* pevAttacker, int iGib)
 		pev->health = 0;
 	}
 
-	//pev->enemy = ENT( pevAttacker );//why? (sjb)
+	// pev->enemy = ENT( pevAttacker );//why? (sjb)
 
 	m_IdealMonsterState = MONSTERSTATE_DEAD;
 
@@ -732,7 +732,7 @@ void CGib::BounceGibTouch(CBaseEntity* pOther)
 	Vector vecSpot;
 	TraceResult tr;
 
-	//if ( RANDOM_LONG(0,1) )
+	// if ( RANDOM_LONG(0,1) )
 	//	return;// don't bleed everytime
 
 	if ((pev->flags & FL_ONGROUND) != 0)
@@ -747,7 +747,7 @@ void CGib::BounceGibTouch(CBaseEntity* pOther)
 	{
 		if (g_Language != LANGUAGE_GERMAN && m_cBloodDecals > 0 && m_bloodColor != DONT_BLEED)
 		{
-			vecSpot = pev->origin + Vector(0, 0, 8); //move up a bit, and trace down.
+			vecSpot = pev->origin + Vector(0, 0, 8); // move up a bit, and trace down.
 			UTIL_TraceLine(vecSpot, vecSpot + Vector(0, 0, -24), ignore_monsters, ENT(pev), &tr);
 
 			UTIL_BloodDecalTrace(&tr, m_bloodColor);
@@ -1251,7 +1251,7 @@ bool CBaseEntity::FVisible(CBaseEntity* pEntity)
 	if ((pev->waterlevel != WaterLevel::Head && pEntity->pev->waterlevel == WaterLevel::Head) || (pev->waterlevel == WaterLevel::Head && pEntity->pev->waterlevel == WaterLevel::Dry))
 		return false;
 
-	vecLookerOrigin = pev->origin + pev->view_ofs; //look through the caller's 'eyes'
+	vecLookerOrigin = pev->origin + pev->view_ofs; // look through the caller's 'eyes'
 	vecTargetOrigin = pEntity->EyePosition();
 
 	UTIL_TraceLine(vecLookerOrigin, vecTargetOrigin, ignore_monsters, ignore_glass, ENT(pev) /*pentIgnore*/, &tr);
@@ -1275,7 +1275,7 @@ bool CBaseEntity::FVisible(const Vector& vecOrigin)
 	TraceResult tr;
 	Vector vecLookerOrigin;
 
-	vecLookerOrigin = EyePosition(); //look through the caller's 'eyes'
+	vecLookerOrigin = EyePosition(); // look through the caller's 'eyes'
 
 	UTIL_TraceLine(vecLookerOrigin, vecOrigin, ignore_monsters, ignore_glass, ENT(pev) /*pentIgnore*/, &tr);
 
@@ -1564,8 +1564,8 @@ Vector CBaseEntity::FireBulletsPlayer(unsigned int cShots, Vector vecSrc, Vector
 
 	for (unsigned int iShot = 1; iShot <= cShots; iShot++)
 	{
-		//Use player's random seed.
-		// get circular gaussian spread
+		// Use player's random seed.
+		//  get circular gaussian spread
 		x = UTIL_SharedRandomFloat(shared_rand + iShot, -0.5, 0.5) + UTIL_SharedRandomFloat(shared_rand + (1 + iShot), -0.5, 0.5);
 		y = UTIL_SharedRandomFloat(shared_rand + (2 + iShot), -0.5, 0.5) + UTIL_SharedRandomFloat(shared_rand + (3 + iShot), -0.5, 0.5);
 		z = x * x + y * y;

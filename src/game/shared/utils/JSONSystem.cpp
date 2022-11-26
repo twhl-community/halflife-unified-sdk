@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 
 #include <string_view>
 
@@ -79,7 +79,7 @@ public:
 
 		const auto formatContents = [](std::string&& contents)
 		{
-			//Trim contents to a reasonable size.
+			// Trim contents to a reasonable size.
 			if (contents.length() > MaxValidationContentsLogLength)
 			{
 				contents.resize(MaxValidationContentsLogLength);
@@ -116,7 +116,7 @@ bool JSONSystem::Initialize()
 
 void JSONSystem::PostInitialize()
 {
-	//Nothing.
+	// Nothing.
 }
 
 void JSONSystem::Shutdown()
@@ -162,7 +162,7 @@ const json_validator* JSONSystem::GetOrCreateValidator(std::string_view schemaNa
 			{ return schema.Name == schemaName; });
 		it != m_Schemas.end())
 	{
-		//Create validator on demand.
+		// Create validator on demand.
 		if (!it->Validator.has_value())
 		{
 			m_Logger->trace("Creating validator for schema \"{}\"", schemaName);
@@ -202,7 +202,7 @@ std::optional<json> JSONSystem::LoadJSONFile(const char* fileName, const JSONLoa
 {
 	if (!m_Logger)
 	{
-		//Can't parse JSON when we're not initialized
+		// Can't parse JSON when we're not initialized
 		return {};
 	}
 
@@ -213,7 +213,7 @@ std::optional<json> JSONSystem::LoadJSONFile(const char* fileName, const JSONLoa
 
 	auto validator = [&]() -> const json_validator*
 	{
-		//Only validate if enabled.
+		// Only validate if enabled.
 		if (0 == m_JsonSchemaValidation->value)
 		{
 			return nullptr;

@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 #include "hud.h"
 
 #include "cbase.h"
@@ -359,7 +359,7 @@ void EV_HLDM_FireBullets(int idx, float* forward, float* right, float* up, int c
 		Vector vecDir, vecEnd;
 
 		float x, y, z;
-		//We randomize for the Shotgun.
+		// We randomize for the Shotgun.
 		if (iBulletType == BULLET_PLAYER_BUCKSHOT)
 		{
 			do
@@ -374,7 +374,7 @@ void EV_HLDM_FireBullets(int idx, float* forward, float* right, float* up, int c
 				vecDir[i] = vecDirShooting[i] + x * flSpreadX * right[i] + y * flSpreadY * up[i];
 				vecEnd[i] = vecSrc[i] + flDistance * vecDir[i];
 			}
-		} //But other guns already have their spread randomized in the synched spread.
+		} // But other guns already have their spread randomized in the synched spread.
 		else
 		{
 
@@ -1108,8 +1108,8 @@ void EV_FireGauss(event_args_t* args)
 //======================
 int g_iSwing;
 
-//Only predict the miss sounds, hit sounds are still played
-//server side, so players don't get the wrong idea.
+// Only predict the miss sounds, hit sounds are still played
+// server side, so players don't get the wrong idea.
 void EV_Crowbar(event_args_t* args)
 {
 	int idx;
@@ -1118,7 +1118,7 @@ void EV_Crowbar(event_args_t* args)
 	idx = args->entindex;
 	VectorCopy(args->origin, origin);
 
-	//Play Swing sound
+	// Play Swing sound
 	gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/cbar_miss1.wav", 1, ATTN_NORM, 0, PITCH_NORM);
 
 	if (EV_IsLocal(idx))
@@ -1197,12 +1197,12 @@ void EV_FireCrossbow2(event_args_t* args)
 	gEngfuncs.pEventAPI->EV_SetTraceHull(2);
 	gEngfuncs.pEventAPI->EV_PlayerTrace(vecSrc, vecEnd, PM_STUDIO_BOX, -1, &tr);
 
-	//We hit something
+	// We hit something
 	if (tr.fraction < 1.0)
 	{
 		physent_t* pe = gEngfuncs.pEventAPI->EV_GetPhysent(tr.ent);
 
-		//Not the world, let's assume we hit something organic ( dog, cat, uncle joe, etc ).
+		// Not the world, let's assume we hit something organic ( dog, cat, uncle joe, etc ).
 		if (pe->solid != SOLID_BSP)
 		{
 			switch (gEngfuncs.pfnRandomLong(0, 1))
@@ -1215,12 +1215,12 @@ void EV_FireCrossbow2(event_args_t* args)
 				break;
 			}
 		}
-		//Stick to world but don't stick to glass, it might break and leave the bolt floating. It can still stick to other non-transparent breakables though.
+		// Stick to world but don't stick to glass, it might break and leave the bolt floating. It can still stick to other non-transparent breakables though.
 		else if (pe->rendermode == kRenderNormal)
 		{
 			gEngfuncs.pEventAPI->EV_PlaySound(0, tr.endpos, CHAN_BODY, "weapons/xbow_hit1.wav", gEngfuncs.pfnRandomFloat(0.95, 1.0), ATTN_NORM, 0, PITCH_NORM);
 
-			//Not underwater, do some sparks...
+			// Not underwater, do some sparks...
 			if (gEngfuncs.PM_PointContents(tr.endpos, nullptr) != CONTENTS_WATER)
 				gEngfuncs.pEfxAPI->R_SparkShower(tr.endpos);
 
@@ -1233,10 +1233,10 @@ void EV_FireCrossbow2(event_args_t* args)
 
 			if (bolt)
 			{
-				bolt->flags |= (FTENT_CLIENTCUSTOM);					 //So it calls the callback function.
+				bolt->flags |= (FTENT_CLIENTCUSTOM);					 // So it calls the callback function.
 				bolt->entity.baseline.vuser1 = tr.endpos - forward * 10; // Pull out a little bit
-				bolt->entity.baseline.vuser2 = vBoltAngles;				 //Look forward!
-				bolt->callback = EV_BoltCallback;						 //So we can set the angles and origin back. (Stick the bolt to the wall)
+				bolt->entity.baseline.vuser2 = vBoltAngles;				 // Look forward!
+				bolt->callback = EV_BoltCallback;						 // So we can set the angles and origin back. (Stick the bolt to the wall)
 			}
 		}
 	}
@@ -1244,7 +1244,7 @@ void EV_FireCrossbow2(event_args_t* args)
 	gEngfuncs.pEventAPI->EV_PopPMStates();
 }
 
-//TODO: Fully predict the fliying bolt.
+// TODO: Fully predict the fliying bolt.
 void EV_FireCrossbow(event_args_t* args)
 {
 	int idx;
@@ -1256,7 +1256,7 @@ void EV_FireCrossbow(event_args_t* args)
 	gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/xbow_fire1.wav", 1, ATTN_NORM, 0, 93 + gEngfuncs.pfnRandomLong(0, 0xF));
 	gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_ITEM, "weapons/xbow_reload1.wav", gEngfuncs.pfnRandomFloat(0.95, 1.0), ATTN_NORM, 0, 93 + gEngfuncs.pfnRandomLong(0, 0xF));
 
-	//Only play the weapon anims if I shot it.
+	// Only play the weapon anims if I shot it.
 	if (EV_IsLocal(idx))
 	{
 		if (0 != args->iparam1)
@@ -1285,7 +1285,7 @@ void EV_FireRpg(event_args_t* args)
 	gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/rocketfire1.wav", 0.9, ATTN_NORM, 0, PITCH_NORM);
 	gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_ITEM, "weapons/glauncher.wav", 0.7, ATTN_NORM, 0, PITCH_NORM);
 
-	//Only play the weapon anims if I shot it.
+	// Only play the weapon anims if I shot it.
 	if (EV_IsLocal(idx))
 	{
 		gEngfuncs.pEventAPI->EV_WeaponAnimation(RPG_FIRE2, 0);
@@ -1337,10 +1337,10 @@ void EV_EgonFire(event_args_t* args)
 	}
 	else
 	{
-		//If there is any sound playing already, kill it.
-		//This is necessary because multiple sounds can play on the same channel at the same time.
-		//In some cases, more than 1 run sound plays when the egon stops firing, in which case only the earliest entry in the list is stopped.
-		//This ensures no more than 1 of those is ever active at the same time.
+		// If there is any sound playing already, kill it.
+		// This is necessary because multiple sounds can play on the same channel at the same time.
+		// In some cases, more than 1 run sound plays when the egon stops firing, in which case only the earliest entry in the list is stopped.
+		// This ensures no more than 1 of those is ever active at the same time.
 		gEngfuncs.pEventAPI->EV_StopSound(idx, CHAN_STATIC, EGON_SOUND_RUN);
 
 		if (iFireMode == FIRE_WIDE)
@@ -1349,11 +1349,11 @@ void EV_EgonFire(event_args_t* args)
 			gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_STATIC, EGON_SOUND_RUN, 0.9, ATTN_NORM, 0, 100);
 	}
 
-	//Only play the weapon anims if I shot it.
+	// Only play the weapon anims if I shot it.
 	if (EV_IsLocal(idx))
 		gEngfuncs.pEventAPI->EV_WeaponAnimation(g_fireAnims1[gEngfuncs.pfnRandomLong(0, 3)], 0);
 
-	if (iStartup && EV_IsLocal(idx) && !pBeam && !pBeam2 && !pFlare && 0 != cl_lw->value) //Adrian: Added the cl_lw check for those lital people that hate weapon prediction.
+	if (iStartup && EV_IsLocal(idx) && !pBeam && !pBeam2 && !pFlare && 0 != cl_lw->value) // Adrian: Added the cl_lw check for those lital people that hate weapon prediction.
 	{
 		Vector vecSrc, vecEnd, angles, forward, right, up;
 		pmtrace_t tr;
@@ -1389,7 +1389,7 @@ void EV_EgonFire(event_args_t* args)
 			float g = 50.0f;
 			float b = 125.0f;
 
-			//if ( IEngineStudio.IsHardware() )
+			// if ( IEngineStudio.IsHardware() )
 			{
 				r /= 255.0f;
 				g /= 255.0f;
@@ -1427,9 +1427,9 @@ void EV_EgonStop(event_args_t* args)
 
 	gEngfuncs.pEventAPI->EV_StopSound(idx, CHAN_STATIC, EGON_SOUND_RUN);
 
-	//Only stop the sound if the event was sent by the same source as the owner of the egon.
-	//If the local player owns the egon then only the local event should play this sound.
-	//If another player owns it, only the server event should play it.
+	// Only stop the sound if the event was sent by the same source as the owner of the egon.
+	// If the local player owns the egon then only the local event should play this sound.
+	// If another player owns it, only the server event should play it.
 	if (0 != args->iparam1)
 		gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, EGON_SOUND_OFF, 0.98, ATTN_NORM, 0, 100);
 
@@ -1485,7 +1485,7 @@ void EV_HornetGunFire(event_args_t* args)
 	VectorCopy(args->origin, origin);
 	VectorCopy(args->angles, angles);
 
-	//Only play the weapon anims if I shot it.
+	// Only play the weapon anims if I shot it.
 	if (EV_IsLocal(idx))
 	{
 		V_PunchAxis(0, gEngfuncs.pfnRandomLong(0, 2));
@@ -1512,8 +1512,8 @@ void EV_HornetGunFire(event_args_t* args)
 //======================
 //	   TRIPMINE START
 //======================
-//We only check if it's possible to put a trip mine
-//and if it is, then we play the animation. Server still places it.
+// We only check if it's possible to put a trip mine
+// and if it is, then we play the animation. Server still places it.
 void EV_TripmineFire(event_args_t* args)
 {
 	int idx;
@@ -1542,7 +1542,7 @@ void EV_TripmineFire(event_args_t* args)
 	gEngfuncs.pEventAPI->EV_SetTraceHull(2);
 	gEngfuncs.pEventAPI->EV_PlayerTrace(vecSrc, vecSrc + forward * 128, PM_NORMAL, -1, &tr);
 
-	//Hit something solid
+	// Hit something solid
 	if (tr.fraction < 1.0)
 		gEngfuncs.pEventAPI->EV_WeaponAnimation(TRIPMINE_DRAW, 0);
 
@@ -1581,7 +1581,7 @@ void EV_SnarkFire(event_args_t* args)
 	gEngfuncs.pEventAPI->EV_SetTraceHull(2);
 	gEngfuncs.pEventAPI->EV_PlayerTrace(vecSrc + forward * 20, vecSrc + forward * 64, PM_NORMAL, -1, &tr);
 
-	//Find space to drop the thing.
+	// Find space to drop the thing.
 	if (tr.allsolid == 0 && tr.startsolid == 0 && tr.fraction > 0.25)
 		gEngfuncs.pEventAPI->EV_WeaponAnimation(SQUEAK_THROW, 0);
 
@@ -1649,8 +1649,8 @@ void EV_FireEagle(event_args_t* args)
 //======================
 int g_iClub;
 
-//Only predict the miss sounds, hit sounds are still played
-//server side, so players don't get the wrong idea.
+// Only predict the miss sounds, hit sounds are still played
+// server side, so players don't get the wrong idea.
 void EV_Pipewrench(event_args_t* args)
 {
 	const int idx = args->entindex;
@@ -1663,7 +1663,7 @@ void EV_Pipewrench(event_args_t* args)
 		return;
 	}
 
-	//Play Swing sound
+	// Play Swing sound
 	if (iBigSwing)
 	{
 		if (hitSomething)
@@ -1822,7 +1822,7 @@ void EV_FireDisplacer(event_args_t* args)
 
 	case DisplacerMode::FIRED:
 	{
-		//bparam1 indicates whether it's a primary or secondary attack. - Solokiller
+		// bparam1 indicates whether it's a primary or secondary attack. - Solokiller
 		if (0 == args->bparam1)
 		{
 			gEngfuncs.pEventAPI->EV_PlaySound(
@@ -1944,8 +1944,8 @@ void EV_SniperRifle(event_args_t* args)
 		args->fparam2);
 }
 
-//Only predict the miss sounds, hit sounds are still played
-//server side, so players don't get the wrong idea.
+// Only predict the miss sounds, hit sounds are still played
+// server side, so players don't get the wrong idea.
 void EV_Knife(event_args_t* args)
 {
 	const int idx = args->entindex;
@@ -1967,7 +1967,7 @@ void EV_Knife(event_args_t* args)
 		break;
 	}
 
-	//Play Swing sound
+	// Play Swing sound
 	gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, pszSwingSound, 1, ATTN_NORM, 0, PITCH_NORM);
 
 	if (EV_IsLocal(idx))

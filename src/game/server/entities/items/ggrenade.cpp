@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 /*
 
 ===== generic grenade.cpp ========================================================
@@ -61,8 +61,8 @@ void CGrenade::Explode(TraceResult* pTrace, int bitsDamageType)
 {
 	float flRndSound; // sound randomizer
 
-	pev->model = string_t::Null;	// invisible
-	pev->solid = SOLID_NOT;	  // intangible
+	pev->model = string_t::Null; // invisible
+	pev->solid = SOLID_NOT;		 // intangible
 
 	pev->takedamage = DAMAGE_NO;
 
@@ -262,7 +262,7 @@ void CGrenade::BounceTouch(CBaseEntity* pOther)
 
 	if (!m_fRegisteredSound && vecTestVelocity.Length() <= 60)
 	{
-		//CBaseEntity::Logger->debug("Grenade Registered!: {}", vecTestVelocity.Length());
+		// CBaseEntity::Logger->debug("Grenade Registered!: {}", vecTestVelocity.Length());
 
 		// grenade is moving really slow. It's probably very close to where it will ultimately stop moving.
 		// go ahead and emit the danger sound.

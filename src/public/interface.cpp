@@ -27,8 +27,8 @@ void* GetModuleHandle(const char* name)
 
 	if ((handle = dlopen(name, RTLD_NOW)) == nullptr)
 	{
-		//printf("Error:%s\n",dlerror());
-		// couldn't open this file
+		// printf("Error:%s\n",dlerror());
+		//  couldn't open this file
 		return nullptr;
 	}
 
@@ -81,7 +81,7 @@ DLLEXPORT IBaseInterface* CreateInterface(const char* pName, int* pReturnCode)
 	return nullptr;
 }
 
-//Local version of CreateInterface, marked static so that it is never merged with the version in other libraries
+// Local version of CreateInterface, marked static so that it is never merged with the version in other libraries
 static IBaseInterface* CreateInterfaceLocal(const char* pName, int* pReturnCode)
 {
 	InterfaceReg* pCur;
@@ -134,7 +134,7 @@ CSysModule* Sys_LoadModule(const char* pModuleName)
 		char szCwd[1024];
 		char szAbsoluteModuleName[1024];
 
-		//Prevent loading from garbage paths if the path is too large for the buffer
+		// Prevent loading from garbage paths if the path is too large for the buffer
 		if (!getcwd(szCwd, sizeof(szCwd)))
 		{
 			exit(-1);
@@ -205,9 +205,9 @@ CreateInterfaceFn Sys_GetFactory(CSysModule* pModule)
 
 	HMODULE hDLL = reinterpret_cast<HMODULE>(pModule);
 
-	//This used to cause problems when compiling with GCC,
-	//but it is now allowed to convert between pointer-to-object to pointer-to-function
-	//See https://en.cppreference.com/w/cpp/language/reinterpret_cast for more information
+	// This used to cause problems when compiling with GCC,
+	// but it is now allowed to convert between pointer-to-object to pointer-to-function
+	// See https://en.cppreference.com/w/cpp/language/reinterpret_cast for more information
 	return reinterpret_cast<CreateInterfaceFn>(GetProcAddress(hDLL, CREATEINTERFACE_PROCNAME));
 }
 

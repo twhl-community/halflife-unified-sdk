@@ -7,9 +7,9 @@
 	Dorky status bar stuff
 */
 
-void MeterStart( int max );
-void MeterAdvance( int amt );
-void MeterEnd( void );
+void MeterStart(int max);
+void MeterAdvance(int amt);
+void MeterEnd(void);
 
 extern int showmeter;
 

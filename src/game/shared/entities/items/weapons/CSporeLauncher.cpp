@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 #include "cbase.h"
 #include "UserMessages.h"
 
@@ -339,7 +339,7 @@ void CSporeLauncher::GetWeaponData(weapon_data_t& data)
 {
 	BaseClass::GetWeaponData(data);
 
-	//m_ReloadState is called m_fInSpecialReload in Op4. - Solokiller
+	// m_ReloadState is called m_fInSpecialReload in Op4. - Solokiller
 	data.m_fInSpecialReload = static_cast<int>(m_ReloadState);
 }
 
@@ -441,7 +441,7 @@ public:
 		auto vecLaunchDir = pev->angles;
 
 		vecLaunchDir.x -= 90;
-		//Rotate it so spores that aren't rotated in Hammer point in the right direction. - Solokiller
+		// Rotate it so spores that aren't rotated in Hammer point in the right direction. - Solokiller
 		vecLaunchDir.y += 180;
 
 		vecLaunchDir.x += RANDOM_FLOAT(-20, 20);

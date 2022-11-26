@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   This source code contains proprietary and confidential information of
+ *   Valve LLC and its suppliers.  Access to this code is restricted to
+ *   persons who have executed a written SDK license with Valve.  Any access,
+ *   use or distribution of this code by or to any unlicensed person is illegal.
+ *
+ ****/
 #include "cbase.h"
 
 class COFNuclearBombButton : public CBaseEntity
@@ -233,8 +233,8 @@ void COFNuclearBomb::Precache()
 	PrecacheSound("buttons/button4.wav");
 	PrecacheSound("buttons/button6.wav");
 
-	//The other entities are created here since a restore only calls Precache
-	//TODO: set the classname members for both entities
+	// The other entities are created here since a restore only calls Precache
+	// TODO: set the classname members for both entities
 	m_pTimer = GetClassPtr<COFNuclearBombTimer>(nullptr);
 
 	m_pTimer->pev->origin = pev->origin;

@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 //
 // Ammo.cpp
 //
@@ -123,7 +123,7 @@ void WeaponsResource::LoadWeaponSprites(WEAPON* pWeapon)
 	}
 	else
 	{
-		pWeapon->hZoomedCrosshair = pWeapon->hCrosshair; //default to non-zoomed crosshair
+		pWeapon->hZoomedCrosshair = pWeapon->hCrosshair; // default to non-zoomed crosshair
 		pWeapon->rcZoomedCrosshair = pWeapon->rcCrosshair;
 	}
 
@@ -136,7 +136,7 @@ void WeaponsResource::LoadWeaponSprites(WEAPON* pWeapon)
 	}
 	else
 	{
-		pWeapon->hZoomedAutoaim = pWeapon->hZoomedCrosshair; //default to zoomed crosshair
+		pWeapon->hZoomedAutoaim = pWeapon->hZoomedCrosshair; // default to zoomed crosshair
 		pWeapon->rcZoomedAutoaim = pWeapon->rcZoomedCrosshair;
 	}
 
@@ -890,7 +890,7 @@ void CHudAmmo::DrawCrosshair(int x, int y)
 		{
 			if (0 == IEngineStudio.IsHardware())
 			{
-				//Fall back to the regular render path for software
+				// Fall back to the regular render path for software
 				x -= (crosshair.rect.right - crosshair.rect.left) / 2;
 				y -= (crosshair.rect.bottom - crosshair.rect.top) / 2;
 
@@ -906,7 +906,7 @@ void CHudAmmo::DrawCrosshair(int x, int y)
 
 			Rect rect;
 
-			//Trim a pixel border around it, since it blends. - Solokiller
+			// Trim a pixel border around it, since it blends. - Solokiller
 			rect.left = crosshair.rect.left * flScale + (flScale - 1);
 			rect.top = crosshair.rect.top * flScale + (flScale - 1);
 			rect.right = crosshair.rect.right * flScale - (flScale - 1);
@@ -981,7 +981,7 @@ bool CHudAmmo::Draw(float flTime)
 	// Draw ammo pickup history
 	gHR.DrawAmmoHistory(flTime);
 
-	//Draw crosshair here so original engine behavior is mimicked pretty closely
+	// Draw crosshair here so original engine behavior is mimicked pretty closely
 	{
 		if (0 != gHUD.m_pCvarCrosshair->value && m_DrawCrosshair)
 		{
@@ -993,7 +993,7 @@ bool CHudAmmo::Draw(float flTime)
 			Vector screen;
 			gEngfuncs.pTriAPI->WorldToScreen(point, screen);
 
-			//Round the value so the crosshair doesn't jitter
+			// Round the value so the crosshair doesn't jitter
 			screen = screen * 1000;
 
 			for (int i = 0; i < 3; ++i)

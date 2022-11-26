@@ -29,8 +29,8 @@
 class asIScriptContext;
 
 /**
-*	@brief Evaluates strings containing conditonal statements.
-*/
+ *	@brief Evaluates strings containing conditonal statements.
+ */
 struct ConditionEvaluator final : public IGameSystem
 {
 	const char* GetName() const override { return "ConditionEvaluator"; }

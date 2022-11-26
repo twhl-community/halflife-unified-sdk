@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   This source code contains proprietary and confidential information of
+ *   Valve LLC and its suppliers.  Access to this code is restricted to
+ *   persons who have executed a written SDK license with Valve.  Any access,
+ *   use or distribution of this code by or to any unlicensed person is illegal.
+ *
+ ****/
 //=========================================================
 // Voltigore - Tank like alien
 //=========================================================
@@ -47,10 +47,10 @@ public:
 	CBaseEntity* CheckTraceHullAttack(float flDist, int iDamage, int iDmgType);
 
 protected:
-	//So babies can't fire off attacks if they happen to have an activity for it
+	// So babies can't fire off attacks if they happen to have an activity for it
 	bool CanUseRangeAttacks() const override { return false; }
 
-	//Babies don't blow up
+	// Babies don't blow up
 	bool BlowsUpOnDeath() const override { return false; }
 
 	float GetMeleeDistance() const override { return BabyVoltigoreMeleeDist; }
@@ -223,7 +223,7 @@ CBaseEntity* COFBabyVoltigore::CheckTraceHullAttack(float flDist, int iDamage, i
 		UTIL_MakeAimVectors(pev->angles);
 
 	Vector vecStart = pev->origin;
-	//Don't rescale the Z size for us since we're just a baby
+	// Don't rescale the Z size for us since we're just a baby
 	vecStart.z += pev->size.z;
 	Vector vecEnd = vecStart + (gpGlobals->v_forward * flDist);
 

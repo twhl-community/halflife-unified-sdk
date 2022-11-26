@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 /*
 
 ===== util.cpp ========================================================
@@ -242,7 +242,7 @@ edict_t* DBG_EntOfVars(const entvars_t* pev)
 	((entvars_t*)pev)->pContainingEntity = pent;
 	return pent;
 }
-#endif //DEBUG
+#endif // DEBUG
 
 // ripped this out of the engine
 float UTIL_AngleMod(float a)
@@ -599,7 +599,7 @@ void UTIL_ScreenShake(const Vector& center, float amplitude, float frequency, fl
 
 			// Had to get rid of this falloff - it didn't work well
 			if (distance < radius)
-				localAmplitude = amplitude; //radius - distance;
+				localAmplitude = amplitude; // radius - distance;
 		}
 		if (0 != localAmplitude)
 		{
@@ -820,7 +820,7 @@ void UTIL_ShowMessageAll(const char* pString)
 // Overloaded to add IGNORE_GLASS
 void UTIL_TraceLine(const Vector& vecStart, const Vector& vecEnd, IGNORE_MONSTERS igmon, IGNORE_GLASS ignoreGlass, edict_t* pentIgnore, TraceResult* ptr)
 {
-	//TODO: define constants
+	// TODO: define constants
 	TRACE_LINE(vecStart, vecEnd, (igmon == ignore_monsters ? 1 : 0) | (ignore_glass == ignoreGlass ? 0x100 : 0), pentIgnore, ptr);
 }
 
@@ -1487,7 +1487,7 @@ static int gSizes[FIELD_TYPECOUNT] =
 		sizeof(float),		   // FIELD_TIME
 		sizeof(int),		   // FIELD_MODELNAME
 		sizeof(int),		   // FIELD_SOUNDNAME
-		sizeof(std::uint64_t), //FIELD_INT64
+		sizeof(std::uint64_t), // FIELD_INT64
 };
 
 
@@ -1596,7 +1596,7 @@ unsigned short CSaveRestoreBuffer::TokenHash(const char* pszToken)
 #endif
 	if (0 == m_data.tokenCount || nullptr == m_data.pTokens)
 	{
-		//if we're here it means trigger_changelevel is trying to actually save something when it's not supposed to.
+		// if we're here it means trigger_changelevel is trying to actually save something when it's not supposed to.
 		Logger->error("No token table array in TokenHash()!");
 		return 0;
 	}
@@ -1911,8 +1911,8 @@ bool CSave::WriteFields(const char* pname, void* pBaseData, TYPEDESCRIPTION* pFi
 
 		case FIELD_BOOLEAN:
 		{
-			//TODO: need to refactor save game stuff to make this cleaner and reusable
-			//Convert booleans to bytes
+			// TODO: need to refactor save game stuff to make this cleaner and reusable
+			// Convert booleans to bytes
 			for (j = 0; j < pTest->fieldSize; j++)
 			{
 				boolArray[j] = ((bool*)pOutputData)[j] ? 1 : 0;
@@ -2074,7 +2074,7 @@ int CRestore::ReadField(void* pBaseData, TYPEDESCRIPTION* pFields, int fieldCoun
 
 							if (!FStringNull(string) && m_precache)
 							{
-								//Don't use UTIL_PrecacheModel/Sound here because we're restoring an already-replaced name.
+								// Don't use UTIL_PrecacheModel/Sound here because we're restoring an already-replaced name.
 								if (pTest->fieldType == FIELD_MODELNAME)
 									UTIL_PrecacheModelDirect(STRING(string));
 								else if (pTest->fieldType == FIELD_SOUNDNAME)

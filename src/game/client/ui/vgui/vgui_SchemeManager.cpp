@@ -146,7 +146,7 @@ static void ParseRGBAFromString(byte colorArray[4], const char* colorVector)
 	}
 	else
 	{
-		//Pure white for easier debugging
+		// Pure white for easier debugging
 		colorArray[0] = 255;
 		colorArray[1] = 255;
 		colorArray[2] = 255;

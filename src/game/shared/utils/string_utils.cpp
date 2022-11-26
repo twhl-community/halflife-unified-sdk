@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 
 #include <charconv>
 
@@ -33,13 +33,13 @@ std::string_view TrimStart(std::string_view text)
 		return text.substr(index);
 	}
 
-	//text was empty or consisted only of whitespace
+	// text was empty or consisted only of whitespace
 	return {};
 }
 
 std::string_view TrimEnd(std::string_view text)
 {
-	//Avoid relying on overflow
+	// Avoid relying on overflow
 	std::size_t index = text.size();
 
 	while (index > 0 && std::isspace(text[index - 1]) != 0)
@@ -47,13 +47,13 @@ std::string_view TrimEnd(std::string_view text)
 		--index;
 	}
 
-	//index is the number of characters left in the string
+	// index is the number of characters left in the string
 	if (index > 0)
 	{
 		return text.substr(0, index);
 	}
 
-	//text was empty or consisted only of whitespace
+	// text was empty or consisted only of whitespace
 	return {};
 }
 
@@ -62,7 +62,7 @@ std::string_view Trim(std::string_view text)
 	return TrimEnd(TrimStart(text));
 }
 
-//TODO: need to use ICU for Unicode-compliant conversion
+// TODO: need to use ICU for Unicode-compliant conversion
 
 void ToLower(std::string& text)
 {
@@ -111,10 +111,10 @@ void UTIL_StringToVector(float* pVector, std::string_view pString)
 			break;
 		}
 
-		//Continue after parsed value.
+		// Continue after parsed value.
 		index = result.ptr - pString.data();
 
-		//Skip all whitespace.
+		// Skip all whitespace.
 		while (index < pString.size() && std::isspace(pString[index]) != 0)
 			++index;
 		if (index >= pString.size())
@@ -145,13 +145,13 @@ bool UTIL_ParseStringWithArrayIndex(std::string_view input, std::string_view& na
 
 	if (endOfName == std::string_view::npos)
 	{
-		//No name.
+		// No name.
 		return false;
 	}
 
 	if (endOfName == (input.length() - 1))
 	{
-		//No index.
+		// No index.
 		return false;
 	}
 
@@ -169,13 +169,13 @@ bool UTIL_ParseStringWithArrayIndex(std::string_view input, std::string_view& na
 
 	if (result.ptr != end)
 	{
-		//Shouldn't happen since we've already verified that there is at least one number at the end.
+		// Shouldn't happen since we've already verified that there is at least one number at the end.
 		return false;
 	}
 
 	if (possibleIndex < 0)
 	{
-		//Shouldn't happen since from_chars isn't supposed to parse numbers too big to be stored correctly.
+		// Shouldn't happen since from_chars isn't supposed to parse numbers too big to be stored correctly.
 		return false;
 	}
 

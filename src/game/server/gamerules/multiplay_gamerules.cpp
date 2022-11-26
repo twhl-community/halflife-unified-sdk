@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 //
 // teamplay_gamerules.cpp
 //
@@ -235,13 +235,13 @@ bool CHalfLifeMultiplay::FShouldSwitchWeapon(CBasePlayer* pPlayer, CBasePlayerIt
 		return false;
 	}
 
-	//Never switch
+	// Never switch
 	if (pPlayer->m_iAutoWepSwitch == 0)
 	{
 		return false;
 	}
 
-	//Only switch if not attacking
+	// Only switch if not attacking
 	if (pPlayer->m_iAutoWepSwitch == 2 && (pPlayer->m_afButtonLast & (IN_ATTACK | IN_ATTACK2)) != 0)
 	{
 		return false;
@@ -296,7 +296,7 @@ bool CHalfLifeMultiplay::ClientConnected(edict_t* pEntity, const char* pszName, 
 
 	if (pEntity)
 	{
-		//TODO: really shouldn't be modifying this directly
+		// TODO: really shouldn't be modifying this directly
 		auto portNumber = strchr(const_cast<char*>(pszAddress), ':');
 
 		if (portNumber)
@@ -407,7 +407,7 @@ float CHalfLifeMultiplay::FlPlayerFallDamage(CBasePlayer* pPlayer)
 
 	switch (iFallDamage)
 	{
-	case 1: //progressive
+	case 1: // progressive
 		pPlayer->m_flFallVelocity -= PLAYER_MAX_SAFE_FALL_SPEED;
 		return pPlayer->m_flFallVelocity * DAMAGE_FOR_FALL_SPEED;
 		break;
@@ -522,7 +522,7 @@ void CHalfLifeMultiplay::PlayerSpawn(CBasePlayer* pPlayer)
 	bool addDefault;
 	CBaseEntity* pWeaponEntity = nullptr;
 
-	//Ensure the player switches to the Glock on spawn regardless of setting
+	// Ensure the player switches to the Glock on spawn regardless of setting
 	const int originalAutoWepSwitch = pPlayer->m_iAutoWepSwitch;
 	pPlayer->m_iAutoWepSwitch = 1;
 
@@ -559,7 +559,7 @@ bool CHalfLifeMultiplay::FPlayerCanRespawn(CBasePlayer* pPlayer)
 //=========================================================
 float CHalfLifeMultiplay::FlPlayerSpawnTime(CBasePlayer* pPlayer)
 {
-	return gpGlobals->time; //now!
+	return gpGlobals->time; // now!
 }
 
 bool CHalfLifeMultiplay::AllowAutoTargetCrosshair()
@@ -731,7 +731,7 @@ void CHalfLifeMultiplay::DeathNotice(CBasePlayer* pVictim, entvars_t* pKiller, e
 	return; // just remove for now
 			/*
 	char	szText[ 128 ];
-
+		
 	if ( pKiller->flags & FL_MONSTER )
 	{
 		// killed by a monster
@@ -739,7 +739,7 @@ void CHalfLifeMultiplay::DeathNotice(CBasePlayer* pVictim, entvars_t* pKiller, e
 		strcat ( szText, " was killed by a monster.\n" );
 		return;
 	}
-
+		
 	if ( pKiller == pVictim->pev )
 	{
 		strcpy ( szText, STRING( pVictim->pev->netname ) );
@@ -748,11 +748,11 @@ void CHalfLifeMultiplay::DeathNotice(CBasePlayer* pVictim, entvars_t* pKiller, e
 	else if ( pKiller->flags & FL_CLIENT )
 	{
 		strcpy ( szText, STRING( pKiller->netname ) );
-
+		
 		strcat( szText, " : " );
 		strcat( szText, killer_weapon_name );
 		strcat( szText, " : " );
-
+		
 		strcat ( szText, STRING( pVictim->pev->netname ) );
 		strcat ( szText, "\n" );
 	}
@@ -771,7 +771,7 @@ void CHalfLifeMultiplay::DeathNotice(CBasePlayer* pVictim, entvars_t* pKiller, e
 		strcpy ( szText, STRING( pVictim->pev->netname ) );
 		strcat ( szText, " died mysteriously.\n" );
 	}
-
+		
 	UTIL_ClientPrintAll( szText );
 */
 }

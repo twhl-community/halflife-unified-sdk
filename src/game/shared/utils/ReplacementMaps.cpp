@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 
 #include <fmt/format.h>
 
@@ -166,11 +166,11 @@ const ReplacementMap* ReplacementMapSystem::Load(const std::string& fileName, co
 	const auto pathID = options.LoadFromAllPaths ? nullptr : "GAMECONFIG";
 
 	auto map = g_JSON.ParseJSONFile(
-					 fileName.c_str(),
-					 {.SchemaName = ReplacementMapSchemaName, .PathID = pathID},
-					 [&, this](const json& input)
-					 { return Parse(input, options); })
-		.value_or(ReplacementMap{});
+						 fileName.c_str(),
+						 {.SchemaName = ReplacementMapSchemaName, .PathID = pathID},
+						 [&, this](const json& input)
+						 { return Parse(input, options); })
+				   .value_or(ReplacementMap{});
 
 	const auto result = m_ReplacementMaps.emplace(std::move(normalizedFileName), std::make_unique<ReplacementMap>(std::move(map)));
 

@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 /*
 
 ===== bmodels.cpp ========================================================
@@ -166,7 +166,7 @@ void CBreakable::Spawn()
 		pev->playerclass = 1;
 	}
 
-	SetModel(STRING(pev->model)); //set size and link into world.
+	SetModel(STRING(pev->model)); // set size and link into world.
 
 	SetTouch(&CBreakable::BreakTouch);
 	if (FBitSet(pev->spawnflags, SF_BREAK_TRIGGER_ONLY)) // Only break on trigger
@@ -291,7 +291,7 @@ void CBreakable::Precache()
 
 	switch (m_Material)
 	{
-	default: //Wood is default, needs to match constant used in KeyValue
+	default: // Wood is default, needs to match constant used in KeyValue
 	case matWood:
 		pGibName = "models/woodgibs.mdl";
 
@@ -391,7 +391,7 @@ void CBreakable::DamageSound()
 		i = 3;
 		break;
 
-	default: //Wood is default, needs to match constant used in KeyValue
+	default: // Wood is default, needs to match constant used in KeyValue
 	case matWood:
 		rgpsz[0] = "debris/wood1.wav";
 		rgpsz[1] = "debris/wood2.wav";
@@ -507,7 +507,7 @@ void CBreakable::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecD
 		{
 			UTIL_Sparks(ptr->vecEndPos);
 
-			float flVolume = RANDOM_FLOAT(0.7, 1.0); //random volume range
+			float flVolume = RANDOM_FLOAT(0.7, 1.0); // random volume range
 			switch (RANDOM_LONG(0, 1))
 			{
 			case 0:
@@ -717,7 +717,7 @@ void CBreakable::Die()
 	WRITE_BYTE(10);
 
 	// Model
-	WRITE_SHORT(m_idShard); //model id#
+	WRITE_SHORT(m_idShard); // model id#
 
 	// # of shards
 	WRITE_BYTE(0); // let client decide

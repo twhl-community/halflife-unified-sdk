@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   This source code contains proprietary and confidential information of
+ *   Valve LLC and its suppliers.  Access to this code is restricted to
+ *   persons who have executed a written SDK license with Valve.  Any access,
+ *   use or distribution of this code by or to any unlicensed person is illegal.
+ *
+ ****/
 //=========================================================
 // schedule.cpp - functions and data pertaining to the
 // monsters' AI scheduling system.
@@ -138,7 +138,7 @@ void CBaseMonster::NextScheduledTask()
 	{
 		// just completed last task in schedule, so make it invalid by clearing it.
 		SetConditions(bits_COND_SCHEDULE_DONE);
-		//ClearSchedule();
+		// ClearSchedule();
 	}
 }
 
@@ -520,7 +520,7 @@ void CBaseMonster::RunTask(Task_t* pTask)
 			if (m_fSequenceFinished)
 				ClearSchedule();
 			pev->framerate = 1.0;
-			//AILogger->debug("Script {} has begun for {}", STRING(m_pCine->m_iszPlay), STRING(pev->classname));
+			// AILogger->debug("Script {} has begun for {}", STRING(m_pCine->m_iszPlay), STRING(pev->classname));
 		}
 		break;
 	}
@@ -1511,7 +1511,7 @@ Schedule_t* CBaseMonster::GetSchedule()
 			}
 			else if (!FacingIdeal())
 			{
-				//turn
+				// turn
 				return GetScheduleOfType(SCHED_COMBAT_FACE);
 			}
 			else
@@ -1559,7 +1559,7 @@ bool CBaseMonster::JumpToTarget(Activity movementAct, float waitTime)
 	if ((pev->flags & FL_ONGROUND) != 0)
 		pev->flags &= ~FL_ONGROUND;
 
-	//const float flGravity = g_engfuncs.pfnCVarGetFloat("sv_gravity");
+	// const float flGravity = g_engfuncs.pfnCVarGetFloat("sv_gravity");
 
 	pev->velocity = m_hTargetEnt->pev->origin + Vector(0, 0, 160) - pev->origin;
 

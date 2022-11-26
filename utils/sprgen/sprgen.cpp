@@ -1,12 +1,12 @@
 /***
-*
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
-*	All Rights Reserved.
-*
-****/
+ *
+ *	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ ****/
 
 //
 // spritegen.c: generates a .spr file from a series of .lbm frame files.
@@ -394,7 +394,7 @@ void Cmd_Frame()
 
 /*
 ===============
-Cmd_GroupStart	
+Cmd_GroupStart
 ===============
 */
 void Cmd_GroupStart(void)
@@ -438,7 +438,7 @@ void Cmd_GroupStart(void)
 
 /*
 ===============
-ParseScript	
+ParseScript
 ===============
 */
 void ParseScript(void)
@@ -520,7 +520,7 @@ void Cmd_Spritename(void)
 
 /*
 ==============
-FinishSprite	
+FinishSprite
 ==============
 */
 void FinishSprite(void)
@@ -551,7 +551,7 @@ void FinishSprite(void)
 /*
 ==============
 main
-	
+
 ==============
 */
 extern char qproject[];

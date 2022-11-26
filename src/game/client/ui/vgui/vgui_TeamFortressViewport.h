@@ -24,7 +24,7 @@
 // custom scheme handling
 #include "vgui_SchemeManager.h"
 
-//TODO: this is a real mess
+// TODO: this is a real mess
 #define PC_RANDOM 7
 #define PC_FIRSTCLASS 1
 #define PC_LASTCLASS 7
@@ -75,7 +75,7 @@ inline TeamFortressViewport* gViewPort = nullptr;
 
 #define CMENU_TOP (BUTTON_SIZE_Y * 4)
 
-//#define MAX_TEAMNAME_SIZE		64
+// #define MAX_TEAMNAME_SIZE		64
 #define MAX_BUTTON_SIZE 32
 
 // Map Briefing Window
@@ -470,7 +470,7 @@ public:
 };
 
 //==============================================================================
-//NOTE/ called CTFViewport in Op4
+// NOTE/ called CTFViewport in Op4
 class TeamFortressViewport : public Panel
 {
 private:
@@ -733,7 +733,7 @@ public:
 
 	virtual void cursorMoved(int x, int y, Panel* panel)
 	{
-		//gViewPort->SetCurrentCommandMenu( m_pSubMenu );
+		// gViewPort->SetCurrentCommandMenu( m_pSubMenu );
 	}
 
 	virtual void cursorEntered(Panel* panel)
@@ -1708,8 +1708,8 @@ public:
 
 		// Set panel dimension
 		// Shouldn't be needed once Billy's fized setImage not recalculating the size
-		//setSize( iXSize + 100, gHUD.m_iFontHeight + 10 );
-		//m_pHealthLabel->setPos( 10, (getTall() - iYSize) / 2 );
+		// setSize( iXSize + 100, gHUD.m_iFontHeight + 10 );
+		// m_pHealthLabel->setPos( 10, (getTall() - iYSize) / 2 );
 	}
 
 	virtual void paintBackground()

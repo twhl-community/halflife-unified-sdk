@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 #include <utility>
 
 #include "cbase.h"
@@ -27,7 +27,7 @@ static const char* const g_pszCreakSounds[] =
 		"items/rope2.wav",
 		"items/rope3.wav"};
 
-//TODO: make sure boolean types are correctly used here
+// TODO: make sure boolean types are correctly used here
 TYPEDESCRIPTION CRope::m_SaveData[] =
 	{
 		DEFINE_FIELD(CRope, m_uiSegments, FIELD_INTEGER),
@@ -155,7 +155,7 @@ void CRope::Spawn()
 
 	if (m_uiSegments > 2)
 	{
-		//CRopeSample** ppCurrentSys = m_CurrentSys;
+		// CRopeSample** ppCurrentSys = m_CurrentSys;
 
 		for (size_t uiSeg = 1; uiSeg < m_uiSegments - 1; ++uiSeg)
 		{
@@ -250,7 +250,7 @@ void CRope::Think()
 
 void CRope::Touch(CBaseEntity* pOther)
 {
-	//Nothing.
+	// Nothing.
 }
 
 bool CRope::Save(CSave& save)
@@ -324,7 +324,7 @@ void CRope::InitializeRopeSim()
 	}
 
 	{
-		//Zero out the anchored segment's mass so it stays in place.
+		// Zero out the anchored segment's mass so it stays in place.
 		auto pSample = m_CurrentSys[0];
 
 		pSample->GetData().mMassReciprocal = 0;
@@ -607,7 +607,7 @@ void CRope::RK4Integrate(const float flDeltaTime, CRopeSample** ppSampleSource, 
 	}
 }
 
-//TODO move to common header - Solokiller
+// TODO move to common header - Solokiller
 static const Vector DOWN(0, 0, -1);
 
 static const Vector RIGHT(0, 1, 0);
@@ -723,7 +723,7 @@ void CRope::TraceModels(CRopeSegment** ppPrimarySegs, CRopeSegment** ppHiddenSeg
 			}
 			else
 			{
-				//CBaseEntity* pEnt = GET_PRIVATE( tr.pHit );
+				// CBaseEntity* pEnt = GET_PRIVATE( tr.pHit );
 				const Vector vecNormal = tr.vecPlaneNormal.Normalize();
 
 				Vector vecOrigin = tr.vecEndPos + vecNormal * 10.0;
@@ -788,15 +788,15 @@ void CRope::SetRopeSegments(const size_t uiNumSegments,
 		CRopeSegment** ppVisible = ppPrimarySegs;
 		CRopeSegment** ppActualHidden = ppHiddenSegs;
 
-		//In multiplayer, the constant toggling of visible segments makes them completely invisible.
-		//So always make the seg segments visible. - Solokiller
+		// In multiplayer, the constant toggling of visible segments makes them completely invisible.
+		// So always make the seg segments visible. - Solokiller
 		if (m_bToggle && g_pGameRules->IsMultiplayer())
 		{
 			std::swap(ppVisible, ppActualHidden);
 		}
 
 		ppVisible[0]->pev->solid = SOLID_TRIGGER;
-		//TODO: maybe only set/unset the nodraw flag
+		// TODO: maybe only set/unset the nodraw flag
 		ppVisible[0]->pev->effects = 0;
 
 		ppActualHidden[0]->pev->solid = SOLID_NOT;
@@ -815,8 +815,8 @@ void CRope::SetRopeSegments(const size_t uiNumSegments,
 
 			Vector vecOrigin = pPrim->pev->origin;
 
-			//vecOrigin.x += 10.0;
-			//vecOrigin.y += 10.0;
+			// vecOrigin.x += 10.0;
+			// vecOrigin.y += 10.0;
 
 			UTIL_SetOrigin(pHidden->pev, vecOrigin);
 		}
@@ -967,7 +967,7 @@ void CRope::ApplyForceToSegment(const Vector& vecForce, const size_t uiSegment)
 	}
 	else if (uiSegment == m_uiSegments)
 	{
-		//Apply force to the last sample.
+		// Apply force to the last sample.
 
 		auto& data = m_CurrentSys[uiSegment - 1]->GetData();
 
@@ -1107,7 +1107,7 @@ Vector CRope::GetSegmentDirFromOrigin(const size_t uiSegmentIndex) const
 	if (uiSegmentIndex >= m_uiSegments)
 		return g_vecZero;
 
-	//There is one more sample than there are segments, so this is fine.
+	// There is one more sample than there are segments, so this is fine.
 	const Vector vecResult =
 		m_CurrentSys[uiSegmentIndex + 1]->GetData().mPosition -
 		m_CurrentSys[uiSegmentIndex]->GetData().mPosition;

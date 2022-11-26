@@ -5,7 +5,7 @@
 #include <ctype.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-//#include <sys/file.h>
+// #include <sys/file.h>
 #include <stdarg.h>
 
 #include "cmdlib.h"
@@ -110,10 +110,10 @@ int main(int argc, char** argv)
 	qtex = (miptex_t *)lump_p;
 	qtex->width = LittleLong(w);
 	qtex->height = LittleLong(h);
-	strcpy (qtex->name, lumpname); 
-	
+	strcpy (qtex->name, lumpname);
+
 	lump_p = (byte *)&qtex->offsets[4];
-	
+
 	screen_p = byteimage + yl*byteimagewidth + xl;
 	linedelta = byteimagewidth - w;
 
@@ -132,7 +132,7 @@ int main(int argc, char** argv)
 		}
 		screen_p += linedelta;
 	}
-	
+
 	//
 	// subsample for greater mip levels
 	//
@@ -141,7 +141,7 @@ int main(int argc, char** argv)
 	for (miplevel = 1 ; miplevel<4 ; miplevel++)
 	{
 		qtex->offsets[miplevel] = LittleLong(lump_p - (byte *)qtex);
-		
+
 		mipstep = 1<<miplevel;
 		for (y=0 ; y<h ; y+=mipstep)
 		{
@@ -156,7 +156,7 @@ int main(int argc, char** argv)
 						count++;
 					}
 				*lump_p++ = AveragePixels (count);
-			}	
+			}
 		}
 	}
 

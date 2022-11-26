@@ -1,8 +1,8 @@
 /***
-*
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*	
-****/
+ *
+ *	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+ *
+ ****/
 
 //===================================================================
 // Useful macros
@@ -55,12 +55,12 @@ public:
 	typedef struct
 	{
 		wchar_t szNodeName[MAX_NAME_CHARS]; // usefull for lookups
-		Matrix3 mat3NodeTM;				 // node's transformation matrix (at time zero)
-		Matrix3 mat3ObjectTM;			 // object-offset transformation matrix (at time zero)
-		int imaxnodeParent;				 // cached index of parent node
-		float xRotFirstFrame;			 // 1st frame's X rotation
-		float yRotFirstFrame;			 // 1st frame's Y rotation
-		float zRotFirstFrame;			 // 1st frame's Z rotation
+		Matrix3 mat3NodeTM;					// node's transformation matrix (at time zero)
+		Matrix3 mat3ObjectTM;				// object-offset transformation matrix (at time zero)
+		int imaxnodeParent;					// cached index of parent node
+		float xRotFirstFrame;				// 1st frame's X rotation
+		float yRotFirstFrame;				// 1st frame's Y rotation
+		float zRotFirstFrame;				// 1st frame's Z rotation
 	} MaxNode;
 	MaxNode* m_rgmaxnode; // array of nodes
 	long m_imaxnodeMac;	  // # of nodes

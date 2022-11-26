@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 
 #include "Platform.h"
 
@@ -475,7 +475,7 @@ void PM_UpdateStepSound()
 	speed = Length(pmove->velocity);
 
 	// determine if we are on a ladder
-	//The Barnacle Grapple sets the FL_IMMUNE_LAVA flag to indicate that the player is not on a ladder - Solokiller
+	// The Barnacle Grapple sets the FL_IMMUNE_LAVA flag to indicate that the player is not on a ladder - Solokiller
 	const bool fLadder = (pmove->movetype == MOVETYPE_FLY) && (pmove->flags & FL_IMMUNE_LAVA) == 0; // IsOnLadder();
 
 	// UNDONE: need defined numbers for run, walk, crouch, crouch run velocities!!!!
@@ -792,7 +792,7 @@ int PM_FlyMove()
 		if (0 != trace.allsolid)
 		{ // entity is trapped in another solid
 			VectorCopy(vec3_origin, pmove->velocity);
-			//Con_DPrintf("Trapped 4\n");
+			// Con_DPrintf("Trapped 4\n");
 			return 4;
 		}
 
@@ -811,7 +811,7 @@ int PM_FlyMove()
 		if (trace.fraction == 1)
 			break; // moved the entire distance
 
-		//if (!trace.ent)
+		// if (!trace.ent)
 		//	Sys_Error ("PM_PlayerTrace: !trace.ent");
 
 		// Save entity that blocked us (since fraction was < 1.0)
@@ -830,7 +830,7 @@ int PM_FlyMove()
 		if (0 == trace.plane.normal[2])
 		{
 			blocked |= 2; // step / wall
-						  //Con_DPrintf("Blocked by %i\n", trace.ent);
+						  // Con_DPrintf("Blocked by %i\n", trace.ent);
 		}
 
 		// Reduce amount of pmove->frametime left by total time left * fraction
@@ -842,7 +842,7 @@ int PM_FlyMove()
 		{ // this shouldn't really happen
 			//  Stop our movement if so.
 			VectorCopy(vec3_origin, pmove->velocity);
-			//Con_DPrintf("Too many planes 4\n");
+			// Con_DPrintf("Too many planes 4\n");
 
 			break;
 		}
@@ -901,9 +901,9 @@ int PM_FlyMove()
 			{ // go along the crease
 				if (numplanes != 2)
 				{
-					//Con_Printf ("clip velocity, numplanes == %i\n",numplanes);
+					// Con_Printf ("clip velocity, numplanes == %i\n",numplanes);
 					VectorCopy(vec3_origin, pmove->velocity);
-					//Con_DPrintf("Trapped 4\n");
+					// Con_DPrintf("Trapped 4\n");
 
 					break;
 				}
@@ -918,7 +918,7 @@ int PM_FlyMove()
 			//
 			if (DotProduct(pmove->velocity, primal_velocity) <= 0)
 			{
-				//Con_DPrintf("Back\n");
+				// Con_DPrintf("Back\n");
 				VectorCopy(vec3_origin, pmove->velocity);
 				break;
 			}
@@ -928,7 +928,7 @@ int PM_FlyMove()
 	if (allFraction == 0)
 	{
 		VectorCopy(vec3_origin, pmove->velocity);
-		//Con_DPrintf( "Don't stick\n" );
+		// Con_DPrintf( "Don't stick\n" );
 	}
 
 	return blocked;
@@ -1047,7 +1047,7 @@ void PM_WalkMove()
 	}
 
 	// If we are not moving, do nothing
-	//if (!pmove->velocity[0] && !pmove->velocity[1] && !pmove->velocity[2])
+	// if (!pmove->velocity[0] && !pmove->velocity[1] && !pmove->velocity[2])
 	//	return;
 
 	oldonground = pmove->onground;
@@ -1194,7 +1194,7 @@ void PM_Friction()
 			friction = pmove->movevars->friction;
 
 		// Grab friction value.
-		//friction = pmove->movevars->friction;
+		// friction = pmove->movevars->friction;
 
 		friction *= pmove->friction; // player friction?
 
@@ -1236,7 +1236,7 @@ void PM_AirAccelerate(Vector wishdir, float wishspeed, float accel)
 		return;
 
 	// Cap speed
-	//wishspd = VectorNormalize (pmove->wishveloc);
+	// wishspd = VectorNormalize (pmove->wishveloc);
 
 	if (wishspd > 30)
 		wishspd = 30;
@@ -1685,7 +1685,7 @@ bool PM_CheckStuck()
 	VectorAdd(base, offset, test);
 	if ((hitent = pmove->PM_TestPlayerPosition(test, nullptr)) == -1)
 	{
-		//Con_DPrintf("Nudged\n");
+		// Con_DPrintf("Nudged\n");
 
 		PM_ResetStuckOffsets(pmove->player_index, pmove->server);
 
@@ -1721,7 +1721,7 @@ bool PM_CheckStuck()
 		}
 	}
 
-	//VectorCopy (base, pmove->origin);
+	// VectorCopy (base, pmove->origin);
 
 	return true;
 }
@@ -1734,7 +1734,7 @@ PM_SpectatorMove
 void PM_SpectatorMove()
 {
 	float speed, drop, friction, control, newspeed;
-	//float   accel;
+	// float   accel;
 	float currentspeed, addspeed, accelspeed;
 	int i;
 	Vector wishvel;
@@ -1921,7 +1921,7 @@ void PM_UnDuck()
 		if (0 != trace.startsolid)
 		{
 			// See if we are stuck?  If so, stay ducked with the duck hull until we have a clear spot
-			//Con_Printf( "unstick got stuck\n" );
+			// Con_Printf( "unstick got stuck\n" );
 			pmove->usehull = 1;
 			return;
 		}
@@ -2108,9 +2108,9 @@ void PM_LadderMove(physent_t* pLadder)
 				Vector velocity, perp, cross, lateral, tmp;
 				float normal;
 
-				//CBaseEntity::Logger->debug("pev {:.2f} - ", pev->velocity);
-				// Calculate player's intended velocity
-				//Vector velocity = (forward * gpGlobals->v_forward) + (right * gpGlobals->v_right);
+				// CBaseEntity::Logger->debug("pev {:.2f} - ", pev->velocity);
+				//  Calculate player's intended velocity
+				// Vector velocity = (forward * gpGlobals->v_forward) + (right * gpGlobals->v_right);
 				VectorScale(vpn, forward, velocity);
 				VectorMA(velocity, right, v_right, velocity);
 
@@ -2144,7 +2144,7 @@ void PM_LadderMove(physent_t* pLadder)
 				{
 					VectorMA(pmove->velocity, MAX_CLIMB_SPEED, trace.plane.normal, pmove->velocity);
 				}
-				//pev->velocity = lateral - (CrossProduct( trace.vecPlaneNormal, perp ) * normal);
+				// pev->velocity = lateral - (CrossProduct( trace.vecPlaneNormal, perp ) * normal);
 			}
 			else
 			{
@@ -2427,9 +2427,9 @@ void PM_PreventMegaBunnyJumping()
 	if (spd <= maxscaledspeed)
 		return;
 
-	fraction = (maxscaledspeed / spd) * 0.65; //Returns the modifier for the velocity
+	fraction = (maxscaledspeed / spd) * 0.65; // Returns the modifier for the velocity
 
-	VectorScale(pmove->velocity, fraction, pmove->velocity); //Crop it down!.
+	VectorScale(pmove->velocity, fraction, pmove->velocity); // Crop it down!.
 }
 
 /*
@@ -2662,12 +2662,12 @@ void PM_CheckFalling()
 		{
 			// NOTE:  In the original game dll , there were no breaks after these cases, causing the first one to
 			// cascade into the second
-			//switch ( RandomLong(0,1) )
+			// switch ( RandomLong(0,1) )
 			//{
-			//case 0:
-			//PM_PlaySound( CHAN_VOICE, "player/pl_fallpain2.wav", 1, ATTN_NORM, 0, PITCH_NORM );
-			//break;
-			//case 1:
+			// case 0:
+			// PM_PlaySound( CHAN_VOICE, "player/pl_fallpain2.wav", 1, ATTN_NORM, 0, PITCH_NORM );
+			// break;
+			// case 1:
 			PM_PlaySound(CHAN_VOICE, "player/pl_fallpain3.wav", 1, ATTN_NORM, 0, PITCH_NORM);
 			//	break;
 			//}
@@ -2813,7 +2813,7 @@ void PM_CheckParamters()
 		  (pmove->cmd.upmove * pmove->cmd.upmove);
 	spd = sqrt(spd);
 
-	maxspeed = pmove->clientmaxspeed; //atof( pmove->PM_Info_ValueForKey( pmove->physinfo, "maxspd" ) );
+	maxspeed = pmove->clientmaxspeed; // atof( pmove->PM_Info_ValueForKey( pmove->physinfo, "maxspd" ) );
 	if (maxspeed != 0.0)
 	{
 		pmove->maxspeed = V_min(maxspeed, pmove->maxspeed);
@@ -3330,12 +3330,12 @@ void PM_Init(struct playermove_s* ppmove)
 	PM_CreateStuckTable();
 	PM_InitTextureTypes();
 
-	//The engine copies the hull sizes initialized by PM_GetHullBounds *before* PM_GetHullBounds is actually called, so manually initialize these.
+	// The engine copies the hull sizes initialized by PM_GetHullBounds *before* PM_GetHullBounds is actually called, so manually initialize these.
 	for (int i = 0; i < NUM_HULLS; ++i)
 	{
 		if (!PM_GetHullBounds(i, pmove->player_mins[i], pmove->player_maxs[i]))
 		{
-			//Matches the engine's behavior in ignoring the remaining hull sizes if any hull isn't provided.
+			// Matches the engine's behavior in ignoring the remaining hull sizes if any hull isn't provided.
 			break;
 		}
 	}

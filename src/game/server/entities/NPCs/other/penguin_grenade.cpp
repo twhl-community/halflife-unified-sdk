@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 #include "cbase.h"
 
 #define PENGUIN_DETONATE_DELAY 15.0
@@ -125,7 +125,7 @@ void CPenguinGrenade::SuperBounceTouch(CBaseEntity* pOther)
 
 		if (g_pGameRules->IsMultiplayer())
 		{
-			//TODO: set to null earlier on, so this can never be valid
+			// TODO: set to null earlier on, so this can never be valid
 			auto owner = CBaseEntity::Instance(pev->owner);
 
 			auto ownerPlayer = owner->IsPlayer() ? owner : nullptr;
@@ -250,7 +250,7 @@ void CPenguinGrenade::Spawn()
 
 	m_flNextBounceSoundTime = gpGlobals->time; // reset each time a snark is spawned.
 
-	//TODO: shouldn't use index
+	// TODO: shouldn't use index
 	pev->sequence = MONSTERPENGUIN_RUN;
 	ResetSequenceInfo();
 }

@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 #include "cbase.h"
 
 #include "CRopeSample.h"
@@ -64,7 +64,7 @@ void CRopeSegment::Spawn()
 
 void CRopeSegment::Think()
 {
-	//Do nothing.
+	// Do nothing.
 }
 
 void CRopeSegment::Touch(CBaseEntity* pOther)
@@ -73,7 +73,7 @@ void CRopeSegment::Touch(CBaseEntity* pOther)
 	{
 		auto pPlayer = static_cast<CBasePlayer*>(pOther);
 
-		//Electrified wires deal damage. - Solokiller
+		// Electrified wires deal damage. - Solokiller
 		if (m_bCauseDamage)
 		{
 			pOther->TakeDamage(pev, pev, 1, DMG_SHOCK);
@@ -95,7 +95,7 @@ void CRopeSegment::Touch(CBaseEntity* pOther)
 
 				if (vecVelocity.Length() > 0.5)
 				{
-					//Apply some external force to move the rope. - Solokiller
+					// Apply some external force to move the rope. - Solokiller
 					data.mApplyExternalForce = true;
 
 					data.mExternalForce = data.mExternalForce + vecVelocity * 750;
@@ -108,14 +108,14 @@ void CRopeSegment::Touch(CBaseEntity* pOther)
 			}
 			else
 			{
-				//This segment cannot be grabbed, so grab the highest one if possible. - Solokiller
+				// This segment cannot be grabbed, so grab the highest one if possible. - Solokiller
 				auto pRope = m_pSample->GetMasterRope();
 
 				CRopeSegment* pSegment;
 
 				if (pRope->GetNumSegments() <= 4)
 				{
-					//Fewer than 5 segments exist, so allow grabbing the last one. - Solokiller
+					// Fewer than 5 segments exist, so allow grabbing the last one. - Solokiller
 					pSegment = pRope->GetSegments()[pRope->GetNumSegments() - 1];
 					pSegment->SetCanBeGrabbed(true);
 				}

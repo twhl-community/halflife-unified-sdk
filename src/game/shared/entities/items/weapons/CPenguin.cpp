@@ -1,23 +1,23 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 #include "cbase.h"
 
 #include "CPenguin.h"
 
 #ifndef CLIENT_DLL
-//TODO: this isn't in vanilla Op4 so it won't save properly there
+// TODO: this isn't in vanilla Op4 so it won't save properly there
 TYPEDESCRIPTION CPenguin::m_SaveData[] =
 	{
 		DEFINE_FIELD(CPenguin, m_fJustThrown, FIELD_BOOLEAN),
@@ -190,7 +190,7 @@ void CPenguin::PrimaryAttack()
 
 void CPenguin::SecondaryAttack()
 {
-	//Nothing
+	// Nothing
 }
 
 int CPenguin::iItemSlot()

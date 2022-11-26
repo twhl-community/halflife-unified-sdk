@@ -1,6 +1,6 @@
 //========= Copyright © 1996-2002, Valve LLC, All rights reserved. ============
 //
-// Purpose: 
+// Purpose:
 //
 // $NoKeywords: $
 //=============================================================================
@@ -13,7 +13,7 @@ namespace vgui
 
 class VGUIAPI LayoutInfo
 {
-	virtual LayoutInfo* getThis()=0;
+	virtual LayoutInfo* getThis() = 0;
 };
 
 }

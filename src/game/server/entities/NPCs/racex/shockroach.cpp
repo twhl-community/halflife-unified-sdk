@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   This source code contains proprietary and confidential information of
+ *   Valve LLC and its suppliers.  Access to this code is restricted to
+ *   persons who have executed a written SDK license with Valve.  Any access,
+ *   use or distribution of this code by or to any unlicensed person is illegal.
+ *
+ ****/
 //=========================================================
 // headcrab.cpp - tiny, jumpy alien parasite
 //=========================================================
@@ -261,9 +261,9 @@ void COFShockRoach::HandleAnimEvent(MonsterEvent_t* pEvent)
 			vecJumpDir = Vector(gpGlobals->v_forward.x, gpGlobals->v_forward.y, gpGlobals->v_up.z) * 350;
 		}
 
-		//Not used for Shock Roach
-		//int iSound = RANDOM_LONG(0,2);
-		//if ( iSound != 0 )
+		// Not used for Shock Roach
+		// int iSound = RANDOM_LONG(0,2);
+		// if ( iSound != 0 )
 		//	EMIT_SOUND_DYN( edict(), CHAN_VOICE, pAttackSounds[iSound], GetSoundVolue(), ATTN_IDLE, 0, GetVoicePitch() );
 
 		pev->velocity = vecJumpDir;
@@ -361,7 +361,7 @@ void COFShockRoach::LeapTouch(CBaseEntity* pOther)
 		return;
 	}
 
-	//Give the player a shock rifle if they don't have one
+	// Give the player a shock rifle if they don't have one
 	if (pOther->IsPlayer())
 	{
 		auto pPlayer = static_cast<CBasePlayer*>(pOther);
@@ -453,11 +453,11 @@ bool COFShockRoach::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, 
 	if ((bitsDamageType & DMG_ACID) != 0)
 		flDamage = 0;
 
-	//Don't take damage while spawning
+	// Don't take damage while spawning
 	if (gpGlobals->time - m_flBirthTime < 2)
 		flDamage = 0;
 
-	//Never gib the roach
+	// Never gib the roach
 	return CBaseMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, (bitsDamageType & ~DMG_ALWAYSGIB) | DMG_NEVERGIB);
 }
 

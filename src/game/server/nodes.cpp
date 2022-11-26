@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   This source code contains proprietary and confidential information of
+ *   Valve LLC and its suppliers.  Access to this code is restricted to
+ *   persons who have executed a written SDK license with Valve.  Any access,
+ *   use or distribution of this code by or to any unlicensed person is illegal.
+ *
+ ****/
 //=========================================================
 // nodes.cpp - AI node tree stuff.
 //=========================================================
@@ -483,7 +483,7 @@ float CGraph::PathLength(int iStart, int iDest, int iHull, int afCapMask)
 		iNext = NextNodeInRoute(iCurrentNode, iDest, iHull, iCap);
 		if (iCurrentNode == iNext)
 		{
-			//Logger->debug("SVD: Can't get there from here..");
+			// Logger->debug("SVD: Can't get there from here..");
 			return 0;
 		}
 
@@ -516,7 +516,7 @@ int CGraph::NextNodeInRoute(int iCurrentNode, int iDest, int iHull, int iCap)
 	while (nCount > 0)
 	{
 		char ch = *pRoute++;
-		//Logger->trace("C({})", ch);
+		// Logger->trace("C({})", ch);
 		if (ch < 0)
 		{
 			// Sequence phrase
@@ -526,17 +526,17 @@ int CGraph::NextNodeInRoute(int iCurrentNode, int iDest, int iHull, int iCap)
 			{
 				iNext = iDest;
 				nCount = 0;
-				//Logger->trace("SEQ: iNext/iDest={}", iNext);
+				// Logger->trace("SEQ: iNext/iDest={}", iNext);
 			}
 			else
 			{
-				//Logger->trace("SEQ: nCount + ch ({} + {})", nCount, ch);
+				// Logger->trace("SEQ: nCount + ch ({} + {})", nCount, ch);
 				nCount = nCount - ch;
 			}
 		}
 		else
 		{
-			//Logger->trace("C({})", *pRoute);
+			// Logger->trace("C({})", *pRoute);
 
 			// Repeat phrase
 			//
@@ -548,11 +548,11 @@ int CGraph::NextNodeInRoute(int iCurrentNode, int iDest, int iHull, int iCap)
 				else if (iNext < 0)
 					iNext += m_cNodes;
 				nCount = 0;
-				//Logger->trace("REP: iNext={}", iNext);
+				// Logger->trace("REP: iNext={}", iNext);
 			}
 			else
 			{
-				//Logger->trace("REP: nCount - ch+1 ({} - {}+1)", nCount, ch);
+				// Logger->trace("REP: nCount - ch+1 ({} - {}+1)", nCount, ch);
 				nCount = nCount - ch - 1;
 			}
 			pRoute++;
@@ -616,19 +616,19 @@ int CGraph::FindShortestPath(int* piPath, int iStart, int iDest, int iHull, int 
 			iNext = NextNodeInRoute(iCurrentNode, iDest, iHull, iCap);
 			if (iCurrentNode == iNext)
 			{
-				//Logger->trace("SVD: Can't get there from here..");
+				// Logger->trace("SVD: Can't get there from here..");
 				return 0;
 				break;
 			}
 			if (iNumPathNodes >= MAX_PATH_SIZE)
 			{
-				//Logger->trace("SVD: Don't return the entire path.");
+				// Logger->trace("SVD: Don't return the entire path.");
 				break;
 			}
 			piPath[iNumPathNodes++] = iNext;
 			iCurrentNode = iNext;
 		}
-		//Logger->trace("SVD: Path with {} nodes.", iNumPathNodes);
+		// Logger->trace("SVD: Path with {} nodes.", iNumPathNodes);
 	}
 	else
 	{
@@ -682,7 +682,7 @@ int CGraph::FindShortestPath(int* piPath, int iStart, int iDest, int iHull, int 
 				iVisitNode = INodeLink(iCurrentNode, i);
 				if ((m_pLinkPool[m_pNodes[iCurrentNode].m_iFirstLink + i].m_afLinkInfo & iHullMask) != iHullMask)
 				{ // monster is too large to walk this connection
-					//Logger->trace("fat ass {}/{}",m_pLinkPool[ m_pNodes[ iCurrentNode ].m_iFirstLink + i ].m_afLinkInfo, iMonsterHull );
+					// Logger->trace("fat ass {}/{}",m_pLinkPool[ m_pNodes[ iCurrentNode ].m_iFirstLink + i ].m_afLinkInfo, iMonsterHull );
 					continue;
 				}
 				// check the connection from the current node to the node we're about to mark visited and push into the queue
@@ -875,12 +875,12 @@ int CGraph::FindNearestNode(const Vector& vecOrigin, int afNodeTypes)
 	unsigned int iHash = (CACHE_SIZE - 1) & Hash((void*)(const float*)vecOrigin, sizeof(vecOrigin));
 	if (m_Cache[iHash].v == vecOrigin)
 	{
-		//Logger->trace("Cache Hit.");
+		// Logger->trace("Cache Hit.");
 		return m_Cache[iHash].n;
 	}
 	else
 	{
-		//Logger->trace("Cache Miss.");
+		// Logger->trace("Cache Miss.");
 	}
 
 	// Mark all points as unchecked.
@@ -1634,7 +1634,7 @@ void CTestHull::BuildNodeGraph()
 	CNode* pSrcNode;  // node we're currently working with
 	CNode* pDestNode; // the other node in comparison operations
 
-	bool fSkipRemainingHulls; //if smallest hull can't fit, don't check any others
+	bool fSkipRemainingHulls; // if smallest hull can't fit, don't check any others
 	bool fPairsValid;		  // are all links in the graph evenly paired?
 
 	int i, j, hull;
@@ -1769,7 +1769,7 @@ void CTestHull::BuildNodeGraph()
 		CGraph::Logger->error("ConnectVisibleNodes FAILED!");
 
 		SetThink(&CTestHull::ShowBadNode); // send the hull off to show the offending node.
-		//pev->solid = SOLID_NOT;
+		// pev->solid = SOLID_NOT;
 		pev->origin = WorldGraph.m_pNodes[iBadNode].m_vecOrigin;
 
 		if (pTempPool)
@@ -1847,7 +1847,7 @@ void CTestHull::BuildNodeGraph()
 				pDestNode = &WorldGraph.m_pNodes[pTempPool[pSrcNode->m_iFirstLink + j].m_iDestNode];
 
 				vecSpot = pDestNode->m_vecOrigin;
-				//vecSpot.z = pev->origin.z;
+				// vecSpot.z = pev->origin.z;
 
 				if (hull < NODE_FLY_HULL)
 				{
@@ -1892,7 +1892,7 @@ void CTestHull::BuildNodeGraph()
 					if (fWalkFailed)
 					{
 
-						//pTempPool[ pSrcNode->m_iFirstLink + j ] = pTempPool [ pSrcNode->m_iFirstLink + ( pSrcNode->m_cNumLinks - 1 ) ];
+						// pTempPool[ pSrcNode->m_iFirstLink + j ] = pTempPool [ pSrcNode->m_iFirstLink + ( pSrcNode->m_cNumLinks - 1 ) ];
 
 						// now me must eliminate the hull that couldn't walk this connection
 						switch (hull)
@@ -1958,7 +1958,7 @@ void CTestHull::BuildNodeGraph()
 	}
 	WorldGraph.m_cLinks = cPoolLinks;
 
-	//copy only the used portions of the TempPool into the graph's link pool
+	// copy only the used portions of the TempPool into the graph's link pool
 	int iFinalPoolIndex = 0;
 	int iOldFirstLink;
 
@@ -2047,7 +2047,7 @@ void CTestHull::BuildNodeGraph()
 
 	// We now have some graphing capabilities.
 	//
-	WorldGraph.m_fGraphPresent = 1;		//graph is in memory.
+	WorldGraph.m_fGraphPresent = 1;		// graph is in memory.
 	WorldGraph.m_fGraphPointersSet = 1; // since the graph was generated, the pointers are ready
 	WorldGraph.m_fRoutingComplete = 0;	// Optimal routes aren't computed, yet.
 
@@ -2191,7 +2191,7 @@ void CQueue::Insert(int iValue, float fPriority)
 	m_tail++;
 
 	if (m_tail == MAX_STACK_NODES)
-	{ //wrap around
+	{ // wrap around
 		m_tail = 0;
 	}
 
@@ -2320,8 +2320,8 @@ bool CGraph::FLoadGraph(const char* szMapName)
 
 	const std::string fileName{std::string{"maps/graphs/"} + szMapName + ".nod"};
 
-	//Note: Allow loading graphs only from the mod directory itself.
-	//Do not allow loading from other games since they may have a different graph format.
+	// Note: Allow loading graphs only from the mod directory itself.
+	// Do not allow loading from other games since they may have a different graph format.
 	const auto buffer = FileSystem_LoadFileIntoBuffer(fileName.c_str(), FileContentFormat::Binary, "GAMECONFIG");
 
 	if (buffer.empty())

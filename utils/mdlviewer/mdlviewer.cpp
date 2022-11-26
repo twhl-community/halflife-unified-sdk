@@ -1,8 +1,8 @@
 /***
-*
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*
-****/
+ *
+ *	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+ *
+ ****/
 // updates:
 // 1-4-98	fixed initialization
 
@@ -127,14 +127,14 @@ void pan(int x, int y)
 	transy -= (y - oy) / 500.;
 	ox = x;
 	oy = y;
-	//glutPostRedisplay();
+	// glutPostRedisplay();
 }
 
 void zoom(int x, int /*y*/)
 {
 	transz += (x - ox) / 20.;
 	ox = x;
-	//glutPostRedisplay();
+	// glutPostRedisplay();
 }
 
 void rotate(int x, int y)
@@ -151,7 +151,7 @@ void rotate(int x, int y)
 		roty += 360.;
 	ox = x;
 	oy = y;
-	//glutPostRedisplay();
+	// glutPostRedisplay();
 }
 
 void motion(int x, int y)
@@ -230,7 +230,7 @@ void display(void)
 	glPopMatrix();
 	SDL_GL_SwapWindow(g_pWindow);
 
-	//glutPostRedisplay();
+	// glutPostRedisplay();
 }
 
 void reshape(int w, int h)
@@ -262,7 +262,7 @@ void key(unsigned char key, int /*x*/, int /*y*/)
 	default:
 		break;
 	}
-	//glutPostRedisplay();
+	// glutPostRedisplay();
 }
 
 #define WIN_SIZE 512
@@ -364,7 +364,7 @@ int main(int argc, char** argv)
 			}
 		}
 
-		//Quit immediately.
+		// Quit immediately.
 		if (bQuit)
 			break;
 

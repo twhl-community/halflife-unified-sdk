@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   This source code contains proprietary and confidential information of
+ *   Valve LLC and its suppliers.  Access to this code is restricted to
+ *   persons who have executed a written SDK license with Valve.  Any access,
+ *   use or distribution of this code by or to any unlicensed person is illegal.
+ *
+ ****/
 
 #pragma once
 
@@ -25,15 +25,15 @@
 #define SF_SCRIPT_EXITAGITATED 2
 #define SF_SCRIPT_REPEATABLE 4
 #define SF_SCRIPT_LEAVECORPSE 8
-//#define SF_SCRIPT_INTERPOLATE		16 // don't use, old bug
+// #define SF_SCRIPT_INTERPOLATE		16 // don't use, old bug
 #define SF_SCRIPT_NOINTERRUPT 32
 #define SF_SCRIPT_OVERRIDESTATE 64
 #define SF_SCRIPT_NOSCRIPTMOVEMENT 128
 
 /**
-*	@brief Don't reset the entity's state after completing the script
-*	For chaining scripts without sequence changes
-*/
+ *	@brief Don't reset the entity's state after completing the script
+ *	For chaining scripts without sequence changes
+ */
 constexpr auto SF_SCRIPT_NORESETENTITY = 256;
 
 #define SCRIPT_BREAK_CONDITIONS (bits_COND_LIGHT_DAMAGE | bits_COND_HEAVY_DAMAGE)
@@ -86,9 +86,9 @@ public:
 	void AllowInterrupt(bool fAllow);
 	int IgnoreConditions() override;
 
-	string_t m_iszIdle;		// string index for idle animation
-	string_t m_iszPlay;		// string index for scripted animation
-	string_t m_iszEntity;	// entity that is wanted for this script
+	string_t m_iszIdle;	  // string index for idle animation
+	string_t m_iszPlay;	  // string index for scripted animation
+	string_t m_iszEntity; // entity that is wanted for this script
 	int m_fMoveTo;
 	int m_iFinishSchedule;
 	float m_flRadius; // range to search

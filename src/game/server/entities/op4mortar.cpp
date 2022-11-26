@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   This source code contains proprietary and confidential information of
+ *   Valve LLC and its suppliers.  Access to this code is restricted to
+ *   persons who have executed a written SDK license with Valve.  Any access,
+ *   use or distribution of this code by or to any unlicensed person is illegal.
+ *
+ ****/
 #include "cbase.h"
 
 class CMortarShell : public CGrenade
@@ -78,7 +78,7 @@ void CMortarShell::Spawn()
 	pev->velocity = -(gpGlobals->v_forward * m_velocity);
 	pev->gravity = 1;
 
-	//Deal twice the damage that the RPG does
+	// Deal twice the damage that the RPG does
 	pev->dmg = 2 * GetSkillFloat("plr_rpg"sv);
 
 	pev->nextthink = gpGlobals->time + 0.01;
@@ -179,8 +179,8 @@ void CMortarShell::MortarExplodeTouch(CBaseEntity* pOther)
 	else
 		UTIL_DecalTrace(&tr, DECAL_SCORCH1);
 
-	//TODO: never used?
-	//g_engfuncs.pfnRandomFloat( 0.0, 1.0 );
+	// TODO: never used?
+	// g_engfuncs.pfnRandomFloat( 0.0, 1.0 );
 
 	switch (RANDOM_LONG(0, 2))
 	{
@@ -511,7 +511,7 @@ void COp4Mortar::MortarThink()
 
 bool COp4Mortar::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
-	//Ignore all damage
+	// Ignore all damage
 	return CBaseMonster::TakeDamage(pevInflictor, pevAttacker, 0, bitsDamageType);
 }
 
@@ -762,7 +762,7 @@ void COp4Mortar::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE use
 	{
 		if ((pev->spawnflags & SF_MORTAR_ACTIVE) == 0 && (pev->spawnflags & SF_MORTAR_CONTROLLABLE) != 0)
 		{
-			//Player fired a mortar
+			// Player fired a mortar
 			EMIT_SOUND(edict(), CHAN_VOICE, "weapons/mortarhit.wav", VOL_NORM, ATTN_NONE);
 			UTIL_ScreenShake(pev->origin, 12.0, 100.0, 2.0, 1000.0);
 
@@ -783,7 +783,7 @@ void COp4Mortar::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE use
 		}
 	}
 
-	//Toggle AI active state
+	// Toggle AI active state
 	if (ShouldToggle(useType, (pev->spawnflags & SF_MORTAR_ACTIVE) != 0))
 	{
 		pev->spawnflags ^= SF_MORTAR_ACTIVE;

@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1999, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1999, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 //
 // death notice
 //
@@ -62,8 +62,8 @@ float* GetClientColor(int clientIndex)
 	case 0:
 		return g_ColorYellow;
 
-		//Opposing Force doesn't send the teamnumber in ScoreInfo, so a -1 is read by the client.
-		//Make sure this uses the correct color.
+		// Opposing Force doesn't send the teamnumber in ScoreInfo, so a -1 is read by the client.
+		// Make sure this uses the correct color.
 	case -1:
 		return nullptr;
 

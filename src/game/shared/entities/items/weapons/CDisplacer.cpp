@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 #include "cbase.h"
 #include "UserMessages.h"
 
@@ -177,7 +177,7 @@ void CDisplacer::SecondaryAttack()
 
 void CDisplacer::Reload()
 {
-	//Nothing
+	// Nothing
 }
 
 void CDisplacer::SpinupThink()
@@ -190,11 +190,11 @@ void CDisplacer::SpinupThink()
 
 		int flags;
 
-		//#if defined( CLIENT_WEAPONS )
+		// #if defined( CLIENT_WEAPONS )
 		//		flags = FEV_NOTHOST;
-		//#else
+		// #else
 		flags = 0;
-		//#endif
+		// #endif
 
 		PLAYBACK_EVENT_FULL(flags, m_pPlayer->edict(), m_usFireDisplacer, 0, g_vecZero, g_vecZero,
 			0, 0, static_cast<int>(m_Mode), 0, 0, 0);
@@ -235,11 +235,11 @@ void CDisplacer::AltSpinupThink()
 
 		int flags;
 
-		//#if defined( CLIENT_WEAPONS )
+		// #if defined( CLIENT_WEAPONS )
 		//		flags = FEV_NOTHOST;
-		//#else
+		// #else
 		flags = 0;
-		//#endif
+		// #endif
 
 		PLAYBACK_EVENT_FULL(flags, m_pPlayer->edict(), m_usFireDisplacer, 0, g_vecZero, g_vecZero,
 			0, 0, static_cast<int>(m_Mode), 0, 0, 0);
@@ -305,7 +305,7 @@ void CDisplacer::FireThink()
 
 	Vector vecSrc = m_pPlayer->GetGunPosition();
 
-	//Update auto-aim
+	// Update auto-aim
 	m_pPlayer->GetAutoaimVectorFromPoint(vecSrc, AUTOAIM_10DEGREES);
 
 	CDisplacerBall::CreateDisplacerBall(vecSrc, vecAnglesAim, m_pPlayer);
@@ -403,7 +403,7 @@ void CDisplacer::AltFireThink()
 		m_pPlayer->m_iWeaponFlash = BRIGHT_GUN_FLASH;
 
 #ifndef CLIENT_DLL
-		//Must always be handled on the server side in order to play the right sounds and effects. - Solokiller
+		// Must always be handled on the server side in order to play the right sounds and effects. - Solokiller
 		int flags = 0;
 
 		PLAYBACK_EVENT_FULL(flags, m_pPlayer->edict(), m_usFireDisplacer, 0, g_vecZero, g_vecZero,

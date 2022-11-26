@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 //=========================================================
 // GameRules
 //=========================================================
@@ -88,7 +88,7 @@ public:
 
 	// Functions to verify the single/multiplayer status of a game
 	virtual bool IsMultiplayer() = 0;								 // is this a multiplayer game? (either coop or deathmatch)
-	virtual bool IsDeathmatch() = 0;								 //is this a deathmatch game?
+	virtual bool IsDeathmatch() = 0;								 // is this a deathmatch game?
 	virtual bool IsTeamplay() { return false; }						 // is this deathmatch game being played with team rules?
 	virtual bool IsCoOp() = 0;										 // is this a coop game?
 	virtual bool IsCTF() = 0;										 // is this a ctf game?
@@ -179,7 +179,7 @@ public:
 	virtual bool PlayFootstepSounds(CBasePlayer* pl, float fvol) { return true; }
 
 	// Monsters
-	virtual bool FAllowMonsters() = 0; //are monsters allowed
+	virtual bool FAllowMonsters() = 0; // are monsters allowed
 
 	// Immediately end a multiplayer game
 	virtual void EndMultiplayerGame() {}

@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 //
 // hud_playerbrowse.cpp
 //
@@ -120,14 +120,14 @@ bool CHudPlayerBrowse::MsgFunc_PlyrBrowse(const char* pszName, int iSize, void* 
 	{
 		const char* identifier = "(Friendly) ";
 
-		//TODO: is the leading space supposed to be here?
+		// TODO: is the leading space supposed to be here?
 		if (!m_fFriendly)
 			identifier = " (Enemy) ";
 
 		strcpy(m_szNewLineBuffer, identifier);
 	}
 
-	//TODO: unsafe use of strncat count parameter
+	// TODO: unsafe use of strncat count parameter
 	strncat(m_szNewLineBuffer, READ_STRING(), iSize - 3);
 
 	if ('\0' != m_szNewLineBuffer[0])
@@ -182,7 +182,7 @@ bool CHudPlayerBrowse::MsgFunc_PlyrBrowse(const char* pszName, int iSize, void* 
 
 		if (m_fFriendly || 0 == m_iNewTeamNum)
 		{
-			//TODO: unsafe
+			// TODO: unsafe
 			sprintf(&m_szNewLineBuffer[strlen(m_szNewLineBuffer)], " (%d/%d)", m_iHealth, m_iArmor);
 		}
 

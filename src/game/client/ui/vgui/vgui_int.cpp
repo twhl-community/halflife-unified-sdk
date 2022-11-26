@@ -38,12 +38,12 @@ void VGui_Startup()
 {
 	Panel* root = (Panel*)VGui_GetPanel();
 	root->setBgColor(128, 128, 0, 0);
-	//root->setNonPainted(false);
-	//root->setBorder(new LineBorder());
+	// root->setNonPainted(false);
+	// root->setBorder(new LineBorder());
 	root->setLayout(new BorderLayout(0));
 
 
-	//root->getSurfaceBase()->setEmulatedCursorVisible(true);
+	// root->getSurfaceBase()->setEmulatedCursorVisible(true);
 
 	if (gViewPort != nullptr)
 	{

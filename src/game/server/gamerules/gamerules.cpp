@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 //=========================================================
 // GameRules.cpp
 //=========================================================
@@ -32,15 +32,13 @@ CGameRules::CGameRules()
 	m_SpectateCommand = g_ClientCommands.CreateScoped("spectate", [this](CBasePlayer* player, const auto& args)
 		{
 			// clients wants to become a spectator
-			BecomeSpectator(player, args);
-		});
+			BecomeSpectator(player, args); });
 
 	m_SpecModeCommand = g_ClientCommands.CreateScoped("specmode", [this](CBasePlayer* player, const auto& args)
 		{
 			// new spectator mode
 			if (player->IsObserver())
-				player->Observer_SetMode(atoi(CMD_ARGV(1)));
-		});
+				player->Observer_SetMode(atoi(CMD_ARGV(1))); });
 }
 
 CBasePlayerItem* CGameRules::FindNextBestWeapon(CBasePlayer* pPlayer, CBasePlayerItem* pCurrentWeapon)
@@ -80,10 +78,10 @@ CBasePlayerItem* CGameRules::FindNextBestWeapon(CBasePlayer* pPlayer, CBasePlaye
 			}
 			else if (pCheck->iWeight() > iBestWeight)
 			{
-				//Logger->debug("Considering {}", STRING(pCheck->pev->classname));
-				// we keep updating the 'best' weapon just in case we can't find a weapon of the same weight
-				// that the player was using. This will end up leaving the player with his heaviest-weighted
-				// weapon.
+				// Logger->debug("Considering {}", STRING(pCheck->pev->classname));
+				//  we keep updating the 'best' weapon just in case we can't find a weapon of the same weight
+				//  that the player was using. This will end up leaving the player with his heaviest-weighted
+				//  weapon.
 				if (pCheck->CanDeploy())
 				{
 					// if this weapon is useable, flag it as the best
@@ -188,7 +186,7 @@ bool CGameRules::CanHavePlayerItem(CBasePlayer* pPlayer, CBasePlayerItem* pWeapo
 
 void CGameRules::BecomeSpectator(CBasePlayer* player, const CommandArgs& args)
 {
-	//Default implementation: applies to all game modes, even singleplayer.
+	// Default implementation: applies to all game modes, even singleplayer.
 
 	// always allow proxies to become a spectator
 	if ((player->pev->flags & FL_PROXY) != 0 || allow_spectators.value != 0)

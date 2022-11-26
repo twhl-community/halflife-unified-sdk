@@ -1,12 +1,12 @@
 /***
-*
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
-*	All Rights Reserved.
-*
-****/
+ *
+ *	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ ****/
 
 // qrad.c
 
@@ -396,7 +396,7 @@ void MakePatchForFace(int fn, winding_t* w)
 		for (j = 0; j < f->numedges; j++)
 		{
 			int edge = dsurfedges[f->firstedge + j];
-			//int edge2 = dsurfedges[ j==f->numedges-1 ? f->firstedge : f->firstedge + j + 1 ];
+			// int edge2 = dsurfedges[ j==f->numedges-1 ? f->firstedge : f->firstedge + j + 1 ];
 
 			if (edge > 0)
 			{

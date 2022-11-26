@@ -65,8 +65,7 @@ bool CHudEntityInfo::Draw(float flTime)
 		{
 			// Include spaces in the label text.
 			{"Classname: ", m_EntityInfo.Classname.c_str()},
-			{"Health: ", healthString.c_str()}
-		};
+			{"Health: ", healthString.c_str()}};
 
 	// Draw labels first, calculate maximum width needed.
 	int maximumWidth = -1;

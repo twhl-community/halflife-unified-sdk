@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 /*
 
 ===== bmodels.cpp ========================================================
@@ -208,7 +208,7 @@ LINK_ENTITY_TO_CLASS(func_illusionary, CFuncIllusionary);
 
 bool CFuncIllusionary::KeyValue(KeyValueData* pkvd)
 {
-	if (FStrEq(pkvd->szKeyName, "skin")) //skin is used for content type
+	if (FStrEq(pkvd->szKeyName, "skin")) // skin is used for content type
 	{
 		pev->skin = atof(pkvd->szValue);
 		return true;
@@ -527,7 +527,7 @@ void CFuncRotating::RampPitchVol(bool fUp)
 //
 void CFuncRotating::SpinUp()
 {
-	Vector vecAVel; //rotational velocity
+	Vector vecAVel; // rotational velocity
 
 	pev->nextthink = pev->ltime + 0.1;
 	pev->avelocity = pev->avelocity + (pev->movedir * (pev->speed * m_flFanFriction));
@@ -557,12 +557,12 @@ void CFuncRotating::SpinUp()
 //
 void CFuncRotating::SpinDown()
 {
-	Vector vecAVel; //rotational velocity
+	Vector vecAVel; // rotational velocity
 	vec_t vecdir;
 
 	pev->nextthink = pev->ltime + 0.1;
 
-	pev->avelocity = pev->avelocity - (pev->movedir * (pev->speed * m_flFanFriction)); //spin down slower than spinup
+	pev->avelocity = pev->avelocity - (pev->movedir * (pev->speed * m_flFanFriction)); // spin down slower than spinup
 
 	vecAVel = pev->avelocity; // cache entity's rotational velocity
 
@@ -610,7 +610,7 @@ void CFuncRotating::RotatingUse(CBaseEntity* pActivator, CBaseEntity* pCaller, U
 		if (pev->avelocity != g_vecZero)
 		{
 			SetThink(&CFuncRotating::SpinDown);
-			//EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, (char *)STRING(pev->noise2),
+			// EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, (char *)STRING(pev->noise2),
 			//	m_flVolume, m_flAttenuation, 0, m_pitch);
 
 			pev->nextthink = pev->ltime + 0.1;
@@ -624,7 +624,7 @@ void CFuncRotating::RotatingUse(CBaseEntity* pActivator, CBaseEntity* pCaller, U
 			pev->nextthink = pev->ltime + 0.1;
 		}
 	}
-	else if (!FBitSet(pev->spawnflags, SF_BRUSH_ACCDCC)) //this is a normal start/stop brush.
+	else if (!FBitSet(pev->spawnflags, SF_BRUSH_ACCDCC)) // this is a normal start/stop brush.
 	{
 		if (pev->avelocity != g_vecZero)
 		{
@@ -664,7 +664,7 @@ void CFuncRotating::Blocked(CBaseEntity* pOther)
 
 
 
-//#endif
+// #endif
 
 
 class CPendulum : public CBaseEntity

@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 /*
 
 ===== world.cpp ========================================================
@@ -249,9 +249,9 @@ void CopyToBodyQue(entvars_t* pev)
 	pevHead->renderamt = ENTINDEX(ENT(pev));
 
 	pevHead->effects = pev->effects | EF_NOINTERP;
-	//pevHead->goalstarttime = pev->goalstarttime;
-	//pevHead->goalframe	= pev->goalframe;
-	//pevHead->goalendtime = pev->goalendtime ;
+	// pevHead->goalstarttime = pev->goalstarttime;
+	// pevHead->goalframe	= pev->goalframe;
+	// pevHead->goalendtime = pev->goalendtime ;
 
 	pevHead->sequence = pev->sequence;
 	pevHead->animtime = pev->animtime;
@@ -296,7 +296,7 @@ globalentity_t* CGlobalState::Find(string_t globalname)
 
 
 // This is available all the time now on impulse 104, remove later
-//#ifdef _DEBUG
+// #ifdef _DEBUG
 void CGlobalState::DumpGlobals()
 {
 	static const char* estates[] = {"Off", "On", "Dead"};
@@ -310,7 +310,7 @@ void CGlobalState::DumpGlobals()
 		pTest = pTest->pNext;
 	}
 }
-//#endif
+// #endif
 
 
 void CGlobalState::EntityAdd(string_t globalname, string_t mapName, GLOBALESTATE state)
@@ -546,7 +546,7 @@ void CWorld::Precache()
 	//!!!UNDONE why is there so much Spawn code in the Precache function? I'll just keep it here
 
 	///!!!LATER - do we want a sound ent in deathmatch? (sjb)
-	//pSoundEnt = CBaseEntity::Create( "soundent", g_vecZero, g_vecZero, edict() );
+	// pSoundEnt = CBaseEntity::Create( "soundent", g_vecZero, g_vecZero, edict() );
 	pSoundEnt = GetClassPtr((CSoundEnt*)nullptr);
 	pSoundEnt->Spawn();
 
@@ -575,7 +575,7 @@ void CWorld::Precache()
 	PrecacheSound("common/null.wav"); // clears sound channels
 
 	PrecacheSound("items/suitchargeok1.wav"); //!!! temporary sound for respawning weapons.
-	PrecacheSound("items/gunpickup2.wav");	   // player picks up a gun.
+	PrecacheSound("items/gunpickup2.wav");	  // player picks up a gun.
 
 	PrecacheSound("common/bodydrop3.wav"); // dead bodies hitting the ground (animation events)
 	PrecacheSound("common/bodydrop4.wav");
@@ -763,7 +763,7 @@ bool CWorld::KeyValue(KeyValueData* pkvd)
 	}
 	else if (FStrEq(pkvd->szKeyName, "gametitle"))
 	{
-		//No need to save, only displayed on startup. Bugged in vanilla, loading a save game shows it again.
+		// No need to save, only displayed on startup. Bugged in vanilla, loading a save game shows it again.
 		g_DisplayTitleName = pkvd->szValue;
 		return true;
 	}

@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   This source code contains proprietary and confidential information of
+ *   Valve LLC and its suppliers.  Access to this code is restricted to
+ *   persons who have executed a written SDK license with Valve.  Any access,
+ *   use or distribution of this code by or to any unlicensed person is illegal.
+ *
+ ****/
 
 //=========================================================
 // icthyosaur - evin, satan fish monster
@@ -580,7 +580,7 @@ Schedule_t* CIchthyosaur::GetScheduleOfType(int Type)
 	case SCHED_DIE:
 		if (pev->deadflag == DEAD_DEAD)
 		{
-			//Already dead, immediately switch to float.
+			// Already dead, immediately switch to float.
 			return slFloat;
 		}
 
@@ -624,7 +624,7 @@ void CIchthyosaur::StartTask(Task_t* pTask)
 	{
 		const int sequenceIndex = LookupSequence("bellyup");
 
-		//Don't restart the animation if we're restoring.
+		// Don't restart the animation if we're restoring.
 		if (pev->sequence != sequenceIndex)
 		{
 			pev->skin = EYE_BASE;
@@ -887,7 +887,7 @@ void CIchthyosaur::SetActivity(Activity NewActivity)
 
 	CFlyingMonster::SetActivity(NewActivity);
 
-	//Restore belly up state.
+	// Restore belly up state.
 	if (pev->deadflag == DEAD_DEAD)
 	{
 		SetSequenceByName("bellyup");

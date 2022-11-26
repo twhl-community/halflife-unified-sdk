@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 //
 // saytext.cpp
 //
@@ -117,8 +117,8 @@ bool CHudSayText::Draw(float flTime)
 		}
 	}
 
-	//Set text color to con_color cvar value before drawing to ensure consistent color.
-	//The engine resets this color to that value after drawing a single string.
+	// Set text color to con_color cvar value before drawing to ensure consistent color.
+	// The engine resets this color to that value after drawing a single string.
 	if (int r, g, b; sscanf(m_con_color->string, "%i %i %i", &r, &g, &b) == 3)
 	{
 		gEngfuncs.pfnDrawSetTextColor(r / 255.0f, g / 255.0f, b / 255.0f);
@@ -134,24 +134,24 @@ bool CHudSayText::Draw(float flTime)
 			{
 				// it's a saytext string
 
-				//Make a copy we can freely modify
+				// Make a copy we can freely modify
 				strncpy(line, g_szLineBuffer[i], sizeof(line) - 1);
 				line[sizeof(line) - 1] = '\0';
 
 				// draw the first x characters in the player color
 				const std::size_t playerNameEndIndex = V_min(g_iNameLengths[i], MAX_PLAYER_NAME_LENGTH + 31);
 
-				//Cut off the actual text so we can print player name
+				// Cut off the actual text so we can print player name
 				line[playerNameEndIndex] = '\0';
 
 				gEngfuncs.pfnDrawSetTextColor(g_pflNameColors[i][0], g_pflNameColors[i][1], g_pflNameColors[i][2]);
 				const int x = DrawConsoleString(LINE_START, y, line + 1); // don't draw the control code at the start
 
-				//Reset last character
+				// Reset last character
 				line[playerNameEndIndex] = g_szLineBuffer[i][playerNameEndIndex];
 
 				// color is reset after each string draw
-				//Print the text without player name
+				// Print the text without player name
 				DrawConsoleString(x, y, line + g_iNameLengths[i]);
 			}
 			else

@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 /*
 
 ===== buttons.cpp ========================================================
@@ -416,8 +416,8 @@ LINK_ENTITY_TO_CLASS(func_button, CBaseButton);
 void CBaseButton::Spawn()
 {
 	//----------------------------------------------------
-	//determine sounds for buttons
-	//a sound of 0 should not make a sound
+	// determine sounds for buttons
+	// a sound of 0 should not make a sound
 	//----------------------------------------------------
 	if (FStrEq("", STRING(m_sounds)))
 	{
@@ -488,7 +488,7 @@ void DoSpark(entvars_t* pev, const Vector& location)
 	Vector tmp = location + pev->size * 0.5;
 	UTIL_Sparks(tmp);
 
-	float flVolume = RANDOM_FLOAT(0.25, 0.75) * 0.4; //random volume range
+	float flVolume = RANDOM_FLOAT(0.25, 0.75) * 0.4; // random volume range
 	switch ((int)(RANDOM_FLOAT(0, 1) * 6))
 	{
 	case 0:
@@ -538,7 +538,7 @@ void CBaseButton::ButtonUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_T
 		{
 			EMIT_SOUND(ENT(pev), CHAN_VOICE, STRING(m_sounds), 1, ATTN_NORM);
 
-			//SUB_UseTargets( m_eoActivator );
+			// SUB_UseTargets( m_eoActivator );
 			ButtonReturn();
 		}
 	}
@@ -699,7 +699,7 @@ void CBaseButton::ButtonBackHome()
 
 	if (FBitSet(pev->spawnflags, SF_BUTTON_TOGGLE))
 	{
-		//EMIT_SOUND(ENT(pev), CHAN_VOICE, STRING(m_sounds), 1, ATTN_NORM);
+		// EMIT_SOUND(ENT(pev), CHAN_VOICE, STRING(m_sounds), 1, ATTN_NORM);
 
 		SUB_UseTargets(m_hActivator, USE_TOGGLE, 0);
 	}
@@ -734,7 +734,7 @@ void CBaseButton::ButtonBackHome()
 		SetTouch(&CBaseButton::ButtonTouch);
 
 	// reset think for a sparking button
-	//func_rot_button's X Axis spawnflag overlaps with this one so don't use it here.
+	// func_rot_button's X Axis spawnflag overlaps with this one so don't use it here.
 	if (!FClassnameIs(pev, "func_rot_button") && FBitSet(pev->spawnflags, SF_BUTTON_SPARK_IF_OFF))
 	{
 		SetThink(&CBaseButton::ButtonSpark);
@@ -758,8 +758,8 @@ LINK_ENTITY_TO_CLASS(func_rot_button, CRotButton);
 void CRotButton::Spawn()
 {
 	//----------------------------------------------------
-	//determine sounds for buttons
-	//a sound of 0 should not make a sound
+	// determine sounds for buttons
+	// a sound of 0 should not make a sound
 	//----------------------------------------------------
 	if (FStrEq("", STRING(m_sounds)))
 	{
@@ -812,7 +812,7 @@ void CRotButton::Spawn()
 	else // touchable button
 		SetTouch(&CRotButton::ButtonTouch);
 
-	//SetTouch( ButtonTouch );
+	// SetTouch( ButtonTouch );
 }
 
 

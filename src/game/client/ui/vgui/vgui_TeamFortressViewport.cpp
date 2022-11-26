@@ -590,8 +590,8 @@ TeamFortressViewport::TeamFortressViewport(int x, int y, int wide, int tall) : P
 	CreateClassMenu();
 	CreateSpectatorMenu();
 	CreateStatsMenu();
-	//CreateScoreBoard();
-	// Init command menus
+	// CreateScoreBoard();
+	//  Init command menus
 	m_iNumMenus = 0;
 	m_iCurrentTeamNumber = m_iUser1 = m_iUser2 = m_iUser3 = 0;
 
@@ -914,7 +914,7 @@ CCommandMenu* TeamFortressViewport::CreateDisguiseSubmenu(CommandButton* pButton
 	m_iNumMenus++;
 
 	// create the class choice buttons
-	//#ifdef _TFC
+	// #ifdef _TFC
 	for (int i = PC_FIRSTCLASS; i <= PC_LASTCLASS; i++)
 	{
 		CommandButton* pDisguiseButton = new CommandButton(
@@ -927,7 +927,7 @@ CCommandMenu* TeamFortressViewport::CreateDisguiseSubmenu(CommandButton* pButton
 
 		pMenu->AddButton(pDisguiseButton);
 	}
-	//#endif
+	// #endif
 
 	return pMenu;
 }
@@ -985,7 +985,7 @@ CommandButton* TeamFortressViewport::CreateCustomButton(char* pButtonText, char*
 		m_pCommandMenus[m_iNumMenus] = pMenu;
 		m_iNumMenus++;
 
-		//#ifdef _TFC
+		// #ifdef _TFC
 		for (int i = PC_FIRSTCLASS; i <= PC_LASTCLASS; i++)
 		{
 			char sz[256];
@@ -998,7 +998,7 @@ CommandButton* TeamFortressViewport::CreateCustomButton(char* pButtonText, char*
 			pClassButton->addActionSignal(new CMenuHandler_StringCommandClassSelect(sz));
 			pMenu->AddButton(pClassButton);
 		}
-		//#endif
+		// #endif
 	}
 
 	return pButton;
@@ -1071,7 +1071,7 @@ void TeamFortressViewport::ShowCommandMenu(int menuIndex)
 	if (!m_iInitialized)
 		return;
 
-	//Already have a menu open.
+	// Already have a menu open.
 	if (m_pCurrentMenu)
 		return;
 
@@ -1255,7 +1255,7 @@ void TeamFortressViewport::UpdatePlayerMenu(int menuIndex)
 
 	for (int i = 1; i < MAX_PLAYERS_HUD; i++)
 	{
-		//if ( g_PlayerInfoList[i].name == nullptr )
+		// if ( g_PlayerInfoList[i].name == nullptr )
 		//	continue; // empty player slot, skip
 
 		pEnt = gEngfuncs.GetEntityByIndex(i);
@@ -1263,7 +1263,7 @@ void TeamFortressViewport::UpdatePlayerMenu(int menuIndex)
 		if (!gHUD.m_Spectator.IsActivePlayer(pEnt))
 			continue;
 
-		//if ( g_PlayerExtraInfo[i].teamname[0] == 0 )
+		// if ( g_PlayerExtraInfo[i].teamname[0] == 0 )
 		//	continue; // skip over players who are not in a team
 
 		SpectButton* pButton = new SpectButton(1, g_PlayerInfoList[pEnt->index].name,
@@ -1356,7 +1356,7 @@ void TeamFortressViewport::UpdateSpectatorPanel()
 		{
 			float* color = GetClientColor(player);
 
-			//Color is null in CTF.
+			// Color is null in CTF.
 			if (color)
 			{
 				int r = color[0] * 255;
@@ -2172,7 +2172,7 @@ bool TeamFortressViewport::MsgFunc_ScoreInfo(const char* pszName, int iSize, voi
 	short cl = READ_BYTE();
 	short frags = READ_SHORT();
 	short deaths = READ_SHORT();
-	//TODO: not written by Op4
+	// TODO: not written by Op4
 	short playerclass = READ_SHORT();
 	short teamnumber = READ_SHORT();
 
@@ -2183,7 +2183,7 @@ bool TeamFortressViewport::MsgFunc_ScoreInfo(const char* pszName, int iSize, voi
 		g_PlayerExtraInfo[cl].playerclass = playerclass;
 		g_PlayerExtraInfo[cl].teamnumber = teamnumber;
 
-		//Dont go bellow 0!
+		// Dont go bellow 0!
 		if (g_PlayerExtraInfo[cl].teamnumber < 0)
 			g_PlayerExtraInfo[cl].teamnumber = 0;
 

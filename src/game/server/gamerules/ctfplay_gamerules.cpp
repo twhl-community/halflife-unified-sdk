@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 
 #include <array>
 
@@ -60,8 +60,8 @@ static const char team_names[MaxTeams][MaxTeamNameLength] =
 		{"Black Mesa"},
 		{"Opposing Force"}};
 
-//First half are first team, second half are second team
-//TODO: rework so it's 2 separate lists
+// First half are first team, second half are second team
+// TODO: rework so it's 2 separate lists
 static const std::array<const char*, MaxTeamCharacters> team_chars =
 	{
 		"ctf_barney",
@@ -98,7 +98,7 @@ const char* GetTeamName(edict_t* pEntity)
 	}
 	else
 	{
-		//A bit counterintuitive, this basically means each player model is a team
+		// A bit counterintuitive, this basically means each player model is a team
 		if (g_pGameRules->IsDeathmatch() && g_pGameRules->IsTeamplay())
 		{
 			return g_engfuncs.pfnInfoKeyValue(g_engfuncs.pfnGetInfoKeyBuffer(pEntity), "model");
@@ -125,7 +125,7 @@ void GetLosingTeam(int& iTeamNum, int& iScoreDiff)
 	iTeamNum = 0;
 	iScoreDiff = 0;
 
-	//TODO: doesn't really make sense, if team 0 is losing the score difference is 0
+	// TODO: doesn't really make sense, if team 0 is losing the score difference is 0
 	if (teamscores[1] < teamscores[0])
 	{
 		iTeamNum = 1;
@@ -425,7 +425,7 @@ void InitItemsForPlayer(CBasePlayer* pPlayer)
 		{
 			for (const auto& item : CTFItems)
 			{
-				//TODO: this can probably be optimized by finding the last item that the player is carrying and only sending that
+				// TODO: this can probably be optimized by finding the last item that the player is carrying and only sending that
 				if ((pOther->m_iItems & item.Mask) != 0)
 				{
 					g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgPlayerIcon, nullptr, pPlayer->edict());
@@ -483,14 +483,12 @@ CHalfLifeCTFplay::CHalfLifeCTFplay()
 				{
 					player->Menu_Team_Input(-1);
 				}
-			}
-		});
+			} });
 
 	m_EndMotdCommand = g_ClientCommands.CreateScoped("endmotd", [](CBasePlayer* player, const auto& args)
 		{
 			player->m_iCurrentMenu = MENU_TEAM;
-			player->Player_Menu();
-		});
+			player->Player_Menu(); });
 
 	m_JoinTeamCommand = g_ClientCommands.CreateScoped("jointeam", [](CBasePlayer* player, const auto& args)
 		{ player->Menu_Team_Input(atoi(CMD_ARGV(1))); });
@@ -500,8 +498,7 @@ CHalfLifeCTFplay::CHalfLifeCTFplay()
 			if (args.Count() > 1)
 			{
 				player->Menu_Char_Input(atoi(args.Argument(1)));
-			}
-		});
+			} });
 
 	m_ChangeTeamCommand = g_ClientCommands.CreateScoped("changeteam", [](CBasePlayer* player, const auto& args)
 		{
@@ -513,8 +510,7 @@ CHalfLifeCTFplay::CHalfLifeCTFplay()
 			{
 				player->m_iCurrentMenu = MENU_TEAM;
 				player->Player_Menu();
-			}
-		});
+			} });
 
 	m_ChangeClassCommand = g_ClientCommands.CreateScoped("changeclass", [](CBasePlayer* player, const auto& args)
 		{
@@ -536,8 +532,7 @@ CHalfLifeCTFplay::CHalfLifeCTFplay()
 			else
 			{
 				ClientPrint(player->pev, HUD_PRINTCONSOLE, "No Team Selected.  Use \"changeteam\".\n");
-			}
-		});
+			} });
 
 	m_FlagInfoCommand = g_ClientCommands.CreateScoped("flaginfo", [](CBasePlayer* player, const auto& args)
 		{ DumpCTFFlagInfo(player); });
@@ -558,7 +553,7 @@ void CHalfLifeCTFplay::Think()
 			m_iStatsPhase = StatsPhase::Nothing;
 			break;
 		case StatsPhase::SendPlayers:
-			//Send up to 5 players worth of stats at a time until we've sent everything.
+			// Send up to 5 players worth of stats at a time until we've sent everything.
 			for (int iStat = 0; iStat <= 5 && m_iStatsPlayer <= gpGlobals->maxClients; ++m_iStatsPlayer)
 			{
 				auto pPlayer = UTIL_PlayerByIndex(m_iStatsPlayer);
@@ -572,7 +567,7 @@ void CHalfLifeCTFplay::Think()
 
 			--m_iStatsPlayer;
 
-			//TODO: checks against an index that may not have been sent
+			// TODO: checks against an index that may not have been sent
 			if (gpGlobals->maxClients <= (m_iStatsPlayer + 1))
 				m_iStatsPhase = StatsPhase::OpenMenu;
 			break;
@@ -764,9 +759,9 @@ void CHalfLifeCTFplay::ClientDisconnected(edict_t* pClient)
 
 			Logger->trace("{} disconnected", PlayerLogInfo{*v2});
 
-			//TODO: doesn't seem to be used
-			//free( v2->ip );
-			//v2->ip = nullptr;
+			// TODO: doesn't seem to be used
+			// free( v2->ip );
+			// v2->ip = nullptr;
 
 			free(pszPlayerIPs[g_engfuncs.pfnIndexOfEdict(pClient)]);
 
@@ -930,7 +925,7 @@ void CHalfLifeCTFplay::PlayerThink(CBasePlayer* pPlayer)
 			g_engfuncs.pfnWriteByte((int)v11);
 			g_engfuncs.pfnWriteString(STRING(pOtherPlayer->pev->netname));
 			g_engfuncs.pfnWriteByte((byte)pOtherPlayer->m_iItems);
-			//Round health up to 0 to prevent wraparound
+			// Round health up to 0 to prevent wraparound
 			g_engfuncs.pfnWriteByte((byte)V_max(0, pOtherPlayer->pev->health));
 			g_engfuncs.pfnWriteByte((byte)pOtherPlayer->pev->armorvalue);
 			g_engfuncs.pfnMessageEnd();
@@ -1293,7 +1288,7 @@ void CHalfLifeCTFplay::ChangePlayerTeam(CBasePlayer* pPlayer, const char* pCharN
 		g_engfuncs.pfnSetClientKeyValue(v5, g_engfuncs.pfnGetInfoKeyBuffer(pPlayer->edict()), "model", pCharName);
 		g_engfuncs.pfnSetClientKeyValue(v5, g_engfuncs.pfnGetInfoKeyBuffer(pPlayer->edict()), "team", pPlayer->m_szTeamName);
 
-		//Send a ScoreInfo message so all clients have all of this client's info.
+		// Send a ScoreInfo message so all clients have all of this client's info.
 		pPlayer->SendScoreInfoAll();
 
 		MESSAGE_BEGIN(MSG_ALL, gmsgTeamInfo);
@@ -1302,7 +1297,7 @@ void CHalfLifeCTFplay::ChangePlayerTeam(CBasePlayer* pPlayer, const char* pCharN
 		g_engfuncs.pfnWriteByte((int)pPlayer->m_iTeamNum);
 		g_engfuncs.pfnMessageEnd();
 
-		//Reset FOV (could have been inherited from observer mode)
+		// Reset FOV (could have been inherited from observer mode)
 		pPlayer->m_iClientFOV = 0;
 		pPlayer->m_iFOV = 0;
 
@@ -1323,7 +1318,7 @@ void CHalfLifeCTFplay::ChangePlayerTeam(CBasePlayer* pPlayer, const char* pCharN
 	}
 	else
 	{
-		//TODO: check how much of this is handled by newer observer code.
+		// TODO: check how much of this is handled by newer observer code.
 		if (pPlayer->pev->health <= 0.0)
 		{
 			respawn(pPlayer->pev, false);
@@ -1524,18 +1519,18 @@ static void InternalSendTeamStat(int playerIndex, const Format& format, const ch
 }
 
 /**
-*	@brief Send a team statistic
-*	Was probably a variadic macro in the original
-*/
+ *	@brief Send a team statistic
+ *	Was probably a variadic macro in the original
+ */
 static void SendTeamStat(int playerIndex, const char* pszStatName, const int value)
 {
 	InternalSendTeamStat(playerIndex, "// {:<20s} : {} for {}", pszStatName, value, value);
 }
 
 /**
-*	@brief Send a team time statistic
-*	Was probably a variadic macro in the original
-*/
+ *	@brief Send a team time statistic
+ *	Was probably a variadic macro in the original
+ */
 static void SendTeamTimeStat(int playerIndex, const char* pszStatName, const float value)
 {
 	const auto time = SecondsToTime(value);
@@ -1707,7 +1702,7 @@ void CHalfLifeCTFplay::SendTeamStatInfo(CTFTeam iTeamNum)
 	}
 	else
 	{
-		//TODO: player count is always 0
+		// TODO: player count is always 0
 		for (auto i = 0; i < MaxTeams; ++i)
 		{
 			Logger->trace("Team \"{}\" scored \"{}\" with \"{}\" players", team_names[i], teamscores[i], 0);
@@ -1814,6 +1809,6 @@ void CHalfLifeCTFplay::RecountTeams()
 
 void CHalfLifeCTFplay::BecomeSpectator(CBasePlayer* player, const CommandArgs& args)
 {
-	//CTF game mode: make sure player has gamemode settings applied properly.
+	// CTF game mode: make sure player has gamemode settings applied properly.
 	player->Menu_Team_Input(-1);
 }

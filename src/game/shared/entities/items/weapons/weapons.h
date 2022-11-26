@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 
 #pragma once
 
@@ -120,7 +120,7 @@ public:
 // the maximum amount of ammo each weapon's clip can hold
 #define WEAPON_NOCLIP -1
 
-//#define CROWBAR_MAX_CLIP		WEAPON_NOCLIP
+// #define CROWBAR_MAX_CLIP		WEAPON_NOCLIP
 #define GLOCK_MAX_CLIP 17
 #define PYTHON_MAX_CLIP 6
 #define MP5_MAX_CLIP 50
@@ -232,8 +232,8 @@ struct AmmoInfo
 	int iId;
 
 	/**
-	*	@brief For exhaustible weapons. If provided, and the player does not have this weapon in their inventory yet it will be given to them.
-	*/
+	 *	@brief For exhaustible weapons. If provided, and the player does not have this weapon in their inventory yet it will be given to them.
+	 */
 	const char* WeaponName = nullptr;
 };
 
@@ -321,7 +321,7 @@ public:
 	// int		m_iIdPrimary;										// Unique Id for primary ammo
 	// int		m_iIdSecondary;										// Unique Id for secondary ammo
 
-	//Hack so deploy animations work when weapon prediction is enabled.
+	// Hack so deploy animations work when weapon prediction is enabled.
 	bool m_ForceSendAnimations = false;
 };
 
@@ -515,7 +515,7 @@ public:
 	CBasePlayerItem* m_rgpPlayerItems[MAX_ITEM_TYPES]; // one slot for each
 
 	string_t m_rgiszAmmo[MAX_AMMO_SLOTS]; // ammo names
-	int m_rgAmmo[MAX_AMMO_SLOTS];	 // ammo quantities
+	int m_rgAmmo[MAX_AMMO_SLOTS];		  // ammo quantities
 
 	int m_cAmmoTypes; // how many ammo types packed into this box (if packed by a level designer)
 };
@@ -788,7 +788,7 @@ public:
 	void Reload() override;
 	void WeaponIdle() override;
 	void ItemPostFrame() override;
-	int m_fInReload; //TODO: not used, remove
+	int m_fInReload; // TODO: not used, remove
 	float m_flNextReload;
 	int m_iShell;
 

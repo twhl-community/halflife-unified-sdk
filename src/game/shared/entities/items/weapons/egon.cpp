@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 
 #include "cbase.h"
 #include "customentity.h"
@@ -316,7 +316,7 @@ void CEgon::Fire(const Vector& vecOrigSrc, const Vector& vecDir)
 
 			if (g_pGameRules->IsMultiplayer())
 			{
-				//multiplayer uses 5 ammo/second
+				// multiplayer uses 5 ammo/second
 				if (gpGlobals->time >= m_flAmmoUseTime)
 				{
 					UseAmmo(1);
@@ -498,7 +498,7 @@ void CEgon::EndAttack()
 {
 	bool bMakeNoise = false;
 
-	if (m_fireState != FIRE_OFF) //Checking the button just in case!.
+	if (m_fireState != FIRE_OFF) // Checking the button just in case!.
 		bMakeNoise = true;
 
 	PLAYBACK_EVENT_FULL(FEV_GLOBAL | FEV_RELIABLE, m_pPlayer->edict(), m_usEgonStop, 0, m_pPlayer->pev->origin, m_pPlayer->pev->angles, 0.0, 0.0,

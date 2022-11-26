@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   This source code contains proprietary and confidential information of
+ *   Valve LLC and its suppliers.  Access to this code is restricted to
+ *   persons who have executed a written SDK license with Valve.  Any access,
+ *   use or distribution of this code by or to any unlicensed person is illegal.
+ *
+ ****/
 
 //=========================================================
 // Gargantua
@@ -28,7 +28,7 @@ const float GARG_ATTACKDIST = 80.0;
 
 // Garg animation events
 #define GARG_AE_SLASH_LEFT 1
-//#define GARG_AE_BEAM_ATTACK_RIGHT	2		// No longer used
+// #define GARG_AE_BEAM_ATTACK_RIGHT	2		// No longer used
 #define GARG_AE_LEFT_FOOT 3
 #define GARG_AE_RIGHT_FOOT 4
 #define GARG_AE_STOMP 5
@@ -130,7 +130,7 @@ void CStomp::Think()
 		m_flLastThinkTime = gpGlobals->time - gpGlobals->frametime;
 	}
 
-	//Use 1/4th the delta time to match the original behavior more closely
+	// Use 1/4th the delta time to match the original behavior more closely
 	const float deltaTime = (gpGlobals->time - m_flLastThinkTime) / 4;
 
 	m_flLastThinkTime = gpGlobals->time;
@@ -772,7 +772,7 @@ void CGargantua::Spawn()
 	pev->solid = SOLID_SLIDEBOX;
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_GREEN;
-	//pev->view_ofs		= Vector ( 0, 0, 96 );// taken from mdl file
+	// pev->view_ofs		= Vector ( 0, 0, 96 );// taken from mdl file
 	m_flFieldOfView = -0.2; // width of forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
 
@@ -980,7 +980,7 @@ void CGargantua::HandleAnimEvent(MonsterEvent_t* pEvent)
 				pHurt->pev->punchangle.x = -30; // pitch
 				pHurt->pev->punchangle.y = -30; // yaw
 				pHurt->pev->punchangle.z = 30;	// roll
-				//UTIL_MakeVectors(pev->angles);	// called by CheckTraceHullAttack
+				// UTIL_MakeVectors(pev->angles);	// called by CheckTraceHullAttack
 				pHurt->pev->velocity = pHurt->pev->velocity - gpGlobals->v_right * 100;
 			}
 			EMIT_SOUND_DYN(edict(), CHAN_WEAPON, RANDOM_SOUND_ARRAY(pAttackHitSounds), 1.0, ATTN_NORM, 0, 50 + RANDOM_LONG(0, 15));
@@ -1159,7 +1159,7 @@ void CGargantua::RunTask(Task_t* pTask)
 			WRITE_BYTE(200);
 
 			// Model
-			WRITE_SHORT(gGargGibModel); //model id#
+			WRITE_SHORT(gGargGibModel); // model id#
 
 			// # of shards
 			WRITE_BYTE(50);
@@ -1296,7 +1296,7 @@ CSpiral* CSpiral::Create(const Vector& origin, float height, float radius, float
 	return pSpiral;
 }
 
-#define SPIRAL_INTERVAL 0.1 //025
+#define SPIRAL_INTERVAL 0.1 // 025
 
 void CSpiral::Think()
 {

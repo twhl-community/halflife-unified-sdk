@@ -114,7 +114,7 @@ bool CVoiceGameMgr::Init(
 			}
 
 			// Force it to update the masks now.
-			//UpdateMasks();
+			// UpdateMasks();
 		});
 
 	m_VModEnableCommand = g_ClientCommands.CreateScoped("vmodenable", [this](CBasePlayer* player, const auto& args)
@@ -136,7 +136,7 @@ bool CVoiceGameMgr::Init(
 			Logger->debug("CVoiceGameMgr::ClientCommand: vmodenable ({})", enable);
 			g_PlayerModEnable[*playerClientIndex] = enable;
 			g_bWantModEnable[*playerClientIndex] = false;
-			//UpdateMasks();
+			// UpdateMasks();
 		});
 
 	return true;

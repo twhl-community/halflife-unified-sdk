@@ -1,19 +1,19 @@
 //========= Copyright © 1996-2002, Valve LLC, All rights reserved. ============
 //
-// Purpose: 
+// Purpose:
 //
 // $NoKeywords: $
 //=============================================================================
 
 #pragma once
 
-#include<VGUI.h>
+#include <VGUI.h>
 
 namespace vgui
 {
 enum VGUIAPI KeyCode
 {
-	KEY_0=0,
+	KEY_0 = 0,
 	KEY_1,
 	KEY_2,
 	KEY_3,

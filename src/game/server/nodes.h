@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   This source code contains proprietary and confidential information of
+ *   Valve LLC and its suppliers.  Access to this code is restricted to
+ *   persons who have executed a written SDK license with Valve.  Any access,
+ *   use or distribution of this code by or to any unlicensed person is illegal.
+ *
+ ****/
 //=========================================================
 // nodes.h
 //=========================================================
@@ -173,7 +173,7 @@ public:
 	int FindShortestPath(int* piPath, int iStart, int iDest, int iHull, int afCapMask);
 	int FindNearestNode(const Vector& vecOrigin, CBaseEntity* pEntity);
 	int FindNearestNode(const Vector& vecOrigin, int afNodeTypes);
-	//int		FindNearestLink ( const Vector &vecTestPoint, int *piNearestLink, bool *pfAlongLine );
+	// int		FindNearestLink ( const Vector &vecTestPoint, int *piNearestLink, bool *pfAlongLine );
 	float PathLength(int iStart, int iDest, int iHull, int afCapMask);
 	int NextNodeInRoute(int iCurrentNode, int iDest, int iHull, int iCap);
 
@@ -312,7 +312,7 @@ public:
 	CQueue(); // constructor
 	inline bool Full() { return (m_cSize == MAX_STACK_NODES); }
 	inline bool Empty() { return (m_cSize == 0); }
-	//inline int Tail () { return ( m_queue[ m_tail ] ); }
+	// inline int Tail () { return ( m_queue[ m_tail ] ); }
 	inline int Size() { return (m_cSize); }
 	void Insert(int, float);
 	int Remove(float&);
@@ -338,7 +338,7 @@ public:
 	CQueuePriority(); // constructor
 	inline bool Full() { return (m_cSize == MAX_STACK_NODES); }
 	inline bool Empty() { return (m_cSize == 0); }
-	//inline int Tail ( float & ) { return ( m_queue[ m_tail ].Id ); }
+	// inline int Tail ( float & ) { return ( m_queue[ m_tail ].Id ); }
 	inline int Size() { return (m_cSize); }
 	void Insert(int, float);
 	int Remove(float&);

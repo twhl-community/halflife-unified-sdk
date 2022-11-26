@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   This source code contains proprietary and confidential information of
+ *   Valve LLC and its suppliers.  Access to this code is restricted to
+ *   persons who have executed a written SDK license with Valve.  Any access,
+ *   use or distribution of this code by or to any unlicensed person is illegal.
+ *
+ ****/
 
 #pragma once
 
@@ -139,9 +139,9 @@ public:
 	void Talk(float flDuration);
 
 	/**
-	*	@brief Invokes @c callback on each friend
-	*	@details Return false to stop iteration
-	*/
+	 *	@brief Invokes @c callback on each friend
+	 *	@details Return false to stop iteration
+	 */
 	template <typename Callback>
 	void ForEachFriend(Callback callback);
 
@@ -234,7 +234,7 @@ void CTalkMonster::ForEachFriend(Callback callback)
 
 		if (myClass == talkMonster->Classify())
 		{
-			//Already checked these. Includes other NPCs of my type
+			// Already checked these. Includes other NPCs of my type
 			continue;
 		}
 

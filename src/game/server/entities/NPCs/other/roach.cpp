@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   This source code contains proprietary and confidential information of
+ *   Valve LLC and its suppliers.  Access to this code is restricted to
+ *   persons who have executed a written SDK license with Valve.  Any access,
+ *   use or distribution of this code by or to any unlicensed person is illegal.
+ *
+ ****/
 //=========================================================
 // cockroach
 //=========================================================
@@ -94,7 +94,7 @@ void CRoach::Touch(CBaseEntity* pOther)
 		return;
 	}
 
-	vecSpot = pev->origin + Vector(0, 0, 8); //move up a bit, and trace down.
+	vecSpot = pev->origin + Vector(0, 0, 8); // move up a bit, and trace down.
 	UTIL_TraceLine(vecSpot, vecSpot + Vector(0, 0, -24), ignore_monsters, ENT(pev), &tr);
 
 	// This isn't really blood.  So you don't have to screen it out based on violence levels (UTIL_ShouldShowBlood())
@@ -166,7 +166,7 @@ void CRoach::Killed(entvars_t* pevAttacker, int iGib)
 
 	ClearShockEffect();
 
-	//random sound
+	// random sound
 	if (RANDOM_LONG(0, 4) == 1)
 	{
 		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "roach/rch_die.wav", 0.8, ATTN_NORM, 0, 80 + RANDOM_LONG(0, 39));
@@ -226,7 +226,7 @@ void CRoach::MonsterThink()
 			if (HasConditions(bits_COND_SEE_FEAR))
 			{
 				// if see something scary
-				//AILogger->debug("Scared");
+				// AILogger->debug("Scared");
 				Eat(30 + (RANDOM_LONG(0, 14))); // roach will ignore food for 30 to 45 seconds
 				PickNewDest(ROACH_SCARED_BY_ENT);
 				SetActivity(ACT_WALK);
@@ -234,7 +234,7 @@ void CRoach::MonsterThink()
 			else if (RANDOM_LONG(0, 149) == 1)
 			{
 				// if roach doesn't see anything, there's still a chance that it will move. (boredom)
-				//AILogger->debug("Bored");
+				// AILogger->debug("Bored");
 				PickNewDest(ROACH_BORED);
 				SetActivity(ACT_WALK);
 
@@ -257,7 +257,7 @@ void CRoach::MonsterThink()
 			if (GETENTITYILLUM(ENT(pev)) > m_flLastLightLevel)
 			{
 				// someone turned on lights!
-				//AILogger->debug("Lights!");
+				// AILogger->debug("Lights!");
 				PickNewDest(ROACH_SCARED_BY_LIGHT);
 				SetActivity(ACT_WALK);
 			}

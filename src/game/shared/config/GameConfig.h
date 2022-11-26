@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 
 #pragma once
 
@@ -33,17 +33,17 @@
 #include "utils/JSONSystem.h"
 #include "utils/string_utils.h"
 
-template<typename DataContext>
+template <typename DataContext>
 struct GameConfigDefinition;
 
-template<typename DataContext>
+template <typename DataContext>
 struct GameConfigLoadParameters final
 {
 	DataContext& Data;
 	const char* PathID = nullptr;
 };
 
-template<typename DataContext>
+template <typename DataContext>
 struct GameConfigContext final
 {
 	const std::string_view ConfigFileName;
@@ -58,7 +58,7 @@ struct GameConfigContext final
  *	@brief Defines a section of a game configuration, and the logic to parse it.
  *	@tparam DataContext The type of the data context this section operates on.
  */
-template<typename DataContext>
+template <typename DataContext>
 class GameConfigSection
 {
 protected:
@@ -96,7 +96,7 @@ public:
  *	@details Each section specifies what kind of data it supports, and provides a means of parsing it.
  *	@tparam DataContext Type of the data context this definition operates on.
  */
-template<typename DataContext>
+template <typename DataContext>
 struct GameConfigDefinition
 {
 	GameConfigDefinition(
@@ -147,8 +147,8 @@ private:
 };
 
 /**
-*	@brief Loads JSON-based configuration files and processes them according to a provided definition.
-*/
+ *	@brief Loads JSON-based configuration files and processes them according to a provided definition.
+ */
 class GameConfigSystem final : public IGameSystem
 {
 public:
@@ -163,7 +163,7 @@ public:
 
 	std::shared_ptr<spdlog::logger> GetLogger() { return m_Logger; }
 
-	template<typename DataContext>
+	template <typename DataContext>
 	std::shared_ptr<const GameConfigDefinition<DataContext>> CreateDefinition(
 		std::string&& name, std::vector<std::unique_ptr<const GameConfigSection<DataContext>>>&& sections);
 
@@ -186,7 +186,7 @@ inline const GameConfigSection<DataContext>* GameConfigDefinition<DataContext>::
 	return nullptr;
 }
 
-template<typename DataContext>
+template <typename DataContext>
 inline std::string GameConfigDefinition<DataContext>::GetSchema() const
 {
 	using namespace std::literals;
@@ -287,7 +287,7 @@ inline std::string GameConfigDefinition<DataContext>::GetSchema() const
 		this->GetName(), sections);
 }
 
-template<typename DataContext>
+template <typename DataContext>
 bool GameConfigDefinition<DataContext>::TryLoad(const char* fileName, const GameConfigLoadParameters<DataContext>& parameters) const
 {
 	GameConfigIncludeStack includeStack;

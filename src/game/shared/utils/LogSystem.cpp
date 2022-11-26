@@ -511,8 +511,7 @@ void LogSystem::SetAllLogLevels(const CommandArgs& args)
 	spdlog::apply_all([&](auto logger)
 		{
 			logger->set_level(level);
-			Con_Printf("Set \"%s\" log level to %s\n", logger->name().c_str(), levelName.data());
-		});
+			Con_Printf("Set \"%s\" log level to %s\n", logger->name().c_str(), levelName.data()); });
 }
 
 void LogSystem::FileCommand(const CommandArgs& args)

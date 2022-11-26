@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 /*
 
 ===== plats.cpp ========================================================
@@ -44,7 +44,7 @@ public:
 
 	string_t m_MoveSound; // sound a plat makes while moving
 	string_t m_StopSound; // sound a plat makes when it stops
-	float m_volume;	 // Sound volume
+	float m_volume;		  // Sound volume
 };
 
 TYPEDESCRIPTION CBasePlatTrain::m_SaveData[] =
@@ -206,8 +206,8 @@ void CFuncPlat::Setup()
 void CFuncPlat::Precache()
 {
 	CBasePlatTrain::Precache();
-	//PrecacheSound("plats/platmove1.wav");
-	//PrecacheSound("plats/platstop1.wav");
+	// PrecacheSound("plats/platmove1.wav");
+	// PrecacheSound("plats/platstop1.wav");
 	if (!IsTogglePlat())
 		PlatSpawnInsideTrigger(pev); // the "start moving" trigger
 }
@@ -276,7 +276,7 @@ void CPlatTrigger::SpawnInsideTrigger(CFuncPlat* pPlatform)
 //
 void CPlatTrigger::Touch(CBaseEntity* pOther)
 {
-	//Platform was removed, remove trigger
+	// Platform was removed, remove trigger
 	if (!m_hPlatform || !m_hPlatform->pev)
 	{
 		UTIL_Remove(this);
@@ -669,7 +669,7 @@ void CFuncTrain::Next()
 	}
 	m_pevCurrentTarget = pTarg->pev; // keep track of this since path corners change our target for us.
 
-	pev->enemy = pTarg->edict(); //hack
+	pev->enemy = pTarg->edict(); // hack
 
 	if (FBitSet(m_pevCurrentTarget->spawnflags, SF_CORNER_TELEPORT))
 	{
@@ -781,8 +781,8 @@ void CFuncTrain::OverrideReset()
 }
 
 /**
-*	@brief Sprite that can follow a path like a train
-*/
+ *	@brief Sprite that can follow a path like a train
+ */
 class CSpriteTrain : public CBasePlatTrain
 {
 public:
@@ -982,7 +982,7 @@ void CSpriteTrain::Next()
 	}
 	m_pevCurrentTarget = pTarg->pev; // keep track of this since path corners change our target for us.
 
-	pev->enemy = pTarg->edict(); //hack
+	pev->enemy = pTarg->edict(); // hack
 
 	if (FBitSet(m_pevCurrentTarget->spawnflags, SF_CORNER_TELEPORT))
 	{
@@ -1532,7 +1532,7 @@ void CFuncTrackTrain::DeadEnd()
 	pev->velocity = g_vecZero;
 	pev->avelocity = g_vecZero;
 
-	
+
 
 	if (pTrack)
 	{

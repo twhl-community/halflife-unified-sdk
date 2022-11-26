@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   This source code contains proprietary and confidential information of
+ *   Valve LLC and its suppliers.  Access to this code is restricted to
+ *   persons who have executed a written SDK license with Valve.  Any access,
+ *   use or distribution of this code by or to any unlicensed person is illegal.
+ *
+ ****/
 //=========================================================
 // hgrunt
 //=========================================================
@@ -111,7 +111,7 @@ protected:
 
 	PostureType GetPreferredCombatPosture() const override
 	{
-		//Always stand when using Saw
+		// Always stand when using Saw
 		if ((pev->weapons & HGruntAllyWeaponFlag::Saw) != 0)
 		{
 			return PostureType::Standing;
@@ -261,7 +261,7 @@ void CHGruntAlly::Shoot(bool firstShotInBurst)
 	}
 	else
 	{
-		//Check this so shotgunners don't shoot bursts if the animation happens to have the events
+		// Check this so shotgunners don't shoot bursts if the animation happens to have the events
 		if (firstShotInBurst)
 		{
 			const Vector vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40, 90) + gpGlobals->v_up * RANDOM_FLOAT(75, 200) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
@@ -326,7 +326,7 @@ void CHGruntAlly::Spawn()
 {
 	SpawnCore();
 
-	//TODO: make torso customizable
+	// TODO: make torso customizable
 	m_iGruntTorso = HGruntAllyTorso::Normal;
 
 	int weaponIndex = 0;
@@ -384,7 +384,7 @@ void CHGruntAlly::Spawn()
 	SetBodygroup(HGruntAllyBodygroup::Torso, m_iGruntTorso);
 	SetBodygroup(HGruntAllyBodygroup::Weapons, weaponIndex);
 
-	//TODO: probably also needs this for head HGruntAllyHead::BeretBlack
+	// TODO: probably also needs this for head HGruntAllyHead::BeretBlack
 	if (m_iGruntHead == HGruntAllyHead::OpsMask || m_iGruntHead == HGruntAllyHead::BandanaBlack)
 	{
 		m_voicePitch = 90;
@@ -468,8 +468,8 @@ std::tuple<int, Activity> CHGruntAlly::GetSequenceForActivity(Activity NewActivi
 }
 
 /**
-*	@brief when triggered, spawns a monster_human_grunt_ally repelling down a line.
-*/
+ *	@brief when triggered, spawns a monster_human_grunt_ally repelling down a line.
+ */
 class CHGruntAllyRepel : public CBaseHGruntAllyRepel
 {
 protected:

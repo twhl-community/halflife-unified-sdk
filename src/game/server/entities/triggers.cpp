@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 /*
 
 ===== triggers.cpp ========================================================
@@ -26,10 +26,10 @@
 #include "ctf/CTFGoalFlag.h"
 #include "UserMessages.h"
 
-#define SF_TRIGGER_PUSH_START_OFF 2		   //spawnflag that makes trigger_push spawn turned OFF
+#define SF_TRIGGER_PUSH_START_OFF 2		   // spawnflag that makes trigger_push spawn turned OFF
 #define SF_TRIGGER_HURT_TARGETONCE 1	   // Only fire hurt target once
-#define SF_TRIGGER_HURT_START_OFF 2		   //spawnflag that makes trigger_push spawn turned OFF
-#define SF_TRIGGER_HURT_NO_CLIENTS 8	   //spawnflag that makes trigger_push spawn turned OFF
+#define SF_TRIGGER_HURT_START_OFF 2		   // spawnflag that makes trigger_push spawn turned OFF
+#define SF_TRIGGER_HURT_NO_CLIENTS 8	   // spawnflag that makes trigger_push spawn turned OFF
 #define SF_TRIGGER_HURT_CLIENTONLYFIRE 16  // trigger hurt will only fire its target if it is hurting a client
 #define SF_TRIGGER_HURT_CLIENTONLYTOUCH 32 // only clients may touch this trigger.
 
@@ -277,11 +277,11 @@ public:
 
 	static TYPEDESCRIPTION m_SaveData[];
 
-	int m_cTargets;								// the total number of targets in this manager's fire list.
-	int m_index;								// Current target
-	float m_startTime;							// Time we started firing
-	string_t m_iTargetName[MAX_MULTI_TARGETS];	// list if indexes into global string array
-	float m_flTargetDelay[MAX_MULTI_TARGETS];	// delay (in seconds) from time of manager fire to target fire
+	int m_cTargets;							   // the total number of targets in this manager's fire list.
+	int m_index;							   // Current target
+	float m_startTime;						   // Time we started firing
+	string_t m_iTargetName[MAX_MULTI_TARGETS]; // list if indexes into global string array
+	float m_flTargetDelay[MAX_MULTI_TARGETS];  // delay (in seconds) from time of manager fire to target fire
 private:
 	inline bool IsClone() { return (pev->spawnflags & SF_MULTIMAN_CLONE) != 0; }
 	inline bool ShouldClone()
@@ -311,7 +311,7 @@ IMPLEMENT_SAVERESTORE(CMultiManager, CBaseToggle);
 bool CMultiManager::KeyValue(KeyValueData* pkvd)
 {
 	// UNDONE: Maybe this should do something like this:
-	//CBaseToggle::KeyValue( pkvd );
+	// CBaseToggle::KeyValue( pkvd );
 	// if ( !pkvd->fHandled )
 	// ... etc.
 
@@ -659,7 +659,7 @@ void CTriggerMonsterJump::Touch(CBaseEntity* pOther)
 //
 // trigger_hurt - hurts anything that touches it. if the trigger has a targetname, firing it will toggle state
 //
-//int gfToggleState = 0; // used to determine when all radiation trigger hurts have called 'RadiationThink'
+// int gfToggleState = 0; // used to determine when all radiation trigger hurts have called 'RadiationThink'
 
 void CTriggerHurt::Spawn()
 {
@@ -930,7 +930,7 @@ void CTriggerMultiple::Spawn()
 	//		if (FBitSet(pev->spawnflags, SPAWNFLAG_NOTOUCH))
 	//			Logger->error("trigger_multiple spawn: health and notouch don't make sense");
 	//		pev->max_health = pev->health;
-	//UNDONE: where to get pfnDie from?
+	// UNDONE: where to get pfnDie from?
 	//		pev->pfnDie = multi_killed;
 	//		pev->takedamage = DAMAGE_YES;
 	//		pev->solid = SOLID_BBOX;
@@ -1365,7 +1365,7 @@ void CChangeLevel::ChangeLevelNow(CBaseEntity* pActivator)
 		strcpy(st_szNextSpot, m_szLandmarkName);
 		gpGlobals->vecLandmarkOffset = VARS(pentLandmark)->origin;
 	}
-	//Logger->debug("Level touches {} levels", ChangeList(levels, std::size(levels)));
+	// Logger->debug("Level touches {} levels", ChangeList(levels, std::size(levels)));
 	Logger->debug("CHANGE LEVEL: {} {}", st_szNextMap, st_szNextSpot);
 	CHANGE_LEVEL(st_szNextMap, st_szNextSpot);
 }
@@ -1487,7 +1487,7 @@ int CChangeLevel::ChangeList(LEVELLIST* pLevelList, int maxList)
 		pentChangelevel = FIND_ENTITY_BY_STRING(pentChangelevel, "classname", "trigger_changelevel");
 	}
 
-	//Token table is null at this point, so don't use CSaveRestoreBuffer::IsValidSaveRestoreData here.
+	// Token table is null at this point, so don't use CSaveRestoreBuffer::IsValidSaveRestoreData here.
 	if (auto pSaveData = reinterpret_cast<SAVERESTOREDATA*>(gpGlobals->pSaveData);
 		nullptr != pSaveData && pSaveData->pTable)
 	{
@@ -1527,10 +1527,10 @@ int CChangeLevel::ChangeList(LEVELLIST* pLevelList, int maxList)
 							if (entityCount > MAX_ENTITY)
 								Logger->error("Too many entities across a transition!");
 						}
-						//else
+						// else
 						//	Logger->debug("Failed {}", STRING(pEntity->pev->classname));
 					}
-					//else
+					// else
 					//	Logger->debug("DON'T SAVE {}", STRING(pEntity->pev->classname));
 				}
 				pent = pent->v.chain;
@@ -1546,7 +1546,7 @@ int CChangeLevel::ChangeList(LEVELLIST* pLevelList, int maxList)
 					// Flag it with the level number
 					saveHelper.EntityFlagsSet(index, entityFlags[j] | (1 << i));
 				}
-				//else
+				// else
 				//	Logger->debug("Screened out {}", STRING(pEntList[j]->pev->classname));
 			}
 		}
@@ -2322,7 +2322,7 @@ void CTriggerPlayerFreeze::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, US
 {
 	m_bUnFrozen = !m_bUnFrozen;
 
-	//TODO: not made for multiplayer
+	// TODO: not made for multiplayer
 	auto pPlayer = UTIL_GetLocalPlayer();
 
 	if (!pPlayer)
@@ -2344,8 +2344,8 @@ void CTriggerPlayerFreeze::PlayerFreezeDelay()
 }
 
 /**
-*	@brief Kills anything that touches it without gibbing it
-*/
+ *	@brief Kills anything that touches it without gibbing it
+ */
 class CTriggerKillNoGib : public CBaseTrigger
 {
 public:
@@ -2363,7 +2363,7 @@ void CTriggerKillNoGib::Spawn()
 	SetTouch(&CTriggerKillNoGib::KillTouch);
 	SetUse(nullptr);
 
-	//TODO: this needs to be removed in order to function
+	// TODO: this needs to be removed in order to function
 	pev->solid = SOLID_NOT;
 }
 
@@ -2407,7 +2407,7 @@ void CTriggerXenReturn::ReturnTouch(CBaseEntity* pOther)
 
 	CBaseEntity* pTarget = nullptr;
 
-	//Find the earth target nearest to the player's original location.
+	// Find the earth target nearest to the player's original location.
 	for (auto pDestination : UTIL_FindEntitiesByClassname("info_displacer_earth_target"))
 	{
 		const float flThisDist = (pPlayer->m_DisplacerReturn - pDestination->pev->origin).Length();
@@ -2628,7 +2628,7 @@ void CTriggerCTFGeneric::Touch(CBaseEntity* pOther)
 
 		SUB_UseTargets(this, triggerType, 0);
 
-		//TODO: constrain team_no input to valid values
+		// TODO: constrain team_no input to valid values
 		if (0 != team_score)
 			teamscores[static_cast<int>(team_no) - 1] += team_score;
 
@@ -2648,7 +2648,7 @@ void CTriggerCTFGeneric::Touch(CBaseEntity* pOther)
 
 		if (0 != team_score)
 		{
-			//TOOD: not sure why this check is here since pev must be valid if the entity exists
+			// TOOD: not sure why this check is here since pev must be valid if the entity exists
 			if (!pOther && 0 == score && pev)
 			{
 				CGameRules::Logger->trace("World triggered \"{}\"", STRING(pev->targetname));

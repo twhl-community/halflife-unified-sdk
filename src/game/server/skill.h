@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 //=========================================================
 // skill.h - skill level concerns
 //=========================================================
@@ -71,8 +71,8 @@ public:
 	void SetSkillLevel(int skillLevel);
 
 	/**
-	*	@brief take the name of a variable, tack a digit for the skill level on, and return the value of that variable
-	*/
+	 *	@brief take the name of a variable, tack a digit for the skill level on, and return the value of that variable
+	 */
 	float GetValue(std::string_view name) const;
 
 	void SetValue(std::string_view name, float value);

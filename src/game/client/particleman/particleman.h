@@ -18,8 +18,8 @@ public:
 	virtual void ResetParticles() = 0;
 	virtual void ApplyForce(Vector vOrigin, Vector vDirection, float flRadius, float flStrength, float flDuration) = 0;
 
-	//Use this if you want to create a new particle without any overloaded functions, Think, Touch, etc.
-	//Just call this function, set the particle's behavior and let it rip.
+	// Use this if you want to create a new particle without any overloaded functions, Think, Touch, etc.
+	// Just call this function, set the particle's behavior and let it rip.
 	virtual CBaseParticle* CreateParticle(Vector org, Vector normal, model_s* sprite, float size, float brightness, const char* classname) = 0;
 
 	virtual void SetRender(int iRender) = 0;

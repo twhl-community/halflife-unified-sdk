@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 
 #pragma once
 
@@ -78,17 +78,20 @@ typedef int EOFFSET;
 // The function is used to intialize / allocate the object for the entity
 #define LINK_ENTITY_TO_CLASS(mapClassName, DLLClassName)    \
 	extern "C" DLLEXPORT void mapClassName(entvars_t* pev); \
-	void mapClassName(entvars_t* pev) { GetClassPtr((DLLClassName*)pev); }
+	void mapClassName(entvars_t* pev)                       \
+	{                                                       \
+		GetClassPtr((DLLClassName*)pev);                    \
+	}
 
 /**
-*	@brief Gets the list of entities.
-*	Will return @c nullptr if there is no map loaded.
-*/
+ *	@brief Gets the list of entities.
+ *	Will return @c nullptr if there is no map loaded.
+ */
 edict_t* UTIL_GetEntityList();
 
 /**
-*	@brief Gets the local player in singleplayer, or @c nullptr in multiplayer.
-*/
+ *	@brief Gets the local player in singleplayer, or @c nullptr in multiplayer.
+ */
 CBasePlayer* UTIL_GetLocalPlayer();
 
 //
@@ -170,7 +173,7 @@ typedef enum
 	MONSTERSTATE_PLAYDEAD,
 	MONSTERSTATE_DEAD,
 
-	MONSTERSTATE_COUNT //Must be last, not a valid state
+	MONSTERSTATE_COUNT // Must be last, not a valid state
 
 } MONSTERSTATE;
 
@@ -218,8 +221,8 @@ CBaseEntity* UTIL_FindEntityGeneric(const char* szName, Vector& vecSrc, float fl
 CBaseEntity* UTIL_PlayerByIndex(int playerIndex);
 
 /**
-*	@brief Finds the player nearest to the given origin.
-*/
+ *	@brief Finds the player nearest to the given origin.
+ */
 CBasePlayer* UTIL_FindNearestPlayer(const Vector& origin);
 
 #define UTIL_EntitiesInPVS(pent) (*g_engfuncs.pfnEntitiesInPVS)(pent)
@@ -320,9 +323,9 @@ void UTIL_SayText(const char* pText, CBaseEntity* pEntity);
 void UTIL_SayTextAll(const char* pText, CBaseEntity* pEntity);
 
 /**
-*	@brief Prints to the given player's console.
-*	Uses fmtlib format strings.
-*/
+ *	@brief Prints to the given player's console.
+ *	Uses fmtlib format strings.
+ */
 template <typename... Args>
 void UTIL_ConsolePrint(edict_t* client, fmt::format_string<Args...> fmt, Args&&... args)
 {
@@ -387,16 +390,16 @@ inline DLL_GLOBAL int g_Language;
 
 #define SPEAKER_START_SILENT 1 // wait for trigger 'on' to start announcements
 
-constexpr int SND_VOLUME = 1 << 0;				// Volume is not 255
-constexpr int SND_ATTENUATION = 1 << 1;			// Attenuation is not 1
-constexpr int SND_LARGE_INDEX = 1 << 2;			// Sound or sentence index is larger than 8 bits
-constexpr int SND_PITCH = 1 << 3;				// Pitch is not 100
-constexpr int SND_SENTENCE = 1 << 4;			// This is a sentence
-constexpr int SND_STOP = 1 << 5;				// duplicated in protocol.h stop sound
-constexpr int SND_CHANGE_VOL = 1 << 6;			// duplicated in protocol.h change sound vol
-constexpr int SND_CHANGE_PITCH = 1 << 7;		// duplicated in protocol.h change sound pitch
-constexpr int SND_SPAWNING = 1 << 8;			// duplicated in protocol.h we're spawing, used in some cases for ambients
-constexpr int SND_PLAY_WHEN_PAUSED = 1 << 9;	// For client side use only: start playing sound even when paused.
+constexpr int SND_VOLUME = 1 << 0;			 // Volume is not 255
+constexpr int SND_ATTENUATION = 1 << 1;		 // Attenuation is not 1
+constexpr int SND_LARGE_INDEX = 1 << 2;		 // Sound or sentence index is larger than 8 bits
+constexpr int SND_PITCH = 1 << 3;			 // Pitch is not 100
+constexpr int SND_SENTENCE = 1 << 4;		 // This is a sentence
+constexpr int SND_STOP = 1 << 5;			 // duplicated in protocol.h stop sound
+constexpr int SND_CHANGE_VOL = 1 << 6;		 // duplicated in protocol.h change sound vol
+constexpr int SND_CHANGE_PITCH = 1 << 7;	 // duplicated in protocol.h change sound pitch
+constexpr int SND_SPAWNING = 1 << 8;		 // duplicated in protocol.h we're spawing, used in some cases for ambients
+constexpr int SND_PLAY_WHEN_PAUSED = 1 << 9; // For client side use only: start playing sound even when paused.
 
 #define LFO_SQUARE 1
 #define LFO_TRIANGLE 2
@@ -473,31 +476,31 @@ inline void STOP_SOUND(edict_t* entity, int channel, const char* sample)
 }
 
 /**
-*	@brief Just like @see EMIT_SOUND_DYN, but will skip the current host player if they have cl_lw turned on.
-*	@details entity must be the current host entity for this to work, and must be called only inside a player's PostThink method.
-*/
+ *	@brief Just like @see EMIT_SOUND_DYN, but will skip the current host player if they have cl_lw turned on.
+ *	@details entity must be the current host entity for this to work, and must be called only inside a player's PostThink method.
+ */
 void EMIT_SOUND_PREDICTED(edict_t* entity, int channel, const char* sample, float volume, float attenuation,
 	int flags, int pitch);
 
 /**
-*	@brief play a specific sentence over the HEV suit speaker - just pass player entity, and !sentencename
-*/
+ *	@brief play a specific sentence over the HEV suit speaker - just pass player entity, and !sentencename
+ */
 void EMIT_SOUND_SUIT(edict_t* entity, const char* sample);
 
 /**
-*	@brief play a sentence, randomly selected from the passed in group id, over the HEV suit speaker
-*/
+ *	@brief play a sentence, randomly selected from the passed in group id, over the HEV suit speaker
+ */
 void EMIT_GROUPID_SUIT(edict_t* entity, int isentenceg);
 
 /**
-*	@brief play a sentence, randomly selected from the passed in groupname
-*/
+ *	@brief play a sentence, randomly selected from the passed in groupname
+ */
 void EMIT_GROUPNAME_SUIT(edict_t* entity, const char* groupname);
 
 #define PRECACHE_SOUND_ARRAY(a)                        \
 	{                                                  \
 		for (std::size_t i = 0; i < std::size(a); i++) \
-			PrecacheSound(a[i]);                      \
+			PrecacheSound(a[i]);                       \
 	}
 
 #define EMIT_SOUND_ARRAY_DYN(chan, array) \
@@ -549,8 +552,8 @@ struct MinuteSecondTime
 };
 
 /**
-*	@brief Converts seconds to minutes and seconds
-*/
+ *	@brief Converts seconds to minutes and seconds
+ */
 inline MinuteSecondTime SecondsToTime(const int seconds)
 {
 	const auto minutes = seconds / 60;
@@ -602,12 +605,12 @@ struct FindNextEntityFunctor
 {
 	static T* Find(T* pStartEntity)
 	{
-		//Start with first player, ignore world
+		// Start with first player, ignore world
 		auto index = pStartEntity ? pStartEntity->entindex() + 1 : 1;
 
 		auto entities = g_engfuncs.pfnPEntityOfEntIndexAllEntities(0);
 
-		//Find the first entity that has a valid baseentity
+		// Find the first entity that has a valid baseentity
 		for (; index < gpGlobals->maxEntities; ++index)
 		{
 			auto entity = static_cast<CBaseEntity*>(GET_PRIVATE(&entities[index]));
@@ -672,8 +675,8 @@ private:
 };
 
 /**
-*	@brief Entity enumerator optimized for iteration from start
-*/
+ *	@brief Entity enumerator optimized for iteration from start
+ */
 template <typename T, typename FINDER>
 class CEntityEnumerator
 {
@@ -702,8 +705,8 @@ private:
 };
 
 /**
-*	@brief Entity enumerator for iteration from a given start entity
-*/
+ *	@brief Entity enumerator for iteration from a given start entity
+ */
 template <typename T, typename FINDER>
 class CEntityEnumeratorWithStart
 {
@@ -801,8 +804,8 @@ private:
 };
 
 /**
-*	@brief Entity enumerator optimized for iteration from start
-*/
+ *	@brief Entity enumerator optimized for iteration from start
+ */
 template <typename T, typename FINDER>
 class CNextEntityEnumerator
 {
@@ -831,9 +834,9 @@ inline CNextEntityEnumerator<T, FindNextEntityFunctor<T>> UTIL_FindEntities()
 }
 
 /**
-*	@brief Helper type to run a function when the helper is destroyed.
-*	Useful for running cleanup on scope exit and function return.
-*/
+ *	@brief Helper type to run a function when the helper is destroyed.
+ *	Useful for running cleanup on scope exit and function return.
+ */
 template <typename Func>
 struct CallOnDestroy
 {

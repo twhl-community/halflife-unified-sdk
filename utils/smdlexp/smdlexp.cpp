@@ -1,8 +1,8 @@
 /***
-*
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*
-****/
+ *
+ *	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+ *
+ ****/
 
 #ifndef _WIN64
 #error "3DS Max plugins can only be built as 64 bit"
@@ -438,7 +438,7 @@ int DumpFrameRotationsTEP::callback(INode* pnode)
 	zRot = ::FlReduceRotation(zRot);
 
 	// Print rotations
-	//fprintf(m_pfile, "%3d %8.4f %8.4f %8.4f %8.4f %8.4f %8.4f\n",
+	// fprintf(m_pfile, "%3d %8.4f %8.4f %8.4f %8.4f %8.4f %8.4f\n",
 	fprintf(m_pfile, "%3d %f %f %f %f %f %f\n",
 		// Node:%-15s Rotation (x,y,z)\n",
 		iNode, rowTrans.x, rowTrans.y, rowTrans.z, xRot, yRot, zRot);
@@ -800,7 +800,7 @@ int DumpModelTEP::InodeOfPhyVectex(int iVertex)
 
 	if (vtxExport)
 	{
-		//need to check if vertex has blending
+		// need to check if vertex has blending
 		if (vtxExport->GetVertexType() & BLENDED_TYPE)
 		{
 			//
@@ -953,9 +953,9 @@ BOOL FUndesirableNode(INode* pnode)
 	return FALSE;
 
 	// Actually, if it's not selected, pretend it doesn't exist!
-	//if (!pnode->Selected())
+	// if (!pnode->Selected())
 	//	return TRUE;
-	//return FALSE;
+	// return FALSE;
 }
 
 

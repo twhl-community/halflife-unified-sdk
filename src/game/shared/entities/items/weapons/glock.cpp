@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 
 #include "cbase.h"
 
@@ -49,9 +49,9 @@ void CGlock::Precache()
 	PrecacheSound("items/9mmclip1.wav");
 	PrecacheSound("items/9mmclip2.wav");
 
-	PrecacheSound("weapons/pl_gun1.wav"); //silenced handgun
-	PrecacheSound("weapons/pl_gun2.wav"); //silenced handgun
-	PrecacheSound("weapons/pl_gun3.wav"); //handgun
+	PrecacheSound("weapons/pl_gun1.wav"); // silenced handgun
+	PrecacheSound("weapons/pl_gun2.wav"); // silenced handgun
+	PrecacheSound("weapons/pl_gun3.wav"); // handgun
 
 	m_usFireGlock1 = PRECACHE_EVENT(1, "events/glock1.sc");
 	m_usFireGlock2 = PRECACHE_EVENT(1, "events/glock2.sc");

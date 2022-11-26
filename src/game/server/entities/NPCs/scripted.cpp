@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   This source code contains proprietary and confidential information of
+ *   Valve LLC and its suppliers.  Access to this code is restricted to
+ *   persons who have executed a written SDK license with Valve.  Any access,
+ *   use or distribution of this code by or to any unlicensed person is illegal.
+ *
+ ****/
 /*
 
 
@@ -358,7 +358,7 @@ void CCineMonster::PossessEntity()
 			//			pTarget->pev->flags &= ~FL_ONGROUND;
 			break;
 		}
-		//AILogger->debug("\"{}\" found and used (INT: {})", STRING(pTarget->pev->targetname), FBitSet(pev->spawnflags, SF_SCRIPT_NOINTERRUPT)?"No":"Yes");
+		// AILogger->debug("\"{}\" found and used (INT: {})", STRING(pTarget->pev->targetname), FBitSet(pev->spawnflags, SF_SCRIPT_NOINTERRUPT)?"No":"Yes");
 
 		pTarget->m_IdealMonsterState = MONSTERSTATE_SCRIPT;
 		if (!FStringNull(m_iszIdle))
@@ -543,7 +543,7 @@ bool CCineAI::StartSequence(CBaseMonster* pTarget, string_t iszSeq, bool complet
 //=========================================================
 void CCineMonster::SequenceDone(CBaseMonster* pMonster)
 {
-	//AILogger->debug("Sequence {} finished", STRING(m_pCine->m_iszPlay));
+	// AILogger->debug("Sequence {} finished", STRING(m_pCine->m_iszPlay));
 
 	if ((pev->spawnflags & SF_SCRIPT_REPEATABLE) == 0)
 	{
@@ -926,7 +926,7 @@ public:
 
 
 private:
-	string_t m_iszSentence;	// string index for idle animation
+	string_t m_iszSentence; // string index for idle animation
 	string_t m_iszEntity;	// entity that is wanted for this sentence
 	float m_flRadius;		// range to search
 	float m_flDuration;		// How long the sentence lasts
@@ -1039,7 +1039,7 @@ void CScriptedSentence::Spawn()
 		m_flAttenuation = ATTN_NORM;
 		break;
 
-	case 3: //EVERYWHERE
+	case 3: // EVERYWHERE
 		m_flAttenuation = ATTN_NONE;
 		break;
 

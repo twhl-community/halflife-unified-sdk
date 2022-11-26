@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 #include "cbase.h"
 #include "UserMessages.h"
 
@@ -24,7 +24,7 @@
 #ifndef CLIENT_DLL
 TYPEDESCRIPTION CShockRifle::m_SaveData[] =
 	{
-		//This isn't restored in the original
+		// This isn't restored in the original
 		DEFINE_FIELD(CShockRifle, m_flRechargeTime, FIELD_TIME),
 };
 
@@ -137,9 +137,9 @@ void CShockRifle::WeaponIdle()
 		m_flSoundDelay = 0;
 	}
 
-	//This used to be completely broken. It used the current game time instead of the weapon time base, which froze the idle animation.
-	//It also never handled IDLE3, so it only ever played IDLE1, and then only animated it when you held down secondary fire.
-	//This is now fixed. - Solokiller
+	// This used to be completely broken. It used the current game time instead of the weapon time base, which froze the idle animation.
+	// It also never handled IDLE3, so it only ever played IDLE1, and then only animated it when you held down secondary fire.
+	// This is now fixed. - Solokiller
 	if (m_flTimeWeaponIdle > UTIL_WeaponTimeBase())
 		return;
 
@@ -165,7 +165,7 @@ void CShockRifle::PrimaryAttack()
 {
 	if (m_pPlayer->pev->waterlevel == WaterLevel::Head)
 	{
-		//Water goes zap.
+		// Water goes zap.
 		const float flVolume = RANDOM_FLOAT(0.8, 0.9);
 
 		EMIT_SOUND_DYN(m_pPlayer->edict(), CHAN_ITEM, "weapons/shock_discharge.wav", flVolume, ATTN_NONE, 0, PITCH_NORM);
@@ -223,7 +223,7 @@ void CShockRifle::PrimaryAttack()
 		gpGlobals->v_right * 9 +
 		gpGlobals->v_up * -7;
 
-	//Update auto-aim
+	// Update auto-aim
 	m_pPlayer->GetAutoaimVectorFromPoint(vecSrc, AUTOAIM_10DEGREES);
 
 	auto pBeam = CShockBeam::CreateShockBeam(vecSrc, vecAnglesAim, m_pPlayer);
@@ -250,7 +250,7 @@ void CShockRifle::PrimaryAttack()
 
 void CShockRifle::SecondaryAttack()
 {
-	//Nothing
+	// Nothing
 }
 
 void CShockRifle::Reload()

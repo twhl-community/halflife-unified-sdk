@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   This source code contains proprietary and confidential information of
+ *   Valve LLC and its suppliers.  Access to this code is restricted to
+ *   persons who have executed a written SDK license with Valve.  Any access,
+ *   use or distribution of this code by or to any unlicensed person is illegal.
+ *
+ ****/
 
 #include "cbase.h"
 
@@ -73,7 +73,7 @@ public:
 
 	int ObjectCaps() override { return 0; }
 
-	//Don't gib ever
+	// Don't gib ever
 	void GibMonster() override {}
 
 	void SetObjectCollisionBox() override
@@ -660,7 +660,7 @@ void COFPitWormUp::HitTouch(CBaseEntity* pOther)
 
 		pOther->pev->punchangle.z = 15;
 
-		//TODO: maybe determine direction of velocity to apply?
+		// TODO: maybe determine direction of velocity to apply?
 		pOther->pev->velocity = pOther->pev->velocity + Vector{0, 0, 200};
 
 		pOther->pev->flags &= ~FL_ONGROUND;
@@ -890,9 +890,9 @@ void COFPitWormUp::StrafeBeam()
 		pHit->TraceAttack(pev, GetSkillFloat("pitworm_dmg_beam"sv), m_vecBeam, &tr, DMG_ENERGYBEAM);
 		pHit->TakeDamage(pev, pev, GetSkillFloat("pitworm_dmg_beam"sv), DMG_ENERGYBEAM);
 
-		//TODO: missing an ApplyMultiDamage call here
-		//Should probably replace the TakeDamage call
-		//ApplyMultiDamage( pev, pev );
+		// TODO: missing an ApplyMultiDamage call here
+		// Should probably replace the TakeDamage call
+		// ApplyMultiDamage( pev, pev );
 	}
 	else if (tr.flFraction != 1.0)
 	{
@@ -970,7 +970,7 @@ void COFPitWormUp::NextActivity()
 {
 	UTIL_MakeAimVectors(pev->angles);
 
-	//TODO: never used?
+	// TODO: never used?
 	const auto moveDistance = m_posDesired - pev->origin;
 
 	if (m_hEnemy)
@@ -1389,9 +1389,9 @@ void COFPitWormSteamTrigger::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, 
 }
 
 /**
-*	@brief Part of the unfinished monster_pitworm entity
-*	Used for navigation and sequence playback
-*/
+ *	@brief Part of the unfinished monster_pitworm entity
+ *	Used for navigation and sequence playback
+ */
 class COFInfoPW : public CPointEntity
 {
 public:
@@ -1666,8 +1666,8 @@ void COFPitWormGibShooter::ShootThink()
 int gSpikeSprite, gSpikeDebrisSprite;
 
 /**
-*	@brief Unfinished, never used Pitworm NPC
-*/
+ *	@brief Unfinished, never used Pitworm NPC
+ */
 class COFPitWorm : public CBaseMonster
 {
 public:
@@ -1993,7 +1993,7 @@ void COFPitWorm::StartMonster()
 				AILogger->debug("Can't Create Route!");
 			}
 			SetState(MONSTERSTATE_IDLE);
-			//ChangeSchedule(GetScheduleOfType(SCHED_IDLE_WALK));
+			// ChangeSchedule(GetScheduleOfType(SCHED_IDLE_WALK));
 		}
 	}
 
@@ -2002,8 +2002,8 @@ void COFPitWorm::StartMonster()
 
 	pev->view_ofs = vecEyePos - pev->origin;
 
-	//SetState ( m_IdealMonsterState );
-	//SetActivity ( m_IdealActivity );
+	// SetState ( m_IdealMonsterState );
+	// SetActivity ( m_IdealActivity );
 
 	// Delay drop to floor to make sure each door in the level has had its chance to spawn
 	// Spread think times so that they don't all happen at the same time (Carmack)
@@ -2254,7 +2254,7 @@ void COFPitWorm::ShootBeam()
 		m_pBeam = CBeam::BeamCreate("sprites/laserbeam.spr", 80);
 		if (m_pBeam)
 		{
-			//EHANDLE::operator CBaseEntity* (&this->baseclass_0.m_hEnemy);
+			// EHANDLE::operator CBaseEntity* (&this->baseclass_0.m_hEnemy);
 			m_pBeam->PointEntInit(tr.vecEndPos, entindex());
 
 			m_pBeam->SetEndAttachment(1);

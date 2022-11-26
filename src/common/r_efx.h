@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 
 #pragma once
 
@@ -177,7 +177,7 @@ struct efx_api_s
 	TEMPENTITY* (*CL_TentEntAllocCustom)(float* origin, struct model_s* model, int high, void (*callback)(struct tempent_s* ent, float frametime, float currenttime));
 	void (*R_GetPackedColor)(short* packed, short color);
 	short (*R_LookupColor)(unsigned char r, unsigned char g, unsigned char b);
-	void (*R_DecalRemoveAll)(int textureIndex); //textureIndex points to the decal index in the array, not the actual texture index.
+	void (*R_DecalRemoveAll)(int textureIndex); // textureIndex points to the decal index in the array, not the actual texture index.
 	void (*R_FireCustomDecal)(int textureIndex, int entity, int modelIndex, float* position, int flags, float scale);
 };
 

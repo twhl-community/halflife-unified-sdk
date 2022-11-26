@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1999, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1999, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 //
 //  hud.h
 //
@@ -498,8 +498,8 @@ public:
 	};
 
 
-	//had to make these public so CHud could access them (to enable concussion icon)
-	//could use a friend declaration instead...
+	// had to make these public so CHud could access them (to enable concussion icon)
+	// could use a friend declaration instead...
 	void EnableIcon(const char* pszIconName, const RGB24& color);
 	void DisableIcon(const char* pszIconName);
 
@@ -513,7 +513,7 @@ private:
 		HSPRITE spr;
 		Rect rc;
 		RGB24 color;
-		int teamnumber; //Not actually used
+		int teamnumber; // Not actually used
 	} icon_sprite_t;
 
 	icon_sprite_t m_IconList[MAX_ICONSPRITES];
@@ -639,8 +639,8 @@ public:
 };
 
 /**
-*	@brief Displays info about this project on the HUD.
-*/
+ *	@brief Displays info about this project on the HUD.
+ */
 class CHudProjectInfo : public CHudBase
 {
 public:
@@ -730,8 +730,8 @@ public:
 	RGB24 m_HudColor = RGB_HUD_COLOR;
 
 	/**
-	*	@brief The color to use for Hud items
-	*/
+	 *	@brief The color to use for Hud items
+	 */
 	RGB24 m_HudItemColor = RGB_HUD_COLOR;
 
 	int m_iFontHeight;

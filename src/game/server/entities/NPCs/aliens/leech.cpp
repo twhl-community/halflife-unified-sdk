@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   This source code contains proprietary and confidential information of
+ *   Valve LLC and its suppliers.  Access to this code is restricted to
+ *   persons who have executed a written SDK license with Valve.  Any access,
+ *   use or distribution of this code by or to any unlicensed person is illegal.
+ *
+ ****/
 //=========================================================
 // leech - basic little swimming monster
 //=========================================================
@@ -178,7 +178,7 @@ void CLeech::OnCreate()
 	pev->model = MAKE_STRING("models/leech.mdl");
 
 	// Just for fun
-	//pev->model = MAKE_STRING("models/icky.mdl");
+	// pev->model = MAKE_STRING("models/icky.mdl");
 }
 
 void CLeech::Spawn()
@@ -368,7 +368,7 @@ float CLeech::ObstacleDistance(CBaseEntity* pTarget)
 	Vector vecTest;
 
 	// use VELOCITY, not angles, not all boids point the direction they are flying
-	//Vector vecDir = UTIL_VecToAngles( pev->velocity );
+	// Vector vecDir = UTIL_VecToAngles( pev->velocity );
 	MakeVectors();
 
 	// check for obstacle ahead
@@ -688,8 +688,8 @@ void CLeech::Killed(entvars_t* pevAttacker, int iGib)
 	Vector vecSplatDir;
 	TraceResult tr;
 
-	//AILogger->debug("Leech: killed");
-	// tell owner ( if any ) that we're dead.This is mostly for MonsterMaker functionality.
+	// AILogger->debug("Leech: killed");
+	//  tell owner ( if any ) that we're dead.This is mostly for MonsterMaker functionality.
 	CBaseEntity* pOwner = CBaseEntity::Instance(pev->owner);
 	if (pOwner)
 		pOwner->DeathNotice(pev);

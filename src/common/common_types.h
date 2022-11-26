@@ -8,10 +8,10 @@
 #pragma once
 
 /**
-*	@file
-*
-*	Common data types
-*/
+ *	@file
+ *
+ *	Common data types
+ */
 
 struct Point
 {

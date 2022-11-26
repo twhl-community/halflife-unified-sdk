@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 #include "cbase.h"
 
 #include "ctf/CTFDefs.h"
@@ -24,7 +24,7 @@
 
 namespace
 {
-//TODO: can probably be smarter - Solokiller
+// TODO: can probably be smarter - Solokiller
 const char* const displace[] =
 	{
 		"monster_bloater",
@@ -158,7 +158,7 @@ void CDisplacerBall::BallTouch(CBaseEntity* pOther)
 	{
 		CBasePlayer* pPlayer = static_cast<CBasePlayer*>(pOther);
 
-		//Clear any flags set on player (onground, using grapple, etc).
+		// Clear any flags set on player (onground, using grapple, etc).
 		pPlayer->pev->flags &= FL_FAKECLIENT;
 		pPlayer->pev->flags |= FL_CLIENT;
 		pPlayer->m_flFallVelocity = 0;
@@ -309,7 +309,7 @@ void CDisplacerBall::KillThink()
 	{
 		pTarget->SetThink(&CBaseEntity::SUB_Remove);
 
-		//TODO: no next think? - Solokiller
+		// TODO: no next think? - Solokiller
 	}
 
 	SetThink(&CDisplacerBall::ExplodeThink);
@@ -343,7 +343,7 @@ void CDisplacerBall::ClearBeams()
 
 void CDisplacerBall::ArmBeam(int iSide)
 {
-	//This method is identical to the Alien Slave's ArmBeam, except it treats m_pBeam as a circular buffer.
+	// This method is identical to the Alien Slave's ArmBeam, except it treats m_pBeam as a circular buffer.
 	if (m_uiBeams >= NUM_BEAMS)
 		m_uiBeams = 0;
 
@@ -369,7 +369,7 @@ void CDisplacerBall::ArmBeam(int iSide)
 	if (flDist == 1.0)
 		return;
 
-	//The beam might already exist if we've created all beams before. - Solokiller
+	// The beam might already exist if we've created all beams before. - Solokiller
 	if (!m_pBeam[m_uiBeams])
 		m_pBeam[m_uiBeams] = CBeam::BeamCreate("sprites/lgtning.spr", 30);
 
@@ -380,7 +380,7 @@ void CDisplacerBall::ArmBeam(int iSide)
 
 	if (pHit && pHit->pev->takedamage != DAMAGE_NO)
 	{
-		//Beam hit something, deal radius damage to it. - Solokiller
+		// Beam hit something, deal radius damage to it. - Solokiller
 		m_pBeam[m_uiBeams]->EntsInit(pHit->entindex(), entindex());
 
 		m_pBeam[m_uiBeams]->SetColor(255, 255, 255);

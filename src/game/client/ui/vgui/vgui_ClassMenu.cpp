@@ -79,7 +79,7 @@ CClassMenuPanel::CClassMenuPanel(int iTrans, bool iRemoveMe, int x, int y, int w
 	// Create the Scroll panel
 	m_pScrollPanel = new CTFScrollPanel(CLASSMENU_WINDOW_X, CLASSMENU_WINDOW_Y, CLASSMENU_WINDOW_SIZE_X, CLASSMENU_WINDOW_SIZE_Y);
 	m_pScrollPanel->setParent(this);
-	//force the scrollbars on, so after the validate clientClip will be smaller
+	// force the scrollbars on, so after the validate clientClip will be smaller
 	m_pScrollPanel->setScrollBarAutoVisible(false, false);
 	m_pScrollPanel->setScrollBarVisible(true, true);
 	m_pScrollPanel->setBorder(new LineBorder(Color(0, 112, 0, 0)));
@@ -87,7 +87,7 @@ CClassMenuPanel::CClassMenuPanel(int iTrans, bool iRemoveMe, int x, int y, int w
 
 	int clientWide = m_pScrollPanel->getClient()->getWide();
 
-	//turn scrollpanel back into auto show scrollbar mode and validate
+	// turn scrollpanel back into auto show scrollbar mode and validate
 	m_pScrollPanel->setScrollBarAutoVisible(false, true);
 	m_pScrollPanel->setScrollBarVisible(false, false);
 	m_pScrollPanel->validate();
@@ -116,10 +116,10 @@ CClassMenuPanel::CClassMenuPanel(int iTrans, bool iRemoveMe, int x, int y, int w
 			m_pButtons[team][i]->setParent(this);
 
 			// Create the Class Info Window
-			//m_pClassInfoPanel[i] = new CTransparentPanel( 255, CLASSMENU_WINDOW_X, CLASSMENU_WINDOW_Y, CLASSMENU_WINDOW_SIZE_X, CLASSMENU_WINDOW_SIZE_Y );
+			// m_pClassInfoPanel[i] = new CTransparentPanel( 255, CLASSMENU_WINDOW_X, CLASSMENU_WINDOW_Y, CLASSMENU_WINDOW_SIZE_X, CLASSMENU_WINDOW_SIZE_Y );
 			m_pClassInfoPanel[team][i] = new CTransparentPanel(255, 0, 0, clientWide, CLASSMENU_WINDOW_SIZE_Y);
 			m_pClassInfoPanel[team][i]->setParent(m_pScrollPanel->getClient());
-			//m_pClassInfoPanel[i]->setVisible( false );
+			// m_pClassInfoPanel[i]->setVisible( false );
 
 			// don't show class pic in lower resolutions
 			const int textOffs = CLASSMENU_WINDOW_NAME_X;
@@ -135,7 +135,7 @@ CClassMenuPanel::CClassMenuPanel(int iTrans, bool iRemoveMe, int x, int y, int w
 			pSchemes->getBgColor(hTitleScheme, r, g, b, a);
 			pNameLabel->setBgColor(r, g, b, a);
 			pNameLabel->setContentAlignment(vgui::Label::a_west);
-			//pNameLabel->setBorder(new LineBorder());
+			// pNameLabel->setBorder(new LineBorder());
 			pNameLabel->setText("%s", localName);
 
 			// Create the Class Image
@@ -145,7 +145,7 @@ CClassMenuPanel::CClassMenuPanel(int iTrans, bool iRemoveMe, int x, int y, int w
 
 			CImageLabel* pLabel = m_pClassImages[team][i];
 			pLabel->setParent(m_pClassInfoPanel[team][i]);
-			//pLabel->setBorder(new LineBorder());
+			// pLabel->setBorder(new LineBorder());
 
 			pLabel->setVisible(false);
 
@@ -182,8 +182,8 @@ CClassMenuPanel::CClassMenuPanel(int iTrans, bool iRemoveMe, int x, int y, int w
 			int maxX = xx + wide;
 			int maxY = yy + tall;
 
-			//check to see if the image goes lower than the text
-			//just use the red teams [0] images
+			// check to see if the image goes lower than the text
+			// just use the red teams [0] images
 			if (m_pClassImages[0][i] != nullptr)
 			{
 				m_pClassImages[0][i]->getPos(xx, yy);
@@ -194,7 +194,7 @@ CClassMenuPanel::CClassMenuPanel(int iTrans, bool iRemoveMe, int x, int y, int w
 			}
 
 			m_pClassInfoPanel[team][i]->setSize(maxX, maxY);
-			//m_pClassInfoPanel[i]->setBorder(new LineBorder());
+			// m_pClassInfoPanel[i]->setBorder(new LineBorder());
 		}
 	}
 
@@ -257,7 +257,7 @@ bool CClassMenuPanel::SlotInput(int iSlot)
 	if ((iSlot <= 0) || (iSlot > PC_LASTCLASS))
 		return false;
 
-	//TODO: apparently bugged in vanilla, still uses old indexing code with no second array index
+	// TODO: apparently bugged in vanilla, still uses old indexing code with no second array index
 	ClassButton* button = m_pButtons[gViewPort->m_iCTFTeamNumber - 1][iSlot - 1];
 
 	if (!button)

@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 //
 // Health.cpp
 //
@@ -210,12 +210,12 @@ bool CHudHealth::Draw(float flTime)
 
 		x = CrossWidth + HealthWidth / 2;
 
-		//Reserve space for 3 digits by default, but allow it to expand
+		// Reserve space for 3 digits by default, but allow it to expand
 		x += gHUD.GetHudNumberWidth(m_iHealth, 3, DHN_DRAWZERO);
 
 		gHUD.DrawHudNumberReverse(x, y, m_iHealth, DHN_DRAWZERO, painColor);
 
-		//x = gHUD.DrawHudNumber(x, y, DHN_3DIGITS | DHN_DRAWZERO, m_iHealth, painColor);
+		// x = gHUD.DrawHudNumber(x, y, DHN_3DIGITS | DHN_DRAWZERO, m_iHealth, painColor);
 
 		x += HealthWidth / 2;
 
@@ -299,8 +299,8 @@ bool CHudHealth::DrawPain(float flTime)
 
 	float fFade = gHUD.m_flTimeDelta * 2;
 
-	//TODO: can probably rework this into an array and a for loop
-	// SPR_Draw top
+	// TODO: can probably rework this into an array and a for loop
+	//  SPR_Draw top
 	if (m_fAttackFront > 0.4)
 	{
 		shade = a * V_max(m_fAttackFront, 0.5);

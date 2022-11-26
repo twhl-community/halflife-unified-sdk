@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   This source code contains proprietary and confidential information of
+ *   Valve LLC and its suppliers.  Access to this code is restricted to
+ *   persons who have executed a written SDK license with Valve.  Any access,
+ *   use or distribution of this code by or to any unlicensed person is illegal.
+ *
+ ****/
 //=========================================================
 // barnacle - stationary ceiling mounted 'fishing' monster
 //=========================================================
@@ -324,7 +324,7 @@ void CBarnacle::BarnacleThink()
 		}
 	}
 
-	//AILogger->debug("tounge {}", m_flAltitude + m_flTongueAdj);
+	// AILogger->debug("tounge {}", m_flAltitude + m_flTongueAdj);
 	SetBoneController(0, -(m_flAltitude + m_flTongueAdj));
 	StudioFrameAdvance(0.1);
 }
@@ -339,7 +339,7 @@ void CBarnacle::Killed(entvars_t* pevAttacker, int iGib)
 	pev->solid = SOLID_NOT;
 	pev->takedamage = DAMAGE_NO;
 
-	//Added for Op4
+	// Added for Op4
 	pev->deadflag = DEAD_DYING;
 
 	ClearShockEffect();
@@ -399,8 +399,8 @@ void CBarnacle::Precache()
 {
 	PrecacheModel(STRING(pev->model));
 
-	PrecacheSound("barnacle/bcl_alert2.wav"); //happy, lifting food up
-	PrecacheSound("barnacle/bcl_bite3.wav");  //just got food to mouth
+	PrecacheSound("barnacle/bcl_alert2.wav"); // happy, lifting food up
+	PrecacheSound("barnacle/bcl_bite3.wav");  // just got food to mouth
 	PrecacheSound("barnacle/bcl_chew1.wav");
 	PrecacheSound("barnacle/bcl_chew2.wav");
 	PrecacheSound("barnacle/bcl_chew3.wav");

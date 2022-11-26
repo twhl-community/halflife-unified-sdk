@@ -1,35 +1,35 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   This source code contains proprietary and confidential information of
+ *   Valve LLC and its suppliers.  Access to this code is restricted to
+ *   persons who have executed a written SDK license with Valve.  Any access,
+ *   use or distribution of this code by or to any unlicensed person is illegal.
+ *
+ ****/
 
 #pragma once
 
 #include "monsters.h"
 
 /**
-*	@brief Enum namespace
-*/
+ *	@brief Enum namespace
+ */
 namespace NPCWeaponState
 {
 /**
-*	@brief Values for NPC weapon equip state.
-*/
+ *	@brief Values for NPC weapon equip state.
+ */
 enum NPCWeaponState
 {
 	Blank = 0, //!< Not visible at all.
 	Holstered, //!< In holster.
-	Drawn //!< In hand.
+	Drawn	   //!< In hand.
 };
 }
 
@@ -388,7 +388,7 @@ public:
 
 	bool JumpToTarget(Activity movementAct, float waitTime);
 
-	//Shock rifle shock effect
+	// Shock rifle shock effect
 	float m_flShockDuration = 0;
 	float m_flShockTime = 0;
 	int m_iOldRenderMode = 0;

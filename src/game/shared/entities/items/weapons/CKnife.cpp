@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 #include "cbase.h"
 
 #include "CKnife.h"
@@ -164,7 +164,7 @@ bool CKnife::Swing(const bool bFirst)
 
 			if (g_pGameRules->IsMultiplayer())
 			{
-				//TODO: This code assumes the target is a player and not some NPC. Rework it to support NPC backstabbing.
+				// TODO: This code assumes the target is a player and not some NPC. Rework it to support NPC backstabbing.
 				UTIL_MakeVectors(pEntity->pev->v_angle);
 
 				const Vector targetRightDirection = gpGlobals->v_right;
@@ -173,7 +173,7 @@ bool CKnife::Swing(const bool bFirst)
 
 				const Vector ownerForwardDirection = gpGlobals->v_forward;
 
-				//In multiplayer the knife can backstab targets.
+				// In multiplayer the knife can backstab targets.
 				const bool isBehindTarget = CrossProduct(targetRightDirection, ownerForwardDirection).z > 0;
 
 				if (isBehindTarget)

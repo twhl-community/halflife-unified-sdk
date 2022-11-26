@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 
 #pragma once
 
@@ -35,7 +35,7 @@ private:
 	static constexpr spdlog::level::level_enum DefaultLogLevel = spdlog::level::info;
 	static const inline std::string DefaultBaseFileName{"L"};
 	static constexpr std::size_t MaxBaseFileNameLength{16};
-	static constexpr std::uint16_t DefaultMaxFiles{8}; //Have a finite limit for files by default.
+	static constexpr std::uint16_t DefaultMaxFiles{8}; // Have a finite limit for files by default.
 
 	struct LoggerConfigurationSettings
 	{

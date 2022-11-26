@@ -115,7 +115,7 @@ ScorePanel::ScorePanel(int x, int y, int wide, int tall) : Panel(x, y, wide, tal
 	m_pCurrentHighlightLabel = nullptr;
 	m_iHighlightRow = -1;
 
-	//m_pTrackerIcon = vgui_LoadTGA("gfx/vgui/640_scoreboardtracker.tga", false);
+	// m_pTrackerIcon = vgui_LoadTGA("gfx/vgui/640_scoreboardtracker.tga", false);
 
 	// Initialize the top title.
 	m_TitleLabel.setFont(tfont);
@@ -497,7 +497,7 @@ int ScorePanel::RebuildTeams()
 
 	if (gHUD.m_Teamplay == 2)
 	{
-		//Hardcoded to 2 because m_iNumTeams may not be the correct value at this time
+		// Hardcoded to 2 because m_iNumTeams may not be the correct value at this time
 		for (i = 1; i <= 2; i++)
 		{
 			g_TeamInfo[i].players = 0;
@@ -526,7 +526,7 @@ int ScorePanel::RebuildTeams()
 
 		if (gHUD.m_Teamplay == 2)
 		{
-			//CTF uses predefined teams with fixed team ids
+			// CTF uses predefined teams with fixed team ids
 			j = g_PlayerExtraInfo[i].teamid;
 
 			if (g_TeamInfo[j].name[0] == '\0')

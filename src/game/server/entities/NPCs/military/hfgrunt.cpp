@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   This source code contains proprietary and confidential information of
+ *   Valve LLC and its suppliers.  Access to this code is restricted to
+ *   persons who have executed a written SDK license with Valve.  Any access,
+ *   use or distribution of this code by or to any unlicensed person is illegal.
+ *
+ ****/
 //=========================================================
 // friendly hgrunt
 //=========================================================
@@ -27,7 +27,7 @@ class CHFGrunt : public CHGrunt
 public:
 	int IRelationship(CBaseEntity* pTarget) override
 	{
-		//Players are allies
+		// Players are allies
 		if (pTarget->IsPlayer())
 			return R_AL;
 
@@ -41,8 +41,8 @@ protected:
 LINK_ENTITY_TO_CLASS(monster_human_friendly_grunt, CHFGrunt);
 
 /**
-*	@brief when triggered, spawns a monster_human_friendly_grunt repelling down a line.
-*/
+ *	@brief when triggered, spawns a monster_human_friendly_grunt repelling down a line.
+ */
 class CHFGruntRepel : public CHGruntRepel
 {
 public:
@@ -66,7 +66,7 @@ public:
 LINK_ENTITY_TO_CLASS(monster_fgrunt_repel, CHFGruntRepel);
 
 /**
-*	@brief DEAD HGRUNT PROP
-*	@details Same as regular grunt
-*/
+ *	@brief DEAD HGRUNT PROP
+ *	@details Same as regular grunt
+ */
 LINK_ENTITY_TO_CLASS(monster_fhgrunt_dead, CDeadHGrunt);

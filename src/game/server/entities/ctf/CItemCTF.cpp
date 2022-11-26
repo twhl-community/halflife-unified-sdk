@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 #include "cbase.h"
 #include "CItemCTF.h"
 #include "CItemSpawnCTF.h"
@@ -30,7 +30,7 @@ bool CItemCTF::KeyValue(KeyValueData* pkvd)
 		return true;
 	}
 
-	//TODO: should invoke base class KeyValue here
+	// TODO: should invoke base class KeyValue here
 	return false;
 }
 
@@ -83,7 +83,7 @@ void CItemCTF::Spawn()
 	m_iLastTouched = 0;
 	m_flPickupTime = 0;
 
-	//TODO: already done above
+	// TODO: already done above
 	SetTouch(&CItemCTF::ItemTouch);
 
 	m_flNextTouchTime = 0;
@@ -234,7 +234,7 @@ void CItemCTF::CarryThink()
 
 void CItemCTF::ItemTouch(CBaseEntity* pOther)
 {
-	//TODO: really shouldn't be using the index here tbh
+	// TODO: really shouldn't be using the index here tbh
 	if (pOther->IsPlayer() && pOther->IsAlive() && (m_iLastTouched != pOther->entindex() || m_flNextTouchTime <= gpGlobals->time))
 	{
 		m_iLastTouched = 0;
@@ -354,7 +354,7 @@ void CItemCTF::ScatterItem(CBasePlayer* pPlayer)
 	m_iLastTouched = pPlayer->entindex();
 	m_flNextTouchTime = 5.0 + gpGlobals->time;
 
-	CGameRules::Logger->trace("{} triggered \"drop_{}_Powerup\"", PlayerLogInfo {*pPlayer}, m_pszItemName);
+	CGameRules::Logger->trace("{} triggered \"drop_{}_Powerup\"", PlayerLogInfo{*pPlayer}, m_pszItemName);
 }
 
 void CItemCTF::ThrowItem(CBasePlayer* pPlayer)

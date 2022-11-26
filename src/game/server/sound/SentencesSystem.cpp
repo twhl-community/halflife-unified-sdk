@@ -263,7 +263,7 @@ void SentencesSystem::LoadSentences()
 		{
 			const int expected = group.count - 1;
 
-			
+
 			if (expected != std::get<1>(*groupData))
 			{
 				// Don't report bad indices if the first sentence is bad since those aren't intended to be groups.

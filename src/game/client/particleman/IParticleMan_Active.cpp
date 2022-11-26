@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 
 #include <vector>
 
@@ -60,8 +60,8 @@ void IParticleMan_Active::ApplyForce(Vector vOrigin, Vector vDirection, float fl
 
 void IParticleMan_Active::SetUp(cl_enginefunc_t* pEnginefuncs)
 {
-	//Note: disabled because we're in the client dll.
-	//std::memcpy(&gEngfuncs, pEnginefuncs, sizeof(gEngfuncs));
+	// Note: disabled because we're in the client dll.
+	// std::memcpy(&gEngfuncs, pEnginefuncs, sizeof(gEngfuncs));
 
 	cl_pmanstats = gEngfuncs.pfnRegisterVariable("cl_pmanstats", "0", 0);
 }
@@ -103,7 +103,7 @@ void IParticleMan_Active::Update()
 	{
 		if (auto& member = g_pForceList[i]; member.m_flDieTime != 0 && member.m_flDieTime < time)
 		{
-			//Always swap to last before erasing to make it cheaper to do.
+			// Always swap to last before erasing to make it cheaper to do.
 			if (i + 1 < g_pForceList.size())
 			{
 				std::swap(member, g_pForceList[g_pForceList.size() - 1]);
@@ -130,7 +130,7 @@ void IParticleMan_Active::Update()
 
 	if (nullptr != cl_pmanstats && cl_pmanstats->value == 1)
 	{
-		//TODO: engine doesn't support printing size_t, use local printf
+		// TODO: engine doesn't support printing size_t, use local printf
 		gEngfuncs.Con_NPrintf(15, "Number of Particles: %d", static_cast<int>(CMiniMem::Instance()->GetTotalParticles()));
 		gEngfuncs.Con_NPrintf(16, "Particles Drawn: %d", static_cast<int>(CMiniMem::Instance()->GetDrawnParticles()));
 	}

@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   This source code contains proprietary and confidential information of
+ *   Valve LLC and its suppliers.  Access to this code is restricted to
+ *   persons who have executed a written SDK license with Valve.  Any access,
+ *   use or distribution of this code by or to any unlicensed person is illegal.
+ *
+ ****/
 //=========================================================
 // male assassin
 //=========================================================
@@ -218,7 +218,7 @@ void CMOFAssassin::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector ve
 
 void CMOFAssassin::IdleSound()
 {
-	//Male Assassin doesn't make idle chat
+	// Male Assassin doesn't make idle chat
 }
 
 //=========================================================
@@ -274,7 +274,7 @@ void CMOFAssassin::Shoot(bool firstShotInBurst)
 	}
 	else
 	{
-		//TODO: why is this 556? is 762 too damaging?
+		// TODO: why is this 556? is 762 too damaging?
 		FireBullets(1, vecShootOrigin, vecShootDir, VECTOR_CONE_1DEGREES, 2048, BULLET_PLAYER_556);
 
 		if (firstShotInBurst)
@@ -302,7 +302,7 @@ void CMOFAssassin::Shoot(bool firstShotInBurst)
 //=========================================================
 void CMOFAssassin::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
-	//Override grunt events that require assassin-specific behavior
+	// Override grunt events that require assassin-specific behavior
 	switch (pEvent->event)
 	{
 	case HGRUNT_AE_DROP_GUN:
@@ -429,7 +429,7 @@ void CMOFAssassin::Spawn()
 //=========================================================
 void CMOFAssassin::PainSound()
 {
-	//Male Assassin doesn't make pain sounds
+	// Male Assassin doesn't make pain sounds
 }
 
 std::tuple<int, Activity> CMOFAssassin::GetSequenceForActivity(Activity NewActivity)
@@ -441,7 +441,7 @@ std::tuple<int, Activity> CMOFAssassin::GetSequenceForActivity(Activity NewActiv
 	{
 	case ACT_RANGE_ATTACK1:
 		// grunt is either shooting standing or shooting crouched
-		//Sniper uses the same set
+		// Sniper uses the same set
 		if (m_fStanding)
 		{
 			// get aimable sequence

@@ -1,6 +1,6 @@
 //========= Copyright � 1996-2001, Valve LLC, All rights reserved. ============
 //
-// Purpose: 
+// Purpose:
 //
 // $NoKeywords: $
 //=============================================================================
@@ -16,46 +16,47 @@ class CBitVecAccessor
 public:
 	CBitVecAccessor(uint32* pDWords, int iBit);
 
-	void		operator=(bool val);
+	void operator=(bool val);
 	operator bool();
 
 private:
 	uint32* m_pDWords;
-	int				m_iBit;
+	int m_iBit;
 };
 
 
-// CBitVec allows you to store a list of bits and do operations on them like they were 
+// CBitVec allows you to store a list of bits and do operations on them like they were
 // an atomic type.
-template<int NUM_BITS>
+template <int NUM_BITS>
 class CBitVec
 {
 public:
-
 	CBitVec();
 
 	// Set all values to the specified value (0 or 1..)
-	void			Init(int val = 0);
+	void Init(int val = 0);
 
 	// Access the bits like an array.
-	CBitVecAccessor	operator[](int i);
+	CBitVecAccessor operator[](int i);
 
 	// Operations on other bit vectors.
 	CBitVec& operator=(CBitVec<NUM_BITS> const& other);
-	bool			operator==(CBitVec<NUM_BITS> const& other);
-	bool			operator!=(CBitVec<NUM_BITS> const& other);
+	bool operator==(CBitVec<NUM_BITS> const& other);
+	bool operator!=(CBitVec<NUM_BITS> const& other);
 
 	// Get underlying dword representations of the bits.
-	int				GetNumDWords();
-	uint32	GetDWord(int i);
-	void			SetDWord(int i, uint32 val);
+	int GetNumDWords();
+	uint32 GetDWord(int i);
+	void SetDWord(int i, uint32 val);
 
-	int				GetNumBits();
+	int GetNumBits();
 
 private:
-
-	enum { NUM_DWORDS = NUM_BITS / 32 + (NUM_BITS & 31) != 0 ? 1 : 0 };
-	uint32	m_DWords[NUM_DWORDS];
+	enum
+	{
+		NUM_DWORDS = NUM_BITS / 32 + (NUM_BITS & 31) != 0 ? 1 : 0
+	};
+	uint32 m_DWords[NUM_DWORDS];
 };
 
 
@@ -90,14 +91,14 @@ inline CBitVecAccessor::operator bool()
 // CBitVec inlines.
 // ------------------------------------------------------------------------ //
 
-template<int NUM_BITS>
+template <int NUM_BITS>
 inline int CBitVec<NUM_BITS>::GetNumBits()
 {
 	return NUM_BITS;
 }
 
 
-template<int NUM_BITS>
+template <int NUM_BITS>
 inline CBitVec<NUM_BITS>::CBitVec()
 {
 	for (int i = 0; i < NUM_DWORDS; i++)
@@ -105,7 +106,7 @@ inline CBitVec<NUM_BITS>::CBitVec()
 }
 
 
-template<int NUM_BITS>
+template <int NUM_BITS>
 inline void CBitVec<NUM_BITS>::Init(int val)
 {
 	for (int i = 0; i < GetNumBits(); i++)
@@ -115,7 +116,7 @@ inline void CBitVec<NUM_BITS>::Init(int val)
 }
 
 
-template<int NUM_BITS>
+template <int NUM_BITS>
 inline CBitVec<NUM_BITS>& CBitVec<NUM_BITS>::operator=(CBitVec<NUM_BITS> const& other)
 {
 	memcpy(m_DWords, other.m_DWords, sizeof(m_DWords));
@@ -123,7 +124,7 @@ inline CBitVec<NUM_BITS>& CBitVec<NUM_BITS>::operator=(CBitVec<NUM_BITS> const& 
 }
 
 
-template<int NUM_BITS>
+template <int NUM_BITS>
 inline CBitVecAccessor CBitVec<NUM_BITS>::operator[](int i)
 {
 	assert(i >= 0 && i < GetNumBits());
@@ -131,7 +132,7 @@ inline CBitVecAccessor CBitVec<NUM_BITS>::operator[](int i)
 }
 
 
-template<int NUM_BITS>
+template <int NUM_BITS>
 inline bool CBitVec<NUM_BITS>::operator==(CBitVec<NUM_BITS> const& other)
 {
 	for (int i = 0; i < NUM_DWORDS; i++)
@@ -142,20 +143,20 @@ inline bool CBitVec<NUM_BITS>::operator==(CBitVec<NUM_BITS> const& other)
 }
 
 
-template<int NUM_BITS>
+template <int NUM_BITS>
 inline bool CBitVec<NUM_BITS>::operator!=(CBitVec<NUM_BITS> const& other)
 {
 	return !(*this == other);
 }
 
 
-template<int NUM_BITS>
+template <int NUM_BITS>
 inline int CBitVec<NUM_BITS>::GetNumDWords()
 {
 	return NUM_DWORDS;
 }
 
-template<int NUM_BITS>
+template <int NUM_BITS>
 inline uint32 CBitVec<NUM_BITS>::GetDWord(int i)
 {
 	assert(i >= 0 && i < NUM_DWORDS);
@@ -163,7 +164,7 @@ inline uint32 CBitVec<NUM_BITS>::GetDWord(int i)
 }
 
 
-template<int NUM_BITS>
+template <int NUM_BITS>
 inline void CBitVec<NUM_BITS>::SetDWord(int i, uint32 val)
 {
 	assert(i >= 0 && i < NUM_DWORDS);

@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   This source code contains proprietary and confidential information of
+ *   Valve LLC and its suppliers.  Access to this code is restricted to
+ *   persons who have executed a written SDK license with Valve.  Any access,
+ *   use or distribution of this code by or to any unlicensed person is illegal.
+ *
+ ****/
 //=========================================================
 // hgrunt
 //=========================================================
@@ -154,7 +154,7 @@ public:
 
 	float m_flLastShot;
 
-	int m_iBrassShell; //TODO: no shell is being ejected atm
+	int m_iBrassShell; // TODO: no shell is being ejected atm
 
 	MedicAllyBodygroup::MedicAllyBodygroup m_WeaponGroup = MedicAllyBodygroup::Invalid;
 
@@ -224,7 +224,7 @@ void COFMedicAlly::DropWeapon(bool applyVelocity)
 //=========================================================
 void COFMedicAlly::Shoot()
 {
-	//Limit fire rate
+	// Limit fire rate
 	if (m_hEnemy == nullptr || gpGlobals->time - m_flLastShot <= 0.11)
 	{
 		return;
@@ -679,13 +679,13 @@ Schedule_t* COFMedicAlly::GetScheduleOfType(int Type)
 
 int COFMedicAlly::ObjectCaps()
 {
-	//Allow healing the player by continuously using
+	// Allow healing the player by continuously using
 	return FCAP_ACROSS_TRANSITION | FCAP_CONTINUOUS_USE;
 }
 
 void COFMedicAlly::Killed(entvars_t* pevAttacker, int iGib)
 {
-	//Clear medic handle from patient
+	// Clear medic handle from patient
 	if (m_hTargetEnt != nullptr)
 	{
 		auto pSquadMonster = m_hTargetEnt->MySquadTalkMonsterPointer();
@@ -699,12 +699,12 @@ void COFMedicAlly::Killed(entvars_t* pevAttacker, int iGib)
 
 void COFMedicAlly::MonsterThink()
 {
-	//Check if we need to start following the player again after healing them
+	// Check if we need to start following the player again after healing them
 	if (m_fFollowChecking && !m_fFollowChecked && gpGlobals->time - m_flFollowCheckTime > 0.5)
 	{
 		m_fFollowChecking = false;
 
-		//TODO: not suited for multiplayer
+		// TODO: not suited for multiplayer
 		auto pPlayer = UTIL_GetLocalPlayer();
 
 		FollowerUse(pPlayer, pPlayer, USE_TOGGLE, 0);
@@ -782,7 +782,7 @@ void COFMedicAlly::HealerActivate(CBaseMonster* pTarget)
 		if (pMonster)
 			pMonster->m_hWaitMedic = nullptr;
 
-		//TODO: could just change the type of pTarget since this is the only type passed in
+		// TODO: could just change the type of pTarget since this is the only type passed in
 		auto pSquadTarget = static_cast<COFSquadTalkMonster*>(pTarget);
 
 		pSquadTarget->m_hWaitMedic = this;
@@ -914,8 +914,8 @@ void COFMedicAlly::HealerUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_
 }
 
 /**
-*	@brief when triggered, spawns a monster_human_medic_ally repelling down a line.
-*/
+ *	@brief when triggered, spawns a monster_human_medic_ally repelling down a line.
+ */
 class COFMedicAllyRepel : public CBaseHGruntAllyRepel
 {
 protected:

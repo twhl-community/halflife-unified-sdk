@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   This source code contains proprietary and confidential information of
+ *   Valve LLC and its suppliers.  Access to this code is restricted to
+ *   persons who have executed a written SDK license with Valve.  Any access,
+ *   use or distribution of this code by or to any unlicensed person is illegal.
+ *
+ ****/
 //=========================================================
 // Voltigore - Tank like alien
 //=========================================================
@@ -275,7 +275,7 @@ void COFChargedBolt::ChargedBoltTouch(CBaseEntity* pOther)
 
 	auto pevOwner = VARS(pev->owner);
 
-	//Null out the owner to avoid issues with radius damage
+	// Null out the owner to avoid issues with radius damage
 	pev->owner = nullptr;
 
 	ClearMultiDamage();
@@ -340,8 +340,8 @@ int COFVoltigore::ISoundMask()
 //=========================================================
 void COFVoltigore::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
 {
-	//Ignore shock damage since we have a shock based attack
-	//TODO: use a filter based on attacker to identify self harm
+	// Ignore shock damage since we have a shock based attack
+	// TODO: use a filter based on attacker to identify self harm
 	if ((bitsDamageType & DMG_SHOCK) == 0)
 	{
 		SpawnBlood(ptr->vecEndPos, BloodColor(), flDamage); // a little surface blood.
@@ -473,7 +473,7 @@ void COFVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 			bolt->LaunchChargedBolt(direction, edict(), 1000, 10);
 
-			//We no longer have to manage the bolt now
+			// We no longer have to manage the bolt now
 			m_pChargedBolt = nullptr;
 
 			ClearBeams();
@@ -973,7 +973,7 @@ void COFVoltigore::RunTask(Task_t* pTask)
 
 				pev->framerate = 0;
 
-				//Flatten the bounding box so players can step on it
+				// Flatten the bounding box so players can step on it
 				if (BBoxFlat())
 				{
 					const auto maxs = Vector(pev->maxs.x, pev->maxs.y, pev->mins.z + 1);
@@ -1082,7 +1082,7 @@ Schedule_t* COFVoltigore::GetScheduleOfType(int Type)
 	case SCHED_RANGE_ATTACK1:
 		if (HasConditions(bits_COND_SEE_ENEMY))
 		{
-			//normal attack
+			// normal attack
 			return &slVoltigoreRangeAttack1[0];
 		}
 		else
@@ -1179,7 +1179,7 @@ void COFVoltigore::DeathGibThink()
 
 			float closest = 1;
 
-			//Do 3 ray traces and use the closest one to make a beam
+			// Do 3 ray traces and use the closest one to make a beam
 			for (auto ray = 0; ray < 3; ++ray)
 			{
 				TraceResult tr1;
@@ -1192,7 +1192,7 @@ void COFVoltigore::DeathGibThink()
 				}
 			}
 
-			//No nearby objects found
+			// No nearby objects found
 			if (closest == 1)
 			{
 				return;
@@ -1262,10 +1262,10 @@ void COFVoltigore::GibMonster()
 	SetThink(&CBaseMonster::SUB_Remove);
 	pev->nextthink = gpGlobals->time + 0.15;
 
-	//Note: the original didn't have the violence check
+	// Note: the original didn't have the violence check
 	if (CVAR_GET_FLOAT("violence_agibs") != 0) // Should never get here, but someone might call it directly
 	{
-		//Gib spawning has been rewritten so the logic for limiting gib submodels is generalized
+		// Gib spawning has been rewritten so the logic for limiting gib submodels is generalized
 		CGib::SpawnRandomGibs(pev, 12, VoltigoreGibs); // Throw alien gibs
 	}
 }

@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 
 #pragma once
 
@@ -21,8 +21,8 @@ class CRopeSample;
 struct RopeSampleData;
 
 /**
-*	Represents a spring that keeps samples a given distance apart.
-*/
+ *	Represents a spring that keeps samples a given distance apart.
+ */
 struct Spring
 {
 	size_t p1;
@@ -33,9 +33,9 @@ struct Spring
 };
 
 /**
-*	A rope with a number of segments.
-*	Uses an RK4 integrator with dampened springs to simulate rope physics.
-*/
+ *	A rope with a number of segments.
+ *	Uses an RK4 integrator with dampened springs to simulate rope physics.
+ */
 class CRope : public CBaseDelay
 {
 public:
@@ -73,15 +73,15 @@ public:
 	void RunSimOnSamples();
 
 	/**
-	*	Computes forces on the given sample list.
-	*	@param pSystem List of sample data. m_NumSamples Elements large.
-	*/
+	 *	Computes forces on the given sample list.
+	 *	@param pSystem List of sample data. m_NumSamples Elements large.
+	 */
 	void ComputeForces(RopeSampleData* pSystem);
 
 	/**
-	*	Computes forces on the given sample list.
-	*	@param pSystem List of samples. m_NumSamples Elements large.
-	*/
+	 *	Computes forces on the given sample list.
+	 *	@param pSystem List of samples. m_NumSamples Elements large.
+	 */
 	void ComputeForces(CRopeSample** ppSystem);
 
 	void ComputeSampleForce(RopeSampleData& data);
@@ -89,45 +89,45 @@ public:
 	void ComputeSpringForce(RopeSampleData& first, RopeSampleData& second, const Spring& spring);
 
 	/**
-	*	Runs RK4 integration.
-	*	@param flDeltaTime Delta between previous and current time.
-	*	@param ppSampleSource Previous sample state.
-	*	@param ppSampleTarget Next sample state.
-	*/
+	 *	Runs RK4 integration.
+	 *	@param flDeltaTime Delta between previous and current time.
+	 *	@param ppSampleSource Previous sample state.
+	 *	@param ppSampleTarget Next sample state.
+	 */
 	void RK4Integrate(const float flDeltaTime, CRopeSample** ppSampleSource, CRopeSample** ppSampleTarget);
 
 	/**
-	*	Traces model positions and angles and corrects them.
-	*	@param ppPrimarySegs Visible segments.
-	*	@param ppHiddenSegs hidden segments.
-	*/
+	 *	Traces model positions and angles and corrects them.
+	 *	@param ppPrimarySegs Visible segments.
+	 *	@param ppHiddenSegs hidden segments.
+	 */
 	void TraceModels(CRopeSegment** ppPrimarySegs, CRopeSegment** ppHiddenSegs);
 
 	/**
-	*	Traces model positions and angles, makes visible segments visible and hidden segments hidden.
-	*/
+	 *	Traces model positions and angles, makes visible segments visible and hidden segments hidden.
+	 */
 	void SetRopeSegments(const size_t uiNumSegments,
 		CRopeSegment** ppPrimarySegs, CRopeSegment** ppHiddenSegs);
 
 	/**
-	*	Moves the attached object up.
-	*	@param flDeltaTime Time between previous and current movement.
-	*	@return true if the object is still on the rope, false otherwise.
-	*/
+	 *	Moves the attached object up.
+	 *	@param flDeltaTime Time between previous and current movement.
+	 *	@return true if the object is still on the rope, false otherwise.
+	 */
 	bool MoveUp(const float flDeltaTime);
 
 	/**
-	*	Moves the attached object down.
-	*	@param flDeltaTime Time between previous and current movement.
-	*	@return true if the object is still on the rope, false otherwise.
-	*/
+	 *	Moves the attached object down.
+	 *	@param flDeltaTime Time between previous and current movement.
+	 *	@return true if the object is still on the rope, false otherwise.
+	 */
 	bool MoveDown(const float flDeltaTime);
 
 	Vector GetAttachedObjectsVelocity() const;
 
 	/**
-	*	Applies force from the player. Only applies if there is currently an object attached to the rope.
-	*/
+	 *	Applies force from the player. Only applies if there is currently an object attached to the rope.
+	 */
 	void ApplyForceFromPlayer(const Vector& vecForce);
 
 	void ApplyForceToSegment(const Vector& vecForce, const size_t uiSegment);
@@ -158,8 +158,8 @@ public:
 	bool ShouldCreak() const;
 
 	/**
-	*	Plays a creak sound.
-	*/
+	 *	Plays a creak sound.
+	 */
 	void Creak();
 
 	string_t GetBodyModel() const { return m_iszBodyModel; }
@@ -181,9 +181,9 @@ public:
 	void SetAttachedObjectsSegment(CRopeSegment* pSegment);
 
 	/**
-	*	@param uiSegmentIndex Segment index.
-	*	@return The segment direction normal from its origin.
-	*/
+	 *	@param uiSegmentIndex Segment index.
+	 *	@return The segment direction normal from its origin.
+	 */
 	Vector GetSegmentDirFromOrigin(const size_t uiSegmentIndex) const;
 
 	Vector GetAttachedObjectsPosition() const;

@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 
 #pragma once
 
@@ -44,7 +44,7 @@ class CRope;
 // generic player
 //
 //-----------------------------------------------------
-//This is Half-Life player entity
+// This is Half-Life player entity
 //-----------------------------------------------------
 #define CSUITPLAYLIST 4 // max of 4 suit sentences queued up at any time
 
@@ -125,10 +125,10 @@ public:
 	float m_flStopExtraSoundTime;
 
 	/**
-	*	@brief What type of suit light the player can use
-	*	@details The initial value here is the default
-	*	To change this setting at runtime call @see SetSuitLightType so that player state is updated properly
-	*/
+	 *	@brief What type of suit light the player can use
+	 *	@details The initial value here is the default
+	 *	To change this setting at runtime call @see SetSuitLightType so that player state is updated properly
+	 */
 	SuitLightType m_SuitLightType = SuitLightType::Flashlight;
 	float m_flFlashLightTime; // Time until next battery draw/Recharge
 	int m_iFlashBattery;	  // Flashlight Battery Draw
@@ -186,7 +186,7 @@ public:
 
 	EHANDLE m_pTank;		 // the tank which the player is currently controlling,  nullptr if no tank
 	EHANDLE m_hViewEntity;	 // The view entity being used, or null if the player is using itself as the view entity
-	bool m_bResetViewEntity; //True if the player's view needs to be set back to the view entity
+	bool m_bResetViewEntity; // True if the player's view needs to be set back to the view entity
 	float m_fDeadTime;		 // the time at which the player died  (used in PlayerDeathThink())
 
 	bool m_fNoPlayerSound; // a debugging feature. Player makes no sound if this is true.
@@ -244,7 +244,7 @@ public:
 
 	std::uint64_t m_WeaponBits;
 
-	//Not saved, used to update client.
+	// Not saved, used to update client.
 	std::uint64_t m_ClientWeaponBits;
 
 	// shared ammo slots
@@ -296,8 +296,8 @@ public:
 	bool SwitchWeapon(CBasePlayerItem* pWeapon);
 
 	/**
-	*	@brief Equips an appropriate weapon for the player if they don't have one equipped already.
-	*/
+	 *	@brief Equips an appropriate weapon for the player if they don't have one equipped already.
+	 */
 	void EquipWeapon();
 
 	void SetWeaponBit(int id);
@@ -399,7 +399,7 @@ public:
 	float m_flPlayAftershock;
 	float m_flNextAmmoBurn; // while charging, when to absorb another unit of player's ammo?
 
-	//Player ID
+	// Player ID
 	void InitStatusBar();
 	void UpdateStatusBar();
 	int m_izSBarState[SBAR_END];
@@ -410,7 +410,7 @@ public:
 
 	void UpdateEntityInfo();
 
-	//Not saved, reset on map change.
+	// Not saved, reset on map change.
 	float m_NextEntityInfoUpdateTime;
 
 	// Assume this is false on map start since the client clears it anyway.
@@ -431,7 +431,7 @@ public:
 
 	bool m_bRestored;
 
-	//True if the player is currently spawning.
+	// True if the player is currently spawning.
 	bool m_bIsSpawning = false;
 
 	bool IsOnRope() const { return (m_afPhysicsFlags & PFLAG_ONROPE) != 0; }
@@ -461,7 +461,7 @@ private:
 	float m_flLastClimbTime = 0;
 	bool m_bIsClimbing = false;
 
-	//For saving and level changes.
+	// For saving and level changes.
 	int m_HudColor = RGB_HUD_COLOR.ToInteger();
 
 	bool m_bInfiniteAir;
@@ -469,9 +469,9 @@ private:
 
 public:
 	/**
-	*	@brief Sets the player's hud color
-	*	@details The player must be fully connected and ready to receive user messages for this to work
-	*/
+	 *	@brief Sets the player's hud color
+	 *	@details The player must be fully connected and ready to receive user messages for this to work
+	 */
 	void SetHudColor(RGB24 color);
 
 	void SendScoreInfo(CBasePlayer* destination);
@@ -645,8 +645,8 @@ inline CPlayerEnumeratorWithStart UTIL_FindPlayers(CBasePlayer* pStartEntity)
 }
 
 /**
-*	@brief Tag type to log player info in the form <tt>\"netname<userid><steamid><teamname>\"</tt>.
-*/
+ *	@brief Tag type to log player info in the form <tt>\"netname<userid><steamid><teamname>\"</tt>.
+ */
 struct PlayerLogInfo
 {
 	CBasePlayer& Player;
@@ -685,7 +685,7 @@ inline bool gEvilImpulse101 = false;
 inline bool giPrecacheGrunt = false;
 
 /**
-*	@brief Display the game title if this key is set
-*/
+ *	@brief Display the game title if this key is set
+ */
 inline DLL_GLOBAL std::string g_DisplayTitleName;
 inline DLL_GLOBAL CBaseEntity* g_pLastSpawn = nullptr;

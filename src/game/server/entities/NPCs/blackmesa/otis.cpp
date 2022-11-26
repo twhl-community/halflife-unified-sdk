@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   This source code contains proprietary and confidential information of
+ *   Valve LLC and its suppliers.  Access to this code is restricted to
+ *   persons who have executed a written SDK license with Valve.  Any access,
+ *   use or distribution of this code by or to any unlicensed person is illegal.
+ *
+ ****/
 //=========================================================
 // monster template
 //=========================================================
@@ -24,8 +24,8 @@
 namespace OtisBodyGroup
 {
 /**
-*	@brief See GuardBodyGroup::GuardBodyGroup for the enum that this extends.
-*/
+ *	@brief See GuardBodyGroup::GuardBodyGroup for the enum that this extends.
+ */
 enum OtisBodyGroup
 {
 	Weapons = GuardBodyGroup::Weapons,
@@ -65,7 +65,7 @@ enum OtisSkin
 };
 }
 
-//TODO: work out a way to abstract sentences out so we don't need to override here to change just those
+// TODO: work out a way to abstract sentences out so we don't need to override here to change just those
 
 class COtis : public CBarney
 {
@@ -312,7 +312,7 @@ void CDeadOtis::OnCreate()
 	CBaseMonster::OnCreate();
 
 	// Corpses have less health
-	pev->health = 8; //GetSkillFloat("otis_health"sv);
+	pev->health = 8; // GetSkillFloat("otis_health"sv);
 	pev->model = MAKE_STRING("models/otis.mdl");
 }
 

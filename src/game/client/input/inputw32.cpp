@@ -73,13 +73,13 @@ cvar_t* sensitivity;
 
 // Custom mouse acceleration (0 disable, 1 to enable, 2 enable with separate yaw/pitch rescale)
 static cvar_t* m_customaccel;
-//Formula: mousesensitivity = ( rawmousedelta^m_customaccel_exponent ) * m_customaccel_scale + sensitivity
-// If mode is 2, then x and y sensitivity are scaled by m_pitch and m_yaw respectively.
-// Custom mouse acceleration value.
+// Formula: mousesensitivity = ( rawmousedelta^m_customaccel_exponent ) * m_customaccel_scale + sensitivity
+//  If mode is 2, then x and y sensitivity are scaled by m_pitch and m_yaw respectively.
+//  Custom mouse acceleration value.
 static cvar_t* m_customaccel_scale;
-//Max mouse move scale factor, 0 for no limit
+// Max mouse move scale factor, 0 for no limit
 static cvar_t* m_customaccel_max;
-//Mouse move is raised to this power before being scaled by scale factor
+// Mouse move is raised to this power before being scaled by scale factor
 static cvar_t* m_customaccel_exponent;
 
 // if threaded mouse is enabled then the time to sleep between polls
@@ -208,7 +208,7 @@ void MousePos_ThreadFunction()
 		{
 			std::unique_lock lock{s_MouseThread.Mutex};
 
-			//TODO: accessing the cvar value is a race condition
+			// TODO: accessing the cvar value is a race condition
 			if (s_MouseThread.Condition.wait_for(
 					lock,
 					std::chrono::milliseconds{(int)m_mousethread_sleep->value},
@@ -348,7 +348,7 @@ void IN_Shutdown()
 #ifdef WIN32
 	if (s_MouseThread.Thread.joinable())
 	{
-		//Mouse thread is active, signal it to quit and wait.
+		// Mouse thread is active, signal it to quit and wait.
 		{
 			std::lock_guard guard{s_MouseThread.Mutex};
 			s_MouseThread.QuittingTime = true;
@@ -496,8 +496,8 @@ void IN_MouseMove(float frametime, usercmd_t* cmd)
 		V_StopPitchDrift();
 	}
 
-	//jjb - this disbles normal mouse control if the user is trying to
-	//      move the camera, or if the mouse cursor is visible or if we're in intermission
+	// jjb - this disbles normal mouse control if the user is trying to
+	//       move the camera, or if the mouse cursor is visible or if we're in intermission
 	if (!iMouseInUse && !gHUD.m_iIntermission && !g_iVisibleMouse)
 	{
 		int deltaX, deltaY;
@@ -629,7 +629,7 @@ IN_Accumulate
 */
 void DLLEXPORT IN_Accumulate()
 {
-	//only accumulate mouse if we are not moving the camera with the mouse
+	// only accumulate mouse if we are not moving the camera with the mouse
 	if (!iMouseInUse && !g_iVisibleMouse)
 	{
 		if (mouseactive)
@@ -699,7 +699,7 @@ void IN_StartupJoystick()
 				s_pJoystick = SDL_GameControllerOpen(i);
 				if (s_pJoystick)
 				{
-					//save the joystick's number of buttons and POV status
+					// save the joystick's number of buttons and POV status
 					joy_numbuttons = SDL_CONTROLLER_BUTTON_MAX;
 					joy_haspov = false;
 

@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 //
 // teamplay_gamerules.cpp
 //
@@ -21,7 +21,7 @@
 #include "ctfplay_gamerules.h"
 #include "UserMessages.h"
 
-//TODO: these should be members of CHalfLifeTeamplay
+// TODO: these should be members of CHalfLifeTeamplay
 static char team_names[MAX_TEAMS][MAX_TEAMNAME_LENGTH];
 static int team_scores[MAX_TEAMS];
 static int num_teams = 0;
@@ -581,7 +581,7 @@ void CHalfLifeTeamplay::RecountTeams(bool bResendInfo)
 				team_scores[tm] += plr->pev->frags;
 			}
 
-			if (bResendInfo) //Someone's info changed, let's send the team info again.
+			if (bResendInfo) // Someone's info changed, let's send the team info again.
 			{
 				if (plr && IsValidTeam(plr->TeamID()))
 				{

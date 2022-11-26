@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   This source code contains proprietary and confidential information of
+ *   Valve LLC and its suppliers.  Access to this code is restricted to
+ *   persons who have executed a written SDK license with Valve.  Any access,
+ *   use or distribution of this code by or to any unlicensed person is illegal.
+ *
+ ****/
 #include "cbase.h"
 #include "customentity.h"
 #include "osprey.h"
@@ -71,7 +71,7 @@ void COsprey::Spawn()
 	UTIL_SetSize(pev, Vector(-400, -400, -100), Vector(400, 400, 32));
 	UTIL_SetOrigin(pev, pev->origin);
 
-	//Set FL_FLY so the Osprey model is interpolated.
+	// Set FL_FLY so the Osprey model is interpolated.
 	pev->flags |= FL_MONSTER | FL_FLY;
 	pev->takedamage = DAMAGE_YES;
 	m_flRightHealth = pev->health / 2;
@@ -347,7 +347,7 @@ void COsprey::Flight()
 {
 	float t = (gpGlobals->time - m_startTime);
 
-	//Only update if delta time is non-zero. It's zero if we're not moving at all (usually because we have no target).
+	// Only update if delta time is non-zero. It's zero if we're not moving at all (usually because we have no target).
 	if (m_dTime != 0)
 	{
 		float scale = 1.0 / m_dTime;
@@ -544,7 +544,7 @@ void COsprey::DyingThink()
 		WRITE_BYTE(50);
 
 		// Model
-		WRITE_SHORT(m_iTailGibs); //model id#
+		WRITE_SHORT(m_iTailGibs); // model id#
 
 		// # of shards
 		WRITE_BYTE(8); // let client decide
@@ -653,7 +653,7 @@ void COsprey::DyingThink()
 		WRITE_BYTE(40);
 
 		// Model
-		WRITE_SHORT(m_iBodyGibs); //model id#
+		WRITE_SHORT(m_iBodyGibs); // model id#
 
 		// # of shards
 		WRITE_BYTE(128);
@@ -707,10 +707,10 @@ void COsprey::ShowDamage()
 
 void COsprey::Update()
 {
-	//Look around so AI triggers work.
+	// Look around so AI triggers work.
 	Look(4092);
 
-	//Listen for sounds so AI triggers work.
+	// Listen for sounds so AI triggers work.
 	Listen();
 
 	ShowDamage();
@@ -719,11 +719,11 @@ void COsprey::Update()
 
 bool COsprey::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
-	//Set enemy to last attacker.
-	//Ospreys are not capable of fighting so they'll get angry at whatever shoots at them, not whatever looks like an enemy.
+	// Set enemy to last attacker.
+	// Ospreys are not capable of fighting so they'll get angry at whatever shoots at them, not whatever looks like an enemy.
 	m_hEnemy = Instance(pevAttacker);
 
-	//It's on now!
+	// It's on now!
 	m_MonsterState = MONSTERSTATE_COMBAT;
 
 	return CBaseMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);

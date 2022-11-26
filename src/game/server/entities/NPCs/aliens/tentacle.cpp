@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   This source code contains proprietary and confidential information of
+ *   Valve LLC and its suppliers.  Access to this code is restricted to
+ *   persons who have executed a written SDK license with Valve.  Any access,
+ *   use or distribution of this code by or to any unlicensed person is illegal.
+ *
+ ****/
 
 /*
 
@@ -29,8 +29,8 @@
 constexpr int TENTACLE_NUM_HEIGHTS = 4;
 
 /**
-*	@brief Amount of units to subtract from a height value to get its equivalent level.
-*/
+ *	@brief Amount of units to subtract from a height value to get its equivalent level.
+ */
 constexpr float TENTACLE_HEIGHT_LEVEL_OFFSET = 40;
 
 class CTentacle : public CBaseMonster
@@ -72,7 +72,7 @@ public:
 	void Killed(entvars_t* pevAttacker, int iGib) override;
 
 	MONSTERSTATE GetIdealState() override { return MONSTERSTATE_IDLE; }
-	//TODO: should override base, but has different signature
+	// TODO: should override base, but has different signature
 	bool CanPlaySequence(bool fDisregardState) { return true; }
 
 	int Classify() override;
@@ -265,7 +265,7 @@ void CTentacle::Spawn()
 {
 	Precache();
 
-	//Sort the list to ensure it's in the correct order, since it is expected that each value is larger than the last.
+	// Sort the list to ensure it's in the correct order, since it is expected that each value is larger than the last.
 	std::sort(std::begin(m_Heights), std::end(m_Heights));
 
 	pev->solid = SOLID_BBOX;
@@ -274,7 +274,7 @@ void CTentacle::Spawn()
 	pev->max_health = pev->health;
 	pev->sequence = 0;
 
-	//Always interpolate tentacles since they don't actually move.
+	// Always interpolate tentacles since they don't actually move.
 	m_EFlags |= EFLAG_SLERP;
 
 	SetModel(STRING(pev->model));
@@ -816,7 +816,7 @@ void CTentacle::DieThink()
 			}
 		}
 
-		//const int previousSequence = pev->sequence;
+		// const int previousSequence = pev->sequence;
 		pev->sequence = FindTransition(pev->sequence, m_iGoalAnim, &m_iDir);
 		// AILogger->debug("{} : {} => {}", previousSequence, m_iGoalAnim, pev->sequence);
 

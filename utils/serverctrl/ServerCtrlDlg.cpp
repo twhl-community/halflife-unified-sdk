@@ -232,7 +232,7 @@ int CServerCtrlDlg::DoModal()
 	}
 	CATCH_ALL(e)
 	{
-		//DELETE_EXCEPTION(e);
+		// DELETE_EXCEPTION(e);
 		m_nModalResult = -1;
 	}
 	END_CATCH_ALL

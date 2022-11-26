@@ -1,12 +1,12 @@
 /***
-*
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
-*	All Rights Reserved.
-*
-****/
+ *
+ *	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ ****/
 
 //
 // studiomdl.c: generates a studio .mdl file from a .qc script
@@ -919,7 +919,7 @@ void SimplifyModel(void)
 		VectorCopy(bmax, sequence[i].bmax);
 
 		/*
-		printf("%s : %.0f %.0f %.0f %.0f %.0f %.0f\n", 
+		printf("%s : %.0f %.0f %.0f %.0f %.0f %.0f\n",
 			sequence[i].name, bmin[0], bmax[0], bmin[1], bmax[1], bmin[2], bmax[2] );
 		*/
 		// printf("%s  %.2f\n", sequence[i].name, sequence[i].panim[0]->pos[9][0][0] / bonetable[9].pos[0] );
@@ -1010,7 +1010,7 @@ void SimplifyModel(void)
 								total++;
 								if (pcount->num.total != pcount->num.valid)
 								{
-									//if (j == 0) printf("%d:%d   ", pcount->num.valid, pcount->num.total );
+									// if (j == 0) printf("%d:%d   ", pcount->num.valid, pcount->num.total );
 									pcount = pvalue;
 									pvalue = pcount + 1;
 								}
@@ -1020,7 +1020,7 @@ void SimplifyModel(void)
 							}
 							pcount->num.total++;
 						}
-						//if (j == 0) printf("%d:%d\n", pcount->num.valid, pcount->num.total );
+						// if (j == 0) printf("%d:%d\n", pcount->num.valid, pcount->num.total );
 
 						sequence[i].panim[q]->numanim[j][k] = pvalue - data;
 						if (sequence[i].panim[q]->numanim[j][k] == 2 && value[0] == 0)
@@ -1402,13 +1402,13 @@ void TextureCoordRanges(s_mesh_t* pmesh, s_texture_t* ptexture)
 
 			if (k_max_u + 1.0 < max_u)
 			{
-				//printf("%d %f %f\n", k, k_max_u, max_u );
+				// printf("%d %f %f\n", k, k_max_u, max_u );
 				for (j = 0; j < 3; j++)
 					pmesh->triangle[k][j].u += 1.0;
 			}
 			else if (n_min_u - 1.0 > min_u)
 			{
-				//printf("%d %f %f\n", n, n_min_u, min_u );
+				// printf("%d %f %f\n", n, n_min_u, min_u );
 				for (j = 0; j < 3; j++)
 					pmesh->triangle[n][j].u -= 1.0;
 			}
@@ -1445,13 +1445,13 @@ void TextureCoordRanges(s_mesh_t* pmesh, s_texture_t* ptexture)
 
 			if (k_max_v + 1.0 < max_v)
 			{
-				//printf("%d %f %f\n", k, k_max_v, max_v );
+				// printf("%d %f %f\n", k, k_max_v, max_v );
 				for (j = 0; j < 3; j++)
 					pmesh->triangle[k][j].v += 1.0;
 			}
 			else if (n_min_v - 1.0 > min_v)
 			{
-				//printf("%d %f %f\n", n, n_min_v, min_v );
+				// printf("%d %f %f\n", n, n_min_v, min_v );
 				for (j = 0; j < 3; j++)
 					pmesh->triangle[n][j].v -= 1.0;
 			}
@@ -1510,8 +1510,8 @@ void TextureCoordRanges(s_mesh_t* pmesh, s_texture_t* ptexture)
 		ptexture->max_t = ptexture->srcheight;
 		ptexture->min_t = 0;
 	}
-	//printf("%d %d : ", ptexture->srcwidth, ptexture->srcheight );
-	//printf("%.0f %.0f %.0f %.0f\n", ptexture->min_s, ptexture->max_s, ptexture->min_t, ptexture->max_t );
+	// printf("%d %d : ", ptexture->srcwidth, ptexture->srcheight );
+	// printf("%.0f %.0f %.0f %.0f\n", ptexture->min_s, ptexture->max_s, ptexture->min_t, ptexture->max_t );
 }
 
 
@@ -1610,12 +1610,12 @@ void ResizeTexture(s_texture_t* ptexture)
 	ptexture->skinleft = ptexture->min_s;
 
 	ptexture->skinwidth = GetSkinWidth(ptexture->max_s - ptexture->min_s);
-  
-  if (0 == ptexture->skinwidth)
+
+	if (0 == ptexture->skinwidth)
 		Error("%s final skin width is 0\n", ptexture->name);
-  
+
 	ptexture->skinheight = GetSkinHeight(ptexture->max_t - ptexture->min_t);
-  
+
 	if (0 == ptexture->skinheight)
 		Error("%s final skin height is 0\n", ptexture->name);
 
@@ -3266,11 +3266,11 @@ void Cmd_Renamebone()
 Cmd_SetTextureRendermode
 
 //paramaters:
-  	 // "texturename" "rendermode" renderamt
-  	// acceptable strings for rendermode are:
-  	// "alpha"
-  	// "additive"
-  	// "masked"
+	 // "texturename" "rendermode" renderamt
+	// acceptable strings for rendermode are:
+	// "alpha"
+	// "additive"
+	// "masked"
 
 ===================
 */

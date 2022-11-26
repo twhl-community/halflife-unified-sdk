@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 /*
 
 ===== doors.cpp ========================================================
@@ -190,7 +190,7 @@ void PlayLockSounds(entvars_t* pev, locksound_t* pls, bool flocked, bool fbutton
 bool CBaseDoor::KeyValue(KeyValueData* pkvd)
 {
 
-	if (FStrEq(pkvd->szKeyName, "skin")) //skin is used for content type
+	if (FStrEq(pkvd->szKeyName, "skin")) // skin is used for content type
 	{
 		pev->skin = atof(pkvd->szValue);
 		return true;
@@ -277,7 +277,7 @@ void CBaseDoor::Spawn()
 	SetMovedir(pev);
 
 	if (pev->skin == 0)
-	{ //normal door
+	{ // normal door
 		if (FBitSet(pev->spawnflags, SF_DOOR_PASSABLE))
 			pev->solid = SOLID_NOT;
 		else
@@ -339,7 +339,7 @@ void CBaseDoor::Precache()
 	PrecacheSound(STRING(m_MoveSound));
 
 	// set the door's 'reached destination' stop sound
-	if (FStrEq("", STRING( m_StopSound)))
+	if (FStrEq("", STRING(m_StopSound)))
 	{
 		m_StopSound = ALLOC_STRING("common/null.wav");
 	}
@@ -549,7 +549,7 @@ void CBaseDoor::DoorGoDown()
 	m_toggle_state = TS_GOING_DOWN;
 
 	SetMoveDone(&CBaseDoor::DoorHitBottom);
-	if (FClassnameIs(pev, "func_door_rotating")) //rotating door
+	if (FClassnameIs(pev, "func_door_rotating")) // rotating door
 		AngularMove(m_vecAngle1, pev->speed);
 	else
 		LinearMove(m_vecPosition1, pev->speed);
@@ -716,7 +716,7 @@ void CRotDoor::Spawn()
 	if (FBitSet(pev->spawnflags, SF_DOOR_ROTATE_BACKWARDS))
 		pev->movedir = pev->movedir * -1;
 
-	//m_flWait			= 2; who the hell did this? (sjb)
+	// m_flWait			= 2; who the hell did this? (sjb)
 	m_vecAngle1 = pev->angles;
 	m_vecAngle2 = pev->angles + pev->movedir * m_flMoveDistance;
 
@@ -879,7 +879,7 @@ void CMomentaryDoor::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE
 	Vector move = m_vecPosition1 + (value * (m_vecPosition2 - m_vecPosition1));
 
 	Vector delta = move - pev->origin;
-	//float speed = delta.Length() * 10;
+	// float speed = delta.Length() * 10;
 	float speed = delta.Length() / 0.1; // move there in 0.1 sec
 	if (speed == 0)
 		return;
@@ -903,7 +903,7 @@ void CMomentaryDoor::DoorMoveDone()
 {
 	// Stop sounds at the next think, rather than here as another
 	// Use call might immediately follow the end of this move
-	//This think function will be replaced by LinearMove if that happens.
+	// This think function will be replaced by LinearMove if that happens.
 	SetThink(&CMomentaryDoor::StopMoveSound);
 	pev->nextthink = pev->ltime + 0.1f;
 }

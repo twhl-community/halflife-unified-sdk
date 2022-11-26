@@ -1,12 +1,12 @@
 /***
-*
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
-*	All Rights Reserved.
-*
-****/
+ *
+ *	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ ****/
 
 // bsp5.h
 
@@ -16,7 +16,7 @@
 #include "polylib.h"
 #include "threads.h"
 
-//#define	ON_EPSILON	0.05
+// #define	ON_EPSILON	0.05
 #define BOGUS_RANGE 18000
 
 // the exact bounding box of the brushes is expanded some for the headnode

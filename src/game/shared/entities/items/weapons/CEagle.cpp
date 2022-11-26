@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 #include "cbase.h"
 #include "UserMessages.h"
 
@@ -106,7 +106,7 @@ void CEagle::WeaponIdle()
 
 	ResetEmptySound();
 
-	//Update autoaim
+	// Update autoaim
 	m_pPlayer->GetAutoaimVector(AUTOAIM_10DEGREES);
 
 	if (m_flTimeWeaponIdle <= UTIL_WeaponTimeBase() && 0 != m_iClip)
@@ -160,7 +160,7 @@ void CEagle::PrimaryAttack()
 	{
 		PlayEmptySound();
 
-		//Note: this is broken in original Op4 since it uses gpGlobals->time when using prediction
+		// Note: this is broken in original Op4 since it uses gpGlobals->time when using prediction
 		m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.15;
 		return;
 	}
@@ -174,11 +174,11 @@ void CEagle::PrimaryAttack()
 				PlayEmptySound();
 				m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.2;
 			}
-			//Don't do this because it glitches the animation
-			//else
+			// Don't do this because it glitches the animation
+			// else
 			//{
 			//	Reload();
-			//}
+			// }
 		}
 
 		return;
@@ -273,7 +273,7 @@ void CEagle::Reload()
 		const bool bResult = DefaultReload(EAGLE_MAX_CLIP, 0 != m_iClip ? EAGLE_RELOAD : EAGLE_RELOAD_NOSHOT, 1.5, 1);
 
 #ifndef CLIENT_DLL
-		//Only turn it off if we're actually reloading
+		// Only turn it off if we're actually reloading
 		if (bResult && m_pLaser && m_bLaserActive)
 		{
 			m_pLaser->pev->effects |= EF_NODRAW;
@@ -368,7 +368,7 @@ public:
 	{
 		CBasePlayerAmmo::OnCreate();
 
-		//TODO: could probably use a better model
+		// TODO: could probably use a better model
 		pev->model = MAKE_STRING("models/w_9mmclip.mdl");
 	}
 

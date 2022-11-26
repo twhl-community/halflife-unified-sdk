@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   This source code contains proprietary and confidential information of
+ *   Valve LLC and its suppliers.  Access to this code is restricted to
+ *   persons who have executed a written SDK license with Valve.  Any access,
+ *   use or distribution of this code by or to any unlicensed person is illegal.
+ *
+ ****/
 //=========================================================
 // hgrunt
 //=========================================================
@@ -247,23 +247,23 @@ bool CBaseHGruntAlly::CheckRangeAttack1(float flDot, float flDist)
 	{
 		const auto maxDistance = GetMaximumRangeAttackDistance();
 
-		//Friendly fire is allowed
+		// Friendly fire is allowed
 		if (!HasConditions(bits_COND_ENEMY_OCCLUDED) && flDist <= maxDistance && flDot >= 0.5 /*&& NoFriendlyFire()*/)
 		{
 			TraceResult tr;
 
 			auto pEnemy = m_hEnemy.Entity<CBaseEntity>();
 
-			//if (!pEnemy->IsPlayer() && flDist <= 64)
+			// if (!pEnemy->IsPlayer() && flDist <= 64)
 			//{
 			//	// kick nonclients, but don't shoot at them.
 			//	return false;
-			//}
+			// }
 
-			//TODO: kinda odd that this doesn't use GetGunPosition like the original
+			// TODO: kinda odd that this doesn't use GetGunPosition like the original
 			Vector vecSrc = pev->origin + Vector(0, 0, 55);
 
-			//Fire at last known position, adjusting for target origin being offset from entity origin
+			// Fire at last known position, adjusting for target origin being offset from entity origin
 			const auto targetOrigin = pEnemy->BodyTarget(vecSrc);
 
 			const auto targetPosition = targetOrigin - pEnemy->pev->origin + m_vecEnemyLKP;
@@ -417,7 +417,7 @@ void CBaseHGruntAlly::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector
 	if (ptr->iHitgroup == 11)
 	{
 		// make sure we're wearing one
-		//TODO: disabled for ally
+		// TODO: disabled for ally
 		if (/*GetBodygroup( HGruntAllyBodygroup::Head ) == HGruntAllyHead::GasMask &&*/ (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_CLUB)) != 0)
 		{
 			// absorb damage
@@ -431,7 +431,7 @@ void CBaseHGruntAlly::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector
 		// it's head shot anyways
 		ptr->iHitgroup = HITGROUP_HEAD;
 	}
-	//PCV absorbs some damage types
+	// PCV absorbs some damage types
 	else if ((ptr->iHitgroup == HITGROUP_CHEST || ptr->iHitgroup == HITGROUP_STOMACH) && (bitsDamageType & (DMG_BLAST | DMG_BULLET | DMG_SLASH)) != 0)
 	{
 		flDamage *= 0.5;
@@ -1586,8 +1586,8 @@ Schedule_t slGruntAllyIdleStand[] =
 				bits_COND_PROVOKED,
 
 			bits_SOUND_COMBAT | // sound flags - change these, and you'll break the talking code.
-				//bits_SOUND_PLAYER		|
-				//bits_SOUND_WORLD		|
+								// bits_SOUND_PLAYER		|
+								// bits_SOUND_WORLD		|
 
 				bits_SOUND_DANGER |
 				bits_SOUND_MEAT | // scents
@@ -1641,8 +1641,8 @@ std::tuple<int, Activity> CBaseHGruntAlly::GetSequenceForActivity(Activity NewAc
 		}
 		else
 		{
-			//TODO: maybe check if we can actually use the grenade launcher before doing this
-			// get launch anim
+			// TODO: maybe check if we can actually use the grenade launcher before doing this
+			//  get launch anim
 			iSequence = LookupSequence("launchgrenade");
 		}
 		break;
@@ -1812,7 +1812,7 @@ Schedule_t* CBaseHGruntAlly::GetSchedule()
 		}
 
 		// new enemy
-		//Do not fire until fired upon
+		// Do not fire until fired upon
 		if (HasAllConditions(bits_COND_NEW_ENEMY | bits_COND_LIGHT_DAMAGE))
 		{
 			if (InSquad())
@@ -1865,7 +1865,7 @@ Schedule_t* CBaseHGruntAlly::GetSchedule()
 		else if (HasConditions(bits_COND_HEAVY_DAMAGE))
 			return GetScheduleOfType(SCHED_TAKE_COVER_FROM_ENEMY);
 		// no ammo
-		//Only if the grunt has a weapon
+		// Only if the grunt has a weapon
 		else if (CanTakeCoverAndReload() && HasConditions(bits_COND_NO_AMMO_LOADED))
 		{
 			//!!!KELLY - this individual just realized he's out of bullet ammo.
@@ -1889,9 +1889,9 @@ Schedule_t* CBaseHGruntAlly::GetSchedule()
 				//!!!KELLY - this grunt was hit and is going to run to cover.
 				if (FOkToSpeak()) // && RANDOM_LONG(0,1))
 				{
-					//sentences::g_Sentences.PlayRndSz( ENT(pev), "FG_COVER", HGRUNT_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
+					// sentences::g_Sentences.PlayRndSz( ENT(pev), "FG_COVER", HGRUNT_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
 					m_iSentence = HGRUNT_SENT_COVER;
-					//JustSpoke();
+					// JustSpoke();
 				}
 				return GetScheduleOfType(SCHED_TAKE_COVER_FROM_ENEMY);
 			}
@@ -1962,9 +1962,9 @@ Schedule_t* CBaseHGruntAlly::GetSchedule()
 				// charge the enemy's position.
 				if (FOkToSpeak()) // && RANDOM_LONG(0,1))
 				{
-					//sentences::g_Sentences.PlayRndSz( ENT(pev), "FG_CHARGE", HGRUNT_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
+					// sentences::g_Sentences.PlayRndSz( ENT(pev), "FG_CHARGE", HGRUNT_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
 					m_iSentence = HGRUNT_SENT_CHARGE;
-					//JustSpoke();
+					// JustSpoke();
 				}
 
 				return GetScheduleOfType(SCHED_GRUNT_ESTABLISH_LINE_OF_FIRE);
@@ -1983,7 +1983,7 @@ Schedule_t* CBaseHGruntAlly::GetSchedule()
 			}
 		}
 
-		//Only if not following a player
+		// Only if not following a player
 		if (!m_hTargetEnt || !m_hTargetEnt->IsPlayer())
 		{
 			if (HasConditions(bits_COND_SEE_ENEMY) && !HasConditions(bits_COND_CAN_RANGE_ATTACK1))
@@ -1992,7 +1992,7 @@ Schedule_t* CBaseHGruntAlly::GetSchedule()
 			}
 		}
 
-		//Don't fall through to idle schedules
+		// Don't fall through to idle schedules
 		break;
 	}
 
@@ -2004,7 +2004,7 @@ Schedule_t* CBaseHGruntAlly::GetSchedule()
 			return GetScheduleOfType(SCHED_SMALL_FLINCH);
 		}
 
-		//if we're not waiting on a medic and we're hurt, call out for a medic
+		// if we're not waiting on a medic and we're hurt, call out for a medic
 		if (!m_hWaitMedic && gpGlobals->time > m_flMedicWaitTime && pev->health <= 20.0)
 		{
 			auto pMedic = MySquadMedic();
@@ -2091,11 +2091,11 @@ Schedule_t* CBaseHGruntAlly::GetScheduleOfType(int Type)
 		}
 		else
 		{
-			//if ( RANDOM_LONG(0,1) )
+			// if ( RANDOM_LONG(0,1) )
 			//{
 			return &slGruntAllyTakeCover[0];
 			//}
-			//else
+			// else
 			//{
 			//	return &slGruntAllyGrenadeCover[ 0 ];
 			//}
@@ -2392,14 +2392,14 @@ void CBaseHGruntAllyRepel::RepelUse(CBaseEntity* pActivator, CBaseEntity* pCalle
 		pGrunt->pev->weapons = pev->weapons;
 		pGrunt->pev->netname = pev->netname;
 
-		//Carry over these spawn flags
+		// Carry over these spawn flags
 		pGrunt->pev->spawnflags |= pev->spawnflags & (SF_MONSTER_WAIT_TILL_SEEN | SF_MONSTER_GAG | SF_MONSTER_HITMONSTERCLIP | SF_MONSTER_PRISONER | SF_SQUADMONSTER_LEADER | SF_MONSTER_PREDISASTER);
 
 		pGrunt->m_iGruntHead = m_iGruntHead;
 		pGrunt->m_iszUse = m_iszUse;
 		pGrunt->m_iszUnUse = m_iszUnUse;
 
-		//Run logic to set up body groups (Spawn was already called once by Create above)
+		// Run logic to set up body groups (Spawn was already called once by Create above)
 		pGrunt->Spawn();
 
 		pGrunt->pev->movetype = MOVETYPE_FLY;

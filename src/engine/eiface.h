@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 
 #pragma once
 
@@ -83,7 +83,7 @@ typedef struct
 	int fEnabled;
 	int fPlayLooping;
 	float cdvolume;
-	//byte 	remap[100];
+	// byte 	remap[100];
 	int fCDRom;
 	int fPlayTrack;
 } CDStatus;
@@ -371,9 +371,9 @@ typedef enum _fieldtypes
 	FIELD_MODELNAME,	   // Engine string that is a model name (needs precache)
 	FIELD_SOUNDNAME,	   // Engine string that is a sound name (needs precache)
 
-	FIELD_ENGINETYPECOUNT, //All preceding types are known to the engine and must remain.
+	FIELD_ENGINETYPECOUNT, // All preceding types are known to the engine and must remain.
 
-	FIELD_INT64 = FIELD_ENGINETYPECOUNT, //64 bit integer
+	FIELD_INT64 = FIELD_ENGINETYPECOUNT, // 64 bit integer
 
 	FIELD_TYPECOUNT, // MUST BE LAST
 } FIELDTYPE;

@@ -1,27 +1,27 @@
 /***
-*
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 
 #pragma once
 
 /**
-*	@file
-*
-*	Functions, types and globals to load and use the GoldSource engine filesystem interface to read and write files.
-*	See the VDC for information on which search paths exist to be used as path IDs:
-*	https://developer.valvesoftware.com/wiki/GoldSource_SteamPipe_Directories
-*/
+ *	@file
+ *
+ *	Functions, types and globals to load and use the GoldSource engine filesystem interface to read and write files.
+ *	See the VDC for information on which search paths exist to be used as path IDs:
+ *	https://developer.valvesoftware.com/wiki/GoldSource_SteamPipe_Directories
+ */
 
 #include <string>
 #include <vector>
@@ -43,36 +43,36 @@ enum class FileContentFormat
 std::string FileSystem_GetGameDirectory();
 
 /**
-*	@brief Loads a file from disk into a buffer.
-*
-*	@details If the returned buffer contains text data and @p format is @c FileContentFormat::Text it is safe to cast the data pointer to char*:
-*	@code{.cpp}
-*	auto text = reinterpret_cast<char*>(buffer.data());
-*	@endcode
-*
-*	@param fileName Name of the file to load.
-*	@param format If @c FileContentFormat::Text, a null terminator will be appended.
-*	@param pathID If not null, only looks for the file in this search path.
-*	@return If the file was successfully loaded the contents of the buffer,
-*		with a zero byte (null terminator) appended to it if @p format is @c FileContentFormat::Text.
-*		If the file could not be loaded an empty buffer is returned.
-*/
+ *	@brief Loads a file from disk into a buffer.
+ *
+ *	@details If the returned buffer contains text data and @p format is @c FileContentFormat::Text it is safe to cast the data pointer to char*:
+ *	@code{.cpp}
+ *	auto text = reinterpret_cast<char*>(buffer.data());
+ *	@endcode
+ *
+ *	@param fileName Name of the file to load.
+ *	@param format If @c FileContentFormat::Text, a null terminator will be appended.
+ *	@param pathID If not null, only looks for the file in this search path.
+ *	@return If the file was successfully loaded the contents of the buffer,
+ *		with a zero byte (null terminator) appended to it if @p format is @c FileContentFormat::Text.
+ *		If the file could not be loaded an empty buffer is returned.
+ */
 std::vector<std::byte> FileSystem_LoadFileIntoBuffer(const char* fileName, FileContentFormat format, const char* pathID = nullptr);
 
 /**
-*	@brief Writes a text file to disk.
-*	@param fileName Name of the file to write to.
-*	@param text Null-terminated text to write. The null terminator is not written to disk.
-*	@param pathID If not null, writes to a writable location assigned to the given search path.
-*		Otherwise the first writable location will be used (in practice this will be the mod directory).
-*		If no writable location exists no file will be written to.
-*	@return True if the file was written, false if an error occurred.
-*/
+ *	@brief Writes a text file to disk.
+ *	@param fileName Name of the file to write to.
+ *	@param text Null-terminated text to write. The null terminator is not written to disk.
+ *	@param pathID If not null, writes to a writable location assigned to the given search path.
+ *		Otherwise the first writable location will be used (in practice this will be the mod directory).
+ *		If no writable location exists no file will be written to.
+ *	@return True if the file was written, false if an error occurred.
+ */
 bool FileSystem_WriteTextToFile(const char* fileName, const char* text, const char* pathID = nullptr);
 
 /**
-*	@brief Helper class to automatically close the file handle associated with a file.
-*/
+ *	@brief Helper class to automatically close the file handle associated with a file.
+ */
 class FSFile
 {
 public:

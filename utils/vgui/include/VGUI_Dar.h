@@ -1,67 +1,85 @@
 //========= Copyright © 1996-2002, Valve LLC, All rights reserved. ============
 //
-// Purpose: 
+// Purpose:
 //
 // $NoKeywords: $
 //=============================================================================
 
 #pragma once
 
-#include<stdlib.h>
-#include<string.h>
-#include<VGUI.h>
+#include <stdlib.h>
+#include <string.h>
+#include <VGUI.h>
 
 namespace vgui
 {
 
-//Simple lightweight dynamic array implementation
-template<class ELEMTYPE> class VGUIAPI Dar
+// Simple lightweight dynamic array implementation
+template <class ELEMTYPE>
+class VGUIAPI Dar
 {
 public:
 	Dar()
 	{
-		_count=0;
-		_capacity=0;
-		_data= nullptr;
+		_count = 0;
+		_capacity = 0;
+		_data = nullptr;
 		ensureCapacity(4);
 	}
 	Dar(int initialCapacity)
 	{
-		_count=0;
-		_capacity=0;
-		_data= nullptr;
+		_count = 0;
+		_capacity = 0;
+		_data = nullptr;
 		ensureCapacity(initialCapacity);
 	}
+
 public:
 	void ensureCapacity(int wantedCapacity)
 	{
-		if(wantedCapacity<=_capacity){return;}
-
-		//double capacity until it is >= wantedCapacity
-		//this could be done with math, but iterative is just so much more fun
-		int newCapacity=_capacity;
-		if(newCapacity==0){newCapacity=1;}
-		while(newCapacity<wantedCapacity){newCapacity*=2;}
-
-		//allocate and zero newData
-		ELEMTYPE* newData=new ELEMTYPE[newCapacity]; 
-		if(newData== nullptr){exit(0);return;}
-		memset(newData,0,sizeof(ELEMTYPE)*newCapacity);
-		_capacity=newCapacity;
-   
-		//copy data into newData
-		for(int i=0;i<_count;i++){newData[i]=_data[i];}
-
-		delete[] _data;
-		_data=newData;
-	}
-	void setCount(int count)
-	{
-		if((count<0)||(count>_capacity))
+		if (wantedCapacity <= _capacity)
 		{
 			return;
 		}
-		_count=count;
+
+		// double capacity until it is >= wantedCapacity
+		// this could be done with math, but iterative is just so much more fun
+		int newCapacity = _capacity;
+		if (newCapacity == 0)
+		{
+			newCapacity = 1;
+		}
+		while (newCapacity < wantedCapacity)
+		{
+			newCapacity *= 2;
+		}
+
+		// allocate and zero newData
+		ELEMTYPE* newData = new ELEMTYPE[newCapacity];
+		if (newData == nullptr)
+		{
+			exit(0);
+			return;
+		}
+		memset(newData, 0, sizeof(ELEMTYPE) * newCapacity);
+		_capacity = newCapacity;
+
+		// copy data into newData
+		for (int i = 0; i < _count; i++)
+		{
+			newData[i] = _data[i];
+		}
+
+		delete[] _data;
+		_data = newData;
+	}
+	void setCount(int count)
+	{
+		if ((count < 0) || (count > _capacity))
+		{
+			return;
+		}
+		_count = count;
 	}
 	int getCount()
 	{
@@ -69,76 +87,76 @@ public:
 	}
 	void addElement(ELEMTYPE elem)
 	{
-		ensureCapacity(_count+1);
-		_data[_count]=elem;
+		ensureCapacity(_count + 1);
+		_data[_count] = elem;
 		_count++;
 	}
 	bool hasElement(ELEMTYPE elem)
 	{
-		for(int i=0;i<_count;i++)
+		for (int i = 0; i < _count; i++)
 		{
-			if(_data[i]==elem)
+			if (_data[i] == elem)
 			{
 				return true;
 			}
 		}
-	return false;
+		return false;
 	}
 	void putElement(ELEMTYPE elem)
 	{
-		if(hasElement(elem))
+		if (hasElement(elem))
 		{
 			return;
 		}
 		addElement(elem);
 	}
-	void insertElementAt(ELEMTYPE elem,int index)
+	void insertElementAt(ELEMTYPE elem, int index)
 	{
-		if((index<0)||(index>_count))
+		if ((index < 0) || (index > _count))
 		{
 			return;
 		}
-		if((index==_count)||(_count==0))
+		if ((index == _count) || (_count == 0))
 		{
 			addElement(elem);
 		}
 		else
 		{
-			addElement(elem); //just to make sure it is big enough
-			for(int i=_count-1;i>index;i--)
+			addElement(elem); // just to make sure it is big enough
+			for (int i = _count - 1; i > index; i--)
 			{
-				_data[i]=_data[i-1];
+				_data[i] = _data[i - 1];
 			}
-			_data[index]=elem;
+			_data[index] = elem;
 		}
 	}
-	void setElementAt(ELEMTYPE elem,int index)
+	void setElementAt(ELEMTYPE elem, int index)
 	{
-		if((index<0)||(index>=_count))
+		if ((index < 0) || (index >= _count))
 		{
 			return;
 		}
-		_data[index]=elem;
+		_data[index] = elem;
 	}
 	void removeElementAt(int index)
 	{
-		if((index<0)||(index>=_count))
+		if ((index < 0) || (index >= _count))
 		{
 			return;
 		}
-   
-		//slide everything to the right of index, left one.
-		for(int i=index;i<(_count-1);i++)
+
+		// slide everything to the right of index, left one.
+		for (int i = index; i < (_count - 1); i++)
 		{
-			_data[i]=_data[i+1];
+			_data[i] = _data[i + 1];
 		}
 		_count--;
-	} 
+	}
 	void removeElement(ELEMTYPE elem)
 	{
-		for(int i=0;i<_count;i++)
+		for (int i = 0; i < _count; i++)
 		{
-			if(_data[i]==elem)
+			if (_data[i] == elem)
 			{
 				removeElementAt(i);
 				break;
@@ -147,24 +165,25 @@ public:
 	}
 	void removeAll()
 	{
-		_count=0;
+		_count = 0;
 	}
 	ELEMTYPE operator[](int index)
 	{
-		if((index<0)||(index>=_count))
+		if ((index < 0) || (index >= _count))
 		{
 			return {};
 		}
 		return _data[index];
 	}
+
 protected:
-	int       _count;
-	int       _capacity;
+	int _count;
+	int _capacity;
 	ELEMTYPE* _data;
 };
 
 #ifdef WIN32
-//forward referencing all the template types used so they get exported
+// forward referencing all the template types used so they get exported
 template class VGUIAPI Dar<char>;
 template class VGUIAPI Dar<char*>;
 template class VGUIAPI Dar<int>;

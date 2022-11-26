@@ -1,17 +1,17 @@
 /***
-*
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+ *
+ *	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+ *
+ *	This product contains software technology licensed from Id
+ *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+ *	All Rights Reserved.
+ *
+ *   Use, distribution, and modification of this source code and/or resulting
+ *   object code is restricted to non-commercial enhancements to products from
+ *   Valve LLC.  All other use, distribution, or modification is prohibited
+ *   without written permission from Valve LLC.
+ *
+ ****/
 
 #include <exception>
 #include <string>
@@ -43,7 +43,7 @@ EnginePtr ASManager::CreateEngine()
 {
 	if (!m_Logger)
 	{
-		//Not initialized yet
+		// Not initialized yet
 		return {};
 	}
 
@@ -55,7 +55,7 @@ EnginePtr ASManager::CreateEngine()
 		return {};
 	}
 
-	//Configure engine
+	// Configure engine
 	engine->SetMessageCallback(asMETHOD(ASManager, OnMessageCallback), this, asCALL_THISCALL);
 	engine->SetTranslateAppExceptionCallback(asMETHOD(ASManager, OnTranslateAppExceptionCallback), this, asCALL_THISCALL);
 
@@ -66,7 +66,7 @@ UniquePtr<asIScriptContext> ASManager::CreateContext(asIScriptEngine& engine)
 {
 	if (!m_Logger)
 	{
-		//Not initialized yet
+		// Not initialized yet
 		return {};
 	}
 
@@ -78,7 +78,7 @@ UniquePtr<asIScriptContext> ASManager::CreateContext(asIScriptEngine& engine)
 		return {};
 	}
 
-	//Configure context
+	// Configure context
 	context->SetExceptionCallback(asMETHOD(ASManager, OnThrownExceptionCallback), this, asCALL_THISCALL);
 
 	return context;
@@ -192,8 +192,8 @@ void ASManager::OnMessageCallback(const asSMessageInfo* msg)
 		}
 	}();
 
-	//The engine will often log information not related to a script by passing an empty section string and 0, 0 for the location.
-	//Only prepend this information if it's relevant.
+	// The engine will often log information not related to a script by passing an empty section string and 0, 0 for the location.
+	// Only prepend this information if it's relevant.
 	if (msg->section && '\0' != msg->section[0])
 	{
 		m_Logger->log(level, "In section \"{}\" at line {}, column {}: {}", msg->section, msg->row, msg->col, msg->message);
@@ -206,36 +206,36 @@ void ASManager::OnMessageCallback(const asSMessageInfo* msg)
 
 void ASManager::OnTranslateAppExceptionCallback(asIScriptContext* context)
 {
-	//See https://www.angelcode.com/angelscript/sdk/docs/manual/doc_cpp_exceptions.html
+	// See https://www.angelcode.com/angelscript/sdk/docs/manual/doc_cpp_exceptions.html
 	try
 	{
 		throw;
 	}
 	catch (const std::exception& e)
 	{
-		//Catch exceptions for logging, but don't allow scripts to catch them.
+		// Catch exceptions for logging, but don't allow scripts to catch them.
 		context->SetException(e.what(), false);
 	}
 	catch (...)
 	{
-		//Rethrow so longjmp reaches its destination.
+		// Rethrow so longjmp reaches its destination.
 		throw;
 	}
 }
 
 void ASManager::OnThrownExceptionCallback(asIScriptContext* context)
 {
-	//Log exception info for debugging purposes.
+	// Log exception info for debugging purposes.
 	assert(m_Logger);
 
 	const auto exceptionFunction = context->GetExceptionFunction();
 	const auto executingFunction = context->GetFunction();
 
-	//Should never happen
+	// Should never happen
 	if (!exceptionFunction || !executingFunction)
 		return;
 
-	//A caught exception is useful to know when debugging, an uncaught exception is an error.
+	// A caught exception is useful to know when debugging, an uncaught exception is an error.
 	const auto level = context->WillExceptionBeCaught() ? spdlog::level::debug : spdlog::level::err;
 
 	{
