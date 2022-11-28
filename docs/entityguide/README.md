@@ -10,6 +10,10 @@ Consult TWHL's entity guide for more complete information about existing entitie
 
 ## Modified entities
 
+### Modifications that affect multiple entities
+
+* [Sound and sentence names](modifications/sound-and-sentence-names.md)
+
 ## Removed entities
 
 * target_cdaudio (replaced by ambient_music)
