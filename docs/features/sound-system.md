@@ -1,4 +1,3 @@
-
 # Sound System
 
 The Unified SDK provides a new sound system to fix bugs and increase or remove some limits.
@@ -26,20 +25,7 @@ The `MP3Volume` engine cvar controls music volume and is set by the music volume
 
 ### Entities
 
-#### ambient_music
-
-This entity allows level designers to control music playback.
-
-You can play and loop music, trigger it to fade out or stop it entirely.
-
-Keyvalues:
-| Key | Purpose |
-| --- | --- |
-| filename | Relative name of the file to play. Only applies to the `Play` and `Loop` commands |
-| command | The command to issue. Any of `Play, Loop, Fadeout, Stop` |
-| target_selector | How to select players to affect. Any of `AllPlayers, Activator, Radius` |
-| radius | If `target_selector` is `Radius`, this is how close the player has to be to be affected by this entity |
-| remove_on_fire | Whether to remove the entity after it has been triggered or after it has affected at least one player (`Radius` only) |
+* [ambient_music](/docs/entityguide/entities/ambient_music.md)
 
 ### Console commands
 

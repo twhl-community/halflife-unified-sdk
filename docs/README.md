@@ -9,6 +9,10 @@ The files in this directory and subdirectories contain documentation for the Uni
 * [C# tools source code](https://github.com/SamVanheer/HalfLife.UnifiedSdk-CSharp)
 * [Releases](https://github.com/SamVanheer/halflife-unified-sdk/releases)
 
+## Entity guide
+
+* [Entity guide](entityguide/README.md)
+
 ## Tools
 
 * [AssetSynchronizer](tools/asset-synchronizer.md)
