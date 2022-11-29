@@ -39,7 +39,7 @@ For offline use the best way to view the documentation is to use Visual Studio C
 
 Visual Studio Code includes Markdown preview using the keyboard shortcuts `CTRL+SHIFT+V` (switch to preview) and `CTRL+K V` (open preview side by side; press `CTRL+K`, let go of both keys, then press `V`).
 
-Link to other documentation files in this repository use relative and absolute links starting at the repository root. To follow links correctly open the repository folder (the folder containing this file) in Visual Studio Code using `File->Open Folder...`.
+Links to other documentation files in this repository use relative and absolute links starting at the repository root. To follow links correctly open the repository folder (the folder containing this file) in Visual Studio Code using `File->Open Folder...`.
 
 Consult Visual Studio Code's documentation for more information about Markdown support : https://code.visualstudio.com/docs/languages/markdown
 
