@@ -26,6 +26,7 @@ The files in this directory and subdirectories contain documentation for the Uni
 ## Scripts
 
 * [MapCfgGenerator](scripts/map-cfg-generator.md)
+* [SourceFileFormatter](scripts/source-file-formatter.md)
 
 ## Features
 
