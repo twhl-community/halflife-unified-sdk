@@ -34,9 +34,13 @@ Scripts may take some time to restore packages and to be compiled before being e
 
 If you are running the dotnet command for the first time after installing or updating the SDK you may get a welcome message. If you wait a bit the command you entered will execute.
 
-### Passing command line parameters
+## Command-line scripts in the SDK
 
-To pass command line parameters simply append them to the command:
+Command-line scripts work just like regular .NET tools. See [.NET Tools](/docs/dotnet-tools.md#command-line-tools) for more information.
+
+### Passing command-line parameters
+
+To pass command-line parameters simply append them to the command:
 ```bat
 dotnet script <script filename> --my-parameter my-value
 ```
@@ -46,7 +50,7 @@ If the parameter conflicts with one used by dotnet script you can use this synta
 dotnet script <script filename> -- --my-parameter my-value
 ```
 
-### Using scripts with Visual Studio Code
+## Using scripts with Visual Studio Code
 
 Visual Studio Code can be used to edit, run and debug C# scripts.
 
