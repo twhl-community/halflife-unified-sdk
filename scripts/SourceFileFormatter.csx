@@ -9,14 +9,20 @@ using Microsoft.Extensions.FileSystemGlobbing;
 using System.CommandLine;
 using System.Diagnostics;
 
+const string ClangFormatEnvKey = "CLANG_FORMAT";
+
 var directoriesArgument = new Argument<IEnumerable<DirectoryInfo>>("directories", description: "Directories to scan for files to format");
 
-var filtersOption = new Option<IEnumerable<string>>("--filter", description: "Wildcard patterns to filter files with")
+var filtersOption = new Option<IEnumerable<string>>("--filter", description: "Wildcard patterns to filter files with. Repeat this option to specify multiple patterns")
 {
 	IsRequired = true
 };
 
-var clangFormatExeOption = new Option<FileInfo?>("--clang-format-exe", description: "Path to the clang-format executable");
+var defaultClangFormat = new FileInfo(Environment.GetEnvironmentVariable(ClangFormatEnvKey) ?? string.Empty);
+
+var clangFormatExeOption = new Option<FileInfo>("--clang-format-exe",
+	getDefaultValue: () => defaultClangFormat,
+	description: $"Path to the clang-format executable. Defaults to the path provided by the {ClangFormatEnvKey} environment variable");
 
 var rootCommand = new RootCommand("Half-Life Unified SDK Source file formatter")
 {
@@ -27,8 +33,6 @@ var rootCommand = new RootCommand("Half-Life Unified SDK Source file formatter")
 
 rootCommand.SetHandler((directories, filters, clangFormatExe, logger) =>
 {
-	clangFormatExe ??= new FileInfo(Environment.GetEnvironmentVariable("CLANG_FORMAT") ?? string.Empty);
-
 	if (!clangFormatExe.Exists)
 	{
 		logger.Error("The clang-format executable \"{FileName}\" does not exist", clangFormatExe.FullName);
