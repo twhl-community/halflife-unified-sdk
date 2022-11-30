@@ -160,11 +160,11 @@ public:
 	float m_fSoftwareXScale, m_fSoftwareYScale;
 
 	// Current view vectors and render origin
-	float m_vUp[3];
-	float m_vRight[3];
-	float m_vNormal[3];
+	Vector m_vUp;
+	Vector m_vRight;
+	Vector m_vNormal;
 
-	float m_vRenderOrigin[3];
+	Vector m_vRenderOrigin;
 
 	// Model render counters ( from engine )
 	int* m_pStudioModelCount;

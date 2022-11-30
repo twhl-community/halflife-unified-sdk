@@ -77,7 +77,7 @@ int g_iUser3 = 0;
 
 void IN_ResetMouse();
 CMenuPanel* CMessageWindowPanel_Create(const char* szMOTD, const char* szTitle, bool iShadeFullscreen, bool iRemoveMe, int x, int y, int wide, int tall);
-float* GetClientColor(int clientIndex);
+Vector* GetClientColor(int clientIndex);
 
 using namespace vgui;
 
@@ -1354,14 +1354,14 @@ void TeamFortressViewport::UpdateSpectatorPanel()
 		// in first person mode colorize player names
 		if ((g_iUser1 == OBS_IN_EYE) && 0 != player)
 		{
-			float* color = GetClientColor(player);
+			Vector* color = GetClientColor(player);
 
 			// Color is null in CTF.
 			if (color)
 			{
-				int r = color[0] * 255;
-				int g = color[1] * 255;
-				int b = color[2] * 255;
+				int r = color->x * 255;
+				int g = color->y * 255;
+				int b = color->z * 255;
 
 				// set team color, a bit transparent
 				m_pSpectatorPanel->m_BottomMainLabel->setFgColor(r, g, b, 0);

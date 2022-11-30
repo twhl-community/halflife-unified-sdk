@@ -30,8 +30,8 @@ struct DeathNoticeItem
 	bool iTeamKill;
 	bool iNonPlayerKill;
 	float flDisplayTime;
-	float* KillerColor;
-	float* VictimColor;
+	Vector* KillerColor;
+	Vector* VictimColor;
 };
 
 #define MAX_DEATHNOTICES 4
@@ -41,26 +41,26 @@ static int DEATHNOTICE_DISPLAY_TIME = 6;
 
 DeathNoticeItem rgDeathNoticeList[MAX_DEATHNOTICES + 1];
 
-float g_ColorBlue[3] = {0.6, 0.8, 1.0};
-float g_ColorRed[3] = {1.0, 0.25, 0.25};
-float g_ColorGreen[3] = {0.6, 1.0, 0.6};
-float g_ColorYellow[3] = {1.0, 0.7, 0.0};
-float g_ColorGrey[3] = {0.8, 0.8, 0.8};
+Vector g_ColorBlue = {0.6, 0.8, 1.0};
+Vector g_ColorRed = {1.0, 0.25, 0.25};
+Vector g_ColorGreen = {0.6, 1.0, 0.6};
+Vector g_ColorYellow = {1.0, 0.7, 0.0};
+Vector g_ColorGrey = {0.8, 0.8, 0.8};
 
-float* GetClientColor(int clientIndex)
+Vector* GetClientColor(int clientIndex)
 {
 	switch (g_PlayerExtraInfo[clientIndex].teamnumber)
 	{
 	case 1:
-		return g_ColorBlue;
+		return &g_ColorBlue;
 	case 2:
-		return g_ColorRed;
+		return &g_ColorRed;
 	case 3:
-		return g_ColorYellow;
+		return &g_ColorYellow;
 	case 4:
-		return g_ColorGreen;
+		return &g_ColorGreen;
 	case 0:
-		return g_ColorYellow;
+		return &g_ColorYellow;
 
 		// Opposing Force doesn't send the teamnumber in ScoreInfo, so a -1 is read by the client.
 		// Make sure this uses the correct color.
@@ -68,7 +68,7 @@ float* GetClientColor(int clientIndex)
 		return nullptr;
 
 	default:
-		return g_ColorGrey;
+		return &g_ColorGrey;
 	}
 
 	return nullptr;
@@ -133,7 +133,7 @@ bool CHudDeathNotice::Draw(float flTime)
 
 				// Draw killers name
 				if (rgDeathNoticeList[i].KillerColor)
-					gEngfuncs.pfnDrawSetTextColor(rgDeathNoticeList[i].KillerColor[0], rgDeathNoticeList[i].KillerColor[1], rgDeathNoticeList[i].KillerColor[2]);
+					gEngfuncs.pfnDrawSetTextColor(rgDeathNoticeList[i].KillerColor->x, rgDeathNoticeList[i].KillerColor->y, rgDeathNoticeList[i].KillerColor->z);
 				x = 5 + DrawConsoleString(x, y, rgDeathNoticeList[i].szKiller);
 			}
 
@@ -150,7 +150,7 @@ bool CHudDeathNotice::Draw(float flTime)
 			if (!rgDeathNoticeList[i].iNonPlayerKill)
 			{
 				if (rgDeathNoticeList[i].VictimColor)
-					gEngfuncs.pfnDrawSetTextColor(rgDeathNoticeList[i].VictimColor[0], rgDeathNoticeList[i].VictimColor[1], rgDeathNoticeList[i].VictimColor[2]);
+					gEngfuncs.pfnDrawSetTextColor(rgDeathNoticeList[i].VictimColor->x, rgDeathNoticeList[i].VictimColor->y, rgDeathNoticeList[i].VictimColor->z);
 				x = DrawConsoleString(x, y, rgDeathNoticeList[i].szVictim);
 			}
 		}

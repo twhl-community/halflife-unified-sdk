@@ -81,11 +81,6 @@ public:
 	{
 	}
 
-	constexpr Vector(float rgfl[3])
-		: x(rgfl[0]), y(rgfl[1]), z(rgfl[2])
-	{
-	}
-
 	// Operators
 	[[nodiscard]] constexpr Vector operator-() const { return Vector(-x, -y, -z); }
 	[[nodiscard]] constexpr bool operator==(const Vector& v) const { return x == v.x && y == v.y && z == v.z; }

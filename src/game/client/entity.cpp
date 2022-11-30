@@ -267,7 +267,7 @@ void Beams()
 	BeamEndModel();
 
 	curtime = gEngfuncs.GetClientTime();
-	float end[3];
+	Vector end;
 
 	if ((curtime - lasttime) < 10.0)
 		return;

@@ -26,17 +26,17 @@
 #include "view.h"
 
 extern bool iJumpSpectator;
-extern float vJumpOrigin[3];
-extern float vJumpAngles[3];
+extern Vector vJumpOrigin;
+extern Vector vJumpAngles;
 
 
 void V_GetInEyePos(int entity, float* origin, float* angles);
 void V_ResetChaseCam();
-void V_GetChasePos(int target, float* cl_angles, float* origin, float* angles);
-float* GetClientColor(int clientIndex);
+void V_GetChasePos(int target, float* cl_angles, float* origin, Vector& angles);
+Vector* GetClientColor(int clientIndex);
 
 // Same color as in TeamFortressViewport::UpdateSpectatorPanel
-float DefaultPlayerColor[3] = {143 / 255.f, 143 / 255.f, 54 / 255.f};
+Vector DefaultPlayerColor = {143 / 255.f, 143 / 255.f, 54 / 255.f};
 
 void UnpackRGB(int& r, int& g, int& b, unsigned long ulRGB)
 {
@@ -570,7 +570,7 @@ bool CHudSpectator::Draw(float flTime)
 	int lx;
 
 	char string[256];
-	float* color;
+	Vector* color;
 
 	// draw only in spectator mode
 	if (0 == g_iUser1)
@@ -632,7 +632,7 @@ bool CHudSpectator::Draw(float flTime)
 		// TODO: this is pretty ugly, need a better way.
 		if (!color)
 		{
-			color = DefaultPlayerColor;
+			color = &DefaultPlayerColor;
 		}
 
 		// draw the players name and health underneath
@@ -640,7 +640,7 @@ bool CHudSpectator::Draw(float flTime)
 
 		lx = strlen(string) * 3; // 3 is avg. character length :)
 
-		gEngfuncs.pfnDrawSetTextColor(color[0], color[1], color[2]);
+		gEngfuncs.pfnDrawSetTextColor(color->x, color->y, color->z);
 		DrawConsoleString(m_vPlayerPos[i][0] - lx, m_vPlayerPos[i][1], string);
 	}
 

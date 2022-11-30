@@ -21,8 +21,8 @@ struct usercmd_t;
 struct ref_params_t
 {
 	// Output
-	float vieworg[3];
-	float viewangles[3];
+	Vector vieworg;
+	Vector viewangles;
 
 	Vector forward;
 	Vector right;
@@ -40,19 +40,19 @@ struct ref_params_t
 	int onground;
 	WaterLevel waterlevel;
 
-	float simvel[3];
-	float simorg[3];
+	Vector simvel;
+	Vector simorg;
 
-	float viewheight[3];
+	Vector viewheight;
 	float idealpitch;
 
-	float cl_viewangles[3];
+	Vector cl_viewangles;
 
 	int health;
-	float crosshairangle[3];
+	Vector crosshairangle;
 	float viewsize;
 
-	float punchangle[3];
+	Vector punchangle;
 	int maxclients;
 	int viewentity;
 	int playernum;

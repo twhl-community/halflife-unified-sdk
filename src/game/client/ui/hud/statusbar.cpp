@@ -26,8 +26,8 @@ DECLARE_MESSAGE(m_StatusBar, StatusValue);
 
 #define STATUSBAR_ID_LINE 1
 
-float* GetClientColor(int clientIndex);
-extern float g_ColorYellow[3];
+Vector* GetClientColor(int clientIndex);
+extern Vector g_ColorYellow;
 
 bool CHudStatusBar::Init()
 {
@@ -63,7 +63,7 @@ void CHudStatusBar::Reset()
 
 	// reset our colors for the status bar lines (yellow is default)
 	for (i = 0; i < MAX_STATUSBAR_LINES; i++)
-		m_pflNameColors[i] = g_ColorYellow;
+		m_pflNameColors[i] = &g_ColorYellow;
 }
 
 void CHudStatusBar::ParseStatusString(int line_num)
@@ -173,7 +173,7 @@ bool CHudStatusBar::Draw(float fTime)
 	{
 		for (int i = 0; i < MAX_STATUSBAR_LINES; i++)
 		{
-			m_pflNameColors[i] = g_ColorYellow;
+			m_pflNameColors[i] = &g_ColorYellow;
 			ParseStatusString(i);
 		}
 		m_bReparseString = false;
@@ -198,7 +198,7 @@ bool CHudStatusBar::Draw(float fTime)
 		}
 
 		if (m_pflNameColors[i])
-			gEngfuncs.pfnDrawSetTextColor(m_pflNameColors[i][0], m_pflNameColors[i][1], m_pflNameColors[i][2]);
+			gEngfuncs.pfnDrawSetTextColor(m_pflNameColors[i]->x, m_pflNameColors[i]->y, m_pflNameColors[i]->z);
 
 		DrawConsoleString(x, y, m_szStatusBar[i]);
 	}

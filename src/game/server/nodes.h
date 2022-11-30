@@ -150,7 +150,7 @@ public:
 	int m_minX, m_minY, m_minZ, m_maxX, m_maxY, m_maxZ;
 	int m_minBoxX, m_minBoxY, m_minBoxZ, m_maxBoxX, m_maxBoxY, m_maxBoxZ;
 	int m_CheckedCounter;
-	float m_RegionMin[3], m_RegionMax[3]; // The range of nodes.
+	Vector m_RegionMin, m_RegionMax; // The range of nodes.
 	CACHE_ENTRY m_Cache[CACHE_SIZE];
 
 

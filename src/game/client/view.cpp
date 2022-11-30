@@ -29,8 +29,8 @@ void InterpolateAngles(float* start, float* end, float* output, float frac);
 void NormalizeAngles(float* angles);
 float Distance(const float* v1, const float* v2);
 
-extern float vJumpOrigin[3];
-extern float vJumpAngles[3];
+extern Vector vJumpOrigin;
+extern Vector vJumpAngles;
 
 
 void V_DropPunchAngle(float frametime, float* ev_punchangle);
@@ -717,7 +717,7 @@ void V_CalcNormalRefdef(ref_params_t* pparams)
 #endif
 
 	{
-		static float lastorg[3];
+		static Vector lastorg;
 		Vector delta;
 
 		VectorSubtract(pparams->simorg, lastorg, delta);
@@ -891,7 +891,7 @@ void V_SmoothInterpolateAngles(float* startAngle, float* endAngle, float* finalA
 }
 
 // Get the origin of the Observer based around the target's position and angles
-void V_GetChaseOrigin(float* angles, float* origin, float distance, float* returnvec)
+void V_GetChaseOrigin(const Vector& angles, float* origin, float distance, float* returnvec)
 {
 	Vector vecEnd;
 	Vector forward;
@@ -956,7 +956,7 @@ void V_GetChaseOrigin(float* angles, float* origin, float distance, float* retur
 
 /*void V_GetDeathCam(cl_entity_t * ent1, cl_entity_t * ent2, float * angle, float * origin)
 {
-	float newAngle[3]; float newOrigin[3];
+	Vector newAngle; Vector newOrigin;
 
 	float distance = 168.0f;
 
@@ -996,10 +996,10 @@ void V_GetChaseOrigin(float* angles, float* origin, float distance, float* retur
 	VectorCopy(angle, v_lastAngles);
 }*/
 
-void V_GetSingleTargetCam(cl_entity_t* ent1, float* angle, float* origin)
+void V_GetSingleTargetCam(cl_entity_t* ent1, Vector& angle, float* origin)
 {
-	float newAngle[3];
-	float newOrigin[3];
+	Vector newAngle;
+	Vector newOrigin;
 
 	int flags = gHUD.m_Spectator.m_iObserverFlags;
 
@@ -1091,9 +1091,9 @@ float MaxAngleBetweenAngles(float* a1, float* a2)
 
 void V_GetDoubleTargetsCam(cl_entity_t* ent1, cl_entity_t* ent2, float* angle, float* origin)
 {
-	float newAngle[3];
-	float newOrigin[3];
-	float tempVec[3];
+	Vector newAngle;
+	Vector newOrigin;
+	Vector tempVec;
 
 	int flags = gHUD.m_Spectator.m_iObserverFlags;
 
@@ -1175,7 +1175,7 @@ void V_GetDoubleTargetsCam(cl_entity_t* ent1, cl_entity_t* ent2, float* angle, f
 	InterpolateAngles( newAngle, tempVec, newAngle, 0.5f); */
 }
 
-void V_GetDirectedChasePosition(cl_entity_t* ent1, cl_entity_t* ent2, float* angle, float* origin)
+void V_GetDirectedChasePosition(cl_entity_t* ent1, cl_entity_t* ent2, Vector& angle, float* origin)
 {
 
 	if (v_resetCamera)
@@ -1199,7 +1199,7 @@ void V_GetDirectedChasePosition(cl_entity_t* ent1, cl_entity_t* ent2, float* ang
 		// second target disappeard somehow (dead)
 
 		// keep last good viewangle
-		float newOrigin[3];
+		Vector newOrigin;
 
 		int flags = gHUD.m_Spectator.m_iObserverFlags;
 
@@ -1230,7 +1230,7 @@ void V_GetDirectedChasePosition(cl_entity_t* ent1, cl_entity_t* ent2, float* ang
 	VectorCopy(angle, v_lastAngles);
 }
 
-void V_GetChasePos(int target, float* cl_angles, float* origin, float* angles)
+void V_GetChasePos(int target, float* cl_angles, float* origin, Vector& angles)
 {
 	cl_entity_t* ent = nullptr;
 
@@ -1321,7 +1321,7 @@ void V_GetInEyePos(int target, float* origin, float* angles)
 		VectorAdd(origin, VEC_VIEW, origin);
 }
 
-void V_GetMapFreePosition(float* cl_angles, float* origin, float* angles)
+void V_GetMapFreePosition(float* cl_angles, float* origin, Vector& angles)
 {
 	Vector forward;
 	Vector zScaledTarget;
@@ -1343,7 +1343,7 @@ void V_GetMapFreePosition(float* cl_angles, float* origin, float* angles)
 	VectorMA(zScaledTarget, -(4096.0f / gHUD.m_Spectator.m_mapZoom), forward, origin);
 }
 
-void V_GetMapChasePosition(int target, float* cl_angles, float* origin, float* angles)
+void V_GetMapChasePosition(int target, float* cl_angles, float* origin, Vector& angles)
 {
 	Vector forward;
 

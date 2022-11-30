@@ -279,18 +279,15 @@ float UTIL_AngleDiff(float destAngle, float srcAngle)
 
 Vector UTIL_VecToAngles(const Vector& vec)
 {
-	float rgflVecOut[3];
-	VEC_TO_ANGLES(vec, rgflVecOut);
-	return Vector(rgflVecOut);
+	Vector out;
+	VEC_TO_ANGLES(vec, out);
+	return out;
 }
 
 //	float UTIL_MoveToOrigin( edict_t *pent, const Vector vecGoal, float flDist, int iMoveType )
 void UTIL_MoveToOrigin(edict_t* pent, const Vector& vecGoal, float flDist, int iMoveType)
 {
-	float rgfl[3];
-	vecGoal.CopyToArray(rgfl);
-	//		return MOVE_TO_ORIGIN ( pent, rgfl, flDist, iMoveType );
-	MOVE_TO_ORIGIN(pent, rgfl, flDist, iMoveType);
+	MOVE_TO_ORIGIN(pent, vecGoal, flDist, iMoveType);
 }
 
 
@@ -518,8 +515,7 @@ void UTIL_MakeVectors(const Vector& vecAngles)
 
 void UTIL_MakeAimVectors(const Vector& vecAngles)
 {
-	float rgflVec[3];
-	vecAngles.CopyToArray(rgflVec);
+	Vector rgflVec = vecAngles;
 	rgflVec[0] = -rgflVec[0];
 	MAKE_VECTORS(rgflVec);
 }

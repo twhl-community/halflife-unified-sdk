@@ -62,8 +62,8 @@ enum synctype_t
 
 struct dmodel_t
 {
-	float mins[3], maxs[3];
-	float origin[3];
+	Vector mins, maxs;
+	Vector origin;
 	int headnode[MAX_MAP_HULLS];
 	int visleafs; // not including the solid leaf 0
 	int firstface, numfaces;
@@ -304,7 +304,7 @@ struct alight_t
 
 struct auxvert_t
 {
-	float fv[3]; // viewspace x, y
+	Vector fv; // viewspace x, y
 };
 
 #include "custom.h"

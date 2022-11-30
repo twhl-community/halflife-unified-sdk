@@ -28,9 +28,9 @@ struct event_args_t
 	// Transmitted
 	int entindex;
 
-	float origin[3];
-	float angles[3];
-	float velocity[3];
+	Vector origin;
+	Vector angles;
+	Vector velocity;
 
 	int ducking;
 
