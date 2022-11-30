@@ -17,7 +17,15 @@ When executed this script generates a set of JSON files in the specified directo
 ### Command line
 
 ```
-dotnet script "path/to/MapCfgGenerator.csx" --destination-directory "path/to/assets/repository/cfgsrc/maps"
+Usage:
+  dotnet script "path/to/MapCfgGenerator.csx" <destination-directory> [options]
+
+Arguments:
+  <destination-directory>  Where to put the generated files
+
+Options:
+  --version       Show version information
+  -?, -h, --help  Show help and usage information
 ```
 
 The destination directory should point to the `cfgsrc/maps` directory in your local copy of the [assets repository](https://github.com/SamVanheer/halflife-unified-sdk-assets).

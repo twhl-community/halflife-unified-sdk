@@ -41,6 +41,11 @@ To pass command line parameters simply append them to the command:
 dotnet script <script filename> --my-parameter my-value
 ```
 
+If the parameter conflicts with one used by dotnet script you can use this syntax to indicate that the parameter is intended for the script itself:
+```bat
+dotnet script <script filename> -- --my-parameter my-value
+```
+
 ### Using scripts with Visual Studio Code
 
 Visual Studio Code can be used to edit, run and debug C# scripts.
