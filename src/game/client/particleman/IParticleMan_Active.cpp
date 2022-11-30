@@ -66,7 +66,7 @@ void IParticleMan_Active::SetUp(cl_enginefunc_t* pEnginefuncs)
 	cl_pmanstats = gEngfuncs.pfnRegisterVariable("cl_pmanstats", "0", 0);
 }
 
-CBaseParticle* IParticleMan_Active::CreateParticle(Vector org, Vector normal, model_s* sprite, float size, float brightness, const char* classname)
+CBaseParticle* IParticleMan_Active::CreateParticle(Vector org, Vector normal, model_t* sprite, float size, float brightness, const char* classname)
 {
 	auto particle = new CBaseParticle();
 

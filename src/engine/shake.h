@@ -20,12 +20,12 @@
 // screen shake
 
 // This structure is sent over the net to describe a screen shake event
-typedef struct
+struct ScreenShake
 {
 	unsigned short amplitude; // FIXED 4.12 amount of shake
 	unsigned short duration;  // FIXED 4.12 seconds duration
 	unsigned short frequency; // FIXED 8.8 noise frequency (low frequency is a jerk,high frequency is a rumble)
-} ScreenShake;
+};
 
 void V_ApplyShake(float* origin, float* angles, float factor);
 void V_CalcShake(void);
@@ -42,10 +42,10 @@ int V_ScreenFade(const char* pszName, int iSize, void* pbuf);
 
 
 // This structure is sent over the net to describe a screen fade event
-typedef struct
+struct ScreenFade
 {
 	unsigned short duration; // FIXED 4.12 seconds duration
 	unsigned short holdTime; // FIXED 4.12 seconds duration until reset (fade & hold)
 	short fadeFlags;		 // flags
 	byte r, g, b, a;		 // fade to color ( max alpha )
-} ScreenFade;
+};

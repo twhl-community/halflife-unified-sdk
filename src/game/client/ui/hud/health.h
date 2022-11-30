@@ -35,12 +35,12 @@
 #define NUM_DMG_TYPES 12
 // instant damage
 
-typedef struct
+struct DAMAGE_IMAGE
 {
 	float fExpire;
 	float fBaseline;
 	int x, y;
-} DAMAGE_IMAGE;
+};
 
 //
 //-----------------------------------------------------

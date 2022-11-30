@@ -24,6 +24,8 @@ typedef float vec_t;
 
 #include "vector.h"
 
+struct mplane_t;
+
 typedef vec_t vec4_t[4]; // x,y,z,w
 typedef vec_t vec5_t[5];
 
@@ -115,7 +117,7 @@ void VectorAngles(const float* forward, float* angles);
 
 int InvertMatrix(const float* m, float* out);
 
-int BoxOnPlaneSide(const Vector& emins, const Vector& emaxs, struct mplane_s* plane);
+int BoxOnPlaneSide(const Vector& emins, const Vector& emaxs, mplane_t* plane);
 float anglemod(float a);
 
 

@@ -73,10 +73,10 @@ enum decal_e
 	DECAL_OFSMSCORCH3,
 };
 
-typedef struct
+struct DLL_DECALLIST
 {
 	const char* name;
 	int index;
-} DLL_DECALLIST;
+};
 
 extern DLL_DECALLIST gDecals[];

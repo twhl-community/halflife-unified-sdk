@@ -94,12 +94,12 @@ private:
 	void BufferHeader(const char* pname, int size);
 };
 
-typedef struct
+struct HEADER
 {
 	unsigned short size;
 	unsigned short token;
 	char* pData;
-} HEADER;
+};
 
 class CRestore : public CSaveRestoreBuffer
 {
@@ -149,16 +149,14 @@ private:
 	}
 
 
-typedef enum
+enum GLOBALESTATE
 {
 	GLOBAL_OFF = 0,
 	GLOBAL_ON = 1,
 	GLOBAL_DEAD = 2
-} GLOBALESTATE;
+};
 
-typedef struct globalentity_s globalentity_t;
-
-struct globalentity_s
+struct globalentity_t
 {
 	char name[64];
 	char levelName[32];

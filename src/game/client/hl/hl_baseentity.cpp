@@ -72,7 +72,7 @@ CBaseEntity* CBaseEntity::Create(const char* szName, const Vector& vecOrigin, co
 void CBaseEntity::SUB_Remove() {}
 
 // CBaseDelay Stubs
-bool CBaseDelay::KeyValue(struct KeyValueData_s*) { return false; }
+bool CBaseDelay::KeyValue(KeyValueData*) { return false; }
 bool CBaseDelay::Restore(class CRestore&) { return true; }
 bool CBaseDelay::Save(class CSave&) { return true; }
 
@@ -97,7 +97,7 @@ void ClientPrint(entvars_t* client, int msg_dest, const char* msg_name, const ch
 // CBaseToggle Stubs
 bool CBaseToggle::Restore(class CRestore&) { return true; }
 bool CBaseToggle::Save(class CSave&) { return true; }
-bool CBaseToggle::KeyValue(struct KeyValueData_s*) { return false; }
+bool CBaseToggle::KeyValue(KeyValueData*) { return false; }
 
 // CGrenade Stubs
 void CGrenade::BounceSound() {}

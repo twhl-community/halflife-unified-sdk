@@ -108,12 +108,12 @@ kbutton_t in_score;
 kbutton_t in_break;
 kbutton_t in_graph; // Display the netgraph
 
-typedef struct kblist_s
+struct kblist_t
 {
-	struct kblist_s* next;
+	kblist_t* next;
 	kbutton_t* pkey;
 	char name[32];
-} kblist_t;
+};
 
 kblist_t* g_kbkeys = nullptr;
 
@@ -191,7 +191,7 @@ KB_Find
 Allows the engine to get a kbutton_t directly ( so it can check +mlook state, etc ) for saving out to .cfg files
 ============
 */
-struct kbutton_s DLLEXPORT* KB_Find(const char* name)
+kbutton_t DLLEXPORT* KB_Find(const char* name)
 {
 	//	RecClFindKey(name);
 
@@ -642,7 +642,7 @@ if active == 1 then we are 1) not playing back demos ( where our commands are ig
 2 ) we have finished signing on to server
 ================
 */
-void DLLEXPORT CL_CreateMove(float frametime, struct usercmd_s* cmd, int active)
+void DLLEXPORT CL_CreateMove(float frametime, usercmd_t* cmd, int active)
 {
 	//	RecClCL_CreateMove(frametime, cmd, active);
 

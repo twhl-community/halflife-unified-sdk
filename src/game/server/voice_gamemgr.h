@@ -55,7 +55,7 @@ public:
 	void Update(double frametime);
 
 	// Called when a new client connects (unsquelches its entity for everyone).
-	void ClientConnected(struct edict_s* pEdict);
+	void ClientConnected(edict_t* pEdict);
 
 	// Called to determine if the Receiver has muted (blocked) the Sender
 	// Returns true if the receiver has blocked the sender

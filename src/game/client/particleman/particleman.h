@@ -20,7 +20,7 @@ public:
 
 	// Use this if you want to create a new particle without any overloaded functions, Think, Touch, etc.
 	// Just call this function, set the particle's behavior and let it rip.
-	virtual CBaseParticle* CreateParticle(Vector org, Vector normal, model_s* sprite, float size, float brightness, const char* classname) = 0;
+	virtual CBaseParticle* CreateParticle(Vector org, Vector normal, model_t* sprite, float size, float brightness, const char* classname) = 0;
 
 	virtual void SetRender(int iRender) = 0;
 };

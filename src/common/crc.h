@@ -19,12 +19,12 @@
 #include "steam/steamtypes.h" // DAL
 
 // MD5 Hash
-typedef struct
+struct MD5Context_t
 {
 	unsigned int buf[4];
 	unsigned int bits[2];
 	unsigned char in[64];
-} MD5Context_t;
+};
 
 typedef uint32 CRC32_t;
 

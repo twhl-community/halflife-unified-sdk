@@ -19,7 +19,7 @@
 
 void EntvarsKeyvalue(entvars_t* pev, KeyValueData* pkvd);
 
-void OnFreeEntPrivateData(edict_s* pEdict);
+void OnFreeEntPrivateData(edict_t* pEdict);
 
 void DummySpectatorFunction(edict_t*)
 {
@@ -291,7 +291,7 @@ void DispatchSave(edict_t* pent, SAVERESTOREDATA* pSaveData)
 	}
 }
 
-void OnFreeEntPrivateData(edict_s* pEdict)
+void OnFreeEntPrivateData(edict_t* pEdict)
 {
 	if (pEdict && pEdict->pvPrivateData)
 	{

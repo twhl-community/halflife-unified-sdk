@@ -38,20 +38,19 @@
 
 #define HUDELEM_ACTIVE 1
 
-typedef struct
+struct POSITION
 {
 	int x, y;
-} POSITION;
+};
 
 #include "global_consts.h"
 
-typedef struct
+struct RGBA
 {
 	unsigned char r, g, b, a;
-} RGBA;
+};
 
-typedef struct cvar_s cvar_t;
-
+struct cvar_t;
 
 #define HUD_ACTIVE 1
 #define HUD_INTERMISSION 2
@@ -315,9 +314,9 @@ public:
 	friend class CHudSpectator;
 
 private:
-	struct cvar_s* m_HUD_saytext;
-	struct cvar_s* m_HUD_saytext_time;
-	struct cvar_s* m_con_color;
+	cvar_t* m_HUD_saytext;
+	cvar_t* m_HUD_saytext_time;
+	cvar_t* m_con_color;
 };
 
 //
@@ -507,14 +506,14 @@ public:
 	void DisableCustomIcon(int nIndex);
 
 private:
-	typedef struct
+	struct icon_sprite_t
 	{
 		char szSpriteName[MAX_ICONSPRITENAME_LENGTH];
 		HSPRITE spr;
 		Rect rc;
 		RGB24 color;
 		int teamnumber; // Not actually used
-	} icon_sprite_t;
+	};
 
 	icon_sprite_t m_IconList[MAX_ICONSPRITES];
 	icon_sprite_t m_CustomList[MAX_CUSTOMSPRITES];
@@ -633,7 +632,7 @@ public:
 	int m_iPlayerNum;
 	bool m_iShowscoresHeld;
 
-	struct cvar_s* cl_showpacketloss;
+	cvar_t* cl_showpacketloss;
 
 	void GetAllPlayersInfo();
 };
@@ -766,7 +765,7 @@ private:
 	Rect* m_rgrcRects;							  /*[HUD_SPRITE_COUNT]*/
 	char* m_rgszSpriteNames;					  /*[HUD_SPRITE_COUNT][MAX_SPRITE_NAME_LENGTH]*/
 
-	struct cvar_s* default_fov;
+	cvar_t* default_fov;
 
 public:
 	HSPRITE GetSprite(int index)

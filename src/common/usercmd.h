@@ -15,7 +15,7 @@
 
 #pragma once
 
-typedef struct usercmd_s
+struct usercmd_t
 {
 	short lerp_msec;   // Interpolation time on client
 	byte msec;		   // Duration in ms of command
@@ -33,4 +33,4 @@ typedef struct usercmd_s
 	// Experimental player impact stuff.
 	int impact_index;
 	Vector impact_position;
-} usercmd_t;
+};

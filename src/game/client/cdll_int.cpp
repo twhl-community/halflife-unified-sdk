@@ -82,7 +82,7 @@ int DLLEXPORT HUD_ConnectionlessPacket(const netadr_t* net_from, const char* arg
 	return 0;
 }
 
-void DLLEXPORT HUD_PlayerMoveInit(struct playermove_s* ppmove)
+void DLLEXPORT HUD_PlayerMoveInit(playermove_t* ppmove)
 {
 	//	RecClClientMoveInit(ppmove);
 
@@ -96,7 +96,7 @@ char DLLEXPORT HUD_PlayerMoveTexture(char* name)
 	return PM_FindTextureType(name);
 }
 
-void DLLEXPORT HUD_PlayerMove(struct playermove_s* ppmove, int server)
+void DLLEXPORT HUD_PlayerMove(playermove_t* ppmove, int server)
 {
 	//	RecClClientMove(ppmove, server);
 

@@ -9,6 +9,8 @@
 
 #include "netadr.h"
 
+struct net_response_t;
+
 #define NETAPI_REQUEST_SERVERLIST (0) // Doesn't need a remote address
 #define NETAPI_REQUEST_PING (1)
 #define NETAPI_REQUEST_RULES (2)
@@ -19,20 +21,20 @@
 //  kill the request hook after receiving the first response
 #define FNETAPI_MULTIPLE_RESPONSE (1 << 0)
 
-typedef void (*net_api_response_func_t)(struct net_response_s* response);
+typedef void (*net_api_response_func_t)(net_response_t* response);
 
 #define NET_SUCCESS (0)
 #define NET_ERROR_TIMEOUT (1 << 0)
 #define NET_ERROR_PROTO_UNSUPPORTED (1 << 1)
 #define NET_ERROR_UNDEFINED (1 << 2)
 
-typedef struct net_adrlist_s
+struct net_adrlist_t
 {
-	struct net_adrlist_s* next;
+	net_adrlist_t* next;
 	netadr_t remote_address;
-} net_adrlist_t;
+};
 
-typedef struct net_response_s
+struct net_response_t
 {
 	// NET_SUCCESS or an error code
 	int error;
@@ -52,9 +54,9 @@ typedef struct net_response_s
 	//  by the engine right after the call!!!!
 	// ALSO:  For NETAPI_REQUEST_SERVERLIST requests, this will be a pointer to a linked list of net_adrlist_t's
 	void* response;
-} net_response_t;
+};
 
-typedef struct net_status_s
+struct net_status_t
 {
 	// Connected to remote server?  1 == yes, 0 otherwise
 	int connected;
@@ -70,13 +72,13 @@ typedef struct net_status_s
 	double connection_time;
 	// Rate setting ( for incoming data )
 	double rate;
-} net_status_t;
+};
 
-typedef struct net_api_s
+struct net_api_t
 {
 	// APIs
 	void (*InitNetworking)(void);
-	void (*Status)(struct net_status_s* status);
+	void (*Status)(net_status_t* status);
 	void (*SendRequest)(int context, int request, int flags, double timeout, netadr_t* remote_address, net_api_response_func_t response);
 	void (*CancelRequest)(int context);
 	void (*CancelAllRequests)(void);
@@ -86,6 +88,6 @@ typedef struct net_api_s
 	const char* (*ValueForKey)(const char* s, const char* key);
 	void (*RemoveKey)(char* s, const char* key);
 	void (*SetValueForKey)(char* s, const char* key, const char* value, int maxsize);
-} net_api_t;
+};
 
 extern net_api_t netapi;

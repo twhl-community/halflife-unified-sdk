@@ -15,7 +15,7 @@
 
 #pragma once
 
-typedef struct dlight_s
+struct dlight_t
 {
 	Vector origin;
 	float radius;
@@ -25,4 +25,4 @@ typedef struct dlight_s
 	float minlight; // don't add when contributing less
 	int key;
 	qboolean dark; // subtracts light instead of adding
-} dlight_t;
+};

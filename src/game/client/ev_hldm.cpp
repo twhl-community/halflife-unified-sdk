@@ -1149,7 +1149,7 @@ void EV_Crowbar(event_args_t* args)
 // This function is used to correct the origin and angles
 // of the bolt, so it looks like it's stuck on the wall.
 //=====================
-void EV_BoltCallback(struct tempent_s* ent, float frametime, float currenttime)
+void EV_BoltCallback(TEMPENTITY* ent, float frametime, float currenttime)
 {
 	ent->entity.origin = ent->entity.baseline.vuser1;
 	ent->entity.angles = ent->entity.baseline.vuser2;
@@ -1307,7 +1307,7 @@ BEAM* pBeam;
 BEAM* pBeam2;
 TEMPENTITY* pFlare; // Vit_amiN: egon's beam flare
 
-void EV_EgonFlareCallback(struct tempent_s* ent, float frametime, float currenttime)
+void EV_EgonFlareCallback(TEMPENTITY* ent, float frametime, float currenttime)
 {
 	float delta = currenttime - ent->tentOffset.z; // time past since the last scale
 	if (delta >= ent->tentOffset.y)

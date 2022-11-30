@@ -97,13 +97,13 @@ void SaveGlobalState(SAVERESTOREDATA* pSaveData);
 void RestoreGlobalState(SAVERESTOREDATA* pSaveData);
 void ResetGlobalState();
 
-typedef enum
+enum USE_TYPE
 {
 	USE_OFF = 0,
 	USE_ON = 1,
 	USE_SET = 2,
 	USE_TOGGLE = 3
-} USE_TYPE;
+};
 
 void FireTargets(const char* targetName, CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
@@ -515,7 +515,7 @@ private:
 };
 
 
-typedef struct locksounds // sounds that doors and buttons make when locked/unlocked
+struct locksound_t // sounds that doors and buttons make when locked/unlocked
 {
 	string_t sLockedSound;		// sound a door makes when it's locked
 	string_t sLockedSentence;	// sentence group played when door is locked
@@ -529,7 +529,7 @@ typedef struct locksounds // sounds that doors and buttons make when locked/unlo
 	float flwaitSentence; // time delay between playing consecutive sentences
 	byte bEOFLocked;	  // true if hit end of list of locked sentences
 	byte bEOFUnlocked;	  // true if hit end of list of unlocked sentences
-} locksound_t;
+};
 
 void PlayLockSounds(entvars_t* pev, locksound_t* pls, bool flocked, bool fbutton);
 

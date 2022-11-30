@@ -622,7 +622,7 @@ HUD_WeaponsPostThink
 Run Weapon firing code on client
 =====================
 */
-void HUD_WeaponsPostThink(local_state_s* from, local_state_s* to, usercmd_t* cmd, double time, unsigned int random_seed)
+void HUD_WeaponsPostThink(local_state_t* from, local_state_t* to, usercmd_t* cmd, double time, unsigned int random_seed)
 {
 	int i;
 	int buttonsChanged;
@@ -957,7 +957,7 @@ runfuncs is 1 if this is the first time we've predicted this command.  If so, so
 be ignored
 =====================
 */
-void DLLEXPORT HUD_PostRunCmd(struct local_state_s* from, struct local_state_s* to, struct usercmd_s* cmd, int runfuncs, double time, unsigned int random_seed)
+void DLLEXPORT HUD_PostRunCmd(local_state_t* from, local_state_t* to, usercmd_t* cmd, int runfuncs, double time, unsigned int random_seed)
 {
 	//	RecClPostRunCmd(from, to, cmd, runfuncs, time, random_seed);
 

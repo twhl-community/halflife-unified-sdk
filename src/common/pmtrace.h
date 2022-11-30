@@ -15,15 +15,13 @@
 
 #pragma once
 
-typedef struct
+struct pmplane_t
 {
 	Vector normal;
 	float dist;
-} pmplane_t;
+};
 
-typedef struct pmtrace_s pmtrace_t;
-
-struct pmtrace_s
+struct pmtrace_t
 {
 	qboolean allsolid;		  // if true, plane is not valid
 	qboolean startsolid;	  // if true, the initial point was in a solid area

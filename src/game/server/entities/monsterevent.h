@@ -15,11 +15,11 @@
 
 #pragma once
 
-typedef struct
+struct MonsterEvent_t
 {
 	int event;
 	char* options;
-} MonsterEvent_t;
+};
 
 #define EVENT_SPECIFIC 0
 #define EVENT_SCRIPTED 1000

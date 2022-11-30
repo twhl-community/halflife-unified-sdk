@@ -30,12 +30,12 @@
 #define FCVAR_ISEXECUTED (1 << 12)		// This cvar's string contains a value that will be executed as a cfg file; don't allow commands to be appended to it
 #define FCVAR_ISPATH (1 << 13)			// This cvar's string is a path or filename; don't allow absolute paths, escaping to another directory or backslashes
 
-typedef struct cvar_s
+struct cvar_t
 {
 	const char* name;
 	// Technically this should be non-const but that only matters to engine code
 	const char* string;
 	int flags;
 	float value;
-	struct cvar_s* next;
-} cvar_t;
+	cvar_t* next;
+};

@@ -14,7 +14,7 @@ typedef unsigned char byte;
 //---------------------------------------------------------------------------
 // client_textmessage_t
 //---------------------------------------------------------------------------
-typedef struct client_textmessage_s
+struct client_textmessage_t
 {
 	int effect;
 	byte r1, g1, b1, a1; // 2 colors for effects
@@ -27,7 +27,7 @@ typedef struct client_textmessage_s
 	float fxtime;
 	const char* pName;
 	const char* pMessage;
-} client_textmessage_t;
+};
 
 
 //--------------------------------------------------------------------------
@@ -36,7 +36,7 @@ typedef struct client_textmessage_s
 // Enumerated list of possible modifiers for a command.  This enumeration
 // is used in a bitarray controlling what modifiers are specified for a command.
 //---------------------------------------------------------------------------
-enum sequenceModifierBits
+enum sequenceModifierBits_e
 {
 	SEQUENCE_MODIFIER_EFFECT_BIT = (1 << 1),
 	SEQUENCE_MODIFIER_POSITION_BIT = (1 << 2),
@@ -50,7 +50,6 @@ enum sequenceModifierBits
 	SEQUENCE_MODIFIER_LISTENER_BIT = (1 << 10),
 	SEQUENCE_MODIFIER_TEXTCHANNEL_BIT = (1 << 11),
 };
-typedef enum sequenceModifierBits sequenceModifierBits_e;
 
 
 //---------------------------------------------------------------------------
@@ -58,7 +57,7 @@ typedef enum sequenceModifierBits sequenceModifierBits_e;
 //
 // Enumerated sequence command types.
 //---------------------------------------------------------------------------
-enum sequenceCommandEnum_
+enum sequenceCommandEnum_e
 {
 	SEQUENCE_COMMAND_ERROR = -1,
 	SEQUENCE_COMMAND_PAUSE = 0,
@@ -86,7 +85,6 @@ enum sequenceCommandEnum_
 	SEQUENCE_MODIFIER_LISTENER,
 	SEQUENCE_MODIFIER_TEXTCHANNEL,
 };
-typedef enum sequenceCommandEnum_ sequenceCommandEnum_e;
 
 
 //---------------------------------------------------------------------------
@@ -94,12 +92,11 @@ typedef enum sequenceCommandEnum_ sequenceCommandEnum_e;
 //
 // Typeerated sequence command types.
 //---------------------------------------------------------------------------
-enum sequenceCommandType_
+enum sequenceCommandType_e
 {
 	SEQUENCE_TYPE_COMMAND,
 	SEQUENCE_TYPE_MODIFIER,
 };
-typedef enum sequenceCommandType_ sequenceCommandType_e;
 
 
 //---------------------------------------------------------------------------
@@ -107,8 +104,7 @@ typedef enum sequenceCommandType_ sequenceCommandType_e;
 //
 // A mapping of a command enumerated-value to its name.
 //---------------------------------------------------------------------------
-typedef struct sequenceCommandMapping_ sequenceCommandMapping_s;
-struct sequenceCommandMapping_
+struct sequenceCommandMapping_s
 {
 	sequenceCommandEnum_e commandEnum;
 	const char* commandName;
@@ -122,8 +118,7 @@ struct sequenceCommandMapping_
 // Structure representing a single command (usually 1 line) from a
 //	.SEQ file entry.
 //---------------------------------------------------------------------------
-typedef struct sequenceCommandLine_ sequenceCommandLine_s;
-struct sequenceCommandLine_
+struct sequenceCommandLine_s
 {
 	int commandType;						// Specifies the type of command
 	client_textmessage_t clientMessage;		// Text HUD message struct
@@ -147,8 +142,7 @@ struct sequenceCommandLine_
 // Structure representing a single command (usually 1 line) from a
 //	.SEQ file entry.
 //---------------------------------------------------------------------------
-typedef struct sequenceEntry_ sequenceEntry_s;
-struct sequenceEntry_
+struct sequenceEntry_s
 {
 	char* fileName;						 // Name of sequence file without .SEQ extension
 	char* entryName;					 // Name of entry label in file
@@ -165,8 +159,7 @@ struct sequenceEntry_
 // file entry.  Sentences are identical to entries in sentences.txt, but
 // can be unique per level and are loaded/unloaded with the level.
 //---------------------------------------------------------------------------
-typedef struct sentenceEntry_ sentenceEntry_s;
-struct sentenceEntry_
+struct sentenceEntry_s
 {
 	char* data;					// sentence data (ie "We have hostiles" )
 	sentenceEntry_s* nextEntry; // Next loaded entry
@@ -181,8 +174,7 @@ struct sentenceEntry_
 // the number at the end of the sentence name.  Groups enable a sentence
 // to be picked at random across a group.
 //--------------------------------------------------------------------------
-typedef struct sentenceGroupEntry_ sentenceGroupEntry_s;
-struct sentenceGroupEntry_
+struct sentenceGroupEntry_s
 {
 	char* groupName;				 // name of the group (ie CT_ALERT )
 	unsigned int numSentences;		 // number of sentences in group

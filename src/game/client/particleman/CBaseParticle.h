@@ -1,5 +1,7 @@
 #pragma once
 
+struct model_t;
+
 #define TRI_COLLIDEWORLD 0x00000020
 #define TRI_COLLIDEALL 0x00001000  // will collide with world and slideboxes
 #define TRI_COLLIDEKILL 0x00004000 // tent is removed upon collision with anything
@@ -68,7 +70,7 @@ public:
 	virtual void CheckCollision(float time);
 	virtual void Touch(Vector pos, Vector normal, int index);
 	virtual void Die(void);
-	virtual void InitializeSprite(Vector org, Vector normal, model_s* sprite, float size, float brightness);
+	virtual void InitializeSprite(Vector org, Vector normal, model_t* sprite, float size, float brightness);
 	virtual void Force(void);
 
 	float m_flSize;			 // scale of object
@@ -108,7 +110,7 @@ public:
 	Vector m_vColor;
 	float m_flMass;
 
-	model_s* m_pTexture;
+	model_t* m_pTexture;
 
 	float m_flBounceFactor;
 

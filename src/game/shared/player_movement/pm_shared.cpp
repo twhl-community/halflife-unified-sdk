@@ -41,32 +41,33 @@ float vJumpAngles[3];
 
 static bool pm_shared_initialized = false;
 
-typedef enum
+// TODO: already defined in com_model.h
+enum modtype_t
 {
 	mod_brush,
 	mod_sprite,
 	mod_alias,
 	mod_studio
-} modtype_t;
+};
 
 playermove_t* pmove = nullptr;
 
-typedef struct
+struct dclipnode_t
 {
 	int planenum;
 	short children[2]; // negative numbers are contents
-} dclipnode_t;
+};
 
-typedef struct mplane_s
+struct mplane_t
 {
 	Vector normal; // surface normal
 	float dist;	   // closest appoach to origin
 	byte type;	   // for texture axis selection and fast side tests
 	byte signbits; // signx + signy<<1 + signz<<1
 	byte pad[2];
-} mplane_t;
+};
 
-typedef struct hull_s
+struct hull_t
 {
 	dclipnode_t* clipnodes;
 	mplane_t* planes;
@@ -74,7 +75,7 @@ typedef struct hull_s
 	int lastclipnode;
 	Vector clip_mins;
 	Vector clip_maxs;
-} hull_t;
+};
 
 // Ducking time
 #define TIME_TO_DUCK 0.4
@@ -3279,7 +3280,7 @@ invoked by each side as appropriate.  There should be no distinction, internally
 and client.  This will ensure that prediction behaves appropriately.
 */
 
-void PM_Move(struct playermove_s* ppmove, qboolean server)
+void PM_Move(playermove_t* ppmove, qboolean server)
 {
 	assert(pm_shared_initialized);
 
@@ -3321,7 +3322,7 @@ int PM_GetPhysEntInfo(int ent)
 	return -1;
 }
 
-void PM_Init(struct playermove_s* ppmove)
+void PM_Init(playermove_t* ppmove)
 {
 	assert(!pm_shared_initialized);
 

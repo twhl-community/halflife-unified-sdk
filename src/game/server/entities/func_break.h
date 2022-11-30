@@ -15,12 +15,12 @@
 
 #pragma once
 
-typedef enum
+enum Explosions
 {
 	expRandom,
 	expDirected
-} Explosions;
-typedef enum
+};
+enum Materials
 {
 	matGlass = 0,
 	matWood,
@@ -33,7 +33,7 @@ typedef enum
 	matRocks,
 	matNone,
 	matLastMaterial
-} Materials;
+};
 
 #define NUM_SHARDS 6 // this many shards spawned when breakable objects break;
 

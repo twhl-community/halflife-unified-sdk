@@ -15,11 +15,13 @@
 
 #pragma once
 
-typedef enum
+struct model_t;
+
+enum TRICULLSTYLE
 {
 	TRI_FRONT = 0,
 	TRI_NONE = 1,
-} TRICULLSTYLE;
+};
 
 #define TRI_API_VERSION 1
 
@@ -31,7 +33,7 @@ typedef enum
 #define TRI_TRIANGLE_STRIP 5
 #define TRI_QUAD_STRIP 6
 
-typedef struct triangleapi_s
+struct triangleapi_t
 {
 	int version;
 
@@ -46,7 +48,7 @@ typedef struct triangleapi_s
 	void (*Vertex3f)(float x, float y, float z);
 	void (*Brightness)(float brightness);
 	void (*CullFace)(TRICULLSTYLE style);
-	int (*SpriteTexture)(struct model_s* pSpriteModel, int frame);
+	int (*SpriteTexture)(model_t* pSpriteModel, int frame);
 	int (*WorldToScreen)(float* world, float* screen);					   // Returns 1 if it's z clipped
 	void (*Fog)(float flFogColor[3], float flStart, float flEnd, int bOn); // Works just like GL_FOG, flFogColor is r/g/b.
 	void (*ScreenToWorld)(float* screen, float* world);
@@ -56,4 +58,4 @@ typedef struct triangleapi_s
 	void (*Color4fRendermode)(float r, float g, float b, float a, int rendermode);
 	void (*FogParams)(float flDensity, int iFogSkybox); // Used with Fog()...sets fog density and whether the fog should be applied to the skybox
 
-} triangleapi_t;
+};

@@ -22,7 +22,7 @@
 // Customization
 // passed to pfnPlayerCustomization
 // For automatic downloading.
-typedef enum
+enum resourcetype_t
 {
 	t_sound = 0,
 	t_skin,
@@ -31,18 +31,18 @@ typedef enum
 	t_generic,
 	t_eventscript,
 	t_world, // Fake type for world, is really t_model
-} resourcetype_t;
+};
 
 
-typedef struct
+struct _resourceinfo_t
 {
 	int size;
-} _resourceinfo_t;
+};
 
-typedef struct resourceinfo_s
+struct resourceinfo_t
 {
 	_resourceinfo_t info[8];
-} resourceinfo_t;
+};
 
 #define RES_FATALIFMISSING (1 << 0) // Disconnect if we can't get this file.
 #define RES_WASMISSING (1 << 1)		// Do we have the file locally, did we get it ok?
@@ -55,7 +55,7 @@ typedef struct resourceinfo_s
 
 #include "crc.h"
 
-typedef struct resource_s
+struct resource_t
 {
 	char szFileName[MAX_QPATH]; // File name to download/precache.
 	resourcetype_t type;		// t_sound, t_skin, t_model, t_decal.
@@ -67,12 +67,12 @@ typedef struct resource_s
 	unsigned char rgucMD5_hash[16]; // To determine if we already have it.
 	unsigned char playernum;		// Which player index this resource is associated with, if it's a custom resource.
 
-	unsigned char rguc_reserved[32]; // For future expansion
-	struct resource_s* pNext;		 // Next in chain.
-	struct resource_s* pPrev;
-} resource_t;
+	unsigned char rguc_reserved[32];	// For future expansion
+	resource_t* pNext;					// Next in chain.
+	resource_t* pPrev;
+};
 
-typedef struct customization_s
+struct customization_t
 {
 	qboolean bInUse;			   // Is this customization in use;
 	resource_t resource;		   // The resource_t for this customization
@@ -82,14 +82,14 @@ typedef struct customization_s
 	int nUserData2;				   // Customization specific data
 	void* pInfo;				   // Buffer that holds the data structure that references the data (e.g., the cachewad_t)
 	void* pBuffer;				   // Buffer that holds the data for the customization (the raw .wad data)
-	struct customization_s* pNext; // Next in chain
-} customization_t;
+	customization_t* pNext;		   // Next in chain
+};
 
 #define FCUST_FROMHPAK (1 << 0)
 #define FCUST_WIPEDATA (1 << 1)
 #define FCUST_IGNOREINIT (1 << 2)
 
-void COM_ClearCustomizationList(struct customization_s* pHead, qboolean bCleanDecals);
-qboolean COM_CreateCustomization(struct customization_s* pListHead, struct resource_s* pResource, int playernumber, int flags,
-	struct customization_s** pCustomization, int* nLumps);
-int COM_SizeofResourceList(struct resource_s* pList, struct resourceinfo_s* ri);
+void COM_ClearCustomizationList(customization_t* pHead, qboolean bCleanDecals);
+qboolean COM_CreateCustomization(customization_t* pListHead, resource_t* pResource, int playernumber, int flags,
+	customization_t** pCustomization, int* nLumps);
+int COM_SizeofResourceList(resource_t* pList, resourceinfo_t* ri);

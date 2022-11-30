@@ -2267,7 +2267,7 @@ void CQueuePriority::Heap_SiftDown(int iSubRoot)
 	int parent = iSubRoot;
 	int child = HEAP_LEFT_CHILD(parent);
 
-	struct tag_HEAP_NODE Ref = m_heap[parent];
+	tag_HEAP_NODE Ref = m_heap[parent];
 
 	while (child < m_cSize)
 	{
@@ -2298,7 +2298,7 @@ void CQueuePriority::Heap_SiftUp()
 		if (m_heap[parent].Priority <= m_heap[child].Priority)
 			break;
 
-		struct tag_HEAP_NODE Tmp;
+		tag_HEAP_NODE Tmp;
 		Tmp = m_heap[child];
 		m_heap[child] = m_heap[parent];
 		m_heap[parent] = Tmp;
@@ -2633,7 +2633,7 @@ struct tagNodePair
 
 void CGraph::HashInsert(int iSrcNode, int iDestNode, int iKey)
 {
-	struct tagNodePair np;
+	tagNodePair np;
 
 	np.iSrc = iSrcNode;
 	np.iDest = iDestNode;
@@ -2655,7 +2655,7 @@ void CGraph::HashInsert(int iSrcNode, int iDestNode, int iKey)
 
 void CGraph::HashSearch(int iSrcNode, int iDestNode, int& iKey)
 {
-	struct tagNodePair np;
+	tagNodePair np;
 
 	np.iSrc = iSrcNode;
 	np.iDest = iDestNode;

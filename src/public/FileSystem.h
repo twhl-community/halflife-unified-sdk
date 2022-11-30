@@ -21,19 +21,19 @@ typedef int WaitForResourcesHandle_t;
 //-----------------------------------------------------------------------------
 // Enums used by the interface
 //-----------------------------------------------------------------------------
-typedef enum
+enum FileSystemSeek_t
 {
 	FILESYSTEM_SEEK_HEAD = 0,
 	FILESYSTEM_SEEK_CURRENT,
 	FILESYSTEM_SEEK_TAIL,
-} FileSystemSeek_t;
+};
 
 enum
 {
 	FILESYSTEM_INVALID_FIND_HANDLE = -1
 };
 
-typedef enum
+enum FileWarningLevel_t
 {
 	// Don't print anything
 	FILESYSTEM_WARNING_QUIET = 0,
@@ -46,7 +46,7 @@ typedef enum
 
 	// Report all open/close events to console ( !slow! )
 	FILESYSTEM_WARNING_REPORTALLACCESSES
-} FileWarningLevel_t;
+};
 
 #define FILESYSTEM_INVALID_HANDLE (FileHandle_t)0
 

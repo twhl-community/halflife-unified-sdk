@@ -39,10 +39,12 @@
 
 #include "usercmd.h"
 
-typedef struct model_s model_t;
+struct hull_t;
+struct model_t;
+struct movevars_t;
 
 // physent_t
-typedef struct physent_s
+struct physent_t
 {
 	char name[32]; // Name of model, or "player" or "world".
 	int player;
@@ -82,10 +84,10 @@ typedef struct physent_s
 	Vector vuser2;
 	Vector vuser3;
 	Vector vuser4;
-} physent_t;
+};
 
 
-typedef struct playermove_s
+struct playermove_t
 {
 	int player_index; // So we don't try to run the PM_CheckStuck nudging too quickly.
 	qboolean server;  // For debugging, are we running physics code on server side?
@@ -178,7 +180,7 @@ typedef struct playermove_s
 
 	char physinfo[MAX_PHYSINFO_STRING]; // Physics info string
 
-	struct movevars_s* movevars;
+	movevars_t* movevars;
 	Vector player_mins[4];
 	Vector player_maxs[4];
 
@@ -193,9 +195,9 @@ typedef struct playermove_s
 	void (*PM_StuckTouch)(int hitent, pmtrace_t* ptraceresult);
 	int (*PM_PointContents)(float* p, int* truecontents /*filled in if this is non-null*/);
 	int (*PM_TruePointContents)(float* p);
-	int (*PM_HullPointContents)(struct hull_s* hull, int num, float* p);
+	int (*PM_HullPointContents)(hull_t* hull, int num, float* p);
 	pmtrace_t (*PM_PlayerTrace)(float* start, float* end, int traceFlags, int ignore_pe);
-	struct pmtrace_s* (*PM_TraceLine)(float* start, float* end, int flags, int usehulll, int ignore_pe);
+	pmtrace_t* (*PM_TraceLine)(float* start, float* end, int flags, int usehulll, int ignore_pe);
 	int32 (*RandomLong)(int32 lLow, int32 lHigh);
 	float (*RandomFloat)(float flLow, float flHigh);
 	int (*PM_GetModelType)(model_t* mod);
@@ -216,5 +218,5 @@ typedef struct playermove_s
 
 	pmtrace_t (*PM_PlayerTraceEx)(float* start, float* end, int traceFlags, int (*pfnIgnore)(physent_t* pe));
 	int (*PM_TestPlayerPositionEx)(float* pos, pmtrace_t* ptrace, int (*pfnIgnore)(physent_t* pe));
-	struct pmtrace_s* (*PM_TraceLineEx)(float* start, float* end, int flags, int usehulll, int (*pfnIgnore)(physent_t* pe));
-} playermove_t;
+	pmtrace_t* (*PM_TraceLineEx)(float* start, float* end, int flags, int usehulll, int (*pfnIgnore)(physent_t* pe));
+};

@@ -97,17 +97,17 @@ public:
 };
 
 
-typedef struct
+struct DIST_INFO
 {
 	int m_SortedBy[3];
 	int m_CheckedEvent;
-} DIST_INFO;
+};
 
-typedef struct
+struct CACHE_ENTRY
 {
 	Vector v;
 	short n; // Nearest node or -1 if no node found.
-} CACHE_ENTRY;
+};
 
 //=========================================================
 // CGraph

@@ -25,7 +25,7 @@
 #include "pm_defs.h"
 #include "pmtrace.h"
 
-void CBaseParticle::InitializeSprite(Vector org, Vector normal, model_s* sprite, float size, float brightness)
+void CBaseParticle::InitializeSprite(Vector org, Vector normal, model_t* sprite, float size, float brightness)
 {
 	m_flSize = m_flOriginalSize = 10;
 

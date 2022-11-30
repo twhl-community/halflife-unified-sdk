@@ -1,37 +1,45 @@
 #pragma once
 
+struct alight_t;
+struct cache_user_t;
+struct cl_entity_t;
+struct cvar_t;
+struct entity_state_t;
+struct model_t;
+struct player_info_t;
+
 #define STUDIO_INTERFACE_VERSION 1
 
-typedef struct engine_studio_api_s
+struct engine_studio_api_t
 {
 	// Allocate number*size bytes and zero it
 	void* (*Mem_Calloc)(int number, size_t size);
 	// Check to see if pointer is in the cache
-	void* (*Cache_Check)(struct cache_user_s* c);
+	void* (*Cache_Check)(cache_user_t* c);
 	// Load file into cache ( can be swapped out on demand )
-	void (*LoadCacheFile)(char* path, struct cache_user_s* cu);
+	void (*LoadCacheFile)(char* path, cache_user_t* cu);
 	// Retrieve model pointer for the named model
-	struct model_s* (*Mod_ForName)(const char* name, int crash_if_missing);
+	model_t* (*Mod_ForName)(const char* name, int crash_if_missing);
 	// Retrieve pointer to studio model data block from a model
-	void* (*Mod_Extradata)(struct model_s* mod);
+	void* (*Mod_Extradata)(model_t* mod);
 	// Retrieve indexed model from client side model precache list
-	struct model_s* (*GetModelByIndex)(int index);
+	model_t* (*GetModelByIndex)(int index);
 	// Get entity that is set for rendering
-	struct cl_entity_s* (*GetCurrentEntity)(void);
+	cl_entity_t* (*GetCurrentEntity)(void);
 	// Get referenced player_info_t
-	struct player_info_s* (*PlayerInfo)(int index);
+	player_info_t* (*PlayerInfo)(int index);
 	// Get most recently received player state data from network system
-	struct entity_state_s* (*GetPlayerState)(int index);
+	entity_state_t* (*GetPlayerState)(int index);
 	// Get viewentity
-	struct cl_entity_s* (*GetViewEntity)(void);
+	cl_entity_t* (*GetViewEntity)(void);
 	// Get current frame count, and last two timestampes on client
 	void (*GetTimes)(int* framecount, double* current, double* old);
 	// Get a pointer to a cvar by name
-	struct cvar_s* (*GetCvar)(const char* name);
+	cvar_t* (*GetCvar)(const char* name);
 	// Get current render origin and view vectors ( up, right and vpn )
 	void (*GetViewInfo)(float* origin, float* upv, float* rightv, float* vpnv);
 	// Get sprite model used for applying chrome effect
-	struct model_s* (*GetChromeSprite)(void);
+	model_t* (*GetChromeSprite)(void);
 	// Get model counters so we can incement instrumentation
 	void (*GetModelCounters)(int** s, int** a);
 	// Get software scaling coefficients
@@ -48,9 +56,9 @@ typedef struct engine_studio_api_s
 	// Check if entity's bbox is in the view frustum
 	int (*StudioCheckBBox)(void);
 	// Apply lighting effects to model
-	void (*StudioDynamicLight)(struct cl_entity_s* ent, struct alight_s* plight);
-	void (*StudioEntityLight)(struct alight_s* plight);
-	void (*StudioSetupLighting)(struct alight_s* plighting);
+	void (*StudioDynamicLight)(cl_entity_t* ent, alight_t* plight);
+	void (*StudioEntityLight)(alight_t* plight);
+	void (*StudioSetupLighting)(alight_t* plighting);
 
 	// Draw mesh vertices
 	void (*StudioDrawPoints)(void);
@@ -66,7 +74,7 @@ typedef struct engine_studio_api_s
 	// Sets up for remapped colors
 	void (*StudioSetRemapColors)(int top, int bottom);
 	// Set's player model and returns model pointer
-	struct model_s* (*SetupPlayerModel)(int index);
+	model_t* (*SetupPlayerModel)(int index);
 	// Fires any events embedded in animation
 	void (*StudioClientEvents)(void);
 	// Retrieve/set forced render effects flags
@@ -75,7 +83,7 @@ typedef struct engine_studio_api_s
 	// Tell engine the value of the studio model header
 	void (*StudioSetHeader)(void* header);
 	// Tell engine which model_t * is being renderered
-	void (*SetRenderModel)(struct model_s* model);
+	void (*SetRenderModel)(model_t* model);
 
 	// Final state setup and restore for rendering
 	void (*SetupRenderer)(int rendermode);
@@ -94,39 +102,39 @@ typedef struct engine_studio_api_s
 	void (*StudioSetRenderamt)(int iRenderamt); //!!!CZERO added for rendering glass on viewmodels
 	void (*StudioSetCullState)(int iCull);
 	void (*StudioRenderShadow)(int iSprite, float* p1, float* p2, float* p3, float* p4);
-} engine_studio_api_t;
+};
 
-typedef struct server_studio_api_s
+struct server_studio_api_t
 {
 	// Allocate number*size bytes and zero it
 	void* (*Mem_Calloc)(int number, size_t size);
 	// Check to see if pointer is in the cache
-	void* (*Cache_Check)(struct cache_user_s* c);
+	void* (*Cache_Check)(cache_user_t* c);
 	// Load file into cache ( can be swapped out on demand )
-	void (*LoadCacheFile)(char* path, struct cache_user_s* cu);
+	void (*LoadCacheFile)(char* path, cache_user_t* cu);
 	// Retrieve pointer to studio model data block from a model
-	void* (*Mod_Extradata)(struct model_s* mod);
-} server_studio_api_t;
+	void* (*Mod_Extradata)(model_t* mod);
+};
 
 
 // client blending
-typedef struct r_studio_interface_s
+struct r_studio_interface_t
 {
 	int version;
 	int (*StudioDrawModel)(int flags);
-	int (*StudioDrawPlayer)(int flags, struct entity_state_s* pplayer);
-} r_studio_interface_t;
+	int (*StudioDrawPlayer)(int flags, entity_state_t* pplayer);
+};
 
 extern r_studio_interface_t* pStudioAPI;
 
 // server blending
 #define SV_BLENDING_INTERFACE_VERSION 1
 
-typedef struct sv_blending_interface_s
+struct sv_blending_interface_t
 {
 	int version;
 
-	void (*SV_StudioSetupBones)(struct model_s* pModel,
+	void (*SV_StudioSetupBones)(model_t* pModel,
 		float frame,
 		int sequence,
 		const Vector angles,
@@ -135,4 +143,4 @@ typedef struct sv_blending_interface_s
 		const byte* pblending,
 		int iBone,
 		const edict_t* pEdict);
-} sv_blending_interface_t;
+};

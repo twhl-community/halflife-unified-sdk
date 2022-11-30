@@ -314,7 +314,7 @@ void CVoiceStatus::CreateEntities()
 		if (!m_VoicePlayers[i])
 			continue;
 
-		cl_entity_s* pClient = gEngfuncs.GetEntityByIndex(i + 1);
+		cl_entity_t* pClient = gEngfuncs.GetEntityByIndex(i + 1);
 
 		// Don't show an icon if the player is not in our PVS.
 		if (!pClient || pClient->curstate.messagenum < localPlayer->curstate.messagenum)
@@ -328,7 +328,7 @@ void CVoiceStatus::CreateEntities()
 		if (pClient == localPlayer && !cam_thirdperson)
 			continue;
 
-		cl_entity_s* pEnt = &m_VoiceHeadModels[iOutModel];
+		cl_entity_t* pEnt = &m_VoiceHeadModels[iOutModel];
 		++iOutModel;
 
 		memset(pEnt, 0, sizeof(*pEnt));
@@ -339,7 +339,7 @@ void CVoiceStatus::CreateEntities()
 		pEnt->curstate.renderfx = kRenderFxNoDissipation;
 		pEnt->curstate.framerate = 1;
 		pEnt->curstate.frame = 0;
-		pEnt->model = (struct model_s*)gEngfuncs.GetSpritePointer(m_VoiceHeadModel);
+		pEnt->model = (model_t*)gEngfuncs.GetSpritePointer(m_VoiceHeadModel);
 		pEnt->angles[0] = pEnt->angles[1] = pEnt->angles[2] = 0;
 		pEnt->curstate.scale = 0.5f;
 

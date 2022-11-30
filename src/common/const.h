@@ -15,6 +15,8 @@
 
 #pragma once
 
+struct edict_t;
+
 //
 // Constants shared by the engine and dlls
 // This header file included by engine files and DLL files.
@@ -718,35 +720,33 @@ enum
 
 #define _DEF_BYTE_
 
-typedef struct
+struct color24
 {
 	byte r, g, b;
-} color24;
+};
 
-typedef struct
+struct colorVec
 {
 	unsigned r, g, b, a;
-} colorVec;
+};
 
-typedef struct
+struct PackedColorVec
 {
 	unsigned short r, g, b, a;
-} PackedColorVec;
+};
 
-typedef struct link_s
+struct link_t
 {
-	struct link_s *prev, *next;
-} link_t;
+	link_t *prev, *next;
+};
 
-typedef struct edict_s edict_t;
-
-typedef struct
+struct plane_t
 {
 	Vector normal;
 	float dist;
-} plane_t;
+};
 
-typedef struct
+struct trace_t
 {
 	qboolean allsolid;	 // if true, plane is not valid
 	qboolean startsolid; // if true, the initial point was in a solid area
@@ -756,7 +756,7 @@ typedef struct
 	plane_t plane;	// surface normal at impact
 	edict_t* ent;	// entity the surface is on
 	int hitgroup;	// 0 == generic, non zero is specific body part
-} trace_t;
+};
 
 /**
  *	@brief Constants for entvars_t::waterlevel

@@ -6,57 +6,89 @@
 #include "common_types.h"
 #include "enums.h"
 
+struct cl_enginefunc_t;
+struct cl_entity_t;
+struct client_data_t;
+struct client_sprite_t;
+struct client_textmessage_t;
+struct clientdata_t;
+struct con_nprint_t;
+struct cvar_t;
+struct demo_api_t;
+struct efx_api_t;
+struct engine_studio_api_t;
+struct entity_state_t;
+struct event_api_t;
+struct event_args_t;
+struct hud_player_info_t;
+struct IVoiceTweak;
+struct kbutton_t;
+struct local_state_t;
+struct model_t;
+struct mstudioevent_t;
+struct net_api_t;
+struct playermove_t;
+struct pmtrace_t;
+struct r_studio_interface_t;
+struct ref_params_t;
+struct screenfade_t;
+struct SCREENINFO;
+struct TEMPENTITY;
+struct triangleapi_t;
+struct usercmd_t;
+struct weapondata_t;
+
 #define MAX_ALIAS_NAME 32
 
-typedef struct cmdalias_s
+struct cmdalias_t
 {
-	struct cmdalias_s* next;
+	cmdalias_t* next;
 	char name[MAX_ALIAS_NAME];
 	char* value;
-} cmdalias_t;
+};
 
 /**
 *	@brief Functions exported by the client .dll
 */
-typedef struct
+struct cldll_func_t
 {
-	int (*pInitFunc)(struct cl_enginefuncs_s*, int);
+	int (*pInitFunc)(cl_enginefunc_t*, int);
 	void (*pHudInitFunc)(void);
 	int (*pHudVidInitFunc)(void);
 	int (*pHudRedrawFunc)(float, int);
-	int (*pHudUpdateClientDataFunc)(struct client_data_s*, float);
+	int (*pHudUpdateClientDataFunc)(client_data_t*, float);
 	void (*pHudResetFunc)(void);
-	void (*pClientMove)(struct playermove_s* ppmove, qboolean server);
-	void (*pClientMoveInit)(struct playermove_s* ppmove);
+	void (*pClientMove)(playermove_t* ppmove, qboolean server);
+	void (*pClientMoveInit)(playermove_t* ppmove);
 	char (*pClientTextureType)(char* name);
 	void (*pIN_ActivateMouse)(void);
 	void (*pIN_DeactivateMouse)(void);
 	void (*pIN_MouseEvent)(int mstate);
 	void (*pIN_ClearStates)(void);
 	void (*pIN_Accumulate)(void);
-	void (*pCL_CreateMove)(float frametime, struct usercmd_s* cmd, int active);
+	void (*pCL_CreateMove)(float frametime, usercmd_t* cmd, int active);
 	int (*pCL_IsThirdPerson)(void);
 	void (*pCL_GetCameraOffsets)(float* ofs);
-	struct kbutton_s* (*pFindKey)(const char* name);
+	kbutton_t* (*pFindKey)(const char* name);
 	void (*pCamThink)(void);
-	void (*pCalcRefdef)(struct ref_params_s* pparams);
-	int (*pAddEntity)(int type, struct cl_entity_s* ent, const char* modelname);
+	void (*pCalcRefdef)(ref_params_t* pparams);
+	int (*pAddEntity)(int type, cl_entity_t* ent, const char* modelname);
 	void (*pCreateEntities)(void);
 	void (*pDrawNormalTriangles)(void);
 	void (*pDrawTransparentTriangles)(void);
-	void (*pStudioEvent)(const struct mstudioevent_s* event, const struct cl_entity_s* entity);
-	void (*pPostRunCmd)(struct local_state_s* from, struct local_state_s* to, struct usercmd_s* cmd, int runfuncs, double time, unsigned int random_seed);
+	void (*pStudioEvent)(const mstudioevent_t* event, const cl_entity_t* entity);
+	void (*pPostRunCmd)(local_state_t* from, local_state_t* to, usercmd_t* cmd, int runfuncs, double time, unsigned int random_seed);
 	void (*pShutdown)(void);
-	void (*pTxferLocalOverrides)(struct entity_state_s* state, const struct clientdata_s* client);
-	void (*pProcessPlayerState)(struct entity_state_s* dst, const struct entity_state_s* src);
-	void (*pTxferPredictionData)(struct entity_state_s* ps, const struct entity_state_s* pps, struct clientdata_s* pcd, const struct clientdata_s* ppcd, struct weapon_data_s* wd, const struct weapon_data_s* pwd);
+	void (*pTxferLocalOverrides)(entity_state_t* state, const clientdata_t* client);
+	void (*pProcessPlayerState)(entity_state_t* dst, const entity_state_t* src);
+	void (*pTxferPredictionData)(entity_state_t* ps, const entity_state_t* pps, clientdata_t* pcd, const clientdata_t* ppcd, weapon_data_t* wd, const weapon_data_t* pwd);
 	void (*pReadDemoBuffer)(int size, unsigned char* buffer);
 	int (*pConnectionlessPacket)(const netadr_t* net_from, const char* args, char* response_buffer, int* response_buffer_size);
 	int (*pGetHullBounds)(int hullnumber, float* mins, float* maxs);
 	void (*pHudFrame)(double);
 	int (*pKeyEvent)(int eventcode, int keynum, const char* pszCurrentBinding);
-	void (*pTempEntUpdate)(double frametime, double client_time, double cl_gravity, struct tempent_s** ppTempEntFree, struct tempent_s** ppTempEntActive, int (*Callback_AddVisibleEntity)(struct cl_entity_s* pEntity), void (*Callback_TempEntPlaySound)(struct tempent_s* pTemp, float damp));
-	struct cl_entity_s* (*pGetUserEntity)(int index);
+	void (*pTempEntUpdate)(double frametime, double client_time, double cl_gravity, TEMPENTITY** ppTempEntFree, TEMPENTITY** ppTempEntActive, int (*Callback_AddVisibleEntity)(cl_entity_t* pEntity), void (*Callback_TempEntPlaySound)(TEMPENTITY* pTemp, float damp));
+	cl_entity_t* (*pGetUserEntity)(int index);
 
 	/**
 	*	@details Possibly null on old client dlls.
@@ -71,7 +103,7 @@ typedef struct
 	/**
 	*	@brief Not used by all clients
 	*/
-	int (*pStudioInterface)(int version, struct r_studio_interface_s** ppinterface, struct engine_studio_api_s* pstudio);
+	int (*pStudioInterface)(int version, r_studio_interface_t** ppinterface, engine_studio_api_t* pstudio);
 
 	/**
 	 *	@brief Not used by all clients
@@ -89,12 +121,12 @@ typedef struct
 	*	so we return a void * which we then do a typecast on later.
 	*/
 	void* (*pClientFactory)();
-} cldll_func_t;
+};
 
 /**
 *	@brief Functions exported by the engine
 */
-typedef struct cl_enginefuncs_s
+struct cl_enginefunc_t
 {
 	HSPRITE (*pfnSPR_Load)(const char* szPicName);
 	int (*pfnSPR_Frames)(HSPRITE hPic);
@@ -106,22 +138,22 @@ typedef struct cl_enginefuncs_s
 	void (*pfnSPR_DrawAdditive)(int frame, int x, int y, const Rect* prc);
 	void (*pfnSPR_EnableScissor)(int x, int y, int width, int height);
 	void (*pfnSPR_DisableScissor)(void);
-	struct client_sprite_s* (*pfnSPR_GetList)(const char* psz, int* piCount);
+	client_sprite_t* (*pfnSPR_GetList)(const char* psz, int* piCount);
 	void (*pfnFillRGBA)(int x, int y, int width, int height, int r, int g, int b, int a);
-	int (*pfnGetScreenInfo)(struct SCREENINFO_s* pscrinfo);
+	int (*pfnGetScreenInfo)(SCREENINFO* pscrinfo);
 	void (*pfnSetCrosshair)(HSPRITE hspr, Rect rc, int r, int g, int b);
-	struct cvar_s* (*pfnRegisterVariable)(const char* szName, const char* szValue, int flags);
+	cvar_t* (*pfnRegisterVariable)(const char* szName, const char* szValue, int flags);
 	float (*pfnGetCvarFloat)(const char* szName);
 	const char* (*pfnGetCvarString)(const char* szName);
 	int (*pfnAddCommand)(const char* cmd_name, void (*pfnEngSrc_function)(void));
 	int (*pfnHookUserMsg)(const char* szMsgName, pfnUserMsgHook pfn);
 	int (*pfnServerCmd)(const char* szCmdString);
 	int (*pfnClientCmd)(const char* szCmdString);
-	void (*pfnGetPlayerInfo)(int ent_num, struct hud_player_info_s* pinfo);
+	void (*pfnGetPlayerInfo)(int ent_num, hud_player_info_t* pinfo);
 	void (*pfnPlaySoundByName)(const char* szSound, float volume);
 	void (*pfnPlaySoundByIndex)(int iSound, float volume);
 	void (*pfnAngleVectors)(const float* vecAngles, float* forward, float* right, float* up);
-	struct client_textmessage_s* (*pfnTextMessageGet)(const char* pName);
+	client_textmessage_t* (*pfnTextMessageGet)(const char* pName);
 	int (*pfnDrawCharacter)(int x, int y, int number, int r, int g, int b);
 	int (*pfnDrawConsoleString)(int x, int y, const char* string);
 	void (*pfnDrawSetTextColor)(float r, float g, float b);
@@ -139,7 +171,7 @@ typedef struct cl_enginefuncs_s
 	void (*Con_Printf)(const char* fmt, ...);
 	void (*Con_DPrintf)(const char* fmt, ...);
 	void (*Con_NPrintf)(int pos, const char* fmt, ...);
-	void (*Con_NXPrintf)(struct con_nprint_s* info, const char* fmt, ...);
+	void (*Con_NXPrintf)(con_nprint_t* info, const char* fmt, ...);
 	const char* (*PhysInfo_ValueForKey)(const char* key);
 	const char* (*ServerInfo_ValueForKey)(const char* key);
 	float (*GetClientMaxspeed)(void);
@@ -147,45 +179,45 @@ typedef struct cl_enginefuncs_s
 	void (*Key_Event)(int key, int down);
 	void (*GetMousePosition)(int* mx, int* my);
 	int (*IsNoClipping)(void);
-	struct cl_entity_s* (*GetLocalPlayer)(void);
-	struct cl_entity_s* (*GetViewModel)(void);
-	struct cl_entity_s* (*GetEntityByIndex)(int idx);
+	cl_entity_t* (*GetLocalPlayer)(void);
+	cl_entity_t* (*GetViewModel)(void);
+	cl_entity_t* (*GetEntityByIndex)(int idx);
 	float (*GetClientTime)(void);
 	void (*V_CalcShake)(void);
 	void (*V_ApplyShake)(float* origin, float* angles, float factor);
 	int (*PM_PointContents)(float* point, int* truecontents);
 	int (*PM_WaterEntity)(float* p);
-	struct pmtrace_s* (*PM_TraceLine)(const float* start, const float* end, int flags, int usehull, int ignore_pe);
-	struct model_s* (*CL_LoadModel)(const char* modelname, int* index);
-	int (*CL_CreateVisibleEntity)(int type, struct cl_entity_s* ent);
-	const struct model_s* (*GetSpritePointer)(HSPRITE hSprite);
+	pmtrace_t* (*PM_TraceLine)(const float* start, const float* end, int flags, int usehull, int ignore_pe);
+	model_t* (*CL_LoadModel)(const char* modelname, int* index);
+	int (*CL_CreateVisibleEntity)(int type, cl_entity_t* ent);
+	const model_t* (*GetSpritePointer)(HSPRITE hSprite);
 	void (*pfnPlaySoundByNameAtLocation)(const char* szSound, float volume, const float* origin);
 	unsigned short (*pfnPrecacheEvent)(int type, const char* psz);
-	void (*pfnPlaybackEvent)(int flags, const struct edict_s* pInvoker, unsigned short eventindex, float delay, const float* origin, const float* angles, float fparam1, float fparam2, int iparam1, int iparam2, int bparam1, int bparam2);
+	void (*pfnPlaybackEvent)(int flags, const edict_t* pInvoker, unsigned short eventindex, float delay, const float* origin, const float* angles, float fparam1, float fparam2, int iparam1, int iparam2, int bparam1, int bparam2);
 	void (*pfnWeaponAnim)(int iAnim, int body);
 	float (*pfnRandomFloat)(float flLow, float flHigh);
 	int32 (*pfnRandomLong)(int32 lLow, int32 lHigh);
-	void (*pfnHookEvent)(const char* name, void (*pfnEvent)(struct event_args_s* args));
+	void (*pfnHookEvent)(const char* name, void (*pfnEvent)(event_args_t* args));
 	int (*Con_IsVisible)();
 	const char* (*pfnGetGameDirectory)(void);
-	struct cvar_s* (*pfnGetCvarPointer)(const char* szName);
+	cvar_t* (*pfnGetCvarPointer)(const char* szName);
 	const char* (*Key_LookupBinding)(const char* pBinding);
 	const char* (*pfnGetLevelName)(void);
-	void (*pfnGetScreenFade)(struct screenfade_s* fade);
-	void (*pfnSetScreenFade)(struct screenfade_s* fade);
+	void (*pfnGetScreenFade)(screenfade_t* fade);
+	void (*pfnSetScreenFade)(screenfade_t* fade);
 	void* (*VGui_GetPanel)();
 	void (*VGui_ViewportPaintBackground)(int extents[4]);
 	byte* (*COM_LoadFile)(const char* path, int usehunk, int* pLength);
 	char* (*COM_ParseFile)(const char* data, char* token);
 	void (*COM_FreeFile)(void* buffer);
-	struct triangleapi_s* pTriAPI;
-	struct efx_api_s* pEfxAPI;
-	struct event_api_s* pEventAPI;
-	struct demo_api_s* pDemoAPI;
-	struct net_api_s* pNetAPI;
-	struct IVoiceTweak_s* pVoiceTweak;
+	triangleapi_t* pTriAPI;
+	efx_api_t* pEfxAPI;
+	event_api_t* pEventAPI;
+	demo_api_t* pDemoAPI;
+	net_api_t* pNetAPI;
+	IVoiceTweak* pVoiceTweak;
 	int (*IsSpectateOnly)(void);
-	struct model_s* (*LoadMapSprite)(const char* filename);
+	model_t* (*LoadMapSprite)(const char* filename);
 	void (*COM_AddAppDirectoryToSearchPath)(const char* pszBaseDir, const char* appName);
 	int (*COM_ExpandFilename)(const char* fileName, char* nameOutBuffer, int nameOutBufferSize);
 	const char* (*PlayerInfo_ValueForKey)(int playerNum, const char* key);
@@ -197,13 +229,13 @@ typedef struct cl_enginefuncs_s
 	void (*pfnGetMousePos)(Point* ppt);
 	void (*pfnSetMousePos)(int x, int y);
 	void (*pfnSetMouseEnable)(qboolean fEnable);
-	struct cvar_s* (*GetFirstCvarPtr)();
+	cvar_t* (*GetFirstCvarPtr)();
 	unsigned int (*GetFirstCmdFunctionHandle)();
 	unsigned int (*GetNextCmdFunctionHandle)(unsigned int cmdhandle);
 	const char* (*GetCmdFunctionName)(unsigned int cmdhandle);
 	float (*hudGetClientOldTime)();
 	float (*hudGetServerGravityValue)();
-	struct model_s* (*hudGetModelByIndex)(int index);
+	model_t* (*hudGetModelByIndex)(int index);
 	void (*pfnSetFilterMode)(int mode);
 	void (*pfnSetFilterColor)(float r, float g, float b);
 	void (*pfnSetFilterBrightness)(float brightness);
@@ -232,4 +264,4 @@ typedef struct cl_enginefuncs_s
 	cmdalias_t* (*pfnGetAliasList)(void);
 	void (*pfnVguiWrap2_GetMouseDelta)(int* x, int* y);
 	int (*pfnFilteredClientCmd)(const char* szCmdString);
-} cl_enginefunc_t;
+};

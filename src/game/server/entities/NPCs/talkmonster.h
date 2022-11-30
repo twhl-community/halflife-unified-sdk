@@ -33,7 +33,7 @@
 #define bit_saidHeard (1 << 6)
 #define bit_saidSmelled (1 << 7)
 
-typedef enum
+enum TALKGROUPNAMES
 {
 	TLK_ANSWER = 0,
 	TLK_QUESTION,
@@ -55,7 +55,7 @@ typedef enum
 	TLK_MORTAL,
 
 	TLK_CGROUPS, // MUST be last entry
-} TALKGROUPNAMES;
+};
 
 
 enum

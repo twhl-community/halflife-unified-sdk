@@ -40,7 +40,7 @@ Studio models are position independent, so the cache manager can move them.
 #define MAXSTUDIOPIVOTS 256
 #define MAXSTUDIOCONTROLLERS 8
 
-typedef struct
+struct studiohdr_t
 {
 	int id;
 	int version;
@@ -93,20 +93,20 @@ typedef struct
 
 	int numtransitions; // animation node to animation node transition graph
 	int transitionindex;
-} studiohdr_t;
+};
 
 // header for demand loaded sequence group data
-typedef struct
+struct studioseqhdr_t
 {
 	int id;
 	int version;
 
 	char name[64];
 	int length;
-} studioseqhdr_t;
+};
 
 // bones
-typedef struct
+struct mstudiobone_t
 {
 	char name[32];		   // bone name for symbolic links
 	int parent;			   // parent bone
@@ -114,11 +114,11 @@ typedef struct
 	int bonecontroller[6]; // bone controller index, -1 == none
 	float value[6];		   // default DoF values
 	float scale[6];		   // scale for delta DoF values
-} mstudiobone_t;
+};
 
 
 // bone controllers
-typedef struct
+struct mstudiobonecontroller_t
 {
 	int bone; // -1 == 0
 	int type; // X, Y, Z, XR, YR, ZR, M
@@ -126,38 +126,38 @@ typedef struct
 	float end;
 	int rest;  // byte index value at rest
 	int index; // 0-3 user set controller, 4 mouth
-} mstudiobonecontroller_t;
+};
 
 // intersection boxes
-typedef struct
+struct mstudiobbox_t
 {
 	int bone;
 	int group;	  // intersection group
 	Vector bbmin; // bounding box
 	Vector bbmax;
-} mstudiobbox_t;
+};
 
 #if !defined(CACHE_USER) && !defined(QUAKEDEF_H)
 #define CACHE_USER
-typedef struct cache_user_s
+struct cache_user_t
 {
 	void* data;
-} cache_user_t;
+};
 #endif
 
 //
 // demand loaded sequence groups
 //
-typedef struct
+struct mstudioseqgroup_t
 {
 	char label[32]; // textual name
 	char name[64];	// file name
 	int32 unused1;	// was "cache"  - index pointer
 	int unused2;	// was "data" -  hack for group 0
-} mstudioseqgroup_t;
+};
 
 // sequence descriptions
-typedef struct
+struct mstudioseqdesc_t
 {
 	char label[32]; // sequence label
 
@@ -200,45 +200,45 @@ typedef struct
 	int nodeflags; // transition rules
 
 	int nextseq; // auto advancing sequences
-} mstudioseqdesc_t;
+};
 
 // events
 #include "studio_event.h"
 /*
-typedef struct
+struct mstudioevent_t
 {
 	int 				frame;
 	int					event;
 	int					type;
 	char				options[64];
-} mstudioevent_t;
+};
 */
 
 // pivots
-typedef struct
+struct mstudiopivot_t
 {
 	Vector org; // pivot point
 	int start;
 	int end;
-} mstudiopivot_t;
+};
 
 // attachment
-typedef struct
+struct mstudioattachment_t
 {
 	char name[32];
 	int type;
 	int bone;
 	Vector org; // attachment point
 	Vector vectors[3];
-} mstudioattachment_t;
+};
 
-typedef struct
+struct mstudioanim_t
 {
 	unsigned short offset[6];
-} mstudioanim_t;
+};
 
 // animation frames
-typedef union
+union mstudioanimvalue_t
 {
 	struct
 	{
@@ -246,37 +246,37 @@ typedef union
 		byte total;
 	} num;
 	short value;
-} mstudioanimvalue_t;
+};
 
 
 
 // body part index
-typedef struct
+struct mstudiobodyparts_t
 {
 	char name[64];
 	int nummodels;
 	int base;
 	int modelindex; // index into models array
-} mstudiobodyparts_t;
+};
 
 
 
 // skin info
-typedef struct
+struct mstudiotexture_t
 {
 	char name[64];
 	int flags;
 	int width;
 	int height;
 	int index;
-} mstudiotexture_t;
+};
 
 
 // skin families
 // short	index[skinfamilies][skinref]
 
 // studio models
-typedef struct
+struct mstudiomodel_t
 {
 	char name[64];
 
@@ -296,30 +296,30 @@ typedef struct
 
 	int numgroups; // deformation groups
 	int groupindex;
-} mstudiomodel_t;
+};
 
 
 // Vector	boundingbox[model][bone][2];	// complex intersection info
 
 
 // meshes
-typedef struct
+struct mstudiomesh_t
 {
 	int numtris;
 	int triindex;
 	int skinref;
 	int numnorms;  // per mesh normals
 	int normindex; // normal Vector
-} mstudiomesh_t;
+};
 
 // triangles
 #if 0
-typedef struct 
+struct mstudiotrivert_t
 {
 	short				vertindex;		// index into vertex array
 	short				normindex;		// index into normal array
 	short				s,t;			// s,t position on skin
-} mstudiotrivert_t;
+};
 #endif
 
 // lighting options

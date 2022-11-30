@@ -27,6 +27,9 @@
 // cl_entity_t
 #include "cl_entity.h"
 
+struct model_t;
+struct pmtrace_t;
+
 /*
 // FOR REFERENCE, These are the built-in tracer colors.  Note, color 4 is the one
 //  that uses the tracerred/tracergreen/tracerblue and traceralpha cvar settings
@@ -74,7 +77,7 @@ color24 gTracerColors[] =
 #define FTENT_NOMODEL 0x00040000	  // Doesn't have a model, never try to draw ( it just triggers other things )
 #define FTENT_CLIENTCUSTOM 0x00080000 // Must specify callback.  Callback function is responsible for killing tempent and updating fields ( unless other flags specify how to do things )
 
-typedef struct tempent_s
+struct TEMPENTITY
 {
 	int flags;
 	float die;
@@ -85,9 +88,9 @@ typedef struct tempent_s
 	float fadeSpeed;
 	float bounceFactor;
 	int hitSound;
-	void (*hitcallback)(struct tempent_s* ent, struct pmtrace_s* ptr);
-	void (*callback)(struct tempent_s* ent, float frametime, float currenttime);
-	struct tempent_s* next;
+	void (*hitcallback)(TEMPENTITY* ent, pmtrace_t* ptr);
+	void (*callback)(TEMPENTITY* ent, float frametime, float currenttime);
+	TEMPENTITY* next;
 	int priority;
 	short clientIndex; // if attached, this is the index of the client to stick to
 					   // if COLLIDEALL, this is the index of the client to ignore
@@ -99,13 +102,11 @@ typedef struct tempent_s
 	// baseline.origin		- velocity
 	// baseline.renderamt	- starting fadeout intensity
 	// baseline.angles		- angle velocity
-} TEMPENTITY;
+};
 
-typedef struct efx_api_s efx_api_t;
-
-struct efx_api_s
+struct efx_api_t
 {
-	particle_t* (*R_AllocParticle)(void (*callback)(struct particle_s* particle, float frametime));
+	particle_t* (*R_AllocParticle)(void (*callback)(particle_t* particle, float frametime));
 	void (*R_BlobExplosion)(float* org);
 	void (*R_Blood)(float* org, float* dir, int pcolor, int speed);
 	void (*R_BloodSprite)(float* org, int colorindex, int modelIndex, int modelIndex2, float size);
@@ -114,9 +115,9 @@ struct efx_api_s
 	void (*R_Bubbles)(float* mins, float* maxs, float height, int modelIndex, int count, float speed);
 	void (*R_BubbleTrail)(float* start, float* end, float height, int modelIndex, int count, float speed);
 	void (*R_BulletImpactParticles)(float* pos);
-	void (*R_EntityParticles)(struct cl_entity_s* ent);
+	void (*R_EntityParticles)(cl_entity_t* ent);
 	void (*R_Explosion)(float* pos, int model, float scale, float framerate, int flags);
-	void (*R_FizzEffect)(struct cl_entity_s* pent, int modelIndex, int density);
+	void (*R_FizzEffect)(cl_entity_t* pent, int modelIndex, int density);
 	void (*R_FireField)(float* org, int radius, int modelIndex, int count, int flags, float life);
 	void (*R_FlickerParticles)(float* org);
 	void (*R_FunnelSprite)(float* org, int modelIndex, int reverse);
@@ -131,9 +132,9 @@ struct efx_api_s
 	void (*R_ParticleExplosion2)(float* org, int colorStart, int colorLength);
 	void (*R_ParticleLine)(float* start, float* end, unsigned char r, unsigned char g, unsigned char b, float life);
 	void (*R_PlayerSprites)(int client, int modelIndex, int count, int size);
-	void (*R_Projectile)(float* origin, float* velocity, int modelIndex, int life, int owner, void (*hitcallback)(struct tempent_s* ent, struct pmtrace_s* ptr));
+	void (*R_Projectile)(float* origin, float* velocity, int modelIndex, int life, int owner, void (*hitcallback)(TEMPENTITY* ent, pmtrace_t* ptr));
 	void (*R_RicochetSound)(float* pos);
-	void (*R_RicochetSprite)(const float* pos, struct model_s* pmodel, float duration, float scale);
+	void (*R_RicochetSprite)(const float* pos, model_t* pmodel, float duration, float scale);
 	void (*R_RocketFlare)(float* pos);
 	void (*R_RocketTrail)(float* start, float* end, int type);
 	void (*R_RunParticleEffect)(float* org, float* dir, int color, int count);
@@ -149,7 +150,7 @@ struct efx_api_s
 	void (*R_Sprite_WallPuff)(TEMPENTITY* pTemp, float scale);
 	void (*R_StreakSplash)(float* pos, float* dir, int color, int count, float speed, int velocityMin, int velocityMax);
 	void (*R_TracerEffect)(float* start, float* end);
-	void (*R_UserTracerParticle)(float* org, float* vel, float life, int colorIndex, float length, unsigned char deathcontext, void (*deathfunc)(struct particle_s* particle));
+	void (*R_UserTracerParticle)(float* org, float* vel, float life, int colorIndex, float length, unsigned char deathcontext, void (*deathfunc)(particle_t* particle));
 	particle_t* (*R_TracerParticles)(float* org, float* vel, float life);
 	void (*R_TeleportSplash)(float* org);
 	void (*R_TempSphereModel)(float* pos, float speed, float life, int count, int modelIndex);
@@ -171,10 +172,10 @@ struct efx_api_s
 	BEAM* (*R_BeamRing)(int startEnt, int endEnt, int modelIndex, float life, float width, float amplitude, float brightness, float speed, int startFrame, float framerate, float r, float g, float b);
 	dlight_t* (*CL_AllocDlight)(int key);
 	dlight_t* (*CL_AllocElight)(int key);
-	TEMPENTITY* (*CL_TempEntAlloc)(float* org, struct model_s* model);
+	TEMPENTITY* (*CL_TempEntAlloc)(float* org, model_t* model);
 	TEMPENTITY* (*CL_TempEntAllocNoModel)(float* org);
-	TEMPENTITY* (*CL_TempEntAllocHigh)(float* org, struct model_s* model);
-	TEMPENTITY* (*CL_TentEntAllocCustom)(float* origin, struct model_s* model, int high, void (*callback)(struct tempent_s* ent, float frametime, float currenttime));
+	TEMPENTITY* (*CL_TempEntAllocHigh)(float* org, model_t* model);
+	TEMPENTITY* (*CL_TentEntAllocCustom)(float* origin, model_t* model, int high, void (*callback)(TEMPENTITY* ent, float frametime, float currenttime));
 	void (*R_GetPackedColor)(short* packed, short color);
 	short (*R_LookupColor)(unsigned char r, unsigned char g, unsigned char b);
 	void (*R_DecalRemoveAll)(int textureIndex); // textureIndex points to the decal index in the array, not the actual texture index.

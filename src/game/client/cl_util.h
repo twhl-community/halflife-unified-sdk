@@ -41,7 +41,7 @@
 		gHUD.y.UserCmd_##x(); \
 	}
 
-inline struct cvar_s* CVAR_CREATE(const char* cv, const char* val, const int flags) { return gEngfuncs.pfnRegisterVariable(cv, val, flags); }
+inline cvar_t* CVAR_CREATE(const char* cv, const char* val, const int flags) { return gEngfuncs.pfnRegisterVariable(cv, val, flags); }
 
 #define SPR_Load (*gEngfuncs.pfnSPR_Load)
 

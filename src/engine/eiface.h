@@ -23,6 +23,16 @@
 #include "cvardef.h"
 #include "Sequence.h"
 #include "netadr.h"
+
+struct clientdata_t;
+struct cvar_t;
+struct delta_t;
+struct entity_state_t;
+struct entvars_t;
+struct playermove_t;
+struct usercmd_t;
+struct weapon_data_t;
+
 //
 // Defines entity interface between engine and DLLs.
 // This header file included by engine files and DLL files.
@@ -32,7 +42,7 @@
 // This is conveniently done for them in extdll.h
 //
 
-typedef enum
+enum ALERT_TYPE
 {
 	at_notice,
 	at_console,	  // same as at_notice, but forces a ConPrintf, not a message box
@@ -40,27 +50,27 @@ typedef enum
 	at_warning,
 	at_error,
 	at_logged // Server print to console ( only in multiplayer games ).
-} ALERT_TYPE;
+};
 
 // 4-22-98  JOHN: added for use in pfnClientPrintf
-typedef enum
+enum PRINT_TYPE
 {
 	print_console,
 	print_center,
 	print_chat,
-} PRINT_TYPE;
+};
 
 // For integrity checking of content on clients
-typedef enum
+enum FORCE_TYPE
 {
 	force_exactfile,					// File on client must exactly match server's file
 	force_model_samebounds,				// For model files only, the geometry must fit in the same bbox
 	force_model_specifybounds,			// For model files only, the geometry must fit in the specified bbox
 	force_model_specifybounds_if_avail, // For Steam model files only, the geometry must fit in the specified bbox (if the file is available)
-} FORCE_TYPE;
+};
 
 // Returned by TraceLine
-typedef struct
+struct TraceResult
 {
 	int fAllSolid;	 // if true, plane is not valid
 	int fStartSolid; // if true, the initial point was in a solid area
@@ -72,10 +82,10 @@ typedef struct
 	Vector vecPlaneNormal; // surface normal at impact
 	edict_t* pHit;		   // entity the surface is on
 	int iHitgroup;		   // 0 == generic, non zero is specific body part
-} TraceResult;
+};
 
 // CD audio status
-typedef struct
+struct CDStatus
 {
 	int fPlaying;	 // is sound playing right now?
 	int fWasPlaying; // if not, CD is paused if WasPlaying is true.
@@ -86,13 +96,13 @@ typedef struct
 	// byte 	remap[100];
 	int fCDRom;
 	int fPlayTrack;
-} CDStatus;
+};
 
 #include "../common/crc.h"
 
 
 // Engine hands this to DLLs for functionality callbacks
-typedef struct enginefuncs_s
+struct enginefuncs_t
 {
 	int (*pfnPrecacheModel)(const char* s);
 	int (*pfnPrecacheSound)(const char* s);
@@ -162,12 +172,12 @@ typedef struct enginefuncs_s
 	void (*pfnFreeEntPrivateData)(edict_t* pEdict);
 	const char* (*pfnSzFromIndex)(int iString);
 	int (*pfnAllocString)(const char* szValue);
-	struct entvars_s* (*pfnGetVarsOfEnt)(edict_t* pEdict);
+	entvars_t* (*pfnGetVarsOfEnt)(edict_t* pEdict);
 	edict_t* (*pfnPEntityOfEntOffset)(int iEntOffset);
 	int (*pfnEntOffsetOfPEntity)(const edict_t* pEdict);
 	int (*pfnIndexOfEdict)(const edict_t* pEdict);
 	edict_t* (*pfnPEntityOfEntIndex)(int iEntIndex);
-	edict_t* (*pfnFindEntityByVars)(struct entvars_s* pvars);
+	edict_t* (*pfnFindEntityByVars)(entvars_t* pvars);
 	void* (*pfnGetModelPtr)(edict_t* pEdict);
 	int (*pfnRegUserMsg)(const char* pszName, int iSize);
 	void (*pfnAnimationAutomove)(const edict_t* pEdict, float flTime);
@@ -226,19 +236,19 @@ typedef struct enginefuncs_s
 
 	int (*pfnCheckVisibility)(const edict_t* entity, unsigned char* pset);
 
-	void (*pfnDeltaSetField)(struct delta_s* pFields, const char* fieldname);
-	void (*pfnDeltaUnsetField)(struct delta_s* pFields, const char* fieldname);
-	void (*pfnDeltaAddEncoder)(const char* name, void (*conditionalencode)(struct delta_s* pFields, const unsigned char* from, const unsigned char* to));
+	void (*pfnDeltaSetField)(delta_t* pFields, const char* fieldname);
+	void (*pfnDeltaUnsetField)(delta_t* pFields, const char* fieldname);
+	void (*pfnDeltaAddEncoder)(const char* name, void (*conditionalencode)(delta_t* pFields, const unsigned char* from, const unsigned char* to));
 	int (*pfnGetCurrentPlayer)();
 	int (*pfnCanSkipPlayer)(const edict_t* player);
-	int (*pfnDeltaFindField)(struct delta_s* pFields, const char* fieldname);
-	void (*pfnDeltaSetFieldByIndex)(struct delta_s* pFields, int fieldNumber);
-	void (*pfnDeltaUnsetFieldByIndex)(struct delta_s* pFields, int fieldNumber);
+	int (*pfnDeltaFindField)(delta_t* pFields, const char* fieldname);
+	void (*pfnDeltaSetFieldByIndex)(delta_t* pFields, int fieldNumber);
+	void (*pfnDeltaUnsetFieldByIndex)(delta_t* pFields, int fieldNumber);
 
 	void (*pfnSetGroupMask)(int mask, int op);
 
-	int (*pfnCreateInstancedBaseline)(int classname, struct entity_state_s* baseline);
-	void (*pfnCvar_DirectSet)(struct cvar_s* var, const char* value);
+	int (*pfnCreateInstancedBaseline)(int classname, entity_state_t* baseline);
+	void (*pfnCvar_DirectSet)(cvar_t* var, const char* value);
 
 	// Forces the client and server to be running with the same version of the specified file
 	//  ( e.g., a player model ).
@@ -285,31 +295,31 @@ typedef struct enginefuncs_s
 	void (*pfnQueryClientCvarValue2)(const edict_t* player, const char* cvarName, int requestID);
 	int (*pfnCheckParm)(const char* pchCmdLineToken, const char** ppnext);
 	edict_t* (*pfnPEntityOfEntIndexAllEntities)(int iEntIndex);
-} enginefuncs_t;
+};
 
 
 // ONLY ADD NEW FUNCTIONS TO THE END OF THIS STRUCT.  INTERFACE VERSION IS FROZEN AT 138
 
 // Passed to pfnKeyValue
-typedef struct KeyValueData_s
+struct KeyValueData
 {
 	const char* szClassName; // in: entity classname
 	const char* szKeyName;	 // in: name of key
 	const char* szValue;	 // in: value of key
 	int32 fHandled;			 // out: DLL sets to true if key-value pair was understood
-} KeyValueData;
+};
 
 
-typedef struct
+struct LEVELLIST
 {
 	char mapName[32];
 	char landmarkName[32];
 	edict_t* pentLandmark;
 	Vector vecLandmarkOrigin;
-} LEVELLIST;
+};
 #define MAX_LEVEL_CONNECTIONS 16 // These are encoded in the lower 16bits of ENTITYTABLE->flags
 
-typedef struct
+struct ENTITYTABLE
 {
 	int id;		   // Ordinal ID of this entity (used for entity <--> pointer conversions)
 	edict_t* pent; // Pointer to the in-game entity
@@ -319,14 +329,14 @@ typedef struct
 	int flags;			// This could be a short -- bit mask of transitions that this entity is in the PVS of
 	string_t classname; // entity class name
 
-} ENTITYTABLE;
+};
 
 #define FENTTABLE_PLAYER 0x80000000
 #define FENTTABLE_REMOVED 0x40000000
 #define FENTTABLE_MOVEABLE 0x20000000
 #define FENTTABLE_GLOBAL 0x10000000
 
-typedef struct saverestore_s
+struct SAVERESTOREDATA
 {
 	char* pBaseData;							// Start of all entity save data
 	char* pCurrentData;							// Current buffer pointer for sequential access
@@ -348,9 +358,9 @@ typedef struct saverestore_s
 	float time;
 	char szCurrentMapName[32]; // To check global entities
 
-} SAVERESTOREDATA;
+};
 
-typedef enum _fieldtypes
+enum FIELDTYPE
 {
 	FIELD_FLOAT = 0,	   // Any floating point value
 	FIELD_STRING,		   // A string ID (return from ALLOC_STRING)
@@ -376,7 +386,7 @@ typedef enum _fieldtypes
 	FIELD_INT64 = FIELD_ENGINETYPECOUNT, // 64 bit integer
 
 	FIELD_TYPECOUNT, // MUST BE LAST
-} FIELDTYPE;
+};
 
 #define _FIELD(type, name, fieldtype, count, flags)                            \
 	{                                                                          \
@@ -392,16 +402,16 @@ typedef enum _fieldtypes
 
 #define FTYPEDESC_GLOBAL 0x0001 // This field is masked for global entity save/restore
 
-typedef struct
+struct TYPEDESCRIPTION
 {
 	FIELDTYPE fieldType;
 	const char* fieldName;
 	int fieldOffset;
 	short fieldSize;
 	short flags;
-} TYPEDESCRIPTION;
+};
 
-typedef struct
+struct DLL_FUNCTIONS
 {
 	// Initialize/shutdown the game (one-time call after loading of game .dll )
 	void (*pfnGameInit)();
@@ -454,17 +464,17 @@ typedef struct
 	// Notify game .dll that engine is going to shut down.  Allows mod authors to set a breakpoint.
 	void (*pfnSys_Error)(const char* error_string);
 
-	void (*pfnPM_Move)(struct playermove_s* ppmove, qboolean server);
-	void (*pfnPM_Init)(struct playermove_s* ppmove);
+	void (*pfnPM_Move)(playermove_t* ppmove, qboolean server);
+	void (*pfnPM_Init)(playermove_t* ppmove);
 	char (*pfnPM_FindTextureType)(char* name);
-	void (*pfnSetupVisibility)(struct edict_s* pViewEntity, struct edict_s* pClient, unsigned char** pvs, unsigned char** pas);
-	void (*pfnUpdateClientData)(const struct edict_s* ent, int sendweapons, struct clientdata_s* cd);
-	int (*pfnAddToFullPack)(struct entity_state_s* state, int e, edict_t* ent, edict_t* host, int hostflags, int player, unsigned char* pSet);
-	void (*pfnCreateBaseline)(int player, int eindex, struct entity_state_s* baseline, struct edict_s* entity, int playermodelindex, Vector* player_mins, Vector* player_maxs);
+	void (*pfnSetupVisibility)(edict_t* pViewEntity, edict_t* pClient, unsigned char** pvs, unsigned char** pas);
+	void (*pfnUpdateClientData)(const edict_t* ent, int sendweapons, clientdata_t* cd);
+	int (*pfnAddToFullPack)(entity_state_t* state, int e, edict_t* ent, edict_t* host, int hostflags, int player, unsigned char* pSet);
+	void (*pfnCreateBaseline)(int player, int eindex, entity_state_t* baseline, edict_t* entity, int playermodelindex, Vector* player_mins, Vector* player_maxs);
 	void (*pfnRegisterEncoders)();
-	int (*pfnGetWeaponData)(struct edict_s* player, struct weapon_data_s* info);
+	int (*pfnGetWeaponData)(edict_t* player, weapon_data_t* info);
 
-	void (*pfnCmdStart)(const edict_t* player, const struct usercmd_s* cmd, unsigned int random_seed);
+	void (*pfnCmdStart)(const edict_t* player, const usercmd_t* cmd, unsigned int random_seed);
 	void (*pfnCmdEnd)(const edict_t* player);
 
 	// Return 1 if the packet is valid.  Set response_buffer_size if you want to send a response packet.  Incoming, it holds the max
@@ -479,21 +489,21 @@ typedef struct
 
 	// One of the pfnForceUnmodified files failed the consistency check for the specified player
 	// Return 0 to allow the client to continue, 1 to force immediate disconnection ( with an optional disconnect message of up to 256 characters )
-	int (*pfnInconsistentFile)(const struct edict_s* player, const char* filename, char* disconnect_message);
+	int (*pfnInconsistentFile)(const edict_t* player, const char* filename, char* disconnect_message);
 
 	// The game .dll should return 1 if lag compensation should be allowed ( could also just set
 	//  the sv_unlag cvar.
 	// Most games right now should return 0, until client-side weapon prediction code is written
 	//  and tested for them.
 	int (*pfnAllowLagCompensation)();
-} DLL_FUNCTIONS;
+};
 
 extern DLL_FUNCTIONS gEntityInterface;
 
 // Current version.
 #define NEW_DLL_FUNCTIONS_VERSION 1
 
-typedef struct
+struct NEW_DLL_FUNCTIONS
 {
 	// Called right before the object's memory is freed.
 	// Calls its destructor.
@@ -502,7 +512,7 @@ typedef struct
 	int (*pfnShouldCollide)(edict_t* pentTouched, edict_t* pentOther);
 	void (*pfnCvarValue)(const edict_t* pEnt, const char* value);
 	void (*pfnCvarValue2)(const edict_t* pEnt, int requestID, const char* cvarName, const char* value);
-} NEW_DLL_FUNCTIONS;
+};
 typedef int (*NEW_DLL_FUNCTIONS_FN)(NEW_DLL_FUNCTIONS* pFunctionTable, int* interfaceVersion);
 
 // Pointers will be null if the game DLL doesn't support this API.

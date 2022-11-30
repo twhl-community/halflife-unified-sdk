@@ -20,17 +20,17 @@
 #define NUM_GLYPHS 256
 // does not exist: // #include "basetypes.h"
 
-typedef struct
+struct charinfo
 {
 	short startoffset;
 	short charwidth;
-} charinfo;
+};
 
-typedef struct qfont_s
+struct qfont_t
 {
 	int width, height;
 	int rowcount;
 	int rowheight;
 	charinfo fontinfo[NUM_GLYPHS];
 	unsigned char data[4];
-} qfont_t;
+};

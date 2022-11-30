@@ -28,7 +28,7 @@ public:
 	void ResetParticles() override;
 	void ApplyForce(Vector vOrigin, Vector vDirection, float flRadius, float flStrength, float flDuration) override;
 
-	CBaseParticle* CreateParticle(Vector org, Vector normal, model_s* sprite, float size, float brightness, const char* classname) override;
+	CBaseParticle* CreateParticle(Vector org, Vector normal, model_t* sprite, float size, float brightness, const char* classname) override;
 
 	void SetRender(int iRender) override;
 };

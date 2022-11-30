@@ -22,10 +22,10 @@
 #include "Platform.h"
 #include "sound/MaterialSystem.h"
 
-struct playermove_s;
+struct playermove_t;
 
-void PM_Init(playermove_s* ppmove);
-void PM_Move(playermove_s* ppmove, qboolean server);
+void PM_Init(playermove_t* ppmove);
+void PM_Move(playermove_t* ppmove, qboolean server);
 
 /**
  *	@brief Engine calls this to enumerate player collision hulls, for prediction. Return false if the hullnumber doesn't exist.
@@ -41,6 +41,6 @@ bool PM_GetHullBounds(int hullnumber, float* mins, float* maxs);
 #define OBS_MAP_FREE 5
 #define OBS_MAP_CHASE 6
 
-extern playermove_s* pmove;
+extern playermove_t* pmove;
 
 inline bool g_CheckForPlayerStuck = false;

@@ -11,7 +11,7 @@
 
 #include "progdefs.h"
 
-struct edict_s
+struct edict_t
 {
 	qboolean free;
 	int serialnumber;

@@ -18,7 +18,7 @@
 
 #include <cstring>
 
-typedef enum
+enum netadrtype_t
 {
 	NA_UNUSED,
 	NA_LOOPBACK,
@@ -26,7 +26,7 @@ typedef enum
 	NA_IP,
 	NA_IPX,
 	NA_BROADCAST_IPX,
-} netadrtype_t;
+};
 
 struct netadr_t
 {

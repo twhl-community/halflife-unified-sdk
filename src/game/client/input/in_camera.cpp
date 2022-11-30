@@ -132,7 +132,7 @@ float MoveToward(float cur, float goal, float maxspeed)
 
 //-------------------------------------------------- Gobal Functions
 
-typedef struct
+struct moveclip_t
 {
 	Vector boxmins, boxmaxs; // enclose the test object along entire move
 	float *mins, *maxs;		 // size of the moving object
@@ -142,7 +142,7 @@ typedef struct
 	int type;
 	edict_t* passedict;
 	qboolean monsterclip;
-} moveclip_t;
+};
 
 void DLLEXPORT CAM_Think()
 {

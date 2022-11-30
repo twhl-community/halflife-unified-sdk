@@ -15,7 +15,7 @@
 
 #pragma once
 
-typedef struct
+struct globalvars_t
 {
 	float time;
 	float frametime;
@@ -49,12 +49,12 @@ typedef struct
 
 	void* pSaveData;
 	Vector vecLandmarkOffset;
-} globalvars_t;
+};
 
 constexpr int NUM_ENT_CONTROLLERS = 4;
 constexpr int NUM_ENT_BLENDERS = 2;
 
-typedef struct entvars_s
+struct entvars_t
 {
 	string_t classname;
 	string_t globalname;
@@ -217,4 +217,4 @@ typedef struct entvars_s
 	edict_t* euser2;
 	edict_t* euser3;
 	edict_t* euser4;
-} entvars_t;
+};

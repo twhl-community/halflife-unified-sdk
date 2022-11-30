@@ -178,7 +178,7 @@ IMPLEMENT_SAVERESTORE(CTentacle, CBaseMonster);
 
 
 // animation sequence aliases
-typedef enum
+enum TENTACLE_ANIM
 {
 	TENTACLE_ANIM_Pit_Idle,
 
@@ -239,7 +239,7 @@ typedef enum
 	TENTACLE_ANIM_Engine_Death3,
 
 	TENTACLE_ANIM_none
-} TENTACLE_ANIM;
+};
 
 void CTentacle::OnCreate()
 {

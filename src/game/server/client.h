@@ -15,6 +15,8 @@
 
 #pragma once
 
+struct clientdata_t;
+
 inline float g_LastPlayerJoinTime;
 
 void respawn(entvars_t* pev, bool fCopyCorpse);
@@ -41,14 +43,14 @@ void PlayerCustomization(edict_t* pEntity, customization_t* pCust);
 void Sys_Error(const char* error_string);
 
 void SetupVisibility(edict_t* pViewEntity, edict_t* pClient, unsigned char** pvs, unsigned char** pas);
-void UpdateClientData(const struct edict_s* ent, int sendweapons, struct clientdata_s* cd);
-int AddToFullPack(struct entity_state_s* state, int e, edict_t* ent, edict_t* host, int hostflags, int player, unsigned char* pSet);
-void CreateBaseline(int player, int eindex, struct entity_state_s* baseline, struct edict_s* entity, int playermodelindex, Vector* player_mins, Vector* player_maxs);
+void UpdateClientData(const edict_t* ent, int sendweapons, clientdata_t* cd);
+int AddToFullPack(entity_state_t* state, int e, edict_t* ent, edict_t* host, int hostflags, int player, unsigned char* pSet);
+void CreateBaseline(int player, int eindex, entity_state_t* baseline, edict_t* entity, int playermodelindex, Vector* player_mins, Vector* player_maxs);
 void RegisterEncoders();
 
-int GetWeaponData(struct edict_s* player, struct weapon_data_s* info);
+int GetWeaponData(edict_t* player, weapon_data_t* info);
 
-void CmdStart(const edict_t* player, const struct usercmd_s* cmd, unsigned int random_seed);
+void CmdStart(const edict_t* player, const usercmd_t* cmd, unsigned int random_seed);
 void CmdEnd(const edict_t* player);
 
 int ConnectionlessPacket(const netadr_t* net_from, const char* args, char* response_buffer, int* response_buffer_size);
