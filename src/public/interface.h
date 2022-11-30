@@ -104,7 +104,7 @@ DLLEXPORT IBaseInterface* CreateInterface(const char* pName, int* pReturnCode);
 };
 
 
-CreateInterfaceFn Sys_GetFactoryThis(void);
+CreateInterfaceFn Sys_GetFactoryThis();
 
 // load/unload components
 class CSysModule;

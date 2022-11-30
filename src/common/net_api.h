@@ -77,11 +77,11 @@ struct net_status_t
 struct net_api_t
 {
 	// APIs
-	void (*InitNetworking)(void);
+	void (*InitNetworking)();
 	void (*Status)(net_status_t* status);
 	void (*SendRequest)(int context, int request, int flags, double timeout, netadr_t* remote_address, net_api_response_func_t response);
 	void (*CancelRequest)(int context);
-	void (*CancelAllRequests)(void);
+	void (*CancelAllRequests)();
 	char* (*AdrToString)(netadr_t* a);
 	int (*CompareAdr)(netadr_t* a, netadr_t* b);
 	int (*StringToAdr)(char* s, netadr_t* a);

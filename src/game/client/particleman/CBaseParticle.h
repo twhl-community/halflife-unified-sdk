@@ -58,8 +58,8 @@ public:
 	}
 
 	virtual void Think(float time);
-	virtual bool CheckVisibility(void);
-	virtual void Draw(void);
+	virtual bool CheckVisibility();
+	virtual void Draw();
 	virtual void Animate(float time);
 	virtual void AnimateAndDie(float time);
 	virtual void Expand(float time);
@@ -69,9 +69,9 @@ public:
 	virtual void CalculateVelocity(float time);
 	virtual void CheckCollision(float time);
 	virtual void Touch(Vector pos, Vector normal, int index);
-	virtual void Die(void);
+	virtual void Die();
 	virtual void InitializeSprite(Vector org, Vector normal, model_t* sprite, float size, float brightness);
-	virtual void Force(void);
+	virtual void Force();
 
 	float m_flSize;			 // scale of object
 	float m_flScaleSpeed;	 // speed at which object expands
@@ -133,12 +133,12 @@ public:
 		m_iRenderFlags |= iFlag;
 	}
 
-	int GetRenderFlags(void)
+	int GetRenderFlags()
 	{
 		return m_iRenderFlags;
 	}
 
-	bool GetParticlePVS(void)
+	bool GetParticlePVS()
 	{
 		return m_bInPVS;
 	}
@@ -148,7 +148,7 @@ public:
 		m_bInPVS = bPVSStat;
 	}
 
-	float GetNextPVSCheck(void)
+	float GetNextPVSCheck()
 	{
 		return m_flNextPVSCheck;
 	}
@@ -168,7 +168,7 @@ public:
 		m_iCollisionFlags &= ~iFlag;
 	}
 
-	int GetCollisionFlags(void)
+	int GetCollisionFlags()
 	{
 		return m_iCollisionFlags;
 	}

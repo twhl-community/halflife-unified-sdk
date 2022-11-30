@@ -45,7 +45,7 @@ public:
 	virtual void createPopup(Panel* embeddedPanel) = 0;
 	virtual bool hasFocus() = 0;
 	virtual bool isWithin(int x, int y) = 0;
-	virtual int createNewTextureID(void) = 0;
+	virtual int createNewTextureID() = 0;
 	virtual void GetMousePos(int& x, int& y) = 0;
 
 protected:

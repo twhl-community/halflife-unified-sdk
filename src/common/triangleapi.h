@@ -39,7 +39,7 @@ struct triangleapi_t
 
 	void (*RenderMode)(int mode);
 	void (*Begin)(int primitiveCode);
-	void (*End)(void);
+	void (*End)();
 
 	void (*Color4f)(float r, float g, float b, float a);
 	void (*Color4ub)(unsigned char r, unsigned char g, unsigned char b, unsigned char a);

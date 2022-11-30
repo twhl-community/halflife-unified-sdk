@@ -59,7 +59,7 @@ extern globalvars_t gGlobalVariables;
 
 //============================================================================
 
-edict_t* ED_Alloc(void);
+edict_t* ED_Alloc();
 void ED_Free(edict_t* ed);
 void ED_LoadFromFile(char* data);
 

@@ -28,7 +28,7 @@ struct ScreenShake
 };
 
 void V_ApplyShake(float* origin, float* angles, float factor);
-void V_CalcShake(void);
+void V_CalcShake();
 int V_ScreenShake(const char* pszName, int iSize, void* pbuf);
 int V_ScreenFade(const char* pszName, int iSize, void* pbuf);
 

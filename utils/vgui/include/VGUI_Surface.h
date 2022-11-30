@@ -34,7 +34,7 @@ public:
 	virtual void GetMousePos(int& x, int& y);
 
 protected:
-	virtual int createNewTextureID(void);
+	virtual int createNewTextureID();
 	virtual void drawSetColor(int r, int g, int b, int a);
 	virtual void drawFilledRect(int x0, int y0, int x1, int y1);
 	virtual void drawOutlinedRect(int x0, int y0, int x1, int y1);

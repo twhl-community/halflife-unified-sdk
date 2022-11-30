@@ -60,11 +60,11 @@ class IFileSystem : public IBaseInterface
 {
 public:
 	// Mount and unmount the filesystem
-	virtual void Mount(void) = 0;
-	virtual void Unmount(void) = 0;
+	virtual void Mount() = 0;
+	virtual void Unmount() = 0;
 
 	// Remove all search paths (including write path?)
-	virtual void RemoveAllSearchPaths(void) = 0;
+	virtual void RemoveAllSearchPaths() = 0;
 
 	// Add paths in priority order (mod dir, game dir, ....)
 	// If one or more .pak files are in the specified directory, then they are
@@ -139,7 +139,7 @@ public:
 	virtual bool GetCurrentDirectory(char* pDirectory, int maxlen) = 0;
 
 	// Dump to printf/OutputDebugString the list of files that have not been closed
-	virtual void PrintOpenedFiles(void) = 0;
+	virtual void PrintOpenedFiles() = 0;
 
 	virtual void SetWarningFunc(void (*pfnWarning)(const char* fmt, ...)) = 0;
 	virtual void SetWarningLevel(FileWarningLevel_t level) = 0;
@@ -147,8 +147,8 @@ public:
 	virtual void LogLevelLoadStarted(const char* name) = 0;
 	virtual void LogLevelLoadFinished(const char* name) = 0;
 	virtual int HintResourceNeed(const char* hintlist, int forgetEverything) = 0;
-	virtual int PauseResourcePreloading(void) = 0;
-	virtual int ResumeResourcePreloading(void) = 0;
+	virtual int PauseResourcePreloading() = 0;
+	virtual int ResumeResourcePreloading() = 0;
 	virtual int SetVBuf(FileHandle_t stream, char* buffer, int mode, long size) = 0;
 	virtual void GetInterfaceVersion(char* p, int maxlen) = 0;
 	virtual bool IsFileImmediatelyAvailable(const char* pFileName) = 0;
