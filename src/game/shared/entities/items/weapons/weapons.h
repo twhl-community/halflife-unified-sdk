@@ -382,6 +382,12 @@ public:
 	virtual void DoRetireWeapon();
 	virtual bool ShouldWeaponIdle() { return false; }
 	void Holster() override;
+
+	/**
+	*	@brief Whether to use relative time values that are decremented every frame or absolute time values.
+	*	Relative time values are required for predicted weapons.
+	*	@see UTIL_WeaponTimeBase
+	*/
 	virtual bool UseDecrement() { return false; }
 
 	int PrimaryAmmoIndex() override;
