@@ -1,19 +1,13 @@
 # Packager
 
+> **Note**
+> This is a [.NET tool](/docs/dotnet-tools.md)
+
+> **Note**
+> This tool is included in the `hlu/tools` directory in the game installation package available [here](https://github.com/SamVanheer/halflife-unified-sdk/releases)
+
 The Packager tool is used to create a zip archive containing a mod installation.
-
-This tool is included in the `hlu/tools` directory in the game installation package available here: https://github.com/SamVanheer/halflife-unified-sdk/releases
-
-## Purpose
-
-When executed this tool creates a zip archive containing a mod installation.
 Old packages will be removed automatically on successful completion.
-
-## Prerequisites
-
-### Install the .NET SDK
-
-See [Setting up the .NET SDK](/docs/tutorials/setting-up-dotnet-sdk.md)
 
 ## Usage
 

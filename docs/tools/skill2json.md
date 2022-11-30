@@ -1,18 +1,12 @@
 # Skill2Json
 
+> **Note**
+> This is a [.NET tool](/docs/dotnet-tools.md)
+
+> **Note**
+> This tool is included in the `hlu/tools` directory in the game installation package available [here](https://github.com/SamVanheer/halflife-unified-sdk/releases)
+
 The Skill2Json tool is used to convert Half-Life 1 `skill.cfg` files to the Unified SDK's `skill.json` format.
-
-This tool is included in the `hlu/tools` directory in the game installation package available here: https://github.com/SamVanheer/halflife-unified-sdk/releases
-
-## Purpose
-
-When executed this tool converts `skill.cfg` to `skill.json`.
-
-## Prerequisites
-
-### Install the .NET SDK
-
-See [Setting up the .NET SDK](/docs/tutorials/setting-up-dotnet-sdk.md)
 
 ## Usage
 

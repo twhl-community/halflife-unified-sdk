@@ -1,27 +1,23 @@
 # AssetSynchronizer
 
+> **Note**
+> This is a [.NET tool](/docs/dotnet-tools.md)
+
+> **Note**
+> This tool is included in the `hlu/tools` directory in the game installation package available [here](https://github.com/SamVanheer/halflife-unified-sdk/releases)
+
 The AssetSynchronizer tool is used to automatically copy assets from the assets repository to the game installation.
 
-This tool is included in the `hlu/tools` directory in the game installation package available here: https://github.com/SamVanheer/halflife-unified-sdk/releases
-
-# Purpose
-
-When executed this tool copies any files that are different from the assets repository to the mod installation.
 While active it monitors the files and copies them automatically on change, creation or rename.
 
-Files are not deleted from the destination directory.
+Files are not deleted from the destination directory if they are deleted from the source directory.
 
-**Note**: make sure to make regular backups of your files. This tool can and will overwrite files without warning, and you will not be able to recover the file's previous contents.
+> **Note**
+> Make sure to make regular backups of your files. This tool can and will overwrite files without warning, and you will not be able to recover the file's previous contents.
 
-# Prerequisites
+## Usage
 
-## Install the .NET SDK
-
-See [Setting up the .NET SDK](/docs/tutorials/setting-up-dotnet-sdk.md)
-
-# Usage
-
-## Command line
+### Command line
 
 ```
 dotnet "path/to/HalfLife.UnifiedSdk.AssetSynchronizer.dll"
@@ -46,11 +42,11 @@ dotnet "path/to/HalfLife.UnifiedSdk.AssetSynchronizer.dll"^
 
 You can then execute the batch file without having to provide the arguments every time.
 
-# Error reporting
+## Error reporting
 
 If any errors occur the tool will log it to the console. Typical errors are files being read-only, attempting to copy a file when a directory with the same name exists, or files having security settings prohibiting copying or overwriting.
 
-# AssetManifest.json format
+## AssetManifest.json format
 
 The asset manifest file contains a list of filters used to control which directories and files are copied.
 

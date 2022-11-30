@@ -1,19 +1,13 @@
 # Installer
 
+> **Note**
+> This is a [.NET tool](/docs/dotnet-tools.md)
+
+> **Note**
+> This tool is included in the `hlu/tools` directory in the game installation package available [here](https://github.com/SamVanheer/halflife-unified-sdk/releases)
+
 The Installer tool is used to copy, convert and upgrade Half-Life game assets for a mod installation.
-
-This tool is included in the `hlu/tools` directory in the game installation package available here: https://github.com/SamVanheer/halflife-unified-sdk/releases
-
-## Purpose
-
-When executed this tool copies, converts and upgrades Half-Life game assets for a mod installation.
-This will copy campaign and training maps and apply any necessary upgrades and bug fixes.
-
-## Prerequisites
-
-### Install the .NET SDK
-
-See [Setting up the .NET SDK](/docs/tutorials/setting-up-dotnet-sdk.md)
+This will copy campaign, training and multiplayer maps and apply any necessary upgrades and bug fixes.
 
 ## Usage
 

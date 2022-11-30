@@ -1,18 +1,12 @@
 # KeyValueMatcher
 
+> **Note**
+> This is a [.NET tool](/docs/dotnet-tools.md)
+
+> **Note**
+> This tool is included in the `hlu/tools` directory in the game installation package available [here](https://github.com/SamVanheer/halflife-unified-sdk/releases)
+
 The KeyValueMatcher tool is used to scan all of the BSP files in a directory for specific patterns.
-
-This tool is included in the `hlu/tools` directory in the game installation package available here: https://github.com/SamVanheer/halflife-unified-sdk/releases
-
-## Purpose
-
-When executed this tool scans BSP files for specific patterns.
-
-## Prerequisites
-
-### Install the .NET SDK
-
-See [Setting up the .NET SDK](/docs/tutorials/setting-up-dotnet-sdk.md)
 
 ## Usage
 

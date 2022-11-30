@@ -1,18 +1,16 @@
 # MapCfgGenerator
 
-The MapCfgGenerator script is used to generate map configuration files for official Half-Life, Opposing Force and Blue Shift maps.
+> **Note**
+> This is a [dotnet script tool](/docs/tutorials/setting-up-and-using-dotnet-script.md)
 
-This tool is included in the `scripts` directory in the [assets repository](https://github.com/SamVanheer/halflife-unified-sdk-assets).
+> **Note**
+> This tool is included in the `scripts` directory in the [assets repository](https://github.com/SamVanheer/halflife-unified-sdk-assets)
+
+The MapCfgGenerator script is used to generate map configuration files for official Half-Life, Opposing Force and Blue Shift maps.
 
 ## Purpose
 
 When executed this script generates a set of JSON files in the specified directory. These files all have the same contents for a particular game.
-
-## Prerequisites
-
-### Install dotnet script
-
-See [Setting up and using dotnet script](/docs/tutorials/setting-up-and-using-dotnet-script.md)
 
 ## Usage
 
