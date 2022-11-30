@@ -38,11 +38,11 @@ struct event_api_t
 	void (*EV_PopPMStates)();
 	void (*EV_SetSolidPlayers)(int playernum);
 	void (*EV_SetTraceHull)(int hull);
-	void (*EV_PlayerTrace)(float* start, float* end, int traceFlags, int ignore_pe, pmtrace_t* tr);
+	void (*EV_PlayerTrace)(const float* start, const float* end, int traceFlags, int ignore_pe, pmtrace_t* tr);
 	void (*EV_WeaponAnimation)(int sequence, int body);
 	unsigned short (*EV_PrecacheEvent)(int type, const char* psz);
-	void (*EV_PlaybackEvent)(int flags, const edict_t* pInvoker, unsigned short eventindex, float delay, float* origin, float* angles, float fparam1, float fparam2, int iparam1, int iparam2, int bparam1, int bparam2);
-	const char* (*EV_TraceTexture)(int ground, float* vstart, float* vend);
+	void (*EV_PlaybackEvent)(int flags, const edict_t* pInvoker, unsigned short eventindex, float delay, const float* origin, const float* angles, float fparam1, float fparam2, int iparam1, int iparam2, int bparam1, int bparam2);
+	const char* (*EV_TraceTexture)(int ground, const float* vstart, const float* vend);
 	void (*EV_StopAllSounds)(int entnum, int entchannel);
 	void (*EV_KillEvents)(int entnum, const char* eventname);
 };
