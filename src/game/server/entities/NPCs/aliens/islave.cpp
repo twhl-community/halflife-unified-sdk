@@ -413,11 +413,6 @@ void CISlave::HandleAnimEvent(MonsterEvent_t* pEvent)
 				WackBeam(1, pNew);
 				UTIL_Remove(m_hDead);
 				EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "hassault/hw_shoot1.wav", 1, ATTN_NORM, 0, RANDOM_LONG(130, 160));
-
-				/*
-				CBaseEntity *pEffect = Create( "test_effect", pNew->Center(), pev->angles );
-				pEffect->Use( this, this, USE_ON, 1 );
-				*/
 				break;
 			}
 		}
