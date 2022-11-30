@@ -22,9 +22,17 @@ Materials are only generated if the texture is embedded in the BSP file, otherwi
 ### Command line
 
 ```
-dotnet "path/to/HalfLife.UnifiedSdk.Bsp2Obj.dll"
---destination "path/to/destination/directory"
-<bsp filename>
+Usage:
+  HalfLife.UnifiedSdk.Bsp2Obj <filename> [options]
+
+Arguments:
+  <filename>  Path to the BSP file
+
+Options:
+  --destination <destination>  Directory to save the OBJ, material and texture files to. If not provided the files will
+                               be saved to the directory that the source file is located in []
+  --version                    Show version information
+  -?, -h, --help               Show help and usage information
 ```
 
 The `destination` parameter specifies where to save generated files. If not specified the files are saved in the same directory as the BSP file.

@@ -14,9 +14,19 @@ This will apply any necessary upgrades and bug fixes.
 ### Command line
 
 ```
-dotnet "path/to/HalfLife.UnifiedSdk.MapUpgrader.dll"
---game "gameModDirectoryName"
---maps "path/to/map.bsp" ["path/to/other_map.bsp"] [...]
+Usage:
+  HalfLife.UnifiedSdk.MapUpgrader [<maps>...] [options]
+
+Arguments:
+  <maps>  List of maps to upgrade
+
+Options:
+  --game                                                      The name of a game's mod directory to apply upgrades for
+  <bshift|cstrike|czero|czeror|dod|gearbox|ricochet|tfc|valv  that game [default: valve]
+  e>
+  --diagnostics-level <All|Common|Disabled>                   The diagnostics level to set [default: Disabled]
+  --version                                                   Show version information
+  -?, -h, --help                                              Show help and usage information
 ```
 
 The game parameter is the mod directory name of the game the maps originate from. If not specified, the map will be treated as a vanilla Half-Life 1 map.

@@ -14,9 +14,15 @@ This will copy campaign, training and multiplayer maps and apply any necessary u
 ### Command line
 
 ```
-dotnet "path/to/HalfLife.UnifiedSdk.Installer.dll"
---mod-directory "path/to/half-life/unified/sdk/mod"
-[--dry-run]
+Usage:
+  HalfLife.UnifiedSdk.Installer [options]
+
+Options:
+  --mod-directory <mod-directory>            Path to the mod directory
+  --dry-run                                  If provided no file changes will be written to disk
+  --diagnostics-level <All|Common|Disabled>  The diagnostics level to set [default: Disabled]
+  --version                                  Show version information
+  -?, -h, --help                             Show help and usage information
 ```
 
 The mod directory should point to your local copy of the [mod installation](/INSTALL.md).

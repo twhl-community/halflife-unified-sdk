@@ -20,10 +20,15 @@ Files are not deleted from the destination directory if they are deleted from th
 ### Command line
 
 ```
-dotnet "path/to/HalfLife.UnifiedSdk.AssetSynchronizer.dll"
---assets-directory "path/to/assets/repository"
---mod-directory "path/to/half-life/unified/sdk/mod"
---asset-manifest "path/to/AssetManifest.json"
+Usage:
+  HalfLife.UnifiedSdk.AssetSynchronizer [options]
+
+Options:
+  --assets-directory <assets-directory>  Path to the assets directory
+  --mod-directory <mod-directory>        Path to the mod directory
+  --asset-manifest <asset-manifest>      Path to the asset manifest file
+  --version                              Show version information
+  -?, -h, --help                         Show help and usage information
 ```
 
 The assets directory should point to your local copy of the [assets repository](https://github.com/SamVanheer/halflife-unified-sdk-assets).

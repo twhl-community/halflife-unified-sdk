@@ -13,9 +13,16 @@ The Skill2Json tool is used to convert Half-Life 1 `skill.cfg` files to the Unif
 ### Command line
 
 ```
-dotnet "path/to/HalfLife.UnifiedSdk.Skill2Json.dll"
---output-filename "path/to/destination/file.json"
-<filename>
+Usage:
+  HalfLife.UnifiedSdk.Skill2Json <filename> [options]
+
+Arguments:
+  <filename>  skill.cfg to convert
+
+Options:
+  --output-filename <output-filename>  If provided, the name of the file to write the skill.json contents to []
+  --version                            Show version information
+  -?, -h, --help                       Show help and usage information
 ```
 
 The `output-filename` parameter specifies where to save the converted file. If not specified the file is saved to the source directory with the same name and `json` extension.

@@ -14,11 +14,17 @@ Old packages will be removed automatically on successful completion.
 ### Command line
 
 ```
-dotnet "path/to/HalfLife.UnifiedSdk.Packager.dll"
---mod-directory "path/to/half-life/unified/sdk/mod"
---package-manifest "path/to/PackageManifest.json"
---package-name "PackagePrefix"
-[--verbose]
+Usage:
+  HalfLife.UnifiedSdk.Packager [options]
+
+Options:
+  --mod-directory <mod-directory> (REQUIRED)        Path to the mod directory
+  --package-manifest <package-manifest> (REQUIRED)  Path to the package manifest file
+  --package-name <package-name> (REQUIRED)          Base name of the package
+  --verbose                                         Log additional information [default: False]
+  --list-omitted                                    List files that were omitted from the package [default: False]
+  --version                                         Show version information
+  -?, -h, --help                                    Show help and usage information
 ```
 The mod directory should point to your local copy of the [mod installation](/INSTALL.md).
 

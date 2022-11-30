@@ -13,17 +13,17 @@ The KeyValueMatcher tool is used to scan all of the BSP files in a directory for
 ### Command line
 
 ```
-dotnet "path/to/HalfLife.UnifiedSdk.KeyValueMatcher.dll" [options]
-```
+Usage:
+  HalfLife.UnifiedSdk.KeyValueMatcher [options]
 
-#### Options:
-
-```
---maps-directory <maps-directory> (REQUIRED)  Path to the maps directory to search
---print-mode <Entity|KeyValue|Nothing>        What to print when a match is found [default: KeyValue]
---classname <classname>                       Classname regex pattern
---key <key>                                   Key regex pattern
---value <value>                               Value regex pattern
+Options:
+  --maps-directory <maps-directory> (REQUIRED)  Path to the maps directory to search
+  --print-mode <Entity|KeyValue|Nothing>        What to print when a match is found [default: KeyValue]
+  --classname <classname>                       Classname regex pattern
+  --key <key>                                   Key regex pattern
+  --value <value>                               Value regex pattern
+  --version                                     Show version information
+  -?, -h, --help                                Show help and usage information
 ```
 
 Regular expressions are used to match against entity data. If a pattern isn't provided then it will be treated as though it matches everything (`.*`).
