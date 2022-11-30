@@ -215,10 +215,12 @@ CBaseEntity* UTIL_FindEntityByClassname(CBaseEntity* pStartEntity, const char* s
 CBaseEntity* UTIL_FindEntityByTargetname(CBaseEntity* pStartEntity, const char* szName);
 CBaseEntity* UTIL_FindEntityGeneric(const char* szName, Vector& vecSrc, float flRadius);
 
-// returns a CBaseEntity pointer to a player by index.  Only returns if the player is spawned and connected
-// otherwise returns nullptr
-// Index is 1 based
-CBaseEntity* UTIL_PlayerByIndex(int playerIndex);
+/**
+*	@brief returns a CBasePlayer pointer to a player by index.
+*	Only returns if the player is spawned and connected, otherwise returns nullptr.
+*	@param playerIndex 1 based player index
+*/
+CBasePlayer* UTIL_PlayerByIndex(int playerIndex);
 
 /**
  *	@brief Finds the player nearest to the given origin.

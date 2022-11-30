@@ -473,16 +473,16 @@ CBaseEntity* UTIL_FindEntityGeneric(const char* szWhatever, Vector& vecSrc, floa
 // returns a CBaseEntity pointer to a player by index.  Only returns if the player is spawned and connected
 // otherwise returns nullptr
 // Index is 1 based
-CBaseEntity* UTIL_PlayerByIndex(int playerIndex)
+CBasePlayer* UTIL_PlayerByIndex(int playerIndex)
 {
-	CBaseEntity* pPlayer = nullptr;
+	CBasePlayer* pPlayer = nullptr;
 
 	if (playerIndex > 0 && playerIndex <= gpGlobals->maxClients)
 	{
 		edict_t* pPlayerEdict = INDEXENT(playerIndex);
 		if (pPlayerEdict && 0 == pPlayerEdict->free)
 		{
-			pPlayer = CBaseEntity::Instance(pPlayerEdict);
+			pPlayer = static_cast<CBasePlayer*>(CBaseEntity::Instance(pPlayerEdict));
 		}
 	}
 
