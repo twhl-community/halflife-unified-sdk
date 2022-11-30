@@ -340,10 +340,10 @@ public:
 	void StartDeathCam();
 	void StartObserver(Vector vecPosition, Vector vecViewAngle);
 
-	void AddPoints(int score, bool bAllowNegativeScore) override;
-	void AddPointsToTeam(int score, bool bAllowNegativeScore) override;
-	bool AddPlayerItem(CBasePlayerItem* pItem) override;
-	bool RemovePlayerItem(CBasePlayerItem* pItem) override;
+	void AddPoints(int score, bool bAllowNegativeScore);
+	void AddPointsToTeam(int score, bool bAllowNegativeScore);
+	bool AddPlayerItem(CBasePlayerItem* pItem);
+	bool RemovePlayerItem(CBasePlayerItem* pItem);
 	void DropPlayerItem(const char* pszItemName);
 	bool HasPlayerItem(CBasePlayerItem* pCheckItem);
 	bool HasNamedPlayerItem(const char* pszItemName);
@@ -358,7 +358,7 @@ public:
 	void GiveNamedItem(const char* szName, int defaultAmmo);
 	void EnableControl(bool fControl);
 
-	int GiveAmmo(int iAmount, const char* szName, int iMax) override;
+	int GiveAmmo(int iAmount, const char* szName, int iMax);
 	void SendAmmoUpdate();
 	void SendSingleAmmoUpdate(int ammoIndex);
 

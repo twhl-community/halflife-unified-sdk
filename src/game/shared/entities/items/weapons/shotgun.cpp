@@ -388,7 +388,7 @@ public:
 		CBasePlayerAmmo::Precache();
 		PrecacheSound("items/9mmclip1.wav");
 	}
-	bool AddAmmo(CBaseEntity* pOther) override
+	bool AddAmmo(CBasePlayer* pOther) override
 	{
 		if (pOther->GiveAmmo(AMMO_BUCKSHOTBOX_GIVE, "buckshot", BUCKSHOT_MAX_CARRY) != -1)
 		{

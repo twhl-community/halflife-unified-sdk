@@ -244,11 +244,6 @@ public:
 	virtual CSquadMonster* MySquadMonsterPointer() { return nullptr; }
 	virtual COFSquadTalkMonster* MySquadTalkMonsterPointer() { return nullptr; }
 	virtual int GetToggleState() { return TS_AT_TOP; }
-	virtual void AddPoints(int score, bool bAllowNegativeScore) {}
-	virtual void AddPointsToTeam(int score, bool bAllowNegativeScore) {}
-	virtual bool AddPlayerItem(CBasePlayerItem* pItem) { return 0; }
-	virtual bool RemovePlayerItem(CBasePlayerItem* pItem) { return 0; }
-	virtual int GiveAmmo(int iAmount, const char* szName, int iMax) { return -1; }
 	virtual float GetDelay() { return 0; }
 	virtual bool IsMoving() { return pev->velocity != g_vecZero; }
 	virtual void OverrideReset() {}

@@ -379,7 +379,7 @@ public:
 		PrecacheSound("items/9mmclip1.wav");
 	}
 
-	bool AddAmmo(CBaseEntity* pOther) override
+	bool AddAmmo(CBasePlayer* pOther) override
 	{
 		if (pOther->GiveAmmo(AMMO_M249_GIVE, "556", M249_MAX_CARRY) != -1)
 		{

@@ -592,7 +592,7 @@ void CBasePlayerItem::DefaultTouch(CBaseEntity* pOther)
 		return;
 	}
 
-	if (pOther->AddPlayerItem(this))
+	if (pPlayer->AddPlayerItem(this))
 	{
 		AttachToPlayer(pPlayer);
 		EMIT_SOUND(ENT(pPlayer->pev), CHAN_ITEM, "items/gunpickup2.wav", 1, ATTN_NORM);
@@ -973,7 +973,9 @@ void CBasePlayerAmmo::DefaultTouch(CBaseEntity* pOther)
 		return;
 	}
 
-	if (AddAmmo(pOther))
+	auto player = static_cast<CBasePlayer*>(pOther);
+
+	if (AddAmmo(player))
 	{
 		if (g_pGameRules->AmmoShouldRespawn(this) == GR_AMMO_RESPAWN_YES)
 		{

@@ -280,7 +280,7 @@ public:
 		CBasePlayerAmmo::Precache();
 		PrecacheSound("items/9mmclip1.wav");
 	}
-	bool AddAmmo(CBaseEntity* pOther) override
+	bool AddAmmo(CBasePlayer* pOther) override
 	{
 		bool bResult = (pOther->GiveAmmo(AMMO_MP5CLIP_GIVE, "9mm", _9MM_MAX_CARRY) != -1);
 		if (bResult)
@@ -310,7 +310,7 @@ public:
 		CBasePlayerAmmo::Precache();
 		PrecacheSound("items/9mmclip1.wav");
 	}
-	bool AddAmmo(CBaseEntity* pOther) override
+	bool AddAmmo(CBasePlayer* pOther) override
 	{
 		bool bResult = (pOther->GiveAmmo(AMMO_CHAINBOX_GIVE, "9mm", _9MM_MAX_CARRY) != -1);
 		if (bResult)
@@ -338,7 +338,7 @@ public:
 		CBasePlayerAmmo::Precache();
 		PrecacheSound("items/9mmclip1.wav");
 	}
-	bool AddAmmo(CBaseEntity* pOther) override
+	bool AddAmmo(CBasePlayer* pOther) override
 	{
 		bool bResult = (pOther->GiveAmmo(AMMO_M203BOX_GIVE, "ARgrenades", M203_GRENADE_MAX_CARRY) != -1);
 

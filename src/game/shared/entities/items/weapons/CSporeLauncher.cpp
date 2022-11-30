@@ -457,7 +457,7 @@ public:
 		return false;
 	}
 
-	bool AddAmmo(CBaseEntity* pOther) override
+	bool AddAmmo(CBasePlayer* pOther) override
 	{
 		if (pOther->GiveAmmo(AMMO_SPORE_GIVE, "spores", SPORELAUNCHER_MAX_CARRY) != -1)
 		{
@@ -510,7 +510,9 @@ public:
 		if (!pOther->IsPlayer() || pev->body == SPOREAMMOBODY_EMPTY)
 			return;
 
-		if (AddAmmo(pOther))
+		auto player = static_cast<CBasePlayer*>(pOther);
+
+		if (AddAmmo(player))
 		{
 			pev->body = SPOREAMMOBODY_EMPTY;
 
