@@ -40,7 +40,7 @@ typedef int fixed16_t;
 
 constexpr double PI = std::numbers::pi;
 
-struct mplane_s;
+struct mplane_t;
 
 constexpr Vector vec3_origin(0, 0, 0);
 constexpr Vector g_vecZero(0, 0, 0);
