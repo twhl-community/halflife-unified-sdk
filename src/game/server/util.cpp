@@ -1763,10 +1763,9 @@ void CSave::WriteFunction(const char* pname, void** data, int count)
 
 void EntvarsKeyvalue(entvars_t* pev, KeyValueData* pkvd)
 {
-	int i;
 	TYPEDESCRIPTION* pField;
 
-	for (i = 0; i < std::size(gEntvarsDescription); i++)
+	for (std::size_t i = 0; i < std::size(gEntvarsDescription); ++i)
 	{
 		pField = &gEntvarsDescription[i];
 
