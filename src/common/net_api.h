@@ -89,5 +89,3 @@ struct net_api_t
 	void (*RemoveKey)(char* s, const char* key);
 	void (*SetValueForKey)(char* s, const char* key, const char* value, int maxsize);
 };
-
-extern net_api_t netapi;

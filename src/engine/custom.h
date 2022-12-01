@@ -33,17 +33,6 @@ enum resourcetype_t
 	t_world, // Fake type for world, is really t_model
 };
 
-
-struct _resourceinfo_t
-{
-	int size;
-};
-
-struct resourceinfo_t
-{
-	_resourceinfo_t info[8];
-};
-
 #define RES_FATALIFMISSING (1 << 0) // Disconnect if we can't get this file.
 #define RES_WASMISSING (1 << 1)		// Do we have the file locally, did we get it ok?
 #define RES_CUSTOM (1 << 2)			// Is this resource one that corresponds to another player's customization
@@ -52,8 +41,6 @@ struct resourceinfo_t
 #define RES_PRECACHED (1 << 4) // Already precached
 #define RES_ALWAYS (1 << 5)	   // download always even if available on client
 #define RES_CHECKFILE (1 << 7) // check file on client
-
-#include "crc.h"
 
 struct resource_t
 {
@@ -88,8 +75,3 @@ struct customization_t
 #define FCUST_FROMHPAK (1 << 0)
 #define FCUST_WIPEDATA (1 << 1)
 #define FCUST_IGNOREINIT (1 << 2)
-
-void COM_ClearCustomizationList(customization_t* pHead, qboolean bCleanDecals);
-qboolean COM_CreateCustomization(customization_t* pListHead, resource_t* pResource, int playernumber, int flags,
-	customization_t** pCustomization, int* nLumps);
-int COM_SizeofResourceList(resource_t* pList, resourceinfo_t* ri);

@@ -101,7 +101,7 @@ void AngleVectorsTranspose(const Vector& angles, Vector* forward, Vector* right,
 	}
 }
 
-void AngleMatrix(const float* angles, float (*matrix)[4])
+void AngleMatrix(const float* angles, float matrix[3][4])
 {
 	float angle;
 	float sr, sp, sy, cr, cp, cy;

@@ -718,8 +718,6 @@ enum
 	kRenderFxLightMultiplier, // CTM !!!CZERO added to tell the studiorender that the value in iuser2 is a lightmultiplier
 };
 
-#define _DEF_BYTE_
-
 struct color24
 {
 	byte r, g, b;
@@ -728,11 +726,6 @@ struct color24
 struct colorVec
 {
 	unsigned r, g, b, a;
-};
-
-struct PackedColorVec
-{
-	unsigned short r, g, b, a;
 };
 
 struct link_t

@@ -235,15 +235,12 @@ target_sources(client PRIVATE
 	../../common/common_types.h
 	../../common/const.h
 	../../common/con_nprint.h
-	../../common/crc.h
 	../../common/cvardef.h
 	../../common/demo_api.h
 	../../common/director_cmds.h
 	../../common/dlight.h
-	../../common/dll_state.h
 	../../common/entity_state.h
 	../../common/entity_types.h
-	../../common/enums.h
 	../../common/event_api.h
 	../../common/event_args.h
 	../../common/event_flags.h
@@ -260,16 +257,16 @@ target_sources(client PRIVATE
 	../../common/Platform.h
 	../../common/PlatformHeaders.h
 	../../common/pmtrace.h
-	../../common/qfont.h
 	../../common/ref_params.h
 	../../common/r_efx.h
 	../../common/r_studioint.h
 	../../common/screenfade.h
 	../../common/Sequence.h
-	../../common/studio_event.h
 	../../common/triangleapi.h
 	../../common/usercmd.h
 	../../common/weaponinfo.h
+	../../common/winsani_in.h
+	../../common/winsani_out.h
 
 	../../engine/APIProxy.h
 	../../engine/cdll_int.h
@@ -277,6 +274,10 @@ target_sources(client PRIVATE
 	../../engine/customentity.h
 	../../engine/edict.h
 	../../engine/eiface.h
+	../../engine/progdefs.h
+	../../engine/progs.h
+	../../engine/shake.h
+	../../engine/studio.h
 
 	../../public/FileSystem.h
 	../../public/interface.cpp

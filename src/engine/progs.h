@@ -16,54 +16,10 @@
 #pragma once
 
 #include "progdefs.h"
-
-// 16 simultaneous events, max
-#define MAX_EVENT_QUEUE 64
-
-#define DEFAULT_EVENT_RESENDS 1
-
 #include "event_flags.h"
 #include "event_args.h"
-
-struct event_info_t
-{
-	unsigned short index; // 0 implies not in use
-
-	short packet_index; // Use data from state info for entity in delta_packet .  -1 implies separate info based on event
-						// parameter signature
-	short entity_index; // The edict this event is associated with
-
-	float fire_time; // if non-zero, the time when the event should be fired ( fixed up on the client )
-
-	event_args_t args;
-
-	// CLIENT ONLY
-	int flags; // Reliable or not, etc.
-};
-
-struct event_state_t
-{
-	event_info_t ei[MAX_EVENT_QUEUE];
-};
-
 #include "entity_state.h"
 #include "edict.h"
 
 #define STRUCT_FROM_LINK(l, t, m) ((t*)((byte*)l - (int)&(((t*)0)->m)))
 #define EDICT_FROM_AREA(l) STRUCT_FROM_LINK(l, edict_t, area)
-
-//============================================================================
-
-extern char* pr_strings;
-extern globalvars_t gGlobalVariables;
-
-//============================================================================
-
-edict_t* ED_Alloc();
-void ED_Free(edict_t* ed);
-void ED_LoadFromFile(char* data);
-
-edict_t* EDICT_NUM(int n);
-int NUM_FOR_EDICT(const edict_t* e);
-
-#define PROG_TO_EDICT(e) ((edict_t*)((byte*)sv.edicts + e))

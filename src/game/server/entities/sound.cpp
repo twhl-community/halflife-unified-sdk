@@ -23,9 +23,6 @@
 #include "gamerules.h"
 #include "sound/MaterialSystem.h"
 
-static char* memfgets(byte* pMemFile, int fileSize, int& filePos, char* pBuffer, int bufferSize);
-
-
 // ==================== GENERIC AMBIENT SOUND ======================================
 
 // runtime pitch shift and volume fadein/out structure

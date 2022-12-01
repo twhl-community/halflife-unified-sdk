@@ -22,5 +22,3 @@ struct demo_api_t
 	int (*IsTimeDemo)();
 	void (*WriteBuffer)(int size, unsigned char* buffer);
 };
-
-extern demo_api_t demoapi;

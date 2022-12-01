@@ -33,6 +33,8 @@ struct playermove_t;
 struct usercmd_t;
 struct weapon_data_t;
 
+using CRC32_t = std::uint32_t;
+
 //
 // Defines entity interface between engine and DLLs.
 // This header file included by engine files and DLL files.
@@ -83,23 +85,6 @@ struct TraceResult
 	edict_t* pHit;		   // entity the surface is on
 	int iHitgroup;		   // 0 == generic, non zero is specific body part
 };
-
-// CD audio status
-struct CDStatus
-{
-	int fPlaying;	 // is sound playing right now?
-	int fWasPlaying; // if not, CD is paused if WasPlaying is true.
-	int fInitialized;
-	int fEnabled;
-	int fPlayLooping;
-	float cdvolume;
-	// byte 	remap[100];
-	int fCDRom;
-	int fPlayTrack;
-};
-
-#include "../common/crc.h"
-
 
 // Engine hands this to DLLs for functionality callbacks
 struct enginefuncs_t
@@ -498,11 +483,10 @@ struct DLL_FUNCTIONS
 	int (*pfnAllowLagCompensation)();
 };
 
-extern DLL_FUNCTIONS gEntityInterface;
-
 // Current version.
 #define NEW_DLL_FUNCTIONS_VERSION 1
 
+// Pointers will be null if the game DLL doesn't support this API.
 struct NEW_DLL_FUNCTIONS
 {
 	// Called right before the object's memory is freed.
@@ -514,9 +498,6 @@ struct NEW_DLL_FUNCTIONS
 	void (*pfnCvarValue2)(const edict_t* pEnt, int requestID, const char* cvarName, const char* value);
 };
 typedef int (*NEW_DLL_FUNCTIONS_FN)(NEW_DLL_FUNCTIONS* pFunctionTable, int* interfaceVersion);
-
-// Pointers will be null if the game DLL doesn't support this API.
-extern NEW_DLL_FUNCTIONS gNewDLLFunctions;
 
 typedef int (*APIFUNCTION)(DLL_FUNCTIONS* pFunctionTable, int interfaceVersion);
 typedef int (*APIFUNCTION2)(DLL_FUNCTIONS* pFunctionTable, int* interfaceVersion);

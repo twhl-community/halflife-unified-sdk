@@ -125,8 +125,6 @@ struct r_studio_interface_t
 	int (*StudioDrawPlayer)(int flags, entity_state_t* pplayer);
 };
 
-extern r_studio_interface_t* pStudioAPI;
-
 // server blending
 #define SV_BLENDING_INTERFACE_VERSION 1
 

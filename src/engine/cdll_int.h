@@ -25,7 +25,7 @@
 #include "steam/steamtypes.h"
 #include "ref_params.h"
 #include "r_efx.h"
-#include "studio_event.h"
+#include "studio.h"
 #include "common_types.h"
 
 // this file is included by both the engine and the client-dll,

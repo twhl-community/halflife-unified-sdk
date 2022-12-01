@@ -203,16 +203,13 @@ struct mstudioseqdesc_t
 };
 
 // events
-#include "studio_event.h"
-/*
 struct mstudioevent_t
 {
-	int 				frame;
-	int					event;
-	int					type;
-	char				options[64];
+	int frame;
+	int event;
+	int type;
+	char options[64];
 };
-*/
 
 // pivots
 struct mstudiopivot_t

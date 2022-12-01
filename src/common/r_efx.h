@@ -181,5 +181,3 @@ struct efx_api_t
 	void (*R_DecalRemoveAll)(int textureIndex); // textureIndex points to the decal index in the array, not the actual texture index.
 	void (*R_FireCustomDecal)(int textureIndex, int entity, int modelIndex, float* position, int flags, float scale);
 };
-
-extern efx_api_t efx;

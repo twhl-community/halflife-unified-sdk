@@ -4,7 +4,6 @@
 #include "netadr.h"
 #include "Sequence.h"
 #include "common_types.h"
-#include "enums.h"
 
 struct cl_enginefunc_t;
 struct cl_entity_t;

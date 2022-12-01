@@ -262,16 +262,37 @@ target_sources(server PRIVATE
 	sound/ServerSoundSystem.cpp
 	sound/ServerSoundSystem.h
 	
+	../../common/com_model.h
+	../../common/common_types.h
 	../../common/const.h
+	../../common/cvardef.h
+	../../common/director_cmds.h
+	../../common/entity_state.h
+	../../common/entity_types.h
+	../../common/event_flags.h
+	../../common/hltv.h
+	../../common/in_buttons.h
 	../../common/mathlib.cpp
 	../../common/mathlib.h
 	../../common/Platform.h
 	../../common/PlatformHeaders.h
+	../../common/pmtrace.h
+	../../common/r_studioint.h
+	../../common/screenfade.h
 	../../common/Sequence.h
+	../../common/usercmd.h
+	../../common/weaponinfo.h
+	../../common/winsani_in.h
+	../../common/winsani_out.h
 
+	../../engine/custom.h
+	../../engine/customentity.h
 	../../engine/edict.h
 	../../engine/eiface.h
 	../../engine/progdefs.h
+	../../engine/progs.h
+	../../engine/shake.h
+	../../engine/studio.h
 	
 	../../public/interface.cpp
 	../../public/interface.h

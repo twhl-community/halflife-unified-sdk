@@ -6,10 +6,7 @@
 
 #pragma once
 
-
-#ifndef _DEF_BYTE_
-typedef unsigned char byte;
-#endif
+#include "Platform.h"
 
 //---------------------------------------------------------------------------
 // client_textmessage_t

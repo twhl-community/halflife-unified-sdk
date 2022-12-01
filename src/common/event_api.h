@@ -46,5 +46,3 @@ struct event_api_t
 	void (*EV_StopAllSounds)(int entnum, int entchannel);
 	void (*EV_KillEvents)(int entnum, const char* eventname);
 };
-
-extern event_api_t eventapi;
