@@ -1062,7 +1062,7 @@ void CBaseMonster::StartTask(Task_t* pTask)
 		// Fall back to using the world if no player exists (Matches original behavior).
 		if (!pPlayer)
 		{
-			pPlayer = CWorld::Instance;
+			pPlayer = World;
 		}
 
 		if (BuildRoute(m_vecMoveGoal, bits_MF_TO_LOCATION, pPlayer))

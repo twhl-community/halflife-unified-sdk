@@ -494,9 +494,7 @@ void CGrapple::CreateEffect()
 #ifndef CLIENT_DLL
 	DestroyEffect();
 
-	m_pTip = GetClassPtr<CGrappleTip>(nullptr);
-
-	m_pTip->pev->classname = MAKE_STRING("grapple_tip");
+	m_pTip = g_EntityDictionary->Create<CGrappleTip>("grapple_tip");
 
 	m_pTip->Spawn();
 

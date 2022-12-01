@@ -237,7 +237,7 @@ void CShockBeam::Explode()
 
 CShockBeam* CShockBeam::CreateShockBeam(const Vector& vecOrigin, const Vector& vecAngles, CBaseEntity* pOwner)
 {
-	auto pBeam = GetClassPtr<CShockBeam>(nullptr);
+	auto pBeam = g_EntityDictionary->Create<CShockBeam>("shock_beam");
 
 	pBeam->pev->angles = vecAngles;
 	pBeam->pev->angles.x = -pBeam->pev->angles.x;
@@ -248,8 +248,6 @@ CShockBeam* CShockBeam::CreateShockBeam(const Vector& vecOrigin, const Vector& v
 
 	pBeam->pev->velocity = gpGlobals->v_forward * 2000.0;
 	pBeam->pev->velocity.z = -pBeam->pev->velocity.z;
-
-	pBeam->pev->classname = MAKE_STRING("shock_beam");
 
 	pBeam->Spawn();
 

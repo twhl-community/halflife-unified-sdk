@@ -201,7 +201,7 @@ void CFlockingFlyerFlock::SpawnFlock()
 
 	for (iCount = 0; iCount < m_cFlockSize; iCount++)
 	{
-		pBoid = GetClassPtr((CFlockingFlyer*)nullptr);
+		pBoid = g_EntityDictionary->Create<CFlockingFlyer>("monster_flyer");
 
 		if (!pLeader)
 		{
@@ -344,7 +344,6 @@ void CFlockingFlyer::FallHack()
 void CFlockingFlyer::SpawnCommonCode()
 {
 	pev->deadflag = DEAD_NO;
-	pev->classname = MAKE_STRING("monster_flyer");
 	pev->solid = SOLID_SLIDEBOX;
 	pev->movetype = MOVETYPE_FLY;
 	pev->takedamage = DAMAGE_YES;

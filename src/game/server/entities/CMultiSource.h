@@ -15,26 +15,27 @@
 
 #pragma once
 
-#include "CBaseEntity.h"
+#include "CPointEntity.h"
 
-#define SF_WORLD_DARK 0x0001	  // Fade from black at startup
-#define SF_WORLD_FORCETEAM 0x0004 // Force teams
-#define SF_WORLD_CTF 0x0008		  // CTF gamemode
-#define SF_WORLD_COOP 0x0010	  // Co-op gamemode
+#define MS_MAX_TARGETS 32
 
-// this moved here from world.cpp, to allow classes to be derived from it
-//=======================
-// CWorld
-//
-// This spawns first when each level begins.
-//=======================
-class CWorld : public CBaseEntity
+class CMultiSource : public CPointEntity
 {
 public:
-	CWorld();
-	~CWorld() override;
-
 	void Spawn() override;
-	void Precache() override;
 	bool KeyValue(KeyValueData* pkvd) override;
+	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+	int ObjectCaps() override { return (CPointEntity::ObjectCaps() | FCAP_MASTER); }
+	bool IsTriggered(CBaseEntity* pActivator) override;
+	void EXPORT Register();
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
+
+	static TYPEDESCRIPTION m_SaveData[];
+
+	EHANDLE m_rgEntities[MS_MAX_TARGETS];
+	int m_rgTriggered[MS_MAX_TARGETS];
+
+	int m_iTotal;
+	string_t m_globalstate;
 };

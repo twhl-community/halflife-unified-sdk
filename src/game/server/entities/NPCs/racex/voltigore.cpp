@@ -132,9 +132,7 @@ void COFChargedBolt::ShutdownChargedBolt()
 
 COFChargedBolt* COFChargedBolt::ChargedBoltCreate()
 {
-	auto pBolt = GetClassPtr<COFChargedBolt>(nullptr);
-
-	pBolt->pev->classname = MAKE_STRING("charged_bolt");
+	auto pBolt = g_EntityDictionary->Create<COFChargedBolt>("charged_bolt");
 
 	pBolt->Spawn();
 

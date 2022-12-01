@@ -68,7 +68,6 @@ void CMortarShell::Spawn()
 
 	UTIL_SetSize(pev, g_vecZero, g_vecZero);
 	UTIL_SetOrigin(pev, pev->origin);
-	pev->classname = MAKE_STRING("mortar_shell");
 
 	SetThink(&CMortarShell::BurnThink);
 	SetTouch(&CMortarShell::MortarExplodeTouch);
@@ -216,7 +215,7 @@ void CMortarShell::MortarExplodeTouch(CBaseEntity* pOther)
 
 CMortarShell* CMortarShell::CreateMortarShell(Vector vecOrigin, Vector vecAngles, CBaseEntity* pOwner, int velocity)
 {
-	auto pShell = GetClassPtr<CMortarShell>(nullptr);
+	auto pShell = g_EntityDictionary->Create<CMortarShell>("mortar_shell");
 
 	UTIL_SetOrigin(pShell->pev, vecOrigin);
 

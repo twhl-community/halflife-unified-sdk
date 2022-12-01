@@ -156,9 +156,6 @@ void CMonsterMaker::Precache()
 //=========================================================
 void CMonsterMaker::MakeMonster()
 {
-	edict_t* pent;
-	entvars_t* pevCreate;
-
 	if (m_iMaxLiveChildren > 0 && m_cLiveChildren >= m_iMaxLiveChildren)
 	{ // not allowed to make a new one yet. Too many live ones out right now.
 		return;
@@ -186,9 +183,9 @@ void CMonsterMaker::MakeMonster()
 		return;
 	}
 
-	pent = CREATE_NAMED_ENTITY(m_iszMonsterClassname);
+	auto entity = g_EntityDictionary->Create(STRING(m_iszMonsterClassname));
 
-	if (FNullEnt(pent))
+	if (FNullEnt(entity))
 	{
 		AILogger->debug("nullptr Ent in MonsterMaker!");
 		return;
@@ -201,22 +198,21 @@ void CMonsterMaker::MakeMonster()
 		FireTargets(STRING(pev->target), this, this, USE_TOGGLE, 0);
 	}
 
-	pevCreate = VARS(pent);
-	pevCreate->origin = pev->origin;
-	pevCreate->angles = pev->angles;
-	SetBits(pevCreate->spawnflags, SF_MONSTER_FALL_TO_GROUND);
+	entity->pev->origin = pev->origin;
+	entity->pev->angles = pev->angles;
+	SetBits(entity->pev->spawnflags, SF_MONSTER_FALL_TO_GROUND);
 
 	// Children hit monsterclip brushes
 	if ((pev->spawnflags & SF_MONSTERMAKER_MONSTERCLIP) != 0)
-		SetBits(pevCreate->spawnflags, SF_MONSTER_HITMONSTERCLIP);
+		SetBits(entity->pev->spawnflags, SF_MONSTER_HITMONSTERCLIP);
 
-	DispatchSpawn(ENT(pevCreate));
-	pevCreate->owner = edict();
+	DispatchSpawn(entity->edict());
+	entity->pev->owner = edict();
 
 	if (!FStringNull(pev->netname))
 	{
 		// if I have a netname (overloaded), give the child monster that name as a targetname
-		pevCreate->targetname = pev->netname;
+		entity->pev->targetname = pev->netname;
 	}
 
 	m_cLiveChildren++; // count this monster

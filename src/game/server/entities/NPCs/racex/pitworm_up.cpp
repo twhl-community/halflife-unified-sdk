@@ -1489,8 +1489,6 @@ void COFPitWormGib::Spawn()
 	pev->renderfx = kRenderFxNone;
 	pev->solid = SOLID_NOT;
 
-	pev->classname = MAKE_STRING("pitworm_gib");
-
 	SetModel("models/pit_worm_gibs.mdl");
 
 	UTIL_SetSize(pev, {-8, -8, -4}, {8, 8, 16});
@@ -1617,7 +1615,7 @@ COFPitWormGib* COFPitWormGibShooter::CreateGib()
 	if (CVAR_GET_FLOAT("violence_hgibs") == 0)
 		return nullptr;
 
-	COFPitWormGib* pGib = GetClassPtr((COFPitWormGib*)nullptr);
+	COFPitWormGib* pGib = g_EntityDictionary->Create<COFPitWormGib>("pitworm_gib");
 	pGib->Spawn();
 
 	if (pev->body <= 1)
@@ -1967,7 +1965,7 @@ void COFPitWorm::StartMonster()
 		// TODO: this was probably unintended.
 		if (!m_pGoalEnt)
 		{
-			m_pGoalEnt = CWorld::Instance;
+			m_pGoalEnt = World;
 		}
 
 		if (!m_pGoalEnt)

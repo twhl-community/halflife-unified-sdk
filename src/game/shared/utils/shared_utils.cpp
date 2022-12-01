@@ -51,6 +51,11 @@ string_t ALLOC_STRING(const char* str)
 	return MAKE_STRING(g_StringPool.Allocate(str));
 }
 
+string_t ALLOC_STRING_VIEW(std::string_view str)
+{
+	return MAKE_STRING(g_StringPool.Allocate(str));
+}
+
 string_t ALLOC_ESCAPED_STRING(const char* str)
 {
 	if (!str)

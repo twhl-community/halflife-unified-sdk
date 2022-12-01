@@ -68,7 +68,6 @@ LINK_ENTITY_TO_CLASS(gonomeguts, COFGonomeGuts);
 void COFGonomeGuts::Spawn()
 {
 	pev->movetype = MOVETYPE_FLY;
-	pev->classname = MAKE_STRING("gonomeguts");
 
 	pev->solid = SOLID_BBOX;
 	pev->rendermode = kRenderTransAlpha;
@@ -147,7 +146,7 @@ void COFGonomeGuts::Animate()
 
 void COFGonomeGuts::Shoot(entvars_t* pevOwner, Vector vecStart, Vector vecVelocity)
 {
-	auto pGuts = GetClassPtr<COFGonomeGuts>(nullptr);
+	auto pGuts = g_EntityDictionary->Create<COFGonomeGuts>("gonomeguts");
 	pGuts->Spawn();
 
 	UTIL_SetOrigin(pGuts->pev, vecStart);
@@ -163,7 +162,7 @@ void COFGonomeGuts::Shoot(entvars_t* pevOwner, Vector vecStart, Vector vecVeloci
 
 COFGonomeGuts* COFGonomeGuts::GonomeGutsCreate(const Vector& origin)
 {
-	auto pGuts = GetClassPtr<COFGonomeGuts>(nullptr);
+	auto pGuts = g_EntityDictionary->Create<COFGonomeGuts>("gonomeguts");
 	pGuts->Spawn();
 
 	pGuts->pev->origin = origin;

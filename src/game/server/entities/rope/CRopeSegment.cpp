@@ -132,7 +132,7 @@ void CRopeSegment::Touch(CBaseEntity* pOther)
 
 CRopeSegment* CRopeSegment::CreateSegment(CRopeSample* pSample, string_t iszModelName)
 {
-	auto pSegment = GetClassPtr(reinterpret_cast<CRopeSegment*>(VARS(CREATE_NAMED_ENTITY(MAKE_STRING("rope_segment")))));
+	auto pSegment = static_cast<CRopeSegment*>(g_EntityDictionary->Create("rope_segment"));
 
 	pSegment->m_iszModelName = iszModelName;
 

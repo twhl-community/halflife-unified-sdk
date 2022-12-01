@@ -12,21 +12,16 @@
  *   without written permission from Valve LLC.
  *
  ****/
-#include "cbase.h"
 
-#include "CEagleLaser.h"
+#pragma once
 
-LINK_ENTITY_TO_CLASS(eagle_laser, CEagleLaser);
+#include "CBaseEntity.h"
 
-//=========================================================
-//=========================================================
-CEagleLaser* CEagleLaser::CreateSpot()
+class CPointEntity : public CBaseEntity
 {
-	auto pSpot = static_cast<CEagleLaser*>(g_EntityDictionary->Create("eagle_laser"));
-	pSpot->Spawn();
+public:
+	void Spawn() override;
+	int ObjectCaps() override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 
-	// Eagle laser is smaller
-	pSpot->pev->scale = 0.5;
-
-	return pSpot;
-}
+private:
+};

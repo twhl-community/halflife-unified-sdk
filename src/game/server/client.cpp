@@ -118,18 +118,18 @@ void ClientDisconnect(edict_t* pEntity)
 
 
 // called by ClientKill and DeadThink
-void respawn(entvars_t* pev, bool fCopyCorpse)
+void respawn(CBasePlayer* player, bool fCopyCorpse)
 {
 	if (0 != gpGlobals->coop || 0 != gpGlobals->deathmatch)
 	{
 		if (fCopyCorpse)
 		{
 			// make a copy of the dead body for appearances sake
-			CopyToBodyQue(pev);
+			CopyToBodyQue(player->pev);
 		}
 
 		// respawn player
-		GetClassPtr((CBasePlayer*)pev)->Spawn();
+		player->Spawn();
 	}
 	else
 	{ // restart the entire server
@@ -178,11 +178,7 @@ called each time a player is spawned
 */
 void ClientPutInServer(edict_t* pEntity)
 {
-	CBasePlayer* pPlayer;
-
-	entvars_t* pev = &pEntity->v;
-
-	pPlayer = GetClassPtr((CBasePlayer*)pev);
+	auto pPlayer = g_EntityDictionary->Create<CBasePlayer>("player", &pEntity->v);
 	pPlayer->SetCustomDecalFrames(-1); // Assume none;
 
 	// Allocate a CBasePlayer for pev, and call spawn
@@ -324,7 +320,7 @@ bool Q_UnicodeValidate(const char* pUTF8)
 // or as
 // blah blah blah
 //
-void Host_Say(edict_t* pEntity, bool teamonly)
+void Host_Say(CBasePlayer* player, bool teamonly)
 {
 	int j;
 	char* p;
@@ -337,9 +333,6 @@ void Host_Say(edict_t* pEntity, bool teamonly)
 	// We can get a raw string now, without the "say " prepended
 	if (CMD_ARGC() == 0)
 		return;
-
-	entvars_t* pev = &pEntity->v;
-	CBasePlayer* player = GetClassPtr((CBasePlayer*)pev);
 
 	// Not yet.
 	if (player->m_flNextChatTime > gpGlobals->time)
@@ -386,11 +379,11 @@ void Host_Say(edict_t* pEntity, bool teamonly)
 	// turn on color set 2  (color on,  no sound)
 	// turn on color set 2  (color on,  no sound)
 	if (player->IsObserver() && (teamonly))
-		sprintf(text, "%c(SPEC) %s: ", 2, STRING(pEntity->v.netname));
+		sprintf(text, "%c(SPEC) %s: ", 2, STRING(player->pev->netname));
 	else if (teamonly)
-		sprintf(text, "%c(TEAM) %s: ", 2, STRING(pEntity->v.netname));
+		sprintf(text, "%c(TEAM) %s: ", 2, STRING(player->pev->netname));
 	else
-		sprintf(text, "%c%s: ", 2, STRING(pEntity->v.netname));
+		sprintf(text, "%c%s: ", 2, STRING(player->pev->netname));
 
 	j = sizeof(text) - 2 - strlen(text); // -2 for /n and null terminator
 	if ((int)strlen(p) > j)
@@ -413,7 +406,7 @@ void Host_Say(edict_t* pEntity, bool teamonly)
 		if (!client->pev)
 			continue;
 
-		if (client->edict() == pEntity)
+		if (client == player)
 			continue;
 
 		if (!(client->IsNetClient())) // Not a client ? (should never be true)
@@ -423,7 +416,7 @@ void Host_Say(edict_t* pEntity, bool teamonly)
 		if (g_VoiceGameMgr.PlayerHasBlockedPlayer(client, player))
 			continue;
 
-		if (!player->IsObserver() && teamonly && g_pGameRules->PlayerRelationship(client, CBaseEntity::Instance(pEntity)) != GR_TEAMMATE)
+		if (!player->IsObserver() && teamonly && g_pGameRules->PlayerRelationship(client, player) != GR_TEAMMATE)
 			continue;
 
 		// Spectators can only talk to other specs
@@ -432,14 +425,14 @@ void Host_Say(edict_t* pEntity, bool teamonly)
 				continue;
 
 		MESSAGE_BEGIN(MSG_ONE, gmsgSayText, nullptr, client->pev);
-		WRITE_BYTE(ENTINDEX(pEntity));
+		WRITE_BYTE(player->entindex());
 		WRITE_STRING(text);
 		MESSAGE_END();
 	}
 
 	// print to the sending client
-	MESSAGE_BEGIN(MSG_ONE, gmsgSayText, nullptr, &pEntity->v);
-	WRITE_BYTE(ENTINDEX(pEntity));
+	MESSAGE_BEGIN(MSG_ONE, gmsgSayText, nullptr, player->pev);
+	WRITE_BYTE(player->entindex());
 	WRITE_STRING(text);
 	MESSAGE_END();
 
@@ -541,11 +534,11 @@ void PrintPageSearchResult(CBasePlayer* player, const PageSearchResult& result)
 void SV_CreateClientCommands()
 {
 	g_ClientCommands.Create("say", [](CBasePlayer* player, const auto& args)
-		{ Host_Say(player->edict(), false); });
+		{ Host_Say(player, false); });
 
 
 	g_ClientCommands.Create("say_team", [](CBasePlayer* player, const auto& args)
-		{ Host_Say(player->edict(), true); });
+		{ Host_Say(player, true); });
 
 	g_ClientCommands.Create("fullupdate", [](CBasePlayer* player, const auto& args)
 		{ player->ForceClientDllUpdate(); });
@@ -731,7 +724,7 @@ void ExecuteClientCommand(edict_t* pEntity)
 		return;
 
 	const char* pcmd = CMD_ARGV(0);
-	auto player = GetClassPtr<CBasePlayer>(reinterpret_cast<CBasePlayer*>(&pEntity->v));
+	auto player = GET_PRIVATE<CBasePlayer>(pEntity);
 
 	if (auto clientCommand = g_ClientCommands.Find(pcmd); clientCommand)
 	{
@@ -771,7 +764,7 @@ void ClientUserInfoChanged(edict_t* pEntity, char* infobuffer)
 	if (!pEntity->pvPrivateData)
 		return;
 
-	auto player = GetClassPtr((CBasePlayer*)&pEntity->v);
+	auto player = GET_PRIVATE<CBasePlayer>(pEntity);
 
 	// msg everyone if someone changes their name,  and it isn't the first time (changing no name to current name)
 	if (!FStringNull(pEntity->v.netname) && STRING(pEntity->v.netname)[0] != 0 && !FStrEq(STRING(pEntity->v.netname), g_engfuncs.pfnInfoKeyValue(infobuffer, "name")))

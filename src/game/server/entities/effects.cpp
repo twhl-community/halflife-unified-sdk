@@ -216,8 +216,7 @@ const Vector& CBeam::GetEndPos()
 CBeam* CBeam::BeamCreate(const char* pSpriteName, int width)
 {
 	// Create a new entity with CBeam private data
-	CBeam* pBeam = GetClassPtr((CBeam*)nullptr);
-	pBeam->pev->classname = MAKE_STRING("beam");
+	CBeam* pBeam = g_EntityDictionary->Create<CBeam>("beam");
 
 	pBeam->BeamInit(pSpriteName, width);
 
@@ -394,7 +393,7 @@ public:
 
 	static CLightning* LightningCreate(const char* pSpriteName, int width)
 	{
-		auto lightning = GetClassPtr<CLightning>(nullptr);
+		auto lightning = g_EntityDictionary->Create<CLightning>("env_beam");
 
 		lightning->BeamInit(pSpriteName, width);
 
@@ -891,12 +890,12 @@ void CLightning::BeamUpdateVars()
 
 	if (!pStart)
 	{
-		pStart = CWorld::Instance;
+		pStart = World;
 	}
 
 	if (!pEnd)
 	{
-		pEnd = CWorld::Instance;
+		pEnd = World;
 	}
 
 	bool pointStart = IsPointEntity(pStart);
@@ -1235,9 +1234,8 @@ void CSprite::SpriteInit(const char* pSpriteName, const Vector& origin)
 
 CSprite* CSprite::SpriteCreate(const char* pSpriteName, const Vector& origin, bool animate)
 {
-	CSprite* pSprite = GetClassPtr((CSprite*)nullptr);
+	CSprite* pSprite = g_EntityDictionary->Create<CSprite>("env_sprite");
 	pSprite->SpriteInit(pSpriteName, origin);
-	pSprite->pev->classname = MAKE_STRING("env_sprite");
 	pSprite->pev->solid = SOLID_NOT;
 	pSprite->pev->movetype = MOVETYPE_NOCLIP;
 	if (animate)
@@ -1461,7 +1459,7 @@ CGib* CGibShooter::CreateGib()
 	if (CVAR_GET_FLOAT("violence_hgibs") == 0)
 		return nullptr;
 
-	CGib* pGib = GetClassPtr((CGib*)nullptr);
+	CGib* pGib = g_EntityDictionary->Create<CGib>("gib");
 	pGib->Spawn("models/hgibs.mdl");
 	pGib->m_bloodColor = BLOOD_COLOR_RED;
 
@@ -1587,7 +1585,7 @@ void CEnvShooter::Precache()
 
 CGib* CEnvShooter::CreateGib()
 {
-	CGib* pGib = GetClassPtr((CGib*)nullptr);
+	CGib* pGib = g_EntityDictionary->Create<CGib>("gib");
 
 	pGib->Spawn(STRING(pev->model));
 
@@ -2202,11 +2200,10 @@ public:
 
 	static CWarpBall* CreateWarpBall(Vector vecOrigin)
 	{
-		auto warpBall = GetClassPtr<CWarpBall>(nullptr);
+		auto warpBall = g_EntityDictionary->Create<CWarpBall>("env_warpball");
 
 		UTIL_SetOrigin(warpBall->pev, vecOrigin);
 
-		warpBall->pev->classname = MAKE_STRING("env_warpball");
 		warpBall->Spawn();
 
 		return warpBall;

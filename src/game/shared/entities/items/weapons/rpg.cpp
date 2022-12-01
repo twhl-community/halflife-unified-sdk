@@ -26,10 +26,8 @@ LINK_ENTITY_TO_CLASS(laser_spot, CLaserSpot);
 //=========================================================
 CLaserSpot* CLaserSpot::CreateSpot()
 {
-	CLaserSpot* pSpot = GetClassPtr((CLaserSpot*)nullptr);
+	CLaserSpot* pSpot = g_EntityDictionary->Create<CLaserSpot>("laser_spot");
 	pSpot->Spawn();
-
-	pSpot->pev->classname = MAKE_STRING("laser_spot");
 
 	return pSpot;
 }
@@ -91,7 +89,7 @@ CRpgRocket::~CRpgRocket()
 //=========================================================
 CRpgRocket* CRpgRocket::CreateRpgRocket(Vector vecOrigin, Vector vecAngles, CBaseEntity* pOwner, CRpg* pLauncher)
 {
-	CRpgRocket* pRocket = GetClassPtr((CRpgRocket*)nullptr);
+	CRpgRocket* pRocket = g_EntityDictionary->Create<CRpgRocket>("rpg_rocket");
 
 	UTIL_SetOrigin(pRocket->pev, vecOrigin);
 	pRocket->pev->angles = vecAngles;
@@ -116,8 +114,6 @@ void CRpgRocket::Spawn()
 	SetModel("models/rpgrocket.mdl");
 	UTIL_SetSize(pev, Vector(0, 0, 0), Vector(0, 0, 0));
 	UTIL_SetOrigin(pev, pev->origin);
-
-	pev->classname = MAKE_STRING("rpg_rocket");
 
 	SetThink(&CRpgRocket::IgniteThink);
 	SetTouch(&CRpgRocket::ExplodeTouch);

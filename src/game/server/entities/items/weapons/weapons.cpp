@@ -206,43 +206,36 @@ void ExplodeModel(const Vector& vecOrigin, float speed, int model, int count)
 // Precaches the weapon and queues the weapon info for sending to clients
 void UTIL_PrecacheOtherWeapon(const char* szClassname)
 {
-	edict_t* pent;
-
-	pent = CREATE_NAMED_ENTITY(MAKE_STRING(szClassname));
-	if (FNullEnt(pent))
+	auto entity = g_WeaponDictionary->Create(szClassname);
+	if (FNullEnt(entity))
 	{
 		CBaseEntity::Logger->error("NULL Ent in UTIL_PrecacheOtherWeapon");
 		return;
 	}
 
-	CBaseEntity* pEntity = CBaseEntity::Instance(VARS(pent));
-
-	if (pEntity)
+	ItemInfo II;
+	entity->Precache();
+	memset(&II, 0, sizeof II);
+	if (entity->GetItemInfo(&II))
 	{
-		ItemInfo II;
-		pEntity->Precache();
-		memset(&II, 0, sizeof II);
-		if (((CBasePlayerItem*)pEntity)->GetItemInfo(&II))
+		CBasePlayerItem::ItemInfoArray[II.iId] = II;
+
+		const char* weaponName = ((II.iFlags & ITEM_FLAG_EXHAUSTIBLE) != 0) ? STRING(entity->pev->classname) : nullptr;
+
+		if (II.pszAmmo1 && '\0' != *II.pszAmmo1)
 		{
-			CBasePlayerItem::ItemInfoArray[II.iId] = II;
-
-			const char* weaponName = ((II.iFlags & ITEM_FLAG_EXHAUSTIBLE) != 0) ? STRING(pEntity->pev->classname) : nullptr;
-
-			if (II.pszAmmo1 && '\0' != *II.pszAmmo1)
-			{
-				AddAmmoNameToAmmoRegistry(II.pszAmmo1, weaponName);
-			}
-
-			if (II.pszAmmo2 && '\0' != *II.pszAmmo2)
-			{
-				AddAmmoNameToAmmoRegistry(II.pszAmmo2, weaponName);
-			}
-
-			memset(&II, 0, sizeof II);
+			AddAmmoNameToAmmoRegistry(II.pszAmmo1, weaponName);
 		}
+
+		if (II.pszAmmo2 && '\0' != *II.pszAmmo2)
+		{
+			AddAmmoNameToAmmoRegistry(II.pszAmmo2, weaponName);
+		}
+
+		memset(&II, 0, sizeof II);
 	}
 
-	REMOVE_ENTITY(pent);
+	REMOVE_ENTITY(entity->edict());
 }
 
 // called by worldspawn

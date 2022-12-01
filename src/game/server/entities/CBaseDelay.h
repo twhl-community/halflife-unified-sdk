@@ -12,21 +12,26 @@
  *   without written permission from Valve LLC.
  *
  ****/
-#include "cbase.h"
 
-#include "CEagleLaser.h"
+#pragma once
 
-LINK_ENTITY_TO_CLASS(eagle_laser, CEagleLaser);
+#include "CBaseEntity.h"
 
-//=========================================================
-//=========================================================
-CEagleLaser* CEagleLaser::CreateSpot()
+//
+// generic Delay entity.
+//
+class CBaseDelay : public CBaseEntity
 {
-	auto pSpot = static_cast<CEagleLaser*>(g_EntityDictionary->Create("eagle_laser"));
-	pSpot->Spawn();
+public:
+	float m_flDelay;
+	string_t m_iszKillTarget;
 
-	// Eagle laser is smaller
-	pSpot->pev->scale = 0.5;
+	bool KeyValue(KeyValueData* pkvd) override;
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
 
-	return pSpot;
-}
+	static TYPEDESCRIPTION m_SaveData[];
+	// common member functions
+	void SUB_UseTargets(CBaseEntity* pActivator, USE_TYPE useType, float value);
+	void EXPORT DelayThink();
+};

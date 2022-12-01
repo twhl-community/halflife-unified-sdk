@@ -24,7 +24,9 @@
 #include "client.h"
 #include "trains.h"
 
-static void PlatSpawnInsideTrigger(entvars_t* pevPlatform);
+class CFuncPlat;
+
+static void PlatSpawnInsideTrigger(CFuncPlat* platform);
 
 #define SF_PLAT_TOGGLE 0x0001
 
@@ -154,7 +156,7 @@ public:
 	EHANDLE m_hPlatform;
 };
 
-
+LINK_ENTITY_TO_CLASS(func_plat_trigger, CPlatTrigger);
 
 /*QUAKED func_plat (0 .5 .8) ? PLAT_LOW_TRIGGER
 speed	default 150
@@ -209,7 +211,7 @@ void CFuncPlat::Precache()
 	// PrecacheSound("plats/platmove1.wav");
 	// PrecacheSound("plats/platstop1.wav");
 	if (!IsTogglePlat())
-		PlatSpawnInsideTrigger(pev); // the "start moving" trigger
+		PlatSpawnInsideTrigger(this); // the "start moving" trigger
 }
 
 
@@ -236,9 +238,9 @@ void CFuncPlat::Spawn()
 
 
 
-static void PlatSpawnInsideTrigger(entvars_t* pevPlatform)
+static void PlatSpawnInsideTrigger(CFuncPlat* platform)
 {
-	GetClassPtr((CPlatTrigger*)nullptr)->SpawnInsideTrigger(GetClassPtr((CFuncPlat*)pevPlatform));
+	g_EntityDictionary->Create<CPlatTrigger>("func_plat_trigger")->SpawnInsideTrigger(platform);
 }
 
 
@@ -704,7 +706,7 @@ void CFuncTrain::Activate()
 
 		if (!target)
 		{
-			target = CWorld::Instance;
+			target = World;
 		}
 
 		pev->target = target->pev->target;
@@ -1022,7 +1024,7 @@ void CSpriteTrain::Activate()
 
 		if (!target)
 		{
-			target = CWorld::Instance;
+			target = World;
 		}
 
 		pev->target = target->pev->target;

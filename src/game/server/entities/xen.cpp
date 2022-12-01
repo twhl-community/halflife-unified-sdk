@@ -247,9 +247,8 @@ LINK_ENTITY_TO_CLASS(xen_ttrigger, CXenTreeTrigger);
 
 CXenTreeTrigger* CXenTreeTrigger::TriggerCreate(edict_t* pOwner, const Vector& position)
 {
-	CXenTreeTrigger* pTrigger = GetClassPtr((CXenTreeTrigger*)nullptr);
+	CXenTreeTrigger* pTrigger = g_EntityDictionary->Create<CXenTreeTrigger>("xen_ttrigger");
 	pTrigger->pev->origin = position;
-	pTrigger->pev->classname = MAKE_STRING("xen_ttrigger");
 	pTrigger->pev->solid = SOLID_TRIGGER;
 	pTrigger->pev->movetype = MOVETYPE_NONE;
 	pTrigger->pev->owner = pOwner;
@@ -493,12 +492,11 @@ public:
 
 CXenHull* CXenHull::CreateHull(CBaseEntity* source, const Vector& mins, const Vector& maxs, const Vector& offset)
 {
-	CXenHull* pHull = GetClassPtr((CXenHull*)nullptr);
+	CXenHull* pHull = g_EntityDictionary->Create<CXenHull>("xen_hull");
 
 	UTIL_SetOrigin(pHull->pev, source->pev->origin + offset);
 	pHull->SetModel(STRING(source->pev->model));
 	pHull->pev->solid = SOLID_BBOX;
-	pHull->pev->classname = MAKE_STRING("xen_hull");
 	pHull->pev->movetype = MOVETYPE_NONE;
 	pHull->pev->owner = source->edict();
 	UTIL_SetSize(pHull->pev, mins, maxs);

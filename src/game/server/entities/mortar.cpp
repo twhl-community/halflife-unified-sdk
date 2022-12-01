@@ -304,7 +304,7 @@ void CMortar::MortarExplode()
 #if 0
 void CMortar::ShootTimed(EVARS* pevOwner, Vector vecStart, float time)
 {
-	CMortar* pMortar = GetClassPtr((CMortar*)nullptr);
+	CMortar* pMortar = g_EntityDictionary->Create<CMortar>("monster_mortar");
 	pMortar->Spawn();
 
 	TraceResult tr;

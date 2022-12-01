@@ -67,6 +67,8 @@ inline string_t MAKE_STRING(const char* str)
 
 string_t ALLOC_STRING(const char* str);
 
+string_t ALLOC_STRING_VIEW(std::string_view str);
+
 /**
  *	@brief Version of ALLOC_STRING that parses and converts escape characters
  */

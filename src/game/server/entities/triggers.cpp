@@ -256,6 +256,8 @@ void CTriggerRelay::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE 
 #define SF_MULTIMAN_CLONE 0x80000000
 #define SF_MULTIMAN_THREAD 0x00000001
 
+#define MAX_MULTI_TARGETS 16 // maximum number of targets a single multi_manager entity may be assigned.
+
 class CMultiManager : public CBaseToggle
 {
 public:
@@ -409,7 +411,7 @@ void CMultiManager::ManagerThink()
 
 CMultiManager* CMultiManager::Clone()
 {
-	CMultiManager* pMulti = GetClassPtr((CMultiManager*)nullptr);
+	CMultiManager* pMulti = g_EntityDictionary->Create<CMultiManager>("multi_manager");
 
 	edict_t* pEdict = pMulti->pev->pContainingEntity;
 	memcpy(pMulti->pev, pev, sizeof(*pev));
@@ -718,7 +720,7 @@ void CTriggerHurt::RadiationThink()
 	if (!FNullEnt(pentPlayer))
 	{
 
-		pPlayer = GetClassPtr((CBasePlayer*)VARS(pentPlayer));
+		pPlayer = GET_PRIVATE<CBasePlayer>(pentPlayer);
 
 		pevTarget = VARS(pentPlayer);
 
@@ -1156,7 +1158,6 @@ LINK_ENTITY_TO_CLASS(fireanddie, CFireAndDie);
 
 void CFireAndDie::Spawn()
 {
-	pev->classname = MAKE_STRING("fireanddie");
 	// Don't call Precache() - it should be called on restore
 }
 
@@ -1329,7 +1330,7 @@ void CChangeLevel::ChangeLevelNow(CBaseEntity* pActivator)
 	// Create an entity to fire the changetarget
 	if (!FStringNull(m_changeTarget))
 	{
-		CFireAndDie* pFireAndDie = GetClassPtr((CFireAndDie*)nullptr);
+		CFireAndDie* pFireAndDie = g_EntityDictionary->Create<CFireAndDie>("fireanddie");
 		if (pFireAndDie)
 		{
 			// Set target and delay
@@ -2081,7 +2082,7 @@ void CTriggerCamera::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE
 		// TODO: this was probably unintential.
 		if (!m_pentPath)
 		{
-			m_pentPath = CWorld::Instance;
+			m_pentPath = World;
 		}
 	}
 	else

@@ -18,6 +18,8 @@
 #include <memory>
 #include <spdlog/logger.h>
 
+#include "basemonster.h"
+#include "CBaseAnimating.h"
 #include "effects.h"
 #include "weaponinfo.h"
 

@@ -76,7 +76,6 @@ IMPLEMENT_SAVERESTORE(CSquidSpit, CBaseEntity);
 void CSquidSpit::Spawn()
 {
 	pev->movetype = MOVETYPE_FLY;
-	pev->classname = MAKE_STRING("squidspit");
 
 	pev->solid = SOLID_BBOX;
 	pev->rendermode = kRenderTransAlpha;
@@ -106,7 +105,7 @@ void CSquidSpit::Animate()
 
 void CSquidSpit::Shoot(entvars_t* pevOwner, Vector vecStart, Vector vecVelocity)
 {
-	CSquidSpit* pSpit = GetClassPtr((CSquidSpit*)nullptr);
+	CSquidSpit* pSpit = g_EntityDictionary->Create<CSquidSpit>("squidspit");
 	pSpit->Spawn();
 
 	UTIL_SetOrigin(pSpit->pev, vecStart);

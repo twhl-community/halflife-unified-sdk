@@ -92,7 +92,6 @@ void CPitdroneSpike::Precache()
 void CPitdroneSpike::Spawn()
 {
 	pev->movetype = MOVETYPE_FLY;
-	pev->classname = MAKE_STRING("pitdronespike");
 
 	pev->solid = SOLID_BBOX;
 	pev->takedamage = DAMAGE_YES;
@@ -110,7 +109,7 @@ void CPitdroneSpike::Spawn()
 
 void CPitdroneSpike::Shoot(entvars_t* pevOwner, Vector vecStart, Vector vecVelocity, Vector vecAngles)
 {
-	CPitdroneSpike* pSpit = GetClassPtr((CPitdroneSpike*)nullptr);
+	CPitdroneSpike* pSpit = g_EntityDictionary->Create<CPitdroneSpike>("pitdronespike");
 
 	pSpit->pev->angles = vecAngles;
 	UTIL_SetOrigin(pSpit->pev, vecStart);

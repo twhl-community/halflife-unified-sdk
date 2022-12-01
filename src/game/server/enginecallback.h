@@ -37,7 +37,6 @@ inline enginefuncs_t g_engfuncs;
 #define MAKE_VECTORS (*g_engfuncs.pfnMakeVectors)
 #define CREATE_ENTITY (*g_engfuncs.pfnCreateEntity)
 #define REMOVE_ENTITY (*g_engfuncs.pfnRemoveEntity)
-#define CREATE_NAMED_ENTITY (*g_engfuncs.pfnCreateNamedEntity)
 #define MAKE_STATIC (*g_engfuncs.pfnMakeStatic)
 #define ENT_IS_ON_FLOOR (*g_engfuncs.pfnEntIsOnFloor)
 #define DROP_TO_FLOOR (*g_engfuncs.pfnDropToFloor)

@@ -95,7 +95,7 @@ IMPLEMENT_SAVERESTORE(CStomp, CBaseEntity);
 
 CStomp* CStomp::StompCreate(const Vector& origin, const Vector& end, float speed)
 {
-	CStomp* pStomp = GetClassPtr((CStomp*)nullptr);
+	CStomp* pStomp = g_EntityDictionary->Create<CStomp>("garg_stomp");
 
 	pStomp->pev->origin = origin;
 	Vector dir = (end - origin);
@@ -110,7 +110,6 @@ CStomp* CStomp::StompCreate(const Vector& origin, const Vector& end, float speed
 void CStomp::Spawn()
 {
 	pev->nextthink = gpGlobals->time;
-	pev->classname = MAKE_STRING("garg_stomp");
 	pev->dmgtime = gpGlobals->time;
 
 	pev->framerate = 30;
@@ -1121,7 +1120,7 @@ void CGargantua::RunTask(Task_t* pTask)
 			int parts = MODEL_FRAMES(gGargGibModel);
 			for (i = 0; i < 10; i++)
 			{
-				CGib* pGib = GetClassPtr((CGib*)nullptr);
+				CGib* pGib = g_EntityDictionary->Create<CGib>("gib");
 
 				pGib->Spawn(GARG_GIB_MODEL);
 
@@ -1283,7 +1282,7 @@ CSpiral* CSpiral::Create(const Vector& origin, float height, float radius, float
 	if (duration <= 0)
 		return nullptr;
 
-	CSpiral* pSpiral = GetClassPtr((CSpiral*)nullptr);
+	CSpiral* pSpiral = g_EntityDictionary->Create<CSpiral>("streak_spiral");
 	pSpiral->Spawn();
 	pSpiral->pev->dmgtime = pSpiral->pev->nextthink;
 	pSpiral->pev->origin = origin;

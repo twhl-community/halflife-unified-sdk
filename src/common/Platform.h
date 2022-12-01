@@ -76,9 +76,6 @@ struct string_t
 
 	constexpr auto operator<=>(const string_t&) const = default;
 
-	// TODO: used for CreateNamedEntity. Remove when that function is no longer used.
-	constexpr operator string_t_value() const { return m_Value; }
-
 	// Never write to this yourself.
 	string_t_value m_Value = string_t_value::Null;
 };

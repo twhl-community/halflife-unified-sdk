@@ -62,6 +62,13 @@ target_sources(server PRIVATE
 	entities/buttons.cpp
 	entities/cbase.cpp
 	entities/cbase.h
+	entities/CBaseAnimating.h
+	entities/CBaseButton.h
+	entities/CBaseDelay.h
+	entities/CBaseEntity.h
+	entities/CBaseToggle.h
+	entities/CMultiSource.h
+	entities/CPointEntity.h
 	entities/doors.cpp
 	entities/doors.h
 	entities/effects.cpp

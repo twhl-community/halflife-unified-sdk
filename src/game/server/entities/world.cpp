@@ -208,15 +208,15 @@ LINK_ENTITY_TO_CLASS(bodyque, CCorpse);
 
 static void InitBodyQue()
 {
-	string_t istrClassname = MAKE_STRING("bodyque");
+	const std::string_view className{"bodyque"sv};
 
-	g_pBodyQueueHead = CREATE_NAMED_ENTITY(istrClassname);
+	g_pBodyQueueHead = g_EntityDictionary->Create(className)->edict();
 	entvars_t* pev = VARS(g_pBodyQueueHead);
 
 	// Reserve 3 more slots for dead bodies
 	for (int i = 0; i < 3; i++)
 	{
-		pev->owner = CREATE_NAMED_ENTITY(istrClassname);
+		pev->owner = g_EntityDictionary->Create(className)->edict();
 		pev = VARS(pev->owner);
 	}
 
@@ -475,7 +475,7 @@ LINK_ENTITY_TO_CLASS(worldspawn, CWorld);
 
 CWorld::CWorld()
 {
-	if (Instance)
+	if (World)
 	{
 		Logger->error("Do not create multiple instances of worldspawn");
 		return;
@@ -483,7 +483,7 @@ CWorld::CWorld()
 
 	g_GameLogger->trace("worldspawn created");
 
-	Instance = this;
+	World = this;
 
 	// Clear previous map's title if it wasn't cleared already.
 	g_DisplayTitleName.clear();
@@ -491,14 +491,14 @@ CWorld::CWorld()
 
 CWorld::~CWorld()
 {
-	if (Instance != this)
+	if (World != this)
 	{
 		return;
 	}
 
 	g_Server.MapIsEnding();
 
-	Instance = nullptr;
+	World = nullptr;
 
 	g_GameLogger->trace("worldspawn destroyed");
 }
@@ -518,7 +518,7 @@ void CWorld::Spawn()
 void CWorld::Precache()
 {
 	// Flag this entity for removal if it's not the actual world entity.
-	if (Instance != this)
+	if (World != this)
 	{
 		UTIL_Remove(this);
 		return;
@@ -547,7 +547,7 @@ void CWorld::Precache()
 
 	///!!!LATER - do we want a sound ent in deathmatch? (sjb)
 	// pSoundEnt = CBaseEntity::Create( "soundent", g_vecZero, g_vecZero, edict() );
-	pSoundEnt = GetClassPtr((CSoundEnt*)nullptr);
+	pSoundEnt = g_EntityDictionary->Create<CSoundEnt>("soundent");
 	pSoundEnt->Spawn();
 
 	if (!pSoundEnt)

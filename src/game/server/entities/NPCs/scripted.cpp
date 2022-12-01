@@ -611,12 +611,12 @@ int CCineMonster::IgnoreConditions()
 }
 
 
-void ScriptEntityCancel(edict_t* pentCine)
+void ScriptEntityCancel(CBaseEntity* cine)
 {
 	// make sure they are a scripted_sequence
-	if (FClassnameIs(pentCine, CLASSNAME))
+	if (FClassnameIs(cine->pev, CLASSNAME))
 	{
-		CCineMonster* pCineTarget = GetClassPtr((CCineMonster*)VARS(pentCine));
+		CCineMonster* pCineTarget = static_cast<CCineMonster*>(cine);
 		// make sure they have a monster in mind for the script
 		CBaseEntity* pEntity = pCineTarget->m_hTargetEnt;
 		CBaseMonster* pTarget = nullptr;
@@ -645,13 +645,13 @@ void CCineMonster::CancelScript()
 
 	if (FStringNull(pev->targetname))
 	{
-		ScriptEntityCancel(edict());
+		ScriptEntityCancel(this);
 		return;
 	}
 
 	for (auto cineTarget : UTIL_FindEntitiesByTargetname(STRING(pev->targetname)))
 	{
-		ScriptEntityCancel(cineTarget->edict());
+		ScriptEntityCancel(cineTarget);
 	}
 }
 

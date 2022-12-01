@@ -15,6 +15,7 @@
 
 #pragma once
 
+#include "basemonster.h"
 #include "gamerules.h"
 #include "pm_materials.h"
 #include "ctf/CTFDefs.h"

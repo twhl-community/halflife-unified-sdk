@@ -29,6 +29,7 @@ Vector VecBModelOrigin(entvars_t* pevBModel);
 #define HUMAN_GIB_COUNT 6
 #define ALIEN_GIB_COUNT 4
 
+LINK_ENTITY_TO_CLASS(gib, CGib);
 
 // HACKHACK -- The gib velocity equations don't work
 void CGib::LimitVelocity()
@@ -54,7 +55,7 @@ void CGib::SpawnStickyGibs(entvars_t* pevVictim, Vector vecOrigin, int cGibs)
 
 	for (i = 0; i < cGibs; i++)
 	{
-		CGib* pGib = GetClassPtr((CGib*)nullptr);
+		CGib* pGib = g_EntityDictionary->Create<CGib>("gib");
 
 		pGib->Spawn("models/stickygib.mdl");
 		pGib->pev->body = RANDOM_LONG(0, 2);
@@ -113,7 +114,7 @@ void CGib::SpawnStickyGibs(entvars_t* pevVictim, Vector vecOrigin, int cGibs)
 
 void CGib::SpawnHeadGib(entvars_t* pevVictim)
 {
-	CGib* pGib = GetClassPtr((CGib*)nullptr);
+	CGib* pGib = g_EntityDictionary->Create<CGib>("gib");
 
 	if (g_Language == LANGUAGE_GERMAN)
 	{
@@ -185,7 +186,7 @@ void CGib::SpawnRandomGibs(entvars_t* pevVictim, int cGibs, const GibData& gibDa
 
 	for (cSplat = 0; cSplat < cGibs; cSplat++)
 	{
-		CGib* pGib = GetClassPtr((CGib*)nullptr);
+		CGib* pGib = g_EntityDictionary->Create<CGib>("gib");
 
 		if (g_Language == LANGUAGE_GERMAN)
 		{
@@ -809,7 +810,6 @@ void CGib::Spawn(const char* szGibModel)
 	pev->rendermode = kRenderNormal;
 	pev->renderfx = kRenderFxNone;
 	pev->solid = SOLID_SLIDEBOX; /// hopefully this will fix the VELOCITY TOO LOW crap
-	pev->classname = MAKE_STRING("gib");
 
 	SetModel(szGibModel);
 	UTIL_SetSize(pev, Vector(0, 0, 0), Vector(0, 0, 0));

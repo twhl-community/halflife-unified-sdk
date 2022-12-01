@@ -13,17 +13,22 @@ const char* StringPool::Allocate(const char* string)
 
 	const std::string_view source{string};
 
-	if (auto it = m_Pool.find(source); it != m_Pool.end())
+	return Allocate(source);
+}
+
+const char* StringPool::Allocate(std::string_view string)
+{
+	if (auto it = m_Pool.find(string); it != m_Pool.end())
 	{
 		return it->second.get();
 	}
 
-	auto destination{std::make_unique<char[]>(source.size() + 1)};
+	auto destination{std::make_unique<char[]>(string.size() + 1)};
 
-	std::strncpy(destination.get(), source.data(), source.size());
-	destination[source.size()] = '\0';
+	std::strncpy(destination.get(), string.data(), string.size());
+	destination[string.size()] = '\0';
 
-	const std::string_view key{destination.get(), source.size()};
+	const std::string_view key{destination.get(), string.size()};
 
 	m_Pool.emplace(key, std::move(destination));
 

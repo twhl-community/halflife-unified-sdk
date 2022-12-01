@@ -179,12 +179,11 @@ void COFGeneWormCloud::TurnOn()
 
 COFGeneWormCloud* COFGeneWormCloud::GeneWormCloudCreate(const Vector& origin)
 {
-	auto pCloud = GetClassPtr<COFGeneWormCloud>(nullptr);
+	auto pCloud = g_EntityDictionary->Create<COFGeneWormCloud>("env_genewormcloud");
 
 	pCloud->Spawn();
 
 	pCloud->pev->origin = origin;
-	pCloud->pev->classname = MAKE_STRING("env_genewormcloud");
 	pCloud->pev->solid = SOLID_BBOX;
 	pCloud->pev->movetype = MOVETYPE_FLY;
 	pCloud->pev->effects = 0;
@@ -447,12 +446,11 @@ void COFGeneWormSpawn::TurnOn()
 
 COFGeneWormSpawn* COFGeneWormSpawn::GeneWormSpawnCreate(const Vector& origin)
 {
-	auto pSpawn = GetClassPtr<COFGeneWormSpawn>(nullptr);
+	auto pSpawn = g_EntityDictionary->Create<COFGeneWormSpawn>("env_genewormspawn");
 
 	pSpawn->Spawn();
 
 	pSpawn->pev->origin = origin;
-	pSpawn->pev->classname = MAKE_STRING("env_genewormspawn");
 	pSpawn->pev->solid = SOLID_NOT;
 	pSpawn->pev->movetype = MOVETYPE_NONE;
 	pSpawn->pev->effects = 0;

@@ -21,6 +21,7 @@ function(add_game_shared_sources target)
 			
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/entities/ehandle.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/entities/ehandle.h
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/entities/EntityDictionary.h
 			
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/entities/items/weapons/CDisplacer.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/entities/items/weapons/CDisplacer.h

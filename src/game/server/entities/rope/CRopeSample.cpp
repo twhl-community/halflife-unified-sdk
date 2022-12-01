@@ -39,7 +39,7 @@ void CRopeSample::Spawn()
 
 CRopeSample* CRopeSample::CreateSample()
 {
-	auto pSample = GetClassPtr(reinterpret_cast<CRopeSample*>(VARS(CREATE_NAMED_ENTITY(MAKE_STRING("rope_sample")))));
+	auto pSample = static_cast<CRopeSample*>(g_EntityDictionary->Create("rope_sample"));
 
 	pSample->Spawn();
 

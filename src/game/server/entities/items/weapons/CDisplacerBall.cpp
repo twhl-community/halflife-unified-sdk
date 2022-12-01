@@ -418,9 +418,7 @@ bool CDisplacerBall::ClassifyTarget(CBaseEntity* pTarget)
 
 CDisplacerBall* CDisplacerBall::CreateDisplacerBall(const Vector& vecOrigin, const Vector& vecAngles, CBaseEntity* pOwner)
 {
-	auto pBall = GetClassPtr<CDisplacerBall>(nullptr);
-
-	pBall->pev->classname = MAKE_STRING("displacer_ball");
+	auto pBall = g_EntityDictionary->Create<CDisplacerBall>("displacer_ball");
 
 	UTIL_SetOrigin(pBall->pev, vecOrigin);
 

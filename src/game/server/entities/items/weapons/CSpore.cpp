@@ -259,7 +259,7 @@ CSpore* CSpore::CreateSpore(
 	const Vector& vecOrigin, const Vector& vecAngles, CBaseEntity* pOwner,
 	SporeType sporeType, bool bIsAI, bool bPuked)
 {
-	auto pSpore = GetClassPtr<CSpore>(nullptr);
+	auto pSpore = g_EntityDictionary->Create<CSpore>("spore");
 
 	UTIL_SetOrigin(pSpore->pev, vecOrigin);
 
@@ -283,8 +283,6 @@ CSpore* CSpore::CreateSpore(
 	pSpore->Spawn();
 
 	pSpore->pev->owner = pOwner->edict();
-
-	pSpore->pev->classname = MAKE_STRING("spore");
 
 	return pSpore;
 }

@@ -1143,7 +1143,6 @@ void MortarSpray(const Vector& position, const Vector& direction, int spriteMode
 void CBMortar::Spawn()
 {
 	pev->movetype = MOVETYPE_TOSS;
-	pev->classname = MAKE_STRING("bmortar");
 
 	pev->solid = SOLID_BBOX;
 	pev->rendermode = kRenderTransAlpha;
@@ -1179,7 +1178,7 @@ void CBMortar::Animate()
 
 CBMortar* CBMortar::Shoot(edict_t* pOwner, Vector vecStart, Vector vecVelocity)
 {
-	CBMortar* pSpit = GetClassPtr((CBMortar*)nullptr);
+	CBMortar* pSpit = g_EntityDictionary->Create<CBMortar>("bmortar");
 	pSpit->Spawn();
 
 	UTIL_SetOrigin(pSpit->pev, vecStart);

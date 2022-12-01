@@ -15,6 +15,7 @@
 
 #pragma once
 
+#include "CBaseToggle.h"
 #include "monsters.h"
 
 /**
@@ -32,6 +33,9 @@ enum NPCWeaponState
 	Drawn	   //!< In hand.
 };
 }
+
+#define ROUTE_SIZE 8	  // how many waypoints a monster can store at one time
+#define MAX_OLD_ENEMIES 4 // how many old enemies to remember
 
 //
 // generic Monster

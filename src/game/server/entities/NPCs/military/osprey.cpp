@@ -322,7 +322,7 @@ void COsprey::FlyThink()
 
 		if (!m_pGoalEnt)
 		{
-			m_pGoalEnt = CWorld::Instance;
+			m_pGoalEnt = World;
 		}
 
 		UpdateGoal();
@@ -342,7 +342,7 @@ void COsprey::FlyThink()
 
 				if (!m_pGoalEnt)
 				{
-					m_pGoalEnt = CWorld::Instance;
+					m_pGoalEnt = World;
 				}
 			} while (m_pGoalEnt->pev->speed < 400 && !HasDead());
 			UpdateGoal();

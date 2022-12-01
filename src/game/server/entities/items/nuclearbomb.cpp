@@ -235,7 +235,7 @@ void COFNuclearBomb::Precache()
 
 	// The other entities are created here since a restore only calls Precache
 	// TODO: set the classname members for both entities
-	m_pTimer = GetClassPtr<COFNuclearBombTimer>(nullptr);
+	m_pTimer = g_EntityDictionary->Create<COFNuclearBombTimer>("item_nuclearbombtimer");
 
 	m_pTimer->pev->origin = pev->origin;
 	m_pTimer->pev->angles = pev->angles;
@@ -244,7 +244,7 @@ void COFNuclearBomb::Precache()
 
 	m_pTimer->SetNuclearBombTimer(m_fOn);
 
-	m_pButton = GetClassPtr<COFNuclearBombButton>(nullptr);
+	m_pButton = g_EntityDictionary->Create<COFNuclearBombButton>("item_nuclearbombbutton");
 
 	m_pButton->pev->origin = pev->origin;
 	m_pButton->pev->angles = pev->angles;

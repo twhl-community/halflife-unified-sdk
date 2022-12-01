@@ -16,6 +16,7 @@
 #include "client.h"
 #include "ServerLibrary.h"
 #include "pm_shared.h"
+#include "world.h"
 
 void EntvarsKeyvalue(entvars_t* pev, KeyValueData* pkvd);
 
@@ -773,25 +774,18 @@ int CBaseEntity::DamageDecal(int bitsDamageType)
 	return DECAL_GUNSHOT1 + RANDOM_LONG(0, 4);
 }
 
-
-
-// NOTE: szName must be a pointer to constant memory, e.g. "monster_class" because the entity
-// will keep a pointer to it after this call.
 CBaseEntity* CBaseEntity::Create(const char* szName, const Vector& vecOrigin, const Vector& vecAngles, edict_t* pentOwner)
 {
-	edict_t* pent;
-	CBaseEntity* pEntity;
+	auto entity = g_EntityDictionary->Create(szName);
 
-	pent = CREATE_NAMED_ENTITY(MAKE_STRING(szName));
-	if (FNullEnt(pent))
+	if (FNullEnt(entity))
 	{
 		CBaseEntity::Logger->debug("NULL Ent in Create!");
 		return nullptr;
 	}
-	pEntity = Instance(pent);
-	pEntity->pev->owner = pentOwner;
-	pEntity->pev->origin = vecOrigin;
-	pEntity->pev->angles = vecAngles;
-	DispatchSpawn(pEntity->edict());
-	return pEntity;
+	entity->pev->owner = pentOwner;
+	entity->pev->origin = vecOrigin;
+	entity->pev->angles = vecAngles;
+	DispatchSpawn(entity->edict());
+	return entity;
 }

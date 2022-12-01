@@ -1272,7 +1272,7 @@ void CHalfLifeCTFplay::ChangePlayerTeam(CBasePlayer* pPlayer, const char* pCharN
 
 				const auto v7 = bGib ? DMG_ALWAYSGIB : DMG_NEVERGIB;
 
-				pPlayer->TakeDamage(CWorld::Instance->pev, CWorld::Instance->pev, 900, v7);
+				pPlayer->TakeDamage(CBaseEntity::World->pev, CBaseEntity::World->pev, 900, v7);
 
 				m_DisableDeathMessages = false;
 				m_DisableDeathPenalty = false;
@@ -1321,7 +1321,7 @@ void CHalfLifeCTFplay::ChangePlayerTeam(CBasePlayer* pPlayer, const char* pCharN
 		// TODO: check how much of this is handled by newer observer code.
 		if (pPlayer->pev->health <= 0.0)
 		{
-			respawn(pPlayer->pev, false);
+			respawn(pPlayer, false);
 		}
 
 		pPlayer->pev->effects |= EF_NODRAW;

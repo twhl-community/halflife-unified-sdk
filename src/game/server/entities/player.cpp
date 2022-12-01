@@ -1140,7 +1140,7 @@ void CBasePlayer::WaterMove()
 				pev->dmg += 1;
 				if (pev->dmg > 5)
 					pev->dmg = 5;
-				TakeDamage(CWorld::Instance->pev, CWorld::Instance->pev, pev->dmg, DMG_DROWN);
+				TakeDamage(World->pev, World->pev, pev->dmg, DMG_DROWN);
 				pev->pain_finished = gpGlobals->time + 1;
 
 				// track drowning damage, give it back when
@@ -1192,12 +1192,12 @@ void CBasePlayer::WaterMove()
 	if (pev->watertype == CONTENT_LAVA) // do damage
 	{
 		if (pev->dmgtime < gpGlobals->time)
-			TakeDamage(CWorld::Instance->pev, CWorld::Instance->pev, 10 * static_cast<int>(pev->waterlevel), DMG_BURN);
+			TakeDamage(World->pev, World->pev, 10 * static_cast<int>(pev->waterlevel), DMG_BURN);
 	}
 	else if (pev->watertype == CONTENT_SLIME) // do damage
 	{
 		pev->dmgtime = gpGlobals->time + 1;
-		TakeDamage(CWorld::Instance->pev, CWorld::Instance->pev, 4 * static_cast<int>(pev->waterlevel), DMG_ACID);
+		TakeDamage(World->pev, World->pev, 4 * static_cast<int>(pev->waterlevel), DMG_ACID);
 	}
 
 	if (!FBitSet(pev->flags, FL_INWATER))
@@ -1297,7 +1297,7 @@ void CBasePlayer::PlayerDeathThink()
 
 	// Logger->debug("Respawn");
 
-	respawn(pev, (m_afPhysicsFlags & PFLAG_OBSERVER) == 0); // don't copy a corpse if we're in deathcam.
+	respawn(this, (m_afPhysicsFlags & PFLAG_OBSERVER) == 0); // don't copy a corpse if we're in deathcam.
 	pev->nextthink = -1;
 }
 
@@ -2782,7 +2782,7 @@ void CBasePlayer::PostThink()
 
 			if (flFallDamage > 0)
 			{
-				TakeDamage(CWorld::Instance->pev, CWorld::Instance->pev, flFallDamage, DMG_FALL);
+				TakeDamage(World->pev, World->pev, flFallDamage, DMG_FALL);
 				pev->punchangle.x = 0;
 			}
 		}
@@ -2983,7 +2983,7 @@ edict_t* EntSelectSpawnPoint(CBasePlayer* pPlayer)
 			{
 				// if ent is a client, kill em (unless they are ourselves)
 				if (ent->IsPlayer() && !(ent->edict() == player))
-					ent->TakeDamage(CWorld::Instance->pev, CWorld::Instance->pev, 300, DMG_GENERIC);
+					ent->TakeDamage(CBaseEntity::World->pev, CBaseEntity::World->pev, 300, DMG_GENERIC);
 			}
 			goto ReturnSpot;
 		}
@@ -3039,7 +3039,7 @@ edict_t* EntSelectSpawnPoint(CBasePlayer* pPlayer)
 			{
 				// if ent is a client, kill em (unless they are ourselves)
 				if (ent->IsPlayer() && !(ent->edict() == player))
-					ent->TakeDamage(CWorld::Instance->pev, CWorld::Instance->pev, 300, DMG_GENERIC);
+					ent->TakeDamage(CBaseEntity::World->pev, CBaseEntity::World->pev, 300, DMG_GENERIC);
 			}
 			goto ReturnSpot;
 		}
@@ -3063,7 +3063,7 @@ ReturnSpot:
 	if (FNullEnt(pSpot))
 	{
 		CBaseEntity::Logger->error("PutClientInServer: no info_player_start on level");
-		return CWorld::Instance->edict();
+		return CBaseEntity::World->edict();
 	}
 
 	g_pLastSpawn = pSpot;
@@ -3081,7 +3081,6 @@ void CBasePlayer::Spawn()
 			m_bIsSpawning = false;
 		}};
 
-	pev->classname = MAKE_STRING("player");
 	pev->health = 100;
 	pev->armorvalue = 0;
 	pev->takedamage = DAMAGE_AIM;
@@ -3489,6 +3488,8 @@ public:
 	int ObjectCaps() override { return FCAP_DONT_SAVE; }
 };
 
+LINK_ENTITY_TO_CLASS(spraycan, CSprayCan);
+
 void CSprayCan::Spawn(entvars_t* pevOwner)
 {
 	pev->origin = pevOwner->origin + Vector(0, 0, 32);
@@ -3545,6 +3546,8 @@ public:
 	void Spray();
 };
 
+LINK_ENTITY_TO_CLASS(blood_splat, CBloodSplat);
+
 void CBloodSplat::Spawn(entvars_t* pevOwner)
 {
 	pev->origin = pevOwner->origin + Vector(0, 0, 32);
@@ -3572,46 +3575,37 @@ void CBloodSplat::Spray()
 
 //==============================================
 
-static edict_t* GiveNamedItem_Common(entvars_t* pev, const char* pszName)
+static CBaseEntity* GiveNamedItem_Common(entvars_t* pev, const char* pszName)
 {
-	string_t istr = MAKE_STRING(pszName);
-
-	edict_t* pent = CREATE_NAMED_ENTITY(istr);
-	if (FNullEnt(pent))
+	auto entity = g_EntityDictionary->Create(pszName);
+	if (FNullEnt(entity))
 	{
 		CBaseEntity::Logger->debug("nullptr Ent in GiveNamedItem!");
 		return nullptr;
 	}
-	VARS(pent)->origin = pev->origin;
-	pent->v.spawnflags |= SF_NORESPAWN;
+	entity->pev->origin = pev->origin;
+	entity->pev->spawnflags |= SF_NORESPAWN;
 
-	DispatchSpawn(pent);
+	DispatchSpawn(entity->edict());
 
-	return pent;
+	return entity;
 }
 
 void CBasePlayer::GiveNamedItem(const char* szName)
 {
-	auto pent = GiveNamedItem_Common(pev, szName);
+	auto entity = GiveNamedItem_Common(pev, szName);
 
-	if (!pent)
+	if (!entity)
 	{
 		return;
 	}
 
-	DispatchTouch(pent, ENT(pev));
+	DispatchTouch(entity->edict(), ENT(pev));
 }
 
 void CBasePlayer::GiveNamedItem(const char* szName, int defaultAmmo)
 {
-	auto pent = GiveNamedItem_Common(pev, szName);
-
-	if (!pent)
-	{
-		return;
-	}
-
-	auto entity = CBaseEntity::Instance(pent);
+	auto entity = GiveNamedItem_Common(pev, szName);
 
 	if (!entity)
 	{
@@ -3623,7 +3617,7 @@ void CBasePlayer::GiveNamedItem(const char* szName, int defaultAmmo)
 		weapon->m_iDefaultAmmo = defaultAmmo;
 	}
 
-	DispatchTouch(pent, ENT(pev));
+	DispatchTouch(entity->edict(), ENT(pev));
 }
 
 int CBasePlayer::GetFlashlightFlag() const
@@ -3825,7 +3819,7 @@ void CBasePlayer::ImpulseCommands()
 		if (tr.flFraction != 1.0)
 		{ // line hit something, so paint a decal
 			m_flNextDecalTime = gpGlobals->time + decalfrequency.value;
-			CSprayCan* pCan = GetClassPtr((CSprayCan*)nullptr);
+			CSprayCan* pCan = g_EntityDictionary->Create<CSprayCan>("spraycan");
 			pCan->Spawn(pev);
 		}
 
@@ -3987,7 +3981,7 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse)
 	{
 		TraceResult tr;
 
-		edict_t* pWorld = CWorld::Instance->edict();
+		edict_t* pWorld = CBaseEntity::World->edict();
 
 		Vector start = pev->origin + pev->view_ofs;
 		Vector end = start + gpGlobals->v_forward * 1024;
@@ -4026,7 +4020,7 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse)
 
 		if (tr.flFraction != 1.0)
 		{ // line hit something, so paint a decal
-			CBloodSplat* pBlood = GetClassPtr((CBloodSplat*)nullptr);
+			CBloodSplat* pBlood = g_EntityDictionary->Create<CBloodSplat>("blood_splat");
 			pBlood->Spawn(pev);
 		}
 		break;

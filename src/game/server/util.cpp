@@ -1405,19 +1405,16 @@ bool UTIL_IsValidEntity(edict_t* pent)
 
 void UTIL_PrecacheOther(const char* szClassname)
 {
-	edict_t* pent;
-
-	pent = CREATE_NAMED_ENTITY(MAKE_STRING(szClassname));
-	if (FNullEnt(pent))
+	auto entity = g_EntityDictionary->Create(szClassname);
+	if (FNullEnt(entity))
 	{
 		CBaseEntity::Logger->debug("nullptr Ent in UTIL_PrecacheOther");
 		return;
 	}
 
-	CBaseEntity* pEntity = CBaseEntity::Instance(VARS(pent));
-	if (pEntity)
-		pEntity->Precache();
-	REMOVE_ENTITY(pent);
+	entity->Precache();
+
+	REMOVE_ENTITY(entity->edict());
 }
 
 //=========================================================

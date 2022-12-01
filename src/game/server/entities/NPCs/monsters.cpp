@@ -2084,7 +2084,7 @@ void CBaseMonster::StartMonster()
 		// TODO: this was probably unintended
 		if (!m_pGoalEnt)
 		{
-			m_pGoalEnt = CWorld::Instance;
+			m_pGoalEnt = World;
 		}
 
 		if (!m_pGoalEnt)

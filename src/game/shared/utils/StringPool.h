@@ -18,6 +18,8 @@ public:
 
 	const char* Allocate(const char* string);
 
+	const char* Allocate(std::string_view string);
+
 private:
 	std::unordered_map<std::string_view, std::unique_ptr<char[]>> m_Pool;
 };
