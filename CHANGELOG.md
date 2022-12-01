@@ -50,6 +50,11 @@ This page lists all changes made since the last release in the current developme
 * Forcefully reset monster ideal activity when released from Barnacle
 * Enabled `ASSERT` & `ASSERTSZ` macros in client dll, use spdlog logger to print assert messages
 * Include targetname & classname in `SUB_Remove` debug message
+* Fixed use of wrong base classes in enttiy save/restore logic
+* Removed duplicate field in CShotgun save table
+* Decrement RPG rocket count only if the rocket was successfully created
+* Added spawnflag to `item_generic` to make a entity solid and based on mins/maxs
+* Removed duplicate conditions in zombie code
 
 ### New features
 
@@ -125,6 +130,14 @@ This page lists all changes made since the last release in the current developme
 ### Scripts
 
 * Added MapCfgGenerator script
+* Added SourceFileFormatter script
+
+### StudioMDL compiler
+
+* Allow longer file paths when loading SMD files
+* Fixed one pixel loss in texture coordinate calculation
+* Made `$cliptotextures` option functional
+* Check for zero dimension textures
 
 ## Project changes
 
