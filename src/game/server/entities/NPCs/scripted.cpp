@@ -758,7 +758,7 @@ void CCineMonster::Activate()
 		while (!pTarget && !FNullEnt(pentTarget))
 		{
 			pTarget = GetMonsterPointer(pentTarget);
-			pentTarget = FIND_ENTITY_BY_TARGETNAME(pentTarget, STRING(m_iszEntity));
+			pentTarget = FIND_ENTITY_BY_CLASSNAME(pentTarget, STRING(m_iszEntity));
 		}
 	}
 	// Found a compatible entity
