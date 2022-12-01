@@ -107,9 +107,6 @@ inline T* GET_PRIVATE(edict_t* pent)
 }
 
 #define FREE_PRIVATE (*g_engfuncs.pfnFreeEntPrivateData)
-// #define STRING			(*g_engfuncs.pfnSzFromIndex)
-// #define ALLOC_STRING	(*g_engfuncs.pfnAllocString)
-#define FIND_ENTITY_BY_STRING (*g_engfuncs.pfnFindEntityByString)
 #define GETENTITYILLUM (*g_engfuncs.pfnGetEntityIllum)
 #define FIND_ENTITY_IN_SPHERE (*g_engfuncs.pfnFindEntityInSphere)
 #define FIND_CLIENT_IN_PVS (*g_engfuncs.pfnFindClientInPVS)

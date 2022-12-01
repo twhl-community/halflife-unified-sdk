@@ -715,12 +715,8 @@ void CBigMomma::NodeStart(string_t iszNextNode)
 
 	if (!FStringNull(pev->netname))
 	{
-		edict_t* pentTarget = FIND_ENTITY_BY_TARGETNAME(nullptr, STRING(pev->netname));
-
-		if (!FNullEnt(pentTarget))
-			pTarget = Instance(pentTarget);
+		pTarget = UTIL_FindEntityByTargetname(nullptr, STRING(pev->netname));
 	}
-
 
 	if (!pTarget)
 	{

@@ -424,7 +424,7 @@ CBaseEntity* UTIL_FindEntityByString(CBaseEntity* pStartEntity, const char* szKe
 	else
 		pentEntity = nullptr;
 
-	pentEntity = FIND_ENTITY_BY_STRING(pentEntity, szKeyword, szValue);
+	pentEntity = g_engfuncs.pfnFindEntityByString(pentEntity, szKeyword, szValue);
 
 	if (!FNullEnt(pentEntity))
 		return CBaseEntity::Instance(pentEntity);
@@ -441,6 +441,10 @@ CBaseEntity* UTIL_FindEntityByTargetname(CBaseEntity* pStartEntity, const char* 
 	return UTIL_FindEntityByString(pStartEntity, "targetname", szName);
 }
 
+CBaseEntity* UTIL_FindEntityByTarget(CBaseEntity* pStartEntity, const char* szName)
+{
+	return UTIL_FindEntityByString(pStartEntity, "target", szName);
+}
 
 CBaseEntity* UTIL_FindEntityGeneric(const char* szWhatever, Vector& vecSrc, float flRadius)
 {
@@ -963,13 +967,12 @@ bool UTIL_IsMasterTriggered(string_t sMaster, CBaseEntity* pActivator)
 {
 	if (!FStringNull(sMaster))
 	{
-		edict_t* pentTarget = FIND_ENTITY_BY_TARGETNAME(nullptr, STRING(sMaster));
+		auto master = UTIL_FindEntityByTargetname(nullptr, STRING(sMaster));
 
-		if (!FNullEnt(pentTarget))
+		if (!FNullEnt(master))
 		{
-			CBaseEntity* pMaster = CBaseEntity::Instance(pentTarget);
-			if (pMaster && (pMaster->ObjectCaps() & FCAP_MASTER) != 0)
-				return pMaster->IsTriggered(pActivator);
+			if ((master->ObjectCaps() & FCAP_MASTER) != 0)
+				return master->IsTriggered(pActivator);
 		}
 
 		CBaseEntity::IOLogger->debug("Master was null or not a master!");

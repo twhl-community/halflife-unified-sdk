@@ -114,6 +114,7 @@ void CGrenade::DetonateUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TY
 void UTIL_Remove(CBaseEntity* pEntity) {}
 void UTIL_SetSize(entvars_t* pev, const Vector& vecMin, const Vector& vecMax) {}
 CBaseEntity* UTIL_FindEntityInSphere(CBaseEntity* pStartEntity, const Vector& vecCenter, float flRadius) { return nullptr; }
+CBaseEntity* UTIL_FindEntityByClassname(CBaseEntity* pStartEntity, const char* szName) { return nullptr; }
 
 Vector UTIL_VecToAngles(const Vector& vec) { return vec3_origin; }
 CSprite* CSprite::SpriteCreate(const char* pSpriteName, const Vector& origin, bool animate) { return nullptr; }

@@ -41,22 +41,6 @@ class CBasePlayer;
 
 inline globalvars_t* gpGlobals = nullptr;
 
-inline edict_t* FIND_ENTITY_BY_CLASSNAME(edict_t* entStart, const char* pszName)
-{
-	return FIND_ENTITY_BY_STRING(entStart, "classname", pszName);
-}
-
-inline edict_t* FIND_ENTITY_BY_TARGETNAME(edict_t* entStart, const char* pszName)
-{
-	return FIND_ENTITY_BY_STRING(entStart, "targetname", pszName);
-}
-
-// for doing a reverse lookup. Say you have a door, and want to find its button.
-inline edict_t* FIND_ENTITY_BY_TARGET(edict_t* entStart, const char* pszName)
-{
-	return FIND_ENTITY_BY_STRING(entStart, "target", pszName);
-}
-
 // Keeps clutter down a bit, when using a float as a bit-vector
 #define SetBits(flBitVector, bits) ((flBitVector) = (int)(flBitVector) | (bits))
 #define ClearBits(flBitVector, bits) ((flBitVector) = (int)(flBitVector) & ~(bits))
@@ -213,6 +197,12 @@ CBaseEntity* UTIL_FindEntityInSphere(CBaseEntity* pStartEntity, const Vector& ve
 CBaseEntity* UTIL_FindEntityByString(CBaseEntity* pStartEntity, const char* szKeyword, const char* szValue);
 CBaseEntity* UTIL_FindEntityByClassname(CBaseEntity* pStartEntity, const char* szName);
 CBaseEntity* UTIL_FindEntityByTargetname(CBaseEntity* pStartEntity, const char* szName);
+
+/**
+*	@brief For doing a reverse lookup. Say you have a door, and want to find its button.
+*/
+CBaseEntity* UTIL_FindEntityByTarget(CBaseEntity* pStartEntity, const char* szName);
+
 CBaseEntity* UTIL_FindEntityGeneric(const char* szName, Vector& vecSrc, float flRadius);
 
 /**
@@ -603,6 +593,15 @@ struct FindByTargetnameFunctor
 };
 
 template <typename T>
+struct FindByTargetFunctor
+{
+	static T* Find(T* pStartEntity, const char* pszName)
+	{
+		return static_cast<T*>(UTIL_FindEntityByTarget(pStartEntity, pszName));
+	}
+};
+
+template <typename T>
 struct FindNextEntityFunctor
 {
 	static T* Find(T* pStartEntity)
@@ -757,6 +756,18 @@ inline CEntityEnumerator<T, FindByTargetnameFunctor<T>> UTIL_FindEntitiesByTarge
 
 template <typename T = CBaseEntity>
 inline CEntityEnumeratorWithStart<T, FindByTargetnameFunctor<T>> UTIL_FindEntitiesByTargetname(const char* pszName, T* pStartEntity)
+{
+	return {pszName, pStartEntity};
+}
+
+template <typename T = CBaseEntity>
+inline CEntityEnumerator<T, FindByTargetFunctor<T>> UTIL_FindEntitiesByTarget(const char* pszName)
+{
+	return {pszName};
+}
+
+template <typename T = CBaseEntity>
+inline CEntityEnumeratorWithStart<T, FindByTargetFunctor<T>> UTIL_FindEntitiesByTarget(const char* pszName, T* pStartEntity)
 {
 	return {pszName, pStartEntity};
 }

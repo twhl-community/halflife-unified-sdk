@@ -478,31 +478,22 @@ CGrenade* CGrenade::ShootSatchelCharge(entvars_t* pevOwner, Vector vecStart, Vec
 
 void CGrenade::UseSatchelCharges(entvars_t* pevOwner, SATCHELCODE code)
 {
-	edict_t* pentFind;
-	edict_t* pentOwner;
-
 	if (!pevOwner)
 		return;
 
 	CBaseEntity* pOwner = CBaseEntity::Instance(pevOwner);
 
-	pentOwner = pOwner->edict();
+	auto pentOwner = pOwner->edict();
 
-	pentFind = FIND_ENTITY_BY_CLASSNAME(nullptr, "grenade");
-	while (!FNullEnt(pentFind))
+	for (auto pEnt : UTIL_FindEntitiesByClassname("grenade"))
 	{
-		CBaseEntity* pEnt = Instance(pentFind);
-		if (pEnt)
+		if (FBitSet(pEnt->pev->spawnflags, SF_DETONATE) && pEnt->pev->owner == pentOwner)
 		{
-			if (FBitSet(pEnt->pev->spawnflags, SF_DETONATE) && pEnt->pev->owner == pentOwner)
-			{
-				if (code == SATCHEL_DETONATE)
-					pEnt->Use(pOwner, pOwner, USE_ON, 0);
-				else // SATCHEL_RELEASE
-					pEnt->pev->owner = nullptr;
-			}
+			if (code == SATCHEL_DETONATE)
+				pEnt->Use(pOwner, pOwner, USE_ON, 0);
+			else // SATCHEL_RELEASE
+				pEnt->pev->owner = nullptr;
 		}
-		pentFind = FIND_ENTITY_BY_CLASSNAME(pentFind, "grenade");
 	}
 }
 

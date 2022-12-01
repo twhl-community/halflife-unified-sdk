@@ -457,23 +457,11 @@ void CSatchel::WeaponIdle()
 //=========================================================
 void DeactivateSatchels(CBasePlayer* pOwner)
 {
-	edict_t* pFind;
-
-	pFind = FIND_ENTITY_BY_CLASSNAME(nullptr, "monster_satchel");
-
-	while (!FNullEnt(pFind))
+	for (auto satchel : UTIL_FindEntitiesByClassname<CSatchelCharge>("monster_satchel"))
 	{
-		CBaseEntity* pEnt = CBaseEntity::Instance(pFind);
-		CSatchelCharge* pSatchel = (CSatchelCharge*)pEnt;
-
-		if (pSatchel)
+		if (satchel->pev->owner == pOwner->edict())
 		{
-			if (pSatchel->pev->owner == pOwner->edict())
-			{
-				pSatchel->Deactivate();
-			}
+			satchel->Deactivate();
 		}
-
-		pFind = FIND_ENTITY_BY_CLASSNAME(pFind, "monster_satchel");
 	}
 }

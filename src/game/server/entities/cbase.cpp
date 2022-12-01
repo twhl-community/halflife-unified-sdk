@@ -310,8 +310,8 @@ void OnFreeEntPrivateData(edict_t* pEdict)
 // different classes with the same global name
 CBaseEntity* FindGlobalEntity(string_t classname, string_t globalname)
 {
-	edict_t* pent = FIND_ENTITY_BY_STRING(nullptr, "globalname", STRING(globalname));
-	CBaseEntity* pReturn = CBaseEntity::Instance(pent);
+	auto pReturn = UTIL_FindEntityByString(nullptr, "globalname", STRING(globalname));
+
 	if (pReturn)
 	{
 		if (!FClassnameIs(pReturn->pev, STRING(classname)))
@@ -593,11 +593,7 @@ CBaseEntity* CBaseEntity::GetNextTarget()
 {
 	if (FStringNull(pev->target))
 		return nullptr;
-	edict_t* pTarget = FIND_ENTITY_BY_TARGETNAME(nullptr, STRING(pev->target));
-	if (FNullEnt(pTarget))
-		return nullptr;
-
-	return Instance(pTarget);
+	return UTIL_FindEntityByTargetname(nullptr, STRING(pev->target));
 }
 
 // Global Savedata for Delay

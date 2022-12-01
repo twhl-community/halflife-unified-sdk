@@ -700,12 +700,17 @@ void CFuncTrain::Activate()
 	if (!m_activated)
 	{
 		m_activated = true;
-		entvars_t* pevTarg = VARS(FIND_ENTITY_BY_TARGETNAME(nullptr, STRING(pev->target)));
+		auto target = UTIL_FindEntityByTargetname(nullptr, STRING(pev->target));
 
-		pev->target = pevTarg->target;
-		m_pevCurrentTarget = pevTarg; // keep track of this since path corners change our target for us.
+		if (!target)
+		{
+			target = CWorld::Instance;
+		}
 
-		UTIL_SetOrigin(pev, pevTarg->origin - (pev->mins + pev->maxs) * 0.5);
+		pev->target = target->pev->target;
+		m_pevCurrentTarget = target->pev; // keep track of this since path corners change our target for us.
+
+		UTIL_SetOrigin(pev, target->pev->origin - (pev->mins + pev->maxs) * 0.5);
 
 		if (FStringNull(pev->targetname))
 		{ // not triggered, so start immediately
@@ -1013,12 +1018,17 @@ void CSpriteTrain::Activate()
 	if (!m_activated)
 	{
 		m_activated = true;
-		entvars_t* pevTarg = VARS(FIND_ENTITY_BY_TARGETNAME(nullptr, STRING(pev->target)));
+		auto target = UTIL_FindEntityByTargetname(nullptr, STRING(pev->target));
 
-		pev->target = pevTarg->target;
-		m_pevCurrentTarget = pevTarg; // keep track of this since path corners change our target for us.
+		if (!target)
+		{
+			target = CWorld::Instance;
+		}
 
-		UTIL_SetOrigin(pev, pevTarg->origin - (pev->mins + pev->maxs) * 0.5);
+		pev->target = target->pev->target;
+		m_pevCurrentTarget = target->pev; // keep track of this since path corners change our target for us.
+
+		UTIL_SetOrigin(pev, target->pev->origin - (pev->mins + pev->maxs) * 0.5);
 
 		if (FStringNull(pev->targetname))
 		{ // not triggered, so start immediately
@@ -1374,7 +1384,7 @@ void CFuncTrackTrain::Next()
 	}
 
 	//	if ( !m_ppath )
-	//		m_ppath = CPathTrack::Instance(FIND_ENTITY_BY_TARGETNAME( nullptr, STRING(pev->target) ));
+	//		m_ppath = CPathTrack::Instance(UTIL_FindEntityByTargetname(nullptr, STRING(pev->target)));
 	if (!m_ppath)
 	{
 		Logger->trace("TRAIN({}): Lost path", STRING(pev->targetname));
@@ -1578,7 +1588,7 @@ bool CFuncTrackTrain::OnControls(entvars_t* pevTest)
 
 void CFuncTrackTrain::Find()
 {
-	m_ppath = CPathTrack::Instance(FIND_ENTITY_BY_TARGETNAME(nullptr, STRING(pev->target)));
+	m_ppath = CPathTrack::Instance(UTIL_FindEntityByTargetname(nullptr, STRING(pev->target)));
 	if (!m_ppath)
 		return;
 
@@ -1668,10 +1678,10 @@ void CFuncTrackTrain::OverrideReset()
 }
 
 
-CFuncTrackTrain* CFuncTrackTrain::Instance(edict_t* pent)
+CFuncTrackTrain* CFuncTrackTrain::Instance(CBaseEntity* pent)
 {
-	if (FClassnameIs(pent, "func_tracktrain"))
-		return (CFuncTrackTrain*)GET_PRIVATE(pent);
+	if (pent && FClassnameIs(pent->pev, "func_tracktrain"))
+		return static_cast<CFuncTrackTrain*>(pent);
 	return nullptr;
 }
 
@@ -1758,20 +1768,20 @@ LINK_ENTITY_TO_CLASS(func_traincontrols, CFuncTrainControls);
 
 void CFuncTrainControls::Find()
 {
-	edict_t* pTarget = nullptr;
+	CBaseEntity* target = nullptr;
 
 	do
 	{
-		pTarget = FIND_ENTITY_BY_TARGETNAME(pTarget, STRING(pev->target));
-	} while (!FNullEnt(pTarget) && !FClassnameIs(pTarget, "func_tracktrain"));
+		target = UTIL_FindEntityByTargetname(target, STRING(pev->target));
+	} while (!FNullEnt(target) && !FClassnameIs(target->pev, "func_tracktrain"));
 
-	if (FNullEnt(pTarget))
+	if (FNullEnt(target))
 	{
 		Logger->debug("No train {}", STRING(pev->target));
 		return;
 	}
 
-	CFuncTrackTrain* ptrain = CFuncTrackTrain::Instance(pTarget);
+	CFuncTrackTrain* ptrain = CFuncTrackTrain::Instance(target);
 	ptrain->SetControls(pev);
 	UTIL_Remove(this);
 }
@@ -1958,20 +1968,19 @@ void CFuncTrackChange::OverrideReset()
 void CFuncTrackChange::Find()
 {
 	// Find track entities
-	edict_t* target;
-
-	target = FIND_ENTITY_BY_TARGETNAME(nullptr, STRING(m_trackTopName));
+	auto target = UTIL_FindEntityByTargetname(nullptr, STRING(m_trackTopName));
 	if (!FNullEnt(target))
 	{
 		m_trackTop = CPathTrack::Instance(target);
-		target = FIND_ENTITY_BY_TARGETNAME(nullptr, STRING(m_trackBottomName));
+		target = UTIL_FindEntityByTargetname(nullptr, STRING(m_trackBottomName));
 		if (!FNullEnt(target))
 		{
 			m_trackBottom = CPathTrack::Instance(target);
-			target = FIND_ENTITY_BY_TARGETNAME(nullptr, STRING(m_trainName));
+			target = UTIL_FindEntityByTargetname(nullptr, STRING(m_trainName));
 			if (!FNullEnt(target))
 			{
-				m_train = CFuncTrackTrain::Instance(FIND_ENTITY_BY_TARGETNAME(nullptr, STRING(m_trainName)));
+				m_train = CFuncTrackTrain::Instance(UTIL_FindEntityByTargetname(nullptr, STRING(m_trainName)));
+
 				if (!m_train)
 				{
 					Logger->error("Can't find train for track change! {}", STRING(m_trainName));
@@ -1987,7 +1996,8 @@ void CFuncTrackChange::Find()
 			else
 			{
 				Logger->error("Can't find train for track change! {}", STRING(m_trainName));
-				target = FIND_ENTITY_BY_TARGETNAME(nullptr, STRING(m_trainName));
+				// TODO: probably unnecessary
+				target = UTIL_FindEntityByTargetname(nullptr, STRING(m_trainName));
 			}
 		}
 		else

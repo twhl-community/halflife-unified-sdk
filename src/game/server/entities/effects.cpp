@@ -886,12 +886,21 @@ void CLightning::RandomPoint(Vector& vecSrc)
 
 void CLightning::BeamUpdateVars()
 {
-	int beamType;
+	auto pStart = UTIL_FindEntityByTargetname(nullptr, STRING(m_iszStartEntity));
+	auto pEnd = UTIL_FindEntityByTargetname(nullptr, STRING(m_iszEndEntity));
 
-	edict_t* pStart = FIND_ENTITY_BY_TARGETNAME(nullptr, STRING(m_iszStartEntity));
-	edict_t* pEnd = FIND_ENTITY_BY_TARGETNAME(nullptr, STRING(m_iszEndEntity));
-	bool pointStart = IsPointEntity(CBaseEntity::Instance(pStart));
-	bool pointEnd = IsPointEntity(CBaseEntity::Instance(pEnd));
+	if (!pStart)
+	{
+		pStart = CWorld::Instance;
+	}
+
+	if (!pEnd)
+	{
+		pEnd = CWorld::Instance;
+	}
+
+	bool pointStart = IsPointEntity(pStart);
+	bool pointEnd = IsPointEntity(pEnd);
 
 	pev->skin = 0;
 	pev->sequence = 0;
@@ -900,19 +909,14 @@ void CLightning::BeamUpdateVars()
 	pev->model = m_iszSpriteName;
 	SetTexture(m_spriteTexture);
 
-	beamType = BEAM_ENTS;
+	int beamType = BEAM_ENTS;
 	if (pointStart || pointEnd)
 	{
 		if (!pointStart) // One point entity must be in pStart
 		{
-			edict_t* pTemp;
 			// Swap start & end
-			pTemp = pStart;
-			pStart = pEnd;
-			pEnd = pTemp;
-			bool swap = pointStart;
-			pointStart = pointEnd;
-			pointEnd = swap;
+			std::swap(pStart, pEnd);
+			std::swap(pointStart, pointEnd);
 		}
 		if (!pointEnd)
 			beamType = BEAM_ENTPOINT;
@@ -923,16 +927,16 @@ void CLightning::BeamUpdateVars()
 	SetType(beamType);
 	if (beamType == BEAM_POINTS || beamType == BEAM_ENTPOINT || beamType == BEAM_HOSE)
 	{
-		SetStartPos(pStart->v.origin);
+		SetStartPos(pStart->pev->origin);
 		if (beamType == BEAM_POINTS || beamType == BEAM_HOSE)
-			SetEndPos(pEnd->v.origin);
+			SetEndPos(pEnd->pev->origin);
 		else
-			SetEndEntity(ENTINDEX(pEnd));
+			SetEndEntity(pEnd->entindex());
 	}
 	else
 	{
-		SetStartEntity(ENTINDEX(pStart));
-		SetEndEntity(ENTINDEX(pEnd));
+		SetStartEntity(pStart->entindex());
+		SetEndEntity(pEnd->entindex());
 	}
 
 	RelinkBeam();

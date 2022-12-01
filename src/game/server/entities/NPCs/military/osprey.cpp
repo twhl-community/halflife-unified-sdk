@@ -318,7 +318,13 @@ void COsprey::FlyThink()
 
 	if (m_pGoalEnt == nullptr && !FStringNull(pev->target)) // this monster has a target
 	{
-		m_pGoalEnt = CBaseEntity::Instance(FIND_ENTITY_BY_TARGETNAME(nullptr, STRING(pev->target)));
+		m_pGoalEnt = UTIL_FindEntityByTargetname(nullptr, STRING(pev->target));
+
+		if (!m_pGoalEnt)
+		{
+			m_pGoalEnt = CWorld::Instance;
+		}
+
 		UpdateGoal();
 	}
 
@@ -332,7 +338,12 @@ void COsprey::FlyThink()
 			}
 			do
 			{
-				m_pGoalEnt = CBaseEntity::Instance(FIND_ENTITY_BY_TARGETNAME(nullptr, STRING(m_pGoalEnt->pev->target)));
+				m_pGoalEnt = UTIL_FindEntityByTargetname(nullptr, STRING(m_pGoalEnt->pev->target));
+
+				if (!m_pGoalEnt)
+				{
+					m_pGoalEnt = CWorld::Instance;
+				}
 			} while (m_pGoalEnt->pev->speed < 400 && !HasDead());
 			UpdateGoal();
 		}

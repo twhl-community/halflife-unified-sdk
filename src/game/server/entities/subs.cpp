@@ -178,23 +178,17 @@ void CBaseEntity::SUB_UseTargets(CBaseEntity* pActivator, USE_TYPE useType, floa
 
 void FireTargets(const char* targetName, CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
-	edict_t* pentTarget = nullptr;
 	if (!targetName)
 		return;
 
 	CBaseEntity::IOLogger->debug("Firing: ({})", targetName);
 
-	for (;;)
+	for (auto target : UTIL_FindEntitiesByTargetname(targetName))
 	{
-		pentTarget = FIND_ENTITY_BY_TARGETNAME(pentTarget, targetName);
-		if (FNullEnt(pentTarget))
-			break;
-
-		CBaseEntity* pTarget = CBaseEntity::Instance(pentTarget);
-		if (pTarget && (pTarget->pev->flags & FL_KILLME) == 0) // Don't use dying ents
+		if (target && (target->pev->flags & FL_KILLME) == 0) // Don't use dying ents
 		{
-			CBaseEntity::IOLogger->debug("Found: {}, firing ({})", STRING(pTarget->pev->classname), targetName);
-			pTarget->Use(pActivator, pCaller, useType, value);
+			CBaseEntity::IOLogger->debug("Found: {}, firing ({})", STRING(target->pev->classname), targetName);
+			target->Use(pActivator, pCaller, useType, value);
 		}
 	}
 }
@@ -251,16 +245,12 @@ void CBaseDelay::SUB_UseTargets(CBaseEntity* pActivator, USE_TYPE useType, float
 
 	if (!FStringNull(m_iszKillTarget))
 	{
-		edict_t* pentKillTarget = nullptr;
-
 		CBaseEntity::IOLogger->debug("KillTarget: {}", STRING(m_iszKillTarget));
-		pentKillTarget = FIND_ENTITY_BY_TARGETNAME(nullptr, STRING(m_iszKillTarget));
-		while (!FNullEnt(pentKillTarget))
-		{
-			UTIL_Remove(CBaseEntity::Instance(pentKillTarget));
 
-			CBaseEntity::IOLogger->debug("killing {}", STRING(pentKillTarget->v.classname));
-			pentKillTarget = FIND_ENTITY_BY_TARGETNAME(pentKillTarget, STRING(m_iszKillTarget));
+		for (auto killTarget : UTIL_FindEntitiesByTargetname(STRING(m_iszKillTarget)))
+		{
+			UTIL_Remove(killTarget);
+			CBaseEntity::IOLogger->debug("killing {}", STRING(killTarget->pev->classname));
 		}
 	}
 

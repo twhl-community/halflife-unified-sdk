@@ -254,17 +254,14 @@ void CCineMonster::Pain()
 // find a viable entity
 bool CCineMonster::FindEntity()
 {
-	edict_t* pentTarget;
-
-	pentTarget = FIND_ENTITY_BY_TARGETNAME(nullptr, STRING(m_iszEntity));
 	m_hTargetEnt = nullptr;
 	CBaseMonster* pTarget = nullptr;
 
-	while (!FNullEnt(pentTarget))
+	for (auto target : UTIL_FindEntitiesByTargetname(STRING(m_iszEntity)))
 	{
-		if (FBitSet(VARS(pentTarget)->flags, FL_MONSTER))
+		if (FBitSet(target->pev->flags, FL_MONSTER))
 		{
-			pTarget = GetMonsterPointer(pentTarget);
+			pTarget = target->MyMonsterPointer();
 			if (pTarget && pTarget->CanPlaySequence(FCanOverrideState(), SS_INTERRUPT_BY_NAME))
 			{
 				m_hTargetEnt = pTarget;
@@ -272,7 +269,6 @@ bool CCineMonster::FindEntity()
 			}
 			AIScriptLogger->debug("Found {}, but can't play!", STRING(m_iszEntity));
 		}
-		pentTarget = FIND_ENTITY_BY_TARGETNAME(pentTarget, STRING(m_iszEntity));
 		pTarget = nullptr;
 	}
 
@@ -694,12 +690,9 @@ void CCineMonster::CancelScript()
 		return;
 	}
 
-	edict_t* pentCineTarget = FIND_ENTITY_BY_TARGETNAME(nullptr, STRING(pev->targetname));
-
-	while (!FNullEnt(pentCineTarget))
+	for (auto cineTarget : UTIL_FindEntitiesByTargetname(STRING(pev->targetname)))
 	{
-		ScriptEntityCancel(pentCineTarget);
-		pentCineTarget = FIND_ENTITY_BY_TARGETNAME(pentCineTarget, STRING(pev->targetname));
+		ScriptEntityCancel(cineTarget->edict());
 	}
 }
 
@@ -707,13 +700,11 @@ void CCineMonster::CancelScript()
 // find all the cinematic entities with my targetname and tell them to wait before starting
 void CCineMonster::DelayStart(bool state)
 {
-	edict_t* pentCine = FIND_ENTITY_BY_TARGETNAME(nullptr, STRING(pev->targetname));
-
-	while (!FNullEnt(pentCine))
+	for (auto cine : UTIL_FindEntitiesByTargetname(STRING(pev->targetname)))
 	{
-		if (FClassnameIs(pentCine, "scripted_sequence"))
+		if (FClassnameIs(cine->pev, "scripted_sequence"))
 		{
-			CCineMonster* pTarget = GetClassPtr((CCineMonster*)VARS(pentCine));
+			CCineMonster* pTarget = static_cast<CCineMonster*>(cine);
 			if (state)
 			{
 				pTarget->m_iDelay++;
@@ -725,7 +716,6 @@ void CCineMonster::DelayStart(bool state)
 					pTarget->m_startTime = gpGlobals->time + 0.05;
 			}
 		}
-		pentCine = FIND_ENTITY_BY_TARGETNAME(pentCine, STRING(pev->targetname));
 	}
 }
 
@@ -734,31 +724,34 @@ void CCineMonster::DelayStart(bool state)
 // Find an entity that I'm interested in and precache the sounds he'll need in the sequence.
 void CCineMonster::Activate()
 {
-	edict_t* pentTarget;
-	CBaseMonster* pTarget;
-
 	// The entity name could be a target name or a classname
 	// Check the targetname
-	pentTarget = FIND_ENTITY_BY_TARGETNAME(nullptr, STRING(m_iszEntity));
-	pTarget = nullptr;
+	CBaseMonster* pTarget = nullptr;
 
-	while (!pTarget && !FNullEnt(pentTarget))
+	for (auto candidate : UTIL_FindEntitiesByTargetname(STRING(m_iszEntity)))
 	{
-		if (FBitSet(VARS(pentTarget)->flags, FL_MONSTER))
+		if (FBitSet(candidate->pev->flags, FL_MONSTER))
 		{
-			pTarget = GetMonsterPointer(pentTarget);
+			pTarget = candidate->MyMonsterPointer();
+
+			if (pTarget)
+			{
+				break;
+			}
 		}
-		pentTarget = FIND_ENTITY_BY_TARGETNAME(pentTarget, STRING(m_iszEntity));
 	}
 
 	// If no entity with that targetname, check the classname
 	if (!pTarget)
 	{
-		pentTarget = FIND_ENTITY_BY_CLASSNAME(nullptr, STRING(m_iszEntity));
-		while (!pTarget && !FNullEnt(pentTarget))
+		for (auto candidate : UTIL_FindEntitiesByClassname(STRING(m_iszEntity)))
 		{
-			pTarget = GetMonsterPointer(pentTarget);
-			pentTarget = FIND_ENTITY_BY_CLASSNAME(pentTarget, STRING(m_iszEntity));
+			pTarget = candidate->MyMonsterPointer();
+
+			if (pTarget)
+			{
+				break;
+			}
 		}
 	}
 	// Found a compatible entity
@@ -1109,23 +1102,17 @@ bool CScriptedSentence::AcceptableSpeaker(CBaseMonster* pMonster)
 
 CBaseMonster* CScriptedSentence::FindEntity()
 {
-	edict_t* pentTarget;
-	CBaseMonster* pMonster;
+	CBaseMonster* pMonster = nullptr;
 
-
-	pentTarget = FIND_ENTITY_BY_TARGETNAME(nullptr, STRING(m_iszEntity));
-	pMonster = nullptr;
-
-	while (!FNullEnt(pentTarget))
+	for (auto target : UTIL_FindEntitiesByTargetname(STRING(m_iszEntity)))
 	{
-		pMonster = GetMonsterPointer(pentTarget);
+		pMonster = target->MyMonsterPointer();
 		if (pMonster != nullptr)
 		{
 			if (AcceptableSpeaker(pMonster))
 				return pMonster;
 			// AIScriptLogger->debug("{} ({}), not acceptable", STRING(pMonster->pev->classname), STRING(pMonster->pev->targetname));
 		}
-		pentTarget = FIND_ENTITY_BY_TARGETNAME(pentTarget, STRING(m_iszEntity));
 	}
 
 	CBaseEntity* pEntity = nullptr;

@@ -48,7 +48,7 @@ public:
 	CPathTrack* ValidPath(CPathTrack* ppath, bool testFlag); // Returns ppath if enabled, nullptr otherwise
 	void Project(CPathTrack* pstart, CPathTrack* pend, Vector* origin, float dist);
 
-	static CPathTrack* Instance(edict_t* pent);
+	static CPathTrack* Instance(CBaseEntity* pent);
 
 	CPathTrack* LookAhead(Vector* origin, float dist, bool move);
 	CPathTrack* Nearest(Vector origin);
@@ -96,7 +96,7 @@ public:
 	void StopSound();
 	void UpdateSound();
 
-	static CFuncTrackTrain* Instance(edict_t* pent);
+	static CFuncTrackTrain* Instance(CBaseEntity* pent);
 
 	bool Save(CSave& save) override;
 	bool Restore(CRestore& restore) override;

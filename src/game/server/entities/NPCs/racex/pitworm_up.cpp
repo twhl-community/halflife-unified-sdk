@@ -1962,7 +1962,13 @@ void COFPitWorm::StartMonster()
 	if (!FStringNull(pev->target)) // this monster has a target
 	{
 		// Find the monster's initial target entity, stash it
-		m_pGoalEnt = CBaseEntity::Instance(FIND_ENTITY_BY_TARGETNAME(nullptr, STRING(pev->target)));
+		m_pGoalEnt = UTIL_FindEntityByTargetname(nullptr, STRING(pev->target));
+
+		// TODO: this was probably unintended.
+		if (!m_pGoalEnt)
+		{
+			m_pGoalEnt = CWorld::Instance;
+		}
 
 		if (!m_pGoalEnt)
 		{

@@ -1586,25 +1586,18 @@ bool COFGeneWorm::FVisible(const Vector& vecOrigin)
 
 void FireHurtTargets(const char* targetName, CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
-	edict_t* pentTarget = nullptr;
 	if (!targetName)
 		return;
 
 	CBaseMonster::AILogger->debug("Firing: ({})", targetName);
 
-	for (;;)
+	for (auto target : UTIL_FindEntitiesByTargetname(targetName))
 	{
-		pentTarget = FIND_ENTITY_BY_TARGETNAME(pentTarget, targetName);
-		if (FNullEnt(pentTarget))
-			break;
-
-		CBaseEntity* pTarget = CBaseEntity::Instance(pentTarget);
-
 		// Fire only those targets that were toggled by the last hurt event
-		if (pTarget && !(useType == USE_OFF && pTarget->pev->solid == SOLID_NOT) && !(useType == USE_ON && pTarget->pev->solid == SOLID_TRIGGER) && (pTarget->pev->flags & FL_KILLME) == 0) // Don't use dying ents
+		if (target && !(useType == USE_OFF && target->pev->solid == SOLID_NOT) && !(useType == USE_ON && target->pev->solid == SOLID_TRIGGER) && (target->pev->flags & FL_KILLME) == 0) // Don't use dying ents
 		{
-			CBaseMonster::AILogger->debug("Found: {}, firing ({})", STRING(pTarget->pev->classname), targetName);
-			pTarget->Use(pActivator, pCaller, useType, value);
+			CBaseMonster::AILogger->debug("Found: {}, firing ({})", STRING(target->pev->classname), targetName);
+			target->Use(pActivator, pCaller, useType, value);
 		}
 	}
 }

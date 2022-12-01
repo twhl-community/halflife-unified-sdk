@@ -134,17 +134,9 @@ bool CGraph::AllocNodes()
 //=========================================================
 entvars_t* CGraph::LinkEntForLink(CLink* pLink, CNode* pNode)
 {
-	edict_t* pentSearch;
-	edict_t* pentTrigger;
-	entvars_t* pevTrigger;
-	entvars_t* pevLinkEnt;
-	TraceResult tr;
-
-	pevLinkEnt = pLink->m_pLinkEnt;
+	auto pevLinkEnt = pLink->m_pLinkEnt;
 	if (!pevLinkEnt)
 		return nullptr;
-
-	pentSearch = nullptr; // start search at the top of the ent list.
 
 	if (FClassnameIs(pevLinkEnt, "func_door") || FClassnameIs(pevLinkEnt, "func_door_rotating"))
 	{
@@ -157,36 +149,31 @@ entvars_t* CGraph::LinkEntForLink(CLink* pLink, CNode* pNode)
 			return pevLinkEnt;
 		}
 
-		while (true)
+		TraceResult tr;
+
+		// find the button or trigger
+		for (auto trigger : UTIL_FindEntitiesByTarget(STRING(pevLinkEnt->targetname)))
 		{
-			pentTrigger = FIND_ENTITY_BY_TARGET(pentSearch, STRING(pevLinkEnt->targetname)); // find the button or trigger
-
-			if (FNullEnt(pentTrigger))
-			{ // no trigger found
-
-				// right now this is a problem among auto-open doors, or any door that opens through the use
-				// of a trigger brush. Trigger brushes have no models, and don't show up in searches. Just allow
-				// monsters to open these sorts of doors for now.
-				return pevLinkEnt;
-			}
-
-			pentSearch = pentTrigger;
-			pevTrigger = VARS(pentTrigger);
-
-			if (FClassnameIs(pevTrigger, "func_button") || FClassnameIs(pevTrigger, "func_rot_button"))
+			if (FClassnameIs(trigger->pev, "func_button") || FClassnameIs(trigger->pev, "func_rot_button"))
 			{ // only buttons are handled right now.
 
 				// trace from the node to the trigger, make sure it's one we can see from the node.
 				// !!!HACKHACK Use bodyqueue here cause there are no ents we really wish to ignore!
-				UTIL_TraceLine(pNode->m_vecOrigin, VecBModelOrigin(pevTrigger), ignore_monsters, g_pBodyQueueHead, &tr);
+				UTIL_TraceLine(pNode->m_vecOrigin, VecBModelOrigin(trigger->pev), ignore_monsters, g_pBodyQueueHead, &tr);
 
-
-				if (VARS(tr.pHit) == pevTrigger)
+				if (tr.pHit == trigger->edict())
 				{ // good to go!
 					return VARS(tr.pHit);
 				}
 			}
 		}
+
+		// no trigger found
+
+		// right now this is a problem among auto-open doors, or any door that opens through the use
+		// of a trigger brush. Trigger brushes have no models, and don't show up in searches. Just allow
+		// monsters to open these sorts of doors for now.
+		return pevLinkEnt;
 	}
 	else
 	{
@@ -2542,10 +2529,9 @@ bool CGraph::FSaveGraph(const char* szMapName)
 //=========================================================
 bool CGraph::FSetGraphPointers()
 {
-	int i;
-	edict_t* pentLinkEnt;
+	CBaseEntity* linkEnt;
 
-	for (i = 0; i < m_cLinks; i++)
+	for (int i = 0; i < m_cLinks; i++)
 	{ // go through all of the links
 
 		if (m_pLinkPool[i].m_pLinkEnt != nullptr)
@@ -2558,9 +2544,9 @@ bool CGraph::FSetGraphPointers()
 			// m_szLinkEntModelname is not necessarily nullptr terminated (so we can store it in a more alignment-friendly 4 bytes)
 			memcpy(name, m_pLinkPool[i].m_szLinkEntModelname, 4);
 			name[4] = 0;
-			pentLinkEnt = FIND_ENTITY_BY_STRING(nullptr, "model", name);
+			linkEnt = UTIL_FindEntityByString(nullptr, "model", name);
 
-			if (FNullEnt(pentLinkEnt))
+			if (FNullEnt(linkEnt))
 			{
 				// the ent isn't around anymore? Either there is a major problem, or it was removed from the world
 				// ( like a func_breakable that's been destroyed or something ). Make sure that LinkEnt is null.
@@ -2569,7 +2555,7 @@ bool CGraph::FSetGraphPointers()
 			}
 			else
 			{
-				m_pLinkPool[i].m_pLinkEnt = VARS(pentLinkEnt);
+				m_pLinkPool[i].m_pLinkEnt = linkEnt->pev;
 
 				if (!FBitSet(m_pLinkPool[i].m_pLinkEnt->flags, FL_GRAPHED))
 				{

@@ -1351,25 +1351,24 @@ void CBasePlayer::PlayerDeathThink()
 //=========================================================
 void CBasePlayer::StartDeathCam()
 {
-	edict_t *pSpot, *pNewSpot;
-	int iRand;
-
 	if (pev->view_ofs == g_vecZero)
 	{
 		// don't accept subsequent attempts to StartDeathCam()
 		return;
 	}
 
-	pSpot = FIND_ENTITY_BY_CLASSNAME(nullptr, "info_intermission");
+	auto pSpot = UTIL_FindEntityByClassname(nullptr, "info_intermission");
 
 	if (!FNullEnt(pSpot))
 	{
 		// at least one intermission spot in the world.
-		iRand = RANDOM_LONG(0, 3);
+		int iRand = RANDOM_LONG(0, 3);
+
+		CBaseEntity* pNewSpot;
 
 		while (iRand > 0)
 		{
-			pNewSpot = FIND_ENTITY_BY_CLASSNAME(pSpot, "info_intermission");
+			pNewSpot = UTIL_FindEntityByClassname(pSpot, "info_intermission");
 
 			if (pNewSpot)
 			{
@@ -1381,8 +1380,8 @@ void CBasePlayer::StartDeathCam()
 
 		CopyToBodyQue(pev);
 
-		UTIL_SetOrigin(pev, pSpot->v.origin);
-		pev->angles = pev->v_angle = pSpot->v.v_angle;
+		UTIL_SetOrigin(pev, pSpot->pev->origin);
+		pev->angles = pev->v_angle = pSpot->pev->v_angle;
 	}
 	else
 	{
@@ -5837,14 +5836,12 @@ void CInfoIntermission::Spawn()
 
 void CInfoIntermission::Think()
 {
-	edict_t* pTarget;
-
 	// find my target
-	pTarget = FIND_ENTITY_BY_TARGETNAME(nullptr, STRING(pev->target));
+	auto pTarget = UTIL_FindEntityByTargetname(nullptr, STRING(pev->target));
 
 	if (!FNullEnt(pTarget))
 	{
-		pev->v_angle = UTIL_VecToAngles((pTarget->v.origin - pev->origin).Normalize());
+		pev->v_angle = UTIL_VecToAngles((pTarget->pev->origin - pev->origin).Normalize());
 		pev->v_angle.x = -pev->v_angle.x;
 	}
 }
