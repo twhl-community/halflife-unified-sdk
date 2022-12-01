@@ -218,8 +218,6 @@ TYPEDESCRIPTION gEntvarsDescription[] =
 		DEFINE_ENTITY_FIELD(radsuit_finished, FIELD_TIME),
 };
 
-#define ENTVARS_COUNT (sizeof(gEntvarsDescription) / sizeof(gEntvarsDescription[0]))
-
 edict_t* UTIL_GetEntityList()
 {
 	return g_engfuncs.pfnPEntityOfEntOffset(0);
@@ -520,19 +518,15 @@ void UTIL_MakeAimVectors(const Vector& vecAngles)
 	MAKE_VECTORS(rgflVec);
 }
 
-
-#define SWAP(a, b, temp) ((temp) = (a), (a) = (b), (b) = (temp))
-
 void UTIL_MakeInvVectors(const Vector& vec, globalvars_t* pgv)
 {
 	MAKE_VECTORS(vec);
 
-	float tmp;
 	pgv->v_right = pgv->v_right * -1;
 
-	SWAP(pgv->v_forward.y, pgv->v_right.x, tmp);
-	SWAP(pgv->v_forward.z, pgv->v_up.x, tmp);
-	SWAP(pgv->v_right.z, pgv->v_up.y, tmp);
+	std::swap(pgv->v_forward.y, pgv->v_right.x);
+	std::swap(pgv->v_forward.z, pgv->v_up.x);
+	std::swap(pgv->v_right.z, pgv->v_up.y);
 }
 
 static unsigned short FixedUnsigned16(float value, float scale)
@@ -1772,7 +1766,7 @@ void EntvarsKeyvalue(entvars_t* pev, KeyValueData* pkvd)
 	int i;
 	TYPEDESCRIPTION* pField;
 
-	for (i = 0; i < ENTVARS_COUNT; i++)
+	for (i = 0; i < std::size(gEntvarsDescription); i++)
 	{
 		pField = &gEntvarsDescription[i];
 
@@ -1819,7 +1813,7 @@ void EntvarsKeyvalue(entvars_t* pev, KeyValueData* pkvd)
 
 bool CSave::WriteEntVars(const char* pname, entvars_t* pev)
 {
-	return WriteFields(pname, pev, gEntvarsDescription, ENTVARS_COUNT);
+	return WriteFields(pname, pev, gEntvarsDescription, std::size(gEntvarsDescription));
 }
 
 
@@ -2185,7 +2179,7 @@ int CRestore::ReadField(void* pBaseData, TYPEDESCRIPTION* pFields, int fieldCoun
 
 bool CRestore::ReadEntVars(const char* pname, entvars_t* pev)
 {
-	return ReadFields(pname, pev, gEntvarsDescription, ENTVARS_COUNT);
+	return ReadFields(pname, pev, gEntvarsDescription, std::size(gEntvarsDescription));
 }
 
 

@@ -132,8 +132,6 @@ private:
 
 #define MAX_ENTITYARRAY 64
 
-// #define std::size(p)		(sizeof(p)/sizeof(p[0]))
-
 #define IMPLEMENT_SAVERESTORE(derivedClass, baseClass)                                     \
 	bool derivedClass::Save(CSave& save)                                                   \
 	{                                                                                      \
