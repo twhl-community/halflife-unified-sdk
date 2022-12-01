@@ -1437,8 +1437,6 @@ bool CChangeLevel::InTransitionVolume(CBaseEntity* pEntity, char* pVolumeName)
 // be moved across.
 int CChangeLevel::ChangeList(LEVELLIST* pLevelList, int maxList)
 {
-	edict_t *pentChangelevel, *pentLandmark;
-
 	int count = 0;
 
 	// Find all of the possible level changes on this BSP

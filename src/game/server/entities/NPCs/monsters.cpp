@@ -96,7 +96,6 @@ TYPEDESCRIPTION CBaseMonster::m_SaveData[] =
 		DEFINE_FIELD(CBaseMonster, m_AllowItemDropping, FIELD_BOOLEAN),
 };
 
-// IMPLEMENT_SAVERESTORE( CBaseMonster, CBaseToggle );
 bool CBaseMonster::Save(CSave& save)
 {
 	if (!CBaseToggle::Save(save))

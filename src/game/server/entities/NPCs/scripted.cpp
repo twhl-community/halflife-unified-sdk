@@ -117,13 +117,6 @@ void CCineMonster::Spawn()
 	// UTIL_SetSize(pev, Vector(-8, -8, -8), Vector(8, 8, 8));
 	pev->solid = SOLID_NOT;
 
-
-	// REMOVE: The old side-effect
-#if 0
-	if (m_iszIdle)
-		m_fMoveTo = 4;
-#endif
-
 	// if no targetname, start now
 	if (FStringNull(pev->targetname) || !FStringNull(m_iszIdle))
 	{
@@ -196,41 +189,7 @@ void CCineMonster::Blocked(CBaseEntity* pOther)
 
 void CCineMonster::Touch(CBaseEntity* pOther)
 {
-	/*
-		AILogger->debug("Cine Touch");
-		if (m_pentTarget && OFFSET(pOther->pev) == OFFSET(m_pentTarget))
-		{
-			CBaseMonster *pTarget = GetClassPtr((CBaseMonster *)VARS(m_pentTarget));
-			pTarget->m_monsterState == MONSTERSTATE_SCRIPT;
-		}
-	*/
 }
-
-
-/*
-	entvars_t *pevOther = VARS( gpGlobals->other );
-
-	if ( !FBitSet ( pevOther->flags , FL_MONSTER ) )
-	{// touched by a non-monster.
-		return;
-	}
-
-	pevOther->origin.z += 1;
-
-	if ( FBitSet ( pevOther->flags, FL_ONGROUND ) )
-	{// clear the onground so physics don't bitch
-		pevOther->flags -= FL_ONGROUND;
-	}
-
-	// toss the monster!
-	pevOther->velocity = pev->movedir * pev->speed;
-	pevOther->velocity.z += m_flHeight;
-
-
-	pev->solid = SOLID_NOT;// kill the trigger for now !!!UNDONE
-}
-*/
-
 
 //
 // ********** Cinematic DIE **********
@@ -1165,15 +1124,6 @@ bool CScriptedSentence::StartSentence(CBaseMonster* pTarget)
 	SUB_UseTargets(nullptr, USE_TOGGLE, 0);
 	return true;
 }
-
-
-
-
-
-/*
-
-*/
-
 
 //=========================================================
 // Furniture - this is the cool comment I cut-and-pasted

@@ -309,16 +309,6 @@ struct mstudiomesh_t
 	int normindex; // normal Vector
 };
 
-// triangles
-#if 0
-struct mstudiotrivert_t
-{
-	short				vertindex;		// index into vertex array
-	short				normindex;		// index into normal array
-	short				s,t;			// s,t position on skin
-};
-#endif
-
 // lighting options
 #define STUDIO_NF_FLATSHADE 0x0001
 #define STUDIO_NF_CHROME 0x0002
