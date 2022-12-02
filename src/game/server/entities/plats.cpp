@@ -1557,18 +1557,18 @@ void CFuncTrackTrain::DeadEnd()
 }
 
 
-void CFuncTrackTrain::SetControls(entvars_t* pevControls)
+void CFuncTrackTrain::SetControls(CBaseEntity* controls)
 {
-	Vector offset = pevControls->origin - pev->oldorigin;
+	Vector offset = controls->pev->origin - pev->oldorigin;
 
-	m_controlMins = pevControls->mins + offset;
-	m_controlMaxs = pevControls->maxs + offset;
+	m_controlMins = controls->pev->mins + offset;
+	m_controlMaxs = controls->pev->maxs + offset;
 }
 
 
-bool CFuncTrackTrain::OnControls(entvars_t* pevTest)
+bool CFuncTrackTrain::OnControls(CBaseEntity* controller)
 {
-	Vector offset = pevTest->origin - pev->origin;
+	Vector offset = controller->pev->origin - pev->origin;
 
 	if ((pev->spawnflags & SF_TRACKTRAIN_NOCONTROL) != 0)
 		return false;
@@ -1784,7 +1784,7 @@ void CFuncTrainControls::Find()
 	}
 
 	CFuncTrackTrain* ptrain = CFuncTrackTrain::Instance(target);
-	ptrain->SetControls(pev);
+	ptrain->SetControls(this);
 	UTIL_Remove(this);
 }
 

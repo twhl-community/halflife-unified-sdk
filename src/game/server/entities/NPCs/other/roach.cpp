@@ -181,7 +181,7 @@ void CRoach::Killed(CBaseEntity* attacker, int iGib)
 	CBaseEntity* pOwner = CBaseEntity::Instance(pev->owner);
 	if (pOwner)
 	{
-		pOwner->DeathNotice(pev);
+		pOwner->DeathNotice(this);
 	}
 	UTIL_Remove(this);
 }

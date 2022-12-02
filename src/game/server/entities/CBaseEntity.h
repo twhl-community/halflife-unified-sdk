@@ -220,7 +220,7 @@ public:
 	// Classify - returns the type of group (i.e, "houndeye", or "human military" so that monsters with different classnames
 	// still realize that they are teammates. (overridden for monsters that form groups)
 	virtual int Classify() { return CLASS_NONE; }
-	virtual void DeathNotice(entvars_t* pevChild) {} // monster maker children use this to tell the monster maker that they have died.
+	virtual void DeathNotice(CBaseEntity* child) {} // monster maker children use this to tell the monster maker that they have died.
 
 
 	static TYPEDESCRIPTION m_SaveData[];
@@ -245,7 +245,7 @@ public:
 	virtual void SetToggleState(int state) {}
 	virtual void StartSneaking() {}
 	virtual void StopSneaking() {}
-	virtual bool OnControls(entvars_t* pev) { return false; }
+	virtual bool OnControls(CBaseEntity* controller) { return false; }
 	virtual bool IsSneaking() { return false; }
 	virtual bool IsAlive() { return (pev->deadflag == DEAD_NO) && pev->health > 0; }
 	virtual bool IsBSPModel() { return pev->solid == SOLID_BSP || pev->movetype == MOVETYPE_PUSHSTEP; }

@@ -93,7 +93,7 @@ public:
 	bool Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
-	bool OnControls(entvars_t* pevTest) override;
+	bool OnControls(CBaseEntity* controller) override;
 	bool StartControl(CBasePlayer* pController);
 	void StopControl();
 	void ControllerPostFrame();
@@ -346,14 +346,14 @@ bool CFuncTank::KeyValue(KeyValueData* pkvd)
 
 //==================================================================================
 // TANK CONTROLLING
-bool CFuncTank::OnControls(entvars_t* pevTest)
+bool CFuncTank::OnControls(CBaseEntity* controller)
 {
 	if ((pev->spawnflags & SF_TANK_CANCONTROL) == 0)
 		return false;
 
-	Vector offset = pevTest->origin - pev->origin;
+	Vector offset = controller->pev->origin - pev->origin;
 
-	if ((m_vecControllerUsePos - pevTest->origin).Length() < 30)
+	if ((m_vecControllerUsePos - controller->pev->origin).Length() < 30)
 		return true;
 
 	return false;

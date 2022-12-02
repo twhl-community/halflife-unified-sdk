@@ -247,7 +247,7 @@ public:
 		m_crabCount = 0;
 	}
 
-	void DeathNotice(entvars_t* pevChild) override;
+	void DeathNotice(CBaseEntity* child) override;
 
 	bool CanLayCrab()
 	{
@@ -625,7 +625,7 @@ void CBigMomma::LayHeadcrab()
 
 
 
-void CBigMomma::DeathNotice(entvars_t* pevChild)
+void CBigMomma::DeathNotice(CBaseEntity* child)
 {
 	if (m_crabCount > 0) // Some babies may cross a transition, but we reset the count then
 		m_crabCount--;

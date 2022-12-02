@@ -1467,7 +1467,7 @@ void CBasePlayer::PlayerUse()
 			{ // Start controlling the train!
 				CBaseEntity* pTrain = CBaseEntity::Instance(pev->groundentity);
 
-				if (pTrain && (pev->button & IN_JUMP) == 0 && FBitSet(pev->flags, FL_ONGROUND) && (pTrain->ObjectCaps() & FCAP_DIRECTIONAL_USE) != 0 && pTrain->OnControls(pev))
+				if (pTrain && (pev->button & IN_JUMP) == 0 && FBitSet(pev->flags, FL_ONGROUND) && (pTrain->ObjectCaps() & FCAP_DIRECTIONAL_USE) != 0 && pTrain->OnControls(this))
 				{
 					m_afPhysicsFlags |= PFLAG_ONTRAIN;
 					m_iTrain = TrainSpeed(pTrain->pev->speed, pTrain->pev->impulse);
@@ -2101,7 +2101,7 @@ void CBasePlayer::PreThink()
 				pTrain = CBaseEntity::Instance(trainTrace.pHit);
 
 
-			if (!pTrain || (pTrain->ObjectCaps() & FCAP_DIRECTIONAL_USE) == 0 || !pTrain->OnControls(pev))
+			if (!pTrain || (pTrain->ObjectCaps() & FCAP_DIRECTIONAL_USE) == 0 || !pTrain->OnControls(this))
 			{
 				// Logger->error("In train mode with no train!");
 				m_afPhysicsFlags &= ~PFLAG_ONTRAIN;
@@ -2737,7 +2737,7 @@ void CBasePlayer::PostThink()
 	// Handle Tank controlling
 	if (m_pTank != nullptr)
 	{ // if they've moved too far from the gun,  or selected a weapon, unuse the gun
-		if (m_pTank->OnControls(pev) && FStringNull(pev->weaponmodel))
+		if (m_pTank->OnControls(this) && FStringNull(pev->weaponmodel))
 		{
 			m_pTank->Use(this, this, USE_SET, 2); // try fire the gun
 		}

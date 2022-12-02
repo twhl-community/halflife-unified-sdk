@@ -36,7 +36,7 @@ public:
 	void EXPORT ToggleUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 	void EXPORT CyclicUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 	void EXPORT MakerThink();
-	void DeathNotice(entvars_t* pevChild) override; // monster maker children use this to tell the monster maker that they have died.
+	void DeathNotice(CBaseEntity* child) override; // monster maker children use this to tell the monster maker that they have died.
 	void MakeMonster();
 
 	bool Save(CSave& save) override;
@@ -270,13 +270,13 @@ void CMonsterMaker::MakerThink()
 
 //=========================================================
 //=========================================================
-void CMonsterMaker::DeathNotice(entvars_t* pevChild)
+void CMonsterMaker::DeathNotice(CBaseEntity* child)
 {
 	// ok, we've gotten the deathnotice from our child, now clear out its owner if we don't want it to fade.
 	m_cLiveChildren--;
 
 	if (!m_fFadeChildren)
 	{
-		pevChild->owner = nullptr;
+		child->pev->owner = nullptr;
 	}
 }
