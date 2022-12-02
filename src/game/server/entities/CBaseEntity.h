@@ -357,22 +357,6 @@ public:
 	template <typename T>
 	static T* Instance(entvars_t* pev) { return Instance<T>(ENT(pev)); }
 
-	CBaseMonster* GetMonsterPointer(entvars_t* pevMonster)
-	{
-		CBaseEntity* pEntity = Instance(pevMonster);
-		if (pEntity)
-			return pEntity->MyMonsterPointer();
-		return nullptr;
-	}
-	CBaseMonster* GetMonsterPointer(edict_t* pentMonster)
-	{
-		CBaseEntity* pEntity = Instance(pentMonster);
-		if (pEntity)
-			return pEntity->MyMonsterPointer();
-		return nullptr;
-	}
-
-
 	// Ugly technique to override base member functions
 	// Normally it's illegal to cast a pointer to a member function of a derived class to a pointer to a
 	// member function of a base class.  static_cast is a sleezy way around that problem.

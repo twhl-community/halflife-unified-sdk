@@ -3399,7 +3399,7 @@ bool CBaseMonster::GetEnemy()
 				// if the new enemy has an owner, take that one as well
 				if (pNewEnemy->pev->owner != nullptr)
 				{
-					CBaseEntity* pOwner = GetMonsterPointer(pNewEnemy->pev->owner);
+					CBaseEntity* pOwner = Instance(pNewEnemy->GetOwner())->MyMonsterPointer();
 					if (pOwner && (pOwner->pev->flags & FL_MONSTER) != 0 && IRelationship(pOwner) != R_NO)
 						PushEnemy(pOwner, m_vecEnemyLKP);
 				}
