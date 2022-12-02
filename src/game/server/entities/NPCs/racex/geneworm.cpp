@@ -126,7 +126,7 @@ void COFGeneWormCloud::GeneWormCloudTouch(CBaseEntity* pOther)
 	{
 		if (pOther->pev->takedamage != DAMAGE_NO)
 		{
-			pOther->TakeDamage(pev, pev, GetSkillFloat("geneworm_dmg_spit"sv), DMG_ACID);
+			pOther->TakeDamage(this, this, GetSkillFloat("geneworm_dmg_spit"sv), DMG_ACID);
 		}
 
 		pev->nextthink = gpGlobals->time;
@@ -370,7 +370,7 @@ void COFGeneWormSpawn::RunGeneWormSpawn(float frames)
 					}
 					else
 					{
-						::RadiusDamage(pev->origin, pev, pev, 1000.0, 128.0, CLASS_NONE, DMG_ALWAYSGIB | DMG_SHOCK);
+						::RadiusDamage(pev->origin, this, this, 1000.0, 128.0, CLASS_NONE, DMG_ALWAYSGIB | DMG_SHOCK);
 						CreateWarpBeams(1);
 						CreateWarpBeams(-1);
 					}
@@ -567,13 +567,13 @@ public:
 	void Precache() override;
 	void Spawn() override;
 
-	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 
-	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
+	void TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
 
-	void Killed(entvars_t* pevAttacker, int iGib) override
+	void Killed(CBaseEntity* attacker, int iGib) override
 	{
-		CBaseMonster::Killed(pevAttacker, iGib);
+		CBaseMonster::Killed(attacker, iGib);
 	}
 
 	bool FVisible(CBaseEntity* pEntity) override;
@@ -1180,17 +1180,17 @@ void COFGeneWorm::HitTouch(CBaseEntity* pOther)
 		switch (tr.iHitgroup)
 		{
 		case 1:
-			pOther->TakeDamage(pev, pev, 10, DMG_CRUSH | DMG_SLASH);
+			pOther->TakeDamage(this, this, 10, DMG_CRUSH | DMG_SLASH);
 			break;
 		case 2:
-			pOther->TakeDamage(pev, pev, 15, DMG_CRUSH | DMG_SLASH);
+			pOther->TakeDamage(this, this, 15, DMG_CRUSH | DMG_SLASH);
 			break;
 		case 3:
-			pOther->TakeDamage(pev, pev, 20, DMG_CRUSH | DMG_SLASH);
+			pOther->TakeDamage(this, this, 20, DMG_CRUSH | DMG_SLASH);
 			break;
 
 		default:
-			pOther->TakeDamage(pev, pev, pOther->pev->health, DMG_CRUSH | DMG_SLASH);
+			pOther->TakeDamage(this, this, pOther->pev->health, DMG_CRUSH | DMG_SLASH);
 			break;
 		}
 
@@ -1381,7 +1381,7 @@ bool COFGeneWorm::ClawAttack()
 	return false;
 }
 
-bool COFGeneWorm::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool COFGeneWorm::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType)
 {
 	// Never actually die
 	if (flDamage >= pev->health)
@@ -1396,9 +1396,9 @@ bool COFGeneWorm::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, fl
 	return true;
 }
 
-void COFGeneWorm::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
+void COFGeneWorm::TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
 {
-	const auto isLaser = 0 == strcmp("env_laser", STRING(pevAttacker->classname));
+	const auto isLaser = 0 == strcmp("env_laser", STRING(attacker->pev->classname));
 
 	if (ptr->iHitgroup != 4 && ptr->iHitgroup != 5 && ptr->iHitgroup != 6)
 	{
@@ -1461,7 +1461,7 @@ void COFGeneWorm::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vec
 	{
 		if (!m_fLeftEyeHit)
 		{
-			if (0 == strcmp("left_eye_laser", STRING(pevAttacker->targetname)))
+			if (0 == strcmp("left_eye_laser", STRING(attacker->pev->targetname)))
 			{
 				m_fLeftEyeHit = true;
 
@@ -1495,7 +1495,7 @@ void COFGeneWorm::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vec
 	{
 		if (!m_fRightEyeHit)
 		{
-			if (0 == strcmp("right_eye_laser", STRING(pevAttacker->targetname)))
+			if (0 == strcmp("right_eye_laser", STRING(attacker->pev->targetname)))
 			{
 				m_fRightEyeHit = true;
 

@@ -752,8 +752,8 @@ void CBeam::BeamDamage(TraceResult* ptr)
 		if (pHit)
 		{
 			ClearMultiDamage();
-			pHit->TraceAttack(pev, pev->dmg * (gpGlobals->time - pev->dmgtime), (ptr->vecEndPos - pev->origin).Normalize(), ptr, DMG_ENERGYBEAM);
-			ApplyMultiDamage(pev, pev);
+			pHit->TraceAttack(this, pev->dmg * (gpGlobals->time - pev->dmgtime), (ptr->vecEndPos - pev->origin).Normalize(), ptr, DMG_ENERGYBEAM);
+			ApplyMultiDamage(this, this);
 			if ((pev->spawnflags & SF_BEAM_DECALS) != 0)
 			{
 				if (pHit->IsBSPModel())
@@ -2373,7 +2373,7 @@ void CWarpBall::WarpBallUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_T
 
 		if (m_flDamageDelay == 0)
 		{
-			::RadiusDamage(pev->origin, pev, pev, 300, 48, CLASS_NONE, DMG_SHOCK);
+			::RadiusDamage(pev->origin, this, this, 300, 48, CLASS_NONE, DMG_SHOCK);
 			m_fDamageApplied = true;
 		}
 		else
@@ -2414,7 +2414,7 @@ void CWarpBall::BallThink()
 		// TODO: this flag is probably supposed to be a "do radius damage" flag, but it isn't used in the Use method
 		if ((pev->spawnflags & SF_WARPBALL_DELAYED_DAMAGE) != 0 && !m_fDamageApplied && (gpGlobals->time - m_flWarpStart) >= m_flDamageDelay)
 		{
-			::RadiusDamage(pev->origin, pev, pev, 300, 48, CLASS_NONE, DMG_SHOCK);
+			::RadiusDamage(pev->origin, this, this, 300, 48, CLASS_NONE, DMG_SHOCK);
 			m_fDamageApplied = true;
 		}
 

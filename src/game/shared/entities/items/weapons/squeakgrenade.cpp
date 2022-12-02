@@ -35,7 +35,7 @@ public:
 	void EXPORT SuperBounceTouch(CBaseEntity* pOther);
 	void EXPORT HuntThink();
 	int BloodColor() override { return BLOOD_COLOR_YELLOW; }
-	void Killed(entvars_t* pevAttacker, int iGib) override;
+	void Killed(CBaseEntity* attacker, int iGib) override;
 	void GibMonster() override;
 
 	bool Save(CSave& save) override;
@@ -152,7 +152,7 @@ void CSqueakGrenade::Precache()
 }
 
 
-void CSqueakGrenade::Killed(entvars_t* pevAttacker, int iGib)
+void CSqueakGrenade::Killed(CBaseEntity* attacker, int iGib)
 {
 	pev->model = string_t::Null; // make invisible
 	SetThink(&CSqueakGrenade::SUB_Remove);
@@ -172,15 +172,15 @@ void CSqueakGrenade::Killed(entvars_t* pevAttacker, int iGib)
 	UTIL_BloodDrips(pev->origin, g_vecZero, BloodColor(), 80);
 
 	if (m_hOwner != nullptr)
-		RadiusDamage(pev, m_hOwner->pev, pev->dmg, CLASS_NONE, DMG_BLAST);
+		RadiusDamage(this, m_hOwner, pev->dmg, CLASS_NONE, DMG_BLAST);
 	else
-		RadiusDamage(pev, pev, pev->dmg, CLASS_NONE, DMG_BLAST);
+		RadiusDamage(this, this, pev->dmg, CLASS_NONE, DMG_BLAST);
 
 	// reset owner so death message happens
 	if (m_hOwner != nullptr)
 		pev->owner = m_hOwner->edict();
 
-	CBaseMonster::Killed(pevAttacker, GIB_ALWAYS);
+	CBaseMonster::Killed(attacker, GIB_ALWAYS);
 }
 
 void CSqueakGrenade::GibMonster()
@@ -209,7 +209,7 @@ void CSqueakGrenade::HuntThink()
 	{
 		g_vecAttackDir = pev->velocity.Normalize();
 		pev->health = -1;
-		Killed(pev, 0);
+		Killed(this, 0);
 		return;
 	}
 
@@ -344,11 +344,11 @@ void CSqueakGrenade::SuperBounceTouch(CBaseEntity* pOther)
 			{
 				// AILogger->debug("hit enemy");
 				ClearMultiDamage();
-				pOther->TraceAttack(pev, GetSkillFloat("snark_dmg_bite"sv), gpGlobals->v_forward, &tr, DMG_SLASH);
+				pOther->TraceAttack(this, GetSkillFloat("snark_dmg_bite"sv), gpGlobals->v_forward, &tr, DMG_SLASH);
 				if (m_hOwner != nullptr)
-					ApplyMultiDamage(pev, m_hOwner->pev);
+					ApplyMultiDamage(this, m_hOwner);
 				else
-					ApplyMultiDamage(pev, pev);
+					ApplyMultiDamage(this, this);
 
 				pev->dmg += GetSkillFloat("snark_dmg_pop"sv); // add more explosion damage
 				// m_flDie += 2.0; // add more life

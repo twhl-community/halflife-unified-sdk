@@ -182,6 +182,16 @@ public:
 
 	int PrecacheSound(const char* s);
 
+	CBaseEntity* GetOwner()
+	{
+		return GET_PRIVATE<CBaseEntity>(pev->owner);
+	}
+
+	void SetOwner(CBaseEntity* owner)
+	{
+		pev->owner = owner ? owner->edict() : nullptr;
+	}
+
 	// initialization functions
 
 	/**
@@ -215,10 +225,10 @@ public:
 
 	static TYPEDESCRIPTION m_SaveData[];
 
-	virtual void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType);
-	virtual bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
+	virtual void TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType);
+	virtual bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType);
 	virtual bool TakeHealth(float flHealth, int bitsDamageType);
-	virtual void Killed(entvars_t* pevAttacker, int iGib);
+	virtual void Killed(CBaseEntity* attacker, int iGib);
 	virtual int BloodColor() { return DONT_BLEED; }
 	virtual void TraceBleed(float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType);
 	virtual bool IsTriggered(CBaseEntity* pActivator) { return true; }
@@ -300,8 +310,8 @@ public:
 	void EXPORT SUB_FadeOut();
 	void EXPORT SUB_CallUseToggle() { this->Use(this, this, USE_TOGGLE, 0); }
 	bool ShouldToggle(USE_TYPE useType, bool currentState);
-	void FireBullets(unsigned int cShots, Vector vecSrc, Vector vecDirShooting, Vector vecSpread, float flDistance, int iBulletType, int iTracerFreq = 4, int iDamage = 0, entvars_t* pevAttacker = nullptr);
-	Vector FireBulletsPlayer(unsigned int cShots, Vector vecSrc, Vector vecDirShooting, Vector vecSpread, float flDistance, int iBulletType, int iTracerFreq = 4, int iDamage = 0, entvars_t* pevAttacker = nullptr, int shared_rand = 0);
+	void FireBullets(unsigned int cShots, Vector vecSrc, Vector vecDirShooting, Vector vecSpread, float flDistance, int iBulletType, int iTracerFreq = 4, int iDamage = 0, CBaseEntity* attacker = nullptr);
+	Vector FireBulletsPlayer(unsigned int cShots, Vector vecSrc, Vector vecDirShooting, Vector vecSpread, float flDistance, int iBulletType, int iTracerFreq = 4, int iDamage = 0, CBaseEntity* attacker = nullptr, int shared_rand = 0);
 
 	virtual CBaseEntity* Respawn() { return nullptr; }
 
@@ -325,6 +335,14 @@ public:
 			return World;
 
 		return Instance(ENT(pev));
+	}
+
+	static CBaseEntity* Instance(CBaseEntity* ent)
+	{
+		if (!ent)
+			return World;
+
+		return ent;
 	}
 
 	template <typename T>

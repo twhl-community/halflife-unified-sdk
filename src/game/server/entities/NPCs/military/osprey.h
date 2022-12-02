@@ -32,7 +32,7 @@ public:
 	void Precache() override;
 	int Classify() override { return CLASS_MACHINE; }
 	int BloodColor() override { return DONT_BLEED; }
-	void Killed(entvars_t* pevAttacker, int iGib) override;
+	void Killed(CBaseEntity* attacker, int iGib) override;
 
 	void UpdateGoal();
 	bool HasDead();
@@ -49,8 +49,8 @@ public:
 	void EXPORT DyingThink();
 	void EXPORT CommandUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
-	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
-	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
+	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
+	void TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
 	void ShowDamage();
 	void Update();
 

@@ -235,7 +235,7 @@ CBaseEntity* COFBabyVoltigore::CheckTraceHullAttack(float flDist, int iDamage, i
 
 		if (iDamage > 0)
 		{
-			pEntity->TakeDamage(pev, pev, iDamage, iDmgType);
+			pEntity->TakeDamage(this, this, iDamage, iDmgType);
 		}
 
 		return pEntity;

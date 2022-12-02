@@ -40,7 +40,7 @@ public:
 	void StartMonster() override;
 	void VacateSlot();
 	void ScheduleChange() override;
-	void Killed(entvars_t* pevAttacker, int iGib) override;
+	void Killed(CBaseEntity* attacker, int iGib) override;
 	bool OccupySlot(int iDesiredSlot);
 	bool NoFriendlyFire();
 
@@ -91,5 +91,5 @@ public:
 
 	virtual bool HealMe(COFSquadTalkMonster* pTarget);
 
-	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 };

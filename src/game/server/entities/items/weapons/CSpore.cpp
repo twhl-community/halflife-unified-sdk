@@ -178,7 +178,7 @@ void CSpore::IgniteThink()
 	WRITE_BYTE(80);
 	MESSAGE_END();
 
-	::RadiusDamage(pev->origin, pev, VARS(pev->owner), pev->dmg, 200, CLASS_NONE, DMG_ALWAYSGIB | DMG_BLAST);
+	::RadiusDamage(pev->origin, this, GetOwner(), pev->dmg, 200, CLASS_NONE, DMG_ALWAYSGIB | DMG_BLAST);
 
 	SetThink(&CSpore::SUB_Remove);
 
@@ -218,7 +218,7 @@ void CSpore::RocketTouch(CBaseEntity* pOther)
 {
 	if (pOther->pev->takedamage != DAMAGE_NO)
 	{
-		pOther->TakeDamage(pev, VARS(pev->owner), GetSkillFloat("plr_spore"sv), DMG_GENERIC);
+		pOther->TakeDamage(this, GetOwner(), GetSkillFloat("plr_spore"sv), DMG_GENERIC);
 	}
 
 	IgniteThink();
@@ -249,7 +249,7 @@ void CSpore::MyBounceTouch(CBaseEntity* pOther)
 	}
 	else
 	{
-		pOther->TakeDamage(pev, VARS(pev->owner), GetSkillFloat("plr_spore"sv), DMG_GENERIC);
+		pOther->TakeDamage(this, GetOwner(), GetSkillFloat("plr_spore"sv), DMG_GENERIC);
 
 		IgniteThink();
 	}

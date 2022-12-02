@@ -94,23 +94,21 @@ void CCrossbowBolt::BoltTouch(CBaseEntity* pOther)
 	if (0 != pOther->pev->takedamage)
 	{
 		TraceResult tr = UTIL_GetGlobalTrace();
-		entvars_t* pevOwner;
-
-		pevOwner = VARS(pev->owner);
+		auto owner = GetOwner();
 
 		// UNDONE: this needs to call TraceAttack instead
 		ClearMultiDamage();
 
 		if (pOther->IsPlayer())
 		{
-			pOther->TraceAttack(pevOwner, GetSkillFloat("plr_xbow_bolt_client"sv), pev->velocity.Normalize(), &tr, DMG_NEVERGIB);
+			pOther->TraceAttack(owner, GetSkillFloat("plr_xbow_bolt_client"sv), pev->velocity.Normalize(), &tr, DMG_NEVERGIB);
 		}
 		else
 		{
-			pOther->TraceAttack(pevOwner, GetSkillFloat("plr_xbow_bolt_monster"sv), pev->velocity.Normalize(), &tr, DMG_BULLET | DMG_NEVERGIB);
+			pOther->TraceAttack(owner, GetSkillFloat("plr_xbow_bolt_monster"sv), pev->velocity.Normalize(), &tr, DMG_BULLET | DMG_NEVERGIB);
 		}
 
-		ApplyMultiDamage(pev, pevOwner);
+		ApplyMultiDamage(this, owner);
 
 		pev->velocity = Vector(0, 0, 0);
 		// play body "thwack" sound
@@ -126,7 +124,7 @@ void CCrossbowBolt::BoltTouch(CBaseEntity* pOther)
 
 		if (!g_pGameRules->IsMultiplayer())
 		{
-			Killed(pev, GIB_NEVER);
+			Killed(this, GIB_NEVER);
 		}
 	}
 	else
@@ -199,16 +197,11 @@ void CCrossbowBolt::ExplodeThink()
 	WRITE_BYTE(TE_EXPLFLAG_NONE);
 	MESSAGE_END();
 
-	entvars_t* pevOwner;
-
-	if (pev->owner)
-		pevOwner = VARS(pev->owner);
-	else
-		pevOwner = nullptr;
+	auto owner = GetOwner();
 
 	pev->owner = nullptr; // can't traceline attack owner if this is set
 
-	::RadiusDamage(pev->origin, pev, pevOwner, pev->dmg, 128, CLASS_NONE, DMG_BLAST | DMG_ALWAYSGIB);
+	::RadiusDamage(pev->origin, this, owner, pev->dmg, 128, CLASS_NONE, DMG_BLAST | DMG_ALWAYSGIB);
 
 	UTIL_Remove(this);
 }
@@ -347,8 +340,8 @@ void CCrossbow::FireSniperBolt()
 	if (0 != tr.pHit->v.takedamage)
 	{
 		ClearMultiDamage();
-		CBaseEntity::Instance(tr.pHit)->TraceAttack(m_pPlayer->pev, 120, vecDir, &tr, DMG_BULLET | DMG_NEVERGIB);
-		ApplyMultiDamage(pev, m_pPlayer->pev);
+		CBaseEntity::Instance(tr.pHit)->TraceAttack(m_pPlayer, 120, vecDir, &tr, DMG_BULLET | DMG_NEVERGIB);
+		ApplyMultiDamage(this, m_pPlayer);
 	}
 #endif
 }

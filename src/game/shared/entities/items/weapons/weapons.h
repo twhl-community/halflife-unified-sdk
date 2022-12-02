@@ -62,7 +62,7 @@ public:
 
 	virtual void BounceSound();
 	int BloodColor() override { return DONT_BLEED; }
-	void Killed(entvars_t* pevAttacker, int iGib) override;
+	void Killed(CBaseEntity* attacker, int iGib) override;
 
 	bool m_fRegisteredSound; // whether or not this grenade has issued its DANGER sound to the world sound list yet.
 };
@@ -449,13 +449,13 @@ inline DLL_GLOBAL short g_sModelIndexBloodDrop;	 // holds the sprite index for b
 inline DLL_GLOBAL short g_sModelIndexBloodSpray; // holds the sprite index for blood spray (bigger)
 
 void ClearMultiDamage();
-void ApplyMultiDamage(entvars_t* pevInflictor, entvars_t* pevAttacker);
-void AddMultiDamage(entvars_t* pevInflictor, CBaseEntity* pEntity, float flDamage, int bitsDamageType);
+void ApplyMultiDamage(CBaseEntity* inflictor, CBaseEntity* attacker);
+void AddMultiDamage(CBaseEntity* inflictor, CBaseEntity* pEntity, float flDamage, int bitsDamageType);
 
 void DecalGunshot(TraceResult* pTrace, int iBulletType);
 void SpawnBlood(Vector vecSpot, int bloodColor, float flDamage);
 int DamageDecal(CBaseEntity* pEntity, int bitsDamageType);
-void RadiusDamage(Vector vecSrc, entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, float flRadius, int iClassIgnore, int bitsDamageType);
+void RadiusDamage(Vector vecSrc, CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, float flRadius, int iClassIgnore, int bitsDamageType);
 
 struct MULTIDAMAGE
 {

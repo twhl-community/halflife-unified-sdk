@@ -266,19 +266,19 @@ void COFChargedBolt::ChargedBoltTouch(CBaseEntity* pOther)
 	else
 	{
 		ClearMultiDamage();
-		pOther->TakeDamage(pev, pev, GetSkillFloat("voltigore_dmg_beam"sv), DMG_ALWAYSGIB | DMG_SHOCK);
+		pOther->TakeDamage(this, this, GetSkillFloat("voltigore_dmg_beam"sv), DMG_ALWAYSGIB | DMG_SHOCK);
 	}
 
 	pev->velocity = g_vecZero;
 
-	auto pevOwner = VARS(pev->owner);
+	auto pevOwner = GetOwner();
 
 	// Null out the owner to avoid issues with radius damage
 	pev->owner = nullptr;
 
 	ClearMultiDamage();
 
-	RadiusDamage(pev->origin, pev, pevOwner, GetSkillFloat("voltigore_dmg_beam"sv), 128.0, CLASS_NONE, DMG_ALWAYSGIB | DMG_SHOCK);
+	RadiusDamage(pev->origin, this, pevOwner, GetSkillFloat("voltigore_dmg_beam"sv), 128.0, CLASS_NONE, DMG_ALWAYSGIB | DMG_SHOCK);
 
 	SetThink(&COFChargedBolt::ShutdownChargedBolt);
 	pev->nextthink = gpGlobals->time + 0.5;
@@ -336,7 +336,7 @@ int COFVoltigore::ISoundMask()
 //=========================================================
 // TraceAttack
 //=========================================================
-void COFVoltigore::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
+void COFVoltigore::TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
 {
 	// Ignore shock damage since we have a shock based attack
 	// TODO: use a filter based on attacker to identify self harm
@@ -344,7 +344,7 @@ void COFVoltigore::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector ve
 	{
 		SpawnBlood(ptr->vecEndPos, BloodColor(), flDamage); // a little surface blood.
 		TraceBleed(flDamage, vecDir, ptr, bitsDamageType);
-		AddMultiDamage(pevAttacker, this, flDamage, bitsDamageType);
+		AddMultiDamage(attacker, this, flDamage, bitsDamageType);
 	}
 }
 
@@ -1226,7 +1226,7 @@ void COFVoltigore::DeathGibThink()
 
 		ClearMultiDamage();
 
-		::RadiusDamage(pev->origin, pev, pev, GetSkillFloat("voltigore_dmg_beam"sv), 160.0, CLASS_NONE, DMG_ALWAYSGIB | DMG_SHOCK);
+		::RadiusDamage(pev->origin, this, this, GetSkillFloat("voltigore_dmg_beam"sv), 160.0, CLASS_NONE, DMG_ALWAYSGIB | DMG_SHOCK);
 	}
 }
 
@@ -1268,9 +1268,9 @@ void COFVoltigore::GibMonster()
 	}
 }
 
-void COFVoltigore::Killed(entvars_t* pevAttacker, int iGib)
+void COFVoltigore::Killed(CBaseEntity* attacker, int iGib)
 {
 	ClearBeams();
 
-	CSquadMonster::Killed(pevAttacker, iGib);
+	CSquadMonster::Killed(attacker, iGib);
 }

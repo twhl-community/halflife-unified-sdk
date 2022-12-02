@@ -531,7 +531,7 @@ bool CBaseEntity::TakeHealth(float flHealth, int bitsDamageType)
 
 // inflict damage on this entity.  bitsDamageType indicates type of damage inflicted, ie: DMG_CRUSH
 
-bool CBaseEntity::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool CBaseEntity::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType)
 {
 	Vector vecTemp;
 
@@ -542,14 +542,14 @@ bool CBaseEntity::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, fl
 
 	// if Attacker == Inflictor, the attack was a melee or other instant-hit attack.
 	// (that is, no actual entity projectile was involved in the attack so use the shooter's origin).
-	if (pevAttacker == pevInflictor)
+	if (attacker == inflictor)
 	{
-		vecTemp = pevInflictor->origin - (VecBModelOrigin(pev));
+		vecTemp = inflictor->pev->origin - (VecBModelOrigin(pev));
 	}
 	else
 	// an actual missile was involved.
 	{
-		vecTemp = pevInflictor->origin - (VecBModelOrigin(pev));
+		vecTemp = inflictor->pev->origin - (VecBModelOrigin(pev));
 	}
 
 	// this global is still used for glass and other non-monster killables, along with decals.
@@ -558,9 +558,9 @@ bool CBaseEntity::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, fl
 	// save damage based on the target's armor level
 
 	// figure momentum add (don't let hurt brushes or other triggers move player)
-	if ((!FNullEnt(pevInflictor)) && (pev->movetype == MOVETYPE_WALK || pev->movetype == MOVETYPE_STEP) && (pevAttacker->solid != SOLID_TRIGGER))
+	if ((!FNullEnt(inflictor)) && (pev->movetype == MOVETYPE_WALK || pev->movetype == MOVETYPE_STEP) && (attacker->pev->solid != SOLID_TRIGGER))
 	{
-		Vector vecDir = pev->origin - (pevInflictor->absmin + pevInflictor->absmax) * 0.5;
+		Vector vecDir = pev->origin - (inflictor->pev->absmin + inflictor->pev->absmax) * 0.5;
 		vecDir = vecDir.Normalize();
 
 		float flForce = flDamage * ((32 * 32 * 72.0) / (pev->size.x * pev->size.y * pev->size.z)) * 5;
@@ -574,7 +574,7 @@ bool CBaseEntity::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, fl
 	pev->health -= flDamage;
 	if (pev->health <= 0)
 	{
-		Killed(pevAttacker, GIB_NORMAL);
+		Killed(attacker, GIB_NORMAL);
 		return false;
 	}
 
@@ -582,7 +582,7 @@ bool CBaseEntity::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, fl
 }
 
 
-void CBaseEntity::Killed(entvars_t* pevAttacker, int iGib)
+void CBaseEntity::Killed(CBaseEntity* attacker, int iGib)
 {
 	pev->takedamage = DAMAGE_NO;
 	pev->deadflag = DEAD_DEAD;

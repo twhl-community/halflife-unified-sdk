@@ -45,7 +45,7 @@ void CHalfLifeCoopplay::UpdateGameMode(CBasePlayer* pPlayer)
 	g_engfuncs.pfnMessageEnd();
 }
 
-void CHalfLifeCoopplay::MonsterKilled(CBaseMonster* pVictim, entvars_t* pKiller, entvars_t* pInflictor)
+void CHalfLifeCoopplay::MonsterKilled(CBaseMonster* pVictim, CBaseEntity* pKiller, CBaseEntity* inflictor)
 {
 	auto killer = CBaseEntity::Instance(pKiller);
 
@@ -124,10 +124,10 @@ int CHalfLifeCoopplay::DeadPlayerWeapons(CBasePlayer* pPlayer)
 	return GR_PLR_DROP_GUN_NO;
 }
 
-void CHalfLifeCoopplay::PlayerKilled(CBasePlayer* pVictim, entvars_t* pKiller, entvars_t* pInflictor)
+void CHalfLifeCoopplay::PlayerKilled(CBasePlayer* pVictim, CBaseEntity* pKiller, CBaseEntity* inflictor)
 {
 	if (!m_DisableDeathPenalty)
-		CHalfLifeMultiplay::PlayerKilled(pVictim, pKiller, pInflictor);
+		CHalfLifeMultiplay::PlayerKilled(pVictim, pKiller, inflictor);
 }
 
 void CHalfLifeCoopplay::Think()

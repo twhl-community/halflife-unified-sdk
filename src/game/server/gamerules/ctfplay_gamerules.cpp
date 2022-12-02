@@ -980,32 +980,32 @@ int CHalfLifeCTFplay::IPointsForKill(CBasePlayer* pAttacker, CBasePlayer* pKille
 	return 0;
 }
 
-void CHalfLifeCTFplay::PlayerKilled(CBasePlayer* pVictim, entvars_t* pKiller, entvars_t* pInflictor)
+void CHalfLifeCTFplay::PlayerKilled(CBasePlayer* pVictim, CBaseEntity* pKiller, CBaseEntity* inflictor)
 {
 	if (!pVictim || 0 != pVictim->pev->iuser1)
 		return;
 
 	if (!m_DisableDeathPenalty && !g_fGameOver)
 	{
-		auto v5 = pKiller ? CBaseEntity::Instance<CBasePlayer>(pKiller) : nullptr;
+		auto killerPlayer = static_cast<CBasePlayer*>(pKiller);
 
 		if (pVictim->m_pFlag)
 		{
-			if (v5 && v5->IsPlayer() && pVictim->m_iTeamNum != v5->m_iTeamNum)
+			if (pKiller && pKiller->IsPlayer() && pVictim->m_iTeamNum != killerPlayer->m_iTeamNum)
 			{
-				++v5->m_iCTFScore;
-				++v5->m_iDefense;
+				++killerPlayer->m_iCTFScore;
+				++killerPlayer->m_iDefense;
 
 				MESSAGE_BEGIN(MSG_ALL, gmsgCTFScore);
-				g_engfuncs.pfnWriteByte(v5->entindex());
-				g_engfuncs.pfnWriteByte(v5->m_iCTFScore);
+				g_engfuncs.pfnWriteByte(killerPlayer->entindex());
+				g_engfuncs.pfnWriteByte(killerPlayer->m_iCTFScore);
 				g_engfuncs.pfnMessageEnd();
 
-				++v5->m_iCTFScore;
+				++killerPlayer->m_iCTFScore;
 
-				ClientPrint(v5->pev, HUD_PRINTTALK, "#CTFScorePoint");
+				ClientPrint(killerPlayer->pev, HUD_PRINTTALK, "#CTFScorePoint");
 
-				UTIL_ClientPrintAll(HUD_PRINTNOTIFY, UTIL_VarArgs("%s", STRING(v5->pev->netname)));
+				UTIL_ClientPrintAll(HUD_PRINTNOTIFY, UTIL_VarArgs("%s", STRING(killerPlayer->pev->netname)));
 
 				if (pVictim->m_iTeamNum == CTFTeam::BlackMesa)
 				{
@@ -1019,70 +1019,70 @@ void CHalfLifeCTFplay::PlayerKilled(CBasePlayer* pVictim, entvars_t* pKiller, en
 				char szTeamName1[256];
 				char szTeamName2[256];
 
-				strncpy(szTeamName1, GetTeamName(pKiller->pContainingEntity), sizeof(szTeamName1));
+				strncpy(szTeamName1, GetTeamName(pKiller->edict()), sizeof(szTeamName1));
 				strncpy(szTeamName2, GetTeamName(pVictim->edict()), sizeof(szTeamName2));
 
 				szTeamName1[sizeof(szTeamName1) - 1] = 0;
 				szTeamName2[sizeof(szTeamName2) - 1] = 0;
 
-				Logger->trace("{} triggered \"FlagDefense\" against {}", PlayerLogInfo{*v5}, PlayerLogInfo{*pVictim});
+				Logger->trace("{} triggered \"FlagDefense\" against {}", PlayerLogInfo{*killerPlayer}, PlayerLogInfo{*pVictim});
 			}
 
 			Logger->trace("{} triggered \"LostFlag\"", PlayerLogInfo{*pVictim});
 		}
 
-		if (v5 && v5->IsPlayer())
+		if (pKiller && pKiller->IsPlayer())
 		{
 			const char* pszInflictorName = nullptr;
 
-			if (pKiller == pInflictor)
+			if (pKiller == inflictor)
 			{
-				if (v5->m_pActiveItem)
-					pszInflictorName = CBasePlayerItem::ItemInfoArray[v5->m_pActiveItem->m_iId].pszName;
+				if (killerPlayer->m_pActiveItem)
+					pszInflictorName = CBasePlayerItem::ItemInfoArray[killerPlayer->m_pActiveItem->m_iId].pszName;
 			}
-			else if (pInflictor && !FStringNull(pInflictor->classname))
+			else if (inflictor && !FStringNull(inflictor->pev->classname))
 			{
-				pszInflictorName = STRING(pInflictor->classname);
+				pszInflictorName = STRING(inflictor->pev->classname);
 			}
 
 			if (pszInflictorName)
 			{
 				if (0 == strcmp("weapon_sniperrifle", pszInflictorName) || 0 == strcmp("weapon_crossbow", pszInflictorName))
 				{
-					++v5->m_iSnipeKills;
+					++killerPlayer->m_iSnipeKills;
 				}
 				else if (0 == strcmp("weapon_grapple", pszInflictorName))
 				{
-					++v5->m_iBarnacleKills;
+					++killerPlayer->m_iBarnacleKills;
 				}
 			}
 
-			if (pKiller == pVictim->pev)
-				++v5->m_iSuicides;
+			if (pKiller == pVictim)
+				++killerPlayer->m_iSuicides;
 
 			for (auto pBase : UTIL_FindEntitiesByClassname<CTFGoalBase>("item_ctfbase"))
 			{
-				if (pKiller != pVictim->pev && pBase->m_iGoalNum == (int)v5->m_iTeamNum)
+				if (pKiller != pVictim && pBase->m_iGoalNum == (int)killerPlayer->m_iTeamNum)
 				{
 					if (g_flBaseDefendDist >= (pVictim->pev->origin - pBase->pev->origin).Length())
 					{
-						++v5->m_iCTFScore;
-						++v5->m_iDefense;
+						++killerPlayer->m_iCTFScore;
+						++killerPlayer->m_iDefense;
 
 						MESSAGE_BEGIN(MSG_ALL, gmsgCTFScore);
-						g_engfuncs.pfnWriteByte(v5->entindex());
-						g_engfuncs.pfnWriteByte(v5->m_iCTFScore);
+						g_engfuncs.pfnWriteByte(killerPlayer->entindex());
+						g_engfuncs.pfnWriteByte(killerPlayer->m_iCTFScore);
 						g_engfuncs.pfnMessageEnd();
 
-						ClientPrint(v5->pev, HUD_PRINTTALK, "#CTFScorePoint");
+						ClientPrint(killerPlayer->pev, HUD_PRINTTALK, "#CTFScorePoint");
 
-						UTIL_ClientPrintAll(HUD_PRINTNOTIFY, UTIL_VarArgs("%s", STRING(v5->pev->netname)));
+						UTIL_ClientPrintAll(HUD_PRINTNOTIFY, UTIL_VarArgs("%s", STRING(killerPlayer->pev->netname)));
 
-						if (v5->m_iTeamNum == CTFTeam::BlackMesa)
+						if (killerPlayer->m_iTeamNum == CTFTeam::BlackMesa)
 						{
 							UTIL_ClientPrintAll(HUD_PRINTNOTIFY, "#CTFFlagDefendedBM");
 						}
-						else if (v5->m_iTeamNum == CTFTeam::OpposingForce)
+						else if (killerPlayer->m_iTeamNum == CTFTeam::OpposingForce)
 						{
 							UTIL_ClientPrintAll(HUD_PRINTNOTIFY, "#CTFFlagDefendedOF");
 						}
@@ -1091,7 +1091,7 @@ void CHalfLifeCTFplay::PlayerKilled(CBasePlayer* pVictim, entvars_t* pKiller, en
 				}
 			}
 
-			if (pKiller != pVictim->pev && gpGlobals->maxClients > 0)
+			if (pKiller != pVictim && gpGlobals->maxClients > 0)
 			{
 				for (auto pPlayer : UTIL_FindPlayers())
 				{
@@ -1127,7 +1127,7 @@ void CHalfLifeCTFplay::PlayerKilled(CBasePlayer* pVictim, entvars_t* pKiller, en
 		}
 	}
 
-	CHalfLifeMultiplay::PlayerKilled(pVictim, pKiller, pInflictor);
+	CHalfLifeMultiplay::PlayerKilled(pVictim, pKiller, inflictor);
 
 	if (pVictim->IsPlayer() && !g_fGameOver)
 	{
@@ -1143,18 +1143,16 @@ void CHalfLifeCTFplay::PlayerKilled(CBasePlayer* pVictim, entvars_t* pKiller, en
 	}
 }
 
-void CHalfLifeCTFplay::DeathNotice(CBasePlayer* pVictim, entvars_t* pKiller, entvars_t* pevInflictor)
+void CHalfLifeCTFplay::DeathNotice(CBasePlayer* pVictim, CBaseEntity* pKiller, CBaseEntity* inflictor)
 {
 	if (!m_DisableDeathMessages)
 	{
-		if (pKiller && pVictim && (pKiller->flags & FL_CLIENT) != 0)
+		if (pKiller && pVictim && (pKiller->pev->flags & FL_CLIENT) != 0)
 		{
-			auto pEntKiller = CBaseEntity::Instance<CBasePlayer>(pKiller);
-
-			if (pEntKiller && pVictim != pEntKiller && (PlayerRelationship(pVictim, pEntKiller) == GR_TEAMMATE))
+			if (pKiller && pVictim != pKiller && (PlayerRelationship(pVictim, pKiller) == GR_TEAMMATE))
 			{
 				MESSAGE_BEGIN(MSG_ALL, gmsgDeathMsg);
-				g_engfuncs.pfnWriteByte(pEntKiller->entindex());
+				g_engfuncs.pfnWriteByte(pKiller->entindex());
 				g_engfuncs.pfnWriteByte(pVictim->entindex());
 				g_engfuncs.pfnWriteString("teammate");
 				g_engfuncs.pfnMessageEnd();
@@ -1162,7 +1160,7 @@ void CHalfLifeCTFplay::DeathNotice(CBasePlayer* pVictim, entvars_t* pKiller, ent
 			}
 		}
 
-		CHalfLifeMultiplay::DeathNotice(pVictim, pKiller, pevInflictor);
+		CHalfLifeMultiplay::DeathNotice(pVictim, pKiller, inflictor);
 	}
 }
 
@@ -1272,7 +1270,7 @@ void CHalfLifeCTFplay::ChangePlayerTeam(CBasePlayer* pPlayer, const char* pCharN
 
 				const auto v7 = bGib ? DMG_ALWAYSGIB : DMG_NEVERGIB;
 
-				pPlayer->TakeDamage(CBaseEntity::World->pev, CBaseEntity::World->pev, 900, v7);
+				pPlayer->TakeDamage(CBaseEntity::World, CBaseEntity::World, 900, v7);
 
 				m_DisableDeathMessages = false;
 				m_DisableDeathPenalty = false;

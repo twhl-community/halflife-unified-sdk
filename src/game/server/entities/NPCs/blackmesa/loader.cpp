@@ -32,9 +32,9 @@ public:
 
 	void SetYawSpeed() override;
 
-	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 
-	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
+	void TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
 
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 
@@ -90,13 +90,13 @@ void COFLoader::SetYawSpeed()
 	pev->yaw_speed = 90;
 }
 
-bool COFLoader::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool COFLoader::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType)
 {
 	// Don't take damage
 	return true;
 }
 
-void COFLoader::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
+void COFLoader::TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
 {
 	UTIL_Ricochet(ptr->vecEndPos, g_engfuncs.pfnRandomFloat(1.0, 2.0));
 }

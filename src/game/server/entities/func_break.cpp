@@ -437,7 +437,6 @@ void CBreakable::DamageSound()
 void CBreakable::BreakTouch(CBaseEntity* pOther)
 {
 	float flDamage;
-	entvars_t* pevToucher = pOther->pev;
 
 	// only players can break these right now
 	if (!pOther->IsPlayer() || !IsBreakable())
@@ -447,19 +446,19 @@ void CBreakable::BreakTouch(CBaseEntity* pOther)
 
 	if (FBitSet(pev->spawnflags, SF_BREAK_TOUCH))
 	{ // can be broken when run into
-		flDamage = pevToucher->velocity.Length() * 0.01;
+		flDamage = pOther->pev->velocity.Length() * 0.01;
 
 		if (flDamage >= pev->health)
 		{
 			SetTouch(nullptr);
-			TakeDamage(pevToucher, pevToucher, flDamage, DMG_CRUSH);
+			TakeDamage(pOther, pOther, flDamage, DMG_CRUSH);
 
 			// do a little damage to player if we broke glass or computer
-			pOther->TakeDamage(pev, pev, flDamage / 4, DMG_SLASH);
+			pOther->TakeDamage(this, this, flDamage / 4, DMG_SLASH);
 		}
 	}
 
-	if (FBitSet(pev->spawnflags, SF_BREAK_PRESSURE) && pevToucher->absmin.z >= pev->maxs.z - 2)
+	if (FBitSet(pev->spawnflags, SF_BREAK_PRESSURE) && pOther->pev->absmin.z >= pev->maxs.z - 2)
 	{ // can be broken when stood upon
 
 		// play creaking sound here.
@@ -496,7 +495,7 @@ void CBreakable::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE use
 }
 
 
-void CBreakable::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
+void CBreakable::TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
 {
 	// random spark if this is a 'computer' object
 	if (RANDOM_LONG(0, 1))
@@ -526,7 +525,7 @@ void CBreakable::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecD
 		}
 	}
 
-	CBaseDelay::TraceAttack(pevAttacker, flDamage, vecDir, ptr, bitsDamageType);
+	CBaseDelay::TraceAttack(attacker, flDamage, vecDir, ptr, bitsDamageType);
 }
 
 //=========================================================
@@ -534,25 +533,25 @@ void CBreakable::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecD
 // exceptions that are breakable-specific
 // bitsDamageType indicates the type of damage sustained ie: DMG_CRUSH
 //=========================================================
-bool CBreakable::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool CBreakable::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType)
 {
 	Vector vecTemp;
 
 	// if Attacker == Inflictor, the attack was a melee or other instant-hit attack.
 	// (that is, no actual entity projectile was involved in the attack so use the shooter's origin).
-	if (pevAttacker == pevInflictor)
+	if (attacker == inflictor)
 	{
-		vecTemp = pevInflictor->origin - (pev->absmin + (pev->size * 0.5));
+		vecTemp = inflictor->pev->origin - (pev->absmin + (pev->size * 0.5));
 
 		// if a client hit the breakable with a crowbar, and breakable is crowbar-sensitive, break it now.
-		if (FBitSet(pevAttacker->flags, FL_CLIENT) &&
+		if (FBitSet(attacker->pev->flags, FL_CLIENT) &&
 			FBitSet(pev->spawnflags, SF_BREAK_CROWBAR) && (bitsDamageType & DMG_CLUB) != 0)
 			flDamage = pev->health;
 	}
 	else
 	// an actual missile was involved.
 	{
-		vecTemp = pevInflictor->origin - (pev->absmin + (pev->size * 0.5));
+		vecTemp = inflictor->pev->origin - (pev->absmin + (pev->size * 0.5));
 	}
 
 	if (!IsBreakable())
@@ -573,7 +572,7 @@ bool CBreakable::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, flo
 	pev->health -= flDamage;
 	if (pev->health <= 0)
 	{
-		Killed(pevAttacker, GIB_NORMAL);
+		Killed(attacker, GIB_NORMAL);
 		Die();
 		return false;
 	}
@@ -812,7 +811,7 @@ public:
 	inline float MaxSpeed() { return m_maxSpeed; }
 
 	// breakables use an overridden takedamage
-	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 
 	static TYPEDESCRIPTION m_SaveData[];
 
@@ -1012,10 +1011,10 @@ void CPushable::StopSound()
 }
 #endif
 
-bool CPushable::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool CPushable::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType)
 {
 	if ((pev->spawnflags & SF_PUSH_BREAKABLE) != 0)
-		return CBreakable::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
+		return CBreakable::TakeDamage(inflictor, attacker, flDamage, bitsDamageType);
 
 	return true;
 }

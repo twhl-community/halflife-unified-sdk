@@ -23,7 +23,7 @@ public:
 	void EXPORT TankThink();
 	void EXPORT TankTouch(CBaseEntity* pOther);
 	int BloodColor() override { return DONT_BLEED; }
-	void Killed(entvars_t* pevAttacker, int iGib) override;
+	void Killed(CBaseEntity* attacker, int iGib) override;
 
 	bool Save(CSave& save) override;
 	bool Restore(CRestore& restore) override;
@@ -77,9 +77,9 @@ void CAirtank::Precache()
 }
 
 
-void CAirtank::Killed(entvars_t* pevAttacker, int iGib)
+void CAirtank::Killed(CBaseEntity* attacker, int iGib)
 {
-	pev->owner = ENT(pevAttacker);
+	SetOwner(attacker);
 
 	// UNDONE: this should make a big bubble cloud, not an explosion
 

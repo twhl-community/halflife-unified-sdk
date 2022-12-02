@@ -263,7 +263,7 @@ void CGauss::SecondaryAttack()
 			SendStopEvent(false);
 
 #ifndef CLIENT_DLL
-			m_pPlayer->TakeDamage(World->pev, World->pev, 50, DMG_SHOCK);
+			m_pPlayer->TakeDamage(World, World, 50, DMG_SHOCK);
 			UTIL_ScreenFade(m_pPlayer, Vector(255, 128, 0), 2, 0.5, 128, FFADE_IN);
 #endif
 			SendWeaponAnim(GAUSS_IDLE);
@@ -392,8 +392,8 @@ void CGauss::Fire(Vector vecOrigSrc, Vector vecDir, float flDamage)
 		if (0 != pEntity->pev->takedamage)
 		{
 			ClearMultiDamage();
-			pEntity->TraceAttack(m_pPlayer->pev, flDamage, vecDir, &tr, DMG_BULLET);
-			ApplyMultiDamage(m_pPlayer->pev, m_pPlayer->pev);
+			pEntity->TraceAttack(m_pPlayer, flDamage, vecDir, &tr, DMG_BULLET);
+			ApplyMultiDamage(m_pPlayer, m_pPlayer);
 		}
 
 		if (pEntity->ReflectGauss())
@@ -417,7 +417,7 @@ void CGauss::Fire(Vector vecOrigSrc, Vector vecDir, float flDamage)
 				vecDest = vecSrc + vecDir * 8192;
 
 				// explode a bit
-				m_pPlayer->RadiusDamage(tr.vecEndPos, pev, m_pPlayer->pev, flDamage * n, CLASS_NONE, DMG_BLAST);
+				m_pPlayer->RadiusDamage(tr.vecEndPos, this, m_pPlayer, flDamage * n, CLASS_NONE, DMG_BLAST);
 
 				nTotal += 34;
 
@@ -469,7 +469,7 @@ void CGauss::Fire(Vector vecOrigSrc, Vector vecDir, float flDamage)
 								damage_radius = flDamage * 2.5;
 							}
 
-							::RadiusDamage(beam_tr.vecEndPos + vecDir * 8, pev, m_pPlayer->pev, flDamage, damage_radius, CLASS_NONE, DMG_BLAST);
+							::RadiusDamage(beam_tr.vecEndPos + vecDir * 8, this, m_pPlayer, flDamage, damage_radius, CLASS_NONE, DMG_BLAST);
 
 							CSoundEnt::InsertSound(bits_SOUND_COMBAT, pev->origin, NORMAL_EXPLOSION_VOLUME, 3.0);
 

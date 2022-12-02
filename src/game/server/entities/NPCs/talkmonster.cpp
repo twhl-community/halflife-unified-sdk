@@ -589,20 +589,20 @@ void CTalkMonster::RunTask(Task_t* pTask)
 }
 
 
-void CTalkMonster::Killed(entvars_t* pevAttacker, int iGib)
+void CTalkMonster::Killed(CBaseEntity* attacker, int iGib)
 {
 	// If a client killed me (unless I was already Barnacle'd), make everyone else mad/afraid of him
-	if ((pevAttacker->flags & FL_CLIENT) != 0 && m_MonsterState != MONSTERSTATE_PRONE)
+	if ((attacker->pev->flags & FL_CLIENT) != 0 && m_MonsterState != MONSTERSTATE_PRONE)
 	{
 		AlertFriends();
-		LimitFollowers(CBaseEntity::Instance(pevAttacker), 0);
+		LimitFollowers(CBaseEntity::Instance(attacker), 0);
 	}
 
 	m_hTargetEnt = nullptr;
 	// Don't finish that sentence
 	StopTalking();
 	SetUse(nullptr);
-	CBaseMonster::Killed(pevAttacker, iGib);
+	CBaseMonster::Killed(attacker, iGib);
 }
 
 void CTalkMonster::AlertFriends()
@@ -1077,12 +1077,12 @@ void CTalkMonster::SetAnswerQuestion(CTalkMonster* pSpeaker)
 	m_hTalkTarget = (CBaseMonster*)pSpeaker;
 }
 
-bool CTalkMonster::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool CTalkMonster::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType)
 {
 	if (IsAlive())
 	{
 		// if player damaged this entity, have other friends talk about it
-		if (pevAttacker && m_MonsterState != MONSTERSTATE_PRONE && FBitSet(pevAttacker->flags, FL_CLIENT))
+		if (attacker && m_MonsterState != MONSTERSTATE_PRONE && FBitSet(attacker->pev->flags, FL_CLIENT))
 		{
 			CBaseEntity* pFriend = FindNearestFriend(false);
 
@@ -1094,7 +1094,7 @@ bool CTalkMonster::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, f
 			}
 		}
 	}
-	return CBaseMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
+	return CBaseMonster::TakeDamage(inflictor, attacker, flDamage, bitsDamageType);
 }
 
 

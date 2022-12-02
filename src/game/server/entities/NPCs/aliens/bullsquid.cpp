@@ -160,7 +160,7 @@ void CSquidSpit::Touch(CBaseEntity* pOther)
 	}
 	else
 	{
-		pOther->TakeDamage(pev, pev, GetSkillFloat("bullsquid_dmg_spit"sv), DMG_GENERIC);
+		pOther->TakeDamage(this, this, GetSkillFloat("bullsquid_dmg_spit"sv), DMG_GENERIC);
 	}
 
 	SetThink(&CSquidSpit::SUB_Remove);
@@ -201,7 +201,7 @@ public:
 	bool FValidateHintType(short sHint) override;
 	Schedule_t* GetSchedule() override;
 	Schedule_t* GetScheduleOfType(int Type) override;
-	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 	int IRelationship(CBaseEntity* pTarget) override;
 	int IgnoreConditions() override;
 	MONSTERSTATE GetIdealState() override;
@@ -282,14 +282,14 @@ int CBullsquid::IRelationship(CBaseEntity* pTarget)
 // TakeDamage - overridden for bullsquid so we can keep track
 // of how much time has passed since it was last injured
 //=========================================================
-bool CBullsquid::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool CBullsquid::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType)
 {
 	float flDist;
 	Vector vecApex;
 
 	// if the squid is running, has an enemy, was hurt by the enemy, hasn't been hurt in the last 3 seconds, and isn't too close to the enemy,
 	// it will swerve. (whew).
-	if (m_hEnemy != nullptr && IsMoving() && pevAttacker == m_hEnemy->pev && gpGlobals->time - m_flLastHurtTime > 3)
+	if (m_hEnemy != nullptr && IsMoving() && attacker == m_hEnemy && gpGlobals->time - m_flLastHurtTime > 3)
 	{
 		flDist = (pev->origin - m_hEnemy->pev->origin).Length2D();
 
@@ -304,13 +304,13 @@ bool CBullsquid::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, flo
 		}
 	}
 
-	if (!FClassnameIs(pevAttacker, "monster_headcrab"))
+	if (!FClassnameIs(attacker->pev, "monster_headcrab"))
 	{
 		// don't forget about headcrabs if it was a headcrab that hurt the squid.
 		m_flLastHurtTime = gpGlobals->time;
 	}
 
-	return CBaseMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
+	return CBaseMonster::TakeDamage(inflictor, attacker, flDamage, bitsDamageType);
 }
 
 //=========================================================

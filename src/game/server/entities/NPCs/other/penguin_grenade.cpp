@@ -40,7 +40,7 @@ public:
 
 	int Classify() override;
 	int IRelationship(CBaseEntity* pTarget) override;
-	void Killed(entvars_t* pevAttacker, int iGib) override;
+	void Killed(CBaseEntity* attacker, int iGib) override;
 	void EXPORT HuntThink();
 	void Smoke();
 	int BloodColor() override;
@@ -153,11 +153,11 @@ void CPenguinGrenade::SuperBounceTouch(CBaseEntity* pOther)
 			{
 				// AILogger->debug("hit enemy");
 				ClearMultiDamage();
-				pOther->TraceAttack(pev, GetSkillFloat("snark_dmg_bite"sv), gpGlobals->v_forward, &tr, DMG_SLASH);
+				pOther->TraceAttack(this, GetSkillFloat("snark_dmg_bite"sv), gpGlobals->v_forward, &tr, DMG_SLASH);
 				if (m_hOwner != nullptr)
-					ApplyMultiDamage(pev, m_hOwner->pev);
+					ApplyMultiDamage(this, m_hOwner);
 				else
-					ApplyMultiDamage(pev, pev);
+					ApplyMultiDamage(this, this);
 
 				// add more explosion damage
 				if (hurtTarget)
@@ -293,7 +293,7 @@ int CPenguinGrenade::IRelationship(CBaseEntity* pTarget)
 	}
 }
 
-void CPenguinGrenade::Killed(entvars_t* pevAttacker, int iGib)
+void CPenguinGrenade::Killed(CBaseEntity* attacker, int iGib)
 {
 	if (m_hOwner != nullptr)
 		pev->owner = m_hOwner->edict();
@@ -326,7 +326,7 @@ void CPenguinGrenade::HuntThink()
 	{
 		g_vecAttackDir = pev->velocity.Normalize();
 		pev->health = -1;
-		Killed(pev, 0);
+		Killed(this, 0);
 		return;
 	}
 

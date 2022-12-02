@@ -134,7 +134,7 @@ void CPitdroneSpike::SpikeTouch(CBaseEntity* pOther)
 	}
 	else
 	{
-		pOther->TakeDamage(pev, pev, GetSkillFloat("pitdrone_dmg_spit"sv), DMG_GENERIC);
+		pOther->TakeDamage(this, this, GetSkillFloat("pitdrone_dmg_spit"sv), DMG_GENERIC);
 		EMIT_SOUND_DYN(edict(), CHAN_VOICE, "weapons/xbow_hitbod1.wav", VOL_NORM, ATTN_NORM, 0, iPitch);
 	}
 

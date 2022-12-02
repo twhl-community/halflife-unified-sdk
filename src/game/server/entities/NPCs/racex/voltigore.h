@@ -77,7 +77,7 @@ public:
 	void RunTask(Task_t* pTask) override;
 	void AlertSound() override;
 	void PainSound() override;
-	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
+	void TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
 	int IRelationship(CBaseEntity* pTarget) override;
 	void StopTalking();
 	bool ShouldSpeak();
@@ -90,7 +90,7 @@ public:
 
 	void GibMonster() override;
 
-	void Killed(entvars_t* pevAttacker, int iGib) override;
+	void Killed(CBaseEntity* attacker, int iGib) override;
 
 	CUSTOM_SCHEDULES;
 

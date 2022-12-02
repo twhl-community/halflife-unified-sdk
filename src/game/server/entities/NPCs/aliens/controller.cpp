@@ -80,8 +80,8 @@ public:
 	static const char* pPainSounds[];
 	static const char* pDeathSounds[];
 
-	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
-	void Killed(entvars_t* pevAttacker, int iGib) override;
+	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
+	void Killed(CBaseEntity* attacker, int iGib) override;
 	void GibMonster() override;
 
 	CSprite* m_pBall[2];   // hand balls
@@ -180,16 +180,16 @@ void CController::SetYawSpeed()
 	pev->yaw_speed = ys;
 }
 
-bool CController::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool CController::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType)
 {
 	// HACK HACK -- until we fix this.
 	if (IsAlive())
 		PainSound();
-	return CBaseMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
+	return CBaseMonster::TakeDamage(inflictor, attacker, flDamage, bitsDamageType);
 }
 
 
-void CController::Killed(entvars_t* pevAttacker, int iGib)
+void CController::Killed(CBaseEntity* attacker, int iGib)
 {
 	// shut off balls
 	/*
@@ -211,7 +211,7 @@ void CController::Killed(entvars_t* pevAttacker, int iGib)
 		m_pBall[1] = nullptr;
 	}
 
-	CSquadMonster::Killed(pevAttacker, iGib);
+	CSquadMonster::Killed(attacker, iGib);
 }
 
 
@@ -1221,8 +1221,8 @@ void CControllerHeadBall::HuntThink()
 		if (pEntity != nullptr && 0 != pEntity->pev->takedamage)
 		{
 			ClearMultiDamage();
-			pEntity->TraceAttack(m_hOwner->pev, GetSkillFloat("controller_dmgzap"sv), pev->velocity, &tr, DMG_SHOCK);
-			ApplyMultiDamage(pev, m_hOwner->pev);
+			pEntity->TraceAttack(m_hOwner, GetSkillFloat("controller_dmgzap"sv), pev->velocity, &tr, DMG_SHOCK);
+			ApplyMultiDamage(this, m_hOwner);
 		}
 
 		MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
@@ -1392,19 +1392,15 @@ void CControllerZapBall::ExplodeTouch(CBaseEntity* pOther)
 	{
 		TraceResult tr = UTIL_GetGlobalTrace();
 
-		entvars_t* pevOwner;
-		if (m_hOwner != nullptr)
+		auto owner = m_hOwner.Entity<CBaseEntity>();
+		if (!owner)
 		{
-			pevOwner = m_hOwner->pev;
-		}
-		else
-		{
-			pevOwner = pev;
+			owner = this;
 		}
 
 		ClearMultiDamage();
-		pOther->TraceAttack(pevOwner, GetSkillFloat("controller_dmgball"sv), pev->velocity.Normalize(), &tr, DMG_ENERGYBEAM);
-		ApplyMultiDamage(pevOwner, pevOwner);
+		pOther->TraceAttack(owner, GetSkillFloat("controller_dmgball"sv), pev->velocity.Normalize(), &tr, DMG_ENERGYBEAM);
+		ApplyMultiDamage(owner, owner);
 
 		UTIL_EmitAmbientSound(ENT(pev), tr.vecEndPos, "weapons/electro4.wav", 0.3, ATTN_NORM, 0, RANDOM_LONG(90, 99));
 	}

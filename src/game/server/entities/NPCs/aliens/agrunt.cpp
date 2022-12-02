@@ -89,7 +89,7 @@ public:
 	void PainSound() override;
 	void AttackSound();
 	void PrescheduleThink() override;
-	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
+	void TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
 	int IRelationship(CBaseEntity* pTarget) override;
 	void StopTalking();
 	bool ShouldSpeak();
@@ -219,7 +219,7 @@ int CAGrunt::ISoundMask()
 //=========================================================
 // TraceAttack
 //=========================================================
-void CAGrunt::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
+void CAGrunt::TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
 {
 	if (ptr->iHitgroup == 10 && (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_CLUB)) != 0)
 	{
@@ -262,7 +262,7 @@ void CAGrunt::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir,
 		TraceBleed(flDamage, vecDir, ptr, bitsDamageType);
 	}
 
-	AddMultiDamage(pevAttacker, this, flDamage, bitsDamageType);
+	AddMultiDamage(attacker, this, flDamage, bitsDamageType);
 }
 
 //=========================================================

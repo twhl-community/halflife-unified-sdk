@@ -266,7 +266,7 @@ Vector CBasePlayer::GetGunPosition()
 //=========================================================
 // TraceAttack
 //=========================================================
-void CBasePlayer::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
+void CBasePlayer::TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
 {
 	if (0 != pev->takedamage)
 	{
@@ -299,7 +299,7 @@ void CBasePlayer::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vec
 
 		SpawnBlood(ptr->vecEndPos, BloodColor(), flDamage); // a little surface blood.
 		TraceBleed(flDamage, vecDir, ptr, bitsDamageType);
-		AddMultiDamage(pevAttacker, this, flDamage, bitsDamageType);
+		AddMultiDamage(attacker, this, flDamage, bitsDamageType);
 	}
 }
 
@@ -319,7 +319,7 @@ static const char* m_szSquadClasses[] =
 		"monster_human_medic_ally",
 		"monster_human_torch_ally"};
 
-bool CBasePlayer::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool CBasePlayer::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType)
 {
 	// have suit diagnose the problem - ie: report damage type
 	int bitsDamage = bitsDamageType;
@@ -347,7 +347,7 @@ bool CBasePlayer::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, fl
 	// go take the damage first
 
 
-	CBaseEntity* pAttacker = CBaseEntity::Instance(pevAttacker);
+	CBaseEntity* pAttacker = CBaseEntity::Instance(attacker);
 
 	if (pAttacker && pAttacker->IsPlayer())
 	{
@@ -402,7 +402,7 @@ bool CBasePlayer::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, fl
 
 	// this cast to INT is critical!!! If a player ends up with 0.5 health, the engine will get that
 	// as an int (zero) and think the player is dead! (this will incite a clientside screentilt, etc)
-	fTookDamage = CBaseMonster::TakeDamage(pevInflictor, pevAttacker, (int)flDamage, bitsDamageType);
+	fTookDamage = CBaseMonster::TakeDamage(inflictor, attacker, (int)flDamage, bitsDamageType);
 
 	// reset damage time countdown for each type of time based damage player just sustained
 
@@ -414,11 +414,11 @@ bool CBasePlayer::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, fl
 
 	// tell director about it
 	MESSAGE_BEGIN(MSG_SPEC, SVC_DIRECTOR);
-	WRITE_BYTE(9);							  // command length in bytes
-	WRITE_BYTE(DRC_CMD_EVENT);				  // take damage event
-	WRITE_SHORT(ENTINDEX(this->edict()));	  // index number of primary entity
-	WRITE_SHORT(ENTINDEX(ENT(pevInflictor))); // index number of secondary entity
-	WRITE_LONG(5);							  // eventflags (priority and flags)
+	WRITE_BYTE(9);							// command length in bytes
+	WRITE_BYTE(DRC_CMD_EVENT);				// take damage event
+	WRITE_SHORT(ENTINDEX(this->edict()));	// index number of primary entity
+	WRITE_SHORT(inflictor->entindex());		// index number of secondary entity
+	WRITE_LONG(5);							// eventflags (priority and flags)
 	MESSAGE_END();
 
 
@@ -776,7 +776,7 @@ void CBasePlayer::RemoveAllItems(bool removeSuit)
  * ENTITY_METHOD(PlayerDie)
  */
 
-void CBasePlayer::Killed(entvars_t* pevAttacker, int iGib)
+void CBasePlayer::Killed(CBaseEntity* attacker, int iGib)
 {
 	CSound* pSound;
 
@@ -784,7 +784,7 @@ void CBasePlayer::Killed(entvars_t* pevAttacker, int iGib)
 	if (m_pActiveItem)
 		m_pActiveItem->Holster();
 
-	g_pGameRules->PlayerKilled(this, pevAttacker, g_pevLastInflictor);
+	g_pGameRules->PlayerKilled(this, attacker, g_pevLastInflictor);
 
 	if (m_pTank != nullptr)
 	{
@@ -1140,7 +1140,7 @@ void CBasePlayer::WaterMove()
 				pev->dmg += 1;
 				if (pev->dmg > 5)
 					pev->dmg = 5;
-				TakeDamage(World->pev, World->pev, pev->dmg, DMG_DROWN);
+				TakeDamage(World, World, pev->dmg, DMG_DROWN);
 				pev->pain_finished = gpGlobals->time + 1;
 
 				// track drowning damage, give it back when
@@ -1192,12 +1192,12 @@ void CBasePlayer::WaterMove()
 	if (pev->watertype == CONTENT_LAVA) // do damage
 	{
 		if (pev->dmgtime < gpGlobals->time)
-			TakeDamage(World->pev, World->pev, 10 * static_cast<int>(pev->waterlevel), DMG_BURN);
+			TakeDamage(World, World, 10 * static_cast<int>(pev->waterlevel), DMG_BURN);
 	}
 	else if (pev->watertype == CONTENT_SLIME) // do damage
 	{
 		pev->dmgtime = gpGlobals->time + 1;
-		TakeDamage(World->pev, World->pev, 4 * static_cast<int>(pev->waterlevel), DMG_ACID);
+		TakeDamage(World, World, 4 * static_cast<int>(pev->waterlevel), DMG_ACID);
 	}
 
 	if (!FBitSet(pev->flags, FL_INWATER))
@@ -2272,15 +2272,15 @@ void CBasePlayer::CheckTimeBasedDamage()
 				bDuration = PARALYZE_DURATION;
 				break;
 			case itbd_NerveGas:
-				//				TakeDamage(pev, pev, NERVEGAS_DAMAGE, DMG_GENERIC);
+				//				TakeDamage(this, this, NERVEGAS_DAMAGE, DMG_GENERIC);
 				bDuration = NERVEGAS_DURATION;
 				break;
 			case itbd_Poison:
-				TakeDamage(pev, pev, POISON_DAMAGE, DMG_GENERIC);
+				TakeDamage(this, this, POISON_DAMAGE, DMG_GENERIC);
 				bDuration = POISON_DURATION;
 				break;
 			case itbd_Radiation:
-				//				TakeDamage(pev, pev, RADIATION_DAMAGE, DMG_GENERIC);
+				//				TakeDamage(this, this, RADIATION_DAMAGE, DMG_GENERIC);
 				bDuration = RADIATION_DURATION;
 				break;
 			case itbd_DrownRecover:
@@ -2296,15 +2296,15 @@ void CBasePlayer::CheckTimeBasedDamage()
 				bDuration = 4; // get up to 5*10 = 50 points back
 				break;
 			case itbd_Acid:
-				//				TakeDamage(pev, pev, ACID_DAMAGE, DMG_GENERIC);
+				//				TakeDamage(this, this, ACID_DAMAGE, DMG_GENERIC);
 				bDuration = ACID_DURATION;
 				break;
 			case itbd_SlowBurn:
-				//				TakeDamage(pev, pev, SLOWBURN_DAMAGE, DMG_GENERIC);
+				//				TakeDamage(this, this, SLOWBURN_DAMAGE, DMG_GENERIC);
 				bDuration = SLOWBURN_DURATION;
 				break;
 			case itbd_SlowFreeze:
-				//				TakeDamage(pev, pev, SLOWFREEZE_DAMAGE, DMG_GENERIC);
+				//				TakeDamage(this, this, SLOWFREEZE_DAMAGE, DMG_GENERIC);
 				bDuration = SLOWFREEZE_DURATION;
 				break;
 			default:
@@ -2782,7 +2782,7 @@ void CBasePlayer::PostThink()
 
 			if (flFallDamage > 0)
 			{
-				TakeDamage(World->pev, World->pev, flFallDamage, DMG_FALL);
+				TakeDamage(World, World, flFallDamage, DMG_FALL);
 				pev->punchangle.x = 0;
 			}
 		}
@@ -2983,7 +2983,7 @@ edict_t* EntSelectSpawnPoint(CBasePlayer* pPlayer)
 			{
 				// if ent is a client, kill em (unless they are ourselves)
 				if (ent->IsPlayer() && !(ent->edict() == player))
-					ent->TakeDamage(CBaseEntity::World->pev, CBaseEntity::World->pev, 300, DMG_GENERIC);
+					ent->TakeDamage(CBaseEntity::World, CBaseEntity::World, 300, DMG_GENERIC);
 			}
 			goto ReturnSpot;
 		}
@@ -3039,7 +3039,7 @@ edict_t* EntSelectSpawnPoint(CBasePlayer* pPlayer)
 			{
 				// if ent is a client, kill em (unless they are ourselves)
 				if (ent->IsPlayer() && !(ent->edict() == player))
-					ent->TakeDamage(CBaseEntity::World->pev, CBaseEntity::World->pev, 300, DMG_GENERIC);
+					ent->TakeDamage(CBaseEntity::World, CBaseEntity::World, 300, DMG_GENERIC);
 			}
 			goto ReturnSpot;
 		}
@@ -4771,7 +4771,7 @@ bool CBasePlayer::FBecomeProne()
 // by Barnacle victims when the barnacle pulls their head
 // into its mouth. For the player, just die.
 //=========================================================
-void CBasePlayer::BarnacleVictimBitten(entvars_t* pevBarnacle)
+void CBasePlayer::BarnacleVictimBitten(CBaseEntity* pevBarnacle)
 {
 	TakeDamage(pevBarnacle, pevBarnacle, pev->health + pev->armorvalue, DMG_SLASH | DMG_ALWAYSGIB);
 }

@@ -97,7 +97,7 @@ public:
 	void RunTask(Task_t* pTask) override;
 	void StartTask(Task_t* pTask) override;
 	int ObjectCaps() override { return CTalkMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
-	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 	int FriendNumber(int arrayNumber) override;
 	void SetActivity(Activity newActivity) override;
 	Activity GetStoppedActivity() override;
@@ -121,7 +121,7 @@ public:
 
 	void TalkInit() override;
 
-	void Killed(entvars_t* pevAttacker, int iGib) override;
+	void Killed(CBaseEntity* attacker, int iGib) override;
 
 	bool Save(CSave& save) override;
 	bool Restore(CRestore& restore) override;

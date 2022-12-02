@@ -183,9 +183,9 @@ bool CKnife::Swing(const bool bFirst)
 				}
 			}
 
-			pEntity->TraceAttack(m_pPlayer->pev, damage, gpGlobals->v_forward, &tr, damageTypes);
+			pEntity->TraceAttack(m_pPlayer, damage, gpGlobals->v_forward, &tr, damageTypes);
 
-			ApplyMultiDamage(m_pPlayer->pev, m_pPlayer->pev);
+			ApplyMultiDamage(m_pPlayer, m_pPlayer);
 		}
 
 #endif

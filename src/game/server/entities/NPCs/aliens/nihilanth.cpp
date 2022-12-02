@@ -31,7 +31,7 @@ public:
 	void Precache() override;
 	int Classify() override { return CLASS_ALIEN_MILITARY; }
 	int BloodColor() override { return BLOOD_COLOR_YELLOW; }
-	void Killed(entvars_t* pevAttacker, int iGib) override;
+	void Killed(CBaseEntity* attacker, int iGib) override;
 	void GibMonster() override;
 
 	void SetObjectCollisionBox() override
@@ -62,8 +62,8 @@ public:
 	void ShootBalls();
 	void MakeFriend(Vector vecPos);
 
-	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
-	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
+	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
+	void TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
 
 	void PainSound() override;
 	void DeathSound() override;
@@ -420,9 +420,9 @@ void CNihilanth::StartupThink()
 }
 
 
-void CNihilanth::Killed(entvars_t* pevAttacker, int iGib)
+void CNihilanth::Killed(CBaseEntity* attacker, int iGib)
 {
-	CBaseMonster::Killed(pevAttacker, iGib);
+	CBaseMonster::Killed(attacker, iGib);
 }
 
 void CNihilanth::DyingThink()
@@ -1238,9 +1238,9 @@ void CNihilanth::CommandUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_T
 }
 
 
-bool CNihilanth::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool CNihilanth::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType)
 {
-	if (pevInflictor->owner == edict())
+	if (inflictor->pev->owner == edict())
 		return false;
 
 	if (flDamage >= pev->health)
@@ -1258,7 +1258,7 @@ bool CNihilanth::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, flo
 
 
 
-void CNihilanth::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
+void CNihilanth::TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
 {
 	if (m_irritation == 3)
 		m_irritation = 2;
@@ -1274,7 +1274,7 @@ void CNihilanth::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecD
 	}
 
 	// SpawnBlood(ptr->vecEndPos, BloodColor(), flDamage * 5.0);// a little surface blood.
-	AddMultiDamage(pevAttacker, this, flDamage, bitsDamageType);
+	AddMultiDamage(attacker, this, flDamage, bitsDamageType);
 }
 
 
@@ -1493,8 +1493,8 @@ void CNihilanthHVR::ZapThink()
 		if (pEntity != nullptr && 0 != pEntity->pev->takedamage)
 		{
 			ClearMultiDamage();
-			pEntity->TraceAttack(pev, GetSkillFloat("nihilanth_zap"sv), pev->velocity, &tr, DMG_SHOCK);
-			ApplyMultiDamage(pev, pev);
+			pEntity->TraceAttack(this, GetSkillFloat("nihilanth_zap"sv), pev->velocity, &tr, DMG_SHOCK);
+			ApplyMultiDamage(this, this);
 		}
 
 		MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
@@ -1548,7 +1548,7 @@ void CNihilanthHVR::ZapTouch(CBaseEntity* pOther)
 {
 	UTIL_EmitAmbientSound(edict(), pev->origin, "weapons/electro4.wav", 1.0, ATTN_NORM, 0, RANDOM_LONG(90, 95));
 
-	RadiusDamage(pev, pev, 50, CLASS_NONE, DMG_SHOCK);
+	RadiusDamage(this, this, 50, CLASS_NONE, DMG_SHOCK);
 	pev->velocity = pev->velocity * 0;
 
 	/*

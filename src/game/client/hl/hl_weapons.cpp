@@ -174,7 +174,7 @@ CBaseEntity :: Killed
 If weapons code "kills" an entity, just set its effects to EF_NODRAW
 =====================
 */
-void CBaseEntity::Killed(entvars_t* pevAttacker, int iGib)
+void CBaseEntity::Killed(CBaseEntity* attacker, int iGib)
 {
 	pev->effects |= EF_NODRAW;
 }
@@ -252,13 +252,13 @@ CBaseEntity::FireBulletsPlayer
 Only produces random numbers to match the server ones.
 =====================
 */
-Vector CBaseEntity::FireBulletsPlayer(unsigned int cShots, Vector vecSrc, Vector vecDirShooting, Vector vecSpread, float flDistance, int iBulletType, int iTracerFreq, int iDamage, entvars_t* pevAttacker, int shared_rand)
+Vector CBaseEntity::FireBulletsPlayer(unsigned int cShots, Vector vecSrc, Vector vecDirShooting, Vector vecSpread, float flDistance, int iBulletType, int iTracerFreq, int iDamage, CBaseEntity* attacker, int shared_rand)
 {
 	float x = 0, y = 0, z;
 
 	for (unsigned int iShot = 1; iShot <= cShots; iShot++)
 	{
-		if (pevAttacker == nullptr)
+		if (attacker == nullptr)
 		{
 			// get circular gaussian spread
 			do
@@ -320,7 +320,7 @@ CBasePlayer::Killed
 
 =====================
 */
-void CBasePlayer::Killed(entvars_t* pevAttacker, int iGib)
+void CBasePlayer::Killed(CBaseEntity* attacker, int iGib)
 {
 	// Holster weapon immediately, to allow it to cleanup
 	if (m_pActiveItem)

@@ -82,7 +82,7 @@ public:
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 	bool CheckRangeAttack1(float flDot, float flDist) override;
 	bool CheckRangeAttack2(float flDot, float flDist) override;
-	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 
 	virtual float GetDamageAmount() { return GetSkillFloat("shockroach_dmg_bite"sv); }
 	virtual int GetVoicePitch() { return 100; }
@@ -380,7 +380,7 @@ void COFShockRoach::LeapTouch(CBaseEntity* pOther)
 	{
 		EMIT_SOUND_DYN(edict(), CHAN_WEAPON, RANDOM_SOUND_ARRAY(pBiteSounds), GetSoundVolue(), ATTN_IDLE, 0, GetVoicePitch());
 
-		pOther->TakeDamage(pev, pev, GetDamageAmount(), DMG_SLASH);
+		pOther->TakeDamage(this, this, GetDamageAmount(), DMG_SLASH);
 	}
 
 	SetTouch(nullptr);
@@ -447,7 +447,7 @@ bool COFShockRoach::CheckRangeAttack2(float flDot, float flDist)
 #endif
 }
 
-bool COFShockRoach::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool COFShockRoach::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType)
 {
 	// Don't take any acid damage -- BigMomma's mortar is acid
 	if ((bitsDamageType & DMG_ACID) != 0)
@@ -458,7 +458,7 @@ bool COFShockRoach::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, 
 		flDamage = 0;
 
 	// Never gib the roach
-	return CBaseMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, (bitsDamageType & ~DMG_ALWAYSGIB) | DMG_NEVERGIB);
+	return CBaseMonster::TakeDamage(inflictor, attacker, flDamage, (bitsDamageType & ~DMG_ALWAYSGIB) | DMG_NEVERGIB);
 }
 
 //=========================================================
@@ -519,7 +519,7 @@ void COFShockRoach::MonsterThink()
 	}
 
 	if (lifeTime >= GetSkillFloat("shockroach_lifespan"sv))
-		TakeDamage(pev, pev, pev->health, DMG_NEVERGIB);
+		TakeDamage(this, this, pev->health, DMG_NEVERGIB);
 
 	CBaseMonster::MonsterThink();
 }

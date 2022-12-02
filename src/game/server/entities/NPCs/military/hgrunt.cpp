@@ -455,7 +455,7 @@ bool CHGrunt::CheckRangeAttack2(float flDot, float flDist)
 //=========================================================
 // TraceAttack - make sure we're not taking it in the helmet
 //=========================================================
-void CHGrunt::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
+void CHGrunt::TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
 {
 	// check for helmet shot
 	if (ptr->iHitgroup == 11)
@@ -474,7 +474,7 @@ void CHGrunt::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir,
 		// it's head shot anyways
 		ptr->iHitgroup = HITGROUP_HEAD;
 	}
-	CSquadMonster::TraceAttack(pevAttacker, flDamage, vecDir, ptr, bitsDamageType);
+	CSquadMonster::TraceAttack(attacker, flDamage, vecDir, ptr, bitsDamageType);
 }
 
 
@@ -483,11 +483,11 @@ void CHGrunt::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir,
 // needs to forget that he is in cover if he's hurt. (Obviously
 // not in a safe place anymore).
 //=========================================================
-bool CHGrunt::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool CHGrunt::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType)
 {
 	Forget(bits_MEMORY_INCOVER);
 
-	return CSquadMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
+	return CSquadMonster::TakeDamage(inflictor, attacker, flDamage, bitsDamageType);
 }
 
 //=========================================================
@@ -799,7 +799,7 @@ void CHGrunt::HandleAnimEvent(MonsterEvent_t* pEvent)
 			UTIL_MakeVectors(pev->angles);
 			pHurt->pev->punchangle.x = 15;
 			pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_forward * 100 + gpGlobals->v_up * 50;
-			pHurt->TakeDamage(pev, pev, GetSkillFloat("hgrunt_kick"sv), DMG_CLUB);
+			pHurt->TakeDamage(this, this, GetSkillFloat("hgrunt_kick"sv), DMG_CLUB);
 		}
 	}
 	break;

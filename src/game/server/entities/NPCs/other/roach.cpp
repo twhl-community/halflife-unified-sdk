@@ -39,7 +39,7 @@ public:
 	void Move(float flInterval) override;
 	void PickNewDest(int iCondition);
 	void EXPORT Touch(CBaseEntity* pOther) override;
-	void Killed(entvars_t* pevAttacker, int iGib) override;
+	void Killed(CBaseEntity* attacker, int iGib) override;
 
 	float m_flLastLightLevel;
 	float m_flNextSmellTime;
@@ -100,7 +100,7 @@ void CRoach::Touch(CBaseEntity* pOther)
 	// This isn't really blood.  So you don't have to screen it out based on violence levels (UTIL_ShouldShowBlood())
 	UTIL_DecalTrace(&tr, DECAL_YBLOOD1 + RANDOM_LONG(0, 5));
 
-	TakeDamage(pOther->pev, pOther->pev, pev->health, DMG_CRUSH);
+	TakeDamage(pOther, pOther, pev->health, DMG_CRUSH);
 }
 
 //=========================================================
@@ -160,7 +160,7 @@ void CRoach::Precache()
 //=========================================================
 // Killed.
 //=========================================================
-void CRoach::Killed(entvars_t* pevAttacker, int iGib)
+void CRoach::Killed(CBaseEntity* attacker, int iGib)
 {
 	pev->solid = SOLID_NOT;
 

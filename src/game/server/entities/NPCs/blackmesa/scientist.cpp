@@ -671,17 +671,17 @@ void CScientist::TalkInit()
 	m_szGrp[TLK_MORTAL] = "SC_MORTAL";
 }
 
-bool CScientist::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool CScientist::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType)
 {
 
-	if (pevInflictor && (pevInflictor->flags & FL_CLIENT) != 0)
+	if (inflictor && (inflictor->pev->flags & FL_CLIENT) != 0)
 	{
 		Remember(bits_MEMORY_PROVOKED);
 		StopFollowing(true);
 	}
 
 	// make sure friends talk about it if player hurts scientist...
-	return CTalkMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
+	return CTalkMonster::TakeDamage(inflictor, attacker, flDamage, bitsDamageType);
 }
 
 
@@ -741,10 +741,10 @@ void CScientist::DeathSound()
 }
 
 
-void CScientist::Killed(entvars_t* pevAttacker, int iGib)
+void CScientist::Killed(CBaseEntity* attacker, int iGib)
 {
 	SetUse(nullptr);
-	CTalkMonster::Killed(pevAttacker, iGib);
+	CTalkMonster::Killed(attacker, iGib);
 }
 
 

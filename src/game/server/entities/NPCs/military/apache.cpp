@@ -126,7 +126,7 @@ void CApache::StartupUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE
 	SetUse(nullptr);
 }
 
-void CApache::Killed(entvars_t* pevAttacker, int iGib)
+void CApache::Killed(CBaseEntity* attacker, int iGib)
 {
 	ClearShockEffect();
 
@@ -291,7 +291,7 @@ void CApache::DyingThink()
 
 		EMIT_SOUND(ENT(pev), CHAN_STATIC, "weapons/mortarhit.wav", 1.0, 0.3);
 
-		RadiusDamage(pev->origin, pev, pev, 300, CLASS_NONE, DMG_BLAST);
+		RadiusDamage(pev->origin, this, this, 300, CLASS_NONE, DMG_BLAST);
 
 		if (/*(pev->spawnflags & SF_NOWRECKAGE) == 0 && */ (pev->flags & FL_ONGROUND) != 0)
 		{
@@ -852,9 +852,9 @@ void CApache::ShowDamage()
 }
 
 
-bool CApache::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool CApache::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType)
 {
-	if (pevInflictor->owner == edict())
+	if (inflictor->pev->owner == edict())
 		return false;
 
 	if ((bitsDamageType & DMG_BLAST) != 0)
@@ -871,7 +871,7 @@ bool CApache::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float 
 	*/
 
 	// AILogger->debug("{:.0f}", flDamage);
-	const bool result = CBaseEntity::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
+	const bool result = CBaseEntity::TakeDamage(inflictor, attacker, flDamage, bitsDamageType);
 
 	// Are we damaged at all?
 	if (pev->health < pev->max_health)
@@ -901,7 +901,7 @@ bool CApache::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float 
 
 
 
-void CApache::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
+void CApache::TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
 {
 	// AILogger->debug("{} {:.0f}", ptr->iHitgroup, flDamage);
 
@@ -913,13 +913,13 @@ void CApache::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir,
 	if (flDamage > 50 || ptr->iHitgroup == 1 || ptr->iHitgroup == 2)
 	{
 		// AILogger->debug("{:.0f}", flDamage);
-		AddMultiDamage(pevAttacker, this, flDamage, bitsDamageType);
+		AddMultiDamage(attacker, this, flDamage, bitsDamageType);
 		m_iDoSmokePuff = 3 + (flDamage / 5.0);
 	}
 	else
 	{
 		// do half damage in the body
-		// AddMultiDamage( pevAttacker, this, flDamage / 2.0, bitsDamageType );
+		// AddMultiDamage( attacker, this, flDamage / 2.0, bitsDamageType );
 		UTIL_Ricochet(ptr->vecEndPos, 2.0);
 	}
 }

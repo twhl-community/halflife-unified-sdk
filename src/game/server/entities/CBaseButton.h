@@ -53,7 +53,7 @@ public:
 	void EXPORT ButtonReturn();
 	void EXPORT ButtonBackHome();
 	void EXPORT ButtonUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 	bool Save(CSave& save) override;
 	bool Restore(CRestore& restore) override;
 

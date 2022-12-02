@@ -172,8 +172,8 @@ void CShockRifle::PrimaryAttack()
 
 		RadiusDamage(
 			pev->origin,
-			m_pPlayer->pev,
-			m_pPlayer->pev,
+			m_pPlayer,
+			m_pPlayer,
 			m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] * 100.0,
 			m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] * 150.0,
 			CLASS_NONE,

@@ -423,7 +423,7 @@ public:
 		SetThink(&CSporeAmmo::Idling);
 	}
 
-	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override
+	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override
 	{
 		if (pev->body == SPOREAMMOBODY_EMPTY)
 		{

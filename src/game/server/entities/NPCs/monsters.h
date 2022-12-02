@@ -74,7 +74,7 @@ inline DLL_GLOBAL Vector g_vecAttackDir;
  *	@brief Set in combat.cpp.  Used to pass the damage inflictor for death messages.
  *	Better solution:  Add as parameter to all Killed() functions.
  */
-inline entvars_t* g_pevLastInflictor = nullptr;
+inline CBaseEntity* g_pevLastInflictor = nullptr;
 inline DLL_GLOBAL bool g_fDrawLines = false;
 
 // spawn flags 256 and above are already taken by the engine
@@ -84,7 +84,7 @@ Vector VecCheckToss(entvars_t* pev, const Vector& vecSpot1, Vector vecSpot2, flo
 Vector VecCheckThrow(entvars_t* pev, const Vector& vecSpot1, Vector vecSpot2, float flSpeed, float flGravityAdj = 1.0);
 void EjectBrass(const Vector& vecOrigin, const Vector& vecVelocity, float rotation, int model, int soundtype);
 void ExplodeModel(const Vector& vecOrigin, float speed, int model, int count);
-bool IsFacing(entvars_t* pevTest, const Vector& reference);
+bool IsFacing(CBaseEntity* pevTest, const Vector& reference);
 
 bool FBoxVisible(entvars_t* pevLooker, entvars_t* pevTarget, Vector& vecTargetOrigin, float flSize = 0.0);
 

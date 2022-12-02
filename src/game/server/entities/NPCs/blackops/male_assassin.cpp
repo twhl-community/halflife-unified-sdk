@@ -89,7 +89,7 @@ public:
 	bool Save(CSave& save) override;
 	bool Restore(CRestore& restore) override;
 
-	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
+	void TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
 
 	// Male Assassin never speaks
 	bool FOkToSpeak() override { return false; }
@@ -204,7 +204,7 @@ bool CMOFAssassin::CheckRangeAttack2(float flDot, float flDist)
 //=========================================================
 // TraceAttack - make sure we're not taking it in the helmet
 //=========================================================
-void CMOFAssassin::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
+void CMOFAssassin::TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
 {
 	// check for helmet shot
 	if (ptr->iHitgroup == 11)
@@ -213,7 +213,7 @@ void CMOFAssassin::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector ve
 		ptr->iHitgroup = HITGROUP_HEAD;
 	}
 
-	CSquadMonster::TraceAttack(pevAttacker, flDamage, vecDir, ptr, bitsDamageType);
+	CSquadMonster::TraceAttack(attacker, flDamage, vecDir, ptr, bitsDamageType);
 }
 
 void CMOFAssassin::IdleSound()
@@ -341,7 +341,7 @@ void CMOFAssassin::HandleAnimEvent(MonsterEvent_t* pEvent)
 			UTIL_MakeVectors(pev->angles);
 			pHurt->pev->punchangle.x = 15;
 			pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_forward * 100 + gpGlobals->v_up * 50;
-			pHurt->TakeDamage(pev, pev, GetSkillFloat("massassin_kick"sv), DMG_CLUB);
+			pHurt->TakeDamage(this, this, GetSkillFloat("massassin_kick"sv), DMG_CLUB);
 		}
 	}
 	break;

@@ -654,7 +654,7 @@ void CGamePlayerHurt::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYP
 		if (pev->dmg < 0)
 			pActivator->TakeHealth(-pev->dmg, DMG_GENERIC);
 		else
-			pActivator->TakeDamage(pev, pev, pev->dmg, DMG_GENERIC);
+			pActivator->TakeDamage(this, this, pev->dmg, DMG_GENERIC);
 	}
 
 	SUB_UseTargets(pActivator, useType, value);

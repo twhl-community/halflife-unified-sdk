@@ -356,9 +356,9 @@ void CGrapple::PrimaryAttack()
 							flDamage *= 2;
 						}
 
-						pHit->TraceAttack(pev, flDamage, gpGlobals->v_forward, &tr, DMG_ALWAYSGIB | DMG_CLUB);
+						pHit->TraceAttack(this, flDamage, gpGlobals->v_forward, &tr, DMG_ALWAYSGIB | DMG_CLUB);
 
-						ApplyMultiDamage(m_pPlayer->pev, m_pPlayer->pev);
+						ApplyMultiDamage(m_pPlayer, m_pPlayer);
 #endif
 
 						m_flDamageTime = gpGlobals->time;

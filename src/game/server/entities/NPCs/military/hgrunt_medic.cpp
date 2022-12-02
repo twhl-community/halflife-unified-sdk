@@ -121,7 +121,7 @@ public:
 
 	int ObjectCaps() override;
 
-	void Killed(entvars_t* pevAttacker, int iGib) override;
+	void Killed(CBaseEntity* attacker, int iGib) override;
 
 	void MonsterThink() override;
 
@@ -683,7 +683,7 @@ int COFMedicAlly::ObjectCaps()
 	return FCAP_ACROSS_TRANSITION | FCAP_CONTINUOUS_USE;
 }
 
-void COFMedicAlly::Killed(entvars_t* pevAttacker, int iGib)
+void COFMedicAlly::Killed(CBaseEntity* attacker, int iGib)
 {
 	// Clear medic handle from patient
 	if (m_hTargetEnt != nullptr)
@@ -694,7 +694,7 @@ void COFMedicAlly::Killed(entvars_t* pevAttacker, int iGib)
 			pSquadMonster->m_hWaitMedic = nullptr;
 	}
 
-	CBaseHGruntAlly::Killed(pevAttacker, iGib);
+	CBaseHGruntAlly::Killed(attacker, iGib);
 }
 
 void COFMedicAlly::MonsterThink()

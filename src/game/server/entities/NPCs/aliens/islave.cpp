@@ -44,15 +44,15 @@ public:
 	bool CheckRangeAttack1(float flDot, float flDist) override;
 	bool CheckRangeAttack2(float flDot, float flDist) override;
 	void CallForHelp(const char* szClassname, float flDist, EHANDLE hEnemy, Vector& vecLocation);
-	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
-	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	void TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
+	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 
 	void DeathSound() override;
 	void PainSound() override;
 	void AlertSound() override;
 	void IdleSound() override;
 
-	void Killed(entvars_t* pevAttacker, int iGib) override;
+	void Killed(CBaseEntity* attacker, int iGib) override;
 
 	void StartTask(Task_t* pTask) override;
 	Schedule_t* GetSchedule() override;
@@ -268,10 +268,10 @@ int CISlave::ISoundMask()
 }
 
 
-void CISlave::Killed(entvars_t* pevAttacker, int iGib)
+void CISlave::Killed(CBaseEntity* attacker, int iGib)
 {
 	ClearBeams();
-	CSquadMonster::Killed(pevAttacker, iGib);
+	CSquadMonster::Killed(attacker, iGib);
 }
 
 //=========================================================
@@ -425,7 +425,7 @@ void CISlave::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 		EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "hassault/hw_shoot1.wav", 1, ATTN_NORM, 0, RANDOM_LONG(130, 160));
 		// STOP_SOUND( ENT(pev), CHAN_WEAPON, "debris/zap4.wav" );
-		ApplyMultiDamage(pev, pev);
+		ApplyMultiDamage(this, this);
 
 		m_flNextAttack = gpGlobals->time + RANDOM_FLOAT(0.5, 4.0);
 	}
@@ -565,23 +565,23 @@ void CISlave::Precache()
 // TakeDamage - get provoked when injured
 //=========================================================
 
-bool CISlave::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool CISlave::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType)
 {
 	// don't slash one of your own
-	if ((bitsDamageType & DMG_SLASH) != 0 && pevAttacker && IRelationship(Instance(pevAttacker)) < R_DL)
+	if ((bitsDamageType & DMG_SLASH) != 0 && attacker && IRelationship(Instance(attacker)) < R_DL)
 		return false;
 
 	m_afMemory |= bits_MEMORY_PROVOKED;
-	return CSquadMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
+	return CSquadMonster::TakeDamage(inflictor, attacker, flDamage, bitsDamageType);
 }
 
 
-void CISlave::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
+void CISlave::TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
 {
 	if ((bitsDamageType & DMG_SHOCK) != 0)
 		return;
 
-	CSquadMonster::TraceAttack(pevAttacker, flDamage, vecDir, ptr, bitsDamageType);
+	CSquadMonster::TraceAttack(attacker, flDamage, vecDir, ptr, bitsDamageType);
 }
 
 
@@ -821,7 +821,7 @@ void CISlave::ZapBeam(int side)
 	pEntity = CBaseEntity::Instance(tr.pHit);
 	if (pEntity != nullptr && 0 != pEntity->pev->takedamage)
 	{
-		pEntity->TraceAttack(pev, GetSkillFloat("islave_dmg_zap"sv), vecAim, &tr, DMG_SHOCK);
+		pEntity->TraceAttack(this, GetSkillFloat("islave_dmg_zap"sv), vecAim, &tr, DMG_SHOCK);
 	}
 	UTIL_EmitAmbientSound(ENT(pev), tr.vecEndPos, "weapons/electro4.wav", 0.5, ATTN_NORM, 0, RANDOM_LONG(140, 160));
 }

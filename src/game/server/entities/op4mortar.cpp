@@ -168,10 +168,10 @@ void CMortarShell::MortarExplodeTouch(CBaseEntity* pOther)
 
 	CSoundEnt::InsertSound(bits_SOUND_COMBAT, pev->origin, 1024, 3.0);
 
-	auto pOwner = VARS(pev->owner);
+	auto pOwner = GetOwner();
 	pev->owner = nullptr;
 
-	RadiusDamage(pev, pOwner, pev->dmg, CLASS_NONE, 64);
+	RadiusDamage(this, pOwner, pev->dmg, CLASS_NONE, 64);
 
 	if (RANDOM_FLOAT(0, 1) >= 0.5)
 		UTIL_DecalTrace(&tr, DECAL_SCORCH2);
@@ -252,7 +252,7 @@ public:
 
 	void EXPORT MortarThink();
 
-	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 
 	void PlaySound();
 
@@ -508,10 +508,10 @@ void COp4Mortar::MortarThink()
 	}
 }
 
-bool COp4Mortar::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool COp4Mortar::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType)
 {
 	// Ignore all damage
-	return CBaseMonster::TakeDamage(pevInflictor, pevAttacker, 0, bitsDamageType);
+	return CBaseMonster::TakeDamage(inflictor, attacker, 0, bitsDamageType);
 }
 
 void COp4Mortar::PlaySound()

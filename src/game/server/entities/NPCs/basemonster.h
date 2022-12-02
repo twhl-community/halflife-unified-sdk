@@ -310,7 +310,7 @@ public:
 	virtual float HearingSensitivity() { return 1.0; }
 
 	bool FBecomeProne() override;
-	virtual void BarnacleVictimBitten(entvars_t* pevBarnacle);
+	virtual void BarnacleVictimBitten(CBaseEntity* pevBarnacle);
 	virtual void BarnacleVictimReleased();
 
 	void SetEyePosition();
@@ -330,12 +330,12 @@ public:
 
 	bool GetEnemy();
 	void MakeDamageBloodDecal(int cCount, float flNoise, TraceResult* ptr, const Vector& vecDir);
-	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
+	void TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
 
 	// combat functions
 	virtual Activity GetDeathActivity();
 	Activity GetSmallFlinchActivity();
-	void Killed(entvars_t* pevAttacker, int iGib) override;
+	void Killed(CBaseEntity* attacker, int iGib) override;
 	virtual void GibMonster();
 	bool ShouldGibMonster(int iGib);
 	void CallGibMonster();
@@ -349,11 +349,11 @@ public:
 	virtual Vector GetGunPosition();
 
 	bool TakeHealth(float flHealth, int bitsDamageType) override;
-	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
-	bool DeadTakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
+	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
+	bool DeadTakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType);
 
-	void RadiusDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int iClassIgnore, int bitsDamageType);
-	void RadiusDamage(Vector vecSrc, entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int iClassIgnore, int bitsDamageType);
+	void RadiusDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int iClassIgnore, int bitsDamageType);
+	void RadiusDamage(Vector vecSrc, CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int iClassIgnore, int bitsDamageType);
 	bool IsMoving() override { return m_movementGoal != MOVEGOAL_NONE; }
 
 	void RouteClear();

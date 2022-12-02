@@ -117,7 +117,7 @@ void CSquadMonster::ScheduleChange()
 //=========================================================
 // Killed
 //=========================================================
-void CSquadMonster::Killed(entvars_t* pevAttacker, int iGib)
+void CSquadMonster::Killed(CBaseEntity* attacker, int iGib)
 {
 	VacateSlot();
 
@@ -126,7 +126,7 @@ void CSquadMonster::Killed(entvars_t* pevAttacker, int iGib)
 		MySquadLeader()->SquadRemove(this);
 	}
 
-	CBaseMonster::Killed(pevAttacker, iGib);
+	CBaseMonster::Killed(attacker, iGib);
 }
 
 // These functions are still awaiting conversion to CSquadMonster
@@ -615,7 +615,7 @@ Schedule_t* CSquadMonster::GetScheduleOfType(int iType)
 	}
 }
 
-bool CSquadMonster::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool CSquadMonster::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType)
 {
 	if (flDamage >= pev->max_health)
 	{
@@ -629,10 +629,10 @@ bool CSquadMonster::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, 
 			{
 				if (!squadMember->m_hEnemy)
 				{
-					g_vecAttackDir = ((pevAttacker->origin + pevAttacker->view_ofs) - (squadMember->pev->origin + squadMember->pev->view_ofs)).Normalize();
+					g_vecAttackDir = ((attacker->pev->origin + attacker->pev->view_ofs) - (squadMember->pev->origin + squadMember->pev->view_ofs)).Normalize();
 
 					const Vector vecStart = squadMember->pev->origin + squadMember->pev->view_ofs;
-					const Vector vecEnd = pevAttacker->origin + pevAttacker->view_ofs + (g_vecAttackDir * m_flDistLook);
+					const Vector vecEnd = attacker->pev->origin + attacker->pev->view_ofs + (g_vecAttackDir * m_flDistLook);
 
 					TraceResult tr;
 
@@ -645,7 +645,7 @@ bool CSquadMonster::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, 
 					else
 					{
 						squadMember->m_hEnemy = CBaseEntity::Instance(tr.pHit);
-						squadMember->m_vecEnemyLKP = pevAttacker->origin;
+						squadMember->m_vecEnemyLKP = attacker->pev->origin;
 						squadMember->SetConditions(bits_COND_NEW_ENEMY);
 					}
 				}
@@ -654,10 +654,10 @@ bool CSquadMonster::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, 
 
 		if (!squadLeader->m_hEnemy)
 		{
-			g_vecAttackDir = ((pevAttacker->origin + pevAttacker->view_ofs) - (squadLeader->pev->origin + squadLeader->pev->view_ofs)).Normalize();
+			g_vecAttackDir = ((attacker->pev->origin + attacker->pev->view_ofs) - (squadLeader->pev->origin + squadLeader->pev->view_ofs)).Normalize();
 
 			const Vector vecStart = squadLeader->pev->origin + squadLeader->pev->view_ofs;
-			const Vector vecEnd = pevAttacker->origin + pevAttacker->view_ofs + (g_vecAttackDir * m_flDistLook);
+			const Vector vecEnd = attacker->pev->origin + attacker->pev->view_ofs + (g_vecAttackDir * m_flDistLook);
 
 			TraceResult tr;
 
@@ -670,11 +670,11 @@ bool CSquadMonster::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, 
 			else
 			{
 				squadLeader->m_hEnemy = CBaseEntity::Instance(tr.pHit);
-				squadLeader->m_vecEnemyLKP = pevAttacker->origin;
+				squadLeader->m_vecEnemyLKP = attacker->pev->origin;
 				squadLeader->SetConditions(bits_COND_NEW_ENEMY);
 			}
 		}
 	}
 
-	return CBaseMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
+	return CBaseMonster::TakeDamage(inflictor, attacker, flDamage, bitsDamageType);
 }

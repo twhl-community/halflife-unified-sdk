@@ -172,13 +172,13 @@ public:
 	void Precache() override;
 	bool KeyValue(KeyValueData* pkvd) override;
 	void Activate() override;
-	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 
 	void RunTask(Task_t* pTask) override;
 	void StartTask(Task_t* pTask) override;
 	Schedule_t* GetSchedule() override;
 	Schedule_t* GetScheduleOfType(int Type) override;
-	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
+	void TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
 
 	void NodeStart(string_t iszNextNode);
 	void NodeReach();
@@ -463,7 +463,7 @@ void CBigMomma::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 		if (pHurt)
 		{
-			pHurt->TakeDamage(pev, pev, GetSkillFloat("bigmomma_dmg_slash"sv), DMG_CRUSH | DMG_SLASH);
+			pHurt->TakeDamage(this, this, GetSkillFloat("bigmomma_dmg_slash"sv), DMG_CRUSH | DMG_SLASH);
 			pHurt->pev->punchangle.x = 15;
 			switch (pEvent->event)
 			{
@@ -553,7 +553,7 @@ void CBigMomma::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 }
 
-void CBigMomma::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
+void CBigMomma::TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
 {
 	if (ptr->iHitgroup != 1)
 	{
@@ -574,11 +574,11 @@ void CBigMomma::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDi
 	}
 
 
-	CBaseMonster::TraceAttack(pevAttacker, flDamage, vecDir, ptr, bitsDamageType);
+	CBaseMonster::TraceAttack(attacker, flDamage, vecDir, ptr, bitsDamageType);
 }
 
 
-bool CBigMomma::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool CBigMomma::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType)
 {
 	// Don't take any acid damage -- BigMomma's mortar is acid
 	if ((bitsDamageType & DMG_ACID) != 0)
@@ -594,7 +594,7 @@ bool CBigMomma::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, floa
 		}
 	}
 
-	return CBaseMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
+	return CBaseMonster::TakeDamage(inflictor, attacker, flDamage, bitsDamageType);
 }
 
 void CBigMomma::LayHeadcrab()
@@ -1227,10 +1227,8 @@ void CBMortar::Touch(CBaseEntity* pOther)
 	// make some flecks
 	MortarSpray(tr.vecEndPos, tr.vecPlaneNormal, gSpitSprite, 24);
 
-	entvars_t* pevOwner = nullptr;
-	if (pev->owner)
-		pevOwner = VARS(pev->owner);
+	auto owner = GetOwner();
 
-	RadiusDamage(pev->origin, pev, pevOwner, GetSkillFloat("bigmomma_dmg_blast"sv), GetSkillFloat("bigmomma_radius_blast"sv), CLASS_NONE, DMG_ACID);
+	RadiusDamage(pev->origin, this, owner, GetSkillFloat("bigmomma_dmg_blast"sv), GetSkillFloat("bigmomma_radius_blast"sv), CLASS_NONE, DMG_ACID);
 	UTIL_Remove(this);
 }

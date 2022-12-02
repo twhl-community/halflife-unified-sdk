@@ -153,7 +153,7 @@ bool CBaseMonster::FShouldEat()
 // by Barnacle victims when the barnacle pulls their head
 // into its mouth
 //=========================================================
-void CBaseMonster::BarnacleVictimBitten(entvars_t* pevBarnacle)
+void CBaseMonster::BarnacleVictimBitten(CBaseEntity* pevBarnacle)
 {
 	Schedule_t* pNewSchedule;
 
@@ -3533,13 +3533,13 @@ void CBaseMonster::ClearShockEffect()
 	}
 }
 
-bool IsFacing(entvars_t* pevTest, const Vector& reference)
+bool IsFacing(CBaseEntity* pevTest, const Vector& reference)
 {
-	Vector vecDir = (reference - pevTest->origin);
+	Vector vecDir = (reference - pevTest->pev->origin);
 	vecDir.z = 0;
 	vecDir = vecDir.Normalize();
 	Vector forward, angle;
-	angle = pevTest->v_angle;
+	angle = pevTest->pev->v_angle;
 	angle.x = 0;
 	UTIL_MakeVectorsPrivate(angle, forward, nullptr, nullptr);
 	// He's facing me, he meant it

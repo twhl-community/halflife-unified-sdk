@@ -442,7 +442,7 @@ void COsprey::HitTouch(CBaseEntity* pOther)
 
 
 /*
-int COsprey::TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType )
+int COsprey::TakeDamage( entvars_t *inflictor, entvars_t *attacker, float flDamage, int bitsDamageType )
 {
 	if (m_flRotortilt <= -90)
 	{
@@ -459,7 +459,7 @@ int COsprey::TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float 
 
 
 
-void COsprey::Killed(entvars_t* pevAttacker, int iGib)
+void COsprey::Killed(CBaseEntity* attacker, int iGib)
 {
 	ClearShockEffect();
 
@@ -638,7 +638,7 @@ void COsprey::DyingThink()
 
 		EMIT_SOUND(ENT(pev), CHAN_STATIC, "weapons/mortarhit.wav", 1.0, 0.3);
 
-		RadiusDamage(pev->origin, pev, pev, 300, CLASS_NONE, DMG_BLAST);
+		RadiusDamage(pev->origin, this, this, 300, CLASS_NONE, DMG_BLAST);
 
 		// gibs
 		vecSpot = pev->origin + (pev->mins + pev->maxs) * 0.5;
@@ -728,19 +728,19 @@ void COsprey::Update()
 	FCheckAITrigger();
 }
 
-bool COsprey::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool COsprey::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType)
 {
 	// Set enemy to last attacker.
 	// Ospreys are not capable of fighting so they'll get angry at whatever shoots at them, not whatever looks like an enemy.
-	m_hEnemy = Instance(pevAttacker);
+	m_hEnemy = Instance(attacker);
 
 	// It's on now!
 	m_MonsterState = MONSTERSTATE_COMBAT;
 
-	return CBaseMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
+	return CBaseMonster::TakeDamage(inflictor, attacker, flDamage, bitsDamageType);
 }
 
-void COsprey::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
+void COsprey::TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
 {
 	// AILogger->debug("{} {:.0f}", ptr->iHitgroup, flDamage);
 
@@ -767,7 +767,7 @@ void COsprey::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir,
 	if (flDamage > 50 || ptr->iHitgroup == 1 || ptr->iHitgroup == 2 || ptr->iHitgroup == 3)
 	{
 		// AILogger->debug("{:.0f}", flDamage);
-		AddMultiDamage(pevAttacker, this, flDamage, bitsDamageType);
+		AddMultiDamage(attacker, this, flDamage, bitsDamageType);
 	}
 	else
 	{

@@ -22,7 +22,7 @@ public:
 	int CheckLocalMove(const Vector& vecStart, const Vector& vecEnd, CBaseEntity* pTarget, float* pflDist) override; // check validity of a straight move through space
 	bool FTriangulate(const Vector& vecStart, const Vector& vecEnd, float flDist, CBaseEntity* pTargetEnt, Vector* pApex) override;
 	Activity GetStoppedActivity() override;
-	void Killed(entvars_t* pevAttacker, int iGib) override;
+	void Killed(CBaseEntity* attacker, int iGib) override;
 	void Stop() override;
 	float ChangeYaw(int speed) override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;

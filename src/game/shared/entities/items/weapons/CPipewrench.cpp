@@ -218,15 +218,15 @@ bool CPipewrench::Swing(const bool bFirst)
 			if ((m_flNextPrimaryAttack + 1 < UTIL_WeaponTimeBase()) || g_pGameRules->IsMultiplayer())
 			{
 				// first swing does full damage
-				pEntity->TraceAttack(m_pPlayer->pev, GetSkillFloat("plr_pipewrench"sv), gpGlobals->v_forward, &tr, DMG_CLUB);
+				pEntity->TraceAttack(m_pPlayer, GetSkillFloat("plr_pipewrench"sv), gpGlobals->v_forward, &tr, DMG_CLUB);
 			}
 			else
 			{
 				// subsequent swings do half
-				pEntity->TraceAttack(m_pPlayer->pev, GetSkillFloat("plr_pipewrench"sv) / 2, gpGlobals->v_forward, &tr, DMG_CLUB);
+				pEntity->TraceAttack(m_pPlayer, GetSkillFloat("plr_pipewrench"sv) / 2, gpGlobals->v_forward, &tr, DMG_CLUB);
 			}
 
-			ApplyMultiDamage(m_pPlayer->pev, m_pPlayer->pev);
+			ApplyMultiDamage(m_pPlayer, m_pPlayer);
 		}
 
 #endif
@@ -371,14 +371,14 @@ void CPipewrench::BigSwing()
 			if ((m_flNextPrimaryAttack + 1 < UTIL_WeaponTimeBase()) || g_pGameRules->IsMultiplayer())
 			{
 				// first swing does full damage
-				pEntity->TraceAttack(m_pPlayer->pev, flDamage, gpGlobals->v_forward, &tr, DMG_CLUB);
+				pEntity->TraceAttack(m_pPlayer, flDamage, gpGlobals->v_forward, &tr, DMG_CLUB);
 			}
 			else
 			{
 				// subsequent swings do half
-				pEntity->TraceAttack(m_pPlayer->pev, flDamage / 2, gpGlobals->v_forward, &tr, DMG_CLUB);
+				pEntity->TraceAttack(m_pPlayer, flDamage / 2, gpGlobals->v_forward, &tr, DMG_CLUB);
 			}
-			ApplyMultiDamage(m_pPlayer->pev, m_pPlayer->pev);
+			ApplyMultiDamage(m_pPlayer, m_pPlayer);
 		}
 
 		// play thwack, smack, or dong sound

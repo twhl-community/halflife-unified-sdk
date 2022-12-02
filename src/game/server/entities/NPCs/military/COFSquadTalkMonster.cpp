@@ -118,7 +118,7 @@ void COFSquadTalkMonster::ScheduleChange()
 //=========================================================
 // Killed
 //=========================================================
-void COFSquadTalkMonster::Killed(entvars_t* pevAttacker, int iGib)
+void COFSquadTalkMonster::Killed(CBaseEntity* attacker, int iGib)
 {
 	VacateSlot();
 
@@ -127,7 +127,7 @@ void COFSquadTalkMonster::Killed(entvars_t* pevAttacker, int iGib)
 		MySquadLeader()->SquadRemove(this);
 	}
 
-	CTalkMonster::Killed(pevAttacker, iGib);
+	CTalkMonster::Killed(attacker, iGib);
 }
 
 //=========================================================
@@ -750,11 +750,11 @@ bool COFSquadTalkMonster::HealMe(COFSquadTalkMonster* pTarget)
 	return false;
 }
 
-bool COFSquadTalkMonster::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool COFSquadTalkMonster::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType)
 {
 	if (m_MonsterState == MONSTERSTATE_SCRIPT)
 	{
-		return CTalkMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
+		return CTalkMonster::TakeDamage(inflictor, attacker, flDamage, bitsDamageType);
 	}
 
 	// If this attack deals enough damage to instakill me...
@@ -771,7 +771,7 @@ bool COFSquadTalkMonster::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAtta
 			if (pSquadMember && pSquadMember->IsAlive() && !pSquadMember->m_hEnemy)
 			{
 				// If they're not being eaten by a barnacle and the attacker is a player...
-				if (m_MonsterState != MONSTERSTATE_PRONE && (pevAttacker->flags & FL_CLIENT) != 0)
+				if (m_MonsterState != MONSTERSTATE_PRONE && (attacker->pev->flags & FL_CLIENT) != 0)
 				{
 					// Friendly fire!
 					pSquadMember->Remember(bits_MEMORY_PROVOKED);
@@ -779,10 +779,10 @@ bool COFSquadTalkMonster::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAtta
 				// Attacked by an NPC...
 				else
 				{
-					g_vecAttackDir = ((pevAttacker->origin + pevAttacker->view_ofs) - (pSquadMember->pev->origin + pSquadMember->pev->view_ofs)).Normalize();
+					g_vecAttackDir = ((attacker->pev->origin + attacker->pev->view_ofs) - (pSquadMember->pev->origin + pSquadMember->pev->view_ofs)).Normalize();
 
 					const Vector vecStart = pSquadMember->pev->origin + pSquadMember->pev->view_ofs;
-					const Vector vecEnd = pevAttacker->origin + pevAttacker->view_ofs + (g_vecAttackDir * m_flDistLook);
+					const Vector vecEnd = attacker->pev->origin + attacker->pev->view_ofs + (g_vecAttackDir * m_flDistLook);
 					TraceResult tr;
 
 					UTIL_TraceLine(vecStart, vecEnd, dont_ignore_monsters, pSquadMember->edict(), &tr);
@@ -798,7 +798,7 @@ bool COFSquadTalkMonster::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAtta
 					{
 						// Make the enemy an enemy of my squadmate
 						pSquadMember->m_hEnemy = CBaseEntity::Instance(tr.pHit);
-						pSquadMember->m_vecEnemyLKP = pevAttacker->origin;
+						pSquadMember->m_vecEnemyLKP = attacker->pev->origin;
 						pSquadMember->SetConditions(bits_COND_NEW_ENEMY);
 					}
 				}
@@ -808,5 +808,5 @@ bool COFSquadTalkMonster::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAtta
 
 	m_flWaitFinished = gpGlobals->time;
 
-	return CTalkMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
+	return CTalkMonster::TakeDamage(inflictor, attacker, flDamage, bitsDamageType);
 }

@@ -277,7 +277,7 @@ public:
 	void Precache() override;
 	void Touch(CBaseEntity* pOther) override;
 	void Think() override;
-	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override
+	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override
 	{
 		Attack();
 		return false;
@@ -399,7 +399,7 @@ void CXenTree::HandleAnimEvent(MonsterEvent_t* pEvent)
 				if (pList[i]->pev->owner != edict())
 				{
 					sound = true;
-					pList[i]->TakeDamage(pev, pev, 25, DMG_CRUSH | DMG_SLASH);
+					pList[i]->TakeDamage(this, this, 25, DMG_CRUSH | DMG_SLASH);
 					pList[i]->pev->punchangle.x = 15;
 					pList[i]->pev->velocity = pList[i]->pev->velocity + forward * 100;
 				}
@@ -454,7 +454,7 @@ public:
 	void Precache() override;
 	void Touch(CBaseEntity* pOther) override;
 	void Think() override;
-	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override
+	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override
 	{
 		Attack();
 		return false;

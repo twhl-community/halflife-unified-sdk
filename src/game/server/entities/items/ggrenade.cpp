@@ -93,15 +93,11 @@ void CGrenade::Explode(TraceResult* pTrace, int bitsDamageType)
 	MESSAGE_END();
 
 	CSoundEnt::InsertSound(bits_SOUND_COMBAT, pev->origin, NORMAL_EXPLOSION_VOLUME, 3.0);
-	entvars_t* pevOwner;
-	if (pev->owner)
-		pevOwner = VARS(pev->owner);
-	else
-		pevOwner = nullptr;
+	CBaseEntity* owner = GetOwner();
 
 	pev->owner = nullptr; // can't traceline attack owner if this is set
 
-	RadiusDamage(pev, pevOwner, pev->dmg, CLASS_NONE, bitsDamageType);
+	RadiusDamage(this, owner, pev->dmg, CLASS_NONE, bitsDamageType);
 
 	if (RANDOM_FLOAT(0, 1) < 0.5)
 	{
@@ -162,7 +158,7 @@ void CGrenade::Smoke()
 	UTIL_Remove(this);
 }
 
-void CGrenade::Killed(entvars_t* pevAttacker, int iGib)
+void CGrenade::Killed(CBaseEntity* attacker, int iGib)
 {
 	Detonate();
 }
@@ -234,19 +230,19 @@ void CGrenade::DangerSoundThink()
 void CGrenade::BounceTouch(CBaseEntity* pOther)
 {
 	// don't hit the guy that launched this grenade
-	if (pOther->edict() == pev->owner)
+	if (pOther == GetOwner())
 		return;
 
 	// only do damage if we're moving fairly fast
 	if (m_flNextAttack < gpGlobals->time && pev->velocity.Length() > 100)
 	{
-		entvars_t* pevOwner = VARS(pev->owner);
-		if (pevOwner)
+		CBaseEntity* owner = GetOwner();
+		if (owner)
 		{
 			TraceResult tr = UTIL_GetGlobalTrace();
 			ClearMultiDamage();
-			pOther->TraceAttack(pevOwner, 1, gpGlobals->v_forward, &tr, DMG_CLUB);
-			ApplyMultiDamage(pev, pevOwner);
+			pOther->TraceAttack(owner, 1, gpGlobals->v_forward, &tr, DMG_CLUB);
+			ApplyMultiDamage(this, owner);
 		}
 		m_flNextAttack = gpGlobals->time + 1.0; // debounce
 	}

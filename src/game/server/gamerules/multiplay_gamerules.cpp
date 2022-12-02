@@ -580,9 +580,9 @@ int CHalfLifeMultiplay::IPointsForKill(CBasePlayer* pAttacker, CBasePlayer* pKil
 //=========================================================
 // PlayerKilled - someone/something killed this player
 //=========================================================
-void CHalfLifeMultiplay::PlayerKilled(CBasePlayer* pVictim, entvars_t* pKiller, entvars_t* pInflictor)
+void CHalfLifeMultiplay::PlayerKilled(CBasePlayer* pVictim, CBaseEntity* pKiller, CBaseEntity* inflictor)
 {
-	DeathNotice(pVictim, pKiller, pInflictor);
+	DeathNotice(pVictim, pKiller, inflictor);
 
 	pVictim->m_iDeaths += 1;
 
@@ -593,20 +593,20 @@ void CHalfLifeMultiplay::PlayerKilled(CBasePlayer* pVictim, entvars_t* pKiller, 
 	if (ktmp && ktmp->IsPlayer())
 		peKiller = (CBasePlayer*)ktmp;
 
-	if (pVictim->pev == pKiller)
+	if (pVictim == pKiller)
 	{ // killed self
-		pKiller->frags -= 1;
+		pKiller->pev->frags -= 1;
 	}
 	else if (ktmp && ktmp->IsPlayer())
 	{
 		// if a player dies in a deathmatch game and the killer is a client, award the killer some points
-		pKiller->frags += IPointsForKill(peKiller, pVictim);
+		pKiller->pev->frags += IPointsForKill(peKiller, pVictim);
 
 		FireTargets("game_playerkill", ktmp, ktmp, USE_TOGGLE, 0);
 	}
 	else
 	{ // killed by the world
-		pKiller->frags -= 1;
+		pKiller->pev->frags -= 1;
 	}
 
 	// update the scores
@@ -639,7 +639,7 @@ void CHalfLifeMultiplay::PlayerKilled(CBasePlayer* pVictim, entvars_t* pKiller, 
 //=========================================================
 // Deathnotice.
 //=========================================================
-void CHalfLifeMultiplay::DeathNotice(CBasePlayer* pVictim, entvars_t* pKiller, entvars_t* pevInflictor)
+void CHalfLifeMultiplay::DeathNotice(CBasePlayer* pVictim, CBaseEntity* pKiller, CBaseEntity* inflictor)
 {
 	// Work out what killed the player, and send a message to all clients about it
 	CBasePlayer* Killer = static_cast<CBasePlayer*>(CBaseEntity::Instance(pKiller));
@@ -651,13 +651,13 @@ void CHalfLifeMultiplay::DeathNotice(CBasePlayer* pVictim, entvars_t* pKiller, e
 	const char* tau = "tau_cannon";
 	const char* gluon = "gluon gun";
 
-	if ((pKiller->flags & FL_CLIENT) != 0)
+	if ((pKiller->pev->flags & FL_CLIENT) != 0)
 	{
-		killer_index = ENTINDEX(ENT(pKiller));
+		killer_index = pKiller->entindex();
 
-		if (pevInflictor)
+		if (inflictor)
 		{
-			if (pevInflictor == pKiller)
+			if (inflictor == pKiller)
 			{
 				// If the inflictor is the killer,  then it must be their current weapon doing the damage
 				CBasePlayer* pPlayer = (CBasePlayer*)CBaseEntity::Instance(pKiller);
@@ -669,13 +669,13 @@ void CHalfLifeMultiplay::DeathNotice(CBasePlayer* pVictim, entvars_t* pKiller, e
 			}
 			else
 			{
-				killer_weapon_name = STRING(pevInflictor->classname); // it's just that easy
+				killer_weapon_name = STRING(inflictor->pev->classname); // it's just that easy
 			}
 		}
 	}
 	else
 	{
-		killer_weapon_name = STRING(pevInflictor->classname);
+		killer_weapon_name = STRING(inflictor->pev->classname);
 	}
 
 	// strip the monster_* or weapon_* from the inflictor's classname
@@ -700,12 +700,12 @@ void CHalfLifeMultiplay::DeathNotice(CBasePlayer* pVictim, entvars_t* pKiller, e
 	else if (0 == strcmp(killer_weapon_name, "gauss"))
 		killer_weapon_name = tau;
 
-	if (pVictim->pev == pKiller)
+	if (pVictim == pKiller)
 	{
 		// killed self
 		Logger->trace("{} committed suicide with \"{}\"", PlayerLogInfo{*pVictim}, killer_weapon_name);
 	}
-	else if ((pKiller->flags & FL_CLIENT) != 0)
+	else if ((pKiller->pev->flags & FL_CLIENT) != 0)
 	{
 		Logger->trace("{} killed {} with \"{}\"", PlayerLogInfo{*Killer}, PlayerLogInfo{*pVictim}, killer_weapon_name);
 	}
@@ -719,10 +719,10 @@ void CHalfLifeMultiplay::DeathNotice(CBasePlayer* pVictim, entvars_t* pKiller, e
 	WRITE_BYTE(9);							 // command length in bytes
 	WRITE_BYTE(DRC_CMD_EVENT);				 // player killed
 	WRITE_SHORT(ENTINDEX(pVictim->edict())); // index number of primary entity
-	if (pevInflictor)
-		WRITE_SHORT(ENTINDEX(ENT(pevInflictor))); // index number of secondary entity
+	if (inflictor)
+		WRITE_SHORT(inflictor->entindex()); // index number of secondary entity
 	else
-		WRITE_SHORT(ENTINDEX(ENT(pKiller))); // index number of secondary entity
+		WRITE_SHORT(pKiller->entindex()); // index number of secondary entity
 	WRITE_LONG(7 | DRC_FLAG_DRAMATIC);		 // eventflags (priority and flags)
 	MESSAGE_END();
 

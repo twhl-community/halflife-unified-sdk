@@ -251,7 +251,7 @@ void CHalfLifeTeamplay::ChangePlayerTeam(CBasePlayer* pPlayer, const char* pTeam
 		m_DisableDeathMessages = true;
 		m_DisableDeathPenalty = true;
 
-		pPlayer->TakeDamage(CBaseEntity::World->pev, CBaseEntity::World->pev, 900, damageFlags);
+		pPlayer->TakeDamage(CBaseEntity::World, CBaseEntity::World, 900, damageFlags);
 
 		m_DisableDeathMessages = false;
 		m_DisableDeathPenalty = false;
@@ -329,12 +329,12 @@ void CHalfLifeTeamplay::ClientUserInfoChanged(CBasePlayer* pPlayer, char* infobu
 //=========================================================
 // Deathnotice.
 //=========================================================
-void CHalfLifeTeamplay::DeathNotice(CBasePlayer* pVictim, entvars_t* pKiller, entvars_t* pevInflictor)
+void CHalfLifeTeamplay::DeathNotice(CBasePlayer* pVictim, CBaseEntity* pKiller, CBaseEntity* inflictor)
 {
 	if (m_DisableDeathMessages)
 		return;
 
-	if (pVictim && pKiller && (pKiller->flags & FL_CLIENT) != 0)
+	if (pVictim && pKiller && (pKiller->pev->flags & FL_CLIENT) != 0)
 	{
 		CBasePlayer* pk = (CBasePlayer*)CBaseEntity::Instance(pKiller);
 
@@ -343,7 +343,7 @@ void CHalfLifeTeamplay::DeathNotice(CBasePlayer* pVictim, entvars_t* pKiller, en
 			if ((pk != pVictim) && (PlayerRelationship(pVictim, pk) == GR_TEAMMATE))
 			{
 				MESSAGE_BEGIN(MSG_ALL, gmsgDeathMsg);
-				WRITE_BYTE(ENTINDEX(ENT(pKiller)));		// the killer
+				WRITE_BYTE(pKiller->entindex());		// the killer
 				WRITE_BYTE(ENTINDEX(pVictim->edict())); // the victim
 				WRITE_STRING("teammate");				// flag this as a teammate kill
 				MESSAGE_END();
@@ -352,16 +352,16 @@ void CHalfLifeTeamplay::DeathNotice(CBasePlayer* pVictim, entvars_t* pKiller, en
 		}
 	}
 
-	CHalfLifeMultiplay::DeathNotice(pVictim, pKiller, pevInflictor);
+	CHalfLifeMultiplay::DeathNotice(pVictim, pKiller, inflictor);
 }
 
 //=========================================================
 //=========================================================
-void CHalfLifeTeamplay::PlayerKilled(CBasePlayer* pVictim, entvars_t* pKiller, entvars_t* pInflictor)
+void CHalfLifeTeamplay::PlayerKilled(CBasePlayer* pVictim, CBaseEntity* pKiller, CBaseEntity* inflictor)
 {
 	if (!m_DisableDeathPenalty)
 	{
-		CHalfLifeMultiplay::PlayerKilled(pVictim, pKiller, pInflictor);
+		CHalfLifeMultiplay::PlayerKilled(pVictim, pKiller, inflictor);
 		RecountTeams();
 	}
 }

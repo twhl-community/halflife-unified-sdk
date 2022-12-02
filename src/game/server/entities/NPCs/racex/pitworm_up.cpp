@@ -86,9 +86,9 @@ public:
 
 	void PainSound() override;
 
-	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 
-	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
+	void TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
 
 	bool FVisible(CBaseEntity* pEntity) override;
 
@@ -656,7 +656,7 @@ void COFPitWormUp::HitTouch(CBaseEntity* pOther)
 
 	if (pOther->pev->modelindex != pev->modelindex && m_flHitTime <= gpGlobals->time && tr.pHit && pev->modelindex == tr.pHit->v.modelindex && pOther->pev->takedamage != DAMAGE_NO)
 	{
-		pOther->TakeDamage(pev, pev, 20, DMG_CRUSH | DMG_SLASH);
+		pOther->TakeDamage(this, this, 20, DMG_CRUSH | DMG_SLASH);
 
 		pOther->pev->punchangle.z = 15;
 
@@ -669,7 +669,7 @@ void COFPitWormUp::HitTouch(CBaseEntity* pOther)
 		EMIT_SOUND_DYN(edict(), CHAN_WEAPON, pAttackSounds[RANDOM_LONG(0, 2)], VOL_NORM, ATTN_NORM, 0, RANDOM_LONG(-5, 5) + 100);
 
 		if (tr.iHitgroup == 2)
-			pOther->TakeDamage(pev, pev, 10, DMG_CRUSH | DMG_SLASH);
+			pOther->TakeDamage(this, this, 10, DMG_CRUSH | DMG_SLASH);
 
 		m_flHitTime = gpGlobals->time + 1.0;
 	}
@@ -805,8 +805,8 @@ void COFPitWormUp::ShootBeam()
 			if (pHit && pHit->pev->takedamage != DAMAGE_NO)
 			{
 				ClearMultiDamage();
-				pHit->TraceAttack(pev, GetSkillFloat("pitworm_dmg_beam"sv), m_vecBeam, &tr, 1024);
-				pHit->TakeDamage(pev, pev, GetSkillFloat("pitworm_dmg_beam"sv), 1024);
+				pHit->TraceAttack(this, GetSkillFloat("pitworm_dmg_beam"sv), m_vecBeam, &tr, 1024);
+				pHit->TakeDamage(this, this, GetSkillFloat("pitworm_dmg_beam"sv), 1024);
 			}
 			else if (tr.flFraction != 1.0)
 			{
@@ -887,8 +887,8 @@ void COFPitWormUp::StrafeBeam()
 	{
 		ClearMultiDamage();
 
-		pHit->TraceAttack(pev, GetSkillFloat("pitworm_dmg_beam"sv), m_vecBeam, &tr, DMG_ENERGYBEAM);
-		pHit->TakeDamage(pev, pev, GetSkillFloat("pitworm_dmg_beam"sv), DMG_ENERGYBEAM);
+		pHit->TraceAttack(this, GetSkillFloat("pitworm_dmg_beam"sv), m_vecBeam, &tr, DMG_ENERGYBEAM);
+		pHit->TakeDamage(this, this, GetSkillFloat("pitworm_dmg_beam"sv), DMG_ENERGYBEAM);
 
 		// TODO: missing an ApplyMultiDamage call here
 		// Should probably replace the TakeDamage call
@@ -1223,13 +1223,13 @@ void COFPitWormUp::PainSound()
 	}
 }
 
-bool COFPitWormUp::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool COFPitWormUp::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType)
 {
 	PainSound();
 	return false;
 }
 
-void COFPitWormUp::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
+void COFPitWormUp::TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
 {
 	if (ptr->iHitgroup == 1)
 	{
@@ -1249,9 +1249,9 @@ void COFPitWormUp::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector ve
 				SpawnBlood(ptr->vecEndPos - vecDir * 4, m_bloodColor, flDamage * 10.0);
 				TraceBleed(flDamage, vecDir, ptr, bitsDamageType);
 
-				if (pevAttacker && !m_hEnemy)
+				if (attacker && !m_hEnemy)
 				{
-					auto pAttacker = Instance(pevAttacker);
+					auto pAttacker = Instance(attacker);
 
 					if (pAttacker && pAttacker->MyMonsterPointer())
 					{
@@ -1689,7 +1689,7 @@ public:
 		pev->yaw_speed = yawSpeed;
 	}
 
-	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 	void Precache() override;
 
 	bool CheckMeleeAttack1(float flDot, float flDist) override
@@ -1735,7 +1735,7 @@ public:
 		return false;
 	}
 
-	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
+	void TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
 
 	void Move(float flInterval) override;
 
@@ -1880,7 +1880,7 @@ void COFPitWorm::OnCreate()
 	pev->model = MAKE_STRING("models/pit_worm.mdl");
 }
 
-bool COFPitWorm::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool COFPitWorm::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType)
 {
 	// Don't take any acid damage -- BigMomma's mortar is acid
 	if ((bitsDamageType & DMG_ACID) != 0)
@@ -2038,7 +2038,7 @@ void COFPitWorm::Spawn()
 	m_pBeam = nullptr;
 }
 
-void COFPitWorm::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
+void COFPitWorm::TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
 {
 	if (ptr->iHitgroup != 1)
 	{
@@ -2079,7 +2079,7 @@ void COFPitWorm::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecD
 	}
 
 
-	CBaseMonster::TraceAttack(pevAttacker, flDamage, vecDir, ptr, bitsDamageType);
+	CBaseMonster::TraceAttack(attacker, flDamage, vecDir, ptr, bitsDamageType);
 }
 
 #define DIST_TO_CHECK 200
@@ -2275,8 +2275,8 @@ void COFPitWorm::ShootBeam()
 			if (target && target->pev->takedamage != DAMAGE_NO)
 			{
 				ClearMultiDamage();
-				target->TraceAttack(pev, 10, m_vecBeam, &tr, DMG_ENERGYBEAM);
-				target->TakeDamage(pev, pev, 10, DMG_ENERGYBEAM);
+				target->TraceAttack(this, 10, m_vecBeam, &tr, DMG_ENERGYBEAM);
+				target->TakeDamage(this, this, 10, DMG_ENERGYBEAM);
 			}
 			else if (tr.flFraction != 1.0)
 			{
@@ -2321,7 +2321,7 @@ void COFPitWorm::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 		if (pHurt)
 		{
-			pHurt->TakeDamage(pev, pev, GetSkillFloat("bigmomma_dmg_slash"sv), DMG_CRUSH | DMG_SLASH);
+			pHurt->TakeDamage(this, this, GetSkillFloat("bigmomma_dmg_slash"sv), DMG_CRUSH | DMG_SLASH);
 			pHurt->pev->punchangle.x = 15;
 
 			pHurt->pev->velocity = pHurt->pev->velocity + (forward * 220) + Vector(0, 0, 200);
@@ -2391,8 +2391,8 @@ void COFPitWorm::StrafeBeam()
 	if (hit && hit->pev->takedamage != DAMAGE_NO)
 	{
 		ClearMultiDamage();
-		hit->TraceAttack(pev, 0x41200000, m_vecBeam, &tr, 1024);
-		hit->TakeDamage(pev, pev, 0x41200000, 1024);
+		hit->TraceAttack(this, 0x41200000, m_vecBeam, &tr, 1024);
+		hit->TakeDamage(this, this, 0x41200000, 1024);
 	}
 	else if (tr.flFraction != 1)
 	{

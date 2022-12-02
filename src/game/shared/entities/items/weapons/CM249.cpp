@@ -219,7 +219,7 @@ void CM249::PrimaryAttack()
 		1,
 		vecSrc, vecAiming, vecSpread,
 		8192.0, BULLET_PLAYER_556, 2, 0,
-		m_pPlayer->pev, m_pPlayer->random_seed);
+		m_pPlayer, m_pPlayer->random_seed);
 
 	int flags;
 #if defined(CLIENT_WEAPONS)

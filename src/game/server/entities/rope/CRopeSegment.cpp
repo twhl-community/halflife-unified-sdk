@@ -76,7 +76,7 @@ void CRopeSegment::Touch(CBaseEntity* pOther)
 		// Electrified wires deal damage. - Solokiller
 		if (m_bCauseDamage)
 		{
-			pOther->TakeDamage(pev, pev, 1, DMG_SHOCK);
+			pOther->TakeDamage(this, this, 1, DMG_SHOCK);
 		}
 
 		if (m_pSample->GetMasterRope()->IsAcceptingAttachment() && !pPlayer->IsOnRope())

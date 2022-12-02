@@ -147,8 +147,8 @@ public:
 	CBaseEntity* Kick();
 	Schedule_t* GetSchedule() override;
 	Schedule_t* GetScheduleOfType(int Type) override;
-	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
-	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	void TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
+	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 
 	int IRelationship(CBaseEntity* pTarget) override;
 
@@ -612,9 +612,9 @@ bool CShockTrooper::CheckRangeAttack2(float flDot, float flDist)
 //=========================================================
 // TraceAttack - make sure we're not taking it in the helmet
 //=========================================================
-void CShockTrooper::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
+void CShockTrooper::TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
 {
-	CSquadMonster::TraceAttack(pevAttacker, flDamage, vecDir, ptr, bitsDamageType);
+	CSquadMonster::TraceAttack(attacker, flDamage, vecDir, ptr, bitsDamageType);
 }
 
 
@@ -623,11 +623,11 @@ void CShockTrooper::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector v
 // needs to forget that he is in cover if he's hurt. (Obviously
 // not in a safe place anymore).
 //=========================================================
-bool CShockTrooper::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool CShockTrooper::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType)
 {
 	Forget(bits_MEMORY_INCOVER);
 
-	return CSquadMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
+	return CSquadMonster::TakeDamage(inflictor, attacker, flDamage, bitsDamageType);
 }
 
 //=========================================================
@@ -899,7 +899,7 @@ void CShockTrooper::HandleAnimEvent(MonsterEvent_t* pEvent)
 			UTIL_MakeVectors(pev->angles);
 			pHurt->pev->punchangle.x = 15;
 			pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_forward * 100 + gpGlobals->v_up * 50;
-			pHurt->TakeDamage(pev, pev, GetSkillFloat("shocktrooper_kick"sv), DMG_CLUB);
+			pHurt->TakeDamage(this, this, GetSkillFloat("shocktrooper_kick"sv), DMG_CLUB);
 		}
 	}
 	break;

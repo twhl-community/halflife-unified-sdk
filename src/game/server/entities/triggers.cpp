@@ -858,7 +858,7 @@ void CBaseTrigger::HurtTouch(CBaseEntity* pOther)
 	if (fldmg < 0)
 		pOther->TakeHealth(-fldmg, m_bitsDamageInflict);
 	else
-		pOther->TakeDamage(pev, pev, fldmg, m_bitsDamageInflict);
+		pOther->TakeDamage(this, this, fldmg, m_bitsDamageInflict);
 
 	// Store pain time so we can get all of the other entities on this frame
 	pev->pain_finished = gpGlobals->time;
@@ -2348,7 +2348,7 @@ void CTriggerKillNoGib::Spawn()
 void CTriggerKillNoGib::KillTouch(CBaseEntity* pOther)
 {
 	if (pOther->pev->takedamage != DAMAGE_NO)
-		pOther->TakeDamage(pev, pOther->pev, 500000, DMG_NEVERGIB);
+		pOther->TakeDamage(this, pOther, 500000, DMG_NEVERGIB);
 }
 
 class CTriggerXenReturn : public CBaseTrigger
@@ -2531,7 +2531,7 @@ void COFTriggerGeneWormHit::GeneWormHitTouch(CBaseEntity* pOther)
 				pev->impulse |= playerBit;
 			}
 
-			pOther->TakeDamage(pev, pev, pev->dmg, DMG_CRUSH);
+			pOther->TakeDamage(this, this, pev->dmg, DMG_CRUSH);
 
 			EMIT_SOUND_DYN(pOther->edict(), CHAN_BODY, pAttackSounds[RANDOM_LONG(0, std::size(pAttackSounds) - 1)], VOL_NORM, 0.1, 0, RANDOM_LONG(-5, 5) + 100);
 

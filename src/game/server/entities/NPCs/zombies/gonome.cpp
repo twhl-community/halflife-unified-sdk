@@ -124,7 +124,7 @@ void COFGonomeGuts::Touch(CBaseEntity* pOther)
 	}
 	else
 	{
-		pOther->TakeDamage(pev, pev, GetSkillFloat("gonome_dmg_guts"sv), DMG_GENERIC);
+		pOther->TakeDamage(this, this, GetSkillFloat("gonome_dmg_guts"sv), DMG_GENERIC);
 	}
 
 	SetThink(&COFGonomeGuts::SUB_Remove);
@@ -226,7 +226,7 @@ public:
 
 	Schedule_t* GetScheduleOfType(int Type) override;
 
-	void Killed(entvars_t* pevAttacker, int iGib) override;
+	void Killed(CBaseEntity* attacker, int iGib) override;
 
 	void StartTask(Task_t* pTask) override;
 
@@ -609,7 +609,7 @@ Schedule_t* COFGonome::GetScheduleOfType(int Type)
 		return CBaseMonster::GetScheduleOfType(Type);
 }
 
-void COFGonome::Killed(entvars_t* pevAttacker, int iGib)
+void COFGonome::Killed(CBaseEntity* attacker, int iGib)
 {
 	if (m_pGonomeGuts)
 	{
@@ -627,7 +627,7 @@ void COFGonome::Killed(entvars_t* pevAttacker, int iGib)
 		m_PlayerLocked = nullptr;
 	}
 
-	CBaseMonster::Killed(pevAttacker, iGib);
+	CBaseMonster::Killed(attacker, iGib);
 }
 
 void COFGonome::StartTask(Task_t* pTask)

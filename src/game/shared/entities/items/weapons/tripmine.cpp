@@ -30,13 +30,13 @@ public:
 
 	static TYPEDESCRIPTION m_SaveData[];
 
-	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 
 	void EXPORT WarningThink();
 	void EXPORT PowerupThink();
 	void EXPORT BeamBreakThink();
 	void EXPORT DelayDeathThink();
-	void Killed(entvars_t* pevAttacker, int iGib) override;
+	void Killed(CBaseEntity* attacker, int iGib) override;
 
 	void MakeBeam();
 	void KillBeam();
@@ -302,14 +302,14 @@ void CTripmineGrenade::BeamBreakThink()
 		// CGrenade code knows who the explosive really belongs to.
 		pev->owner = m_pRealOwner;
 		pev->health = 0;
-		Killed(VARS(pev->owner), GIB_NORMAL);
+		Killed(GetOwner(), GIB_NORMAL);
 		return;
 	}
 
 	pev->nextthink = gpGlobals->time + 0.1;
 }
 
-bool CTripmineGrenade::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool CTripmineGrenade::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType)
 {
 	if (gpGlobals->time < m_flPowerUp && flDamage < pev->health)
 	{
@@ -320,17 +320,17 @@ bool CTripmineGrenade::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacke
 		KillBeam();
 		return false;
 	}
-	return CGrenade::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
+	return CGrenade::TakeDamage(inflictor, attacker, flDamage, bitsDamageType);
 }
 
-void CTripmineGrenade::Killed(entvars_t* pevAttacker, int iGib)
+void CTripmineGrenade::Killed(CBaseEntity* attacker, int iGib)
 {
 	pev->takedamage = DAMAGE_NO;
 
-	if (pevAttacker && (pevAttacker->flags & FL_CLIENT) != 0)
+	if (attacker && (attacker->pev->flags & FL_CLIENT) != 0)
 	{
 		// some client has destroyed this mine, he'll get credit for any kills
-		pev->owner = ENT(pevAttacker);
+		SetOwner(attacker);
 	}
 
 	SetThink(&CTripmineGrenade::DelayDeathThink);

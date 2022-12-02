@@ -411,7 +411,7 @@ bool CBaseHGruntAlly::CheckRangeAttack2(float flDot, float flDist)
 //=========================================================
 // TraceAttack - make sure we're not taking it in the helmet
 //=========================================================
-void CBaseHGruntAlly::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
+void CBaseHGruntAlly::TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
 {
 	// check for helmet shot
 	if (ptr->iHitgroup == 11)
@@ -437,7 +437,7 @@ void CBaseHGruntAlly::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector
 		flDamage *= 0.5;
 	}
 
-	COFSquadTalkMonster::TraceAttack(pevAttacker, flDamage, vecDir, ptr, bitsDamageType);
+	COFSquadTalkMonster::TraceAttack(attacker, flDamage, vecDir, ptr, bitsDamageType);
 }
 
 //=========================================================
@@ -445,24 +445,24 @@ void CBaseHGruntAlly::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector
 // needs to forget that he is in cover if he's hurt. (Obviously
 // not in a safe place anymore).
 //=========================================================
-bool CBaseHGruntAlly::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool CBaseHGruntAlly::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType)
 {
 	// make sure friends talk about it if player hurts talkmonsters...
-	bool ret = COFSquadTalkMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
+	bool ret = COFSquadTalkMonster::TakeDamage(inflictor, attacker, flDamage, bitsDamageType);
 
 	if (!IsAlive() || pev->deadflag != DEAD_NO)
 		return ret;
 
 	Forget(bits_MEMORY_INCOVER);
 
-	if (m_MonsterState != MONSTERSTATE_PRONE && (pevAttacker->flags & FL_CLIENT) != 0)
+	if (m_MonsterState != MONSTERSTATE_PRONE && (attacker->pev->flags & FL_CLIENT) != 0)
 	{
 		// This is a heurstic to determine if the player intended to harm me
 		// If I have an enemy, we can't establish intent (may just be crossfire)
 		if (m_hEnemy == nullptr)
 		{
 			// If the player was facing directly at me, or I'm already suspicious, get mad
-			if (gpGlobals->time - m_flLastHitByPlayer < 4.0 && m_iPlayerHits > 2 && ((m_afMemory & bits_MEMORY_SUSPICIOUS) != 0 || IsFacing(pevAttacker, pev->origin)))
+			if (gpGlobals->time - m_flLastHitByPlayer < 4.0 && m_iPlayerHits > 2 && ((m_afMemory & bits_MEMORY_SUSPICIOUS) != 0 || IsFacing(attacker, pev->origin)))
 			{
 				// Alright, now I'm pissed!
 				PlaySentence("FG_MAD", 4, VOL_NORM, ATTN_NORM);
@@ -703,7 +703,7 @@ void CBaseHGruntAlly::HandleAnimEvent(MonsterEvent_t* pEvent)
 			UTIL_MakeVectors(pev->angles);
 			pHurt->pev->punchangle.x = 15;
 			pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_forward * 100 + gpGlobals->v_up * 50;
-			pHurt->TakeDamage(pev, pev, GetSkillFloat("hgrunt_ally_kick"sv), DMG_CLUB);
+			pHurt->TakeDamage(this, this, GetSkillFloat("hgrunt_ally_kick"sv), DMG_CLUB);
 		}
 	}
 	break;
@@ -2315,11 +2315,11 @@ bool CBaseHGruntAlly::KeyValue(KeyValueData* pkvd)
 	return COFSquadTalkMonster::KeyValue(pkvd);
 }
 
-void CBaseHGruntAlly::Killed(entvars_t* pevAttacker, int iGib)
+void CBaseHGruntAlly::Killed(CBaseEntity* attacker, int iGib)
 {
 	if (m_MonsterState != MONSTERSTATE_DEAD)
 	{
-		if (HasMemory(bits_MEMORY_SUSPICIOUS) || IsFacing(pevAttacker, pev->origin))
+		if (HasMemory(bits_MEMORY_SUSPICIOUS) || IsFacing(attacker, pev->origin))
 		{
 			Remember(bits_MEMORY_PROVOKED);
 
@@ -2337,7 +2337,7 @@ void CBaseHGruntAlly::Killed(entvars_t* pevAttacker, int iGib)
 	}
 
 	SetUse(nullptr);
-	COFSquadTalkMonster::Killed(pevAttacker, iGib);
+	COFSquadTalkMonster::Killed(attacker, iGib);
 }
 
 bool CBaseHGruntAllyRepel::KeyValue(KeyValueData* pkvd)

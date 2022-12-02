@@ -588,7 +588,7 @@ void CBaseDoor::Blocked(CBaseEntity* pOther)
 {
 	// Hurt the blocker a little.
 	if (0 != pev->dmg)
-		pOther->TakeDamage(pev, pev, pev->dmg, DMG_CRUSH);
+		pOther->TakeDamage(this, this, pev->dmg, DMG_CRUSH);
 
 	// if a door has a negative wait, it would never come back if blocked,
 	// so let it just squash the object to death real fast

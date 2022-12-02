@@ -128,11 +128,11 @@ void CShockBeam::ExplodeThink()
 
 void CShockBeam::WaterExplodeThink()
 {
-	auto pOwner = VARS(pev->owner);
+	auto pOwner = GetOwner();
 
 	Explode();
 
-	::RadiusDamage(pev->origin, pev, pOwner, 100.0, 150.0, CLASS_NONE, DMG_ALWAYSGIB | DMG_BLAST);
+	::RadiusDamage(pev->origin, this, pOwner, 100.0, 150.0, CLASS_NONE, DMG_ALWAYSGIB | DMG_BLAST);
 
 	UTIL_Remove(this);
 }
@@ -164,14 +164,14 @@ void CShockBeam::BallTouch(CBaseEntity* pOther)
 			}
 		}
 
-		pOther->TraceAttack(VARS(pev->owner), damage, pev->velocity.Normalize(), &tr, bitsDamageTypes);
+		pOther->TraceAttack(GetOwner(), damage, pev->velocity.Normalize(), &tr, bitsDamageTypes);
 
 		if (pMonster)
 		{
 			pMonster->AddShockEffect(63.0, 152.0, 208.0, 16.0, 0.5);
 		}
 
-		ApplyMultiDamage(pev, VARS(pev->owner));
+		ApplyMultiDamage(this, GetOwner());
 
 		pev->velocity = g_vecZero;
 	}

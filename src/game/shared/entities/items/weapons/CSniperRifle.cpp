@@ -145,7 +145,7 @@ void CSniperRifle::PrimaryAttack()
 	Vector vecShot = m_pPlayer->FireBulletsPlayer(1,
 		vecSrc, vecAiming, g_vecZero,
 		8192, BULLET_PLAYER_762, 0, 0,
-		m_pPlayer->pev, m_pPlayer->random_seed);
+		m_pPlayer, m_pPlayer->random_seed);
 
 	PLAYBACK_EVENT_FULL(FEV_NOTHOST,
 		m_pPlayer->edict(), m_usSniper, 0,

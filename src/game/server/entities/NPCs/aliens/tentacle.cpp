@@ -67,9 +67,9 @@ public:
 
 	float HearingSensitivity() override { return 2.0; }
 
-	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
-	void Killed(entvars_t* pevAttacker, int iGib) override;
+	void Killed(CBaseEntity* attacker, int iGib) override;
 
 	MONSTERSTATE GetIdealState() override { return MONSTERSTATE_IDLE; }
 	// TODO: should override base, but has different signature
@@ -1027,12 +1027,12 @@ void CTentacle::HitTouch(CBaseEntity* pOther)
 
 	if (tr.iHitgroup >= 3)
 	{
-		pOther->TakeDamage(pev, pev, m_iHitDmg, DMG_CRUSH);
+		pOther->TakeDamage(this, this, m_iHitDmg, DMG_CRUSH);
 		// AILogger->debug("wack {:3d} : ", m_iHitDmg);
 	}
 	else if (tr.iHitgroup != 0)
 	{
-		pOther->TakeDamage(pev, pev, 20, DMG_CRUSH);
+		pOther->TakeDamage(this, this, 20, DMG_CRUSH);
 		// AILogger->debug("tap  {:3d} : ", 20);
 	}
 	else
@@ -1046,7 +1046,7 @@ void CTentacle::HitTouch(CBaseEntity* pOther)
 }
 
 
-bool CTentacle::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool CTentacle::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType)
 {
 	if (flDamage > pev->health)
 	{
@@ -1062,7 +1062,7 @@ bool CTentacle::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, floa
 
 
 
-void CTentacle::Killed(entvars_t* pevAttacker, int iGib)
+void CTentacle::Killed(CBaseEntity* attacker, int iGib)
 {
 	m_iGoalAnim = TENTACLE_ANIM_Pit_Idle;
 	ClearShockEffect();

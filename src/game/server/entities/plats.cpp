@@ -397,7 +397,7 @@ void CFuncPlat::Blocked(CBaseEntity* pOther)
 {
 	Logger->trace("{} Blocked by {}", STRING(pev->classname), STRING(pOther->pev->classname));
 	// Hurt the blocker a little
-	pOther->TakeDamage(pev, pev, 1, DMG_CRUSH);
+	pOther->TakeDamage(this, this, 1, DMG_CRUSH);
 
 	STOP_SOUND(ENT(pev), CHAN_STATIC, STRING(m_MoveSound));
 
@@ -577,7 +577,7 @@ void CFuncTrain::Blocked(CBaseEntity* pOther)
 
 	m_flActivateFinished = gpGlobals->time + 0.5;
 
-	pOther->TakeDamage(pev, pev, pev->dmg, DMG_CRUSH);
+	pOther->TakeDamage(this, this, pev->dmg, DMG_CRUSH);
 }
 
 
@@ -891,7 +891,7 @@ void CSpriteTrain::Blocked(CBaseEntity* pOther)
 
 	m_flActivateFinished = pev->ltime + 0.5;
 
-	pOther->TakeDamage(pev, pev, pev->dmg, DMG_CRUSH);
+	pOther->TakeDamage(this, this, pev->dmg, DMG_CRUSH);
 }
 
 
@@ -1259,7 +1259,7 @@ void CFuncTrackTrain::Blocked(CBaseEntity* pOther)
 	if (pev->dmg <= 0)
 		return;
 	// we can't hurt this thing, so we're not concerned with it
-	pOther->TakeDamage(pev, pev, pev->dmg, DMG_CRUSH);
+	pOther->TakeDamage(this, this, pev->dmg, DMG_CRUSH);
 }
 
 
@@ -2326,7 +2326,7 @@ public:
 
 	int BloodColor() override { return DONT_BLEED; }
 	int Classify() override { return CLASS_MACHINE; }
-	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 	Vector BodyTarget(const Vector& posSrc) override { return pev->origin; }
 
@@ -2455,7 +2455,7 @@ void CGunTarget::Stop()
 }
 
 
-bool CGunTarget::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool CGunTarget::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType)
 {
 	if (pev->health > 0)
 	{

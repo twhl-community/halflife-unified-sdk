@@ -146,9 +146,7 @@ Player entered the suicide command
 */
 void ClientKill(edict_t* pEntity)
 {
-	entvars_t* pev = &pEntity->v;
-
-	CBasePlayer* pl = (CBasePlayer*)CBasePlayer::Instance(pev);
+	CBasePlayer* pl = GET_PRIVATE<CBasePlayer>(pEntity);
 
 	// Only check for teams in CTF gamemode
 	if ((pl->pev->flags & FL_SPECTATOR) != 0 || (g_pGameRules->IsCTF() && pl->m_iTeamNum == CTFTeam::None))
@@ -162,8 +160,8 @@ void ClientKill(edict_t* pEntity)
 	pl->m_fNextSuicideTime = gpGlobals->time + 1; // don't let them suicide for 5 seconds after suiciding
 
 	// have the player kill themself
-	pev->health = 0;
-	pl->Killed(pev, GIB_NEVER);
+	pl->pev->health = 0;
+	pl->Killed(pl, GIB_NEVER);
 
 	//	pev->frags -= 2;		// extra penalty
 	//	respawn( pev );
@@ -866,7 +864,6 @@ Called every frame before physics are run
 */
 void PlayerPreThink(edict_t* pEntity)
 {
-	entvars_t* pev = &pEntity->v;
 	CBasePlayer* pPlayer = (CBasePlayer*)GET_PRIVATE(pEntity);
 
 	if (pPlayer)
@@ -882,7 +879,6 @@ Called every frame after physics are run
 */
 void PlayerPostThink(edict_t* pEntity)
 {
-	entvars_t* pev = &pEntity->v;
 	CBasePlayer* pPlayer = (CBasePlayer*)GET_PRIVATE(pEntity);
 
 	if (pPlayer)
@@ -1084,7 +1080,6 @@ animation right now.
 */
 void PlayerCustomization(edict_t* pEntity, customization_t* pCust)
 {
-	entvars_t* pev = &pEntity->v;
 	CBasePlayer* pPlayer = (CBasePlayer*)GET_PRIVATE(pEntity);
 
 	if (!pPlayer)

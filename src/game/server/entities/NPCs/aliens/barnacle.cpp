@@ -38,8 +38,8 @@ public:
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 	void EXPORT BarnacleThink();
 	void EXPORT WaitTillDead();
-	void Killed(entvars_t* pevAttacker, int iGib) override;
-	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	void Killed(CBaseEntity* attacker, int iGib) override;
+	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 	bool Save(CSave& save) override;
 	bool Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
@@ -133,14 +133,14 @@ void CBarnacle::Spawn()
 	UTIL_SetOrigin(pev, pev->origin);
 }
 
-bool CBarnacle::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+bool CBarnacle::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType)
 {
 	if ((bitsDamageType & DMG_CLUB) != 0)
 	{
 		flDamage = pev->health;
 	}
 
-	return CBaseMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
+	return CBaseMonster::TakeDamage(inflictor, attacker, flDamage, bitsDamageType);
 }
 
 //=========================================================
@@ -202,7 +202,7 @@ void CBarnacle::BarnacleThink()
 
 				if (pVictim)
 				{
-					pVictim->BarnacleVictimBitten(pev);
+					pVictim->BarnacleVictimBitten(this);
 					SetActivity(ACT_EAT);
 				}
 			}
@@ -220,7 +220,7 @@ void CBarnacle::BarnacleThink()
 				// kill!
 				if (pVictim)
 				{
-					pVictim->TakeDamage(pev, pev, pVictim->pev->health, DMG_SLASH | DMG_ALWAYSGIB);
+					pVictim->TakeDamage(this, this, pVictim->pev->health, DMG_SLASH | DMG_ALWAYSGIB);
 					m_cGibs = 3;
 				}
 
@@ -243,7 +243,7 @@ void CBarnacle::BarnacleThink()
 					break;
 				}
 
-				pVictim->BarnacleVictimBitten(pev);
+				pVictim->BarnacleVictimBitten(this);
 			}
 		}
 	}
@@ -332,7 +332,7 @@ void CBarnacle::BarnacleThink()
 //=========================================================
 // Killed.
 //=========================================================
-void CBarnacle::Killed(entvars_t* pevAttacker, int iGib)
+void CBarnacle::Killed(CBaseEntity* attacker, int iGib)
 {
 	CBaseMonster* pVictim;
 

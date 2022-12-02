@@ -75,7 +75,7 @@ public:
 	void MakeSound();
 	void SpreadFlock();
 	void SpreadFlock2();
-	void Killed(entvars_t* pevAttacker, int iGib) override;
+	void Killed(CBaseEntity* attacker, int iGib) override;
 	bool FPathBlocked();
 	// void KeyValue( KeyValueData *pkvd ) override;
 
@@ -291,7 +291,7 @@ void CFlockingFlyer::MakeSound()
 
 //=========================================================
 //=========================================================
-void CFlockingFlyer::Killed(entvars_t* pevAttacker, int iGib)
+void CFlockingFlyer::Killed(CBaseEntity* attacker, int iGib)
 {
 	CFlockingFlyer* pSquad;
 

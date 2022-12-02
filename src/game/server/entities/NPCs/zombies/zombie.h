@@ -85,7 +85,7 @@ public:
 	// No range attacks
 	bool CheckRangeAttack1(float flDot, float flDist) override { return false; }
 	bool CheckRangeAttack2(float flDot, float flDist) override { return false; }
-	bool TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 
 protected:
 	virtual float GetOneSlashDamage();
