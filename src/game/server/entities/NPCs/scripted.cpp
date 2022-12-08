@@ -270,7 +270,7 @@ void CCineMonster::PossessEntity()
 #if 0
 		if (!pTarget->CanPlaySequence(FCanOverrideState()))
 		{
-			AILogger->debug("Can't possess entity {}", STRING(pTarget->pev->classname));
+			AIScriptLogger->debug("Can't possess entity {}", STRING(pTarget->pev->classname));
 			return;
 		}
 #endif
@@ -313,7 +313,7 @@ void CCineMonster::PossessEntity()
 			//			pTarget->pev->flags &= ~FL_ONGROUND;
 			break;
 		}
-		// AILogger->debug("\"{}\" found and used (INT: {})", STRING(pTarget->pev->targetname), FBitSet(pev->spawnflags, SF_SCRIPT_NOINTERRUPT)?"No":"Yes");
+		// AIScriptLogger->debug("\"{}\" found and used (INT: {})", STRING(pTarget->pev->targetname), FBitSet(pev->spawnflags, SF_SCRIPT_NOINTERRUPT)?"No":"Yes");
 
 		pTarget->m_IdealMonsterState = MONSTERSTATE_SCRIPT;
 		if (!FStringNull(m_iszIdle))
@@ -342,7 +342,7 @@ void CCineAI::PossessEntity()
 	{
 		if (!pTarget->CanPlaySequence(FCanOverrideState(), SS_INTERRUPT_AI))
 		{
-			AILogger->debug("(AI)Can't possess entity {}", STRING(pTarget->pev->classname));
+			AIScriptLogger->debug("(AI)Can't possess entity {}", STRING(pTarget->pev->classname));
 			return;
 		}
 
@@ -384,11 +384,11 @@ void CCineAI::PossessEntity()
 			pTarget->pev->flags &= ~FL_ONGROUND;
 			break;
 		default:
-			AILogger->warn("aiscript:  invalid Move To Position value!");
+			AIScriptLogger->warn("aiscript:  invalid Move To Position value!");
 			break;
 		}
 
-		AILogger->debug("\"{}\" found and used", STRING(pTarget->pev->targetname));
+		AIScriptLogger->debug("\"{}\" found and used", STRING(pTarget->pev->targetname));
 
 		pTarget->m_IdealMonsterState = MONSTERSTATE_SCRIPT;
 
@@ -416,12 +416,12 @@ void CCineMonster::CineThink()
 	if (FindEntity())
 	{
 		PossessEntity();
-		AILogger->debug("script \"{}\" using monster \"{}\"", STRING(pev->targetname), STRING(m_iszEntity));
+		AIScriptLogger->debug("script \"{}\" using monster \"{}\"", STRING(pev->targetname), STRING(m_iszEntity));
 	}
 	else
 	{
 		CancelScript();
-		AILogger->debug("script \"{}\" can't find monster \"{}\"", STRING(pev->targetname), STRING(m_iszEntity));
+		AIScriptLogger->debug("script \"{}\" can't find monster \"{}\"", STRING(pev->targetname), STRING(m_iszEntity));
 		pev->nextthink = gpGlobals->time + 1.0;
 	}
 }
@@ -439,7 +439,7 @@ bool CCineMonster::StartSequence(CBaseMonster* pTarget, string_t iszSeq, bool co
 	pTarget->pev->sequence = pTarget->LookupSequence(STRING(iszSeq));
 	if (pTarget->pev->sequence == -1)
 	{
-		AILogger->error("{}: unknown scripted sequence \"{}\"", STRING(pTarget->pev->targetname), STRING(iszSeq));
+		AIScriptLogger->error("{}: unknown scripted sequence \"{}\"", STRING(pTarget->pev->targetname), STRING(iszSeq));
 		pTarget->pev->sequence = 0;
 		// return false;
 	}
@@ -479,7 +479,7 @@ bool CCineAI::StartSequence(CBaseMonster* pTarget, string_t iszSeq, bool complet
 
 	if (pTarget->pev->sequence == -1)
 	{
-		AILogger->error("{}: unknown aiscripted sequence \"{}\"", STRING(pTarget->pev->targetname), STRING(iszSeq));
+		AIScriptLogger->error("{}: unknown aiscripted sequence \"{}\"", STRING(pTarget->pev->targetname), STRING(iszSeq));
 		pTarget->pev->sequence = 0;
 		// return false;
 	}
@@ -498,7 +498,7 @@ bool CCineAI::StartSequence(CBaseMonster* pTarget, string_t iszSeq, bool complet
 //=========================================================
 void CCineMonster::SequenceDone(CBaseMonster* pMonster)
 {
-	// AILogger->debug("Sequence {} finished", STRING(m_pCine->m_iszPlay));
+	// AIScriptLogger->debug("Sequence {} finished", STRING(m_pCine->m_iszPlay));
 
 	if ((pev->spawnflags & SF_SCRIPT_REPEATABLE) == 0)
 	{
@@ -556,7 +556,7 @@ void CCineAI::FixScriptMonsterSchedule(CBaseMonster* pMonster)
 		pMonster->ChangeSchedule(pMonster->GetScheduleOfType(SCHED_AMBUSH));
 		break;
 	default:
-		AILogger->debug("FixScriptMonsterSchedule - no case!");
+		AIScriptLogger->debug("FixScriptMonsterSchedule - no case!");
 		pMonster->ClearSchedule();
 		break;
 	}
@@ -641,7 +641,7 @@ void ScriptEntityCancel(CBaseEntity* cine)
 // find all the cinematic entities with my targetname and stop them from playing
 void CCineMonster::CancelScript()
 {
-	AILogger->debug("Cancelling script: {}", STRING(m_iszPlay));
+	AIScriptLogger->debug("Cancelling script: {}", STRING(m_iszPlay));
 
 	if (FStringNull(pev->targetname))
 	{
@@ -1096,7 +1096,7 @@ bool CScriptedSentence::StartSentence(CBaseMonster* pTarget)
 {
 	if (!pTarget)
 	{
-		CBaseMonster::AILogger->debug("Not Playing sentence {}", STRING(m_iszSentence));
+		CCineMonster::AIScriptLogger->debug("Not Playing sentence {}", STRING(m_iszSentence));
 		return false;
 	}
 
@@ -1120,7 +1120,7 @@ bool CScriptedSentence::StartSentence(CBaseMonster* pTarget)
 	}
 
 	pTarget->PlayScriptedSentence(STRING(m_iszSentence), m_flDuration, m_flVolume, m_flAttenuation, bConcurrent, pListener);
-	CBaseMonster::AILogger->debug("Playing sentence {} ({:.1f})", STRING(m_iszSentence), m_flDuration);
+	CCineMonster::AIScriptLogger->debug("Playing sentence {} ({:.1f})", STRING(m_iszSentence), m_flDuration);
 	SUB_UseTargets(nullptr, USE_TOGGLE, 0);
 	return true;
 }
