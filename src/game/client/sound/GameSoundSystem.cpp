@@ -308,6 +308,13 @@ void GameSoundSystem::StartSound(
 				return;
 			}
 
+			if (sentenceIndex >= sentences::EngineMaxSentences)
+			{
+				m_Logger->warn("cl_snd_openal is 0: Sentence \"{}\" has index greater than {}, engine doesn't support this",
+					soundOrSentence, (sentences::EngineMaxSentences - 1));
+				return;
+			}
+
 			fmt::format_to(std::back_inserter(sentenceIndexString), "!{}", sentenceIndex);
 
 			soundOrSentence = sentenceIndexString.c_str();

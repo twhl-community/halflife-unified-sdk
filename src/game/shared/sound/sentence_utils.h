@@ -31,11 +31,13 @@ namespace sentences
 {
 constexpr int CBSENTENCENAME_MAX = 32;
 
+constexpr int EngineMaxSentences = 1536;
+
 /**
  *	@brief The amount of sentences to reserve space for on startup.
  *	This is the original engine limit.
  */
-constexpr int InitialSentencesReserveCount = 1536;
+constexpr int InitialSentencesReserveCount = EngineMaxSentences;
 
 /**
  *	@brief max number of sentences in game. This limit is defined by ServerSoundSystem::EmitSound's use of fixed size integer writing.
