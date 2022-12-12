@@ -824,6 +824,7 @@ Many changes have been made since 2019. All changes made after [[this|https://gi
 * Fixed Voltigore beam attack not updating beam attachment positions as it moves [#90](https://github.com/SamVanheer/halflife-op4-updated/issues/90) (Thanks LuckNukeHunter99)
 * Fixed Baby Voltigore melee distance being twice its intended distance [#91](https://github.com/SamVanheer/halflife-op4-updated/issues/91) (Thanks LuckNukeHunter99)
 * Fixed typo in Pit Drone sound name [#92](https://github.com/SamVanheer/halflife-op4-updated/issues/92) (Thanks λλλλλλ)
+* Fix Penguin grenade not using correct spawn angles [#93](https://github.com/SamVanheer/halflife-op4-updated/issues/93) (Thanks LuckNukeHunter99)
 
 ## Changes in V1.0.0 Beta 010
 
