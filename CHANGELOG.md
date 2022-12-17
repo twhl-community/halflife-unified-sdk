@@ -83,6 +83,7 @@ All changes from Half-Life Updated up until Beta 5 are included: https://github.
 * Fixed projects with spaces in paths failing to execute post build step [#179](https://github.com/SamVanheer/halflife-updated/issues/179) (Thanks Shepard)
 * Fixed NPCs not being able to speak scripted sentences while in scripted death [#180](https://github.com/SamVanheer/halflife-updated/issues/180) (Thanks λλλλλλ)
 * Removed unnecessary semicolons (Thanks Shepard)
+* Updated source file encoding to UTF-8 [#183](https://github.com/SamVanheer/halflife-updated/issues/183) (Thanks anchurcn)
 
 ## Changes in V1.0.0 Beta 013
 
