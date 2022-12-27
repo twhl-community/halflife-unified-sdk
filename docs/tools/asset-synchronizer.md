@@ -53,15 +53,24 @@ If any errors occur the tool will log it to the console. Typical errors are file
 
 ## AssetManifest.json format
 
-The asset manifest file contains a list of filters used to control which directories and files are copied.
+The asset manifest file contains a list of pattern groups, each containing a path and a list of filters used to control which directories and files are copied.
 
 The basic format is a JSON array:
 ```jsonc
-[
-]
+{
+	"PatternGroups": [
+		{
+			"Path": "%ModDirectory%",
+			"Filters": []
+		}
+	]
+}
 ```
 
-Each array element is an object containing these properties:
+The `Path` refers to the directory in the `Half-Life` directory where destination paths (see below) start in.
+The constant `%ModDirectory%` resolves to the directory given on the command line and can be used to copy content to related mod directories such as `%ModDirectory%_hd`.
+
+Each filter array element is an object containing these properties:
 ```jsonc
 {
 	"Source": "cfgsrc",
@@ -83,38 +92,45 @@ To specify a file in the assets or game directory, specify an empty string for `
 Example:
 ```jsonc
 //This file contains a list of filters to copy assets to the game directory.
-[
-	{
-		"Source": "cfgsrc",
-		"Destination": "",
-		"Pattern": "server.cfg",
-	},
-	{
-		"Source": "cfgsrc",
-		"Destination": "cfg",
-		"Pattern": "*.json",
-		"Recursive": true
-	},
-	{
-		"Source": "cfgsrc",
-		"Destination": "",
-		"Pattern": "*.scr.install",
-	},
-	{
-		"Source": "cfgsrc",
-		"Destination": "",
-		"Pattern": "titles.txt"
-	},
-	{
-		"Source": "resourcesrc",
-		"Destination": "resource",
-		"Pattern": "*.txt",
-		"Recursive": true
-	},
-	{
-		"Source": "soundsrc",
-		"Destination": "sound",
-		"Pattern": "*.txt"
-	}
-]
+{
+	"PatternGroups": [
+		{
+			"Path": "%ModDirectory%",
+			"Filters": [
+				{
+					"Source": "cfgsrc",
+					"Destination": "",
+					"Pattern": "server.cfg",
+				},
+				{
+					"Source": "cfgsrc",
+					"Destination": "cfg",
+					"Pattern": "*.json",
+					"Recursive": true
+				},
+				{
+					"Source": "cfgsrc",
+					"Destination": "",
+					"Pattern": "*.scr.install",
+				},
+				{
+					"Source": "cfgsrc",
+					"Destination": "",
+					"Pattern": "titles.txt"
+				},
+				{
+					"Source": "resourcesrc",
+					"Destination": "resource",
+					"Pattern": "*.txt",
+					"Recursive": true
+				},
+				{
+					"Source": "soundsrc",
+					"Destination": "sound",
+					"Pattern": "*.txt"
+				}
+			]
+		}
+	]
+}
 ```
