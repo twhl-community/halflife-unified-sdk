@@ -352,7 +352,7 @@ typedef struct s_model_s
 	int numbones;
 	s_node_t node[MAXSTUDIOSRCBONES];
 	s_bone_t skeleton[MAXSTUDIOSRCBONES];
-	int boneref[MAXSTUDIOSRCBONES];	 // is local bone (or child) referenced with a vertex
+	int boneref[MAXSTUDIOSRCBONES];	 // is local bone (or child) referenced with a vertex, and or attachment
 	int bonemap[MAXSTUDIOSRCBONES];	 // local bone to world bone mapping
 	int boneimap[MAXSTUDIOSRCBONES]; // world bone to local bone mapping
 

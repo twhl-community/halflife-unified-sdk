@@ -401,6 +401,17 @@ void SimplifyModel(void)
 		}
 		for (k = 0; k < MAXSTUDIOSRCBONES; k++)
 		{
+			// Check if a bone is referenced by an attachment.
+			for (j = 0; j < numattachments; j++)
+			{
+				if (0 == stricmp(attachment[j].bonename, model[i]->node[k].name))
+				{
+					model[i]->boneref[k] = 1;
+				}
+			}
+		}
+		for (k = 0; k < MAXSTUDIOSRCBONES; k++)
+		{
 			// tag parent bones as used if child has been used
 			if (model[i]->boneref[k])
 			{
