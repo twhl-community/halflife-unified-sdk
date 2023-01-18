@@ -20,6 +20,7 @@
 
 #include <spdlog/logger.h>
 
+#include "entity_utils.h"
 #include "filesystem_utils.h"
 #include "mathlib.h"
 #include "LogSystem.h"
