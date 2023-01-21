@@ -20,6 +20,8 @@
 #include "config/ConditionEvaluator.h"
 #include "config/GameConfig.h"
 
+#include "networking/NetworkDataSystem.h"
+
 #include "scripting/AS/ASManager.h"
 
 #include "utils/ConCommandSystem.h"
@@ -83,6 +85,7 @@ void GameLibrary::AddGameSystems()
 	g_GameSystems.Add(&g_ConCommands);
 	g_GameSystems.Add(&g_JSON);
 	g_GameSystems.Add(&g_Logging);
+	g_GameSystems.Add(&g_NetworkData);
 	g_GameSystems.Add(&g_ASManager);
 	// Depends on Angelscript
 	g_GameSystems.Add(&g_ConditionEvaluator);

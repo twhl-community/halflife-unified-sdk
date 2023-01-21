@@ -16,6 +16,7 @@
 #include <regex>
 #include <stdexcept>
 #include <string_view>
+#include <utility>
 
 #include <fmt/format.h>
 
@@ -39,6 +40,8 @@
 #include "config/sections/GlobalSoundReplacementSection.h"
 #include "config/sections/HudColorSection.h"
 #include "config/sections/SuitLightTypeSection.h"
+
+#include "networking/NetworkDataSystem.h"
 
 #include "sound/SentencesSystem.h"
 #include "sound/ServerSoundSystem.h"
@@ -85,6 +88,9 @@ bool ServerLibrary::Initialize()
 		return false;
 	}
 
+	m_AllowDownload = g_ConCommands.GetCVar("sv_allowdownload");
+	m_AllowDLFile = g_ConCommands.GetCVar("sv_allow_dlfile");
+
 	CBaseEntity::IOLogger = g_Logging.CreateLogger("ent.io");
 	CBaseMonster::AILogger = g_Logging.CreateLogger("ent.ai");
 	CCineMonster::AIScriptLogger = g_Logging.CreateLogger("ent.ai.script");
@@ -124,6 +130,27 @@ void ServerLibrary::Shutdown()
 
 void ServerLibrary::RunFrame()
 {
+	// Force the download cvars to enabled so we can download network data.
+	if (m_AllowDownload->value == 0)
+	{
+		g_engfuncs.pfnCvar_DirectSet(m_AllowDownload, "1");
+	}
+
+	if (m_AllowDLFile->value == 0)
+	{
+		g_engfuncs.pfnCvar_DirectSet(m_AllowDLFile, "1");
+	}
+}
+
+template <typename... Args>
+void ServerLibrary::ShutdownServer(spdlog::format_string_t<Args...> fmt, Args&&... args)
+{
+	g_GameLogger->critical(fmt, std::forward<Args>(args)...);
+	SERVER_COMMAND("shutdownserver\n");
+	// Don't do this; if done at certain points during the map spawn phase
+	// this will cause a fatal error because the engine tries to write to
+	// an uninitialized network message buffer.
+	//SERVER_EXECUTE();
 }
 
 void ServerLibrary::NewMapStarted(bool loadGame)
@@ -162,6 +189,11 @@ void ServerLibrary::PreMapActivate()
 void ServerLibrary::PostMapActivate()
 {
 	LoadMapChangeConfigFile();
+
+	if (!g_NetworkData.GenerateNetworkDataFile())
+	{
+		ShutdownServer("Shutting down server due to fatal error writing network data file");
+	}
 }
 
 void ServerLibrary::PlayerActivating(CBasePlayer* player)

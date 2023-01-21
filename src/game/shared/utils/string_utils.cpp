@@ -131,6 +131,13 @@ void UTIL_StringToVector(float* pVector, std::string_view pString)
 	}
 }
 
+int UTIL_StringToInteger(std::string_view str)
+{
+	int value = 0;
+	std::from_chars(str.data(), str.data() + str.size(), value);
+	return value;
+}
+
 IntegerString UTIL_ToString(int iValue)
 {
 	IntegerString buffer;

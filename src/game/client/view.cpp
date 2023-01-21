@@ -7,6 +7,7 @@
 
 #include "entity_state.h"
 #include "cl_entity.h"
+#include "ClientLibrary.h"
 #include "ref_params.h"
 #include "in_defs.h" // PITCH YAW ROLL
 #include "pm_movevars.h"
@@ -1617,6 +1618,10 @@ void V_CalcSpectatorRefdef(ref_params_t* pparams)
 
 void DLLEXPORT V_CalcRefdef(ref_params_t* pparams)
 {
+	// This is the earliest the engine will unconditionally call into the client
+	// after the connection state has changed to active and signon has reached state 2.
+	g_Client.ClientActivated();
+
 	g_Paused = pparams->paused != 0;
 	g_MaxEntities = pparams->max_entities;
 	g_WaterLevel = pparams->waterlevel;

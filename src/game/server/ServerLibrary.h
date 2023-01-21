@@ -25,6 +25,7 @@
 #include "config/GameConfig.h"
 
 class CBasePlayer;
+struct cvar_t;
 
 /**
  *	@brief Handles core server actions
@@ -89,6 +90,9 @@ protected:
 	void SetEntLogLevels(spdlog::level::level_enum level) override;
 
 private:
+	template <typename... Args>
+	void ShutdownServer(spdlog::format_string_t<Args...> fmt, Args&&... args);
+
 	/**
 	 *	@brief Called when a new map has started
 	 *	@param loadGame Whether this is a save game being loaded or a new map being started
@@ -104,6 +108,9 @@ private:
 	std::unordered_set<std::string> GetMapConfigCommandWhitelist();
 
 private:
+	cvar_t* m_AllowDownload{};
+	cvar_t* m_AllowDLFile{};
+
 	std::shared_ptr<const GameConfigDefinition<MapState>> m_ServerConfigDefinition;
 	std::shared_ptr<const GameConfigDefinition<MapState>> m_MapConfigDefinition;
 	std::shared_ptr<const GameConfigDefinition<MapState>> m_MapChangeConfigDefinition;

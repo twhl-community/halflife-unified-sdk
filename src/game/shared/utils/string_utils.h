@@ -52,6 +52,7 @@ void ToUpper(std::string& text);
 [[nodiscard]] std::string ToUpper(std::string_view text);
 
 void UTIL_StringToVector(float* pVector, std::string_view pString);
+int UTIL_StringToInteger(std::string_view str);
 
 // for handy use with ClientPrint params
 IntegerString UTIL_ToString(int iValue);

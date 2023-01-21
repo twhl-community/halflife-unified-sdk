@@ -131,6 +131,7 @@ so the HUD can reinitialize itself.
 
 int DLLEXPORT HUD_VidInit()
 {
+	g_Client.VidInit();
 	gHUD.VidInit();
 
 	VGui_Startup();
