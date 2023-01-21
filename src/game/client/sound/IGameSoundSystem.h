@@ -15,6 +15,10 @@
 
 #pragma once
 
+#include "networking/NetworkDataSystem.h"
+
+#include "utils/json_fwd.h"
+
 namespace sound
 {
 /**
@@ -44,18 +48,14 @@ struct SoundIndex final
 /**
  *	@brief Provides sound playback for game systems.
  */
-struct IGameSoundSystem
+struct IGameSoundSystem : public INetworkDataBlockHandler
 {
 	virtual ~IGameSoundSystem() = default;
-
-	virtual void LoadSentences() = 0;
 
 	virtual void StartSound(
 		int entityIndex, int channelIndex, const char* soundOrSentence, const Vector& origin, float volume, float attenuation, int pitch, int flags) = 0;
 
 	virtual void StopAllSounds() = 0;
-
-	virtual void ClearCaches() = 0;
 
 	virtual void MsgFunc_EmitSound(const char* pszName, int iSize, void* pbuf) = 0;
 };

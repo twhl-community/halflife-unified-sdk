@@ -23,6 +23,7 @@
 #include "view.h"
 
 #include "sound/sentence_utils.h"
+#include "utils/JSONSystem.h"
 
 namespace sound
 {
@@ -31,41 +32,52 @@ SentencesSystem::SentencesSystem(std::shared_ptr<spdlog::logger> logger, SoundCa
 {
 }
 
-void SentencesSystem::LoadSentences()
+void SentencesSystem::HandleNetworkDataBlock(NetworkDataBlock& block)
 {
-	if (m_LoadedSentences)
-	{
-		return;
-	}
+	assert(m_Sentences.empty());
 
-	const auto fileContents = FileSystem_LoadFileIntoBuffer("sound/sentences.txt", FileContentFormat::Text);
-
-	if (fileContents.empty())
+	if (!block.Data.is_array())
 	{
+		block.ErrorMessage = "Sentences network data has invalid format (must be array of strings)";
 		return;
 	}
 
 	RelativeFilename wordFileName;
 
-	// for each line in the file...
-	sentences::SentencesListParser parser{{reinterpret_cast<const char*>(fileContents.data())}, *m_Logger};
-
-	for (auto sentence = parser.Next(); sentence; sentence = parser.Next())
+	for (const auto& inputSentence : block.Data)
 	{
+		if (!inputSentence.is_string())
+		{
+			block.ErrorMessage = "Sentences network data has invalid format (array elements must be strings)";
+			return;
+		}
+
 		if (m_Sentences.size() >= sentences::MaxSentencesCount)
 		{
-			m_Logger->error("Too many sentences in sentences.txt!");
+			m_Logger->error("Too many sentences in list!");
 			break;
 		}
 
-		const std::string_view name = std::get<0>(*sentence);
+		const auto sentenceContents = inputSentence.get<std::string>();
+
+		const auto sentence = sentences::ParseSentence(sentenceContents);
+
+		const std::string_view name = std::get<0>(sentence);
+		const std::string_view value = std::get<1>(sentence);
+
+		// This should never happen since the server validates input at parse time.
+		if (name.empty() || value.empty())
+		{
+			block.ErrorMessage = "Invalid sentence in list";
+			return;
+		}
 
 		// Parse sentence contents.
 		Sentence sentenceToAdd;
 
 		sentenceToAdd.Name = sentences::SentenceName{name.data(), name.size()};
 
-		const auto directoryInfo = sentences::ParseDirectory(std::get<1>(*sentence));
+		const auto directoryInfo = sentences::ParseDirectory(value);
 		const std::string_view directoryName{std::get<0>(directoryInfo)};
 
 		sentences::SentenceWordParser wordParser{std::get<1>(directoryInfo)};
@@ -89,7 +101,12 @@ void SentencesSystem::LoadSentences()
 		m_Sentences.push_back(sentenceToAdd);
 	}
 
-	m_LoadedSentences = true;
+	g_NetworkData.GetLogger()->debug("Parsed {} sentences from network data", m_Sentences.size());
+}
+
+void SentencesSystem::Clear()
+{
+	m_Sentences.clear();
 }
 
 std::size_t SentencesSystem::FindSentence(const char* name) const

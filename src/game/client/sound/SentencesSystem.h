@@ -22,6 +22,8 @@
 
 #include "SoundInternalDefs.h"
 
+#include "utils/json_fwd.h"
+
 namespace sound
 {
 class SoundCache;
@@ -39,7 +41,9 @@ public:
 	SentencesSystem(const SentencesSystem&) = delete;
 	SentencesSystem& operator=(const SentencesSystem&) = delete;
 
-	void LoadSentences();
+	void HandleNetworkDataBlock(NetworkDataBlock& block);
+
+	void Clear();
 
 	std::size_t FindSentence(const char* name) const;
 
@@ -64,7 +68,5 @@ private:
 	SoundCache* const m_SoundCache;
 
 	std::vector<Sentence> m_Sentences;
-
-	bool m_LoadedSentences{false};
 };
 }

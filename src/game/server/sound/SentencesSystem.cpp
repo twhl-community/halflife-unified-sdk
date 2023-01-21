@@ -20,13 +20,16 @@
 #include "cbase.h"
 #include "SentencesSystem.h"
 #include "ServerLibrary.h"
+#include "networking/NetworkDataSystem.h"
 #include "sound/sentence_utils.h"
+#include "utils/JSONSystem.h"
 
 namespace sentences
 {
 bool SentencesSystem::Initialize()
 {
 	m_Logger = g_Logging.CreateLogger("sentences");
+	g_NetworkData.RegisterHandler("Sentences", this);
 	return true;
 }
 
@@ -48,8 +51,8 @@ void SentencesSystem::NewMapStarted()
 	{
 		const auto isSentence = [this](const auto& name)
 		{
-			return std::find_if(m_SentenceNames.begin(), m_SentenceNames.end(), [&](const auto& candidate)
-					   { return 0 == stricmp(candidate.c_str(), name.c_str()); }) != m_SentenceNames.end();
+			return std::find_if(m_Sentences.begin(), m_Sentences.end(), [&](const auto& candidate)
+					   { return 0 == stricmp(candidate.Name.c_str(), name.c_str()); }) != m_Sentences.end();
 		};
 
 		const auto isGroup = [this](const auto& name)
@@ -73,15 +76,27 @@ void SentencesSystem::NewMapStarted()
 	}
 }
 
+void SentencesSystem::HandleNetworkDataBlock(NetworkDataBlock& block)
+{
+	block.Data = json::array();
+
+	for (const auto& sentence : m_Sentences)
+	{
+		block.Data.push_back(fmt::format("{} {}", sentence.Name.c_str(), sentence.Value));
+	}
+
+	g_NetworkData.GetLogger()->debug("Wrote {} sentences to network data", m_Sentences.size());
+}
+
 const char* SentencesSystem::GetSentenceNameByIndex(int index) const
 {
-	if (index < 0 || static_cast<std::size_t>(index) >= m_SentenceNames.size())
+	if (index < 0 || static_cast<std::size_t>(index) >= m_Sentences.size())
 	{
 		ASSERT(!"Invalid index passed to SentencesSystem::GetSentenceNameByIndex");
 		return nullptr;
 	}
 
-	return m_SentenceNames[index].c_str();
+	return m_Sentences[index].Name.c_str();
 }
 
 int SentencesSystem::GetGroupIndex(const char* szgroupname) const
@@ -116,9 +131,9 @@ int SentencesSystem::LookupSentence(const char* sample, SentenceIndexName* sente
 	// Handle sentence replacement.
 	sample = CheckForSentenceReplacement(sample);
 
-	for (size_t i = 0; i < m_SentenceNames.size(); i++)
+	for (size_t i = 0; i < m_Sentences.size(); i++)
 	{
-		if (!stricmp(m_SentenceNames[i].c_str(), sample))
+		if (!stricmp(m_Sentences[i].Name.c_str(), sample))
 		{
 			if (sentencenum)
 			{
@@ -191,10 +206,10 @@ void SentencesSystem::LoadSentences()
 {
 	m_Logger->trace("Loading sentences.txt");
 
-	m_SentenceNames.clear();
+	m_Sentences.clear();
 	m_SentenceGroups.clear();
 
-	m_SentenceNames.reserve(InitialSentencesReserveCount);
+	m_Sentences.reserve(InitialSentencesReserveCount);
 
 	const auto fileContents = FileSystem_LoadFileIntoBuffer("sound/sentences.txt", FileContentFormat::Text);
 
@@ -214,7 +229,7 @@ void SentencesSystem::LoadSentences()
 	{
 		const std::string_view name = std::get<0>(*sentence);
 
-		if (m_SentenceNames.size() >= MaxSentencesCount)
+		if (m_Sentences.size() >= MaxSentencesCount)
 		{
 			m_Logger->error("Too many sentences in sentences.txt! (maximum {})", MaxSentencesCount);
 			break;
@@ -225,7 +240,7 @@ void SentencesSystem::LoadSentences()
 			m_Logger->warn("Encountered duplicate sentence name \"{}\"", name);
 		}
 
-		m_SentenceNames.push_back(SentenceName{name.data(), name.size()});
+		m_Sentences.emplace_back(SentenceName{name.data(), name.size()}, std::string{std::get<1>(*sentence)});
 
 		const auto groupData = ParseGroupData(name);
 
@@ -278,7 +293,7 @@ void SentencesSystem::LoadSentences()
 		}
 	}
 
-	m_Logger->debug("Loaded {} out of max {} sentences with {} sentence groups", m_SentenceNames.size(), MaxSentencesCount, m_SentenceGroups.size());
+	m_Logger->debug("Loaded {} out of max {} sentences with {} sentence groups", m_Sentences.size(), MaxSentencesCount, m_SentenceGroups.size());
 
 	// init lru lists
 	for (auto& group : m_SentenceGroups)

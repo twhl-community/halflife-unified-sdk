@@ -153,6 +153,11 @@ void SoundCache::ClearBuffers()
 	}
 }
 
+void SoundCache::Clear()
+{
+	m_Sounds.clear();
+}
+
 SoundIndex SoundCache::MakeSoundIndex(const Sound* sound) const
 {
 	return SoundIndex{(sound - m_Sounds.data()) + 1};

@@ -47,6 +47,8 @@ public:
 
 	void ClearBuffers();
 
+	void Clear();
+
 private:
 	SoundIndex MakeSoundIndex(const Sound* sound) const;
 

@@ -16,16 +16,25 @@
 #pragma once
 
 #include <memory>
+#include <string>
 #include <vector>
 
 #include <spdlog/logger.h>
 
+#include "networking/NetworkDataSystem.h"
 #include "sound/sentence_utils.h"
+#include "utils/json_fwd.h"
 #include "utils/GameSystem.h"
 
 namespace sentences
 {
-class SentencesSystem final : public IGameSystem
+struct Sentence
+{
+	SentenceName Name;
+	std::string Value;
+};
+
+class SentencesSystem final : public IGameSystem, public INetworkDataBlockHandler
 {
 public:
 	const char* GetName() const override { return "Sentences"; }
@@ -35,6 +44,8 @@ public:
 	void Shutdown() override;
 
 	void NewMapStarted();
+
+	void HandleNetworkDataBlock(NetworkDataBlock& block) override;
 
 	const char* GetSentenceNameByIndex(int index) const;
 
@@ -104,7 +115,7 @@ private:
 private:
 	std::shared_ptr<spdlog::logger> m_Logger;
 
-	std::vector<SentenceName> m_SentenceNames;
+	std::vector<Sentence> m_Sentences;
 	std::vector<SENTENCEG> m_SentenceGroups;
 };
 

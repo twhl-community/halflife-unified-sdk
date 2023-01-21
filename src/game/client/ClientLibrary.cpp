@@ -59,8 +59,6 @@ void ClientLibrary::HudInit()
 
 	// Has to be done here because music cvars don't exist at Initialize time.
 	sound::CreateSoundSystem();
-
-	sound::g_SoundSystem->GetGameSoundSystem()->LoadSentences();
 }
 
 void ClientLibrary::VidInit()
@@ -135,7 +133,6 @@ void ClientLibrary::RunFrame()
 
 		// Stop all sounds if we connect, disconnect, start a new map using "map" (resets connection time), change servers or change maps.
 		sound::g_SoundSystem->GetGameSoundSystem()->StopAllSounds();
-		sound::g_SoundSystem->GetGameSoundSystem()->ClearCaches();
 
 		// Clear sound replacement map on any change.
 		g_ReplacementMaps.Clear();

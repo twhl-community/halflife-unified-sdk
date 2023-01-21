@@ -194,9 +194,21 @@ bool GameSoundSystem::Create(std::shared_ptr<spdlog::logger> logger, ALCdevice* 
 	return true;
 }
 
-void GameSoundSystem::LoadSentences()
+void GameSoundSystem::OnBeginNetworkDataProcessing()
 {
-	m_Sentences->LoadSentences();
+	// Clear all references to sounds and sentences.
+	StopAllSounds();
+
+	// Remove all sentences so we can load the incoming list.
+	m_Sentences->Clear();
+
+	// Clear the entire cache so we start fresh.
+	m_SoundCache->Clear();
+}
+
+void GameSoundSystem::HandleNetworkDataBlock(NetworkDataBlock& block)
+{
+	return m_Sentences->HandleNetworkDataBlock(block);
 }
 
 void GameSoundSystem::Update()
@@ -419,15 +431,6 @@ void GameSoundSystem::StartSound(
 void GameSoundSystem::StopAllSounds()
 {
 	m_Channels.clear();
-}
-
-void GameSoundSystem::ClearCaches()
-{
-	// Need to stop sounds to clear OpenAL buffers.
-	StopAllSounds();
-
-	// Clear all cached data. The sounds themselves need to stay because the sentences reference them.
-	m_SoundCache->ClearBuffers();
 }
 
 void GameSoundSystem::MsgFunc_EmitSound(const char* pszName, int iSize, void* pbuf)

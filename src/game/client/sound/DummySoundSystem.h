@@ -25,15 +25,13 @@ struct DummyGameSoundSystem final : public IGameSoundSystem
 {
 	~DummyGameSoundSystem() override = default;
 
-	void LoadSentences() override {}
+	void HandleNetworkDataBlock(NetworkDataBlock& block) override {}
 
 	void StartSound(
 		int entnum, int entchannel,
 		const char* soundOrSentence, const Vector& origin, float fvol, float attenuation, int flags, int pitch) override {}
 
 	void StopAllSounds() override {}
-
-	void ClearCaches() override {}
 
 	void MsgFunc_EmitSound(const char* pszName, int iSize, void* pbuf) override {}
 };

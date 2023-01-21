@@ -37,7 +37,9 @@ public:
 
 	bool Create(std::shared_ptr<spdlog::logger> logger, ALCdevice* device);
 
-	void LoadSentences() override;
+	void OnBeginNetworkDataProcessing() override;
+
+	void HandleNetworkDataBlock(NetworkDataBlock& block) override;
 
 	void Update();
 
@@ -53,8 +55,6 @@ public:
 		int entityIndex, int channelIndex, const char* soundOrSentence, const Vector& origin, float volume, float attenuation, int flags, int pitch) override;
 
 	void StopAllSounds() override;
-
-	void ClearCaches() override;
 
 	void MsgFunc_EmitSound(const char* pszName, int iSize, void* pbuf) override;
 

@@ -23,6 +23,8 @@
 
 #include <spdlog/logger.h>
 
+#include "Platform.h"
+
 #include "utils/GameSystem.h"
 #include "utils/JSONSystem.h"
 

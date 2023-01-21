@@ -22,6 +22,7 @@
 #include "MusicSystem.h"
 #include "SoundSystem.h"
 
+#include "networking/NetworkDataSystem.h"
 #include "utils/ConCommandSystem.h"
 
 namespace sound
@@ -199,5 +200,7 @@ void CreateSoundSystem()
 	g_ConCommands.CreateCommand("snd_playdynamic", &S_PlayDynamicSound);
 	g_ConCommands.CreateCommand("snd_stopsound", [](const auto&)
 		{ g_SoundSystem->GetGameSoundSystem()->StopAllSounds(); });
+
+	g_NetworkData.RegisterHandler("Sentences", g_SoundSystem->GetGameSoundSystem());
 }
 }
