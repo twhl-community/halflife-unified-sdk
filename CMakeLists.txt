@@ -214,7 +214,7 @@ if (UNIX)
 	# Create a symbolic link to the OpenAL library so the dependency can be located at runtime.
 	INSTALL(CODE "execute_process( \
 		COMMAND ${CMAKE_COMMAND} -E create_symlink \
-		\"${CMAKE_INSTALL_PREFIX}/cl_dlls/libopenal-hlu.so.1.22.2\" \
+		\"./libopenal-hlu.so.1.22.2\" \
 		\"${CMAKE_INSTALL_PREFIX}/cl_dlls/libopenal-hlu.so.1\"   \
 		)"
 	)
