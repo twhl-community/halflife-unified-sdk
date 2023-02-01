@@ -47,9 +47,9 @@ FARPROC WINAPI DelayHook(
 {
 	if (dliNotify == dliNotePreLoadLibrary)
 	{
-		if (strcmp(pdli->szDll, "OpenAL32.dll") == 0)
+		if (strcmp(pdli->szDll, "openal-hlu.dll") == 0)
 		{
-			return DelayLoad_LoadGameLib("cl_dlls/OpenAL32.dll");
+			return DelayLoad_LoadGameLib("cl_dlls/openal-hlu.dll");
 		}
 	}
 

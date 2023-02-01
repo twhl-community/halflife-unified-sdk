@@ -1,5 +1,5 @@
 {
-	"2022-09-20": {
+	"local_ports": {
 		"eastl": {
 			"baseline": "3.19.00",
 			"port-version": 0
@@ -11,6 +11,10 @@
 		"libnyquist": {
 			"baseline": "0.1.0",
 			"port-version": 0
+		},
+		"openal-soft": {
+			"baseline": "1.22.2",
+			"port-version": 2
 		}
 	}
 }

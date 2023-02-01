@@ -74,7 +74,7 @@ if (UNIX)
 endif()
 
 target_link_options(client PRIVATE
-	$<$<PLATFORM_ID:Windows>:/DELAYLOAD:OpenAL32.dll>
+	$<$<PLATFORM_ID:Windows>:/DELAYLOAD:openal-hlu.dll>
 	$<$<PLATFORM_ID:Darwin>:-framework Carbon>)
 
 target_sources(client PRIVATE

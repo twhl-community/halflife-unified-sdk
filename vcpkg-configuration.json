@@ -3,11 +3,12 @@
 		{
 			"kind": "filesystem",
 			"path": "vcpkg_config/registry",
-			"baseline": "2022-09-20",
+			"baseline": "local_ports",
 			"packages": [
 				"eastl",
 				"json-schema-validator",
-				"libnyquist"
+				"libnyquist",
+				"openal-soft"
 			]
 		}
   ]

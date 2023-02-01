@@ -1,0 +1,9 @@
+{
+	"versions": [
+	{
+		"version-string": "1.22.2",
+		"port-version": 2,
+		"path": "$/ports/openal-soft/1.22.2_2"
+	}
+	]
+}
