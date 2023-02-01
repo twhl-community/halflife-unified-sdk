@@ -204,18 +204,25 @@ install(FILES
 	${CMAKE_BINARY_DIR}/liblist.gam
 	DESTINATION .)
 
+# CMake doesn't currently support installing imported libraries of type UNKNOWN.
+# See https://gitlab.kitware.com/cmake/cmake/-/issues/22406
+#install(IMPORTED_RUNTIME_ARTIFACTS OpenAL::OpenAL
+#	RUNTIME DESTINATION cl_dlls)
+install(FILES $<TARGET_FILE:OpenAL::OpenAL> DESTINATION cl_dlls)
+
+if (UNIX)
+	# Create a symbolic link to the OpenAL library so the dependency can be located at runtime.
+	INSTALL(CODE "execute_process( \
+		COMMAND ${CMAKE_COMMAND} -E create_symlink \
+		\"${CMAKE_INSTALL_PREFIX}/cl_dlls/libopenal-hlu.so.1.22.2\" \
+		\"${CMAKE_INSTALL_PREFIX}/cl_dlls/libopenal-hlu.so.1\"   \
+		)"
+	)
+endif()
+
 if (MSVC)
 	install(FILES $<TARGET_PDB_FILE:client> DESTINATION cl_dlls OPTIONAL)
 	install(FILES $<TARGET_PDB_FILE:server> DESTINATION dlls OPTIONAL)
-	
-	# Copy the OpenAL library on Windows only.
-	# On Linux OpenAL is loaded by Miles Sound System, and the Steam runtime provides this library.
-	# CMake doesn't currently support installing imported libraries of type UNKNOWN.
-	# See https://gitlab.kitware.com/cmake/cmake/-/issues/22406
-	#install(IMPORTED_RUNTIME_ARTIFACTS OpenAL::OpenAL
-	#	RUNTIME DESTINATION cl_dlls)
-	
-	install(FILES $<TARGET_FILE:OpenAL::OpenAL> DESTINATION cl_dlls)
 endif()
 
 # Set up the script that will copy the mod libraries to the HLDS directory

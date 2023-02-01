@@ -30,6 +30,8 @@ target_include_directories(SDL2 INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/../../../e
 
 add_library(client SHARED)
 
+set_target_properties(client PROPERTIES INSTALL_RPATH "$ORIGIN")
+
 set_common_properties(client)
 
 target_include_directories(client PRIVATE
