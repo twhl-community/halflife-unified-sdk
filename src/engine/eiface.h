@@ -451,7 +451,7 @@ struct DLL_FUNCTIONS
 
 	void (*pfnPM_Move)(playermove_t* ppmove, qboolean server);
 	void (*pfnPM_Init)(playermove_t* ppmove);
-	char (*pfnPM_FindTextureType)(char* name);
+	char (*pfnPM_FindTextureType)(const char* name);
 	void (*pfnSetupVisibility)(edict_t* pViewEntity, edict_t* pClient, unsigned char** pvs, unsigned char** pas);
 	void (*pfnUpdateClientData)(const edict_t* ent, int sendweapons, clientdata_t* cd);
 	int (*pfnAddToFullPack)(entity_state_t* state, int e, edict_t* ent, edict_t* host, int hostflags, int player, unsigned char* pSet);

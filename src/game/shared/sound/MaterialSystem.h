@@ -31,4 +31,4 @@ void PM_InitTextureTypes();
  *	@brief given texture name, find texture type.
  *	If not found, return type 'concrete'.
  */
-char PM_FindTextureType(char* name);
+char PM_FindTextureType(const char* name);

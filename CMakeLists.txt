@@ -105,7 +105,11 @@ function(set_common_properties TARGET_NAME)
 		# Since the arch settings used are i686 this means including the setting ensures original settings are used,
 		# but it could cause problems for AMD targets
 		$<$<CXX_COMPILER_ID:Clang,AppleClang,GNU>:-fpermissive -fno-strict-aliasing -Wno-invalid-offsetof -march=pentium-m -mfpmath=387>
-			
+		
+		# flifetime-dse=1 is needed to disable a compiler optimization that optimizes out std::memset calls in CBaseEntity::operator new
+		# See https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html#index-flifetime-dse for more information about the flifetime-dse flag
+		$<$<CXX_COMPILER_ID:GNU>:-flifetime-dse=1>
+		
 		$<$<CXX_COMPILER_ID:MSVC>:/W3 /MP>
 			
 		# These are all from the original Makefile
