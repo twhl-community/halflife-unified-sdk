@@ -87,7 +87,6 @@ target_sources(client PRIVATE
 	ClientLibrary.h
 	com_weapons.cpp
 	com_weapons.h
-	$<$<PLATFORM_ID:Windows>:DelayLoad.cpp>
 	demo.cpp
 	demo.h
 	entity.cpp
@@ -290,6 +289,10 @@ target_sources(client PRIVATE
 )
 
 add_game_shared_sources(client)
+
+if (WIN32)
+	target_sources(client PRIVATE DelayLoad.cpp)
+endif()
 
 target_precompile_headers(client PRIVATE ui/hud/hud.h)
 
