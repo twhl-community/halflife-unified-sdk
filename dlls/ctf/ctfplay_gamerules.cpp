@@ -1298,7 +1298,7 @@ void CHalfLifeCTFplay::ChangePlayerTeam(CBasePlayer* pPlayer, const char* pCharN
 
 				const auto v7 = bGib ? DMG_ALWAYSGIB : DMG_NEVERGIB;
 
-				pPlayer->TakeDamage(CWorld::Instance->pev, CWorld::Instance->pev, 900, v7);
+				pPlayer->TakeDamage(CWorld::World->pev, CWorld::World->pev, 900, v7);
 
 				m_DisableDeathMessages = false;
 				m_DisableDeathPenalty = false;

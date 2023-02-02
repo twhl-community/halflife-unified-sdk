@@ -1064,6 +1064,12 @@ enum hgun_e
 class CHgun : public CBasePlayerWeapon
 {
 public:
+#ifndef CLIENT_DLL
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
+	static TYPEDESCRIPTION m_SaveData[];
+#endif
+
 	void Spawn() override;
 	void Precache() override;
 	int iItemSlot() override { return 4; }
