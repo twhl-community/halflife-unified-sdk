@@ -42,6 +42,12 @@ endif
 BASE_CFLAGS=-std=c++17 -fpermissive -fno-strict-aliasing -fno-exceptions -fexpensive-optimizations -Werror=return-type -w
 BASE_CFLAGS+=-DNDEBUG -DPOSIX -D_POSIX -DLINUX -D_LINUX -DGNUC -DNO_MALLOC_OVERRIDE -DCLIENT_WEAPONS
 
+# flifetime-dse=1 is needed to disable a compiler optimization that optimizes out std::memset calls in CBaseEntity::operator new
+# See https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html#index-flifetime-dse for more information about the flifetime-dse flag
+ifeq "$(COMPILER)" "g++"
+	BASE_CFLAGS+=-flifetime-dse=1
+endif
+
 SHLIBEXT=so
 SHLIBCFLAGS=
 ifeq "$(CFG)" "release"
