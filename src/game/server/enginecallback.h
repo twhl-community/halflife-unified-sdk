@@ -85,6 +85,11 @@ inline void WRITE_RGB24(RGB24 color)
 	WRITE_BYTE(color.Blue);
 }
 
+inline void WRITE_FLOAT(float value)
+{
+	WRITE_LONG(*reinterpret_cast<int*>(&value));
+}
+
 #define CVAR_REGISTER (*g_engfuncs.pfnCVarRegister)
 #define CVAR_SET_FLOAT (*g_engfuncs.pfnCVarSetFloat)
 #define CVAR_SET_STRING (*g_engfuncs.pfnCVarSetString)
