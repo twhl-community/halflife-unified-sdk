@@ -814,8 +814,6 @@ Many changes have been made since 2019. All changes made after [[this|https://gi
 
 ## Changes in V1.0.0 Beta 011
 
-> Note: this beta has not been released yet.
-
 ### Bug fixes
 
 * Fixed trigger_ctfgeneric printing wrong targetname in log [#87](https://github.com/SamVanheer/halflife-op4-updated/issues/87)
