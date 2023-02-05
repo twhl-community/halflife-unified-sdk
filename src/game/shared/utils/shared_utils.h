@@ -77,6 +77,10 @@ string_t ALLOC_ESCAPED_STRING(const char* str);
 
 void ClearStringPool();
 
+bool Con_IsPrintBufferingEnabled();
+
+void Con_SetPrintBufferingEnabled(bool enabled);
+
 void Con_Printf(const char* format, ...);
 void Con_DPrintf(const char* format, ...);
 

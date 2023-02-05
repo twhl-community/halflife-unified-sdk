@@ -36,6 +36,9 @@ bool ClientLibrary::Initialize()
 		return false;
 	}
 
+	// Enable buffering for non-debug print output so it isn't ignored outright by the engine.
+	Con_SetPrintBufferingEnabled(true);
+
 	gEngfuncs.pfnHookUserMsg("SoundRpl", &MsgFunc_SoundRpl);
 
 	return true;
@@ -47,6 +50,11 @@ void ClientLibrary::HudInit()
 	sound::CreateSoundSystem();
 
 	sound::g_SoundSystem->GetGameSoundSystem()->LoadSentences();
+}
+
+void ClientLibrary::PostInitialize()
+{
+	Con_SetPrintBufferingEnabled(false);
 }
 
 void ClientLibrary::Shutdown()

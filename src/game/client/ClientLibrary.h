@@ -42,6 +42,8 @@ public:
 	 */
 	void HudInit();
 
+	void PostInitialize();
+
 	void Shutdown() override;
 
 	void RunFrame() override;

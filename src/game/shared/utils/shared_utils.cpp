@@ -99,6 +99,66 @@ void ClearStringPool()
 	g_StringPool = StringPool{};
 }
 
+static bool g_PrintBufferingEnabled = false;
+
+std::string g_PrintBuffer;
+
+bool Con_IsPrintBufferingEnabled()
+{
+	return g_PrintBufferingEnabled;
+}
+
+void Con_SetPrintBufferingEnabled(bool enabled)
+{
+	if (g_PrintBufferingEnabled == enabled)
+	{
+		return;
+	}
+
+	g_PrintBufferingEnabled = enabled;
+
+	if (!g_PrintBufferingEnabled)
+	{
+		// Flush buffer to console. Send it one line at a time to minimize the chances of truncation.
+		if (!g_PrintBuffer.empty())
+		{
+			// Append a newline so we're sure every line ends with one.
+			// This newline will be temporarily converted to a null terminator below for the last line.
+			g_PrintBuffer += '\n';
+
+			std::size_t startIndex = 0;
+
+			while (true)
+			{
+				// Don't print last newline.
+				if (startIndex == std::string::npos || startIndex == (g_PrintBuffer.size() - 1))
+				{
+					break;
+				}
+
+				std::size_t endIndex = g_PrintBuffer.find('\n', startIndex + 1);
+
+				const std::size_t actualEndIndex = endIndex != std::string::npos ? endIndex : g_PrintBuffer.size();
+
+				const std::size_t count = actualEndIndex - startIndex;
+
+				g_PrintBuffer[actualEndIndex] = '\0';
+
+				// Print substring.
+				g_engfuncs.pfnServerPrint(g_PrintBuffer.data() + startIndex);
+
+				g_PrintBuffer[actualEndIndex] = '\n';
+
+				// If there was a valid newline it'll be printed next iteration.
+				startIndex = endIndex;
+			}
+		}
+
+		g_PrintBuffer.clear();
+		g_PrintBuffer.shrink_to_fit();
+	}
+}
+
 void Con_VPrintf(const char* format, va_list list)
 {
 	static char buffer[8192];
@@ -107,7 +167,14 @@ void Con_VPrintf(const char* format, va_list list)
 
 	if (result >= 0 && static_cast<std::size_t>(result) < std::size(buffer))
 	{
-		g_engfuncs.pfnServerPrint(buffer);
+		if (g_PrintBufferingEnabled)
+		{
+			g_PrintBuffer += buffer;
+		}
+		else
+		{
+			g_engfuncs.pfnServerPrint(buffer);
+		}
 	}
 	else
 	{

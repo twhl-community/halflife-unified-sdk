@@ -16,6 +16,7 @@
 #include "hud.h"
 #include "camera.h"
 #include "kbutton.h"
+#include "ClientLibrary.h"
 #include "cvardef.h"
 #include "usercmd.h"
 #include "const.h"
@@ -66,6 +67,8 @@ static bool IN_UseRawInput()
 }
 
 static bool m_bMouseThread = false;
+
+static bool g_ReceivedFirstMouseActivate = false;
 
 // mouse variables
 cvar_t* m_filter;
@@ -244,6 +247,13 @@ IN_ActivateMouse
 */
 void DLLEXPORT IN_ActivateMouse()
 {
+	// This is the first function called after the engine has initialized itself, allowing us to do some post-init work.
+	if (!g_ReceivedFirstMouseActivate)
+	{
+		g_ReceivedFirstMouseActivate = true;
+		g_Client.PostInitialize();
+	}
+
 	if (mouseinitialized)
 	{
 #ifdef WIN32
@@ -343,6 +353,9 @@ IN_Shutdown
 */
 void IN_Shutdown()
 {
+	// Reset flag in case we're reloading due to video setting change.
+	g_ReceivedFirstMouseActivate = false;
+
 	IN_DeactivateMouse();
 
 #ifdef WIN32
