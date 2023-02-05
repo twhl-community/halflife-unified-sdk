@@ -108,6 +108,23 @@ bool GameSoundSystem::Create(std::shared_ptr<spdlog::logger> logger, ALCdevice* 
 		return false;
 	}
 
+	// An active context is required to query these.
+	{
+		const auto getOpenALString = [](ALenum param)
+		{
+			if (const auto result = alGetString(param); result)
+			{
+				return result;
+			}
+
+			return "Unknown";
+		};
+
+		m_Logger->trace("OpenAL vendor: {}", getOpenALString(AL_VENDOR));
+		m_Logger->trace("OpenAL version: {}", getOpenALString(AL_VERSION));
+		m_Logger->trace("OpenAL renderer: {}", getOpenALString(AL_RENDERER));
+	}
+
 	ALCint auxSendsCount = 0;
 	alcGetIntegerv(device, ALC_MAX_AUXILIARY_SENDS, 1, &auxSendsCount);
 
