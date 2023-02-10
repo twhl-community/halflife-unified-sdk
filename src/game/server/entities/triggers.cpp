@@ -1626,27 +1626,29 @@ void CTriggerPush::Touch(CBaseEntity* pOther)
 		return;
 	}
 
-	if (pevToucher->solid != SOLID_NOT && pevToucher->solid != SOLID_BSP)
-	{
-		// Instant trigger, just transfer velocity and remove
-		if (FBitSet(pev->spawnflags, SF_TRIG_PUSH_ONCE))
-		{
-			pevToucher->velocity = pevToucher->velocity + (pev->speed * pev->movedir);
-			if (pevToucher->velocity.z > 0)
-				pevToucher->flags &= ~FL_ONGROUND;
-			UTIL_Remove(this);
-		}
-		else
-		{ // Push field, transfer to base velocity
-			Vector vecPush = (pev->speed * pev->movedir);
-			if ((pevToucher->flags & FL_BASEVELOCITY) != 0)
-				vecPush = vecPush + pevToucher->basevelocity;
+	if ( pevToucher->solid != SOLID_NOT ) //&& pevToucher->solid != SOLID_BSP ) 
+	{ 
+		if(pevToucher->movetype == MOVETYPE_PUSHSTEP) //pushable related code 
+		{ 
+			pevToucher->velocity = pevToucher->velocity + (pev->speed * pev->movedir); 
 
-			pevToucher->basevelocity = vecPush;
+			if ( pevToucher->velocity.z > 0 ) 
+				pevToucher->flags &= ~FL_ONGROUND; 
+			pev->solid = SOLID_NOT; //push once. re-enable to affect again 
+		} 
+		else //other physobjects 
+		{ 
+			// Push field, transfer to base velocity 
+			Vector vecPush = (pev->speed * pev->movedir); 
+			if ( pevToucher->flags & FL_BASEVELOCITY ) 
+				vecPush = vecPush +  pevToucher->basevelocity; 
 
-			pevToucher->flags |= FL_BASEVELOCITY;
+			pevToucher->basevelocity = vecPush; 
+			pevToucher->flags |= FL_BASEVELOCITY; 
 			// Logger->debug("Vel {}, base {}", pevToucher->velocity.z, pevToucher->basevelocity.z);
-		}
+		} 
+
+		if (FBitSet(pev->spawnflags, SF_TRIG_PUSH_ONCE)) UTIL_Remove( this ); 
 	}
 }
 
