@@ -130,6 +130,9 @@ void ServerLibrary::NewMapStarted(bool loadGame)
 {
 	g_GameLogger->trace("Starting new map");
 
+	// Log some useful game info.
+	g_GameLogger->info("Maximum number of edicts: {}", gpGlobals->maxEntities);
+
 	g_LastPlayerJoinTime = 0;
 
 	ClearStringPool();
