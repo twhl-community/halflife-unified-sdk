@@ -20,11 +20,9 @@
 
 #include "hud.h"
 
-DECLARE_MESSAGE(m_Geiger, Geiger)
-
 bool CHudGeiger::Init()
 {
-	HOOK_MESSAGE(Geiger);
+	g_ClientUserMessages.RegisterHandler("Geiger", &CHudGeiger::MsgFunc_Geiger, this);
 
 	m_iGeigerRange = 0;
 	m_iFlags = 0;
@@ -41,7 +39,7 @@ bool CHudGeiger::VidInit()
 	return true;
 };
 
-bool CHudGeiger::MsgFunc_Geiger(const char* pszName, int iSize, void* pbuf)
+void CHudGeiger::MsgFunc_Geiger(const char* pszName, int iSize, void* pbuf)
 {
 
 	BEGIN_READ(pbuf, iSize);
@@ -51,8 +49,6 @@ bool CHudGeiger::MsgFunc_Geiger(const char* pszName, int iSize, void* pbuf)
 	m_iGeigerRange = m_iGeigerRange << 2;
 
 	m_iFlags |= HUD_ACTIVE;
-
-	return true;
 }
 
 bool CHudGeiger::Draw(float flTime)

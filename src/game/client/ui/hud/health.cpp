@@ -20,10 +20,6 @@
 
 #include "hud.h"
 
-
-DECLARE_MESSAGE(m_Health, Health)
-DECLARE_MESSAGE(m_Health, Damage)
-
 #define PAIN_NAME "sprites/%d_pain.spr"
 #define DAMAGE_NAME "sprites/%d_dmg.spr"
 
@@ -46,8 +42,8 @@ int giDmgFlags[NUM_DMG_TYPES] =
 
 bool CHudHealth::Init()
 {
-	HOOK_MESSAGE(Health);
-	HOOK_MESSAGE(Damage);
+	g_ClientUserMessages.RegisterHandler("Health", &CHudHealth::MsgFunc_Health, this);
+	g_ClientUserMessages.RegisterHandler("Damage", &CHudHealth::MsgFunc_Damage, this);
 	m_iHealth = 100;
 	m_fFade = 0;
 	m_iFlags = 0;
@@ -89,7 +85,7 @@ bool CHudHealth::VidInit()
 	return true;
 }
 
-bool CHudHealth::MsgFunc_Health(const char* pszName, int iSize, void* pbuf)
+void CHudHealth::MsgFunc_Health(const char* pszName, int iSize, void* pbuf)
 {
 	// TODO: update local health data
 	BEGIN_READ(pbuf, iSize);
@@ -103,12 +99,10 @@ bool CHudHealth::MsgFunc_Health(const char* pszName, int iSize, void* pbuf)
 		m_fFade = FADE_TIME;
 		m_iHealth = x;
 	}
-
-	return true;
 }
 
 
-bool CHudHealth::MsgFunc_Damage(const char* pszName, int iSize, void* pbuf)
+void CHudHealth::MsgFunc_Damage(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 
@@ -126,8 +120,6 @@ bool CHudHealth::MsgFunc_Damage(const char* pszName, int iSize, void* pbuf)
 	// Actually took damage?
 	if (damageTaken > 0 || armor > 0)
 		CalcDamageDirection(vecFrom);
-
-	return true;
 }
 
 

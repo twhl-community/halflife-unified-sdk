@@ -57,6 +57,6 @@ struct IGameSoundSystem
 
 	virtual void ClearCaches() = 0;
 
-	virtual void UserMsg_EmitSound(const char* pszName, int iSize, void* pbuf) = 0;
+	virtual void MsgFunc_EmitSound(const char* pszName, int iSize, void* pbuf) = 0;
 };
 }

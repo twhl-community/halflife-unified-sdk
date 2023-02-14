@@ -21,13 +21,17 @@
 #include "net_api.h"
 #include "parsemsg.h"
 #include "view.h"
+
+#include "networking/ClientUserMessages.h"
+
 #include "sound/ClientSoundReplacement.h"
 #include "sound/IGameSoundSystem.h"
 #include "sound/IMusicSystem.h"
 #include "sound/ISoundSystem.h"
+
 #include "utils/ReplacementMaps.h"
 
-int MsgFunc_SoundRpl(const char* pszName, int iSize, void* pbuf);
+void MsgFunc_SoundRpl(const char* pszName, int iSize, void* pbuf);
 
 bool ClientLibrary::Initialize()
 {
@@ -39,7 +43,7 @@ bool ClientLibrary::Initialize()
 	// Enable buffering for non-debug print output so it isn't ignored outright by the engine.
 	Con_SetPrintBufferingEnabled(true);
 
-	gEngfuncs.pfnHookUserMsg("SoundRpl", &MsgFunc_SoundRpl);
+	g_ClientUserMessages.RegisterHandler("SoundRpl", &MsgFunc_SoundRpl);
 
 	return true;
 }
@@ -62,6 +66,9 @@ void ClientLibrary::Shutdown()
 	sound::g_SoundSystem.reset();
 
 	GameLibrary::Shutdown();
+
+	// Clear handlers in case of restart.
+	g_ClientUserMessages.Clear();
 }
 
 void ClientLibrary::RunFrame()
@@ -123,6 +130,11 @@ void ClientLibrary::RunFrame()
 	sound::g_SoundSystem->Update();
 }
 
+void ClientLibrary::OnUserMessageReceived()
+{
+	// Nothing.
+}
+
 SDL_Window* ClientLibrary::FindWindow()
 {
 	// Find the game window. The window id is a unique identifier that increments starting from 1, so we can cache the value to speed up lookup.
@@ -139,13 +151,11 @@ SDL_Window* ClientLibrary::FindWindow()
 	return nullptr;
 }
 
-int MsgFunc_SoundRpl(const char* pszName, int iSize, void* pbuf)
+void MsgFunc_SoundRpl(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 
 	const char* replacementFileName = READ_STRING();
 
 	sound::g_ClientSoundReplacement = g_ReplacementMaps.Load(replacementFileName, {.CaseSensitive = false, .LoadFromAllPaths = true});
-
-	return 1;
 }

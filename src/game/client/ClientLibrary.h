@@ -48,6 +48,8 @@ public:
 
 	void RunFrame() override;
 
+	void OnUserMessageReceived();
+
 private:
 	SDL_Window* FindWindow();
 

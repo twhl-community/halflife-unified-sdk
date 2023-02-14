@@ -20,12 +20,9 @@
 
 #include "hud.h"
 
-DECLARE_MESSAGE(m_Train, Train)
-
-
 bool CHudTrain::Init()
 {
-	HOOK_MESSAGE(Train);
+	g_ClientUserMessages.RegisterHandler("Train", &CHudTrain::MsgFunc_Train, this);
 
 	m_iPos = 0;
 	m_iFlags = 0;
@@ -63,7 +60,7 @@ bool CHudTrain::Draw(float fTime)
 }
 
 
-bool CHudTrain::MsgFunc_Train(const char* pszName, int iSize, void* pbuf)
+void CHudTrain::MsgFunc_Train(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 
@@ -74,6 +71,4 @@ bool CHudTrain::MsgFunc_Train(const char* pszName, int iSize, void* pbuf)
 		m_iFlags |= HUD_ACTIVE;
 	else
 		m_iFlags &= ~HUD_ACTIVE;
-
-	return true;
 }

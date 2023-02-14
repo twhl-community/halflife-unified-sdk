@@ -40,12 +40,6 @@ icon_sprite_t g_PlayerSpriteList[MAX_PLAYERS_HUD + 1][6];
 DECLARE_COMMAND(m_Scoreboard, ShowScores);
 DECLARE_COMMAND(m_Scoreboard, HideScores);
 
-DECLARE_MESSAGE(m_Scoreboard, ScoreInfo);
-DECLARE_MESSAGE(m_Scoreboard, TeamInfo);
-DECLARE_MESSAGE(m_Scoreboard, TeamScore);
-DECLARE_MESSAGE(m_Scoreboard, PlayerIcon);
-DECLARE_MESSAGE(m_Scoreboard, CTFScore);
-
 bool CHudScoreboard::Init()
 {
 	gHUD.AddHudElem(this);
@@ -54,11 +48,11 @@ bool CHudScoreboard::Init()
 	// HOOK_COMMAND( "+showscores", ShowScores );
 	// HOOK_COMMAND( "-showscores", HideScores );
 
-	HOOK_MESSAGE(ScoreInfo);
-	HOOK_MESSAGE(TeamScore);
-	HOOK_MESSAGE(TeamInfo);
-	HOOK_MESSAGE(PlayerIcon);
-	HOOK_MESSAGE(CTFScore);
+	g_ClientUserMessages.RegisterHandler("ScoreInfo", &CHudScoreboard::MsgFunc_ScoreInfo, this);
+	g_ClientUserMessages.RegisterHandler("TeamScore", &CHudScoreboard::MsgFunc_TeamScore, this);
+	g_ClientUserMessages.RegisterHandler("TeamInfo", &CHudScoreboard::MsgFunc_TeamInfo, this);
+	g_ClientUserMessages.RegisterHandler("PlayerIcon", &CHudScoreboard::MsgFunc_PlayerIcon, this);
+	g_ClientUserMessages.RegisterHandler("CTFScore", &CHudScoreboard::MsgFunc_CTFScore, this);
 
 	InitHUDData();
 
@@ -554,7 +548,7 @@ void CHudScoreboard::GetAllPlayersInfo()
 	}
 }
 
-bool CHudScoreboard::MsgFunc_ScoreInfo(const char* pszName, int iSize, void* pbuf)
+void CHudScoreboard::MsgFunc_ScoreInfo(const char* pszName, int iSize, void* pbuf)
 {
 	m_iFlags |= HUD_ACTIVE;
 
@@ -574,15 +568,13 @@ bool CHudScoreboard::MsgFunc_ScoreInfo(const char* pszName, int iSize, void* pbu
 
 		gViewPort->UpdateOnPlayerInfo();
 	}
-
-	return true;
 }
 
 // Message handler for TeamInfo message
 // accepts two values:
 //		byte: client number
 //		string: client team name
-bool CHudScoreboard::MsgFunc_TeamInfo(const char* pszName, int iSize, void* pbuf)
+void CHudScoreboard::MsgFunc_TeamInfo(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 	short cl = READ_BYTE();
@@ -600,7 +592,7 @@ bool CHudScoreboard::MsgFunc_TeamInfo(const char* pszName, int iSize, void* pbuf
 	if (gViewPort && gViewPort->m_pScoreBoard)
 	{
 		m_iNumTeams = gViewPort->m_pScoreBoard->RebuildTeams();
-		return true;
+		return;
 	}
 
 	// rebuild the list of teams
@@ -656,8 +648,6 @@ bool CHudScoreboard::MsgFunc_TeamInfo(const char* pszName, int iSize, void* pbuf
 		if (g_TeamInfo[i].players < 1)
 			memset(&g_TeamInfo[i], 0, sizeof(team_info_t));
 	}
-
-	return true;
 }
 
 // Message handler for TeamScore message
@@ -666,7 +656,7 @@ bool CHudScoreboard::MsgFunc_TeamInfo(const char* pszName, int iSize, void* pbuf
 //		short: teams kills
 //		short: teams deaths
 // if this message is never received, then scores will simply be the combined totals of the players.
-bool CHudScoreboard::MsgFunc_TeamScore(const char* pszName, int iSize, void* pbuf)
+void CHudScoreboard::MsgFunc_TeamScore(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 	char* TeamName = READ_STRING();
@@ -679,17 +669,15 @@ bool CHudScoreboard::MsgFunc_TeamScore(const char* pszName, int iSize, void* pbu
 			break;
 	}
 	if (i > m_iNumTeams)
-		return true;
+		return;
 
 	// use this new score data instead of combined player scores
 	g_TeamInfo[i].scores_overriden = true;
 	g_TeamInfo[i].frags = READ_SHORT();
 	g_TeamInfo[i].deaths = READ_SHORT();
-
-	return true;
 }
 
-bool CHudScoreboard::MsgFunc_PlayerIcon(const char* pszName, int iSize, void* pbuf)
+void CHudScoreboard::MsgFunc_PlayerIcon(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 	const short playerIndex = READ_BYTE();
@@ -698,7 +686,7 @@ bool CHudScoreboard::MsgFunc_PlayerIcon(const char* pszName, int iSize, void* pb
 	const unsigned char itemId = READ_BYTE();
 
 	if (playerIndex > MAX_PLAYERS_HUD)
-		return true;
+		return;
 
 	if (!isActive)
 	{
@@ -709,13 +697,13 @@ bool CHudScoreboard::MsgFunc_PlayerIcon(const char* pszName, int iSize, void* pb
 				memset(&g_PlayerSpriteList[playerIndex][i], 0, sizeof(g_PlayerSpriteList[playerIndex][i]));
 			}
 		}
-		return true;
+		return;
 	}
 
 	if (0 == itemId)
 	{
 		memset(&g_PlayerSpriteList[playerIndex][iconIndex], 0, sizeof(g_PlayerSpriteList[playerIndex][iconIndex]));
-		return true;
+		return;
 	}
 
 	for (int i = 0, id = CTFItem::BlackMesaFlag; i < 2; ++i, id <<= 1)
@@ -736,14 +724,14 @@ bool CHudScoreboard::MsgFunc_PlayerIcon(const char* pszName, int iSize, void* pb
 
 		strcpy(sprite.szSpriteName, "score_flag");
 
-		return true;
+		return;
 	}
 
 	for (int i = 1; i < 6; ++i)
 	{
 		if ((itemId & g_PlayerSpriteList[playerIndex][i].bFlags) != 0)
 		{
-			return true;
+			return;
 		}
 	}
 
@@ -814,11 +802,9 @@ bool CHudScoreboard::MsgFunc_PlayerIcon(const char* pszName, int iSize, void* pb
 	}
 
 	m_iFlags |= HUD_ACTIVE;
-
-	return true;
 }
 
-bool CHudScoreboard::MsgFunc_CTFScore(const char* pszName, int iSize, void* pbuf)
+void CHudScoreboard::MsgFunc_CTFScore(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 	const int playerIndex = READ_BYTE();
@@ -828,8 +814,6 @@ bool CHudScoreboard::MsgFunc_CTFScore(const char* pszName, int iSize, void* pbuf
 	{
 		g_PlayerExtraInfo[playerIndex].flagcaptures = score;
 	}
-
-	return true;
 }
 
 void CHudScoreboard::DeathMsg(int killer, int victim)

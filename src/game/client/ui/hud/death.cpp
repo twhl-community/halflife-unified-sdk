@@ -19,8 +19,6 @@
 
 #include "vgui_TeamFortressViewport.h"
 
-DECLARE_MESSAGE(m_DeathNotice, DeathMsg);
-
 struct DeathNoticeItem
 {
 	char szKiller[MAX_PLAYER_NAME_LENGTH * 2];
@@ -78,7 +76,7 @@ bool CHudDeathNotice::Init()
 {
 	gHUD.AddHudElem(this);
 
-	HOOK_MESSAGE(DeathMsg);
+	g_ClientUserMessages.RegisterHandler("DeathMsg", &CHudDeathNotice::MsgFunc_DeathMsg, this);
 
 	CVAR_CREATE("hud_deathnotice_time", "6", 0);
 
@@ -160,7 +158,7 @@ bool CHudDeathNotice::Draw(float flTime)
 }
 
 // This message handler may be better off elsewhere
-bool CHudDeathNotice::MsgFunc_DeathMsg(const char* pszName, int iSize, void* pbuf)
+void CHudDeathNotice::MsgFunc_DeathMsg(const char* pszName, int iSize, void* pbuf)
 {
 	m_iFlags |= HUD_ACTIVE;
 
@@ -299,6 +297,4 @@ bool CHudDeathNotice::MsgFunc_DeathMsg(const char* pszName, int iSize, void* pbu
 
 		ConsolePrint("\n");
 	}
-
-	return true;
 }

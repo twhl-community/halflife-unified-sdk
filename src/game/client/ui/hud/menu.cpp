@@ -30,13 +30,11 @@ char g_szPrelocalisedMenuString[MAX_MENU_STRING];
 
 std::string KB_ConvertString(const char* in);
 
-DECLARE_MESSAGE(m_Menu, ShowMenu);
-
 bool CHudMenu::Init()
 {
 	gHUD.AddHudElem(this);
 
-	HOOK_MESSAGE(ShowMenu);
+	g_ClientUserMessages.RegisterHandler("ShowMenu", &CHudMenu::MsgFunc_ShowMenu, this);
 
 	InitHUDData();
 
@@ -226,7 +224,7 @@ void CHudMenu::SelectMenuItem(int menu_item)
 //		byte : a boolean, true if there is more string yet to be received before displaying the menu, false if it's the last string
 //		string: menu string to display
 // if this message is never received, then scores will simply be the combined totals of the players.
-bool CHudMenu::MsgFunc_ShowMenu(const char* pszName, int iSize, void* pbuf)
+void CHudMenu::MsgFunc_ShowMenu(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 
@@ -271,6 +269,4 @@ bool CHudMenu::MsgFunc_ShowMenu(const char* pszName, int iSize, void* pbuf)
 	}
 
 	m_fWaitingForMore = NeedMore;
-
-	return true;
 }

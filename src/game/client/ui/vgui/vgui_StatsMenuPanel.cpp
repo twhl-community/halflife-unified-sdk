@@ -289,7 +289,7 @@ void CStatsMenuPanel::SetPlayerImage(const char* szImage)
 	}
 }
 
-bool CStatsMenuPanel::MsgFunc_StatsInfo(const char* pszName, int iSize, void* pbuf)
+void CStatsMenuPanel::MsgFunc_StatsInfo(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 	const int teamNum = READ_BYTE();
@@ -412,11 +412,9 @@ bool CStatsMenuPanel::MsgFunc_StatsInfo(const char* pszName, int iSize, void* pb
 			m_pStatsWindow[teamNum]->setSize(wide, tall);
 		}
 	}
-
-	return false;
 }
 
-bool CStatsMenuPanel::MsgFunc_StatsPlayer(const char* pszName, int iSize, void* pbuf)
+void CStatsMenuPanel::MsgFunc_StatsPlayer(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 	const int playerIndex = READ_BYTE();
@@ -478,6 +476,4 @@ bool CStatsMenuPanel::MsgFunc_StatsPlayer(const char* pszName, int iSize, void* 
 			m_pStatsWindow[3]->setSize(wide, tall);
 		}
 	}
-
-	return false;
 }

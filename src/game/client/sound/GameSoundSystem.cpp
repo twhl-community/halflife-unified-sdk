@@ -430,7 +430,7 @@ void GameSoundSystem::ClearCaches()
 	m_SoundCache->ClearBuffers();
 }
 
-void GameSoundSystem::UserMsg_EmitSound(const char* pszName, int iSize, void* pbuf)
+void GameSoundSystem::MsgFunc_EmitSound(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 

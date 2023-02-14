@@ -50,23 +50,6 @@ CVoiceStatus* GetClientVoiceMgr()
 
 static CVoiceStatus* g_pInternalVoiceStatus = nullptr;
 
-int __MsgFunc_VoiceMask(const char* pszName, int iSize, void* pbuf)
-{
-	if (g_pInternalVoiceStatus)
-		g_pInternalVoiceStatus->HandleVoiceMaskMsg(iSize, pbuf);
-
-	return 1;
-}
-
-int __MsgFunc_ReqState(const char* pszName, int iSize, void* pbuf)
-{
-	if (g_pInternalVoiceStatus)
-		g_pInternalVoiceStatus->HandleReqStateMsg(iSize, pbuf);
-
-	return 1;
-}
-
-
 int g_BannedPlayerPrintCount;
 void ForEachBannedPlayer(char id[16])
 {
@@ -200,8 +183,9 @@ int CVoiceStatus::Init(
 	m_pParentPanel = pParentPanel;
 	gHUD.AddHudElem(this);
 	m_iFlags = HUD_ACTIVE;
-	HOOK_MESSAGE(VoiceMask);
-	HOOK_MESSAGE(ReqState);
+
+	g_ClientUserMessages.RegisterHandler("VoiceMask", &CVoiceStatus::HandleVoiceMaskMsg, this);
+	g_ClientUserMessages.RegisterHandler("ReqState", &CVoiceStatus::HandleReqStateMsg, this);
 
 	return 1;
 }

@@ -16,13 +16,11 @@
 #include "hud.h"
 #include "ProjectInfo.h"
 
-DECLARE_MESSAGE(m_ProjectInfo, ProjectInfo);
-
 bool CHudProjectInfo::Init()
 {
 	gHUD.AddHudElem(this);
 
-	HOOK_MESSAGE(ProjectInfo);
+	g_ClientUserMessages.RegisterHandler("ProjectInfo", &CHudProjectInfo::MsgFunc_ProjectInfo, this);
 
 	m_iFlags |= HUD_ACTIVE;
 
@@ -116,7 +114,7 @@ bool CHudProjectInfo::Draw(float flTime)
 	return true;
 }
 
-bool CHudProjectInfo::MsgFunc_ProjectInfo(const char* pszName, int iSize, void* pbuf)
+void CHudProjectInfo::MsgFunc_ProjectInfo(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 
@@ -127,6 +125,4 @@ bool CHudProjectInfo::MsgFunc_ProjectInfo(const char* pszName, int iSize, void* 
 	m_ServerInfo.BranchName = READ_STRING();
 	m_ServerInfo.TagName = READ_STRING();
 	m_ServerInfo.CommitHash = READ_STRING();
-
-	return true;
 }

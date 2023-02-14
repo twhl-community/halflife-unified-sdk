@@ -20,15 +20,13 @@
 
 #include "hud.h"
 
-DECLARE_MESSAGE(m_Battery, Battery)
-
 bool CHudBattery::Init()
 {
 	m_iBat = 0;
 	m_fFade = 0;
 	m_iFlags = 0;
 
-	HOOK_MESSAGE(Battery);
+	g_ClientUserMessages.RegisterHandler("Battery", &CHudBattery::MsgFunc_Battery, this);
 
 	gHUD.AddHudElem(this);
 
@@ -49,7 +47,7 @@ bool CHudBattery::VidInit()
 	return true;
 }
 
-bool CHudBattery::MsgFunc_Battery(const char* pszName, int iSize, void* pbuf)
+void CHudBattery::MsgFunc_Battery(const char* pszName, int iSize, void* pbuf)
 {
 	m_iFlags |= HUD_ACTIVE;
 
@@ -61,8 +59,6 @@ bool CHudBattery::MsgFunc_Battery(const char* pszName, int iSize, void* pbuf)
 		m_fFade = FADE_TIME;
 		m_iBat = x;
 	}
-
-	return true;
 }
 
 

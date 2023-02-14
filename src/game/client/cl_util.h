@@ -25,15 +25,6 @@
 #include "utils/shared_utils.h"
 
 // Macros to hook function calls into the HUD object
-#define HOOK_MESSAGE(x) gEngfuncs.pfnHookUserMsg(#x, __MsgFunc_##x);
-
-#define DECLARE_MESSAGE(y, x)                                     \
-	int __MsgFunc_##x(const char* pszName, int iSize, void* pbuf) \
-	{                                                             \
-		return gHUD.y.MsgFunc_##x(pszName, iSize, pbuf);          \
-	}
-
-
 #define HOOK_COMMAND(x, y) gEngfuncs.pfnAddCommand(x, __CmdFunc_##y);
 #define DECLARE_COMMAND(y, x) \
 	void __CmdFunc_##x()      \

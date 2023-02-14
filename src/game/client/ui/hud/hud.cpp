@@ -81,55 +81,6 @@ cvar_t* cl_bobtilt = nullptr;
 
 void ShutdownInput();
 
-int __MsgFunc_HudColor(const char* pszName, int iSize, void* pbuf)
-{
-	return static_cast<int>(gHUD.MsgFunc_HudColor(pszName, iSize, pbuf));
-}
-
-// DECLARE_MESSAGE(m_Logo, Logo)
-int __MsgFunc_Logo(const char* pszName, int iSize, void* pbuf)
-{
-	return static_cast<int>(gHUD.MsgFunc_Logo(pszName, iSize, pbuf));
-}
-
-// DECLARE_MESSAGE(m_Logo, Logo)
-int __MsgFunc_ResetHUD(const char* pszName, int iSize, void* pbuf)
-{
-	return static_cast<int>(gHUD.MsgFunc_ResetHUD(pszName, iSize, pbuf));
-}
-
-int __MsgFunc_InitHUD(const char* pszName, int iSize, void* pbuf)
-{
-	gHUD.MsgFunc_InitHUD(pszName, iSize, pbuf);
-	return 1;
-}
-
-int __MsgFunc_ViewMode(const char* pszName, int iSize, void* pbuf)
-{
-	gHUD.MsgFunc_ViewMode(pszName, iSize, pbuf);
-	return 1;
-}
-
-int __MsgFunc_SetFOV(const char* pszName, int iSize, void* pbuf)
-{
-	return static_cast<int>(gHUD.MsgFunc_SetFOV(pszName, iSize, pbuf));
-}
-
-int __MsgFunc_Concuss(const char* pszName, int iSize, void* pbuf)
-{
-	return static_cast<int>(gHUD.MsgFunc_Concuss(pszName, iSize, pbuf));
-}
-
-int __MsgFunc_Weapons(const char* pszName, int iSize, void* pbuf)
-{
-	return static_cast<int>(gHUD.MsgFunc_Weapons(pszName, iSize, pbuf));
-}
-
-int __MsgFunc_GameMode(const char* pszName, int iSize, void* pbuf)
-{
-	return static_cast<int>(gHUD.MsgFunc_GameMode(pszName, iSize, pbuf));
-}
-
 // TFFree Command Menu
 void __CmdFunc_OpenCommandMenu()
 {
@@ -164,195 +115,24 @@ void __CmdFunc_ForceCloseCommandMenu()
 	}
 }
 
-// TFFree Command Menu Message Handlers
-int __MsgFunc_ValClass(const char* pszName, int iSize, void* pbuf)
-{
-	if (gViewPort)
-		return static_cast<int>(gViewPort->MsgFunc_ValClass(pszName, iSize, pbuf));
-	return 0;
-}
-
-int __MsgFunc_TeamNames(const char* pszName, int iSize, void* pbuf)
-{
-	if (gViewPort)
-		return static_cast<int>(gViewPort->MsgFunc_TeamNames(pszName, iSize, pbuf));
-	return 0;
-}
-
-int __MsgFunc_Feign(const char* pszName, int iSize, void* pbuf)
-{
-	if (gViewPort)
-		return static_cast<int>(gViewPort->MsgFunc_Feign(pszName, iSize, pbuf));
-	return 0;
-}
-
-int __MsgFunc_Detpack(const char* pszName, int iSize, void* pbuf)
-{
-	if (gViewPort)
-		return static_cast<int>(gViewPort->MsgFunc_Detpack(pszName, iSize, pbuf));
-	return 0;
-}
-
-int __MsgFunc_VGUIMenu(const char* pszName, int iSize, void* pbuf)
-{
-	if (gViewPort)
-		return static_cast<int>(gViewPort->MsgFunc_VGUIMenu(pszName, iSize, pbuf));
-	return 0;
-}
-
-int __MsgFunc_MOTD(const char* pszName, int iSize, void* pbuf)
-{
-	if (gViewPort)
-		return static_cast<int>(gViewPort->MsgFunc_MOTD(pszName, iSize, pbuf));
-	return 0;
-}
-
-int __MsgFunc_BuildSt(const char* pszName, int iSize, void* pbuf)
-{
-	if (gViewPort)
-		return static_cast<int>(gViewPort->MsgFunc_BuildSt(pszName, iSize, pbuf));
-	return 0;
-}
-
-int __MsgFunc_RandomPC(const char* pszName, int iSize, void* pbuf)
-{
-	if (gViewPort)
-		return static_cast<int>(gViewPort->MsgFunc_RandomPC(pszName, iSize, pbuf));
-	return 0;
-}
-
-int __MsgFunc_ServerName(const char* pszName, int iSize, void* pbuf)
-{
-	if (gViewPort)
-		return static_cast<int>(gViewPort->MsgFunc_ServerName(pszName, iSize, pbuf));
-	return 0;
-}
-
-/*
-int __MsgFunc_ScoreInfo(const char* pszName, int iSize, void* pbuf)
-{
-	if (gViewPort)
-		return gViewPort->MsgFunc_ScoreInfo(pszName, iSize, pbuf);
-	return 0;
-}
-
-int __MsgFunc_TeamScore(const char* pszName, int iSize, void* pbuf)
-{
-	if (gViewPort)
-		return gViewPort->MsgFunc_TeamScore(pszName, iSize, pbuf);
-	return 0;
-}
-
-int __MsgFunc_TeamInfo(const char* pszName, int iSize, void* pbuf)
-{
-	if (gViewPort)
-		return gViewPort->MsgFunc_TeamInfo(pszName, iSize, pbuf);
-	return 0;
-}
-*/
-
-int __MsgFunc_Spectator(const char* pszName, int iSize, void* pbuf)
-{
-	if (gViewPort)
-		return static_cast<int>(gViewPort->MsgFunc_Spectator(pszName, iSize, pbuf));
-	return 0;
-}
-
-int __MsgFunc_SpecFade(const char* pszName, int iSize, void* pbuf)
-{
-	if (gViewPort)
-		return static_cast<int>(gViewPort->MsgFunc_SpecFade(pszName, iSize, pbuf));
-	return 0;
-}
-
-int __MsgFunc_ResetFade(const char* pszName, int iSize, void* pbuf)
-{
-	if (gViewPort)
-		return static_cast<int>(gViewPort->MsgFunc_ResetFade(pszName, iSize, pbuf));
-	return 0;
-}
-
-int __MsgFunc_AllowSpec(const char* pszName, int iSize, void* pbuf)
-{
-	if (gViewPort)
-		return static_cast<int>(gViewPort->MsgFunc_AllowSpec(pszName, iSize, pbuf));
-	return 0;
-}
-
-int __MsgFunc_TeamFull(const char* pszName, int iSize, void* pbuf)
-{
-	if (gViewPort)
-		return static_cast<int>(gViewPort->MsgFunc_TeamFull(pszName, iSize, pbuf));
-	return 0;
-}
-
-int __MsgFunc_SetMenuTeam(const char* pszName, int iSize, void* pbuf)
-{
-	if (gViewPort)
-		return static_cast<int>(gViewPort->MsgFunc_SetMenuTeam(pszName, iSize, pbuf));
-	return 0;
-}
-
-int __MsgFunc_StatsInfo(const char* pszName, int iSize, void* pbuf)
-{
-	if (gViewPort)
-		return static_cast<int>(gViewPort->MsgFunc_StatsInfo(pszName, iSize, pbuf));
-	return 0;
-}
-
-int __MsgFunc_StatsPlayer(const char* pszName, int iSize, void* pbuf)
-{
-	if (gViewPort)
-		return static_cast<int>(gViewPort->MsgFunc_StatsPlayer(pszName, iSize, pbuf));
-	return 0;
-}
-
 // This is called every time the DLL is loaded
 void CHud::Init()
 {
-	HOOK_MESSAGE(HudColor);
-	HOOK_MESSAGE(Logo);
-	HOOK_MESSAGE(ResetHUD);
-	HOOK_MESSAGE(GameMode);
-	HOOK_MESSAGE(InitHUD);
-	HOOK_MESSAGE(ViewMode);
-	HOOK_MESSAGE(SetFOV);
-	HOOK_MESSAGE(Concuss);
-	HOOK_MESSAGE(Weapons);
+	g_ClientUserMessages.RegisterHandler("HudColor", &CHud::MsgFunc_HudColor, this);
+	g_ClientUserMessages.RegisterHandler("Logo", &CHud::MsgFunc_Logo, this);
+	g_ClientUserMessages.RegisterHandler("ResetHUD", &CHud::MsgFunc_ResetHUD, this);
+	g_ClientUserMessages.RegisterHandler("GameMode", &CHud::MsgFunc_GameMode, this);
+	g_ClientUserMessages.RegisterHandler("InitHUD", &CHud::MsgFunc_InitHUD, this);
+	g_ClientUserMessages.RegisterHandler("ViewMode", &CHud::MsgFunc_ViewMode, this);
+	g_ClientUserMessages.RegisterHandler("SetFOV", &CHud::MsgFunc_SetFOV, this);
+	g_ClientUserMessages.RegisterHandler("Concuss", &CHud::MsgFunc_Concuss, this);
+	g_ClientUserMessages.RegisterHandler("Weapons", &CHud::MsgFunc_Weapons, this);
 
 	// TFFree CommandMenu
 	HOOK_COMMAND("+commandmenu", OpenCommandMenu);
 	HOOK_COMMAND("-commandmenu", CloseCommandMenu);
 	HOOK_COMMAND("ForceCloseCommandMenu", ForceCloseCommandMenu);
 	HOOK_COMMAND("special", InputPlayerSpecial);
-
-	HOOK_MESSAGE(ValClass);
-	HOOK_MESSAGE(TeamNames);
-	HOOK_MESSAGE(Feign);
-	HOOK_MESSAGE(Detpack);
-	HOOK_MESSAGE(MOTD);
-	HOOK_MESSAGE(BuildSt);
-	HOOK_MESSAGE(RandomPC);
-	HOOK_MESSAGE(ServerName);
-
-	/*
-	HOOK_MESSAGE(ScoreInfo);
-	HOOK_MESSAGE(TeamScore);
-	HOOK_MESSAGE(TeamInfo);
-	*/
-
-	HOOK_MESSAGE(Spectator);
-	HOOK_MESSAGE(AllowSpec);
-	HOOK_MESSAGE(SetMenuTeam);
-	HOOK_MESSAGE(StatsInfo);
-	HOOK_MESSAGE(StatsPlayer);
-
-	HOOK_MESSAGE(SpecFade);
-	HOOK_MESSAGE(ResetFade);
-	HOOK_MESSAGE(TeamFull);
-
-	// VGUI Menus
-	HOOK_MESSAGE(VGUIMenu);
 
 	CVAR_CREATE("hud_classautokill", "1", FCVAR_ARCHIVE | FCVAR_USERINFO); // controls whether or not to suicide immediately on TF class switch
 	CVAR_CREATE("hud_takesshots", "0", FCVAR_ARCHIVE);					   // controls whether or not to automatically take screenshots at the end of a round
@@ -564,7 +344,7 @@ void CHud::VidInit()
 	GetClientVoiceMgr()->VidInit();
 }
 
-bool CHud::MsgFunc_HudColor(const char* pszName, int iSize, void* pbuf)
+void CHud::MsgFunc_HudColor(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 
@@ -577,18 +357,14 @@ bool CHud::MsgFunc_HudColor(const char* pszName, int iSize, void* pbuf)
 	{
 		m_HudItemColor = m_HudColor;
 	}
-
-	return true;
 }
 
-bool CHud::MsgFunc_Logo(const char* pszName, int iSize, void* pbuf)
+void CHud::MsgFunc_Logo(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 
 	// update Train data
 	m_iLogo = READ_BYTE();
-
-	return true;
 }
 
 float g_lastFOV = 0.0;
@@ -685,7 +461,7 @@ float HUD_GetFOV()
 	return g_lastFOV;
 }
 
-bool CHud::MsgFunc_SetFOV(const char* pszName, int iSize, void* pbuf)
+void CHud::MsgFunc_SetFOV(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 
@@ -723,8 +499,6 @@ bool CHud::MsgFunc_SetFOV(const char* pszName, int iSize, void* pbuf)
 		// set a new sensitivity that is proportional to the change from the FOV default
 		m_flMouseSensitivity = sensitivity->value * ((float)newfov / (float)def_fov) * CVAR_GET_FLOAT("zoom_sensitivity_ratio");
 	}
-
-	return true;
 }
 
 

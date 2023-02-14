@@ -134,16 +134,6 @@ IMusicSystem* SoundSystem::GetMusicSystem()
 	return m_MusicSystem.get();
 }
 
-static int UserMsg_EmitSound(const char* pszName, int iSize, void* pbuf)
-{
-	if (g_SoundSystem)
-	{
-		g_SoundSystem->GetGameSoundSystem()->UserMsg_EmitSound(pszName, iSize, pbuf);
-	}
-
-	return 1;
-}
-
 static void S_PlaySound(const CommandArgs& args, int channelIndex)
 {
 	if (args.Count() < 2)
@@ -203,7 +193,7 @@ void CreateSoundSystem()
 		return std::make_unique<DummySoundSystem>();
 	}();
 
-	gEngfuncs.pfnHookUserMsg("EmitSound", &UserMsg_EmitSound);
+	g_ClientUserMessages.RegisterHandler("EmitSound", &IGameSoundSystem::MsgFunc_EmitSound, g_SoundSystem->GetGameSoundSystem());
 
 	g_ConCommands.CreateCommand("snd_playstatic", &S_PlayStaticSound);
 	g_ConCommands.CreateCommand("snd_playdynamic", &S_PlayDynamicSound);

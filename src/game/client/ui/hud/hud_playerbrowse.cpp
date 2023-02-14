@@ -23,13 +23,11 @@
 
 #include "ctf/CTFDefs.h"
 
-DECLARE_MESSAGE(m_PlayerBrowse, PlyrBrowse);
-
 bool CHudPlayerBrowse::Init()
 {
 	gHUD.AddHudElem(this);
 
-	HOOK_MESSAGE(PlyrBrowse);
+	g_ClientUserMessages.RegisterHandler("PlyrBrowse", &CHudPlayerBrowse::MsgFunc_PlyrBrowse, this);
 
 	Reset();
 
@@ -108,7 +106,7 @@ bool CHudPlayerBrowse::Draw(float flTime)
 	return true;
 }
 
-bool CHudPlayerBrowse::MsgFunc_PlyrBrowse(const char* pszName, int iSize, void* pbuf)
+void CHudPlayerBrowse::MsgFunc_PlyrBrowse(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 
@@ -198,6 +196,4 @@ bool CHudPlayerBrowse::MsgFunc_PlyrBrowse(const char* pszName, int iSize, void* 
 		m_flDelayFade = 200;
 		m_flDelayFadeSprite = 255;
 	}
-
-	return true;
 }

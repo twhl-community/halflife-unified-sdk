@@ -20,10 +20,6 @@
 
 #include "hud.h"
 
-
-DECLARE_MESSAGE(m_Flash, FlashBat)
-DECLARE_MESSAGE(m_Flash, Flashlight)
-
 #define BAT_NAME "sprites/%d_Flashlight.spr"
 
 bool CHudFlashlight::Init()
@@ -31,8 +27,8 @@ bool CHudFlashlight::Init()
 	m_fFade = 0;
 	m_fOn = false;
 
-	HOOK_MESSAGE(Flashlight);
-	HOOK_MESSAGE(FlashBat);
+	g_ClientUserMessages.RegisterHandler("Flashlight", &CHudFlashlight::MsgFunc_Flashlight, this);
+	g_ClientUserMessages.RegisterHandler("FlashBat", &CHudFlashlight::MsgFunc_FlashBat, this);
 
 	m_iFlags |= HUD_ACTIVE;
 
@@ -76,17 +72,15 @@ bool CHudFlashlight::VidInit()
 	return true;
 }
 
-bool CHudFlashlight::MsgFunc_FlashBat(const char* pszName, int iSize, void* pbuf)
+void CHudFlashlight::MsgFunc_FlashBat(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 	int x = READ_BYTE();
 	m_iBat = x;
 	m_flBat = ((float)x) / 100.0;
-
-	return true;
 }
 
-bool CHudFlashlight::MsgFunc_Flashlight(const char* pszName, int iSize, void* pbuf)
+void CHudFlashlight::MsgFunc_Flashlight(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 	m_SuitLightType = static_cast<SuitLightType>(READ_BYTE());
@@ -97,8 +91,6 @@ bool CHudFlashlight::MsgFunc_Flashlight(const char* pszName, int iSize, void* pb
 
 	// Always update this, so that changing to flashlight type disables NVG effects
 	gHUD.SetNightVisionState(m_SuitLightType == SuitLightType::Nightvision && m_fOn);
-
-	return true;
 }
 
 bool CHudFlashlight::Draw(float flTime)

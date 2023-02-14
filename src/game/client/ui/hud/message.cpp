@@ -20,9 +20,6 @@
 
 #include "hud.h"
 
-DECLARE_MESSAGE(m_Message, HudText)
-DECLARE_MESSAGE(m_Message, GameTitle)
-
 // 1 Global client_textmessage_t for custom messages that aren't in the titles.txt
 client_textmessage_t g_pCustomMessage;
 const char* g_pCustomName = "Custom";
@@ -30,8 +27,8 @@ char g_pCustomText[1024];
 
 bool CHudMessage::Init()
 {
-	HOOK_MESSAGE(HudText);
-	HOOK_MESSAGE(GameTitle);
+	g_ClientUserMessages.RegisterHandler("HudText", &CHudMessage::MsgFunc_HudText, this);
+	g_ClientUserMessages.RegisterHandler("GameTitle", &CHudMessage::MsgFunc_GameTitle, this);
 
 	gHUD.AddHudElem(this);
 
@@ -486,7 +483,7 @@ void CHudMessage::MessageAdd(const char* pName, float time)
 }
 
 
-bool CHudMessage::MsgFunc_HudText(const char* pszName, int iSize, void* pbuf)
+void CHudMessage::MsgFunc_HudText(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 
@@ -499,12 +496,10 @@ bool CHudMessage::MsgFunc_HudText(const char* pszName, int iSize, void* pbuf)
 	// Turn on drawing
 	if ((m_iFlags & HUD_ACTIVE) == 0)
 		m_iFlags |= HUD_ACTIVE;
-
-	return true;
 }
 
 
-bool CHudMessage::MsgFunc_GameTitle(const char* pszName, int iSize, void* pbuf)
+void CHudMessage::MsgFunc_GameTitle(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 
@@ -547,8 +542,6 @@ bool CHudMessage::MsgFunc_GameTitle(const char* pszName, int iSize, void* pbuf)
 		if ((m_iFlags & HUD_ACTIVE) == 0)
 			m_iFlags |= HUD_ACTIVE;
 	}
-
-	return true;
 }
 
 void CHudMessage::MessageAdd(client_textmessage_t* newMessage)

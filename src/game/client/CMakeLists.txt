@@ -116,6 +116,9 @@ target_sources(client PRIVATE
 	input/in_camera.cpp
 	input/kbutton.h
 	
+	networking/ClientUserMessages.cpp
+	networking/ClientUserMessages.h
+	
 	particleman/CBaseParticle.cpp
 	particleman/CBaseParticle.h
 	particleman/CFrustum.cpp

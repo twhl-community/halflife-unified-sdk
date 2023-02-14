@@ -21,13 +21,10 @@
 #include "cl_entity.h"
 #include "event_api.h"
 
-DECLARE_MESSAGE(m_FlagIcons, FlagIcon);
-DECLARE_MESSAGE(m_FlagIcons, FlagTimer);
-
 bool CHudFlagIcons::Init()
 {
-	HOOK_MESSAGE(FlagIcon);
-	HOOK_MESSAGE(FlagTimer);
+	g_ClientUserMessages.RegisterHandler("FlagIcon", &CHudFlagIcons::MsgFunc_FlagIcon, this);
+	g_ClientUserMessages.RegisterHandler("FlagTimer", &CHudFlagIcons::MsgFunc_FlagTimer, this);
 
 	gHUD.AddHudElem(this);
 
@@ -134,7 +131,7 @@ void CHudFlagIcons::DisableFlag(const char* pszFlagName, unsigned char team_idx)
 	}
 }
 
-bool CHudFlagIcons::MsgFunc_FlagIcon(const char* pszName, int iSize, void* pbuf)
+void CHudFlagIcons::MsgFunc_FlagIcon(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 	const bool isActive = 0 != READ_BYTE();
@@ -154,11 +151,9 @@ bool CHudFlagIcons::MsgFunc_FlagIcon(const char* pszName, int iSize, void* pbuf)
 	{
 		DisableFlag(flagName, team_idx);
 	}
-
-	return true;
 }
 
-bool CHudFlagIcons::MsgFunc_FlagTimer(const char* pszName, int iSize, void* pbuf)
+void CHudFlagIcons::MsgFunc_FlagTimer(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 	m_bIsTimer = READ_BYTE() != 0;
@@ -168,6 +163,4 @@ bool CHudFlagIcons::MsgFunc_FlagTimer(const char* pszName, int iSize, void* pbuf
 		m_flTimeLimit = READ_SHORT();
 		m_bTimerReset = true;
 	}
-
-	return true;
 }

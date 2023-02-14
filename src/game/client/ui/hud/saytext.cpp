@@ -40,13 +40,11 @@ static float flScrollTime = 0; // the time at which the lines next scroll up
 static int Y_START = 0;
 static int line_height = 0;
 
-DECLARE_MESSAGE(m_SayText, SayText);
-
 bool CHudSayText::Init()
 {
 	gHUD.AddHudElem(this);
 
-	HOOK_MESSAGE(SayText);
+	g_ClientUserMessages.RegisterHandler("SayText", &CHudSayText::MsgFunc_SayText, this);
 
 	InitHUDData();
 
@@ -167,14 +165,12 @@ bool CHudSayText::Draw(float flTime)
 	return true;
 }
 
-bool CHudSayText::MsgFunc_SayText(const char* pszName, int iSize, void* pbuf)
+void CHudSayText::MsgFunc_SayText(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 
 	int client_index = READ_BYTE(); // the client who spoke the message
 	SayTextPrint(READ_STRING(), iSize - 1, client_index);
-
-	return true;
 }
 
 void CHudSayText::SayTextPrint(const char* pszBuf, int iBufSize, int clientIndex)

@@ -17,13 +17,11 @@
 
 #include "hud.h"
 
-DECLARE_MESSAGE(m_EntityInfo, EntityInfo);
-
 bool CHudEntityInfo::Init()
 {
 	gHUD.AddHudElem(this);
 
-	HOOK_MESSAGE(EntityInfo);
+	g_ClientUserMessages.RegisterHandler("EntityInfo", &CHudEntityInfo::MsgFunc_EntityInfo, this);
 
 	m_iFlags |= HUD_ACTIVE;
 
@@ -90,7 +88,7 @@ bool CHudEntityInfo::Draw(float flTime)
 	return true;
 }
 
-bool CHudEntityInfo::MsgFunc_EntityInfo(const char* pszName, int iSize, void* pbuf)
+void CHudEntityInfo::MsgFunc_EntityInfo(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 
@@ -101,13 +99,11 @@ bool CHudEntityInfo::MsgFunc_EntityInfo(const char* pszName, int iSize, void* pb
 	// Nothing to draw, skip rest of message.
 	if (m_EntityInfo.Classname.empty())
 	{
-		return true;
+		return;
 	}
 
 	m_EntityInfo.Health = READ_LONG();
 	m_EntityInfo.Color = READ_RGB24();
 
 	m_DrawEndTime = gHUD.m_flTime + EntityInfoDrawTime;
-
-	return true;
 }

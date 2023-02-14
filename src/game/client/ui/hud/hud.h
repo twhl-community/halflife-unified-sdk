@@ -30,6 +30,7 @@
 #include "palette.h"
 #include "cl_util.h"
 #include "parsemsg.h"
+#include "networking/ClientUserMessages.h"
 
 #define DHN_DRAWZERO 1
 #define DHN_2DIGITS 2
@@ -104,13 +105,13 @@ public:
 	void Think() override;
 	void Reset() override;
 	bool DrawWList(float flTime);
-	bool MsgFunc_CurWeapon(const char* pszName, int iSize, void* pbuf);
-	bool MsgFunc_WeaponList(const char* pszName, int iSize, void* pbuf);
-	bool MsgFunc_AmmoX(const char* pszName, int iSize, void* pbuf);
-	bool MsgFunc_AmmoPickup(const char* pszName, int iSize, void* pbuf);
-	bool MsgFunc_WeapPickup(const char* pszName, int iSize, void* pbuf);
-	bool MsgFunc_ItemPickup(const char* pszName, int iSize, void* pbuf);
-	bool MsgFunc_HideWeapon(const char* pszName, int iSize, void* pbuf);
+	void MsgFunc_CurWeapon(const char* pszName, int iSize, void* pbuf);
+	void MsgFunc_WeaponList(const char* pszName, int iSize, void* pbuf);
+	void MsgFunc_AmmoX(const char* pszName, int iSize, void* pbuf);
+	void MsgFunc_AmmoPickup(const char* pszName, int iSize, void* pbuf);
+	void MsgFunc_WeapPickup(const char* pszName, int iSize, void* pbuf);
+	void MsgFunc_ItemPickup(const char* pszName, int iSize, void* pbuf);
+	void MsgFunc_HideWeapon(const char* pszName, int iSize, void* pbuf);
 
 	void SlotInput(int iSlot);
 	void UserCmd_Slot1();
@@ -177,7 +178,7 @@ public:
 	bool Init() override;
 	bool VidInit() override;
 	bool Draw(float flTime) override;
-	bool MsgFunc_Geiger(const char* pszName, int iSize, void* pbuf);
+	void MsgFunc_Geiger(const char* pszName, int iSize, void* pbuf);
 
 private:
 	int m_iGeigerRange;
@@ -192,7 +193,7 @@ public:
 	bool Init() override;
 	bool VidInit() override;
 	bool Draw(float flTime) override;
-	bool MsgFunc_Train(const char* pszName, int iSize, void* pbuf);
+	void MsgFunc_Train(const char* pszName, int iSize, void* pbuf);
 
 private:
 	HSPRITE m_hSprite;
@@ -211,8 +212,8 @@ public:
 	void Reset() override;
 	void ParseStatusString(int line_num);
 
-	bool MsgFunc_StatusText(const char* pszName, int iSize, void* pbuf);
-	bool MsgFunc_StatusValue(const char* pszName, int iSize, void* pbuf);
+	void MsgFunc_StatusText(const char* pszName, int iSize, void* pbuf);
+	void MsgFunc_StatusValue(const char* pszName, int iSize, void* pbuf);
 
 protected:
 	enum
@@ -271,7 +272,7 @@ public:
 	void InitHUDData() override;
 	bool VidInit() override;
 	bool Draw(float flTime) override;
-	bool MsgFunc_DeathMsg(const char* pszName, int iSize, void* pbuf);
+	void MsgFunc_DeathMsg(const char* pszName, int iSize, void* pbuf);
 
 private:
 	int m_HUD_d_skull; // sprite index of skull icon
@@ -288,7 +289,7 @@ public:
 	bool VidInit() override;
 	void Reset() override;
 	bool Draw(float flTime) override;
-	bool MsgFunc_ShowMenu(const char* pszName, int iSize, void* pbuf);
+	void MsgFunc_ShowMenu(const char* pszName, int iSize, void* pbuf);
 
 	void SelectMenuItem(int menu_item);
 
@@ -308,7 +309,7 @@ public:
 	void InitHUDData() override;
 	bool VidInit() override;
 	bool Draw(float flTime) override;
-	bool MsgFunc_SayText(const char* pszName, int iSize, void* pbuf);
+	void MsgFunc_SayText(const char* pszName, int iSize, void* pbuf);
 	void SayTextPrint(const char* pszBuf, int iBufSize, int clientIndex = -1);
 	void EnsureTextFitsInOneLineAndWrapIfHaveTo(int line);
 	friend class CHudSpectator;
@@ -328,7 +329,7 @@ public:
 	bool Init() override;
 	bool VidInit() override;
 	bool Draw(float flTime) override;
-	bool MsgFunc_Battery(const char* pszName, int iSize, void* pbuf);
+	void MsgFunc_Battery(const char* pszName, int iSize, void* pbuf);
 
 private:
 	HSPRITE m_hSprite1;
@@ -364,8 +365,8 @@ public:
 	bool VidInit() override;
 	bool Draw(float flTime) override;
 	void Reset() override;
-	bool MsgFunc_Flashlight(const char* pszName, int iSize, void* pbuf);
-	bool MsgFunc_FlashBat(const char* pszName, int iSize, void* pbuf);
+	void MsgFunc_Flashlight(const char* pszName, int iSize, void* pbuf);
+	void MsgFunc_FlashBat(const char* pszName, int iSize, void* pbuf);
 
 private:
 	LightData* GetLightData()
@@ -427,7 +428,7 @@ public:
 	static char* LocaliseTextString(const char* msg, char* dst_buffer, int buffer_size);
 	static char* BufferedLocaliseTextString(const char* msg);
 	const char* LookupString(const char* msg_name, int* msg_dest = nullptr);
-	bool MsgFunc_TextMsg(const char* pszName, int iSize, void* pbuf);
+	void MsgFunc_TextMsg(const char* pszName, int iSize, void* pbuf);
 };
 
 //
@@ -440,8 +441,8 @@ public:
 	bool Init() override;
 	bool VidInit() override;
 	bool Draw(float flTime) override;
-	bool MsgFunc_HudText(const char* pszName, int iSize, void* pbuf);
-	bool MsgFunc_GameTitle(const char* pszName, int iSize, void* pbuf);
+	void MsgFunc_HudText(const char* pszName, int iSize, void* pbuf);
+	void MsgFunc_GameTitle(const char* pszName, int iSize, void* pbuf);
 
 	float FadeBlend(float fadein, float fadeout, float hold, float localTime);
 	int XPosition(float x, int width, int lineWidth);
@@ -486,8 +487,8 @@ public:
 	bool VidInit() override;
 	void Reset() override;
 	bool Draw(float flTime) override;
-	bool MsgFunc_StatusIcon(const char* pszName, int iSize, void* pbuf);
-	bool MsgFunc_CustomIcon(const char* pszName, int iSize, void* pbuf);
+	void MsgFunc_StatusIcon(const char* pszName, int iSize, void* pbuf);
+	void MsgFunc_CustomIcon(const char* pszName, int iSize, void* pbuf);
 
 	enum
 	{
@@ -534,8 +535,8 @@ public:
 	void EnableFlag(const char* pszFlagName, unsigned char team_idx, unsigned char red, unsigned char green, unsigned char blue, unsigned char score);
 	void DisableFlag(const char* pszFlagName, unsigned char team_idx);
 
-	bool MsgFunc_FlagIcon(const char* pszName, int iSize, void* pbuf);
-	bool MsgFunc_FlagTimer(const char* pszName, int iSize, void* pbuf);
+	void MsgFunc_FlagIcon(const char* pszName, int iSize, void* pbuf);
+	void MsgFunc_FlagTimer(const char* pszName, int iSize, void* pbuf);
 
 private:
 	enum
@@ -572,7 +573,7 @@ public:
 	void InitHUDData();
 	bool Draw(float flTime);
 
-	bool MsgFunc_PlyrBrowse(const char* pszName, int iSize, void* pbuf);
+	void MsgFunc_PlyrBrowse(const char* pszName, int iSize, void* pbuf);
 
 private:
 	enum
@@ -616,11 +617,11 @@ public:
 	int DrawPlayers(int xoffset, float listslot, int nameoffset = 0, const char* team = nullptr); // returns the ypos where it finishes drawing
 	void UserCmd_ShowScores();
 	void UserCmd_HideScores();
-	bool MsgFunc_ScoreInfo(const char* pszName, int iSize, void* pbuf);
-	bool MsgFunc_TeamInfo(const char* pszName, int iSize, void* pbuf);
-	bool MsgFunc_TeamScore(const char* pszName, int iSize, void* pbuf);
-	bool MsgFunc_PlayerIcon(const char* pszName, int iSize, void* pbuf);
-	bool MsgFunc_CTFScore(const char* pszName, int iSize, void* pbuf);
+	void MsgFunc_ScoreInfo(const char* pszName, int iSize, void* pbuf);
+	void MsgFunc_TeamInfo(const char* pszName, int iSize, void* pbuf);
+	void MsgFunc_TeamScore(const char* pszName, int iSize, void* pbuf);
+	void MsgFunc_PlayerIcon(const char* pszName, int iSize, void* pbuf);
+	void MsgFunc_CTFScore(const char* pszName, int iSize, void* pbuf);
 	void DeathMsg(int killer, int victim);
 
 
@@ -647,7 +648,7 @@ public:
 	bool VidInit() override;
 	bool Draw(float flTime) override;
 
-	bool MsgFunc_ProjectInfo(const char* pszName, int iSize, void* pbuf);
+	void MsgFunc_ProjectInfo(const char* pszName, int iSize, void* pbuf);
 
 private:
 	struct LibraryInfo
@@ -679,7 +680,7 @@ public:
 	bool VidInit() override;
 	bool Draw(float flTime) override;
 
-	bool MsgFunc_EntityInfo(const char* pszName, int iSize, void* pbuf);
+	void MsgFunc_EntityInfo(const char* pszName, int iSize, void* pbuf);
 
 private:
 	static constexpr int MaxClassnameLengthCount = 64;
@@ -814,16 +815,16 @@ public:
 	~CHud(); // destructor, frees allocated memory
 
 	// user messages
-	bool MsgFunc_Damage(const char* pszName, int iSize, void* pbuf);
-	bool MsgFunc_GameMode(const char* pszName, int iSize, void* pbuf);
-	bool MsgFunc_HudColor(const char* pszName, int iSize, void* pbuf);
-	bool MsgFunc_Logo(const char* pszName, int iSize, void* pbuf);
-	bool MsgFunc_ResetHUD(const char* pszName, int iSize, void* pbuf);
+	void MsgFunc_Damage(const char* pszName, int iSize, void* pbuf);
+	void MsgFunc_GameMode(const char* pszName, int iSize, void* pbuf);
+	void MsgFunc_HudColor(const char* pszName, int iSize, void* pbuf);
+	void MsgFunc_Logo(const char* pszName, int iSize, void* pbuf);
+	void MsgFunc_ResetHUD(const char* pszName, int iSize, void* pbuf);
 	void MsgFunc_InitHUD(const char* pszName, int iSize, void* pbuf);
 	void MsgFunc_ViewMode(const char* pszName, int iSize, void* pbuf);
-	bool MsgFunc_SetFOV(const char* pszName, int iSize, void* pbuf);
-	bool MsgFunc_Concuss(const char* pszName, int iSize, void* pbuf);
-	bool MsgFunc_Weapons(const char* pszName, int iSize, void* pbuf);
+	void MsgFunc_SetFOV(const char* pszName, int iSize, void* pbuf);
+	void MsgFunc_Concuss(const char* pszName, int iSize, void* pbuf);
+	void MsgFunc_Weapons(const char* pszName, int iSize, void* pbuf);
 
 	// Screen information
 	SCREENINFO m_scrinfo;

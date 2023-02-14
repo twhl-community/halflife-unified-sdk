@@ -33,7 +33,7 @@ extern TEMPENTITY* pFlare; // Vit_amiN
 
 /// USER-DEFINED SERVER MESSAGE HANDLERS
 
-bool CHud::MsgFunc_ResetHUD(const char* pszName, int iSize, void* pbuf)
+void CHud::MsgFunc_ResetHUD(const char* pszName, int iSize, void* pbuf)
 {
 	// clear all hud data
 	HUDLIST* pList = m_pHudList;
@@ -53,8 +53,6 @@ bool CHud::MsgFunc_ResetHUD(const char* pszName, int iSize, void* pbuf)
 
 	// reset concussion effect
 	m_iConcussionEffect = 0;
-
-	return true;
 }
 
 void CAM_ToFirstPerson();
@@ -87,7 +85,7 @@ void CHud::MsgFunc_InitHUD(const char* pszName, int iSize, void* pbuf)
 }
 
 
-bool CHud::MsgFunc_GameMode(const char* pszName, int iSize, void* pbuf)
+void CHud::MsgFunc_GameMode(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 	m_Teamplay = giTeamplay = READ_BYTE();
@@ -102,12 +100,10 @@ bool CHud::MsgFunc_GameMode(const char* pszName, int iSize, void* pbuf)
 			gViewPort->HideScoreBoard();
 		}
 	}
-
-	return true;
 }
 
 
-bool CHud::MsgFunc_Damage(const char* pszName, int iSize, void* pbuf)
+void CHud::MsgFunc_Damage(const char* pszName, int iSize, void* pbuf)
 {
 	int armor, blood;
 	Vector from;
@@ -127,11 +123,9 @@ bool CHud::MsgFunc_Damage(const char* pszName, int iSize, void* pbuf)
 		count = 10;
 
 	// TODO: kick viewangles,  show damage visually
-
-	return true;
 }
 
-bool CHud::MsgFunc_Concuss(const char* pszName, int iSize, void* pbuf)
+void CHud::MsgFunc_Concuss(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 	m_iConcussionEffect = READ_BYTE();
@@ -141,10 +135,9 @@ bool CHud::MsgFunc_Concuss(const char* pszName, int iSize, void* pbuf)
 	}
 	else
 		this->m_StatusIcons.DisableIcon("dmg_concuss");
-	return true;
 }
 
-bool CHud::MsgFunc_Weapons(const char* pszName, int iSize, void* pbuf)
+void CHud::MsgFunc_Weapons(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 
@@ -152,6 +145,4 @@ bool CHud::MsgFunc_Weapons(const char* pszName, int iSize, void* pbuf)
 	const std::uint64_t upperBits = READ_LONG();
 
 	m_iWeaponBits = (lowerBits & 0XFFFFFFFF) | ((upperBits & 0XFFFFFFFF) << 32ULL);
-
-	return true;
 }

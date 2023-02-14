@@ -21,13 +21,10 @@
 #include "cl_entity.h"
 #include "event_api.h"
 
-DECLARE_MESSAGE(m_StatusIcons, StatusIcon);
-DECLARE_MESSAGE(m_StatusIcons, CustomIcon);
-
 bool CHudStatusIcons::Init()
 {
-	HOOK_MESSAGE(StatusIcon);
-	HOOK_MESSAGE(CustomIcon);
+	g_ClientUserMessages.RegisterHandler("StatusIcon", &CHudStatusIcons::MsgFunc_StatusIcon, this);
+	g_ClientUserMessages.RegisterHandler("CustomIcon", &CHudStatusIcons::MsgFunc_CustomIcon, this);
 
 	gHUD.AddHudElem(this);
 
@@ -105,7 +102,7 @@ bool CHudStatusIcons::Draw(float flTime)
 //		byte   : red
 //		byte   : green
 //		byte   : blue
-bool CHudStatusIcons::MsgFunc_StatusIcon(const char* pszName, int iSize, void* pbuf)
+void CHudStatusIcons::MsgFunc_StatusIcon(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 
@@ -124,11 +121,9 @@ bool CHudStatusIcons::MsgFunc_StatusIcon(const char* pszName, int iSize, void* p
 	{
 		DisableIcon(pszIconName);
 	}
-
-	return true;
 }
 
-bool CHudStatusIcons::MsgFunc_CustomIcon(const char* pszName, int iSize, void* pbuf)
+void CHudStatusIcons::MsgFunc_CustomIcon(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 
@@ -156,8 +151,6 @@ bool CHudStatusIcons::MsgFunc_CustomIcon(const char* pszName, int iSize, void* p
 	{
 		DisableCustomIcon(index);
 	}
-
-	return true;
 }
 
 // add the icon to the icon list, and set it's drawing color

@@ -21,9 +21,6 @@
 
 #include "hud.h"
 
-DECLARE_MESSAGE(m_StatusBar, StatusText);
-DECLARE_MESSAGE(m_StatusBar, StatusValue);
-
 #define STATUSBAR_ID_LINE 1
 
 Vector* GetClientColor(int clientIndex);
@@ -33,8 +30,8 @@ bool CHudStatusBar::Init()
 {
 	gHUD.AddHudElem(this);
 
-	HOOK_MESSAGE(StatusText);
-	HOOK_MESSAGE(StatusValue);
+	g_ClientUserMessages.RegisterHandler("StatusText", &CHudStatusBar::MsgFunc_StatusText, this);
+	g_ClientUserMessages.RegisterHandler("StatusValue", &CHudStatusBar::MsgFunc_StatusValue, this);
 
 	Reset();
 
@@ -218,39 +215,35 @@ bool CHudStatusBar::Draw(float fTime)
 // if StatusValue[slotnum] != 0, the following string is drawn, upto the next newline - otherwise the text is skipped upto next newline
 // %pX, where X is an integer, will substitute a player name here, getting the player index from StatusValue[X]
 // %iX, where X is an integer, will substitute a number here, getting the number from StatusValue[X]
-bool CHudStatusBar::MsgFunc_StatusText(const char* pszName, int iSize, void* pbuf)
+void CHudStatusBar::MsgFunc_StatusText(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 
 	int line = READ_BYTE();
 
 	if (line < 0 || line >= MAX_STATUSBAR_LINES)
-		return true;
+		return;
 
 	strncpy(m_szStatusText[line], READ_STRING(), MAX_STATUSTEXT_LENGTH);
 	m_szStatusText[line][MAX_STATUSTEXT_LENGTH - 1] = 0; // ensure it's null terminated ( strncpy() won't null terminate if read string too long)
 
 	m_iFlags |= HUD_ACTIVE;
 	m_bReparseString = true;
-
-	return true;
 }
 
 // Message handler for StatusText message
 // accepts two values:
 //		byte: index into the status value array
 //		short: value to store
-bool CHudStatusBar::MsgFunc_StatusValue(const char* pszName, int iSize, void* pbuf)
+void CHudStatusBar::MsgFunc_StatusValue(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 
 	int index = READ_BYTE();
 	if (index < 1 || index >= MAX_STATUSBAR_VALUES)
-		return true; // index out of range
+		return; // index out of range
 
 	m_iStatusValues[index] = READ_SHORT();
 
 	m_bReparseString = true;
-
-	return true;
 }
