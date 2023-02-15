@@ -449,7 +449,7 @@ void PM_CatagorizeTextureType()
 	pmove->sztexturename[CBTEXTURENAMEMAX - 1] = 0;
 
 	// get texture type
-	pmove->chtexturetype = PM_FindTextureType(pmove->sztexturename);
+	pmove->chtexturetype = g_MaterialSystem.FindTextureType(pmove->sztexturename);
 }
 
 void PM_UpdateStepSound()
@@ -3329,7 +3329,7 @@ void PM_Init(playermove_t* ppmove)
 	pmove = ppmove;
 
 	PM_CreateStuckTable();
-	PM_InitTextureTypes();
+	g_MaterialSystem.LoadMaterials();
 
 	// The engine copies the hull sizes initialized by PM_GetHullBounds *before* PM_GetHullBounds is actually called, so manually initialize these.
 	for (int i = 0; i < NUM_HULLS; ++i)

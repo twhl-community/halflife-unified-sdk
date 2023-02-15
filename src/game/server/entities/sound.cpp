@@ -1266,7 +1266,7 @@ float TEXTURETYPE_PlaySound(TraceResult* ptr, Vector vecSrc, Vector vecEnd, int 
 			// Logger->debug("texture hit: {}", szbuffer);
 
 			// get texture type
-			chTextureType = PM_FindTextureType(szbuffer);
+			chTextureType = g_MaterialSystem.FindTextureType(szbuffer);
 		}
 	}
 

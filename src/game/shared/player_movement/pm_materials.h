@@ -15,7 +15,9 @@
 
 #pragma once
 
-#define CBTEXTURENAMEMAX 13 // only load first n chars of name
+#include <cstddef>
+
+constexpr std::size_t CBTEXTURENAMEMAX = 13; // only load first n chars of name
 
 #define CHAR_TEX_CONCRETE 'C' // texture types
 #define CHAR_TEX_METAL 'M'

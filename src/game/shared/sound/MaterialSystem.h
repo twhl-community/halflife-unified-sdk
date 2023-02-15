@@ -15,20 +15,50 @@
 
 #pragma once
 
+#include <array>
+#include <cstddef>
+#include <string_view>
+#include <vector>
+
+#include <EASTL/fixed_string.h>
+
+#include "pm_materials.h"
+
+using TextureName = eastl::fixed_string<char, CBTEXTURENAMEMAX>;
+
+struct Material
+{
+	TextureName Name;
+	char Type{};
+};
+
 /**
- *	@file
- *
- *	Used to detect the texture the player is standing on,
+ *	@brief Used to detect the texture the player is standing on,
  *	map the texture name to a material type.
  *	Play footstep sound based on material type.
  */
+class MaterialSystem final
+{
+public:
+	MaterialSystem() = default;
+	MaterialSystem(const MaterialSystem&) = delete;
+	MaterialSystem& operator=(const MaterialSystem&) = delete;
 
-#define CTEXTURESMAX 512 // max number of textures loaded
+	void LoadMaterials();
 
-void PM_InitTextureTypes();
+	/**
+	 *	@brief given texture name, find texture type.
+	 *	If not found, return type 'concrete'.
+	 */
+	char FindTextureType(const char* name) const;
 
-/**
- *	@brief given texture name, find texture type.
- *	If not found, return type 'concrete'.
- */
-char PM_FindTextureType(const char* name);
+private:
+	void ParseMaterialsFile(const char* fileName);
+
+private:
+	std::vector<Material> m_Materials;
+
+	bool m_MaterialsInitialized = false;
+};
+
+inline MaterialSystem g_MaterialSystem;

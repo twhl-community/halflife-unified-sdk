@@ -204,3 +204,36 @@ std::string_view GetLine(std::string_view& text)
 
 	return line;
 }
+
+std::string_view::const_iterator FindWhitespace(std::string_view text)
+{
+	return std::find_if(text.begin(), text.end(), [](auto c)
+		{ return 0 != std::isspace(c); });
+}
+
+std::string_view SkipWhitespace(std::string_view text)
+{
+	const auto end = text.end();
+
+	const auto it = std::find_if(text.begin(), text.end(), [](auto c)
+		{ return 0 == std::isspace(c); });
+
+	if (it == end)
+	{
+		return {};
+	}
+
+	return {it, end};
+}
+
+std::string_view RemoveComments(std::string_view text)
+{
+	const auto commentStart = text.find("//");
+
+	if (commentStart != text.npos)
+	{
+		text = text.substr(0, commentStart);
+	}
+
+	return text;
+}

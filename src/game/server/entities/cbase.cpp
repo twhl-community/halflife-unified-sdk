@@ -76,7 +76,8 @@ static DLL_FUNCTIONS gFunctionTable =
 
 		PM_Move,			// pfnPM_Move
 		PM_Init,			// pfnPM_Init				Server version of player movement initialization
-		PM_FindTextureType, // pfnPM_FindTextureType
+		[](const char* name)
+		{ return g_MaterialSystem.FindTextureType(name); }, // pfnPM_FindTextureType
 
 		SetupVisibility,		  // pfnSetupVisibility        Set up PVS and PAS for networking for this client
 		UpdateClientData,		  // pfnUpdateClientData       Set up data sent only to specific client

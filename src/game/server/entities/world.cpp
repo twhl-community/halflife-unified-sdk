@@ -561,7 +561,7 @@ void CWorld::Precache()
 
 	// init texture type array from materials.txt
 
-	PM_InitTextureTypes();
+	g_MaterialSystem.LoadMaterials();
 
 
 	// the area based ambient sounds MUST be the first precache_sounds

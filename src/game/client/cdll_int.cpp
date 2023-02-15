@@ -93,7 +93,7 @@ char DLLEXPORT HUD_PlayerMoveTexture(char* name)
 {
 	//	RecClClientTextureType(name);
 
-	return PM_FindTextureType(name);
+	return g_MaterialSystem.FindTextureType(name);
 }
 
 void DLLEXPORT HUD_PlayerMove(playermove_t* ppmove, int server)
