@@ -23,6 +23,8 @@
 #include <EASTL/fixed_string.h>
 
 #include "pm_materials.h"
+#include "networking/NetworkDataSystem.h"
+#include "utils/GameSystem.h"
 
 using TextureName = eastl::fixed_string<char, CBTEXTURENAMEMAX>;
 
@@ -37,12 +39,20 @@ struct Material
  *	map the texture name to a material type.
  *	Play footstep sound based on material type.
  */
-class MaterialSystem final
+class MaterialSystem final : public IGameSystem, public INetworkDataBlockHandler
 {
 public:
 	MaterialSystem() = default;
 	MaterialSystem(const MaterialSystem&) = delete;
 	MaterialSystem& operator=(const MaterialSystem&) = delete;
+
+	const char* GetName() const override { return "MaterialSystem"; }
+
+	bool Initialize() override;
+	void PostInitialize() override {}
+	void Shutdown() override;
+
+	void HandleNetworkDataBlock(NetworkDataBlock& block) override;
 
 	void LoadMaterials();
 
@@ -57,8 +67,6 @@ private:
 
 private:
 	std::vector<Material> m_Materials;
-
-	bool m_MaterialsInitialized = false;
 };
 
 inline MaterialSystem g_MaterialSystem;

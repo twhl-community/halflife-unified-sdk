@@ -24,6 +24,8 @@
 
 #include "scripting/AS/ASManager.h"
 
+#include "sound/MaterialSystem.h"
+
 #include "utils/ConCommandSystem.h"
 #include "utils/GameSystem.h"
 #include "utils/JSONSystem.h"
@@ -91,6 +93,7 @@ void GameLibrary::AddGameSystems()
 	g_GameSystems.Add(&g_ConditionEvaluator);
 	g_GameSystems.Add(&g_GameConfigSystem);
 	g_GameSystems.Add(&g_ReplacementMaps);
+	g_GameSystems.Add(&g_MaterialSystem);
 }
 
 void GameLibrary::SetEntLogLevels(spdlog::level::level_enum level)

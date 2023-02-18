@@ -19,6 +19,8 @@
 #include "cbase.h"
 #include "MaterialSystem.h"
 
+#include "networking/NetworkDataSystem.h"
+
 constexpr std::size_t MinimumMaterialsCount = 512; // original max number of textures loaded
 
 std::optional<Material> TryParseMaterial(std::string_view line)
@@ -51,11 +53,71 @@ std::optional<Material> TryParseMaterial(std::string_view line)
 	return Material{.Name{textureName.data(), size}, .Type = type};
 }
 
+bool MaterialSystem::Initialize()
+{
+	g_NetworkData.RegisterHandler("MaterialSystem", this);
+
+	return true;
+}
+
+void MaterialSystem::Shutdown()
+{
+}
+
+void MaterialSystem::HandleNetworkDataBlock(NetworkDataBlock& block)
+{
+	if (block.Mode == NetworkDataMode::Serialize)
+	{
+		block.Data = json::array();
+
+		for (const auto& material : m_Materials)
+		{
+			json mat = json::object();
+
+			mat.emplace("Texture", material.Name.c_str());
+			mat.emplace("Type", std::string{material.Type});
+
+			block.Data.push_back(std::move(mat));
+		}
+
+		g_NetworkData.GetLogger()->debug("Wrote {} materials to network data", m_Materials.size());
+	}
+	else
+	{
+		m_Materials.clear();
+
+		if (!block.Data.is_array())
+		{
+			block.ErrorMessage = "Material network data must be an array of objects";
+			return;
+		}
+
+		for (const auto& mat : block.Data)
+		{
+			if (!mat.is_object())
+			{
+				block.ErrorMessage = "Material network data must be an array of objects";
+				return;
+			}
+
+			const auto texture = mat.value<std::string>("Texture", {});
+			const auto type = mat.value<std::string>("Type", {});
+
+			if (texture.empty() || type.empty())
+			{
+				block.ErrorMessage = "Material network data entry must contain a texture name and material type";
+				return;
+			}
+
+			m_Materials.emplace_back(texture.c_str(), type.front());
+		}
+
+		g_NetworkData.GetLogger()->debug("Parsed {} materials from network data", m_Materials.size());
+	}
+}
+
 void MaterialSystem::LoadMaterials()
 {
-	if (m_MaterialsInitialized)
-		return;
-
 	m_Materials.clear();
 	m_Materials.reserve(MinimumMaterialsCount);
 
@@ -63,14 +125,10 @@ void MaterialSystem::LoadMaterials()
 
 	std::stable_sort(m_Materials.begin(), m_Materials.end(), [](const auto& lhs, const auto& rhs)
 		{ return stricmp(lhs.Name.c_str(), rhs.Name.c_str()) < 0; });
-
-	m_MaterialsInitialized = true;
 }
 
 char MaterialSystem::FindTextureType(const char* name) const
 {
-	assert(m_MaterialsInitialized);
-
 	const auto end = m_Materials.end();
 
 	// TODO: multiple materials can have the same name, so this will not always return the right type.
