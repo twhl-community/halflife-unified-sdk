@@ -20,8 +20,6 @@
 #include "cbase.h"
 #include "sentence_utils.h"
 
-using namespace std::string_view_literals;
-
 namespace sentences
 {
 constexpr std::string_view DefaultSentenceDirectory{"vox/"sv};

@@ -24,8 +24,6 @@
 #include "util.h"
 #include "skill.h"
 
-using namespace std::string_view_literals;
-
 class CBaseEntity;
 class CBaseMonster;
 class CBasePlayerItem;

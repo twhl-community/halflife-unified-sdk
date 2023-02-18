@@ -52,8 +52,11 @@
 #include <cstring>
 #include <iterator>
 #include <string>
+#include <string_view>
 
 #include <EASTL/fixed_string.h>
+
+using namespace std::string_view_literals;
 
 using byte = unsigned char;
 using qboolean = int;
