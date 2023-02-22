@@ -42,13 +42,13 @@ void CHud::Think()
 	GetScreenInfo(&m_scrinfo);
 
 	int newfov;
-	HUDLIST* pList = m_pHudList;
 
-	while (pList)
+	for (auto hudElement : m_HudList)
 	{
-		if ((pList->p->m_iFlags & HUD_ACTIVE) != 0)
-			pList->p->Think();
-		pList = pList->pNext;
+		if ((hudElement->m_iFlags & HUD_ACTIVE) != 0)
+		{
+			hudElement->Think();
+		}
 	}
 
 	newfov = HUD_GetFOV();
@@ -147,27 +147,23 @@ bool CHud::Redraw(float flTime, bool intermission)
 	// draw all registered HUD elements
 	if (0 != m_pCvarDraw->value)
 	{
-		HUDLIST* pList = m_pHudList;
-
-		while (pList)
+		for (auto hudElement : m_HudList)
 		{
 			if (!intermission)
 			{
-				if ((pList->p->m_iFlags & HUD_ACTIVE) != 0 && (m_iHideHUDDisplay & HIDEHUD_ALL) == 0)
-					pList->p->Draw(flTime);
+				if ((hudElement->m_iFlags & HUD_ACTIVE) != 0 && (m_iHideHUDDisplay & HIDEHUD_ALL) == 0)
+					hudElement->Draw(flTime);
 			}
 			else
 			{ // it's an intermission,  so only draw hud elements that are set to draw during intermissions
-				if ((pList->p->m_iFlags & HUD_INTERMISSION) != 0)
-					pList->p->Draw(flTime);
+				if ((hudElement->m_iFlags & HUD_INTERMISSION) != 0)
+					hudElement->Draw(flTime);
 			}
-
-			pList = pList->pNext;
 		}
 	}
 
 	// are we in demo mode? do we need to draw the logo in the top corner?
-	if (0 != m_iLogo)
+	if (m_ShowLogo)
 	{
 		int x, y, i;
 

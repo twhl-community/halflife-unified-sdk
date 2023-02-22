@@ -137,10 +137,6 @@ void CHud::Init()
 	CVAR_CREATE("hud_classautokill", "1", FCVAR_ARCHIVE | FCVAR_USERINFO); // controls whether or not to suicide immediately on TF class switch
 	CVAR_CREATE("hud_takesshots", "0", FCVAR_ARCHIVE);					   // controls whether or not to automatically take screenshots at the end of a round
 
-
-	m_iLogo = 0;
-	m_iFOV = 0;
-
 	CVAR_CREATE("zoom_sensitivity_ratio", "1.2", 0);
 	CVAR_CREATE("cl_autowepswitch", "1", FCVAR_ARCHIVE | FCVAR_USERINFO);
 	default_fov = CVAR_CREATE("default_fov", "90", FCVAR_ARCHIVE);
@@ -152,23 +148,8 @@ void CHud::Init()
 	cl_rollspeed = CVAR_CREATE("cl_rollspeed", "200", FCVAR_ARCHIVE);
 	cl_bobtilt = CVAR_CREATE("cl_bobtilt", "0", FCVAR_ARCHIVE);
 
-	m_pSpriteList = nullptr;
-
 	// Clear any old HUD list
-	if (m_pHudList)
-	{
-		HUDLIST* pList;
-		while (m_pHudList)
-		{
-			pList = m_pHudList;
-			m_pHudList = m_pHudList->pNext;
-			free(pList);
-		}
-		m_pHudList = nullptr;
-	}
-
-	// In case we get messages before the first update -- time will be valid
-	m_flTime = 1.0;
+	m_HudList.clear();
 
 	m_Ammo.Init();
 	m_Health.Init();
@@ -200,38 +181,17 @@ void CHud::Shutdown()
 	GetClientVoiceMgr()->Shutdown();
 }
 
-// CHud destructor
-// cleans up memory allocated for m_rg* arrays
-CHud ::~CHud()
-{
-	delete[] m_rghSprites;
-	delete[] m_rgrcRects;
-	delete[] m_rgszSpriteNames;
-
-	if (m_pHudList)
-	{
-		HUDLIST* pList;
-		while (m_pHudList)
-		{
-			pList = m_pHudList;
-			m_pHudList = m_pHudList->pNext;
-			free(pList);
-		}
-		m_pHudList = nullptr;
-	}
-}
-
 // GetSpriteIndex()
 // searches through the sprite list loaded from hud.txt for a name matching SpriteName
-// returns an index into the gHUD.m_rghSprites[] array
-// returns 0 if sprite not found
+// returns an index into the gHUD.m_Sprites list
+// returns -1 if sprite not found
 int CHud::GetSpriteIndex(const char* SpriteName)
 {
 	// look through the loaded sprite name list for SpriteName
-	for (int i = 0; i < m_iSpriteCount; i++)
+	for (std::size_t i = 0; i < m_Sprites.size(); ++i)
 	{
-		if (strncmp(SpriteName, m_rgszSpriteNames + (i * MAX_SPRITE_NAME_LENGTH), MAX_SPRITE_NAME_LENGTH) == 0)
-			return i;
+		if (SpriteName == m_Sprites[i].Name)
+			return static_cast<int>(i);
 	}
 
 	return -1; // invalid sprite
@@ -251,97 +211,58 @@ void CHud::VidInit()
 	m_hsprCursor = 0;
 
 	// Only load this once
-	if (!m_pSpriteList)
+	if (m_Sprites.empty())
 	{
 		// we need to load the hud.txt, and all sprites within
-		m_pSpriteList = SPR_GetList("sprites/hud.txt", &m_iSpriteCountAllRes);
+		int spriteCountAllRes;
+		client_sprite_t* spriteList = SPR_GetList("sprites/hud.txt", &spriteCountAllRes);
 
-		if (m_pSpriteList)
+		if (spriteList)
 		{
-			// count the number of sprites of the appropriate res
-			m_iSpriteCount = 0;
-			client_sprite_t* p = m_pSpriteList;
-			int j;
-			for (j = 0; j < m_iSpriteCountAllRes; j++)
-			{
-				if (p->iRes == m_iRes)
-					m_iSpriteCount++;
-				p++;
-			}
+			m_Sprites.reserve(spriteCountAllRes);
 
-			// allocated memory for sprite handle arrays
-			m_rghSprites = new HSPRITE[m_iSpriteCount];
-			m_rgrcRects = new Rect[m_iSpriteCount];
-			m_rgszSpriteNames = new char[m_iSpriteCount * MAX_SPRITE_NAME_LENGTH];
-
-			p = m_pSpriteList;
-			int index = 0;
-			for (j = 0; j < m_iSpriteCountAllRes; j++)
+			client_sprite_t* p = spriteList;
+			for (int j = 0; j < spriteCountAllRes; ++j)
 			{
 				if (p->iRes == m_iRes)
 				{
-					char sz[256];
-					sprintf(sz, "sprites/%s.spr", p->szSprite);
-					m_rghSprites[index] = SPR_Load(sz);
-					m_rgrcRects[index] = p->rc;
-					strncpy(&m_rgszSpriteNames[index * MAX_SPRITE_NAME_LENGTH], p->szName, MAX_SPRITE_NAME_LENGTH);
+					auto& hudSprite = m_Sprites.emplace_back();
 
-					index++;
+					hudSprite.Name = p->szName;
+					hudSprite.SpriteName = p->szSprite;
+					hudSprite.Rectangle = p->rc;
 				}
 
-				p++;
-			}
-		}
-	}
-	else
-	{
-		// we have already have loaded the sprite reference from hud.txt, but
-		// we need to make sure all the sprites have been loaded (we've gone through a transition, or loaded a save game)
-		client_sprite_t* p = m_pSpriteList;
-		int index = 0;
-		for (int j = 0; j < m_iSpriteCountAllRes; j++)
-		{
-			if (p->iRes == m_iRes)
-			{
-				char sz[256];
-				sprintf(sz, "sprites/%s.spr", p->szSprite);
-				m_rghSprites[index] = SPR_Load(sz);
-				index++;
+				++p;
 			}
 
-			p++;
+			m_Sprites.shrink_to_fit();
+
+			gEngfuncs.COM_FreeFile(spriteList);
 		}
+	}
+
+	// we have already have loaded the sprite reference from hud.txt, but
+	// we need to make sure all the sprites have been loaded (we've gone through a transition, or loaded a save game)
+	for (auto& hudSprite : m_Sprites)
+	{
+		hudSprite.Handle = SPR_Load(fmt::format("sprites/{}.spr", hudSprite.SpriteName.c_str()).c_str());
 	}
 
 	// assumption: number_1, number_2, etc, are all listed and loaded sequentially
 	m_HUD_number_0 = GetSpriteIndex("number_0");
 
-	m_iFontHeight = m_rgrcRects[m_HUD_number_0].bottom - m_rgrcRects[m_HUD_number_0].top;
+	const auto& numberRect = m_Sprites[m_HUD_number_0].Rectangle;
+	m_iFontHeight = numberRect.bottom - numberRect.top;
 
 	// Reset to default on new map load
 	m_HudColor = RGB_HUD_COLOR;
 	m_HudItemColor = RGB_HUD_COLOR;
 
-	m_Ammo.VidInit();
-	m_Health.VidInit();
-	m_Spectator.VidInit();
-	m_Geiger.VidInit();
-	m_Train.VidInit();
-	m_Battery.VidInit();
-	m_Flash.VidInit();
-	m_Message.VidInit();
-	m_Scoreboard.VidInit();
-	m_StatusBar.VidInit();
-	m_DeathNotice.VidInit();
-	m_SayText.VidInit();
-	m_Menu.VidInit();
-	m_TextMessage.VidInit();
-	m_StatusIcons.VidInit();
-	m_FlagIcons.VidInit();
-	m_PlayerBrowse.VidInit();
-	m_ProjectInfo.VidInit();
-	m_EntityInfo.VidInit();
-	GetClientVoiceMgr()->VidInit();
+	for (auto hudElement : m_HudList)
+	{
+		hudElement->VidInit();
+	}
 }
 
 void CHud::MsgFunc_HudColor(const char* pszName, int iSize, void* pbuf)
@@ -364,7 +285,7 @@ void CHud::MsgFunc_Logo(const char* pszName, int iSize, void* pbuf)
 	BEGIN_READ(pbuf, iSize);
 
 	// update Train data
-	m_iLogo = READ_BYTE();
+	m_ShowLogo = READ_BYTE() != 0;
 }
 
 float g_lastFOV = 0.0;
@@ -504,32 +425,12 @@ void CHud::MsgFunc_SetFOV(const char* pszName, int iSize, void* pbuf)
 
 void CHud::AddHudElem(CHudBase* phudelem)
 {
-	HUDLIST *pdl, *ptemp;
-
 	// phudelem->Think();
 
 	if (!phudelem)
 		return;
 
-	pdl = (HUDLIST*)malloc(sizeof(HUDLIST));
-	if (!pdl)
-		return;
-
-	memset(pdl, 0, sizeof(HUDLIST));
-	pdl->p = phudelem;
-
-	if (!m_pHudList)
-	{
-		m_pHudList = pdl;
-		return;
-	}
-
-	ptemp = m_pHudList;
-
-	while (ptemp->pNext)
-		ptemp = ptemp->pNext;
-
-	ptemp->pNext = pdl;
+	m_HudList.push_back(phudelem);
 }
 
 float CHud::GetSensitivity()

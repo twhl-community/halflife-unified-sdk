@@ -22,6 +22,8 @@
 
 #pragma once
 
+#include <vector>
+
 #include <EASTL/fixed_string.h>
 
 #include "common_types.h"
@@ -38,6 +40,8 @@
 #define MIN_ALPHA 100
 
 #define HUDELEM_ACTIVE 1
+
+#define MAX_SPRITE_NAME_LENGTH 24
 
 struct POSITION
 {
@@ -77,14 +81,6 @@ public:
 	virtual void Reset() {}
 	virtual void InitHUDData() {} // called every time a server is connected to
 };
-
-struct HUDLIST
-{
-	CHudBase* p;
-	HUDLIST* pNext;
-};
-
-
 
 //
 //-----------------------------------------------------
@@ -478,7 +474,6 @@ private:
 //
 //-----------------------------------------------------
 //
-#define MAX_SPRITE_NAME_LENGTH 24
 
 class CHudStatusIcons : public CHudBase
 {
@@ -700,32 +695,45 @@ private:
 class CHud
 {
 private:
-	HUDLIST* m_pHudList;
-	HSPRITE m_hsprLogo;
-	int m_iLogo;
-	client_sprite_t* m_pSpriteList;
-	int m_iSpriteCount;
-	int m_iSpriteCountAllRes;
-	float m_flMouseSensitivity;
-	int m_iConcussionEffect;
+	struct HudSprite
+	{
+		eastl::fixed_string<char, MAX_SPRITE_NAME_LENGTH> Name;
+		eastl::fixed_string<char, 64> SpriteName;
+		HSPRITE Handle = 0;
+		Rect Rectangle{0, 0, 0, 0};
+	};
+
+	// the memory for these arrays are allocated in the first call to CHud::VidInit(), when the hud.txt and associated sprites are loaded.
+	// freed in ~CHud()
+	std::vector<HudSprite> m_Sprites;
+
+	std::vector<CHudBase*> m_HudList;
+
+	HSPRITE m_hsprLogo = 0;
+	bool m_ShowLogo = false;
+	float m_flMouseSensitivity = 0;
+	int m_iConcussionEffect = 0;
 
 	bool m_NightVisionState = false;
 
+	cvar_t* default_fov = nullptr;
+
 public:
 	HSPRITE m_hsprCursor;
-	float m_flTime;		  // the current client time
-	float m_fOldTime;	  // the time at which the HUD was last redrawn
-	double m_flTimeDelta; // the difference between flTime and fOldTime
+	// In case we get messages before the first update -- time will be valid
+	float m_flTime = 1;		  // the current client time
+	float m_fOldTime = 0;	  // the time at which the HUD was last redrawn
+	double m_flTimeDelta = 0; // the difference between flTime and fOldTime
 	Vector m_vecOrigin;
 	Vector m_vecAngles;
-	int m_iKeyBits;
-	int m_iHideHUDDisplay;
-	int m_iFOV;
-	int m_Teamplay;
+	int m_iKeyBits = 0;
+	int m_iHideHUDDisplay = 0;
+	int m_iFOV = 0;
+	int m_Teamplay = 0;
 	static constexpr int m_iRes = 640;
-	cvar_t* m_pCvarStealMouse;
-	cvar_t* m_pCvarDraw;
-	cvar_t* m_pCvarCrosshair;
+	cvar_t* m_pCvarStealMouse = nullptr;
+	cvar_t* m_pCvarDraw = nullptr;
+	cvar_t* m_pCvarCrosshair = nullptr;
 
 	RGB24 m_HudColor = RGB_HUD_COLOR;
 
@@ -759,24 +767,15 @@ public:
 		return (m_iWeaponBits & ~(1ULL << WEAPON_SUIT)) != 0;
 	}
 
-private:
-	// the memory for these arrays are allocated in the first call to CHud::VidInit(), when the hud.txt and associated sprites are loaded.
-	// freed in ~CHud()
-	HSPRITE* m_rghSprites; /*[HUD_SPRITE_COUNT]*/ // the sprites loaded from hud.txt
-	Rect* m_rgrcRects;							  /*[HUD_SPRITE_COUNT]*/
-	char* m_rgszSpriteNames;					  /*[HUD_SPRITE_COUNT][MAX_SPRITE_NAME_LENGTH]*/
-
-	cvar_t* default_fov;
-
 public:
 	HSPRITE GetSprite(int index)
 	{
-		return (index < 0) ? 0 : m_rghSprites[index];
+		return (index < 0) ? 0 : m_Sprites[index].Handle;
 	}
 
 	Rect& GetSpriteRect(int index)
 	{
-		return m_rgrcRects[index];
+		return m_Sprites[index].Rectangle;
 	}
 
 
@@ -811,8 +810,8 @@ public:
 	bool Redraw(float flTime, bool intermission);
 	bool UpdateClientData(client_data_t* cdata, float time);
 
-	CHud() : m_iSpriteCount(0), m_pHudList(nullptr) {}
-	~CHud(); // destructor, frees allocated memory
+	CHud() = default;
+	~CHud() = default;
 
 	// user messages
 	void MsgFunc_Damage(const char* pszName, int iSize, void* pbuf);
@@ -829,12 +828,12 @@ public:
 	// Screen information
 	SCREENINFO m_scrinfo;
 
-	std::uint64_t m_iWeaponBits;
-	bool m_fPlayerDead;
-	bool m_iIntermission;
+	std::uint64_t m_iWeaponBits = 0;
+	bool m_fPlayerDead = false;
+	bool m_iIntermission = false;
 
 	// sprite indexes
-	int m_HUD_number_0;
+	int m_HUD_number_0 = 0;
 
 
 	void AddHudElem(CHudBase* p);

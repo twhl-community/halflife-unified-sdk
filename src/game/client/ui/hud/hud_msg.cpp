@@ -36,13 +36,9 @@ extern TEMPENTITY* pFlare; // Vit_amiN
 void CHud::MsgFunc_ResetHUD(const char* pszName, int iSize, void* pbuf)
 {
 	// clear all hud data
-	HUDLIST* pList = m_pHudList;
-
-	while (pList)
+	for (auto hudElement : m_HudList)
 	{
-		if (pList->p)
-			pList->p->Reset();
-		pList = pList->pNext;
+		hudElement->Reset();
 	}
 
 	// Reset weapon bits.
@@ -65,15 +61,10 @@ void CHud::MsgFunc_ViewMode(const char* pszName, int iSize, void* pbuf)
 void CHud::MsgFunc_InitHUD(const char* pszName, int iSize, void* pbuf)
 {
 	// prepare all hud data
-	HUDLIST* pList = m_pHudList;
-
-	while (pList)
+	for (auto hudElement : m_HudList)
 	{
-		if (pList->p)
-			pList->p->InitHUDData();
-		pList = pList->pNext;
+		hudElement->InitHUDData();
 	}
-
 
 	// TODO: needs to be called on every map change, not just when starting a new game
 	if (g_pParticleMan)
