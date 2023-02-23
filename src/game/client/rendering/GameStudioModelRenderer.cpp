@@ -95,8 +95,6 @@ Export this function for the engine to use the studio renderer class to render o
 */
 int DLLEXPORT HUD_GetStudioModelInterface(int version, r_studio_interface_t** ppinterface, engine_studio_api_t* pstudio)
 {
-	//	RecClStudioInterface(version, ppinterface, pstudio);
-
 	if (version != STUDIO_INTERFACE_VERSION)
 		return 0;
 

@@ -28,8 +28,6 @@ HUD_AddEntity
 */
 int DLLEXPORT HUD_AddEntity(int type, cl_entity_t* ent, const char* modelname)
 {
-	//	RecClAddEntity(type, ent, modelname);
-
 	switch (type)
 	{
 	case ET_NORMAL:
@@ -69,8 +67,6 @@ structure, we need to copy them into the state structure at this point.
 */
 void DLLEXPORT HUD_TxferLocalOverrides(entity_state_t* state, const clientdata_t* client)
 {
-	//	RecClTxferLocalOverrides(state, client);
-
 	VectorCopy(client->origin, state->origin);
 
 	// Spectator
@@ -94,8 +90,6 @@ playerstate structure
 */
 void DLLEXPORT HUD_ProcessPlayerState(entity_state_t* dst, const entity_state_t* src)
 {
-	//	RecClProcessPlayerState(dst, src);
-
 	// Copy in network data
 	VectorCopy(src->origin, dst->origin);
 	VectorCopy(src->angles, dst->angles);
@@ -163,8 +157,6 @@ Because we can predict an arbitrary number of frames before the server responds 
 */
 void DLLEXPORT HUD_TxferPredictionData(entity_state_t* ps, const entity_state_t* pps, clientdata_t* pcd, const clientdata_t* ppcd, weapon_data_t* wd, const weapon_data_t* pwd)
 {
-	//	RecClTxferPredictionData(ps, pps, pcd, ppcd, wd, pwd);
-
 	ps->oldbuttons = pps->oldbuttons;
 	ps->flFallVelocity = pps->flFallVelocity;
 	ps->iStepLeft = pps->iStepLeft;
@@ -297,8 +289,6 @@ Gives us a chance to add additional entities to the render this frame
 */
 void DLLEXPORT HUD_CreateEntities()
 {
-	//	RecClCreateEntities();
-
 #if defined(BEAM_TEST)
 	Beams();
 #endif
@@ -320,8 +310,6 @@ fired during this frame, handle the event by it's tag ( e.g., muzzleflash, sound
 */
 void DLLEXPORT HUD_StudioEvent(const mstudioevent_t* event, const cl_entity_t* entity)
 {
-	//	RecClStudioEvent(event, entity);
-
 	bool iMuzzleFlash = true;
 
 
@@ -374,8 +362,6 @@ void DLLEXPORT HUD_TempEntUpdate(
 	int (*Callback_AddVisibleEntity)(cl_entity_t* pEntity),
 	void (*Callback_TempEntPlaySound)(TEMPENTITY* pTemp, float damp))
 {
-	//	RecClTempEntUpdate(frametime, client_time, cl_gravity, ppTempEntFree, ppTempEntActive, Callback_AddVisibleEntity, Callback_TempEntPlaySound);
-
 	static int gTempEntFrame = 0;
 	int i;
 	TEMPENTITY *pTemp, *pnext, *pprev;
@@ -747,8 +733,6 @@ Indices must start at 1, not zero.
 */
 cl_entity_t DLLEXPORT* HUD_GetUserEntity(int index)
 {
-	//	RecClGetUserEntity(index);
-
 #if defined(BEAM_TEST)
 	// None by default, you would return a valic pointer if you create a client side
 	//  beam and attach it to a client side entity.

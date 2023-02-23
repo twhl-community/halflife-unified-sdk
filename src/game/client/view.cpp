@@ -1617,8 +1617,6 @@ void V_CalcSpectatorRefdef(ref_params_t* pparams)
 
 void DLLEXPORT V_CalcRefdef(ref_params_t* pparams)
 {
-	//	RecClCalcRefdef(pparams);
-
 	g_Paused = pparams->paused != 0;
 	g_MaxEntities = pparams->max_entities;
 	g_WaterLevel = pparams->waterlevel;

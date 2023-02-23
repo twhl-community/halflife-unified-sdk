@@ -959,8 +959,6 @@ be ignored
 */
 void DLLEXPORT HUD_PostRunCmd(local_state_t* from, local_state_t* to, usercmd_t* cmd, int runfuncs, double time, unsigned int random_seed)
 {
-	//	RecClPostRunCmd(from, to, cmd, runfuncs, time, random_seed);
-
 	g_runfuncs = 0 != runfuncs;
 
 	// Event code depends on this stuff, so always initialize it.
