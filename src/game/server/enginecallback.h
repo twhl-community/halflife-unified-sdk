@@ -15,6 +15,8 @@
 
 #pragma once
 
+#include <bit>
+
 #include "event_flags.h"
 
 // Must be provided by user of this code
@@ -86,7 +88,7 @@ inline void WRITE_RGB24(RGB24 color)
 
 inline void WRITE_FLOAT(float value)
 {
-	WRITE_LONG(*reinterpret_cast<int*>(&value));
+	WRITE_LONG(std::bit_cast<int>(value));
 }
 
 #define CVAR_REGISTER (*g_engfuncs.pfnCVarRegister)
