@@ -69,6 +69,7 @@ target_sources(server PRIVATE
 	entities/CBaseToggle.h
 	entities/CMultiSource.h
 	entities/CPointEntity.h
+	entities/CTriggerChangeKeyValue.cpp
 	entities/doors.cpp
 	entities/doors.h
 	entities/effects.cpp
