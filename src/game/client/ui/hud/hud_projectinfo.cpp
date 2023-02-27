@@ -58,7 +58,7 @@ bool CHudProjectInfo::VidInit()
 
 bool CHudProjectInfo::Draw(float flTime)
 {
-	if (m_ShowProjectInfo->value > 0)
+	if (m_IsAlphaBuild || m_ShowProjectInfo->value > 0)
 	{
 		const int xPos = 20;
 		const int lineHeight = 20;
@@ -99,7 +99,7 @@ bool CHudProjectInfo::Draw(float flTime)
 
 		if (m_IsAlphaBuild)
 		{
-			lineDrawer("WIP build not suited for use (testing only)");
+			lineDrawer("Work In Progress build not suited for use (testing individual features by request only)");
 		}
 
 		if (m_ClientInfo.MajorVersion != m_ServerInfo.MajorVersion || m_ClientInfo.MinorVersion != m_ServerInfo.MinorVersion || m_ClientInfo.PatchVersion != m_ServerInfo.PatchVersion)
