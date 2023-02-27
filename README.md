@@ -31,6 +31,8 @@ See the `#welcome` channel for more information about the Discord server. Please
 
 See the TWHL thread for status updates about these projects: https://twhl.info/thread/view/20055
 
+Updated game assets provided by [Marc-Antoine Lortie](https://github.com/malortie).
+
 ## Documentation format
 
 All of the SDK's documentation is written in Markdown. Github allows you to view these files as well as navigate through them.

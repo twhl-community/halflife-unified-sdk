@@ -55,6 +55,7 @@ This page lists all changes made since the last release in the current developme
 * Decrement RPG rocket count only if the rocket was successfully created
 * Added spawnflag to `item_generic` to make a entity solid and based on mins/maxs
 * Removed duplicate conditions in zombie code
+* Fixed c2a5 barrels not flying up as high as they're supposed to (Thanks Uncle Mike for pointing to the cause and fix, Streit and rbar1um43 for providing a link to this information)
 
 ### New features
 
