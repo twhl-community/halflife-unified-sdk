@@ -701,7 +701,7 @@ bool CBarney::KeyValue(KeyValueData* pkvd)
 		return true;
 	}
 
-	return CBaseMonster::KeyValue(pkvd);
+	return CTalkMonster::KeyValue(pkvd);
 }
 
 //=========================================================
