@@ -313,7 +313,7 @@ void CFlockingFlyer::Killed(CBaseEntity* attacker, int iGib)
 	pev->framerate = 0;
 	pev->effects = EF_NOINTERP;
 
-	UTIL_SetSize(pev, Vector(0, 0, 0), Vector(0, 0, 0));
+	SetSize(Vector(0, 0, 0), Vector(0, 0, 0));
 	pev->movetype = MOVETYPE_TOSS;
 
 	ClearShockEffect();
@@ -355,8 +355,8 @@ void CFlockingFlyer::SpawnCommonCode()
 
 	SetModel(STRING(pev->model));
 
-	//	UTIL_SetSize(pev, Vector(0,0,0), Vector(0,0,0));
-	UTIL_SetSize(pev, Vector(-5, -5, 0), Vector(5, 5, 2));
+	//	SetSize(Vector(0,0,0), Vector(0,0,0));
+	SetSize(Vector(-5, -5, 0), Vector(5, 5, 2));
 }
 
 //=========================================================

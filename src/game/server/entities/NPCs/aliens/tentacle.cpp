@@ -278,7 +278,7 @@ void CTentacle::Spawn()
 	m_EFlags |= EFLAG_SLERP;
 
 	SetModel(STRING(pev->model));
-	UTIL_SetSize(pev, Vector(-32, -32, 0), Vector(32, 32, 64));
+	SetSize(Vector(-32, -32, 0), Vector(32, 32, 64));
 
 	pev->takedamage = DAMAGE_AIM;
 	pev->flags |= FL_MONSTER;
@@ -1096,7 +1096,7 @@ void CTentacleMaw::Spawn()
 {
 	Precache();
 	SetModel(STRING(pev->model));
-	UTIL_SetSize(pev, Vector(-32, -32, 0), Vector(32, 32, 64));
+	SetSize(Vector(-32, -32, 0), Vector(32, 32, 64));
 
 	pev->solid = SOLID_NOT;
 	pev->movetype = MOVETYPE_STEP;

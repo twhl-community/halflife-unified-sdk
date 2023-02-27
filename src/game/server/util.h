@@ -177,7 +177,6 @@ inline bool FClassnameIs(entvars_t* pev, const char* szClassname)
 }
 
 // Misc. Prototypes
-void UTIL_SetSize(entvars_t* pev, const Vector& vecMin, const Vector& vecMax);
 float UTIL_VecToYaw(const Vector& vec);
 Vector UTIL_VecToAngles(const Vector& vec);
 float UTIL_AngleMod(float a);

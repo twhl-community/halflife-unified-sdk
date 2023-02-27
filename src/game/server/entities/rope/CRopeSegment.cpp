@@ -57,7 +57,7 @@ void CRopeSegment::Spawn()
 	pev->effects = EF_NODRAW;
 	UTIL_SetOrigin(pev, pev->origin);
 
-	UTIL_SetSize(pev, Vector(-30, -30, -30), Vector(30, 30, 30));
+	SetSize(Vector(-30, -30, -30), Vector(30, 30, 30));
 
 	pev->nextthink = gpGlobals->time + 0.5;
 }

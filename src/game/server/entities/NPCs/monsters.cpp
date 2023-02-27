@@ -3304,7 +3304,7 @@ void CBaseMonster::MonsterInitDead()
 	pev->max_health = pev->health;
 	pev->deadflag = DEAD_DEAD;
 
-	UTIL_SetSize(pev, g_vecZero, g_vecZero);
+	SetSize(g_vecZero, g_vecZero);
 	UTIL_SetOrigin(pev, pev->origin);
 
 	// Setup health counters, etc.

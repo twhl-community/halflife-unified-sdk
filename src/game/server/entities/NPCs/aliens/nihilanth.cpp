@@ -283,8 +283,8 @@ void CNihilanth::Spawn()
 	pev->solid = SOLID_BBOX;
 
 	SetModel(STRING(pev->model));
-	// UTIL_SetSize(pev, Vector( -300, -300, 0), Vector(300, 300, 512));
-	UTIL_SetSize(pev, Vector(-32, -32, 0), Vector(32, 32, 64));
+	// SetSize(Vector( -300, -300, 0), Vector(300, 300, 512));
+	SetSize(Vector(-32, -32, 0), Vector(32, 32, 64));
 	UTIL_SetOrigin(pev, pev->origin);
 
 	pev->flags |= FL_MONSTER | FL_FLY;
@@ -1350,7 +1350,7 @@ void CNihilanthHVR::CircleInit(CBaseEntity* pTarget)
 	m_nFrames = 1;
 	pev->renderamt = 255;
 
-	UTIL_SetSize(pev, Vector(0, 0, 0), Vector(0, 0, 0));
+	SetSize(Vector(0, 0, 0), Vector(0, 0, 0));
 	UTIL_SetOrigin(pev, pev->origin);
 
 	SetThink(&CNihilanthHVR::HoverThink);

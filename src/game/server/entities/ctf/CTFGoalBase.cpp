@@ -67,7 +67,7 @@ void CTFGoalBase::Spawn()
 	vecMin.x = -16;
 	vecMin.y = -16;
 	vecMin.z = 0;
-	UTIL_SetSize(pev, vecMin, vecMax);
+	SetSize(vecMin, vecMax);
 
 	if (0 == g_engfuncs.pfnDropToFloor(edict()))
 	{

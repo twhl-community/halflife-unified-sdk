@@ -577,7 +577,7 @@ void CScientist::Spawn()
 		SetBodygroup(ScientistBodygroup::Head, RANDOM_LONG(0, GetBodygroupSubmodelCount(ScientistBodygroup::Head) - 1)); // pick a head, any head
 	}
 
-	UTIL_SetSize(pev, VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX);
+	SetSize(VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX);
 
 	pev->solid = SOLID_SLIDEBOX;
 	pev->movetype = MOVETYPE_STEP;
@@ -1161,7 +1161,7 @@ void CSittingScientist::Spawn()
 	Precache();
 	InitBoneControllers();
 
-	UTIL_SetSize(pev, Vector(-14, -14, 0), Vector(14, 14, 36));
+	SetSize(Vector(-14, -14, 0), Vector(14, 14, 36));
 
 	pev->solid = SOLID_SLIDEBOX;
 	pev->movetype = MOVETYPE_STEP;

@@ -180,6 +180,8 @@ public:
 
 	int PrecacheSound(const char* s);
 
+	void SetSize(const Vector& min, const Vector& max);
+
 	CBaseEntity* GetOwner()
 	{
 		return GET_PRIVATE<CBaseEntity>(pev->owner);
@@ -206,6 +208,13 @@ public:
 
 	virtual void Spawn() {}
 	virtual void Precache() {}
+
+	/**
+	*	@brief Handles keyvalues in CBaseEntity that must be handled,
+	*	even if an entity does not call the base class version of KeyValue.
+	*/
+	bool RequiredKeyValue(KeyValueData* pkvd);
+
 	virtual bool KeyValue(KeyValueData* pkvd) { return false; }
 	virtual bool Save(CSave& save);
 	virtual bool Restore(CRestore& restore);
@@ -471,6 +480,11 @@ public:
 	{
 		return g_Skill.GetValue(name);
 	}
+
+	Vector m_CustomHullMin{vec3_origin};
+	Vector m_CustomHullMax{vec3_origin};
+	bool m_HasCustomHullMin{false};
+	bool m_HasCustomHullMax{false};
 
 	// We use this variables to store each ammo count.
 	int ammo_9mm;

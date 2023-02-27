@@ -104,7 +104,7 @@ void CGib::SpawnStickyGibs(entvars_t* pevVictim, Vector vecOrigin, int cGibs)
 
 			pGib->pev->movetype = MOVETYPE_TOSS;
 			pGib->pev->solid = SOLID_BBOX;
-			UTIL_SetSize(pGib->pev, Vector(0, 0, 0), Vector(0, 0, 0));
+			pGib->SetSize(Vector(0, 0, 0), Vector(0, 0, 0));
 			pGib->SetTouch(&CGib::StickyGibTouch);
 			pGib->SetThink(nullptr);
 		}
@@ -251,7 +251,7 @@ void CGib::SpawnRandomGibs(entvars_t* pevVictim, int cGibs, const GibData& gibDa
 			}
 
 			pGib->pev->solid = SOLID_BBOX;
-			UTIL_SetSize(pGib->pev, Vector(0, 0, 0), Vector(0, 0, 0));
+			pGib->SetSize(Vector(0, 0, 0), Vector(0, 0, 0));
 		}
 		pGib->LimitVelocity();
 	}
@@ -812,7 +812,7 @@ void CGib::Spawn(const char* szGibModel)
 	pev->solid = SOLID_SLIDEBOX; /// hopefully this will fix the VELOCITY TOO LOW crap
 
 	SetModel(szGibModel);
-	UTIL_SetSize(pev, Vector(0, 0, 0), Vector(0, 0, 0));
+	SetSize(Vector(0, 0, 0), Vector(0, 0, 0));
 
 	pev->nextthink = gpGlobals->time + 4;
 	m_lifeTime = 25;

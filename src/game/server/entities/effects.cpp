@@ -297,7 +297,7 @@ void CBeam::RelinkBeam()
 	pev->mins = pev->mins - pev->origin;
 	pev->maxs = pev->maxs - pev->origin;
 
-	UTIL_SetSize(pev, pev->mins, pev->maxs);
+	SetSize(pev->mins, pev->maxs);
 	UTIL_SetOrigin(pev, pev->origin);
 }
 
@@ -2133,7 +2133,7 @@ void CItemSoda::Spawn()
 	pev->movetype = MOVETYPE_TOSS;
 
 	SetModel(STRING(pev->model));
-	UTIL_SetSize(pev, Vector(0, 0, 0), Vector(0, 0, 0));
+	SetSize(Vector(0, 0, 0), Vector(0, 0, 0));
 
 	SetThink(&CItemSoda::CanThink);
 	pev->nextthink = gpGlobals->time + 0.5;
@@ -2144,7 +2144,7 @@ void CItemSoda::CanThink()
 	EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/g_bounce3.wav", 1, ATTN_NORM);
 
 	pev->solid = SOLID_TRIGGER;
-	UTIL_SetSize(pev, Vector(-8, -8, 0), Vector(8, 8, 8));
+	SetSize(Vector(-8, -8, 0), Vector(8, 8, 8));
 	SetThink(nullptr);
 	SetTouch(&CItemSoda::CanTouch);
 }
@@ -2282,7 +2282,7 @@ void CWarpBall::Spawn()
 	pev->solid = SOLID_NOT;
 
 	UTIL_SetOrigin(pev, pev->origin);
-	UTIL_SetSize(pev, g_vecZero, g_vecZero);
+	SetSize(g_vecZero, g_vecZero);
 
 	pev->rendermode = kRenderGlow;
 	pev->renderamt = 255;

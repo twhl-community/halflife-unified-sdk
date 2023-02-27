@@ -85,7 +85,7 @@ void CHornet::Spawn()
 	}
 
 	SetModel("models/hornet.mdl");
-	UTIL_SetSize(pev, Vector(-4, -4, -4), Vector(4, 4, 4));
+	SetSize(Vector(-4, -4, -4), Vector(4, 4, 4));
 
 	SetTouch(&CHornet::DieTouch);
 	SetThink(&CHornet::StartTrack);

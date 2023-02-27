@@ -30,7 +30,7 @@ bool FEntIsVisible(entvars_t* pev, entvars_t* pevTarget);
 void CPointEntity::Spawn()
 {
 	pev->solid = SOLID_NOT;
-	//	UTIL_SetSize(pev, g_vecZero, g_vecZero);
+	//	SetSize(g_vecZero, g_vecZero);
 }
 
 

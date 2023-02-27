@@ -444,7 +444,7 @@ void CBasePlayerItem::FallInit()
 	pev->solid = SOLID_BBOX;
 
 	UTIL_SetOrigin(pev, pev->origin);
-	UTIL_SetSize(pev, Vector(0, 0, 0), Vector(0, 0, 0)); // pointsize until it lands on the ground.
+	SetSize(Vector(0, 0, 0), Vector(0, 0, 0)); // pointsize until it lands on the ground.
 
 	SetTouch(&CBasePlayerItem::DefaultTouch);
 	SetThink(&CBasePlayerItem::FallThink);
@@ -927,7 +927,7 @@ void CBasePlayerAmmo::Spawn()
 	SetModel(STRING(pev->model));
 	pev->movetype = MOVETYPE_TOSS;
 	pev->solid = SOLID_TRIGGER;
-	UTIL_SetSize(pev, Vector(-16, -16, 0), Vector(16, 16, 16));
+	SetSize(Vector(-16, -16, 0), Vector(16, 16, 16));
 	UTIL_SetOrigin(pev, pev->origin);
 
 	SetTouch(&CBasePlayerAmmo::DefaultTouch);
@@ -1161,7 +1161,7 @@ void CWeaponBox::Spawn()
 	pev->movetype = MOVETYPE_TOSS;
 	pev->solid = SOLID_TRIGGER;
 
-	UTIL_SetSize(pev, g_vecZero, g_vecZero);
+	SetSize(g_vecZero, g_vecZero);
 
 	SetModel(STRING(pev->model));
 }

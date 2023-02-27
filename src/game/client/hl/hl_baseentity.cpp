@@ -46,6 +46,11 @@ int CBaseEntity::PrecacheSound(const char* s)
 	return UTIL_PrecacheSound(s);
 }
 
+void CBaseEntity::SetSize(const Vector& min, const Vector& max)
+{
+	// Nothing.
+}
+
 void CBaseEntity::OnCreate()
 {
 	// Nothing.
@@ -112,7 +117,6 @@ CGrenade* CGrenade::ShootContact(entvars_t* pevOwner, Vector vecStart, Vector ve
 void CGrenade::DetonateUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) {}
 
 void UTIL_Remove(CBaseEntity* pEntity) {}
-void UTIL_SetSize(entvars_t* pev, const Vector& vecMin, const Vector& vecMax) {}
 CBaseEntity* UTIL_FindEntityInSphere(CBaseEntity* pStartEntity, const Vector& vecCenter, float flRadius) { return nullptr; }
 CBaseEntity* UTIL_FindEntityByClassname(CBaseEntity* pStartEntity, const char* szName) { return nullptr; }
 

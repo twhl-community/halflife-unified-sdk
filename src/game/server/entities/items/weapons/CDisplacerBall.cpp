@@ -88,7 +88,7 @@ void CDisplacerBall::Spawn()
 
 	UTIL_SetOrigin(pev, pev->origin);
 
-	UTIL_SetSize(pev, g_vecZero, g_vecZero);
+	SetSize(g_vecZero, g_vecZero);
 
 	pev->rendermode = kRenderTransAdd;
 
@@ -250,7 +250,7 @@ void CDisplacerBall::FlyThink()
 
 void CDisplacerBall::FlyThink2()
 {
-	UTIL_SetSize(pev, Vector(-8, -8, -8), Vector(8, 8, 8));
+	SetSize(Vector(-8, -8, -8), Vector(8, 8, 8));
 
 	ArmBeam(-1);
 	ArmBeam(1);

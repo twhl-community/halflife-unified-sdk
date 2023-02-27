@@ -53,7 +53,7 @@ void CSpore::Spawn()
 
 	SetModel("models/spore.mdl");
 
-	UTIL_SetSize(pev, g_vecZero, g_vecZero);
+	SetSize(g_vecZero, g_vecZero);
 
 	UTIL_SetOrigin(pev, pev->origin);
 

@@ -279,7 +279,7 @@ void CHeadCrab::Spawn()
 	Precache();
 
 	SetModel(STRING(pev->model));
-	UTIL_SetSize(pev, Vector(-12, -12, 0), Vector(12, 12, 24));
+	SetSize(Vector(-12, -12, 0), Vector(12, 12, 24));
 
 	pev->solid = SOLID_SLIDEBOX;
 	pev->movetype = MOVETYPE_STEP;
@@ -506,7 +506,7 @@ void CBabyCrab::Spawn()
 	CHeadCrab::Spawn();
 	pev->rendermode = kRenderTransTexture;
 	pev->renderamt = 192;
-	UTIL_SetSize(pev, Vector(-12, -12, 0), Vector(12, 12, 24));
+	SetSize(Vector(-12, -12, 0), Vector(12, 12, 24));
 }
 
 void CBabyCrab::SetYawSpeed()

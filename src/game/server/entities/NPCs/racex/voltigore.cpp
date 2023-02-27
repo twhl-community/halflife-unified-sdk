@@ -91,7 +91,7 @@ void COFChargedBolt::Spawn()
 
 	UTIL_SetOrigin(pev, pev->origin);
 
-	UTIL_SetSize(pev, g_vecZero, g_vecZero);
+	SetSize(g_vecZero, g_vecZero);
 
 	pev->rendermode = kRenderTransAdd;
 	pev->renderamt = 255;
@@ -550,7 +550,7 @@ void COFVoltigore::SpawnCore(const Vector& mins, const Vector& maxs)
 	Precache();
 
 	SetModel(STRING(pev->model));
-	UTIL_SetSize(pev, mins, maxs);
+	SetSize(mins, maxs);
 
 	pev->solid = SOLID_SLIDEBOX;
 	pev->movetype = MOVETYPE_STEP;
@@ -975,11 +975,11 @@ void COFVoltigore::RunTask(Task_t* pTask)
 				if (BBoxFlat())
 				{
 					const auto maxs = Vector(pev->maxs.x, pev->maxs.y, pev->mins.z + 1);
-					UTIL_SetSize(pev, pev->mins, maxs);
+					SetSize(pev->mins, maxs);
 				}
 				else
 				{
-					UTIL_SetSize(pev, {-4, -4, 0}, {4, 4, 1});
+					SetSize({-4, -4, 0}, {4, 4, 1});
 				}
 
 				if (ShouldFadeOnDeath())

@@ -454,10 +454,10 @@ void CBaseMonster::RunTask(Task_t* pTask)
 				// a bit of a hack. If a corpses' bbox is positioned such that being left solid so that it can be attacked will
 				// block the player on a slope or stairs, the corpse is made nonsolid.
 				//					pev->solid = SOLID_NOT;
-				UTIL_SetSize(pev, Vector(-4, -4, 0), Vector(4, 4, 1));
+				SetSize(Vector(-4, -4, 0), Vector(4, 4, 1));
 			}
 			else // !!!HACKHACK - put monster in a thin, wide bounding box until we fix the solid type/bounding volume problem
-				UTIL_SetSize(pev, Vector(pev->mins.x, pev->mins.y, pev->mins.z), Vector(pev->maxs.x, pev->maxs.y, pev->mins.z + 1));
+				SetSize(Vector(pev->mins.x, pev->mins.y, pev->mins.z), Vector(pev->maxs.x, pev->maxs.y, pev->mins.z + 1));
 
 			if (ShouldFadeOnDeath())
 			{

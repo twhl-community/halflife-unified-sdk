@@ -394,7 +394,7 @@ public:
 
 		pev->movetype = MOVETYPE_FLY;
 
-		UTIL_SetSize(pev, Vector(-16, -16, -16), Vector(16, 16, 16));
+		SetSize(Vector(-16, -16, -16), Vector(16, 16, 16));
 
 		pev->origin.z += 16;
 

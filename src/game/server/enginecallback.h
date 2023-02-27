@@ -25,7 +25,6 @@ inline enginefuncs_t g_engfuncs;
 #define GETPLAYERUSERID (*g_engfuncs.pfnGetPlayerUserId)
 #define MODEL_INDEX (*g_engfuncs.pfnModelIndex)
 #define MODEL_FRAMES (*g_engfuncs.pfnModelFrames)
-#define SET_SIZE (*g_engfuncs.pfnSetSize)
 #define CHANGE_LEVEL (*g_engfuncs.pfnChangeLevel)
 #define GET_SPAWN_PARMS (*g_engfuncs.pfnGetSpawnParms)
 #define SAVE_SPAWN_PARMS (*g_engfuncs.pfnSaveSpawnParms)

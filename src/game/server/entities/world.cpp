@@ -236,6 +236,8 @@ void CopyToBodyQue(entvars_t* pev)
 
 	entvars_t* pevHead = VARS(g_pBodyQueueHead);
 
+	auto entity = CBaseEntity::Instance(pevHead);
+
 	pevHead->angles = pev->angles;
 	pevHead->model = pev->model;
 	pevHead->modelindex = pev->modelindex;
@@ -257,7 +259,7 @@ void CopyToBodyQue(entvars_t* pev)
 	pevHead->animtime = pev->animtime;
 
 	UTIL_SetOrigin(pevHead, pev->origin);
-	UTIL_SetSize(pevHead, pev->mins, pev->maxs);
+	entity->SetSize(pev->mins, pev->maxs);
 	g_pBodyQueueHead = pevHead->owner;
 }
 

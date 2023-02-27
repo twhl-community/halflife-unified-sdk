@@ -48,7 +48,7 @@ void COFNuclearBombButton::Spawn()
 
 	pev->solid = SOLID_NOT;
 
-	UTIL_SetSize(pev, {-16, -16, 0}, {16, 16, 32});
+	SetSize({-16, -16, 0}, {16, 16, 32});
 
 	pev->movetype = MOVETYPE_NONE;
 
@@ -110,7 +110,7 @@ void COFNuclearBombTimer::Spawn()
 
 	pev->solid = SOLID_NOT;
 
-	UTIL_SetSize(pev, {-16, -16, 0}, {16, 16, 32});
+	SetSize({-16, -16, 0}, {16, 16, 32});
 
 	pev->movetype = MOVETYPE_NONE;
 
@@ -263,7 +263,7 @@ void COFNuclearBomb::Spawn()
 	pev->solid = SOLID_BBOX;
 
 	UTIL_SetOrigin(pev, pev->origin);
-	UTIL_SetSize(pev, {-16, -16, 0}, {16, 16, 32});
+	SetSize({-16, -16, 0}, {16, 16, 32});
 
 	pev->movetype = MOVETYPE_NONE;
 

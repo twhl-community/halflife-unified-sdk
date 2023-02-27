@@ -212,6 +212,13 @@ void DispatchKeyValue(edict_t* pentKeyvalue, KeyValueData* pkvd)
 	if (!pEntity)
 		return;
 
+	pkvd->fHandled = pEntity->RequiredKeyValue(pkvd);
+
+	if (pkvd->fHandled != 0)
+	{
+		return;
+	}
+
 	pkvd->fHandled = static_cast<int32>(pEntity->KeyValue(pkvd));
 }
 
@@ -484,6 +491,46 @@ void SaveReadFields(SAVERESTOREDATA* pSaveData, const char* pname, void* pBaseDa
 	restoreHelper.ReadFields(pname, pBaseData, pFields, fieldCount);
 }
 
+static void CheckForBackwardsBounds(CBaseEntity* entity)
+{
+	if (UTIL_FixBoundsVectors(entity->m_CustomHullMin, entity->m_CustomHullMax))
+	{
+		// Can't log the targetname because it may not have been set yet.
+		CBaseEntity::Logger->warn("Backwards mins/maxs fixed in custom hull (entity index {})", entity->entindex());
+	}
+}
+
+bool CBaseEntity::RequiredKeyValue(KeyValueData* pkvd)
+{
+	// Note: while this code does fix backwards bounds here it will not apply to partial hulls mixing with hard-coded ones.
+	if (FStrEq(pkvd->szKeyName, "custom_hull_min"))
+	{
+		UTIL_StringToVector(m_CustomHullMin, pkvd->szValue);
+		m_HasCustomHullMin = true;
+
+		if (m_HasCustomHullMax)
+		{
+			CheckForBackwardsBounds(this);
+		}
+
+		return true;
+	}
+	else if (FStrEq(pkvd->szKeyName, "custom_hull_max"))
+	{
+		UTIL_StringToVector(m_CustomHullMax, pkvd->szValue);
+		m_HasCustomHullMax = true;
+
+		if (m_HasCustomHullMin)
+		{
+			CheckForBackwardsBounds(this);
+		}
+
+		return true;
+	}
+
+	return false;
+}
+
 int CBaseEntity::PrecacheModel(const char* s)
 {
 	return UTIL_PrecacheModel(s);
@@ -494,11 +541,21 @@ void CBaseEntity::SetModel(const char* s)
 	s = UTIL_CheckForGlobalModelReplacement(s);
 
 	g_engfuncs.pfnSetModel(edict(), s);
+
+	if (m_HasCustomHullMin || m_HasCustomHullMax)
+	{
+		SetSize(pev->mins, pev->maxs);
+	}
 }
 
 int CBaseEntity::PrecacheSound(const char* s)
 {
 	return UTIL_PrecacheSound(s);
+}
+
+void CBaseEntity::SetSize(const Vector& min, const Vector& max)
+{
+	g_engfuncs.pfnSetSize(edict(), m_HasCustomHullMin ? m_CustomHullMin : min, m_HasCustomHullMax ? m_CustomHullMax : max);
 }
 
 void CBaseEntity::OnCreate()
@@ -607,6 +664,11 @@ TYPEDESCRIPTION CBaseEntity::m_SaveData[] =
 		DEFINE_FIELD(CBaseEntity, m_pfnTouch, FIELD_FUNCTION),
 		DEFINE_FIELD(CBaseEntity, m_pfnUse, FIELD_FUNCTION),
 		DEFINE_FIELD(CBaseEntity, m_pfnBlocked, FIELD_FUNCTION),
+
+		DEFINE_FIELD(CBaseEntity, m_CustomHullMin, FIELD_VECTOR),
+		DEFINE_FIELD(CBaseEntity, m_CustomHullMax, FIELD_VECTOR),
+		DEFINE_FIELD(CBaseEntity, m_HasCustomHullMin, FIELD_BOOLEAN),
+		DEFINE_FIELD(CBaseEntity, m_HasCustomHullMax, FIELD_BOOLEAN),
 };
 
 
@@ -635,7 +697,7 @@ bool CBaseEntity::Restore(CRestore& restore)
 		// Don't use UTIL_PrecacheModel here because we're restoring an already-replaced name.
 		UTIL_PrecacheModelDirect(STRING(pev->model));
 		SetModel(STRING(pev->model));
-		UTIL_SetSize(pev, mins, maxs); // Reset them
+		SetSize(mins, maxs); // Reset them
 	}
 
 	return status;

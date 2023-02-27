@@ -285,7 +285,7 @@ void COFShockRoach::Spawn()
 	Precache();
 
 	SetModel(STRING(pev->model));
-	UTIL_SetSize(pev, Vector(-12, -12, 0), Vector(12, 12, 4));
+	SetSize(Vector(-12, -12, 0), Vector(12, 12, 4));
 
 	pev->solid = SOLID_SLIDEBOX;
 	pev->movetype = MOVETYPE_FLY;
@@ -514,7 +514,7 @@ void COFShockRoach::MonsterThink()
 
 	if (!m_fRoachSolid && lifeTime >= 2.0)
 	{
-		UTIL_SetSize(pev, Vector(-12, -12, 0), Vector(12, 12, 4));
+		SetSize(Vector(-12, -12, 0), Vector(12, 12, 4));
 		m_fRoachSolid = true;
 	}
 

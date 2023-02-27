@@ -50,7 +50,7 @@ void CItemCTF::Spawn()
 
 	UTIL_SetOrigin(pev, pev->origin);
 
-	UTIL_SetSize(pev, {-16, -16, 0}, {16, 16, 48});
+	SetSize({-16, -16, 0}, {16, 16, 48});
 
 	SetTouch(&CItemCTF::ItemTouch);
 

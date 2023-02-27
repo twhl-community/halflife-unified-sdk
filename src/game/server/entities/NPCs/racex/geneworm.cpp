@@ -93,7 +93,7 @@ void COFGeneWormCloud::Spawn()
 
 	UTIL_SetOrigin(pev, pev->origin);
 
-	UTIL_SetSize(pev, g_vecZero, g_vecZero);
+	SetSize(g_vecZero, g_vecZero);
 
 	m_maxFrame = MODEL_FRAMES(pev->modelindex) - 1;
 
@@ -294,7 +294,7 @@ void COFGeneWormSpawn::Spawn()
 
 	UTIL_SetOrigin(pev, pev->origin);
 
-	UTIL_SetSize(pev, g_vecZero, g_vecZero);
+	SetSize(g_vecZero, g_vecZero);
 
 	m_maxFrame = MODEL_FRAMES(pev->modelindex) - 1;
 
@@ -757,7 +757,7 @@ void COFGeneWorm::Spawn()
 
 	SetModel(STRING(pev->model));
 
-	UTIL_SetSize(pev, {-436.67, -720.49, -331.74}, {425.29, 164.85, 355.68});
+	SetSize({-436.67, -720.49, -331.74}, {425.29, 164.85, 355.68});
 
 	UTIL_SetOrigin(pev, pev->origin);
 

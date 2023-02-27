@@ -58,7 +58,7 @@ void CAirtank::Spawn()
 	pev->solid = SOLID_BBOX;
 
 	SetModel(STRING(pev->model));
-	UTIL_SetSize(pev, Vector(-16, -16, 0), Vector(16, 16, 36));
+	SetSize(Vector(-16, -16, 0), Vector(16, 16, 36));
 	UTIL_SetOrigin(pev, pev->origin);
 
 	SetTouch(&CAirtank::TankTouch);

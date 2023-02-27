@@ -13,6 +13,7 @@
  *
  ****/
 
+#include <algorithm>
 #include <string>
 
 #include "cbase.h"
@@ -227,6 +228,22 @@ bool COM_GetParam(const char* name, const char** next)
 bool COM_HasParam(const char* name)
 {
 	return g_engfuncs.pfnCheckParm(name, nullptr) != 0;
+}
+
+bool UTIL_FixBoundsVectors(Vector& mins, Vector& maxs)
+{
+	bool neededFixing = false;
+
+	for (std::size_t i = 0; i < 3; ++i)
+	{
+		if (mins[i] > maxs[i])
+		{
+			neededFixing = true;
+			std::swap(mins[i], maxs[i]);
+		}
+	}
+
+	return neededFixing;
 }
 
 const char* COM_Parse(const char* data)

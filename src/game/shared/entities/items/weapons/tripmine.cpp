@@ -92,7 +92,7 @@ void CTripmineGrenade::Spawn()
 	ResetSequenceInfo();
 	pev->framerate = 0;
 
-	UTIL_SetSize(pev, Vector(-8, -8, -8), Vector(8, 8, 8));
+	SetSize(Vector(-8, -8, -8), Vector(8, 8, 8));
 	UTIL_SetOrigin(pev, pev->origin);
 
 	// TODO: define constant
@@ -381,7 +381,7 @@ void CTripmine::Spawn()
 
 	if (!UTIL_IsMultiplayer())
 	{
-		UTIL_SetSize(pev, Vector(-16, -16, 0), Vector(16, 16, 28));
+		SetSize(Vector(-16, -16, 0), Vector(16, 16, 28));
 	}
 }
 

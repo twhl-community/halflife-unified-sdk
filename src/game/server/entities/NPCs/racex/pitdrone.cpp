@@ -102,7 +102,7 @@ void CPitdroneSpike::Spawn()
 	pev->frame = 0;
 	pev->scale = 0.5;
 
-	UTIL_SetSize(pev, Vector(-4, -4, -4), Vector(4, 4, 4));
+	SetSize(Vector(-4, -4, -4), Vector(4, 4, 4));
 
 	m_maxFrame = (float)MODEL_FRAMES(pev->modelindex) - 1;
 }
@@ -664,7 +664,7 @@ void CPitdrone::Spawn()
 	Precache();
 
 	SetModel(STRING(pev->model));
-	UTIL_SetSize(pev, Vector(-16, -16, 0), Vector(16, 16, 48));
+	SetSize(Vector(-16, -16, 0), Vector(16, 16, 48));
 
 	pev->solid = SOLID_SLIDEBOX;
 	pev->movetype = MOVETYPE_STEP;

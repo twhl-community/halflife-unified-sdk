@@ -331,7 +331,7 @@ void COFPitWormUp::Spawn()
 
 	SetModel(STRING(pev->model));
 
-	UTIL_SetSize(pev, {-32, -32, 0}, {32, 32, 64});
+	SetSize({-32, -32, 0}, {32, 32, 64});
 
 	UTIL_SetOrigin(pev, pev->origin);
 
@@ -1491,7 +1491,7 @@ void COFPitWormGib::Spawn()
 
 	SetModel("models/pit_worm_gibs.mdl");
 
-	UTIL_SetSize(pev, {-8, -8, -4}, {8, 8, 16});
+	SetSize({-8, -8, -4}, {8, 8, 16});
 
 	pev->nextthink = gpGlobals->time + 0.1;
 	SetThink(&COFPitWormGib::GibFloat);
@@ -2020,7 +2020,7 @@ void COFPitWorm::Spawn()
 	Precache();
 
 	SetModel(STRING(pev->model));
-	UTIL_SetSize(pev, Vector(-32, -32, 0), Vector(32, 32, 64));
+	SetSize(Vector(-32, -32, 0), Vector(32, 32, 64));
 
 	pev->solid = SOLID_SLIDEBOX;
 	pev->movetype = MOVETYPE_STEP;

@@ -658,7 +658,7 @@ void CBigMomma::Spawn()
 	Precache();
 
 	SetModel(STRING(pev->model));
-	UTIL_SetSize(pev, Vector(-32, -32, 0), Vector(32, 32, 64));
+	SetSize(Vector(-32, -32, 0), Vector(32, 32, 64));
 
 	pev->solid = SOLID_SLIDEBOX;
 	pev->movetype = MOVETYPE_STEP;
@@ -1152,7 +1152,7 @@ void CBMortar::Spawn()
 	pev->frame = 0;
 	pev->scale = 0.5;
 
-	UTIL_SetSize(pev, Vector(0, 0, 0), Vector(0, 0, 0));
+	SetSize(Vector(0, 0, 0), Vector(0, 0, 0));
 
 	m_maxFrame = (float)MODEL_FRAMES(pev->modelindex) - 1;
 	pev->dmgtime = gpGlobals->time + 0.4;

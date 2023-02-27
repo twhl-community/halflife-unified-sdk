@@ -156,7 +156,7 @@ void CWallHealth::Spawn()
 	pev->movetype = MOVETYPE_PUSH;
 
 	UTIL_SetOrigin(pev, pev->origin); // set size and link into world
-	UTIL_SetSize(pev, pev->mins, pev->maxs);
+	SetSize(pev->mins, pev->maxs);
 	SetModel(STRING(pev->model));
 	m_iJuice = GetSkillFloat("healthcharger"sv);
 	pev->frame = 0;

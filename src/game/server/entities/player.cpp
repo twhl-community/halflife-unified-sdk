@@ -3144,9 +3144,9 @@ void CBasePlayer::Spawn()
 	pev->sequence = LookupActivity(ACT_IDLE);
 
 	if (FBitSet(pev->flags, FL_DUCKING))
-		UTIL_SetSize(pev, VEC_DUCK_HULL_MIN, VEC_DUCK_HULL_MAX);
+		SetSize(VEC_DUCK_HULL_MIN, VEC_DUCK_HULL_MAX);
 	else
-		UTIL_SetSize(pev, VEC_HULL_MIN, VEC_HULL_MAX);
+		SetSize(VEC_HULL_MIN, VEC_HULL_MAX);
 
 	pev->view_ofs = VEC_VIEW;
 	Precache();
@@ -3297,11 +3297,11 @@ bool CBasePlayer::Restore(CRestore& restore)
 		// Use the crouch HACK
 		// FixPlayerCrouchStuck( edict() );
 		// Don't need to do this with new player prediction code.
-		UTIL_SetSize(pev, VEC_DUCK_HULL_MIN, VEC_DUCK_HULL_MAX);
+		SetSize(VEC_DUCK_HULL_MIN, VEC_DUCK_HULL_MAX);
 	}
 	else
 	{
-		UTIL_SetSize(pev, VEC_HULL_MIN, VEC_HULL_MAX);
+		SetSize(VEC_HULL_MIN, VEC_HULL_MAX);
 	}
 
 	g_engfuncs.pfnSetPhysicsKeyValue(edict(), "hl", "1");

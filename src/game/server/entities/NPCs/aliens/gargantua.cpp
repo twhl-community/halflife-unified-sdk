@@ -766,7 +766,7 @@ void CGargantua::Spawn()
 	Precache();
 
 	SetModel(STRING(pev->model));
-	UTIL_SetSize(pev, Vector(-32, -32, 0), Vector(32, 32, 64));
+	SetSize(Vector(-32, -32, 0), Vector(32, 32, 64));
 
 	pev->solid = SOLID_SLIDEBOX;
 	pev->movetype = MOVETYPE_STEP;
@@ -1239,7 +1239,7 @@ void CSmoker::Spawn()
 	pev->movetype = MOVETYPE_NONE;
 	pev->nextthink = gpGlobals->time;
 	pev->solid = SOLID_NOT;
-	UTIL_SetSize(pev, g_vecZero, g_vecZero);
+	SetSize(g_vecZero, g_vecZero);
 	pev->effects |= EF_NODRAW;
 	pev->angles = g_vecZero;
 }
@@ -1271,7 +1271,7 @@ void CSpiral::Spawn()
 	pev->movetype = MOVETYPE_NONE;
 	pev->nextthink = gpGlobals->time;
 	pev->solid = SOLID_NOT;
-	UTIL_SetSize(pev, g_vecZero, g_vecZero);
+	SetSize(g_vecZero, g_vecZero);
 	pev->effects |= EF_NODRAW;
 	pev->angles = g_vecZero;
 }

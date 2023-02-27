@@ -48,7 +48,7 @@ void CShockBeam::Spawn()
 
 	UTIL_SetOrigin(pev, pev->origin);
 
-	UTIL_SetSize(pev, Vector(-4, -4, -4), Vector(4, 4, 4));
+	SetSize(Vector(-4, -4, -4), Vector(4, 4, 4));
 
 	SetTouch(&CShockBeam::BallTouch);
 	SetThink(&CShockBeam::FlyThink);

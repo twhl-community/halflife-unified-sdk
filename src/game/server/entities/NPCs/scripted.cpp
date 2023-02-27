@@ -114,7 +114,7 @@ LINK_ENTITY_TO_CLASS(aiscripted_sequence, CCineAI);
 void CCineMonster::Spawn()
 {
 	// pev->solid = SOLID_TRIGGER;
-	// UTIL_SetSize(pev, Vector(-8, -8, -8), Vector(8, 8, 8));
+	// SetSize(Vector(-8, -8, -8), Vector(8, 8, 8));
 	pev->solid = SOLID_NOT;
 
 	// if no targetname, start now
@@ -758,7 +758,7 @@ bool CBaseMonster::CineCleanup()
 		pev->solid = SOLID_NOT;
 		SetState(MONSTERSTATE_DEAD);
 		pev->deadflag = DEAD_DEAD;
-		UTIL_SetSize(pev, pev->mins, Vector(pev->maxs.x, pev->maxs.y, pev->mins.z + 2));
+		SetSize(pev->mins, Vector(pev->maxs.x, pev->maxs.y, pev->mins.z + 2));
 
 		if (pOldCine && FBitSet(pOldCine->pev->spawnflags, SF_SCRIPT_LEAVECORPSE))
 		{

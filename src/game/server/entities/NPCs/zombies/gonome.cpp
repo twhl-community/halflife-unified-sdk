@@ -92,7 +92,7 @@ void COFGonomeGuts::Spawn()
 	pev->frame = 0;
 	pev->scale = 0.5;
 
-	UTIL_SetSize(pev, g_vecZero, g_vecZero);
+	SetSize(g_vecZero, g_vecZero);
 
 	m_maxFrame = static_cast<int>(MODEL_FRAMES(pev->modelindex) - 1);
 }

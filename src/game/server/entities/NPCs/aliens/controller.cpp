@@ -362,7 +362,7 @@ void CController::Spawn()
 	Precache();
 
 	SetModel(STRING(pev->model));
-	UTIL_SetSize(pev, Vector(-32, -32, 0), Vector(32, 32, 64));
+	SetSize(Vector(-32, -32, 0), Vector(32, 32, 64));
 
 	pev->solid = SOLID_SLIDEBOX;
 	pev->movetype = MOVETYPE_FLY;
@@ -1158,7 +1158,7 @@ void CControllerHeadBall::Spawn()
 	pev->renderamt = 255;
 	pev->scale = 2.0;
 
-	UTIL_SetSize(pev, Vector(0, 0, 0), Vector(0, 0, 0));
+	SetSize(Vector(0, 0, 0), Vector(0, 0, 0));
 	UTIL_SetOrigin(pev, pev->origin);
 
 	SetThink(&CControllerHeadBall::HuntThink);
@@ -1352,7 +1352,7 @@ void CControllerZapBall::Spawn()
 	pev->renderamt = 255;
 	pev->scale = 0.5;
 
-	UTIL_SetSize(pev, Vector(0, 0, 0), Vector(0, 0, 0));
+	SetSize(Vector(0, 0, 0), Vector(0, 0, 0));
 	UTIL_SetOrigin(pev, pev->origin);
 
 	SetThink(&CControllerZapBall::AnimateThink);

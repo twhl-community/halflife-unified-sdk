@@ -226,7 +226,7 @@ void CPenguinGrenade::Spawn()
 	pev->solid = SOLID_BBOX;
 
 	SetModel(STRING(pev->model));
-	UTIL_SetSize(pev, Vector(-4, -4, 0), Vector(4, 4, 8));
+	SetSize(Vector(-4, -4, 0), Vector(4, 4, 8));
 	UTIL_SetOrigin(pev, pev->origin);
 
 	SetTouch(&CPenguinGrenade::SuperBounceTouch);

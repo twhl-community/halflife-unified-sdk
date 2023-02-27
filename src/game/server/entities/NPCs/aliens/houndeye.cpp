@@ -330,7 +330,7 @@ void CHoundeye::Spawn()
 	Precache();
 
 	SetModel(STRING(pev->model));
-	UTIL_SetSize(pev, Vector(-16, -16, 0), Vector(16, 16, 36));
+	SetSize(Vector(-16, -16, 0), Vector(16, 16, 36));
 
 	pev->solid = SOLID_SLIDEBOX;
 	pev->movetype = MOVETYPE_STEP;
