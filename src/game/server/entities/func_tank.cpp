@@ -485,13 +485,12 @@ CBaseEntity* CFuncTank::FindTarget(CBaseEntity* pvsPlayer)
 	{
 		const auto distance = (pPlayerTarget->pev->origin - pev->origin).Length2D();
 
-		// TODO: use max range here?
-		if (0 <= distance && distance <= 2048.0)
+		if (InRange(distance))
 		{
 			TraceResult tr;
 			UTIL_TraceLine(BarrelPosition(), pPlayerTarget->pev->origin + pPlayerTarget->pev->view_ofs, dont_ignore_monsters, edict(), &tr);
 
-			if (tr.pHit == pPlayerTarget->pev->pContainingEntity)
+			if (tr.pHit == pPlayerTarget->edict())
 			{
 				if (0 == m_iEnemyType)
 					return pPlayerTarget;
@@ -502,7 +501,9 @@ CBaseEntity* CFuncTank::FindTarget(CBaseEntity* pvsPlayer)
 		}
 	}
 
-	Vector size(2048, 2048, 2048);
+	const float maxDist = m_maxRange > 0 ? m_maxRange : 2048;
+
+	Vector size(maxDist, maxDist, maxDist);
 
 	CBaseEntity* pList[100];
 	const auto count = UTIL_EntitiesInBox(pList, std::size(pList), pev->origin - size, pev->origin + size, FL_MONSTER | FL_CLIENT);
@@ -550,7 +551,7 @@ CBaseEntity* CFuncTank::FindTarget(CBaseEntity* pvsPlayer)
 	{
 		const auto distance = (pEntity->pev->origin - pev->origin).Length();
 
-		if (distance >= 0 && 2048 >= distance && (!pIdealTarget || flIdealDist > distance))
+		if (InRange(distance) && (!pIdealTarget || flIdealDist > distance))
 		{
 			TraceResult tr;
 			UTIL_TraceLine(BarrelPosition(), pEntity->pev->origin + pEntity->pev->view_ofs, dont_ignore_monsters, edict(), &tr);
