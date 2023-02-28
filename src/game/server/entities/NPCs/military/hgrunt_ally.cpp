@@ -190,25 +190,86 @@ void CHGruntAlly::DropWeapon(bool applyVelocity)
 //=========================================================
 void CHGruntAlly::Shoot(bool firstShotInBurst)
 {
-	if (m_hEnemy == nullptr)
+	if (m_hEnemy)
 	{
-		return;
+		const Vector vecShootOrigin = GetGunPosition();
+		const Vector vecShootDir = ShootAtEnemy(vecShootOrigin);
+
+		UTIL_MakeVectors(pev->angles);
+
+		bool firedShot = false;
+
+		if (FBitSet(pev->weapons, HGruntAllyWeaponFlag::MP5))
+		{
+			const Vector vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40, 90) + gpGlobals->v_up * RANDOM_FLOAT(75, 200) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
+			EjectBrass(vecShootOrigin - vecShootDir * 24, vecShellVelocity, pev->angles.y, m_iBrassShell, TE_BOUNCE_SHELL);
+			FireBullets(1, vecShootOrigin, vecShootDir, VECTOR_CONE_10DEGREES, 2048, BULLET_MONSTER_MP5); // shoot +-5 degrees
+
+			firedShot = true;
+		}
+		else if (FBitSet(pev->weapons, HGruntAllyWeaponFlag::Saw))
+		{
+			switch (RANDOM_LONG(0, 1))
+			{
+			case 0:
+			{
+				const auto vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(75, 200) + gpGlobals->v_up * RANDOM_FLOAT(150, 200) + gpGlobals->v_forward * 25.0;
+				EjectBrass(vecShootOrigin - vecShootDir * 6, vecShellVelocity, pev->angles.y, m_iSawLink, TE_BOUNCE_SHELL);
+				break;
+			}
+
+			case 1:
+			{
+				const auto vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(100, 250) + gpGlobals->v_up * RANDOM_FLOAT(100, 150) + gpGlobals->v_forward * 25.0;
+				EjectBrass(vecShootOrigin - vecShootDir * 6, vecShellVelocity, pev->angles.y, m_iSawShell, TE_BOUNCE_SHELL);
+				break;
+			}
+			}
+
+			FireBullets(1, vecShootOrigin, vecShootDir, VECTOR_CONE_5DEGREES, 8192, BULLET_PLAYER_556, 2); // shoot +-5 degrees
+
+			switch (RANDOM_LONG(0, 2))
+			{
+			case 0:
+				EMIT_SOUND_DYN(edict(), CHAN_WEAPON, "weapons/saw_fire1.wav", VOL_NORM, ATTN_NORM, 0, RANDOM_LONG(0, 15) + 94);
+				break;
+			case 1:
+				EMIT_SOUND_DYN(edict(), CHAN_WEAPON, "weapons/saw_fire2.wav", VOL_NORM, ATTN_NORM, 0, RANDOM_LONG(0, 15) + 94);
+				break;
+			case 2:
+				EMIT_SOUND_DYN(edict(), CHAN_WEAPON, "weapons/saw_fire3.wav", VOL_NORM, ATTN_NORM, 0, RANDOM_LONG(0, 15) + 94);
+				break;
+			}
+
+			firedShot = true;
+		}
+		else
+		{
+			// Check this so shotgunners don't shoot bursts if the animation happens to have the events
+			if (firstShotInBurst)
+			{
+				const Vector vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40, 90) + gpGlobals->v_up * RANDOM_FLOAT(75, 200) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
+				EjectBrass(vecShootOrigin - vecShootDir * 24, vecShellVelocity, pev->angles.y, m_iShotgunShell, TE_BOUNCE_SHOTSHELL);
+				FireBullets(GetSkillFloat("hgrunt_ally_pellets"sv), vecShootOrigin, vecShootDir, VECTOR_CONE_15DEGREES, 2048, BULLET_PLAYER_BUCKSHOT, 0); // shoot +-7.5 degrees
+
+				firedShot = true;
+			}
+		}
+
+		if (firedShot)
+		{
+			pev->effects |= EF_MUZZLEFLASH;
+
+			m_cAmmoLoaded--; // take away a bullet!
+
+			Vector angDir = UTIL_VecToAngles(vecShootDir);
+			SetBlending(0, angDir.x);
+		}
 	}
 
-	const Vector vecShootOrigin = GetGunPosition();
-	const Vector vecShootDir = ShootAtEnemy(vecShootOrigin);
-
-	UTIL_MakeVectors(pev->angles);
-
-	bool firedShot = false;
-
-	if (FBitSet(pev->weapons, HGruntAllyWeaponFlag::MP5))
+	if (firstShotInBurst)
 	{
-		const Vector vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40, 90) + gpGlobals->v_up * RANDOM_FLOAT(75, 200) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
-		EjectBrass(vecShootOrigin - vecShootDir * 24, vecShellVelocity, pev->angles.y, m_iBrassShell, TE_BOUNCE_SHELL);
-		FireBullets(1, vecShootOrigin, vecShootDir, VECTOR_CONE_10DEGREES, 2048, BULLET_MONSTER_MP5); // shoot +-5 degrees
-
-		if (firstShotInBurst)
+		if (FBitSet(pev->weapons, HGruntAllyWeaponFlag::MP5))
 		{
 			// the first round of the three round burst plays the sound and puts a sound in the world sound list.
 			if (RANDOM_LONG(0, 1))
@@ -220,68 +281,12 @@ void CHGruntAlly::Shoot(bool firstShotInBurst)
 				EMIT_SOUND(ENT(pev), CHAN_WEAPON, "hgrunt/gr_mgun2.wav", 1, ATTN_NORM);
 			}
 		}
-
-		firedShot = true;
-	}
-	else if (FBitSet(pev->weapons, HGruntAllyWeaponFlag::Saw))
-	{
-		switch (RANDOM_LONG(0, 1))
+		else if (FBitSet(pev->weapons, HGruntAllyWeaponFlag::Shotgun))
 		{
-		case 0:
-		{
-			const auto vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(75, 200) + gpGlobals->v_up * RANDOM_FLOAT(150, 200) + gpGlobals->v_forward * 25.0;
-			EjectBrass(vecShootOrigin - vecShootDir * 6, vecShellVelocity, pev->angles.y, m_iSawLink, TE_BOUNCE_SHELL);
-			break;
-		}
-
-		case 1:
-		{
-			const auto vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(100, 250) + gpGlobals->v_up * RANDOM_FLOAT(100, 150) + gpGlobals->v_forward * 25.0;
-			EjectBrass(vecShootOrigin - vecShootDir * 6, vecShellVelocity, pev->angles.y, m_iSawShell, TE_BOUNCE_SHELL);
-			break;
-		}
-		}
-
-		FireBullets(1, vecShootOrigin, vecShootDir, VECTOR_CONE_5DEGREES, 8192, BULLET_PLAYER_556, 2); // shoot +-5 degrees
-
-		switch (RANDOM_LONG(0, 2))
-		{
-		case 0:
-			EMIT_SOUND_DYN(edict(), CHAN_WEAPON, "weapons/saw_fire1.wav", VOL_NORM, ATTN_NORM, 0, RANDOM_LONG(0, 15) + 94);
-			break;
-		case 1:
-			EMIT_SOUND_DYN(edict(), CHAN_WEAPON, "weapons/saw_fire2.wav", VOL_NORM, ATTN_NORM, 0, RANDOM_LONG(0, 15) + 94);
-			break;
-		case 2:
-			EMIT_SOUND_DYN(edict(), CHAN_WEAPON, "weapons/saw_fire3.wav", VOL_NORM, ATTN_NORM, 0, RANDOM_LONG(0, 15) + 94);
-			break;
-		}
-
-		firedShot = true;
-	}
-	else
-	{
-		// Check this so shotgunners don't shoot bursts if the animation happens to have the events
-		if (firstShotInBurst)
-		{
-			const Vector vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40, 90) + gpGlobals->v_up * RANDOM_FLOAT(75, 200) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
-			EjectBrass(vecShootOrigin - vecShootDir * 24, vecShellVelocity, pev->angles.y, m_iShotgunShell, TE_BOUNCE_SHOTSHELL);
-			FireBullets(GetSkillFloat("hgrunt_ally_pellets"sv), vecShootOrigin, vecShootDir, VECTOR_CONE_15DEGREES, 2048, BULLET_PLAYER_BUCKSHOT, 0); // shoot +-7.5 degrees
-
 			EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/sbarrel1.wav", 1, ATTN_NORM);
-
-			firedShot = true;
 		}
-	}
 
-	if (firedShot)
-	{
-		pev->effects |= EF_MUZZLEFLASH;
-
-		m_cAmmoLoaded--; // take away a bullet!
-
-		Vector angDir = UTIL_VecToAngles(vecShootDir);
-		SetBlending(0, angDir.x);
+		CSoundEnt::InsertSound(bits_SOUND_COMBAT, pev->origin, 384, 0.3);
 	}
 }
 
