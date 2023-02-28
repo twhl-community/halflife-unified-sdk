@@ -813,6 +813,14 @@ Fixes that have been reported but not yet fixed in the original game:
 
 Many changes have been made since 2019. All changes made after [[this|https://github.com/Solokiller/halflife-op4/commit/0acdeaea6c27c6b3e1f0ef458f58b98925bc201b]] commit are new.
 
+## Changes in V1.0.0 Beta 012
+
+> Note: this beta has not been released yet.
+
+### Bug fixes
+
+* Force Pitworm animations to interpolate to fix stuttering movement [Unified SDK #434](SamVanheer/halflife-unified-sdk#434) (Thanks [malortie](https://github.com/malortie))
+
 ## Changes in V1.0.0 Beta 011
 
 ### Bug fixes
