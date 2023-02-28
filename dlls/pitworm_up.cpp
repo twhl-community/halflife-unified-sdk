@@ -345,6 +345,9 @@ void COFPitWormUp::Spawn()
 
 	pev->sequence = 0;
 
+	// Force interpolation on.
+	m_EFlags |= EFLAG_SLERP;
+
 	ResetSequenceInfo();
 
 	m_flTorsoYaw = 0;
