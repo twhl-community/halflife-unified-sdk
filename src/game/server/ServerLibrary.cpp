@@ -89,6 +89,7 @@ bool ServerLibrary::Initialize()
 	}
 
 	m_AllowDownload = g_ConCommands.GetCVar("sv_allowdownload");
+	m_SendResources = g_ConCommands.GetCVar("sv_send_resources");
 	m_AllowDLFile = g_ConCommands.GetCVar("sv_allow_dlfile");
 
 	CBaseEntity::IOLogger = g_Logging.CreateLogger("ent.io");
@@ -128,18 +129,23 @@ void ServerLibrary::Shutdown()
 	GameLibrary::Shutdown();
 }
 
+static void ForceCvarToValue(cvar_t* cvar, float value)
+{
+	if (cvar->value != value)
+	{
+		// So server operators know what's going on since these cvars aren't normally logged.
+		g_GameLogger->warn("Forcing server cvar \"{}\" to \"{}\" to ensure network data file is transferred",
+			cvar->name, value);
+		g_engfuncs.pfnCvar_DirectSet(cvar, std::to_string(value).c_str());
+	}
+}
+
 void ServerLibrary::RunFrame()
 {
 	// Force the download cvars to enabled so we can download network data.
-	if (m_AllowDownload->value == 0)
-	{
-		g_engfuncs.pfnCvar_DirectSet(m_AllowDownload, "1");
-	}
-
-	if (m_AllowDLFile->value == 0)
-	{
-		g_engfuncs.pfnCvar_DirectSet(m_AllowDLFile, "1");
-	}
+	ForceCvarToValue(m_AllowDownload, 1);
+	ForceCvarToValue(m_SendResources, 1);
+	ForceCvarToValue(m_AllowDLFile, 1);
 }
 
 template <typename... Args>
@@ -150,7 +156,7 @@ void ServerLibrary::ShutdownServer(spdlog::format_string_t<Args...> fmt, Args&&.
 	// Don't do this; if done at certain points during the map spawn phase
 	// this will cause a fatal error because the engine tries to write to
 	// an uninitialized network message buffer.
-	//SERVER_EXECUTE();
+	// SERVER_EXECUTE();
 }
 
 void ServerLibrary::NewMapStarted(bool loadGame)

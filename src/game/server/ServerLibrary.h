@@ -109,6 +109,7 @@ private:
 
 private:
 	cvar_t* m_AllowDownload{};
+	cvar_t* m_SendResources{};
 	cvar_t* m_AllowDLFile{};
 
 	std::shared_ptr<const GameConfigDefinition<MapState>> m_ServerConfigDefinition;
