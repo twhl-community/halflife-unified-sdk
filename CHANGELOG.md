@@ -76,6 +76,14 @@ All changes from Half-Life Updated up until Beta 5 are included: https://github.
 
 # Half-Life Updated changelog
 
+## Changges in V1.0.0 Beta 015
+
+> Note: this beta has not been released yet.
+
+### Bug fixes
+
+* Fixed tripmines not detonating if placed on breakable and a save game is loaded [#192](https://github.com/SamVanheer/halflife-updated/issues/192) (Thanks forklift.mdl)
+
 ## Changes in V1.0.0 Beta 014
 
 ### Bug fixes
