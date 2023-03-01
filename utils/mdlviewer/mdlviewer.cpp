@@ -30,7 +30,7 @@
 #pragma warning(disable : 4244) // conversion from 'double ' to 'float ', possible loss of data
 #pragma warning(disable : 4305) // truncation from 'const double ' to 'float '
 
-vec3_t g_vright; // needs to be set to viewer's right in order for chrome to work
+Vector g_vright; // needs to be set to viewer's right in order for chrome to work
 float g_lambert = 1.5;
 
 float gldepthmin = 0;

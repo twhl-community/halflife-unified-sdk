@@ -31,16 +31,16 @@
 
 ////////////////////////////////////////////////////////////////////////
 
-vec3_t g_xformverts[MAXSTUDIOVERTS];  // transformed vertices
-vec3_t g_lightvalues[MAXSTUDIOVERTS]; // light surface normals
-vec3_t* g_pxformverts;
-vec3_t* g_pvlightvalues;
+Vector g_xformverts[MAXSTUDIOVERTS];  // transformed vertices
+Vector g_lightvalues[MAXSTUDIOVERTS]; // light surface normals
+Vector* g_pxformverts;
+Vector* g_pvlightvalues;
 
-vec3_t g_lightvec;					// light vector in model reference frame
-vec3_t g_blightvec[MAXSTUDIOBONES]; // light vectors in bone reference frames
+Vector g_lightvec;					// light vector in model reference frame
+Vector g_blightvec[MAXSTUDIOBONES]; // light vectors in bone reference frames
 int g_ambientlight;					// ambient world light
 float g_shadelight;					// direct world light
-vec3_t g_lightcolor;
+Vector g_lightcolor;
 
 int g_smodels_total; // cookie
 
@@ -48,8 +48,8 @@ float g_bonetransform[MAXSTUDIOBONES][3][4]; // bone transformation matrix
 
 int g_chrome[MAXSTUDIOVERTS][2];	  // texture coords for surface normals
 int g_chromeage[MAXSTUDIOBONES];	  // last time chrome vectors were updated
-vec3_t g_chromeup[MAXSTUDIOBONES];	  // chrome vector "up" in bone reference frames
-vec3_t g_chromeright[MAXSTUDIOBONES]; // chrome vector "right" in bone reference frames
+Vector g_chromeup[MAXSTUDIOBONES];	  // chrome vector "up" in bone reference frames
+Vector g_chromeright[MAXSTUDIOBONES]; // chrome vector "right" in bone reference frames
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -111,7 +111,7 @@ void StudioModel::CalcBoneQuaternion(int frame, float s, mstudiobone_t* pbone, m
 {
 	int j, k;
 	vec4_t q1, q2;
-	vec3_t angle1, angle2;
+	Vector angle1, angle2;
 	mstudioanimvalue_t* panimvalue;
 
 	for (j = 0; j < 3; j++)
@@ -235,7 +235,7 @@ void StudioModel::CalcBonePosition(int frame, float s, mstudiobone_t* pbone, mst
 }
 
 
-void StudioModel::CalcRotations(vec3_t* pos, vec4_t* q, mstudioseqdesc_t* pseqdesc, mstudioanim_t* panim, float f)
+void StudioModel::CalcRotations(Vector* pos, vec4_t* q, mstudioseqdesc_t* pseqdesc, mstudioanim_t* panim, float f)
 {
 	int i;
 	int frame;
@@ -278,7 +278,7 @@ mstudioanim_t* StudioModel::GetAnim(mstudioseqdesc_t* pseqdesc)
 }
 
 
-void StudioModel::SlerpBones(vec4_t q1[], vec3_t pos1[], vec4_t q2[], vec3_t pos2[], float s)
+void StudioModel::SlerpBones(vec4_t q1[], Vector pos1[], vec4_t q2[], Vector pos2[], float s)
 {
 	int i;
 	vec4_t q3;
@@ -334,15 +334,15 @@ void StudioModel::SetUpBones(void)
 	mstudioseqdesc_t* pseqdesc;
 	mstudioanim_t* panim;
 
-	static vec3_t pos[MAXSTUDIOBONES];
+	static Vector pos[MAXSTUDIOBONES];
 	float bonematrix[3][4];
 	static vec4_t q[MAXSTUDIOBONES];
 
-	static vec3_t pos2[MAXSTUDIOBONES];
+	static Vector pos2[MAXSTUDIOBONES];
 	static vec4_t q2[MAXSTUDIOBONES];
-	static vec3_t pos3[MAXSTUDIOBONES];
+	static Vector pos3[MAXSTUDIOBONES];
 	static vec4_t q3[MAXSTUDIOBONES];
-	static vec3_t pos4[MAXSTUDIOBONES];
+	static Vector pos4[MAXSTUDIOBONES];
 	static vec4_t q4[MAXSTUDIOBONES];
 
 
@@ -410,7 +410,7 @@ void StudioModel::SetUpBones(void)
 StudioModel::TransformFinalVert
 ================
 */
-void StudioModel::Lighting(float* lv, int bone, int flags, vec3_t normal)
+void StudioModel::Lighting(float* lv, int bone, int flags, const Vector& normal)
 {
 	float illum;
 	float lightcos;
@@ -450,7 +450,7 @@ void StudioModel::Lighting(float* lv, int bone, int flags, vec3_t normal)
 }
 
 
-void StudioModel::Chrome(int* pchrome, int bone, vec3_t normal)
+void StudioModel::Chrome(int* pchrome, int bone, const Vector& normal)
 {
 	float n;
 
@@ -613,11 +613,8 @@ void StudioModel::DrawPoints()
 	mstudiomesh_t* pmesh;
 	byte* pvertbone;
 	byte* pnormbone;
-	vec3_t* pstudioverts;
-	vec3_t* pstudionorms;
 	mstudiotexture_t* ptexture;
 	float* av;
-	float* lv;
 	float lv_tmp;
 	short* pskinref;
 
@@ -627,8 +624,8 @@ void StudioModel::DrawPoints()
 
 	pmesh = (mstudiomesh_t*)((byte*)m_pstudiohdr + m_pmodel->meshindex);
 
-	pstudioverts = (vec3_t*)((byte*)m_pstudiohdr + m_pmodel->vertindex);
-	pstudionorms = (vec3_t*)((byte*)m_pstudiohdr + m_pmodel->normindex);
+	Vector* pstudioverts = (Vector*)((byte*)m_pstudiohdr + m_pmodel->vertindex);
+	Vector* pstudionorms = (Vector*)((byte*)m_pstudiohdr + m_pmodel->normindex);
 
 	pskinref = (short*)((byte*)m_ptexturehdr + m_ptexturehdr->skinindex);
 	if (m_skinnum != 0 && m_skinnum < m_ptexturehdr->numskinfamilies)
@@ -643,22 +640,22 @@ void StudioModel::DrawPoints()
 	// clip and draw all triangles
 	//
 
-	lv = (float*)g_pvlightvalues;
+	Vector* lv = g_pvlightvalues;
 	for (j = 0; j < m_pmodel->nummesh; j++)
 	{
 		int flags;
 		flags = ptexture[pskinref[pmesh[j].skinref]].flags;
-		for (i = 0; i < pmesh[j].numnorms; i++, lv += 3, pstudionorms++, pnormbone++)
+		for (i = 0; i < pmesh[j].numnorms; i++, lv++, pstudionorms++, pnormbone++)
 		{
-			Lighting(&lv_tmp, *pnormbone, flags, (float*)pstudionorms);
+			Lighting(&lv_tmp, *pnormbone, flags, *pstudionorms);
 
 			// FIX: move this check out of the inner loop
 			if (flags & STUDIO_NF_CHROME)
-				Chrome(g_chrome[(float(*)[3])lv - g_pvlightvalues], *pnormbone, (float*)pstudionorms);
+				Chrome(g_chrome[lv - g_pvlightvalues], *pnormbone, *pstudionorms);
 
-			lv[0] = lv_tmp * g_lightcolor[0];
-			lv[1] = lv_tmp * g_lightcolor[1];
-			lv[2] = lv_tmp * g_lightcolor[2];
+			(*lv)[0] = lv_tmp * g_lightcolor[0];
+			(*lv)[1] = lv_tmp * g_lightcolor[1];
+			(*lv)[2] = lv_tmp * g_lightcolor[2];
 		}
 	}
 
@@ -697,8 +694,8 @@ void StudioModel::DrawPoints()
 					// FIX: put these in as integer coords, not floats
 					glTexCoord2f(g_chrome[ptricmds[1]][0] * s, g_chrome[ptricmds[1]][1] * t);
 
-					lv = g_pvlightvalues[ptricmds[1]];
-					glColor4f(lv[0], lv[1], lv[2], 1.0);
+					lv = &g_pvlightvalues[ptricmds[1]];
+					glColor4f((*lv)[0], (*lv)[1], (*lv)[2], 1.0);
 
 					av = g_pxformverts[ptricmds[0]];
 					glVertex3f(av[0], av[1], av[2]);
@@ -726,8 +723,8 @@ void StudioModel::DrawPoints()
 					// FIX: put these in as integer coords, not floats
 					glTexCoord2f(ptricmds[2] * s, ptricmds[3] * t);
 
-					lv = g_pvlightvalues[ptricmds[1]];
-					glColor4f(lv[0], lv[1], lv[2], 1.0);
+					lv = &g_pvlightvalues[ptricmds[1]];
+					glColor4f((*lv)[0], (*lv)[1], (*lv)[2], 1.0);
 
 					av = g_pxformverts[ptricmds[0]];
 					glVertex3f(av[0], av[1], av[2]);

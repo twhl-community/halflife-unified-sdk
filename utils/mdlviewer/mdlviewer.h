@@ -31,8 +31,8 @@ public:
 
 private:
 	// entity settings
-	vec3_t m_origin;
-	vec3_t m_angles;
+	Vector m_origin;
+	Vector m_angles;
 	int m_sequence;		  // sequence index
 	float m_frame;		  // frame
 	int m_bodynum;		  // bodypart selection
@@ -56,15 +56,15 @@ private:
 	void CalcBoneAdj(void);
 	void CalcBoneQuaternion(int frame, float s, mstudiobone_t* pbone, mstudioanim_t* panim, float* q);
 	void CalcBonePosition(int frame, float s, mstudiobone_t* pbone, mstudioanim_t* panim, float* pos);
-	void CalcRotations(vec3_t* pos, vec4_t* q, mstudioseqdesc_t* pseqdesc, mstudioanim_t* panim, float f);
+	void CalcRotations(Vector* pos, vec4_t* q, mstudioseqdesc_t* pseqdesc, mstudioanim_t* panim, float f);
 	mstudioanim_t* GetAnim(mstudioseqdesc_t* pseqdesc);
-	void SlerpBones(vec4_t q1[], vec3_t pos1[], vec4_t q2[], vec3_t pos2[], float s);
+	void SlerpBones(vec4_t q1[], Vector pos1[], vec4_t q2[], Vector pos2[], float s);
 	void SetUpBones(void);
 
 	void DrawPoints(void);
 
-	void Lighting(float* lv, int bone, int flags, vec3_t normal);
-	void Chrome(int* chrome, int bone, vec3_t normal);
+	void Lighting(float* lv, int bone, int flags, const Vector& normal);
+	void Chrome(int* chrome, int bone, const Vector& normal);
 
 	void SetupLighting(void);
 
@@ -73,5 +73,5 @@ private:
 	void UploadTexture(mstudiotexture_t* ptexture, byte* data, byte* pal);
 };
 
-extern vec3_t g_vright; // needs to be set to viewer's right in order for chrome to work
+extern Vector g_vright; // needs to be set to viewer's right in order for chrome to work
 extern float g_lambert; // modifier for pseudo-hemispherical lighting
