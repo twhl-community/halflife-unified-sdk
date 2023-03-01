@@ -10,6 +10,7 @@
 
 #include "qlumpy.h"
 #include "math.h"
+#include "qfont.h"
 
 #pragma warning(disable : 4244)
 
@@ -34,24 +35,7 @@ typedef struct
 
 // Font stuff
 
-#define NUM_GLYPHS 256
 const unsigned kFontMarker = 254;
-
-typedef struct
-{
-	short startoffset;
-	short charwidth;
-} charinfo;
-
-typedef struct
-{
-	int width, height;
-	int rowcount;
-	int rowheight;
-	charinfo fontinfo[NUM_GLYPHS];
-	byte data[4];
-} qfont_t;
-
 
 extern qboolean fTransparent255;
 
