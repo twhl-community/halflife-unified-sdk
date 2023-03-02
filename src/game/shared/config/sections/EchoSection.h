@@ -38,7 +38,7 @@ public:
 	{
 		// If developer mode is on then this is a debug message, otherwise it's a trace message. Helps to prevent abuse.
 		context.Logger.log(g_pDeveloper->value > 0 ? spdlog::level::debug : spdlog::level::trace,
-			"{}", context.Input.get<std::string>());
+			"{}", context.Input.template get<std::string>());
 		return true;
 	}
 };
