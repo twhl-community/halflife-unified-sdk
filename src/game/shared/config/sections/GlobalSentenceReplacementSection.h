@@ -32,15 +32,17 @@ public:
 
 	std::string_view GetName() const override final { return "GlobalSentenceReplacement"; }
 
-	std::tuple<std::string, std::string> GetSchema() const override final
+	json::value_t GetType() const override final { return json::value_t::object; }
+
+	std::string GetSchema() const override final
 	{
-		return {
-			fmt::format(R"(
-"FileName": {{
-	"type": "string"
-}}
-)"),
-			{"\"FileName\""}};
+		return fmt::format(R"(
+"properties": {{
+	"FileName": {{
+		"type": "string"
+	}}
+}},
+"required": ["FileName"])");
 	}
 
 	bool TryParse(GameConfigContext<MapState>& context) const override final

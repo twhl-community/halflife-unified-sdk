@@ -30,23 +30,15 @@ public:
 
 	std::string_view GetName() const override final { return "Echo"; }
 
-	std::tuple<std::string, std::string> GetSchema() const override final
-	{
-		return {
-			fmt::format(R"(
-"Message": {{
-	"type": "string"
-}}
-)"),
-			{"\"Message\""}};
-	}
+	json::value_t GetType() const override final { return json::value_t::string; }
+
+	std::string GetSchema() const override final { return {}; }
 
 	bool TryParse(GameConfigContext<DataContext>& context) const override final
 	{
-		using namespace std::literals;
 		// If developer mode is on then this is a debug message, otherwise it's a trace message. Helps to prevent abuse.
 		context.Logger.log(g_pDeveloper->value > 0 ? spdlog::level::debug : spdlog::level::trace,
-			"{}", context.Input.value("Message", "No message provided"sv));
+			"{}", context.Input.get<std::string>());
 		return true;
 	}
 };

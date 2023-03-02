@@ -19,7 +19,6 @@
 #include <stdexcept>
 #include <string>
 #include <string_view>
-#include <tuple>
 #include <vector>
 
 #include <fmt/format.h>
@@ -75,13 +74,18 @@ public:
 	virtual std::string_view GetName() const = 0;
 
 	/**
-	 *	@brief Gets the partial schema for this section.
-	 *	@details The schema is the part of an object's "properties" definition.
-	 *	Define properties used by this section in it.
-	 *	@return A tuple containing the object definition
-	 *		and the contents of the \c required array applicable to the keys specified in the first element.
+	*	@brief Gets the section type (e.g. @c object, @c array, etc).
+	*/
+	virtual json::value_t GetType() const = 0;
+
+	/**
+	 *	@brief Gets the schema for this section.
+	 *	@details @c title and @c type are provided by the game config system.
+	 *	For objects the schema should contain at minimum the object's @c properties.
+	 *	It can also contain @c required and other schema properties not provided automatically.
+	 *	This can be an empty string if no additional information is needed (e.g. a number with no validation required).
 	 */
-	virtual std::tuple<std::string, std::string> GetSchema() const = 0;
+	virtual std::string GetSchema() const = 0;
 
 	/**
 	 *	@brief Tries to parse the given configuration.
@@ -138,7 +142,11 @@ private:
 
 	void ParseIncludedFiles(LoadContext& loadContext, const json& input) const;
 
-	void ParseSections(LoadContext& loadContext, std::string_view configFileName, const json& input) const;
+	void ParseSectionGroups(LoadContext& loadContext, std::string_view configFileName, const json& input) const;
+
+	void ParseSections(LoadContext& loadContext, std::string_view configFileName, const json& sectionGroup) const;
+
+	bool ShouldProcessSectionGroup(const json& input) const;
 
 private:
 	std::shared_ptr<spdlog::logger> m_Logger;
@@ -189,18 +197,18 @@ inline const GameConfigSection<DataContext>* GameConfigDefinition<DataContext>::
 template <typename DataContext>
 inline std::string GameConfigDefinition<DataContext>::GetSchema() const
 {
-	using namespace std::literals;
-
 	// A configuration is structured like this:
 	/*
 	{
 		"Includes": [
 			"some_filename.json"
 		],
-		"Sections": [
+		"SectionGroups": [
 			{
-				"Name": "SectionName",
-				Section-specific properties here
+				"Condition": "<some condition>", // Optional.
+				"Sections": {
+					"SectionName": <Section data here> // Value can be any type chosen by section.
+				}
 			}
 		]
 	}
@@ -214,43 +222,26 @@ inline std::string GameConfigDefinition<DataContext>::GetSchema() const
 
 		bool first = true;
 
-		// Each section is comprised of a reserved key "Name" whose value is required to be the name of the section,
-		// and keys specified by each section
 		for (const auto& section : m_Sections)
 		{
-			if (!first)
+			if (first)
+			{
+				first = false;
+			}
+			else
 			{
 				buffer += ',';
 			}
 
-			first = false;
-
-			const auto [definition, required] = section->GetSchema();
+			const auto schema = section->GetSchema();
 
 			buffer += fmt::format(R"(
-{{
+"{0}": {{
 	"title": "{0} Section",
-	"type": "object",
-	"properties": {{
-		"Name": {{
-			"type": "string",
-			"const": "{0}",
-			"default": "{0}",
-			"readOnly": true
-		}},
-		"Condition": {{
-			"description": "If specified, this section will only be used if the condition evaluates true",
-			"type": "string"
-		}},
-		{1}
-	}},
-	"required": [
-		"Name"{2}
-		{3}
-	]
-}}
-)",
-				section->GetName(), definition, required.empty() ? ""sv : ","sv, required);
+	"type": "{1}"{2}
+	{3}
+}})",
+				section->GetName(), json(section->GetType()).type_name(), schema.empty() ? ""sv : ","sv, schema);
 		}
 
 		return buffer;
@@ -272,13 +263,27 @@ inline std::string GameConfigDefinition<DataContext>::GetSchema() const
 				"pattern": "^[\\w/]+.json$"
 			}}
 		}},
-		"Sections": {{
-			"title": "Sections",
+		"SectionGroups": {{
+			"title": "Section groups",
 			"type": "array",
 			"items": {{
-				"anyOf": [
-					{}
-				]
+				"title": "Section group",
+				"description": "A group of sections with an optional condition",
+				"type": "object",
+				"properties": {{
+					"Condition": {{
+						"description": "If specified, this section group will only be used if the condition evaluates true",
+						"type": "string"
+					}},
+					"Sections": {{
+						"title": "Sections",
+						"type": "object",
+						"properties": {{
+							{}
+						}},
+						"additionalProperties": false
+					}}
+				}}
 			}}
 		}}
 	}}
@@ -334,7 +339,7 @@ void GameConfigDefinition<DataContext>::ParseConfig(LoadContext& loadContext, st
 	if (input.is_object())
 	{
 		ParseIncludedFiles(loadContext, input);
-		ParseSections(loadContext, configFileName, input);
+		ParseSectionGroups(loadContext, configFileName, input);
 	}
 }
 
@@ -391,71 +396,100 @@ void GameConfigDefinition<DataContext>::ParseIncludedFiles(LoadContext& loadCont
 }
 
 template <typename DataContext>
-void GameConfigDefinition<DataContext>::ParseSections(LoadContext& loadContext, std::string_view configFileName, const json& input) const
+void GameConfigDefinition<DataContext>::ParseSectionGroups(LoadContext& loadContext, std::string_view configFileName, const json& input) const
 {
-	using namespace std::literals;
+	const auto sectionGroups = input.find("SectionGroups");
 
-	if (auto sections = input.find("Sections"); sections != input.end())
+	if (sectionGroups == input.end() || !sectionGroups->is_array())
 	{
-		if (!sections->is_array())
+		return;
+	}
+
+	for (std::size_t index = 0; const auto& sectionGroup : *sectionGroups)
+	{
+		m_Logger->trace("Entering section group {}", index);
+
+		if (ShouldProcessSectionGroup(sectionGroup))
 		{
-			return;
+			ParseSections(loadContext, configFileName, sectionGroup);
 		}
 
-		for (const auto& section : *sections)
+		m_Logger->trace("Exiting section group {}", index);
+
+		++index;
+	}
+}
+
+template <typename DataContext>
+void GameConfigDefinition<DataContext>::ParseSections(LoadContext& loadContext, std::string_view configFileName, const json& sectionGroup) const
+{
+	const auto sections = sectionGroup.find("Sections");
+
+	if (sections == sectionGroup.end() || !sections->is_object())
+	{
+		return;
+	}
+
+	m_Logger->trace("{} sections in group", sections->size());
+
+	for (const auto& [name, section] : sections->items())
+	{
+		m_Logger->debug("Processing section \"{}\" ({})", name, section.type_name());
+
+		if (const auto sectionObj = FindSection(name); sectionObj)
 		{
-			if (!section.is_object())
+			if (sectionObj->GetType() != section.type())
 			{
 				continue;
 			}
 
-			if (const auto name = section.value("Name", ""sv); !name.empty())
+			GameConfigContext<DataContext> context{
+				.ConfigFileName = configFileName,
+				.Input = section,
+				.Definition = *this,
+				.Logger = *m_Logger,
+				.Data = loadContext.Parameters.Data};
+
+			if (!sectionObj->TryParse(context))
 			{
-				if (const auto sectionObj = FindSection(name); sectionObj)
-				{
-					if (const auto condition = section.value("Condition", ""sv); !condition.empty())
-					{
-						m_Logger->trace("Testing section \"{}\" condition \"{}\"", sectionObj->GetName(), condition);
-
-						const auto shouldUseSection = g_ConditionEvaluator.Evaluate(condition);
-
-						if (!shouldUseSection.has_value())
-						{
-							// Error already reported
-							m_Logger->trace("Skipping section because an error occurred while evaluating condition");
-							continue;
-						}
-
-						if (!shouldUseSection.value())
-						{
-							m_Logger->trace("Skipping section because condition evaluated false");
-							continue;
-						}
-						else
-						{
-							m_Logger->trace("Using section because condition evaluated true");
-						}
-					}
-
-					GameConfigContext<DataContext> context{
-						.ConfigFileName = configFileName,
-						.Input = section,
-						.Definition = *this,
-						.Logger = *m_Logger,
-						.Data = loadContext.Parameters.Data};
-
-					if (!sectionObj->TryParse(context))
-					{
-						m_Logger->error("Error parsing section \"{}\"", sectionObj->GetName());
-					}
-				}
-				else
-				{
-					m_Logger->warn("Unknown section \"{}\"", name);
-				}
+				m_Logger->error("Error parsing section \"{}\"", sectionObj->GetName());
 			}
 		}
+		else
+		{
+			m_Logger->warn("Unknown section \"{}\"", name);
+		}
 	}
+}
+
+template <typename DataContext>
+bool GameConfigDefinition<DataContext>::ShouldProcessSectionGroup(const json& input) const
+{
+	if (const auto condition = input.value("Condition", ""sv); !condition.empty())
+	{
+		m_Logger->trace("Testing section group condition \"{}\"", condition);
+
+		const auto shouldUseSection = g_ConditionEvaluator.Evaluate(condition);
+
+		if (!shouldUseSection.has_value())
+		{
+			// Error already reported
+			m_Logger->trace("Skipping section group because an error occurred while evaluating condition");
+			return false;
+		}
+
+		if (!shouldUseSection.value())
+		{
+			m_Logger->trace("Skipping section group because condition evaluated false");
+			return false;
+		}
+		else
+		{
+			m_Logger->trace("Using section group because condition evaluated true");
+		}
+	}
+
+	return true;
 }
 
 template <typename DataContext>

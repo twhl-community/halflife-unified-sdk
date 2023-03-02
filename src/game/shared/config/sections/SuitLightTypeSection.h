@@ -35,7 +35,9 @@ public:
 
 	std::string_view GetName() const override final { return "SuitLightType"; }
 
-	std::tuple<std::string, std::string> GetSchema() const override final
+	json::value_t GetType() const override final { return json::value_t::string; }
+
+	std::string GetSchema() const override final
 	{
 		const auto types = []()
 		{
@@ -62,20 +64,12 @@ public:
 			return types;
 		}();
 
-		return {
-			fmt::format(R"(
-"Type": {{
-	"type": "string",
-	"enum": [{}]
-}}
-)",
-				types),
-			{"\"Type\""}};
+		return fmt::format(R"("enum": [{}])", types);
 	}
 
 	bool TryParse(GameConfigContext<MapState>& context) const override final
 	{
-		const auto type = context.Input.value("Type", std::string{});
+		const auto type = context.Input.get<std::string>();
 
 		if (!type.empty())
 		{

@@ -33,21 +33,16 @@ public:
 
 	std::string_view GetName() const override final { return "HudColor"; }
 
-	std::tuple<std::string, std::string> GetSchema() const override final
+	json::value_t GetType() const override final { return json::value_t::string; }
+
+	std::string GetSchema() const override final
 	{
-		return {
-			fmt::format(R"(
-"Color": {{
-	"type": "string",
-	"pattern": "^\\d\\d?\\d? \\d\\d?\\d? \\d\\d?\\d?$"
-}}
-)"),
-			{"\"Color\""}};
+		return fmt::format(R"("pattern": "^\\d\\d?\\d? \\d\\d?\\d? \\d\\d?\\d?$")");
 	}
 
 	bool TryParse(GameConfigContext<MapState>& context) const override final
 	{
-		const auto color = context.Input.value("Color", std::string{});
+		const auto color = context.Input.get<std::string>();
 
 		if (!color.empty())
 		{

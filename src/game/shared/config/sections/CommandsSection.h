@@ -50,40 +50,20 @@ public:
 
 	std::string_view GetName() const override final { return "Commands"; }
 
-	std::tuple<std::string, std::string> GetSchema() const override final
+	json::value_t GetType() const override final { return json::value_t::array; }
+
+	std::string GetSchema() const override final
 	{
-		return {
-			fmt::format(R"(
-"Commands": {{
-	"type": "array",
-	"items": {{
-		"title": "Command",
-		"type": "string",
-		"pattern": ".+"
-	}}
-}}
-)"),
-			{"\"Commands\""}};
+		return fmt::format(R"(
+"items": {{
+	"title": "Command",
+	"type": "string",
+	"pattern": ".+"
+}})");
 	}
 
 	bool TryParse(GameConfigContext<DataContext>& context) const override final
 	{
-		using namespace std::literals;
-
-		const auto commandsIt = context.Input.find("Commands");
-
-		if (commandsIt == context.Input.end())
-		{
-			return false;
-		}
-
-		const auto& commandsInput = *commandsIt;
-
-		if (!commandsInput.is_array())
-		{
-			return false;
-		}
-
 		std::string buffer;
 
 		auto& logger = context.Logger;
@@ -100,9 +80,9 @@ public:
 
 		std::vector<std::string> commands;
 
-		commands.reserve(commandsInput.size());
+		commands.reserve(context.Input.size());
 
-		for (const auto& command : commandsInput)
+		for (const auto& command : context.Input)
 		{
 			if (!command.is_string())
 			{
