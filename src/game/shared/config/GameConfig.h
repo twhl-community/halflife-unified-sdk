@@ -310,7 +310,7 @@ bool GameConfigDefinition<DataContext>::TryLoad(const char* fileName, const Game
 template <typename DataContext>
 bool GameConfigDefinition<DataContext>::TryLoadCore(LoadContext& loadContext, const char* fileName) const
 {
-	m_Logger->trace("Loading \"{}\" configuration file \"{}\" (depth {})", GetName(), fileName, loadContext.Depth);
+	m_Logger->debug("Loading \"{}\" configuration file \"{}\" (depth {})", GetName(), fileName, loadContext.Depth);
 
 	auto result = g_JSON.ParseJSONFile(
 		fileName,
