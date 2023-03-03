@@ -18,50 +18,23 @@
 #include "ServerConfigContext.h"
 
 #include "config/GameConfig.h"
-
-#include "utils/JSONSystem.h"
-#include "utils/ReplacementMaps.h"
+#include "config/sections/BaseFileNamesListSection.h"
 
 /**
- *	@brief Allows a configuration file to specify a global model replacement file.
+ *	@brief Allows a configuration file to specify one or more global model replacement files.
  */
-class GlobalModelReplacementSection final : public GameConfigSection<ServerConfigContext>
+class GlobalModelReplacementSection final : public BaseFileNamesListSection<ServerConfigContext>
 {
 public:
 	explicit GlobalModelReplacementSection() = default;
 
 	std::string_view GetName() const override final { return "GlobalModelReplacement"; }
 
-	json::value_t GetType() const override final { return json::value_t::object; }
+protected:
+	std::string_view GetListName() const override final { return "global model replacement"; }
 
-	std::string GetSchema() const override final
+	std::vector<std::string>& GetFileNamesList(ServerConfigContext& context) const override final
 	{
-		return fmt::format(R"(
-"properties": {{
-	"FileName": {{
-		"type": "string"
-	}}
-}},
-"required": ["FileName"])");
-	}
-
-	bool TryParse(GameConfigContext<ServerConfigContext>& context) const override final
-	{
-		const auto fileName = context.Input.value("FileName", std::string{});
-
-		if (!fileName.empty())
-		{
-			context.Logger.debug("Adding global model replacement file \"{}\"", fileName);
-
-			if (!context.Data.State.m_GlobalModelReplacement->empty())
-			{
-				context.Logger.error("Only one global model replacement file may be specified");
-				return false;
-			}
-
-			context.Data.State.m_GlobalModelReplacement = g_ReplacementMaps.Load(fileName, {.CaseSensitive = false});
-		}
-
-		return true;
+		return context.GlobalModelReplacementFiles;
 	}
 };

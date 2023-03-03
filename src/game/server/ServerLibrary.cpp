@@ -320,6 +320,9 @@ void ServerLibrary::LoadServerConfigFiles()
 		g_GameLogger->trace("Loading map config file");
 		m_MapConfigDefinition->TryLoad(mapCfgFileName.c_str(), {.Data = context});
 	}
+
+	m_MapState.m_GlobalModelReplacement = g_ReplacementMaps.LoadMultiple(context.GlobalModelReplacementFiles, {.CaseSensitive = false});
+	m_MapState.m_GlobalSentenceReplacement = g_ReplacementMaps.LoadMultiple(context.GlobalSentenceReplacementFiles, {.CaseSensitive = true});
 }
 
 void ServerLibrary::LoadMapChangeConfigFile()

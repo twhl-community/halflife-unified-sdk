@@ -13,6 +13,8 @@
  *
  ****/
 
+#include <iterator>
+
 #include <fmt/format.h>
 
 #include "cbase.h"
@@ -106,7 +108,7 @@ void ReplacementMapSystem::Clear()
 	m_ReplacementMaps.clear();
 }
 
-ReplacementMap ReplacementMapSystem::Parse(const json& input, const ReplacementMapOptions& options) const
+Replacements ReplacementMapSystem::Parse(const json& input, const ReplacementMapOptions& options) const
 {
 	m_Logger->trace("Parsing replacement map with options:\n{}", options);
 
@@ -142,7 +144,19 @@ ReplacementMap ReplacementMapSystem::Parse(const json& input, const ReplacementM
 		}
 	}
 
-	return ReplacementMap{std::move(map), options.CaseSensitive};
+	return map;
+}
+
+Replacements ReplacementMapSystem::ParseFile(const char* fileName, const ReplacementMapOptions& options) const
+{
+	const auto pathID = options.LoadFromAllPaths ? nullptr : "GAMECONFIG";
+
+	return g_JSON.ParseJSONFile(
+						 fileName,
+						 {.SchemaName = ReplacementMapSchemaName, .PathID = pathID},
+						 [&, this](const json& input)
+						 { return Parse(input, options); })
+		.value_or(Replacements{});
 }
 
 const ReplacementMap* ReplacementMapSystem::Load(const std::string& fileName, const ReplacementMapOptions& options)
@@ -163,16 +177,29 @@ const ReplacementMap* ReplacementMapSystem::Load(const std::string& fileName, co
 		return it->second.get();
 	}
 
-	const auto pathID = options.LoadFromAllPaths ? nullptr : "GAMECONFIG";
+	auto map = ParseFile(fileName.c_str(), options);
 
-	auto map = g_JSON.ParseJSONFile(
-						 fileName.c_str(),
-						 {.SchemaName = ReplacementMapSchemaName, .PathID = pathID},
-						 [&, this](const json& input)
-						 { return Parse(input, options); })
-				   .value_or(ReplacementMap{});
+	auto replacementMap = std::make_unique<ReplacementMap>(std::move(map), options.CaseSensitive);
 
-	const auto result = m_ReplacementMaps.emplace(std::move(normalizedFileName), std::make_unique<ReplacementMap>(std::move(map)));
+	const auto result = m_ReplacementMaps.emplace(std::move(normalizedFileName), std::move(replacementMap));
 
 	return result.first->second.get();
+}
+
+std::unique_ptr<ReplacementMap> ReplacementMapSystem::LoadMultiple(const std::span<std::string> fileNames, const ReplacementMapOptions& options) const
+{
+	Replacements map;
+
+	// Load each file and insert existing entries into the new map.
+	// Only entries not in the new map will be added.
+	for (const auto& fileName : fileNames)
+	{
+		auto next = ParseFile(fileName.c_str(), options);
+
+		next.insert(std::make_move_iterator(map.begin()), std::make_move_iterator(map.end()));
+
+		map = std::move(next);
+	}
+
+	return std::make_unique<ReplacementMap>(std::move(map), options.CaseSensitive);
 }

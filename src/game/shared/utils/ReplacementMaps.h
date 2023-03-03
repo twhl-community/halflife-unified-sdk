@@ -16,6 +16,7 @@
 #pragma once
 
 #include <memory>
+#include <span>
 #include <string>
 #include <unordered_map>
 
@@ -93,8 +94,16 @@ public:
 
 	const ReplacementMap* Load(const std::string& fileName, const ReplacementMapOptions& options = {});
 
+	/**
+	*	@brief Loads multiple replacement files and merges them together. Last occurrence of a replacement wins.
+	*	Not cached.
+	*/
+	std::unique_ptr<ReplacementMap> LoadMultiple(const std::span<std::string> fileNames, const ReplacementMapOptions& options = {}) const;
+
 private:
-	ReplacementMap Parse(const json& input, const ReplacementMapOptions& options) const;
+	Replacements Parse(const json& input, const ReplacementMapOptions& options) const;
+
+	Replacements ParseFile(const char* fileName, const ReplacementMapOptions& options) const;
 
 private:
 	std::shared_ptr<spdlog::logger> m_Logger;
