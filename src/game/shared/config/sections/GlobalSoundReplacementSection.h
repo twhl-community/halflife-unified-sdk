@@ -15,7 +15,7 @@
 
 #pragma once
 
-#include "MapState.h"
+#include "ServerConfigContext.h"
 
 #include "config/GameConfig.h"
 
@@ -25,7 +25,7 @@
 /**
  *	@brief Allows a configuration file to specify a global sound replacement file.
  */
-class GlobalSoundReplacementSection final : public GameConfigSection<MapState>
+class GlobalSoundReplacementSection final : public GameConfigSection<ServerConfigContext>
 {
 public:
 	explicit GlobalSoundReplacementSection() = default;
@@ -45,7 +45,7 @@ public:
 "required": ["FileName"])");
 	}
 
-	bool TryParse(GameConfigContext<MapState>& context) const override final
+	bool TryParse(GameConfigContext<ServerConfigContext>& context) const override final
 	{
 		const auto fileName = context.Input.value("FileName", std::string{});
 
@@ -53,13 +53,13 @@ public:
 		{
 			context.Logger.debug("Adding global sound replacement file \"{}\"", fileName);
 
-			if (!context.Data.m_GlobalSoundReplacement->empty())
+			if (!context.Data.State.m_GlobalSoundReplacement->empty())
 			{
 				context.Logger.error("Only one global sound replacement file may be specified");
 				return false;
 			}
 
-			context.Data.m_GlobalSoundReplacementFileName.assign(fileName.data(), fileName.size());
+			context.Data.State.m_GlobalSoundReplacementFileName.assign(fileName.data(), fileName.size());
 
 			if (fileName.size() > (MaxUserMessageLength - 1))
 			{
@@ -69,7 +69,7 @@ public:
 				return false;
 			}
 
-			context.Data.m_GlobalSoundReplacement = g_ReplacementMaps.Load(fileName, {.CaseSensitive = false});
+			context.Data.State.m_GlobalSoundReplacement = g_ReplacementMaps.Load(fileName, {.CaseSensitive = false});
 		}
 
 		return true;

@@ -266,10 +266,10 @@ void ServerLibrary::CreateConfigDefinitions()
 {
 	m_ServerConfigDefinition = g_GameConfigSystem.CreateDefinition("ServerGameConfig", []()
 		{
-			std::vector<std::unique_ptr<const GameConfigSection<MapState>>> sections;
+			std::vector<std::unique_ptr<const GameConfigSection<ServerConfigContext>>> sections;
 
 			AddCommonConfigSections(sections);
-			sections.push_back(std::make_unique<CommandsSection<MapState>>());
+			sections.push_back(std::make_unique<CommandsSection<ServerConfigContext>>());
 			sections.push_back(std::make_unique<GlobalModelReplacementSection>());
 			sections.push_back(std::make_unique<GlobalSentenceReplacementSection>());
 			sections.push_back(std::make_unique<GlobalSoundReplacementSection>());
@@ -280,10 +280,10 @@ void ServerLibrary::CreateConfigDefinitions()
 
 	m_MapConfigDefinition = g_GameConfigSystem.CreateDefinition("MapGameConfig", [this]()
 		{
-			std::vector<std::unique_ptr<const GameConfigSection<MapState>>> sections;
+			std::vector<std::unique_ptr<const GameConfigSection<ServerConfigContext>>> sections;
 
 			AddCommonConfigSections(sections);
-			sections.push_back(std::make_unique<CommandsSection<MapState>>(GetMapConfigCommandWhitelist()));
+			sections.push_back(std::make_unique<CommandsSection<ServerConfigContext>>(GetMapConfigCommandWhitelist()));
 			sections.push_back(std::make_unique<GlobalModelReplacementSection>());
 			sections.push_back(std::make_unique<GlobalSentenceReplacementSection>());
 			sections.push_back(std::make_unique<GlobalSoundReplacementSection>());
@@ -294,21 +294,23 @@ void ServerLibrary::CreateConfigDefinitions()
 
 	m_MapChangeConfigDefinition = g_GameConfigSystem.CreateDefinition("MapChangeGameConfig", []()
 		{
-			std::vector<std::unique_ptr<const GameConfigSection<MapState>>> sections;
+			std::vector<std::unique_ptr<const GameConfigSection<ServerConfigContext>>> sections;
 
 			//Limit the map change config to commands only, configuration should be handled by other cfg files
 			AddCommonConfigSections(sections);
-			sections.push_back(std::make_unique<CommandsSection<MapState>>());
+			sections.push_back(std::make_unique<CommandsSection<ServerConfigContext>>());
 
 			return sections; }());
 }
 
 void ServerLibrary::LoadServerConfigFiles()
 {
+	ServerConfigContext context{.State = m_MapState};
+
 	if (const auto cfgFile = servercfgfile.string; cfgFile && '\0' != cfgFile[0])
 	{
 		g_GameLogger->trace("Loading server config file");
-		m_ServerConfigDefinition->TryLoad(cfgFile, {.Data = m_MapState, .PathID = "GAMECONFIG"});
+		m_ServerConfigDefinition->TryLoad(cfgFile, {.Data = context, .PathID = "GAMECONFIG"});
 	}
 
 	// Check if the file exists so we don't get errors about it during loading
@@ -316,16 +318,18 @@ void ServerLibrary::LoadServerConfigFiles()
 		g_pFileSystem->FileExists(mapCfgFileName.c_str()))
 	{
 		g_GameLogger->trace("Loading map config file");
-		m_MapConfigDefinition->TryLoad(mapCfgFileName.c_str(), {.Data = m_MapState});
+		m_MapConfigDefinition->TryLoad(mapCfgFileName.c_str(), {.Data = context});
 	}
 }
 
 void ServerLibrary::LoadMapChangeConfigFile()
 {
+	ServerConfigContext context{.State = m_MapState};
+
 	if (const auto cfgFile = mapchangecfgfile.string; cfgFile && '\0' != cfgFile[0])
 	{
 		g_GameLogger->trace("Loading map change config file");
-		m_MapChangeConfigDefinition->TryLoad(cfgFile, {.Data = m_MapState, .PathID = "GAMECONFIG"});
+		m_MapChangeConfigDefinition->TryLoad(cfgFile, {.Data = context, .PathID = "GAMECONFIG"});
 	}
 }
 

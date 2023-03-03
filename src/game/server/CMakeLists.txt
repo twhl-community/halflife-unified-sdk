@@ -42,6 +42,7 @@ target_sources(server PRIVATE
 	plane.cpp
 	plane.h
 	saverestore.h
+	ServerConfigContext.h
 	ServerLibrary.cpp
 	ServerLibrary.h
 	skill.cpp

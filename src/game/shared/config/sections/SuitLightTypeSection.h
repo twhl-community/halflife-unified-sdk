@@ -18,7 +18,7 @@
 #include <string>
 
 #include "cdll_dll.h"
-#include "MapState.h"
+#include "ServerConfigContext.h"
 
 #include "config/GameConfig.h"
 
@@ -28,7 +28,7 @@
 /**
  *	@brief Allows a configuration file to specify the player's suit light type.
  */
-class SuitLightTypeSection final : public GameConfigSection<MapState>
+class SuitLightTypeSection final : public GameConfigSection<ServerConfigContext>
 {
 public:
 	explicit SuitLightTypeSection() = default;
@@ -67,7 +67,7 @@ public:
 		return fmt::format(R"("enum": [{}])", types);
 	}
 
-	bool TryParse(GameConfigContext<MapState>& context) const override final
+	bool TryParse(GameConfigContext<ServerConfigContext>& context) const override final
 	{
 		const auto type = context.Input.get<std::string>();
 
@@ -75,7 +75,7 @@ public:
 		{
 			if (auto value = SuitLightTypeFromString(type); value)
 			{
-				context.Data.m_LightType = *value;
+				context.Data.State.m_LightType = *value;
 			}
 		}
 

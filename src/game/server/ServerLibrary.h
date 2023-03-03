@@ -21,6 +21,7 @@
 
 #include "GameLibrary.h"
 #include "MapState.h"
+#include "ServerConfigContext.h"
 
 #include "config/GameConfig.h"
 
@@ -112,9 +113,9 @@ private:
 	cvar_t* m_SendResources{};
 	cvar_t* m_AllowDLFile{};
 
-	std::shared_ptr<const GameConfigDefinition<MapState>> m_ServerConfigDefinition;
-	std::shared_ptr<const GameConfigDefinition<MapState>> m_MapConfigDefinition;
-	std::shared_ptr<const GameConfigDefinition<MapState>> m_MapChangeConfigDefinition;
+	std::shared_ptr<const GameConfigDefinition<ServerConfigContext>> m_ServerConfigDefinition;
+	std::shared_ptr<const GameConfigDefinition<ServerConfigContext>> m_MapConfigDefinition;
+	std::shared_ptr<const GameConfigDefinition<ServerConfigContext>> m_MapChangeConfigDefinition;
 
 	bool m_IsStartingNewMap = true;
 

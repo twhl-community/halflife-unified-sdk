@@ -15,8 +15,8 @@
 
 #pragma once
 
-#include "MapState.h"
 #include "palette.h"
+#include "ServerConfigContext.h"
 
 #include "config/GameConfig.h"
 
@@ -26,7 +26,7 @@
 /**
  *	@brief Allows a configuration file to specify the player's hud color.
  */
-class HudColorSection final : public GameConfigSection<MapState>
+class HudColorSection final : public GameConfigSection<ServerConfigContext>
 {
 public:
 	explicit HudColorSection() = default;
@@ -40,7 +40,7 @@ public:
 		return fmt::format(R"("pattern": "^\\d\\d?\\d? \\d\\d?\\d? \\d\\d?\\d?$")");
 	}
 
-	bool TryParse(GameConfigContext<MapState>& context) const override final
+	bool TryParse(GameConfigContext<ServerConfigContext>& context) const override final
 	{
 		const auto color = context.Input.get<std::string>();
 
@@ -50,7 +50,7 @@ public:
 
 			UTIL_StringToVector(colorValue, color);
 
-			context.Data.m_HudColor = {
+			context.Data.State.m_HudColor = {
 				static_cast<std::uint8_t>(colorValue.x),
 				static_cast<std::uint8_t>(colorValue.y),
 				static_cast<std::uint8_t>(colorValue.z)};

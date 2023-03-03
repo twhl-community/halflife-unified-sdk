@@ -15,7 +15,7 @@
 
 #pragma once
 
-#include "MapState.h"
+#include "ServerConfigContext.h"
 
 #include "config/GameConfig.h"
 
@@ -25,7 +25,7 @@
 /**
  *	@brief Allows a configuration file to specify a global sentence replacement file.
  */
-class GlobalSentenceReplacementSection final : public GameConfigSection<MapState>
+class GlobalSentenceReplacementSection final : public GameConfigSection<ServerConfigContext>
 {
 public:
 	explicit GlobalSentenceReplacementSection() = default;
@@ -45,7 +45,7 @@ public:
 "required": ["FileName"])");
 	}
 
-	bool TryParse(GameConfigContext<MapState>& context) const override final
+	bool TryParse(GameConfigContext<ServerConfigContext>& context) const override final
 	{
 		const auto fileName = context.Input.value("FileName", std::string{});
 
@@ -53,13 +53,13 @@ public:
 		{
 			context.Logger.debug("Adding global sentence replacement file \"{}\"", fileName);
 
-			if (!context.Data.m_GlobalSentenceReplacement->empty())
+			if (!context.Data.State.m_GlobalSentenceReplacement->empty())
 			{
 				context.Logger.error("Only one global sentence replacement file may be specified");
 				return false;
 			}
 
-			context.Data.m_GlobalSentenceReplacement = g_ReplacementMaps.Load(fileName);
+			context.Data.State.m_GlobalSentenceReplacement = g_ReplacementMaps.Load(fileName);
 		}
 
 		return true;
