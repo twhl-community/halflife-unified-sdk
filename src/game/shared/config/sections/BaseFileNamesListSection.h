@@ -25,7 +25,7 @@
  *	@brief Base class for sections that specify a list of filenames.
  *	Derived classes must provide the GetListName and GetFileNamesList functions.
  */
-template<typename DataContext>
+template <typename DataContext>
 class BaseFileNamesListSection : public GameConfigSection<DataContext>
 {
 public:
@@ -46,14 +46,21 @@ public:
 
 	bool TryParse(GameConfigContext<DataContext>& context) const override final
 	{
+		auto& fileNamesList = GetFileNamesList(context.Data);
+
+		if (const auto resetList = context.Input.find("ResetList");
+			resetList != context.Input.end() && resetList->is_boolean() && resetList->get<bool>())
+		{
+			context.Logger.debug("Resetting {} filename list", GetListName());
+			fileNamesList.clear();
+		}
+
 		const auto fileNames = context.Input.find("FileNames");
 
 		if (fileNames == context.Input.end() || !fileNames->is_array())
 		{
 			return false;
 		}
-
-		auto& fileNamesList = GetFileNamesList(context.Data);
 
 		const auto begin = fileNames->begin();
 
