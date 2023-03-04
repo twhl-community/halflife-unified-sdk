@@ -49,7 +49,7 @@ public:
 		auto& fileNamesList = GetFileNamesList(context.Data);
 
 		if (const auto resetList = context.Input.find("ResetList");
-			resetList != context.Input.end() && resetList->is_boolean() && resetList->get<bool>())
+			resetList != context.Input.end() && resetList->is_boolean() && resetList->template get<bool>())
 		{
 			context.Logger.debug("Resetting {} filename list", GetListName());
 			fileNamesList.clear();
@@ -73,7 +73,7 @@ public:
 				continue;
 			}
 
-			auto fileNameString = fileName.get<std::string>();
+			auto fileNameString = fileName.template get<std::string>();
 
 			const auto trimmedString = Trim(fileNameString);
 
