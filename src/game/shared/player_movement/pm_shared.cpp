@@ -28,7 +28,7 @@
 #ifndef CLIENT_DLL
 #include "sound/ServerSoundSystem.h"
 #else
-#include "sound/ClientSoundReplacement.h"
+#include "sound/ClientSoundReplacementSystem.h"
 #include "utils/ReplacementMaps.h"
 #endif
 
@@ -161,7 +161,7 @@ void PM_PlaySound(int channel, const char* sample, float volume, float attenuati
 #ifndef CLIENT_DLL
 	sample = sound::g_ServerSound.CheckForSoundReplacement(sample);
 #else
-	sample = sound::g_ClientSoundReplacement->Lookup(sample);
+	sample = sound::g_ClientSoundReplacement.Lookup(sample);
 #endif
 
 	pmove->PM_PlaySound(channel, sample, volume, attenuation, fFlags, pitch);

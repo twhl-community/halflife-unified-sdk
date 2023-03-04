@@ -44,7 +44,5 @@ public:
 	// Initialized during config load.
 	std::unique_ptr<const ReplacementMap> m_GlobalModelReplacement;
 	std::unique_ptr<const ReplacementMap> m_GlobalSentenceReplacement;
-
-	Filename m_GlobalSoundReplacementFileName;
-	const ReplacementMap* m_GlobalSoundReplacement{&ReplacementMap::Empty};
+	std::unique_ptr<const ReplacementMap> m_GlobalSoundReplacement;
 };

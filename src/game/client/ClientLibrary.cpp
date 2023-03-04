@@ -27,14 +27,12 @@
 #include "networking/ClientUserMessages.h"
 #include "networking/NetworkDataSystem.h"
 
-#include "sound/ClientSoundReplacement.h"
+#include "sound/ClientSoundReplacementSystem.h"
 #include "sound/IGameSoundSystem.h"
 #include "sound/IMusicSystem.h"
 #include "sound/ISoundSystem.h"
 
 #include "utils/ReplacementMaps.h"
-
-void MsgFunc_SoundRpl(const char* pszName, int iSize, void* pbuf);
 
 bool ClientLibrary::Initialize()
 {
@@ -47,8 +45,6 @@ bool ClientLibrary::Initialize()
 
 	// Enable buffering for non-debug print output so it isn't ignored outright by the engine.
 	Con_SetPrintBufferingEnabled(true);
-
-	g_ClientUserMessages.RegisterHandler("SoundRpl", &MsgFunc_SoundRpl);
 
 	return true;
 }
@@ -136,7 +132,6 @@ void ClientLibrary::RunFrame()
 
 		// Clear sound replacement map on any change.
 		g_ReplacementMaps.Clear();
-		sound::g_ClientSoundReplacement = &ReplacementMap::Empty;
 
 		if (!isConnected || m_ConnectionTime > status.connection_time || m_ServerAddress != status.remote_address)
 		{
@@ -218,6 +213,7 @@ Check the console for more information.)",
 void ClientLibrary::AddGameSystems()
 {
 	GameLibrary::AddGameSystems();
+	g_GameSystems.Add(&sound::g_ClientSoundReplacement);
 }
 
 SDL_Window* ClientLibrary::FindWindow()
@@ -234,13 +230,4 @@ SDL_Window* ClientLibrary::FindWindow()
 	}
 
 	return nullptr;
-}
-
-void MsgFunc_SoundRpl(const char* pszName, int iSize, void* pbuf)
-{
-	BEGIN_READ(pbuf, iSize);
-
-	const char* replacementFileName = READ_STRING();
-
-	sound::g_ClientSoundReplacement = g_ReplacementMaps.Load(replacementFileName, {.CaseSensitive = false, .LoadFromAllPaths = true});
 }

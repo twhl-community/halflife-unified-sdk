@@ -82,5 +82,4 @@ void LinkUserMessages()
 	gmsgProjectInfo = REG_USER_MSG("ProjectInfo", -1);
 	gmsgEntityInfo = REG_USER_MSG("EntityInfo", -1);
 	gmsgEmitSound = REG_USER_MSG("EmitSound", -1);
-	gmsgSoundRpl = REG_USER_MSG("SoundRpl", -1);
 }

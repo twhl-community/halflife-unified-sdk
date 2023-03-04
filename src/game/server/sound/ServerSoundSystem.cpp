@@ -25,6 +25,7 @@ namespace sound
 bool ServerSoundSystem::Initialize()
 {
 	m_Logger = g_Logging.CreateLogger("sound");
+	g_NetworkData.RegisterHandler("GlobalSoundReplacement", this);
 	return true;
 }
 
@@ -36,6 +37,14 @@ void ServerSoundSystem::Shutdown()
 {
 	g_Logging.RemoveLogger(m_Logger);
 	m_Logger.reset();
+}
+
+void ServerSoundSystem::HandleNetworkDataBlock(NetworkDataBlock& block)
+{
+	if (block.Name == "GlobalSoundReplacement")
+	{
+		block.Data = g_ReplacementMaps.Serialize(*g_Server.GetMapState()->m_GlobalSoundReplacement);
+	}
 }
 
 void ServerSoundSystem::EmitSound(edict_t* entity, int channel, const char* sample, float volume, float attenuation, int flags, int pitch)

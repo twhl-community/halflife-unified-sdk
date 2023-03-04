@@ -180,12 +180,6 @@ void ServerLibrary::NewMapStarted(bool loadGame)
 
 	g_Skill.NewMapStarted();
 	sentences::g_Sentences.NewMapStarted();
-
-	if (!m_MapState.m_GlobalSoundReplacementFileName.empty())
-	{
-		UTIL_PrecacheGenericDirect(m_MapState.m_GlobalSoundReplacementFileName.c_str());
-		g_engfuncs.pfnForceUnmodified(force_exactfile, nullptr, nullptr, m_MapState.m_GlobalSoundReplacementFileName.c_str());
-	}
 }
 
 void ServerLibrary::PreMapActivate()
@@ -213,13 +207,6 @@ void ServerLibrary::PlayerActivating(CBasePlayer* player)
 	WRITE_STRING(UnifiedSDKGitTagName);
 	WRITE_STRING(UnifiedSDKGitCommitHash);
 	MESSAGE_END();
-
-	if (!m_MapState.m_GlobalSoundReplacementFileName.empty())
-	{
-		MESSAGE_BEGIN(MSG_ONE, gmsgSoundRpl, nullptr, player->edict());
-		WRITE_STRING(m_MapState.m_GlobalSoundReplacementFileName.c_str());
-		MESSAGE_END();
-	}
 
 	// Override the hud color.
 	if (m_MapState.m_HudColor)
@@ -323,6 +310,7 @@ void ServerLibrary::LoadServerConfigFiles()
 
 	m_MapState.m_GlobalModelReplacement = g_ReplacementMaps.LoadMultiple(context.GlobalModelReplacementFiles, {.CaseSensitive = false});
 	m_MapState.m_GlobalSentenceReplacement = g_ReplacementMaps.LoadMultiple(context.GlobalSentenceReplacementFiles, {.CaseSensitive = true});
+	m_MapState.m_GlobalSoundReplacement = g_ReplacementMaps.LoadMultiple(context.GlobalSoundReplacementFiles, {.CaseSensitive = false});
 }
 
 void ServerLibrary::LoadMapChangeConfigFile()

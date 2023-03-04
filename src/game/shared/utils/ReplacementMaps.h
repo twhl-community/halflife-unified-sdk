@@ -24,7 +24,7 @@
 
 #include "utils/GameSystem.h"
 #include "utils/heterogeneous_lookup.h"
-#include "utils/json_fwd.h"
+#include "utils/JSONSystem.h"
 
 using Replacements = std::unordered_map<std::string, std::string, TransparentStringHash, TransparentEqual>;
 
@@ -33,8 +33,6 @@ using Replacements = std::unordered_map<std::string, std::string, TransparentStr
  */
 struct ReplacementMap
 {
-	static const ReplacementMap Empty;
-
 	ReplacementMap() = default;
 
 	ReplacementMap(Replacements&& replacements, bool caseSensitive)
@@ -59,8 +57,6 @@ private:
 	Replacements m_Replacements;
 	bool m_CaseSensitive = true;
 };
-
-const inline ReplacementMap ReplacementMap::Empty;
 
 struct ReplacementMapOptions
 {
@@ -99,6 +95,17 @@ public:
 	*	Not cached.
 	*/
 	std::unique_ptr<ReplacementMap> LoadMultiple(const std::span<std::string> fileNames, const ReplacementMapOptions& options = {}) const;
+
+	/**
+	*	@brief Serializes a replacement map into a JSON object.
+	*/
+	json Serialize(const ReplacementMap& map) const;
+
+	/**
+	*	@brief Deserializes a replacement map from a JSON object.
+	*	If an error occurs during deserialization an empty map is returned.
+	*/
+	std::unique_ptr<ReplacementMap> Deserialize(const json& input) const;
 
 private:
 	Replacements Parse(const json& input, const ReplacementMapOptions& options) const;

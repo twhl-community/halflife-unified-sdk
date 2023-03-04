@@ -14,7 +14,7 @@
 #include "particleman.h"
 #include "view.h"
 
-#include "sound/ClientSoundReplacement.h"
+#include "sound/ClientSoundReplacementSystem.h"
 
 void Game_AddObjects();
 
@@ -337,7 +337,7 @@ void DLLEXPORT HUD_StudioEvent(const mstudioevent_t* event, const cl_entity_t* e
 		// Client side sound
 	case 5004:
 	{
-		auto sample = sound::g_ClientSoundReplacement->Lookup(event->options);
+		auto sample = sound::g_ClientSoundReplacement.Lookup(event->options);
 		gEngfuncs.pfnPlaySoundByNameAtLocation(sample, 1.0, entity->attachment[0]);
 		break;
 	}

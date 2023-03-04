@@ -16,10 +16,11 @@
 #pragma once
 
 #include "GameSystem.h"
+#include "networking/NetworkDataSystem.h"
 
 namespace sound
 {
-class ServerSoundSystem final : public IGameSystem
+class ServerSoundSystem final : public IGameSystem, public INetworkDataBlockHandler
 {
 public:
 	const char* GetName() const override { return "ServerSound"; }
@@ -27,6 +28,8 @@ public:
 	bool Initialize() override;
 	void PostInitialize() override;
 	void Shutdown() override;
+
+	void HandleNetworkDataBlock(NetworkDataBlock& block) override;
 
 	void EmitSound(edict_t* entity, int channel, const char* sample, float volume, float attenuation, int flags, int pitch);
 

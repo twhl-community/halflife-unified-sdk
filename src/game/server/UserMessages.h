@@ -74,6 +74,5 @@ inline int gmsgProjectInfo = 0;
 inline int gmsgEntityInfo = 0;
 
 inline int gmsgEmitSound = 0;
-inline int gmsgSoundRpl = 0;
 
 void LinkUserMessages();
