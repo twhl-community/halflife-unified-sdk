@@ -350,35 +350,32 @@ bool SkillSystem::ParseConfiguration(const json& input)
 
 		for (const auto& item : variables.items())
 		{
-			[&]()
+			const json value = item.value();
+
+			if (!value.is_number())
 			{
-				const json value = item.value();
+				// Already validated by schema.
+				continue;
+			}
 
-				if (!value.is_number())
-				{
-					// Already validated by schema.
-					return;
-				}
+			// Get the skill variable base name and skill level.
+			const auto maybeVariableName = TryParseSkillVariableName(item.key(), *m_Logger);
 
-				// Get the skill variable base name and skill level.
-				const auto maybeVariableName = TryParseSkillVariableName(item.key(), *m_Logger);
+			if (!maybeVariableName.has_value())
+			{
+				continue;
+			}
 
-				if (!maybeVariableName.has_value())
-				{
-					return;
-				}
+			const auto& variableName = maybeVariableName.value();
 
-				const auto& variableName = maybeVariableName.value();
+			const auto valueFloat = value.get<float>();
 
-				const auto valueFloat = value.get<float>();
+			const auto& skillLevel = std::get<1>(variableName);
 
-				const auto& skillLevel = std::get<1>(variableName);
-
-				if (!skillLevel.has_value() || skillLevel.value() == GetSkillLevel())
-				{
-					SetValue(std::get<0>(variableName), valueFloat);
-				}
-			}();
+			if (!skillLevel.has_value() || skillLevel.value() == GetSkillLevel())
+			{
+				SetValue(std::get<0>(variableName), valueFloat);
+			}
 		}
 	}
 
