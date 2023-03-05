@@ -35,6 +35,10 @@ public:
 	{
 		return fmt::format(R"(
 "properties": {{
+	"ResetList": {{
+		"description": "If true, the list of filenames is cleared before new filenames are added to it",
+		"type": "boolean"
+	}},
 	"FileNames": {{
 		"type": "array",
 		"items": {{
@@ -59,7 +63,7 @@ public:
 
 		if (fileNames == context.Input.end() || !fileNames->is_array())
 		{
-			return false;
+			return true;
 		}
 
 		const auto begin = fileNames->begin();
