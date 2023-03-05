@@ -68,12 +68,8 @@ float EV_HLDM_PlayTextureSound(int idx, pmtrace_t* ptr, float* vecSrc, float* ve
 	const char* rgsz[4];
 	int cnt;
 	float fattn = ATTN_NORM;
-	int entity;
-	const char* pTextureName;
-	char texname[64];
-	char szbuffer[64];
 
-	entity = gEngfuncs.pEventAPI->EV_IndexFromTrace(ptr);
+	const int entity = gEngfuncs.pEventAPI->EV_IndexFromTrace(ptr);
 
 	// FIXME check if playtexture sounds movevar is set
 	//
@@ -89,30 +85,14 @@ float EV_HLDM_PlayTextureSound(int idx, pmtrace_t* ptr, float* vecSrc, float* ve
 	else if (entity == 0)
 	{
 		// get texture from entity or world (world is ent(0))
-		pTextureName = gEngfuncs.pEventAPI->EV_TraceTexture(ptr->ent, vecSrc, vecEnd);
+		const char* pTextureName = gEngfuncs.pEventAPI->EV_TraceTexture(ptr->ent, vecSrc, vecEnd);
 
 		if (pTextureName)
 		{
-			strcpy(texname, pTextureName);
-			pTextureName = texname;
-
-			// strip leading '-0' or '+0~' or '{' or '!'
-			if (*pTextureName == '-' || *pTextureName == '+')
-			{
-				pTextureName += 2;
-			}
-
-			if (*pTextureName == '{' || *pTextureName == '!' || *pTextureName == '~' || *pTextureName == ' ')
-			{
-				pTextureName++;
-			}
-
-			// '}}'
-			strcpy(szbuffer, pTextureName);
-			szbuffer[CBTEXTURENAMEMAX - 1] = 0;
+			pTextureName = g_MaterialSystem.StripTexturePrefix(pTextureName);
 
 			// get texture type
-			chTextureType = g_MaterialSystem.FindTextureType(szbuffer);
+			chTextureType = g_MaterialSystem.FindTextureType(pTextureName);
 		}
 	}
 

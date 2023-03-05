@@ -84,9 +84,6 @@ struct hull_t
 #define STUCK_MOVEDOWN -1
 #define STOP_EPSILON 0.1
 
-#define CTEXTURESMAX 512	// max number of textures loaded
-#define CBTEXTURENAMEMAX 13 // only load first n chars of name
-
 #define CHAR_TEX_CONCRETE 'C' // texture types
 #define CHAR_TEX_METAL 'M'
 #define CHAR_TEX_DIRT 'D'
@@ -437,16 +434,10 @@ void PM_CatagorizeTextureType()
 	if (!pTextureName)
 		return;
 
-	// strip leading '-0' or '+0~' or '{' or '!'
-	if (*pTextureName == '-' || *pTextureName == '+')
-		pTextureName += 2;
+	pTextureName = g_MaterialSystem.StripTexturePrefix(pTextureName);
 
-	if (*pTextureName == '{' || *pTextureName == '!' || *pTextureName == '~' || *pTextureName == ' ')
-		pTextureName++;
-	// '}}'
-
-	strcpy(pmove->sztexturename, pTextureName);
-	pmove->sztexturename[CBTEXTURENAMEMAX - 1] = 0;
+	strncpy(pmove->sztexturename, pTextureName, TextureNameMax - 1);
+	pmove->sztexturename[TextureNameMax - 1] = 0;
 
 	// get texture type
 	pmove->chtexturetype = g_MaterialSystem.FindTextureType(pmove->sztexturename);

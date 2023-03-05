@@ -18,6 +18,7 @@
 #include <array>
 #include <cstddef>
 #include <memory>
+#include <optional>
 #include <span>
 #include <string>
 #include <vector>
@@ -30,7 +31,9 @@
 #include "networking/NetworkDataSystem.h"
 #include "utils/GameSystem.h"
 
-using TextureName = eastl::fixed_string<char, CBTEXTURENAMEMAX>;
+constexpr std::size_t TextureNameMax = 16; // Must match texture name length in WAD and BSP file formats.
+
+using TextureName = eastl::fixed_string<char, TextureNameMax>;
 
 struct Material
 {
@@ -60,6 +63,8 @@ public:
 
 	void LoadMaterials(std::span<const std::string> fileNames);
 
+	static const char* StripTexturePrefix(const char* name);
+
 	/**
 	 *	@brief given texture name, find texture type.
 	 *	If not found, return type 'concrete'.
@@ -68,6 +73,8 @@ public:
 
 private:
 	void ParseMaterialsFile(const char* fileName);
+
+	std::optional<Material> TryParseMaterial(std::string_view line);
 
 private:
 	std::shared_ptr<spdlog::logger> m_Logger;

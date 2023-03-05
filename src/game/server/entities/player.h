@@ -17,9 +17,9 @@
 
 #include "basemonster.h"
 #include "gamerules.h"
-#include "pm_materials.h"
 #include "ctf/CTFDefs.h"
 #include "palette.h"
+#include "sound/MaterialSystem.h"
 
 class CRope;
 
@@ -172,7 +172,7 @@ public:
 	float m_flgeigerDelay; // delay per update of range msg to client
 	int m_igeigerRangePrev;
 	int m_iStepLeft;						// alternate left/right foot stepping sound
-	char m_szTextureName[CBTEXTURENAMEMAX]; // current texture name we're standing on
+	char m_szTextureName[TextureNameMax];	// current texture name we're standing on
 	char m_chTextureType;					// current texture type
 
 	int m_idrowndmg;	  // track drowning damage taken

@@ -23,36 +23,6 @@
 
 constexpr std::size_t MinimumMaterialsCount = 512; // original max number of textures loaded
 
-std::optional<Material> TryParseMaterial(std::string_view line)
-{
-	line = RemoveComments(line);
-	line = SkipWhitespace(line);
-
-	if (line.empty())
-		return {};
-
-	if (0 == std::isalpha(line.front()))
-		return {};
-
-	const char type = std::toupper(line.front());
-
-	line = SkipWhitespace(line.substr(1));
-
-	if (line.empty())
-		return {};
-
-	const auto end = FindWhitespace(line);
-
-	const std::string_view textureName{line.begin(), end};
-
-	if (textureName.empty())
-		return {};
-
-	const std::size_t size = std::min(CBTEXTURENAMEMAX - 1, textureName.size());
-
-	return Material{.Name{textureName.data(), size}, .Type = type};
-}
-
 bool MaterialSystem::Initialize()
 {
 	m_Logger = g_Logging.CreateLogger("materials");
@@ -136,6 +106,22 @@ void MaterialSystem::LoadMaterials(std::span<const std::string> fileNames)
 	m_Logger->debug("Loaded {} materials", m_Materials.size());
 }
 
+const char* MaterialSystem::StripTexturePrefix(const char* name)
+{
+	// strip leading '-0' or '+0~' or '{' or '!'
+	if (*name == '-' || *name == '+')
+	{
+		name += 2;
+	}
+
+	if (*name == '{' || *name == '!' || *name == '~' || *name == ' ')
+	{
+		++name;
+	}
+
+	return name;
+}
+
 char MaterialSystem::FindTextureType(const char* name) const
 {
 	const auto end = m_Materials.end();
@@ -143,8 +129,8 @@ char MaterialSystem::FindTextureType(const char* name) const
 	// TODO: multiple materials can have the same name, so this will not always return the right type.
 	// Once full texture names are used duplicates should not be allowed which will solve this problem.
 	if (auto it = std::lower_bound(m_Materials.begin(), end, name, [](const auto& material, auto name)
-			{ return strnicmp(material.Name.c_str(), name, CBTEXTURENAMEMAX - 1) < 0; });
-		it != end && strnicmp(it->Name.c_str(), name, CBTEXTURENAMEMAX - 1) == 0)
+			{ return stricmp(material.Name.c_str(), name) < 0; });
+		it != end && stricmp(it->Name.c_str(), name) == 0)
 	{
 		return it->Type;
 	}
@@ -177,4 +163,38 @@ void MaterialSystem::ParseMaterialsFile(const char* fileName)
 
 		m_Materials.push_back(std::move(*material));
 	}
+}
+
+std::optional<Material> MaterialSystem::TryParseMaterial(std::string_view line)
+{
+	line = RemoveComments(line);
+	line = SkipWhitespace(line);
+
+	if (line.empty())
+		return {};
+
+	if (0 == std::isalpha(line.front()))
+		return {};
+
+	const char type = std::toupper(line.front());
+
+	line = SkipWhitespace(line.substr(1));
+
+	if (line.empty())
+		return {};
+
+	const auto end = FindWhitespace(line);
+
+	const std::string_view textureName{line.begin(), end};
+
+	if (textureName.empty())
+		return {};
+
+	if (textureName.size() >= TextureNameMax)
+	{
+		m_Logger->warn("Texture name \"{}\" exceeds {} byte maximum, ignoring", textureName, TextureNameMax);
+		return {};
+	}
+
+	return Material{.Name{textureName.data(), textureName.size()}, .Type = type};
 }

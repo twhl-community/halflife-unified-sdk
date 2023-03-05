@@ -1223,7 +1223,6 @@ float TEXTURETYPE_PlaySound(TraceResult* ptr, Vector vecSrc, Vector vecEnd, int 
 	char chTextureType;
 	float fvol;
 	float fvolbar;
-	char szbuffer[64];
 	const char* pTextureName;
 	const char* rgsz[4];
 	int cnt;
@@ -1253,20 +1252,12 @@ float TEXTURETYPE_PlaySound(TraceResult* ptr, Vector vecSrc, Vector vecEnd, int 
 
 		if (pTextureName)
 		{
-			// strip leading '-0' or '+0~' or '{' or '!'
-			if (*pTextureName == '-' || *pTextureName == '+')
-				pTextureName += 2;
+			pTextureName = g_MaterialSystem.StripTexturePrefix(pTextureName);
 
-			if (*pTextureName == '{' || *pTextureName == '!' || *pTextureName == '~' || *pTextureName == ' ')
-				pTextureName++;
-			// '}}'
-			strcpy(szbuffer, pTextureName);
-			szbuffer[CBTEXTURENAMEMAX - 1] = 0;
-
-			// Logger->debug("texture hit: {}", szbuffer);
+			// Logger->debug("texture hit: {}", pTextureName);
 
 			// get texture type
-			chTextureType = g_MaterialSystem.FindTextureType(szbuffer);
+			chTextureType = g_MaterialSystem.FindTextureType(pTextureName);
 		}
 	}
 
