@@ -94,7 +94,7 @@ public:
 	*	@brief Loads multiple replacement files and merges them together. Last occurrence of a replacement wins.
 	*	Not cached.
 	*/
-	std::unique_ptr<ReplacementMap> LoadMultiple(const std::span<std::string> fileNames, const ReplacementMapOptions& options = {}) const;
+	std::unique_ptr<ReplacementMap> LoadMultiple(std::span<const std::string> fileNames, const ReplacementMapOptions& options = {}) const;
 
 	/**
 	*	@brief Serializes a replacement map into a JSON object.

@@ -186,7 +186,7 @@ const ReplacementMap* ReplacementMapSystem::Load(const std::string& fileName, co
 	return result.first->second.get();
 }
 
-std::unique_ptr<ReplacementMap> ReplacementMapSystem::LoadMultiple(const std::span<std::string> fileNames, const ReplacementMapOptions& options) const
+std::unique_ptr<ReplacementMap> ReplacementMapSystem::LoadMultiple(std::span<const std::string> fileNames, const ReplacementMapOptions& options) const
 {
 	Replacements map;
 
