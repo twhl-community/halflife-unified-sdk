@@ -34,7 +34,6 @@
 using namespace std::literals;
 
 constexpr std::string_view SkillConfigSchemaName{"SkillConfig"sv};
-constexpr const char* const SkillConfigName = "cfg/skill.json";
 
 constexpr std::string_view SkillVariableNameRegexPattern{"^([a-zA-Z_](?:[a-zA-Z_0-9]*[a-zA-Z_]))([123]?)$"};
 const std::regex SkillVariableNameRegex{SkillVariableNameRegexPattern.data(), SkillVariableNameRegexPattern.length()};
@@ -198,11 +197,6 @@ bool SkillSystem::Initialize()
 			m_SkillVariables.clear(); },
 		CommandLibraryPrefix::No);
 
-	g_ConCommands.CreateCommand(
-		"sk_reload", [this](const auto& args)
-		{ LoadSkillConfigFile(); },
-		CommandLibraryPrefix::No);
-
 	return true;
 }
 
@@ -211,15 +205,8 @@ void SkillSystem::Shutdown()
 	m_Logger.reset();
 }
 
-void SkillSystem::NewMapStarted()
+void SkillSystem::LoadSkillConfigFiles(std::span<const std::string> fileNames)
 {
-	LoadSkillConfigFile();
-}
-
-void SkillSystem::LoadSkillConfigFile()
-{
-	g_GameLogger->trace("Loading skill config file");
-
 	// Refresh skill level setting first.
 	int iSkill = (int)CVAR_GET_FLOAT("skill");
 
@@ -230,13 +217,18 @@ void SkillSystem::LoadSkillConfigFile()
 	// Erase all previous data.
 	m_SkillVariables.clear();
 
-	if (const auto result = g_JSON.ParseJSONFile(SkillConfigName,
-			{.SchemaName = SkillConfigSchemaName, .PathID = "GAMECONFIG"},
-			[this](const json& input)
-			{ return ParseConfiguration(input); });
-		!result.value_or(false))
+	for (const auto& fileName : fileNames)
 	{
-		m_Logger->error("Error loading skill configuration file \"{}\"", SkillConfigName);
+		m_Logger->trace("Loading {}", fileName);
+
+		if (const auto result = g_JSON.ParseJSONFile(fileName.c_str(),
+				{.SchemaName = SkillConfigSchemaName, .PathID = "GAMECONFIG"},
+				[this](const json& input)
+				{ return ParseConfiguration(input); });
+			!result.value_or(false))
+		{
+			m_Logger->error("Error loading skill configuration file \"{}\"", fileName);
+		}
 	}
 }
 

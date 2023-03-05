@@ -29,6 +29,7 @@ struct ServerConfigContext
 
 	std::vector<std::string> SentencesFiles;
 	std::vector<std::string> MaterialsFiles;
+	std::vector<std::string> SkillFiles;
 
 	std::vector<std::string> GlobalModelReplacementFiles;
 	std::vector<std::string> GlobalSentenceReplacementFiles;

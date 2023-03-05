@@ -46,8 +46,6 @@
 #include "sound/SentencesSystem.h"
 #include "sound/ServerSoundSystem.h"
 
-using namespace std::literals;
-
 constexpr const char* const MapConfigCommandWhitelistFileName = "cfg/MapConfigCommandWhitelist.json";
 const std::regex MapConfigCommandWhitelistRegex{"^[\\w]+$"};
 constexpr std::string_view MapConfigCommandWhitelistSchemaName{"MapConfigCommandWhitelist"sv};
@@ -178,7 +176,6 @@ void ServerLibrary::NewMapStarted(bool loadGame)
 	// Load the config files, which will initialize the map state as needed
 	LoadServerConfigFiles();
 
-	g_Skill.NewMapStarted();
 	sentences::g_Sentences.NewMapStarted();
 }
 
@@ -251,35 +248,35 @@ void ServerLibrary::SetEntLogLevels(spdlog::level::level_enum level)
 
 void ServerLibrary::CreateConfigDefinitions()
 {
-	m_ServerConfigDefinition = g_GameConfigSystem.CreateDefinition("ServerGameConfig", []()
+	const auto addMapAndServerSections = [](std::vector<std::unique_ptr<const GameConfigSection<ServerConfigContext>>>& sections)
+	{
+		sections.push_back(std::make_unique<SentencesSection>());
+		sections.push_back(std::make_unique<MaterialsSection>());
+		sections.push_back(std::make_unique<SkillSection>());
+		sections.push_back(std::make_unique<GlobalModelReplacementSection>());
+		sections.push_back(std::make_unique<GlobalSentenceReplacementSection>());
+		sections.push_back(std::make_unique<GlobalSoundReplacementSection>());
+		sections.push_back(std::make_unique<HudColorSection>());
+		sections.push_back(std::make_unique<SuitLightTypeSection>());
+	};
+
+	m_ServerConfigDefinition = g_GameConfigSystem.CreateDefinition("ServerGameConfig", [&]()
 		{
 			std::vector<std::unique_ptr<const GameConfigSection<ServerConfigContext>>> sections;
 
 			AddCommonConfigSections(sections);
 			sections.push_back(std::make_unique<CommandsSection<ServerConfigContext>>());
-			sections.push_back(std::make_unique<SentencesSection>());
-			sections.push_back(std::make_unique<MaterialsSection>());
-			sections.push_back(std::make_unique<GlobalModelReplacementSection>());
-			sections.push_back(std::make_unique<GlobalSentenceReplacementSection>());
-			sections.push_back(std::make_unique<GlobalSoundReplacementSection>());
-			sections.push_back(std::make_unique<HudColorSection>());
-			sections.push_back(std::make_unique<SuitLightTypeSection>());
+			addMapAndServerSections(sections);
 
 			return sections; }());
 
-	m_MapConfigDefinition = g_GameConfigSystem.CreateDefinition("MapGameConfig", [this]()
+	m_MapConfigDefinition = g_GameConfigSystem.CreateDefinition("MapGameConfig", [&, this]()
 		{
 			std::vector<std::unique_ptr<const GameConfigSection<ServerConfigContext>>> sections;
 
 			AddCommonConfigSections(sections);
 			sections.push_back(std::make_unique<CommandsSection<ServerConfigContext>>(GetMapConfigCommandWhitelist()));
-			sections.push_back(std::make_unique<SentencesSection>());
-			sections.push_back(std::make_unique<MaterialsSection>());
-			sections.push_back(std::make_unique<GlobalModelReplacementSection>());
-			sections.push_back(std::make_unique<GlobalSentenceReplacementSection>());
-			sections.push_back(std::make_unique<GlobalSoundReplacementSection>());
-			sections.push_back(std::make_unique<HudColorSection>());
-			sections.push_back(std::make_unique<SuitLightTypeSection>());
+			addMapAndServerSections(sections);
 
 			return sections; }());
 
@@ -314,6 +311,7 @@ void ServerLibrary::LoadServerConfigFiles()
 
 	sentences::g_Sentences.LoadSentences(context.SentencesFiles);
 	g_MaterialSystem.LoadMaterials(context.MaterialsFiles);
+	g_Skill.LoadSkillConfigFiles(context.SkillFiles);
 
 	m_MapState.m_GlobalModelReplacement = g_ReplacementMaps.LoadMultiple(context.GlobalModelReplacementFiles, {.CaseSensitive = false});
 	m_MapState.m_GlobalSentenceReplacement = g_ReplacementMaps.LoadMultiple(context.GlobalSentenceReplacementFiles, {.CaseSensitive = true});

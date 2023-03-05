@@ -57,3 +57,22 @@ protected:
 		return context.MaterialsFiles;
 	}
 };
+
+/**
+ *	@brief Allows a configuration file to specify one or more skill files.
+ */
+class SkillSection final : public BaseFileNamesListSection<ServerConfigContext>
+{
+public:
+	explicit SkillSection() = default;
+
+	std::string_view GetName() const override final { return "Skill"; }
+
+protected:
+	std::string_view GetListName() const override final { return "skill"; }
+
+	std::vector<std::string>& GetFileNamesList(ServerConfigContext& context) const override final
+	{
+		return context.SkillFiles;
+	}
+};

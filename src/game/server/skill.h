@@ -20,6 +20,7 @@
 
 #include <array>
 #include <memory>
+#include <span>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -63,9 +64,7 @@ public:
 	void PostInitialize() override {}
 	void Shutdown() override;
 
-	void NewMapStarted();
-
-	void LoadSkillConfigFile();
+	void LoadSkillConfigFiles(std::span<const std::string> fileNames);
 
 	constexpr SkillLevel GetSkillLevel() const { return m_SkillLevel; }
 
