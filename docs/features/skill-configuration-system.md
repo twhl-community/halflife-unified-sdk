@@ -97,12 +97,6 @@ Syntax: `sk_reset`
 
 Removes all skill variables.
 
-### sk_reload
-
-Syntax: `sk_reload`
-
-Reloads the configuration file. Changes will take effect immediately except in those cases where values have been cached in other C++ variables (e.g. an NPC's health will not change).
-
 ## Skill2Json
 
 The `Skill2Json` tool converts original Half-Life `skill.cfg` files to the Unified SDK `skill.json` format. You can find this tool in the mod installation's `tools` directory.
