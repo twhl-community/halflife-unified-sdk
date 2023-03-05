@@ -42,6 +42,7 @@
 
 #include "networking/NetworkDataSystem.h"
 
+#include "sound/MaterialSystem.h"
 #include "sound/SentencesSystem.h"
 #include "sound/ServerSoundSystem.h"
 
@@ -257,6 +258,7 @@ void ServerLibrary::CreateConfigDefinitions()
 			AddCommonConfigSections(sections);
 			sections.push_back(std::make_unique<CommandsSection<ServerConfigContext>>());
 			sections.push_back(std::make_unique<SentencesSection>());
+			sections.push_back(std::make_unique<MaterialsSection>());
 			sections.push_back(std::make_unique<GlobalModelReplacementSection>());
 			sections.push_back(std::make_unique<GlobalSentenceReplacementSection>());
 			sections.push_back(std::make_unique<GlobalSoundReplacementSection>());
@@ -272,6 +274,7 @@ void ServerLibrary::CreateConfigDefinitions()
 			AddCommonConfigSections(sections);
 			sections.push_back(std::make_unique<CommandsSection<ServerConfigContext>>(GetMapConfigCommandWhitelist()));
 			sections.push_back(std::make_unique<SentencesSection>());
+			sections.push_back(std::make_unique<MaterialsSection>());
 			sections.push_back(std::make_unique<GlobalModelReplacementSection>());
 			sections.push_back(std::make_unique<GlobalSentenceReplacementSection>());
 			sections.push_back(std::make_unique<GlobalSoundReplacementSection>());
@@ -310,6 +313,7 @@ void ServerLibrary::LoadServerConfigFiles()
 	}
 
 	sentences::g_Sentences.LoadSentences(context.SentencesFiles);
+	g_MaterialSystem.LoadMaterials(context.MaterialsFiles);
 
 	m_MapState.m_GlobalModelReplacement = g_ReplacementMaps.LoadMultiple(context.GlobalModelReplacementFiles, {.CaseSensitive = false});
 	m_MapState.m_GlobalSentenceReplacement = g_ReplacementMaps.LoadMultiple(context.GlobalSentenceReplacementFiles, {.CaseSensitive = true});

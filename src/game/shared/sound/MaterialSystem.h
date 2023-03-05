@@ -17,10 +17,14 @@
 
 #include <array>
 #include <cstddef>
-#include <string_view>
+#include <memory>
+#include <span>
+#include <string>
 #include <vector>
 
 #include <EASTL/fixed_string.h>
+
+#include <spdlog/logger.h>
 
 #include "pm_materials.h"
 #include "networking/NetworkDataSystem.h"
@@ -54,7 +58,7 @@ public:
 
 	void HandleNetworkDataBlock(NetworkDataBlock& block) override;
 
-	void LoadMaterials();
+	void LoadMaterials(std::span<const std::string> fileNames);
 
 	/**
 	 *	@brief given texture name, find texture type.
@@ -66,6 +70,7 @@ private:
 	void ParseMaterialsFile(const char* fileName);
 
 private:
+	std::shared_ptr<spdlog::logger> m_Logger;
 	std::vector<Material> m_Materials;
 };
 

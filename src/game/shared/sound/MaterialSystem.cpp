@@ -55,6 +55,8 @@ std::optional<Material> TryParseMaterial(std::string_view line)
 
 bool MaterialSystem::Initialize()
 {
+	m_Logger = g_Logging.CreateLogger("materials");
+
 	g_NetworkData.RegisterHandler("MaterialSystem", this);
 
 	return true;
@@ -62,6 +64,8 @@ bool MaterialSystem::Initialize()
 
 void MaterialSystem::Shutdown()
 {
+	g_Logging.RemoveLogger(m_Logger);
+	m_Logger.reset();
 }
 
 void MaterialSystem::HandleNetworkDataBlock(NetworkDataBlock& block)
@@ -116,15 +120,20 @@ void MaterialSystem::HandleNetworkDataBlock(NetworkDataBlock& block)
 	}
 }
 
-void MaterialSystem::LoadMaterials()
+void MaterialSystem::LoadMaterials(std::span<const std::string> fileNames)
 {
 	m_Materials.clear();
 	m_Materials.reserve(MinimumMaterialsCount);
 
-	ParseMaterialsFile("sound/materials.txt");
+	for (const auto& fileName : fileNames)
+	{
+		ParseMaterialsFile(fileName.c_str());
+	}
 
 	std::stable_sort(m_Materials.begin(), m_Materials.end(), [](const auto& lhs, const auto& rhs)
 		{ return stricmp(lhs.Name.c_str(), rhs.Name.c_str()) < 0; });
+
+	m_Logger->debug("Loaded {} materials", m_Materials.size());
 }
 
 char MaterialSystem::FindTextureType(const char* name) const
@@ -145,6 +154,8 @@ char MaterialSystem::FindTextureType(const char* name) const
 
 void MaterialSystem::ParseMaterialsFile(const char* fileName)
 {
+	m_Logger->trace("Loading {}", fileName);
+
 	const auto fileContents = FileSystem_LoadFileIntoBuffer(fileName, FileContentFormat::Text);
 
 	if (fileContents.empty())

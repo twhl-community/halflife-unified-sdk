@@ -38,3 +38,22 @@ protected:
 		return context.SentencesFiles;
 	}
 };
+
+/**
+ *	@brief Allows a configuration file to specify one or more materials files.
+ */
+class MaterialsSection final : public BaseFileNamesListSection<ServerConfigContext>
+{
+public:
+	explicit MaterialsSection() = default;
+
+	std::string_view GetName() const override final { return "Materials"; }
+
+protected:
+	std::string_view GetListName() const override final { return "materials"; }
+
+	std::vector<std::string>& GetFileNamesList(ServerConfigContext& context) const override final
+	{
+		return context.MaterialsFiles;
+	}
+};
