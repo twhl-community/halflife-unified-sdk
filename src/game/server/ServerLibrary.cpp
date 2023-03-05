@@ -35,9 +35,7 @@
 #include "config/GameConfig.h"
 #include "config/sections/CommandsSection.h"
 #include "config/sections/EchoSection.h"
-#include "config/sections/GlobalModelReplacementSection.h"
-#include "config/sections/GlobalSentenceReplacementSection.h"
-#include "config/sections/GlobalSoundReplacementSection.h"
+#include "config/sections/GlobalReplacementFilesSections.h"
 #include "config/sections/HudColorSection.h"
 #include "config/sections/SuitLightTypeSection.h"
 

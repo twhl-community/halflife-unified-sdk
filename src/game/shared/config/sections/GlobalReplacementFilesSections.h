@@ -21,6 +21,44 @@
 #include "config/sections/BaseFileNamesListSection.h"
 
 /**
+ *	@brief Allows a configuration file to specify one or more global model replacement files.
+ */
+class GlobalModelReplacementSection final : public BaseFileNamesListSection<ServerConfigContext>
+{
+public:
+	explicit GlobalModelReplacementSection() = default;
+
+	std::string_view GetName() const override final { return "GlobalModelReplacement"; }
+
+protected:
+	std::string_view GetListName() const override final { return "global model replacement"; }
+
+	std::vector<std::string>& GetFileNamesList(ServerConfigContext& context) const override final
+	{
+		return context.GlobalModelReplacementFiles;
+	}
+};
+
+/**
+ *	@brief Allows a configuration file to specify one or more global sentence replacement files.
+ */
+class GlobalSentenceReplacementSection final : public BaseFileNamesListSection<ServerConfigContext>
+{
+public:
+	explicit GlobalSentenceReplacementSection() = default;
+
+	std::string_view GetName() const override final { return "GlobalSentenceReplacement"; }
+
+protected:
+	std::string_view GetListName() const override final { return "global sentence replacement"; }
+
+	std::vector<std::string>& GetFileNamesList(ServerConfigContext& context) const override final
+	{
+		return context.GlobalSentenceReplacementFiles;
+	}
+};
+
+/**
  *	@brief Allows a configuration file to specify one or more global sound replacement files.
  */
 class GlobalSoundReplacementSection final : public BaseFileNamesListSection<ServerConfigContext>

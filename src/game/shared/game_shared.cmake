@@ -14,9 +14,7 @@ function(add_game_shared_sources target)
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/sections/BaseFileNamesListSection.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/sections/CommandsSection.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/sections/EchoSection.h
-			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/sections/GlobalModelReplacementSection.h
-			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/sections/GlobalSentenceReplacementSection.h
-			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/sections/GlobalSoundReplacementSection.h
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/sections/GlobalReplacementFilesSections.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/sections/HudColorSection.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/sections/SuitLightTypeSection.h
 			
