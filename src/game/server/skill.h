@@ -24,24 +24,25 @@
 #include <string_view>
 #include <vector>
 
+#include <fmt/core.h>
+
 #include <spdlog/logger.h>
 
 #include "json_fwd.h"
 #include "utils/GameSystem.h"
 
-namespace SkillLevel
-{
-enum SkillLevel
+enum class SkillLevel
 {
 	Easy = 1,
 	Medium = 2,
 	Hard = 3
 };
-}
 
-constexpr int SkillLevelCount = SkillLevel::Hard;
+constexpr auto format_as(SkillLevel s) { return fmt::underlying(s); }
 
-constexpr bool IsValidSkillLevel(int skillLevel)
+constexpr int SkillLevelCount = static_cast<int>(SkillLevel::Hard);
+
+constexpr bool IsValidSkillLevel(SkillLevel skillLevel)
 {
 	return skillLevel >= SkillLevel::Easy && skillLevel <= SkillLevel::Hard;
 }
@@ -66,12 +67,12 @@ public:
 
 	void LoadSkillConfigFile();
 
-	constexpr int GetSkillLevel() const { return m_SkillLevel; }
+	constexpr SkillLevel GetSkillLevel() const { return m_SkillLevel; }
 
-	void SetSkillLevel(int skillLevel);
+	void SetSkillLevel(SkillLevel skillLevel);
 
 	/**
-	 *	@brief take the name of a variable, tack a digit for the skill level on, and return the value of that variable
+	 *	@brief Gets the value for a given skill variable.
 	 */
 	float GetValue(std::string_view name) const;
 
@@ -85,14 +86,14 @@ private:
 private:
 	std::shared_ptr<spdlog::logger> m_Logger;
 
-	int m_SkillLevel = SkillLevel::Easy;
+	SkillLevel m_SkillLevel = SkillLevel::Easy;
 
 	std::vector<SkillVariable> m_SkillVariables;
 };
 
 inline SkillSystem g_Skill;
 
-inline void SkillSystem::SetSkillLevel(int skillLevel)
+inline void SkillSystem::SetSkillLevel(SkillLevel skillLevel)
 {
 	if (!IsValidSkillLevel(skillLevel))
 	{

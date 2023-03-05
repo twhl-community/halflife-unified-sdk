@@ -72,7 +72,7 @@ static std::string GetSkillConfigSchema()
 		SkillVariableNameRegexPattern);
 }
 
-static std::optional<std::tuple<std::string_view, std::optional<int>>> TryParseSkillVariableName(std::string_view key, spdlog::logger& logger)
+static std::optional<std::tuple<std::string_view, std::optional<SkillLevel>>> TryParseSkillVariableName(std::string_view key, spdlog::logger& logger)
 {
 	std::match_results<std::string_view::const_iterator> matches;
 
@@ -103,7 +103,7 @@ static std::optional<std::tuple<std::string_view, std::optional<int>>> TryParseS
 		return {};
 	}
 
-	return {{baseName, skillLevel}};
+	return {{baseName, static_cast<SkillLevel>(skillLevel)}};
 }
 
 bool SkillSystem::Initialize()
@@ -225,7 +225,7 @@ void SkillSystem::LoadSkillConfigFile()
 
 	iSkill = std::clamp(iSkill, static_cast<int>(SkillLevel::Easy), static_cast<int>(SkillLevel::Hard));
 
-	SetSkillLevel(iSkill);
+	SetSkillLevel(static_cast<SkillLevel>(iSkill));
 
 	// Erase all previous data.
 	m_SkillVariables.clear();
