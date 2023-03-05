@@ -27,6 +27,8 @@ struct ServerConfigContext
 {
 	MapState& State;
 
+	std::vector<std::string> SentencesFiles;
+
 	std::vector<std::string> GlobalModelReplacementFiles;
 	std::vector<std::string> GlobalSentenceReplacementFiles;
 	std::vector<std::string> GlobalSoundReplacementFiles;

@@ -33,15 +33,31 @@ bool SentencesSystem::Initialize()
 	return true;
 }
 
-void SentencesSystem::PostInitialize()
-{
-	LoadSentences();
-}
-
 void SentencesSystem::Shutdown()
 {
 	g_Logging.RemoveLogger(m_Logger);
 	m_Logger.reset();
+}
+
+void SentencesSystem::LoadSentences(std::span<const std::string> fileNames)
+{
+	m_Sentences.clear();
+	m_SentenceGroups.clear();
+
+	m_Sentences.reserve(InitialSentencesReserveCount);
+
+	for (const auto& fileName : fileNames)
+	{
+		LoadSentences(fileName);
+	}
+
+	m_Logger->debug("Loaded {} out of max {} sentences with {} sentence groups", m_Sentences.size(), MaxSentencesCount, m_SentenceGroups.size());
+
+	// init lru lists
+	for (auto& group : m_SentenceGroups)
+	{
+		InitLRU(group.rgblru, group.count);
+	}
 }
 
 void SentencesSystem::NewMapStarted()
@@ -202,16 +218,11 @@ void SentencesSystem::Stop(edict_t* entity, int isentenceg, int ipick)
 	STOP_SOUND(entity, CHAN_VOICE, name.c_str());
 }
 
-void SentencesSystem::LoadSentences()
+void SentencesSystem::LoadSentences(const std::string& fileName)
 {
-	m_Logger->trace("Loading sentences.txt");
+	m_Logger->trace("Loading {}", fileName);
 
-	m_Sentences.clear();
-	m_SentenceGroups.clear();
-
-	m_Sentences.reserve(InitialSentencesReserveCount);
-
-	const auto fileContents = FileSystem_LoadFileIntoBuffer("sound/sentences.txt", FileContentFormat::Text);
+	const auto fileContents = FileSystem_LoadFileIntoBuffer(fileName.c_str(), FileContentFormat::Text);
 
 	if (fileContents.empty())
 	{
@@ -231,7 +242,7 @@ void SentencesSystem::LoadSentences()
 
 		if (m_Sentences.size() >= MaxSentencesCount)
 		{
-			m_Logger->error("Too many sentences in sentences.txt! (maximum {})", MaxSentencesCount);
+			m_Logger->error("Too many sentences in {}! (maximum {})", fileName, MaxSentencesCount);
 			break;
 		}
 
@@ -251,6 +262,7 @@ void SentencesSystem::LoadSentences()
 
 		const std::string_view groupName = std::get<0>(*groupData);
 
+		// TODO: needs to handle redefining sentences and groups in other files.
 		// if new name doesn't match previous group name,
 		// make a new group.
 
@@ -291,14 +303,6 @@ void SentencesSystem::LoadSentences()
 				groupsWithBadSentenceIndices.insert(groupName);
 			}
 		}
-	}
-
-	m_Logger->debug("Loaded {} out of max {} sentences with {} sentence groups", m_Sentences.size(), MaxSentencesCount, m_SentenceGroups.size());
-
-	// init lru lists
-	for (auto& group : m_SentenceGroups)
-	{
-		InitLRU(group.rgblru, group.count);
 	}
 }
 

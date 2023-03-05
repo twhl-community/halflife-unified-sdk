@@ -55,7 +55,7 @@ void ServerSoundSystem::EmitSound(edict_t* entity, int channel, const char* samp
 		if (sentences::g_Sentences.LookupSentence(sample, &name) >= 0)
 			EmitSoundSentence(entity, channel, name.c_str(), volume, attenuation, flags, pitch);
 		else
-			m_Logger->debug("Unable to find {} in sentences.txt", sample);
+			m_Logger->debug("Unable to find {} in sentences", sample);
 	}
 	else
 	{

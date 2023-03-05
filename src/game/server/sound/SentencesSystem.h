@@ -16,6 +16,7 @@
 #pragma once
 
 #include <memory>
+#include <span>
 #include <string>
 #include <vector>
 
@@ -40,8 +41,10 @@ public:
 	const char* GetName() const override { return "Sentences"; }
 
 	bool Initialize() override;
-	void PostInitialize() override;
+	void PostInitialize() override {}
 	void Shutdown() override;
+
+	void LoadSentences(std::span<const std::string> fileNames);
 
 	void NewMapStarted();
 
@@ -84,7 +87,7 @@ public:
 	void Stop(edict_t* entity, int isentenceg, int ipick);
 
 private:
-	void LoadSentences();
+	void LoadSentences(const std::string& fileName);
 
 	/**
 	 *	@brief randomize list of sentence name indices

@@ -35,6 +35,7 @@
 #include "config/GameConfig.h"
 #include "config/sections/CommandsSection.h"
 #include "config/sections/EchoSection.h"
+#include "config/sections/GameDataFilesSections.h"
 #include "config/sections/GlobalReplacementFilesSections.h"
 #include "config/sections/HudColorSection.h"
 #include "config/sections/SuitLightTypeSection.h"
@@ -255,6 +256,7 @@ void ServerLibrary::CreateConfigDefinitions()
 
 			AddCommonConfigSections(sections);
 			sections.push_back(std::make_unique<CommandsSection<ServerConfigContext>>());
+			sections.push_back(std::make_unique<SentencesSection>());
 			sections.push_back(std::make_unique<GlobalModelReplacementSection>());
 			sections.push_back(std::make_unique<GlobalSentenceReplacementSection>());
 			sections.push_back(std::make_unique<GlobalSoundReplacementSection>());
@@ -269,6 +271,7 @@ void ServerLibrary::CreateConfigDefinitions()
 
 			AddCommonConfigSections(sections);
 			sections.push_back(std::make_unique<CommandsSection<ServerConfigContext>>(GetMapConfigCommandWhitelist()));
+			sections.push_back(std::make_unique<SentencesSection>());
 			sections.push_back(std::make_unique<GlobalModelReplacementSection>());
 			sections.push_back(std::make_unique<GlobalSentenceReplacementSection>());
 			sections.push_back(std::make_unique<GlobalSoundReplacementSection>());
@@ -305,6 +308,8 @@ void ServerLibrary::LoadServerConfigFiles()
 		g_GameLogger->trace("Loading map config file");
 		m_MapConfigDefinition->TryLoad(mapCfgFileName.c_str(), {.Data = context});
 	}
+
+	sentences::g_Sentences.LoadSentences(context.SentencesFiles);
 
 	m_MapState.m_GlobalModelReplacement = g_ReplacementMaps.LoadMultiple(context.GlobalModelReplacementFiles, {.CaseSensitive = false});
 	m_MapState.m_GlobalSentenceReplacement = g_ReplacementMaps.LoadMultiple(context.GlobalSentenceReplacementFiles, {.CaseSensitive = true});
