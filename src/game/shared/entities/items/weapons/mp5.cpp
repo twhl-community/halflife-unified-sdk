@@ -29,7 +29,6 @@ void CMP5::OnCreate()
 //=========================================================
 void CMP5::Spawn()
 {
-	pev->classname = MAKE_STRING("weapon_9mmAR"); // hack to allow for old names
 	Precache();
 	SetModel(STRING(pev->model));
 	m_iId = WEAPON_MP5;

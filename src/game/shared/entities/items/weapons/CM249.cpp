@@ -61,8 +61,6 @@ void CM249::Precache()
 
 void CM249::Spawn()
 {
-	pev->classname = MAKE_STRING("weapon_m249");
-
 	Precache();
 
 	m_iId = WEAPON_M249;

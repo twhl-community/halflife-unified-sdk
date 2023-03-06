@@ -129,6 +129,9 @@ target_sources(client PRIVATE
 	particleman/IParticleMan_Active.h
 	particleman/particleman.h
 	particleman/particleman_internal.h
+	
+	prediction/ClientPredictionSystem.cpp
+	prediction/ClientPredictionSystem.h
 
 	rendering/GameStudioModelRenderer.cpp
 	rendering/GameStudioModelRenderer.h

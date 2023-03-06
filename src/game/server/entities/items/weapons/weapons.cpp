@@ -256,78 +256,31 @@ void W_Precache()
 	UTIL_PrecacheOther("item_security");
 	UTIL_PrecacheOther("item_longjump");
 
-	// shotgun
-	UTIL_PrecacheOtherWeapon("weapon_shotgun");
+	// Precache weapons in a well-defined order so the client initializes its local data the same way as the server.
+	// TODO: This is only necessary until weapon data is sent over the network.
+	const auto classNames = g_WeaponDictionary->GetClassNames();
+
+	std::vector<std::string_view> sortedClassNames{classNames.begin(), classNames.end()};
+
+	std::ranges::sort(sortedClassNames);
+
+	// This will also try to precache cycler_weapon but it doesn't return any item data so that's fine.
+	for (const auto& className : sortedClassNames)
+	{
+		UTIL_PrecacheOtherWeapon(className.data());
+	}
+
 	UTIL_PrecacheOther("ammo_buckshot");
-
-	// crowbar
-	UTIL_PrecacheOtherWeapon("weapon_crowbar");
-
-	// glock
-	UTIL_PrecacheOtherWeapon("weapon_9mmhandgun");
 	UTIL_PrecacheOther("ammo_9mmclip");
-
-	// mp5
-	UTIL_PrecacheOtherWeapon("weapon_9mmAR");
 	UTIL_PrecacheOther("ammo_9mmAR");
 	UTIL_PrecacheOther("ammo_ARgrenades");
-
-	// python
-	UTIL_PrecacheOtherWeapon("weapon_357");
 	UTIL_PrecacheOther("ammo_357");
-
-	// gauss
-	UTIL_PrecacheOtherWeapon("weapon_gauss");
 	UTIL_PrecacheOther("ammo_gaussclip");
-
-	// rpg
-	UTIL_PrecacheOtherWeapon("weapon_rpg");
 	UTIL_PrecacheOther("ammo_rpgclip");
-
-	// crossbow
-	UTIL_PrecacheOtherWeapon("weapon_crossbow");
 	UTIL_PrecacheOther("ammo_crossbow");
-
-	// egon
-	UTIL_PrecacheOtherWeapon("weapon_egon");
-
-	// tripmine
-	UTIL_PrecacheOtherWeapon("weapon_tripmine");
-
-	// satchel charge
-	UTIL_PrecacheOtherWeapon("weapon_satchel");
-
-	// hand grenade
-	UTIL_PrecacheOtherWeapon("weapon_handgrenade");
-
-	// squeak grenade
-	UTIL_PrecacheOtherWeapon("weapon_snark");
-
-	// hornetgun
-	UTIL_PrecacheOtherWeapon("weapon_hornetgun");
-
-	UTIL_PrecacheOtherWeapon("weapon_grapple");
-
-	UTIL_PrecacheOtherWeapon("weapon_eagle");
-
-	UTIL_PrecacheOtherWeapon("weapon_pipewrench");
-
-	UTIL_PrecacheOtherWeapon("weapon_m249");
 	UTIL_PrecacheOther("ammo_556");
-
-	UTIL_PrecacheOtherWeapon("weapon_displacer");
-
-	UTIL_PrecacheOtherWeapon("weapon_sporelauncher");
 	UTIL_PrecacheOther("ammo_spore");
-
-	UTIL_PrecacheOtherWeapon("weapon_shockrifle");
-
-	UTIL_PrecacheOtherWeapon("weapon_sniperrifle");
 	UTIL_PrecacheOther("ammo_762");
-
-	UTIL_PrecacheOtherWeapon("weapon_knife");
-
-	UTIL_PrecacheOtherWeapon("weapon_penguin");
 
 	UTIL_PrecacheSound("weapons/spore_hit1.wav");
 	UTIL_PrecacheSound("weapons/spore_hit2.wav");

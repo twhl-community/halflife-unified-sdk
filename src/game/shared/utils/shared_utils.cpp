@@ -47,6 +47,20 @@ void DBG_AssertFunction(
 }
 #endif // DEBUG
 
+#ifdef DEBUG
+edict_t* DBG_EntOfVars(const entvars_t* pev)
+{
+	if (pev->pContainingEntity != nullptr)
+		return pev->pContainingEntity;
+	CBaseEntity::Logger->debug("entvars_t pContainingEntity is nullptr, calling into engine");
+	edict_t* pent = (*g_engfuncs.pfnFindEntityByVars)((entvars_t*)pev);
+	if (pent == nullptr)
+		CBaseEntity::Logger->debug("DAMN!  Even the engine couldn't FindEntityByVars!");
+	((entvars_t*)pev)->pContainingEntity = pent;
+	return pent;
+}
+#endif // DEBUG
+
 string_t ALLOC_STRING(const char* str)
 {
 	return MAKE_STRING(g_StringPool.Allocate(str));

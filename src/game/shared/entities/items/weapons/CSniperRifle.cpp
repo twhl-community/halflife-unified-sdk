@@ -38,8 +38,6 @@ void CSniperRifle::OnCreate()
 
 void CSniperRifle::Precache()
 {
-	pev->classname = MAKE_STRING("weapon_sniperrifle");
-
 	BaseClass::Precache();
 
 	m_iId = WEAPON_SNIPERRIFLE;

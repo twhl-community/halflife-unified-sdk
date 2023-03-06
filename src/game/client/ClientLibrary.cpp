@@ -27,6 +27,8 @@
 #include "networking/ClientUserMessages.h"
 #include "networking/NetworkDataSystem.h"
 
+#include "prediction/ClientPredictionSystem.h"
+
 #include "sound/ClientSoundReplacementSystem.h"
 #include "sound/IGameSoundSystem.h"
 #include "sound/IMusicSystem.h"
@@ -40,8 +42,6 @@ bool ClientLibrary::Initialize()
 	{
 		return false;
 	}
-
-	gpGlobals->pStringBase = "";
 
 	// Enable buffering for non-debug print output so it isn't ignored outright by the engine.
 	Con_SetPrintBufferingEnabled(true);
@@ -213,6 +213,7 @@ Check the console for more information.)",
 void ClientLibrary::AddGameSystems()
 {
 	GameLibrary::AddGameSystems();
+	g_GameSystems.Add(&g_ClientPrediction);
 	g_GameSystems.Add(&sound::g_ClientSoundReplacement);
 }
 

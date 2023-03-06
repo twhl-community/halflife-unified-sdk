@@ -55,8 +55,6 @@ void CEagle::Precache()
 
 void CEagle::Spawn()
 {
-	pev->classname = MAKE_STRING("weapon_eagle");
-
 	Precache();
 
 	m_iId = WEAPON_EAGLE;

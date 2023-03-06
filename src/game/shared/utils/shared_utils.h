@@ -35,6 +35,9 @@ inline cvar_t* g_pDeveloper;
 inline std::shared_ptr<spdlog::logger> g_AssertLogger;
 inline std::shared_ptr<spdlog::logger> g_PrecacheLogger;
 
+// More explicit than "int"
+typedef int EOFFSET;
+
 //
 // How did I ever live without ASSERT?
 //
@@ -46,6 +49,45 @@ void DBG_AssertFunction(bool fExpr, const char* szExpr, const char* szFile, int 
 #define ASSERT(f)
 #define ASSERTSZ(f, sz)
 #endif // !DEBUG
+
+//
+// Conversion among the three types of "entity", including identity-conversions.
+//
+#ifdef DEBUG
+edict_t* DBG_EntOfVars(const entvars_t* pev);
+inline edict_t* ENT(const entvars_t* pev) { return DBG_EntOfVars(pev); }
+#else
+inline edict_t* ENT(const entvars_t* pev)
+{
+	return pev->pContainingEntity;
+}
+#endif
+inline edict_t* ENT(edict_t* pent)
+{
+	return pent;
+}
+inline edict_t* ENT(EOFFSET eoffset) { return (*g_engfuncs.pfnPEntityOfEntOffset)(eoffset); }
+inline EOFFSET OFFSET(const edict_t* pent)
+{
+	ASSERTSZ(pent, "Bad ent in OFFSET()");
+	return (*g_engfuncs.pfnEntOffsetOfPEntity)(pent);
+}
+inline EOFFSET OFFSET(entvars_t* pev)
+{
+	ASSERTSZ(pev, "Bad pev in OFFSET()");
+	return OFFSET(ENT(pev));
+}
+
+inline entvars_t* VARS(edict_t* pent)
+{
+	if (!pent)
+		return nullptr;
+
+	return &pent->v;
+}
+
+inline int ENTINDEX(edict_t* pEdict) { return (*g_engfuncs.pfnIndexOfEdict)(pEdict); }
+inline edict_t* INDEXENT(int iEdictNum) { return (*g_engfuncs.pfnPEntityOfEntIndex)(iEdictNum); }
 
 // Testing strings for nullity
 inline constexpr bool FStringNull(string_t iString)

@@ -52,7 +52,6 @@ void CPython::IncrementAmmo(CBasePlayer* pPlayer)
 
 void CPython::Spawn()
 {
-	pev->classname = MAKE_STRING("weapon_357"); // hack to allow for old names
 	Precache();
 	m_iId = WEAPON_PYTHON;
 	SetModel(STRING(pev->model));

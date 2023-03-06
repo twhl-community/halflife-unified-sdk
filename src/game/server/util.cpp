@@ -228,20 +228,6 @@ CBasePlayer* UTIL_GetLocalPlayer()
 	return static_cast<CBasePlayer*>(UTIL_PlayerByIndex(1));
 }
 
-#ifdef DEBUG
-edict_t* DBG_EntOfVars(const entvars_t* pev)
-{
-	if (pev->pContainingEntity != nullptr)
-		return pev->pContainingEntity;
-	CBaseEntity::Logger->debug("entvars_t pContainingEntity is nullptr, calling into engine");
-	edict_t* pent = (*g_engfuncs.pfnFindEntityByVars)((entvars_t*)pev);
-	if (pent == nullptr)
-		CBaseEntity::Logger->debug("DAMN!  Even the engine couldn't FindEntityByVars!");
-	((entvars_t*)pev)->pContainingEntity = pent;
-	return pent;
-}
-#endif // DEBUG
-
 // ripped this out of the engine
 float UTIL_AngleMod(float a)
 {
