@@ -61,14 +61,14 @@ public:
 	bool Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
-	int m_maxFrame;
+	float m_maxFrame;
 };
 
 LINK_ENTITY_TO_CLASS(squidspit, CSquidSpit);
 
 TYPEDESCRIPTION CSquidSpit::m_SaveData[] =
 	{
-		DEFINE_FIELD(CSquidSpit, m_maxFrame, FIELD_INTEGER),
+		DEFINE_FIELD(CSquidSpit, m_maxFrame, FIELD_FLOAT),
 };
 
 IMPLEMENT_SAVERESTORE(CSquidSpit, CBaseEntity);
