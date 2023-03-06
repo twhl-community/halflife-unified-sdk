@@ -16,7 +16,6 @@
 #include "cbase.h"
 #include "UserMessages.h"
 
-LINK_ENTITY_TO_CLASS(weapon_python, CPython);
 LINK_ENTITY_TO_CLASS(weapon_357, CPython);
 
 void CPython::OnCreate()

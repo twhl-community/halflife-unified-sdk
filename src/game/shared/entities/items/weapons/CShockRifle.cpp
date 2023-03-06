@@ -32,7 +32,6 @@ IMPLEMENT_SAVERESTORE(CShockRifle, CShockRifle::BaseClass);
 #endif
 
 LINK_ENTITY_TO_CLASS(weapon_shockrifle, CShockRifle);
-LINK_ENTITY_TO_CLASS(weapon_shockroach, CShockRifle);
 
 void CShockRifle::OnCreate()
 {

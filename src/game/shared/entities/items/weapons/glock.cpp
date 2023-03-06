@@ -15,7 +15,6 @@
 
 #include "cbase.h"
 
-LINK_ENTITY_TO_CLASS(weapon_glock, CGlock);
 LINK_ENTITY_TO_CLASS(weapon_9mmhandgun, CGlock);
 
 void CGlock::OnCreate()
@@ -252,5 +251,5 @@ public:
 		return false;
 	}
 };
-LINK_ENTITY_TO_CLASS(ammo_glockclip, CGlockAmmo);
+
 LINK_ENTITY_TO_CLASS(ammo_9mmclip, CGlockAmmo);
