@@ -529,8 +529,6 @@ void CFlockingFlyer::SpreadFlock2()
 bool CFlockingFlyer::FPathBlocked()
 {
 	TraceResult tr;
-	Vector vecDist; // used for general measurements
-	Vector vecDir;	// used for general measurements
 	bool fBlocked;
 
 	if (m_flFakeBlockedTime > gpGlobals->time)
@@ -585,8 +583,6 @@ void CFlockingFlyer::FlockLeaderThink()
 {
 	TraceResult tr;
 	Vector vecDist;		// used for general measurements
-	Vector vecDir;		// used for general measurements
-	int cProcessed = 0; // keep track of how many other boids we've processed
 	float flLeftSide;
 	float flRightSide;
 
@@ -690,9 +686,6 @@ void CFlockingFlyer::FlockLeaderThink()
 //=========================================================
 void CFlockingFlyer::FlockFollowerThink()
 {
-	TraceResult tr;
-	Vector vecDist;
-	Vector vecDir;
 	Vector vecDirToLeader;
 	float flDistToLeader;
 

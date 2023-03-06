@@ -501,9 +501,7 @@ void CBullsquid::AlertSound()
 void CBullsquid::SetYawSpeed()
 {
 	int ys;
-
-	ys = 0;
-
+    
 	switch (m_Activity)
 	{
 	case ACT_WALK:
