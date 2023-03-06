@@ -18,10 +18,9 @@
 #include <array>
 #include <cstddef>
 #include <memory>
-#include <optional>
 #include <span>
 #include <string>
-#include <vector>
+#include <unordered_map>
 
 #include <EASTL/fixed_string.h>
 
@@ -30,14 +29,22 @@
 #include "pm_materials.h"
 #include "networking/NetworkDataSystem.h"
 #include "utils/GameSystem.h"
+#include "utils/heterogeneous_lookup.h"
+#include "utils/json_fwd.h"
 
 constexpr std::size_t TextureNameMax = 16; // Must match texture name length in WAD and BSP file formats.
 
 using TextureName = eastl::fixed_string<char, TextureNameMax>;
 
+struct TextureNameHash : public TransparentStringHash
+{
+	using TransparentStringHash::operator();
+
+	[[nodiscard]] size_t operator()(const TextureName& txt) const { return hash_type{}(txt.c_str()); }
+};
+
 struct Material
 {
-	TextureName Name;
 	char Type{};
 };
 
@@ -72,13 +79,11 @@ public:
 	char FindTextureType(const char* name) const;
 
 private:
-	void ParseMaterialsFile(const char* fileName);
-
-	std::optional<Material> TryParseMaterial(std::string_view line);
+	bool ParseConfiguration(const json& input);
 
 private:
 	std::shared_ptr<spdlog::logger> m_Logger;
-	std::vector<Material> m_Materials;
+	std::unordered_map<TextureName, Material, TextureNameHash, TransparentEqual> m_Materials;
 };
 
 inline MaterialSystem g_MaterialSystem;
