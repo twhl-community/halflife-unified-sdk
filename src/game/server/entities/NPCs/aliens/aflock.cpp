@@ -444,7 +444,6 @@ void CFlockingFlyer::FormFlock()
 		// I am my own leader
 		m_pSquadLeader = this;
 		m_pSquadNext = nullptr;
-		int squadCount = 1;
 
 		CBaseEntity* pEntity = nullptr;
 
@@ -457,7 +456,6 @@ void CFlockingFlyer::FormFlock()
 				// Can we recruit this guy?
 				if (FClassnameIs(pRecruit->pev, "monster_flyer"))
 				{
-					squadCount++;
 					SquadAdd((CFlockingFlyer*)pRecruit);
 				}
 			}
