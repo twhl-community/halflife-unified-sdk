@@ -1487,6 +1487,7 @@ Fixes that have been reported but not yet fixed in the original game:
 ### Bug fixes
 
 * Fixed tripmines not detonating if placed on breakable and a save game is loaded [#192](https://github.com/SamVanheer/halflife-updated/issues/192) (Thanks forklift.mdl)
+* Fixed func_friction not working properly in multiplayer (halflife issue [#1542](https://github.com/ValveSoftware/halflife/issues/1542)) (Thanks L453rh4wk)
 
 ## Changes in V1.0.0 Beta 014
 
