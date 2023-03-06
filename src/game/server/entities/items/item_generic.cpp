@@ -17,7 +17,6 @@
 const auto SF_ITEMGENERIC_DROP_TO_FLOOR = 1 << 0;
 const auto SF_ITEMGENERIC_SOLID = 1 << 1;
 
-// TODO: needs save/restore
 class CGenericItem : public CBaseAnimating
 {
 public:
@@ -30,9 +29,18 @@ public:
 
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
+    bool Save(CSave& save) override;
+    bool Restore(CRestore& restore) override;
+    static TYPEDESCRIPTION m_SaveData[];
+    
 	float m_lastTime;
 	string_t m_iSequence;
 };
+
+TYPEDESCRIPTION CGenericItem::m_SaveData[] = {
+    DEFINE_FIELD(CGenericItem, m_lastTime, FIELD_TIME),
+};
+IMPLEMENT_SAVERESTORE(CGenericItem, CBaseAnimating);
 
 LINK_ENTITY_TO_CLASS(item_generic, CGenericItem);
 
