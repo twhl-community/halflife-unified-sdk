@@ -2122,12 +2122,12 @@ void CBasePlayer::PreThink()
 		if ((m_afButtonPressed & IN_FORWARD) != 0)
 		{
 			vel = 1;
-			pTrain->Use(this, this, USE_SET, (float)vel);
+			pTrain->Use(this, this, USE_SET, vel);
 		}
 		else if ((m_afButtonPressed & IN_BACK) != 0)
 		{
 			vel = -1;
-			pTrain->Use(this, this, USE_SET, (float)vel);
+			pTrain->Use(this, this, USE_SET, vel);
 		}
 
 		if (0 != vel)
@@ -3765,7 +3765,7 @@ void CBasePlayer::ImpulseCommands()
 	// Handle use events
 	PlayerUse();
 
-	int iImpulse = (int)pev->impulse;
+	int iImpulse = pev->impulse;
 	switch (iImpulse)
 	{
 	case 99:
@@ -5663,7 +5663,7 @@ void CStripWeapons::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE 
 	}
 	else if (!g_pGameRules->IsDeathmatch())
 	{
-		pPlayer = (CBasePlayer*)UTIL_GetLocalPlayer();
+		pPlayer = UTIL_GetLocalPlayer();
 	}
 
 	if (pPlayer)
