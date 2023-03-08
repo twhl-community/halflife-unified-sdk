@@ -293,12 +293,14 @@ void CFlockingFlyer::MakeSound()
 //=========================================================
 void CFlockingFlyer::Killed(CBaseEntity* attacker, int iGib)
 {
-    CFlockingFlyer* pSquad = m_pSquadLeader;
+	CFlockingFlyer* pSquad;
+
+	pSquad = (CFlockingFlyer*)m_pSquadLeader;
 
 	while (pSquad)
 	{
 		pSquad->m_flAlertTime = gpGlobals->time + 15;
-		pSquad = pSquad->m_pSquadNext;
+		pSquad = (CFlockingFlyer*)pSquad->m_pSquadNext;
 	}
 
 	if (m_pSquadLeader)
