@@ -19,6 +19,8 @@
 #include "cl_dll.h"
 #include "ClientPredictionSystem.h"
 
+#include "CRpg.h"
+
 #include "com_weapons.h"
 #include "entity_state.h"
 #include "usercmd.h"

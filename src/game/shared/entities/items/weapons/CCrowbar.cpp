@@ -14,7 +14,7 @@
  ****/
 
 #include "cbase.h"
-
+#include "CCrowbar.h"
 
 #define CROWBAR_BODYHIT_VOLUME 128
 #define CROWBAR_WALLHIT_VOLUME 512

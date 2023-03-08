@@ -14,6 +14,7 @@
  ****/
 
 #include "cbase.h"
+#include "CMP5.h"
 #include "UserMessages.h"
 
 LINK_ENTITY_TO_CLASS(weapon_9mmAR, CMP5);

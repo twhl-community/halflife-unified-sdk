@@ -14,6 +14,7 @@
  ****/
 
 #include "cbase.h"
+#include "CHgun.h"
 #include "aliens/hornet.h"
 #include "UserMessages.h"
 
@@ -25,6 +26,14 @@ enum firemode_e
 
 
 LINK_ENTITY_TO_CLASS(weapon_hornetgun, CHgun);
+
+#ifndef CLIENT_DLL
+TYPEDESCRIPTION CHgun::m_SaveData[] =
+	{
+		DEFINE_FIELD(CHgun, m_flRechargeTime, FIELD_TIME),
+};
+IMPLEMENT_SAVERESTORE(CHgun, CBasePlayerWeapon);
+#endif
 
 bool CHgun::IsUseable()
 {

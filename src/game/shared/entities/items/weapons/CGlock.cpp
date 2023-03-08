@@ -14,6 +14,7 @@
  ****/
 
 #include "cbase.h"
+#include "CGlock.h"
 
 LINK_ENTITY_TO_CLASS(weapon_9mmhandgun, CGlock);
 

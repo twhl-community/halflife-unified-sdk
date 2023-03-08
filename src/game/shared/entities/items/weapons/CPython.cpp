@@ -14,6 +14,7 @@
  ****/
 
 #include "cbase.h"
+#include "CPython.h"
 #include "UserMessages.h"
 
 LINK_ENTITY_TO_CLASS(weapon_357, CPython);

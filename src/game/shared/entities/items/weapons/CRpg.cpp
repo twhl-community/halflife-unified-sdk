@@ -14,65 +14,29 @@
  ****/
 
 #include "cbase.h"
+#include "CRpg.h"
 #include "UserMessages.h"
+
+#ifndef CLIENT_DLL
+#include "items/weapons/CLaserSpot.h"
+#endif
 
 LINK_ENTITY_TO_CLASS(weapon_rpg, CRpg);
 
 #ifndef CLIENT_DLL
-
-LINK_ENTITY_TO_CLASS(laser_spot, CLaserSpot);
-
-//=========================================================
-//=========================================================
-CLaserSpot* CLaserSpot::CreateSpot()
-{
-	CLaserSpot* pSpot = g_EntityDictionary->Create<CLaserSpot>("laser_spot");
-	pSpot->Spawn();
-
-	return pSpot;
-}
-
-//=========================================================
-//=========================================================
-void CLaserSpot::Spawn()
-{
-	Precache();
-	pev->movetype = MOVETYPE_NONE;
-	pev->solid = SOLID_NOT;
-
-	pev->rendermode = kRenderGlow;
-	pev->renderfx = kRenderFxNoDissipation;
-	pev->renderamt = 255;
-
-	SetModel("sprites/laserdot.spr");
-	UTIL_SetOrigin(pev, pev->origin);
+TYPEDESCRIPTION CRpg::m_SaveData[] =
+	{
+		DEFINE_FIELD(CRpg, m_fSpotActive, FIELD_BOOLEAN),
+		DEFINE_FIELD(CRpg, m_cActiveRockets, FIELD_INTEGER),
 };
+IMPLEMENT_SAVERESTORE(CRpg, CBasePlayerWeapon);
 
-//=========================================================
-// Suspend- make the laser sight invisible.
-//=========================================================
-void CLaserSpot::Suspend(float flSuspendTime)
-{
-	pev->effects |= EF_NODRAW;
-
-	SetThink(&CLaserSpot::Revive);
-	pev->nextthink = gpGlobals->time + flSuspendTime;
-}
-
-//=========================================================
-// Revive - bring a suspended laser sight back.
-//=========================================================
-void CLaserSpot::Revive()
-{
-	pev->effects &= ~EF_NODRAW;
-
-	SetThink(nullptr);
-}
-
-void CLaserSpot::Precache()
-{
-	PrecacheModel("sprites/laserdot.spr");
+TYPEDESCRIPTION CRpgRocket::m_SaveData[] =
+	{
+		DEFINE_FIELD(CRpgRocket, m_flIgniteTime, FIELD_TIME),
+		DEFINE_FIELD(CRpgRocket, m_pLauncher, FIELD_EHANDLE),
 };
+IMPLEMENT_SAVERESTORE(CRpgRocket, CGrenade);
 
 LINK_ENTITY_TO_CLASS(rpg_rocket, CRpgRocket);
 
