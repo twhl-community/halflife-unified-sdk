@@ -19,8 +19,6 @@
 #include "cl_dll.h"
 #include "ClientPredictionSystem.h"
 
-#include "CRpg.h"
-
 #include "com_weapons.h"
 #include "entity_state.h"
 #include "usercmd.h"
@@ -244,12 +242,6 @@ void ClientPredictionSystem::WeaponsPostThink(local_state_t* from, local_state_t
 		localPlayer->m_pActiveItem = GetLocalWeapon(from->client.m_iId);
 	}
 
-	if (localPlayer->m_pActiveItem->m_iId == WEAPON_RPG)
-	{
-		((CRpg*)localPlayer->m_pActiveItem)->m_fSpotActive = 0 != from->client.vuser2[1];
-		((CRpg*)localPlayer->m_pActiveItem)->m_cActiveRockets = (int)from->client.vuser2[2];
-	}
-
 	// Don't go firing anything if we have died or are spectating
 	// Or if we don't have a weapon model deployed
 	if ((localPlayer->pev->deadflag != (DEAD_DISCARDBODY + 1)) &&
@@ -314,12 +306,6 @@ void ClientPredictionSystem::WeaponsPostThink(local_state_t* from, local_state_t
 	to->client.ammo_rockets = localPlayer->ammo_rockets;
 	to->client.vuser2.y = localPlayer->ammo_spores;
 	to->client.vuser2.z = localPlayer->ammo_762;
-
-	if (localPlayer->m_pActiveItem->m_iId == WEAPON_RPG)
-	{
-		to->client.vuser2[1] = static_cast<float>(((CRpg*)localPlayer->m_pActiveItem)->m_fSpotActive);
-		to->client.vuser2[2] = ((CRpg*)localPlayer->m_pActiveItem)->m_cActiveRockets;
-	}
 
 	// Make sure that weapon animation matches what the game .dll is telling us
 	//  over the wire ( fixes some animation glitches )
