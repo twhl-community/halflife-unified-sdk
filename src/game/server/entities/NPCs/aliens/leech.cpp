@@ -685,9 +685,6 @@ void CLeech::SwimThink()
 
 void CLeech::Killed(CBaseEntity* attacker, int iGib)
 {
-	Vector vecSplatDir;
-	TraceResult tr;
-
 	// AILogger->debug("Leech: killed");
 	//  tell owner ( if any ) that we're dead.This is mostly for MonsterMaker functionality.
 	CBaseEntity* pOwner = CBaseEntity::Instance(pev->owner);

@@ -1305,8 +1305,6 @@ void CChangeLevel::UseChangeLevel(CBaseEntity* pActivator, CBaseEntity* pCaller,
 
 void CChangeLevel::ChangeLevelNow(CBaseEntity* pActivator)
 {
-	LEVELLIST levels[16];
-
 	ASSERT(!FStrEq(m_szMapName, ""));
 
 	// Don't work in deathmatch

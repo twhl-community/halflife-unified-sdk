@@ -348,9 +348,7 @@ void COFMedicAlly::Spawn()
 	{
 		m_iGruntHead = RANDOM_LONG(0, 99) % 2 == 0 ? MedicAllyHead::White : MedicAllyHead::Black;
 	}
-
-	int weaponIndex = 0;
-
+    
 	if ((pev->weapons & MedicAllyWeaponFlag::Glock) != 0)
 	{
 		m_WeaponGroup = MedicAllyBodygroup::Glock;

@@ -33,7 +33,6 @@ extern TEMPENTITY* pFlare; // Vit_amiN: egon's energy flare
 void UpdateBeams()
 {
 	Vector forward, vecSrc, vecEnd, angles, right, up;
-	Vector view_ofs;
 	pmtrace_t tr;
 	cl_entity_t* pthisplayer = gEngfuncs.GetLocalPlayer();
 	int idx = pthisplayer->index;

@@ -192,7 +192,6 @@ bool CGraph::HandleLinkEnt(int iNode, entvars_t* pevLinkEnt, int afCapMask, NODE
 {
 	edict_t* pentWorld;
 	CBaseEntity* pDoor;
-	TraceResult tr;
 
 	if (0 == m_fGraphPresent || 0 == m_fGraphPointersSet)
 	{ // protect us in the case that the node graph isn't available
@@ -849,7 +848,6 @@ int CGraph::FindNearestNode(const Vector& vecOrigin, CBaseEntity* pEntity)
 int CGraph::FindNearestNode(const Vector& vecOrigin, int afNodeTypes)
 {
 	int i;
-	TraceResult tr;
 
 	if (0 == m_fGraphPresent || 0 == m_fGraphPointersSet)
 	{ // protect us in the case that the node graph isn't available
@@ -1614,8 +1612,6 @@ void CTestHull::CallBuildNodeGraph()
 //=========================================================
 void CTestHull::BuildNodeGraph()
 {
-	TraceResult tr;
-
 	CLink* pTempPool; // temporary link pool
 
 	CNode* pSrcNode;  // node we're currently working with
@@ -1628,23 +1624,9 @@ void CTestHull::BuildNodeGraph()
 
 	int iBadNode; // this is the node that caused graph generation to fail
 
-	int cMaxInitialLinks = 0;
-	int cMaxValidLinks = 0;
-
-	int iPoolIndex = 0;
 	int cPoolLinks; // number of links in the pool.
-
-	Vector vecDirToCheckNode;
-	Vector vecDirToTestNode;
-	Vector vecStepCheckDir;
-	Vector vecTraceSpot;
+    
 	Vector vecSpot;
-
-	Vector2D vec2DirToCheckNode;
-	Vector2D vec2DirToTestNode;
-	Vector2D vec2StepCheckDir;
-	Vector2D vec2TraceSpot;
-	Vector2D vec2Spot;
 
 	float flYaw; // use this stuff to walk the hull between nodes
 	float flDist;

@@ -50,12 +50,7 @@ public:
 		const bool isValid = nullptr != data && nullptr != data->pTokens && data->tokenCount > 0;
 
 		ASSERT(isValid);
-
-		if (!isValid)
-		{
-			int x = 10;
-		}
-
+	    
 		return isValid;
 	}
 

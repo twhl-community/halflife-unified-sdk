@@ -430,7 +430,6 @@ void CMOFAssassin::PainSound()
 std::tuple<int, Activity> CMOFAssassin::GetSequenceForActivity(Activity NewActivity)
 {
 	int iSequence = ACTIVITY_NOT_AVAILABLE;
-	void* pmodel = GET_MODEL_PTR(ENT(pev));
 
 	switch (NewActivity)
 	{

@@ -732,8 +732,6 @@ Schedule_t* CController::GetSchedule()
 
 	case MONSTERSTATE_COMBAT:
 	{
-		Vector vecTmp = Intersect(Vector(0, 0, 0), Vector(100, 4, 7), Vector(2, 10, -3), 20.0);
-
 		// dead enemy
 		if (HasConditions(bits_COND_LIGHT_DAMAGE))
 		{

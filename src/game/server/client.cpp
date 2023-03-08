@@ -1956,10 +1956,10 @@ to be created during play ( e.g., grenades, ammo packs, projectiles, corpses, et
 */
 void CreateInstancedBaselines()
 {
-	int iret = 0;
-	entity_state_t state;
+	//int iret = 0;
+	//entity_state_t state;
 
-	memset(&state, 0, sizeof(state));
+	//memset(&state, 0, sizeof(state));
 
 	// Create any additional baselines here for things like grendates, etc.
 	// iret = ENGINE_INSTANCE_BASELINE( pc->pev->classname, &state );

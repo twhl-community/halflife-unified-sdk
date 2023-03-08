@@ -1075,9 +1075,7 @@ Vector VecCheckSplatToss(entvars_t* pev, const Vector& vecSpot1, Vector vecSpot2
 	TraceResult tr;
 	Vector vecMidPoint; // halfway point between Spot1 and Spot2
 	Vector vecApex;		// highest point
-	Vector vecScale;
 	Vector vecGrenadeVel;
-	Vector vecTemp;
 	float flGravity = g_psv_gravity->value;
 
 	// calculate the midpoint and apex of the 'triangle'
@@ -1103,7 +1101,6 @@ Vector VecCheckSplatToss(entvars_t* pev, const Vector& vecSpot1, Vector vecSpot2
 	float time = speed / flGravity;
 	vecGrenadeVel = (vecSpot2 - vecSpot1);
 	vecGrenadeVel.z = 0;
-	float distance = vecGrenadeVel.Length();
 
 	// Travel half the distance to the target in that time (apex is at the midpoint)
 	vecGrenadeVel = vecGrenadeVel * (0.5 / time);

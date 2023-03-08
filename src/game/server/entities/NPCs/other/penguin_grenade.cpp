@@ -350,11 +350,8 @@ void CPenguinGrenade::HuntThink()
 		return;
 
 	m_flNextHunt = gpGlobals->time + 2.0;
-
-	CBaseEntity* pOther = nullptr;
+    
 	Vector vecDir;
-	TraceResult tr;
-
 	Vector vecFlat = pev->velocity;
 	vecFlat.z = 0;
 	vecFlat = vecFlat.Normalize();

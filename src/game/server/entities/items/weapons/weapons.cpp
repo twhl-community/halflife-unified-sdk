@@ -74,10 +74,6 @@ void ClearMultiDamage()
 
 void ApplyMultiDamage(CBaseEntity* inflictor, CBaseEntity* attacker)
 {
-	Vector vecSpot1; // where blood comes from
-	Vector vecDir;	 // direction blood should go
-	TraceResult tr;
-
 	if (!gMultiDamage.pEntity)
 		return;
 
