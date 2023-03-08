@@ -12,7 +12,9 @@
  *   without written permission from Valve LLC.
  *
  ****/
+
 #include "cbase.h"
+#include "CTripmine.h"
 
 #define TRIPMINE_PRIMARY_VOLUME 450
 

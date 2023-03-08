@@ -12,8 +12,9 @@
  *   without written permission from Valve LLC.
  *
  ****/
-#include "cbase.h"
 
+#include "cbase.h"
+#include "CHandGrenade.h"
 
 #define HANDGRENADE_PRIMARY_VOLUME 450
 

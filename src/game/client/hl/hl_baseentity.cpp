@@ -85,9 +85,6 @@ bool CBaseDelay::Save(class CSave&) { return true; }
 bool CBaseAnimating::Restore(class CRestore&) { return true; }
 bool CBaseAnimating::Save(class CSave&) { return true; }
 
-// DEBUG Stubs
-edict_t* DBG_EntOfVars(const entvars_t* pev) { return nullptr; }
-
 // UTIL_* Stubs
 void UTIL_PrecacheOther(const char* szClassname) {}
 void UTIL_BloodDrips(const Vector& origin, const Vector& direction, int color, int amount) {}

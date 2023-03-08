@@ -15,6 +15,7 @@
 #include "hud.h"
 #include "demo.h"
 
+#include "com_weapons.h"
 #include "demo_api.h"
 #include "const.h"
 #include "entity_state.h"
@@ -28,7 +29,6 @@
 extern BEAM* pBeam;
 extern BEAM* pBeam2;
 extern TEMPENTITY* pFlare; // Vit_amiN: egon's energy flare
-Vector HUD_GetLastOrg();
 
 void UpdateBeams()
 {

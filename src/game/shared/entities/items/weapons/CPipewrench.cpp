@@ -41,7 +41,6 @@ void CPipewrench::OnCreate()
 
 void CPipewrench::Spawn()
 {
-	pev->classname = MAKE_STRING("weapon_pipewrench");
 	Precache();
 	m_iId = WEAPON_PIPEWRENCH;
 	SetModel(STRING(pev->model));

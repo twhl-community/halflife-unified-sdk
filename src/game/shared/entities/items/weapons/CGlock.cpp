@@ -14,8 +14,8 @@
  ****/
 
 #include "cbase.h"
+#include "CGlock.h"
 
-LINK_ENTITY_TO_CLASS(weapon_glock, CGlock);
 LINK_ENTITY_TO_CLASS(weapon_9mmhandgun, CGlock);
 
 void CGlock::OnCreate()
@@ -27,7 +27,6 @@ void CGlock::OnCreate()
 
 void CGlock::Spawn()
 {
-	pev->classname = MAKE_STRING("weapon_9mmhandgun"); // hack to allow for old names
 	Precache();
 	m_iId = WEAPON_GLOCK;
 	SetModel(STRING(pev->model));
@@ -252,5 +251,5 @@ public:
 		return false;
 	}
 };
-LINK_ENTITY_TO_CLASS(ammo_glockclip, CGlockAmmo);
+
 LINK_ENTITY_TO_CLASS(ammo_9mmclip, CGlockAmmo);

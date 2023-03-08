@@ -59,8 +59,6 @@ void CDisplacer::Precache()
 
 void CDisplacer::Spawn()
 {
-	pev->classname = MAKE_STRING("weapon_displacer");
-
 	Precache();
 
 	m_iId = WEAPON_DISPLACER;

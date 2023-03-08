@@ -145,6 +145,8 @@ target_sources(server PRIVATE
 	entities/items/weapons/CEagleLaser.h
 	entities/items/weapons/CGrappleTip.cpp
 	entities/items/weapons/CGrappleTip.h
+	entities/items/weapons/CLaserSpot.cpp
+	entities/items/weapons/CLaserSpot.h
 	entities/items/weapons/CShockBeam.cpp
 	entities/items/weapons/CShockBeam.h
 	entities/items/weapons/CSpore.cpp

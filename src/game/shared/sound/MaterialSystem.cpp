@@ -14,18 +14,46 @@
  ****/
 
 #include <algorithm>
-#include <cassert>
 
 #include "cbase.h"
 #include "MaterialSystem.h"
 
 #include "networking/NetworkDataSystem.h"
 
+#include "utils/JSONSystem.h"
+
 constexpr std::size_t MinimumMaterialsCount = 512; // original max number of textures loaded
+
+constexpr std::string_view MaterialsConfigSchemaName{"MaterialsConfig"sv};
+
+static std::string GetMaterialsConfigSchema()
+{
+	return fmt::format(R"(
+{{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"title": "Materials Definition File",
+	"type": "object",
+	"patternProperties": {{
+		"^\\w+$": {{
+			"type": "object",
+			"properties": {{
+				"Type": {{
+					"type": "string"
+				}}
+			}},
+			"required": ["Type"]
+		}}
+	}},
+	"additionalProperties": false
+}}
+)");
+}
 
 bool MaterialSystem::Initialize()
 {
 	m_Logger = g_Logging.CreateLogger("materials");
+
+	g_JSON.RegisterSchema(MaterialsConfigSchemaName, &GetMaterialsConfigSchema);
 
 	g_NetworkData.RegisterHandler("MaterialSystem", this);
 
@@ -42,16 +70,16 @@ void MaterialSystem::HandleNetworkDataBlock(NetworkDataBlock& block)
 {
 	if (block.Mode == NetworkDataMode::Serialize)
 	{
-		block.Data = json::array();
+		// This configuration structure must be identical to the one loaded from files!
+		block.Data = json::object();
 
 		for (const auto& material : m_Materials)
 		{
 			json mat = json::object();
 
-			mat.emplace("Texture", material.Name.c_str());
-			mat.emplace("Type", std::string{material.Type});
+			mat.emplace("Type", std::string{material.second.Type});
 
-			block.Data.push_back(std::move(mat));
+			block.Data.emplace(material.first.c_str(), std::move(mat));
 		}
 
 		g_NetworkData.GetLogger()->debug("Wrote {} materials to network data", m_Materials.size());
@@ -60,30 +88,10 @@ void MaterialSystem::HandleNetworkDataBlock(NetworkDataBlock& block)
 	{
 		m_Materials.clear();
 
-		if (!block.Data.is_array())
+		if (!ParseConfiguration(block.Data))
 		{
-			block.ErrorMessage = "Material network data must be an array of objects";
+			block.ErrorMessage = "Material network data has invalid format";
 			return;
-		}
-
-		for (const auto& mat : block.Data)
-		{
-			if (!mat.is_object())
-			{
-				block.ErrorMessage = "Material network data must be an array of objects";
-				return;
-			}
-
-			const auto texture = mat.value<std::string>("Texture", {});
-			const auto type = mat.value<std::string>("Type", {});
-
-			if (texture.empty() || type.empty())
-			{
-				block.ErrorMessage = "Material network data entry must contain a texture name and material type";
-				return;
-			}
-
-			m_Materials.emplace_back(texture.c_str(), type.front());
 		}
 
 		g_NetworkData.GetLogger()->debug("Parsed {} materials from network data", m_Materials.size());
@@ -97,11 +105,17 @@ void MaterialSystem::LoadMaterials(std::span<const std::string> fileNames)
 
 	for (const auto& fileName : fileNames)
 	{
-		ParseMaterialsFile(fileName.c_str());
-	}
+		m_Logger->trace("Loading {}", fileName);
 
-	std::stable_sort(m_Materials.begin(), m_Materials.end(), [](const auto& lhs, const auto& rhs)
-		{ return stricmp(lhs.Name.c_str(), rhs.Name.c_str()) < 0; });
+		if (const auto result = g_JSON.ParseJSONFile(fileName.c_str(),
+				{.SchemaName = MaterialsConfigSchemaName},
+				[this](const json& input)
+				{ return ParseConfiguration(input); });
+			!result.value_or(false))
+		{
+			m_Logger->error("Error loading materials configuration file \"{}\"", fileName);
+		}
+	}
 
 	m_Logger->debug("Loaded {} materials", m_Materials.size());
 }
@@ -124,77 +138,47 @@ const char* MaterialSystem::StripTexturePrefix(const char* name)
 
 char MaterialSystem::FindTextureType(const char* name) const
 {
-	const auto end = m_Materials.end();
+	TextureName upperName{name};
 
-	// TODO: multiple materials can have the same name, so this will not always return the right type.
-	// Once full texture names are used duplicates should not be allowed which will solve this problem.
-	if (auto it = std::lower_bound(m_Materials.begin(), end, name, [](const auto& material, auto name)
-			{ return stricmp(material.Name.c_str(), name) < 0; });
-		it != end && stricmp(it->Name.c_str(), name) == 0)
+	std::transform(upperName.begin(), upperName.end(), upperName.begin(), [](char c)
+		{ return std::toupper(c); });
+
+	if (auto it = m_Materials.find(upperName); it != m_Materials.end())
 	{
-		return it->Type;
+		return it->second.Type;
 	}
 
 	return CHAR_TEX_CONCRETE;
 }
 
-void MaterialSystem::ParseMaterialsFile(const char* fileName)
+bool MaterialSystem::ParseConfiguration(const json& input)
 {
-	m_Logger->trace("Loading {}", fileName);
-
-	const auto fileContents = FileSystem_LoadFileIntoBuffer(fileName, FileContentFormat::Text);
-
-	if (fileContents.empty())
-		return;
-
-	std::string_view materials{reinterpret_cast<const char*>(fileContents.data()), fileContents.size() - 1};
-
-	while (true)
+	if (!input.is_object())
 	{
-		auto line = GetLine(materials);
-
-		if (line.empty())
-			break;
-
-		auto material = TryParseMaterial(line);
-
-		if (!material)
-			continue;
-
-		m_Materials.push_back(std::move(*material));
-	}
-}
-
-std::optional<Material> MaterialSystem::TryParseMaterial(std::string_view line)
-{
-	line = RemoveComments(line);
-	line = SkipWhitespace(line);
-
-	if (line.empty())
-		return {};
-
-	if (0 == std::isalpha(line.front()))
-		return {};
-
-	const char type = std::toupper(line.front());
-
-	line = SkipWhitespace(line.substr(1));
-
-	if (line.empty())
-		return {};
-
-	const auto end = FindWhitespace(line);
-
-	const std::string_view textureName{line.begin(), end};
-
-	if (textureName.empty())
-		return {};
-
-	if (textureName.size() >= TextureNameMax)
-	{
-		m_Logger->warn("Texture name \"{}\" exceeds {} byte maximum, ignoring", textureName, TextureNameMax);
-		return {};
+		return false;
 	}
 
-	return Material{.Name{textureName.data(), textureName.size()}, .Type = type};
+	for (const auto& [texture, mat] : input.items())
+	{
+		if (!mat.is_object())
+		{
+			return false;
+		}
+
+		const auto type = mat.value<std::string>("Type", {});
+
+		if (texture.empty() || type.empty())
+		{
+			return false;
+		}
+
+		TextureName name{texture.c_str()};
+
+		std::transform(name.begin(), name.end(), name.begin(), [](char c)
+			{ return std::toupper(c); });
+
+		m_Materials.insert_or_assign(std::move(name), Material{type.front()});
+	}
+
+	return true;
 }

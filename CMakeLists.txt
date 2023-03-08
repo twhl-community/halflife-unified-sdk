@@ -107,6 +107,25 @@ function(set_common_properties TARGET_NAME)
 		# They have not been tested with CMake since there is no Mac system available to test on, so this might not work
 		$<$<PLATFORM_ID:Darwin>:-Qunused-arguments -mmacosx-version-min=10.5 -fasm-blocks -arch i386 -march=prescott -momit-leaf-frame-pointer -mtune=core2>)
 
+	# Disable certain compiler warnings.
+	if (MSVC)
+		target_compile_options(${TARGET_NAME} PRIVATE
+			# int or float down-conversion
+			/wd4244
+			# int or float data truncation
+			/wd4305
+			# unreferenced inline function removed
+			/wd4514
+			# unreferenced formal parameter
+			/wd4100
+			# Variable is uninitialized
+			/wd26495
+			# Arithmetic overflow
+			/wd26451
+			# The enum type is unscoped
+			/wd26812)
+	endif()
+
 	target_link_options(${TARGET_NAME} PRIVATE
 		$<$<PLATFORM_ID:Linux>:-static-libstdc++ -Wl,-Map,${TARGET_NAME}_map.txt>)
 	

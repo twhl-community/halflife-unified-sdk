@@ -15,15 +15,18 @@
 
 #pragma once
 
-#include "CLaserSpot.h"
+#include "cbase.h"
 
-/**
- *	@brief Identical to CLaserSpot, different class to avoid RPG laser confusion logic. - Solokiller
- */
-class CEagleLaser : public CLaserSpot
+class CLaserSpot : public CBaseEntity
 {
 public:
-	using BaseClass = CLaserSpot;
+	void Spawn() override;
+	void Precache() override;
 
-	static CEagleLaser* CreateSpot();
+	int ObjectCaps() override { return FCAP_DONT_SAVE; }
+
+	void Suspend(float flSuspendTime);
+	void EXPORT Revive();
+
+	static CLaserSpot* CreateSpot();
 };

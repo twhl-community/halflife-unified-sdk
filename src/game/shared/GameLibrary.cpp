@@ -48,13 +48,13 @@ bool GameLibrary::Initialize()
 		return false;
 	}
 
-	g_GameSystems.Invoke(&IGameSystem::PostInitialize);
-
 	g_GameLogger = g_Logging.CreateLogger("game");
 	g_AssertLogger = g_Logging.CreateLogger("assert");
 	g_PrecacheLogger = g_Logging.CreateLogger("precache");
 	CBaseEntity::Logger = g_Logging.CreateLogger("ent");
 	CBasePlayerItem::WeaponsLogger = g_Logging.CreateLogger("ent.weapons");
+
+	g_GameSystems.Invoke(&IGameSystem::PostInitialize);
 
 	g_ConCommands.CreateCommand("log_setentlevels", [this](const auto& args)
 		{ SetEntLogLevels(args); });

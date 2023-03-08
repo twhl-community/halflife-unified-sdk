@@ -14,6 +14,7 @@
  ****/
 
 #include "cbase.h"
+#include "CShotgun.h"
 #include "UserMessages.h"
 
 // special deathmatch shotgun spreads
@@ -21,6 +22,17 @@
 #define VECTOR_CONE_DM_DOUBLESHOTGUN Vector(0.17365, 0.04362, 0.00) // 20 degrees by 5 degrees
 
 LINK_ENTITY_TO_CLASS(weapon_shotgun, CShotgun);
+
+#ifndef CLIENT_DLL
+TYPEDESCRIPTION CShotgun::m_SaveData[] =
+	{
+		DEFINE_FIELD(CShotgun, m_flNextReload, FIELD_TIME),
+		DEFINE_FIELD(CShotgun, m_fInSpecialReload, FIELD_INTEGER),
+		// DEFINE_FIELD( CShotgun, m_iShell, FIELD_INTEGER ),
+		DEFINE_FIELD(CShotgun, m_flPumpTime, FIELD_TIME),
+};
+IMPLEMENT_SAVERESTORE(CShotgun, CBasePlayerWeapon);
+#endif
 
 void CShotgun::OnCreate()
 {

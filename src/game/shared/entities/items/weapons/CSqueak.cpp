@@ -14,6 +14,7 @@
  ****/
 
 #include "cbase.h"
+#include "CSqueak.h"
 
 enum w_squeak_e
 {

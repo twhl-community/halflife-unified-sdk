@@ -32,7 +32,6 @@ IMPLEMENT_SAVERESTORE(CShockRifle, CShockRifle::BaseClass);
 #endif
 
 LINK_ENTITY_TO_CLASS(weapon_shockrifle, CShockRifle);
-LINK_ENTITY_TO_CLASS(weapon_shockroach, CShockRifle);
 
 void CShockRifle::OnCreate()
 {
@@ -63,9 +62,6 @@ void CShockRifle::Precache()
 
 void CShockRifle::Spawn()
 {
-	// Hack to allow for old names.
-	pev->classname = MAKE_STRING("weapon_shockrifle");
-
 	m_iId = WEAPON_SHOCKRIFLE;
 
 	Precache();

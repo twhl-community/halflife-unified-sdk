@@ -15,12 +15,28 @@
 
 #include "cbase.h"
 #include "customentity.h"
+#include "CEgon.h"
 #include "UserMessages.h"
 
 #define EGON_SWITCH_NARROW_TIME 0.75 // Time it takes to switch fire modes
 #define EGON_SWITCH_WIDE_TIME 1.5
 
 LINK_ENTITY_TO_CLASS(weapon_egon, CEgon);
+
+#ifndef CLIENT_DLL
+TYPEDESCRIPTION CEgon::m_SaveData[] =
+	{
+		//	DEFINE_FIELD( CEgon, m_pBeam, FIELD_CLASSPTR ),
+		//	DEFINE_FIELD( CEgon, m_pNoise, FIELD_CLASSPTR ),
+		//	DEFINE_FIELD( CEgon, m_pSprite, FIELD_CLASSPTR ),
+		DEFINE_FIELD(CEgon, m_shootTime, FIELD_TIME),
+		DEFINE_FIELD(CEgon, m_fireState, FIELD_INTEGER),
+		DEFINE_FIELD(CEgon, m_fireMode, FIELD_INTEGER),
+		DEFINE_FIELD(CEgon, m_shakeTime, FIELD_TIME),
+		DEFINE_FIELD(CEgon, m_flAmmoUseTime, FIELD_TIME),
+};
+IMPLEMENT_SAVERESTORE(CEgon, CBasePlayerWeapon);
+#endif
 
 void CEgon::OnCreate()
 {

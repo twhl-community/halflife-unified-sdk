@@ -14,9 +14,9 @@
  ****/
 
 #include "cbase.h"
+#include "CMP5.h"
 #include "UserMessages.h"
 
-LINK_ENTITY_TO_CLASS(weapon_mp5, CMP5);
 LINK_ENTITY_TO_CLASS(weapon_9mmAR, CMP5);
 
 void CMP5::OnCreate()
@@ -30,7 +30,6 @@ void CMP5::OnCreate()
 //=========================================================
 void CMP5::Spawn()
 {
-	pev->classname = MAKE_STRING("weapon_9mmAR"); // hack to allow for old names
 	Precache();
 	SetModel(STRING(pev->model));
 	m_iId = WEAPON_MP5;
@@ -290,7 +289,7 @@ public:
 		return bResult;
 	}
 };
-LINK_ENTITY_TO_CLASS(ammo_mp5clip, CMP5AmmoClip);
+
 LINK_ENTITY_TO_CLASS(ammo_9mmAR, CMP5AmmoClip);
 
 
@@ -349,5 +348,5 @@ public:
 		return bResult;
 	}
 };
-LINK_ENTITY_TO_CLASS(ammo_mp5grenades, CMP5AmmoGrenade);
+
 LINK_ENTITY_TO_CLASS(ammo_ARgrenades, CMP5AmmoGrenade);

@@ -14,6 +14,7 @@
  ****/
 
 #include "cbase.h"
+#include "CSatchel.h"
 
 class CSatchelCharge : public CGrenade
 {
@@ -159,6 +160,14 @@ void CSatchelCharge::BounceSound()
 
 
 LINK_ENTITY_TO_CLASS(weapon_satchel, CSatchel);
+
+#ifndef CLIENT_DLL
+TYPEDESCRIPTION CSatchel::m_SaveData[] =
+	{
+		DEFINE_FIELD(CSatchel, m_chargeReady, FIELD_INTEGER),
+};
+IMPLEMENT_SAVERESTORE(CSatchel, CBasePlayerWeapon);
+#endif
 
 void CSatchel::OnCreate()
 {

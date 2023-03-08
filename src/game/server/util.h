@@ -54,9 +54,6 @@ inline globalvars_t* gpGlobals = nullptr;
 // this bogus "empty" define to mark things as constant.
 #define CONSTANT
 
-// More explicit than "int"
-typedef int EOFFSET;
-
 /**
  *	@brief Gets the list of entities.
  *	Will return @c nullptr if there is no map loaded.
@@ -68,44 +65,6 @@ edict_t* UTIL_GetEntityList();
  */
 CBasePlayer* UTIL_GetLocalPlayer();
 
-//
-// Conversion among the three types of "entity", including identity-conversions.
-//
-#ifdef DEBUG
-edict_t* DBG_EntOfVars(const entvars_t* pev);
-inline edict_t* ENT(const entvars_t* pev) { return DBG_EntOfVars(pev); }
-#else
-inline edict_t* ENT(const entvars_t* pev)
-{
-	return pev->pContainingEntity;
-}
-#endif
-inline edict_t* ENT(edict_t* pent)
-{
-	return pent;
-}
-inline edict_t* ENT(EOFFSET eoffset) { return (*g_engfuncs.pfnPEntityOfEntOffset)(eoffset); }
-inline EOFFSET OFFSET(const edict_t* pent)
-{
-	ASSERTSZ(pent, "Bad ent in OFFSET()");
-	return (*g_engfuncs.pfnEntOffsetOfPEntity)(pent);
-}
-inline EOFFSET OFFSET(entvars_t* pev)
-{
-	ASSERTSZ(pev, "Bad pev in OFFSET()");
-	return OFFSET(ENT(pev));
-}
-
-inline entvars_t* VARS(edict_t* pent)
-{
-	if (!pent)
-		return nullptr;
-
-	return &pent->v;
-}
-
-inline int ENTINDEX(edict_t* pEdict) { return (*g_engfuncs.pfnIndexOfEdict)(pEdict); }
-inline edict_t* INDEXENT(int iEdictNum) { return (*g_engfuncs.pfnPEntityOfEntIndex)(iEdictNum); }
 inline void MESSAGE_BEGIN(int msg_dest, int msg_type, const float* pOrigin, entvars_t* ent)
 {
 	(*g_engfuncs.pfnMessageBegin)(msg_dest, msg_type, pOrigin, ENT(ent));
