@@ -148,11 +148,11 @@ void CDecal::TriggerDecal(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYP
 	WRITE_COORD(pev->origin.x);
 	WRITE_COORD(pev->origin.y);
 	WRITE_COORD(pev->origin.z);
-	WRITE_SHORT((int)pev->skin);
+	WRITE_SHORT(pev->skin);
 	entityIndex = (short)ENTINDEX(trace.pHit);
 	WRITE_SHORT(entityIndex);
 	if (0 != entityIndex)
-		WRITE_SHORT((int)VARS(trace.pHit)->modelindex);
+		WRITE_SHORT(VARS(trace.pHit)->modelindex);
 	MESSAGE_END();
 
 	SetThink(&CDecal::SUB_Remove);
@@ -169,11 +169,11 @@ void CDecal::StaticDecal()
 
 	entityIndex = (short)ENTINDEX(trace.pHit);
 	if (0 != entityIndex)
-		modelIndex = (int)VARS(trace.pHit)->modelindex;
+		modelIndex = VARS(trace.pHit)->modelindex;
 	else
 		modelIndex = 0;
 
-	g_engfuncs.pfnStaticDecal(pev->origin, (int)pev->skin, entityIndex, modelIndex);
+	g_engfuncs.pfnStaticDecal(pev->origin, pev->skin, entityIndex, modelIndex);
 
 	SUB_Remove();
 }
