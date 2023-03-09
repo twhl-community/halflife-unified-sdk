@@ -181,7 +181,7 @@ void CHudStatusIcons::EnableIcon(const char* pszIconName, const RGB24& color)
 	}
 
 	// Load the sprite and add it to the list
-	// the sprite must be listed in hud.txt
+	// the sprite must be listed in hud.json
 	int spr_index = gHUD.GetSpriteIndex(pszIconName);
 	m_IconList[i].spr = gHUD.GetSprite(spr_index);
 	m_IconList[i].rc = gHUD.GetSpriteRect(spr_index);

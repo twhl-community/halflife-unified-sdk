@@ -19,6 +19,7 @@
 //
 
 #include "hud.h"
+#include "HudSpriteConfigSystem.h"
 #include "pm_shared.h"
 #include "triangleapi.h"
 #include "com_model.h"
@@ -33,8 +34,6 @@ extern engine_studio_api_t IEngineStudio;
 WEAPON* gpActiveSel; // nullptr means off, 1 means just the menu bar, otherwise
 					 // this points to the active weapon menu item
 WEAPON* gpLastSel;	 // Last weapon menu selection
-
-client_sprite_t* GetSpriteList(client_sprite_t* pList, const char* psz, int iRes, int iCount);
 
 int g_weaponselect = 0;
 
@@ -70,56 +69,50 @@ bool WeaponsResource::HasAmmo(WEAPON* p)
 
 void WeaponsResource::LoadWeaponSprites(WEAPON* pWeapon)
 {
-	int i;
-
-	char sz[256];
-
 	if (!pWeapon)
 		return;
 
-	memset(&pWeapon->rcActive, 0, sizeof(Rect));
-	memset(&pWeapon->rcInactive, 0, sizeof(Rect));
-	memset(&pWeapon->rcAmmo, 0, sizeof(Rect));
-	memset(&pWeapon->rcAmmo2, 0, sizeof(Rect));
+	pWeapon->rcCrosshair = Rect{};
+	pWeapon->rcAutoaim = Rect{};
+	pWeapon->rcZoomedCrosshair = Rect{};
+	pWeapon->rcZoomedAutoaim = Rect{};
+	pWeapon->rcInactive = Rect{};
+	pWeapon->rcActive = Rect{};
+	pWeapon->rcAmmo = Rect{};
+	pWeapon->rcAmmo2 = Rect{};
+
+	pWeapon->hCrosshair = 0;
+	pWeapon->hAutoaim = 0;
+	pWeapon->hZoomedCrosshair = 0;
+	pWeapon->hZoomedAutoaim = 0;
 	pWeapon->hInactive = 0;
 	pWeapon->hActive = 0;
 	pWeapon->hAmmo = 0;
 	pWeapon->hAmmo2 = 0;
 
-	sprintf(sz, "sprites/%s.txt", pWeapon->szName);
-	client_sprite_t* pList = SPR_GetList(sz, &i);
+	const auto sprites = g_HudSpriteConfig.Load(fmt::format("sprites/{}.json", pWeapon->szName).c_str());
 
-	if (!pList)
+	if (sprites.empty())
 		return;
 
-	client_sprite_t* p;
+	const HudSprite* p;
 
-	p = GetSpriteList(pList, "crosshair", CHud::m_iRes, i);
-	if (p)
+	if (p = GetSpriteList(sprites, "crosshair"); p)
 	{
-		sprintf(sz, "sprites/%s.spr", p->szSprite);
-		pWeapon->hCrosshair = SPR_Load(sz);
-		pWeapon->rcCrosshair = p->rc;
+		pWeapon->hCrosshair = SPR_Load(fmt::format("sprites/{}.spr", p->SpriteName.c_str()));
+		pWeapon->rcCrosshair = p->Rectangle;
 	}
-	else
-		pWeapon->hCrosshair = 0;
 
-	p = GetSpriteList(pList, "autoaim", CHud::m_iRes, i);
-	if (p)
+	if (p = GetSpriteList(sprites, "autoaim"); p)
 	{
-		sprintf(sz, "sprites/%s.spr", p->szSprite);
-		pWeapon->hAutoaim = SPR_Load(sz);
-		pWeapon->rcAutoaim = p->rc;
+		pWeapon->hAutoaim = SPR_Load(fmt::format("sprites/{}.spr", p->SpriteName.c_str()));
+		pWeapon->rcAutoaim = p->Rectangle;
 	}
-	else
-		pWeapon->hAutoaim = 0;
 
-	p = GetSpriteList(pList, "zoom", CHud::m_iRes, i);
-	if (p)
+	if (p = GetSpriteList(sprites, "zoom"); p)
 	{
-		sprintf(sz, "sprites/%s.spr", p->szSprite);
-		pWeapon->hZoomedCrosshair = SPR_Load(sz);
-		pWeapon->rcZoomedCrosshair = p->rc;
+		pWeapon->hZoomedCrosshair = SPR_Load(fmt::format("sprites/{}.spr", p->SpriteName.c_str()));
+		pWeapon->rcZoomedCrosshair = p->Rectangle;
 	}
 	else
 	{
@@ -127,64 +120,47 @@ void WeaponsResource::LoadWeaponSprites(WEAPON* pWeapon)
 		pWeapon->rcZoomedCrosshair = pWeapon->rcCrosshair;
 	}
 
-	p = GetSpriteList(pList, "zoom_autoaim", CHud::m_iRes, i);
-	if (p)
+	if (p = GetSpriteList(sprites, "zoom_autoaim"); p)
 	{
-		sprintf(sz, "sprites/%s.spr", p->szSprite);
-		pWeapon->hZoomedAutoaim = SPR_Load(sz);
-		pWeapon->rcZoomedAutoaim = p->rc;
+		pWeapon->hZoomedAutoaim = SPR_Load(fmt::format("sprites/{}.spr", p->SpriteName.c_str()));
+		pWeapon->rcZoomedAutoaim = p->Rectangle;
 	}
 	else
 	{
+		// TODO: should this be using hAutoaim instead?
 		pWeapon->hZoomedAutoaim = pWeapon->hZoomedCrosshair; // default to zoomed crosshair
 		pWeapon->rcZoomedAutoaim = pWeapon->rcZoomedCrosshair;
 	}
 
-	p = GetSpriteList(pList, "weapon", CHud::m_iRes, i);
-	if (p)
+	if (p = GetSpriteList(sprites, "weapon"); p)
 	{
-		sprintf(sz, "sprites/%s.spr", p->szSprite);
-		pWeapon->hInactive = SPR_Load(sz);
-		pWeapon->rcInactive = p->rc;
+		pWeapon->hInactive = SPR_Load(fmt::format("sprites/{}.spr", p->SpriteName.c_str()));
+		pWeapon->rcInactive = p->Rectangle;
 
 		gHR.iHistoryGap = V_max(gHR.iHistoryGap, pWeapon->rcActive.bottom - pWeapon->rcActive.top);
 	}
-	else
-		pWeapon->hInactive = 0;
 
-	p = GetSpriteList(pList, "weapon_s", CHud::m_iRes, i);
-	if (p)
+	if (p = GetSpriteList(sprites, "weapon_s"); p)
 	{
-		sprintf(sz, "sprites/%s.spr", p->szSprite);
-		pWeapon->hActive = SPR_Load(sz);
-		pWeapon->rcActive = p->rc;
+		pWeapon->hActive = SPR_Load(fmt::format("sprites/{}.spr", p->SpriteName.c_str()));
+		pWeapon->rcActive = p->Rectangle;
 	}
-	else
-		pWeapon->hActive = 0;
 
-	p = GetSpriteList(pList, "ammo", CHud::m_iRes, i);
-	if (p)
+	if (p = GetSpriteList(sprites, "ammo"); p)
 	{
-		sprintf(sz, "sprites/%s.spr", p->szSprite);
-		pWeapon->hAmmo = SPR_Load(sz);
-		pWeapon->rcAmmo = p->rc;
+		pWeapon->hAmmo = SPR_Load(fmt::format("sprites/{}.spr", p->SpriteName.c_str()));
+		pWeapon->rcAmmo = p->Rectangle;
 
 		gHR.iHistoryGap = V_max(gHR.iHistoryGap, pWeapon->rcActive.bottom - pWeapon->rcActive.top);
 	}
-	else
-		pWeapon->hAmmo = 0;
 
-	p = GetSpriteList(pList, "ammo2", CHud::m_iRes, i);
-	if (p)
+	if (p = GetSpriteList(sprites, "ammo2"); p)
 	{
-		sprintf(sz, "sprites/%s.spr", p->szSprite);
-		pWeapon->hAmmo2 = SPR_Load(sz);
-		pWeapon->rcAmmo2 = p->rc;
+		pWeapon->hAmmo2 = SPR_Load(fmt::format("sprites/{}.spr", p->SpriteName.c_str()));
+		pWeapon->rcAmmo2 = p->Rectangle;
 
 		gHR.iHistoryGap = V_max(gHR.iHistoryGap, pWeapon->rcActive.bottom - pWeapon->rcActive.top);
 	}
-	else
-		pWeapon->hAmmo2 = 0;
 }
 
 // Returns the first weapon for a given slot.
@@ -1292,31 +1268,4 @@ bool CHudAmmo::DrawWList(float flTime)
 	}
 
 	return true;
-}
-
-
-/* =================================
-	GetSpriteList
-
-Finds and returns the matching
-sprite name 'psz' and resolution 'iRes'
-in the given sprite list 'pList'
-iCount is the number of items in the pList
-================================= */
-client_sprite_t* GetSpriteList(client_sprite_t* pList, const char* psz, int iRes, int iCount)
-{
-	if (!pList)
-		return nullptr;
-
-	int i = iCount;
-	client_sprite_t* p = pList;
-
-	while (0 != i--)
-	{
-		if ((0 == strcmp(psz, p->szName)) && (p->iRes == iRes))
-			return p;
-		p++;
-	}
-
-	return nullptr;
 }

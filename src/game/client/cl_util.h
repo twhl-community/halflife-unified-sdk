@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include <string>
+
 #include "cvardef.h"
 
 #include "Platform.h"
@@ -34,7 +36,15 @@
 
 inline cvar_t* CVAR_CREATE(const char* cv, const char* val, const int flags) { return gEngfuncs.pfnRegisterVariable(cv, val, flags); }
 
-#define SPR_Load (*gEngfuncs.pfnSPR_Load)
+inline HSPRITE SPR_Load(const char* spriteName)
+{
+	return gEngfuncs.pfnSPR_Load(spriteName);
+}
+
+inline HSPRITE SPR_Load(const std::string& spriteName)
+{
+	return gEngfuncs.pfnSPR_Load(spriteName.c_str());
+}
 
 inline void SPR_Set(HSPRITE hPic, const RGB24& color)
 {
@@ -42,7 +52,6 @@ inline void SPR_Set(HSPRITE hPic, const RGB24& color)
 }
 
 #define SPR_Frames (*gEngfuncs.pfnSPR_Frames)
-#define SPR_GetList (*gEngfuncs.pfnSPR_GetList)
 
 // SPR_Draw  draws a the current sprite as solid
 #define SPR_Draw (*gEngfuncs.pfnSPR_Draw)

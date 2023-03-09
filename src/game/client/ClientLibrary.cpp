@@ -34,6 +34,8 @@
 #include "sound/IMusicSystem.h"
 #include "sound/ISoundSystem.h"
 
+#include "ui/hud/HudSpriteConfigSystem.h"
+
 #include "utils/ReplacementMaps.h"
 
 bool ClientLibrary::Initialize()
@@ -215,6 +217,7 @@ void ClientLibrary::AddGameSystems()
 	GameLibrary::AddGameSystems();
 	g_GameSystems.Add(&g_ClientPrediction);
 	g_GameSystems.Add(&sound::g_ClientSoundReplacement);
+	g_GameSystems.Add(&g_HudSpriteConfig);
 }
 
 SDL_Window* ClientLibrary::FindWindow()

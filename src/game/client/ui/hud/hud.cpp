@@ -25,6 +25,7 @@
 #include "demo.h"
 #include "demo_api.h"
 #include "vgui_ScorePanel.h"
+#include "HudSpriteConfigSystem.h"
 
 class CHLVoiceStatusHelper : public IVoiceStatusHelper
 {
@@ -69,9 +70,6 @@ public:
 	}
 };
 static CHLVoiceStatusHelper g_VoiceStatusHelper;
-
-
-extern client_sprite_t* GetSpriteList(client_sprite_t* pList, const char* psz, int iRes, int iCount);
 
 extern cvar_t* sensitivity;
 cvar_t* cl_lw = nullptr;
@@ -181,13 +179,8 @@ void CHud::Shutdown()
 	GetClientVoiceMgr()->Shutdown();
 }
 
-// GetSpriteIndex()
-// searches through the sprite list loaded from hud.txt for a name matching SpriteName
-// returns an index into the gHUD.m_Sprites list
-// returns -1 if sprite not found
 int CHud::GetSpriteIndex(const char* SpriteName)
 {
-	// look through the loaded sprite name list for SpriteName
 	for (std::size_t i = 0; i < m_Sprites.size(); ++i)
 	{
 		if (SpriteName == m_Sprites[i].Name)
@@ -213,36 +206,11 @@ void CHud::VidInit()
 	// Only load this once
 	if (m_Sprites.empty())
 	{
-		// we need to load the hud.txt, and all sprites within
-		int spriteCountAllRes;
-		client_sprite_t* spriteList = SPR_GetList("sprites/hud.txt", &spriteCountAllRes);
-
-		if (spriteList)
-		{
-			m_Sprites.reserve(spriteCountAllRes);
-
-			client_sprite_t* p = spriteList;
-			for (int j = 0; j < spriteCountAllRes; ++j)
-			{
-				if (p->iRes == m_iRes)
-				{
-					auto& hudSprite = m_Sprites.emplace_back();
-
-					hudSprite.Name = p->szName;
-					hudSprite.SpriteName = p->szSprite;
-					hudSprite.Rectangle = p->rc;
-				}
-
-				++p;
-			}
-
-			m_Sprites.shrink_to_fit();
-
-			gEngfuncs.COM_FreeFile(spriteList);
-		}
+		// we need to load the hud.json, and all sprites within
+		m_Sprites = g_HudSpriteConfig.Load("sprites/hud.json");
 	}
 
-	// we have already have loaded the sprite reference from hud.txt, but
+	// we have already have loaded the sprite reference from hud.json, but
 	// we need to make sure all the sprites have been loaded (we've gone through a transition, or loaded a save game)
 	for (auto& hudSprite : m_Sprites)
 	{

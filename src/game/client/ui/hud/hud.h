@@ -22,6 +22,7 @@
 
 #pragma once
 
+#include <array>
 #include <vector>
 
 #include <EASTL/fixed_string.h>
@@ -692,19 +693,18 @@ private:
 	float m_DrawEndTime{0};
 };
 
+struct HudSprite
+{
+	eastl::fixed_string<char, MAX_SPRITE_NAME_LENGTH> Name;
+	eastl::fixed_string<char, MAX_QPATH> SpriteName;
+	Rect Rectangle;
+	HSPRITE Handle{0};
+};
+
 class CHud
 {
 private:
-	struct HudSprite
-	{
-		eastl::fixed_string<char, MAX_SPRITE_NAME_LENGTH> Name;
-		eastl::fixed_string<char, 64> SpriteName;
-		HSPRITE Handle = 0;
-		Rect Rectangle{0, 0, 0, 0};
-	};
-
-	// the memory for these arrays are allocated in the first call to CHud::VidInit(), when the hud.txt and associated sprites are loaded.
-	// freed in ~CHud()
+	// the memory for these arrays are allocated in the first call to CHud::VidInit(), when the hud.json and associated sprites are loaded.
 	std::vector<HudSprite> m_Sprites;
 
 	std::vector<CHudBase*> m_HudList;
@@ -778,8 +778,11 @@ public:
 		return m_Sprites[index].Rectangle;
 	}
 
-
-	int GetSpriteIndex(const char* SpriteName); // gets a sprite index, for use in the m_rghSprites[] array
+	/**
+	 *	@brief Searches through the sprite list loaded from hud.json for a name matching SpriteName
+	 *	@return An index into the gHUD.m_Sprites list, or -1 if sprite not found
+	 */
+	int GetSpriteIndex(const char* SpriteName);
 
 	CHudAmmo m_Ammo;
 	CHudHealth m_Health;

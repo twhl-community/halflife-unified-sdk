@@ -127,8 +127,7 @@ struct cldll_func_t
  */
 struct cl_enginefunc_t
 {
-	HSPRITE (*pfnSPR_Load)
-	(const char* szPicName);
+	HSPRITE (*pfnSPR_Load)(const char* szPicName);
 	int (*pfnSPR_Frames)(HSPRITE hPic);
 	int (*pfnSPR_Height)(HSPRITE hPic, int frame);
 	int (*pfnSPR_Width)(HSPRITE hPic, int frame);
@@ -138,7 +137,7 @@ struct cl_enginefunc_t
 	void (*pfnSPR_DrawAdditive)(int frame, int x, int y, const Rect* prc);
 	void (*pfnSPR_EnableScissor)(int x, int y, int width, int height);
 	void (*pfnSPR_DisableScissor)();
-	client_sprite_t* (*pfnSPR_GetList)(const char* psz, int* piCount);
+	[[deprecated("Use g_HudSpriteConfig instead")]] client_sprite_t* (*pfnSPR_GetList)(const char* psz, int* piCount);
 	void (*pfnFillRGBA)(int x, int y, int width, int height, int r, int g, int b, int a);
 	int (*pfnGetScreenInfo)(SCREENINFO* pscrinfo);
 	void (*pfnSetCrosshair)(HSPRITE hspr, Rect rc, int r, int g, int b);
