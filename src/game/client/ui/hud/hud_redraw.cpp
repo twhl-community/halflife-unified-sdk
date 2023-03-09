@@ -288,8 +288,8 @@ int CHud::DrawHudNumber(int x, int y, int iFlags, int iNumber, const RGB24& colo
 		if (iNumber >= 100)
 		{
 			k = iNumber / 100;
-			SPR_Set(GetSprite(m_HUD_number_0 + k), color);
-			SPR_DrawAdditive(0, x, y, &GetSpriteRect(m_HUD_number_0 + k));
+			SPR_Set(GetSprite(m_HudNumbers[k]), color);
+			SPR_DrawAdditive(0, x, y, &GetSpriteRect(m_HudNumbers[k]));
 			x += iWidth;
 		}
 		else if ((iFlags & DHN_3DIGITS) != 0)
@@ -302,8 +302,8 @@ int CHud::DrawHudNumber(int x, int y, int iFlags, int iNumber, const RGB24& colo
 		if (iNumber >= 10)
 		{
 			k = (iNumber % 100) / 10;
-			SPR_Set(GetSprite(m_HUD_number_0 + k), color);
-			SPR_DrawAdditive(0, x, y, &GetSpriteRect(m_HUD_number_0 + k));
+			SPR_Set(GetSprite(m_HudNumbers[k]), color);
+			SPR_DrawAdditive(0, x, y, &GetSpriteRect(m_HudNumbers[k]));
 			x += iWidth;
 		}
 		else if ((iFlags & (DHN_3DIGITS | DHN_2DIGITS)) != 0)
@@ -314,8 +314,8 @@ int CHud::DrawHudNumber(int x, int y, int iFlags, int iNumber, const RGB24& colo
 
 		// SPR_Draw ones
 		k = iNumber % 10;
-		SPR_Set(GetSprite(m_HUD_number_0 + k), color);
-		SPR_DrawAdditive(0, x, y, &GetSpriteRect(m_HUD_number_0 + k));
+		SPR_Set(GetSprite(m_HudNumbers[k]), color);
+		SPR_DrawAdditive(0, x, y, &GetSpriteRect(m_HudNumbers[k]));
 		x += iWidth;
 	}
 	else if ((iFlags & DHN_DRAWZERO) != 0)
@@ -401,7 +401,7 @@ int CHud::DrawHudNumberReverse(int x, int y, int number, int flags, const RGB24&
 		do
 		{
 			const int digit = remainder % 10;
-			const int digitSpriteIndex = m_HUD_number_0 + digit;
+			const int digitSpriteIndex = m_HudNumbers[digit];
 
 			// This has to happen *before* drawing because we're drawing in reverse
 			x -= digitWidth;

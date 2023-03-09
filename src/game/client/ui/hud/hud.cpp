@@ -249,8 +249,13 @@ void CHud::VidInit()
 		hudSprite.Handle = SPR_Load(fmt::format("sprites/{}.spr", hudSprite.SpriteName.c_str()).c_str());
 	}
 
-	// assumption: number_1, number_2, etc, are all listed and loaded sequentially
 	m_HUD_number_0 = GetSpriteIndex("number_0");
+
+	// TODO: make sure these actually exist
+	for (int i = 0; i < 10; ++i)
+	{
+		m_HudNumbers[i] = GetSpriteIndex(fmt::format("number_{}", i).c_str());
+	}
 
 	const auto& numberRect = m_Sprites[m_HUD_number_0].Rectangle;
 	m_iFontHeight = numberRect.bottom - numberRect.top;

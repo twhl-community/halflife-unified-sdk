@@ -835,6 +835,8 @@ public:
 	// sprite indexes
 	int m_HUD_number_0 = 0;
 
+	std::array<int, 10> m_HudNumbers{};
+
 
 	void AddHudElem(CHudBase* p);
 
