@@ -277,6 +277,7 @@ void JSONSystem::ListSchemas(const CommandArgs& args)
 {
 	if (!IsDebugEnabled())
 	{
+		Con_Printf("json_listschemas can only be used if %s_json_debug is set to 1\n", GetShortLibraryPrefix().data());
 		return;
 	}
 
@@ -292,6 +293,7 @@ void JSONSystem::GenerateSchema(const CommandArgs& args)
 {
 	if (!IsDebugEnabled())
 	{
+		Con_Printf("json_generateschema can only be used if %s_json_debug is set to 1\n", GetShortLibraryPrefix().data());
 		return;
 	}
 
@@ -320,6 +322,7 @@ void JSONSystem::GenerateAllSchemas(const CommandArgs& args)
 {
 	if (!IsDebugEnabled())
 	{
+		Con_Printf("json_generateallschemas can only be used if %s_json_debug is set to 1\n", GetShortLibraryPrefix().data());
 		return;
 	}
 
