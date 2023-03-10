@@ -465,7 +465,7 @@ void GameConfigDefinition<DataContext>::ParseSections(LoadContext& loadContext, 
 template <typename DataContext>
 bool GameConfigDefinition<DataContext>::ShouldProcessSectionGroup(const json& input) const
 {
-	if (const auto condition = input.value("Condition", ""sv); !condition.empty())
+	if (const auto condition = Trim(input.value("Condition"sv, ""sv)); !condition.empty())
 	{
 		m_Logger->trace("Testing section group condition \"{}\"", condition);
 
