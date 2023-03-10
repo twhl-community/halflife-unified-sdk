@@ -320,7 +320,6 @@ void CBaseMonster::FadeMonster()
 //=========================================================
 void CBaseMonster::GibMonster()
 {
-	TraceResult tr;
 	bool gibbed = false;
 
 	EMIT_SOUND(ENT(pev), CHAN_WEAPON, "common/bodysplat.wav", 1, ATTN_NORM);
@@ -608,9 +607,6 @@ Killed
 */
 void CBaseMonster::Killed(CBaseEntity* attacker, int iGib)
 {
-	unsigned int cCount = 0;
-	bool fDone = false;
-
 	if (HasMemory(bits_MEMORY_KILLED))
 	{
 		if (ShouldGibMonster(iGib))
@@ -773,7 +769,6 @@ void CGib::BounceGibTouch(CBaseEntity* pOther)
 //
 void CGib::StickyGibTouch(CBaseEntity* pOther)
 {
-	Vector vecSpot;
 	TraceResult tr;
 
 	SetThink(&CGib::SUB_Remove);
@@ -1522,7 +1517,6 @@ This version is used by Players, uses the random seed generator to sync client a
 */
 Vector CBaseEntity::FireBulletsPlayer(unsigned int cShots, Vector vecSrc, Vector vecDirShooting, Vector vecSpread, float flDistance, int iBulletType, int iTracerFreq, int iDamage, CBaseEntity* attacker, int shared_rand)
 {
-	static int tracerCount;
 	TraceResult tr;
 	Vector vecRight = gpGlobals->v_right;
 	Vector vecUp = gpGlobals->v_up;

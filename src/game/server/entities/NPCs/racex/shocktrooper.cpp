@@ -818,9 +818,6 @@ void CShockTrooper::Shoot()
 //=========================================================
 void CShockTrooper::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
-	Vector vecShootDir;
-	Vector vecShootOrigin;
-
 	switch (pEvent->event)
 	{
 	case STROOPER_AE_DROP_GUN:
@@ -1723,8 +1720,7 @@ IMPLEMENT_CUSTOM_SCHEDULES(CShockTrooper, CSquadMonster);
 void CShockTrooper::SetActivity(Activity NewActivity)
 {
 	int iSequence = ACTIVITY_NOT_AVAILABLE;
-	void* pmodel = GET_MODEL_PTR(ENT(pev));
-
+    
 	switch (NewActivity)
 	{
 	case ACT_RANGE_ATTACK1:

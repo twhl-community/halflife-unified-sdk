@@ -354,16 +354,6 @@ void CGauss::Fire(Vector vecOrigSrc, Vector vecDir, float flDamage)
 	m_pPlayer->m_iWeaponVolume = GAUSS_PRIMARY_FIRE_VOLUME;
 
 	Vector vecSrc = vecOrigSrc;
-	Vector vecDest = vecSrc + vecDir * 8192;
-	edict_t* pentIgnore;
-	TraceResult tr, beam_tr;
-	float flMaxFrac = 1.0;
-	int nTotal = 0;
-	bool fHasPunched = false;
-	bool fFirstBeam = true;
-	int nMaxHits = 10;
-
-	pentIgnore = ENT(m_pPlayer->pev);
 
 #ifdef CLIENT_DLL
 	if (m_fPrimaryFire == false)
@@ -379,6 +369,15 @@ void CGauss::Fire(Vector vecOrigSrc, Vector vecDir, float flDamage)
 	// WeaponsLogger->debug("{} {}", tr.flFraction, flMaxFrac);
 
 #ifndef CLIENT_DLL
+    Vector vecDest = vecSrc + vecDir * 8192;
+    edict_t* pentIgnore = nullptr;
+    TraceResult tr, beam_tr;
+    float flMaxFrac = 1.0;
+    int nTotal = 0;
+    bool fHasPunched = false;
+    bool fFirstBeam = true;
+    int nMaxHits = 10;
+    
 	while (flDamage > 10 && nMaxHits > 0)
 	{
 		nMaxHits--;

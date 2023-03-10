@@ -566,7 +566,6 @@ void CGargantua::FlameControls(float angleX, float angleY)
 void CGargantua::FlameUpdate()
 {
 	int i;
-	static float offset[2] = {60, -60};
 	TraceResult trace;
 	Vector vecStart, angleGun;
 	bool streaks = false;

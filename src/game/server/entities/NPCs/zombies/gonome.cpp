@@ -665,7 +665,6 @@ void COFGonome::StartTask(Task_t* pTask)
 void COFGonome::SetActivity(Activity NewActivity)
 {
 	int iSequence = ACTIVITY_NOT_AVAILABLE;
-	void* pmodel = GET_MODEL_PTR(ENT(pev));
 
 	if (NewActivity != ACT_RANGE_ATTACK1 && m_pGonomeGuts)
 	{

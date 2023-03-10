@@ -1551,15 +1551,8 @@ void CBasePlayer::PlayerUse()
 	}
 }
 
-
-
 void CBasePlayer::Jump()
 {
-	Vector vecWallCheckDir; // direction we're tracing a line to find a wall when walljumping
-	Vector vecAdjustedVelocity;
-	Vector vecSpot;
-	TraceResult tr;
-
 	if (FBitSet(pev->flags, FL_WATERJUMP))
 		return;
 
@@ -2248,8 +2241,6 @@ void CBasePlayer::CheckTimeBasedDamage()
 {
 	int i;
 	byte bDuration = 0;
-
-	static float gtbdPrev = 0.0;
 
 	if ((m_bitsDamageType & DMG_TIMEBASED) == 0)
 		return;

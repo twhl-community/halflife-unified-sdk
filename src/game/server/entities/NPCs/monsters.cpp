@@ -3145,8 +3145,6 @@ bool CBaseMonster::CanPlaySequence(bool fDisregardMonsterState, int interruptLev
 bool CBaseMonster::FindLateralCover(const Vector& vecThreat, const Vector& vecViewOffset)
 {
 	TraceResult tr;
-	Vector vecBestOnLeft;
-	Vector vecBestOnRight;
 	Vector vecLeftTest;
 	Vector vecRightTest;
 	Vector vecStepRight;

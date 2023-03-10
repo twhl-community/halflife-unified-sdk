@@ -30,7 +30,6 @@ Vector* GetClientColor(int clientIndex);
 // allow 20 pixels on either side of the text
 #define MAX_LINE_WIDTH (ScreenWidth - 40)
 #define LINE_START 10
-static float SCROLL_SPEED = 5;
 
 static char g_szLineBuffer[MAX_LINES + 1][MAX_CHARS_PER_LINE];
 static Vector* g_pflNameColors[MAX_LINES + 1];

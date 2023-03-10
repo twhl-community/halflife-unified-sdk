@@ -1510,7 +1510,7 @@ void CHudSpectator::DrawOverviewEntities()
 {
 	int i;
 	model_t* hSpriteModel;
-	Vector origin, angles, point, forward, right, left, up, world, screen, offset;
+	Vector origin, angles, point, forward, right, left, up, screen, offset;
 	float x, y, z, r, g, b, sizeScale = 4.0f;
 	cl_entity_t* ent;
 	float rmatrix[3][4]; // transformation matrix

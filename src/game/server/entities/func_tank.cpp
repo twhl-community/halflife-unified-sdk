@@ -351,8 +351,6 @@ bool CFuncTank::OnControls(CBaseEntity* controller)
 	if ((pev->spawnflags & SF_TANK_CANCONTROL) == 0)
 		return false;
 
-	Vector offset = controller->pev->origin - pev->origin;
-
 	if ((m_vecControllerUsePos - controller->pev->origin).Length() < 30)
 		return true;
 
@@ -1037,7 +1035,7 @@ void CFuncTankRocket::Fire(const Vector& barrelEnd, const Vector& forward, CBase
 		{
 			for (i = 0; i < bulletCount; i++)
 			{
-				CBaseEntity* pRocket = CBaseEntity::Create("rpg_rocket", barrelEnd, pev->angles, edict());
+				Create("rpg_rocket", barrelEnd, pev->angles, edict());
 			}
 			CFuncTank::Fire(barrelEnd, forward, this);
 		}

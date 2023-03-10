@@ -70,7 +70,7 @@ Point cam_mouse;
 //-------------------------------------------------- Local Variables
 
 static kbutton_t cam_pitchup, cam_pitchdown, cam_yawleft, cam_yawright;
-static kbutton_t cam_in, cam_out, cam_move;
+static kbutton_t cam_in, cam_out;
 
 //-------------------------------------------------- Prototypes
 
@@ -146,9 +146,6 @@ struct moveclip_t
 
 void DLLEXPORT CAM_Think()
 {
-	Vector origin;
-	Vector ext, pnt, camForward, camRight, camUp;
-	moveclip_t clip;
 	float dist;
 	Vector camAngles;
 	float flSensitivity;

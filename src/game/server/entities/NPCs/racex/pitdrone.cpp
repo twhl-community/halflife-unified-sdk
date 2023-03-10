@@ -149,9 +149,7 @@ void CPitdroneSpike::SpikeTouch(CBaseEntity* pOther)
 		const auto vecOrigin = pev->origin - vecDir * 6;
 
 		UTIL_SetOrigin(pev, vecOrigin);
-
-		auto v41 = UTIL_VecToAngles(vecDir);
-
+	    
 		pev->angles = UTIL_VecToAngles(vecDir);
 		pev->solid = SOLID_NOT;
 		pev->movetype = MOVETYPE_FLY;

@@ -98,7 +98,6 @@ static int originalmouseparms[3], newmouseparms[3] = {0, 0, 1};
 static bool mouseactive = false;
 bool mouseinitialized;
 static bool mouseparmsvalid;
-static bool mouseshowtoggle = true;
 
 // joystick defines and variables
 // where should defines be moved?

@@ -74,9 +74,7 @@ Vector VecCheckToss(entvars_t* pev, const Vector& vecSpot1, Vector vecSpot2, flo
 	TraceResult tr;
 	Vector vecMidPoint; // halfway point between Spot1 and Spot2
 	Vector vecApex;		// highest point
-	Vector vecScale;
 	Vector vecGrenadeVel;
-	Vector vecTemp;
 	float flGravity = g_psv_gravity->value * flGravityAdj;
 
 	if (vecSpot2.z - vecSpot1.z > 500)

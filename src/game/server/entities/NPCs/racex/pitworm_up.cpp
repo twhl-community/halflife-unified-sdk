@@ -972,10 +972,7 @@ void COFPitWormUp::TrackEnemy()
 void COFPitWormUp::NextActivity()
 {
 	UTIL_MakeAimVectors(pev->angles);
-
-	// TODO: never used?
-	const auto moveDistance = m_posDesired - pev->origin;
-
+    
 	if (m_hEnemy)
 	{
 		if (!m_hEnemy->IsAlive())
@@ -2093,7 +2090,6 @@ void COFPitWorm::Move(float flInterval)
 	float flCheckDist;
 	float flDist; // how far the lookahead check got before hitting an object.
 	Vector vecDir;
-	Vector vecApex;
 	CBaseEntity* pTargetEnt;
 
 	// Don't move if no valid route
