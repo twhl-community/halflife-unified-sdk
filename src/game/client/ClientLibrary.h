@@ -45,8 +45,8 @@ public:
 	void HudInit();
 
 	/**
-	*	@brief Called whenever the client connects to a server.
-	*/
+	 *	@brief Called whenever the client connects to a server.
+	 */
 	void VidInit();
 
 	void PostInitialize();
@@ -60,10 +60,10 @@ public:
 	void OnUserMessageReceived();
 
 	/**
-	*	@brief Checks if the network data file needs loading.
-	*	@details Should be called if it is possible for networked data to be accessed before the file is loaded.
-	*	In practice this means user messages that use such data.
-	*/
+	 *	@brief Checks if the network data file needs loading.
+	 *	@details Should be called if it is possible for networked data to be accessed before the file is loaded.
+	 *	In practice this means user messages that use such data.
+	 */
 	void CheckNetworkDataFile();
 
 protected:

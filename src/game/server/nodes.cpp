@@ -1625,7 +1625,7 @@ void CTestHull::BuildNodeGraph()
 	int iBadNode; // this is the node that caused graph generation to fail
 
 	int cPoolLinks; // number of links in the pool.
-    
+
 	Vector vecSpot;
 
 	float flYaw; // use this stuff to walk the hull between nodes

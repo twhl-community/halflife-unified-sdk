@@ -369,15 +369,15 @@ void CGauss::Fire(Vector vecOrigSrc, Vector vecDir, float flDamage)
 	// WeaponsLogger->debug("{} {}", tr.flFraction, flMaxFrac);
 
 #ifndef CLIENT_DLL
-    Vector vecDest = vecSrc + vecDir * 8192;
-    edict_t* pentIgnore = nullptr;
-    TraceResult tr, beam_tr;
-    float flMaxFrac = 1.0;
-    int nTotal = 0;
-    bool fHasPunched = false;
-    bool fFirstBeam = true;
-    int nMaxHits = 10;
-    
+	Vector vecDest = vecSrc + vecDir * 8192;
+	edict_t* pentIgnore = nullptr;
+	TraceResult tr, beam_tr;
+	float flMaxFrac = 1.0;
+	int nTotal = 0;
+	bool fHasPunched = false;
+	bool fFirstBeam = true;
+	int nMaxHits = 10;
+
 	while (flDamage > 10 && nMaxHits > 0)
 	{
 		nMaxHits--;

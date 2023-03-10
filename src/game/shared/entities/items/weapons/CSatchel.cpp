@@ -384,9 +384,9 @@ void CSatchel::Throw()
 	if (0 != m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType])
 	{
 #ifndef CLIENT_DLL
-	    Vector vecSrc = m_pPlayer->pev->origin;
-	    Vector vecThrow = gpGlobals->v_forward * 274 + m_pPlayer->pev->velocity;
-	    
+		Vector vecSrc = m_pPlayer->pev->origin;
+		Vector vecThrow = gpGlobals->v_forward * 274 + m_pPlayer->pev->velocity;
+
 		CBaseEntity* pSatchel = Create("monster_satchel", vecSrc, Vector(0, 0, 0), m_pPlayer->edict());
 		pSatchel->pev->velocity = vecThrow;
 		pSatchel->pev->avelocity.y = 400;

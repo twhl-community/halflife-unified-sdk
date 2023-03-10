@@ -147,17 +147,17 @@ CBaseEntity* UTIL_FindEntityByClassname(CBaseEntity* pStartEntity, const char* s
 CBaseEntity* UTIL_FindEntityByTargetname(CBaseEntity* pStartEntity, const char* szName);
 
 /**
-*	@brief For doing a reverse lookup. Say you have a door, and want to find its button.
-*/
+ *	@brief For doing a reverse lookup. Say you have a door, and want to find its button.
+ */
 CBaseEntity* UTIL_FindEntityByTarget(CBaseEntity* pStartEntity, const char* szName);
 
 CBaseEntity* UTIL_FindEntityGeneric(const char* szName, Vector& vecSrc, float flRadius);
 
 /**
-*	@brief returns a CBasePlayer pointer to a player by index.
-*	Only returns if the player is spawned and connected, otherwise returns nullptr.
-*	@param playerIndex 1 based player index
-*/
+ *	@brief returns a CBasePlayer pointer to a player by index.
+ *	Only returns if the player is spawned and connected, otherwise returns nullptr.
+ *	@param playerIndex 1 based player index
+ */
 CBasePlayer* UTIL_PlayerByIndex(int playerIndex);
 
 /**

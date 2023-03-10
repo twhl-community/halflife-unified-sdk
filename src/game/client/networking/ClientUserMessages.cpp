@@ -32,7 +32,7 @@ bool ClientUserMessages::IsRegistered(std::string_view name) const
 void ClientUserMessages::RegisterHandler(std::string_view name, MessageHandler&& handler)
 {
 	if (name.empty() || std::find_if_not(name.begin(), name.end(), [](auto c)
-			{ return std::isalpha(c); }) != name.end())
+							{ return std::isalpha(c); }) != name.end())
 	{
 		assert(!"User message handler names must contain only alphabetic characters");
 		return;

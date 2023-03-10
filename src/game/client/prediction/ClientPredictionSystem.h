@@ -49,8 +49,8 @@ public:
 	CBasePlayerWeapon* GetLocalWeapon(int id);
 
 	/**
-	*	@brief Run Weapon firing code on client
-	*/
+	 *	@brief Run Weapon firing code on client
+	 */
 	void WeaponsPostThink(local_state_t* from, local_state_t* to, usercmd_t* cmd, double time, unsigned int random_seed);
 
 private:

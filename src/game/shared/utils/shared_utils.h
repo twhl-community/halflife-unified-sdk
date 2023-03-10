@@ -138,9 +138,9 @@ bool COM_GetParam(const char* name, const char** next);
 bool COM_HasParam(const char* name);
 
 /**
-*	@brief Fixes bounds vectors so that the min components are <= than the max components.
-*	This avoids the "backwards mins/maxs" engine error.
-*/
+ *	@brief Fixes bounds vectors so that the min components are <= than the max components.
+ *	This avoids the "backwards mins/maxs" engine error.
+ */
 bool UTIL_FixBoundsVectors(Vector& mins, Vector& maxs);
 
 constexpr bool UTIL_IsServer()

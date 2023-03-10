@@ -29,11 +29,11 @@
 #include "utils/JSONSystem.h"
 
 /**
-*	@brief Version of the network data protocol.
-*	Used to verify that the server and client are using the same version.
-*	Increment this whenever the contents of the network data file change.
-*	A protocol version of 0 is treated as invalid/missing.
-*/
+ *	@brief Version of the network data protocol.
+ *	Used to verify that the server and client are using the same version.
+ *	Increment this whenever the contents of the network data file change.
+ *	A protocol version of 0 is treated as invalid/missing.
+ */
 constexpr std::uint32_t NetworkDataProtocolVersion = 1;
 
 constexpr std::uint32_t NetworkDataInvalidProtocolVersion = 0;
@@ -49,8 +49,8 @@ struct NetworkDataBlock
 	const std::string_view Name;
 
 	/**
-	*	@brief Whether the block is being serialized or deserialized.
-	*/
+	 *	@brief Whether the block is being serialized or deserialized.
+	 */
 	const NetworkDataMode Mode;
 
 	json Data;
@@ -63,21 +63,21 @@ struct NetworkDataBlock
 };
 
 /**
-*	@brief Handles network data serialization and deserialization.
-*/
+ *	@brief Handles network data serialization and deserialization.
+ */
 class INetworkDataBlockHandler
 {
 public:
 	virtual ~INetworkDataBlockHandler() = default;
 
 	/**
-	*	@brief Called when a network data set is about to be processed.
-	*/
+	 *	@brief Called when a network data set is about to be processed.
+	 */
 	virtual void OnBeginNetworkDataProcessing() {}
 
 	/**
-	*	@brief Called when a network data set has been processed.
-	*/
+	 *	@brief Called when a network data set has been processed.
+	 */
 	virtual void OnEndNetworkDataProcessing() {}
 
 	virtual void HandleNetworkDataBlock(NetworkDataBlock& block) = 0;

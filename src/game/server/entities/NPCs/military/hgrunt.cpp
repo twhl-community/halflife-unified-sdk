@@ -1660,7 +1660,7 @@ IMPLEMENT_CUSTOM_SCHEDULES(CHGrunt, CSquadMonster);
 std::tuple<int, Activity> CHGrunt::GetSequenceForActivity(Activity NewActivity)
 {
 	int iSequence = ACTIVITY_NOT_AVAILABLE;
-    
+
 	switch (NewActivity)
 	{
 	case ACT_RANGE_ATTACK1:

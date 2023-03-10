@@ -414,11 +414,11 @@ bool CBasePlayer::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, floa
 
 	// tell director about it
 	MESSAGE_BEGIN(MSG_SPEC, SVC_DIRECTOR);
-	WRITE_BYTE(9);							// command length in bytes
-	WRITE_BYTE(DRC_CMD_EVENT);				// take damage event
-	WRITE_SHORT(ENTINDEX(this->edict()));	// index number of primary entity
-	WRITE_SHORT(inflictor->entindex());		// index number of secondary entity
-	WRITE_LONG(5);							// eventflags (priority and flags)
+	WRITE_BYTE(9);						  // command length in bytes
+	WRITE_BYTE(DRC_CMD_EVENT);			  // take damage event
+	WRITE_SHORT(ENTINDEX(this->edict())); // index number of primary entity
+	WRITE_SHORT(inflictor->entindex());	  // index number of secondary entity
+	WRITE_LONG(5);						  // eventflags (priority and flags)
 	MESSAGE_END();
 
 

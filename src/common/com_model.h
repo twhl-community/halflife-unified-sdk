@@ -94,11 +94,11 @@ struct texture_t
 {
 	char name[16];
 	unsigned width, height;
-	int anim_total;					// total tenths in sequence ( 0 = no)
-	int anim_min, anim_max;			// time for this frame min <=time< max
-	texture_t* anim_next;			// in the animation sequence
-	texture_t* alternate_anims;		// bmodels in frame 1 use these
-	unsigned offsets[MIPLEVELS];	// four mip maps stored
+	int anim_total;				 // total tenths in sequence ( 0 = no)
+	int anim_min, anim_max;		 // time for this frame min <=time< max
+	texture_t* anim_next;		 // in the animation sequence
+	texture_t* alternate_anims;	 // bmodels in frame 1 use these
+	unsigned offsets[MIPLEVELS]; // four mip maps stored
 	unsigned paloffset;
 };
 
@@ -289,7 +289,6 @@ struct model_t
 	// additional model data
 	//
 	cache_user_t cache; // only access through Mod_Extradata
-
 };
 
 typedef vec_t vec4_t[4];

@@ -23,9 +23,9 @@ CBasePlayer* ToBasePlayer(CBaseEntity* entity)
 		return nullptr;
 	}
 
-	#if DEBUG
+#if DEBUG
 	assert(dynamic_cast<CBasePlayer*>(entity) != nullptr);
-	#endif
+#endif
 
 	return static_cast<CBasePlayer*>(entity);
 }

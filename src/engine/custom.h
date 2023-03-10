@@ -54,22 +54,22 @@ struct resource_t
 	unsigned char rgucMD5_hash[16]; // To determine if we already have it.
 	unsigned char playernum;		// Which player index this resource is associated with, if it's a custom resource.
 
-	unsigned char rguc_reserved[32];	// For future expansion
-	resource_t* pNext;					// Next in chain.
+	unsigned char rguc_reserved[32]; // For future expansion
+	resource_t* pNext;				 // Next in chain.
 	resource_t* pPrev;
 };
 
 struct customization_t
 {
-	qboolean bInUse;			   // Is this customization in use;
-	resource_t resource;		   // The resource_t for this customization
-	qboolean bTranslated;		   // Has the raw data been translated into a useable format?
-								   //  (e.g., raw decal .wad make into texture_t *)
-	int nUserData1;				   // Customization specific data
-	int nUserData2;				   // Customization specific data
-	void* pInfo;				   // Buffer that holds the data structure that references the data (e.g., the cachewad_t)
-	void* pBuffer;				   // Buffer that holds the data for the customization (the raw .wad data)
-	customization_t* pNext;		   // Next in chain
+	qboolean bInUse;		// Is this customization in use;
+	resource_t resource;	// The resource_t for this customization
+	qboolean bTranslated;	// Has the raw data been translated into a useable format?
+							//  (e.g., raw decal .wad make into texture_t *)
+	int nUserData1;			// Customization specific data
+	int nUserData2;			// Customization specific data
+	void* pInfo;			// Buffer that holds the data structure that references the data (e.g., the cachewad_t)
+	void* pBuffer;			// Buffer that holds the data for the customization (the raw .wad data)
+	customization_t* pNext; // Next in chain
 };
 
 #define FCUST_FROMHPAK (1 << 0)

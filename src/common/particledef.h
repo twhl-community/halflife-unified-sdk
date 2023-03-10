@@ -50,4 +50,4 @@ struct particle_t
 
 	// For deathfunc, etc.
 	unsigned char context;
-} ;
+};

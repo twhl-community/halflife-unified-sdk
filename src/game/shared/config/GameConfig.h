@@ -74,8 +74,8 @@ public:
 	virtual std::string_view GetName() const = 0;
 
 	/**
-	*	@brief Gets the section type (e.g. @c object, @c array, etc).
-	*/
+	 *	@brief Gets the section type (e.g. @c object, @c array, etc).
+	 */
 	virtual json::value_t GetType() const = 0;
 
 	/**

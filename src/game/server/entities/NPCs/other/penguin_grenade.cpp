@@ -350,7 +350,7 @@ void CPenguinGrenade::HuntThink()
 		return;
 
 	m_flNextHunt = gpGlobals->time + 2.0;
-    
+
 	Vector vecDir;
 	Vector vecFlat = pev->velocity;
 	vecFlat.z = 0;

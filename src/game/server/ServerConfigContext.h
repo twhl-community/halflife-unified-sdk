@@ -21,8 +21,8 @@
 #include "MapState.h"
 
 /**
-*	@brief Context used by config section parsers.
-*/
+ *	@brief Context used by config section parsers.
+ */
 struct ServerConfigContext
 {
 	MapState& State;

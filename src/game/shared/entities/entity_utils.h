@@ -19,9 +19,9 @@ class CBaseEntity;
 class CBasePlayer;
 
 /**
-*	@brief Converts an entity pointer to a player pointer, returning nullptr if it isn't a player.
-*	In debug builds the type is checked to make sure it's a player.
-*/
+ *	@brief Converts an entity pointer to a player pointer, returning nullptr if it isn't a player.
+ *	In debug builds the type is checked to make sure it's a player.
+ */
 CBasePlayer* ToBasePlayer(CBaseEntity* entity);
 
 /**

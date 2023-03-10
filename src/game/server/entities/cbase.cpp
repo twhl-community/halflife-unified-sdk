@@ -74,8 +74,8 @@ static DLL_FUNCTIONS gFunctionTable =
 
 		Sys_Error, // pfnSys_Error				Called when engine has encountered an error
 
-		PM_Move,			// pfnPM_Move
-		PM_Init,			// pfnPM_Init				Server version of player movement initialization
+		PM_Move, // pfnPM_Move
+		PM_Init, // pfnPM_Init				Server version of player movement initialization
 		[](const char* name)
 		{ return g_MaterialSystem.FindTextureType(name); }, // pfnPM_FindTextureType
 

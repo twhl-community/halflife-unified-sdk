@@ -171,9 +171,9 @@ public:
 	float m_flgeigerRange; // range to nearest radiation source
 	float m_flgeigerDelay; // delay per update of range msg to client
 	int m_igeigerRangePrev;
-	int m_iStepLeft;						// alternate left/right foot stepping sound
-	char m_szTextureName[TextureNameMax];	// current texture name we're standing on
-	char m_chTextureType;					// current texture type
+	int m_iStepLeft;					  // alternate left/right foot stepping sound
+	char m_szTextureName[TextureNameMax]; // current texture name we're standing on
+	char m_chTextureType;				  // current texture type
 
 	int m_idrowndmg;	  // track drowning damage taken
 	int m_idrownrestored; // track drowning damage restored

@@ -972,7 +972,7 @@ void COFPitWormUp::TrackEnemy()
 void COFPitWormUp::NextActivity()
 {
 	UTIL_MakeAimVectors(pev->angles);
-    
+
 	if (m_hEnemy)
 	{
 		if (!m_hEnemy->IsAlive())

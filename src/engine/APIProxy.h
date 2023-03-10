@@ -47,8 +47,8 @@ struct cmdalias_t
 };
 
 /**
-*	@brief Functions exported by the client .dll
-*/
+ *	@brief Functions exported by the client .dll
+ */
 struct cldll_func_t
 {
 	int (*pInitFunc)(cl_enginefunc_t*, int);
@@ -90,8 +90,8 @@ struct cldll_func_t
 	cl_entity_t* (*pGetUserEntity)(int index);
 
 	/**
-	*	@details Possibly null on old client dlls.
-	*/
+	 *	@details Possibly null on old client dlls.
+	 */
 	void (*pVoiceStatus)(int entindex, qboolean bTalking);
 
 	/**
@@ -100,8 +100,8 @@ struct cldll_func_t
 	void (*pDirectorMessage)(int iSize, void* pbuf);
 
 	/**
-	*	@brief Not used by all clients
-	*/
+	 *	@brief Not used by all clients
+	 */
 	int (*pStudioInterface)(int version, r_studio_interface_t** ppinterface, engine_studio_api_t* pstudio);
 
 	/**
@@ -115,19 +115,20 @@ struct cldll_func_t
 	int (*pGetPlayerTeam)(int iplayer);
 
 	/**
-	*	@brief this should be CreateInterfaceFn but that means including interface.h
-	*	which is a C++ file and some of the client files a C only...
-	*	so we return a void * which we then do a typecast on later.
-	*/
+	 *	@brief this should be CreateInterfaceFn but that means including interface.h
+	 *	which is a C++ file and some of the client files a C only...
+	 *	so we return a void * which we then do a typecast on later.
+	 */
 	void* (*pClientFactory)();
 };
 
 /**
-*	@brief Functions exported by the engine
-*/
+ *	@brief Functions exported by the engine
+ */
 struct cl_enginefunc_t
 {
-	HSPRITE (*pfnSPR_Load)(const char* szPicName);
+	HSPRITE (*pfnSPR_Load)
+	(const char* szPicName);
 	int (*pfnSPR_Frames)(HSPRITE hPic);
 	int (*pfnSPR_Height)(HSPRITE hPic, int frame);
 	int (*pfnSPR_Width)(HSPRITE hPic, int frame);

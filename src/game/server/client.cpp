@@ -1179,7 +1179,7 @@ we could also use the pas/ pvs that we set in SetupVisibility, if we wanted to. 
 */
 int AddToFullPack(entity_state_t* state, int e, edict_t* ent, edict_t* host, int hostflags, int player, unsigned char* pSet)
 {
-	// Entities with an index greater than this will corrupt the client's heap because 
+	// Entities with an index greater than this will corrupt the client's heap because
 	// the index is sent with only 11 bits of precision (2^11 == 2048).
 	// So we don't send them, just like having too many entities would result
 	// in the entity not being sent.
@@ -1956,10 +1956,10 @@ to be created during play ( e.g., grenades, ammo packs, projectiles, corpses, et
 */
 void CreateInstancedBaselines()
 {
-	//int iret = 0;
-	//entity_state_t state;
+	// int iret = 0;
+	// entity_state_t state;
 
-	//memset(&state, 0, sizeof(state));
+	// memset(&state, 0, sizeof(state));
 
 	// Create any additional baselines here for things like grendates, etc.
 	// iret = ENGINE_INSTANCE_BASELINE( pc->pev->classname, &state );

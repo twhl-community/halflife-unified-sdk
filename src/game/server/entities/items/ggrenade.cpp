@@ -59,8 +59,7 @@ void CGrenade::Explode(Vector vecSrc, Vector vecAim)
 // UNDONE: temporary scorching for PreAlpha - find a less sleazy permenant solution.
 void CGrenade::Explode(TraceResult* pTrace, int bitsDamageType)
 {
-
-    pev->model = string_t::Null; // invisible
+	pev->model = string_t::Null; // invisible
 	pev->solid = SOLID_NOT;		 // intangible
 
 	pev->takedamage = DAMAGE_NO;
@@ -110,7 +109,7 @@ void CGrenade::Explode(TraceResult* pTrace, int bitsDamageType)
 	{
 		UTIL_DecalTrace(pTrace, DECAL_SCORCH2);
 	}
-    
+
 	switch (RANDOM_LONG(0, 2))
 	{
 	case 0:

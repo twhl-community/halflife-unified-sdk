@@ -293,8 +293,8 @@ void CFlockingFlyer::MakeSound()
 //=========================================================
 void CFlockingFlyer::Killed(CBaseEntity* attacker, int iGib)
 {
-    CFlockingFlyer* pSquad = m_pSquadLeader;
-    
+	CFlockingFlyer* pSquad = m_pSquadLeader;
+
 	while (pSquad)
 	{
 		pSquad->m_flAlertTime = gpGlobals->time + 15;
@@ -580,10 +580,10 @@ bool CFlockingFlyer::FPathBlocked()
 void CFlockingFlyer::FlockLeaderThink()
 {
 	TraceResult tr;
-	Vector vecDist;		// used for general measurements
+	Vector vecDist; // used for general measurements
 	float flLeftSide;
 	float flRightSide;
-    
+
 	pev->nextthink = gpGlobals->time + 0.1;
 
 	UTIL_MakeVectors(pev->angles);

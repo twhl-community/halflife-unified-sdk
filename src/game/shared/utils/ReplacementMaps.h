@@ -91,20 +91,20 @@ public:
 	const ReplacementMap* Load(const std::string& fileName, const ReplacementMapOptions& options = {});
 
 	/**
-	*	@brief Loads multiple replacement files and merges them together. Last occurrence of a replacement wins.
-	*	Not cached.
-	*/
+	 *	@brief Loads multiple replacement files and merges them together. Last occurrence of a replacement wins.
+	 *	Not cached.
+	 */
 	std::unique_ptr<ReplacementMap> LoadMultiple(std::span<const std::string> fileNames, const ReplacementMapOptions& options = {}) const;
 
 	/**
-	*	@brief Serializes a replacement map into a JSON object.
-	*/
+	 *	@brief Serializes a replacement map into a JSON object.
+	 */
 	json Serialize(const ReplacementMap& map) const;
 
 	/**
-	*	@brief Deserializes a replacement map from a JSON object.
-	*	If an error occurs during deserialization an empty map is returned.
-	*/
+	 *	@brief Deserializes a replacement map from a JSON object.
+	 *	If an error occurs during deserialization an empty map is returned.
+	 */
 	std::unique_ptr<ReplacementMap> Deserialize(const json& input) const;
 
 private:

@@ -210,9 +210,9 @@ public:
 	virtual void Precache() {}
 
 	/**
-	*	@brief Handles keyvalues in CBaseEntity that must be handled,
-	*	even if an entity does not call the base class version of KeyValue.
-	*/
+	 *	@brief Handles keyvalues in CBaseEntity that must be handled,
+	 *	even if an entity does not call the base class version of KeyValue.
+	 */
 	bool RequiredKeyValue(KeyValueData* pkvd);
 
 	virtual bool KeyValue(KeyValueData* pkvd) { return false; }

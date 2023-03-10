@@ -57,5 +57,4 @@ struct triangleapi_t
 	void (*LightAtPoint)(float* pos, float* value);
 	void (*Color4fRendermode)(float r, float g, float b, float a, int rendermode);
 	void (*FogParams)(float flDensity, int iFogSkybox); // Used with Fog()...sets fog density and whether the fog should be applied to the skybox
-
 };

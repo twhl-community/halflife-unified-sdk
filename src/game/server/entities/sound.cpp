@@ -69,8 +69,6 @@ struct dynpitchvol_t
 
 	int lfofrac;
 	int lfomult;
-
-
 };
 
 #define CDPVPRESETMAX 27

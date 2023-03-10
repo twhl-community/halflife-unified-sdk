@@ -313,7 +313,6 @@ struct ENTITYTABLE
 	int size;			// Byte size of this entity's data
 	int flags;			// This could be a short -- bit mask of transitions that this entity is in the PVS of
 	string_t classname; // entity class name
-
 };
 
 #define FENTTABLE_PLAYER 0x80000000
@@ -342,7 +341,6 @@ struct SAVERESTOREDATA
 	Vector vecLandmarkOffset; // for landmark transitions
 	float time;
 	char szCurrentMapName[32]; // To check global entities
-
 };
 
 enum FIELDTYPE

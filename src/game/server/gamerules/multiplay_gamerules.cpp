@@ -723,7 +723,7 @@ void CHalfLifeMultiplay::DeathNotice(CBasePlayer* pVictim, CBaseEntity* pKiller,
 		WRITE_SHORT(inflictor->entindex()); // index number of secondary entity
 	else
 		WRITE_SHORT(pKiller->entindex()); // index number of secondary entity
-	WRITE_LONG(7 | DRC_FLAG_DRAMATIC);		 // eventflags (priority and flags)
+	WRITE_LONG(7 | DRC_FLAG_DRAMATIC);	  // eventflags (priority and flags)
 	MESSAGE_END();
 
 	//  Print a standard message
