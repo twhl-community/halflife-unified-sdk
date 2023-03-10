@@ -78,8 +78,16 @@ static std::vector<HudSprite> ParseHudSpriteConfiguration(const json& input)
 	{
 		HudSprite sprite;
 
-		sprite.Name = hudSpriteName.c_str();
-		sprite.SpriteName = data.value("SpriteName"sv, ""sv).data();
+		std::string trimmedHudSpriteName{Trim(hudSpriteName)};
+		std::string trimmedSpriteName{Trim(data.value("SpriteName"sv, ""sv))};
+
+		if (trimmedHudSpriteName.empty() || trimmedSpriteName.empty())
+		{
+			continue;
+		}
+
+		sprite.Name = trimmedHudSpriteName.c_str();
+		sprite.SpriteName = trimmedSpriteName.c_str();
 		sprite.Rectangle.left = data.value<int>("Left"sv, 0);
 		sprite.Rectangle.top = data.value<int>("Top"sv, 0);
 		sprite.Rectangle.right = sprite.Rectangle.left + data.value<int>("Width"sv, 0);
