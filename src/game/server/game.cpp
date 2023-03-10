@@ -14,6 +14,7 @@
  ****/
 #include "cbase.h"
 #include "ServerLibrary.h"
+#include "UserMessages.h"
 
 cvar_t displaysoundlist = {"displaysoundlist", "0"};
 
@@ -113,6 +114,9 @@ void GameDLLInit()
 	CVAR_REGISTER(&sv_entityinfo_eager);
 
 	// END REGISTER CVARS FOR OPPOSING FORCE
+
+	// Link user messages immediately so there are no race conditions.
+	LinkUserMessages();
 
 	if (!g_Server.Initialize())
 	{

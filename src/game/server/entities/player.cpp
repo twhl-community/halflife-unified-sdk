@@ -3221,9 +3221,6 @@ void CBasePlayer::Precache()
 
 	m_iTrain |= TRAIN_NEW;
 
-	// Make sure any necessary user messages have been registered
-	LinkUserMessages();
-
 	m_iUpdateTime = 5; // won't update for 1/2 a second
 
 	if (gInitHUD)

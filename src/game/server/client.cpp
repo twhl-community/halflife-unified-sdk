@@ -46,8 +46,6 @@ DLL_GLOBAL unsigned int g_ulFrameCount;
 
 void CopyToBodyQue(entvars_t* pev);
 
-void LinkUserMessages();
-
 /*
 ===========
 ClientConnect
@@ -848,9 +846,6 @@ void ServerActivate(edict_t* pEdictList, int edictCount, int clientMax)
 			CBaseEntity::Logger->debug("Can't instance {}", STRING(pEdictList[i].v.classname));
 		}
 	}
-
-	// Link user messages here to make sure first client can get them...
-	LinkUserMessages();
 
 	g_Server.PostMapActivate();
 }
