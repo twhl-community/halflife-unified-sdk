@@ -103,7 +103,7 @@ bool NetworkDataSystem::GenerateNetworkDataFile()
 	}
 
 	// Precache the file so clients download it.
-	g_engfuncs.pfnPrecacheGeneric(STRING(ALLOC_STRING(NetworkDataFileName.c_str())));
+	UTIL_PrecacheGenericDirect(STRING(ALLOC_STRING(NetworkDataFileName.c_str())));
 
 	return true;
 }

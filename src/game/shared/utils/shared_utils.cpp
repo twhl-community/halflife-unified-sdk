@@ -437,6 +437,34 @@ float UTIL_SharedRandomFloat(unsigned int seed, float low, float high)
 	}
 }
 
+static const char* ValidateModel(const char* str, PrecacheList* list)
+{
+	if (str[0] == '!')
+	{
+		++str;
+	}
+
+	return str;
+}
+
+static const char* ValidateSound(const char* str, PrecacheList* list)
+{
+	if (str[0] == '!')
+	{
+		list->GetLogger()->error("\"{}\": Do not precache sentence names!", str);
+		return nullptr;
+	}
+
+	return str;
+}
+
+void UTIL_CreatePrecacheLists()
+{
+	g_ModelPrecache = std::make_unique<PrecacheList>("model", g_PrecacheLogger, &ValidateModel, g_engfuncs.pfnPrecacheModel);
+	g_SoundPrecache = std::make_unique<PrecacheList>("sound", g_PrecacheLogger, &ValidateSound, g_engfuncs.pfnPrecacheSound);
+	g_GenericPrecache = std::make_unique<PrecacheList>("generic", g_PrecacheLogger, nullptr, g_engfuncs.pfnPrecacheGeneric);
+}
+
 const char* UTIL_CheckForGlobalModelReplacement(const char* s)
 {
 #ifndef CLIENT_DLL
@@ -446,18 +474,13 @@ const char* UTIL_CheckForGlobalModelReplacement(const char* s)
 	return s;
 }
 
-static void UTIL_PrecacheLog(const char* type, const char* fileName)
-{
-	if (g_PrecacheLogger->should_log(spdlog::level::trace))
-	{
-		g_PrecacheLogger->trace("[{}] \"{}\"{}", type, fileName, fileName == gpGlobals->pStringBase ? " (Null string_t)" : "");
-	}
-}
-
 int UTIL_PrecacheModelDirect(const char* s)
 {
-	UTIL_PrecacheLog("model", s);
-	return g_engfuncs.pfnPrecacheModel(s);
+#ifndef CLIENT_DLL
+	return g_ModelPrecache->Add(s);
+#else
+	return 0;
+#endif
 }
 
 int UTIL_PrecacheModel(const char* s)
@@ -477,8 +500,11 @@ int UTIL_PrecacheModel(const char* s)
 
 int UTIL_PrecacheSoundDirect(const char* s)
 {
-	UTIL_PrecacheLog("sound", s);
-	return g_engfuncs.pfnPrecacheSound(s);
+#ifndef CLIENT_DLL
+	return g_SoundPrecache->Add(s);
+#else
+	return 0;
+#endif
 }
 
 int UTIL_PrecacheSound(const char* s)
@@ -500,6 +526,9 @@ int UTIL_PrecacheSound(const char* s)
 
 int UTIL_PrecacheGenericDirect(const char* s)
 {
-	UTIL_PrecacheLog("generic", s);
-	return g_engfuncs.pfnPrecacheGeneric(s);
+#ifndef CLIENT_DLL
+	return g_GenericPrecache->Add(s);
+#else
+	return 0;
+#endif
 }

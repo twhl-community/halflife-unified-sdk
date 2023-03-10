@@ -76,6 +76,9 @@ function(add_game_shared_sources target)
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/entities/items/weapons/weapons_shared.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/entities/items/weapons/weapons.h
 			
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/models/BspLoader.cpp
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/models/BspLoader.h
+			
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/networking/NetworkDataSystem.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/networking/NetworkDataSystem.h
 			
@@ -112,6 +115,8 @@ function(add_game_shared_sources target)
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/JSONSystem.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/LogSystem.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/LogSystem.h
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/PrecacheList.cpp
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/PrecacheList.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/ReplacementMaps.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/ReplacementMaps.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/utils/shared_utils.cpp

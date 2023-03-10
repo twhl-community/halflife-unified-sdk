@@ -40,6 +40,8 @@
 #include "config/sections/HudColorSection.h"
 #include "config/sections/SuitLightTypeSection.h"
 
+#include "models/BspLoader.h"
+
 #include "networking/NetworkDataSystem.h"
 
 #include "sound/MaterialSystem.h"
@@ -90,6 +92,7 @@ bool ServerLibrary::Initialize()
 	m_SendResources = g_ConCommands.GetCVar("sv_send_resources");
 	m_AllowDLFile = g_ConCommands.GetCVar("sv_allow_dlfile");
 
+	g_PrecacheLogger = g_Logging.CreateLogger("precache");
 	CBaseEntity::IOLogger = g_Logging.CreateLogger("ent.io");
 	CBaseMonster::AILogger = g_Logging.CreateLogger("ent.ai");
 	CCineMonster::AIScriptLogger = g_Logging.CreateLogger("ent.ai.script");
@@ -97,6 +100,8 @@ bool ServerLibrary::Initialize()
 	CSaveRestoreBuffer::Logger = g_Logging.CreateLogger("saverestore");
 	CGameRules::Logger = g_Logging.CreateLogger("gamerules");
 	CVoiceGameMgr::Logger = g_Logging.CreateLogger("voice");
+
+	UTIL_CreatePrecacheLists();
 
 	SV_CreateClientCommands();
 
@@ -123,6 +128,7 @@ void ServerLibrary::Shutdown()
 	CCineMonster::AIScriptLogger.reset();
 	CBaseMonster::AILogger.reset();
 	CBaseEntity::IOLogger.reset();
+	g_PrecacheLogger.reset();
 
 	GameLibrary::Shutdown();
 }
@@ -146,6 +152,8 @@ void ServerLibrary::RunFrame()
 	ForceCvarToValue(m_AllowDLFile, 1);
 }
 
+// Note: don't return after calling this to ensure that server state is still mostly correct.
+// Otherwise the game may crash.
 template <typename... Args>
 void ServerLibrary::ShutdownServer(spdlog::format_string_t<Args...> fmt, Args&&... args)
 {
@@ -166,12 +174,35 @@ void ServerLibrary::NewMapStarted(bool loadGame)
 
 	g_LastPlayerJoinTime = 0;
 
+	for (auto list : {g_ModelPrecache.get(), g_SoundPrecache.get(), g_GenericPrecache.get()})
+	{
+		list->Clear();
+	}
+
 	ClearStringPool();
 
 	// Initialize map state to its default state
 	m_MapState = MapState{};
 
 	g_ReplacementMaps.Clear();
+
+	// Add BSP models to precache list.
+	const auto completeMapName = fmt::format("maps/{}.bsp", STRING(gpGlobals->mapname));
+
+	if (auto bspData = BspLoader::Load(completeMapName.c_str()); bspData)
+	{
+		g_ModelPrecache->AddUnchecked(STRING(ALLOC_STRING(completeMapName.c_str())));
+
+		// Submodel 0 is the world so skip it.
+		for (std::size_t subModel = 1; subModel < bspData->SubModelCount; ++subModel)
+		{
+			g_ModelPrecache->AddUnchecked(STRING(ALLOC_STRING(fmt::format("*{}", subModel).c_str())));
+		}
+	}
+	else
+	{
+		ShutdownServer("Shutting down server due to error loading BSP data");
+	}
 
 	// Load the config files, which will initialize the map state as needed
 	LoadServerConfigFiles();
@@ -190,6 +221,15 @@ void ServerLibrary::PostMapActivate()
 	if (!g_NetworkData.GenerateNetworkDataFile())
 	{
 		ShutdownServer("Shutting down server due to fatal error writing network data file");
+	}
+
+	if (g_PrecacheLogger->should_log(spdlog::level::debug))
+	{
+		for (auto list : {g_ModelPrecache.get(), g_SoundPrecache.get(), g_GenericPrecache.get()})
+		{
+			// Don't count the invalid string.
+			g_PrecacheLogger->debug("[{}] {} precached total", list->GetType(), list->GetCount() - 1);
+		}
 	}
 }
 
