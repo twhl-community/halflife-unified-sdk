@@ -20,6 +20,7 @@
 #include "hud.h"
 #include "cbase.h"
 #include "ClientLibrary.h"
+#include "entity.h"
 #include "net_api.h"
 #include "parsemsg.h"
 #include "ProjectInfoSystem.h"
@@ -49,6 +50,7 @@ bool ClientLibrary::Initialize()
 		return false;
 	}
 
+	TempEntity_Initialize();
 
 	return true;
 }
@@ -56,6 +58,7 @@ bool ClientLibrary::Initialize()
 void ClientLibrary::HudInit()
 {
 	m_AllowDownload = g_ConCommands.GetCVar("cl_allowdownload");
+	r_decals = g_ConCommands.GetCVar("r_decals");
 
 	// Has to be done here because music cvars don't exist at Initialize time.
 	sound::CreateSoundSystem();

@@ -29,6 +29,8 @@
 #include "vgui_TeamFortressViewport.h"
 #include "view.h"
 
+#include "sound/ISoundSystem.h"
+
 extern engine_studio_api_t IEngineStudio;
 
 WEAPON* gpActiveSel; // nullptr means off, 1 means just the menu bar, otherwise

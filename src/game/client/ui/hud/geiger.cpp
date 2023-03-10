@@ -19,6 +19,7 @@
 //
 
 #include "hud.h"
+#include "sound/ISoundSystem.h"
 
 bool CHudGeiger::Init()
 {

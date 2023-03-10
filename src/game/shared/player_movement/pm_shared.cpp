@@ -29,6 +29,8 @@
 #include "sound/ServerSoundSystem.h"
 #else
 #include "sound/ClientSoundReplacementSystem.h"
+#include "sound/IGameSoundSystem.h"
+#include "sound/ISoundSystem.h"
 #include "utils/ReplacementMaps.h"
 #endif
 
@@ -142,15 +144,20 @@ static void PM_TraceModel(physent_t* pEnt, const Vector& start, const Vector& en
 
 void PM_PlaySound(int channel, const char* sample, float volume, float attenuation, int fFlags, int pitch)
 {
-	// It's possible for this to execute before the client has received the replacement filename.
+	// It's possible for this to execute before the client has received the replacement map.
 	// The engine will load the sound even if it wasn't precached, so it's not a problem.
 #ifndef CLIENT_DLL
 	sample = sound::g_ServerSound.CheckForSoundReplacement(sample);
+
+	EMIT_SOUND_PREDICTED(UTIL_GetEntityList() + pmove->player_index + 1, channel, sample, volume, attenuation, fFlags, pitch);
 #else
-	sample = sound::g_ClientSoundReplacement.Lookup(sample);
+	if (pmove->runfuncs)
+	{
+		CL_StartSound(pmove->player_index + 1, channel, sample, pmove->origin, volume, attenuation, pitch, fFlags);
+	}
 #endif
 
-	pmove->PM_PlaySound(channel, sample, volume, attenuation, fFlags, pitch);
+	//pmove->PM_PlaySound(channel, sample, volume, attenuation, fFlags, pitch);
 }
 
 void PM_PlayStepSound(int step, float fvol)

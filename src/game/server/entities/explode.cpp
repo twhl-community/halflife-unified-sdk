@@ -199,32 +199,10 @@ void CEnvExplosion::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE 
 	}
 
 	// draw fireball
-	if ((pev->spawnflags & SF_ENVEXPLOSION_NOFIREBALL) == 0)
-	{
-		MESSAGE_BEGIN(MSG_PAS, SVC_TEMPENTITY, pev->origin);
-		WRITE_BYTE(TE_EXPLOSION);
-		WRITE_COORD(pev->origin.x);
-		WRITE_COORD(pev->origin.y);
-		WRITE_COORD(pev->origin.z);
-		WRITE_SHORT(g_sModelIndexFireball);
-		WRITE_BYTE((byte)m_spriteScale); // scale * 10
-		WRITE_BYTE(15);					 // framerate
-		WRITE_BYTE(TE_EXPLFLAG_NONE);
-		MESSAGE_END();
-	}
-	else
-	{
-		MESSAGE_BEGIN(MSG_PAS, SVC_TEMPENTITY, pev->origin);
-		WRITE_BYTE(TE_EXPLOSION);
-		WRITE_COORD(pev->origin.x);
-		WRITE_COORD(pev->origin.y);
-		WRITE_COORD(pev->origin.z);
-		WRITE_SHORT(g_sModelIndexFireball);
-		WRITE_BYTE(0);	// no sprite
-		WRITE_BYTE(15); // framerate
-		WRITE_BYTE(TE_EXPLFLAG_NONE);
-		MESSAGE_END();
-	}
+	UTIL_ExplosionEffect(pev->origin, g_sModelIndexFireball,
+		(pev->spawnflags & SF_ENVEXPLOSION_NOFIREBALL) == 0 ? static_cast<byte>(m_spriteScale) : 0,
+		15, TE_EXPLFLAG_NONE,
+		MSG_PAS, pev->origin);
 
 	// do damage
 	if ((pev->spawnflags & SF_ENVEXPLOSION_NODAMAGE) == 0)

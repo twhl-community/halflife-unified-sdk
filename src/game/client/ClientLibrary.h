@@ -88,3 +88,5 @@ private:
 };
 
 inline ClientLibrary g_Client;
+
+inline cvar_t* r_decals = nullptr;

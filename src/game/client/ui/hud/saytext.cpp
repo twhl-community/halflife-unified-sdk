@@ -22,6 +22,8 @@
 
 #include "vgui_TeamFortressViewport.h"
 
+#include "sound/ISoundSystem.h"
+
 Vector* GetClientColor(int clientIndex);
 
 #define MAX_LINES 5

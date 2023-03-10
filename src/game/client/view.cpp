@@ -1639,6 +1639,8 @@ void DLLEXPORT V_CalcRefdef(ref_params_t* pparams)
 		V_CalcNormalRefdef(pparams);
 	}
 
+	g_ViewEntity = pparams->viewentity;
+
 	/*
 	// Example of how to overlay the whole screen with red at 50 % alpha
 	#define SF_TEST

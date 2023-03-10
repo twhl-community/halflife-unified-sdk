@@ -149,8 +149,8 @@ struct cl_enginefunc_t
 	int (*pfnServerCmd)(const char* szCmdString);
 	int (*pfnClientCmd)(const char* szCmdString);
 	void (*pfnGetPlayerInfo)(int ent_num, hud_player_info_t* pinfo);
-	void (*pfnPlaySoundByName)(const char* szSound, float volume);
-	void (*pfnPlaySoundByIndex)(int iSound, float volume);
+	[[deprecated("Use CL_StartSound in ISoundSystem.h instead")]] void (*pfnPlaySoundByName)(const char* szSound, float volume);
+	[[deprecated("Use CL_StartSound in ISoundSystem.h instead")]] void (*pfnPlaySoundByIndex)(int iSound, float volume);
 	void (*pfnAngleVectors)(const float* vecAngles, float* forward, float* right, float* up);
 	client_textmessage_t* (*pfnTextMessageGet)(const char* pName);
 	int (*pfnDrawCharacter)(int x, int y, int number, int r, int g, int b);
@@ -190,7 +190,8 @@ struct cl_enginefunc_t
 	model_t* (*CL_LoadModel)(const char* modelname, int* index);
 	int (*CL_CreateVisibleEntity)(int type, cl_entity_t* ent);
 	const model_t* (*GetSpritePointer)(HSPRITE hSprite);
-	void (*pfnPlaySoundByNameAtLocation)(const char* szSound, float volume, const float* origin);
+	[[deprecated("Use PlaySoundByNameAtLocation in ISoundSystem.h instead")]] void (*pfnPlaySoundByNameAtLocation)(
+		const char* szSound, float volume, const float* origin);
 	unsigned short (*pfnPrecacheEvent)(int type, const char* psz);
 	void (*pfnPlaybackEvent)(int flags, const edict_t* pInvoker, unsigned short eventindex, float delay, const float* origin, const float* angles, float fparam1, float fparam2, int iparam1, int iparam2, int bparam1, int bparam2);
 	void (*pfnWeaponAnim)(int iAnim, int body);
@@ -251,13 +252,13 @@ struct cl_enginefunc_t
 	void* (*pfnGetCareerUI)();
 	void (*Cvar_Set)(const char* cvar, const char* value);
 	int (*pfnIsCareerMatch)();
-	void (*pfnPlaySoundVoiceByName)(const char* szSound, float volume, int pitch);
+	[[deprecated("Use CL_StartSound in ISoundSystem.h instead")]] void (*pfnPlaySoundVoiceByName)(const char* szSound, float volume, int pitch);
 	void (*pfnPrimeMusicStream)(const char* szFilename, int looping);
 	double (*GetAbsoluteTime)();
 	void (*pfnProcessTutorMessageDecayBuffer)(int* buffer, int bufferLength);
 	void (*pfnConstructTutorMessageDecayBuffer)(int* buffer, int bufferLength);
 	void (*pfnResetTutorMessageDecayData)();
-	void (*pfnPlaySoundByNameAtPitch)(const char* szSound, float volume, int pitch);
+	[[deprecated("Use CL_StartSound in ISoundSystem.h instead")]] void (*pfnPlaySoundByNameAtPitch)(const char* szSound, float volume, int pitch);
 	void (*pfnFillRGBABlend)(int x, int y, int width, int height, int r, int g, int b, int a);
 	int (*pfnGetAppID)();
 	cmdalias_t* (*pfnGetAliasList)();

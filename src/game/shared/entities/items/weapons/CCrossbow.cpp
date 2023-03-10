@@ -180,23 +180,9 @@ void CCrossbowBolt::ExplodeThink()
 	pev->dmg = 40;
 	iScale = 10;
 
-	MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, pev->origin);
-	WRITE_BYTE(TE_EXPLOSION);
-	WRITE_COORD(pev->origin.x);
-	WRITE_COORD(pev->origin.y);
-	WRITE_COORD(pev->origin.z);
-	if (iContents != CONTENTS_WATER)
-	{
-		WRITE_SHORT(g_sModelIndexFireball);
-	}
-	else
-	{
-		WRITE_SHORT(g_sModelIndexWExplosion);
-	}
-	WRITE_BYTE(iScale); // scale * 10
-	WRITE_BYTE(15);		// framerate
-	WRITE_BYTE(TE_EXPLFLAG_NONE);
-	MESSAGE_END();
+	UTIL_ExplosionEffect(pev->origin, iContents != CONTENTS_WATER ? g_sModelIndexFireball : g_sModelIndexWExplosion,
+		iScale, 15, TE_EXPLFLAG_NONE,
+		MSG_PVS, pev->origin);
 
 	auto owner = GetOwner();
 

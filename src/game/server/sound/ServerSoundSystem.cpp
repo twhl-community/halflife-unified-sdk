@@ -25,6 +25,8 @@ namespace sound
 bool ServerSoundSystem::Initialize()
 {
 	m_Logger = g_Logging.CreateLogger("sound");
+	m_UseOpenAl = g_ConCommands.CreateCVar("snd_openal", "1", FCVAR_ARCHIVE);
+	g_NetworkData.RegisterHandler("SoundList", this);
 	g_NetworkData.RegisterHandler("GlobalSoundReplacement", this);
 	return true;
 }
@@ -41,7 +43,16 @@ void ServerSoundSystem::Shutdown()
 
 void ServerSoundSystem::HandleNetworkDataBlock(NetworkDataBlock& block)
 {
-	if (block.Name == "GlobalSoundReplacement")
+	if (block.Name == "SoundList")
+	{
+		block.Data = json::array();
+
+		for (std::size_t i = 1; i < g_SoundPrecache->GetCount(); ++i)
+		{
+			block.Data.push_back(g_SoundPrecache->GetString(i));
+		}
+	}
+	else if (block.Name == "GlobalSoundReplacement")
 	{
 		block.Data = g_ReplacementMaps.Serialize(*g_Server.GetMapState()->m_GlobalSoundReplacement);
 	}
@@ -49,33 +60,71 @@ void ServerSoundSystem::HandleNetworkDataBlock(NetworkDataBlock& block)
 
 void ServerSoundSystem::EmitSound(edict_t* entity, int channel, const char* sample, float volume, float attenuation, int flags, int pitch)
 {
-	if (sample && *sample == '!')
+	if (m_UseOpenAl->value != 0)
 	{
-		sentences::SentenceIndexName name;
-		if (sentences::g_Sentences.LookupSentence(sample, &name) >= 0)
-			EmitSoundSentence(entity, channel, name.c_str(), volume, attenuation, flags, pitch);
+		if (sample && *sample == '!')
+		{
+			sentences::SentenceIndexName name;
+			if (sentences::g_Sentences.LookupSentence(sample, &name) >= 0)
+				EmitSoundSentence(entity, channel, name.c_str(), volume, attenuation, flags, pitch);
+			else
+				m_Logger->debug("Unable to find {} in sentences", sample);
+		}
 		else
-			m_Logger->debug("Unable to find {} in sentences", sample);
+		{
+			sample = CheckForSoundReplacement(sample);
+
+			const Vector origin = entity->v.origin + (entity->v.mins + entity->v.maxs) * 0.5f;
+			EmitSoundCore(entity, channel, sample, volume, attenuation, flags, pitch, origin, false);
+		}
 	}
 	else
 	{
-		sample = CheckForSoundReplacement(sample);
-		EMIT_SOUND_DYN2(entity, channel, sample, volume, attenuation, flags, pitch);
+		if (sample && *sample == '!')
+		{
+			sentences::SentenceIndexName name;
+			if (sentences::g_Sentences.LookupSentence(sample, &name) >= 0)
+				EMIT_SOUND_DYN2(entity, channel, name.c_str(), volume, attenuation, flags, pitch);
+			else
+				m_Logger->debug("Unable to find {} in sentences", sample);
+		}
+		else
+		{
+			sample = CheckForSoundReplacement(sample);
+			EMIT_SOUND_DYN2(entity, channel, sample, volume, attenuation, flags, pitch);
+		}
 	}
 }
 
 void ServerSoundSystem::EmitAmbientSound(edict_t* entity, const Vector& vecOrigin, const char* samp, float vol, float attenuation, int fFlags, int pitch)
 {
-	if (samp && *samp == '!')
+	if (m_UseOpenAl->value != 0)
 	{
-		sentences::SentenceIndexName name;
-		if (sentences::g_Sentences.LookupSentence(samp, &name) >= 0)
-			EmitSoundCore(entity, CHAN_STATIC, name.c_str(), vol, attenuation, fFlags, pitch, vecOrigin, true);
+		if (samp && *samp == '!')
+		{
+			sentences::SentenceIndexName name;
+			if (sentences::g_Sentences.LookupSentence(samp, &name) >= 0)
+				EmitSoundCore(entity, CHAN_STATIC, name.c_str(), vol, attenuation, fFlags, pitch, vecOrigin, true);
+		}
+		else
+		{
+			samp = CheckForSoundReplacement(samp);
+			EmitSoundCore(entity, CHAN_STATIC, samp, vol, attenuation, fFlags, pitch, vecOrigin, true);
+		}
 	}
 	else
 	{
-		samp = CheckForSoundReplacement(samp);
-		EMIT_AMBIENT_SOUND(entity, vecOrigin, samp, vol, attenuation, fFlags, pitch);
+		if (samp && *samp == '!')
+		{
+			sentences::SentenceIndexName name;
+			if (sentences::g_Sentences.LookupSentence(samp, &name) >= 0)
+				EMIT_AMBIENT_SOUND(entity, vecOrigin, name.c_str(), vol, attenuation, fFlags, pitch);
+		}
+		else
+		{
+			samp = CheckForSoundReplacement(samp);
+			EMIT_AMBIENT_SOUND(entity, vecOrigin, samp, vol, attenuation, fFlags, pitch);
+		}
 	}
 }
 
@@ -129,8 +178,13 @@ void ServerSoundSystem::EmitSoundCore(edict_t* entity, int channel, const char* 
 	}
 	else
 	{
-		m_Logger->error("EmitSound: regular sounds not supported");
-		return;
+		soundIndex = g_SoundPrecache->IndexOf(sample);
+
+		if (soundIndex <= 0)
+		{
+			m_Logger->error("EmitSound: {} not precached ({})", sample, soundIndex);
+			return;
+		}
 	}
 
 	const int entityIndex = ENTINDEX(entity);

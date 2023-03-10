@@ -126,5 +126,7 @@ private:
 	bool m_Paused{false};
 
 	float m_LastKnownVolume{-1};
+
+	std::vector<SoundIndex> m_PrecacheMap;
 };
 }

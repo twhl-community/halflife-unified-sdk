@@ -46,6 +46,8 @@ public:
 
 	std::size_t GetCount() const { return m_Precaches.size(); }
 
+	const char* GetString(std::size_t index) const { return m_Precaches[index]; }
+
 	int IndexOf(const char* str) const;
 
 	int Add(const char* str);

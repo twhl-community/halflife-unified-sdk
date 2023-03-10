@@ -24,8 +24,9 @@ struct pmtrace_t;
 struct event_api_t
 {
 	int version;
-	void (*EV_PlaySound)(int ent, const float* origin, int channel, const char* sample, float volume, float attenuation, int fFlags, int pitch);
-	void (*EV_StopSound)(int ent, int channel, const char* sample);
+	/*[[deprecated("Use EV_PlaySound in ISoundSystem.h instead")]]*/ void (*EV_PlaySound)(
+		int ent, const float* origin, int channel, const char* sample, float volume, float attenuation, int fFlags, int pitch);
+	[[deprecated("Use EV_StopSound in ISoundSystem.h instead")]] void (*EV_StopSound)(int ent, int channel, const char* sample);
 	int (*EV_FindModelIndex)(const char* pmodel);
 	int (*EV_IsLocal)(int playernum);
 	int (*EV_LocalPlayerDucking)();

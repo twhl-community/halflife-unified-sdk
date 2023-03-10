@@ -224,6 +224,8 @@ void UTIL_BloodDecalTrace(TraceResult* pTrace, int bloodColor);
 void UTIL_DecalTrace(TraceResult* pTrace, int decalNumber);
 void UTIL_PlayerDecalTrace(TraceResult* pTrace, int playernum, int decalNumber, bool bIsCustom);
 void UTIL_GunshotDecalTrace(TraceResult* pTrace, int decalNumber);
+void UTIL_ExplosionEffect(const Vector& explosionOrigin, int modelIndex, byte scale, int framerate, int flags,
+	int msg_dest, const float* pOrigin = nullptr, edict_t* ed = nullptr);
 void UTIL_Sparks(const Vector& position);
 void UTIL_Ricochet(const Vector& position, float scale);
 void UTIL_StringToIntArray(int* pVector, int count, const char* pString);

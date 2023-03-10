@@ -90,6 +90,7 @@ target_sources(client PRIVATE
 	demo.cpp
 	demo.h
 	entity.cpp
+	entity.h
 	events.cpp
 	eventscripts.h
 	ev_common.cpp

@@ -150,21 +150,9 @@ void CMortarShell::MortarExplodeTouch(CBaseEntity* pOther)
 
 	const auto contents = UTIL_PointContents(pev->origin);
 
-	MESSAGE_BEGIN(MSG_PAS, SVC_TEMPENTITY, pev->origin);
-	WRITE_BYTE(TE_EXPLOSION);
-	WRITE_COORD(pev->origin.x);
-	WRITE_COORD(pev->origin.y);
-	WRITE_COORD(pev->origin.z);
-
-	if (contents == CONTENTS_WATER)
-		g_engfuncs.pfnWriteShort(g_sModelIndexWExplosion);
-	else
-		g_engfuncs.pfnWriteShort(g_sModelIndexFireball);
-
-	WRITE_BYTE(static_cast<int>((pev->dmg - 50.0) * 5.0));
-	WRITE_BYTE(10);
-	WRITE_BYTE(TE_EXPLFLAG_NONE);
-	MESSAGE_END();
+	UTIL_ExplosionEffect(pev->origin, contents == CONTENTS_WATER ? g_sModelIndexWExplosion : g_sModelIndexFireball,
+		static_cast<int>((pev->dmg - 50.0) * 5.0), 10, TE_EXPLFLAG_NONE,
+		MSG_PAS, pev->origin);
 
 	CSoundEnt::InsertSound(bits_SOUND_COMBAT, pev->origin, 1024, 3.0);
 

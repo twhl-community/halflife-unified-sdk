@@ -20,6 +20,7 @@
 #include "entity_state.h"
 #include "cl_entity.h"
 #include "event_api.h"
+#include "sound/ISoundSystem.h"
 
 bool CHudStatusIcons::Init()
 {
@@ -192,7 +193,7 @@ void CHudStatusIcons::EnableIcon(const char* pszIconName, const RGB24& color)
 	if (strstr(m_IconList[i].szSpriteName, "grenade"))
 	{
 		cl_entity_t* pthisplayer = gEngfuncs.GetLocalPlayer();
-		gEngfuncs.pEventAPI->EV_PlaySound(pthisplayer->index, pthisplayer->origin, CHAN_STATIC, "weapons/timer.wav", 1.0, ATTN_NORM, 0, PITCH_NORM);
+		EV_PlaySound(pthisplayer->index, pthisplayer->origin, CHAN_STATIC, "weapons/timer.wav", 1.0, ATTN_NORM, 0, PITCH_NORM);
 	}
 }
 

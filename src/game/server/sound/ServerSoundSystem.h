@@ -18,6 +18,8 @@
 #include "GameSystem.h"
 #include "networking/NetworkDataSystem.h"
 
+struct cvar_t;
+
 namespace sound
 {
 class ServerSoundSystem final : public IGameSystem, public INetworkDataBlockHandler
@@ -46,6 +48,7 @@ private:
 
 private:
 	std::shared_ptr<spdlog::logger> m_Logger;
+	cvar_t* m_UseOpenAl{};
 };
 
 inline ServerSoundSystem g_ServerSound;

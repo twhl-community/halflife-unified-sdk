@@ -509,16 +509,16 @@ void COsprey::DyingThink()
 		Vector vecSpot = pev->origin + pev->velocity * 0.2;
 
 		// random explosions
-		MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, vecSpot);
-		WRITE_BYTE(TE_EXPLOSION); // This just makes a dynamic light now
-		WRITE_COORD(vecSpot.x + RANDOM_FLOAT(-150, 150));
-		WRITE_COORD(vecSpot.y + RANDOM_FLOAT(-150, 150));
-		WRITE_COORD(vecSpot.z + RANDOM_FLOAT(-150, -50));
-		WRITE_SHORT(g_sModelIndexFireball);
-		WRITE_BYTE(RANDOM_LONG(0, 29) + 30); // scale * 10
-		WRITE_BYTE(12);						 // framerate
-		WRITE_BYTE(TE_EXPLFLAG_NONE);
-		MESSAGE_END();
+		// This just makes a dynamic light now
+		Vector explosionOrigin = vecSpot;
+
+		explosionOrigin.x += RANDOM_FLOAT(-150, 150);
+		explosionOrigin.y += RANDOM_FLOAT(-150, 150);
+		explosionOrigin.z += RANDOM_FLOAT(-150, -50);
+
+		UTIL_ExplosionEffect(explosionOrigin, g_sModelIndexFireball,
+			RANDOM_LONG(0, 29) + 30, 12, TE_EXPLFLAG_NONE,
+			MSG_PVS, pev->origin);
 
 		// lots of smoke
 		MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, vecSpot);
@@ -580,15 +580,10 @@ void COsprey::DyingThink()
 		Vector vecSpot = pev->origin + (pev->mins + pev->maxs) * 0.5;
 
 		/*
-		MESSAGE_BEGIN( MSG_BROADCAST, SVC_TEMPENTITY );
-			WRITE_BYTE( TE_EXPLOSION);		// This just makes a dynamic light now
-			WRITE_COORD( vecSpot.x );
-			WRITE_COORD( vecSpot.y );
-			WRITE_COORD( vecSpot.z + 512 );
-			WRITE_SHORT( m_iExplode );
-			WRITE_BYTE( 250 ); // scale * 10
-			WRITE_BYTE( 10  ); // framerate
-		MESSAGE_END();
+		// This just makes a dynamic light now
+		UTIL_ExplosionEffect(vecSpot + Vector(0, 0, 512), m_iExplode,
+			250, 10, TE_EXPLFLAG_NONE,
+			MSG_BROADCAST);
 		*/
 
 		// gibs

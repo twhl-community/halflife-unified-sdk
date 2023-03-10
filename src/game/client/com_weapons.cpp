@@ -22,6 +22,7 @@
 #include "entity_state.h"
 #include "r_efx.h"
 #include "view.h"
+#include "sound/ISoundSystem.h"
 
 // remember the current animation for the view model, in case we get out of sync with
 //  server.
@@ -70,7 +71,7 @@ void HUD_PlaySound(const char* sound, float volume)
 	if (!g_runfuncs || !g_finalstate)
 		return;
 
-	gEngfuncs.pfnPlaySoundByNameAtLocation(sound, volume, g_finalstate->playerstate.origin);
+	PlaySoundByNameAtLocation(sound, volume, g_finalstate->playerstate.origin);
 }
 
 /*

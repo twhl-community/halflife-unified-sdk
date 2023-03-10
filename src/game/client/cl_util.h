@@ -160,10 +160,6 @@ inline int safe_sprintf(char* dst, int len_dst, const char* format, ...)
 	return 0;
 }
 
-// sound functions
-inline void PlaySound(const char* szSound, float vol) { gEngfuncs.pfnPlaySoundByName(szSound, vol); }
-inline void PlaySound(int iSound, float vol) { gEngfuncs.pfnPlaySoundByIndex(iSound, vol); }
-
 float Length(const float* v);
 void VectorMA(const float* veca, float scale, const float* vecb, float* vecc);
 void VectorScale(const float* in, float scale, float* out);

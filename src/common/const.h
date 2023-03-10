@@ -149,10 +149,18 @@ struct edict_t;
 // byte (brightness)
 // byte (scroll speed in 0.1's)
 
-#define TE_GUNSHOT 2 // particle effect plus ricochet sound
+/**
+*	@brief Send using gmsgTempEntity instead of SVC_TEMPENTITY.
+*	particle effect plus ricochet sound
+*/
+#define TE_GUNSHOT 2
 // coord coord coord (position)
 
-#define TE_EXPLOSION 3 // additive sprite, 2 dynamic lights, flickering particles, explosion sound, move vertically 8 pps
+/**
+ *	@brief Use UTIL_ExplosionEffect instead.
+ *	additive sprite, 2 dynamic lights, flickering particles, explosion sound, move vertically 8 pps
+ */
+#define TE_EXPLOSION 3
 // coord coord coord (position)
 // short (sprite index)
 // byte (scale in 0.1's)
@@ -167,7 +175,11 @@ struct edict_t;
 #define TE_EXPLFLAG_NOPARTICLES 8 // do not draw particles
 
 
-#define TE_TAREXPLOSION 4 // Quake1 "tarbaby" explosion with sound
+/**
+ *	@brief Send using gmsgTempEntity instead of SVC_TEMPENTITY.
+ *	Quake1 "tarbaby" explosion with sound
+ */
+#define TE_TAREXPLOSION 4
 // coord coord coord (position)
 
 #define TE_SMOKE 5 // alphablend sprite, move vertically 30 pps
@@ -210,7 +222,11 @@ struct edict_t;
 #define TE_TELEPORT 11 // Quake1 teleport splash
 // coord coord coord (position)
 
-#define TE_EXPLOSION2 12 // Quake1 colormaped (base palette) particle explosion with sound
+/**
+ *	@brief Send using gmsgTempEntity instead of SVC_TEMPENTITY.
+ *	Quake1 colormaped (base palette) particle explosion with sound
+ */
+#define TE_EXPLOSION2 12
 // coord coord coord (position)
 // byte (starting color)
 // byte (num colors)
@@ -425,7 +441,11 @@ struct edict_t;
 // byte (life in 0.1 secs)
 // byte (flags)
 
-#define TE_GUNSHOTDECAL 109 // decal and ricochet sound
+/**
+*	@brief Use UTIL_GunshotDecalTrace instead.
+*	decal and ricochet sound
+*/
+#define TE_GUNSHOTDECAL 109
 // coord, coord, coord (position)
 // short (entity index???)
 // byte (decal???)
@@ -438,7 +458,11 @@ struct edict_t;
 // byte (speed)
 // byte (noise)
 
-#define TE_ARMOR_RICOCHET 111 // quick spark sprite, client ricochet sound.
+/**
+ *	@brief Send using gmsgTempEntity instead of SVC_TEMPENTITY.
+ *	quick spark sprite, client ricochet sound.
+ */
+#define TE_ARMOR_RICOCHET 111
 // coord, coord, coord (position)
 // byte (scale in 0.1's)
 
@@ -538,6 +562,10 @@ struct edict_t;
 #define TE_KILLPLAYERATTACHMENTS 125 // will expire all TENTS attached to a player.
 // byte (entity index of player)
 
+/**
+*	@brief Do not use, plays sounds using the engine's sound system.
+*	Obsolete, replaced by client side weapon prediction.
+*/
 #define TE_MULTIGUNSHOT 126 // much more compact shotgun message
 // This message is used to make a client approximate a 'spray' of gunfire.
 // Any weapon that fires more than one bullet per frame and fires in a bit of a spread is

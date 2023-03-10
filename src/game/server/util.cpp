@@ -1171,7 +1171,7 @@ void UTIL_GunshotDecalTrace(TraceResult* pTrace, int decalNumber)
 	if (pTrace->flFraction == 1.0)
 		return;
 
-	MESSAGE_BEGIN(MSG_PAS, SVC_TEMPENTITY, pTrace->vecEndPos);
+	MESSAGE_BEGIN(MSG_PAS, gmsgTempEntity, pTrace->vecEndPos);
 	WRITE_BYTE(TE_GUNSHOTDECAL);
 	WRITE_COORD(pTrace->vecEndPos.x);
 	WRITE_COORD(pTrace->vecEndPos.y);
@@ -1181,6 +1181,18 @@ void UTIL_GunshotDecalTrace(TraceResult* pTrace, int decalNumber)
 	MESSAGE_END();
 }
 
+void UTIL_ExplosionEffect(const Vector& explosionOrigin, int modelIndex, byte scale, int framerate, int flags,
+	int msg_dest, const float* pOrigin, edict_t* ed)
+{
+	MESSAGE_BEGIN(msg_dest, gmsgTempEntity, pOrigin, ed);
+	WRITE_BYTE(TE_EXPLOSION);
+	WRITE_COORD_VECTOR(explosionOrigin);
+	WRITE_SHORT(modelIndex);
+	WRITE_BYTE(scale);
+	WRITE_BYTE(framerate);
+	WRITE_BYTE(flags);
+	MESSAGE_END();
+}
 
 void UTIL_Sparks(const Vector& position)
 {

@@ -214,11 +214,27 @@ void GameSoundSystem::OnBeginNetworkDataProcessing()
 
 	// Clear the entire cache so we start fresh.
 	m_SoundCache->Clear();
+
+	m_PrecacheMap.clear();
 }
 
 void GameSoundSystem::HandleNetworkDataBlock(NetworkDataBlock& block)
 {
-	return m_Sentences->HandleNetworkDataBlock(block);
+	if (block.Name == "SoundList")
+	{
+		// The empty name, shouldn't be used.
+		m_PrecacheMap.push_back(SoundIndex{});
+
+		for (const auto& fileName : block.Data)
+		{
+			// TODO: avoid constructing multiple strings here
+			m_PrecacheMap.push_back(m_SoundCache->FindName(fileName.get<std::string>().c_str()));
+		}
+	}
+	else if (block.Name == "Sentences")
+	{
+		m_Sentences->HandleNetworkDataBlock(block);
+	}
 }
 
 void GameSoundSystem::Update()
@@ -484,27 +500,40 @@ void GameSoundSystem::MsgFunc_EmitSound(const char* pszName, int iSize, void* pb
 		return;
 	}
 
-	if ((flags & SND_SENTENCE) == 0)
-	{
-		m_Logger->error("MsgFunc_EmitSound: Cannot play regular sounds");
-		return;
-	}
-
 	const std::size_t absoluteSoundIndex = soundIndex >= 0 ? static_cast<std::size_t>(soundIndex) : SentencesSystem::InvalidIndex;
 
-	const auto sentence = m_Sentences->GetSentence(absoluteSoundIndex);
-
-	if (!sentence)
+	// TODO: this is needlessly converting from index to filename and back again
+	if ((flags & SND_SENTENCE) == 0)
 	{
-		m_Logger->error("MsgFunc_EmitSound: Invalid sentence index {}", soundIndex);
-		return;
+		if (absoluteSoundIndex >= m_PrecacheMap.size())
+		{
+			m_Logger->error("MsgFunc_EmitSound: Invalid sound index {}", soundIndex);
+			return;
+		}
+
+		const SoundIndex soundIndex = m_PrecacheMap[absoluteSoundIndex];
+
+		const auto sound = m_SoundCache->GetSound(soundIndex);
+
+		assert(sound);
+
+		StartSound(entityIndex, channel, sound->Name.c_str(), origin, volume, attenuation, pitch, flags);
 	}
+	else
+	{
+		const auto sentence = m_Sentences->GetSentence(absoluteSoundIndex);
 
-	Filename sample;
+		if (!sentence)
+		{
+			m_Logger->error("MsgFunc_EmitSound: Invalid sentence index {}", soundIndex);
+			return;
+		}
+		
+		Filename sample;
+		fmt::format_to(std::back_inserter(sample), "!{}", sentence->Name.c_str());
 
-	fmt::format_to(std::back_inserter(sample), "!{}", sentence->Name.c_str());
-
-	StartSound(entityIndex, channel, sample.c_str(), origin, volume, attenuation, pitch, flags);
+		StartSound(entityIndex, channel, sample.c_str(), origin, volume, attenuation, pitch, flags);
+	}
 }
 
 bool GameSoundSystem::MakeCurrent()

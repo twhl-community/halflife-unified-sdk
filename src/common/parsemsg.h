@@ -32,6 +32,18 @@ int READ_LONG();
 float READ_FLOAT();
 char* READ_STRING();
 float READ_COORD();
+
+inline Vector READ_COORDVECTOR()
+{
+	Vector pos;
+
+	pos.x = READ_COORD();
+	pos.y = READ_COORD();
+	pos.z = READ_COORD();
+
+	return pos;
+}
+
 float READ_ANGLE();
 float READ_HIRESANGLE();
 bool READ_OK();

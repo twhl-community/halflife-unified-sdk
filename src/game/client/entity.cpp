@@ -1,7 +1,11 @@
 // Client side entity management functions
 
+#include <limits>
+
 #include "hud.h"
+#include "ClientLibrary.h"
 #include "const.h"
+#include "entity.h"
 #include "entity_types.h"
 #include "studio.h" // def. of mstudioevent_t
 #include "r_efx.h"
@@ -14,7 +18,12 @@
 #include "particleman.h"
 #include "view.h"
 
+#include "networking/ClientUserMessages.h"
+
 #include "sound/ClientSoundReplacementSystem.h"
+#include "sound/ISoundSystem.h"
+
+#include "utils/ConCommandSystem.h"
 
 void Game_AddObjects();
 
@@ -338,7 +347,7 @@ void DLLEXPORT HUD_StudioEvent(const mstudioevent_t* event, const cl_entity_t* e
 	case 5004:
 	{
 		auto sample = sound::g_ClientSoundReplacement.Lookup(event->options);
-		gEngfuncs.pfnPlaySoundByNameAtLocation(sample, 1.0, entity->attachment[0]);
+		PlaySoundByNameAtLocation(sample, 1.0, entity->attachment[0]);
 		break;
 	}
 	default:
@@ -346,13 +355,10 @@ void DLLEXPORT HUD_StudioEvent(const mstudioevent_t* event, const cl_entity_t* e
 	}
 }
 
-/*
-=================
-CL_UpdateTEnts
-
-Simulation and cleanup of temporary entities
-=================
-*/
+/**
+ *	@brief Simulation and cleanup of temporary entities
+ *	@param Callback_TempEntPlaySound Obsolete. Use CL_TempEntPlaySound instead.
+ */
 void DLLEXPORT HUD_TempEntUpdate(
 	double frametime,			  // Simulation time
 	double client_time,			  // Absolute time on client
@@ -638,7 +644,7 @@ void DLLEXPORT HUD_TempEntUpdate(
 
 					if (0 != pTemp->hitSound)
 					{
-						Callback_TempEntPlaySound(pTemp, damp);
+						CL_TempEntPlaySound(pTemp, damp);
 					}
 
 					if ((pTemp->flags & FTENT_COLLIDEKILL) != 0)
@@ -747,4 +753,129 @@ cl_entity_t DLLEXPORT* HUD_GetUserEntity(int index)
 #else
 	return nullptr;
 #endif
+}
+
+static void CL_ParseGunshot()
+{
+	const Vector pos = READ_COORDVECTOR();
+	gEngfuncs.pEfxAPI->R_RunParticleEffect(pos, vec3_origin, 0, 20);
+	R_RicochetSound(pos);
+}
+
+static void CL_ParseExplosion()
+{
+	const Vector pos = READ_COORDVECTOR();
+	const int spriteIndex = READ_SHORT();
+
+	const float scale = READ_BYTE() * 0.1f;
+	const float framerate = READ_BYTE();
+	const int flags = READ_BYTE();
+
+	R_Explosion(pos, spriteIndex, scale, framerate, flags);
+}
+
+static void CL_ParseTarExplosion()
+{
+	const Vector pos = READ_COORDVECTOR();
+	gEngfuncs.pEfxAPI->R_BlobExplosion(pos);
+	CL_StartSound(-1, CHAN_AUTO, "weapons/explode3.wav", pos, VOL_NORM, 1.0f, PITCH_NORM, 0);
+}
+
+static void CL_ParseExplosion2()
+{
+	const Vector pos = READ_COORDVECTOR();
+	const int colorStart = READ_BYTE();
+	const int colorLength = READ_BYTE();
+
+	gEngfuncs.pEfxAPI->R_ParticleExplosion2(pos, colorStart, colorLength);
+
+	auto light = gEngfuncs.pEfxAPI->CL_AllocDlight(0);
+	light->origin = pos;
+	light->radius = 350;
+	light->die = gEngfuncs.GetClientTime() + 0.5;
+	light->decay = 300;
+
+	CL_StartSound(-1, CHAN_AUTO, "weapons/explode3.wav", pos, VOL_NORM, 0.6f, PITCH_NORM, 0);
+}
+
+static void CL_ParseGunshotDecal()
+{
+	const Vector pos = READ_COORDVECTOR();
+	const int entityIndex = READ_SHORT();
+	const int decalId = READ_BYTE();
+
+	gEngfuncs.pEfxAPI->R_BulletImpactParticles(pos);
+
+	if (const int random = gEngfuncs.pfnRandomLong(0, std::numeric_limits<short>::max());
+		random < (std::numeric_limits<short>::max() / 2))
+	{
+		R_RicochetSound(pos, random);
+	}
+
+	if (entityIndex < 0 || !gEngfuncs.GetEntityByIndex(entityIndex))
+	{
+		Con_DPrintf("Decal: entity = %d\n", entityIndex);
+		return;
+	}
+
+	if (r_decals->value)
+	{
+		const int decalIndex = gEngfuncs.pEfxAPI->Draw_DecalIndex(decalId);
+		gEngfuncs.pEfxAPI->R_DecalShoot(decalIndex, entityIndex, 0, pos, 0);
+	}
+}
+
+static void CL_ParseArmorRicochet()
+{
+	const Vector pos = READ_COORDVECTOR();
+	const float life = READ_BYTE() * 0.1f;
+
+	const auto model = gEngfuncs.CL_LoadModel("sprites/richo1.spr", nullptr);
+
+	gEngfuncs.pEfxAPI->R_RicochetSprite(pos, model, 0.1, life);
+
+	R_RicochetSound(pos);
+}
+
+static void MsgFunc_TempEntity(const char* name, int size, void* buf)
+{
+	BEGIN_READ(buf, size);
+
+	const int type = READ_BYTE();
+
+	switch (type)
+	{
+	default:
+		Con_DPrintf("Unsupported custom temp entity %d\n", type);
+		return;
+
+	case TE_GUNSHOT:
+		CL_ParseGunshot();
+		break;
+
+	case TE_EXPLOSION:
+		CL_ParseExplosion();
+		break;
+
+	case TE_TAREXPLOSION:
+		CL_ParseTarExplosion();
+		break;
+
+	case TE_EXPLOSION2:
+		CL_ParseExplosion2();
+		break;
+
+	case TE_GUNSHOTDECAL:
+		CL_ParseGunshotDecal();
+		break;
+
+	case TE_ARMOR_RICOCHET:
+		CL_ParseArmorRicochet();
+		break;
+	}
+}
+
+void TempEntity_Initialize()
+{
+	g_ClientUserMessages.RegisterHandler("TempEntity", &MsgFunc_TempEntity);
 }

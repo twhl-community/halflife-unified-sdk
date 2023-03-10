@@ -25,6 +25,8 @@
 #include "screenfade.h"
 #include "view.h"
 
+#include "sound/ISoundSystem.h"
+
 extern bool iJumpSpectator;
 extern Vector vJumpOrigin;
 extern Vector vJumpAngles;
@@ -756,7 +758,7 @@ void CHudSpectator::DirectorMessage(int iSize, void* pbuf)
 		f1 = READ_FLOAT();
 
 		// gEngfuncs.Con_Printf("DRC_CMD_FX_SOUND: %s %.2f\n", string, value );
-		gEngfuncs.pEventAPI->EV_PlaySound(0, v_origin, CHAN_BODY, string, f1, ATTN_NORM, 0, PITCH_NORM);
+		EV_PlaySound(0, v_origin, CHAN_BODY, string, f1, ATTN_NORM, 0, PITCH_NORM);
 
 		break;
 
