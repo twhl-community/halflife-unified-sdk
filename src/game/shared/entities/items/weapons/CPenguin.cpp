@@ -76,18 +76,16 @@ void CPenguin::Holster()
 {
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;
 
-	if (0 != m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType])
+	if (0 == m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType])
 	{
-		SendWeaponAnim(PENGUIN_DOWN);
-
-		EMIT_SOUND(edict(), CHAN_WEAPON, "common/null.wav", VOL_NORM, ATTN_NORM);
-	}
-	else
-	{
-		m_pPlayer->pev->weapons &= ~(1 << WEAPON_PENGUIN);
+		m_pPlayer->ClearWeaponBit(m_iId);
 		SetThink(&CPenguin::DestroyItem);
 		pev->nextthink = gpGlobals->time + 0.1;
+		return;
 	}
+
+	SendWeaponAnim(PENGUIN_DOWN);
+	EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "common/null.wav", VOL_NORM, ATTN_NORM);
 }
 
 void CPenguin::WeaponIdle()
