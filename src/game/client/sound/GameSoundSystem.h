@@ -17,6 +17,7 @@
 
 #include <array>
 #include <memory>
+#include <string_view>
 #include <vector>
 
 #include <spdlog/logger.h>
@@ -63,6 +64,8 @@ private:
 
 	void SetVolume();
 
+	std::string_view GetSoundName(const SoundData& sound) const;
+
 	Channel* CreateChannel();
 
 	/**
@@ -71,6 +74,9 @@ private:
 	void ClearChannel(Channel& channel);
 
 	void RemoveChannel(Channel& channel);
+
+	template <typename FilterFunction>
+	Channel* FindDynamicChannel(int entityIndex, FilterFunction&& filterFunction);
 
 	Channel* FindOrCreateChannel(int entityIndex, int channelIndex);
 

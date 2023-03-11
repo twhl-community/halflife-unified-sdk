@@ -425,6 +425,8 @@ void GameSoundSystem::StartSound(
 
 	if (SetupChannel(*newChannel, entityIndex, channelIndex, std::move(sound), origin, volume, pitch, attenuation, false))
 	{
+		m_Logger->trace("Playing \"{}\": Entity {}, channel {}", soundOrSentence, entityIndex, channelIndex);
+
 		if (!m_Paused || (flags & SND_PLAY_WHEN_PAUSED) != 0)
 		{
 			alSourcePlay(newChannel->Source.Id);
@@ -519,6 +521,31 @@ void GameSoundSystem::SetVolume()
 	alListenerf(AL_GAIN, m_Volume->value);
 }
 
+std::string_view GameSoundSystem::GetSoundName(const SoundData& sound) const
+{
+	return std::visit([&, this](auto&& sound)
+		{
+			using T = std::decay_t<decltype(sound)>;
+
+			if constexpr (std::is_same_v<T, SoundIndex>)
+			{
+				const auto& soundData = *m_SoundCache->GetSound(sound);
+				return std::string_view{soundData.Name.data(), soundData.Name.size()};
+			}
+			else if constexpr (std::is_same_v<T, SentenceChannel>)
+			{
+				const auto& sentence = *m_Sentences->GetSentence(sound.Sentence);
+				return std::string_view{sentence.Name.data(), sentence.Name.size()};
+			}
+			else
+			{
+				static_assert(always_false_v<T>, "GetSoundName does not handle all sound types");
+			}
+
+			return std::string_view{}; },
+		sound);
+}
+
 Channel* GameSoundSystem::CreateChannel()
 {
 	Channel channel;
@@ -552,18 +579,65 @@ void GameSoundSystem::RemoveChannel(Channel& channel)
 	m_Channels.erase(m_Channels.begin() + (&channel - m_Channels.data()));
 }
 
+template <typename FilterFunction>
+Channel* GameSoundSystem::FindDynamicChannel(int entityIndex, FilterFunction&& filterFunction)
+{
+	for (auto& channel : m_Channels)
+	{
+		if (channel.ChannelIndex == CHAN_STATIC)
+			continue;
+
+		if (channel.EntityIndex != entityIndex)
+			continue;
+
+		if (filterFunction(channel))
+			return &channel;
+	}
+
+	return nullptr;
+}
+
 Channel* GameSoundSystem::FindOrCreateChannel(int entityIndex, int channelIndex)
 {
-	if (channelIndex != CHAN_STATIC)
+	// The engine's original behavior works like this:
+	// There are 128 channels. 4 ambient, 8 dynamic, 116 static.
+	// Ambient channels are left over from Quake 1 and are never used.
+	// For dynamic channels it depends on the channel index.
+	// CHAN_AUTO picks the first unused channel or the channel closest to finishing its sound.
+	// CHAN_VOICE prefers channels assigned to the current entity's voice channel,
+	// otherwise same as CHAN_AUTO.
+	// All other channels will reuse channels assigned to the current entity if
+	// they are the same channel or if the requested channel is -1, otherwise same as CHAN_AUTO.
+	// For static channels it always tries to find an unused static channel.
+
+	// This sound system allocates channels on demand so it tries to follow the old rules first,
+	// falling back to allocating a channel if no in-use channels match.
+	if (channelIndex != CHAN_STATIC && channelIndex != CHAN_AUTO)
 	{
-		// Dynamic channels only allow a single sound to play on them for a given entity.
-		for (auto& channel : m_Channels)
+		Channel* channel = nullptr;
+
+		if (channelIndex == CHAN_VOICE)
 		{
-			if (channel.ChannelIndex != CHAN_STATIC && channel.EntityIndex == entityIndex && channel.ChannelIndex == channelIndex)
-			{
-				ClearChannel(channel);
-				return &channel;
-			}
+			// Always override existing voice lines.
+			channel = FindDynamicChannel(entityIndex, [&](Channel& channel)
+				{ return channel.ChannelIndex == CHAN_VOICE; });
+		}
+		else if (channelIndex != -1)
+		{
+			channel = FindDynamicChannel(entityIndex, [&](Channel& channel)
+				{ return channel.ChannelIndex == channelIndex; });
+		}
+		else
+		{
+			channel = FindDynamicChannel(entityIndex, [&](Channel& channel)
+				{ return true; });
+		}
+
+		if (channel)
+		{
+			m_Logger->trace("Clearing \"{}\": entity {}, channel {}", GetSoundName(channel->Sound), entityIndex, channelIndex);
+			ClearChannel(*channel);
+			return channel;
 		}
 	}
 
