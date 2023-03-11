@@ -41,13 +41,14 @@
 
 bool ClientLibrary::Initialize()
 {
+	// Enable buffering for non-debug print output so it isn't ignored outright by the engine.
+	Con_SetPrintBufferingEnabled(true);
+
 	if (!GameLibrary::Initialize())
 	{
 		return false;
 	}
 
-	// Enable buffering for non-debug print output so it isn't ignored outright by the engine.
-	Con_SetPrintBufferingEnabled(true);
 
 	return true;
 }
