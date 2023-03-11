@@ -91,6 +91,8 @@ private:
 
 private:
 	std::shared_ptr<spdlog::logger> m_Logger;
+	std::shared_ptr<spdlog::logger> m_CacheLogger;
+	std::shared_ptr<spdlog::logger> m_SentencesLogger;
 
 	cvar_t* m_Volume{};
 	cvar_t* m_RoomOff{};

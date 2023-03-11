@@ -48,11 +48,19 @@ GameSoundSystem::~GameSoundSystem()
 		alDeleteEffects(m_RoomEffects.size(), m_RoomEffects.data());
 		std::memset(m_RoomEffects.data(), 0, m_RoomEffects.size() * sizeof(ALuint));
 	}
+
+	g_Logging.RemoveLogger(m_SentencesLogger);
+	m_SentencesLogger.reset();
+
+	g_Logging.RemoveLogger(m_CacheLogger);
+	m_CacheLogger.reset();
 }
 
 bool GameSoundSystem::Create(std::shared_ptr<spdlog::logger> logger, ALCdevice* device)
 {
 	m_Logger = logger;
+	m_CacheLogger = g_Logging.CreateLogger("sound.cache");
+	m_SentencesLogger = g_Logging.CreateLogger("sound.sentences");
 
 	m_Volume = gEngfuncs.pfnGetCvarPointer("volume");
 	m_RoomOff = gEngfuncs.pfnGetCvarPointer("room_off");
@@ -188,8 +196,8 @@ bool GameSoundSystem::Create(std::shared_ptr<spdlog::logger> logger, ALCdevice* 
 	constexpr double metersPerUnit = footInMeters / 16;
 	alListenerf(AL_METERS_PER_UNIT, static_cast<float>(metersPerUnit));
 
-	m_SoundCache = std::make_unique<SoundCache>(m_Logger);
-	m_Sentences = std::make_unique<SentencesSystem>(m_Logger, m_SoundCache.get());
+	m_SoundCache = std::make_unique<SoundCache>(m_CacheLogger);
+	m_Sentences = std::make_unique<SentencesSystem>(m_SentencesLogger, m_SoundCache.get());
 
 	return true;
 }
