@@ -205,25 +205,33 @@ bool SentencesSystem::UpdateSentence(Channel& channel)
 
 void SentencesSystem::InitMouth(int entityIndex, int channelIndex)
 {
-	if ((channelIndex == CHAN_VOICE || channelIndex == CHAN_STREAM) && entityIndex > 0 && entityIndex < g_MaxEntities)
+	if ((channelIndex == CHAN_VOICE || channelIndex == CHAN_STREAM) && entityIndex > 0)
 	{
 		auto entity = gEngfuncs.GetEntityByIndex(entityIndex);
-		auto& mouth = entity->mouth;
 
-		mouth.mouthopen = 0;
-		mouth.sndavg = 0;
-		mouth.sndcount = 0;
+		if (entity)
+		{
+			auto& mouth = entity->mouth;
+
+			mouth.mouthopen = 0;
+			mouth.sndavg = 0;
+			mouth.sndcount = 0;
+		}
 	}
 }
 
 void SentencesSystem::CloseMouth(int entityIndex, int channelIndex)
 {
-	if ((channelIndex == CHAN_VOICE || channelIndex == CHAN_STREAM) && entityIndex > 0 && entityIndex < g_MaxEntities)
+	if ((channelIndex == CHAN_VOICE || channelIndex == CHAN_STREAM) && entityIndex > 0)
 	{
 		auto entity = gEngfuncs.GetEntityByIndex(entityIndex);
-		auto& mouth = entity->mouth;
 
-		mouth.mouthopen = 0;
+		if (entity)
+		{
+			auto& mouth = entity->mouth;
+
+			mouth.mouthopen = 0;
+		}
 	}
 }
 

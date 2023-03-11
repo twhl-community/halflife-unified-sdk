@@ -9,7 +9,6 @@
 
 // TODO: could just make a copy of ref_params_t when it gets passed in instead.
 inline bool g_Paused = false;
-inline int g_MaxEntities = 0;
 inline WaterLevel g_WaterLevel = WaterLevel::Dry;
 
 inline Vector v_origin;

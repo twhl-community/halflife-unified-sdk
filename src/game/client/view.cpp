@@ -1623,7 +1623,6 @@ void DLLEXPORT V_CalcRefdef(ref_params_t* pparams)
 	g_Client.ClientActivated();
 
 	g_Paused = pparams->paused != 0;
-	g_MaxEntities = pparams->max_entities;
 	g_WaterLevel = pparams->waterlevel;
 
 	// intermission / finale rendering

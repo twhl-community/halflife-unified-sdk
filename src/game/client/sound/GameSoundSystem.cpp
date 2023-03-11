@@ -464,15 +464,17 @@ void GameSoundSystem::MsgFunc_EmitSound(const char* pszName, int iSize, void* pb
 
 	const int pitch = (flags & SND_PITCH) != 0 ? READ_BYTE() : 100;
 
-	if (entityIndex < 0 || entityIndex >= g_MaxEntities)
+	const auto entity = gEngfuncs.GetEntityByIndex(entityIndex);
+
+	if (!entity)
 	{
-		m_Logger->error("UserMsg_EmitSound: Entity index {} is invalid, max edicts is {}", entityIndex, g_MaxEntities);
+		m_Logger->error("MsgFunc_EmitSound: Entity index {} is invalid", entityIndex);
 		return;
 	}
 
 	if ((flags & SND_SENTENCE) == 0)
 	{
-		m_Logger->error("UserMsg_EmitSound: Cannot play regular sounds");
+		m_Logger->error("MsgFunc_EmitSound: Cannot play regular sounds");
 		return;
 	}
 
@@ -482,7 +484,7 @@ void GameSoundSystem::MsgFunc_EmitSound(const char* pszName, int iSize, void* pb
 
 	if (!sentence)
 	{
-		m_Logger->error("UserMsg_EmitSound: Invalid sentence index {}", soundIndex);
+		m_Logger->error("MsgFunc_EmitSound: Invalid sentence index {}", soundIndex);
 		return;
 	}
 
@@ -816,7 +818,7 @@ bool GameSoundSystem::UpdateSound(Channel& channel)
 void GameSoundSystem::Spatialize(Channel& channel, int messagenum)
 {
 	// Update sound channel position.
-	if (channel.EntityIndex > 0 && channel.EntityIndex < g_MaxEntities)
+	if (channel.EntityIndex > 0)
 	{
 		auto entity = gEngfuncs.GetEntityByIndex(channel.EntityIndex);
 
