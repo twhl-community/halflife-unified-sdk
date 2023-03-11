@@ -24,7 +24,7 @@
 #include "client.h"
 #include "gamerules.h"
 #include "nodes.h"
-#include "ProjectInfo.h"
+#include "ProjectInfoSystem.h"
 #include "scripted.h"
 #include "ServerLibrary.h"
 #include "skill.h"
@@ -83,6 +83,9 @@ ServerLibrary::~ServerLibrary() = default;
 
 bool ServerLibrary::Initialize()
 {
+	// Make sure both use the same info on the server.
+	g_ProjectInfo.SetServerInfo(*g_ProjectInfo.GetLocalInfo());
+
 	if (!GameLibrary::Initialize())
 	{
 		return false;
@@ -235,16 +238,6 @@ void ServerLibrary::PostMapActivate()
 
 void ServerLibrary::PlayerActivating(CBasePlayer* player)
 {
-	MESSAGE_BEGIN(MSG_ONE, gmsgProjectInfo, nullptr, player->edict());
-	WRITE_LONG(UnifiedSDKVersionMajor);
-	WRITE_LONG(UnifiedSDKVersionMinor);
-	WRITE_LONG(UnifiedSDKVersionPatch);
-
-	WRITE_STRING(UnifiedSDKGitBranchName);
-	WRITE_STRING(UnifiedSDKGitTagName);
-	WRITE_STRING(UnifiedSDKGitCommitHash);
-	MESSAGE_END();
-
 	// Override the hud color.
 	if (m_MapState.m_HudColor)
 	{

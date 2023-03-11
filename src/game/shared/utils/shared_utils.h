@@ -155,8 +155,6 @@ constexpr bool UTIL_IsServer()
 
 constexpr std::string_view GetShortLibraryPrefix()
 {
-	using namespace std::literals;
-
 	if constexpr (UTIL_IsServer())
 	{
 		return "sv"sv;
@@ -169,8 +167,6 @@ constexpr std::string_view GetShortLibraryPrefix()
 
 constexpr std::string_view GetLongLibraryPrefix()
 {
-	using namespace std::literals;
-
 	if constexpr (UTIL_IsServer())
 	{
 		return "server"sv;

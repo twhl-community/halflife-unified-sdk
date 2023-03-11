@@ -22,6 +22,7 @@
 #include "ClientLibrary.h"
 #include "net_api.h"
 #include "parsemsg.h"
+#include "ProjectInfoSystem.h"
 #include "view.h"
 
 #include "networking/ClientUserMessages.h"
@@ -139,6 +140,9 @@ void ClientLibrary::RunFrame()
 		{
 			// Stop music playback if we disconnect or start a new map.
 			sound::g_SoundSystem->GetMusicSystem()->Stop();
+
+			// Clear out old server info.
+			g_ProjectInfo.SetServerInfo(LibraryInfo{});
 		}
 
 		m_IsConnected = isConnected;

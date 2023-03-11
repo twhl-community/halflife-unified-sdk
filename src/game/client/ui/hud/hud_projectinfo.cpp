@@ -14,43 +14,25 @@
  ****/
 
 #include "hud.h"
-#include "ProjectInfo.h"
+#include "ProjectInfoSystem.h"
 
 bool CHudProjectInfo::Init()
 {
 	gHUD.AddHudElem(this);
 
-	g_ClientUserMessages.RegisterHandler("ProjectInfo", &CHudProjectInfo::MsgFunc_ProjectInfo, this);
-
 	m_iFlags |= HUD_ACTIVE;
 
-	{
-		std::string releaseType{UnifiedSDKReleaseType};
-
-		ToLower(releaseType);
-
-		m_IsAlphaBuild = releaseType.find("alpha") != std::string::npos;
-	}
+	m_IsAlphaBuild = g_ProjectInfo.IsAlphaBuild(*g_ProjectInfo.GetLocalInfo());
 
 	// Turn this on by default if this is a (pre-)alpha build.
 	// Users will easily know they're running a (pre-)alpha build and screenshots and videos will include important information.
-	m_ShowProjectInfo = CVAR_CREATE("cl_showprojectinfo", m_IsAlphaBuild ? "1" : "0", 0);
-
-	m_ClientInfo.MajorVersion = UnifiedSDKVersionMajor;
-	m_ClientInfo.MinorVersion = UnifiedSDKVersionMinor;
-	m_ClientInfo.PatchVersion = UnifiedSDKVersionPatch;
-
-	m_ClientInfo.BranchName = UnifiedSDKGitBranchName;
-	m_ClientInfo.TagName = UnifiedSDKGitTagName;
-	m_ClientInfo.CommitHash = UnifiedSDKGitCommitHash;
+	m_ShowProjectInfo = CVAR_CREATE("cl_projectinfo_show", m_IsAlphaBuild ? "1" : "0", 0);
 
 	return true;
 }
 
 bool CHudProjectInfo::VidInit()
 {
-	// New server, reset info.
-	m_ServerInfo = {};
 	return true;
 }
 
@@ -72,26 +54,21 @@ bool CHudProjectInfo::Draw(float flTime)
 		const auto libraryDrawer = [&](const LibraryInfo& info, const char* libraryName, const RGB24& libraryNameColor)
 		{
 			lineDrawer(fmt::format("{}:", libraryName), libraryNameColor);
-
-			if (info.MajorVersion != -1)
-			{
-				lineDrawer(fmt::format("\tVersion: {}.{}.{}", info.MajorVersion, info.MinorVersion, info.PatchVersion));
-				lineDrawer(fmt::format("\tBranch: {}", info.BranchName));
-				lineDrawer(fmt::format("\tTag: {}", info.TagName));
-				lineDrawer(fmt::format("\tCommit Hash: {}", info.CommitHash));
-			}
-			else
-			{
-				lineDrawer("\tUnknown (incompatible server, or branch and/or tag names may be too long)");
-			}
+			lineDrawer(fmt::format("\tVersion: {}.{}.{}-{}", info.MajorVersion, info.MinorVersion, info.PatchVersion, info.ReleaseType));
+			lineDrawer(fmt::format("\tBranch: {}", info.BranchName));
+			lineDrawer(fmt::format("\tTag: {}", info.TagName));
+			lineDrawer(fmt::format("\tCommit Hash: {}", info.CommitHash));
+			lineDrawer(fmt::format("\tBuild Timestamp: {}", info.BuildTimestamp));
 		};
+
+		const auto clientInfo = g_ProjectInfo.GetLocalInfo();
+		const auto serverInfo = g_ProjectInfo.GetServerInfo();
 
 		// The server's build type isn't important enough to send over.
 		lineDrawer(fmt::format("Build type: {}", UNIFIED_SDK_CONFIG));
-		lineDrawer(fmt::format("Release type: {}", UnifiedSDKReleaseType));
 
-		libraryDrawer(m_ClientInfo, "Client", {128, 128, 255});
-		libraryDrawer(m_ServerInfo, "Server", {255, 128, 128});
+		libraryDrawer(*clientInfo, "Client", {128, 128, 255});
+		libraryDrawer(*serverInfo, "Server", {255, 128, 128});
 
 		yPos += lineHeight;
 
@@ -100,29 +77,11 @@ bool CHudProjectInfo::Draw(float flTime)
 			lineDrawer("Work In Progress build not suited for use (testing individual features by request only)");
 		}
 
-		if (m_ClientInfo.MajorVersion != m_ServerInfo.MajorVersion || m_ClientInfo.MinorVersion != m_ServerInfo.MinorVersion || m_ClientInfo.PatchVersion != m_ServerInfo.PatchVersion)
-		{
-			lineDrawer("Warning: Client and server versions do not match");
-		}
-
-		if (m_ClientInfo.CommitHash != m_ServerInfo.CommitHash)
+		if (clientInfo->CommitHash != serverInfo->CommitHash)
 		{
 			lineDrawer("Warning: Client and server builds do not match");
 		}
 	}
 
 	return true;
-}
-
-void CHudProjectInfo::MsgFunc_ProjectInfo(const char* pszName, int iSize, void* pbuf)
-{
-	BEGIN_READ(pbuf, iSize);
-
-	m_ServerInfo.MajorVersion = READ_LONG();
-	m_ServerInfo.MinorVersion = READ_LONG();
-	m_ServerInfo.PatchVersion = READ_LONG();
-
-	m_ServerInfo.BranchName = READ_STRING();
-	m_ServerInfo.TagName = READ_STRING();
-	m_ServerInfo.CommitHash = READ_STRING();
 }

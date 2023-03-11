@@ -23,7 +23,7 @@
 #include <nlohmann/json.hpp>
 
 #include "cbase.h"
-#include "ProjectInfo.h"
+#include "ProjectInfoSystem.h"
 
 #include "networking/NetworkDataSystem.h"
 
@@ -113,10 +113,20 @@ std::optional<json> NetworkDataSystem::TryGenerateNetworkData()
 	json output = json::object();
 
 	{
+		const auto serverInfo = g_ProjectInfo.GetLocalInfo();
+
 		json metaData = json::object();
 
 		metaData.emplace("ProtocolVersion", NetworkDataProtocolVersion);
-		metaData.emplace("Version", fmt::format("{}.{}.{}", UnifiedSDKVersionMajor, UnifiedSDKVersionMinor, UnifiedSDKVersionPatch));
+		metaData.emplace("Version", fmt::format("{}.{}.{}", serverInfo->MajorVersion, serverInfo->MinorVersion, serverInfo->PatchVersion));
+
+		metaData.emplace("ReleaseType", serverInfo->ReleaseType);
+
+		metaData.emplace("Branch", serverInfo->BranchName);
+		metaData.emplace("Tag", serverInfo->TagName);
+		metaData.emplace("Commit", serverInfo->CommitHash);
+
+		metaData.emplace("BuildTimestamp", serverInfo->BuildTimestamp);
 
 		output.emplace("Meta", std::move(metaData));
 	}
@@ -261,36 +271,16 @@ bool NetworkDataSystem::TryParseNetworkData(const std::vector<std::uint8_t>& fil
 		return false;
 	}
 
-	auto metaIt = input.find("Meta");
-
-	if (metaIt == input.end())
-	{
-		m_Logger->error("Error loading network data: Network data is invalid (missing \"Meta\" key)");
-		return false;
-	}
-
-	if (!metaIt->is_object())
-	{
-		m_Logger->error("Error loading network data: Network data is invalid (\"Meta\" is not an object)");
-		return false;
-	}
-
-	auto dataIt = input.find("Data");
-
-	if (dataIt == input.end())
-	{
-		m_Logger->error("Error loading network data: Network data is invalid (missing \"Data\" key)");
-		return false;
-	}
-
-	if (!dataIt->is_object())
-	{
-		m_Logger->error("Error loading network data: Network data is invalid (\"Data\" is not an object)");
-		return false;
-	}
-
 	try
 	{
+		auto metaIt = input.find("Meta");
+
+		if (metaIt == input.end())
+		{
+			m_Logger->error("Error loading network data: Network data is invalid (missing \"Meta\" key)");
+			return false;
+		}
+
 		const std::uint32_t protocolVersion = metaIt->value("ProtocolVersion", NetworkDataInvalidProtocolVersion);
 
 		if (protocolVersion != NetworkDataProtocolVersion)
@@ -315,24 +305,61 @@ bool NetworkDataSystem::TryParseNetworkData(const std::vector<std::uint8_t>& fil
 
 		const std::string versionString = metaIt->value("Version", "");
 
+		std::string releaseType = metaIt->value("ReleaseType", "");
+
+		std::string branch = metaIt->value("Branch", "");
+		std::string tag = metaIt->value("Tag", "");
+		std::string commit = metaIt->value("Commit", "");
+
+		std::string buildTimestamp = metaIt->value("BuildTimestamp", "");
+
 		std::match_results<std::string::const_iterator> matches;
 
-		if (!std::regex_match(versionString, matches, VersionRegex))
+		if (!std::regex_match(versionString, matches, VersionRegex) || releaseType.empty() || branch.empty() || tag.empty() || commit.empty() || buildTimestamp.empty())
 		{
-			m_Logger->error("Error loading network data: Invalid server version string");
+			m_Logger->error("Error loading network data: Invalid server project info");
 			return false;
 		}
+
+		const auto localInfo = g_ProjectInfo.GetLocalInfo();
 
 		const int major = UTIL_StringToInteger({matches[1].first, matches[1].second});
 		const int minor = UTIL_StringToInteger({matches[2].first, matches[2].second});
 		const int patch = UTIL_StringToInteger({matches[3].first, matches[3].second});
 
-		if (major != UnifiedSDKVersionMajor || minor != UnifiedSDKVersionMinor || patch != UnifiedSDKVersionPatch)
+		if (major != localInfo->MajorVersion || minor != localInfo->MinorVersion || patch != localInfo->PatchVersion)
 		{
 			m_Logger->error("Error loading network data: Server is running a different mod version (expected: {}.{}.{}, actual: {})",
-				UnifiedSDKVersionMajor, UnifiedSDKVersionMinor, UnifiedSDKVersionPatch, versionString);
+				localInfo->MajorVersion, localInfo->MinorVersion, localInfo->PatchVersion, versionString);
 			return false;
 		}
+
+		// If this isn't a development build then stricter compatibility checks are needed.
+		// Build timestamp will never match for clients and servers,
+		// it is only used for diagnostics output not compatibility checking.
+		if (!g_ProjectInfo.IsAlphaBuild(*g_ProjectInfo.GetLocalInfo()))
+		{
+			if (branch != localInfo->BranchName || tag != localInfo->TagName || commit != localInfo->CommitHash)
+			{
+				m_Logger->error(R"(Error loading network data: Server is running a different mod version
+	Property: Client : Server
+	Branch: {} : {}
+	Tag: {} : {}
+	Commit : {} : {})",
+					branch, localInfo->BranchName, tag, localInfo->TagName, commit, localInfo->CommitHash);
+				return false;
+			}
+		}
+
+		g_ProjectInfo.SetServerInfo(
+			{.MajorVersion = major,
+				.MinorVersion = minor,
+				.PatchVersion = patch,
+				.ReleaseType = std::move(releaseType),
+				.BranchName = std::move(branch),
+				.TagName = std::move(tag),
+				.CommitHash = std::move(commit),
+				.BuildTimestamp = std::move(buildTimestamp)});
 	}
 	catch (const std::exception& e)
 	{
@@ -351,6 +378,14 @@ bool NetworkDataSystem::TryParseNetworkData(const std::vector<std::uint8_t>& fil
 
 	try
 	{
+		auto dataIt = input.find("Data");
+
+		if (dataIt == input.end())
+		{
+			m_Logger->error("Error loading network data: Network data is invalid (missing \"Data\" key)");
+			return false;
+		}
+
 		for (auto& [key, value] : dataIt->items())
 		{
 			auto it = std::find_if(m_Handlers.begin(), m_Handlers.end(), [&](const auto& candidate)

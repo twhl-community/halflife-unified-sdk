@@ -644,26 +644,10 @@ public:
 	bool VidInit() override;
 	bool Draw(float flTime) override;
 
-	void MsgFunc_ProjectInfo(const char* pszName, int iSize, void* pbuf);
-
 private:
-	struct LibraryInfo
-	{
-		int MajorVersion = -1;
-		int MinorVersion = -1;
-		int PatchVersion = -1;
-
-		std::string BranchName;
-		std::string TagName;
-		std::string CommitHash;
-	};
-
 	cvar_t* m_ShowProjectInfo = nullptr;
 
 	bool m_IsAlphaBuild = false;
-
-	LibraryInfo m_ClientInfo;
-	LibraryInfo m_ServerInfo;
 };
 
 /**

@@ -16,6 +16,7 @@
 #include "cbase.h"
 
 #include "GameLibrary.h"
+#include "ProjectInfoSystem.h"
 
 #include "config/ConditionEvaluator.h"
 #include "config/GameConfig.h"
@@ -92,6 +93,7 @@ void GameLibrary::AddGameSystems()
 	g_GameSystems.Add(&g_GameConfigSystem);
 	g_GameSystems.Add(&g_ReplacementMaps);
 	g_GameSystems.Add(&g_MaterialSystem);
+	g_GameSystems.Add(&g_ProjectInfo);
 }
 
 void GameLibrary::SetEntLogLevels(spdlog::level::level_enum level)
