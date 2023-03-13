@@ -196,6 +196,8 @@ bool GameSoundSystem::Create(std::shared_ptr<spdlog::logger> logger, ALCdevice* 
 	constexpr double metersPerUnit = footInMeters / 16;
 	alListenerf(AL_METERS_PER_UNIT, static_cast<float>(metersPerUnit));
 
+	alDopplerFactor(0.f);
+
 	m_SoundCache = std::make_unique<SoundCache>(m_CacheLogger);
 	m_Sentences = std::make_unique<SentencesSystem>(m_SentencesLogger, m_SoundCache.get());
 
