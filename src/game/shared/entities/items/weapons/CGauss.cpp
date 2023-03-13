@@ -370,7 +370,7 @@ void CGauss::Fire(Vector vecOrigSrc, Vector vecDir, float flDamage)
 
 #ifndef CLIENT_DLL
 	Vector vecDest = vecSrc + vecDir * 8192;
-	edict_t* pentIgnore = nullptr;
+	edict_t* pentIgnore = ENT(m_pPlayer->pev);
 	TraceResult tr, beam_tr;
 	float flMaxFrac = 1.0;
 	int nTotal = 0;
