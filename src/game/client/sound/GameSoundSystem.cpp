@@ -96,7 +96,7 @@ bool GameSoundSystem::Create(std::shared_ptr<spdlog::logger> logger, ALCdevice* 
 		return false;
 	}
 
-	ALint attribs[4] = {0};
+	ALCint attribs[3] = {0};
 
 	// We only need 1.
 	attribs[0] = ALC_MAX_AUXILIARY_SENDS;
