@@ -656,6 +656,7 @@ bool GameSoundSystem::SetupChannel(Channel& channel, int entityIndex, int channe
 	alSourcef(channel.Source.Id, AL_GAIN, volume);
 	alSourcef(channel.Source.Id, AL_PITCH, pitch / 100.f);
 	alSourcef(channel.Source.Id, AL_ROLLOFF_FACTOR, attenuation);
+	alSourcef(channel.Source.Id, AL_REFERENCE_DISTANCE, 0);
 	alSourcef(channel.Source.Id, AL_MAX_DISTANCE, NominalClippingDistance);
 	alSourcei(channel.Source.Id, AL_SOURCE_RELATIVE, isRelative ? AL_TRUE : AL_FALSE);
 	alSourcei(channel.Source.Id, AL_LOOPING, AL_FALSE);
