@@ -1035,7 +1035,7 @@ void EV_FireGauss(event_args_t* args)
 
 						delta = beam_tr.endpos - tr.endpos;
 
-						n = Length(delta);
+						n = delta.Length();
 
 						if (n < flDamage)
 						{

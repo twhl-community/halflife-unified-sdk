@@ -175,7 +175,7 @@ void PM_PlayStepSound(int step, float fvol)
 	hvel = pmove->velocity;
 	hvel[2] = 0.0;
 
-	if (0 != pmove->multiplayer && (!g_onladder && Length(hvel) <= 220))
+	if (0 != pmove->multiplayer && (!g_onladder && hvel.Length() <= 220))
 		return;
 
 	// irand - 0,1 for right foot, 2,3 for left foot
@@ -474,7 +474,7 @@ void PM_UpdateStepSound()
 
 	PM_CatagorizeTextureType();
 
-	speed = Length(pmove->velocity);
+	speed = pmove->velocity.Length();
 
 	// determine if we are on a ladder
 	// The Barnacle Grapple sets the FL_IMMUNE_LAVA flag to indicate that the player is not on a ladder - Solokiller
@@ -498,7 +498,7 @@ void PM_UpdateStepSound()
 	//  play step sound.  Also, if pmove->flTimeStepSound is zero, get the new
 	//  sound right away - we just started moving in new level.
 	if ((fLadder || (pmove->onground != -1)) &&
-		(Length(pmove->velocity) > 0.0) &&
+		(pmove->velocity.Length() > 0.0) &&
 		(speed >= velwalk || 0 == pmove->flTimeStepSound))
 	{
 		const bool fWalking = speed < velrun;
@@ -909,7 +909,7 @@ int PM_FlyMove()
 
 					break;
 				}
-				CrossProduct(planes[0], planes[1], dir);
+				dir = CrossProduct(planes[0], planes[1]);
 				d = DotProduct(dir, pmove->velocity);
 				VectorScale(dir, d, pmove->velocity);
 			}
@@ -1040,7 +1040,7 @@ void PM_WalkMove()
 	// Add in any base velocity to the current velocity.
 	pmove->velocity = pmove->velocity + pmove->basevelocity;
 
-	spd = Length(pmove->velocity);
+	spd = pmove->velocity.Length();
 
 	if (spd < 1.0f)
 	{
@@ -1758,7 +1758,7 @@ void PM_SpectatorMove()
 #endif
 		// Move around in normal spectator method
 
-		speed = Length(pmove->velocity);
+		speed = pmove->velocity.Length();
 		if (speed < 1)
 		{
 			pmove->velocity = vec3_origin;
@@ -2116,7 +2116,7 @@ void PM_LadderMove(physent_t* pLadder)
 				//					perp = perp.Normalize();
 				tmp = vec3_origin;
 				tmp[2] = 1;
-				CrossProduct(tmp, trace.plane.normal, perp);
+				perp = CrossProduct(tmp, trace.plane.normal);
 				VectorNormalize(perp);
 
 
@@ -2134,7 +2134,7 @@ void PM_LadderMove(physent_t* pLadder)
 				// NOTE: It IS possible to face up and move down or face down and move up
 				// because the velocity is a sum of the directional velocity and the converted
 				// velocity through the face of the ladder -- by design.
-				CrossProduct(trace.plane.normal, perp, tmp);
+				tmp = CrossProduct(trace.plane.normal, perp);
 				VectorMA(lateral, -normal, tmp, pmove->velocity);
 				if (onFloor && normal > 0) // On ground moving away from the ladder
 				{
@@ -2276,8 +2276,8 @@ void PM_Physics_Toss()
 	// If on ground and not moving, return.
 	if (pmove->onground != -1)
 	{
-		if (VectorCompare(pmove->basevelocity, vec3_origin) &&
-			VectorCompare(pmove->velocity, vec3_origin))
+		if (pmove->basevelocity == vec3_origin &&
+			pmove->velocity == vec3_origin)
 			return;
 	}
 
@@ -2418,7 +2418,7 @@ void PM_PreventMegaBunnyJumping()
 	if (maxscaledspeed <= 0.0f)
 		return;
 
-	spd = Length(pmove->velocity);
+	spd = pmove->velocity.Length();
 
 	if (spd <= maxscaledspeed)
 		return;
@@ -2540,7 +2540,7 @@ void PM_Jump()
 		if ((cansuperjump || canjumppackjump) &&
 			(pmove->cmd.buttons & IN_DUCK) != 0 &&
 			(pmove->flDuckTime > 0) &&
-			Length(pmove->velocity) > 50)
+			pmove->velocity.Length() > 50)
 		{
 			pmove->punchangle[0] = -5;
 

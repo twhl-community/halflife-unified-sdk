@@ -711,7 +711,7 @@ void V_CalcNormalRefdef(ref_params_t* pparams)
 
 		delta = pparams->simorg - lastorg;
 
-		if (Length(delta) != 0.0)
+		if (delta.Length() != 0.0)
 		{
 			ViewInterp.Origins[ViewInterp.CurrentOrigin & ORIGIN_MASK] = pparams->simorg;
 			ViewInterp.OriginTime[ViewInterp.CurrentOrigin & ORIGIN_MASK] = pparams->time;
@@ -760,7 +760,7 @@ void V_CalcNormalRefdef(ref_params_t* pparams)
 				VectorMA(ViewInterp.Origins[foundidx & ORIGIN_MASK], frac, delta, neworg);
 
 				// Dont interpolate large changes
-				if (Length(delta) < 64)
+				if (delta.Length() < 64)
 				{
 					delta = neworg - pparams->simorg;
 

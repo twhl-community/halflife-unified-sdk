@@ -22,36 +22,6 @@ void VectorMA(const float* veca, float scale, const float* vecb, float* vecc)
 	vecc[2] = veca[2] + scale * vecb[2];
 }
 
-bool VectorCompare(const float* v1, const float* v2)
-{
-	int i;
-
-	for (i = 0; i < 3; i++)
-		if (v1[i] != v2[i])
-			return false;
-
-	return true;
-}
-
-float Length(const float* v)
-{
-	int i;
-	float length = 0.0f;
-
-	for (i = 0; i < 3; i++)
-		length += v[i] * v[i];
-	length = sqrt(length); // FIXME
-
-	return length;
-}
-
-void CrossProduct(const float* v1, const float* v2, float* cross)
-{
-	cross[0] = v1[1] * v2[2] - v1[2] * v2[1];
-	cross[1] = v1[2] * v2[0] - v1[0] * v2[2];
-	cross[2] = v1[0] * v2[1] - v1[1] * v2[0];
-}
-
 float VectorNormalize(float* v)
 {
 	float length, ilength;
@@ -419,8 +389,8 @@ void InterpolateAngles(float* start, float* end, float* output, float frac)
 float AngleBetweenVectors(const Vector& v1, const Vector& v2)
 {
 	float angle;
-	float l1 = Length(v1);
-	float l2 = Length(v2);
+	float l1 = v1.Length();
+	float l2 = v2.Length();
 
 	if (0 == l1 || 0 == l2)
 		return 0.0f;
@@ -433,8 +403,6 @@ float AngleBetweenVectors(const Vector& v1, const Vector& v2)
 
 void VectorMatrix(const Vector& forward, Vector& right, Vector& up)
 {
-	Vector tmp;
-
 	if (forward[0] == 0 && forward[1] == 0)
 	{
 		right[0] = 1;
@@ -446,12 +414,9 @@ void VectorMatrix(const Vector& forward, Vector& right, Vector& up)
 		return;
 	}
 
-	tmp[0] = 0;
-	tmp[1] = 0;
-	tmp[2] = 1.0;
-	CrossProduct(forward, tmp, right);
+	right = CrossProduct(forward, vec3_up);
 	VectorNormalize(right);
-	CrossProduct(right, forward, up);
+	up = CrossProduct(right, forward);
 	VectorNormalize(up);
 }
 

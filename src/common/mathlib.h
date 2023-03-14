@@ -54,9 +54,6 @@ constexpr Vector vec3_up{0, 0, 1};
 
 void VectorMA(const float* veca, float scale, const float* vecb, float* vecc);
 
-bool VectorCompare(const float* v1, const float* v2);
-float Length(const float* v);
-void CrossProduct(const float* v1, const float* v2, float* cross);
 float VectorNormalize(float* v); // returns vector length
 void VectorInverse(float* v);
 void VectorScale(const float* in, float scale, float* out);

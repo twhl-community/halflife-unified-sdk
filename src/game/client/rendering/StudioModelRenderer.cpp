@@ -242,7 +242,7 @@ void CStudioModelRenderer::StudioCalcBoneQuaterion(int frame, float s, mstudiobo
 		}
 	}
 
-	if (!VectorCompare(angle1, angle2))
+	if (angle1 != angle2)
 	{
 		AngleQuaternion(angle1, q1);
 		AngleQuaternion(angle2, q2);
@@ -1244,7 +1244,7 @@ void CStudioModelRenderer::StudioEstimateGait(entity_state_t* pplayer)
 	{
 		est_velocity = m_pCurrentEntity->origin - m_pPlayerInfo->prevgaitorigin;
 		m_pPlayerInfo->prevgaitorigin = m_pCurrentEntity->origin;
-		m_flGaitMovement = Length(est_velocity);
+		m_flGaitMovement = est_velocity.Length();
 		if (dt <= 0 || m_flGaitMovement / dt < 5)
 		{
 			m_flGaitMovement = 0;
@@ -1255,7 +1255,7 @@ void CStudioModelRenderer::StudioEstimateGait(entity_state_t* pplayer)
 	else
 	{
 		est_velocity = pplayer->velocity;
-		m_flGaitMovement = Length(est_velocity) * dt;
+		m_flGaitMovement = est_velocity.Length() * dt;
 	}
 
 	if (est_velocity[1] == 0 && est_velocity[0] == 0)
