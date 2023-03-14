@@ -56,8 +56,6 @@ public:
 
 	void Reload() override;
 
-	int iItemSlot() override;
-
 	bool GetItemInfo(ItemInfo* p) override;
 
 	void IncrementAmmo(CBasePlayer* pPlayer) override;

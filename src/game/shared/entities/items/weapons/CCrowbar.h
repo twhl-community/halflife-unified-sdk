@@ -36,7 +36,6 @@ public:
 	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
-	int iItemSlot() override { return 1; }
 	void EXPORT SwingAgain();
 	void EXPORT Smack();
 	bool GetItemInfo(ItemInfo* p) override;

@@ -316,11 +316,6 @@ void CEagle::UpdateLaser()
 #endif
 }
 
-int CEagle::iItemSlot()
-{
-	return 2;
-}
-
 bool CEagle::GetItemInfo(ItemInfo* p)
 {
 	p->pszAmmo1 = "357";

@@ -554,11 +554,6 @@ void CGrapple::DestroyEffect()
 #endif
 }
 
-int CGrapple::iItemSlot()
-{
-	return 1;
-}
-
 bool CGrapple::GetItemInfo(ItemInfo* p)
 {
 	p->pszAmmo1 = nullptr;

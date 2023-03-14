@@ -37,7 +37,6 @@ public:
 	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
-	int iItemSlot() override { return 2; }
 	bool GetItemInfo(ItemInfo* p) override;
 
 	void IncrementAmmo(CBasePlayer* pPlayer) override;

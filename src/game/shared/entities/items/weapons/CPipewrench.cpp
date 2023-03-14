@@ -514,11 +514,6 @@ void CPipewrench::SetWeaponData(const weapon_data_t& data)
 	m_iSwingMode = data.m_fInSpecialReload;
 }
 
-int CPipewrench::iItemSlot()
-{
-	return 1;
-}
-
 bool CPipewrench::GetItemInfo(ItemInfo* p)
 {
 	p->pszAmmo1 = nullptr;

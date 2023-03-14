@@ -283,11 +283,6 @@ void CShockRifle::RechargeAmmo(bool bLoud)
 	}
 }
 
-int CShockRifle::iItemSlot()
-{
-	return 4;
-}
-
 bool CShockRifle::GetItemInfo(ItemInfo* p)
 {
 	p->pszAmmo1 = "shock";

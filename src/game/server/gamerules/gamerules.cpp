@@ -55,7 +55,7 @@ CBasePlayerItem* CGameRules::FindNextBestWeapon(CBasePlayer* pPlayer, CBasePlaye
 
 	int iBestWeight = -1; // no weapon lower than -1 can be autoswitched to
 
-	for (int i = 0; i < MAX_ITEM_TYPES; i++)
+	for (int i = 0; i < MAX_WEAPON_SLOTS; i++)
 	{
 		for (auto pCheck = pPlayer->m_rgpPlayerItems[i]; pCheck; pCheck = pCheck->m_pNext)
 		{

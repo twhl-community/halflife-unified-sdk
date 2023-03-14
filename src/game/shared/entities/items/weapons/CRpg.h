@@ -46,7 +46,6 @@ public:
 	void Spawn() override;
 	void Precache() override;
 	void Reload() override;
-	int iItemSlot() override { return 4; }
 	bool GetItemInfo(ItemInfo* p) override;
 	void IncrementAmmo(CBasePlayer* pPlayer) override;
 

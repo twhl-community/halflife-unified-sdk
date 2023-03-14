@@ -1703,7 +1703,7 @@ int GetWeaponData(edict_t* player, weapon_data_t* info)
 		return 1;
 
 	// go through all of the weapons and make a list of the ones to pack
-	for (i = 0; i < MAX_ITEM_TYPES; i++)
+	for (i = 0; i < MAX_WEAPON_SLOTS; i++)
 	{
 		if (pl->m_rgpPlayerItems[i])
 		{

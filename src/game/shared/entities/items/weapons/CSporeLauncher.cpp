@@ -305,11 +305,6 @@ void CSporeLauncher::Reload()
 	}
 }
 
-int CSporeLauncher::iItemSlot()
-{
-	return 4;
-}
-
 bool CSporeLauncher::GetItemInfo(ItemInfo* p)
 {
 	p->pszAmmo1 = "spores";

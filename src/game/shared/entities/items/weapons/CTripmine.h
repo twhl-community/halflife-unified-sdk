@@ -36,7 +36,6 @@ public:
 	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
-	int iItemSlot() override { return 5; }
 	bool GetItemInfo(ItemInfo* p) override;
 	void SetObjectCollisionBox() override
 	{

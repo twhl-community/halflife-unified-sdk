@@ -199,11 +199,6 @@ void CSniperRifle::Reload()
 	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 4.102;
 }
 
-int CSniperRifle::iItemSlot()
-{
-	return 4;
-}
-
 bool CSniperRifle::GetItemInfo(ItemInfo* p)
 {
 	p->pszAmmo1 = "762";

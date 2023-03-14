@@ -191,11 +191,6 @@ void CPenguin::SecondaryAttack()
 	// Nothing
 }
 
-int CPenguin::iItemSlot()
-{
-	return 5;
-}
-
 bool CPenguin::GetItemInfo(ItemInfo* p)
 {
 	p->pszAmmo1 = "Penguins";

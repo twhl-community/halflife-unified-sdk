@@ -67,8 +67,6 @@ public:
 
 	void SecondaryAttack() override;
 
-	int iItemSlot() override;
-
 	bool GetItemInfo(ItemInfo* p) override;
 
 	bool UseDecrement() override

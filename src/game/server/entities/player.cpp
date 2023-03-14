@@ -87,7 +87,7 @@ TYPEDESCRIPTION CBasePlayer::m_playerSaveData[] =
 		DEFINE_ARRAY(CBasePlayer, m_rgflSuitNoRepeatTime, FIELD_TIME, CSUITNOREPEAT),
 		DEFINE_FIELD(CBasePlayer, m_lastDamageAmount, FIELD_INTEGER),
 
-		DEFINE_ARRAY(CBasePlayer, m_rgpPlayerItems, FIELD_CLASSPTR, MAX_ITEM_TYPES),
+		DEFINE_ARRAY(CBasePlayer, m_rgpPlayerItems, FIELD_CLASSPTR, MAX_WEAPON_SLOTS),
 		DEFINE_FIELD(CBasePlayer, m_pActiveItem, FIELD_CLASSPTR),
 		DEFINE_FIELD(CBasePlayer, m_pLastItem, FIELD_CLASSPTR),
 		DEFINE_FIELD(CBasePlayer, m_WeaponBits, FIELD_INT64),
@@ -626,7 +626,7 @@ void CBasePlayer::PackDeadPlayerItems()
 	}
 
 	// go through all of the weapons and make a list of the ones to pack
-	for (i = 0; i < MAX_ITEM_TYPES; i++)
+	for (i = 0; i < MAX_WEAPON_SLOTS; i++)
 	{
 		if (m_rgpPlayerItems[i])
 		{
@@ -745,7 +745,7 @@ void CBasePlayer::RemoveAllItems(bool removeSuit)
 
 	int i;
 	CBasePlayerItem* pPendingItem;
-	for (i = 0; i < MAX_ITEM_TYPES; i++)
+	for (i = 0; i < MAX_WEAPON_SLOTS; i++)
 	{
 		m_pActiveItem = m_rgpPlayerItems[i];
 		while (m_pActiveItem)
@@ -2813,7 +2813,7 @@ pt_end:
 #if defined(CLIENT_WEAPONS)
 	// Decay timers on weapons
 	// go through all of the weapons and make a list of the ones to pack
-	for (int i = 0; i < MAX_ITEM_TYPES; i++)
+	for (int i = 0; i < MAX_WEAPON_SLOTS; i++)
 	{
 		if (m_rgpPlayerItems[i])
 		{
@@ -3387,7 +3387,7 @@ void CBasePlayer::SelectItem(const char* pstr)
 
 	CBasePlayerItem* pItem = nullptr;
 
-	for (int i = 0; i < MAX_ITEM_TYPES; i++)
+	for (int i = 0; i < MAX_WEAPON_SLOTS; i++)
 	{
 		if (m_rgpPlayerItems[i])
 		{
@@ -3437,7 +3437,7 @@ bool CBasePlayer::HasWeapons()
 {
 	int i;
 
-	for (i = 0; i < MAX_ITEM_TYPES; i++)
+	for (i = 0; i < MAX_WEAPON_SLOTS; i++)
 	{
 		if (m_rgpPlayerItems[i])
 		{
@@ -4597,7 +4597,7 @@ void CBasePlayer::UpdateClientData()
 	SendAmmoUpdate();
 
 	// Update all the items
-	for (int i = 0; i < MAX_ITEM_TYPES; i++)
+	for (int i = 0; i < MAX_WEAPON_SLOTS; i++)
 	{
 		if (m_rgpPlayerItems[i]) // each item updates it's successors
 			m_rgpPlayerItems[i]->UpdateClientData(this);
@@ -5090,7 +5090,7 @@ void CBasePlayer::DropPlayerItem(const char* pszItemName)
 	CBasePlayerItem* pWeapon;
 	int i;
 
-	for (i = 0; i < MAX_ITEM_TYPES; i++)
+	for (i = 0; i < MAX_WEAPON_SLOTS; i++)
 	{
 		pWeapon = m_rgpPlayerItems[i];
 
@@ -5190,7 +5190,7 @@ bool CBasePlayer::HasNamedPlayerItem(const char* pszItemName)
 	CBasePlayerItem* pItem;
 	int i;
 
-	for (i = 0; i < MAX_ITEM_TYPES; i++)
+	for (i = 0; i < MAX_WEAPON_SLOTS; i++)
 	{
 		pItem = m_rgpPlayerItems[i];
 

@@ -319,11 +319,6 @@ int CM249::RecalculateBody(int iClip)
 	}
 }
 
-int CM249::iItemSlot()
-{
-	return 4;
-}
-
 bool CM249::GetItemInfo(ItemInfo* p)
 {
 	p->pszAmmo1 = "556";

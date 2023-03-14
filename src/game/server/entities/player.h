@@ -238,7 +238,7 @@ public:
 	float m_flJumpTime;
 
 	// usable player items
-	CBasePlayerItem* m_rgpPlayerItems[MAX_ITEM_TYPES];
+	CBasePlayerItem* m_rgpPlayerItems[MAX_WEAPON_SLOTS];
 	CBasePlayerItem* m_pActiveItem;
 	CBasePlayerItem* m_pClientActiveItem; // client version of the active item
 	CBasePlayerItem* m_pLastItem;

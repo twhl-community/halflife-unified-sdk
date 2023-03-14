@@ -271,11 +271,6 @@ void CKnife::Smack()
 	DecalGunshot(&m_trHit, BULLET_PLAYER_CROWBAR);
 }
 
-int CKnife::iItemSlot()
-{
-	return 1;
-}
-
 bool CKnife::GetItemInfo(ItemInfo* p)
 {
 	p->pszAmmo1 = nullptr;

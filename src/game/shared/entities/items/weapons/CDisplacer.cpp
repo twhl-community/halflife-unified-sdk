@@ -429,11 +429,6 @@ void CDisplacer::AltFireThink()
 #endif
 }
 
-int CDisplacer::iItemSlot()
-{
-	return 4;
-}
-
 bool CDisplacer::GetItemInfo(ItemInfo* p)
 {
 	p->pszAmmo1 = "uranium";

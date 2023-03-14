@@ -72,8 +72,6 @@ public:
 
 	void SetWeaponData(const weapon_data_t& data) override;
 
-	int iItemSlot() override;
-
 	bool GetItemInfo(ItemInfo* p) override;
 
 	bool UseDecrement() override

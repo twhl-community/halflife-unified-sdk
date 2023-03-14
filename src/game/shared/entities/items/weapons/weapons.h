@@ -308,8 +308,7 @@ public:
 	CBasePlayerItem* m_pNext;
 	int m_iId; // WEAPON_???
 
-	virtual int iItemSlot() { return 0; } // return 0 to MAX_ITEMS_SLOTS, used in hud
-
+	int iItemSlot() { return ItemInfoArray[m_iId].iSlot; } // return 0 to MAX_ITEMS_SLOTS, used in hud
 	int iItemPosition() { return ItemInfoArray[m_iId].iPosition; }
 	const char* pszAmmo1() { return ItemInfoArray[m_iId].pszAmmo1; }
 	int iMaxAmmo1() { return ItemInfoArray[m_iId].iMaxAmmo1; }
@@ -520,7 +519,7 @@ public:
 	bool PackWeapon(CBasePlayerItem* pWeapon);
 	bool PackAmmo(string_t iszName, int iCount);
 
-	CBasePlayerItem* m_rgpPlayerItems[MAX_ITEM_TYPES]; // one slot for each
+	CBasePlayerItem* m_rgpPlayerItems[MAX_WEAPON_SLOTS]; // one slot for each
 
 	string_t m_rgiszAmmo[MAX_AMMO_SLOTS]; // ammo names
 	int m_rgAmmo[MAX_AMMO_SLOTS];		  // ammo quantities

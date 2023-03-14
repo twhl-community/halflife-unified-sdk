@@ -1060,7 +1060,7 @@ TYPEDESCRIPTION CWeaponBox::m_SaveData[] =
 	{
 		DEFINE_ARRAY(CWeaponBox, m_rgAmmo, FIELD_INTEGER, MAX_AMMO_SLOTS),
 		DEFINE_ARRAY(CWeaponBox, m_rgiszAmmo, FIELD_STRING, MAX_AMMO_SLOTS),
-		DEFINE_ARRAY(CWeaponBox, m_rgpPlayerItems, FIELD_CLASSPTR, MAX_ITEM_TYPES),
+		DEFINE_ARRAY(CWeaponBox, m_rgpPlayerItems, FIELD_CLASSPTR, MAX_WEAPON_SLOTS),
 		DEFINE_FIELD(CWeaponBox, m_cAmmoTypes, FIELD_INTEGER),
 };
 
@@ -1125,7 +1125,7 @@ void CWeaponBox::Kill()
 	int i;
 
 	// destroy the weapons
-	for (i = 0; i < MAX_ITEM_TYPES; i++)
+	for (i = 0; i < MAX_WEAPON_SLOTS; i++)
 	{
 		pWeapon = m_rgpPlayerItems[i];
 
@@ -1186,7 +1186,7 @@ void CWeaponBox::Touch(CBaseEntity* pOther)
 	// go through my weapons and try to give the usable ones to the player.
 	// it's important the the player be given ammo first, so the weapons code doesn't refuse
 	// to deploy a better weapon that the player may pick up because he has no ammo for it.
-	for (i = 0; i < MAX_ITEM_TYPES; i++)
+	for (i = 0; i < MAX_WEAPON_SLOTS; i++)
 	{
 		if (m_rgpPlayerItems[i])
 		{
@@ -1355,7 +1355,7 @@ bool CWeaponBox::IsEmpty()
 {
 	int i;
 
-	for (i = 0; i < MAX_ITEM_TYPES; i++)
+	for (i = 0; i < MAX_WEAPON_SLOTS; i++)
 	{
 		if (m_rgpPlayerItems[i])
 		{
