@@ -56,7 +56,7 @@ EV_CreateTracer
 Creates a tracer effect
 =================
 */
-void EV_CreateTracer(float* start, float* end)
+void EV_CreateTracer(Vector& start, const Vector& end)
 {
 	gEngfuncs.pEfxAPI->R_TracerEffect(start, end);
 }
@@ -99,7 +99,7 @@ EV_GetGunPosition
 Figure out the height of the gun
 =================
 */
-void EV_GetGunPosition(event_args_t* args, float* pos, float* origin)
+void EV_GetGunPosition(event_args_t* args, Vector& pos, const Vector& origin)
 {
 	int idx;
 
@@ -131,11 +131,9 @@ EV_EjectBrass
 Bullet shell casings
 =================
 */
-void EV_EjectBrass(float* origin, float* velocity, float rotation, int model, int soundtype)
+void EV_EjectBrass(const Vector& origin, const Vector& velocity, float rotation, int model, int soundtype)
 {
-	Vector endpos;
-	VectorClear(endpos);
-	endpos[1] = rotation;
+	const Vector endpos{0, rotation, 0};
 	gEngfuncs.pEfxAPI->R_TempModel(origin, velocity, endpos, 2.5, model, soundtype);
 }
 
@@ -146,7 +144,10 @@ EV_GetDefaultShellInfo
 Determine where to eject shells from
 =================
 */
-void EV_GetDefaultShellInfo(event_args_t* args, float* origin, float* velocity, float* ShellVelocity, float* ShellOrigin, float* forward, float* right, float* up, float forwardScale, float upScale, float rightScale)
+void EV_GetDefaultShellInfo(event_args_t* args,
+	const Vector& origin, const Vector& velocity, Vector& ShellVelocity, Vector& ShellOrigin,
+	const Vector& forward, const Vector& right, const Vector& up,
+	float forwardScale, float upScale, float rightScale)
 {
 	int i;
 	float fR, fU;

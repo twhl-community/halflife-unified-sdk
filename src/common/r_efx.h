@@ -149,12 +149,17 @@ struct efx_api_t
 	void (*R_Sprite_Trail)(int type, float* start, float* end, int modelIndex, int count, float life, float size, float amplitude, int renderamt, float speed);
 	void (*R_Sprite_WallPuff)(TEMPENTITY* pTemp, float scale);
 	void (*R_StreakSplash)(float* pos, float* dir, int color, int count, float speed, int velocityMin, int velocityMax);
-	void (*R_TracerEffect)(float* start, float* end);
+
+	/**
+	*	@param start Modified by function.
+	*/
+	void (*R_TracerEffect)(float* start, const float* end);
+
 	void (*R_UserTracerParticle)(float* org, float* vel, float life, int colorIndex, float length, unsigned char deathcontext, void (*deathfunc)(particle_t* particle));
 	particle_t* (*R_TracerParticles)(float* org, float* vel, float life);
 	void (*R_TeleportSplash)(float* org);
 	void (*R_TempSphereModel)(float* pos, float speed, float life, int count, int modelIndex);
-	TEMPENTITY* (*R_TempModel)(float* pos, float* dir, float* angles, float life, int modelIndex, int soundtype);
+	TEMPENTITY* (*R_TempModel)(const float* pos, const float* dir, const float* angles, float life, int modelIndex, int soundtype);
 	TEMPENTITY* (*R_DefaultSprite)(const float* pos, int spriteIndex, float framerate);
 	TEMPENTITY* (*R_TempSprite)(float* pos, const float* dir, float scale, int modelIndex, int rendermode, int renderfx, float a, float life, int flags);
 	int (*Draw_DecalIndex)(int id);
@@ -172,10 +177,10 @@ struct efx_api_t
 	BEAM* (*R_BeamRing)(int startEnt, int endEnt, int modelIndex, float life, float width, float amplitude, float brightness, float speed, int startFrame, float framerate, float r, float g, float b);
 	dlight_t* (*CL_AllocDlight)(int key);
 	dlight_t* (*CL_AllocElight)(int key);
-	TEMPENTITY* (*CL_TempEntAlloc)(float* org, model_t* model);
-	TEMPENTITY* (*CL_TempEntAllocNoModel)(float* org);
-	TEMPENTITY* (*CL_TempEntAllocHigh)(float* org, model_t* model);
-	TEMPENTITY* (*CL_TentEntAllocCustom)(float* origin, model_t* model, int high, void (*callback)(TEMPENTITY* ent, float frametime, float currenttime));
+	TEMPENTITY* (*CL_TempEntAlloc)(const float* org, model_t* model);
+	TEMPENTITY* (*CL_TempEntAllocNoModel)(const float* org);
+	TEMPENTITY* (*CL_TempEntAllocHigh)(const float* org, model_t* model);
+	TEMPENTITY* (*CL_TentEntAllocCustom)(const float* origin, model_t* model, int high, void (*callback)(TEMPENTITY* ent, float frametime, float currenttime));
 	void (*R_GetPackedColor)(short* packed, short color);
 	short (*R_LookupColor)(unsigned char r, unsigned char g, unsigned char b);
 	void (*R_DecalRemoveAll)(int textureIndex); // textureIndex points to the decal index in the array, not the actual texture index.
