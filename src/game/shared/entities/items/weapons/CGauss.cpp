@@ -42,10 +42,6 @@ float CGauss::GetFullChargeTime()
 	return 4;
 }
 
-#ifdef CLIENT_DLL
-extern bool g_irunninggausspred;
-#endif
-
 void CGauss::OnCreate()
 {
 	CBasePlayerWeapon::OnCreate();

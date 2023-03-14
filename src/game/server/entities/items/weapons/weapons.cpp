@@ -685,24 +685,6 @@ bool CBasePlayerWeapon::UpdateClientData(CBasePlayer* pPlayer)
 	return true;
 }
 
-
-void CBasePlayerWeapon::SendWeaponAnim(int iAnim, int body)
-{
-	const bool skiplocal = !m_ForceSendAnimations && UseDecrement();
-
-	m_pPlayer->pev->weaponanim = iAnim;
-
-#if defined(CLIENT_WEAPONS)
-	if (skiplocal && ENGINE_CANSKIP(m_pPlayer->edict()))
-		return;
-#endif
-
-	MESSAGE_BEGIN(MSG_ONE, SVC_WEAPONANIM, nullptr, m_pPlayer->pev);
-	WRITE_BYTE(iAnim);	   // sequence number
-	WRITE_BYTE(pev->body); // weaponmodel bodygroup.
-	MESSAGE_END();
-}
-
 bool CBasePlayerWeapon::AddPrimaryAmmo(int iCount, const char* szName, int iMaxClip, int iMaxCarry)
 {
 	int iIdAmmo;
@@ -815,34 +797,6 @@ void CBasePlayerWeapon::SetWeaponModels(const char* viewModel, const char* weapo
 	m_pPlayer->pev->weaponmodel = MAKE_STRING(UTIL_CheckForGlobalModelReplacement(weaponModel));
 }
 
-bool CBasePlayerWeapon::DefaultDeploy(const char* szViewModel, const char* szWeaponModel, int iAnim, const char* szAnimExt, int body)
-{
-	if (!CanDeploy())
-		return false;
-
-	m_pPlayer->TabulateAmmo();
-	SetWeaponModels(szViewModel, szWeaponModel);
-	strcpy(m_pPlayer->m_szAnimExtention, szAnimExt);
-	SendWeaponAnim(iAnim, body);
-
-	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;
-	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 1.0;
-	m_flLastFireTime = 0.0;
-
-	return true;
-}
-
-bool CBasePlayerWeapon::PlayEmptySound()
-{
-	if (m_iPlayEmptySound)
-	{
-		EMIT_SOUND_PREDICTED(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/357_cock1.wav", 0.8, ATTN_NORM, 0, PITCH_NORM);
-		m_iPlayEmptySound = false;
-		return false;
-	}
-	return false;
-}
-
 //=========================================================
 //=========================================================
 int CBasePlayerWeapon::PrimaryAmmoIndex()
@@ -855,13 +809,6 @@ int CBasePlayerWeapon::PrimaryAmmoIndex()
 int CBasePlayerWeapon::SecondaryAmmoIndex()
 {
 	return m_iSecondaryAmmoType;
-}
-
-void CBasePlayerWeapon::Holster()
-{
-	m_fInReload = false; // cancel any reload in progress.
-	m_pPlayer->pev->viewmodel = string_t::Null;
-	m_pPlayer->pev->weaponmodel = string_t::Null;
 }
 
 void CBasePlayerAmmo::Precache()

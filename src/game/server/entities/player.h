@@ -353,6 +353,11 @@ public:
 	void SelectNextItem(int iItem);
 	void SelectLastItem();
 	void SelectItem(const char* pstr);
+
+private:
+	void DeployWeapon(CBasePlayerItem* weapon);
+
+public:
 	void ItemPreFrame();
 	void ItemPostFrame();
 	void GiveNamedItem(const char* szName);

@@ -276,6 +276,10 @@ public:
 	}
 
 	virtual bool CanHolster() { return true; } // can this weapon be put away right now?
+
+	/**
+	 *	@brief Put away weapon
+	 */
 	virtual void Holster();
 	virtual void UpdateItemInfo() {}
 
@@ -352,6 +356,10 @@ public:
 	bool m_iPlayEmptySound;
 	bool m_fFireOnEmpty; // True when the gun is empty and the player is still holding down the
 						 // attack key(s)
+
+	/**
+	*	@brief Animate weapon model
+	*/
 	virtual bool PlayEmptySound();
 	virtual void ResetEmptySound();
 
@@ -439,12 +447,12 @@ public:
 inline short g_sModelIndexLaser; // holds the index for the laser beam
 constexpr const char* g_pModelNameLaser = "sprites/laserbeam.spr";
 
-inline short g_sModelIndexLaserDot;	 // holds the index for the laser beam dot
-inline short g_sModelIndexFireball;	 // holds the index for the fireball
-inline short g_sModelIndexSmoke;		 // holds the index for the smoke cloud
+inline short g_sModelIndexLaserDot;	  // holds the index for the laser beam dot
+inline short g_sModelIndexFireball;	  // holds the index for the fireball
+inline short g_sModelIndexSmoke;	  // holds the index for the smoke cloud
 inline short g_sModelIndexWExplosion; // holds the index for the underwater explosion
-inline short g_sModelIndexBubbles;	 // holds the index for the bubbles model
-inline short g_sModelIndexBloodDrop;	 // holds the sprite index for blood drops
+inline short g_sModelIndexBubbles;	  // holds the index for the bubbles model
+inline short g_sModelIndexBloodDrop;  // holds the sprite index for blood drops
 inline short g_sModelIndexBloodSpray; // holds the sprite index for blood spray (bigger)
 
 void ClearMultiDamage();
@@ -528,5 +536,7 @@ public:
 };
 
 #ifdef CLIENT_DLL
+inline bool g_irunninggausspred = false;
+
 void LoadVModel(const char* szViewModel, CBasePlayer* m_pPlayer);
 #endif

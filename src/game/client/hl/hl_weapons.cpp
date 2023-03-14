@@ -24,13 +24,10 @@
 #include "view.h"
 #include "prediction/ClientPredictionSystem.h"
 
-LINK_ENTITY_TO_CLASS(player, CBasePlayer);
-
 // Local version of game .dll global variables ( time, etc. )
 static globalvars_t Globals;
 
 float g_flApplyVel = 0.0;
-bool g_irunninggausspred = false;
 
 Vector previousorigin;
 
@@ -86,72 +83,6 @@ void CBaseEntity::Killed(CBaseEntity* attacker, int iGib)
 
 /*
 =====================
-CBasePlayerWeapon :: DefaultDeploy
-
-=====================
-*/
-bool CBasePlayerWeapon::DefaultDeploy(const char* szViewModel, const char* szWeaponModel, int iAnim, const char* szAnimExt, int body)
-{
-	if (!CanDeploy())
-		return false;
-
-	gEngfuncs.CL_LoadModel(szViewModel, reinterpret_cast<int*>(&m_pPlayer->pev->viewmodel.m_Value));
-
-	SendWeaponAnim(iAnim, body);
-
-	g_irunninggausspred = false;
-	m_pPlayer->m_flNextAttack = 0.5;
-	m_flTimeWeaponIdle = 1.0;
-	return true;
-}
-
-/*
-=====================
-CBasePlayerWeapon :: PlayEmptySound
-
-=====================
-*/
-bool CBasePlayerWeapon::PlayEmptySound()
-{
-	if (m_iPlayEmptySound)
-	{
-		HUD_PlaySound("weapons/357_cock1.wav", 0.8);
-		m_iPlayEmptySound = false;
-		return false;
-	}
-	return false;
-}
-
-/*
-=====================
-CBasePlayerWeapon::Holster
-
-Put away weapon
-=====================
-*/
-void CBasePlayerWeapon::Holster()
-{
-	m_fInReload = false; // cancel any reload in progress.
-	g_irunninggausspred = false;
-	m_pPlayer->pev->viewmodel = string_t::Null;
-}
-
-/*
-=====================
-CBasePlayerWeapon::SendWeaponAnim
-
-Animate weapon model
-=====================
-*/
-void CBasePlayerWeapon::SendWeaponAnim(int iAnim, int body)
-{
-	m_pPlayer->pev->weaponanim = iAnim;
-
-	HUD_SendWeaponAnim(iAnim, body, false);
-}
-
-/*
-=====================
 CBaseEntity::FireBulletsPlayer
 
 Only produces random numbers to match the server ones.
@@ -184,39 +115,6 @@ Vector CBaseEntity::FireBulletsPlayer(unsigned int cShots, Vector vecSrc, Vector
 	}
 
 	return Vector(x * vecSpread.x, y * vecSpread.y, 0.0);
-}
-
-/*
-=====================
-CBasePlayer::SelectItem
-
-  Switch weapons
-=====================
-*/
-void CBasePlayer::SelectItem(const char* pstr)
-{
-	if (!pstr)
-		return;
-
-	CBasePlayerItem* pItem = nullptr;
-
-	if (!pItem)
-		return;
-
-
-	if (pItem == m_pActiveItem)
-		return;
-
-	if (m_pActiveItem)
-		m_pActiveItem->Holster();
-
-	m_pLastItem = m_pActiveItem;
-	m_pActiveItem = pItem;
-
-	if (m_pActiveItem)
-	{
-		m_pActiveItem->Deploy();
-	}
 }
 
 /*

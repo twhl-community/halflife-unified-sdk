@@ -59,19 +59,14 @@ int HUD_GetWeaponAnim()
 	return g_currentanim;
 }
 
-/*
-=====================
-HUD_PlaySound
-
-Play a sound, if we are seeing this command for the first time
-=====================
-*/
-void HUD_PlaySound(const char* sound, float volume)
+// Play a sound if we are seeing this command for the first time
+void EMIT_SOUND_PREDICTED(edict_t* entity, int channel, const char* sample, float volume, float attenuation,
+	int flags, int pitch)
 {
 	if (!g_runfuncs || !g_finalstate)
 		return;
 
-	PlaySoundByNameAtLocation(sound, volume, g_finalstate->playerstate.origin);
+	CL_StartSound(g_ViewEntity, channel, sample, g_finalstate->playerstate.origin, volume, attenuation, pitch, flags);
 }
 
 /*
