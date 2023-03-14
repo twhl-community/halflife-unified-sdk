@@ -15,7 +15,7 @@
 
 #include "mathlib.h"
 
-float VectorNormalize(float* v)
+float VectorNormalize(Vector& v)
 {
 	float length, ilength;
 
@@ -111,7 +111,7 @@ void AngleVectorsTranspose(const Vector& angles, Vector* forward, Vector* right,
 	}
 }
 
-void AngleMatrix(const float* angles, float matrix[3][4])
+void AngleMatrix(const Vector& angles, float matrix[3][4])
 {
 	float angle;
 	float sr, sp, sy, cr, cp, cy;
@@ -171,12 +171,12 @@ void AngleIMatrix(const Vector& angles, float matrix[3][4])
 	matrix[2][3] = 0.0;
 }
 
-void VectorTransform(const float* in1, float in2[3][4], float* out)
+void VectorTransform(const Vector& in1, float in2[3][4], Vector& out)
 {
 	// TODO: undefined behavior, clean this up
-	out[0] = DotProduct(*reinterpret_cast<const Vector*>(in1), *reinterpret_cast<const Vector*>(in2[0])) + in2[0][3];
-	out[1] = DotProduct(*reinterpret_cast<const Vector*>(in1), *reinterpret_cast<const Vector*>(in2[1])) + in2[1][3];
-	out[2] = DotProduct(*reinterpret_cast<const Vector*>(in1), *reinterpret_cast<const Vector*>(in2[2])) + in2[2][3];
+	out[0] = DotProduct(in1, *reinterpret_cast<const Vector*>(in2[0])) + in2[0][3];
+	out[1] = DotProduct(in1, *reinterpret_cast<const Vector*>(in2[1])) + in2[1][3];
+	out[2] = DotProduct(in1, *reinterpret_cast<const Vector*>(in2[2])) + in2[2][3];
 }
 
 void ConcatTransforms(float in1[3][4], float in2[3][4], float out[3][4])
@@ -287,7 +287,7 @@ void QuaternionSlerp(vec4_t p, vec4_t q, float t, vec4_t qt)
 
 // angles index are not the same as ROLL, PITCH, YAW
 
-void AngleQuaternion(float* angles, vec4_t quaternion)
+void AngleQuaternion(const Vector& angles, vec4_t quaternion)
 {
 	float angle;
 	float sr, sp, sy, cr, cp, cy;
@@ -309,7 +309,7 @@ void AngleQuaternion(float* angles, vec4_t quaternion)
 	quaternion[3] = cr * cp * cy + sr * sp * sy; // W
 }
 
-void NormalizeAngles(float* angles)
+void NormalizeAngles(Vector& angles)
 {
 	int i;
 	// Normalize angles
@@ -335,7 +335,7 @@ FIXME:  Use Quaternions to avoid discontinuities
 Frac is 0.0 to 1.0 ( i.e., should probably be clamped, but doesn't have to be )
 ===================
 */
-void InterpolateAngles(float* start, float* end, float* output, float frac)
+void InterpolateAngles(Vector& start, Vector& end, Vector& output, float frac)
 {
 	int i;
 	float ang1, ang2;
@@ -399,7 +399,7 @@ void VectorMatrix(const Vector& forward, Vector& right, Vector& up)
 	VectorNormalize(up);
 }
 
-void VectorAngles(const float* forward, float* angles)
+void VectorAngles(const Vector& forward, Vector& angles)
 {
 	double tmp, yaw, pitch;
 

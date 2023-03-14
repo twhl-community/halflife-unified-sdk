@@ -52,7 +52,7 @@ constexpr Vector vec3_forward{1, 0, 0};
 constexpr Vector vec3_right{0, -1, 0};
 constexpr Vector vec3_up{0, 0, 1};
 
-float VectorNormalize(float* v); // returns vector length
+float VectorNormalize(Vector& v); // returns vector length
 int Q_log2(int val);
 
 void AngleVectors(const Vector& angles, Vector* forward, Vector* right, Vector* up);
@@ -64,21 +64,21 @@ inline void AngleVectors(const Vector& angles, Vector& forward, Vector& right, V
 
 void AngleVectorsTranspose(const Vector& angles, Vector* forward, Vector* right, Vector* up);
 
-void AngleMatrix(const float* angles, float matrix[3][4]);
+void AngleMatrix(const Vector& angles, float matrix[3][4]);
 void AngleIMatrix(const Vector& angles, float matrix[3][4]);
-void VectorTransform(const float* in1, float in2[3][4], float* out);
+void VectorTransform(const Vector& in1, float in2[3][4], Vector& out);
 void ConcatTransforms(float in1[3][4], float in2[3][4], float out[3][4]);
 
 void MatrixCopy(float in[3][4], float out[3][4]);
 void QuaternionMatrix(vec4_t quaternion, float (*matrix)[4]);
 void QuaternionSlerp(vec4_t p, vec4_t q, float t, vec4_t qt);
-void AngleQuaternion(float* angles, vec4_t quaternion);
+void AngleQuaternion(const Vector& angles, vec4_t quaternion);
 
-void NormalizeAngles(float* angles);
-void InterpolateAngles(float* start, float* end, float* output, float frac);
+void NormalizeAngles(Vector& angles);
+void InterpolateAngles(Vector& start, Vector& end, Vector& output, float frac);
 float AngleBetweenVectors(const Vector& v1, const Vector& v2);
 
 void VectorMatrix(const Vector& forward, Vector& right, Vector& up);
-void VectorAngles(const float* forward, float* angles);
+void VectorAngles(const Vector& forward, Vector& angles);
 
 float anglemod(float a);
