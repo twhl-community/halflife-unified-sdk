@@ -83,7 +83,7 @@ public:
 	Vector BarrelPosition()
 	{
 		Vector forward, right, up;
-		UTIL_MakeVectorsPrivate(pev->angles, forward, right, up);
+		AngleVectors(pev->angles, forward, right, up);
 		return pev->origin + (forward * m_barrelPos.x) + (right * m_barrelPos.y) + (up * m_barrelPos.z);
 	}
 
@@ -417,7 +417,7 @@ void CFuncTank::ControllerPostFrame()
 	if ((m_pController->pev->button & IN_ATTACK) != 0)
 	{
 		Vector vecForward;
-		UTIL_MakeVectorsPrivate(pev->angles, vecForward, nullptr, nullptr);
+		AngleVectors(pev->angles, &vecForward, nullptr, nullptr);
 
 		m_fireLast = gpGlobals->time - (1 / m_fireRate) - 0.01; // to make sure the gun doesn't fire too many bullets
 
@@ -728,7 +728,7 @@ void CFuncTank::TrackTarget()
 	{
 		bool fire = false;
 		Vector forward;
-		UTIL_MakeVectorsPrivate(pev->angles, forward, nullptr, nullptr);
+		AngleVectors(pev->angles, &forward, nullptr, nullptr);
 
 		if ((pev->spawnflags & SF_TANK_LINEOFSIGHT) != 0)
 		{

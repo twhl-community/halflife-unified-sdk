@@ -86,7 +86,7 @@ void CBaseParticle::InitializeSprite(Vector org, Vector normal, model_t* sprite,
 	m_flOriginalBrightness = m_flBrightness = brightness;
 
 	Vector forward, right, up;
-	gEngfuncs.pfnAngleVectors(normal, forward, right, up);
+	AngleVectors(normal, forward, right, up);
 
 	const Vector scaledRight = right * size;
 	const Vector scaledUp = up * size;
@@ -195,7 +195,7 @@ void CBaseParticle::Draw()
 	resultColor.z = std::clamp(resultColor.z, 0.f, 255.f);
 
 	Vector forward, right, up;
-	gEngfuncs.pfnAngleVectors(m_vAngles, forward, right, up);
+	AngleVectors(m_vAngles, forward, right, up);
 
 	const float radius = m_flSize;
 	const Vector width = right * radius * m_flStretchX;

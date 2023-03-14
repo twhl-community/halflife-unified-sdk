@@ -2299,7 +2299,7 @@ void COFPitWorm::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 		Vector forward, right;
 
-		UTIL_MakeVectorsPrivate(pev->angles, forward, right, nullptr);
+		AngleVectors(pev->angles, &forward, &right, nullptr);
 
 		Vector center = pev->origin + forward * 128;
 		Vector mins = center - Vector(96, 96, 0);

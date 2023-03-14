@@ -987,7 +987,7 @@ void CGargantua::HandleAnimEvent(MonsterEvent_t* pEvent)
 			EMIT_SOUND_DYN(edict(), CHAN_WEAPON, RANDOM_SOUND_ARRAY(pAttackMissSounds), 1.0, ATTN_NORM, 0, 50 + RANDOM_LONG(0, 15));
 
 		Vector forward;
-		UTIL_MakeVectorsPrivate(pev->angles, forward, nullptr, nullptr);
+		AngleVectors(pev->angles, &forward, nullptr, nullptr);
 	}
 	break;
 

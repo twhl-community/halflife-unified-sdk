@@ -35,7 +35,6 @@ inline enginefuncs_t g_engfuncs;
 #define MOVE_TO_ORIGIN (*g_engfuncs.pfnMoveToOrigin)
 #define oldCHANGE_YAW (*g_engfuncs.pfnChangeYaw)
 #define CHANGE_PITCH (*g_engfuncs.pfnChangePitch)
-#define MAKE_VECTORS (*g_engfuncs.pfnMakeVectors)
 #define CREATE_ENTITY (*g_engfuncs.pfnCreateEntity)
 #define REMOVE_ENTITY (*g_engfuncs.pfnRemoveEntity)
 #define MAKE_STATIC (*g_engfuncs.pfnMakeStatic)

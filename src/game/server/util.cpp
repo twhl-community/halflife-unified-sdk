@@ -497,7 +497,7 @@ CBasePlayer* UTIL_FindNearestPlayer(const Vector& origin)
 
 void UTIL_MakeVectors(const Vector& vecAngles)
 {
-	MAKE_VECTORS(vecAngles);
+	AngleVectors(vecAngles, gpGlobals->v_forward, gpGlobals->v_right, gpGlobals->v_up);
 }
 
 
@@ -505,12 +505,12 @@ void UTIL_MakeAimVectors(const Vector& vecAngles)
 {
 	Vector rgflVec = vecAngles;
 	rgflVec[0] = -rgflVec[0];
-	MAKE_VECTORS(rgflVec);
+	UTIL_MakeVectors(rgflVec);
 }
 
 void UTIL_MakeInvVectors(const Vector& vec, globalvars_t* pgv)
 {
-	MAKE_VECTORS(vec);
+	UTIL_MakeVectors(vec);
 
 	pgv->v_right = pgv->v_right * -1;
 

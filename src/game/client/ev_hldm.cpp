@@ -1995,7 +1995,7 @@ void EV_PenguinFire(event_args_t* args)
 	Vector origin = args->origin;
 	Vector angles = args->angles;
 	Vector forward;
-	gEngfuncs.pfnAngleVectors(angles, forward, nullptr, nullptr);
+	AngleVectors(angles, &forward, nullptr, nullptr);
 
 	if (EV_IsLocal(args->entindex))
 	{

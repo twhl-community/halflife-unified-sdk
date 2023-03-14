@@ -108,8 +108,8 @@ struct enginefuncs_t
 	edict_t* (*pfnFindEntityInSphere)(edict_t* pEdictStartSearchAfter, const float* org, float rad);
 	edict_t* (*pfnFindClientInPVS)(edict_t* pEdict);
 	edict_t* (*pfnEntitiesInPVS)(edict_t* pplayer);
-	void (*pfnMakeVectors)(const float* rgflVector);
-	void (*pfnAngleVectors)(const float* rgflVector, float* forward, float* right, float* up);
+	[[deprecated("Use UTIL_MakeVectors instead")]] void (*pfnMakeVectors)(const float* rgflVector);
+	[[deprecated("Use AngleVectors instead")]] void (*pfnAngleVectors)(const float* rgflVector, float* forward, float* right, float* up);
 	edict_t* (*pfnCreateEntity)();
 	void (*pfnRemoveEntity)(edict_t* e);
 	edict_t* (*pfnCreateNamedEntity)(string_t_value className);

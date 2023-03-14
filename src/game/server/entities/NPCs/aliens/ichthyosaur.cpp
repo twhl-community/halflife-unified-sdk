@@ -500,7 +500,7 @@ void CIchthyosaur::Spawn()
 	m_flMaxDist = 384;
 
 	Vector Forward;
-	UTIL_MakeVectorsPrivate(pev->angles, Forward, nullptr, nullptr);
+	AngleVectors(pev->angles, &Forward, nullptr, nullptr);
 	pev->velocity = m_flightSpeed * Forward.Normalize();
 	m_SaveVelocity = pev->velocity;
 }
@@ -948,7 +948,7 @@ void CIchthyosaur::Swim()
 		ClearBits(pev->flags, FL_ONGROUND);
 
 		Angles = Vector(-pev->angles.x, pev->angles.y, pev->angles.z);
-		UTIL_MakeVectorsPrivate(Angles, Forward, Right, Up);
+		AngleVectors(Angles, Forward, Right, Up);
 
 		pev->velocity = Forward * 200 + Up * 200;
 
@@ -989,7 +989,7 @@ void CIchthyosaur::Swim()
 #define PROBE_LENGTH 150
 	Angles = UTIL_VecToAngles(m_SaveVelocity);
 	Angles.x = -Angles.x;
-	UTIL_MakeVectorsPrivate(Angles, Forward, Right, Up);
+	AngleVectors(Angles, Forward, Right, Up);
 
 	Vector f, u, l, r, d;
 	f = DoProbe(start + PROBE_LENGTH * Forward);
@@ -1002,7 +1002,7 @@ void CIchthyosaur::Swim()
 	m_SaveVelocity = (m_SaveVelocity + SteeringVector / 2).Normalize();
 
 	Angles = Vector(-pev->angles.x, pev->angles.y, pev->angles.z);
-	UTIL_MakeVectorsPrivate(Angles, Forward, Right, Up);
+	AngleVectors(Angles, Forward, Right, Up);
 	// AILogger->debug("{} : {}", Angles.x, Forward.z);
 
 	float flDot = DotProduct(Forward, m_SaveVelocity);
@@ -1117,7 +1117,7 @@ void CIchthyosaur::Swim()
 	if (pev->angles.z > 20)
 		pev->angles.z = 20;
 
-	UTIL_MakeVectorsPrivate(Vector(-Angles.x, Angles.y, Angles.z), Forward, Right, Up);
+	AngleVectors(Vector(-Angles.x, Angles.y, Angles.z), Forward, Right, Up);
 
 	// UTIL_MoveToOrigin ( ENT(pev), pev->origin + Forward * speed, speed, MOVE_STRAFE );
 }

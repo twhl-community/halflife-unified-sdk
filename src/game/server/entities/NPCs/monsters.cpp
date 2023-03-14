@@ -3539,7 +3539,7 @@ bool IsFacing(CBaseEntity* pevTest, const Vector& reference)
 	Vector forward, angle;
 	angle = pevTest->pev->v_angle;
 	angle.x = 0;
-	UTIL_MakeVectorsPrivate(angle, forward, nullptr, nullptr);
+	AngleVectors(angle, &forward, nullptr, nullptr);
 	// He's facing me, he meant it
 	if (DotProduct(forward, vecDir) > 0.96) // +/- 15 degrees or so
 	{

@@ -151,7 +151,7 @@ struct cl_enginefunc_t
 	void (*pfnGetPlayerInfo)(int ent_num, hud_player_info_t* pinfo);
 	[[deprecated("Use CL_StartSound in ISoundSystem.h instead")]] void (*pfnPlaySoundByName)(const char* szSound, float volume);
 	[[deprecated("Use CL_StartSound in ISoundSystem.h instead")]] void (*pfnPlaySoundByIndex)(int iSound, float volume);
-	void (*pfnAngleVectors)(const float* vecAngles, float* forward, float* right, float* up);
+	[[deprecated("Use AngleVectors instead")]] void (*pfnAngleVectors)(const float* vecAngles, float* forward, float* right, float* up);
 	client_textmessage_t* (*pfnTextMessageGet)(const char* pName);
 	int (*pfnDrawCharacter)(int x, int y, int number, int r, int g, int b);
 	int (*pfnDrawConsoleString)(int x, int y, const char* string);

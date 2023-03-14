@@ -330,7 +330,7 @@ void CXenTree::Spawn()
 	pev->framerate = RANDOM_FLOAT(0.7, 1.4);
 
 	Vector triggerPosition;
-	UTIL_MakeVectorsPrivate(pev->angles, triggerPosition, nullptr, nullptr);
+	AngleVectors(pev->angles, &triggerPosition, nullptr, nullptr);
 	triggerPosition = pev->origin + (triggerPosition * 64);
 	// Create the trigger
 	m_pTrigger = CXenTreeTrigger::TriggerCreate(edict(), triggerPosition);
@@ -390,7 +390,7 @@ void CXenTree::HandleAnimEvent(MonsterEvent_t* pEvent)
 		int count = UTIL_EntitiesInBox(pList, 8, m_pTrigger->pev->absmin, m_pTrigger->pev->absmax, FL_MONSTER | FL_CLIENT);
 		Vector forward;
 
-		UTIL_MakeVectorsPrivate(pev->angles, forward, nullptr, nullptr);
+		AngleVectors(pev->angles, &forward, nullptr, nullptr);
 
 		for (int i = 0; i < count; i++)
 		{
@@ -545,7 +545,7 @@ void CXenSporeLarge::Spawn()
 
 	Vector forward, right;
 
-	UTIL_MakeVectorsPrivate(pev->angles, forward, right, nullptr);
+	AngleVectors(pev->angles, &forward, &right, nullptr);
 
 	// Rotate the leg hulls into position
 	for (std::size_t i = 0; i < std::size(m_hullSizes); i++)

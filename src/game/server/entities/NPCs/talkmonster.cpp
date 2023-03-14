@@ -425,7 +425,7 @@ void CTalkMonster::StartTask(Task_t* pTask)
 		dir.y = pev->ideal_yaw + 180;
 		Vector move;
 
-		UTIL_MakeVectorsPrivate(dir, move, nullptr, nullptr);
+		AngleVectors(dir, &move, nullptr, nullptr);
 		dir = pev->origin + move * pTask->flData;
 		if (MoveToLocation(ACT_WALK, 2, dir))
 		{
