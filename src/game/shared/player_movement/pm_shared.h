@@ -32,6 +32,9 @@ void PM_Move(playermove_t* ppmove, qboolean server);
  */
 bool PM_GetHullBounds(int hullnumber, float* mins, float* maxs);
 
+int PM_GetVisEntInfo(int ent);
+int PM_GetPhysEntInfo(int ent);
+
 // Spectator Movement modes (stored in pev->iuser1, so the physics code can get at them)
 #define OBS_NONE 0
 #define OBS_CHASE_LOCKED 1

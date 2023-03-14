@@ -20,15 +20,8 @@
 #include "Exports.h"
 #include "view.h"
 
-int CL_IsThirdPerson();
-void CL_CameraOffset(float* ofs);
-
-int PM_GetVisEntInfo(int ent);
-int PM_GetPhysEntInfo(int ent);
-
 extern Vector vJumpOrigin;
 extern Vector vJumpAngles;
-
 
 void V_DropPunchAngle(float frametime, Vector& ev_punchangle);
 
