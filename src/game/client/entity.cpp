@@ -76,7 +76,7 @@ structure, we need to copy them into the state structure at this point.
 */
 void DLLEXPORT HUD_TxferLocalOverrides(entity_state_t* state, const clientdata_t* client)
 {
-	VectorCopy(client->origin, state->origin);
+	state->origin = client->origin;
 
 	// Spectator
 	state->iuser1 = client->iuser1;
@@ -100,10 +100,10 @@ playerstate structure
 void DLLEXPORT HUD_ProcessPlayerState(entity_state_t* dst, const entity_state_t* src)
 {
 	// Copy in network data
-	VectorCopy(src->origin, dst->origin);
-	VectorCopy(src->angles, dst->angles);
+	dst->origin = src->origin;
+	dst->angles = src->angles;
 
-	VectorCopy(src->velocity, dst->velocity);
+	dst->velocity = src->velocity;
 
 	dst->frame = src->frame;
 	dst->modelindex = src->modelindex;
@@ -129,7 +129,7 @@ void DLLEXPORT HUD_ProcessPlayerState(entity_state_t* dst, const entity_state_t*
 	memcpy(&dst->controller[0], &src->controller[0], 4 * sizeof(byte));
 	memcpy(&dst->blending[0], &src->blending[0], 2 * sizeof(byte));
 
-	VectorCopy(src->basevelocity, dst->basevelocity);
+	dst->basevelocity = src->basevelocity;
 
 	dst->friction = src->friction;
 	dst->gravity = src->gravity;
@@ -210,10 +210,10 @@ void DLLEXPORT HUD_TxferPredictionData(entity_state_t* ps, const entity_state_t*
 	pcd->fuser2 = ppcd->fuser2;
 	pcd->fuser3 = ppcd->fuser3;
 
-	VectorCopy(ppcd->vuser1, pcd->vuser1);
-	VectorCopy(ppcd->vuser2, pcd->vuser2);
-	VectorCopy(ppcd->vuser3, pcd->vuser3);
-	VectorCopy(ppcd->vuser4, pcd->vuser4);
+	pcd->vuser1 = ppcd->vuser1;
+	pcd->vuser2 = ppcd->vuser2;
+	pcd->vuser3 = ppcd->vuser3;
+	pcd->vuser4 = ppcd->vuser4;
 
 	memcpy(wd, pwd, MAX_WEAPONS * sizeof(weapon_data_t));
 }
@@ -455,7 +455,7 @@ void DLLEXPORT HUD_TempEntUpdate(
 		{
 			pprev = pTemp;
 
-			VectorCopy(pTemp->entity.origin, pTemp->entity.prevstate.origin);
+			pTemp->entity.prevstate.origin = pTemp->entity.origin;
 
 			if ((pTemp->flags & FTENT_SPARKSHOWER) != 0)
 			{
@@ -489,7 +489,7 @@ void DLLEXPORT HUD_TempEntUpdate(
 
 				pClient = gEngfuncs.GetEntityByIndex(pTemp->clientIndex);
 
-				VectorAdd(pClient->origin, pTemp->tentOffset, pTemp->entity.origin);
+				pTemp->entity.origin = pClient->origin + pTemp->tentOffset;
 			}
 			else if ((pTemp->flags & FTENT_SINEWAVE) != 0)
 			{
@@ -553,7 +553,7 @@ void DLLEXPORT HUD_TempEntUpdate(
 				pTemp->entity.angles[1] += pTemp->entity.baseline.angles[1] * frametime;
 				pTemp->entity.angles[2] += pTemp->entity.baseline.angles[2] * frametime;
 
-				VectorCopy(pTemp->entity.angles, pTemp->entity.latched.prevangles);
+				pTemp->entity.latched.prevangles = pTemp->entity.angles;
 			}
 
 			if ((pTemp->flags & (FTENT_COLLIDEALL | FTENT_COLLIDEWORLD)) != 0)
@@ -578,7 +578,7 @@ void DLLEXPORT HUD_TempEntUpdate(
 						if (0 == pmtrace.ent || (pe->info != pTemp->clientIndex))
 						{
 							traceFraction = pmtrace.fraction;
-							VectorCopy(pmtrace.plane.normal, traceNormal);
+							traceNormal = pmtrace.plane.normal;
 
 							if (pTemp->hitcallback)
 							{
@@ -598,7 +598,7 @@ void DLLEXPORT HUD_TempEntUpdate(
 					if (pmtrace.fraction != 1)
 					{
 						traceFraction = pmtrace.fraction;
-						VectorCopy(pmtrace.plane.normal, traceNormal);
+						traceNormal = pmtrace.plane.normal;
 
 						if ((pTemp->flags & FTENT_SPARKSHOWER) != 0)
 						{
@@ -679,7 +679,7 @@ void DLLEXPORT HUD_TempEntUpdate(
 			if ((pTemp->flags & FTENT_FLICKER) != 0 && gTempEntFrame == pTemp->entity.curstate.effects)
 			{
 				dlight_t* dl = gEngfuncs.pEfxAPI->CL_AllocDlight(0);
-				VectorCopy(pTemp->entity.origin, dl->origin);
+				dl->origin = pTemp->entity.origin;
 				dl->radius = 60;
 				dl->color.r = 255;
 				dl->color.g = 120;

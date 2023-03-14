@@ -52,31 +52,6 @@ constexpr Vector vec3_forward{1, 0, 0};
 constexpr Vector vec3_right{0, -1, 0};
 constexpr Vector vec3_up{0, 0, 1};
 
-#define VectorSubtract(a, b, c)   \
-	{                             \
-		(c)[0] = (a)[0] - (b)[0]; \
-		(c)[1] = (a)[1] - (b)[1]; \
-		(c)[2] = (a)[2] - (b)[2]; \
-	}
-#define VectorAdd(a, b, c)        \
-	{                             \
-		(c)[0] = (a)[0] + (b)[0]; \
-		(c)[1] = (a)[1] + (b)[1]; \
-		(c)[2] = (a)[2] + (b)[2]; \
-	}
-#define VectorCopy(a, b) \
-	{                    \
-		(b)[0] = (a)[0]; \
-		(b)[1] = (a)[1]; \
-		(b)[2] = (a)[2]; \
-	}
-inline void VectorClear(float* a)
-{
-	a[0] = 0.0;
-	a[1] = 0.0;
-	a[2] = 0.0;
-}
-
 void VectorMA(const float* veca, float scale, const float* vecb, float* vecc);
 
 bool VectorCompare(const float* v1, const float* v2);
@@ -114,5 +89,3 @@ void VectorMatrix(const Vector& forward, Vector& right, Vector& up);
 void VectorAngles(const float* forward, float* angles);
 
 float anglemod(float a);
-
-float Distance(const float* v1, const float* v2);

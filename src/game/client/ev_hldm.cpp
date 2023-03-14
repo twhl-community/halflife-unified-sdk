@@ -321,7 +321,7 @@ void EV_HLDM_CheckTracer(int idx, const Vector& vecSrc, const Vector& end, const
 		}
 		else
 		{
-			VectorCopy(vecSrc, vecTracerSrc);
+			vecTracerSrc = vecSrc;
 		}
 
 		switch (iBulletType)
@@ -468,9 +468,9 @@ void EV_FireGlock1(event_args_t* args)
 	Vector up, right, forward;
 
 	idx = args->entindex;
-	VectorCopy(args->origin, origin);
-	VectorCopy(args->angles, angles);
-	VectorCopy(args->velocity, velocity);
+	origin = args->origin;
+	angles = args->angles;
+	velocity = args->velocity;
 
 	const bool empty = 0 != args->bparam1;
 	AngleVectors(angles, forward, right, up);
@@ -493,7 +493,7 @@ void EV_FireGlock1(event_args_t* args)
 
 	EV_GetGunPosition(args, vecSrc, origin);
 
-	VectorCopy(forward, vecAiming);
+	vecAiming = forward;
 
 	EV_HLDM_FireBullets(idx, forward, right, up, 1, vecSrc, vecAiming, 8192, BULLET_PLAYER_9MM, 0, &tracerCount[idx - 1], args->fparam1, args->fparam2);
 }
@@ -512,9 +512,9 @@ void EV_FireGlock2(event_args_t* args)
 	Vector up, right, forward;
 
 	idx = args->entindex;
-	VectorCopy(args->origin, origin);
-	VectorCopy(args->angles, angles);
-	VectorCopy(args->velocity, velocity);
+	origin = args->origin;
+	angles = args->angles;
+	velocity = args->velocity;
 
 	const bool empty = 0 != args->bparam1;
 	AngleVectors(angles, forward, right, up);
@@ -538,7 +538,7 @@ void EV_FireGlock2(event_args_t* args)
 
 	EV_GetGunPosition(args, vecSrc, origin);
 
-	VectorCopy(forward, vecAiming);
+	vecAiming = forward;
 
 	EV_HLDM_FireBullets(idx, forward, right, up, 1, vecSrc, vecAiming, 8192, BULLET_PLAYER_9MM, 0, &tracerCount[idx - 1], args->fparam1, args->fparam2);
 }
@@ -564,9 +564,9 @@ void EV_FireShotGunDouble(event_args_t* args)
 	Vector up, right, forward;
 
 	idx = args->entindex;
-	VectorCopy(args->origin, origin);
-	VectorCopy(args->angles, angles);
-	VectorCopy(args->velocity, velocity);
+	origin = args->origin;
+	angles = args->angles;
+	velocity = args->velocity;
 
 	AngleVectors(angles, forward, right, up);
 
@@ -590,7 +590,7 @@ void EV_FireShotGunDouble(event_args_t* args)
 	EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/dbarrel1.wav", gEngfuncs.pfnRandomFloat(0.98, 1.0), ATTN_NORM, 0, 85 + gEngfuncs.pfnRandomLong(0, 0x1f));
 
 	EV_GetGunPosition(args, vecSrc, origin);
-	VectorCopy(forward, vecAiming);
+	vecAiming = forward;
 
 	if (gEngfuncs.GetMaxClients() > 1)
 	{
@@ -616,9 +616,9 @@ void EV_FireShotGunSingle(event_args_t* args)
 	Vector up, right, forward;
 
 	idx = args->entindex;
-	VectorCopy(args->origin, origin);
-	VectorCopy(args->angles, angles);
-	VectorCopy(args->velocity, velocity);
+	origin = args->origin;
+	angles = args->angles;
+	velocity = args->velocity;
 
 	AngleVectors(angles, forward, right, up);
 
@@ -640,7 +640,7 @@ void EV_FireShotGunSingle(event_args_t* args)
 	EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/sbarrel1.wav", gEngfuncs.pfnRandomFloat(0.95, 1.0), ATTN_NORM, 0, 93 + gEngfuncs.pfnRandomLong(0, 0x1f));
 
 	EV_GetGunPosition(args, vecSrc, origin);
-	VectorCopy(forward, vecAiming);
+	vecAiming = forward;
 
 	if (gEngfuncs.GetMaxClients() > 1)
 	{
@@ -672,9 +672,9 @@ void EV_FireMP5(event_args_t* args)
 	Vector up, right, forward;
 
 	idx = args->entindex;
-	VectorCopy(args->origin, origin);
-	VectorCopy(args->angles, angles);
-	VectorCopy(args->velocity, velocity);
+	origin = args->origin;
+	angles = args->angles;
+	velocity = args->velocity;
 
 	AngleVectors(angles, forward, right, up);
 
@@ -704,7 +704,7 @@ void EV_FireMP5(event_args_t* args)
 	}
 
 	EV_GetGunPosition(args, vecSrc, origin);
-	VectorCopy(forward, vecAiming);
+	vecAiming = forward;
 
 	EV_HLDM_FireBullets(idx, forward, right, up, 1, vecSrc, vecAiming, 8192, BULLET_PLAYER_MP5, 2, &tracerCount[idx - 1], args->fparam1, args->fparam2);
 }
@@ -717,7 +717,7 @@ void EV_FireMP52(event_args_t* args)
 	Vector origin;
 
 	idx = args->entindex;
-	VectorCopy(args->origin, origin);
+	origin = args->origin;
 
 	if (EV_IsLocal(idx))
 	{
@@ -754,9 +754,9 @@ void EV_FirePython(event_args_t* args)
 	Vector up, right, forward;
 
 	idx = args->entindex;
-	VectorCopy(args->origin, origin);
-	VectorCopy(args->angles, angles);
-	VectorCopy(args->velocity, velocity);
+	origin = args->origin;
+	angles = args->angles;
+	velocity = args->velocity;
 
 	AngleVectors(angles, forward, right, up);
 
@@ -788,7 +788,7 @@ void EV_FirePython(event_args_t* args)
 
 	EV_GetGunPosition(args, vecSrc, origin);
 
-	VectorCopy(forward, vecAiming);
+	vecAiming = forward;
 
 	EV_HLDM_FireBullets(idx, forward, right, up, 1, vecSrc, vecAiming, 8192, BULLET_PLAYER_357, 0, &tracerCount[idx - 1], args->fparam1, args->fparam2);
 }
@@ -811,9 +811,9 @@ void EV_SpinGauss(event_args_t* args)
 	int pitch;
 
 	idx = args->entindex;
-	VectorCopy(args->origin, origin);
-	VectorCopy(args->angles, angles);
-	VectorCopy(args->velocity, velocity);
+	origin = args->origin;
+	angles = args->angles;
+	velocity = args->velocity;
 
 	pitch = args->iparam1;
 
@@ -859,9 +859,9 @@ void EV_FireGauss(event_args_t* args)
 	Vector up, right, forward;
 
 	idx = args->entindex;
-	VectorCopy(args->origin, origin);
-	VectorCopy(args->angles, angles);
-	VectorCopy(args->velocity, velocity);
+	origin = args->origin;
+	angles = args->angles;
+	velocity = args->velocity;
 
 	if (0 != args->bparam2)
 	{
@@ -973,7 +973,7 @@ void EV_FireGauss(event_args_t* args)
 
 				flMaxFrac = flMaxFrac - tr.fraction;
 
-				VectorCopy(r, forward);
+				forward = r;
 
 				VectorMA(tr.endpos, 8.0, forward, vecSrc);
 				VectorMA(vecSrc, 8192.0, forward, vecDest);
@@ -981,7 +981,7 @@ void EV_FireGauss(event_args_t* args)
 				gEngfuncs.pEfxAPI->R_TempSprite(tr.endpos, vec3_origin, 0.2, m_iGlow, kRenderGlow, kRenderFxNoDissipation, flDamage * n / 255.0, flDamage * n * 0.5 * 0.1, FTENT_FADEOUT);
 
 				Vector fwd;
-				VectorAdd(tr.endpos, tr.plane.normal, fwd);
+				fwd = tr.endpos + tr.plane.normal;
 
 				gEngfuncs.pEfxAPI->R_Sprite_Trail(TE_SPRITETRAIL, tr.endpos, fwd, m_iBalls, 3, 0.1, gEngfuncs.pfnRandomFloat(10, 20) / 100.0, 100,
 					255, 100);
@@ -1033,7 +1033,7 @@ void EV_FireGauss(event_args_t* args)
 
 						gEngfuncs.pEventAPI->EV_PlayerTrace(beam_tr.endpos, tr.endpos, PM_STUDIO_BOX, -1, &beam_tr);
 
-						VectorSubtract(beam_tr.endpos, tr.endpos, delta);
+						delta = beam_tr.endpos - tr.endpos;
 
 						n = Length(delta);
 
@@ -1046,7 +1046,7 @@ void EV_FireGauss(event_args_t* args)
 							// absorption balls
 							{
 								Vector fwd;
-								VectorSubtract(tr.endpos, forward, fwd);
+								fwd = tr.endpos - forward;
 								gEngfuncs.pEfxAPI->R_Sprite_Trail(TE_SPRITETRAIL, tr.endpos, fwd, m_iBalls, 3, 0.1, gEngfuncs.pfnRandomFloat(10, 20) / 100.0, 100,
 									255, 100);
 							}
@@ -1061,12 +1061,12 @@ void EV_FireGauss(event_args_t* args)
 							// balls
 							{
 								Vector fwd;
-								VectorSubtract(beam_tr.endpos, forward, fwd);
+								fwd = beam_tr.endpos - forward;
 								gEngfuncs.pEfxAPI->R_Sprite_Trail(TE_SPRITETRAIL, beam_tr.endpos, fwd, m_iBalls, (int)(flDamage * 0.3), 0.1, gEngfuncs.pfnRandomFloat(10, 20) / 100.0, 200,
 									255, 40);
 							}
 
-							VectorAdd(beam_tr.endpos, forward, vecSrc);
+							vecSrc = beam_tr.endpos + forward;
 						}
 					}
 					else
@@ -1086,7 +1086,7 @@ void EV_FireGauss(event_args_t* args)
 
 						{
 							Vector fwd;
-							VectorAdd(tr.endpos, tr.plane.normal, fwd);
+							fwd = tr.endpos + tr.plane.normal;
 							gEngfuncs.pEfxAPI->R_Sprite_Trail(TE_SPRITETRAIL, tr.endpos, fwd, m_iBalls, 8, 0.6, gEngfuncs.pfnRandomFloat(10, 20) / 100.0, 100,
 								255, 200);
 						}
@@ -1098,7 +1098,7 @@ void EV_FireGauss(event_args_t* args)
 		}
 		else
 		{
-			VectorAdd(tr.endpos, forward, vecSrc);
+			vecSrc = tr.endpos + forward;
 		}
 	}
 }
@@ -1119,7 +1119,7 @@ void EV_Crowbar(event_args_t* args)
 	Vector origin;
 
 	idx = args->entindex;
-	VectorCopy(args->origin, origin);
+	origin = args->origin;
 
 	// Play Swing sound
 	EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/cbar_miss1.wav", 1, ATTN_NORM, 0, PITCH_NORM);
@@ -1170,10 +1170,10 @@ void EV_FireCrossbow2(event_args_t* args)
 	Vector velocity;
 
 	idx = args->entindex;
-	VectorCopy(args->origin, origin);
-	VectorCopy(args->angles, angles);
+	origin = args->origin;
+	angles = args->angles;
 
-	VectorCopy(args->velocity, velocity);
+	velocity = args->velocity;
 
 	AngleVectors(angles, forward, right, up);
 
@@ -1254,7 +1254,7 @@ void EV_FireCrossbow(event_args_t* args)
 	Vector origin;
 
 	idx = args->entindex;
-	VectorCopy(args->origin, origin);
+	origin = args->origin;
 
 	EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/xbow_fire1.wav", 1, ATTN_NORM, 0, 93 + gEngfuncs.pfnRandomLong(0, 0xF));
 	EV_PlaySound(idx, origin, CHAN_ITEM, "weapons/xbow_reload1.wav", gEngfuncs.pfnRandomFloat(0.95, 1.0), ATTN_NORM, 0, 93 + gEngfuncs.pfnRandomLong(0, 0xF));
@@ -1283,7 +1283,7 @@ void EV_FireRpg(event_args_t* args)
 	Vector origin;
 
 	idx = args->entindex;
-	VectorCopy(args->origin, origin);
+	origin = args->origin;
 
 	EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/rocketfire1.wav", 0.9, ATTN_NORM, 0, PITCH_NORM);
 	EV_PlaySound(idx, origin, CHAN_ITEM, "weapons/glauncher.wav", 0.7, ATTN_NORM, 0, PITCH_NORM);
@@ -1326,7 +1326,7 @@ void EV_EgonFire(event_args_t* args)
 	Vector origin;
 
 	idx = args->entindex;
-	VectorCopy(args->origin, origin);
+	origin = args->origin;
 	iFireMode = args->iparam2;
 	const bool iStartup = 0 != args->bparam1;
 
@@ -1365,7 +1365,7 @@ void EV_EgonFire(event_args_t* args)
 
 		if (pl)
 		{
-			VectorCopy(gHUD.m_vecAngles, angles);
+			angles = gHUD.m_vecAngles;
 
 			AngleVectors(angles, forward, right, up);
 
@@ -1426,7 +1426,7 @@ void EV_EgonStop(event_args_t* args)
 	Vector origin;
 
 	idx = args->entindex;
-	VectorCopy(args->origin, origin);
+	origin = args->origin;
 
 	EV_StopSound(idx, CHAN_STATIC, EGON_SOUND_RUN);
 
@@ -1485,8 +1485,8 @@ void EV_HornetGunFire(event_args_t* args)
 	Vector origin, angles;
 
 	idx = args->entindex;
-	VectorCopy(args->origin, origin);
-	VectorCopy(args->angles, angles);
+	origin = args->origin;
+	angles = args->angles;
 
 	// Only play the weapon anims if I shot it.
 	if (EV_IsLocal(idx))
@@ -1524,8 +1524,8 @@ void EV_TripmineFire(event_args_t* args)
 	pmtrace_t tr;
 
 	idx = args->entindex;
-	VectorCopy(args->origin, vecSrc);
-	VectorCopy(args->angles, angles);
+	vecSrc = args->origin;
+	angles = args->angles;
 
 	AngleVectors(angles, &forward, nullptr, nullptr);
 
@@ -1565,8 +1565,8 @@ void EV_SnarkFire(event_args_t* args)
 	pmtrace_t tr;
 
 	idx = args->entindex;
-	VectorCopy(args->origin, vecSrc);
-	VectorCopy(args->angles, angles);
+	vecSrc = args->origin;
+	angles = args->angles;
 
 	AngleVectors(angles, &forward, nullptr, nullptr);
 

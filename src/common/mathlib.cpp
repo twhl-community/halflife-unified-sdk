@@ -489,10 +489,3 @@ float anglemod(float a)
 	a = (360.0 / 65536) * ((int)(a * (65536 / 360.0)) & 65535);
 	return a;
 }
-
-float Distance(const float* v1, const float* v2)
-{
-	Vector d;
-	VectorSubtract(v2, v1, d);
-	return Length(d);
-}

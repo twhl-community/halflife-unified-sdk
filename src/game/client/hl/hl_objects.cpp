@@ -45,7 +45,7 @@ void UpdateBeams()
 
 	AngleVectors(angles, forward, right, up);
 
-	VectorCopy(origin, vecSrc);
+	vecSrc = origin;
 
 	VectorMA(vecSrc, 2048, forward, vecEnd);
 

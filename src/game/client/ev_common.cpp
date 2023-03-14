@@ -121,7 +121,7 @@ void EV_GetGunPosition(event_args_t* args, Vector& pos, const Vector& origin)
 		}
 	}
 
-	VectorAdd(origin, view_ofs, pos);
+	pos = origin + view_ofs;
 }
 
 /*

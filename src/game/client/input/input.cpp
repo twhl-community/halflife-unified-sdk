@@ -729,12 +729,12 @@ void DLLEXPORT CL_CreateMove(float frametime, usercmd_t* cmd, int active)
 
 	if (g_iAlive)
 	{
-		VectorCopy(viewangles, cmd->viewangles);
-		VectorCopy(viewangles, oldangles);
+		cmd->viewangles = viewangles;
+		oldangles = viewangles;
 	}
 	else
 	{
-		VectorCopy(oldangles, cmd->viewangles);
+		cmd->viewangles = oldangles;
 	}
 }
 
