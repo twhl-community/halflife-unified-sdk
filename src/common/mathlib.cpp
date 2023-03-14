@@ -15,13 +15,6 @@
 
 #include "mathlib.h"
 
-void VectorMA(const float* veca, float scale, const float* vecb, float* vecc)
-{
-	vecc[0] = veca[0] + scale * vecb[0];
-	vecc[1] = veca[1] + scale * vecb[1];
-	vecc[2] = veca[2] + scale * vecb[2];
-}
-
 float VectorNormalize(float* v)
 {
 	float length, ilength;

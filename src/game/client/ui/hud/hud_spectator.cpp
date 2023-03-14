@@ -1551,27 +1551,27 @@ void CHudSpectator::DrawOverviewEntities()
 		gEngfuncs.pTriAPI->Color4f(1.0, 1.0, 1.0, 1.0);
 
 		gEngfuncs.pTriAPI->TexCoord2f(1, 0);
-		VectorMA(origin, 16.0f * sizeScale, up, point);
-		VectorMA(point, 16.0f * sizeScale, right, point);
+		point = origin + ((16.0f * sizeScale) * up);
+		point = point + ((16.0f * sizeScale) * right);
 		point[2] *= zScale;
 		gEngfuncs.pTriAPI->Vertex3fv(point);
 
 		gEngfuncs.pTriAPI->TexCoord2f(0, 0);
 
-		VectorMA(origin, 16.0f * sizeScale, up, point);
-		VectorMA(point, -16.0f * sizeScale, right, point);
+		point = origin + ((16.0f * sizeScale) * up);
+		point = point + ((-16.0f * sizeScale) * right);
 		point[2] *= zScale;
 		gEngfuncs.pTriAPI->Vertex3fv(point);
 
 		gEngfuncs.pTriAPI->TexCoord2f(0, 1);
-		VectorMA(origin, -16.0f * sizeScale, up, point);
-		VectorMA(point, -16.0f * sizeScale, right, point);
+		point = origin + ((-16.0f * sizeScale) * up);
+		point = point + ((-16.0f * sizeScale) * right);
 		point[2] *= zScale;
 		gEngfuncs.pTriAPI->Vertex3fv(point);
 
 		gEngfuncs.pTriAPI->TexCoord2f(1, 1);
-		VectorMA(origin, -16.0f * sizeScale, up, point);
-		VectorMA(point, 16.0f * sizeScale, right, point);
+		point = origin + ((-16.0f * sizeScale) * up);
+		point = point + ((16.0f * sizeScale) * right);
 		point[2] *= zScale;
 		gEngfuncs.pTriAPI->Vertex3fv(point);
 

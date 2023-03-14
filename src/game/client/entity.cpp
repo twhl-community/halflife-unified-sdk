@@ -624,7 +624,7 @@ void DLLEXPORT HUD_TempEntUpdate(
 					float proj, damp;
 
 					// Place at contact point
-					VectorMA(pTemp->entity.prevstate.origin, traceFraction * frametime, pTemp->entity.baseline.origin, pTemp->entity.origin);
+					pTemp->entity.origin = pTemp->entity.prevstate.origin + ((traceFraction * frametime) * pTemp->entity.baseline.origin);
 					// Damp velocity
 					damp = pTemp->bounceFactor;
 					if ((pTemp->flags & (FTENT_GRAVITY | FTENT_SLOWGRAVITY)) != 0)
@@ -659,7 +659,7 @@ void DLLEXPORT HUD_TempEntUpdate(
 						if (damp != 0)
 						{
 							proj = DotProduct(pTemp->entity.baseline.origin, traceNormal);
-							VectorMA(pTemp->entity.baseline.origin, -proj * 2, traceNormal, pTemp->entity.baseline.origin);
+							pTemp->entity.baseline.origin = pTemp->entity.baseline.origin + ((-proj * 2) * traceNormal);
 							// Reflect rotation (fake)
 
 							pTemp->entity.angles[1] = -pTemp->entity.angles[1];

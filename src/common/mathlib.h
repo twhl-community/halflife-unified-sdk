@@ -52,8 +52,6 @@ constexpr Vector vec3_forward{1, 0, 0};
 constexpr Vector vec3_right{0, -1, 0};
 constexpr Vector vec3_up{0, 0, 1};
 
-void VectorMA(const float* veca, float scale, const float* vecb, float* vecc);
-
 float VectorNormalize(float* v); // returns vector length
 int Q_log2(int val);
 

@@ -877,7 +877,7 @@ void EV_FireGauss(event_args_t* args)
 
 	AngleVectors(angles, forward, right, up);
 
-	VectorMA(vecSrc, 8192, forward, vecDest);
+	vecDest = vecSrc + (8192 * forward);
 
 	if (EV_IsLocal(idx))
 	{
@@ -969,14 +969,14 @@ void EV_FireGauss(event_args_t* args)
 				// reflect
 				Vector r;
 
-				VectorMA(forward, 2.0 * n, tr.plane.normal, r);
+				r = forward + ((2.0 * n) * tr.plane.normal);
 
 				flMaxFrac = flMaxFrac - tr.fraction;
 
 				forward = r;
 
-				VectorMA(tr.endpos, 8.0, forward, vecSrc);
-				VectorMA(vecSrc, 8192.0, forward, vecDest);
+				vecSrc = tr.endpos + (8.0 * forward);
+				vecDest = vecSrc + (8192.0 * forward);
 
 				gEngfuncs.pEfxAPI->R_TempSprite(tr.endpos, vec3_origin, 0.2, m_iGlow, kRenderGlow, kRenderFxNoDissipation, flDamage * n / 255.0, flDamage * n * 0.5 * 0.1, FTENT_FADEOUT);
 
@@ -1013,7 +1013,7 @@ void EV_FireGauss(event_args_t* args)
 				{
 					Vector start;
 
-					VectorMA(tr.endpos, 8.0, forward, start);
+					start = tr.endpos + (8.0 * forward);
 
 					// Store off the old count
 					gEngfuncs.pEventAPI->EV_PushPMStates();
@@ -1179,7 +1179,7 @@ void EV_FireCrossbow2(event_args_t* args)
 
 	EV_GetGunPosition(args, vecSrc, origin);
 
-	VectorMA(vecSrc, 8192, forward, vecEnd);
+	vecEnd = vecSrc + (8192 * forward);
 
 	EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/xbow_fire1.wav", 1, ATTN_NORM, 0, 93 + gEngfuncs.pfnRandomLong(0, 0xF));
 	EV_PlaySound(idx, origin, CHAN_ITEM, "weapons/xbow_reload1.wav", gEngfuncs.pfnRandomFloat(0.95, 1.0), ATTN_NORM, 0, 93 + gEngfuncs.pfnRandomLong(0, 0xF));
@@ -1371,7 +1371,7 @@ void EV_EgonFire(event_args_t* args)
 
 			EV_GetGunPosition(args, vecSrc, pl->origin);
 
-			VectorMA(vecSrc, 2048, forward, vecEnd);
+			vecEnd = vecSrc + (2048 * forward);
 
 			gEngfuncs.pEventAPI->EV_SetUpPlayerPrediction(0, 1);
 

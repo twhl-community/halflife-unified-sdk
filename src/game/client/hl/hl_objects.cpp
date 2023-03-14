@@ -47,7 +47,7 @@ void UpdateBeams()
 
 	vecSrc = origin;
 
-	VectorMA(vecSrc, 2048, forward, vecEnd);
+	vecEnd = vecSrc + (2048 * forward);
 
 	gEngfuncs.pEventAPI->EV_SetUpPlayerPrediction(0, 1);
 

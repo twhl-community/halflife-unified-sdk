@@ -757,7 +757,7 @@ void V_CalcNormalRefdef(ref_params_t* pparams)
 				frac = (t - ViewInterp.OriginTime[foundidx & ORIGIN_MASK]) / dt;
 				frac = V_min(1.0, frac);
 				delta = ViewInterp.Origins[(foundidx + 1) & ORIGIN_MASK] - ViewInterp.Origins[foundidx & ORIGIN_MASK];
-				VectorMA(ViewInterp.Origins[foundidx & ORIGIN_MASK], frac, delta, neworg);
+				neworg = ViewInterp.Origins[foundidx & ORIGIN_MASK] + (frac * delta);
 
 				// Dont interpolate large changes
 				if (delta.Length() < 64)
@@ -899,7 +899,7 @@ void V_GetChaseOrigin(const Vector& angles, const Vector& origin, float distance
 
 	vecStart = origin;
 
-	VectorMA(vecStart, distance, forward, vecEnd);
+	vecEnd = vecStart + (distance * forward);
 
 	while (maxLoops > 0)
 	{
@@ -939,7 +939,7 @@ void V_GetChaseOrigin(const Vector& angles, const Vector& origin, float distance
 				(8-maxLoops),ent->curstate.number, ent->model->name, ent->curstate.solid);
 		} */
 
-	VectorMA(trace->endpos, 4, trace->plane.normal, returnvec);
+	returnvec = trace->endpos + (4 * trace->plane.normal);
 
 	v_lastDistance = (origin - trace->endpos).Length(); // real distance without offset
 }
@@ -1331,7 +1331,7 @@ void V_GetMapFreePosition(Vector& cl_angles, Vector& origin, Vector& angles)
 
 	VectorNormalize(forward);
 
-	VectorMA(zScaledTarget, -(4096.0f / gHUD.m_Spectator.m_mapZoom), forward, origin);
+	origin = zScaledTarget + (-(4096.0f / gHUD.m_Spectator.m_mapZoom) * forward);
 }
 
 void V_GetMapChasePosition(int target, Vector& cl_angles, Vector& origin, Vector& angles)
@@ -1374,7 +1374,7 @@ void V_GetMapChasePosition(int target, Vector& cl_angles, Vector& origin, Vector
 
 	VectorNormalize(forward);
 
-	VectorMA(origin, -1536, forward, origin);
+	origin = origin + (-1536 * forward);
 }
 
 int V_FindViewModelByWeaponModel(int weaponindex)

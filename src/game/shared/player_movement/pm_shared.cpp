@@ -1338,7 +1338,7 @@ void PM_WaterMove()
 
 	// Now move
 	// assume it is a stair or a slope, so press down from stepheight above
-	VectorMA(pmove->origin, pmove->frametime, pmove->velocity, dest);
+	dest = pmove->origin + (pmove->frametime * pmove->velocity);
 	start = dest;
 	start[2] += pmove->movevars->stepsize + 1;
 	trace = pmove->PM_PlayerTrace(start, dest, PM_NORMAL, -1);
@@ -1475,7 +1475,7 @@ bool PM_CheckWater()
 					{1, 0, 0}, {0, 1, 0}, {-1, 0, 0},
 					{0, -1, 0}, {0, 0, 1}, {0, 0, -1}};
 
-			VectorMA(pmove->basevelocity, 50.0 * pmove->waterlevel, current_table[CONTENTS_CURRENT_0 - truecont], pmove->basevelocity);
+			pmove->basevelocity = pmove->basevelocity + ((50.0 * pmove->waterlevel) * current_table[CONTENTS_CURRENT_0 - truecont]);
 		}
 	}
 
@@ -1818,7 +1818,7 @@ void PM_SpectatorMove()
 			pmove->velocity[i] += accelspeed * wishdir[i];
 
 		// move
-		VectorMA(pmove->origin, pmove->frametime, pmove->velocity, pmove->origin);
+		pmove->origin = pmove->origin + (pmove->frametime * pmove->velocity);
 	}
 	else
 	{
@@ -2108,7 +2108,7 @@ void PM_LadderMove(physent_t* pLadder)
 				//  Calculate player's intended velocity
 				// Vector velocity = (forward * gpGlobals->v_forward) + (right * gpGlobals->v_right);
 				velocity = vpn * forward;
-				VectorMA(velocity, right, v_right, velocity);
+				velocity = velocity + (right * v_right);
 
 
 				// Perpendicular in the ladder plane
@@ -2135,10 +2135,10 @@ void PM_LadderMove(physent_t* pLadder)
 				// because the velocity is a sum of the directional velocity and the converted
 				// velocity through the face of the ladder -- by design.
 				tmp = CrossProduct(trace.plane.normal, perp);
-				VectorMA(lateral, -normal, tmp, pmove->velocity);
+				pmove->velocity = lateral + (-normal * tmp);
 				if (onFloor && normal > 0) // On ground moving away from the ladder
 				{
-					VectorMA(pmove->velocity, MAX_CLIMB_SPEED, trace.plane.normal, pmove->velocity);
+					pmove->velocity = pmove->velocity + (MAX_CLIMB_SPEED * trace.plane.normal);
 				}
 				// pev->velocity = lateral - (CrossProduct( trace.vecPlaneNormal, perp ) * normal);
 			}
@@ -2387,7 +2387,7 @@ void PM_NoClip()
 	}
 	wishvel[2] += pmove->cmd.upmove;
 
-	VectorMA(pmove->origin, pmove->frametime, wishvel, pmove->origin);
+	pmove->origin = pmove->origin + (pmove->frametime * wishvel);
 
 	// Zero out the velocity so that we don't accumulate a huge downward velocity from
 	//  gravity, etc.
@@ -2617,7 +2617,7 @@ void PM_CheckWaterJump()
 	vecStart = pmove->origin;
 	vecStart[2] += WJ_HEIGHT;
 
-	VectorMA(vecStart, 24, flatforward, vecEnd);
+	vecEnd = vecStart + (24 * flatforward);
 
 	// Trace, this trace should use the point sized collision hull
 	savehull = pmove->usehull;
@@ -2626,8 +2626,8 @@ void PM_CheckWaterJump()
 	if (tr.fraction < 1.0 && fabs(tr.plane.normal[2]) < 0.1f) // Facing a near vertical wall?
 	{
 		vecStart[2] += pmove->player_maxs[savehull][2] - WJ_HEIGHT;
-		VectorMA(vecStart, 24, flatforward, vecEnd);
-		VectorMA(vec3_origin, -50, tr.plane.normal, pmove->movedir);
+		vecEnd = vecStart + (24 * flatforward);
+		pmove->movedir = vec3_origin + (-50 * tr.plane.normal);
 
 		tr = pmove->PM_PlayerTrace(vecStart, vecEnd, PM_NORMAL, -1);
 		if (tr.fraction == 1.0)
