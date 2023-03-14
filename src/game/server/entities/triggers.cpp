@@ -1276,9 +1276,6 @@ void CChangeLevel::Spawn()
 	//	Logger->debug("TRANSITION: {} ({})", m_szMapName, m_szLandmarkName);
 }
 
-FILE_GLOBAL char st_szNextMap[cchMapNameMost];
-FILE_GLOBAL char st_szNextSpot[cchMapNameMost];
-
 CBaseEntity* CChangeLevel::FindLandmark(const char* pLandmarkName)
 {
 	for (auto landmark : UTIL_FindEntitiesByTargetname(pLandmarkName))
@@ -1339,28 +1336,29 @@ void CChangeLevel::ChangeLevelNow(CBaseEntity* pActivator)
 			DispatchSpawn(pFireAndDie->edict());
 		}
 	}
-	// This object will get removed in the call to CHANGE_LEVEL, copy the params into "safe" memory
-	strcpy(st_szNextMap, m_szMapName);
 
 	m_hActivator = pActivator;
 	SUB_UseTargets(pActivator, USE_TOGGLE, 0);
-	st_szNextSpot[0] = 0; // Init landmark to nullptr
+
+	// Init landmark to empty string
+	const char* landmarkNameInNextMap = "";
 
 	// look for a landmark entity
 	auto landmark = FindLandmark(m_szLandmarkName);
 	if (!FNullEnt(landmark))
 	{
-		strcpy(st_szNextSpot, m_szLandmarkName);
+		landmarkNameInNextMap = m_szLandmarkName;
 		gpGlobals->vecLandmarkOffset = landmark->pev->origin;
 	}
 	// Logger->debug("Level touches {} levels", ChangeList(levels, std::size(levels)));
-	Logger->debug("CHANGE LEVEL: {} {}", st_szNextMap, st_szNextSpot);
-	CHANGE_LEVEL(st_szNextMap, st_szNextSpot);
+	Logger->debug("CHANGE LEVEL: {} {}", m_szMapName, landmarkNameInNextMap);
+
+	// Note: passing nullptr for landmark name uses the changelevel console command (entities don't transition);
+	// passing any string uses changelevel2 (entities do transition).
+	// The engine copies the names so they don't need to be stored in global variables.
+	CHANGE_LEVEL(m_szMapName, landmarkNameInNextMap);
 }
 
-//
-// GLOBALS ASSUMED SET:  st_szNextMap
-//
 void CChangeLevel::TouchChangeLevel(CBaseEntity* pOther)
 {
 	if (!pOther->IsPlayer())
