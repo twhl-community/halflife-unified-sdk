@@ -1253,7 +1253,7 @@ bool CHudSpectator::ParseOverviewFile()
 
 	if (fileContents.empty())
 	{
-		gEngfuncs.Con_DPrintf("Couldn't open file %s. Using default values for overiew mode.\n", filename);
+		gEngfuncs.Con_DPrintf("Couldn't open file %s. Using default values for overview mode.\n", filename);
 		return false;
 	}
 
