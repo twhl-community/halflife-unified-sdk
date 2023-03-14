@@ -268,16 +268,10 @@ UTIL_ParticleBox
 For debugging, draw a box around a player made out of particles
 =====================
 */
-void UTIL_ParticleBox(CBasePlayer* player, float* mins, float* maxs, float life, unsigned char r, unsigned char g, unsigned char b)
+void UTIL_ParticleBox(CBasePlayer* player, const Vector& mins, const Vector& maxs, float life, unsigned char r, unsigned char g, unsigned char b)
 {
-	int i;
-	Vector mmin, mmax;
-
-	for (i = 0; i < 3; i++)
-	{
-		mmin[i] = player->pev->origin[i] + mins[i];
-		mmax[i] = player->pev->origin[i] + maxs[i];
-	}
+	const Vector mmin = player->pev->origin + mins;
+	const Vector mmax = player->pev->origin + maxs;
 
 	gEngfuncs.pEfxAPI->R_ParticleBox(mmin, mmax, 5.0, 0, 255, 0);
 }
@@ -330,7 +324,7 @@ UTIL_ParticleLine
 For debugging, draw a line made out of particles
 =====================
 */
-void UTIL_ParticleLine(CBasePlayer* player, float* start, float* end, float life, unsigned char r, unsigned char g, unsigned char b)
+void UTIL_ParticleLine(CBasePlayer* player, const Vector& start, const Vector& end, float life, unsigned char r, unsigned char g, unsigned char b)
 {
 	gEngfuncs.pEfxAPI->R_ParticleLine(start, end, r, g, b, life);
 }

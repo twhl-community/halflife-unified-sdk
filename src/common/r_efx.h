@@ -130,7 +130,7 @@ struct efx_api_t
 	void (*R_ParticleBurst)(float* pos, int size, int color, float life);
 	void (*R_ParticleExplosion)(float* org);
 	void (*R_ParticleExplosion2)(const float* org, int colorStart, int colorLength);
-	void (*R_ParticleLine)(float* start, float* end, unsigned char r, unsigned char g, unsigned char b, float life);
+	void (*R_ParticleLine)(const float* start, const float* end, unsigned char r, unsigned char g, unsigned char b, float life);
 	void (*R_PlayerSprites)(int client, int modelIndex, int count, int size);
 	void (*R_Projectile)(float* origin, float* velocity, int modelIndex, int life, int owner, void (*hitcallback)(TEMPENTITY* ent, pmtrace_t* ptr));
 	[[deprecated("Use R_RicochetSound in ISoundSystem.h instead")]] void (*R_RicochetSound)(const float* pos);
