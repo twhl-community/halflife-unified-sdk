@@ -176,7 +176,7 @@ struct enginefuncs_t
 	int (*pfnCmd_Argc)();				  // access client 'cmd' strings
 	void (*pfnGetAttachment)(const edict_t* pEdict, int iAttachment, float* rgflOrigin, float* rgflAngles);
 	void (*pfnCRC32_Init)(CRC32_t* pulCRC);
-	void (*pfnCRC32_ProcessBuffer)(CRC32_t* pulCRC, void* p, int len);
+	void (*pfnCRC32_ProcessBuffer)(CRC32_t* pulCRC, const void* p, int len);
 	void (*pfnCRC32_ProcessByte)(CRC32_t* pulCRC, unsigned char ch);
 	CRC32_t (*pfnCRC32_Final)(CRC32_t pulCRC);
 	int32 (*pfnRandomLong)(int32 lLow, int32 lHigh);

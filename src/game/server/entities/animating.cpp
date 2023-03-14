@@ -109,7 +109,7 @@ void CBaseAnimating::ResetSequenceInfo()
 {
 	void* pmodel = GET_MODEL_PTR(ENT(pev));
 
-	GetSequenceInfo(pmodel, pev, &m_flFrameRate, &m_flGroundSpeed);
+	GetSequenceInfo(pmodel, pev, m_flFrameRate, m_flGroundSpeed);
 	m_fSequenceLoops = ((GetSequenceFlags() & STUDIO_LOOPING) != 0);
 	pev->animtime = gpGlobals->time;
 	pev->framerate = 1.0;
@@ -258,7 +258,7 @@ int CBaseAnimating::GetBodygroupSubmodelCount(int group)
 	return pbodypart->nummodels;
 }
 
-bool CBaseAnimating::ExtractBbox(int sequence, float* mins, float* maxs)
+bool CBaseAnimating::ExtractBbox(int sequence, Vector& mins, Vector& maxs)
 {
 	return ::ExtractBbox(GET_MODEL_PTR(ENT(pev)), sequence, mins, maxs);
 }

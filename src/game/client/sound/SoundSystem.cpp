@@ -325,9 +325,9 @@ void CL_StartSound(int ent, int channel, const char* sample, const Vector& origi
 	sound::g_SoundSystem->GetGameSoundSystem()->StartSound(ent, channel, sample, origin, volume, attenuation, pitch, fFlags);
 }
 
-void EV_PlaySound(int ent, const float* origin, int channel, const char* sample, float volume, float attenuation, int fFlags, int pitch)
+void EV_PlaySound(int ent, const Vector& origin, int channel, const char* sample, float volume, float attenuation, int fFlags, int pitch)
 {
-	CL_StartSound(ent, channel, sample, {origin[0], origin[1], origin[2]}, volume, attenuation, pitch, fFlags);
+	CL_StartSound(ent, channel, sample, origin, volume, attenuation, pitch, fFlags);
 
 	// gEngfuncs.pEventAPI->EV_PlaySound(ent, origin, channel, sample, volume, attenuation, fFlags, pitch);
 }
@@ -348,11 +348,11 @@ void PlaySound(const char* szSound, float vol)
 	//gEngfuncs.pfnPlaySoundByName(szSound, vol);
 }
 
-void PlaySoundByNameAtLocation(const char* szSound, float volume, const float* origin)
+void PlaySoundByNameAtLocation(const char* szSound, float volume, const Vector& origin)
 {
 	volume = std::clamp(volume, 0.f, 1.f);
 
-	CL_StartSound(g_ViewEntity, CHAN_AUTO, szSound, {origin[0], origin[1], origin[2]}, volume, 1.0, PITCH_NORM, 0);
+	CL_StartSound(g_ViewEntity, CHAN_AUTO, szSound, origin, volume, 1.0, PITCH_NORM, 0);
 
 	// gEngfuncs.pfnPlaySoundByNameAtLocation(szSound, 1.0, entity->attachment[0]);
 }
@@ -494,12 +494,12 @@ constexpr const char* RicochetSounds[] =
 		"weapons/ric4.wav",
 		"weapons/ric5.wav"};
 
-void R_RicochetSound(const float* pos, int index)
+void R_RicochetSound(const Vector& pos, int index)
 {
-	CL_StartSound(-1, CHAN_AUTO, RicochetSounds[index % std::size(RicochetSounds)], {pos[0], pos[1], pos[2]}, VOL_NORM, 1.0, PITCH_NORM, 0);
+	CL_StartSound(-1, CHAN_AUTO, RicochetSounds[index % std::size(RicochetSounds)], pos, VOL_NORM, 1.0, PITCH_NORM, 0);
 }
 
-void R_RicochetSound(const float* pos)
+void R_RicochetSound(const Vector& pos)
 {
 	R_RicochetSound(pos, gEngfuncs.pfnRandomLong(0, 4));
 
@@ -513,7 +513,7 @@ constexpr const char* ExplosionSounds[] =
 	"weapons/explode5.wav"
 };
 
-void R_Explosion(const float* pos, int model, float scale, float framerate, int flags)
+void R_Explosion(const Vector& pos, int model, float scale, float framerate, int flags)
 {
 	if (scale != 0)
 	{
@@ -529,9 +529,7 @@ void R_Explosion(const float* pos, int model, float scale, float framerate, int 
 		{
 			auto yellowLight = gEngfuncs.pEfxAPI->CL_AllocDlight(0);
 
-			yellowLight->origin[0] = pos[0];
-			yellowLight->origin[1] = pos[1];
-			yellowLight->origin[2] = pos[2];
+			yellowLight->origin = pos;
 
 			yellowLight->radius = 200;
 
@@ -545,9 +543,7 @@ void R_Explosion(const float* pos, int model, float scale, float framerate, int 
 
 			auto orangeLight = gEngfuncs.pEfxAPI->CL_AllocDlight(0);
 
-			orangeLight->origin[0] = pos[0];
-			orangeLight->origin[1] = pos[1];
-			orangeLight->origin[2] = pos[2];
+			orangeLight->origin = pos;
 
 			orangeLight->radius = 150;
 
@@ -563,6 +559,6 @@ void R_Explosion(const float* pos, int model, float scale, float framerate, int 
 
 	if ((flags & TE_EXPLFLAG_NOSOUND) == 0)
 	{
-		CL_StartSound(-1, CHAN_AUTO, ExplosionSounds[gEngfuncs.pfnRandomLong(0, 2)], {pos[0], pos[1], pos[2]}, VOL_NORM, 0.3f, PITCH_NORM, 0);
+		CL_StartSound(-1, CHAN_AUTO, ExplosionSounds[gEngfuncs.pfnRandomLong(0, 2)], pos, VOL_NORM, 0.3f, PITCH_NORM, 0);
 	}
 }

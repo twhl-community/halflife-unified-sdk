@@ -44,7 +44,7 @@ public:
 	void SetBodygroup(int iGroup, int iValue);
 	int GetBodygroup(int iGroup) const;
 	int GetBodygroupSubmodelCount(int group);
-	bool ExtractBbox(int sequence, float* mins, float* maxs);
+	bool ExtractBbox(int sequence, Vector& mins, Vector& maxs);
 	void SetSequenceBox();
 
 	// animation needs

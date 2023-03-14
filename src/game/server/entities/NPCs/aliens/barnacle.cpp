@@ -33,7 +33,7 @@ public:
 	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
-	CBaseEntity* TongueTouchEnt(float* pflLength);
+	CBaseEntity* TongueTouchEnt(float& flLength);
 	int Classify() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 	void EXPORT BarnacleThink();
@@ -281,7 +281,7 @@ void CBarnacle::BarnacleThink()
 			}
 		}
 
-		pTouchEnt = TongueTouchEnt(&flLength);
+		pTouchEnt = TongueTouchEnt(flLength);
 
 		if (pTouchEnt != nullptr && m_fTongueExtended)
 		{
@@ -414,18 +414,14 @@ void CBarnacle::Precache()
 // of the trace in the int pointer provided.
 //=========================================================
 #define BARNACLE_CHECK_SPACING 8
-CBaseEntity* CBarnacle::TongueTouchEnt(float* pflLength)
+CBaseEntity* CBarnacle::TongueTouchEnt(float& flLength)
 {
 	TraceResult tr;
-	float length;
 
 	// trace once to hit architecture and see if the tongue needs to change position.
 	UTIL_TraceLine(pev->origin, pev->origin - Vector(0, 0, 2048), ignore_monsters, ENT(pev), &tr);
-	length = fabs(pev->origin.z - tr.vecEndPos.z);
-	if (pflLength)
-	{
-		*pflLength = length;
-	}
+	const float length = fabs(pev->origin.z - tr.vecEndPos.z);
+	flLength = length;
 
 	Vector delta = Vector(BARNACLE_CHECK_SPACING, BARNACLE_CHECK_SPACING, 0);
 	Vector mins = pev->origin - delta;

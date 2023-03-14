@@ -1153,7 +1153,6 @@ Handles both ground friction and water friction
 */
 void PM_Friction()
 {
-	float* vel;
 	float speed, newspeed, control;
 	float friction;
 	float drop;
@@ -1163,11 +1162,8 @@ void PM_Friction()
 	if (0 != pmove->waterjumptime)
 		return;
 
-	// Get velocity
-	vel = pmove->velocity;
-
 	// Calculate speed
-	speed = sqrt(vel[0] * vel[0] + vel[1] * vel[1] + vel[2] * vel[2]);
+	speed = pmove->velocity.Length();
 
 	// If too slow, return
 	if (speed < 0.1f)
@@ -1183,8 +1179,8 @@ void PM_Friction()
 		Vector start, stop;
 		pmtrace_t trace;
 
-		start[0] = stop[0] = pmove->origin[0] + vel[0] / speed * 16;
-		start[1] = stop[1] = pmove->origin[1] + vel[1] / speed * 16;
+		start[0] = stop[0] = pmove->origin[0] + pmove->velocity[0] / speed * 16;
+		start[1] = stop[1] = pmove->origin[1] + pmove->velocity[1] / speed * 16;
 		start[2] = pmove->origin[2] + pmove->player_mins[pmove->usehull][2];
 		stop[2] = start[2] - 34;
 
@@ -1220,9 +1216,7 @@ void PM_Friction()
 	newspeed /= speed;
 
 	// Adjust velocity according to proportion.
-	newvel[0] = vel[0] * newspeed;
-	newvel[1] = vel[1] * newspeed;
-	newvel[2] = vel[2] * newspeed;
+	newvel = pmove->velocity * newspeed;
 
 	VectorCopy(newvel, pmove->velocity);
 }

@@ -23,7 +23,7 @@
 
 
 
-bool ExtractBbox(void* pmodel, int sequence, float* mins, float* maxs)
+bool ExtractBbox(void* pmodel, int sequence, Vector& mins, Vector& maxs)
 {
 	studiohdr_t* pstudiohdr;
 
@@ -104,7 +104,7 @@ int LookupActivityHeaviest(void* pmodel, entvars_t* pev, int activity)
 	return seq;
 }
 
-void GetEyePosition(void* pmodel, float* vecEyePosition)
+void GetEyePosition(void* pmodel, Vector& vecEyePosition)
 {
 	studiohdr_t* pstudiohdr;
 
@@ -190,7 +190,7 @@ void SequencePrecache(CBaseEntity* self, void* pmodel, const char* pSequenceName
 
 
 
-void GetSequenceInfo(void* pmodel, entvars_t* pev, float* pflFrameRate, float* pflGroundSpeed)
+void GetSequenceInfo(void* pmodel, entvars_t* pev, float& flFrameRate, float& flGroundSpeed)
 {
 	studiohdr_t* pstudiohdr;
 
@@ -202,8 +202,8 @@ void GetSequenceInfo(void* pmodel, entvars_t* pev, float* pflFrameRate, float* p
 
 	if (pev->sequence < 0 || pev->sequence >= pstudiohdr->numseq)
 	{
-		*pflFrameRate = 0.0;
-		*pflGroundSpeed = 0.0;
+		flFrameRate = 0.0;
+		flGroundSpeed = 0.0;
 		return;
 	}
 
@@ -211,14 +211,14 @@ void GetSequenceInfo(void* pmodel, entvars_t* pev, float* pflFrameRate, float* p
 
 	if (pseqdesc->numframes > 1)
 	{
-		*pflFrameRate = 256 * pseqdesc->fps / (pseqdesc->numframes - 1);
-		*pflGroundSpeed = sqrt(pseqdesc->linearmovement[0] * pseqdesc->linearmovement[0] + pseqdesc->linearmovement[1] * pseqdesc->linearmovement[1] + pseqdesc->linearmovement[2] * pseqdesc->linearmovement[2]);
-		*pflGroundSpeed = *pflGroundSpeed * pseqdesc->fps / (pseqdesc->numframes - 1);
+		flFrameRate = 256 * pseqdesc->fps / (pseqdesc->numframes - 1);
+		flGroundSpeed = sqrt(pseqdesc->linearmovement[0] * pseqdesc->linearmovement[0] + pseqdesc->linearmovement[1] * pseqdesc->linearmovement[1] + pseqdesc->linearmovement[2] * pseqdesc->linearmovement[2]);
+		flGroundSpeed = flGroundSpeed * pseqdesc->fps / (pseqdesc->numframes - 1);
 	}
 	else
 	{
-		*pflFrameRate = 256.0;
-		*pflGroundSpeed = 0.0;
+		flFrameRate = 256.0;
+		flGroundSpeed = 0.0;
 	}
 }
 

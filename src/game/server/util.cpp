@@ -1779,7 +1779,7 @@ void EntvarsKeyvalue(entvars_t* pev, KeyValueData* pkvd)
 
 			case FIELD_POSITION_VECTOR:
 			case FIELD_VECTOR:
-				UTIL_StringToVector((float*)((char*)pev + pField->fieldOffset), pkvd->szValue);
+				UTIL_StringToVector(*((Vector*)((char*)pev + pField->fieldOffset)), pkvd->szValue);
 				break;
 
 			default:

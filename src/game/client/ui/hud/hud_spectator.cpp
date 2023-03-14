@@ -198,7 +198,7 @@ bool CHudSpectator::Init()
 	return true;
 }
 
-bool UTIL_FindEntityInMap(const char* name, float* origin, float* angle)
+bool UTIL_FindEntityInMap(const char* name, Vector& origin, Vector& angle)
 {
 	bool found = false;
 	int n;

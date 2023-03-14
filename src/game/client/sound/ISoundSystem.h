@@ -60,16 +60,16 @@ void CreateSoundSystem();
 void CL_StartSound(int ent, int channel, const char* sample, const Vector& origin, float volume, float attenuation, int pitch, int fFlags);
 
 // Wrappers for engine functions used by client code.
-void EV_PlaySound(int ent, const float* origin, int channel, const char* sample, float volume, float attenuation, int fFlags, int pitch);
+void EV_PlaySound(int ent, const Vector& origin, int channel, const char* sample, float volume, float attenuation, int fFlags, int pitch);
 
 void EV_StopSound(int ent, int channel, const char* sample);
 
 void PlaySound(const char* szSound, float vol);
-void PlaySoundByNameAtLocation(const char* szSound, float volume, const float* origin);
+void PlaySoundByNameAtLocation(const char* szSound, float volume, const Vector& origin);
 
 void CL_TempEntPlaySound(TEMPENTITY* pTemp, float damp);
 
-void R_RicochetSound(const float* pos, int index);
-void R_RicochetSound(const float* pos);
+void R_RicochetSound(const Vector& pos, int index);
+void R_RicochetSound(const Vector& pos);
 
-void R_Explosion(const float* pos, int model, float scale, float framerate, int flags);
+void R_Explosion(const Vector& pos, int model, float scale, float framerate, int flags);

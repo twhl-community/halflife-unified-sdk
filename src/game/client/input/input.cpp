@@ -577,7 +577,7 @@ CL_AdjustAngles
 Moves the local angle positions
 ================
 */
-void CL_AdjustAngles(float frametime, float* viewangles)
+void CL_AdjustAngles(float frametime, Vector& viewangles)
 {
 	float speed;
 	float up, down;

@@ -94,7 +94,7 @@ std::string ToUpper(std::string_view text)
 	return result;
 }
 
-void UTIL_StringToVector(float* pVector, std::string_view pString)
+void UTIL_StringToVector(Vector& destination, std::string_view pString)
 {
 	std::size_t index = 0;
 
@@ -104,7 +104,7 @@ void UTIL_StringToVector(float* pVector, std::string_view pString)
 
 	for (j = 0; j < 3; j++) // lifted from pr_edict.c
 	{
-		const auto result = std::from_chars(pString.data() + index, end, pVector[j]);
+		const auto result = std::from_chars(pString.data() + index, end, destination[j]);
 
 		if (result.ec != std::errc())
 		{
@@ -127,7 +127,7 @@ void UTIL_StringToVector(float* pVector, std::string_view pString)
 			pkvd->szClassName, pkvd->szKeyName, pkvd->szValue );
 		*/
 		for (j = j + 1; j < 3; j++)
-			pVector[j] = 0;
+			destination[j] = 0;
 	}
 }
 

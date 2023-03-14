@@ -333,7 +333,7 @@ void CWeaponCycler::SecondaryAttack()
 
 	pev->modelindex = m_iModel;
 	void* pmodel = GET_MODEL_PTR(ENT(pev));
-	GetSequenceInfo(pmodel, pev, &flFrameRate, &flGroundSpeed);
+	GetSequenceInfo(pmodel, pev, flFrameRate, flGroundSpeed);
 	pev->modelindex = 0;
 
 	if (flFrameRate == 0.0)
