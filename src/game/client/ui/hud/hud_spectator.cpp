@@ -31,10 +31,6 @@ extern bool iJumpSpectator;
 extern Vector vJumpOrigin;
 extern Vector vJumpAngles;
 
-
-void V_GetInEyePos(int entity, float* origin, float* angles);
-void V_ResetChaseCam();
-void V_GetChasePos(int target, float* cl_angles, float* origin, Vector& angles);
 Vector* GetClientColor(int clientIndex);
 
 // Same color as in TeamFortressViewport::UpdateSpectatorPanel
@@ -1156,7 +1152,7 @@ void CHudSpectator::SetModes(int iNewMainMode, int iNewInsetMode)
 			g_iUser1 = OBS_ROAMING;
 			if (0 != g_iUser2)
 			{
-				V_GetChasePos(g_iUser2, v_cl_angles, vJumpOrigin, vJumpAngles);
+				V_GetChasePos(g_iUser2, &v_cl_angles, vJumpOrigin, vJumpAngles);
 				gEngfuncs.SetViewAngles(vJumpAngles);
 				iJumpSpectator = true;
 			}
@@ -1655,7 +1651,7 @@ void CHudSpectator::DrawOverviewEntities()
 	}
 	else if (m_pip->value == INSET_CHASE_FREE || g_iUser1 == OBS_CHASE_FREE)
 	{
-		V_GetChasePos(g_iUser2, v_cl_angles, origin, angles);
+		V_GetChasePos(g_iUser2, &v_cl_angles, origin, angles);
 	}
 	else if (g_iUser1 == OBS_ROAMING)
 	{

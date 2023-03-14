@@ -34,7 +34,7 @@ extern Vector vJumpOrigin;
 extern Vector vJumpAngles;
 
 
-void V_DropPunchAngle(float frametime, float* ev_punchangle);
+void V_DropPunchAngle(float frametime, Vector& ev_punchangle);
 void VectorAngles(const float* forward, float* angles);
 
 #include "r_studioint.h"
@@ -835,7 +835,7 @@ void V_CalcNormalRefdef(ref_params_t* pparams)
 	v_crosshairangle = pparams->crosshairangle;
 }
 
-void V_SmoothInterpolateAngles(float* startAngle, float* endAngle, float* finalAngle, float degreesPerSec)
+void V_SmoothInterpolateAngles(Vector& startAngle, Vector& endAngle, Vector& finalAngle, float degreesPerSec)
 {
 	float absd, frac, d, threshhold;
 
@@ -892,7 +892,7 @@ void V_SmoothInterpolateAngles(float* startAngle, float* endAngle, float* finalA
 }
 
 // Get the origin of the Observer based around the target's position and angles
-void V_GetChaseOrigin(const Vector& angles, float* origin, float distance, float* returnvec)
+void V_GetChaseOrigin(const Vector& angles, const Vector& origin, float distance, Vector& returnvec)
 {
 	Vector vecEnd;
 	Vector forward;
@@ -945,9 +945,10 @@ void V_GetChaseOrigin(const Vector& angles, float* origin, float distance, float
 		maxLoops--;
 	}
 
-	/*	if ( ent )
+	/*	if (ent)
 		{
-			gEngfuncs.Con_Printf("Trace loops %i , entity %i, model %s, solid %i\n",(8-maxLoops),ent->curstate.number, ent->model->name , ent->curstate.solid );
+			gEngfuncs.Con_Printf("Trace loops %i, entity %i, model %s, solid %i\n",
+				(8-maxLoops),ent->curstate.number, ent->model->name, ent->curstate.solid);
 		} */
 
 	VectorMA(trace->endpos, 4, trace->plane.normal, returnvec);
@@ -955,30 +956,31 @@ void V_GetChaseOrigin(const Vector& angles, float* origin, float distance, float
 	v_lastDistance = Distance(trace->endpos, origin); // real distance without offset
 }
 
-/*void V_GetDeathCam(cl_entity_t * ent1, cl_entity_t * ent2, float * angle, float * origin)
+/*void V_GetDeathCam(cl_entity_t* ent1, cl_entity_t* ent2, Vector& angle, Vector& origin)
 {
-	Vector newAngle; Vector newOrigin;
+	Vector newAngle;
+	Vector newOrigin;
 
 	float distance = 168.0f;
 
-	v_lastDistance+= v_frametime * 96.0f;	// move unit per seconds back
+	v_lastDistance += v_frametime * 96.0f;	// move unit per seconds back
 
-	if ( v_resetCamera )
+	if (v_resetCamera)
 		v_lastDistance = 64.0f;
 
-	if ( distance > v_lastDistance )
+	if (distance > v_lastDistance)
 		distance = v_lastDistance;
 
 	VectorCopy(ent1->origin, newOrigin);
 
-	if ( ent1->player )
+	if (ent1->player)
 		newOrigin[2]+= 17; // head level of living player
 
 	// get new angle towards second target
-	if ( ent2 )
+	if (ent2)
 	{
-		VectorSubtract( ent2->origin, ent1->origin, newAngle );
-		VectorAngles( newAngle, newAngle );
+		VectorSubtract(ent2->origin, ent1->origin, newAngle);
+		VectorAngles(newAngle, newAngle);
 		newAngle[0] = -newAngle[0];
 	}
 	else
@@ -990,14 +992,14 @@ void V_GetChaseOrigin(const Vector& angles, float* origin, float distance, float
 	}
 
 	// and smooth view
-	V_SmoothInterpolateAngles( v_lastAngles, newAngle, angle, 120.0f );
+	V_SmoothInterpolateAngles(v_lastAngles, newAngle, angle, 120.0f);
 
-	V_GetChaseOrigin( angle, newOrigin, distance, origin );
+	V_GetChaseOrigin(angle, newOrigin, distance, origin);
 
 	VectorCopy(angle, v_lastAngles);
 }*/
 
-void V_GetSingleTargetCam(cl_entity_t* ent1, Vector& angle, float* origin)
+void V_GetSingleTargetCam(cl_entity_t* ent1, Vector& angle, Vector& origin)
 {
 	Vector newAngle;
 	Vector newOrigin;
@@ -1062,7 +1064,7 @@ void V_GetSingleTargetCam(cl_entity_t* ent1, Vector& angle, float* origin)
 	V_GetChaseOrigin(angle, newOrigin, distance, origin);
 }
 
-float MaxAngleBetweenAngles(float* a1, float* a2)
+float MaxAngleBetweenAngles(Vector& a1, Vector& a2)
 {
 	float d, maxd = 0.0f;
 
@@ -1090,7 +1092,7 @@ float MaxAngleBetweenAngles(float* a1, float* a2)
 	return maxd;
 }
 
-void V_GetDoubleTargetsCam(cl_entity_t* ent1, cl_entity_t* ent2, float* angle, float* origin)
+void V_GetDoubleTargetsCam(cl_entity_t* ent1, cl_entity_t* ent2, Vector& angle, Vector& origin)
 {
 	Vector newAngle;
 	Vector newOrigin;
@@ -1176,7 +1178,7 @@ void V_GetDoubleTargetsCam(cl_entity_t* ent1, cl_entity_t* ent2, float* angle, f
 	InterpolateAngles( newAngle, tempVec, newAngle, 0.5f); */
 }
 
-void V_GetDirectedChasePosition(cl_entity_t* ent1, cl_entity_t* ent2, Vector& angle, float* origin)
+void V_GetDirectedChasePosition(cl_entity_t* ent1, cl_entity_t* ent2, Vector& angle, Vector& origin)
 {
 
 	if (v_resetCamera)
@@ -1231,7 +1233,7 @@ void V_GetDirectedChasePosition(cl_entity_t* ent1, cl_entity_t* ent2, Vector& an
 	VectorCopy(angle, v_lastAngles);
 }
 
-void V_GetChasePos(int target, float* cl_angles, float* origin, Vector& angles)
+void V_GetChasePos(int target, Vector* cl_angles, Vector& origin, Vector& angles)
 {
 	cl_entity_t* ent = nullptr;
 
@@ -1267,7 +1269,7 @@ void V_GetChasePos(int target, float* cl_angles, float* origin, Vector& angles)
 			angles[0] *= -1;
 		}
 		else
-			VectorCopy(cl_angles, angles);
+			VectorCopy(*cl_angles, angles);
 
 
 		VectorCopy(ent->origin, origin);
@@ -1286,7 +1288,7 @@ void V_ResetChaseCam()
 }
 
 
-void V_GetInEyePos(int target, float* origin, float* angles)
+void V_GetInEyePos(int target, Vector& origin, Vector& angles)
 {
 	if (0 == target)
 	{
@@ -1322,7 +1324,7 @@ void V_GetInEyePos(int target, float* origin, float* angles)
 		VectorAdd(origin, VEC_VIEW, origin);
 }
 
-void V_GetMapFreePosition(float* cl_angles, float* origin, Vector& angles)
+void V_GetMapFreePosition(Vector& cl_angles, Vector& origin, Vector& angles)
 {
 	Vector forward;
 	Vector zScaledTarget;
@@ -1344,7 +1346,7 @@ void V_GetMapFreePosition(float* cl_angles, float* origin, Vector& angles)
 	VectorMA(zScaledTarget, -(4096.0f / gHUD.m_Spectator.m_mapZoom), forward, origin);
 }
 
-void V_GetMapChasePosition(int target, float* cl_angles, float* origin, Vector& angles)
+void V_GetMapChasePosition(int target, Vector& cl_angles, Vector& origin, Vector& angles)
 {
 	Vector forward;
 
@@ -1355,7 +1357,7 @@ void V_GetMapChasePosition(int target, float* cl_angles, float* origin, Vector& 
 		if (0 != gHUD.m_Spectator.m_autoDirector->value)
 		{
 			// this is done to get the angles made by director mode
-			V_GetChasePos(target, cl_angles, origin, angles);
+			V_GetChasePos(target, &cl_angles, origin, angles);
 			VectorCopy(ent->origin, origin);
 
 			// keep fix chase angle horizontal
@@ -1536,7 +1538,7 @@ void V_CalcSpectatorRefdef(ref_params_t* pparams)
 			break;
 
 		case OBS_CHASE_FREE:
-			V_GetChasePos(g_iUser2, v_cl_angles, v_origin, v_angles);
+			V_GetChasePos(g_iUser2, &v_cl_angles, v_origin, v_angles);
 			break;
 
 		case OBS_ROAMING:
@@ -1582,7 +1584,7 @@ void V_CalcSpectatorRefdef(ref_params_t* pparams)
 		switch ((int)gHUD.m_Spectator.m_pip->value)
 		{
 		case INSET_CHASE_FREE:
-			V_GetChasePos(g_iUser2, v_cl_angles, v_origin, v_angles);
+			V_GetChasePos(g_iUser2, &v_cl_angles, v_origin, v_angles);
 			break;
 
 		case INSET_IN_EYE:
@@ -1667,7 +1669,7 @@ V_DropPunchAngle
 
 =============
 */
-void V_DropPunchAngle(float frametime, float* ev_punchangle)
+void V_DropPunchAngle(float frametime, Vector& ev_punchangle)
 {
 	float len;
 

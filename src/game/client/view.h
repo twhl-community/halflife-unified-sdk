@@ -21,3 +21,7 @@ inline Vector v_crosshairangle;
 
 void V_StartPitchDrift();
 void V_StopPitchDrift();
+
+void V_GetInEyePos(int entity, Vector& origin, Vector& angles);
+void V_ResetChaseCam();
+void V_GetChasePos(int target, Vector* cl_angles, Vector& origin, Vector& angles);
