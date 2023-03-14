@@ -68,14 +68,14 @@
 #define MOVE_NORMAL 0 // normal move in the direction monster is facing
 #define MOVE_STRAFE 1 // moves in direction specified, no matter which way monster is facing
 
-inline DLL_GLOBAL Vector g_vecAttackDir;
+inline Vector g_vecAttackDir;
 
 /**
  *	@brief Set in combat.cpp.  Used to pass the damage inflictor for death messages.
  *	Better solution:  Add as parameter to all Killed() functions.
  */
 inline CBaseEntity* g_pevLastInflictor = nullptr;
-inline DLL_GLOBAL bool g_fDrawLines = false;
+inline bool g_fDrawLines = false;
 
 // spawn flags 256 and above are already taken by the engine
 void UTIL_MoveToOrigin(edict_t* pent, const Vector& vecGoal, float flDist, int iMoveType);

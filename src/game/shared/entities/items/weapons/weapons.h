@@ -437,16 +437,16 @@ public:
 };
 
 
-inline DLL_GLOBAL short g_sModelIndexLaser; // holds the index for the laser beam
-constexpr DLL_GLOBAL const char* g_pModelNameLaser = "sprites/laserbeam.spr";
+inline short g_sModelIndexLaser; // holds the index for the laser beam
+constexpr const char* g_pModelNameLaser = "sprites/laserbeam.spr";
 
-inline DLL_GLOBAL short g_sModelIndexLaserDot;	 // holds the index for the laser beam dot
-inline DLL_GLOBAL short g_sModelIndexFireball;	 // holds the index for the fireball
-inline DLL_GLOBAL short g_sModelIndexSmoke;		 // holds the index for the smoke cloud
-inline DLL_GLOBAL short g_sModelIndexWExplosion; // holds the index for the underwater explosion
-inline DLL_GLOBAL short g_sModelIndexBubbles;	 // holds the index for the bubbles model
-inline DLL_GLOBAL short g_sModelIndexBloodDrop;	 // holds the sprite index for blood drops
-inline DLL_GLOBAL short g_sModelIndexBloodSpray; // holds the sprite index for blood spray (bigger)
+inline short g_sModelIndexLaserDot;	 // holds the index for the laser beam dot
+inline short g_sModelIndexFireball;	 // holds the index for the fireball
+inline short g_sModelIndexSmoke;		 // holds the index for the smoke cloud
+inline short g_sModelIndexWExplosion; // holds the index for the underwater explosion
+inline short g_sModelIndexBubbles;	 // holds the index for the bubbles model
+inline short g_sModelIndexBloodDrop;	 // holds the sprite index for blood drops
+inline short g_sModelIndexBloodSpray; // holds the sprite index for blood spray (bigger)
 
 void ClearMultiDamage();
 void ApplyMultiDamage(CBaseEntity* inflictor, CBaseEntity* attacker);

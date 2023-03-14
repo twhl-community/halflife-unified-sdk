@@ -46,14 +46,6 @@ inline globalvars_t* gpGlobals = nullptr;
 #define ClearBits(flBitVector, bits) ((flBitVector) = (int)(flBitVector) & ~(bits))
 #define FBitSet(flBitVector, bit) (((int)(flBitVector) & (bit)) != 0)
 
-// Makes these more explicit, and easier to find
-#define FILE_GLOBAL static
-#define DLL_GLOBAL
-
-// Until we figure out why "const" gives the compiler problems, we'll just have to use
-// this bogus "empty" define to mark things as constant.
-#define CONSTANT
-
 /**
  *	@brief Gets the list of entities.
  *	Will return @c nullptr if there is no map loaded.
@@ -320,7 +312,7 @@ int BuildChangeList(LEVELLIST* pLevelList, int maxList);
 //
 #define LANGUAGE_GERMAN 1
 
-inline DLL_GLOBAL int g_Language;
+inline int g_Language;
 
 #define AMBIENT_SOUND_STATIC 0 // medium radius attenuation
 #define AMBIENT_SOUND_EVERYWHERE 1

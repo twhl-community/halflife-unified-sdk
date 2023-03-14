@@ -92,4 +92,4 @@ void SaveGlobalState(SAVERESTOREDATA* pSaveData);
 void RestoreGlobalState(SAVERESTOREDATA* pSaveData);
 void ResetGlobalState();
 
-inline DLL_GLOBAL edict_t* g_pBodyQueueHead = nullptr;
+inline edict_t* g_pBodyQueueHead = nullptr;

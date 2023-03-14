@@ -42,7 +42,7 @@
 #include "ctf/CTFGoalFlag.h"
 #include "ctfplay_gamerules.h"
 
-DLL_GLOBAL unsigned int g_ulFrameCount;
+unsigned int g_ulFrameCount;
 
 void CopyToBodyQue(entvars_t* pev);
 

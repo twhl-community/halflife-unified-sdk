@@ -397,8 +397,8 @@ protected:
 	void SendMOTDToClient(edict_t* client);
 };
 
-inline DLL_GLOBAL CGameRules* g_pGameRules = nullptr;
-inline DLL_GLOBAL bool g_fGameOver;
+inline CGameRules* g_pGameRules = nullptr;
+inline bool g_fGameOver;
 inline bool g_teamplay = false;
 
 const char* GetTeamName(edict_t* pEntity);
