@@ -895,7 +895,7 @@ void V_GetChaseOrigin(const Vector& angles, const Vector& origin, float distance
 	// Trace back from the target using the player's view angles
 	AngleVectors(angles, &forward, nullptr, nullptr);
 
-	VectorScale(forward, -1, forward);
+	forward = -forward;
 
 	vecStart = origin;
 
@@ -1456,7 +1456,7 @@ void V_CalcSpectatorRefdef(ref_params_t* pparams)
 		{
 			Vector distance;
 			distance = ent->prevstate.origin - ent->curstate.origin;
-			VectorScale(distance, 1 / timeDiff, distance);
+			distance = distance * (1 / timeDiff);
 
 			velocity[0] = velocity[0] * 0.9f + distance[0] * 0.1f;
 			velocity[1] = velocity[1] * 0.9f + distance[1] * 0.1f;
@@ -1664,7 +1664,7 @@ void V_DropPunchAngle(float frametime, Vector& ev_punchangle)
 	len = VectorNormalize(ev_punchangle);
 	len -= (10.0 + len * 0.5) * frametime;
 	len = V_max(len, 0.0);
-	VectorScale(ev_punchangle, len, ev_punchangle);
+	ev_punchangle = ev_punchangle * len;
 }
 
 /*

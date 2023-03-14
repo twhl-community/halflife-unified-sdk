@@ -55,8 +55,6 @@ constexpr Vector vec3_up{0, 0, 1};
 void VectorMA(const float* veca, float scale, const float* vecb, float* vecc);
 
 float VectorNormalize(float* v); // returns vector length
-void VectorInverse(float* v);
-void VectorScale(const float* in, float scale, float* out);
 int Q_log2(int val);
 
 void AngleVectors(const Vector& angles, Vector* forward, Vector* right, Vector* up);

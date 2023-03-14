@@ -22,6 +22,20 @@
 		(b)[2] = (a)[2]; \
 	}
 
+void VectorInverse(float* v)
+{
+	v[0] = -v[0];
+	v[1] = -v[1];
+	v[2] = -v[2];
+}
+
+void VectorScale(const float* in, float scale, float* out)
+{
+	out[0] = in[0] * scale;
+	out[1] = in[1] * scale;
+	out[2] = in[2] * scale;
+}
+
 // team colors for old TFC models
 #define TEAM1_COLOR 150
 #define TEAM2_COLOR 250

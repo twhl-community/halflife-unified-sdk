@@ -40,20 +40,6 @@ float VectorNormalize(float* v)
 	return length;
 }
 
-void VectorInverse(float* v)
-{
-	v[0] = -v[0];
-	v[1] = -v[1];
-	v[2] = -v[2];
-}
-
-void VectorScale(const float* in, float scale, float* out)
-{
-	out[0] = in[0] * scale;
-	out[1] = in[1] * scale;
-	out[2] = in[2] * scale;
-}
-
 int Q_log2(int val)
 {
 	int answer = 0;
