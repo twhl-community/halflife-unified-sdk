@@ -9,7 +9,6 @@
 #include "cl_entity.h"
 #include "ClientLibrary.h"
 #include "ref_params.h"
-#include "in_defs.h" // PITCH YAW ROLL
 #include "pm_movevars.h"
 #include "pm_shared.h"
 #include "pm_defs.h"
@@ -26,16 +25,12 @@ void CL_CameraOffset(float* ofs);
 
 int PM_GetVisEntInfo(int ent);
 int PM_GetPhysEntInfo(int ent);
-void InterpolateAngles(float* start, float* end, float* output, float frac);
-void NormalizeAngles(float* angles);
-float Distance(const float* v1, const float* v2);
 
 extern Vector vJumpOrigin;
 extern Vector vJumpAngles;
 
 
 void V_DropPunchAngle(float frametime, Vector& ev_punchangle);
-void VectorAngles(const float* forward, float* angles);
 
 #include "r_studioint.h"
 #include "com_model.h"

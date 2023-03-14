@@ -15,7 +15,6 @@
 #include "usercmd.h"
 #include "const.h"
 #include "camera.h"
-#include "in_defs.h"
 #include "view.h"
 #include "Exports.h"
 
@@ -26,14 +25,10 @@ extern bool g_iAlive;
 
 extern int g_weaponselect;
 
-// Defined in pm_math.c
-float anglemod(float a);
-
 void IN_Init();
 void IN_Move(float frametime, usercmd_t* cmd);
 void IN_Shutdown();
 void V_Init();
-void VectorAngles(const float* forward, float* angles);
 int CL_ButtonBits(bool);
 
 // xxx need client dll function to get and clear impuse

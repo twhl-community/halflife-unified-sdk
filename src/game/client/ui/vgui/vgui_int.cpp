@@ -19,7 +19,6 @@
 #include "usercmd.h"
 #include "const.h"
 #include "camera.h"
-#include "in_defs.h"
 #include "vgui_TeamFortressViewport.h"
 
 using namespace vgui;

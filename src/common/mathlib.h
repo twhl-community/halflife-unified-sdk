@@ -24,6 +24,13 @@ typedef float vec_t;
 
 #include "vector.h"
 
+// up / down
+#define PITCH 0
+// left / right
+#define YAW 1
+// fall over
+#define ROLL 2
+
 typedef vec_t vec4_t[4]; // x,y,z,w
 typedef vec_t vec5_t[5];
 
@@ -92,6 +99,12 @@ void AngleVectorsTranspose(const Vector& angles, Vector* forward, Vector* right,
 void AngleMatrix(const float* angles, float matrix[3][4]);
 void AngleIMatrix(const Vector& angles, float matrix[3][4]);
 void VectorTransform(const float* in1, float in2[3][4], float* out);
+void ConcatTransforms(float in1[3][4], float in2[3][4], float out[3][4]);
+
+void MatrixCopy(float in[3][4], float out[3][4]);
+void QuaternionMatrix(vec4_t quaternion, float (*matrix)[4]);
+void QuaternionSlerp(vec4_t p, vec4_t q, float t, vec4_t qt);
+void AngleQuaternion(float* angles, vec4_t quaternion);
 
 void NormalizeAngles(float* angles);
 void InterpolateAngles(float* start, float* end, float* output, float frac);
@@ -101,3 +114,5 @@ void VectorMatrix(const Vector& forward, Vector& right, Vector& up);
 void VectorAngles(const float* forward, float* angles);
 
 float anglemod(float a);
+
+float Distance(const float* v1, const float* v2);

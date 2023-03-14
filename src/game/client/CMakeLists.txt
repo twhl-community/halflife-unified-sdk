@@ -100,7 +100,6 @@ target_sources(client PRIVATE
 	global_consts.h
 	interpolation.cpp
 	interpolation.h
-	in_defs.h
 	player_info.h
 	util.cpp
 	view.cpp
@@ -138,8 +137,6 @@ target_sources(client PRIVATE
 	rendering/GameStudioModelRenderer.h
 	rendering/StudioModelRenderer.cpp
 	rendering/StudioModelRenderer.h
-	rendering/studio_util.cpp
-	rendering/studio_util.h
 	rendering/tri.cpp
 	rendering/tri.h
 	

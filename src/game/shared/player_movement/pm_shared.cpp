@@ -107,13 +107,6 @@ struct hull_t
 
 #define PLAYER_DUCKING_MULTIPLIER 0.333
 
-// up / down
-#define PITCH 0
-// left / right
-#define YAW 1
-// fall over
-#define ROLL 2
-
 #define CONTENTS_CURRENT_0 -9
 #define CONTENTS_CURRENT_90 -10
 #define CONTENTS_CURRENT_180 -11

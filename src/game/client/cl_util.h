@@ -160,12 +160,6 @@ inline int safe_sprintf(char* dst, int len_dst, const char* format, ...)
 	return 0;
 }
 
-float Length(const float* v);
-void VectorMA(const float* veca, float scale, const float* vecb, float* vecc);
-void VectorScale(const float* in, float scale, float* out);
-float VectorNormalize(float* v);
-void VectorInverse(float* v);
-
 HSPRITE LoadSprite(const char* pszName);
 
 inline bool UTIL_IsMapLoaded()

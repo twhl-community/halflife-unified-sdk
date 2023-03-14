@@ -23,9 +23,6 @@ struct model_t;
 #define OVERVIEW_TILE_SIZE 128 // don't change this
 #define OVERVIEW_MAX_LAYERS 1
 
-void VectorAngles(const float* forward, float* angles);
-void NormalizeAngles(float* angles);
-
 //-----------------------------------------------------------------------------
 // Purpose: Handles the drawing of the spectator stuff (camera & top-down map and all the things on it )
 //-----------------------------------------------------------------------------

@@ -52,7 +52,6 @@
 #include "r_efx.h"
 #include "event_api.h"
 #include "event_args.h"
-#include "in_defs.h"
 
 #include "r_studioint.h"
 #include "com_model.h"
@@ -65,7 +64,6 @@ static int tracerCount[MAX_PLAYERS];
 #include "pm_shared.h"
 
 void V_PunchAxis(int axis, float punch);
-void VectorAngles(const float* forward, float* angles);
 
 extern cvar_t* cl_lw;
 

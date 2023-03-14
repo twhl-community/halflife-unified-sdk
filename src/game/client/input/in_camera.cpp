@@ -12,7 +12,6 @@
 #include "usercmd.h"
 #include "const.h"
 #include "camera.h"
-#include "in_defs.h"
 #include "Exports.h"
 
 #include "SDL2/SDL_mouse.h"

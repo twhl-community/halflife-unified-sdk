@@ -41,7 +41,6 @@
 #include "usercmd.h"
 #include "const.h"
 #include "camera.h"
-#include "in_defs.h"
 #include "pm_shared.h"
 #include "keydefs.h"
 #include "demo.h"

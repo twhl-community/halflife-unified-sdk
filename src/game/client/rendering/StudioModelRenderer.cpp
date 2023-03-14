@@ -10,7 +10,6 @@
 #include "dlight.h"
 #include "triangleapi.h"
 
-#include "studio_util.h"
 #include "r_studioint.h"
 
 #include "StudioModelRenderer.h"
