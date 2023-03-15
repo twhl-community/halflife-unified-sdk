@@ -202,10 +202,8 @@ void CSniperRifle::Reload()
 bool CSniperRifle::GetItemInfo(ItemInfo* p)
 {
 	p->pszAmmo1 = "762";
-	p->iMaxAmmo1 = SNIPERRIFLE_MAX_CARRY;
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo2 = nullptr;
-	p->iMaxAmmo2 = WEAPON_NOCLIP;
 	p->iMaxClip = SNIPERRIFLE_MAX_CLIP;
 	p->iSlot = 5;
 	p->iPosition = 2;
@@ -217,7 +215,7 @@ bool CSniperRifle::GetItemInfo(ItemInfo* p)
 
 void CSniperRifle::IncrementAmmo(CBasePlayer* pPlayer)
 {
-	if (pPlayer->GiveAmmo(1, "762", SNIPERRIFLE_MAX_CARRY) >= 0)
+	if (pPlayer->GiveAmmo(1, "762") >= 0)
 	{
 		EMIT_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
 	}
@@ -255,7 +253,7 @@ public:
 
 	bool AddAmmo(CBasePlayer* pOther) override
 	{
-		if (pOther->GiveAmmo(AMMO_SNIPERRIFLE_GIVE, "762", SNIPERRIFLE_MAX_CARRY) != -1)
+		if (pOther->GiveAmmo(AMMO_SNIPERRIFLE_GIVE, "762") != -1)
 		{
 			EMIT_SOUND(edict(), CHAN_ITEM, "items/9mmclip1.wav", VOL_NORM, ATTN_NORM);
 

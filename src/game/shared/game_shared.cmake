@@ -28,6 +28,8 @@ function(add_game_shared_sources target)
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/entities/entity_utils.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/entities/player_shared.cpp
 			
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/entities/items/weapons/AmmoTypeSystem.cpp
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/entities/items/weapons/AmmoTypeSystem.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/entities/items/weapons/CCrossbow.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/entities/items/weapons/CCrossbow.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/entities/items/weapons/CCrowbar.cpp

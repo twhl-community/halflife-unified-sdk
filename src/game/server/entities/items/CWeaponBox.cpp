@@ -14,6 +14,7 @@
  ****/
 
 #include "cbase.h"
+#include "AmmoTypeSystem.h"
 #include "CWeaponBox.h"
 
 LINK_ENTITY_TO_CLASS(weaponbox, CWeaponBox);
@@ -119,7 +120,7 @@ void CWeaponBox::Touch(CBaseEntity* pOther)
 		if (!FStringNull(m_rgiszAmmo[i]))
 		{
 			// there's some ammo of this type.
-			pPlayer->GiveAmmo(m_rgAmmo[i], STRING(m_rgiszAmmo[i]), MaxAmmoCarry(m_rgiszAmmo[i]));
+			pPlayer->GiveAmmo(m_rgAmmo[i], STRING(m_rgiszAmmo[i]));
 
 			// Logger->trace("Gave {} rounds of {}", m_rgAmmo[i], STRING(m_rgiszAmmo[i]));
 
@@ -209,8 +210,6 @@ bool CWeaponBox::PackWeapon(CBasePlayerWeapon* weapon)
 
 bool CWeaponBox::PackAmmo(string_t iszName, int iCount)
 {
-	int iMaxCarry;
-
 	if (FStringNull(iszName))
 	{
 		// error here
@@ -218,30 +217,48 @@ bool CWeaponBox::PackAmmo(string_t iszName, int iCount)
 		return false;
 	}
 
-	iMaxCarry = MaxAmmoCarry(iszName);
+	const auto type = g_AmmoTypes.GetByName(STRING(iszName));
 
-	if (iMaxCarry != -1 && iCount > 0)
+	if (type && iCount > 0)
 	{
 		// Logger->debug("Packed {} rounds of {}", iCount, STRING(iszName));
-		GiveAmmo(iCount, STRING(iszName), iMaxCarry);
+		GiveAmmo(iCount, type);
 		return true;
 	}
 
 	return false;
 }
 
-int CWeaponBox::GiveAmmo(int iCount, const char* szName, int iMax, int* pIndex /* = nullptr*/)
+int CWeaponBox::GiveAmmo(int iCount, const char* szName, int* pIndex)
 {
+	const auto type = g_AmmoTypes.GetByName(szName);
+
+	if (!type)
+	{
+		CBasePlayerWeapon::WeaponsLogger->error("CWeaponBox::GiveAmmo: Unknown ammo type \"{}\"", szName);
+		return -1;
+	}
+
+	return GiveAmmo(iCount, type, pIndex);
+}
+
+int CWeaponBox::GiveAmmo(int iCount, const AmmoType* type, int* pIndex)
+{
+	if (!type)
+	{
+		return -1;
+	}
+
 	int i;
 
 	for (i = 1; i < MAX_AMMO_TYPES && !FStringNull(m_rgiszAmmo[i]); i++)
 	{
-		if (stricmp(szName, STRING(m_rgiszAmmo[i])) == 0)
+		if (type->Name.comparei(STRING(m_rgiszAmmo[i])) == 0)
 		{
 			if (pIndex)
 				*pIndex = i;
 
-			int iAdd = V_min(iCount, iMax - m_rgAmmo[i]);
+			int iAdd = V_min(iCount, type->MaximumCapacity - m_rgAmmo[i]);
 			if (iCount == 0 || iAdd > 0)
 			{
 				m_rgAmmo[i] += iAdd;
@@ -256,7 +273,7 @@ int CWeaponBox::GiveAmmo(int iCount, const char* szName, int iMax, int* pIndex /
 		if (pIndex)
 			*pIndex = i;
 
-		m_rgiszAmmo[i] = MAKE_STRING(szName);
+		m_rgiszAmmo[i] = ALLOC_STRING(type->Name.c_str());
 		m_rgAmmo[i] = iCount;
 
 		return i;

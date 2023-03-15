@@ -845,7 +845,7 @@ void CHalfLifeCTFplay::PlayerSpawn(CBasePlayer* pPlayer)
 				pPlayer->GiveNamedItem("weapon_pipewrench");
 				pPlayer->GiveNamedItem("weapon_eagle");
 				pPlayer->GiveNamedItem("weapon_grapple");
-				pPlayer->GiveAmmo(DEAGLE_DEFAULT_GIVE * 3, "357", _357_MAX_CARRY);
+				pPlayer->GiveAmmo(DEAGLE_DEFAULT_GIVE * 3, "357");
 			}
 
 			for (auto pFlag : UTIL_FindEntitiesByClassname<CTFGoalFlag>("item_ctfflag"))
@@ -1162,19 +1162,6 @@ void CHalfLifeCTFplay::DeathNotice(CBasePlayer* pVictim, CBaseEntity* pKiller, C
 
 		CHalfLifeMultiplay::DeathNotice(pVictim, pKiller, inflictor);
 	}
-}
-
-bool CHalfLifeCTFplay::CanHaveAmmo(CBasePlayer* pPlayer, const char* pszAmmoName, int iMaxCarry)
-{
-	if (pszAmmoName)
-	{
-		const auto ammoIndex = CBasePlayer::GetAmmoIndex(pszAmmoName);
-
-		if (ammoIndex >= 0)
-			return pPlayer->AmmoInventory(ammoIndex) < iMaxCarry;
-	}
-
-	return false;
 }
 
 const char* CHalfLifeCTFplay::GetTeamID(CBaseEntity* pEntity)

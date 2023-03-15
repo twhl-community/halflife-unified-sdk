@@ -312,7 +312,7 @@ bool CBasePlayer::HasPlayerWeapon(CBasePlayerWeapon* weapon) { return false; }
 bool CBasePlayer::SwitchWeapon(CBasePlayerWeapon* weapon) { return false; }
 Vector CBasePlayer::GetGunPosition() { return g_vecZero; }
 const char* CBasePlayer::TeamID() { return ""; }
-int CBasePlayer::GiveAmmo(int iCount, const char* szName, int iMax) { return 0; }
+int CBasePlayer::GiveAmmo(int iCount, const char* szName) { return 0; }
 void CBasePlayer::AddPoints(int score, bool bAllowNegativeScore) {}
 void CBasePlayer::AddPointsToTeam(int score, bool bAllowNegativeScore) {}
 void CBasePlayer::TabulateAmmo() {}
@@ -341,8 +341,8 @@ void CBasePlayerWeapon::AttachToPlayer(CBasePlayer* pPlayer) {}
 bool CBasePlayerWeapon::AddDuplicate(CBasePlayerWeapon* original) { return false; }
 void CBasePlayerWeapon::AddToPlayer(CBasePlayer* pPlayer) {}
 bool CBasePlayerWeapon::UpdateClientData(CBasePlayer* pPlayer) { return false; }
-bool CBasePlayerWeapon::AddPrimaryAmmo(int iCount, const char* szName, int iMaxClip, int iMaxCarry) { return true; }
-bool CBasePlayerWeapon::AddSecondaryAmmo(int iCount, const char* szName, int iMax) { return true; }
+bool CBasePlayerWeapon::AddPrimaryAmmo(int iCount, const char* szName, int iMaxClip) { return true; }
+bool CBasePlayerWeapon::AddSecondaryAmmo(int iCount, const char* szName) { return true; }
 bool CBasePlayerWeapon::IsUseable() { return true; }
 void CBasePlayerAmmo::Precache() {}
 void CBasePlayerAmmo::Spawn() {}

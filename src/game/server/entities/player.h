@@ -364,7 +364,7 @@ public:
 	void GiveNamedItem(const char* szName, int defaultAmmo);
 	void EnableControl(bool fControl);
 
-	int GiveAmmo(int iAmount, const char* szName, int iMax);
+	int GiveAmmo(int iAmount, const char* szName);
 	void SendAmmoUpdate();
 	void SendSingleAmmoUpdate(int ammoIndex);
 

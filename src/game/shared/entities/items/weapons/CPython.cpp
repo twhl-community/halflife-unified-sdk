@@ -30,9 +30,7 @@ bool CPython::GetItemInfo(ItemInfo* p)
 {
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo1 = "357";
-	p->iMaxAmmo1 = _357_MAX_CARRY;
 	p->pszAmmo2 = nullptr;
-	p->iMaxAmmo2 = -1;
 	p->iMaxClip = PYTHON_MAX_CLIP;
 	p->iFlags = 0;
 	p->iSlot = 1;
@@ -45,7 +43,7 @@ bool CPython::GetItemInfo(ItemInfo* p)
 
 void CPython::IncrementAmmo(CBasePlayer* pPlayer)
 {
-	if (pPlayer->GiveAmmo(1, "357", _357_MAX_CARRY) >= 0)
+	if (pPlayer->GiveAmmo(1, "357") >= 0)
 	{
 		EMIT_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
 	}
@@ -258,7 +256,7 @@ public:
 	}
 	bool AddAmmo(CBasePlayer* pOther) override
 	{
-		if (pOther->GiveAmmo(AMMO_357BOX_GIVE, "357", _357_MAX_CARRY) != -1)
+		if (pOther->GiveAmmo(AMMO_357BOX_GIVE, "357") != -1)
 		{
 			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
 			return true;

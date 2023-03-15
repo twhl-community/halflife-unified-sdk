@@ -318,9 +318,7 @@ bool CRpg::GetItemInfo(ItemInfo* p)
 {
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo1 = "rockets";
-	p->iMaxAmmo1 = ROCKET_MAX_CARRY;
 	p->pszAmmo2 = nullptr;
-	p->iMaxAmmo2 = -1;
 	p->iMaxClip = RPG_MAX_CLIP;
 	p->iSlot = 3;
 	p->iPosition = 0;
@@ -333,7 +331,7 @@ bool CRpg::GetItemInfo(ItemInfo* p)
 
 void CRpg::IncrementAmmo(CBasePlayer* pPlayer)
 {
-	if (pPlayer->GiveAmmo(1, "rockets", ROCKET_MAX_CARRY) >= 0)
+	if (pPlayer->GiveAmmo(1, "rockets") >= 0)
 	{
 		EMIT_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
 	}
@@ -547,7 +545,7 @@ public:
 			iGive = AMMO_RPGCLIP_GIVE;
 		}
 
-		if (pOther->GiveAmmo(iGive, "rockets", ROCKET_MAX_CARRY) != -1)
+		if (pOther->GiveAmmo(iGive, "rockets") != -1)
 		{
 			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
 			return true;

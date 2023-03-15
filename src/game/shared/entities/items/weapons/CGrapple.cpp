@@ -557,10 +557,8 @@ void CGrapple::DestroyEffect()
 bool CGrapple::GetItemInfo(ItemInfo* p)
 {
 	p->pszAmmo1 = nullptr;
-	p->iMaxAmmo1 = WEAPON_NOCLIP;
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo2 = nullptr;
-	p->iMaxAmmo2 = WEAPON_NOCLIP;
 	p->iMaxClip = WEAPON_NOCLIP;
 	p->iSlot = 0;
 	p->iPosition = 3;

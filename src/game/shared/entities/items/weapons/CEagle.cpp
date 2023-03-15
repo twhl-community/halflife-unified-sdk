@@ -319,10 +319,8 @@ void CEagle::UpdateLaser()
 bool CEagle::GetItemInfo(ItemInfo* p)
 {
 	p->pszAmmo1 = "357";
-	p->iMaxAmmo1 = _357_MAX_CARRY;
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo2 = nullptr;
-	p->iMaxAmmo2 = WEAPON_NOCLIP;
 	p->iMaxClip = EAGLE_MAX_CLIP;
 	p->iSlot = 1;
 	p->iPosition = 2;
@@ -334,7 +332,7 @@ bool CEagle::GetItemInfo(ItemInfo* p)
 
 void CEagle::IncrementAmmo(CBasePlayer* pPlayer)
 {
-	if (pPlayer->GiveAmmo(1, "357", _357_MAX_CARRY) >= 0)
+	if (pPlayer->GiveAmmo(1, "357") >= 0)
 	{
 		EMIT_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
 	}
@@ -373,7 +371,7 @@ public:
 
 	bool AddAmmo(CBasePlayer* pOther) override
 	{
-		if (pOther->GiveAmmo(AMMO_EAGLE_GIVE, "357", _357_MAX_CARRY) != -1)
+		if (pOther->GiveAmmo(AMMO_EAGLE_GIVE, "357") != -1)
 		{
 			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
 			return true;

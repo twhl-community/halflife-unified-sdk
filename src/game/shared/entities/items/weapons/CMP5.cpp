@@ -75,9 +75,7 @@ bool CMP5::GetItemInfo(ItemInfo* p)
 {
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo1 = "9mm";
-	p->iMaxAmmo1 = _9MM_MAX_CARRY;
 	p->pszAmmo2 = "ARgrenades";
-	p->iMaxAmmo2 = M203_GRENADE_MAX_CARRY;
 	p->iMaxClip = MP5_MAX_CLIP;
 	p->iSlot = 2;
 	p->iPosition = 0;
@@ -90,14 +88,14 @@ bool CMP5::GetItemInfo(ItemInfo* p)
 
 void CMP5::IncrementAmmo(CBasePlayer* pPlayer)
 {
-	if (pPlayer->GiveAmmo(1, "9mm", _9MM_MAX_CARRY) >= 0)
+	if (pPlayer->GiveAmmo(1, "9mm") >= 0)
 	{
 		EMIT_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
 	}
 
 	if (m_flNextGrenadeLoad < gpGlobals->time)
 	{
-		pPlayer->GiveAmmo(1, "ARgrenades", M203_GRENADE_MAX_CARRY);
+		pPlayer->GiveAmmo(1, "ARgrenades");
 		m_flNextGrenadeLoad = gpGlobals->time + 10;
 	}
 }
@@ -280,7 +278,7 @@ public:
 	}
 	bool AddAmmo(CBasePlayer* pOther) override
 	{
-		bool bResult = (pOther->GiveAmmo(AMMO_MP5CLIP_GIVE, "9mm", _9MM_MAX_CARRY) != -1);
+		bool bResult = (pOther->GiveAmmo(AMMO_MP5CLIP_GIVE, "9mm") != -1);
 		if (bResult)
 		{
 			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
@@ -310,7 +308,7 @@ public:
 	}
 	bool AddAmmo(CBasePlayer* pOther) override
 	{
-		bool bResult = (pOther->GiveAmmo(AMMO_CHAINBOX_GIVE, "9mm", _9MM_MAX_CARRY) != -1);
+		bool bResult = (pOther->GiveAmmo(AMMO_CHAINBOX_GIVE, "9mm") != -1);
 		if (bResult)
 		{
 			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
@@ -338,7 +336,7 @@ public:
 	}
 	bool AddAmmo(CBasePlayer* pOther) override
 	{
-		bool bResult = (pOther->GiveAmmo(AMMO_M203BOX_GIVE, "ARgrenades", M203_GRENADE_MAX_CARRY) != -1);
+		bool bResult = (pOther->GiveAmmo(AMMO_M203BOX_GIVE, "ARgrenades") != -1);
 
 		if (bResult)
 		{

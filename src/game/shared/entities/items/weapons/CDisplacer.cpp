@@ -432,10 +432,8 @@ void CDisplacer::AltFireThink()
 bool CDisplacer::GetItemInfo(ItemInfo* p)
 {
 	p->pszAmmo1 = "uranium";
-	p->iMaxAmmo1 = URANIUM_MAX_CARRY;
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo2 = nullptr;
-	p->iMaxAmmo2 = WEAPON_NOCLIP;
 	p->iMaxClip = WEAPON_NOCLIP;
 	p->iFlags = 0;
 	p->iSlot = 5;
@@ -447,7 +445,7 @@ bool CDisplacer::GetItemInfo(ItemInfo* p)
 
 void CDisplacer::IncrementAmmo(CBasePlayer* pPlayer)
 {
-	if (pPlayer->GiveAmmo(1, "uranium", URANIUM_MAX_CARRY) >= 0)
+	if (pPlayer->GiveAmmo(1, "uranium") >= 0)
 	{
 		EMIT_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
 	}

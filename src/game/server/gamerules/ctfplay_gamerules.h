@@ -89,8 +89,6 @@ public:
 
 	void DeathNotice(CBasePlayer* pVictim, CBaseEntity* pKiller, CBaseEntity* inflictor) override;
 
-	bool CanHaveAmmo(CBasePlayer* pPlayer, const char* pszAmmoName, int iMaxCarry) override;
-
 	const char* GetTeamID(CBaseEntity* pEntity) override;
 
 	int PlayerRelationship(CBaseEntity* pPlayer, CBaseEntity* pTarget) override;

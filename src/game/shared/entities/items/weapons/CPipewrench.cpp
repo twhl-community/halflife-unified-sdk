@@ -517,10 +517,8 @@ void CPipewrench::SetWeaponData(const weapon_data_t& data)
 bool CPipewrench::GetItemInfo(ItemInfo* p)
 {
 	p->pszAmmo1 = nullptr;
-	p->iMaxAmmo1 = WEAPON_NOCLIP;
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo2 = nullptr;
-	p->iMaxAmmo2 = WEAPON_NOCLIP;
 	p->iMaxClip = WEAPON_NOCLIP;
 	p->iSlot = 0;
 	p->iPosition = 1;

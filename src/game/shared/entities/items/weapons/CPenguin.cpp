@@ -194,10 +194,8 @@ void CPenguin::SecondaryAttack()
 bool CPenguin::GetItemInfo(ItemInfo* p)
 {
 	p->pszAmmo1 = "Penguins";
-	p->iMaxAmmo1 = PENGUIN_MAX_CARRY;
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo2 = nullptr;
-	p->iMaxAmmo2 = WEAPON_NOCLIP;
 	p->iMaxClip = WEAPON_NOCLIP;
 	p->iSlot = 4;
 	p->iPosition = 4;

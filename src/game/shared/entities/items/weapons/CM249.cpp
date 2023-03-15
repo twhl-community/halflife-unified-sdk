@@ -322,10 +322,8 @@ int CM249::RecalculateBody(int iClip)
 bool CM249::GetItemInfo(ItemInfo* p)
 {
 	p->pszAmmo1 = "556";
-	p->iMaxAmmo1 = M249_MAX_CARRY;
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo2 = nullptr;
-	p->iMaxAmmo2 = WEAPON_NOCLIP;
 	p->iMaxClip = M249_MAX_CLIP;
 	p->iSlot = 5;
 	p->iPosition = 0;
@@ -338,7 +336,7 @@ bool CM249::GetItemInfo(ItemInfo* p)
 
 void CM249::IncrementAmmo(CBasePlayer* pPlayer)
 {
-	if (pPlayer->GiveAmmo(1, "556", M249_MAX_CARRY) >= 0)
+	if (pPlayer->GiveAmmo(1, "556") >= 0)
 	{
 		EMIT_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
 	}
@@ -374,7 +372,7 @@ public:
 
 	bool AddAmmo(CBasePlayer* pOther) override
 	{
-		if (pOther->GiveAmmo(AMMO_M249_GIVE, "556", M249_MAX_CARRY) != -1)
+		if (pOther->GiveAmmo(AMMO_M249_GIVE, "556") != -1)
 		{
 			EMIT_SOUND(edict(), CHAN_ITEM, "items/9mmclip1.wav", VOL_NORM, ATTN_NORM);
 

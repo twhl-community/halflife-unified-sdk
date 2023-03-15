@@ -286,10 +286,8 @@ void CShockRifle::RechargeAmmo(bool bLoud)
 bool CShockRifle::GetItemInfo(ItemInfo* p)
 {
 	p->pszAmmo1 = "shock";
-	p->iMaxAmmo1 = SHOCKRIFLE_MAX_CLIP;
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo2 = nullptr;
-	p->iMaxAmmo2 = WEAPON_NOCLIP;
 	p->iMaxClip = WEAPON_NOCLIP;
 	p->iFlags = ITEM_FLAG_NOAUTORELOAD | ITEM_FLAG_NOAUTOSWITCHEMPTY;
 	p->iSlot = 6;

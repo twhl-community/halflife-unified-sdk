@@ -25,6 +25,7 @@
 #include <EASTL/fixed_string.h>
 
 #include "cbase.h"
+#include "AmmoTypeSystem.h"
 #include "player.h"
 #include "trains.h"
 #include "nodes.h"
@@ -705,7 +706,7 @@ void CBasePlayer::PackDeadPlayerItems()
 	// pack the ammo
 	while (iPackAmmo[iPA] != -1)
 	{
-		pWeaponBox->PackAmmo(MAKE_STRING(CBasePlayerWeapon::AmmoInfoArray[iPackAmmo[iPA]].pszName), m_rgAmmo[iPackAmmo[iPA]]);
+		pWeaponBox->PackAmmo(MAKE_STRING(g_AmmoTypes.GetByIndex(iPackAmmo[iPA])->Name.c_str()), m_rgAmmo[iPackAmmo[iPA]]);
 		iPA++;
 	}
 
@@ -4090,7 +4091,7 @@ bool CBasePlayer::RemovePlayerWeapon(CBasePlayerWeapon* weapon)
 //
 // Returns the unique ID for the ammo, or -1 if error
 //
-int CBasePlayer::GiveAmmo(int iCount, const char* szName, int iMax)
+int CBasePlayer::GiveAmmo(int iCount, const char* szName)
 {
 	if (!szName)
 	{
@@ -4098,33 +4099,34 @@ int CBasePlayer::GiveAmmo(int iCount, const char* szName, int iMax)
 		return -1;
 	}
 
-	if (!g_pGameRules->CanHaveAmmo(this, szName, iMax))
+	const auto type = g_AmmoTypes.GetByName(szName);
+
+	if (!type)
+	{
+		// Ammo type not registered.
+		return -1;
+	}
+
+	if (!g_pGameRules->CanHaveAmmo(this, szName))
 	{
 		// game rules say I can't have any more of this ammo type.
 		return -1;
 	}
 
-	int i = 0;
-
-	i = GetAmmoIndex(szName);
-
-	if (i < 0 || i >= MAX_AMMO_TYPES)
-		return -1;
-
-	int iAdd = V_min(iCount, iMax - m_rgAmmo[i]);
+	int iAdd = V_min(iCount, type->MaximumCapacity - m_rgAmmo[type->Id]);
 	if (iAdd < 1)
-		return i;
+		return type->Id;
 
 	// If this is an exhaustible weapon make sure the player has it.
-	if (const auto& ammoType = CBasePlayerWeapon::AmmoInfoArray[i]; ammoType.WeaponName != nullptr)
+	if (type->WeaponName)
 	{
-		if (!HasNamedPlayerWeapon(ammoType.WeaponName))
+		if (!HasNamedPlayerWeapon(type->WeaponName->c_str()))
 		{
-			GiveNamedItem(ammoType.WeaponName, 0);
+			GiveNamedItem(type->WeaponName->c_str(), 0);
 		}
 	}
 
-	m_rgAmmo[i] += iAdd;
+	m_rgAmmo[type->Id] += iAdd;
 
 
 	if (0 != gmsgAmmoPickup) // make sure the ammo messages have been linked first
@@ -4138,7 +4140,7 @@ int CBasePlayer::GiveAmmo(int iCount, const char* szName, int iMax)
 
 	TabulateAmmo();
 
-	return i;
+	return type->Id;
 }
 
 
@@ -4209,21 +4211,10 @@ int CBasePlayer::AmmoInventory(int iAmmoIndex)
 
 int CBasePlayer::GetAmmoIndex(const char* psz)
 {
-	int i;
-
 	if (!psz)
 		return -1;
 
-	for (i = 1; i < MAX_AMMO_TYPES; i++)
-	{
-		if (!CBasePlayerWeapon::AmmoInfoArray[i].pszName)
-			continue;
-
-		if (stricmp(psz, CBasePlayerWeapon::AmmoInfoArray[i].pszName) == 0)
-			return i;
-	}
-
-	return -1;
+	return g_AmmoTypes.IndexOf(psz);
 }
 
 // Called from UpdateClientData
@@ -4516,16 +4507,20 @@ void CBasePlayer::UpdateClientData()
 			else
 				pszName = II.pszName;
 
+			// TODO: ammo info should be sent over separately.
+			const auto type1 = II.pszAmmo1 ? g_AmmoTypes.GetByName(II.pszAmmo1) : nullptr;
+			const auto type2 = II.pszAmmo2 ? g_AmmoTypes.GetByName(II.pszAmmo2) : nullptr;
+
 			MESSAGE_BEGIN(MSG_ONE, gmsgWeaponList, nullptr, pev);
-			WRITE_STRING(pszName);				   // string	weapon name
-			WRITE_BYTE(GetAmmoIndex(II.pszAmmo1)); // byte		Ammo Type
-			WRITE_BYTE(II.iMaxAmmo1);			   // byte     Max Ammo 1
-			WRITE_BYTE(GetAmmoIndex(II.pszAmmo2)); // byte		Ammo2 Type
-			WRITE_BYTE(II.iMaxAmmo2);			   // byte     Max Ammo 2
-			WRITE_BYTE(II.iSlot);				   // byte		bucket
-			WRITE_BYTE(II.iPosition);			   // byte		bucket pos
-			WRITE_BYTE(II.iId);					   // byte		id (bit index into m_WeaponBits)
-			WRITE_BYTE(II.iFlags);				   // byte		Flags
+			WRITE_STRING(pszName);										// string	weapon name
+			WRITE_BYTE(GetAmmoIndex(II.pszAmmo1));						// byte		Ammo Type
+			WRITE_BYTE(type1 ? type1->MaximumCapacity : WEAPON_NOCLIP);	// byte     Max Ammo 1
+			WRITE_BYTE(GetAmmoIndex(II.pszAmmo2));						// byte		Ammo2 Type
+			WRITE_BYTE(type2 ? type2->MaximumCapacity : WEAPON_NOCLIP);	// byte     Max Ammo 2
+			WRITE_BYTE(II.iSlot);										// byte		bucket
+			WRITE_BYTE(II.iPosition);									// byte		bucket pos
+			WRITE_BYTE(II.iId);											// byte		id (bit index into m_WeaponBits)
+			WRITE_BYTE(II.iFlags);										// byte		Flags
 			MESSAGE_END();
 		}
 	}

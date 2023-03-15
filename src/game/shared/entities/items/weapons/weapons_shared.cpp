@@ -14,34 +14,40 @@
  ****/
 
 #include "cbase.h"
+#include "AmmoTypeSystem.h"
 
 #ifdef CLIENT_DLL
 #include "com_weapons.h"
 #endif
 
-void AddAmmoNameToAmmoRegistry(const char* szAmmoname, const char* weaponName)
+void Weapons_RegisterAmmoTypes()
 {
-	// make sure it's not already in the registry
-	for (int i = 0; i < MAX_AMMO_TYPES; i++)
-	{
-		if (!CBasePlayerWeapon::AmmoInfoArray[i].pszName)
-			continue;
+	g_AmmoTypes.Clear();
 
-		if (stricmp(CBasePlayerWeapon::AmmoInfoArray[i].pszName, szAmmoname) == 0)
-			return; // ammo already in registry, just quite
-	}
+	g_AmmoTypes.Register("9mm", _9MM_MAX_CARRY);
+	g_AmmoTypes.Register("357", _357_MAX_CARRY);
 
+	g_AmmoTypes.Register("ARgrenades", M203_GRENADE_MAX_CARRY);
+	g_AmmoTypes.Register("buckshot", BUCKSHOT_MAX_CARRY);
+	g_AmmoTypes.Register("bolts", BOLT_MAX_CARRY);
 
-	giAmmoIndex++;
-	ASSERT(giAmmoIndex < MAX_AMMO_TYPES);
-	if (giAmmoIndex >= MAX_AMMO_TYPES)
-		giAmmoIndex = 0;
+	g_AmmoTypes.Register("rockets", ROCKET_MAX_CARRY);
+	g_AmmoTypes.Register("uranium", URANIUM_MAX_CARRY);
+	g_AmmoTypes.Register("Hornets", HORNET_MAX_CARRY);
 
-	auto& ammoType = CBasePlayerWeapon::AmmoInfoArray[giAmmoIndex];
+	g_AmmoTypes.Register("Hand Grenade", HANDGRENADE_MAX_CARRY, "weapon_handgrenade");
+	g_AmmoTypes.Register("Satchel Charge", SATCHEL_MAX_CARRY, "weapon_satchel");
+	g_AmmoTypes.Register("Trip Mine", TRIPMINE_MAX_CARRY, "weapon_tripmine");
+	g_AmmoTypes.Register("Snarks", SNARK_MAX_CARRY, "weapon_snark");
+	g_AmmoTypes.Register("Penguins", PENGUIN_MAX_CARRY, "weapon_penguin");
+	
+	g_AmmoTypes.Register("556", M249_MAX_CARRY);
+	g_AmmoTypes.Register("762", SNIPERRIFLE_MAX_CARRY);
 
-	ammoType.pszName = szAmmoname;
-	ammoType.iId = giAmmoIndex; // yes, this info is redundant
-	ammoType.WeaponName = weaponName;
+	g_AmmoTypes.Register("spores", SPORELAUNCHER_MAX_CARRY);
+	g_AmmoTypes.Register("shock", SHOCKRIFLE_MAX_CLIP);
+
+	CBasePlayerWeapon::WeaponsLogger->debug("Registered {} ammo types", g_AmmoTypes.GetCount());
 }
 
 void FindHullIntersection(const Vector& vecSrc, TraceResult& tr, const Vector& mins, const Vector& maxs, edict_t* pEntity)
@@ -243,9 +249,13 @@ void CBasePlayerWeapon::ItemPostFrame()
 		{
 			m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] += m_iClip - iMaxClip();
 
-			if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] > iMaxAmmo1())
+			const auto type = g_AmmoTypes.GetByIndex(m_iPrimaryAmmoType);
+
+			assert(type);
+
+			if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] > type->MaximumCapacity)
 			{
-				m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] = iMaxAmmo1();
+				m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] = type->MaximumCapacity;
 			}
 
 			m_iClip = iMaxClip();

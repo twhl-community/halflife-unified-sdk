@@ -308,10 +308,8 @@ void CSporeLauncher::Reload()
 bool CSporeLauncher::GetItemInfo(ItemInfo* p)
 {
 	p->pszAmmo1 = "spores";
-	p->iMaxAmmo1 = SPORELAUNCHER_MAX_CARRY;
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo2 = nullptr;
-	p->iMaxAmmo2 = WEAPON_NOCLIP;
 	p->iMaxClip = SPORELAUNCHER_MAX_CLIP;
 	p->iSlot = 6;
 	p->iPosition = 0;
@@ -324,7 +322,7 @@ bool CSporeLauncher::GetItemInfo(ItemInfo* p)
 
 void CSporeLauncher::IncrementAmmo(CBasePlayer* pPlayer)
 {
-	if (pPlayer->GiveAmmo(1, "spores", SPORELAUNCHER_MAX_CARRY) >= 0)
+	if (pPlayer->GiveAmmo(1, "spores") >= 0)
 	{
 		EMIT_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
 	}
@@ -454,7 +452,7 @@ public:
 
 	bool AddAmmo(CBasePlayer* pOther) override
 	{
-		if (pOther->GiveAmmo(AMMO_SPORE_GIVE, "spores", SPORELAUNCHER_MAX_CARRY) != -1)
+		if (pOther->GiveAmmo(AMMO_SPORE_GIVE, "spores") != -1)
 		{
 			EMIT_SOUND(edict(), CHAN_ITEM, "weapons/spore_ammo.wav", VOL_NORM, ATTN_NORM);
 

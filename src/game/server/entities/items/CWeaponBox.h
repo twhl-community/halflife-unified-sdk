@@ -17,6 +17,8 @@
 
 #include "cbase.h"
 
+struct AmmoType;
+
 /**
 *	@brief a single entity that can store weapons and ammo.
 */
@@ -37,7 +39,8 @@ public:
 	*	@brief is there anything in this box?
 	*/
 	bool IsEmpty();
-	int GiveAmmo(int iCount, const char* szName, int iMax, int* pIndex = nullptr);
+	int GiveAmmo(int iCount, const char* szName, int* pIndex = nullptr);
+	int GiveAmmo(int iCount, const AmmoType* type, int* pIndex = nullptr);
 	void SetObjectCollisionBox() override;
 
 	/**

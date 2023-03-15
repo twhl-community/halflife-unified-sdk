@@ -218,9 +218,7 @@ struct ItemInfo
 	int iSlot;
 	int iPosition;
 	const char* pszAmmo1; // ammo 1 type
-	int iMaxAmmo1;		  // max ammo 1
 	const char* pszAmmo2; // ammo 2 type
-	int iMaxAmmo2;		  // max ammo 2
 	const char* pszName;
 	int iMaxClip;
 	int iId;
@@ -228,29 +226,7 @@ struct ItemInfo
 	int iWeight; // this value used to determine this weapon's importance in autoselection.
 };
 
-struct AmmoInfo
-{
-	const char* pszName;
-	int iId;
-
-	/**
-	 *	@brief For exhaustible weapons. If provided, and the player does not have this weapon in their inventory yet it will be given to them.
-	 */
-	const char* WeaponName = nullptr;
-};
-
-inline int giAmmoIndex = 0;
-
-/**
-*	@brief Precaches the ammo and queues the ammo info for sending to clients
-*/
-void AddAmmoNameToAmmoRegistry(const char* szAmmoname, const char* weaponName);
-
-/**
-*	@brief pass in a name and this function will tell you
-*	the maximum amount of that type of ammunition that a player can carry.
-*/
-int MaxAmmoCarry(string_t iszName);
+void Weapons_RegisterAmmoTypes();
 
 /**
 *	@brief Weapons that the player has in their inventory that they can use.
@@ -297,8 +273,8 @@ public:
 	virtual bool ExtractClipAmmo(CBasePlayerWeapon* weapon);
 
 	// generic "shared" ammo handlers
-	bool AddPrimaryAmmo(int iCount, const char* szName, int iMaxClip, int iMaxCarry);
-	bool AddSecondaryAmmo(int iCount, const char* szName, int iMaxCarry);
+	bool AddPrimaryAmmo(int iCount, const char* szName, int iMaxClip);
+	bool AddSecondaryAmmo(int iCount, const char* szName);
 
 	void EXPORT DestroyItem();
 	void EXPORT DefaultTouch(CBaseEntity* pOther);
@@ -467,14 +443,11 @@ public:
 	void PrintState();
 
 	static inline ItemInfo ItemInfoArray[MAX_WEAPONS];
-	static inline AmmoInfo AmmoInfoArray[MAX_AMMO_TYPES];
 
 	int iItemSlot() { return ItemInfoArray[m_iId].iSlot; } // return 0 to MAX_ITEMS_SLOTS, used in hud
 	int iItemPosition() { return ItemInfoArray[m_iId].iPosition; }
 	const char* pszAmmo1() { return ItemInfoArray[m_iId].pszAmmo1; }
-	int iMaxAmmo1() { return ItemInfoArray[m_iId].iMaxAmmo1; }
 	const char* pszAmmo2() { return ItemInfoArray[m_iId].pszAmmo2; }
-	int iMaxAmmo2() { return ItemInfoArray[m_iId].iMaxAmmo2; }
 	const char* pszName() { return ItemInfoArray[m_iId].pszName; }
 	int iMaxClip() { return ItemInfoArray[m_iId].iMaxClip; }
 	int iWeight() { return ItemInfoArray[m_iId].iWeight; }

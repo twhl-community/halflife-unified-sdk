@@ -60,17 +60,17 @@ bool CItemBackpackCTF::MyTouch(CBasePlayer* pPlayer)
 
 				EMIT_SOUND_DYN(edict(), CHAN_VOICE, "items/ammopickup1.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
 
-				pPlayer->GiveAmmo(AMMO_URANIUMBOX_GIVE, "uranium", URANIUM_MAX_CARRY);
-				pPlayer->GiveAmmo(AMMO_GLOCKCLIP_GIVE, "9mm", _9MM_MAX_CARRY);
-				pPlayer->GiveAmmo(AMMO_357BOX_GIVE, "357", _357_MAX_CARRY);
-				pPlayer->GiveAmmo(AMMO_BUCKSHOTBOX_GIVE, "buckshot", BUCKSHOT_MAX_CARRY);
-				pPlayer->GiveAmmo(CROSSBOW_DEFAULT_GIVE, "bolts", BOLT_MAX_CARRY);
-				pPlayer->GiveAmmo(1, "rockets", ROCKET_MAX_CARRY);
-				pPlayer->GiveAmmo(HANDGRENADE_DEFAULT_GIVE, "Hand Grenade", HANDGRENADE_MAX_CARRY);
-				pPlayer->GiveAmmo(SNARK_DEFAULT_GIVE, "Snarks", SNARK_MAX_CARRY);
-				pPlayer->GiveAmmo(SPORELAUNCHER_DEFAULT_GIVE, "spores", SPORELAUNCHER_MAX_CARRY);
-				pPlayer->GiveAmmo(SNIPERRIFLE_DEFAULT_GIVE, "762", SNIPERRIFLE_MAX_CARRY);
-				pPlayer->GiveAmmo(M249_MAX_CARRY, "556", M249_MAX_CARRY);
+				pPlayer->GiveAmmo(AMMO_URANIUMBOX_GIVE, "uranium");
+				pPlayer->GiveAmmo(AMMO_GLOCKCLIP_GIVE, "9mm");
+				pPlayer->GiveAmmo(AMMO_357BOX_GIVE, "357");
+				pPlayer->GiveAmmo(AMMO_BUCKSHOTBOX_GIVE, "buckshot");
+				pPlayer->GiveAmmo(CROSSBOW_DEFAULT_GIVE, "bolts");
+				pPlayer->GiveAmmo(1, "rockets");
+				pPlayer->GiveAmmo(HANDGRENADE_DEFAULT_GIVE, "Hand Grenade");
+				pPlayer->GiveAmmo(SNARK_DEFAULT_GIVE, "Snarks");
+				pPlayer->GiveAmmo(SPORELAUNCHER_DEFAULT_GIVE, "spores");
+				pPlayer->GiveAmmo(SNIPERRIFLE_DEFAULT_GIVE, "762");
+				pPlayer->GiveAmmo(M249_MAX_CARRY, "556");
 
 				return true;
 			}

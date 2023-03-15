@@ -24,6 +24,7 @@
 #include "coopplay_gamerules.h"
 #include "world.h"
 #include "UserMessages.h"
+#include "items/weapons/AmmoTypeSystem.h"
 
 edict_t* EntSelectSpawnPoint(CBasePlayer* pPlayer);
 
@@ -114,17 +115,13 @@ bool CGameRules::GetNextBestWeapon(CBasePlayer* pPlayer, CBasePlayerWeapon* pCur
 
 //=========================================================
 //=========================================================
-bool CGameRules::CanHaveAmmo(CBasePlayer* pPlayer, const char* pszAmmoName, int iMaxCarry)
+bool CGameRules::CanHaveAmmo(CBasePlayer* pPlayer, const char* pszAmmoName)
 {
-	int iAmmoIndex;
-
 	if (pszAmmoName)
 	{
-		iAmmoIndex = pPlayer->GetAmmoIndex(pszAmmoName);
-
-		if (iAmmoIndex > -1)
+		if (const auto type = g_AmmoTypes.GetByName(pszAmmoName); type)
 		{
-			if (pPlayer->AmmoInventory(iAmmoIndex) < iMaxCarry)
+			if (pPlayer->AmmoInventory(type->Id) < type->MaximumCapacity)
 			{
 				// player has room for more of this type of ammo
 				return true;
@@ -161,7 +158,7 @@ bool CGameRules::CanHavePlayerWeapon(CBasePlayer* pPlayer, CBasePlayerWeapon* pW
 
 	if (pWeapon->pszAmmo1())
 	{
-		if (!CanHaveAmmo(pPlayer, pWeapon->pszAmmo1(), pWeapon->iMaxAmmo1()))
+		if (!CanHaveAmmo(pPlayer, pWeapon->pszAmmo1()))
 		{
 			// we can't carry anymore ammo for this gun. We can only
 			// have the gun if we aren't already carrying one of this type
