@@ -30,6 +30,7 @@
 #include "nodes.h"
 #include "talkmonster.h"
 #include "squadmonster.h"
+#include "items/CWeaponBox.h"
 #include "military/COFSquadTalkMonster.h"
 #include "shake.h"
 #include "ctfplay_gamerules.h"

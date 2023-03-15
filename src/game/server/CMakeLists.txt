@@ -132,6 +132,8 @@ target_sources(server PRIVATE
 	entities/ctf/CTFSpawn.h
 	
 	entities/items/airtank.cpp
+	entities/items/CWeaponBox.cpp
+	entities/items/CWeaponBox.h
 	entities/items/ggrenade.cpp
 	entities/items/healthkit.cpp
 	entities/items/h_battery.cpp
@@ -250,17 +252,16 @@ target_sources(server PRIVATE
 	entities/NPCs/racex/voltigore.cpp
 	entities/NPCs/racex/voltigore.h
 	
-	gamerules/coopplay_gamerules.cpp
-	gamerules/coopplay_gamerules.h
-	gamerules/ctfplay_gamerules.cpp
-	gamerules/ctfplay_gamerules.h
-	
 	entities/NPCs/zombies/gonome.cpp
 	entities/NPCs/zombies/zombie.cpp
 	entities/NPCs/zombies/zombie.h
 	entities/NPCs/zombies/zombie_barney.cpp
 	entities/NPCs/zombies/zombie_soldier.cpp
-
+	
+	gamerules/coopplay_gamerules.cpp
+	gamerules/coopplay_gamerules.h
+	gamerules/ctfplay_gamerules.cpp
+	gamerules/ctfplay_gamerules.h
 	gamerules/gamerules.cpp
 	gamerules/gamerules.h
 	gamerules/multiplay_gamerules.cpp

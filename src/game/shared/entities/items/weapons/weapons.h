@@ -247,6 +247,12 @@ inline int giAmmoIndex = 0;
 void AddAmmoNameToAmmoRegistry(const char* szAmmoname, const char* weaponName);
 
 /**
+*	@brief pass in a name and this function will tell you
+*	the maximum amount of that type of ammunition that a player can carry.
+*/
+int MaxAmmoCarry(string_t iszName);
+
+/**
 *	@brief Weapons that the player has in their inventory that they can use.
 */
 class CBasePlayerWeapon : public CBaseAnimating
@@ -584,39 +590,6 @@ void FindHullIntersection(const Vector& vecSrc, TraceResult& tr, const Vector& m
 #define VECTOR_CONE_10DEGREES Vector(0.08716, 0.08716, 0.08716)
 #define VECTOR_CONE_15DEGREES Vector(0.13053, 0.13053, 0.13053)
 #define VECTOR_CONE_20DEGREES Vector(0.17365, 0.17365, 0.17365)
-
-//=========================================================
-// CWeaponBox - a single entity that can store weapons
-// and ammo.
-//=========================================================
-class CWeaponBox : public CBaseEntity
-{
-public:
-	void OnCreate() override;
-	void Precache() override;
-	void Spawn() override;
-	void Touch(CBaseEntity* pOther) override;
-	bool KeyValue(KeyValueData* pkvd) override;
-	bool IsEmpty();
-	int GiveAmmo(int iCount, const char* szName, int iMax, int* pIndex = nullptr);
-	void SetObjectCollisionBox() override;
-
-	void EXPORT Kill();
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
-
-	bool HasWeapon(CBasePlayerWeapon* checkWeapon);
-	bool PackWeapon(CBasePlayerWeapon* weapon);
-	bool PackAmmo(string_t iszName, int iCount);
-
-	CBasePlayerWeapon* m_rgpPlayerWeapons[MAX_WEAPON_SLOTS]; // one slot for each
-
-	string_t m_rgiszAmmo[MAX_AMMO_SLOTS]; // ammo names
-	int m_rgAmmo[MAX_AMMO_SLOTS];		  // ammo quantities
-
-	int m_cAmmoTypes; // how many ammo types packed into this box (if packed by a level designer)
-};
 
 #ifdef CLIENT_DLL
 inline bool g_irunninggausspred = false;
