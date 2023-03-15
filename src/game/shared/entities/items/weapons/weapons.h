@@ -339,7 +339,6 @@ public:
 	virtual bool PlayEmptySound();
 	virtual void ResetEmptySound();
 
-	virtual void Drop();
 	virtual void Kill();
 	virtual void AttachToPlayer(CBasePlayer* pPlayer);
 

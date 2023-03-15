@@ -747,7 +747,7 @@ void CBasePlayer::RemoveAllItems(bool removeSuit)
 		while (m_pActiveWeapon)
 		{
 			pendingWeapon = m_pActiveWeapon->m_pNext;
-			m_pActiveWeapon->Drop();
+			m_pActiveWeapon->Kill();
 			m_pActiveWeapon = pendingWeapon;
 		}
 		m_rgpPlayerWeapons[i] = nullptr;

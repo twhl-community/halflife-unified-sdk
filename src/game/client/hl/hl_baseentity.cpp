@@ -336,7 +336,6 @@ void CBasePlayerWeapon::CheckRespawn() {}
 CBaseEntity* CBasePlayerWeapon::Respawn() { return nullptr; }
 void CBasePlayerWeapon::DefaultTouch(CBaseEntity* pOther) {}
 void CBasePlayerWeapon::DestroyItem() {}
-void CBasePlayerWeapon::Drop() {}
 void CBasePlayerWeapon::Kill() {}
 void CBasePlayerWeapon::AttachToPlayer(CBasePlayer* pPlayer) {}
 bool CBasePlayerWeapon::AddDuplicate(CBasePlayerWeapon* original) { return false; }

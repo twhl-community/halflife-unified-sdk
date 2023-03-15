@@ -545,13 +545,6 @@ void CBasePlayerWeapon::DestroyItem()
 	Kill();
 }
 
-void CBasePlayerWeapon::Drop()
-{
-	SetTouch(nullptr);
-	SetThink(&CBasePlayerWeapon::SUB_Remove);
-	pev->nextthink = gpGlobals->time + .1;
-}
-
 void CBasePlayerWeapon::Kill()
 {
 	SetTouch(nullptr);
