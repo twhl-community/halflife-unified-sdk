@@ -374,10 +374,6 @@ void CBasePlayerWeapon::SetObjectCollisionBox()
 	pev->absmax = pev->origin + Vector(24, 24, 16);
 }
 
-
-//=========================================================
-// Sets up movetype, size, solidtype for a new weapon.
-//=========================================================
 void CBasePlayerWeapon::FallInit()
 {
 	pev->movetype = MOVETYPE_TOSS;
@@ -392,13 +388,6 @@ void CBasePlayerWeapon::FallInit()
 	pev->nextthink = gpGlobals->time + 0.1;
 }
 
-//=========================================================
-// FallThink - Items that have just spawned run this think
-// to catch them when they hit the ground. Once we're sure
-// that the object is grounded, we change its solid type
-// to trigger and set it in a large box that helps the
-// player get it.
-//=========================================================
 void CBasePlayerWeapon::FallThink()
 {
 	pev->nextthink = gpGlobals->time + 0.1;
@@ -421,9 +410,6 @@ void CBasePlayerWeapon::FallThink()
 	}
 }
 
-//=========================================================
-// Materialize - make a CBasePlayerWeapon visible and tangible
-//=========================================================
 void CBasePlayerWeapon::Materialize()
 {
 	if ((pev->effects & EF_NODRAW) != 0)
@@ -441,10 +427,6 @@ void CBasePlayerWeapon::Materialize()
 	SetThink(nullptr);
 }
 
-//=========================================================
-// AttemptToMaterialize - the item is trying to rematerialize,
-// should it do so now or wait longer?
-//=========================================================
 void CBasePlayerWeapon::AttemptToMaterialize()
 {
 	float time = g_pGameRules->FlWeaponTryRespawn(this);
@@ -458,10 +440,6 @@ void CBasePlayerWeapon::AttemptToMaterialize()
 	pev->nextthink = gpGlobals->time + time;
 }
 
-//=========================================================
-// CheckRespawn - a player is taking this weapon, should
-// it respawn?
-//=========================================================
 void CBasePlayerWeapon::CheckRespawn()
 {
 	switch (g_pGameRules->WeaponShouldRespawn(this))
@@ -475,10 +453,6 @@ void CBasePlayerWeapon::CheckRespawn()
 	}
 }
 
-//=========================================================
-// Respawn- this item is already in the world, but it is
-// invisible and intangible. Make it visible and tangible.
-//=========================================================
 CBaseEntity* CBasePlayerWeapon::Respawn()
 {
 	// make a copy of this weapon that is invisible and inaccessible to players (no touch function). The weapon spawn/respawn code
@@ -565,7 +539,6 @@ void CBasePlayerWeapon::AttachToPlayer(CBasePlayer* pPlayer)
 	SetTouch(nullptr);
 }
 
-// CALLED THROUGH the newly-touched weapon's instance. The existing player weapon is original
 bool CBasePlayerWeapon::AddDuplicate(CBasePlayerWeapon* original)
 {
 	if (0 != m_iDefaultAmmo)
@@ -578,7 +551,6 @@ bool CBasePlayerWeapon::AddDuplicate(CBasePlayerWeapon* original)
 		return ExtractClipAmmo(original);
 	}
 }
-
 
 void CBasePlayerWeapon::AddToPlayer(CBasePlayer* pPlayer)
 {
@@ -701,7 +673,6 @@ bool CBasePlayerWeapon::AddPrimaryAmmo(int iCount, const char* szName, int iMaxC
 	return iIdAmmo > 0 ? true : false;
 }
 
-
 bool CBasePlayerWeapon::AddSecondaryAmmo(int iCount, const char* szName, int iMax)
 {
 	int iIdAmmo;
@@ -718,12 +689,6 @@ bool CBasePlayerWeapon::AddSecondaryAmmo(int iCount, const char* szName, int iMa
 	return iIdAmmo > 0 ? true : false;
 }
 
-//=========================================================
-// IsUseable - this function determines whether or not a
-// weapon is useable by the player in its current state.
-// (does it have ammo loaded? do I have any ammo for the
-// weapon?, etc)
-//=========================================================
 bool CBasePlayerWeapon::IsUseable()
 {
 	if (m_iClip > 0)
@@ -845,14 +810,6 @@ void CBasePlayerAmmo::DefaultTouch(CBaseEntity* pOther)
 	}
 }
 
-//=========================================================
-// called by the new item with the existing item as parameter
-//
-// if we call ExtractAmmo(), it's because the player is picking up this type of weapon for
-// the first time. If it is spawned by the world, m_iDefaultAmmo will have a default ammo amount in it.
-// if  this is a weapon dropped by a dying player, has 0 m_iDefaultAmmo, which means only the ammo in
-// the weapon clip comes along.
-//=========================================================
 bool CBasePlayerWeapon::ExtractAmmo(CBasePlayerWeapon* weapon)
 {
 	bool iReturn = false;
@@ -873,9 +830,6 @@ bool CBasePlayerWeapon::ExtractAmmo(CBasePlayerWeapon* weapon)
 	return iReturn;
 }
 
-//=========================================================
-// called by the new item's class with the existing item as parameter
-//=========================================================
 bool CBasePlayerWeapon::ExtractClipAmmo(CBasePlayerWeapon* weapon)
 {
 	int iAmmo;
@@ -893,9 +847,6 @@ bool CBasePlayerWeapon::ExtractClipAmmo(CBasePlayerWeapon* weapon)
 	return weapon->m_pPlayer->GiveAmmo(iAmmo, pszAmmo1(), iMaxAmmo1()) != 0; // , &m_iPrimaryAmmoType
 }
 
-//=========================================================
-// RetireWeapon - no more ammo for this gun, put it away.
-//=========================================================
 void CBasePlayerWeapon::RetireWeapon()
 {
 	SetThink(&CBasePlayerWeapon::CallDoRetireWeapon);
@@ -924,9 +875,6 @@ void CBasePlayerWeapon::DoRetireWeapon()
 	}
 }
 
-//=========================================================================
-// GetNextAttackDelay - An accurate way of calcualting the next attack time.
-//=========================================================================
 float CBasePlayerWeapon::GetNextAttackDelay(float delay)
 {
 	if (m_flLastFireTime == 0 || m_flNextPrimaryAttack <= -1.1)

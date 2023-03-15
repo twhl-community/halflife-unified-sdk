@@ -19,7 +19,6 @@
 #include "com_weapons.h"
 #endif
 
-// Precaches the ammo and queues the ammo info for sending to clients
 void AddAmmoNameToAmmoRegistry(const char* szAmmoname, const char* weaponName)
 {
 	// make sure it's not already in the registry

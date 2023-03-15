@@ -241,6 +241,9 @@ struct AmmoInfo
 
 inline int giAmmoIndex = 0;
 
+/**
+*	@brief Precaches the ammo and queues the ammo info for sending to clients
+*/
 void AddAmmoNameToAmmoRegistry(const char* szAmmoname, const char* weaponName);
 
 /**
@@ -258,22 +261,32 @@ public:
 
 	static TYPEDESCRIPTION m_SaveData[];
 
-	virtual bool CanAddToPlayer(CBasePlayer* player) { return true; } // return true if the item you want the item added to the player inventory
+	/**
+	*	@brief return true if the item you want the item added to the player inventory
+	*/
+	virtual bool CanAddToPlayer(CBasePlayer* player) { return true; }
 
 	virtual void AddToPlayer(CBasePlayer* pPlayer);
 
 	/**
 	*	@brief return true if you want your duplicate removed from world
+	*	CALLED THROUGH the newly-touched weapon's instance. The existing player weapon is @c original.
 	*/
 	virtual bool AddDuplicate(CBasePlayerWeapon* original);
 
 	/**
-	*	@brief Return true if you can add ammo to yourself when picked up
+	*	@brief called by the new item with the existing item as parameter
+	*	@details If we call ExtractAmmo(), it's because the player is picking up this type of weapon for the first time.
+	*	If it is spawned by the world, m_iDefaultAmmo will have a default ammo amount in it.
+	*	if this is a weapon dropped by a dying player, has 0 m_iDefaultAmmo,
+	*	which means only the ammo in the weapon clip comes along.
+	*	@return true if you can add ammo to yourself when picked up
 	*/
 	virtual bool ExtractAmmo(CBasePlayerWeapon* weapon);
 
 	/**
-	*	@brief Return true if you can add ammo to yourself when picked up
+	*	@brief Called by the new item's class with the existing item as parameter
+	*	@return true if you can add ammo to yourself when picked up
 	*/
 	virtual bool ExtractClipAmmo(CBasePlayerWeapon* weapon);
 
@@ -282,22 +295,67 @@ public:
 	bool AddSecondaryAmmo(int iCount, const char* szName, int iMaxCarry);
 
 	void EXPORT DestroyItem();
-	void EXPORT DefaultTouch(CBaseEntity* pOther); // default weapon touch
-	void EXPORT FallThink();					   // when an item is first spawned, this think is run to determine when the object has hit the ground.
-	void EXPORT Materialize();					   // make a weapon visible and tangible
-	void EXPORT AttemptToMaterialize();			   // the weapon desires to become visible and tangible, if the game rules allow for it
-	CBaseEntity* Respawn() override;			   // copy a weapon
-	void FallInit();
+	void EXPORT DefaultTouch(CBaseEntity* pOther);
+
+	/**
+	*	@brief when an item is first spawned, this think is run to determine when the object has hit the ground.
+	*	@details Items that have just spawned run this think to catch them when they hit the ground.
+	*	Once we're sure that the object is grounded, we change its solid type to trigger
+	*	and set it in a large box that helps the player get it.
+	*/
+	void EXPORT FallThink();
+
+	/**
+	*	@brief make a weapon visible and tangible
+	*/
+	void EXPORT Materialize();
+
+	/**
+	*	@brief the weapon desires to become visible and tangible, if the game rules allow for it.
+	*	Should it do so now or wait longer?
+	*/
+	void EXPORT AttemptToMaterialize();
+
+	/**
+	 *	@brief A player is taking this weapon, should it respawn?
+	 */
 	void CheckRespawn();
-	virtual bool GetItemInfo(ItemInfo* p) { return false; } // returns false if struct not filled out
-	virtual bool CanDeploy();
+
+	/**
+	 *	@brief copy a weapon
+	 */
+	CBaseEntity* Respawn() override;
+
+	/**
+	*	@brief Sets up movetype, size, solidtype for a new weapon.
+	*/
+	void FallInit();
+
+	/**
+	*	@brief returns false if struct not filled out
+	*/
+	virtual bool GetItemInfo(ItemInfo* p) { return false; }
+	
+	/**
+	*	@brief this function determines whether or not a weapon is useable by the player in its current state.
+	*	(does it have ammo loaded? do I have any ammo for the weapon?, etc)
+	*/
 	virtual bool IsUseable();
-	virtual bool Deploy() // returns is deploy was successful
+
+	virtual bool CanDeploy();
+
+	/**
+	*	@brief returns is deploy was successful
+	*/
+	virtual bool Deploy()
 	{
 		return true;
 	}
 
-	virtual bool CanHolster() { return true; } // can this weapon be put away right now?
+	/**
+	*	@brief can this weapon be put away right now?
+	*/
+	virtual bool CanHolster() { return true; }
 
 	/**
 	 *	@brief Put away weapon
@@ -325,13 +383,28 @@ public:
 	virtual void ItemPostFrame();
 
 	// called by CBasePlayerWeapons ItemPostFrame()
-	virtual void PrimaryAttack() {}	  // do "+ATTACK"
-	virtual void SecondaryAttack() {} // do "+ATTACK2"
 
-	virtual void Reload() {}		  // do "+RELOAD"
+	/**
+	*	@brief do "+ATTACK"
+	*/
+	virtual void PrimaryAttack() {}
+
+	/**
+	*	@brief do "+ATTACK2"
+	*/
+	virtual void SecondaryAttack() {}
+
+	/**
+	*	@brief do "+RELOAD"
+	*/
+	virtual void Reload() {}
 
 	virtual bool ShouldWeaponIdle() { return false; }
-	virtual void WeaponIdle() {}	  // called when no buttons pressed
+
+	/**
+	*	@brief called when no buttons pressed
+	*/
+	virtual void WeaponIdle() {}
 
 	/**
 	 *	@brief Animate weapon model
@@ -358,6 +431,9 @@ public:
 
 	virtual void DecrementTimers() {}
 
+	/**
+	*	@brief no more ammo for this gun, put it away.
+	*/
 	void RetireWeapon();
 
 	// Can't use virtual functions as think functions so this wrapper is needed.
@@ -375,6 +451,9 @@ public:
 	 */
 	virtual bool UseDecrement() { return false; }
 
+	/**
+	*	@brief An accurate way of calculating the next attack time.
+	*/
 	float GetNextAttackDelay(float delay);
 
 	void SetWeaponModels(const char* viewModel, const char* weaponModel);
@@ -412,18 +491,19 @@ public:
 	bool m_fFireOnEmpty;
 
 	float m_flPumpTime;
-	int m_fInSpecialReload;		   // Are we in the middle of a reload for the shotguns
-	float m_flNextPrimaryAttack;   // soonest time ItemPostFrame will call PrimaryAttack
-	float m_flNextSecondaryAttack; // soonest time ItemPostFrame will call SecondaryAttack
-	float m_flTimeWeaponIdle;	   // soonest time ItemPostFrame will call WeaponIdle
-	int m_iPrimaryAmmoType;		   // "primary" ammo index into players m_rgAmmo[]
-	int m_iSecondaryAmmoType;	   // "secondary" ammo index into players m_rgAmmo[]
-	int m_iClip;				   // number of shots left in the primary weapon clip, -1 it not used
-	int m_iClientClip;			   // the last version of m_iClip sent to hud dll
-	int m_iClientWeaponState;	   // the last version of the weapon state sent to hud dll (is current weapon, is on target)
-	bool m_fInReload;			   // Are we in the middle of a reload;
 
-	int m_iDefaultAmmo; // how much ammo you get when you pick up this weapon as placed by a level designer.
+	int m_fInSpecialReload;		   //!< Are we in the middle of a reload for the shotguns
+	float m_flNextPrimaryAttack;   //!< soonest time ItemPostFrame will call PrimaryAttack
+	float m_flNextSecondaryAttack; //!< soonest time ItemPostFrame will call SecondaryAttack
+	float m_flTimeWeaponIdle;	   //!< soonest time ItemPostFrame will call WeaponIdle
+	int m_iPrimaryAmmoType;		   //!< "primary" ammo index into players m_rgAmmo[]
+	int m_iSecondaryAmmoType;	   //!< "secondary" ammo index into players m_rgAmmo[]
+	int m_iClip;				   //!< number of shots left in the primary weapon clip, -1 it not used
+	int m_iClientClip;			   //!< the last version of m_iClip sent to hud dll
+	int m_iClientWeaponState;	   //!< the last version of the weapon state sent to hud dll (is current weapon, is on target)
+	bool m_fInReload;			   //!< Are we in the middle of a reload
+
+	int m_iDefaultAmmo; //!< how much ammo you get when you pick up this weapon as placed by a level designer.
 
 	// hle time creep vars
 	float m_flPrevPrimaryAttack;
