@@ -93,7 +93,7 @@ TYPEDESCRIPTION CBasePlayer::m_playerSaveData[] =
 		DEFINE_FIELD(CBasePlayer, m_pLastWeapon, FIELD_CLASSPTR),
 		DEFINE_FIELD(CBasePlayer, m_WeaponBits, FIELD_INT64),
 
-		DEFINE_ARRAY(CBasePlayer, m_rgAmmo, FIELD_INTEGER, MAX_AMMO_SLOTS),
+		DEFINE_ARRAY(CBasePlayer, m_rgAmmo, FIELD_INTEGER, MAX_AMMO_TYPES),
 		DEFINE_FIELD(CBasePlayer, m_idrowndmg, FIELD_INTEGER),
 		DEFINE_FIELD(CBasePlayer, m_idrownrestored, FIELD_INTEGER),
 		DEFINE_FIELD(CBasePlayer, m_tSneaking, FIELD_TIME),
@@ -151,7 +151,7 @@ TYPEDESCRIPTION CBasePlayer::m_playerSaveData[] =
 		// DEFINE_FIELD( CBasePlayer, m_fWeapon, FIELD_BOOLEAN ),  // Don't restore, client needs reset
 		// DEFINE_FIELD( CBasePlayer, m_nCustomSprayFrames, FIELD_INTEGER ), // Don't restore, depends on server message after spawning and only matters in multiplayer
 		// DEFINE_FIELD( CBasePlayer, m_vecAutoAim, FIELD_VECTOR ), // Don't save/restore - this is recomputed
-		// DEFINE_ARRAY( CBasePlayer, m_rgAmmoLast, FIELD_INTEGER, MAX_AMMO_SLOTS ), // Don't need to restore
+		// DEFINE_ARRAY( CBasePlayer, m_rgAmmoLast, FIELD_INTEGER, MAX_AMMO_TYPES ), // Don't need to restore
 		// DEFINE_FIELD( CBasePlayer, m_fOnTarget, FIELD_BOOLEAN ), // Don't need to restore
 		// DEFINE_FIELD( CBasePlayer, m_nCustomSprayFrames, FIELD_INTEGER ), // Don't need to restore
 
@@ -604,7 +604,7 @@ void CBasePlayer::PackDeadPlayerItems()
 	int iAmmoRules;
 	int i;
 	CBasePlayerWeapon* rgpPackWeapons[MAX_WEAPONS];
-	int iPackAmmo[MAX_AMMO_SLOTS + 1];
+	int iPackAmmo[MAX_AMMO_TYPES + 1];
 	int iPW = 0; // index into packweapons array
 	int iPA = 0; // index into packammo array
 
@@ -658,7 +658,7 @@ void CBasePlayer::PackDeadPlayerItems()
 	// now go through ammo and make a list of which types to pack.
 	if (iAmmoRules != GR_PLR_DROP_AMMO_NO)
 	{
-		for (i = 0; i < MAX_AMMO_SLOTS; i++)
+		for (i = 0; i < MAX_AMMO_TYPES; i++)
 		{
 			if (m_rgAmmo[i] > 0)
 			{
@@ -763,7 +763,7 @@ void CBasePlayer::RemoveAllItems(bool removeSuit)
 	// Re-add suit bit if needed.
 	SetHasSuit(!removeSuit);
 
-	for (i = 0; i < MAX_AMMO_SLOTS; i++)
+	for (i = 0; i < MAX_AMMO_TYPES; i++)
 		m_rgAmmo[i] = 0;
 
 	UpdateClientData();
@@ -3153,7 +3153,7 @@ void CBasePlayer::Spawn()
 	m_iClientBattery = -1;
 
 	// reset all ammo values to 0
-	for (int i = 0; i < MAX_AMMO_SLOTS; i++)
+	for (int i = 0; i < MAX_AMMO_TYPES; i++)
 	{
 		m_rgAmmo[i] = 0;
 		m_rgAmmoLast[i] = 0; // client ammo values also have to be reset  (the death hud clear messages does on the client side)
@@ -3668,7 +3668,7 @@ void CBasePlayer::ForceClientDllUpdate()
 	m_ClientWeaponBits = 0;
 	m_ClientSndRoomtype = -1;
 
-	for (int i = 0; i < MAX_AMMO_SLOTS; ++i)
+	for (int i = 0; i < MAX_AMMO_TYPES; ++i)
 	{
 		m_rgAmmoLast[i] = 0;
 	}
@@ -4108,7 +4108,7 @@ int CBasePlayer::GiveAmmo(int iCount, const char* szName, int iMax)
 
 	i = GetAmmoIndex(szName);
 
-	if (i < 0 || i >= MAX_AMMO_SLOTS)
+	if (i < 0 || i >= MAX_AMMO_TYPES)
 		return -1;
 
 	int iAdd = V_min(iCount, iMax - m_rgAmmo[i]);
@@ -4214,7 +4214,7 @@ int CBasePlayer::GetAmmoIndex(const char* psz)
 	if (!psz)
 		return -1;
 
-	for (i = 1; i < MAX_AMMO_SLOTS; i++)
+	for (i = 1; i < MAX_AMMO_TYPES; i++)
 	{
 		if (!CBasePlayerWeapon::AmmoInfoArray[i].pszName)
 			continue;
@@ -4230,7 +4230,7 @@ int CBasePlayer::GetAmmoIndex(const char* psz)
 // makes sure the client has all the necessary ammo info,  if values have changed
 void CBasePlayer::SendAmmoUpdate()
 {
-	for (int i = 0; i < MAX_AMMO_SLOTS; i++)
+	for (int i = 0; i < MAX_AMMO_TYPES; i++)
 	{
 		InternalSendSingleAmmoUpdate(i);
 	}
@@ -4238,7 +4238,7 @@ void CBasePlayer::SendAmmoUpdate()
 
 void CBasePlayer::SendSingleAmmoUpdate(int ammoIndex)
 {
-	if (ammoIndex < 0 || ammoIndex >= MAX_AMMO_SLOTS)
+	if (ammoIndex < 0 || ammoIndex >= MAX_AMMO_TYPES)
 	{
 		return;
 	}

@@ -36,8 +36,7 @@ constexpr int MAX_PLAYERS = 32;
 #define HIDEHUD_ALL (1 << 2)
 #define HIDEHUD_HEALTH (1 << 3)
 
-#define MAX_AMMO_TYPES 32 // ???
-#define MAX_AMMO_SLOTS 32 // not really slots
+#define MAX_AMMO_TYPES 32
 
 #define HUD_PRINTNOTIFY 1
 #define HUD_PRINTCONSOLE 2

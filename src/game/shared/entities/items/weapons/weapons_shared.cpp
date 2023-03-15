@@ -22,7 +22,7 @@
 void AddAmmoNameToAmmoRegistry(const char* szAmmoname, const char* weaponName)
 {
 	// make sure it's not already in the registry
-	for (int i = 0; i < MAX_AMMO_SLOTS; i++)
+	for (int i = 0; i < MAX_AMMO_TYPES; i++)
 	{
 		if (!CBasePlayerWeapon::AmmoInfoArray[i].pszName)
 			continue;
@@ -33,8 +33,8 @@ void AddAmmoNameToAmmoRegistry(const char* szAmmoname, const char* weaponName)
 
 
 	giAmmoIndex++;
-	ASSERT(giAmmoIndex < MAX_AMMO_SLOTS);
-	if (giAmmoIndex >= MAX_AMMO_SLOTS)
+	ASSERT(giAmmoIndex < MAX_AMMO_TYPES);
+	if (giAmmoIndex >= MAX_AMMO_TYPES)
 		giAmmoIndex = 0;
 
 	auto& ammoType = CBasePlayerWeapon::AmmoInfoArray[giAmmoIndex];

@@ -467,7 +467,7 @@ public:
 	void PrintState();
 
 	static inline ItemInfo ItemInfoArray[MAX_WEAPONS];
-	static inline AmmoInfo AmmoInfoArray[MAX_AMMO_SLOTS];
+	static inline AmmoInfo AmmoInfoArray[MAX_AMMO_TYPES];
 
 	int iItemSlot() { return ItemInfoArray[m_iId].iSlot; } // return 0 to MAX_ITEMS_SLOTS, used in hud
 	int iItemPosition() { return ItemInfoArray[m_iId].iPosition; }
