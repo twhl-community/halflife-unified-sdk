@@ -26,7 +26,7 @@
 
 class CBaseEntity;
 class CBaseMonster;
-class CBasePlayerItem;
+class CBasePlayerWeapon;
 class CCineMonster;
 class COFSquadTalkMonster;
 class CSound;

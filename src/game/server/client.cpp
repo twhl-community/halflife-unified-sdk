@@ -549,7 +549,7 @@ void SV_CreateClientCommands()
 	g_ClientCommands.Create("drop", [](CBasePlayer* player, const auto& args)
 		{
 			// player is dropping an item.
-			player->DropPlayerItem(args.Argument(1)); });
+			player->DropPlayerWeapon(args.Argument(1)); });
 
 	g_ClientCommands.Create("fov", [](CBasePlayer* player, const auto& args)
 		{
@@ -1695,7 +1695,6 @@ int GetWeaponData(edict_t* player, weapon_data_t* info)
 	weapon_data_t* item;
 	entvars_t* pev = &player->v;
 	CBasePlayer* pl = dynamic_cast<CBasePlayer*>(CBasePlayer::Instance(pev));
-	CBasePlayerWeapon* gun;
 
 	ItemInfo II;
 
@@ -1705,15 +1704,14 @@ int GetWeaponData(edict_t* player, weapon_data_t* info)
 	// go through all of the weapons and make a list of the ones to pack
 	for (i = 0; i < MAX_WEAPON_SLOTS; i++)
 	{
-		if (pl->m_rgpPlayerItems[i])
+		if (pl->m_rgpPlayerWeapons[i])
 		{
 			// there's a weapon here. Should I pack it?
-			CBasePlayerItem* pPlayerItem = pl->m_rgpPlayerItems[i];
+			CBasePlayerWeapon* gun = pl->m_rgpPlayerWeapons[i];
 
-			while (pPlayerItem)
+			while (gun)
 			{
-				gun = pPlayerItem->GetWeaponPtr();
-				if (gun && gun->UseDecrement())
+				if (gun->UseDecrement())
 				{
 					// Get The ID.
 					memset(&II, 0, sizeof(II));
@@ -1743,7 +1741,7 @@ int GetWeaponData(edict_t* player, weapon_data_t* info)
 						//						item->m_flPumpTime				= V_max( gun->m_flPumpTime, -0.001 );
 					}
 				}
-				pPlayerItem = pPlayerItem->m_pNext;
+				gun = gun->m_pNext;
 			}
 		}
 	}
@@ -1841,10 +1839,10 @@ void UpdateClientData(const edict_t* ent, int sendweapons, clientdata_t* cd)
 			cd->vuser2.y = pl->ammo_spores;
 			cd->vuser2.z = pl->ammo_762;
 
-			if (pl->m_pActiveItem)
+			if (pl->m_pActiveWeapon)
 			{
-				CBasePlayerWeapon* gun = pl->m_pActiveItem->GetWeaponPtr();
-				if (gun && gun->UseDecrement())
+				CBasePlayerWeapon* gun = pl->m_pActiveWeapon;
+				if (gun->UseDecrement())
 				{
 					ItemInfo II;
 					memset(&II, 0, sizeof(II));

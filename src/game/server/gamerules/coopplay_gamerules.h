@@ -54,7 +54,7 @@ public:
 
 	void Think() override;
 
-	int WeaponShouldRespawn(CBasePlayerItem* pWeapon) override;
+	int WeaponShouldRespawn(CBasePlayerWeapon* pWeapon) override;
 
 	int ItemShouldRespawn(CItem* pItem) override;
 	float FlItemRespawnTime(CItem* pItem) override;
@@ -64,9 +64,9 @@ public:
 
 	bool FPlayerCanTakeDamage(CBasePlayer* pPlayer, CBaseEntity* pAttacker) override;
 
-	float FlWeaponTryRespawn(CBasePlayerItem* pWeapon) override;
+	float FlWeaponTryRespawn(CBasePlayerWeapon* pWeapon) override;
 
-	float FlWeaponRespawnTime(CBasePlayerItem* pWeapon) override;
+	float FlWeaponRespawnTime(CBasePlayerWeapon* pWeapon) override;
 
 	const char* GetGameDescription() override { return "HL Coopplay"; }
 

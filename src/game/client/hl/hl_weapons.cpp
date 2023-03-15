@@ -126,8 +126,8 @@ CBasePlayer::Killed
 void CBasePlayer::Killed(CBaseEntity* attacker, int iGib)
 {
 	// Holster weapon immediately, to allow it to cleanup
-	if (m_pActiveItem)
-		m_pActiveItem->Holster();
+	if (m_pActiveWeapon)
+		m_pActiveWeapon->Holster();
 
 	g_irunninggausspred = false;
 }
@@ -140,8 +140,8 @@ CBasePlayer::Spawn
 */
 void CBasePlayer::Spawn()
 {
-	if (m_pActiveItem)
-		m_pActiveItem->Deploy();
+	if (m_pActiveWeapon)
+		m_pActiveWeapon->Deploy();
 
 	g_irunninggausspred = false;
 }

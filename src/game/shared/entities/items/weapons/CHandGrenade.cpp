@@ -71,7 +71,7 @@ void CHandGrenade::IncrementAmmo(CBasePlayer* pPlayer)
 {
 #ifndef CLIENT_DLL
 	// TODO: not sure how useful this is given that the player has to have this weapon for this method to be called
-	if (!pPlayer->HasNamedPlayerItem("weapon_handgrenade"))
+	if (!pPlayer->HasNamedPlayerWeapon("weapon_handgrenade"))
 	{
 		pPlayer->GiveNamedItem("weapon_handgrenade");
 	}

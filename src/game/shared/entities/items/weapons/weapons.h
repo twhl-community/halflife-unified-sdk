@@ -243,8 +243,10 @@ inline int giAmmoIndex = 0;
 
 void AddAmmoNameToAmmoRegistry(const char* szAmmoname, const char* weaponName);
 
-// Items that the player has in their inventory that they can use
-class CBasePlayerItem : public CBaseAnimating
+/**
+*	@brief Weapons that the player has in their inventory that they can use.
+*/
+class CBasePlayerWeapon : public CBaseAnimating
 {
 public:
 	static inline std::shared_ptr<spdlog::logger> WeaponsLogger;
@@ -259,7 +261,26 @@ public:
 	virtual bool CanAddToPlayer(CBasePlayer* player) { return true; } // return true if the item you want the item added to the player inventory
 
 	virtual void AddToPlayer(CBasePlayer* pPlayer);
-	virtual bool AddDuplicate(CBasePlayerItem* pItem) { return false; } // return true if you want your duplicate removed from world
+
+	/**
+	*	@brief return true if you want your duplicate removed from world
+	*/
+	virtual bool AddDuplicate(CBasePlayerWeapon* original);
+
+	/**
+	*	@brief Return true if you can add ammo to yourself when picked up
+	*/
+	virtual bool ExtractAmmo(CBasePlayerWeapon* weapon);
+
+	/**
+	*	@brief Return true if you can add ammo to yourself when picked up
+	*/
+	virtual bool ExtractClipAmmo(CBasePlayerWeapon* weapon);
+
+	// generic "shared" ammo handlers
+	bool AddPrimaryAmmo(int iCount, const char* szName, int iMaxClip, int iMaxCarry);
+	bool AddSecondaryAmmo(int iCount, const char* szName, int iMaxCarry);
+
 	void EXPORT DestroyItem();
 	void EXPORT DefaultTouch(CBaseEntity* pOther); // default weapon touch
 	void EXPORT FallThink();					   // when an item is first spawned, this think is run to determine when the object has hit the ground.
@@ -269,7 +290,8 @@ public:
 	void FallInit();
 	void CheckRespawn();
 	virtual bool GetItemInfo(ItemInfo* p) { return false; } // returns false if struct not filled out
-	virtual bool CanDeploy() { return true; }
+	virtual bool CanDeploy();
+	virtual bool IsUseable();
 	virtual bool Deploy() // returns is deploy was successful
 	{
 		return true;
@@ -281,23 +303,55 @@ public:
 	 *	@brief Put away weapon
 	 */
 	virtual void Holster();
+
+	/**
+	*	@brief updates HUD state
+	*/
 	virtual void UpdateItemInfo() {}
 
-	virtual void ItemPreFrame() {}	// called each frame by the player PreThink
-	virtual void ItemPostFrame() {} // called each frame by the player PostThink
+	virtual void SendWeaponAnim(int iAnim, int body = 0);
+
+	bool DefaultDeploy(const char* szViewModel, const char* szWeaponModel, int iAnim, const char* szAnimExt, int body = 0);
+	bool DefaultReload(int iClipSize, int iAnim, float fDelay, int body = 0);
+
+	/**
+	*	@brief called each frame by player PreThink
+	*/
+	virtual void ItemPreFrame() {}
+
+	/**
+	*	@brief called each frame by player PostThink
+	*/
+	virtual void ItemPostFrame();
+
+	// called by CBasePlayerWeapons ItemPostFrame()
+	virtual void PrimaryAttack() {}	  // do "+ATTACK"
+	virtual void SecondaryAttack() {} // do "+ATTACK2"
+
+	virtual void Reload() {}		  // do "+RELOAD"
+
+	virtual bool ShouldWeaponIdle() { return false; }
+	virtual void WeaponIdle() {}	  // called when no buttons pressed
+
+	/**
+	 *	@brief Animate weapon model
+	 */
+	virtual bool PlayEmptySound();
+	virtual void ResetEmptySound();
 
 	virtual void Drop();
 	virtual void Kill();
 	virtual void AttachToPlayer(CBasePlayer* pPlayer);
 
-	virtual int PrimaryAmmoIndex() { return -1; }
-	virtual int SecondaryAmmoIndex() { return -1; }
+	int PrimaryAmmoIndex() { return m_iPrimaryAmmoType; }
+	int SecondaryAmmoIndex() { return m_iSecondaryAmmoType; }
 
 	virtual void IncrementAmmo(CBasePlayer* pPlayer) {}
 
-	virtual bool UpdateClientData(CBasePlayer* pPlayer) { return false; }
-
-	virtual CBasePlayerWeapon* GetWeaponPtr() { return nullptr; }
+	/**
+	*	@brief sends hud info to client dll, if things have changed
+	*/
+	virtual bool UpdateClientData(CBasePlayer* pPlayer);
 
 	virtual void GetWeaponData(weapon_data_t& data) {}
 
@@ -305,12 +359,31 @@ public:
 
 	virtual void DecrementTimers() {}
 
+	void RetireWeapon();
+
+	// Can't use virtual functions as think functions so this wrapper is needed.
+	void EXPORT CallDoRetireWeapon()
+	{
+		DoRetireWeapon();
+	}
+
+	virtual void DoRetireWeapon();
+
+	/**
+	 *	@brief Whether to use relative time values that are decremented every frame or absolute time values.
+	 *	Relative time values are required for predicted weapons.
+	 *	@see UTIL_WeaponTimeBase
+	 */
+	virtual bool UseDecrement() { return false; }
+
+	float GetNextAttackDelay(float delay);
+
+	void SetWeaponModels(const char* viewModel, const char* weaponModel);
+
+	void PrintState();
+
 	static inline ItemInfo ItemInfoArray[MAX_WEAPONS];
 	static inline AmmoInfo AmmoInfoArray[MAX_AMMO_SLOTS];
-
-	CBasePlayer* m_pPlayer;
-	CBasePlayerItem* m_pNext;
-	int m_iId; // WEAPON_???
 
 	int iItemSlot() { return ItemInfoArray[m_iId].iSlot; } // return 0 to MAX_ITEMS_SLOTS, used in hud
 	int iItemPosition() { return ItemInfoArray[m_iId].iPosition; }
@@ -323,89 +396,21 @@ public:
 	int iWeight() { return ItemInfoArray[m_iId].iWeight; }
 	int iFlags() { return ItemInfoArray[m_iId].iFlags; }
 
-	// int		m_iIdPrimary;										// Unique Id for primary ammo
-	// int		m_iIdSecondary;										// Unique Id for secondary ammo
+	CBasePlayer* m_pPlayer;
+	CBasePlayerWeapon* m_pNext;
+	int m_iId; // WEAPON_???
 
-	// Hack so deploy animations work when weapon prediction is enabled.
+	/**
+	*	@brief Hack so deploy animations work when weapon prediction is enabled.
+	*/
 	bool m_ForceSendAnimations = false;
-};
-
-
-// inventory items that
-class CBasePlayerWeapon : public CBasePlayerItem
-{
-public:
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
-	static TYPEDESCRIPTION m_SaveData[];
-
-	// generic weapon versions of CBasePlayerItem calls
-	void AddToPlayer(CBasePlayer* pPlayer) override;
-	bool AddDuplicate(CBasePlayerItem* pItem) override;
-
-	virtual bool ExtractAmmo(CBasePlayerWeapon* pWeapon);	  //{ return true; }			// Return true if you can add ammo to yourself when picked up
-	virtual bool ExtractClipAmmo(CBasePlayerWeapon* pWeapon); // { return true; }			// Return true if you can add ammo to yourself when picked up
-
-	// generic "shared" ammo handlers
-	bool AddPrimaryAmmo(int iCount, const char* szName, int iMaxClip, int iMaxCarry);
-	bool AddSecondaryAmmo(int iCount, const char* szName, int iMaxCarry);
-
-	void UpdateItemInfo() override {} // updates HUD state
 
 	bool m_iPlayEmptySound;
-	bool m_fFireOnEmpty; // True when the gun is empty and the player is still holding down the
-						 // attack key(s)
 
 	/**
-	*	@brief Animate weapon model
+	*	@brief True when the gun is empty and the player is still holding down the attack key(s)
 	*/
-	virtual bool PlayEmptySound();
-	virtual void ResetEmptySound();
-
-	virtual void SendWeaponAnim(int iAnim, int body = 0);
-
-	bool CanDeploy() override;
-	virtual bool IsUseable();
-
-	void SetWeaponModels(const char* viewModel, const char* weaponModel);
-
-	bool DefaultDeploy(const char* szViewModel, const char* szWeaponModel, int iAnim, const char* szAnimExt, int body = 0);
-	bool DefaultReload(int iClipSize, int iAnim, float fDelay, int body = 0);
-
-	void ItemPostFrame() override; // called each frame by the player PostThink
-	// called by CBasePlayerWeapons ItemPostFrame()
-	virtual void PrimaryAttack() {}						  // do "+ATTACK"
-	virtual void SecondaryAttack() {}					  // do "+ATTACK2"
-	virtual void Reload() {}							  // do "+RELOAD"
-	virtual void WeaponIdle() {}						  // called when no buttons pressed
-	bool UpdateClientData(CBasePlayer* pPlayer) override; // sends hud info to client dll, if things have changed
-	void RetireWeapon();
-
-	// Can't use virtual functions as think functions so this wrapper is needed.
-	void EXPORT CallDoRetireWeapon()
-	{
-		DoRetireWeapon();
-	}
-
-	virtual void DoRetireWeapon();
-	virtual bool ShouldWeaponIdle() { return false; }
-	void Holster() override;
-
-	/**
-	 *	@brief Whether to use relative time values that are decremented every frame or absolute time values.
-	 *	Relative time values are required for predicted weapons.
-	 *	@see UTIL_WeaponTimeBase
-	 */
-	virtual bool UseDecrement() { return false; }
-
-	int PrimaryAmmoIndex() override;
-	int SecondaryAmmoIndex() override;
-
-	void PrintState();
-
-	CBasePlayerWeapon* GetWeaponPtr() override { return this; }
-	float GetNextAttackDelay(float delay);
+	bool m_fFireOnEmpty;
 
 	float m_flPumpTime;
 	int m_fInSpecialReload;		   // Are we in the middle of a reload for the shotguns
@@ -429,7 +434,6 @@ public:
 	string_t m_ViewModel;
 	string_t m_PlayerModel;
 };
-
 
 class CBasePlayerAmmo : public CBaseEntity
 {
@@ -523,11 +527,11 @@ public:
 	bool Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
-	bool HasWeapon(CBasePlayerItem* pCheckItem);
-	bool PackWeapon(CBasePlayerItem* pWeapon);
+	bool HasWeapon(CBasePlayerWeapon* checkWeapon);
+	bool PackWeapon(CBasePlayerWeapon* weapon);
 	bool PackAmmo(string_t iszName, int iCount);
 
-	CBasePlayerItem* m_rgpPlayerItems[MAX_WEAPON_SLOTS]; // one slot for each
+	CBasePlayerWeapon* m_rgpPlayerWeapons[MAX_WEAPON_SLOTS]; // one slot for each
 
 	string_t m_rgiszAmmo[MAX_AMMO_SLOTS]; // ammo names
 	int m_rgAmmo[MAX_AMMO_SLOTS];		  // ammo quantities

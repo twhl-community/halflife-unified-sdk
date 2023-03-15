@@ -372,9 +372,9 @@ bool CFuncTank::StartControl(CBasePlayer* pController)
 	CBaseEntity::Logger->debug("using TANK!");
 
 	m_pController = pController;
-	if (m_pController->m_pActiveItem)
+	if (m_pController->m_pActiveWeapon)
 	{
-		m_pController->m_pActiveItem->Holster();
+		m_pController->m_pActiveWeapon->Holster();
 		m_pController->pev->weaponmodel = string_t::Null;
 		m_pController->pev->viewmodel = string_t::Null;
 	}

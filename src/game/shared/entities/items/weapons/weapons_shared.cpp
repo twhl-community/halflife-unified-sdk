@@ -25,10 +25,10 @@ void AddAmmoNameToAmmoRegistry(const char* szAmmoname, const char* weaponName)
 	// make sure it's not already in the registry
 	for (int i = 0; i < MAX_AMMO_SLOTS; i++)
 	{
-		if (!CBasePlayerItem::AmmoInfoArray[i].pszName)
+		if (!CBasePlayerWeapon::AmmoInfoArray[i].pszName)
 			continue;
 
-		if (stricmp(CBasePlayerItem::AmmoInfoArray[i].pszName, szAmmoname) == 0)
+		if (stricmp(CBasePlayerWeapon::AmmoInfoArray[i].pszName, szAmmoname) == 0)
 			return; // ammo already in registry, just quite
 	}
 
@@ -38,7 +38,7 @@ void AddAmmoNameToAmmoRegistry(const char* szAmmoname, const char* weaponName)
 	if (giAmmoIndex >= MAX_AMMO_SLOTS)
 		giAmmoIndex = 0;
 
-	auto& ammoType = CBasePlayerItem::AmmoInfoArray[giAmmoIndex];
+	auto& ammoType = CBasePlayerWeapon::AmmoInfoArray[giAmmoIndex];
 
 	ammoType.pszName = szAmmoname;
 	ammoType.iId = giAmmoIndex; // yes, this info is redundant

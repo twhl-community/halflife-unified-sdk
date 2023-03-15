@@ -239,7 +239,7 @@ void ClientPredictionSystem::WeaponsPostThink(local_state_t* from, local_state_t
 	// Point to current weapon object
 	if (WEAPON_NONE != from->client.m_iId)
 	{
-		localPlayer->m_pActiveItem = GetLocalWeapon(from->client.m_iId);
+		localPlayer->m_pActiveWeapon = GetLocalWeapon(from->client.m_iId);
 	}
 
 	// Don't go firing anything if we have died or are spectating
@@ -266,16 +266,16 @@ void ClientPredictionSystem::WeaponsPostThink(local_state_t* from, local_state_t
 			if (pNew && (pNew != pWeapon))
 			{
 				// Put away old weapon
-				if (localPlayer->m_pActiveItem)
-					localPlayer->m_pActiveItem->Holster();
+				if (localPlayer->m_pActiveWeapon)
+					localPlayer->m_pActiveWeapon->Holster();
 
-				localPlayer->m_pLastItem = localPlayer->m_pActiveItem;
-				localPlayer->m_pActiveItem = pNew;
+				localPlayer->m_pLastWeapon = localPlayer->m_pActiveWeapon;
+				localPlayer->m_pActiveWeapon = pNew;
 
 				// Deploy new weapon
-				if (localPlayer->m_pActiveItem)
+				if (localPlayer->m_pActiveWeapon)
 				{
-					localPlayer->m_pActiveItem->Deploy();
+					localPlayer->m_pActiveWeapon->Deploy();
 				}
 
 				// Update weapon id so we can predict things correctly.
@@ -456,7 +456,7 @@ void ClientPredictionSystem::PrepWeapon(std::string_view className, CBasePlayer*
 
 	m_Weapons[info.iId] = entity;
 
-	CBasePlayerItem::ItemInfoArray[info.iId] = info;
+	CBasePlayerWeapon::ItemInfoArray[info.iId] = info;
 
 	const char* weaponName = ((info.iFlags & ITEM_FLAG_EXHAUSTIBLE) != 0) ? STRING(entity->pev->classname) : nullptr;
 

@@ -36,7 +36,7 @@
 #endif
 
 class CBaseEntity;
-class CBasePlayerItem;
+class CBasePlayerWeapon;
 class CBasePlayer;
 
 inline globalvars_t* gpGlobals = nullptr;

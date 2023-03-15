@@ -237,11 +237,11 @@ public:
 	float m_flShieldTime;
 	float m_flJumpTime;
 
-	// usable player items
-	CBasePlayerItem* m_rgpPlayerItems[MAX_WEAPON_SLOTS];
-	CBasePlayerItem* m_pActiveItem;
-	CBasePlayerItem* m_pClientActiveItem; // client version of the active item
-	CBasePlayerItem* m_pLastItem;
+	// usable player weapons
+	CBasePlayerWeapon* m_rgpPlayerWeapons[MAX_WEAPON_SLOTS];
+	CBasePlayerWeapon* m_pActiveWeapon;
+	CBasePlayerWeapon* m_pClientActiveWeapon; // client version of the active weapon
+	CBasePlayerWeapon* m_pLastWeapon;
 
 	std::uint64_t m_WeaponBits;
 
@@ -294,7 +294,7 @@ public:
 	void RenewItems();
 	void PackDeadPlayerItems();
 	void RemoveAllItems(bool removeSuit);
-	bool SwitchWeapon(CBasePlayerItem* pWeapon);
+	bool SwitchWeapon(CBasePlayerWeapon* weapon);
 
 	/**
 	 *	@brief Equips an appropriate weapon for the player if they don't have one equipped already.
@@ -343,11 +343,11 @@ public:
 
 	void AddPoints(int score, bool bAllowNegativeScore);
 	void AddPointsToTeam(int score, bool bAllowNegativeScore);
-	bool AddPlayerItem(CBasePlayerItem* pItem);
-	bool RemovePlayerItem(CBasePlayerItem* pItem);
-	void DropPlayerItem(const char* pszItemName);
-	bool HasPlayerItem(CBasePlayerItem* pCheckItem);
-	bool HasNamedPlayerItem(const char* pszItemName);
+	bool AddPlayerWeapon(CBasePlayerWeapon* weapon);
+	bool RemovePlayerWeapon(CBasePlayerWeapon* weapon);
+	void DropPlayerWeapon(const char* pszItemName);
+	bool HasPlayerWeapon(CBasePlayerWeapon* checkWeapon);
+	bool HasNamedPlayerWeapon(const char* pszItemName);
 	bool HasWeapons(); // do I have ANY weapons?
 	void SelectPrevItem(int iItem);
 	void SelectNextItem(int iItem);
@@ -355,7 +355,7 @@ public:
 	void SelectItem(const char* pstr);
 
 private:
-	void DeployWeapon(CBasePlayerItem* weapon);
+	void DeployWeapon(CBasePlayerWeapon* weapon);
 
 public:
 	void ItemPreFrame();

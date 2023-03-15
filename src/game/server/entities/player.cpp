@@ -87,9 +87,9 @@ TYPEDESCRIPTION CBasePlayer::m_playerSaveData[] =
 		DEFINE_ARRAY(CBasePlayer, m_rgflSuitNoRepeatTime, FIELD_TIME, CSUITNOREPEAT),
 		DEFINE_FIELD(CBasePlayer, m_lastDamageAmount, FIELD_INTEGER),
 
-		DEFINE_ARRAY(CBasePlayer, m_rgpPlayerItems, FIELD_CLASSPTR, MAX_WEAPON_SLOTS),
-		DEFINE_FIELD(CBasePlayer, m_pActiveItem, FIELD_CLASSPTR),
-		DEFINE_FIELD(CBasePlayer, m_pLastItem, FIELD_CLASSPTR),
+		DEFINE_ARRAY(CBasePlayer, m_rgpPlayerWeapons, FIELD_CLASSPTR, MAX_WEAPON_SLOTS),
+		DEFINE_FIELD(CBasePlayer, m_pActiveWeapon, FIELD_CLASSPTR),
+		DEFINE_FIELD(CBasePlayer, m_pLastWeapon, FIELD_CLASSPTR),
 		DEFINE_FIELD(CBasePlayer, m_WeaponBits, FIELD_INT64),
 
 		DEFINE_ARRAY(CBasePlayer, m_rgAmmo, FIELD_INTEGER, MAX_AMMO_SLOTS),
@@ -624,32 +624,32 @@ void CBasePlayer::PackDeadPlayerItems()
 	// go through all of the weapons and make a list of the ones to pack
 	for (i = 0; i < MAX_WEAPON_SLOTS; i++)
 	{
-		if (m_rgpPlayerItems[i])
+		if (m_rgpPlayerWeapons[i])
 		{
 			// there's a weapon here. Should I pack it?
-			CBasePlayerItem* pPlayerItem = m_rgpPlayerItems[i];
+			CBasePlayerWeapon* weapon = m_rgpPlayerWeapons[i];
 
-			while (pPlayerItem)
+			while (weapon)
 			{
 				switch (iWeaponRules)
 				{
 				case GR_PLR_DROP_GUN_ACTIVE:
-					if (m_pActiveItem && pPlayerItem == m_pActiveItem)
+					if (m_pActiveWeapon && weapon == m_pActiveWeapon)
 					{
 						// this is the active item. Pack it.
-						rgpPackWeapons[iPW++] = (CBasePlayerWeapon*)pPlayerItem;
+						rgpPackWeapons[iPW++] = weapon;
 					}
 					break;
 
 				case GR_PLR_DROP_GUN_ALL:
-					rgpPackWeapons[iPW++] = (CBasePlayerWeapon*)pPlayerItem;
+					rgpPackWeapons[iPW++] = weapon;
 					break;
 
 				default:
 					break;
 				}
 
-				pPlayerItem = pPlayerItem->m_pNext;
+				weapon = weapon->m_pNext;
 			}
 		}
 	}
@@ -669,12 +669,12 @@ void CBasePlayer::PackDeadPlayerItems()
 					break;
 
 				case GR_PLR_DROP_AMMO_ACTIVE:
-					if (m_pActiveItem && i == m_pActiveItem->PrimaryAmmoIndex())
+					if (m_pActiveWeapon && i == m_pActiveWeapon->PrimaryAmmoIndex())
 					{
 						// this is the primary ammo type for the active weapon
 						iPackAmmo[iPA++] = i;
 					}
-					else if (m_pActiveItem && i == m_pActiveItem->SecondaryAmmoIndex())
+					else if (m_pActiveWeapon && i == m_pActiveWeapon->SecondaryAmmoIndex())
 					{
 						// this is the secondary ammo type for the active weapon
 						iPackAmmo[iPA++] = i;
@@ -704,7 +704,7 @@ void CBasePlayer::PackDeadPlayerItems()
 	// pack the ammo
 	while (iPackAmmo[iPA] != -1)
 	{
-		pWeaponBox->PackAmmo(MAKE_STRING(CBasePlayerItem::AmmoInfoArray[iPackAmmo[iPA]].pszName), m_rgAmmo[iPackAmmo[iPA]]);
+		pWeaponBox->PackAmmo(MAKE_STRING(CBasePlayerWeapon::AmmoInfoArray[iPackAmmo[iPA]].pszName), m_rgAmmo[iPackAmmo[iPA]]);
 		iPA++;
 	}
 
@@ -724,14 +724,14 @@ void CBasePlayer::PackDeadPlayerItems()
 
 void CBasePlayer::RemoveAllItems(bool removeSuit)
 {
-	if (m_pActiveItem)
+	if (m_pActiveWeapon)
 	{
 		ResetAutoaim();
-		m_pActiveItem->Holster();
-		m_pActiveItem = nullptr;
+		m_pActiveWeapon->Holster();
+		m_pActiveWeapon = nullptr;
 	}
 
-	m_pLastItem = nullptr;
+	m_pLastWeapon = nullptr;
 
 	if (m_pTank != nullptr)
 	{
@@ -740,19 +740,19 @@ void CBasePlayer::RemoveAllItems(bool removeSuit)
 	}
 
 	int i;
-	CBasePlayerItem* pPendingItem;
+	CBasePlayerWeapon* pendingWeapon;
 	for (i = 0; i < MAX_WEAPON_SLOTS; i++)
 	{
-		m_pActiveItem = m_rgpPlayerItems[i];
-		while (m_pActiveItem)
+		m_pActiveWeapon = m_rgpPlayerWeapons[i];
+		while (m_pActiveWeapon)
 		{
-			pPendingItem = m_pActiveItem->m_pNext;
-			m_pActiveItem->Drop();
-			m_pActiveItem = pPendingItem;
+			pendingWeapon = m_pActiveWeapon->m_pNext;
+			m_pActiveWeapon->Drop();
+			m_pActiveWeapon = pendingWeapon;
 		}
-		m_rgpPlayerItems[i] = nullptr;
+		m_rgpPlayerWeapons[i] = nullptr;
 	}
-	m_pActiveItem = nullptr;
+	m_pActiveWeapon = nullptr;
 
 	pev->viewmodel = string_t::Null;
 	pev->weaponmodel = string_t::Null;
@@ -777,8 +777,8 @@ void CBasePlayer::Killed(CBaseEntity* attacker, int iGib)
 	CSound* pSound;
 
 	// Holster weapon immediately, to allow it to cleanup
-	if (m_pActiveItem)
-		m_pActiveItem->Holster();
+	if (m_pActiveWeapon)
+		m_pActiveWeapon->Holster();
 
 	g_pGameRules->PlayerKilled(this, attacker, g_pevLastInflictor);
 
@@ -1366,8 +1366,8 @@ void CBasePlayer::StartObserver(Vector vecPosition, Vector vecViewAngle)
 	MESSAGE_END();
 
 	// Holster weapon immediately, to allow it to cleanup
-	if (m_pActiveItem)
-		m_pActiveItem->Holster();
+	if (m_pActiveWeapon)
+		m_pActiveWeapon->Holster();
 
 	if (m_pTank != nullptr)
 	{
@@ -2811,15 +2811,13 @@ pt_end:
 	// go through all of the weapons and make a list of the ones to pack
 	for (int i = 0; i < MAX_WEAPON_SLOTS; i++)
 	{
-		if (m_rgpPlayerItems[i])
+		if (m_rgpPlayerWeapons[i])
 		{
-			CBasePlayerItem* pPlayerItem = m_rgpPlayerItems[i];
+			CBasePlayerWeapon* gun = m_rgpPlayerWeapons[i];
 
-			while (pPlayerItem)
+			while (gun)
 			{
-				CBasePlayerWeapon* gun = pPlayerItem->GetWeaponPtr();
-
-				if (gun && gun->UseDecrement())
+				if (gun->UseDecrement())
 				{
 					gun->m_flNextPrimaryAttack = V_max(gun->m_flNextPrimaryAttack - gpGlobals->frametime, -1.1);
 					gun->m_flNextSecondaryAttack = V_max(gun->m_flNextSecondaryAttack - gpGlobals->frametime, -0.001);
@@ -2843,7 +2841,7 @@ pt_end:
 					//	}
 				}
 
-				pPlayerItem = pPlayerItem->m_pNext;
+				gun = gun->m_pNext;
 			}
 		}
 	}
@@ -3146,11 +3144,11 @@ void CBasePlayer::Spawn()
 
 	m_fNoPlayerSound = false; // normal sound behavior.
 
-	m_pLastItem = nullptr;
+	m_pLastWeapon = nullptr;
 	m_fInitHUD = true;
 	m_iClientHideHUD = -1; // force this to be recalculated
 	m_fWeapon = false;
-	m_pClientActiveItem = nullptr;
+	m_pClientActiveWeapon = nullptr;
 	m_iClientBattery = -1;
 
 	// reset all ammo values to 0
@@ -3312,12 +3310,11 @@ bool CBasePlayer::Restore(CRestore& restore)
 
 	// If we have an active item and it has valid model strings, reset the models now.
 	// Otherwise the weapon will do this itself.
-	if (m_pActiveItem)
+	if (m_pActiveWeapon)
 	{
-		if (auto weapon = static_cast<CBasePlayerWeapon*>(m_pActiveItem->GetWeaponPtr());
-			weapon && !FStringNull(weapon->m_ViewModel) && !FStringNull(weapon->m_PlayerModel))
+		if (!FStringNull(m_pActiveWeapon->m_ViewModel) && !FStringNull(m_pActiveWeapon->m_PlayerModel))
 		{
-			weapon->SetWeaponModels(STRING(weapon->m_ViewModel), STRING(weapon->m_PlayerModel));
+			m_pActiveWeapon->SetWeaponModels(STRING(m_pActiveWeapon->m_ViewModel), STRING(m_pActiveWeapon->m_PlayerModel));
 		}
 	}
 
@@ -3332,47 +3329,45 @@ bool CBasePlayer::Restore(CRestore& restore)
 
 void CBasePlayer::SelectNextItem(int iItem)
 {
-	CBasePlayerItem* pItem;
+	CBasePlayerWeapon* weapon = m_rgpPlayerWeapons[iItem];
 
-	pItem = m_rgpPlayerItems[iItem];
-
-	if (!pItem)
+	if (!weapon)
 		return;
 
-	if (pItem == m_pActiveItem)
+	if (weapon == m_pActiveWeapon)
 	{
 		// select the next one in the chain
-		pItem = m_pActiveItem->m_pNext;
-		if (!pItem)
+		weapon = m_pActiveWeapon->m_pNext;
+		if (!weapon)
 		{
 			return;
 		}
 
-		CBasePlayerItem* pLast;
-		pLast = pItem;
+		CBasePlayerWeapon* pLast;
+		pLast = weapon;
 		while (pLast->m_pNext)
 			pLast = pLast->m_pNext;
 
 		// relink chain
-		pLast->m_pNext = m_pActiveItem;
-		m_pActiveItem->m_pNext = nullptr;
-		m_rgpPlayerItems[iItem] = pItem;
+		pLast->m_pNext = m_pActiveWeapon;
+		m_pActiveWeapon->m_pNext = nullptr;
+		m_rgpPlayerWeapons[iItem] = weapon;
 	}
 
 	ResetAutoaim();
 
 	// FIX, this needs to queue them up and delay
-	if (m_pActiveItem)
+	if (m_pActiveWeapon)
 	{
-		m_pActiveItem->Holster();
+		m_pActiveWeapon->Holster();
 	}
 
-	m_pActiveItem = pItem;
+	m_pActiveWeapon = weapon;
 
-	if (m_pActiveItem)
+	if (m_pActiveWeapon)
 	{
-		m_pActiveItem->Deploy();
-		m_pActiveItem->UpdateItemInfo();
+		m_pActiveWeapon->Deploy();
+		m_pActiveWeapon->UpdateItemInfo();
 	}
 }
 
@@ -3385,7 +3380,7 @@ bool CBasePlayer::HasWeapons()
 
 	for (i = 0; i < MAX_WEAPON_SLOTS; i++)
 	{
-		if (m_rgpPlayerItems[i])
+		if (m_rgpPlayerWeapons[i])
 		{
 			return true;
 		}
@@ -3972,32 +3967,30 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse)
 //
 // Add a weapon to the player (Item == Weapon == Selectable Object)
 //
-bool CBasePlayer::AddPlayerItem(CBasePlayerItem* pItem)
+bool CBasePlayer::AddPlayerWeapon(CBasePlayerWeapon* weapon)
 {
-	CBasePlayerItem* pInsert;
-
-	pInsert = m_rgpPlayerItems[pItem->iItemSlot()];
+	CBasePlayerWeapon* pInsert = m_rgpPlayerWeapons[weapon->iItemSlot()];
 
 	while (pInsert)
 	{
-		if (FClassnameIs(pInsert->pev, STRING(pItem->pev->classname)))
+		if (FClassnameIs(pInsert->pev, STRING(weapon->pev->classname)))
 		{
-			if (pItem->AddDuplicate(pInsert))
+			if (weapon->AddDuplicate(pInsert))
 			{
-				g_pGameRules->PlayerGotWeapon(this, pItem);
-				pItem->CheckRespawn();
+				g_pGameRules->PlayerGotWeapon(this, weapon);
+				weapon->CheckRespawn();
 
 				// ugly hack to update clip w/o an update clip message
 				pInsert->UpdateItemInfo();
-				if (m_pActiveItem)
-					m_pActiveItem->UpdateItemInfo();
+				if (m_pActiveWeapon)
+					m_pActiveWeapon->UpdateItemInfo();
 
-				pItem->Kill();
+				weapon->Kill();
 			}
 			else if (gEvilImpulse101)
 			{
 				// FIXME: remove anyway for deathmatch testing
-				pItem->Kill();
+				weapon->Kill();
 			}
 			return false;
 		}
@@ -4005,45 +3998,42 @@ bool CBasePlayer::AddPlayerItem(CBasePlayerItem* pItem)
 	}
 
 
-	if (pItem->CanAddToPlayer(this))
+	if (weapon->CanAddToPlayer(this))
 	{
-		pItem->AddToPlayer(this);
+		weapon->AddToPlayer(this);
 
-		g_pGameRules->PlayerGotWeapon(this, pItem);
-		pItem->CheckRespawn();
+		g_pGameRules->PlayerGotWeapon(this, weapon);
+		weapon->CheckRespawn();
 
 		// Add to the list before extracting ammo so weapon ownership checks work properly.
-		pItem->m_pNext = m_rgpPlayerItems[pItem->iItemSlot()];
-		m_rgpPlayerItems[pItem->iItemSlot()] = pItem;
+		weapon->m_pNext = m_rgpPlayerWeapons[weapon->iItemSlot()];
+		m_rgpPlayerWeapons[weapon->iItemSlot()] = weapon;
 
-		if (auto weapon = pItem->GetWeaponPtr(); weapon)
+		weapon->ExtractAmmo(weapon);
+
+		// Immediately update the ammo HUD so weapon pickup isn't sometimes red because the HUD doesn't know about regenerating/free ammo yet.
+		if (-1 != weapon->m_iPrimaryAmmoType)
 		{
-			weapon->ExtractAmmo(weapon);
+			SendSingleAmmoUpdate(CBasePlayer::GetAmmoIndex(weapon->pszAmmo1()));
+		}
 
-			// Immediately update the ammo HUD so weapon pickup isn't sometimes red because the HUD doesn't know about regenerating/free ammo yet.
-			if (-1 != weapon->m_iPrimaryAmmoType)
-			{
-				SendSingleAmmoUpdate(CBasePlayer::GetAmmoIndex(weapon->pszAmmo1()));
-			}
+		if (-1 != weapon->m_iSecondaryAmmoType)
+		{
+			SendSingleAmmoUpdate(CBasePlayer::GetAmmoIndex(weapon->pszAmmo2()));
+		}
 
-			if (-1 != weapon->m_iSecondaryAmmoType)
-			{
-				SendSingleAmmoUpdate(CBasePlayer::GetAmmoIndex(weapon->pszAmmo2()));
-			}
-
-			// Don't show weapon pickup if we're spawning or if it's an exhaustible weapon (will show ammo pickup instead).
-			if (!m_bIsSpawning && (weapon->iFlags() & ITEM_FLAG_EXHAUSTIBLE) == 0)
-			{
-				MESSAGE_BEGIN(MSG_ONE, gmsgWeapPickup, NULL, pev);
-				WRITE_BYTE(weapon->m_iId);
-				MESSAGE_END();
-			}
+		// Don't show weapon pickup if we're spawning or if it's an exhaustible weapon (will show ammo pickup instead).
+		if (!m_bIsSpawning && (weapon->iFlags() & ITEM_FLAG_EXHAUSTIBLE) == 0)
+		{
+			MESSAGE_BEGIN(MSG_ONE, gmsgWeapPickup, NULL, pev);
+			WRITE_BYTE(weapon->m_iId);
+			MESSAGE_END();
 		}
 
 		// should we switch to this item?
-		if (g_pGameRules->FShouldSwitchWeapon(this, pItem))
+		if (g_pGameRules->FShouldSwitchWeapon(this, weapon))
 		{
-			SwitchWeapon(pItem);
+			SwitchWeapon(weapon);
 		}
 
 		return true;
@@ -4051,44 +4041,44 @@ bool CBasePlayer::AddPlayerItem(CBasePlayerItem* pItem)
 	else if (gEvilImpulse101)
 	{
 		// FIXME: remove anyway for deathmatch testing
-		pItem->Kill();
+		weapon->Kill();
 	}
 	return false;
 }
 
 
 
-bool CBasePlayer::RemovePlayerItem(CBasePlayerItem* pItem)
+bool CBasePlayer::RemovePlayerWeapon(CBasePlayerWeapon* weapon)
 {
-	if (m_pActiveItem == pItem)
+	if (m_pActiveWeapon == weapon)
 	{
 		ResetAutoaim();
-		pItem->Holster();
-		pItem->pev->nextthink = 0; // crowbar may be trying to swing again, etc.
-		pItem->SetThink(nullptr);
-		m_pActiveItem = nullptr;
+		weapon->Holster();
+		weapon->pev->nextthink = 0; // crowbar may be trying to swing again, etc.
+		weapon->SetThink(nullptr);
+		m_pActiveWeapon = nullptr;
 		pev->viewmodel = string_t::Null;
 		pev->weaponmodel = string_t::Null;
 	}
-	if (m_pLastItem == pItem)
-		m_pLastItem = nullptr;
+	if (m_pLastWeapon == weapon)
+		m_pLastWeapon = nullptr;
 
-	CBasePlayerItem* pPrev = m_rgpPlayerItems[pItem->iItemSlot()];
+	CBasePlayerWeapon* pPrev = m_rgpPlayerWeapons[weapon->iItemSlot()];
 
-	if (pPrev == pItem)
+	if (pPrev == weapon)
 	{
-		m_rgpPlayerItems[pItem->iItemSlot()] = pItem->m_pNext;
+		m_rgpPlayerWeapons[weapon->iItemSlot()] = weapon->m_pNext;
 		return true;
 	}
 	else
 	{
-		while (pPrev && pPrev->m_pNext != pItem)
+		while (pPrev && pPrev->m_pNext != weapon)
 		{
 			pPrev = pPrev->m_pNext;
 		}
 		if (pPrev)
 		{
-			pPrev->m_pNext = pItem->m_pNext;
+			pPrev->m_pNext = weapon->m_pNext;
 			return true;
 		}
 	}
@@ -4125,9 +4115,9 @@ int CBasePlayer::GiveAmmo(int iCount, const char* szName, int iMax)
 		return i;
 
 	// If this is an exhaustible weapon make sure the player has it.
-	if (const auto& ammoType = CBasePlayerItem::AmmoInfoArray[i]; ammoType.WeaponName != nullptr)
+	if (const auto& ammoType = CBasePlayerWeapon::AmmoInfoArray[i]; ammoType.WeaponName != nullptr)
 	{
-		if (!HasNamedPlayerItem(ammoType.WeaponName))
+		if (!HasNamedPlayerWeapon(ammoType.WeaponName))
 		{
 			GiveNamedItem(ammoType.WeaponName, 0);
 		}
@@ -4169,10 +4159,10 @@ void CBasePlayer::ItemPreFrame()
 		return;
 	}
 
-	if (!m_pActiveItem)
+	if (!m_pActiveWeapon)
 		return;
 
-	m_pActiveItem->ItemPreFrame();
+	m_pActiveWeapon->ItemPreFrame();
 }
 
 
@@ -4200,10 +4190,10 @@ void CBasePlayer::ItemPostFrame()
 
 	ImpulseCommands();
 
-	if (!m_pActiveItem)
+	if (!m_pActiveWeapon)
 		return;
 
-	m_pActiveItem->ItemPostFrame();
+	m_pActiveWeapon->ItemPostFrame();
 }
 
 int CBasePlayer::AmmoInventory(int iAmmoIndex)
@@ -4225,10 +4215,10 @@ int CBasePlayer::GetAmmoIndex(const char* psz)
 
 	for (i = 1; i < MAX_AMMO_SLOTS; i++)
 	{
-		if (!CBasePlayerItem::AmmoInfoArray[i].pszName)
+		if (!CBasePlayerWeapon::AmmoInfoArray[i].pszName)
 			continue;
 
-		if (stricmp(psz, CBasePlayerItem::AmmoInfoArray[i].pszName) == 0)
+		if (stricmp(psz, CBasePlayerWeapon::AmmoInfoArray[i].pszName) == 0)
 			return i;
 	}
 
@@ -4514,7 +4504,7 @@ void CBasePlayer::UpdateClientData()
 
 		for (i = 0; i < MAX_WEAPONS; i++)
 		{
-			ItemInfo& II = CBasePlayerItem::ItemInfoArray[i];
+			ItemInfo& II = CBasePlayerWeapon::ItemInfoArray[i];
 
 			if (WEAPON_NONE == II.iId)
 				continue;
@@ -4545,13 +4535,13 @@ void CBasePlayer::UpdateClientData()
 	// Update all the items
 	for (int i = 0; i < MAX_WEAPON_SLOTS; i++)
 	{
-		if (m_rgpPlayerItems[i]) // each item updates it's successors
-			m_rgpPlayerItems[i]->UpdateClientData(this);
+		if (m_rgpPlayerWeapons[i]) // each item updates it's successors
+			m_rgpPlayerWeapons[i]->UpdateClientData(this);
 	}
 
 	// Active item is becoming null, or we're sending all HUD state to client
 	// Only if we're not in Observer mode, which uses the target player's weapon
-	if (pev->iuser1 == OBS_NONE && !m_pActiveItem && ((m_pClientActiveItem != m_pActiveItem) || fullHUDInitRequired))
+	if (pev->iuser1 == OBS_NONE && !m_pActiveWeapon && ((m_pClientActiveWeapon != m_pActiveWeapon) || fullHUDInitRequired))
 	{
 		// Tell ammo hud that we have no weapon selected
 		MESSAGE_BEGIN(MSG_ONE, gmsgCurWeapon, nullptr, pev);
@@ -4562,7 +4552,7 @@ void CBasePlayer::UpdateClientData()
 	}
 
 	// Cache and client weapon change
-	m_pClientActiveItem = m_pActiveItem;
+	m_pClientActiveWeapon = m_pActiveWeapon;
 	m_iClientFOV = m_iFOV;
 	UpdateCTFHud();
 
@@ -4793,7 +4783,7 @@ Vector CBasePlayer::GetAutoaimVectorFromPoint(const Vector& vecSrc, float flDelt
 		m_fOnTarget = false;
 	else if (m_fOldTargeting != m_fOnTarget)
 	{
-		m_pActiveItem->UpdateItemInfo();
+		m_pActiveWeapon->UpdateItemInfo();
 	}
 
 	if (angles.x > 180)
@@ -5014,10 +5004,10 @@ int CBasePlayer::GetCustomDecalFrames()
 
 
 //=========================================================
-// DropPlayerItem - drop the named item, or if no name,
+// DropPlayerWeapon - drop the named item, or if no name,
 // the active item.
 //=========================================================
-void CBasePlayer::DropPlayerItem(const char* pszItemName)
+void CBasePlayer::DropPlayerWeapon(const char* pszItemName)
 {
 	if (!g_pGameRules->IsMultiplayer() || (weaponstay.value > 0))
 	{
@@ -5033,19 +5023,19 @@ void CBasePlayer::DropPlayerItem(const char* pszItemName)
 		pszItemName = nullptr;
 	}
 
-	CBasePlayerItem* pWeapon;
+	CBasePlayerWeapon* weapon;
 	int i;
 
 	for (i = 0; i < MAX_WEAPON_SLOTS; i++)
 	{
-		pWeapon = m_rgpPlayerItems[i];
+		weapon = m_rgpPlayerWeapons[i];
 
-		while (pWeapon)
+		while (weapon)
 		{
 			if (pszItemName)
 			{
 				// try to match by name.
-				if (0 == strcmp(pszItemName, STRING(pWeapon->pev->classname)))
+				if (0 == strcmp(pszItemName, STRING(weapon->pev->classname)))
 				{
 					// match!
 					break;
@@ -5054,52 +5044,52 @@ void CBasePlayer::DropPlayerItem(const char* pszItemName)
 			else
 			{
 				// trying to drop active item
-				if (pWeapon == m_pActiveItem)
+				if (weapon == m_pActiveWeapon)
 				{
 					// active item!
 					break;
 				}
 			}
 
-			pWeapon = pWeapon->m_pNext;
+			weapon = weapon->m_pNext;
 		}
 
 
 		// if we land here with a valid pWeapon pointer, that's because we found the
 		// item we want to drop and hit a BREAK;  pWeapon is the item.
-		if (pWeapon)
+		if (weapon)
 		{
-			if (!g_pGameRules->GetNextBestWeapon(this, pWeapon))
+			if (!g_pGameRules->GetNextBestWeapon(this, weapon))
 				return; // can't drop the item they asked for, may be our last item or something we can't holster
 
 			UTIL_MakeVectors(pev->angles);
 
-			ClearWeaponBit(pWeapon->m_iId); // take item off hud
+			ClearWeaponBit(weapon->m_iId); // take item off hud
 
 			CWeaponBox* pWeaponBox = (CWeaponBox*)CBaseEntity::Create("weaponbox", pev->origin + gpGlobals->v_forward * 10, pev->angles, edict());
 			pWeaponBox->pev->angles.x = 0;
 			pWeaponBox->pev->angles.z = 0;
-			pWeaponBox->PackWeapon(pWeapon);
+			pWeaponBox->PackWeapon(weapon);
 			pWeaponBox->pev->velocity = gpGlobals->v_forward * 300 + gpGlobals->v_forward * 100;
 
 			// drop half of the ammo for this weapon.
 			int iAmmoIndex;
 
-			iAmmoIndex = GetAmmoIndex(pWeapon->pszAmmo1()); // ???
+			iAmmoIndex = GetAmmoIndex(weapon->pszAmmo1()); // ???
 
 			if (iAmmoIndex != -1)
 			{
 				// this weapon weapon uses ammo, so pack an appropriate amount.
-				if ((pWeapon->iFlags() & ITEM_FLAG_EXHAUSTIBLE) != 0)
+				if ((weapon->iFlags() & ITEM_FLAG_EXHAUSTIBLE) != 0)
 				{
 					// pack up all the ammo, this weapon is its own ammo type
-					pWeaponBox->PackAmmo(MAKE_STRING(pWeapon->pszAmmo1()), m_rgAmmo[iAmmoIndex]);
+					pWeaponBox->PackAmmo(MAKE_STRING(weapon->pszAmmo1()), m_rgAmmo[iAmmoIndex]);
 					m_rgAmmo[iAmmoIndex] = 0;
 				}
 				else
 				{
 					// pack half of the ammo
-					pWeaponBox->PackAmmo(MAKE_STRING(pWeapon->pszAmmo1()), m_rgAmmo[iAmmoIndex] / 2);
+					pWeaponBox->PackAmmo(MAKE_STRING(weapon->pszAmmo1()), m_rgAmmo[iAmmoIndex] / 2);
 					m_rgAmmo[iAmmoIndex] /= 2;
 				}
 			}
@@ -5110,15 +5100,15 @@ void CBasePlayer::DropPlayerItem(const char* pszItemName)
 }
 
 //=========================================================
-// HasPlayerItem Does the player already have this item?
+// HasPlayerWeapon Does the player already have this item?
 //=========================================================
-bool CBasePlayer::HasPlayerItem(CBasePlayerItem* pCheckItem)
+bool CBasePlayer::HasPlayerWeapon(CBasePlayerWeapon* checkWeapon)
 {
-	CBasePlayerItem* pItem = m_rgpPlayerItems[pCheckItem->iItemSlot()];
+	CBasePlayerWeapon* pItem = m_rgpPlayerWeapons[checkWeapon->iItemSlot()];
 
 	while (pItem)
 	{
-		if (FClassnameIs(pItem->pev, STRING(pCheckItem->pev->classname)))
+		if (FClassnameIs(pItem->pev, STRING(checkWeapon->pev->classname)))
 		{
 			return true;
 		}
@@ -5129,24 +5119,24 @@ bool CBasePlayer::HasPlayerItem(CBasePlayerItem* pCheckItem)
 }
 
 //=========================================================
-// HasNamedPlayerItem Does the player already have this item?
+// HasNamedPlayerWeapon Does the player already have this item?
 //=========================================================
-bool CBasePlayer::HasNamedPlayerItem(const char* pszItemName)
+bool CBasePlayer::HasNamedPlayerWeapon(const char* pszItemName)
 {
-	CBasePlayerItem* pItem;
+	CBasePlayerWeapon* weapon;
 	int i;
 
 	for (i = 0; i < MAX_WEAPON_SLOTS; i++)
 	{
-		pItem = m_rgpPlayerItems[i];
+		weapon = m_rgpPlayerWeapons[i];
 
-		while (pItem)
+		while (weapon)
 		{
-			if (0 == strcmp(pszItemName, STRING(pItem->pev->classname)))
+			if (0 == strcmp(pszItemName, STRING(weapon->pev->classname)))
 			{
 				return true;
 			}
-			pItem = pItem->m_pNext;
+			weapon = weapon->m_pNext;
 		}
 	}
 
@@ -5156,27 +5146,27 @@ bool CBasePlayer::HasNamedPlayerItem(const char* pszItemName)
 //=========================================================
 //
 //=========================================================
-bool CBasePlayer::SwitchWeapon(CBasePlayerItem* pWeapon)
+bool CBasePlayer::SwitchWeapon(CBasePlayerWeapon* weapon)
 {
-	if (pWeapon && !pWeapon->CanDeploy())
+	if (weapon && !weapon->CanDeploy())
 	{
 		return false;
 	}
 
 	ResetAutoaim();
 
-	if (m_pActiveItem)
+	if (m_pActiveWeapon)
 	{
-		m_pActiveItem->Holster();
+		m_pActiveWeapon->Holster();
 	}
 
-	m_pActiveItem = pWeapon;
+	m_pActiveWeapon = weapon;
 
-	if (pWeapon)
+	if (weapon)
 	{
-		pWeapon->m_ForceSendAnimations = true;
-		pWeapon->Deploy();
-		pWeapon->m_ForceSendAnimations = false;
+		weapon->m_ForceSendAnimations = true;
+		weapon->Deploy();
+		weapon->m_ForceSendAnimations = false;
 	}
 
 	return true;
@@ -5416,7 +5406,7 @@ bool CBasePlayer::Menu_Char_Input(int inp)
 
 void CBasePlayer::EquipWeapon()
 {
-	if (m_pActiveItem)
+	if (m_pActiveWeapon)
 	{
 		if ((!FStringNull(pev->viewmodel) || !FStringNull(pev->weaponmodel)))
 		{
@@ -5425,14 +5415,14 @@ void CBasePlayer::EquipWeapon()
 		}
 
 		// Have a weapon equipped, but not deployed.
-		if (m_pActiveItem->CanDeploy() && m_pActiveItem->Deploy())
+		if (m_pActiveWeapon->CanDeploy() && m_pActiveWeapon->Deploy())
 		{
 			return;
 		}
 	}
 
 	// No weapon equipped or couldn't deploy it, find a suitable alternative.
-	g_pGameRules->GetNextBestWeapon(this, m_pActiveItem, true);
+	g_pGameRules->GetNextBestWeapon(this, m_pActiveWeapon, true);
 }
 
 void CBasePlayer::SetPrefsFromUserinfo(char* infobuffer)

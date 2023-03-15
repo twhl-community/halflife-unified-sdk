@@ -177,13 +177,13 @@ void CSatchel::OnCreate()
 //=========================================================
 // CALLED THROUGH the newly-touched weapon's instance. The existing player weapon is pOriginal
 //=========================================================
-bool CSatchel::AddDuplicate(CBasePlayerItem* pOriginal)
+bool CSatchel::AddDuplicate(CBasePlayerWeapon* original)
 {
 	CSatchel* pSatchel;
 
 	if (UTIL_IsMultiplayer())
 	{
-		pSatchel = (CSatchel*)pOriginal;
+		pSatchel = (CSatchel*)original;
 
 		if (pSatchel->m_chargeReady != 0)
 		{
@@ -192,7 +192,7 @@ bool CSatchel::AddDuplicate(CBasePlayerItem* pOriginal)
 		}
 	}
 
-	return CBasePlayerWeapon::AddDuplicate(pOriginal);
+	return CBasePlayerWeapon::AddDuplicate(original);
 }
 
 //=========================================================

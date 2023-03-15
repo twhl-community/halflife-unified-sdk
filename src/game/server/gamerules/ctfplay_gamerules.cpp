@@ -1037,8 +1037,8 @@ void CHalfLifeCTFplay::PlayerKilled(CBasePlayer* pVictim, CBaseEntity* pKiller, 
 
 			if (pKiller == inflictor)
 			{
-				if (killerPlayer->m_pActiveItem)
-					pszInflictorName = CBasePlayerItem::ItemInfoArray[killerPlayer->m_pActiveItem->m_iId].pszName;
+				if (killerPlayer->m_pActiveWeapon)
+					pszInflictorName = CBasePlayerWeapon::ItemInfoArray[killerPlayer->m_pActiveWeapon->m_iId].pszName;
 			}
 			else if (inflictor && !FStringNull(inflictor->pev->classname))
 			{
@@ -1366,7 +1366,7 @@ void CHalfLifeCTFplay::ChangePlayerTeam(CBasePlayer* pPlayer, const char* pCharN
 		pPlayer->Observer_SetMode(OBS_CHASE_FREE);
 		pPlayer->pev->deadflag = DEAD_RESPAWNABLE;
 
-		if (pPlayer->HasNamedPlayerItem("weapon_satchel"))
+		if (pPlayer->HasNamedPlayerWeapon("weapon_satchel"))
 			DeactivateSatchels(pPlayer);
 
 		pPlayer->RemoveAllItems(false);

@@ -41,7 +41,7 @@ CGameRules::CGameRules()
 				player->Observer_SetMode(atoi(CMD_ARGV(1))); });
 }
 
-CBasePlayerItem* CGameRules::FindNextBestWeapon(CBasePlayer* pPlayer, CBasePlayerItem* pCurrentWeapon)
+CBasePlayerWeapon* CGameRules::FindNextBestWeapon(CBasePlayer* pPlayer, CBasePlayerWeapon* pCurrentWeapon)
 {
 	if (pCurrentWeapon != nullptr && !pCurrentWeapon->CanHolster())
 	{
@@ -51,13 +51,13 @@ CBasePlayerItem* CGameRules::FindNextBestWeapon(CBasePlayer* pPlayer, CBasePlaye
 
 	const int currentWeight = pCurrentWeapon != nullptr ? pCurrentWeapon->iWeight() : -1;
 
-	CBasePlayerItem* pBest = nullptr; // this will be used in the event that we don't find a weapon in the same category.
+	CBasePlayerWeapon* pBest = nullptr; // this will be used in the event that we don't find a weapon in the same category.
 
 	int iBestWeight = -1; // no weapon lower than -1 can be autoswitched to
 
 	for (int i = 0; i < MAX_WEAPON_SLOTS; i++)
 	{
-		for (auto pCheck = pPlayer->m_rgpPlayerItems[i]; pCheck; pCheck = pCheck->m_pNext)
+		for (auto pCheck = pPlayer->m_rgpPlayerWeapons[i]; pCheck; pCheck = pCheck->m_pNext)
 		{
 			// don't reselect the weapon we're trying to get rid of
 			if (pCheck == pCurrentWeapon)
@@ -101,7 +101,7 @@ CBasePlayerItem* CGameRules::FindNextBestWeapon(CBasePlayer* pPlayer, CBasePlaye
 	return pBest;
 }
 
-bool CGameRules::GetNextBestWeapon(CBasePlayer* pPlayer, CBasePlayerItem* pCurrentWeapon, bool alwaysSearch)
+bool CGameRules::GetNextBestWeapon(CBasePlayer* pPlayer, CBasePlayerWeapon* pCurrentWeapon, bool alwaysSearch)
 {
 	if (auto pBest = FindNextBestWeapon(pPlayer, pCurrentWeapon); pBest != nullptr)
 	{
@@ -153,7 +153,7 @@ edict_t* CGameRules::GetPlayerSpawnSpot(CBasePlayer* pPlayer)
 
 //=========================================================
 //=========================================================
-bool CGameRules::CanHavePlayerItem(CBasePlayer* pPlayer, CBasePlayerItem* pWeapon)
+bool CGameRules::CanHavePlayerWeapon(CBasePlayer* pPlayer, CBasePlayerWeapon* pWeapon)
 {
 	// only living players can have items
 	if (pPlayer->pev->deadflag != DEAD_NO)
@@ -165,7 +165,7 @@ bool CGameRules::CanHavePlayerItem(CBasePlayer* pPlayer, CBasePlayerItem* pWeapo
 		{
 			// we can't carry anymore ammo for this gun. We can only
 			// have the gun if we aren't already carrying one of this type
-			if (pPlayer->HasPlayerItem(pWeapon))
+			if (pPlayer->HasPlayerWeapon(pWeapon))
 			{
 				return false;
 			}
@@ -174,7 +174,7 @@ bool CGameRules::CanHavePlayerItem(CBasePlayer* pPlayer, CBasePlayerItem* pWeapo
 	else
 	{
 		// weapon doesn't use ammo, don't take another if you already have it.
-		if (pPlayer->HasPlayerItem(pWeapon))
+		if (pPlayer->HasPlayerWeapon(pWeapon))
 		{
 			return false;
 		}

@@ -22,14 +22,14 @@ void CBasePlayer::SelectItem(const char* pstr)
 	if (!pstr)
 		return;
 
-	CBasePlayerItem* pItem = nullptr;
+	CBasePlayerWeapon* pItem = nullptr;
 
 #ifndef CLIENT_DLL
 	for (int i = 0; i < MAX_WEAPON_SLOTS; i++)
 	{
-		if (m_rgpPlayerItems[i])
+		if (m_rgpPlayerWeapons[i])
 		{
-			pItem = m_rgpPlayerItems[i];
+			pItem = m_rgpPlayerWeapons[i];
 
 			while (pItem)
 			{
@@ -47,7 +47,7 @@ void CBasePlayer::SelectItem(const char* pstr)
 	if (!pItem)
 		return;
 
-	if (pItem == m_pActiveItem)
+	if (pItem == m_pActiveWeapon)
 		return;
 
 	DeployWeapon(pItem);
@@ -55,35 +55,35 @@ void CBasePlayer::SelectItem(const char* pstr)
 
 void CBasePlayer::SelectLastItem()
 {
-	if (!m_pLastItem)
+	if (!m_pLastWeapon)
 	{
 		return;
 	}
 
-	if (m_pActiveItem && !m_pActiveItem->CanHolster())
+	if (m_pActiveWeapon && !m_pActiveWeapon->CanHolster())
 	{
 		return;
 	}
 
-	DeployWeapon(m_pLastItem);
+	DeployWeapon(m_pLastWeapon);
 }
 
-void CBasePlayer::DeployWeapon(CBasePlayerItem* weapon)
+void CBasePlayer::DeployWeapon(CBasePlayerWeapon* weapon)
 {
 	ResetAutoaim();
 
 	// FIX, this needs to queue them up and delay
-	if (m_pActiveItem)
-		m_pActiveItem->Holster();
+	if (m_pActiveWeapon)
+		m_pActiveWeapon->Holster();
 
-	m_pLastItem = m_pActiveItem;
-	m_pActiveItem = weapon;
+	m_pLastWeapon = m_pActiveWeapon;
+	m_pActiveWeapon = weapon;
 
-	if (m_pActiveItem)
+	if (m_pActiveWeapon)
 	{
-		m_pActiveItem->m_ForceSendAnimations = true;
-		m_pActiveItem->Deploy();
-		m_pActiveItem->m_ForceSendAnimations = false;
-		m_pActiveItem->UpdateItemInfo();
+		m_pActiveWeapon->m_ForceSendAnimations = true;
+		m_pActiveWeapon->Deploy();
+		m_pActiveWeapon->m_ForceSendAnimations = false;
+		m_pActiveWeapon->UpdateItemInfo();
 	}
 }

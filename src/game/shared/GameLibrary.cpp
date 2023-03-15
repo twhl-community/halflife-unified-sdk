@@ -52,7 +52,7 @@ bool GameLibrary::Initialize()
 	g_GameLogger = g_Logging.CreateLogger("game");
 	g_AssertLogger = g_Logging.CreateLogger("assert");
 	CBaseEntity::Logger = g_Logging.CreateLogger("ent");
-	CBasePlayerItem::WeaponsLogger = g_Logging.CreateLogger("ent.weapons");
+	CBasePlayerWeapon::WeaponsLogger = g_Logging.CreateLogger("ent.weapons");
 
 	g_GameSystems.Invoke(&IGameSystem::PostInitialize);
 
@@ -64,7 +64,7 @@ bool GameLibrary::Initialize()
 
 void GameLibrary::Shutdown()
 {
-	CBasePlayerItem::WeaponsLogger.reset();
+	CBasePlayerWeapon::WeaponsLogger.reset();
 	CBaseEntity::Logger.reset();
 	g_AssertLogger.reset();
 	g_GameLogger.reset();
@@ -100,7 +100,7 @@ void GameLibrary::SetEntLogLevels(spdlog::level::level_enum level)
 {
 	const auto& levelName = spdlog::level::to_string_view(level);
 
-	for (auto& logger : {CBaseEntity::Logger, CBasePlayerItem::WeaponsLogger})
+	for (auto& logger : {CBaseEntity::Logger, CBasePlayerWeapon::WeaponsLogger})
 	{
 		logger->set_level(level);
 		Con_Printf("Set \"%s\" log level to %s\n", logger->name().c_str(), levelName.data());

@@ -366,7 +366,7 @@ void COFShockRoach::LeapTouch(CBaseEntity* pOther)
 	{
 		auto pPlayer = static_cast<CBasePlayer*>(pOther);
 
-		if (!pPlayer->HasNamedPlayerItem("weapon_shockrifle"))
+		if (!pPlayer->HasNamedPlayerWeapon("weapon_shockrifle"))
 		{
 			pPlayer->GiveNamedItem("weapon_shockrifle");
 			SetTouch(nullptr);
