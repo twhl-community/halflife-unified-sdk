@@ -164,7 +164,7 @@ int SentencesSystem::LookupSentence(const char* sample, SentenceIndexName* sente
 	return -1;
 }
 
-int SentencesSystem::PlayRndI(edict_t* entity, int isentenceg, float volume, float attenuation, int flags, int pitch)
+int SentencesSystem::PlayRndI(CBaseEntity* entity, int isentenceg, float volume, float attenuation, int flags, int pitch)
 {
 	SentenceIndexName name;
 
@@ -174,7 +174,7 @@ int SentencesSystem::PlayRndI(edict_t* entity, int isentenceg, float volume, flo
 	return ipick;
 }
 
-int SentencesSystem::PlayRndSz(edict_t* entity, const char* szgroupname,
+int SentencesSystem::PlayRndSz(CBaseEntity* entity, const char* szgroupname,
 	float volume, float attenuation, int flags, int pitch)
 {
 	const int isentenceg = GetGroupIndex(szgroupname);
@@ -193,7 +193,7 @@ int SentencesSystem::PlayRndSz(edict_t* entity, const char* szgroupname,
 	return ipick;
 }
 
-int SentencesSystem::PlaySequentialSz(edict_t* entity, const char* szgroupname,
+int SentencesSystem::PlaySequentialSz(CBaseEntity* entity, const char* szgroupname,
 	float volume, float attenuation, int flags, int pitch, int ipick, bool freset)
 {
 	const int isentenceg = GetGroupIndex(szgroupname);

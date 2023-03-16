@@ -18,6 +18,7 @@
 #include "GameSystem.h"
 #include "networking/NetworkDataSystem.h"
 
+class CBaseEntity;
 struct cvar_t;
 
 namespace sound
@@ -42,17 +43,17 @@ public:
 	*	as it's not quite as fast as with normal pitch (the pitchshift mixer is not native coded).
 	*	TODO: is this still true?
 	*/
-	void EmitSound(edict_t* entity, int channel, const char* sample, float volume, float attenuation, int flags, int pitch);
+	void EmitSound(CBaseEntity* entity, int channel, const char* sample, float volume, float attenuation, int flags, int pitch);
 
-	void EmitAmbientSound(edict_t* entity, const Vector& vecOrigin, const char* samp, float vol, float attenuation, int fFlags, int pitch);
+	void EmitAmbientSound(CBaseEntity* entity, const Vector& vecOrigin, const char* samp, float vol, float attenuation, int fFlags, int pitch);
 
 	const char* CheckForSoundReplacement(const char* soundName) const;
 
 private:
-	void EmitSoundCore(edict_t* entity, int channel, const char* sample, float volume, float attenuation,
+	void EmitSoundCore(CBaseEntity* entity, int channel, const char* sample, float volume, float attenuation,
 		int flags, int pitch, const Vector& origin, bool alwaysBroadcast);
 
-	void EmitSoundSentence(edict_t* entity, int channel, const char* sample, float volume, float attenuation,
+	void EmitSoundSentence(CBaseEntity* entity, int channel, const char* sample, float volume, float attenuation,
 		int flags, int pitch);
 
 private:

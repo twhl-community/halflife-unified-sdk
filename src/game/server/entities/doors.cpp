@@ -136,7 +136,7 @@ void PlayLockSounds(CBaseEntity* entity, locksound_t* pls, bool flocked, bool fb
 			// play next 'door locked' sentence in group
 			int iprev = pls->iLockedSentence;
 
-			pls->iLockedSentence = sentences::g_Sentences.PlaySequentialSz(entity->edict(), STRING(pls->sLockedSentence),
+			pls->iLockedSentence = sentences::g_Sentences.PlaySequentialSz(entity, STRING(pls->sLockedSentence),
 				0.85, ATTN_NORM, 0, 100, pls->iLockedSentence, false);
 			pls->iUnlockedSentence = 0;
 
@@ -172,7 +172,7 @@ void PlayLockSounds(CBaseEntity* entity, locksound_t* pls, bool flocked, bool fb
 		{
 			int iprev = pls->iUnlockedSentence;
 
-			pls->iUnlockedSentence = sentences::g_Sentences.PlaySequentialSz(entity->edict(), STRING(pls->sUnlockedSentence),
+			pls->iUnlockedSentence = sentences::g_Sentences.PlaySequentialSz(entity, STRING(pls->sUnlockedSentence),
 				0.85, ATTN_NORM, 0, 100, pls->iUnlockedSentence, false);
 			pls->iLockedSentence = 0;
 

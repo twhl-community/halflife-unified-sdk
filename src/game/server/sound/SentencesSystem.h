@@ -27,6 +27,8 @@
 #include "utils/json_fwd.h"
 #include "utils/GameSystem.h"
 
+class CBaseEntity;
+
 namespace sentences
 {
 struct Sentence
@@ -69,17 +71,17 @@ public:
 	 *	@return ipick - which sentence was picked to play from the group.
 	 *		Ipick is only needed if you plan on stopping the sound before playback is done (@see Stop).
 	 */
-	int PlayRndI(edict_t* entity, int isentenceg, float volume, float attenuation, int flags, int pitch);
+	int PlayRndI(CBaseEntity* entity, int isentenceg, float volume, float attenuation, int flags, int pitch);
 
 	/**
 	 *	@brief same as PlayRndI, but takes sentence group name instead of index.
 	 */
-	int PlayRndSz(edict_t* entity, const char* szrootname, float volume, float attenuation, int flags, int pitch);
+	int PlayRndSz(CBaseEntity* entity, const char* szrootname, float volume, float attenuation, int flags, int pitch);
 
 	/**
 	 *	@brief play sentences in sequential order from sentence group. Reset after last sentence.
 	 */
-	int PlaySequentialSz(edict_t* entity, const char* szrootname, float volume, float attenuation, int flags, int pitch, int ipick, bool freset);
+	int PlaySequentialSz(CBaseEntity* entity, const char* szrootname, float volume, float attenuation, int flags, int pitch, int ipick, bool freset);
 
 	/**
 	 *	@brief for this entity, for the given sentence within the sentence group, stop the sentence.

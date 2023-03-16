@@ -239,7 +239,7 @@ void CBasePlayer::DeathSound()
 	}
 
 	// play one of the suit death alarms
-	EMIT_GROUPNAME_SUIT(ENT(pev), "HEV_DEAD");
+	EMIT_GROUPNAME_SUIT(this, "HEV_DEAD");
 }
 
 // override takehealth
@@ -2482,12 +2482,12 @@ void CBasePlayer::CheckSuitUpdate()
 				char sentence[sentences::CBSENTENCENAME_MAX + 1];
 				strcpy(sentence, "!");
 				strcat(sentence, sentences::g_Sentences.GetSentenceNameByIndex(isentence));
-				EMIT_SOUND_SUIT(ENT(pev), sentence);
+				EMIT_SOUND_SUIT(this, sentence);
 			}
 			else
 			{
 				// play sentence group
-				EMIT_GROUPID_SUIT(ENT(pev), -isentence);
+				EMIT_GROUPID_SUIT(this, -isentence);
 			}
 			m_flSuitUpdate = gpGlobals->time + SUITUPDATETIME;
 		}

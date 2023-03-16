@@ -1509,7 +1509,7 @@ void CSpeaker::SpeakerThink()
 	{
 		// make random announcement from sentence group
 
-		if (sentences::g_Sentences.PlayRndSz(ENT(pev), szSoundFile, flvolume, flattenuation, flags, pitch) < 0)
+		if (sentences::g_Sentences.PlayRndSz(this, szSoundFile, flvolume, flattenuation, flags, pitch) < 0)
 			Logger->debug("Level Design Error!: SPEAKER has bad sentence group name: {}", szSoundFile);
 
 		// set next announcement time for random 5 to 10 minute delay

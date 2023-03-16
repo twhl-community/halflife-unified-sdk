@@ -142,7 +142,7 @@ void PM_PlaySound(int channel, const char* sample, float volume, float attenuati
 #ifndef CLIENT_DLL
 	sample = sound::g_ServerSound.CheckForSoundReplacement(sample);
 
-	EMIT_SOUND_PREDICTED(UTIL_GetEntityList() + pmove->player_index + 1, channel, sample, volume, attenuation, fFlags, pitch);
+	EMIT_SOUND_PREDICTED(UTIL_PlayerByIndex(pmove->player_index + 1), channel, sample, volume, attenuation, fFlags, pitch);
 #else
 	if (pmove->runfuncs)
 	{

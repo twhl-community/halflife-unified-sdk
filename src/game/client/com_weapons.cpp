@@ -60,7 +60,7 @@ int HUD_GetWeaponAnim()
 }
 
 // Play a sound if we are seeing this command for the first time
-void EMIT_SOUND_PREDICTED(edict_t* entity, int channel, const char* sample, float volume, float attenuation,
+void EMIT_SOUND_PREDICTED(CBaseEntity* entity, int channel, const char* sample, float volume, float attenuation,
 	int flags, int pitch)
 {
 	if (!g_runfuncs || !g_finalstate)

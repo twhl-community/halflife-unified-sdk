@@ -191,9 +191,9 @@ public:
 			return false;
 
 		if ((pev->spawnflags & SF_SUIT_SHORTLOGON) != 0)
-			EMIT_SOUND_SUIT(pPlayer->edict(), "!HEV_A0"); // short version of suit logon,
+			EMIT_SOUND_SUIT(pPlayer, "!HEV_A0"); // short version of suit logon,
 		else
-			EMIT_SOUND_SUIT(pPlayer->edict(), "!HEV_AAx"); // long version of suit logon
+			EMIT_SOUND_SUIT(pPlayer, "!HEV_AAx"); // long version of suit logon
 
 		pPlayer->SetHasSuit(true);
 		return true;
@@ -251,7 +251,7 @@ public:
 
 			sprintf(szcharge, "!HEV_%1dP", pct);
 
-			// EMIT_SOUND_SUIT(ENT(pev), szcharge);
+			// EMIT_SOUND_SUIT(this, szcharge);
 			pPlayer->SetSuitUpdate(szcharge, false, SUIT_NEXT_IN_30SEC);
 			return true;
 		}
@@ -327,7 +327,7 @@ public:
 			WRITE_STRING(STRING(pev->classname));
 			MESSAGE_END();
 
-			EMIT_SOUND_SUIT(pPlayer->edict(), "!HEV_A1"); // Play the longjump sound UNDONE: Kelly? correct sound?
+			EMIT_SOUND_SUIT(pPlayer, "!HEV_A1"); // Play the longjump sound UNDONE: Kelly? correct sound?
 			return true;
 		}
 		return false;
@@ -376,7 +376,7 @@ public:
 
 			sprintf(szcharge, "!HEV_%1dP", pct);
 
-			// EMIT_SOUND_SUIT(ENT(pev), szcharge);
+			// EMIT_SOUND_SUIT(this, szcharge);
 			pPlayer->SetSuitUpdate(szcharge, false, SUIT_NEXT_IN_30SEC);
 			return true;
 		}
@@ -427,7 +427,7 @@ public:
 
 			sprintf(szcharge, "!HEV_%1dP", pct);
 
-			// EMIT_SOUND_SUIT(ENT(pev), szcharge);
+			// EMIT_SOUND_SUIT(this, szcharge);
 			pPlayer->SetSuitUpdate(szcharge, false, SUIT_NEXT_IN_30SEC);
 			return true;
 		}

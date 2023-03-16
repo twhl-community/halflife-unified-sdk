@@ -1353,7 +1353,7 @@ bool CSittingScientist::FIdleSpeak()
 		pTalkMonster->SetAnswerQuestion(this);
 
 		IdleHeadTurn(pentFriend->pev->origin);
-		sentences::g_Sentences.PlayRndSz(ENT(pev), m_szGrp[TLK_PQUESTION], 1.0, ATTN_IDLE, 0, pitch);
+		sentences::g_Sentences.PlayRndSz(this, m_szGrp[TLK_PQUESTION], 1.0, ATTN_IDLE, 0, pitch);
 		// set global min delay for next conversation
 		CTalkMonster::g_talkWaitTime = gpGlobals->time + RANDOM_FLOAT(4.8, 5.2);
 		return true;
@@ -1362,7 +1362,7 @@ bool CSittingScientist::FIdleSpeak()
 	// otherwise, play an idle statement
 	if (RANDOM_LONG(0, 1))
 	{
-		sentences::g_Sentences.PlayRndSz(ENT(pev), m_szGrp[TLK_PIDLE], 1.0, ATTN_IDLE, 0, pitch);
+		sentences::g_Sentences.PlayRndSz(this, m_szGrp[TLK_PIDLE], 1.0, ATTN_IDLE, 0, pitch);
 		// set global min delay for next conversation
 		CTalkMonster::g_talkWaitTime = gpGlobals->time + RANDOM_FLOAT(4.8, 5.2);
 		return true;

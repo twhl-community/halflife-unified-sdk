@@ -874,7 +874,7 @@ void COFMedicAlly::HealerUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_
 				}
 				else
 				{
-					sentences::g_Sentences.PlayRndSz(edict(), "MG_HEAL", HGRUNT_SENTENCE_VOLUME, ATTN_NORM, 0, m_voicePitch);
+					sentences::g_Sentences.PlayRndSz(this, "MG_HEAL", HGRUNT_SENTENCE_VOLUME, ATTN_NORM, 0, m_voicePitch);
 					ChangeSchedule(slMedicAllyDrawNeedle);
 				}
 			}
@@ -899,7 +899,7 @@ void COFMedicAlly::HealerUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_
 			if (gpGlobals->time - m_flLastRejectAudio > 4.0 && m_iHealCharge <= 0 && !m_fHealing)
 			{
 				m_flLastRejectAudio = gpGlobals->time;
-				sentences::g_Sentences.PlayRndSz(edict(), "MG_NOTHEAL", HGRUNT_SENTENCE_VOLUME, ATTN_NORM, 0, m_voicePitch);
+				sentences::g_Sentences.PlayRndSz(this, "MG_NOTHEAL", HGRUNT_SENTENCE_VOLUME, ATTN_NORM, 0, m_voicePitch);
 			}
 		}
 

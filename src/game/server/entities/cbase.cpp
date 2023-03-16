@@ -856,20 +856,20 @@ CBaseEntity* CBaseEntity::Create(const char* szName, const Vector& vecOrigin, co
 
 void CBaseEntity::EmitSound(int channel, const char* sample, float volume, float attenuation)
 {
-	sound::g_ServerSound.EmitSound(edict(), channel, sample, volume, attenuation, 0, PITCH_NORM);
+	sound::g_ServerSound.EmitSound(this, channel, sample, volume, attenuation, 0, PITCH_NORM);
 }
 
 void CBaseEntity::EmitSoundDyn(int channel, const char* sample, float volume, float attenuation, int flags, int pitch)
 {
-	sound::g_ServerSound.EmitSound(edict(), channel, sample, volume, attenuation, flags, pitch);
+	sound::g_ServerSound.EmitSound(this, channel, sample, volume, attenuation, flags, pitch);
 }
 
 void CBaseEntity::EmitAmbientSound(const Vector& vecOrigin, const char* samp, float vol, float attenuation, int fFlags, int pitch)
 {
-	sound::g_ServerSound.EmitAmbientSound(edict(), vecOrigin, samp, vol, attenuation, fFlags, pitch);
+	sound::g_ServerSound.EmitAmbientSound(this, vecOrigin, samp, vol, attenuation, fFlags, pitch);
 }
 
 void CBaseEntity::StopSound(int channel, const char* sample)
 {
-	sound::g_ServerSound.EmitSound(edict(), channel, sample, 0, 0, SND_STOP, PITCH_NORM);
+	sound::g_ServerSound.EmitSound(this, channel, sample, 0, 0, SND_STOP, PITCH_NORM);
 }
