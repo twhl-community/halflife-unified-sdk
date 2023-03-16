@@ -731,8 +731,8 @@ void CHoundeye::StartTask(Task_t* pTask)
 								// draw a beam.
 								MESSAGE_BEGIN( MSG_BROADCAST, SVC_TEMPENTITY );
 									WRITE_BYTE( TE_BEAMENTS );
-									WRITE_SHORT( ENTINDEX( this->edict() ) );
-									WRITE_SHORT( ENTINDEX( pSquad->edict() ) );
+									WRITE_SHORT(entindex());
+									WRITE_SHORT(pSquad->entindex());
 									WRITE_SHORT( m_iSpriteTexture );
 									WRITE_BYTE( 0 ); // framestart
 									WRITE_BYTE( 0 ); // framerate

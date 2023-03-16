@@ -373,7 +373,7 @@ void CHalfLifeMultiplay::ClientDisconnected(edict_t* pClient)
 
 			Logger->trace("{} disconnected", PlayerLogInfo{*pPlayer});
 
-			const int playerIndex = ENTINDEX(pClient);
+			const int playerIndex = pPlayer->entindex();
 
 			free(pszPlayerIPs[playerIndex]);
 			pszPlayerIPs[playerIndex] = nullptr;
@@ -381,7 +381,7 @@ void CHalfLifeMultiplay::ClientDisconnected(edict_t* pClient)
 			pPlayer->RemoveAllItems(true); // destroy all of the players weapons and items
 
 			g_engfuncs.pfnMessageBegin(MSG_ALL, gmsgSpectator, nullptr, nullptr);
-			g_engfuncs.pfnWriteByte(ENTINDEX(pClient));
+			g_engfuncs.pfnWriteByte(pPlayer->entindex());
 			g_engfuncs.pfnWriteByte(0);
 			g_engfuncs.pfnMessageEnd();
 
@@ -690,7 +690,7 @@ void CHalfLifeMultiplay::DeathNotice(CBasePlayer* pVictim, CBaseEntity* pKiller,
 
 	MESSAGE_BEGIN(MSG_ALL, gmsgDeathMsg);
 	WRITE_BYTE(killer_index);				// the killer
-	WRITE_BYTE(ENTINDEX(pVictim->edict())); // the victim
+	WRITE_BYTE(pVictim->entindex());		// the victim
 	WRITE_STRING(killer_weapon_name);		// what they were killed by (should this be a string?)
 	MESSAGE_END();
 
@@ -716,14 +716,14 @@ void CHalfLifeMultiplay::DeathNotice(CBasePlayer* pVictim, CBaseEntity* pKiller,
 	}
 
 	MESSAGE_BEGIN(MSG_SPEC, SVC_DIRECTOR);
-	WRITE_BYTE(9);							 // command length in bytes
-	WRITE_BYTE(DRC_CMD_EVENT);				 // player killed
-	WRITE_SHORT(ENTINDEX(pVictim->edict())); // index number of primary entity
+	WRITE_BYTE(9);							// command length in bytes
+	WRITE_BYTE(DRC_CMD_EVENT);				// player killed
+	WRITE_SHORT(pVictim->entindex());		// index number of primary entity
 	if (inflictor)
 		WRITE_SHORT(inflictor->entindex()); // index number of secondary entity
 	else
-		WRITE_SHORT(pKiller->entindex()); // index number of secondary entity
-	WRITE_LONG(7 | DRC_FLAG_DRAMATIC);	  // eventflags (priority and flags)
+		WRITE_SHORT(pKiller->entindex());	// index number of secondary entity
+	WRITE_LONG(7 | DRC_FLAG_DRAMATIC);		// eventflags (priority and flags)
 	MESSAGE_END();
 
 	//  Print a standard message

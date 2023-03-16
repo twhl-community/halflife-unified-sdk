@@ -411,11 +411,11 @@ bool CBasePlayer::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, floa
 
 	// tell director about it
 	MESSAGE_BEGIN(MSG_SPEC, SVC_DIRECTOR);
-	WRITE_BYTE(9);						  // command length in bytes
-	WRITE_BYTE(DRC_CMD_EVENT);			  // take damage event
-	WRITE_SHORT(ENTINDEX(this->edict())); // index number of primary entity
-	WRITE_SHORT(inflictor->entindex());	  // index number of secondary entity
-	WRITE_LONG(5);						  // eventflags (priority and flags)
+	WRITE_BYTE(9);							// command length in bytes
+	WRITE_BYTE(DRC_CMD_EVENT);				// take damage event
+	WRITE_SHORT(entindex());				// index number of primary entity
+	WRITE_SHORT(inflictor->entindex());		// index number of secondary entity
+	WRITE_LONG(5);							// eventflags (priority and flags)
 	MESSAGE_END();
 
 
@@ -1412,7 +1412,7 @@ void CBasePlayer::StartObserver(Vector vecPosition, Vector vecViewAngle)
 
 	pev->team = string_t::Null;
 	MESSAGE_BEGIN(MSG_ALL, gmsgTeamInfo);
-	WRITE_BYTE(ENTINDEX(edict()));
+	WRITE_BYTE(entindex());
 	WRITE_STRING("");
 	MESSAGE_END();
 
@@ -1705,7 +1705,7 @@ void CBasePlayer::UpdateStatusBar()
 
 			if (pEntity->IsPlayer())
 			{
-				newSBarState[SBAR_ID_TARGETNAME] = ENTINDEX(pEntity->edict());
+				newSBarState[SBAR_ID_TARGETNAME] = pEntity->entindex();
 				strcpy(sbuf1, "1 %p1\n2 Health: %i2%%\n3 Armor: %i3%%");
 
 				// allies and medics get to see the targets health
