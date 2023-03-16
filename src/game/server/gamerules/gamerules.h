@@ -110,7 +110,7 @@ public:
 	virtual void PlayerThink(CBasePlayer* pPlayer) = 0;		   // called by CBasePlayer::PreThink every frame, before physics are run and after keys are accepted
 	virtual bool FPlayerCanRespawn(CBasePlayer* pPlayer) = 0;  // is this player allowed to respawn now?
 	virtual float FlPlayerSpawnTime(CBasePlayer* pPlayer) = 0; // When in the future will this player be able to spawn?
-	virtual edict_t* GetPlayerSpawnSpot(CBasePlayer* pPlayer); // Place this player on their spawnspot and face them the proper direction.
+	virtual CBaseEntity* GetPlayerSpawnSpot(CBasePlayer* pPlayer); // Place this player on their spawnspot and face them the proper direction.
 
 	virtual bool AllowAutoTargetCrosshair() { return true; }
 	virtual void ClientUserInfoChanged(CBasePlayer* pPlayer, char* infobuffer) {} // the player has changed userinfo;  can change it now
@@ -328,7 +328,7 @@ public:
 	void PlayerThink(CBasePlayer* pPlayer) override;
 	bool FPlayerCanRespawn(CBasePlayer* pPlayer) override;
 	float FlPlayerSpawnTime(CBasePlayer* pPlayer) override;
-	edict_t* GetPlayerSpawnSpot(CBasePlayer* pPlayer) override;
+	CBaseEntity* GetPlayerSpawnSpot(CBasePlayer* pPlayer) override;
 
 	bool AllowAutoTargetCrosshair() override;
 	void ClientUserInfoChanged(CBasePlayer* pPlayer, char* infobuffer) override;

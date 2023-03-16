@@ -30,4 +30,4 @@ inline CBaseEntity* g_pLastSpawn = nullptr;
  *	@brief Returns the entity to spawn at
  *	USES AND SETS GLOBAL g_pLastSpawn
  */
-edict_t* EntSelectSpawnPoint(CBasePlayer* pPlayer);
+CBaseEntity* EntSelectSpawnPoint(CBasePlayer* pPlayer);

@@ -3070,9 +3070,9 @@ bool CBasePlayer::Restore(CRestore& restore)
 		Logger->debug("No Landmark:{}", pSaveData->szLandmarkName);
 
 		// default to normal spawn
-		edict_t* pentSpawnSpot = EntSelectSpawnPoint(this);
-		pev->origin = VARS(pentSpawnSpot)->origin + Vector(0, 0, 1);
-		pev->angles = VARS(pentSpawnSpot)->angles;
+		CBaseEntity* pSpawnSpot = EntSelectSpawnPoint(this);
+		pev->origin = pSpawnSpot->pev->origin + Vector(0, 0, 1);
+		pev->angles = pSpawnSpot->pev->angles;
 	}
 	pev->v_angle.z = 0; // Clear out roll
 	pev->angles = pev->v_angle;

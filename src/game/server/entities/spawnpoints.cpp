@@ -59,12 +59,9 @@ bool IsSpawnPointValid(CBaseEntity* pPlayer, CBaseEntity* pSpot)
 	return true;
 }
 
-edict_t* EntSelectSpawnPoint(CBasePlayer* pPlayer)
+static CBaseEntity* EntTrySelectSpawnPoint(CBasePlayer* pPlayer)
 {
 	CBaseEntity* pSpot;
-	edict_t* player;
-
-	player = pPlayer->edict();
 
 	if (g_pGameRules->IsCTF() && pPlayer->m_iTeamNum != CTFTeam::None)
 	{
@@ -87,7 +84,7 @@ edict_t* EntSelectSpawnPoint(CBasePlayer* pPlayer)
 				if (IsSpawnPointValid(pPlayer, pSpot) && pSpot->pev->origin != g_vecZero)
 				{
 					// if so, go to pSpot
-					goto ReturnSpot;
+					return pSpot;
 				}
 			}
 			// increment pSpot
@@ -111,7 +108,7 @@ edict_t* EntSelectSpawnPoint(CBasePlayer* pPlayer)
 				if (IsSpawnPointValid(pPlayer, pSpot) && pSpot->pev->origin != g_vecZero)
 				{
 					// if so, go to pSpot
-					goto ReturnSpot;
+					return pSpot;
 				}
 			}
 			// increment pSpot
@@ -125,10 +122,10 @@ edict_t* EntSelectSpawnPoint(CBasePlayer* pPlayer)
 			while ((ent = UTIL_FindEntityInSphere(ent, pSpot->pev->origin, 128)) != nullptr)
 			{
 				// if ent is a client, kill em (unless they are ourselves)
-				if (ent->IsPlayer() && !(ent->edict() == player))
+				if (ent->IsPlayer() && ent != pPlayer)
 					ent->TakeDamage(CBaseEntity::World, CBaseEntity::World, 300, DMG_GENERIC);
 			}
-			goto ReturnSpot;
+			return pSpot;
 		}
 	}
 
@@ -137,10 +134,10 @@ edict_t* EntSelectSpawnPoint(CBasePlayer* pPlayer)
 	{
 		pSpot = UTIL_FindEntityByClassname(g_pLastSpawn, "info_player_coop");
 		if (!FNullEnt(pSpot))
-			goto ReturnSpot;
+			return pSpot;
 		pSpot = UTIL_FindEntityByClassname(g_pLastSpawn, "info_player_start");
 		if (!FNullEnt(pSpot))
-			goto ReturnSpot;
+			return pSpot;
 	}
 	else if (g_pGameRules->IsDeathmatch())
 	{
@@ -167,7 +164,7 @@ edict_t* EntSelectSpawnPoint(CBasePlayer* pPlayer)
 					}
 
 					// if so, go to pSpot
-					goto ReturnSpot;
+					return pSpot;
 				}
 			}
 			// increment pSpot
@@ -181,10 +178,10 @@ edict_t* EntSelectSpawnPoint(CBasePlayer* pPlayer)
 			while ((ent = UTIL_FindEntityInSphere(ent, pSpot->pev->origin, 128)) != nullptr)
 			{
 				// if ent is a client, kill em (unless they are ourselves)
-				if (ent->IsPlayer() && !(ent->edict() == player))
+				if (ent->IsPlayer() && ent != pPlayer)
 					ent->TakeDamage(CBaseEntity::World, CBaseEntity::World, 300, DMG_GENERIC);
 			}
-			goto ReturnSpot;
+			return pSpot;
 		}
 	}
 
@@ -193,22 +190,28 @@ edict_t* EntSelectSpawnPoint(CBasePlayer* pPlayer)
 	{
 		pSpot = UTIL_FindEntityByClassname(nullptr, "info_player_start");
 		if (!FNullEnt(pSpot))
-			goto ReturnSpot;
+			return pSpot;
 	}
 	else
 	{
 		pSpot = UTIL_FindEntityByTargetname(nullptr, STRING(gpGlobals->startspot));
 		if (!FNullEnt(pSpot))
-			goto ReturnSpot;
+			return pSpot;
 	}
 
-ReturnSpot:
+	return nullptr;
+}
+
+CBaseEntity* EntSelectSpawnPoint(CBasePlayer* pPlayer)
+{
+	auto pSpot = EntTrySelectSpawnPoint(pPlayer);
+
 	if (FNullEnt(pSpot))
 	{
 		CBaseEntity::Logger->error("PutClientInServer: no info_player_start on level");
-		return CBaseEntity::World->edict();
+		return CBaseEntity::World;
 	}
 
 	g_pLastSpawn = pSpot;
-	return pSpot->edict();
+	return pSpot;
 }

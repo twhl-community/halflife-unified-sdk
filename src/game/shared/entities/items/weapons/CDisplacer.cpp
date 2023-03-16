@@ -353,7 +353,7 @@ void CDisplacer::AltFireThink()
 	}
 	else
 	{
-		pDestination = GET_PRIVATE<CBaseEntity>(EntSelectSpawnPoint(m_pPlayer));
+		pDestination = EntSelectSpawnPoint(m_pPlayer);
 
 		if (!pDestination)
 			pDestination = g_pLastSpawn;

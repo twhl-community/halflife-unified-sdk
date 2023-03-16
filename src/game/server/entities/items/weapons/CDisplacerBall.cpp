@@ -197,13 +197,13 @@ void CDisplacerBall::BallTouch(CBaseEntity* pOther)
 			}
 		}
 
-		auto pSpawnSpot = VARS(g_pGameRules->GetPlayerSpawnSpot(pPlayer));
+		auto pSpawnSpot = g_pGameRules->GetPlayerSpawnSpot(pPlayer);
 
-		Vector vecEnd = pSpawnSpot->origin;
+		Vector vecEnd = pSpawnSpot->pev->origin;
 
 		vecEnd.z -= 100;
 
-		UTIL_TraceLine(pSpawnSpot->origin, pSpawnSpot->origin - Vector(0, 0, 100), ignore_monsters, edict(), &tr);
+		UTIL_TraceLine(pSpawnSpot->pev->origin, pSpawnSpot->pev->origin - Vector(0, 0, 100), ignore_monsters, edict(), &tr);
 
 		UTIL_SetOrigin(pPlayer->pev, tr.vecEndPos + Vector(0, 0, 37));
 

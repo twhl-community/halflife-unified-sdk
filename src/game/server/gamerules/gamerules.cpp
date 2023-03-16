@@ -133,18 +133,18 @@ bool CGameRules::CanHaveAmmo(CBasePlayer* pPlayer, const char* pszAmmoName)
 
 //=========================================================
 //=========================================================
-edict_t* CGameRules::GetPlayerSpawnSpot(CBasePlayer* pPlayer)
+CBaseEntity* CGameRules::GetPlayerSpawnSpot(CBasePlayer* pPlayer)
 {
-	edict_t* pentSpawnSpot = EntSelectSpawnPoint(pPlayer);
+	CBaseEntity* pSpawnSpot = EntSelectSpawnPoint(pPlayer);
 
-	pPlayer->pev->origin = VARS(pentSpawnSpot)->origin + Vector(0, 0, 1);
+	pPlayer->pev->origin = pSpawnSpot->pev->origin + Vector(0, 0, 1);
 	pPlayer->pev->v_angle = g_vecZero;
 	pPlayer->pev->velocity = g_vecZero;
-	pPlayer->pev->angles = VARS(pentSpawnSpot)->angles;
+	pPlayer->pev->angles = pSpawnSpot->pev->angles;
 	pPlayer->pev->punchangle = g_vecZero;
 	pPlayer->pev->fixangle = 1;
 
-	return pentSpawnSpot;
+	return pSpawnSpot;
 }
 
 //=========================================================
@@ -187,8 +187,8 @@ void CGameRules::BecomeSpectator(CBasePlayer* player, const CommandArgs& args)
 	// always allow proxies to become a spectator
 	if ((player->pev->flags & FL_PROXY) != 0 || allow_spectators.value != 0)
 	{
-		edict_t* pentSpawnSpot = g_pGameRules->GetPlayerSpawnSpot(player);
-		player->StartObserver(player->pev->origin, VARS(pentSpawnSpot)->angles);
+		CBaseEntity* pSpawnSpot = g_pGameRules->GetPlayerSpawnSpot(player);
+		player->StartObserver(player->pev->origin, pSpawnSpot->pev->angles);
 
 		// notify other clients of player switching to spectator mode
 		UTIL_ClientPrintAll(HUD_PRINTNOTIFY, UTIL_VarArgs("%s switched to spectator mode\n",
