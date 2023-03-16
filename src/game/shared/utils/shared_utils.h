@@ -36,9 +36,6 @@ inline cvar_t* g_pDeveloper;
 inline std::shared_ptr<spdlog::logger> g_AssertLogger;
 inline std::shared_ptr<spdlog::logger> g_PrecacheLogger;
 
-// More explicit than "int"
-typedef int EOFFSET;
-
 //
 // How did I ever live without ASSERT?
 //
@@ -67,17 +64,6 @@ inline edict_t* ENT(edict_t* pent)
 {
 	return pent;
 }
-inline edict_t* ENT(EOFFSET eoffset) { return (*g_engfuncs.pfnPEntityOfEntOffset)(eoffset); }
-inline EOFFSET OFFSET(const edict_t* pent)
-{
-	ASSERTSZ(pent, "Bad ent in OFFSET()");
-	return (*g_engfuncs.pfnEntOffsetOfPEntity)(pent);
-}
-inline EOFFSET OFFSET(entvars_t* pev)
-{
-	ASSERTSZ(pev, "Bad pev in OFFSET()");
-	return OFFSET(ENT(pev));
-}
 
 inline entvars_t* VARS(edict_t* pent)
 {
@@ -87,8 +73,19 @@ inline entvars_t* VARS(edict_t* pent)
 	return &pent->v;
 }
 
-inline int ENTINDEX(edict_t* pEdict) { return (*g_engfuncs.pfnIndexOfEdict)(pEdict); }
+inline int ENTINDEX(const edict_t* pEdict) { return (*g_engfuncs.pfnIndexOfEdict)(pEdict); }
 inline edict_t* INDEXENT(int iEdictNum) { return (*g_engfuncs.pfnPEntityOfEntIndex)(iEdictNum); }
+
+// Testing the three types of "entity" for nullity
+
+// Index 0 is worldspawn, which is treated as a null entity to match Quake 1's QuakeC integer boolean logic.
+// if (ent) is false for index 0.
+inline bool FNullEnt(const edict_t* pent) { return pent == nullptr || ENTINDEX(pent) == 0; }
+inline bool FNullEnt(entvars_t* pev) { return pev == nullptr || FNullEnt(ENT(pev)); }
+
+// entity offsets are no longer used. These overloads exist only to produce compiler errors if code passes integers.
+inline bool FNullEnt(int eoffset) = delete;
+inline edict_t* ENT(int eoffset) = delete;
 
 // Testing strings for nullity
 inline constexpr bool FStringNull(string_t iString)

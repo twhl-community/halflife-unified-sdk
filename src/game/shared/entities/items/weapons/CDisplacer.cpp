@@ -370,7 +370,7 @@ void CDisplacer::AltFireThink()
 		UTIL_SetOrigin(m_pPlayer->pev, tr.vecEndPos + Vector(0, 0, 37));
 	}
 
-	if (pDestination && !FNullEnt(pDestination->pev))
+	if (!FNullEnt(pDestination))
 	{
 		m_pPlayer->pev->flags &= ~FL_SKIPLOCALHOST;
 

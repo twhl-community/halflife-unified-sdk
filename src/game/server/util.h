@@ -62,15 +62,6 @@ inline void MESSAGE_BEGIN(int msg_dest, int msg_type, const float* pOrigin, entv
 	(*g_engfuncs.pfnMessageBegin)(msg_dest, msg_type, pOrigin, ENT(ent));
 }
 
-// Testing the three types of "entity" for nullity
-#define eoNullEntity 0
-inline bool FNullEnt(EOFFSET eoffset)
-{
-	return eoffset == 0;
-}
-inline bool FNullEnt(const edict_t* pent) { return pent == nullptr || FNullEnt(OFFSET(pent)); }
-inline bool FNullEnt(entvars_t* pev) { return pev == nullptr || FNullEnt(OFFSET(pev)); }
-
 #define cchMapNameMost 32
 
 // Dot products for view cone checking

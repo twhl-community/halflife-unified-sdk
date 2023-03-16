@@ -1446,29 +1446,29 @@ void UTIL_StripToken(const char* pKey, char* pDest)
 // --------------------------------------------------------------
 static int gSizes[FIELD_TYPECOUNT] =
 	{
-		sizeof(float),	   // FIELD_FLOAT
-		sizeof(int),	   // FIELD_STRING
-		sizeof(int),	   // FIELD_ENTITY
-		sizeof(int),	   // FIELD_CLASSPTR
-		sizeof(int),	   // FIELD_EHANDLE
-		sizeof(int),	   // FIELD_entvars_t
-		sizeof(int),	   // FIELD_EDICT
-		sizeof(float) * 3, // FIELD_VECTOR
-		sizeof(float) * 3, // FIELD_POSITION_VECTOR
-		sizeof(int*),	   // FIELD_POINTER
-		sizeof(int),	   // FIELD_INTEGER
+		sizeof(float),			// FIELD_FLOAT
+		sizeof(int),			// FIELD_STRING
+		0,						// FIELD_DEPRECATED1
+		sizeof(int),			// FIELD_CLASSPTR
+		sizeof(int),			// FIELD_EHANDLE
+		sizeof(int),			// FIELD_entvars_t
+		sizeof(int),			// FIELD_EDICT
+		sizeof(float) * 3,		// FIELD_VECTOR
+		sizeof(float) * 3,		// FIELD_POSITION_VECTOR
+		sizeof(int*),			// FIELD_POINTER
+		sizeof(int),			// FIELD_INTEGER
 #ifdef GNUC
-		sizeof(int*) * 2, // FIELD_FUNCTION
+		sizeof(int*) * 2,		// FIELD_FUNCTION
 #else
-		sizeof(int*), // FIELD_FUNCTION
+		sizeof(int*),			// FIELD_FUNCTION
 #endif
-		sizeof(byte),		   // FIELD_BOOLEAN
-		sizeof(short),		   // FIELD_SHORT
-		sizeof(char),		   // FIELD_CHARACTER
-		sizeof(float),		   // FIELD_TIME
-		sizeof(int),		   // FIELD_MODELNAME
-		sizeof(int),		   // FIELD_SOUNDNAME
-		sizeof(std::uint64_t), // FIELD_INT64
+		sizeof(byte),			// FIELD_BOOLEAN
+		sizeof(short),			// FIELD_SHORT
+		sizeof(char),			// FIELD_CHARACTER
+		sizeof(float),			// FIELD_TIME
+		sizeof(int),			// FIELD_MODELNAME
+		sizeof(int),			// FIELD_SOUNDNAME
+		sizeof(std::uint64_t),	// FIELD_INT64
 };
 
 
@@ -1494,12 +1494,6 @@ int CSaveRestoreBuffer::EntityIndex(entvars_t* pevLookup)
 		return -1;
 	return EntityIndex(ENT(pevLookup));
 }
-
-int CSaveRestoreBuffer::EntityIndex(EOFFSET eoLookup)
-{
-	return EntityIndex(ENT(eoLookup));
-}
-
 
 int CSaveRestoreBuffer::EntityIndex(edict_t* pentLookup)
 {
@@ -1786,7 +1780,7 @@ void EntvarsKeyvalue(entvars_t* pev, KeyValueData* pkvd)
 			case FIELD_EVARS:
 			case FIELD_CLASSPTR:
 			case FIELD_EDICT:
-			case FIELD_ENTITY:
+			case FIELD_DEPRECATED1:
 			case FIELD_POINTER:
 				CBaseEntity::Logger->error("Bad field in entity!!");
 				break;
@@ -1853,7 +1847,6 @@ bool CSave::WriteFields(const char* pname, void* pBaseData, TYPEDESCRIPTION* pFi
 		case FIELD_CLASSPTR:
 		case FIELD_EVARS:
 		case FIELD_EDICT:
-		case FIELD_ENTITY:
 		case FIELD_EHANDLE:
 			if (pTest->fieldSize > MAX_ENTITYARRAY)
 				Logger->error("Can't save more than {} entities in an array!!!", MAX_ENTITYARRAY);
@@ -1869,9 +1862,6 @@ bool CSave::WriteFields(const char* pname, void* pBaseData, TYPEDESCRIPTION* pFi
 					break;
 				case FIELD_EDICT:
 					entityArray[j] = EntityIndex(((edict_t**)pOutputData)[j]);
-					break;
-				case FIELD_ENTITY:
-					entityArray[j] = EntityIndex(((EOFFSET*)pOutputData)[j]);
 					break;
 				case FIELD_EHANDLE:
 					entityArray[j] = EntityIndex((CBaseEntity*)(((EHANDLE*)pOutputData)[j]));
@@ -1924,6 +1914,8 @@ bool CSave::WriteFields(const char* pname, void* pBaseData, TYPEDESCRIPTION* pFi
 		case FIELD_FUNCTION:
 			WriteFunction(pTest->fieldName, (void**)pOutputData, pTest->fieldSize);
 			break;
+
+		case FIELD_DEPRECATED1:
 		default:
 			Logger->error("Bad field type");
 		}
@@ -2091,14 +2083,6 @@ int CRestore::ReadField(void* pBaseData, TYPEDESCRIPTION* pFields, int fieldCoun
 						else
 							*((EHANDLE*)pOutputData) = nullptr;
 						break;
-					case FIELD_ENTITY:
-						entityIndex = *(int*)pInputData;
-						pent = EntityFromIndex(entityIndex);
-						if (pent)
-							*((EOFFSET*)pOutputData) = OFFSET(pent);
-						else
-							*((EOFFSET*)pOutputData) = 0;
-						break;
 					case FIELD_VECTOR:
 						((float*)pOutputData)[0] = ((float*)pInputData)[0];
 						((float*)pOutputData)[1] = ((float*)pInputData)[1];
@@ -2146,6 +2130,7 @@ int CRestore::ReadField(void* pBaseData, TYPEDESCRIPTION* pFields, int fieldCoun
 							*((int*)pOutputData) = FUNCTION_FROM_NAME((char*)pInputData);
 						break;
 
+					case FIELD_DEPRECATED1:
 					default:
 						Logger->error("Bad field type");
 					}

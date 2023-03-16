@@ -18,12 +18,6 @@
 
 */
 
-//
-// TODO:
-//		Take advantage of new monster fields like m_hEnemy and get rid of that OFFSET() stuff
-//		Revisit enemy validation stuff, maybe it's not necessary with the newest monster code
-//
-
 #include "cbase.h"
 
 Vector VecBModelOrigin(entvars_t* pevBModel);

@@ -158,8 +158,11 @@ struct enginefuncs_t
 	const char* (*pfnSzFromIndex)(int iString);
 	int (*pfnAllocString)(const char* szValue);
 	entvars_t* (*pfnGetVarsOfEnt)(edict_t* pEdict);
+	/**
+	*	@brief Still called by UTIL_GetEntityList so it can't be marked deprecated, but don't use this anywhere else.
+	*/
 	edict_t* (*pfnPEntityOfEntOffset)(int iEntOffset);
-	int (*pfnEntOffsetOfPEntity)(const edict_t* pEdict);
+	[[deprecated("Do not use entity offsets. Use entity indices or handles instead")]]  int (*pfnEntOffsetOfPEntity)(const edict_t* pEdict);
 	int (*pfnIndexOfEdict)(const edict_t* pEdict);
 	edict_t* (*pfnPEntityOfEntIndex)(int iEntIndex);
 	edict_t* (*pfnFindEntityByVars)(entvars_t* pvars);
@@ -343,28 +346,39 @@ struct SAVERESTOREDATA
 	char szCurrentMapName[32]; // To check global entities
 };
 
+/**
+*	@details The Steam version of the engine uses the following types:
+*	FIELD_FLOAT
+*	FIELD_STRING
+*	FIELD_EDICT
+*	FIELD_VECTOR
+*	FIELD_INTEGER
+*	FIELD_CHARACTER
+*	FIELD_TIME
+*	They must remain supported.
+*/
 enum FIELDTYPE
 {
-	FIELD_FLOAT = 0,	   // Any floating point value
-	FIELD_STRING,		   // A string ID (return from ALLOC_STRING)
-	FIELD_ENTITY,		   // An entity offset (EOFFSET)
-	FIELD_CLASSPTR,		   // CBaseEntity *
-	FIELD_EHANDLE,		   // Entity handle
-	FIELD_EVARS,		   // EVARS *
-	FIELD_EDICT,		   // edict_t *, or edict_t *  (same thing)
-	FIELD_VECTOR,		   // Any vector
-	FIELD_POSITION_VECTOR, // A world coordinate (these are fixed up across level transitions automagically)
-	FIELD_POINTER,		   // Arbitrary data pointer... to be removed, use an array of FIELD_CHARACTER
-	FIELD_INTEGER,		   // Any integer or enum
-	FIELD_FUNCTION,		   // A class function pointer (Think, Use, etc)
-	FIELD_BOOLEAN,		   // boolean, implemented as an int, I may use this as a hint for compression
-	FIELD_SHORT,		   // 2 byte integer
-	FIELD_CHARACTER,	   // a byte
-	FIELD_TIME,			   // a floating point time (these are fixed up automatically too!)
-	FIELD_MODELNAME,	   // Engine string that is a model name (needs precache)
-	FIELD_SOUNDNAME,	   // Engine string that is a sound name (needs precache)
+	FIELD_FLOAT = 0,		// Any floating point value
+	FIELD_STRING,			// A string ID (return from ALLOC_STRING)
+	FIELD_DEPRECATED1,		// An entity offset (EOFFSET). Deprecated, do not use.
+	FIELD_CLASSPTR,			// CBaseEntity *
+	FIELD_EHANDLE,			// Entity handle
+	FIELD_EVARS,			// EVARS *
+	FIELD_EDICT,			// edict_t *, or edict_t *  (same thing)
+	FIELD_VECTOR,			// Any vector
+	FIELD_POSITION_VECTOR,	// A world coordinate (these are fixed up across level transitions automagically)
+	FIELD_POINTER,			// Arbitrary data pointer... to be removed, use an array of FIELD_CHARACTER
+	FIELD_INTEGER,			// Any integer or enum
+	FIELD_FUNCTION,			// A class function pointer (Think, Use, etc)
+	FIELD_BOOLEAN,			// boolean, implemented as an int, I may use this as a hint for compression
+	FIELD_SHORT,			// 2 byte integer
+	FIELD_CHARACTER,		// a byte
+	FIELD_TIME,				// a floating point time (these are fixed up automatically too!)
+	FIELD_MODELNAME,		// Engine string that is a model name (needs precache)
+	FIELD_SOUNDNAME,		// Engine string that is a sound name (needs precache)
 
-	FIELD_ENGINETYPECOUNT, // All preceding types are known to the engine and must remain.
+	FIELD_ENGINETYPECOUNT,	// All preceding types are known to the engine and must remain.
 
 	FIELD_INT64 = FIELD_ENGINETYPECOUNT, // 64 bit integer
 

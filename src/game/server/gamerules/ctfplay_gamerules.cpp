@@ -776,7 +776,7 @@ void CHalfLifeCTFplay::ClientDisconnected(edict_t* pClient)
 
 			for (auto pPlayer : UTIL_FindPlayers())
 			{
-				if (FNullEnt(pPlayer->pev))
+				if (FNullEnt(pPlayer))
 					break;
 
 				if (pPlayer != v2 && pPlayer->m_hObserverTarget == v2)

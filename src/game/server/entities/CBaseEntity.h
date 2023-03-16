@@ -359,7 +359,7 @@ public:
 	static T* Instance(edict_t* pent)
 	{
 		if (!pent)
-			pent = ENT(0);
+			pent = INDEXENT(0);
 		CBaseEntity* pEnt = (CBaseEntity*)GET_PRIVATE(pent);
 		return static_cast<T*>(pEnt);
 	}

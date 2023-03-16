@@ -2394,7 +2394,7 @@ void CTriggerXenReturn::ReturnTouch(CBaseEntity* pOther)
 		}
 	}
 
-	if (pTarget && !FNullEnt(pTarget->pev))
+	if (!FNullEnt(pTarget))
 	{
 		pPlayer->pev->flags &= ~FL_SKIPLOCALHOST;
 
