@@ -91,5 +91,3 @@ void SaveReadFields(SAVERESTOREDATA* pSaveData, const char* pname, void* pBaseDa
 void SaveGlobalState(SAVERESTOREDATA* pSaveData);
 void RestoreGlobalState(SAVERESTOREDATA* pSaveData);
 void ResetGlobalState();
-
-inline edict_t* g_pBodyQueueHead = nullptr;

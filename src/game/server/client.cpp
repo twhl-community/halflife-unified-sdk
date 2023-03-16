@@ -27,6 +27,7 @@
 #include <optional>
 
 #include "cbase.h"
+#include "CCorpse.h"
 #include "com_model.h"
 #include "client.h"
 #include "customentity.h"
@@ -43,8 +44,6 @@
 #include "ctfplay_gamerules.h"
 
 unsigned int g_ulFrameCount;
-
-void CopyToBodyQue(entvars_t* pev);
 
 /*
 ===========
@@ -124,7 +123,7 @@ void respawn(CBasePlayer* player, bool fCopyCorpse)
 		if (fCopyCorpse)
 		{
 			// make a copy of the dead body for appearances sake
-			CopyToBodyQue(player->pev);
+			CopyToBodyQue(player);
 		}
 
 		// respawn player

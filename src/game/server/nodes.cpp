@@ -20,6 +20,7 @@
 #include <string>
 
 #include "cbase.h"
+#include "CCorpse.h"
 #include "nodes.h"
 #include "doors.h"
 #include "filesystem_utils.h"
@@ -159,7 +160,7 @@ entvars_t* CGraph::LinkEntForLink(CLink* pLink, CNode* pNode)
 
 				// trace from the node to the trigger, make sure it's one we can see from the node.
 				// !!!HACKHACK Use bodyqueue here cause there are no ents we really wish to ignore!
-				UTIL_TraceLine(pNode->m_vecOrigin, VecBModelOrigin(trigger->pev), ignore_monsters, g_pBodyQueueHead, &tr);
+				UTIL_TraceLine(pNode->m_vecOrigin, VecBModelOrigin(trigger->pev), ignore_monsters, g_pBodyQueueHead->edict(), &tr);
 
 				if (tr.pHit == trigger->edict())
 				{ // good to go!
@@ -1240,7 +1241,7 @@ int CGraph::LinkVisibleNodes(CLink* pLinkPool, FSFile& file, int* piBadNode)
 			UTIL_TraceLine(m_pNodes[i].m_vecOrigin,
 				m_pNodes[j].m_vecOrigin,
 				ignore_monsters,
-				g_pBodyQueueHead, //!!!HACKHACK no real ent to supply here, using a global we don't care about
+				g_pBodyQueueHead->edict(), //!!!HACKHACK no real ent to supply here, using a global we don't care about
 				&tr);
 
 
@@ -1255,7 +1256,7 @@ int CGraph::LinkVisibleNodes(CLink* pLinkPool, FSFile& file, int* piBadNode)
 				UTIL_TraceLine(m_pNodes[j].m_vecOrigin,
 					m_pNodes[i].m_vecOrigin,
 					ignore_monsters,
-					g_pBodyQueueHead, //!!!HACKHACK no real ent to supply here, using a global we don't care about
+					g_pBodyQueueHead->edict(), //!!!HACKHACK no real ent to supply here, using a global we don't care about
 					&tr);
 
 
@@ -1706,7 +1707,7 @@ void CTestHull::BuildNodeGraph()
 			UTIL_TraceLine(WorldGraph.m_pNodes[i].m_vecOrigin,
 				WorldGraph.m_pNodes[i].m_vecOrigin - Vector(0, 0, 384),
 				ignore_monsters,
-				g_pBodyQueueHead, //!!!HACKHACK no real ent to supply here, using a global we don't care about
+				g_pBodyQueueHead->edict(), //!!!HACKHACK no real ent to supply here, using a global we don't care about
 				&tr);
 
 			// This trace is ONLY used if we hit an entity flagged with FL_WORLDBRUSH
@@ -1714,7 +1715,7 @@ void CTestHull::BuildNodeGraph()
 			UTIL_TraceLine(WorldGraph.m_pNodes[i].m_vecOrigin,
 				WorldGraph.m_pNodes[i].m_vecOrigin - Vector(0, 0, 384),
 				dont_ignore_monsters,
-				g_pBodyQueueHead, //!!!HACKHACK no real ent to supply here, using a global we don't care about
+				g_pBodyQueueHead->edict(), //!!!HACKHACK no real ent to supply here, using a global we don't care about
 				&trEnt);
 
 

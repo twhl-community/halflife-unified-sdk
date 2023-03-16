@@ -25,6 +25,7 @@
 #include <EASTL/fixed_string.h>
 
 #include "cbase.h"
+#include "CCorpse.h"
 #include "AmmoTypeSystem.h"
 #include "player.h"
 #include "trains.h"
@@ -46,7 +47,6 @@
 
 // #define DUCKFIX
 
-void CopyToBodyQue(entvars_t* pev);
 edict_t* EntSelectSpawnPoint(CBasePlayer* pPlayer);
 
 #define TRAIN_ACTIVE 0x80
@@ -1332,7 +1332,7 @@ void CBasePlayer::StartDeathCam()
 			iRand--;
 		}
 
-		CopyToBodyQue(pev);
+		CopyToBodyQue(this);
 
 		UTIL_SetOrigin(pev, pSpot->pev->origin);
 		pev->angles = pev->v_angle = pSpot->pev->v_angle;
@@ -1341,7 +1341,7 @@ void CBasePlayer::StartDeathCam()
 	{
 		// no intermission spot. Push them up in the air, looking down at their corpse
 		TraceResult tr;
-		CopyToBodyQue(pev);
+		CopyToBodyQue(this);
 		UTIL_TraceLine(pev->origin, pev->origin + Vector(0, 0, 128), ignore_monsters, edict(), &tr);
 
 		UTIL_SetOrigin(pev, tr.vecEndPos);

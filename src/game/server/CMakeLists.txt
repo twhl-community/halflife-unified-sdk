@@ -68,6 +68,8 @@ target_sources(server PRIVATE
 	entities/CBaseDelay.h
 	entities/CBaseEntity.h
 	entities/CBaseToggle.h
+	entities/CCorpse.cpp
+	entities/CCorpse.h
 	entities/CMultiSource.h
 	entities/CPointEntity.h
 	entities/CTriggerChangeKeyValue.cpp
