@@ -774,7 +774,7 @@ void CGib::StickyGibTouch(CBaseEntity* pOther)
 	SetThink(&CGib::SUB_Remove);
 	pev->nextthink = gpGlobals->time + 10;
 
-	if (!FClassnameIs(pOther->pev, "worldspawn"))
+	if (!pOther->ClassnameIs("worldspawn"))
 	{
 		pev->nextthink = gpGlobals->time;
 		return;

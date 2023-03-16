@@ -312,7 +312,7 @@ void ClientPredictionSystem::WeaponsPostThink(local_state_t* from, local_state_t
 	if (g_runfuncs && (HUD_GetWeaponAnim() != to->client.weaponanim))
 	{
 		// Make sure the 357 has the right body
-		if (FClassnameIs(pWeapon->pev, "weapon_357"))
+		if (pWeapon->ClassnameIs("weapon_357"))
 		{
 			pWeapon->pev->body = UTIL_IsMultiplayer() ? 1 : 0;
 		}

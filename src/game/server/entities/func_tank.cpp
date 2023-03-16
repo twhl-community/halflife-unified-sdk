@@ -955,7 +955,7 @@ CLaser* CFuncTankLaser::GetLaser()
 
 	for (auto laser : UTIL_FindEntitiesByTargetname(STRING(pev->message)))
 	{
-		if (FClassnameIs(laser->pev, "env_laser"))
+		if (laser->ClassnameIs("env_laser"))
 		{
 			m_pLaser = static_cast<CLaser*>(laser);
 			break;

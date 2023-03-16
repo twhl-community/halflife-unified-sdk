@@ -288,7 +288,7 @@ bool CWeaponBox::HasWeapon(CBasePlayerWeapon* checkWeapon)
 
 	while (weapon)
 	{
-		if (FClassnameIs(weapon->pev, STRING(checkWeapon->pev->classname)))
+		if (weapon->ClassnameIs(STRING(checkWeapon->pev->classname)))
 		{
 			return true;
 		}

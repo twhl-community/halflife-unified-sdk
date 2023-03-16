@@ -33,7 +33,7 @@ void CBasePlayer::SelectItem(const char* pstr)
 
 			while (pItem)
 			{
-				if (FClassnameIs(pItem->pev, pstr))
+				if (pItem->ClassnameIs(pstr))
 					break;
 				pItem = pItem->m_pNext;
 			}

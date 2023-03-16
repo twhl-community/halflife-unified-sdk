@@ -164,6 +164,11 @@ public:
 
 	const char* GetClassname() const { return STRING(pev->classname); }
 
+	inline bool ClassnameIs(const char* szClassname) const
+	{
+		return FStrEq(STRING(pev->classname), szClassname);
+	}
+
 	const char* GetGlobalname() const { return STRING(pev->globalname); }
 
 	const char* GetTargetname() const { return STRING(pev->targetname); }
@@ -191,6 +196,16 @@ public:
 	void SetOwner(CBaseEntity* owner)
 	{
 		pev->owner = owner ? owner->edict() : nullptr;
+	}
+
+	CBaseEntity* GetGroundEntity()
+	{
+		return GET_PRIVATE<CBaseEntity>(pev->groundentity);
+	}
+
+	void SetGroundEntity(CBaseEntity* entity)
+	{
+		pev->groundentity = entity ? entity->edict() : nullptr;
 	}
 
 	// initialization functions

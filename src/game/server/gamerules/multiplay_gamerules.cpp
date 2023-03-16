@@ -756,7 +756,7 @@ void CHalfLifeMultiplay::DeathNotice(CBasePlayer* pVictim, CBaseEntity* pKiller,
 		strcat ( szText, STRING( pVictim->pev->netname ) );
 		strcat ( szText, "\n" );
 	}
-	else if ( FClassnameIs ( pKiller, "worldspawn" ) )
+	else if (pKiller->ClassnameIs("worldspawn"))
 	{
 		strcpy ( szText, STRING( pVictim->pev->netname ) );
 		strcat ( szText, " fell or drowned or something.\n" );

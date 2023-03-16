@@ -430,7 +430,7 @@ void CSquadMonster::StartMonster()
 			AILogger->debug("Squad of {} {} formed", iSquadSize, STRING(pev->classname));
 		}
 
-		if (IsLeader() && FClassnameIs(pev, "monster_human_grunt"))
+		if (IsLeader() && ClassnameIs("monster_human_grunt"))
 		{
 			SetBodygroup(HGruntBodyGroup::Head, HGruntHead::Commander); // UNDONE: truly ugly hack
 			pev->skin = 0;

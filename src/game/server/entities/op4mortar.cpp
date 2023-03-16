@@ -850,7 +850,7 @@ void COp4MortarController::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, US
 
 	for (auto pEntity : UTIL_FindEntitiesByTargetname<COp4Mortar>(STRING(pev->target)))
 	{
-		if (FClassnameIs(pEntity->pev, "op4mortar"))
+		if (pEntity->ClassnameIs("op4mortar"))
 		{
 			pEntity->UpdatePosition(m_direction, m_controller);
 		}

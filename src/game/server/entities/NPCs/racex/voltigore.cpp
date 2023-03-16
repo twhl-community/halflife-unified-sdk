@@ -314,7 +314,7 @@ void COFVoltigore::OnCreate()
 //=========================================================
 int COFVoltigore::IRelationship(CBaseEntity* pTarget)
 {
-	if (FClassnameIs(pTarget->pev, "monster_human_grunt"))
+	if (pTarget->ClassnameIs("monster_human_grunt"))
 	{
 		return R_NM;
 	}

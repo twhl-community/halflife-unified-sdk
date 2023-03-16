@@ -708,7 +708,7 @@ void CBaseButton::ButtonBackHome()
 	{
 		for (auto target : UTIL_FindEntitiesByTargetname(STRING(pev->target)))
 		{
-			if (!FClassnameIs(target->pev, "multisource"))
+			if (!target->ClassnameIs("multisource"))
 				continue;
 
 			target->Use(m_hActivator, this, USE_TOGGLE, 0);
@@ -726,7 +726,7 @@ void CBaseButton::ButtonBackHome()
 
 	// reset think for a sparking button
 	// func_rot_button's X Axis spawnflag overlaps with this one so don't use it here.
-	if (!FClassnameIs(pev, "func_rot_button") && FBitSet(pev->spawnflags, SF_BUTTON_SPARK_IF_OFF))
+	if (!ClassnameIs("func_rot_button") && FBitSet(pev->spawnflags, SF_BUTTON_SPARK_IF_OFF))
 	{
 		SetThink(&CBaseButton::ButtonSpark);
 		pev->nextthink = pev->ltime + 0.5; // no hurry.
@@ -941,7 +941,7 @@ void CMomentaryRotButton::UpdateAllButtons(float value, bool start)
 	// Update all rot buttons attached to the same target
 	for (auto target : UTIL_FindEntitiesByTarget(STRING(pev->target)))
 	{
-		if (FClassnameIs(target->pev, "momentary_rot_button"))
+		if (target->ClassnameIs("momentary_rot_button"))
 		{
 			auto pEntity = static_cast<CMomentaryRotButton*>(target);
 			if (start)

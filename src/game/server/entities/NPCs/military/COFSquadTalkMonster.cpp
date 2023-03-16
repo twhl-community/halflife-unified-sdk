@@ -721,7 +721,7 @@ COFSquadTalkMonster* COFSquadTalkMonster::MySquadMedic()
 	{
 		auto pMember = member.Entity<COFSquadTalkMonster>();
 
-		if (pMember && FClassnameIs(pMember->pev, "monster_human_medic_ally"))
+		if (pMember && pMember->ClassnameIs("monster_human_medic_ally"))
 		{
 			return pMember;
 		}
@@ -736,7 +736,7 @@ COFSquadTalkMonster* COFSquadTalkMonster::FindSquadMedic(int searchRadius)
 	{
 		auto pMonster = pEntity->MySquadTalkMonsterPointer();
 
-		if (pMonster && pMonster != this && pMonster->IsAlive() && !pMonster->m_pCine && FClassnameIs(pMonster->pev, "monster_human_medic_ally"))
+		if (pMonster && pMonster != this && pMonster->IsAlive() && !pMonster->m_pCine && pMonster->ClassnameIs("monster_human_medic_ally"))
 		{
 			return pMonster;
 		}

@@ -109,14 +109,6 @@ inline bool FStrEq(const char* sz1, const char* sz2)
 {
 	return (strcmp(sz1, sz2) == 0);
 }
-inline bool FClassnameIs(edict_t* pent, const char* szClassname)
-{
-	return FStrEq(STRING(VARS(pent)->classname), szClassname);
-}
-inline bool FClassnameIs(entvars_t* pev, const char* szClassname)
-{
-	return FStrEq(STRING(pev->classname), szClassname);
-}
 
 // Misc. Prototypes
 float UTIL_VecToYaw(const Vector& vec);

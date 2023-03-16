@@ -1980,7 +1980,7 @@ void COFPitWorm::StartMonster()
 			// JAY: How important is this error message?  Big Momma doesn't obey this rule, so I took it out.
 #if 0
 			// At this point, we expect only a path_corner as initial goal
-			if (!FClassnameIs(m_pGoalEnt->pev, "path_corner"))
+			if (!m_pGoalEnt->ClassnameIs("path_corner"))
 			{
 				Logger->warning("ReadyMonster--monster's initial goal '{}' is not a path_corner", STRING(pev->target));
 			}

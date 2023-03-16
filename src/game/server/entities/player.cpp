@@ -1487,7 +1487,7 @@ void CBasePlayer::PlayerUse()
 	while ((pObject = UTIL_FindEntityInSphere(pObject, pev->origin, PLAYER_SEARCH_RADIUS)) != nullptr)
 	{
 		// Special behavior for ropes: check if the player is close enough to the rope segment origin
-		if (FClassnameIs(pObject->pev, "rope_segment"))
+		if (pObject->ClassnameIs("rope_segment"))
 		{
 			if ((pev->origin - pObject->pev->origin).Length() > PLAYER_SEARCH_RADIUS)
 			{
@@ -3790,7 +3790,7 @@ bool CBasePlayer::AddPlayerWeapon(CBasePlayerWeapon* weapon)
 
 	while (pInsert)
 	{
-		if (FClassnameIs(pInsert->pev, STRING(weapon->pev->classname)))
+		if (pInsert->ClassnameIs(STRING(weapon->pev->classname)))
 		{
 			if (weapon->AddDuplicate(pInsert))
 			{
@@ -4919,7 +4919,7 @@ bool CBasePlayer::HasPlayerWeapon(CBasePlayerWeapon* checkWeapon)
 
 	while (pItem)
 	{
-		if (FClassnameIs(pItem->pev, STRING(checkWeapon->pev->classname)))
+		if (pItem->ClassnameIs(STRING(checkWeapon->pev->classname)))
 		{
 			return true;
 		}

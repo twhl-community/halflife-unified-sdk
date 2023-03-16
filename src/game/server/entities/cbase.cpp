@@ -327,7 +327,7 @@ CBaseEntity* FindGlobalEntity(string_t classname, string_t globalname)
 
 	if (pReturn)
 	{
-		if (!FClassnameIs(pReturn->pev, STRING(classname)))
+		if (!pReturn->ClassnameIs(STRING(classname)))
 		{
 			CBaseEntity::Logger->debug("Global entity found {}, wrong class {}", STRING(globalname), STRING(pReturn->pev->classname));
 			pReturn = nullptr;

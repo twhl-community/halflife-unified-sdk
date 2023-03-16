@@ -351,7 +351,7 @@ CPathTrack* CPathTrack::Nearest(Vector origin)
 
 CPathTrack* CPathTrack::Instance(CBaseEntity* pent)
 {
-	if (pent && FClassnameIs(pent->pev, "path_track"))
+	if (pent && pent->ClassnameIs("path_track"))
 		return static_cast<CPathTrack*>(pent);
 	return nullptr;
 }

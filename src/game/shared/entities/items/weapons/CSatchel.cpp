@@ -342,7 +342,7 @@ void CSatchel::PrimaryAttack()
 
 		while ((pSatchel = UTIL_FindEntityInSphere(pSatchel, m_pPlayer->pev->origin, 4096)) != nullptr)
 		{
-			if (FClassnameIs(pSatchel->pev, "monster_satchel"))
+			if (pSatchel->ClassnameIs("monster_satchel"))
 			{
 				if (pSatchel->pev->owner == pPlayer)
 				{

@@ -248,7 +248,7 @@ CGrappleTip::TargetClass CGrappleTip::ClassifyTarget(CBaseEntity* pTarget)
 	{
 		for (size_t uiIndex = 0; uiIndex < std::size(grapple_small); ++uiIndex)
 		{
-			if (FClassnameIs(pTarget->pev, grapple_small[uiIndex]))
+			if (pTarget->ClassnameIs(grapple_small[uiIndex]))
 			{
 				m_hGrappleTarget = pTarget;
 				m_vecOriginOffset = pev->origin - pTarget->pev->origin;
@@ -259,7 +259,7 @@ CGrappleTip::TargetClass CGrappleTip::ClassifyTarget(CBaseEntity* pTarget)
 
 		for (size_t uiIndex = 0; uiIndex < std::size(grapple_medium); ++uiIndex)
 		{
-			if (FClassnameIs(pTarget->pev, grapple_medium[uiIndex]))
+			if (pTarget->ClassnameIs(grapple_medium[uiIndex]))
 			{
 				m_hGrappleTarget = pTarget;
 				m_vecOriginOffset = pev->origin - pTarget->pev->origin;
@@ -270,7 +270,7 @@ CGrappleTip::TargetClass CGrappleTip::ClassifyTarget(CBaseEntity* pTarget)
 
 		for (size_t uiIndex = 0; uiIndex < std::size(grapple_large); ++uiIndex)
 		{
-			if (FClassnameIs(pTarget->pev, grapple_large[uiIndex]))
+			if (pTarget->ClassnameIs(grapple_large[uiIndex]))
 			{
 				m_hGrappleTarget = pTarget;
 				m_vecOriginOffset = pev->origin - pTarget->pev->origin;
@@ -281,7 +281,7 @@ CGrappleTip::TargetClass CGrappleTip::ClassifyTarget(CBaseEntity* pTarget)
 
 		for (size_t uiIndex = 0; uiIndex < std::size(grapple_fixed); ++uiIndex)
 		{
-			if (FClassnameIs(pTarget->pev, grapple_fixed[uiIndex]))
+			if (pTarget->ClassnameIs(grapple_fixed[uiIndex]))
 			{
 				bIsFixed = true;
 				break;

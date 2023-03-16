@@ -969,21 +969,17 @@ void CTriggerOnce::Spawn()
 
 void CBaseTrigger::MultiTouch(CBaseEntity* pOther)
 {
-	entvars_t* pevToucher;
-
-	pevToucher = pOther->pev;
-
 	// Only touch clients, monsters, or pushables (depending on flags)
-	if (((pevToucher->flags & FL_CLIENT) != 0 && (pev->spawnflags & SF_TRIGGER_NOCLIENTS) == 0) ||
-		((pevToucher->flags & FL_MONSTER) != 0 && (pev->spawnflags & SF_TRIGGER_ALLOWMONSTERS) != 0) ||
-		(pev->spawnflags & SF_TRIGGER_PUSHABLES) != 0 && FClassnameIs(pevToucher, "func_pushable"))
+	if (((pOther->pev->flags & FL_CLIENT) != 0 && (pev->spawnflags & SF_TRIGGER_NOCLIENTS) == 0) ||
+		((pOther->pev->flags & FL_MONSTER) != 0 && (pev->spawnflags & SF_TRIGGER_ALLOWMONSTERS) != 0) ||
+		(pev->spawnflags & SF_TRIGGER_PUSHABLES) != 0 && pOther->ClassnameIs("func_pushable"))
 	{
 
 #if 0
 		// if the trigger has an angles field, check player's facing direction
 		if (pev->movedir != g_vecZero)
 		{
-			UTIL_MakeVectors(pevToucher->angles);
+			UTIL_MakeVectors(pOther->pev->angles);
 			if (DotProduct(gpGlobals->v_forward, pev->movedir) < 0)
 				return;         // not facing the right way
 		}
@@ -1281,7 +1277,7 @@ CBaseEntity* CChangeLevel::FindLandmark(const char* pLandmarkName)
 	for (auto landmark : UTIL_FindEntitiesByTargetname(pLandmarkName))
 	{
 		// Found the landmark
-		if (FClassnameIs(landmark->pev, "info_landmark"))
+		if (landmark->ClassnameIs("info_landmark"))
 			return landmark;
 	}
 
@@ -1412,7 +1408,7 @@ bool CChangeLevel::InTransitionVolume(CBaseEntity* pEntity, char* pVolumeName)
 
 	for (auto volume : UTIL_FindEntitiesByTargetname(pVolumeName))
 	{
-		if (volume && FClassnameIs(volume->pev, "trigger_transition"))
+		if (volume && volume->ClassnameIs("trigger_transition"))
 		{
 			if (volume->Intersects(pEntity)) // It touches one, it's in the volume
 				return true;

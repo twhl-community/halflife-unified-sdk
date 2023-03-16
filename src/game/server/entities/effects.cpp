@@ -632,7 +632,7 @@ bool IsPointEntity(CBaseEntity* pEnt)
 {
 	if (0 == pEnt->pev->modelindex)
 		return true;
-	if (FClassnameIs(pEnt->pev, "info_target") || FClassnameIs(pEnt->pev, "info_landmark") || FClassnameIs(pEnt->pev, "path_corner"))
+	if (pEnt->ClassnameIs("info_target") || pEnt->ClassnameIs("info_landmark") || pEnt->ClassnameIs("path_corner"))
 		return true;
 
 	return false;

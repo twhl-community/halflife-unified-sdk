@@ -139,13 +139,15 @@ entvars_t* CGraph::LinkEntForLink(CLink* pLink, CNode* pNode)
 	if (!pevLinkEnt)
 		return nullptr;
 
-	if (FClassnameIs(pevLinkEnt, "func_door") || FClassnameIs(pevLinkEnt, "func_door_rotating"))
+	CBaseEntity* entity = CBaseEntity::Instance(pevLinkEnt);
+
+	if (entity->ClassnameIs("func_door") || entity->ClassnameIs("func_door_rotating"))
 	{
 
 		///!!!UNDONE - check for TOGGLE or STAY open doors here. If a door is in the way, and is
 		// TOGGLE or STAY OPEN, even monsters that can't open doors can go that way.
 
-		if ((pevLinkEnt->spawnflags & SF_DOOR_USE_ONLY) != 0)
+		if ((entity->pev->spawnflags & SF_DOOR_USE_ONLY) != 0)
 		{ // door is use only, so the door is all the monster has to worry about
 			return pevLinkEnt;
 		}
@@ -153,9 +155,9 @@ entvars_t* CGraph::LinkEntForLink(CLink* pLink, CNode* pNode)
 		TraceResult tr;
 
 		// find the button or trigger
-		for (auto trigger : UTIL_FindEntitiesByTarget(STRING(pevLinkEnt->targetname)))
+		for (auto trigger : UTIL_FindEntitiesByTarget(entity->GetTargetname()))
 		{
-			if (FClassnameIs(trigger->pev, "func_button") || FClassnameIs(trigger->pev, "func_rot_button"))
+			if (trigger->ClassnameIs("func_button") || trigger->ClassnameIs("func_rot_button"))
 			{ // only buttons are handled right now.
 
 				// trace from the node to the trigger, make sure it's one we can see from the node.
@@ -178,7 +180,7 @@ entvars_t* CGraph::LinkEntForLink(CLink* pLink, CNode* pNode)
 	}
 	else
 	{
-		Logger->trace("Unsupported PathEnt: '{}'", STRING(pevLinkEnt->classname));
+		Logger->trace("Unsupported PathEnt: '{}'", entity->GetClassname());
 		return nullptr;
 	}
 }
@@ -191,9 +193,6 @@ entvars_t* CGraph::LinkEntForLink(CLink* pLink, CNode* pNode)
 //=========================================================
 bool CGraph::HandleLinkEnt(int iNode, entvars_t* pevLinkEnt, int afCapMask, NODEQUERY queryType)
 {
-	edict_t* pentWorld;
-	CBaseEntity* pDoor;
-
 	if (0 == m_fGraphPresent || 0 == m_fGraphPointersSet)
 	{ // protect us in the case that the node graph isn't available
 		Logger->error("Graph not ready!");
@@ -205,15 +204,14 @@ bool CGraph::HandleLinkEnt(int iNode, entvars_t* pevLinkEnt, int afCapMask, NODE
 		Logger->debug("dead path ent!");
 		return true;
 	}
-	pentWorld = nullptr;
+
+	CBaseEntity* entity = CBaseEntity::Instance(pevLinkEnt);
 
 	// func_door
-	if (FClassnameIs(pevLinkEnt, "func_door") || FClassnameIs(pevLinkEnt, "func_door_rotating"))
+	if (entity->ClassnameIs("func_door") || entity->ClassnameIs("func_door_rotating"))
 	{ // ent is a door.
 
-		pDoor = (CBaseEntity::Instance(pevLinkEnt));
-
-		if ((pevLinkEnt->spawnflags & SF_DOOR_USE_ONLY) != 0)
+		if ((entity->pev->spawnflags & SF_DOOR_USE_ONLY) != 0)
 		{ // door is use only.
 
 			if ((afCapMask & bits_CAP_OPEN_DOORS) != 0)
@@ -223,7 +221,7 @@ bool CGraph::HandleLinkEnt(int iNode, entvars_t* pevLinkEnt, int afCapMask, NODE
 			else
 			{
 				// monster should try for it if the door is open and looks as if it will stay that way
-				if (pDoor->GetToggleState() == TS_AT_TOP && (pevLinkEnt->spawnflags & SF_DOOR_NO_AUTO_RETURN) != 0)
+				if (entity->GetToggleState() == TS_AT_TOP && (entity->pev->spawnflags & SF_DOOR_NO_AUTO_RETURN) != 0)
 				{
 					return true;
 				}
@@ -235,13 +233,13 @@ bool CGraph::HandleLinkEnt(int iNode, entvars_t* pevLinkEnt, int afCapMask, NODE
 		{ // door must be opened with a button or trigger field.
 
 			// monster should try for it if the door is open and looks as if it will stay that way
-			if (pDoor->GetToggleState() == TS_AT_TOP && (pevLinkEnt->spawnflags & SF_DOOR_NO_AUTO_RETURN) != 0)
+			if (entity->GetToggleState() == TS_AT_TOP && (entity->pev->spawnflags & SF_DOOR_NO_AUTO_RETURN) != 0)
 			{
 				return true;
 			}
 			if ((afCapMask & bits_CAP_OPEN_DOORS) != 0)
 			{
-				if ((pevLinkEnt->spawnflags & SF_DOOR_NOMONSTERS) == 0 || queryType == NODEGRAPH_STATIC)
+				if ((entity->pev->spawnflags & SF_DOOR_NOMONSTERS) == 0 || queryType == NODEGRAPH_STATIC)
 					return true;
 			}
 
@@ -249,13 +247,13 @@ bool CGraph::HandleLinkEnt(int iNode, entvars_t* pevLinkEnt, int afCapMask, NODE
 		}
 	}
 	// func_breakable
-	else if (FClassnameIs(pevLinkEnt, "func_breakable") && queryType == NODEGRAPH_STATIC)
+	else if (entity->ClassnameIs("func_breakable") && queryType == NODEGRAPH_STATIC)
 	{
 		return true;
 	}
 	else
 	{
-		Logger->trace("Unhandled Ent in Path {}", STRING(pevLinkEnt->classname));
+		Logger->trace("Unhandled Ent in Path {}", entity->GetClassname());
 		return false;
 	}
 
@@ -1259,12 +1257,13 @@ int CGraph::LinkVisibleNodes(CLink* pLinkPool, FSFile& file, int* piBadNode)
 					g_pBodyQueueHead->edict(), //!!!HACKHACK no real ent to supply here, using a global we don't care about
 					&tr);
 
+				auto hitEnt = CBaseEntity::Instance(pTraceEnt);
 
 				// there is a solid_bsp ent in the way of these two nodes, so we must record several things about in order to keep
 				// track of it in the pathfinding code, as well as through save and restore of the node graph. ANY data that is manipulated
 				// as part of the process of adding a LINKENT to a connection here must also be done in CGraph::SetGraphPointers, where reloaded
 				// graphs are prepared for use.
-				if (tr.pHit == pTraceEnt && !FClassnameIs(tr.pHit, "worldspawn"))
+				if (tr.pHit == pTraceEnt && !hitEnt->ClassnameIs("worldspawn"))
 				{
 					// get a pointer
 					pLinkPool[cTotalLinks].m_pLinkEnt = VARS(tr.pHit);
@@ -1562,7 +1561,7 @@ void CNodeEnt::Spawn()
 	WorldGraph.m_pNodes[WorldGraph.m_cNodes].m_sHintType = m_sHintType;
 	WorldGraph.m_pNodes[WorldGraph.m_cNodes].m_sHintActivity = m_sHintActivity;
 
-	if (FClassnameIs(pev, "info_node_air"))
+	if (ClassnameIs("info_node_air"))
 		WorldGraph.m_pNodes[WorldGraph.m_cNodes].m_afNodeInfo = bits_NODE_AIR;
 	else
 		WorldGraph.m_pNodes[WorldGraph.m_cNodes].m_afNodeInfo = 0;
@@ -3461,13 +3460,13 @@ void CNodeViewer::Spawn()
 	}
 
 
-	if (FClassnameIs(pev, "node_viewer_fly"))
+	if (ClassnameIs("node_viewer_fly"))
 	{
 		m_iHull = NODE_FLY_HULL;
 		m_afNodeType = bits_NODE_AIR;
 		m_vecColor = Vector(160, 100, 255);
 	}
-	else if (FClassnameIs(pev, "node_viewer_large"))
+	else if (ClassnameIs("node_viewer_large"))
 	{
 		m_iHull = NODE_LARGE_HULL;
 		m_afNodeType = bits_NODE_LAND | bits_NODE_WATER;

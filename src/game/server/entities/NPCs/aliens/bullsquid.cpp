@@ -251,7 +251,7 @@ int CBullsquid::IgnoreConditions()
 
 	if (m_hEnemy != nullptr)
 	{
-		if (FClassnameIs(m_hEnemy->pev, "monster_headcrab"))
+		if (m_hEnemy->ClassnameIs("monster_headcrab"))
 		{
 			// (Unless after a tasty headcrab)
 			iIgnore = bits_COND_SMELL | bits_COND_SMELL_FOOD;
@@ -268,7 +268,7 @@ int CBullsquid::IgnoreConditions()
 //=========================================================
 int CBullsquid::IRelationship(CBaseEntity* pTarget)
 {
-	if (gpGlobals->time - m_flLastHurtTime < 5 && FClassnameIs(pTarget->pev, "monster_headcrab"))
+	if (gpGlobals->time - m_flLastHurtTime < 5 && pTarget->ClassnameIs("monster_headcrab"))
 	{
 		// if squid has been hurt in the last 5 seconds, and is getting relationship for a headcrab,
 		// tell squid to disregard crab.
@@ -304,7 +304,7 @@ bool CBullsquid::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float
 		}
 	}
 
-	if (!FClassnameIs(attacker->pev, "monster_headcrab"))
+	if (!attacker->ClassnameIs("monster_headcrab"))
 	{
 		// don't forget about headcrabs if it was a headcrab that hurt the squid.
 		m_flLastHurtTime = gpGlobals->time;
@@ -1243,7 +1243,7 @@ MONSTERSTATE CBullsquid::GetIdealState()
 		COMBAT goes to ALERT upon death of enemy
 		*/
 		{
-			if (m_hEnemy != nullptr && ((iConditions & (bits_COND_LIGHT_DAMAGE | bits_COND_HEAVY_DAMAGE)) != 0) && FClassnameIs(m_hEnemy->pev, "monster_headcrab"))
+			if (m_hEnemy != nullptr && ((iConditions & (bits_COND_LIGHT_DAMAGE | bits_COND_HEAVY_DAMAGE)) != 0) && m_hEnemy->ClassnameIs("monster_headcrab"))
 			{
 				// if the squid has a headcrab enemy and something hurts it, it's going to forget about the crab for a while.
 				m_hEnemy = nullptr;

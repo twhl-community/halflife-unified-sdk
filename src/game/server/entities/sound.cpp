@@ -1355,7 +1355,7 @@ float TEXTURETYPE_PlaySound(TraceResult* ptr, Vector vecSrc, Vector vecEnd, int 
 
 	// did we hit a breakable?
 
-	if (pEntity && FClassnameIs(pEntity->pev, "func_breakable"))
+	if (pEntity && pEntity->ClassnameIs("func_breakable"))
 	{
 		// drop volumes, the object will already play a damaged sound
 		fvol /= 1.5;
