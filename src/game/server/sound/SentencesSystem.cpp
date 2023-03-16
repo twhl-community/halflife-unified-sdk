@@ -116,13 +116,13 @@ const char* SentencesSystem::GetSentenceNameByIndex(int index) const
 	return m_Sentences[index].Name.c_str();
 }
 
-int SentencesSystem::GetGroupIndex(const char* szgroupname) const
+int SentencesSystem::GetGroupIndex(CBaseEntity* entity, const char* szgroupname) const
 {
 	if (!szgroupname)
 		return -1;
 
 	// See if the group was replaced.
-	szgroupname = CheckForSentenceReplacement(szgroupname);
+	szgroupname = CheckForSentenceReplacement(entity, szgroupname);
 
 	// search rgsentenceg for match on szgroupname
 	int i = 0;
@@ -137,7 +137,7 @@ int SentencesSystem::GetGroupIndex(const char* szgroupname) const
 	return -1;
 }
 
-int SentencesSystem::LookupSentence(const char* sample, SentenceIndexName* sentencenum) const
+int SentencesSystem::LookupSentence(CBaseEntity* entity, const char* sample, SentenceIndexName* sentencenum) const
 {
 	// this is a sentence name; lookup sentence number
 	// and give to engine as string.
@@ -146,7 +146,7 @@ int SentencesSystem::LookupSentence(const char* sample, SentenceIndexName* sente
 	++sample;
 
 	// Handle sentence replacement.
-	sample = CheckForSentenceReplacement(sample);
+	sample = CheckForSentenceReplacement(entity, sample);
 
 	for (size_t i = 0; i < m_Sentences.size(); i++)
 	{
@@ -177,7 +177,7 @@ int SentencesSystem::PlayRndI(CBaseEntity* entity, int isentenceg, float volume,
 int SentencesSystem::PlayRndSz(CBaseEntity* entity, const char* szgroupname,
 	float volume, float attenuation, int flags, int pitch)
 {
-	const int isentenceg = GetGroupIndex(szgroupname);
+	const int isentenceg = GetGroupIndex(entity, szgroupname);
 	if (isentenceg < 0)
 	{
 		m_Logger->debug("No such sentence group {}", szgroupname);
@@ -196,7 +196,7 @@ int SentencesSystem::PlayRndSz(CBaseEntity* entity, const char* szgroupname,
 int SentencesSystem::PlaySequentialSz(CBaseEntity* entity, const char* szgroupname,
 	float volume, float attenuation, int flags, int pitch, int ipick, bool freset)
 {
-	const int isentenceg = GetGroupIndex(szgroupname);
+	const int isentenceg = GetGroupIndex(entity, szgroupname);
 	if (isentenceg < 0)
 		return -1;
 
@@ -380,8 +380,13 @@ int SentencesSystem::PickSequential(int isentenceg, SentenceIndexName& found, in
 	return ipick + 1;
 }
 
-const char* SentencesSystem::CheckForSentenceReplacement(const char* sentenceName) const
+const char* SentencesSystem::CheckForSentenceReplacement(CBaseEntity* entity, const char* sentenceName) const
 {
+	if (entity->m_SentenceReplacement)
+	{
+		sentenceName = entity->m_SentenceReplacement->Lookup(sentenceName);
+	}
+
 	return g_Server.GetMapState()->m_GlobalSentenceReplacement->Lookup(sentenceName);
 }
 }

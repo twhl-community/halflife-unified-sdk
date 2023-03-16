@@ -149,6 +149,9 @@ int DispatchSpawn(edict_t* pent)
 
 	if (pEntity)
 	{
+		// Load up replacement files now, right before we start using them.
+		pEntity->LoadReplacementFiles();
+
 		// Initialize these or entities who don't link to the world won't have anything in here
 		pEntity->pev->absmin = pEntity->pev->origin - Vector(1, 1, 1);
 		pEntity->pev->absmax = pEntity->pev->origin + Vector(1, 1, 1);
@@ -389,14 +392,17 @@ int DispatchRestore(edict_t* pent, SAVERESTOREDATA* pSaveData, int globalEntity)
 			}
 		}
 
+		pEntity->Restore(restoreHelper);
+
+		// Restore replacement files ahead of setup.
+		pEntity->LoadReplacementFiles();
+
 		if ((pEntity->ObjectCaps() & FCAP_MUST_SPAWN) != 0)
 		{
-			pEntity->Restore(restoreHelper);
 			pEntity->Spawn();
 		}
 		else
 		{
-			pEntity->Restore(restoreHelper);
 			pEntity->Precache();
 		}
 
@@ -502,10 +508,61 @@ static void CheckForBackwardsBounds(CBaseEntity* entity)
 	}
 }
 
+static const ReplacementMap* LoadReplacementMap(string_t fileName, const ReplacementMapOptions& options)
+{
+	const char* fileNameString = STRING(fileName);
+
+	if (FStrEq(fileNameString, ""))
+	{
+		return nullptr;
+	}
+
+	return g_ReplacementMaps.Load(fileNameString, options);
+}
+
+static const ReplacementMap* LoadFileNameReplacementMap(string_t fileName)
+{
+	return LoadReplacementMap(fileName, {.CaseSensitive = false, .LoadFromAllPaths = true});
+}
+
+static const ReplacementMap* LoadSentenceReplacementMap(string_t fileName)
+{
+	return LoadReplacementMap(fileName, {.CaseSensitive = true, .LoadFromAllPaths = true});
+}
+
 bool CBaseEntity::RequiredKeyValue(KeyValueData* pkvd)
 {
+	// Replacement maps can be changed at runtime using trigger_changekeyvalue.
+	// Note that this may cause host_error or sys_error if files aren't precached.
+	if (FStrEq(pkvd->szKeyName, "model_replacement_filename"))
+	{
+		m_ModelReplacementFileName = ALLOC_STRING(pkvd->szValue);
+
+		if (m_ModelReplacement)
+		{
+			m_ModelReplacement = LoadFileNameReplacementMap(m_ModelReplacementFileName);
+		}
+	}
+	else if (FStrEq(pkvd->szKeyName, "sound_replacement_filename"))
+	{
+		m_SoundReplacementFileName = ALLOC_STRING(pkvd->szValue);
+
+		if (m_SoundReplacement)
+		{
+			m_SoundReplacement = LoadFileNameReplacementMap(m_SoundReplacementFileName);
+		}
+	}
+	else if (FStrEq(pkvd->szKeyName, "sentence_replacement_filename"))
+	{
+		m_SentenceReplacementFileName = ALLOC_STRING(pkvd->szValue);
+
+		if (m_SentenceReplacement)
+		{
+			m_SentenceReplacement = LoadFileNameReplacementMap(m_SentenceReplacementFileName);
+		}
+	}
 	// Note: while this code does fix backwards bounds here it will not apply to partial hulls mixing with hard-coded ones.
-	if (FStrEq(pkvd->szKeyName, "custom_hull_min"))
+	else if (FStrEq(pkvd->szKeyName, "custom_hull_min"))
 	{
 		UTIL_StringToVector(m_CustomHullMin, pkvd->szValue);
 		m_HasCustomHullMin = true;
@@ -533,13 +590,30 @@ bool CBaseEntity::RequiredKeyValue(KeyValueData* pkvd)
 	return false;
 }
 
+void CBaseEntity::LoadReplacementFiles()
+{
+	m_ModelReplacement = LoadFileNameReplacementMap(m_ModelReplacementFileName);
+	m_SoundReplacement = LoadFileNameReplacementMap(m_SoundReplacementFileName);
+	m_SentenceReplacement = LoadSentenceReplacementMap(m_SentenceReplacementFileName);
+}
+
 int CBaseEntity::PrecacheModel(const char* s)
 {
+	if (m_ModelReplacement)
+	{
+		s = m_ModelReplacement->Lookup(s);
+	}
+
 	return UTIL_PrecacheModel(s);
 }
 
 void CBaseEntity::SetModel(const char* s)
 {
+	if (m_ModelReplacement)
+	{
+		s = m_ModelReplacement->Lookup(s);
+	}
+
 	s = UTIL_CheckForGlobalModelReplacement(s);
 
 	g_engfuncs.pfnSetModel(edict(), s);
@@ -552,6 +626,16 @@ void CBaseEntity::SetModel(const char* s)
 
 int CBaseEntity::PrecacheSound(const char* s)
 {
+	if (s[0] == '*')
+	{
+		++s;
+	}
+
+	if (m_SoundReplacement)
+	{
+		s = m_SoundReplacement->Lookup(s);
+	}
+
 	return UTIL_PrecacheSound(s);
 }
 
@@ -666,6 +750,10 @@ TYPEDESCRIPTION CBaseEntity::m_SaveData[] =
 		DEFINE_FIELD(CBaseEntity, m_pfnTouch, FIELD_FUNCTION),
 		DEFINE_FIELD(CBaseEntity, m_pfnUse, FIELD_FUNCTION),
 		DEFINE_FIELD(CBaseEntity, m_pfnBlocked, FIELD_FUNCTION),
+
+		DEFINE_FIELD(CBaseEntity, m_ModelReplacementFileName, FIELD_STRING),
+		DEFINE_FIELD(CBaseEntity, m_SoundReplacementFileName, FIELD_STRING),
+		DEFINE_FIELD(CBaseEntity, m_SentenceReplacementFileName, FIELD_STRING),
 
 		DEFINE_FIELD(CBaseEntity, m_CustomHullMin, FIELD_VECTOR),
 		DEFINE_FIELD(CBaseEntity, m_CustomHullMax, FIELD_VECTOR),

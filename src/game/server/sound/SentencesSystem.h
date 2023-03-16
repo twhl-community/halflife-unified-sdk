@@ -58,13 +58,13 @@ public:
 	 *	@brief Given sentence group rootname (name without number suffix), get sentence group index (isentenceg).
 	 *	@return -1 if no such name.
 	 */
-	int GetGroupIndex(const char* szrootname) const;
+	int GetGroupIndex(CBaseEntity* entity, const char* szrootname) const;
 
 	/**
 	 *	@brief convert sentence (sample) name to !sentencenum.
 	 *	@return Sentence index, or -1 if the sentence could not be found.
 	 */
-	int LookupSentence(const char* sample, SentenceIndexName* sentencenum) const;
+	int LookupSentence(CBaseEntity* entity, const char* sample, SentenceIndexName* sentencenum) const;
 
 	/**
 	 *	@brief given sentence group index, play random sentence for given entity.
@@ -115,7 +115,7 @@ private:
 	 */
 	int PickSequential(int isentenceg, SentenceIndexName& found, int ipick, bool freset) const;
 
-	const char* CheckForSentenceReplacement(const char* sentenceName) const;
+	const char* CheckForSentenceReplacement(CBaseEntity* entity, const char* sentenceName) const;
 
 private:
 	std::shared_ptr<spdlog::logger> m_Logger;

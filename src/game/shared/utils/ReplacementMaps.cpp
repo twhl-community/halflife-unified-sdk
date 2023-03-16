@@ -179,6 +179,12 @@ const ReplacementMap* ReplacementMapSystem::Load(const std::string& fileName, co
 
 	auto map = ParseFile(fileName.c_str(), options);
 
+	if (map.empty())
+	{
+		// Don't waste memory and cpu time on this.
+		return nullptr;
+	}
+
 	auto replacementMap = std::make_unique<ReplacementMap>(std::move(map), options.CaseSensitive);
 
 	const auto result = m_ReplacementMaps.emplace(std::move(normalizedFileName), std::move(replacementMap));

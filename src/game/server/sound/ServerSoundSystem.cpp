@@ -65,14 +65,14 @@ void ServerSoundSystem::EmitSound(CBaseEntity* entity, int channel, const char* 
 		if (sample && *sample == '!')
 		{
 			sentences::SentenceIndexName name;
-			if (sentences::g_Sentences.LookupSentence(sample, &name) >= 0)
+			if (sentences::g_Sentences.LookupSentence(entity, sample, &name) >= 0)
 				EmitSoundSentence(entity, channel, name.c_str(), volume, attenuation, flags, pitch);
 			else
 				m_Logger->debug("Unable to find {} in sentences", sample);
 		}
 		else
 		{
-			sample = CheckForSoundReplacement(sample);
+			sample = CheckForSoundReplacement(entity, sample);
 
 			const Vector origin = entity->pev->origin + (entity->pev->mins + entity->pev->maxs) * 0.5f;
 			EmitSoundCore(entity, channel, sample, volume, attenuation, flags, pitch, origin, false);
@@ -83,14 +83,14 @@ void ServerSoundSystem::EmitSound(CBaseEntity* entity, int channel, const char* 
 		if (sample && *sample == '!')
 		{
 			sentences::SentenceIndexName name;
-			if (sentences::g_Sentences.LookupSentence(sample, &name) >= 0)
+			if (sentences::g_Sentences.LookupSentence(entity, sample, &name) >= 0)
 				EMIT_SOUND_DYN2(entity->edict(), channel, name.c_str(), volume, attenuation, flags, pitch);
 			else
 				m_Logger->debug("Unable to find {} in sentences", sample);
 		}
 		else
 		{
-			sample = CheckForSoundReplacement(sample);
+			sample = CheckForSoundReplacement(entity, sample);
 			EMIT_SOUND_DYN2(entity->edict(), channel, sample, volume, attenuation, flags, pitch);
 		}
 	}
@@ -103,12 +103,12 @@ void ServerSoundSystem::EmitAmbientSound(CBaseEntity* entity, const Vector& vecO
 		if (samp && *samp == '!')
 		{
 			sentences::SentenceIndexName name;
-			if (sentences::g_Sentences.LookupSentence(samp, &name) >= 0)
+			if (sentences::g_Sentences.LookupSentence(entity, samp, &name) >= 0)
 				EmitSoundCore(entity, CHAN_STATIC, name.c_str(), vol, attenuation, fFlags, pitch, vecOrigin, true);
 		}
 		else
 		{
-			samp = CheckForSoundReplacement(samp);
+			samp = CheckForSoundReplacement(entity, samp);
 			EmitSoundCore(entity, CHAN_STATIC, samp, vol, attenuation, fFlags, pitch, vecOrigin, true);
 		}
 	}
@@ -117,12 +117,12 @@ void ServerSoundSystem::EmitAmbientSound(CBaseEntity* entity, const Vector& vecO
 		if (samp && *samp == '!')
 		{
 			sentences::SentenceIndexName name;
-			if (sentences::g_Sentences.LookupSentence(samp, &name) >= 0)
+			if (sentences::g_Sentences.LookupSentence(entity, samp, &name) >= 0)
 				EMIT_AMBIENT_SOUND(entity->edict(), vecOrigin, name.c_str(), vol, attenuation, fFlags, pitch);
 		}
 		else
 		{
-			samp = CheckForSoundReplacement(samp);
+			samp = CheckForSoundReplacement(entity, samp);
 			EMIT_AMBIENT_SOUND(entity->edict(), vecOrigin, samp, vol, attenuation, fFlags, pitch);
 		}
 	}
@@ -138,6 +138,21 @@ const char* ServerSoundSystem::CheckForSoundReplacement(const char* soundName) c
 	}
 
 	return g_Server.GetMapState()->m_GlobalSoundReplacement->Lookup(soundName);
+}
+
+const char* ServerSoundSystem::CheckForSoundReplacement(CBaseEntity* entity, const char* soundName) const
+{
+	if (soundName[0] == '*')
+	{
+		++soundName;
+	}
+
+	if (entity->m_SoundReplacement)
+	{
+		soundName = entity->m_SoundReplacement->Lookup(soundName);
+	}
+
+	return CheckForSoundReplacement(soundName);
 }
 
 void ServerSoundSystem::EmitSoundCore(CBaseEntity* entity, int channel, const char* sample, float volume, float attenuation,

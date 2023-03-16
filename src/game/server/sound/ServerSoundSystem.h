@@ -50,6 +50,8 @@ public:
 	const char* CheckForSoundReplacement(const char* soundName) const;
 
 private:
+	const char* CheckForSoundReplacement(CBaseEntity* entity, const char* soundName) const;
+
 	void EmitSoundCore(CBaseEntity* entity, int channel, const char* sample, float volume, float attenuation,
 		int flags, int pitch, const Vector& origin, bool alwaysBroadcast);
 

@@ -2531,13 +2531,13 @@ void CBasePlayer::SetSuitUpdate(const char* name, bool fgroup, int iNoRepeatTime
 	// get sentence or group number
 	if (!fgroup)
 	{
-		isentence = sentences::g_Sentences.LookupSentence(name, nullptr);
+		isentence = sentences::g_Sentences.LookupSentence(this, name, nullptr);
 		if (isentence < 0)
 			return;
 	}
 	else
 		// mark group number as negative
-		isentence = -sentences::g_Sentences.GetGroupIndex(name);
+		isentence = -sentences::g_Sentences.GetGroupIndex(this, name);
 
 	// check norepeat list - this list lets us cancel
 	// the playback of words or sentences that have already

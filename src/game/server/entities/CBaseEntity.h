@@ -32,6 +32,7 @@ class COFSquadTalkMonster;
 class CSound;
 class CSquadMonster;
 class CTalkMonster;
+struct ReplacementMap;
 
 #define MAX_PATH_SIZE 10 // max number of nodes available for a path.
 
@@ -214,6 +215,8 @@ public:
 	 *	even if an entity does not call the base class version of KeyValue.
 	 */
 	bool RequiredKeyValue(KeyValueData* pkvd);
+
+	void LoadReplacementFiles();
 
 	virtual bool KeyValue(KeyValueData* pkvd) { return false; }
 	virtual bool Save(CSave& save);
@@ -486,6 +489,14 @@ public:
 	void EmitSoundDyn(int channel, const char* sample, float volume, float attenuation, int flags, int pitch);
 	void EmitAmbientSound(const Vector& vecOrigin, const char* samp, float vol, float attenuation, int fFlags, int pitch);
 	void StopSound(int channel, const char* sample);
+
+	string_t m_ModelReplacementFileName;
+	string_t m_SoundReplacementFileName;
+	string_t m_SentenceReplacementFileName;
+
+	const ReplacementMap* m_ModelReplacement{};
+	const ReplacementMap* m_SoundReplacement{};
+	const ReplacementMap* m_SentenceReplacement{};
 
 	Vector m_CustomHullMin{vec3_origin};
 	Vector m_CustomHullMax{vec3_origin};
