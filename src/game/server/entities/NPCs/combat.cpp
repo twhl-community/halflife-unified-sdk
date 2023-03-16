@@ -759,7 +759,7 @@ void CGib::BounceGibTouch(CBaseEntity* pOther)
 
 			volume = 0.8 * V_min(1.0, ((float)zvel) / 450.0);
 
-			CBreakable::MaterialSoundRandom(edict(), (Materials)m_material, volume);
+			CBreakable::MaterialSoundRandom(this, (Materials)m_material, volume);
 		}
 	}
 }

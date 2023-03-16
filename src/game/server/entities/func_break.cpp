@@ -273,7 +273,7 @@ void CBreakable::MaterialSoundPrecache(CBaseEntity* self, Materials precacheMate
 	}
 }
 
-void CBreakable::MaterialSoundRandom(edict_t* pEdict, Materials soundMaterial, float volume)
+void CBreakable::MaterialSoundRandom(CBaseEntity* self, Materials soundMaterial, float volume)
 {
 	const char** pSoundList;
 	int soundCount = 0;
@@ -281,7 +281,7 @@ void CBreakable::MaterialSoundRandom(edict_t* pEdict, Materials soundMaterial, f
 	pSoundList = MaterialSoundList(soundMaterial, soundCount);
 
 	if (0 != soundCount)
-		EMIT_SOUND(pEdict, CHAN_BODY, pSoundList[RANDOM_LONG(0, soundCount - 1)], volume, 1.0);
+		EMIT_SOUND(self->edict(), CHAN_BODY, pSoundList[RANDOM_LONG(0, soundCount - 1)], volume, 1.0);
 }
 
 

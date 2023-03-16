@@ -33,7 +33,7 @@ struct locksound_t // sounds that doors and buttons make when locked/unlocked
 	byte bEOFUnlocked;	  // true if hit end of list of unlocked sentences
 };
 
-void PlayLockSounds(entvars_t* pev, locksound_t* pls, bool flocked, bool fbutton);
+void PlayLockSounds(CBaseEntity* entity, locksound_t* pls, bool flocked, bool fbutton);
 
 //
 // Generic Button

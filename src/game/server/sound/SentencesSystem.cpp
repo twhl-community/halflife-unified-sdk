@@ -207,7 +207,7 @@ int SentencesSystem::PlaySequentialSz(edict_t* entity, const char* szgroupname,
 	return ipicknext;
 }
 
-void SentencesSystem::Stop(edict_t* entity, int isentenceg, int ipick)
+void SentencesSystem::Stop(CBaseEntity* entity, int isentenceg, int ipick)
 {
 	if (isentenceg < 0 || ipick < 0)
 		return;
@@ -215,7 +215,7 @@ void SentencesSystem::Stop(edict_t* entity, int isentenceg, int ipick)
 	SentenceIndexName name;
 	fmt::format_to(std::back_inserter(name), "!{}{}", m_SentenceGroups[isentenceg].GroupName.c_str(), ipick);
 
-	STOP_SOUND(entity, CHAN_VOICE, name.c_str());
+	STOP_SOUND(entity->edict(), CHAN_VOICE, name.c_str());
 }
 
 void SentencesSystem::LoadSentences(const std::string& fileName)

@@ -84,7 +84,7 @@ public:
 	/**
 	 *	@brief for this entity, for the given sentence within the sentence group, stop the sentence.
 	 */
-	void Stop(edict_t* entity, int isentenceg, int ipick);
+	void Stop(CBaseEntity* entity, int isentenceg, int ipick);
 
 private:
 	void LoadSentences(const std::string& fileName);

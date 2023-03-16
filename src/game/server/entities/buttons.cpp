@@ -482,31 +482,31 @@ void CBaseButton::Spawn()
 // Makes flagged buttons spark when turned off
 //
 
-void DoSpark(entvars_t* pev, const Vector& location)
+void DoSpark(CBaseEntity* entity, const Vector& location)
 {
-	Vector tmp = location + pev->size * 0.5;
+	Vector tmp = location + entity->pev->size * 0.5;
 	UTIL_Sparks(tmp);
 
 	float flVolume = RANDOM_FLOAT(0.25, 0.75) * 0.4; // random volume range
 	switch ((int)(RANDOM_FLOAT(0, 1) * 6))
 	{
 	case 0:
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "buttons/spark1.wav", flVolume, ATTN_NORM);
+		EMIT_SOUND(entity->edict(), CHAN_VOICE, "buttons/spark1.wav", flVolume, ATTN_NORM);
 		break;
 	case 1:
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "buttons/spark2.wav", flVolume, ATTN_NORM);
+		EMIT_SOUND(entity->edict(), CHAN_VOICE, "buttons/spark2.wav", flVolume, ATTN_NORM);
 		break;
 	case 2:
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "buttons/spark3.wav", flVolume, ATTN_NORM);
+		EMIT_SOUND(entity->edict(), CHAN_VOICE, "buttons/spark3.wav", flVolume, ATTN_NORM);
 		break;
 	case 3:
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "buttons/spark4.wav", flVolume, ATTN_NORM);
+		EMIT_SOUND(entity->edict(), CHAN_VOICE, "buttons/spark4.wav", flVolume, ATTN_NORM);
 		break;
 	case 4:
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "buttons/spark5.wav", flVolume, ATTN_NORM);
+		EMIT_SOUND(entity->edict(), CHAN_VOICE, "buttons/spark5.wav", flVolume, ATTN_NORM);
 		break;
 	case 5:
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "buttons/spark6.wav", flVolume, ATTN_NORM);
+		EMIT_SOUND(entity->edict(), CHAN_VOICE, "buttons/spark6.wav", flVolume, ATTN_NORM);
 		break;
 	}
 }
@@ -516,7 +516,7 @@ void CBaseButton::ButtonSpark()
 	SetThink(&CBaseButton::ButtonSpark);
 	pev->nextthink = pev->ltime + (0.1 + RANDOM_FLOAT(0, 1.5)); // spark again at random interval
 
-	DoSpark(pev, pev->absmin);
+	DoSpark(this, pev->absmin);
 }
 
 
@@ -587,7 +587,7 @@ void CBaseButton::ButtonTouch(CBaseEntity* pOther)
 	if (!UTIL_IsMasterTriggered(m_sMaster, pOther))
 	{
 		// play button locked sound
-		PlayLockSounds(pev, &m_ls, true, true);
+		PlayLockSounds(this, &m_ls, true, true);
 		return;
 	}
 
@@ -614,13 +614,13 @@ void CBaseButton::ButtonActivate()
 	if (!UTIL_IsMasterTriggered(m_sMaster, m_hActivator))
 	{
 		// button is locked, play locked sound
-		PlayLockSounds(pev, &m_ls, true, true);
+		PlayLockSounds(this, &m_ls, true, true);
 		return;
 	}
 	else
 	{
 		// button is unlocked, play unlocked sound
-		PlayLockSounds(pev, &m_ls, false, true);
+		PlayLockSounds(this, &m_ls, false, true);
 	}
 
 	ASSERT(m_toggle_state == TS_AT_BOTTOM);
@@ -1137,7 +1137,7 @@ bool CEnvSpark::KeyValue(KeyValueData* pkvd)
 void EXPORT CEnvSpark::SparkThink()
 {
 	pev->nextthink = gpGlobals->time + 0.1 + RANDOM_FLOAT(0, m_flDelay);
-	DoSpark(pev, pev->origin);
+	DoSpark(this, pev->origin);
 }
 
 void EXPORT CEnvSpark::SparkStart(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
