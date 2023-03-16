@@ -311,7 +311,7 @@ void CShockTrooper::GibMonster()
 		// TODO: change body group
 	}
 
-	EMIT_SOUND(ENT(pev), CHAN_WEAPON, "common/bodysplat.wav", 1, ATTN_NORM);
+	EmitSound(CHAN_WEAPON, "common/bodysplat.wav", 1, ATTN_NORM);
 
 	if (CVAR_GET_FLOAT("violence_agibs") != 0) // Should never get here, but someone might call it directly
 	{
@@ -880,7 +880,7 @@ void CShockTrooper::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 		Shoot();
 
-		EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/shock_fire.wav", 1, ATTN_NORM);
+		EmitSound(CHAN_WEAPON, "weapons/shock_fire.wav", 1, ATTN_NORM);
 
 		CSoundEnt::InsertSound(bits_SOUND_COMBAT, pev->origin, 384, 0.3);
 	}
@@ -1095,19 +1095,19 @@ void CShockTrooper::PainSound()
 		{
 		case 0:
 			// TODO: the directory names should be lowercase
-			EMIT_SOUND(ENT(pev), CHAN_VOICE, "ShockTrooper/shock_trooper_pain3.wav", 1, ATTN_NORM);
+			EmitSound(CHAN_VOICE, "ShockTrooper/shock_trooper_pain3.wav", 1, ATTN_NORM);
 			break;
 		case 1:
-			EMIT_SOUND(ENT(pev), CHAN_VOICE, "ShockTrooper/shock_trooper_pain4.wav", 1, ATTN_NORM);
+			EmitSound(CHAN_VOICE, "ShockTrooper/shock_trooper_pain4.wav", 1, ATTN_NORM);
 			break;
 		case 2:
-			EMIT_SOUND(ENT(pev), CHAN_VOICE, "ShockTrooper/shock_trooper_pain5.wav", 1, ATTN_NORM);
+			EmitSound(CHAN_VOICE, "ShockTrooper/shock_trooper_pain5.wav", 1, ATTN_NORM);
 			break;
 		case 3:
-			EMIT_SOUND(ENT(pev), CHAN_VOICE, "ShockTrooper/shock_trooper_pain1.wav", 1, ATTN_NORM);
+			EmitSound(CHAN_VOICE, "ShockTrooper/shock_trooper_pain1.wav", 1, ATTN_NORM);
 			break;
 		case 4:
-			EMIT_SOUND(ENT(pev), CHAN_VOICE, "ShockTrooper/shock_trooper_pain2.wav", 1, ATTN_NORM);
+			EmitSound(CHAN_VOICE, "ShockTrooper/shock_trooper_pain2.wav", 1, ATTN_NORM);
 			break;
 		}
 

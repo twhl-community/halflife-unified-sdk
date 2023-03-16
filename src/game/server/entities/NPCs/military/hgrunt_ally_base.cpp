@@ -672,7 +672,7 @@ void CBaseHGruntAlly::HandleAnimEvent(MonsterEvent_t* pEvent)
 	{
 		if (CanUseGrenadeLauncher())
 		{
-			EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/glauncher.wav", 0.8, ATTN_NORM);
+			EmitSound(CHAN_WEAPON, "weapons/glauncher.wav", 0.8, ATTN_NORM);
 			CGrenade::ShootContact(pev, GetGunPosition(), m_vecTossVelocity);
 			m_fThrowGrenade = false;
 			if (g_Skill.GetSkillLevel() == SkillLevel::Hard)
@@ -902,22 +902,22 @@ void CBaseHGruntAlly::PainSound()
 		switch (RANDOM_LONG(0, 7))
 		{
 		case 0:
-			EMIT_SOUND(ENT(pev), CHAN_VOICE, "fgrunt/pain3.wav", 1, ATTN_NORM);
+			EmitSound(CHAN_VOICE, "fgrunt/pain3.wav", 1, ATTN_NORM);
 			break;
 		case 1:
-			EMIT_SOUND(ENT(pev), CHAN_VOICE, "fgrunt/pain4.wav", 1, ATTN_NORM);
+			EmitSound(CHAN_VOICE, "fgrunt/pain4.wav", 1, ATTN_NORM);
 			break;
 		case 2:
-			EMIT_SOUND(ENT(pev), CHAN_VOICE, "fgrunt/pain5.wav", 1, ATTN_NORM);
+			EmitSound(CHAN_VOICE, "fgrunt/pain5.wav", 1, ATTN_NORM);
 			break;
 		case 3:
-			EMIT_SOUND(ENT(pev), CHAN_VOICE, "fgrunt/pain1.wav", 1, ATTN_NORM);
+			EmitSound(CHAN_VOICE, "fgrunt/pain1.wav", 1, ATTN_NORM);
 			break;
 		case 4:
-			EMIT_SOUND(ENT(pev), CHAN_VOICE, "fgrunt/pain2.wav", 1, ATTN_NORM);
+			EmitSound(CHAN_VOICE, "fgrunt/pain2.wav", 1, ATTN_NORM);
 			break;
 		case 5:
-			EMIT_SOUND(ENT(pev), CHAN_VOICE, "fgrunt/pain6.wav", 1, ATTN_NORM);
+			EmitSound(CHAN_VOICE, "fgrunt/pain6.wav", 1, ATTN_NORM);
 			break;
 		}
 
@@ -933,22 +933,22 @@ void CBaseHGruntAlly::DeathSound()
 	switch (RANDOM_LONG(0, 5))
 	{
 	case 0:
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "fgrunt/death1.wav", 1, ATTN_IDLE);
+		EmitSound(CHAN_VOICE, "fgrunt/death1.wav", 1, ATTN_IDLE);
 		break;
 	case 1:
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "fgrunt/death2.wav", 1, ATTN_IDLE);
+		EmitSound(CHAN_VOICE, "fgrunt/death2.wav", 1, ATTN_IDLE);
 		break;
 	case 2:
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "fgrunt/death3.wav", 1, ATTN_IDLE);
+		EmitSound(CHAN_VOICE, "fgrunt/death3.wav", 1, ATTN_IDLE);
 		break;
 	case 3:
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "fgrunt/death4.wav", 1, ATTN_IDLE);
+		EmitSound(CHAN_VOICE, "fgrunt/death4.wav", 1, ATTN_IDLE);
 		break;
 	case 4:
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "fgrunt/death5.wav", 1, ATTN_IDLE);
+		EmitSound(CHAN_VOICE, "fgrunt/death5.wav", 1, ATTN_IDLE);
 		break;
 	case 5:
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "fgrunt/death6.wav", 1, ATTN_IDLE);
+		EmitSound(CHAN_VOICE, "fgrunt/death6.wav", 1, ATTN_IDLE);
 		break;
 	}
 }
@@ -2024,7 +2024,7 @@ Schedule_t* CBaseHGruntAlly::GetSchedule()
 					{
 						AILogger->debug("Injured Grunt called for Medic");
 
-						EMIT_SOUND_DYN(edict(), CHAN_VOICE, "fgrunt/medic.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+						EmitSoundDyn(CHAN_VOICE, "fgrunt/medic.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
 
 						JustSpoke();
 						m_flMedicWaitTime = gpGlobals->time + 5.0;

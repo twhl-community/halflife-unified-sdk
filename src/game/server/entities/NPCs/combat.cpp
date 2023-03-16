@@ -322,7 +322,7 @@ void CBaseMonster::GibMonster()
 {
 	bool gibbed = false;
 
-	EMIT_SOUND(ENT(pev), CHAN_WEAPON, "common/bodysplat.wav", 1, ATTN_NORM);
+	EmitSound(CHAN_WEAPON, "common/bodysplat.wav", 1, ATTN_NORM);
 
 	// only humans throw skulls !!!UNDONE - eventually monsters will have their own sets of gibs
 	if (HasHumanGibs())
@@ -617,7 +617,7 @@ void CBaseMonster::Killed(CBaseEntity* attacker, int iGib)
 	Remember(bits_MEMORY_KILLED);
 
 	// clear the deceased's sound channels.(may have been firing or reloading when killed)
-	EMIT_SOUND(ENT(pev), CHAN_WEAPON, "common/null.wav", 1, ATTN_NORM);
+	EmitSound(CHAN_WEAPON, "common/null.wav", 1, ATTN_NORM);
 	m_IdealMonsterState = MONSTERSTATE_DEAD;
 	// Make sure this condition is fired too (TakeDamage breaks out before this happens on death)
 	SetConditions(bits_COND_LIGHT_DAMAGE);
@@ -1586,9 +1586,9 @@ Vector CBaseEntity::FireBulletsPlayer(unsigned int cShots, Vector vecSrc, Vector
 
 					if (tr.pHit && tr.pHit->v.takedamage != DAMAGE_NO)
 					{
-						EMIT_SOUND_DYN(tr.pHit, CHAN_BODY, "weapons/xbow_hitbod2.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
-
 						auto pHitEntity = Instance(tr.pHit);
+
+						pHitEntity->EmitSoundDyn(CHAN_BODY, "weapons/xbow_hitbod2.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
 
 						if (pHitEntity->BloodColor() != DONT_BLEED)
 						{

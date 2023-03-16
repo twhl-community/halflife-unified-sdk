@@ -368,7 +368,7 @@ void CItemCTF::ThrowItem(CBasePlayer* pPlayer)
 
 	UTIL_SetOrigin(pev, pev->origin);
 
-	EMIT_SOUND(edict(), CHAN_VOICE, "ctf/itemthrow.wav", VOL_NORM, ATTN_NORM);
+	EmitSound(CHAN_VOICE, "ctf/itemthrow.wav", VOL_NORM, ATTN_NORM);
 
 	pev->flags &= ~FL_ONGROUND;
 	pev->movetype = MOVETYPE_TOSS;

@@ -141,7 +141,7 @@ void COtis::GuardFirePistol()
 		pitchShift = 0;
 	else
 		pitchShift -= 5;
-	EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "weapons/de_shot1.wav", 1, ATTN_NORM, 0, 100 + pitchShift);
+	EmitSoundDyn(CHAN_WEAPON, "weapons/de_shot1.wav", 1, ATTN_NORM, 0, 100 + pitchShift);
 
 	CSoundEnt::InsertSound(bits_SOUND_COMBAT, pev->origin, 384, 0.3);
 

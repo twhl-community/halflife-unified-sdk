@@ -291,7 +291,7 @@ void CBarney::GuardFirePistol()
 		pitchShift = 0;
 	else
 		pitchShift -= 5;
-	EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "barney/ba_attack2.wav", 1, ATTN_NORM, 0, 100 + pitchShift);
+	EmitSoundDyn(CHAN_WEAPON, "barney/ba_attack2.wav", 1, ATTN_NORM, 0, 100 + pitchShift);
 
 	CSoundEnt::InsertSound(bits_SOUND_COMBAT, pev->origin, 384, 0.3);
 
@@ -464,13 +464,13 @@ void CBarney::PainSound()
 	switch (RANDOM_LONG(0, 2))
 	{
 	case 0:
-		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "barney/ba_pain1.wav", 1, ATTN_NORM, 0, GetVoicePitch());
+		EmitSoundDyn(CHAN_VOICE, "barney/ba_pain1.wav", 1, ATTN_NORM, 0, GetVoicePitch());
 		break;
 	case 1:
-		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "barney/ba_pain2.wav", 1, ATTN_NORM, 0, GetVoicePitch());
+		EmitSoundDyn(CHAN_VOICE, "barney/ba_pain2.wav", 1, ATTN_NORM, 0, GetVoicePitch());
 		break;
 	case 2:
-		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "barney/ba_pain3.wav", 1, ATTN_NORM, 0, GetVoicePitch());
+		EmitSoundDyn(CHAN_VOICE, "barney/ba_pain3.wav", 1, ATTN_NORM, 0, GetVoicePitch());
 		break;
 	}
 }
@@ -483,13 +483,13 @@ void CBarney::DeathSound()
 	switch (RANDOM_LONG(0, 2))
 	{
 	case 0:
-		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "barney/ba_die1.wav", 1, ATTN_NORM, 0, GetVoicePitch());
+		EmitSoundDyn(CHAN_VOICE, "barney/ba_die1.wav", 1, ATTN_NORM, 0, GetVoicePitch());
 		break;
 	case 1:
-		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "barney/ba_die2.wav", 1, ATTN_NORM, 0, GetVoicePitch());
+		EmitSoundDyn(CHAN_VOICE, "barney/ba_die2.wav", 1, ATTN_NORM, 0, GetVoicePitch());
 		break;
 	case 2:
-		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "barney/ba_die3.wav", 1, ATTN_NORM, 0, GetVoicePitch());
+		EmitSoundDyn(CHAN_VOICE, "barney/ba_die3.wav", 1, ATTN_NORM, 0, GetVoicePitch());
 		break;
 	}
 }

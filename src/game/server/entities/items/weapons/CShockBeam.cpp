@@ -232,7 +232,7 @@ void CShockBeam::Explode()
 
 	pev->owner = nullptr;
 
-	EMIT_SOUND(edict(), CHAN_WEAPON, "weapons/shock_impact.wav", RANDOM_FLOAT(0.8, 0.9), ATTN_NORM);
+	EmitSound(CHAN_WEAPON, "weapons/shock_impact.wav", RANDOM_FLOAT(0.8, 0.9), ATTN_NORM);
 }
 
 CShockBeam* CShockBeam::CreateShockBeam(const Vector& vecOrigin, const Vector& vecAngles, CBaseEntity* pOwner)

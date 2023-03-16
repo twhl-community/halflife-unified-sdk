@@ -232,7 +232,7 @@ void CAmbientGeneric::Precache()
 	}
 	if (m_fActive)
 	{
-		UTIL_EmitAmbientSound(ENT(pev), pev->origin, szSoundFile,
+		EmitAmbientSound(pev->origin, szSoundFile,
 			(m_dpv.vol * 0.01), m_flAttenuation, SND_SPAWNING, m_dpv.pitch);
 
 		pev->nextthink = gpGlobals->time + 0.1;
@@ -282,7 +282,7 @@ void CAmbientGeneric::RampThink()
 			m_dpv.spindown = 0; // done with ramp down
 
 			// shut sound off
-			UTIL_EmitAmbientSound(ENT(pev), pev->origin, szSoundFile,
+			EmitAmbientSound(pev->origin, szSoundFile,
 				0, 0, SND_STOP, 0);
 
 			// return without setting nextthink
@@ -326,7 +326,7 @@ void CAmbientGeneric::RampThink()
 			m_dpv.fadeout = 0; // done with ramp down
 
 			// shut sound off
-			UTIL_EmitAmbientSound(ENT(pev), pev->origin, szSoundFile,
+			EmitAmbientSound(pev->origin, szSoundFile,
 				0, 0, SND_STOP, 0);
 
 			// return without setting nextthink
@@ -432,7 +432,7 @@ void CAmbientGeneric::RampThink()
 		if (pitch == PITCH_NORM)
 			pitch = PITCH_NORM + 1; // don't send 'no pitch' !
 
-		UTIL_EmitAmbientSound(ENT(pev), pev->origin, szSoundFile,
+		EmitAmbientSound(pev->origin, szSoundFile,
 			(vol * 0.01), m_flAttenuation, flags, pitch);
 	}
 
@@ -554,7 +554,7 @@ void CAmbientGeneric::ToggleUse(CBaseEntity* pActivator, CBaseEntity* pCaller, U
 
 		m_dpv.pitch = fraction * 255;
 
-		UTIL_EmitAmbientSound(ENT(pev), pev->origin, szSoundFile,
+		EmitAmbientSound(pev->origin, szSoundFile,
 			0, 0, SND_CHANGE_PITCH, m_dpv.pitch);
 
 		return;
@@ -609,7 +609,7 @@ void CAmbientGeneric::ToggleUse(CBaseEntity* pActivator, CBaseEntity* pCaller, U
 				pev->nextthink = gpGlobals->time + 0.1;
 			}
 			else
-				UTIL_EmitAmbientSound(ENT(pev), pev->origin, szSoundFile,
+				EmitAmbientSound(pev->origin, szSoundFile,
 					0, 0, SND_STOP, 0);
 		}
 	}
@@ -625,14 +625,14 @@ void CAmbientGeneric::ToggleUse(CBaseEntity* pActivator, CBaseEntity* pCaller, U
 			m_fActive = true;
 		else
 			// shut sound off now - may be interrupting a long non-looping sound
-			UTIL_EmitAmbientSound(ENT(pev), pev->origin, szSoundFile,
+			EmitAmbientSound(pev->origin, szSoundFile,
 				0, 0, SND_STOP, 0);
 
 		// init all ramp params for startup
 
 		InitModulationParms();
 
-		UTIL_EmitAmbientSound(ENT(pev), pev->origin, szSoundFile,
+		EmitAmbientSound(pev->origin, szSoundFile,
 			(m_dpv.vol * 0.01), m_flAttenuation, 0, m_dpv.pitch);
 
 		pev->nextthink = gpGlobals->time + 0.1;
@@ -1373,20 +1373,20 @@ float TEXTURETYPE_PlaySound(TraceResult* ptr, Vector vecSrc, Vector vecEnd, int 
 			switch (RANDOM_LONG(0, 1))
 			{
 			case 0:
-				UTIL_EmitAmbientSound(CBaseEntity::World->edict(), ptr->vecEndPos, "buttons/spark5.wav", flVolume, ATTN_NORM, 0, 100);
+				CBaseEntity::World->EmitAmbientSound(ptr->vecEndPos, "buttons/spark5.wav", flVolume, ATTN_NORM, 0, 100);
 				break;
 			case 1:
-				UTIL_EmitAmbientSound(CBaseEntity::World->edict(), ptr->vecEndPos, "buttons/spark6.wav", flVolume, ATTN_NORM, 0, 100);
+				CBaseEntity::World->EmitAmbientSound(ptr->vecEndPos, "buttons/spark6.wav", flVolume, ATTN_NORM, 0, 100);
 				break;
-				// case 0: EMIT_SOUND(ENT(pev), CHAN_VOICE, "buttons/spark5.wav", flVolume, ATTN_NORM);	break;
-				// case 1: EMIT_SOUND(ENT(pev), CHAN_VOICE, "buttons/spark6.wav", flVolume, ATTN_NORM);	break;
+				// case 0: EmitSound(CHAN_VOICE, "buttons/spark5.wav", flVolume, ATTN_NORM);	break;
+				// case 1: EmitSound(CHAN_VOICE, "buttons/spark6.wav", flVolume, ATTN_NORM);	break;
 			}
 		}
 	}
 
 	// play material hit sound
-	UTIL_EmitAmbientSound(CBaseEntity::World->edict(), ptr->vecEndPos, rgsz[RANDOM_LONG(0, cnt - 1)], fvol, fattn, 0, 96 + RANDOM_LONG(0, 0xf));
-	// EMIT_SOUND_DYN( ENT(m_pPlayer->pev), CHAN_WEAPON, rgsz[RANDOM_LONG(0,cnt-1)], fvol, ATTN_NORM, 0, 96 + RANDOM_LONG(0,0xf));
+	CBaseEntity::World->EmitAmbientSound(ptr->vecEndPos, rgsz[RANDOM_LONG(0, cnt - 1)], fvol, fattn, 0, 96 + RANDOM_LONG(0, 0xf));
+	// m_pPlayer->EmitSoundDyn(CHAN_WEAPON, rgsz[RANDOM_LONG(0,cnt-1)], fvol, ATTN_NORM, 0, 96 + RANDOM_LONG(0,0xf));
 
 	return fvolbar;
 }
@@ -1499,7 +1499,7 @@ void CSpeaker::SpeakerThink()
 	if (szSoundFile[0] == '!')
 	{
 		// play single sentence, one shot
-		UTIL_EmitAmbientSound(ENT(pev), pev->origin, szSoundFile,
+		EmitAmbientSound(pev->origin, szSoundFile,
 			flvolume, flattenuation, flags, pitch);
 
 		// shut off and reset

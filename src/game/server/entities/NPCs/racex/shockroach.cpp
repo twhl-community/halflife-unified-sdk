@@ -264,7 +264,7 @@ void COFShockRoach::HandleAnimEvent(MonsterEvent_t* pEvent)
 		// Not used for Shock Roach
 		// int iSound = RANDOM_LONG(0,2);
 		// if ( iSound != 0 )
-		//	EMIT_SOUND_DYN( edict(), CHAN_VOICE, pAttackSounds[iSound], GetSoundVolue(), ATTN_IDLE, 0, GetVoicePitch() );
+		//	EmitSoundDyn(CHAN_VOICE, pAttackSounds[iSound], GetSoundVolue(), ATTN_IDLE, 0, GetVoicePitch());
 
 		pev->velocity = vecJumpDir;
 		m_flNextAttack = gpGlobals->time + 2;
@@ -378,7 +378,7 @@ void COFShockRoach::LeapTouch(CBaseEntity* pOther)
 	// Don't hit if back on ground
 	if (!FBitSet(pev->flags, FL_ONGROUND))
 	{
-		EMIT_SOUND_DYN(edict(), CHAN_WEAPON, RANDOM_SOUND_ARRAY(pBiteSounds), GetSoundVolue(), ATTN_IDLE, 0, GetVoicePitch());
+		EmitSoundDyn(CHAN_WEAPON, RANDOM_SOUND_ARRAY(pBiteSounds), GetSoundVolue(), ATTN_IDLE, 0, GetVoicePitch());
 
 		pOther->TakeDamage(this, this, GetDamageAmount(), DMG_SLASH);
 	}
@@ -406,7 +406,7 @@ void COFShockRoach::StartTask(Task_t* pTask)
 	{
 	case TASK_RANGE_ATTACK1:
 	{
-		EMIT_SOUND_DYN(edict(), CHAN_WEAPON, pAttackSounds[0], GetSoundVolue(), ATTN_IDLE, 0, GetVoicePitch());
+		EmitSoundDyn(CHAN_WEAPON, pAttackSounds[0], GetSoundVolue(), ATTN_IDLE, 0, GetVoicePitch());
 		m_IdealActivity = ACT_RANGE_ATTACK1;
 		SetTouch(&COFShockRoach::LeapTouch);
 		break;

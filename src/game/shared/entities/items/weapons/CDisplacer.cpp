@@ -79,7 +79,7 @@ void CDisplacer::Holster()
 {
 	m_fInReload = false;
 
-	STOP_SOUND(m_pPlayer->edict(), CHAN_WEAPON, "weapons/displacer_spin.wav");
+	m_pPlayer->StopSound(CHAN_WEAPON, "weapons/displacer_spin.wav");
 
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 1.0;
 
@@ -139,13 +139,13 @@ void CDisplacer::PrimaryAttack()
 
 		m_Mode = DisplacerMode::STARTED;
 
-		EMIT_SOUND(m_pPlayer->edict(), CHAN_WEAPON, "weapons/displacer_spin.wav", RANDOM_FLOAT(0.8, 0.9), ATTN_NORM);
+		m_pPlayer->EmitSound(CHAN_WEAPON, "weapons/displacer_spin.wav", RANDOM_FLOAT(0.8, 0.9), ATTN_NORM);
 
 		m_flTimeWeaponIdle = m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 2.5;
 	}
 	else
 	{
-		EMIT_SOUND(m_pPlayer->edict(), CHAN_WEAPON, "buttons/button11.wav", RANDOM_FLOAT(0.8, 0.9), ATTN_NORM);
+		m_pPlayer->EmitSound(CHAN_WEAPON, "buttons/button11.wav", RANDOM_FLOAT(0.8, 0.9), ATTN_NORM);
 
 		m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.5;
 	}
@@ -161,13 +161,13 @@ void CDisplacer::SecondaryAttack()
 
 		m_Mode = DisplacerMode::STARTED;
 
-		EMIT_SOUND(m_pPlayer->edict(), CHAN_WEAPON, "weapons/displacer_spin2.wav", RANDOM_FLOAT(0.8, 0.9), ATTN_NORM);
+		m_pPlayer->EmitSound(CHAN_WEAPON, "weapons/displacer_spin2.wav", RANDOM_FLOAT(0.8, 0.9), ATTN_NORM);
 
 		m_flTimeWeaponIdle = m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 1.5;
 	}
 	else
 	{
-		EMIT_SOUND(m_pPlayer->edict(), CHAN_WEAPON, "buttons/button11.wav", RANDOM_FLOAT(0.8, 0.9), ATTN_NORM);
+		m_pPlayer->EmitSound(CHAN_WEAPON, "buttons/button11.wav", RANDOM_FLOAT(0.8, 0.9), ATTN_NORM);
 
 		m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.5;
 	}
@@ -281,7 +281,7 @@ void CDisplacer::FireThink()
 
 	m_pPlayer->pev->effects |= EF_MUZZLEFLASH;
 
-	EMIT_SOUND(edict(), CHAN_WEAPON, "weapons/displacer_fire.wav", RANDOM_FLOAT(0.8, 0.9), ATTN_NORM);
+	EmitSound(CHAN_WEAPON, "weapons/displacer_fire.wav", RANDOM_FLOAT(0.8, 0.9), ATTN_NORM);
 
 	int flags;
 
@@ -330,7 +330,7 @@ void CDisplacer::AltFireThink()
 	}
 #endif
 
-	STOP_SOUND(m_pPlayer->edict(), CHAN_WEAPON, "weapons/displacer_spin.wav");
+	m_pPlayer->StopSound(CHAN_WEAPON, "weapons/displacer_spin.wav");
 
 	m_pPlayer->m_DisplacerReturn = m_pPlayer->pev->origin;
 
@@ -424,7 +424,7 @@ void CDisplacer::AltFireThink()
 	}
 	else
 	{
-		EMIT_SOUND(m_pPlayer->edict(), CHAN_WEAPON, "buttons/button11.wav", RANDOM_FLOAT(0.8, 0.9), ATTN_NORM);
+		m_pPlayer->EmitSound(CHAN_WEAPON, "buttons/button11.wav", RANDOM_FLOAT(0.8, 0.9), ATTN_NORM);
 	}
 #endif
 }
@@ -447,6 +447,6 @@ void CDisplacer::IncrementAmmo(CBasePlayer* pPlayer)
 {
 	if (pPlayer->GiveAmmo(1, "uranium") >= 0)
 	{
-		EMIT_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
+		pPlayer->EmitSound(CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
 	}
 }

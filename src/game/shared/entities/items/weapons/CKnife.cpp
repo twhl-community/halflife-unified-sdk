@@ -206,10 +206,10 @@ bool CKnife::Swing(const bool bFirst)
 				switch (RANDOM_LONG(0, 1))
 				{
 				case 0:
-					EMIT_SOUND(m_pPlayer->edict(), CHAN_ITEM, "weapons/knife_hit_flesh1.wav", 1, ATTN_NORM);
+					m_pPlayer->EmitSound(CHAN_ITEM, "weapons/knife_hit_flesh1.wav", 1, ATTN_NORM);
 					break;
 				case 1:
-					EMIT_SOUND(m_pPlayer->edict(), CHAN_ITEM, "weapons/knife_hit_flesh2.wav", 1, ATTN_NORM);
+					m_pPlayer->EmitSound(CHAN_ITEM, "weapons/knife_hit_flesh2.wav", 1, ATTN_NORM);
 					break;
 				}
 				m_pPlayer->m_iWeaponVolume = KNIFE_BODYHIT_VOLUME;
@@ -241,10 +241,10 @@ bool CKnife::Swing(const bool bFirst)
 			switch (RANDOM_LONG(0, 1))
 			{
 			case 0:
-				EMIT_SOUND_DYN(m_pPlayer->edict(), CHAN_ITEM, "weapons/knife_hit_wall1.wav", fvolbar, ATTN_NORM, 0, 98 + RANDOM_LONG(0, 3));
+				m_pPlayer->EmitSoundDyn(CHAN_ITEM, "weapons/knife_hit_wall1.wav", fvolbar, ATTN_NORM, 0, 98 + RANDOM_LONG(0, 3));
 				break;
 			case 1:
-				EMIT_SOUND_DYN(m_pPlayer->edict(), CHAN_ITEM, "weapons/knife_hit_wall2.wav", fvolbar, ATTN_NORM, 0, 98 + RANDOM_LONG(0, 3));
+				m_pPlayer->EmitSoundDyn(CHAN_ITEM, "weapons/knife_hit_wall2.wav", fvolbar, ATTN_NORM, 0, 98 + RANDOM_LONG(0, 3));
 				break;
 			}
 

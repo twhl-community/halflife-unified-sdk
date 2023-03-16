@@ -256,7 +256,7 @@ void CEagle::SecondaryAttack()
 
 			m_pLaser = nullptr;
 
-			EMIT_SOUND_DYN(edict(), CHAN_WEAPON, "weapons/desert_eagle_sight2.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+			EmitSoundDyn(CHAN_WEAPON, "weapons/desert_eagle_sight2.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
 		}
 	}
 #endif
@@ -298,7 +298,7 @@ void CEagle::UpdateLaser()
 		{
 			m_pLaser = CEagleLaser::CreateSpot();
 
-			EMIT_SOUND_DYN(edict(), CHAN_WEAPON, "weapons/desert_eagle_sight.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+			EmitSoundDyn(CHAN_WEAPON, "weapons/desert_eagle_sight.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
 		}
 
 		UTIL_MakeVectors(m_pPlayer->pev->v_angle);
@@ -334,7 +334,7 @@ void CEagle::IncrementAmmo(CBasePlayer* pPlayer)
 {
 	if (pPlayer->GiveAmmo(1, "357") >= 0)
 	{
-		EMIT_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
+		pPlayer->EmitSound(CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
 	}
 }
 
@@ -373,7 +373,7 @@ public:
 	{
 		if (pOther->GiveAmmo(AMMO_EAGLE_GIVE, "357") != -1)
 		{
-			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
+			EmitSound(CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
 			return true;
 		}
 		return false;

@@ -338,7 +338,7 @@ void CM249::IncrementAmmo(CBasePlayer* pPlayer)
 {
 	if (pPlayer->GiveAmmo(1, "556") >= 0)
 	{
-		EMIT_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
+		pPlayer->EmitSound(CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
 	}
 }
 
@@ -374,7 +374,7 @@ public:
 	{
 		if (pOther->GiveAmmo(AMMO_M249_GIVE, "556") != -1)
 		{
-			EMIT_SOUND(edict(), CHAN_ITEM, "items/9mmclip1.wav", VOL_NORM, ATTN_NORM);
+			EmitSound(CHAN_ITEM, "items/9mmclip1.wav", VOL_NORM, ATTN_NORM);
 
 			return true;
 		}

@@ -365,7 +365,7 @@ void CBasePlayerWeapon::FallThink()
 		if (!FNullEnt(pev->owner))
 		{
 			int pitch = 95 + RANDOM_LONG(0, 29);
-			EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "items/weapondrop1.wav", 1, ATTN_NORM, 0, pitch);
+			EmitSoundDyn(CHAN_VOICE, "items/weapondrop1.wav", 1, ATTN_NORM, 0, pitch);
 		}
 
 		// lie flat
@@ -381,7 +381,7 @@ void CBasePlayerWeapon::Materialize()
 	if ((pev->effects & EF_NODRAW) != 0)
 	{
 		// changing from invisible state to visible.
-		EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "items/suitchargeok1.wav", 1, ATTN_NORM, 0, 150);
+		EmitSoundDyn(CHAN_WEAPON, "items/suitchargeok1.wav", 1, ATTN_NORM, 0, 150);
 		pev->effects &= ~EF_NODRAW;
 		pev->effects |= EF_MUZZLEFLASH;
 	}
@@ -468,7 +468,7 @@ void CBasePlayerWeapon::DefaultTouch(CBaseEntity* pOther)
 	if (pPlayer->AddPlayerWeapon(this))
 	{
 		AttachToPlayer(pPlayer);
-		EMIT_SOUND(ENT(pPlayer->pev), CHAN_ITEM, "items/gunpickup2.wav", 1, ATTN_NORM);
+		pPlayer->EmitSound(CHAN_ITEM, "items/gunpickup2.wav", 1, ATTN_NORM);
 	}
 
 	SUB_UseTargets(pOther, USE_TOGGLE, 0); // UNDONE: when should this happen?
@@ -632,7 +632,7 @@ bool CBasePlayerWeapon::AddPrimaryAmmo(int iCount, const char* szName, int iMaxC
 		{
 			// play the "got ammo" sound only if we gave some ammo to a player that already had this gun.
 			// if the player is just getting this gun for the first time, DefaultTouch will play the "picked up gun" sound for us.
-			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
+			EmitSound(CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
 		}
 	}
 
@@ -650,7 +650,7 @@ bool CBasePlayerWeapon::AddSecondaryAmmo(int iCount, const char* szName)
 	if (iIdAmmo > 0)
 	{
 		m_iSecondaryAmmoType = iIdAmmo;
-		EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
+		EmitSound(CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
 	}
 	return iIdAmmo > 0 ? true : false;
 }
@@ -731,7 +731,7 @@ void CBasePlayerAmmo::Materialize()
 	if ((pev->effects & EF_NODRAW) != 0)
 	{
 		// changing from invisible state to visible.
-		EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "items/suitchargeok1.wav", 1, ATTN_NORM, 0, 150);
+		EmitSoundDyn(CHAN_WEAPON, "items/suitchargeok1.wav", 1, ATTN_NORM, 0, 150);
 		pev->effects &= ~EF_NODRAW;
 		pev->effects |= EF_MUZZLEFLASH;
 	}

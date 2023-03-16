@@ -390,7 +390,7 @@ void COFVoltigore::AlertSound()
 {
 	StopTalking();
 
-	EMIT_SOUND(ENT(pev), CHAN_VOICE, pAlertSounds[RANDOM_LONG(0, std::size(pAlertSounds) - 1)], 1.0, ATTN_NORM);
+	EmitSound(CHAN_VOICE, pAlertSounds[RANDOM_LONG(0, std::size(pAlertSounds) - 1)], 1.0, ATTN_NORM);
 }
 
 //=========================================================
@@ -407,7 +407,7 @@ void COFVoltigore::PainSound()
 
 	StopTalking();
 
-	EMIT_SOUND(ENT(pev), CHAN_VOICE, pPainSounds[RANDOM_LONG(0, std::size(pPainSounds) - 1)], 1.0, ATTN_NORM);
+	EmitSound(CHAN_VOICE, pPainSounds[RANDOM_LONG(0, std::size(pPainSounds) - 1)], 1.0, ATTN_NORM);
 }
 
 //=========================================================
@@ -495,7 +495,7 @@ void COFVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_right * 250;
 			}
 
-			EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, pAttackHitSounds[RANDOM_LONG(0, std::size(pAttackHitSounds) - 1)], 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5, 5));
+			EmitSoundDyn(CHAN_WEAPON, pAttackHitSounds[RANDOM_LONG(0, std::size(pAttackHitSounds) - 1)], 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5, 5));
 
 			Vector vecArmPos, vecArmAng;
 			GetAttachment(0, vecArmPos, vecArmAng);
@@ -504,7 +504,7 @@ void COFVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 		else
 		{
 			// Play a random attack miss sound
-			EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, pAttackMissSounds[RANDOM_LONG(0, std::size(pAttackMissSounds) - 1)], 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5, 5));
+			EmitSoundDyn(CHAN_WEAPON, pAttackMissSounds[RANDOM_LONG(0, std::size(pAttackMissSounds) - 1)], 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5, 5));
 		}
 	}
 	break;
@@ -525,7 +525,7 @@ void COFVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_right * -250;
 			}
 
-			EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, pAttackHitSounds[RANDOM_LONG(0, std::size(pAttackHitSounds) - 1)], 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5, 5));
+			EmitSoundDyn(CHAN_WEAPON, pAttackHitSounds[RANDOM_LONG(0, std::size(pAttackHitSounds) - 1)], 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5, 5));
 
 			Vector vecArmPos, vecArmAng;
 			GetAttachment(0, vecArmPos, vecArmAng);
@@ -534,7 +534,7 @@ void COFVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 		else
 		{
 			// Play a random attack miss sound
-			EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, pAttackMissSounds[RANDOM_LONG(0, std::size(pAttackMissSounds) - 1)], 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5, 5));
+			EmitSoundDyn(CHAN_WEAPON, pAttackMissSounds[RANDOM_LONG(0, std::size(pAttackMissSounds) - 1)], 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5, 5));
 		}
 	}
 	break;
@@ -944,7 +944,7 @@ void COFVoltigore::StartTask(Task_t* pTask)
 			UTIL_SetOrigin(m_pChargedBolt->pev, vecConverge);
 		}
 
-		UTIL_EmitAmbientSound(edict(), pev->origin, "debris/beamstart2.wav", 0.5, ATTN_NORM, 0, RANDOM_LONG(140, 160));
+		EmitAmbientSound(pev->origin, "debris/beamstart2.wav", 0.5, ATTN_NORM, 0, RANDOM_LONG(140, 160));
 		CBaseMonster::StartTask(pTask);
 	}
 	break;
@@ -1247,7 +1247,7 @@ const GibData VoltigoreGibs = {"models/vgibs.mdl", 0, 9, VoltigoreGibLimits};
 
 void COFVoltigore::GibMonster()
 {
-	EMIT_SOUND(ENT(pev), CHAN_WEAPON, "common/bodysplat.wav", 1, ATTN_NORM);
+	EmitSound(CHAN_WEAPON, "common/bodysplat.wav", 1, ATTN_NORM);
 
 	pev->renderfx = kRenderFxExplode;
 

@@ -77,7 +77,7 @@ void CHandGrenade::IncrementAmmo(CBasePlayer* pPlayer)
 
 	if (pPlayer->GiveAmmo(1, "Hand Grenade") >= 0)
 	{
-		EMIT_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
+		pPlayer->EmitSound(CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
 	}
 }
 
@@ -112,7 +112,7 @@ void CHandGrenade::Holster()
 		pev->nextthink = gpGlobals->time + 0.1;
 	}
 
-	EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "common/null.wav", 1.0, ATTN_NORM);
+	m_pPlayer->EmitSound(CHAN_WEAPON, "common/null.wav", 1.0, ATTN_NORM);
 }
 
 void CHandGrenade::PrimaryAttack()

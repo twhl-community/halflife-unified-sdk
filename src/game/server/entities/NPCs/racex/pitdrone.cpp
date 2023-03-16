@@ -130,12 +130,12 @@ void CPitdroneSpike::SpikeTouch(CBaseEntity* pOther)
 
 	if (0 == pOther->pev->takedamage)
 	{
-		EMIT_SOUND_DYN(edict(), CHAN_VOICE, "weapons/xbow_hit1.wav", VOL_NORM, ATTN_NORM, 0, iPitch);
+		EmitSoundDyn(CHAN_VOICE, "weapons/xbow_hit1.wav", VOL_NORM, ATTN_NORM, 0, iPitch);
 	}
 	else
 	{
 		pOther->TakeDamage(this, this, GetSkillFloat("pitdrone_dmg_spit"sv), DMG_GENERIC);
-		EMIT_SOUND_DYN(edict(), CHAN_VOICE, "weapons/xbow_hitbod1.wav", VOL_NORM, ATTN_NORM, 0, iPitch);
+		EmitSoundDyn(CHAN_VOICE, "weapons/xbow_hitbod1.wav", VOL_NORM, ATTN_NORM, 0, iPitch);
 	}
 
 	SetTouch(nullptr);
@@ -422,16 +422,16 @@ void CPitdrone::PainSound()
 	switch (RANDOM_LONG(0, 3))
 	{
 	case 0:
-		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "pitdrone/pit_drone_pain1.wav", 1, ATTN_NORM, 0, iPitch);
+		EmitSoundDyn(CHAN_VOICE, "pitdrone/pit_drone_pain1.wav", 1, ATTN_NORM, 0, iPitch);
 		break;
 	case 1:
-		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "pitdrone/pit_drone_pain2.wav", 1, ATTN_NORM, 0, iPitch);
+		EmitSoundDyn(CHAN_VOICE, "pitdrone/pit_drone_pain2.wav", 1, ATTN_NORM, 0, iPitch);
 		break;
 	case 2:
-		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "pitdrone/pit_drone_pain3.wav", 1, ATTN_NORM, 0, iPitch);
+		EmitSoundDyn(CHAN_VOICE, "pitdrone/pit_drone_pain3.wav", 1, ATTN_NORM, 0, iPitch);
 		break;
 	case 3:
-		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "pitdrone/pit_drone_pain4.wav", 1, ATTN_NORM, 0, iPitch);
+		EmitSoundDyn(CHAN_VOICE, "pitdrone/pit_drone_pain4.wav", 1, ATTN_NORM, 0, iPitch);
 		break;
 	}
 }
@@ -446,13 +446,13 @@ void CPitdrone::AlertSound()
 	switch (RANDOM_LONG(0, 2))
 	{
 	case 0:
-		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "pitdrone/pit_drone_alert1.wav", 1, ATTN_NORM, 0, iPitch);
+		EmitSoundDyn(CHAN_VOICE, "pitdrone/pit_drone_alert1.wav", 1, ATTN_NORM, 0, iPitch);
 		break;
 	case 1:
-		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "pitdrone/pit_drone_alert2.wav", 1, ATTN_NORM, 0, iPitch);
+		EmitSoundDyn(CHAN_VOICE, "pitdrone/pit_drone_alert2.wav", 1, ATTN_NORM, 0, iPitch);
 		break;
 	case 2:
-		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "pitdrone/pit_drone_alert3.wav", 1, ATTN_NORM, 0, iPitch);
+		EmitSoundDyn(CHAN_VOICE, "pitdrone/pit_drone_alert3.wav", 1, ATTN_NORM, 0, iPitch);
 		break;
 	}
 }
@@ -609,10 +609,10 @@ void CPitdrone::HandleAnimEvent(MonsterEvent_t* pEvent)
 			switch (RANDOM_LONG(0, 1))
 			{
 			case 0:
-				EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "bullchicken/bc_bite2.wav", 1, ATTN_NORM, 0, iPitch);
+				EmitSoundDyn(CHAN_WEAPON, "bullchicken/bc_bite2.wav", 1, ATTN_NORM, 0, iPitch);
 				break;
 			case 1:
-				EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "bullchicken/bc_bite3.wav", 1, ATTN_NORM, 0, iPitch);
+				EmitSoundDyn(CHAN_WEAPON, "bullchicken/bc_bite3.wav", 1, ATTN_NORM, 0, iPitch);
 				break;
 			}
 
@@ -1192,7 +1192,7 @@ const GibData PitDroneGibs = {"models/pit_drone_gibs.mdl", 0, 7};
 
 void CPitdrone::GibMonster()
 {
-	EMIT_SOUND(ENT(pev), CHAN_WEAPON, "common/bodysplat.wav", 1, ATTN_NORM);
+	EmitSound(CHAN_WEAPON, "common/bodysplat.wav", 1, ATTN_NORM);
 
 	if (CVAR_GET_FLOAT("violence_agibs") != 0) // Should never get here, but someone might call it directly
 	{

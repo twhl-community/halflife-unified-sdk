@@ -102,15 +102,15 @@ void COFGonomeGuts::Touch(CBaseEntity* pOther)
 	// splat sound
 	const auto iPitch = RANDOM_FLOAT(90, 110);
 
-	EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "bullchicken/bc_acid1.wav", 1, ATTN_NORM, 0, iPitch);
+	EmitSoundDyn(CHAN_VOICE, "bullchicken/bc_acid1.wav", 1, ATTN_NORM, 0, iPitch);
 
 	switch (RANDOM_LONG(0, 1))
 	{
 	case 0:
-		EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "bullchicken/bc_spithit1.wav", 1, ATTN_NORM, 0, iPitch);
+		EmitSoundDyn(CHAN_WEAPON, "bullchicken/bc_spithit1.wav", 1, ATTN_NORM, 0, iPitch);
 		break;
 	case 1:
-		EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "bullchicken/bc_spithit2.wav", 1, ATTN_NORM, 0, iPitch);
+		EmitSoundDyn(CHAN_WEAPON, "bullchicken/bc_spithit2.wav", 1, ATTN_NORM, 0, iPitch);
 		break;
 	}
 
@@ -309,7 +309,7 @@ void COFGonome::PainSound()
 	int pitch = 95 + RANDOM_LONG(0, 9);
 
 	if (RANDOM_LONG(0, 5) < 2)
-		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pPainSounds), 1.0, ATTN_NORM, 0, pitch);
+		EmitSoundDyn(CHAN_VOICE, RANDOM_SOUND_ARRAY(pPainSounds), 1.0, ATTN_NORM, 0, pitch);
 }
 
 void COFGonome::IdleSound()
@@ -317,7 +317,7 @@ void COFGonome::IdleSound()
 	int pitch = 100 + RANDOM_LONG(-5, 5);
 
 	// Play a random idle sound
-	EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pIdleSounds), 1.0, ATTN_NORM, 0, pitch);
+	EmitSoundDyn(CHAN_VOICE, RANDOM_SOUND_ARRAY(pIdleSounds), 1.0, ATTN_NORM, 0, pitch);
 }
 
 //=========================================================
@@ -442,10 +442,10 @@ void COFGonome::HandleAnimEvent(MonsterEvent_t* pEvent)
 				pHurt->pev->punchangle.x = 9;
 				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_forward * 25;
 			}
-			EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, RANDOM_SOUND_ARRAY(pAttackHitSounds), 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5, 5));
+			EmitSoundDyn(CHAN_WEAPON, RANDOM_SOUND_ARRAY(pAttackHitSounds), 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5, 5));
 		}
 		else
-			EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, RANDOM_SOUND_ARRAY(pAttackMissSounds), 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5, 5));
+			EmitSoundDyn(CHAN_WEAPON, RANDOM_SOUND_ARRAY(pAttackMissSounds), 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5, 5));
 	}
 	break;
 
@@ -470,10 +470,10 @@ void COFGonome::HandleAnimEvent(MonsterEvent_t* pEvent)
 				pHurt->pev->punchangle.x = 9;
 				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_forward * 25;
 			}
-			EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, RANDOM_SOUND_ARRAY(pAttackHitSounds), 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5, 5));
+			EmitSoundDyn(CHAN_WEAPON, RANDOM_SOUND_ARRAY(pAttackHitSounds), 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5, 5));
 		}
 		else
-			EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, RANDOM_SOUND_ARRAY(pAttackMissSounds), 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5, 5));
+			EmitSoundDyn(CHAN_WEAPON, RANDOM_SOUND_ARRAY(pAttackMissSounds), 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5, 5));
 	}
 	break;
 

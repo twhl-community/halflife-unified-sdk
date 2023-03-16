@@ -116,10 +116,10 @@ void CCrossbowBolt::BoltTouch(CBaseEntity* pOther)
 		switch (RANDOM_LONG(0, 1))
 		{
 		case 0:
-			EMIT_SOUND(ENT(pev), CHAN_BODY, "weapons/xbow_hitbod1.wav", 1, ATTN_NORM);
+			EmitSound(CHAN_BODY, "weapons/xbow_hitbod1.wav", 1, ATTN_NORM);
 			break;
 		case 1:
-			EMIT_SOUND(ENT(pev), CHAN_BODY, "weapons/xbow_hitbod2.wav", 1, ATTN_NORM);
+			EmitSound(CHAN_BODY, "weapons/xbow_hitbod2.wav", 1, ATTN_NORM);
 			break;
 		}
 
@@ -130,7 +130,7 @@ void CCrossbowBolt::BoltTouch(CBaseEntity* pOther)
 	}
 	else
 	{
-		EMIT_SOUND_DYN(ENT(pev), CHAN_BODY, "weapons/xbow_hit1.wav", RANDOM_FLOAT(0.95, 1.0), ATTN_NORM, 0, 98 + RANDOM_LONG(0, 7));
+		EmitSoundDyn(CHAN_BODY, "weapons/xbow_hit1.wav", RANDOM_FLOAT(0.95, 1.0), ATTN_NORM, 0, 98 + RANDOM_LONG(0, 7));
 
 		SetThink(&CCrossbowBolt::SUB_Remove);
 		pev->nextthink = gpGlobals->time; // this will get changed below if the bolt is allowed to stick in what it hit.
@@ -248,7 +248,7 @@ void CCrossbow::IncrementAmmo(CBasePlayer* pPlayer)
 {
 	if (pPlayer->GiveAmmo(1, "bolts") >= 0)
 	{
-		EMIT_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
+		pPlayer->EmitSound(CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
 	}
 }
 
@@ -425,7 +425,7 @@ void CCrossbow::Reload()
 
 	if (DefaultReload(5, CROSSBOW_RELOAD, 4.5))
 	{
-		EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/xbow_reload1.wav", RANDOM_FLOAT(0.95, 1.0), ATTN_NORM, 0, 93 + RANDOM_LONG(0, 0xF));
+		m_pPlayer->EmitSoundDyn(CHAN_ITEM, "weapons/xbow_reload1.wav", RANDOM_FLOAT(0.95, 1.0), ATTN_NORM, 0, 93 + RANDOM_LONG(0, 0xF));
 	}
 }
 
@@ -488,7 +488,7 @@ public:
 	{
 		if (pOther->GiveAmmo(AMMO_CROSSBOWCLIP_GIVE, "bolts") != -1)
 		{
-			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
+			EmitSound(CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
 			return true;
 		}
 		return false;

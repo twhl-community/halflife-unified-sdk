@@ -72,7 +72,7 @@ void COFBabyVoltigore::AlertSound()
 {
 	StopTalking();
 
-	EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, pAlertSounds[RANDOM_LONG(0, std::size(pAlertSounds) - 1)], 1.0, ATTN_NORM, 0, 180);
+	EmitSoundDyn(CHAN_VOICE, pAlertSounds[RANDOM_LONG(0, std::size(pAlertSounds) - 1)], 1.0, ATTN_NORM, 0, 180);
 }
 
 //=========================================================
@@ -89,7 +89,7 @@ void COFBabyVoltigore::PainSound()
 
 	StopTalking();
 
-	EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, pPainSounds[RANDOM_LONG(0, std::size(pPainSounds) - 1)], 1.0, ATTN_NORM, 0, 180);
+	EmitSoundDyn(CHAN_VOICE, pPainSounds[RANDOM_LONG(0, std::size(pPainSounds) - 1)], 1.0, ATTN_NORM, 0, 180);
 }
 
 //=========================================================
@@ -108,13 +108,13 @@ void COFBabyVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 		{
 			// left foot
 		case 0:
-			EMIT_SOUND_DYN(ENT(pev), CHAN_BODY, "voltigore/voltigore_footstep1.wav", 1, ATTN_IDLE, 0, 130);
+			EmitSoundDyn(CHAN_BODY, "voltigore/voltigore_footstep1.wav", 1, ATTN_IDLE, 0, 130);
 			break;
 		case 1:
-			EMIT_SOUND_DYN(ENT(pev), CHAN_BODY, "voltigore/voltigore_footstep2.wav", 1, ATTN_IDLE, 0, 130);
+			EmitSoundDyn(CHAN_BODY, "voltigore/voltigore_footstep2.wav", 1, ATTN_IDLE, 0, 130);
 			break;
 		case 2:
-			EMIT_SOUND_DYN(ENT(pev), CHAN_BODY, "voltigore/voltigore_footstep3.wav", 1, ATTN_IDLE, 0, 130);
+			EmitSoundDyn(CHAN_BODY, "voltigore/voltigore_footstep3.wav", 1, ATTN_IDLE, 0, 130);
 			break;
 		}
 		break;
@@ -135,7 +135,7 @@ void COFBabyVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_right * 250;
 			}
 
-			EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, pAttackHitSounds[RANDOM_LONG(0, std::size(pAttackHitSounds) - 1)], 1.0, ATTN_IDLE, 0, 130);
+			EmitSoundDyn(CHAN_WEAPON, pAttackHitSounds[RANDOM_LONG(0, std::size(pAttackHitSounds) - 1)], 1.0, ATTN_IDLE, 0, 130);
 
 			Vector vecArmPos, vecArmAng;
 			GetAttachment(0, vecArmPos, vecArmAng);
@@ -144,7 +144,7 @@ void COFBabyVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 		else
 		{
 			// Play a random attack miss sound
-			EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, pAttackMissSounds[RANDOM_LONG(0, std::size(pAttackMissSounds) - 1)], 1.0, ATTN_IDLE, 0, 130);
+			EmitSoundDyn(CHAN_WEAPON, pAttackMissSounds[RANDOM_LONG(0, std::size(pAttackMissSounds) - 1)], 1.0, ATTN_IDLE, 0, 130);
 		}
 	}
 	break;
@@ -165,7 +165,7 @@ void COFBabyVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_right * -250;
 			}
 
-			EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, pAttackHitSounds[RANDOM_LONG(0, std::size(pAttackHitSounds) - 1)], 1.0, ATTN_IDLE, 0, 130);
+			EmitSoundDyn(CHAN_WEAPON, pAttackHitSounds[RANDOM_LONG(0, std::size(pAttackHitSounds) - 1)], 1.0, ATTN_IDLE, 0, 130);
 
 			Vector vecArmPos, vecArmAng;
 			GetAttachment(0, vecArmPos, vecArmAng);
@@ -174,7 +174,7 @@ void COFBabyVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 		else
 		{
 			// Play a random attack miss sound
-			EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, pAttackMissSounds[RANDOM_LONG(0, std::size(pAttackMissSounds) - 1)], 1.0, ATTN_IDLE, 0, 130);
+			EmitSoundDyn(CHAN_WEAPON, pAttackMissSounds[RANDOM_LONG(0, std::size(pAttackMissSounds) - 1)], 1.0, ATTN_IDLE, 0, 130);
 		}
 	}
 	break;
@@ -184,10 +184,10 @@ void COFBabyVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 		{
 			// left foot
 		case 0:
-			EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "voltigore/voltigore_run_grunt1.wav", 1, ATTN_NORM, 0, 180);
+			EmitSoundDyn(CHAN_VOICE, "voltigore/voltigore_run_grunt1.wav", 1, ATTN_NORM, 0, 180);
 			break;
 		case 1:
-			EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "voltigore/voltigore_run_grunt2.wav", 1, ATTN_NORM, 0, 180);
+			EmitSoundDyn(CHAN_VOICE, "voltigore/voltigore_run_grunt2.wav", 1, ATTN_NORM, 0, 180);
 			break;
 		}
 		break;

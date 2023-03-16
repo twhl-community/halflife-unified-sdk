@@ -693,16 +693,16 @@ void CHGrunt::Shoot(bool firstShotInBurst)
 			// the first round of the three round burst plays the sound and puts a sound in the world sound list.
 			if (RANDOM_LONG(0, 1))
 			{
-				EMIT_SOUND(ENT(pev), CHAN_WEAPON, "hgrunt/gr_mgun1.wav", 1, ATTN_NORM);
+				EmitSound(CHAN_WEAPON, "hgrunt/gr_mgun1.wav", 1, ATTN_NORM);
 			}
 			else
 			{
-				EMIT_SOUND(ENT(pev), CHAN_WEAPON, "hgrunt/gr_mgun2.wav", 1, ATTN_NORM);
+				EmitSound(CHAN_WEAPON, "hgrunt/gr_mgun2.wav", 1, ATTN_NORM);
 			}
 		}
 		else
 		{
-			EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/sbarrel1.wav", 1, ATTN_NORM);
+			EmitSound(CHAN_WEAPON, "weapons/sbarrel1.wav", 1, ATTN_NORM);
 		}
 
 		CSoundEnt::InsertSound(bits_SOUND_COMBAT, pev->origin, 384, 0.3);
@@ -744,7 +744,7 @@ void CHGrunt::HandleAnimEvent(MonsterEvent_t* pEvent)
 	break;
 
 	case HGRUNT_AE_RELOAD:
-		EMIT_SOUND(ENT(pev), CHAN_WEAPON, "hgrunt/gr_reload1.wav", 1, ATTN_NORM);
+		EmitSound(CHAN_WEAPON, "hgrunt/gr_reload1.wav", 1, ATTN_NORM);
 		m_cAmmoLoaded = m_cClipSize;
 		ClearConditions(bits_COND_NO_AMMO_LOADED);
 		break;
@@ -763,7 +763,7 @@ void CHGrunt::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 	case HGRUNT_AE_GREN_LAUNCH:
 	{
-		EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/glauncher.wav", 0.8, ATTN_NORM);
+		EmitSound(CHAN_WEAPON, "weapons/glauncher.wav", 0.8, ATTN_NORM);
 		CGrenade::ShootContact(pev, GetGunPosition(), m_vecTossVelocity);
 		m_fThrowGrenade = false;
 		if (g_Skill.GetSkillLevel() == SkillLevel::Hard)
@@ -1019,19 +1019,19 @@ void CHGrunt::PainSound()
 		switch (RANDOM_LONG(0, 6))
 		{
 		case 0:
-			EMIT_SOUND(ENT(pev), CHAN_VOICE, "hgrunt/gr_pain3.wav", 1, ATTN_NORM);
+			EmitSound(CHAN_VOICE, "hgrunt/gr_pain3.wav", 1, ATTN_NORM);
 			break;
 		case 1:
-			EMIT_SOUND(ENT(pev), CHAN_VOICE, "hgrunt/gr_pain4.wav", 1, ATTN_NORM);
+			EmitSound(CHAN_VOICE, "hgrunt/gr_pain4.wav", 1, ATTN_NORM);
 			break;
 		case 2:
-			EMIT_SOUND(ENT(pev), CHAN_VOICE, "hgrunt/gr_pain5.wav", 1, ATTN_NORM);
+			EmitSound(CHAN_VOICE, "hgrunt/gr_pain5.wav", 1, ATTN_NORM);
 			break;
 		case 3:
-			EMIT_SOUND(ENT(pev), CHAN_VOICE, "hgrunt/gr_pain1.wav", 1, ATTN_NORM);
+			EmitSound(CHAN_VOICE, "hgrunt/gr_pain1.wav", 1, ATTN_NORM);
 			break;
 		case 4:
-			EMIT_SOUND(ENT(pev), CHAN_VOICE, "hgrunt/gr_pain2.wav", 1, ATTN_NORM);
+			EmitSound(CHAN_VOICE, "hgrunt/gr_pain2.wav", 1, ATTN_NORM);
 			break;
 		}
 
@@ -1047,13 +1047,13 @@ void CHGrunt::DeathSound()
 	switch (RANDOM_LONG(0, 2))
 	{
 	case 0:
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "hgrunt/gr_die1.wav", 1, ATTN_IDLE);
+		EmitSound(CHAN_VOICE, "hgrunt/gr_die1.wav", 1, ATTN_IDLE);
 		break;
 	case 1:
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "hgrunt/gr_die2.wav", 1, ATTN_IDLE);
+		EmitSound(CHAN_VOICE, "hgrunt/gr_die2.wav", 1, ATTN_IDLE);
 		break;
 	case 2:
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "hgrunt/gr_die3.wav", 1, ATTN_IDLE);
+		EmitSound(CHAN_VOICE, "hgrunt/gr_die3.wav", 1, ATTN_IDLE);
 		break;
 	}
 }

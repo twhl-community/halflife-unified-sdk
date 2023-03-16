@@ -22,6 +22,7 @@
 #include "ServerLibrary.h"
 #include "networking/NetworkDataSystem.h"
 #include "sound/sentence_utils.h"
+#include "sound/ServerSoundSystem.h"
 #include "utils/JSONSystem.h"
 
 namespace sentences
@@ -169,7 +170,7 @@ int SentencesSystem::PlayRndI(edict_t* entity, int isentenceg, float volume, flo
 
 	const int ipick = Pick(isentenceg, name);
 	if (ipick > 0 && !name.empty())
-		EMIT_SOUND_DYN(entity, CHAN_VOICE, name.c_str(), volume, attenuation, flags, pitch);
+		sound::g_ServerSound.EmitSound(entity, CHAN_VOICE, name.c_str(), volume, attenuation, flags, pitch);
 	return ipick;
 }
 
@@ -187,7 +188,7 @@ int SentencesSystem::PlayRndSz(edict_t* entity, const char* szgroupname,
 
 	const int ipick = Pick(isentenceg, name);
 	if (ipick >= 0 && !name.empty())
-		EMIT_SOUND_DYN(entity, CHAN_VOICE, name.c_str(), volume, attenuation, flags, pitch);
+		sound::g_ServerSound.EmitSound(entity, CHAN_VOICE, name.c_str(), volume, attenuation, flags, pitch);
 
 	return ipick;
 }
@@ -203,7 +204,7 @@ int SentencesSystem::PlaySequentialSz(edict_t* entity, const char* szgroupname,
 
 	const int ipicknext = PickSequential(isentenceg, name, ipick, freset);
 	if (ipicknext >= 0 && !name.empty())
-		EMIT_SOUND_DYN(entity, CHAN_VOICE, name.c_str(), volume, attenuation, flags, pitch);
+		sound::g_ServerSound.EmitSound(entity, CHAN_VOICE, name.c_str(), volume, attenuation, flags, pitch);
 	return ipicknext;
 }
 
@@ -215,7 +216,7 @@ void SentencesSystem::Stop(CBaseEntity* entity, int isentenceg, int ipick)
 	SentenceIndexName name;
 	fmt::format_to(std::back_inserter(name), "!{}{}", m_SentenceGroups[isentenceg].GroupName.c_str(), ipick);
 
-	STOP_SOUND(entity->edict(), CHAN_VOICE, name.c_str());
+	entity->StopSound(CHAN_VOICE, name.c_str());
 }
 
 void SentencesSystem::LoadSentences(const std::string& fileName)

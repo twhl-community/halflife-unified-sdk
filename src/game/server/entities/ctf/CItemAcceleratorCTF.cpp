@@ -73,7 +73,7 @@ bool CItemAcceleratorCTF::MyTouch(CBasePlayer* pPlayer)
 				MESSAGE_BEGIN(MSG_ONE, gmsgItemPickup, nullptr, pPlayer->edict());
 				WRITE_STRING(STRING(pev->classname));
 				MESSAGE_END();
-				EMIT_SOUND(edict(), CHAN_VOICE, "items/ammopickup1.wav", VOL_NORM, ATTN_NORM);
+				EmitSound(CHAN_VOICE, "items/ammopickup1.wav", VOL_NORM, ATTN_NORM);
 				return true;
 			}
 		}

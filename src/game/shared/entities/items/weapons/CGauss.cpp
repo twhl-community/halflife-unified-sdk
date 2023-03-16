@@ -102,7 +102,7 @@ void CGauss::IncrementAmmo(CBasePlayer* pPlayer)
 {
 	if (pPlayer->GiveAmmo(1, "uranium") >= 0)
 	{
-		EMIT_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
+		pPlayer->EmitSound(CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
 	}
 }
 
@@ -158,7 +158,7 @@ void CGauss::SecondaryAttack()
 	{
 		if (m_fInAttack != 0)
 		{
-			EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/electro4.wav", 1.0, ATTN_NORM, 0, 80 + RANDOM_LONG(0, 0x3f));
+			m_pPlayer->EmitSoundDyn(CHAN_WEAPON, "weapons/electro4.wav", 1.0, ATTN_NORM, 0, 80 + RANDOM_LONG(0, 0x3f));
 			// Have to send to the host as well because the client will predict the frame with m_fInAttack == 0
 			SendStopEvent(true);
 			SendWeaponAnim(GAUSS_IDLE);
@@ -177,7 +177,7 @@ void CGauss::SecondaryAttack()
 	{
 		if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
 		{
-			EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/357_cock1.wav", 0.8, ATTN_NORM);
+			m_pPlayer->EmitSound(CHAN_WEAPON, "weapons/357_cock1.wav", 0.8, ATTN_NORM);
 			m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;
 			return;
 		}
@@ -260,8 +260,8 @@ void CGauss::SecondaryAttack()
 		if (m_pPlayer->m_flStartCharge < gpGlobals->time - 10)
 		{
 			// Player charged up too long. Zap him.
-			EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/electro4.wav", 1.0, ATTN_NORM, 0, 80 + RANDOM_LONG(0, 0x3f));
-			EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/electro6.wav", 1.0, ATTN_NORM, 0, 75 + RANDOM_LONG(0, 0x3f));
+			m_pPlayer->EmitSoundDyn(CHAN_WEAPON, "weapons/electro4.wav", 1.0, ATTN_NORM, 0, 80 + RANDOM_LONG(0, 0x3f));
+			m_pPlayer->EmitSoundDyn(CHAN_ITEM, "weapons/electro6.wav", 1.0, ATTN_NORM, 0, 75 + RANDOM_LONG(0, 0x3f));
 
 			m_fInAttack = 0;
 			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 1.0;
@@ -521,13 +521,13 @@ void CGauss::WeaponIdle()
 		switch (RANDOM_LONG(0, 3))
 		{
 		case 0:
-			EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/electro4.wav", RANDOM_FLOAT(0.7, 0.8), ATTN_NORM);
+			m_pPlayer->EmitSound(CHAN_WEAPON, "weapons/electro4.wav", RANDOM_FLOAT(0.7, 0.8), ATTN_NORM);
 			break;
 		case 1:
-			EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/electro5.wav", RANDOM_FLOAT(0.7, 0.8), ATTN_NORM);
+			m_pPlayer->EmitSound(CHAN_WEAPON, "weapons/electro5.wav", RANDOM_FLOAT(0.7, 0.8), ATTN_NORM);
 			break;
 		case 2:
-			EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/electro6.wav", RANDOM_FLOAT(0.7, 0.8), ATTN_NORM);
+			m_pPlayer->EmitSound(CHAN_WEAPON, "weapons/electro6.wav", RANDOM_FLOAT(0.7, 0.8), ATTN_NORM);
 			break;
 		case 3:
 			break; // no sound
@@ -606,7 +606,7 @@ public:
 	{
 		if (pOther->GiveAmmo(AMMO_URANIUMBOX_GIVE, "uranium") != -1)
 		{
-			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
+			EmitSound(CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
 			return true;
 		}
 		return false;

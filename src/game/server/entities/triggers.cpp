@@ -1008,7 +1008,7 @@ void CBaseTrigger::ActivateMultiTrigger(CBaseEntity* pActivator)
 		return;
 
 	if (!FStringNull(pev->noise))
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, STRING(pev->noise), 1, ATTN_NORM);
+		EmitSound(CHAN_VOICE, STRING(pev->noise), 1, ATTN_NORM);
 
 	// don't trigger again until reset
 	// pev->takedamage = DAMAGE_NO;
@@ -2416,7 +2416,7 @@ void CTriggerXenReturn::ReturnTouch(CBaseEntity* pOther)
 
 		pPlayer->m_SndRoomtype = pPlayer->m_DisplacerSndRoomtype;
 
-		EMIT_SOUND(pPlayer->edict(), CHAN_WEAPON, "weapons/displacer_self.wav", RANDOM_FLOAT(0.8, 0.9), ATTN_NORM);
+		pPlayer->EmitSound(CHAN_WEAPON, "weapons/displacer_self.wav", RANDOM_FLOAT(0.8, 0.9), ATTN_NORM);
 	}
 }
 
@@ -2529,7 +2529,7 @@ void COFTriggerGeneWormHit::GeneWormHitTouch(CBaseEntity* pOther)
 
 			pOther->TakeDamage(this, this, pev->dmg, DMG_CRUSH);
 
-			EMIT_SOUND_DYN(pOther->edict(), CHAN_BODY, pAttackSounds[RANDOM_LONG(0, std::size(pAttackSounds) - 1)], VOL_NORM, 0.1, 0, RANDOM_LONG(-5, 5) + 100);
+			pOther->EmitSoundDyn(CHAN_BODY, pAttackSounds[RANDOM_LONG(0, std::size(pAttackSounds) - 1)], VOL_NORM, 0.1, 0, RANDOM_LONG(-5, 5) + 100);
 
 			pev->pain_finished = gpGlobals->time;
 			m_flLastDamageTime = gpGlobals->time;

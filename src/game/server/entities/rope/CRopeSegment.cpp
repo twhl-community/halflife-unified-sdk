@@ -103,7 +103,7 @@ void CRopeSegment::Touch(CBaseEntity* pOther)
 
 				if (m_pSample->GetMasterRope()->IsSoundAllowed())
 				{
-					EMIT_SOUND(edict(), CHAN_BODY, "items/grab_rope.wav", 1.0, ATTN_NORM);
+					EmitSound(CHAN_BODY, "items/grab_rope.wav", 1.0, ATTN_NORM);
 				}
 			}
 			else

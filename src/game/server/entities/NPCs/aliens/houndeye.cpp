@@ -302,11 +302,11 @@ void CHoundeye::HandleAnimEvent(MonsterEvent_t* pEvent)
 		break;
 
 	case HOUND_AE_ANGERSOUND1:
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "houndeye/he_pain3.wav", 1, ATTN_NORM);
+		EmitSound(CHAN_VOICE, "houndeye/he_pain3.wav", 1, ATTN_NORM);
 		break;
 
 	case HOUND_AE_ANGERSOUND2:
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "houndeye/he_pain1.wav", 1, ATTN_NORM);
+		EmitSound(CHAN_VOICE, "houndeye/he_pain1.wav", 1, ATTN_NORM);
 		break;
 
 	case HOUND_AE_CLOSE_EYE:
@@ -392,13 +392,13 @@ void CHoundeye::IdleSound()
 	switch (RANDOM_LONG(0, 2))
 	{
 	case 0:
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "houndeye/he_idle1.wav", 1, ATTN_NORM);
+		EmitSound(CHAN_VOICE, "houndeye/he_idle1.wav", 1, ATTN_NORM);
 		break;
 	case 1:
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "houndeye/he_idle2.wav", 1, ATTN_NORM);
+		EmitSound(CHAN_VOICE, "houndeye/he_idle2.wav", 1, ATTN_NORM);
 		break;
 	case 2:
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "houndeye/he_idle3.wav", 1, ATTN_NORM);
+		EmitSound(CHAN_VOICE, "houndeye/he_idle3.wav", 1, ATTN_NORM);
 		break;
 	}
 }
@@ -411,10 +411,10 @@ void CHoundeye::WarmUpSound()
 	switch (RANDOM_LONG(0, 1))
 	{
 	case 0:
-		EMIT_SOUND(ENT(pev), CHAN_WEAPON, "houndeye/he_attack1.wav", 0.7, ATTN_NORM);
+		EmitSound(CHAN_WEAPON, "houndeye/he_attack1.wav", 0.7, ATTN_NORM);
 		break;
 	case 1:
-		EMIT_SOUND(ENT(pev), CHAN_WEAPON, "houndeye/he_attack3.wav", 0.7, ATTN_NORM);
+		EmitSound(CHAN_WEAPON, "houndeye/he_attack3.wav", 0.7, ATTN_NORM);
 		break;
 	}
 }
@@ -427,13 +427,13 @@ void CHoundeye::WarnSound()
 	switch (RANDOM_LONG(0, 2))
 	{
 	case 0:
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "houndeye/he_hunt1.wav", 1, ATTN_NORM);
+		EmitSound(CHAN_VOICE, "houndeye/he_hunt1.wav", 1, ATTN_NORM);
 		break;
 	case 1:
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "houndeye/he_hunt2.wav", 1, ATTN_NORM);
+		EmitSound(CHAN_VOICE, "houndeye/he_hunt2.wav", 1, ATTN_NORM);
 		break;
 	case 2:
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "houndeye/he_hunt3.wav", 1, ATTN_NORM);
+		EmitSound(CHAN_VOICE, "houndeye/he_hunt3.wav", 1, ATTN_NORM);
 		break;
 	}
 }
@@ -452,13 +452,13 @@ void CHoundeye::AlertSound()
 	switch (RANDOM_LONG(0, 2))
 	{
 	case 0:
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "houndeye/he_alert1.wav", 1, ATTN_NORM);
+		EmitSound(CHAN_VOICE, "houndeye/he_alert1.wav", 1, ATTN_NORM);
 		break;
 	case 1:
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "houndeye/he_alert2.wav", 1, ATTN_NORM);
+		EmitSound(CHAN_VOICE, "houndeye/he_alert2.wav", 1, ATTN_NORM);
 		break;
 	case 2:
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "houndeye/he_alert3.wav", 1, ATTN_NORM);
+		EmitSound(CHAN_VOICE, "houndeye/he_alert3.wav", 1, ATTN_NORM);
 		break;
 	}
 }
@@ -471,13 +471,13 @@ void CHoundeye::DeathSound()
 	switch (RANDOM_LONG(0, 2))
 	{
 	case 0:
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "houndeye/he_die1.wav", 1, ATTN_NORM);
+		EmitSound(CHAN_VOICE, "houndeye/he_die1.wav", 1, ATTN_NORM);
 		break;
 	case 1:
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "houndeye/he_die2.wav", 1, ATTN_NORM);
+		EmitSound(CHAN_VOICE, "houndeye/he_die2.wav", 1, ATTN_NORM);
 		break;
 	case 2:
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "houndeye/he_die3.wav", 1, ATTN_NORM);
+		EmitSound(CHAN_VOICE, "houndeye/he_die3.wav", 1, ATTN_NORM);
 		break;
 	}
 }
@@ -490,13 +490,13 @@ void CHoundeye::PainSound()
 	switch (RANDOM_LONG(0, 2))
 	{
 	case 0:
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "houndeye/he_pain3.wav", 1, ATTN_NORM);
+		EmitSound(CHAN_VOICE, "houndeye/he_pain3.wav", 1, ATTN_NORM);
 		break;
 	case 1:
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "houndeye/he_pain4.wav", 1, ATTN_NORM);
+		EmitSound(CHAN_VOICE, "houndeye/he_pain4.wav", 1, ATTN_NORM);
 		break;
 	case 2:
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "houndeye/he_pain5.wav", 1, ATTN_NORM);
+		EmitSound(CHAN_VOICE, "houndeye/he_pain5.wav", 1, ATTN_NORM);
 		break;
 	}
 }
@@ -562,13 +562,13 @@ void CHoundeye::SonicAttack()
 	switch (RANDOM_LONG(0, 2))
 	{
 	case 0:
-		EMIT_SOUND(ENT(pev), CHAN_WEAPON, "houndeye/he_blast1.wav", 1, ATTN_NORM);
+		EmitSound(CHAN_WEAPON, "houndeye/he_blast1.wav", 1, ATTN_NORM);
 		break;
 	case 1:
-		EMIT_SOUND(ENT(pev), CHAN_WEAPON, "houndeye/he_blast2.wav", 1, ATTN_NORM);
+		EmitSound(CHAN_WEAPON, "houndeye/he_blast2.wav", 1, ATTN_NORM);
 		break;
 	case 2:
-		EMIT_SOUND(ENT(pev), CHAN_WEAPON, "houndeye/he_blast3.wav", 1, ATTN_NORM);
+		EmitSound(CHAN_WEAPON, "houndeye/he_blast3.wav", 1, ATTN_NORM);
 		break;
 	}
 

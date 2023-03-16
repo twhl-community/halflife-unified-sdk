@@ -63,9 +63,9 @@ void CPenguin::Spawn()
 bool CPenguin::Deploy()
 {
 	if (g_engfuncs.pfnRandomFloat(0.0, 1.0) <= 0.5)
-		EMIT_SOUND(edict(), CHAN_VOICE, "squeek/sqk_hunt2.wav", VOL_NORM, ATTN_NORM);
+		EmitSound(CHAN_VOICE, "squeek/sqk_hunt2.wav", VOL_NORM, ATTN_NORM);
 	else
-		EMIT_SOUND(edict(), CHAN_VOICE, "squeek/sqk_hunt3.wav", VOL_NORM, ATTN_NORM);
+		EmitSound(CHAN_VOICE, "squeek/sqk_hunt3.wav", VOL_NORM, ATTN_NORM);
 
 	m_pPlayer->m_iWeaponVolume = QUIET_GUN_VOLUME;
 
@@ -85,7 +85,7 @@ void CPenguin::Holster()
 	}
 
 	SendWeaponAnim(PENGUIN_DOWN);
-	EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "common/null.wav", VOL_NORM, ATTN_NORM);
+	m_pPlayer->EmitSound(CHAN_WEAPON, "common/null.wav", VOL_NORM, ATTN_NORM);
 }
 
 void CPenguin::WeaponIdle()
@@ -172,9 +172,9 @@ void CPenguin::PrimaryAttack()
 #endif
 
 			if (g_engfuncs.pfnRandomFloat(0, 1) <= 0.5)
-				EMIT_SOUND_DYN(edict(), CHAN_VOICE, "squeek/sqk_hunt2.wav", VOL_NORM, ATTN_NORM, 0, 105);
+				EmitSoundDyn(CHAN_VOICE, "squeek/sqk_hunt2.wav", VOL_NORM, ATTN_NORM, 0, 105);
 			else
-				EMIT_SOUND_DYN(edict(), CHAN_VOICE, "squeek/sqk_hunt3.wav", VOL_NORM, ATTN_NORM, 0, 105);
+				EmitSoundDyn(CHAN_VOICE, "squeek/sqk_hunt3.wav", VOL_NORM, ATTN_NORM, 0, 105);
 
 			m_pPlayer->m_iWeaponVolume = QUIET_GUN_VOLUME;
 			--m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType];

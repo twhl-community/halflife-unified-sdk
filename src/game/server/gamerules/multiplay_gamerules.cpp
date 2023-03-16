@@ -439,13 +439,13 @@ void CHalfLifeMultiplay::PlayerThink(CBasePlayer* pPlayer)
 
 				if (!pPlayer->m_fPlayingAChargeSound)
 				{
-					EMIT_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_armor_charge.wav", VOL_NORM, ATTN_NORM);
+					pPlayer->EmitSound(CHAN_STATIC, "ctf/pow_armor_charge.wav", VOL_NORM, ATTN_NORM);
 					pPlayer->m_fPlayingAChargeSound = true;
 				}
 			}
 			else if (pPlayer->m_fPlayingAChargeSound)
 			{
-				STOP_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_armor_charge.wav");
+				pPlayer->StopSound(CHAN_STATIC, "ctf/pow_armor_charge.wav");
 				pPlayer->m_fPlayingAChargeSound = false;
 			}
 
@@ -468,13 +468,13 @@ void CHalfLifeMultiplay::PlayerThink(CBasePlayer* pPlayer)
 
 				if (!pPlayer->m_fPlayingHChargeSound)
 				{
-					EMIT_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_health_charge.wav", VOL_NORM, ATTN_NORM);
+					pPlayer->EmitSound(CHAN_STATIC, "ctf/pow_health_charge.wav", VOL_NORM, ATTN_NORM);
 					pPlayer->m_fPlayingHChargeSound = true;
 				}
 			}
 			else if (pPlayer->m_fPlayingHChargeSound)
 			{
-				STOP_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_health_charge.wav");
+				pPlayer->StopSound(CHAN_STATIC, "ctf/pow_health_charge.wav");
 				pPlayer->m_fPlayingHChargeSound = false;
 			}
 

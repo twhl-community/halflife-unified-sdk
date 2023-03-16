@@ -626,7 +626,7 @@ void COFPitWormUp::DyingThink()
 
 		ClearShockEffect();
 
-		EMIT_SOUND(edict(), CHAN_VOICE, "pitworm/pit_worm_death.wav", VOL_NORM, 0.1);
+		EmitSound(CHAN_VOICE, "pitworm/pit_worm_death.wav", VOL_NORM, 0.1);
 
 		m_flDeathStartTime = gpGlobals->time;
 
@@ -669,7 +669,7 @@ void COFPitWormUp::HitTouch(CBaseEntity* pOther)
 		pOther->pev->flags &= ~FL_ONGROUND;
 
 
-		EMIT_SOUND_DYN(edict(), CHAN_WEAPON, pAttackSounds[RANDOM_LONG(0, 2)], VOL_NORM, ATTN_NORM, 0, RANDOM_LONG(-5, 5) + 100);
+		EmitSoundDyn(CHAN_WEAPON, pAttackSounds[RANDOM_LONG(0, 2)], VOL_NORM, ATTN_NORM, 0, RANDOM_LONG(-5, 5) + 100);
 
 		if (tr.iHitgroup == 2)
 			pOther->TakeDamage(this, this, 10, DMG_CRUSH | DMG_SLASH);
@@ -830,7 +830,7 @@ void COFPitWormUp::ShootBeam()
 
 			m_flIdealHeadYaw += m_flBeamDir * 50.0;
 
-			EMIT_SOUND_DYN(edict(), CHAN_WEAPON, pShootSounds[RANDOM_LONG(0, std::size(pShootSounds) - 1)], VOL_NORM, ATTN_NORM, 0, RANDOM_LONG(-5, 5) + 100);
+			EmitSoundDyn(CHAN_WEAPON, pShootSounds[RANDOM_LONG(0, std::size(pShootSounds) - 1)], VOL_NORM, ATTN_NORM, 0, RANDOM_LONG(-5, 5) + 100);
 			MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
 			WRITE_BYTE(TE_ELIGHT);
 			WRITE_SHORT(entindex() | (1 << 12));
@@ -998,7 +998,7 @@ void COFPitWormUp::NextActivity()
 
 		if (m_hEnemy)
 		{
-			EMIT_SOUND(edict(), CHAN_VOICE, "pitworm/pit_worm_alert.wav", VOL_NORM, 0.1);
+			EmitSound(CHAN_VOICE, "pitworm/pit_worm_alert.wav", VOL_NORM, 0.1);
 		}
 	}
 
@@ -1090,7 +1090,7 @@ bool COFPitWormUp::ClawAttack()
 			}
 		}
 
-		EMIT_SOUND(edict(), CHAN_VOICE, pAttackVoiceSounds[RANDOM_LONG(0, std::size(pAttackVoiceSounds) - 1)], VOL_NORM, 0.1);
+		EmitSound(CHAN_VOICE, pAttackVoiceSounds[RANDOM_LONG(0, std::size(pAttackVoiceSounds) - 1)], VOL_NORM, 0.1);
 
 		m_fLockHeight = true;
 		m_fLockYaw = true;
@@ -1181,11 +1181,11 @@ bool COFPitWormUp::ClawAttack()
 
 	if (pev->sequence == PITWORM_ANIM_RangeAttack)
 	{
-		EMIT_SOUND(edict(), CHAN_VOICE, "pitworm/pit_worm_attack_eyeblast.wav", VOL_NORM, 0.1);
+		EmitSound(CHAN_VOICE, "pitworm/pit_worm_attack_eyeblast.wav", VOL_NORM, 0.1);
 	}
 	else
 	{
-		EMIT_SOUND(edict(), CHAN_VOICE, pAttackVoiceSounds[RANDOM_LONG(0, std::size(pAttackVoiceSounds) - 1)], VOL_NORM, 0.1);
+		EmitSound(CHAN_VOICE, pAttackVoiceSounds[RANDOM_LONG(0, std::size(pAttackVoiceSounds) - 1)], VOL_NORM, 0.1);
 	}
 
 	m_fAttacking = true;
@@ -1210,7 +1210,7 @@ void COFPitWormUp::LockTopLevel()
 
 void COFPitWormUp::IdleSound()
 {
-	EMIT_SOUND(edict(), CHAN_VOICE, pPainSounds[RANDOM_LONG(0, std::size(pPainSounds) - 1)], VOL_NORM, 0.1);
+	EmitSound(CHAN_VOICE, pPainSounds[RANDOM_LONG(0, std::size(pPainSounds) - 1)], VOL_NORM, 0.1);
 }
 
 void COFPitWormUp::PainSound()
@@ -1219,7 +1219,7 @@ void COFPitWormUp::PainSound()
 	{
 		m_flNextPainSound = RANDOM_FLOAT(2, 5) + gpGlobals->time;
 
-		EMIT_SOUND(edict(), CHAN_VOICE, pPainSounds[RANDOM_LONG(0, std::size(pPainSounds) - 1)], VOL_NORM, 0.1);
+		EmitSound(CHAN_VOICE, pPainSounds[RANDOM_LONG(0, std::size(pPainSounds) - 1)], VOL_NORM, 0.1);
 	}
 }
 
@@ -1256,7 +1256,7 @@ void COFPitWormUp::TraceAttack(CBaseEntity* attacker, float flDamage, Vector vec
 					if (pAttacker && pAttacker->MyMonsterPointer())
 					{
 						m_hEnemy = pAttacker;
-						EMIT_SOUND(edict(), CHAN_VOICE, "pitworm/pit_worm_alert.wav", VOL_NORM, 0.1);
+						EmitSound(CHAN_VOICE, "pitworm/pit_worm_alert.wav", VOL_NORM, 0.1);
 
 						if (!m_fFirstSighting)
 						{
@@ -1312,7 +1312,7 @@ void COFPitWormUp::HandleAnimEvent(MonsterEvent_t* pEvent)
 	switch (pEvent->event)
 	{
 	case PITWORM_UP_AE_HITGROUND:
-		EMIT_SOUND_DYN(edict(), CHAN_WEAPON, pHitGroundSounds[RANDOM_LONG(0, std::size(pHitGroundSounds) - 1)], VOL_NORM, ATTN_NORM, 0, RANDOM_LONG(-5, 5) + 100);
+		EmitSoundDyn(CHAN_WEAPON, pHitGroundSounds[RANDOM_LONG(0, std::size(pHitGroundSounds) - 1)], VOL_NORM, ATTN_NORM, 0, RANDOM_LONG(-5, 5) + 100);
 
 		if (pev->sequence == PITWORM_ANIM_Level2AttackCenter)
 			UTIL_ScreenShake(pev->origin, 12.0, 100.0, 2.0, 1000.0);
@@ -2326,7 +2326,7 @@ void COFPitWorm::HandleAnimEvent(MonsterEvent_t* pEvent)
 			pHurt->pev->velocity = pHurt->pev->velocity + (forward * 220) + Vector(0, 0, 200);
 
 			pHurt->pev->flags &= ~FL_ONGROUND;
-			EMIT_SOUND_DYN(edict(), CHAN_WEAPON, RANDOM_SOUND_ARRAY(pAttackHitSounds), 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5, 5));
+			EmitSoundDyn(CHAN_WEAPON, RANDOM_SOUND_ARRAY(pAttackHitSounds), 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5, 5));
 		}
 	}
 	break;

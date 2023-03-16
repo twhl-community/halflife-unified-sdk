@@ -379,7 +379,7 @@ bool CBaseButton::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, floa
 
 	if (code == BUTTON_RETURN)
 	{
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, STRING(m_sounds), 1, ATTN_NORM);
+		EmitSound(CHAN_VOICE, STRING(m_sounds), 1, ATTN_NORM);
 
 		// Toggle buttons fire when they get back to their "home" position
 		if ((pev->spawnflags & SF_BUTTON_TOGGLE) == 0)
@@ -491,22 +491,22 @@ void DoSpark(CBaseEntity* entity, const Vector& location)
 	switch ((int)(RANDOM_FLOAT(0, 1) * 6))
 	{
 	case 0:
-		EMIT_SOUND(entity->edict(), CHAN_VOICE, "buttons/spark1.wav", flVolume, ATTN_NORM);
+		entity->EmitSound(CHAN_VOICE, "buttons/spark1.wav", flVolume, ATTN_NORM);
 		break;
 	case 1:
-		EMIT_SOUND(entity->edict(), CHAN_VOICE, "buttons/spark2.wav", flVolume, ATTN_NORM);
+		entity->EmitSound(CHAN_VOICE, "buttons/spark2.wav", flVolume, ATTN_NORM);
 		break;
 	case 2:
-		EMIT_SOUND(entity->edict(), CHAN_VOICE, "buttons/spark3.wav", flVolume, ATTN_NORM);
+		entity->EmitSound(CHAN_VOICE, "buttons/spark3.wav", flVolume, ATTN_NORM);
 		break;
 	case 3:
-		EMIT_SOUND(entity->edict(), CHAN_VOICE, "buttons/spark4.wav", flVolume, ATTN_NORM);
+		entity->EmitSound(CHAN_VOICE, "buttons/spark4.wav", flVolume, ATTN_NORM);
 		break;
 	case 4:
-		EMIT_SOUND(entity->edict(), CHAN_VOICE, "buttons/spark5.wav", flVolume, ATTN_NORM);
+		entity->EmitSound(CHAN_VOICE, "buttons/spark5.wav", flVolume, ATTN_NORM);
 		break;
 	case 5:
-		EMIT_SOUND(entity->edict(), CHAN_VOICE, "buttons/spark6.wav", flVolume, ATTN_NORM);
+		entity->EmitSound(CHAN_VOICE, "buttons/spark6.wav", flVolume, ATTN_NORM);
 		break;
 	}
 }
@@ -535,7 +535,7 @@ void CBaseButton::ButtonUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_T
 	{
 		if (!m_fStayPushed && FBitSet(pev->spawnflags, SF_BUTTON_TOGGLE))
 		{
-			EMIT_SOUND(ENT(pev), CHAN_VOICE, STRING(m_sounds), 1, ATTN_NORM);
+			EmitSound(CHAN_VOICE, STRING(m_sounds), 1, ATTN_NORM);
 
 			// SUB_UseTargets( m_eoActivator );
 			ButtonReturn();
@@ -596,7 +596,7 @@ void CBaseButton::ButtonTouch(CBaseEntity* pOther)
 
 	if (code == BUTTON_RETURN)
 	{
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, STRING(m_sounds), 1, ATTN_NORM);
+		EmitSound(CHAN_VOICE, STRING(m_sounds), 1, ATTN_NORM);
 		SUB_UseTargets(m_hActivator, USE_TOGGLE, 0);
 		ButtonReturn();
 	}
@@ -609,7 +609,7 @@ void CBaseButton::ButtonTouch(CBaseEntity* pOther)
 //
 void CBaseButton::ButtonActivate()
 {
-	EMIT_SOUND(ENT(pev), CHAN_VOICE, STRING(m_sounds), 1, ATTN_NORM);
+	EmitSound(CHAN_VOICE, STRING(m_sounds), 1, ATTN_NORM);
 
 	if (!UTIL_IsMasterTriggered(m_sMaster, m_hActivator))
 	{
@@ -698,7 +698,7 @@ void CBaseButton::ButtonBackHome()
 
 	if (FBitSet(pev->spawnflags, SF_BUTTON_TOGGLE))
 	{
-		// EMIT_SOUND(ENT(pev), CHAN_VOICE, STRING(m_sounds), 1, ATTN_NORM);
+		// EmitSound(CHAN_VOICE, STRING(m_sounds), 1, ATTN_NORM);
 
 		SUB_UseTargets(m_hActivator, USE_TOGGLE, 0);
 	}
@@ -918,7 +918,7 @@ bool CMomentaryRotButton::KeyValue(KeyValueData* pkvd)
 
 void CMomentaryRotButton::PlaySound()
 {
-	EMIT_SOUND(ENT(pev), CHAN_VOICE, STRING(m_sounds), 1, ATTN_NORM);
+	EmitSound(CHAN_VOICE, STRING(m_sounds), 1, ATTN_NORM);
 }
 
 // BUGBUG: This design causes a latentcy.  When the button is retriggered, the first impulse
@@ -1003,7 +1003,7 @@ void CMomentaryRotButton::UpdateTarget(float value)
 
 void CMomentaryRotButton::Off()
 {
-	STOP_SOUND(ENT(pev), CHAN_VOICE, STRING(m_sounds));
+	StopSound(CHAN_VOICE, STRING(m_sounds));
 
 	pev->avelocity = g_vecZero;
 	m_lastUsed = false;

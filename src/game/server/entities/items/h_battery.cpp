@@ -120,7 +120,7 @@ void CRecharge::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useT
 		if (m_flSoundTime <= gpGlobals->time)
 		{
 			m_flSoundTime = gpGlobals->time + 0.62;
-			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/suitchargeno1.wav", 0.85, ATTN_NORM);
+			EmitSound(CHAN_ITEM, "items/suitchargeno1.wav", 0.85, ATTN_NORM);
 		}
 		return;
 	}
@@ -150,13 +150,13 @@ void CRecharge::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useT
 	if (0 == m_iOn)
 	{
 		m_iOn++;
-		EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/suitchargeok1.wav", 0.85, ATTN_NORM);
+		EmitSound(CHAN_ITEM, "items/suitchargeok1.wav", 0.85, ATTN_NORM);
 		m_flSoundTime = 0.56 + gpGlobals->time;
 	}
 	if ((m_iOn == 1) && (m_flSoundTime <= gpGlobals->time))
 	{
 		m_iOn++;
-		EMIT_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge1.wav", 0.85, ATTN_NORM);
+		EmitSound(CHAN_STATIC, "items/suitcharge1.wav", 0.85, ATTN_NORM);
 	}
 
 
@@ -185,7 +185,7 @@ void CRecharge::Off()
 {
 	// Stop looping sound.
 	if (m_iOn > 1)
-		STOP_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge1.wav");
+		StopSound(CHAN_STATIC, "items/suitcharge1.wav");
 
 	m_iOn = 0;
 

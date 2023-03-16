@@ -1019,7 +1019,7 @@ bool CRope::ShouldCreak() const
 
 void CRope::Creak()
 {
-	EMIT_SOUND(edict(), CHAN_BODY,
+	EmitSound(CHAN_BODY,
 		g_pszCreakSounds[RANDOM_LONG(0, std::size(g_pszCreakSounds) - 1)],
 		VOL_NORM, ATTN_NORM);
 }

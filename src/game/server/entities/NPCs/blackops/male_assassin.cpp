@@ -275,16 +275,16 @@ void CMOFAssassin::Shoot(bool firstShotInBurst)
 			// the first round of the three round burst plays the sound and puts a sound in the world sound list.
 			if (RANDOM_LONG(0, 1))
 			{
-				EMIT_SOUND(ENT(pev), CHAN_WEAPON, "hgrunt/gr_mgun1.wav", 1, ATTN_NORM);
+				EmitSound(CHAN_WEAPON, "hgrunt/gr_mgun1.wav", 1, ATTN_NORM);
 			}
 			else
 			{
-				EMIT_SOUND(ENT(pev), CHAN_WEAPON, "hgrunt/gr_mgun2.wav", 1, ATTN_NORM);
+				EmitSound(CHAN_WEAPON, "hgrunt/gr_mgun2.wav", 1, ATTN_NORM);
 			}
 		}
 		else
 		{
-			EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/sniper_fire.wav", 1, ATTN_NORM);
+			EmitSound(CHAN_WEAPON, "weapons/sniper_fire.wav", 1, ATTN_NORM);
 		}
 
 		CSoundEnt::InsertSound(bits_SOUND_COMBAT, pev->origin, 384, 0.3);

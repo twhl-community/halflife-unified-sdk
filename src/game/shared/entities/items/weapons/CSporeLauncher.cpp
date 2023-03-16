@@ -147,7 +147,7 @@ void CSporeLauncher::WeaponIdle()
 				iAnim = SPLAUNCHER_FIDGET;
 				m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 4;
 
-				EMIT_SOUND(m_pPlayer->edict(), CHAN_ITEM, "weapons/splauncher_pet.wav", 0.7, ATTN_NORM);
+				m_pPlayer->EmitSound(CHAN_ITEM, "weapons/splauncher_pet.wav", 0.7, ATTN_NORM);
 			}
 
 			SendWeaponAnim(iAnim);
@@ -289,7 +289,7 @@ void CSporeLauncher::Reload()
 		// was waiting for gun to move to side
 		m_ReloadState = ReloadState::RELOAD_ONE;
 
-		EMIT_SOUND(m_pPlayer->edict(), CHAN_ITEM, "weapons/splauncher_reload.wav", 0.7, ATTN_NORM);
+		m_pPlayer->EmitSound(CHAN_ITEM, "weapons/splauncher_reload.wav", 0.7, ATTN_NORM);
 
 		SendWeaponAnim(SPLAUNCHER_RELOAD);
 
@@ -324,7 +324,7 @@ void CSporeLauncher::IncrementAmmo(CBasePlayer* pPlayer)
 {
 	if (pPlayer->GiveAmmo(1, "spores") >= 0)
 	{
-		EMIT_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
+		pPlayer->EmitSound(CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
 	}
 }
 
@@ -454,7 +454,7 @@ public:
 	{
 		if (pOther->GiveAmmo(AMMO_SPORE_GIVE, "spores") != -1)
 		{
-			EMIT_SOUND(edict(), CHAN_ITEM, "weapons/spore_ammo.wav", VOL_NORM, ATTN_NORM);
+			EmitSound(CHAN_ITEM, "weapons/spore_ammo.wav", VOL_NORM, ATTN_NORM);
 
 			return true;
 		}

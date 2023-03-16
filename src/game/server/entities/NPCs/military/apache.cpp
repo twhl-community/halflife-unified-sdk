@@ -133,7 +133,7 @@ void CApache::Killed(CBaseEntity* attacker, int iGib)
 	pev->movetype = MOVETYPE_TOSS;
 	pev->gravity = 0.3;
 
-	STOP_SOUND(ENT(pev), CHAN_STATIC, "apache/ap_rotor2.wav");
+	StopSound(CHAN_STATIC, "apache/ap_rotor2.wav");
 
 	SetSize(Vector(-32, -32, -64), Vector(32, 32, 0));
 	SetThink(&CApache::DyingThink);
@@ -284,7 +284,7 @@ void CApache::DyingThink()
 		WRITE_BYTE(0);	 // speed
 		MESSAGE_END();
 
-		EMIT_SOUND(ENT(pev), CHAN_STATIC, "weapons/mortarhit.wav", 1.0, 0.3);
+		EmitSound(CHAN_STATIC, "weapons/mortarhit.wav", 1.0, 0.3);
 
 		RadiusDamage(pev->origin, this, this, 300, CLASS_NONE, DMG_BLAST);
 
@@ -370,7 +370,7 @@ void CApache::CrashTouch(CBaseEntity* pOther)
 
 void CApache::GibMonster()
 {
-	// EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "common/bodysplat.wav", 0.75, ATTN_NORM, 0, 200);
+	// EmitSoundDyn(CHAN_VOICE, "common/bodysplat.wav", 0.75, ATTN_NORM, 0, 200);
 }
 
 
@@ -655,8 +655,8 @@ void CApache::Flight()
 	// make rotor, engine sounds
 	if (m_iSoundState == 0)
 	{
-		EMIT_SOUND_DYN(ENT(pev), CHAN_STATIC, "apache/ap_rotor2.wav", 1.0, 0.3, 0, 110);
-		// EMIT_SOUND_DYN(ENT(pev), CHAN_STATIC, "apache/ap_whine1.wav", 0.5, 0.2, 0, 110 );
+		EmitSoundDyn(CHAN_STATIC, "apache/ap_rotor2.wav", 1.0, 0.3, 0, 110);
+		// EmitSoundDyn(CHAN_STATIC, "apache/ap_whine1.wav", 0.5, 0.2, 0, 110 );
 
 		m_iSoundState = SND_CHANGE_PITCH; // hack for going through level transitions
 	}
@@ -684,9 +684,9 @@ void CApache::Flight()
 			if (flVol > 1.0)
 				flVol = 1.0;
 
-			EMIT_SOUND_DYN(ENT(pev), CHAN_STATIC, "apache/ap_rotor2.wav", 1.0, 0.3, SND_CHANGE_PITCH | SND_CHANGE_VOL, pitch);
+			EmitSoundDyn(CHAN_STATIC, "apache/ap_rotor2.wav", 1.0, 0.3, SND_CHANGE_PITCH | SND_CHANGE_VOL, pitch);
 		}
-		// EMIT_SOUND_DYN(ENT(pev), CHAN_STATIC, "apache/ap_whine1.wav", flVol, 0.2, SND_CHANGE_PITCH | SND_CHANGE_VOL, pitch);
+		// EmitSoundDyn(CHAN_STATIC, "apache/ap_whine1.wav", flVol, 0.2, SND_CHANGE_PITCH | SND_CHANGE_VOL, pitch);
 
 		// AILogger->debug("{:.0f} {:.2f}", pitch, flVol);
 	}
@@ -791,7 +791,7 @@ bool CApache::FireGun()
 	{
 #if 1
 		FireBullets(1, posGun, vecGun, VECTOR_CONE_4DEGREES, 8192, BULLET_MONSTER_12MM, 1);
-		EMIT_SOUND(ENT(pev), CHAN_WEAPON, "turret/tu_fire1.wav", 1, 0.3);
+		EmitSound(CHAN_WEAPON, "turret/tu_fire1.wav", 1, 0.3);
 #else
 		static float flNext;
 		TraceResult tr;
@@ -986,7 +986,7 @@ void CApacheHVR::IgniteThink()
 	pev->effects |= EF_LIGHT;
 
 	// make rocket sound
-	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/rocket1.wav", 1, 0.5);
+	EmitSound(CHAN_VOICE, "weapons/rocket1.wav", 1, 0.5);
 
 	// rocket trail
 	MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);

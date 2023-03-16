@@ -125,7 +125,7 @@ void CSpore::IgniteThink()
 		m_hSprite = nullptr;
 	}
 
-	EMIT_SOUND(edict(), CHAN_WEAPON, "weapons/splauncher_impact.wav", VOL_NORM, ATTN_NORM);
+	EmitSound(CHAN_WEAPON, "weapons/splauncher_impact.wav", VOL_NORM, ATTN_NORM);
 
 	const auto vecDir = pev->velocity.Normalize();
 
@@ -243,7 +243,7 @@ void CSpore::MyBounceTouch(CBaseEntity* pOther)
 			}
 			else
 			{
-				EMIT_SOUND_DYN(edict(), CHAN_VOICE, "weapons/splauncher_bounce.wav", 0.25, ATTN_NORM, 0, PITCH_NORM);
+				EmitSoundDyn(CHAN_VOICE, "weapons/splauncher_bounce.wav", 0.25, ATTN_NORM, 0, PITCH_NORM);
 			}
 		}
 	}

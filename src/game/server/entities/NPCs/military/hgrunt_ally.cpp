@@ -231,13 +231,13 @@ void CHGruntAlly::Shoot(bool firstShotInBurst)
 			switch (RANDOM_LONG(0, 2))
 			{
 			case 0:
-				EMIT_SOUND_DYN(edict(), CHAN_WEAPON, "weapons/saw_fire1.wav", VOL_NORM, ATTN_NORM, 0, RANDOM_LONG(0, 15) + 94);
+				EmitSoundDyn(CHAN_WEAPON, "weapons/saw_fire1.wav", VOL_NORM, ATTN_NORM, 0, RANDOM_LONG(0, 15) + 94);
 				break;
 			case 1:
-				EMIT_SOUND_DYN(edict(), CHAN_WEAPON, "weapons/saw_fire2.wav", VOL_NORM, ATTN_NORM, 0, RANDOM_LONG(0, 15) + 94);
+				EmitSoundDyn(CHAN_WEAPON, "weapons/saw_fire2.wav", VOL_NORM, ATTN_NORM, 0, RANDOM_LONG(0, 15) + 94);
 				break;
 			case 2:
-				EMIT_SOUND_DYN(edict(), CHAN_WEAPON, "weapons/saw_fire3.wav", VOL_NORM, ATTN_NORM, 0, RANDOM_LONG(0, 15) + 94);
+				EmitSoundDyn(CHAN_WEAPON, "weapons/saw_fire3.wav", VOL_NORM, ATTN_NORM, 0, RANDOM_LONG(0, 15) + 94);
 				break;
 			}
 
@@ -274,16 +274,16 @@ void CHGruntAlly::Shoot(bool firstShotInBurst)
 			// the first round of the three round burst plays the sound and puts a sound in the world sound list.
 			if (RANDOM_LONG(0, 1))
 			{
-				EMIT_SOUND(ENT(pev), CHAN_WEAPON, "hgrunt/gr_mgun1.wav", 1, ATTN_NORM);
+				EmitSound(CHAN_WEAPON, "hgrunt/gr_mgun1.wav", 1, ATTN_NORM);
 			}
 			else
 			{
-				EMIT_SOUND(ENT(pev), CHAN_WEAPON, "hgrunt/gr_mgun2.wav", 1, ATTN_NORM);
+				EmitSound(CHAN_WEAPON, "hgrunt/gr_mgun2.wav", 1, ATTN_NORM);
 			}
 		}
 		else if (FBitSet(pev->weapons, HGruntAllyWeaponFlag::Shotgun))
 		{
-			EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/sbarrel1.wav", 1, ATTN_NORM);
+			EmitSound(CHAN_WEAPON, "weapons/sbarrel1.wav", 1, ATTN_NORM);
 		}
 
 		CSoundEnt::InsertSound(bits_SOUND_COMBAT, pev->origin, 384, 0.3);
@@ -301,11 +301,11 @@ void CHGruntAlly::HandleAnimEvent(MonsterEvent_t* pEvent)
 	case HGRUNT_AE_RELOAD:
 		if (FBitSet(pev->weapons, HGruntAllyWeaponFlag::Saw))
 		{
-			EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/saw_reload.wav", 1, ATTN_NORM);
+			EmitSound(CHAN_WEAPON, "weapons/saw_reload.wav", 1, ATTN_NORM);
 		}
 		else
 		{
-			EMIT_SOUND(ENT(pev), CHAN_WEAPON, "hgrunt/gr_reload1.wav", 1, ATTN_NORM);
+			EmitSound(CHAN_WEAPON, "hgrunt/gr_reload1.wav", 1, ATTN_NORM);
 		}
 
 		m_cAmmoLoaded = m_cClipSize;

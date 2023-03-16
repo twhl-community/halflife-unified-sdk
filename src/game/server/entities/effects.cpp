@@ -1976,7 +1976,7 @@ void CMessage::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useTy
 	}
 	if (!FStringNull(pev->noise))
 	{
-		EMIT_SOUND(edict(), CHAN_BODY, STRING(pev->noise), pev->scale, pev->speed);
+		EmitSound(CHAN_BODY, STRING(pev->noise), pev->scale, pev->speed);
 	}
 	if ((pev->spawnflags & SF_MESSAGE_ONCE) != 0)
 		UTIL_Remove(this);
@@ -2141,7 +2141,7 @@ void CItemSoda::Spawn()
 
 void CItemSoda::CanThink()
 {
-	EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/g_bounce3.wav", 1, ATTN_NORM);
+	EmitSound(CHAN_WEAPON, "weapons/g_bounce3.wav", 1, ATTN_NORM);
 
 	pev->solid = SOLID_TRIGGER;
 	SetSize(Vector(-8, -8, 0), Vector(8, 8, 8));
@@ -2387,7 +2387,7 @@ void CWarpBall::WarpBallUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_T
 
 		m_flWarpStart = gpGlobals->time;
 
-		EMIT_SOUND(edict(), CHAN_WEAPON, "debris/alien_teleport.wav", VOL_NORM, ATTN_NORM);
+		EmitSound(CHAN_WEAPON, "debris/alien_teleport.wav", VOL_NORM, ATTN_NORM);
 	}
 }
 

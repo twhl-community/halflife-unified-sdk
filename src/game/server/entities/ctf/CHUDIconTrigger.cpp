@@ -32,7 +32,7 @@ void CHUDIconTrigger::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYP
 	if (m_flNextActiveTime <= gpGlobals->time && UTIL_IsMasterTriggered(m_sMaster, pActivator))
 	{
 		if (!FStringNull(pev->noise))
-			EMIT_SOUND_DYN(edict(), CHAN_VOICE, STRING(pev->noise), VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+			EmitSoundDyn(CHAN_VOICE, STRING(pev->noise), VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
 
 		m_hActivator = pActivator;
 

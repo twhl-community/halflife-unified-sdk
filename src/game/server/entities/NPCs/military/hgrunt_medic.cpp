@@ -254,7 +254,7 @@ void COFMedicAlly::Shoot()
 
 		const auto pitch = random <= 10 ? random + 95 : 100;
 
-		EMIT_SOUND_DYN(edict(), CHAN_WEAPON, pszSoundName, VOL_NORM, ATTN_NORM, 0, pitch);
+		EmitSoundDyn(CHAN_WEAPON, pszSoundName, VOL_NORM, ATTN_NORM, 0, pitch);
 	}
 
 	pev->effects |= EF_MUZZLEFLASH;
@@ -279,11 +279,11 @@ void COFMedicAlly::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 		if ((pev->weapons & MedicAllyWeaponFlag::DesertEagle) != 0)
 		{
-			EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/desert_eagle_reload.wav", 1, ATTN_NORM);
+			EmitSound(CHAN_WEAPON, "weapons/desert_eagle_reload.wav", 1, ATTN_NORM);
 		}
 		else
 		{
-			EMIT_SOUND(ENT(pev), CHAN_WEAPON, "hgrunt/gr_reload1.wav", 1, ATTN_NORM);
+			EmitSound(CHAN_WEAPON, "hgrunt/gr_reload1.wav", 1, ATTN_NORM);
 		}
 
 		m_cAmmoLoaded = m_cClipSize;
@@ -419,7 +419,7 @@ void COFMedicAlly::StartTask(Task_t* pTask)
 
 		if (!m_fHealAudioPlaying)
 		{
-			EMIT_SOUND(edict(), CHAN_WEAPON, "fgrunt/medic_give_shot.wav", VOL_NORM, ATTN_NORM);
+			EmitSound(CHAN_WEAPON, "fgrunt/medic_give_shot.wav", VOL_NORM, ATTN_NORM);
 			m_fHealAudioPlaying = true;
 		}
 		break;
@@ -441,7 +441,7 @@ void COFMedicAlly::StartTask(Task_t* pTask)
 			m_fHealing = false;
 			m_fUseHealing = false;
 
-			STOP_SOUND(edict(), CHAN_WEAPON, "fgrunt/medic_give_shot.wav");
+			StopSound(CHAN_WEAPON, "fgrunt/medic_give_shot.wav");
 
 			m_fFollowChecked = false;
 			m_fFollowChecking = false;
@@ -459,7 +459,7 @@ void COFMedicAlly::StartTask(Task_t* pTask)
 		m_fHealing = false;
 		m_fUseHealing = false;
 
-		STOP_SOUND(edict(), CHAN_WEAPON, "fgrunt/medic_give_shot.wav");
+		StopSound(CHAN_WEAPON, "fgrunt/medic_give_shot.wav");
 
 		m_fFollowChecked = false;
 		m_fFollowChecking = false;
@@ -811,7 +811,7 @@ void COFMedicAlly::HealerActivate(CBaseMonster* pTarget)
 
 		ClearSchedule();
 
-		EMIT_SOUND(edict(), CHAN_VOICE, "fgrunt/medical.wav", VOL_NORM, ATTN_NORM);
+		EmitSound(CHAN_VOICE, "fgrunt/medical.wav", VOL_NORM, ATTN_NORM);
 
 		ChangeSchedule(slMedicAllyDrawNeedle);
 	}

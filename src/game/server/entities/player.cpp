@@ -165,11 +165,11 @@ void CBasePlayer::Pain()
 	flRndSound = RANDOM_FLOAT(0, 1);
 
 	if (flRndSound <= 0.33)
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "player/pl_pain5.wav", 1, ATTN_NORM);
+		EmitSound(CHAN_VOICE, "player/pl_pain5.wav", 1, ATTN_NORM);
 	else if (flRndSound <= 0.66)
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "player/pl_pain6.wav", 1, ATTN_NORM);
+		EmitSound(CHAN_VOICE, "player/pl_pain6.wav", 1, ATTN_NORM);
 	else
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "player/pl_pain7.wav", 1, ATTN_NORM);
+		EmitSound(CHAN_VOICE, "player/pl_pain7.wav", 1, ATTN_NORM);
 }
 
 /*
@@ -219,7 +219,7 @@ void CBasePlayer::DeathSound()
 	/*
 	if (pev->waterlevel == 3)
 	{
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "player/h2odeath.wav", 1, ATTN_NONE);
+		EmitSound(CHAN_VOICE, "player/h2odeath.wav", 1, ATTN_NONE);
 		return;
 	}
 	*/
@@ -228,13 +228,13 @@ void CBasePlayer::DeathSound()
 	switch (RANDOM_LONG(1, 5))
 	{
 	case 1:
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "player/pl_pain5.wav", 1, ATTN_NORM);
+		EmitSound(CHAN_VOICE, "player/pl_pain5.wav", 1, ATTN_NORM);
 		break;
 	case 2:
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "player/pl_pain6.wav", 1, ATTN_NORM);
+		EmitSound(CHAN_VOICE, "player/pl_pain6.wav", 1, ATTN_NORM);
 		break;
 	case 3:
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "player/pl_pain7.wav", 1, ATTN_NORM);
+		EmitSound(CHAN_VOICE, "player/pl_pain7.wav", 1, ATTN_NORM);
 		break;
 	}
 
@@ -356,7 +356,7 @@ bool CBasePlayer::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, floa
 		{
 			flDamage *= 1.6;
 
-			EMIT_SOUND(edict(), CHAN_STATIC, "turret/tu_ping.wav", VOL_NORM, ATTN_NORM);
+			EmitSound(CHAN_STATIC, "turret/tu_ping.wav", VOL_NORM, ATTN_NORM);
 		}
 		if (m_pFlag)
 		{
@@ -1102,9 +1102,9 @@ void CBasePlayer::WaterMove()
 
 		// play 'up for air' sound
 		if (pev->air_finished < gpGlobals->time)
-			EMIT_SOUND(ENT(pev), CHAN_VOICE, "player/pl_wade1.wav", 1, ATTN_NORM);
+			EmitSound(CHAN_VOICE, "player/pl_wade1.wav", 1, ATTN_NORM);
 		else if (pev->air_finished < gpGlobals->time + 9)
-			EMIT_SOUND(ENT(pev), CHAN_VOICE, "player/pl_wade2.wav", 1, ATTN_NORM);
+			EmitSound(CHAN_VOICE, "player/pl_wade2.wav", 1, ATTN_NORM);
 
 		pev->air_finished = gpGlobals->time + AIRTIME;
 		pev->dmg = 2;
@@ -1172,16 +1172,16 @@ void CBasePlayer::WaterMove()
 			switch (RANDOM_LONG(0, 3))
 			{
 			case 0:
-				EMIT_SOUND(ENT(pev), CHAN_BODY, "player/pl_swim1.wav", 0.8, ATTN_NORM);
+				EmitSound(CHAN_BODY, "player/pl_swim1.wav", 0.8, ATTN_NORM);
 				break;
 			case 1:
-				EMIT_SOUND(ENT(pev), CHAN_BODY, "player/pl_swim2.wav", 0.8, ATTN_NORM);
+				EmitSound(CHAN_BODY, "player/pl_swim2.wav", 0.8, ATTN_NORM);
 				break;
 			case 2:
-				EMIT_SOUND(ENT(pev), CHAN_BODY, "player/pl_swim3.wav", 0.8, ATTN_NORM);
+				EmitSound(CHAN_BODY, "player/pl_swim3.wav", 0.8, ATTN_NORM);
 				break;
 			case 3:
-				EMIT_SOUND(ENT(pev), CHAN_BODY, "player/pl_swim4.wav", 0.8, ATTN_NORM);
+				EmitSound(CHAN_BODY, "player/pl_swim4.wav", 0.8, ATTN_NORM);
 				break;
 			}
 		}
@@ -1470,7 +1470,7 @@ void CBasePlayer::PlayerUse()
 					m_afPhysicsFlags |= PFLAG_ONTRAIN;
 					m_iTrain = TrainSpeed(pTrain->pev->speed, pTrain->pev->impulse);
 					m_iTrain |= TRAIN_NEW;
-					EMIT_SOUND(ENT(pev), CHAN_ITEM, "plats/train_use1.wav", 0.8, ATTN_NORM);
+					EmitSound(CHAN_ITEM, "plats/train_use1.wav", 0.8, ATTN_NORM);
 					return;
 				}
 			}
@@ -1526,7 +1526,7 @@ void CBasePlayer::PlayerUse()
 		int caps = pObject->ObjectCaps();
 
 		if ((m_afButtonPressed & IN_USE) != 0)
-			EMIT_SOUND(ENT(pev), CHAN_ITEM, "common/wpn_select.wav", 0.4, ATTN_NORM);
+			EmitSound(CHAN_ITEM, "common/wpn_select.wav", 0.4, ATTN_NORM);
 
 		if (((pev->button & IN_USE) != 0 && (caps & FCAP_CONTINUOUS_USE) != 0) ||
 			((m_afButtonPressed & IN_USE) != 0 && (caps & (FCAP_IMPULSE_USE | FCAP_ONOFF_USE)) != 0))
@@ -1545,7 +1545,7 @@ void CBasePlayer::PlayerUse()
 	else
 	{
 		if ((m_afButtonPressed & IN_USE) != 0)
-			EMIT_SOUND(ENT(pev), CHAN_ITEM, "common/wpn_denyselect.wav", 0.4, ATTN_NORM);
+			EmitSound(CHAN_ITEM, "common/wpn_denyselect.wav", 0.4, ATTN_NORM);
 	}
 }
 
@@ -2756,7 +2756,7 @@ void CBasePlayer::PostThink()
 			// BUG - this happens all the time in water, especially when
 			// BUG - water has current force
 			// if ( !pev->groundentity || VARS(pev->groundentity)->velocity.z == 0 )
-			// EMIT_SOUND(ENT(pev), CHAN_BODY, "player/pl_wade1.wav", 1, ATTN_NORM);
+			// EmitSound(CHAN_BODY, "player/pl_wade1.wav", 1, ATTN_NORM);
 		}
 		else if (m_flFallVelocity > PLAYER_MAX_SAFE_FALL_SPEED)
 		{ // after this point, we start doing damage
@@ -2766,7 +2766,7 @@ void CBasePlayer::PostThink()
 			if (flFallDamage > pev->health)
 			{ // splat
 				// note: play on item channel because we play footstep landing on body channel
-				EMIT_SOUND(ENT(pev), CHAN_ITEM, "common/bodysplat.wav", 1, ATTN_NORM);
+				EmitSound(CHAN_ITEM, "common/bodysplat.wav", 1, ATTN_NORM);
 			}
 
 			if (flFallDamage > 0)
@@ -3429,7 +3429,7 @@ void CSprayCan::Spawn(entvars_t* pevOwner)
 	pev->frame = 0;
 
 	pev->nextthink = gpGlobals->time + 0.1;
-	EMIT_SOUND(ENT(pev), CHAN_VOICE, "player/sprayer.wav", 1, ATTN_NORM);
+	EmitSound(CHAN_VOICE, "player/sprayer.wav", 1, ATTN_NORM);
 }
 
 void CSprayCan::Think()
@@ -3599,7 +3599,7 @@ void CBasePlayer::FlashlightTurnOn()
 			}
 		}();
 
-		EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, onSound, 1.0, ATTN_NORM, 0, PITCH_NORM);
+		EmitSoundDyn(CHAN_WEAPON, onSound, 1.0, ATTN_NORM, 0, PITCH_NORM);
 
 		SetBits(pev->effects, GetFlashlightFlag());
 		UpdateFlashlight(this, true);
@@ -3622,7 +3622,7 @@ void CBasePlayer::FlashlightTurnOff()
 		}
 	}();
 
-	EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, offSound, 1.0, ATTN_NORM, 0, PITCH_NORM);
+	EmitSoundDyn(CHAN_WEAPON, offSound, 1.0, ATTN_NORM, 0, PITCH_NORM);
 
 	ClearBits(pev->effects, GetFlashlightFlag());
 	UpdateFlashlight(this, false);

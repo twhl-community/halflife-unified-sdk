@@ -158,7 +158,7 @@ void CSniperRifle::PrimaryAttack()
 
 void CSniperRifle::SecondaryAttack()
 {
-	EMIT_SOUND_DYN(m_pPlayer->edict(), CHAN_ITEM, "weapons/sniper_zoom.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+	m_pPlayer->EmitSoundDyn(CHAN_ITEM, "weapons/sniper_zoom.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
 
 	ToggleZoom();
 
@@ -217,7 +217,7 @@ void CSniperRifle::IncrementAmmo(CBasePlayer* pPlayer)
 {
 	if (pPlayer->GiveAmmo(1, "762") >= 0)
 	{
-		EMIT_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
+		pPlayer->EmitSound(CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
 	}
 }
 
@@ -255,7 +255,7 @@ public:
 	{
 		if (pOther->GiveAmmo(AMMO_SNIPERRIFLE_GIVE, "762") != -1)
 		{
-			EMIT_SOUND(edict(), CHAN_ITEM, "items/9mmclip1.wav", VOL_NORM, ATTN_NORM);
+			EmitSound(CHAN_ITEM, "items/9mmclip1.wav", VOL_NORM, ATTN_NORM);
 
 			return true;
 		}

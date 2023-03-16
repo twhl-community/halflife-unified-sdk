@@ -281,7 +281,7 @@ void CDisplacerBall::FizzleThink()
 
 	RadiusDamage(pev->origin, this, pOwner, pev->dmg, 128.0, CLASS_NONE, DMG_ALWAYSGIB | DMG_BLAST);
 
-	EMIT_SOUND(edict(), CHAN_WEAPON, "weapons/displacer_impact.wav", RANDOM_FLOAT(0.8, 0.9), ATTN_NORM);
+	EmitSound(CHAN_WEAPON, "weapons/displacer_impact.wav", RANDOM_FLOAT(0.8, 0.9), ATTN_NORM);
 
 	UTIL_Remove(this);
 }
@@ -298,7 +298,7 @@ void CDisplacerBall::ExplodeThink()
 
 	RadiusDamage(pev->origin, this, pOwner, pev->dmg, GetSkillFloat("plr_displacer_radius"sv), CLASS_NONE, DMG_ALWAYSGIB | DMG_BLAST);
 
-	EMIT_SOUND(edict(), CHAN_WEAPON, "weapons/displacer_teleport.wav", RANDOM_FLOAT(0.8, 0.9), ATTN_NORM);
+	EmitSound(CHAN_WEAPON, "weapons/displacer_teleport.wav", RANDOM_FLOAT(0.8, 0.9), ATTN_NORM);
 
 	UTIL_Remove(this);
 }

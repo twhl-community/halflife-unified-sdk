@@ -90,7 +90,7 @@ void CMP5::IncrementAmmo(CBasePlayer* pPlayer)
 {
 	if (pPlayer->GiveAmmo(1, "9mm") >= 0)
 	{
-		EMIT_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
+		pPlayer->EmitSound(CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
 	}
 
 	if (m_flNextGrenadeLoad < gpGlobals->time)
@@ -281,7 +281,7 @@ public:
 		bool bResult = (pOther->GiveAmmo(AMMO_MP5CLIP_GIVE, "9mm") != -1);
 		if (bResult)
 		{
-			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
+			EmitSound(CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
 		}
 		return bResult;
 	}
@@ -311,7 +311,7 @@ public:
 		bool bResult = (pOther->GiveAmmo(AMMO_CHAINBOX_GIVE, "9mm") != -1);
 		if (bResult)
 		{
-			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
+			EmitSound(CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
 		}
 		return bResult;
 	}
@@ -340,7 +340,7 @@ public:
 
 		if (bResult)
 		{
-			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
+			EmitSound(CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
 		}
 		return bResult;
 	}

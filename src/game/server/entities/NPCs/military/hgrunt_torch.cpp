@@ -202,7 +202,7 @@ void COFTorchAlly::Shoot()
 
 	const auto pitch = random <= 10 ? random + 95 : 100;
 
-	EMIT_SOUND_DYN(edict(), CHAN_WEAPON, "weapons/desert_eagle_fire.wav", VOL_NORM, ATTN_NORM, 0, pitch);
+	EmitSoundDyn(CHAN_WEAPON, "weapons/desert_eagle_fire.wav", VOL_NORM, ATTN_NORM, 0, pitch);
 
 	pev->effects |= EF_MUZZLEFLASH;
 
@@ -223,7 +223,7 @@ void COFTorchAlly::HandleAnimEvent(MonsterEvent_t* pEvent)
 	switch (pEvent->event)
 	{
 	case HGRUNT_AE_RELOAD:
-		EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/desert_eagle_reload.wav", 1, ATTN_NORM);
+		EmitSound(CHAN_WEAPON, "weapons/desert_eagle_reload.wav", 1, ATTN_NORM);
 
 		m_cAmmoLoaded = m_cClipSize;
 		ClearConditions(bits_COND_NO_AMMO_LOADED);

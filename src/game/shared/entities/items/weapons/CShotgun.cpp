@@ -98,7 +98,7 @@ void CShotgun::IncrementAmmo(CBasePlayer* pPlayer)
 {
 	if (pPlayer->GiveAmmo(1, "buckshot") >= 0)
 	{
-		EMIT_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
+		pPlayer->EmitSound(CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
 	}
 }
 
@@ -281,9 +281,9 @@ void CShotgun::Reload()
 		m_fInSpecialReload = 2;
 
 		if (RANDOM_LONG(0, 1))
-			EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/reload1.wav", 1, ATTN_NORM, 0, 85 + RANDOM_LONG(0, 0x1f));
+			m_pPlayer->EmitSoundDyn(CHAN_ITEM, "weapons/reload1.wav", 1, ATTN_NORM, 0, 85 + RANDOM_LONG(0, 0x1f));
 		else
-			EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/reload3.wav", 1, ATTN_NORM, 0, 85 + RANDOM_LONG(0, 0x1f));
+			m_pPlayer->EmitSoundDyn(CHAN_ITEM, "weapons/reload3.wav", 1, ATTN_NORM, 0, 85 + RANDOM_LONG(0, 0x1f));
 
 		SendWeaponAnim(SHOTGUN_RELOAD);
 
@@ -311,7 +311,7 @@ void CShotgun::WeaponIdle()
 	if ( m_flPumpTime && m_flPumpTime < gpGlobals->time )
 	{
 		// play pumping sound
-		EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/scock1.wav", 1, ATTN_NORM, 0, 95 + RANDOM_LONG(0,0x1f));
+		m_pPlayer->EmitSoundDyn(CHAN_ITEM, "weapons/scock1.wav", 1, ATTN_NORM, 0, 95 + RANDOM_LONG(0,0x1f));
 		m_flPumpTime = 0;
 	}
 	*/
@@ -341,7 +341,7 @@ void CShotgun::WeaponIdle()
 				SendWeaponAnim(SHOTGUN_PUMP);
 
 				// play cocking sound
-				EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/scock1.wav", 1, ATTN_NORM, 0, 95 + RANDOM_LONG(0, 0x1f));
+				m_pPlayer->EmitSoundDyn(CHAN_ITEM, "weapons/scock1.wav", 1, ATTN_NORM, 0, 95 + RANDOM_LONG(0, 0x1f));
 				m_fInSpecialReload = 0;
 				m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 1.5;
 			}
@@ -375,7 +375,7 @@ void CShotgun::ItemPostFrame()
 	if (0 != m_flPumpTime && m_flPumpTime < gpGlobals->time)
 	{
 		// play pumping sound
-		EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/scock1.wav", 1, ATTN_NORM, 0, 95 + RANDOM_LONG(0, 0x1f));
+		m_pPlayer->EmitSoundDyn(CHAN_ITEM, "weapons/scock1.wav", 1, ATTN_NORM, 0, 95 + RANDOM_LONG(0, 0x1f));
 		m_flPumpTime = 0;
 	}
 
@@ -402,7 +402,7 @@ public:
 	{
 		if (pOther->GiveAmmo(AMMO_BUCKSHOTBOX_GIVE, "buckshot") != -1)
 		{
-			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
+			EmitSound(CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
 			return true;
 		}
 		return false;

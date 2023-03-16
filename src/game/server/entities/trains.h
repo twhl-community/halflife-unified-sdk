@@ -93,8 +93,8 @@ public:
 	void SetControls(CBaseEntity* controls);
 	bool OnControls(CBaseEntity* controller) override;
 
-	void StopSound();
-	void UpdateSound();
+	void StopTrainSound();
+	void UpdateTrainSound();
 
 	static CFuncTrackTrain* Instance(CBaseEntity* pent);
 

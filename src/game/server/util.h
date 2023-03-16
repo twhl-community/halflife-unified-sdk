@@ -383,29 +383,8 @@ constexpr int SND_PLAY_WHEN_PAUSED = 1 << 9; // For client side use only: start 
 
 float TEXTURETYPE_PlaySound(TraceResult* ptr, Vector vecSrc, Vector vecEnd, int iBulletType);
 
-// NOTE: use EMIT_SOUND_DYN to set the pitch of a sound. Pitch of 100
-// is no pitch shift.  Pitch > 100 up to 255 is a higher pitch, pitch < 100
-// down to 1 is a lower pitch.   150 to 70 is the realistic range.
-// EMIT_SOUND_DYN with pitch != 100 should be used sparingly, as it's not quite as
-// fast as EMIT_SOUND (the pitchshift mixer is not native coded).
-
-void EMIT_SOUND_DYN(edict_t* entity, int channel, const char* sample, float volume, float attenuation,
-	int flags, int pitch);
-
-void UTIL_EmitAmbientSound(edict_t* entity, const Vector& vecOrigin, const char* samp, float vol, float attenuation, int fFlags, int pitch);
-
-inline void EMIT_SOUND(edict_t* entity, int channel, const char* sample, float volume, float attenuation)
-{
-	EMIT_SOUND_DYN(entity, channel, sample, volume, attenuation, 0, PITCH_NORM);
-}
-
-inline void STOP_SOUND(edict_t* entity, int channel, const char* sample)
-{
-	EMIT_SOUND_DYN(entity, channel, sample, 0, 0, SND_STOP, PITCH_NORM);
-}
-
 /**
- *	@brief Just like @see EMIT_SOUND_DYN, but will skip the current host player if they have cl_lw turned on.
+ *	@brief Just like @see CBaseEntity::EmitSoundDyn, but will skip the current host player if they have cl_lw turned on.
  *	@details entity must be the current host entity for this to work, and must be called only inside a player's PostThink method.
  */
 void EMIT_SOUND_PREDICTED(edict_t* entity, int channel, const char* sample, float volume, float attenuation,
@@ -433,7 +412,7 @@ void EMIT_GROUPNAME_SUIT(edict_t* entity, const char* groupname);
 	}
 
 #define EMIT_SOUND_ARRAY_DYN(chan, array) \
-	EMIT_SOUND_DYN(ENT(pev), chan, array[RANDOM_LONG(0, std::size(array) - 1)], 1.0, ATTN_NORM, 0, RANDOM_LONG(95, 105));
+	EmitSoundDyn(chan, array[RANDOM_LONG(0, std::size(array) - 1)], 1.0, ATTN_NORM, 0, RANDOM_LONG(95, 105));
 
 #define RANDOM_SOUND_ARRAY(array) (array)[RANDOM_LONG(0, std::size((array)) - 1)]
 

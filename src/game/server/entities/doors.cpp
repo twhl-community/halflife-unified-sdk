@@ -126,7 +126,7 @@ void PlayLockSounds(CBaseEntity* entity, locksound_t* pls, bool flocked, bool fb
 		if (fplaysound)
 		{
 			// play 'door locked' sound
-			EMIT_SOUND(entity->edict(), CHAN_ITEM, STRING(pls->sLockedSound), fvol, ATTN_NORM);
+			entity->EmitSound(CHAN_ITEM, STRING(pls->sLockedSound), fvol, ATTN_NORM);
 			pls->flwaitSound = gpGlobals->time + flsoundwait;
 		}
 
@@ -163,7 +163,7 @@ void PlayLockSounds(CBaseEntity* entity, locksound_t* pls, bool flocked, bool fb
 		// play 'door unlocked' sound if set
 		if (fplaysound)
 		{
-			EMIT_SOUND(entity->edict(), CHAN_ITEM, STRING(pls->sUnlockedSound), fvol, ATTN_NORM);
+			entity->EmitSound(CHAN_ITEM, STRING(pls->sUnlockedSound), fvol, ATTN_NORM);
 			pls->flwaitSound = gpGlobals->time + flsoundwait;
 		}
 
@@ -456,7 +456,7 @@ void CBaseDoor::DoorGoUp()
 	if (!FBitSet(pev->spawnflags, SF_DOOR_SILENT))
 	{
 		if (m_toggle_state != TS_GOING_UP && m_toggle_state != TS_GOING_DOWN)
-			EMIT_SOUND(ENT(pev), CHAN_STATIC, STRING(m_MoveSound), 1, ATTN_NORM);
+			EmitSound(CHAN_STATIC, STRING(m_MoveSound), 1, ATTN_NORM);
 	}
 
 	m_toggle_state = TS_GOING_UP;
@@ -498,8 +498,8 @@ void CBaseDoor::DoorHitTop()
 {
 	if (!FBitSet(pev->spawnflags, SF_DOOR_SILENT))
 	{
-		STOP_SOUND(ENT(pev), CHAN_STATIC, STRING(m_MoveSound));
-		EMIT_SOUND(ENT(pev), CHAN_STATIC, STRING(m_StopSound), 1, ATTN_NORM);
+		StopSound(CHAN_STATIC, STRING(m_MoveSound));
+		EmitSound(CHAN_STATIC, STRING(m_StopSound), 1, ATTN_NORM);
 	}
 
 	ASSERT(m_toggle_state == TS_GOING_UP);
@@ -540,7 +540,7 @@ void CBaseDoor::DoorGoDown()
 	if (!FBitSet(pev->spawnflags, SF_DOOR_SILENT))
 	{
 		if (m_toggle_state != TS_GOING_UP && m_toggle_state != TS_GOING_DOWN)
-			EMIT_SOUND(ENT(pev), CHAN_STATIC, STRING(m_MoveSound), 1, ATTN_NORM);
+			EmitSound(CHAN_STATIC, STRING(m_MoveSound), 1, ATTN_NORM);
 	}
 
 #ifdef DOOR_ASSERT
@@ -562,8 +562,8 @@ void CBaseDoor::DoorHitBottom()
 {
 	if (!FBitSet(pev->spawnflags, SF_DOOR_SILENT))
 	{
-		STOP_SOUND(ENT(pev), CHAN_STATIC, STRING(m_MoveSound));
-		EMIT_SOUND(ENT(pev), CHAN_STATIC, STRING(m_StopSound), 1, ATTN_NORM);
+		StopSound(CHAN_STATIC, STRING(m_MoveSound));
+		EmitSound(CHAN_STATIC, STRING(m_StopSound), 1, ATTN_NORM);
 	}
 
 	ASSERT(m_toggle_state == TS_GOING_DOWN);
@@ -636,7 +636,7 @@ void CBaseDoor::Blocked(CBaseEntity* pOther)
 						}
 
 						if (!FBitSet(pev->spawnflags, SF_DOOR_SILENT))
-							STOP_SOUND(ENT(pev), CHAN_STATIC, STRING(m_MoveSound));
+							StopSound(CHAN_STATIC, STRING(m_MoveSound));
 
 						if (pDoor->m_toggle_state == TS_GOING_DOWN)
 							pDoor->DoorGoUp();
@@ -879,7 +879,7 @@ void CMomentaryDoor::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE
 	// This entity only thinks when it moves, so if it's thinking, it's in the process of moving
 	// play the sound when it starts moving (not yet thinking)
 	if (pev->nextthink < pev->ltime || pev->nextthink == 0)
-		EMIT_SOUND(ENT(pev), CHAN_STATIC, STRING(m_MoveSound), 1, ATTN_NORM);
+		EmitSound(CHAN_STATIC, STRING(m_MoveSound), 1, ATTN_NORM);
 	// If we already moving to designated point, return
 	else if (move == m_vecFinalDest)
 		return;
@@ -902,7 +902,7 @@ void CMomentaryDoor::DoorMoveDone()
 
 void CMomentaryDoor::StopMoveSound()
 {
-	STOP_SOUND(ENT(pev), CHAN_STATIC, STRING(m_MoveSound));
-	EMIT_SOUND(ENT(pev), CHAN_STATIC, STRING(m_StopSound), 1, ATTN_NORM);
+	StopSound(CHAN_STATIC, STRING(m_MoveSound));
+	EmitSound(CHAN_STATIC, STRING(m_StopSound), 1, ATTN_NORM);
 	SetThink(nullptr);
 }

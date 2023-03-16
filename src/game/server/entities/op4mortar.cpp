@@ -121,7 +121,7 @@ void CMortarShell::FlyThink()
 	if (pev->velocity.z < 20.0 && !m_iSoundedOff)
 	{
 		m_iSoundedOff = true;
-		EMIT_SOUND(edict(), CHAN_VOICE, "weapons/ofmortar.wav", RANDOM_FLOAT(0.8, 0.9), ATTN_NONE);
+		EmitSound(CHAN_VOICE, "weapons/ofmortar.wav", RANDOM_FLOAT(0.8, 0.9), ATTN_NONE);
 	}
 
 	pev->nextthink = gpGlobals->time + 0.1;
@@ -172,13 +172,13 @@ void CMortarShell::MortarExplodeTouch(CBaseEntity* pOther)
 	switch (RANDOM_LONG(0, 2))
 	{
 	case 0:
-		EMIT_SOUND(edict(), CHAN_VOICE, "weapons/debris1.wav", 0.55, ATTN_NORM);
+		EmitSound(CHAN_VOICE, "weapons/debris1.wav", 0.55, ATTN_NORM);
 		break;
 	case 1:
-		EMIT_SOUND(edict(), CHAN_VOICE, "weapons/debris2.wav", 0.55, ATTN_NORM);
+		EmitSound(CHAN_VOICE, "weapons/debris2.wav", 0.55, ATTN_NORM);
 		break;
 	case 2:
-		EMIT_SOUND(edict(), CHAN_VOICE, "weapons/debris3.wav", 0.55, ATTN_NORM);
+		EmitSound(CHAN_VOICE, "weapons/debris3.wav", 0.55, ATTN_NORM);
 		break;
 	}
 
@@ -463,7 +463,7 @@ void COp4Mortar::MortarThink()
 				{
 					if (gpGlobals->time - m_fireLast > m_fireDelay)
 					{
-						EMIT_SOUND(edict(), CHAN_VOICE, "weapons/mortarhit.wav", VOL_NORM, ATTN_NORM);
+						EmitSound(CHAN_VOICE, "weapons/mortarhit.wav", VOL_NORM, ATTN_NORM);
 						UTIL_ScreenShake(pev->origin, 12.0, 100.0, 2.0, 1000.0);
 
 						Vector vecPos, vecAngle;
@@ -504,7 +504,7 @@ bool COp4Mortar::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float
 
 void COp4Mortar::PlaySound()
 {
-	EMIT_SOUND(edict(), CHAN_VOICE, "player/pl_grate1.wav", VOL_NORM, ATTN_NORM);
+	EmitSound(CHAN_VOICE, "player/pl_grate1.wav", VOL_NORM, ATTN_NORM);
 }
 
 void COp4Mortar::Off()
@@ -750,7 +750,7 @@ void COp4Mortar::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE use
 		if ((pev->spawnflags & SF_MORTAR_ACTIVE) == 0 && (pev->spawnflags & SF_MORTAR_CONTROLLABLE) != 0)
 		{
 			// Player fired a mortar
-			EMIT_SOUND(edict(), CHAN_VOICE, "weapons/mortarhit.wav", VOL_NORM, ATTN_NONE);
+			EmitSound(CHAN_VOICE, "weapons/mortarhit.wav", VOL_NORM, ATTN_NONE);
 			UTIL_ScreenShake(pev->origin, 12.0, 100.0, 2.0, 1000.0);
 
 			Vector pos, angle;

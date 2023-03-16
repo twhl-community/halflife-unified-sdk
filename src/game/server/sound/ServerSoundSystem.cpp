@@ -276,17 +276,6 @@ void ServerSoundSystem::EmitSoundSentence(edict_t* entity, int channel, const ch
 }
 }
 
-void EMIT_SOUND_DYN(edict_t* entity, int channel, const char* sample, float volume, float attenuation,
-	int flags, int pitch)
-{
-	sound::g_ServerSound.EmitSound(entity, channel, sample, volume, attenuation, flags, pitch);
-}
-
-void UTIL_EmitAmbientSound(edict_t* entity, const Vector& vecOrigin, const char* samp, float vol, float attenuation, int fFlags, int pitch)
-{
-	sound::g_ServerSound.EmitAmbientSound(entity, vecOrigin, samp, vol, attenuation, fFlags, pitch);
-}
-
 void EMIT_SOUND_PREDICTED(edict_t* entity, int channel, const char* sample, float volume, float attenuation,
 	int flags, int pitch)
 {
@@ -297,7 +286,7 @@ void EMIT_SOUND_PREDICTED(edict_t* entity, int channel, const char* sample, floa
 	}
 	else
 	{
-		EMIT_SOUND_DYN(entity, channel, sample, volume, attenuation, flags, pitch);
+		sound::g_ServerSound.EmitSound(entity, channel, sample, volume, attenuation, flags, pitch);
 	}
 }
 
@@ -311,7 +300,7 @@ void EMIT_SOUND_SUIT(edict_t* entity, const char* sample)
 		pitch = RANDOM_LONG(0, 6) + 98;
 
 	if (fvol > 0.05)
-		EMIT_SOUND_DYN(entity, CHAN_STATIC, sample, fvol, ATTN_NORM, 0, pitch);
+		sound::g_ServerSound.EmitSound(entity, CHAN_STATIC, sample, fvol, ATTN_NORM, 0, pitch);
 }
 
 void EMIT_GROUPID_SUIT(edict_t* entity, int isentenceg)

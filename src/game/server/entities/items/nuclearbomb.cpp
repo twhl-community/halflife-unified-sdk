@@ -138,7 +138,7 @@ void COFNuclearBombTimer::NuclearBombTimerThink()
 
 	if (bPlayBombSound)
 	{
-		EMIT_SOUND(edict(), CHAN_BODY, "common/nuke_ticking.wav", 0.75, ATTN_IDLE);
+		EmitSound(CHAN_BODY, "common/nuke_ticking.wav", 0.75, ATTN_IDLE);
 		bBombSoundPlaying = true;
 	}
 
@@ -162,7 +162,7 @@ void COFNuclearBombTimer::SetNuclearBombTimer(bool fOn)
 
 		if (bBombSoundPlaying)
 		{
-			STOP_SOUND(edict(), CHAN_BODY, "common/nuke_ticking.wav");
+			StopSound(CHAN_BODY, "common/nuke_ticking.wav");
 			bBombSoundPlaying = false;
 		}
 	}
@@ -286,12 +286,12 @@ void COFNuclearBomb::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE
 		if (m_fOn)
 		{
 			m_fOn = false;
-			EMIT_SOUND(edict(), CHAN_VOICE, "buttons/button4.wav", VOL_NORM, ATTN_NORM);
+			EmitSound(CHAN_VOICE, "buttons/button4.wav", VOL_NORM, ATTN_NORM);
 		}
 		else
 		{
 			m_fOn = true;
-			EMIT_SOUND(edict(), CHAN_VOICE, "buttons/button6.wav", VOL_NORM, ATTN_NORM);
+			EmitSound(CHAN_VOICE, "buttons/button6.wav", VOL_NORM, ATTN_NORM);
 		}
 
 		SUB_UseTargets(pActivator, USE_TOGGLE, 0);

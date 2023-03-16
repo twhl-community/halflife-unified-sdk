@@ -1242,7 +1242,7 @@ void CControllerHeadBall::HuntThink()
 		WRITE_BYTE(10);	 // speed
 		MESSAGE_END();
 
-		UTIL_EmitAmbientSound(ENT(pev), tr.vecEndPos, "weapons/electro4.wav", 0.5, ATTN_NORM, 0, RANDOM_LONG(140, 160));
+		EmitAmbientSound(tr.vecEndPos, "weapons/electro4.wav", 0.5, ATTN_NORM, 0, RANDOM_LONG(140, 160));
 
 		m_flNextAttack = gpGlobals->time + 3.0;
 
@@ -1400,7 +1400,7 @@ void CControllerZapBall::ExplodeTouch(CBaseEntity* pOther)
 		pOther->TraceAttack(owner, GetSkillFloat("controller_dmgball"sv), pev->velocity.Normalize(), &tr, DMG_ENERGYBEAM);
 		ApplyMultiDamage(owner, owner);
 
-		UTIL_EmitAmbientSound(ENT(pev), tr.vecEndPos, "weapons/electro4.wav", 0.3, ATTN_NORM, 0, RANDOM_LONG(90, 99));
+		EmitAmbientSound(tr.vecEndPos, "weapons/electro4.wav", 0.3, ATTN_NORM, 0, RANDOM_LONG(90, 99));
 	}
 
 	UTIL_Remove(this);

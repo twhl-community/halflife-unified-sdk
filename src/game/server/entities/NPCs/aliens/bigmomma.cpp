@@ -481,7 +481,7 @@ void CBigMomma::HandleAnimEvent(MonsterEvent_t* pEvent)
 			}
 
 			pHurt->pev->flags &= ~FL_ONGROUND;
-			EMIT_SOUND_DYN(edict(), CHAN_WEAPON, RANDOM_SOUND_ARRAY(pAttackHitSounds), 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5, 5));
+			EmitSoundDyn(CHAN_WEAPON, RANDOM_SOUND_ARRAY(pAttackHitSounds), 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5, 5));
 		}
 	}
 	break;
@@ -619,7 +619,7 @@ void CBigMomma::LayHeadcrab()
 	UTIL_TraceLine(pev->origin, pev->origin - Vector(0, 0, 100), ignore_monsters, edict(), &tr);
 	UTIL_DecalTrace(&tr, DECAL_MOMMABIRTH);
 
-	EMIT_SOUND_DYN(edict(), CHAN_WEAPON, RANDOM_SOUND_ARRAY(pBirthSounds), 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5, 5));
+	EmitSoundDyn(CHAN_WEAPON, RANDOM_SOUND_ARRAY(pBirthSounds), 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5, 5));
 	m_crabCount++;
 }
 
@@ -644,7 +644,7 @@ void CBigMomma::LaunchMortar()
 	Vector startPos = pev->origin;
 	startPos.z += 180;
 
-	EMIT_SOUND_DYN(edict(), CHAN_WEAPON, RANDOM_SOUND_ARRAY(pSackSounds), 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5, 5));
+	EmitSoundDyn(CHAN_WEAPON, RANDOM_SOUND_ARRAY(pSackSounds), 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5, 5));
 	CBMortar* pBomb = CBMortar::Shoot(edict(), startPos, pev->movedir);
 	pBomb->pev->gravity = 1.0;
 	MortarSpray(startPos, Vector(0, 0, 1), gSpitSprite, 24);
@@ -1005,7 +1005,7 @@ void CBigMomma::StartTask(Task_t* pTask)
 
 	case TASK_MELEE_ATTACK1:
 		// Play an attack sound here
-		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pAttackSounds), 1.0, ATTN_NORM, 0, PITCH_NORM);
+		EmitSoundDyn(CHAN_VOICE, RANDOM_SOUND_ARRAY(pAttackSounds), 1.0, ATTN_NORM, 0, PITCH_NORM);
 		CBaseMonster::StartTask(pTask);
 		break;
 
@@ -1197,15 +1197,15 @@ void CBMortar::Touch(CBaseEntity* pOther)
 	// splat sound
 	iPitch = RANDOM_FLOAT(90, 110);
 
-	EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "bullchicken/bc_acid1.wav", 1, ATTN_NORM, 0, iPitch);
+	EmitSoundDyn(CHAN_VOICE, "bullchicken/bc_acid1.wav", 1, ATTN_NORM, 0, iPitch);
 
 	switch (RANDOM_LONG(0, 1))
 	{
 	case 0:
-		EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "bullchicken/bc_spithit1.wav", 1, ATTN_NORM, 0, iPitch);
+		EmitSoundDyn(CHAN_WEAPON, "bullchicken/bc_spithit1.wav", 1, ATTN_NORM, 0, iPitch);
 		break;
 	case 1:
-		EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "bullchicken/bc_spithit2.wav", 1, ATTN_NORM, 0, iPitch);
+		EmitSoundDyn(CHAN_WEAPON, "bullchicken/bc_spithit2.wav", 1, ATTN_NORM, 0, iPitch);
 		break;
 	}
 

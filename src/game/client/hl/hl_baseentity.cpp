@@ -24,8 +24,6 @@ This file contains "stubs" of class member implementations so that we can predic
 #include "cbase.h"
 #include "nodes.h"
 
-void EMIT_SOUND_DYN(edict_t* entity, int channel, const char* sample, float volume, float attenuation, int flags, int pitch) {}
-
 bool SkillSystem::Initialize() { return true; }
 void SkillSystem::Shutdown() {}
 float SkillSystem::GetValue(std::string_view) const { return 0; }
@@ -75,6 +73,9 @@ bool CBaseEntity::ShouldToggle(USE_TYPE useType, bool currentState) { return fal
 int CBaseEntity::DamageDecal(int bitsDamageType) { return -1; }
 CBaseEntity* CBaseEntity::Create(const char* szName, const Vector& vecOrigin, const Vector& vecAngles, edict_t* pentOwner) { return nullptr; }
 void CBaseEntity::SUB_Remove() {}
+void CBaseEntity::EmitSound(int channel, const char* sample, float volume, float attenuation) {}
+void CBaseEntity::EmitSoundDyn(int channel, const char* sample, float volume, float attenuation, int flags, int pitch) {}
+void CBaseEntity::StopSound(int channel, const char* sample) {}
 
 // CBaseDelay Stubs
 bool CBaseDelay::KeyValue(KeyValueData*) { return false; }

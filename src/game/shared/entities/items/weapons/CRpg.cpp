@@ -98,7 +98,7 @@ void CRpgRocket::Spawn()
 //=========================================================
 void CRpgRocket::RocketTouch(CBaseEntity* pOther)
 {
-	STOP_SOUND(edict(), CHAN_VOICE, "weapons/rocket1.wav");
+	StopSound(CHAN_VOICE, "weapons/rocket1.wav");
 	ExplodeTouch(pOther);
 }
 
@@ -120,7 +120,7 @@ void CRpgRocket::IgniteThink()
 	pev->effects |= EF_LIGHT;
 
 	// make rocket sound
-	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/rocket1.wav", 1, 0.5);
+	EmitSound(CHAN_VOICE, "weapons/rocket1.wav", 1, 0.5);
 
 	// rocket trail
 	MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
@@ -206,7 +206,7 @@ void CRpgRocket::FollowThink()
 		if ((pev->effects & EF_LIGHT) != 0)
 		{
 			pev->effects = 0;
-			STOP_SOUND(ENT(pev), CHAN_VOICE, "weapons/rocket1.wav");
+			StopSound(CHAN_VOICE, "weapons/rocket1.wav");
 		}
 		pev->velocity = pev->velocity * 0.2 + vecTarget * flSpeed * 0.798;
 		if (pev->waterlevel == WaterLevel::Dry && pev->velocity.Length() < 1500)
@@ -333,7 +333,7 @@ void CRpg::IncrementAmmo(CBasePlayer* pPlayer)
 {
 	if (pPlayer->GiveAmmo(1, "rockets") >= 0)
 	{
-		EMIT_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
+		pPlayer->EmitSound(CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
 	}
 }
 
@@ -547,7 +547,7 @@ public:
 
 		if (pOther->GiveAmmo(iGive, "rockets") != -1)
 		{
-			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
+			EmitSound(CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
 			return true;
 		}
 		return false;
