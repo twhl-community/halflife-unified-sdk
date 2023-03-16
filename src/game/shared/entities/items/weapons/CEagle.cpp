@@ -256,7 +256,7 @@ void CEagle::SecondaryAttack()
 
 			m_pLaser = nullptr;
 
-			EmitSoundDyn(CHAN_WEAPON, "weapons/desert_eagle_sight2.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+			EmitSound(CHAN_WEAPON, "weapons/desert_eagle_sight2.wav", VOL_NORM, ATTN_NORM);
 		}
 	}
 #endif
@@ -298,7 +298,7 @@ void CEagle::UpdateLaser()
 		{
 			m_pLaser = CEagleLaser::CreateSpot();
 
-			EmitSoundDyn(CHAN_WEAPON, "weapons/desert_eagle_sight.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+			EmitSound(CHAN_WEAPON, "weapons/desert_eagle_sight.wav", VOL_NORM, ATTN_NORM);
 		}
 
 		UTIL_MakeVectors(m_pPlayer->pev->v_angle);

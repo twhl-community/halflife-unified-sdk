@@ -164,7 +164,7 @@ void CShockRifle::PrimaryAttack()
 		// Water goes zap.
 		const float flVolume = RANDOM_FLOAT(0.8, 0.9);
 
-		m_pPlayer->EmitSoundDyn(CHAN_ITEM, "weapons/shock_discharge.wav", flVolume, ATTN_NONE, 0, PITCH_NORM);
+		m_pPlayer->EmitSound(CHAN_ITEM, "weapons/shock_discharge.wav", flVolume, ATTN_NONE);
 
 		RadiusDamage(
 			pev->origin,

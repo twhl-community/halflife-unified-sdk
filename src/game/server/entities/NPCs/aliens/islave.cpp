@@ -230,7 +230,7 @@ void CISlave::IdleSound()
 	WRITE_BYTE(0);		// decay * 0.1
 	MESSAGE_END();
 
-	EmitSoundDyn(CHAN_WEAPON, "debris/zap1.wav", 1, ATTN_NORM, 0, 100);
+	EmitSound(CHAN_WEAPON, "debris/zap1.wav", 1, ATTN_NORM);
 #endif
 }
 

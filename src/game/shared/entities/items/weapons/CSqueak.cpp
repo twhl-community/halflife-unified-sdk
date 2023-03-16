@@ -166,7 +166,7 @@ void CSqueakGrenade::Killed(CBaseEntity* attacker, int iGib)
 	pev->takedamage = DAMAGE_NO;
 
 	// play squeek blast
-	EmitSoundDyn(CHAN_ITEM, "squeek/sqk_blast1.wav", 1, 0.5, 0, PITCH_NORM);
+	EmitSound(CHAN_ITEM, "squeek/sqk_blast1.wav", 1, 0.5);
 
 	CSoundEnt::InsertSound(bits_SOUND_COMBAT, pev->origin, SMALL_EXPLOSION_VOLUME, 3.0);
 
@@ -460,9 +460,9 @@ bool CSqueak::Deploy()
 	float flRndSound = RANDOM_FLOAT(0, 1);
 
 	if (flRndSound <= 0.5)
-		EmitSoundDyn(CHAN_VOICE, "squeek/sqk_hunt2.wav", 1, ATTN_NORM, 0, 100);
+		EmitSound(CHAN_VOICE, "squeek/sqk_hunt2.wav", 1, ATTN_NORM);
 	else
-		EmitSoundDyn(CHAN_VOICE, "squeek/sqk_hunt3.wav", 1, ATTN_NORM, 0, 100);
+		EmitSound(CHAN_VOICE, "squeek/sqk_hunt3.wav", 1, ATTN_NORM);
 
 	m_pPlayer->m_iWeaponVolume = QUIET_GUN_VOLUME;
 

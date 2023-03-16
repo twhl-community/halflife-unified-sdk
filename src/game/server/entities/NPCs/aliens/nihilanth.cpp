@@ -1452,7 +1452,7 @@ void CNihilanthHVR::ZapInit(CBaseEntity* pEnemy)
 	SetTouch(&CNihilanthHVR::ZapTouch);
 	pev->nextthink = gpGlobals->time + 0.1;
 
-	EmitSoundDyn(CHAN_WEAPON, "debris/zap4.wav", 1, ATTN_NORM, 0, 100);
+	EmitSound(CHAN_WEAPON, "debris/zap4.wav", 1, ATTN_NORM);
 }
 
 void CNihilanthHVR::ZapThink()
@@ -1578,7 +1578,7 @@ void CNihilanthHVR::TeleportInit(CNihilanth* pOwner, CBaseEntity* pEnemy, CBaseE
 	SetTouch(&CNihilanthHVR::TeleportTouch);
 	pev->nextthink = gpGlobals->time + 0.1;
 
-	EmitSoundDyn(CHAN_WEAPON, "x/x_teleattack1.wav", 1, 0.2, 0, 100);
+	EmitSound(CHAN_WEAPON, "x/x_teleattack1.wav", 1, 0.2);
 }
 
 

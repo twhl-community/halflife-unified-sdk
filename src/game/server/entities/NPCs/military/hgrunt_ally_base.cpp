@@ -2024,7 +2024,7 @@ Schedule_t* CBaseHGruntAlly::GetSchedule()
 					{
 						AILogger->debug("Injured Grunt called for Medic");
 
-						EmitSoundDyn(CHAN_VOICE, "fgrunt/medic.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+						EmitSound(CHAN_VOICE, "fgrunt/medic.wav", VOL_NORM, ATTN_NORM);
 
 						JustSpoke();
 						m_flMedicWaitTime = gpGlobals->time + 5.0;

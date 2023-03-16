@@ -3255,7 +3255,7 @@ void CBaseMonster::PlaySentence(const char* pszSentence, float duration, float v
 void CBaseMonster::PlaySentenceCore(const char* pszSentence, float duration, float volume, float attenuation)
 {
 	if (pszSentence[0] == '!')
-		EmitSoundDyn(CHAN_VOICE, pszSentence, volume, attenuation, 0, PITCH_NORM);
+		EmitSound(CHAN_VOICE, pszSentence, volume, attenuation);
 	else
 		sentences::g_Sentences.PlayRndSz(this, pszSentence, volume, attenuation, 0, PITCH_NORM);
 }

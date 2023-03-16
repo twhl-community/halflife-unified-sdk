@@ -61,7 +61,7 @@ bool CItemRegenerationCTF::MyTouch(CBasePlayer* pPlayer)
 				g_engfuncs.pfnWriteString(STRING(pev->classname));
 				g_engfuncs.pfnMessageEnd();
 
-				EmitSoundDyn(CHAN_VOICE, "items/ammopickup1.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+				EmitSound(CHAN_VOICE, "items/ammopickup1.wav", VOL_NORM, ATTN_NORM);
 
 				if (pPlayer->pev->health < 100.0)
 				{

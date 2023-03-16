@@ -1588,7 +1588,7 @@ Vector CBaseEntity::FireBulletsPlayer(unsigned int cShots, Vector vecSrc, Vector
 					{
 						auto pHitEntity = Instance(tr.pHit);
 
-						pHitEntity->EmitSoundDyn(CHAN_BODY, "weapons/xbow_hitbod2.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+						pHitEntity->EmitSound(CHAN_BODY, "weapons/xbow_hitbod2.wav", VOL_NORM, ATTN_NORM);
 
 						if (pHitEntity->BloodColor() != DONT_BLEED)
 						{

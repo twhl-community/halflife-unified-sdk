@@ -158,7 +158,7 @@ void CSniperRifle::PrimaryAttack()
 
 void CSniperRifle::SecondaryAttack()
 {
-	m_pPlayer->EmitSoundDyn(CHAN_ITEM, "weapons/sniper_zoom.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+	m_pPlayer->EmitSound(CHAN_ITEM, "weapons/sniper_zoom.wav", VOL_NORM, ATTN_NORM);
 
 	ToggleZoom();
 

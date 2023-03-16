@@ -163,19 +163,19 @@ void CRosenberg::PainSound()
 	switch (RANDOM_LONG(0, 4))
 	{
 	case 0:
-		EmitSoundDyn(CHAN_VOICE, "rosenberg/ro_pain1.wav", 1, ATTN_NORM, 0, 100);
+		EmitSound(CHAN_VOICE, "rosenberg/ro_pain1.wav", 1, ATTN_NORM);
 		break;
 	case 1:
-		EmitSoundDyn(CHAN_VOICE, "rosenberg/ro_pain2.wav", 1, ATTN_NORM, 0, 100);
+		EmitSound(CHAN_VOICE, "rosenberg/ro_pain2.wav", 1, ATTN_NORM);
 		break;
 	case 2:
-		EmitSoundDyn(CHAN_VOICE, "rosenberg/ro_pain3.wav", 1, ATTN_NORM, 0, 100);
+		EmitSound(CHAN_VOICE, "rosenberg/ro_pain3.wav", 1, ATTN_NORM);
 		break;
 	case 3:
-		EmitSoundDyn(CHAN_VOICE, "rosenberg/ro_pain4.wav", 1, ATTN_NORM, 0, 100);
+		EmitSound(CHAN_VOICE, "rosenberg/ro_pain4.wav", 1, ATTN_NORM);
 		break;
 	case 4:
-		EmitSoundDyn(CHAN_VOICE, "rosenberg/ro_pain5.wav", 1, ATTN_NORM, 0, 100);
+		EmitSound(CHAN_VOICE, "rosenberg/ro_pain5.wav", 1, ATTN_NORM);
 		break;
 	}
 }

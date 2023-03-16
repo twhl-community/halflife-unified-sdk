@@ -1005,7 +1005,7 @@ void CBigMomma::StartTask(Task_t* pTask)
 
 	case TASK_MELEE_ATTACK1:
 		// Play an attack sound here
-		EmitSoundDyn(CHAN_VOICE, RANDOM_SOUND_ARRAY(pAttackSounds), 1.0, ATTN_NORM, 0, PITCH_NORM);
+		EmitSound(CHAN_VOICE, RANDOM_SOUND_ARRAY(pAttackSounds), 1.0, ATTN_NORM);
 		CBaseMonster::StartTask(pTask);
 		break;
 

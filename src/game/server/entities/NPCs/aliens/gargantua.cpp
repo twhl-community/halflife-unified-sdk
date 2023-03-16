@@ -539,8 +539,8 @@ void CGargantua::FlameCreate()
 			CSoundEnt::InsertSound(bits_SOUND_COMBAT, posGun, 384, 0.3);
 		}
 	}
-	EmitSoundDyn(CHAN_BODY, pBeamAttackSounds[1], 1.0, ATTN_NORM, 0, PITCH_NORM);
-	EmitSoundDyn(CHAN_WEAPON, pBeamAttackSounds[2], 1.0, ATTN_NORM, 0, PITCH_NORM);
+	EmitSound(CHAN_BODY, pBeamAttackSounds[1], 1.0, ATTN_NORM);
+	EmitSound(CHAN_WEAPON, pBeamAttackSounds[2], 1.0, ATTN_NORM);
 }
 
 
@@ -691,7 +691,7 @@ void CGargantua::FlameDestroy()
 {
 	int i;
 
-	EmitSoundDyn(CHAN_WEAPON, pBeamAttackSounds[0], 1.0, ATTN_NORM, 0, PITCH_NORM);
+	EmitSound(CHAN_WEAPON, pBeamAttackSounds[0], 1.0, ATTN_NORM);
 	for (i = 0; i < 4; i++)
 	{
 		if (m_pFlame[i])
@@ -827,7 +827,7 @@ void CGargantua::TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDi
 	{
 		if (m_painSoundTime < gpGlobals->time)
 		{
-			EmitSoundDyn(CHAN_VOICE, RANDOM_SOUND_ARRAY(pPainSounds), 1.0, ATTN_GARG, 0, PITCH_NORM);
+			EmitSound(CHAN_VOICE, RANDOM_SOUND_ARRAY(pPainSounds), 1.0, ATTN_GARG);
 			m_painSoundTime = gpGlobals->time + RANDOM_FLOAT(2.5, 4);
 		}
 	}
@@ -841,7 +841,7 @@ void CGargantua::TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDi
 			UTIL_Ricochet(ptr->vecEndPos, RANDOM_FLOAT(0.5, 1.5));
 			pev->dmgtime = gpGlobals->time;
 			//			if ( RANDOM_LONG(0,100) < 25 )
-			//				EmitSoundDyn(CHAN_BODY, pRicSounds[ RANDOM_LONG(0,std::size(pRicSounds)-1) ], 1.0, ATTN_NORM, 0, PITCH_NORM);
+			//				EmitSound(CHAN_BODY, pRicSounds[ RANDOM_LONG(0,std::size(pRicSounds)-1) ], 1.0, ATTN_NORM);
 		}
 		flDamage = 0;
 	}
@@ -1084,7 +1084,7 @@ void CGargantua::StartTask(Task_t* pTask)
 
 	case TASK_SOUND_ATTACK:
 		if (RANDOM_LONG(0, 100) < 30)
-			EmitSoundDyn(CHAN_VOICE, RANDOM_SOUND_ARRAY(pAttackSounds), 1.0, ATTN_GARG, 0, PITCH_NORM);
+			EmitSound(CHAN_VOICE, RANDOM_SOUND_ARRAY(pAttackSounds), 1.0, ATTN_GARG);
 		TaskComplete();
 		break;
 

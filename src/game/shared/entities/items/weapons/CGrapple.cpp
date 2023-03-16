@@ -122,7 +122,7 @@ void CGrapple::WeaponIdle()
 		}
 		else if (flNextIdle > 0.95)
 		{
-			m_pPlayer->EmitSoundDyn(CHAN_STATIC, "weapons/bgrapple_cough.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+			m_pPlayer->EmitSound(CHAN_STATIC, "weapons/bgrapple_cough.wav", VOL_NORM, ATTN_NORM);
 
 			iAnim = BGRAPPLE_COUGH;
 			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 4.6;

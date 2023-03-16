@@ -3599,7 +3599,7 @@ void CBasePlayer::FlashlightTurnOn()
 			}
 		}();
 
-		EmitSoundDyn(CHAN_WEAPON, onSound, 1.0, ATTN_NORM, 0, PITCH_NORM);
+		EmitSound(CHAN_WEAPON, onSound, 1.0, ATTN_NORM);
 
 		SetBits(pev->effects, GetFlashlightFlag());
 		UpdateFlashlight(this, true);
@@ -3622,7 +3622,7 @@ void CBasePlayer::FlashlightTurnOff()
 		}
 	}();
 
-	EmitSoundDyn(CHAN_WEAPON, offSound, 1.0, ATTN_NORM, 0, PITCH_NORM);
+	EmitSound(CHAN_WEAPON, offSound, 1.0, ATTN_NORM);
 
 	ClearBits(pev->effects, GetFlashlightFlag());
 	UpdateFlashlight(this, false);

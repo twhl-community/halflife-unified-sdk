@@ -243,7 +243,7 @@ void CSpore::MyBounceTouch(CBaseEntity* pOther)
 			}
 			else
 			{
-				EmitSoundDyn(CHAN_VOICE, "weapons/splauncher_bounce.wav", 0.25, ATTN_NORM, 0, PITCH_NORM);
+				EmitSound(CHAN_VOICE, "weapons/splauncher_bounce.wav", 0.25, ATTN_NORM);
 			}
 		}
 	}

@@ -1334,7 +1334,7 @@ void CFuncTrackTrain::StopTrainSound()
 	if (m_soundPlaying && !FStringNull(m_sounds))
 	{
 		StopSound(CHAN_STATIC, STRING(m_sounds));
-		EmitSoundDyn(CHAN_ITEM, "plats/ttrain_brake1.wav", m_flVolume, ATTN_NORM, 0, 100);
+		EmitSound(CHAN_ITEM, "plats/ttrain_brake1.wav", m_flVolume, ATTN_NORM);
 	}
 
 	m_soundPlaying = false;
@@ -1357,7 +1357,7 @@ void CFuncTrackTrain::UpdateTrainSound()
 		if (!m_soundPlaying)
 		{
 			// play startup sound for train
-			EmitSoundDyn(CHAN_ITEM, "plats/ttrain_start1.wav", m_flVolume, ATTN_NORM, 0, 100);
+			EmitSound(CHAN_ITEM, "plats/ttrain_start1.wav", m_flVolume, ATTN_NORM);
 		}
 
 		EmitSoundDyn(CHAN_STATIC, STRING(m_sounds), m_flVolume, ATTN_NORM, 0, (int)flpitch);
