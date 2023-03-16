@@ -22,11 +22,10 @@
 #include "teamplay_gamerules.h"
 #include "ctfplay_gamerules.h"
 #include "coopplay_gamerules.h"
+#include "spawnpoints.h"
 #include "world.h"
 #include "UserMessages.h"
 #include "items/weapons/AmmoTypeSystem.h"
-
-edict_t* EntSelectSpawnPoint(CBasePlayer* pPlayer);
 
 CGameRules::CGameRules()
 {

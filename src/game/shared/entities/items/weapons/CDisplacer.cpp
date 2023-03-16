@@ -16,14 +16,13 @@
 #include "UserMessages.h"
 
 #ifndef CLIENT_DLL
+#include "spawnpoints.h"
 #include "rope/CRope.h"
 
 #include "weapons/CDisplacerBall.h"
 
 #include "ctf/CTFGoal.h"
 #include "ctf/CTFGoalFlag.h"
-
-edict_t* EntSelectSpawnPoint(CBasePlayer* pPlayer);
 #endif
 
 #include "CDisplacer.h"

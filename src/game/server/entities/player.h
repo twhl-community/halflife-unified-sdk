@@ -694,4 +694,3 @@ inline bool giPrecacheGrunt = false;
  *	@brief Display the game title if this key is set
  */
 inline std::string g_DisplayTitleName;
-inline CBaseEntity* g_pLastSpawn = nullptr;

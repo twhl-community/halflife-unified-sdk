@@ -95,6 +95,8 @@ target_sources(server PRIVATE
 	entities/player.cpp
 	entities/player.h
 	entities/player_sethudcolor.cpp
+	entities/spawnpoints.cpp
+	entities/spawnpoints.h
 	entities/sound.cpp
 	entities/soundent.cpp
 	entities/soundent.h

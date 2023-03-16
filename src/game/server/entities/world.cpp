@@ -26,6 +26,7 @@
 #include "client.h"
 #include "teamplay_gamerules.h"
 #include "ctfplay_gamerules.h"
+#include "spawnpoints.h"
 #include "world.h"
 #include "ServerLibrary.h"
 #include "ctf/CItemCTF.h"
