@@ -316,17 +316,15 @@ void CEagle::UpdateLaser()
 #endif
 }
 
-bool CEagle::GetItemInfo(ItemInfo* p)
+bool CEagle::GetWeaponInfo(WeaponInfo& info)
 {
-	p->pszAmmo1 = "357";
-	p->pszName = STRING(pev->classname);
-	p->pszAmmo2 = nullptr;
-	p->iMaxClip = EAGLE_MAX_CLIP;
-	p->iSlot = 1;
-	p->iPosition = 2;
-	p->iFlags = 0;
-	p->iId = m_iId = WEAPON_EAGLE;
-	p->iWeight = EAGLE_WEIGHT;
+	info.AmmoType1 = "357";
+	info.Name = STRING(pev->classname);
+	info.MagazineSize1 = EAGLE_MAX_CLIP;
+	info.Slot = 1;
+	info.Position = 2;
+	info.Id = m_iId = WEAPON_EAGLE;
+	info.Weight = EAGLE_WEIGHT;
 	return true;
 }
 

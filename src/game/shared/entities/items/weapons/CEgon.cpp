@@ -95,17 +95,15 @@ void CEgon::Holster()
 	EndAttack();
 }
 
-bool CEgon::GetItemInfo(ItemInfo* p)
+bool CEgon::GetWeaponInfo(WeaponInfo& info)
 {
-	p->pszName = STRING(pev->classname);
-	p->pszAmmo1 = "uranium";
-	p->pszAmmo2 = nullptr;
-	p->iMaxClip = WEAPON_NOCLIP;
-	p->iSlot = 3;
-	p->iPosition = 2;
-	p->iId = m_iId = WEAPON_EGON;
-	p->iFlags = 0;
-	p->iWeight = EGON_WEIGHT;
+	info.Name = STRING(pev->classname);
+	info.AmmoType1 = "uranium";
+	info.MagazineSize1 = WEAPON_NOCLIP;
+	info.Slot = 3;
+	info.Position = 2;
+	info.Id = m_iId = WEAPON_EGON;
+	info.Weight = EGON_WEIGHT;
 
 	return true;
 }

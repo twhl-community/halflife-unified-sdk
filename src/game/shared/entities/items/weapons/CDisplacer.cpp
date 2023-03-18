@@ -428,17 +428,15 @@ void CDisplacer::AltFireThink()
 #endif
 }
 
-bool CDisplacer::GetItemInfo(ItemInfo* p)
+bool CDisplacer::GetWeaponInfo(WeaponInfo& info)
 {
-	p->pszAmmo1 = "uranium";
-	p->pszName = STRING(pev->classname);
-	p->pszAmmo2 = nullptr;
-	p->iMaxClip = WEAPON_NOCLIP;
-	p->iFlags = 0;
-	p->iSlot = 5;
-	p->iPosition = 1;
-	p->iId = m_iId = WEAPON_DISPLACER;
-	p->iWeight = DISPLACER_WEIGHT;
+	info.AmmoType1 = "uranium";
+	info.Name = STRING(pev->classname);
+	info.MagazineSize1 = WEAPON_NOCLIP;
+	info.Slot = 5;
+	info.Position = 1;
+	info.Id = m_iId = WEAPON_DISPLACER;
+	info.Weight = DISPLACER_WEIGHT;
 	return true;
 }
 

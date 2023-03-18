@@ -189,12 +189,11 @@ void UTIL_PrecacheOtherWeapon(const char* szClassname)
 		return;
 	}
 
-	ItemInfo II;
 	entity->Precache();
-	memset(&II, 0, sizeof II);
-	if (entity->GetItemInfo(&II))
+
+	if (WeaponInfo info; entity->GetWeaponInfo(info))
 	{
-		CBasePlayerWeapon::ItemInfoArray[II.iId] = II;
+		g_WeaponData.Register(std::move(info));
 	}
 
 	REMOVE_ENTITY(entity->edict());
@@ -205,7 +204,7 @@ void W_Precache()
 {
 	g_GameLogger->trace("Precaching weapon assets");
 
-	memset(CBasePlayerWeapon::ItemInfoArray, 0, sizeof(CBasePlayerWeapon::ItemInfoArray));
+	g_WeaponData.Clear();
 
 	Weapons_RegisterAmmoTypes();
 

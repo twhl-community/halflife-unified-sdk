@@ -305,17 +305,15 @@ void CSporeLauncher::Reload()
 	}
 }
 
-bool CSporeLauncher::GetItemInfo(ItemInfo* p)
+bool CSporeLauncher::GetWeaponInfo(WeaponInfo& info)
 {
-	p->pszAmmo1 = "spores";
-	p->pszName = STRING(pev->classname);
-	p->pszAmmo2 = nullptr;
-	p->iMaxClip = SPORELAUNCHER_MAX_CLIP;
-	p->iSlot = 6;
-	p->iPosition = 0;
-	p->iId = m_iId = WEAPON_SPORELAUNCHER;
-	p->iFlags = 0;
-	p->iWeight = SPORELAUNCHER_WEIGHT;
+	info.AmmoType1 = "spores";
+	info.Name = STRING(pev->classname);
+	info.MagazineSize1 = SPORELAUNCHER_MAX_CLIP;
+	info.Slot = 6;
+	info.Position = 0;
+	info.Id = m_iId = WEAPON_SPORELAUNCHER;
+	info.Weight = SPORELAUNCHER_WEIGHT;
 
 	return true;
 }

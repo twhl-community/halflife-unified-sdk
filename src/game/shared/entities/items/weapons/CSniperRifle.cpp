@@ -199,17 +199,15 @@ void CSniperRifle::Reload()
 	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 4.102;
 }
 
-bool CSniperRifle::GetItemInfo(ItemInfo* p)
+bool CSniperRifle::GetWeaponInfo(WeaponInfo& info)
 {
-	p->pszAmmo1 = "762";
-	p->pszName = STRING(pev->classname);
-	p->pszAmmo2 = nullptr;
-	p->iMaxClip = SNIPERRIFLE_MAX_CLIP;
-	p->iSlot = 5;
-	p->iPosition = 2;
-	p->iFlags = 0;
-	p->iId = m_iId = WEAPON_SNIPERRIFLE;
-	p->iWeight = SNIPERRIFLE_WEIGHT;
+	info.AmmoType1 = "762";
+	info.Name = STRING(pev->classname);
+	info.MagazineSize1 = SNIPERRIFLE_MAX_CLIP;
+	info.Slot = 5;
+	info.Position = 2;
+	info.Id = m_iId = WEAPON_SNIPERRIFLE;
+	info.Weight = SNIPERRIFLE_WEIGHT;
 	return true;
 }
 

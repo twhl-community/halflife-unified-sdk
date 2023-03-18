@@ -271,15 +271,13 @@ void CKnife::Smack()
 	DecalGunshot(&m_trHit, BULLET_PLAYER_CROWBAR);
 }
 
-bool CKnife::GetItemInfo(ItemInfo* p)
+bool CKnife::GetWeaponInfo(WeaponInfo& info)
 {
-	p->pszAmmo1 = nullptr;
-	p->pszName = STRING(pev->classname);
-	p->pszAmmo2 = nullptr;
-	p->iMaxClip = WEAPON_NOCLIP;
-	p->iSlot = 0;
-	p->iPosition = 2;
-	p->iId = m_iId = WEAPON_KNIFE;
-	p->iWeight = 0;
+	info.Name = STRING(pev->classname);
+	info.MagazineSize1 = WEAPON_NOCLIP;
+	info.Slot = 0;
+	info.Position = 2;
+	info.Id = m_iId = WEAPON_KNIFE;
+	info.Weight = 0;
 	return true;
 }

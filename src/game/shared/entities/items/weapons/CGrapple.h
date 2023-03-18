@@ -67,7 +67,7 @@ public:
 
 	void SecondaryAttack() override;
 
-	bool GetItemInfo(ItemInfo* p) override;
+	bool GetWeaponInfo(WeaponInfo& info) override;
 
 	bool UseDecrement() override
 	{

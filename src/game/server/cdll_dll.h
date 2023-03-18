@@ -75,6 +75,10 @@ enum WeaponId
 	WEAPON_SUIT = 31
 };
 
+/**
+*	@brief Indicates that a weapon does not use magazines.
+*/
+constexpr int WEAPON_NOCLIP = -1;
 
 enum class SuitLightType
 {

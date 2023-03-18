@@ -21,6 +21,7 @@
 #include "basemonster.h"
 #include "CBaseAnimating.h"
 #include "effects.h"
+#include "WeaponDataSystem.h"
 #include "weaponinfo.h"
 
 class CBasePlayer;
@@ -120,7 +121,6 @@ public:
 #define PENGUIN_MAX_CARRY 9
 
 // the maximum amount of ammo each weapon's clip can hold
-#define WEAPON_NOCLIP -1
 
 // #define CROWBAR_MAX_CLIP		WEAPON_NOCLIP
 #define GLOCK_MAX_CLIP 17
@@ -213,19 +213,6 @@ enum Bullet
 
 #define WEAPON_IS_ONTARGET 0x40
 
-struct ItemInfo
-{
-	int iSlot;
-	int iPosition;
-	const char* pszAmmo1; // ammo 1 type
-	const char* pszAmmo2; // ammo 2 type
-	const char* pszName;
-	int iMaxClip;
-	int iId;
-	int iFlags;
-	int iWeight; // this value used to determine this weapon's importance in autoselection.
-};
-
 void Weapons_RegisterAmmoTypes();
 
 /**
@@ -242,6 +229,18 @@ public:
 	bool Restore(CRestore& restore) override;
 
 	static TYPEDESCRIPTION m_SaveData[];
+
+	void OnCreate() override
+	{
+		CBaseAnimating::OnCreate();
+
+		m_WeaponInfo = g_WeaponData.GetByName(GetClassname());
+
+		if (!m_WeaponInfo)
+		{
+			m_WeaponInfo = &g_WeaponData.DummyInfo;
+		}
+	}
 
 	/**
 	*	@brief return true if the item you want the item added to the player inventory
@@ -316,7 +315,7 @@ public:
 	/**
 	*	@brief returns false if struct not filled out
 	*/
-	virtual bool GetItemInfo(ItemInfo* p) { return false; }
+	virtual bool GetWeaponInfo(WeaponInfo& info) { return false; }
 	
 	/**
 	*	@brief this function determines whether or not a weapon is useable by the player in its current state.
@@ -442,20 +441,19 @@ public:
 
 	void PrintState();
 
-	static inline ItemInfo ItemInfoArray[MAX_WEAPONS];
-
-	int iItemSlot() { return ItemInfoArray[m_iId].iSlot; } // return 0 to MAX_ITEMS_SLOTS, used in hud
-	int iItemPosition() { return ItemInfoArray[m_iId].iPosition; }
-	const char* pszAmmo1() { return ItemInfoArray[m_iId].pszAmmo1; }
-	const char* pszAmmo2() { return ItemInfoArray[m_iId].pszAmmo2; }
-	const char* pszName() { return ItemInfoArray[m_iId].pszName; }
-	int iMaxClip() { return ItemInfoArray[m_iId].iMaxClip; }
-	int iWeight() { return ItemInfoArray[m_iId].iWeight; }
-	int iFlags() { return ItemInfoArray[m_iId].iFlags; }
+	int iItemSlot() { return m_WeaponInfo->Slot; } // return 0 to MAX_ITEMS_SLOTS, used in hud
+	int iItemPosition() { return m_WeaponInfo->Position; }
+	const char* pszAmmo1() { return !m_WeaponInfo->AmmoType1.empty() ? m_WeaponInfo->AmmoType1.c_str() : nullptr; }
+	const char* pszAmmo2() { return !m_WeaponInfo->AmmoType2.empty() ? m_WeaponInfo->AmmoType2.c_str() : nullptr; }
+	const char* pszName() { return m_WeaponInfo->Name.c_str(); }
+	int iMaxClip() { return m_WeaponInfo->MagazineSize1; }
+	int iWeight() { return m_WeaponInfo->Weight; }
+	int iFlags() { return m_WeaponInfo->Flags; }
 
 	CBasePlayer* m_pPlayer;
 	CBasePlayerWeapon* m_pNext;
 	int m_iId; // WEAPON_???
+	const WeaponInfo* m_WeaponInfo{};
 
 	/**
 	*	@brief Hack so deploy animations work when weapon prediction is enabled.

@@ -1038,7 +1038,7 @@ void CHalfLifeCTFplay::PlayerKilled(CBasePlayer* pVictim, CBaseEntity* pKiller, 
 			if (pKiller == inflictor)
 			{
 				if (killerPlayer->m_pActiveWeapon)
-					pszInflictorName = CBasePlayerWeapon::ItemInfoArray[killerPlayer->m_pActiveWeapon->m_iId].pszName;
+					pszInflictorName = g_WeaponData.GetByIndex(killerPlayer->m_pActiveWeapon->m_iId)->Name.c_str();
 			}
 			else if (inflictor && !FStringNull(inflictor->pev->classname))
 			{

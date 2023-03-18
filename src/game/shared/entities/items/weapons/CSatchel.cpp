@@ -227,17 +227,16 @@ void CSatchel::Precache()
 }
 
 
-bool CSatchel::GetItemInfo(ItemInfo* p)
+bool CSatchel::GetWeaponInfo(WeaponInfo& info)
 {
-	p->pszName = STRING(pev->classname);
-	p->pszAmmo1 = "Satchel Charge";
-	p->pszAmmo2 = nullptr;
-	p->iMaxClip = WEAPON_NOCLIP;
-	p->iSlot = 4;
-	p->iPosition = 1;
-	p->iFlags = ITEM_FLAG_SELECTONEMPTY | ITEM_FLAG_LIMITINWORLD | ITEM_FLAG_EXHAUSTIBLE;
-	p->iId = m_iId = WEAPON_SATCHEL;
-	p->iWeight = SATCHEL_WEIGHT;
+	info.Name = STRING(pev->classname);
+	info.AmmoType1 = "Satchel Charge";
+	info.MagazineSize1 = WEAPON_NOCLIP;
+	info.Slot = 4;
+	info.Position = 1;
+	info.Flags = ITEM_FLAG_SELECTONEMPTY | ITEM_FLAG_LIMITINWORLD | ITEM_FLAG_EXHAUSTIBLE;
+	info.Id = m_iId = WEAPON_SATCHEL;
+	info.Weight = SATCHEL_WEIGHT;
 
 	return true;
 }

@@ -514,16 +514,14 @@ void CPipewrench::SetWeaponData(const weapon_data_t& data)
 	m_iSwingMode = data.m_fInSpecialReload;
 }
 
-bool CPipewrench::GetItemInfo(ItemInfo* p)
+bool CPipewrench::GetWeaponInfo(WeaponInfo& info)
 {
-	p->pszAmmo1 = nullptr;
-	p->pszName = STRING(pev->classname);
-	p->pszAmmo2 = nullptr;
-	p->iMaxClip = WEAPON_NOCLIP;
-	p->iSlot = 0;
-	p->iPosition = 1;
-	p->iId = m_iId = WEAPON_PIPEWRENCH;
-	p->iWeight = PIPEWRENCH_WEIGHT;
+	info.Name = STRING(pev->classname);
+	info.MagazineSize1 = WEAPON_NOCLIP;
+	info.Slot = 0;
+	info.Position = 1;
+	info.Id = m_iId = WEAPON_PIPEWRENCH;
+	info.Weight = PIPEWRENCH_WEIGHT;
 
 	return true;
 }

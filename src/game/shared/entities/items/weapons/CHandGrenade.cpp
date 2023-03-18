@@ -50,17 +50,16 @@ void CHandGrenade::Precache()
 	PrecacheModel("models/p_grenade.mdl");
 }
 
-bool CHandGrenade::GetItemInfo(ItemInfo* p)
+bool CHandGrenade::GetWeaponInfo(WeaponInfo& info)
 {
-	p->pszName = STRING(pev->classname);
-	p->pszAmmo1 = "Hand Grenade";
-	p->pszAmmo2 = nullptr;
-	p->iMaxClip = WEAPON_NOCLIP;
-	p->iSlot = 4;
-	p->iPosition = 0;
-	p->iId = m_iId = WEAPON_HANDGRENADE;
-	p->iWeight = HANDGRENADE_WEIGHT;
-	p->iFlags = ITEM_FLAG_LIMITINWORLD | ITEM_FLAG_EXHAUSTIBLE;
+	info.Name = STRING(pev->classname);
+	info.AmmoType1 = "Hand Grenade";
+	info.MagazineSize1 = WEAPON_NOCLIP;
+	info.Slot = 4;
+	info.Position = 0;
+	info.Id = m_iId = WEAPON_HANDGRENADE;
+	info.Weight = HANDGRENADE_WEIGHT;
+	info.Flags = ITEM_FLAG_LIMITINWORLD | ITEM_FLAG_EXHAUSTIBLE;
 
 	return true;
 }

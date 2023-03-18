@@ -36,7 +36,7 @@ public:
 	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
-	bool GetItemInfo(ItemInfo* p) override;
+	bool GetWeaponInfo(WeaponInfo& info) override;
 	void SetObjectCollisionBox() override
 	{
 		//!!!BUGBUG - fix the model!

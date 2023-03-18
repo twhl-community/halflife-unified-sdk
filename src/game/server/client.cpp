@@ -1695,8 +1695,6 @@ int GetWeaponData(edict_t* player, weapon_data_t* info)
 	entvars_t* pev = &player->v;
 	CBasePlayer* pl = dynamic_cast<CBasePlayer*>(CBasePlayer::Instance(pev));
 
-	ItemInfo II;
-
 	if (!pl)
 		return 1;
 
@@ -1713,14 +1711,14 @@ int GetWeaponData(edict_t* player, weapon_data_t* info)
 				if (gun->UseDecrement())
 				{
 					// Get The ID.
-					memset(&II, 0, sizeof(II));
-					gun->GetItemInfo(&II);
+					WeaponInfo weaponInfo;
+					gun->GetWeaponInfo(weaponInfo);
 
-					if (II.iId >= 0 && II.iId < MAX_WEAPONS)
+					if (weaponInfo.Id >= 0 && weaponInfo.Id < MAX_WEAPONS)
 					{
-						item = &info[II.iId];
+						item = &info[weaponInfo.Id];
 
-						item->m_iId = II.iId;
+						item->m_iId = weaponInfo.Id;
 						item->m_iClip = gun->m_iClip;
 
 						item->m_flTimeWeaponIdle = V_max(gun->m_flTimeWeaponIdle, -0.001);
@@ -1843,11 +1841,10 @@ void UpdateClientData(const edict_t* ent, int sendweapons, clientdata_t* cd)
 				CBasePlayerWeapon* gun = pl->m_pActiveWeapon;
 				if (gun->UseDecrement())
 				{
-					ItemInfo II;
-					memset(&II, 0, sizeof(II));
-					gun->GetItemInfo(&II);
+					WeaponInfo weaponInfo;
+					gun->GetWeaponInfo(weaponInfo);
 
-					cd->m_iId = II.iId;
+					cd->m_iId = weaponInfo.Id;
 
 					cd->vuser3.z = gun->m_iSecondaryAmmoType;
 					cd->vuser4.x = gun->m_iPrimaryAmmoType;

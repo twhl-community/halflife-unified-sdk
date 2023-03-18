@@ -191,17 +191,16 @@ void CPenguin::SecondaryAttack()
 	// Nothing
 }
 
-bool CPenguin::GetItemInfo(ItemInfo* p)
+bool CPenguin::GetWeaponInfo(WeaponInfo& info)
 {
-	p->pszAmmo1 = "Penguins";
-	p->pszName = STRING(pev->classname);
-	p->pszAmmo2 = nullptr;
-	p->iMaxClip = WEAPON_NOCLIP;
-	p->iSlot = 4;
-	p->iPosition = 4;
-	p->iId = m_iId = WEAPON_PENGUIN;
-	p->iWeight = PENGUIN_WEIGHT;
-	p->iFlags = ITEM_FLAG_LIMITINWORLD | ITEM_FLAG_EXHAUSTIBLE;
+	info.AmmoType1 = "Penguins";
+	info.Name = STRING(pev->classname);
+	info.MagazineSize1 = WEAPON_NOCLIP;
+	info.Slot = 4;
+	info.Position = 4;
+	info.Id = m_iId = WEAPON_PENGUIN;
+	info.Weight = PENGUIN_WEIGHT;
+	info.Flags = ITEM_FLAG_LIMITINWORLD | ITEM_FLAG_EXHAUSTIBLE;
 
 	return true;
 }

@@ -437,17 +437,16 @@ void CSqueak::Precache()
 }
 
 
-bool CSqueak::GetItemInfo(ItemInfo* p)
+bool CSqueak::GetWeaponInfo(WeaponInfo& info)
 {
-	p->pszName = STRING(pev->classname);
-	p->pszAmmo1 = "Snarks";
-	p->pszAmmo2 = nullptr;
-	p->iMaxClip = WEAPON_NOCLIP;
-	p->iSlot = 4;
-	p->iPosition = 3;
-	p->iId = m_iId = WEAPON_SNARK;
-	p->iWeight = SNARK_WEIGHT;
-	p->iFlags = ITEM_FLAG_LIMITINWORLD | ITEM_FLAG_EXHAUSTIBLE;
+	info.Name = STRING(pev->classname);
+	info.AmmoType1 = "Snarks";
+	info.MagazineSize1 = WEAPON_NOCLIP;
+	info.Slot = 4;
+	info.Position = 3;
+	info.Id = m_iId = WEAPON_SNARK;
+	info.Weight = SNARK_WEIGHT;
+	info.Flags = ITEM_FLAG_LIMITINWORLD | ITEM_FLAG_EXHAUSTIBLE;
 
 	return true;
 }

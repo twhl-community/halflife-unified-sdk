@@ -67,7 +67,7 @@ public:
 
 	void EXPORT AltFireThink();
 
-	bool GetItemInfo(ItemInfo* p) override;
+	bool GetWeaponInfo(WeaponInfo& info) override;
 
 	void IncrementAmmo(CBasePlayer* pPlayer) override;
 

@@ -55,7 +55,7 @@ public:
 
 	void EXPORT Smack();
 
-	bool GetItemInfo(ItemInfo* p) override;
+	bool GetWeaponInfo(WeaponInfo& info) override;
 
 	bool UseDecrement() override
 	{

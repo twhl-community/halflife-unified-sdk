@@ -314,17 +314,15 @@ void CRpg::Precache()
 }
 
 
-bool CRpg::GetItemInfo(ItemInfo* p)
+bool CRpg::GetWeaponInfo(WeaponInfo& info)
 {
-	p->pszName = STRING(pev->classname);
-	p->pszAmmo1 = "rockets";
-	p->pszAmmo2 = nullptr;
-	p->iMaxClip = RPG_MAX_CLIP;
-	p->iSlot = 3;
-	p->iPosition = 0;
-	p->iId = m_iId = WEAPON_RPG;
-	p->iFlags = 0;
-	p->iWeight = RPG_WEIGHT;
+	info.Name = STRING(pev->classname);
+	info.AmmoType1 = "rockets";
+	info.MagazineSize1 = RPG_MAX_CLIP;
+	info.Slot = 3;
+	info.Position = 0;
+	info.Id = m_iId = WEAPON_RPG;
+	info.Weight = RPG_WEIGHT;
 
 	return true;
 }

@@ -283,16 +283,15 @@ void CShockRifle::RechargeAmmo(bool bLoud)
 	}
 }
 
-bool CShockRifle::GetItemInfo(ItemInfo* p)
+bool CShockRifle::GetWeaponInfo(WeaponInfo& info)
 {
-	p->pszAmmo1 = "shock";
-	p->pszName = STRING(pev->classname);
-	p->pszAmmo2 = nullptr;
-	p->iMaxClip = WEAPON_NOCLIP;
-	p->iFlags = ITEM_FLAG_NOAUTORELOAD | ITEM_FLAG_NOAUTOSWITCHEMPTY;
-	p->iSlot = 6;
-	p->iPosition = 1;
-	p->iId = m_iId = WEAPON_SHOCKRIFLE;
-	p->iWeight = SHOCKRIFLE_WEIGHT;
+	info.AmmoType1 = "shock";
+	info.Name = STRING(pev->classname);
+	info.MagazineSize1 = WEAPON_NOCLIP;
+	info.Flags = ITEM_FLAG_NOAUTORELOAD | ITEM_FLAG_NOAUTOSWITCHEMPTY;
+	info.Slot = 6;
+	info.Position = 1;
+	info.Id = m_iId = WEAPON_SHOCKRIFLE;
+	info.Weight = SHOCKRIFLE_WEIGHT;
 	return true;
 }

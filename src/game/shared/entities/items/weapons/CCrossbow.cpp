@@ -230,17 +230,15 @@ void CCrossbow::Precache()
 }
 
 
-bool CCrossbow::GetItemInfo(ItemInfo* p)
+bool CCrossbow::GetWeaponInfo(WeaponInfo& info)
 {
-	p->pszName = STRING(pev->classname);
-	p->pszAmmo1 = "bolts";
-	p->pszAmmo2 = nullptr;
-	p->iMaxClip = CROSSBOW_MAX_CLIP;
-	p->iSlot = 2;
-	p->iPosition = 2;
-	p->iId = WEAPON_CROSSBOW;
-	p->iFlags = 0;
-	p->iWeight = CROSSBOW_WEIGHT;
+	info.Name = STRING(pev->classname);
+	info.AmmoType1 = "bolts";
+	info.MagazineSize1 = CROSSBOW_MAX_CLIP;
+	info.Slot = 2;
+	info.Position = 2;
+	info.Id = WEAPON_CROSSBOW;
+	info.Weight = CROSSBOW_WEIGHT;
 	return true;
 }
 

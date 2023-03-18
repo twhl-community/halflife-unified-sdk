@@ -83,17 +83,15 @@ void CGauss::Precache()
 	m_usGaussSpin = PRECACHE_EVENT(1, "events/gaussspin.sc");
 }
 
-bool CGauss::GetItemInfo(ItemInfo* p)
+bool CGauss::GetWeaponInfo(WeaponInfo& info)
 {
-	p->pszName = STRING(pev->classname);
-	p->pszAmmo1 = "uranium";
-	p->pszAmmo2 = nullptr;
-	p->iMaxClip = WEAPON_NOCLIP;
-	p->iSlot = 3;
-	p->iPosition = 1;
-	p->iId = m_iId = WEAPON_GAUSS;
-	p->iFlags = 0;
-	p->iWeight = GAUSS_WEIGHT;
+	info.Name = STRING(pev->classname);
+	info.AmmoType1 = "uranium";
+	info.MagazineSize1 = WEAPON_NOCLIP;
+	info.Slot = 3;
+	info.Position = 1;
+	info.Id = m_iId = WEAPON_GAUSS;
+	info.Weight = GAUSS_WEIGHT;
 
 	return true;
 }

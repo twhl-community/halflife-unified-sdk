@@ -319,17 +319,15 @@ int CM249::RecalculateBody(int iClip)
 	}
 }
 
-bool CM249::GetItemInfo(ItemInfo* p)
+bool CM249::GetWeaponInfo(WeaponInfo& info)
 {
-	p->pszAmmo1 = "556";
-	p->pszName = STRING(pev->classname);
-	p->pszAmmo2 = nullptr;
-	p->iMaxClip = M249_MAX_CLIP;
-	p->iSlot = 5;
-	p->iPosition = 0;
-	p->iFlags = 0;
-	p->iId = m_iId = WEAPON_M249;
-	p->iWeight = M249_WEIGHT;
+	info.AmmoType1 = "556";
+	info.Name = STRING(pev->classname);
+	info.MagazineSize1 = M249_MAX_CLIP;
+	info.Slot = 5;
+	info.Position = 0;
+	info.Id = m_iId = WEAPON_M249;
+	info.Weight = M249_WEIGHT;
 
 	return true;
 }

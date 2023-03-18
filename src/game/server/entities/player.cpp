@@ -4307,35 +4307,27 @@ void CBasePlayer::UpdateClientData()
 		// ????		Icons
 
 		// Send ALL the weapon info now
-		int i;
-
-		for (i = 0; i < MAX_WEAPONS; i++)
+		for (int i = 0; i < MAX_WEAPONS; i++)
 		{
-			ItemInfo& II = CBasePlayerWeapon::ItemInfoArray[i];
+			const auto info = g_WeaponData.GetByIndex(i);
 
-			if (WEAPON_NONE == II.iId)
+			if (!info || info->Id == WEAPON_NONE)
 				continue;
 
-			const char* pszName;
-			if (!II.pszName)
-				pszName = "Empty";
-			else
-				pszName = II.pszName;
-
 			// TODO: ammo info should be sent over separately.
-			const auto type1 = II.pszAmmo1 ? g_AmmoTypes.GetByName(II.pszAmmo1) : nullptr;
-			const auto type2 = II.pszAmmo2 ? g_AmmoTypes.GetByName(II.pszAmmo2) : nullptr;
+			const auto type1 = !info->AmmoType1.empty() ? g_AmmoTypes.GetByName(info->AmmoType1.c_str()) : nullptr;
+			const auto type2 = !info->AmmoType2.empty() ? g_AmmoTypes.GetByName(info->AmmoType2.c_str()) : nullptr;
 
 			MESSAGE_BEGIN(MSG_ONE, gmsgWeaponList, nullptr, pev);
-			WRITE_STRING(pszName);										// string	weapon name
-			WRITE_BYTE(GetAmmoIndex(II.pszAmmo1));						// byte		Ammo Type
+			WRITE_STRING(info->Name.c_str());							// string	weapon name
+			WRITE_BYTE(type1 ? type1->Id : -1);							// byte		Ammo Type
 			WRITE_BYTE(type1 ? type1->MaximumCapacity : WEAPON_NOCLIP);	// byte     Max Ammo 1
-			WRITE_BYTE(GetAmmoIndex(II.pszAmmo2));						// byte		Ammo2 Type
+			WRITE_BYTE(type2 ? type2->Id : -1);							// byte		Ammo2 Type
 			WRITE_BYTE(type2 ? type2->MaximumCapacity : WEAPON_NOCLIP);	// byte     Max Ammo 2
-			WRITE_BYTE(II.iSlot);										// byte		bucket
-			WRITE_BYTE(II.iPosition);									// byte		bucket pos
-			WRITE_BYTE(II.iId);											// byte		id (bit index into m_WeaponBits)
-			WRITE_BYTE(II.iFlags);										// byte		Flags
+			WRITE_BYTE(info->Slot);										// byte		bucket
+			WRITE_BYTE(info->Position);									// byte		bucket pos
+			WRITE_BYTE(info->Id);										// byte		id (bit index into m_WeaponBits)
+			WRITE_BYTE(info->Flags);									// byte		Flags
 			MESSAGE_END();
 		}
 	}

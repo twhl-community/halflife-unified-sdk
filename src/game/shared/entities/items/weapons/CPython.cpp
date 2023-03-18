@@ -26,17 +26,15 @@ void CPython::OnCreate()
 	m_WorldModel = pev->model = MAKE_STRING("models/w_357.mdl");
 }
 
-bool CPython::GetItemInfo(ItemInfo* p)
+bool CPython::GetWeaponInfo(WeaponInfo& info)
 {
-	p->pszName = STRING(pev->classname);
-	p->pszAmmo1 = "357";
-	p->pszAmmo2 = nullptr;
-	p->iMaxClip = PYTHON_MAX_CLIP;
-	p->iFlags = 0;
-	p->iSlot = 1;
-	p->iPosition = 1;
-	p->iId = m_iId = WEAPON_PYTHON;
-	p->iWeight = PYTHON_WEIGHT;
+	info.Name = STRING(pev->classname);
+	info.AmmoType1 = "357";
+	info.MagazineSize1 = PYTHON_MAX_CLIP;
+	info.Slot = 1;
+	info.Position = 1;
+	info.Id = m_iId = WEAPON_PYTHON;
+	info.Weight = PYTHON_WEIGHT;
 
 	return true;
 }

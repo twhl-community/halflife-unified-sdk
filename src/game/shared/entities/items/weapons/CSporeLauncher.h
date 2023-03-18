@@ -68,7 +68,7 @@ public:
 
 	void Reload() override;
 
-	bool GetItemInfo(ItemInfo* p) override;
+	bool GetWeaponInfo(WeaponInfo& info) override;
 
 	void IncrementAmmo(CBasePlayer* pPlayer) override;
 

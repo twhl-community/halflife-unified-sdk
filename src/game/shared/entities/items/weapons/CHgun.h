@@ -39,7 +39,7 @@ public:
 	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
-	bool GetItemInfo(ItemInfo* p) override;
+	bool GetWeaponInfo(WeaponInfo& info) override;
 	void AddToPlayer(CBasePlayer* pPlayer) override;
 
 	void PrimaryAttack() override;

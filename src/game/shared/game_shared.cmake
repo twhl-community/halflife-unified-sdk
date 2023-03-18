@@ -80,6 +80,8 @@ function(add_game_shared_sources target)
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/entities/items/weapons/CTripmine.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/entities/items/weapons/weapons_shared.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/entities/items/weapons/weapons.h
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/entities/items/weapons/WeaponDataSystem.cpp
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/entities/items/weapons/WeaponDataSystem.h
 			
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/models/BspLoader.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/models/BspLoader.h

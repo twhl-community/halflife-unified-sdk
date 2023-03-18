@@ -554,17 +554,14 @@ void CGrapple::DestroyEffect()
 #endif
 }
 
-bool CGrapple::GetItemInfo(ItemInfo* p)
+bool CGrapple::GetWeaponInfo(WeaponInfo& info)
 {
-	p->pszAmmo1 = nullptr;
-	p->pszName = STRING(pev->classname);
-	p->pszAmmo2 = nullptr;
-	p->iMaxClip = WEAPON_NOCLIP;
-	p->iSlot = 0;
-	p->iPosition = 3;
-	p->iId = m_iId = WEAPON_GRAPPLE;
-	p->iFlags = 0;
-	p->iWeight = 21;
+	info.Name = STRING(pev->classname);
+	info.MagazineSize1 = WEAPON_NOCLIP;
+	info.Slot = 0;
+	info.Position = 3;
+	info.Id = m_iId = WEAPON_GRAPPLE;
+	info.Weight = 21;
 
 	return true;
 }

@@ -38,7 +38,7 @@ public:
 	void Precache() override;
 	void EXPORT SwingAgain();
 	void EXPORT Smack();
-	bool GetItemInfo(ItemInfo* p) override;
+	bool GetWeaponInfo(WeaponInfo& info) override;
 
 	void PrimaryAttack() override;
 	bool Swing(bool fFirst);

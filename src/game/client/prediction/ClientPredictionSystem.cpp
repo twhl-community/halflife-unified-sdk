@@ -447,14 +447,12 @@ void ClientPredictionSystem::PrepWeapon(std::string_view className, CBasePlayer*
 
 	entity->m_pPlayer = weaponOwner;
 
-	ItemInfo info;
+	WeaponInfo info;
 
-	entity->GetItemInfo(&info);
+	entity->GetWeaponInfo(info);
 
 	// If this assert hits then you have more than one weapon with the same id.
-	assert(!m_Weapons[info.iId]);
+	assert(!m_Weapons[info.Id]);
 
-	m_Weapons[info.iId] = entity;
-
-	CBasePlayerWeapon::ItemInfoArray[info.iId] = info;
+	m_Weapons[info.Id] = entity;
 }

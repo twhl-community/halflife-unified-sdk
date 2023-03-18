@@ -79,17 +79,15 @@ void CShotgun::Precache()
 	m_usDoubleFire = PRECACHE_EVENT(1, "events/shotgun2.sc");
 }
 
-bool CShotgun::GetItemInfo(ItemInfo* p)
+bool CShotgun::GetWeaponInfo(WeaponInfo& info)
 {
-	p->pszName = STRING(pev->classname);
-	p->pszAmmo1 = "buckshot";
-	p->pszAmmo2 = nullptr;
-	p->iMaxClip = SHOTGUN_MAX_CLIP;
-	p->iSlot = 2;
-	p->iPosition = 1;
-	p->iFlags = 0;
-	p->iId = m_iId = WEAPON_SHOTGUN;
-	p->iWeight = SHOTGUN_WEIGHT;
+	info.Name = STRING(pev->classname);
+	info.AmmoType1 = "buckshot";
+	info.MagazineSize1 = SHOTGUN_MAX_CLIP;
+	info.Slot = 2;
+	info.Position = 1;
+	info.Id = m_iId = WEAPON_SHOTGUN;
+	info.Weight = SHOTGUN_WEIGHT;
 
 	return true;
 }

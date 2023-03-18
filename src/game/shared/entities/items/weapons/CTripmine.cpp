@@ -399,17 +399,16 @@ void CTripmine::Precache()
 	m_usTripFire = PRECACHE_EVENT(1, "events/tripfire.sc");
 }
 
-bool CTripmine::GetItemInfo(ItemInfo* p)
+bool CTripmine::GetWeaponInfo(WeaponInfo& info)
 {
-	p->pszName = STRING(pev->classname);
-	p->pszAmmo1 = "Trip Mine";
-	p->pszAmmo2 = nullptr;
-	p->iMaxClip = WEAPON_NOCLIP;
-	p->iSlot = 4;
-	p->iPosition = 2;
-	p->iId = m_iId = WEAPON_TRIPMINE;
-	p->iWeight = TRIPMINE_WEIGHT;
-	p->iFlags = ITEM_FLAG_LIMITINWORLD | ITEM_FLAG_EXHAUSTIBLE;
+	info.Name = STRING(pev->classname);
+	info.AmmoType1 = "Trip Mine";
+	info.MagazineSize1 = WEAPON_NOCLIP;
+	info.Slot = 4;
+	info.Position = 2;
+	info.Id = m_iId = WEAPON_TRIPMINE;
+	info.Weight = TRIPMINE_WEIGHT;
+	info.Flags = ITEM_FLAG_LIMITINWORLD | ITEM_FLAG_EXHAUSTIBLE;
 
 	return true;
 }
