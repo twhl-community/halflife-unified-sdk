@@ -15,8 +15,6 @@
 
 #pragma once
 
-#include <optional>
-
 #include <EASTL/fixed_string.h>
 #include <EASTL/fixed_vector.h>
 
@@ -32,7 +30,7 @@ struct AmmoType
 	/**
 	 *	@brief For exhaustible weapons. If provided, and the player does not have this weapon in their inventory yet it will be given to them.
 	 */
-	std::optional<eastl::fixed_string<char, 32>> WeaponName;
+	eastl::fixed_string<char, 32> WeaponName;
 };
 
 /**
@@ -61,7 +59,7 @@ public:
 	 *	@param weaponName If specified, this is the name of the weapon to give the player when they get ammo of this type.
 	 *		Used for exhaustible weapons like hand grenades to ensure the player always has the associated weapon.
 	 */
-	int Register(std::string_view name, int maximumCapacity, std::optional<std::string_view> weaponName = std::nullopt);
+	int Register(std::string_view name, int maximumCapacity, std::string_view weaponName = {});
 
 private:
 	// Public indices are 1-based, private ones are 0-based.

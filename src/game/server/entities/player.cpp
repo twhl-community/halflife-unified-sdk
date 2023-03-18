@@ -3933,11 +3933,11 @@ int CBasePlayer::GiveAmmo(int iCount, const char* szName)
 		return type->Id;
 
 	// If this is an exhaustible weapon make sure the player has it.
-	if (type->WeaponName)
+	if (!type->WeaponName.empty())
 	{
-		if (!HasNamedPlayerWeapon(type->WeaponName->c_str()))
+		if (!HasNamedPlayerWeapon(type->WeaponName.c_str()))
 		{
-			GiveNamedItem(type->WeaponName->c_str(), 0);
+			GiveNamedItem(type->WeaponName.c_str(), 0);
 		}
 	}
 

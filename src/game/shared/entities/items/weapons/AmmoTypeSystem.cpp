@@ -66,17 +66,15 @@ void AmmoTypeSystem::Clear()
 	m_AmmoTypes.clear();
 }
 
-int AmmoTypeSystem::Register(std::string_view name, int maximumCapacity, std::optional<std::string_view> weaponName)
+int AmmoTypeSystem::Register(std::string_view name, int maximumCapacity, std::string_view weaponName)
 {
 	if (const int index = IndexOf(name); index != -1)
 	{
 		const auto type = GetByIndex(index);
 
-		if (type->WeaponName.has_value() != weaponName.has_value() ||
-			(type->WeaponName.has_value() &&
-				eastl::string::comparei(
-					type->WeaponName->data(), type->WeaponName->data() + type->WeaponName->size(),
-					weaponName->data(), weaponName->data() + weaponName->size()) != 0))
+		if (eastl::string::comparei(
+				type->WeaponName.data(), type->WeaponName.data() + type->WeaponName.size(),
+				weaponName.data(), weaponName.data() + weaponName.size()) != 0)
 		{
 			CBasePlayerWeapon::WeaponsLogger->warn(
 				"Attempting to register duplicate ammo type \"{}\" with differing properties");
@@ -109,11 +107,11 @@ int AmmoTypeSystem::Register(std::string_view name, int maximumCapacity, std::op
 		return -1;
 	}
 
-	if (weaponName && std::find_if_not(weaponName->begin(), weaponName->end(), [](auto& c)
-						  { return std::isalnum(c) || c == '_'; }) != weaponName->end())
+	if (!weaponName.empty() && std::find_if_not(weaponName.begin(), weaponName.end(), [](auto& c)
+						  { return std::isalnum(c) || c == '_'; }) != weaponName.end())
 	{
 		assert(!"Invalid ammo type weapon name");
-		CBasePlayerWeapon::WeaponsLogger->error("Attempting to register ammo type \"{}\" with invalid weapon name \"{}\"", name, *weaponName);
+		CBasePlayerWeapon::WeaponsLogger->error("Attempting to register ammo type \"{}\" with invalid weapon name \"{}\"", name, weaponName);
 		return -1;
 	}
 
@@ -123,11 +121,11 @@ int AmmoTypeSystem::Register(std::string_view name, int maximumCapacity, std::op
 	type.Id = static_cast<int>(m_AmmoTypes.size());
 	type.Name.assign(name.data(), name.size());
 	type.MaximumCapacity = maximumCapacity;
+	type.WeaponName.assign(weaponName.data(), weaponName.size());
 
-	if (weaponName)
+	if (!weaponName.empty())
 	{
-		CBasePlayerWeapon::WeaponsLogger->trace("Associated with weapon \"{}\"", *weaponName);
-		type.WeaponName.emplace().assign(weaponName->data(), weaponName->size());
+		CBasePlayerWeapon::WeaponsLogger->trace("Associated with weapon \"{}\"", weaponName);
 	}
 
 	return type.Id;
