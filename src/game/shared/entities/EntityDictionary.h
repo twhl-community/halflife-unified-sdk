@@ -177,6 +177,20 @@ public:
 		return Cast<TConcrete>(BaseEntityDictionary::Create(className));
 	}
 
+	/**
+	*	@brief Destroys the CBaseEntity object. Does not free the associated edict.
+	*/
+	void Destroy(CBaseEntity* entity)
+	{
+		if (!entity)
+		{
+			return;
+		}
+
+		entity->OnDestroy();
+		delete entity;
+	}
+
 	template <std::derived_from<TBaseEntity> TConcrete>
 	void Add(const EntityDescriptor<TConcrete>* descriptor)
 	{

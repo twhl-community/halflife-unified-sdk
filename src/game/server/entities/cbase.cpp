@@ -310,9 +310,7 @@ void OnFreeEntPrivateData(edict_t* pEdict)
 	{
 		auto entity = reinterpret_cast<CBaseEntity*>(pEdict->pvPrivateData);
 
-		entity->OnDestroy();
-
-		delete entity;
+		g_EntityDictionary->Destroy(entity);
 
 		// Zero this out so the engine doesn't try to free it again.
 		pEdict->pvPrivateData = nullptr;

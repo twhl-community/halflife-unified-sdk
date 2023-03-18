@@ -63,11 +63,11 @@ void ClientPredictionSystem::Shutdown()
 	{
 		for (auto& weapon : m_Weapons)
 		{
-			delete weapon;
+			g_WeaponDictionary->Destroy(weapon);
 			weapon = nullptr;
 		}
 
-		delete m_Player;
+		g_EntityDictionary->Destroy(m_Player);
 		m_Player = nullptr;
 
 		std::memset(entities, 0, sizeof(entities));
