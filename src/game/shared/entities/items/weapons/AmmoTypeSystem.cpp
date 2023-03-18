@@ -17,6 +17,52 @@
 
 #include "AmmoTypeSystem.h"
 
+bool AmmoTypeSystem::Initialize()
+{
+	g_NetworkData.RegisterHandler("AmmoTypes", this);
+	return true;
+}
+
+void AmmoTypeSystem::HandleNetworkDataBlock(NetworkDataBlock& block)
+{
+	if (block.Mode == NetworkDataMode::Serialize)
+	{
+		block.Data = json::array();
+
+		for (const auto& type : m_AmmoTypes)
+		{
+			json data = json::object();
+
+			data.emplace("Name", type.Name.c_str());
+			data.emplace("MaximumCapacity", type.MaximumCapacity);
+
+			if (!type.WeaponName.empty())
+			{
+				data.emplace("WeaponName", type.WeaponName.c_str());
+			}
+
+			block.Data.push_back(std::move(data));
+		}
+	}
+	else
+	{
+		Clear();
+
+		for (const auto& data : block.Data)
+		{
+			const auto name = data.value("Name", "");
+			const int maximumCapacity = data.value("MaximumCapacity", -2);
+			const auto weaponName = data.value("WeaponName", "");
+
+			if (Register(name, maximumCapacity, weaponName) == -1)
+			{
+				block.ErrorMessage = "Invalid ammo type received from server";
+				return;
+			}
+		}
+	}
+}
+
 int AmmoTypeSystem::IndexOf(std::string_view name) const
 {
 	for (std::size_t i = 0; i < m_AmmoTypes.size(); ++i)

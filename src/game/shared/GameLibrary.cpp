@@ -15,6 +15,7 @@
 
 #include "cbase.h"
 
+#include "AmmoTypeSystem.h"
 #include "GameLibrary.h"
 #include "ProjectInfoSystem.h"
 #include "WeaponDataSystem.h"
@@ -96,6 +97,7 @@ void GameLibrary::AddGameSystems()
 	g_GameSystems.Add(&g_MaterialSystem);
 	g_GameSystems.Add(&g_ProjectInfo);
 	g_GameSystems.Add(&g_WeaponData);
+	g_GameSystems.Add(&g_AmmoTypes);
 }
 
 void GameLibrary::SetEntLogLevels(spdlog::level::level_enum level)

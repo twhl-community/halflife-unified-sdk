@@ -19,6 +19,8 @@
 #include <EASTL/fixed_vector.h>
 
 #include "cbase.h"
+#include "networking/NetworkDataSystem.h"
+#include "utils/GameSystem.h"
 
 struct AmmoType
 {
@@ -37,9 +39,19 @@ struct AmmoType
  *	@brief Manages the ammo type definitions.
  *	@details Ammo type id 0 is the invalid/none index.
  */
-class AmmoTypeSystem final
+class AmmoTypeSystem final : public IGameSystem, public INetworkDataBlockHandler
 {
 public:
+	const char* GetName() const override { return "AmmoTypes"; }
+
+	bool Initialize() override;
+
+	void PostInitialize() override {}
+
+	void Shutdown() override {}
+
+	void HandleNetworkDataBlock(NetworkDataBlock& block) override;
+
 	int GetCount() const { return static_cast<std::size_t>(m_AmmoTypes.size()); }
 
 	int IndexOf(std::string_view name) const;
