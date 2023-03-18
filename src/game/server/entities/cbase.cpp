@@ -149,9 +149,6 @@ int DispatchSpawn(edict_t* pent)
 
 	if (pEntity)
 	{
-		// Load up replacement files now, right before we start using them.
-		pEntity->LoadReplacementFiles();
-
 		// Initialize these or entities who don't link to the world won't have anything in here
 		pEntity->pev->absmin = pEntity->pev->origin - Vector(1, 1, 1);
 		pEntity->pev->absmax = pEntity->pev->origin + Vector(1, 1, 1);
@@ -535,29 +532,17 @@ bool CBaseEntity::RequiredKeyValue(KeyValueData* pkvd)
 	if (FStrEq(pkvd->szKeyName, "model_replacement_filename"))
 	{
 		m_ModelReplacementFileName = ALLOC_STRING(pkvd->szValue);
-
-		if (m_ModelReplacement)
-		{
-			m_ModelReplacement = LoadFileNameReplacementMap(m_ModelReplacementFileName);
-		}
+		m_ModelReplacement = LoadFileNameReplacementMap(m_ModelReplacementFileName);
 	}
 	else if (FStrEq(pkvd->szKeyName, "sound_replacement_filename"))
 	{
 		m_SoundReplacementFileName = ALLOC_STRING(pkvd->szValue);
-
-		if (m_SoundReplacement)
-		{
-			m_SoundReplacement = LoadFileNameReplacementMap(m_SoundReplacementFileName);
-		}
+		m_SoundReplacement = LoadFileNameReplacementMap(m_SoundReplacementFileName);
 	}
 	else if (FStrEq(pkvd->szKeyName, "sentence_replacement_filename"))
 	{
 		m_SentenceReplacementFileName = ALLOC_STRING(pkvd->szValue);
-
-		if (m_SentenceReplacement)
-		{
-			m_SentenceReplacement = LoadFileNameReplacementMap(m_SentenceReplacementFileName);
-		}
+		m_SentenceReplacement = LoadFileNameReplacementMap(m_SentenceReplacementFileName);
 	}
 	// Note: while this code does fix backwards bounds here it will not apply to partial hulls mixing with hard-coded ones.
 	else if (FStrEq(pkvd->szKeyName, "custom_hull_min"))
