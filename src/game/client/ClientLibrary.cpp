@@ -69,6 +69,9 @@ void ClientLibrary::VidInit()
 	// Remove downloaded files only. The server is responsible for removing generated files.
 	// This has to happen now since not all cases are caught in RunFrame.
 	g_NetworkData.RemoveNetworkDataFiles("GAMEDOWNLOAD");
+
+	// Hud vid init has been delayed until after the network data file has been received to allow use of its data.
+	// gHUD.VidInit();
 }
 
 void ClientLibrary::PostInitialize()
@@ -217,6 +220,8 @@ Check the console for more information.)",
 
 			return;
 		}
+
+		gHUD.VidInit();
 	}
 }
 

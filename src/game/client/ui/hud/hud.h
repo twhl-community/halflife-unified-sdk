@@ -103,7 +103,6 @@ public:
 	void Reset() override;
 	bool DrawWList(float flTime);
 	void MsgFunc_CurWeapon(const char* pszName, int iSize, void* pbuf);
-	void MsgFunc_WeaponList(const char* pszName, int iSize, void* pbuf);
 	void MsgFunc_AmmoX(const char* pszName, int iSize, void* pbuf);
 	void MsgFunc_AmmoPickup(const char* pszName, int iSize, void* pbuf);
 	void MsgFunc_WeapPickup(const char* pszName, int iSize, void* pbuf);

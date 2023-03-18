@@ -28,7 +28,6 @@ inline int gmsgDamage = 0;
 inline int gmsgBattery = 0;
 inline int gmsgTrain = 0;
 inline int gmsgLogo = 0;
-inline int gmsgWeaponList = 0;
 inline int gmsgAmmoX = 0;
 inline int gmsgHudText = 0;
 inline int gmsgDeathMsg = 0;

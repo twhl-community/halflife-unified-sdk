@@ -134,9 +134,7 @@ TYPEDESCRIPTION CBasePlayer::m_playerSaveData[] =
 		// DEFINE_FIELD( CBasePlayer, m_fDeadTime, FIELD_FLOAT ), // only used in multiplayer games
 		// DEFINE_FIELD( CBasePlayer, m_fGameHUDInitialized, FIELD_INTEGER ), // only used in multiplayer games
 		// DEFINE_FIELD( CBasePlayer, m_flStopExtraSoundTime, FIELD_TIME ),
-		// DEFINE_FIELD( CBasePlayer, m_fKnownItem, FIELD_BOOLEAN ), // reset to zero on load
 		// DEFINE_FIELD( CBasePlayer, m_iPlayerSound, FIELD_INTEGER ),	// Don't restore, set in Precache()
-		// DEFINE_FIELD( CBasePlayer, m_fNewAmmo, FIELD_INTEGER ), // Don't restore, client needs reset
 		// DEFINE_FIELD( CBasePlayer, m_flgeigerRange, FIELD_FLOAT ),	// Don't restore, reset in Precache()
 		// DEFINE_FIELD( CBasePlayer, m_flgeigerDelay, FIELD_FLOAT ),	// Don't restore, reset in Precache()
 		// DEFINE_FIELD( CBasePlayer, m_igeigerRangePrev, FIELD_FLOAT ),	// Don't restore, reset in Precache()
@@ -3491,7 +3489,6 @@ void CBasePlayer::ForceClientDllUpdate()
 
 	m_iTrain |= TRAIN_NEW; // Force new train message.
 	m_fWeapon = false;	   // Force weapon send
-	m_fKnownItem = false;  // Force weaponinit messages.
 	m_fInitHUD = true;	   // Force HUD gmsgResetHUD message
 
 	// Now force all the necessary messages
@@ -4285,53 +4282,6 @@ void CBasePlayer::UpdateClientData()
 
 		m_iTrain &= ~TRAIN_NEW;
 	}
-
-	//
-	// New Weapon?
-	//
-	if (!m_fKnownItem)
-	{
-		m_fKnownItem = true;
-
-		// WeaponInit Message
-		// byte  = # of weapons
-		//
-		// for each weapon:
-		// byte		name str length (not including null)
-		// bytes... name
-		// byte		Ammo Type
-		// byte		Ammo2 Type
-		// byte		bucket
-		// byte		bucket pos
-		// byte		flags
-		// ????		Icons
-
-		// Send ALL the weapon info now
-		for (int i = 0; i < MAX_WEAPONS; i++)
-		{
-			const auto info = g_WeaponData.GetByIndex(i);
-
-			if (!info || info->Id == WEAPON_NONE)
-				continue;
-
-			// TODO: ammo info should be sent over separately.
-			const auto type1 = !info->AmmoType1.empty() ? g_AmmoTypes.GetByName(info->AmmoType1.c_str()) : nullptr;
-			const auto type2 = !info->AmmoType2.empty() ? g_AmmoTypes.GetByName(info->AmmoType2.c_str()) : nullptr;
-
-			MESSAGE_BEGIN(MSG_ONE, gmsgWeaponList, nullptr, pev);
-			WRITE_STRING(info->Name.c_str());							// string	weapon name
-			WRITE_BYTE(type1 ? type1->Id : -1);							// byte		Ammo Type
-			WRITE_BYTE(type1 ? type1->MaximumCapacity : WEAPON_NOCLIP);	// byte     Max Ammo 1
-			WRITE_BYTE(type2 ? type2->Id : -1);							// byte		Ammo2 Type
-			WRITE_BYTE(type2 ? type2->MaximumCapacity : WEAPON_NOCLIP);	// byte     Max Ammo 2
-			WRITE_BYTE(info->Slot);										// byte		bucket
-			WRITE_BYTE(info->Position);									// byte		bucket pos
-			WRITE_BYTE(info->Id);										// byte		id (bit index into m_WeaponBits)
-			WRITE_BYTE(info->Flags);									// byte		Flags
-			MESSAGE_END();
-		}
-	}
-
 
 	SendAmmoUpdate();
 

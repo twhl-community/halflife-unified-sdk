@@ -146,8 +146,6 @@ public:
 	float m_flFallVelocity;
 
 	int m_rgItems[MAX_ITEMS];
-	bool m_fKnownItem; // True when a new item needs to be added
-	int m_fNewAmmo;	   // True when a new item has been added
 
 	unsigned int m_afPhysicsFlags; // physics flags - set when 'normal' physics should be revisited or overriden
 	float m_fNextSuicideTime;	   // the time after which the player can next use the suicide command

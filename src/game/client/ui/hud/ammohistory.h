@@ -18,6 +18,10 @@
 
 #pragma once
 
+#include <array>
+
+struct AmmoType;
+
 // this is the max number of items in each bucket
 #define MAX_WEAPON_POSITIONS MAX_WEAPON_SLOTS
 
@@ -25,7 +29,7 @@ class WeaponsResource
 {
 private:
 	// Information about weapons & ammo
-	WEAPON rgWeapons[MAX_WEAPONS]; // Weapons Array
+	std::array<WEAPON, MAX_WEAPONS> rgWeapons; // Weapons Array
 
 	// counts of weapons * ammo
 	WEAPON* rgSlots[MAX_WEAPON_SLOTS + 1][MAX_WEAPON_POSITIONS + 1]; // The slots currently in use by weapons.  The value is a pointer to the weapon;  if it's nullptr, no weapon is there
@@ -34,7 +38,6 @@ private:
 public:
 	void Init()
 	{
-		memset(rgWeapons, 0, sizeof rgWeapons);
 		Reset();
 	}
 
@@ -48,36 +51,22 @@ public:
 	///// WEAPON /////
 	std::uint64_t iOldWeaponBits;
 
-	WEAPON* GetWeapon(int iId) { return &rgWeapons[iId]; }
-	void AddWeapon(WEAPON* wp)
+	WEAPON* GetWeapon(int iId)
 	{
-		rgWeapons[wp->iId] = *wp;
-		LoadWeaponSprites(&rgWeapons[wp->iId]);
+		return &rgWeapons[iId];
 	}
 
-	void PickupWeapon(WEAPON* wp)
-	{
-		rgSlots[wp->iSlot][wp->iSlotPos] = wp;
-	}
+	void PickupWeapon(WEAPON* wp);
 
-	void DropWeapon(WEAPON* wp)
-	{
-		rgSlots[wp->iSlot][wp->iSlotPos] = nullptr;
-	}
+	void DropWeapon(WEAPON* wp);
 
-	void DropAllWeapons()
-	{
-		for (int i = 0; i < MAX_WEAPONS; i++)
-		{
-			if (rgWeapons[i].iId)
-				DropWeapon(&rgWeapons[i]);
-		}
-	}
+	void DropAllWeapons();
 
 	WEAPON* GetWeaponSlot(int slot, int pos) { return rgSlots[slot][pos]; }
 
+	void InitializeWeapons();
+
 	void LoadWeaponSprites(WEAPON* wp);
-	void LoadAllWeaponSprites();
 	WEAPON* GetFirstPos(int iSlot);
 	void SelectSlot(int iSlot, bool fAdvance, int iDirection);
 	WEAPON* GetNextActivePos(int iSlot, int iSlotPos);
@@ -87,7 +76,7 @@ public:
 	///// AMMO /////
 	void SetAmmo(int iId, int iCount) { riAmmo[iId] = iCount; }
 
-	int CountAmmo(int iId);
+	int CountAmmo(const AmmoType* type);
 
 	HSPRITE* GetAmmoPicFromWeapon(int iAmmoId, Rect& rect);
 };

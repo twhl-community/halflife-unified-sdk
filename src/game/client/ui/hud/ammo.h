@@ -15,6 +15,9 @@
 
 #pragma once
 
+struct AmmoType;
+struct WeaponInfo;
+
 #define MAX_WEAPON_NAME 128
 
 
@@ -24,33 +27,28 @@
 
 struct WEAPON
 {
-	char szName[MAX_WEAPON_NAME];
-	int iAmmoType;
-	int iAmmo2Type;
-	int iMax1;
-	int iMax2;
-	int iSlot;
-	int iSlotPos;
-	int iFlags;
-	int iId;
-	int iClip;
+	const WeaponInfo* Info{};
+	const AmmoType* AmmoType1{};
+	const AmmoType* AmmoType2{};
 
-	int iCount; // # of itesm in plist
+	int AmmoInMagazine{0};
 
-	HSPRITE hActive;
+	int iCount{0}; // # of itesm in plist
+
+	HSPRITE hActive{0};
 	Rect rcActive;
-	HSPRITE hInactive;
+	HSPRITE hInactive{0};
 	Rect rcInactive;
-	HSPRITE hAmmo;
+	HSPRITE hAmmo{0};
 	Rect rcAmmo;
-	HSPRITE hAmmo2;
+	HSPRITE hAmmo2{0};
 	Rect rcAmmo2;
-	HSPRITE hCrosshair;
+	HSPRITE hCrosshair{0};
 	Rect rcCrosshair;
-	HSPRITE hAutoaim;
+	HSPRITE hAutoaim{0};
 	Rect rcAutoaim;
-	HSPRITE hZoomedCrosshair;
+	HSPRITE hZoomedCrosshair{0};
 	Rect rcZoomedCrosshair;
-	HSPRITE hZoomedAutoaim;
+	HSPRITE hZoomedAutoaim{0};
 	Rect rcZoomedAutoaim;
 };
