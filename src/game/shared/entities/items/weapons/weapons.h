@@ -233,7 +233,11 @@ public:
 	void OnCreate() override
 	{
 		CBaseAnimating::OnCreate();
+		LinkWeaponInfo();
+	}
 
+	void LinkWeaponInfo()
+	{
 		m_WeaponInfo = g_WeaponData.GetByName(GetClassname());
 
 		if (!m_WeaponInfo)

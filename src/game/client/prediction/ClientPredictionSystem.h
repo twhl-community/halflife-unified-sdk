@@ -41,6 +41,8 @@ public:
 	void PostInitialize() override {}
 
 	void Shutdown() override;
+	
+	void Reset();
 
 	void InitializeEntities();
 
@@ -59,6 +61,7 @@ private:
 
 private:
 	bool m_Initialized = false;
+	bool m_WeaponInfoLinked = false;
 
 	CBasePlayer* m_Player{};
 	std::array<CBasePlayerWeapon*, MAX_WEAPONS> m_Weapons{};

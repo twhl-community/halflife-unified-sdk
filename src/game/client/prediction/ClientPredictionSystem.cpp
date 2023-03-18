@@ -59,6 +59,8 @@ bool ClientPredictionSystem::Initialize()
 
 void ClientPredictionSystem::Shutdown()
 {
+	Reset();
+
 	if (m_Initialized)
 	{
 		for (auto& weapon : m_Weapons)
@@ -77,33 +79,50 @@ void ClientPredictionSystem::Shutdown()
 	}
 }
 
+void ClientPredictionSystem::Reset()
+{
+	m_WeaponInfoLinked = false;
+}
+
 void ClientPredictionSystem::InitializeEntities()
 {
-	if (m_Initialized)
+	if (!m_Initialized)
 	{
-		return;
+		m_Initialized = true;
+
+		// Set up weapons, player needed to run weapons code client-side.
+		// Event code depends on this stuff, so always initialize it.
+		// This has to be done here because event precache requires the server's event list to be present on the client.
+
+		// Allocate a slot for the local player
+		m_Player = CreatePlayer();
+
+		// Precache weapons in a well-defined order so the client initializes its local data the same way as the server.
+		// TODO: This is only necessary until weapon data is sent over the network.
+		const auto classNames = g_WeaponDictionary->GetClassNames();
+
+		std::vector<std::string_view> sortedClassNames{classNames.begin(), classNames.end()};
+
+		std::ranges::sort(sortedClassNames);
+
+		for (const auto& className : sortedClassNames)
+		{
+			PrepWeapon(className, m_Player);
+		}
 	}
 
-	m_Initialized = true;
-
-	// Set up weapons, player needed to run weapons code client-side.
-	// Event code depends on this stuff, so always initialize it.
-	// This has to be done here because event precache requires the server's event list to be present on the client.
-
-	// Allocate a slot for the local player
-	m_Player = CreatePlayer();
-
-	// Precache weapons in a well-defined order so the client initializes its local data the same way as the server.
-	// TODO: This is only necessary until weapon data is sent over the network.
-	const auto classNames = g_WeaponDictionary->GetClassNames();
-
-	std::vector<std::string_view> sortedClassNames{classNames.begin(), classNames.end()};
-
-	std::ranges::sort(sortedClassNames);
-
-	for (const auto& className : sortedClassNames)
+	// Since we get weapon info every level change we need to re-link the info objects.
+	if (!m_WeaponInfoLinked)
 	{
-		PrepWeapon(className, m_Player);
+		m_WeaponInfoLinked = true;
+
+		for (auto weapon : m_Weapons)
+		{
+			if (weapon)
+			{
+				weapon->LinkWeaponInfo();
+			}
+		}
 	}
 }
 
