@@ -438,9 +438,6 @@ void CItemAcceleratorCTF::Spawn()
 
 	SetModel(STRING(pev->model));
 
-	// TODO: is this actually used?
-	pev->spawnflags |= SF_NORESPAWN;
-
 	pev->oldorigin = pev->origin;
 
 	CItemCTF::Spawn();
@@ -550,8 +547,6 @@ void CItemBackpackCTF::Spawn()
 	Precache();
 
 	SetModel(STRING(pev->model));
-
-	pev->spawnflags |= SF_NORESPAWN;
 	pev->oldorigin = pev->origin;
 
 	CItemCTF::Spawn();
@@ -624,7 +619,6 @@ void CItemLongJumpCTF::Spawn()
 
 	SetModel(STRING(pev->model));
 
-	pev->spawnflags |= SF_NORESPAWN;
 	pev->oldorigin = pev->origin;
 	CItemCTF::Spawn();
 
@@ -691,7 +685,6 @@ void CItemPortableHEVCTF::Spawn()
 
 	SetModel(STRING(pev->model));
 
-	pev->spawnflags |= SF_NORESPAWN;
 	pev->oldorigin = pev->origin;
 
 	CItemCTF::Spawn();
@@ -765,7 +758,6 @@ void CItemRegenerationCTF::Spawn()
 
 	SetModel(STRING(pev->model));
 
-	pev->spawnflags |= SF_NORESPAWN;
 	pev->oldorigin = pev->origin;
 
 	CItemCTF::Spawn();

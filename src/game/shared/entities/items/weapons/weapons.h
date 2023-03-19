@@ -23,6 +23,7 @@
 #include "effects.h"
 #include "WeaponDataSystem.h"
 #include "weaponinfo.h"
+#include "items/CBaseItem.h"
 
 class CBasePlayer;
 class CBasePlayerWeapon;
@@ -224,7 +225,7 @@ void Weapons_RegisterAmmoTypes();
 /**
 *	@brief Weapons that the player has in their inventory that they can use.
 */
-class CBasePlayerWeapon : public CBaseAnimating
+class CBasePlayerWeapon : public CBaseItem
 {
 public:
 	static inline std::shared_ptr<spdlog::logger> WeaponsLogger;
@@ -236,10 +237,24 @@ public:
 
 	static TYPEDESCRIPTION m_SaveData[];
 
+	ItemType GetType() const { return ItemType::InventoryItem; }
+
+	void Accept(IItemVisitor& visitor) override
+	{
+		visitor.Visit(this);
+	}
+
 	void OnCreate() override
 	{
-		CBaseAnimating::OnCreate();
+		CBaseItem::OnCreate();
 		LinkWeaponInfo();
+	}
+
+	void Spawn() override
+	{
+		Precache();
+		SetModel(GetModelName());
+		SetupItem(vec3_origin, vec3_origin); //pointsize until it lands on the ground.
 	}
 
 	void LinkWeaponInfo()
@@ -286,41 +301,6 @@ public:
 	bool AddSecondaryAmmo(int iCount, const char* szName);
 
 	void EXPORT DestroyItem();
-	void EXPORT DefaultTouch(CBaseEntity* pOther);
-
-	/**
-	*	@brief when an item is first spawned, this think is run to determine when the object has hit the ground.
-	*	@details Items that have just spawned run this think to catch them when they hit the ground.
-	*	Once we're sure that the object is grounded, we change its solid type to trigger
-	*	and set it in a large box that helps the player get it.
-	*/
-	void EXPORT FallThink();
-
-	/**
-	*	@brief make a weapon visible and tangible
-	*/
-	void EXPORT Materialize();
-
-	/**
-	*	@brief the weapon desires to become visible and tangible, if the game rules allow for it.
-	*	Should it do so now or wait longer?
-	*/
-	void EXPORT AttemptToMaterialize();
-
-	/**
-	 *	@brief A player is taking this weapon, should it respawn?
-	 */
-	void CheckRespawn();
-
-	/**
-	 *	@brief copy a weapon
-	 */
-	CBaseEntity* Respawn() override;
-
-	/**
-	*	@brief Sets up movetype, size, solidtype for a new weapon.
-	*/
-	void FallInit();
 
 	/**
 	*	@brief returns false if struct not filled out
@@ -460,6 +440,12 @@ public:
 	int iWeight() { return m_WeaponInfo->Weight; }
 	int iFlags() { return m_WeaponInfo->Flags; }
 
+protected:
+	CBasePlayerWeapon* GetItemToRespawn(const Vector& respawnPoint) override;
+
+	ItemAddResult Apply(CBasePlayer* player) override;
+
+public:
 	CBasePlayer* m_pPlayer;
 	CBasePlayerWeapon* m_pNext;
 	int m_iId; // WEAPON_???
@@ -501,16 +487,23 @@ public:
 	string_t m_PlayerModel;
 };
 
-class CBasePlayerAmmo : public CBaseEntity
+class CBasePlayerAmmo : public CBaseItem
 {
 public:
-	void Precache() override;
-	void Spawn() override;
-	void EXPORT DefaultTouch(CBaseEntity* pOther); // default weapon touch
-	virtual bool AddAmmo(CBasePlayer* pOther) { return true; }
+	ItemType GetType() const override { return ItemType::Consumable; }
 
-	CBaseEntity* Respawn() override;
-	void EXPORT Materialize();
+	void Accept(IItemVisitor& visitor) override
+	{
+		visitor.Visit(this);
+	}
+
+	ItemAddResult Apply(CBasePlayer* player) override
+	{
+		return AddAmmo(player) ? ItemAddResult::Added : ItemAddResult::NotAdded;
+	}
+
+protected:
+	virtual bool AddAmmo(CBasePlayer* pOther) { return true; }
 };
 
 inline short g_sModelIndexLaser; // holds the index for the laser beam

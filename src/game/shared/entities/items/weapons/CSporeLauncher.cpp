@@ -58,15 +58,11 @@ void CSporeLauncher::Precache()
 
 void CSporeLauncher::Spawn()
 {
-	Precache();
+	CBasePlayerWeapon::Spawn();
 
 	m_iId = WEAPON_SPORELAUNCHER;
 
-	SetModel(STRING(pev->model));
-
 	m_iDefaultAmmo = SPORELAUNCHER_DEFAULT_GIVE;
-
-	FallInit();
 
 	pev->sequence = 0;
 

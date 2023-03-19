@@ -27,13 +27,9 @@ void CGlock::OnCreate()
 
 void CGlock::Spawn()
 {
-	Precache();
+	CBasePlayerWeapon::Spawn();
 	m_iId = WEAPON_GLOCK;
-	SetModel(STRING(pev->model));
-
 	m_iDefaultAmmo = GLOCK_DEFAULT_GIVE;
-
-	FallInit(); // get ready to fall down.
 }
 
 void CGlock::Precache()

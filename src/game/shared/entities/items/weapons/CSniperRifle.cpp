@@ -59,13 +59,8 @@ void CSniperRifle::Precache()
 
 void CSniperRifle::Spawn()
 {
-	Precache();
-
-	SetModel(STRING(pev->model));
-
+	CBasePlayerWeapon::Spawn();
 	m_iDefaultAmmo = SNIPERRIFLE_DEFAULT_GIVE;
-
-	FallInit(); // get ready to fall down.
 }
 
 bool CSniperRifle::Deploy()

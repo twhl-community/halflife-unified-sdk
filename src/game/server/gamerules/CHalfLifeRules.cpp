@@ -17,6 +17,7 @@
 #include "CHalfLifeRules.h"
 #include "items.h"
 #include "UserMessages.h"
+#include "items/CBaseItem.h"
 
 CHalfLifeRules::CHalfLifeRules()
 {
@@ -127,76 +128,52 @@ void CHalfLifeRules::DeathNotice(CBasePlayer* pVictim, CBaseEntity* pKiller, CBa
 {
 }
 
-void CHalfLifeRules::PlayerGotWeapon(CBasePlayer* pPlayer, CBasePlayerWeapon* pWeapon)
-{
-}
-
-float CHalfLifeRules::FlWeaponRespawnTime(CBasePlayerWeapon* pWeapon)
-{
-	return -1;
-}
-
-float CHalfLifeRules::FlWeaponTryRespawn(CBasePlayerWeapon* pWeapon)
-{
-	return 0;
-}
-
-Vector CHalfLifeRules::VecWeaponRespawnSpot(CBasePlayerWeapon* pWeapon)
-{
-	return pWeapon->pev->origin;
-}
-
-int CHalfLifeRules::WeaponShouldRespawn(CBasePlayerWeapon* pWeapon)
-{
-	return GR_WEAPON_RESPAWN_NO;
-}
-
-bool CHalfLifeRules::CanHaveItem(CBasePlayer* pPlayer, CItem* pItem)
+bool CHalfLifeRules::CanHaveItem(CBasePlayer* player, CBaseItem* item)
 {
 	return true;
 }
 
-void CHalfLifeRules::PlayerGotItem(CBasePlayer* pPlayer, CItem* pItem)
+void CHalfLifeRules::PlayerGotItem(CBasePlayer* player, CBaseItem* item)
 {
 }
 
-int CHalfLifeRules::ItemShouldRespawn(CItem* pItem)
+bool CHalfLifeRules::ItemShouldRespawn(CBaseItem* item)
 {
-	return GR_ITEM_RESPAWN_NO;
+	// Items don't respawn in singleplayer by default
+	return item->m_RespawnMode == ItemRespawnMode::Always;
 }
 
-float CHalfLifeRules::FlItemRespawnTime(CItem* pItem)
+float CHalfLifeRules::ItemRespawnTime(CBaseItem* item)
 {
+	// Allow respawn if it has a custom delay
+	if (item->m_RespawnDelay != ITEM_DEFAULT_RESPAWN_DELAY)
+	{
+		return gpGlobals->time + item->m_RespawnDelay;
+	}
+
+	// No respawn
 	return -1;
 }
 
-Vector CHalfLifeRules::VecItemRespawnSpot(CItem* pItem)
+Vector CHalfLifeRules::ItemRespawnSpot(CBaseItem* item)
 {
-	return pItem->pev->origin;
+	return item->pev->origin;
+}
+
+float CHalfLifeRules::ItemTryRespawn(CBaseItem* item)
+{
+	// If it has a custom delay then it can spawn when it first checks, otherwise never respawn
+	if (item->m_RespawnDelay != ITEM_DEFAULT_RESPAWN_DELAY)
+	{
+		return 0;
+	}
+
+	return -1;
 }
 
 bool CHalfLifeRules::IsAllowedToSpawn(CBaseEntity* pEntity)
 {
 	return true;
-}
-
-void CHalfLifeRules::PlayerGotAmmo(CBasePlayer* pPlayer, char* szName, int iCount)
-{
-}
-
-int CHalfLifeRules::AmmoShouldRespawn(CBasePlayerAmmo* pAmmo)
-{
-	return GR_AMMO_RESPAWN_NO;
-}
-
-float CHalfLifeRules::FlAmmoRespawnTime(CBasePlayerAmmo* pAmmo)
-{
-	return -1;
-}
-
-Vector CHalfLifeRules::VecAmmoRespawnSpot(CBasePlayerAmmo* pAmmo)
-{
-	return pAmmo->pev->origin;
 }
 
 float CHalfLifeRules::FlHealthChargerRechargeTime()

@@ -62,15 +62,10 @@ void CShockRifle::Precache()
 
 void CShockRifle::Spawn()
 {
+	CBasePlayerWeapon::Spawn();
 	m_iId = WEAPON_SHOCKRIFLE;
 
-	Precache();
-
-	SetModel(STRING(pev->model));
-
 	m_iDefaultAmmo = SHOCKRIFLE_DEFAULT_GIVE;
-
-	FallInit();
 
 	pev->sequence = 0;
 	pev->animtime = gpGlobals->time;

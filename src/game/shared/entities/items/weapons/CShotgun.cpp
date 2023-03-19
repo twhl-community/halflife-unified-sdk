@@ -44,13 +44,9 @@ void CShotgun::OnCreate()
 
 void CShotgun::Spawn()
 {
-	Precache();
+	CBasePlayerWeapon::Spawn();
 	m_iId = WEAPON_SHOTGUN;
-	SetModel(STRING(pev->model));
-
 	m_iDefaultAmmo = SHOTGUN_DEFAULT_GIVE;
-
-	FallInit(); // get ready to fall
 }
 
 void CShotgun::Precache()

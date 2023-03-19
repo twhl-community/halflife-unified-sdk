@@ -41,13 +41,10 @@ void CPipewrench::OnCreate()
 
 void CPipewrench::Spawn()
 {
-	Precache();
+	CBasePlayerWeapon::Spawn();
 	m_iId = WEAPON_PIPEWRENCH;
-	SetModel(STRING(pev->model));
 	m_iClip = WEAPON_NOCLIP;
 	m_iSwingMode = SWING_NONE;
-
-	FallInit(); // get ready to fall down.
 }
 
 void CPipewrench::Precache()

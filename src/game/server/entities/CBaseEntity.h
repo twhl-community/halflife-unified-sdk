@@ -50,8 +50,6 @@ struct ReplacementMap;
 // UNDONE: This will ignore transition volumes (trigger_transition), but not the PVS!!!
 #define FCAP_FORCE_TRANSITION 0x00000080 // ALWAYS goes across transitions
 
-#define SF_NORESPAWN (1 << 30) // !!!set this bit on guns and stuff that should never respawn.
-
 #define EXPORT DLLEXPORT
 
 enum USE_TYPE
@@ -389,8 +387,6 @@ public:
 		float flDistance, int iBulletType,
 		int iTracerFreq = 4, int iDamage = 0, CBaseEntity* attacker = nullptr, int shared_rand = 0);
 
-	virtual CBaseEntity* Respawn() { return nullptr; }
-
 	/**
 	*	@brief If self.delay is set, a DelayedUse entity will be created that will actually
 	*	do the SUB_UseTargets after that many seconds have passed.
@@ -537,7 +533,7 @@ public:
 
 
 	//
-	static CBaseEntity* Create(const char* szName, const Vector& vecOrigin, const Vector& vecAngles, edict_t* pentOwner = nullptr);
+	static CBaseEntity* Create(const char* szName, const Vector& vecOrigin, const Vector& vecAngles, edict_t* pentOwner = nullptr, bool callSpawn = true);
 
 	virtual bool FBecomeProne() { return false; }
 	edict_t* edict() { return ENT(pev); }

@@ -26,6 +26,41 @@
 #include "UserMessages.h"
 #include "items/weapons/AmmoTypeSystem.h"
 
+void GameRulesCanHaveItemVisitor::Visit(CBasePlayerWeapon* weapon)
+{
+	// only living players can have items
+	if (Player->pev->deadflag != DEAD_NO)
+	{
+		CanHaveItem = false;
+		return;
+	}
+
+	if (weapon->pszAmmo1())
+	{
+		if (!GameRules->CanHaveAmmo(Player, weapon->pszAmmo1()))
+		{
+			// we can't carry anymore ammo for this gun. We can only
+			// have the gun if we aren't already carrying one of this type
+			if (Player->HasPlayerWeapon(weapon))
+			{
+				CanHaveItem = false;
+				return;
+			}
+		}
+	}
+	else
+	{
+		// weapon doesn't use ammo, don't take another if you already have it.
+		if (Player->HasPlayerWeapon(weapon))
+		{
+			CanHaveItem = false;
+			return;
+		}
+	}
+
+	// note: will fall through to here if GetItemInfo doesn't fill the struct!
+}
+
 CGameRules::CGameRules()
 {
 	m_SpectateCommand = g_ClientCommands.CreateScoped("spectate", [this](CBasePlayer* player, const auto& args)
@@ -142,35 +177,11 @@ CBaseEntity* CGameRules::GetPlayerSpawnSpot(CBasePlayer* pPlayer)
 	return pSpawnSpot;
 }
 
-bool CGameRules::CanHavePlayerWeapon(CBasePlayer* pPlayer, CBasePlayerWeapon* pWeapon)
+bool CGameRules::CanHaveItem(CBasePlayer* player, CBaseItem* item)
 {
-	// only living players can have items
-	if (pPlayer->pev->deadflag != DEAD_NO)
-		return false;
-
-	if (pWeapon->pszAmmo1())
-	{
-		if (!CanHaveAmmo(pPlayer, pWeapon->pszAmmo1()))
-		{
-			// we can't carry anymore ammo for this gun. We can only
-			// have the gun if we aren't already carrying one of this type
-			if (pPlayer->HasPlayerWeapon(pWeapon))
-			{
-				return false;
-			}
-		}
-	}
-	else
-	{
-		// weapon doesn't use ammo, don't take another if you already have it.
-		if (pPlayer->HasPlayerWeapon(pWeapon))
-		{
-			return false;
-		}
-	}
-
-	// note: will fall through to here if GetItemInfo doesn't fill the struct!
-	return true;
+	GameRulesCanHaveItemVisitor visitor{this, player};
+	item->Accept(visitor);
+	return visitor.CanHaveItem;
 }
 
 void CGameRules::BecomeSpectator(CBasePlayer* player, const CommandArgs& args)

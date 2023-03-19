@@ -57,15 +57,10 @@ void CDisplacer::Precache()
 
 void CDisplacer::Spawn()
 {
-	Precache();
+	CBasePlayerWeapon::Spawn();
 
 	m_iId = WEAPON_DISPLACER;
-
-	SetModel(STRING(pev->model));
-
 	m_iDefaultAmmo = DISPLACER_DEFAULT_GIVE;
-
-	FallInit();
 }
 
 bool CDisplacer::Deploy()

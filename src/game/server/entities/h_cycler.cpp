@@ -279,7 +279,7 @@ void CWeaponCycler::Spawn()
 
 	UTIL_SetOrigin(pev, pev->origin);
 	SetSize(Vector(-16, -16, 0), Vector(16, 16, 16));
-	SetTouch(&CWeaponCycler::DefaultTouch);
+	SetTouch(&CWeaponCycler::ItemTouch);
 }
 
 bool CWeaponCycler::Deploy()

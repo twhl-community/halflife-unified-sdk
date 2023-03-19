@@ -3161,16 +3161,17 @@ void CBloodSplat::Spray()
 	pev->nextthink = gpGlobals->time + 0.1;
 }
 
-static CBaseEntity* GiveNamedItem_Common(entvars_t* pev, const char* pszName)
+static CBaseItem* GiveNamedItem_Common(entvars_t* pev, const char* pszName)
 {
-	auto entity = g_EntityDictionary->Create(pszName);
+	// Only give items to player.
+	auto entity = g_ItemDictionary->Create(pszName);
 	if (FNullEnt(entity))
 	{
 		CBaseEntity::Logger->debug("nullptr Ent in GiveNamedItem!");
 		return nullptr;
 	}
 	entity->pev->origin = pev->origin;
-	entity->pev->spawnflags |= SF_NORESPAWN;
+	entity->m_RespawnMode = ItemRespawnMode::Never;
 
 	DispatchSpawn(entity->edict());
 
@@ -3186,7 +3187,10 @@ void CBasePlayer::GiveNamedItem(const char* szName)
 		return;
 	}
 
-	DispatchTouch(entity->edict(), ENT(pev));
+	if (entity->AddToPlayer(this) != ItemAddResult::Added)
+	{
+		UTIL_Remove(entity);
+	}
 }
 
 void CBasePlayer::GiveNamedItem(const char* szName, int defaultAmmo)
@@ -3203,7 +3207,10 @@ void CBasePlayer::GiveNamedItem(const char* szName, int defaultAmmo)
 		weapon->m_iDefaultAmmo = defaultAmmo;
 	}
 
-	DispatchTouch(entity->edict(), ENT(pev));
+	if (entity->AddToPlayer(this) != ItemAddResult::Added)
+	{
+		UTIL_Remove(entity);
+	}
 }
 
 int CBasePlayer::GetFlashlightFlag() const
@@ -3440,7 +3447,6 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse)
 
 
 	case 101:
-		gEvilImpulse101 = true;
 		GiveNamedItem("item_suit");
 		GiveNamedItem("item_battery");
 		GiveNamedItem("weapon_crowbar");
@@ -3479,7 +3485,6 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse)
 		// TODO: not given
 		// GiveNamedItem( "ammo_762" );
 
-		gEvilImpulse101 = false;
 		break;
 
 	case 102:
@@ -3604,7 +3609,7 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse)
 	}
 }
 
-bool CBasePlayer::AddPlayerWeapon(CBasePlayerWeapon* weapon)
+ItemAddResult CBasePlayer::AddPlayerWeapon(CBasePlayerWeapon* weapon)
 {
 	CBasePlayerWeapon* pInsert = m_rgpPlayerWeapons[weapon->iItemSlot()];
 
@@ -3614,33 +3619,23 @@ bool CBasePlayer::AddPlayerWeapon(CBasePlayerWeapon* weapon)
 		{
 			if (weapon->AddDuplicate(pInsert))
 			{
-				g_pGameRules->PlayerGotWeapon(this, weapon);
-				weapon->CheckRespawn();
-
 				// ugly hack to update clip w/o an update clip message
 				pInsert->UpdateItemInfo();
 				if (m_pActiveWeapon)
 					m_pActiveWeapon->UpdateItemInfo();
 
 				weapon->Kill();
+				return ItemAddResult::AddedAsDuplicate;
 			}
-			else if (gEvilImpulse101)
-			{
-				// FIXME: remove anyway for deathmatch testing
-				weapon->Kill();
-			}
-			return false;
+
+			return ItemAddResult::NotAdded;
 		}
 		pInsert = pInsert->m_pNext;
 	}
 
-
 	if (weapon->CanAddToPlayer(this))
 	{
 		weapon->AddToPlayer(this);
-
-		g_pGameRules->PlayerGotWeapon(this, weapon);
-		weapon->CheckRespawn();
 
 		// Add to the list before extracting ammo so weapon ownership checks work properly.
 		weapon->m_pNext = m_rgpPlayerWeapons[weapon->iItemSlot()];
@@ -3673,14 +3668,10 @@ bool CBasePlayer::AddPlayerWeapon(CBasePlayerWeapon* weapon)
 			SwitchWeapon(weapon);
 		}
 
-		return true;
+		return ItemAddResult::Added;
 	}
-	else if (gEvilImpulse101)
-	{
-		// FIXME: remove anyway for deathmatch testing
-		weapon->Kill();
-	}
-	return false;
+
+	return ItemAddResult::NotAdded;
 }
 
 bool CBasePlayer::RemovePlayerWeapon(CBasePlayerWeapon* weapon)

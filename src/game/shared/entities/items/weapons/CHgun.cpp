@@ -49,14 +49,11 @@ void CHgun::OnCreate()
 
 void CHgun::Spawn()
 {
-	Precache();
+	CBasePlayerWeapon::Spawn();
 	m_iId = WEAPON_HORNETGUN;
-	SetModel(STRING(pev->model));
 
 	m_iDefaultAmmo = HIVEHAND_DEFAULT_GIVE;
 	m_iFirePhase = 0;
-
-	FallInit(); // get ready to fall down.
 }
 
 void CHgun::Precache()

@@ -58,26 +58,13 @@ public:
 	void PlayerKilled(CBasePlayer* pVictim, CBaseEntity* pKiller, CBaseEntity* inflictor) override;
 	void DeathNotice(CBasePlayer* pVictim, CBaseEntity* pKiller, CBaseEntity* inflictor) override;
 
-	void PlayerGotWeapon(CBasePlayer* pPlayer, CBasePlayerWeapon* pWeapon) override;
-	bool CanHavePlayerWeapon(CBasePlayer* pPlayer, CBasePlayerWeapon* pWeapon) override;
+	bool CanHaveItem(CBasePlayer* player, CBaseItem* item) override;
+	void PlayerGotItem(CBasePlayer* player, CBaseItem* item) override;
 
-	int WeaponShouldRespawn(CBasePlayerWeapon* pWeapon) override;
-	float FlWeaponRespawnTime(CBasePlayerWeapon* pWeapon) override;
-	float FlWeaponTryRespawn(CBasePlayerWeapon* pWeapon) override;
-	Vector VecWeaponRespawnSpot(CBasePlayerWeapon* pWeapon) override;
-
-	bool CanHaveItem(CBasePlayer* pPlayer, CItem* pItem) override;
-	void PlayerGotItem(CBasePlayer* pPlayer, CItem* pItem) override;
-
-	int ItemShouldRespawn(CItem* pItem) override;
-	float FlItemRespawnTime(CItem* pItem) override;
-	Vector VecItemRespawnSpot(CItem* pItem) override;
-
-	void PlayerGotAmmo(CBasePlayer* pPlayer, char* szName, int iCount) override;
-
-	int AmmoShouldRespawn(CBasePlayerAmmo* pAmmo) override;
-	float FlAmmoRespawnTime(CBasePlayerAmmo* pAmmo) override;
-	Vector VecAmmoRespawnSpot(CBasePlayerAmmo* pAmmo) override;
+	bool ItemShouldRespawn(CBaseItem* item) override;
+	float ItemRespawnTime(CBaseItem* item) override;
+	Vector ItemRespawnSpot(CBaseItem* item) override;
+	float ItemTryRespawn(CBaseItem* item) override;
 
 	float FlHealthChargerRechargeTime() override;
 	float FlHEVChargerRechargeTime() override;

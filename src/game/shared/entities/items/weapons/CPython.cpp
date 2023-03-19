@@ -49,13 +49,9 @@ void CPython::IncrementAmmo(CBasePlayer* pPlayer)
 
 void CPython::Spawn()
 {
-	Precache();
+	CBasePlayerWeapon::Spawn();
 	m_iId = WEAPON_PYTHON;
-	SetModel(STRING(pev->model));
-
 	m_iDefaultAmmo = PYTHON_DEFAULT_GIVE;
-
-	FallInit(); // get ready to fall down.
 }
 
 void CPython::Precache()

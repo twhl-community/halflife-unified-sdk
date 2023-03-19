@@ -48,11 +48,9 @@ void CPenguin::Precache()
 
 void CPenguin::Spawn()
 {
-	Precache();
+	CBasePlayerWeapon::Spawn();
 
 	m_iId = WEAPON_PENGUIN;
-	SetModel(STRING(pev->model));
-	FallInit();
 
 	m_iDefaultAmmo = PENGUIN_MAX_CLIP;
 	pev->sequence = 1;

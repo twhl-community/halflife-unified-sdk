@@ -199,13 +199,10 @@ void CCrossbow::OnCreate()
 
 void CCrossbow::Spawn()
 {
-	Precache();
+	CBasePlayerWeapon::Spawn();
 	m_iId = WEAPON_CROSSBOW;
-	SetModel(STRING(pev->model));
 
 	m_iDefaultAmmo = CROSSBOW_DEFAULT_GIVE;
-
-	FallInit(); // get ready to fall down.
 }
 
 void CCrossbow::Precache()

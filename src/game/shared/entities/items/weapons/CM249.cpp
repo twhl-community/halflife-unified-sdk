@@ -61,17 +61,12 @@ void CM249::Precache()
 
 void CM249::Spawn()
 {
-	Precache();
+	CBasePlayerWeapon::Spawn();
 
 	m_iId = WEAPON_M249;
-
-	SetModel(STRING(pev->model));
-
 	m_iDefaultAmmo = M249_DEFAULT_GIVE;
 
 	m_bAlternatingEject = false;
-
-	FallInit(); // get ready to fall down.
 }
 
 bool CM249::Deploy()

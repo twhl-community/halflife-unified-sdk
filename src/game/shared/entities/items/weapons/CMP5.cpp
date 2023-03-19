@@ -28,15 +28,12 @@ void CMP5::OnCreate()
 
 void CMP5::Spawn()
 {
-	Precache();
-	SetModel(STRING(pev->model));
+	CBasePlayerWeapon::Spawn();
 	m_iId = WEAPON_MP5;
 
 	m_iDefaultAmmo = MP5_DEFAULT_GIVE;
 
 	m_flNextGrenadeLoad = gpGlobals->time;
-
-	FallInit(); // get ready to fall down.
 }
 
 void CMP5::Precache()

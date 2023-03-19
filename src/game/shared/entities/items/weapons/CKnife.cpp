@@ -47,15 +47,10 @@ void CKnife::Precache()
 
 void CKnife::Spawn()
 {
-	Precache();
+	CBasePlayerWeapon::Spawn();
 
 	m_iId = WEAPON_KNIFE;
-
-	SetModel(STRING(pev->model));
-
 	m_iClip = WEAPON_NOCLIP;
-
-	FallInit();
 }
 
 bool CKnife::Deploy()

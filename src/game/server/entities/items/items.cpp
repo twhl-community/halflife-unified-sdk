@@ -17,101 +17,6 @@
 #include "items.h"
 #include "UserMessages.h"
 
-void CItem::Precache()
-{
-	if (!FStringNull(pev->model))
-	{
-		PrecacheModel(STRING(pev->model));
-	}
-}
-
-void CItem::Spawn()
-{
-	Precache();
-
-	if (!FStringNull(pev->model))
-	{
-		SetModel(STRING(pev->model));
-	}
-
-	pev->movetype = MOVETYPE_TOSS;
-	pev->solid = SOLID_TRIGGER;
-	UTIL_SetOrigin(pev, pev->origin);
-	SetSize(Vector(-16, -16, 0), Vector(16, 16, 16));
-	SetTouch(&CItem::ItemTouch);
-
-	if (DROP_TO_FLOOR(ENT(pev)) == 0)
-	{
-		CBaseEntity::Logger->error("Item {} fell out of level at {}", STRING(pev->classname), pev->origin);
-		UTIL_Remove(this);
-		return;
-	}
-}
-
-void CItem::ItemTouch(CBaseEntity* pOther)
-{
-	// if it's not a player, ignore
-	if (!pOther->IsPlayer())
-	{
-		return;
-	}
-
-	CBasePlayer* pPlayer = (CBasePlayer*)pOther;
-
-	// ok, a player is touching this item, but can he have it?
-	if (!g_pGameRules->CanHaveItem(pPlayer, this))
-	{
-		// no? Ignore the touch.
-		return;
-	}
-
-	if (MyTouch(pPlayer))
-	{
-		SUB_UseTargets(pOther, USE_TOGGLE, 0);
-		SetTouch(nullptr);
-
-		// player grabbed the item.
-		g_pGameRules->PlayerGotItem(pPlayer, this);
-		if (g_pGameRules->ItemShouldRespawn(this) == GR_ITEM_RESPAWN_YES)
-		{
-			Respawn();
-		}
-		else
-		{
-			UTIL_Remove(this);
-		}
-	}
-	else if (gEvilImpulse101)
-	{
-		UTIL_Remove(this);
-	}
-}
-
-CBaseEntity* CItem::Respawn()
-{
-	SetTouch(nullptr);
-	pev->effects |= EF_NODRAW;
-
-	UTIL_SetOrigin(pev, g_pGameRules->VecItemRespawnSpot(this)); // blip to whereever you should respawn.
-
-	SetThink(&CItem::Materialize);
-	pev->nextthink = g_pGameRules->FlItemRespawnTime(this);
-	return this;
-}
-
-void CItem::Materialize()
-{
-	if ((pev->effects & EF_NODRAW) != 0)
-	{
-		// changing from invisible state to visible.
-		EmitSoundDyn(CHAN_WEAPON, "items/suitchargeok1.wav", 1, ATTN_NORM, 0, 150);
-		pev->effects &= ~EF_NODRAW;
-		pev->effects |= EF_MUZZLEFLASH;
-	}
-
-	SetTouch(&CItem::ItemTouch);
-}
-
 #define SF_SUIT_SHORTLOGON 0x0001
 
 class CItemSuit : public CItem
@@ -123,17 +28,18 @@ public:
 
 		pev->model = MAKE_STRING("models/w_suit.mdl");
 	}
-	bool MyTouch(CBasePlayer* pPlayer) override
+
+	bool AddItem(CBasePlayer* player) override
 	{
-		if (pPlayer->HasSuit())
+		if (player->HasSuit())
 			return false;
 
 		if ((pev->spawnflags & SF_SUIT_SHORTLOGON) != 0)
-			EMIT_SOUND_SUIT(pPlayer, "!HEV_A0"); // short version of suit logon,
+			EMIT_SOUND_SUIT(player, "!HEV_A0"); // short version of suit logon,
 		else
-			EMIT_SOUND_SUIT(pPlayer, "!HEV_AAx"); // long version of suit logon
+			EMIT_SOUND_SUIT(player, "!HEV_AAx"); // long version of suit logon
 
-		pPlayer->SetHasSuit(true);
+		player->SetHasSuit(true);
 		return true;
 	}
 };
@@ -157,32 +63,32 @@ public:
 		CItem::Precache();
 		PrecacheSound("items/gunpickup2.wav");
 	}
-	bool MyTouch(CBasePlayer* pPlayer) override
+	bool AddItem(CBasePlayer* player) override
 	{
-		if (pPlayer->pev->deadflag != DEAD_NO)
+		if (player->pev->deadflag != DEAD_NO)
 		{
 			return false;
 		}
 
-		if ((pPlayer->pev->armorvalue < MAX_NORMAL_BATTERY) &&
-			pPlayer->HasSuit())
+		if ((player->pev->armorvalue < MAX_NORMAL_BATTERY) &&
+			player->HasSuit())
 		{
 			int pct;
 			char szcharge[64];
 
-			pPlayer->pev->armorvalue += GetSkillFloat("battery"sv);
-			pPlayer->pev->armorvalue = V_min(pPlayer->pev->armorvalue, MAX_NORMAL_BATTERY);
+			player->pev->armorvalue += GetSkillFloat("battery"sv);
+			player->pev->armorvalue = V_min(player->pev->armorvalue, MAX_NORMAL_BATTERY);
 
-			pPlayer->EmitSound(CHAN_ITEM, "items/gunpickup2.wav", 1, ATTN_NORM);
+			player->EmitSound(CHAN_ITEM, "items/gunpickup2.wav", 1, ATTN_NORM);
 
-			MESSAGE_BEGIN(MSG_ONE, gmsgItemPickup, nullptr, pPlayer->pev);
+			MESSAGE_BEGIN(MSG_ONE, gmsgItemPickup, nullptr, player->pev);
 			WRITE_STRING(STRING(pev->classname));
 			MESSAGE_END();
 
 
 			// Suit reports new power level
 			// For some reason this wasn't working in release build -- round it.
-			pct = (int)((float)(pPlayer->pev->armorvalue * 100.0) * (1.0 / MAX_NORMAL_BATTERY) + 0.5);
+			pct = (int)((float)(player->pev->armorvalue * 100.0) * (1.0 / MAX_NORMAL_BATTERY) + 0.5);
 			pct = (pct / 5);
 			if (pct > 0)
 				pct--;
@@ -190,7 +96,7 @@ public:
 			sprintf(szcharge, "!HEV_%1dP", pct);
 
 			// EMIT_SOUND_SUIT(this, szcharge);
-			pPlayer->SetSuitUpdate(szcharge, false, SUIT_NEXT_IN_30SEC);
+			player->SetSuitUpdate(szcharge, false, SUIT_NEXT_IN_30SEC);
 			return true;
 		}
 		return false;
@@ -208,11 +114,11 @@ public:
 
 		pev->model = MAKE_STRING("models/w_antidote.mdl");
 	}
-	bool MyTouch(CBasePlayer* pPlayer) override
+	bool AddItem(CBasePlayer* player) override
 	{
-		pPlayer->SetSuitUpdate("!HEV_DET4", false, SUIT_NEXT_IN_1MIN);
+		player->SetSuitUpdate("!HEV_DET4", false, SUIT_NEXT_IN_1MIN);
 
-		pPlayer->m_rgItems[ITEM_ANTIDOTE] += 1;
+		player->m_rgItems[ITEM_ANTIDOTE] += 1;
 		return true;
 	}
 };
@@ -228,9 +134,9 @@ public:
 
 		pev->model = MAKE_STRING("models/w_security.mdl");
 	}
-	bool MyTouch(CBasePlayer* pPlayer) override
+	bool AddItem(CBasePlayer* player) override
 	{
-		pPlayer->m_rgItems[ITEM_SECURITY] += 1;
+		player->m_rgItems[ITEM_SECURITY] += 1;
 		return true;
 	}
 };
@@ -246,24 +152,24 @@ public:
 
 		pev->model = MAKE_STRING("models/w_longjump.mdl");
 	}
-	bool MyTouch(CBasePlayer* pPlayer) override
+	bool AddItem(CBasePlayer* player) override
 	{
-		if (pPlayer->m_fLongJump)
+		if (player->m_fLongJump)
 		{
 			return false;
 		}
 
-		if (pPlayer->HasSuit())
+		if (player->HasSuit())
 		{
-			pPlayer->m_fLongJump = true; // player now has longjump module
+			player->m_fLongJump = true; // player now has longjump module
 
-			g_engfuncs.pfnSetPhysicsKeyValue(pPlayer->edict(), "slj", "1");
+			g_engfuncs.pfnSetPhysicsKeyValue(player->edict(), "slj", "1");
 
-			MESSAGE_BEGIN(MSG_ONE, gmsgItemPickup, nullptr, pPlayer->pev);
+			MESSAGE_BEGIN(MSG_ONE, gmsgItemPickup, nullptr, player->pev);
 			WRITE_STRING(STRING(pev->classname));
 			MESSAGE_END();
 
-			EMIT_SOUND_SUIT(pPlayer, "!HEV_A1"); // Play the longjump sound UNDONE: Kelly? correct sound?
+			EMIT_SOUND_SUIT(player, "!HEV_A1"); // Play the longjump sound UNDONE: Kelly? correct sound?
 			return true;
 		}
 		return false;
@@ -286,26 +192,26 @@ public:
 		CItem::Precache();
 		PrecacheSound("items/gunpickup2.wav");
 	}
-	bool MyTouch(CBasePlayer* pPlayer) override
+	bool AddItem(CBasePlayer* player) override
 	{
-		if ((pPlayer->pev->armorvalue < MAX_NORMAL_BATTERY) && pPlayer->HasSuit())
+		if ((player->pev->armorvalue < MAX_NORMAL_BATTERY) && player->HasSuit())
 		{
 			int pct;
 			char szcharge[64];
 
-			pPlayer->pev->armorvalue += 40;
-			pPlayer->pev->armorvalue = V_min(pPlayer->pev->armorvalue, MAX_NORMAL_BATTERY);
+			player->pev->armorvalue += 40;
+			player->pev->armorvalue = V_min(player->pev->armorvalue, MAX_NORMAL_BATTERY);
 
-			pPlayer->EmitSound(CHAN_ITEM, "items/gunpickup2.wav", 1, ATTN_NORM);
+			player->EmitSound(CHAN_ITEM, "items/gunpickup2.wav", 1, ATTN_NORM);
 
-			MESSAGE_BEGIN(MSG_ONE, gmsgItemPickup, nullptr, pPlayer->pev);
+			MESSAGE_BEGIN(MSG_ONE, gmsgItemPickup, nullptr, player->pev);
 			WRITE_STRING(STRING(pev->classname));
 			MESSAGE_END();
 
 
 			// Suit reports new power level
 			// For some reason this wasn't working in release build -- round it.
-			pct = (int)((float)(pPlayer->pev->armorvalue * 100.0) * (1.0 / MAX_NORMAL_BATTERY) + 0.5);
+			pct = (int)((float)(player->pev->armorvalue * 100.0) * (1.0 / MAX_NORMAL_BATTERY) + 0.5);
 			pct = (pct / 5);
 			if (pct > 0)
 				pct--;
@@ -313,7 +219,7 @@ public:
 			sprintf(szcharge, "!HEV_%1dP", pct);
 
 			// EMIT_SOUND_SUIT(this, szcharge);
-			pPlayer->SetSuitUpdate(szcharge, false, SUIT_NEXT_IN_30SEC);
+			player->SetSuitUpdate(szcharge, false, SUIT_NEXT_IN_30SEC);
 			return true;
 		}
 
@@ -337,26 +243,26 @@ public:
 		CItem::Precache();
 		PrecacheSound("items/gunpickup2.wav");
 	}
-	bool MyTouch(CBasePlayer* pPlayer) override
+	bool AddItem(CBasePlayer* player) override
 	{
-		if ((pPlayer->pev->armorvalue < MAX_NORMAL_BATTERY) && pPlayer->HasSuit())
+		if ((player->pev->armorvalue < MAX_NORMAL_BATTERY) && player->HasSuit())
 		{
 			int pct;
 			char szcharge[64];
 
-			pPlayer->pev->armorvalue += 60;
-			pPlayer->pev->armorvalue = V_min(pPlayer->pev->armorvalue, MAX_NORMAL_BATTERY);
+			player->pev->armorvalue += 60;
+			player->pev->armorvalue = V_min(player->pev->armorvalue, MAX_NORMAL_BATTERY);
 
-			pPlayer->EmitSound(CHAN_ITEM, "items/gunpickup2.wav", 1, ATTN_NORM);
+			player->EmitSound(CHAN_ITEM, "items/gunpickup2.wav", 1, ATTN_NORM);
 
-			MESSAGE_BEGIN(MSG_ONE, gmsgItemPickup, nullptr, pPlayer->pev);
+			MESSAGE_BEGIN(MSG_ONE, gmsgItemPickup, nullptr, player->pev);
 			WRITE_STRING(STRING(pev->classname));
 			MESSAGE_END();
 
 
 			// Suit reports new power level
 			// For some reason this wasn't working in release build -- round it.
-			pct = (int)((float)(pPlayer->pev->armorvalue * 100.0) * (1.0 / MAX_NORMAL_BATTERY) + 0.5);
+			pct = (int)((float)(player->pev->armorvalue * 100.0) * (1.0 / MAX_NORMAL_BATTERY) + 0.5);
 			pct = (pct / 5);
 			if (pct > 0)
 				pct--;
@@ -364,7 +270,7 @@ public:
 			sprintf(szcharge, "!HEV_%1dP", pct);
 
 			// EMIT_SOUND_SUIT(this, szcharge);
-			pPlayer->SetSuitUpdate(szcharge, false, SUIT_NEXT_IN_30SEC);
+			player->SetSuitUpdate(szcharge, false, SUIT_NEXT_IN_30SEC);
 			return true;
 		}
 

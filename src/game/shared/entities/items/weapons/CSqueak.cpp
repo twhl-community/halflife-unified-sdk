@@ -406,11 +406,8 @@ void CSqueak::OnCreate()
 
 void CSqueak::Spawn()
 {
-	Precache();
+	CBasePlayerWeapon::Spawn();
 	m_iId = WEAPON_SNARK;
-	SetModel(STRING(pev->model));
-
-	FallInit(); // get ready to fall down.
 
 	m_iDefaultAmmo = SNARK_DEFAULT_GIVE;
 

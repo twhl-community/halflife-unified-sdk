@@ -15,13 +15,23 @@
 
 #pragma once
 
-class CItem : public CBaseEntity
+#include "items/CBaseItem.h"
+
+class CItem : public CBaseItem
 {
 public:
-	void Precache() override;
-	void Spawn() override;
-	CBaseEntity* Respawn() override;
-	void EXPORT ItemTouch(CBaseEntity* pOther);
-	void EXPORT Materialize();
-	virtual bool MyTouch(CBasePlayer* pPlayer) { return false; }
+	ItemType GetType() const override final { return ItemType::Consumable; }
+
+	void Accept(IItemVisitor& visitor) override
+	{
+		visitor.Visit(this);
+	}
+
+	ItemAddResult Apply(CBasePlayer* player) override
+	{
+		return AddItem(player) ? ItemAddResult::Added : ItemAddResult::NotAdded;
+	}
+
+protected:
+	virtual bool AddItem(CBasePlayer* player) = 0;
 };

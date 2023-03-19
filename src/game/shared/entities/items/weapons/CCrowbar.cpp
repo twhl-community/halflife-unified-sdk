@@ -30,12 +30,10 @@ void CCrowbar::OnCreate()
 
 void CCrowbar::Spawn()
 {
-	Precache();
-	m_iId = WEAPON_CROWBAR;
-	SetModel(STRING(pev->model));
-	m_iClip = -1;
+	CBasePlayerWeapon::Spawn();
 
-	FallInit(); // get ready to fall down.
+	m_iId = WEAPON_CROWBAR;
+	m_iClip = -1;
 }
 
 void CCrowbar::Precache()

@@ -68,19 +68,15 @@ void CGrapple::Precache()
 
 void CGrapple::Spawn()
 {
-	Precache();
+	CBasePlayerWeapon::Spawn();
 
 	m_iId = WEAPON_GRAPPLE;
-
-	SetModel(STRING(pev->model));
 
 	m_iClip = WEAPON_NOCLIP;
 
 	m_pTip = nullptr;
 
 	m_bGrappling = false;
-
-	FallInit();
 }
 
 bool CGrapple::Deploy()

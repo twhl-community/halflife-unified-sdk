@@ -21,11 +21,10 @@
 
 #include "ClientCommandRegistry.h"
 
-class CBasePlayerWeapon;
-class CBasePlayer;
-class CItem;
-class CBasePlayerAmmo;
+class CBaseItem;
 class CBaseMonster;
+class CBasePlayer;
+class CBasePlayerWeapon;
 
 /**
 *	@brief weapon respawning return codes
@@ -228,95 +227,45 @@ public:
 
 	virtual void MonsterKilled(CBaseMonster* pVictim, CBaseEntity* pKiller, CBaseEntity* inflictor) {}
 
-	// Weapon retrieval
-	/**
-	*	@brief The player is touching an CBasePlayerWeapon, do I give it to him?
-	*/
-	virtual bool CanHavePlayerWeapon(CBasePlayer* pPlayer, CBasePlayerWeapon* pWeapon);
-
-	/**
-	*	@brief Called each time a player picks up a weapon from the ground
-	*/
-	virtual void PlayerGotWeapon(CBasePlayer* pPlayer, CBasePlayerWeapon* pWeapon) = 0;
-
-	// Weapon spawn/respawn control
-	/**
-	*	@brief should this weapon respawn?
-	*	any conditions inhibiting the respawning of this weapon?
-	*/
-	virtual int WeaponShouldRespawn(CBasePlayerWeapon* pWeapon) = 0;
-
-	/**
-	*	@brief when may this weapon respawn?
-	*/
-	virtual float FlWeaponRespawnTime(CBasePlayerWeapon* pWeapon) = 0;
-
-	/**
-	*	@brief can i respawn now, and if not, when should i try again?
-	*	Returns 0 if the weapon can respawn now, otherwise it returns the time at which it can try to spawn again.
-	*/
-	virtual float FlWeaponTryRespawn(CBasePlayerWeapon* pWeapon) = 0;
-
-	/**
-	*	@brief where in the world should this weapon respawn?
-	*	Some game variations may choose to randomize spawn locations
-	*/
-	virtual Vector VecWeaponRespawnSpot(CBasePlayerWeapon* pWeapon) = 0;
-
 	// Item retrieval
 	/**
 	*	@brief is this player allowed to take this item?
 	*/
-	virtual bool CanHaveItem(CBasePlayer* pPlayer, CItem* pItem) = 0;
+	virtual bool CanHaveItem(CBasePlayer* player, CBaseItem* item);
 
 	/**
 	*	@brief call each time a player picks up an item (battery, healthkit, longjump)
 	*/
-	virtual void PlayerGotItem(CBasePlayer* pPlayer, CItem* pItem) = 0;
+	virtual void PlayerGotItem(CBasePlayer* player, CBaseItem* item) = 0;
 
 	// Item spawn/respawn control
 	/**
 	*	@brief Should this item respawn?
 	*/
-	virtual int ItemShouldRespawn(CItem* pItem) = 0;
+	virtual bool ItemShouldRespawn(CBaseItem* item) = 0;
 
 	/**
 	*	@brief when may this item respawn?
 	*/
-	virtual float FlItemRespawnTime(CItem* pItem) = 0;
+	virtual float ItemRespawnTime(CBaseItem* item) = 0;
 
 	/**
 	*	@brief where in the world should this item respawn?
+	*	by default, everything spawns where placed by the designer.
+	*	Some game variations may choose to randomize spawn locations
 	*/
-	virtual Vector VecItemRespawnSpot(CItem* pItem) = 0;
-
 	// Ammo retrieval
 	/**
 	*	@brief can this player take more of this ammo?
 	*/
 	virtual bool CanHaveAmmo(CBasePlayer* pPlayer, const char* pszAmmoName);
+	virtual Vector ItemRespawnSpot(CBaseItem* item) = 0;
 
 	/**
-	*	@brief called each time a player picks up some ammo in the world
-	*/
-	virtual void PlayerGotAmmo(CBasePlayer* pPlayer, char* szName, int iCount) = 0;
-
-	// Ammo spawn/respawn control
-	/**
-	*	@brief should this ammo item respawn?
-	*/
-	virtual int AmmoShouldRespawn(CBasePlayerAmmo* pAmmo) = 0;
-
-	/**
-	*	@brief when should this ammo item respawn?
-	*/
-	virtual float FlAmmoRespawnTime(CBasePlayerAmmo* pAmmo) = 0;
-
-	/**
-	*	@brief where in the world should this ammo item respawn?
-	*	by default, everything spawns where placed by the designer.
-	*/
-	virtual Vector VecAmmoRespawnSpot(CBasePlayerAmmo* pAmmo) = 0;
+	 *	@brief can i respawn now, and if not, when should i try again?
+	 *	Returns 0 if the item can respawn now, otherwise it returns the time at which it can try to spawn again.
+	 */
+	virtual float ItemTryRespawn(CBaseItem* item) = 0;
 
 	/**
 	*	@brief how long until a depleted HealthCharger recharges itself?
@@ -394,3 +343,22 @@ inline bool g_fGameOver;
 inline bool g_teamplay = false;
 
 const char* GetTeamName(edict_t* pEntity);
+
+class GameRulesCanHaveItemVisitor : public IItemVisitor
+{
+public:
+	explicit GameRulesCanHaveItemVisitor(CGameRules* gameRules, CBasePlayer* player)
+		: GameRules(gameRules), Player(player)
+	{
+	}
+
+	void Visit(CBasePlayerAmmo* ammo) override {}
+
+	void Visit(CBasePlayerWeapon* weapon) override;
+
+	void Visit(CItem* pickupItem) override {}
+
+	CGameRules* const GameRules;
+	CBasePlayer* const Player;
+	bool CanHaveItem = true;
+};

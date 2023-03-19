@@ -147,7 +147,7 @@ void CWeaponBox::Touch(CBaseEntity* pOther)
 				weapon = m_rgpPlayerWeapons[i];
 				m_rgpPlayerWeapons[i] = m_rgpPlayerWeapons[i]->m_pNext; // unlink this weapon from the box
 
-				if (pPlayer->AddPlayerWeapon(weapon))
+				if (pPlayer->AddPlayerWeapon(weapon) == ItemAddResult::Added)
 				{
 					weapon->AttachToPlayer(pPlayer);
 				}
@@ -192,7 +192,7 @@ bool CWeaponBox::PackWeapon(CBasePlayerWeapon* weapon)
 		weapon->m_pNext = nullptr;
 	}
 
-	weapon->pev->spawnflags |= SF_NORESPAWN; // never respawn
+	weapon->m_RespawnMode = ItemRespawnMode::Never;
 	weapon->pev->movetype = MOVETYPE_NONE;
 	weapon->pev->solid = SOLID_NOT;
 	weapon->pev->effects = EF_NODRAW;

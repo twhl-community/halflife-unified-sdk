@@ -23,6 +23,7 @@
 
 #include "CBaseEntity.h"
 #include "weapons.h"
+#include "items/CBaseItem.h"
 
 /**
  *	@file
@@ -237,6 +238,7 @@ struct EntityDictionaryLocator final
 
 // Used at runtime to look up entities of specific types.
 inline EntityDictionary<CBaseEntity>* g_EntityDictionary = EntityDictionaryLocator<CBaseEntity>::Get();
+inline EntityDictionary<CBaseItem>* g_ItemDictionary = EntityDictionaryLocator<CBaseItem>::Get();
 inline EntityDictionary<CBasePlayerWeapon>* g_WeaponDictionary = EntityDictionaryLocator<CBasePlayerWeapon>::Get();
 
 namespace detail
@@ -260,6 +262,7 @@ void RegisterEntityDescriptor(EntityDescriptor<TEntity>* descriptor)
 	// but since we don't have reflection available and existing libraries require loads of refactoring this will have to do for now.
 	detail::RegisterEntityDescriptorToDictionaries(descriptor,
 		EntityDictionaryLocator<CBaseEntity>::Get(),
+		EntityDictionaryLocator<CBaseItem>::Get(),
 		EntityDictionaryLocator<CBasePlayerWeapon>::Get());
 }
 

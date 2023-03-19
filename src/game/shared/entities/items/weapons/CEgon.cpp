@@ -47,13 +47,9 @@ void CEgon::OnCreate()
 
 void CEgon::Spawn()
 {
-	Precache();
+	CBasePlayerWeapon::Spawn();
 	m_iId = WEAPON_EGON;
-	SetModel(STRING(pev->model));
-
 	m_iDefaultAmmo = EGON_DEFAULT_GIVE;
-
-	FallInit(); // get ready to fall down.
 }
 
 void CEgon::Precache()

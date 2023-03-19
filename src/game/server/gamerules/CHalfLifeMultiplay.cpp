@@ -22,6 +22,7 @@
 #include "UserMessages.h"
 
 #include "CHalfLifeCTFplay.h"
+#include "items/CBaseItem.h"
 
 CVoiceGameMgr g_VoiceGameMgr;
 
@@ -42,6 +43,93 @@ public:
 	}
 };
 static CMultiplayGameMgrHelper g_GameMgrHelper;
+
+class MultiplayCanHaveItemVisitor final : public GameRulesCanHaveItemVisitor
+{
+public:
+	explicit MultiplayCanHaveItemVisitor(CHalfLifeMultiplay* gameRules, CBasePlayer* player)
+		: GameRulesCanHaveItemVisitor(gameRules, player)
+	{
+	}
+
+	void Visit(CBasePlayerWeapon* weapon) override
+	{
+		if (weaponstay.value > 0)
+		{
+			if ((weapon->iFlags() & ITEM_FLAG_LIMITINWORLD) == 0)
+			{
+				// check if the player already has this weapon
+				if (Player->HasPlayerWeapon(weapon))
+				{
+					CanHaveItem = false;
+					return;
+				}
+			}
+		}
+
+		GameRulesCanHaveItemVisitor::Visit(weapon);
+	}
+};
+
+class MultiplayItemRespawnTimeVisitor final : public IItemVisitor
+{
+public:
+	void Visit(CBasePlayerAmmo* ammo) override
+	{
+		RespawnTime = AMMO_RESPAWN_TIME;
+	}
+
+	void Visit(CBasePlayerWeapon* weapon) override
+	{
+		if (weaponstay.value > 0)
+		{
+			// make sure it's only certain weapons
+			if ((weapon->iFlags() & ITEM_FLAG_LIMITINWORLD) == 0)
+			{
+				RespawnTime = 0; // weapon respawns almost instantly
+				return;
+			}
+		}
+
+		RespawnTime = WEAPON_RESPAWN_TIME;
+	}
+
+	void Visit(CItem* pickupItem) override
+	{
+		RespawnTime = ITEM_RESPAWN_TIME;
+	}
+
+	// Don't respawn unknown items.
+	float RespawnTime = -1;
+};
+
+class MultiplayItemTryRespawnVisitor final : public IItemVisitor
+{
+public:
+	explicit MultiplayItemTryRespawnVisitor(CHalfLifeMultiplay* gameRules)
+		: GameRules(gameRules)
+	{
+	}
+
+	void Visit(CBasePlayerAmmo* ammo) override {}
+
+	void Visit(CBasePlayerWeapon* weapon) override
+	{
+		if (WEAPON_NONE != weapon->m_iId && (weapon->iFlags() & ITEM_FLAG_LIMITINWORLD) != 0)
+		{
+			if (NUMBER_OF_ENTITIES() < (gpGlobals->maxEntities - ENTITY_INTOLERANCE))
+				return;
+
+			// we're past the entity tolerance level, so delay the respawn
+			RespawnTime = GameRules->ItemRespawnTime(weapon);
+		}
+	}
+
+	void Visit(CItem* pickupItem) override {}
+
+	CHalfLifeMultiplay* const GameRules;
+	float RespawnTime = 0;
+};
 
 CHalfLifeMultiplay::CHalfLifeMultiplay()
 {
@@ -699,112 +787,47 @@ void CHalfLifeMultiplay::DeathNotice(CBasePlayer* pVictim, CBaseEntity* pKiller,
 */
 }
 
-void CHalfLifeMultiplay::PlayerGotWeapon(CBasePlayer* pPlayer, CBasePlayerWeapon* pWeapon)
+bool CHalfLifeMultiplay::CanHaveItem(CBasePlayer* player, CBaseItem* item)
+{
+	MultiplayCanHaveItemVisitor visitor{this, player};
+	item->Accept(visitor);
+	return visitor.CanHaveItem;
+}
+
+void CHalfLifeMultiplay::PlayerGotItem(CBasePlayer* player, CBaseItem* item)
 {
 }
 
-float CHalfLifeMultiplay::FlWeaponRespawnTime(CBasePlayerWeapon* pWeapon)
+bool CHalfLifeMultiplay::ItemShouldRespawn(CBaseItem* item)
 {
-	if (weaponstay.value > 0)
+	return item->m_RespawnMode != ItemRespawnMode::Never;
+}
+
+
+
+float CHalfLifeMultiplay::ItemRespawnTime(CBaseItem* item)
+{
+	if (item->m_RespawnDelay != ITEM_DEFAULT_RESPAWN_DELAY)
 	{
-		// make sure it's only certain weapons
-		if ((pWeapon->iFlags() & ITEM_FLAG_LIMITINWORLD) == 0)
-		{
-			return gpGlobals->time + 0; // weapon respawns almost instantly
-		}
+		return gpGlobals->time + item->m_RespawnDelay;
 	}
 
-	return gpGlobals->time + WEAPON_RESPAWN_TIME;
-}
-
-float CHalfLifeMultiplay::FlWeaponTryRespawn(CBasePlayerWeapon* pWeapon)
-{
-	if (pWeapon && WEAPON_NONE != pWeapon->m_iId && (pWeapon->iFlags() & ITEM_FLAG_LIMITINWORLD) != 0)
-	{
-		if (NUMBER_OF_ENTITIES() < (gpGlobals->maxEntities - ENTITY_INTOLERANCE))
-			return 0;
-
-		// we're past the entity tolerance level,  so delay the respawn
-		return FlWeaponRespawnTime(pWeapon);
-	}
-
-	return 0;
-}
-
-Vector CHalfLifeMultiplay::VecWeaponRespawnSpot(CBasePlayerWeapon* pWeapon)
-{
-	return pWeapon->pev->origin;
-}
-
-int CHalfLifeMultiplay::WeaponShouldRespawn(CBasePlayerWeapon* pWeapon)
-{
-	if ((pWeapon->pev->spawnflags & SF_NORESPAWN) != 0)
-	{
-		return GR_WEAPON_RESPAWN_NO;
-	}
-
-	return GR_WEAPON_RESPAWN_YES;
-}
-
-bool CHalfLifeMultiplay::CanHavePlayerWeapon(CBasePlayer* pPlayer, CBasePlayerWeapon* pItem)
-{
-	if (weaponstay.value > 0)
-	{
-		if ((pItem->iFlags() & ITEM_FLAG_LIMITINWORLD) != 0)
-			return CGameRules::CanHavePlayerWeapon(pPlayer, pItem);
-
-		// check if the player already has this weapon
-		for (int i = 0; i < MAX_WEAPON_SLOTS; i++)
-		{
-			CBasePlayerWeapon* it = pPlayer->m_rgpPlayerWeapons[i];
-
-			while (it != nullptr)
-			{
-				if (it->m_iId == pItem->m_iId)
-				{
-					return false;
-				}
-
-				it = it->m_pNext;
-			}
-		}
-	}
-
-	return CGameRules::CanHavePlayerWeapon(pPlayer, pItem);
-}
-
-bool CHalfLifeMultiplay::CanHaveItem(CBasePlayer* pPlayer, CItem* pItem)
-{
-	return true;
-}
-
-void CHalfLifeMultiplay::PlayerGotItem(CBasePlayer* pPlayer, CItem* pItem)
-{
-}
-
-int CHalfLifeMultiplay::ItemShouldRespawn(CItem* pItem)
-{
-	if ((pItem->pev->spawnflags & SF_NORESPAWN) != 0)
-	{
-		return GR_ITEM_RESPAWN_NO;
-	}
-
-	return GR_ITEM_RESPAWN_YES;
-}
-
-float CHalfLifeMultiplay::FlItemRespawnTime(CItem* pItem)
-{
-	return gpGlobals->time + ITEM_RESPAWN_TIME;
+	MultiplayItemRespawnTimeVisitor visitor;
+	item->Accept(visitor);
+	return gpGlobals->time + visitor.RespawnTime;
 }
 
 
-Vector CHalfLifeMultiplay::VecItemRespawnSpot(CItem* pItem)
+Vector CHalfLifeMultiplay::ItemRespawnSpot(CBaseItem* item)
 {
-	return pItem->pev->origin;
+	return item->pev->origin;
 }
 
-void CHalfLifeMultiplay::PlayerGotAmmo(CBasePlayer* pPlayer, char* szName, int iCount)
+float CHalfLifeMultiplay::ItemTryRespawn(CBaseItem* item)
 {
+	MultiplayItemTryRespawnVisitor visitor{this};
+	item->Accept(visitor);
+	return visitor.RespawnTime;
 }
 
 bool CHalfLifeMultiplay::IsAllowedToSpawn(CBaseEntity* pEntity)
@@ -813,26 +836,6 @@ bool CHalfLifeMultiplay::IsAllowedToSpawn(CBaseEntity* pEntity)
 	//		return false;
 
 	return true;
-}
-
-int CHalfLifeMultiplay::AmmoShouldRespawn(CBasePlayerAmmo* pAmmo)
-{
-	if ((pAmmo->pev->spawnflags & SF_NORESPAWN) != 0)
-	{
-		return GR_AMMO_RESPAWN_NO;
-	}
-
-	return GR_AMMO_RESPAWN_YES;
-}
-
-float CHalfLifeMultiplay::FlAmmoRespawnTime(CBasePlayerAmmo* pAmmo)
-{
-	return gpGlobals->time + AMMO_RESPAWN_TIME;
-}
-
-Vector CHalfLifeMultiplay::VecAmmoRespawnSpot(CBasePlayerAmmo* pAmmo)
-{
-	return pAmmo->pev->origin;
 }
 
 float CHalfLifeMultiplay::FlHealthChargerRechargeTime()

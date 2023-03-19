@@ -19,6 +19,7 @@
 #include "CGameRules.h"
 #include "ctf/CTFDefs.h"
 #include "palette.h"
+#include "items/CBaseItem.h"
 #include "sound/MaterialSystem.h"
 
 class CRope;
@@ -393,7 +394,7 @@ public:
 	/**
 	*	@brief Add a weapon to the player (Item == Weapon == Selectable Object)
 	*/
-	bool AddPlayerWeapon(CBasePlayerWeapon* weapon);
+	ItemAddResult AddPlayerWeapon(CBasePlayerWeapon* weapon);
 
 	bool RemovePlayerWeapon(CBasePlayerWeapon* weapon);
 
@@ -794,7 +795,6 @@ struct fmt::formatter<PlayerLogInfo>
 };
 
 inline bool gInitHUD = true;
-inline bool gEvilImpulse101 = false;
 inline bool giPrecacheGrunt = false;
 
 /**

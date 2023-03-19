@@ -268,10 +268,9 @@ void CRpg::Reload()
 
 void CRpg::Spawn()
 {
-	Precache();
+	CBasePlayerWeapon::Spawn();
 	m_iId = WEAPON_RPG;
 
-	SetModel(STRING(pev->model));
 	m_fSpotActive = true;
 
 	if (UTIL_IsMultiplayer())
@@ -283,8 +282,6 @@ void CRpg::Spawn()
 	{
 		m_iDefaultAmmo = RPG_DEFAULT_GIVE;
 	}
-
-	FallInit(); // get ready to fall down.
 }
 
 void CRpg::Precache()

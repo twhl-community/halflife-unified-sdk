@@ -52,13 +52,9 @@ void CGauss::OnCreate()
 
 void CGauss::Spawn()
 {
-	Precache();
+	CBasePlayerWeapon::Spawn();
 	m_iId = WEAPON_GAUSS;
-	SetModel(STRING(pev->model));
-
 	m_iDefaultAmmo = GAUSS_DEFAULT_GIVE;
-
-	FallInit(); // get ready to fall down.
 }
 
 void CGauss::Precache()

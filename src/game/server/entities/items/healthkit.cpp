@@ -20,56 +20,41 @@
 class CHealthKit : public CItem
 {
 public:
-	void OnCreate() override;
-	void Precache() override;
-	bool MyTouch(CBasePlayer* pPlayer) override;
+	void OnCreate() override
+	{
+		CItem::OnCreate();
+		pev->model = MAKE_STRING("models/w_medkit.mdl");
+	}
+
+	void Precache() override
+	{
+		CItem::Precache();
+		PrecacheSound("items/smallmedkit1.wav");
+	}
+
+	bool AddItem(CBasePlayer* player) override
+	{
+		if (player->pev->deadflag != DEAD_NO)
+		{
+			return false;
+		}
+
+		if (player->TakeHealth(GetSkillFloat("healthkit"sv), DMG_GENERIC))
+		{
+			MESSAGE_BEGIN(MSG_ONE, gmsgItemPickup, nullptr, player->pev);
+			WRITE_STRING(STRING(pev->classname));
+			MESSAGE_END();
+
+			player->EmitSound(CHAN_ITEM, "items/smallmedkit1.wav", 1, ATTN_NORM);
+
+			return true;
+		}
+
+		return false;
+	}
 };
 
 LINK_ENTITY_TO_CLASS(item_healthkit, CHealthKit);
-
-void CHealthKit::OnCreate()
-{
-	CItem::OnCreate();
-
-	pev->model = MAKE_STRING("models/w_medkit.mdl");
-}
-
-void CHealthKit::Precache()
-{
-	CItem::Precache();
-	PrecacheSound("items/smallmedkit1.wav");
-}
-
-bool CHealthKit::MyTouch(CBasePlayer* pPlayer)
-{
-	if (pPlayer->pev->deadflag != DEAD_NO)
-	{
-		return false;
-	}
-
-	if (pPlayer->TakeHealth(GetSkillFloat("healthkit"sv), DMG_GENERIC))
-	{
-		MESSAGE_BEGIN(MSG_ONE, gmsgItemPickup, nullptr, pPlayer->pev);
-		WRITE_STRING(STRING(pev->classname));
-		MESSAGE_END();
-
-		pPlayer->EmitSound(CHAN_ITEM, "items/smallmedkit1.wav", 1, ATTN_NORM);
-
-		// TODO: incorrect check here, but won't respawn due to respawn delay being -1 in singleplayer
-		if (0 != g_pGameRules->ItemShouldRespawn(this))
-		{
-			Respawn();
-		}
-		else
-		{
-			UTIL_Remove(this);
-		}
-
-		return true;
-	}
-
-	return false;
-}
 
 /**
 *	@brief Wall mounted health kit

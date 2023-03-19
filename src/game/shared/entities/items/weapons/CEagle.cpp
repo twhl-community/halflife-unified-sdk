@@ -55,15 +55,10 @@ void CEagle::Precache()
 
 void CEagle::Spawn()
 {
-	Precache();
+	CBasePlayerWeapon::Spawn();
 
 	m_iId = WEAPON_EAGLE;
-
-	SetModel(STRING(pev->model));
-
 	m_iDefaultAmmo = DEAGLE_DEFAULT_GIVE;
-
-	FallInit();
 }
 
 bool CEagle::Deploy()

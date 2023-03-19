@@ -901,7 +901,7 @@ int CBaseEntity::DamageDecal(int bitsDamageType)
 	return DECAL_GUNSHOT1 + RANDOM_LONG(0, 4);
 }
 
-CBaseEntity* CBaseEntity::Create(const char* szName, const Vector& vecOrigin, const Vector& vecAngles, edict_t* pentOwner)
+CBaseEntity* CBaseEntity::Create(const char* szName, const Vector& vecOrigin, const Vector& vecAngles, edict_t* pentOwner, bool callSpawn)
 {
 	auto entity = g_EntityDictionary->Create(szName);
 
@@ -913,7 +913,12 @@ CBaseEntity* CBaseEntity::Create(const char* szName, const Vector& vecOrigin, co
 	entity->pev->owner = pentOwner;
 	entity->pev->origin = vecOrigin;
 	entity->pev->angles = vecAngles;
-	DispatchSpawn(entity->edict());
+
+	if (callSpawn)
+	{
+		DispatchSpawn(entity->edict());
+	}
+
 	return entity;
 }
 

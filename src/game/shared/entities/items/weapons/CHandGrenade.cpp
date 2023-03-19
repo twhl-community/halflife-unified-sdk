@@ -29,17 +29,14 @@ void CHandGrenade::OnCreate()
 
 void CHandGrenade::Spawn()
 {
-	Precache();
+	CBasePlayerWeapon::Spawn();
 	m_iId = WEAPON_HANDGRENADE;
-	SetModel(STRING(pev->model));
 
 #ifndef CLIENT_DLL
 	pev->dmg = GetSkillFloat("plr_hand_grenade"sv);
 #endif
 
 	m_iDefaultAmmo = HANDGRENADE_DEFAULT_GIVE;
-
-	FallInit(); // get ready to fall down.
 }
 
 void CHandGrenade::Precache()

@@ -197,13 +197,9 @@ void CSatchel::AddToPlayer(CBasePlayer* pPlayer)
 
 void CSatchel::Spawn()
 {
-	Precache();
+	CBasePlayerWeapon::Spawn();
 	m_iId = WEAPON_SATCHEL;
-	SetModel(STRING(pev->model));
-
 	m_iDefaultAmmo = SATCHEL_DEFAULT_GIVE;
-
-	FallInit(); // get ready to fall down.
 }
 
 void CSatchel::Precache()
