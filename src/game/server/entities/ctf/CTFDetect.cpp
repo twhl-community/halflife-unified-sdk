@@ -15,7 +15,7 @@
 
 #include "cbase.h"
 #include "ctf/CTFDetect.h"
-#include "ctfplay_gamerules.h"
+#include "CHalfLifeCTFplay.h"
 
 LINK_ENTITY_TO_CLASS(info_ctfdetect, CTFDetect);
 

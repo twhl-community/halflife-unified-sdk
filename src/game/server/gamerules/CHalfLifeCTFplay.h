@@ -17,7 +17,7 @@
 
 #include <memory>
 
-#include "ClientCommandRegistry.h"
+#include "CHalfLifeMultiplay.h"
 
 #include "ctf/CTFDefs.h"
 

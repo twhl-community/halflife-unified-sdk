@@ -12,18 +12,16 @@
  *   without written permission from Valve LLC.
  *
  ****/
-//
-// teamplay_gamerules.cpp
-//
+
 #include "cbase.h"
-#include "gamerules.h"
+#include "CHalfLifeMultiplay.h"
 
 #include "items.h"
 #include "voice_gamemgr.h"
 #include "hltv.h"
 #include "UserMessages.h"
 
-#include "ctfplay_gamerules.h"
+#include "CHalfLifeCTFplay.h"
 
 CVoiceGameMgr g_VoiceGameMgr;
 

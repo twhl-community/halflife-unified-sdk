@@ -12,16 +12,15 @@
  *   without written permission from Valve LLC.
  *
  ****/
-//=========================================================
-// GameRules.cpp
-//=========================================================
 
 #include "cbase.h"
 #include "GameLibrary.h"
-#include "gamerules.h"
-#include "teamplay_gamerules.h"
-#include "ctfplay_gamerules.h"
-#include "coopplay_gamerules.h"
+#include "CGameRules.h"
+#include "CHalfLifeCoopplay.h"
+#include "CHalfLifeCTFplay.h"
+#include "CHalfLifeMultiplay.h"
+#include "CHalfLifeRules.h"
+#include "CHalfLifeTeamplay.h"
 #include "spawnpoints.h"
 #include "world.h"
 #include "UserMessages.h"

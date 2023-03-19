@@ -22,7 +22,6 @@
 
 #include "cbase.h"
 #include "client.h"
-#include "gamerules.h"
 #include "nodes.h"
 #include "ProjectInfoSystem.h"
 #include "scripted.h"

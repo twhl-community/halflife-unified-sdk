@@ -15,7 +15,7 @@
 #include "cbase.h"
 #include "CItemCTF.h"
 #include "CItemSpawnCTF.h"
-#include "ctfplay_gamerules.h"
+#include "CHalfLifeCTFplay.h"
 
 const auto SF_ITEMCTF_RANDOM_SPAWN = 1 << 2;
 const auto SF_ITEMCTF_IGNORE_TEAM = 1 << 3;

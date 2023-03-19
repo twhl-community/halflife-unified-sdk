@@ -262,16 +262,18 @@ target_sources(server PRIVATE
 	entities/NPCs/zombies/zombie_barney.cpp
 	entities/NPCs/zombies/zombie_soldier.cpp
 	
-	gamerules/coopplay_gamerules.cpp
-	gamerules/coopplay_gamerules.h
-	gamerules/ctfplay_gamerules.cpp
-	gamerules/ctfplay_gamerules.h
-	gamerules/gamerules.cpp
-	gamerules/gamerules.h
-	gamerules/multiplay_gamerules.cpp
-	gamerules/singleplay_gamerules.cpp
-	gamerules/teamplay_gamerules.cpp
-	gamerules/teamplay_gamerules.h
+	gamerules/CGameRules.cpp
+	gamerules/CGameRules.h
+	gamerules/CHalfLifeCoopplay.cpp
+	gamerules/CHalfLifeCoopplay.h
+	gamerules/CHalfLifeCTFplay.cpp
+	gamerules/CHalfLifeCTFplay.h
+	gamerules/CHalfLifeMultiplay.cpp
+	gamerules/CHalfLifeMultiplay.h
+	gamerules/CHalfLifeRules.cpp
+	gamerules/CHalfLifeRules.h
+	gamerules/CHalfLifeTeamplay.cpp
+	gamerules/CHalfLifeTeamplay.h
 	
 	sound/SentencesSystem.cpp
 	sound/SentencesSystem.h

@@ -22,7 +22,7 @@
 #include "basemonster.h"
 #include "UserMessages.h"
 
-#include "ctfplay_gamerules.h"
+#include "CHalfLifeCTFplay.h"
 #include "ctf/CTFGoalFlag.h"
 #include "ctf/CItemCTF.h"
 #include "ctf/CTFGoalBase.h"

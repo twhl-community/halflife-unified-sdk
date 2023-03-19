@@ -19,7 +19,7 @@
 #include "ctf/CTFGoalBase.h"
 #include "ctf/CTFGoalFlag.h"
 
-#include "ctfplay_gamerules.h"
+#include "CHalfLifeCTFplay.h"
 #include "UserMessages.h"
 
 void DumpCTFFlagInfo(CBasePlayer* pPlayer)

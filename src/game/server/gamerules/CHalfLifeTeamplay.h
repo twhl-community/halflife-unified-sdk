@@ -12,15 +12,12 @@
  *   without written permission from Valve LLC.
  *
  ****/
-//
-// teamplay_gamerules.h
-//
 
 #pragma once
 
 #include <memory>
 
-#include "ClientCommandRegistry.h"
+#include "CHalfLifeMultiplay.h"
 
 #define MAX_TEAMNAME_LENGTH 16
 #define MAX_TEAMS 32

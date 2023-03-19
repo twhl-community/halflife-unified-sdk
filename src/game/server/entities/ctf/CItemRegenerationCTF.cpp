@@ -16,7 +16,7 @@
 #include "cbase.h"
 #include "CItemCTF.h"
 #include "CItemRegenerationCTF.h"
-#include "ctfplay_gamerules.h"
+#include "CHalfLifeCTFplay.h"
 #include "UserMessages.h"
 
 LINK_ENTITY_TO_CLASS(item_ctfregeneration, CItemRegenerationCTF);

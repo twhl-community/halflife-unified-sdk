@@ -12,13 +12,9 @@
  *   without written permission from Valve LLC.
  *
  ****/
-//
-// teamplay_gamerules.cpp
-//
+
 #include "cbase.h"
-#include "gamerules.h"
-#include "teamplay_gamerules.h"
-#include "ctfplay_gamerules.h"
+#include "CHalfLifeTeamplay.h"
 #include "UserMessages.h"
 
 // TODO: these should be members of CHalfLifeTeamplay

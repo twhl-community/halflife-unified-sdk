@@ -49,7 +49,7 @@ CBaseEntity
 #include "decals.h"
 #include "skill.h"
 #include "game.h"
-#include "gamerules.h"
+#include "CGameRules.h"
 
 #include "basemonster.h"
 #include "CBaseAnimating.h"

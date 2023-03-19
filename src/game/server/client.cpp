@@ -41,7 +41,6 @@
 
 #include "ctf/CTFGoal.h"
 #include "ctf/CTFGoalFlag.h"
-#include "ctfplay_gamerules.h"
 
 unsigned int g_ulFrameCount;
 

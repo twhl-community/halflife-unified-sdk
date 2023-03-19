@@ -20,7 +20,6 @@
 
 #include "cbase.h"
 #include "talkmonster.h"
-#include "gamerules.h"
 #include "sound/MaterialSystem.h"
 
 // ==================== GENERIC AMBIENT SOUND ======================================

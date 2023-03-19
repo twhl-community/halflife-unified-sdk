@@ -36,7 +36,7 @@
 #include "military/COFSquadTalkMonster.h"
 #include "shake.h"
 #include "spawnpoints.h"
-#include "ctfplay_gamerules.h"
+#include "CHalfLifeCTFplay.h"
 #include "ctf/CHUDIconTrigger.h"
 #include "pm_shared.h"
 #include "hltv.h"

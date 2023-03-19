@@ -12,11 +12,9 @@
  *   without written permission from Valve LLC.
  *
  ****/
-//
-// coopplay_gamerules.cpp
-//
+
 #include "cbase.h"
-#include "coopplay_gamerules.h"
+#include "CHalfLifeCoopplay.h"
 #include "items.h"
 #include "UserMessages.h"
 

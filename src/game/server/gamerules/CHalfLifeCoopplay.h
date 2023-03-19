@@ -15,7 +15,7 @@
 
 #include <memory>
 
-#include "ClientCommandRegistry.h"
+#include "CHalfLifeMultiplay.h"
 
 class CHalfLifeCoopplay : public CHalfLifeMultiplay
 {
