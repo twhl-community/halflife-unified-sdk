@@ -21,11 +21,6 @@
 #define BOLT_AIR_VELOCITY 2000
 #define BOLT_WATER_VELOCITY 1000
 
-// UNDONE: Save/restore this?  Don't forget to set classname and LINK_ENTITY_TO_CLASS()
-//
-// OVERLOADS SOME ENTVARS:
-//
-// speed - the ideal magnitude of my velocity
 class CCrossbowBolt : public CBaseEntity
 {
 	void Spawn() override;
@@ -40,6 +35,7 @@ class CCrossbowBolt : public CBaseEntity
 public:
 	static CCrossbowBolt* BoltCreate();
 };
+
 LINK_ENTITY_TO_CLASS(crossbow_bolt, CCrossbowBolt);
 
 CCrossbowBolt* CCrossbowBolt::BoltCreate()
@@ -69,7 +65,6 @@ void CCrossbowBolt::Spawn()
 	pev->nextthink = gpGlobals->time + 0.2;
 }
 
-
 void CCrossbowBolt::Precache()
 {
 	PrecacheModel("models/crossbow_bolt.mdl");
@@ -80,7 +75,6 @@ void CCrossbowBolt::Precache()
 	PrecacheSound("fvox/beep.wav");
 	m_iTrail = PrecacheModel("sprites/streak.spr");
 }
-
 
 int CCrossbowBolt::Classify()
 {
@@ -228,7 +222,6 @@ void CCrossbow::Precache()
 	m_usCrossbow = PRECACHE_EVENT(1, "events/crossbow1.sc");
 	m_usCrossbow2 = PRECACHE_EVENT(1, "events/crossbow2.sc");
 }
-
 
 bool CCrossbow::GetWeaponInfo(WeaponInfo& info)
 {
@@ -394,7 +387,6 @@ void CCrossbow::FireBolt()
 		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.75;
 }
 
-
 void CCrossbow::SecondaryAttack()
 {
 	if (m_pPlayer->m_iFOV != 0)
@@ -409,7 +401,6 @@ void CCrossbow::SecondaryAttack()
 	pev->nextthink = UTIL_WeaponTimeBase() + 0.1;
 	m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 1.0;
 }
-
 
 void CCrossbow::Reload()
 {
@@ -426,7 +417,6 @@ void CCrossbow::Reload()
 		m_pPlayer->EmitSoundDyn(CHAN_ITEM, "weapons/xbow_reload1.wav", RANDOM_FLOAT(0.95, 1.0), ATTN_NORM, 0, 93 + RANDOM_LONG(0, 0xF));
 	}
 }
-
 
 void CCrossbow::WeaponIdle()
 {
@@ -465,8 +455,6 @@ void CCrossbow::WeaponIdle()
 	}
 }
 
-
-
 class CCrossbowAmmo : public CBasePlayerAmmo
 {
 public:
@@ -492,4 +480,5 @@ public:
 		return false;
 	}
 };
+
 LINK_ENTITY_TO_CLASS(ammo_crossbow, CCrossbowAmmo);

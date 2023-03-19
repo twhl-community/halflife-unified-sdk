@@ -50,6 +50,7 @@ TYPEDESCRIPTION COsprey::m_SaveData[] =
 		DEFINE_FIELD(COsprey, m_iDoLeftSmokePuff, FIELD_INTEGER),
 		DEFINE_FIELD(COsprey, m_iDoRightSmokePuff, FIELD_INTEGER),
 };
+
 IMPLEMENT_SAVERESTORE(COsprey, CBaseMonster);
 
 void COsprey::OnCreate()
@@ -156,7 +157,6 @@ void COsprey::FindAllThink()
 	m_startTime = gpGlobals->time;
 }
 
-
 void COsprey::DeployThink()
 {
 	UTIL_MakeAimVectors(pev->angles);
@@ -187,8 +187,6 @@ void COsprey::DeployThink()
 	pev->nextthink = gpGlobals->time + 0.1;
 }
 
-
-
 bool COsprey::HasDead()
 {
 	for (int i = 0; i < m_iUnits; i++)
@@ -204,7 +202,6 @@ bool COsprey::HasDead()
 	}
 	return false;
 }
-
 
 CBaseMonster* COsprey::MakeGrunt(Vector vecSrc)
 {
@@ -249,7 +246,6 @@ CBaseMonster* COsprey::MakeGrunt(Vector vecSrc)
 	return nullptr;
 }
 
-
 void COsprey::HoverThink()
 {
 	int i;
@@ -271,7 +267,6 @@ void COsprey::HoverThink()
 	UTIL_MakeAimVectors(pev->angles);
 	Update();
 }
-
 
 void COsprey::UpdateGoal()
 {
@@ -307,7 +302,6 @@ void COsprey::UpdateGoal()
 		AILogger->debug("{} missing target", STRING(pev->classname));
 	}
 }
-
 
 void COsprey::FlyThink()
 {
@@ -352,7 +346,6 @@ void COsprey::FlyThink()
 	Flight();
 	Update();
 }
-
 
 void COsprey::Flight()
 {
@@ -434,30 +427,10 @@ void COsprey::Flight()
 	}
 }
 
-
 void COsprey::HitTouch(CBaseEntity* pOther)
 {
 	pev->nextthink = gpGlobals->time + 2.0;
 }
-
-
-/*
-int COsprey::TakeDamage( entvars_t *inflictor, entvars_t *attacker, float flDamage, int bitsDamageType )
-{
-	if (m_flRotortilt <= -90)
-	{
-		m_flRotortilt = 0;
-	}
-	else
-	{
-		m_flRotortilt -= 45;
-	}
-	SetBoneController( 0, m_flRotortilt );
-	return 0;
-}
-*/
-
-
 
 void COsprey::Killed(CBaseEntity* attacker, int iGib)
 {
@@ -491,7 +464,6 @@ void COsprey::CrashTouch(CBaseEntity* pOther)
 		m_velocity = pev->velocity;
 	}
 }
-
 
 void COsprey::DyingThink()
 {
@@ -675,7 +647,6 @@ void COsprey::DyingThink()
 		UTIL_Remove(this);
 	}
 }
-
 
 void COsprey::ShowDamage()
 {

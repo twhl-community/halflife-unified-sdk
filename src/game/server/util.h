@@ -279,7 +279,14 @@ float UTIL_DotPoints(const Vector& vecSrc, const Vector& vecCheck, const Vector&
 void UTIL_StripToken(const char* pKey, char* pDest); // for redundant keynames
 
 // Misc functions
+/**
+ *	@brief QuakeEd only writes a single float for angles (bad idea), so up and down are just constant angles.
+ */
 void SetMovedir(entvars_t* pev);
+
+/**
+*	@brief calculates origin of a bmodel from absmin/size because all bmodel origins are 0 0 0
+*/
 Vector VecBModelOrigin(entvars_t* pevBModel);
 
 //

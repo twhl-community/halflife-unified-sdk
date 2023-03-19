@@ -58,7 +58,6 @@ void CPython::Spawn()
 	FallInit(); // get ready to fall down.
 }
 
-
 void CPython::Precache()
 {
 	PrecacheModel("models/v_357.mdl");
@@ -90,7 +89,6 @@ bool CPython::Deploy()
 
 	return DefaultDeploy("models/v_357.mdl", "models/p_357.mdl", PYTHON_DRAW, "python", pev->body);
 }
-
 
 void CPython::Holster()
 {
@@ -182,7 +180,6 @@ void CPython::PrimaryAttack()
 	m_flTimeWeaponIdle = UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10, 15);
 }
 
-
 void CPython::Reload()
 {
 	if (m_pPlayer->ammo_357 <= 0)
@@ -197,7 +194,6 @@ void CPython::Reload()
 
 	DefaultReload(6, PYTHON_RELOAD, 2.0, bUseScope ? 1 : 0);
 }
-
 
 void CPython::WeaponIdle()
 {
@@ -235,7 +231,6 @@ void CPython::WeaponIdle()
 
 	SendWeaponAnim(iAnim, bUseScope ? 1 : 0);
 }
-
 
 class CPythonAmmo : public CBasePlayerAmmo
 {

@@ -12,9 +12,6 @@
  *   use or distribution of this code by or to any unlicensed person is illegal.
  *
  ****/
-//=========================================================
-// hgrunt
-//=========================================================
 
 #include "cbase.h"
 #include "squadmonster.h"
@@ -24,10 +21,7 @@
 #include "explode.h"
 #include "hgrunt_ally_base.h"
 
-//=========================================================
-// monster-specific DEFINE's
-//=========================================================
-#define TORCH_DEAGLE_CLIP_SIZE 8 // how many bullets in a clip?
+#define TORCH_DEAGLE_CLIP_SIZE 8 //!< how many bullets in a clip?
 #define TORCH_BEAM_SPRITE "sprites/xbeam3.spr"
 
 namespace TorchAllyBodygroup
@@ -59,9 +53,6 @@ enum TorchAllyWeaponFlag
 };
 }
 
-//=========================================================
-// Monster's Anim Events Go Here
-//=========================================================
 #define TORCH_AE_HOLSTER_TORCH 17
 #define TORCH_AE_HOLSTER_GUN 18
 #define TORCH_AE_HOLSTER_BOTH 19
@@ -148,9 +139,6 @@ void COFTorchAlly::DropWeapon(bool applyVelocity)
 	}
 }
 
-//=========================================================
-// GibMonster - make gun fly through the air.
-//=========================================================
 void COFTorchAlly::GibMonster()
 {
 	if (m_fTorchActive)
@@ -163,9 +151,6 @@ void COFTorchAlly::GibMonster()
 	CBaseHGruntAlly::GibMonster();
 }
 
-//=========================================================
-// TraceAttack - make sure we're not taking it in the helmet
-//=========================================================
 void COFTorchAlly::TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
 {
 	// check for Torch fuel tank hit
@@ -180,9 +165,6 @@ void COFTorchAlly::TraceAttack(CBaseEntity* attacker, float flDamage, Vector vec
 	CBaseHGruntAlly::TraceAttack(attacker, flDamage, vecDir, ptr, bitsDamageType);
 }
 
-//=========================================================
-// Shoot
-//=========================================================
 void COFTorchAlly::Shoot()
 {
 	// Limit fire rate
@@ -214,10 +196,6 @@ void COFTorchAlly::Shoot()
 	m_flLastShot = gpGlobals->time;
 }
 
-//=========================================================
-// HandleAnimEvent - catches the monster-specific messages
-// that occur when tagged animation frames are played.
-//=========================================================
 void COFTorchAlly::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
 	switch (pEvent->event)
@@ -298,9 +276,6 @@ void COFTorchAlly::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 }
 
-//=========================================================
-// Spawn
-//=========================================================
 void COFTorchAlly::Spawn()
 {
 	SpawnCore();
@@ -330,9 +305,6 @@ void COFTorchAlly::Spawn()
 	m_flMedicWaitTime = gpGlobals->time;
 }
 
-//=========================================================
-// Precache - precaches all resources this monster needs
-//=========================================================
 void COFTorchAlly::Precache()
 {
 	PrecacheModel(TORCH_BEAM_SPRITE);

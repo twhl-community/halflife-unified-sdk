@@ -12,10 +12,6 @@
  *   use or distribution of this code by or to any unlicensed person is illegal.
  *
  ****/
-//=========================================================
-// monster template
-//=========================================================
-// UNDONE: Holster weapon?
 
 #include "cbase.h"
 #include "talkmonster.h"
@@ -102,9 +98,6 @@ void COtis::OnCreate()
 	pev->model = MAKE_STRING("models/otis.mdl");
 }
 
-//=========================================================
-// ALertSound - otis says "Freeze!"
-//=========================================================
 void COtis::AlertSound()
 {
 	if (m_hEnemy != nullptr)
@@ -116,10 +109,6 @@ void COtis::AlertSound()
 	}
 }
 
-//=========================================================
-// GuardFirePistol - shoots one round from the pistol at
-// the enemy otis is facing.
-//=========================================================
 void COtis::GuardFirePistol()
 {
 	Vector vecShootOrigin;
@@ -165,9 +154,6 @@ bool COtis::KeyValue(KeyValueData* pkvd)
 	return CBarney::KeyValue(pkvd);
 }
 
-//=========================================================
-// Precache - precaches all resources this monster needs
-//=========================================================
 void COtis::Precache()
 {
 	CBarney::Precache();
@@ -192,7 +178,6 @@ void COtis::Spawn()
 	SetBodygroup(OtisBodyGroup::Items, m_Item);
 }
 
-// Init talk data
 void COtis::TalkInit()
 {
 	CTalkMonster::TalkInit();
@@ -282,16 +267,6 @@ void COtis::DeclineFollowing()
 	PlaySentence("OT_POK", 2, VOL_NORM, ATTN_NORM);
 }
 
-//=========================================================
-// DEAD OTIS PROP
-//
-// Designer selects a pose in worldcraft, 0 through num_poses-1
-// this value is added to what is selected as the 'first dead pose'
-// among the monster's normal animations. All dead poses must
-// appear sequentially in the model file. Be sure and set
-// the m_iFirstPose properly!
-//
-//=========================================================
 class CDeadOtis : public CBaseMonster
 {
 public:
@@ -329,9 +304,6 @@ bool CDeadOtis::KeyValue(KeyValueData* pkvd)
 
 LINK_ENTITY_TO_CLASS(monster_otis_dead, CDeadOtis);
 
-//=========================================================
-// ********** DeadOtis SPAWN **********
-//=========================================================
 void CDeadOtis::Spawn()
 {
 	PrecacheModel(STRING(pev->model));

@@ -27,9 +27,15 @@
 class CBasePlayer;
 class CBasePlayerWeapon;
 
+/**
+*	@brief removes all satchels owned by the provided player. Should only be used upon death.
+*	Made this global on purpose.
+*/
 void DeactivateSatchels(CBasePlayer* pOwner);
 
-// Contact Grenade / Timed grenade / Satchel Charge
+/**
+*	@brief Contact Grenade / Timed grenade / Satchel Charge
+*/
 class CGrenade : public CBaseMonster
 {
 public:
@@ -54,6 +60,10 @@ public:
 
 	void EXPORT BounceTouch(CBaseEntity* pOther);
 	void EXPORT SlideTouch(CBaseEntity* pOther);
+
+	/**
+	*	@brief Contact grenade, explode when it touches something
+	*/
 	void EXPORT ExplodeTouch(CBaseEntity* pOther);
 	void EXPORT DangerSoundThink();
 	void EXPORT PreDetonate();
@@ -68,7 +78,6 @@ public:
 	bool m_fRegisteredSound; // whether or not this grenade has issued its DANGER sound to the world sound list yet.
 };
 
-
 // constant items
 #define ITEM_HEALTHKIT 1
 #define ITEM_ANTIDOTE 2
@@ -76,7 +85,6 @@ public:
 #define ITEM_BATTERY 4
 
 #define MAX_NORMAL_BATTERY 100
-
 
 // weapon weight factors (for auto-switching)   (-1 = noswitch)
 #define CROWBAR_WEIGHT 0
@@ -144,7 +152,6 @@ public:
 #define SNIPERRIFLE_MAX_CLIP 5
 #define PENGUIN_MAX_CLIP 3
 
-
 // the default amount of ammo that comes with each gun when it spawns
 #define GLOCK_DEFAULT_GIVE 17
 #define PYTHON_DEFAULT_GIVE 6
@@ -203,7 +210,6 @@ enum Bullet
 	BULLET_PLAYER_762,
 	BULLET_PLAYER_EAGLE,
 };
-
 
 #define ITEM_FLAG_SELECTONEMPTY 1
 #define ITEM_FLAG_NOAUTORELOAD 2
@@ -507,7 +513,6 @@ public:
 	void EXPORT Materialize();
 };
 
-
 inline short g_sModelIndexLaser; // holds the index for the laser beam
 constexpr const char* g_pModelNameLaser = "sprites/laserbeam.spr";
 
@@ -519,15 +524,30 @@ inline short g_sModelIndexBubbles;	  // holds the index for the bubbles model
 inline short g_sModelIndexBloodDrop;  // holds the sprite index for blood drops
 inline short g_sModelIndexBloodSpray; // holds the sprite index for blood spray (bigger)
 
+/**
+*	@brief resets the global multi damage accumulator
+*/
 void ClearMultiDamage();
+
+/**
+*	@brief inflicts contents of global multi damage register on gMultiDamage.pEntity
+*/
 void ApplyMultiDamage(CBaseEntity* inflictor, CBaseEntity* attacker);
 void AddMultiDamage(CBaseEntity* inflictor, CBaseEntity* pEntity, float flDamage, int bitsDamageType);
 
 void DecalGunshot(TraceResult* pTrace, int iBulletType);
 void SpawnBlood(Vector vecSpot, int bloodColor, float flDamage);
 int DamageDecal(CBaseEntity* pEntity, int bitsDamageType);
+
+/**
+*	@brief this entity is exploding, or otherwise needs to inflict damage upon entities within a certain range.
+*	only damage ents that can clearly be seen by the explosion!
+*/
 void RadiusDamage(Vector vecSrc, CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, float flRadius, int iClassIgnore, int bitsDamageType);
 
+/**
+*	@brief Collects multiple small damages into a single damage
+*/
 struct MULTIDAMAGE
 {
 	CBaseEntity* pEntity;

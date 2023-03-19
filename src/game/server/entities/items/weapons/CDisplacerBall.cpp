@@ -23,7 +23,7 @@
 
 namespace
 {
-// TODO: can probably be smarter - Solokiller
+// TODO: can probably be smarter
 const char* const displace[] =
 	{
 		"monster_bloater",
@@ -308,7 +308,7 @@ void CDisplacerBall::KillThink()
 	{
 		pTarget->SetThink(&CBaseEntity::SUB_Remove);
 
-		// TODO: no next think? - Solokiller
+		// TODO: no next think?
 	}
 
 	SetThink(&CDisplacerBall::ExplodeThink);
@@ -368,7 +368,7 @@ void CDisplacerBall::ArmBeam(int iSide)
 	if (flDist == 1.0)
 		return;
 
-	// The beam might already exist if we've created all beams before. - Solokiller
+	// The beam might already exist if we've created all beams before.
 	if (!m_pBeam[m_uiBeams])
 		m_pBeam[m_uiBeams] = CBeam::BeamCreate("sprites/lgtning.spr", 30);
 
@@ -379,7 +379,7 @@ void CDisplacerBall::ArmBeam(int iSide)
 
 	if (pHit && pHit->pev->takedamage != DAMAGE_NO)
 	{
-		// Beam hit something, deal radius damage to it. - Solokiller
+		// Beam hit something, deal radius damage to it.
 		m_pBeam[m_uiBeams]->EntsInit(pHit->entindex(), entindex());
 
 		m_pBeam[m_uiBeams]->SetColor(255, 255, 255);

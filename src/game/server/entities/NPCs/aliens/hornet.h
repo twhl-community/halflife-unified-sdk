@@ -12,15 +12,9 @@
  *   without written permission from Valve LLC.
  *
  ****/
-//=========================================================
-// Hornets
-//=========================================================
 
 #pragma once
 
-//=========================================================
-// Hornet Defines
-//=========================================================
 #define HORNET_TYPE_RED 0
 #define HORNET_TYPE_ORANGE 1
 #define HORNET_RED_SPEED (float)600
@@ -29,23 +23,44 @@
 
 extern int iHornetPuff;
 
-//=========================================================
-// Hornet - this is the projectile that the Alien Grunt fires.
-//=========================================================
+/**
+*	@brief this is the projectile that the Alien Grunt fires.
+*/
 class CHornet : public CBaseMonster
 {
 public:
 	void Spawn() override;
 	void Precache() override;
+
+	/**
+	*	@brief ID's Hornet as their owner
+	*/
 	int Classify() override;
+
+	/**
+	*	@brief hornets will never get mad at each other, no matter who the owner is.
+	*/
 	int IRelationship(CBaseEntity* pTarget) override;
+
 	bool Save(CSave& save) override;
 	bool Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
 	void IgniteTrail();
+
+	/**
+	*	@brief starts a hornet out tracking its target
+	*/
 	void EXPORT StartTrack();
+
+	/**
+	*	@brief starts a hornet out just flying straight.
+	*/
 	void EXPORT StartDart();
+
+	/**
+	*	@brief Hornet is flying, gently tracking target
+	*/
 	void EXPORT TrackTarget();
 	void EXPORT TrackTouch(CBaseEntity* pOther);
 	void EXPORT DartTouch(CBaseEntity* pOther);

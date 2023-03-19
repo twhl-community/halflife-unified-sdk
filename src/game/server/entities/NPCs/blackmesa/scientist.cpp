@@ -12,9 +12,6 @@
  *   use or distribution of this code by or to any unlicensed person is illegal.
  *
  ****/
-//=========================================================
-// human scientist (passive lab worker)
-//=========================================================
 
 #include "cbase.h"
 #include "talkmonster.h"
@@ -33,9 +30,6 @@ TYPEDESCRIPTION CScientist::m_SaveData[] =
 
 IMPLEMENT_SAVERESTORE(CScientist, CTalkMonster);
 
-//=========================================================
-// AI Schedules Specific to this monster
-//=========================================================
 Task_t tlFollow[] =
 	{
 		{TASK_SET_FAIL_SCHEDULE, (float)SCHED_CANT_FOLLOW}, // If you fail, bail out of follow
@@ -106,7 +100,6 @@ Schedule_t slStopFollowing[] =
 			"StopFollowing"},
 };
 
-
 Task_t tlHeal[] =
 	{
 		{TASK_MOVE_TO_TARGET_RANGE, (float)50},				 // Move within 60 of target ent (client)
@@ -126,7 +119,6 @@ Schedule_t slHeal[] =
 			0,
 			"Heal"},
 };
-
 
 Task_t tlFaceTarget[] =
 	{
@@ -148,7 +140,6 @@ Schedule_t slFaceTarget[] =
 			"FaceTarget"},
 };
 
-
 Task_t tlSciPanic[] =
 	{
 		{TASK_STOP_MOVING, (float)0},
@@ -166,7 +157,6 @@ Schedule_t slSciPanic[] =
 			0,
 			"SciPanic"},
 };
-
 
 Task_t tlIdleSciStand[] =
 	{
@@ -200,7 +190,6 @@ Schedule_t slIdleSciStand[] =
 		},
 };
 
-
 Task_t tlScientistCover[] =
 	{
 		{TASK_SET_FAIL_SCHEDULE, (float)SCHED_PANIC}, // If you fail, just panic!
@@ -219,8 +208,6 @@ Schedule_t slScientistCover[] =
 			0,
 			"ScientistCover"},
 };
-
-
 
 Task_t tlScientistHide[] =
 	{
@@ -244,7 +231,6 @@ Schedule_t slScientistHide[] =
 			bits_SOUND_DANGER,
 			"ScientistHide"},
 };
-
 
 Task_t tlScientistStartle[] =
 	{
@@ -270,7 +256,6 @@ Schedule_t slScientistStartle[] =
 			"ScientistStartle"},
 };
 
-
 // Marphy Fact Files Fix - Restore fear display animation
 Task_t tlFear[] =
 	{
@@ -289,7 +274,6 @@ Schedule_t slFear[] =
 			"Fear"},
 };
 
-
 DEFINE_CUSTOM_SCHEDULES(CScientist){
 	slFollow,
 	slFaceTarget,
@@ -304,7 +288,6 @@ DEFINE_CUSTOM_SCHEDULES(CScientist){
 	slFollowScared,
 	slFaceTargetScared,
 };
-
 
 IMPLEMENT_CUSTOM_SCHEDULES(CScientist, CTalkMonster);
 
@@ -323,7 +306,6 @@ void CScientist::DeclineFollowing()
 	PlaySentence("SC_POK", 2, VOL_NORM, ATTN_NORM);
 }
 
-
 void CScientist::Scream()
 {
 	// Marphy Fact Files Fix - This speech check always fails during combat, so removing
@@ -335,14 +317,12 @@ void CScientist::Scream()
 	//}
 }
 
-
 Activity CScientist::GetStoppedActivity()
 {
 	if (m_hEnemy != nullptr)
 		return ACT_EXCITED;
 	return CTalkMonster::GetStoppedActivity();
 }
-
 
 void CScientist::StartTask(Task_t* pTask)
 {
@@ -479,21 +459,11 @@ void CScientist::RunTask(Task_t* pTask)
 		break;
 	}
 }
-
-//=========================================================
-// Classify - indicates this monster's place in the
-// relationship table.
-//=========================================================
 int CScientist::Classify()
 {
 	return CLASS_HUMAN_PASSIVE;
 }
 
-
-//=========================================================
-// SetYawSpeed - allows each sequence to have a different
-// turn rate associated with it.
-//=========================================================
 void CScientist::SetYawSpeed()
 {
 	int ys;
@@ -520,10 +490,6 @@ void CScientist::SetYawSpeed()
 	pev->yaw_speed = ys;
 }
 
-//=========================================================
-// HandleAnimEvent - catches the monster-specific messages
-// that occur when tagged animation frames are played.
-//=========================================================
 void CScientist::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
 	switch (pEvent->event)
@@ -641,7 +607,6 @@ void CScientist::Precache()
 	CTalkMonster::Precache();
 }
 
-// Init talk data
 void CScientist::TalkInit()
 {
 	CTalkMonster::TalkInit();
@@ -684,12 +649,6 @@ bool CScientist::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float
 	return CTalkMonster::TakeDamage(inflictor, attacker, flDamage, bitsDamageType);
 }
 
-
-//=========================================================
-// ISoundMask - returns a bit mask indicating which types
-// of sounds this monster regards. In the base class implementation,
-// monsters care about all sounds, but no scents.
-//=========================================================
 // Marphy Fact Files Fix - Restore scientist's sense of smell
 int CScientist::ISoundMask()
 {
@@ -702,9 +661,6 @@ int CScientist::ISoundMask()
 		   bits_SOUND_PLAYER;
 }
 
-//=========================================================
-// PainSound
-//=========================================================
 void CScientist::PainSound()
 {
 	if (gpGlobals->time < m_painTime)
@@ -732,21 +688,16 @@ void CScientist::PainSound()
 	}
 }
 
-//=========================================================
-// DeathSound
-//=========================================================
 void CScientist::DeathSound()
 {
 	PainSound();
 }
-
 
 void CScientist::Killed(CBaseEntity* attacker, int iGib)
 {
 	SetUse(nullptr);
 	CTalkMonster::Killed(attacker, iGib);
 }
-
 
 void CScientist::SetActivity(Activity newActivity)
 {
@@ -759,7 +710,6 @@ void CScientist::SetActivity(Activity newActivity)
 		newActivity = ACT_IDLE;
 	CTalkMonster::SetActivity(newActivity);
 }
-
 
 Schedule_t* CScientist::GetScheduleOfType(int Type)
 {
@@ -1024,7 +974,6 @@ MONSTERSTATE CScientist::GetIdealState()
 	return CTalkMonster::GetIdealState();
 }
 
-
 bool CScientist::CanHeal()
 {
 	if ((m_healTime > gpGlobals->time) || (m_hTargetEnt == nullptr) || (m_hTargetEnt->pev->health > (m_hTargetEnt->pev->max_health * 0.5)))
@@ -1055,10 +1004,6 @@ int CScientist::FriendNumber(int arrayNumber)
 	return arrayNumber;
 }
 
-
-//=========================================================
-// Dead Scientist PROP
-//=========================================================
 class CDeadScientist : public CBaseMonster
 {
 public:
@@ -1070,6 +1015,9 @@ public:
 	int m_iPose; // which sequence to display
 	static const char* m_szPoses[7];
 };
+
+LINK_ENTITY_TO_CLASS(monster_scientist_dead, CDeadScientist);
+
 const char* CDeadScientist::m_szPoses[] = {"lying_on_back", "lying_on_stomach", "dead_sitting", "dead_hang", "dead_table1", "dead_table2", "dead_table3"};
 
 void CDeadScientist::OnCreate()
@@ -1091,11 +1039,7 @@ bool CDeadScientist::KeyValue(KeyValueData* pkvd)
 
 	return CBaseMonster::KeyValue(pkvd);
 }
-LINK_ENTITY_TO_CLASS(monster_scientist_dead, CDeadScientist);
 
-//
-// ********** DeadScientist SPAWN **********
-//
 void CDeadScientist::Spawn()
 {
 	PrecacheModel(STRING(pev->model));
@@ -1127,6 +1071,7 @@ void CDeadScientist::Spawn()
 }
 
 LINK_ENTITY_TO_CLASS(monster_sitting_scientist, CSittingScientist);
+
 TYPEDESCRIPTION CSittingScientist::m_SaveData[] =
 	{
 		// Don't need to save/restore m_baseSequence (recalced)
@@ -1198,9 +1143,6 @@ void CSittingScientist::Precache()
 	TalkInit();
 }
 
-//=========================================================
-// ID as a passive human
-//=========================================================
 int CSittingScientist::Classify()
 {
 	return CLASS_HUMAN_PASSIVE;
@@ -1214,9 +1156,6 @@ int CSittingScientist::FriendNumber(int arrayNumber)
 	return arrayNumber;
 }
 
-//=========================================================
-// sit, do stuff
-//=========================================================
 void CSittingScientist::SittingThink()
 {
 	CBaseEntity* pent;
@@ -1318,17 +1257,12 @@ void CSittingScientist::SittingThink()
 	pev->nextthink = gpGlobals->time + 0.1;
 }
 
-// prepare sitting scientist to answer a question
 void CSittingScientist::SetAnswerQuestion(CTalkMonster* pSpeaker)
 {
 	m_flResponseDelay = gpGlobals->time + RANDOM_FLOAT(3, 4);
 	m_hTalkTarget = (CBaseMonster*)pSpeaker;
 }
 
-//=========================================================
-// FIdleSpeak
-// ask question of nearby friend, or make statement
-//=========================================================
 bool CSittingScientist::FIdleSpeak()
 {
 	// try to start a conversation, or make statement

@@ -13,12 +13,6 @@
  *
  ****/
 
-/*
-
-	h_tentacle.cpp - silo of death tentacle monster (half life)
-
-*/
-
 #include "cbase.h"
 
 #define ACT_T_IDLE 1010
@@ -33,6 +27,9 @@ constexpr int TENTACLE_NUM_HEIGHTS = 4;
  */
 constexpr float TENTACLE_HEIGHT_LEVEL_OFFSET = 40;
 
+/**
+*	@brief silo of death tentacle monster
+*/
 class CTentacle : public CBaseMonster
 {
 public:
@@ -117,8 +114,6 @@ public:
 	static const char* pHitWater[];
 };
 
-
-
 bool CTentacle::g_fFlySound;
 bool CTentacle::g_fSquirmSound;
 
@@ -152,7 +147,6 @@ const char* CTentacle::pHitWater[] =
 		"player/pl_slosh4.wav",
 };
 
-
 TYPEDESCRIPTION CTentacle::m_SaveData[] =
 	{
 		DEFINE_FIELD(CTentacle, m_flInitialYaw, FIELD_FLOAT),
@@ -174,8 +168,8 @@ TYPEDESCRIPTION CTentacle::m_SaveData[] =
 		DEFINE_FIELD(CTentacle, m_flPrevSoundTime, FIELD_TIME),
 		DEFINE_ARRAY(CTentacle, m_Heights, FIELD_FLOAT, TENTACLE_NUM_HEIGHTS),
 };
-IMPLEMENT_SAVERESTORE(CTentacle, CBaseMonster);
 
+IMPLEMENT_SAVERESTORE(CTentacle, CBaseMonster);
 
 // animation sequence aliases
 enum TENTACLE_ANIM
@@ -249,18 +243,11 @@ void CTentacle::OnCreate()
 	pev->model = MAKE_STRING("models/tentacle2.mdl");
 }
 
-//=========================================================
-// Classify - indicates this monster's place in the
-// relationship table.
-//=========================================================
 int CTentacle::Classify()
 {
 	return CLASS_ALIEN_MONSTER;
 }
 
-//
-// Tentacle Spawn
-//
 void CTentacle::Spawn()
 {
 	Precache();
@@ -341,7 +328,6 @@ void CTentacle::Precache()
 	PRECACHE_SOUND_ARRAY(pHitWater);
 }
 
-
 CTentacle::CTentacle()
 {
 	m_flMaxYaw = 65;
@@ -386,8 +372,6 @@ bool CTentacle::KeyValue(KeyValueData* pkvd)
 	return CBaseMonster::KeyValue(pkvd);
 }
 
-
-
 int CTentacle::Level(float dz)
 {
 	for (std::size_t level = 1; level < std::size(m_Heights); ++level)
@@ -401,7 +385,6 @@ int CTentacle::Level(float dz)
 	return 3;
 }
 
-
 float CTentacle::MyHeight()
 {
 	const int level = MyLevel();
@@ -413,7 +396,6 @@ float CTentacle::MyHeight()
 
 	return m_Heights[0];
 }
-
 
 int CTentacle::MyLevel()
 {
@@ -483,7 +465,6 @@ int CTentacle::MyLevel()
 	return -1;
 }
 
-
 void CTentacle::Test()
 {
 	pev->sequence = TENTACLE_ANIM_Floor_Strike;
@@ -492,11 +473,6 @@ void CTentacle::Test()
 	pev->nextthink = gpGlobals->time + 0.1;
 }
 
-
-
-//
-// TentacleThink
-//
 void CTentacle::Cycle()
 {
 	// AILogger->debug("{} {:.2f} {} {}", STRING( pev->targetname ), pev->origin.z, m_MonsterState, m_IdealMonsterState);
@@ -756,8 +732,6 @@ void CTentacle::Cycle()
 	}
 }
 
-
-
 void CTentacle::CommandUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
 	// AILogger->debug("{} triggered {}", STRING(pev->targetname), useType);
@@ -784,8 +758,6 @@ void CTentacle::CommandUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TY
 		break;
 	}
 }
-
-
 
 void CTentacle::DieThink()
 {
@@ -859,7 +831,6 @@ void CTentacle::DieThink()
 		pev->ideal_yaw = m_flInitialYaw + dy;
 	}
 }
-
 
 void CTentacle::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
@@ -984,11 +955,6 @@ void CTentacle::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 }
 
-
-//
-// TentacleStart
-//
-// void CTentacle :: Start( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
 void CTentacle::Start()
 {
 	SetThink(&CTentacle::Cycle);
@@ -1007,9 +973,6 @@ void CTentacle::Start()
 
 	pev->nextthink = gpGlobals->time + 0.1;
 }
-
-
-
 
 void CTentacle::HitTouch(CBaseEntity* pOther)
 {
@@ -1045,7 +1008,6 @@ void CTentacle::HitTouch(CBaseEntity* pOther)
 	// AILogger->debug("{} : {:.0f} : {} : {}", STRING(tr.pHit->v.classname), pev->angles.y, STRING(pOther->pev->classname), tr.iHitgroup);
 }
 
-
 bool CTentacle::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType)
 {
 	if (flDamage > pev->health)
@@ -1059,17 +1021,12 @@ bool CTentacle::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float 
 	return true;
 }
 
-
-
-
 void CTentacle::Killed(CBaseEntity* attacker, int iGib)
 {
 	m_iGoalAnim = TENTACLE_ANIM_Pit_Idle;
 	ClearShockEffect();
 	return;
 }
-
-
 
 class CTentacleMaw : public CBaseMonster
 {
@@ -1089,9 +1046,6 @@ void CTentacleMaw::OnCreate()
 	pev->model = MAKE_STRING("models/maw.mdl");
 }
 
-//
-// Tentacle Spawn
-//
 void CTentacleMaw::Spawn()
 {
 	Precache();

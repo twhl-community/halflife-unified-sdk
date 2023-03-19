@@ -12,22 +12,16 @@
  *   without written permission from Valve LLC.
  *
  ****/
-/*
 
-===== bmodels.cpp ========================================================
-
-  spawn, think, and use functions for entities that use brush models
-
-*/
 #include "cbase.h"
 #include "func_break.h"
 #include "explode.h"
 
-// =================== FUNC_Breakable ==============================================
-
-// Just add more items to the bottom of this array and they will automagically be supported
-// This is done instead of just a classname in the FGD so we can control which entities can
-// be spawned, and still remain fairly flexible
+/**
+*	@brief Just add more items to the bottom of this array and they will automagically be supported
+*	This is done instead of just a classname in the FGD so we can control which entities can
+*	be spawned, and still remain fairly flexible
+*/
 const char* CBreakable::pSpawnObjects[] =
 	{
 		nullptr,			  // 0
@@ -123,11 +117,8 @@ bool CBreakable::KeyValue(KeyValueData* pkvd)
 	return CBaseDelay::KeyValue(pkvd);
 }
 
-
-//
-// func_breakable - bmodel that breaks into pieces after taking damage
-//
 LINK_ENTITY_TO_CLASS(func_breakable, CBreakable);
+
 TYPEDESCRIPTION CBreakable::m_SaveData[] =
 	{
 		DEFINE_FIELD(CBreakable, m_Material, FIELD_INTEGER),
@@ -176,7 +167,6 @@ void CBreakable::Spawn()
 	if (!IsBreakable() && pev->rendermode != kRenderNormal)
 		pev->flags |= FL_WORLDBRUSH;
 }
-
 
 const char* CBreakable::pSoundsWood[] =
 	{
@@ -284,7 +274,6 @@ void CBreakable::MaterialSoundRandom(CBaseEntity* self, Materials soundMaterial,
 		self->EmitSound(CHAN_BODY, pSoundList[RANDOM_LONG(0, soundCount - 1)], volume, 1.0);
 }
 
-
 void CBreakable::Precache()
 {
 	const char* pGibName;
@@ -354,10 +343,6 @@ void CBreakable::Precache()
 	if (!FStringNull(m_iszSpawnObject))
 		UTIL_PrecacheOther(STRING(m_iszSpawnObject));
 }
-
-// play shard sound when func_breakable takes damage.
-// the more damage, the louder the shard sound.
-
 
 void CBreakable::DamageSound()
 {
@@ -476,12 +461,6 @@ void CBreakable::BreakTouch(CBaseEntity* pOther)
 	}
 }
 
-
-//
-// Smash the our breakable object
-//
-
-// Break when triggered
 void CBreakable::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
 	if (IsBreakable())
@@ -493,7 +472,6 @@ void CBreakable::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE use
 		Die();
 	}
 }
-
 
 void CBreakable::TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
 {
@@ -528,11 +506,6 @@ void CBreakable::TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDi
 	CBaseDelay::TraceAttack(attacker, flDamage, vecDir, ptr, bitsDamageType);
 }
 
-//=========================================================
-// Special takedamage for func_breakable. Allows us to make
-// exceptions that are breakable-specific
-// bitsDamageType indicates the type of damage sustained ie: DMG_CRUSH
-//=========================================================
 bool CBreakable::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType)
 {
 	Vector vecTemp;
@@ -584,7 +557,6 @@ bool CBreakable::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float
 
 	return true;
 }
-
 
 void CBreakable::Die()
 {
@@ -771,13 +743,10 @@ void CBreakable::Die()
 	}
 }
 
-
-
 bool CBreakable::IsBreakable()
 {
 	return m_Material != matUnbreakableGlass;
 }
-
 
 int CBreakable::DamageDecal(int bitsDamageType)
 {
@@ -790,7 +759,6 @@ int CBreakable::DamageDecal(int bitsDamageType)
 	return CBaseEntity::DamageDecal(bitsDamageType);
 }
 
-
 class CPushable : public CBreakable
 {
 public:
@@ -799,7 +767,12 @@ public:
 	void Touch(CBaseEntity* pOther) override;
 	void Move(CBaseEntity* pMover, bool push);
 	bool KeyValue(KeyValueData* pkvd) override;
+
+	/**
+	*	@brief Pull the func_pushable
+	*/
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+
 	void EXPORT StopPushSound();
 	//	virtual void	SetActivator( CBaseEntity *pActivator ) { m_pPusher = pActivator; }
 
@@ -832,7 +805,6 @@ LINK_ENTITY_TO_CLASS(func_pushable, CPushable);
 
 const char* CPushable::m_soundNames[3] = {"debris/pushbox1.wav", "debris/pushbox2.wav", "debris/pushbox3.wav"};
 
-
 void CPushable::Spawn()
 {
 	if ((pev->spawnflags & SF_PUSH_BREAKABLE) != 0)
@@ -859,7 +831,6 @@ void CPushable::Spawn()
 	m_soundTime = 0;
 }
 
-
 void CPushable::Precache()
 {
 	for (int i = 0; i < 3; i++)
@@ -868,7 +839,6 @@ void CPushable::Precache()
 	if ((pev->spawnflags & SF_PUSH_BREAKABLE) != 0)
 		CBreakable::Precache();
 }
-
 
 bool CPushable::KeyValue(KeyValueData* pkvd)
 {
@@ -907,8 +877,6 @@ bool CPushable::KeyValue(KeyValueData* pkvd)
 	return CBreakable::KeyValue(pkvd);
 }
 
-
-// Pull the func_pushable
 void CPushable::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
 	if (!pActivator || !pActivator->IsPlayer())
@@ -922,7 +890,6 @@ void CPushable::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useT
 		Move(pActivator, false);
 }
 
-
 void CPushable::Touch(CBaseEntity* pOther)
 {
 	if (pOther->ClassnameIs("worldspawn"))
@@ -930,7 +897,6 @@ void CPushable::Touch(CBaseEntity* pOther)
 
 	Move(pOther, true);
 }
-
 
 void CPushable::Move(CBaseEntity* pOther, bool push)
 {

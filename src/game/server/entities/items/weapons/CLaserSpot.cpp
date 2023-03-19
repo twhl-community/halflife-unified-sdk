@@ -18,8 +18,6 @@
 
 LINK_ENTITY_TO_CLASS(laser_spot, CLaserSpot);
 
-//=========================================================
-//=========================================================
 CLaserSpot* CLaserSpot::CreateSpot()
 {
 	CLaserSpot* pSpot = g_EntityDictionary->Create<CLaserSpot>("laser_spot");
@@ -28,8 +26,6 @@ CLaserSpot* CLaserSpot::CreateSpot()
 	return pSpot;
 }
 
-//=========================================================
-//=========================================================
 void CLaserSpot::Spawn()
 {
 	Precache();
@@ -44,9 +40,6 @@ void CLaserSpot::Spawn()
 	UTIL_SetOrigin(pev, pev->origin);
 }
 
-//=========================================================
-// Suspend- make the laser sight invisible.
-//=========================================================
 void CLaserSpot::Suspend(float flSuspendTime)
 {
 	pev->effects |= EF_NODRAW;
@@ -55,9 +48,6 @@ void CLaserSpot::Suspend(float flSuspendTime)
 	pev->nextthink = gpGlobals->time + flSuspendTime;
 }
 
-//=========================================================
-// Revive - bring a suspended laser sight back.
-//=========================================================
 void CLaserSpot::Revive()
 {
 	pev->effects &= ~EF_NODRAW;

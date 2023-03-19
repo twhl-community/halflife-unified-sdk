@@ -12,9 +12,6 @@
  *   use or distribution of this code by or to any unlicensed person is illegal.
  *
  ****/
-//=========================================================
-// Voltigore - Tank like alien
-//=========================================================
 
 #include "cbase.h"
 #include "squadmonster.h"
@@ -39,6 +36,9 @@ public:
 
 	void SetAttachment(CBaseAnimating* pAttachEnt, int iAttachIdx);
 
+	/**
+	*	@brief small beam from arm to nearby geometry
+	*/
 	void ArmBeam(int side);
 
 	void EXPORT AttachThink();
@@ -169,10 +169,6 @@ void COFChargedBolt::SetAttachment(CBaseAnimating* pAttachEnt, int iAttachIdx)
 
 	pev->nextthink = gpGlobals->time + 0.05;
 }
-
-//=========================================================
-// ArmBeam - small beam from arm to nearby geometry
-//=========================================================
 
 void COFChargedBolt::ArmBeam(int side)
 {
@@ -308,10 +304,6 @@ void COFVoltigore::OnCreate()
 	pev->model = MAKE_STRING("models/voltigore.mdl");
 }
 
-//=========================================================
-// IRelationship - overridden because Human Grunts are
-// Alien Grunt's nemesis.
-//=========================================================
 int COFVoltigore::IRelationship(CBaseEntity* pTarget)
 {
 	if (pTarget->ClassnameIs("monster_human_grunt"))
@@ -322,9 +314,6 @@ int COFVoltigore::IRelationship(CBaseEntity* pTarget)
 	return CSquadMonster::IRelationship(pTarget);
 }
 
-//=========================================================
-// ISoundMask
-//=========================================================
 int COFVoltigore::ISoundMask()
 {
 	return bits_SOUND_WORLD |
@@ -333,9 +322,6 @@ int COFVoltigore::ISoundMask()
 		   bits_SOUND_DANGER;
 }
 
-//=========================================================
-// TraceAttack
-//=========================================================
 void COFVoltigore::TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
 {
 	// Ignore shock damage since we have a shock based attack
@@ -348,17 +334,11 @@ void COFVoltigore::TraceAttack(CBaseEntity* attacker, float flDamage, Vector vec
 	}
 }
 
-//=========================================================
-// StopTalking - won't speak again for 10-20 seconds.
-//=========================================================
 void COFVoltigore::StopTalking()
 {
 	m_flNextWordTime = m_flNextSpeakTime = gpGlobals->time + 10 + RANDOM_LONG(0, 10);
 }
 
-//=========================================================
-// ShouldSpeak - Should this voltigore be talking?
-//=========================================================
 bool COFVoltigore::ShouldSpeak()
 {
 	if (m_flNextSpeakTime > gpGlobals->time)
@@ -383,9 +363,6 @@ bool COFVoltigore::ShouldSpeak()
 	return true;
 }
 
-//=========================================================
-// AlertSound
-//=========================================================
 void COFVoltigore::AlertSound()
 {
 	StopTalking();
@@ -393,9 +370,6 @@ void COFVoltigore::AlertSound()
 	EmitSound(CHAN_VOICE, pAlertSounds[RANDOM_LONG(0, std::size(pAlertSounds) - 1)], 1.0, ATTN_NORM);
 }
 
-//=========================================================
-// PainSound
-//=========================================================
 void COFVoltigore::PainSound()
 {
 	if (m_flNextPainTime > gpGlobals->time)
@@ -410,19 +384,11 @@ void COFVoltigore::PainSound()
 	EmitSound(CHAN_VOICE, pPainSounds[RANDOM_LONG(0, std::size(pPainSounds) - 1)], 1.0, ATTN_NORM);
 }
 
-//=========================================================
-// Classify - indicates this monster's place in the
-// relationship table.
-//=========================================================
 int COFVoltigore::Classify()
 {
 	return CLASS_ALIEN_MILITARY;
 }
 
-//=========================================================
-// SetYawSpeed - allows each sequence to have a different
-// turn rate associated with it.
-//=========================================================
 void COFVoltigore::SetYawSpeed()
 {
 	int ys;
@@ -440,12 +406,6 @@ void COFVoltigore::SetYawSpeed()
 	pev->yaw_speed = ys;
 }
 
-//=========================================================
-// HandleAnimEvent - catches the monster-specific messages
-// that occur when tagged animation frames are played.
-//
-// Returns number of events handled, 0 if none.
-//=========================================================
 void COFVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
 	switch (pEvent->event)
@@ -572,9 +532,6 @@ void COFVoltigore::SpawnCore(const Vector& mins, const Vector& maxs)
 	MonsterInit();
 }
 
-//=========================================================
-// Spawn
-//=========================================================
 void COFVoltigore::Spawn()
 {
 	SpawnCore({-80, -80, 0}, {80, 80, 90});
@@ -618,13 +575,6 @@ void COFVoltigore::Precache()
 	m_iVoltigoreGibs = PrecacheModel("models/vgibs.mdl");
 }
 
-//=========================================================
-// AI Schedules Specific to this monster
-//=========================================================
-
-//=========================================================
-// Fail Schedule
-//=========================================================
 Task_t tlVoltigoreFail[] =
 	{
 		{TASK_STOP_MOVING, 0},
@@ -643,9 +593,6 @@ Schedule_t slVoltigoreFail[] =
 			"Voltigore Fail"},
 };
 
-//=========================================================
-// Combat Fail Schedule
-//=========================================================
 Task_t tlVoltigoreCombatFail[] =
 	{
 		{TASK_STOP_MOVING, 0},
@@ -664,11 +611,6 @@ Schedule_t slVoltigoreCombatFail[] =
 			"Voltigore Combat Fail"},
 };
 
-//=========================================================
-// Standoff schedule. Used in combat when a monster is
-// hiding in cover or the enemy has moved out of sight.
-// Should we look around in this schedule?
-//=========================================================
 Task_t tlVoltigoreStandoff[] =
 	{
 		{TASK_STOP_MOVING, (float)0},
@@ -676,6 +618,10 @@ Task_t tlVoltigoreStandoff[] =
 		{TASK_WAIT_FACE_ENEMY, (float)2},
 };
 
+/**
+*	@brief Used in combat when a monster is hiding in cover or the enemy has moved out of sight.
+*	Should we look around in this schedule?
+*/
 Schedule_t slVoltigoreStandoff[] =
 	{
 		{tlVoltigoreStandoff,
@@ -689,9 +635,6 @@ Schedule_t slVoltigoreStandoff[] =
 			bits_SOUND_DANGER,
 			"Voltigore Standoff"}};
 
-//=========================================================
-// primary range attacks
-//=========================================================
 Task_t tlVoltigoreRangeAttack1[] =
 	{
 		{TASK_STOP_MOVING, (float)0},
@@ -713,10 +656,6 @@ Schedule_t slVoltigoreRangeAttack1[] =
 			"Voltigore Range Attack1"},
 };
 
-//=========================================================
-// Take cover from enemy! Tries lateral cover before node
-// cover!
-//=========================================================
 Task_t tlVoltigoreTakeCoverFromEnemy[] =
 	{
 		{TASK_STOP_MOVING, (float)0},
@@ -737,9 +676,6 @@ Schedule_t slVoltigoreTakeCoverFromEnemy[] =
 			"VoltigoreTakeCoverFromEnemy"},
 };
 
-//=========================================================
-// Victory dance!
-//=========================================================
 Task_t tlVoltigoreVictoryDance[] =
 	{
 		{TASK_STOP_MOVING, (float)0},
@@ -774,8 +710,6 @@ Schedule_t slVoltigoreVictoryDance[] =
 			"VoltigoreVictoryDance"},
 };
 
-//=========================================================
-//=========================================================
 Task_t tlVoltigoreThreatDisplay[] =
 	{
 		{TASK_STOP_MOVING, (float)0},
@@ -809,11 +743,6 @@ DEFINE_CUSTOM_SCHEDULES(COFVoltigore){
 
 IMPLEMENT_CUSTOM_SCHEDULES(COFVoltigore, CSquadMonster);
 
-//=========================================================
-// FCanCheckAttacks - this is overridden for alien grunts
-// because they can use their smart weapons against unseen
-// enemies. Base class doesn't attack anyone it can't see.
-//=========================================================
 bool COFVoltigore::FCanCheckAttacks()
 {
 	if (!HasConditions(bits_COND_ENEMY_TOOFAR))
@@ -826,10 +755,6 @@ bool COFVoltigore::FCanCheckAttacks()
 	}
 }
 
-//=========================================================
-// CheckMeleeAttack1 - alien grunts zap the crap out of
-// any enemy that gets too close.
-//=========================================================
 bool COFVoltigore::CheckMeleeAttack1(float flDot, float flDist)
 {
 	if (HasConditions(bits_COND_SEE_ENEMY) && flDist <= GetMeleeDistance() && flDot >= 0.6 && m_hEnemy != nullptr)
@@ -839,15 +764,11 @@ bool COFVoltigore::CheckMeleeAttack1(float flDot, float flDist)
 	return false;
 }
 
-//=========================================================
-// CheckRangeAttack1
-//
-// !!!LATER - we may want to load balance this. Several
-// tracelines are done, so we may not want to do this every
-// server frame. Definitely not while firing.
-//=========================================================
 bool COFVoltigore::CheckRangeAttack1(float flDot, float flDist)
 {
+	//!!!LATER - we may want to load balance this.Several
+	// tracelines are done, so we may not want to do this every
+	// server frame. Definitely not while firing.
 	if (IsMoving() && flDist >= 512)
 	{
 		return false;
@@ -877,9 +798,6 @@ bool COFVoltigore::CheckRangeAttack1(float flDot, float flDist)
 	return false;
 }
 
-//=========================================================
-// StartTask
-//=========================================================
 void COFVoltigore::StartTask(Task_t* pTask)
 {
 	switch (pTask->iTask)
@@ -1001,12 +919,6 @@ void COFVoltigore::RunTask(Task_t* pTask)
 	}
 }
 
-//=========================================================
-// GetSchedule - Decides which type of schedule best suits
-// the monster's current state and conditions. Then calls
-// monster's member function to get a pointer to a schedule
-// of the proper type.
-//=========================================================
 Schedule_t* COFVoltigore::GetSchedule()
 {
 	if (HasConditions(bits_COND_HEAR_SOUND))
@@ -1067,8 +979,6 @@ Schedule_t* COFVoltigore::GetSchedule()
 	return CSquadMonster::GetSchedule();
 }
 
-//=========================================================
-//=========================================================
 Schedule_t* COFVoltigore::GetScheduleOfType(int Type)
 {
 	switch (Type)

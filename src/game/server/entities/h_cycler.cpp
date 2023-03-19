@@ -12,12 +12,10 @@
  *   without written permission from Valve LLC.
  *
  ****/
-/*
 
-===== h_cycler.cpp ========================================================
-
-  The Halflife Cycler Monsters
-
+/**
+*	@file
+*	The Halflife Cycler Monsters
 */
 
 #include "cbase.h"
@@ -26,11 +24,19 @@ class CCycler : public CBaseMonster
 {
 public:
 	int ObjectCaps() override { return (CBaseEntity::ObjectCaps() | FCAP_IMPULSE_USE); }
+
+	/**
+	*	@brief changes sequences when shot
+	*/
 	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 	void OnCreate() override;
 	void Spawn() override;
 	void Think() override;
 	// void Pain( float flDamage );
+
+	/**
+	*	@brief starts a rotation trend
+	*/
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
 	// Don't treat as a live target
@@ -51,8 +57,6 @@ TYPEDESCRIPTION CCycler::m_SaveData[] =
 };
 
 IMPLEMENT_SAVERESTORE(CCycler, CBaseMonster);
-
-// Cycler member functions
 
 void CCycler::OnCreate()
 {
@@ -107,9 +111,6 @@ void CCycler::Spawn()
 	SetSize(vecMin, vecMax);
 }
 
-//
-// cycler think
-//
 void CCycler::Think()
 {
 	pev->nextthink = gpGlobals->time + 0.1;
@@ -135,9 +136,6 @@ void CCycler::Think()
 	}
 }
 
-//
-// CyclerUse - starts a rotation trend
-//
 void CCycler::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
 	m_animate = !m_animate;
@@ -147,10 +145,6 @@ void CCycler::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useTyp
 		pev->framerate = 0.0;
 }
 
-//
-// CyclerPain , changes sequences when shot
-//
-// void CCycler :: Pain( float flDamage )
 bool CCycler::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType)
 {
 	if (m_animate)
@@ -208,7 +202,6 @@ TYPEDESCRIPTION CCyclerSprite::m_SaveData[] =
 
 IMPLEMENT_SAVERESTORE(CCyclerSprite, CBaseEntity);
 
-
 void CCyclerSprite::Spawn()
 {
 	pev->solid = SOLID_SLIDEBOX;
@@ -227,7 +220,6 @@ void CCyclerSprite::Spawn()
 	m_maxFrame = (float)MODEL_FRAMES(pev->modelindex) - 1;
 }
 
-
 void CCyclerSprite::Think()
 {
 	if (ShouldAnimate())
@@ -237,13 +229,11 @@ void CCyclerSprite::Think()
 	m_lastTime = gpGlobals->time;
 }
 
-
 void CCyclerSprite::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
 	m_animate = !m_animate;
 	CBaseEntity::Logger->debug("Sprite: {}", STRING(pev->model));
 }
-
 
 bool CCyclerSprite::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType)
 {
@@ -261,12 +251,6 @@ void CCyclerSprite::Animate(float frames)
 		pev->frame = fmod(pev->frame, m_maxFrame);
 }
 
-
-
-
-
-
-
 class CWeaponCycler : public CBasePlayerWeapon
 {
 public:
@@ -280,8 +264,8 @@ public:
 	string_t m_iszModel;
 	int m_iModel;
 };
-LINK_ENTITY_TO_CLASS(cycler_weapon, CWeaponCycler);
 
+LINK_ENTITY_TO_CLASS(cycler_weapon, CWeaponCycler);
 
 void CWeaponCycler::Spawn()
 {
@@ -298,8 +282,6 @@ void CWeaponCycler::Spawn()
 	SetTouch(&CWeaponCycler::DefaultTouch);
 }
 
-
-
 bool CWeaponCycler::Deploy()
 {
 	m_pPlayer->pev->viewmodel = m_iszModel;
@@ -309,12 +291,10 @@ bool CWeaponCycler::Deploy()
 	return true;
 }
 
-
 void CWeaponCycler::Holster()
 {
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;
 }
-
 
 void CWeaponCycler::PrimaryAttack()
 {
@@ -323,7 +303,6 @@ void CWeaponCycler::PrimaryAttack()
 
 	m_flNextPrimaryAttack = gpGlobals->time + 0.3;
 }
-
 
 void CWeaponCycler::SecondaryAttack()
 {
@@ -346,9 +325,9 @@ void CWeaponCycler::SecondaryAttack()
 	m_flNextSecondaryAttack = gpGlobals->time + 0.3;
 }
 
-
-
-// Flaming Wreakage
+/**
+*	@brief Flaming Wreakage
+*/
 class CWreckage : public CBaseMonster
 {
 	bool Save(CSave& save) override;
@@ -361,12 +340,13 @@ class CWreckage : public CBaseMonster
 
 	int m_flStartTime;
 };
+
 TYPEDESCRIPTION CWreckage::m_SaveData[] =
 	{
 		DEFINE_FIELD(CWreckage, m_flStartTime, FIELD_TIME),
 };
-IMPLEMENT_SAVERESTORE(CWreckage, CBaseMonster);
 
+IMPLEMENT_SAVERESTORE(CWreckage, CBaseMonster);
 
 LINK_ENTITY_TO_CLASS(cycler_wreckage, CWreckage);
 

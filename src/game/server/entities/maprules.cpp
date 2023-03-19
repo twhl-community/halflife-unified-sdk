@@ -13,14 +13,10 @@
  *
  ****/
 
-//	-------------------------------------------
-//
-//	maprules.cpp
-//
-//	This module contains entities for implementing/changing game
-//	rules dynamically within each map (.BSP)
-//
-//	-------------------------------------------
+/**
+*	@file
+*	This module contains entities for implementing/changing game rules dynamically within each map (.BSP)
+*/
 
 #include "cbase.h"
 #include "maprules.h"
@@ -50,14 +46,12 @@ TYPEDESCRIPTION CRuleEntity::m_SaveData[] =
 
 IMPLEMENT_SAVERESTORE(CRuleEntity, CBaseEntity);
 
-
 void CRuleEntity::Spawn()
 {
 	pev->solid = SOLID_NOT;
 	pev->movetype = MOVETYPE_NONE;
 	pev->effects = EF_NODRAW;
 }
-
 
 bool CRuleEntity::KeyValue(KeyValueData* pkvd)
 {
@@ -83,9 +77,9 @@ bool CRuleEntity::CanFireForActivator(CBaseEntity* pActivator)
 	return true;
 }
 
-//
-// CRulePointEntity -- base class for all rule "point" entities (not brushes)
-//
+/**
+*	@file base class for all rule "point" entities (not brushes)
+*/
 class CRulePointEntity : public CRuleEntity
 {
 public:
@@ -99,10 +93,10 @@ void CRulePointEntity::Spawn()
 	pev->model = string_t::Null;
 }
 
-//
-// CRuleBrushEntity -- base class for all rule "brush" entities (not brushes)
-// Default behavior is to set up like a trigger, invisible, but keep the model for volume testing
-//
+/**
+*	@brief base class for all rule "brush" entities (not brushes)
+*	Default behavior is to set up like a trigger, invisible, but keep the model for volume testing
+*/
 class CRuleBrushEntity : public CRuleEntity
 {
 public:
@@ -117,15 +111,13 @@ void CRuleBrushEntity::Spawn()
 	CRuleEntity::Spawn();
 }
 
-
-// CGameScore / game_score	-- award points to player / team
-//	Points +/- total
-//	Flag: Allow negative scores					SF_SCORE_NEGATIVE
-//	Flag: Award points to team in teamplay		SF_SCORE_TEAM
-
 #define SF_SCORE_NEGATIVE 0x0001
 #define SF_SCORE_TEAM 0x0002
 
+/**
+*	@brief award points to player / team
+*	Points +/- total
+*/
 class CGameScore : public CRulePointEntity
 {
 public:
@@ -144,12 +136,10 @@ private:
 
 LINK_ENTITY_TO_CLASS(game_score, CGameScore);
 
-
 void CGameScore::Spawn()
 {
 	CRulePointEntity::Spawn();
 }
-
 
 bool CGameScore::KeyValue(KeyValueData* pkvd)
 {
@@ -161,8 +151,6 @@ bool CGameScore::KeyValue(KeyValueData* pkvd)
 
 	return CRulePointEntity::KeyValue(pkvd);
 }
-
-
 
 void CGameScore::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
@@ -185,9 +173,9 @@ void CGameScore::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE use
 	}
 }
 
-
-// CGameEnd / game_end	-- Ends the game in MP
-
+/**
+*	@brief Ends the game in MP
+*/
 class CGameEnd : public CRulePointEntity
 {
 public:
@@ -198,7 +186,6 @@ private:
 
 LINK_ENTITY_TO_CLASS(game_end, CGameEnd);
 
-
 void CGameEnd::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
 	if (!CanFireForActivator(pActivator))
@@ -207,16 +194,11 @@ void CGameEnd::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useTy
 	g_pGameRules->EndMultiplayerGame();
 }
 
-
-//
-// CGameText / game_text	-- NON-Localized HUD Message (use env_message to display a titles.txt message)
-//	Flag: All players					SF_ENVTEXT_ALLPLAYERS
-//
-
-
 #define SF_ENVTEXT_ALLPLAYERS 0x0001
 
-
+/**
+ *	@brief NON-Localized HUD Message (use env_message to display a titles.txt message)
+ */
 class CGameText : public CRulePointEntity
 {
 public:
@@ -240,8 +222,9 @@ private:
 
 LINK_ENTITY_TO_CLASS(game_text, CGameText);
 
-// Save parms as a block.  Will break save/restore if the structure changes, but this entity didn't ship with Half-Life, so
-// it can't impact saved Half-Life games.
+// Save parms as a block.
+// Will break save/restore if the structure changes, but this entity didn't ship with Half-Life,
+// so it can't impact saved Half-Life games.
 TYPEDESCRIPTION CGameText::m_SaveData[] =
 	{
 		DEFINE_ARRAY(CGameText, m_textParms, FIELD_CHARACTER, sizeof(hudtextparms_t)),
@@ -333,7 +316,6 @@ bool CGameText::KeyValue(KeyValueData* pkvd)
 	return CRulePointEntity::KeyValue(pkvd);
 }
 
-
 void CGameText::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
 	if (!CanFireForActivator(pActivator))
@@ -352,19 +334,17 @@ void CGameText::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useT
 	}
 }
 
-
-//
-// CGameTeamMaster / game_team_master	-- "Masters" like multisource, but based on the team of the activator
-// Only allows mastered entity to fire if the team matches my team
-//
-// team index (pulled from server team list "mp_teamlist"
-// Flag: Remove on Fire
-// Flag: Any team until set?		-- Any team can use this until the team is set (otherwise no teams can use it)
-//
-
 #define SF_TEAMMASTER_FIREONCE 0x0001
 #define SF_TEAMMASTER_ANYTEAM 0x0002
 
+/**
+*	@brief "Masters" like multisource, but based on the team of the activator
+*	Only allows mastered entity to fire if the team matches my team
+*
+*	@details team index (pulled from server team list "mp_teamlist"
+*	Flag: Remove on Fire
+*	Flag: Any team until set? -- Any team can use this until the team is set (otherwise no teams can use it)
+*/
 class CGameTeamMaster : public CRulePointEntity
 {
 public:
@@ -414,7 +394,6 @@ bool CGameTeamMaster::KeyValue(KeyValueData* pkvd)
 	return CRulePointEntity::KeyValue(pkvd);
 }
 
-
 void CGameTeamMaster::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
 	if (!CanFireForActivator(pActivator))
@@ -441,12 +420,10 @@ void CGameTeamMaster::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYP
 	}
 }
 
-
 bool CGameTeamMaster::IsTriggered(CBaseEntity* pActivator)
 {
 	return TeamMatch(pActivator);
 }
-
 
 const char* CGameTeamMaster::TeamID()
 {
@@ -455,7 +432,6 @@ const char* CGameTeamMaster::TeamID()
 
 	return g_pGameRules->GetIndexedTeamName(m_teamIndex); // UNDONE: Fill this in with the team from the "teamlist"
 }
-
 
 bool CGameTeamMaster::TeamMatch(CBaseEntity* pActivator)
 {
@@ -468,15 +444,14 @@ bool CGameTeamMaster::TeamMatch(CBaseEntity* pActivator)
 	return UTIL_TeamsMatch(pActivator->TeamID(), TeamID());
 }
 
-
-//
-// CGameTeamSet / game_team_set	-- Changes the team of the entity it targets to the activator's team
-// Flag: Fire once
-// Flag: Clear team				-- Sets the team to "NONE" instead of activator
-
 #define SF_TEAMSET_FIREONCE 0x0001
 #define SF_TEAMSET_CLEARTEAM 0x0002
 
+/**
+*	@brief Changes the team of the entity it targets to the activator's team
+*	@details Flag: Fire once
+*	Flag: Clear team -- Sets the team to "NONE" instead of activator
+*/
 class CGameTeamSet : public CRulePointEntity
 {
 public:
@@ -488,7 +463,6 @@ private:
 };
 
 LINK_ENTITY_TO_CLASS(game_team_set, CGameTeamSet);
-
 
 void CGameTeamSet::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
@@ -510,11 +484,9 @@ void CGameTeamSet::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE u
 	}
 }
 
-
-//
-// CGamePlayerZone / game_player_zone -- players in the zone fire my target when I'm fired
-//
-// Needs master?
+/**
+*	@brief players in the zone fire my target when I'm fired
+*/
 class CGamePlayerZone : public CRuleBrushEntity
 {
 public:
@@ -533,6 +505,7 @@ private:
 };
 
 LINK_ENTITY_TO_CLASS(game_zone_player, CGamePlayerZone);
+
 TYPEDESCRIPTION CGamePlayerZone::m_SaveData[] =
 	{
 		DEFINE_FIELD(CGamePlayerZone, m_iszInTarget, FIELD_STRING),
@@ -625,13 +598,12 @@ void CGamePlayerZone::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYP
 	}
 }
 
-
-
-//
-// CGamePlayerHurt / game_player_hurt	-- Damages the player who fires it
-// Flag: Fire once
-
 #define SF_PKILL_FIREONCE 0x0001
+
+/**
+ *	@brief Damages the player who fires it
+ *	@details Flag: Fire once
+ */
 class CGamePlayerHurt : public CRulePointEntity
 {
 public:
@@ -642,7 +614,6 @@ private:
 };
 
 LINK_ENTITY_TO_CLASS(game_player_hurt, CGamePlayerHurt);
-
 
 void CGamePlayerHurt::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
@@ -665,16 +636,14 @@ void CGamePlayerHurt::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYP
 	}
 }
 
-
-
-//
-// CGameCounter / game_counter	-- Counts events and fires target
-// Flag: Fire once
-// Flag: Reset on Fire
-
 #define SF_GAMECOUNT_FIREONCE 0x0001
 #define SF_GAMECOUNT_RESET 0x0002
 
+/**
+*	@brief Counts events and fires target
+*	@details Flag: Fire once
+*	Flag: Reset on Fire
+*/
 class CGameCounter : public CRulePointEntity
 {
 public:
@@ -704,7 +673,6 @@ void CGameCounter::Spawn()
 	SetInitialValue(CountValue());
 	CRulePointEntity::Spawn();
 }
-
 
 void CGameCounter::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
@@ -742,14 +710,12 @@ void CGameCounter::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE u
 	}
 }
 
-
-
-//
-// CGameCounterSet / game_counter_set	-- Sets the counter's value
-// Flag: Fire once
-
 #define SF_GAMECOUNTSET_FIREONCE 0x0001
 
+/**
+*	@brief Sets the counter's value
+*	@details Flag: Fire once
+*/
 class CGameCounterSet : public CRulePointEntity
 {
 public:
@@ -760,7 +726,6 @@ private:
 };
 
 LINK_ENTITY_TO_CLASS(game_counter_set, CGameCounterSet);
-
 
 void CGameCounterSet::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
@@ -775,14 +740,13 @@ void CGameCounterSet::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYP
 	}
 }
 
-
-//
-// CGamePlayerEquip / game_playerequip	-- Sets the default player equipment
-// Flag: USE Only
-
 #define SF_PLAYEREQUIP_USEONLY 0x0001
 #define MAX_EQUIP 32
 
+/**
+*	@brief Sets the default player equipment
+*	Flag: USE Only
+*/
 class CGamePlayerEquip : public CRulePointEntity
 {
 public:
@@ -814,7 +778,6 @@ IMPLEMENT_SAVERESTORE(CGamePlayerEquip, CRulePointEntity);
 
 LINK_ENTITY_TO_CLASS(game_player_equip, CGamePlayerEquip);
 
-
 bool CGamePlayerEquip::KeyValue(KeyValueData* pkvd)
 {
 	if (CRulePointEntity::KeyValue(pkvd))
@@ -839,7 +802,6 @@ bool CGamePlayerEquip::KeyValue(KeyValueData* pkvd)
 
 	return false;
 }
-
 
 void CGamePlayerEquip::Touch(CBaseEntity* pOther)
 {
@@ -872,23 +834,21 @@ void CGamePlayerEquip::EquipPlayer(CBaseEntity* pEntity)
 	}
 }
 
-
 void CGamePlayerEquip::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
 	EquipPlayer(pActivator);
 }
 
-
-//
-// CGamePlayerTeam / game_player_team	-- Changes the team of the player who fired it
-// Flag: Fire once
-// Flag: Kill Player
-// Flag: Gib Player
-
 #define SF_PTEAM_FIREONCE 0x0001
 #define SF_PTEAM_KILL 0x0002
 #define SF_PTEAM_GIB 0x0004
 
+/**
+*	@brief Changes the team of the player who fired it
+*	@details Flag: Fire once
+*	Flag: Kill Player
+*	Flag: Gib Player
+*/
 class CGamePlayerTeam : public CRulePointEntity
 {
 public:
@@ -904,7 +864,6 @@ private:
 
 LINK_ENTITY_TO_CLASS(game_player_team, CGamePlayerTeam);
 
-
 const char* CGamePlayerTeam::TargetTeamName(const char* pszTargetName)
 {
 	CBaseEntity* pTeamEntity = nullptr;
@@ -917,7 +876,6 @@ const char* CGamePlayerTeam::TargetTeamName(const char* pszTargetName)
 
 	return nullptr;
 }
-
 
 void CGamePlayerTeam::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {

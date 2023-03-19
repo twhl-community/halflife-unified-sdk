@@ -18,11 +18,6 @@
 
 LINK_ENTITY_TO_CLASS(trigger, CBaseTrigger);
 
-/*
-================
-InitTrigger
-================
-*/
 void CBaseTrigger::InitTrigger()
 {
 	// trigger angles are used for one-way touches.  An angle of 0 is assumed
@@ -41,9 +36,6 @@ void CBaseTrigger::InitTrigger()
 	}
 }
 
-//
-// Cache user-entity-field values until spawn is called.
-//
 bool CBaseTrigger::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq(pkvd->szKeyName, "damage"))

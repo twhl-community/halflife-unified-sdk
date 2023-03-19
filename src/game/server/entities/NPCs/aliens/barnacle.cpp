@@ -12,27 +12,29 @@
  *   use or distribution of this code by or to any unlicensed person is illegal.
  *
  ****/
-//=========================================================
-// barnacle - stationary ceiling mounted 'fishing' monster
-//=========================================================
 
 #include "cbase.h"
 
-#define BARNACLE_BODY_HEIGHT 44 // how 'tall' the barnacle's model is.
+#define BARNACLE_BODY_HEIGHT 44 //!< how 'tall' the barnacle's model is.
 #define BARNACLE_PULL_SPEED 8
-#define BARNACLE_KILL_VICTIM_DELAY 5 // how many seconds after pulling prey in to gib them.
+#define BARNACLE_KILL_VICTIM_DELAY 5 //!< how many seconds after pulling prey in to gib them.
 
-//=========================================================
-// Monster's Anim Events Go Here
-//=========================================================
 #define BARNACLE_AE_PUKEGIB 2
 
+/**
+*	@brief stationary ceiling mounted 'fishing' monster
+*/
 class CBarnacle : public CBaseMonster
 {
 public:
 	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
+
+	/**
+	*	@brief does a trace along the barnacle's tongue to see if any entity is touching it.
+	*	Also stores the length of the trace in the float reference provided.
+	*/
 	CBaseEntity* TongueTouchEnt(float& flLength);
 	int Classify() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
@@ -51,6 +53,7 @@ public:
 	bool m_fLiftingPrey;
 	float m_flTongueAdj;
 };
+
 LINK_ENTITY_TO_CLASS(monster_barnacle, CBarnacle);
 
 TYPEDESCRIPTION CBarnacle::m_SaveData[] =
@@ -73,21 +76,11 @@ void CBarnacle::OnCreate()
 	pev->model = MAKE_STRING("models/barnacle.mdl");
 }
 
-//=========================================================
-// Classify - indicates this monster's place in the
-// relationship table.
-//=========================================================
 int CBarnacle::Classify()
 {
 	return CLASS_ALIEN_MONSTER;
 }
 
-//=========================================================
-// HandleAnimEvent - catches the monster-specific messages
-// that occur when tagged animation frames are played.
-//
-// Returns number of events handled, 0 if none.
-//=========================================================
 void CBarnacle::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
 	switch (pEvent->event)
@@ -101,9 +94,6 @@ void CBarnacle::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 }
 
-//=========================================================
-// Spawn
-//=========================================================
 void CBarnacle::Spawn()
 {
 	Precache();
@@ -143,8 +133,6 @@ bool CBarnacle::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float 
 	return CBaseMonster::TakeDamage(inflictor, attacker, flDamage, bitsDamageType);
 }
 
-//=========================================================
-//=========================================================
 void CBarnacle::BarnacleThink()
 {
 	CBaseEntity* pTouchEnt;
@@ -329,9 +317,6 @@ void CBarnacle::BarnacleThink()
 	StudioFrameAdvance(0.1);
 }
 
-//=========================================================
-// Killed.
-//=========================================================
 void CBarnacle::Killed(CBaseEntity* attacker, int iGib)
 {
 	CBaseMonster* pVictim;
@@ -375,8 +360,6 @@ void CBarnacle::Killed(CBaseEntity* attacker, int iGib)
 	SetThink(&CBarnacle::WaitTillDead);
 }
 
-//=========================================================
-//=========================================================
 void CBarnacle::WaitTillDead()
 {
 	pev->nextthink = gpGlobals->time + 0.1;
@@ -392,9 +375,6 @@ void CBarnacle::WaitTillDead()
 	}
 }
 
-//=========================================================
-// Precache - precaches all resources this monster needs
-//=========================================================
 void CBarnacle::Precache()
 {
 	PrecacheModel(STRING(pev->model));
@@ -408,11 +388,6 @@ void CBarnacle::Precache()
 	PrecacheSound("barnacle/bcl_die3.wav");
 }
 
-//=========================================================
-// TongueTouchEnt - does a trace along the barnacle's tongue
-// to see if any entity is touching it. Also stores the length
-// of the trace in the int pointer provided.
-//=========================================================
 #define BARNACLE_CHECK_SPACING 8
 CBaseEntity* CBarnacle::TongueTouchEnt(float& flLength)
 {

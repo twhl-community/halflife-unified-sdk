@@ -55,6 +55,11 @@ public:
 	void SecondaryAttack() override;
 	void WeaponIdle() override;
 
+	/**
+	*	@brief since all of this code has to run and then call Fire(),
+	*	it was easier at this point to rip it out of weaponidle() and make its own function
+	*	than to try to merge this into Fire(), which has some identical variable names
+	*/
 	void StartFire();
 	void Fire(Vector vecOrigSrc, Vector vecDirShooting, float flDamage);
 	float GetFullChargeTime();

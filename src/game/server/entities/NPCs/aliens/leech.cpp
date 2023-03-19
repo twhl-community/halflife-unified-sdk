@@ -12,41 +12,14 @@
  *   use or distribution of this code by or to any unlicensed person is illegal.
  *
  ****/
-//=========================================================
-// leech - basic little swimming monster
-//=========================================================
-//
-// UNDONE:
-// DONE:Steering force model for attack
-// DONE:Attack animation control / damage
-// DONE:Establish range of up/down motion and steer around vertical obstacles
-// DONE:Re-evaluate height periodically
-// DONE:Fall (MOVETYPE_TOSS) and play different anim if out of water
-// Test in complex room (c2a3?)
-// DONE:Sounds? - Kelly will fix
-// Blood cloud? Hurt effect?
-// Group behavior?
-// DONE:Save/restore
-// Flop animation - just bind to ACT_TWITCH
-// Fix fatal push into wall case
-//
-// Try this on a bird
-// Try this on a model with hulls/tracehull?
-//
-
 
 #include "cbase.h"
-
-
-
 
 // Animation events
 #define LEECH_AE_ATTACK 1
 #define LEECH_AE_FLOP 2
 
-
 // Movement constants
-
 #define LEECH_ACCELERATE 10
 #define LEECH_CHECK_DIST 45
 #define LEECH_SWIM_SPEED 50
@@ -56,11 +29,11 @@
 #define LEECH_SIZEX 10
 #define LEECH_FRAMETIME 0.1
 
-
-
 #define DEBUG_BEAMS 0
 
-
+/**
+*	@brief basic little swimming monster
+*/
 class CLeech : public CBaseMonster
 {
 public:
@@ -92,7 +65,12 @@ public:
 	void AttackSound();
 	void AlertSound() override;
 	void UpdateMotion();
+
+	/**
+	*	@brief returns normalized distance to obstacle
+	*/
 	float ObstacleDistance(CBaseEntity* pTarget);
+
 	void MakeVectors();
 	void RecalculateWaterlevel();
 	void SwitchLeechState();
@@ -134,8 +112,6 @@ private:
 #endif
 };
 
-
-
 LINK_ENTITY_TO_CLASS(monster_leech, CLeech);
 
 TYPEDESCRIPTION CLeech::m_SaveData[] =
@@ -155,7 +131,6 @@ TYPEDESCRIPTION CLeech::m_SaveData[] =
 };
 
 IMPLEMENT_SAVERESTORE(CLeech, CBaseMonster);
-
 
 const char* CLeech::pAttackSounds[] =
 	{
@@ -208,13 +183,10 @@ void CLeech::Spawn()
 	m_stateTime = gpGlobals->time + RANDOM_FLOAT(1, 5);
 }
 
-
 void CLeech::Activate()
 {
 	RecalculateWaterlevel();
 }
-
-
 
 void CLeech::RecalculateWaterlevel()
 {
@@ -238,7 +210,6 @@ void CLeech::RecalculateWaterlevel()
 	m_height = RANDOM_FLOAT(m_bottom, m_top);
 	m_waterTime = gpGlobals->time + RANDOM_FLOAT(5, 7);
 }
-
 
 void CLeech::SwitchLeechState()
 {
@@ -264,15 +235,12 @@ void CLeech::SwitchLeechState()
 	}
 }
 
-
 int CLeech::IRelationship(CBaseEntity* pTarget)
 {
 	if (pTarget->IsPlayer())
 		return R_DL;
 	return CBaseMonster::IRelationship(pTarget);
 }
-
-
 
 void CLeech::AttackSound()
 {
@@ -283,12 +251,10 @@ void CLeech::AttackSound()
 	}
 }
 
-
 void CLeech::AlertSound()
 {
 	EmitSound(CHAN_VOICE, RANDOM_SOUND_ARRAY(pAlertSounds), 1.0, ATTN_NORM * 0.5);
 }
-
 
 void CLeech::Precache()
 {
@@ -297,7 +263,6 @@ void CLeech::Precache()
 	PRECACHE_SOUND_ARRAY(pAttackSounds);
 	PRECACHE_SOUND_ARRAY(pAlertSounds);
 }
-
 
 bool CLeech::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType)
 {
@@ -311,7 +276,6 @@ bool CLeech::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flD
 
 	return CBaseMonster::TakeDamage(inflictor, attacker, flDamage, bitsDamageType);
 }
-
 
 void CLeech::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
@@ -350,7 +314,6 @@ void CLeech::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 }
 
-
 void CLeech::MakeVectors()
 {
 	Vector tmp = pev->angles;
@@ -358,10 +321,6 @@ void CLeech::MakeVectors()
 	UTIL_MakeVectors(tmp);
 }
 
-
-//
-// ObstacleDistance - returns normalized distance to obstacle
-//
 float CLeech::ObstacleDistance(CBaseEntity* pTarget)
 {
 	TraceResult tr;
@@ -414,7 +373,6 @@ float CLeech::ObstacleDistance(CBaseEntity* pTarget)
 	return 1.0;
 }
 
-
 void CLeech::DeadThink()
 {
 	if (m_fSequenceFinished)
@@ -448,8 +406,6 @@ void CLeech::DeadThink()
 		}
 	}
 }
-
-
 
 void CLeech::UpdateMotion()
 {
@@ -547,7 +503,6 @@ void CLeech::UpdateMotion()
 	m_pt->SetColor(0, 0, 255);
 #endif
 }
-
 
 void CLeech::SwimThink()
 {
@@ -681,7 +636,6 @@ void CLeech::SwimThink()
 	pev->ideal_yaw = m_flTurning + targetYaw;
 	UpdateMotion();
 }
-
 
 void CLeech::Killed(CBaseEntity* attacker, int iGib)
 {

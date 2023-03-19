@@ -12,9 +12,6 @@
  *   use or distribution of this code by or to any unlicensed person is illegal.
  *
  ****/
-//=========================================================
-// pit drone - medium sized, fires sharp teeth like spikes and swipes with sharp appendages
-//=========================================================
 
 #include "cbase.h"
 #include "nodes.h"
@@ -24,10 +21,6 @@
 int iSpikeTrail;
 int iPitdroneSpitSprite;
 
-
-//=========================================================
-// monster-specific schedule types
-//=========================================================
 enum
 {
 	SCHED_PITDRONE_HURTHOP = LAST_COMMON_SCHEDULE + 1,
@@ -40,17 +33,11 @@ enum
 	SCHED_PITDRONE_TAKECOVER_FAILED,
 };
 
-//=========================================================
-// monster-specific tasks
-//=========================================================
 enum
 {
 	TASK_PITDRONE_HOPTURN = LAST_COMMON_TASK + 1,
 };
 
-//=========================================================
-// Bullsquid's spit projectile
-//=========================================================
 class CPitdroneSpike : public CBaseEntity
 {
 public:
@@ -188,9 +175,6 @@ void CPitdroneSpike::StartTrail()
 	SetThink(nullptr);
 }
 
-//=========================================================
-// Monster's Anim Events Go Here
-//=========================================================
 #define PITDRONE_AE_SPIT (1)
 #define PITDRONE_AE_BITE (2)
 #define PITDRONE_AE_TAILWHIP (4)
@@ -216,6 +200,9 @@ enum PitdroneWeapon
 };
 }
 
+/**
+*	@brief medium sized, fires sharp teeth like spikes and swipes with sharp appendages
+*/
 class CPitdrone : public CBaseMonster
 {
 public:
@@ -234,7 +221,12 @@ public:
 	bool CheckMeleeAttack1(float flDot, float flDist) override;
 	bool CheckMeleeAttack2(float flDot, float flDist) override;
 	bool CheckRangeAttack1(float flDot, float flDist) override;
+
+	/**
+	*	@brief overridden for bullsquid because there are things that need to be checked every think.
+	*/
 	void RunAI() override;
+
 	bool FValidateHintType(short sHint) override;
 	Schedule_t* GetSchedule() override;
 	Schedule_t* GetScheduleOfType(int Type) override;
@@ -251,8 +243,8 @@ public:
 	CUSTOM_SCHEDULES;
 	static TYPEDESCRIPTION m_SaveData[];
 
-	float m_flLastHurtTime;	 // we keep track of this, because if something hurts a squid, it will forget about its love of headcrabs for a while.
-	float m_flNextSpikeTime; // last time the pit drone used the spike attack.
+	float m_flLastHurtTime;	 //!< we keep track of this, because if something hurts a squid, it will forget about its love of headcrabs for a while.
+	float m_flNextSpikeTime; //!< last time the pit drone used the spike attack.
 	int m_iInitialAmmo;
 	float m_flNextEatTime;
 };
@@ -275,9 +267,6 @@ void CPitdrone::OnCreate()
 	pev->model = MAKE_STRING("models/pit_drone.mdl");
 }
 
-//=========================================================
-// IgnoreConditions
-//=========================================================
 int CPitdrone::IgnoreConditions()
 {
 	int iIgnore = CBaseMonster::IgnoreConditions();
@@ -302,9 +291,6 @@ int CPitdrone::IRelationship(CBaseEntity* pTarget)
 	return CBaseMonster::IRelationship(pTarget);
 }
 
-//=========================================================
-// CheckRangeAttack1
-//=========================================================
 bool CPitdrone::CheckRangeAttack1(float flDot, float flDist)
 {
 	if (m_iInitialAmmo == -1 || GetBodygroup(PitdroneBodygroup::Weapons) == PitdroneWeapon::Empty || (IsMoving() && flDist >= 512))
@@ -359,9 +345,6 @@ bool CPitdrone::CheckMeleeAttack2(float flDot, float flDist)
 	return false;
 }
 
-//=========================================================
-//  FValidateHintType
-//=========================================================
 bool CPitdrone::FValidateHintType(short sHint)
 {
 	static short sSquidHints[] =
@@ -381,11 +364,6 @@ bool CPitdrone::FValidateHintType(short sHint)
 	return false;
 }
 
-//=========================================================
-// ISoundMask - returns a bit mask indicating which types
-// of sounds this monster regards. In the base class implementation,
-// monsters care about all sounds, but no scents.
-//=========================================================
 int CPitdrone::ISoundMask()
 {
 	return bits_SOUND_WORLD |
@@ -396,25 +374,15 @@ int CPitdrone::ISoundMask()
 		   bits_SOUND_PLAYER;
 }
 
-//=========================================================
-// Classify - indicates this monster's place in the
-// relationship table.
-//=========================================================
 int CPitdrone::Classify()
 {
 	return CLASS_ALIEN_PREDATOR;
 }
 
-//=========================================================
-// IdleSound
-//=========================================================
 void CPitdrone::IdleSound()
 {
 }
 
-//=========================================================
-// PainSound
-//=========================================================
 void CPitdrone::PainSound()
 {
 	int iPitch = RANDOM_LONG(85, 120);
@@ -436,9 +404,6 @@ void CPitdrone::PainSound()
 	}
 }
 
-//=========================================================
-// AlertSound
-//=========================================================
 void CPitdrone::AlertSound()
 {
 	int iPitch = RANDOM_LONG(140, 160);
@@ -457,10 +422,6 @@ void CPitdrone::AlertSound()
 	}
 }
 
-//=========================================================
-// SetYawSpeed - allows each sequence to have a different
-// turn rate associated with it.
-//=========================================================
 void CPitdrone::SetYawSpeed()
 {
 	int ys;
@@ -489,10 +450,6 @@ void CPitdrone::SetYawSpeed()
 	pev->yaw_speed = ys;
 }
 
-//=========================================================
-// HandleAnimEvent - catches the monster-specific messages
-// that occur when tagged animation frames are played.
-//=========================================================
 void CPitdrone::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
 	switch (pEvent->event)
@@ -654,9 +611,6 @@ void CPitdrone::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 }
 
-//=========================================================
-// Spawn
-//=========================================================
 void CPitdrone::Spawn()
 {
 	Precache();
@@ -698,9 +652,6 @@ void CPitdrone::Spawn()
 	MonsterInit();
 }
 
-//=========================================================
-// Precache - precaches all resources this monster needs
-//=========================================================
 void CPitdrone::Precache()
 {
 	PrecacheModel(STRING(pev->model));
@@ -741,10 +692,6 @@ void CPitdrone::Precache()
 	PrecacheSound("bullchicken/bc_bite3.wav");
 }
 
-//========================================================
-// RunAI - overridden for bullsquid because there are things
-// that need to be checked every think.
-//========================================================
 void CPitdrone::RunAI()
 {
 	// first, do base class stuff
@@ -759,10 +706,6 @@ void CPitdrone::RunAI()
 		}
 	}
 }
-
-//========================================================
-// AI Schedules Specific to this monster
-//=========================================================
 
 // primary range attack
 Task_t tlPitdroneRangeAttack1[] =
@@ -983,9 +926,6 @@ DEFINE_CUSTOM_SCHEDULES(CPitdrone){
 
 IMPLEMENT_CUSTOM_SCHEDULES(CPitdrone, CBaseMonster);
 
-//=========================================================
-// GetSchedule
-//=========================================================
 Schedule_t* CPitdrone::GetSchedule()
 {
 	switch (m_MonsterState)
@@ -1078,9 +1018,6 @@ Schedule_t* CPitdrone::GetSchedule()
 	return CBaseMonster::GetSchedule();
 }
 
-//=========================================================
-// GetScheduleOfType
-//=========================================================
 Schedule_t* CPitdrone::GetScheduleOfType(int Type)
 {
 	switch (Type)
@@ -1116,11 +1053,6 @@ Schedule_t* CPitdrone::GetScheduleOfType(int Type)
 	return CBaseMonster::GetScheduleOfType(Type);
 }
 
-//=========================================================
-// Start task - selects the correct activity and performs
-// any necessary calculations to start the next task on the
-// schedule.
-//=========================================================
 void CPitdrone::StartTask(Task_t* pTask)
 {
 	m_iTaskStatus = TASKSTATUS_RUNNING;
@@ -1154,9 +1086,6 @@ void CPitdrone::StartTask(Task_t* pTask)
 	}
 }
 
-//=========================================================
-// RunTask
-//=========================================================
 void CPitdrone::RunTask(Task_t* pTask)
 {
 	switch (pTask->iTask)

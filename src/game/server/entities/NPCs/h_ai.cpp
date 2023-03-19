@@ -12,33 +12,19 @@
  *   without written permission from Valve LLC.
  *
  ****/
-/*
 
-  h_ai.cpp - halflife specific ai code
-
+/**
+*	@file
+*	halflife specific ai code
+*	AI UTILITY FUNCTIONS
+*	!!!UNDONE - move CBaseMonster functions to monsters.cpp
 */
-
 
 #include "cbase.h"
 
 #define NUM_LATERAL_CHECKS 13	 // how many checks are made on each side of a monster looking for lateral cover
 #define NUM_LATERAL_LOS_CHECKS 6 // how many checks are made on each side of a monster looking for lateral cover
 
-// float flRandom = RANDOM_FLOAT(0,1);
-
-//=========================================================
-//
-// AI UTILITY FUNCTIONS
-//
-// !!!UNDONE - move CBaseMonster functions to monsters.cpp
-//=========================================================
-
-//=========================================================
-// FBoxVisible - a more accurate ( and slower ) version
-// of FVisible.
-//
-// !!!UNDONE - make this CBaseMonster?
-//=========================================================
 bool FBoxVisible(entvars_t* pevLooker, entvars_t* pevTarget, Vector& vecTargetOrigin, float flSize)
 {
 	// don't look through water
@@ -65,10 +51,6 @@ bool FBoxVisible(entvars_t* pevLooker, entvars_t* pevTarget, Vector& vecTargetOr
 	return false; // Line of sight is not established
 }
 
-//
-// VecCheckToss - returns the velocity at which an object should be lobbed from vecspot1 to land near vecspot2.
-// returns g_vecZero if toss is not feasible.
-//
 Vector VecCheckToss(entvars_t* pev, const Vector& vecSpot1, Vector vecSpot2, float flGravityAdj)
 {
 	TraceResult tr;
@@ -148,11 +130,6 @@ Vector VecCheckToss(entvars_t* pev, const Vector& vecSpot1, Vector vecSpot2, flo
 	return vecGrenadeVel;
 }
 
-
-//
-// VecCheckThrow - returns the velocity vector at which an object should be thrown from vecspot1 to hit vecspot2.
-// returns g_vecZero if throw is not feasible.
-//
 Vector VecCheckThrow(entvars_t* pev, const Vector& vecSpot1, Vector vecSpot2, float flSpeed, float flGravityAdj)
 {
 	float flGravity = g_psv_gravity->value * flGravityAdj;

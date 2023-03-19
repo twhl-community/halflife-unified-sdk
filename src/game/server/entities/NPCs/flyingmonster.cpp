@@ -49,12 +49,10 @@ int CFlyingMonster::CheckLocalMove(const Vector& vecStart, const Vector& vecEnd,
 	return LOCALMOVE_VALID;
 }
 
-
 bool CFlyingMonster::FTriangulate(const Vector& vecStart, const Vector& vecEnd, float flDist, CBaseEntity* pTargetEnt, Vector* pApex)
 {
 	return CBaseMonster::FTriangulate(vecStart, vecEnd, flDist, pTargetEnt, pApex);
 }
-
 
 Activity CFlyingMonster::GetStoppedActivity()
 {
@@ -63,7 +61,6 @@ Activity CFlyingMonster::GetStoppedActivity()
 
 	return ACT_HOVER;
 }
-
 
 void CFlyingMonster::Stop()
 {
@@ -77,7 +74,6 @@ void CFlyingMonster::Stop()
 	pev->angles.x = 0;
 	m_vecTravel = g_vecZero;
 }
-
 
 float CFlyingMonster::ChangeYaw(int speed)
 {
@@ -113,7 +109,6 @@ float CFlyingMonster::ChangeYaw(int speed)
 	return CBaseMonster::ChangeYaw(speed);
 }
 
-
 void CFlyingMonster::Killed(CBaseEntity* attacker, int iGib)
 {
 	pev->movetype = MOVETYPE_STEP;
@@ -122,7 +117,6 @@ void CFlyingMonster::Killed(CBaseEntity* attacker, int iGib)
 	pev->angles.x = 0;
 	CBaseMonster::Killed(attacker, iGib);
 }
-
 
 void CFlyingMonster::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
@@ -143,14 +137,12 @@ void CFlyingMonster::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 }
 
-
 void CFlyingMonster::Move(float flInterval)
 {
 	if (pev->movetype == MOVETYPE_FLY)
 		m_flGroundSpeed = m_flightSpeed;
 	CBaseMonster::Move(flInterval);
 }
-
 
 bool CFlyingMonster::ShouldAdvanceRoute(float flWaypointDist)
 {
@@ -163,7 +155,6 @@ bool CFlyingMonster::ShouldAdvanceRoute(float flWaypointDist)
 
 	return false;
 }
-
 
 void CFlyingMonster::MoveExecute(CBaseEntity* pTargetEnt, const Vector& vecDir, float flInterval)
 {
@@ -204,7 +195,6 @@ void CFlyingMonster::MoveExecute(CBaseEntity* pTargetEnt, const Vector& vecDir, 
 	else
 		CBaseMonster::MoveExecute(pTargetEnt, vecDir, flInterval);
 }
-
 
 float CFlyingMonster::CeilingZ(const Vector& position)
 {

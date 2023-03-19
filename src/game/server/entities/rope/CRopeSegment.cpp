@@ -73,7 +73,7 @@ void CRopeSegment::Touch(CBaseEntity* pOther)
 	{
 		auto pPlayer = static_cast<CBasePlayer*>(pOther);
 
-		// Electrified wires deal damage. - Solokiller
+		// Electrified wires deal damage.
 		if (m_bCauseDamage)
 		{
 			pOther->TakeDamage(this, this, 1, DMG_SHOCK);
@@ -95,7 +95,7 @@ void CRopeSegment::Touch(CBaseEntity* pOther)
 
 				if (vecVelocity.Length() > 0.5)
 				{
-					// Apply some external force to move the rope. - Solokiller
+					// Apply some external force to move the rope.
 					data.mApplyExternalForce = true;
 
 					data.mExternalForce = data.mExternalForce + vecVelocity * 750;
@@ -108,14 +108,14 @@ void CRopeSegment::Touch(CBaseEntity* pOther)
 			}
 			else
 			{
-				// This segment cannot be grabbed, so grab the highest one if possible. - Solokiller
+				// This segment cannot be grabbed, so grab the highest one if possible.
 				auto pRope = m_pSample->GetMasterRope();
 
 				CRopeSegment* pSegment;
 
 				if (pRope->GetNumSegments() <= 4)
 				{
-					// Fewer than 5 segments exist, so allow grabbing the last one. - Solokiller
+					// Fewer than 5 segments exist, so allow grabbing the last one.
 					pSegment = pRope->GetSegments()[pRope->GetNumSegments() - 1];
 					pSegment->SetCanBeGrabbed(true);
 				}

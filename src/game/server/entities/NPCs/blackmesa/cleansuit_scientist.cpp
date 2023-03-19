@@ -12,9 +12,6 @@
  *   use or distribution of this code by or to any unlicensed person is illegal.
  *
  ****/
-//=========================================================
-// human scientist (passive lab worker)
-//=========================================================
 
 #include "cbase.h"
 #include "talkmonster.h"
@@ -22,10 +19,9 @@
 #include "scripted.h"
 #include "scientist.h"
 
-//=======================================================
-// Scientist
-//=======================================================
-
+/**
+*	@brief human scientist (passive lab worker)
+*/
 class CCleansuitScientist : public CScientist
 {
 public:
@@ -58,9 +54,6 @@ void CCleansuitScientist::Heal()
 	m_healTime = gpGlobals->time + 60;
 }
 
-//=========================================================
-// Dead Scientist PROP
-//=========================================================
 class CDeadCleansuitScientist : public CBaseMonster
 {
 public:
@@ -72,6 +65,9 @@ public:
 	int m_iPose; // which sequence to display
 	static const char* m_szPoses[9];
 };
+
+LINK_ENTITY_TO_CLASS(monster_cleansuit_scientist_dead, CDeadCleansuitScientist);
+
 const char* CDeadCleansuitScientist::m_szPoses[] =
 	{
 		"lying_on_back",
@@ -103,11 +99,7 @@ bool CDeadCleansuitScientist::KeyValue(KeyValueData* pkvd)
 
 	return CBaseMonster::KeyValue(pkvd);
 }
-LINK_ENTITY_TO_CLASS(monster_cleansuit_scientist_dead, CDeadCleansuitScientist);
 
-//
-// ********** DeadScientist SPAWN **********
-//
 void CDeadCleansuitScientist::Spawn()
 {
 	PrecacheModel(STRING(pev->model));
@@ -137,10 +129,6 @@ void CDeadCleansuitScientist::Spawn()
 	//	pev->skin += 2; // use bloody skin -- UNDONE: Turn this back on when we have a bloody skin again!
 	MonsterInitDead();
 }
-
-//=========================================================
-// Sitting Scientist PROP
-//=========================================================
 
 class CSittingCleansuitScientist : public CSittingScientist // kdb: changed from public CBaseMonster so he can speak
 {

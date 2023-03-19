@@ -134,9 +134,9 @@ constexpr int CLASS_LAST = CLASS_ALIEN_RACE_X;
 
 void FireTargets(const char* targetName, CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
-//
-// Base Entity.  All entity types derive from this
-//
+/**
+*	@brief Base Entity. All entity types derive from this
+*/
 class CBaseEntity
 {
 public:
@@ -223,6 +223,10 @@ public:
 	virtual void OnDestroy();
 
 	virtual void Spawn() {}
+
+	/**
+	*	@brief precaches all resources this entity needs
+	*/
 	virtual void Precache() {}
 
 	/**
@@ -233,17 +237,24 @@ public:
 
 	void LoadReplacementFiles();
 
+	/**
+	*	@brief Cache user-entity-field values until spawn is called.
+	*/
 	virtual bool KeyValue(KeyValueData* pkvd) { return false; }
 	virtual bool Save(CSave& save);
 	virtual bool Restore(CRestore& restore);
 	virtual int ObjectCaps() { return FCAP_ACROSS_TRANSITION; }
 	virtual void Activate() {}
 
-	// Setup the object->object collision box (pev->mins / pev->maxs is the object->world collision box)
+	/**
+	*	@brief Setup the object->object collision box (pev->mins / pev->maxs is the object->world collision box)
+	*/
 	virtual void SetObjectCollisionBox();
 
-	// Classify - returns the type of group (i.e, "houndeye", or "human military" so that monsters with different classnames
-	// still realize that they are teammates. (overridden for monsters that form groups)
+	/**
+	*	@brief returns the type of group (i.e, "houndeye", or "human military") so that monsters
+	*	with different classnames still realize that they are teammates. (overridden for monsters that form groups)
+	*/
 	virtual int Classify() { return CLASS_NONE; }
 	virtual void DeathNotice(CBaseEntity* child) {} // monster maker children use this to tell the monster maker that they have died.
 
@@ -251,7 +262,16 @@ public:
 	static TYPEDESCRIPTION m_SaveData[];
 
 	virtual void TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType);
+
+	/**
+	*	@brief inflict damage on this entity.
+	*	@param bitsDamageType indicates type of damage inflicted, ie: DMG_CRUSH
+	*/
 	virtual bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType);
+
+	/**
+	*	@brief give health
+	*/
 	virtual bool TakeHealth(float flHealth, int bitsDamageType);
 	virtual void Killed(CBaseEntity* attacker, int iGib);
 	virtual int BloodColor() { return DONT_BLEED; }
@@ -326,20 +346,59 @@ public:
 		::operator delete(pMem);
 	}
 
+	/**
+	*	@brief This updates global tables that need to know about entities being removed
+	*/
 	void UpdateOnRemove();
 
 	// common member functions
+	/**
+	*	@brief Convenient way to delay removing oneself
+	*/
 	void EXPORT SUB_Remove();
+
+	/**
+	*	@brief Convenient way to explicitly do nothing (passed to functions that require a method)
+	*	TODO: probably obsolete, replace with nullptr
+	*/
 	void EXPORT SUB_DoNothing();
+
+	/**
+	*	@brief slowly fades a entity out, then removes it.
+	*	DON'T USE ME FOR GIBS AND STUFF IN MULTIPLAYER!
+	*	SET A FUTURE THINK AND A RENDERMODE!!
+	*/
 	void EXPORT SUB_StartFadeOut();
 	void EXPORT SUB_FadeOut();
 	void EXPORT SUB_CallUseToggle() { this->Use(this, this, USE_TOGGLE, 0); }
 	bool ShouldToggle(USE_TYPE useType, bool currentState);
-	void FireBullets(unsigned int cShots, Vector vecSrc, Vector vecDirShooting, Vector vecSpread, float flDistance, int iBulletType, int iTracerFreq = 4, int iDamage = 0, CBaseEntity* attacker = nullptr);
-	Vector FireBulletsPlayer(unsigned int cShots, Vector vecSrc, Vector vecDirShooting, Vector vecSpread, float flDistance, int iBulletType, int iTracerFreq = 4, int iDamage = 0, CBaseEntity* attacker = nullptr, int shared_rand = 0);
+
+	/**
+	*	@brief Go to the trouble of combining multiple pellets into a single damage call.
+	*	This version is used by Monsters.
+	*/
+	void FireBullets(unsigned int cShots, Vector vecSrc, Vector vecDirShooting, Vector vecSpread,
+		float flDistance, int iBulletType,
+		int iTracerFreq = 4, int iDamage = 0, CBaseEntity* attacker = nullptr);
+
+	/**
+	*	@brief Go to the trouble of combining multiple pellets into a single damage call.
+	*	This version is used by Players, uses the random seed generator to sync client and server side shots.
+	*/
+	Vector FireBulletsPlayer(unsigned int cShots, Vector vecSrc, Vector vecDirShooting, Vector vecSpread,
+		float flDistance, int iBulletType,
+		int iTracerFreq = 4, int iDamage = 0, CBaseEntity* attacker = nullptr, int shared_rand = 0);
 
 	virtual CBaseEntity* Respawn() { return nullptr; }
 
+	/**
+	*	@brief If self.delay is set, a DelayedUse entity will be created that will actually
+	*	do the SUB_UseTargets after that many seconds have passed.
+	*	Removes all entities with a targetname that match self.killtarget,
+	*	and removes them, so some events can remove other triggers.
+	*	Search for (string)targetname in all entities that
+	*	match (string)self.target and call their .use function (if they have one)
+	*/
 	void SUB_UseTargets(CBaseEntity* pActivator, USE_TYPE useType, float value);
 	// Do the bounding boxes of these two intersect?
 	bool Intersects(CBaseEntity* pOther);
@@ -491,7 +550,14 @@ public:
 
 	virtual int Illumination() { return GETENTITYILLUM(ENT(pev)); }
 
+	/**
+	*	@brief returns true if a line can be traced from the caller's eyes to the target
+	*/
 	virtual bool FVisible(CBaseEntity* pEntity);
+
+	/**
+	*	@brief returns true if a line can be traced from the caller's eyes to the target vector
+	*/
 	virtual bool FVisible(const Vector& vecOrigin);
 
 	static float GetSkillFloat(std::string_view name)

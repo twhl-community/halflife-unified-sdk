@@ -56,7 +56,6 @@ void CEgon::Spawn()
 	FallInit(); // get ready to fall down.
 }
 
-
 void CEgon::Precache()
 {
 	PrecacheModel(STRING(m_WorldModel));
@@ -78,7 +77,6 @@ void CEgon::Precache()
 	m_usEgonFire = PRECACHE_EVENT(1, "events/egon_fire.sc");
 	m_usEgonStop = PRECACHE_EVENT(1, "events/egon_stop.sc");
 }
-
 
 bool CEgon::Deploy()
 {
@@ -366,7 +364,6 @@ void CEgon::Fire(const Vector& vecOrigSrc, const Vector& vecDir)
 	UpdateEffect(tmpSrc, tr.vecEndPos, timedist);
 }
 
-
 void CEgon::UpdateEffect(const Vector& startPoint, const Vector& endPoint, float timeBlend)
 {
 #ifndef CLIENT_DLL
@@ -442,7 +439,6 @@ void CEgon::CreateEffect()
 #endif
 }
 
-
 void CEgon::DestroyEffect()
 {
 
@@ -467,8 +463,6 @@ void CEgon::DestroyEffect()
 	}
 #endif
 }
-
-
 
 void CEgon::WeaponIdle()
 {
@@ -504,8 +498,6 @@ void CEgon::WeaponIdle()
 	m_deployed = true;
 }
 
-
-
 void CEgon::EndAttack()
 {
 	bool bMakeNoise = false;
@@ -523,8 +515,6 @@ void CEgon::EndAttack()
 
 	DestroyEffect();
 }
-
-
 
 class CEgonAmmo : public CBasePlayerAmmo
 {
@@ -551,4 +541,5 @@ public:
 		return false;
 	}
 };
+
 LINK_ENTITY_TO_CLASS(ammo_egonclip, CEgonAmmo);

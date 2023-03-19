@@ -60,6 +60,7 @@ private:
 float CSqueakGrenade::m_flNextBounceSoundTime = 0;
 
 LINK_ENTITY_TO_CLASS(monster_snark, CSqueakGrenade);
+
 TYPEDESCRIPTION CSqueakGrenade::m_SaveData[] =
 	{
 		DEFINE_FIELD(CSqueakGrenade, m_flDie, FIELD_TIME),
@@ -152,7 +153,6 @@ void CSqueakGrenade::Precache()
 	PrecacheSound("squeek/sqk_deploy1.wav");
 }
 
-
 void CSqueakGrenade::Killed(CBaseEntity* attacker, int iGib)
 {
 	pev->model = string_t::Null; // make invisible
@@ -188,8 +188,6 @@ void CSqueakGrenade::GibMonster()
 {
 	EmitSoundDyn(CHAN_VOICE, "common/bodysplat.wav", 0.75, ATTN_NORM, 0, 200);
 }
-
-
 
 void CSqueakGrenade::HuntThink()
 {
@@ -306,7 +304,6 @@ void CSqueakGrenade::HuntThink()
 	pev->angles.x = 0;
 }
 
-
 void CSqueakGrenade::SuperBounceTouch(CBaseEntity* pOther)
 {
 	float flpitch;
@@ -396,7 +393,6 @@ void CSqueakGrenade::SuperBounceTouch(CBaseEntity* pOther)
 
 	m_flNextBounceSoundTime = gpGlobals->time + 0.5; // half second.
 }
-
 #endif
 
 LINK_ENTITY_TO_CLASS(weapon_snark, CSqueak);
@@ -423,7 +419,6 @@ void CSqueak::Spawn()
 	pev->framerate = 1.0;
 }
 
-
 void CSqueak::Precache()
 {
 	PrecacheModel(STRING(m_WorldModel));
@@ -435,7 +430,6 @@ void CSqueak::Precache()
 
 	m_usSnarkFire = PRECACHE_EVENT(1, "events/snarkfire.sc");
 }
-
 
 bool CSqueak::GetWeaponInfo(WeaponInfo& info)
 {
@@ -450,8 +444,6 @@ bool CSqueak::GetWeaponInfo(WeaponInfo& info)
 
 	return true;
 }
-
-
 
 bool CSqueak::Deploy()
 {
@@ -475,7 +467,6 @@ bool CSqueak::Deploy()
 	return result;
 }
 
-
 void CSqueak::Holster()
 {
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;
@@ -491,7 +482,6 @@ void CSqueak::Holster()
 	SendWeaponAnim(SQUEAK_DOWN);
 	m_pPlayer->EmitSound(CHAN_WEAPON, "common/null.wav", 1.0, ATTN_NORM);
 }
-
 
 void CSqueak::PrimaryAttack()
 {
@@ -551,11 +541,9 @@ void CSqueak::PrimaryAttack()
 	}
 }
 
-
 void CSqueak::SecondaryAttack()
 {
 }
-
 
 void CSqueak::WeaponIdle()
 {

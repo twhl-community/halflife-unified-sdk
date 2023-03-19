@@ -21,8 +21,6 @@
 #include "animation.h"
 #include "scriptevent.h"
 
-
-
 bool ExtractBbox(void* pmodel, int sequence, Vector& mins, Vector& maxs)
 {
 	studiohdr_t* pstudiohdr;
@@ -45,7 +43,6 @@ bool ExtractBbox(void* pmodel, int sequence, Vector& mins, Vector& maxs)
 
 	return true;
 }
-
 
 int LookupActivity(void* pmodel, entvars_t* pev, int activity)
 {
@@ -73,7 +70,6 @@ int LookupActivity(void* pmodel, entvars_t* pev, int activity)
 
 	return seq;
 }
-
 
 int LookupActivityHeaviest(void* pmodel, entvars_t* pev, int activity)
 {
@@ -140,14 +136,12 @@ int LookupSequence(void* pmodel, const char* label)
 	return -1;
 }
 
-
 bool IsSoundEvent(int eventNumber)
 {
 	if (eventNumber == SCRIPT_EVENT_SOUND || eventNumber == SCRIPT_EVENT_SOUND_VOICE)
 		return true;
 	return false;
 }
-
 
 void SequencePrecache(CBaseEntity* self, void* pmodel, const char* pSequenceName)
 {
@@ -188,8 +182,6 @@ void SequencePrecache(CBaseEntity* self, void* pmodel, const char* pSequenceName
 	}
 }
 
-
-
 void GetSequenceInfo(void* pmodel, entvars_t* pev, float& flFrameRate, float& flGroundSpeed)
 {
 	studiohdr_t* pstudiohdr;
@@ -222,7 +214,6 @@ void GetSequenceInfo(void* pmodel, entvars_t* pev, float& flFrameRate, float& fl
 	}
 }
 
-
 int GetSequenceFlags(void* pmodel, entvars_t* pev)
 {
 	studiohdr_t* pstudiohdr;
@@ -236,7 +227,6 @@ int GetSequenceFlags(void* pmodel, entvars_t* pev)
 
 	return pseqdesc->flags;
 }
-
 
 int GetAnimationEvent(void* pmodel, entvars_t* pev, MonsterEvent_t* pMonsterEvent, float flStart, float flEnd, int index)
 {
@@ -339,7 +329,6 @@ float SetController(void* pmodel, entvars_t* pev, int iController, float flValue
 	return setting * (1.0 / 255.0) * (pbonecontroller->end - pbonecontroller->start) + pbonecontroller->start;
 }
 
-
 float SetBlending(void* pmodel, entvars_t* pev, int iBlender, float flValue)
 {
 	studiohdr_t* pstudiohdr;
@@ -382,9 +371,6 @@ float SetBlending(void* pmodel, entvars_t* pev, int iBlender, float flValue)
 
 	return setting * (1.0 / 255.0) * (pseqdesc->blendend[iBlender] - pseqdesc->blendstart[iBlender]) + pseqdesc->blendstart[iBlender];
 }
-
-
-
 
 int FindTransition(void* pmodel, int iEndingAnim, int iGoalAnim, int* piDir)
 {
@@ -473,7 +459,6 @@ void SetBodygroup(void* pmodel, entvars_t* pev, int iGroup, int iValue)
 
 	pev->body = (pev->body - (iCurrent * pbodypart->base) + (iValue * pbodypart->base));
 }
-
 
 int GetBodygroup(void* pmodel, entvars_t* pev, int iGroup)
 {

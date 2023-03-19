@@ -12,16 +12,14 @@
  *   use or distribution of this code by or to any unlicensed person is illegal.
  *
  ****/
-//=========================================================
-// monsterstate.cpp - base class monster functions for
-// controlling core AI.
-//=========================================================
+
+/**
+*	@file
+*	base class monster functions for controlling core AI.
+*/
 
 #include "cbase.h"
 
-//=========================================================
-// SetState
-//=========================================================
 void CBaseMonster::SetState(MONSTERSTATE State)
 {
 	/*
@@ -49,9 +47,6 @@ void CBaseMonster::SetState(MONSTERSTATE State)
 	m_IdealMonsterState = State;
 }
 
-//=========================================================
-// RunAI
-//=========================================================
 void CBaseMonster::RunAI()
 {
 	// to test model's eye height
@@ -105,10 +100,6 @@ void CBaseMonster::RunAI()
 	m_afConditions &= ~(bits_COND_LIGHT_DAMAGE | bits_COND_HEAVY_DAMAGE);
 }
 
-//=========================================================
-// GetIdealState - surveys the Conditions information available
-// and finds the best new state for a monster.
-//=========================================================
 MONSTERSTATE CBaseMonster::GetIdealState()
 {
 	int iConditions;

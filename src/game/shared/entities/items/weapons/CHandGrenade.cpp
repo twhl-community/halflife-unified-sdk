@@ -42,7 +42,6 @@ void CHandGrenade::Spawn()
 	FallInit(); // get ready to fall down.
 }
 
-
 void CHandGrenade::Precache()
 {
 	PrecacheModel(STRING(m_WorldModel));
@@ -125,7 +124,6 @@ void CHandGrenade::PrimaryAttack()
 		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.5;
 	}
 }
-
 
 void CHandGrenade::WeaponIdle()
 {

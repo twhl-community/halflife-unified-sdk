@@ -12,15 +12,12 @@
  *   use or distribution of this code by or to any unlicensed person is illegal.
  *
  ****/
-//=========================================================
-// GMan - misunderstood servant of the people
-//=========================================================
+
 #include "cbase.h"
 
-//=========================================================
-// Monster's Anim Events Go Here
-//=========================================================
-
+/**
+*	@brief misunderstood servant of the people
+*/
 class CGMan : public CBaseMonster
 {
 public:
@@ -47,8 +44,8 @@ public:
 	EHANDLE m_hTalkTarget;
 	float m_flTalkTime;
 };
-LINK_ENTITY_TO_CLASS(monster_gman, CGMan);
 
+LINK_ENTITY_TO_CLASS(monster_gman, CGMan);
 
 TYPEDESCRIPTION CGMan::m_SaveData[] =
 	{
@@ -65,19 +62,11 @@ void CGMan::OnCreate()
 	pev->model = MAKE_STRING("models/gman.mdl");
 }
 
-//=========================================================
-// Classify - indicates this monster's place in the
-// relationship table.
-//=========================================================
 int CGMan::Classify()
 {
 	return CLASS_NONE;
 }
 
-//=========================================================
-// SetYawSpeed - allows each sequence to have a different
-// turn rate associated with it.
-//=========================================================
 void CGMan::SetYawSpeed()
 {
 	int ys;
@@ -92,10 +81,6 @@ void CGMan::SetYawSpeed()
 	pev->yaw_speed = ys;
 }
 
-//=========================================================
-// HandleAnimEvent - catches the monster-specific messages
-// that occur when tagged animation frames are played.
-//=========================================================
 void CGMan::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
 	switch (pEvent->event)
@@ -107,17 +92,11 @@ void CGMan::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 }
 
-//=========================================================
-// ISoundMask - generic monster can't hear.
-//=========================================================
 int CGMan::ISoundMask()
 {
 	return bits_SOUND_NONE;
 }
 
-//=========================================================
-// Spawn
-//=========================================================
 void CGMan::Spawn()
 {
 	Precache();
@@ -134,19 +113,10 @@ void CGMan::Spawn()
 	MonsterInit();
 }
 
-//=========================================================
-// Precache - precaches all resources this monster needs
-//=========================================================
 void CGMan::Precache()
 {
 	PrecacheModel(STRING(pev->model));
 }
-
-
-//=========================================================
-// AI Schedules Specific to this monster
-//=========================================================
-
 
 void CGMan::StartTask(Task_t* pTask)
 {
@@ -206,12 +176,9 @@ void CGMan::RunTask(Task_t* pTask)
 	}
 }
 
-
-//=========================================================
-// Override all damage
-//=========================================================
 bool CGMan::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType)
 {
+	// Override all damage
 	pev->health = pev->max_health / 2; // always trigger the 50% damage aitrigger
 
 	if (flDamage > 0)
@@ -226,13 +193,11 @@ bool CGMan::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDa
 	return true;
 }
 
-
 void CGMan::TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
 {
 	UTIL_Ricochet(ptr->vecEndPos, 1.0);
 	AddMultiDamage(attacker, this, flDamage, bitsDamageType);
 }
-
 
 void CGMan::PlayScriptedSentence(const char* pszSentence, float duration, float volume, float attenuation, bool bConcurrent, CBaseEntity* pListener)
 {

@@ -12,21 +12,6 @@
  *   use or distribution of this code by or to any unlicensed person is illegal.
  *
  ****/
-//=========================================================
-// hgrunt
-//=========================================================
-
-//=========================================================
-// Hit groups!
-//=========================================================
-/*
-
-  1 - Head
-  2 - Stomach
-  3 - Gun
-
-*/
-
 
 #include "cbase.h"
 #include "plane.h"
@@ -62,18 +47,6 @@ void CBaseHGruntAlly::OnCreate()
 	m_voicePitch = 100;
 }
 
-//=========================================================
-// Speak Sentence - say your cued up sentence.
-//
-// Some grunt sentences (take cover and charge) rely on actually
-// being able to execute the intended action. It's really lame
-// when a grunt says 'COVER ME' and then doesn't move. The problem
-// is that the sentences were played when the decision to TRY
-// to move to cover was made. Now the sentence is played after
-// we know for sure that there is a valid path. The schedule
-// may still fail but in most cases, well after the grunt has
-// started moving.
-//=========================================================
 void CBaseHGruntAlly::SpeakSentence()
 {
 	if (m_iSentence == HGRUNT_SENT_NONE)
@@ -89,9 +62,6 @@ void CBaseHGruntAlly::SpeakSentence()
 	}
 }
 
-//=========================================================
-// GibMonster - make gun fly through the air.
-//=========================================================
 void CBaseHGruntAlly::GibMonster()
 {
 	if (m_hWaitMedic)
@@ -109,11 +79,6 @@ void CBaseHGruntAlly::GibMonster()
 	COFSquadTalkMonster::GibMonster();
 }
 
-//=========================================================
-// ISoundMask - Overidden for human grunts because they
-// hear the DANGER sound that is made by hand grenades and
-// other dangerous items.
-//=========================================================
 int CBaseHGruntAlly::ISoundMask()
 {
 	return bits_SOUND_WORLD |
@@ -125,9 +90,6 @@ int CBaseHGruntAlly::ISoundMask()
 		   bits_SOUND_GARBAGE;
 }
 
-//=========================================================
-// someone else is talking - don't speak
-//=========================================================
 bool CBaseHGruntAlly::FOkToSpeak()
 {
 	// if someone else is talking, don't speak
@@ -150,18 +112,12 @@ bool CBaseHGruntAlly::FOkToSpeak()
 	return true;
 }
 
-//=========================================================
-//=========================================================
 void CBaseHGruntAlly::JustSpoke()
 {
 	COFSquadTalkMonster::g_talkWaitTime = gpGlobals->time + RANDOM_FLOAT(1.5, 2.0);
 	m_iSentence = HGRUNT_SENT_NONE;
 }
 
-//=========================================================
-// PrescheduleThink - this function runs after conditions
-// are collected and before scheduling code is run.
-//=========================================================
 void CBaseHGruntAlly::PrescheduleThink()
 {
 	if (InSquad() && m_hEnemy != nullptr)
@@ -182,18 +138,6 @@ void CBaseHGruntAlly::PrescheduleThink()
 	}
 }
 
-//=========================================================
-// FCanCheckAttacks - this is overridden for human grunts
-// because they can throw/shoot grenades when they can't see their
-// target and the base class doesn't check attacks if the monster
-// cannot see its enemy.
-//
-// !!!BUGBUG - this gets called before a 3-round burst is fired
-// which means that a friendly can still be hit with up to 2 rounds.
-// ALSO, grenades will not be tossed if there is a friendly in front,
-// this is a bad bug. Friendly machine gun fire avoidance
-// will unecessarily prevent the throwing of a grenade as well.
-//=========================================================
 bool CBaseHGruntAlly::FCanCheckAttacks()
 {
 	if (!HasConditions(bits_COND_ENEMY_TOOFAR))
@@ -206,10 +150,6 @@ bool CBaseHGruntAlly::FCanCheckAttacks()
 	}
 }
 
-
-//=========================================================
-// CheckMeleeAttack1
-//=========================================================
 bool CBaseHGruntAlly::CheckMeleeAttack1(float flDot, float flDist)
 {
 	CBaseMonster* pEnemy;
@@ -233,14 +173,6 @@ bool CBaseHGruntAlly::CheckMeleeAttack1(float flDot, float flDist)
 	return false;
 }
 
-//=========================================================
-// CheckRangeAttack1 - overridden for HGrunt, cause
-// FCanCheckAttacks() doesn't disqualify all attacks based
-// on whether or not the enemy is occluded because unlike
-// the base class, the HGrunt can attack when the enemy is
-// occluded (throw grenade over wall, etc). We must
-// disqualify the machine gun attack if the enemy is occluded.
-//=========================================================
 bool CBaseHGruntAlly::CheckRangeAttack1(float flDot, float flDist)
 {
 	if (CanRangeAttack())
@@ -280,10 +212,6 @@ bool CBaseHGruntAlly::CheckRangeAttack1(float flDot, float flDist)
 	return false;
 }
 
-//=========================================================
-// CheckRangeAttack2 - this checks the Grunt's grenade
-// attack.
-//=========================================================
 bool CBaseHGruntAlly::CheckRangeAttack2(float flDot, float flDist)
 {
 	if (!CanUseThrownGrenades() && !CanUseGrenadeLauncher())
@@ -408,9 +336,6 @@ bool CBaseHGruntAlly::CheckRangeAttack2(float flDot, float flDist)
 	return m_fThrowGrenade;
 }
 
-//=========================================================
-// TraceAttack - make sure we're not taking it in the helmet
-//=========================================================
 void CBaseHGruntAlly::TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
 {
 	// check for helmet shot
@@ -440,11 +365,6 @@ void CBaseHGruntAlly::TraceAttack(CBaseEntity* attacker, float flDamage, Vector 
 	COFSquadTalkMonster::TraceAttack(attacker, flDamage, vecDir, ptr, bitsDamageType);
 }
 
-//=========================================================
-// TakeDamage - overridden for the grunt because the grunt
-// needs to forget that he is in cover if he's hurt. (Obviously
-// not in a safe place anymore).
-//=========================================================
 bool CBaseHGruntAlly::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType)
 {
 	// make sure friends talk about it if player hurts talkmonsters...
@@ -496,10 +416,6 @@ bool CBaseHGruntAlly::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, 
 	return ret;
 }
 
-//=========================================================
-// SetYawSpeed - allows each sequence to have a different
-// turn rate associated with it.
-//=========================================================
 void CBaseHGruntAlly::SetYawSpeed()
 {
 	int ys;
@@ -582,10 +498,6 @@ void CBaseHGruntAlly::IdleSound()
 	}
 }
 
-//=========================================================
-// CheckAmmo - overridden for the grunt because he actually
-// uses ammo! (base class doesn't)
-//=========================================================
 void CBaseHGruntAlly::CheckAmmo()
 {
 	if (m_cAmmoLoaded <= 0)
@@ -594,17 +506,11 @@ void CBaseHGruntAlly::CheckAmmo()
 	}
 }
 
-//=========================================================
-// Classify - indicates this monster's place in the
-// relationship table.
-//=========================================================
 int CBaseHGruntAlly::Classify()
 {
 	return CLASS_HUMAN_MILITARY_FRIENDLY;
 }
 
-//=========================================================
-//=========================================================
 CBaseEntity* CBaseHGruntAlly::Kick()
 {
 	TraceResult tr;
@@ -625,10 +531,6 @@ CBaseEntity* CBaseHGruntAlly::Kick()
 	return nullptr;
 }
 
-//=========================================================
-// GetGunPosition	return the end of the barrel
-//=========================================================
-
 Vector CBaseHGruntAlly::GetGunPosition()
 {
 	if (m_fStanding)
@@ -641,10 +543,6 @@ Vector CBaseHGruntAlly::GetGunPosition()
 	}
 }
 
-//=========================================================
-// HandleAnimEvent - catches the monster-specific messages
-// that occur when tagged animation frames are played.
-//=========================================================
 void CBaseHGruntAlly::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
 	switch (pEvent->event)
@@ -724,9 +622,6 @@ void CBaseHGruntAlly::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 }
 
-//=========================================================
-// Spawn
-//=========================================================
 void CBaseHGruntAlly::SpawnCore()
 {
 	Precache();
@@ -763,9 +658,6 @@ void CBaseHGruntAlly::SpawnCore()
 	SetUse(&CBaseHGruntAlly::FollowerUse);
 }
 
-//=========================================================
-// Precache - precaches all resources this monster needs
-//=========================================================
 void CBaseHGruntAlly::Precache()
 {
 	TalkInit();
@@ -802,9 +694,6 @@ void CBaseHGruntAlly::Precache()
 	COFSquadTalkMonster::Precache();
 }
 
-//=========================================================
-// start task
-//=========================================================
 void CBaseHGruntAlly::StartTask(Task_t* pTask)
 {
 	m_iTaskStatus = TASKSTATUS_RUNNING;
@@ -853,9 +742,6 @@ void CBaseHGruntAlly::StartTask(Task_t* pTask)
 	}
 }
 
-//=========================================================
-// RunTask
-//=========================================================
 void CBaseHGruntAlly::RunTask(Task_t* pTask)
 {
 	switch (pTask->iTask)
@@ -880,9 +766,6 @@ void CBaseHGruntAlly::RunTask(Task_t* pTask)
 	}
 }
 
-//=========================================================
-// PainSound
-//=========================================================
 void CBaseHGruntAlly::PainSound()
 {
 	if (gpGlobals->time > m_flNextPainTime)
@@ -925,9 +808,6 @@ void CBaseHGruntAlly::PainSound()
 	}
 }
 
-//=========================================================
-// DeathSound
-//=========================================================
 void CBaseHGruntAlly::DeathSound()
 {
 	switch (RANDOM_LONG(0, 5))
@@ -953,13 +833,6 @@ void CBaseHGruntAlly::DeathSound()
 	}
 }
 
-//=========================================================
-// AI Schedules Specific to this monster
-//=========================================================
-
-//=========================================================
-// GruntFail
-//=========================================================
 Task_t tlGruntAllyFail[] =
 	{
 		{TASK_STOP_MOVING, 0},
@@ -980,9 +853,6 @@ Schedule_t slGruntAllyFail[] =
 			"Grunt Fail"},
 };
 
-//=========================================================
-// Grunt Combat Fail
-//=========================================================
 Task_t tlGruntAllyCombatFail[] =
 	{
 		{TASK_STOP_MOVING, 0},
@@ -1001,9 +871,6 @@ Schedule_t slGruntAllyCombatFail[] =
 			"Grunt Combat Fail"},
 };
 
-//=========================================================
-// Victory dance!
-//=========================================================
 Task_t tlGruntAllyVictoryDance[] =
 	{
 		{TASK_STOP_MOVING, (float)0},
@@ -1027,10 +894,6 @@ Schedule_t slGruntAllyVictoryDance[] =
 			"GruntVictoryDance"},
 };
 
-//=========================================================
-// Establish line of fire - move to a position that allows
-// the grunt to attack.
-//=========================================================
 Task_t tlGruntAllyEstablishLineOfFire[] =
 	{
 		{TASK_SET_FAIL_SCHEDULE, (float)SCHED_GRUNT_ELOF_FAIL},
@@ -1040,6 +903,9 @@ Task_t tlGruntAllyEstablishLineOfFire[] =
 		{TASK_WAIT_FOR_MOVEMENT, (float)0},
 };
 
+/**
+*	@brief move to a position that allows the grunt to attack.
+*/
 Schedule_t slGruntAllyEstablishLineOfFire[] =
 	{
 		{tlGruntAllyEstablishLineOfFire,
@@ -1056,10 +922,6 @@ Schedule_t slGruntAllyEstablishLineOfFire[] =
 			"GruntEstablishLineOfFire"},
 };
 
-//=========================================================
-// GruntFoundEnemy - grunt established sight with an enemy
-// that was hiding from the squad.
-//=========================================================
 Task_t tlGruntAllyFoundEnemy[] =
 	{
 		{TASK_STOP_MOVING, 0},
@@ -1067,6 +929,9 @@ Task_t tlGruntAllyFoundEnemy[] =
 		{TASK_PLAY_SEQUENCE_FACE_ENEMY, (float)ACT_SIGNAL1},
 };
 
+/**
+*	@brief grunt established sight with an enemy that was hiding from the squad.
+*/
 Schedule_t slGruntAllyFoundEnemy[] =
 	{
 		{tlGruntAllyFoundEnemy,
@@ -1077,9 +942,6 @@ Schedule_t slGruntAllyFoundEnemy[] =
 			"GruntFoundEnemy"},
 };
 
-//=========================================================
-// GruntCombatFace Schedule
-//=========================================================
 Task_t tlGruntAllyCombatFace1[] =
 	{
 		{TASK_STOP_MOVING, 0},
@@ -1101,10 +963,6 @@ Schedule_t slGruntAllyCombatFace[] =
 			"Combat Face"},
 };
 
-//=========================================================
-// Suppressing fire - don't stop shooting until the clip is
-// empty or grunt gets hurt.
-//=========================================================
 Task_t tlGruntAllySignalSuppress[] =
 	{
 		{TASK_STOP_MOVING, 0},
@@ -1127,6 +985,9 @@ Task_t tlGruntAllySignalSuppress[] =
 		{TASK_RANGE_ATTACK1, (float)0},
 };
 
+/**
+*	@brief don't stop shooting until the clip is empty or grunt gets hurt.
+*/
 Schedule_t slGruntAllySignalSuppress[] =
 	{
 		{tlGruntAllySignalSuppress,
@@ -1177,12 +1038,6 @@ Schedule_t slGruntAllySuppress[] =
 			"Suppress"},
 };
 
-
-//=========================================================
-// grunt wait in cover - we don't allow danger or the ability
-// to attack to break a grunt's run to cover schedule, but
-// when a grunt is in cover, we do want them to attack if they can.
-//=========================================================
 Task_t tlGruntAllyWaitInCover[] =
 	{
 		{TASK_STOP_MOVING, (float)0},
@@ -1190,6 +1045,10 @@ Task_t tlGruntAllyWaitInCover[] =
 		{TASK_WAIT_FACE_ENEMY, (float)1},
 };
 
+/**
+*	@brief we don't allow danger or the ability to attack to break a grunt's run to cover schedule,
+*	but when a grunt is in cover, we do want them to attack if they can.
+*/
 Schedule_t slGruntAllyWaitInCover[] =
 	{
 		{tlGruntAllyWaitInCover,
@@ -1231,9 +1090,6 @@ Schedule_t slGruntAllyTakeCover[] =
 			"TakeCover"},
 };
 
-//=========================================================
-// drop grenade then run to cover.
-//=========================================================
 Task_t tlGruntAllyGrenadeCover1[] =
 	{
 		{TASK_STOP_MOVING, (float)0},
@@ -1246,6 +1102,9 @@ Task_t tlGruntAllyGrenadeCover1[] =
 		{TASK_SET_SCHEDULE, (float)SCHED_GRUNT_WAIT_FACE_ENEMY},
 };
 
+/**
+*	@brief drop grenade then run to cover.
+*/
 Schedule_t slGruntAllyGrenadeCover[] =
 	{
 		{tlGruntAllyGrenadeCover1,
@@ -1255,10 +1114,6 @@ Schedule_t slGruntAllyGrenadeCover[] =
 			"GrenadeCover"},
 };
 
-
-//=========================================================
-// drop grenade then run to cover.
-//=========================================================
 Task_t tlGruntAllyTossGrenadeCover1[] =
 	{
 		{TASK_FACE_ENEMY, (float)0},
@@ -1266,6 +1121,9 @@ Task_t tlGruntAllyTossGrenadeCover1[] =
 		{TASK_SET_SCHEDULE, (float)SCHED_TAKE_COVER_FROM_ENEMY},
 };
 
+/**
+*	@brief drop grenade then run to cover.
+*/
 Schedule_t slGruntAllyTossGrenadeCover[] =
 	{
 		{tlGruntAllyTossGrenadeCover1,
@@ -1275,9 +1133,6 @@ Schedule_t slGruntAllyTossGrenadeCover[] =
 			"TossGrenadeCover"},
 };
 
-//=========================================================
-// hide from the loudest sound source (to run from grenade)
-//=========================================================
 Task_t tlGruntAllyTakeCoverFromBestSound[] =
 	{
 		{TASK_SET_FAIL_SCHEDULE, (float)SCHED_COWER}, // duck and cover if cannot move from explosion
@@ -1289,6 +1144,9 @@ Task_t tlGruntAllyTakeCoverFromBestSound[] =
 		{TASK_TURN_LEFT, (float)179},
 };
 
+/**
+*	@brief hide from the loudest sound source (to run from grenade)
+*/
 Schedule_t slGruntAllyTakeCoverFromBestSound[] =
 	{
 		{tlGruntAllyTakeCoverFromBestSound,
@@ -1298,9 +1156,6 @@ Schedule_t slGruntAllyTakeCoverFromBestSound[] =
 			"GruntTakeCoverFromBestSound"},
 };
 
-//=========================================================
-// Grunt reload schedule
-//=========================================================
 Task_t tlGruntAllyHideReload[] =
 	{
 		{TASK_STOP_MOVING, (float)0},
@@ -1323,9 +1178,6 @@ Schedule_t slGruntAllyHideReload[] =
 			bits_SOUND_DANGER,
 			"GruntHideReload"}};
 
-//=========================================================
-// Do a turning sweep of the area
-//=========================================================
 Task_t tlGruntAllySweep[] =
 	{
 		{TASK_TURN_LEFT, (float)179},
@@ -1334,6 +1186,9 @@ Task_t tlGruntAllySweep[] =
 		{TASK_WAIT, (float)1},
 };
 
+/**
+*	@brief Do a turning sweep of the area
+*/
 Schedule_t slGruntAllySweep[] =
 	{
 		{tlGruntAllySweep,
@@ -1353,10 +1208,6 @@ Schedule_t slGruntAllySweep[] =
 			"Grunt Sweep"},
 };
 
-//=========================================================
-// primary range attack. Overriden because base class stops attacking when the enemy is occluded.
-// grunt's grenade toss requires the enemy be occluded.
-//=========================================================
 Task_t tlGruntAllyRangeAttack1A[] =
 	{
 		{TASK_STOP_MOVING, (float)0},
@@ -1374,6 +1225,10 @@ Task_t tlGruntAllyRangeAttack1A[] =
 		{TASK_RANGE_ATTACK1, (float)0},
 };
 
+/**
+*	@brief Overridden because base class stops attacking when the enemy is occluded.
+*	grunt's grenade toss requires the enemy be occluded.
+*/
 Schedule_t slGruntAllyRangeAttack1A[] =
 	{
 		{tlGruntAllyRangeAttack1A,
@@ -1390,11 +1245,6 @@ Schedule_t slGruntAllyRangeAttack1A[] =
 			"Range Attack1A"},
 };
 
-
-//=========================================================
-// primary range attack. Overriden because base class stops attacking when the enemy is occluded.
-// grunt's grenade toss requires the enemy be occluded.
-//=========================================================
 Task_t tlGruntAllyRangeAttack1B[] =
 	{
 		{TASK_STOP_MOVING, (float)0},
@@ -1412,6 +1262,10 @@ Task_t tlGruntAllyRangeAttack1B[] =
 		{TASK_RANGE_ATTACK1, (float)0},
 };
 
+/**
+*	@brief Overridden because base class stops attacking when the enemy is occluded.
+*	grunt's grenade toss requires the enemy be occluded.
+*/
 Schedule_t slGruntAllyRangeAttack1B[] =
 	{
 		{tlGruntAllyRangeAttack1B,
@@ -1428,10 +1282,6 @@ Schedule_t slGruntAllyRangeAttack1B[] =
 			"Range Attack1B"},
 };
 
-//=========================================================
-// secondary range attack. Overriden because base class stops attacking when the enemy is occluded.
-// grunt's grenade toss requires the enemy be occluded.
-//=========================================================
 Task_t tlGruntAllyRangeAttack2[] =
 	{
 		{TASK_STOP_MOVING, (float)0},
@@ -1440,6 +1290,10 @@ Task_t tlGruntAllyRangeAttack2[] =
 		{TASK_SET_SCHEDULE, (float)SCHED_GRUNT_WAIT_FACE_ENEMY}, // don't run immediately after throwing grenade.
 };
 
+/**
+*	@brief Overridden because base class stops attacking when the enemy is occluded.
+*	grunt's grenade toss requires the enemy be occluded.
+*/
 Schedule_t slGruntAllyRangeAttack2[] =
 	{
 		{tlGruntAllyRangeAttack2,
@@ -1449,10 +1303,6 @@ Schedule_t slGruntAllyRangeAttack2[] =
 			"RangeAttack2"},
 };
 
-
-//=========================================================
-// repel
-//=========================================================
 Task_t tlGruntAllyRepel[] =
 	{
 		{TASK_STOP_MOVING, (float)0},
@@ -1476,10 +1326,6 @@ Schedule_t slGruntAllyRepel[] =
 			"Repel"},
 };
 
-
-//=========================================================
-// repel
-//=========================================================
 Task_t tlGruntAllyRepelAttack[] =
 	{
 		{TASK_STOP_MOVING, (float)0},
@@ -1496,9 +1342,6 @@ Schedule_t slGruntAllyRepelAttack[] =
 			"Repel Attack"},
 };
 
-//=========================================================
-// repel land
-//=========================================================
 Task_t tlGruntAllyRepelLand[] =
 	{
 		{TASK_STOP_MOVING, (float)0},
@@ -1683,9 +1526,6 @@ std::tuple<int, Activity> CBaseHGruntAlly::GetSequenceForActivity(Activity NewAc
 	return {iSequence, NewActivity};
 }
 
-//=========================================================
-// SetActivity
-//=========================================================
 void CBaseHGruntAlly::SetActivity(Activity NewActivity)
 {
 	const auto [iSequence, activity] = GetSequenceForActivity(NewActivity);
@@ -1712,9 +1552,6 @@ void CBaseHGruntAlly::SetActivity(Activity NewActivity)
 	}
 }
 
-//=========================================================
-// Get Schedule!
-//=========================================================
 Schedule_t* CBaseHGruntAlly::GetSchedule()
 {
 	// clear old sentence
@@ -2065,8 +1902,6 @@ Schedule_t* CBaseHGruntAlly::GetSchedule()
 	return COFSquadTalkMonster::GetSchedule();
 }
 
-//=========================================================
-//=========================================================
 Schedule_t* CBaseHGruntAlly::GetScheduleOfType(int Type)
 {
 	switch (Type)

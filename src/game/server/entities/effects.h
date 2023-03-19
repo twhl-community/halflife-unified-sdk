@@ -105,7 +105,6 @@ private:
 	float m_maxFrame;
 };
 
-
 class CBeam : public CBaseEntity
 {
 public:
@@ -151,6 +150,7 @@ public:
 	inline int GetStartEntity() { return pev->sequence & 0xFFF; }
 	inline int GetEndEntity() { return pev->skin & 0xFFF; }
 
+	// These don't take attachments into account
 	const Vector& GetStartPos();
 	const Vector& GetEndPos();
 
@@ -193,10 +193,8 @@ public:
 	}
 };
 
-
 #define SF_MESSAGE_ONCE 0x0001 // Fade in, not out
 #define SF_MESSAGE_ALL 0x0002  // Send to all clients
-
 
 class CLaser : public CBeam
 {

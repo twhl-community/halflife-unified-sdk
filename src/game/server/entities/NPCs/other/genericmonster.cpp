@@ -12,20 +12,19 @@
  *   use or distribution of this code by or to any unlicensed person is illegal.
  *
  ****/
-//=========================================================
-// Generic Monster - purely for scripted sequence work.
-//=========================================================
+
 #include "cbase.h"
 
-// For holograms, make them not solid so the player can walk through them
+/**
+*	@brief For holograms, make them not solid so the player can walk through them
+*/
 #define SF_GENERICMONSTER_NOTSOLID 4
 
 const int SF_GENERICMONSTER_CONTROLLER = 8;
 
-//=========================================================
-// Monster's Anim Events Go Here
-//=========================================================
-
+/**
+*	@brief purely for scripted sequence work.
+*/
 class CGenericMonster : public CBaseMonster
 {
 public:
@@ -72,19 +71,11 @@ void CGenericMonster::OnCreate()
 	pev->health = 8;
 }
 
-//=========================================================
-// Classify - indicates this monster's place in the
-// relationship table.
-//=========================================================
 int CGenericMonster::Classify()
 {
 	return CLASS_PLAYER_ALLY;
 }
 
-//=========================================================
-// SetYawSpeed - allows each sequence to have a different
-// turn rate associated with it.
-//=========================================================
 void CGenericMonster::SetYawSpeed()
 {
 	int ys;
@@ -99,10 +90,6 @@ void CGenericMonster::SetYawSpeed()
 	pev->yaw_speed = ys;
 }
 
-//=========================================================
-// HandleAnimEvent - catches the monster-specific messages
-// that occur when tagged animation frames are played.
-//=========================================================
 void CGenericMonster::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
 	switch (pEvent->event)
@@ -114,17 +101,12 @@ void CGenericMonster::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 }
 
-//=========================================================
-// ISoundMask - generic monster can't hear.
-//=========================================================
 int CGenericMonster::ISoundMask()
 {
+	// generic monster can't hear.
 	return bits_SOUND_NONE;
 }
 
-//=========================================================
-// Spawn
-//=========================================================
 void CGenericMonster::Spawn()
 {
 	Precache();
@@ -155,9 +137,6 @@ void CGenericMonster::Spawn()
 	m_flIdealYaw = 0;
 }
 
-//=========================================================
-// Precache - precaches all resources this monster needs
-//=========================================================
 void CGenericMonster::Precache()
 {
 	PrecacheModel(STRING(pev->model));
@@ -206,7 +185,6 @@ void CGenericMonster::MonsterThink()
 	CBaseMonster::MonsterThink();
 }
 
-// turn head towards supplied origin
 void CGenericMonster::IdleHeadTurn(Vector& vecFriend)
 {
 	// turn head in desired direction only if ent has a turnable head
@@ -223,7 +201,3 @@ void CGenericMonster::IdleHeadTurn(Vector& vecFriend)
 		m_flIdealYaw = yaw;
 	}
 }
-
-//=========================================================
-// AI Schedules Specific to this monster
-//=========================================================

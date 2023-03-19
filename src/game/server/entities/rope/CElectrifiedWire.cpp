@@ -33,7 +33,7 @@ TYPEDESCRIPTION CElectrifiedWire::m_SaveData[] =
 		DEFINE_FIELD(CElectrifiedWire, m_uiNumUninsulatedSegments, FIELD_INTEGER),
 		DEFINE_ARRAY(CElectrifiedWire, m_uiUninsulatedSegments, FIELD_INTEGER, CElectrifiedWire::MAX_SEGMENTS),
 
-		// DEFINE_FIELD( CElectrifiedWire, m_iLightningSprite, FIELD_INTEGER ), //Not restored, reset in Precache. - Solokiller
+		// DEFINE_FIELD( CElectrifiedWire, m_iLightningSprite, FIELD_INTEGER ), //Not restored, reset in Precache.
 
 		DEFINE_FIELD(CElectrifiedWire, m_flLastSparkTime, FIELD_TIME),
 };

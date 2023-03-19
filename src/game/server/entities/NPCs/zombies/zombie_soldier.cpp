@@ -12,9 +12,6 @@
  *   use or distribution of this code by or to any unlicensed person is illegal.
  *
  ****/
-//=========================================================
-// Zombie Soldier
-//=========================================================
 
 #include "cbase.h"
 #include "zombie.h"
@@ -37,9 +34,6 @@ protected:
 
 LINK_ENTITY_TO_CLASS(monster_zombie_soldier, CZombieSoldier);
 
-//=========================================================
-// DEAD HGRUNT ZOMBIE PROP
-//=========================================================
 class CDeadZombieSoldier : public CBaseMonster
 {
 public:
@@ -77,9 +71,6 @@ bool CDeadZombieSoldier::KeyValue(KeyValueData* pkvd)
 
 LINK_ENTITY_TO_CLASS(monster_zombie_soldier_dead, CDeadZombieSoldier);
 
-//=========================================================
-// ********** DeadZombieSoldier SPAWN **********
-//=========================================================
 void CDeadZombieSoldier::Spawn()
 {
 	PrecacheModel(STRING(pev->model));

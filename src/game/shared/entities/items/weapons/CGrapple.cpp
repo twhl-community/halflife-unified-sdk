@@ -163,7 +163,7 @@ void CGrapple::PrimaryAttack()
 			if (m_pTip->GetGrappleType() > CGrappleTip::TargetClass::SMALL)
 			{
 				m_pPlayer->pev->movetype = MOVETYPE_FLY;
-				// Tells the physics code that the player is not on a ladder - Solokiller
+				// Tells the physics code that the player is not on a ladder
 				m_pPlayer->pev->flags |= FL_IMMUNE_LAVA;
 			}
 

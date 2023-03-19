@@ -875,7 +875,7 @@ void CHudAmmo::DrawCrosshair(int x, int y)
 
 			Rect rect;
 
-			// Trim a pixel border around it, since it blends. - Solokiller
+			// Trim a pixel border around it, since it blends.
 			rect.left = crosshair.rect.left * flScale + (flScale - 1);
 			rect.top = crosshair.rect.top * flScale + (flScale - 1);
 			rect.right = crosshair.rect.right * flScale - (flScale - 1);

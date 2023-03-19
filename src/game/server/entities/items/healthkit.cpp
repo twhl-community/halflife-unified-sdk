@@ -12,6 +12,7 @@
  *   without written permission from Valve LLC.
  *
  ****/
+
 #include "cbase.h"
 #include "items.h"
 #include "UserMessages.h"
@@ -22,27 +23,9 @@ public:
 	void OnCreate() override;
 	void Precache() override;
 	bool MyTouch(CBasePlayer* pPlayer) override;
-
-	/*
-		int		Save( CSave &save ) override;
-		int		Restore( CRestore &restore ) override;
-
-		static	TYPEDESCRIPTION m_SaveData[];
-	*/
 };
-
 
 LINK_ENTITY_TO_CLASS(item_healthkit, CHealthKit);
-
-/*
-TYPEDESCRIPTION	CHealthKit::m_SaveData[] =
-{
-
-};
-
-
-IMPLEMENT_SAVERESTORE( CHealthKit, CItem);
-*/
 
 void CHealthKit::OnCreate()
 {
@@ -88,11 +71,9 @@ bool CHealthKit::MyTouch(CBasePlayer* pPlayer)
 	return false;
 }
 
-
-
-//-------------------------------------------------------------
-// Wall mounted health kit
-//-------------------------------------------------------------
+/**
+*	@brief Wall mounted health kit
+*/
 class CWallHealth : public CBaseToggle
 {
 public:
@@ -127,7 +108,6 @@ TYPEDESCRIPTION CWallHealth::m_SaveData[] =
 IMPLEMENT_SAVERESTORE(CWallHealth, CBaseToggle);
 
 LINK_ENTITY_TO_CLASS(func_healthcharger, CWallHealth);
-
 
 bool CWallHealth::KeyValue(KeyValueData* pkvd)
 {
@@ -168,7 +148,6 @@ void CWallHealth::Precache()
 	PrecacheSound("items/medshotno1.wav");
 	PrecacheSound("items/medcharge4.wav");
 }
-
 
 void CWallHealth::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {

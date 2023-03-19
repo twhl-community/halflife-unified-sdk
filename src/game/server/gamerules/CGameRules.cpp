@@ -111,8 +111,6 @@ bool CGameRules::GetNextBestWeapon(CBasePlayer* pPlayer, CBasePlayerWeapon* pCur
 	return false;
 }
 
-//=========================================================
-//=========================================================
 bool CGameRules::CanHaveAmmo(CBasePlayer* pPlayer, const char* pszAmmoName)
 {
 	if (pszAmmoName)
@@ -130,8 +128,6 @@ bool CGameRules::CanHaveAmmo(CBasePlayer* pPlayer, const char* pszAmmoName)
 	return false;
 }
 
-//=========================================================
-//=========================================================
 CBaseEntity* CGameRules::GetPlayerSpawnSpot(CBasePlayer* pPlayer)
 {
 	CBaseEntity* pSpawnSpot = EntSelectSpawnPoint(pPlayer);
@@ -146,8 +142,6 @@ CBaseEntity* CGameRules::GetPlayerSpawnSpot(CBasePlayer* pPlayer)
 	return pSpawnSpot;
 }
 
-//=========================================================
-//=========================================================
 bool CGameRules::CanHavePlayerWeapon(CBasePlayer* pPlayer, CBasePlayerWeapon* pWeapon)
 {
 	// only living players can have items
@@ -196,10 +190,6 @@ void CGameRules::BecomeSpectator(CBasePlayer* player, const CommandArgs& args)
 	else
 		ClientPrint(player->pev, HUD_PRINTCONSOLE, "Spectator mode is disabled.\n");
 }
-
-//=========================================================
-// instantiate the proper game rules object
-//=========================================================
 
 CGameRules* InstallGameRules(CBaseEntity* pWorld)
 {

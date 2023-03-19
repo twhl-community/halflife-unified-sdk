@@ -12,16 +12,13 @@
  *   without written permission from Valve LLC.
  *
  ****/
-/*
-
-===== mortar.cpp ========================================================
-
-  the "LaBuznik" mortar device
-
-*/
 
 #include "cbase.h"
 
+/**
+*	@brief the "LaBuznik" mortar device
+*	Drops bombs from above
+*/
 class CFuncMortarField : public CBaseToggle
 {
 public:
@@ -37,6 +34,9 @@ public:
 
 	static TYPEDESCRIPTION m_SaveData[];
 
+	/**
+	*	@brief If connected to a table, then use the table controllers, else hit where the trigger is.
+	*/
 	void EXPORT FieldUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
 	string_t m_iszXController;
@@ -60,7 +60,6 @@ TYPEDESCRIPTION CFuncMortarField::m_SaveData[] =
 };
 
 IMPLEMENT_SAVERESTORE(CFuncMortarField, CBaseToggle);
-
 
 bool CFuncMortarField::KeyValue(KeyValueData* pkvd)
 {
@@ -93,8 +92,6 @@ bool CFuncMortarField::KeyValue(KeyValueData* pkvd)
 	return false;
 }
 
-
-// Drop bombs from above
 void CFuncMortarField::Spawn()
 {
 	pev->solid = SOLID_NOT;
@@ -105,7 +102,6 @@ void CFuncMortarField::Spawn()
 	Precache();
 }
 
-
 void CFuncMortarField::Precache()
 {
 	PrecacheSound("weapons/mortar.wav");
@@ -113,8 +109,6 @@ void CFuncMortarField::Precache()
 	PrecacheModel("sprites/lgtning.spr");
 }
 
-
-// If connected to a table, then use the table controllers, else hit where the trigger is.
 void CFuncMortarField::FieldUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
 	Vector vecStart;
@@ -185,7 +179,6 @@ void CFuncMortarField::FieldUse(CBaseEntity* pActivator, CBaseEntity* pCaller, U
 	}
 }
 
-
 class CMortar : public CGrenade
 {
 public:
@@ -211,7 +204,6 @@ void CMortar::Spawn()
 
 	Precache();
 }
-
 
 void CMortar::Precache()
 {
@@ -299,7 +291,6 @@ void CMortar::MortarExplode()
 	pev->nextthink = gpGlobals->time + 0.1;
 #endif
 }
-
 
 #if 0
 void CMortar::ShootTimed(EVARS* pevOwner, Vector vecStart, float time)

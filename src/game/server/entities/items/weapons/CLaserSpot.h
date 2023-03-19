@@ -25,7 +25,14 @@ public:
 
 	int ObjectCaps() override { return FCAP_DONT_SAVE; }
 
+	/**
+	*	@brief make the laser sight invisible.
+	*/
 	void Suspend(float flSuspendTime);
+
+	/**
+	*	@brief bring a suspended laser sight back.
+	*/
 	void EXPORT Revive();
 
 	static CLaserSpot* CreateSpot();

@@ -29,6 +29,7 @@ TYPEDESCRIPTION CGauss::m_SaveData[] =
 		//	DEFINE_FIELD( CGauss, m_flNextAmmoBurn, FIELD_TIME ),
 		DEFINE_FIELD(CGauss, m_fPrimaryFire, FIELD_BOOLEAN),
 };
+
 IMPLEMENT_SAVERESTORE(CGauss, CBasePlayerWeapon);
 #endif
 
@@ -59,7 +60,6 @@ void CGauss::Spawn()
 
 	FallInit(); // get ready to fall down.
 }
-
 
 void CGauss::Precache()
 {
@@ -119,7 +119,6 @@ void CGauss::Holster()
 	SendWeaponAnim(GAUSS_HOLSTER);
 	m_fInAttack = 0;
 }
-
 
 void CGauss::PrimaryAttack()
 {
@@ -279,12 +278,6 @@ void CGauss::SecondaryAttack()
 	}
 }
 
-//=========================================================
-// StartFire- since all of this code has to run and then
-// call Fire(), it was easier at this point to rip it out
-// of weaponidle() and make its own function then to try to
-// merge this into Fire(), which has some identical variable names
-//=========================================================
 void CGauss::StartFire()
 {
 	float flDamage;
@@ -506,9 +499,6 @@ void CGauss::Fire(Vector vecOrigSrc, Vector vecDir, float flDamage)
 	// WeaponsLogger->debug("{} bytes", nTotal);
 }
 
-
-
-
 void CGauss::WeaponIdle()
 {
 	ResetEmptySound();
@@ -582,8 +572,6 @@ void CGauss::SendStopEvent(bool sendToHost)
 
 	PLAYBACK_EVENT_FULL(flags, m_pPlayer->edict(), m_usGaussFire, 0.01, m_pPlayer->pev->origin, m_pPlayer->pev->angles, 0.0, 0.0, 0, 0, 0, 1);
 }
-
-
 
 class CGaussAmmo : public CBasePlayerAmmo
 {

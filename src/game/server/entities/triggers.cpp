@@ -12,12 +12,10 @@
  *   without written permission from Valve LLC.
  *
  ****/
-/*
 
-===== triggers.cpp ========================================================
-
-  spawn and use functions for editor-placed triggers
-
+/**
+*	@file
+*	spawn and use functions for editor-placed triggers
 */
 
 #include "cbase.h"
@@ -37,11 +35,18 @@
 void SetMovedir(entvars_t* pev);
 Vector VecBModelOrigin(entvars_t* pevBModel);
 
+/**
+*	@brief Modifies an entity's friction
+*/
 class CFrictionModifier : public CBaseEntity
 {
 public:
 	void Spawn() override;
 	bool KeyValue(KeyValueData* pkvd) override;
+
+	/**
+	*	@brief Sets toucher's friction to m_frictionFraction (1.0 = normal friction)
+	*/
 	void EXPORT ChangeFriction(CBaseEntity* pOther);
 	bool Save(CSave& save) override;
 	bool Restore(CRestore& restore) override;
@@ -55,7 +60,6 @@ public:
 
 LINK_ENTITY_TO_CLASS(func_friction, CFrictionModifier);
 
-// Global Savedata for changelevel friction modifier
 TYPEDESCRIPTION CFrictionModifier::m_SaveData[] =
 	{
 		DEFINE_FIELD(CFrictionModifier, m_frictionFraction, FIELD_FLOAT),
@@ -63,8 +67,6 @@ TYPEDESCRIPTION CFrictionModifier::m_SaveData[] =
 
 IMPLEMENT_SAVERESTORE(CFrictionModifier, CBaseEntity);
 
-
-// Modify an entity's friction
 void CFrictionModifier::Spawn()
 {
 	pev->solid = SOLID_TRIGGER;
@@ -73,17 +75,12 @@ void CFrictionModifier::Spawn()
 	SetTouch(&CFrictionModifier::ChangeFriction);
 }
 
-
-// Sets toucher's friction to m_frictionFraction (1.0 = normal friction)
 void CFrictionModifier::ChangeFriction(CBaseEntity* pOther)
 {
 	if (pOther->pev->movetype != MOVETYPE_BOUNCEMISSILE && pOther->pev->movetype != MOVETYPE_BOUNCE)
 		pOther->pev->friction = m_frictionFraction;
 }
 
-
-
-// Sets toucher's friction to m_frictionFraction (1.0 = normal friction)
 bool CFrictionModifier::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq(pkvd->szKeyName, "modifier"))
@@ -95,12 +92,12 @@ bool CFrictionModifier::KeyValue(KeyValueData* pkvd)
 	return CBaseEntity::KeyValue(pkvd);
 }
 
-
-// This trigger will fire when the level spawns (or respawns if not fire once)
-// It will check a global state before firing.  It supports delay and killtargets
-
 #define SF_AUTO_FIREONCE 0x0001
 
+/**
+*	@brief This trigger will fire when the level spawns (or respawns if not fire once)
+*	It will check a global state before firing. It supports delay and killtargets
+*/
 class CAutoTrigger : public CBaseDelay
 {
 public:
@@ -119,6 +116,7 @@ private:
 	string_t m_globalstate;
 	USE_TYPE triggerType;
 };
+
 LINK_ENTITY_TO_CLASS(trigger_auto, CAutoTrigger);
 
 TYPEDESCRIPTION CAutoTrigger::m_SaveData[] =
@@ -157,18 +155,15 @@ bool CAutoTrigger::KeyValue(KeyValueData* pkvd)
 	return CBaseDelay::KeyValue(pkvd);
 }
 
-
 void CAutoTrigger::Spawn()
 {
 	Precache();
 }
 
-
 void CAutoTrigger::Precache()
 {
 	pev->nextthink = gpGlobals->time + 0.1;
 }
-
 
 void CAutoTrigger::Think()
 {
@@ -179,8 +174,6 @@ void CAutoTrigger::Think()
 			UTIL_Remove(this);
 	}
 }
-
-
 
 #define SF_RELAY_FIREONCE 0x0001
 
@@ -200,6 +193,7 @@ public:
 private:
 	USE_TYPE triggerType;
 };
+
 LINK_ENTITY_TO_CLASS(trigger_relay, CTriggerRelay);
 
 TYPEDESCRIPTION CTriggerRelay::m_SaveData[] =
@@ -232,13 +226,9 @@ bool CTriggerRelay::KeyValue(KeyValueData* pkvd)
 	return CBaseDelay::KeyValue(pkvd);
 }
 
-
 void CTriggerRelay::Spawn()
 {
 }
-
-
-
 
 void CTriggerRelay::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
@@ -247,18 +237,17 @@ void CTriggerRelay::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE 
 		UTIL_Remove(this);
 }
 
-
-//**********************************************************
-// The Multimanager Entity - when fired, will fire up to 16 targets
-// at specified times.
-// FLAG:		THREAD (create clones when triggered)
-// FLAG:		CLONE (this is a clone for a threaded execution)
-
+// Note since this is 0 clones will also clone themselves.
 #define SF_MULTIMAN_CLONE 0x80000000
 #define SF_MULTIMAN_THREAD 0x00000001
 
 #define MAX_MULTI_TARGETS 16 // maximum number of targets a single multi_manager entity may be assigned.
 
+/**
+*	@brief when fired, will fire up to 16 targets at specified times.
+*	@details FLAG: THREAD (create clones when triggered)
+*	FLAG: CLONE (this is a clone for a threaded execution)
+*/
 class CMultiManager : public CBaseToggle
 {
 public:
@@ -297,9 +286,9 @@ private:
 
 	CMultiManager* Clone();
 };
+
 LINK_ENTITY_TO_CLASS(multi_manager, CMultiManager);
 
-// Global Savedata for multi_manager
 TYPEDESCRIPTION CMultiManager::m_SaveData[] =
 	{
 		DEFINE_FIELD(CMultiManager, m_cTargets, FIELD_INTEGER),
@@ -341,7 +330,6 @@ bool CMultiManager::KeyValue(KeyValueData* pkvd)
 	return false;
 }
 
-
 void CMultiManager::Spawn()
 {
 	pev->solid = SOLID_NOT;
@@ -372,7 +360,6 @@ void CMultiManager::Spawn()
 	}
 }
 
-
 bool CMultiManager::HasTarget(string_t targetname)
 {
 	for (int i = 0; i < m_cTargets; i++)
@@ -381,7 +368,6 @@ bool CMultiManager::HasTarget(string_t targetname)
 
 	return false;
 }
-
 
 // Designers were using this to fire targets that may or may not exist --
 // so I changed it to use the standard target fire code, made it a little simpler.
@@ -426,7 +412,6 @@ CMultiManager* CMultiManager::Clone()
 	return pMulti;
 }
 
-
 // The USE function builds the time table and starts the entity thinking.
 void CMultiManager::ManagerUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
@@ -461,23 +446,16 @@ void CMultiManager::ManagerReport()
 }
 #endif
 
-//***********************************************************
-
-
-//
-// Render parameters trigger
-//
-// This entity will copy its render parameters (renderfx, rendermode, rendercolor, renderamt)
-// to its targets when triggered.
-//
-
-
 // Flags to indicate masking off various render parameters that are normally copied to the targets
 #define SF_RENDER_MASKFX (1 << 0)
 #define SF_RENDER_MASKAMT (1 << 1)
 #define SF_RENDER_MASKMODE (1 << 2)
 #define SF_RENDER_MASKCOLOR (1 << 3)
 
+/**
+*	@brief This entity will copy its render parameters (renderfx, rendermode, rendercolor, renderamt)
+*	to its targets when triggered.
+*/
 class CRenderFxManager : public CBaseEntity
 {
 public:
@@ -486,7 +464,6 @@ public:
 };
 
 LINK_ENTITY_TO_CLASS(env_render, CRenderFxManager);
-
 
 void CRenderFxManager::Spawn()
 {
@@ -511,18 +488,23 @@ void CRenderFxManager::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TY
 	}
 }
 
+/**
+*	@brief hurts anything that touches it. if the trigger has a targetname, firing it will toggle state
+*/
 class CTriggerHurt : public CBaseTrigger
 {
 public:
 	void Spawn() override;
+
+	/**
+	*	@brief trigger hurt that causes radiation will do a radius check and set the player's geiger counter level
+	*	according to distance from center of trigger
+	*/
 	void EXPORT RadiationThink();
 };
 
 LINK_ENTITY_TO_CLASS(trigger_hurt, CTriggerHurt);
 
-//
-// trigger_monsterjump
-//
 class CTriggerMonsterJump : public CBaseTrigger
 {
 public:
@@ -532,7 +514,6 @@ public:
 };
 
 LINK_ENTITY_TO_CLASS(trigger_monsterjump, CTriggerMonsterJump);
-
 
 void CTriggerMonsterJump::Spawn()
 {
@@ -551,7 +532,6 @@ void CTriggerMonsterJump::Spawn()
 		SetUse(&CTriggerMonsterJump::ToggleUse);
 	}
 }
-
 
 void CTriggerMonsterJump::Think()
 {
@@ -582,13 +562,6 @@ void CTriggerMonsterJump::Touch(CBaseEntity* pOther)
 	pev->nextthink = gpGlobals->time;
 }
 
-//=====================================
-
-//
-// trigger_hurt - hurts anything that touches it. if the trigger has a targetname, firing it will toggle state
-//
-// int gfToggleState = 0; // used to determine when all radiation trigger hurts have called 'RadiationThink'
-
 void CTriggerHurt::Spawn()
 {
 	InitTrigger();
@@ -614,10 +587,6 @@ void CTriggerHurt::Spawn()
 
 	UTIL_SetOrigin(pev, pev->origin); // Link into the list
 }
-
-// trigger hurt that causes radiation will do a radius
-// check and set the player's geiger counter level
-// according to distance from center of trigger
 
 void CTriggerHurt::RadiationThink()
 {
@@ -675,9 +644,6 @@ void CTriggerHurt::RadiationThink()
 	pev->nextthink = gpGlobals->time + 0.25;
 }
 
-//
-// ToggleUse - If this is the USE function for a trigger, its state will toggle every time it's fired
-//
 void CBaseTrigger::ToggleUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
 	if (pev->solid == SOLID_NOT)
@@ -694,7 +660,6 @@ void CBaseTrigger::ToggleUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_
 	UTIL_SetOrigin(pev, pev->origin);
 }
 
-// When touched, a hurt trigger does DMG points of damage each half-second
 void CBaseTrigger::HurtTouch(CBaseEntity* pOther)
 {
 	float fldmg;
@@ -818,21 +783,8 @@ void CBaseTrigger::HurtTouch(CBaseEntity* pOther)
 	}
 }
 
-
-/*QUAKED trigger_multiple (.5 .5 .5) ? notouch
-Variable sized repeatable trigger.  Must be targeted at one or more entities.
-If "health" is set, the trigger must be killed to activate each time.
-If "delay" is set, the trigger waits some time after activating before firing.
-"wait" : Seconds between triggerings. (.2 default)
-If notouch is set, the trigger is only fired by other entities, not by touching.
-NOTOUCH has been obsoleted by trigger_relay!
-sounds
-1)      secret
-2)      beep beep
-3)      large switch
-4)
-NEW
-if a trigger has a NETNAME, that NETNAME will become the TARGET of the triggered object.
+/**
+*	@brief Variable sized repeatable trigger. Must be targeted at one or more entities.
 */
 class CTriggerMultiple : public CBaseTrigger
 {
@@ -842,7 +794,6 @@ public:
 
 LINK_ENTITY_TO_CLASS(trigger_multiple, CTriggerMultiple);
 
-
 void CTriggerMultiple::Spawn()
 {
 	if (m_flWait == 0)
@@ -851,37 +802,11 @@ void CTriggerMultiple::Spawn()
 	InitTrigger();
 
 	ASSERTSZ(pev->health == 0, "trigger_multiple with health");
-	//	UTIL_SetOrigin(pev, pev->origin);
-	//	SetModel(STRING(pev->model));
-	//	if (pev->health > 0)
-	//		{
-	//		if (FBitSet(pev->spawnflags, SPAWNFLAG_NOTOUCH))
-	//			Logger->error("trigger_multiple spawn: health and notouch don't make sense");
-	//		pev->max_health = pev->health;
-	// UNDONE: where to get pfnDie from?
-	//		pev->pfnDie = multi_killed;
-	//		pev->takedamage = DAMAGE_YES;
-	//		pev->solid = SOLID_BBOX;
-	//		UTIL_SetOrigin(pev, pev->origin);  // make sure it links into the world
-	//		}
-	//	else
-	{
-		SetTouch(&CTriggerMultiple::MultiTouch);
-	}
+	SetTouch(&CTriggerMultiple::MultiTouch);
 }
 
-
-/*QUAKED trigger_once (.5 .5 .5) ? notouch
-Variable sized trigger. Triggers once, then removes itself.  You must set the key "target" to the name of another object in the level that has a matching
-"targetname".  If "health" is set, the trigger must be killed to activate.
-If notouch is set, the trigger is only fired by other entities, not by touching.
-if "killtarget" is set, any objects that have a matching "target" will be removed when the trigger is fired.
-if "angle" is set, the trigger will only fire when someone is facing the direction of the angle.  Use "360" for an angle of 0.
-sounds
-1)      secret
-2)      beep beep
-3)      large switch
-4)
+/**
+*	@brief Variable sized trigger. Triggers once, then removes itself.
 */
 class CTriggerOnce : public CTriggerMultiple
 {
@@ -890,14 +815,13 @@ public:
 };
 
 LINK_ENTITY_TO_CLASS(trigger_once, CTriggerOnce);
+
 void CTriggerOnce::Spawn()
 {
 	m_flWait = -1;
 
 	CTriggerMultiple::Spawn();
 }
-
-
 
 void CBaseTrigger::MultiTouch(CBaseEntity* pOther)
 {
@@ -921,12 +845,6 @@ void CBaseTrigger::MultiTouch(CBaseEntity* pOther)
 	}
 }
 
-
-//
-// the trigger was just touched/killed/used
-// self.enemy should be set to the activator so it can be held through a delay
-// so wait for the delay time before firing
-//
 void CBaseTrigger::ActivateMultiTrigger(CBaseEntity* pActivator)
 {
 	if (pev->nextthink > gpGlobals->time)
@@ -965,8 +883,6 @@ void CBaseTrigger::ActivateMultiTrigger(CBaseEntity* pActivator)
 	}
 }
 
-
-// the wait time has passed, so set back up for another activation
 void CBaseTrigger::MultiWaitOver()
 {
 	//	if (pev->max_health)
@@ -978,12 +894,6 @@ void CBaseTrigger::MultiWaitOver()
 	SetThink(nullptr);
 }
 
-
-// ========================= COUNTING TRIGGER =====================================
-
-//
-// GLOBALS ASSUMED SET:  g_eoActivator
-//
 void CBaseTrigger::CounterUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
 	m_cTriggersLeft--;
@@ -1027,18 +937,15 @@ void CBaseTrigger::CounterUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE
 	ActivateMultiTrigger(m_hActivator);
 }
 
-
-/*QUAKED trigger_counter (.5 .5 .5) ? nomessage
-Acts as an intermediary for an action that takes multiple inputs.
-If nomessage is not set, it will print "1 more.. " etc when triggered and
-"sequence complete" when finished.  After the counter has been triggered "cTriggersLeft"
-times (default 2), it will fire all of it's targets and remove itself.
+/**
+*	@brief Acts as an intermediary for an action that takes multiple inputs.
 */
 class CTriggerCounter : public CBaseTrigger
 {
 public:
 	void Spawn() override;
 };
+
 LINK_ENTITY_TO_CLASS(trigger_counter, CTriggerCounter);
 
 void CTriggerCounter::Spawn()
@@ -1052,8 +959,9 @@ void CTriggerCounter::Spawn()
 	SetUse(&CTriggerCounter::CounterUse);
 }
 
-// ============================== LADDER =======================================
-
+/**
+*	@brief makes an area vertically negotiable
+*/
 class CLadder : public CBaseTrigger
 {
 public:
@@ -1061,18 +969,14 @@ public:
 	void Spawn() override;
 	void Precache() override;
 };
-LINK_ENTITY_TO_CLASS(func_ladder, CLadder);
 
+LINK_ENTITY_TO_CLASS(func_ladder, CLadder);
 
 bool CLadder::KeyValue(KeyValueData* pkvd)
 {
 	return CBaseTrigger::KeyValue(pkvd);
 }
 
-
-//=========================================================
-// func_ladder - makes an area vertically negotiable
-//=========================================================
 void CLadder::Precache()
 {
 	// Do all of this in here because we need to 'convert' old saved games
@@ -1086,7 +990,6 @@ void CLadder::Precache()
 	pev->effects &= ~EF_NODRAW;
 }
 
-
 void CLadder::Spawn()
 {
 	Precache();
@@ -1095,9 +998,9 @@ void CLadder::Spawn()
 	pev->movetype = MOVETYPE_PUSH;
 }
 
-
-// ========================== A TRIGGER THAT PUSHES YOU ===============================
-
+/**
+*	@brief Pushes the player
+*/
 class CTriggerPush : public CBaseTrigger
 {
 public:
@@ -1105,18 +1008,13 @@ public:
 	bool KeyValue(KeyValueData* pkvd) override;
 	void Touch(CBaseEntity* pOther) override;
 };
-LINK_ENTITY_TO_CLASS(trigger_push, CTriggerPush);
 
+LINK_ENTITY_TO_CLASS(trigger_push, CTriggerPush);
 
 bool CTriggerPush::KeyValue(KeyValueData* pkvd)
 {
 	return CBaseTrigger::KeyValue(pkvd);
 }
-
-
-/*QUAKED trigger_push (.5 .5 .5) ? TRIG_PUSH_ONCE
-Pushes the player
-*/
 
 void CTriggerPush::Spawn()
 {
@@ -1134,7 +1032,6 @@ void CTriggerPush::Spawn()
 
 	UTIL_SetOrigin(pev, pev->origin); // Link into the list
 }
-
 
 void CTriggerPush::Touch(CBaseEntity* pOther)
 {
@@ -1173,12 +1070,6 @@ void CTriggerPush::Touch(CBaseEntity* pOther)
 		}
 	}
 }
-
-
-//======================================
-// teleport trigger
-//
-//
 
 void CBaseTrigger::TeleportTouch(CBaseEntity* pOther)
 {
@@ -1235,12 +1126,12 @@ void CBaseTrigger::TeleportTouch(CBaseEntity* pOther)
 	pevToucher->velocity = pevToucher->basevelocity = g_vecZero;
 }
 
-
 class CTriggerTeleport : public CBaseTrigger
 {
 public:
 	void Spawn() override;
 };
+
 LINK_ENTITY_TO_CLASS(trigger_teleport, CTriggerTeleport);
 
 void CTriggerTeleport::Spawn()
@@ -1250,7 +1141,6 @@ void CTriggerTeleport::Spawn()
 	SetTouch(&CTriggerTeleport::TeleportTouch);
 }
 
-
 LINK_ENTITY_TO_CLASS(info_teleport_destination, CPointEntity);
 
 class CTriggerGravity : public CBaseTrigger
@@ -1259,6 +1149,7 @@ public:
 	void Spawn() override;
 	void EXPORT GravityTouch(CBaseEntity* pOther);
 };
+
 LINK_ENTITY_TO_CLASS(trigger_gravity, CTriggerGravity);
 
 void CTriggerGravity::Spawn()
@@ -1275,12 +1166,6 @@ void CTriggerGravity::GravityTouch(CBaseEntity* pOther)
 
 	pOther->pev->gravity = pev->gravity;
 }
-
-
-
-
-
-
 
 // this is a really bad idea.
 class CTriggerChangeTarget : public CBaseDelay
@@ -1299,6 +1184,7 @@ public:
 private:
 	string_t m_iszNewTarget;
 };
+
 LINK_ENTITY_TO_CLASS(trigger_changetarget, CTriggerChangeTarget);
 
 TYPEDESCRIPTION CTriggerChangeTarget::m_SaveData[] =
@@ -1323,7 +1209,6 @@ void CTriggerChangeTarget::Spawn()
 {
 }
 
-
 void CTriggerChangeTarget::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
 	CBaseEntity* pTarget = UTIL_FindEntityByString(nullptr, "targetname", STRING(pev->target));
@@ -1338,9 +1223,6 @@ void CTriggerChangeTarget::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, US
 		}
 	}
 }
-
-
-
 
 #define SF_CAMERA_PLAYER_POSITION 1
 #define SF_CAMERA_PLAYER_TARGET 2
@@ -1374,9 +1256,9 @@ public:
 	float m_deceleration;
 	bool m_state;
 };
+
 LINK_ENTITY_TO_CLASS(trigger_camera, CTriggerCamera);
 
-// Global Savedata for changelevel friction modifier
 TYPEDESCRIPTION CTriggerCamera::m_SaveData[] =
 	{
 		DEFINE_FIELD(CTriggerCamera, m_hPlayer, FIELD_EHANDLE),
@@ -1410,7 +1292,6 @@ void CTriggerCamera::Spawn()
 		m_deceleration = 500;
 }
 
-
 bool CTriggerCamera::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq(pkvd->szKeyName, "wait"))
@@ -1436,8 +1317,6 @@ bool CTriggerCamera::KeyValue(KeyValueData* pkvd)
 
 	return CBaseDelay::KeyValue(pkvd);
 }
-
-
 
 void CTriggerCamera::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
@@ -1541,7 +1420,6 @@ void CTriggerCamera::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE
 	m_moveDistance = 0;
 	Move();
 }
-
 
 void CTriggerCamera::FollowTarget()
 {

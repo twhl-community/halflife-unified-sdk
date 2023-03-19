@@ -12,18 +12,10 @@
  *   use or distribution of this code by or to any unlicensed person is illegal.
  *
  ****/
-//=========================================================
-// Zombie
-//=========================================================
-
-// UNDONE: Don't flinch every time you get hit
 
 #include "cbase.h"
 #include "zombie.h"
 
-//=========================================================
-// Monster's Anim Events Go Here
-//=========================================================
 #define ZOMBIE_AE_ATTACK_GUTS_GRAB 0x03
 #define ZOMBIE_AE_ATTACK_GUTS_THROW 4
 #define GONOME_AE_ATTACK_BITE_FIRST 19
@@ -185,7 +177,6 @@ enum
 	TASK_GONOME_GET_PATH_TO_ENEMY_CORPSE = LAST_COMMON_TASK + 1,
 };
 
-
 class COFGonome : public CZombie
 {
 public:
@@ -320,10 +311,6 @@ void COFGonome::IdleSound()
 	EmitSoundDyn(CHAN_VOICE, RANDOM_SOUND_ARRAY(pIdleSounds), 1.0, ATTN_NORM, 0, pitch);
 }
 
-//=========================================================
-// HandleAnimEvent - catches the monster-specific messages
-// that occur when tagged animation frames are played.
-//=========================================================
 void COFGonome::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
 	switch (pEvent->event)
@@ -483,9 +470,6 @@ void COFGonome::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 }
 
-//=========================================================
-// Spawn
-//=========================================================
 void COFGonome::Spawn()
 {
 	m_flNextThrowTime = gpGlobals->time;
@@ -495,9 +479,6 @@ void COFGonome::Spawn()
 	CZombie::Spawn();
 }
 
-//=========================================================
-// Precache - precaches all resources this monster needs
-//=========================================================
 void COFGonome::Precache()
 {
 	// Don't call CZombie::Spawn here!
@@ -526,12 +507,6 @@ void COFGonome::Precache()
 	PrecacheSound("bullchicken/bc_spithit1.wav");
 	PrecacheSound("bullchicken/bc_spithit2.wav");
 }
-
-//=========================================================
-// AI Schedules Specific to this monster
-//=========================================================
-
-
 
 int COFGonome::IgnoreConditions()
 {
@@ -749,9 +724,6 @@ void COFGonome::SetActivity(Activity NewActivity)
 	m_IdealActivity = NewActivity;
 }
 
-//=========================================================
-// DEAD GONOME PROP
-//=========================================================
 class CDeadGonome : public CBaseMonster
 {
 public:
@@ -789,9 +761,6 @@ bool CDeadGonome::KeyValue(KeyValueData* pkvd)
 
 LINK_ENTITY_TO_CLASS(monster_gonome_dead, CDeadGonome);
 
-//=========================================================
-// ********** DeadGonome SPAWN **********
-//=========================================================
 void CDeadGonome::Spawn()
 {
 	PrecacheModel(STRING(pev->model));

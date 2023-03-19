@@ -24,7 +24,6 @@ enum firemode_e
 	FIREMODE_FAST
 };
 
-
 LINK_ENTITY_TO_CLASS(weapon_hornetgun, CHgun);
 
 #ifndef CLIENT_DLL
@@ -32,6 +31,7 @@ TYPEDESCRIPTION CHgun::m_SaveData[] =
 	{
 		DEFINE_FIELD(CHgun, m_flRechargeTime, FIELD_TIME),
 };
+
 IMPLEMENT_SAVERESTORE(CHgun, CBasePlayerWeapon);
 #endif
 
@@ -58,7 +58,6 @@ void CHgun::Spawn()
 
 	FallInit(); // get ready to fall down.
 }
-
 
 void CHgun::Precache()
 {
@@ -98,7 +97,6 @@ bool CHgun::GetWeaponInfo(WeaponInfo& info)
 	return true;
 }
 
-
 bool CHgun::Deploy()
 {
 	return DefaultDeploy("models/v_hgun.mdl", "models/p_hgun.mdl", HGUN_UP, "hive");
@@ -115,7 +113,6 @@ void CHgun::Holster()
 		m_pPlayer->m_rgAmmo[PrimaryAmmoIndex()] = 1;
 	}
 }
-
 
 void CHgun::PrimaryAttack()
 {
@@ -164,8 +161,6 @@ void CHgun::PrimaryAttack()
 
 	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10, 15);
 }
-
-
 
 void CHgun::SecondaryAttack()
 {
@@ -249,7 +244,6 @@ void CHgun::SecondaryAttack()
 	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10, 15);
 }
 
-
 void CHgun::Reload()
 {
 #ifndef CLIENT_DLL
@@ -265,7 +259,6 @@ void CHgun::Reload()
 	m_pPlayer->TabulateAmmo();
 #endif
 }
-
 
 void CHgun::WeaponIdle()
 {

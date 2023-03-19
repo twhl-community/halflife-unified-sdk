@@ -131,7 +131,6 @@ void CTripmineGrenade::Spawn()
 	m_vecEnd = pev->origin + m_vecDir * 2048;
 }
 
-
 void CTripmineGrenade::Precache()
 {
 	PrecacheModel(STRING(pev->model));
@@ -139,7 +138,6 @@ void CTripmineGrenade::Precache()
 	PrecacheSound("weapons/mine_activate.wav");
 	PrecacheSound("weapons/mine_charge.wav");
 }
-
 
 void CTripmineGrenade::WarningThink()
 {
@@ -150,7 +148,6 @@ void CTripmineGrenade::WarningThink()
 	SetThink(&CTripmineGrenade::PowerupThink);
 	pev->nextthink = gpGlobals->time + 1.0;
 }
-
 
 void CTripmineGrenade::PowerupThink()
 {
@@ -216,7 +213,6 @@ void CTripmineGrenade::PowerupThink()
 	pev->nextthink = gpGlobals->time + 0.1;
 }
 
-
 void CTripmineGrenade::KillBeam()
 {
 	if (m_pBeam)
@@ -225,7 +221,6 @@ void CTripmineGrenade::KillBeam()
 		m_pBeam = nullptr;
 	}
 }
-
 
 void CTripmineGrenade::MakeBeam()
 {
@@ -253,7 +248,6 @@ void CTripmineGrenade::MakeBeam()
 	m_pBeam->SetScrollRate(255);
 	m_pBeam->SetBrightness(64);
 }
-
 
 void CTripmineGrenade::BeamBreakThink()
 {
@@ -343,7 +337,6 @@ void CTripmineGrenade::Killed(CBaseEntity* attacker, int iGib)
 	EmitSound(CHAN_BODY, "common/null.wav", 0.5, ATTN_NORM); // shut off chargeup
 }
 
-
 void CTripmineGrenade::DelayDeathThink()
 {
 	KillBeam();
@@ -418,7 +411,6 @@ bool CTripmine::Deploy()
 	pev->body = 0;
 	return DefaultDeploy("models/v_tripmine.mdl", "models/p_tripmine.mdl", TRIPMINE_DRAW, "trip");
 }
-
 
 void CTripmine::Holster()
 {

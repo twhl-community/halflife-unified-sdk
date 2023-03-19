@@ -12,9 +12,7 @@
  *   use or distribution of this code by or to any unlicensed person is illegal.
  *
  ****/
-//=========================================================
-// monster template
-//=========================================================
+
 // UNDONE: Holster weapon?
 
 #include "cbase.h"
@@ -34,9 +32,6 @@ TYPEDESCRIPTION CBarney::m_SaveData[] =
 
 IMPLEMENT_SAVERESTORE(CBarney, CTalkMonster);
 
-//=========================================================
-// AI Schedules Specific to this monster
-//=========================================================
 Task_t tlBaFollow[] =
 	{
 		{TASK_MOVE_TO_TARGET_RANGE, (float)128}, // Move within 128 of target ent (client)
@@ -56,10 +51,6 @@ Schedule_t slBaFollow[] =
 			"Follow"},
 };
 
-//=========================================================
-// BarneyDraw- much better looking draw schedule for when
-// barney knows who he's gonna attack.
-//=========================================================
 Task_t tlBarneyEnemyDraw[] =
 	{
 		{TASK_STOP_MOVING, 0},
@@ -67,6 +58,9 @@ Task_t tlBarneyEnemyDraw[] =
 		{TASK_PLAY_SEQUENCE_FACE_ENEMY, (float)ACT_ARM},
 };
 
+/**
+*	@brief much better looking draw schedule for when barney knows who he's gonna attack.
+*/
 Schedule_t slBarneyEnemyDraw[] =
 	{
 		{tlBarneyEnemyDraw,
@@ -96,7 +90,6 @@ Schedule_t slBaFaceTarget[] =
 			bits_SOUND_DANGER,
 			"FaceTarget"},
 };
-
 
 Task_t tlIdleBaStand[] =
 	{
@@ -135,7 +128,6 @@ DEFINE_CUSTOM_SCHEDULES(CBarney){
 	slIdleBaStand,
 };
 
-
 IMPLEMENT_CUSTOM_SCHEDULES(CBarney, CTalkMonster);
 
 void CBarney::OnCreate()
@@ -168,13 +160,6 @@ void CBarney::RunTask(Task_t* pTask)
 	}
 }
 
-
-
-
-//=========================================================
-// ISoundMask - returns a bit mask indicating which types
-// of sounds this monster regards.
-//=========================================================
 int CBarney::ISoundMask()
 {
 	return bits_SOUND_WORLD |
@@ -186,18 +171,11 @@ int CBarney::ISoundMask()
 		   bits_SOUND_PLAYER;
 }
 
-//=========================================================
-// Classify - indicates this monster's place in the
-// relationship table.
-//=========================================================
 int CBarney::Classify()
 {
 	return CLASS_PLAYER_ALLY;
 }
 
-//=========================================================
-// ALertSound - barney says "Freeze!"
-//=========================================================
 void CBarney::AlertSound()
 {
 	if (m_hEnemy != nullptr)
@@ -208,10 +186,7 @@ void CBarney::AlertSound()
 		}
 	}
 }
-//=========================================================
-// SetYawSpeed - allows each sequence to have a different
-// turn rate associated with it.
-//=========================================================
+
 void CBarney::SetYawSpeed()
 {
 	int ys;
@@ -237,10 +212,6 @@ void CBarney::SetYawSpeed()
 	pev->yaw_speed = ys;
 }
 
-
-//=========================================================
-// CheckRangeAttack1
-//=========================================================
 bool CBarney::CheckRangeAttack1(float flDot, float flDist)
 {
 	if (flDist <= 1024 && flDot >= 0.5)
@@ -265,11 +236,6 @@ bool CBarney::CheckRangeAttack1(float flDot, float flDist)
 	return false;
 }
 
-
-//=========================================================
-// GuardFirePistol - shoots one round from the pistol at
-// the enemy barney is facing.
-//=========================================================
 void CBarney::GuardFirePistol()
 {
 	Vector vecShootOrigin;
@@ -299,12 +265,6 @@ void CBarney::GuardFirePistol()
 	m_cAmmoLoaded--; // take away a bullet!
 }
 
-//=========================================================
-// HandleAnimEvent - catches the monster-specific messages
-// that occur when tagged animation frames are played.
-//
-// Returns number of events handled, 0 if none.
-//=========================================================
 void CBarney::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
 	switch (pEvent->event)
@@ -377,7 +337,6 @@ void CBarney::Precache()
 	CTalkMonster::Precache();
 }
 
-// Init talk data
 void CBarney::TalkInit()
 {
 	CTalkMonster::TalkInit();
@@ -450,10 +409,6 @@ bool CBarney::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float fl
 	return ret;
 }
 
-
-//=========================================================
-// PainSound
-//=========================================================
 void CBarney::PainSound()
 {
 	if (gpGlobals->time < m_painTime)
@@ -475,9 +430,6 @@ void CBarney::PainSound()
 	}
 }
 
-//=========================================================
-// DeathSound
-//=========================================================
 void CBarney::DeathSound()
 {
 	switch (RANDOM_LONG(0, 2))
@@ -493,7 +445,6 @@ void CBarney::DeathSound()
 		break;
 	}
 }
-
 
 void CBarney::TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
 {
@@ -543,10 +494,6 @@ void CBarney::Killed(CBaseEntity* attacker, int iGib)
 	SetUse(nullptr);
 	CTalkMonster::Killed(attacker, iGib);
 }
-
-//=========================================================
-// AI Schedules Specific to this monster
-//=========================================================
 
 Schedule_t* CBarney::GetScheduleOfType(int Type)
 {
@@ -598,12 +545,6 @@ void CBarney::SpeakKilledEnemy()
 	PlaySentence("BA_KILL", 4, VOL_NORM, ATTN_NORM);
 }
 
-//=========================================================
-// GetSchedule - Decides which type of schedule best suits
-// the monster's current state and conditions. Then calls
-// monster's member function to get a pointer to a schedule
-// of the proper type.
-//=========================================================
 Schedule_t* CBarney::GetSchedule()
 {
 	if (HasConditions(bits_COND_HEAR_SOUND))
@@ -704,16 +645,13 @@ bool CBarney::KeyValue(KeyValueData* pkvd)
 	return CTalkMonster::KeyValue(pkvd);
 }
 
-//=========================================================
-// DEAD BARNEY PROP
-//
-// Designer selects a pose in worldcraft, 0 through num_poses-1
-// this value is added to what is selected as the 'first dead pose'
-// among the monster's normal animations. All dead poses must
-// appear sequentially in the model file. Be sure and set
-// the m_iFirstPose properly!
-//
-//=========================================================
+/**
+*	@brief DEAD BARNEY PROP
+*	@details Designer selects a pose in worldcraft, 0 through num_poses-1
+*	this value is added to what is selected as the 'first dead pose' among the monster's normal animations.
+*	All dead poses must appear sequentially in the model file.
+*	Be sure and set the m_iFirstPose properly!
+*/
 class CDeadBarney : public CBaseMonster
 {
 public:
@@ -751,9 +689,6 @@ bool CDeadBarney::KeyValue(KeyValueData* pkvd)
 
 LINK_ENTITY_TO_CLASS(monster_barney_dead, CDeadBarney);
 
-//=========================================================
-// ********** DeadBarney SPAWN **********
-//=========================================================
 void CDeadBarney::Spawn()
 {
 	PrecacheModel(STRING(pev->model));

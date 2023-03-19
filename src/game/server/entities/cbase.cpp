@@ -142,7 +142,6 @@ int GetNewDLLFunctions(NEW_DLL_FUNCTIONS* pFunctionTable, int* interfaceVersion)
 }
 }
 
-
 int DispatchSpawn(edict_t* pent)
 {
 	CBaseEntity* pEntity = (CBaseEntity*)GET_PRIVATE(pent);
@@ -236,7 +235,6 @@ void DispatchTouch(edict_t* pentTouched, edict_t* pentOther)
 		pEntity->Touch(pOther);
 }
 
-
 void DispatchUse(edict_t* pentUsed, edict_t* pentOther)
 {
 	CBaseEntity* pEntity = (CBaseEntity*)GET_PRIVATE(pentUsed);
@@ -314,8 +312,10 @@ void OnFreeEntPrivateData(edict_t* pEdict)
 	}
 }
 
-// Find the matching global entity.  Spit out an error if the designer made entities of
-// different classes with the same global name
+/**
+*	@brief Find the matching global entity.
+*	Spit out an error if the designer made entities of different classes with the same global name
+*/
 CBaseEntity* FindGlobalEntity(string_t classname, string_t globalname)
 {
 	auto pReturn = UTIL_FindEntityByString(nullptr, "globalname", STRING(globalname));
@@ -448,7 +448,6 @@ int DispatchRestore(edict_t* pent, SAVERESTOREDATA* pSaveData, int globalEntity)
 	return 0;
 }
 
-
 void DispatchObjectCollsionBox(edict_t* pent)
 {
 	CBaseEntity* pEntity = (CBaseEntity*)GET_PRIVATE(pent);
@@ -460,7 +459,6 @@ void DispatchObjectCollsionBox(edict_t* pent)
 		SetObjectCollisionBox(&pent->v);
 }
 
-
 void SaveWriteFields(SAVERESTOREDATA* pSaveData, const char* pname, void* pBaseData, TYPEDESCRIPTION* pFields, int fieldCount)
 {
 	if (!CSaveRestoreBuffer::IsValidSaveRestoreData(pSaveData))
@@ -471,7 +469,6 @@ void SaveWriteFields(SAVERESTOREDATA* pSaveData, const char* pname, void* pBaseD
 	CSave saveHelper(*pSaveData);
 	saveHelper.WriteFields(pname, pBaseData, pFields, fieldCount);
 }
-
 
 void SaveReadFields(SAVERESTOREDATA* pSaveData, const char* pname, void* pBaseData, TYPEDESCRIPTION* pFields, int fieldCount)
 {
@@ -637,7 +634,6 @@ void CBaseEntity::OnDestroy()
 	// Nothing.
 }
 
-// give health
 bool CBaseEntity::TakeHealth(float flHealth, int bitsDamageType)
 {
 	if (0 == pev->takedamage)
@@ -654,8 +650,6 @@ bool CBaseEntity::TakeHealth(float flHealth, int bitsDamageType)
 
 	return true;
 }
-
-// inflict damage on this entity.  bitsDamageType indicates type of damage inflicted, ie: DMG_CRUSH
 
 bool CBaseEntity::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType)
 {
@@ -707,14 +701,12 @@ bool CBaseEntity::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, floa
 	return true;
 }
 
-
 void CBaseEntity::Killed(CBaseEntity* attacker, int iGib)
 {
 	pev->takedamage = DAMAGE_NO;
 	pev->deadflag = DEAD_DEAD;
 	UTIL_Remove(this);
 }
-
 
 CBaseEntity* CBaseEntity::GetNextTarget()
 {
@@ -723,7 +715,6 @@ CBaseEntity* CBaseEntity::GetNextTarget()
 	return UTIL_FindEntityByTargetname(nullptr, STRING(pev->target));
 }
 
-// Global Savedata for Delay
 TYPEDESCRIPTION CBaseEntity::m_SaveData[] =
 	{
 		DEFINE_FIELD(CBaseEntity, m_pGoalEnt, FIELD_CLASSPTR),
@@ -743,7 +734,6 @@ TYPEDESCRIPTION CBaseEntity::m_SaveData[] =
 		DEFINE_FIELD(CBaseEntity, m_HasCustomHullMin, FIELD_BOOLEAN),
 		DEFINE_FIELD(CBaseEntity, m_HasCustomHullMax, FIELD_BOOLEAN),
 };
-
 
 bool CBaseEntity::Save(CSave& save)
 {
@@ -775,7 +765,6 @@ bool CBaseEntity::Restore(CRestore& restore)
 
 	return status;
 }
-
 
 // Initialize absmin & absmax to the appropriate box
 void SetObjectCollisionBox(entvars_t* pev)
@@ -815,12 +804,10 @@ void SetObjectCollisionBox(entvars_t* pev)
 	pev->absmax.z += 1;
 }
 
-
 void CBaseEntity::SetObjectCollisionBox()
 {
 	::SetObjectCollisionBox(pev);
 }
-
 
 bool CBaseEntity::Intersects(CBaseEntity* pOther)
 {
@@ -896,7 +883,6 @@ bool CBaseEntity::ShouldToggle(USE_TYPE useType, bool currentState)
 	}
 	return true;
 }
-
 
 int CBaseEntity::DamageDecal(int bitsDamageType)
 {

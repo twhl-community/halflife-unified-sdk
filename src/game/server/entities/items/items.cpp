@@ -12,13 +12,6 @@
  *   without written permission from Valve LLC.
  *
  ****/
-/*
-
-===== items.cpp ========================================================
-
-  functions governing the selection/use of weapons for players
-
-*/
 
 #include "cbase.h"
 #include "items.h"
@@ -261,7 +254,6 @@ public:
 
 LINK_ENTITY_TO_CLASS(item_battery, CItemBattery);
 
-
 class CItemAntidote : public CItem
 {
 public:
@@ -281,7 +273,6 @@ public:
 };
 
 LINK_ENTITY_TO_CLASS(item_antidote, CItemAntidote);
-
 
 class CItemSecurity : public CItem
 {

@@ -1825,7 +1825,7 @@ void EV_FireDisplacer(event_args_t* args)
 
 	case DisplacerMode::FIRED:
 	{
-		// bparam1 indicates whether it's a primary or secondary attack. - Solokiller
+		// bparam1 indicates whether it's a primary or secondary attack.
 		if (0 == args->bparam1)
 		{
 			EV_PlaySound(

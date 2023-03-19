@@ -15,25 +15,16 @@
 
 #pragma once
 
-//=========================================================
-// monster-specific schedule types
-//=========================================================
 enum
 {
 	SCHED_VOLTIGORE_THREAT_DISPLAY = LAST_COMMON_SCHEDULE + 1,
 };
 
-//=========================================================
-// monster-specific tasks
-//=========================================================
 enum
 {
 	TASK_VOLTIGORE_GET_PATH_TO_ENEMY_CORPSE = LAST_COMMON_TASK + 1,
 };
 
-//=========================================================
-// Monster's Anim Events Go Here
-//=========================================================
 #define VOLTIGORE_AE_BOLT1 (1)
 #define VOLTIGORE_AE_BOLT2 (2)
 #define VOLTIGORE_AE_BOLT3 (3)
@@ -46,12 +37,13 @@ enum
 #define VOLTIGORE_AE_LEFT_PUNCH (12)
 #define VOLTIGORE_AE_RIGHT_PUNCH (13)
 
-
-
 #define VOLTIGORE_MELEE_DIST 128
 
 constexpr int VOLTIGORE_BEAM_COUNT = 8;
 
+/**
+*	@brief Tank like alien
+*/
 class COFVoltigore : public CSquadMonster
 {
 public:
@@ -70,16 +62,38 @@ public:
 
 	Schedule_t* GetSchedule() override;
 	Schedule_t* GetScheduleOfType(int Type) override;
+
+	/**
+	*	@brief this is overridden for alien grunts because they can use their smart weapons against unseen enemies.
+	*	Base class doesn't attack anyone it can't see.
+	*/
 	bool FCanCheckAttacks() override;
+
+	/**
+	*	@brief alien grunts zap the crap out of any enemy that gets too close.
+	*/
 	bool CheckMeleeAttack1(float flDot, float flDist) override;
+
 	bool CheckRangeAttack1(float flDot, float flDist) override;
 	void StartTask(Task_t* pTask) override;
 	void RunTask(Task_t* pTask) override;
 	void AlertSound() override;
 	void PainSound() override;
 	void TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
+
+	/**
+	*	@brief overridden because Human Grunts are Voltigore's nemesis.
+	*/
 	int IRelationship(CBaseEntity* pTarget) override;
+
+	/**
+	*	@brief won't speak again for 10-20 seconds.
+	*/
 	void StopTalking();
+
+	/**
+	*	@brief Should this voltigore be talking?
+	*/
 	bool ShouldSpeak();
 
 	void ClearBeams();

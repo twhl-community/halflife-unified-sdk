@@ -26,8 +26,6 @@ void CMP5::OnCreate()
 	m_WorldModel = pev->model = MAKE_STRING("models/w_9mmAR.mdl");
 }
 
-//=========================================================
-//=========================================================
 void CMP5::Spawn()
 {
 	Precache();
@@ -40,7 +38,6 @@ void CMP5::Spawn()
 
 	FallInit(); // get ready to fall down.
 }
-
 
 void CMP5::Precache()
 {
@@ -103,7 +100,6 @@ bool CMP5::Deploy()
 {
 	return DefaultDeploy("models/v_9mmAR.mdl", "models/p_9mmAR.mdl", MP5_DEPLOY, "mp5");
 }
-
 
 void CMP5::PrimaryAttack()
 {
@@ -168,8 +164,6 @@ void CMP5::PrimaryAttack()
 	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10, 15);
 }
 
-
-
 void CMP5::SecondaryAttack()
 {
 	// don't fire underwater
@@ -230,7 +224,6 @@ void CMP5::Reload()
 	DefaultReload(MP5_MAX_CLIP, MP5_RELOAD, 1.5);
 }
 
-
 void CMP5::WeaponIdle()
 {
 	ResetEmptySound();
@@ -257,8 +250,6 @@ void CMP5::WeaponIdle()
 
 	m_flTimeWeaponIdle = UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10, 15); // how long till we do this again.
 }
-
-
 
 class CMP5AmmoClip : public CBasePlayerAmmo
 {
@@ -288,8 +279,6 @@ public:
 
 LINK_ENTITY_TO_CLASS(ammo_9mmAR, CMP5AmmoClip);
 
-
-
 class CMP5Chainammo : public CBasePlayerAmmo
 {
 public:
@@ -315,8 +304,8 @@ public:
 		return bResult;
 	}
 };
-LINK_ENTITY_TO_CLASS(ammo_9mmbox, CMP5Chainammo);
 
+LINK_ENTITY_TO_CLASS(ammo_9mmbox, CMP5Chainammo);
 
 class CMP5AmmoGrenade : public CBasePlayerAmmo
 {

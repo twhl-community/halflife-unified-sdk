@@ -330,7 +330,7 @@ void CSporeLauncher::GetWeaponData(weapon_data_t& data)
 {
 	BaseClass::GetWeaponData(data);
 
-	// m_ReloadState is called m_fInSpecialReload in Op4. - Solokiller
+	// m_ReloadState is called m_fInSpecialReload in Op4.
 	data.m_fInSpecialReload = static_cast<int>(m_ReloadState);
 }
 
@@ -432,7 +432,7 @@ public:
 		auto vecLaunchDir = pev->angles;
 
 		vecLaunchDir.x -= 90;
-		// Rotate it so spores that aren't rotated in Hammer point in the right direction. - Solokiller
+		// Rotate it so spores that aren't rotated in Hammer point in the right direction.
 		vecLaunchDir.y += 180;
 
 		vecLaunchDir.x += RANDOM_FLOAT(-20, 20);

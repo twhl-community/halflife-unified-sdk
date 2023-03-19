@@ -12,12 +12,10 @@
  *   without written permission from Valve LLC.
  *
  ****/
-/*
 
-===== subs.cpp ========================================================
-
-  frequently used global functions
-
+/**
+*	@file
+*	frequently used global functions
 */
 
 #include "cbase.h"
@@ -26,29 +24,28 @@
 
 bool FEntIsVisible(entvars_t* pev, entvars_t* pevTarget);
 
-// Landmark class
 void CPointEntity::Spawn()
 {
 	pev->solid = SOLID_NOT;
 	//	SetSize(g_vecZero, g_vecZero);
 }
 
-
+/**
+*	@brief Null Entity, remove on startup
+*/
 class CNullEntity : public CBaseEntity
 {
 public:
 	void Spawn() override;
 };
 
-
-// Null Entity, remove on startup
 void CNullEntity::Spawn()
 {
 	REMOVE_ENTITY(ENT(pev));
 }
+
 LINK_ENTITY_TO_CLASS(info_null, CNullEntity);
 
-// This updates global tables that need to know about entities being removed
 void CBaseEntity::UpdateOnRemove()
 {
 	int i;
@@ -70,7 +67,6 @@ void CBaseEntity::UpdateOnRemove()
 		gGlobalState.EntitySetState(pev->globalname, GLOBAL_DEAD);
 }
 
-// Convenient way to delay removing oneself
 void CBaseEntity::SUB_Remove()
 {
 	UpdateOnRemove();
@@ -84,14 +80,10 @@ void CBaseEntity::SUB_Remove()
 	REMOVE_ENTITY(ENT(pev));
 }
 
-
-// Convenient way to explicitly do nothing (passed to functions that require a method)
 void CBaseEntity::SUB_DoNothing()
 {
 }
 
-
-// Global Savedata for Delay
 TYPEDESCRIPTION CBaseDelay::m_SaveData[] =
 	{
 		DEFINE_FIELD(CBaseDelay, m_flDelay, FIELD_FLOAT),
@@ -116,33 +108,13 @@ bool CBaseDelay::KeyValue(KeyValueData* pkvd)
 	return CBaseEntity::KeyValue(pkvd);
 }
 
-
-/*
-==============================
-SUB_UseTargets
-
-If self.delay is set, a DelayedUse entity will be created that will actually
-do the SUB_UseTargets after that many seconds have passed.
-
-Removes all entities with a targetname that match self.killtarget,
-and removes them, so some events can remove other triggers.
-
-Search for (string)targetname in all entities that
-match (string)self.target and call their .use function (if they have one)
-
-==============================
-*/
 void CBaseEntity::SUB_UseTargets(CBaseEntity* pActivator, USE_TYPE useType, float value)
 {
-	//
-	// fire targets
-	//
 	if (!FStringNull(pev->target))
 	{
 		FireTargets(STRING(pev->target), pActivator, this, useType, value);
 	}
 }
-
 
 void FireTargets(const char* targetName, CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
@@ -162,7 +134,6 @@ void FireTargets(const char* targetName, CBaseEntity* pActivator, CBaseEntity* p
 }
 
 LINK_ENTITY_TO_CLASS(DelayedUse, CBaseDelay);
-
 
 void CBaseDelay::SUB_UseTargets(CBaseEntity* pActivator, USE_TYPE useType, float value)
 {
@@ -230,18 +201,6 @@ void CBaseDelay::SUB_UseTargets(CBaseEntity* pActivator, USE_TYPE useType, float
 	}
 }
 
-
-/*
-void CBaseDelay :: SUB_UseTargetsEntMethod()
-{
-	SUB_UseTargets(pev);
-}
-*/
-
-/*
-QuakeEd only writes a single float for angles (bad idea), so up and down are
-just constant angles.
-*/
 void SetMovedir(entvars_t* pev)
 {
 	if (pev->angles == Vector(0, -1, 0))
@@ -261,9 +220,6 @@ void SetMovedir(entvars_t* pev)
 	pev->angles = g_vecZero;
 }
 
-
-
-
 void CBaseDelay::DelayThink()
 {
 	CBaseEntity* pActivator = nullptr;
@@ -277,8 +233,6 @@ void CBaseDelay::DelayThink()
 	REMOVE_ENTITY(ENT(pev));
 }
 
-
-// Global Savedata for Toggle
 TYPEDESCRIPTION CBaseToggle::m_SaveData[] =
 	{
 		DEFINE_FIELD(CBaseToggle, m_toggle_state, FIELD_INTEGER),
@@ -301,8 +255,8 @@ TYPEDESCRIPTION CBaseToggle::m_SaveData[] =
 		DEFINE_FIELD(CBaseToggle, m_sMaster, FIELD_STRING),
 		DEFINE_FIELD(CBaseToggle, m_bitsDamageInflict, FIELD_INTEGER), // damage type inflicted
 };
-IMPLEMENT_SAVERESTORE(CBaseToggle, CBaseAnimating);
 
+IMPLEMENT_SAVERESTORE(CBaseToggle, CBaseAnimating);
 
 bool CBaseToggle::KeyValue(KeyValueData* pkvd)
 {
@@ -330,14 +284,6 @@ bool CBaseToggle::KeyValue(KeyValueData* pkvd)
 	return CBaseDelay::KeyValue(pkvd);
 }
 
-/*
-=============
-LinearMove
-
-calculate pev->velocity and pev->nextthink to reach vecDest from
-pev->origin traveling at flSpeed
-===============
-*/
 void CBaseToggle::LinearMove(Vector vecDest, float flSpeed)
 {
 	ASSERTSZ(flSpeed != 0, "LinearMove:  no speed is defined!");
@@ -366,12 +312,6 @@ void CBaseToggle::LinearMove(Vector vecDest, float flSpeed)
 	pev->velocity = vecDestDelta / flTravelTime;
 }
 
-
-/*
-============
-After moving, set origin to exact final destination, call "move done" function
-============
-*/
 void CBaseToggle::LinearMoveDone()
 {
 	Vector delta = m_vecFinalDest - pev->origin;
@@ -394,15 +334,6 @@ bool CBaseToggle::IsLockedByMaster()
 	return !FStringNull(m_sMaster) && !UTIL_IsMasterTriggered(m_sMaster, m_hActivator);
 }
 
-/*
-=============
-AngularMove
-
-calculate pev->velocity and pev->nextthink to reach vecDest from
-pev->origin traveling at flSpeed
-Just like LinearMove, but rotational.
-===============
-*/
 void CBaseToggle::AngularMove(Vector vecDestAngle, float flSpeed)
 {
 	ASSERTSZ(flSpeed != 0, "AngularMove:  no speed is defined!");
@@ -431,12 +362,6 @@ void CBaseToggle::AngularMove(Vector vecDestAngle, float flSpeed)
 	pev->avelocity = vecDestDelta / flTravelTime;
 }
 
-
-/*
-============
-After rotating, set angle to exact final angle, call "move done" function
-============
-*/
 void CBaseToggle::AngularMoveDone()
 {
 	pev->angles = m_vecFinalAngle;
@@ -445,7 +370,6 @@ void CBaseToggle::AngularMoveDone()
 	if (m_pfnCallWhenMoveDone)
 		(this->*m_pfnCallWhenMoveDone)();
 }
-
 
 float CBaseToggle::AxisValue(int flags, const Vector& angles)
 {
@@ -457,7 +381,6 @@ float CBaseToggle::AxisValue(int flags, const Vector& angles)
 	return angles.y;
 }
 
-
 void CBaseToggle::AxisDir(entvars_t* pev)
 {
 	if (FBitSet(pev->spawnflags, SF_DOOR_ROTATE_Z))
@@ -467,7 +390,6 @@ void CBaseToggle::AxisDir(entvars_t* pev)
 	else
 		pev->movedir = Vector(0, 1, 0); // around y-axis
 }
-
 
 float CBaseToggle::AxisDelta(int flags, const Vector& angle1, const Vector& angle2)
 {
@@ -480,13 +402,8 @@ float CBaseToggle::AxisDelta(int flags, const Vector& angle1, const Vector& angl
 	return angle1.y - angle2.y;
 }
 
-
-/*
-=============
-FEntIsVisible
-
-returns true if the passed entity is visible to caller, even if not infront ()
-=============
+/**
+*	@brief returns true if the passed entity is visible to caller, even if not infront ()
 */
 bool FEntIsVisible(
 	entvars_t* pev,

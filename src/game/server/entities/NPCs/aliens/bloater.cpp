@@ -12,18 +12,10 @@
  *   use or distribution of this code by or to any unlicensed person is illegal.
  *
  ****/
-//=========================================================
-// Bloater
-//=========================================================
 
 #include "cbase.h"
 
-
-//=========================================================
-// Monster's Anim Events Go Here
-//=========================================================
 #define BLOATER_AE_ATTACK_MELEE1 0x01
-
 
 class CBloater : public CBaseMonster
 {
@@ -56,19 +48,11 @@ void CBloater::OnCreate()
 	pev->model = MAKE_STRING("models/floater.mdl");
 }
 
-//=========================================================
-// Classify - indicates this monster's place in the
-// relationship table.
-//=========================================================
 int CBloater::Classify()
 {
 	return CLASS_ALIEN_MONSTER;
 }
 
-//=========================================================
-// SetYawSpeed - allows each sequence to have a different
-// turn rate associated with it.
-//=========================================================
 void CBloater::SetYawSpeed()
 {
 	int ys;
@@ -166,11 +150,6 @@ void CBloater::AttackSnd()
 #endif
 }
 
-
-//=========================================================
-// HandleAnimEvent - catches the monster-specific messages
-// that occur when tagged animation frames are played.
-//=========================================================
 void CBloater::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
 	switch (pEvent->event)
@@ -188,9 +167,6 @@ void CBloater::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 }
 
-//=========================================================
-// Spawn
-//=========================================================
 void CBloater::Spawn()
 {
 	Precache();
@@ -209,14 +185,7 @@ void CBloater::Spawn()
 	MonsterInit();
 }
 
-//=========================================================
-// Precache - precaches all resources this monster needs
-//=========================================================
 void CBloater::Precache()
 {
 	PrecacheModel(STRING(pev->model));
 }
-
-//=========================================================
-// AI Schedules Specific to this monster
-//=========================================================

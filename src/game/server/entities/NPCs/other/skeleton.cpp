@@ -14,9 +14,6 @@
  ****/
 #include "cbase.h"
 
-//=========================================================
-// DEAD SKELETON PROP
-//=========================================================
 class COFSkeleton : public CBaseMonster
 {
 public:
@@ -54,9 +51,6 @@ bool COFSkeleton::KeyValue(KeyValueData* pkvd)
 
 LINK_ENTITY_TO_CLASS(monster_skeleton_dead, COFSkeleton);
 
-//=========================================================
-// ********** Skeleton SPAWN **********
-//=========================================================
 void COFSkeleton::Spawn()
 {
 	PrecacheModel(STRING(pev->model));

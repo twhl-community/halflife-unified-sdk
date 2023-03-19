@@ -12,19 +12,17 @@
  *   use or distribution of this code by or to any unlicensed person is illegal.
  *
  ****/
-//=========================================================
-// schedule.cpp - functions and data pertaining to the
-// monsters' AI scheduling system.
-//=========================================================
+
+/**
+*	@file
+*	functions and data pertaining to the monsters' AI scheduling system.
+*/
+
 #include "cbase.h"
 #include "scripted.h"
 #include "nodes.h"
 #include "defaultai.h"
 
-//=========================================================
-// FHaveSchedule - Returns true if monster's m_pSchedule
-// is anything other than nullptr.
-//=========================================================
 bool CBaseMonster::FHaveSchedule()
 {
 	if (m_pSchedule == nullptr)
@@ -35,10 +33,6 @@ bool CBaseMonster::FHaveSchedule()
 	return true;
 }
 
-//=========================================================
-// ClearSchedule - blanks out the caller's schedule pointer
-// and index.
-//=========================================================
 void CBaseMonster::ClearSchedule()
 {
 	m_iTaskStatus = TASKSTATUS_NEW;
@@ -46,10 +40,6 @@ void CBaseMonster::ClearSchedule()
 	m_iScheduleIndex = 0;
 }
 
-//=========================================================
-// FScheduleDone - Returns true if the caller is on the
-// last task in the schedule
-//=========================================================
 bool CBaseMonster::FScheduleDone()
 {
 	ASSERT(m_pSchedule != nullptr);
@@ -62,11 +52,6 @@ bool CBaseMonster::FScheduleDone()
 	return false;
 }
 
-//=========================================================
-// ChangeSchedule - replaces the monster's schedule pointer
-// with the passed pointer, and sets the ScheduleIndex back
-// to 0
-//=========================================================
 void CBaseMonster::ChangeSchedule(Schedule_t* pNewSchedule)
 {
 	ASSERT(pNewSchedule != nullptr);
@@ -124,9 +109,6 @@ void CBaseMonster::ChangeSchedule(Schedule_t* pNewSchedule)
 #endif // 0
 }
 
-//=========================================================
-// NextScheduledTask - increments the ScheduleIndex
-//=========================================================
 void CBaseMonster::NextScheduledTask()
 {
 	ASSERT(m_pSchedule != nullptr);
@@ -142,11 +124,6 @@ void CBaseMonster::NextScheduledTask()
 	}
 }
 
-//=========================================================
-// IScheduleFlags - returns an integer with all Conditions
-// bits that are currently set and also set in the current
-// schedule's Interrupt mask.
-//=========================================================
 int CBaseMonster::IScheduleFlags()
 {
 	if (!m_pSchedule)
@@ -158,11 +135,6 @@ int CBaseMonster::IScheduleFlags()
 	return m_afConditions & m_pSchedule->iInterruptMask;
 }
 
-//=========================================================
-// FScheduleValid - returns true as long as the current
-// schedule is still the proper schedule to be executing,
-// taking into account all conditions
-//=========================================================
 bool CBaseMonster::FScheduleValid()
 {
 	if (m_pSchedule == nullptr)
@@ -192,11 +164,6 @@ bool CBaseMonster::FScheduleValid()
 	return true;
 }
 
-//=========================================================
-// MaintainSchedule - does all the per-think schedule maintenance.
-// ensures that the monster leaves this function with a valid
-// schedule!
-//=========================================================
 void CBaseMonster::MaintainSchedule()
 {
 	Schedule_t* pNewSchedule;
@@ -291,9 +258,6 @@ void CBaseMonster::MaintainSchedule()
 	}
 }
 
-//=========================================================
-// RunTask
-//=========================================================
 void CBaseMonster::RunTask(Task_t* pTask)
 {
 	switch (pTask->iTask)
@@ -543,11 +507,6 @@ void CBaseMonster::RunTask(Task_t* pTask)
 	}
 }
 
-//=========================================================
-// SetTurnActivity - measures the difference between the way
-// the monster is facing and determines whether or not to
-// select one of the 180 turn animations.
-//=========================================================
 void CBaseMonster::SetTurnActivity()
 {
 	float flYD;
@@ -563,11 +522,6 @@ void CBaseMonster::SetTurnActivity()
 	}
 }
 
-//=========================================================
-// Start task - selects the correct activity and performs
-// any necessary calculations to start the next task on the
-// schedule.
-//=========================================================
 void CBaseMonster::StartTask(Task_t* pTask)
 {
 	switch (pTask->iTask)
@@ -1359,10 +1313,6 @@ void CBaseMonster::StartTask(Task_t* pTask)
 	}
 }
 
-//=========================================================
-// GetTask - returns a pointer to the current
-// scheduled task. nullptr if there's a problem.
-//=========================================================
 Task_t* CBaseMonster::GetTask()
 {
 	if (m_iScheduleIndex < 0 || m_iScheduleIndex >= m_pSchedule->cTasks)
@@ -1376,12 +1326,6 @@ Task_t* CBaseMonster::GetTask()
 	}
 }
 
-//=========================================================
-// GetSchedule - Decides which type of schedule best suits
-// the monster's current state and conditions. Then calls
-// monster's member function to get a pointer to a schedule
-// of the proper type.
-//=========================================================
 Schedule_t* CBaseMonster::GetSchedule()
 {
 	switch (m_MonsterState)

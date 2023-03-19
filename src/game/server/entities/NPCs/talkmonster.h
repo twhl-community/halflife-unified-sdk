@@ -15,11 +15,6 @@
 
 #pragma once
 
-//=========================================================
-// Talking monster base class
-// Used for scientists and barneys
-//=========================================================
-
 #define TALKRANGE_MIN 500.0 // don't talk to anyone farther away than this
 
 #define TLK_STARE_DIST 128 // anyone closer than this and looking at me is probably staring at me.
@@ -57,7 +52,6 @@ enum TALKGROUPNAMES
 	TLK_CGROUPS, // MUST be last entry
 };
 
-
 enum
 {
 	SCHED_CANT_FOLLOW = LAST_COMMON_SCHEDULE + 1,
@@ -89,10 +83,21 @@ enum
 	LAST_TALKMONSTER_TASK, // MUST be last
 };
 
+/**
+*	@brief Talking monster base class
+*	Used for scientists and barneys
+*/
 class CTalkMonster : public CBaseMonster
 {
 public:
+	/**
+	*	@brief monsters derived from ctalkmonster should call this in precache()
+	*/
 	virtual void TalkInit();
+
+	/**
+	*	@brief Scan for nearest, visible friend. If fPlayer is true, look for nearest player
+	*/
 	CBaseEntity* FindNearestFriend(bool fPlayer);
 	float TargetDistance();
 	void StopTalking() { SentenceStop(); }
@@ -126,16 +131,45 @@ public:
 
 	// Conversations / communication
 	int GetVoicePitch();
+
+	/**
+	*	@brief Respond to a previous question
+	*/
 	void IdleRespond();
+
+	/**
+	*	@brief ask question of nearby friend, or make statement
+	*/
 	bool FIdleSpeak();
+
 	bool FIdleStare();
+
+	/**
+	*	@brief Try to greet player first time he's seen
+	*/
 	bool FIdleHello();
+
+	/**
+	*	@brief turn head towards supplied origin
+	*/
 	void IdleHeadTurn(Vector& vecFriend);
 	bool FOkToSpeak();
+
+	/**
+	*	@brief try to smell something
+	*/
 	void TrySmellTalk();
 	void AlertFriends();
 	void ShutUpFriends();
+
+	/**
+	*	@brief am I saying a sentence right now?
+	*/
 	bool IsTalking();
+
+	/**
+	*	@brief set a timer that tells us when the monster is done talking.
+	*/
 	void Talk(float flDuration);
 
 	/**
@@ -158,6 +192,9 @@ public:
 
 	void EXPORT FollowerUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
+	/**
+	*	@brief Prepare this talking monster to answer question
+	*/
 	virtual void SetAnswerQuestion(CTalkMonster* pSpeaker);
 	virtual int FriendNumber(int arrayNumber) { return arrayNumber; }
 
@@ -167,20 +204,20 @@ public:
 
 	static float g_talkWaitTime;
 
-	int m_bitsSaid;					  // set bits for sentences we don't want repeated
-	int m_nSpeak;					  // number of times initiated talking
-	int m_voicePitch;				  // pitch of voice for this head
-	const char* m_szGrp[TLK_CGROUPS]; // sentence group names
-	float m_useTime;				  // Don't allow +USE until this time
-	string_t m_iszUse;				  // Custom +USE sentence group (follow)
-	string_t m_iszUnUse;			  // Custom +USE sentence group (stop following)
+	int m_bitsSaid;					  //!< set bits for sentences we don't want repeated
+	int m_nSpeak;					  //!< number of times initiated talking
+	int m_voicePitch;				  //!< pitch of voice for this head
+	const char* m_szGrp[TLK_CGROUPS]; //!< sentence group names
+	float m_useTime;				  //!< Don't allow +USE until this time
+	string_t m_iszUse;				  //!< Custom +USE sentence group (follow)
+	string_t m_iszUnUse;			  //!< Custom +USE sentence group (stop following)
 
-	float m_flLastSaidSmelled; // last time we talked about something that stinks
-	float m_flStopTalkTime;	   // when in the future that I'll be done saying this sentence.
+	float m_flLastSaidSmelled; //!< last time we talked about something that stinks
+	float m_flStopTalkTime;	   //!< when in the future that I'll be done saying this sentence.
 
 	bool m_fStartSuspicious;
 
-	EHANDLE m_hTalkTarget; // who to look at while talking
+	EHANDLE m_hTalkTarget; //!< who to look at while talking
 	CUSTOM_SCHEDULES;
 };
 

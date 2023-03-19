@@ -15,9 +15,6 @@
 
 #pragma once
 
-//=========================================================
-// Monster's Anim Events Go Here
-//=========================================================
 #define ZOMBIE_AE_ATTACK_RIGHT 0x01
 #define ZOMBIE_AE_ATTACK_LEFT 0x02
 #define ZOMBIE_AE_ATTACK_BOTH 0x03

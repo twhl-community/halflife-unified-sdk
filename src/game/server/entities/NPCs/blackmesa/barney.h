@@ -15,9 +15,6 @@
 
 #pragma once
 
-//=========================================================
-// Monster's Anim Events Go Here
-//=========================================================
 // first flag is barney dying for scripted sequences?
 #define BARNEY_AE_DRAW (2)
 #define BARNEY_AE_SHOOT (3)
@@ -39,8 +36,17 @@ public:
 	void Precache() override;
 	void SetYawSpeed() override;
 	int ISoundMask() override;
+
+	/**
+	*	@brief shoots one round from the pistol at the enemy barney is facing.
+	*/
 	virtual void GuardFirePistol();
+
+	/**
+	*	@brief barney says "Freeze!"
+	*/
 	void AlertSound() override;
+
 	int Classify() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 

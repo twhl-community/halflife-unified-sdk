@@ -12,16 +12,16 @@
  *   use or distribution of this code by or to any unlicensed person is illegal.
  *
  ****/
-//=========================================================
-// friendly hgrunt
-//=========================================================
 
 #include "cbase.h"
 #include "squadmonster.h"
 #include "hgrunt.h"
 
-int g_fFGruntQuestion; // true if an idle grunt asked a question. Cleared when someone answers.
+int g_fFGruntQuestion; //!< true if an idle grunt asked a question. Cleared when someone answers.
 
+/**
+*	@brief friendly hgrunt
+*/
 class CHFGrunt : public CHGrunt
 {
 public:

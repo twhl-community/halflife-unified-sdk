@@ -12,12 +12,9 @@
  *   without written permission from Valve LLC.
  *
  ****/
-/*
-
-===== world.cpp ========================================================
-
-  precaches and defs for entities and other data that must always be available.
-
+/**
+*	@file
+*	precaches and defs for entities and other data that must always be available.
 */
 
 #include "cbase.h"
@@ -34,9 +31,9 @@ CGlobalState gGlobalState;
 
 void W_Precache();
 
-//
-// This must match the list in util.h
-//
+/**
+*	@details This must match the list in util.h
+*/
 DLL_DECALLIST gDecals[] = {
 	{"{shot1", 0},		 // DECAL_GUNSHOT1
 	{"{shot2", 0},		 // DECAL_GUNSHOT2
@@ -90,14 +87,6 @@ DLL_DECALLIST gDecals[] = {
 	{"{ofsmscorch2", 0}, // DECAL_OFSMSCORCH2
 	{"{ofsmscorch3", 0}, // DECAL_OFSMSCORCH3
 };
-
-/*
-==============================================================================
-
-BODY QUE
-
-==============================================================================
-*/
 
 #define SF_DECAL_NOTINDEATHMATCH 2048
 
@@ -160,7 +149,6 @@ void CDecal::TriggerDecal(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYP
 	pev->nextthink = gpGlobals->time + 0.1;
 }
 
-
 void CDecal::StaticDecal()
 {
 	TraceResult trace;
@@ -178,7 +166,6 @@ void CDecal::StaticDecal()
 
 	SUB_Remove();
 }
-
 
 bool CDecal::KeyValue(KeyValueData* pkvd)
 {
@@ -229,7 +216,6 @@ globalentity_t* CGlobalState::Find(string_t globalname)
 	return pTest;
 }
 
-
 // This is available all the time now on impulse 104, remove later
 // #ifdef _DEBUG
 void CGlobalState::DumpGlobals()
@@ -247,7 +233,6 @@ void CGlobalState::DumpGlobals()
 }
 // #endif
 
-
 void CGlobalState::EntityAdd(string_t globalname, string_t mapName, GLOBALESTATE state)
 {
 	ASSERT(!Find(globalname));
@@ -262,7 +247,6 @@ void CGlobalState::EntityAdd(string_t globalname, string_t mapName, GLOBALESTATE
 	m_listCount++;
 }
 
-
 void CGlobalState::EntitySetState(string_t globalname, GLOBALESTATE state)
 {
 	globalentity_t* pEnt = Find(globalname);
@@ -271,14 +255,12 @@ void CGlobalState::EntitySetState(string_t globalname, GLOBALESTATE state)
 		pEnt->state = state;
 }
 
-
 const globalentity_t* CGlobalState::EntityFromTable(string_t globalname)
 {
 	globalentity_t* pEnt = Find(globalname);
 
 	return pEnt;
 }
-
 
 GLOBALESTATE CGlobalState::EntityGetState(string_t globalname)
 {
@@ -289,21 +271,17 @@ GLOBALESTATE CGlobalState::EntityGetState(string_t globalname)
 	return GLOBAL_OFF;
 }
 
-
-// Global Savedata for Delay
 TYPEDESCRIPTION CGlobalState::m_SaveData[] =
 	{
 		DEFINE_FIELD(CGlobalState, m_listCount, FIELD_INTEGER),
 };
 
-// Global Savedata for Delay
 TYPEDESCRIPTION gGlobalEntitySaveData[] =
 	{
 		DEFINE_ARRAY(globalentity_t, name, FIELD_CHARACTER, 64),
 		DEFINE_ARRAY(globalentity_t, levelName, FIELD_CHARACTER, 32),
 		DEFINE_FIELD(globalentity_t, state, FIELD_INTEGER),
 };
-
 
 bool CGlobalState::Save(CSave& save)
 {
@@ -355,7 +333,6 @@ void CGlobalState::EntityUpdate(string_t globalname, string_t mapname)
 		strcpy(pEnt->levelName, STRING(mapname));
 }
 
-
 void CGlobalState::ClearStates()
 {
 	globalentity_t* pFree = m_pList;
@@ -368,7 +345,6 @@ void CGlobalState::ClearStates()
 	Reset();
 }
 
-
 void SaveGlobalState(SAVERESTOREDATA* pSaveData)
 {
 	if (!CSaveRestoreBuffer::IsValidSaveRestoreData(pSaveData))
@@ -379,7 +355,6 @@ void SaveGlobalState(SAVERESTOREDATA* pSaveData)
 	CSave saveHelper(*pSaveData);
 	gGlobalState.Save(saveHelper);
 }
-
 
 void RestoreGlobalState(SAVERESTOREDATA* pSaveData)
 {
@@ -392,19 +367,11 @@ void RestoreGlobalState(SAVERESTOREDATA* pSaveData)
 	gGlobalState.Restore(restoreHelper);
 }
 
-
 void ResetGlobalState()
 {
 	gGlobalState.ClearStates();
 	gInitHUD = true; // Init the HUD on a new game / load game
 }
-
-// moved CWorld class definition to cbase.h
-//=======================
-// CWorld
-//
-// This spawns first when each level begins.
-//=======================
 
 LINK_ENTITY_TO_CLASS(worldspawn, CWorld);
 
@@ -647,12 +614,9 @@ void CWorld::Precache()
 	CVAR_SET_FLOAT("sv_wateramp", pev->scale);
 }
 
-
-//
-// Just to ignore the "wad" field.
-//
 bool CWorld::KeyValue(KeyValueData* pkvd)
 {
+	//ignore the "wad" field.
 	if (FStrEq(pkvd->szKeyName, "skyname"))
 	{
 		// Sent over net now.

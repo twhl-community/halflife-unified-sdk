@@ -22,10 +22,13 @@
 #include "changelevel.h"
 #include "shake.h"
 
-// These are the new entry points to entities.
 LINK_ENTITY_TO_CLASS(info_landmark, CPointEntity);
 
-class CTriggerVolume : public CPointEntity // Derive from point entity so this doesn't move across levels
+/**
+*	@brief Define space that travels across a level transition
+*	@details Derive from point entity so this doesn't move across levels
+*/
+class CTriggerVolume : public CPointEntity
 {
 public:
 	void Spawn() override;
@@ -33,7 +36,6 @@ public:
 
 LINK_ENTITY_TO_CLASS(trigger_transition, CTriggerVolume);
 
-// Define space that travels across a level transition
 void CTriggerVolume::Spawn()
 {
 	pev->solid = SOLID_NOT;
@@ -43,7 +45,9 @@ void CTriggerVolume::Spawn()
 	pev->modelindex = 0;
 }
 
-// Fires a target after level transition and then dies
+/**
+*	@brief Fires a target after level transition and then dies
+*/
 class CFireAndDie : public CBaseDelay
 {
 public:
@@ -74,7 +78,6 @@ void CFireAndDie::Think()
 
 LINK_ENTITY_TO_CLASS(trigger_changelevel, CChangeLevel);
 
-// Global Savedata for changelevel trigger
 TYPEDESCRIPTION CChangeLevel::m_SaveData[] =
 	{
 		DEFINE_ARRAY(CChangeLevel, m_szMapName, FIELD_CHARACTER, cchMapNameMost),
@@ -84,10 +87,6 @@ TYPEDESCRIPTION CChangeLevel::m_SaveData[] =
 };
 
 IMPLEMENT_SAVERESTORE(CChangeLevel, CBaseTrigger);
-
-//
-// Cache user-entity-field values until spawn is called.
-//
 
 bool CChangeLevel::KeyValue(KeyValueData* pkvd)
 {
@@ -118,10 +117,6 @@ bool CChangeLevel::KeyValue(KeyValueData* pkvd)
 
 	return CBaseTrigger::KeyValue(pkvd);
 }
-
-/*QUAKED trigger_changelevel (0.5 0.5 0.5) ? NO_INTERMISSION
-When the player touches this, he gets sent to the map listed in the "map" variable.  Unless the NO_INTERMISSION flag is set, the view will go to the info_intermission spot and display stats.
-*/
 
 void CChangeLevel::Spawn()
 {
@@ -159,11 +154,6 @@ CBaseEntity* CChangeLevel::FindLandmark(const char* pLandmarkName)
 	return nullptr;
 }
 
-//=========================================================
-// CChangeLevel :: Use - allows level transitions to be
-// triggered by buttons, etc.
-//
-//=========================================================
 void CChangeLevel::UseChangeLevel(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
 	ChangeLevelNow(pActivator);
@@ -236,8 +226,6 @@ void CChangeLevel::TouchChangeLevel(CBaseEntity* pOther)
 	ChangeLevelNow(pOther);
 }
 
-// Add a transition to the list, but ignore duplicates
-// (a designer may have placed multiple trigger_changelevels with the same landmark)
 bool CChangeLevel::AddTransitionToList(LEVELLIST* pLevelList, int listCount, const char* pMapName, const char* pLandmarkName, CBaseEntity* landmark)
 {
 	if (!pLevelList || !pMapName || !pLandmarkName || !landmark)
@@ -291,8 +279,6 @@ bool CChangeLevel::InTransitionVolume(CBaseEntity* pEntity, char* pVolumeName)
 
 // This has grown into a complicated beast
 // Can we make this more elegant?
-// This builds the list of all transitions on this level and which entities are in their PVS's and can / should
-// be moved across.
 int CChangeLevel::ChangeList(LEVELLIST* pLevelList, int maxList)
 {
 	int count = 0;

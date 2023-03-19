@@ -18,8 +18,6 @@
 
 LINK_ENTITY_TO_CLASS(eagle_laser, CEagleLaser);
 
-//=========================================================
-//=========================================================
 CEagleLaser* CEagleLaser::CreateSpot()
 {
 	auto pSpot = static_cast<CEagleLaser*>(g_EntityDictionary->Create("eagle_laser"));

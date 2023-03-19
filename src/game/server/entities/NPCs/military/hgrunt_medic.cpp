@@ -12,21 +12,6 @@
  *   use or distribution of this code by or to any unlicensed person is illegal.
  *
  ****/
-//=========================================================
-// hgrunt
-//=========================================================
-
-//=========================================================
-// Hit groups!
-//=========================================================
-/*
-
-  1 - Head
-  2 - Stomach
-  3 - Gun
-
-*/
-
 
 #include "cbase.h"
 #include "squadmonster.h"
@@ -36,11 +21,8 @@
 #include "hgrunt_ally_base.h"
 #include "blackmesa/scientist.h"
 
-//=========================================================
-// monster-specific DEFINE's
-//=========================================================
-#define MEDIC_DEAGLE_CLIP_SIZE 9 // how many bullets in a clip?
-#define MEDIC_GLOCK_CLIP_SIZE 9	 // how many bullets in a clip?
+#define MEDIC_DEAGLE_CLIP_SIZE 9 //!< how many bullets in a clip?
+#define MEDIC_GLOCK_CLIP_SIZE 9	 //!< how many bullets in a clip?
 
 namespace MedicAllyBodygroup
 {
@@ -86,17 +68,11 @@ static const MedicWeaponData MedicWeaponDatas[] =
 		{MedicAllyBodygroup::Deagle, "weapon_eagle"},
 		{MedicAllyBodygroup::Glock, "weapon_9mmhandgun"}};
 
-//=========================================================
-// Monster's Anim Events Go Here
-//=========================================================
 #define MEDIC_AE_HOLSTER_GUN 15
 #define MEDIC_AE_EQUIP_NEEDLE 16
 #define MEDIC_AE_HOLSTER_NEEDLE 17
 #define MEDIC_AE_EQUIP_GUN 18
 
-//=========================================================
-// monster-specific schedule types
-//=========================================================
 enum
 {
 	SCHED_MEDIC_ALLY_HEAL_ALLY = LAST_GRUNT_SCHEDULE + 1,
@@ -219,9 +195,6 @@ void COFMedicAlly::DropWeapon(bool applyVelocity)
 	}
 }
 
-//=========================================================
-// Shoot
-//=========================================================
 void COFMedicAlly::Shoot()
 {
 	// Limit fire rate
@@ -267,10 +240,6 @@ void COFMedicAlly::Shoot()
 	m_flLastShot = gpGlobals->time;
 }
 
-//=========================================================
-// HandleAnimEvent - catches the monster-specific messages
-// that occur when tagged animation frames are played.
-//=========================================================
 void COFMedicAlly::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
 	switch (pEvent->event)
@@ -324,9 +293,6 @@ void COFMedicAlly::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 }
 
-//=========================================================
-// Spawn
-//=========================================================
 void COFMedicAlly::Spawn()
 {
 	SpawnCore();
@@ -388,9 +354,6 @@ void COFMedicAlly::Spawn()
 	SetUse(&COFMedicAlly::HealerUse);
 }
 
-//=========================================================
-// Precache - precaches all resources this monster needs
-//=========================================================
 void COFMedicAlly::Precache()
 {
 	PrecacheSound("weapons/desert_eagle_fire.wav");
@@ -404,9 +367,6 @@ void COFMedicAlly::Precache()
 	CBaseHGruntAlly::Precache();
 }
 
-//=========================================================
-// start task
-//=========================================================
 void COFMedicAlly::StartTask(Task_t* pTask)
 {
 	m_iTaskStatus = TASKSTATUS_RUNNING;
@@ -478,9 +438,6 @@ void COFMedicAlly::StartTask(Task_t* pTask)
 	}
 }
 
-//=========================================================
-// RunTask
-//=========================================================
 void COFMedicAlly::RunTask(Task_t* pTask)
 {
 	switch (pTask->iTask)
@@ -532,10 +489,6 @@ void COFMedicAlly::RunTask(Task_t* pTask)
 	}
 	}
 }
-
-//=========================================================
-// AI Schedules Specific to this monster
-//=========================================================
 
 Task_t tlMedicAllyNewHealTarget[] =
 	{
@@ -661,8 +614,6 @@ Schedule_t* COFMedicAlly::GetHealSchedule()
 	return nullptr;
 }
 
-//=========================================================
-//=========================================================
 Schedule_t* COFMedicAlly::GetScheduleOfType(int Type)
 {
 	switch (Type)

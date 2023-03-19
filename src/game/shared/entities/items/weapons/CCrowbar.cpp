@@ -38,7 +38,6 @@ void CCrowbar::Spawn()
 	FallInit(); // get ready to fall down.
 }
 
-
 void CCrowbar::Precache()
 {
 	PrecacheModel("models/v_crowbar.mdl");
@@ -65,8 +64,6 @@ bool CCrowbar::GetWeaponInfo(WeaponInfo& info)
 	return true;
 }
 
-
-
 bool CCrowbar::Deploy()
 {
 	return DefaultDeploy("models/v_crowbar.mdl", "models/p_crowbar.mdl", CROWBAR_DRAW, "crowbar");
@@ -87,18 +84,15 @@ void CCrowbar::PrimaryAttack()
 	}
 }
 
-
 void CCrowbar::Smack()
 {
 	DecalGunshot(&m_trHit, BULLET_PLAYER_CROWBAR);
 }
 
-
 void CCrowbar::SwingAgain()
 {
 	Swing(false);
 }
-
 
 bool CCrowbar::Swing(bool fFirst)
 {

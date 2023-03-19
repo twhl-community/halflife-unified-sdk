@@ -12,13 +12,6 @@
  *   without written permission from Valve LLC.
  *
  ****/
-/*
-
-===== monsters.cpp ========================================================
-
-  Monster-related utility code
-
-*/
 
 #include "cbase.h"
 #include "animation.h"
@@ -35,11 +28,6 @@ TYPEDESCRIPTION CBaseAnimating::m_SaveData[] =
 
 IMPLEMENT_SAVERESTORE(CBaseAnimating, CBaseDelay);
 
-
-//=========================================================
-// StudioFrameAdvance - advance the animation frame up to the current time
-// if an flInterval is passed in, only advance animation that number of seconds
-//=========================================================
 float CBaseAnimating::StudioFrameAdvance(float flInterval)
 {
 	if (flInterval == 0.0)
@@ -69,9 +57,6 @@ float CBaseAnimating::StudioFrameAdvance(float flInterval)
 	return flInterval;
 }
 
-//=========================================================
-// LookupActivity
-//=========================================================
 int CBaseAnimating::LookupActivity(int activity)
 {
 	ASSERT(activity != 0);
@@ -80,12 +65,6 @@ int CBaseAnimating::LookupActivity(int activity)
 	return ::LookupActivity(pmodel, pev, activity);
 }
 
-//=========================================================
-// LookupActivityHeaviest
-//
-// Get activity with highest 'weight'
-//
-//=========================================================
 int CBaseAnimating::LookupActivityHeaviest(int activity)
 {
 	void* pmodel = GET_MODEL_PTR(ENT(pev));
@@ -93,8 +72,6 @@ int CBaseAnimating::LookupActivityHeaviest(int activity)
 	return ::LookupActivityHeaviest(pmodel, pev, activity);
 }
 
-//=========================================================
-//=========================================================
 int CBaseAnimating::LookupSequence(const char* label)
 {
 	void* pmodel = GET_MODEL_PTR(ENT(pev));
@@ -102,9 +79,6 @@ int CBaseAnimating::LookupSequence(const char* label)
 	return ::LookupSequence(pmodel, label);
 }
 
-
-//=========================================================
-//=========================================================
 void CBaseAnimating::ResetSequenceInfo()
 {
 	void* pmodel = GET_MODEL_PTR(ENT(pev));
@@ -117,10 +91,6 @@ void CBaseAnimating::ResetSequenceInfo()
 	m_flLastEventCheck = gpGlobals->time;
 }
 
-
-
-//=========================================================
-//=========================================================
 int CBaseAnimating::GetSequenceFlags()
 {
 	void* pmodel = GET_MODEL_PTR(ENT(pev));
@@ -128,9 +98,6 @@ int CBaseAnimating::GetSequenceFlags()
 	return ::GetSequenceFlags(pmodel, pev);
 }
 
-//=========================================================
-// DispatchAnimEvents
-//=========================================================
 void CBaseAnimating::DispatchAnimEvents(float flInterval)
 {
 	MonsterEvent_t event;
@@ -163,9 +130,6 @@ void CBaseAnimating::DispatchAnimEvents(float flInterval)
 	}
 }
 
-
-//=========================================================
-//=========================================================
 float CBaseAnimating::SetBoneController(int iController, float flValue)
 {
 	void* pmodel = GET_MODEL_PTR(ENT(pev));
@@ -173,8 +137,6 @@ float CBaseAnimating::SetBoneController(int iController, float flValue)
 	return SetController(pmodel, pev, iController, flValue);
 }
 
-//=========================================================
-//=========================================================
 void CBaseAnimating::InitBoneControllers()
 {
 	void* pmodel = GET_MODEL_PTR(ENT(pev));
@@ -185,8 +147,6 @@ void CBaseAnimating::InitBoneControllers()
 	SetController(pmodel, pev, 3, 0.0);
 }
 
-//=========================================================
-//=========================================================
 float CBaseAnimating::SetBlending(int iBlender, float flValue)
 {
 	void* pmodel = GET_MODEL_PTR(ENT(pev));
@@ -194,22 +154,16 @@ float CBaseAnimating::SetBlending(int iBlender, float flValue)
 	return ::SetBlending(pmodel, pev, iBlender, flValue);
 }
 
-//=========================================================
-//=========================================================
 void CBaseAnimating::GetBonePosition(int iBone, Vector& origin, Vector& angles)
 {
 	GET_BONE_POSITION(ENT(pev), iBone, origin, angles);
 }
 
-//=========================================================
-//=========================================================
 void CBaseAnimating::GetAttachment(int iAttachment, Vector& origin, Vector& angles)
 {
 	GET_ATTACHMENT(ENT(pev), iAttachment, origin, angles);
 }
 
-//=========================================================
-//=========================================================
 int CBaseAnimating::FindTransition(int iEndingSequence, int iGoalSequence, int* piDir)
 {
 	void* pmodel = GET_MODEL_PTR(ENT(pev));
@@ -227,8 +181,6 @@ int CBaseAnimating::FindTransition(int iEndingSequence, int iGoalSequence, int* 
 	return ::FindTransition(pmodel, iEndingSequence, iGoalSequence, piDir);
 }
 
-//=========================================================
-//=========================================================
 void CBaseAnimating::GetAutomovement(Vector& origin, Vector& angles, float flInterval)
 {
 }
@@ -262,9 +214,6 @@ bool CBaseAnimating::ExtractBbox(int sequence, Vector& mins, Vector& maxs)
 {
 	return ::ExtractBbox(GET_MODEL_PTR(ENT(pev)), sequence, mins, maxs);
 }
-
-//=========================================================
-//=========================================================
 
 void CBaseAnimating::SetSequenceBox()
 {

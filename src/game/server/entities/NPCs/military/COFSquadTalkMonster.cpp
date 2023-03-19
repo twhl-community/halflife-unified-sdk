@@ -12,18 +12,13 @@
  *   use or distribution of this code by or to any unlicensed person is illegal.
  *
  ****/
-//=========================================================
-// Squadmonster  functions
-//=========================================================
+
 #include "cbase.h"
 #include "talkmonster.h"
 #include "squadmonster.h"
 #include "COFSquadTalkMonster.h"
 #include "plane.h"
 
-//=========================================================
-// Save/Restore
-//=========================================================
 TYPEDESCRIPTION COFSquadTalkMonster::m_SaveData[] =
 	{
 		DEFINE_FIELD(COFSquadTalkMonster, m_hSquadLeader, FIELD_EHANDLE),
@@ -34,17 +29,10 @@ TYPEDESCRIPTION COFSquadTalkMonster::m_SaveData[] =
 		DEFINE_FIELD(COFSquadTalkMonster, m_flLastEnemySightTime, FIELD_TIME),
 
 		DEFINE_FIELD(COFSquadTalkMonster, m_iMySlot, FIELD_INTEGER),
-
-
 };
 
 IMPLEMENT_SAVERESTORE(COFSquadTalkMonster, CTalkMonster);
 
-
-//=========================================================
-// OccupySlot - if any slots of the passed slots are
-// available, the monster will be assigned to one.
-//=========================================================
 bool COFSquadTalkMonster::OccupySlot(int iDesiredSlots)
 {
 	int i;
@@ -94,9 +82,6 @@ bool COFSquadTalkMonster::OccupySlot(int iDesiredSlots)
 	return false;
 }
 
-//=========================================================
-// VacateSlot
-//=========================================================
 void COFSquadTalkMonster::VacateSlot()
 {
 	if (m_iMySlot != bits_NO_SLOT && InSquad())
@@ -107,17 +92,11 @@ void COFSquadTalkMonster::VacateSlot()
 	}
 }
 
-//=========================================================
-// ScheduleChange
-//=========================================================
 void COFSquadTalkMonster::ScheduleChange()
 {
 	VacateSlot();
 }
 
-//=========================================================
-// Killed
-//=========================================================
 void COFSquadTalkMonster::Killed(CBaseEntity* attacker, int iGib)
 {
 	VacateSlot();
@@ -130,12 +109,6 @@ void COFSquadTalkMonster::Killed(CBaseEntity* attacker, int iGib)
 	CTalkMonster::Killed(attacker, iGib);
 }
 
-//=========================================================
-//
-// SquadRemove(), remove pRemove from my squad.
-// If I am pRemove, promote m_pSquadNext to leader
-//
-//=========================================================
 void COFSquadTalkMonster::SquadRemove(COFSquadTalkMonster* pRemove)
 {
 	ASSERT(pRemove != nullptr);
@@ -174,11 +147,6 @@ void COFSquadTalkMonster::SquadRemove(COFSquadTalkMonster* pRemove)
 	pRemove->m_hSquadLeader = nullptr;
 }
 
-//=========================================================
-//
-// SquadAdd(), add pAdd to my squad
-//
-//=========================================================
 bool COFSquadTalkMonster::SquadAdd(COFSquadTalkMonster* pAdd)
 {
 	ASSERT(pAdd != nullptr);
@@ -198,14 +166,6 @@ bool COFSquadTalkMonster::SquadAdd(COFSquadTalkMonster* pAdd)
 	// should complain here
 }
 
-
-//=========================================================
-//
-// SquadPasteEnemyInfo - called by squad members that have
-// current info on the enemy so that it can be stored for
-// members who don't have current info.
-//
-//=========================================================
 void COFSquadTalkMonster::SquadPasteEnemyInfo()
 {
 	COFSquadTalkMonster* pSquadLeader = MySquadLeader();
@@ -213,14 +173,6 @@ void COFSquadTalkMonster::SquadPasteEnemyInfo()
 		pSquadLeader->m_vecEnemyLKP = m_vecEnemyLKP;
 }
 
-//=========================================================
-//
-// SquadCopyEnemyInfo - called by squad members who don't
-// have current info on the enemy. Reads from the same fields
-// in the leader's data that other squad members write to,
-// so the most recent data is always available here.
-//
-//=========================================================
 void COFSquadTalkMonster::SquadCopyEnemyInfo()
 {
 	COFSquadTalkMonster* pSquadLeader = MySquadLeader();
@@ -228,12 +180,6 @@ void COFSquadTalkMonster::SquadCopyEnemyInfo()
 		m_vecEnemyLKP = pSquadLeader->m_vecEnemyLKP;
 }
 
-//=========================================================
-//
-// SquadMakeEnemy - makes everyone in the squad angry at
-// the same entity.
-//
-//=========================================================
 void COFSquadTalkMonster::SquadMakeEnemy(CBaseEntity* pEnemy)
 {
 	if (m_MonsterState == MONSTERSTATE_SCRIPT)
@@ -340,13 +286,6 @@ void COFSquadTalkMonster::SquadMakeEnemy(CBaseEntity* pEnemy)
 	}
 }
 
-
-//=========================================================
-//
-// SquadCount(), return the number of members of this squad
-// callable from leaders & followers
-//
-//=========================================================
 int COFSquadTalkMonster::SquadCount()
 {
 	if (!InSquad())
@@ -363,13 +302,6 @@ int COFSquadTalkMonster::SquadCount()
 	return squadCount;
 }
 
-
-//=========================================================
-//
-// SquadRecruit(), get some monsters of my classification and
-// link them as a group.  returns the group size
-//
-//=========================================================
 int COFSquadTalkMonster::SquadRecruit(int searchRadius, int maxMembers)
 {
 	int squadCount;
@@ -447,9 +379,6 @@ int COFSquadTalkMonster::SquadRecruit(int searchRadius, int maxMembers)
 	return squadCount;
 }
 
-//=========================================================
-// CheckEnemy
-//=========================================================
 bool COFSquadTalkMonster::CheckEnemy(CBaseEntity* pEnemy)
 {
 	bool iUpdatedLKP;
@@ -474,9 +403,6 @@ bool COFSquadTalkMonster::CheckEnemy(CBaseEntity* pEnemy)
 	return iUpdatedLKP;
 }
 
-//=========================================================
-// StartMonster
-//=========================================================
 void COFSquadTalkMonster::StartMonster()
 {
 	CTalkMonster::StartMonster();
@@ -505,12 +431,6 @@ void COFSquadTalkMonster::StartMonster()
 	m_iPlayerHits = 0;
 }
 
-//=========================================================
-// NoFriendlyFire - checks for possibility of friendly fire
-//
-// Builds a large box in front of the grunt and checks to see
-// if any squad members are in that box.
-//=========================================================
 bool COFSquadTalkMonster::NoFriendlyFire()
 {
 	if (!InSquad())
@@ -574,10 +494,6 @@ bool COFSquadTalkMonster::NoFriendlyFire()
 	return true;
 }
 
-//=========================================================
-// GetIdealState - surveys the Conditions information available
-// and finds the best new state for a monster.
-//=========================================================
 MONSTERSTATE COFSquadTalkMonster::GetIdealState()
 {
 	int iConditions;
@@ -599,11 +515,6 @@ MONSTERSTATE COFSquadTalkMonster::GetIdealState()
 	return CTalkMonster::GetIdealState();
 }
 
-//=========================================================
-// FValidateCover - determines whether or not the chosen
-// cover location is a good one to move to. (currently based
-// on proximity to others in the squad)
-//=========================================================
 bool COFSquadTalkMonster::FValidateCover(const Vector& vecCoverLocation)
 {
 	if (!InSquad())
@@ -620,10 +531,6 @@ bool COFSquadTalkMonster::FValidateCover(const Vector& vecCoverLocation)
 	return true;
 }
 
-//=========================================================
-// SquadEnemySplit- returns true if not all squad members
-// are fighting the same enemy.
-//=========================================================
 bool COFSquadTalkMonster::SquadEnemySplit()
 {
 	if (!InSquad())
@@ -643,11 +550,6 @@ bool COFSquadTalkMonster::SquadEnemySplit()
 	return false;
 }
 
-//=========================================================
-// FValidateCover - determines whether or not the chosen
-// cover location is a good one to move to. (currently based
-// on proximity to others in the squad)
-//=========================================================
 bool COFSquadTalkMonster::SquadMemberInRange(const Vector& vecLocation, float flDist)
 {
 	if (!InSquad())
@@ -663,7 +565,6 @@ bool COFSquadTalkMonster::SquadMemberInRange(const Vector& vecLocation, float fl
 	}
 	return false;
 }
-
 
 extern Schedule_t slChaseEnemyFailed[];
 

@@ -29,6 +29,7 @@ TYPEDESCRIPTION CRpg::m_SaveData[] =
 		DEFINE_FIELD(CRpg, m_fSpotActive, FIELD_BOOLEAN),
 		DEFINE_FIELD(CRpg, m_cActiveRockets, FIELD_INTEGER),
 };
+
 IMPLEMENT_SAVERESTORE(CRpg, CBasePlayerWeapon);
 
 TYPEDESCRIPTION CRpgRocket::m_SaveData[] =
@@ -36,6 +37,7 @@ TYPEDESCRIPTION CRpgRocket::m_SaveData[] =
 		DEFINE_FIELD(CRpgRocket, m_flIgniteTime, FIELD_TIME),
 		DEFINE_FIELD(CRpgRocket, m_pLauncher, FIELD_EHANDLE),
 };
+
 IMPLEMENT_SAVERESTORE(CRpgRocket, CGrenade);
 
 LINK_ENTITY_TO_CLASS(rpg_rocket, CRpgRocket);
@@ -49,8 +51,6 @@ CRpgRocket::~CRpgRocket()
 	}
 }
 
-//=========================================================
-//=========================================================
 CRpgRocket* CRpgRocket::CreateRpgRocket(Vector vecOrigin, Vector vecAngles, CBaseEntity* pOwner, CRpg* pLauncher)
 {
 	CRpgRocket* pRocket = g_EntityDictionary->Create<CRpgRocket>("rpg_rocket");
@@ -66,8 +66,6 @@ CRpgRocket* CRpgRocket::CreateRpgRocket(Vector vecOrigin, Vector vecAngles, CBas
 	return pRocket;
 }
 
-//=========================================================
-//=========================================================
 void CRpgRocket::Spawn()
 {
 	Precache();
@@ -94,23 +92,18 @@ void CRpgRocket::Spawn()
 	pev->dmg = GetSkillFloat("plr_rpg"sv);
 }
 
-//=========================================================
-//=========================================================
 void CRpgRocket::RocketTouch(CBaseEntity* pOther)
 {
 	StopSound(CHAN_VOICE, "weapons/rocket1.wav");
 	ExplodeTouch(pOther);
 }
 
-//=========================================================
-//=========================================================
 void CRpgRocket::Precache()
 {
 	PrecacheModel("models/rpgrocket.mdl");
 	m_iTrail = PrecacheModel("sprites/smoke.spr");
 	PrecacheSound("weapons/rocket1.wav");
 }
-
 
 void CRpgRocket::IgniteThink()
 {
@@ -143,7 +136,6 @@ void CRpgRocket::IgniteThink()
 	SetThink(&CRpgRocket::FollowThink);
 	pev->nextthink = gpGlobals->time + 0.1;
 }
-
 
 void CRpgRocket::FollowThink()
 {
@@ -295,7 +287,6 @@ void CRpg::Spawn()
 	FallInit(); // get ready to fall down.
 }
 
-
 void CRpg::Precache()
 {
 	PrecacheModel(STRING(m_WorldModel));
@@ -312,7 +303,6 @@ void CRpg::Precache()
 
 	m_usRpg = PRECACHE_EVENT(1, "events/rpg.sc");
 }
-
 
 bool CRpg::GetWeaponInfo(WeaponInfo& info)
 {
@@ -345,7 +335,6 @@ bool CRpg::Deploy()
 	return DefaultDeploy("models/v_rpg.mdl", "models/p_rpg.mdl", RPG_DRAW1, "rpg");
 }
 
-
 bool CRpg::CanHolster()
 {
 	if (m_fSpotActive && 0 != m_cActiveRockets)
@@ -373,8 +362,6 @@ void CRpg::Holster()
 	}
 #endif
 }
-
-
 
 void CRpg::PrimaryAttack()
 {
@@ -420,7 +407,6 @@ void CRpg::PrimaryAttack()
 	UpdateSpot();
 }
 
-
 void CRpg::SecondaryAttack()
 {
 	m_fSpotActive = !m_fSpotActive;
@@ -435,7 +421,6 @@ void CRpg::SecondaryAttack()
 
 	m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.2;
 }
-
 
 void CRpg::WeaponIdle()
 {
@@ -476,8 +461,6 @@ void CRpg::WeaponIdle()
 	}
 }
 
-
-
 void CRpg::UpdateSpot()
 {
 
@@ -512,7 +495,6 @@ void CRpg::SetWeaponData(const weapon_data_t& data)
 	m_fSpotActive = data.fuser2 != 0;
 	m_cActiveRockets = data.fuser3;
 }
-
 
 class CRpgAmmo : public CBasePlayerAmmo
 {

@@ -12,23 +12,20 @@
  *   use or distribution of this code by or to any unlicensed person is illegal.
  *
  ****/
-//=========================================================
-// Voltigore - Tank like alien
-//=========================================================
 
 #include "cbase.h"
 #include "squadmonster.h"
 #include "voltigore.h"
 
-//=========================================================
-// Monster's Anim Events Go Here
-//=========================================================
 #define BABYVOLTIGORE_AE_LEFT_FOOT (10)
 #define BABYVOLTIGORE_AE_RIGHT_FOOT (11)
 #define BABYVOLTIGORE_AE_RUN 14
 
 constexpr float BabyVoltigoreMeleeDist = 64;
 
+/**
+*	@brief Tank like alien
+*/
 class COFBabyVoltigore : public COFVoltigore
 {
 public:
@@ -44,6 +41,11 @@ public:
 	void AlertSound() override;
 	void PainSound() override;
 
+	/**
+	*	@brief expects a length to trace, amount of damage to do, and damage type.
+	*	Returns a pointer to the damaged entity in case the monster wishes to do other stuff to the victim (punchangle, etc)
+	*	Used for many contact-range melee attacks. Bites, claws, etc.
+	*/
 	CBaseEntity* CheckTraceHullAttack(float flDist, int iDamage, int iDmgType);
 
 protected:
@@ -65,9 +67,6 @@ void COFBabyVoltigore::OnCreate()
 	pev->model = MAKE_STRING("models/baby_voltigore.mdl");
 }
 
-//=========================================================
-// AlertSound
-//=========================================================
 void COFBabyVoltigore::AlertSound()
 {
 	StopTalking();
@@ -75,9 +74,6 @@ void COFBabyVoltigore::AlertSound()
 	EmitSoundDyn(CHAN_VOICE, pAlertSounds[RANDOM_LONG(0, std::size(pAlertSounds) - 1)], 1.0, ATTN_NORM, 0, 180);
 }
 
-//=========================================================
-// PainSound
-//=========================================================
 void COFBabyVoltigore::PainSound()
 {
 	if (m_flNextPainTime > gpGlobals->time)
@@ -92,12 +88,6 @@ void COFBabyVoltigore::PainSound()
 	EmitSoundDyn(CHAN_VOICE, pPainSounds[RANDOM_LONG(0, std::size(pPainSounds) - 1)], 1.0, ATTN_NORM, 0, 180);
 }
 
-//=========================================================
-// HandleAnimEvent - catches the monster-specific messages
-// that occur when tagged animation frames are played.
-//
-// Returns number of events handled, 0 if none.
-//=========================================================
 void COFBabyVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
 	switch (pEvent->event)
@@ -198,21 +188,11 @@ void COFBabyVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 }
 
-//=========================================================
-// Spawn
-//=========================================================
 void COFBabyVoltigore::Spawn()
 {
 	SpawnCore({-16, -16, 0}, {16, 16, 32});
 }
-//=========================================================
-// CheckTraceHullAttack - expects a length to trace, amount
-// of damage to do, and damage type. Returns a pointer to
-// the damaged entity in case the monster wishes to do
-// other stuff to the victim (punchangle, etc)
-//
-// Used for many contact-range melee attacks. Bites, claws, etc.
-//=========================================================
+
 CBaseEntity* COFBabyVoltigore::CheckTraceHullAttack(float flDist, int iDamage, int iDmgType)
 {
 	TraceResult tr;

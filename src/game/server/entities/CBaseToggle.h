@@ -17,11 +17,11 @@
 
 #include "CBaseAnimating.h"
 
-//
-// generic Toggle entity.
-//
 #define SF_ITEM_USE_ONLY 256 //  ITEM_USE_ONLY = BUTTON_USE_ONLY = DOOR_USE_ONLY!!!
 
+/**
+*	@brief generic Toggle entity.
+*/
 class CBaseToggle : public CBaseAnimating
 {
 public:
@@ -58,10 +58,27 @@ public:
 	float GetDelay() override { return m_flWait; }
 
 	// common member functions
+	/**
+	*	@brief calculate pev->velocity and pev->nextthink to reach vecDest from pev->origin traveling at flSpeed
+	*/
 	void LinearMove(Vector vecDest, float flSpeed);
+
+	/**
+	*	@brief After moving, set origin to exact final destination, call "move done" function
+	*/
 	void EXPORT LinearMoveDone();
+
+	/**
+	*	@brief calculate pev->velocity and pev->nextthink to reach vecDest from pev->origin traveling at flSpeed
+	*	Just like LinearMove, but rotational.
+	*/
 	void AngularMove(Vector vecDestAngle, float flSpeed);
+
+	/**
+	*	@brief After rotating, set angle to exact final angle, call "move done" function
+	*/
 	void EXPORT AngularMoveDone();
+
 	bool IsLockedByMaster();
 
 	static float AxisValue(int flags, const Vector& angles);

@@ -23,11 +23,9 @@
 #define SF_WORLD_COOP 0x0010	  // Co-op gamemode
 
 // this moved here from world.cpp, to allow classes to be derived from it
-//=======================
-// CWorld
-//
-// This spawns first when each level begins.
-//=======================
+/**
+*	@brief This spawns first when each level begins.
+*/
 class CWorld : public CBaseEntity
 {
 public:

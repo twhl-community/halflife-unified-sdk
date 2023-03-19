@@ -28,8 +28,12 @@ public:
 	void EXPORT SatchelThink();
 
 public:
+	/**
+	*	@brief do whatever it is we do to an orphaned satchel when we don't want it in the world anymore.
+	*/
 	void Deactivate();
 };
+
 LINK_ENTITY_TO_CLASS(monster_satchel, CSatchelCharge);
 
 void CSatchelCharge::OnCreate()
@@ -39,16 +43,11 @@ void CSatchelCharge::OnCreate()
 	pev->model = MAKE_STRING("models/w_satchel.mdl");
 }
 
-//=========================================================
-// Deactivate - do whatever it is we do to an orphaned
-// satchel when we don't want it in the world anymore.
-//=========================================================
 void CSatchelCharge::Deactivate()
 {
 	pev->solid = SOLID_NOT;
 	UTIL_Remove(this);
 }
-
 
 void CSatchelCharge::Spawn()
 {
@@ -74,7 +73,6 @@ void CSatchelCharge::Spawn()
 	// ResetSequenceInfo( );
 	pev->sequence = 1;
 }
-
 
 void CSatchelCharge::SatchelSlide(CBaseEntity* pOther)
 {
@@ -102,7 +100,6 @@ void CSatchelCharge::SatchelSlide(CBaseEntity* pOther)
 	}
 	StudioFrameAdvance();
 }
-
 
 void CSatchelCharge::SatchelThink()
 {
@@ -156,7 +153,6 @@ void CSatchelCharge::BounceSound()
 	}
 }
 
-
 LINK_ENTITY_TO_CLASS(weapon_satchel, CSatchel);
 
 #ifndef CLIENT_DLL
@@ -164,6 +160,7 @@ TYPEDESCRIPTION CSatchel::m_SaveData[] =
 	{
 		DEFINE_FIELD(CSatchel, m_chargeReady, FIELD_INTEGER),
 };
+
 IMPLEMENT_SAVERESTORE(CSatchel, CBasePlayerWeapon);
 #endif
 
@@ -174,9 +171,6 @@ void CSatchel::OnCreate()
 	m_WorldModel = pev->model = MAKE_STRING("models/w_satchel.mdl");
 }
 
-//=========================================================
-// CALLED THROUGH the newly-touched weapon's instance. The existing player weapon is pOriginal
-//=========================================================
 bool CSatchel::AddDuplicate(CBasePlayerWeapon* original)
 {
 	CSatchel* pSatchel;
@@ -195,8 +189,6 @@ bool CSatchel::AddDuplicate(CBasePlayerWeapon* original)
 	return CBasePlayerWeapon::AddDuplicate(original);
 }
 
-//=========================================================
-//=========================================================
 void CSatchel::AddToPlayer(CBasePlayer* pPlayer)
 {
 	m_chargeReady = 0; // this satchel charge weapon now forgets that any satchels are deployed by it.
@@ -214,7 +206,6 @@ void CSatchel::Spawn()
 	FallInit(); // get ready to fall down.
 }
 
-
 void CSatchel::Precache()
 {
 	PrecacheModel("models/v_satchel.mdl");
@@ -225,7 +216,6 @@ void CSatchel::Precache()
 
 	UTIL_PrecacheOther("monster_satchel");
 }
-
 
 bool CSatchel::GetWeaponInfo(WeaponInfo& info)
 {
@@ -241,8 +231,6 @@ bool CSatchel::GetWeaponInfo(WeaponInfo& info)
 	return true;
 }
 
-//=========================================================
-//=========================================================
 bool CSatchel::IsUseable()
 {
 	if (m_pPlayer->m_rgAmmo[PrimaryAmmoIndex()] > 0)
@@ -297,7 +285,6 @@ bool CSatchel::Deploy()
 	return result;
 }
 
-
 void CSatchel::Holster()
 {
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;
@@ -319,8 +306,6 @@ void CSatchel::Holster()
 		pev->nextthink = gpGlobals->time + 0.1;
 	}
 }
-
-
 
 void CSatchel::PrimaryAttack()
 {
@@ -366,7 +351,6 @@ void CSatchel::PrimaryAttack()
 	}
 }
 
-
 void CSatchel::SecondaryAttack()
 {
 	if (m_chargeReady != 2)
@@ -374,7 +358,6 @@ void CSatchel::SecondaryAttack()
 		Throw();
 	}
 }
-
 
 void CSatchel::Throw()
 {
@@ -406,7 +389,6 @@ void CSatchel::Throw()
 		m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.5;
 	}
 }
-
 
 void CSatchel::WeaponIdle()
 {
@@ -452,12 +434,6 @@ void CSatchel::WeaponIdle()
 	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10, 15); // how long till we do this again.
 }
 
-//=========================================================
-// DeactivateSatchels - removes all satchels owned by
-// the provided player. Should only be used upon death.
-//
-// Made this global on purpose.
-//=========================================================
 void DeactivateSatchels(CBasePlayer* pOwner)
 {
 	for (auto satchel : UTIL_FindEntitiesByClassname<CSatchelCharge>("monster_satchel"))

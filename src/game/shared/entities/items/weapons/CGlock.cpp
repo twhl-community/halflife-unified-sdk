@@ -36,7 +36,6 @@ void CGlock::Spawn()
 	FallInit(); // get ready to fall down.
 }
 
-
 void CGlock::Precache()
 {
 	PrecacheModel("models/v_9mmhandgun.mdl");
@@ -160,7 +159,6 @@ void CGlock::GlockFire(float flSpread, float flCycleTime, bool fUseAutoAim)
 	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10, 15);
 }
 
-
 void CGlock::Reload()
 {
 	if (m_pPlayer->ammo_9mm <= 0)
@@ -178,8 +176,6 @@ void CGlock::Reload()
 		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10, 15);
 	}
 }
-
-
 
 void CGlock::WeaponIdle()
 {
@@ -214,13 +210,6 @@ void CGlock::WeaponIdle()
 		SendWeaponAnim(iAnim);
 	}
 }
-
-
-
-
-
-
-
 
 class CGlockAmmo : public CBasePlayerAmmo
 {

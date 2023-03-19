@@ -399,7 +399,7 @@ void CDisplacer::AltFireThink()
 		m_pPlayer->m_iWeaponFlash = BRIGHT_GUN_FLASH;
 
 #ifndef CLIENT_DLL
-		// Must always be handled on the server side in order to play the right sounds and effects. - Solokiller
+		// Must always be handled on the server side in order to play the right sounds and effects.
 		int flags = 0;
 
 		PLAYBACK_EVENT_FULL(flags, m_pPlayer->edict(), m_usFireDisplacer, 0, g_vecZero, g_vecZero,

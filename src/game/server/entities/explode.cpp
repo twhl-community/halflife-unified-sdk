@@ -12,17 +12,18 @@
  *   without written permission from Valve LLC.
  *
  ****/
-/*
 
-===== explode.cpp ========================================================
-
-  Explosion-related code
-
+/**
+*	@file
+*	Explosion-related code
 */
+
 #include "cbase.h"
 #include "explode.h"
 
-// Spark Shower
+/**
+*	@brief Spark Shower
+*/
 class CShower : public CBaseEntity
 {
 public:
@@ -71,7 +72,6 @@ void CShower::Spawn()
 
 	pev->angles = g_vecZero;
 }
-
 
 void CShower::Think()
 {
@@ -245,7 +245,6 @@ void CEnvExplosion::Smoke()
 		UTIL_Remove(this);
 	}
 }
-
 
 // HACKHACK -- create one of these and fake a keyvalue to get the right explosion setup
 void ExplosionCreate(const Vector& center, const Vector& angles, edict_t* pOwner, int magnitude, bool doDamage)

@@ -12,19 +12,12 @@
  *   use or distribution of this code by or to any unlicensed person is illegal.
  *
  ****/
-//=========================================================
-// human scientist (passive lab worker)
-//=========================================================
 
 #include "cbase.h"
 #include "talkmonster.h"
 #include "defaultai.h"
 #include "scripted.h"
 #include "scientist.h"
-
-//=======================================================
-// Scientist
-//=======================================================
 
 class CRosenberg : public CScientist
 {
@@ -93,9 +86,6 @@ void CRosenberg::StartTask(Task_t* pTask)
 	}
 }
 
-//=========================================================
-// Precache - precaches all resources this monster needs
-//=========================================================
 void CRosenberg::Precache()
 {
 	PrecacheModel(STRING(pev->model));
@@ -112,7 +102,6 @@ void CRosenberg::Precache()
 	CTalkMonster::Precache();
 }
 
-// Init talk data
 void CRosenberg::TalkInit()
 {
 	CTalkMonster::TalkInit();
@@ -150,9 +139,6 @@ bool CRosenberg::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float
 	return CTalkMonster::TakeDamage(inflictor, attacker, flDamage, bitsDamageType);
 }
 
-//=========================================================
-// PainSound
-//=========================================================
 void CRosenberg::PainSound()
 {
 	if (gpGlobals->time < m_painTime)

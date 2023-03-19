@@ -12,20 +12,6 @@
  *   use or distribution of this code by or to any unlicensed person is illegal.
  *
  ****/
-//=========================================================
-// male assassin
-//=========================================================
-
-//=========================================================
-// Hit groups!
-//=========================================================
-/*
-
-  1 - Head
-  2 - Stomach
-  3 - Gun
-
-*/
 
 #include "cbase.h"
 #include "squadmonster.h"
@@ -128,9 +114,6 @@ void CMOFAssassin::OnCreate()
 	pev->model = MAKE_STRING("models/massn.mdl");
 }
 
-//=========================================================
-// GibMonster - make gun fly through the air.
-//=========================================================
 void CMOFAssassin::GibMonster()
 {
 	Vector vecGunPos;
@@ -169,14 +152,6 @@ void CMOFAssassin::GibMonster()
 	CBaseMonster::GibMonster();
 }
 
-//=========================================================
-// CheckRangeAttack1 - overridden for HGrunt, cause
-// FCanCheckAttacks() doesn't disqualify all attacks based
-// on whether or not the enemy is occluded because unlike
-// the base class, the HGrunt can attack when the enemy is
-// occluded (throw grenade over wall, etc). We must
-// disqualify the machine gun attack if the enemy is occluded.
-//=========================================================
 bool CMOFAssassin::CheckRangeAttack1(float flDot, float flDist)
 {
 	if (0 != pev->weapons)
@@ -192,18 +167,11 @@ bool CMOFAssassin::CheckRangeAttack1(float flDot, float flDist)
 	return false;
 }
 
-//=========================================================
-// CheckRangeAttack2 - this checks the Grunt's grenade
-// attack.
-//=========================================================
 bool CMOFAssassin::CheckRangeAttack2(float flDot, float flDist)
 {
 	return CheckRangeAttack2Core(flDot, flDist, GetSkillFloat("massassin_gspeed"sv));
 }
 
-//=========================================================
-// TraceAttack - make sure we're not taking it in the helmet
-//=========================================================
 void CMOFAssassin::TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType)
 {
 	// check for helmet shot
@@ -221,10 +189,6 @@ void CMOFAssassin::IdleSound()
 	// Male Assassin doesn't make idle chat
 }
 
-//=========================================================
-// CheckAmmo - overridden for the grunt because he actually
-// uses ammo! (base class doesn't)
-//=========================================================
 void CMOFAssassin::CheckAmmo()
 {
 	if (0 != pev->weapons)
@@ -233,9 +197,6 @@ void CMOFAssassin::CheckAmmo()
 	}
 }
 
-//=========================================================
-// Shoot
-//=========================================================
 void CMOFAssassin::Shoot(bool firstShotInBurst)
 {
 	if (m_hEnemy)
@@ -291,10 +252,6 @@ void CMOFAssassin::Shoot(bool firstShotInBurst)
 	}
 }
 
-//=========================================================
-// HandleAnimEvent - catches the monster-specific messages
-// that occur when tagged animation frames are played.
-//=========================================================
 void CMOFAssassin::HandleAnimEvent(MonsterEvent_t* pEvent)
 {
 	// Override grunt events that require assassin-specific behavior
@@ -347,9 +304,6 @@ void CMOFAssassin::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 }
 
-//=========================================================
-// Spawn
-//=========================================================
 void CMOFAssassin::Spawn()
 {
 	Precache();
@@ -419,9 +373,6 @@ void CMOFAssassin::Spawn()
 	MonsterInit();
 }
 
-//=========================================================
-// PainSound
-//=========================================================
 void CMOFAssassin::PainSound()
 {
 	// Male Assassin doesn't make pain sounds

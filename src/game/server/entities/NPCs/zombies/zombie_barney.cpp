@@ -12,9 +12,6 @@
  *   use or distribution of this code by or to any unlicensed person is illegal.
  *
  ****/
-//=========================================================
-// Zombie Barney
-//=========================================================
 
 #include "cbase.h"
 #include "zombie.h"

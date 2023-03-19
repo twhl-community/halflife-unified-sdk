@@ -15,7 +15,7 @@
 
 #pragma once
 
-#define NUM_SCIENTIST_HEADS 4 // four heads available for scientist model
+#define NUM_SCIENTIST_HEADS 4 //!< four heads available for scientist model
 enum
 {
 	HEAD_GLASSES = 0,
@@ -72,17 +72,13 @@ enum
 	TASK_MOVE_TO_TARGET_RANGE_SCARED,
 };
 
-//=========================================================
-// Monster's Anim Events Go Here
-//=========================================================
 #define SCIENTIST_AE_HEAL (1)
 #define SCIENTIST_AE_NEEDLEON (2)
 #define SCIENTIST_AE_NEEDLEOFF (3)
 
-//=======================================================
-// Scientist
-//=======================================================
-
+/**
+*	@brief human scientist (passive lab worker)
+*/
 class CScientist : public CTalkMonster
 {
 public:

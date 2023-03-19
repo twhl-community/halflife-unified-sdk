@@ -12,12 +12,9 @@
  *   without written permission from Valve LLC.
  *
  ****/
-/*
-
-===== h_battery.cpp ========================================================
-
-  battery-related code
-
+/**
+*	@file
+*	battery-related code
 */
 
 #include "cbase.h"
@@ -56,7 +53,6 @@ TYPEDESCRIPTION CRecharge::m_SaveData[] =
 IMPLEMENT_SAVERESTORE(CRecharge, CBaseToggle);
 
 LINK_ENTITY_TO_CLASS(func_recharge, CRecharge);
-
 
 bool CRecharge::KeyValue(KeyValueData* pkvd)
 {
@@ -97,7 +93,6 @@ void CRecharge::Precache()
 	PrecacheSound("items/suitchargeno1.wav");
 	PrecacheSound("items/suitchargeok1.wav");
 }
-
 
 void CRecharge::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {

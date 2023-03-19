@@ -102,9 +102,21 @@ class CBasePlayer : public CBaseMonster
 {
 public:
 	// Spectator camera
+	/**
+	*	@brief Find the next client in the game for this player to spectate
+	*/
 	void Observer_FindNextPlayer(bool bReverse);
+
+	/**
+	*	@brief Handle buttons in observer mode
+	*/
 	void Observer_HandleButtons();
+
+	/**
+	*	@brief Attempt to change the observer mode
+	*/
 	void Observer_SetMode(int iMode);
+
 	void Observer_CheckTarget();
 	void Observer_CheckProperties();
 	EHANDLE m_hObserverTarget;
@@ -147,7 +159,7 @@ public:
 
 	int m_rgItems[MAX_ITEMS];
 
-	unsigned int m_afPhysicsFlags; // physics flags - set when 'normal' physics should be revisited or overriden
+	unsigned int m_afPhysicsFlags; // physics flags - set when 'normal' physics should be revisited or overridden
 	float m_fNextSuicideTime;	   // the time after which the player can next use the suicide command
 
 

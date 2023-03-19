@@ -12,10 +12,12 @@
  *   use or distribution of this code by or to any unlicensed person is illegal.
  *
  ****/
-// Base class for flying monsters.  This overrides the movement test & execution code from CBaseMonster
 
 #pragma once
 
+/**
+*	@brief Base class for flying monsters.  This overrides the movement test & execution code from CBaseMonster
+*/
 class CFlyingMonster : public CBaseMonster
 {
 public:

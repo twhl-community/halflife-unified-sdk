@@ -22,7 +22,7 @@ LINK_ENTITY_TO_CLASS(grapple_tip, CGrappleTip);
 
 namespace
 {
-// TODO: this should be handled differently. A method that returns an overall size, another whether it's fixed, etc. - Solokiller
+// TODO: this should be handled differently. A method that returns an overall size, another whether it's fixed, etc.
 const char* const grapple_small[] =
 	{
 		"monster_bloater",
@@ -154,7 +154,7 @@ void CGrappleTip::FlyThink()
 		maxSpeed = 1600;
 	}
 
-	// TODO: should probably clamp at sv_maxvelocity to prevent the tip from going off course. - Solokiller
+	// TODO: should probably clamp at sv_maxvelocity to prevent the tip from going off course.
 	if (pev->velocity.Length() > maxSpeed)
 	{
 		pev->velocity = pev->velocity.Normalize() * maxSpeed;

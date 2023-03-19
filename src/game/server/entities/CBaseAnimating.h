@@ -26,13 +26,25 @@ public:
 	static TYPEDESCRIPTION m_SaveData[];
 
 	// Basic Monster Animation functions
-	float StudioFrameAdvance(float flInterval = 0.0); // accumulate animation frame time from last time called until now
+	/**
+	*	@brief advance the animation frame from last time called up to the current time
+	*	if an flInterval is passed in, only advance animation that number of seconds
+	*/
+	float StudioFrameAdvance(float flInterval = 0.0);
 	int GetSequenceFlags();
 	int LookupActivity(int activity);
+
+	/**
+	*	@brief Get activity with highest 'weight'
+	*/
 	int LookupActivityHeaviest(int activity);
 	int LookupSequence(const char* label);
 	void ResetSequenceInfo();
 	void DispatchAnimEvents(float flFutureInterval = 0.1); // Handle events that have happend since last time called up until X seconds into the future
+
+	/**
+	*	@brief catches the messages that occur when tagged animation frames are played.
+	*/
 	virtual void HandleAnimEvent(MonsterEvent_t* pEvent) {}
 	float SetBoneController(int iController, float flValue);
 	void InitBoneControllers();
@@ -48,9 +60,9 @@ public:
 	void SetSequenceBox();
 
 	// animation needs
-	float m_flFrameRate;	  // computed FPS for current sequence
-	float m_flGroundSpeed;	  // computed linear movement rate for current sequence
-	float m_flLastEventCheck; // last time the event list was checked
-	bool m_fSequenceFinished; // flag set when StudioAdvanceFrame moves across a frame boundry
-	bool m_fSequenceLoops;	  // true if the sequence loops
+	float m_flFrameRate;	  //!< computed FPS for current sequence
+	float m_flGroundSpeed;	  //!< computed linear movement rate for current sequence
+	float m_flLastEventCheck; //!< last time the event list was checked
+	bool m_fSequenceFinished; //!< flag set when StudioAdvanceFrame moves across a frame boundry
+	bool m_fSequenceLoops;	  //!< true if the sequence loops
 };

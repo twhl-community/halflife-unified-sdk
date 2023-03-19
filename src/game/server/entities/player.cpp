@@ -60,7 +60,6 @@
 #define FLASH_DRAIN_TIME 1.2  // 100 units/3 minutes
 #define FLASH_CHARGE_TIME 0.2 // 100 units/20 seconds  (seconds per unit)
 
-// Global Savedata for player
 TYPEDESCRIPTION CBasePlayer::m_playerSaveData[] =
 	{
 		DEFINE_FIELD(CBasePlayer, m_SuitLightType, FIELD_INTEGER),
@@ -1942,7 +1941,7 @@ void CBasePlayer::PreThink()
 	else
 		pev->flags &= ~FL_ONTRAIN;
 
-	// We're on a rope. - Solokiller
+	// We're on a rope.
 	if ((m_afPhysicsFlags & PFLAG_ONROPE) != 0 && m_pRope)
 	{
 		pev->velocity = g_vecZero;
@@ -1970,7 +1969,7 @@ void CBasePlayer::PreThink()
 			m_pRope->ApplyForceFromPlayer(vecForce);
 		}
 
-		// Determine if any force should be applied to the rope, or if we should move around. - Solokiller
+		// Determine if any force should be applied to the rope, or if we should move around.
 		if ((pev->button & (IN_BACK | IN_FORWARD)) != 0)
 		{
 			if ((gpGlobals->v_forward.x * gpGlobals->v_forward.x +
@@ -1988,7 +1987,7 @@ void CBasePlayer::PreThink()
 						{
 							if (!m_pRope->MoveDown(flDelta))
 							{
-								// Let go of the rope, detach. - Solokiller
+								// Let go of the rope, detach.
 								pev->movetype = MOVETYPE_WALK;
 								pev->solid = SOLID_SLIDEBOX;
 
@@ -2011,7 +2010,7 @@ void CBasePlayer::PreThink()
 						}
 						else if (!m_pRope->MoveDown(flDelta))
 						{
-							// Let go of the rope, detach. - Solokiller
+							// Let go of the rope, detach.
 							pev->movetype = MOVETYPE_WALK;
 							pev->solid = SOLID_SLIDEBOX;
 							m_afPhysicsFlags &= ~PFLAG_ONROPE;
@@ -2049,7 +2048,7 @@ void CBasePlayer::PreThink()
 
 		if ((m_afButtonPressed & IN_JUMP) != 0)
 		{
-			// We've jumped off the rope, give us some momentum - Solokiller
+			// We've jumped off the rope, give us some momentum
 			pev->movetype = MOVETYPE_WALK;
 			pev->solid = SOLID_SLIDEBOX;
 			m_afPhysicsFlags &= ~PFLAG_ONROPE;

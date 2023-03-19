@@ -12,9 +12,6 @@
  *   without written permission from Valve LLC.
  *
  ****/
-//=========================================================
-// sound.cpp
-//=========================================================
 
 #include <fmt/format.h>
 
@@ -22,12 +19,11 @@
 #include "talkmonster.h"
 #include "sound/MaterialSystem.h"
 
-// ==================== GENERIC AMBIENT SOUND ======================================
-
-// runtime pitch shift and volume fadein/out structure
-
-// NOTE: IF YOU CHANGE THIS STRUCT YOU MUST CHANGE THE SAVE/RESTORE VERSION NUMBER
-// SEE BELOW (in the typedescription for the class)
+/**
+*	@brief runtime pitch shift and volume fadein/out structure
+*	@details NOTE: IF YOU CHANGE THIS STRUCT YOU MUST CHANGE THE SAVE/RESTORE VERSION NUMBER
+*	SEE BELOW (in the typedescription for the class)
+*/
 struct dynpitchvol_t
 {
 	// NOTE: do not change the order of these parameters
@@ -72,8 +68,9 @@ struct dynpitchvol_t
 
 #define CDPVPRESETMAX 27
 
-// presets for runtime pitch and vol modulation of ambient sounds
-
+/**
+*	@brief presets for runtime pitch and vol modulation of ambient sounds
+*/
 dynpitchvol_t rgdpvpreset[CDPVPRESETMAX] =
 	{
 		// pitch	pstart	spinup	spindwn	volrun	volstrt	fadein	fadeout	lfotype	lforate	modptch modvol	cspnup
@@ -105,14 +102,32 @@ dynpitchvol_t rgdpvpreset[CDPVPRESETMAX] =
 		{26, 60, 60, 0, 0, 10, 1, 40, 70, 3, 80, 20, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		{27, 128, 90, 10, 10, 10, 1, 20, 40, 1, 5, 10, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
 
+/**
+*	@brief general-purpose user-defined static sound
+*/
 class CAmbientGeneric : public CBaseEntity
 {
 public:
 	bool KeyValue(KeyValueData* pkvd) override;
 	void Spawn() override;
 	void Precache() override;
+
+	/**
+	*	@brief turns an ambient sound on or off.
+	*	If the ambient is a looping sound, mark sound as active (m_fActive) if it's playing, innactive if not.
+	*	If the sound is not a looping sound, never mark it as active.
+	*/
 	void EXPORT ToggleUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+
+	/**
+	*	@brief Think at 5hz if we are dynamically modifying pitch or volume of the playing sound.
+	*	This function will ramp pitch and/or volume up or down, modify pitch/volume with lfo if active.
+	*/
 	void EXPORT RampThink();
+
+	/**
+	*	@brief Init all ramp params in preparation to play a new sound
+	*/
 	void InitModulationParms();
 
 	bool Save(CSave& save) override;
@@ -128,6 +143,7 @@ public:
 };
 
 LINK_ENTITY_TO_CLASS(ambient_generic, CAmbientGeneric);
+
 TYPEDESCRIPTION CAmbientGeneric::m_SaveData[] =
 	{
 		DEFINE_FIELD(CAmbientGeneric, m_flAttenuation, FIELD_FLOAT),
@@ -144,9 +160,6 @@ TYPEDESCRIPTION CAmbientGeneric::m_SaveData[] =
 
 IMPLEMENT_SAVERESTORE(CAmbientGeneric, CBaseEntity);
 
-//
-// ambient_generic - general-purpose user-defined static sound
-//
 void CAmbientGeneric::Spawn()
 {
 	/*
@@ -210,7 +223,6 @@ void CAmbientGeneric::Spawn()
 	Precache();
 }
 
-
 void CAmbientGeneric::Precache()
 {
 	const char* szSoundFile = STRING(pev->message);
@@ -237,11 +249,6 @@ void CAmbientGeneric::Precache()
 		pev->nextthink = gpGlobals->time + 0.1;
 	}
 }
-
-// RampThink - Think at 5hz if we are dynamically modifying
-// pitch or volume of the playing sound.  This function will
-// ramp pitch and/or volume up or down, modify pitch/volume
-// with lfo if active.
 
 void CAmbientGeneric::RampThink()
 {
@@ -440,9 +447,6 @@ void CAmbientGeneric::RampThink()
 	return;
 }
 
-// Init all ramp params in preparation to
-// play a new sound
-
 void CAmbientGeneric::InitModulationParms()
 {
 	int pitchinc;
@@ -523,12 +527,6 @@ void CAmbientGeneric::InitModulationParms()
 									  // if we intend to pitch shift later!
 }
 
-//
-// ToggleUse - turns an ambient sound on or off.  If the
-// ambient is a looping sound, mark sound as active (m_fActive)
-// if it's playing, innactive if not.  If the sound is not
-// a looping sound, never mark it as active.
-//
 void CAmbientGeneric::ToggleUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
 	const char* szSoundFile = STRING(pev->message);
@@ -637,8 +635,6 @@ void CAmbientGeneric::ToggleUse(CBaseEntity* pActivator, CBaseEntity* pCaller, U
 		pev->nextthink = gpGlobals->time + 0.1;
 	}
 }
-// KeyValue - load keyvalue pairs into member data of the
-// ambient generic. NOTE: called BEFORE spawn!
 
 bool CAmbientGeneric::KeyValue(KeyValueData* pkvd)
 {
@@ -868,6 +864,7 @@ private:
 };
 
 LINK_ENTITY_TO_CLASS(ambient_music, CAmbientMusic);
+
 TYPEDESCRIPTION CAmbientMusic::m_SaveData[] =
 	{
 		DEFINE_FIELD(CAmbientMusic, m_FileName, FIELD_STRING),
@@ -1045,14 +1042,27 @@ std::string CAmbientMusic::GetCommand() const
 	}();
 }
 
-// =================== ROOM SOUND FX ==========================================
-
+/**
+*	@brief A sound entity that will set player roomtype when player moves in range and sight.
+*	@details A client that is visible and in range of a sound entity will have its room_type set by that sound entity.
+*	If two or more sound entities are contending for a client,
+*	then the nearest sound entity to the client will set the client's room_type.
+*	A client's room_type will remain set to its prior value until a new in-range,
+*	visible sound entity resets a new room_type.
+*/
 class CEnvSound : public CPointEntity
 {
 public:
 	bool KeyValue(KeyValueData* pkvd) override;
 	void Spawn() override;
 
+	/**
+	*	@brief A client that is visible and in range of a sound entity will have its room_type set by that sound entity.If two or more
+// sound entities are contending for a client, then the nearest
+// sound entity to the client will set the client's room_type.
+// A client's room_type will remain set to its prior value until
+// a new in-range, visible sound entity resets a new room_type.
+	*/
 	void Think() override;
 
 	bool Save(CSave& save) override;
@@ -1064,6 +1074,7 @@ public:
 };
 
 LINK_ENTITY_TO_CLASS(env_sound, CEnvSound);
+
 TYPEDESCRIPTION CEnvSound::m_SaveData[] =
 	{
 		DEFINE_FIELD(CEnvSound, m_flRadius, FIELD_FLOAT),
@@ -1071,7 +1082,6 @@ TYPEDESCRIPTION CEnvSound::m_SaveData[] =
 };
 
 IMPLEMENT_SAVERESTORE(CEnvSound, CPointEntity);
-
 
 bool CEnvSound::KeyValue(KeyValueData* pkvd)
 {
@@ -1090,9 +1100,9 @@ bool CEnvSound::KeyValue(KeyValueData* pkvd)
 	return false;
 }
 
-// returns true if the given sound entity (pev) is in range
-// and can see the given player entity (pevTarget)
-
+/**
+*	@brief returns true if the given sound entity (pev) is in range and can see the given player entity (pevTarget)
+*/
 bool FEnvSoundInRange(CEnvSound* pSound, entvars_t* pevTarget, float& flRange)
 {
 	const Vector vecSpot1 = pSound->pev->origin + pSound->pev->view_ofs;
@@ -1113,15 +1123,6 @@ bool FEnvSoundInRange(CEnvSound* pSound, entvars_t* pevTarget, float& flRange)
 
 	return pSound->m_flRadius >= flRange;
 }
-
-//
-// A client that is visible and in range of a sound entity will
-// have its room_type set by that sound entity.  If two or more
-// sound entities are contending for a client, then the nearest
-// sound entity to the client will set the client's room_type.
-// A client's room_type will remain set to its prior value until
-// a new in-range, visible sound entity resets a new room_type.
-//
 
 // CONSIDER: if player in water state, autoset roomtype to 14,15 or 16.
 
@@ -1196,11 +1197,6 @@ void CEnvSound::Think()
 	pev->nextthink = gpGlobals->time + (shouldThinkFast ? 0.25 : 0.75);
 }
 
-//
-// env_sound - spawn a sound entity that will set player roomtype
-// when player moves in range and sight.
-//
-//
 void CEnvSound::Spawn()
 {
 	// spread think times
@@ -1209,10 +1205,12 @@ void CEnvSound::Spawn()
 
 // ===================== MATERIAL TYPE DETECTION, MAIN ROUTINES ========================
 
-// play a strike sound based on the texture that was hit by the attack traceline.  VecSrc/VecEnd are the
-// original traceline endpoints used by the attacker, iBulletType is the type of bullet that hit the texture.
-// returns volume of strike instrument (crowbar) to play
-
+/**
+*	@brief play a strike sound based on the texture that was hit by the attack traceline.
+*	VecSrc/VecEnd are the original traceline endpoints used by the attacker
+*	@param iBulletType the type of bullet that hit the texture.
+*	@return volume of strike instrument (crowbar) to play
+*/
 float TEXTURETYPE_PlaySound(TraceResult* ptr, Vector vecSrc, Vector vecEnd, int iBulletType)
 {
 	// hit the world, try to play sound based on texture material type
@@ -1390,18 +1388,21 @@ float TEXTURETYPE_PlaySound(TraceResult* ptr, Vector vecSrc, Vector vecEnd, int 
 	return fvolbar;
 }
 
-// ===================================================================================
-//
-// Speaker class. Used for announcements per level, for door lock/unlock spoken voice.
-//
-
+/**
+*	@brief Used for announcements per level, for door lock/unlock spoken voice.
+*/
 class CSpeaker : public CBaseEntity
 {
 public:
 	bool KeyValue(KeyValueData* pkvd) override;
 	void Spawn() override;
 	void Precache() override;
+
+	/**
+	*	@brief if an announcement is pending, cancel it. If no announcement is pending, start one.
+	*/
 	void EXPORT ToggleUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+
 	void EXPORT SpeakerThink();
 
 	bool Save(CSave& save) override;
@@ -1414,6 +1415,7 @@ public:
 };
 
 LINK_ENTITY_TO_CLASS(speaker, CSpeaker);
+
 TYPEDESCRIPTION CSpeaker::m_SaveData[] =
 	{
 		DEFINE_FIELD(CSpeaker, m_preset, FIELD_INTEGER),
@@ -1421,9 +1423,6 @@ TYPEDESCRIPTION CSpeaker::m_SaveData[] =
 
 IMPLEMENT_SAVERESTORE(CSpeaker, CBaseEntity);
 
-//
-// ambient_generic - general-purpose user-defined static sound
-//
 void CSpeaker::Spawn()
 {
 	const char* szSoundFile = STRING(pev->message);
@@ -1458,6 +1457,7 @@ void CSpeaker::Precache()
 		// set first announcement time for random n second
 		pev->nextthink = gpGlobals->time + RANDOM_FLOAT(5.0, 15.0);
 }
+
 void CSpeaker::SpeakerThink()
 {
 	float flvolume = pev->health * 0.1;
@@ -1521,10 +1521,6 @@ void CSpeaker::SpeakerThink()
 	return;
 }
 
-
-//
-// ToggleUse - if an announcement is pending, cancel it.  If no announcement is pending, start one.
-//
 void CSpeaker::ToggleUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
 	bool fActive = (pev->nextthink > 0.0);
@@ -1567,9 +1563,6 @@ void CSpeaker::ToggleUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE
 		pev->nextthink = gpGlobals->time + 0.1;
 	}
 }
-
-// KeyValue - load keyvalue pairs into member data
-// NOTE: called BEFORE spawn!
 
 bool CSpeaker::KeyValue(KeyValueData* pkvd)
 {

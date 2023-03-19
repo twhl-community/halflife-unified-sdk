@@ -83,7 +83,7 @@ private:
 
 	int m_iShell;
 
-	// Used to alternate between ejecting shells and links. - Solokiller
+	// Used to alternate between ejecting shells and links.
 	bool m_bAlternatingEject;
 	int m_iLink;
 	int m_iSmoke;

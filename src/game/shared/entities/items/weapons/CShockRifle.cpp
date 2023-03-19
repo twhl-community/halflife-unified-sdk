@@ -135,7 +135,7 @@ void CShockRifle::WeaponIdle()
 
 	// This used to be completely broken. It used the current game time instead of the weapon time base, which froze the idle animation.
 	// It also never handled IDLE3, so it only ever played IDLE1, and then only animated it when you held down secondary fire.
-	// This is now fixed. - Solokiller
+	// This is now fixed.
 	if (m_flTimeWeaponIdle > UTIL_WeaponTimeBase())
 		return;
 

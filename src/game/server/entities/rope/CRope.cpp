@@ -607,7 +607,7 @@ void CRope::RK4Integrate(const float flDeltaTime, CRopeSample** ppSampleSource, 
 	}
 }
 
-// TODO move to common header - Solokiller
+// TODO move to common header
 static const Vector DOWN(0, 0, -1);
 
 static const Vector RIGHT(0, 1, 0);
@@ -789,7 +789,7 @@ void CRope::SetRopeSegments(const size_t uiNumSegments,
 		CRopeSegment** ppActualHidden = ppHiddenSegs;
 
 		// In multiplayer, the constant toggling of visible segments makes them completely invisible.
-		// So always make the seg segments visible. - Solokiller
+		// So always make the seg segments visible.
 		if (m_bToggle && g_pGameRules->IsMultiplayer())
 		{
 			std::swap(ppVisible, ppActualHidden);

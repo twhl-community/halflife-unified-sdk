@@ -31,6 +31,7 @@ TYPEDESCRIPTION CShotgun::m_SaveData[] =
 		// DEFINE_FIELD( CShotgun, m_iShell, FIELD_INTEGER ),
 		DEFINE_FIELD(CShotgun, m_flPumpTime, FIELD_TIME),
 };
+
 IMPLEMENT_SAVERESTORE(CShotgun, CBasePlayerWeapon);
 #endif
 
@@ -51,7 +52,6 @@ void CShotgun::Spawn()
 
 	FallInit(); // get ready to fall
 }
-
 
 void CShotgun::Precache()
 {
@@ -172,7 +172,6 @@ void CShotgun::PrimaryAttack()
 	m_fInSpecialReload = 0;
 }
 
-
 void CShotgun::SecondaryAttack()
 {
 	// don't fire underwater
@@ -243,7 +242,6 @@ void CShotgun::SecondaryAttack()
 	m_fInSpecialReload = 0;
 }
 
-
 void CShotgun::Reload()
 {
 	int maxClip = SHOTGUN_MAX_CLIP;
@@ -296,7 +294,6 @@ void CShotgun::Reload()
 		m_fInSpecialReload = 1;
 	}
 }
-
 
 void CShotgun::WeaponIdle()
 {
@@ -380,7 +377,6 @@ void CShotgun::ItemPostFrame()
 	CBasePlayerWeapon::ItemPostFrame();
 }
 
-
 class CShotgunAmmo : public CBasePlayerAmmo
 {
 public:
@@ -406,4 +402,5 @@ public:
 		return false;
 	}
 };
+
 LINK_ENTITY_TO_CLASS(ammo_buckshot, CShotgunAmmo);

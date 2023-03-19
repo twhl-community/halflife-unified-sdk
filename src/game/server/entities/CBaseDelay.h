@@ -17,9 +17,9 @@
 
 #include "CBaseEntity.h"
 
-//
-// generic Delay entity.
-//
+/**
+*	@brief generic Delay entity.
+*/
 class CBaseDelay : public CBaseEntity
 {
 public:

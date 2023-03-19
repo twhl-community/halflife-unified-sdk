@@ -12,17 +12,12 @@
  *   use or distribution of this code by or to any unlicensed person is illegal.
  *
  ****/
-//=========================================================
-// Squadmonster  functions
-//=========================================================
+
 #include "cbase.h"
 #include "squadmonster.h"
 #include "plane.h"
 #include "military/hgrunt.h"
 
-//=========================================================
-// Save/Restore
-//=========================================================
 TYPEDESCRIPTION CSquadMonster::m_SaveData[] =
 	{
 		DEFINE_FIELD(CSquadMonster, m_hSquadLeader, FIELD_EHANDLE),
@@ -33,17 +28,10 @@ TYPEDESCRIPTION CSquadMonster::m_SaveData[] =
 		DEFINE_FIELD(CSquadMonster, m_flLastEnemySightTime, FIELD_TIME),
 
 		DEFINE_FIELD(CSquadMonster, m_iMySlot, FIELD_INTEGER),
-
-
 };
 
 IMPLEMENT_SAVERESTORE(CSquadMonster, CBaseMonster);
 
-
-//=========================================================
-// OccupySlot - if any slots of the passed slots are
-// available, the monster will be assigned to one.
-//=========================================================
 bool CSquadMonster::OccupySlot(int iDesiredSlots)
 {
 	int i;
@@ -93,9 +81,6 @@ bool CSquadMonster::OccupySlot(int iDesiredSlots)
 	return false;
 }
 
-//=========================================================
-// VacateSlot
-//=========================================================
 void CSquadMonster::VacateSlot()
 {
 	if (m_iMySlot != bits_NO_SLOT && InSquad())
@@ -106,17 +91,11 @@ void CSquadMonster::VacateSlot()
 	}
 }
 
-//=========================================================
-// ScheduleChange
-//=========================================================
 void CSquadMonster::ScheduleChange()
 {
 	VacateSlot();
 }
 
-//=========================================================
-// Killed
-//=========================================================
 void CSquadMonster::Killed(CBaseEntity* attacker, int iGib)
 {
 	VacateSlot();
@@ -131,13 +110,6 @@ void CSquadMonster::Killed(CBaseEntity* attacker, int iGib)
 
 // These functions are still awaiting conversion to CSquadMonster
 
-
-//=========================================================
-//
-// SquadRemove(), remove pRemove from my squad.
-// If I am pRemove, promote m_pSquadNext to leader
-//
-//=========================================================
 void CSquadMonster::SquadRemove(CSquadMonster* pRemove)
 {
 	ASSERT(pRemove != nullptr);
@@ -176,11 +148,6 @@ void CSquadMonster::SquadRemove(CSquadMonster* pRemove)
 	pRemove->m_hSquadLeader = nullptr;
 }
 
-//=========================================================
-//
-// SquadAdd(), add pAdd to my squad
-//
-//=========================================================
 bool CSquadMonster::SquadAdd(CSquadMonster* pAdd)
 {
 	ASSERT(pAdd != nullptr);
@@ -200,14 +167,6 @@ bool CSquadMonster::SquadAdd(CSquadMonster* pAdd)
 	// should complain here
 }
 
-
-//=========================================================
-//
-// SquadPasteEnemyInfo - called by squad members that have
-// current info on the enemy so that it can be stored for
-// members who don't have current info.
-//
-//=========================================================
 void CSquadMonster::SquadPasteEnemyInfo()
 {
 	CSquadMonster* pSquadLeader = MySquadLeader();
@@ -215,14 +174,6 @@ void CSquadMonster::SquadPasteEnemyInfo()
 		pSquadLeader->m_vecEnemyLKP = m_vecEnemyLKP;
 }
 
-//=========================================================
-//
-// SquadCopyEnemyInfo - called by squad members who don't
-// have current info on the enemy. Reads from the same fields
-// in the leader's data that other squad members write to,
-// so the most recent data is always available here.
-//
-//=========================================================
 void CSquadMonster::SquadCopyEnemyInfo()
 {
 	CSquadMonster* pSquadLeader = MySquadLeader();
@@ -230,12 +181,6 @@ void CSquadMonster::SquadCopyEnemyInfo()
 		m_vecEnemyLKP = pSquadLeader->m_vecEnemyLKP;
 }
 
-//=========================================================
-//
-// SquadMakeEnemy - makes everyone in the squad angry at
-// the same entity.
-//
-//=========================================================
 void CSquadMonster::SquadMakeEnemy(CBaseEntity* pEnemy)
 {
 	if (!InSquad())
@@ -270,13 +215,6 @@ void CSquadMonster::SquadMakeEnemy(CBaseEntity* pEnemy)
 	}
 }
 
-
-//=========================================================
-//
-// SquadCount(), return the number of members of this squad
-// callable from leaders & followers
-//
-//=========================================================
 int CSquadMonster::SquadCount()
 {
 	if (!InSquad())
@@ -293,13 +231,6 @@ int CSquadMonster::SquadCount()
 	return squadCount;
 }
 
-
-//=========================================================
-//
-// SquadRecruit(), get some monsters of my classification and
-// link them as a group.  returns the group size
-//
-//=========================================================
 int CSquadMonster::SquadRecruit(int searchRadius, int maxMembers)
 {
 	int squadCount;
@@ -377,9 +308,6 @@ int CSquadMonster::SquadRecruit(int searchRadius, int maxMembers)
 	return squadCount;
 }
 
-//=========================================================
-// CheckEnemy
-//=========================================================
 bool CSquadMonster::CheckEnemy(CBaseEntity* pEnemy)
 {
 	bool iUpdatedLKP;
@@ -404,9 +332,6 @@ bool CSquadMonster::CheckEnemy(CBaseEntity* pEnemy)
 	return iUpdatedLKP;
 }
 
-//=========================================================
-// StartMonster
-//=========================================================
 void CSquadMonster::StartMonster()
 {
 	CBaseMonster::StartMonster();
@@ -438,12 +363,6 @@ void CSquadMonster::StartMonster()
 	}
 }
 
-//=========================================================
-// NoFriendlyFire - checks for possibility of friendly fire
-//
-// Builds a large box in front of the grunt and checks to see
-// if any squad members are in that box.
-//=========================================================
 bool CSquadMonster::NoFriendlyFire()
 {
 	if (!InSquad())
@@ -507,10 +426,6 @@ bool CSquadMonster::NoFriendlyFire()
 	return true;
 }
 
-//=========================================================
-// GetIdealState - surveys the Conditions information available
-// and finds the best new state for a monster.
-//=========================================================
 MONSTERSTATE CSquadMonster::GetIdealState()
 {
 	int iConditions;
@@ -532,11 +447,6 @@ MONSTERSTATE CSquadMonster::GetIdealState()
 	return CBaseMonster::GetIdealState();
 }
 
-//=========================================================
-// FValidateCover - determines whether or not the chosen
-// cover location is a good one to move to. (currently based
-// on proximity to others in the squad)
-//=========================================================
 bool CSquadMonster::FValidateCover(const Vector& vecCoverLocation)
 {
 	if (!InSquad())
@@ -553,10 +463,6 @@ bool CSquadMonster::FValidateCover(const Vector& vecCoverLocation)
 	return true;
 }
 
-//=========================================================
-// SquadEnemySplit- returns true if not all squad members
-// are fighting the same enemy.
-//=========================================================
 bool CSquadMonster::SquadEnemySplit()
 {
 	if (!InSquad())
@@ -576,11 +482,6 @@ bool CSquadMonster::SquadEnemySplit()
 	return false;
 }
 
-//=========================================================
-// FValidateCover - determines whether or not the chosen
-// cover location is a good one to move to. (currently based
-// on proximity to others in the squad)
-//=========================================================
 bool CSquadMonster::SquadMemberInRange(const Vector& vecLocation, float flDist)
 {
 	if (!InSquad())
@@ -596,7 +497,6 @@ bool CSquadMonster::SquadMemberInRange(const Vector& vecLocation, float flDist)
 	}
 	return false;
 }
-
 
 extern Schedule_t slChaseEnemyFailed[];
 

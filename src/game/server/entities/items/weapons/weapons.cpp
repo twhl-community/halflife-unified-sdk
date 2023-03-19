@@ -12,12 +12,9 @@
  *   without written permission from Valve LLC.
  *
  ****/
-/*
-
-===== weapons.cpp ========================================================
-
-  functions governing the selection/use of weapons for players
-
+/**
+*	@file
+*	functions governing the selection/use of weapons for players
 */
 
 #include "cbase.h"
@@ -25,32 +22,12 @@
 #include "weapons.h"
 #include "UserMessages.h"
 
-/*
-==============================================================================
-
-MULTI-DAMAGE
-
-Collects multiple small damages into a single damage
-
-==============================================================================
-*/
-
-//
-// ClearMultiDamage - resets the global multi damage accumulator
-//
 void ClearMultiDamage()
 {
 	gMultiDamage.pEntity = nullptr;
 	gMultiDamage.amount = 0;
 	gMultiDamage.type = 0;
 }
-
-
-//
-// ApplyMultiDamage - inflicts contents of global multi damage register on gMultiDamage.pEntity
-//
-// GLOBALS USED:
-//		gMultiDamage
 
 void ApplyMultiDamage(CBaseEntity* inflictor, CBaseEntity* attacker)
 {
@@ -59,10 +36,6 @@ void ApplyMultiDamage(CBaseEntity* inflictor, CBaseEntity* attacker)
 
 	gMultiDamage.pEntity->TakeDamage(inflictor, attacker, gMultiDamage.amount, gMultiDamage.type);
 }
-
-
-// GLOBALS USED:
-//		gMultiDamage
 
 void AddMultiDamage(CBaseEntity* inflictor, CBaseEntity* pEntity, float flDamage, int bitsDamageType)
 {
@@ -81,16 +54,10 @@ void AddMultiDamage(CBaseEntity* inflictor, CBaseEntity* pEntity, float flDamage
 	gMultiDamage.amount += flDamage;
 }
 
-/*
-================
-SpawnBlood
-================
-*/
 void SpawnBlood(Vector vecSpot, int bloodColor, float flDamage)
 {
 	UTIL_BloodDrips(vecSpot, g_vecAttackDir, bloodColor, (int)flDamage);
 }
-
 
 int DamageDecal(CBaseEntity* pEntity, int bitsDamageType)
 {
@@ -137,11 +104,6 @@ void DecalGunshot(TraceResult* pTrace, int iBulletType)
 	}
 }
 
-
-
-//
-// EjectBrass - tosses a brass shell from passed origin at passed velocity
-//
 void EjectBrass(const Vector& vecOrigin, const Vector& vecVelocity, float rotation, int model, int soundtype)
 {
 	// FIX: when the player shoots, their gun isn't in the same position as it is on the model other players see.
@@ -161,7 +123,6 @@ void EjectBrass(const Vector& vecOrigin, const Vector& vecVelocity, float rotati
 	MESSAGE_END();
 }
 
-
 #if 0
 // UNDONE: This is no longer used?
 void ExplodeModel(const Vector& vecOrigin, float speed, int model, int count)
@@ -179,7 +140,9 @@ void ExplodeModel(const Vector& vecOrigin, float speed, int model, int count)
 }
 #endif
 
-// Precaches the weapon and queues the weapon info for sending to clients
+/**
+*	@brief Precaches the weapon and queues the weapon info for sending to clients
+*/
 void UTIL_PrecacheOtherWeapon(const char* szClassname)
 {
 	auto entity = g_WeaponDictionary->Create(szClassname);
