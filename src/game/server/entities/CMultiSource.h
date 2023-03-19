@@ -21,6 +21,9 @@
 
 class CMultiSource : public CPointEntity
 {
+	DECLARE_CLASS(CMultiSource, CPointEntity);
+	DECLARE_DATAMAP();
+
 public:
 	void Spawn() override;
 	bool KeyValue(KeyValueData* pkvd) override;
@@ -28,10 +31,6 @@ public:
 	int ObjectCaps() override { return (CPointEntity::ObjectCaps() | FCAP_MASTER); }
 	bool IsTriggered(CBaseEntity* pActivator) override;
 	void EXPORT Register();
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
-	static TYPEDESCRIPTION m_SaveData[];
 
 	EHANDLE m_rgEntities[MS_MAX_TARGETS];
 	int m_rgTriggered[MS_MAX_TARGETS];

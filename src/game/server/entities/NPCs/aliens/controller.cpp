@@ -26,11 +26,11 @@
 
 class CController : public CSquadMonster
 {
+	DECLARE_CLASS(CController, CSquadMonster);
+	DECLARE_DATAMAP();
+
 public:
 	void OnCreate() override;
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
 
 	void Spawn() override;
 	void Precache() override;
@@ -94,15 +94,13 @@ public:
 
 LINK_ENTITY_TO_CLASS(monster_alien_controller, CController);
 
-TYPEDESCRIPTION CController::m_SaveData[] =
-	{
-		DEFINE_ARRAY(CController, m_pBall, FIELD_CLASSPTR, 2),
-		DEFINE_ARRAY(CController, m_iBall, FIELD_INTEGER, 2),
-		DEFINE_ARRAY(CController, m_iBallTime, FIELD_TIME, 2),
-		DEFINE_ARRAY(CController, m_iBallCurrent, FIELD_INTEGER, 2),
-		DEFINE_FIELD(CController, m_vecEstVelocity, FIELD_VECTOR),
-};
-IMPLEMENT_SAVERESTORE(CController, CSquadMonster);
+BEGIN_DATAMAP(CController)
+DEFINE_ARRAY(m_pBall, FIELD_CLASSPTR, 2),
+	DEFINE_ARRAY(m_iBall, FIELD_INTEGER, 2),
+	DEFINE_ARRAY(m_iBallTime, FIELD_TIME, 2),
+	DEFINE_ARRAY(m_iBallCurrent, FIELD_INTEGER, 2),
+	DEFINE_FIELD(m_vecEstVelocity, FIELD_VECTOR),
+	END_DATAMAP();
 
 const char* CController::pAttackSounds[] =
 	{

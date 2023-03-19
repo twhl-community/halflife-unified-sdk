@@ -18,117 +18,6 @@
 #include "cbase.h"
 #include "saverestore.h"
 
-TYPEDESCRIPTION gEntvarsDescription[] =
-	{
-		DEFINE_ENTITY_FIELD(classname, FIELD_STRING),
-		DEFINE_ENTITY_GLOBAL_FIELD(globalname, FIELD_STRING),
-
-		DEFINE_ENTITY_FIELD(origin, FIELD_POSITION_VECTOR),
-		DEFINE_ENTITY_FIELD(oldorigin, FIELD_POSITION_VECTOR),
-		DEFINE_ENTITY_FIELD(velocity, FIELD_VECTOR),
-		DEFINE_ENTITY_FIELD(basevelocity, FIELD_VECTOR),
-		DEFINE_ENTITY_FIELD(movedir, FIELD_VECTOR),
-
-		DEFINE_ENTITY_FIELD(angles, FIELD_VECTOR),
-		DEFINE_ENTITY_FIELD(avelocity, FIELD_VECTOR),
-		DEFINE_ENTITY_FIELD(punchangle, FIELD_VECTOR),
-		DEFINE_ENTITY_FIELD(v_angle, FIELD_VECTOR),
-		DEFINE_ENTITY_FIELD(fixangle, FIELD_FLOAT),
-		DEFINE_ENTITY_FIELD(idealpitch, FIELD_FLOAT),
-		DEFINE_ENTITY_FIELD(pitch_speed, FIELD_FLOAT),
-		DEFINE_ENTITY_FIELD(ideal_yaw, FIELD_FLOAT),
-		DEFINE_ENTITY_FIELD(yaw_speed, FIELD_FLOAT),
-
-		DEFINE_ENTITY_FIELD(modelindex, FIELD_INTEGER),
-		DEFINE_ENTITY_GLOBAL_FIELD(model, FIELD_MODELNAME),
-
-		DEFINE_ENTITY_FIELD(viewmodel, FIELD_MODELNAME),
-		DEFINE_ENTITY_FIELD(weaponmodel, FIELD_MODELNAME),
-
-		DEFINE_ENTITY_FIELD(absmin, FIELD_POSITION_VECTOR),
-		DEFINE_ENTITY_FIELD(absmax, FIELD_POSITION_VECTOR),
-		DEFINE_ENTITY_GLOBAL_FIELD(mins, FIELD_VECTOR),
-		DEFINE_ENTITY_GLOBAL_FIELD(maxs, FIELD_VECTOR),
-		DEFINE_ENTITY_GLOBAL_FIELD(size, FIELD_VECTOR),
-
-		DEFINE_ENTITY_FIELD(ltime, FIELD_TIME),
-		DEFINE_ENTITY_FIELD(nextthink, FIELD_TIME),
-
-		DEFINE_ENTITY_FIELD(solid, FIELD_INTEGER),
-		DEFINE_ENTITY_FIELD(movetype, FIELD_INTEGER),
-
-		DEFINE_ENTITY_FIELD(skin, FIELD_INTEGER),
-		DEFINE_ENTITY_FIELD(body, FIELD_INTEGER),
-		DEFINE_ENTITY_FIELD(effects, FIELD_INTEGER),
-
-		DEFINE_ENTITY_FIELD(gravity, FIELD_FLOAT),
-		DEFINE_ENTITY_FIELD(friction, FIELD_FLOAT),
-		DEFINE_ENTITY_FIELD(light_level, FIELD_FLOAT),
-
-		DEFINE_ENTITY_FIELD(frame, FIELD_FLOAT),
-		DEFINE_ENTITY_FIELD(scale, FIELD_FLOAT),
-		DEFINE_ENTITY_FIELD(sequence, FIELD_INTEGER),
-		DEFINE_ENTITY_FIELD(animtime, FIELD_TIME),
-		DEFINE_ENTITY_FIELD(framerate, FIELD_FLOAT),
-		DEFINE_ENTITY_ARRAY(controller, FIELD_CHARACTER, NUM_ENT_CONTROLLERS),
-		DEFINE_ENTITY_ARRAY(blending, FIELD_CHARACTER, NUM_ENT_BLENDERS),
-
-		DEFINE_ENTITY_FIELD(rendermode, FIELD_INTEGER),
-		DEFINE_ENTITY_FIELD(renderamt, FIELD_FLOAT),
-		DEFINE_ENTITY_FIELD(rendercolor, FIELD_VECTOR),
-		DEFINE_ENTITY_FIELD(renderfx, FIELD_INTEGER),
-
-		DEFINE_ENTITY_FIELD(health, FIELD_FLOAT),
-		DEFINE_ENTITY_FIELD(frags, FIELD_FLOAT),
-		DEFINE_ENTITY_FIELD(weapons, FIELD_INTEGER),
-		DEFINE_ENTITY_FIELD(takedamage, FIELD_FLOAT),
-
-		DEFINE_ENTITY_FIELD(deadflag, FIELD_FLOAT),
-		DEFINE_ENTITY_FIELD(view_ofs, FIELD_VECTOR),
-		DEFINE_ENTITY_FIELD(button, FIELD_INTEGER),
-		DEFINE_ENTITY_FIELD(impulse, FIELD_INTEGER),
-
-		DEFINE_ENTITY_FIELD(chain, FIELD_EDICT),
-		DEFINE_ENTITY_FIELD(dmg_inflictor, FIELD_EDICT),
-		DEFINE_ENTITY_FIELD(enemy, FIELD_EDICT),
-		DEFINE_ENTITY_FIELD(aiment, FIELD_EDICT),
-		DEFINE_ENTITY_FIELD(owner, FIELD_EDICT),
-		DEFINE_ENTITY_FIELD(groundentity, FIELD_EDICT),
-
-		DEFINE_ENTITY_FIELD(spawnflags, FIELD_INTEGER),
-		DEFINE_ENTITY_FIELD(flags, FIELD_FLOAT),
-
-		DEFINE_ENTITY_FIELD(colormap, FIELD_INTEGER),
-		DEFINE_ENTITY_FIELD(team, FIELD_INTEGER),
-
-		DEFINE_ENTITY_FIELD(max_health, FIELD_FLOAT),
-		DEFINE_ENTITY_FIELD(teleport_time, FIELD_TIME),
-		DEFINE_ENTITY_FIELD(armortype, FIELD_FLOAT),
-		DEFINE_ENTITY_FIELD(armorvalue, FIELD_FLOAT),
-		DEFINE_ENTITY_FIELD(waterlevel, FIELD_INTEGER),
-		DEFINE_ENTITY_FIELD(watertype, FIELD_INTEGER),
-
-		// Having these fields be local to the individual levels makes it easier to test those levels individually.
-		DEFINE_ENTITY_GLOBAL_FIELD(target, FIELD_STRING),
-		DEFINE_ENTITY_GLOBAL_FIELD(targetname, FIELD_STRING),
-		DEFINE_ENTITY_FIELD(netname, FIELD_STRING),
-		DEFINE_ENTITY_FIELD(message, FIELD_STRING),
-
-		DEFINE_ENTITY_FIELD(dmg_take, FIELD_FLOAT),
-		DEFINE_ENTITY_FIELD(dmg_save, FIELD_FLOAT),
-		DEFINE_ENTITY_FIELD(dmg, FIELD_FLOAT),
-		DEFINE_ENTITY_FIELD(dmgtime, FIELD_TIME),
-
-		DEFINE_ENTITY_FIELD(noise, FIELD_SOUNDNAME),
-		DEFINE_ENTITY_FIELD(noise1, FIELD_SOUNDNAME),
-		DEFINE_ENTITY_FIELD(noise2, FIELD_SOUNDNAME),
-		DEFINE_ENTITY_FIELD(noise3, FIELD_SOUNDNAME),
-		DEFINE_ENTITY_FIELD(speed, FIELD_FLOAT),
-		DEFINE_ENTITY_FIELD(air_finished, FIELD_TIME),
-		DEFINE_ENTITY_FIELD(pain_finished, FIELD_TIME),
-		DEFINE_ENTITY_FIELD(radsuit_finished, FIELD_TIME),
-};
-
 // --------------------------------------------------------------
 //
 // CSave
@@ -419,34 +308,30 @@ void CSave::WriteFunction(const char* pname, void** data, int count)
 // TODO: this shouldn't be here.
 void EntvarsKeyvalue(entvars_t* pev, KeyValueData* pkvd)
 {
-	TYPEDESCRIPTION* pField;
-
-	for (std::size_t i = 0; i < std::size(gEntvarsDescription); ++i)
+	for (const auto& field : entvars_t::GetLocalDataMap()->Descriptions)
 	{
-		pField = &gEntvarsDescription[i];
-
-		if (!stricmp(pField->fieldName, pkvd->szKeyName))
+		if (!stricmp(field.fieldName, pkvd->szKeyName))
 		{
-			switch (pField->fieldType)
+			switch (field.fieldType)
 			{
 			case FIELD_MODELNAME:
 			case FIELD_SOUNDNAME:
 			case FIELD_STRING:
-				(*(string_t*)((char*)pev + pField->fieldOffset)) = ALLOC_STRING(pkvd->szValue);
+				(*(string_t*)((char*)pev + field.fieldOffset)) = ALLOC_STRING(pkvd->szValue);
 				break;
 
 			case FIELD_TIME:
 			case FIELD_FLOAT:
-				(*(float*)((char*)pev + pField->fieldOffset)) = atof(pkvd->szValue);
+				(*(float*)((char*)pev + field.fieldOffset)) = atof(pkvd->szValue);
 				break;
 
 			case FIELD_INTEGER:
-				(*(int*)((char*)pev + pField->fieldOffset)) = atoi(pkvd->szValue);
+				(*(int*)((char*)pev + field.fieldOffset)) = atoi(pkvd->szValue);
 				break;
 
 			case FIELD_POSITION_VECTOR:
 			case FIELD_VECTOR:
-				UTIL_StringToVector(*((Vector*)((char*)pev + pField->fieldOffset)), pkvd->szValue);
+				UTIL_StringToVector(*((Vector*)((char*)pev + field.fieldOffset)), pkvd->szValue);
 				break;
 
 			default:
@@ -462,11 +347,6 @@ void EntvarsKeyvalue(entvars_t* pev, KeyValueData* pkvd)
 			return;
 		}
 	}
-}
-
-bool CSave::WriteEntVars(const char* pname, entvars_t* pev)
-{
-	return WriteFields(pname, pev, gEntvarsDescription, std::size(gEntvarsDescription));
 }
 
 bool CSave::WriteFields(const char* pname, void* pBaseData, const TYPEDESCRIPTION* pFields, int fieldCount)
@@ -588,6 +468,11 @@ bool CSave::WriteFields(const char* pname, void* pBaseData, const TYPEDESCRIPTIO
 	}
 
 	return true;
+}
+
+bool CSave::WriteFields(void* baseData, const DataMap& dataMap)
+{
+	return WriteFields(dataMap.ClassName, baseData, dataMap.Descriptions.data(), dataMap.Descriptions.size());
 }
 
 void CSave::BufferString(char* pdata, int len)
@@ -799,11 +684,6 @@ int CRestore::ReadField(void* pBaseData, const TYPEDESCRIPTION* pFields, int fie
 	return -1;
 }
 
-bool CRestore::ReadEntVars(const char* pname, entvars_t* pev)
-{
-	return ReadFields(pname, pev, gEntvarsDescription, std::size(gEntvarsDescription));
-}
-
 bool CRestore::ReadFields(const char* pname, void* pBaseData, const TYPEDESCRIPTION* pFields, int fieldCount)
 {
 	unsigned short i, token;
@@ -844,6 +724,11 @@ bool CRestore::ReadFields(const char* pname, void* pBaseData, const TYPEDESCRIPT
 	}
 
 	return true;
+}
+
+bool CRestore::ReadFields(void* baseData, const DataMap& dataMap)
+{
+	return ReadFields(dataMap.ClassName, baseData, dataMap.Descriptions.data(), dataMap.Descriptions.size());
 }
 
 void CRestore::BufferReadHeader(HEADER* pheader)

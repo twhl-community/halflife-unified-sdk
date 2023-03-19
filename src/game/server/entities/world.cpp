@@ -269,30 +269,25 @@ GLOBALESTATE CGlobalState::EntityGetState(string_t globalname)
 	return GLOBAL_OFF;
 }
 
-TYPEDESCRIPTION CGlobalState::m_SaveData[] =
-	{
-		DEFINE_FIELD(CGlobalState, m_listCount, FIELD_INTEGER),
-};
+BEGIN_DATAMAP_NOBASE(CGlobalState)
+DEFINE_FIELD(m_listCount, FIELD_INTEGER),
+	END_DATAMAP();
 
-TYPEDESCRIPTION gGlobalEntitySaveData[] =
-	{
-		DEFINE_ARRAY(globalentity_t, name, FIELD_CHARACTER, 64),
-		DEFINE_ARRAY(globalentity_t, levelName, FIELD_CHARACTER, 32),
-		DEFINE_FIELD(globalentity_t, state, FIELD_INTEGER),
-};
+BEGIN_DATAMAP_NOBASE(globalentity_t)
+DEFINE_ARRAY(name, FIELD_CHARACTER, 64),
+	DEFINE_ARRAY(levelName, FIELD_CHARACTER, 32),
+	DEFINE_FIELD(state, FIELD_INTEGER),
+	END_DATAMAP();
 
 bool CGlobalState::Save(CSave& save)
 {
-	int i;
-	globalentity_t* pEntity;
-
-	if (!save.WriteFields("GLOBAL", this, m_SaveData, std::size(m_SaveData)))
+	if (!save.WriteFields(this, *GetDataMap()))
 		return false;
 
-	pEntity = m_pList;
-	for (i = 0; i < m_listCount && pEntity; i++)
+	globalentity_t* pEntity = m_pList;
+	for (int i = 0; i < m_listCount && pEntity; i++)
 	{
-		if (!save.WriteFields("GENT", pEntity, gGlobalEntitySaveData, std::size(gGlobalEntitySaveData)))
+		if (!save.WriteFields(pEntity, *pEntity->GetDataMap()))
 			return false;
 
 		pEntity = pEntity->pNext;
@@ -303,20 +298,18 @@ bool CGlobalState::Save(CSave& save)
 
 bool CGlobalState::Restore(CRestore& restore)
 {
-	int i, listCount;
 	globalentity_t tmpEntity;
 
-
 	ClearStates();
-	if (!restore.ReadFields("GLOBAL", this, m_SaveData, std::size(m_SaveData)))
+	if (!restore.ReadFields(this, *GetDataMap()))
 		return false;
 
-	listCount = m_listCount; // Get new list count
+	const int listCount = m_listCount; // Get new list count
 	m_listCount = 0;		 // Clear loaded data
 
-	for (i = 0; i < listCount; i++)
+	for (int i = 0; i < listCount; i++)
 	{
-		if (!restore.ReadFields("GENT", &tmpEntity, gGlobalEntitySaveData, std::size(gGlobalEntitySaveData)))
+		if (!restore.ReadFields(&tmpEntity, *tmpEntity.GetDataMap()))
 			return false;
 		EntityAdd(MAKE_STRING(tmpEntity.name), MAKE_STRING(tmpEntity.levelName), tmpEntity.state);
 	}

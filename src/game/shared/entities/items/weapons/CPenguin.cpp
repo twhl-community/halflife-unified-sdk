@@ -16,15 +16,10 @@
 
 #include "CPenguin.h"
 
-#ifndef CLIENT_DLL
 // TODO: this isn't in vanilla Op4 so it won't save properly there
-TYPEDESCRIPTION CPenguin::m_SaveData[] =
-	{
-		DEFINE_FIELD(CPenguin, m_fJustThrown, FIELD_BOOLEAN),
-};
-
-IMPLEMENT_SAVERESTORE(CPenguin, CPenguin::BaseClass);
-#endif
+BEGIN_DATAMAP(CPenguin)
+DEFINE_FIELD(m_fJustThrown, FIELD_BOOLEAN),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(weapon_penguin, CPenguin);
 

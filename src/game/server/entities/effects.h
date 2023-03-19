@@ -35,6 +35,9 @@
 
 class CSprite : public CPointEntity
 {
+	DECLARE_CLASS(CSprite, CPointEntity);
+	DECLARE_DATAMAP();
+
 public:
 	void Spawn() override;
 	void Precache() override;
@@ -95,9 +98,6 @@ public:
 
 	void EXPORT AnimateUntilDead();
 
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
 	static CSprite* SpriteCreate(const char* pSpriteName, const Vector& origin, bool animate);
 
 private:
@@ -198,6 +198,9 @@ public:
 
 class CLaser : public CBeam
 {
+	DECLARE_CLASS(CLaser, CBeam);
+	DECLARE_DATAMAP();
+
 public:
 	void Spawn() override;
 	void Precache() override;
@@ -211,9 +214,6 @@ public:
 
 	void EXPORT StrikeThink();
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
 
 	void UpdateOnRemove() override;
 

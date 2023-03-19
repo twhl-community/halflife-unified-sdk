@@ -22,6 +22,7 @@
 #include "Platform.h"
 #include "extdll.h"
 #include "util.h"
+#include "DataMap.h"
 #include "skill.h"
 
 class CBaseEntity;
@@ -137,6 +138,9 @@ void FireTargets(const char* targetName, CBaseEntity* pActivator, CBaseEntity* p
 */
 class CBaseEntity
 {
+	DECLARE_CLASS_NOBASE(CBaseEntity);
+	DECLARE_DATAMAP_NOBASE();
+
 public:
 	static inline std::shared_ptr<spdlog::logger> Logger;
 	static inline std::shared_ptr<spdlog::logger> IOLogger;
@@ -241,8 +245,9 @@ public:
 	*	@brief Cache user-entity-field values until spawn is called.
 	*/
 	virtual bool KeyValue(KeyValueData* pkvd) { return false; }
-	virtual bool Save(CSave& save);
-	virtual bool Restore(CRestore& restore);
+	bool Save(CSave& save);
+	bool Restore(CRestore& restore);
+	virtual void PostRestore();
 	virtual int ObjectCaps() { return FCAP_ACROSS_TRANSITION; }
 	virtual void Activate() {}
 
@@ -257,9 +262,6 @@ public:
 	*/
 	virtual int Classify() { return CLASS_NONE; }
 	virtual void DeathNotice(CBaseEntity* child) {} // monster maker children use this to tell the monster maker that they have died.
-
-
-	static TYPEDESCRIPTION m_SaveData[];
 
 	virtual void TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType);
 

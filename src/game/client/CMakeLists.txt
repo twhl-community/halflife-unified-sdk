@@ -239,11 +239,13 @@ target_sources(client PRIVATE
 	
 	../../common/beamdef.h
 	../../common/cl_entity.h
+	../../common/ClassData.h
 	../../common/com_model.h
 	../../common/common_types.h
 	../../common/const.h
 	../../common/con_nprint.h
 	../../common/cvardef.h
+	../../common/DataMap.h
 	../../common/demo_api.h
 	../../common/director_cmds.h
 	../../common/dlight.h

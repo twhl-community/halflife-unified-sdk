@@ -20,6 +20,9 @@
 
 class CBlowerCannon : public CBaseToggle
 {
+	DECLARE_CLASS(CBlowerCannon, CBaseToggle);
+	DECLARE_DATAMAP();
+
 private:
 	enum class WeaponType
 	{
@@ -36,12 +39,6 @@ private:
 	};
 
 public:
-	using BaseClass = CBaseToggle;
-
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
-
 	bool KeyValue(KeyValueData* pkvd) override;
 
 	void Precache() override;
@@ -58,15 +55,12 @@ public:
 	FireType m_iFireType;
 };
 
-TYPEDESCRIPTION CBlowerCannon::m_SaveData[] =
-	{
-		DEFINE_FIELD(CBlowerCannon, m_flDelay, FIELD_FLOAT),
-		DEFINE_FIELD(CBlowerCannon, m_iZOffset, FIELD_INTEGER),
-		DEFINE_FIELD(CBlowerCannon, m_iWeaponType, FIELD_INTEGER),
-		DEFINE_FIELD(CBlowerCannon, m_iFireType, FIELD_INTEGER),
-};
-
-IMPLEMENT_SAVERESTORE(CBlowerCannon, CBlowerCannon::BaseClass);
+BEGIN_DATAMAP(CBlowerCannon)
+DEFINE_FIELD(m_flDelay, FIELD_FLOAT),
+	DEFINE_FIELD(m_iZOffset, FIELD_INTEGER),
+	DEFINE_FIELD(m_iWeaponType, FIELD_INTEGER),
+	DEFINE_FIELD(m_iFireType, FIELD_INTEGER),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(env_blowercannon, CBlowerCannon);
 

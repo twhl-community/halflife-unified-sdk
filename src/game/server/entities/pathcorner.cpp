@@ -18,14 +18,13 @@
 
 class CPathCorner : public CPointEntity
 {
+	DECLARE_CLASS(CPathCorner, CPointEntity);
+	DECLARE_DATAMAP();
+
 public:
 	void Spawn() override;
 	bool KeyValue(KeyValueData* pkvd) override;
 	float GetDelay() override { return m_flWait; }
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
-	static TYPEDESCRIPTION m_SaveData[];
 
 private:
 	float m_flWait;
@@ -33,12 +32,9 @@ private:
 
 LINK_ENTITY_TO_CLASS(path_corner, CPathCorner);
 
-TYPEDESCRIPTION CPathCorner::m_SaveData[] =
-	{
-		DEFINE_FIELD(CPathCorner, m_flWait, FIELD_FLOAT),
-};
-
-IMPLEMENT_SAVERESTORE(CPathCorner, CPointEntity);
+BEGIN_DATAMAP(CPathCorner)
+DEFINE_FIELD(m_flWait, FIELD_FLOAT),
+	END_DATAMAP();
 
 bool CPathCorner::KeyValue(KeyValueData* pkvd)
 {
@@ -56,16 +52,14 @@ void CPathCorner::Spawn()
 	ASSERTSZ(!FStringNull(pev->targetname), "path_corner without a targetname");
 }
 
-TYPEDESCRIPTION CPathTrack::m_SaveData[] =
-	{
-		DEFINE_FIELD(CPathTrack, m_length, FIELD_FLOAT),
-		DEFINE_FIELD(CPathTrack, m_pnext, FIELD_CLASSPTR),
-		DEFINE_FIELD(CPathTrack, m_paltpath, FIELD_CLASSPTR),
-		DEFINE_FIELD(CPathTrack, m_pprevious, FIELD_CLASSPTR),
-		DEFINE_FIELD(CPathTrack, m_altName, FIELD_STRING),
-};
+BEGIN_DATAMAP(CPathTrack)
+DEFINE_FIELD(m_length, FIELD_FLOAT),
+	DEFINE_FIELD(m_pnext, FIELD_CLASSPTR),
+	DEFINE_FIELD(m_paltpath, FIELD_CLASSPTR),
+	DEFINE_FIELD(m_pprevious, FIELD_CLASSPTR),
+	DEFINE_FIELD(m_altName, FIELD_STRING),
+	END_DATAMAP();
 
-IMPLEMENT_SAVERESTORE(CPathTrack, CPointEntity);
 LINK_ENTITY_TO_CLASS(path_track, CPathTrack);
 
 bool CPathTrack::KeyValue(KeyValueData* pkvd)

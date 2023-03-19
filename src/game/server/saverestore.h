@@ -19,6 +19,8 @@
 
 #include <spdlog/logger.h>
 
+#include "DataMap.h"
+
 class CBaseEntity;
 
 class CSaveRestoreBuffer
@@ -76,8 +78,9 @@ public:
 	void WritePositionVector(const char* pname, const Vector& value);			// Offset for landmark if necessary
 	void WritePositionVector(const char* pname, const float* value, int count); // array of pos vectors
 	void WriteFunction(const char* pname, void** value, int count);				// Save a function pointer
-	bool WriteEntVars(const char* pname, entvars_t* pev);						// Save entvars_t (entvars_t)
 	bool WriteFields(const char* pname, void* pBaseData, const TYPEDESCRIPTION* pFields, int fieldCount);
+
+	bool WriteFields(void* baseData, const DataMap& dataMap);
 
 private:
 	bool DataEmpty(const char* pdata, int size);
@@ -99,8 +102,8 @@ class CRestore : public CSaveRestoreBuffer
 public:
 	using CSaveRestoreBuffer::CSaveRestoreBuffer;
 
-	bool ReadEntVars(const char* pname, entvars_t* pev); // entvars_t
 	bool ReadFields(const char* pname, void* pBaseData, const TYPEDESCRIPTION* pFields, int fieldCount);
+	bool ReadFields(void* baseData, const DataMap& dataMap);
 	int ReadField(void* pBaseData, const TYPEDESCRIPTION* pFields, int fieldCount, int startField, int size, char* pName, void* pData);
 	int ReadInt();
 	short ReadShort();
@@ -125,20 +128,6 @@ private:
 
 #define MAX_ENTITYARRAY 64
 
-#define IMPLEMENT_SAVERESTORE(derivedClass, baseClass)                                     \
-	bool derivedClass::Save(CSave& save)                                                   \
-	{                                                                                      \
-		if (!baseClass::Save(save))                                                        \
-			return false;                                                                  \
-		return save.WriteFields(#derivedClass, this, m_SaveData, std::size(m_SaveData));   \
-	}                                                                                      \
-	bool derivedClass::Restore(CRestore& restore)                                          \
-	{                                                                                      \
-		if (!baseClass::Restore(restore))                                                  \
-			return false;                                                                  \
-		return restore.ReadFields(#derivedClass, this, m_SaveData, std::size(m_SaveData)); \
-	}
-
 
 enum GLOBALESTATE
 {
@@ -149,6 +138,10 @@ enum GLOBALESTATE
 
 struct globalentity_t
 {
+	DECLARE_CLASS_NOBASE(globalentity_t);
+	DECLARE_SIMPLE_DATAMAP();
+
+public:
 	char name[64];
 	char levelName[32];
 	GLOBALESTATE state;
@@ -157,6 +150,9 @@ struct globalentity_t
 
 class CGlobalState
 {
+	DECLARE_CLASS_NOBASE(CGlobalState);
+	DECLARE_SIMPLE_DATAMAP();
+
 public:
 	CGlobalState();
 	void Reset();
@@ -169,7 +165,6 @@ public:
 	bool EntityInTable(string_t globalname) { return Find(globalname) != nullptr; }
 	bool Save(CSave& save);
 	bool Restore(CRestore& restore);
-	static TYPEDESCRIPTION m_SaveData[];
 
 	// #ifdef _DEBUG
 	void DumpGlobals();

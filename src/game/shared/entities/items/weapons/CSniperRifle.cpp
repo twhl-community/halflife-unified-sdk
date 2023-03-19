@@ -17,15 +17,10 @@
 
 #include "CSniperRifle.h"
 
-#ifndef CLIENT_DLL
-TYPEDESCRIPTION CSniperRifle::m_SaveData[] =
-	{
-		DEFINE_FIELD(CSniperRifle, m_flReloadStart, FIELD_TIME),
-		DEFINE_FIELD(CSniperRifle, m_bReloading, FIELD_BOOLEAN),
-};
-
-IMPLEMENT_SAVERESTORE(CSniperRifle, CSniperRifle::BaseClass);
-#endif
+BEGIN_DATAMAP(CSniperRifle)
+DEFINE_FIELD(m_flReloadStart, FIELD_TIME),
+	DEFINE_FIELD(m_bReloading, FIELD_BOOLEAN),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(weapon_sniperrifle, CSniperRifle);
 
@@ -221,9 +216,9 @@ void CSniperRifle::ToggleZoom()
 
 class CSniperRifleAmmo : public CBasePlayerAmmo
 {
-public:
-	using BaseClass = CBasePlayerAmmo;
+	DECLARE_CLASS(CSniperRifleAmmo, CBasePlayerAmmo);
 
+public:
 	void OnCreate() override
 	{
 		CBasePlayerAmmo::OnCreate();

@@ -32,6 +32,9 @@ enum GuardBodyGroup
 
 class CBarney : public CTalkMonster
 {
+	DECLARE_CLASS(CBarney, CTalkMonster);
+	DECLARE_DATAMAP();
+
 public:
 	void OnCreate() override;
 	void Spawn() override;
@@ -74,10 +77,6 @@ public:
 	void Killed(CBaseEntity* attacker, int iGib) override;
 
 	bool KeyValue(KeyValueData* pkvd) override;
-
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
 
 	float m_painTime;
 	float m_checkAttackTime;

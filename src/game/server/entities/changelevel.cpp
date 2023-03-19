@@ -79,16 +79,13 @@ void CFireAndDie::Think()
 
 LINK_ENTITY_TO_CLASS(trigger_changelevel, CChangeLevel);
 
-TYPEDESCRIPTION CChangeLevel::m_SaveData[] =
-	{
-		DEFINE_ARRAY(CChangeLevel, m_szMapName, FIELD_CHARACTER, cchMapNameMost),
-		DEFINE_ARRAY(CChangeLevel, m_szLandmarkName, FIELD_CHARACTER, cchMapNameMost),
-		DEFINE_FIELD(CChangeLevel, m_changeTarget, FIELD_STRING),
-		DEFINE_FIELD(CChangeLevel, m_changeTargetDelay, FIELD_FLOAT),
-		DEFINE_FIELD(CChangeLevel, m_UsePersistentLevelChange, FIELD_BOOLEAN),
-};
-
-IMPLEMENT_SAVERESTORE(CChangeLevel, CBaseTrigger);
+BEGIN_DATAMAP(CChangeLevel)
+DEFINE_ARRAY(m_szMapName, FIELD_CHARACTER, cchMapNameMost),
+	DEFINE_ARRAY(m_szLandmarkName, FIELD_CHARACTER, cchMapNameMost),
+	DEFINE_FIELD(m_changeTarget, FIELD_STRING),
+	DEFINE_FIELD(m_changeTargetDelay, FIELD_FLOAT),
+	DEFINE_FIELD(m_UsePersistentLevelChange, FIELD_BOOLEAN),
+	END_DATAMAP();
 
 bool CChangeLevel::KeyValue(KeyValueData* pkvd)
 {
@@ -509,15 +506,14 @@ bool CTriggerEndSection::KeyValue(KeyValueData* pkvd)
 
 class CRevertSaved : public CPointEntity
 {
+	DECLARE_CLASS(CRevertSaved, CPointEntity);
+	DECLARE_DATAMAP();
+
 public:
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 	void EXPORT MessageThink();
 	void EXPORT LoadThink();
 	bool KeyValue(KeyValueData* pkvd) override;
-
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
 
 	inline float Duration() { return pev->dmg_take; }
 	inline float HoldTime() { return pev->dmg_save; }
@@ -536,13 +532,10 @@ private:
 
 LINK_ENTITY_TO_CLASS(player_loadsaved, CRevertSaved);
 
-TYPEDESCRIPTION CRevertSaved::m_SaveData[] =
-	{
-		DEFINE_FIELD(CRevertSaved, m_messageTime, FIELD_FLOAT), // These are not actual times, but durations, so save as floats
-		DEFINE_FIELD(CRevertSaved, m_loadTime, FIELD_FLOAT),
-};
-
-IMPLEMENT_SAVERESTORE(CRevertSaved, CPointEntity);
+BEGIN_DATAMAP(CRevertSaved)
+DEFINE_FIELD(m_messageTime, FIELD_FLOAT), // These are not actual times, but durations, so save as floats
+	DEFINE_FIELD(m_loadTime, FIELD_FLOAT),
+	END_DATAMAP();
 
 bool CRevertSaved::KeyValue(KeyValueData* pkvd)
 {

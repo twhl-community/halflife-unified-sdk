@@ -270,10 +270,12 @@ target_sources(server PRIVATE
 	sound/ServerSoundSystem.cpp
 	sound/ServerSoundSystem.h
 	
+	../../common/ClassData.h
 	../../common/com_model.h
 	../../common/common_types.h
 	../../common/const.h
 	../../common/cvardef.h
+	../../common/DataMap.h
 	../../common/director_cmds.h
 	../../common/entity_state.h
 	../../common/entity_types.h

@@ -35,13 +35,10 @@ enum rpg_e
 
 class CRpg : public CBasePlayerWeapon
 {
-public:
-#ifndef CLIENT_DLL
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
-#endif
+	DECLARE_CLASS(CRpg, CBasePlayerWeapon);
+	DECLARE_DATAMAP();
 
+public:
 	void OnCreate() override;
 	void Precache() override;
 	void Reload() override;
@@ -82,12 +79,11 @@ private:
 
 class CRpgRocket : public CGrenade
 {
+	DECLARE_CLASS(CRpgRocket, CGrenade);
+	DECLARE_DATAMAP();
+
 public:
 	~CRpgRocket() override;
-
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
 
 	void Spawn() override;
 	void Precache() override;

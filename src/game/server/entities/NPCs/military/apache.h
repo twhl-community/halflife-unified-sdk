@@ -22,11 +22,10 @@ class CBeam;
 
 class CApache : public CBaseMonster
 {
-public:
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
+	DECLARE_CLASS(CApache, CBaseMonster);
+	DECLARE_DATAMAP();
 
+public:
 	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;

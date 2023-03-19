@@ -107,6 +107,9 @@ dynpitchvol_t rgdpvpreset[CDPVPRESETMAX] =
 */
 class CAmbientGeneric : public CBaseEntity
 {
+	DECLARE_CLASS(CAmbientGeneric, CBaseEntity);
+	DECLARE_DATAMAP();
+
 public:
 	bool KeyValue(KeyValueData* pkvd) override;
 	void Spawn() override;
@@ -130,9 +133,6 @@ public:
 	*/
 	void InitModulationParms();
 
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
 	int ObjectCaps() override { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
 
 	float m_flAttenuation; // attenuation value
@@ -144,21 +144,18 @@ public:
 
 LINK_ENTITY_TO_CLASS(ambient_generic, CAmbientGeneric);
 
-TYPEDESCRIPTION CAmbientGeneric::m_SaveData[] =
-	{
-		DEFINE_FIELD(CAmbientGeneric, m_flAttenuation, FIELD_FLOAT),
-		DEFINE_FIELD(CAmbientGeneric, m_fActive, FIELD_BOOLEAN),
-		DEFINE_FIELD(CAmbientGeneric, m_fLooping, FIELD_BOOLEAN),
+BEGIN_DATAMAP(CAmbientGeneric)
+DEFINE_FIELD(m_flAttenuation, FIELD_FLOAT),
+	DEFINE_FIELD(m_fActive, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_fLooping, FIELD_BOOLEAN),
 
-		// HACKHACK - This is not really in the spirit of the save/restore design, but save this
-		// out as a binary data block.  If the dynpitchvol_t is changed, old saved games will NOT
-		// load these correctly, so bump the save/restore version if you change the size of the struct
-		// The right way to do this is to split the input parms (read in keyvalue) into members and re-init this
-		// struct in Precache(), but it's unlikely that the struct will change, so it's not worth the time right now.
-		DEFINE_ARRAY(CAmbientGeneric, m_dpv, FIELD_CHARACTER, sizeof(dynpitchvol_t)),
-};
-
-IMPLEMENT_SAVERESTORE(CAmbientGeneric, CBaseEntity);
+	// HACKHACK - This is not really in the spirit of the save/restore design, but save this
+	// out as a binary data block.  If the dynpitchvol_t is changed, old saved games will NOT
+	// load these correctly, so bump the save/restore version if you change the size of the struct
+	// The right way to do this is to split the input parms (read in keyvalue) into members and re-init this
+	// struct in Precache(), but it's unlikely that the struct will change, so it's not worth the time right now.
+	DEFINE_ARRAY(m_dpv, FIELD_CHARACTER, sizeof(dynpitchvol_t)),
+	END_DATAMAP();
 
 void CAmbientGeneric::Spawn()
 {
@@ -840,11 +837,10 @@ constexpr int SF_AMBIENTMUSIC_REMOVEONFIRE = 1 << 0;
  */
 class CAmbientMusic : public CBaseEntity
 {
-public:
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
+	DECLARE_CLASS(CAmbientMusic, CBaseEntity);
+	DECLARE_DATAMAP();
 
+public:
 	int ObjectCaps() override { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
 
 	bool KeyValue(KeyValueData* pkvd) override;
@@ -865,15 +861,12 @@ private:
 
 LINK_ENTITY_TO_CLASS(ambient_music, CAmbientMusic);
 
-TYPEDESCRIPTION CAmbientMusic::m_SaveData[] =
-	{
-		DEFINE_FIELD(CAmbientMusic, m_FileName, FIELD_STRING),
-		DEFINE_FIELD(CAmbientMusic, m_Command, FIELD_INTEGER),
-		DEFINE_FIELD(CAmbientMusic, m_TargetSelector, FIELD_INTEGER),
-		DEFINE_FIELD(CAmbientMusic, m_Radius, FIELD_FLOAT),
-};
-
-IMPLEMENT_SAVERESTORE(CAmbientMusic, CBaseEntity);
+BEGIN_DATAMAP(CAmbientMusic)
+DEFINE_FIELD(m_FileName, FIELD_STRING),
+	DEFINE_FIELD(m_Command, FIELD_INTEGER),
+	DEFINE_FIELD(m_TargetSelector, FIELD_INTEGER),
+	DEFINE_FIELD(m_Radius, FIELD_FLOAT),
+	END_DATAMAP();
 
 bool CAmbientMusic::KeyValue(KeyValueData* pkvd)
 {
@@ -1052,6 +1045,9 @@ std::string CAmbientMusic::GetCommand() const
 */
 class CEnvSound : public CPointEntity
 {
+	DECLARE_CLASS(CEnvSound, CPointEntity);
+	DECLARE_DATAMAP();
+
 public:
 	bool KeyValue(KeyValueData* pkvd) override;
 	void Spawn() override;
@@ -1065,23 +1061,16 @@ public:
 	*/
 	void Think() override;
 
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
-
 	float m_flRadius;
 	int m_Roomtype;
 };
 
 LINK_ENTITY_TO_CLASS(env_sound, CEnvSound);
 
-TYPEDESCRIPTION CEnvSound::m_SaveData[] =
-	{
-		DEFINE_FIELD(CEnvSound, m_flRadius, FIELD_FLOAT),
-		DEFINE_FIELD(CEnvSound, m_Roomtype, FIELD_INTEGER),
-};
-
-IMPLEMENT_SAVERESTORE(CEnvSound, CPointEntity);
+BEGIN_DATAMAP(CEnvSound)
+DEFINE_FIELD(m_flRadius, FIELD_FLOAT),
+	DEFINE_FIELD(m_Roomtype, FIELD_INTEGER),
+	END_DATAMAP();
 
 bool CEnvSound::KeyValue(KeyValueData* pkvd)
 {
@@ -1393,6 +1382,9 @@ float TEXTURETYPE_PlaySound(TraceResult* ptr, Vector vecSrc, Vector vecEnd, int 
 */
 class CSpeaker : public CBaseEntity
 {
+	DECLARE_CLASS(CSpeaker, CBaseEntity);
+	DECLARE_DATAMAP();
+
 public:
 	bool KeyValue(KeyValueData* pkvd) override;
 	void Spawn() override;
@@ -1405,10 +1397,6 @@ public:
 
 	void EXPORT SpeakerThink();
 
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
-
 	int ObjectCaps() override { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
 
 	int m_preset; // preset number
@@ -1416,12 +1404,9 @@ public:
 
 LINK_ENTITY_TO_CLASS(speaker, CSpeaker);
 
-TYPEDESCRIPTION CSpeaker::m_SaveData[] =
-	{
-		DEFINE_FIELD(CSpeaker, m_preset, FIELD_INTEGER),
-};
-
-IMPLEMENT_SAVERESTORE(CSpeaker, CBaseEntity);
+BEGIN_DATAMAP(CSpeaker)
+DEFINE_FIELD(m_preset, FIELD_INTEGER),
+	END_DATAMAP();
 
 void CSpeaker::Spawn()
 {

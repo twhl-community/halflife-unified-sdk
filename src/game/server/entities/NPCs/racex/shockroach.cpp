@@ -57,6 +57,9 @@ Schedule_t slRCRangeAttack1Fast[] =
 
 class COFShockRoach : public CBaseMonster
 {
+	DECLARE_CLASS(COFShockRoach, CBaseMonster);
+	DECLARE_DATAMAP();
+
 public:
 	void OnCreate() override;
 	void Spawn() override;
@@ -95,10 +98,6 @@ public:
 
 	void MonsterThink() override;
 
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
-
 	float m_flBirthTime;
 	bool m_fRoachSolid;
 
@@ -113,12 +112,9 @@ public:
 };
 LINK_ENTITY_TO_CLASS(monster_shockroach, COFShockRoach);
 
-TYPEDESCRIPTION COFShockRoach::m_SaveData[] =
-	{
-		DEFINE_FIELD(COFShockRoach, m_flBirthTime, FIELD_TIME),
-};
-
-IMPLEMENT_SAVERESTORE(COFShockRoach, CBaseMonster);
+BEGIN_DATAMAP(COFShockRoach)
+DEFINE_FIELD(m_flBirthTime, FIELD_TIME),
+	END_DATAMAP();
 
 DEFINE_CUSTOM_SCHEDULES(COFShockRoach){
 	slRCRangeAttack1,

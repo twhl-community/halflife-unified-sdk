@@ -22,6 +22,9 @@
 
 class CCycler : public CBaseMonster
 {
+	DECLARE_CLASS(CCycler, CBaseMonster);
+	DECLARE_DATAMAP();
+
 public:
 	int ObjectCaps() override { return (CBaseEntity::ObjectCaps() | FCAP_IMPULSE_USE); }
 
@@ -42,21 +45,14 @@ public:
 	// Don't treat as a live target
 	bool IsAlive() override { return false; }
 
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
-
 	bool m_animate;
 };
 
 LINK_ENTITY_TO_CLASS(cycler, CCycler);
 
-TYPEDESCRIPTION CCycler::m_SaveData[] =
-	{
-		DEFINE_FIELD(CCycler, m_animate, FIELD_BOOLEAN),
-};
-
-IMPLEMENT_SAVERESTORE(CCycler, CBaseMonster);
+BEGIN_DATAMAP(CCycler)
+DEFINE_FIELD(m_animate, FIELD_BOOLEAN),
+	END_DATAMAP();
 
 void CCycler::OnCreate()
 {
@@ -173,6 +169,9 @@ bool CCycler::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float fl
 
 class CCyclerSprite : public CBaseEntity
 {
+	DECLARE_CLASS(CCyclerSprite, CBaseEntity);
+	DECLARE_DATAMAP();
+
 public:
 	void Spawn() override;
 	void Think() override;
@@ -180,10 +179,6 @@ public:
 	int ObjectCaps() override { return (CBaseEntity::ObjectCaps() | FCAP_IMPULSE_USE); }
 	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 	void Animate(float frames);
-
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
 
 	inline bool ShouldAnimate() { return m_animate && m_maxFrame > 1.0; }
 	bool m_animate;
@@ -193,14 +188,11 @@ public:
 
 LINK_ENTITY_TO_CLASS(cycler_sprite, CCyclerSprite);
 
-TYPEDESCRIPTION CCyclerSprite::m_SaveData[] =
-	{
-		DEFINE_FIELD(CCyclerSprite, m_animate, FIELD_BOOLEAN),
-		DEFINE_FIELD(CCyclerSprite, m_lastTime, FIELD_TIME),
-		DEFINE_FIELD(CCyclerSprite, m_maxFrame, FIELD_FLOAT),
-};
-
-IMPLEMENT_SAVERESTORE(CCyclerSprite, CBaseEntity);
+BEGIN_DATAMAP(CCyclerSprite)
+DEFINE_FIELD(m_animate, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_lastTime, FIELD_TIME),
+	DEFINE_FIELD(m_maxFrame, FIELD_FLOAT),
+	END_DATAMAP();
 
 void CCyclerSprite::Spawn()
 {
@@ -330,23 +322,21 @@ void CWeaponCycler::SecondaryAttack()
 */
 class CWreckage : public CBaseMonster
 {
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
+	DECLARE_CLASS(CWreckage, CBaseMonster);
+	DECLARE_DATAMAP();
 
+public:
 	void Spawn() override;
 	void Precache() override;
 	void Think() override;
 
+private:
 	float m_flStartTime;
 };
 
-TYPEDESCRIPTION CWreckage::m_SaveData[] =
-	{
-		DEFINE_FIELD(CWreckage, m_flStartTime, FIELD_TIME),
-};
-
-IMPLEMENT_SAVERESTORE(CWreckage, CBaseMonster);
+BEGIN_DATAMAP(CWreckage)
+DEFINE_FIELD(m_flStartTime, FIELD_TIME),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(cycler_wreckage, CWreckage);
 

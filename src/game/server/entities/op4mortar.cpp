@@ -16,11 +16,10 @@
 
 class CMortarShell : public CGrenade
 {
-public:
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
+	DECLARE_CLASS(CMortarShell, CGrenade);
+	DECLARE_DATAMAP();
 
+public:
 	void Precache() override;
 	void Spawn() override;
 
@@ -38,14 +37,11 @@ public:
 	bool m_iSoundedOff;
 };
 
-TYPEDESCRIPTION CMortarShell::m_SaveData[] =
-	{
-		DEFINE_FIELD(CMortarShell, m_velocity, FIELD_INTEGER),
-		DEFINE_FIELD(CMortarShell, m_flIgniteTime, FIELD_TIME),
-		DEFINE_FIELD(CMortarShell, m_iSoundedOff, FIELD_BOOLEAN),
-};
-
-IMPLEMENT_SAVERESTORE(CMortarShell, CGrenade);
+BEGIN_DATAMAP(CMortarShell)
+DEFINE_FIELD(m_velocity, FIELD_INTEGER),
+	DEFINE_FIELD(m_flIgniteTime, FIELD_TIME),
+	DEFINE_FIELD(m_iSoundedOff, FIELD_BOOLEAN),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(mortar_shell, CMortarShell);
 
@@ -223,11 +219,10 @@ const auto SF_MORTAR_CONTROLLABLE = 1 << 5;
 
 class COp4Mortar : public CBaseMonster
 {
-public:
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
+	DECLARE_CLASS(COp4Mortar, CBaseMonster);
+	DECLARE_DATAMAP();
 
+public:
 	bool KeyValue(KeyValueData* pkvd) override;
 
 	void OnCreate() override;
@@ -278,33 +273,30 @@ public:
 	Vector m_vIdealGunAngle;
 };
 
-TYPEDESCRIPTION COp4Mortar::m_SaveData[] =
-	{
-		DEFINE_FIELD(COp4Mortar, d_x, FIELD_INTEGER),
-		DEFINE_FIELD(COp4Mortar, d_y, FIELD_INTEGER),
-		DEFINE_FIELD(COp4Mortar, m_lastupdate, FIELD_FLOAT),
-		DEFINE_FIELD(COp4Mortar, m_playsound, FIELD_BOOLEAN),
-		DEFINE_FIELD(COp4Mortar, m_updated, FIELD_INTEGER),
-		DEFINE_FIELD(COp4Mortar, m_direction, FIELD_INTEGER),
-		DEFINE_FIELD(COp4Mortar, m_start, FIELD_VECTOR),
-		DEFINE_FIELD(COp4Mortar, m_end, FIELD_VECTOR),
-		DEFINE_FIELD(COp4Mortar, m_velocity, FIELD_INTEGER),
-		DEFINE_FIELD(COp4Mortar, m_hmin, FIELD_INTEGER),
-		DEFINE_FIELD(COp4Mortar, m_hmax, FIELD_INTEGER),
-		DEFINE_FIELD(COp4Mortar, m_fireLast, FIELD_FLOAT),
-		DEFINE_FIELD(COp4Mortar, m_maxRange, FIELD_FLOAT),
-		DEFINE_FIELD(COp4Mortar, m_minRange, FIELD_FLOAT),
-		DEFINE_FIELD(COp4Mortar, m_iEnemyType, FIELD_INTEGER),
-		DEFINE_FIELD(COp4Mortar, m_fireDelay, FIELD_FLOAT),
-		DEFINE_FIELD(COp4Mortar, m_trackDelay, FIELD_FLOAT),
-		DEFINE_FIELD(COp4Mortar, m_tracking, FIELD_BOOLEAN),
-		DEFINE_FIELD(COp4Mortar, m_zeroYaw, FIELD_FLOAT),
-		DEFINE_FIELD(COp4Mortar, m_vGunAngle, FIELD_VECTOR),
-		DEFINE_FIELD(COp4Mortar, m_vIdealGunVector, FIELD_VECTOR),
-		DEFINE_FIELD(COp4Mortar, m_vIdealGunAngle, FIELD_VECTOR),
-};
-
-IMPLEMENT_SAVERESTORE(COp4Mortar, CBaseMonster);
+BEGIN_DATAMAP(COp4Mortar)
+DEFINE_FIELD(d_x, FIELD_INTEGER),
+	DEFINE_FIELD(d_y, FIELD_INTEGER),
+	DEFINE_FIELD(m_lastupdate, FIELD_FLOAT),
+	DEFINE_FIELD(m_playsound, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_updated, FIELD_INTEGER),
+	DEFINE_FIELD(m_direction, FIELD_INTEGER),
+	DEFINE_FIELD(m_start, FIELD_VECTOR),
+	DEFINE_FIELD(m_end, FIELD_VECTOR),
+	DEFINE_FIELD(m_velocity, FIELD_INTEGER),
+	DEFINE_FIELD(m_hmin, FIELD_INTEGER),
+	DEFINE_FIELD(m_hmax, FIELD_INTEGER),
+	DEFINE_FIELD(m_fireLast, FIELD_FLOAT),
+	DEFINE_FIELD(m_maxRange, FIELD_FLOAT),
+	DEFINE_FIELD(m_minRange, FIELD_FLOAT),
+	DEFINE_FIELD(m_iEnemyType, FIELD_INTEGER),
+	DEFINE_FIELD(m_fireDelay, FIELD_FLOAT),
+	DEFINE_FIELD(m_trackDelay, FIELD_FLOAT),
+	DEFINE_FIELD(m_tracking, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_zeroYaw, FIELD_FLOAT),
+	DEFINE_FIELD(m_vGunAngle, FIELD_VECTOR),
+	DEFINE_FIELD(m_vIdealGunVector, FIELD_VECTOR),
+	DEFINE_FIELD(m_vIdealGunAngle, FIELD_VECTOR),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(op4mortar, COp4Mortar);
 
@@ -782,11 +774,10 @@ void COp4Mortar::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE use
 
 class COp4MortarController : public CBaseToggle
 {
-public:
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
+	DECLARE_CLASS(COp4MortarController, CBaseToggle);
+	DECLARE_DATAMAP();
 
+public:
 	int ObjectCaps() override { return FCAP_CONTINUOUS_USE; }
 
 	bool KeyValue(KeyValueData* pkvd) override;
@@ -802,14 +793,11 @@ public:
 	float m_lastpush;
 };
 
-TYPEDESCRIPTION COp4MortarController::m_SaveData[] =
-	{
-		DEFINE_FIELD(COp4MortarController, m_direction, FIELD_INTEGER),
-		DEFINE_FIELD(COp4MortarController, m_controller, FIELD_INTEGER),
-		DEFINE_FIELD(COp4MortarController, m_lastpush, FIELD_FLOAT),
-};
-
-IMPLEMENT_SAVERESTORE(COp4MortarController, CBaseToggle);
+BEGIN_DATAMAP(COp4MortarController)
+DEFINE_FIELD(m_direction, FIELD_INTEGER),
+	DEFINE_FIELD(m_controller, FIELD_INTEGER),
+	DEFINE_FIELD(m_lastpush, FIELD_FLOAT),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(func_op4mortarcontroller, COp4MortarController);
 

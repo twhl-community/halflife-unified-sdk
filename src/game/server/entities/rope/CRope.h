@@ -38,14 +38,15 @@ struct Spring
  */
 class CRope : public CBaseDelay
 {
+	DECLARE_CLASS(CRope, CBaseDelay);
+	DECLARE_DATAMAP();
+
 public:
 	static const size_t MAX_SEGMENTS = 63;
 
 	static const size_t MAX_SAMPLES = 64;
 
 	static const size_t MAX_TEMP_SAMPLES = 5;
-
-	using BaseClass = CBaseDelay;
 
 public:
 	CRope();
@@ -63,10 +64,7 @@ public:
 
 	void Touch(CBaseEntity* pOther) override;
 
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
-	static TYPEDESCRIPTION m_SaveData[];
+	void PostRestore() override;
 
 	void InitializeRopeSim();
 

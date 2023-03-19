@@ -110,6 +110,9 @@ enum HGRUNT_SENTENCE_TYPES
 
 class CHGrunt : public CSquadMonster
 {
+	DECLARE_CLASS(CHGrunt, CSquadMonster);
+	DECLARE_DATAMAP();
+
 public:
 	void OnCreate() override;
 	void Spawn() override;
@@ -184,9 +187,6 @@ public:
 	*/
 	void SpeakSentence();
 
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
 	CBaseEntity* Kick();
 	Schedule_t* GetSchedule() override;
 	Schedule_t* GetScheduleOfType(int Type) override;
@@ -214,7 +214,6 @@ public:
 	void JustSpoke();
 
 	CUSTOM_SCHEDULES;
-	static TYPEDESCRIPTION m_SaveData[];
 
 	// checking the feasibility of a grenade toss is kind of costly, so we do it every couple of seconds,
 	// not every server frame.

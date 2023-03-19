@@ -60,14 +60,13 @@ LINK_ENTITY_TO_CLASS(streak_spiral, CSpiral);
 
 class CStomp : public CBaseEntity
 {
+	DECLARE_CLASS(CStomp, CBaseEntity);
+	DECLARE_DATAMAP();
+
 public:
 	void Spawn() override;
 	void Think() override;
 	static CStomp* StompCreate(const Vector& origin, const Vector& end, float speed);
-
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
 
 	float m_flLastThinkTime;
 
@@ -78,12 +77,9 @@ private:
 
 LINK_ENTITY_TO_CLASS(garg_stomp, CStomp);
 
-TYPEDESCRIPTION CStomp::m_SaveData[] =
-	{
-		DEFINE_FIELD(CStomp, m_flLastThinkTime, FIELD_TIME),
-};
-
-IMPLEMENT_SAVERESTORE(CStomp, CBaseEntity);
+BEGIN_DATAMAP(CStomp)
+DEFINE_FIELD(m_flLastThinkTime, FIELD_TIME),
+	END_DATAMAP();
 
 CStomp* CStomp::StompCreate(const Vector& origin, const Vector& end, float speed)
 {
@@ -200,6 +196,9 @@ void StreakSplash(const Vector& origin, const Vector& direction, int color, int 
 
 class CGargantua : public CBaseMonster
 {
+	DECLARE_CLASS(CGargantua, CBaseMonster);
+	DECLARE_DATAMAP();
+
 public:
 	void OnCreate() override;
 	void Spawn() override;
@@ -244,10 +243,6 @@ public:
 
 	void FlameDamage(Vector vecStart, Vector vecEnd, CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int iClassIgnore, int bitsDamageType);
 
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
-
 	CUSTOM_SCHEDULES;
 
 private:
@@ -287,20 +282,17 @@ private:
 
 LINK_ENTITY_TO_CLASS(monster_gargantua, CGargantua);
 
-TYPEDESCRIPTION CGargantua::m_SaveData[] =
-	{
-		DEFINE_FIELD(CGargantua, m_pEyeGlow, FIELD_CLASSPTR),
-		DEFINE_FIELD(CGargantua, m_eyeBrightness, FIELD_INTEGER),
-		DEFINE_FIELD(CGargantua, m_seeTime, FIELD_TIME),
-		DEFINE_FIELD(CGargantua, m_flameTime, FIELD_TIME),
-		DEFINE_FIELD(CGargantua, m_streakTime, FIELD_TIME),
-		DEFINE_FIELD(CGargantua, m_painSoundTime, FIELD_TIME),
-		DEFINE_ARRAY(CGargantua, m_pFlame, FIELD_CLASSPTR, 4),
-		DEFINE_FIELD(CGargantua, m_flameX, FIELD_FLOAT),
-		DEFINE_FIELD(CGargantua, m_flameY, FIELD_FLOAT),
-};
-
-IMPLEMENT_SAVERESTORE(CGargantua, CBaseMonster);
+BEGIN_DATAMAP(CGargantua)
+DEFINE_FIELD(m_pEyeGlow, FIELD_CLASSPTR),
+	DEFINE_FIELD(m_eyeBrightness, FIELD_INTEGER),
+	DEFINE_FIELD(m_seeTime, FIELD_TIME),
+	DEFINE_FIELD(m_flameTime, FIELD_TIME),
+	DEFINE_FIELD(m_streakTime, FIELD_TIME),
+	DEFINE_FIELD(m_painSoundTime, FIELD_TIME),
+	DEFINE_ARRAY(m_pFlame, FIELD_CLASSPTR, 4),
+	DEFINE_FIELD(m_flameX, FIELD_FLOAT),
+	DEFINE_FIELD(m_flameY, FIELD_FLOAT),
+	END_DATAMAP();
 
 const char* CGargantua::pAttackHitSounds[] =
 	{

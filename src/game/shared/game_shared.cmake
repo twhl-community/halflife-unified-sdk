@@ -24,6 +24,7 @@ function(add_game_shared_sources target)
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/entities/ehandle.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/entities/ehandle.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/entities/EntityDictionary.h
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/entities/entity_shared.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/entities/entity_utils.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/entities/entity_utils.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/entities/player_shared.cpp

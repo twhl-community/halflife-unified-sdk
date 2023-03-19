@@ -26,11 +26,10 @@ const int AE_GENEWORM_HIT_WALL = 9;
 
 class COFGeneWormCloud : public CBaseEntity
 {
-public:
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
+	DECLARE_CLASS(COFGeneWormCloud, CBaseEntity);
+	DECLARE_DATAMAP();
 
+public:
 	int Classify() override { return CLASS_NONE; }
 
 	void Precache() override;
@@ -60,18 +59,15 @@ public:
 	bool m_fSinking;
 };
 
-TYPEDESCRIPTION COFGeneWormCloud::m_SaveData[] =
-	{
-		DEFINE_FIELD(COFGeneWormCloud, m_lastTime, FIELD_FLOAT),
-		DEFINE_FIELD(COFGeneWormCloud, m_maxFrame, FIELD_FLOAT),
-		DEFINE_FIELD(COFGeneWormCloud, m_bLaunched, FIELD_BOOLEAN),
-		DEFINE_FIELD(COFGeneWormCloud, m_fadeScale, FIELD_FLOAT),
-		DEFINE_FIELD(COFGeneWormCloud, m_fadeRender, FIELD_FLOAT),
-		DEFINE_FIELD(COFGeneWormCloud, m_damageTimer, FIELD_FLOAT),
-		DEFINE_FIELD(COFGeneWormCloud, m_fSinking, FIELD_BOOLEAN),
-};
-
-IMPLEMENT_SAVERESTORE(COFGeneWormCloud, CBaseEntity);
+BEGIN_DATAMAP(COFGeneWormCloud)
+DEFINE_FIELD(m_lastTime, FIELD_FLOAT),
+	DEFINE_FIELD(m_maxFrame, FIELD_FLOAT),
+	DEFINE_FIELD(m_bLaunched, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_fadeScale, FIELD_FLOAT),
+	DEFINE_FIELD(m_fadeRender, FIELD_FLOAT),
+	DEFINE_FIELD(m_damageTimer, FIELD_FLOAT),
+	DEFINE_FIELD(m_fSinking, FIELD_BOOLEAN),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(env_genewormcloud, COFGeneWormCloud);
 
@@ -221,11 +217,10 @@ const auto GENEWORM_SPAWN_BEAM_COUNT = 8;
 
 class COFGeneWormSpawn : public CBaseEntity
 {
-public:
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
+	DECLARE_CLASS(COFGeneWormSpawn, CBaseEntity);
+	DECLARE_DATAMAP();
 
+public:
 	void Precache() override;
 	void Spawn() override;
 
@@ -257,20 +252,17 @@ public:
 	int m_iBeams;
 };
 
-TYPEDESCRIPTION COFGeneWormSpawn::m_SaveData[] =
-	{
-		DEFINE_FIELD(COFGeneWormSpawn, m_lastTime, FIELD_FLOAT),
-		DEFINE_FIELD(COFGeneWormSpawn, m_maxFrame, FIELD_FLOAT),
-		DEFINE_FIELD(COFGeneWormSpawn, m_flBirthTime, FIELD_FLOAT),
-		DEFINE_FIELD(COFGeneWormSpawn, m_flWarpTime, FIELD_FLOAT),
-		DEFINE_FIELD(COFGeneWormSpawn, m_bLaunched, FIELD_BOOLEAN),
-		DEFINE_FIELD(COFGeneWormSpawn, m_bWarping, FIELD_BOOLEAN),
-		DEFINE_FIELD(COFGeneWormSpawn, m_bTrooperDropped, FIELD_BOOLEAN),
-		DEFINE_ARRAY(COFGeneWormSpawn, m_pBeam, FIELD_CLASSPTR, GENEWORM_SPAWN_BEAM_COUNT),
-		DEFINE_FIELD(COFGeneWormSpawn, m_iBeams, FIELD_INTEGER),
-};
-
-IMPLEMENT_SAVERESTORE(COFGeneWormSpawn, CBaseEntity);
+BEGIN_DATAMAP(COFGeneWormSpawn)
+DEFINE_FIELD(m_lastTime, FIELD_FLOAT),
+	DEFINE_FIELD(m_maxFrame, FIELD_FLOAT),
+	DEFINE_FIELD(m_flBirthTime, FIELD_FLOAT),
+	DEFINE_FIELD(m_flWarpTime, FIELD_FLOAT),
+	DEFINE_FIELD(m_bLaunched, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_bWarping, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_bTrooperDropped, FIELD_BOOLEAN),
+	DEFINE_ARRAY(m_pBeam, FIELD_CLASSPTR, GENEWORM_SPAWN_BEAM_COUNT),
+	DEFINE_FIELD(m_iBeams, FIELD_INTEGER),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(env_genewormspawn, COFGeneWormSpawn);
 
@@ -545,11 +537,10 @@ int iGeneWormSpitSprite;
 
 class COFGeneWorm : public CBaseMonster
 {
-public:
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
+	DECLARE_CLASS(COFGeneWorm, CBaseMonster);
+	DECLARE_DATAMAP();
 
+public:
 	int Classify() override { return CLASS_ALIEN_MONSTER; }
 
 	int BloodColor() override { return BLOOD_COLOR_GREEN; }
@@ -662,37 +653,34 @@ public:
 	float m_flMadDelayTime;
 };
 
-TYPEDESCRIPTION COFGeneWorm::m_SaveData[] =
-	{
-		DEFINE_FIELD(COFGeneWorm, m_flNextPainSound, FIELD_TIME),
-		DEFINE_FIELD(COFGeneWorm, m_posTarget, FIELD_POSITION_VECTOR),
-		DEFINE_FIELD(COFGeneWorm, m_flLastSeen, FIELD_TIME),
-		DEFINE_FIELD(COFGeneWorm, m_flPrevSeen, FIELD_TIME),
-		DEFINE_FIELD(COFGeneWorm, m_pCloud, FIELD_CLASSPTR),
-		DEFINE_FIELD(COFGeneWorm, m_iWasHit, FIELD_INTEGER),
-		DEFINE_FIELD(COFGeneWorm, m_flTakeHitTime, FIELD_FLOAT),
-		DEFINE_FIELD(COFGeneWorm, m_flHitTime, FIELD_FLOAT),
-		DEFINE_FIELD(COFGeneWorm, m_flNextMeleeTime, FIELD_FLOAT),
-		DEFINE_FIELD(COFGeneWorm, m_flNextRangeTime, FIELD_FLOAT),
-		DEFINE_FIELD(COFGeneWorm, m_fRightEyeHit, FIELD_BOOLEAN),
-		DEFINE_FIELD(COFGeneWorm, m_fLeftEyeHit, FIELD_BOOLEAN),
-		DEFINE_FIELD(COFGeneWorm, m_fGetMad, FIELD_BOOLEAN),
-		DEFINE_FIELD(COFGeneWorm, m_fOrificeHit, FIELD_BOOLEAN),
-		DEFINE_FIELD(COFGeneWorm, m_flOrificeOpenTime, FIELD_FLOAT),
-		DEFINE_FIELD(COFGeneWorm, m_orificeGlow, FIELD_CLASSPTR),
-		DEFINE_FIELD(COFGeneWorm, m_fSpawningTrooper, FIELD_BOOLEAN),
-		DEFINE_FIELD(COFGeneWorm, m_flSpawnTrooperTime, FIELD_FLOAT),
-		DEFINE_FIELD(COFGeneWorm, m_iHitTimes, FIELD_INTEGER),
-		DEFINE_FIELD(COFGeneWorm, m_iMaxHitTimes, FIELD_INTEGER),
-		DEFINE_FIELD(COFGeneWorm, m_fSpitting, FIELD_BOOLEAN),
-		DEFINE_FIELD(COFGeneWorm, m_flSpitStartTime, FIELD_TIME),
-		DEFINE_FIELD(COFGeneWorm, m_fActivated, FIELD_BOOLEAN),
-		DEFINE_FIELD(COFGeneWorm, m_flDeathStart, FIELD_TIME),
-		DEFINE_FIELD(COFGeneWorm, m_fHasEntered, FIELD_BOOLEAN),
-		DEFINE_FIELD(COFGeneWorm, m_flMadDelayTime, FIELD_FLOAT),
-};
-
-IMPLEMENT_SAVERESTORE(COFGeneWorm, CBaseMonster);
+BEGIN_DATAMAP(COFGeneWorm)
+DEFINE_FIELD(m_flNextPainSound, FIELD_TIME),
+	DEFINE_FIELD(m_posTarget, FIELD_POSITION_VECTOR),
+	DEFINE_FIELD(m_flLastSeen, FIELD_TIME),
+	DEFINE_FIELD(m_flPrevSeen, FIELD_TIME),
+	DEFINE_FIELD(m_pCloud, FIELD_CLASSPTR),
+	DEFINE_FIELD(m_iWasHit, FIELD_INTEGER),
+	DEFINE_FIELD(m_flTakeHitTime, FIELD_FLOAT),
+	DEFINE_FIELD(m_flHitTime, FIELD_FLOAT),
+	DEFINE_FIELD(m_flNextMeleeTime, FIELD_FLOAT),
+	DEFINE_FIELD(m_flNextRangeTime, FIELD_FLOAT),
+	DEFINE_FIELD(m_fRightEyeHit, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_fLeftEyeHit, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_fGetMad, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_fOrificeHit, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_flOrificeOpenTime, FIELD_FLOAT),
+	DEFINE_FIELD(m_orificeGlow, FIELD_CLASSPTR),
+	DEFINE_FIELD(m_fSpawningTrooper, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_flSpawnTrooperTime, FIELD_FLOAT),
+	DEFINE_FIELD(m_iHitTimes, FIELD_INTEGER),
+	DEFINE_FIELD(m_iMaxHitTimes, FIELD_INTEGER),
+	DEFINE_FIELD(m_fSpitting, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_flSpitStartTime, FIELD_TIME),
+	DEFINE_FIELD(m_fActivated, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_flDeathStart, FIELD_TIME),
+	DEFINE_FIELD(m_fHasEntered, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_flMadDelayTime, FIELD_FLOAT),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(monster_geneworm, COFGeneWorm);
 

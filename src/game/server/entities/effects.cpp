@@ -30,6 +30,9 @@ LINK_ENTITY_TO_CLASS(info_target, CPointEntity);
 
 class CBubbling : public CBaseEntity
 {
+	DECLARE_CLASS(CBubbling, CBaseEntity);
+	DECLARE_DATAMAP();
+
 public:
 	void Spawn() override;
 	void Precache() override;
@@ -38,10 +41,7 @@ public:
 	void EXPORT FizzThink();
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
 	int ObjectCaps() override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
-	static TYPEDESCRIPTION m_SaveData[];
 
 	int m_density;
 	int m_frequency;
@@ -51,16 +51,13 @@ public:
 
 LINK_ENTITY_TO_CLASS(env_bubbles, CBubbling);
 
-TYPEDESCRIPTION CBubbling::m_SaveData[] =
-	{
-		DEFINE_FIELD(CBubbling, m_density, FIELD_INTEGER),
-		DEFINE_FIELD(CBubbling, m_frequency, FIELD_INTEGER),
-		DEFINE_FIELD(CBubbling, m_state, FIELD_BOOLEAN),
-		// Let spawn restore this!
-		//	DEFINE_FIELD( CBubbling, m_bubbleModel, FIELD_INTEGER ),
-};
-
-IMPLEMENT_SAVERESTORE(CBubbling, CBaseEntity);
+BEGIN_DATAMAP(CBubbling)
+DEFINE_FIELD(m_density, FIELD_INTEGER),
+	DEFINE_FIELD(m_frequency, FIELD_INTEGER),
+	DEFINE_FIELD(m_state, FIELD_BOOLEAN),
+	// Let spawn restore this!
+	//	DEFINE_FIELD(m_bubbleModel, FIELD_INTEGER),
+	END_DATAMAP();
 
 #define SF_BUBBLES_STARTOFF 0x0001
 
@@ -342,6 +339,9 @@ void CBeam::DoSparks(const Vector& start, const Vector& end)
 
 class CLightning : public CBeam
 {
+	DECLARE_CLASS(CLightning, CBeam);
+	DECLARE_DATAMAP();
+
 public:
 	void Spawn() override;
 	void Precache() override;
@@ -362,10 +362,6 @@ public:
 			return true;
 		return false;
 	}
-
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
 
 	void BeamUpdateVars();
 
@@ -397,24 +393,21 @@ public:
 LINK_ENTITY_TO_CLASS(env_lightning, CLightning);
 LINK_ENTITY_TO_CLASS(env_beam, CLightning);
 
-TYPEDESCRIPTION CLightning::m_SaveData[] =
-	{
-		DEFINE_FIELD(CLightning, m_active, FIELD_BOOLEAN),
-		DEFINE_FIELD(CLightning, m_iszStartEntity, FIELD_STRING),
-		DEFINE_FIELD(CLightning, m_iszEndEntity, FIELD_STRING),
-		DEFINE_FIELD(CLightning, m_life, FIELD_FLOAT),
-		DEFINE_FIELD(CLightning, m_boltWidth, FIELD_INTEGER),
-		DEFINE_FIELD(CLightning, m_noiseAmplitude, FIELD_INTEGER),
-		DEFINE_FIELD(CLightning, m_brightness, FIELD_INTEGER),
-		DEFINE_FIELD(CLightning, m_speed, FIELD_INTEGER),
-		DEFINE_FIELD(CLightning, m_restrike, FIELD_FLOAT),
-		DEFINE_FIELD(CLightning, m_spriteTexture, FIELD_INTEGER),
-		DEFINE_FIELD(CLightning, m_iszSpriteName, FIELD_STRING),
-		DEFINE_FIELD(CLightning, m_frameStart, FIELD_INTEGER),
-		DEFINE_FIELD(CLightning, m_radius, FIELD_FLOAT),
-};
-
-IMPLEMENT_SAVERESTORE(CLightning, CBeam);
+BEGIN_DATAMAP(CLightning)
+DEFINE_FIELD(m_active, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_iszStartEntity, FIELD_STRING),
+	DEFINE_FIELD(m_iszEndEntity, FIELD_STRING),
+	DEFINE_FIELD(m_life, FIELD_FLOAT),
+	DEFINE_FIELD(m_boltWidth, FIELD_INTEGER),
+	DEFINE_FIELD(m_noiseAmplitude, FIELD_INTEGER),
+	DEFINE_FIELD(m_brightness, FIELD_INTEGER),
+	DEFINE_FIELD(m_speed, FIELD_INTEGER),
+	DEFINE_FIELD(m_restrike, FIELD_FLOAT),
+	DEFINE_FIELD(m_spriteTexture, FIELD_INTEGER),
+	DEFINE_FIELD(m_iszSpriteName, FIELD_STRING),
+	DEFINE_FIELD(m_frameStart, FIELD_INTEGER),
+	DEFINE_FIELD(m_radius, FIELD_FLOAT),
+	END_DATAMAP();
 
 void CLightning::Spawn()
 {
@@ -897,14 +890,11 @@ void CLightning::BeamUpdateVars()
 
 LINK_ENTITY_TO_CLASS(env_laser, CLaser);
 
-TYPEDESCRIPTION CLaser::m_SaveData[] =
-	{
-		DEFINE_FIELD(CLaser, m_pSprite, FIELD_CLASSPTR),
-		DEFINE_FIELD(CLaser, m_iszSpriteName, FIELD_STRING),
-		DEFINE_FIELD(CLaser, m_firePosition, FIELD_POSITION_VECTOR),
-};
-
-IMPLEMENT_SAVERESTORE(CLaser, CBeam);
+BEGIN_DATAMAP(CLaser)
+DEFINE_FIELD(m_pSprite, FIELD_CLASSPTR),
+	DEFINE_FIELD(m_iszSpriteName, FIELD_STRING),
+	DEFINE_FIELD(m_firePosition, FIELD_POSITION_VECTOR),
+	END_DATAMAP();
 
 void CLaser::Spawn()
 {
@@ -1065,13 +1055,13 @@ void CLaser::UpdateOnRemove()
 
 class CGlow : public CPointEntity
 {
+	DECLARE_CLASS(CGlow, CPointEntity);
+	DECLARE_DATAMAP();
+
 public:
 	void Spawn() override;
 	void Think() override;
 	void Animate(float frames);
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
 
 	float m_lastTime;
 	float m_maxFrame;
@@ -1079,13 +1069,10 @@ public:
 
 LINK_ENTITY_TO_CLASS(env_glow, CGlow);
 
-TYPEDESCRIPTION CGlow::m_SaveData[] =
-	{
-		DEFINE_FIELD(CGlow, m_lastTime, FIELD_TIME),
-		DEFINE_FIELD(CGlow, m_maxFrame, FIELD_FLOAT),
-};
-
-IMPLEMENT_SAVERESTORE(CGlow, CPointEntity);
+BEGIN_DATAMAP(CGlow)
+DEFINE_FIELD(m_lastTime, FIELD_TIME),
+	DEFINE_FIELD(m_maxFrame, FIELD_FLOAT),
+	END_DATAMAP();
 
 void CGlow::Spawn()
 {
@@ -1120,13 +1107,10 @@ void CGlow::Animate(float frames)
 
 LINK_ENTITY_TO_CLASS(env_sprite, CSprite);
 
-TYPEDESCRIPTION CSprite::m_SaveData[] =
-	{
-		DEFINE_FIELD(CSprite, m_lastTime, FIELD_TIME),
-		DEFINE_FIELD(CSprite, m_maxFrame, FIELD_FLOAT),
-};
-
-IMPLEMENT_SAVERESTORE(CSprite, CPointEntity);
+BEGIN_DATAMAP(CSprite)
+DEFINE_FIELD(m_lastTime, FIELD_TIME),
+	DEFINE_FIELD(m_maxFrame, FIELD_FLOAT),
+	END_DATAMAP();
 
 void CSprite::Spawn()
 {
@@ -1285,6 +1269,9 @@ void CSprite::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useTyp
 
 class CGibShooter : public CBaseDelay
 {
+	DECLARE_CLASS(CGibShooter, CBaseDelay);
+	DECLARE_DATAMAP();
+
 public:
 	void Spawn() override;
 	void Precache() override;
@@ -1293,10 +1280,6 @@ public:
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
 	virtual CGib* CreateGib();
-
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
 
 	int m_iGibs;
 	int m_iGibCapacity;
@@ -1307,18 +1290,16 @@ public:
 	float m_flGibLife;
 };
 
-TYPEDESCRIPTION CGibShooter::m_SaveData[] =
-	{
-		DEFINE_FIELD(CGibShooter, m_iGibs, FIELD_INTEGER),
-		DEFINE_FIELD(CGibShooter, m_iGibCapacity, FIELD_INTEGER),
-		DEFINE_FIELD(CGibShooter, m_iGibMaterial, FIELD_INTEGER),
-		DEFINE_FIELD(CGibShooter, m_iGibModelIndex, FIELD_INTEGER),
-		DEFINE_FIELD(CGibShooter, m_flGibVelocity, FIELD_FLOAT),
-		DEFINE_FIELD(CGibShooter, m_flVariance, FIELD_FLOAT),
-		DEFINE_FIELD(CGibShooter, m_flGibLife, FIELD_FLOAT),
-};
+BEGIN_DATAMAP(CGibShooter)
+DEFINE_FIELD(m_iGibs, FIELD_INTEGER),
+	DEFINE_FIELD(m_iGibCapacity, FIELD_INTEGER),
+	DEFINE_FIELD(m_iGibMaterial, FIELD_INTEGER),
+	DEFINE_FIELD(m_iGibModelIndex, FIELD_INTEGER),
+	DEFINE_FIELD(m_flGibVelocity, FIELD_FLOAT),
+	DEFINE_FIELD(m_flVariance, FIELD_FLOAT),
+	DEFINE_FIELD(m_flGibLife, FIELD_FLOAT),
+	END_DATAMAP();
 
-IMPLEMENT_SAVERESTORE(CGibShooter, CBaseDelay);
 LINK_ENTITY_TO_CLASS(gibshooter, CGibShooter);
 
 void CGibShooter::Precache()
@@ -2095,11 +2076,10 @@ const int SF_WARPBALL_DELAYED_DAMAGE = 1 << 1;
  */
 class CWarpBall : public CBaseEntity
 {
-public:
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
+	DECLARE_CLASS(CWarpBall, CBaseEntity);
+	DECLARE_DATAMAP();
 
+public:
 	int Classify() override { return CLASS_NONE; }
 
 	bool KeyValue(KeyValueData* pkvd) override;
@@ -2141,24 +2121,21 @@ public:
 
 LINK_ENTITY_TO_CLASS(env_warpball, CWarpBall);
 
-TYPEDESCRIPTION CWarpBall::m_SaveData[] =
-	{
-		DEFINE_FIELD(CWarpBall, m_iBeams, FIELD_INTEGER),
-		DEFINE_FIELD(CWarpBall, m_flLastTime, FIELD_FLOAT),
-		DEFINE_FIELD(CWarpBall, m_flMaxFrame, FIELD_FLOAT),
-		DEFINE_FIELD(CWarpBall, m_flBeamRadius, FIELD_FLOAT),
-		DEFINE_FIELD(CWarpBall, m_iszWarpTarget, FIELD_STRING),
-		DEFINE_FIELD(CWarpBall, m_flWarpStart, FIELD_FLOAT),
-		DEFINE_FIELD(CWarpBall, m_flDamageDelay, FIELD_FLOAT),
-		DEFINE_FIELD(CWarpBall, m_flTargetDelay, FIELD_FLOAT),
-		DEFINE_FIELD(CWarpBall, m_fPlaying, FIELD_BOOLEAN),
-		DEFINE_FIELD(CWarpBall, m_fDamageApplied, FIELD_BOOLEAN),
-		DEFINE_FIELD(CWarpBall, m_fBeamsCleared, FIELD_BOOLEAN),
-		DEFINE_FIELD(CWarpBall, m_pBeams, FIELD_CLASSPTR),
-		DEFINE_FIELD(CWarpBall, m_pSprite, FIELD_CLASSPTR),
-};
-
-IMPLEMENT_SAVERESTORE(CWarpBall, CBaseEntity);
+BEGIN_DATAMAP(CWarpBall)
+DEFINE_FIELD(m_iBeams, FIELD_INTEGER),
+	DEFINE_FIELD(m_flLastTime, FIELD_FLOAT),
+	DEFINE_FIELD(m_flMaxFrame, FIELD_FLOAT),
+	DEFINE_FIELD(m_flBeamRadius, FIELD_FLOAT),
+	DEFINE_FIELD(m_iszWarpTarget, FIELD_STRING),
+	DEFINE_FIELD(m_flWarpStart, FIELD_FLOAT),
+	DEFINE_FIELD(m_flDamageDelay, FIELD_FLOAT),
+	DEFINE_FIELD(m_flTargetDelay, FIELD_FLOAT),
+	DEFINE_FIELD(m_fPlaying, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_fDamageApplied, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_fBeamsCleared, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_pBeams, FIELD_CLASSPTR),
+	DEFINE_FIELD(m_pSprite, FIELD_CLASSPTR),
+	END_DATAMAP();
 
 bool CWarpBall::KeyValue(KeyValueData* pkvd)
 {

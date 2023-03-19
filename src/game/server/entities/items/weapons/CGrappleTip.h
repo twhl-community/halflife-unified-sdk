@@ -17,6 +17,8 @@
 
 class CGrappleTip : public CBaseEntity
 {
+	DECLARE_CLASS(CGrappleTip, CBaseEntity);
+
 public:
 	enum class TargetClass
 	{
@@ -28,8 +30,6 @@ public:
 	};
 
 public:
-	using BaseClass = CBaseEntity;
-
 	void Precache() override;
 
 	void Spawn() override;

@@ -277,57 +277,13 @@ void W_Precache()
 	UTIL_PrecacheSound("items/weapondrop1.wav"); // weapon falls to the ground
 }
 
-TYPEDESCRIPTION CBasePlayerWeapon::m_SaveData[] =
-	{
-		DEFINE_FIELD(CBasePlayerWeapon, m_pPlayer, FIELD_CLASSPTR),
-		DEFINE_FIELD(CBasePlayerWeapon, m_pNext, FIELD_CLASSPTR),
-		// DEFINE_FIELD( CBasePlayerWeapon, m_fKnown, FIELD_INTEGER ),Reset to zero on load
-		DEFINE_FIELD(CBasePlayerWeapon, m_iId, FIELD_INTEGER),
-		// DEFINE_FIELD( CBasePlayerWeapon, m_iIdPrimary, FIELD_INTEGER ),
-		// DEFINE_FIELD( CBasePlayerWeapon, m_iIdSecondary, FIELD_INTEGER ),
-#if defined(CLIENT_WEAPONS)
-		DEFINE_FIELD(CBasePlayerWeapon, m_flNextPrimaryAttack, FIELD_FLOAT),
-		DEFINE_FIELD(CBasePlayerWeapon, m_flNextSecondaryAttack, FIELD_FLOAT),
-		DEFINE_FIELD(CBasePlayerWeapon, m_flTimeWeaponIdle, FIELD_FLOAT),
-#else  // CLIENT_WEAPONS
-		DEFINE_FIELD(CBasePlayerWeapon, m_flNextPrimaryAttack, FIELD_TIME),
-		DEFINE_FIELD(CBasePlayerWeapon, m_flNextSecondaryAttack, FIELD_TIME),
-		DEFINE_FIELD(CBasePlayerWeapon, m_flTimeWeaponIdle, FIELD_TIME),
-#endif // CLIENT_WEAPONS
-		DEFINE_FIELD(CBasePlayerWeapon, m_iPrimaryAmmoType, FIELD_INTEGER),
-		DEFINE_FIELD(CBasePlayerWeapon, m_iSecondaryAmmoType, FIELD_INTEGER),
-		DEFINE_FIELD(CBasePlayerWeapon, m_iClip, FIELD_INTEGER),
-		DEFINE_FIELD(CBasePlayerWeapon, m_iDefaultAmmo, FIELD_INTEGER),
-		DEFINE_FIELD(CBasePlayerWeapon, m_iDefaultPrimaryAmmo, FIELD_INTEGER),
-		//	DEFINE_FIELD( CBasePlayerWeapon, m_iClientClip, FIELD_INTEGER )	 , reset to zero on load so hud gets updated correctly
-		//  DEFINE_FIELD( CBasePlayerWeapon, m_iClientWeaponState, FIELD_INTEGER ), reset to zero on load so hud gets updated correctly
-		DEFINE_FIELD(CBasePlayerWeapon, m_WorldModel, FIELD_STRING),
-		DEFINE_FIELD(CBasePlayerWeapon, m_ViewModel, FIELD_STRING),
-		DEFINE_FIELD(CBasePlayerWeapon, m_PlayerModel, FIELD_STRING),
-};
-
-bool CBasePlayerWeapon::Save(CSave& save)
+void CBasePlayerWeapon::PostRestore()
 {
-	if (!CBaseItem::Save(save))
-		return false;
-	return save.WriteFields("CBasePlayerWeapon", this, m_SaveData, std::size(m_SaveData));
-}
-bool CBasePlayerWeapon::Restore(CRestore& restore)
-{
-	if (!CBaseItem::Restore(restore))
-		return false;
-	if (!restore.ReadFields("CBasePlayerWeapon", this, m_SaveData, std::size(m_SaveData)))
-	{
-		return false;
-	}
-
 	// If we're part of the player's inventory and we're the active item, reset weapon strings.
 	if (m_pPlayer && m_pPlayer->m_pActiveWeapon == this)
 	{
 		SetWeaponModels(STRING(m_ViewModel), STRING(m_PlayerModel));
 	}
-
-	return true;
 }
 
 bool CBasePlayerWeapon::KeyValue(KeyValueData* pkvd)
@@ -766,15 +722,6 @@ void CBasePlayerWeapon::PrintState()
 
 	Logger->debug("m_iclip:  {}", m_iClip);
 }
-
-// m_AmmoName isn't saved here because it's initialized by all derived classes.
-// Classes that let level designers set the name should also save it.
-TYPEDESCRIPTION CBasePlayerAmmo::m_SaveData[] =
-	{
-		DEFINE_FIELD(CBasePlayerAmmo, m_AmmoAmount, FIELD_INTEGER)
-};
-
-IMPLEMENT_SAVERESTORE(CBasePlayerAmmo, CBaseItem);
 
 bool CBasePlayerAmmo::KeyValue(KeyValueData* pkvd)
 {

@@ -119,22 +119,19 @@ bool CBreakable::KeyValue(KeyValueData* pkvd)
 
 LINK_ENTITY_TO_CLASS(func_breakable, CBreakable);
 
-TYPEDESCRIPTION CBreakable::m_SaveData[] =
-	{
-		DEFINE_FIELD(CBreakable, m_Material, FIELD_INTEGER),
-		DEFINE_FIELD(CBreakable, m_Explosion, FIELD_INTEGER),
+BEGIN_DATAMAP(CBreakable)
+DEFINE_FIELD(m_Material, FIELD_INTEGER),
+	DEFINE_FIELD(m_Explosion, FIELD_INTEGER),
 
-		// Don't need to save/restore these because we precache after restore
-		//	DEFINE_FIELD( CBreakable, m_idShard, FIELD_INTEGER ),
+	// Don't need to save/restore these because we precache after restore
+	//	DEFINE_FIELD(m_idShard, FIELD_INTEGER),
 
-		DEFINE_FIELD(CBreakable, m_angle, FIELD_FLOAT),
-		DEFINE_FIELD(CBreakable, m_iszGibModel, FIELD_STRING),
-		DEFINE_FIELD(CBreakable, m_iszSpawnObject, FIELD_STRING),
+	DEFINE_FIELD(m_angle, FIELD_FLOAT),
+	DEFINE_FIELD(m_iszGibModel, FIELD_STRING),
+	DEFINE_FIELD(m_iszSpawnObject, FIELD_STRING),
 
-		// Explosion magnitude is stored in pev->impulse
-};
-
-IMPLEMENT_SAVERESTORE(CBreakable, CBaseDelay);
+	// Explosion magnitude is stored in pev->impulse
+	END_DATAMAP();
 
 void CBreakable::Spawn()
 {
@@ -761,6 +758,9 @@ int CBreakable::DamageDecal(int bitsDamageType)
 
 class CPushable : public CBreakable
 {
+	DECLARE_CLASS(CPushable, CBreakable);
+	DECLARE_DATAMAP();
+
 public:
 	void Spawn() override;
 	void Precache() override;
@@ -777,15 +777,11 @@ public:
 	//	virtual void	SetActivator( CBaseEntity *pActivator ) { m_pPusher = pActivator; }
 
 	int ObjectCaps() override { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION) | FCAP_CONTINUOUS_USE; }
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
 
 	inline float MaxSpeed() { return m_maxSpeed; }
 
 	// breakables use an overridden takedamage
 	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
-
-	static TYPEDESCRIPTION m_SaveData[];
 
 	static const char* m_soundNames[3];
 	int m_lastSound; // no need to save/restore, just keeps the same sound from playing twice in a row
@@ -793,13 +789,10 @@ public:
 	float m_soundTime;
 };
 
-TYPEDESCRIPTION CPushable::m_SaveData[] =
-	{
-		DEFINE_FIELD(CPushable, m_maxSpeed, FIELD_FLOAT),
-		DEFINE_FIELD(CPushable, m_soundTime, FIELD_TIME),
-};
-
-IMPLEMENT_SAVERESTORE(CPushable, CBreakable);
+BEGIN_DATAMAP(CPushable)
+DEFINE_FIELD(m_maxSpeed, FIELD_FLOAT),
+	DEFINE_FIELD(m_soundTime, FIELD_TIME),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(func_pushable, CPushable);
 

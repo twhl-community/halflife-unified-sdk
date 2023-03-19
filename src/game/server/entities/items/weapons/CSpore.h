@@ -22,6 +22,9 @@ enum SporeAnim
 
 class CSpore : public CGrenade
 {
+	DECLARE_CLASS(CSpore, CGrenade);
+	DECLARE_DATAMAP();
+
 public:
 	enum class SporeType
 	{
@@ -30,15 +33,6 @@ public:
 	};
 
 public:
-	using BaseClass = CGrenade;
-
-#ifndef CLIENT_DLL
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
-	static TYPEDESCRIPTION m_SaveData[];
-#endif
-
 	void Precache() override;
 
 	void Spawn() override;

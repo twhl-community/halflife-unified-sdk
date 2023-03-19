@@ -98,27 +98,24 @@ void CShower::Touch(CBaseEntity* pOther)
 
 class CEnvExplosion : public CBaseMonster
 {
+	DECLARE_CLASS(CEnvExplosion, CBaseMonster);
+	DECLARE_DATAMAP();
+
 public:
 	void Spawn() override;
 	void EXPORT Smoke();
 	bool KeyValue(KeyValueData* pkvd) override;
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
-
 	int m_iMagnitude;  // how large is the fireball? how much damage?
 	int m_spriteScale; // what's the exact fireball sprite scale?
 };
 
-TYPEDESCRIPTION CEnvExplosion::m_SaveData[] =
-	{
-		DEFINE_FIELD(CEnvExplosion, m_iMagnitude, FIELD_INTEGER),
-		DEFINE_FIELD(CEnvExplosion, m_spriteScale, FIELD_INTEGER),
-};
+BEGIN_DATAMAP(CEnvExplosion)
+DEFINE_FIELD(m_iMagnitude, FIELD_INTEGER),
+	DEFINE_FIELD(m_spriteScale, FIELD_INTEGER),
+	END_DATAMAP();
 
-IMPLEMENT_SAVERESTORE(CEnvExplosion, CBaseMonster);
 LINK_ENTITY_TO_CLASS(env_explosion, CEnvExplosion);
 
 bool CEnvExplosion::KeyValue(KeyValueData* pkvd)

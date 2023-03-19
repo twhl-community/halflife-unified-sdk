@@ -38,9 +38,9 @@ static const size_t DISPLACER_NUM_BEAMS = 4;
 
 class CDisplacer : public CBasePlayerWeapon
 {
-public:
-	using BaseClass = CBasePlayerWeapon;
+	DECLARE_CLASS(CDisplacer, CBasePlayerWeapon);
 
+public:
 	void OnCreate() override;
 
 	void Precache() override;

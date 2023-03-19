@@ -21,14 +21,11 @@
 
 LINK_ENTITY_TO_CLASS(monster_scientist, CScientist);
 
-TYPEDESCRIPTION CScientist::m_SaveData[] =
-	{
-		DEFINE_FIELD(CScientist, m_painTime, FIELD_TIME),
-		DEFINE_FIELD(CScientist, m_healTime, FIELD_TIME),
-		DEFINE_FIELD(CScientist, m_fearTime, FIELD_TIME),
-};
-
-IMPLEMENT_SAVERESTORE(CScientist, CTalkMonster);
+BEGIN_DATAMAP(CScientist)
+DEFINE_FIELD(m_painTime, FIELD_TIME),
+	DEFINE_FIELD(m_healTime, FIELD_TIME),
+	DEFINE_FIELD(m_fearTime, FIELD_TIME),
+	END_DATAMAP();
 
 Task_t tlFollow[] =
 	{
@@ -1072,14 +1069,11 @@ void CDeadScientist::Spawn()
 
 LINK_ENTITY_TO_CLASS(monster_sitting_scientist, CSittingScientist);
 
-TYPEDESCRIPTION CSittingScientist::m_SaveData[] =
-	{
-		// Don't need to save/restore m_baseSequence (recalced)
-		DEFINE_FIELD(CSittingScientist, m_headTurn, FIELD_INTEGER),
-		DEFINE_FIELD(CSittingScientist, m_flResponseDelay, FIELD_FLOAT),
-};
-
-IMPLEMENT_SAVERESTORE(CSittingScientist, CScientist);
+BEGIN_DATAMAP(CSittingScientist)
+// Don't need to save/restore m_baseSequence (recalced)
+DEFINE_FIELD(m_headTurn, FIELD_INTEGER),
+	DEFINE_FIELD(m_flResponseDelay, FIELD_FLOAT),
+	END_DATAMAP();
 
 // animation sequence aliases
 enum SITTING_ANIM

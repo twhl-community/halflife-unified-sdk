@@ -19,6 +19,8 @@
 
 class CPointEntity : public CBaseEntity
 {
+	DECLARE_CLASS(CPointEntity, CBaseEntity);
+
 public:
 	void Spawn() override;
 	int ObjectCaps() override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }

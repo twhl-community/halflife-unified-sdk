@@ -64,6 +64,9 @@ enum SS_INTERRUPT
 */
 class CCineMonster : public CBaseMonster
 {
+	DECLARE_CLASS(CCineMonster, CBaseMonster);
+	DECLARE_DATAMAP();
+
 public:
 	static inline std::shared_ptr<spdlog::logger> AIScriptLogger;
 
@@ -78,11 +81,6 @@ public:
 	*	@brief Find an entity that I'm interested in and precache the sounds he'll need in the sequence.
 	*/
 	void Activate() override;
-
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
-	static TYPEDESCRIPTION m_SaveData[];
 
 	// void EXPORT CineSpawnThink();
 	void EXPORT CineThink();

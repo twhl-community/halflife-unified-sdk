@@ -34,9 +34,9 @@ enum KnifeAnim
 
 class CKnife : public CBasePlayerWeapon
 {
-public:
-	using BaseClass = CBasePlayerWeapon;
+	DECLARE_CLASS(CKnife, CBasePlayerWeapon);
 
+public:
 	void OnCreate() override;
 
 	void Precache() override;

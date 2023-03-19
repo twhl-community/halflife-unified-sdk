@@ -26,6 +26,9 @@
 */
 class CBarnacle : public CBaseMonster
 {
+	DECLARE_CLASS(CBarnacle, CBaseMonster);
+	DECLARE_DATAMAP();
+
 public:
 	void OnCreate() override;
 	void Spawn() override;
@@ -42,9 +45,6 @@ public:
 	void EXPORT WaitTillDead();
 	void Killed(CBaseEntity* attacker, int iGib) override;
 	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
 
 	float m_flAltitude;
 	float m_flKillVictimTime;
@@ -56,17 +56,14 @@ public:
 
 LINK_ENTITY_TO_CLASS(monster_barnacle, CBarnacle);
 
-TYPEDESCRIPTION CBarnacle::m_SaveData[] =
-	{
-		DEFINE_FIELD(CBarnacle, m_flAltitude, FIELD_FLOAT),
-		DEFINE_FIELD(CBarnacle, m_flKillVictimTime, FIELD_TIME),
-		DEFINE_FIELD(CBarnacle, m_cGibs, FIELD_INTEGER), // barnacle loads up on gibs each time it kills something.
-		DEFINE_FIELD(CBarnacle, m_fTongueExtended, FIELD_BOOLEAN),
-		DEFINE_FIELD(CBarnacle, m_fLiftingPrey, FIELD_BOOLEAN),
-		DEFINE_FIELD(CBarnacle, m_flTongueAdj, FIELD_FLOAT),
-};
-
-IMPLEMENT_SAVERESTORE(CBarnacle, CBaseMonster);
+BEGIN_DATAMAP(CBarnacle)
+DEFINE_FIELD(m_flAltitude, FIELD_FLOAT),
+	DEFINE_FIELD(m_flKillVictimTime, FIELD_TIME),
+	DEFINE_FIELD(m_cGibs, FIELD_INTEGER), // barnacle loads up on gibs each time it kills something.
+	DEFINE_FIELD(m_fTongueExtended, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_fLiftingPrey, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_flTongueAdj, FIELD_FLOAT),
+	END_DATAMAP();
 
 void CBarnacle::OnCreate()
 {

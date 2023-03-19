@@ -40,6 +40,9 @@ enum
 */
 class CHAssassin : public CBaseMonster
 {
+	DECLARE_CLASS(CHAssassin, CBaseMonster);
+	DECLARE_DATAMAP();
+
 public:
 	void OnCreate() override;
 	void Spawn() override;
@@ -76,10 +79,6 @@ public:
 	void IdleSound() override;
 	CUSTOM_SCHEDULES;
 
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
-
 	float m_flLastShot;
 	float m_flDiviation;
 
@@ -99,23 +98,20 @@ public:
 
 LINK_ENTITY_TO_CLASS(monster_human_assassin, CHAssassin);
 
-TYPEDESCRIPTION CHAssassin::m_SaveData[] =
-	{
-		DEFINE_FIELD(CHAssassin, m_flLastShot, FIELD_TIME),
-		DEFINE_FIELD(CHAssassin, m_flDiviation, FIELD_FLOAT),
+BEGIN_DATAMAP(CHAssassin)
+DEFINE_FIELD(m_flLastShot, FIELD_TIME),
+	DEFINE_FIELD(m_flDiviation, FIELD_FLOAT),
 
-		DEFINE_FIELD(CHAssassin, m_flNextJump, FIELD_TIME),
-		DEFINE_FIELD(CHAssassin, m_vecJumpVelocity, FIELD_VECTOR),
+	DEFINE_FIELD(m_flNextJump, FIELD_TIME),
+	DEFINE_FIELD(m_vecJumpVelocity, FIELD_VECTOR),
 
-		DEFINE_FIELD(CHAssassin, m_flNextGrenadeCheck, FIELD_TIME),
-		DEFINE_FIELD(CHAssassin, m_vecTossVelocity, FIELD_VECTOR),
-		DEFINE_FIELD(CHAssassin, m_fThrowGrenade, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_flNextGrenadeCheck, FIELD_TIME),
+	DEFINE_FIELD(m_vecTossVelocity, FIELD_VECTOR),
+	DEFINE_FIELD(m_fThrowGrenade, FIELD_BOOLEAN),
 
-		DEFINE_FIELD(CHAssassin, m_iTargetRanderamt, FIELD_INTEGER),
-		DEFINE_FIELD(CHAssassin, m_iFrustration, FIELD_INTEGER),
-};
-
-IMPLEMENT_SAVERESTORE(CHAssassin, CBaseMonster);
+	DEFINE_FIELD(m_iTargetRanderamt, FIELD_INTEGER),
+	DEFINE_FIELD(m_iFrustration, FIELD_INTEGER),
+	END_DATAMAP();
 
 void CHAssassin::OnCreate()
 {

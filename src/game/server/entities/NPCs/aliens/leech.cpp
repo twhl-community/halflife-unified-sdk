@@ -36,6 +36,9 @@
 */
 class CLeech : public CBaseMonster
 {
+	DECLARE_CLASS(CLeech, CBaseMonster);
+	DECLARE_DATAMAP();
+
 public:
 	void OnCreate() override;
 	void Spawn() override;
@@ -84,10 +87,6 @@ public:
 	int Classify() override { return CLASS_INSECT; }
 	int IRelationship(CBaseEntity* pTarget) override;
 
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
-
 	static const char* pAttackSounds[];
 	static const char* pAlertSounds[];
 
@@ -114,23 +113,20 @@ private:
 
 LINK_ENTITY_TO_CLASS(monster_leech, CLeech);
 
-TYPEDESCRIPTION CLeech::m_SaveData[] =
-	{
-		DEFINE_FIELD(CLeech, m_flTurning, FIELD_FLOAT),
-		DEFINE_FIELD(CLeech, m_fPathBlocked, FIELD_BOOLEAN),
-		DEFINE_FIELD(CLeech, m_flAccelerate, FIELD_FLOAT),
-		DEFINE_FIELD(CLeech, m_obstacle, FIELD_FLOAT),
-		DEFINE_FIELD(CLeech, m_top, FIELD_FLOAT),
-		DEFINE_FIELD(CLeech, m_bottom, FIELD_FLOAT),
-		DEFINE_FIELD(CLeech, m_height, FIELD_FLOAT),
-		DEFINE_FIELD(CLeech, m_waterTime, FIELD_TIME),
-		DEFINE_FIELD(CLeech, m_sideTime, FIELD_TIME),
-		DEFINE_FIELD(CLeech, m_zTime, FIELD_TIME),
-		DEFINE_FIELD(CLeech, m_stateTime, FIELD_TIME),
-		DEFINE_FIELD(CLeech, m_attackSoundTime, FIELD_TIME),
-};
-
-IMPLEMENT_SAVERESTORE(CLeech, CBaseMonster);
+BEGIN_DATAMAP(CLeech)
+DEFINE_FIELD(m_flTurning, FIELD_FLOAT),
+	DEFINE_FIELD(m_fPathBlocked, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_flAccelerate, FIELD_FLOAT),
+	DEFINE_FIELD(m_obstacle, FIELD_FLOAT),
+	DEFINE_FIELD(m_top, FIELD_FLOAT),
+	DEFINE_FIELD(m_bottom, FIELD_FLOAT),
+	DEFINE_FIELD(m_height, FIELD_FLOAT),
+	DEFINE_FIELD(m_waterTime, FIELD_TIME),
+	DEFINE_FIELD(m_sideTime, FIELD_TIME),
+	DEFINE_FIELD(m_zTime, FIELD_TIME),
+	DEFINE_FIELD(m_stateTime, FIELD_TIME),
+	DEFINE_FIELD(m_attackSoundTime, FIELD_TIME),
+	END_DATAMAP();
 
 const char* CLeech::pAttackSounds[] =
 	{

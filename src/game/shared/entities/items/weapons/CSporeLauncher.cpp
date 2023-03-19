@@ -21,14 +21,9 @@
 
 #include "CSporeLauncher.h"
 
-#ifndef CLIENT_DLL
-TYPEDESCRIPTION CSporeLauncher::m_SaveData[] =
-	{
-		DEFINE_FIELD(CSporeLauncher, m_ReloadState, FIELD_INTEGER),
-};
-
-IMPLEMENT_SAVERESTORE(CSporeLauncher, CSporeLauncher::BaseClass);
-#endif
+BEGIN_DATAMAP(CSporeLauncher)
+		DEFINE_FIELD(m_ReloadState, FIELD_INTEGER),
+END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(weapon_sporelauncher, CSporeLauncher);
 
@@ -353,9 +348,9 @@ enum SporeAmmoBody
 
 class CSporeAmmo : public CBasePlayerAmmo
 {
-public:
-	using BaseClass = CBasePlayerAmmo;
+	DECLARE_CLASS(CSporeAmmo, CBasePlayerAmmo);
 
+public:
 	void OnCreate() override
 	{
 		CBasePlayerAmmo::OnCreate();

@@ -24,6 +24,12 @@ This file contains "stubs" of class member implementations so that we can predic
 #include "cbase.h"
 #include "nodes.h"
 
+DEFINE_DUMMY_DATAMAP(CBaseDelay);
+DEFINE_DUMMY_DATAMAP(CBaseAnimating);
+DEFINE_DUMMY_DATAMAP(CBaseToggle);
+DEFINE_DUMMY_DATAMAP(CBaseMonster);
+DEFINE_DUMMY_DATAMAP(CBasePlayer);
+
 bool SkillSystem::Initialize() { return true; }
 void SkillSystem::Shutdown() {}
 float SkillSystem::GetValue(std::string_view) const { return 0; }
@@ -66,8 +72,6 @@ void CBaseEntity::OnDestroy()
 bool CBaseEntity::GiveHealth(float flHealth, int bitsDamageType) { return true; }
 bool CBaseEntity::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) { return true; }
 CBaseEntity* CBaseEntity::GetNextTarget() { return nullptr; }
-bool CBaseEntity::Save(CSave& save) { return true; }
-bool CBaseEntity::Restore(CRestore& restore) { return true; }
 void CBaseEntity::SetObjectCollisionBox() {}
 bool CBaseEntity::Intersects(CBaseEntity* pOther) { return false; }
 void CBaseEntity::MakeDormant() {}
@@ -84,12 +88,6 @@ void CBaseEntity::UpdateOnRemove() {}
 
 // CBaseDelay Stubs
 bool CBaseDelay::KeyValue(KeyValueData*) { return false; }
-bool CBaseDelay::Restore(class CRestore&) { return true; }
-bool CBaseDelay::Save(class CSave&) { return true; }
-
-// CBaseAnimating Stubs
-bool CBaseAnimating::Restore(class CRestore&) { return true; }
-bool CBaseAnimating::Save(class CSave&) { return true; }
 
 // UTIL_* Stubs
 void UTIL_PrecacheOther(const char* szClassname) {}
@@ -102,8 +100,6 @@ void UTIL_ClientPrintAll(int, char const*, char const*, char const*, char const*
 void ClientPrint(CBasePlayer* client, int msg_dest, const char* msg_name, const char* param1, const char* param2, const char* param3, const char* param4) {}
 
 // CBaseToggle Stubs
-bool CBaseToggle::Restore(class CRestore&) { return true; }
-bool CBaseToggle::Save(class CSave&) { return true; }
 bool CBaseToggle::KeyValue(KeyValueData*) { return false; }
 
 // CGrenade Stubs
@@ -253,8 +249,7 @@ void CBaseMonster::RunAI() {}
 void CBaseMonster::Killed(CBaseEntity* attacker, int iGib) {}
 bool CBaseMonster::GiveHealth(float flHealth, int bitsDamageType) { return false; }
 bool CBaseMonster::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) { return false; }
-bool CBaseMonster::Restore(class CRestore&) { return true; }
-bool CBaseMonster::Save(class CSave&) { return true; }
+void CBaseMonster::PostRestore() {}
 
 int TrainSpeed(int iSpeed, int iMax) { return 0; }
 void CBasePlayer::DeathSound() {}
@@ -281,9 +276,7 @@ void CBasePlayer::SetSuitUpdate(const char* name, bool fgroup, int iNoRepeatTime
 void CBasePlayer::UpdatePlayerSound() {}
 void CBasePlayer::PostThink() {}
 void CBasePlayer::Precache() {}
-bool CBasePlayer::Save(CSave& save) { return false; }
 void CBasePlayer::RenewItems() {}
-bool CBasePlayer::Restore(CRestore& restore) { return false; }
 void CBasePlayer::SelectNextItem(int iItem) {}
 bool CBasePlayer::HasWeapons() { return false; }
 void CBasePlayer::SelectPrevItem(int iItem) {}
@@ -317,6 +310,7 @@ const char* CBasePlayer::TeamID() { return ""; }
 int CBasePlayer::GiveAmmo(int iCount, const char* szName) { return 0; }
 void CBasePlayer::AddPoints(int score, bool bAllowNegativeScore) {}
 void CBasePlayer::AddPointsToTeam(int score, bool bAllowNegativeScore) {}
+void CBasePlayer::PostRestore() {}
 
 void ClearMultiDamage() {}
 void ApplyMultiDamage(CBaseEntity* inflictor, CBaseEntity* attacker) {}
@@ -325,8 +319,6 @@ void SpawnBlood(Vector vecSpot, int bloodColor, float flDamage) {}
 int DamageDecal(CBaseEntity* pEntity, int bitsDamageType) { return 0; }
 void DecalGunshot(TraceResult* pTrace, int iBulletType) {}
 void EjectBrass(const Vector& vecOrigin, const Vector& vecVelocity, float rotation, int model, int soundtype) {}
-bool CBasePlayerWeapon::Restore(class CRestore&) { return true; }
-bool CBasePlayerWeapon::Save(class CSave&) { return true; }
 bool CBasePlayerWeapon::KeyValue(KeyValueData* pkvd) { return false; }
 float CBasePlayerWeapon::GetNextAttackDelay(float flTime) { return flTime; }
 void CBasePlayerWeapon::SetObjectCollisionBox() {}
@@ -343,6 +335,7 @@ void CBasePlayerWeapon::RetireWeapon() {}
 void CBasePlayerWeapon::DoRetireWeapon() {}
 CBasePlayerWeapon* CBasePlayerWeapon::GetItemToRespawn(const Vector& respawnPoint) { return nullptr; }
 ItemAddResult CBasePlayerWeapon::Apply(CBasePlayer* player) { return ItemAddResult::NotAdded; }
+void CBasePlayerWeapon::PostRestore() {}
 
 bool CBasePlayerAmmo::KeyValue(KeyValueData* pkvd) { return false; }
 void CBasePlayerAmmo::Spawn() {}

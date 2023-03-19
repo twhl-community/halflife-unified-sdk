@@ -22,22 +22,19 @@
 #include "customentity.h"
 #include "hgrunt_ally_base.h"
 
-TYPEDESCRIPTION CBaseHGruntAlly::m_SaveData[] =
-	{
-		DEFINE_FIELD(CBaseHGruntAlly, m_flNextGrenadeCheck, FIELD_TIME),
-		DEFINE_FIELD(CBaseHGruntAlly, m_flNextPainTime, FIELD_TIME),
-		//	DEFINE_FIELD( CBaseHGruntAlly, m_flLastEnemySightTime, FIELD_TIME ), // don't save, go to zero
-		DEFINE_FIELD(CBaseHGruntAlly, m_vecTossVelocity, FIELD_VECTOR),
-		DEFINE_FIELD(CBaseHGruntAlly, m_fThrowGrenade, FIELD_BOOLEAN),
-		DEFINE_FIELD(CBaseHGruntAlly, m_fStanding, FIELD_BOOLEAN),
-		DEFINE_FIELD(CBaseHGruntAlly, m_fFirstEncounter, FIELD_BOOLEAN),
-		DEFINE_FIELD(CBaseHGruntAlly, m_cClipSize, FIELD_INTEGER),
-		DEFINE_FIELD(CBaseHGruntAlly, m_iSentence, FIELD_INTEGER),
-		DEFINE_FIELD(CBaseHGruntAlly, m_iGruntHead, FIELD_INTEGER),
-		DEFINE_FIELD(CBaseHGruntAlly, m_iGruntTorso, FIELD_INTEGER),
-};
-
-IMPLEMENT_SAVERESTORE(CBaseHGruntAlly, COFSquadTalkMonster);
+BEGIN_DATAMAP(CBaseHGruntAlly)
+DEFINE_FIELD(m_flNextGrenadeCheck, FIELD_TIME),
+	DEFINE_FIELD(m_flNextPainTime, FIELD_TIME),
+	//	DEFINE_FIELD(m_flLastEnemySightTime, FIELD_TIME), // don't save, go to zero
+	DEFINE_FIELD(m_vecTossVelocity, FIELD_VECTOR),
+	DEFINE_FIELD(m_fThrowGrenade, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_fStanding, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_fFirstEncounter, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_cClipSize, FIELD_INTEGER),
+	DEFINE_FIELD(m_iSentence, FIELD_INTEGER),
+	DEFINE_FIELD(m_iGruntHead, FIELD_INTEGER),
+	DEFINE_FIELD(m_iGruntTorso, FIELD_INTEGER),
+	END_DATAMAP();
 
 void CBaseHGruntAlly::OnCreate()
 {

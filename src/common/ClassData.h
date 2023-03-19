@@ -15,15 +15,16 @@
 
 #pragma once
 
-#include "CLaserSpot.h"
+/**
+ *	@brief Defines the typedef @c ThisClass.
+ */
+#define DECLARE_CLASS_NOBASE(thisClass) \
+public:									\
+	using ThisClass = thisClass
 
 /**
- *	@brief Identical to CLaserSpot, different class to avoid RPG laser confusion logic.
+ *	@brief Defines the typedefs @c ThisClass and @c BaseClass.
  */
-class CEagleLaser : public CLaserSpot
-{
-	DECLARE_CLASS(CEagleLaser, CLaserSpot);
-
-public:
-	static CEagleLaser* CreateSpot();
-};
+#define DECLARE_CLASS(thisClass, baseClass) \
+	DECLARE_CLASS_NOBASE(thisClass);        \
+	using BaseClass = baseClass

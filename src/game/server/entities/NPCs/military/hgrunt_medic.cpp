@@ -80,6 +80,9 @@ enum
 
 class COFMedicAlly : public CBaseHGruntAlly
 {
+	DECLARE_CLASS(COFMedicAlly, CBaseHGruntAlly);
+	DECLARE_DATAMAP();
+
 public:
 	void OnCreate() override;
 
@@ -89,9 +92,6 @@ public:
 	void StartTask(Task_t* pTask) override;
 	void RunTask(Task_t* pTask) override;
 	void Shoot();
-
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
 
 	Schedule_t* GetScheduleOfType(int Type) override;
 
@@ -110,7 +110,6 @@ public:
 	void HealerActivate(CBaseMonster* pTarget);
 
 	CUSTOM_SCHEDULES;
-	static TYPEDESCRIPTION m_SaveData[];
 
 	int m_iHealCharge;
 	bool m_fUseHealing;
@@ -144,22 +143,19 @@ protected:
 
 LINK_ENTITY_TO_CLASS(monster_human_medic_ally, COFMedicAlly);
 
-TYPEDESCRIPTION COFMedicAlly::m_SaveData[] =
-	{
-		DEFINE_FIELD(COFMedicAlly, m_flFollowCheckTime, FIELD_FLOAT),
-		DEFINE_FIELD(COFMedicAlly, m_fFollowChecking, FIELD_BOOLEAN),
-		DEFINE_FIELD(COFMedicAlly, m_fFollowChecked, FIELD_BOOLEAN),
-		DEFINE_FIELD(COFMedicAlly, m_flLastRejectAudio, FIELD_FLOAT),
-		DEFINE_FIELD(COFMedicAlly, m_iHealCharge, FIELD_INTEGER),
-		DEFINE_FIELD(COFMedicAlly, m_fUseHealing, FIELD_BOOLEAN),
-		DEFINE_FIELD(COFMedicAlly, m_fHealing, FIELD_BOOLEAN),
-		DEFINE_FIELD(COFMedicAlly, m_flLastUseTime, FIELD_TIME),
-		DEFINE_FIELD(COFMedicAlly, m_fHealActive, FIELD_BOOLEAN),
-		DEFINE_FIELD(COFMedicAlly, m_flLastShot, FIELD_TIME),
-		DEFINE_FIELD(COFMedicAlly, m_WeaponGroup, FIELD_INTEGER),
-};
-
-IMPLEMENT_SAVERESTORE(COFMedicAlly, CBaseHGruntAlly);
+BEGIN_DATAMAP(COFMedicAlly)
+DEFINE_FIELD(m_flFollowCheckTime, FIELD_FLOAT),
+	DEFINE_FIELD(m_fFollowChecking, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_fFollowChecked, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_flLastRejectAudio, FIELD_FLOAT),
+	DEFINE_FIELD(m_iHealCharge, FIELD_INTEGER),
+	DEFINE_FIELD(m_fUseHealing, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_fHealing, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_flLastUseTime, FIELD_TIME),
+	DEFINE_FIELD(m_fHealActive, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_flLastShot, FIELD_TIME),
+	DEFINE_FIELD(m_WeaponGroup, FIELD_INTEGER),
+	END_DATAMAP();
 
 void COFMedicAlly::OnCreate()
 {

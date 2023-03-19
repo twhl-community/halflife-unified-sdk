@@ -18,16 +18,10 @@
 
 class CShockBeam : public CGrenade
 {
+	DECLARE_CLASS(CShockBeam, CGrenade);
+	DECLARE_DATAMAP();
+
 public:
-	using BaseClass = CGrenade;
-
-#ifndef CLIENT_DLL
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
-	static TYPEDESCRIPTION m_SaveData[];
-#endif
-
 	void Precache() override;
 
 	void Spawn() override;

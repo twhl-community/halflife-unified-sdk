@@ -53,13 +53,10 @@ enum EGON_FIREMODE
 
 class CEgon : public CBasePlayerWeapon
 {
-public:
-#ifndef CLIENT_DLL
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
-#endif
+	DECLARE_CLASS(CEgon, CBasePlayerWeapon);
+	DECLARE_DATAMAP();
 
+public:
 	void OnCreate() override;
 	void Precache() override;
 	bool GetWeaponInfo(WeaponInfo& info) override;

@@ -23,6 +23,9 @@ const int MAX_CHANGE_KEYVALUES = 16;
  */
 class CTriggerChangeKeyValue : public CBaseDelay
 {
+	DECLARE_CLASS(CTriggerChangeKeyValue, CBaseDelay);
+	DECLARE_DATAMAP();
+
 public:
 	int ObjectCaps() override { return CBaseDelay::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 
@@ -30,10 +33,6 @@ public:
 	void Spawn() override;
 
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
-
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
 
 private:
 	string_t m_changeTargetName;
@@ -44,15 +43,12 @@ private:
 
 LINK_ENTITY_TO_CLASS(trigger_changekeyvalue, CTriggerChangeKeyValue);
 
-TYPEDESCRIPTION CTriggerChangeKeyValue::m_SaveData[] =
-	{
-		DEFINE_FIELD(CTriggerChangeKeyValue, m_changeTargetName, FIELD_STRING),
-		DEFINE_FIELD(CTriggerChangeKeyValue, m_cTargets, FIELD_INTEGER),
-		DEFINE_ARRAY(CTriggerChangeKeyValue, m_iKey, FIELD_STRING, MAX_CHANGE_KEYVALUES),
-		DEFINE_ARRAY(CTriggerChangeKeyValue, m_iValue, FIELD_STRING, MAX_CHANGE_KEYVALUES),
-};
-
-IMPLEMENT_SAVERESTORE(CTriggerChangeKeyValue, CBaseDelay);
+BEGIN_DATAMAP(CTriggerChangeKeyValue)
+DEFINE_FIELD(m_changeTargetName, FIELD_STRING),
+	DEFINE_FIELD(m_cTargets, FIELD_INTEGER),
+	DEFINE_ARRAY(m_iKey, FIELD_STRING, MAX_CHANGE_KEYVALUES),
+	DEFINE_ARRAY(m_iValue, FIELD_STRING, MAX_CHANGE_KEYVALUES),
+	END_DATAMAP();
 
 bool CTriggerChangeKeyValue::KeyValue(KeyValueData* pkvd)
 {

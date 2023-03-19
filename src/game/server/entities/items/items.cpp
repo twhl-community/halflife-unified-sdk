@@ -114,13 +114,11 @@ LINK_ENTITY_TO_CLASS(item_longjump, CItemLongJump);
 
 class CHealthKit : public CItem
 {
+	DECLARE_CLASS(CHealthKit, CItem);
+	DECLARE_DATAMAP();
+
 public:
 	static constexpr float RefillHealthAmount = -1;
-
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
-	static TYPEDESCRIPTION m_SaveData[];
 
 	void OnCreate() override
 	{
@@ -183,21 +181,17 @@ protected:
 
 LINK_ENTITY_TO_CLASS(item_healthkit, CHealthKit);
 
-TYPEDESCRIPTION CHealthKit::m_SaveData[] =
-	{
-		DEFINE_FIELD(CHealthKit, m_HealthAmount, FIELD_FLOAT)};
-
-IMPLEMENT_SAVERESTORE(CHealthKit, CItem);
+BEGIN_DATAMAP(CHealthKit)
+DEFINE_FIELD(m_HealthAmount, FIELD_FLOAT),
+	END_DATAMAP();
 
 class CItemBattery : public CItem
 {
+	DECLARE_CLASS(CItemBattery, CItem);
+	DECLARE_DATAMAP();
+
 public:
 	static constexpr float RefillArmorAmount = -1;
-
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
-	static TYPEDESCRIPTION m_SaveData[];
 
 	void OnCreate() override
 	{
@@ -275,11 +269,9 @@ protected:
 
 LINK_ENTITY_TO_CLASS(item_battery, CItemBattery);
 
-TYPEDESCRIPTION CItemBattery::m_SaveData[] =
-	{
-		DEFINE_FIELD(CItemBattery, m_ArmorAmount, FIELD_FLOAT)};
-
-IMPLEMENT_SAVERESTORE(CItemBattery, CItem);
+BEGIN_DATAMAP(CItemBattery)
+DEFINE_FIELD(m_ArmorAmount, FIELD_FLOAT),
+	END_DATAMAP();
 
 class CItemHelmet : public CItemBattery
 {

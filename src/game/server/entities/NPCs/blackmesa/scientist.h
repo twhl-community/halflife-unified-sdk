@@ -81,6 +81,9 @@ enum
 */
 class CScientist : public CTalkMonster
 {
+	DECLARE_CLASS(CScientist, CTalkMonster);
+	DECLARE_DATAMAP();
+
 public:
 	void OnCreate() override;
 	bool KeyValue(KeyValueData* pkvd) override;
@@ -119,10 +122,6 @@ public:
 
 	void Killed(CBaseEntity* attacker, int iGib) override;
 
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
-
 	CUSTOM_SCHEDULES;
 
 protected:
@@ -140,6 +139,9 @@ protected:
  */
 class CSittingScientist : public CScientist // kdb: changed from public CBaseMonster so he can speak
 {
+	DECLARE_CLASS(CSittingScientist, CScientist);
+	DECLARE_DATAMAP();
+
 public:
 	void OnCreate() override;
 	void Spawn() override;
@@ -147,9 +149,6 @@ public:
 
 	void EXPORT SittingThink();
 	int Classify() override;
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
 
 	void SetAnswerQuestion(CTalkMonster* pSpeaker) override;
 	int FriendNumber(int arrayNumber) override;

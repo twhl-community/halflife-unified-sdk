@@ -31,29 +31,24 @@
 
 class CEnvGlobal : public CPointEntity
 {
+	DECLARE_CLASS(CEnvGlobal, CPointEntity);
+	DECLARE_DATAMAP();
+
 public:
 	void Spawn() override;
 	bool KeyValue(KeyValueData* pkvd) override;
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
-
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
-	static TYPEDESCRIPTION m_SaveData[];
 
 	string_t m_globalstate;
 	int m_triggermode;
 	int m_initialstate;
 };
 
-TYPEDESCRIPTION CEnvGlobal::m_SaveData[] =
-	{
-		DEFINE_FIELD(CEnvGlobal, m_globalstate, FIELD_STRING),
-		DEFINE_FIELD(CEnvGlobal, m_triggermode, FIELD_INTEGER),
-		DEFINE_FIELD(CEnvGlobal, m_initialstate, FIELD_INTEGER),
-};
-
-IMPLEMENT_SAVERESTORE(CEnvGlobal, CPointEntity);
+BEGIN_DATAMAP(CEnvGlobal)
+DEFINE_FIELD(m_globalstate, FIELD_STRING),
+	DEFINE_FIELD(m_triggermode, FIELD_INTEGER),
+	DEFINE_FIELD(m_initialstate, FIELD_INTEGER),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(env_global, CEnvGlobal);
 
@@ -127,16 +122,13 @@ void CEnvGlobal::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE use
 		gGlobalState.EntityAdd(m_globalstate, gpGlobals->mapname, newState);
 }
 
-TYPEDESCRIPTION CMultiSource::m_SaveData[] =
-	{
-		//!!!BUGBUG FIX
-		DEFINE_ARRAY(CMultiSource, m_rgEntities, FIELD_EHANDLE, MS_MAX_TARGETS),
-		DEFINE_ARRAY(CMultiSource, m_rgTriggered, FIELD_INTEGER, MS_MAX_TARGETS),
-		DEFINE_FIELD(CMultiSource, m_iTotal, FIELD_INTEGER),
-		DEFINE_FIELD(CMultiSource, m_globalstate, FIELD_STRING),
-};
-
-IMPLEMENT_SAVERESTORE(CMultiSource, CPointEntity);
+BEGIN_DATAMAP(CMultiSource)
+//!!!BUGBUG FIX
+DEFINE_ARRAY(m_rgEntities, FIELD_EHANDLE, MS_MAX_TARGETS),
+	DEFINE_ARRAY(m_rgTriggered, FIELD_INTEGER, MS_MAX_TARGETS),
+	DEFINE_FIELD(m_iTotal, FIELD_INTEGER),
+	DEFINE_FIELD(m_globalstate, FIELD_STRING),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(multisource, CMultiSource);
 
@@ -254,21 +246,18 @@ void CMultiSource::Register()
 	pev->spawnflags &= ~SF_MULTI_INIT;
 }
 
-TYPEDESCRIPTION CBaseButton::m_SaveData[] =
-	{
-		DEFINE_FIELD(CBaseButton, m_fStayPushed, FIELD_BOOLEAN),
-		DEFINE_FIELD(CBaseButton, m_fRotating, FIELD_BOOLEAN),
+BEGIN_DATAMAP(CBaseButton)
+DEFINE_FIELD(m_fStayPushed, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_fRotating, FIELD_BOOLEAN),
 
-		DEFINE_FIELD(CBaseButton, m_sounds, FIELD_SOUNDNAME),
-		DEFINE_FIELD(CBaseButton, m_LockedSound, FIELD_SOUNDNAME),
-		DEFINE_FIELD(CBaseButton, m_LockedSentence, FIELD_STRING),
-		DEFINE_FIELD(CBaseButton, m_UnlockedSound, FIELD_SOUNDNAME),
-		DEFINE_FIELD(CBaseButton, m_UnlockedSentence, FIELD_STRING),
-		DEFINE_FIELD(CBaseButton, m_strChangeTarget, FIELD_STRING),
-		//	DEFINE_FIELD( CBaseButton, m_ls, FIELD_??? ),   // This is restored in Precache()
-};
-
-IMPLEMENT_SAVERESTORE(CBaseButton, CBaseToggle);
+	DEFINE_FIELD(m_sounds, FIELD_SOUNDNAME),
+	DEFINE_FIELD(m_LockedSound, FIELD_SOUNDNAME),
+	DEFINE_FIELD(m_LockedSentence, FIELD_STRING),
+	DEFINE_FIELD(m_UnlockedSound, FIELD_SOUNDNAME),
+	DEFINE_FIELD(m_UnlockedSentence, FIELD_STRING),
+	DEFINE_FIELD(m_strChangeTarget, FIELD_STRING),
+	//	DEFINE_FIELD(m_ls, FIELD_???),   // This is restored in Precache()
+	END_DATAMAP();
 
 void CBaseButton::Precache()
 {
@@ -740,6 +729,9 @@ void CRotButton::Spawn()
 
 class CMomentaryRotButton : public CBaseToggle
 {
+	DECLARE_CLASS(CMomentaryRotButton, CBaseToggle);
+	DECLARE_DATAMAP();
+
 public:
 	void Spawn() override;
 	bool KeyValue(KeyValueData* pkvd) override;
@@ -760,11 +752,6 @@ public:
 	void PlaySound();
 	void UpdateTarget(float value);
 
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
-	static TYPEDESCRIPTION m_SaveData[];
-
 	bool m_lastUsed;
 	int m_direction;
 	float m_returnSpeed;
@@ -773,17 +760,14 @@ public:
 	string_t m_sounds;
 };
 
-TYPEDESCRIPTION CMomentaryRotButton::m_SaveData[] =
-	{
-		DEFINE_FIELD(CMomentaryRotButton, m_lastUsed, FIELD_BOOLEAN),
-		DEFINE_FIELD(CMomentaryRotButton, m_direction, FIELD_INTEGER),
-		DEFINE_FIELD(CMomentaryRotButton, m_returnSpeed, FIELD_FLOAT),
-		DEFINE_FIELD(CMomentaryRotButton, m_start, FIELD_VECTOR),
-		DEFINE_FIELD(CMomentaryRotButton, m_end, FIELD_VECTOR),
-		DEFINE_FIELD(CMomentaryRotButton, m_sounds, FIELD_SOUNDNAME),
-};
-
-IMPLEMENT_SAVERESTORE(CMomentaryRotButton, CBaseToggle);
+BEGIN_DATAMAP(CMomentaryRotButton)
+DEFINE_FIELD(m_lastUsed, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_direction, FIELD_INTEGER),
+	DEFINE_FIELD(m_returnSpeed, FIELD_FLOAT),
+	DEFINE_FIELD(m_start, FIELD_VECTOR),
+	DEFINE_FIELD(m_end, FIELD_VECTOR),
+	DEFINE_FIELD(m_sounds, FIELD_SOUNDNAME),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(momentary_rot_button, CMomentaryRotButton);
 
@@ -970,6 +954,9 @@ void CMomentaryRotButton::UpdateSelfReturn(float value)
 
 class CEnvSpark : public CPointEntity
 {
+	DECLARE_CLASS(CEnvSpark, CPointEntity);
+	DECLARE_DATAMAP();
+
 public:
 	void Spawn() override;
 	void Precache() override;
@@ -978,20 +965,12 @@ public:
 	void EXPORT SparkStop(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 	bool KeyValue(KeyValueData* pkvd) override;
 
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
-	static TYPEDESCRIPTION m_SaveData[];
-
 	float m_flDelay;
 };
 
-TYPEDESCRIPTION CEnvSpark::m_SaveData[] =
-	{
-		DEFINE_FIELD(CEnvSpark, m_flDelay, FIELD_FLOAT),
-};
-
-IMPLEMENT_SAVERESTORE(CEnvSpark, CBaseEntity);
+BEGIN_DATAMAP(CEnvSpark)
+DEFINE_FIELD(m_flDelay, FIELD_FLOAT),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(env_spark, CEnvSpark);
 LINK_ENTITY_TO_CLASS(env_debris, CEnvSpark);

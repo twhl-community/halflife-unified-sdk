@@ -48,6 +48,9 @@ constexpr int VOLTIGORE_BEAM_COUNT = 8;
 */
 class COFVoltigore : public CSquadMonster
 {
+	DECLARE_CLASS(COFVoltigore, CSquadMonster);
+	DECLARE_DATAMAP();
+
 public:
 	void OnCreate() override;
 	void Spawn() override;
@@ -109,10 +112,6 @@ public:
 	void Killed(CBaseEntity* attacker, int iGib) override;
 
 	CUSTOM_SCHEDULES;
-
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
 
 	static constexpr const char* pAttackHitSounds[] =
 		{

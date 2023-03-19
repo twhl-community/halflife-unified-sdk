@@ -87,6 +87,9 @@ enum
 
 class CShockTrooper : public CSquadMonster
 {
+	DECLARE_CLASS(CShockTrooper, CSquadMonster);
+	DECLARE_DATAMAP();
+
 public:
 	void OnCreate() override;
 	void Spawn() override;
@@ -162,9 +165,6 @@ public:
 	*/
 	void SpeakSentence();
 
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
 	CBaseEntity* Kick();
 	Schedule_t* GetSchedule() override;
 	Schedule_t* GetScheduleOfType(int Type) override;
@@ -194,7 +194,6 @@ public:
 	void MonsterThink() override;
 
 	CUSTOM_SCHEDULES;
-	static TYPEDESCRIPTION m_SaveData[];
 
 	// checking the feasibility of a grenade toss is kind of costly, so we do it every couple of seconds,
 	// not every server frame.
@@ -227,25 +226,20 @@ public:
 
 LINK_ENTITY_TO_CLASS(monster_shocktrooper, CShockTrooper);
 
-TYPEDESCRIPTION CShockTrooper::m_SaveData[] =
-	{
-		DEFINE_FIELD(CShockTrooper, m_flNextGrenadeCheck, FIELD_TIME),
-		DEFINE_FIELD(CShockTrooper, m_flNextPainTime, FIELD_TIME),
-		//	DEFINE_FIELD( CShockTrooper, m_flLastEnemySightTime, FIELD_TIME ), // don't save, go to zero
-		DEFINE_FIELD(CShockTrooper, m_vecTossVelocity, FIELD_VECTOR),
-		DEFINE_FIELD(CShockTrooper, m_fThrowGrenade, FIELD_BOOLEAN),
-		DEFINE_FIELD(CShockTrooper, m_fStanding, FIELD_BOOLEAN),
-		DEFINE_FIELD(CShockTrooper, m_fFirstEncounter, FIELD_BOOLEAN),
-		DEFINE_FIELD(CShockTrooper, m_cClipSize, FIELD_INTEGER),
-		DEFINE_FIELD(CShockTrooper, m_voicePitch, FIELD_INTEGER),
-		//  DEFINE_FIELD( CShotgun, m_iBrassShell, FIELD_INTEGER ),
-		//  DEFINE_FIELD( CShotgun, m_iShotgunShell, FIELD_INTEGER ),
-		DEFINE_FIELD(CShockTrooper, m_iSentence, FIELD_INTEGER),
-		DEFINE_FIELD(CShockTrooper, m_flLastChargeTime, FIELD_FLOAT),
-		DEFINE_FIELD(CShockTrooper, m_flLastShot, FIELD_TIME),
-};
-
-IMPLEMENT_SAVERESTORE(CShockTrooper, CSquadMonster);
+BEGIN_DATAMAP(CShockTrooper)
+DEFINE_FIELD(m_flNextGrenadeCheck, FIELD_TIME),
+	DEFINE_FIELD(m_flNextPainTime, FIELD_TIME),
+	//	DEFINE_FIELD(m_flLastEnemySightTime, FIELD_TIME), // don't save, go to zero
+	DEFINE_FIELD(m_vecTossVelocity, FIELD_VECTOR),
+	DEFINE_FIELD(m_fThrowGrenade, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_fStanding, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_fFirstEncounter, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_cClipSize, FIELD_INTEGER),
+	DEFINE_FIELD(m_voicePitch, FIELD_INTEGER),
+	DEFINE_FIELD(m_iSentence, FIELD_INTEGER),
+	DEFINE_FIELD(m_flLastChargeTime, FIELD_FLOAT),
+	DEFINE_FIELD(m_flLastShot, FIELD_TIME),
+	END_DATAMAP();
 
 const char* CShockTrooper::pGruntSentences[] =
 	{

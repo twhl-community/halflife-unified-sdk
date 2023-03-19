@@ -26,14 +26,9 @@ enum firemode_e
 
 LINK_ENTITY_TO_CLASS(weapon_hornetgun, CHgun);
 
-#ifndef CLIENT_DLL
-TYPEDESCRIPTION CHgun::m_SaveData[] =
-	{
-		DEFINE_FIELD(CHgun, m_flRechargeTime, FIELD_TIME),
-};
-
-IMPLEMENT_SAVERESTORE(CHgun, CBasePlayerWeapon);
-#endif
+BEGIN_DATAMAP(CHgun)
+DEFINE_FIELD(m_flRechargeTime, FIELD_TIME),
+	END_DATAMAP();
 
 bool CHgun::IsUseable()
 {

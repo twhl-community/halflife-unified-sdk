@@ -52,6 +52,9 @@
 */
 class CSquadMonster : public CBaseMonster
 {
+	DECLARE_CLASS(CSquadMonster, CBaseMonster);
+	DECLARE_DATAMAP();
+
 public:
 	// squad leader info
 	EntityHandle<CSquadMonster> m_hSquadLeader;						   //!< who is my leader
@@ -147,11 +150,6 @@ public:
 	bool SquadMemberInRange(const Vector& vecLocation, float flDist);
 
 	CSquadMonster* MySquadMonsterPointer() override { return this; }
-
-	static TYPEDESCRIPTION m_SaveData[];
-
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
 
 	/**
 	*	@brief determines whether or not the chosen cover location is a good one to move to.

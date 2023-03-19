@@ -25,14 +25,10 @@
 
 class COFGonomeGuts : public CBaseEntity
 {
+	DECLARE_CLASS(COFGonomeGuts, CBaseEntity);
+	DECLARE_DATAMAP();
+
 public:
-	using BaseClass = CBaseEntity;
-
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
-	static TYPEDESCRIPTION m_SaveData[];
-
 	void Spawn() override;
 
 	void Touch(CBaseEntity* pOther) override;
@@ -48,12 +44,9 @@ public:
 	int m_maxFrame;
 };
 
-TYPEDESCRIPTION COFGonomeGuts::m_SaveData[] =
-	{
-		DEFINE_FIELD(COFGonomeGuts, m_maxFrame, FIELD_INTEGER),
-};
-
-IMPLEMENT_SAVERESTORE(COFGonomeGuts, COFGonomeGuts::BaseClass);
+BEGIN_DATAMAP(COFGonomeGuts)
+DEFINE_FIELD(m_maxFrame, FIELD_INTEGER),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(gonomeguts, COFGonomeGuts);
 
@@ -179,14 +172,10 @@ enum
 
 class COFGonome : public CZombie
 {
+	DECLARE_CLASS(COFGonome, CZombie);
+	DECLARE_DATAMAP();
+
 public:
-	using BaseClass = CZombie;
-
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
-	static TYPEDESCRIPTION m_SaveData[];
-
 	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
@@ -239,13 +228,10 @@ protected:
 	virtual float GetBulletDamageFraction() const override { return 0.15f; }
 };
 
-TYPEDESCRIPTION COFGonome::m_SaveData[] =
-	{
-		DEFINE_FIELD(COFGonome, m_flNextThrowTime, FIELD_TIME),
-		DEFINE_FIELD(COFGonome, m_PlayerLocked, FIELD_EHANDLE),
-};
-
-IMPLEMENT_SAVERESTORE(COFGonome, COFGonome::BaseClass);
+BEGIN_DATAMAP(COFGonome)
+DEFINE_FIELD(m_flNextThrowTime, FIELD_TIME),
+	DEFINE_FIELD(m_PlayerLocked, FIELD_EHANDLE),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(monster_gonome, COFGonome);
 

@@ -237,6 +237,9 @@ void CFuncMonsterClip::Spawn()
  */
 class CFuncRotating : public CBaseEntity
 {
+	DECLARE_CLASS(CFuncRotating, CBaseEntity);
+	DECLARE_DATAMAP();
+
 public:
 	// basic functions
 	void Spawn() override;
@@ -270,10 +273,6 @@ public:
 
 	void Blocked(CBaseEntity* pOther) override;
 	int ObjectCaps() override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
-	static TYPEDESCRIPTION m_SaveData[];
 
 	float m_flFanFriction;
 	float m_flAttenuation;
@@ -282,15 +281,13 @@ public:
 	string_t m_sounds;
 };
 
-TYPEDESCRIPTION CFuncRotating::m_SaveData[] =
-	{
-		DEFINE_FIELD(CFuncRotating, m_flFanFriction, FIELD_FLOAT),
-		DEFINE_FIELD(CFuncRotating, m_flAttenuation, FIELD_FLOAT),
-		DEFINE_FIELD(CFuncRotating, m_flVolume, FIELD_FLOAT),
-		DEFINE_FIELD(CFuncRotating, m_pitch, FIELD_FLOAT),
-		DEFINE_FIELD(CFuncRotating, m_sounds, FIELD_SOUNDNAME)};
-
-IMPLEMENT_SAVERESTORE(CFuncRotating, CBaseEntity);
+BEGIN_DATAMAP(CFuncRotating)
+DEFINE_FIELD(m_flFanFriction, FIELD_FLOAT),
+	DEFINE_FIELD(m_flAttenuation, FIELD_FLOAT),
+	DEFINE_FIELD(m_flVolume, FIELD_FLOAT),
+	DEFINE_FIELD(m_pitch, FIELD_FLOAT),
+	DEFINE_FIELD(m_sounds, FIELD_SOUNDNAME),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(func_rotating, CFuncRotating);
 
@@ -615,6 +612,9 @@ void CFuncRotating::Blocked(CBaseEntity* pOther)
 
 class CPendulum : public CBaseEntity
 {
+	DECLARE_CLASS(CPendulum, CBaseEntity);
+	DECLARE_DATAMAP();
+
 public:
 	void Spawn() override;
 	bool KeyValue(KeyValueData* pkvd) override;
@@ -624,11 +624,7 @@ public:
 	void Touch(CBaseEntity* pOther) override;
 	void EXPORT RopeTouch(CBaseEntity* pOther); // this touch func makes the pendulum a rope
 	int ObjectCaps() override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
 	void Blocked(CBaseEntity* pOther) override;
-
-	static TYPEDESCRIPTION m_SaveData[];
 
 	float m_accel;	  // Acceleration
 	float m_distance; //
@@ -642,19 +638,16 @@ public:
 
 LINK_ENTITY_TO_CLASS(func_pendulum, CPendulum);
 
-TYPEDESCRIPTION CPendulum::m_SaveData[] =
-	{
-		DEFINE_FIELD(CPendulum, m_accel, FIELD_FLOAT),
-		DEFINE_FIELD(CPendulum, m_distance, FIELD_FLOAT),
-		DEFINE_FIELD(CPendulum, m_time, FIELD_TIME),
-		DEFINE_FIELD(CPendulum, m_damp, FIELD_FLOAT),
-		DEFINE_FIELD(CPendulum, m_maxSpeed, FIELD_FLOAT),
-		DEFINE_FIELD(CPendulum, m_dampSpeed, FIELD_FLOAT),
-		DEFINE_FIELD(CPendulum, m_center, FIELD_VECTOR),
-		DEFINE_FIELD(CPendulum, m_start, FIELD_VECTOR),
-};
-
-IMPLEMENT_SAVERESTORE(CPendulum, CBaseEntity);
+BEGIN_DATAMAP(CPendulum)
+DEFINE_FIELD(m_accel, FIELD_FLOAT),
+	DEFINE_FIELD(m_distance, FIELD_FLOAT),
+	DEFINE_FIELD(m_time, FIELD_TIME),
+	DEFINE_FIELD(m_damp, FIELD_FLOAT),
+	DEFINE_FIELD(m_maxSpeed, FIELD_FLOAT),
+	DEFINE_FIELD(m_dampSpeed, FIELD_FLOAT),
+	DEFINE_FIELD(m_center, FIELD_VECTOR),
+	DEFINE_FIELD(m_start, FIELD_VECTOR),
+	END_DATAMAP();
 
 bool CPendulum::KeyValue(KeyValueData* pkvd)
 {

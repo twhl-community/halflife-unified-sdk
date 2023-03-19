@@ -53,6 +53,9 @@ int iAgruntMuzzleFlash;
 */
 class CAGrunt : public CSquadMonster
 {
+	DECLARE_CLASS(CAGrunt, CSquadMonster);
+	DECLARE_DATAMAP();
+
 public:
 	void OnCreate() override;
 	void Spawn() override;
@@ -93,10 +96,6 @@ public:
 	bool ShouldSpeak();
 	CUSTOM_SCHEDULES;
 
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
-
 	static const char* pAttackHitSounds[];
 	static const char* pAttackMissSounds[];
 	static const char* pAttackSounds[];
@@ -118,17 +117,14 @@ public:
 
 LINK_ENTITY_TO_CLASS(monster_alien_grunt, CAGrunt);
 
-TYPEDESCRIPTION CAGrunt::m_SaveData[] =
-	{
-		DEFINE_FIELD(CAGrunt, m_fCanHornetAttack, FIELD_BOOLEAN),
-		DEFINE_FIELD(CAGrunt, m_flNextHornetAttackCheck, FIELD_TIME),
-		DEFINE_FIELD(CAGrunt, m_flNextPainTime, FIELD_TIME),
-		DEFINE_FIELD(CAGrunt, m_flNextSpeakTime, FIELD_TIME),
-		DEFINE_FIELD(CAGrunt, m_flNextWordTime, FIELD_TIME),
-		DEFINE_FIELD(CAGrunt, m_iLastWord, FIELD_INTEGER),
-};
-
-IMPLEMENT_SAVERESTORE(CAGrunt, CSquadMonster);
+BEGIN_DATAMAP(CAGrunt)
+DEFINE_FIELD(m_fCanHornetAttack, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_flNextHornetAttackCheck, FIELD_TIME),
+	DEFINE_FIELD(m_flNextPainTime, FIELD_TIME),
+	DEFINE_FIELD(m_flNextSpeakTime, FIELD_TIME),
+	DEFINE_FIELD(m_flNextWordTime, FIELD_TIME),
+	DEFINE_FIELD(m_iLastWord, FIELD_INTEGER),
+	END_DATAMAP();
 
 const char* CAGrunt::pAttackHitSounds[] =
 	{

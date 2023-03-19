@@ -23,20 +23,16 @@
 
 LINK_ENTITY_TO_CLASS(weapon_egon, CEgon);
 
-#ifndef CLIENT_DLL
-TYPEDESCRIPTION CEgon::m_SaveData[] =
-	{
-		//	DEFINE_FIELD( CEgon, m_pBeam, FIELD_CLASSPTR ),
-		//	DEFINE_FIELD( CEgon, m_pNoise, FIELD_CLASSPTR ),
-		//	DEFINE_FIELD( CEgon, m_pSprite, FIELD_CLASSPTR ),
-		DEFINE_FIELD(CEgon, m_shootTime, FIELD_TIME),
-		DEFINE_FIELD(CEgon, m_fireState, FIELD_INTEGER),
-		DEFINE_FIELD(CEgon, m_fireMode, FIELD_INTEGER),
-		DEFINE_FIELD(CEgon, m_shakeTime, FIELD_TIME),
-		DEFINE_FIELD(CEgon, m_flAmmoUseTime, FIELD_TIME),
-};
-IMPLEMENT_SAVERESTORE(CEgon, CBasePlayerWeapon);
-#endif
+BEGIN_DATAMAP(CEgon)
+//	DEFINE_FIELD(m_pBeam, FIELD_CLASSPTR),
+//	DEFINE_FIELD(m_pNoise, FIELD_CLASSPTR),
+//	DEFINE_FIELD(m_pSprite, FIELD_CLASSPTR),
+DEFINE_FIELD(m_shootTime, FIELD_TIME),
+	DEFINE_FIELD(m_fireState, FIELD_INTEGER),
+	DEFINE_FIELD(m_fireMode, FIELD_INTEGER),
+	DEFINE_FIELD(m_shakeTime, FIELD_TIME),
+	DEFINE_FIELD(m_flAmmoUseTime, FIELD_TIME),
+	END_DATAMAP();
 
 void CEgon::OnCreate()
 {

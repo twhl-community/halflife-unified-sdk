@@ -42,6 +42,9 @@ enum Materials
 */
 class CBreakable : public CBaseDelay
 {
+	DECLARE_CLASS(CBreakable, CBaseDelay);
+	DECLARE_DATAMAP();
+
 public:
 	// basic functions
 	void Spawn() override;
@@ -70,8 +73,6 @@ public:
 
 	void EXPORT Die();
 	int ObjectCaps() override { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
 
 	inline bool Explodable() { return ExplosionMagnitude() > 0; }
 	inline int ExplosionMagnitude() { return pev->impulse; }
@@ -87,8 +88,6 @@ public:
 	static const char* pSoundsMetal[];
 	static const char* pSoundsConcrete[];
 	static const char* pSpawnObjects[];
-
-	static TYPEDESCRIPTION m_SaveData[];
 
 	Materials m_Material;
 	Explosions m_Explosion;

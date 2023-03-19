@@ -30,6 +30,9 @@ enum SporeLauncherAnim
 
 class CSporeLauncher : public CBasePlayerWeapon
 {
+	DECLARE_CLASS(CSporeLauncher, CBasePlayerWeapon);
+	DECLARE_DATAMAP();
+
 private:
 	enum class ReloadState
 	{
@@ -39,15 +42,6 @@ private:
 	};
 
 public:
-	using BaseClass = CBasePlayerWeapon;
-
-#ifndef CLIENT_DLL
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
-	static TYPEDESCRIPTION m_SaveData[];
-#endif
-
 	void OnCreate() override;
 
 	void Precache() override;

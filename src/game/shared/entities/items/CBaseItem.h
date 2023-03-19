@@ -62,14 +62,10 @@ public:
  */
 class CBaseItem : public CBaseAnimating
 {
+	DECLARE_CLASS(CBaseItem, CBaseAnimating);
+	DECLARE_DATAMAP();
+
 public:
-#ifndef CLIENT_DLL
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
-	static TYPEDESCRIPTION m_SaveData[];
-#endif
-
 	bool KeyValue(KeyValueData* pkvd) override;
 	void Precache() override;
 	void Spawn() override;

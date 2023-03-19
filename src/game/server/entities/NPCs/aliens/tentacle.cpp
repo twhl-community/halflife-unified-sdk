@@ -32,6 +32,9 @@ constexpr float TENTACLE_HEIGHT_LEVEL_OFFSET = 40;
 */
 class CTentacle : public CBaseMonster
 {
+	DECLARE_CLASS(CTentacle, CBaseMonster);
+	DECLARE_DATAMAP();
+
 public:
 	CTentacle();
 
@@ -39,10 +42,6 @@ public:
 	void Spawn() override;
 	void Precache() override;
 	bool KeyValue(KeyValueData* pkvd) override;
-
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
 
 	// Don't allow the tentacle to go across transitions!!!
 	int ObjectCaps() override { return CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
@@ -147,29 +146,26 @@ const char* CTentacle::pHitWater[] =
 		"player/pl_slosh4.wav",
 };
 
-TYPEDESCRIPTION CTentacle::m_SaveData[] =
-	{
-		DEFINE_FIELD(CTentacle, m_flInitialYaw, FIELD_FLOAT),
-		DEFINE_FIELD(CTentacle, m_iGoalAnim, FIELD_INTEGER),
-		DEFINE_FIELD(CTentacle, m_iLevel, FIELD_INTEGER),
-		DEFINE_FIELD(CTentacle, m_iDir, FIELD_INTEGER),
-		DEFINE_FIELD(CTentacle, m_flFramerateAdj, FIELD_FLOAT),
-		DEFINE_FIELD(CTentacle, m_flSoundYaw, FIELD_FLOAT),
-		DEFINE_FIELD(CTentacle, m_iSoundLevel, FIELD_INTEGER),
-		DEFINE_FIELD(CTentacle, m_flSoundTime, FIELD_TIME),
-		DEFINE_FIELD(CTentacle, m_flSoundRadius, FIELD_FLOAT),
-		DEFINE_FIELD(CTentacle, m_iHitDmg, FIELD_INTEGER),
-		DEFINE_FIELD(CTentacle, m_flHitTime, FIELD_TIME),
-		DEFINE_FIELD(CTentacle, m_flTapRadius, FIELD_FLOAT),
-		DEFINE_FIELD(CTentacle, m_flNextSong, FIELD_TIME),
-		DEFINE_FIELD(CTentacle, m_iTapSound, FIELD_INTEGER),
-		DEFINE_FIELD(CTentacle, m_flMaxYaw, FIELD_FLOAT),
-		DEFINE_FIELD(CTentacle, m_vecPrevSound, FIELD_POSITION_VECTOR),
-		DEFINE_FIELD(CTentacle, m_flPrevSoundTime, FIELD_TIME),
-		DEFINE_ARRAY(CTentacle, m_Heights, FIELD_FLOAT, TENTACLE_NUM_HEIGHTS),
-};
-
-IMPLEMENT_SAVERESTORE(CTentacle, CBaseMonster);
+BEGIN_DATAMAP(CTentacle)
+DEFINE_FIELD(m_flInitialYaw, FIELD_FLOAT),
+	DEFINE_FIELD(m_iGoalAnim, FIELD_INTEGER),
+	DEFINE_FIELD(m_iLevel, FIELD_INTEGER),
+	DEFINE_FIELD(m_iDir, FIELD_INTEGER),
+	DEFINE_FIELD(m_flFramerateAdj, FIELD_FLOAT),
+	DEFINE_FIELD(m_flSoundYaw, FIELD_FLOAT),
+	DEFINE_FIELD(m_iSoundLevel, FIELD_INTEGER),
+	DEFINE_FIELD(m_flSoundTime, FIELD_TIME),
+	DEFINE_FIELD(m_flSoundRadius, FIELD_FLOAT),
+	DEFINE_FIELD(m_iHitDmg, FIELD_INTEGER),
+	DEFINE_FIELD(m_flHitTime, FIELD_TIME),
+	DEFINE_FIELD(m_flTapRadius, FIELD_FLOAT),
+	DEFINE_FIELD(m_flNextSong, FIELD_TIME),
+	DEFINE_FIELD(m_iTapSound, FIELD_INTEGER),
+	DEFINE_FIELD(m_flMaxYaw, FIELD_FLOAT),
+	DEFINE_FIELD(m_vecPrevSound, FIELD_POSITION_VECTOR),
+	DEFINE_FIELD(m_flPrevSoundTime, FIELD_TIME),
+	DEFINE_ARRAY(m_Heights, FIELD_FLOAT, TENTACLE_NUM_HEIGHTS),
+	END_DATAMAP();
 
 // animation sequence aliases
 enum TENTACLE_ANIM
@@ -330,6 +326,7 @@ void CTentacle::Precache()
 
 CTentacle::CTentacle()
 {
+	// TODO: use in-class initializer
 	m_flMaxYaw = 65;
 	m_iTapSound = 0;
 }

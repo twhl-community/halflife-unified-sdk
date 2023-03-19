@@ -89,6 +89,9 @@ enum
 */
 class CTalkMonster : public CBaseMonster
 {
+	DECLARE_CLASS(CTalkMonster, CBaseMonster);
+	DECLARE_DATAMAP();
+
 public:
 	/**
 	*	@brief monsters derived from ctalkmonster should call this in precache()
@@ -197,10 +200,6 @@ public:
 	*/
 	virtual void SetAnswerQuestion(CTalkMonster* pSpeaker);
 	virtual int FriendNumber(int arrayNumber) { return arrayNumber; }
-
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
 
 	static float g_talkWaitTime;
 

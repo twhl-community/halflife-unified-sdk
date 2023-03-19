@@ -19,16 +19,11 @@
 #define PIPEWRENCH_BODYHIT_VOLUME 128
 #define PIPEWRENCH_WALLHIT_VOLUME 512
 
-#ifndef CLIENT_DLL
-TYPEDESCRIPTION CPipewrench::m_SaveData[] =
-	{
-		DEFINE_FIELD(CPipewrench, m_flBigSwingStart, FIELD_TIME),
-		DEFINE_FIELD(CPipewrench, m_iSwing, FIELD_INTEGER),
-		DEFINE_FIELD(CPipewrench, m_iSwingMode, FIELD_INTEGER),
-};
-
-IMPLEMENT_SAVERESTORE(CPipewrench, CPipewrench::BaseClass);
-#endif
+BEGIN_DATAMAP(CPipewrench)
+DEFINE_FIELD(m_flBigSwingStart, FIELD_TIME),
+	DEFINE_FIELD(m_iSwing, FIELD_INTEGER),
+	DEFINE_FIELD(m_iSwingMode, FIELD_INTEGER),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(weapon_pipewrench, CPipewrench);
 

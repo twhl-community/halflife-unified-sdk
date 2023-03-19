@@ -58,98 +58,97 @@
 #define FLASH_DRAIN_TIME 1.2  // 100 units/3 minutes
 #define FLASH_CHARGE_TIME 0.2 // 100 units/20 seconds  (seconds per unit)
 
-TYPEDESCRIPTION CBasePlayer::m_playerSaveData[] =
-	{
-		DEFINE_FIELD(CBasePlayer, m_SuitLightType, FIELD_INTEGER),
+BEGIN_DATAMAP(CBasePlayer)
+DEFINE_FIELD(m_SuitLightType, FIELD_INTEGER),
 
-		DEFINE_FIELD(CBasePlayer, m_flFlashLightTime, FIELD_TIME),
-		DEFINE_FIELD(CBasePlayer, m_iFlashBattery, FIELD_INTEGER),
+	DEFINE_FIELD(m_flFlashLightTime, FIELD_TIME),
+	DEFINE_FIELD(m_iFlashBattery, FIELD_INTEGER),
 
-		DEFINE_FIELD(CBasePlayer, m_afButtonLast, FIELD_INTEGER),
-		DEFINE_FIELD(CBasePlayer, m_afButtonPressed, FIELD_INTEGER),
-		DEFINE_FIELD(CBasePlayer, m_afButtonReleased, FIELD_INTEGER),
+	DEFINE_FIELD(m_afButtonLast, FIELD_INTEGER),
+	DEFINE_FIELD(m_afButtonPressed, FIELD_INTEGER),
+	DEFINE_FIELD(m_afButtonReleased, FIELD_INTEGER),
 
-		DEFINE_ARRAY(CBasePlayer, m_rgItems, FIELD_INTEGER, MAX_ITEMS),
-		DEFINE_FIELD(CBasePlayer, m_afPhysicsFlags, FIELD_INTEGER),
+	DEFINE_ARRAY(m_rgItems, FIELD_INTEGER, MAX_ITEMS),
+	DEFINE_FIELD(m_afPhysicsFlags, FIELD_INTEGER),
 
-		DEFINE_FIELD(CBasePlayer, m_flTimeStepSound, FIELD_TIME),
-		DEFINE_FIELD(CBasePlayer, m_flTimeWeaponIdle, FIELD_TIME),
-		DEFINE_FIELD(CBasePlayer, m_flSwimTime, FIELD_TIME),
-		DEFINE_FIELD(CBasePlayer, m_flDuckTime, FIELD_TIME),
-		DEFINE_FIELD(CBasePlayer, m_flWallJumpTime, FIELD_TIME),
+	DEFINE_FIELD(m_flTimeStepSound, FIELD_TIME),
+	DEFINE_FIELD(m_flTimeWeaponIdle, FIELD_TIME),
+	DEFINE_FIELD(m_flSwimTime, FIELD_TIME),
+	DEFINE_FIELD(m_flDuckTime, FIELD_TIME),
+	DEFINE_FIELD(m_flWallJumpTime, FIELD_TIME),
 
-		DEFINE_FIELD(CBasePlayer, m_flSuitUpdate, FIELD_TIME),
-		DEFINE_ARRAY(CBasePlayer, m_rgSuitPlayList, FIELD_INTEGER, CSUITPLAYLIST),
-		DEFINE_FIELD(CBasePlayer, m_iSuitPlayNext, FIELD_INTEGER),
-		DEFINE_ARRAY(CBasePlayer, m_rgiSuitNoRepeat, FIELD_INTEGER, CSUITNOREPEAT),
-		DEFINE_ARRAY(CBasePlayer, m_rgflSuitNoRepeatTime, FIELD_TIME, CSUITNOREPEAT),
-		DEFINE_FIELD(CBasePlayer, m_lastDamageAmount, FIELD_INTEGER),
+	DEFINE_FIELD(m_flSuitUpdate, FIELD_TIME),
+	DEFINE_ARRAY(m_rgSuitPlayList, FIELD_INTEGER, CSUITPLAYLIST),
+	DEFINE_FIELD(m_iSuitPlayNext, FIELD_INTEGER),
+	DEFINE_ARRAY(m_rgiSuitNoRepeat, FIELD_INTEGER, CSUITNOREPEAT),
+	DEFINE_ARRAY(m_rgflSuitNoRepeatTime, FIELD_TIME, CSUITNOREPEAT),
+	DEFINE_FIELD(m_lastDamageAmount, FIELD_INTEGER),
 
-		DEFINE_ARRAY(CBasePlayer, m_rgpPlayerWeapons, FIELD_CLASSPTR, MAX_WEAPON_SLOTS),
-		DEFINE_FIELD(CBasePlayer, m_pActiveWeapon, FIELD_CLASSPTR),
-		DEFINE_FIELD(CBasePlayer, m_pLastWeapon, FIELD_CLASSPTR),
-		DEFINE_FIELD(CBasePlayer, m_WeaponBits, FIELD_INT64),
-		DEFINE_FIELD(CBasePlayer, m_HudFlags, FIELD_INTEGER),
+	DEFINE_ARRAY(m_rgpPlayerWeapons, FIELD_CLASSPTR, MAX_WEAPON_SLOTS),
+	DEFINE_FIELD(m_pActiveWeapon, FIELD_CLASSPTR),
+	DEFINE_FIELD(m_pLastWeapon, FIELD_CLASSPTR),
+	DEFINE_FIELD(m_WeaponBits, FIELD_INT64),
+	DEFINE_FIELD(m_HudFlags, FIELD_INTEGER),
 
-		DEFINE_ARRAY(CBasePlayer, m_rgAmmo, FIELD_INTEGER, MAX_AMMO_TYPES),
-		DEFINE_FIELD(CBasePlayer, m_idrowndmg, FIELD_INTEGER),
-		DEFINE_FIELD(CBasePlayer, m_idrownrestored, FIELD_INTEGER),
+	DEFINE_ARRAY(m_rgAmmo, FIELD_INTEGER, MAX_AMMO_TYPES),
+	DEFINE_FIELD(m_idrowndmg, FIELD_INTEGER),
+	DEFINE_FIELD(m_idrownrestored, FIELD_INTEGER),
 
-		DEFINE_FIELD(CBasePlayer, m_iTrain, FIELD_INTEGER),
-		DEFINE_FIELD(CBasePlayer, m_bitsHUDDamage, FIELD_INTEGER),
-		DEFINE_FIELD(CBasePlayer, m_flFallVelocity, FIELD_FLOAT),
-		DEFINE_FIELD(CBasePlayer, m_iTargetVolume, FIELD_INTEGER),
-		DEFINE_FIELD(CBasePlayer, m_iWeaponVolume, FIELD_INTEGER),
-		DEFINE_FIELD(CBasePlayer, m_iExtraSoundTypes, FIELD_INTEGER),
-		DEFINE_FIELD(CBasePlayer, m_iWeaponFlash, FIELD_INTEGER),
-		DEFINE_FIELD(CBasePlayer, m_fLongJump, FIELD_BOOLEAN),
-		DEFINE_FIELD(CBasePlayer, m_fInitHUD, FIELD_BOOLEAN),
-		DEFINE_FIELD(CBasePlayer, m_tbdPrev, FIELD_TIME),
+	DEFINE_FIELD(m_iTrain, FIELD_INTEGER),
+	DEFINE_FIELD(m_bitsHUDDamage, FIELD_INTEGER),
+	DEFINE_FIELD(m_flFallVelocity, FIELD_FLOAT),
+	DEFINE_FIELD(m_iTargetVolume, FIELD_INTEGER),
+	DEFINE_FIELD(m_iWeaponVolume, FIELD_INTEGER),
+	DEFINE_FIELD(m_iExtraSoundTypes, FIELD_INTEGER),
+	DEFINE_FIELD(m_iWeaponFlash, FIELD_INTEGER),
+	DEFINE_FIELD(m_fLongJump, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_fInitHUD, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_tbdPrev, FIELD_TIME),
 
-		DEFINE_FIELD(CBasePlayer, m_pTank, FIELD_EHANDLE),
-		DEFINE_FIELD(CBasePlayer, m_hViewEntity, FIELD_EHANDLE),
-		DEFINE_FIELD(CBasePlayer, m_iHideHUD, FIELD_INTEGER),
-		DEFINE_FIELD(CBasePlayer, m_iFOV, FIELD_INTEGER),
+	DEFINE_FIELD(m_pTank, FIELD_EHANDLE),
+	DEFINE_FIELD(m_hViewEntity, FIELD_EHANDLE),
+	DEFINE_FIELD(m_iHideHUD, FIELD_INTEGER),
+	DEFINE_FIELD(m_iFOV, FIELD_INTEGER),
 
-		DEFINE_FIELD(CBasePlayer, m_SndRoomtype, FIELD_INTEGER),
-		// Don't save these. Let the game recalculate the closest env_sound, and continue to use the last room type like it always has.
-		// DEFINE_FIELD(CBasePlayer, m_SndLast, FIELD_EHANDLE),
-		// DEFINE_FIELD(CBasePlayer, m_flSndRange, FIELD_FLOAT),
+	DEFINE_FIELD(m_SndRoomtype, FIELD_INTEGER),
+	// Don't save these. Let the game recalculate the closest env_sound, and continue to use the last room type like it always has.
+	// DEFINE_FIELD(m_SndLast, FIELD_EHANDLE),
+	// DEFINE_FIELD(m_flSndRange, FIELD_FLOAT),
 
-		DEFINE_FIELD(CBasePlayer, m_pRope, FIELD_CLASSPTR),
-		DEFINE_FIELD(CBasePlayer, m_flLastClimbTime, FIELD_TIME),
-		DEFINE_FIELD(CBasePlayer, m_bIsClimbing, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_pRope, FIELD_CLASSPTR),
+	DEFINE_FIELD(m_flLastClimbTime, FIELD_TIME),
+	DEFINE_FIELD(m_bIsClimbing, FIELD_BOOLEAN),
 
-		// Vanilla Op4 doesn't restore this. Not a big deal but it can cause you to teleport to the wrong area after a restore
-		DEFINE_FIELD(CBasePlayer, m_DisplacerReturn, FIELD_POSITION_VECTOR),
-		DEFINE_FIELD(CBasePlayer, m_DisplacerSndRoomtype, FIELD_INTEGER),
-		DEFINE_FIELD(CBasePlayer, m_HudColor, FIELD_INTEGER),
+	// Vanilla Op4 doesn't restore this. Not a big deal but it can cause you to teleport to the wrong area after a restore
+	DEFINE_FIELD(m_DisplacerReturn, FIELD_POSITION_VECTOR),
+	DEFINE_FIELD(m_DisplacerSndRoomtype, FIELD_INTEGER),
+	DEFINE_FIELD(m_HudColor, FIELD_INTEGER),
 
-		DEFINE_FIELD(CBasePlayer, m_bInfiniteAir, FIELD_BOOLEAN),
-		DEFINE_FIELD(CBasePlayer, m_bInfiniteArmor, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_bInfiniteAir, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_bInfiniteArmor, FIELD_BOOLEAN),
 
-		// DEFINE_FIELD( CBasePlayer, m_fDeadTime, FIELD_FLOAT ), // only used in multiplayer games
-		// DEFINE_FIELD( CBasePlayer, m_fGameHUDInitialized, FIELD_INTEGER ), // only used in multiplayer games
-		// DEFINE_FIELD( CBasePlayer, m_flStopExtraSoundTime, FIELD_TIME ),
-		// DEFINE_FIELD( CBasePlayer, m_iPlayerSound, FIELD_INTEGER ),	// Don't restore, set in Precache()
-		// DEFINE_FIELD( CBasePlayer, m_flgeigerRange, FIELD_FLOAT ),	// Don't restore, reset in Precache()
-		// DEFINE_FIELD( CBasePlayer, m_flgeigerDelay, FIELD_FLOAT ),	// Don't restore, reset in Precache()
-		// DEFINE_FIELD( CBasePlayer, m_igeigerRangePrev, FIELD_FLOAT ),	// Don't restore, reset in Precache()
-		// DEFINE_FIELD( CBasePlayer, m_iStepLeft, FIELD_INTEGER ), // Don't need to restore
-		// DEFINE_ARRAY( CBasePlayer, m_szTextureName, FIELD_CHARACTER, TextureNameMax ), // Don't need to restore
-		// DEFINE_FIELD( CBasePlayer, m_chTextureType, FIELD_CHARACTER ), // Don't need to restore
-		// DEFINE_FIELD( CBasePlayer, m_fNoPlayerSound, FIELD_BOOLEAN ), // Don't need to restore, debug
-		// DEFINE_FIELD( CBasePlayer, m_iUpdateTime, FIELD_INTEGER ), // Don't need to restore
-		// DEFINE_FIELD( CBasePlayer, m_iClientHealth, FIELD_INTEGER ), // Don't restore, client needs reset
-		// DEFINE_FIELD( CBasePlayer, m_iClientBattery, FIELD_INTEGER ), // Don't restore, client needs reset
-		// DEFINE_FIELD( CBasePlayer, m_iClientHideHUD, FIELD_INTEGER ), // Don't restore, client needs reset
-		// DEFINE_FIELD( CBasePlayer, m_fWeapon, FIELD_BOOLEAN ),  // Don't restore, client needs reset
-		// DEFINE_FIELD( CBasePlayer, m_nCustomSprayFrames, FIELD_INTEGER ), // Don't restore, depends on server message after spawning and only matters in multiplayer
-		// DEFINE_FIELD( CBasePlayer, m_vecAutoAim, FIELD_VECTOR ), // Don't save/restore - this is recomputed
-		// DEFINE_ARRAY( CBasePlayer, m_rgAmmoLast, FIELD_INTEGER, MAX_AMMO_TYPES ), // Don't need to restore
-		// DEFINE_FIELD( CBasePlayer, m_fOnTarget, FIELD_BOOLEAN ), // Don't need to restore
-		// DEFINE_FIELD( CBasePlayer, m_nCustomSprayFrames, FIELD_INTEGER ), // Don't need to restore
-};
+	// DEFINE_FIELD(m_fDeadTime, FIELD_FLOAT), // only used in multiplayer games
+	// DEFINE_FIELD(m_fGameHUDInitialized, FIELD_INTEGER), // only used in multiplayer games
+	// DEFINE_FIELD(m_flStopExtraSoundTime, FIELD_TIME),
+	// DEFINE_FIELD(m_iPlayerSound, FIELD_INTEGER),	// Don't restore, set in Precache()
+	// DEFINE_FIELD(m_flgeigerRange, FIELD_FLOAT),	// Don't restore, reset in Precache()
+	// DEFINE_FIELD(m_flgeigerDelay, FIELD_FLOAT),	// Don't restore, reset in Precache()
+	// DEFINE_FIELD(m_igeigerRangePrev, FIELD_FLOAT),	// Don't restore, reset in Precache()
+	// DEFINE_FIELD(m_iStepLeft, FIELD_INTEGER), // Don't need to restore
+	// DEFINE_ARRAY(m_szTextureName, FIELD_CHARACTER, TextureNameMax), // Don't need to restore
+	// DEFINE_FIELD(m_chTextureType, FIELD_CHARACTER), // Don't need to restore
+	// DEFINE_FIELD(m_fNoPlayerSound, FIELD_BOOLEAN), // Don't need to restore, debug
+	// DEFINE_FIELD(m_iUpdateTime, FIELD_INTEGER), // Don't need to restore
+	// DEFINE_FIELD(m_iClientHealth, FIELD_INTEGER), // Don't restore, client needs reset
+	// DEFINE_FIELD(m_iClientBattery, FIELD_INTEGER), // Don't restore, client needs reset
+	// DEFINE_FIELD(m_iClientHideHUD, FIELD_INTEGER), // Don't restore, client needs reset
+	// DEFINE_FIELD(m_fWeapon, FIELD_BOOLEAN),  // Don't restore, client needs reset
+	// DEFINE_FIELD(m_nCustomSprayFrames, FIELD_INTEGER), // Don't restore, depends on server message after spawning and only matters in multiplayer
+	// DEFINE_FIELD(m_vecAutoAim, FIELD_VECTOR), // Don't save/restore - this is recomputed
+	// DEFINE_ARRAY(m_rgAmmoLast, FIELD_INTEGER, MAX_AMMO_TYPES), // Don't need to restore
+	// DEFINE_FIELD(m_fOnTarget, FIELD_BOOLEAN), // Don't need to restore
+	// DEFINE_FIELD(m_nCustomSprayFrames, FIELD_INTEGER), // Don't need to restore
+	END_DATAMAP();
 
 void CBasePlayer::Pain()
 {
@@ -2879,24 +2878,13 @@ void CBasePlayer::Precache()
 		m_fInitHUD = true;
 }
 
-bool CBasePlayer::Save(CSave& save)
-{
-	if (!CBaseMonster::Save(save))
-		return false;
-
-	return save.WriteFields("PLAYER", this, m_playerSaveData, std::size(m_playerSaveData));
-}
-
 void CBasePlayer::RenewItems()
 {
 }
 
-bool CBasePlayer::Restore(CRestore& restore)
+void CBasePlayer::PostRestore()
 {
-	if (!CBaseMonster::Restore(restore))
-		return false;
-
-	bool status = restore.ReadFields("PLAYER", this, m_playerSaveData, std::size(m_playerSaveData));
+	BaseClass::PostRestore();
 
 	SAVERESTOREDATA* pSaveData = (SAVERESTOREDATA*)gpGlobals->pSaveData;
 	// landmark isn't present.
@@ -2918,7 +2906,7 @@ bool CBasePlayer::Restore(CRestore& restore)
 	m_ClientSndRoomtype = -1;
 
 	// Reset room type on level change.
-	if (!FStrEq(restore.GetData().szCurrentMapName, STRING(gpGlobals->mapname)))
+	if (!FStrEq(pSaveData->szCurrentMapName, STRING(gpGlobals->mapname)))
 	{
 		m_SndRoomtype = 0;
 	}
@@ -2964,8 +2952,6 @@ bool CBasePlayer::Restore(CRestore& restore)
 	m_bResetViewEntity = true;
 
 	m_bRestored = true;
-
-	return status;
 }
 
 void CBasePlayer::SelectNextItem(int iItem)

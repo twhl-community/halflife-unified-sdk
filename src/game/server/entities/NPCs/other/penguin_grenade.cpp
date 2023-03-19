@@ -26,12 +26,10 @@ enum MonsterPenguinAnim
 
 class CPenguinGrenade : public CGrenade
 {
+	DECLARE_CLASS(CPenguinGrenade, CGrenade);
+	DECLARE_DATAMAP();
+
 public:
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
-	static TYPEDESCRIPTION m_SaveData[];
-
 	void OnCreate() override;
 	void Precache() override;
 	void GibMonster() override;
@@ -58,16 +56,14 @@ public:
 
 float CPenguinGrenade::m_flNextBounceSoundTime = 0;
 
-TYPEDESCRIPTION CPenguinGrenade::m_SaveData[] =
-	{
-		DEFINE_FIELD(CPenguinGrenade, m_flDie, FIELD_TIME),
-		DEFINE_FIELD(CPenguinGrenade, m_vecTarget, FIELD_VECTOR),
-		DEFINE_FIELD(CPenguinGrenade, m_flNextHunt, FIELD_TIME),
-		DEFINE_FIELD(CPenguinGrenade, m_flNextHit, FIELD_TIME),
-		DEFINE_FIELD(CPenguinGrenade, m_posPrev, FIELD_POSITION_VECTOR),
-		DEFINE_FIELD(CPenguinGrenade, m_hOwner, FIELD_EHANDLE)};
-
-IMPLEMENT_SAVERESTORE(CPenguinGrenade, CGrenade);
+BEGIN_DATAMAP(CPenguinGrenade)
+DEFINE_FIELD(m_flDie, FIELD_TIME),
+	DEFINE_FIELD(m_vecTarget, FIELD_VECTOR),
+	DEFINE_FIELD(m_flNextHunt, FIELD_TIME),
+	DEFINE_FIELD(m_flNextHit, FIELD_TIME),
+	DEFINE_FIELD(m_posPrev, FIELD_POSITION_VECTOR),
+	DEFINE_FIELD(m_hOwner, FIELD_EHANDLE),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(monster_penguin, CPenguinGrenade);
 

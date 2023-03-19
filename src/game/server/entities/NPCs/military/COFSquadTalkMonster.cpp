@@ -19,19 +19,16 @@
 #include "COFSquadTalkMonster.h"
 #include "plane.h"
 
-TYPEDESCRIPTION COFSquadTalkMonster::m_SaveData[] =
-	{
-		DEFINE_FIELD(COFSquadTalkMonster, m_hSquadLeader, FIELD_EHANDLE),
-		DEFINE_ARRAY(COFSquadTalkMonster, m_hSquadMember, FIELD_EHANDLE, MAX_SQUAD_MEMBERS - 1),
+BEGIN_DATAMAP(COFSquadTalkMonster)
+DEFINE_FIELD(m_hSquadLeader, FIELD_EHANDLE),
+	DEFINE_ARRAY(m_hSquadMember, FIELD_EHANDLE, MAX_SQUAD_MEMBERS - 1),
 
-		// DEFINE_FIELD( COFSquadTalkMonster, m_afSquadSlots, FIELD_INTEGER ), // these need to be reset after transitions!
-		DEFINE_FIELD(COFSquadTalkMonster, m_fEnemyEluded, FIELD_BOOLEAN),
-		DEFINE_FIELD(COFSquadTalkMonster, m_flLastEnemySightTime, FIELD_TIME),
+	// DEFINE_FIELD( m_afSquadSlots, FIELD_INTEGER), // these need to be reset after transitions!
+	DEFINE_FIELD(m_fEnemyEluded, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_flLastEnemySightTime, FIELD_TIME),
 
-		DEFINE_FIELD(COFSquadTalkMonster, m_iMySlot, FIELD_INTEGER),
-};
-
-IMPLEMENT_SAVERESTORE(COFSquadTalkMonster, CTalkMonster);
+	DEFINE_FIELD(m_iMySlot, FIELD_INTEGER),
+	END_DATAMAP();
 
 bool COFSquadTalkMonster::OccupySlot(int iDesiredSlots)
 {

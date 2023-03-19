@@ -30,6 +30,9 @@ constexpr int MaxMonsterMakerChildKeys = 64;
  */
 class CMonsterMaker : public CBaseMonster
 {
+	DECLARE_CLASS(CMonsterMaker, CBaseMonster);
+	DECLARE_DATAMAP();
+
 public:
 	void Spawn() override;
 	void Precache() override;
@@ -60,11 +63,6 @@ public:
 	 */
 	void MakeMonster();
 
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
-	static TYPEDESCRIPTION m_SaveData[];
-
 	string_t m_iszMonsterClassname; // classname of the monster(s) that will be created.
 
 	int m_cNumMonsters; // max number of monsters this ent can create
@@ -86,21 +84,18 @@ public:
 
 LINK_ENTITY_TO_CLASS(monstermaker, CMonsterMaker);
 
-TYPEDESCRIPTION CMonsterMaker::m_SaveData[] =
-	{
-		DEFINE_FIELD(CMonsterMaker, m_iszMonsterClassname, FIELD_STRING),
-		DEFINE_FIELD(CMonsterMaker, m_cNumMonsters, FIELD_INTEGER),
-		DEFINE_FIELD(CMonsterMaker, m_cLiveChildren, FIELD_INTEGER),
-		DEFINE_FIELD(CMonsterMaker, m_flGround, FIELD_FLOAT),
-		DEFINE_FIELD(CMonsterMaker, m_iMaxLiveChildren, FIELD_INTEGER),
-		DEFINE_FIELD(CMonsterMaker, m_fActive, FIELD_BOOLEAN),
-		DEFINE_FIELD(CMonsterMaker, m_fFadeChildren, FIELD_BOOLEAN),
-		DEFINE_ARRAY(CMonsterMaker, m_ChildKeys, FIELD_STRING, MaxMonsterMakerChildKeys),
-		DEFINE_ARRAY(CMonsterMaker, m_ChildValues, FIELD_STRING, MaxMonsterMakerChildKeys),
-		DEFINE_FIELD(CMonsterMaker, m_ChildKeyCount, FIELD_INTEGER),
-};
-
-IMPLEMENT_SAVERESTORE(CMonsterMaker, CBaseMonster);
+BEGIN_DATAMAP(CMonsterMaker)
+DEFINE_FIELD(m_iszMonsterClassname, FIELD_STRING),
+	DEFINE_FIELD(m_cNumMonsters, FIELD_INTEGER),
+	DEFINE_FIELD(m_cLiveChildren, FIELD_INTEGER),
+	DEFINE_FIELD(m_flGround, FIELD_FLOAT),
+	DEFINE_FIELD(m_iMaxLiveChildren, FIELD_INTEGER),
+	DEFINE_FIELD(m_fActive, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_fFadeChildren, FIELD_BOOLEAN),
+	DEFINE_ARRAY(m_ChildKeys, FIELD_STRING, MaxMonsterMakerChildKeys),
+	DEFINE_ARRAY(m_ChildValues, FIELD_STRING, MaxMonsterMakerChildKeys),
+	DEFINE_FIELD(m_ChildKeyCount, FIELD_INTEGER),
+	END_DATAMAP();
 
 bool CMonsterMaker::KeyValue(KeyValueData* pkvd)
 {

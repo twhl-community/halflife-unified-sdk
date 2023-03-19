@@ -16,6 +16,9 @@
 
 class CAirtank : public CGrenade
 {
+	DECLARE_CLASS(CAirtank, CGrenade);
+	DECLARE_DATAMAP();
+
 public:
 	void OnCreate() override;
 	void Spawn() override;
@@ -25,22 +28,14 @@ public:
 	int BloodColor() override { return DONT_BLEED; }
 	void Killed(CBaseEntity* attacker, int iGib) override;
 
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
-	static TYPEDESCRIPTION m_SaveData[];
-
 	bool m_state;
 };
 
 LINK_ENTITY_TO_CLASS(item_airtank, CAirtank);
 
-TYPEDESCRIPTION CAirtank::m_SaveData[] =
-	{
-		DEFINE_FIELD(CAirtank, m_state, FIELD_BOOLEAN),
-};
-
-IMPLEMENT_SAVERESTORE(CAirtank, CGrenade);
+BEGIN_DATAMAP(CAirtank)
+DEFINE_FIELD(m_state, FIELD_BOOLEAN),
+	END_DATAMAP();
 
 void CAirtank::OnCreate()
 {

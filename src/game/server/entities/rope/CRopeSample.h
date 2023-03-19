@@ -37,15 +37,12 @@ struct RopeSampleData
  */
 class CRopeSample : public CBaseEntity
 {
-public:
-	using BaseClass = CBaseEntity;
+	DECLARE_CLASS(CRopeSample, CBaseEntity);
+	DECLARE_DATAMAP();
 
+public:
 	void Spawn() override;
 
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
-	static TYPEDESCRIPTION m_SaveData[];
 
 	static CRopeSample* CreateSample();
 

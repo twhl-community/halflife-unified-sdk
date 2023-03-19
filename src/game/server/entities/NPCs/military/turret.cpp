@@ -35,6 +35,9 @@ enum TURRET_ANIM
 
 class CBaseTurret : public CBaseMonster
 {
+	DECLARE_CLASS(CBaseTurret, CBaseMonster);
+	DECLARE_DATAMAP();
+
 public:
 	void Spawn() override;
 	void Precache() override;
@@ -89,11 +92,6 @@ public:
 	virtual void EyeOn();
 	virtual void EyeOff();
 
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
-	static TYPEDESCRIPTION m_SaveData[];
-
 	// other functions
 	void SetTurretAnim(TURRET_ANIM anim);
 	bool MoveTurret();
@@ -132,42 +130,42 @@ public:
 	float m_flSpinUpTime; // Amount of time until the barrel should spin down when searching
 };
 
-TYPEDESCRIPTION CBaseTurret::m_SaveData[] =
-	{
-		DEFINE_FIELD(CBaseTurret, m_flMaxSpin, FIELD_FLOAT),
-		DEFINE_FIELD(CBaseTurret, m_iSpin, FIELD_BOOLEAN),
+BEGIN_DATAMAP(CBaseTurret)
+DEFINE_FIELD(m_flMaxSpin, FIELD_FLOAT),
+	DEFINE_FIELD(m_iSpin, FIELD_BOOLEAN),
 
-		DEFINE_FIELD(CBaseTurret, m_pEyeGlow, FIELD_CLASSPTR),
-		DEFINE_FIELD(CBaseTurret, m_eyeBrightness, FIELD_INTEGER),
-		DEFINE_FIELD(CBaseTurret, m_iDeployHeight, FIELD_INTEGER),
-		DEFINE_FIELD(CBaseTurret, m_iRetractHeight, FIELD_INTEGER),
-		DEFINE_FIELD(CBaseTurret, m_iMinPitch, FIELD_INTEGER),
+	DEFINE_FIELD(m_pEyeGlow, FIELD_CLASSPTR),
+	DEFINE_FIELD(m_eyeBrightness, FIELD_INTEGER),
+	DEFINE_FIELD(m_iDeployHeight, FIELD_INTEGER),
+	DEFINE_FIELD(m_iRetractHeight, FIELD_INTEGER),
+	DEFINE_FIELD(m_iMinPitch, FIELD_INTEGER),
 
-		DEFINE_FIELD(CBaseTurret, m_iBaseTurnRate, FIELD_INTEGER),
-		DEFINE_FIELD(CBaseTurret, m_fTurnRate, FIELD_FLOAT),
-		DEFINE_FIELD(CBaseTurret, m_iOrientation, FIELD_INTEGER),
-		DEFINE_FIELD(CBaseTurret, m_iOn, FIELD_BOOLEAN),
-		DEFINE_FIELD(CBaseTurret, m_fBeserk, FIELD_BOOLEAN),
-		DEFINE_FIELD(CBaseTurret, m_iAutoStart, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_iBaseTurnRate, FIELD_INTEGER),
+	DEFINE_FIELD(m_fTurnRate, FIELD_FLOAT),
+	DEFINE_FIELD(m_iOrientation, FIELD_INTEGER),
+	DEFINE_FIELD(m_iOn, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_fBeserk, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_iAutoStart, FIELD_BOOLEAN),
 
 
-		DEFINE_FIELD(CBaseTurret, m_vecLastSight, FIELD_POSITION_VECTOR),
-		DEFINE_FIELD(CBaseTurret, m_flLastSight, FIELD_TIME),
-		DEFINE_FIELD(CBaseTurret, m_flMaxWait, FIELD_FLOAT),
-		DEFINE_FIELD(CBaseTurret, m_iSearchSpeed, FIELD_INTEGER),
+	DEFINE_FIELD(m_vecLastSight, FIELD_POSITION_VECTOR),
+	DEFINE_FIELD(m_flLastSight, FIELD_TIME),
+	DEFINE_FIELD(m_flMaxWait, FIELD_FLOAT),
+	DEFINE_FIELD(m_iSearchSpeed, FIELD_INTEGER),
 
-		DEFINE_FIELD(CBaseTurret, m_flStartYaw, FIELD_FLOAT),
-		DEFINE_FIELD(CBaseTurret, m_vecCurAngles, FIELD_VECTOR),
-		DEFINE_FIELD(CBaseTurret, m_vecGoalAngles, FIELD_VECTOR),
+	DEFINE_FIELD(m_flStartYaw, FIELD_FLOAT),
+	DEFINE_FIELD(m_vecCurAngles, FIELD_VECTOR),
+	DEFINE_FIELD(m_vecGoalAngles, FIELD_VECTOR),
 
-		DEFINE_FIELD(CBaseTurret, m_flPingTime, FIELD_TIME),
-		DEFINE_FIELD(CBaseTurret, m_flSpinUpTime, FIELD_TIME),
-};
-
-IMPLEMENT_SAVERESTORE(CBaseTurret, CBaseMonster);
+	DEFINE_FIELD(m_flPingTime, FIELD_TIME),
+	DEFINE_FIELD(m_flSpinUpTime, FIELD_TIME),
+	END_DATAMAP();
 
 class CTurret : public CBaseTurret
 {
+	DECLARE_CLASS(CTurret, CBaseTurret);
+	DECLARE_DATAMAP();
+
 public:
 	void OnCreate() override;
 	void Spawn() override;
@@ -176,23 +174,16 @@ public:
 	void SpinUpCall() override;
 	void SpinDownCall() override;
 
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
-	static TYPEDESCRIPTION m_SaveData[];
-
 	// other functions
 	void Shoot(Vector& vecSrc, Vector& vecDirToEnemy) override;
 
 private:
 	bool m_iStartSpin;
 };
-TYPEDESCRIPTION CTurret::m_SaveData[] =
-	{
-		DEFINE_FIELD(CTurret, m_iStartSpin, FIELD_BOOLEAN),
-};
 
-IMPLEMENT_SAVERESTORE(CTurret, CBaseTurret);
+BEGIN_DATAMAP(CTurret)
+DEFINE_FIELD(m_iStartSpin, FIELD_BOOLEAN),
+	END_DATAMAP();
 
 class CMiniTurret : public CBaseTurret
 {

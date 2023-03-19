@@ -27,6 +27,9 @@ const int SF_GENERICMONSTER_CONTROLLER = 8;
 */
 class CGenericMonster : public CBaseMonster
 {
+	DECLARE_CLASS(CGenericMonster, CBaseMonster);
+	DECLARE_DATAMAP();
+
 public:
 	void OnCreate() override;
 	void Spawn() override;
@@ -41,11 +44,6 @@ public:
 	void MonsterThink() override;
 	void IdleHeadTurn(Vector& vecFriend);
 
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
-	static TYPEDESCRIPTION m_SaveData[];
-
 	float m_talkTime;
 	EHANDLE m_hTalkTarget;
 	float m_flIdealYaw;
@@ -53,16 +51,13 @@ public:
 };
 LINK_ENTITY_TO_CLASS(monster_generic, CGenericMonster);
 
-TYPEDESCRIPTION CGenericMonster::m_SaveData[] =
-	{
-		// TODO: should be FIELD_TIME
-		DEFINE_FIELD(CGenericMonster, m_talkTime, FIELD_FLOAT),
-		DEFINE_FIELD(CGenericMonster, m_hTalkTarget, FIELD_EHANDLE),
-		DEFINE_FIELD(CGenericMonster, m_flIdealYaw, FIELD_FLOAT),
-		DEFINE_FIELD(CGenericMonster, m_flCurrentYaw, FIELD_FLOAT),
-};
-
-IMPLEMENT_SAVERESTORE(CGenericMonster, CBaseMonster);
+BEGIN_DATAMAP(CGenericMonster)
+// TODO: should be FIELD_TIME
+DEFINE_FIELD(m_talkTime, FIELD_FLOAT),
+	DEFINE_FIELD(m_hTalkTarget, FIELD_EHANDLE),
+	DEFINE_FIELD(m_flIdealYaw, FIELD_FLOAT),
+	DEFINE_FIELD(m_flCurrentYaw, FIELD_FLOAT),
+	END_DATAMAP();
 
 void CGenericMonster::OnCreate()
 {

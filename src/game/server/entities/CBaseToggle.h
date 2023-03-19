@@ -24,6 +24,9 @@
 */
 class CBaseToggle : public CBaseAnimating
 {
+	DECLARE_CLASS(CBaseToggle, CBaseAnimating);
+	DECLARE_DATAMAP();
+
 public:
 	bool KeyValue(KeyValueData* pkvd) override;
 
@@ -48,11 +51,6 @@ public:
 	Vector m_vecFinalAngle;
 
 	int m_bitsDamageInflict; // DMG_ damage type that the door or tigger does
-
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
-	static TYPEDESCRIPTION m_SaveData[];
 
 	float GetDelay() override { return m_flWait; }
 

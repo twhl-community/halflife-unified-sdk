@@ -21,10 +21,10 @@
 
 class COsprey : public CBaseMonster
 {
+	DECLARE_CLASS(COsprey, CBaseMonster);
+	DECLARE_DATAMAP();
+
 public:
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
 	int ObjectCaps() override { return CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 
 	void OnCreate() override;

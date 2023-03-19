@@ -31,77 +31,67 @@
 // lose our enemy pointer or other data (goal ent, target, etc)
 // that make the current schedule invalid, perhaps it's best
 // to just pick a new one when we start up again.
-TYPEDESCRIPTION CBaseMonster::m_SaveData[] =
-	{
-		DEFINE_FIELD(CBaseMonster, m_hEnemy, FIELD_EHANDLE),
-		DEFINE_FIELD(CBaseMonster, m_hTargetEnt, FIELD_EHANDLE),
-		DEFINE_ARRAY(CBaseMonster, m_hOldEnemy, FIELD_EHANDLE, MAX_OLD_ENEMIES),
-		DEFINE_ARRAY(CBaseMonster, m_vecOldEnemy, FIELD_POSITION_VECTOR, MAX_OLD_ENEMIES),
-		DEFINE_FIELD(CBaseMonster, m_flFieldOfView, FIELD_FLOAT),
-		DEFINE_FIELD(CBaseMonster, m_flWaitFinished, FIELD_TIME),
-		DEFINE_FIELD(CBaseMonster, m_flMoveWaitFinished, FIELD_TIME),
+BEGIN_DATAMAP(CBaseMonster)
+DEFINE_FIELD(m_hEnemy, FIELD_EHANDLE),
+	DEFINE_FIELD(m_hTargetEnt, FIELD_EHANDLE),
+	DEFINE_ARRAY(m_hOldEnemy, FIELD_EHANDLE, MAX_OLD_ENEMIES),
+	DEFINE_ARRAY(m_vecOldEnemy, FIELD_POSITION_VECTOR, MAX_OLD_ENEMIES),
+	DEFINE_FIELD(m_flFieldOfView, FIELD_FLOAT),
+	DEFINE_FIELD(m_flWaitFinished, FIELD_TIME),
+	DEFINE_FIELD(m_flMoveWaitFinished, FIELD_TIME),
 
-		DEFINE_FIELD(CBaseMonster, m_Activity, FIELD_INTEGER),
-		DEFINE_FIELD(CBaseMonster, m_IdealActivity, FIELD_INTEGER),
-		DEFINE_FIELD(CBaseMonster, m_LastHitGroup, FIELD_INTEGER),
-		DEFINE_FIELD(CBaseMonster, m_MonsterState, FIELD_INTEGER),
-		DEFINE_FIELD(CBaseMonster, m_IdealMonsterState, FIELD_INTEGER),
-		DEFINE_FIELD(CBaseMonster, m_iTaskStatus, FIELD_INTEGER),
+	DEFINE_FIELD(m_Activity, FIELD_INTEGER),
+	DEFINE_FIELD(m_IdealActivity, FIELD_INTEGER),
+	DEFINE_FIELD(m_LastHitGroup, FIELD_INTEGER),
+	DEFINE_FIELD(m_MonsterState, FIELD_INTEGER),
+	DEFINE_FIELD(m_IdealMonsterState, FIELD_INTEGER),
+	DEFINE_FIELD(m_iTaskStatus, FIELD_INTEGER),
 
-		// Schedule_t			*m_pSchedule;
+	// Schedule_t			*m_pSchedule;
 
-		DEFINE_FIELD(CBaseMonster, m_iScheduleIndex, FIELD_INTEGER),
-		DEFINE_FIELD(CBaseMonster, m_afConditions, FIELD_INTEGER),
-		// WayPoint_t			m_Route[ ROUTE_SIZE ];
-		//	DEFINE_FIELD( CBaseMonster, m_movementGoal, FIELD_INTEGER ),
-		//	DEFINE_FIELD( CBaseMonster, m_iRouteIndex, FIELD_INTEGER ),
-		//	DEFINE_FIELD( CBaseMonster, m_moveWaitTime, FIELD_FLOAT ),
+	DEFINE_FIELD(m_iScheduleIndex, FIELD_INTEGER),
+	DEFINE_FIELD(m_afConditions, FIELD_INTEGER),
+	// WayPoint_t			m_Route[ ROUTE_SIZE ];
+	//	DEFINE_FIELD(m_movementGoal, FIELD_INTEGER),
+	//	DEFINE_FIELD(m_iRouteIndex, FIELD_INTEGER),
+	//	DEFINE_FIELD(m_moveWaitTime, FIELD_FLOAT),
 
-		DEFINE_FIELD(CBaseMonster, m_vecMoveGoal, FIELD_POSITION_VECTOR),
-		DEFINE_FIELD(CBaseMonster, m_movementActivity, FIELD_INTEGER),
+	DEFINE_FIELD(m_vecMoveGoal, FIELD_POSITION_VECTOR),
+	DEFINE_FIELD(m_movementActivity, FIELD_INTEGER),
 
-		//		int					m_iAudibleList; // first index of a linked list of sounds that the monster can hear.
-		//	DEFINE_FIELD( CBaseMonster, m_afSoundTypes, FIELD_INTEGER ),
-		DEFINE_FIELD(CBaseMonster, m_vecLastPosition, FIELD_POSITION_VECTOR),
-		DEFINE_FIELD(CBaseMonster, m_iHintNode, FIELD_INTEGER),
-		DEFINE_FIELD(CBaseMonster, m_afMemory, FIELD_INTEGER),
-		DEFINE_FIELD(CBaseMonster, m_iMaxHealth, FIELD_INTEGER),
+	//		int					m_iAudibleList; // first index of a linked list of sounds that the monster can hear.
+	//	DEFINE_FIELD(m_afSoundTypes, FIELD_INTEGER),
+	DEFINE_FIELD(m_vecLastPosition, FIELD_POSITION_VECTOR),
+	DEFINE_FIELD(m_iHintNode, FIELD_INTEGER),
+	DEFINE_FIELD(m_afMemory, FIELD_INTEGER),
+	DEFINE_FIELD(m_iMaxHealth, FIELD_INTEGER),
 
-		DEFINE_FIELD(CBaseMonster, m_vecEnemyLKP, FIELD_POSITION_VECTOR),
-		DEFINE_FIELD(CBaseMonster, m_cAmmoLoaded, FIELD_INTEGER),
-		DEFINE_FIELD(CBaseMonster, m_afCapability, FIELD_INTEGER),
+	DEFINE_FIELD(m_vecEnemyLKP, FIELD_POSITION_VECTOR),
+	DEFINE_FIELD(m_cAmmoLoaded, FIELD_INTEGER),
+	DEFINE_FIELD(m_afCapability, FIELD_INTEGER),
 
-		DEFINE_FIELD(CBaseMonster, m_flNextAttack, FIELD_TIME),
-		DEFINE_FIELD(CBaseMonster, m_bitsDamageType, FIELD_INTEGER),
-		DEFINE_ARRAY(CBaseMonster, m_rgbTimeBasedDamage, FIELD_CHARACTER, CDMG_TIMEBASED),
-		DEFINE_FIELD(CBaseMonster, m_bloodColor, FIELD_INTEGER),
-		DEFINE_FIELD(CBaseMonster, m_failSchedule, FIELD_INTEGER),
+	DEFINE_FIELD(m_flNextAttack, FIELD_TIME),
+	DEFINE_FIELD(m_bitsDamageType, FIELD_INTEGER),
+	DEFINE_ARRAY(m_rgbTimeBasedDamage, FIELD_CHARACTER, CDMG_TIMEBASED),
+	DEFINE_FIELD(m_bloodColor, FIELD_INTEGER),
+	DEFINE_FIELD(m_failSchedule, FIELD_INTEGER),
 
-		DEFINE_FIELD(CBaseMonster, m_flHungryTime, FIELD_TIME),
-		DEFINE_FIELD(CBaseMonster, m_flDistTooFar, FIELD_FLOAT),
-		DEFINE_FIELD(CBaseMonster, m_flDistLook, FIELD_FLOAT),
-		DEFINE_FIELD(CBaseMonster, m_iTriggerCondition, FIELD_INTEGER),
-		DEFINE_FIELD(CBaseMonster, m_iszTriggerTarget, FIELD_STRING),
+	DEFINE_FIELD(m_flHungryTime, FIELD_TIME),
+	DEFINE_FIELD(m_flDistTooFar, FIELD_FLOAT),
+	DEFINE_FIELD(m_flDistLook, FIELD_FLOAT),
+	DEFINE_FIELD(m_iTriggerCondition, FIELD_INTEGER),
+	DEFINE_FIELD(m_iszTriggerTarget, FIELD_STRING),
 
-		DEFINE_FIELD(CBaseMonster, m_HackedGunPos, FIELD_VECTOR),
+	DEFINE_FIELD(m_HackedGunPos, FIELD_VECTOR),
 
-		DEFINE_FIELD(CBaseMonster, m_scriptState, FIELD_INTEGER),
-		DEFINE_FIELD(CBaseMonster, m_pCine, FIELD_CLASSPTR),
-		DEFINE_FIELD(CBaseMonster, m_AllowItemDropping, FIELD_BOOLEAN),
-};
+	DEFINE_FIELD(m_scriptState, FIELD_INTEGER),
+	DEFINE_FIELD(m_pCine, FIELD_CLASSPTR),
+	DEFINE_FIELD(m_AllowItemDropping, FIELD_BOOLEAN),
+	END_DATAMAP();
 
-bool CBaseMonster::Save(CSave& save)
+void CBaseMonster::PostRestore()
 {
-	if (!CBaseToggle::Save(save))
-		return false;
-	return save.WriteFields("CBaseMonster", this, m_SaveData, std::size(m_SaveData));
-}
-
-bool CBaseMonster::Restore(CRestore& restore)
-{
-	if (!CBaseToggle::Restore(restore))
-		return false;
-	bool status = restore.ReadFields("CBaseMonster", this, m_SaveData, std::size(m_SaveData));
+	BaseClass::PostRestore();
 
 	// We don't save/restore routes yet
 	RouteClear();
@@ -116,8 +106,6 @@ bool CBaseMonster::Restore(CRestore& restore)
 	// If we don't have an enemy, clear conditions like see enemy, etc.
 	if (m_hEnemy == nullptr)
 		m_afConditions = 0;
-
-	return status;
 }
 
 void CBaseMonster::Eat(float flFullDuration)

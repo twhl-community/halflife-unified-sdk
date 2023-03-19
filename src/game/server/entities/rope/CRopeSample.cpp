@@ -16,20 +16,17 @@
 
 #include "CRopeSample.h"
 
-TYPEDESCRIPTION CRopeSample::m_SaveData[] =
-	{
-		DEFINE_FIELD(CRopeSample, m_Data.mPosition, FIELD_VECTOR),
-		DEFINE_FIELD(CRopeSample, m_Data.mVelocity, FIELD_VECTOR),
-		DEFINE_FIELD(CRopeSample, m_Data.mForce, FIELD_VECTOR),
-		DEFINE_FIELD(CRopeSample, m_Data.mExternalForce, FIELD_VECTOR),
-		DEFINE_FIELD(CRopeSample, m_Data.mApplyExternalForce, FIELD_BOOLEAN),
-		DEFINE_FIELD(CRopeSample, m_Data.mMassReciprocal, FIELD_FLOAT),
-		DEFINE_FIELD(CRopeSample, m_pMasterRope, FIELD_CLASSPTR),
-};
+BEGIN_DATAMAP(CRopeSample)
+DEFINE_FIELD(m_Data.mPosition, FIELD_VECTOR),
+	DEFINE_FIELD(m_Data.mVelocity, FIELD_VECTOR),
+	DEFINE_FIELD(m_Data.mForce, FIELD_VECTOR),
+	DEFINE_FIELD(m_Data.mExternalForce, FIELD_VECTOR),
+	DEFINE_FIELD(m_Data.mApplyExternalForce, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_Data.mMassReciprocal, FIELD_FLOAT),
+	DEFINE_FIELD(m_pMasterRope, FIELD_CLASSPTR),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(rope_sample, CRopeSample);
-
-IMPLEMENT_SAVERESTORE(CRopeSample, CRopeSample::BaseClass);
 
 void CRopeSample::Spawn()
 {

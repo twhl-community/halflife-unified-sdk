@@ -155,14 +155,9 @@ void CSatchelCharge::BounceSound()
 
 LINK_ENTITY_TO_CLASS(weapon_satchel, CSatchel);
 
-#ifndef CLIENT_DLL
-TYPEDESCRIPTION CSatchel::m_SaveData[] =
-	{
-		DEFINE_FIELD(CSatchel, m_chargeReady, FIELD_INTEGER),
-};
-
-IMPLEMENT_SAVERESTORE(CSatchel, CBasePlayerWeapon);
-#endif
+BEGIN_DATAMAP(CSatchel)
+DEFINE_FIELD(m_chargeReady, FIELD_INTEGER),
+	END_DATAMAP();
 
 void CSatchel::OnCreate()
 {

@@ -170,11 +170,10 @@ void COFNuclearBombTimer::SetNuclearBombTimer(bool fOn)
 
 class COFNuclearBomb : public CBaseToggle
 {
-public:
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
+	DECLARE_CLASS(COFNuclearBomb, CBaseToggle);
+	DECLARE_DATAMAP();
 
+public:
 	int ObjectCaps() override { return CBaseToggle::ObjectCaps() | FCAP_IMPULSE_USE; }
 
 	bool KeyValue(KeyValueData* pkvd) override;
@@ -191,14 +190,11 @@ public:
 	int m_iPushCount;
 };
 
-TYPEDESCRIPTION COFNuclearBomb::m_SaveData[] =
-	{
-		DEFINE_FIELD(COFNuclearBomb, m_fOn, FIELD_BOOLEAN),
-		DEFINE_FIELD(COFNuclearBomb, m_flLastPush, FIELD_TIME),
-		DEFINE_FIELD(COFNuclearBomb, m_iPushCount, FIELD_INTEGER),
-};
-
-IMPLEMENT_SAVERESTORE(COFNuclearBomb, CBaseToggle);
+BEGIN_DATAMAP(COFNuclearBomb)
+DEFINE_FIELD(m_fOn, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_flLastPush, FIELD_TIME),
+	DEFINE_FIELD(m_iPushCount, FIELD_INTEGER),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(item_nuclearbomb, COFNuclearBomb);
 

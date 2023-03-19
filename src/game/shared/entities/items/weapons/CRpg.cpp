@@ -23,23 +23,17 @@
 
 LINK_ENTITY_TO_CLASS(weapon_rpg, CRpg);
 
+BEGIN_DATAMAP(CRpg)
+DEFINE_FIELD(m_fSpotActive, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_cActiveRockets, FIELD_INTEGER),
+	END_DATAMAP();
+
+BEGIN_DATAMAP(CRpgRocket)
+DEFINE_FIELD(m_flIgniteTime, FIELD_TIME),
+	DEFINE_FIELD(m_pLauncher, FIELD_EHANDLE),
+	END_DATAMAP();
+
 #ifndef CLIENT_DLL
-TYPEDESCRIPTION CRpg::m_SaveData[] =
-	{
-		DEFINE_FIELD(CRpg, m_fSpotActive, FIELD_BOOLEAN),
-		DEFINE_FIELD(CRpg, m_cActiveRockets, FIELD_INTEGER),
-};
-
-IMPLEMENT_SAVERESTORE(CRpg, CBasePlayerWeapon);
-
-TYPEDESCRIPTION CRpgRocket::m_SaveData[] =
-	{
-		DEFINE_FIELD(CRpgRocket, m_flIgniteTime, FIELD_TIME),
-		DEFINE_FIELD(CRpgRocket, m_pLauncher, FIELD_EHANDLE),
-};
-
-IMPLEMENT_SAVERESTORE(CRpgRocket, CGrenade);
-
 LINK_ENTITY_TO_CLASS(rpg_rocket, CRpgRocket);
 
 CRpgRocket::~CRpgRocket()

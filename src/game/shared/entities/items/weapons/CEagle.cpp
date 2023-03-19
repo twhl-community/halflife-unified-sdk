@@ -21,15 +21,10 @@
 
 #include "CEagle.h"
 
-#ifndef CLIENT_DLL
-TYPEDESCRIPTION CEagle::m_SaveData[] =
-	{
-		DEFINE_FIELD(CEagle, m_bSpotVisible, FIELD_BOOLEAN),
-		DEFINE_FIELD(CEagle, m_bLaserActive, FIELD_BOOLEAN),
-};
-
-IMPLEMENT_SAVERESTORE(CEagle, CEagle::BaseClass);
-#endif
+BEGIN_DATAMAP(CEagle)
+DEFINE_FIELD(m_bSpotVisible, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_bLaserActive, FIELD_BOOLEAN),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(weapon_eagle, CEagle);
 

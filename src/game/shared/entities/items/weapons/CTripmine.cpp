@@ -22,15 +22,13 @@
 
 class CTripmineGrenade : public CGrenade
 {
+	DECLARE_CLASS(CTripmineGrenade, CGrenade);
+	DECLARE_DATAMAP();
+
 public:
 	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
-
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
-	static TYPEDESCRIPTION m_SaveData[];
 
 	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 
@@ -57,21 +55,18 @@ public:
 
 LINK_ENTITY_TO_CLASS(monster_tripmine, CTripmineGrenade);
 
-TYPEDESCRIPTION CTripmineGrenade::m_SaveData[] =
-	{
-		DEFINE_FIELD(CTripmineGrenade, m_flPowerUp, FIELD_TIME),
-		DEFINE_FIELD(CTripmineGrenade, m_vecDir, FIELD_VECTOR),
-		DEFINE_FIELD(CTripmineGrenade, m_vecEnd, FIELD_POSITION_VECTOR),
-		DEFINE_FIELD(CTripmineGrenade, m_flBeamLength, FIELD_FLOAT),
-		DEFINE_FIELD(CTripmineGrenade, m_hOwner, FIELD_EHANDLE),
-		// Don't save, recreate.
-		// DEFINE_FIELD(CTripmineGrenade, m_pBeam, FIELD_CLASSPTR),
-		DEFINE_FIELD(CTripmineGrenade, m_posOwner, FIELD_POSITION_VECTOR),
-		DEFINE_FIELD(CTripmineGrenade, m_angleOwner, FIELD_VECTOR),
-		DEFINE_FIELD(CTripmineGrenade, m_RealOwner, FIELD_EHANDLE),
-};
-
-IMPLEMENT_SAVERESTORE(CTripmineGrenade, CGrenade);
+BEGIN_DATAMAP(CTripmineGrenade)
+DEFINE_FIELD(m_flPowerUp, FIELD_TIME),
+	DEFINE_FIELD(m_vecDir, FIELD_VECTOR),
+	DEFINE_FIELD(m_vecEnd, FIELD_POSITION_VECTOR),
+	DEFINE_FIELD(m_flBeamLength, FIELD_FLOAT),
+	DEFINE_FIELD(m_hOwner, FIELD_EHANDLE),
+	// Don't save, recreate.
+	// DEFINE_FIELD(m_pBeam, FIELD_CLASSPTR),
+	DEFINE_FIELD(m_posOwner, FIELD_POSITION_VECTOR),
+	DEFINE_FIELD(m_angleOwner, FIELD_VECTOR),
+	DEFINE_FIELD(m_RealOwner, FIELD_EHANDLE),
+	END_DATAMAP();
 
 void CTripmineGrenade::OnCreate()
 {

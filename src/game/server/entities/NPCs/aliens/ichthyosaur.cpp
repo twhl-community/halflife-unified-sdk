@@ -32,6 +32,9 @@
 */
 class CIchthyosaur : public CFlyingMonster
 {
+	DECLARE_CLASS(CIchthyosaur, CFlyingMonster);
+	DECLARE_DATAMAP();
+
 public:
 	void OnCreate() override;
 	void Spawn() override;
@@ -40,10 +43,6 @@ public:
 	int Classify() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 	CUSTOM_SCHEDULES;
-
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
 
 	Schedule_t* GetSchedule() override;
 	Schedule_t* GetScheduleOfType(int Type) override;
@@ -110,20 +109,17 @@ public:
 
 LINK_ENTITY_TO_CLASS(monster_ichthyosaur, CIchthyosaur);
 
-TYPEDESCRIPTION CIchthyosaur::m_SaveData[] =
-	{
-		DEFINE_FIELD(CIchthyosaur, m_SaveVelocity, FIELD_VECTOR),
-		DEFINE_FIELD(CIchthyosaur, m_idealDist, FIELD_FLOAT),
-		DEFINE_FIELD(CIchthyosaur, m_flBlink, FIELD_FLOAT),
-		DEFINE_FIELD(CIchthyosaur, m_flEnemyTouched, FIELD_FLOAT),
-		DEFINE_FIELD(CIchthyosaur, m_bOnAttack, FIELD_BOOLEAN),
-		DEFINE_FIELD(CIchthyosaur, m_flMaxSpeed, FIELD_FLOAT),
-		DEFINE_FIELD(CIchthyosaur, m_flMinSpeed, FIELD_FLOAT),
-		DEFINE_FIELD(CIchthyosaur, m_flMaxDist, FIELD_FLOAT),
-		DEFINE_FIELD(CIchthyosaur, m_flNextAlert, FIELD_TIME),
-};
-
-IMPLEMENT_SAVERESTORE(CIchthyosaur, CFlyingMonster);
+BEGIN_DATAMAP(CIchthyosaur)
+DEFINE_FIELD(m_SaveVelocity, FIELD_VECTOR),
+	DEFINE_FIELD(m_idealDist, FIELD_FLOAT),
+	DEFINE_FIELD(m_flBlink, FIELD_FLOAT),
+	DEFINE_FIELD(m_flEnemyTouched, FIELD_FLOAT),
+	DEFINE_FIELD(m_bOnAttack, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_flMaxSpeed, FIELD_FLOAT),
+	DEFINE_FIELD(m_flMinSpeed, FIELD_FLOAT),
+	DEFINE_FIELD(m_flMaxDist, FIELD_FLOAT),
+	DEFINE_FIELD(m_flNextAlert, FIELD_TIME),
+	END_DATAMAP();
 
 const char* CIchthyosaur::pIdleSounds[] =
 	{

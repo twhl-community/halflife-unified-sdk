@@ -24,6 +24,9 @@ struct AmmoType;
 */
 class CWeaponBox : public CBaseEntity
 {
+	DECLARE_CLASS(CWeaponBox, CBaseEntity);
+	DECLARE_DATAMAP();
+
 public:
 	void OnCreate() override;
 	void Precache() override;
@@ -51,9 +54,6 @@ public:
 	*	@brief the think function that removes the box from the world.
 	*/
 	void EXPORT Kill();
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
 
 	/**
 	*	@brief is a weapon of this type already packed in this box?

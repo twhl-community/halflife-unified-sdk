@@ -20,6 +20,9 @@
 */
 class COFSquadTalkMonster : public CTalkMonster
 {
+	DECLARE_CLASS(COFSquadTalkMonster, CTalkMonster);
+	DECLARE_DATAMAP();
+
 public:
 	// squad leader info
 	EntityHandle<COFSquadTalkMonster> m_hSquadLeader; //!< who is my leader
@@ -122,11 +125,6 @@ public:
 	bool SquadMemberInRange(const Vector& vecLocation, float flDist);
 
 	COFSquadTalkMonster* MySquadTalkMonsterPointer() override { return this; }
-
-	static TYPEDESCRIPTION m_SaveData[];
-
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
 
 	/**
 	*	@brief determines whether or not the chosen cover location is a good one to move to.

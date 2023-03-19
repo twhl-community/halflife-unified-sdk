@@ -40,6 +40,9 @@ enum
 
 class CPitdroneSpike : public CBaseEntity
 {
+	DECLARE_CLASS(CPitdroneSpike, CBaseEntity);
+	DECLARE_DATAMAP();
+
 public:
 	void Precache() override;
 	void Spawn() override;
@@ -51,21 +54,14 @@ public:
 
 	void EXPORT StartTrail();
 
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
-
 	int m_maxFrame;
 };
 
 LINK_ENTITY_TO_CLASS(pitdronespike, CPitdroneSpike);
 
-TYPEDESCRIPTION CPitdroneSpike::m_SaveData[] =
-	{
-		DEFINE_FIELD(CPitdroneSpike, m_maxFrame, FIELD_INTEGER),
-};
-
-IMPLEMENT_SAVERESTORE(CPitdroneSpike, CBaseEntity);
+BEGIN_DATAMAP(CPitdroneSpike)
+DEFINE_FIELD(m_maxFrame, FIELD_INTEGER),
+	END_DATAMAP();
 
 void CPitdroneSpike::Precache()
 {
@@ -205,6 +201,9 @@ enum PitdroneWeapon
 */
 class CPitdrone : public CBaseMonster
 {
+	DECLARE_CLASS(CPitdrone, CBaseMonster);
+	DECLARE_DATAMAP();
+
 public:
 	void OnCreate() override;
 	void Spawn() override;
@@ -237,11 +236,7 @@ public:
 	void GibMonster() override;
 	bool KeyValue(KeyValueData* pkvd) override;
 
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
 	CUSTOM_SCHEDULES;
-	static TYPEDESCRIPTION m_SaveData[];
 
 	float m_flLastHurtTime;	 //!< we keep track of this, because if something hurts a squid, it will forget about its love of headcrabs for a while.
 	float m_flNextSpikeTime; //!< last time the pit drone used the spike attack.
@@ -250,14 +245,11 @@ public:
 };
 LINK_ENTITY_TO_CLASS(monster_pitdrone, CPitdrone);
 
-TYPEDESCRIPTION CPitdrone::m_SaveData[] =
-	{
-		DEFINE_FIELD(CPitdrone, m_flLastHurtTime, FIELD_TIME),
-		DEFINE_FIELD(CPitdrone, m_flNextSpikeTime, FIELD_TIME),
-		DEFINE_FIELD(CPitdrone, m_flNextEatTime, FIELD_TIME),
-};
-
-IMPLEMENT_SAVERESTORE(CPitdrone, CBaseMonster);
+BEGIN_DATAMAP(CPitdrone)
+DEFINE_FIELD(m_flLastHurtTime, FIELD_TIME),
+	DEFINE_FIELD(m_flNextSpikeTime, FIELD_TIME),
+	DEFINE_FIELD(m_flNextEatTime, FIELD_TIME),
+	END_DATAMAP();
 
 void CPitdrone::OnCreate()
 {

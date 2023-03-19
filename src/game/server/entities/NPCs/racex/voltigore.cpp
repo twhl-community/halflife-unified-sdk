@@ -19,6 +19,9 @@
 
 class COFChargedBolt : public CBaseEntity
 {
+	DECLARE_CLASS(COFChargedBolt, CBaseEntity);
+	DECLARE_DATAMAP();
+
 public:
 	void Precache() override;
 	void Spawn() override;
@@ -47,10 +50,6 @@ public:
 
 	void EXPORT ChargedBoltTouch(CBaseEntity* pOther);
 
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
-
 	int m_iShowerSparks;
 	EntityHandle<CBeam> m_pBeam[VOLTIGORE_BEAM_COUNT];
 	int m_iBeams;
@@ -60,16 +59,13 @@ public:
 
 LINK_ENTITY_TO_CLASS(charged_bolt, COFChargedBolt);
 
-TYPEDESCRIPTION COFChargedBolt::m_SaveData[] =
-	{
-		DEFINE_FIELD(COFChargedBolt, m_iShowerSparks, FIELD_INTEGER),
-		DEFINE_ARRAY(COFChargedBolt, m_pBeam, FIELD_EHANDLE, VOLTIGORE_BEAM_COUNT),
-		DEFINE_FIELD(COFChargedBolt, m_iBeams, FIELD_INTEGER),
-		DEFINE_FIELD(COFChargedBolt, m_pAttachEnt, FIELD_CLASSPTR),
-		DEFINE_FIELD(COFChargedBolt, m_iAttachIdx, FIELD_INTEGER),
-};
-
-IMPLEMENT_SAVERESTORE(COFChargedBolt, CBaseEntity);
+BEGIN_DATAMAP(COFChargedBolt)
+DEFINE_FIELD(m_iShowerSparks, FIELD_INTEGER),
+	DEFINE_ARRAY(m_pBeam, FIELD_EHANDLE, VOLTIGORE_BEAM_COUNT),
+	DEFINE_FIELD(m_iBeams, FIELD_INTEGER),
+	DEFINE_FIELD(m_pAttachEnt, FIELD_CLASSPTR),
+	DEFINE_FIELD(m_iAttachIdx, FIELD_INTEGER),
+	END_DATAMAP();
 
 void COFChargedBolt::Precache()
 {
@@ -282,19 +278,16 @@ void COFChargedBolt::ChargedBoltTouch(CBaseEntity* pOther)
 
 LINK_ENTITY_TO_CLASS(monster_alien_voltigore, COFVoltigore);
 
-TYPEDESCRIPTION COFVoltigore::m_SaveData[] =
-	{
-		DEFINE_ARRAY(COFVoltigore, m_pBeam, FIELD_EHANDLE, VOLTIGORE_BEAM_COUNT),
-		DEFINE_FIELD(COFVoltigore, m_iBeams, FIELD_INTEGER),
-		DEFINE_FIELD(COFVoltigore, m_flNextBeamAttackCheck, FIELD_TIME),
-		DEFINE_FIELD(COFVoltigore, m_flNextPainTime, FIELD_TIME),
-		DEFINE_FIELD(COFVoltigore, m_flNextSpeakTime, FIELD_TIME),
-		DEFINE_FIELD(COFVoltigore, m_flNextWordTime, FIELD_TIME),
-		DEFINE_FIELD(COFVoltigore, m_iLastWord, FIELD_INTEGER),
-		DEFINE_FIELD(COFVoltigore, m_pChargedBolt, FIELD_EHANDLE),
-};
-
-IMPLEMENT_SAVERESTORE(COFVoltigore, CSquadMonster);
+BEGIN_DATAMAP(COFVoltigore)
+DEFINE_ARRAY(m_pBeam, FIELD_EHANDLE, VOLTIGORE_BEAM_COUNT),
+	DEFINE_FIELD(m_iBeams, FIELD_INTEGER),
+	DEFINE_FIELD(m_flNextBeamAttackCheck, FIELD_TIME),
+	DEFINE_FIELD(m_flNextPainTime, FIELD_TIME),
+	DEFINE_FIELD(m_flNextSpeakTime, FIELD_TIME),
+	DEFINE_FIELD(m_flNextWordTime, FIELD_TIME),
+	DEFINE_FIELD(m_iLastWord, FIELD_INTEGER),
+	DEFINE_FIELD(m_pChargedBolt, FIELD_EHANDLE),
+	END_DATAMAP();
 
 void COFVoltigore::OnCreate()
 {

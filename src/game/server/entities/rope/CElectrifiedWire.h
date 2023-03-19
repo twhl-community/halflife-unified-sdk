@@ -23,9 +23,10 @@
  */
 class CElectrifiedWire : public CRope
 {
-public:
-	using BaseClass = CRope;
+	DECLARE_CLASS(CElectrifiedWire, CRope);
+	DECLARE_DATAMAP();
 
+public:
 	bool KeyValue(KeyValueData* pkvd) override;
 
 	void Precache() override;
@@ -35,11 +36,6 @@ public:
 	void Think() override;
 
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float flValue) override;
-
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
-	static TYPEDESCRIPTION m_SaveData[];
 
 	bool IsActive() const { return m_bIsActive != false; }
 

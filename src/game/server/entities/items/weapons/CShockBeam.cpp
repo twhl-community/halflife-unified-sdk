@@ -17,14 +17,11 @@
 
 #include "CShockBeam.h"
 
-TYPEDESCRIPTION CShockBeam::m_SaveData[] =
-	{
-		DEFINE_FIELD(CShockBeam, m_pBeam1, FIELD_CLASSPTR),
-		DEFINE_FIELD(CShockBeam, m_pBeam2, FIELD_CLASSPTR),
-		DEFINE_FIELD(CShockBeam, m_pSprite, FIELD_CLASSPTR),
-};
-
-IMPLEMENT_SAVERESTORE(CShockBeam, CShockBeam::BaseClass);
+BEGIN_DATAMAP(CShockBeam)
+DEFINE_FIELD(m_pBeam1, FIELD_CLASSPTR),
+	DEFINE_FIELD(m_pBeam2, FIELD_CLASSPTR),
+	DEFINE_FIELD(m_pSprite, FIELD_CLASSPTR),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(shock_beam, CShockBeam);
 

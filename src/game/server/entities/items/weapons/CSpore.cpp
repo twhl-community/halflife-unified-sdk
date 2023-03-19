@@ -16,14 +16,12 @@
 
 #include "CSpore.h"
 
-TYPEDESCRIPTION CSpore::m_SaveData[] =
-	{
-		DEFINE_FIELD(CSpore, m_SporeType, FIELD_INTEGER),
-		DEFINE_FIELD(CSpore, m_flIgniteTime, FIELD_TIME),
-		DEFINE_FIELD(CSpore, m_bIsAI, FIELD_BOOLEAN),
-		DEFINE_FIELD(CSpore, m_hSprite, FIELD_EHANDLE)};
-
-IMPLEMENT_SAVERESTORE(CSpore, CSpore::BaseClass);
+BEGIN_DATAMAP(CSpore)
+DEFINE_FIELD(m_SporeType, FIELD_INTEGER),
+	DEFINE_FIELD(m_flIgniteTime, FIELD_TIME),
+	DEFINE_FIELD(m_bIsAI, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_hSprite, FIELD_EHANDLE),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(spore, CSpore);
 

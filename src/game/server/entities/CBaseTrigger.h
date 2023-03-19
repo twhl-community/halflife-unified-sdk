@@ -19,6 +19,8 @@
 
 class CBaseTrigger : public CBaseToggle
 {
+	DECLARE_CLASS(CBaseTrigger, CBaseToggle);
+
 public:
 	bool KeyValue(KeyValueData* pkvd) override;
 	

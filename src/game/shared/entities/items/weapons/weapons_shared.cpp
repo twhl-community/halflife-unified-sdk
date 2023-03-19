@@ -20,6 +20,40 @@
 #include "com_weapons.h"
 #endif
 
+BEGIN_DATAMAP(CBasePlayerWeapon)
+DEFINE_FIELD(m_pPlayer, FIELD_CLASSPTR),
+	DEFINE_FIELD(m_pNext, FIELD_CLASSPTR),
+	// DEFINE_FIELD(m_fKnown, FIELD_INTEGER),Reset to zero on load
+	DEFINE_FIELD(m_iId, FIELD_INTEGER),
+// DEFINE_FIELDm_iIdPrimary, FIELD_INTEGER),
+// DEFINE_FIELDm_iIdSecondary, FIELD_INTEGER),
+#if defined(CLIENT_WEAPONS)
+	DEFINE_FIELD(m_flNextPrimaryAttack, FIELD_FLOAT),
+	DEFINE_FIELD(m_flNextSecondaryAttack, FIELD_FLOAT),
+	DEFINE_FIELD(m_flTimeWeaponIdle, FIELD_FLOAT),
+#else  // CLIENT_WEAPONS
+	DEFINE_FIELD(m_flNextPrimaryAttack, FIELD_TIME),
+	DEFINE_FIELD(m_flNextSecondaryAttack, FIELD_TIME),
+	DEFINE_FIELD(m_flTimeWeaponIdle, FIELD_TIME),
+#endif // CLIENT_WEAPONS
+	DEFINE_FIELD(m_iPrimaryAmmoType, FIELD_INTEGER),
+	DEFINE_FIELD(m_iSecondaryAmmoType, FIELD_INTEGER),
+	DEFINE_FIELD(m_iClip, FIELD_INTEGER),
+	DEFINE_FIELD(m_iDefaultAmmo, FIELD_INTEGER),
+	DEFINE_FIELD(m_iDefaultPrimaryAmmo, FIELD_INTEGER),
+	//	DEFINE_FIELD(m_iClientClip, FIELD_INTEGER)	 , reset to zero on load so hud gets updated correctly
+	//  DEFINE_FIELD(m_iClientWeaponState, FIELD_INTEGER), reset to zero on load so hud gets updated correctly
+	DEFINE_FIELD(m_WorldModel, FIELD_STRING),
+	DEFINE_FIELD(m_ViewModel, FIELD_STRING),
+	DEFINE_FIELD(m_PlayerModel, FIELD_STRING),
+	END_DATAMAP();
+
+// m_AmmoName isn't saved here because it's initialized by all derived classes.
+// Classes that let level designers set the name should also save it.
+BEGIN_DATAMAP(CBasePlayerAmmo)
+DEFINE_FIELD(m_AmmoAmount, FIELD_INTEGER),
+	END_DATAMAP();
+
 void FindHullIntersection(const Vector& vecSrc, TraceResult& tr, const Vector& mins, const Vector& maxs, CBaseEntity* pEntity)
 {
 	int i, j, k;

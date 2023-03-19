@@ -87,6 +87,9 @@ enum class PostureType
 
 class CBaseHGruntAlly : public COFSquadTalkMonster
 {
+	DECLARE_CLASS(CBaseHGruntAlly, COFSquadTalkMonster);
+	DECLARE_DATAMAP();
+
 public:
 	void OnCreate() override;
 
@@ -160,9 +163,6 @@ public:
 	 */
 	void SpeakSentence();
 
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
 	CBaseEntity* Kick();
 	Schedule_t* GetSchedule() override;
 	Schedule_t* GetScheduleOfType(int Type) override;
@@ -203,7 +203,6 @@ public:
 	}
 
 	CUSTOM_SCHEDULES;
-	static TYPEDESCRIPTION m_SaveData[];
 
 	bool m_lastAttackCheck;
 

@@ -17,12 +17,12 @@
 
 class CDisplacerBall : public CBaseEntity
 {
+	DECLARE_CLASS(CDisplacerBall, CBaseEntity);
+
 private:
 	static const size_t NUM_BEAMS = 8;
 
 public:
-	using BaseClass = CBaseEntity;
-
 	void Precache() override;
 
 	void Spawn() override;

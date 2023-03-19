@@ -26,11 +26,10 @@ class CNihilanth;
  */
 class CNihilanthHVR : public CBaseMonster
 {
-public:
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
+	DECLARE_CLASS(CNihilanthHVR, CBaseMonster);
+	DECLARE_DATAMAP();
 
+public:
 	void Spawn() override;
 	void Precache() override;
 
@@ -68,27 +67,23 @@ public:
 
 LINK_ENTITY_TO_CLASS(nihilanth_energy_ball, CNihilanthHVR);
 
-TYPEDESCRIPTION CNihilanthHVR::m_SaveData[] =
-	{
-		DEFINE_FIELD(CNihilanthHVR, m_flIdealVel, FIELD_FLOAT),
-		DEFINE_FIELD(CNihilanthHVR, m_vecIdeal, FIELD_VECTOR),
-		DEFINE_FIELD(CNihilanthHVR, m_pNihilanth, FIELD_CLASSPTR),
-		DEFINE_FIELD(CNihilanthHVR, m_hTouch, FIELD_EHANDLE),
-		DEFINE_FIELD(CNihilanthHVR, m_nFrames, FIELD_INTEGER),
-};
-
-IMPLEMENT_SAVERESTORE(CNihilanthHVR, CBaseMonster);
+BEGIN_DATAMAP(CNihilanthHVR)
+DEFINE_FIELD(m_flIdealVel, FIELD_FLOAT),
+	DEFINE_FIELD(m_vecIdeal, FIELD_VECTOR),
+	DEFINE_FIELD(m_pNihilanth, FIELD_CLASSPTR),
+	DEFINE_FIELD(m_hTouch, FIELD_EHANDLE),
+	DEFINE_FIELD(m_nFrames, FIELD_INTEGER),
+	END_DATAMAP();
 
 /**
 *	@brief final Boss monster
 */
 class CNihilanth : public CBaseMonster
 {
-public:
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
+	DECLARE_CLASS(CNihilanth, CBaseMonster);
+	DECLARE_DATAMAP();
 
+public:
 	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
@@ -192,41 +187,38 @@ public:
 
 LINK_ENTITY_TO_CLASS(monster_nihilanth, CNihilanth);
 
-TYPEDESCRIPTION CNihilanth::m_SaveData[] =
-	{
-		DEFINE_FIELD(CNihilanth, m_flForce, FIELD_FLOAT),
-		DEFINE_FIELD(CNihilanth, m_flNextPainSound, FIELD_TIME),
-		DEFINE_FIELD(CNihilanth, m_velocity, FIELD_VECTOR),
-		DEFINE_FIELD(CNihilanth, m_avelocity, FIELD_VECTOR),
-		DEFINE_FIELD(CNihilanth, m_vecTarget, FIELD_VECTOR),
-		DEFINE_FIELD(CNihilanth, m_posTarget, FIELD_POSITION_VECTOR),
-		DEFINE_FIELD(CNihilanth, m_vecDesired, FIELD_VECTOR),
-		DEFINE_FIELD(CNihilanth, m_posDesired, FIELD_POSITION_VECTOR),
-		DEFINE_FIELD(CNihilanth, m_flMinZ, FIELD_FLOAT),
-		DEFINE_FIELD(CNihilanth, m_flMaxZ, FIELD_FLOAT),
-		DEFINE_FIELD(CNihilanth, m_vecGoal, FIELD_VECTOR),
-		DEFINE_FIELD(CNihilanth, m_flLastSeen, FIELD_TIME),
-		DEFINE_FIELD(CNihilanth, m_flPrevSeen, FIELD_TIME),
-		DEFINE_FIELD(CNihilanth, m_irritation, FIELD_INTEGER),
-		DEFINE_FIELD(CNihilanth, m_iLevel, FIELD_INTEGER),
-		DEFINE_FIELD(CNihilanth, m_iTeleport, FIELD_INTEGER),
-		DEFINE_FIELD(CNihilanth, m_hRecharger, FIELD_EHANDLE),
-		DEFINE_ARRAY(CNihilanth, m_hSphere, FIELD_EHANDLE, N_SPHERES),
-		DEFINE_FIELD(CNihilanth, m_iActiveSpheres, FIELD_INTEGER),
-		DEFINE_FIELD(CNihilanth, m_flAdj, FIELD_FLOAT),
-		DEFINE_FIELD(CNihilanth, m_pBall, FIELD_CLASSPTR),
-		DEFINE_ARRAY(CNihilanth, m_szRechargerTarget, FIELD_CHARACTER, 64),
-		DEFINE_ARRAY(CNihilanth, m_szDrawUse, FIELD_CHARACTER, 64),
-		DEFINE_ARRAY(CNihilanth, m_szTeleportUse, FIELD_CHARACTER, 64),
-		DEFINE_ARRAY(CNihilanth, m_szTeleportTouch, FIELD_CHARACTER, 64),
-		DEFINE_ARRAY(CNihilanth, m_szDeadUse, FIELD_CHARACTER, 64),
-		DEFINE_ARRAY(CNihilanth, m_szDeadTouch, FIELD_CHARACTER, 64),
-		DEFINE_FIELD(CNihilanth, m_flShootEnd, FIELD_TIME),
-		DEFINE_FIELD(CNihilanth, m_flShootTime, FIELD_TIME),
-		DEFINE_ARRAY(CNihilanth, m_hFriend, FIELD_EHANDLE, 3),
-};
-
-IMPLEMENT_SAVERESTORE(CNihilanth, CBaseMonster);
+BEGIN_DATAMAP(CNihilanth)
+DEFINE_FIELD(m_flForce, FIELD_FLOAT),
+	DEFINE_FIELD(m_flNextPainSound, FIELD_TIME),
+	DEFINE_FIELD(m_velocity, FIELD_VECTOR),
+	DEFINE_FIELD(m_avelocity, FIELD_VECTOR),
+	DEFINE_FIELD(m_vecTarget, FIELD_VECTOR),
+	DEFINE_FIELD(m_posTarget, FIELD_POSITION_VECTOR),
+	DEFINE_FIELD(m_vecDesired, FIELD_VECTOR),
+	DEFINE_FIELD(m_posDesired, FIELD_POSITION_VECTOR),
+	DEFINE_FIELD(m_flMinZ, FIELD_FLOAT),
+	DEFINE_FIELD(m_flMaxZ, FIELD_FLOAT),
+	DEFINE_FIELD(m_vecGoal, FIELD_VECTOR),
+	DEFINE_FIELD(m_flLastSeen, FIELD_TIME),
+	DEFINE_FIELD(m_flPrevSeen, FIELD_TIME),
+	DEFINE_FIELD(m_irritation, FIELD_INTEGER),
+	DEFINE_FIELD(m_iLevel, FIELD_INTEGER),
+	DEFINE_FIELD(m_iTeleport, FIELD_INTEGER),
+	DEFINE_FIELD(m_hRecharger, FIELD_EHANDLE),
+	DEFINE_ARRAY(m_hSphere, FIELD_EHANDLE, N_SPHERES),
+	DEFINE_FIELD(m_iActiveSpheres, FIELD_INTEGER),
+	DEFINE_FIELD(m_flAdj, FIELD_FLOAT),
+	DEFINE_FIELD(m_pBall, FIELD_CLASSPTR),
+	DEFINE_ARRAY(m_szRechargerTarget, FIELD_CHARACTER, 64),
+	DEFINE_ARRAY(m_szDrawUse, FIELD_CHARACTER, 64),
+	DEFINE_ARRAY(m_szTeleportUse, FIELD_CHARACTER, 64),
+	DEFINE_ARRAY(m_szTeleportTouch, FIELD_CHARACTER, 64),
+	DEFINE_ARRAY(m_szDeadUse, FIELD_CHARACTER, 64),
+	DEFINE_ARRAY(m_szDeadTouch, FIELD_CHARACTER, 64),
+	DEFINE_FIELD(m_flShootEnd, FIELD_TIME),
+	DEFINE_FIELD(m_flShootTime, FIELD_TIME),
+	DEFINE_ARRAY(m_hFriend, FIELD_EHANDLE, 3),
+	END_DATAMAP();
 
 const char* CNihilanth::pAttackSounds[] =
 	{

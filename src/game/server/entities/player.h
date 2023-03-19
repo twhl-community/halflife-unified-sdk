@@ -113,6 +113,9 @@ enum Cheat
 
 class CBasePlayer : public CBaseMonster
 {
+	DECLARE_CLASS(CBasePlayer, CBaseMonster);
+	DECLARE_DATAMAP();
+
 public:
 	// Spectator camera
 	/**
@@ -317,8 +320,7 @@ public:
 												 // Spectators should return true for this
 	const char* TeamID() override;
 
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
+	void PostRestore() override;
 
 	/**
 	*	@brief Marks everything as new so the player will resend this to the hud.
@@ -357,8 +359,6 @@ public:
 	virtual void UpdateClientData();
 
 	void UpdateCTFHud();
-
-	static TYPEDESCRIPTION m_playerSaveData[];
 
 	// Player is moved across the transition by other means
 	int ObjectCaps() override { return CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }

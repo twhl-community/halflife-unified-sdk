@@ -14,9 +14,9 @@
  ****/
 
 /**
-*	@file
-*	frequently used global functions
-*/
+ *	@file
+ *	frequently used global functions
+ */
 
 #include "cbase.h"
 #include "nodes.h"
@@ -29,8 +29,8 @@ void CPointEntity::Spawn()
 }
 
 /**
-*	@brief Null Entity, remove on startup
-*/
+ *	@brief Null Entity, remove on startup
+ */
 class CNullEntity : public CBaseEntity
 {
 public:
@@ -82,13 +82,10 @@ void CBaseEntity::SUB_Remove()
 	REMOVE_ENTITY(ENT(pev));
 }
 
-TYPEDESCRIPTION CBaseDelay::m_SaveData[] =
-	{
-		DEFINE_FIELD(CBaseDelay, m_flDelay, FIELD_FLOAT),
-		DEFINE_FIELD(CBaseDelay, m_iszKillTarget, FIELD_STRING),
-};
-
-IMPLEMENT_SAVERESTORE(CBaseDelay, CBaseEntity);
+BEGIN_DATAMAP(CBaseDelay)
+DEFINE_FIELD(m_flDelay, FIELD_FLOAT),
+	DEFINE_FIELD(m_iszKillTarget, FIELD_STRING),
+	END_DATAMAP();
 
 bool CBaseDelay::KeyValue(KeyValueData* pkvd)
 {
@@ -220,30 +217,27 @@ void CBaseDelay::DelayThink()
 	REMOVE_ENTITY(ENT(pev));
 }
 
-TYPEDESCRIPTION CBaseToggle::m_SaveData[] =
-	{
-		DEFINE_FIELD(CBaseToggle, m_toggle_state, FIELD_INTEGER),
-		DEFINE_FIELD(CBaseToggle, m_flActivateFinished, FIELD_TIME),
-		DEFINE_FIELD(CBaseToggle, m_flMoveDistance, FIELD_FLOAT),
-		DEFINE_FIELD(CBaseToggle, m_flWait, FIELD_FLOAT),
-		DEFINE_FIELD(CBaseToggle, m_flLip, FIELD_FLOAT),
-		DEFINE_FIELD(CBaseToggle, m_flTWidth, FIELD_FLOAT),
-		DEFINE_FIELD(CBaseToggle, m_flTLength, FIELD_FLOAT),
-		DEFINE_FIELD(CBaseToggle, m_vecPosition1, FIELD_POSITION_VECTOR),
-		DEFINE_FIELD(CBaseToggle, m_vecPosition2, FIELD_POSITION_VECTOR),
-		DEFINE_FIELD(CBaseToggle, m_vecAngle1, FIELD_VECTOR), // UNDONE: Position could go through transition, but also angle?
-		DEFINE_FIELD(CBaseToggle, m_vecAngle2, FIELD_VECTOR), // UNDONE: Position could go through transition, but also angle?
-		DEFINE_FIELD(CBaseToggle, m_cTriggersLeft, FIELD_INTEGER),
-		DEFINE_FIELD(CBaseToggle, m_flHeight, FIELD_FLOAT),
-		DEFINE_FIELD(CBaseToggle, m_hActivator, FIELD_EHANDLE),
-		DEFINE_FIELD(CBaseToggle, m_pfnCallWhenMoveDone, FIELD_FUNCTION),
-		DEFINE_FIELD(CBaseToggle, m_vecFinalDest, FIELD_POSITION_VECTOR),
-		DEFINE_FIELD(CBaseToggle, m_vecFinalAngle, FIELD_VECTOR),
-		DEFINE_FIELD(CBaseToggle, m_sMaster, FIELD_STRING),
-		DEFINE_FIELD(CBaseToggle, m_bitsDamageInflict, FIELD_INTEGER), // damage type inflicted
-};
-
-IMPLEMENT_SAVERESTORE(CBaseToggle, CBaseAnimating);
+BEGIN_DATAMAP(CBaseToggle)
+DEFINE_FIELD(m_toggle_state, FIELD_INTEGER),
+	DEFINE_FIELD(m_flActivateFinished, FIELD_TIME),
+	DEFINE_FIELD(m_flMoveDistance, FIELD_FLOAT),
+	DEFINE_FIELD(m_flWait, FIELD_FLOAT),
+	DEFINE_FIELD(m_flLip, FIELD_FLOAT),
+	DEFINE_FIELD(m_flTWidth, FIELD_FLOAT),
+	DEFINE_FIELD(m_flTLength, FIELD_FLOAT),
+	DEFINE_FIELD(m_vecPosition1, FIELD_POSITION_VECTOR),
+	DEFINE_FIELD(m_vecPosition2, FIELD_POSITION_VECTOR),
+	DEFINE_FIELD(m_vecAngle1, FIELD_VECTOR), // UNDONE: Position could go through transition, but also angle?
+	DEFINE_FIELD(m_vecAngle2, FIELD_VECTOR), // UNDONE: Position could go through transition, but also angle?
+	DEFINE_FIELD(m_cTriggersLeft, FIELD_INTEGER),
+	DEFINE_FIELD(m_flHeight, FIELD_FLOAT),
+	DEFINE_FIELD(m_hActivator, FIELD_EHANDLE),
+	DEFINE_FIELD(m_pfnCallWhenMoveDone, FIELD_FUNCTION),
+	DEFINE_FIELD(m_vecFinalDest, FIELD_POSITION_VECTOR),
+	DEFINE_FIELD(m_vecFinalAngle, FIELD_VECTOR),
+	DEFINE_FIELD(m_sMaster, FIELD_STRING),
+	DEFINE_FIELD(m_bitsDamageInflict, FIELD_INTEGER), // damage type inflicted
+	END_DATAMAP();
 
 bool CBaseToggle::KeyValue(KeyValueData* pkvd)
 {
@@ -390,8 +384,8 @@ float CBaseToggle::AxisDelta(int flags, const Vector& angle1, const Vector& angl
 }
 
 /**
-*	@brief returns true if the passed entity is visible to caller, even if not infront ()
-*/
+ *	@brief returns true if the passed entity is visible to caller, even if not infront ()
+ */
 bool FEntIsVisible(CBaseEntity* entity, CBaseEntity* target)
 {
 	Vector vecSpot1 = entity->pev->origin + entity->pev->view_ofs;

@@ -56,11 +56,10 @@ const char* const PITWORM_UP_LEVEL_NAMES[PITWORM_UP_NUM_LEVELS] =
 
 class COFPitWormUp : public CBaseMonster
 {
-public:
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
+	DECLARE_CLASS(COFPitWormUp, CBaseMonster);
+	DECLARE_DATAMAP();
 
+public:
 	void OnCreate() override;
 
 	void Precache() override;
@@ -191,62 +190,59 @@ public:
 
 LINK_ENTITY_TO_CLASS(monster_pitworm_up, COFPitWormUp);
 
-TYPEDESCRIPTION COFPitWormUp::m_SaveData[] =
-	{
-		DEFINE_FIELD(COFPitWormUp, m_flNextPainSound, FIELD_TIME),
-		DEFINE_FIELD(COFPitWormUp, m_vecTarget, FIELD_VECTOR),
-		DEFINE_FIELD(COFPitWormUp, m_posTarget, FIELD_POSITION_VECTOR),
-		DEFINE_FIELD(COFPitWormUp, m_vecDesired, FIELD_VECTOR),
-		DEFINE_FIELD(COFPitWormUp, m_posDesired, FIELD_POSITION_VECTOR),
+BEGIN_DATAMAP(COFPitWormUp)
+DEFINE_FIELD(m_flNextPainSound, FIELD_TIME),
+	DEFINE_FIELD(m_vecTarget, FIELD_VECTOR),
+	DEFINE_FIELD(m_posTarget, FIELD_POSITION_VECTOR),
+	DEFINE_FIELD(m_vecDesired, FIELD_VECTOR),
+	DEFINE_FIELD(m_posDesired, FIELD_POSITION_VECTOR),
 
-		DEFINE_FIELD(COFPitWormUp, m_offsetBeam, FIELD_FLOAT),
-		DEFINE_FIELD(COFPitWormUp, m_posBeam, FIELD_POSITION_VECTOR),
-		DEFINE_FIELD(COFPitWormUp, m_vecBeam, FIELD_VECTOR),
-		DEFINE_FIELD(COFPitWormUp, m_angleBeam, FIELD_VECTOR),
-		DEFINE_FIELD(COFPitWormUp, m_flBeamExpireTime, FIELD_FLOAT),
-		DEFINE_FIELD(COFPitWormUp, m_flBeamDir, FIELD_FLOAT),
+	DEFINE_FIELD(m_offsetBeam, FIELD_FLOAT),
+	DEFINE_FIELD(m_posBeam, FIELD_POSITION_VECTOR),
+	DEFINE_FIELD(m_vecBeam, FIELD_VECTOR),
+	DEFINE_FIELD(m_angleBeam, FIELD_VECTOR),
+	DEFINE_FIELD(m_flBeamExpireTime, FIELD_FLOAT),
+	DEFINE_FIELD(m_flBeamDir, FIELD_FLOAT),
 
-		DEFINE_FIELD(COFPitWormUp, m_flTorsoYaw, FIELD_FLOAT),
-		DEFINE_FIELD(COFPitWormUp, m_flHeadYaw, FIELD_FLOAT),
-		DEFINE_FIELD(COFPitWormUp, m_flHeadPitch, FIELD_FLOAT),
-		DEFINE_FIELD(COFPitWormUp, m_flIdealTorsoYaw, FIELD_FLOAT),
-		DEFINE_FIELD(COFPitWormUp, m_flIdealHeadYaw, FIELD_FLOAT),
-		DEFINE_FIELD(COFPitWormUp, m_flIdealHeadPitch, FIELD_FLOAT),
+	DEFINE_FIELD(m_flTorsoYaw, FIELD_FLOAT),
+	DEFINE_FIELD(m_flHeadYaw, FIELD_FLOAT),
+	DEFINE_FIELD(m_flHeadPitch, FIELD_FLOAT),
+	DEFINE_FIELD(m_flIdealTorsoYaw, FIELD_FLOAT),
+	DEFINE_FIELD(m_flIdealHeadYaw, FIELD_FLOAT),
+	DEFINE_FIELD(m_flIdealHeadPitch, FIELD_FLOAT),
 
-		DEFINE_ARRAY(COFPitWormUp, m_flLevels, FIELD_FLOAT, PITWORM_UP_NUM_LEVELS),
-		DEFINE_ARRAY(COFPitWormUp, m_flTargetLevels, FIELD_FLOAT, PITWORM_UP_NUM_LEVELS),
+	DEFINE_ARRAY(m_flLevels, FIELD_FLOAT, PITWORM_UP_NUM_LEVELS),
+	DEFINE_ARRAY(m_flTargetLevels, FIELD_FLOAT, PITWORM_UP_NUM_LEVELS),
 
-		DEFINE_FIELD(COFPitWormUp, m_flLastSeen, FIELD_TIME),
-		DEFINE_FIELD(COFPitWormUp, m_flPrevSeen, FIELD_TIME),
+	DEFINE_FIELD(m_flLastSeen, FIELD_TIME),
+	DEFINE_FIELD(m_flPrevSeen, FIELD_TIME),
 
-		DEFINE_FIELD(COFPitWormUp, m_iLevel, FIELD_INTEGER),
-		DEFINE_FIELD(COFPitWormUp, m_flLevelSpeed, FIELD_FLOAT),
+	DEFINE_FIELD(m_iLevel, FIELD_INTEGER),
+	DEFINE_FIELD(m_flLevelSpeed, FIELD_FLOAT),
 
-		DEFINE_FIELD(COFPitWormUp, m_pBeam, FIELD_CLASSPTR),
-		DEFINE_FIELD(COFPitWormUp, m_pSprite, FIELD_CLASSPTR),
+	DEFINE_FIELD(m_pBeam, FIELD_CLASSPTR),
+	DEFINE_FIELD(m_pSprite, FIELD_CLASSPTR),
 
-		DEFINE_FIELD(COFPitWormUp, m_fAttacking, FIELD_BOOLEAN),
-		DEFINE_FIELD(COFPitWormUp, m_fLockHeight, FIELD_BOOLEAN),
-		DEFINE_FIELD(COFPitWormUp, m_fLockYaw, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_fAttacking, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_fLockHeight, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_fLockYaw, FIELD_BOOLEAN),
 
-		DEFINE_FIELD(COFPitWormUp, m_iWasHit, FIELD_INTEGER),
+	DEFINE_FIELD(m_iWasHit, FIELD_INTEGER),
 
-		DEFINE_FIELD(COFPitWormUp, m_flTakeHitTime, FIELD_TIME),
-		DEFINE_FIELD(COFPitWormUp, m_flHitTime, FIELD_TIME),
-		DEFINE_FIELD(COFPitWormUp, m_flNextMeleeTime, FIELD_TIME),
-		DEFINE_FIELD(COFPitWormUp, m_flNextRangeTime, FIELD_TIME),
-		DEFINE_FIELD(COFPitWormUp, m_flDeathStartTime, FIELD_TIME),
+	DEFINE_FIELD(m_flTakeHitTime, FIELD_TIME),
+	DEFINE_FIELD(m_flHitTime, FIELD_TIME),
+	DEFINE_FIELD(m_flNextMeleeTime, FIELD_TIME),
+	DEFINE_FIELD(m_flNextRangeTime, FIELD_TIME),
+	DEFINE_FIELD(m_flDeathStartTime, FIELD_TIME),
 
-		DEFINE_FIELD(COFPitWormUp, m_fFirstSighting, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_fFirstSighting, FIELD_BOOLEAN),
 
-		DEFINE_FIELD(COFPitWormUp, m_fTopLevelLocked, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_fTopLevelLocked, FIELD_BOOLEAN),
 
-		DEFINE_FIELD(COFPitWormUp, m_flLastBlinkTime, FIELD_FLOAT),
-		DEFINE_FIELD(COFPitWormUp, m_flLastBlinkInterval, FIELD_FLOAT),
-		DEFINE_FIELD(COFPitWormUp, m_flLastEventTime, FIELD_FLOAT),
-};
-
-IMPLEMENT_SAVERESTORE(COFPitWormUp, CBaseMonster);
+	DEFINE_FIELD(m_flLastBlinkTime, FIELD_FLOAT),
+	DEFINE_FIELD(m_flLastBlinkInterval, FIELD_FLOAT),
+	DEFINE_FIELD(m_flLastEventTime, FIELD_FLOAT),
+	END_DATAMAP();
 
 const char* COFPitWormUp::pAttackSounds[] =
 	{
@@ -1409,11 +1405,10 @@ void COFPitWormSteamTrigger::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, 
  */
 class COFInfoPW : public CPointEntity
 {
-public:
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
+	DECLARE_CLASS(COFInfoPW, CPointEntity);
+	DECLARE_DATAMAP();
 
+public:
 	bool KeyValue(KeyValueData* pkvd) override;
 
 	void Spawn() override;
@@ -1423,12 +1418,9 @@ public:
 	string_t m_preSequence;
 };
 
-TYPEDESCRIPTION COFInfoPW::m_SaveData[] =
-	{
-		DEFINE_FIELD(COFInfoPW, m_preSequence, FIELD_STRING),
-};
-
-IMPLEMENT_SAVERESTORE(COFInfoPW, CPointEntity);
+BEGIN_DATAMAP(COFInfoPW)
+DEFINE_FIELD(m_preSequence, FIELD_STRING),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(info_pitworm, COFInfoPW);
 
@@ -1537,6 +1529,9 @@ void COFPitWormGib::GibFloat()
 
 class COFPitWormGibShooter : public CBaseEntity
 {
+	DECLARE_CLASS(COFPitWormGibShooter, CBaseEntity);
+	DECLARE_DATAMAP();
+
 public:
 	void Spawn() override;
 	void Precache() override;
@@ -1545,10 +1540,6 @@ public:
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
 	virtual COFPitWormGib* CreateGib();
-
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
 
 	float m_flDelay;
 	int m_iGibs;
@@ -1559,16 +1550,14 @@ public:
 	float m_flVariance;
 };
 
-TYPEDESCRIPTION COFPitWormGibShooter::m_SaveData[] =
-	{
-		DEFINE_FIELD(COFPitWormGibShooter, m_iGibs, FIELD_INTEGER),
-		DEFINE_FIELD(COFPitWormGibShooter, m_iGibCapacity, FIELD_INTEGER),
-		DEFINE_FIELD(COFPitWormGibShooter, m_iGibMaterial, FIELD_INTEGER),
-		DEFINE_FIELD(COFPitWormGibShooter, m_flGibVelocity, FIELD_FLOAT),
-		DEFINE_FIELD(COFPitWormGibShooter, m_flVariance, FIELD_FLOAT),
-};
+BEGIN_DATAMAP(COFPitWormGibShooter)
+DEFINE_FIELD(m_iGibs, FIELD_INTEGER),
+	DEFINE_FIELD(m_iGibCapacity, FIELD_INTEGER),
+	DEFINE_FIELD(m_iGibMaterial, FIELD_INTEGER),
+	DEFINE_FIELD(m_flGibVelocity, FIELD_FLOAT),
+	DEFINE_FIELD(m_flVariance, FIELD_FLOAT),
+	END_DATAMAP();
 
-IMPLEMENT_SAVERESTORE(COFPitWormGibShooter, CBaseEntity);
 LINK_ENTITY_TO_CLASS(pitworm_gibshooter, COFPitWormGibShooter);
 
 void COFPitWormGibShooter::Precache()
@@ -1683,11 +1672,10 @@ int gSpikeSprite, gSpikeDebrisSprite;
  */
 class COFPitWorm : public CBaseMonster
 {
-public:
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
+	DECLARE_CLASS(COFPitWorm, CBaseMonster);
+	DECLARE_DATAMAP();
 
+public:
 	void OnCreate() override;
 
 	int Classify() override
@@ -1812,29 +1800,27 @@ public:
 	Activity m_NextActivity;
 };
 
-TYPEDESCRIPTION COFPitWorm::m_SaveData[] =
-	{
-		DEFINE_FIELD(COFPitWorm, m_nodeTime, FIELD_TIME),
-		DEFINE_FIELD(COFPitWorm, m_spikeTime, FIELD_TIME),
-		DEFINE_FIELD(COFPitWorm, m_painSoundTime, FIELD_TIME),
-		DEFINE_FIELD(COFPitWorm, m_slowMode, FIELD_INTEGER),
-		DEFINE_FIELD(COFPitWorm, m_slowTime, FIELD_TIME),
-		DEFINE_FIELD(COFPitWorm, m_flHeadYaw, FIELD_FLOAT),
-		DEFINE_FIELD(COFPitWorm, m_flHeadPitch, FIELD_FLOAT),
-		DEFINE_FIELD(COFPitWorm, m_flIdealHeadYaw, FIELD_FLOAT),
-		DEFINE_FIELD(COFPitWorm, m_flIdealHeadPitch, FIELD_FLOAT),
-		DEFINE_FIELD(COFPitWorm, m_posTarget, FIELD_VECTOR),
-		DEFINE_FIELD(COFPitWorm, m_vecTarget, FIELD_VECTOR),
-		DEFINE_FIELD(COFPitWorm, m_pBeam, FIELD_CLASSPTR),
-		DEFINE_FIELD(COFPitWorm, m_posBeam, FIELD_VECTOR),
-		DEFINE_FIELD(COFPitWorm, m_vecBeam, FIELD_VECTOR),
-		DEFINE_FIELD(COFPitWorm, m_angleBeam, FIELD_VECTOR),
-		DEFINE_FIELD(COFPitWorm, m_offsetBeam, FIELD_FLOAT),
-		DEFINE_FIELD(COFPitWorm, m_flBeamExpireTime, FIELD_FLOAT),
-		DEFINE_FIELD(COFPitWorm, m_flBeamDir, FIELD_FLOAT),
-		DEFINE_FIELD(COFPitWorm, m_NextActivity, FIELD_INTEGER)};
-
-IMPLEMENT_SAVERESTORE(COFPitWorm, CBaseMonster);
+BEGIN_DATAMAP(COFPitWorm)
+DEFINE_FIELD(m_nodeTime, FIELD_TIME),
+	DEFINE_FIELD(m_spikeTime, FIELD_TIME),
+	DEFINE_FIELD(m_painSoundTime, FIELD_TIME),
+	DEFINE_FIELD(m_slowMode, FIELD_INTEGER),
+	DEFINE_FIELD(m_slowTime, FIELD_TIME),
+	DEFINE_FIELD(m_flHeadYaw, FIELD_FLOAT),
+	DEFINE_FIELD(m_flHeadPitch, FIELD_FLOAT),
+	DEFINE_FIELD(m_flIdealHeadYaw, FIELD_FLOAT),
+	DEFINE_FIELD(m_flIdealHeadPitch, FIELD_FLOAT),
+	DEFINE_FIELD(m_posTarget, FIELD_VECTOR),
+	DEFINE_FIELD(m_vecTarget, FIELD_VECTOR),
+	DEFINE_FIELD(m_pBeam, FIELD_CLASSPTR),
+	DEFINE_FIELD(m_posBeam, FIELD_VECTOR),
+	DEFINE_FIELD(m_vecBeam, FIELD_VECTOR),
+	DEFINE_FIELD(m_angleBeam, FIELD_VECTOR),
+	DEFINE_FIELD(m_offsetBeam, FIELD_FLOAT),
+	DEFINE_FIELD(m_flBeamExpireTime, FIELD_FLOAT),
+	DEFINE_FIELD(m_flBeamDir, FIELD_FLOAT),
+	DEFINE_FIELD(m_NextActivity, FIELD_INTEGER),
+	END_DATAMAP();
 
 const char* COFPitWorm::pChildDieSounds[] =
 	{

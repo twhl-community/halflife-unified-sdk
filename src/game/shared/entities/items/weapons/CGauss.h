@@ -35,12 +35,10 @@ enum gauss_e
 
 class CGauss : public CBasePlayerWeapon
 {
+	DECLARE_CLASS(CGauss, CBasePlayerWeapon);
+	DECLARE_DATAMAP();
+
 public:
-#ifndef CLIENT_DLL
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
-#endif
 
 	void OnCreate() override;
 	void Precache() override;

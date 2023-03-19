@@ -51,6 +51,9 @@ void PlayLockSounds(CBaseEntity* entity, locksound_t* pls, bool flocked, bool fb
 */
 class CBaseButton : public CBaseToggle
 {
+	DECLARE_CLASS(CBaseButton, CBaseToggle);
+	DECLARE_DATAMAP();
+
 public:
 	void Spawn() override;
 	void Precache() override;
@@ -88,8 +91,6 @@ public:
 
 	void EXPORT ButtonUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
 
 	enum BUTTON_CODE
 	{
@@ -99,7 +100,6 @@ public:
 	};
 	BUTTON_CODE ButtonResponseToTouch();
 
-	static TYPEDESCRIPTION m_SaveData[];
 	// Buttons that don't take damage can be IMPULSE used
 	int ObjectCaps() override { return (CBaseToggle::ObjectCaps() & ~FCAP_ACROSS_TRANSITION) | (pev->takedamage ? 0 : FCAP_IMPULSE_USE); }
 

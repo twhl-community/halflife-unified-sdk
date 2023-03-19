@@ -23,24 +23,21 @@ float CTalkMonster::g_talkWaitTime = 0; // time delay until it's ok to speak: us
 
 // NOTE: m_szGrp should be fixed up by precache each save/restore
 
-TYPEDESCRIPTION CTalkMonster::m_SaveData[] =
-	{
-		DEFINE_FIELD(CTalkMonster, m_bitsSaid, FIELD_INTEGER),
-		DEFINE_FIELD(CTalkMonster, m_nSpeak, FIELD_INTEGER),
+BEGIN_DATAMAP(CTalkMonster)
+DEFINE_FIELD(m_bitsSaid, FIELD_INTEGER),
+	DEFINE_FIELD(m_nSpeak, FIELD_INTEGER),
 
-		DEFINE_FIELD(CTalkMonster, m_voicePitch, FIELD_INTEGER),
-		// Recalc'ed in Precache()
-		//	DEFINE_FIELD( CTalkMonster, m_szGrp, FIELD_??? ),
-		DEFINE_FIELD(CTalkMonster, m_useTime, FIELD_TIME),
-		DEFINE_FIELD(CTalkMonster, m_iszUse, FIELD_STRING),
-		DEFINE_FIELD(CTalkMonster, m_iszUnUse, FIELD_STRING),
-		DEFINE_FIELD(CTalkMonster, m_flLastSaidSmelled, FIELD_TIME),
-		DEFINE_FIELD(CTalkMonster, m_flStopTalkTime, FIELD_TIME),
-		DEFINE_FIELD(CTalkMonster, m_hTalkTarget, FIELD_EHANDLE),
-		DEFINE_FIELD(CTalkMonster, m_fStartSuspicious, FIELD_BOOLEAN),
-};
-
-IMPLEMENT_SAVERESTORE(CTalkMonster, CBaseMonster);
+	DEFINE_FIELD(m_voicePitch, FIELD_INTEGER),
+	// Recalc'ed in Precache()
+	//	DEFINE_FIELD( CTalkMonster, m_szGrp, FIELD_??? ),
+	DEFINE_FIELD(m_useTime, FIELD_TIME),
+	DEFINE_FIELD(m_iszUse, FIELD_STRING),
+	DEFINE_FIELD(m_iszUnUse, FIELD_STRING),
+	DEFINE_FIELD(m_flLastSaidSmelled, FIELD_TIME),
+	DEFINE_FIELD(m_flStopTalkTime, FIELD_TIME),
+	DEFINE_FIELD(m_hTalkTarget, FIELD_EHANDLE),
+	DEFINE_FIELD(m_fStartSuspicious, FIELD_BOOLEAN),
+	END_DATAMAP();
 
 //=========================================================
 // AI Schedules Specific to talking monsters

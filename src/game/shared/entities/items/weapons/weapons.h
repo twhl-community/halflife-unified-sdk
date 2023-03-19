@@ -230,15 +230,15 @@ constexpr int RefillAllAmmoAmount = -1;
 */
 class CBasePlayerWeapon : public CBaseItem
 {
+	DECLARE_CLASS(CBasePlayerWeapon, CBaseItem);
+	DECLARE_DATAMAP();
+
 public:
 	static inline std::shared_ptr<spdlog::logger> WeaponsLogger;
 
 	void SetObjectCollisionBox() override;
 
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
-	static TYPEDESCRIPTION m_SaveData[];
+	void PostRestore() override;
 
 	ItemType GetType() const { return ItemType::InventoryItem; }
 
@@ -486,14 +486,10 @@ constexpr char DefaultItemPickupSound[] = "items/9mmclip1.wav";
 */
 class CBasePlayerAmmo : public CBaseItem
 {
+	DECLARE_CLASS(CBasePlayerAmmo, CBaseItem);
+	DECLARE_DATAMAP();
+
 public:
-#ifndef CLIENT_DLL
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
-	static TYPEDESCRIPTION m_SaveData[];
-#endif
-
 	bool KeyValue(KeyValueData* pkvd) override;
 
 	void Precache() override

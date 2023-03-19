@@ -24,6 +24,9 @@
 */
 class CChangeLevel : public CBaseTrigger
 {
+	DECLARE_CLASS(CChangeLevel, CBaseTrigger);
+	DECLARE_DATAMAP();
+
 public:
 	void Spawn() override;
 	bool KeyValue(KeyValueData* pkvd) override;
@@ -51,11 +54,6 @@ public:
 	static bool AddTransitionToList(LEVELLIST* pLevelList, int listCount, const char* pMapName, const char* pLandmarkName, CBaseEntity* pentLandmark);
 
 	static bool InTransitionVolume(CBaseEntity* pEntity, char* pVolumeName);
-
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
-	static TYPEDESCRIPTION m_SaveData[];
 
 	char m_szMapName[cchMapNameMost];	   // trigger_changelevel only:  next map
 	char m_szLandmarkName[cchMapNameMost]; // trigger_changelevel only:  landmark on next map

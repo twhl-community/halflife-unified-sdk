@@ -23,12 +23,12 @@
 
 class CRuleEntity : public CBaseEntity
 {
+	DECLARE_CLASS(CRuleEntity, CBaseEntity);
+	DECLARE_DATAMAP();
+
 public:
 	void Spawn() override;
 	bool KeyValue(KeyValueData* pkvd) override;
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
 
 	void SetMaster(string_t iszMaster) { m_iszMaster = iszMaster; }
 
@@ -39,12 +39,9 @@ private:
 	string_t m_iszMaster;
 };
 
-TYPEDESCRIPTION CRuleEntity::m_SaveData[] =
-	{
-		DEFINE_FIELD(CRuleEntity, m_iszMaster, FIELD_STRING),
-};
-
-IMPLEMENT_SAVERESTORE(CRuleEntity, CBaseEntity);
+BEGIN_DATAMAP(CRuleEntity)
+DEFINE_FIELD(m_iszMaster, FIELD_STRING),
+	END_DATAMAP();
 
 void CRuleEntity::Spawn()
 {
@@ -201,16 +198,15 @@ void CGameEnd::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useTy
  */
 class CGameText : public CRulePointEntity
 {
+	DECLARE_CLASS(CGameText, CRulePointEntity);
+	DECLARE_DATAMAP();
+
 public:
 	void Precache() override;
 	void Spawn() override;
 
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 	bool KeyValue(KeyValueData* pkvd) override;
-
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
 
 	inline bool MessageToAll() { return (pev->spawnflags & SF_ENVTEXT_ALLPLAYERS) != 0; }
 	inline void MessageSet(const char* pMessage) { pev->message = ALLOC_STRING(pMessage); }
@@ -225,12 +221,9 @@ LINK_ENTITY_TO_CLASS(game_text, CGameText);
 // Save parms as a block.
 // Will break save/restore if the structure changes, but this entity didn't ship with Half-Life,
 // so it can't impact saved Half-Life games.
-TYPEDESCRIPTION CGameText::m_SaveData[] =
-	{
-		DEFINE_ARRAY(CGameText, m_textParms, FIELD_CHARACTER, sizeof(hudtextparms_t)),
-};
-
-IMPLEMENT_SAVERESTORE(CGameText, CRulePointEntity);
+BEGIN_DATAMAP(CGameText)
+DEFINE_ARRAY(m_textParms, FIELD_CHARACTER, sizeof(hudtextparms_t)),
+	END_DATAMAP();
 
 void CGameText::Precache()
 {
@@ -489,13 +482,12 @@ void CGameTeamSet::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE u
 */
 class CGamePlayerZone : public CRuleBrushEntity
 {
+	DECLARE_CLASS(CGamePlayerZone, CRuleBrushEntity);
+	DECLARE_DATAMAP();
+
 public:
 	bool KeyValue(KeyValueData* pkvd) override;
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
-
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
 
 private:
 	string_t m_iszInTarget;
@@ -506,15 +498,12 @@ private:
 
 LINK_ENTITY_TO_CLASS(game_zone_player, CGamePlayerZone);
 
-TYPEDESCRIPTION CGamePlayerZone::m_SaveData[] =
-	{
-		DEFINE_FIELD(CGamePlayerZone, m_iszInTarget, FIELD_STRING),
-		DEFINE_FIELD(CGamePlayerZone, m_iszOutTarget, FIELD_STRING),
-		DEFINE_FIELD(CGamePlayerZone, m_iszInCount, FIELD_STRING),
-		DEFINE_FIELD(CGamePlayerZone, m_iszOutCount, FIELD_STRING),
-};
-
-IMPLEMENT_SAVERESTORE(CGamePlayerZone, CRuleBrushEntity);
+BEGIN_DATAMAP(CGamePlayerZone)
+DEFINE_FIELD(m_iszInTarget, FIELD_STRING),
+	DEFINE_FIELD(m_iszOutTarget, FIELD_STRING),
+	DEFINE_FIELD(m_iszInCount, FIELD_STRING),
+	DEFINE_FIELD(m_iszOutCount, FIELD_STRING),
+	END_DATAMAP();
 
 bool CGamePlayerZone::KeyValue(KeyValueData* pkvd)
 {
@@ -749,17 +738,15 @@ void CGameCounterSet::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYP
 */
 class CGamePlayerEquip : public CRulePointEntity
 {
+	DECLARE_CLASS(CGamePlayerEquip, CRulePointEntity);
+	DECLARE_DATAMAP();
+
 public:
 	bool KeyValue(KeyValueData* pkvd) override;
 	void Touch(CBaseEntity* pOther) override;
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
 	inline bool UseOnly() { return (pev->spawnflags & SF_PLAYEREQUIP_USEONLY) != 0; }
-
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
-	static TYPEDESCRIPTION m_SaveData[];
 
 private:
 	void EquipPlayer(CBaseEntity* pPlayer);
@@ -768,13 +755,10 @@ private:
 	int m_weaponCount[MAX_EQUIP];
 };
 
-TYPEDESCRIPTION CGamePlayerEquip::m_SaveData[] =
-	{
-		DEFINE_ARRAY(CGamePlayerEquip, m_weaponNames, FIELD_STRING, MAX_EQUIP),
-		DEFINE_ARRAY(CGamePlayerEquip, m_weaponCount, FIELD_INTEGER, MAX_EQUIP),
-};
-
-IMPLEMENT_SAVERESTORE(CGamePlayerEquip, CRulePointEntity);
+BEGIN_DATAMAP(CGamePlayerEquip)
+DEFINE_ARRAY(m_weaponNames, FIELD_STRING, MAX_EQUIP),
+	DEFINE_ARRAY(m_weaponCount, FIELD_INTEGER, MAX_EQUIP),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(game_player_equip, CGamePlayerEquip);
 

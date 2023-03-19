@@ -17,20 +17,15 @@
 
 #include "CM249.h"
 
-#ifndef CLIENT_DLL
-TYPEDESCRIPTION CM249::m_SaveData[] =
-	{
-		DEFINE_FIELD(CM249, m_flReloadStartTime, FIELD_FLOAT),
-		DEFINE_FIELD(CM249, m_flReloadStart, FIELD_FLOAT),
-		DEFINE_FIELD(CM249, m_bReloading, FIELD_BOOLEAN),
-		DEFINE_FIELD(CM249, m_iFire, FIELD_INTEGER),
-		DEFINE_FIELD(CM249, m_iSmoke, FIELD_INTEGER),
-		DEFINE_FIELD(CM249, m_iLink, FIELD_INTEGER),
-		DEFINE_FIELD(CM249, m_iShell, FIELD_INTEGER),
-};
-
-IMPLEMENT_SAVERESTORE(CM249, CM249::BaseClass);
-#endif
+BEGIN_DATAMAP(CM249)
+DEFINE_FIELD(m_flReloadStartTime, FIELD_FLOAT),
+	DEFINE_FIELD(m_flReloadStart, FIELD_FLOAT),
+	DEFINE_FIELD(m_bReloading, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_iFire, FIELD_INTEGER),
+	DEFINE_FIELD(m_iSmoke, FIELD_INTEGER),
+	DEFINE_FIELD(m_iLink, FIELD_INTEGER),
+	DEFINE_FIELD(m_iShell, FIELD_INTEGER),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(weapon_m249, CM249);
 
@@ -339,9 +334,9 @@ void CM249::SetWeaponData(const weapon_data_t& data)
 
 class CAmmo556 : public CBasePlayerAmmo
 {
-public:
-	using BaseClass = CBasePlayerAmmo;
+	DECLARE_CLASS(CAmmo556, CBasePlayerAmmo);
 
+public:
 	void OnCreate() override
 	{
 		BaseClass::OnCreate();

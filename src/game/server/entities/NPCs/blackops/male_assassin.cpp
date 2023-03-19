@@ -60,6 +60,9 @@ enum MAssassinWeaponFlag
 
 class CMOFAssassin : public CHGrunt
 {
+	DECLARE_CLASS(CMOFAssassin, CHGrunt);
+	DECLARE_DATAMAP();
+
 public:
 	void OnCreate() override;
 	void Spawn() override;
@@ -72,17 +75,12 @@ public:
 	void Shoot(bool firstShotInBurst) override;
 	void GibMonster() override;
 
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
 	void TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
 
 	// Male Assassin never speaks
 	bool FOkToSpeak() override { return false; }
 
 	bool KeyValue(KeyValueData* pkvd) override;
-
-	static TYPEDESCRIPTION m_SaveData[];
 
 	float m_flLastShot;
 	bool m_fStandingGround;
@@ -96,15 +94,12 @@ protected:
 
 LINK_ENTITY_TO_CLASS(monster_male_assassin, CMOFAssassin);
 
-TYPEDESCRIPTION CMOFAssassin::m_SaveData[] =
-	{
-		DEFINE_FIELD(CMOFAssassin, m_iAssassinHead, FIELD_INTEGER),
-		DEFINE_FIELD(CMOFAssassin, m_flLastShot, FIELD_TIME),
-		DEFINE_FIELD(CMOFAssassin, m_fStandingGround, FIELD_BOOLEAN),
-		DEFINE_FIELD(CMOFAssassin, m_flStandGroundRange, FIELD_FLOAT),
-};
-
-IMPLEMENT_SAVERESTORE(CMOFAssassin, CHGrunt);
+BEGIN_DATAMAP(CMOFAssassin)
+DEFINE_FIELD(m_iAssassinHead, FIELD_INTEGER),
+	DEFINE_FIELD(m_flLastShot, FIELD_TIME),
+	DEFINE_FIELD(m_fStandingGround, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_flStandGroundRange, FIELD_FLOAT),
+	END_DATAMAP();
 
 void CMOFAssassin::OnCreate()
 {

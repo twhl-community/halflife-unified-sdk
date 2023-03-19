@@ -29,6 +29,9 @@
 */
 class CISlave : public CSquadMonster
 {
+	DECLARE_CLASS(CISlave, CSquadMonster);
+	DECLARE_DATAMAP();
+
 public:
 	void OnCreate() override;
 	void Spawn() override;
@@ -55,10 +58,6 @@ public:
 	Schedule_t* GetSchedule() override;
 	Schedule_t* GetScheduleOfType(int Type) override;
 	CUSTOM_SCHEDULES;
-
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
 
 	void UpdateOnRemove() override;
 
@@ -106,20 +105,17 @@ public:
 
 LINK_ENTITY_TO_CLASS(monster_alien_slave, CISlave);
 
-TYPEDESCRIPTION CISlave::m_SaveData[] =
-	{
-		DEFINE_FIELD(CISlave, m_iBravery, FIELD_INTEGER),
+BEGIN_DATAMAP(CISlave)
+DEFINE_FIELD(m_iBravery, FIELD_INTEGER),
 
-		DEFINE_ARRAY(CISlave, m_pBeam, FIELD_CLASSPTR, ISLAVE_MAX_BEAMS),
-		DEFINE_FIELD(CISlave, m_iBeams, FIELD_INTEGER),
-		DEFINE_FIELD(CISlave, m_flNextAttack, FIELD_TIME),
+	DEFINE_ARRAY(m_pBeam, FIELD_CLASSPTR, ISLAVE_MAX_BEAMS),
+	DEFINE_FIELD(m_iBeams, FIELD_INTEGER),
+	DEFINE_FIELD(m_flNextAttack, FIELD_TIME),
 
-		DEFINE_FIELD(CISlave, m_voicePitch, FIELD_INTEGER),
+	DEFINE_FIELD(m_voicePitch, FIELD_INTEGER),
 
-		DEFINE_FIELD(CISlave, m_hDead, FIELD_EHANDLE),
-};
-
-IMPLEMENT_SAVERESTORE(CISlave, CSquadMonster);
+	DEFINE_FIELD(m_hDead, FIELD_EHANDLE),
+	END_DATAMAP();
 
 const char* CISlave::pAttackHitSounds[] =
 	{

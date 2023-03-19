@@ -30,16 +30,10 @@ enum M249Anim
 
 class CM249 : public CBasePlayerWeapon
 {
+	DECLARE_CLASS(CM249, CBasePlayerWeapon);
+	DECLARE_DATAMAP();
+
 public:
-	using BaseClass = CBasePlayerWeapon;
-
-#ifndef CLIENT_DLL
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
-	static TYPEDESCRIPTION m_SaveData[];
-#endif
-
 	void OnCreate() override;
 
 	void Precache() override;

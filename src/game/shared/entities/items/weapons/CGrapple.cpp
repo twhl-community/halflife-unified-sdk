@@ -24,16 +24,11 @@
 
 #include "CGrapple.h"
 
-#ifndef CLIENT_DLL
-TYPEDESCRIPTION CGrapple::m_SaveData[] =
-	{
-		DEFINE_FIELD(CGrapple, m_pBeam, FIELD_CLASSPTR),
-		DEFINE_FIELD(CGrapple, m_flShootTime, FIELD_TIME),
-		DEFINE_FIELD(CGrapple, m_FireState, FIELD_INTEGER),
-};
-
-IMPLEMENT_SAVERESTORE(CGrapple, CGrapple::BaseClass);
-#endif
+BEGIN_DATAMAP(CGrapple)
+DEFINE_FIELD(m_pBeam, FIELD_CLASSPTR),
+	DEFINE_FIELD(m_flShootTime, FIELD_TIME),
+	DEFINE_FIELD(m_FireState, FIELD_INTEGER),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(weapon_grapple, CGrapple);
 

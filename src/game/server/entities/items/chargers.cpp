@@ -20,6 +20,9 @@
  */
 class CBaseCharger : public CBaseToggle
 {
+	DECLARE_CLASS(CBaseCharger, CBaseToggle);
+	DECLARE_DATAMAP();
+
 public:
 	enum class State
 	{
@@ -29,11 +32,6 @@ public:
 	};
 
 	static constexpr int UnlimitedJuice = -1;
-
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
-	static TYPEDESCRIPTION m_SaveData[];
 
 	int ObjectCaps() override { return (CBaseToggle::ObjectCaps() | FCAP_CONTINUOUS_USE) & ~FCAP_ACROSS_TRANSITION; }
 
@@ -74,21 +72,18 @@ protected:
 	const char* m_DispensingSound = nullptr;
 };
 
-TYPEDESCRIPTION CBaseCharger::m_SaveData[] =
-	{
-		DEFINE_FIELD(CBaseCharger, m_FireOnRecharge, FIELD_STRING),
-		DEFINE_FIELD(CBaseCharger, m_FireOnEmpty, FIELD_STRING),
-		DEFINE_FIELD(CBaseCharger, m_FireOnSpawn, FIELD_BOOLEAN),
-		DEFINE_FIELD(CBaseCharger, m_State, FIELD_INTEGER),
-		DEFINE_FIELD(CBaseCharger, m_Juice, FIELD_INTEGER),
-		DEFINE_FIELD(CBaseCharger, m_NextCharge, FIELD_TIME),
-		DEFINE_FIELD(CBaseCharger, m_SoundTime, FIELD_TIME),
-		DEFINE_FIELD(CBaseCharger, m_TotalJuice, FIELD_INTEGER),
-		DEFINE_FIELD(CBaseCharger, m_RechargeDelay, FIELD_INTEGER),
-		DEFINE_FIELD(CBaseCharger, m_ChargePerUse, FIELD_INTEGER),
-};
-
-IMPLEMENT_SAVERESTORE(CBaseCharger, CBaseToggle);
+BEGIN_DATAMAP(CBaseCharger)
+DEFINE_FIELD(m_FireOnRecharge, FIELD_STRING),
+	DEFINE_FIELD(m_FireOnEmpty, FIELD_STRING),
+	DEFINE_FIELD(m_FireOnSpawn, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_State, FIELD_INTEGER),
+	DEFINE_FIELD(m_Juice, FIELD_INTEGER),
+	DEFINE_FIELD(m_NextCharge, FIELD_TIME),
+	DEFINE_FIELD(m_SoundTime, FIELD_TIME),
+	DEFINE_FIELD(m_TotalJuice, FIELD_INTEGER),
+	DEFINE_FIELD(m_RechargeDelay, FIELD_INTEGER),
+	DEFINE_FIELD(m_ChargePerUse, FIELD_INTEGER),
+	END_DATAMAP();
 
 bool CBaseCharger::KeyValue(KeyValueData* pkvd)
 {

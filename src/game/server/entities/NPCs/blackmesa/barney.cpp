@@ -23,14 +23,11 @@
 
 LINK_ENTITY_TO_CLASS(monster_barney, CBarney);
 
-TYPEDESCRIPTION CBarney::m_SaveData[] =
-	{
-		DEFINE_FIELD(CBarney, m_painTime, FIELD_TIME),
-		DEFINE_FIELD(CBarney, m_checkAttackTime, FIELD_TIME),
-		DEFINE_FIELD(CBarney, m_lastAttackCheck, FIELD_BOOLEAN),
-};
-
-IMPLEMENT_SAVERESTORE(CBarney, CTalkMonster);
+BEGIN_DATAMAP(CBarney)
+DEFINE_FIELD(m_painTime, FIELD_TIME),
+	DEFINE_FIELD(m_checkAttackTime, FIELD_TIME),
+	DEFINE_FIELD(m_lastAttackCheck, FIELD_BOOLEAN),
+	END_DATAMAP();
 
 Task_t tlBaFollow[] =
 	{

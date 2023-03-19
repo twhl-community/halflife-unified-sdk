@@ -23,6 +23,9 @@
 */
 class CInfoBM : public CPointEntity
 {
+	DECLARE_CLASS(CInfoBM, CPointEntity);
+	DECLARE_DATAMAP();
+
 public:
 	void Spawn() override;
 	bool KeyValue(KeyValueData* pkvd) override;
@@ -35,21 +38,14 @@ public:
 	// Reach delay in pev->speed
 	// Reach sequence in pev->netname
 
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
-
 	string_t m_preSequence;
 };
 
 LINK_ENTITY_TO_CLASS(info_bigmomma, CInfoBM);
 
-TYPEDESCRIPTION CInfoBM::m_SaveData[] =
-	{
-		DEFINE_FIELD(CInfoBM, m_preSequence, FIELD_STRING),
-};
-
-IMPLEMENT_SAVERESTORE(CInfoBM, CPointEntity);
+BEGIN_DATAMAP(CInfoBM)
+DEFINE_FIELD(m_preSequence, FIELD_STRING),
+	END_DATAMAP();
 
 void CInfoBM::Spawn()
 {
@@ -91,6 +87,9 @@ bool CInfoBM::KeyValue(KeyValueData* pkvd)
 */
 class CBMortar : public CBaseEntity
 {
+	DECLARE_CLASS(CBMortar, CBaseEntity);
+	DECLARE_DATAMAP();
+
 public:
 	void Spawn() override;
 
@@ -98,21 +97,14 @@ public:
 	void Touch(CBaseEntity* pOther) override;
 	void EXPORT Animate();
 
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
-
 	int m_maxFrame;
 };
 
 LINK_ENTITY_TO_CLASS(bmortar, CBMortar);
 
-TYPEDESCRIPTION CBMortar::m_SaveData[] =
-	{
-		DEFINE_FIELD(CBMortar, m_maxFrame, FIELD_INTEGER),
-};
-
-IMPLEMENT_SAVERESTORE(CBMortar, CBaseEntity);
+BEGIN_DATAMAP(CBMortar)
+DEFINE_FIELD(m_maxFrame, FIELD_INTEGER),
+	END_DATAMAP();
 
 #define BIG_AE_STEP1 1		// Footstep left
 #define BIG_AE_STEP2 2		// Footstep right
@@ -154,6 +146,9 @@ void MortarSpray(const Vector& position, const Vector& direction, int spriteMode
 
 class CBigMomma : public CBaseMonster
 {
+	DECLARE_CLASS(CBigMomma, CBaseMonster);
+	DECLARE_DATAMAP();
+
 public:
 	void OnCreate() override;
 	void Spawn() override;
@@ -270,10 +265,6 @@ public:
 	bool CheckMeleeAttack2(float flDot, float flDist) override; // Lay a crab
 	bool CheckRangeAttack1(float flDot, float flDist) override; // Mortar launch
 
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
-
 	static const char* pChildDieSounds[];
 	static const char* pSackSounds[];
 	static const char* pDeathSounds[];
@@ -295,16 +286,13 @@ private:
 };
 LINK_ENTITY_TO_CLASS(monster_bigmomma, CBigMomma);
 
-TYPEDESCRIPTION CBigMomma::m_SaveData[] =
-	{
-		DEFINE_FIELD(CBigMomma, m_nodeTime, FIELD_TIME),
-		DEFINE_FIELD(CBigMomma, m_crabTime, FIELD_TIME),
-		DEFINE_FIELD(CBigMomma, m_mortarTime, FIELD_TIME),
-		DEFINE_FIELD(CBigMomma, m_painSoundTime, FIELD_TIME),
-		DEFINE_FIELD(CBigMomma, m_crabCount, FIELD_INTEGER),
-};
-
-IMPLEMENT_SAVERESTORE(CBigMomma, CBaseMonster);
+BEGIN_DATAMAP(CBigMomma)
+DEFINE_FIELD(m_nodeTime, FIELD_TIME),
+	DEFINE_FIELD(m_crabTime, FIELD_TIME),
+	DEFINE_FIELD(m_mortarTime, FIELD_TIME),
+	DEFINE_FIELD(m_painSoundTime, FIELD_TIME),
+	DEFINE_FIELD(m_crabCount, FIELD_INTEGER),
+	END_DATAMAP();
 
 const char* CBigMomma::pChildDieSounds[] =
 	{

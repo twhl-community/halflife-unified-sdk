@@ -20,26 +20,22 @@
 
 class CActAnimating : public CBaseAnimating
 {
+	DECLARE_CLASS(CActAnimating, CBaseAnimating);
+	DECLARE_DATAMAP();
+
 public:
 	void SetActivity(Activity act);
 	inline Activity GetActivity() { return m_Activity; }
 
 	int ObjectCaps() override { return CBaseAnimating::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
-
 private:
 	Activity m_Activity;
 };
 
-TYPEDESCRIPTION CActAnimating::m_SaveData[] =
-	{
-		DEFINE_FIELD(CActAnimating, m_Activity, FIELD_INTEGER),
-};
-
-IMPLEMENT_SAVERESTORE(CActAnimating, CBaseAnimating);
+BEGIN_DATAMAP(CActAnimating)
+DEFINE_FIELD(m_Activity, FIELD_INTEGER),
+	END_DATAMAP();
 
 void CActAnimating::SetActivity(Activity act)
 {
@@ -55,6 +51,9 @@ void CActAnimating::SetActivity(Activity act)
 
 class CXenPLight : public CActAnimating
 {
+	DECLARE_CLASS(CXenPLight, CActAnimating);
+	DECLARE_DATAMAP();
+
 public:
 	void OnCreate() override;
 	void Spawn() override;
@@ -66,22 +65,15 @@ public:
 	void LightOn();
 	void LightOff();
 
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
-
 private:
 	CSprite* m_pGlow;
 };
 
 LINK_ENTITY_TO_CLASS(xen_plantlight, CXenPLight);
 
-TYPEDESCRIPTION CXenPLight::m_SaveData[] =
-	{
-		DEFINE_FIELD(CXenPLight, m_pGlow, FIELD_CLASSPTR),
-};
-
-IMPLEMENT_SAVERESTORE(CXenPLight, CActAnimating);
+BEGIN_DATAMAP(CXenPLight)
+DEFINE_FIELD(m_pGlow, FIELD_CLASSPTR),
+	END_DATAMAP();
 
 void CXenPLight::OnCreate()
 {
@@ -268,6 +260,9 @@ void CXenTreeTrigger::Touch(CBaseEntity* pOther)
 
 class CXenTree : public CActAnimating
 {
+	DECLARE_CLASS(CXenTree, CActAnimating);
+	DECLARE_DATAMAP();
+
 public:
 	void OnCreate() override;
 	void Spawn() override;
@@ -285,10 +280,6 @@ public:
 
 	void UpdateOnRemove() override;
 
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
-
 	static const char* pAttackHitSounds[];
 	static const char* pAttackMissSounds[];
 
@@ -298,12 +289,9 @@ private:
 
 LINK_ENTITY_TO_CLASS(xen_tree, CXenTree);
 
-TYPEDESCRIPTION CXenTree::m_SaveData[] =
-	{
-		DEFINE_FIELD(CXenTree, m_pTrigger, FIELD_CLASSPTR),
-};
-
-IMPLEMENT_SAVERESTORE(CXenTree, CActAnimating);
+BEGIN_DATAMAP(CXenTree)
+DEFINE_FIELD(m_pTrigger, FIELD_CLASSPTR),
+	END_DATAMAP();
 
 void CXenTree::OnCreate()
 {

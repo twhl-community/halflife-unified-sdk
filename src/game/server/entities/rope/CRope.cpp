@@ -28,31 +28,30 @@ static const char* const g_pszCreakSounds[] =
 		"items/rope3.wav"};
 
 // TODO: make sure boolean types are correctly used here
-TYPEDESCRIPTION CRope::m_SaveData[] =
-	{
-		DEFINE_FIELD(CRope, m_uiSegments, FIELD_INTEGER),
-		DEFINE_FIELD(CRope, m_bToggle, FIELD_BOOLEAN),
-		DEFINE_FIELD(CRope, m_bInitialDeltaTime, FIELD_BOOLEAN),
-		DEFINE_FIELD(CRope, m_flLastTime, FIELD_TIME),
-		DEFINE_FIELD(CRope, m_vecLastEndPos, FIELD_POSITION_VECTOR),
-		DEFINE_FIELD(CRope, m_vecGravity, FIELD_VECTOR),
-		DEFINE_FIELD(CRope, m_flHookConstant, FIELD_FLOAT),
-		DEFINE_FIELD(CRope, m_flSpringDampning, FIELD_FLOAT),
-		DEFINE_FIELD(CRope, m_uiNumSamples, FIELD_INTEGER),
-		DEFINE_FIELD(CRope, m_SpringCnt, FIELD_INTEGER),
-		DEFINE_FIELD(CRope, m_bObjectAttached, FIELD_BOOLEAN),
-		DEFINE_FIELD(CRope, m_uiAttachedObjectsSegment, FIELD_INTEGER),
-		DEFINE_FIELD(CRope, m_flDetachTime, FIELD_TIME),
-		DEFINE_ARRAY(CRope, seg, FIELD_CLASSPTR, CRope::MAX_SEGMENTS),
-		DEFINE_ARRAY(CRope, altseg, FIELD_CLASSPTR, CRope::MAX_SEGMENTS),
-		DEFINE_ARRAY(CRope, m_CurrentSys, FIELD_CLASSPTR, CRope::MAX_SAMPLES),
-		DEFINE_ARRAY(CRope, m_TargetSys, FIELD_CLASSPTR, CRope::MAX_SAMPLES),
-		DEFINE_FIELD(CRope, m_bDisallowPlayerAttachment, FIELD_BOOLEAN),
-		DEFINE_FIELD(CRope, m_iszBodyModel, FIELD_STRING),
-		DEFINE_FIELD(CRope, m_iszEndingModel, FIELD_STRING),
-		DEFINE_FIELD(CRope, m_flAttachedObjectsOffset, FIELD_FLOAT),
-		DEFINE_FIELD(CRope, m_bMakeSound, FIELD_BOOLEAN),
-};
+BEGIN_DATAMAP(CRope)
+DEFINE_FIELD(m_uiSegments, FIELD_INTEGER),
+	DEFINE_FIELD(m_bToggle, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_bInitialDeltaTime, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_flLastTime, FIELD_TIME),
+	DEFINE_FIELD(m_vecLastEndPos, FIELD_POSITION_VECTOR),
+	DEFINE_FIELD(m_vecGravity, FIELD_VECTOR),
+	DEFINE_FIELD(m_flHookConstant, FIELD_FLOAT),
+	DEFINE_FIELD(m_flSpringDampning, FIELD_FLOAT),
+	DEFINE_FIELD(m_uiNumSamples, FIELD_INTEGER),
+	DEFINE_FIELD(m_SpringCnt, FIELD_INTEGER),
+	DEFINE_FIELD(m_bObjectAttached, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_uiAttachedObjectsSegment, FIELD_INTEGER),
+	DEFINE_FIELD(m_flDetachTime, FIELD_TIME),
+	DEFINE_ARRAY(seg, FIELD_CLASSPTR, CRope::MAX_SEGMENTS),
+	DEFINE_ARRAY(altseg, FIELD_CLASSPTR, CRope::MAX_SEGMENTS),
+	DEFINE_ARRAY(m_CurrentSys, FIELD_CLASSPTR, CRope::MAX_SAMPLES),
+	DEFINE_ARRAY(m_TargetSys, FIELD_CLASSPTR, CRope::MAX_SAMPLES),
+	DEFINE_FIELD(m_bDisallowPlayerAttachment, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_iszBodyModel, FIELD_STRING),
+	DEFINE_FIELD(m_iszEndingModel, FIELD_STRING),
+	DEFINE_FIELD(m_flAttachedObjectsOffset, FIELD_FLOAT),
+	DEFINE_FIELD(m_bMakeSound, FIELD_BOOLEAN),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(env_rope, CRope);
 
@@ -294,22 +293,9 @@ void CRope::Touch(CBaseEntity* pOther)
 	// Nothing.
 }
 
-bool CRope::Save(CSave& save)
+void CRope::PostRestore()
 {
-	if (!BaseClass::Save(save))
-		return false;
-
-	return save.WriteFields("CRope", this, m_SaveData, std::size(m_SaveData));
-}
-
-bool CRope::Restore(CRestore& restore)
-{
-	if (!BaseClass::Restore(restore))
-	{
-		return false;
-	}
-
-	auto status = restore.ReadFields("CRope", this, m_SaveData, std::size(m_SaveData));
+	BaseClass::PostRestore();
 
 	for (size_t uiIndex = 0; uiIndex < MAX_TEMP_SAMPLES; ++uiIndex)
 	{
@@ -318,8 +304,6 @@ bool CRope::Restore(CRestore& restore)
 
 	m_bSpringsInitialized = false;
 	m_bInitialDeltaTime = true;
-
-	return status;
 }
 
 void CRope::InitializeRopeSim()

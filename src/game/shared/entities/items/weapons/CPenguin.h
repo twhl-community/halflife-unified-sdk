@@ -27,16 +27,10 @@ enum PenguinAnim
 
 class CPenguin : public CBasePlayerWeapon
 {
+	DECLARE_CLASS(CPenguin, CBasePlayerWeapon);
+	DECLARE_DATAMAP();
+
 public:
-	using BaseClass = CBasePlayerWeapon;
-
-#ifndef CLIENT_DLL
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
-	static TYPEDESCRIPTION m_SaveData[];
-#endif
-
 	void OnCreate() override;
 
 	void Precache() override;

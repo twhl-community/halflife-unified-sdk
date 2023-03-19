@@ -23,9 +23,10 @@ class CRopeSample;
  */
 class CRopeSegment : public CBaseAnimating
 {
-public:
-	using BaseClass = CBaseAnimating;
+	DECLARE_CLASS(CRopeSegment, CBaseAnimating);
+	DECLARE_DATAMAP();
 
+public:
 	CRopeSegment();
 
 	void Precache() override;
@@ -35,11 +36,6 @@ public:
 	void Think() override;
 
 	void Touch(CBaseEntity* pOther) override;
-
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
-	static TYPEDESCRIPTION m_SaveData[];
 
 	static CRopeSegment* CreateSegment(CRopeSample* pSample, string_t iszModelName);
 

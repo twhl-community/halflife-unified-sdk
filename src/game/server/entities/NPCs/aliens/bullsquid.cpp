@@ -40,6 +40,9 @@ enum
 */
 class CSquidSpit : public CBaseEntity
 {
+	DECLARE_CLASS(CSquidSpit, CBaseEntity);
+	DECLARE_DATAMAP();
+
 public:
 	void Spawn() override;
 
@@ -47,21 +50,14 @@ public:
 	void Touch(CBaseEntity* pOther) override;
 	void EXPORT Animate();
 
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
-
 	int m_maxFrame;
 };
 
 LINK_ENTITY_TO_CLASS(squidspit, CSquidSpit);
 
-TYPEDESCRIPTION CSquidSpit::m_SaveData[] =
-	{
-		DEFINE_FIELD(CSquidSpit, m_maxFrame, FIELD_INTEGER),
-};
-
-IMPLEMENT_SAVERESTORE(CSquidSpit, CBaseEntity);
+BEGIN_DATAMAP(CSquidSpit)
+DEFINE_FIELD(m_maxFrame, FIELD_INTEGER),
+	END_DATAMAP();
 
 void CSquidSpit::Spawn()
 {
@@ -169,6 +165,9 @@ void CSquidSpit::Touch(CBaseEntity* pOther)
 */
 class CBullsquid : public CBaseMonster
 {
+	DECLARE_CLASS(CBullsquid, CBaseMonster);
+	DECLARE_DATAMAP();
+
 public:
 	void OnCreate() override;
 	void Spawn() override;
@@ -224,11 +223,7 @@ public:
 	*/
 	MONSTERSTATE GetIdealState() override;
 
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
 	CUSTOM_SCHEDULES;
-	static TYPEDESCRIPTION m_SaveData[];
 
 	bool m_fCanThreatDisplay; // this is so the squid only does the "I see a headcrab!" dance one time.
 
@@ -238,14 +233,11 @@ public:
 
 LINK_ENTITY_TO_CLASS(monster_bullchicken, CBullsquid);
 
-TYPEDESCRIPTION CBullsquid::m_SaveData[] =
-	{
-		DEFINE_FIELD(CBullsquid, m_fCanThreatDisplay, FIELD_BOOLEAN),
-		DEFINE_FIELD(CBullsquid, m_flLastHurtTime, FIELD_TIME),
-		DEFINE_FIELD(CBullsquid, m_flNextSpitTime, FIELD_TIME),
-};
-
-IMPLEMENT_SAVERESTORE(CBullsquid, CBaseMonster);
+BEGIN_DATAMAP(CBullsquid)
+DEFINE_FIELD(m_fCanThreatDisplay, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_flLastHurtTime, FIELD_TIME),
+	DEFINE_FIELD(m_flNextSpitTime, FIELD_TIME),
+	END_DATAMAP();
 
 void CBullsquid::OnCreate()
 {

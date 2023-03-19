@@ -61,6 +61,9 @@ enum TorchAllyWeaponFlag
 
 class COFTorchAlly : public CBaseHGruntAlly
 {
+	DECLARE_CLASS(COFTorchAlly, CBaseHGruntAlly);
+	DECLARE_DATAMAP();
+
 public:
 	void OnCreate() override;
 
@@ -70,16 +73,11 @@ public:
 	void Shoot();
 	void GibMonster() override;
 
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
 	void TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
 
 	void Killed(CBaseEntity* attacker, int iGib) override;
 
 	void MonsterThink() override;
-
-	static TYPEDESCRIPTION m_SaveData[];
 
 	bool m_fTorchActive;
 
@@ -101,13 +99,10 @@ protected:
 
 LINK_ENTITY_TO_CLASS(monster_human_torch_ally, COFTorchAlly);
 
-TYPEDESCRIPTION COFTorchAlly::m_SaveData[] =
-	{
-		DEFINE_FIELD(COFTorchAlly, m_fTorchActive, FIELD_BOOLEAN),
-		DEFINE_FIELD(COFTorchAlly, m_flLastShot, FIELD_TIME),
-};
-
-IMPLEMENT_SAVERESTORE(COFTorchAlly, CBaseHGruntAlly);
+BEGIN_DATAMAP(COFTorchAlly)
+DEFINE_FIELD(m_fTorchActive, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_flLastShot, FIELD_TIME),
+	END_DATAMAP();
 
 void COFTorchAlly::OnCreate()
 {

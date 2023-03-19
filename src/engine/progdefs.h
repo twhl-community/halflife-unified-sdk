@@ -15,6 +15,8 @@
 
 #pragma once
 
+#include "DataMap.h"
+
 struct globalvars_t
 {
 	float time;
@@ -56,6 +58,9 @@ constexpr int NUM_ENT_BLENDERS = 2;
 
 struct entvars_t
 {
+	DECLARE_CLASS_NOBASE(entvars_t);
+	DECLARE_SIMPLE_DATAMAP();
+
 	string_t classname;
 	string_t globalname;
 

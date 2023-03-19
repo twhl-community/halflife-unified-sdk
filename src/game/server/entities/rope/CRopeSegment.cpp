@@ -19,21 +19,19 @@
 
 #include "CRopeSegment.h"
 
-TYPEDESCRIPTION CRopeSegment::m_SaveData[] =
-	{
-		DEFINE_FIELD(CRopeSegment, m_pSample, FIELD_CLASSPTR),
-		DEFINE_FIELD(CRopeSegment, m_iszModelName, FIELD_STRING),
-		DEFINE_FIELD(CRopeSegment, m_flDefaultMass, FIELD_FLOAT),
-		DEFINE_FIELD(CRopeSegment, m_bCauseDamage, FIELD_BOOLEAN),
-		DEFINE_FIELD(CRopeSegment, m_bCanBeGrabbed, FIELD_BOOLEAN),
-};
+BEGIN_DATAMAP(CRopeSegment)
+DEFINE_FIELD(m_pSample, FIELD_CLASSPTR),
+	DEFINE_FIELD(m_iszModelName, FIELD_STRING),
+	DEFINE_FIELD(m_flDefaultMass, FIELD_FLOAT),
+	DEFINE_FIELD(m_bCauseDamage, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_bCanBeGrabbed, FIELD_BOOLEAN),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(rope_segment, CRopeSegment);
 
-IMPLEMENT_SAVERESTORE(CRopeSegment, CRopeSegment::BaseClass);
-
 CRopeSegment::CRopeSegment()
 {
+	// TODO: move to in-class initializer?
 	m_iszModelName = MAKE_STRING("models/rope16.mdl");
 }
 

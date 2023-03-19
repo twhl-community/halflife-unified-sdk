@@ -19,17 +19,12 @@
 
 LINK_ENTITY_TO_CLASS(weapon_shotgun, CShotgun);
 
-#ifndef CLIENT_DLL
-TYPEDESCRIPTION CShotgun::m_SaveData[] =
-	{
-		DEFINE_FIELD(CShotgun, m_flNextReload, FIELD_TIME),
-		DEFINE_FIELD(CShotgun, m_fInSpecialReload, FIELD_INTEGER),
-		// DEFINE_FIELD( CShotgun, m_iShell, FIELD_INTEGER ),
-		DEFINE_FIELD(CShotgun, m_flPumpTime, FIELD_TIME),
-};
-
-IMPLEMENT_SAVERESTORE(CShotgun, CBasePlayerWeapon);
-#endif
+BEGIN_DATAMAP(CShotgun)
+DEFINE_FIELD(m_flNextReload, FIELD_TIME),
+	DEFINE_FIELD(m_fInSpecialReload, FIELD_INTEGER),
+	// DEFINE_FIELD(m_iShell, FIELD_INTEGER),
+	DEFINE_FIELD(m_flPumpTime, FIELD_TIME),
+	END_DATAMAP();
 
 void CShotgun::OnCreate()
 {

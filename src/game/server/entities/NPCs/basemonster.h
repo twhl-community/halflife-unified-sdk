@@ -42,6 +42,9 @@ enum NPCWeaponState
 */
 class CBaseMonster : public CBaseToggle
 {
+	DECLARE_CLASS(CBaseMonster, CBaseToggle);
+	DECLARE_DATAMAP();
+
 private:
 	int m_afConditions;
 
@@ -137,10 +140,7 @@ public:
 
 	bool m_AllowItemDropping = true;
 
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
-	static TYPEDESCRIPTION m_SaveData[];
+	void PostRestore() override;
 
 	/**
 	*	@brief !!! netname entvar field is used in squadmonster for groupname!!!

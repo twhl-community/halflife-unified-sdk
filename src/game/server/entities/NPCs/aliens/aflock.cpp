@@ -26,16 +26,15 @@
 
 class CFlockingFlyerFlock : public CBaseMonster
 {
+	DECLARE_CLASS(CFlockingFlyerFlock, CBaseMonster);
+	DECLARE_DATAMAP();
+
 public:
 	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	bool KeyValue(KeyValueData* pkvd) override;
 	void SpawnFlock();
-
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
 
 	// Sounds are shared by the flock
 	static void PrecacheFlockSounds(CBaseEntity* self);
@@ -44,16 +43,16 @@ public:
 	float m_flFlockRadius;
 };
 
-TYPEDESCRIPTION CFlockingFlyerFlock::m_SaveData[] =
-	{
-		DEFINE_FIELD(CFlockingFlyerFlock, m_cFlockSize, FIELD_INTEGER),
-		DEFINE_FIELD(CFlockingFlyerFlock, m_flFlockRadius, FIELD_FLOAT),
-};
-
-IMPLEMENT_SAVERESTORE(CFlockingFlyerFlock, CBaseMonster);
+BEGIN_DATAMAP(CFlockingFlyerFlock)
+DEFINE_FIELD(m_cFlockSize, FIELD_INTEGER),
+	DEFINE_FIELD(m_flFlockRadius, FIELD_FLOAT),
+	END_DATAMAP();
 
 class CFlockingFlyer : public CBaseMonster
 {
+	DECLARE_CLASS(CFlockingFlyer, CBaseMonster);
+	DECLARE_DATAMAP();
+
 public:
 	void OnCreate() override;
 	void Spawn() override;
@@ -96,10 +95,6 @@ public:
 	bool FPathBlocked();
 	// void KeyValue( KeyValueData *pkvd ) override;
 
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
-
 	bool IsLeader() { return m_pSquadLeader == this; }
 	bool InSquad() { return m_pSquadLeader != nullptr; }
 	int SquadCount();
@@ -124,23 +119,20 @@ public:
 LINK_ENTITY_TO_CLASS(monster_flyer, CFlockingFlyer);
 LINK_ENTITY_TO_CLASS(monster_flyer_flock, CFlockingFlyerFlock);
 
-TYPEDESCRIPTION CFlockingFlyer::m_SaveData[] =
-	{
-		DEFINE_FIELD(CFlockingFlyer, m_pSquadLeader, FIELD_CLASSPTR),
-		DEFINE_FIELD(CFlockingFlyer, m_pSquadNext, FIELD_CLASSPTR),
-		DEFINE_FIELD(CFlockingFlyer, m_fTurning, FIELD_BOOLEAN),
-		DEFINE_FIELD(CFlockingFlyer, m_fCourseAdjust, FIELD_BOOLEAN),
-		DEFINE_FIELD(CFlockingFlyer, m_fPathBlocked, FIELD_BOOLEAN),
-		DEFINE_FIELD(CFlockingFlyer, m_vecReferencePoint, FIELD_POSITION_VECTOR),
-		DEFINE_FIELD(CFlockingFlyer, m_vecAdjustedVelocity, FIELD_VECTOR),
-		DEFINE_FIELD(CFlockingFlyer, m_flGoalSpeed, FIELD_FLOAT),
-		DEFINE_FIELD(CFlockingFlyer, m_flLastBlockedTime, FIELD_TIME),
-		DEFINE_FIELD(CFlockingFlyer, m_flFakeBlockedTime, FIELD_TIME),
-		DEFINE_FIELD(CFlockingFlyer, m_flAlertTime, FIELD_TIME),
-		//	DEFINE_FIELD( CFlockingFlyer, m_flFlockNextSoundTime, FIELD_TIME ),	// don't need to save
-};
-
-IMPLEMENT_SAVERESTORE(CFlockingFlyer, CBaseMonster);
+BEGIN_DATAMAP(CFlockingFlyer)
+DEFINE_FIELD(m_pSquadLeader, FIELD_CLASSPTR),
+	DEFINE_FIELD(m_pSquadNext, FIELD_CLASSPTR),
+	DEFINE_FIELD(m_fTurning, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_fCourseAdjust, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_fPathBlocked, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_vecReferencePoint, FIELD_POSITION_VECTOR),
+	DEFINE_FIELD(m_vecAdjustedVelocity, FIELD_VECTOR),
+	DEFINE_FIELD(m_flGoalSpeed, FIELD_FLOAT),
+	DEFINE_FIELD(m_flLastBlockedTime, FIELD_TIME),
+	DEFINE_FIELD(m_flFakeBlockedTime, FIELD_TIME),
+	DEFINE_FIELD(m_flAlertTime, FIELD_TIME),
+	//	DEFINE_FIELD(m_flFlockNextSoundTime, FIELD_TIME),	// don't need to save
+	END_DATAMAP();
 
 void CFlockingFlyer::OnCreate()
 {

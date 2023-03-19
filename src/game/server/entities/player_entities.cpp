@@ -18,16 +18,15 @@
 
 class CPlayerSetHudColor : public CPointEntity
 {
+	DECLARE_CLASS(CPlayerSetHudColor, CPointEntity);
+	DECLARE_DATAMAP();
+
 public:
 	enum class Action
 	{
 		Set = 0,
 		Reset = 1
 	};
-
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
 
 	bool KeyValue(KeyValueData* pkvd) override;
 
@@ -40,13 +39,10 @@ private:
 
 LINK_ENTITY_TO_CLASS(player_sethudcolor, CPlayerSetHudColor);
 
-TYPEDESCRIPTION CPlayerSetHudColor::m_SaveData[] =
-	{
-		DEFINE_FIELD(CPlayerSetHudColor, m_HudColor, FIELD_VECTOR),
-		DEFINE_FIELD(CPlayerSetHudColor, m_Action, FIELD_INTEGER),
-};
-
-IMPLEMENT_SAVERESTORE(CPlayerSetHudColor, CPointEntity);
+BEGIN_DATAMAP(CPlayerSetHudColor)
+DEFINE_FIELD(m_HudColor, FIELD_VECTOR),
+	DEFINE_FIELD(m_Action, FIELD_INTEGER),
+	END_DATAMAP();
 
 bool CPlayerSetHudColor::KeyValue(KeyValueData* pkvd)
 {
@@ -99,11 +95,10 @@ void CPlayerSetHudColor::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_
 
 class CPlayerSetSuitLightType : public CPointEntity
 {
-public:
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
+	DECLARE_CLASS(CPlayerSetSuitLightType, CPointEntity);
+	DECLARE_DATAMAP();
 
+public:
 	bool KeyValue(KeyValueData* pkvd) override;
 
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
@@ -115,13 +110,10 @@ private:
 
 LINK_ENTITY_TO_CLASS(player_setsuitlighttype, CPlayerSetSuitLightType);
 
-TYPEDESCRIPTION CPlayerSetSuitLightType::m_SaveData[] =
-	{
-		DEFINE_FIELD(CPlayerSetSuitLightType, m_AllPlayers, FIELD_BOOLEAN),
-		DEFINE_FIELD(CPlayerSetSuitLightType, m_Type, FIELD_INTEGER),
-};
-
-IMPLEMENT_SAVERESTORE(CPlayerSetSuitLightType, CPointEntity);
+BEGIN_DATAMAP(CPlayerSetSuitLightType)
+DEFINE_FIELD(m_AllPlayers, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_Type, FIELD_INTEGER),
+	END_DATAMAP();
 
 bool CPlayerSetSuitLightType::KeyValue(KeyValueData* pkvd)
 {
@@ -171,15 +163,14 @@ void CPlayerSetSuitLightType::Use(CBaseEntity* pActivator, CBaseEntity* pCaller,
 
 class CStripWeapons : public CPointEntity
 {
+	DECLARE_CLASS(CStripWeapons, CPointEntity);
+	DECLARE_DATAMAP();
+
 public:
 	static constexpr int StripFlagAllPlayers = 1 << 0;
 	static constexpr int StripFlagRemoveWeapons = 1 << 1;
 	static constexpr int StripFlagRemoveSuit = 1 << 2;
 	static constexpr int StripFlagRemoveLongJump = 1 << 3;
-
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
 
 	bool KeyValue(KeyValueData* pkvd) override;
 
@@ -191,11 +182,9 @@ private:
 
 LINK_ENTITY_TO_CLASS(player_weaponstrip, CStripWeapons);
 
-TYPEDESCRIPTION CStripWeapons::m_SaveData[] =
-	{
-		DEFINE_FIELD(CStripWeapons, m_Flags, FIELD_INTEGER)};
-
-IMPLEMENT_SAVERESTORE(CStripWeapons, CPointEntity);
+BEGIN_DATAMAP(CStripWeapons)
+DEFINE_FIELD(m_Flags, FIELD_INTEGER),
+	END_DATAMAP();
 
 bool CStripWeapons::KeyValue(KeyValueData* pkvd)
 {
@@ -303,14 +292,13 @@ void CStripWeapons::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE 
  */
 class CPlayerSetHealth : public CPointEntity
 {
+	DECLARE_CLASS(CPlayerSetHealth, CPointEntity);
+	DECLARE_DATAMAP();
+
 public:
 	static constexpr int FlagAllPlayers = 1 << 0;
 	static constexpr int FlagSetHealth = 1 << 1;
 	static constexpr int FlagSetArmor = 1 << 2;
-
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
 
 	bool KeyValue(KeyValueData* pkvd) override;
 
@@ -324,13 +312,11 @@ private:
 
 LINK_ENTITY_TO_CLASS(player_sethealth, CPlayerSetHealth);
 
-TYPEDESCRIPTION CPlayerSetHealth::m_SaveData[] =
-	{
-		DEFINE_FIELD(CPlayerSetHealth, m_Flags, FIELD_INTEGER),
-		DEFINE_FIELD(CPlayerSetHealth, m_Health, FIELD_INTEGER),
-		DEFINE_FIELD(CPlayerSetHealth, m_Armor, FIELD_INTEGER)};
-
-IMPLEMENT_SAVERESTORE(CPlayerSetHealth, CPointEntity);
+BEGIN_DATAMAP(CPlayerSetHealth)
+DEFINE_FIELD(m_Flags, FIELD_INTEGER),
+	DEFINE_FIELD(m_Health, FIELD_INTEGER),
+	DEFINE_FIELD(m_Armor, FIELD_INTEGER),
+	END_DATAMAP();
 
 bool CPlayerSetHealth::KeyValue(KeyValueData* pkvd)
 {
@@ -430,11 +416,10 @@ void CPlayerSetHealth::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TY
 
 class CPlayerHasSuit : public CPointEntity
 {
-public:
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
+	DECLARE_CLASS(CPlayerHasSuit, CPointEntity);
+	DECLARE_DATAMAP();
 
+public:
 	bool KeyValue(KeyValueData* pkvd) override;
 
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
@@ -446,13 +431,10 @@ private:
 
 LINK_ENTITY_TO_CLASS(player_hassuit, CPlayerHasSuit);
 
-TYPEDESCRIPTION CPlayerHasSuit::m_SaveData[] =
-	{
-		DEFINE_FIELD(CPlayerHasSuit, m_PassTarget, FIELD_STRING),
-		DEFINE_FIELD(CPlayerHasSuit, m_FailTarget, FIELD_STRING),
-};
-
-IMPLEMENT_SAVERESTORE(CPlayerHasSuit, CPointEntity);
+BEGIN_DATAMAP(CPlayerHasSuit)
+DEFINE_FIELD(m_PassTarget, FIELD_STRING),
+	DEFINE_FIELD(m_FailTarget, FIELD_STRING),
+	END_DATAMAP();
 
 bool CPlayerHasSuit::KeyValue(KeyValueData* pkvd)
 {

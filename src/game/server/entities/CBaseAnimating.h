@@ -19,12 +19,10 @@
 
 class CBaseAnimating : public CBaseDelay
 {
+	DECLARE_CLASS(CBaseAnimating, CBaseDelay);
+	DECLARE_DATAMAP();
+
 public:
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
-	static TYPEDESCRIPTION m_SaveData[];
-
 	// Basic Monster Animation functions
 	/**
 	*	@brief advance the animation frame from last time called up to the current time

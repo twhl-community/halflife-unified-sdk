@@ -18,29 +18,26 @@
 
 #include "CElectrifiedWire.h"
 
-TYPEDESCRIPTION CElectrifiedWire::m_SaveData[] =
-	{
-		DEFINE_FIELD(CElectrifiedWire, m_bIsActive, FIELD_BOOLEAN),
+BEGIN_DATAMAP(CElectrifiedWire)
+DEFINE_FIELD(m_bIsActive, FIELD_BOOLEAN),
 
-		DEFINE_FIELD(CElectrifiedWire, m_iTipSparkFrequency, FIELD_INTEGER),
-		DEFINE_FIELD(CElectrifiedWire, m_iBodySparkFrequency, FIELD_INTEGER),
-		DEFINE_FIELD(CElectrifiedWire, m_iLightningFrequency, FIELD_INTEGER),
+	DEFINE_FIELD(m_iTipSparkFrequency, FIELD_INTEGER),
+	DEFINE_FIELD(m_iBodySparkFrequency, FIELD_INTEGER),
+	DEFINE_FIELD(m_iLightningFrequency, FIELD_INTEGER),
 
-		DEFINE_FIELD(CElectrifiedWire, m_iXJoltForce, FIELD_INTEGER),
-		DEFINE_FIELD(CElectrifiedWire, m_iYJoltForce, FIELD_INTEGER),
-		DEFINE_FIELD(CElectrifiedWire, m_iZJoltForce, FIELD_INTEGER),
+	DEFINE_FIELD(m_iXJoltForce, FIELD_INTEGER),
+	DEFINE_FIELD(m_iYJoltForce, FIELD_INTEGER),
+	DEFINE_FIELD(m_iZJoltForce, FIELD_INTEGER),
 
-		DEFINE_FIELD(CElectrifiedWire, m_uiNumUninsulatedSegments, FIELD_INTEGER),
-		DEFINE_ARRAY(CElectrifiedWire, m_uiUninsulatedSegments, FIELD_INTEGER, CElectrifiedWire::MAX_SEGMENTS),
+	DEFINE_FIELD(m_uiNumUninsulatedSegments, FIELD_INTEGER),
+	DEFINE_ARRAY(m_uiUninsulatedSegments, FIELD_INTEGER, CElectrifiedWire::MAX_SEGMENTS),
 
-		// DEFINE_FIELD( CElectrifiedWire, m_iLightningSprite, FIELD_INTEGER ), //Not restored, reset in Precache.
+	// DEFINE_FIELD(m_iLightningSprite, FIELD_INTEGER), //Not restored, reset in Precache.
 
-		DEFINE_FIELD(CElectrifiedWire, m_flLastSparkTime, FIELD_TIME),
-};
+	DEFINE_FIELD(m_flLastSparkTime, FIELD_TIME),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(env_electrified_wire, CElectrifiedWire);
-
-IMPLEMENT_SAVERESTORE(CElectrifiedWire, CElectrifiedWire::BaseClass);
 
 bool CElectrifiedWire::KeyValue(KeyValueData* pkvd)
 {

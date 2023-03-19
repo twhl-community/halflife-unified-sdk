@@ -236,7 +236,7 @@ int DispatchRestore(edict_t* pent, SAVERESTOREDATA* pSaveData, int globalEntity)
 		{
 			CRestore tmpRestore(*pSaveData);
 			tmpRestore.PrecacheMode(false);
-			tmpRestore.ReadEntVars("ENTVARS", &tmpVars);
+			tmpRestore.ReadFields(&tmpVars, *entvars_t::GetLocalDataMap());
 
 			// HACKHACK - reset the save pointers, we're going to restore for real this time
 			pSaveData->size = pSaveData->pTable[pSaveData->currentIndex].location;
@@ -276,9 +276,7 @@ int DispatchRestore(edict_t* pent, SAVERESTOREDATA* pSaveData, int globalEntity)
 		}
 
 		pEntity->Restore(restoreHelper);
-
-		// Restore replacement files ahead of setup.
-		pEntity->LoadReplacementFiles();
+		pEntity->PostRestore();
 
 		if ((pEntity->ObjectCaps() & FCAP_MUST_SPAWN) != 0)
 		{
@@ -612,57 +610,6 @@ CBaseEntity* CBaseEntity::GetNextTarget()
 	if (FStringNull(pev->target))
 		return nullptr;
 	return UTIL_FindEntityByTargetname(nullptr, STRING(pev->target));
-}
-
-TYPEDESCRIPTION CBaseEntity::m_SaveData[] =
-	{
-		DEFINE_FIELD(CBaseEntity, m_pGoalEnt, FIELD_CLASSPTR),
-		DEFINE_FIELD(CBaseEntity, m_EFlags, FIELD_CHARACTER),
-
-		DEFINE_FIELD(CBaseEntity, m_pfnThink, FIELD_FUNCTION), // UNDONE: Build table of these!!!
-		DEFINE_FIELD(CBaseEntity, m_pfnTouch, FIELD_FUNCTION),
-		DEFINE_FIELD(CBaseEntity, m_pfnUse, FIELD_FUNCTION),
-		DEFINE_FIELD(CBaseEntity, m_pfnBlocked, FIELD_FUNCTION),
-
-		DEFINE_FIELD(CBaseEntity, m_ModelReplacementFileName, FIELD_STRING),
-		DEFINE_FIELD(CBaseEntity, m_SoundReplacementFileName, FIELD_STRING),
-		DEFINE_FIELD(CBaseEntity, m_SentenceReplacementFileName, FIELD_STRING),
-
-		DEFINE_FIELD(CBaseEntity, m_CustomHullMin, FIELD_VECTOR),
-		DEFINE_FIELD(CBaseEntity, m_CustomHullMax, FIELD_VECTOR),
-		DEFINE_FIELD(CBaseEntity, m_HasCustomHullMin, FIELD_BOOLEAN),
-		DEFINE_FIELD(CBaseEntity, m_HasCustomHullMax, FIELD_BOOLEAN),
-};
-
-bool CBaseEntity::Save(CSave& save)
-{
-	if (save.WriteEntVars("ENTVARS", pev))
-		return save.WriteFields("BASE", this, m_SaveData, std::size(m_SaveData));
-
-	return false;
-}
-
-bool CBaseEntity::Restore(CRestore& restore)
-{
-	bool status;
-
-	status = restore.ReadEntVars("ENTVARS", pev);
-	if (status)
-		status = restore.ReadFields("BASE", this, m_SaveData, std::size(m_SaveData));
-
-	if (pev->modelindex != 0 && !FStringNull(pev->model))
-	{
-		Vector mins, maxs;
-		mins = pev->mins; // Set model is about to destroy these
-		maxs = pev->maxs;
-
-		// Don't use UTIL_PrecacheModel here because we're restoring an already-replaced name.
-		UTIL_PrecacheModelDirect(STRING(pev->model));
-		SetModel(STRING(pev->model));
-		SetSize(mins, maxs); // Reset them
-	}
-
-	return status;
 }
 
 // Initialize absmin & absmax to the appropriate box

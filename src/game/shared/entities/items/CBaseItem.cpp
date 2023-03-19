@@ -16,20 +16,16 @@
 #include "cbase.h"
 #include "CBaseItem.h"
 
-#ifndef CLIENT_DLL
-TYPEDESCRIPTION CBaseItem::m_SaveData[] =
-	{
-		DEFINE_FIELD(CBaseItem, m_RespawnDelay, FIELD_FLOAT),
-		DEFINE_FIELD(CBaseItem, m_FallMode, FIELD_INTEGER),
-		DEFINE_FIELD(CBaseItem, m_StayVisibleDuringRespawn, FIELD_BOOLEAN),
-		DEFINE_FIELD(CBaseItem, m_IsRespawning, FIELD_BOOLEAN),
-		DEFINE_FIELD(CBaseItem, m_FlashOnRespawn, FIELD_BOOLEAN),
-		DEFINE_FIELD(CBaseItem, m_PlayPickupSound, FIELD_BOOLEAN),
-		DEFINE_FIELD(CBaseItem, m_TriggerOnSpawn, FIELD_STRING),
-		DEFINE_FIELD(CBaseItem, m_TriggerOnDespawn, FIELD_STRING)};
-
-IMPLEMENT_SAVERESTORE(CBaseItem, CBaseAnimating);
-#endif
+BEGIN_DATAMAP(CBaseItem)
+DEFINE_FIELD(m_RespawnDelay, FIELD_FLOAT),
+	DEFINE_FIELD(m_FallMode, FIELD_INTEGER),
+	DEFINE_FIELD(m_StayVisibleDuringRespawn, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_IsRespawning, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_FlashOnRespawn, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_PlayPickupSound, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_TriggerOnSpawn, FIELD_STRING),
+	DEFINE_FIELD(m_TriggerOnDespawn, FIELD_STRING),
+	END_DATAMAP();
 
 bool CBaseItem::KeyValue(KeyValueData* pkvd)
 {

@@ -58,6 +58,9 @@ enum
 */
 class CHoundeye : public CSquadMonster
 {
+	DECLARE_CLASS(CHoundeye, CSquadMonster);
+	DECLARE_DATAMAP();
+
 public:
 	void OnCreate() override;
 	void Spawn() override;
@@ -92,11 +95,7 @@ public:
 	Schedule_t* GetScheduleOfType(int Type) override;
 	Schedule_t* GetSchedule() override;
 
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
 	CUSTOM_SCHEDULES;
-	static TYPEDESCRIPTION m_SaveData[];
 
 	int m_iSpriteTexture;
 	bool m_fAsleep;			// some houndeyes sleep in idle mode if this is set, the houndeye is lying down
@@ -106,15 +105,12 @@ public:
 
 LINK_ENTITY_TO_CLASS(monster_houndeye, CHoundeye);
 
-TYPEDESCRIPTION CHoundeye::m_SaveData[] =
-	{
-		DEFINE_FIELD(CHoundeye, m_iSpriteTexture, FIELD_INTEGER),
-		DEFINE_FIELD(CHoundeye, m_fAsleep, FIELD_BOOLEAN),
-		DEFINE_FIELD(CHoundeye, m_fDontBlink, FIELD_BOOLEAN),
-		DEFINE_FIELD(CHoundeye, m_vecPackCenter, FIELD_POSITION_VECTOR),
-};
-
-IMPLEMENT_SAVERESTORE(CHoundeye, CSquadMonster);
+BEGIN_DATAMAP(CHoundeye)
+DEFINE_FIELD(m_iSpriteTexture, FIELD_INTEGER),
+	DEFINE_FIELD(m_fAsleep, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_fDontBlink, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_vecPackCenter, FIELD_POSITION_VECTOR),
+	END_DATAMAP();
 
 void CHoundeye::OnCreate()
 {

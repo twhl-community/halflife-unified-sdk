@@ -37,6 +37,9 @@
 */
 class CFrictionModifier : public CBaseEntity
 {
+	DECLARE_CLASS(CFrictionModifier, CBaseEntity);
+	DECLARE_DATAMAP();
+
 public:
 	void Spawn() override;
 	bool KeyValue(KeyValueData* pkvd) override;
@@ -45,24 +48,17 @@ public:
 	*	@brief Sets toucher's friction to m_frictionFraction (1.0 = normal friction)
 	*/
 	void EXPORT ChangeFriction(CBaseEntity* pOther);
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
 
 	int ObjectCaps() override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
-
-	static TYPEDESCRIPTION m_SaveData[];
 
 	float m_frictionFraction; // Sorry, couldn't resist this name :)
 };
 
 LINK_ENTITY_TO_CLASS(func_friction, CFrictionModifier);
 
-TYPEDESCRIPTION CFrictionModifier::m_SaveData[] =
-	{
-		DEFINE_FIELD(CFrictionModifier, m_frictionFraction, FIELD_FLOAT),
-};
-
-IMPLEMENT_SAVERESTORE(CFrictionModifier, CBaseEntity);
+BEGIN_DATAMAP(CFrictionModifier)
+DEFINE_FIELD(m_frictionFraction, FIELD_FLOAT),
+	END_DATAMAP();
 
 void CFrictionModifier::Spawn()
 {
@@ -97,6 +93,9 @@ bool CFrictionModifier::KeyValue(KeyValueData* pkvd)
 */
 class CAutoTrigger : public CBaseDelay
 {
+	DECLARE_CLASS(CAutoTrigger, CBaseDelay);
+	DECLARE_DATAMAP();
+
 public:
 	bool KeyValue(KeyValueData* pkvd) override;
 	void Spawn() override;
@@ -104,10 +103,6 @@ public:
 	void Think() override;
 
 	int ObjectCaps() override { return CBaseDelay::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
-	static TYPEDESCRIPTION m_SaveData[];
 
 private:
 	string_t m_globalstate;
@@ -116,13 +111,10 @@ private:
 
 LINK_ENTITY_TO_CLASS(trigger_auto, CAutoTrigger);
 
-TYPEDESCRIPTION CAutoTrigger::m_SaveData[] =
-	{
-		DEFINE_FIELD(CAutoTrigger, m_globalstate, FIELD_STRING),
-		DEFINE_FIELD(CAutoTrigger, triggerType, FIELD_INTEGER),
-};
-
-IMPLEMENT_SAVERESTORE(CAutoTrigger, CBaseDelay);
+BEGIN_DATAMAP(CAutoTrigger)
+DEFINE_FIELD(m_globalstate, FIELD_STRING),
+	DEFINE_FIELD(triggerType, FIELD_INTEGER),
+	END_DATAMAP();
 
 bool CAutoTrigger::KeyValue(KeyValueData* pkvd)
 {
@@ -176,16 +168,15 @@ void CAutoTrigger::Think()
 
 class CTriggerRelay : public CBaseDelay
 {
+	DECLARE_CLASS(CTriggerRelay, CBaseDelay);
+	DECLARE_DATAMAP();
+
 public:
 	bool KeyValue(KeyValueData* pkvd) override;
 	void Spawn() override;
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
 	int ObjectCaps() override { return CBaseDelay::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
-	static TYPEDESCRIPTION m_SaveData[];
 
 private:
 	USE_TYPE triggerType;
@@ -193,12 +184,9 @@ private:
 
 LINK_ENTITY_TO_CLASS(trigger_relay, CTriggerRelay);
 
-TYPEDESCRIPTION CTriggerRelay::m_SaveData[] =
-	{
-		DEFINE_FIELD(CTriggerRelay, triggerType, FIELD_INTEGER),
-};
-
-IMPLEMENT_SAVERESTORE(CTriggerRelay, CBaseDelay);
+BEGIN_DATAMAP(CTriggerRelay)
+DEFINE_FIELD(triggerType, FIELD_INTEGER),
+	END_DATAMAP();
 
 bool CTriggerRelay::KeyValue(KeyValueData* pkvd)
 {
@@ -247,6 +235,9 @@ constexpr int MAX_MULTI_TARGETS = 16; // maximum number of targets a single mult
 */
 class CMultiManager : public CBaseToggle
 {
+	DECLARE_CLASS(CMultiManager, CBaseToggle);
+	DECLARE_DATAMAP();
+
 public:
 	bool KeyValue(KeyValueData* pkvd) override;
 	void Spawn() override;
@@ -260,11 +251,6 @@ public:
 	bool HasTarget(string_t targetname) override;
 
 	int ObjectCaps() override { return CBaseToggle::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
-
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
-	static TYPEDESCRIPTION m_SaveData[];
 
 	int m_cTargets;							   // the total number of targets in this manager's fire list.
 	int m_index;							   // Current target
@@ -286,16 +272,13 @@ private:
 
 LINK_ENTITY_TO_CLASS(multi_manager, CMultiManager);
 
-TYPEDESCRIPTION CMultiManager::m_SaveData[] =
-	{
-		DEFINE_FIELD(CMultiManager, m_cTargets, FIELD_INTEGER),
-		DEFINE_FIELD(CMultiManager, m_index, FIELD_INTEGER),
-		DEFINE_FIELD(CMultiManager, m_startTime, FIELD_TIME),
-		DEFINE_ARRAY(CMultiManager, m_iTargetName, FIELD_STRING, MAX_MULTI_TARGETS),
-		DEFINE_ARRAY(CMultiManager, m_flTargetDelay, FIELD_FLOAT, MAX_MULTI_TARGETS),
-};
-
-IMPLEMENT_SAVERESTORE(CMultiManager, CBaseToggle);
+BEGIN_DATAMAP(CMultiManager)
+DEFINE_FIELD(m_cTargets, FIELD_INTEGER),
+	DEFINE_FIELD(m_index, FIELD_INTEGER),
+	DEFINE_FIELD(m_startTime, FIELD_TIME),
+	DEFINE_ARRAY(m_iTargetName, FIELD_STRING, MAX_MULTI_TARGETS),
+	DEFINE_ARRAY(m_flTargetDelay, FIELD_FLOAT, MAX_MULTI_TARGETS),
+	END_DATAMAP();
 
 bool CMultiManager::KeyValue(KeyValueData* pkvd)
 {
@@ -1112,16 +1095,15 @@ void CTriggerGravity::GravityTouch(CBaseEntity* pOther)
 // this is a really bad idea.
 class CTriggerChangeTarget : public CBaseDelay
 {
+	DECLARE_CLASS(CTriggerChangeTarget, CBaseDelay);
+	DECLARE_DATAMAP();
+
 public:
 	bool KeyValue(KeyValueData* pkvd) override;
 	void Spawn() override;
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
 	int ObjectCaps() override { return CBaseDelay::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
-	static TYPEDESCRIPTION m_SaveData[];
 
 private:
 	string_t m_iszNewTarget;
@@ -1129,12 +1111,9 @@ private:
 
 LINK_ENTITY_TO_CLASS(trigger_changetarget, CTriggerChangeTarget);
 
-TYPEDESCRIPTION CTriggerChangeTarget::m_SaveData[] =
-	{
-		DEFINE_FIELD(CTriggerChangeTarget, m_iszNewTarget, FIELD_STRING),
-};
-
-IMPLEMENT_SAVERESTORE(CTriggerChangeTarget, CBaseDelay);
+BEGIN_DATAMAP(CTriggerChangeTarget)
+DEFINE_FIELD(m_iszNewTarget, FIELD_STRING),
+	END_DATAMAP();
 
 bool CTriggerChangeTarget::KeyValue(KeyValueData* pkvd)
 {
@@ -1172,6 +1151,9 @@ void CTriggerChangeTarget::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, US
 
 class CTriggerCamera : public CBaseDelay
 {
+	DECLARE_CLASS(CTriggerCamera, CBaseDelay);
+	DECLARE_DATAMAP();
+
 public:
 	void Spawn() override;
 	bool KeyValue(KeyValueData* pkvd) override;
@@ -1179,10 +1161,7 @@ public:
 	void EXPORT FollowTarget();
 	void Move();
 
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
 	int ObjectCaps() override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
-	static TYPEDESCRIPTION m_SaveData[];
 
 	EntityHandle<CBasePlayer> m_hPlayer;
 	EHANDLE m_hTarget;
@@ -1201,24 +1180,21 @@ public:
 
 LINK_ENTITY_TO_CLASS(trigger_camera, CTriggerCamera);
 
-TYPEDESCRIPTION CTriggerCamera::m_SaveData[] =
-	{
-		DEFINE_FIELD(CTriggerCamera, m_hPlayer, FIELD_EHANDLE),
-		DEFINE_FIELD(CTriggerCamera, m_hTarget, FIELD_EHANDLE),
-		DEFINE_FIELD(CTriggerCamera, m_pentPath, FIELD_CLASSPTR),
-		DEFINE_FIELD(CTriggerCamera, m_sPath, FIELD_STRING),
-		DEFINE_FIELD(CTriggerCamera, m_flWait, FIELD_FLOAT),
-		DEFINE_FIELD(CTriggerCamera, m_flReturnTime, FIELD_TIME),
-		DEFINE_FIELD(CTriggerCamera, m_flStopTime, FIELD_TIME),
-		DEFINE_FIELD(CTriggerCamera, m_moveDistance, FIELD_FLOAT),
-		DEFINE_FIELD(CTriggerCamera, m_targetSpeed, FIELD_FLOAT),
-		DEFINE_FIELD(CTriggerCamera, m_initialSpeed, FIELD_FLOAT),
-		DEFINE_FIELD(CTriggerCamera, m_acceleration, FIELD_FLOAT),
-		DEFINE_FIELD(CTriggerCamera, m_deceleration, FIELD_FLOAT),
-		DEFINE_FIELD(CTriggerCamera, m_state, FIELD_BOOLEAN),
-};
-
-IMPLEMENT_SAVERESTORE(CTriggerCamera, CBaseDelay);
+BEGIN_DATAMAP(CTriggerCamera)
+DEFINE_FIELD(m_hPlayer, FIELD_EHANDLE),
+	DEFINE_FIELD(m_hTarget, FIELD_EHANDLE),
+	DEFINE_FIELD(m_pentPath, FIELD_CLASSPTR),
+	DEFINE_FIELD(m_sPath, FIELD_STRING),
+	DEFINE_FIELD(m_flWait, FIELD_FLOAT),
+	DEFINE_FIELD(m_flReturnTime, FIELD_TIME),
+	DEFINE_FIELD(m_flStopTime, FIELD_TIME),
+	DEFINE_FIELD(m_moveDistance, FIELD_FLOAT),
+	DEFINE_FIELD(m_targetSpeed, FIELD_FLOAT),
+	DEFINE_FIELD(m_initialSpeed, FIELD_FLOAT),
+	DEFINE_FIELD(m_acceleration, FIELD_FLOAT),
+	DEFINE_FIELD(m_deceleration, FIELD_FLOAT),
+	DEFINE_FIELD(m_state, FIELD_BOOLEAN),
+	END_DATAMAP();
 
 void CTriggerCamera::Spawn()
 {
@@ -1475,11 +1451,11 @@ void CTriggerCamera::Move()
 
 class CTriggerPlayerFreeze : public CBaseDelay
 {
-public:
-	static TYPEDESCRIPTION m_SaveData[];
+	DECLARE_CLASS(CTriggerPlayerFreeze, CBaseDelay);
+	DECLARE_DATAMAP();
 
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
+public:
+	void PostRestore() override;
 
 	void Spawn() override;
 
@@ -1491,36 +1467,19 @@ public:
 	bool m_bUnFrozen;
 };
 
-TYPEDESCRIPTION CTriggerPlayerFreeze::m_SaveData[] =
-	{
-		DEFINE_FIELD(CTriggerPlayerFreeze, m_bUnFrozen, FIELD_BOOLEAN),
-};
+BEGIN_DATAMAP(CTriggerPlayerFreeze)
+DEFINE_FIELD(m_bUnFrozen, FIELD_BOOLEAN),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(trigger_playerfreeze, CTriggerPlayerFreeze);
 
-bool CTriggerPlayerFreeze::Save(CSave& save)
+void CTriggerPlayerFreeze::PostRestore()
 {
-	if (!CBaseDelay::Save(save))
-		return false;
-
-	return save.WriteFields("CTriggerPlayerFreeze", this, m_SaveData, std::size(m_SaveData));
-}
-
-bool CTriggerPlayerFreeze::Restore(CRestore& restore)
-{
-	if (!CBaseDelay::Restore(restore))
-		return false;
-
-	if (!restore.ReadFields("CTriggerPlayerFreeze", this, m_SaveData, std::size(m_SaveData)))
-		return false;
-
 	if (!m_bUnFrozen)
 	{
 		SetThink(&CTriggerPlayerFreeze::PlayerFreezeDelay);
 		pev->nextthink = gpGlobals->time + 0.5;
 	}
-
-	return true;
 }
 
 void CTriggerPlayerFreeze::Spawn()
@@ -1588,9 +1547,9 @@ void CTriggerKillNoGib::KillTouch(CBaseEntity* pOther)
 
 class CTriggerXenReturn : public CBaseTrigger
 {
-public:
-	using BaseClass = CBaseTrigger;
+	DECLARE_CLASS(CTriggerXenReturn, CBaseTrigger);
 
+public:
 	void Spawn() override;
 
 	void EXPORT ReturnTouch(CBaseEntity* pOther);
@@ -1667,11 +1626,10 @@ const auto SF_GENEWORM_HIT_TOUCH_CLIENT_ONLY = 1 << 5;
 
 class COFTriggerGeneWormHit : public CBaseTrigger
 {
-public:
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
+	DECLARE_CLASS(COFTriggerGeneWormHit, CBaseTrigger);
+	DECLARE_DATAMAP();
 
+public:
 	void Precache() override;
 	void Spawn() override;
 
@@ -1682,12 +1640,9 @@ public:
 	float m_flLastDamageTime;
 };
 
-TYPEDESCRIPTION COFTriggerGeneWormHit::m_SaveData[] =
-	{
-		DEFINE_FIELD(COFTriggerGeneWormHit, m_flLastDamageTime, FIELD_TIME),
-};
-
-IMPLEMENT_SAVERESTORE(COFTriggerGeneWormHit, CBaseTrigger);
+BEGIN_DATAMAP(COFTriggerGeneWormHit)
+DEFINE_FIELD(m_flLastDamageTime, FIELD_TIME),
+	END_DATAMAP();
 
 const char* COFTriggerGeneWormHit::pAttackSounds[] =
 	{

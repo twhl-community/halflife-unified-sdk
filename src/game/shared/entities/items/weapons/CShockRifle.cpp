@@ -21,15 +21,10 @@
 
 #include "CShockRifle.h"
 
-#ifndef CLIENT_DLL
-TYPEDESCRIPTION CShockRifle::m_SaveData[] =
-	{
-		// This isn't restored in the original
-		DEFINE_FIELD(CShockRifle, m_flRechargeTime, FIELD_TIME),
-};
-
-IMPLEMENT_SAVERESTORE(CShockRifle, CShockRifle::BaseClass);
-#endif
+BEGIN_DATAMAP(CShockRifle)
+// This isn't restored in the original
+DEFINE_FIELD(m_flRechargeTime, FIELD_TIME),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(weapon_shockrifle, CShockRifle);
 

@@ -36,6 +36,9 @@
 // #define PATH_SPARKLE_DEBUG		1	// This makes a particle effect around path_track entities for debugging
 class CPathTrack : public CPointEntity
 {
+	DECLARE_CLASS(CPathTrack, CPointEntity);
+	DECLARE_DATAMAP();
+
 public:
 	void Spawn() override;
 	void Activate() override;
@@ -56,10 +59,6 @@ public:
 	CPathTrack* GetNext();
 	CPathTrack* GetPrevious();
 
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
-	static TYPEDESCRIPTION m_SaveData[];
 #if PATH_SPARKLE_DEBUG
 	void EXPORT Sparkle();
 #endif
@@ -73,6 +72,9 @@ public:
 
 class CFuncTrackTrain : public CBaseEntity
 {
+	DECLARE_CLASS(CFuncTrackTrain, CBaseEntity);
+	DECLARE_DATAMAP();
+
 public:
 	void Spawn() override;
 	void Precache() override;
@@ -103,10 +105,6 @@ public:
 
 	static CFuncTrackTrain* Instance(CBaseEntity* pent);
 
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-
-	static TYPEDESCRIPTION m_SaveData[];
 	int ObjectCaps() override { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION) | FCAP_DIRECTIONAL_USE; }
 
 	void OverrideReset() override;
