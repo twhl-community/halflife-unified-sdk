@@ -12,7 +12,6 @@
  *   without written permission from Valve LLC.
  *
  ****/
-// Implementation in UTIL.CPP
 
 #pragma once
 
