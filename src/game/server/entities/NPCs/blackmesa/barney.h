@@ -15,6 +15,8 @@
 
 #pragma once
 
+#include "talkmonster.h"
+
 // first flag is barney dying for scripted sequences?
 #define BARNEY_AE_DRAW (2)
 #define BARNEY_AE_SHOOT (3)

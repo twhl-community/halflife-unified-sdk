@@ -14,21 +14,32 @@
  ****/
 
 #include "cbase.h"
+#include "ReplacementMaps.h"
 #include "talkmonster.h"
 #include "defaultai.h"
 #include "scripted.h"
 #include "scientist.h"
 
+const ReplacementMap RosenbergSentenceReplacement{
+	{{"SC_POK", "RO_POK"},
+		{"SC_SCREAM", "RO_SCREAM"},
+		{"SC_HEAL", "RO_HEAL"},
+		{"SC_PLFEAR", "RO_PLFEAR"},
+		{"SC_FEAR", "RO_FEAR"}},
+	true};
+
 class CRosenberg : public CScientist
 {
 public:
+	void OnCreate() override
+	{
+		CScientist::OnCreate();
+		m_SentenceReplacement = &RosenbergSentenceReplacement;
+	}
+
 	void Precache() override;
 
-	void StartTask(Task_t* pTask) override;
 	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
-	void DeclineFollowing() override;
-
-	void Scream();
 
 	void PainSound() override;
 
@@ -36,55 +47,6 @@ public:
 };
 
 LINK_ENTITY_TO_CLASS(monster_rosenberg, CRosenberg);
-
-void CRosenberg::DeclineFollowing()
-{
-	Talk(10);
-	m_hTalkTarget = m_hEnemy;
-	PlaySentence("RO_POK", 2, VOL_NORM, ATTN_NORM);
-}
-
-void CRosenberg::Scream()
-{
-	if (FOkToSpeak())
-	{
-		Talk(10);
-		m_hTalkTarget = m_hEnemy;
-		PlaySentence("RO_SCREAM", RANDOM_FLOAT(3, 6), VOL_NORM, ATTN_NORM);
-	}
-}
-
-void CRosenberg::StartTask(Task_t* pTask)
-{
-	switch (pTask->iTask)
-	{
-	case TASK_SAY_HEAL:
-		//		if ( FOkToSpeak() )
-		Talk(2);
-		m_hTalkTarget = m_hTargetEnt;
-		PlaySentence("RO_HEAL", 2, VOL_NORM, ATTN_IDLE);
-
-		TaskComplete();
-		break;
-
-	case TASK_SAY_FEAR:
-		if (FOkToSpeak())
-		{
-			Talk(2);
-			m_hTalkTarget = m_hEnemy;
-			if (m_hEnemy->IsPlayer())
-				PlaySentence("RO_PLFEAR", 5, VOL_NORM, ATTN_NORM);
-			else
-				PlaySentence("RO_FEAR", 5, VOL_NORM, ATTN_NORM);
-		}
-		TaskComplete();
-		break;
-
-	default:
-		CScientist::StartTask(pTask);
-		break;
-	}
-}
 
 void CRosenberg::Precache()
 {
