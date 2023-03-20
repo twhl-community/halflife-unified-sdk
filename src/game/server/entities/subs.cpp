@@ -48,9 +48,6 @@ void CNullEntity::Spawn()
 }
 LINK_ENTITY_TO_CLASS(info_null, CNullEntity);
 
-// These are the new entry points to entities.
-LINK_ENTITY_TO_CLASS(info_landmark, CPointEntity);
-
 // This updates global tables that need to know about entities being removed
 void CBaseEntity::UpdateOnRemove()
 {

@@ -281,7 +281,6 @@ void UTIL_StripToken(const char* pKey, char* pDest); // for redundant keynames
 // Misc functions
 void SetMovedir(entvars_t* pev);
 Vector VecBModelOrigin(entvars_t* pevBModel);
-int BuildChangeList(LEVELLIST* pLevelList, int maxList);
 
 //
 // Constants that were used only by QC (maybe not used at all now)

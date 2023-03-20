@@ -27,6 +27,7 @@
 #include <optional>
 
 #include "cbase.h"
+#include "changelevel.h"
 #include "CCorpse.h"
 #include "com_model.h"
 #include "client.h"
@@ -891,7 +892,7 @@ void ParmsChangeLevel()
 	SAVERESTOREDATA* pSaveData = (SAVERESTOREDATA*)gpGlobals->pSaveData;
 
 	if (pSaveData)
-		pSaveData->connectionCount = BuildChangeList(pSaveData->levelList, MAX_LEVEL_CONNECTIONS);
+		pSaveData->connectionCount = CChangeLevel::ChangeList(pSaveData->levelList, MAX_LEVEL_CONNECTIONS);
 }
 
 
