@@ -500,26 +500,32 @@ static void CheckForBackwardsBounds(CBaseEntity* entity)
 	}
 }
 
-static const ReplacementMap* LoadReplacementMap(string_t fileName, const ReplacementMapOptions& options)
+static void LoadReplacementMap(const ReplacementMap*& destination, string_t fileName, const ReplacementMapOptions& options)
 {
 	const char* fileNameString = STRING(fileName);
 
 	if (FStrEq(fileNameString, ""))
 	{
-		return nullptr;
+		return;
 	}
 
-	return g_ReplacementMaps.Load(fileNameString, options);
+	auto result = g_ReplacementMaps.Load(fileNameString, options);
+
+	// Only overwrite destination if we successfully loaded something.
+	if (result)
+	{
+		destination = result;
+	}
 }
 
-static const ReplacementMap* LoadFileNameReplacementMap(string_t fileName)
+static void LoadFileNameReplacementMap(const ReplacementMap*& destination, string_t fileName)
 {
-	return LoadReplacementMap(fileName, {.CaseSensitive = false, .LoadFromAllPaths = true});
+	return LoadReplacementMap(destination, fileName, {.CaseSensitive = false, .LoadFromAllPaths = true});
 }
 
-static const ReplacementMap* LoadSentenceReplacementMap(string_t fileName)
+static void LoadSentenceReplacementMap(const ReplacementMap*& destination, string_t fileName)
 {
-	return LoadReplacementMap(fileName, {.CaseSensitive = true, .LoadFromAllPaths = true});
+	return LoadReplacementMap(destination, fileName, {.CaseSensitive = true, .LoadFromAllPaths = true});
 }
 
 bool CBaseEntity::RequiredKeyValue(KeyValueData* pkvd)
@@ -529,17 +535,17 @@ bool CBaseEntity::RequiredKeyValue(KeyValueData* pkvd)
 	if (FStrEq(pkvd->szKeyName, "model_replacement_filename"))
 	{
 		m_ModelReplacementFileName = ALLOC_STRING(pkvd->szValue);
-		m_ModelReplacement = LoadFileNameReplacementMap(m_ModelReplacementFileName);
+		LoadFileNameReplacementMap(m_ModelReplacement, m_ModelReplacementFileName);
 	}
 	else if (FStrEq(pkvd->szKeyName, "sound_replacement_filename"))
 	{
 		m_SoundReplacementFileName = ALLOC_STRING(pkvd->szValue);
-		m_SoundReplacement = LoadFileNameReplacementMap(m_SoundReplacementFileName);
+		LoadFileNameReplacementMap(m_SoundReplacement, m_SoundReplacementFileName);
 	}
 	else if (FStrEq(pkvd->szKeyName, "sentence_replacement_filename"))
 	{
 		m_SentenceReplacementFileName = ALLOC_STRING(pkvd->szValue);
-		m_SentenceReplacement = LoadFileNameReplacementMap(m_SentenceReplacementFileName);
+		LoadFileNameReplacementMap(m_SentenceReplacement, m_SentenceReplacementFileName);
 	}
 	// Note: while this code does fix backwards bounds here it will not apply to partial hulls mixing with hard-coded ones.
 	else if (FStrEq(pkvd->szKeyName, "custom_hull_min"))
@@ -572,9 +578,9 @@ bool CBaseEntity::RequiredKeyValue(KeyValueData* pkvd)
 
 void CBaseEntity::LoadReplacementFiles()
 {
-	m_ModelReplacement = LoadFileNameReplacementMap(m_ModelReplacementFileName);
-	m_SoundReplacement = LoadFileNameReplacementMap(m_SoundReplacementFileName);
-	m_SentenceReplacement = LoadSentenceReplacementMap(m_SentenceReplacementFileName);
+	LoadFileNameReplacementMap(m_ModelReplacement, m_ModelReplacementFileName);
+	LoadFileNameReplacementMap(m_SoundReplacement, m_SoundReplacementFileName);
+	LoadSentenceReplacementMap(m_SentenceReplacement, m_SentenceReplacementFileName);
 }
 
 int CBaseEntity::PrecacheModel(const char* s)
