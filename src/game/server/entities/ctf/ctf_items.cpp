@@ -13,9 +13,9 @@
  *
  ****/
 #include "cbase.h"
-#include "CItemCTF.h"
-#include "CItemSpawnCTF.h"
+#include "ctf_items.h"
 #include "CHalfLifeCTFplay.h"
+#include "UserMessages.h"
 
 const auto SF_ITEMCTF_RANDOM_SPAWN = 1 << 2;
 const auto SF_ITEMCTF_IGNORE_TEAM = 1 << 3;
@@ -400,4 +400,376 @@ void CItemCTF::ThrowItem(CBasePlayer* pPlayer)
 	m_flNextTouchTime = 5.0 + gpGlobals->time;
 
 	CGameRules::Logger->trace("{} triggered \"drop_{}_Powerup\"", PlayerLogInfo{*pPlayer}, m_pszItemName);
+}
+
+LINK_ENTITY_TO_CLASS(info_ctfspawn_powerup, CItemSpawnCTF);
+
+bool CItemSpawnCTF::KeyValue(KeyValueData* pkvd)
+{
+	if (FStrEq("team_no", pkvd->szKeyName))
+	{
+		team_no = static_cast<CTFTeam>(atoi(pkvd->szValue));
+		return true;
+	}
+
+	return CPointEntity::KeyValue(pkvd);
+}
+
+LINK_ENTITY_TO_CLASS(item_ctfaccelerator, CItemAcceleratorCTF);
+
+void CItemAcceleratorCTF::OnCreate()
+{
+	CItemCTF::OnCreate();
+
+	pev->model = MAKE_STRING("models/w_accelerator.mdl");
+}
+
+void CItemAcceleratorCTF::Precache()
+{
+	CItemCTF::Precache();
+
+	PrecacheModel(STRING(pev->model));
+	PrecacheSound("turret/tu_ping.wav");
+}
+
+void CItemAcceleratorCTF::Spawn()
+{
+	Precache();
+
+	SetModel(STRING(pev->model));
+
+	// TODO: is this actually used?
+	pev->spawnflags |= SF_NORESPAWN;
+
+	pev->oldorigin = pev->origin;
+
+	CItemCTF::Spawn();
+
+	m_iItemFlag = CTFItem::Acceleration;
+	m_pszItemName = "Damage";
+}
+
+void CItemAcceleratorCTF::RemoveEffect(CBasePlayer* pPlayer)
+{
+	pPlayer->m_flAccelTime += gpGlobals->time - m_flPickupTime;
+}
+
+bool CItemAcceleratorCTF::MyTouch(CBasePlayer* pPlayer)
+{
+	if ((pPlayer->m_iItems & CTFItem::Acceleration) == 0)
+	{
+		if (0 == multipower.value)
+		{
+			if ((pPlayer->m_iItems & CTFItem::ItemsMask) != 0)
+				return false;
+		}
+
+		if (team_no == CTFTeam::None || team_no == pPlayer->m_iTeamNum)
+		{
+			if (pPlayer->HasSuit())
+			{
+				pPlayer->m_iItems = static_cast<CTFItem::CTFItem>(pPlayer->m_iItems | CTFItem::Acceleration);
+				MESSAGE_BEGIN(MSG_ONE, gmsgItemPickup, nullptr, pPlayer->edict());
+				WRITE_STRING(STRING(pev->classname));
+				MESSAGE_END();
+				EmitSound(CHAN_VOICE, "items/ammopickup1.wav", VOL_NORM, ATTN_NORM);
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+LINK_ENTITY_TO_CLASS(item_ctfbackpack, CItemBackpackCTF);
+
+void CItemBackpackCTF::OnCreate()
+{
+	CItemCTF::OnCreate();
+
+	pev->model = MAKE_STRING("models/w_backpack.mdl");
+}
+
+void CItemBackpackCTF::Precache()
+{
+	PrecacheModel(STRING(pev->model));
+	PrecacheSound("ctf/pow_backpack.wav");
+}
+
+void CItemBackpackCTF::RemoveEffect(CBasePlayer* pPlayer)
+{
+	pPlayer->m_flBackpackTime += gpGlobals->time - m_flPickupTime;
+}
+
+bool CItemBackpackCTF::MyTouch(CBasePlayer* pPlayer)
+{
+	if ((pPlayer->m_iItems & CTFItem::Backpack) == 0)
+	{
+		if (0 == multipower.value)
+		{
+			if ((pPlayer->m_iItems & ~(CTFItem::BlackMesaFlag | CTFItem::OpposingForceFlag)) != 0)
+				return false;
+		}
+
+		if (static_cast<int>(team_no) <= 0 || team_no == pPlayer->m_iTeamNum)
+		{
+			if (pPlayer->HasSuit())
+			{
+				pPlayer->m_iItems = static_cast<CTFItem::CTFItem>(pPlayer->m_iItems | CTFItem::Backpack);
+				g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgItemPickup, nullptr, pPlayer->edict());
+				g_engfuncs.pfnWriteString(STRING(pev->classname));
+				g_engfuncs.pfnMessageEnd();
+
+				EmitSound(CHAN_VOICE, "items/ammopickup1.wav", VOL_NORM, ATTN_NORM);
+
+				pPlayer->GiveAmmo(AMMO_URANIUMBOX_GIVE, "uranium");
+				pPlayer->GiveAmmo(AMMO_GLOCKCLIP_GIVE, "9mm");
+				pPlayer->GiveAmmo(AMMO_357BOX_GIVE, "357");
+				pPlayer->GiveAmmo(AMMO_BUCKSHOTBOX_GIVE, "buckshot");
+				pPlayer->GiveAmmo(CROSSBOW_DEFAULT_GIVE, "bolts");
+				pPlayer->GiveAmmo(1, "rockets");
+				pPlayer->GiveAmmo(HANDGRENADE_DEFAULT_GIVE, "Hand Grenade");
+				pPlayer->GiveAmmo(SNARK_DEFAULT_GIVE, "Snarks");
+				pPlayer->GiveAmmo(SPORELAUNCHER_DEFAULT_GIVE, "spores");
+				pPlayer->GiveAmmo(SNIPERRIFLE_DEFAULT_GIVE, "762");
+				pPlayer->GiveAmmo(M249_MAX_CARRY, "556");
+
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+void CItemBackpackCTF::Spawn()
+{
+	PrecacheSound("ctf/itemthrow.wav");
+	PrecacheSound("items/ammopickup1.wav");
+
+	Precache();
+
+	SetModel(STRING(pev->model));
+
+	pev->spawnflags |= SF_NORESPAWN;
+	pev->oldorigin = pev->origin;
+
+	CItemCTF::Spawn();
+
+	m_iItemFlag = CTFItem::Backpack;
+	m_pszItemName = "Ammo";
+}
+
+LINK_ENTITY_TO_CLASS(item_ctflongjump, CItemLongJumpCTF);
+
+void CItemLongJumpCTF::OnCreate()
+{
+	CItemCTF::OnCreate();
+
+	pev->model = MAKE_STRING("models/w_jumppack.mdl");
+}
+
+void CItemLongJumpCTF::Precache()
+{
+	PrecacheModel(STRING(pev->model));
+	PrecacheSound("ctf/pow_big_jump.wav");
+}
+
+void CItemLongJumpCTF::RemoveEffect(CBasePlayer* pPlayer)
+{
+	pPlayer->m_fLongJump = false;
+	g_engfuncs.pfnSetPhysicsKeyValue(pPlayer->edict(), "jpj", "0");
+	pPlayer->m_flJumpTime += gpGlobals->time - m_flPickupTime;
+}
+
+bool CItemLongJumpCTF::MyTouch(CBasePlayer* pPlayer)
+{
+	if ((pPlayer->m_iItems & CTFItem::LongJump) == 0)
+	{
+		if (0 == multipower.value)
+		{
+			if ((pPlayer->m_iItems & ~(CTFItem::BlackMesaFlag | CTFItem::OpposingForceFlag)) != 0)
+				return false;
+		}
+
+		if (static_cast<int>(team_no) <= 0 || team_no == pPlayer->m_iTeamNum)
+		{
+			if (pPlayer->HasSuit())
+			{
+				pPlayer->m_fLongJump = true;
+				g_engfuncs.pfnSetPhysicsKeyValue(pPlayer->edict(), "jpj", "1");
+
+				pPlayer->m_iItems = static_cast<CTFItem::CTFItem>(pPlayer->m_iItems | CTFItem::LongJump);
+
+				g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgItemPickup, nullptr, pPlayer->edict());
+				g_engfuncs.pfnWriteString(STRING(pev->classname));
+				g_engfuncs.pfnMessageEnd();
+
+				EmitSound(CHAN_VOICE, "items/ammopickup1.wav", VOL_NORM, ATTN_NORM);
+
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+void CItemLongJumpCTF::Spawn()
+{
+	PrecacheSound("ctf/itemthrow.wav");
+	PrecacheSound("items/ammopickup1.wav");
+
+	Precache();
+
+	SetModel(STRING(pev->model));
+
+	pev->spawnflags |= SF_NORESPAWN;
+	pev->oldorigin = pev->origin;
+	CItemCTF::Spawn();
+
+	m_iItemFlag = CTFItem::LongJump;
+	m_pszItemName = "Jump";
+}
+
+LINK_ENTITY_TO_CLASS(item_ctfportablehev, CItemPortableHEVCTF);
+
+void CItemPortableHEVCTF::OnCreate()
+{
+	CItemCTF::OnCreate();
+
+	pev->model = MAKE_STRING("models/w_porthev.mdl");
+}
+
+void CItemPortableHEVCTF::Precache()
+{
+	PrecacheModel(STRING(pev->model));
+	PrecacheSound("ctf/pow_armor_charge.wav");
+}
+
+void CItemPortableHEVCTF::RemoveEffect(CBasePlayer* pPlayer)
+{
+	pPlayer->m_flShieldTime += gpGlobals->time - m_flPickupTime;
+}
+
+bool CItemPortableHEVCTF::MyTouch(CBasePlayer* pPlayer)
+{
+	if ((pPlayer->m_iItems & CTFItem::PortableHEV) == 0)
+	{
+		if (0 == multipower.value)
+		{
+			if ((pPlayer->m_iItems & ~(CTFItem::BlackMesaFlag | CTFItem::OpposingForceFlag)) != 0)
+				return false;
+		}
+
+		if (static_cast<int>(team_no) <= 0 || team_no == pPlayer->m_iTeamNum)
+		{
+			if (pPlayer->HasSuit())
+			{
+				pPlayer->m_iItems = static_cast<CTFItem::CTFItem>(pPlayer->m_iItems | CTFItem::PortableHEV);
+				pPlayer->m_fPlayingAChargeSound = false;
+
+				g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgItemPickup, nullptr, pPlayer->edict());
+				g_engfuncs.pfnWriteString(STRING(pev->classname));
+				g_engfuncs.pfnMessageEnd();
+
+				EmitSound(CHAN_VOICE, "items/ammopickup1.wav", VOL_NORM, ATTN_NORM);
+
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+void CItemPortableHEVCTF::Spawn()
+{
+	PrecacheSound("ctf/itemthrow.wav");
+	PrecacheSound("items/ammopickup1.wav");
+
+	Precache();
+
+	SetModel(STRING(pev->model));
+
+	pev->spawnflags |= SF_NORESPAWN;
+	pev->oldorigin = pev->origin;
+
+	CItemCTF::Spawn();
+
+	m_iItemFlag = CTFItem::PortableHEV;
+	m_pszItemName = "Shield";
+}
+
+LINK_ENTITY_TO_CLASS(item_ctfregeneration, CItemRegenerationCTF);
+
+void CItemRegenerationCTF::OnCreate()
+{
+	CItemCTF::OnCreate();
+
+	pev->model = MAKE_STRING("models/w_health.mdl");
+}
+
+void CItemRegenerationCTF::Precache()
+{
+	PrecacheModel(STRING(pev->model));
+	PrecacheSound("ctf/pow_health_charge.wav");
+}
+
+void CItemRegenerationCTF::RemoveEffect(CBasePlayer* pPlayer)
+{
+	pPlayer->m_flHealthTime += gpGlobals->time - m_flPickupTime;
+}
+
+bool CItemRegenerationCTF::MyTouch(CBasePlayer* pPlayer)
+{
+	if ((pPlayer->m_iItems & CTFItem::Regeneration) == 0)
+	{
+		if (0 == multipower.value)
+		{
+			if ((pPlayer->m_iItems & ~(CTFItem::BlackMesaFlag | CTFItem::OpposingForceFlag)) != 0)
+				return false;
+		}
+
+		if (static_cast<int>(team_no) <= 0 || team_no == pPlayer->m_iTeamNum)
+		{
+			if (pPlayer->HasSuit())
+			{
+				pPlayer->m_iItems = static_cast<CTFItem::CTFItem>(pPlayer->m_iItems | CTFItem::Regeneration);
+				pPlayer->m_fPlayingHChargeSound = false;
+
+				g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgItemPickup, nullptr, pPlayer->edict());
+				g_engfuncs.pfnWriteString(STRING(pev->classname));
+				g_engfuncs.pfnMessageEnd();
+
+				EmitSound(CHAN_VOICE, "items/ammopickup1.wav", VOL_NORM, ATTN_NORM);
+
+				if (pPlayer->pev->health < 100.0)
+				{
+					pPlayer->TakeHealth(GetSkillFloat("healthkit"sv), DMG_GENERIC);
+				}
+
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+void CItemRegenerationCTF::Spawn()
+{
+	PrecacheSound("ctf/itemthrow.wav");
+	PrecacheSound("items/ammopickup1.wav");
+
+	Precache();
+
+	SetModel(STRING(pev->model));
+
+	pev->spawnflags |= SF_NORESPAWN;
+	pev->oldorigin = pev->origin;
+
+	CItemCTF::Spawn();
+
+	m_iItemFlag = CTFItem::Regeneration;
+	m_pszItemName = "Health";
 }

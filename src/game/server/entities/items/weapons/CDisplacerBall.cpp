@@ -15,8 +15,7 @@
 #include "cbase.h"
 
 #include "ctf/CTFDefs.h"
-#include "ctf/CTFGoal.h"
-#include "ctf/CTFGoalFlag.h"
+#include "ctf/ctf_goals.h"
 
 #include "UserMessages.h"
 

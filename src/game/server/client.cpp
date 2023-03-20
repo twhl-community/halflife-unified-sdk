@@ -39,8 +39,7 @@
 #include "ClientCommandRegistry.h"
 #include "ServerLibrary.h"
 
-#include "ctf/CTFGoal.h"
-#include "ctf/CTFGoalFlag.h"
+#include "ctf/ctf_goals.h"
 
 unsigned int g_ulFrameCount;
 

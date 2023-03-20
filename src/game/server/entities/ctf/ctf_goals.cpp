@@ -15,12 +15,217 @@
 
 #include "cbase.h"
 #include "basemonster.h"
-#include "ctf/CTFGoal.h"
-#include "ctf/CTFGoalBase.h"
-#include "ctf/CTFGoalFlag.h"
-
 #include "CHalfLifeCTFplay.h"
 #include "UserMessages.h"
+#include "ctf_goals.h"
+
+bool CTFGoal::KeyValue(KeyValueData* pkvd)
+{
+	if (FStrEq("goal_no", pkvd->szKeyName))
+	{
+		m_iGoalNum = atoi(pkvd->szValue);
+		return true;
+	}
+	else if (FStrEq("goal_min", pkvd->szKeyName))
+	{
+		Vector tmp;
+		UTIL_StringToVector(tmp, pkvd->szValue);
+		if (tmp != g_vecZero)
+			m_GoalMin = tmp;
+
+		return true;
+	}
+	else if (FStrEq("goal_max", pkvd->szKeyName))
+	{
+		Vector tmp;
+		UTIL_StringToVector(tmp, pkvd->szValue);
+		if (tmp != g_vecZero)
+			m_GoalMax = tmp;
+
+		return true;
+	}
+
+	return false;
+}
+
+void CTFGoal::Spawn()
+{
+	if (!FStringNull(pev->model))
+	{
+		const char* modelName = STRING(pev->model);
+
+		if (*modelName == '*')
+			pev->effects |= EF_NODRAW;
+
+		PrecacheModel(modelName);
+		SetModel(STRING(pev->model));
+	}
+
+	pev->solid = SOLID_TRIGGER;
+
+	if (0 == m_iGoalState)
+		m_iGoalState = 1;
+
+	UTIL_SetOrigin(pev, pev->origin);
+
+	SetThink(&CTFGoal::PlaceGoal);
+	pev->nextthink = gpGlobals->time + 0.2;
+}
+
+void CTFGoal::SetObjectCollisionBox()
+{
+	if (*STRING(pev->model) == '*')
+	{
+		float max = 0;
+		for (int i = 0; i < 3; ++i)
+		{
+			float v = fabs(pev->mins[i]);
+			if (v > max)
+				max = v;
+			v = fabs(pev->maxs[i]);
+			if (v > max)
+				max = v;
+		}
+
+		for (int i = 0; i < 3; ++i)
+		{
+			pev->absmin[i] = pev->origin[i] - max;
+			pev->absmax[i] = pev->origin[i] + max;
+		}
+
+		pev->absmin.x -= 1.0;
+		pev->absmin.y -= 1.0;
+		pev->absmin.z -= 1.0;
+		pev->absmax.x += 1.0;
+		pev->absmax.y += 1.0;
+		pev->absmax.z += 1.0;
+	}
+	else
+	{
+		pev->absmin = pev->origin + Vector(-24, -24, 0);
+		pev->absmax = pev->origin + Vector(24, 24, 16);
+	}
+}
+
+void CTFGoal::StartGoal()
+{
+	SetThink(&CTFGoal::PlaceGoal);
+	pev->nextthink = gpGlobals->time + 0.2;
+}
+
+void CTFGoal::PlaceGoal()
+{
+	pev->movetype = MOVETYPE_NONE;
+	pev->velocity = g_vecZero;
+	pev->oldorigin = pev->origin;
+}
+
+LINK_ENTITY_TO_CLASS(item_ctfbase, CTFGoalBase);
+
+void CTFGoalBase::BaseThink()
+{
+	Vector vecLightPos, vecLightAng;
+	GetAttachment(0, vecLightPos, vecLightAng);
+
+	g_engfuncs.pfnMessageBegin(MSG_BROADCAST, SVC_TEMPENTITY, nullptr, nullptr);
+	g_engfuncs.pfnWriteByte(TE_ELIGHT);
+	g_engfuncs.pfnWriteShort(entindex() + 0x1000);
+	g_engfuncs.pfnWriteCoord(vecLightPos.x);
+	g_engfuncs.pfnWriteCoord(vecLightPos.y);
+	g_engfuncs.pfnWriteCoord(vecLightPos.z);
+	g_engfuncs.pfnWriteCoord(128);
+
+	if (m_iGoalNum == 1)
+	{
+		g_engfuncs.pfnWriteByte(255);
+		g_engfuncs.pfnWriteByte(128);
+		g_engfuncs.pfnWriteByte(128);
+	}
+	else
+	{
+		g_engfuncs.pfnWriteByte(128);
+		g_engfuncs.pfnWriteByte(255);
+		g_engfuncs.pfnWriteByte(128);
+	}
+
+	g_engfuncs.pfnWriteByte(255);
+	g_engfuncs.pfnWriteCoord(0);
+	g_engfuncs.pfnMessageEnd();
+	pev->nextthink = gpGlobals->time + 20.0;
+}
+
+void CTFGoalBase::Spawn()
+{
+	pev->movetype = MOVETYPE_TOSS;
+	pev->solid = SOLID_NOT;
+	UTIL_SetOrigin(pev, pev->origin);
+
+	Vector vecMin;
+	Vector vecMax;
+
+	vecMax.x = 16;
+	vecMax.y = 16;
+	vecMax.z = 16;
+	vecMin.x = -16;
+	vecMin.y = -16;
+	vecMin.z = 0;
+	SetSize(vecMin, vecMax);
+
+	if (0 == g_engfuncs.pfnDropToFloor(edict()))
+	{
+		CBaseEntity::Logger->error("Item {} fell out of level at {}", STRING(pev->classname), pev->origin);
+		UTIL_Remove(this);
+	}
+	else
+	{
+		if (!FStringNull(pev->model))
+		{
+			PrecacheModel(STRING(pev->model));
+			SetModel(STRING(pev->model));
+
+			pev->sequence = LookupSequence("on_ground");
+
+			if (pev->sequence != -1)
+			{
+				ResetSequenceInfo();
+				pev->frame = 0;
+			}
+		}
+
+		SetThink(&CTFGoalBase::BaseThink);
+		pev->nextthink = gpGlobals->time + 0.1;
+	}
+}
+
+void CTFGoalBase::TurnOnLight(CBasePlayer* pPlayer)
+{
+	Vector vecLightPos, vecLightAng;
+	GetAttachment(0, vecLightPos, vecLightAng);
+	g_engfuncs.pfnMessageBegin(MSG_ONE, SVC_TEMPENTITY, nullptr, pPlayer->edict());
+	g_engfuncs.pfnWriteByte(TE_ELIGHT);
+
+	g_engfuncs.pfnWriteShort(entindex() + 0x1000);
+	g_engfuncs.pfnWriteCoord(vecLightPos.x);
+	g_engfuncs.pfnWriteCoord(vecLightPos.y);
+	g_engfuncs.pfnWriteCoord(vecLightPos.z);
+	g_engfuncs.pfnWriteCoord(128);
+
+	if (m_iGoalNum == 1)
+	{
+		g_engfuncs.pfnWriteByte(255);
+		g_engfuncs.pfnWriteByte(128);
+		g_engfuncs.pfnWriteByte(128);
+	}
+	else
+	{
+		g_engfuncs.pfnWriteByte(128);
+		g_engfuncs.pfnWriteByte(255);
+		g_engfuncs.pfnWriteByte(128);
+	}
+	g_engfuncs.pfnWriteByte(255);
+	g_engfuncs.pfnWriteCoord(0);
+	g_engfuncs.pfnMessageEnd();
+}
 
 void DumpCTFFlagInfo(CBasePlayer* pPlayer)
 {

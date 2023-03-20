@@ -28,7 +28,7 @@
 #include "spawnpoints.h"
 #include "world.h"
 #include "ServerLibrary.h"
-#include "ctf/CItemCTF.h"
+#include "ctf/ctf_items.h"
 
 CGlobalState gGlobalState;
 

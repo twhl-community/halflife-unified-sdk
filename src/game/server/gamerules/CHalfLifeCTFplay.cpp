@@ -23,15 +23,8 @@
 #include "UserMessages.h"
 
 #include "CHalfLifeCTFplay.h"
-#include "ctf/CTFGoalFlag.h"
-#include "ctf/CItemCTF.h"
-#include "ctf/CTFGoalBase.h"
-
-#include "ctf/CItemAcceleratorCTF.h"
-#include "ctf/CItemBackpackCTF.h"
-#include "ctf/CItemLongJumpCTF.h"
-#include "ctf/CItemPortableHEVCTF.h"
-#include "ctf/CItemRegenerationCTF.h"
+#include "ctf/ctf_goals.h"
+#include "ctf/ctf_items.h"
 
 #include "pm_shared.h"
 

@@ -15,11 +15,46 @@
 
 #pragma once
 
-#include "CTFGoal.h"
+#include "CBaseAnimating.h"
+
+class CBasePlayer;
 
 extern float g_flFlagReturnTime;
 
 void DumpCTFFlagInfo(CBasePlayer* pPlayer);
+
+class CTFGoal : public CBaseAnimating
+{
+public:
+	int Classify() override { return CLASS_NONE; }
+
+	bool KeyValue(KeyValueData* pkvd) override;
+
+	void Spawn() override;
+
+	void SetObjectCollisionBox() override;
+
+	void StartGoal();
+
+	void EXPORT PlaceGoal();
+
+	int m_iGoalNum;
+	int m_iGoalState;
+	Vector m_GoalMin;
+	Vector m_GoalMax;
+};
+
+class CTFGoalBase : public CTFGoal
+{
+public:
+	int Classify() override { return CLASS_NONE; }
+
+	void EXPORT BaseThink();
+
+	void Spawn() override;
+
+	void TurnOnLight(CBasePlayer* pPlayer);
+};
 
 class CTFGoalFlag : public CTFGoal
 {
