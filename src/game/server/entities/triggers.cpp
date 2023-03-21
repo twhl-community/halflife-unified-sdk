@@ -1122,7 +1122,7 @@ void CBaseTrigger::TeleportTouch(CBaseEntity* pOther)
 		pevToucher->v_angle = target->pev->angles;
 	}
 
-	pevToucher->fixangle = 1;
+	pevToucher->fixangle = FIXANGLE_ABSOLUTE;
 	pevToucher->velocity = pevToucher->basevelocity = g_vecZero;
 }
 
@@ -1704,7 +1704,7 @@ void CTriggerXenReturn::ReturnTouch(CBaseEntity* pOther)
 
 		pPlayer->pev->angles = pTarget->pev->angles;
 		pPlayer->pev->v_angle = pTarget->pev->angles;
-		pPlayer->pev->fixangle = 1;
+		pPlayer->pev->fixangle = FIXANGLE_ABSOLUTE;
 
 		pPlayer->pev->basevelocity = g_vecZero;
 		pPlayer->pev->velocity = g_vecZero;

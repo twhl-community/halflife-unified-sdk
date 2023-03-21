@@ -137,7 +137,7 @@ CBaseEntity* CGameRules::GetPlayerSpawnSpot(CBasePlayer* pPlayer)
 	pPlayer->pev->velocity = g_vecZero;
 	pPlayer->pev->angles = pSpawnSpot->pev->angles;
 	pPlayer->pev->punchangle = g_vecZero;
-	pPlayer->pev->fixangle = 1;
+	pPlayer->pev->fixangle = FIXANGLE_ABSOLUTE;
 
 	return pSpawnSpot;
 }

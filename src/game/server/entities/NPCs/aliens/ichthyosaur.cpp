@@ -402,7 +402,7 @@ void CIchthyosaur::HandleAnimEvent(MonsterEvent_t* pEvent)
 					pHurt->pev->angles.x += RANDOM_FLOAT(-35, 35);
 					pHurt->pev->angles.y += RANDOM_FLOAT(-90, 90);
 					pHurt->pev->angles.z = 0;
-					pHurt->pev->fixangle = 1;
+					pHurt->pev->fixangle = FIXANGLE_ABSOLUTE;
 				}
 				pHurt->TakeDamage(this, this, GetSkillFloat("ichthyosaur_shake"sv), DMG_SLASH);
 			}

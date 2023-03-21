@@ -385,7 +385,7 @@ void CDisplacer::AltFireThink()
 
 		m_pPlayer->pev->v_angle = pDestination->pev->angles;
 
-		m_pPlayer->pev->fixangle = 1;
+		m_pPlayer->pev->fixangle = FIXANGLE_ABSOLUTE;
 
 		m_pPlayer->pev->basevelocity = g_vecZero;
 		m_pPlayer->pev->velocity = g_vecZero;

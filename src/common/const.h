@@ -677,6 +677,11 @@ constexpr int NUM_HULLS = 4;
 #define SF_TRAIN_START_ON 4 // Train is initially moving
 #define SF_TRAIN_PASSABLE 8 // Train is not solid -- used to make water trains
 
+// view angle update types for fixangle
+constexpr int FIXANGLE_NONE = 0;
+constexpr int FIXANGLE_ABSOLUTE = 1;	//!< Force view angles
+constexpr int FIXANGLE_RELATIVE = 2;	//!< Add avelocity yaw to view angles
+
 // buttons
 #include "in_buttons.h"
 

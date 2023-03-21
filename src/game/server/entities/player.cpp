@@ -1348,7 +1348,7 @@ void CBasePlayer::StartDeathCam()
 
 	m_afPhysicsFlags |= PFLAG_OBSERVER;
 	pev->view_ofs = g_vecZero;
-	pev->fixangle = 1;
+	pev->fixangle = FIXANGLE_ABSOLUTE;
 	pev->solid = SOLID_NOT;
 	pev->takedamage = DAMAGE_NO;
 	pev->movetype = MOVETYPE_NONE;
@@ -1395,7 +1395,7 @@ void CBasePlayer::StartObserver(Vector vecPosition, Vector vecViewAngle)
 	pev->effects = EF_NODRAW;
 	pev->view_ofs = g_vecZero;
 	pev->angles = pev->v_angle = vecViewAngle;
-	pev->fixangle = 1;
+	pev->fixangle = FIXANGLE_ABSOLUTE;
 	pev->solid = SOLID_NOT;
 	pev->takedamage = DAMAGE_NO;
 	pev->movetype = MOVETYPE_NONE;
@@ -3074,7 +3074,7 @@ bool CBasePlayer::Restore(CRestore& restore)
 	pev->v_angle.z = 0; // Clear out roll
 	pev->angles = pev->v_angle;
 
-	pev->fixangle = 1; // turn this way immediately
+	pev->fixangle = FIXANGLE_ABSOLUTE; // turn this way immediately
 
 	m_iClientFOV = -1; // Make sure the client gets the right FOV value.
 	m_ClientSndRoomtype = -1;
