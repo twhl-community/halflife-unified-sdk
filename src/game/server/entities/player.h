@@ -29,6 +29,10 @@ class CRope;
 #define PLAYER_MIN_BOUNCE_SPEED 200
 #define PLAYER_FALL_PUNCH_THRESHHOLD (float)350 // won't punch player's screen/make scrape noise unless player falling at least this fast.
 
+#define PLAYER_LONGJUMP_SPEED 350 // how fast we longjump
+
+#define PLAYER_DUCKING_MULTIPLIER 0.333
+
 //
 // Player PHYSICS FLAGS bits
 //

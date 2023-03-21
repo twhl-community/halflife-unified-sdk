@@ -616,7 +616,7 @@ struct edict_t;
 #define CONTENTS_SLIME -4
 #define CONTENTS_LAVA -5
 #define CONTENTS_SKY -6
-/* These additional contents constants are defined in bspfile.h
+// These additional contents constants are defined in bspfile.h
 #define	CONTENTS_ORIGIN		-7		// removed at csg time
 #define	CONTENTS_CLIP		-8		// changed to contents_solid
 #define	CONTENTS_CURRENT_0		-9
@@ -627,19 +627,12 @@ struct edict_t;
 #define	CONTENTS_CURRENT_DOWN	-14
 
 #define CONTENTS_TRANSLUCENT	-15
-*/
+
 #define CONTENTS_LADDER -16
 
-#define CONTENT_FLYFIELD -17
-#define CONTENT_GRAVITY_FLYFIELD -18
-#define CONTENT_FOG -19
-
-#define CONTENT_EMPTY -1
-#define CONTENT_SOLID -2
-#define CONTENT_WATER -3
-#define CONTENT_SLIME -4
-#define CONTENT_LAVA -5
-#define CONTENT_SKY -6
+#define CONTENTS_FLYFIELD -17
+#define CONTENTS_GRAVITY_FLYFIELD -18
+#define CONTENTS_FOG -19
 
 // channels
 #define CHAN_AUTO 0

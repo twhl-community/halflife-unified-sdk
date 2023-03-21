@@ -13,11 +13,9 @@
  *
  ****/
 
-#include "Platform.h"
+#include "cbase.h"
 
-#include "mathlib.h"
-#include "cdll_dll.h"
-#include "const.h"
+#include "com_model.h"
 #include "usercmd.h"
 #include "pm_defs.h"
 #include "pm_shared.h"
@@ -43,41 +41,7 @@ Vector vJumpAngles;
 
 static bool pm_shared_initialized = false;
 
-// TODO: already defined in com_model.h
-enum modtype_t
-{
-	mod_brush,
-	mod_sprite,
-	mod_alias,
-	mod_studio
-};
-
 playermove_t* pmove = nullptr;
-
-struct dclipnode_t
-{
-	int planenum;
-	short children[2]; // negative numbers are contents
-};
-
-struct mplane_t
-{
-	Vector normal; // surface normal
-	float dist;	   // closest appoach to origin
-	byte type;	   // for texture axis selection and fast side tests
-	byte signbits; // signx + signy<<1 + signz<<1
-	byte pad[2];
-};
-
-struct hull_t
-{
-	dclipnode_t* clipnodes;
-	mplane_t* planes;
-	int firstclipnode;
-	int lastclipnode;
-	Vector clip_mins;
-	Vector clip_maxs;
-};
 
 // Ducking time
 #define TIME_TO_DUCK 0.4
@@ -96,25 +60,6 @@ struct hull_t
 #define STEP_WADE 7		// wading in liquid
 #define STEP_LADDER 8	// climbing ladder
 #define STEP_SNOW 9		// snow
-
-#define PLAYER_FATAL_FALL_SPEED 1024															  // approx 60 feet
-#define PLAYER_MAX_SAFE_FALL_SPEED 580															  // approx 20 feet
-#define DAMAGE_FOR_FALL_SPEED (float)100 / (PLAYER_FATAL_FALL_SPEED - PLAYER_MAX_SAFE_FALL_SPEED) // damage per unit per second.
-#define PLAYER_MIN_BOUNCE_SPEED 200
-#define PLAYER_FALL_PUNCH_THRESHHOLD (float)350 // won't punch player's screen/make scrape noise unless player falling at least this fast.
-
-#define PLAYER_LONGJUMP_SPEED 350 // how fast we longjump
-
-#define PLAYER_DUCKING_MULTIPLIER 0.333
-
-#define CONTENTS_CURRENT_0 -9
-#define CONTENTS_CURRENT_90 -10
-#define CONTENTS_CURRENT_180 -11
-#define CONTENTS_CURRENT_270 -12
-#define CONTENTS_CURRENT_UP -13
-#define CONTENTS_CURRENT_DOWN -14
-
-#define CONTENTS_TRANSLUCENT -15
 
 static Vector rgv3tStuckTable[54];
 static int rgStuckLast[MAX_PLAYERS][2];
