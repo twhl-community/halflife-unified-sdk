@@ -17,61 +17,6 @@
 #include "items.h"
 #include "UserMessages.h"
 
-class CWorldItem : public CBaseEntity
-{
-public:
-	bool KeyValue(KeyValueData* pkvd) override;
-	void Spawn() override;
-	int m_iType;
-};
-
-LINK_ENTITY_TO_CLASS(world_items, CWorldItem);
-
-bool CWorldItem::KeyValue(KeyValueData* pkvd)
-{
-	if (FStrEq(pkvd->szKeyName, "type"))
-	{
-		m_iType = atoi(pkvd->szValue);
-		return true;
-	}
-
-	return CBaseEntity::KeyValue(pkvd);
-}
-
-void CWorldItem::Spawn()
-{
-	CBaseEntity* pEntity = nullptr;
-
-	switch (m_iType)
-	{
-	case 44: // ITEM_BATTERY:
-		pEntity = CBaseEntity::Create("item_battery", pev->origin, pev->angles);
-		break;
-	case 42: // ITEM_ANTIDOTE:
-		pEntity = CBaseEntity::Create("item_antidote", pev->origin, pev->angles);
-		break;
-	case 43: // ITEM_SECURITY:
-		pEntity = CBaseEntity::Create("item_security", pev->origin, pev->angles);
-		break;
-	case 45: // ITEM_SUIT:
-		pEntity = CBaseEntity::Create("item_suit", pev->origin, pev->angles);
-		break;
-	}
-
-	if (!pEntity)
-	{
-		CBaseEntity::Logger->debug("unable to create world_item {}", m_iType);
-	}
-	else
-	{
-		pEntity->pev->target = pev->target;
-		pEntity->pev->targetname = pev->targetname;
-		pEntity->pev->spawnflags = pev->spawnflags;
-	}
-
-	REMOVE_ENTITY(edict());
-}
-
 void CItem::Precache()
 {
 	if (!FStringNull(pev->model))
