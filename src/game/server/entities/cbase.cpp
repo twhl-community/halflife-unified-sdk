@@ -545,7 +545,7 @@ bool CBaseEntity::RequiredKeyValue(KeyValueData* pkvd)
 	else if (FStrEq(pkvd->szKeyName, "sentence_replacement_filename"))
 	{
 		m_SentenceReplacementFileName = ALLOC_STRING(pkvd->szValue);
-		LoadFileNameReplacementMap(m_SentenceReplacement, m_SentenceReplacementFileName);
+		LoadSentenceReplacementMap(m_SentenceReplacement, m_SentenceReplacementFileName);
 	}
 	// Note: while this code does fix backwards bounds here it will not apply to partial hulls mixing with hard-coded ones.
 	else if (FStrEq(pkvd->szKeyName, "custom_hull_min"))
