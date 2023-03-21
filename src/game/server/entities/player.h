@@ -285,6 +285,13 @@ public:
 	Vector GetGunPosition() override;
 	bool TakeHealth(float flHealth, int bitsDamageType) override;
 	void TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
+
+	/**
+	*	@brief NOTE: each call to TakeDamage with bitsDamageType set to
+	*	a time-based damage type will cause the damage time countdown to be reset.
+	*	Thus the ongoing effects of poison, radiation etc are implemented
+	*	with subsequent calls to TakeDamage using DMG_GENERIC.
+	*/
 	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 	void Killed(CBaseEntity* attacker, int iGib) override;
 	Vector BodyTarget(const Vector& posSrc) override { return Center() + pev->view_ofs * RANDOM_FLOAT(0.5, 1.1); } // position to shoot at
@@ -301,7 +308,17 @@ public:
 
 	bool Save(CSave& save) override;
 	bool Restore(CRestore& restore) override;
+
+	/**
+	*	@brief Marks everything as new so the player will resend this to the hud.
+	*/
 	void RenewItems();
+
+	/**
+	*	@brief call this when a player dies to pack up the appropriate weapons and ammo items,
+	*	and to destroy anything that shouldn't be packed.
+	*	This is pretty brute force :(
+	*/
 	void PackDeadPlayerItems();
 	void RemoveAllItems(bool removeSuit);
 	bool SwitchWeapon(CBasePlayerWeapon* weapon);
@@ -317,7 +334,12 @@ public:
 	bool HasSuit() const;
 	void SetHasSuit(bool hasSuit);
 
-	// JOHN:  sends custom messages if player HUD data has changed  (eg health, ammo)
+	/**
+	*	@brief resends any changed player HUD info to the client.
+	*	Called every frame by PlayerPreThink
+	*	Also called at start of demo recording and playback by ForceClientDllUpdate to ensure the demo gets messages
+	*	reflecting all of the HUD state info.
+	*/
 	virtual void UpdateClientData();
 
 	void UpdateCTFHud();
@@ -337,10 +359,17 @@ public:
 
 	void SetSuitLightType(SuitLightType type);
 
+	/**
+	*	@brief updates the position of the player's reserved sound slot in the sound list.
+	*/
 	void UpdatePlayerSound();
 	void DeathSound() override;
 
 	int Classify() override;
+
+	/**
+	*	@brief Set the activity based on an event or current state
+	*/
 	void SetAnimation(PLAYER_ANIM playerAnim);
 	char m_szAnimExtention[32];
 
@@ -348,14 +377,27 @@ public:
 	virtual void ImpulseCommands();
 	void CheatImpulseCommands(int iImpulse);
 
+	/**
+	*	@brief find an intermission spot and send the player off into observer mode
+	*/
 	void StartDeathCam();
 	void StartObserver(Vector vecPosition, Vector vecViewAngle);
 
 	void AddPoints(int score, bool bAllowNegativeScore);
 	void AddPointsToTeam(int score, bool bAllowNegativeScore);
+
+	/**
+	*	@brief Add a weapon to the player (Item == Weapon == Selectable Object)
+	*/
 	bool AddPlayerWeapon(CBasePlayerWeapon* weapon);
+
 	bool RemovePlayerWeapon(CBasePlayerWeapon* weapon);
+
+	/**
+	*	@brief drop the named item, or if no name, the active item.
+	*/
 	void DropPlayerWeapon(const char* pszItemName);
+
 	bool HasPlayerWeapon(CBasePlayerWeapon* checkWeapon);
 	bool HasNamedPlayerWeapon(const char* pszItemName);
 	bool HasWeapons(); // do I have ANY weapons?
@@ -368,13 +410,27 @@ private:
 	void DeployWeapon(CBasePlayerWeapon* weapon);
 
 public:
+	/**
+	*	@brief Called every frame by the player PreThink
+	*/
 	void ItemPreFrame();
+
+	/**
+	*	@brief Called every frame by the player PostThink
+	*/
 	void ItemPostFrame();
 	void GiveNamedItem(const char* szName);
 	void GiveNamedItem(const char* szName, int defaultAmmo);
 	void EnableControl(bool fControl);
 
+	/**
+	*	@brief Returns the unique ID for the ammo, or -1 if error
+	*/
 	int GiveAmmo(int iAmount, const char* szName);
+
+	/**
+	*	@brief makes sure the client has all the necessary ammo info, if values have changed
+	*/
 	void SendAmmoUpdate();
 	void SendSingleAmmoUpdate(int ammoIndex);
 
@@ -386,8 +442,20 @@ public:
 	void EXPORT PlayerDeathThink();
 	void PlayerUse();
 
+	/**
+	*	@brief Play suit update if it's time
+	*/
 	void CheckSuitUpdate();
+
+	/**
+	*	@brief add sentence to suit playlist queue.
+	*	@param fgroup if true, then name is a sentence group (HEV_AA),
+	*		otherwise name is a specific sentence name ie: !HEV_AA0.
+	*	@param iNoRepeat if specified, then we won't repeat playback of this word or sentence
+	*		for at least that number of seconds.
+	*/
 	void SetSuitUpdate(const char* name, bool fgroup, int iNoRepeat);
+
 	void UpdateGeigerCounter();
 	void CheckTimeBasedDamage();
 
@@ -396,18 +464,43 @@ public:
 	void BarnacleVictimReleased() override;
 	static int GetAmmoIndex(const char* psz);
 	int AmmoInventory(int iAmmoIndex);
+
+	/**
+	*	@brief return player light level plus virtual muzzle flash
+	*/
 	int Illumination() override;
 
 	void ResetAutoaim();
+
+	/**
+	*	@brief set crosshair position to point to enemey
+	*/
 	Vector GetAutoaimVector(float flDelta);
+
 	Vector GetAutoaimVectorFromPoint(const Vector& vecSrc, float flDelta);
 	Vector AutoaimDeflection(const Vector& vecSrc, float flDist, float flDelta);
 
-	void ForceClientDllUpdate(); // Forces all client .dll specific data to be resent to client.
+	/**
+	*	@brief When recording a demo, we need to have the server tell us the entire client state
+	*	so that the client side .dll can behave correctly.
+	*	Reset stuff so that the state is transmitted.
+	*/
+	void ForceClientDllUpdate();
 
+	/**
+	*	@brief UNDONE:  Determine real frame limit, 8 is a placeholder.
+	*	Note:  -1 means no custom frames present.
+	*/
 	void SetCustomDecalFrames(int nFrames);
+
+	/**
+	*	@brief Returns the # of custom frames this player's custom clan logo contains.
+	*/
 	int GetCustomDecalFrames();
 
+	/**
+	*	@brief This function is used to find and store all the ammo we have into the ammo vars.
+	*/
 	void TabulateAmmo();
 
 	float m_flStartCharge;
