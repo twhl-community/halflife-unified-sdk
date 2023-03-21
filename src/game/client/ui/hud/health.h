@@ -37,6 +37,7 @@
 
 struct DAMAGE_IMAGE
 {
+	int SpriteIndex{0};
 	float fExpire;
 	float fBaseline;
 	int x, y;
@@ -55,7 +56,6 @@ public:
 	void MsgFunc_Health(const char* pszName, int iSize, void* pbuf);
 	void MsgFunc_Damage(const char* pszName, int iSize, void* pbuf);
 	int m_iHealth;
-	int m_HUD_dmg_bio;
 	int m_HUD_cross;
 	float m_fAttackFront, m_fAttackRear, m_fAttackLeft, m_fAttackRight;
 	RGB24 GetPainColor();

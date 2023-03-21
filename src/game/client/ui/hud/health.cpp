@@ -25,20 +25,27 @@
 
 int giDmgHeight, giDmgWidth;
 
-int giDmgFlags[NUM_DMG_TYPES] =
+struct DamageType
+{
+	const char* HudSpriteName;
+	int TypeFlags;
+};
+
+// TODO: add remaining damage types from TFC
+const DamageType g_DamageTypes[NUM_DMG_TYPES] =
 	{
-		DMG_POISON,
-		DMG_ACID,
-		DMG_FREEZE | DMG_SLOWFREEZE,
-		DMG_DROWN,
-		DMG_BURN | DMG_SLOWBURN,
-		DMG_NERVEGAS,
-		DMG_RADIATION,
-		DMG_SHOCK,
-		DMG_CALTROP,
-		DMG_TRANQ,
-		DMG_CONCUSS,
-		DMG_HALLUC};
+		{"dmg_poison", DMG_POISON},
+		{"dmg_chem", DMG_ACID},
+		{"dmg_cold", DMG_FREEZE | DMG_SLOWFREEZE},
+		{"dmg_drown", DMG_DROWN},
+		{"dmg_heat", DMG_BURN | DMG_SLOWBURN},
+		{"dmg_gas", DMG_NERVEGAS},
+		{"dmg_rad", DMG_RADIATION},
+		{"dmg_shock", DMG_SHOCK},
+		{"", DMG_CALTROP},
+		{"", DMG_TRANQ},
+		{"", DMG_CONCUSS},
+		{"", DMG_HALLUC}};
 
 bool CHudHealth::Init()
 {
@@ -77,11 +84,17 @@ bool CHudHealth::VidInit()
 {
 	m_hSprite = 0;
 
-	m_HUD_dmg_bio = gHUD.GetSpriteIndex("dmg_bio") + 1;
 	m_HUD_cross = gHUD.GetSpriteIndex("cross");
 
-	giDmgHeight = gHUD.GetSpriteRect(m_HUD_dmg_bio).right - gHUD.GetSpriteRect(m_HUD_dmg_bio).left;
-	giDmgWidth = gHUD.GetSpriteRect(m_HUD_dmg_bio).bottom - gHUD.GetSpriteRect(m_HUD_dmg_bio).top;
+	for (int i = 0; i < NUM_DMG_TYPES; ++i)
+	{
+		m_dmg[i].SpriteIndex = gHUD.GetSpriteIndex(g_DamageTypes[i].HudSpriteName);
+	}
+
+	const Rect damageRect = gHUD.GetSpriteRect(m_dmg[0].SpriteIndex);
+
+	giDmgHeight = damageRect.right - damageRect.left;
+	giDmgWidth = damageRect.bottom - damageRect.top;
 	return true;
 }
 
@@ -368,11 +381,11 @@ bool CHudHealth::DrawDamage(float flTime)
 	int i;
 	for (i = 0; i < NUM_DMG_TYPES; i++)
 	{
-		if ((m_bitsDamage & giDmgFlags[i]) != 0)
+		if ((m_bitsDamage & g_DamageTypes[i].TypeFlags) != 0)
 		{
 			pdmg = &m_dmg[i];
-			SPR_Set(gHUD.GetSprite(m_HUD_dmg_bio + i), color);
-			SPR_DrawAdditive(0, pdmg->x, pdmg->y, &gHUD.GetSpriteRect(m_HUD_dmg_bio + i));
+			SPR_Set(gHUD.GetSprite(pdmg->SpriteIndex), color);
+			SPR_DrawAdditive(0, pdmg->x, pdmg->y, &gHUD.GetSpriteRect(pdmg->SpriteIndex));
 		}
 	}
 
@@ -382,7 +395,7 @@ bool CHudHealth::DrawDamage(float flTime)
 	{
 		DAMAGE_IMAGE* pdmg = &m_dmg[i];
 
-		if ((m_bitsDamage & giDmgFlags[i]) != 0)
+		if ((m_bitsDamage & g_DamageTypes[i].TypeFlags) != 0)
 		{
 			pdmg->fExpire = V_min(flTime + DMG_IMAGE_LIFE, pdmg->fExpire);
 
@@ -402,7 +415,7 @@ bool CHudHealth::DrawDamage(float flTime)
 						pdmg->y += giDmgHeight;
 				}
 
-				m_bitsDamage &= ~giDmgFlags[i]; // clear the bits
+				m_bitsDamage &= ~g_DamageTypes[i].TypeFlags; // clear the bits
 			}
 		}
 	}
@@ -423,7 +436,7 @@ void CHudHealth::UpdateTiles(float flTime, long bitsDamage)
 		pdmg = &m_dmg[i];
 
 		// Is this one already on?
-		if ((m_bitsDamage & giDmgFlags[i]) != 0)
+		if ((m_bitsDamage & g_DamageTypes[i].TypeFlags) != 0)
 		{
 			pdmg->fExpire = flTime + DMG_IMAGE_LIFE; // extend the duration
 			if (0 == pdmg->fBaseline)
@@ -431,7 +444,7 @@ void CHudHealth::UpdateTiles(float flTime, long bitsDamage)
 		}
 
 		// Are we just turning it on?
-		if ((bitsOn & giDmgFlags[i]) != 0)
+		if ((bitsOn & g_DamageTypes[i].TypeFlags) != 0)
 		{
 			// put this one at the bottom
 			pdmg->x = giDmgWidth / 8;

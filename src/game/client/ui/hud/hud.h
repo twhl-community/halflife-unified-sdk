@@ -147,8 +147,9 @@ private:
 	float m_fFade;
 	RGBA m_rgba;
 	WEAPON* m_pWeapon;
-	int m_HUD_bucket0;
 	int m_HUD_selection;
+
+	std::array<int, MAX_WEAPON_SLOTS> m_BucketSprites;
 
 	bool m_DrawCrosshair = true;
 

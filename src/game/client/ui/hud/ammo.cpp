@@ -334,14 +334,19 @@ void CHudAmmo::Reset()
 bool CHudAmmo::VidInit()
 {
 	// Load sprites for buckets (top row of weapon menu)
-	m_HUD_bucket0 = gHUD.GetSpriteIndex("bucket1");
 	m_HUD_selection = gHUD.GetSpriteIndex("selection");
 
-	ghsprBuckets = gHUD.GetSprite(m_HUD_bucket0);
-	giBucketWidth = gHUD.GetSpriteRect(m_HUD_bucket0).right - gHUD.GetSpriteRect(m_HUD_bucket0).left;
-	giBucketHeight = gHUD.GetSpriteRect(m_HUD_bucket0).bottom - gHUD.GetSpriteRect(m_HUD_bucket0).top;
+	for (int i = 0; i < MAX_WEAPON_SLOTS; ++i)
+	{
+		m_BucketSprites[i] = gHUD.GetSpriteIndex(fmt::format("bucket{}", i + 1).c_str());
+	}
 
-	gHR.iHistoryGap = V_max(gHR.iHistoryGap, gHUD.GetSpriteRect(m_HUD_bucket0).bottom - gHUD.GetSpriteRect(m_HUD_bucket0).top);
+	ghsprBuckets = gHUD.GetSprite(m_BucketSprites[0]);
+	const Rect bucketRect = gHUD.GetSpriteRect(m_BucketSprites[0]);
+	giBucketWidth = bucketRect.right - bucketRect.left;
+	giBucketHeight = bucketRect.bottom - bucketRect.top;
+
+	gHR.iHistoryGap = V_max(gHR.iHistoryGap, bucketRect.bottom - bucketRect.top);
 
 	// Get weapon and ammo info from server info, load weapon sprites.
 	gWR.InitializeWeapons();
@@ -1174,7 +1179,7 @@ bool CHudAmmo::DrawWList(float flTime)
 			a = 192;
 		*/
 
-		SPR_Set(gHUD.GetSprite(m_HUD_bucket0 + i), gHUD.m_HudItemColor);
+		SPR_Set(gHUD.GetSprite(m_BucketSprites[i]), gHUD.m_HudItemColor);
 
 		// make active slot wide enough to accomodate gun pictures
 		if (i == iActiveSlot)
@@ -1188,7 +1193,7 @@ bool CHudAmmo::DrawWList(float flTime)
 		else
 			iWidth = giBucketWidth;
 
-		SPR_DrawAdditive(0, x, y, &gHUD.GetSpriteRect(m_HUD_bucket0 + i));
+		SPR_DrawAdditive(0, x, y, &gHUD.GetSpriteRect(m_BucketSprites[i]));
 
 		x += iWidth + 5;
 	}
