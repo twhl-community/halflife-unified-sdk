@@ -352,21 +352,20 @@ LINK_ENTITY_TO_CLASS(weapon_tripmine, CTripmine);
 void CTripmine::OnCreate()
 {
 	CBasePlayerWeapon::OnCreate();
-
+	m_iId = WEAPON_TRIPMINE;
+	m_iDefaultAmmo = TRIPMINE_DEFAULT_GIVE;
 	m_WorldModel = pev->model = MAKE_STRING("models/v_tripmine.mdl");
 }
 
 void CTripmine::Spawn()
 {
 	CBasePlayerWeapon::Spawn();
-	m_iId = WEAPON_TRIPMINE;
+	
 	pev->frame = 0;
 	pev->body = 3;
 	pev->sequence = TRIPMINE_GROUND;
 	// ResetSequenceInfo( );
 	pev->framerate = 0;
-
-	m_iDefaultAmmo = TRIPMINE_DEFAULT_GIVE;
 
 	// HACK: force the body to the first person view by default so it doesn't show up as a huge tripmine for a second.
 #ifdef CLIENT_DLL
@@ -396,7 +395,7 @@ bool CTripmine::GetWeaponInfo(WeaponInfo& info)
 	info.MagazineSize1 = WEAPON_NOCLIP;
 	info.Slot = 4;
 	info.Position = 2;
-	info.Id = m_iId = WEAPON_TRIPMINE;
+	info.Id = WEAPON_TRIPMINE;
 	info.Weight = TRIPMINE_WEIGHT;
 	info.Flags = ITEM_FLAG_LIMITINWORLD | ITEM_FLAG_EXHAUSTIBLE;
 

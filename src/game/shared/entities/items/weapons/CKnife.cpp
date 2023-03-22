@@ -24,7 +24,8 @@ LINK_ENTITY_TO_CLASS(weapon_knife, CKnife);
 void CKnife::OnCreate()
 {
 	BaseClass::OnCreate();
-
+	m_iId = WEAPON_KNIFE;
+	m_iClip = WEAPON_NOCLIP;
 	m_WorldModel = pev->model = MAKE_STRING("models/w_knife.mdl");
 }
 
@@ -43,14 +44,6 @@ void CKnife::Precache()
 	PrecacheSound("weapons/knife_hit_wall2.wav");
 
 	m_usKnife = PRECACHE_EVENT(1, "events/knife.sc");
-}
-
-void CKnife::Spawn()
-{
-	CBasePlayerWeapon::Spawn();
-
-	m_iId = WEAPON_KNIFE;
-	m_iClip = WEAPON_NOCLIP;
 }
 
 bool CKnife::Deploy()
@@ -272,7 +265,7 @@ bool CKnife::GetWeaponInfo(WeaponInfo& info)
 	info.MagazineSize1 = WEAPON_NOCLIP;
 	info.Slot = 0;
 	info.Position = 2;
-	info.Id = m_iId = WEAPON_KNIFE;
+	info.Id = WEAPON_KNIFE;
 	info.Weight = 0;
 	return true;
 }

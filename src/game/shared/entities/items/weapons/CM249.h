@@ -44,8 +44,6 @@ public:
 
 	void Precache() override;
 
-	void Spawn() override;
-
 	bool Deploy() override;
 
 	void Holster() override;
@@ -84,7 +82,7 @@ private:
 	int m_iShell;
 
 	// Used to alternate between ejecting shells and links.
-	bool m_bAlternatingEject;
+	bool m_bAlternatingEject = false;
 	int m_iLink;
 	int m_iSmoke;
 	int m_iFire;

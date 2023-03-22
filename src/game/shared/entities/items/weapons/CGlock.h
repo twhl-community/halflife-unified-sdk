@@ -35,7 +35,6 @@ class CGlock : public CBasePlayerWeapon
 {
 public:
 	void OnCreate() override;
-	void Spawn() override;
 	void Precache() override;
 	bool GetWeaponInfo(WeaponInfo& info) override;
 

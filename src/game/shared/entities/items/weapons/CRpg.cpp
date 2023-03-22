@@ -215,6 +215,19 @@ void CRpgRocket::FollowThink()
 void CRpg::OnCreate()
 {
 	CBasePlayerWeapon::OnCreate();
+	m_iId = WEAPON_RPG;
+
+	m_fSpotActive = true;
+
+	if (UTIL_IsMultiplayer())
+	{
+		// more default ammo in multiplay.
+		m_iDefaultAmmo = RPG_DEFAULT_GIVE * 2;
+	}
+	else
+	{
+		m_iDefaultAmmo = RPG_DEFAULT_GIVE;
+	}
 
 	m_WorldModel = pev->model = MAKE_STRING("models/w_rpg.mdl");
 }
@@ -266,24 +279,6 @@ void CRpg::Reload()
 	}
 }
 
-void CRpg::Spawn()
-{
-	CBasePlayerWeapon::Spawn();
-	m_iId = WEAPON_RPG;
-
-	m_fSpotActive = true;
-
-	if (UTIL_IsMultiplayer())
-	{
-		// more default ammo in multiplay.
-		m_iDefaultAmmo = RPG_DEFAULT_GIVE * 2;
-	}
-	else
-	{
-		m_iDefaultAmmo = RPG_DEFAULT_GIVE;
-	}
-}
-
 void CRpg::Precache()
 {
 	PrecacheModel(STRING(m_WorldModel));
@@ -308,7 +303,7 @@ bool CRpg::GetWeaponInfo(WeaponInfo& info)
 	info.MagazineSize1 = RPG_MAX_CLIP;
 	info.Slot = 3;
 	info.Position = 0;
-	info.Id = m_iId = WEAPON_RPG;
+	info.Id = WEAPON_RPG;
 	info.Weight = RPG_WEIGHT;
 
 	return true;

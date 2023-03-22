@@ -34,7 +34,6 @@ class CCrowbar : public CBasePlayerWeapon
 {
 public:
 	void OnCreate() override;
-	void Spawn() override;
 	void Precache() override;
 	void EXPORT SwingAgain();
 	void EXPORT Smack();

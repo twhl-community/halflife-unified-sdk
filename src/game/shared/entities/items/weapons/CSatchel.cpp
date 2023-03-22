@@ -167,7 +167,8 @@ IMPLEMENT_SAVERESTORE(CSatchel, CBasePlayerWeapon);
 void CSatchel::OnCreate()
 {
 	CBasePlayerWeapon::OnCreate();
-
+	m_iId = WEAPON_SATCHEL;
+	m_iDefaultAmmo = SATCHEL_DEFAULT_GIVE;
 	m_WorldModel = pev->model = MAKE_STRING("models/w_satchel.mdl");
 }
 
@@ -195,13 +196,6 @@ void CSatchel::AddToPlayer(CBasePlayer* pPlayer)
 	CBasePlayerWeapon::AddToPlayer(pPlayer);
 }
 
-void CSatchel::Spawn()
-{
-	CBasePlayerWeapon::Spawn();
-	m_iId = WEAPON_SATCHEL;
-	m_iDefaultAmmo = SATCHEL_DEFAULT_GIVE;
-}
-
 void CSatchel::Precache()
 {
 	PrecacheModel("models/v_satchel.mdl");
@@ -221,7 +215,7 @@ bool CSatchel::GetWeaponInfo(WeaponInfo& info)
 	info.Slot = 4;
 	info.Position = 1;
 	info.Flags = ITEM_FLAG_SELECTONEMPTY | ITEM_FLAG_LIMITINWORLD | ITEM_FLAG_EXHAUSTIBLE;
-	info.Id = m_iId = WEAPON_SATCHEL;
+	info.Id = WEAPON_SATCHEL;
 	info.Weight = SATCHEL_WEIGHT;
 
 	return true;

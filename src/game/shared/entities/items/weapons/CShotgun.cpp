@@ -38,15 +38,9 @@ IMPLEMENT_SAVERESTORE(CShotgun, CBasePlayerWeapon);
 void CShotgun::OnCreate()
 {
 	CBasePlayerWeapon::OnCreate();
-
-	m_WorldModel = pev->model = MAKE_STRING("models/w_shotgun.mdl");
-}
-
-void CShotgun::Spawn()
-{
-	CBasePlayerWeapon::Spawn();
 	m_iId = WEAPON_SHOTGUN;
 	m_iDefaultAmmo = SHOTGUN_DEFAULT_GIVE;
+	m_WorldModel = pev->model = MAKE_STRING("models/w_shotgun.mdl");
 }
 
 void CShotgun::Precache()
@@ -82,7 +76,7 @@ bool CShotgun::GetWeaponInfo(WeaponInfo& info)
 	info.MagazineSize1 = SHOTGUN_MAX_CLIP;
 	info.Slot = 2;
 	info.Position = 1;
-	info.Id = m_iId = WEAPON_SHOTGUN;
+	info.Id = WEAPON_SHOTGUN;
 	info.Weight = SHOTGUN_WEIGHT;
 
 	return true;

@@ -32,15 +32,14 @@ LINK_ENTITY_TO_CLASS(weapon_sniperrifle, CSniperRifle);
 void CSniperRifle::OnCreate()
 {
 	CBasePlayerWeapon::OnCreate();
-
+	m_iId = WEAPON_SNIPERRIFLE;
+	m_iDefaultAmmo = SNIPERRIFLE_DEFAULT_GIVE;
 	m_WorldModel = pev->model = MAKE_STRING("models/w_m40a1.mdl");
 }
 
 void CSniperRifle::Precache()
 {
 	BaseClass::Precache();
-
-	m_iId = WEAPON_SNIPERRIFLE;
 
 	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/v_m40a1.mdl");
@@ -55,12 +54,6 @@ void CSniperRifle::Precache()
 	PrecacheSound("weapons/sniper_bolt2.wav");
 
 	m_usSniper = PRECACHE_EVENT(1, "events/sniper.sc");
-}
-
-void CSniperRifle::Spawn()
-{
-	CBasePlayerWeapon::Spawn();
-	m_iDefaultAmmo = SNIPERRIFLE_DEFAULT_GIVE;
 }
 
 bool CSniperRifle::Deploy()
@@ -201,7 +194,7 @@ bool CSniperRifle::GetWeaponInfo(WeaponInfo& info)
 	info.MagazineSize1 = SNIPERRIFLE_MAX_CLIP;
 	info.Slot = 5;
 	info.Position = 2;
-	info.Id = m_iId = WEAPON_SNIPERRIFLE;
+	info.Id = WEAPON_SNIPERRIFLE;
 	info.Weight = SNIPERRIFLE_WEIGHT;
 	return true;
 }

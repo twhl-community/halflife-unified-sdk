@@ -37,7 +37,8 @@ LINK_ENTITY_TO_CLASS(weapon_m249, CM249);
 void CM249::OnCreate()
 {
 	BaseClass::OnCreate();
-
+	m_iId = WEAPON_M249;
+	m_iDefaultAmmo = M249_DEFAULT_GIVE;
 	m_WorldModel = pev->model = MAKE_STRING("models/w_saw.mdl");
 }
 
@@ -57,16 +58,6 @@ void CM249::Precache()
 	PrecacheSound("weapons/saw_fire1.wav");
 
 	m_usFireM249 = PRECACHE_EVENT(1, "events/m249.sc");
-}
-
-void CM249::Spawn()
-{
-	CBasePlayerWeapon::Spawn();
-
-	m_iId = WEAPON_M249;
-	m_iDefaultAmmo = M249_DEFAULT_GIVE;
-
-	m_bAlternatingEject = false;
 }
 
 bool CM249::Deploy()
@@ -321,7 +312,7 @@ bool CM249::GetWeaponInfo(WeaponInfo& info)
 	info.MagazineSize1 = M249_MAX_CLIP;
 	info.Slot = 5;
 	info.Position = 0;
-	info.Id = m_iId = WEAPON_M249;
+	info.Id = WEAPON_M249;
 	info.Weight = M249_WEIGHT;
 
 	return true;

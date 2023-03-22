@@ -41,8 +41,6 @@ public:
 
 	void Precache() override;
 
-	void Spawn() override;
-
 	bool Deploy() override;
 
 	void Holster() override;

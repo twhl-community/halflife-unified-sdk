@@ -31,7 +31,8 @@ LINK_ENTITY_TO_CLASS(weapon_penguin, CPenguin);
 void CPenguin::OnCreate()
 {
 	CBasePlayerWeapon::OnCreate();
-
+	m_iId = WEAPON_PENGUIN;
+	m_iDefaultAmmo = PENGUIN_MAX_CLIP;
 	m_WorldModel = pev->model = MAKE_STRING("models/w_penguinnest.mdl");
 }
 
@@ -50,9 +51,6 @@ void CPenguin::Spawn()
 {
 	CBasePlayerWeapon::Spawn();
 
-	m_iId = WEAPON_PENGUIN;
-
-	m_iDefaultAmmo = PENGUIN_MAX_CLIP;
 	pev->sequence = 1;
 	pev->animtime = gpGlobals->time;
 	pev->framerate = 1;
@@ -196,7 +194,7 @@ bool CPenguin::GetWeaponInfo(WeaponInfo& info)
 	info.MagazineSize1 = WEAPON_NOCLIP;
 	info.Slot = 4;
 	info.Position = 4;
-	info.Id = m_iId = WEAPON_PENGUIN;
+	info.Id = WEAPON_PENGUIN;
 	info.Weight = PENGUIN_WEIGHT;
 	info.Flags = ITEM_FLAG_LIMITINWORLD | ITEM_FLAG_EXHAUSTIBLE;
 

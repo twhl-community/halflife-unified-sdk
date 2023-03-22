@@ -40,7 +40,8 @@ LINK_ENTITY_TO_CLASS(weapon_grapple, CGrapple);
 void CGrapple::OnCreate()
 {
 	BaseClass::OnCreate();
-
+	m_iId = WEAPON_GRAPPLE;
+	m_iClip = WEAPON_NOCLIP;
 	m_WorldModel = pev->model = MAKE_STRING("models/w_bgrap.mdl");
 }
 
@@ -64,19 +65,6 @@ void CGrapple::Precache()
 	PrecacheModel("sprites/tongue.spr");
 
 	UTIL_PrecacheOther("grapple_tip");
-}
-
-void CGrapple::Spawn()
-{
-	CBasePlayerWeapon::Spawn();
-
-	m_iId = WEAPON_GRAPPLE;
-
-	m_iClip = WEAPON_NOCLIP;
-
-	m_pTip = nullptr;
-
-	m_bGrappling = false;
 }
 
 bool CGrapple::Deploy()
@@ -556,7 +544,7 @@ bool CGrapple::GetWeaponInfo(WeaponInfo& info)
 	info.MagazineSize1 = WEAPON_NOCLIP;
 	info.Slot = 0;
 	info.Position = 3;
-	info.Id = m_iId = WEAPON_GRAPPLE;
+	info.Id = WEAPON_GRAPPLE;
 	info.Weight = 21;
 
 	return true;

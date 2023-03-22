@@ -24,16 +24,9 @@ LINK_ENTITY_TO_CLASS(weapon_crowbar, CCrowbar);
 void CCrowbar::OnCreate()
 {
 	CBasePlayerWeapon::OnCreate();
-
-	m_WorldModel = pev->model = MAKE_STRING("models/w_crowbar.mdl");
-}
-
-void CCrowbar::Spawn()
-{
-	CBasePlayerWeapon::Spawn();
-
 	m_iId = WEAPON_CROWBAR;
-	m_iClip = -1;
+	m_iClip = WEAPON_NOCLIP;
+	m_WorldModel = pev->model = MAKE_STRING("models/w_crowbar.mdl");
 }
 
 void CCrowbar::Precache()

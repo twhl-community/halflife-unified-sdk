@@ -193,16 +193,9 @@ LINK_ENTITY_TO_CLASS(weapon_crossbow, CCrossbow);
 void CCrossbow::OnCreate()
 {
 	CBasePlayerWeapon::OnCreate();
-
-	m_WorldModel = pev->model = MAKE_STRING("models/w_crossbow.mdl");
-}
-
-void CCrossbow::Spawn()
-{
-	CBasePlayerWeapon::Spawn();
 	m_iId = WEAPON_CROSSBOW;
-
 	m_iDefaultAmmo = CROSSBOW_DEFAULT_GIVE;
+	m_WorldModel = pev->model = MAKE_STRING("models/w_crossbow.mdl");
 }
 
 void CCrossbow::Precache()

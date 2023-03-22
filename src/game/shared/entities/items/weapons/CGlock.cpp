@@ -21,15 +21,9 @@ LINK_ENTITY_TO_CLASS(weapon_9mmhandgun, CGlock);
 void CGlock::OnCreate()
 {
 	CBasePlayerWeapon::OnCreate();
-
-	m_WorldModel = pev->model = MAKE_STRING("models/w_9mmhandgun.mdl");
-}
-
-void CGlock::Spawn()
-{
-	CBasePlayerWeapon::Spawn();
 	m_iId = WEAPON_GLOCK;
 	m_iDefaultAmmo = GLOCK_DEFAULT_GIVE;
+	m_WorldModel = pev->model = MAKE_STRING("models/w_9mmhandgun.mdl");
 }
 
 void CGlock::Precache()
@@ -58,7 +52,7 @@ bool CGlock::GetWeaponInfo(WeaponInfo& info)
 	info.MagazineSize1 = GLOCK_MAX_CLIP;
 	info.Slot = 1;
 	info.Position = 0;
-	info.Id = m_iId = WEAPON_GLOCK;
+	info.Id = WEAPON_GLOCK;
 	info.Weight = GLOCK_WEIGHT;
 
 	return true;

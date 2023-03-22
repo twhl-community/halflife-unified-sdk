@@ -44,7 +44,6 @@ public:
 #endif
 
 	void OnCreate() override;
-	void Spawn() override;
 	void Precache() override;
 	bool GetWeaponInfo(WeaponInfo& info) override;
 	void AddToPlayer(CBasePlayer* pPlayer) override;

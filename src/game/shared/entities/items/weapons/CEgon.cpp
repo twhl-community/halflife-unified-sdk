@@ -41,15 +41,9 @@ IMPLEMENT_SAVERESTORE(CEgon, CBasePlayerWeapon);
 void CEgon::OnCreate()
 {
 	CBasePlayerWeapon::OnCreate();
-
-	m_WorldModel = pev->model = MAKE_STRING("models/w_egon.mdl");
-}
-
-void CEgon::Spawn()
-{
-	CBasePlayerWeapon::Spawn();
 	m_iId = WEAPON_EGON;
 	m_iDefaultAmmo = EGON_DEFAULT_GIVE;
+	m_WorldModel = pev->model = MAKE_STRING("models/w_egon.mdl");
 }
 
 void CEgon::Precache()
@@ -96,7 +90,7 @@ bool CEgon::GetWeaponInfo(WeaponInfo& info)
 	info.MagazineSize1 = WEAPON_NOCLIP;
 	info.Slot = 3;
 	info.Position = 2;
-	info.Id = m_iId = WEAPON_EGON;
+	info.Id = WEAPON_EGON;
 	info.Weight = EGON_WEIGHT;
 
 	return true;

@@ -36,7 +36,8 @@ LINK_ENTITY_TO_CLASS(weapon_shockrifle, CShockRifle);
 void CShockRifle::OnCreate()
 {
 	CBasePlayerWeapon::OnCreate();
-
+	m_iId = WEAPON_SHOCKRIFLE;
+	m_iDefaultAmmo = SHOCKRIFLE_DEFAULT_GIVE;
 	m_WorldModel = pev->model = MAKE_STRING("models/w_shock_rifle.mdl");
 }
 
@@ -63,9 +64,6 @@ void CShockRifle::Precache()
 void CShockRifle::Spawn()
 {
 	CBasePlayerWeapon::Spawn();
-	m_iId = WEAPON_SHOCKRIFLE;
-
-	m_iDefaultAmmo = SHOCKRIFLE_DEFAULT_GIVE;
 
 	pev->sequence = 0;
 	pev->animtime = gpGlobals->time;
@@ -286,7 +284,7 @@ bool CShockRifle::GetWeaponInfo(WeaponInfo& info)
 	info.Flags = ITEM_FLAG_NOAUTORELOAD | ITEM_FLAG_NOAUTOSWITCHEMPTY;
 	info.Slot = 6;
 	info.Position = 1;
-	info.Id = m_iId = WEAPON_SHOCKRIFLE;
+	info.Id = WEAPON_SHOCKRIFLE;
 	info.Weight = SHOCKRIFLE_WEIGHT;
 	return true;
 }

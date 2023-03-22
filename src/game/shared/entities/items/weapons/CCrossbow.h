@@ -37,7 +37,6 @@ class CCrossbow : public CBasePlayerWeapon
 {
 public:
 	void OnCreate() override;
-	void Spawn() override;
 	void Precache() override;
 	bool GetWeaponInfo(WeaponInfo& info) override;
 	void IncrementAmmo(CBasePlayer* pPlayer) override;

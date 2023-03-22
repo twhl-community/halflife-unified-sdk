@@ -43,7 +43,6 @@ public:
 #endif
 
 	void OnCreate() override;
-	void Spawn() override;
 	void Precache() override;
 	void Reload() override;
 	bool GetWeaponInfo(WeaponInfo& info) override;

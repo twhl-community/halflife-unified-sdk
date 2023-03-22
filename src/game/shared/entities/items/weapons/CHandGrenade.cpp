@@ -23,20 +23,12 @@ LINK_ENTITY_TO_CLASS(weapon_handgrenade, CHandGrenade);
 void CHandGrenade::OnCreate()
 {
 	CBasePlayerWeapon::OnCreate();
-
-	m_WorldModel = pev->model = MAKE_STRING("models/w_grenade.mdl");
-}
-
-void CHandGrenade::Spawn()
-{
-	CBasePlayerWeapon::Spawn();
 	m_iId = WEAPON_HANDGRENADE;
-
+	m_iDefaultAmmo = HANDGRENADE_DEFAULT_GIVE;
 #ifndef CLIENT_DLL
 	pev->dmg = GetSkillFloat("plr_hand_grenade"sv);
 #endif
-
-	m_iDefaultAmmo = HANDGRENADE_DEFAULT_GIVE;
+	m_WorldModel = pev->model = MAKE_STRING("models/w_grenade.mdl");
 }
 
 void CHandGrenade::Precache()
@@ -53,7 +45,7 @@ bool CHandGrenade::GetWeaponInfo(WeaponInfo& info)
 	info.MagazineSize1 = WEAPON_NOCLIP;
 	info.Slot = 4;
 	info.Position = 0;
-	info.Id = m_iId = WEAPON_HANDGRENADE;
+	info.Id = WEAPON_HANDGRENADE;
 	info.Weight = HANDGRENADE_WEIGHT;
 	info.Flags = ITEM_FLAG_LIMITINWORLD | ITEM_FLAG_EXHAUSTIBLE;
 

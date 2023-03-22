@@ -22,17 +22,9 @@ LINK_ENTITY_TO_CLASS(weapon_9mmAR, CMP5);
 void CMP5::OnCreate()
 {
 	CBasePlayerWeapon::OnCreate();
-
-	m_WorldModel = pev->model = MAKE_STRING("models/w_9mmAR.mdl");
-}
-
-void CMP5::Spawn()
-{
-	CBasePlayerWeapon::Spawn();
 	m_iId = WEAPON_MP5;
-
 	m_iDefaultAmmo = MP5_DEFAULT_GIVE;
-
+	m_WorldModel = pev->model = MAKE_STRING("models/w_9mmAR.mdl");
 	m_flNextGrenadeLoad = gpGlobals->time;
 }
 
@@ -73,7 +65,7 @@ bool CMP5::GetWeaponInfo(WeaponInfo& info)
 	info.MagazineSize1 = MP5_MAX_CLIP;
 	info.Slot = 2;
 	info.Position = 0;
-	info.Id = m_iId = WEAPON_MP5;
+	info.Id = WEAPON_MP5;
 	info.Weight = MP5_WEIGHT;
 
 	return true;

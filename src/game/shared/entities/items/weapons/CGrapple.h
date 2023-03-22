@@ -55,8 +55,6 @@ public:
 
 	void Precache() override;
 
-	void Spawn() override;
-
 	bool Deploy() override;
 
 	void Holster() override;
@@ -87,7 +85,7 @@ private:
 	void DestroyEffect();
 
 private:
-	CGrappleTip* m_pTip;
+	CGrappleTip* m_pTip = nullptr;
 
 	CBeam* m_pBeam;
 
@@ -96,7 +94,7 @@ private:
 
 	FireState m_FireState;
 
-	bool m_bGrappling;
+	bool m_bGrappling = false;
 
 	bool m_bMissed;
 

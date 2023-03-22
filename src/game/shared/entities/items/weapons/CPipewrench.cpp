@@ -35,16 +35,9 @@ LINK_ENTITY_TO_CLASS(weapon_pipewrench, CPipewrench);
 void CPipewrench::OnCreate()
 {
 	BaseClass::OnCreate();
-
-	m_WorldModel = pev->model = MAKE_STRING("models/w_pipe_wrench.mdl");
-}
-
-void CPipewrench::Spawn()
-{
-	CBasePlayerWeapon::Spawn();
 	m_iId = WEAPON_PIPEWRENCH;
 	m_iClip = WEAPON_NOCLIP;
-	m_iSwingMode = SWING_NONE;
+	m_WorldModel = pev->model = MAKE_STRING("models/w_pipe_wrench.mdl");
 }
 
 void CPipewrench::Precache()
@@ -517,7 +510,7 @@ bool CPipewrench::GetWeaponInfo(WeaponInfo& info)
 	info.MagazineSize1 = WEAPON_NOCLIP;
 	info.Slot = 0;
 	info.Position = 1;
-	info.Id = m_iId = WEAPON_PIPEWRENCH;
+	info.Id = WEAPON_PIPEWRENCH;
 	info.Weight = PIPEWRENCH_WEIGHT;
 
 	return true;

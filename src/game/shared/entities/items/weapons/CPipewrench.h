@@ -55,7 +55,6 @@ public:
 #endif
 
 	void OnCreate() override;
-	void Spawn() override;
 	void Precache() override;
 	void EXPORT SwingAgain();
 	void EXPORT Smack();
@@ -84,7 +83,7 @@ public:
 	}
 
 	float m_flBigSwingStart;
-	int m_iSwingMode;
+	int m_iSwingMode = SWING_NONE;
 	int m_iSwing;
 	TraceResult m_trHit;
 

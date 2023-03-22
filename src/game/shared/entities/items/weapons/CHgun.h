@@ -37,7 +37,6 @@ public:
 #endif
 
 	void OnCreate() override;
-	void Spawn() override;
 	void Precache() override;
 	bool GetWeaponInfo(WeaponInfo& info) override;
 	void AddToPlayer(CBasePlayer* pPlayer) override;
@@ -53,7 +52,7 @@ public:
 
 	float m_flRechargeTime;
 
-	int m_iFirePhase; // don't save me.
+	int m_iFirePhase = 0; // don't save me.
 
 	bool UseDecrement() override
 	{

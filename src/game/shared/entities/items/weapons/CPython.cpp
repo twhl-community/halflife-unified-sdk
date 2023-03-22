@@ -22,7 +22,8 @@ LINK_ENTITY_TO_CLASS(weapon_357, CPython);
 void CPython::OnCreate()
 {
 	CBasePlayerWeapon::OnCreate();
-
+	m_iId = WEAPON_PYTHON;
+	m_iDefaultAmmo = PYTHON_DEFAULT_GIVE;
 	m_WorldModel = pev->model = MAKE_STRING("models/w_357.mdl");
 }
 
@@ -33,7 +34,7 @@ bool CPython::GetWeaponInfo(WeaponInfo& info)
 	info.MagazineSize1 = PYTHON_MAX_CLIP;
 	info.Slot = 1;
 	info.Position = 1;
-	info.Id = m_iId = WEAPON_PYTHON;
+	info.Id = WEAPON_PYTHON;
 	info.Weight = PYTHON_WEIGHT;
 
 	return true;
@@ -45,13 +46,6 @@ void CPython::IncrementAmmo(CBasePlayer* pPlayer)
 	{
 		pPlayer->EmitSound(CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
 	}
-}
-
-void CPython::Spawn()
-{
-	CBasePlayerWeapon::Spawn();
-	m_iId = WEAPON_PYTHON;
-	m_iDefaultAmmo = PYTHON_DEFAULT_GIVE;
 }
 
 void CPython::Precache()

@@ -35,7 +35,8 @@ LINK_ENTITY_TO_CLASS(weapon_sporelauncher, CSporeLauncher);
 void CSporeLauncher::OnCreate()
 {
 	CBasePlayerWeapon::OnCreate();
-
+	m_iId = WEAPON_SPORELAUNCHER;
+	m_iDefaultAmmo = SPORELAUNCHER_DEFAULT_GIVE;
 	m_WorldModel = pev->model = MAKE_STRING("models/w_spore_launcher.mdl");
 }
 
@@ -60,14 +61,8 @@ void CSporeLauncher::Spawn()
 {
 	CBasePlayerWeapon::Spawn();
 
-	m_iId = WEAPON_SPORELAUNCHER;
-
-	m_iDefaultAmmo = SPORELAUNCHER_DEFAULT_GIVE;
-
 	pev->sequence = 0;
-
 	pev->animtime = gpGlobals->time;
-
 	pev->framerate = 1;
 }
 
@@ -308,7 +303,7 @@ bool CSporeLauncher::GetWeaponInfo(WeaponInfo& info)
 	info.MagazineSize1 = SPORELAUNCHER_MAX_CLIP;
 	info.Slot = 6;
 	info.Position = 0;
-	info.Id = m_iId = WEAPON_SPORELAUNCHER;
+	info.Id = WEAPON_SPORELAUNCHER;
 	info.Weight = SPORELAUNCHER_WEIGHT;
 
 	return true;

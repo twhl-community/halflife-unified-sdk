@@ -43,17 +43,9 @@ bool CHgun::IsUseable()
 void CHgun::OnCreate()
 {
 	CBasePlayerWeapon::OnCreate();
-
-	m_WorldModel = pev->model = MAKE_STRING("models/w_hgun.mdl");
-}
-
-void CHgun::Spawn()
-{
-	CBasePlayerWeapon::Spawn();
 	m_iId = WEAPON_HORNETGUN;
-
 	m_iDefaultAmmo = HIVEHAND_DEFAULT_GIVE;
-	m_iFirePhase = 0;
+	m_WorldModel = pev->model = MAKE_STRING("models/w_hgun.mdl");
 }
 
 void CHgun::Precache()
@@ -87,7 +79,7 @@ bool CHgun::GetWeaponInfo(WeaponInfo& info)
 	info.MagazineSize1 = WEAPON_NOCLIP;
 	info.Slot = 3;
 	info.Position = 3;
-	info.Id = m_iId = WEAPON_HORNETGUN;
+	info.Id = WEAPON_HORNETGUN;
 	info.Flags = ITEM_FLAG_NOAUTOSWITCHEMPTY | ITEM_FLAG_NOAUTORELOAD;
 	info.Weight = HORNETGUN_WEIGHT;
 

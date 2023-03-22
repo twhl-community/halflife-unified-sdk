@@ -31,7 +31,8 @@ LINK_ENTITY_TO_CLASS(weapon_displacer, CDisplacer);
 void CDisplacer::OnCreate()
 {
 	BaseClass::OnCreate();
-
+	m_iId = WEAPON_DISPLACER;
+	m_iDefaultAmmo = DISPLACER_DEFAULT_GIVE;
 	m_WorldModel = pev->model = MAKE_STRING("models/w_displacer.mdl");
 }
 
@@ -53,14 +54,6 @@ void CDisplacer::Precache()
 	UTIL_PrecacheOther("displacer_ball");
 
 	m_usFireDisplacer = PRECACHE_EVENT(1, "events/displacer.sc");
-}
-
-void CDisplacer::Spawn()
-{
-	CBasePlayerWeapon::Spawn();
-
-	m_iId = WEAPON_DISPLACER;
-	m_iDefaultAmmo = DISPLACER_DEFAULT_GIVE;
 }
 
 bool CDisplacer::Deploy()
@@ -429,7 +422,7 @@ bool CDisplacer::GetWeaponInfo(WeaponInfo& info)
 	info.MagazineSize1 = WEAPON_NOCLIP;
 	info.Slot = 5;
 	info.Position = 1;
-	info.Id = m_iId = WEAPON_DISPLACER;
+	info.Id = WEAPON_DISPLACER;
 	info.Weight = DISPLACER_WEIGHT;
 	return true;
 }

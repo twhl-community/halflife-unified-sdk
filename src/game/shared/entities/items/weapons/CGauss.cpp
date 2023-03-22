@@ -46,15 +46,9 @@ float CGauss::GetFullChargeTime()
 void CGauss::OnCreate()
 {
 	CBasePlayerWeapon::OnCreate();
-
-	m_WorldModel = pev->model = MAKE_STRING("models/w_gauss.mdl");
-}
-
-void CGauss::Spawn()
-{
-	CBasePlayerWeapon::Spawn();
 	m_iId = WEAPON_GAUSS;
 	m_iDefaultAmmo = GAUSS_DEFAULT_GIVE;
+	m_WorldModel = pev->model = MAKE_STRING("models/w_gauss.mdl");
 }
 
 void CGauss::Precache()
@@ -86,7 +80,7 @@ bool CGauss::GetWeaponInfo(WeaponInfo& info)
 	info.MagazineSize1 = WEAPON_NOCLIP;
 	info.Slot = 3;
 	info.Position = 1;
-	info.Id = m_iId = WEAPON_GAUSS;
+	info.Id = WEAPON_GAUSS;
 	info.Weight = GAUSS_WEIGHT;
 
 	return true;

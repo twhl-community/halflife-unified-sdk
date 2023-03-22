@@ -36,7 +36,8 @@ LINK_ENTITY_TO_CLASS(weapon_eagle, CEagle);
 void CEagle::OnCreate()
 {
 	BaseClass::OnCreate();
-
+	m_iId = WEAPON_EAGLE;
+	m_iDefaultAmmo = DEAGLE_DEFAULT_GIVE;
 	m_WorldModel = pev->model = MAKE_STRING("models/w_desert_eagle.mdl");
 }
 
@@ -51,14 +52,6 @@ void CEagle::Precache()
 	PrecacheSound("weapons/desert_eagle_sight.wav");
 	PrecacheSound("weapons/desert_eagle_sight2.wav");
 	m_usFireEagle = PRECACHE_EVENT(1, "events/eagle.sc");
-}
-
-void CEagle::Spawn()
-{
-	CBasePlayerWeapon::Spawn();
-
-	m_iId = WEAPON_EAGLE;
-	m_iDefaultAmmo = DEAGLE_DEFAULT_GIVE;
 }
 
 bool CEagle::Deploy()
@@ -318,7 +311,7 @@ bool CEagle::GetWeaponInfo(WeaponInfo& info)
 	info.MagazineSize1 = EAGLE_MAX_CLIP;
 	info.Slot = 1;
 	info.Position = 2;
-	info.Id = m_iId = WEAPON_EAGLE;
+	info.Id = WEAPON_EAGLE;
 	info.Weight = EAGLE_WEIGHT;
 	return true;
 }

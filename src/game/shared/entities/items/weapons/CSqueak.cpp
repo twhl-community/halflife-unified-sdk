@@ -400,17 +400,15 @@ LINK_ENTITY_TO_CLASS(weapon_snark, CSqueak);
 void CSqueak::OnCreate()
 {
 	CBasePlayerWeapon::OnCreate();
-
+	m_iId = WEAPON_SNARK;
+	m_iDefaultAmmo = SNARK_DEFAULT_GIVE;
 	m_WorldModel = pev->model = MAKE_STRING("models/w_sqknest.mdl");
 }
 
 void CSqueak::Spawn()
 {
 	CBasePlayerWeapon::Spawn();
-	m_iId = WEAPON_SNARK;
-
-	m_iDefaultAmmo = SNARK_DEFAULT_GIVE;
-
+	
 	pev->sequence = 1;
 	pev->animtime = gpGlobals->time;
 	pev->framerate = 1.0;
@@ -435,7 +433,7 @@ bool CSqueak::GetWeaponInfo(WeaponInfo& info)
 	info.MagazineSize1 = WEAPON_NOCLIP;
 	info.Slot = 4;
 	info.Position = 3;
-	info.Id = m_iId = WEAPON_SNARK;
+	info.Id = WEAPON_SNARK;
 	info.Weight = SNARK_WEIGHT;
 	info.Flags = ITEM_FLAG_LIMITINWORLD | ITEM_FLAG_EXHAUSTIBLE;
 
