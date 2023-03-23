@@ -266,6 +266,7 @@ TYPEDESCRIPTION CBasePlayerWeapon::m_SaveData[] =
 		DEFINE_FIELD(CBasePlayerWeapon, m_iSecondaryAmmoType, FIELD_INTEGER),
 		DEFINE_FIELD(CBasePlayerWeapon, m_iClip, FIELD_INTEGER),
 		DEFINE_FIELD(CBasePlayerWeapon, m_iDefaultAmmo, FIELD_INTEGER),
+		DEFINE_FIELD(CBasePlayerWeapon, m_iDefaultPrimaryAmmo, FIELD_INTEGER),
 		//	DEFINE_FIELD( CBasePlayerWeapon, m_iClientClip, FIELD_INTEGER )	 , reset to zero on load so hud gets updated correctly
 		//  DEFINE_FIELD( CBasePlayerWeapon, m_iClientWeaponState, FIELD_INTEGER ), reset to zero on load so hud gets updated correctly
 		DEFINE_FIELD(CBasePlayerWeapon, m_WorldModel, FIELD_STRING),
@@ -295,6 +296,17 @@ bool CBasePlayerWeapon::Restore(CRestore& restore)
 	}
 
 	return true;
+}
+
+bool CBasePlayerWeapon::KeyValue(KeyValueData* pkvd)
+{
+	if (FStrEq(pkvd->szKeyName, "default_ammo"))
+	{
+		m_iDefaultAmmo = std::max(RefillAllAmmoAmount, atoi(pkvd->szValue));
+		return true;
+	}
+
+	return CBaseItem::KeyValue(pkvd);
 }
 
 void CBasePlayerWeapon::SetObjectCollisionBox()
@@ -343,6 +355,7 @@ CBasePlayerWeapon* CBasePlayerWeapon::GetItemToRespawn(const Vector& respawnPoin
 	newWeapon->m_TriggerOnSpawn = m_TriggerOnSpawn;
 	newWeapon->m_TriggerOnDespawn = m_TriggerOnDespawn;
 
+	newWeapon->m_iDefaultPrimaryAmmo = newWeapon->m_iDefaultAmmo = m_iDefaultPrimaryAmmo;
 	newWeapon->m_WorldModel = m_WorldModel;
 	newWeapon->m_ViewModel = m_ViewModel;
 	newWeapon->m_PlayerModel = m_PlayerModel;
@@ -496,6 +509,15 @@ bool CBasePlayerWeapon::UpdateClientData(CBasePlayer* pPlayer)
 
 bool CBasePlayerWeapon::AddPrimaryAmmo(CBasePlayerWeapon* origin, int iCount, const char* szName, int iMaxClip)
 {
+	auto type = g_AmmoTypes.GetByName(szName);
+
+	if (!type)
+	{
+		assert(!"Unknown ammo type");
+		CBasePlayerWeapon::WeaponsLogger->error("Trying to add unknown ammo type \"{}\"", szName);
+		return false;
+	}
+
 	// Don't double for single shot weapons (e.g. RPG)
 	if ((m_pPlayer->m_iItems & CTFItem::Backpack) != 0 && iMaxClip > 1)
 	{
@@ -511,21 +533,19 @@ bool CBasePlayerWeapon::AddPrimaryAmmo(CBasePlayerWeapon* origin, int iCount, co
 	}
 	else if (m_iClip == 0)
 	{
+		if (iCount == RefillAllAmmoAmount)
+		{
+			// Full magazine + spare.
+			iCount = type->MaximumCapacity + iMaxClip;
+		}
+
 		m_iClip = V_min(iCount, iMaxClip);
 		iIdAmmo = m_pPlayer->GiveAmmo(iCount - m_iClip, szName);
 
 		// Make sure we count this as ammo taken.
 		if (iCount > 0 && iIdAmmo == -1)
 		{
-			if (auto type = g_AmmoTypes.GetByName(szName); type)
-			{
-				iIdAmmo = type->Id;
-			}
-			else
-			{
-				assert(!"Unknown ammo type");
-				CBasePlayerWeapon::WeaponsLogger->error("Trying to add unknown ammo type \"{}\"", szName);
-			}
+			iIdAmmo = type->Id;
 		}
 	}
 	else

@@ -252,8 +252,12 @@ public:
 		LinkWeaponInfo();
 	}
 
+	bool KeyValue(KeyValueData* pkvd) override;
+
 	void Spawn() override
 	{
+		m_iDefaultPrimaryAmmo = m_iDefaultAmmo;
+
 		Precache();
 		SetModel(GetModelName());
 		SetupItem(vec3_origin, vec3_origin); //pointsize until it lands on the ground.
@@ -479,6 +483,7 @@ public:
 	bool m_fInReload;			   //!< Are we in the middle of a reload
 
 	int m_iDefaultAmmo; //!< how much ammo you get when you pick up this weapon as placed by a level designer.
+	int m_iDefaultPrimaryAmmo; // Copy of m_iDefaultAmmo after KeyValue is handled for respawn.
 
 	// hle time creep vars
 	float m_flPrevPrimaryAttack;
