@@ -227,26 +227,9 @@ public:
 	void OnCreate() override
 	{
 		CBasePlayerAmmo::OnCreate();
-
+		m_AmmoAmount = AMMO_SNIPERRIFLE_GIVE;
+		m_AmmoName = MAKE_STRING("762");
 		pev->model = MAKE_STRING("models/w_m40a1clip.mdl");
-	}
-
-	void Precache() override
-	{
-		BaseClass::Precache();
-		PrecacheSound("items/9mmclip1.wav");
-	}
-
-	bool AddAmmo(CBasePlayer* pOther) override
-	{
-		if (pOther->GiveAmmo(AMMO_SNIPERRIFLE_GIVE, "762") != -1)
-		{
-			EmitSound(CHAN_ITEM, "items/9mmclip1.wav", VOL_NORM, ATTN_NORM);
-
-			return true;
-		}
-
-		return false;
 	}
 };
 

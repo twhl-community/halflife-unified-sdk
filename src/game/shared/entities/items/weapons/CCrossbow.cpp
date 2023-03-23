@@ -451,23 +451,9 @@ public:
 	void OnCreate() override
 	{
 		CBasePlayerAmmo::OnCreate();
-
+		m_AmmoAmount = AMMO_CROSSBOWCLIP_GIVE;
+		m_AmmoName = MAKE_STRING("bolts");
 		pev->model = MAKE_STRING("models/w_crossbow_clip.mdl");
-	}
-
-	void Precache() override
-	{
-		CBasePlayerAmmo::Precache();
-		PrecacheSound("items/9mmclip1.wav");
-	}
-	bool AddAmmo(CBasePlayer* pOther) override
-	{
-		if (pOther->GiveAmmo(AMMO_CROSSBOWCLIP_GIVE, "bolts") != -1)
-		{
-			EmitSound(CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
-			return true;
-		}
-		return false;
 	}
 };
 

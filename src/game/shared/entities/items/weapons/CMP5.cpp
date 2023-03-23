@@ -246,23 +246,9 @@ public:
 	void OnCreate() override
 	{
 		CBasePlayerAmmo::OnCreate();
-
+		m_AmmoAmount = AMMO_MP5CLIP_GIVE;
+		m_AmmoName = MAKE_STRING("9mm");
 		pev->model = MAKE_STRING("models/w_9mmARclip.mdl");
-	}
-
-	void Precache() override
-	{
-		CBasePlayerAmmo::Precache();
-		PrecacheSound("items/9mmclip1.wav");
-	}
-	bool AddAmmo(CBasePlayer* pOther) override
-	{
-		bool bResult = (pOther->GiveAmmo(AMMO_MP5CLIP_GIVE, "9mm") != -1);
-		if (bResult)
-		{
-			EmitSound(CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
-		}
-		return bResult;
 	}
 };
 
@@ -274,23 +260,9 @@ public:
 	void OnCreate() override
 	{
 		CBasePlayerAmmo::OnCreate();
-
+		m_AmmoAmount = AMMO_CHAINBOX_GIVE;
+		m_AmmoName = MAKE_STRING("9mm");
 		pev->model = MAKE_STRING("models/w_chainammo.mdl");
-	}
-
-	void Precache() override
-	{
-		CBasePlayerAmmo::Precache();
-		PrecacheSound("items/9mmclip1.wav");
-	}
-	bool AddAmmo(CBasePlayer* pOther) override
-	{
-		bool bResult = (pOther->GiveAmmo(AMMO_CHAINBOX_GIVE, "9mm") != -1);
-		if (bResult)
-		{
-			EmitSound(CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
-		}
-		return bResult;
 	}
 };
 
@@ -302,24 +274,9 @@ public:
 	void OnCreate() override
 	{
 		CBasePlayerAmmo::OnCreate();
-
+		m_AmmoAmount = AMMO_M203BOX_GIVE;
+		m_AmmoName = MAKE_STRING("ARgrenades");
 		pev->model = MAKE_STRING("models/w_ARgrenade.mdl");
-	}
-
-	void Precache() override
-	{
-		CBasePlayerAmmo::Precache();
-		PrecacheSound("items/9mmclip1.wav");
-	}
-	bool AddAmmo(CBasePlayer* pOther) override
-	{
-		bool bResult = (pOther->GiveAmmo(AMMO_M203BOX_GIVE, "ARgrenades") != -1);
-
-		if (bResult)
-		{
-			EmitSound(CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
-		}
-		return bResult;
 	}
 };
 

@@ -344,26 +344,9 @@ public:
 	void OnCreate() override
 	{
 		BaseClass::OnCreate();
-
+		m_AmmoAmount = AMMO_M249_GIVE;
+		m_AmmoName = MAKE_STRING("556");
 		pev->model = MAKE_STRING("models/w_saw_clip.mdl");
-	}
-
-	void Precache() override
-	{
-		CBasePlayerAmmo::Precache();
-		PrecacheSound("items/9mmclip1.wav");
-	}
-
-	bool AddAmmo(CBasePlayer* pOther) override
-	{
-		if (pOther->GiveAmmo(AMMO_M249_GIVE, "556") != -1)
-		{
-			EmitSound(CHAN_ITEM, "items/9mmclip1.wav", VOL_NORM, ATTN_NORM);
-
-			return true;
-		}
-
-		return false;
 	}
 };
 

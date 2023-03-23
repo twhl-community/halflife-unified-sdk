@@ -219,11 +219,19 @@ bool CWeaponBox::PackAmmo(string_t iszName, int iCount)
 
 	const auto type = g_AmmoTypes.GetByName(STRING(iszName));
 
-	if (type && iCount > 0)
+	if (type)
 	{
-		// Logger->debug("Packed {} rounds of {}", iCount, STRING(iszName));
-		GiveAmmo(iCount, type);
-		return true;
+		if (iCount == RefillAllAmmoAmount)
+		{
+			iCount = type->MaximumCapacity;
+		}
+
+		if (iCount > 0)
+		{
+			// Logger->debug("Packed {} rounds of {}", iCount, STRING(iszName));
+			GiveAmmo(iCount, type);
+			return true;
+		}
 	}
 
 	return false;

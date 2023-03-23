@@ -3727,6 +3727,11 @@ int CBasePlayer::GiveAmmo(int iCount, const char* szName)
 		return -1;
 	}
 
+	if (iCount == RefillAllAmmoAmount)
+	{
+		iCount = type->MaximumCapacity;
+	}
+
 	if (!g_pGameRules->CanHaveAmmo(this, szName))
 	{
 		// game rules say I can't have any more of this ammo type.

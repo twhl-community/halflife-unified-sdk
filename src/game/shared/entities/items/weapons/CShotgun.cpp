@@ -373,23 +373,9 @@ public:
 	void OnCreate() override
 	{
 		CBasePlayerAmmo::OnCreate();
-
+		m_AmmoAmount = AMMO_BUCKSHOTBOX_GIVE;
+		m_AmmoName = MAKE_STRING("buckshot");
 		pev->model = MAKE_STRING("models/w_shotbox.mdl");
-	}
-
-	void Precache() override
-	{
-		CBasePlayerAmmo::Precache();
-		PrecacheSound("items/9mmclip1.wav");
-	}
-	bool AddAmmo(CBasePlayer* pOther) override
-	{
-		if (pOther->GiveAmmo(AMMO_BUCKSHOTBOX_GIVE, "buckshot") != -1)
-		{
-			EmitSound(CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
-			return true;
-		}
-		return false;
 	}
 };
 

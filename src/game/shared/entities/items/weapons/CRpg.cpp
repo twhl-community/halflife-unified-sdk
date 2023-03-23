@@ -495,34 +495,15 @@ public:
 	{
 		CBasePlayerAmmo::OnCreate();
 
-		pev->model = MAKE_STRING("models/w_rpgammo.mdl");
-	}
-
-	void Precache() override
-	{
-		CBasePlayerAmmo::Precache();
-		PrecacheSound("items/9mmclip1.wav");
-	}
-	bool AddAmmo(CBasePlayer* pOther) override
-	{
-		int iGive;
-
+		// hand out more ammo per rocket in multiplayer.
+		m_AmmoAmount = AMMO_RPGCLIP_GIVE;
 		if (UTIL_IsMultiplayer())
 		{
-			// hand out more ammo per rocket in multiplayer.
-			iGive = AMMO_RPGCLIP_GIVE * 2;
-		}
-		else
-		{
-			iGive = AMMO_RPGCLIP_GIVE;
+			m_AmmoAmount *= 2;
 		}
 
-		if (pOther->GiveAmmo(iGive, "rockets") != -1)
-		{
-			EmitSound(CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
-			return true;
-		}
-		return false;
+		m_AmmoName = MAKE_STRING("rockets");
+		pev->model = MAKE_STRING("models/w_rpgammo.mdl");
 	}
 };
 

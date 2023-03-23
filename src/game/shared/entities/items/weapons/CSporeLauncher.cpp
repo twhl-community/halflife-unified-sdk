@@ -358,13 +358,15 @@ public:
 	void OnCreate() override
 	{
 		CBasePlayerAmmo::OnCreate();
-
+		m_AmmoAmount = AMMO_SPORE_GIVE;
+		m_AmmoName = MAKE_STRING("spores");
 		pev->model = MAKE_STRING("models/spore_ammo.mdl");
 	}
 
 	void Precache() override
 	{
-		CBasePlayerAmmo::Precache();
+		// Don't precache default pickup sound.
+		CBaseItem::Precache();
 		PrecacheSound("weapons/spore_ammo.wav");
 	}
 
@@ -439,16 +441,9 @@ public:
 		return false;
 	}
 
-	bool AddAmmo(CBasePlayer* pOther) override
+	bool AddAmmo(CBasePlayer* player) override
 	{
-		if (pOther->GiveAmmo(AMMO_SPORE_GIVE, "spores") != -1)
-		{
-			EmitSound(CHAN_ITEM, "weapons/spore_ammo.wav", VOL_NORM, ATTN_NORM);
-
-			return true;
-		}
-
-		return false;
+		return GiveAmmo(player, m_AmmoAmount, STRING(m_AmmoName), "weapons/spore_ammo.wav");
 	}
 
 	void EXPORT Idling()

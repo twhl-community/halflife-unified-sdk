@@ -18,6 +18,7 @@
 */
 
 #include "cbase.h"
+#include "AmmoTypeSystem.h"
 #include "GameLibrary.h"
 #include "weapons.h"
 #include "UserMessages.h"
@@ -682,4 +683,71 @@ void CBasePlayerWeapon::PrintState()
 	// Logger->debug("m_finsr:  {}", m_fInSpecialReload);
 
 	Logger->debug("m_iclip:  {}", m_iClip);
+}
+
+// m_AmmoName isn't saved here because it's initialized by all derived classes.
+// Classes that let level designers set the name should also save it.
+TYPEDESCRIPTION CBasePlayerAmmo::m_SaveData[] =
+	{
+		DEFINE_FIELD(CBasePlayerAmmo, m_AmmoAmount, FIELD_INTEGER)
+};
+
+IMPLEMENT_SAVERESTORE(CBasePlayerAmmo, CBaseItem);
+
+bool CBasePlayerAmmo::KeyValue(KeyValueData* pkvd)
+{
+	if (FStrEq(pkvd->szKeyName, "ammo_amount"))
+	{
+		m_AmmoAmount = std::max(RefillAllAmmoAmount, atoi(pkvd->szValue));
+	}
+
+	return CBaseItem::KeyValue(pkvd);
+}
+
+void CBasePlayerAmmo::Spawn()
+{
+	CBaseItem::Spawn();
+
+	// Make sure these are set.
+	assert(m_AmmoAmount >= RefillAllAmmoAmount);
+	assert(!FStrEq(STRING(m_AmmoName), ""));
+}
+
+bool CBasePlayerAmmo::GiveAmmo(CBasePlayer* player, int amount, const char* ammoName, const char* pickupSoundName)
+{
+	if (amount < RefillAllAmmoAmount || !ammoName || FStrEq(ammoName, ""))
+	{
+		CBasePlayerWeapon::WeaponsLogger->error("Invalid ammo data for entity {}:{}", GetClassname(), entindex());
+		return false;
+	}
+
+	if (amount == RefillAllAmmoAmount)
+	{
+		if (auto type = g_AmmoTypes.GetByName(ammoName); type)
+		{
+			amount = type->MaximumCapacity;
+		}
+	}
+
+	if (player->GiveAmmo(amount, ammoName) != -1)
+	{
+		if (pickupSoundName)
+		{
+			EmitSound(CHAN_ITEM, pickupSoundName, VOL_NORM, ATTN_NORM);
+		}
+
+		return true;
+	}
+
+	return false;
+}
+
+bool CBasePlayerAmmo::DefaultGiveAmmo(CBasePlayer* player, int amount, const char* ammoName, bool playSound)
+{
+	return GiveAmmo(player, amount, ammoName, playSound ? "items/9mmclip1.wav" : nullptr);
+}
+
+bool CBasePlayerAmmo::AddAmmo(CBasePlayer* player)
+{
+	return DefaultGiveAmmo(player, m_AmmoAmount, STRING(m_AmmoName), true);
 }

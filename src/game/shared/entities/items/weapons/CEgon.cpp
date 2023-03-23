@@ -512,23 +512,9 @@ public:
 	void OnCreate() override
 	{
 		CBasePlayerAmmo::OnCreate();
-
+		m_AmmoAmount = AMMO_URANIUMBOX_GIVE;
+		m_AmmoName = MAKE_STRING("uranium");
 		pev->model = MAKE_STRING("models/w_chainammo.mdl");
-	}
-
-	void Precache() override
-	{
-		CBasePlayerAmmo::Precache();
-		PrecacheSound("items/9mmclip1.wav");
-	}
-	bool AddAmmo(CBasePlayer* pOther) override
-	{
-		if (pOther->GiveAmmo(AMMO_URANIUMBOX_GIVE, "uranium") != -1)
-		{
-			EmitSound(CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
-			return true;
-		}
-		return false;
 	}
 };
 

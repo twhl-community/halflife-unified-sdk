@@ -344,25 +344,10 @@ public:
 	void OnCreate() override
 	{
 		CBasePlayerAmmo::OnCreate();
-
+		m_AmmoAmount = AMMO_EAGLE_GIVE;
+		m_AmmoName = MAKE_STRING("357");
 		// TODO: could probably use a better model
 		pev->model = MAKE_STRING("models/w_9mmclip.mdl");
-	}
-
-	void Precache() override
-	{
-		CBasePlayerAmmo::Precache();
-		PrecacheSound("items/9mmclip1.wav");
-	}
-
-	bool AddAmmo(CBasePlayer* pOther) override
-	{
-		if (pOther->GiveAmmo(AMMO_EAGLE_GIVE, "357") != -1)
-		{
-			EmitSound(CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
-			return true;
-		}
-		return false;
 	}
 };
 

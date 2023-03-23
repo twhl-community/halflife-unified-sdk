@@ -222,6 +222,8 @@ enum Bullet
 
 void Weapons_RegisterAmmoTypes();
 
+constexpr int RefillAllAmmoAmount = -1;
+
 /**
 *	@brief Weapons that the player has in their inventory that they can use.
 */
@@ -487,9 +489,31 @@ public:
 	string_t m_PlayerModel;
 };
 
+/**
+*	@brief Base class for ammo entities.
+*	@details Inheriting classes must set m_AmmoAmount to the default give amount
+*	and m_AmmoName to a valid ammo name in @c OnCreate.
+*/
 class CBasePlayerAmmo : public CBaseItem
 {
 public:
+#ifndef CLIENT_DLL
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
+
+	static TYPEDESCRIPTION m_SaveData[];
+#endif
+
+	bool KeyValue(KeyValueData* pkvd) override;
+
+	void Precache() override
+	{
+		CBaseItem::Precache();
+		PrecacheSound("items/9mmclip1.wav");
+	}
+
+	void Spawn() override;
+
 	ItemType GetType() const override { return ItemType::Consumable; }
 
 	void Accept(IItemVisitor& visitor) override
@@ -497,13 +521,22 @@ public:
 		visitor.Visit(this);
 	}
 
+protected:
 	ItemAddResult Apply(CBasePlayer* player) override
 	{
 		return AddAmmo(player) ? ItemAddResult::Added : ItemAddResult::NotAdded;
 	}
 
+	bool GiveAmmo(CBasePlayer* player, int amount, const char* ammoName, const char* pickupSoundName);
+
+	bool DefaultGiveAmmo(CBasePlayer* player, int amount, const char* ammoName, bool playSound);
+
+	virtual bool AddAmmo(CBasePlayer* player);
+
 protected:
-	virtual bool AddAmmo(CBasePlayer* pOther) { return true; }
+	// Set to -2 to detect missing initialization.
+	int m_AmmoAmount = -2;
+	string_t m_AmmoName;
 };
 
 inline short g_sModelIndexLaser; // holds the index for the laser beam
