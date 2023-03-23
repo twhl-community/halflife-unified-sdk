@@ -198,6 +198,7 @@ void CSatchel::AddToPlayer(CBasePlayer* pPlayer)
 
 void CSatchel::Precache()
 {
+	CBasePlayerWeapon::Precache();
 	PrecacheModel("models/v_satchel.mdl");
 	PrecacheModel("models/v_satchel_radio.mdl");
 	PrecacheModel(STRING(m_WorldModel));

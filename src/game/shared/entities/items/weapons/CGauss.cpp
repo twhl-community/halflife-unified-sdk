@@ -53,6 +53,7 @@ void CGauss::OnCreate()
 
 void CGauss::Precache()
 {
+	CBasePlayerWeapon::Precache();
 	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/v_gauss.mdl");
 	PrecacheModel("models/p_gauss.mdl");

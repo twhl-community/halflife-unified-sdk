@@ -43,6 +43,7 @@ void CEagle::OnCreate()
 
 void CEagle::Precache()
 {
+	CBasePlayerWeapon::Precache();
 	PrecacheModel("models/v_desert_eagle.mdl");
 	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/p_desert_eagle.mdl");

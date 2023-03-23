@@ -33,6 +33,7 @@ void CHandGrenade::OnCreate()
 
 void CHandGrenade::Precache()
 {
+	CBasePlayerWeapon::Precache();
 	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/v_grenade.mdl");
 	PrecacheModel("models/p_grenade.mdl");

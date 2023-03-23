@@ -31,6 +31,7 @@ void CKnife::OnCreate()
 
 void CKnife::Precache()
 {
+	CBasePlayerWeapon::Precache();
 	PrecacheModel("models/v_knife.mdl");
 	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/p_knife.mdl");

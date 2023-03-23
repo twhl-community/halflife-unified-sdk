@@ -281,6 +281,7 @@ void CRpg::Reload()
 
 void CRpg::Precache()
 {
+	CBasePlayerWeapon::Precache();
 	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/v_rpg.mdl");
 	PrecacheModel("models/p_rpg.mdl");

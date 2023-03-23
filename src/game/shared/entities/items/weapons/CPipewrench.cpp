@@ -42,6 +42,7 @@ void CPipewrench::OnCreate()
 
 void CPipewrench::Precache()
 {
+	CBasePlayerWeapon::Precache();
 	PrecacheModel("models/v_pipe_wrench.mdl");
 	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/p_pipe_wrench.mdl");

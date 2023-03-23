@@ -200,6 +200,7 @@ void CCrossbow::OnCreate()
 
 void CCrossbow::Precache()
 {
+	CBasePlayerWeapon::Precache();
 	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/v_crossbow.mdl");
 	PrecacheModel("models/p_crossbow.mdl");

@@ -42,6 +42,7 @@ void CSporeLauncher::OnCreate()
 
 void CSporeLauncher::Precache()
 {
+	CBasePlayerWeapon::Precache();
 	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/v_spore_launcher.mdl");
 	PrecacheModel("models/p_spore_launcher.mdl");

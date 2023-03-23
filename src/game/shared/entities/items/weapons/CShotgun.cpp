@@ -45,6 +45,7 @@ void CShotgun::OnCreate()
 
 void CShotgun::Precache()
 {
+	CBasePlayerWeapon::Precache();
 	PrecacheModel("models/v_shotgun.mdl");
 	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/p_shotgun.mdl");

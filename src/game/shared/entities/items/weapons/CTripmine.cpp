@@ -380,6 +380,7 @@ void CTripmine::Spawn()
 
 void CTripmine::Precache()
 {
+	CBasePlayerWeapon::Precache();
 	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/v_tripmine.mdl");
 	PrecacheModel("models/p_tripmine.mdl");

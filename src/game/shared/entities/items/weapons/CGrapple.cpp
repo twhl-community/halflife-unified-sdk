@@ -47,6 +47,7 @@ void CGrapple::OnCreate()
 
 void CGrapple::Precache()
 {
+	CBasePlayerWeapon::Precache();
 	PrecacheModel("models/v_bgrap.mdl");
 	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/p_bgrap.mdl");

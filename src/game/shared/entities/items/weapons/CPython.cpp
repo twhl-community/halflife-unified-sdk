@@ -50,6 +50,7 @@ void CPython::IncrementAmmo(CBasePlayer* pPlayer)
 
 void CPython::Precache()
 {
+	CBasePlayerWeapon::Precache();
 	PrecacheModel("models/v_357.mdl");
 	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/p_357.mdl");

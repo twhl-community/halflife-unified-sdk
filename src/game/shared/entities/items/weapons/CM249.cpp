@@ -44,6 +44,7 @@ void CM249::OnCreate()
 
 void CM249::Precache()
 {
+	CBasePlayerWeapon::Precache();
 	PrecacheModel("models/v_saw.mdl");
 	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/p_saw.mdl");

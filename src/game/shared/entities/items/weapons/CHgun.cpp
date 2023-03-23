@@ -50,6 +50,7 @@ void CHgun::OnCreate()
 
 void CHgun::Precache()
 {
+	CBasePlayerWeapon::Precache();
 	PrecacheModel("models/v_hgun.mdl");
 	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/p_hgun.mdl");

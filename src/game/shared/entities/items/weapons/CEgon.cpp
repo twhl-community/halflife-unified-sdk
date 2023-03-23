@@ -48,6 +48,7 @@ void CEgon::OnCreate()
 
 void CEgon::Precache()
 {
+	CBasePlayerWeapon::Precache();
 	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/v_egon.mdl");
 	PrecacheModel("models/p_egon.mdl");

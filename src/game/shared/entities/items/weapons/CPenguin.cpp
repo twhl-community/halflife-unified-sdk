@@ -38,6 +38,7 @@ void CPenguin::OnCreate()
 
 void CPenguin::Precache()
 {
+	CBasePlayerWeapon::Precache();
 	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/v_penguin.mdl");
 	PrecacheModel("models/p_penguin.mdl");

@@ -38,6 +38,7 @@ void CDisplacer::OnCreate()
 
 void CDisplacer::Precache()
 {
+	CBasePlayerWeapon::Precache();
 	PrecacheModel("models/v_displacer.mdl");
 	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/p_displacer.mdl");

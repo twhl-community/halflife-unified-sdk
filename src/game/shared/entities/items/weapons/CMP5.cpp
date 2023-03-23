@@ -30,6 +30,7 @@ void CMP5::OnCreate()
 
 void CMP5::Precache()
 {
+	CBasePlayerWeapon::Precache();
 	PrecacheModel("models/v_9mmAR.mdl");
 	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/p_9mmAR.mdl");

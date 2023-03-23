@@ -416,6 +416,7 @@ void CSqueak::Spawn()
 
 void CSqueak::Precache()
 {
+	CBasePlayerWeapon::Precache();
 	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/v_squeak.mdl");
 	PrecacheModel("models/p_squeak.mdl");

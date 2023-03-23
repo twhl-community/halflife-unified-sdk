@@ -28,6 +28,7 @@ void CGlock::OnCreate()
 
 void CGlock::Precache()
 {
+	CBasePlayerWeapon::Precache();
 	PrecacheModel("models/v_9mmhandgun.mdl");
 	PrecacheModel(STRING(m_WorldModel));
 	PrecacheModel("models/p_9mmhandgun.mdl");
