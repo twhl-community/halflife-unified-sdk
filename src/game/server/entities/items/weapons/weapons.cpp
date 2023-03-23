@@ -480,25 +480,37 @@ bool CBasePlayerWeapon::UpdateClientData(CBasePlayer* pPlayer)
 
 bool CBasePlayerWeapon::AddPrimaryAmmo(CBasePlayerWeapon* origin, int iCount, const char* szName, int iMaxClip)
 {
-	int iIdAmmo;
-
 	// Don't double for single shot weapons (e.g. RPG)
 	if ((m_pPlayer->m_iItems & CTFItem::Backpack) != 0 && iMaxClip > 1)
 	{
 		iMaxClip *= 2;
 	}
 
-	if (iMaxClip < 1)
+	int iIdAmmo;
+
+	if (iMaxClip <= 0)
 	{
-		m_iClip = -1;
+		m_iClip = WEAPON_NOCLIP;
 		iIdAmmo = m_pPlayer->GiveAmmo(iCount, szName);
 	}
 	else if (m_iClip == 0)
 	{
-		int i;
-		i = V_min(m_iClip + iCount, iMaxClip) - m_iClip;
-		m_iClip += i;
-		iIdAmmo = m_pPlayer->GiveAmmo(iCount - i, szName);
+		m_iClip = V_min(iCount, iMaxClip);
+		iIdAmmo = m_pPlayer->GiveAmmo(iCount - m_iClip, szName);
+
+		// Make sure we count this as ammo taken.
+		if (iCount > 0 && iIdAmmo == -1)
+		{
+			if (auto type = g_AmmoTypes.GetByName(szName); type)
+			{
+				iIdAmmo = type->Id;
+			}
+			else
+			{
+				assert(!"Unknown ammo type");
+				CBasePlayerWeapon::WeaponsLogger->error("Trying to add unknown ammo type \"{}\"", szName);
+			}
+		}
 	}
 	else
 	{
@@ -518,14 +530,12 @@ bool CBasePlayerWeapon::AddPrimaryAmmo(CBasePlayerWeapon* origin, int iCount, co
 		}
 	}
 
-	return iIdAmmo > 0 ? true : false;
+	return iIdAmmo > 0;
 }
 
 bool CBasePlayerWeapon::AddSecondaryAmmo(int iCount, const char* szName)
 {
-	int iIdAmmo;
-
-	iIdAmmo = m_pPlayer->GiveAmmo(iCount, szName);
+	const int iIdAmmo = m_pPlayer->GiveAmmo(iCount, szName);
 
 	// m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType] = iMax; // hack for testing
 
@@ -534,7 +544,7 @@ bool CBasePlayerWeapon::AddSecondaryAmmo(int iCount, const char* szName)
 		m_iSecondaryAmmoType = iIdAmmo;
 		EmitSound(CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
 	}
-	return iIdAmmo > 0 ? true : false;
+	return iIdAmmo > 0;
 }
 
 bool CBasePlayerWeapon::IsUseable()
@@ -579,22 +589,27 @@ void CBasePlayerWeapon::SetWeaponModels(const char* viewModel, const char* weapo
 
 bool CBasePlayerWeapon::ExtractAmmo(CBasePlayerWeapon* weapon)
 {
-	bool iReturn = false;
+	bool extractedAmmo = false;
 
 	if (pszAmmo1() != nullptr)
 	{
 		// blindly call with m_iDefaultAmmo. It's either going to be a value or zero. If it is zero,
 		// we only get the ammo in the weapon's clip, which is what we want.
-		iReturn = weapon->AddPrimaryAmmo(this, m_iDefaultAmmo, pszAmmo1(), iMaxClip());
-		m_iDefaultAmmo = 0;
+		extractedAmmo = weapon->AddPrimaryAmmo(this, m_iDefaultAmmo, pszAmmo1(), iMaxClip());
+
+		// Only wipe default ammo if the weapon actually took it.
+		if (extractedAmmo)
+		{
+			m_iDefaultAmmo = 0;
+		}
 	}
 
 	if (pszAmmo2() != nullptr)
 	{
-		iReturn |= weapon->AddSecondaryAmmo(0, pszAmmo2());
+		extractedAmmo |= weapon->AddSecondaryAmmo(0, pszAmmo2());
 	}
 
-	return iReturn;
+	return extractedAmmo;
 }
 
 bool CBasePlayerWeapon::ExtractClipAmmo(CBasePlayerWeapon* weapon)
@@ -729,7 +744,8 @@ bool CBasePlayerAmmo::GiveAmmo(CBasePlayer* player, int amount, const char* ammo
 		}
 	}
 
-	if (player->GiveAmmo(amount, ammoName) != -1)
+	// Act like giving 0 ammo always succeeds. For fake ammo pickups.
+	if (amount == 0 || player->GiveAmmo(amount, ammoName) != -1)
 	{
 		if (pickupSoundName)
 		{

@@ -3739,8 +3739,10 @@ int CBasePlayer::GiveAmmo(int iCount, const char* szName)
 	}
 
 	int iAdd = V_min(iCount, type->MaximumCapacity - m_rgAmmo[type->Id]);
-	if (iAdd < 1)
-		return type->Id;
+
+	// If we couldn't give any more ammo then just bow out. (Should already be handled by gamerules above).
+	if (iAdd <= 0)
+		return -1;
 
 	// If this is an exhaustible weapon make sure the player has it.
 	if (!type->WeaponName.empty())
