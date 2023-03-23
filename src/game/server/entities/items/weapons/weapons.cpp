@@ -324,6 +324,14 @@ CBasePlayerWeapon* CBasePlayerWeapon::GetItemToRespawn(const Vector& respawnPoin
 	newWeapon->pev->sequence = pev->sequence;
 	newWeapon->pev->avelocity = pev->avelocity;
 
+	newWeapon->m_ModelReplacementFileName = m_ModelReplacementFileName;
+	newWeapon->m_SoundReplacementFileName = m_SoundReplacementFileName;
+	newWeapon->m_SentenceReplacementFileName = m_SentenceReplacementFileName;
+
+	newWeapon->m_ModelReplacement = m_ModelReplacement;
+	newWeapon->m_SoundReplacement = m_SoundReplacement;
+	newWeapon->m_SentenceReplacement = m_SentenceReplacement;
+
 	newWeapon->m_RespawnMode = m_RespawnMode;
 	newWeapon->m_RespawnDelay = m_RespawnDelay;
 
