@@ -330,6 +330,7 @@ CBasePlayerWeapon* CBasePlayerWeapon::GetItemToRespawn(const Vector& respawnPoin
 	newWeapon->m_FallMode = m_FallMode;
 	newWeapon->m_StayVisibleDuringRespawn = m_StayVisibleDuringRespawn;
 	newWeapon->m_FlashOnRespawn = m_FlashOnRespawn;
+	newWeapon->m_PlayPickupSound = m_PlayPickupSound;
 
 	newWeapon->m_TriggerOnSpawn = m_TriggerOnSpawn;
 	newWeapon->m_TriggerOnDespawn = m_TriggerOnDespawn;
@@ -339,6 +340,9 @@ CBasePlayerWeapon* CBasePlayerWeapon::GetItemToRespawn(const Vector& respawnPoin
 	newWeapon->m_PlayerModel = m_PlayerModel;
 
 	DispatchSpawn(newWeapon->edict());
+
+	// This weapon has been picked up, so from now own it should play pickup sounds (when dropped and picked up again).
+	m_PlayPickupSound = false;
 
 	return newWeapon;
 }
@@ -350,7 +354,11 @@ ItemAddResult CBasePlayerWeapon::Apply(CBasePlayer* player)
 	if (result == ItemAddResult::Added)
 	{
 		AttachToPlayer(player);
-		player->EmitSound(CHAN_ITEM, "items/gunpickup2.wav", 1, ATTN_NORM);
+
+		if (m_PlayPickupSound)
+		{
+			player->EmitSound(CHAN_ITEM, "items/gunpickup2.wav", 1, ATTN_NORM);
+		}
 	}
 
 	return result;
@@ -747,7 +755,7 @@ bool CBasePlayerAmmo::GiveAmmo(CBasePlayer* player, int amount, const char* ammo
 	// Act like giving 0 ammo always succeeds. For fake ammo pickups.
 	if (amount == 0 || player->GiveAmmo(amount, ammoName) != -1)
 	{
-		if (pickupSoundName)
+		if (pickupSoundName && m_PlayPickupSound)
 		{
 			EmitSound(CHAN_ITEM, pickupSoundName, VOL_NORM, ATTN_NORM);
 		}

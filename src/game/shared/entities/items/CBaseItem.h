@@ -140,6 +140,8 @@ protected:
 
 	bool m_FlashOnRespawn = true;
 
+	bool m_PlayPickupSound = true;
+
 	/**
 	 *	@brief Target to trigger when this entity spawns/respawns
 	 */

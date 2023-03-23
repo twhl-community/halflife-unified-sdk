@@ -34,10 +34,13 @@ public:
 		if (player->HasSuit())
 			return false;
 
-		if ((pev->spawnflags & SF_SUIT_SHORTLOGON) != 0)
-			EMIT_SOUND_SUIT(player, "!HEV_A0"); // short version of suit logon,
-		else
-			EMIT_SOUND_SUIT(player, "!HEV_AAx"); // long version of suit logon
+		if (m_PlayPickupSound)
+		{
+			if ((pev->spawnflags & SF_SUIT_SHORTLOGON) != 0)
+				EMIT_SOUND_SUIT(player, "!HEV_A0"); // short version of suit logon,
+			else
+				EMIT_SOUND_SUIT(player, "!HEV_AAx"); // long version of suit logon
+		}
 
 		player->SetHasSuit(true);
 		return true;
@@ -48,62 +51,6 @@ LINK_ENTITY_TO_CLASS(item_suit, CItemSuit);
 
 // Unused alias of the suit
 LINK_ENTITY_TO_CLASS(item_vest, CItemSuit);
-
-class CItemBattery : public CItem
-{
-public:
-	void OnCreate() override
-	{
-		CItem::OnCreate();
-
-		pev->model = MAKE_STRING("models/w_battery.mdl");
-	}
-	void Precache() override
-	{
-		CItem::Precache();
-		PrecacheSound("items/gunpickup2.wav");
-	}
-	bool AddItem(CBasePlayer* player) override
-	{
-		if (player->pev->deadflag != DEAD_NO)
-		{
-			return false;
-		}
-
-		if ((player->pev->armorvalue < MAX_NORMAL_BATTERY) &&
-			player->HasSuit())
-		{
-			int pct;
-			char szcharge[64];
-
-			player->pev->armorvalue += GetSkillFloat("battery"sv);
-			player->pev->armorvalue = V_min(player->pev->armorvalue, MAX_NORMAL_BATTERY);
-
-			player->EmitSound(CHAN_ITEM, "items/gunpickup2.wav", 1, ATTN_NORM);
-
-			MESSAGE_BEGIN(MSG_ONE, gmsgItemPickup, nullptr, player->pev);
-			WRITE_STRING(STRING(pev->classname));
-			MESSAGE_END();
-
-
-			// Suit reports new power level
-			// For some reason this wasn't working in release build -- round it.
-			pct = (int)((float)(player->pev->armorvalue * 100.0) * (1.0 / MAX_NORMAL_BATTERY) + 0.5);
-			pct = (pct / 5);
-			if (pct > 0)
-				pct--;
-
-			sprintf(szcharge, "!HEV_%1dP", pct);
-
-			// EMIT_SOUND_SUIT(this, szcharge);
-			player->SetSuitUpdate(szcharge, false, SUIT_NEXT_IN_30SEC);
-			return true;
-		}
-		return false;
-	}
-};
-
-LINK_ENTITY_TO_CLASS(item_battery, CItemBattery);
 
 class CItemAntidote : public CItem
 {
@@ -116,7 +63,10 @@ public:
 	}
 	bool AddItem(CBasePlayer* player) override
 	{
-		player->SetSuitUpdate("!HEV_DET4", false, SUIT_NEXT_IN_1MIN);
+		if (m_PlayPickupSound)
+		{
+			player->SetSuitUpdate("!HEV_DET4", false, SUIT_NEXT_IN_1MIN);
+		}
 
 		player->m_rgItems[ITEM_ANTIDOTE] += 1;
 		return true;
@@ -169,7 +119,11 @@ public:
 			WRITE_STRING(STRING(pev->classname));
 			MESSAGE_END();
 
-			EMIT_SOUND_SUIT(player, "!HEV_A1"); // Play the longjump sound UNDONE: Kelly? correct sound?
+			if (m_PlayPickupSound)
+			{
+				EMIT_SOUND_SUIT(player, "!HEV_A1"); // Play the longjump sound UNDONE: Kelly? correct sound?
+			}
+
 			return true;
 		}
 		return false;
@@ -178,7 +132,69 @@ public:
 
 LINK_ENTITY_TO_CLASS(item_longjump, CItemLongJump);
 
-class CItemHelmet : public CItem
+class CItemBattery : public CItem
+{
+public:
+	void OnCreate() override
+	{
+		CItem::OnCreate();
+
+		pev->model = MAKE_STRING("models/w_battery.mdl");
+	}
+	void Precache() override
+	{
+		CItem::Precache();
+		PrecacheSound("items/gunpickup2.wav");
+	}
+	bool AddItem(CBasePlayer* player) override
+	{
+		return DefaultAddArmor(player, GetSkillFloat("battery"sv));
+	}
+
+protected:
+	bool DefaultAddArmor(CBasePlayer* player, float amount)
+	{
+		if (player->pev->deadflag != DEAD_NO)
+		{
+			return false;
+		}
+
+		if (player->pev->armorvalue < MAX_NORMAL_BATTERY && player->HasSuit())
+		{
+			player->pev->armorvalue += amount;
+			player->pev->armorvalue = V_min(player->pev->armorvalue, MAX_NORMAL_BATTERY);
+
+			MESSAGE_BEGIN(MSG_ONE, gmsgItemPickup, nullptr, player->pev);
+			WRITE_STRING(STRING(pev->classname));
+			MESSAGE_END();
+
+			if (m_PlayPickupSound)
+			{
+				player->EmitSound(CHAN_ITEM, "items/gunpickup2.wav", 1, ATTN_NORM);
+
+				// Suit reports new power level
+				// For some reason this wasn't working in release build -- round it.
+				int pct = (int)((float)(player->pev->armorvalue * 100.0) * (1.0 / MAX_NORMAL_BATTERY) + 0.5);
+				pct = (pct / 5);
+				if (pct > 0)
+					pct--;
+
+				char szcharge[64];
+				sprintf(szcharge, "!HEV_%1dP", pct);
+
+				// EMIT_SOUND_SUIT(this, szcharge);
+				player->SetSuitUpdate(szcharge, false, SUIT_NEXT_IN_30SEC);
+			}
+
+			return true;
+		}
+		return false;
+	}
+};
+
+LINK_ENTITY_TO_CLASS(item_battery, CItemBattery);
+
+class CItemHelmet : public CItemBattery
 {
 public:
 	void OnCreate() override
@@ -187,49 +203,16 @@ public:
 
 		pev->model = MAKE_STRING("models/Barney_Helmet.mdl");
 	}
-	void Precache() override
-	{
-		CItem::Precache();
-		PrecacheSound("items/gunpickup2.wav");
-	}
 	bool AddItem(CBasePlayer* player) override
 	{
-		if ((player->pev->armorvalue < MAX_NORMAL_BATTERY) && player->HasSuit())
-		{
-			int pct;
-			char szcharge[64];
-
-			player->pev->armorvalue += 40;
-			player->pev->armorvalue = V_min(player->pev->armorvalue, MAX_NORMAL_BATTERY);
-
-			player->EmitSound(CHAN_ITEM, "items/gunpickup2.wav", 1, ATTN_NORM);
-
-			MESSAGE_BEGIN(MSG_ONE, gmsgItemPickup, nullptr, player->pev);
-			WRITE_STRING(STRING(pev->classname));
-			MESSAGE_END();
-
-
-			// Suit reports new power level
-			// For some reason this wasn't working in release build -- round it.
-			pct = (int)((float)(player->pev->armorvalue * 100.0) * (1.0 / MAX_NORMAL_BATTERY) + 0.5);
-			pct = (pct / 5);
-			if (pct > 0)
-				pct--;
-
-			sprintf(szcharge, "!HEV_%1dP", pct);
-
-			// EMIT_SOUND_SUIT(this, szcharge);
-			player->SetSuitUpdate(szcharge, false, SUIT_NEXT_IN_30SEC);
-			return true;
-		}
-
-		return false;
+		// TODO: add to skill.json
+		return DefaultAddArmor(player, 40);
 	}
 };
 
 LINK_ENTITY_TO_CLASS(item_helmet, CItemHelmet);
 
-class CItemArmorVest : public CItem
+class CItemArmorVest : public CItemBattery
 {
 public:
 	void OnCreate() override
@@ -238,43 +221,10 @@ public:
 
 		pev->model = MAKE_STRING("models/Barney_Vest.mdl");
 	}
-	void Precache() override
-	{
-		CItem::Precache();
-		PrecacheSound("items/gunpickup2.wav");
-	}
 	bool AddItem(CBasePlayer* player) override
 	{
-		if ((player->pev->armorvalue < MAX_NORMAL_BATTERY) && player->HasSuit())
-		{
-			int pct;
-			char szcharge[64];
-
-			player->pev->armorvalue += 60;
-			player->pev->armorvalue = V_min(player->pev->armorvalue, MAX_NORMAL_BATTERY);
-
-			player->EmitSound(CHAN_ITEM, "items/gunpickup2.wav", 1, ATTN_NORM);
-
-			MESSAGE_BEGIN(MSG_ONE, gmsgItemPickup, nullptr, player->pev);
-			WRITE_STRING(STRING(pev->classname));
-			MESSAGE_END();
-
-
-			// Suit reports new power level
-			// For some reason this wasn't working in release build -- round it.
-			pct = (int)((float)(player->pev->armorvalue * 100.0) * (1.0 / MAX_NORMAL_BATTERY) + 0.5);
-			pct = (pct / 5);
-			if (pct > 0)
-				pct--;
-
-			sprintf(szcharge, "!HEV_%1dP", pct);
-
-			// EMIT_SOUND_SUIT(this, szcharge);
-			player->SetSuitUpdate(szcharge, false, SUIT_NEXT_IN_30SEC);
-			return true;
-		}
-
-		return false;
+		// TODO: add to skill.json
+		return DefaultAddArmor(player, 60);
 	}
 };
 

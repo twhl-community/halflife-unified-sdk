@@ -25,6 +25,7 @@ TYPEDESCRIPTION CBaseItem::m_SaveData[] =
 		DEFINE_FIELD(CBaseItem, m_StayVisibleDuringRespawn, FIELD_BOOLEAN),
 		DEFINE_FIELD(CBaseItem, m_IsRespawning, FIELD_BOOLEAN),
 		DEFINE_FIELD(CBaseItem, m_FlashOnRespawn, FIELD_BOOLEAN),
+		DEFINE_FIELD(CBaseItem, m_PlayPickupSound, FIELD_BOOLEAN),
 		DEFINE_FIELD(CBaseItem, m_TriggerOnSpawn, FIELD_STRING),
 		DEFINE_FIELD(CBaseItem, m_TriggerOnDespawn, FIELD_STRING)};
 
@@ -57,6 +58,11 @@ bool CBaseItem::KeyValue(KeyValueData* pkvd)
 	else if (FStrEq(pkvd->szKeyName, "flash_on_respawn"))
 	{
 		m_FlashOnRespawn = atoi(pkvd->szValue) != 0;
+		return true;
+	}
+	else if (FStrEq(pkvd->szKeyName, "play_pickup_sound"))
+	{
+		m_PlayPickupSound = atoi(pkvd->szValue) != 0;
 		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "fall_mode"))
