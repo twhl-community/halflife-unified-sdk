@@ -444,12 +444,6 @@ void CBasePlayerWeapon::AddToPlayer(CBasePlayer* pPlayer)
 	m_pPlayer = pPlayer;
 
 	pPlayer->SetWeaponBit(m_iId);
-
-	if (0 == m_iPrimaryAmmoType)
-	{
-		m_iPrimaryAmmoType = pPlayer->GetAmmoIndex(pszAmmo1());
-		m_iSecondaryAmmoType = pPlayer->GetAmmoIndex(pszAmmo2());
-	}
 }
 
 bool CBasePlayerWeapon::UpdateClientData(CBasePlayer* pPlayer)
@@ -557,7 +551,6 @@ bool CBasePlayerWeapon::AddPrimaryAmmo(CBasePlayerWeapon* origin, int iCount, co
 
 	if (iIdAmmo > 0)
 	{
-		m_iPrimaryAmmoType = iIdAmmo;
 		if (this != origin)
 		{
 			// play the "got ammo" sound only if we gave some ammo to a player that already had this gun.
@@ -577,7 +570,6 @@ bool CBasePlayerWeapon::AddSecondaryAmmo(int iCount, const char* szName)
 
 	if (iIdAmmo > 0)
 	{
-		m_iSecondaryAmmoType = iIdAmmo;
 		EmitSound(CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
 	}
 	return iIdAmmo > 0;
@@ -662,7 +654,7 @@ bool CBasePlayerWeapon::ExtractClipAmmo(CBasePlayerWeapon* weapon)
 	}
 
 	// TODO: should handle -1 return as well (only return true if ammo was taken)
-	return weapon->m_pPlayer->GiveAmmo(iAmmo, pszAmmo1()) != 0; // , &m_iPrimaryAmmoType
+	return weapon->m_pPlayer->GiveAmmo(iAmmo, pszAmmo1()) != 0;
 }
 
 void CBasePlayerWeapon::RetireWeapon()

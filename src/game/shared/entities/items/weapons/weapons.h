@@ -246,32 +246,13 @@ public:
 		visitor.Visit(this);
 	}
 
-	void OnCreate() override
-	{
-		CBaseItem::OnCreate();
-		LinkWeaponInfo();
-	}
+	void OnCreate() override;
 
 	bool KeyValue(KeyValueData* pkvd) override;
 
-	void Spawn() override
-	{
-		m_iDefaultPrimaryAmmo = m_iDefaultAmmo;
+	void Spawn() override;
 
-		Precache();
-		SetModel(GetModelName());
-		SetupItem(vec3_origin, vec3_origin); //pointsize until it lands on the ground.
-	}
-
-	void LinkWeaponInfo()
-	{
-		m_WeaponInfo = g_WeaponData.GetByName(GetClassname());
-
-		if (!m_WeaponInfo)
-		{
-			m_WeaponInfo = &g_WeaponData.DummyInfo;
-		}
-	}
+	void LinkWeaponInfo();
 
 	/**
 	*	@brief return true if the item you want the item added to the player inventory
@@ -471,16 +452,16 @@ public:
 
 	float m_flPumpTime;
 
-	int m_fInSpecialReload;		   //!< Are we in the middle of a reload for the shotguns
-	float m_flNextPrimaryAttack;   //!< soonest time ItemPostFrame will call PrimaryAttack
-	float m_flNextSecondaryAttack; //!< soonest time ItemPostFrame will call SecondaryAttack
-	float m_flTimeWeaponIdle;	   //!< soonest time ItemPostFrame will call WeaponIdle
-	int m_iPrimaryAmmoType;		   //!< "primary" ammo index into players m_rgAmmo[]
-	int m_iSecondaryAmmoType;	   //!< "secondary" ammo index into players m_rgAmmo[]
-	int m_iClip;				   //!< number of shots left in the primary weapon clip, -1 it not used
-	int m_iClientClip;			   //!< the last version of m_iClip sent to hud dll
-	int m_iClientWeaponState;	   //!< the last version of the weapon state sent to hud dll (is current weapon, is on target)
-	bool m_fInReload;			   //!< Are we in the middle of a reload
+	int m_fInSpecialReload;			//!< Are we in the middle of a reload for the shotguns
+	float m_flNextPrimaryAttack;	//!< soonest time ItemPostFrame will call PrimaryAttack
+	float m_flNextSecondaryAttack;	//!< soonest time ItemPostFrame will call SecondaryAttack
+	float m_flTimeWeaponIdle;		//!< soonest time ItemPostFrame will call WeaponIdle
+	int m_iPrimaryAmmoType = -1;	//!< "primary" ammo index into players m_rgAmmo[]
+	int m_iSecondaryAmmoType = -1;	//!< "secondary" ammo index into players m_rgAmmo[]
+	int m_iClip;					//!< number of shots left in the primary weapon clip, -1 it not used
+	int m_iClientClip;				//!< the last version of m_iClip sent to hud dll
+	int m_iClientWeaponState;		//!< the last version of the weapon state sent to hud dll (is current weapon, is on target)
+	bool m_fInReload;				//!< Are we in the middle of a reload
 
 	int m_iDefaultAmmo; //!< how much ammo you get when you pick up this weapon as placed by a level designer.
 	int m_iDefaultPrimaryAmmo; // Copy of m_iDefaultAmmo after KeyValue is handled for respawn.

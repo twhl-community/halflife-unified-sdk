@@ -94,6 +94,50 @@ void FindHullIntersection(const Vector& vecSrc, TraceResult& tr, const Vector& m
 	}
 }
 
+void CBasePlayerWeapon::OnCreate()
+{
+	CBaseItem::OnCreate();
+	LinkWeaponInfo();
+}
+
+void CBasePlayerWeapon::Spawn()
+{
+	m_iDefaultPrimaryAmmo = m_iDefaultAmmo;
+
+	Precache();
+	SetModel(GetModelName());
+	SetupItem(vec3_origin, vec3_origin); // pointsize until it lands on the ground.
+}
+
+void CBasePlayerWeapon::LinkWeaponInfo()
+{
+	m_WeaponInfo = g_WeaponData.GetByName(GetClassname());
+
+	if (!m_WeaponInfo)
+	{
+		m_WeaponInfo = &g_WeaponData.DummyInfo;
+	}
+
+	// (re)initialize ammo type indices.
+	if (!m_WeaponInfo->AmmoType1.empty())
+	{
+		m_iPrimaryAmmoType = g_AmmoTypes.IndexOf(m_WeaponInfo->AmmoType1.c_str());
+	}
+	else
+	{
+		m_iPrimaryAmmoType = -1;
+	}
+
+	if (!m_WeaponInfo->AmmoType2.empty())
+	{
+		m_iSecondaryAmmoType = g_AmmoTypes.IndexOf(m_WeaponInfo->AmmoType2.c_str());
+	}
+	else
+	{
+		m_iSecondaryAmmoType = -1;
+	}
+}
+
 void CBasePlayerWeapon::SendWeaponAnim(int iAnim, int body)
 {
 	m_pPlayer->pev->weaponanim = iAnim;
