@@ -135,28 +135,49 @@ LINK_ENTITY_TO_CLASS(item_longjump, CItemLongJump);
 class CItemBattery : public CItem
 {
 public:
+	static constexpr float RefillArmorAmount = -1;
+
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
+
+	static TYPEDESCRIPTION m_SaveData[];
+
 	void OnCreate() override
 	{
 		CItem::OnCreate();
-
+		m_ArmorAmount = GetSkillFloat("battery"sv);
 		pev->model = MAKE_STRING("models/w_battery.mdl");
 	}
+
+	bool KeyValue(KeyValueData* pkvd) override
+	{
+		if (FStrEq(pkvd->szKeyName, "armor_amount"))
+		{
+			m_ArmorAmount = std::max(RefillArmorAmount, static_cast<float>(atof(pkvd->szValue)));
+			return true;
+		}
+
+		return CItem::KeyValue(pkvd);
+	}
+
 	void Precache() override
 	{
 		CItem::Precache();
 		PrecacheSound("items/gunpickup2.wav");
 	}
-	bool AddItem(CBasePlayer* player) override
-	{
-		return DefaultAddArmor(player, GetSkillFloat("battery"sv));
-	}
 
-protected:
-	bool DefaultAddArmor(CBasePlayer* player, float amount)
+	bool AddItem(CBasePlayer* player) override
 	{
 		if (player->pev->deadflag != DEAD_NO)
 		{
 			return false;
+		}
+
+		float amount = m_ArmorAmount;
+
+		if (amount == RefillArmorAmount)
+		{
+			amount = MAX_NORMAL_BATTERY;
 		}
 
 		if (player->pev->armorvalue < MAX_NORMAL_BATTERY && player->HasSuit())
@@ -190,9 +211,18 @@ protected:
 		}
 		return false;
 	}
+
+protected:
+	float m_ArmorAmount = 0;
 };
 
 LINK_ENTITY_TO_CLASS(item_battery, CItemBattery);
+
+TYPEDESCRIPTION CItemBattery::m_SaveData[] =
+	{
+		DEFINE_FIELD(CItemBattery, m_ArmorAmount, FIELD_FLOAT)};
+
+IMPLEMENT_SAVERESTORE(CItemBattery, CItem);
 
 class CItemHelmet : public CItemBattery
 {
@@ -200,13 +230,8 @@ public:
 	void OnCreate() override
 	{
 		CItem::OnCreate();
-
-		pev->model = MAKE_STRING("models/Barney_Helmet.mdl");
-	}
-	bool AddItem(CBasePlayer* player) override
-	{
-		// TODO: add to skill.json
-		return DefaultAddArmor(player, 40);
+		m_ArmorAmount = 40; // TODO: add to skill.json
+		pev->model = MAKE_STRING("models/barney_helmet.mdl");
 	}
 };
 
@@ -218,13 +243,8 @@ public:
 	void OnCreate() override
 	{
 		CItem::OnCreate();
-
-		pev->model = MAKE_STRING("models/Barney_Vest.mdl");
-	}
-	bool AddItem(CBasePlayer* player) override
-	{
-		// TODO: add to skill.json
-		return DefaultAddArmor(player, 60);
+		m_ArmorAmount = 60; // TODO: add to skill.json
+		pev->model = MAKE_STRING("models/barney_vest.mdl");
 	}
 };
 
