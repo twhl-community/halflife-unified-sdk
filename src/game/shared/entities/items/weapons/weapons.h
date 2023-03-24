@@ -282,7 +282,7 @@ public:
 	virtual bool ExtractClipAmmo(CBasePlayerWeapon* weapon);
 
 	// generic "shared" ammo handlers
-	bool AddPrimaryAmmo(int iCount, const char* szName, int iMaxClip);
+	bool AddPrimaryAmmo(CBasePlayerWeapon* origin, int iCount, const char* szName, int iMaxClip);
 	bool AddSecondaryAmmo(int iCount, const char* szName);
 
 	void EXPORT DestroyItem();

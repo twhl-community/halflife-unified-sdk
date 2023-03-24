@@ -558,7 +558,7 @@ bool CBasePlayerWeapon::UpdateClientData(CBasePlayer* pPlayer)
 	return true;
 }
 
-bool CBasePlayerWeapon::AddPrimaryAmmo(int iCount, const char* szName, int iMaxClip)
+bool CBasePlayerWeapon::AddPrimaryAmmo(CBasePlayerWeapon* origin, int iCount, const char* szName, int iMaxClip)
 {
 	int iIdAmmo;
 
@@ -590,7 +590,7 @@ bool CBasePlayerWeapon::AddPrimaryAmmo(int iCount, const char* szName, int iMaxC
 	if (iIdAmmo > 0)
 	{
 		m_iPrimaryAmmoType = iIdAmmo;
-		if (m_pPlayer->HasPlayerWeapon(this))
+		if (this != origin)
 		{
 			// play the "got ammo" sound only if we gave some ammo to a player that already had this gun.
 			// if the player is just getting this gun for the first time, DefaultTouch will play the "picked up gun" sound for us.
@@ -740,7 +740,7 @@ bool CBasePlayerWeapon::ExtractAmmo(CBasePlayerWeapon* weapon)
 	{
 		// blindly call with m_iDefaultAmmo. It's either going to be a value or zero. If it is zero,
 		// we only get the ammo in the weapon's clip, which is what we want.
-		iReturn = weapon->AddPrimaryAmmo(m_iDefaultAmmo, pszAmmo1(), iMaxClip());
+		iReturn = weapon->AddPrimaryAmmo(this, m_iDefaultAmmo, pszAmmo1(), iMaxClip());
 		m_iDefaultAmmo = 0;
 	}
 

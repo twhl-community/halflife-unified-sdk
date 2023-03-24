@@ -342,8 +342,6 @@ void CBasePlayerWeapon::AttachToPlayer(CBasePlayer* pPlayer) {}
 bool CBasePlayerWeapon::AddDuplicate(CBasePlayerWeapon* original) { return false; }
 void CBasePlayerWeapon::AddToPlayer(CBasePlayer* pPlayer) {}
 bool CBasePlayerWeapon::UpdateClientData(CBasePlayer* pPlayer) { return false; }
-bool CBasePlayerWeapon::AddPrimaryAmmo(int iCount, const char* szName, int iMaxClip) { return true; }
-bool CBasePlayerWeapon::AddSecondaryAmmo(int iCount, const char* szName) { return true; }
 bool CBasePlayerWeapon::IsUseable() { return true; }
 void CBasePlayerAmmo::Precache() {}
 void CBasePlayerAmmo::Spawn() {}
