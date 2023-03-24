@@ -2759,9 +2759,8 @@ void CBasePlayer::Spawn()
 	m_bitsHUDDamage = -1;
 	m_bitsDamageType = 0;
 	m_afPhysicsFlags = 0;
-	m_fLongJump = false; // no longjump module.
+	SetHasLongJump(false); // no longjump module.
 
-	g_engfuncs.pfnSetPhysicsKeyValue(edict(), "slj", "0");
 	g_engfuncs.pfnSetPhysicsKeyValue(edict(), "hl", "1");
 	g_engfuncs.pfnSetPhysicsKeyValue(edict(), "jpj", "0");
 
@@ -2955,14 +2954,7 @@ bool CBasePlayer::Restore(CRestore& restore)
 
 	g_engfuncs.pfnSetPhysicsKeyValue(edict(), "hl", "1");
 
-	if (m_fLongJump)
-	{
-		g_engfuncs.pfnSetPhysicsKeyValue(edict(), "slj", "1");
-	}
-	else
-	{
-		g_engfuncs.pfnSetPhysicsKeyValue(edict(), "slj", "0");
-	}
+	SetHasLongJump(m_fLongJump);
 
 	RenewItems();
 
@@ -3834,6 +3826,18 @@ void CBasePlayer::SendAmmoUpdate()
 	{
 		InternalSendSingleAmmoUpdate(i);
 	}
+}
+
+bool CBasePlayer::HasLongJump() const
+{
+	return m_fLongJump;
+}
+
+void CBasePlayer::SetHasLongJump(bool hasLongJump)
+{
+	m_fLongJump = hasLongJump;
+	g_engfuncs.pfnSetPhysicsKeyValue(edict(), "slj", hasLongJump ? "1" : "0");
+	// TODO: CTF long jump integration
 }
 
 void CBasePlayer::SendSingleAmmoUpdate(int ammoIndex)

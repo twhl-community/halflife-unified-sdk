@@ -339,6 +339,9 @@ public:
 	bool HasSuit() const;
 	void SetHasSuit(bool hasSuit);
 
+	bool HasLongJump() const;
+	void SetHasLongJump(bool hasLongJump);
+
 	/**
 	*	@brief resends any changed player HUD info to the client.
 	*	Called every frame by PlayerPreThink

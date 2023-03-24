@@ -100,26 +100,128 @@ void PlayerSetHudColor::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_T
 class CStripWeapons : public CPointEntity
 {
 public:
+	static constexpr int StripFlagAllPlayers = 1 << 0;
+	static constexpr int StripFlagRemoveWeapons = 1 << 1;
+	static constexpr int StripFlagRemoveSuit = 1 << 2;
+	static constexpr int StripFlagRemoveLongJump = 1 << 3;
+
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
+	static TYPEDESCRIPTION m_SaveData[];
+
+	bool KeyValue(KeyValueData* pkvd) override;
+
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
 private:
+	int m_Flags = StripFlagRemoveWeapons;
 };
 
 LINK_ENTITY_TO_CLASS(player_weaponstrip, CStripWeapons);
 
+TYPEDESCRIPTION CStripWeapons::m_SaveData[] =
+	{
+		DEFINE_FIELD(CStripWeapons, m_Flags, FIELD_INTEGER)};
+
+IMPLEMENT_SAVERESTORE(CStripWeapons, CPointEntity);
+
+bool CStripWeapons::KeyValue(KeyValueData* pkvd)
+{
+	if (FStrEq(pkvd->szKeyName, "all_players"))
+	{
+		if (atoi(pkvd->szValue) != 0)
+		{
+			SetBits(m_Flags, StripFlagAllPlayers);
+		}
+		else
+		{
+			ClearBits(m_Flags, StripFlagAllPlayers);
+		}
+
+		return true;
+	}
+	else if (FStrEq(pkvd->szKeyName, "strip_weapons"))
+	{
+		if (atoi(pkvd->szValue) != 0)
+		{
+			SetBits(m_Flags, StripFlagRemoveWeapons);
+		}
+		else
+		{
+			ClearBits(m_Flags, StripFlagRemoveWeapons);
+		}
+
+		return true;
+	}
+	else if (FStrEq(pkvd->szKeyName, "strip_suit"))
+	{
+		if (atoi(pkvd->szValue) != 0)
+		{
+			SetBits(m_Flags, StripFlagRemoveSuit);
+		}
+		else
+		{
+			ClearBits(m_Flags, StripFlagRemoveSuit);
+		}
+
+		return true;
+	}
+	else if (FStrEq(pkvd->szKeyName, "strip_longjump"))
+	{
+		if (atoi(pkvd->szValue) != 0)
+		{
+			SetBits(m_Flags, StripFlagRemoveLongJump);
+		}
+		else
+		{
+			ClearBits(m_Flags, StripFlagRemoveLongJump);
+		}
+
+		return true;
+	}
+
+	return CPointEntity::KeyValue(pkvd);
+}
+
 void CStripWeapons::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
-	CBasePlayer* pPlayer = nullptr;
-
-	if (pActivator && pActivator->IsPlayer())
+	const auto executor = [&](CBasePlayer* player)
 	{
-		pPlayer = (CBasePlayer*)pActivator;
-	}
-	else if (!g_pGameRules->IsDeathmatch())
-	{
-		pPlayer = UTIL_GetLocalPlayer();
-	}
+		if ((m_Flags & StripFlagRemoveWeapons) != 0)
+		{
+			player->RemoveAllItems(false);
+		}
 
-	if (pPlayer)
-		pPlayer->RemoveAllItems(false);
+		if ((m_Flags & StripFlagRemoveSuit) != 0)
+		{
+			player->SetHasSuit(false);
+		}
+
+		if ((m_Flags & StripFlagRemoveLongJump) != 0)
+		{
+			player->SetHasLongJump(false);
+		}
+	};
+
+	if ((m_Flags & StripFlagAllPlayers) != 0)
+	{
+		for (auto player : UTIL_FindPlayers())
+		{
+			executor(player);
+		}
+	}
+	else
+	{
+		CBasePlayer* player = ToBasePlayer(pActivator);
+
+		if (!player && !g_pGameRules->IsDeathmatch())
+		{
+			player = UTIL_GetLocalPlayer();
+		}
+
+		if (player)
+		{
+			executor(player);
+		}
+	}
 }

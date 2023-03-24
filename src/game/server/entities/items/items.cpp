@@ -104,16 +104,14 @@ public:
 	}
 	bool AddItem(CBasePlayer* player) override
 	{
-		if (player->m_fLongJump)
+		if (player->HasLongJump())
 		{
 			return false;
 		}
 
 		if (player->HasSuit())
 		{
-			player->m_fLongJump = true; // player now has longjump module
-
-			g_engfuncs.pfnSetPhysicsKeyValue(player->edict(), "slj", "1");
+			player->SetHasLongJump(true); // player now has longjump module
 
 			MESSAGE_BEGIN(MSG_ONE, gmsgItemPickup, nullptr, player->pev);
 			WRITE_STRING(STRING(pev->classname));
