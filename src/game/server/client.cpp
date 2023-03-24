@@ -329,8 +329,9 @@ void Host_Say(CBasePlayer* player, bool teamonly)
 	if (CMD_ARGC() == 0)
 		return;
 
+	// Only limit chat in multiplayer.
 	// Not yet.
-	if (player->m_flNextChatTime > gpGlobals->time)
+	if (gpGlobals->maxClients > 1 && player->m_flNextChatTime > gpGlobals->time)
 		return;
 
 	if (!stricmp(pcmd, cpSay) || !stricmp(pcmd, cpSayTeam))
