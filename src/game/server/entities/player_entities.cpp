@@ -96,3 +96,30 @@ void PlayerSetHudColor::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_T
 
 	player->SetHudColor(color);
 }
+
+class CStripWeapons : public CPointEntity
+{
+public:
+	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+
+private:
+};
+
+LINK_ENTITY_TO_CLASS(player_weaponstrip, CStripWeapons);
+
+void CStripWeapons::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
+{
+	CBasePlayer* pPlayer = nullptr;
+
+	if (pActivator && pActivator->IsPlayer())
+	{
+		pPlayer = (CBasePlayer*)pActivator;
+	}
+	else if (!g_pGameRules->IsDeathmatch())
+	{
+		pPlayer = UTIL_GetLocalPlayer();
+	}
+
+	if (pPlayer)
+		pPlayer->RemoveAllItems(false);
+}
