@@ -362,6 +362,9 @@ CBasePlayerWeapon* CBasePlayerWeapon::GetItemToRespawn(const Vector& respawnPoin
 
 	DispatchSpawn(newWeapon->edict());
 
+	// Don't allow this weapon to be targeted from now on.
+	pev->targetname = string_t::Null;
+
 	// This weapon has been picked up, so from now own it should play pickup sounds (when dropped and picked up again).
 	m_PlayPickupSound = false;
 
