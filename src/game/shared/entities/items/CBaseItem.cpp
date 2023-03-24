@@ -133,6 +133,12 @@ void CBaseItem::Spawn()
 {
 #ifndef CLIENT_DLL
 	Precache();
+
+	if(FStrEq(GetModelName(), ""))
+	{
+		Logger->warn("{}:{} has no model", GetClassname(), entindex());
+	}
+
 	SetModel(GetModelName());
 	SetupItem({-16, -16, 0}, {16, 16, 16});
 #endif
