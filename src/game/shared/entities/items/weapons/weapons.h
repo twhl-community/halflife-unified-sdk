@@ -475,6 +475,8 @@ public:
 	string_t m_PlayerModel;
 };
 
+constexpr char DefaultItemPickupSound[] = "items/9mmclip1.wav";
+
 /**
 *	@brief Base class for ammo entities.
 *	@details Inheriting classes must set m_AmmoAmount to the default give amount
@@ -495,7 +497,7 @@ public:
 	void Precache() override
 	{
 		CBaseItem::Precache();
-		PrecacheSound("items/9mmclip1.wav");
+		PrecacheSound(DefaultItemPickupSound);
 	}
 
 	void Spawn() override;
@@ -512,6 +514,8 @@ protected:
 	{
 		return AddAmmo(player) ? ItemAddResult::Added : ItemAddResult::NotAdded;
 	}
+
+	void PlayPickupSound(const char* pickupSoundName);
 
 	bool GiveAmmo(CBasePlayer* player, int amount, const char* ammoName, const char* pickupSoundName);
 

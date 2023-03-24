@@ -756,6 +756,14 @@ void CBasePlayerAmmo::Spawn()
 	assert(!FStrEq(STRING(m_AmmoName), ""));
 }
 
+void CBasePlayerAmmo::PlayPickupSound(const char* pickupSoundName)
+{
+	if (pickupSoundName && m_PlayPickupSound)
+	{
+		EmitSound(CHAN_ITEM, pickupSoundName, VOL_NORM, ATTN_NORM);
+	}
+}
+
 bool CBasePlayerAmmo::GiveAmmo(CBasePlayer* player, int amount, const char* ammoName, const char* pickupSoundName)
 {
 	if (amount < RefillAllAmmoAmount || !ammoName || FStrEq(ammoName, ""))
@@ -775,11 +783,7 @@ bool CBasePlayerAmmo::GiveAmmo(CBasePlayer* player, int amount, const char* ammo
 	// Act like giving 0 ammo always succeeds. For fake ammo pickups.
 	if (amount == 0 || player->GiveAmmo(amount, ammoName) != -1)
 	{
-		if (pickupSoundName && m_PlayPickupSound)
-		{
-			EmitSound(CHAN_ITEM, pickupSoundName, VOL_NORM, ATTN_NORM);
-		}
-
+		PlayPickupSound(pickupSoundName);
 		return true;
 	}
 
@@ -788,7 +792,7 @@ bool CBasePlayerAmmo::GiveAmmo(CBasePlayer* player, int amount, const char* ammo
 
 bool CBasePlayerAmmo::DefaultGiveAmmo(CBasePlayer* player, int amount, const char* ammoName, bool playSound)
 {
-	return GiveAmmo(player, amount, ammoName, playSound ? "items/9mmclip1.wav" : nullptr);
+	return GiveAmmo(player, amount, ammoName, playSound ? DefaultItemPickupSound : nullptr);
 }
 
 bool CBasePlayerAmmo::AddAmmo(CBasePlayer* player)
