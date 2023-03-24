@@ -20,9 +20,17 @@
 class CHealthKit : public CItem
 {
 public:
+	static constexpr float RefillHealthAmount = -1;
+
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
+
+	static TYPEDESCRIPTION m_SaveData[];
+
 	void OnCreate() override
 	{
 		CItem::OnCreate();
+		m_HealthAmount = GetSkillFloat("healthkit"sv);
 		pev->model = MAKE_STRING("models/w_medkit.mdl");
 	}
 
@@ -32,6 +40,17 @@ public:
 		PrecacheSound("items/smallmedkit1.wav");
 	}
 
+	bool KeyValue(KeyValueData* pkvd) override
+	{
+		if (FStrEq(pkvd->szKeyName, "health_amount"))
+		{
+			m_HealthAmount = std::max(RefillHealthAmount, static_cast<float>(atof(pkvd->szValue)));
+			return true;
+		}
+
+		return CItem::KeyValue(pkvd);
+	}
+
 	bool AddItem(CBasePlayer* player) override
 	{
 		if (player->pev->deadflag != DEAD_NO)
@@ -39,7 +58,14 @@ public:
 			return false;
 		}
 
-		if (player->TakeHealth(GetSkillFloat("healthkit"sv), DMG_GENERIC))
+		float amount = m_HealthAmount;
+
+		if (amount == RefillHealthAmount)
+		{
+			amount = player->pev->max_health;
+		}
+
+		if (player->TakeHealth(amount, DMG_GENERIC))
 		{
 			MESSAGE_BEGIN(MSG_ONE, gmsgItemPickup, nullptr, player->pev);
 			WRITE_STRING(STRING(pev->classname));
@@ -52,9 +78,18 @@ public:
 
 		return false;
 	}
+
+protected:
+	float m_HealthAmount = 0;
 };
 
 LINK_ENTITY_TO_CLASS(item_healthkit, CHealthKit);
+
+TYPEDESCRIPTION CHealthKit::m_SaveData[] =
+	{
+		DEFINE_FIELD(CHealthKit, m_HealthAmount, FIELD_FLOAT)};
+
+IMPLEMENT_SAVERESTORE(CHealthKit, CItem);
 
 /**
 *	@brief Wall mounted health kit
