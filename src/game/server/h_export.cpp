@@ -145,4 +145,125 @@ int DLLEXPORT GetNewDLLFunctions(NEW_DLL_FUNCTIONS* pFunctionTable, int* interfa
 	memcpy(pFunctionTable, &gNewDLLFunctions, sizeof(gNewDLLFunctions));
 	return 1;
 }
+
+struct TITLECOMMENT
+{
+	const char* BSPName;
+	const char* TitleName;
+};
+
+static constexpr TITLECOMMENT gTitleComments[66] =
+	{
+		{"t0a0", "#T0A0TITLE"},
+		{"c0a0", "#C0A0TITLE"},
+		{"c1a0", "#C0A1TITLE"},
+		{"c1a1", "#C1A1TITLE"},
+		{"c1a2", "#C1A2TITLE"},
+		{"c1a3", "#C1A3TITLE"},
+		{"c1a4", "#C1A4TITLE"},
+		{"c2a1", "#C2A1TITLE"},
+		{"c2a2", "#C2A2TITLE"},
+		{"c2a3", "#C2A3TITLE"},
+		{"c2a4d", "#C2A4TITLE2"},
+		{"c2a4e", "#C2A4TITLE2"},
+		{"c2a4f", "#C2A4TITLE2"},
+		{"c2a4g", "#C2A4TITLE2"},
+		{"c2a4", "#C2A4TITLE1"},
+		{"c2a5", "#C2A5TITLE"},
+		{"c3a1", "#C3A1TITLE"},
+		{"c3a2", "#C3A2TITLE"},
+		{"c4a1a", "#C4A1ATITLE"},
+		{"c4a1b", "#C4A1ATITLE"},
+		{"c4a1c", "#C4A1ATITLE"},
+		{"c4a1d", "#C4A1ATITLE"},
+		{"c4a1e", "#C4A1ATITLE"},
+		{"c4a1", "#C4A1TITLE"},
+		{"c4a2", "#C4A2TITLE"},
+		{"c4a3", "#C4A3TITLE"},
+		{"c5a1", "#C5TITLE"},
+		{"ofboot", "#OF_BOOT0TITLE"},
+		{"of0a", "#OF1A1TITLE"},
+		{"of1a1", "#OF1A3TITLE"},
+		{"of1a2", "#OF1A3TITLE"},
+		{"of1a3", "#OF1A3TITLE"},
+		{"of1a4", "#OF1A3TITLE"},
+		{"of1a", "#OF1A5TITLE"},
+		{"of2a1", "#OF2A1TITLE"},
+		{"of2a2", "#OF2A1TITLE"},
+		{"of2a3", "#OF2A1TITLE"},
+		{"of2a", "#OF2A4TITLE"},
+		{"of3a1", "#OF3A1TITLE"},
+		{"of3a2", "#OF3A1TITLE"},
+		{"of3a", "#OF3A3TITLE"},
+		{"of4a1", "#OF4A1TITLE"},
+		{"of4a2", "#OF4A1TITLE"},
+		{"of4a3", "#OF4A1TITLE"},
+		{"of4a", "#OF4A4TITLE"},
+		{"of5a", "#OF5A1TITLE"},
+		{"of6a1", "#OF6A1TITLE"},
+		{"of6a2", "#OF6A1TITLE"},
+		{"of6a3", "#OF6A1TITLE"},
+		{"of6a4b", "#OF6A4TITLE"},
+		{"of6a4", "#OF6A1TITLE"},
+		{"of6a5", "#OF6A4TITLE"},
+		{"of6a", "#OF6A4TITLE"},
+		{"of7a", "#OF7A0TITLE"},
+		{"ba_tram", "#BA_TRAMTITLE"},
+		{"ba_security", "#BA_SECURITYTITLE"},
+		{"ba_main", "#BA_SECURITYTITLE"},
+		{"ba_elevator", "#BA_SECURITYTITLE"},
+		{"ba_canal", "#BA_CANALSTITLE"},
+		{"ba_yard", "#BA_YARDTITLE"},
+		{"ba_xen", "#BA_XENTITLE"},
+		{"ba_hazard", "#BA_HAZARD"},
+		{"ba_power", "#BA_POWERTITLE"},
+		{"ba_teleport1", "#BA_YARDTITLE"},
+		{"ba_teleport", "#BA_TELEPORTTITLE"},
+		{"ba_outro", "#BA_OUTRO"}};
+
+/**
+ *	@brief Called by the engine to get the level name shown in the save and load game dialogs.
+ *	@param buffer Filled in by this function.
+ *		Contains either a localizable token loaded from @c resource/valve_%language%.txt or a plain text title.
+ */
+void DLLEXPORT SV_SaveGameComment(char* buffer, int bufferSize)
+{
+	const char* mapName = STRING(gpGlobals->mapname);
+
+	const char* titleName = nullptr;
+
+	// See if the current map is in the hardcoded list of titles
+	if (mapName)
+	{
+		for (const auto& comment : gTitleComments)
+		{
+			// See if the bsp name starts with this prefix
+			if (!strnicmp(mapName, comment.BSPName, strlen(comment.BSPName)))
+			{
+				if (comment.TitleName)
+				{
+					titleName = comment.TitleName;
+					break;
+				}
+			}
+		}
+	}
+
+	if (!titleName)
+	{
+		// Slightly different behavior here compared to the engine
+		// Instead of using maps/mapname.bsp we just use an empty string
+		if (mapName)
+		{
+			titleName = mapName;
+		}
+		else
+		{
+			titleName = "";
+		}
+	}
+
+	strncpy(buffer, titleName, bufferSize - 1);
+	buffer[bufferSize - 1] = '\0';
+}
 }
