@@ -52,6 +52,10 @@ class CRope;
 //-----------------------------------------------------
 // This is Half-Life player entity
 //-----------------------------------------------------
+// constant items
+constexpr int ITEM_ANTIDOTE = 0;
+constexpr int MAX_ITEMS = ITEM_ANTIDOTE + 1; // hard coded item types
+
 #define CSUITPLAYLIST 4 // max of 4 suit sentences queued up at any time
 
 #define SUIT_GROUP true

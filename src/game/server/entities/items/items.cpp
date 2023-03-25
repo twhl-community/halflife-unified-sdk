@@ -75,24 +75,6 @@ public:
 
 LINK_ENTITY_TO_CLASS(item_antidote, CItemAntidote);
 
-class CItemSecurity : public CItem
-{
-public:
-	void OnCreate() override
-	{
-		CItem::OnCreate();
-
-		pev->model = MAKE_STRING("models/w_security.mdl");
-	}
-	bool AddItem(CBasePlayer* player) override
-	{
-		player->m_rgItems[ITEM_SECURITY] += 1;
-		return true;
-	}
-};
-
-LINK_ENTITY_TO_CLASS(item_security, CItemSecurity);
-
 class CItemLongJump : public CItem
 {
 public:

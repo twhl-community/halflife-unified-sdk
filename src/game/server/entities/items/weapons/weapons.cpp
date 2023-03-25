@@ -178,7 +178,6 @@ void W_Precache()
 	UTIL_PrecacheOther("item_suit");
 	UTIL_PrecacheOther("item_battery");
 	UTIL_PrecacheOther("item_antidote");
-	UTIL_PrecacheOther("item_security");
 	UTIL_PrecacheOther("item_longjump");
 
 	// Precache weapons in a well-defined order so the client initializes its local data the same way as the server.

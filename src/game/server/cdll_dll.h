@@ -29,8 +29,6 @@ constexpr int MAX_PLAYERS = 32;
 
 #define MAX_WEAPON_SLOTS 7 // hud item selection slots
 
-#define MAX_ITEMS 5 // hard coded item types
-
 #define HIDEHUD_WEAPONS (1 << 0)
 #define HIDEHUD_FLASHLIGHT (1 << 1)
 #define HIDEHUD_ALL (1 << 2)

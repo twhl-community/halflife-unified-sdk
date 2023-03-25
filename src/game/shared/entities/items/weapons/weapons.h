@@ -79,12 +79,6 @@ public:
 	bool m_fRegisteredSound; // whether or not this grenade has issued its DANGER sound to the world sound list yet.
 };
 
-// constant items
-#define ITEM_HEALTHKIT 1
-#define ITEM_ANTIDOTE 2
-#define ITEM_SECURITY 3
-#define ITEM_BATTERY 4
-
 #define MAX_NORMAL_BATTERY 100
 
 // weapon weight factors (for auto-switching)   (-1 = noswitch)
