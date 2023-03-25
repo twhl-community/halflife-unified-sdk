@@ -3153,16 +3153,18 @@ void CBloodSplat::Spray()
 	pev->nextthink = gpGlobals->time + 0.1;
 }
 
-static CBaseItem* GiveNamedItem_Common(entvars_t* pev, const char* pszName)
+static CBaseItem* GiveNamedItem_Common(CBasePlayer* player, const char* pszName)
 {
 	// Only give items to player.
 	auto entity = g_ItemDictionary->Create(pszName);
+
 	if (FNullEnt(entity))
 	{
 		CBaseEntity::Logger->debug("nullptr Ent in GiveNamedItem!");
 		return nullptr;
 	}
-	entity->pev->origin = pev->origin;
+
+	entity->pev->origin = player->pev->origin;
 	entity->m_RespawnMode = ItemRespawnMode::Never;
 
 	DispatchSpawn(entity->edict());
@@ -3172,7 +3174,7 @@ static CBaseItem* GiveNamedItem_Common(entvars_t* pev, const char* pszName)
 
 void CBasePlayer::GiveNamedItem(const char* szName)
 {
-	auto entity = GiveNamedItem_Common(pev, szName);
+	auto entity = GiveNamedItem_Common(this, szName);
 
 	if (!entity)
 	{
@@ -3181,13 +3183,13 @@ void CBasePlayer::GiveNamedItem(const char* szName)
 
 	if (entity->AddToPlayer(this) != ItemAddResult::Added)
 	{
-		UTIL_Remove(entity);
+		g_engfuncs.pfnRemoveEntity(entity->edict());
 	}
 }
 
 void CBasePlayer::GiveNamedItem(const char* szName, int defaultAmmo)
 {
-	auto entity = GiveNamedItem_Common(pev, szName);
+	auto entity = GiveNamedItem_Common(this, szName);
 
 	if (!entity)
 	{
@@ -3201,7 +3203,7 @@ void CBasePlayer::GiveNamedItem(const char* szName, int defaultAmmo)
 
 	if (entity->AddToPlayer(this) != ItemAddResult::Added)
 	{
-		UTIL_Remove(entity);
+		g_engfuncs.pfnRemoveEntity(entity->edict());
 	}
 }
 

@@ -213,6 +213,8 @@ ItemAddResult CBaseItem::AddToPlayer(CBasePlayer* player)
 		if (GetType() == ItemType::Consumable)
 		{
 			SetTouch(nullptr);
+			// Make invisible immediately.
+			pev->effects |= EF_NODRAW;
 			UTIL_Remove(this);
 		}
 	}
