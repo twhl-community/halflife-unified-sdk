@@ -838,12 +838,12 @@ bool CHalfLifeMultiplay::IsAllowedToSpawn(CBaseEntity* pEntity)
 	return true;
 }
 
-float CHalfLifeMultiplay::FlHealthChargerRechargeTime()
+int CHalfLifeMultiplay::HealthChargerRechargeTime()
 {
 	return 60;
 }
 
-float CHalfLifeMultiplay::FlHEVChargerRechargeTime()
+int CHalfLifeMultiplay::HEVChargerRechargeTime()
 {
 	return 30;
 }

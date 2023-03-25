@@ -73,6 +73,8 @@ enum
 */
 #define ENTITY_INTOLERANCE 100
 
+constexpr int ChargerRechargeDelayNever = -1;
+
 class CGameRules
 {
 public:
@@ -270,12 +272,12 @@ public:
 	/**
 	*	@brief how long until a depleted HealthCharger recharges itself?
 	*/
-	virtual float FlHealthChargerRechargeTime() = 0;
+	virtual int HealthChargerRechargeTime() { return ChargerRechargeDelayNever; }
 
 	/**
 	*	@brief how long until a depleted HEV Charger recharges itself?
 	*/
-	virtual float FlHEVChargerRechargeTime() { return 0; }
+	virtual int HEVChargerRechargeTime() { return ChargerRechargeDelayNever; }
 
 	/**
 	*	@brief what do I do with a player's weapons when he's killed?

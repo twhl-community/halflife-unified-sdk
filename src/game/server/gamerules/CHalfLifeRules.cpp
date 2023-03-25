@@ -176,11 +176,6 @@ bool CHalfLifeRules::IsAllowedToSpawn(CBaseEntity* pEntity)
 	return true;
 }
 
-float CHalfLifeRules::FlHealthChargerRechargeTime()
-{
-	return 0; // don't recharge
-}
-
 int CHalfLifeRules::DeadPlayerWeapons(CBasePlayer* pPlayer)
 {
 	return GR_PLR_DROP_GUN_NO;

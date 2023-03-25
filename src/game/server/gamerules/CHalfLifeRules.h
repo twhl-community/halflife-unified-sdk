@@ -62,8 +62,6 @@ public:
 	Vector ItemRespawnSpot(CBaseItem* item) override;
 	float ItemTryRespawn(CBaseItem* item) override;
 
-	float FlHealthChargerRechargeTime() override;
-
 	int DeadPlayerWeapons(CBasePlayer* pPlayer) override;
 
 	int DeadPlayerAmmo(CBasePlayer* pPlayer) override;

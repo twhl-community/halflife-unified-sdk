@@ -113,9 +113,9 @@ float CHalfLifeCoopplay::FlPlayerSpawnTime(CBasePlayer* pPlayer)
 	return gpGlobals->time;
 }
 
-float CHalfLifeCoopplay::FlHealthChargerRechargeTime()
+int CHalfLifeCoopplay::HealthChargerRechargeTime()
 {
-	return coopweprespawn.value > 1 ? 60 : 0;
+	return coopweprespawn.value > 1 ? 60 : ChargerRechargeDelayNever;
 }
 
 int CHalfLifeCoopplay::DeadPlayerWeapons(CBasePlayer* pPlayer)

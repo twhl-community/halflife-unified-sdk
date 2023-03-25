@@ -130,8 +130,7 @@ target_sources(server PRIVATE
 	entities/items/CWeaponBox.cpp
 	entities/items/CWeaponBox.h
 	entities/items/ggrenade.cpp
-	entities/items/healthkit.cpp
-	entities/items/h_battery.cpp
+	entities/items/chargers.cpp
 	entities/items/item_generic.cpp
 	entities/items/items.cpp
 	entities/items/items.h

@@ -46,7 +46,7 @@ public:
 
 	float FlPlayerSpawnTime(CBasePlayer* pPlayer) override;
 
-	float FlHealthChargerRechargeTime() override;
+	int HealthChargerRechargeTime() override;
 
 	int DeadPlayerWeapons(CBasePlayer* pPlayer) override;
 
