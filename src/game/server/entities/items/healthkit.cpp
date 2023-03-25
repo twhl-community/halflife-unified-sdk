@@ -71,7 +71,10 @@ public:
 			WRITE_STRING(STRING(pev->classname));
 			MESSAGE_END();
 
-			player->EmitSound(CHAN_ITEM, "items/smallmedkit1.wav", 1, ATTN_NORM);
+			if (m_PlayPickupSound)
+			{
+				player->EmitSound(CHAN_ITEM, "items/smallmedkit1.wav", 1, ATTN_NORM);
+			}
 
 			return true;
 		}
