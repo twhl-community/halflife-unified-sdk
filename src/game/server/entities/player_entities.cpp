@@ -16,7 +16,7 @@
 #include "cbase.h"
 #include "basemonster.h"
 
-class PlayerSetHudColor : public CPointEntity
+class CPlayerSetHudColor : public CPointEntity
 {
 public:
 	enum class Action
@@ -38,17 +38,17 @@ private:
 	Action m_Action{Action::Set};
 };
 
-LINK_ENTITY_TO_CLASS(player_sethudcolor, PlayerSetHudColor);
+LINK_ENTITY_TO_CLASS(player_sethudcolor, CPlayerSetHudColor);
 
-TYPEDESCRIPTION PlayerSetHudColor::m_SaveData[] =
+TYPEDESCRIPTION CPlayerSetHudColor::m_SaveData[] =
 	{
-		DEFINE_FIELD(PlayerSetHudColor, m_HudColor, FIELD_VECTOR),
-		DEFINE_FIELD(PlayerSetHudColor, m_Action, FIELD_INTEGER),
+		DEFINE_FIELD(CPlayerSetHudColor, m_HudColor, FIELD_VECTOR),
+		DEFINE_FIELD(CPlayerSetHudColor, m_Action, FIELD_INTEGER),
 };
 
-IMPLEMENT_SAVERESTORE(PlayerSetHudColor, CPointEntity);
+IMPLEMENT_SAVERESTORE(CPlayerSetHudColor, CPointEntity);
 
-bool PlayerSetHudColor::KeyValue(KeyValueData* pkvd)
+bool CPlayerSetHudColor::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq(pkvd->szKeyName, "hud_color"))
 	{
@@ -64,7 +64,7 @@ bool PlayerSetHudColor::KeyValue(KeyValueData* pkvd)
 	return CPointEntity::KeyValue(pkvd);
 }
 
-void PlayerSetHudColor::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
+void CPlayerSetHudColor::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
 	if (!pActivator || !pActivator->IsPlayer())
 	{
@@ -95,6 +95,78 @@ void PlayerSetHudColor::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_T
 	}();
 
 	player->SetHudColor(color);
+}
+
+class CPlayerSetSuitLightType : public CPointEntity
+{
+public:
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
+	static TYPEDESCRIPTION m_SaveData[];
+
+	bool KeyValue(KeyValueData* pkvd) override;
+
+	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+
+private:
+	bool m_AllPlayers = false;
+	SuitLightType m_Type = SuitLightType::Flashlight;
+};
+
+LINK_ENTITY_TO_CLASS(player_setsuitlighttype, CPlayerSetSuitLightType);
+
+TYPEDESCRIPTION CPlayerSetSuitLightType::m_SaveData[] =
+	{
+		DEFINE_FIELD(CPlayerSetSuitLightType, m_AllPlayers, FIELD_BOOLEAN),
+		DEFINE_FIELD(CPlayerSetSuitLightType, m_Type, FIELD_INTEGER),
+};
+
+IMPLEMENT_SAVERESTORE(CPlayerSetSuitLightType, CPointEntity);
+
+bool CPlayerSetSuitLightType::KeyValue(KeyValueData* pkvd)
+{
+	if (FStrEq(pkvd->szKeyName, "all_players"))
+	{
+		m_AllPlayers = atoi(pkvd->szValue) != 0;
+		return true;
+	}
+	else if (FStrEq(pkvd->szKeyName, "light_type"))
+	{
+		m_Type = static_cast<SuitLightType>(atoi(pkvd->szValue));
+		return true;
+	}
+
+	return CPointEntity::KeyValue(pkvd);
+}
+
+void CPlayerSetSuitLightType::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
+{
+	const auto executor = [this](CBasePlayer* player)
+	{
+		player->SetSuitLightType(m_Type);
+	};
+
+	if (m_AllPlayers)
+	{
+		for (auto player : UTIL_FindPlayers())
+		{
+			executor(player);
+		}
+	}
+	else
+	{
+		CBasePlayer* player = ToBasePlayer(pActivator);
+
+		if (!player && !g_pGameRules->IsDeathmatch())
+		{
+			player = UTIL_GetLocalPlayer();
+		}
+
+		if (player)
+		{
+			executor(player);
+		}
+	}
 }
 
 class CStripWeapons : public CPointEntity
