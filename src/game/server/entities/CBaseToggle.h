@@ -54,7 +54,6 @@ public:
 
 	static TYPEDESCRIPTION m_SaveData[];
 
-	int GetToggleState() override { return m_toggle_state; }
 	float GetDelay() override { return m_flWait; }
 
 	// common member functions
