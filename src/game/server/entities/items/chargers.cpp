@@ -16,8 +16,8 @@
 #include "cbase.h"
 
 /**
-*	@brief Base class for charger entities.
-*/
+ *	@brief Base class for charger entities.
+ */
 class CBaseCharger : public CBaseToggle
 {
 public:
@@ -27,6 +27,8 @@ public:
 		Starting,
 		Going
 	};
+
+	static constexpr int UnlimitedJuice = -1;
 
 	bool Save(CSave& save) override;
 	bool Restore(CRestore& restore) override;
@@ -38,14 +40,18 @@ public:
 	bool KeyValue(KeyValueData* pkvd) override;
 	void Precache() override;
 	void Spawn() override;
-	
+	void Activate() override;
+
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
+private:
 	void EXPORT Off();
 	void EXPORT Recharge();
 
+	void CheckIfOutOfCharge(bool fireTargets);
+
 protected:
-	virtual bool TryCharge(CBasePlayer* player) = 0;
+	virtual bool TryCharge(CBasePlayer* player, int amount) = 0;
 
 protected:
 	State m_State = State::Off;
@@ -53,9 +59,15 @@ protected:
 	float m_NextCharge = 0;
 	float m_SoundTime = 0;
 
+	string_t m_FireOnRecharge;
+	string_t m_FireOnEmpty;
+
+	bool m_FireOnSpawn = true;
+
 	// Initialized by derived class.
 	int m_TotalJuice = 0;
 	int m_RechargeDelay = 0; // How long until charger recharges its juice.
+	int m_ChargePerUse = 1;	 // Amount of juice to charge per use.
 	float m_SoundVolume = VOL_NORM;
 	const char* m_StartupSound = nullptr;
 	const char* m_DenySound = nullptr;
@@ -64,21 +76,51 @@ protected:
 
 TYPEDESCRIPTION CBaseCharger::m_SaveData[] =
 	{
+		DEFINE_FIELD(CBaseCharger, m_FireOnRecharge, FIELD_STRING),
+		DEFINE_FIELD(CBaseCharger, m_FireOnEmpty, FIELD_STRING),
+		DEFINE_FIELD(CBaseCharger, m_FireOnSpawn, FIELD_BOOLEAN),
 		DEFINE_FIELD(CBaseCharger, m_State, FIELD_INTEGER),
 		DEFINE_FIELD(CBaseCharger, m_Juice, FIELD_INTEGER),
 		DEFINE_FIELD(CBaseCharger, m_NextCharge, FIELD_TIME),
 		DEFINE_FIELD(CBaseCharger, m_SoundTime, FIELD_TIME),
 		DEFINE_FIELD(CBaseCharger, m_TotalJuice, FIELD_INTEGER),
 		DEFINE_FIELD(CBaseCharger, m_RechargeDelay, FIELD_INTEGER),
+		DEFINE_FIELD(CBaseCharger, m_ChargePerUse, FIELD_INTEGER),
 };
 
 IMPLEMENT_SAVERESTORE(CBaseCharger, CBaseToggle);
 
 bool CBaseCharger::KeyValue(KeyValueData* pkvd)
 {
-	if (FStrEq(pkvd->szKeyName, "recharge_delay"))
+	if (FStrEq(pkvd->szKeyName, "fire_on_recharge"))
+	{
+		m_FireOnRecharge = ALLOC_STRING(pkvd->szValue);
+		return true;
+	}
+	else if (FStrEq(pkvd->szKeyName, "fire_on_empty"))
+	{
+		m_FireOnEmpty = ALLOC_STRING(pkvd->szValue);
+		return true;
+	}
+	else if (FStrEq(pkvd->szKeyName, "fire_on_spawn"))
+	{
+		m_FireOnSpawn = atoi(pkvd->szValue) != 0;
+		return true;
+	}
+	else if (FStrEq(pkvd->szKeyName, "total_juice"))
+	{
+		m_TotalJuice = std::max(UnlimitedJuice, atoi(pkvd->szValue));
+		return true;
+	}
+	else if (FStrEq(pkvd->szKeyName, "recharge_delay"))
 	{
 		m_RechargeDelay = std::max(ChargerRechargeDelayNever, atoi(pkvd->szValue));
+		return true;
+	}
+	else if (FStrEq(pkvd->szKeyName, "charge_per_use"))
+	{
+		// Allow 0 to make cosmetic chargers.
+		m_ChargePerUse = std::max(0, atoi(pkvd->szValue));
 		return true;
 	}
 
@@ -110,6 +152,23 @@ void CBaseCharger::Spawn()
 	pev->frame = 0;
 }
 
+void CBaseCharger::Activate()
+{
+	if (m_FireOnSpawn)
+	{
+		if (m_Juice != 0 && !FStringNull(m_FireOnRecharge))
+		{
+			FireTargets(STRING(m_FireOnRecharge), this, this, USE_ON, 0);
+		}
+	}
+
+	// Always call this
+	CheckIfOutOfCharge(m_FireOnSpawn);
+
+	// Clear this so loading save games doesn't trigger it again
+	m_FireOnSpawn = false;
+}
+
 void CBaseCharger::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
 	// if it's not a player, ignore
@@ -120,15 +179,12 @@ void CBaseCharger::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE u
 		return;
 	}
 
-	// if there is no juice left, turn it off
-	if (m_Juice <= 0)
-	{
-		pev->frame = 1;
-		Off();
-	}
+	CheckIfOutOfCharge(true);
 
-	// if the player doesn't have the suit, or there is no juice left, make the deny noise
-	if ((m_Juice <= 0) || !player->HasSuit())
+	// if the player doesn't have the suit, or there is no juice left, or the master isn't active, make the deny noise
+	if (!UTIL_IsMasterTriggered(m_sMaster, player) ||
+		(m_Juice != UnlimitedJuice && m_Juice <= 0) ||
+		!player->HasSuit())
 	{
 		if (m_SoundTime <= gpGlobals->time)
 		{
@@ -160,9 +216,12 @@ void CBaseCharger::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE u
 	}
 
 	// charge the player
-	if (TryCharge(player))
+	if (TryCharge(player, m_ChargePerUse))
 	{
-		--m_Juice;
+		if (m_Juice != UnlimitedJuice)
+		{
+			m_Juice = std::max(0, m_Juice - m_ChargePerUse);
+		}
 	}
 
 	// govern the rate of charge
@@ -188,10 +247,42 @@ void CBaseCharger::Off()
 
 void CBaseCharger::Recharge()
 {
-	EmitSound(CHAN_ITEM, m_StartupSound, m_SoundVolume, ATTN_NORM);
 	m_Juice = m_TotalJuice;
 	pev->frame = 0;
 	SetThink(&CBaseCharger::SUB_DoNothing);
+
+	if (m_Juice != 0)
+	{
+		EmitSound(CHAN_ITEM, m_StartupSound, m_SoundVolume, ATTN_NORM);
+
+		if (!FStringNull(m_FireOnRecharge))
+		{
+			FireTargets(STRING(m_FireOnRecharge), this, this, USE_ON, 0);
+		}
+	}
+}
+
+void CBaseCharger::CheckIfOutOfCharge(bool fireTargets)
+{
+	// if there is no juice left, turn it off
+	if (m_Juice == 0)
+	{
+		// Don't re-do turn off logic if we're already turned off.
+		if (pev->frame == 0)
+		{
+			if (fireTargets && !FStringNull(m_FireOnEmpty))
+			{
+				FireTargets(STRING(m_FireOnEmpty), this, this, USE_OFF, 0);
+			}
+
+			pev->frame = 1;
+			Off();
+		}
+	}
+	else
+	{
+		pev->frame = 0;
+	}
 }
 
 /**
@@ -212,9 +303,9 @@ public:
 	}
 
 protected:
-	bool TryCharge(CBasePlayer* player) override
+	bool TryCharge(CBasePlayer* player, int amount) override
 	{
-		return player->TakeHealth(1, DMG_GENERIC);
+		return player->TakeHealth(amount, DMG_GENERIC);
 	}
 };
 
@@ -235,14 +326,14 @@ public:
 	}
 
 protected:
-	bool TryCharge(CBasePlayer* player) override
+	bool TryCharge(CBasePlayer* player, int amount) override
 	{
 		if (player->pev->armorvalue >= MAX_NORMAL_BATTERY)
 		{
 			return false;
 		}
 
-		player->pev->armorvalue += 1;
+		player->pev->armorvalue += amount;
 
 		if (player->pev->armorvalue > MAX_NORMAL_BATTERY)
 			player->pev->armorvalue = MAX_NORMAL_BATTERY;
