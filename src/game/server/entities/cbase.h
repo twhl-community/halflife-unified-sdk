@@ -67,10 +67,6 @@ CBaseEntity
 
 // C functions for external declarations that call the appropriate C++ methods
 
-extern "C" DLLEXPORT int GetEntityAPI(DLL_FUNCTIONS* pFunctionTable, int interfaceVersion);
-extern "C" DLLEXPORT int GetEntityAPI2(DLL_FUNCTIONS* pFunctionTable, int* interfaceVersion);
-extern "C" DLLEXPORT int GetNewDLLFunctions(NEW_DLL_FUNCTIONS* pFunctionTable, int* interfaceVersion);
-
 /**
  *	@brief HACKHACK -- this is a hack to keep the node graph entity from "touching" things (like triggers)
  *	while it builds the graph
@@ -91,3 +87,4 @@ void SaveReadFields(SAVERESTOREDATA* pSaveData, const char* pname, void* pBaseDa
 void SaveGlobalState(SAVERESTOREDATA* pSaveData);
 void RestoreGlobalState(SAVERESTOREDATA* pSaveData);
 void ResetGlobalState();
+void OnFreeEntPrivateData(edict_t* pEdict);
