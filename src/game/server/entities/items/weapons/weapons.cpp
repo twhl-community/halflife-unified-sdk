@@ -535,7 +535,7 @@ bool CBasePlayerWeapon::AddPrimaryAmmo(CBasePlayerWeapon* origin, int iCount, co
 			iCount = type->MaximumCapacity + iMaxClip;
 		}
 
-		m_iClip = V_min(iCount, iMaxClip);
+		m_iClip = std::min(iCount, iMaxClip);
 		iIdAmmo = m_pPlayer->GiveAmmo(iCount - m_iClip, szName);
 
 		// Make sure we count this as ammo taken.

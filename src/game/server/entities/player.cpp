@@ -2164,7 +2164,7 @@ void CBasePlayer::CheckTimeBasedDamage()
 				// after the player has been drowning and finally takes a breath
 				if (m_idrowndmg > m_idrownrestored)
 				{
-					int idif = V_min(m_idrowndmg - m_idrownrestored, 10);
+					int idif = std::min(m_idrowndmg - m_idrownrestored, 10);
 
 					TakeHealth(idif, DMG_GENERIC);
 					m_idrownrestored += idif;
@@ -2677,26 +2677,26 @@ pt_end:
 			{
 				if (gun->UseDecrement())
 				{
-					gun->m_flNextPrimaryAttack = V_max(gun->m_flNextPrimaryAttack - gpGlobals->frametime, -1.1);
-					gun->m_flNextSecondaryAttack = V_max(gun->m_flNextSecondaryAttack - gpGlobals->frametime, -0.001);
+					gun->m_flNextPrimaryAttack = std::max(gun->m_flNextPrimaryAttack - gpGlobals->frametime, -1.1f);
+					gun->m_flNextSecondaryAttack = std::max(gun->m_flNextSecondaryAttack - gpGlobals->frametime, -0.001f);
 
 					if (gun->m_flTimeWeaponIdle != 1000)
 					{
-						gun->m_flTimeWeaponIdle = V_max(gun->m_flTimeWeaponIdle - gpGlobals->frametime, -0.001);
+						gun->m_flTimeWeaponIdle = std::max(gun->m_flTimeWeaponIdle - gpGlobals->frametime, -0.001f);
 					}
 
 					if (gun->pev->fuser1 != 1000)
 					{
-						gun->pev->fuser1 = V_max(gun->pev->fuser1 - gpGlobals->frametime, -0.001);
+						gun->pev->fuser1 = std::max(gun->pev->fuser1 - gpGlobals->frametime, -0.001f);
 					}
 
 					gun->DecrementTimers();
 
 					// Only decrement if not flagged as NO_DECREMENT
-					//					if ( gun->m_flPumpTime != 1000 )
-					//	{
-					//		gun->m_flPumpTime	= V_max( gun->m_flPumpTime - gpGlobals->frametime, -0.001 );
-					//	}
+					// if (gun->m_flPumpTime != 1000)
+					// {
+					//	gun->m_flPumpTime = std::max(gun->m_flPumpTime - gpGlobals->frametime, -0.001f);
+					// }
 				}
 
 				gun = gun->m_pNext;
@@ -3730,7 +3730,7 @@ int CBasePlayer::GiveAmmo(int iCount, const char* szName)
 		return -1;
 	}
 
-	int iAdd = V_min(iCount, type->MaximumCapacity - m_rgAmmo[type->Id]);
+	int iAdd = std::min(iCount, type->MaximumCapacity - m_rgAmmo[type->Id]);
 
 	// If we couldn't give any more ammo then just bow out. (Should already be handled by gamerules above).
 	if (iAdd <= 0)
@@ -3862,7 +3862,7 @@ void CBasePlayer::InternalSendSingleAmmoUpdate(int ammoIndex)
 		// send "Ammo" update message
 		MESSAGE_BEGIN(MSG_ONE, gmsgAmmoX, NULL, pev);
 		WRITE_BYTE(ammoIndex);
-		WRITE_BYTE(V_max(V_min(m_rgAmmo[ammoIndex], 254), 0)); // clamp the value to one byte
+		WRITE_BYTE(std::clamp(m_rgAmmo[ammoIndex], 0, 254)); // clamp the value to one byte
 		MESSAGE_END();
 	}
 }

@@ -190,7 +190,7 @@ bool CHudStatusBar::Draw(float fTime)
 		// let user set status ID bar centering
 		if ((i == STATUSBAR_ID_LINE) && 0 != CVAR_GET_FLOAT("hud_centerid"))
 		{
-			x = V_max(0, V_max(2, (ScreenWidth - TextWidth)) / 2);
+			x = std::max(0, std::max(2, (ScreenWidth - TextWidth)) / 2);
 			y = (ScreenHeight / 2) + (TextHeight * CVAR_GET_FLOAT("hud_centerid"));
 		}
 

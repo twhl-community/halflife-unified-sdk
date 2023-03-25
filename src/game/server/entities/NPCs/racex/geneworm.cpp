@@ -1667,7 +1667,7 @@ void COFGeneWorm::TrackHead()
 
 	const auto yawDelta = UTIL_AngleDiff(angles.y, pev->angles.y);
 
-	const auto yawAngle = V_max(-30, V_min(30, yawDelta));
+	const auto yawAngle = std::clamp(yawDelta, -30.f, 30.f);
 
 	SetBoneController(0, yawAngle);
 }

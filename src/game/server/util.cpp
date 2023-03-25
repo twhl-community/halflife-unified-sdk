@@ -890,7 +890,7 @@ void UTIL_BloodStream(const Vector& origin, const Vector& direction, int color, 
 	WRITE_COORD(direction.y);
 	WRITE_COORD(direction.z);
 	WRITE_BYTE(color);
-	WRITE_BYTE(V_min(amount, 255));
+	WRITE_BYTE(std::min(amount, 255));
 	MESSAGE_END();
 }
 
@@ -919,10 +919,10 @@ void UTIL_BloodDrips(const Vector& origin, const Vector& direction, int color, i
 	WRITE_COORD(origin.x); // pos
 	WRITE_COORD(origin.y);
 	WRITE_COORD(origin.z);
-	WRITE_SHORT(g_sModelIndexBloodSpray);		  // initial sprite model
-	WRITE_SHORT(g_sModelIndexBloodDrop);		  // droplet sprite models
-	WRITE_BYTE(color);							  // color index into host_basepal
-	WRITE_BYTE(V_min(V_max(3, amount / 10), 16)); // size
+	WRITE_SHORT(g_sModelIndexBloodSpray);			// initial sprite model
+	WRITE_SHORT(g_sModelIndexBloodDrop);			// droplet sprite models
+	WRITE_BYTE(color);								// color index into host_basepal
+	WRITE_BYTE(std::clamp(amount / 10, 3, 16));		// size
 	MESSAGE_END();
 }
 

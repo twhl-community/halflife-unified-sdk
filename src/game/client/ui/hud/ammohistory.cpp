@@ -104,7 +104,7 @@ bool HistoryResource::DrawAmmoHistory(float flTime)
 	{
 		if (HISTSLOT_EMPTY != rgAmmoHistory[i].type)
 		{
-			rgAmmoHistory[i].DisplayTime = V_min(rgAmmoHistory[i].DisplayTime, gHUD.m_flTime + HISTORY_DRAW_TIME);
+			rgAmmoHistory[i].DisplayTime = std::min(rgAmmoHistory[i].DisplayTime, gHUD.m_flTime + HISTORY_DRAW_TIME);
 
 			if (rgAmmoHistory[i].DisplayTime <= flTime)
 			{ // pic drawing time has expired
@@ -117,7 +117,7 @@ bool HistoryResource::DrawAmmoHistory(float flTime)
 				HSPRITE* spr = gWR.GetAmmoPicFromWeapon(rgAmmoHistory[i].iId, rcPic);
 
 				float scale = (rgAmmoHistory[i].DisplayTime - flTime) * 80;
-				const auto color = gHUD.m_HudColor.Scale(V_min(scale, 255));
+				const auto color = gHUD.m_HudColor.Scale(std::min(scale, 255.f));
 
 				// Draw the pic
 				int ypos = ScreenHeight - (AMMO_PICKUP_PICK_HEIGHT + (AMMO_PICKUP_GAP * i));
@@ -142,7 +142,7 @@ bool HistoryResource::DrawAmmoHistory(float flTime)
 				const auto& originalColor = gWR.HasAmmo(weap) ? gHUD.m_HudColor : RGB_REDISH;
 
 				float scale = (rgAmmoHistory[i].DisplayTime - flTime) * 80;
-				const auto color = originalColor.Scale(V_min(scale, 255));
+				const auto color = originalColor.Scale(std::min(scale, 255.f));
 
 				int ypos = ScreenHeight - (AMMO_PICKUP_PICK_HEIGHT + (AMMO_PICKUP_GAP * i));
 				int xpos = ScreenWidth - (weap->rcInactive.right - weap->rcInactive.left);
@@ -157,7 +157,7 @@ bool HistoryResource::DrawAmmoHistory(float flTime)
 				Rect rect = gHUD.GetSpriteRect(rgAmmoHistory[i].iId);
 
 				float scale = (rgAmmoHistory[i].DisplayTime - flTime) * 80;
-				const auto color = gHUD.m_HudColor.Scale(V_min(scale, 255));
+				const auto color = gHUD.m_HudColor.Scale(std::min(scale, 255.f));
 
 				int ypos = ScreenHeight - (AMMO_PICKUP_PICK_HEIGHT + (AMMO_PICKUP_GAP * i));
 				int xpos = ScreenWidth - (rect.right - rect.left) - 10;

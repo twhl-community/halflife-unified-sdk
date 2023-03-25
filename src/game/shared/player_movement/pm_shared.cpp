@@ -1929,7 +1929,7 @@ void PM_Duck()
 				pmove->bInDuck = 1;
 			}
 
-			time = V_max(0.0, (1.0 - (float)pmove->flDuckTime / 1000.0));
+			time = std::max(0.0, (1.0 - (float)pmove->flDuckTime / 1000.0));
 
 			if (0 != pmove->bInDuck)
 			{
@@ -2733,7 +2733,7 @@ void PM_DropPunchAngle(Vector& punchangle)
 
 	len = VectorNormalize(punchangle);
 	len -= (10.0 + len * 0.5) * pmove->frametime;
-	len = V_max(len, 0.0);
+	len = std::max(len, 0.0f);
 	punchangle = punchangle * len;
 }
 
@@ -2757,7 +2757,7 @@ void PM_CheckParamters()
 	maxspeed = pmove->clientmaxspeed; // atof( pmove->PM_Info_ValueForKey( pmove->physinfo, "maxspd" ) );
 	if (maxspeed != 0.0)
 	{
-		pmove->maxspeed = V_min(maxspeed, pmove->maxspeed);
+		pmove->maxspeed = std::min(maxspeed, pmove->maxspeed);
 	}
 
 	if ((spd != 0.0) &&

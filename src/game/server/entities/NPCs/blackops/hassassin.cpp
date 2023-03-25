@@ -614,12 +614,12 @@ void CHAssassin::RunAI()
 			EmitSound(CHAN_BODY, "debris/beamstart1.wav", 0.2, ATTN_NORM);
 		}
 
-		pev->renderamt = V_max(pev->renderamt - 50, m_iTargetRanderamt);
+		pev->renderamt = std::max(pev->renderamt - 50, static_cast<float>(m_iTargetRanderamt));
 		pev->rendermode = kRenderTransTexture;
 	}
 	else if (pev->renderamt < m_iTargetRanderamt)
 	{
-		pev->renderamt = V_min(pev->renderamt + 50, m_iTargetRanderamt);
+		pev->renderamt = std::min(pev->renderamt + 50, static_cast<float>(m_iTargetRanderamt));
 		if (pev->renderamt == 255)
 			pev->rendermode = kRenderNormal;
 	}

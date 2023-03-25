@@ -178,7 +178,7 @@ void WeaponsResource::LoadWeaponSprites(WEAPON* pWeapon)
 		pWeapon->hInactive = SPR_Load(fmt::format("sprites/{}.spr", p->SpriteName.c_str()));
 		pWeapon->rcInactive = p->Rectangle;
 
-		gHR.iHistoryGap = V_max(gHR.iHistoryGap, pWeapon->rcActive.bottom - pWeapon->rcActive.top);
+		gHR.iHistoryGap = std::max(gHR.iHistoryGap, pWeapon->rcActive.bottom - pWeapon->rcActive.top);
 	}
 
 	if (p = GetSpriteList(sprites, "weapon_s"); p)
@@ -192,7 +192,7 @@ void WeaponsResource::LoadWeaponSprites(WEAPON* pWeapon)
 		pWeapon->hAmmo = SPR_Load(fmt::format("sprites/{}.spr", p->SpriteName.c_str()));
 		pWeapon->rcAmmo = p->Rectangle;
 
-		gHR.iHistoryGap = V_max(gHR.iHistoryGap, pWeapon->rcActive.bottom - pWeapon->rcActive.top);
+		gHR.iHistoryGap = std::max(gHR.iHistoryGap, pWeapon->rcActive.bottom - pWeapon->rcActive.top);
 	}
 
 	if (p = GetSpriteList(sprites, "ammo2"); p)
@@ -200,7 +200,7 @@ void WeaponsResource::LoadWeaponSprites(WEAPON* pWeapon)
 		pWeapon->hAmmo2 = SPR_Load(fmt::format("sprites/{}.spr", p->SpriteName.c_str()));
 		pWeapon->rcAmmo2 = p->Rectangle;
 
-		gHR.iHistoryGap = V_max(gHR.iHistoryGap, pWeapon->rcActive.bottom - pWeapon->rcActive.top);
+		gHR.iHistoryGap = std::max(gHR.iHistoryGap, pWeapon->rcActive.bottom - pWeapon->rcActive.top);
 	}
 }
 
@@ -346,7 +346,7 @@ bool CHudAmmo::VidInit()
 	giBucketWidth = bucketRect.right - bucketRect.left;
 	giBucketHeight = bucketRect.bottom - bucketRect.top;
 
-	gHR.iHistoryGap = V_max(gHR.iHistoryGap, bucketRect.bottom - bucketRect.top);
+	gHR.iHistoryGap = std::max(gHR.iHistoryGap, bucketRect.bottom - bucketRect.top);
 
 	// Get weapon and ammo info from server info, load weapon sprites.
 	gWR.InitializeWeapons();
@@ -876,7 +876,7 @@ void CHudAmmo::DrawCrosshair(int x, int y)
 			const int iOrigWidth = gEngfuncs.pfnSPR_Width(crosshair.sprite, 0);
 			const int iOrigHeight = gEngfuncs.pfnSPR_Height(crosshair.sprite, 0);
 
-			const float flScale = V_max(1, m_pCvarCrosshairScale->value);
+			const float flScale = std::max(1.f, m_pCvarCrosshairScale->value);
 
 			Rect rect;
 
@@ -1001,7 +1001,7 @@ bool CHudAmmo::Draw(float flTime)
 
 	AmmoWidth = gHUD.GetSpriteRect(gHUD.m_HUD_number_0).right - gHUD.GetSpriteRect(gHUD.m_HUD_number_0).left;
 
-	const int a = (int)V_max(MIN_ALPHA, m_fFade);
+	const int a = std::max(MIN_ALPHA, static_cast<int>(m_fFade));
 
 	if (m_fFade > 0)
 		m_fFade -= (gHUD.m_flTimeDelta * 20);

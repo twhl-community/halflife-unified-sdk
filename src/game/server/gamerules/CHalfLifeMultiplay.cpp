@@ -1023,16 +1023,12 @@ bool ReloadMapCycleFile(const char* filename, mapcycle_t* cycle)
 					s = g_engfuncs.pfnInfoKeyValue(szBuffer, "minplayers");
 					if (s && '\0' != s[0])
 					{
-						item->minplayers = atoi(s);
-						item->minplayers = V_max(item->minplayers, 0);
-						item->minplayers = V_min(item->minplayers, gpGlobals->maxClients);
+						item->minplayers = std::clamp(atoi(s), 0, gpGlobals->maxClients);
 					}
 					s = g_engfuncs.pfnInfoKeyValue(szBuffer, "maxplayers");
 					if (s && '\0' != s[0])
 					{
-						item->maxplayers = atoi(s);
-						item->maxplayers = V_max(item->maxplayers, 0);
-						item->maxplayers = V_min(item->maxplayers, gpGlobals->maxClients);
+						item->maxplayers = std::clamp(atoi(s), 0, gpGlobals->maxClients);
 					}
 
 					// Remove keys

@@ -768,12 +768,12 @@ void inline CalcBounds(int& Lower, int& Upper, int Goal, int Best)
 	int Temp = 2 * Goal - Best;
 	if (Best > Goal)
 	{
-		Lower = V_max(0, Temp);
+		Lower = std::max(0, Temp);
 		Upper = Best;
 	}
 	else
 	{
-		Upper = V_min(255, Temp);
+		Upper = std::min(255, Temp);
 		Lower = Best;
 	}
 }
@@ -939,7 +939,7 @@ int CGraph::FindNearestNode(const Vector& vecOrigin, int afNodeTypes)
 		}
 	}
 
-	for (i = V_max(m_minY, halfY + 1); i <= m_maxY; i++)
+	for (i = std::max(m_minY, halfY + 1); i <= m_maxY; i++)
 	{
 		for (j = m_RangeStart[1][i]; j <= m_RangeEnd[1][i]; j++)
 		{
@@ -960,7 +960,7 @@ int CGraph::FindNearestNode(const Vector& vecOrigin, int afNodeTypes)
 		}
 	}
 
-	for (i = V_min(m_maxZ, halfZ); i >= m_minZ; i--)
+	for (i = std::min(m_maxZ, halfZ); i >= m_minZ; i--)
 	{
 		for (j = m_RangeStart[2][i]; j <= m_RangeEnd[2][i]; j++)
 		{
@@ -981,7 +981,7 @@ int CGraph::FindNearestNode(const Vector& vecOrigin, int afNodeTypes)
 		}
 	}
 
-	for (i = V_max(m_minX, halfX + 1); i <= m_maxX; i++)
+	for (i = std::max(m_minX, halfX + 1); i <= m_maxX; i++)
 	{
 		for (j = m_RangeStart[0][i]; j <= m_RangeEnd[0][i]; j++)
 		{
@@ -1003,7 +1003,7 @@ int CGraph::FindNearestNode(const Vector& vecOrigin, int afNodeTypes)
 		}
 	}
 
-	for (i = V_min(m_maxY, halfY); i >= m_minY; i--)
+	for (i = std::min(m_maxY, halfY); i >= m_minY; i--)
 	{
 		for (j = m_RangeStart[1][i]; j <= m_RangeEnd[1][i]; j++)
 		{
@@ -1024,7 +1024,7 @@ int CGraph::FindNearestNode(const Vector& vecOrigin, int afNodeTypes)
 		}
 	}
 
-	for (i = V_max(m_minZ, halfZ + 1); i <= m_maxZ; i++)
+	for (i = std::max(m_minZ, halfZ + 1); i <= m_maxZ; i++)
 	{
 		for (j = m_RangeStart[2][i]; j <= m_RangeEnd[2][i]; j++)
 		{

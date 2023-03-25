@@ -114,7 +114,7 @@ bool CHudDeathNotice::Draw(float flTime)
 			continue;
 		}
 
-		rgDeathNoticeList[i].flDisplayTime = V_min(rgDeathNoticeList[i].flDisplayTime, gHUD.m_flTime + DEATHNOTICE_DISPLAY_TIME);
+		rgDeathNoticeList[i].flDisplayTime = std::min(rgDeathNoticeList[i].flDisplayTime, gHUD.m_flTime + DEATHNOTICE_DISPLAY_TIME);
 
 		// Only draw if the viewport will let me
 		if (gViewPort && gViewPort->AllowedToPrintText())

@@ -171,11 +171,11 @@ void CGenericMonster::MonsterThink()
 		{
 			if (m_flCurrentYaw <= m_flIdealYaw)
 			{
-				m_flCurrentYaw += V_min(20.0, m_flIdealYaw - m_flCurrentYaw);
+				m_flCurrentYaw += std::min(20.0f, m_flIdealYaw - m_flCurrentYaw);
 			}
 			else
 			{
-				m_flCurrentYaw -= V_min(20.0, m_flCurrentYaw - m_flIdealYaw);
+				m_flCurrentYaw -= std::min(20.0f, m_flCurrentYaw - m_flIdealYaw);
 			}
 
 			SetBoneController(0, m_flCurrentYaw);

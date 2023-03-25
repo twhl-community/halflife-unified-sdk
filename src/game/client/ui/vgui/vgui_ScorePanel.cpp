@@ -535,7 +535,7 @@ int ScorePanel::RebuildTeams()
 				g_TeamInfo[j].players = 0;
 			}
 
-			m_iNumTeams = V_max(j, m_iNumTeams);
+			m_iNumTeams = std::max(j, m_iNumTeams);
 		}
 		else
 		{
@@ -559,7 +559,7 @@ int ScorePanel::RebuildTeams()
 						break;
 				}
 
-				m_iNumTeams = V_max(j, m_iNumTeams);
+				m_iNumTeams = std::max(j, m_iNumTeams);
 
 				strncpy(g_TeamInfo[j].name, g_PlayerExtraInfo[i].teamname, MAX_TEAM_NAME);
 				g_TeamInfo[j].players = 0;

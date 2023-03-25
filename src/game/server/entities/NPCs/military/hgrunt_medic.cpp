@@ -459,7 +459,7 @@ void COFMedicAlly::RunTask(Task_t* pTask)
 				{
 					auto pHealTarget = m_hTargetEnt.Entity<CBaseEntity>();
 
-					const auto toHeal = V_min(5, pHealTarget->pev->max_health - pHealTarget->pev->health);
+					const auto toHeal = std::min(5.f, pHealTarget->pev->max_health - pHealTarget->pev->health);
 
 					if (toHeal != 0 && pHealTarget->TakeHealth(toHeal, DMG_GENERIC))
 					{

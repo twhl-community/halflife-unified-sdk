@@ -919,7 +919,7 @@ void CHalfLifeCTFplay::PlayerThink(CBasePlayer* pPlayer)
 			g_engfuncs.pfnWriteString(STRING(pOtherPlayer->pev->netname));
 			g_engfuncs.pfnWriteByte((byte)pOtherPlayer->m_iItems);
 			// Round health up to 0 to prevent wraparound
-			g_engfuncs.pfnWriteByte((byte)V_max(0, pOtherPlayer->pev->health));
+			g_engfuncs.pfnWriteByte((byte)std::max(0.f, pOtherPlayer->pev->health));
 			g_engfuncs.pfnWriteByte((byte)pOtherPlayer->pev->armorvalue);
 			g_engfuncs.pfnMessageEnd();
 		}

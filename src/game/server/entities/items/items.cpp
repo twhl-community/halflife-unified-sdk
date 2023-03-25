@@ -163,7 +163,7 @@ public:
 		if (player->pev->armorvalue < MAX_NORMAL_BATTERY && player->HasSuit())
 		{
 			player->pev->armorvalue += amount;
-			player->pev->armorvalue = V_min(player->pev->armorvalue, MAX_NORMAL_BATTERY);
+			player->pev->armorvalue = std::min(player->pev->armorvalue, static_cast<float>(MAX_NORMAL_BATTERY));
 
 			MESSAGE_BEGIN(MSG_ONE, gmsgItemPickup, nullptr, player->pev);
 			WRITE_STRING(STRING(pev->classname));

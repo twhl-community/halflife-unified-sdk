@@ -81,10 +81,10 @@ bool CHudFlagIcons::Draw(float flTime)
 				m_bTimerReset = false;
 			}
 
-			const float totalSecondsLeft = m_flTimeLimit - (gHUD.m_flTime - m_flTimeStart);
+			const int totalSecondsLeft = static_cast<int>(m_flTimeLimit - (gHUD.m_flTime - m_flTimeStart));
 
-			const int minutesLeft = V_max(0, totalSecondsLeft / 60.0);
-			const int secondsLeft = V_max(0, totalSecondsLeft - (60 * minutesLeft));
+			const int minutesLeft = std::max(0, totalSecondsLeft / 60);
+			const int secondsLeft = std::max(0, totalSecondsLeft - (60 * minutesLeft));
 
 			// TODO: this buffer is static in vanilla Op4
 			char szBuf[40];

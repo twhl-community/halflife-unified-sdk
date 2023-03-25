@@ -118,9 +118,6 @@ constexpr std::size_t MAX_PATH_LENGTH = 260;
 constexpr std::size_t MAX_QPATH = 64; // Must match value in quakedefs.h
 constexpr std::size_t MaxUserMessageLength = 192;
 
-#define V_min(a, b) (((a) < (b)) ? (a) : (b))
-#define V_max(a, b) (((a) > (b)) ? (a) : (b))
-
 /**
  *	@brief Type to efficiently store an absolute filename. Stores the string in a buffer with automatic lifetime if possible.
  */

@@ -102,7 +102,7 @@ void CItemCTF::DropPreThink()
 	{
 		SetThink(&CItemCTF::DropThink);
 
-		pev->nextthink = V_max(0, g_flPowerupRespawnTime - 5) + gpGlobals->time;
+		pev->nextthink = std::max(0.f, g_flPowerupRespawnTime - 5) + gpGlobals->time;
 	}
 }
 

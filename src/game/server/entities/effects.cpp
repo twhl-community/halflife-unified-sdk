@@ -270,12 +270,12 @@ void CBeam::RelinkBeam()
 {
 	const Vector &startPos = GetStartPos(), &endPos = GetEndPos();
 
-	pev->mins.x = V_min(startPos.x, endPos.x);
-	pev->mins.y = V_min(startPos.y, endPos.y);
-	pev->mins.z = V_min(startPos.z, endPos.z);
-	pev->maxs.x = V_max(startPos.x, endPos.x);
-	pev->maxs.y = V_max(startPos.y, endPos.y);
-	pev->maxs.z = V_max(startPos.z, endPos.z);
+	pev->mins.x = std::min(startPos.x, endPos.x);
+	pev->mins.y = std::min(startPos.y, endPos.y);
+	pev->mins.z = std::min(startPos.z, endPos.z);
+	pev->maxs.x = std::max(startPos.x, endPos.x);
+	pev->maxs.y = std::max(startPos.y, endPos.y);
+	pev->maxs.z = std::max(startPos.z, endPos.z);
 	pev->mins = pev->mins - pev->origin;
 	pev->maxs = pev->maxs - pev->origin;
 
@@ -288,12 +288,12 @@ void CBeam::SetObjectCollisionBox()
 {
 	const Vector& startPos = GetStartPos(), & endPos = GetEndPos();
 
-	pev->absmin.x = V_min(startPos.x, endPos.x);
-	pev->absmin.y = V_min(startPos.y, endPos.y);
-	pev->absmin.z = V_min(startPos.z, endPos.z);
-	pev->absmax.x = V_max(startPos.x, endPos.x);
-	pev->absmax.y = V_max(startPos.y, endPos.y);
-	pev->absmax.z = V_max(startPos.z, endPos.z);
+	pev->absmin.x = std::min(startPos.x, endPos.x);
+	pev->absmin.y = std::min(startPos.y, endPos.y);
+	pev->absmin.z = std::min(startPos.z, endPos.z);
+	pev->absmax.x = std::max(startPos.x, endPos.x);
+	pev->absmax.y = std::max(startPos.y, endPos.y);
+	pev->absmax.z = std::max(startPos.z, endPos.z);
 }
 #endif
 
