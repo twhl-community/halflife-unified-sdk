@@ -292,16 +292,11 @@ WEAPON* WeaponsResource::GetNextActivePos(int iSlot, int iSlotPos)
 	return nullptr;
 }
 
-
-int giBucketHeight, giBucketWidth;
-
 // Ammo Bar width and height
 const int giABHeight = 4;
 const int giABWidth = 20;
 
-HSPRITE ghsprBuckets; // Sprite for top row of weapons menu
-
-#define HISTORY_DRAW_TIME "5"
+constexpr char HISTORY_DRAW_TIME[] = "5";
 
 void SendWeaponSelectCommand(const char* weaponName)
 {
@@ -380,11 +375,7 @@ bool CHudAmmo::VidInit()
 		m_BucketSprites[i] = gHUD.GetSpriteIndex(fmt::format("bucket{}", i + 1).c_str());
 	}
 
-	ghsprBuckets = gHUD.GetSprite(m_BucketSprites[0]);
 	const Rect bucketRect = gHUD.GetSpriteRect(m_BucketSprites[0]);
-	giBucketWidth = bucketRect.right - bucketRect.left;
-	giBucketHeight = bucketRect.bottom - bucketRect.top;
-
 	gHR.iHistoryGap = std::max(gHR.iHistoryGap, bucketRect.bottom - bucketRect.top);
 
 	// Get weapon and ammo info from server info, load weapon sprites.
@@ -1211,6 +1202,10 @@ bool CHudAmmo::DrawWList(float flTime)
 		}
 	}
 
+	const Rect bucketRect = gHUD.GetSpriteRect(m_BucketSprites[0]);
+	const int bucketWidth = bucketRect.right - bucketRect.left;
+	const int bucketHeight = bucketRect.bottom - bucketRect.top;
+
 	// Draw top line
 	for (i = 0; i < MAX_WEAPON_SLOTS; i++)
 	{
@@ -1232,10 +1227,10 @@ bool CHudAmmo::DrawWList(float flTime)
 			if (p)
 				iWidth = p->rcActive.right - p->rcActive.left;
 			else
-				iWidth = giBucketWidth;
+				iWidth = bucketWidth;
 		}
 		else
-			iWidth = giBucketWidth;
+			iWidth = bucketWidth;
 
 		SPR_DrawAdditive(0, x, y, &gHUD.GetSpriteRect(m_BucketSprites[i]));
 
@@ -1248,7 +1243,7 @@ bool CHudAmmo::DrawWList(float flTime)
 	// Draw all of the buckets
 	for (i = 0; i < MAX_WEAPON_SLOTS; i++)
 	{
-		y = giBucketHeight + 10;
+		y = bucketHeight + 10;
 
 		const int highestPositionInSlot = gWR.GetHighestPositionInSlot(i);
 
@@ -1257,7 +1252,7 @@ bool CHudAmmo::DrawWList(float flTime)
 		if (i == iActiveSlot)
 		{
 			WEAPON* p = gWR.GetFirstPos(i);
-			int iWidth = giBucketWidth;
+			int iWidth = bucketWidth;
 			if (p)
 				iWidth = p->rcActive.right - p->rcActive.left;
 
@@ -1324,12 +1319,12 @@ bool CHudAmmo::DrawWList(float flTime)
 					a = 96;
 				}
 
-				FillRGBA(x, y, giBucketWidth, giBucketHeight, color, a);
+				FillRGBA(x, y, bucketWidth, bucketHeight, color, a);
 
-				y += giBucketHeight + 5;
+				y += bucketHeight + 5;
 			}
 
-			x += giBucketWidth + 5;
+			x += bucketWidth + 5;
 		}
 	}
 
