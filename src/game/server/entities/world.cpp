@@ -29,8 +29,6 @@
 
 CGlobalState gGlobalState;
 
-void W_Precache();
-
 /**
 *	@details This must match the list in util.h
 */

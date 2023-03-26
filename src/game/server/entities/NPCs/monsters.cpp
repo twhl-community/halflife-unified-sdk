@@ -27,8 +27,6 @@
 
 #define MONSTER_CUT_CORNER_DIST 8 //!< 8 means the monster's bounding box is contained without the box of the node in WC
 
-Vector VecBModelOrigin(entvars_t* pevBModel);
-
 // UNDONE: Save schedule data?  Can this be done?  We may
 // lose our enemy pointer or other data (goal ent, target, etc)
 // that make the current schedule invalid, perhaps it's best

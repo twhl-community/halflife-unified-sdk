@@ -149,7 +149,6 @@ bool CBaseMonster::MoveToEnemy(Activity movementAct, float waitTime) { return fa
 bool CBaseMonster::MoveToLocation(Activity movementAct, float waitTime, const Vector& goal) { return false; }
 bool CBaseMonster::MoveToTarget(Activity movementAct, float waitTime) { return false; }
 bool CBaseMonster::MoveToNode(Activity movementAct, float waitTime, const Vector& goal) { return false; }
-bool ShouldSimplify(int routeType) { return true; }
 void CBaseMonster::RouteSimplify(CBaseEntity* pTargetEnt) {}
 bool CBaseMonster::FBecomeProne() { return true; }
 bool CBaseMonster::CheckRangeAttack1(float flDot, float flDist) { return false; }

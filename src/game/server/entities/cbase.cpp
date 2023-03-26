@@ -20,8 +20,6 @@
 
 void EntvarsKeyvalue(entvars_t* pev, KeyValueData* pkvd);
 
-Vector VecBModelOrigin(entvars_t* pevBModel);
-
 static void SetObjectCollisionBox(entvars_t* pev);
 
 int DispatchSpawn(edict_t* pent)

@@ -16,8 +16,6 @@
 #include "cbase.h"
 #include "doors.h"
 
-void SetMovedir(entvars_t* ev);
-
 /**
 *	@brief if two doors touch, they are assumed to be connected and operate as a unit.
 */
@@ -405,8 +403,6 @@ bool CBaseDoor::DoorActivate()
 
 	return true;
 }
-
-Vector VecBModelOrigin(entvars_t* pevBModel);
 
 void CBaseDoor::DoorGoUp()
 {

@@ -33,8 +33,6 @@
 #define MAX_NODE_INITIAL_LINKS 128
 #define MAX_NODES 1024
 
-Vector VecBModelOrigin(entvars_t* pevBModel);
-
 CGraph WorldGraph;
 
 LINK_ENTITY_TO_CLASS(info_node, CNodeEnt);

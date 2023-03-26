@@ -1244,6 +1244,7 @@ void CSpiral::Think()
 		UTIL_Remove(this);
 }
 
+// TODO: move to explode.cpp
 // HACKHACK Cut and pasted from explode.cpp
 void SpawnExplosion(Vector center, float randomRange, float time, int magnitude)
 {
