@@ -191,7 +191,7 @@ void CGameRules::BecomeSpectator(CBasePlayer* player, const CommandArgs& args)
 	// always allow proxies to become a spectator
 	if ((player->pev->flags & FL_PROXY) != 0 || allow_spectators.value != 0)
 	{
-		CBaseEntity* pSpawnSpot = g_pGameRules->GetPlayerSpawnSpot(player);
+		CBaseEntity* pSpawnSpot = GetPlayerSpawnSpot(player);
 		player->StartObserver(player->pev->origin, pSpawnSpot->pev->angles);
 
 		// notify other clients of player switching to spectator mode
