@@ -92,7 +92,6 @@ TYPEDESCRIPTION CBasePlayer::m_playerSaveData[] =
 		DEFINE_ARRAY(CBasePlayer, m_rgAmmo, FIELD_INTEGER, MAX_AMMO_TYPES),
 		DEFINE_FIELD(CBasePlayer, m_idrowndmg, FIELD_INTEGER),
 		DEFINE_FIELD(CBasePlayer, m_idrownrestored, FIELD_INTEGER),
-		DEFINE_FIELD(CBasePlayer, m_tSneaking, FIELD_TIME),
 
 		DEFINE_FIELD(CBasePlayer, m_iTrain, FIELD_INTEGER),
 		DEFINE_FIELD(CBasePlayer, m_bitsHUDDamage, FIELD_INTEGER),
@@ -2780,7 +2779,6 @@ void CBasePlayer::Spawn()
 
 	m_bloodColor = BLOOD_COLOR_RED;
 	m_flNextAttack = UTIL_WeaponTimeBase();
-	StartSneaking();
 
 	m_iFlashBattery = 99;
 	m_flFlashLightTime = 1; // force first message

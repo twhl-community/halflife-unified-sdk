@@ -212,7 +212,6 @@ public:
 	bool m_fNoPlayerSound; // a debugging feature. Player makes no sound if this is true.
 	bool m_fLongJump;	   // does this player have the longjump module?
 
-	float m_tSneaking;
 	int m_iUpdateTime;	  // stores the number of frame ticks before sending HUD update messages
 	int m_iClientHealth;  // the health currently known by the client.  If this changes, send a new
 	int m_iClientBattery; // the Battery currently known by the client.  If this changes, send a new
@@ -304,9 +303,6 @@ public:
 	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 	void Killed(CBaseEntity* attacker, int iGib) override;
 	Vector BodyTarget(const Vector& posSrc) override { return Center() + pev->view_ofs * RANDOM_FLOAT(0.5, 1.1); } // position to shoot at
-	void StartSneaking() override { m_tSneaking = gpGlobals->time - 1; }
-	void StopSneaking() override { m_tSneaking = gpGlobals->time + 30; }
-	bool IsSneaking() override { return m_tSneaking <= gpGlobals->time; }
 	bool IsAlive() override { return (pev->deadflag == DEAD_NO) && pev->health > 0; }
 	bool ShouldFadeOnDeath() override { return false; }
 	bool IsPlayer() override { return true; } // Spectators should return false for this, they aren't "players" as far as game logic is concerned
