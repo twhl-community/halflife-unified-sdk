@@ -236,7 +236,7 @@ void CBaseCharger::Off()
 
 	m_State = State::Off;
 
-	if (0 == m_Juice && m_RechargeDelay != ChargerRechargeDelayNever)
+	if (0 == m_Juice && m_RechargeDelay != ChargerRechargeDelayNever && m_TotalJuice != 0)
 	{
 		pev->nextthink = pev->ltime + m_RechargeDelay;
 		SetThink(&CBaseCharger::Recharge);
