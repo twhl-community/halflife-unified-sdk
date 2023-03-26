@@ -49,7 +49,7 @@ void CCleansuitScientist::Heal()
 	if (target.Length() > 100)
 		return;
 
-	m_hTargetEnt->TakeHealth(GetSkillFloat("cleansuit_scientist_heal"sv), DMG_GENERIC);
+	m_hTargetEnt->GiveHealth(GetSkillFloat("cleansuit_scientist_heal"sv), DMG_GENERIC);
 	// Don't heal again for 1 minute
 	m_healTime = gpGlobals->time + 60;
 }

@@ -59,7 +59,7 @@ void CBaseEntity::OnDestroy()
 	// Nothing.
 }
 
-bool CBaseEntity::TakeHealth(float flHealth, int bitsDamageType) { return true; }
+bool CBaseEntity::GiveHealth(float flHealth, int bitsDamageType) { return true; }
 bool CBaseEntity::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) { return true; }
 CBaseEntity* CBaseEntity::GetNextTarget() { return nullptr; }
 bool CBaseEntity::Save(CSave& save) { return true; }
@@ -248,14 +248,14 @@ Schedule_t* CBaseMonster::ScheduleFromName(const char* pName) { return nullptr; 
 void CBaseMonster::BecomeDead() {}
 void CBaseMonster::RunAI() {}
 void CBaseMonster::Killed(CBaseEntity* attacker, int iGib) {}
-bool CBaseMonster::TakeHealth(float flHealth, int bitsDamageType) { return false; }
+bool CBaseMonster::GiveHealth(float flHealth, int bitsDamageType) { return false; }
 bool CBaseMonster::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) { return false; }
 bool CBaseMonster::Restore(class CRestore&) { return true; }
 bool CBaseMonster::Save(class CSave&) { return true; }
 
 int TrainSpeed(int iSpeed, int iMax) { return 0; }
 void CBasePlayer::DeathSound() {}
-bool CBasePlayer::TakeHealth(float flHealth, int bitsDamageType) { return false; }
+bool CBasePlayer::GiveHealth(float flHealth, int bitsDamageType) { return false; }
 void CBasePlayer::TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) {}
 bool CBasePlayer::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) { return false; }
 void CBasePlayer::PackDeadPlayerItems() {}

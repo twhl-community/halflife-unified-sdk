@@ -757,7 +757,7 @@ void CBaseTrigger::HurtTouch(CBaseEntity* pOther)
 #endif
 
 	if (fldmg < 0)
-		pOther->TakeHealth(-fldmg, m_bitsDamageInflict);
+		pOther->GiveHealth(-fldmg, m_bitsDamageInflict);
 	else
 		pOther->TakeDamage(this, this, fldmg, m_bitsDamageInflict);
 

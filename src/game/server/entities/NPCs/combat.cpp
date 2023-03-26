@@ -771,7 +771,7 @@ void CGib::Spawn(const char* szGibModel)
 	m_cBloodDecals = 5; // how many blood decals this gib can place (1 per bounce until none remain).
 }
 
-bool CBaseMonster::TakeHealth(float flHealth, int bitsDamageType)
+bool CBaseMonster::GiveHealth(float flHealth, int bitsDamageType)
 {
 	if (0 == pev->takedamage)
 		return false;
@@ -782,7 +782,7 @@ bool CBaseMonster::TakeHealth(float flHealth, int bitsDamageType)
 
 	m_bitsDamageType &= ~(bitsDamageType & ~DMG_TIMEBASED);
 
-	return CBaseEntity::TakeHealth(flHealth, bitsDamageType);
+	return CBaseEntity::GiveHealth(flHealth, bitsDamageType);
 }
 
 bool CBaseMonster::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType)

@@ -522,7 +522,7 @@ void CBaseEntity::OnDestroy()
 	// Nothing.
 }
 
-bool CBaseEntity::TakeHealth(float flHealth, int bitsDamageType)
+bool CBaseEntity::GiveHealth(float flHealth, int bitsDamageType)
 {
 	if (0 == pev->takedamage)
 		return false;

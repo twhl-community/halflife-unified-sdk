@@ -736,9 +736,10 @@ bool CItemRegenerationCTF::MyTouch(CBasePlayer* pPlayer)
 
 				EmitSound(CHAN_VOICE, "items/ammopickup1.wav", VOL_NORM, ATTN_NORM);
 
+				// TODO: check player's max health.
 				if (pPlayer->pev->health < 100.0)
 				{
-					pPlayer->TakeHealth(GetSkillFloat("healthkit"sv), DMG_GENERIC);
+					pPlayer->GiveHealth(GetSkillFloat("healthkit"sv), DMG_GENERIC);
 				}
 
 				return true;

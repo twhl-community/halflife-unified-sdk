@@ -292,7 +292,7 @@ public:
 	virtual void PreThink();
 	virtual void PostThink();
 	Vector GetGunPosition() override;
-	bool TakeHealth(float flHealth, int bitsDamageType) override;
+	bool GiveHealth(float flHealth, int bitsDamageType) override;
 	void TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
 
 	/**

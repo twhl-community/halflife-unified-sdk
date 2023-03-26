@@ -461,7 +461,7 @@ void COFMedicAlly::RunTask(Task_t* pTask)
 
 					const auto toHeal = std::min(5.f, pHealTarget->pev->max_health - pHealTarget->pev->health);
 
-					if (toHeal != 0 && pHealTarget->TakeHealth(toHeal, DMG_GENERIC))
+					if (toHeal != 0 && pHealTarget->GiveHealth(toHeal, DMG_GENERIC))
 					{
 						m_iHealCharge -= toHeal;
 					}
@@ -832,12 +832,12 @@ void COFMedicAlly::HealerUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_
 
 			if (m_fHealActive)
 			{
-				if (pActivator->TakeHealth(2, DMG_GENERIC))
+				if (pActivator->GiveHealth(2, DMG_GENERIC))
 				{
 					m_iHealCharge -= 2;
 				}
 			}
-			else if (pActivator->TakeHealth(1, DMG_GENERIC))
+			else if (pActivator->GiveHealth(1, DMG_GENERIC))
 			{
 				--m_iHealCharge;
 			}

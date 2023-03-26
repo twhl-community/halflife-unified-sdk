@@ -682,7 +682,7 @@ public:
 
 	virtual Vector GetGunPosition();
 
-	bool TakeHealth(float flHealth, int bitsDamageType) override;
+	bool GiveHealth(float flHealth, int bitsDamageType) override;
 
 	/**
 	*	@brief The damage is coming from inflictor, but get mad at attacker

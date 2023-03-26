@@ -267,10 +267,7 @@ public:
 	*/
 	virtual bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType);
 
-	/**
-	*	@brief give health
-	*/
-	virtual bool TakeHealth(float flHealth, int bitsDamageType);
+	virtual bool GiveHealth(float flHealth, int bitsDamageType);
 	virtual void Killed(CBaseEntity* attacker, int iGib);
 	virtual int BloodColor() { return DONT_BLEED; }
 	virtual void TraceBleed(float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType);

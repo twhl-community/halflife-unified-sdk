@@ -231,9 +231,9 @@ void CBasePlayer::DeathSound()
 	EMIT_GROUPNAME_SUIT(this, "HEV_DEAD");
 }
 
-bool CBasePlayer::TakeHealth(float flHealth, int bitsDamageType)
+bool CBasePlayer::GiveHealth(float flHealth, int bitsDamageType)
 {
-	return CBaseMonster::TakeHealth(flHealth, bitsDamageType);
+	return CBaseMonster::GiveHealth(flHealth, bitsDamageType);
 }
 
 Vector CBasePlayer::GetGunPosition()
@@ -2166,7 +2166,7 @@ void CBasePlayer::CheckTimeBasedDamage()
 				{
 					int idif = std::min(m_idrowndmg - m_idrownrestored, 10);
 
-					TakeHealth(idif, DMG_GENERIC);
+					GiveHealth(idif, DMG_GENERIC);
 					m_idrownrestored += idif;
 				}
 				bDuration = 4; // get up to 5*10 = 50 points back

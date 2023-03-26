@@ -305,7 +305,7 @@ public:
 protected:
 	bool TryCharge(CBasePlayer* player, int amount) override
 	{
-		return player->TakeHealth(amount, DMG_GENERIC);
+		return player->GiveHealth(amount, DMG_GENERIC);
 	}
 };
 

@@ -160,7 +160,7 @@ public:
 			amount = player->pev->max_health;
 		}
 
-		if (player->TakeHealth(amount, DMG_GENERIC))
+		if (player->GiveHealth(amount, DMG_GENERIC))
 		{
 			MESSAGE_BEGIN(MSG_ONE, gmsgItemPickup, nullptr, player->pev);
 			WRITE_STRING(STRING(pev->classname));
