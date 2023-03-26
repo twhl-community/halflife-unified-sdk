@@ -241,10 +241,10 @@ void CTriggerRelay::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE 
 #define SF_MULTIMAN_CLONE 0x80000000
 #define SF_MULTIMAN_THREAD 0x00000001
 
-#define MAX_MULTI_TARGETS 16 // maximum number of targets a single multi_manager entity may be assigned.
+constexpr int MAX_MULTI_TARGETS = 16; // maximum number of targets a single multi_manager entity may be assigned.
 
 /**
-*	@brief when fired, will fire up to 16 targets at specified times.
+*	@brief when fired, will fire up to MAX_MULTI_TARGETS targets at specified times.
 *	@details FLAG: THREAD (create clones when triggered)
 *	FLAG: CLONE (this is a clone for a threaded execution)
 */
@@ -324,6 +324,10 @@ bool CMultiManager::KeyValue(KeyValueData* pkvd)
 			m_flTargetDelay[m_cTargets] = atof(pkvd->szValue);
 			m_cTargets++;
 			return true;
+		}
+		else
+		{
+			Logger->warn("{}:{}: Too many targets! (> {})", GetClassname(), entindex(), MAX_MULTI_TARGETS);
 		}
 	}
 
