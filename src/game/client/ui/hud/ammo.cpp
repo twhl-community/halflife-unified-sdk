@@ -102,9 +102,9 @@ bool WeaponsResource::HasAmmo(WEAPON* p)
 		return true;
 
 	return p->AmmoInMagazine > 0 ||
-		0 != CountAmmo(p->AmmoType1) ||
-		0 != CountAmmo(p->AmmoType2) ||
-		(p->Info->Flags & WEAPON_FLAGS_SELECTONEMPTY) != 0;
+		   0 != CountAmmo(p->AmmoType1) ||
+		   0 != CountAmmo(p->AmmoType2) ||
+		   (p->Info->Flags & ITEM_FLAG_SELECTONEMPTY) != 0;
 }
 
 
@@ -575,19 +575,15 @@ void CHudAmmo::MsgFunc_HideWeapon(const char* pszName, int iSize, void* pbuf)
 void CHudAmmo::MsgFunc_CurWeapon(const char* pszName, int iSize, void* pbuf)
 {
 	static Rect nullrc;
-	bool fOnTarget = false;
 
 	BEGIN_READ(pbuf, iSize);
 
-	int iState = READ_BYTE();
+	const WeaponState iState = static_cast<WeaponState>(READ_BYTE());
 	int iId = READ_CHAR();
 	int iClip = READ_CHAR();
 
 	// detect if we're also on target
-	if (iState > 1)
-	{
-		fOnTarget = true;
-	}
+	const bool onTarget = iState > WeaponState::Active;
 
 	if (iId < 1)
 	{
@@ -620,7 +616,7 @@ void CHudAmmo::MsgFunc_CurWeapon(const char* pszName, int iSize, void* pbuf)
 		pWeapon->AmmoInMagazine = iClip;
 
 
-	if (iState == 0) // we're not the current weapon, so update no more
+	if (iState == WeaponState::Inactive) // we're not the current weapon, so update no more
 		return;
 
 	m_pWeapon = pWeapon;
@@ -629,7 +625,7 @@ void CHudAmmo::MsgFunc_CurWeapon(const char* pszName, int iSize, void* pbuf)
 
 	if (gHUD.m_iFOV >= 90)
 	{ // normal crosshairs
-		if (fOnTarget && 0 != m_pWeapon->hAutoaim)
+		if (onTarget && 0 != m_pWeapon->hAutoaim)
 			SetAutoaimCrosshair(m_pWeapon->hAutoaim, m_pWeapon->rcAutoaim);
 		else
 			SetAutoaimCrosshair(0, {});
@@ -638,7 +634,7 @@ void CHudAmmo::MsgFunc_CurWeapon(const char* pszName, int iSize, void* pbuf)
 	}
 	else
 	{ // zoomed crosshairs
-		if (fOnTarget && 0 != m_pWeapon->hZoomedAutoaim)
+		if (onTarget && 0 != m_pWeapon->hZoomedAutoaim)
 			SetAutoaimCrosshair(m_pWeapon->hZoomedAutoaim, m_pWeapon->rcZoomedAutoaim);
 		else
 			SetAutoaimCrosshair(0, {});

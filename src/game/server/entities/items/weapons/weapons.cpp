@@ -451,13 +451,13 @@ void CBasePlayerWeapon::AddToPlayer(CBasePlayer* pPlayer)
 bool CBasePlayerWeapon::UpdateClientData(CBasePlayer* pPlayer)
 {
 	bool bSend = false;
-	int state = 0;
+	WeaponState state = WeaponState::Inactive;
 	if (pPlayer->m_pActiveWeapon == this)
 	{
 		if (pPlayer->m_fOnTarget)
-			state = WEAPON_IS_ONTARGET;
+			state = WeaponState::OnTarget;
 		else
-			state = 1;
+			state = WeaponState::Active;
 	}
 
 	// Forcing send of all data!
@@ -478,7 +478,7 @@ bool CBasePlayerWeapon::UpdateClientData(CBasePlayer* pPlayer)
 
 	// If the ammo, state, or fov has changed, update the weapon
 	if (m_iClip != m_iClientClip ||
-		state != m_iClientWeaponState ||
+		state != m_ClientWeaponState ||
 		pPlayer->m_iFOV != pPlayer->m_iClientFOV)
 	{
 		bSend = true;
@@ -487,13 +487,13 @@ bool CBasePlayerWeapon::UpdateClientData(CBasePlayer* pPlayer)
 	if (bSend)
 	{
 		MESSAGE_BEGIN(MSG_ONE, gmsgCurWeapon, nullptr, pPlayer->pev);
-		WRITE_BYTE(state);
+		WRITE_BYTE(static_cast<int>(state));
 		WRITE_BYTE(m_iId);
 		WRITE_BYTE(m_iClip);
 		MESSAGE_END();
 
 		m_iClientClip = m_iClip;
-		m_iClientWeaponState = state;
+		m_ClientWeaponState = state;
 		pPlayer->m_fWeapon = true;
 	}
 

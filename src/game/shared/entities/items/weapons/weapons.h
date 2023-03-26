@@ -212,7 +212,12 @@ enum Bullet
 #define ITEM_FLAG_LIMITINWORLD 8
 #define ITEM_FLAG_EXHAUSTIBLE 16 // A player can totally exhaust their ammo supply and lose this weapon
 
-#define WEAPON_IS_ONTARGET 0x40
+enum class WeaponState
+{
+	Inactive = 0,
+	Active,
+	OnTarget
+};
 
 void Weapons_RegisterAmmoTypes();
 
@@ -446,16 +451,16 @@ public:
 
 	float m_flPumpTime;
 
-	int m_fInSpecialReload;			//!< Are we in the middle of a reload for the shotguns
-	float m_flNextPrimaryAttack;	//!< soonest time ItemPostFrame will call PrimaryAttack
-	float m_flNextSecondaryAttack;	//!< soonest time ItemPostFrame will call SecondaryAttack
-	float m_flTimeWeaponIdle;		//!< soonest time ItemPostFrame will call WeaponIdle
-	int m_iPrimaryAmmoType = -1;	//!< "primary" ammo index into players m_rgAmmo[]
-	int m_iSecondaryAmmoType = -1;	//!< "secondary" ammo index into players m_rgAmmo[]
-	int m_iClip;					//!< number of shots left in the primary weapon clip, -1 it not used
-	int m_iClientClip;				//!< the last version of m_iClip sent to hud dll
-	int m_iClientWeaponState;		//!< the last version of the weapon state sent to hud dll (is current weapon, is on target)
-	bool m_fInReload;				//!< Are we in the middle of a reload
+	int m_fInSpecialReload;				//!< Are we in the middle of a reload for the shotguns
+	float m_flNextPrimaryAttack;		//!< soonest time ItemPostFrame will call PrimaryAttack
+	float m_flNextSecondaryAttack;		//!< soonest time ItemPostFrame will call SecondaryAttack
+	float m_flTimeWeaponIdle;			//!< soonest time ItemPostFrame will call WeaponIdle
+	int m_iPrimaryAmmoType = -1;		//!< "primary" ammo index into players m_rgAmmo[]
+	int m_iSecondaryAmmoType = -1;		//!< "secondary" ammo index into players m_rgAmmo[]
+	int m_iClip;						//!< number of shots left in the primary weapon clip, -1 it not used
+	int m_iClientClip;					//!< the last version of m_iClip sent to hud dll
+	WeaponState m_ClientWeaponState;	//!< the last version of the weapon state sent to hud dll (is current weapon, is on target)
+	bool m_fInReload;					//!< Are we in the middle of a reload
 
 	int m_iDefaultAmmo; //!< how much ammo you get when you pick up this weapon as placed by a level designer.
 	int m_iDefaultPrimaryAmmo; // Copy of m_iDefaultAmmo after KeyValue is handled for respawn.
