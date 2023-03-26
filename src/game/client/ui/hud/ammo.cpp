@@ -301,10 +301,6 @@ const int giABWidth = 20;
 
 HSPRITE ghsprBuckets; // Sprite for top row of weapons menu
 
-// width of ammo fonts
-#define AMMO_SMALL_WIDTH 10
-#define AMMO_LARGE_WIDTH 20
-
 #define HISTORY_DRAW_TIME "5"
 
 void SendWeaponSelectCommand(const char* weaponName)

@@ -21,7 +21,6 @@
 #include "hud.h"
 
 #define PAIN_NAME "sprites/%d_pain.spr"
-#define DAMAGE_NAME "sprites/%d_dmg.spr"
 
 int giDmgHeight, giDmgWidth;
 

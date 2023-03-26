@@ -20,8 +20,6 @@
 
 #include "hud.h"
 
-#define BAT_NAME "sprites/%d_Flashlight.spr"
-
 bool CHudFlashlight::Init()
 {
 	m_fFade = 0;
