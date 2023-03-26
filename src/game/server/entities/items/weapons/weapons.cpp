@@ -655,7 +655,9 @@ bool CBasePlayerWeapon::ExtractClipAmmo(CBasePlayerWeapon* weapon)
 		iAmmo = m_iClip;
 	}
 
-	// TODO: should handle -1 return as well (only return true if ammo was taken)
+	// This should check against -1 to be correct,
+	// but that changes original HL behavior which causes players to always pick up dropped weapons,
+	// even if they have full ammo.
 	return weapon->m_pPlayer->GiveAmmo(iAmmo, pszAmmo1()) != 0;
 }
 

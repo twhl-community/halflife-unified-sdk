@@ -69,8 +69,6 @@ enum OtisSkin
 };
 }
 
-// TODO: work out a way to abstract sentences out so we don't need to override here to change just those
-
 class COtis : public CBarney
 {
 public:
