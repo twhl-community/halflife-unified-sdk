@@ -19,11 +19,9 @@
 #pragma once
 
 #include <array>
+#include <vector>
 
 struct AmmoType;
-
-// this is the max number of items in each bucket
-#define MAX_WEAPON_POSITIONS MAX_WEAPON_SLOTS
 
 class WeaponsResource
 {
@@ -32,8 +30,8 @@ private:
 	std::array<WEAPON, MAX_WEAPONS> rgWeapons; // Weapons Array
 
 	// counts of weapons * ammo
-	WEAPON* rgSlots[MAX_WEAPON_SLOTS + 1][MAX_WEAPON_POSITIONS + 1]; // The slots currently in use by weapons.  The value is a pointer to the weapon;  if it's nullptr, no weapon is there
-	int riAmmo[MAX_AMMO_TYPES];										 // count of each ammo type
+	std::array<std::vector<WEAPON*>, MAX_WEAPON_SLOTS> rgSlots;	// The slots currently in use by weapons.
+	int riAmmo[MAX_AMMO_TYPES];									// count of each ammo type
 
 public:
 	void Init()
@@ -44,9 +42,13 @@ public:
 	void Reset()
 	{
 		iOldWeaponBits = 0;
-		memset(rgSlots, 0, sizeof rgSlots);
+
+		DropAllWeapons();
+
 		memset(riAmmo, 0, sizeof riAmmo);
 	}
+
+	constexpr int GetSlotCount() const { return static_cast<int>(rgSlots.size()); }
 
 	///// WEAPON /////
 	std::uint64_t iOldWeaponBits;
@@ -62,7 +64,9 @@ public:
 
 	void DropAllWeapons();
 
-	WEAPON* GetWeaponSlot(int slot, int pos) { return rgSlots[slot][pos]; }
+	int GetHighestPositionInSlot(int slot) const;
+
+	WEAPON* GetWeaponSlot(int slot, int pos);
 
 	void InitializeWeapons();
 

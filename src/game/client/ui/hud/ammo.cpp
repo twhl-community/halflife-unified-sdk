@@ -67,21 +67,65 @@ void WeaponsResource::InitializeWeapons()
 
 void WeaponsResource::PickupWeapon(WEAPON* wp)
 {
-	rgSlots[wp->Info->Slot][wp->Info->Position] = wp;
+	assert(wp);
+
+	if (!GetWeaponSlot(wp->Info->Slot, wp->Info->Position))
+	{
+		auto& buckets = rgSlots[wp->Info->Slot];
+
+		// Use sorted insertion so search operations finds weapons in position order.
+		auto it = std::upper_bound(buckets.begin(), buckets.end(), wp, [](const auto lhs, const auto rhs)
+			{ return lhs->Info->Position < rhs->Info->Position; });
+
+		buckets.insert(it, wp);
+	}
 }
 
 void WeaponsResource::DropWeapon(WEAPON* wp)
 {
-	rgSlots[wp->Info->Slot][wp->Info->Position] = nullptr;
+	assert(wp);
+	assert(wp->Info->Slot >= 0 && static_cast<std::size_t>(wp->Info->Slot) < rgSlots.size());
+
+	auto& buckets = rgSlots[wp->Info->Slot];
+
+	if (auto it = std::find(buckets.begin(), buckets.end(), wp); it != buckets.end())
+	{
+		buckets.erase(it);
+	}
 }
 
 void WeaponsResource::DropAllWeapons()
 {
-	for (int i = 0; i < MAX_WEAPONS; i++)
+	for (auto& buckets : rgSlots)
 	{
-		if (rgWeapons[i].Info && rgWeapons[i].Info->Id != WEAPON_NONE)
-			DropWeapon(&rgWeapons[i]);
+		buckets.clear();
 	}
+}
+
+int WeaponsResource::GetHighestPositionInSlot(int slot) const
+{
+	if (slot < 0 || static_cast<std::size_t>(slot) >= rgSlots.size())
+	{
+		return -1;
+	}
+
+	auto& buckets = rgSlots[slot];
+	return buckets.empty() ? -1 : static_cast<int>(buckets.back()->Info->Position);
+}
+
+WEAPON* WeaponsResource::GetWeaponSlot(int slot, int pos)
+{
+	assert(slot >= 0 && static_cast<std::size_t>(slot) < rgSlots.size());
+
+	for (auto weapon : rgSlots[slot])
+	{
+		if (weapon->Info->Position == pos)
+		{
+			return weapon;
+		}
+	}
+
+	return nullptr;
 }
 
 int WeaponsResource::CountAmmo(const AmmoType* type)
@@ -207,32 +251,45 @@ void WeaponsResource::LoadWeaponSprites(WEAPON* pWeapon)
 // Returns the first weapon for a given slot.
 WEAPON* WeaponsResource::GetFirstPos(int iSlot)
 {
-	WEAPON* pret = nullptr;
+	assert(iSlot >= 0 && static_cast<std::size_t>(iSlot) < rgSlots.size());
 
-	for (int i = 0; i < MAX_WEAPON_POSITIONS; i++)
+	for (auto weapon : rgSlots[iSlot])
 	{
-		if (rgSlots[iSlot][i] && HasAmmo(rgSlots[iSlot][i]))
+		if (HasAmmo(weapon))
 		{
-			pret = rgSlots[iSlot][i];
-			break;
+			return weapon;
 		}
 	}
 
-	return pret;
+	return nullptr;
 }
 
 
 WEAPON* WeaponsResource::GetNextActivePos(int iSlot, int iSlotPos)
 {
-	if (iSlotPos >= MAX_WEAPON_POSITIONS || iSlot >= MAX_WEAPON_SLOTS)
+	if (static_cast<std::size_t>(iSlot) >= rgSlots.size())
 		return nullptr;
 
-	WEAPON* p = gWR.rgSlots[iSlot][iSlotPos + 1];
+	// Start with the position after the current one.
+	++iSlotPos;
 
-	if (!p || !gWR.HasAmmo(p))
-		return GetNextActivePos(iSlot, iSlotPos + 1);
+	for (auto weapon : rgSlots[iSlot])
+	{
+		if (weapon->Info->Position < iSlotPos)
+		{
+			continue;
+		}
 
-	return p;
+		if (weapon->Info->Position == iSlotPos && HasAmmo(weapon))
+		{
+			return weapon;
+		}
+
+		// Try the next one.
+		++iSlotPos;
+	}
+
+	return nullptr;
 }
 
 
@@ -440,7 +497,7 @@ void WeaponsResource::SelectSlot(int iSlot, bool fAdvance, int iDirection)
 		return;
 	}
 
-	if (iSlot > MAX_WEAPON_SLOTS)
+	if (iSlot >= MAX_WEAPON_SLOTS)
 		return;
 
 	if (gHUD.m_fPlayerDead || (gHUD.m_iHideHUDDisplay & (HIDEHUD_WEAPONS | HIDEHUD_ALL)) != 0)
@@ -742,7 +799,9 @@ void CHudAmmo::UserCmd_NextWeapon()
 	{
 		for (; slot < MAX_WEAPON_SLOTS; slot++)
 		{
-			for (; pos < MAX_WEAPON_POSITIONS; pos++)
+			const int highestPosition = gWR.GetHighestPositionInSlot(slot);
+
+			for (; pos <= highestPosition; pos++)
 			{
 				WEAPON* wsp = gWR.GetWeaponSlot(slot, pos);
 
@@ -771,12 +830,18 @@ void CHudAmmo::UserCmd_PrevWeapon()
 	if (!gpActiveSel || gpActiveSel == (WEAPON*)1)
 		gpActiveSel = m_pWeapon;
 
-	int pos = MAX_WEAPON_POSITIONS - 1;
-	int slot = MAX_WEAPON_SLOTS - 1;
+	int slot;
+	int pos;
+
 	if (gpActiveSel)
 	{
-		pos = gpActiveSel->Info->Position - 1;
 		slot = gpActiveSel->Info->Slot;
+		pos = gpActiveSel->Info->Position - 1;
+	}
+	else
+	{
+		slot = gWR.GetSlotCount() - 1;
+		pos = gWR.GetHighestPositionInSlot(slot);
 	}
 
 	for (int loop = 0; loop <= 1; loop++)
@@ -794,10 +859,11 @@ void CHudAmmo::UserCmd_PrevWeapon()
 				}
 			}
 
-			pos = MAX_WEAPON_POSITIONS - 1;
+			pos = gWR.GetHighestPositionInSlot(slot - 1);
 		}
 
-		slot = MAX_WEAPON_SLOTS - 1;
+		slot = gWR.GetSlotCount() - 1;
+		pos = gWR.GetHighestPositionInSlot(slot - 1);
 	}
 
 	gpActiveSel = nullptr;
@@ -1202,6 +1268,8 @@ bool CHudAmmo::DrawWList(float flTime)
 	{
 		y = giBucketHeight + 10;
 
+		const int highestPositionInSlot = gWR.GetHighestPositionInSlot(i);
+
 		// If this is the active slot, draw the bigger pictures,
 		// otherwise just draw boxes
 		if (i == iActiveSlot)
@@ -1211,11 +1279,11 @@ bool CHudAmmo::DrawWList(float flTime)
 			if (p)
 				iWidth = p->rcActive.right - p->rcActive.left;
 
-			for (int iPos = 0; iPos < MAX_WEAPON_POSITIONS; iPos++)
+			for (int iPos = 0; iPos <= highestPositionInSlot; iPos++)
 			{
 				p = gWR.GetWeaponSlot(i, iPos);
 
-				if (!p || !p->Info)
+				if (!p)
 					continue;
 
 				const auto color = gHUD.m_HudItemColor;
@@ -1253,11 +1321,11 @@ bool CHudAmmo::DrawWList(float flTime)
 		{
 			// Draw Row of weapons.
 
-			for (int iPos = 0; iPos < MAX_WEAPON_POSITIONS; iPos++)
+			for (int iPos = 0; iPos <= highestPositionInSlot; iPos++)
 			{
 				WEAPON* p = gWR.GetWeaponSlot(i, iPos);
 
-				if (!p || !p->Info)
+				if (!p)
 					continue;
 
 				RGB24 color;
