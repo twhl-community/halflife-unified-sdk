@@ -88,31 +88,6 @@ void __CmdFunc_OpenCommandMenu()
 	}
 }
 
-// TFC "special" command
-void __CmdFunc_InputPlayerSpecial()
-{
-	if (gViewPort)
-	{
-		gViewPort->InputPlayerSpecial();
-	}
-}
-
-void __CmdFunc_CloseCommandMenu()
-{
-	if (gViewPort)
-	{
-		gViewPort->InputSignalHideCommandMenu();
-	}
-}
-
-void __CmdFunc_ForceCloseCommandMenu()
-{
-	if (gViewPort)
-	{
-		gViewPort->HideCommandMenu();
-	}
-}
-
 // This is called every time the DLL is loaded
 void CHud::Init()
 {
@@ -125,12 +100,6 @@ void CHud::Init()
 	g_ClientUserMessages.RegisterHandler("SetFOV", &CHud::MsgFunc_SetFOV, this);
 	g_ClientUserMessages.RegisterHandler("Concuss", &CHud::MsgFunc_Concuss, this);
 	g_ClientUserMessages.RegisterHandler("Weapons", &CHud::MsgFunc_Weapons, this);
-
-	// TFFree CommandMenu
-	HOOK_COMMAND("+commandmenu", OpenCommandMenu);
-	HOOK_COMMAND("-commandmenu", CloseCommandMenu);
-	HOOK_COMMAND("ForceCloseCommandMenu", ForceCloseCommandMenu);
-	HOOK_COMMAND("special", InputPlayerSpecial);
 
 	CVAR_CREATE("hud_classautokill", "1", FCVAR_ARCHIVE | FCVAR_USERINFO); // controls whether or not to suicide immediately on TF class switch
 	CVAR_CREATE("hud_takesshots", "0", FCVAR_ARCHIVE);					   // controls whether or not to automatically take screenshots at the end of a round

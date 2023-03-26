@@ -562,6 +562,15 @@ TeamFortressViewport::TeamFortressViewport(int x, int y, int wide, int tall) : P
 	// VGUI Menus
 	g_ClientUserMessages.RegisterHandler("VGUIMenu", &TeamFortressViewport::MsgFunc_VGUIMenu, this);
 
+	// TFFree CommandMenu
+	g_ConCommands.CreateCommand(
+		"+commandmenu", [this](const auto&)
+		{ ShowCommandMenu(m_StandardMenu); },
+		CommandLibraryPrefix::No);
+	RegisterClientCommand("-commandmenu", &TeamFortressViewport::InputSignalHideCommandMenu, this);
+	RegisterClientCommand("ForceCloseCommandMenu", &TeamFortressViewport::HideCommandMenu, this);
+	RegisterClientCommand("special", &TeamFortressViewport::InputPlayerSpecial, this);
+
 	Initialize();
 	addInputSignal(new CViewPortInputHandler);
 

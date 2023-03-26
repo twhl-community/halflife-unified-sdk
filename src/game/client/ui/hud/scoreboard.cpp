@@ -37,16 +37,13 @@ struct icon_sprite_t
 
 icon_sprite_t g_PlayerSpriteList[MAX_PLAYERS_HUD + 1][6];
 
-DECLARE_COMMAND(m_Scoreboard, ShowScores);
-DECLARE_COMMAND(m_Scoreboard, HideScores);
-
 bool CHudScoreboard::Init()
 {
 	gHUD.AddHudElem(this);
 
 	// Hook messages & commands here
-	// HOOK_COMMAND( "+showscores", ShowScores );
-	// HOOK_COMMAND( "-showscores", HideScores );
+	// RegisterClientCommand("+showscores", &CHudScoreboard::UserCmd_ShowScores, this);
+	// RegisterClientCommand("-showscores", &CHudScoreboard::UserCmd_HideScores, this);
 
 	g_ClientUserMessages.RegisterHandler("ScoreInfo", &CHudScoreboard::MsgFunc_ScoreInfo, this);
 	g_ClientUserMessages.RegisterHandler("TeamScore", &CHudScoreboard::MsgFunc_TeamScore, this);

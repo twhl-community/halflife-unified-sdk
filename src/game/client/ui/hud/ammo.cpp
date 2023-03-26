@@ -301,20 +301,6 @@ const int giABWidth = 20;
 
 HSPRITE ghsprBuckets; // Sprite for top row of weapons menu
 
-DECLARE_COMMAND(m_Ammo, Slot1);
-DECLARE_COMMAND(m_Ammo, Slot2);
-DECLARE_COMMAND(m_Ammo, Slot3);
-DECLARE_COMMAND(m_Ammo, Slot4);
-DECLARE_COMMAND(m_Ammo, Slot5);
-DECLARE_COMMAND(m_Ammo, Slot6);
-DECLARE_COMMAND(m_Ammo, Slot7);
-DECLARE_COMMAND(m_Ammo, Slot8);
-DECLARE_COMMAND(m_Ammo, Slot9);
-DECLARE_COMMAND(m_Ammo, Slot10);
-DECLARE_COMMAND(m_Ammo, Close);
-DECLARE_COMMAND(m_Ammo, NextWeapon);
-DECLARE_COMMAND(m_Ammo, PrevWeapon);
-
 // width of ammo fonts
 #define AMMO_SMALL_WIDTH 10
 #define AMMO_LARGE_WIDTH 20
@@ -348,19 +334,19 @@ bool CHudAmmo::Init()
 	g_ClientUserMessages.RegisterHandler("HideWeapon", &CHudAmmo::MsgFunc_HideWeapon, this); // hides the weapon, ammo, and crosshair displays temporarily
 	g_ClientUserMessages.RegisterHandler("AmmoX", &CHudAmmo::MsgFunc_AmmoX, this);			 // update known ammo type's count
 
-	HOOK_COMMAND("slot1", Slot1);
-	HOOK_COMMAND("slot2", Slot2);
-	HOOK_COMMAND("slot3", Slot3);
-	HOOK_COMMAND("slot4", Slot4);
-	HOOK_COMMAND("slot5", Slot5);
-	HOOK_COMMAND("slot6", Slot6);
-	HOOK_COMMAND("slot7", Slot7);
-	HOOK_COMMAND("slot8", Slot8);
-	HOOK_COMMAND("slot9", Slot9);
-	HOOK_COMMAND("slot10", Slot10);
-	HOOK_COMMAND("cancelselect", Close);
-	HOOK_COMMAND("invnext", NextWeapon);
-	HOOK_COMMAND("invprev", PrevWeapon);
+	RegisterClientCommand("slot1", &CHudAmmo::UserCmd_Slot1, this);
+	RegisterClientCommand("slot2", &CHudAmmo::UserCmd_Slot2, this);
+	RegisterClientCommand("slot3", &CHudAmmo::UserCmd_Slot3, this);
+	RegisterClientCommand("slot4", &CHudAmmo::UserCmd_Slot4, this);
+	RegisterClientCommand("slot5", &CHudAmmo::UserCmd_Slot5, this);
+	RegisterClientCommand("slot6", &CHudAmmo::UserCmd_Slot6, this);
+	RegisterClientCommand("slot7", &CHudAmmo::UserCmd_Slot7, this);
+	RegisterClientCommand("slot8", &CHudAmmo::UserCmd_Slot8, this);
+	RegisterClientCommand("slot9", &CHudAmmo::UserCmd_Slot9, this);
+	RegisterClientCommand("slot10", &CHudAmmo::UserCmd_Slot10, this);
+	RegisterClientCommand("cancelselect", &CHudAmmo::UserCmd_Close, this);
+	RegisterClientCommand("invnext", &CHudAmmo::UserCmd_NextWeapon, this);
+	RegisterClientCommand("invprev", &CHudAmmo::UserCmd_PrevWeapon, this);
 
 	Reset();
 
