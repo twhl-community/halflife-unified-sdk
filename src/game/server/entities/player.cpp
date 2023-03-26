@@ -3766,11 +3766,7 @@ int CBasePlayer::GiveAmmo(int iCount, const char* szName)
 
 void CBasePlayer::ItemPreFrame()
 {
-#if defined(CLIENT_WEAPONS)
-	if (m_flNextAttack > 0)
-#else
-	if (gpGlobals->time < m_flNextAttack)
-#endif
+	if (m_flNextAttack > UTIL_WeaponTimeBase())
 	{
 		return;
 	}
@@ -3787,11 +3783,7 @@ void CBasePlayer::ItemPostFrame()
 	if (m_pTank != nullptr)
 		return;
 
-#if defined(CLIENT_WEAPONS)
-	if (m_flNextAttack > 0)
-#else
-	if (gpGlobals->time < m_flNextAttack)
-#endif
+	if (m_flNextAttack > UTIL_WeaponTimeBase())
 	{
 		return;
 	}
