@@ -427,3 +427,70 @@ void CPlayerSetHealth::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TY
 		}
 	}
 }
+
+class CPlayerHasSuit : public CPointEntity
+{
+public:
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
+	static TYPEDESCRIPTION m_SaveData[];
+
+	bool KeyValue(KeyValueData* pkvd) override;
+
+	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+
+private:
+	string_t m_PassTarget;
+	string_t m_FailTarget;
+};
+
+LINK_ENTITY_TO_CLASS(player_hassuit, CPlayerHasSuit);
+
+TYPEDESCRIPTION CPlayerHasSuit::m_SaveData[] =
+	{
+		DEFINE_FIELD(CPlayerHasSuit, m_PassTarget, FIELD_STRING),
+		DEFINE_FIELD(CPlayerHasSuit, m_FailTarget, FIELD_STRING),
+};
+
+IMPLEMENT_SAVERESTORE(CPlayerHasSuit, CPointEntity);
+
+bool CPlayerHasSuit::KeyValue(KeyValueData* pkvd)
+{
+	if (FStrEq(pkvd->szKeyName, "pass_target"))
+	{
+		m_PassTarget = ALLOC_STRING(pkvd->szValue);
+		return true;
+	}
+	else if (FStrEq(pkvd->szKeyName, "fail_target"))
+	{
+		m_FailTarget = ALLOC_STRING(pkvd->szValue);
+		return true;
+	}
+
+	return CPointEntity::KeyValue(pkvd);
+}
+
+void CPlayerHasSuit::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
+{
+	auto player = ToBasePlayer(pActivator);
+
+	if (!player)
+	{
+		return;
+	}
+
+	if (player->HasSuit())
+	{
+		if (!FStringNull(m_PassTarget))
+		{
+			FireTargets(STRING(m_PassTarget), pActivator, pCaller, USE_TOGGLE, 0);
+		}
+	}
+	else
+	{
+		if (!FStringNull(m_FailTarget))
+		{
+			FireTargets(STRING(m_FailTarget), pActivator, pCaller, USE_TOGGLE, 0);
+		}
+	}
+}
