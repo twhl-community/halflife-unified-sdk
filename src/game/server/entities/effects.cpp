@@ -135,7 +135,7 @@ bool CBubbling::KeyValue(KeyValueData* pkvd)
 
 void CBubbling::FizzThink()
 {
-	MESSAGE_BEGIN(MSG_PAS, SVC_TEMPENTITY, VecBModelOrigin(pev));
+	MESSAGE_BEGIN(MSG_PAS, SVC_TEMPENTITY, VecBModelOrigin(this));
 	WRITE_BYTE(TE_FIZZ);
 	WRITE_SHORT((short)entindex());
 	WRITE_SHORT((short)m_bubbleModel);
@@ -280,7 +280,7 @@ void CBeam::RelinkBeam()
 	pev->maxs = pev->maxs - pev->origin;
 
 	SetSize(pev->mins, pev->maxs);
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 }
 
 #if 0
@@ -1049,7 +1049,7 @@ void CLaser::FireAtPoint(TraceResult& tr)
 {
 	SetEndPos(tr.vecEndPos);
 	if (m_pSprite)
-		UTIL_SetOrigin(m_pSprite->pev, tr.vecEndPos);
+		m_pSprite->SetOrigin(tr.vecEndPos);
 
 	BeamDamage(&tr);
 	DoSparks(GetStartPos(), tr.vecEndPos);
@@ -1388,7 +1388,7 @@ void CGibShooter::Spawn()
 		m_flGibLife = 25;
 	}
 
-	SetMovedir(pev);
+	SetMovedir(this);
 	pev->body = MODEL_FRAMES(m_iGibModelIndex);
 }
 
@@ -1577,7 +1577,7 @@ void CBlood::Spawn()
 	pev->movetype = MOVETYPE_NONE;
 	pev->effects = 0;
 	pev->frame = 0;
-	SetMovedir(pev);
+	SetMovedir(this);
 }
 
 bool CBlood::KeyValue(KeyValueData* pkvd)
@@ -2121,7 +2121,7 @@ public:
 	{
 		auto warpBall = g_EntityDictionary->Create<CWarpBall>("env_warpball");
 
-		UTIL_SetOrigin(warpBall->pev, vecOrigin);
+		warpBall->SetOrigin(vecOrigin);
 
 		warpBall->Spawn();
 
@@ -2200,7 +2200,7 @@ void CWarpBall::Spawn()
 	pev->movetype = MOVETYPE_NONE;
 	pev->solid = SOLID_NOT;
 
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 	SetSize(g_vecZero, g_vecZero);
 
 	pev->rendermode = kRenderGlow;
@@ -2222,7 +2222,7 @@ void CWarpBall::WarpBallUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_T
 		{
 			auto targetEntity = g_engfuncs.pfnFindEntityByString(nullptr, "targetname", STRING(m_iszWarpTarget));
 			if (targetEntity)
-				UTIL_SetOrigin(pev, targetEntity->v.origin);
+				SetOrigin(targetEntity->v.origin);
 		}
 
 		SetModel("sprites/XFlare1.spr");
@@ -2255,7 +2255,7 @@ void CWarpBall::WarpBallUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_T
 			m_pBeams->m_iszSpriteName = MAKE_STRING("sprites/lgtning.spr");
 
 			m_pBeams->pev->origin = pev->origin;
-			UTIL_SetOrigin(m_pBeams->pev, pev->origin);
+			m_pBeams->SetOrigin(pev->origin);
 
 			m_pBeams->m_restrike = -0.5;
 			m_pBeams->m_noiseAmplitude = 65;

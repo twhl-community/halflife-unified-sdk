@@ -145,7 +145,7 @@ void CBaseCharger::Spawn()
 	pev->solid = SOLID_BSP;
 	pev->movetype = MOVETYPE_PUSH;
 
-	UTIL_SetOrigin(pev, pev->origin); // set size and link into world
+	SetOrigin(pev->origin); // set size and link into world
 	SetSize(pev->mins, pev->maxs);
 	SetModel(STRING(pev->model));
 	m_Juice = m_TotalJuice;

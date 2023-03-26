@@ -55,7 +55,7 @@ CRpgRocket* CRpgRocket::CreateRpgRocket(Vector vecOrigin, Vector vecAngles, CBas
 {
 	CRpgRocket* pRocket = g_EntityDictionary->Create<CRpgRocket>("rpg_rocket");
 
-	UTIL_SetOrigin(pRocket->pev, vecOrigin);
+	pRocket->SetOrigin(vecOrigin);
 	pRocket->pev->angles = vecAngles;
 	pRocket->Spawn();
 	pRocket->SetTouch(&CRpgRocket::RocketTouch);
@@ -75,7 +75,7 @@ void CRpgRocket::Spawn()
 
 	SetModel("models/rpgrocket.mdl");
 	SetSize(Vector(0, 0, 0), Vector(0, 0, 0));
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 
 	SetThink(&CRpgRocket::IgniteThink);
 	SetTouch(&CRpgRocket::ExplodeTouch);
@@ -472,7 +472,7 @@ void CRpg::UpdateSpot()
 		TraceResult tr;
 		UTIL_TraceLine(vecSrc, vecSrc + vecAiming * 8192, dont_ignore_monsters, ENT(m_pPlayer->pev), &tr);
 
-		UTIL_SetOrigin(m_pSpot->pev, tr.vecEndPos);
+		m_pSpot->SetOrigin(tr.vecEndPos);
 	}
 #endif
 }

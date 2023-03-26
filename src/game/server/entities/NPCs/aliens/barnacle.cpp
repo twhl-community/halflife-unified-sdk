@@ -86,7 +86,7 @@ void CBarnacle::HandleAnimEvent(MonsterEvent_t* pEvent)
 	switch (pEvent->event)
 	{
 	case BARNACLE_AE_PUKEGIB:
-		CGib::SpawnRandomGibs(pev, 1, true);
+		CGib::SpawnRandomGibs(this, 1, true);
 		break;
 	default:
 		CBaseMonster::HandleAnimEvent(pEvent);
@@ -120,7 +120,7 @@ void CBarnacle::Spawn()
 	SetThink(&CBarnacle::BarnacleThink);
 	pev->nextthink = gpGlobals->time + 0.5;
 
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 }
 
 bool CBarnacle::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType)
@@ -195,7 +195,7 @@ void CBarnacle::BarnacleThink()
 				}
 			}
 
-			UTIL_SetOrigin(m_hEnemy->pev, vecNewEnemyOrigin);
+			m_hEnemy->SetOrigin(vecNewEnemyOrigin);
 		}
 		else
 		{
@@ -252,7 +252,7 @@ void CBarnacle::BarnacleThink()
 		if (0 != m_cGibs && RANDOM_LONG(0, 99) == 1)
 		{
 			// cough up a gib.
-			CGib::SpawnRandomGibs(pev, 1, true);
+			CGib::SpawnRandomGibs(this, 1, true);
 			m_cGibs--;
 
 			switch (RANDOM_LONG(0, 2))

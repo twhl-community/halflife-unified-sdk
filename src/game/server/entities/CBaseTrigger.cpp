@@ -23,7 +23,7 @@ void CBaseTrigger::InitTrigger()
 	// trigger angles are used for one-way touches.  An angle of 0 is assumed
 	// to mean no restrictions, so use a yaw of 360 instead.
 	if (pev->angles != g_vecZero)
-		SetMovedir(pev);
+		SetMovedir(this);
 	pev->solid = SOLID_TRIGGER;
 	pev->movetype = MOVETYPE_NONE;
 	SetModel(STRING(pev->model)); // set size and link into world

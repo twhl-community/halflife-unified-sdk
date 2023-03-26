@@ -179,6 +179,8 @@ public:
 
 	const char* GetMessage() const { return STRING(pev->message); }
 
+	void SetOrigin(const Vector& origin);
+
 	int PrecacheModel(const char* s);
 	void SetModel(const char* s);
 

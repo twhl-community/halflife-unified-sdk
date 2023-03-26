@@ -277,7 +277,7 @@ void CWeaponCycler::Spawn()
 	m_iszModel = pev->model;
 	m_iModel = pev->modelindex;
 
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 	SetSize(Vector(-16, -16, 0), Vector(16, 16, 16));
 	SetTouch(&CWeaponCycler::ItemTouch);
 }

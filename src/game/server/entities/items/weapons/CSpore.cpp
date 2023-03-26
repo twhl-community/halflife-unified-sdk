@@ -55,7 +55,7 @@ void CSpore::Spawn()
 
 	SetSize(g_vecZero, g_vecZero);
 
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 
 	SetThink(&CSpore::FlyThink);
 
@@ -261,7 +261,7 @@ CSpore* CSpore::CreateSpore(
 {
 	auto pSpore = g_EntityDictionary->Create<CSpore>("spore");
 
-	UTIL_SetOrigin(pSpore->pev, vecOrigin);
+	pSpore->SetOrigin(vecOrigin);
 
 	pSpore->m_SporeType = sporeType;
 

@@ -468,7 +468,7 @@ void CGargantua::EyeUpdate()
 			m_pEyeGlow->pev->effects |= EF_NODRAW;
 		else
 			m_pEyeGlow->pev->effects &= ~EF_NODRAW;
-		UTIL_SetOrigin(m_pEyeGlow->pev, pev->origin);
+		m_pEyeGlow->SetOrigin(pev->origin);
 	}
 }
 

@@ -98,7 +98,7 @@ void CBaseItem::SetupItem(const Vector& mins, const Vector& maxs)
 	pev->solid = SOLID_TRIGGER;
 
 	SetSize(mins, maxs);
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 
 	SetTouch(&CBaseItem::ItemTouch);
 
@@ -234,7 +234,7 @@ ItemAddResult CBaseItem::AddToPlayer(CBasePlayer* player)
 CBaseItem* CBaseItem::GetItemToRespawn(const Vector& respawnPoint)
 {
 #ifndef CLIENT_DLL
-	UTIL_SetOrigin(pev, respawnPoint); // move to wherever I'm supposed to respawn.
+	SetOrigin(respawnPoint); // move to wherever I'm supposed to respawn.
 #endif
 
 	return this;
@@ -289,7 +289,7 @@ void CBaseItem::Materialize()
 	}
 
 	pev->solid = SOLID_TRIGGER;
-	UTIL_SetOrigin(pev, pev->origin); // link into world.
+	SetOrigin(pev->origin); // link into world.
 	SetTouch(&CBaseItem::ItemTouch);
 	SetThink(nullptr);
 

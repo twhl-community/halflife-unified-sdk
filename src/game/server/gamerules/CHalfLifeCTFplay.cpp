@@ -497,7 +497,7 @@ CHalfLifeCTFplay::CHalfLifeCTFplay()
 		{
 			if (player->m_iCurrentMenu == MENU_TEAM)
 			{
-				ClientPrint(player->pev, HUD_PRINTCONSOLE, "Already in team selection menu.\n");
+				ClientPrint(player, HUD_PRINTCONSOLE, "Already in team selection menu.\n");
 			}
 			else
 			{
@@ -511,7 +511,7 @@ CHalfLifeCTFplay::CHalfLifeCTFplay()
 			{
 				if (player->m_iCurrentMenu == MENU_CLASS)
 				{
-					ClientPrint(player->pev, HUD_PRINTCONSOLE, "Already in character selection menu.\n");
+					ClientPrint(player, HUD_PRINTCONSOLE, "Already in character selection menu.\n");
 				}
 				else
 				{
@@ -524,7 +524,7 @@ CHalfLifeCTFplay::CHalfLifeCTFplay()
 			}
 			else
 			{
-				ClientPrint(player->pev, HUD_PRINTCONSOLE, "No Team Selected.  Use \"changeteam\".\n");
+				ClientPrint(player, HUD_PRINTCONSOLE, "No Team Selected.  Use \"changeteam\".\n");
 			} });
 
 	m_FlagInfoCommand = g_ClientCommands.CreateScoped("flaginfo", [](CBasePlayer* player, const auto& args)
@@ -665,7 +665,7 @@ bool CHalfLifeCTFplay::ClientConnected(edict_t* pEntity, const char* pszName, co
 					RespawnPlayerCTFPowerups(pPlayer, true);
 				}
 
-				ClientPrint(pPlayer->pev, HUD_PRINTCENTER, "#CTFGameReset");
+				ClientPrint(pPlayer, HUD_PRINTCENTER, "#CTFGameReset");
 			}
 		}
 
@@ -996,7 +996,7 @@ void CHalfLifeCTFplay::PlayerKilled(CBasePlayer* pVictim, CBaseEntity* pKiller, 
 
 				++killerPlayer->m_iCTFScore;
 
-				ClientPrint(killerPlayer->pev, HUD_PRINTTALK, "#CTFScorePoint");
+				ClientPrint(killerPlayer, HUD_PRINTTALK, "#CTFScorePoint");
 
 				UTIL_ClientPrintAll(HUD_PRINTNOTIFY, UTIL_VarArgs("%s", STRING(killerPlayer->pev->netname)));
 
@@ -1067,7 +1067,7 @@ void CHalfLifeCTFplay::PlayerKilled(CBasePlayer* pVictim, CBaseEntity* pKiller, 
 						g_engfuncs.pfnWriteByte(killerPlayer->m_iCTFScore);
 						g_engfuncs.pfnMessageEnd();
 
-						ClientPrint(killerPlayer->pev, HUD_PRINTTALK, "#CTFScorePoint");
+						ClientPrint(killerPlayer, HUD_PRINTTALK, "#CTFScorePoint");
 
 						UTIL_ClientPrintAll(HUD_PRINTNOTIFY, UTIL_VarArgs("%s", STRING(killerPlayer->pev->netname)));
 
@@ -1102,7 +1102,7 @@ void CHalfLifeCTFplay::PlayerKilled(CBasePlayer* pVictim, CBaseEntity* pKiller, 
 							g_engfuncs.pfnWriteByte(pPlayer->m_iCTFScore);
 							g_engfuncs.pfnMessageEnd();
 
-							ClientPrint(pPlayer->pev, HUD_PRINTTALK, "#CTFScorePoint");
+							ClientPrint(pPlayer, HUD_PRINTTALK, "#CTFScorePoint");
 							UTIL_ClientPrintAll(HUD_PRINTNOTIFY, UTIL_VarArgs("%s", STRING(pPlayer->pev->netname)));
 
 							if (pVictim->m_iTeamNum == CTFTeam::BlackMesa)

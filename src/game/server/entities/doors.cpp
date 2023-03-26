@@ -253,7 +253,7 @@ LINK_ENTITY_TO_CLASS(func_water, CBaseDoor);
 void CBaseDoor::Spawn()
 {
 	Precache();
-	SetMovedir(pev);
+	SetMovedir(this);
 
 	if (pev->skin == 0)
 	{ // normal door
@@ -269,7 +269,7 @@ void CBaseDoor::Spawn()
 	}
 
 	pev->movetype = MOVETYPE_PUSH;
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 	SetModel(STRING(pev->model));
 
 	if (pev->speed == 0)
@@ -281,7 +281,7 @@ void CBaseDoor::Spawn()
 	ASSERTSZ(m_vecPosition1 != m_vecPosition2, "door start/end positions are equal");
 	if (FBitSet(pev->spawnflags, SF_DOOR_START_OPEN))
 	{ // swap pos1 and pos2, put door at pos2
-		UTIL_SetOrigin(pev, m_vecPosition2);
+		SetOrigin(m_vecPosition2);
 		m_vecPosition2 = m_vecPosition1;
 		m_vecPosition1 = pev->origin;
 	}
@@ -300,9 +300,9 @@ void CBaseDoor::Spawn()
 void CBaseDoor::SetToggleState(int state)
 {
 	if (state == TS_AT_TOP)
-		UTIL_SetOrigin(pev, m_vecPosition2);
+		SetOrigin(m_vecPosition2);
 	else
-		UTIL_SetOrigin(pev, m_vecPosition1);
+		SetOrigin(m_vecPosition1);
 }
 
 void CBaseDoor::Precache()
@@ -406,8 +406,6 @@ bool CBaseDoor::DoorActivate()
 
 void CBaseDoor::DoorGoUp()
 {
-	entvars_t* pevActivator;
-
 	// It could be going-down, if blocked.
 	ASSERT(m_toggle_state == TS_AT_BOTTOM || m_toggle_state == TS_GOING_DOWN);
 
@@ -428,18 +426,18 @@ void CBaseDoor::DoorGoUp()
 
 		if (m_hActivator != nullptr)
 		{
-			pevActivator = m_hActivator->pev;
+			CBaseEntity* activator = m_hActivator;
 
 			if (!FBitSet(pev->spawnflags, SF_DOOR_ONEWAY) && 0 != pev->movedir.y) // Y axis rotation, move away from the player
 			{
-				Vector vec = pevActivator->origin - pev->origin;
-				Vector angles = pevActivator->angles;
+				Vector vec = activator->pev->origin - pev->origin;
+				Vector angles = activator->pev->angles;
 				angles.x = 0;
 				angles.z = 0;
 				UTIL_MakeVectors(angles);
 				//			Vector vnext = (pevToucher->origin + (pevToucher->velocity * 10)) - pev->origin;
-				UTIL_MakeVectors(pevActivator->angles);
-				Vector vnext = (pevActivator->origin + (gpGlobals->v_forward * 10)) - pev->origin;
+				UTIL_MakeVectors(activator->pev->angles);
+				Vector vnext = (activator->pev->origin + (gpGlobals->v_forward * 10)) - pev->origin;
 				if ((vec.x * vnext.y - vec.y * vnext.x) < 0)
 					sign = -1.0;
 			}
@@ -611,7 +609,7 @@ void CRotDoor::Spawn()
 {
 	Precache();
 	// set the axis of rotation
-	CBaseToggle::AxisDir(pev);
+	CBaseToggle::AxisDir(this);
 
 	// check for clockwise rotation
 	if (FBitSet(pev->spawnflags, SF_DOOR_ROTATE_BACKWARDS))
@@ -629,7 +627,7 @@ void CRotDoor::Spawn()
 		pev->solid = SOLID_BSP;
 
 	pev->movetype = MOVETYPE_PUSH;
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 	SetModel(STRING(pev->model));
 
 	if (pev->speed == 0)
@@ -663,7 +661,7 @@ void CRotDoor::SetToggleState(int state)
 	else
 		pev->angles = m_vecAngle1;
 
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 }
 
 class CMomentaryDoor : public CBaseToggle
@@ -702,12 +700,12 @@ IMPLEMENT_SAVERESTORE(CMomentaryDoor, CBaseToggle);
 
 void CMomentaryDoor::Spawn()
 {
-	SetMovedir(pev);
+	SetMovedir(this);
 
 	pev->solid = SOLID_BSP;
 	pev->movetype = MOVETYPE_PUSH;
 
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 	SetModel(STRING(pev->model));
 
 	if (pev->speed == 0)
@@ -722,7 +720,7 @@ void CMomentaryDoor::Spawn()
 
 	if (FBitSet(pev->spawnflags, SF_DOOR_START_OPEN))
 	{ // swap pos1 and pos2, put door at pos2
-		UTIL_SetOrigin(pev, m_vecPosition2);
+		SetOrigin(m_vecPosition2);
 		m_vecPosition2 = m_vecPosition1;
 		m_vecPosition1 = pev->origin;
 	}

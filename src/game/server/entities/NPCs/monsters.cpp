@@ -631,7 +631,7 @@ bool CBaseMonster::MoveToNode(Activity movementAct, float waitTime, const Vector
 }
 
 #ifdef _DEBUG
-void DrawRoute(entvars_t* pev, WayPoint_t* m_Route, int m_iRouteIndex, int r, int g, int b)
+void DrawRoute(CBaseEntity* entity, WayPoint_t* m_Route, int m_iRouteIndex, int r, int g, int b)
 {
 	int i;
 
@@ -645,9 +645,9 @@ void DrawRoute(entvars_t* pev, WayPoint_t* m_Route, int m_iRouteIndex, int r, in
 
 	MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
 	WRITE_BYTE(TE_BEAMPOINTS);
-	WRITE_COORD(pev->origin.x);
-	WRITE_COORD(pev->origin.y);
-	WRITE_COORD(pev->origin.z);
+	WRITE_COORD(entity->pev->origin.x);
+	WRITE_COORD(entity->pev->origin.y);
+	WRITE_COORD(entity->pev->origin.z);
 	WRITE_COORD(m_Route[m_iRouteIndex].vecLocation.x);
 	WRITE_COORD(m_Route[m_iRouteIndex].vecLocation.y);
 	WRITE_COORD(m_Route[m_iRouteIndex].vecLocation.z);
@@ -1141,7 +1141,7 @@ int CBaseMonster::CheckLocalMove(const Vector& vecStart, const Vector& vecEnd, C
 	iReturn = LOCALMOVE_VALID;				  // assume everything will be ok.
 
 	// move the monster to the start of the local move that's to be checked.
-	UTIL_SetOrigin(pev, vecStart); // !!!BUGBUG - won't this fire triggers? - nope, SetOrigin doesn't fire
+	SetOrigin(vecStart); // !!!BUGBUG - won't this fire triggers? - nope, SetOrigin doesn't fire
 
 	if ((pev->flags & (FL_FLY | FL_SWIM)) == 0)
 	{
@@ -1221,34 +1221,33 @@ int CBaseMonster::CheckLocalMove(const Vector& vecStart, const Vector& vecEnd, C
 	*/
 
 	// since we've actually moved the monster during the check, undo the move.
-	UTIL_SetOrigin(pev, vecStartPos);
+	SetOrigin(vecStartPos);
 
 	return iReturn;
 }
 
-float CBaseMonster::OpenDoorAndWait(entvars_t* pevDoor)
+float CBaseMonster::OpenDoorAndWait(CBaseEntity* door)
 {
 	float flTravelTime = 0;
 
 	// AILogger->trace("A door.");
-	CBaseEntity* pcbeDoor = CBaseEntity::Instance(pevDoor);
-	if (pcbeDoor && !pcbeDoor->IsLockedByMaster())
+	if (door && !door->IsLockedByMaster())
 	{
 		// AILogger->trace("unlocked!");
-		pcbeDoor->Use(this, this, USE_ON, 0.0);
-		// AILogger->trace("pevDoor->nextthink = {} ms", (int)(1000*pevDoor->nextthink));
-		// AILogger->trace("pevDoor->ltime = {} ms", (int)(1000*pevDoor->ltime));
-		// AILogger->trace("pev-> nextthink = {} ms", (int)(1000*pev->nextthink));
+		door->Use(this, this, USE_ON, 0.0);
+		// AILogger->trace("door->pev->nextthink = {} ms", (int)(1000*door->pev->nextthink));
+		// AILogger->trace("door->pev->ltime = {} ms", (int)(1000*door->pev->ltime));
+		// AILogger->trace("pev->nextthink = {} ms", (int)(1000*pev->nextthink));
 		// AILogger->trace("pev->ltime = {} ms", (int)(1000*pev->ltime));
-		flTravelTime = pevDoor->nextthink - pevDoor->ltime;
+		flTravelTime = door->pev->nextthink - door->pev->ltime;
 		// AILogger->trace("Waiting {} ms", (int)(1000*flTravelTime));
-		if (!FStringNull(pcbeDoor->pev->targetname))
+		if (!FStringNull(door->pev->targetname))
 		{
-			for (auto target : UTIL_FindEntitiesByTargetname(STRING(pcbeDoor->pev->targetname)))
+			for (auto target : UTIL_FindEntitiesByTargetname(STRING(door->pev->targetname)))
 			{
-				if (target != pcbeDoor)
+				if (target != door)
 				{
-					if (target->ClassnameIs(STRING(pcbeDoor->pev->classname)))
+					if (target->ClassnameIs(STRING(door->pev->classname)))
 					{
 						target->Use(this, this, USE_ON, 0.0);
 					}
@@ -1300,7 +1299,8 @@ void CBaseMonster::AdvanceRoute(float distance)
 						entvars_t* pevDoor = WorldGraph.m_pLinkPool[iLink].m_pLinkEnt;
 						if (pevDoor)
 						{
-							m_flMoveWaitFinished = OpenDoorAndWait(pevDoor);
+							auto door = CBaseEntity::Instance(pevDoor);
+							m_flMoveWaitFinished = OpenDoorAndWait(door);
 							//							AILogger->trace("Waiting for door {:.2f}", m_flMoveWaitFinished-gpGlobals->time);
 						}
 					}
@@ -2947,7 +2947,7 @@ void CBaseMonster::CorpseFallThink()
 		SetThink(nullptr);
 
 		SetSequenceBox();
-		UTIL_SetOrigin(pev, pev->origin); // link into world.
+		SetOrigin(pev->origin); // link into world.
 	}
 	else
 		pev->nextthink = gpGlobals->time + 0.1;
@@ -2969,7 +2969,7 @@ void CBaseMonster::MonsterInitDead()
 	pev->deadflag = DEAD_DEAD;
 
 	SetSize(g_vecZero, g_vecZero);
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 
 	// Setup health counters, etc.
 	BecomeDead();

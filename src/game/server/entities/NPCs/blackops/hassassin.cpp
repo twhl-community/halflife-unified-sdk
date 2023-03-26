@@ -220,7 +220,7 @@ void CHAssassin::HandleAnimEvent(MonsterEvent_t* pEvent)
 	case ASSASSIN_AE_TOSS1:
 	{
 		UTIL_MakeVectors(pev->angles);
-		CGrenade::ShootTimed(pev, pev->origin + gpGlobals->v_forward * 34 + Vector(0, 0, 32), m_vecTossVelocity, 2.0);
+		CGrenade::ShootTimed(this, pev->origin + gpGlobals->v_forward * 34 + Vector(0, 0, 32), m_vecTossVelocity, 2.0);
 
 		m_flNextGrenadeCheck = gpGlobals->time + 6; // wait six seconds before even looking again to see if a grenade can be thrown.
 		m_fThrowGrenade = false;
@@ -580,7 +580,7 @@ bool CHAssassin::CheckRangeAttack2(float flDot, float flDist)
 
 	if (m_flNextGrenadeCheck < gpGlobals->time && !HasConditions(bits_COND_ENEMY_OCCLUDED) && flDist <= 512 /* && flDot >= 0.5 */ /* && NoFriendlyFire() */)
 	{
-		Vector vecToss = VecCheckThrow(pev, GetGunPosition(), m_hEnemy->Center(), flDist, 0.5); // use dist as speed to get there in 1 second
+		Vector vecToss = VecCheckThrow(this, GetGunPosition(), m_hEnemy->Center(), flDist, 0.5); // use dist as speed to get there in 1 second
 
 		if (vecToss != g_vecZero)
 		{

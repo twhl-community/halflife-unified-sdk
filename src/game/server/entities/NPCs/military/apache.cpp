@@ -58,7 +58,7 @@ void CApache::Spawn()
 
 	SetModel(STRING(pev->model));
 	SetSize(Vector(-32, -32, -64), Vector(32, 32, 0));
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 
 	pev->flags |= FL_MONSTER;
 	pev->takedamage = DAMAGE_AIM;
@@ -938,7 +938,7 @@ void CApacheHVR::Spawn()
 
 	SetModel("models/HVR.mdl");
 	SetSize(Vector(0, 0, 0), Vector(0, 0, 0));
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 
 	SetThink(&CApacheHVR::IgniteThink);
 	SetTouch(&CApacheHVR::ExplodeTouch);

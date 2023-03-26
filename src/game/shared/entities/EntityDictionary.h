@@ -131,7 +131,7 @@ protected:
 		// allocate entity if necessary
 		if (pev == nullptr)
 		{
-			pev = VARS(CREATE_ENTITY());
+			pev = &CREATE_ENTITY()->v;
 		}
 
 		// Replicate the ALLOC_PRIVATE engine function's behavior.

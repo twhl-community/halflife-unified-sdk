@@ -100,7 +100,7 @@ void CGrappleTip::Spawn()
 
 	SetSize(g_vecZero, g_vecZero);
 
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 
 	SetThink(&CGrappleTip::FlyThink);
 	SetTouch(&CGrappleTip::TongueTouch);
@@ -302,7 +302,7 @@ CGrappleTip::TargetClass CGrappleTip::ClassifyTarget(CBaseEntity* pTarget)
 
 void CGrappleTip::SetPosition(const Vector& vecOrigin, const Vector& vecAngles, CBaseEntity* pOwner)
 {
-	UTIL_SetOrigin(pev, vecOrigin);
+	SetOrigin(vecOrigin);
 	pev->angles = vecAngles;
 	pev->owner = pOwner->edict();
 }

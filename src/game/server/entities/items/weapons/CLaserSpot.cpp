@@ -37,7 +37,7 @@ void CLaserSpot::Spawn()
 	pev->renderamt = 255;
 
 	SetModel("sprites/laserdot.spr");
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 }
 
 void CLaserSpot::Suspend(float flSuspendTime)

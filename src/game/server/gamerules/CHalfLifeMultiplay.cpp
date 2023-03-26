@@ -325,7 +325,7 @@ bool CHalfLifeMultiplay::ClientConnected(edict_t* pEntity, const char* pszName, 
 					RespawnPlayerCTFPowerups(pPlayer, true);
 				}
 
-				ClientPrint(pPlayer->pev, HUD_PRINTCENTER, "#CTFGameReset");
+				ClientPrint(pPlayer, HUD_PRINTCENTER, "#CTFGameReset");
 			}
 		}
 	}

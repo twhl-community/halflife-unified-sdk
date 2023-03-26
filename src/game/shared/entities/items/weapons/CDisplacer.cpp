@@ -354,7 +354,7 @@ void CDisplacer::AltFireThink()
 
 		UTIL_TraceLine(pDestination->pev->origin, vecEnd, ignore_monsters, edict(), &tr);
 
-		UTIL_SetOrigin(m_pPlayer->pev, tr.vecEndPos + Vector(0, 0, 37));
+		m_pPlayer->SetOrigin(tr.vecEndPos + Vector(0, 0, 37));
 	}
 
 	if (!FNullEnt(pDestination))
@@ -368,7 +368,7 @@ void CDisplacer::AltFireThink()
 			vecNewOrigin.z += 37;
 		}
 
-		UTIL_SetOrigin(m_pPlayer->pev, vecNewOrigin);
+		m_pPlayer->SetOrigin(vecNewOrigin);
 
 		m_pPlayer->pev->angles = pDestination->pev->angles;
 

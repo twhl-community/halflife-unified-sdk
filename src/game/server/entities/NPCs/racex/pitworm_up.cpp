@@ -333,7 +333,7 @@ void COFPitWormUp::Spawn()
 
 	SetSize({-32, -32, 0}, {32, 32, 64});
 
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 
 	pev->flags |= FL_MONSTER;
 	pev->takedamage = DAMAGE_AIM;
@@ -1363,7 +1363,7 @@ void COFPitWormSteamTrigger::Spawn()
 	pev->solid = SOLID_NOT;
 	pev->movetype = MOVETYPE_NONE;
 	pev->effects = EF_NODRAW;
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 }
 
 void COFPitWormSteamTrigger::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
@@ -1605,7 +1605,7 @@ void COFPitWormGibShooter::Spawn()
 		m_flDelay = 0.1;
 	}
 
-	SetMovedir(pev);
+	SetMovedir(this);
 	pev->body = MODEL_FRAMES(m_iGibModelIndex);
 }
 
@@ -2352,7 +2352,7 @@ void COFPitWorm::HandleAnimEvent(MonsterEvent_t* pEvent)
 	{
 		pev->flags &= ~FL_ONGROUND;
 
-		UTIL_SetOrigin(pev, pev->origin + Vector(0, 0, 1));
+		SetOrigin(pev->origin + Vector(0, 0, 1));
 		UTIL_MakeVectors(pev->angles);
 		pev->velocity = gpGlobals->v_forward * 200 + gpGlobals->v_up * 500;
 	}

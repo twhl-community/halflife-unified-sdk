@@ -274,7 +274,7 @@ void CMortar::MortarExplode()
 
 	// ExplodeModel( pev->origin, 400, g_sModelIndexShrapnel, 30 );
 
-	RadiusDamage(pev, VARS(pev->owner), pev->dmg, CLASS_NONE, DMG_BLAST);
+	RadiusDamage(this, GetOwner(), pev->dmg, CLASS_NONE, DMG_BLAST);
 
 	/*
 	if ( RANDOM_FLOAT ( 0 , 1 ) < 0.5 )
@@ -303,6 +303,6 @@ void CMortar::ShootTimed(EVARS* pevOwner, Vector vecStart, float time)
 
 	pMortar->pev->nextthink = gpGlobals->time + time;
 
-	UTIL_SetOrigin(pMortar->pev, tr.vecEndPos);
+	pMortar->SetOrigin(tr.vecEndPos);
 }
 #endif

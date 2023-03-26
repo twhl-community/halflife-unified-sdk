@@ -518,7 +518,7 @@ LINK_ENTITY_TO_CLASS(trigger_monsterjump, CTriggerMonsterJump);
 
 void CTriggerMonsterJump::Spawn()
 {
-	SetMovedir(pev);
+	SetMovedir(this);
 
 	InitTrigger();
 
@@ -529,7 +529,7 @@ void CTriggerMonsterJump::Spawn()
 	if (!FStringNull(pev->targetname))
 	{ // if targetted, spawn turned off
 		pev->solid = SOLID_NOT;
-		UTIL_SetOrigin(pev, pev->origin); // Unlink from trigger list
+		SetOrigin(pev->origin); // Unlink from trigger list
 		SetUse(&CTriggerMonsterJump::ToggleUse);
 	}
 }
@@ -537,29 +537,27 @@ void CTriggerMonsterJump::Spawn()
 void CTriggerMonsterJump::Think()
 {
 	pev->solid = SOLID_NOT;			  // kill the trigger for now !!!UNDONE
-	UTIL_SetOrigin(pev, pev->origin); // Unlink from trigger list
+	SetOrigin(pev->origin); // Unlink from trigger list
 	SetThink(nullptr);
 }
 
 void CTriggerMonsterJump::Touch(CBaseEntity* pOther)
 {
-	entvars_t* pevOther = pOther->pev;
-
-	if (!FBitSet(pevOther->flags, FL_MONSTER))
+	if (!FBitSet(pOther->pev->flags, FL_MONSTER))
 	{ // touched by a non-monster.
 		return;
 	}
 
-	pevOther->origin.z += 1;
+	pOther->pev->origin.z += 1;
 
-	if (FBitSet(pevOther->flags, FL_ONGROUND))
+	if (FBitSet(pOther->pev->flags, FL_ONGROUND))
 	{ // clear the onground so physics don't bitch
-		pevOther->flags &= ~FL_ONGROUND;
+		pOther->pev->flags &= ~FL_ONGROUND;
 	}
 
 	// toss the monster!
-	pevOther->velocity = pev->movedir * pev->speed;
-	pevOther->velocity.z += m_flHeight;
+	pOther->pev->velocity = pev->movedir * pev->speed;
+	pOther->pev->velocity.z += m_flHeight;
 	pev->nextthink = gpGlobals->time;
 }
 
@@ -586,7 +584,7 @@ void CTriggerHurt::Spawn()
 	if (FBitSet(pev->spawnflags, SF_TRIGGER_HURT_START_OFF)) // if flagged to Start Turned Off, make trigger nonsolid.
 		pev->solid = SOLID_NOT;
 
-	UTIL_SetOrigin(pev, pev->origin); // Link into the list
+	SetOrigin(pev->origin); // Link into the list
 }
 
 void CTriggerHurt::RadiationThink()
@@ -595,7 +593,6 @@ void CTriggerHurt::RadiationThink()
 	edict_t* pentPlayer;
 	CBasePlayer* pPlayer = nullptr;
 	float flRange;
-	entvars_t* pevTarget;
 	Vector vecSpot1;
 	Vector vecSpot2;
 	Vector vecRange;
@@ -624,12 +621,10 @@ void CTriggerHurt::RadiationThink()
 
 		pPlayer = GET_PRIVATE<CBasePlayer>(pentPlayer);
 
-		pevTarget = VARS(pentPlayer);
-
 		// get range to player;
 
 		vecSpot1 = (pev->absmin + pev->absmax) * 0.5;
-		vecSpot2 = (pevTarget->absmin + pevTarget->absmax) * 0.5;
+		vecSpot2 = (pPlayer->pev->absmin + pPlayer->pev->absmax) * 0.5;
 
 		vecRange = vecSpot1 - vecSpot2;
 		flRange = vecRange.Length();
@@ -658,7 +653,7 @@ void CBaseTrigger::ToggleUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_
 	{ // turn the trigger off
 		pev->solid = SOLID_NOT;
 	}
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 }
 
 void CBaseTrigger::HurtTouch(CBaseEntity* pOther)
@@ -1031,15 +1026,13 @@ void CTriggerPush::Spawn()
 
 	SetUse(&CTriggerPush::ToggleUse);
 
-	UTIL_SetOrigin(pev, pev->origin); // Link into the list
+	SetOrigin(pev->origin); // Link into the list
 }
 
 void CTriggerPush::Touch(CBaseEntity* pOther)
 {
-	entvars_t* pevToucher = pOther->pev;
-
 	// UNDONE: Is there a better way than health to detect things that have physics? (clients/monsters)
-	switch (pevToucher->movetype)
+	switch (pOther->pev->movetype)
 	{
 	case MOVETYPE_NONE:
 	case MOVETYPE_PUSH:
@@ -1048,36 +1041,34 @@ void CTriggerPush::Touch(CBaseEntity* pOther)
 		return;
 	}
 
-	if (pevToucher->solid != SOLID_NOT && pevToucher->solid != SOLID_BSP)
+	if (pOther->pev->solid != SOLID_NOT && pOther->pev->solid != SOLID_BSP)
 	{
 		// Instant trigger, just transfer velocity and remove
 		if (FBitSet(pev->spawnflags, SF_TRIG_PUSH_ONCE))
 		{
-			pevToucher->velocity = pevToucher->velocity + (pev->speed * pev->movedir);
-			if (pevToucher->velocity.z > 0)
-				pevToucher->flags &= ~FL_ONGROUND;
+			pOther->pev->velocity = pOther->pev->velocity + (pev->speed * pev->movedir);
+			if (pOther->pev->velocity.z > 0)
+				pOther->pev->flags &= ~FL_ONGROUND;
 			UTIL_Remove(this);
 		}
 		else
 		{ // Push field, transfer to base velocity
 			Vector vecPush = (pev->speed * pev->movedir);
-			if ((pevToucher->flags & FL_BASEVELOCITY) != 0)
-				vecPush = vecPush + pevToucher->basevelocity;
+			if ((pOther->pev->flags & FL_BASEVELOCITY) != 0)
+				vecPush = vecPush + pOther->pev->basevelocity;
 
-			pevToucher->basevelocity = vecPush;
+			pOther->pev->basevelocity = vecPush;
 
-			pevToucher->flags |= FL_BASEVELOCITY;
-			// Logger->debug("Vel {}, base {}", pevToucher->velocity.z, pevToucher->basevelocity.z);
+			pOther->pev->flags |= FL_BASEVELOCITY;
+			// Logger->debug("Vel {}, base {}", pOther->pev->velocity.z, pOther->pev->basevelocity.z);
 		}
 	}
 }
 
 void CBaseTrigger::TeleportTouch(CBaseEntity* pOther)
 {
-	entvars_t* pevToucher = pOther->pev;
-
 	// Only teleport monsters or clients
-	if (!FBitSet(pevToucher->flags, FL_CLIENT | FL_MONSTER))
+	if (!FBitSet(pOther->pev->flags, FL_CLIENT | FL_MONSTER))
 		return;
 
 	if (!UTIL_IsMasterTriggered(m_sMaster, pOther))
@@ -1085,7 +1076,7 @@ void CBaseTrigger::TeleportTouch(CBaseEntity* pOther)
 
 	if ((pev->spawnflags & SF_TRIGGER_ALLOWMONSTERS) == 0)
 	{ // no monsters allowed!
-		if (FBitSet(pevToucher->flags, FL_MONSTER))
+		if (FBitSet(pOther->pev->flags, FL_MONSTER))
 		{
 			return;
 		}
@@ -1112,19 +1103,19 @@ void CBaseTrigger::TeleportTouch(CBaseEntity* pOther)
 
 	tmp.z++;
 
-	pevToucher->flags &= ~FL_ONGROUND;
+	pOther->pev->flags &= ~FL_ONGROUND;
 
-	UTIL_SetOrigin(pevToucher, tmp);
+	pOther->SetOrigin(tmp);
 
-	pevToucher->angles = target->pev->angles;
+	pOther->pev->angles = target->pev->angles;
 
 	if (pOther->IsPlayer())
 	{
-		pevToucher->v_angle = target->pev->angles;
+		pOther->pev->v_angle = target->pev->angles;
 	}
 
-	pevToucher->fixangle = FIXANGLE_ABSOLUTE;
-	pevToucher->velocity = pevToucher->basevelocity = g_vecZero;
+	pOther->pev->fixangle = FIXANGLE_ABSOLUTE;
+	pOther->pev->velocity = pOther->pev->basevelocity = g_vecZero;
 }
 
 class CTriggerTeleport : public CBaseTrigger
@@ -1397,7 +1388,7 @@ void CTriggerCamera::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE
 	// copy over player information
 	if (FBitSet(pev->spawnflags, SF_CAMERA_PLAYER_POSITION))
 	{
-		UTIL_SetOrigin(pev, pActivator->pev->origin + pActivator->pev->view_ofs);
+		SetOrigin(pActivator->pev->origin + pActivator->pev->view_ofs);
 		pev->angles.x = -pActivator->pev->angles.x;
 		pev->angles.y = pActivator->pev->angles.y;
 		pev->angles.z = 0;
@@ -1701,7 +1692,7 @@ void CTriggerXenReturn::ReturnTouch(CBaseEntity* pOther)
 		vecDest.z -= pPlayer->pev->mins.z;
 		vecDest.z += 1;
 
-		UTIL_SetOrigin(pPlayer->pev, vecDest);
+		pPlayer->SetOrigin(vecDest);
 
 		pPlayer->pev->angles = pTarget->pev->angles;
 		pPlayer->pev->v_angle = pTarget->pev->angles;
@@ -1783,7 +1774,7 @@ void COFTriggerGeneWormHit::Spawn()
 		pev->solid = SOLID_NOT;
 	}
 
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 
 	pev->dmg = GetSkillFloat("geneworm_dmg_hit"sv);
 	m_flLastDamageTime = gpGlobals->time;

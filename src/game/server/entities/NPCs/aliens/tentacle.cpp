@@ -296,7 +296,7 @@ void CTentacle::Spawn()
 	m_MonsterState = MONSTERSTATE_IDLE;
 
 	// SetThink( Test );
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 }
 
 void CTentacle::Precache()

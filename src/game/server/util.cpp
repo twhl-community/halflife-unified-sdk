@@ -49,24 +49,24 @@ CBaseEntity* UTIL_FindEntityForward(CBaseEntity* pMe)
 	return nullptr;
 }
 
-void UTIL_ParametricRocket(entvars_t* pev, Vector vecOrigin, Vector vecAngles, edict_t* owner)
+void UTIL_ParametricRocket(CBaseEntity* entity, Vector vecOrigin, Vector vecAngles, edict_t* owner)
 {
-	pev->startpos = vecOrigin;
+	entity->pev->startpos = vecOrigin;
 	// Trace out line to end pos
 	TraceResult tr;
 	UTIL_MakeVectors(vecAngles);
-	UTIL_TraceLine(pev->startpos, pev->startpos + gpGlobals->v_forward * 8192, ignore_monsters, owner, &tr);
-	pev->endpos = tr.vecEndPos;
+	UTIL_TraceLine(entity->pev->startpos, entity->pev->startpos + gpGlobals->v_forward * 8192, ignore_monsters, owner, &tr);
+	entity->pev->endpos = tr.vecEndPos;
 
 	// Now compute how long it will take based on current velocity
-	Vector vecTravel = pev->endpos - pev->startpos;
+	Vector vecTravel = entity->pev->endpos - entity->pev->startpos;
 	float travelTime = 0.0;
-	if (pev->velocity.Length() > 0)
+	if (entity->pev->velocity.Length() > 0)
 	{
-		travelTime = vecTravel.Length() / pev->velocity.Length();
+		travelTime = vecTravel.Length() / entity->pev->velocity.Length();
 	}
-	pev->starttime = gpGlobals->time;
-	pev->impacttime = gpGlobals->time + travelTime;
+	entity->pev->starttime = gpGlobals->time;
+	entity->pev->impacttime = gpGlobals->time + travelTime;
 }
 
 // Normal overrides
@@ -623,9 +623,9 @@ void UTIL_ClientPrintAll(int msg_dest, const char* msg_name, const char* param1,
 	MESSAGE_END();
 }
 
-void ClientPrint(entvars_t* client, int msg_dest, const char* msg_name, const char* param1, const char* param2, const char* param3, const char* param4)
+void ClientPrint(CBasePlayer* client, int msg_dest, const char* msg_name, const char* param1, const char* param2, const char* param3, const char* param4)
 {
-	MESSAGE_BEGIN(MSG_ONE, gmsgTextMsg, nullptr, client);
+	MESSAGE_BEGIN(MSG_ONE, gmsgTextMsg, nullptr, client->edict());
 	WRITE_BYTE(msg_dest);
 	WRITE_STRING(msg_name);
 
@@ -730,14 +730,6 @@ TraceResult UTIL_GetGlobalTrace()
 float UTIL_VecToYaw(const Vector& vec)
 {
 	return VEC_TO_YAW(vec);
-}
-
-
-void UTIL_SetOrigin(entvars_t* pev, const Vector& vecOrigin)
-{
-	edict_t* ent = ENT(pev);
-	if (ent)
-		SET_ORIGIN(ent, vecOrigin);
 }
 
 void UTIL_ParticleEffect(const Vector& vecOrigin, const Vector& vecDirection, unsigned int ulColor, unsigned int ulCount)
@@ -1324,6 +1316,30 @@ void UTIL_StripToken(const char* pKey, char* pDest)
 		i++;
 	}
 	pDest[i] = 0;
+}
+
+void SetMovedir(CBaseEntity* entity)
+{
+	if (entity->pev->angles == Vector(0, -1, 0))
+	{
+		entity->pev->movedir = Vector(0, 0, 1);
+	}
+	else if (entity->pev->angles == Vector(0, -2, 0))
+	{
+		entity->pev->movedir = Vector(0, 0, -1);
+	}
+	else
+	{
+		UTIL_MakeVectors(entity->pev->angles);
+		entity->pev->movedir = gpGlobals->v_forward;
+	}
+
+	entity->pev->angles = g_vecZero;
+}
+
+Vector VecBModelOrigin(CBaseEntity* bModel)
+{
+	return bModel->pev->absmin + (bModel->pev->size * 0.5);
 }
 
 bool UTIL_IsMultiplayer()

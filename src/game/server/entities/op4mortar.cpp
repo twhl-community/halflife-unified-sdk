@@ -67,7 +67,7 @@ void CMortarShell::Spawn()
 	SetModel("models/mortarshell.mdl");
 
 	SetSize(g_vecZero, g_vecZero);
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 
 	SetThink(&CMortarShell::BurnThink);
 	SetTouch(&CMortarShell::MortarExplodeTouch);
@@ -205,7 +205,7 @@ CMortarShell* CMortarShell::CreateMortarShell(Vector vecOrigin, Vector vecAngles
 {
 	auto pShell = g_EntityDictionary->Create<CMortarShell>("mortar_shell");
 
-	UTIL_SetOrigin(pShell->pev, vecOrigin);
+	pShell->SetOrigin(vecOrigin);
 
 	pShell->pev->angles = vecAngles;
 	pShell->m_velocity = velocity;
@@ -369,7 +369,7 @@ void COp4Mortar::Spawn()
 {
 	Precache();
 
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 
 	SetModel(STRING(pev->model));
 
@@ -448,7 +448,7 @@ void COp4Mortar::MortarThink()
 					Vector vecPos, vecAngle;
 					GetAttachment(0, vecPos, vecAngle);
 
-					m_vIdealGunVector = VecCheckThrow(pev, vecPos, pEnemy->pev->origin, m_velocity / 2);
+					m_vIdealGunVector = VecCheckThrow(this, vecPos, pEnemy->pev->origin, m_velocity / 2);
 
 					m_vIdealGunAngle = UTIL_VecToAngles(m_vIdealGunVector);
 
@@ -829,7 +829,7 @@ void COp4MortarController::Spawn()
 	pev->solid = SOLID_NOT;
 	pev->movetype = MOVETYPE_PUSH;
 
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 
 	SetModel(STRING(pev->model));
 

@@ -41,7 +41,6 @@ inline enginefuncs_t g_engfuncs;
 #define ENT_IS_ON_FLOOR (*g_engfuncs.pfnEntIsOnFloor)
 #define DROP_TO_FLOOR (*g_engfuncs.pfnDropToFloor)
 #define WALK_MOVE (*g_engfuncs.pfnWalkMove)
-#define SET_ORIGIN (*g_engfuncs.pfnSetOrigin)
 #define EMIT_SOUND_DYN2 (*g_engfuncs.pfnEmitSound)
 #define BUILD_SOUND_MSG (*g_engfuncs.pfnBuildSoundMsg)
 #define TRACE_LINE (*g_engfuncs.pfnTraceLine)

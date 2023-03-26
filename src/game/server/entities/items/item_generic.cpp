@@ -110,7 +110,7 @@ void CGenericItem::Spawn()
 		ExtractBbox(sequence, mins, maxs);
 
 		SetSize(mins, maxs);
-		UTIL_SetOrigin(pev, pev->origin);
+		SetOrigin(pev->origin);
 	}
 }
 

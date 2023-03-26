@@ -38,7 +38,7 @@ void CGib::LimitVelocity()
 		pev->velocity = pev->velocity.Normalize() * 1500; // This should really be sv_maxvelocity * 0.75 or something
 }
 
-void CGib::SpawnStickyGibs(entvars_t* pevVictim, Vector vecOrigin, int cGibs)
+void CGib::SpawnStickyGibs(CBaseEntity* victim, Vector vecOrigin, int cGibs)
 {
 	int i;
 
@@ -55,16 +55,16 @@ void CGib::SpawnStickyGibs(entvars_t* pevVictim, Vector vecOrigin, int cGibs)
 		pGib->Spawn("models/stickygib.mdl");
 		pGib->pev->body = RANDOM_LONG(0, 2);
 
-		if (pevVictim)
+		if (victim)
 		{
 			pGib->pev->origin.x = vecOrigin.x + RANDOM_FLOAT(-3, 3);
 			pGib->pev->origin.y = vecOrigin.y + RANDOM_FLOAT(-3, 3);
 			pGib->pev->origin.z = vecOrigin.z + RANDOM_FLOAT(-3, 3);
 
 			/*
-			pGib->pev->origin.x = pevVictim->absmin.x + pevVictim->size.x * (RANDOM_FLOAT ( 0 , 1 ) );
-			pGib->pev->origin.y = pevVictim->absmin.y + pevVictim->size.y * (RANDOM_FLOAT ( 0 , 1 ) );
-			pGib->pev->origin.z = pevVictim->absmin.z + pevVictim->size.z * (RANDOM_FLOAT ( 0 , 1 ) );
+			pGib->pev->origin.x = victim->pev->absmin.x + victim->pev->size.x * (RANDOM_FLOAT ( 0 , 1 ) );
+			pGib->pev->origin.y = victim->pev->absmin.y + victim->pev->size.y * (RANDOM_FLOAT ( 0 , 1 ) );
+			pGib->pev->origin.z = victim->pev->absmin.z + victim->pev->size.z * (RANDOM_FLOAT ( 0 , 1 ) );
 			*/
 
 			// make the gib fly away from the attack vector
@@ -81,13 +81,13 @@ void CGib::SpawnStickyGibs(entvars_t* pevVictim, Vector vecOrigin, int cGibs)
 			pGib->pev->avelocity.y = RANDOM_FLOAT(250, 400);
 
 			// copy owner's blood color
-			pGib->m_bloodColor = (CBaseEntity::Instance(pevVictim))->BloodColor();
+			pGib->m_bloodColor = victim->BloodColor();
 
-			if (pevVictim->health > -50)
+			if (victim->pev->health > -50)
 			{
 				pGib->pev->velocity = pGib->pev->velocity * 0.7;
 			}
-			else if (pevVictim->health > -200)
+			else if (victim->pev->health > -200)
 			{
 				pGib->pev->velocity = pGib->pev->velocity * 2;
 			}
@@ -107,7 +107,7 @@ void CGib::SpawnStickyGibs(entvars_t* pevVictim, Vector vecOrigin, int cGibs)
 	}
 }
 
-void CGib::SpawnHeadGib(entvars_t* pevVictim)
+void CGib::SpawnHeadGib(CBaseEntity* victim)
 {
 	CGib* pGib = g_EntityDictionary->Create<CGib>("gib");
 
@@ -122,19 +122,18 @@ void CGib::SpawnHeadGib(entvars_t* pevVictim)
 		pGib->pev->body = 0;
 	}
 
-	if (pevVictim)
+	if (victim)
 	{
-		pGib->pev->origin = pevVictim->origin + pevVictim->view_ofs;
+		pGib->pev->origin = victim->pev->origin + victim->pev->view_ofs;
 
 		edict_t* pentPlayer = FIND_CLIENT_IN_PVS(pGib->edict());
 
 		if (RANDOM_LONG(0, 100) <= 5 && pentPlayer)
 		{
 			// 5% chance head will be thrown at player's face.
-			entvars_t* pevPlayer;
+			auto player = GET_PRIVATE<CBaseEntity>(pentPlayer);
 
-			pevPlayer = VARS(pentPlayer);
-			pGib->pev->velocity = ((pevPlayer->origin + pevPlayer->view_ofs) - pGib->pev->origin).Normalize() * 300;
+			pGib->pev->velocity = ((player->pev->origin + player->pev->view_ofs) - pGib->pev->origin).Normalize() * 300;
 			pGib->pev->velocity.z += 100;
 		}
 		else
@@ -147,13 +146,13 @@ void CGib::SpawnHeadGib(entvars_t* pevVictim)
 		pGib->pev->avelocity.y = RANDOM_FLOAT(100, 300);
 
 		// copy owner's blood color
-		pGib->m_bloodColor = (CBaseEntity::Instance(pevVictim))->BloodColor();
+		pGib->m_bloodColor = victim->BloodColor();
 
-		if (pevVictim->health > -50)
+		if (victim->pev->health > -50)
 		{
 			pGib->pev->velocity = pGib->pev->velocity * 0.7;
 		}
-		else if (pevVictim->health > -200)
+		else if (victim->pev->health > -200)
 		{
 			pGib->pev->velocity = pGib->pev->velocity * 2;
 		}
@@ -165,7 +164,7 @@ void CGib::SpawnHeadGib(entvars_t* pevVictim)
 	pGib->LimitVelocity();
 }
 
-void CGib::SpawnRandomGibs(entvars_t* pevVictim, int cGibs, const GibData& gibData)
+void CGib::SpawnRandomGibs(CBaseEntity* victim, int cGibs, const GibData& gibData)
 {
 	// Track the number of uses of a particular submodel so we can avoid spawning too many of the same
 	auto pLimitTracking = gibData.Limits != nullptr ? reinterpret_cast<int*>(stackalloc(sizeof(int) * gibData.SubModelCount)) : nullptr;
@@ -209,12 +208,12 @@ void CGib::SpawnRandomGibs(entvars_t* pevVictim, int cGibs, const GibData& gibDa
 			}
 		}
 
-		if (pevVictim)
+		if (victim)
 		{
 			// spawn the gib somewhere in the monster's bounding volume
-			pGib->pev->origin.x = pevVictim->absmin.x + pevVictim->size.x * (RANDOM_FLOAT(0, 1));
-			pGib->pev->origin.y = pevVictim->absmin.y + pevVictim->size.y * (RANDOM_FLOAT(0, 1));
-			pGib->pev->origin.z = pevVictim->absmin.z + pevVictim->size.z * (RANDOM_FLOAT(0, 1)) + 1; // absmin.z is in the floor because the engine subtracts 1 to enlarge the box
+			pGib->pev->origin.x = victim->pev->absmin.x + victim->pev->size.x * (RANDOM_FLOAT(0, 1));
+			pGib->pev->origin.y = victim->pev->absmin.y + victim->pev->size.y * (RANDOM_FLOAT(0, 1));
+			pGib->pev->origin.z = victim->pev->absmin.z + victim->pev->size.z * (RANDOM_FLOAT(0, 1)) + 1; // absmin.z is in the floor because the engine subtracts 1 to enlarge the box
 
 			// make the gib fly away from the attack vector
 			pGib->pev->velocity = g_vecAttackDir * -1;
@@ -230,13 +229,13 @@ void CGib::SpawnRandomGibs(entvars_t* pevVictim, int cGibs, const GibData& gibDa
 			pGib->pev->avelocity.y = RANDOM_FLOAT(100, 300);
 
 			// copy owner's blood color
-			pGib->m_bloodColor = (CBaseEntity::Instance(pevVictim))->BloodColor();
+			pGib->m_bloodColor = victim->BloodColor();
 
-			if (pevVictim->health > -50)
+			if (victim->pev->health > -50)
 			{
 				pGib->pev->velocity = pGib->pev->velocity * 0.7;
 			}
-			else if (pevVictim->health > -200)
+			else if (victim->pev->health > -200)
 			{
 				pGib->pev->velocity = pGib->pev->velocity * 2;
 			}
@@ -258,9 +257,9 @@ void CGib::SpawnRandomGibs(entvars_t* pevVictim, int cGibs, const GibData& gibDa
 const GibData HumanGibs = {"models/hgibs.mdl", 1, HUMAN_GIB_COUNT};
 const GibData AlienGibs = {"models/agibs.mdl", 0, ALIEN_GIB_COUNT};
 
-void CGib::SpawnRandomGibs(entvars_t* pevVictim, int cGibs, bool human)
+void CGib::SpawnRandomGibs(CBaseEntity* victim, int cGibs, bool human)
 {
-	SpawnRandomGibs(pevVictim, cGibs, human ? HumanGibs : AlienGibs);
+	SpawnRandomGibs(victim, cGibs, human ? HumanGibs : AlienGibs);
 }
 
 bool CBaseMonster::HasHumanGibs()
@@ -317,8 +316,8 @@ void CBaseMonster::GibMonster()
 	{
 		if (CVAR_GET_FLOAT("violence_hgibs") != 0) // Only the player will ever get here
 		{
-			CGib::SpawnHeadGib(pev);
-			CGib::SpawnRandomGibs(pev, 4, true); // throw some human gibs.
+			CGib::SpawnHeadGib(this);
+			CGib::SpawnRandomGibs(this, 4, true); // throw some human gibs.
 		}
 		gibbed = true;
 	}
@@ -326,7 +325,7 @@ void CBaseMonster::GibMonster()
 	{
 		if (CVAR_GET_FLOAT("violence_agibs") != 0) // Should never get here, but someone might call it directly
 		{
-			CGib::SpawnRandomGibs(pev, 4, false); // Throw alien gibs
+			CGib::SpawnRandomGibs(this, 4, false); // Throw alien gibs
 		}
 		gibbed = true;
 	}

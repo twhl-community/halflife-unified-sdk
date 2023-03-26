@@ -81,7 +81,7 @@ public:
 	bool IsLockedByMaster();
 
 	static float AxisValue(int flags, const Vector& angles);
-	static void AxisDir(entvars_t* pev);
+	static void AxisDir(CBaseEntity* entity);
 	static float AxisDelta(int flags, const Vector& angle1, const Vector& angle2);
 
 	string_t m_sMaster; // If this button has a master switch, this is the targetname.

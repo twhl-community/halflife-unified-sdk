@@ -226,7 +226,7 @@ void CFlockingFlyerFlock::SpawnFlock()
 		vecSpot = pev->origin + vecSpot;
 
 		pBoid->pev->model = pev->model;
-		UTIL_SetOrigin(pBoid->pev, vecSpot);
+		pBoid->SetOrigin(vecSpot);
 		pBoid->pev->movetype = MOVETYPE_FLY;
 		pBoid->SpawnCommonCode();
 		pBoid->pev->flags &= ~FL_ONGROUND;
@@ -636,7 +636,7 @@ void CFlockingFlyer::FlockLeaderThink()
 	// maybe it did, though.
 	if (FBitSet(pev->flags, FL_ONGROUND))
 	{
-		UTIL_SetOrigin(pev, pev->origin + Vector(0, 0, 1));
+		SetOrigin(pev->origin + Vector(0, 0, 1));
 		pev->velocity.z = 0;
 	}
 

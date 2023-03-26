@@ -43,7 +43,7 @@ class CSquidSpit : public CBaseEntity
 public:
 	void Spawn() override;
 
-	static void Shoot(entvars_t* pevOwner, Vector vecStart, Vector vecVelocity);
+	static void Shoot(CBaseEntity* owner, Vector vecStart, Vector vecVelocity);
 	void Touch(CBaseEntity* pOther) override;
 	void EXPORT Animate();
 
@@ -93,14 +93,14 @@ void CSquidSpit::Animate()
 	}
 }
 
-void CSquidSpit::Shoot(entvars_t* pevOwner, Vector vecStart, Vector vecVelocity)
+void CSquidSpit::Shoot(CBaseEntity* owner, Vector vecStart, Vector vecVelocity)
 {
 	CSquidSpit* pSpit = g_EntityDictionary->Create<CSquidSpit>("squidspit");
 	pSpit->Spawn();
 
-	UTIL_SetOrigin(pSpit->pev, vecStart);
+	pSpit->SetOrigin(vecStart);
 	pSpit->pev->velocity = vecVelocity;
-	pSpit->pev->owner = ENT(pevOwner);
+	pSpit->pev->owner = owner->edict();
 
 	pSpit->SetThink(&CSquidSpit::Animate);
 	pSpit->pev->nextthink = gpGlobals->time + 0.1;
@@ -538,7 +538,7 @@ void CBullsquid::HandleAnimEvent(MonsterEvent_t* pEvent)
 			WRITE_BYTE(25);				   // noise ( client will divide by 100 )
 			MESSAGE_END();
 
-			CSquidSpit::Shoot(pev, vecSpitOffset, vecSpitDir * 900);
+			CSquidSpit::Shoot(this, vecSpitOffset, vecSpitDir * 900);
 		}
 	}
 	break;

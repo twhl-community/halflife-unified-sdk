@@ -85,7 +85,7 @@ void CDisplacerBall::Spawn()
 
 	SetModel("sprites/exit1.spr");
 
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 
 	SetSize(g_vecZero, g_vecZero);
 
@@ -181,7 +181,7 @@ void CDisplacerBall::BallTouch(CBaseEntity* pOther)
 					WRITE_BYTE(pPlayer->m_iCTFScore);
 					MESSAGE_END();
 
-					ClientPrint(pPlayer->pev, HUD_PRINTTALK, "#CTFScorePoint");
+					ClientPrint(pPlayer, HUD_PRINTTALK, "#CTFScorePoint");
 					UTIL_ClientPrintAll(HUD_PRINTNOTIFY, UTIL_VarArgs("%s", STRING(pPlayer->pev->netname)));
 
 					if (pPlayer->m_iTeamNum == CTFTeam::BlackMesa)
@@ -204,7 +204,7 @@ void CDisplacerBall::BallTouch(CBaseEntity* pOther)
 
 		UTIL_TraceLine(pSpawnSpot->pev->origin, pSpawnSpot->pev->origin - Vector(0, 0, 100), ignore_monsters, edict(), &tr);
 
-		UTIL_SetOrigin(pPlayer->pev, tr.vecEndPos + Vector(0, 0, 37));
+		pPlayer->SetOrigin(tr.vecEndPos + Vector(0, 0, 37));
 
 		pPlayer->pev->sequence = pPlayer->LookupActivity(ACT_IDLE);
 
@@ -233,7 +233,7 @@ void CDisplacerBall::BallTouch(CBaseEntity* pOther)
 
 	pev->solid = SOLID_NOT;
 
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 
 	SetThink(&CDisplacerBall::KillThink);
 
@@ -419,7 +419,7 @@ CDisplacerBall* CDisplacerBall::CreateDisplacerBall(const Vector& vecOrigin, con
 {
 	auto pBall = g_EntityDictionary->Create<CDisplacerBall>("displacer_ball");
 
-	UTIL_SetOrigin(pBall->pev, vecOrigin);
+	pBall->SetOrigin(vecOrigin);
 
 	Vector vecNewAngles = vecAngles;
 

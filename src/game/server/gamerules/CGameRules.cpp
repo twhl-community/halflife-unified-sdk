@@ -199,7 +199,7 @@ void CGameRules::BecomeSpectator(CBasePlayer* player, const CommandArgs& args)
 												 (!FStringNull(player->pev->netname) && STRING(player->pev->netname)[0] != 0) ? STRING(player->pev->netname) : "unconnected"));
 	}
 	else
-		ClientPrint(player->pev, HUD_PRINTCONSOLE, "Spectator mode is disabled.\n");
+		ClientPrint(player, HUD_PRINTCONSOLE, "Spectator mode is disabled.\n");
 }
 
 CGameRules* InstallGameRules(CBaseEntity* pWorld)

@@ -70,7 +70,7 @@ void COsprey::Spawn()
 
 	SetModel(STRING(pev->model));
 	SetSize(Vector(-400, -400, -100), Vector(400, 400, 32));
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 
 	// Set FL_FLY so the Osprey model is interpolated.
 	pev->flags |= FL_MONSTER | FL_FLY;
@@ -362,7 +362,7 @@ void COsprey::Flight()
 		Vector ang = (m_ang1) * (1.0 - f) + (m_ang2)*f;
 		m_velocity = m_vel1 * (1.0 - f) + m_vel2 * f;
 
-		UTIL_SetOrigin(pev, pos);
+		SetOrigin(pos);
 		pev->angles = ang;
 	}
 

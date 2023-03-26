@@ -29,6 +29,10 @@ void SkillSystem::Shutdown() {}
 float SkillSystem::GetValue(std::string_view) const { return 0; }
 
 // CBaseEntity Stubs
+void CBaseEntity::SetOrigin(const Vector& origin)
+{
+}
+
 int CBaseEntity::PrecacheModel(const char* s)
 {
 	return UTIL_PrecacheModel(s);
@@ -93,9 +97,8 @@ void UTIL_DecalTrace(TraceResult* pTrace, int decalNumber) {}
 void UTIL_GunshotDecalTrace(TraceResult* pTrace, int decalNumber) {}
 void UTIL_MakeVectors(const Vector& vecAngles) {}
 bool UTIL_IsValidEntity(edict_t* pent) { return true; }
-void UTIL_SetOrigin(entvars_t*, const Vector& org) {}
 void UTIL_ClientPrintAll(int, char const*, char const*, char const*, char const*, char const*) {}
-void ClientPrint(entvars_t* client, int msg_dest, const char* msg_name, const char* param1, const char* param2, const char* param3, const char* param4) {}
+void ClientPrint(CBasePlayer* client, int msg_dest, const char* msg_name, const char* param1, const char* param2, const char* param3, const char* param4) {}
 
 // CBaseToggle Stubs
 bool CBaseToggle::Restore(class CRestore&) { return true; }
@@ -110,8 +113,8 @@ void CGrenade::Killed(CBaseEntity*, int) {}
 void CGrenade::OnCreate() { CBaseMonster::OnCreate(); }
 void CGrenade::Precache() {}
 void CGrenade::Spawn() {}
-CGrenade* CGrenade::ShootTimed(entvars_t* pevOwner, Vector vecStart, Vector vecVelocity, float time) { return nullptr; }
-CGrenade* CGrenade::ShootContact(entvars_t* pevOwner, Vector vecStart, Vector vecVelocity) { return nullptr; }
+CGrenade* CGrenade::ShootTimed(CBaseEntity* owner, Vector vecStart, Vector vecVelocity, float time) { return nullptr; }
+CGrenade* CGrenade::ShootContact(CBaseEntity* owner, Vector vecStart, Vector vecVelocity) { return nullptr; }
 void CGrenade::DetonateUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) {}
 
 void UTIL_Remove(CBaseEntity* pEntity) {}
@@ -163,7 +166,7 @@ bool CBaseMonster::PopEnemy() { return false; }
 void CBaseMonster::SetActivity(Activity NewActivity) {}
 void CBaseMonster::SetSequenceByName(const char* szSequence) {}
 int CBaseMonster::CheckLocalMove(const Vector& vecStart, const Vector& vecEnd, CBaseEntity* pTarget, float* pflDist) { return 0; }
-float CBaseMonster::OpenDoorAndWait(entvars_t* pevDoor) { return 0.0; }
+float CBaseMonster::OpenDoorAndWait(CBaseEntity* door) { return 0.0; }
 void CBaseMonster::AdvanceRoute(float distance) {}
 int CBaseMonster::RouteClassify(int iMoveFlag) { return 0; }
 bool CBaseMonster::BuildRoute(const Vector& vecGoal, int iMoveFlag, CBaseEntity* pTarget) { return false; }

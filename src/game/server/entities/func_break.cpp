@@ -734,7 +734,7 @@ void CBreakable::Die()
 	SetThink(&CBreakable::SUB_Remove);
 	pev->nextthink = pev->ltime + 0.1;
 	if (!FStringNull(m_iszSpawnObject))
-		CBaseEntity::Create(STRING(m_iszSpawnObject), VecBModelOrigin(pev), pev->angles, edict());
+		CBaseEntity::Create(STRING(m_iszSpawnObject), VecBModelOrigin(this), pev->angles, edict());
 
 
 	if (Explodable())
@@ -824,7 +824,7 @@ void CPushable::Spawn()
 	pev->friction = 0;
 
 	pev->origin.z += 1; // Pick up off of the floor
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 
 	// Multiply by area of the box's cross-section (assume 1000 units^3 standard volume)
 	pev->skin = (pev->skin * (pev->maxs.x - pev->mins.x) * (pev->maxs.y - pev->mins.y)) * 0.0005;
@@ -900,15 +900,14 @@ void CPushable::Touch(CBaseEntity* pOther)
 
 void CPushable::Move(CBaseEntity* pOther, bool push)
 {
-	entvars_t* pevToucher = pOther->pev;
 	bool playerTouch = false;
 
 	// Is entity standing on this pushable ?
-	if (FBitSet(pevToucher->flags, FL_ONGROUND) && pevToucher->groundentity && VARS(pevToucher->groundentity) == pev)
+	if (FBitSet(pOther->pev->flags, FL_ONGROUND) && pOther->GetGroundEntity() == this)
 	{
 		// Only push if floating
 		if (pev->waterlevel > WaterLevel::Dry)
-			pev->velocity.z += pevToucher->velocity.z * 0.1;
+			pev->velocity.z += pOther->pev->velocity.z * 0.1;
 
 		return;
 	}
@@ -916,7 +915,7 @@ void CPushable::Move(CBaseEntity* pOther, bool push)
 
 	if (pOther->IsPlayer())
 	{
-		if (push && (pevToucher->button & (IN_FORWARD | IN_USE)) == 0) // Don't push unless the player is pushing forward and NOT use (pull)
+		if (push && (pOther->pev->button & (IN_FORWARD | IN_USE)) == 0) // Don't push unless the player is pushing forward and NOT use (pull)
 			return;
 		playerTouch = true;
 	}
@@ -925,7 +924,7 @@ void CPushable::Move(CBaseEntity* pOther, bool push)
 
 	if (playerTouch)
 	{
-		if ((pevToucher->flags & FL_ONGROUND) == 0) // Don't push away from jumping/falling players unless in water
+		if ((pOther->pev->flags & FL_ONGROUND) == 0) // Don't push away from jumping/falling players unless in water
 		{
 			if (pev->waterlevel < WaterLevel::Feet)
 				return;
@@ -938,8 +937,8 @@ void CPushable::Move(CBaseEntity* pOther, bool push)
 	else
 		factor = 0.25;
 
-	pev->velocity.x += pevToucher->velocity.x * factor;
-	pev->velocity.y += pevToucher->velocity.y * factor;
+	pev->velocity.x += pOther->pev->velocity.x * factor;
+	pev->velocity.y += pOther->pev->velocity.y * factor;
 
 	float length = sqrt(pev->velocity.x * pev->velocity.x + pev->velocity.y * pev->velocity.y);
 	if (push && (length > MaxSpeed()))
@@ -949,8 +948,8 @@ void CPushable::Move(CBaseEntity* pOther, bool push)
 	}
 	if (playerTouch)
 	{
-		pevToucher->velocity.x = pev->velocity.x;
-		pevToucher->velocity.y = pev->velocity.y;
+		pOther->pev->velocity.x = pev->velocity.x;
+		pOther->pev->velocity.y = pev->velocity.y;
 		if ((gpGlobals->time - m_soundTime) > 0.7)
 		{
 			m_soundTime = gpGlobals->time;

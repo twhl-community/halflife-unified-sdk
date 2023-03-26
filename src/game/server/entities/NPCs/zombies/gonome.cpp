@@ -39,11 +39,11 @@ public:
 
 	void EXPORT Animate();
 
-	static void Shoot(entvars_t* pevOwner, Vector vecStart, Vector vecVelocity);
+	static void Shoot(CBaseEntity* owner, Vector vecStart, Vector vecVelocity);
 
 	static COFGonomeGuts* GonomeGutsCreate(const Vector& origin);
 
-	void Launch(entvars_t* pevOwner, Vector vecStart, Vector vecVelocity);
+	void Launch(CBaseEntity* owner, Vector vecStart, Vector vecVelocity);
 
 	int m_maxFrame;
 };
@@ -136,14 +136,14 @@ void COFGonomeGuts::Animate()
 	}
 }
 
-void COFGonomeGuts::Shoot(entvars_t* pevOwner, Vector vecStart, Vector vecVelocity)
+void COFGonomeGuts::Shoot(CBaseEntity* owner, Vector vecStart, Vector vecVelocity)
 {
 	auto pGuts = g_EntityDictionary->Create<COFGonomeGuts>("gonomeguts");
 	pGuts->Spawn();
 
-	UTIL_SetOrigin(pGuts->pev, vecStart);
+	pGuts->SetOrigin(vecStart);
 	pGuts->pev->velocity = vecVelocity;
-	pGuts->pev->owner = ENT(pevOwner);
+	pGuts->pev->owner = owner->edict();
 
 	if (pGuts->m_maxFrame > 0)
 	{
@@ -162,11 +162,11 @@ COFGonomeGuts* COFGonomeGuts::GonomeGutsCreate(const Vector& origin)
 	return pGuts;
 }
 
-void COFGonomeGuts::Launch(entvars_t* pevOwner, Vector vecStart, Vector vecVelocity)
+void COFGonomeGuts::Launch(CBaseEntity* owner, Vector vecStart, Vector vecVelocity)
 {
-	UTIL_SetOrigin(pev, vecStart);
+	SetOrigin(vecStart);
 	pev->velocity = vecVelocity;
-	pev->owner = ENT(pevOwner);
+	pev->owner = owner->edict();
 
 	SetThink(&COFGonomeGuts::Animate);
 	pev->nextthink = gpGlobals->time + 0.1;
@@ -384,7 +384,7 @@ void COFGonome::HandleAnimEvent(MonsterEvent_t* pEvent)
 			m_pGonomeGuts->pev->aiment = nullptr;
 			m_pGonomeGuts->pev->movetype = MOVETYPE_FLY;
 
-			m_pGonomeGuts->Launch(pev, vecGutsPos, direction * 900);
+			m_pGonomeGuts->Launch(this, vecGutsPos, direction * 900);
 		}
 		else
 		{

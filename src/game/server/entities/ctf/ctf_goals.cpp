@@ -66,7 +66,7 @@ void CTFGoal::Spawn()
 	if (0 == m_iGoalState)
 		m_iGoalState = 1;
 
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 
 	SetThink(&CTFGoal::PlaceGoal);
 	pev->nextthink = gpGlobals->time + 0.2;
@@ -158,7 +158,7 @@ void CTFGoalBase::Spawn()
 {
 	pev->movetype = MOVETYPE_TOSS;
 	pev->solid = SOLID_NOT;
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 
 	Vector vecMin;
 	Vector vecMax;
@@ -283,7 +283,7 @@ void CTFGoalFlag::ReturnFlag()
 	pev->effects |= EF_NODRAW;
 	pev->origin = pev->oldorigin;
 
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 
 	if (!FStringNull(pev->model))
 	{
@@ -363,11 +363,11 @@ void CTFGoalFlag::FlagCarryThink()
 
 			if (flagFound)
 			{
-				ClientPrint(player->pev, HUD_PRINTCENTER, "#CTFPickUpFlagP");
+				ClientPrint(player, HUD_PRINTCENTER, "#CTFPickUpFlagP");
 			}
 			else
 			{
-				ClientPrint(player->pev, HUD_PRINTCENTER, "#CTFPickUpFlagG");
+				ClientPrint(player, HUD_PRINTCENTER, "#CTFPickUpFlagG");
 			}
 
 			pev->nextthink = gpGlobals->time + 20.0;
@@ -411,7 +411,7 @@ void CTFGoalFlag::Spawn()
 	{
 		pev->movetype = MOVETYPE_TOSS;
 		pev->solid = SOLID_TRIGGER;
-		UTIL_SetOrigin(pev, pev->origin);
+		SetOrigin(pev->origin);
 
 		Vector vecMax, vecMin;
 		vecMax.x = 16;
@@ -450,7 +450,7 @@ void CTFGoalFlag::Spawn()
 				pev->netname = MAKE_STRING("goalflag");
 			}
 
-			UTIL_SetOrigin(pev, pev->origin);
+			SetOrigin(pev->origin);
 
 			m_OriginalAngles = pev->angles;
 
@@ -516,9 +516,9 @@ void CTFGoalFlag::ScoreFlagTouch(CBasePlayer* pPlayer)
 				if (static_cast<int>(player->m_iTeamNum) == m_iGoalNum)
 				{
 					if (pPlayer == player)
-						ClientPrint(player->pev, HUD_PRINTCENTER, "#CTFCaptureFlagP");
+						ClientPrint(player, HUD_PRINTCENTER, "#CTFCaptureFlagP");
 					else
-						ClientPrint(player->pev, HUD_PRINTCENTER, "#CTFCaptureFlagT");
+						ClientPrint(player, HUD_PRINTCENTER, "#CTFCaptureFlagT");
 				}
 				else if (pPlayer == player)
 				{
@@ -535,25 +535,25 @@ void CTFGoalFlag::ScoreFlagTouch(CBasePlayer* pPlayer)
 
 					if (foundFlag)
 					{
-						ClientPrint(player->pev, HUD_PRINTCENTER, "#CTFPickUpFlagP");
+						ClientPrint(player, HUD_PRINTCENTER, "#CTFPickUpFlagP");
 					}
 					else
 					{
-						ClientPrint(player->pev, HUD_PRINTCENTER, "#CTFPickUpFlagG");
+						ClientPrint(player, HUD_PRINTCENTER, "#CTFPickUpFlagG");
 					}
 				}
 				else
 				{
-					ClientPrint(player->pev, HUD_PRINTCENTER, "#CTFPickUpFlagT");
+					ClientPrint(player, HUD_PRINTCENTER, "#CTFPickUpFlagT");
 				}
 			}
 			else if (static_cast<int>(pPlayer->m_iTeamNum) == m_iGoalNum)
 			{
-				ClientPrint(player->pev, HUD_PRINTCENTER, "#CTFFlagCaptured");
+				ClientPrint(player, HUD_PRINTCENTER, "#CTFFlagCaptured");
 			}
 			else
 			{
-				ClientPrint(player->pev, HUD_PRINTCENTER, "#CTFLoseFlag");
+				ClientPrint(player, HUD_PRINTCENTER, "#CTFLoseFlag");
 			}
 		}
 
@@ -578,7 +578,7 @@ void CTFGoalFlag::ScoreFlagTouch(CBasePlayer* pPlayer)
 				g_engfuncs.pfnWriteByte(pPlayer->m_iCTFScore);
 				g_engfuncs.pfnMessageEnd();
 
-				ClientPrint(pPlayer->pev, HUD_PRINTTALK, "#CTFScorePoints");
+				ClientPrint(pPlayer, HUD_PRINTTALK, "#CTFScorePoints");
 				pPlayer->SendScoreInfoAll();
 
 				UTIL_ClientPrintAll(HUD_PRINTNOTIFY, "#CTFTeamBM");
@@ -596,7 +596,7 @@ void CTFGoalFlag::ScoreFlagTouch(CBasePlayer* pPlayer)
 					g_engfuncs.pfnWriteByte(pPlayer->m_iCTFScore);
 					g_engfuncs.pfnMessageEnd();
 
-					ClientPrint(returnPlayer->pev, HUD_PRINTTALK, "#CTFScorePoint");
+					ClientPrint(returnPlayer, HUD_PRINTTALK, "#CTFScorePoint");
 					UTIL_ClientPrintAll(HUD_PRINTNOTIFY, UTIL_VarArgs("%s", STRING(returnPlayer->pev->netname)));
 					UTIL_ClientPrintAll(HUD_PRINTNOTIFY, "#CTFFlagAssistBM");
 				}
@@ -631,7 +631,7 @@ void CTFGoalFlag::ScoreFlagTouch(CBasePlayer* pPlayer)
 				g_engfuncs.pfnWriteByte(pPlayer->m_iCTFScore);
 				g_engfuncs.pfnMessageEnd();
 
-				ClientPrint(pPlayer->pev, HUD_PRINTTALK, "#CTFScorePoints");
+				ClientPrint(pPlayer, HUD_PRINTTALK, "#CTFScorePoints");
 
 				pPlayer->SendScoreInfoAll();
 
@@ -652,7 +652,7 @@ void CTFGoalFlag::ScoreFlagTouch(CBasePlayer* pPlayer)
 					g_engfuncs.pfnWriteByte(pPlayer->m_iCTFScore);
 					g_engfuncs.pfnMessageEnd();
 
-					ClientPrint(returnPlayer->pev, HUD_PRINTTALK, "#CTFScorePoint");
+					ClientPrint(returnPlayer, HUD_PRINTTALK, "#CTFScorePoint");
 					UTIL_ClientPrintAll(HUD_PRINTNOTIFY, UTIL_VarArgs("%s", STRING(returnPlayer->pev->netname)));
 					UTIL_ClientPrintAll(HUD_PRINTNOTIFY, "#CTFFlagAssistOF");
 				}
@@ -761,7 +761,7 @@ void CTFGoalFlag::GiveFlagToPlayer(CBasePlayer* pPlayer)
 	g_engfuncs.pfnWriteByte(pPlayer->m_iCTFScore);
 	g_engfuncs.pfnMessageEnd();
 
-	ClientPrint(pPlayer->pev, HUD_PRINTTALK, "#CTFScorePoint");
+	ClientPrint(pPlayer, HUD_PRINTTALK, "#CTFScorePoint");
 
 	pPlayer->SendScoreInfoAll();
 
@@ -842,11 +842,11 @@ void CTFGoalFlag::goal_item_touch(CBaseEntity* pOther)
 
 		if (static_cast<int>(player->m_iTeamNum) == m_iGoalNum)
 		{
-			ClientPrint(player->pev, HUD_PRINTCENTER, "#CTFFlagReturnedT");
+			ClientPrint(player, HUD_PRINTCENTER, "#CTFFlagReturnedT");
 		}
 		else
 		{
-			ClientPrint(player->pev, HUD_PRINTCENTER, "#CTFFlagReturnedE");
+			ClientPrint(player, HUD_PRINTCENTER, "#CTFFlagReturnedE");
 		}
 	}
 
@@ -858,7 +858,7 @@ void CTFGoalFlag::goal_item_touch(CBaseEntity* pOther)
 	g_engfuncs.pfnWriteByte(pPlayer->m_iCTFScore);
 	g_engfuncs.pfnMessageEnd();
 
-	ClientPrint(pPlayer->pev, HUD_PRINTTALK, "#CTFScorePoint");
+	ClientPrint(pPlayer, HUD_PRINTTALK, "#CTFScorePoint");
 
 	pPlayer->SendScoreInfoAll();
 
@@ -879,7 +879,7 @@ void CTFGoalFlag::DoDrop(const Vector& vecOrigin)
 {
 	pev->flags &= ~FL_ONGROUND;
 	pev->origin = vecOrigin;
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 
 	pev->angles = g_vecZero;
 
@@ -933,9 +933,9 @@ void CTFGoalFlag::DisplayFlagStatus(CBasePlayer* pPlayer)
 	{
 	case 1:
 		if (m_iGoalNum == 1)
-			ClientPrint(pPlayer->pev, HUD_PRINTNOTIFY, "#CTFInfoFlagAtBaseBM");
+			ClientPrint(pPlayer, HUD_PRINTNOTIFY, "#CTFInfoFlagAtBaseBM");
 		else
-			ClientPrint(pPlayer->pev, HUD_PRINTNOTIFY, "#CTFInfoFlagAtBaseOF");
+			ClientPrint(pPlayer, HUD_PRINTNOTIFY, "#CTFInfoFlagAtBaseOF");
 		break;
 
 	case 2:
@@ -946,31 +946,31 @@ void CTFGoalFlag::DisplayFlagStatus(CBasePlayer* pPlayer)
 		{
 			if (m_iGoalNum == 1)
 			{
-				ClientPrint(pPlayer->pev, HUD_PRINTNOTIFY, "%s", STRING(owner->pev->netname));
-				ClientPrint(pPlayer->pev, HUD_PRINTNOTIFY, "#CTFInfoFlagCarriedBM");
+				ClientPrint(pPlayer, HUD_PRINTNOTIFY, "%s", STRING(owner->pev->netname));
+				ClientPrint(pPlayer, HUD_PRINTNOTIFY, "#CTFInfoFlagCarriedBM");
 			}
 			else
 			{
-				ClientPrint(pPlayer->pev, HUD_PRINTNOTIFY, "%s", STRING(owner->pev->netname));
-				ClientPrint(pPlayer->pev, HUD_PRINTNOTIFY, "#CTFInfoFlagCarriedOF");
+				ClientPrint(pPlayer, HUD_PRINTNOTIFY, "%s", STRING(owner->pev->netname));
+				ClientPrint(pPlayer, HUD_PRINTNOTIFY, "#CTFInfoFlagCarriedOF");
 			}
 		}
 		else if (m_iGoalNum == 1)
 		{
-			ClientPrint(pPlayer->pev, HUD_PRINTNOTIFY, "#CTFInfoFlagCarryBM");
+			ClientPrint(pPlayer, HUD_PRINTNOTIFY, "#CTFInfoFlagCarryBM");
 		}
 		else
 		{
-			ClientPrint(pPlayer->pev, HUD_PRINTNOTIFY, "#CTFInfoFlagCarryOF");
+			ClientPrint(pPlayer, HUD_PRINTNOTIFY, "#CTFInfoFlagCarryOF");
 		}
 	}
 	break;
 
 	case 3:
 		if (m_iGoalNum == 1)
-			ClientPrint(pPlayer->pev, HUD_PRINTNOTIFY, "#CTFInfoFlagDroppedBM");
+			ClientPrint(pPlayer, HUD_PRINTNOTIFY, "#CTFInfoFlagDroppedBM");
 		else
-			ClientPrint(pPlayer->pev, HUD_PRINTNOTIFY, "#CTFInfoFlagDroppedOF");
+			ClientPrint(pPlayer, HUD_PRINTNOTIFY, "#CTFInfoFlagDroppedOF");
 		break;
 	}
 }

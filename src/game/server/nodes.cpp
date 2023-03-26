@@ -160,7 +160,7 @@ entvars_t* CGraph::LinkEntForLink(CLink* pLink, CNode* pNode)
 
 				// trace from the node to the trigger, make sure it's one we can see from the node.
 				// !!!HACKHACK Use bodyqueue here cause there are no ents we really wish to ignore!
-				UTIL_TraceLine(pNode->m_vecOrigin, VecBModelOrigin(trigger->pev), ignore_monsters, g_pBodyQueueHead->edict(), &tr);
+				UTIL_TraceLine(pNode->m_vecOrigin, VecBModelOrigin(trigger), ignore_monsters, g_pBodyQueueHead->edict(), &tr);
 
 				if (tr.pHit == trigger->edict())
 				{ // good to go!
@@ -1449,7 +1449,7 @@ class CTestHull : public CBaseMonster
 {
 
 public:
-	void Spawn(entvars_t* pevMasterNode);
+	void Spawn(CBaseEntity* masterNode);
 	int ObjectCaps() override { return CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 	void EXPORT CallBuildNodeGraph();
 	void BuildNodeGraph();
@@ -1465,7 +1465,7 @@ LINK_ENTITY_TO_CLASS(testhull, CTestHull);
 //=========================================================
 // CTestHull::Spawn
 //=========================================================
-void CTestHull::Spawn(entvars_t* pevMasterNode)
+void CTestHull::Spawn(CBaseEntity* masterNode)
 {
 	SetModel("models/player.mdl");
 	SetSize(VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX);
@@ -1501,7 +1501,7 @@ void CTestHull::DropDelay()
 {
 	//	UTIL_CenterPrintAll( "Node Graph out of Date. Rebuilding..." );
 
-	UTIL_SetOrigin(pev, WorldGraph.m_pNodes[0].m_vecOrigin);
+	SetOrigin(WorldGraph.m_pNodes[0].m_vecOrigin);
 
 	SetThink(&CTestHull::CallBuildNodeGraph);
 
@@ -1545,7 +1545,7 @@ void CNodeEnt::Spawn()
 	if (WorldGraph.m_cNodes == 0)
 	{ // this is the first node to spawn, spawn the test hull entity that builds and walks the node tree
 		CTestHull* pHull = g_EntityDictionary->Create<CTestHull>("testhull");
-		pHull->Spawn(pev);
+		pHull->Spawn(this);
 	}
 
 	if (WorldGraph.m_cNodes >= MAX_NODES)
@@ -1793,7 +1793,7 @@ void CTestHull::BuildNodeGraph()
 					break;
 				}
 
-				UTIL_SetOrigin(pev, pSrcNode->m_vecOrigin); // place the hull on the node
+				SetOrigin(pSrcNode->m_vecOrigin); // place the hull on the node
 
 				if (!FBitSet(pev->flags, FL_ONGROUND))
 				{

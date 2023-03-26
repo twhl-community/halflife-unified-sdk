@@ -97,12 +97,13 @@ void ClientDisconnect(edict_t* pEntity)
 	// since the edict doesn't get deleted, fix it so it doesn't interfere.
 	pEntity->v.takedamage = DAMAGE_NO; // don't attract autoaim
 	pEntity->v.solid = SOLID_NOT;	   // nonsolid
-	UTIL_SetOrigin(&pEntity->v, pEntity->v.origin);
 
 	auto pPlayer = reinterpret_cast<CBasePlayer*>(GET_PRIVATE(pEntity));
 
 	if (pPlayer)
 	{
+		pPlayer->SetOrigin(pPlayer->pev->origin);
+
 		if (pPlayer->m_pTank != nullptr)
 		{
 			pPlayer->m_pTank->Use(pPlayer, pPlayer, USE_OFF, 0);
@@ -740,7 +741,7 @@ void ExecuteClientCommand(edict_t* pEntity)
 		command[127] = '\0';
 
 		// tell the user they entered an unknown command
-		ClientPrint(player->pev, HUD_PRINTCONSOLE, UTIL_VarArgs("Unknown command: %s\n", command));
+		ClientPrint(player, HUD_PRINTCONSOLE, UTIL_VarArgs("Unknown command: %s\n", command));
 	}
 }
 
@@ -1692,8 +1693,7 @@ int GetWeaponData(edict_t* player, weapon_data_t* info)
 #if defined(CLIENT_WEAPONS)
 	int i;
 	weapon_data_t* item;
-	entvars_t* pev = &player->v;
-	CBasePlayer* pl = dynamic_cast<CBasePlayer*>(CBasePlayer::Instance(pev));
+	auto pl = GET_PRIVATE<CBasePlayer>(player);
 
 	if (!pl)
 		return 1;
@@ -1758,64 +1758,56 @@ void UpdateClientData(const edict_t* ent, int sendweapons, clientdata_t* cd)
 {
 	if (!ent || !ent->pvPrivateData)
 		return;
-	entvars_t* pev = (entvars_t*)&ent->v;
-	CBasePlayer* pl = dynamic_cast<CBasePlayer*>(CBasePlayer::Instance(pev));
-	entvars_t* pevOrg = nullptr;
+
+	auto pl = GET_PRIVATE<CBasePlayer>(const_cast<edict_t*>(ent));
+	CBaseEntity* viewEntity = pl;
+	CBasePlayer* plOrg = pl;
 
 	// if user is spectating different player in First person, override some vars
 	if (pl && pl->pev->iuser1 == OBS_IN_EYE)
 	{
 		if (pl->m_hObserverTarget)
 		{
-			pevOrg = pev;
-			pev = pl->m_hObserverTarget->pev;
-			pl = dynamic_cast<CBasePlayer*>(CBasePlayer::Instance(pev));
+			viewEntity = pl->m_hObserverTarget;
+			pl = dynamic_cast<CBasePlayer*>(viewEntity);
 		}
 	}
 
-	cd->flags = pev->flags;
-	cd->health = pev->health;
+	cd->flags = viewEntity->pev->flags;
+	cd->health = viewEntity->pev->health;
 
-	cd->viewmodel = MODEL_INDEX(STRING(pev->viewmodel));
+	cd->viewmodel = MODEL_INDEX(STRING(viewEntity->pev->viewmodel));
 
-	cd->waterlevel = pev->waterlevel;
-	cd->watertype = pev->watertype;
-	cd->weapons = pev->weapons;
+	cd->waterlevel = viewEntity->pev->waterlevel;
+	cd->watertype = viewEntity->pev->watertype;
+	cd->weapons = viewEntity->pev->weapons;
 
 	// Vectors
-	cd->origin = pev->origin;
-	cd->velocity = pev->velocity;
-	cd->view_ofs = pev->view_ofs;
-	cd->punchangle = pev->punchangle;
+	cd->origin = viewEntity->pev->origin;
+	cd->velocity = viewEntity->pev->velocity;
+	cd->view_ofs = viewEntity->pev->view_ofs;
+	cd->punchangle = viewEntity->pev->punchangle;
 
-	cd->bInDuck = pev->bInDuck;
-	cd->flTimeStepSound = pev->flTimeStepSound;
-	cd->flDuckTime = pev->flDuckTime;
-	cd->flSwimTime = pev->flSwimTime;
-	cd->waterjumptime = pev->teleport_time;
+	cd->bInDuck = viewEntity->pev->bInDuck;
+	cd->flTimeStepSound = viewEntity->pev->flTimeStepSound;
+	cd->flDuckTime = viewEntity->pev->flDuckTime;
+	cd->flSwimTime = viewEntity->pev->flSwimTime;
+	cd->waterjumptime = viewEntity->pev->teleport_time;
 
 	strcpy(cd->physinfo, ENGINE_GETPHYSINFO(ent));
 
-	cd->maxspeed = pev->maxspeed;
-	cd->fov = pl->m_iFOV;
-	cd->weaponanim = pev->weaponanim;
+	cd->maxspeed = viewEntity->pev->maxspeed;
+	cd->fov = pl ? pl->m_iFOV : plOrg->m_iFOV; // Use actual player FOV if target is not a player.
+	cd->weaponanim = viewEntity->pev->weaponanim;
 
-	cd->pushmsec = pev->pushmsec;
+	cd->pushmsec = viewEntity->pev->pushmsec;
 
 	// Spectator mode
-	if (pevOrg != nullptr)
-	{
-		// don't use spec vars from chased player
-		cd->iuser1 = pevOrg->iuser1;
-		cd->iuser2 = pevOrg->iuser2;
-	}
-	else
-	{
-		cd->iuser1 = pev->iuser1;
-		cd->iuser2 = pev->iuser2;
-	}
+	// don't use spec vars from chased player
+	cd->iuser1 = plOrg->pev->iuser1;
+	cd->iuser2 = plOrg->pev->iuser2;
 
-	cd->iuser4 = pl->m_iItems;
+	cd->iuser4 = pl ? pl->m_iItems : CTFItem::None; // Non-players don't have items.
 
 #if defined(CLIENT_WEAPONS)
 	if (0 != sendweapons)
@@ -1867,8 +1859,7 @@ This is the time to examine the usercmd for anything extra.  This call happens e
 */
 void CmdStart(const edict_t* player, const usercmd_t* cmd, unsigned int random_seed)
 {
-	entvars_t* pev = (entvars_t*)&player->v;
-	CBasePlayer* pl = dynamic_cast<CBasePlayer*>(CBasePlayer::Instance(pev));
+	auto pl = GET_PRIVATE<CBasePlayer>(const_cast<edict_t*>(player));
 
 	if (!pl)
 		return;
@@ -1890,8 +1881,7 @@ Each cmdstart is exactly matched with a cmd end, clean up any group trace flags,
 */
 void CmdEnd(const edict_t* player)
 {
-	entvars_t* pev = (entvars_t*)&player->v;
-	CBasePlayer* pl = dynamic_cast<CBasePlayer*>(CBasePlayer::Instance(pev));
+	auto pl = GET_PRIVATE<CBasePlayer>(const_cast<edict_t*>(player));
 
 	if (!pl)
 		return;

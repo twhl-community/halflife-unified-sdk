@@ -326,7 +326,7 @@ bool CHGrunt::CheckRangeAttack2Core(float flDot, float flDist, float grenadeSpee
 
 	if (FBitSet(pev->weapons, HGRUNT_HANDGRENADE))
 	{
-		Vector vecToss = VecCheckToss(pev, GetGunPosition(), vecTarget, 0.5);
+		Vector vecToss = VecCheckToss(this, GetGunPosition(), vecTarget, 0.5);
 
 		if (vecToss != g_vecZero)
 		{
@@ -347,7 +347,7 @@ bool CHGrunt::CheckRangeAttack2Core(float flDot, float flDist, float grenadeSpee
 	}
 	else
 	{
-		Vector vecToss = VecCheckThrow(pev, GetGunPosition(), vecTarget, grenadeSpeed, 0.5);
+		Vector vecToss = VecCheckThrow(this, GetGunPosition(), vecTarget, grenadeSpeed, 0.5);
 
 		if (vecToss != g_vecZero)
 		{
@@ -643,8 +643,8 @@ void CHGrunt::HandleAnimEvent(MonsterEvent_t* pEvent)
 	case HGRUNT_AE_GREN_TOSS:
 	{
 		UTIL_MakeVectors(pev->angles);
-		// CGrenade::ShootTimed( pev, pev->origin + gpGlobals->v_forward * 34 + Vector (0, 0, 32), m_vecTossVelocity, 3.5 );
-		CGrenade::ShootTimed(pev, GetGunPosition(), m_vecTossVelocity, 3.5);
+		// CGrenade::ShootTimed(this, pev->origin + gpGlobals->v_forward * 34 + Vector (0, 0, 32), m_vecTossVelocity, 3.5);
+		CGrenade::ShootTimed(this, GetGunPosition(), m_vecTossVelocity, 3.5);
 
 		m_fThrowGrenade = false;
 		m_flNextGrenadeCheck = gpGlobals->time + 6; // wait six seconds before even looking again to see if a grenade can be thrown.
@@ -655,7 +655,7 @@ void CHGrunt::HandleAnimEvent(MonsterEvent_t* pEvent)
 	case HGRUNT_AE_GREN_LAUNCH:
 	{
 		EmitSound(CHAN_WEAPON, "weapons/glauncher.wav", 0.8, ATTN_NORM);
-		CGrenade::ShootContact(pev, GetGunPosition(), m_vecTossVelocity);
+		CGrenade::ShootContact(this, GetGunPosition(), m_vecTossVelocity);
 		m_fThrowGrenade = false;
 		if (g_Skill.GetSkillLevel() == SkillLevel::Hard)
 			m_flNextGrenadeCheck = gpGlobals->time + RANDOM_FLOAT(2, 5); // wait a random amount of time before shooting again
@@ -667,7 +667,7 @@ void CHGrunt::HandleAnimEvent(MonsterEvent_t* pEvent)
 	case HGRUNT_AE_GREN_DROP:
 	{
 		UTIL_MakeVectors(pev->angles);
-		CGrenade::ShootTimed(pev, pev->origin + gpGlobals->v_forward * 17 - gpGlobals->v_right * 27 + gpGlobals->v_up * 6, g_vecZero, 3);
+		CGrenade::ShootTimed(this, pev->origin + gpGlobals->v_forward * 17 - gpGlobals->v_right * 27 + gpGlobals->v_up * 6, g_vecZero, 3);
 	}
 	break;
 

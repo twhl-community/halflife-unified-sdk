@@ -147,7 +147,7 @@ IMPLEMENT_SAVERESTORE(CBMortar, CBaseEntity);
 #define bits_MEMORY_FIRED_NODE (bits_MEMORY_CUSTOM4)
 
 int gSpitSprite, gSpitDebrisSprite;
-Vector VecCheckSplatToss(entvars_t* pev, const Vector& vecSpot1, Vector vecSpot2, float maxHeight);
+Vector VecCheckSplatToss(CBaseEntity* entity, const Vector& vecSpot1, Vector vecSpot2, float maxHeight);
 void MortarSpray(const Vector& position, const Vector& direction, int spriteModel, int count);
 
 #define BIG_CHILDCLASS "monster_babycrab"
@@ -506,7 +506,7 @@ void CBigMomma::HandleAnimEvent(MonsterEvent_t* pEvent)
 	case BIG_AE_JUMP_FORWARD:
 		ClearBits(pev->flags, FL_ONGROUND);
 
-		UTIL_SetOrigin(pev, pev->origin + Vector(0, 0, 1)); // take him off ground so engine doesn't instantly reset onground
+		SetOrigin(pev->origin + Vector(0, 0, 1)); // take him off ground so engine doesn't instantly reset onground
 		UTIL_MakeVectors(pev->angles);
 
 		pev->velocity = (gpGlobals->v_forward * 200) + gpGlobals->v_up * 500;
@@ -739,7 +739,7 @@ bool CBigMomma::CheckRangeAttack1(float flDot, float flDist)
 		{
 			Vector startPos = pev->origin;
 			startPos.z += 180;
-			pev->movedir = VecCheckSplatToss(pev, startPos, pEnemy->BodyTarget(pev->origin), RANDOM_FLOAT(150, 500));
+			pev->movedir = VecCheckSplatToss(this, startPos, pEnemy->BodyTarget(pev->origin), RANDOM_FLOAT(150, 500));
 			if (pev->movedir != g_vecZero)
 				return true;
 		}
@@ -1007,7 +1007,7 @@ void CBigMomma::RunTask(Task_t* pTask)
 	}
 }
 
-Vector VecCheckSplatToss(entvars_t* pev, const Vector& vecSpot1, Vector vecSpot2, float maxHeight)
+Vector VecCheckSplatToss(CBaseEntity* entity, const Vector& vecSpot1, Vector vecSpot2, float maxHeight)
 {
 	TraceResult tr;
 	Vector vecMidPoint; // halfway point between Spot1 and Spot2
@@ -1017,10 +1017,10 @@ Vector VecCheckSplatToss(entvars_t* pev, const Vector& vecSpot1, Vector vecSpot2
 
 	// calculate the midpoint and apex of the 'triangle'
 	vecMidPoint = vecSpot1 + (vecSpot2 - vecSpot1) * 0.5;
-	UTIL_TraceLine(vecMidPoint, vecMidPoint + Vector(0, 0, maxHeight), ignore_monsters, ENT(pev), &tr);
+	UTIL_TraceLine(vecMidPoint, vecMidPoint + Vector(0, 0, maxHeight), ignore_monsters, entity->edict(), &tr);
 	vecApex = tr.vecEndPos;
 
-	UTIL_TraceLine(vecSpot1, vecApex, dont_ignore_monsters, ENT(pev), &tr);
+	UTIL_TraceLine(vecSpot1, vecApex, dont_ignore_monsters, entity->edict(), &tr);
 	if (tr.flFraction != 1.0)
 	{
 		// fail!
@@ -1106,7 +1106,7 @@ CBMortar* CBMortar::Shoot(edict_t* pOwner, Vector vecStart, Vector vecVelocity)
 	CBMortar* pSpit = g_EntityDictionary->Create<CBMortar>("bmortar");
 	pSpit->Spawn();
 
-	UTIL_SetOrigin(pSpit->pev, vecStart);
+	pSpit->SetOrigin(vecStart);
 	pSpit->pev->velocity = vecVelocity;
 	pSpit->pev->owner = pOwner;
 	pSpit->pev->scale = 2.5;

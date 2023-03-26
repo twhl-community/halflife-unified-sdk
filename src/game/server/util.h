@@ -150,7 +150,6 @@ int UTIL_EntitiesInBox(CBaseEntity** pList, int listMax, const Vector& mins, con
 void UTIL_MakeAimVectors(const Vector& vecAngles); // like MakeVectors, but assumes pitch isn't inverted
 void UTIL_MakeInvVectors(const Vector& vec, globalvars_t* pgv);
 
-void UTIL_SetOrigin(entvars_t* pev, const Vector& vecOrigin);
 void UTIL_ParticleEffect(const Vector& vecOrigin, const Vector& vecDirection, unsigned int ulColor, unsigned int ulCount);
 void UTIL_ScreenShake(const Vector& center, float amplitude, float frequency, float duration, float radius);
 void UTIL_ScreenShakeAll(const Vector& center, float amplitude, float frequency, float duration);
@@ -228,7 +227,8 @@ inline void UTIL_CenterPrintAll(const char* msg_name, const char* param1 = nullp
 }
 
 // prints messages through the HUD
-void ClientPrint(entvars_t* client, int msg_dest, const char* msg_name, const char* param1 = nullptr, const char* param2 = nullptr, const char* param3 = nullptr, const char* param4 = nullptr);
+void ClientPrint(CBasePlayer* client, int msg_dest, const char* msg_name,
+	const char* param1 = nullptr, const char* param2 = nullptr, const char* param3 = nullptr, const char* param4 = nullptr);
 
 // prints a message to the HUD say (chat)
 void UTIL_SayText(const char* pText, CBaseEntity* pEntity);
@@ -282,12 +282,12 @@ void UTIL_StripToken(const char* pKey, char* pDest); // for redundant keynames
 /**
  *	@brief QuakeEd only writes a single float for angles (bad idea), so up and down are just constant angles.
  */
-void SetMovedir(entvars_t* pev);
+void SetMovedir(CBaseEntity* entity);
 
 /**
 *	@brief calculates origin of a bmodel from absmin/size because all bmodel origins are 0 0 0
 */
-Vector VecBModelOrigin(entvars_t* pevBModel);
+Vector VecBModelOrigin(CBaseEntity* bModel);
 
 //
 // Constants that were used only by QC (maybe not used at all now)

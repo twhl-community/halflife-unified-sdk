@@ -77,13 +77,13 @@ void UTIL_MoveToOrigin(edict_t* pent, const Vector& vecGoal, float flDist, int i
 *	@brief returns the velocity at which an object should be lobbed from vecspot1 to land near vecspot2.
 *	@return g_vecZero if toss is not feasible.
 */
-Vector VecCheckToss(entvars_t* pev, const Vector& vecSpot1, Vector vecSpot2, float flGravityAdj = 1.0);
+Vector VecCheckToss(CBaseEntity* entity, const Vector& vecSpot1, Vector vecSpot2, float flGravityAdj = 1.0);
 
 /**
 *	@brief returns the velocity vector at which an object should be thrown from vecspot1 to hit vecspot2.
 *	@return g_vecZero if throw is not feasible.
 */
-Vector VecCheckThrow(entvars_t* pev, const Vector& vecSpot1, Vector vecSpot2, float flSpeed, float flGravityAdj = 1.0);
+Vector VecCheckThrow(CBaseEntity* entity, const Vector& vecSpot1, Vector vecSpot2, float flSpeed, float flGravityAdj = 1.0);
 
 /**
 *	@brief tosses a brass shell from passed origin at passed velocity
@@ -96,7 +96,9 @@ bool IsFacing(CBaseEntity* pevTest, const Vector& reference);
 *	@brief a more accurate ( and slower ) version of FVisible.
 *	!!!UNDONE - make this CBaseMonster?
 */
-bool FBoxVisible(entvars_t* pevLooker, entvars_t* pevTarget, Vector& vecTargetOrigin, float flSize = 0.0);
+bool FBoxVisible(CBaseEntity* looker, CBaseEntity* target, Vector& vecTargetOrigin, float flSize = 0.0);
+
+void DrawRoute(CBaseEntity* entity, WayPoint_t* m_Route, int m_iRouteIndex, int r, int g, int b);
 
 // monster to monster relationship types
 #define R_AL -2 //!< (ALLY) pals. Good alternative to R_NO when applicable.
@@ -205,10 +207,10 @@ public:
 	void LimitVelocity();
 
 	int ObjectCaps() override { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION) | FCAP_DONT_SAVE; }
-	static void SpawnHeadGib(entvars_t* pevVictim);
-	static void SpawnRandomGibs(entvars_t* pevVictim, int cGibs, const GibData& gibData);
-	static void SpawnRandomGibs(entvars_t* pevVictim, int cGibs, bool human);
-	static void SpawnStickyGibs(entvars_t* pevVictim, Vector vecOrigin, int cGibs);
+	static void SpawnHeadGib(CBaseEntity* victim);
+	static void SpawnRandomGibs(CBaseEntity* victim, int cGibs, const GibData& gibData);
+	static void SpawnRandomGibs(CBaseEntity* victim, int cGibs, bool human);
+	static void SpawnStickyGibs(CBaseEntity* victim, Vector vecOrigin, int cGibs);
 
 	int m_bloodColor;
 	int m_cBloodDecals;

@@ -383,7 +383,7 @@ public:
 
 		pev->origin.z += 16;
 
-		UTIL_SetOrigin(pev, pev->origin);
+		SetOrigin(pev->origin);
 
 		pev->angles.x -= 90;
 

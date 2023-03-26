@@ -89,7 +89,7 @@ void COFChargedBolt::Spawn()
 
 	SetModel("sprites/blueflare2.spr");
 
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 
 	SetSize(g_vecZero, g_vecZero);
 
@@ -163,7 +163,7 @@ void COFChargedBolt::SetAttachment(CBaseAnimating* pAttachEnt, int iAttachIdx)
 
 	pAttachEnt->GetAttachment(iAttachIdx, vecOrigin, vecAngles);
 
-	UTIL_SetOrigin(pev, vecOrigin);
+	SetOrigin(vecOrigin);
 
 	SetThink(&COFChargedBolt::AttachThink);
 
@@ -233,7 +233,7 @@ void COFChargedBolt::AttachThink()
 	Vector vecAngles;
 
 	m_pAttachEnt->GetAttachment(m_iAttachIdx, vecOrigin, vecAngles);
-	UTIL_SetOrigin(pev, vecOrigin);
+	SetOrigin(vecOrigin);
 
 	pev->nextthink = gpGlobals->time + 0.05;
 }
@@ -859,7 +859,7 @@ void COFVoltigore::StartTask(Task_t* pTask)
 		{
 			m_pChargedBolt = COFChargedBolt::ChargedBoltCreate();
 
-			UTIL_SetOrigin(m_pChargedBolt->pev, vecConverge);
+			m_pChargedBolt->SetOrigin(vecConverge);
 		}
 
 		EmitAmbientSound(pev->origin, "debris/beamstart2.wav", 0.5, ATTN_NORM, 0, RANDOM_LONG(140, 160));
@@ -1174,7 +1174,7 @@ void COFVoltigore::GibMonster()
 	if (CVAR_GET_FLOAT("violence_agibs") != 0) // Should never get here, but someone might call it directly
 	{
 		// Gib spawning has been rewritten so the logic for limiting gib submodels is generalized
-		CGib::SpawnRandomGibs(pev, 12, VoltigoreGibs); // Throw alien gibs
+		CGib::SpawnRandomGibs(this, 12, VoltigoreGibs); // Throw alien gibs
 	}
 }
 

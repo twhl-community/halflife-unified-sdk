@@ -775,7 +775,7 @@ void CController::RunAI()
 		m_pBall[i]->SetBrightness(m_iBallCurrent[i]);
 
 		GetAttachment(i + 2, vecStart, angleGun);
-		UTIL_SetOrigin(m_pBall[i]->pev, vecStart);
+		m_pBall[i]->SetOrigin(vecStart);
 
 		MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
 		WRITE_BYTE(TE_ELIGHT);
@@ -792,8 +792,6 @@ void CController::RunAI()
 		MESSAGE_END();
 	}
 }
-
-void DrawRoute(entvars_t* pev, WayPoint_t* m_Route, int m_iRouteIndex, int r, int g, int b);
 
 void CController::Stop()
 {
@@ -835,7 +833,7 @@ void CController::Move(float flInterval)
 	}
 #else
 // Debug, draw the route
-//	DrawRoute( pev, m_Route, m_iRouteIndex, 0, 0, 255 );
+//	DrawRoute(this, m_Route, m_iRouteIndex, 0, 0, 255);
 #endif
 
 	// if the monster is moving directly towards an entity (enemy for instance), we'll set this pointer
@@ -1066,7 +1064,7 @@ void CControllerHeadBall::Spawn()
 	pev->scale = 2.0;
 
 	SetSize(Vector(0, 0, 0), Vector(0, 0, 0));
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 
 	SetThink(&CControllerHeadBall::HuntThink);
 	SetTouch(&CControllerHeadBall::BounceTouch);
@@ -1250,7 +1248,7 @@ void CControllerZapBall::Spawn()
 	pev->scale = 0.5;
 
 	SetSize(Vector(0, 0, 0), Vector(0, 0, 0));
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 
 	SetThink(&CControllerZapBall::AnimateThink);
 	SetTouch(&CControllerZapBall::ExplodeTouch);

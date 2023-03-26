@@ -52,7 +52,7 @@ void COFNuclearBombButton::Spawn()
 
 	pev->movetype = MOVETYPE_NONE;
 
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 
 	if (DROP_TO_FLOOR(edict()) == 0)
 	{
@@ -114,7 +114,7 @@ void COFNuclearBombTimer::Spawn()
 
 	pev->movetype = MOVETYPE_NONE;
 
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 
 	if (DROP_TO_FLOOR(edict()) == 0)
 	{
@@ -262,7 +262,7 @@ void COFNuclearBomb::Spawn()
 
 	pev->solid = SOLID_BBOX;
 
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 	SetSize({-16, -16, 0}, {16, 16, 32});
 
 	pev->movetype = MOVETYPE_NONE;

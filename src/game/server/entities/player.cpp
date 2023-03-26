@@ -1277,7 +1277,7 @@ void CBasePlayer::StartDeathCam()
 
 		CopyToBodyQue(this);
 
-		UTIL_SetOrigin(pev, pSpot->pev->origin);
+		SetOrigin(pSpot->pev->origin);
 		pev->angles = pev->v_angle = pSpot->pev->v_angle;
 	}
 	else
@@ -1287,7 +1287,7 @@ void CBasePlayer::StartDeathCam()
 		CopyToBodyQue(this);
 		UTIL_TraceLine(pev->origin, pev->origin + Vector(0, 0, 128), ignore_monsters, edict(), &tr);
 
-		UTIL_SetOrigin(pev, tr.vecEndPos);
+		SetOrigin(tr.vecEndPos);
 		pev->angles = pev->v_angle = UTIL_VecToAngles(tr.vecEndPos - pev->origin);
 	}
 
@@ -1364,7 +1364,7 @@ void CBasePlayer::StartObserver(Vector vecPosition, Vector vecViewAngle)
 	RemoveAllItems(false);
 
 	// Move them to the new position
-	UTIL_SetOrigin(pev, vecPosition);
+	SetOrigin(vecPosition);
 
 	// Find a player to watch
 	m_flNextObserverInput = 0;
@@ -1441,7 +1441,7 @@ void CBasePlayer::PlayerUse()
 			// !!!PERFORMANCE- should this check be done on a per case basis AFTER we've determined that
 			// this object is actually usable? This dot is being done for every object within PLAYER_SEARCH_RADIUS
 			// when player hits the use key. How many objects can be in that area, anyway? (sjb)
-			vecLOS = (VecBModelOrigin(pObject->pev) - (pev->origin + pev->view_ofs));
+			vecLOS = (VecBModelOrigin(pObject) - (pev->origin + pev->view_ofs));
 
 			// This essentially moves the origin of the target to the corner nearest the player to test to see
 			// if it's "hull" is in the view cone
@@ -1526,8 +1526,8 @@ void CBasePlayer::Jump()
 	}
 
 	// If you're standing on a conveyor, add it's velocity to yours (for momentum)
-	entvars_t* pevGround = VARS(pev->groundentity);
-	if (pevGround && (pevGround->flags & FL_CONVEYOR) != 0)
+	CBaseEntity* ground = GetGroundEntity();
+	if (ground && (ground->pev->flags & FL_CONVEYOR) != 0)
 	{
 		pev->velocity = pev->velocity + pev->basevelocity;
 	}
@@ -2610,7 +2610,7 @@ void CBasePlayer::PostThink()
 			// Did he hit the world or a non-moving entity?
 			// BUG - this happens all the time in water, especially when
 			// BUG - water has current force
-			// if ( !pev->groundentity || VARS(pev->groundentity)->velocity.z == 0 )
+			// if (auto groundEntity = GetGroundEntity(); !groundEntity || groundEntity->pev->velocity.z == 0)
 			// EmitSound(CHAN_BODY, "player/pl_wade1.wav", 1, ATTN_NORM);
 		}
 		else if (m_flFallVelocity > PLAYER_MAX_SAFE_FALL_SPEED)
@@ -3060,7 +3060,7 @@ const char* CBasePlayer::TeamID()
 class CSprayCan : public CBaseEntity
 {
 public:
-	void Spawn(entvars_t* pevOwner);
+	void Spawn(CBaseEntity* owner);
 	void Think() override;
 
 	int ObjectCaps() override { return FCAP_DONT_SAVE; }
@@ -3068,11 +3068,11 @@ public:
 
 LINK_ENTITY_TO_CLASS(spraycan, CSprayCan);
 
-void CSprayCan::Spawn(entvars_t* pevOwner)
+void CSprayCan::Spawn(CBaseEntity* owner)
 {
-	pev->origin = pevOwner->origin + Vector(0, 0, 32);
-	pev->angles = pevOwner->v_angle;
-	pev->owner = ENT(pevOwner);
+	pev->origin = owner->pev->origin + Vector(0, 0, 32);
+	pev->angles = owner->pev->v_angle;
+	pev->owner = owner->edict();
 	pev->frame = 0;
 
 	pev->nextthink = gpGlobals->time + 0.1;
@@ -3120,17 +3120,17 @@ void CSprayCan::Think()
 class CBloodSplat : public CBaseEntity
 {
 public:
-	void Spawn(entvars_t* pevOwner);
+	void Spawn(CBaseEntity* owner);
 	void Spray();
 };
 
 LINK_ENTITY_TO_CLASS(blood_splat, CBloodSplat);
 
-void CBloodSplat::Spawn(entvars_t* pevOwner)
+void CBloodSplat::Spawn(CBaseEntity* owner)
 {
-	pev->origin = pevOwner->origin + Vector(0, 0, 32);
-	pev->angles = pevOwner->v_angle;
-	pev->owner = ENT(pevOwner);
+	pev->origin = owner->pev->origin + Vector(0, 0, 32);
+	pev->angles = owner->pev->v_angle;
+	pev->owner = owner->edict();
 
 	SetThink(&CBloodSplat::Spray);
 	pev->nextthink = gpGlobals->time + 0.1;
@@ -3390,7 +3390,7 @@ void CBasePlayer::ImpulseCommands()
 		{ // line hit something, so paint a decal
 			m_flNextDecalTime = gpGlobals->time + decalfrequency.value;
 			CSprayCan* pCan = g_EntityDictionary->Create<CSprayCan>("spraycan");
-			pCan->Spawn(pev);
+			pCan->Spawn(this);
 		}
 
 		break;
@@ -3481,7 +3481,7 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse)
 
 	case 102:
 		// Gibbage!!!
-		CGib::SpawnRandomGibs(pev, 1, true);
+		CGib::SpawnRandomGibs(this, 1, true);
 		break;
 
 	case 103:
@@ -3587,7 +3587,7 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse)
 		if (tr.flFraction != 1.0)
 		{ // line hit something, so paint a decal
 			CBloodSplat* pBlood = g_EntityDictionary->Create<CBloodSplat>("blood_splat");
-			pBlood->Spawn(pev);
+			pBlood->Spawn(this);
 		}
 		break;
 	case 203: // remove creature.
@@ -4776,7 +4776,7 @@ bool CBasePlayer::Menu_Team_Input(int inp)
 			{
 				if (!g_pGameRules->TeamsBalanced() && inp != g_pGameRules->GetTeamIndex(g_pGameRules->TeamWithFewestPlayers()) + 1)
 				{
-					ClientPrint(pev, HUD_PRINTCONSOLE, "Team balancing enabled.\nThis team is full.\n");
+					ClientPrint(this, HUD_PRINTCONSOLE, "Team balancing enabled.\nThis team is full.\n");
 					MESSAGE_BEGIN(MSG_ONE, gmsgTeamFull, nullptr, edict());
 					WRITE_BYTE(1);
 					MESSAGE_END();
@@ -4829,7 +4829,7 @@ bool CBasePlayer::Menu_Char_Input(int inp)
 {
 	if (m_iNewTeamNum == CTFTeam::None)
 	{
-		ClientPrint(pev, HUD_PRINTCONSOLE, "Can't change character; not in a team.\n");
+		ClientPrint(this, HUD_PRINTCONSOLE, "Can't change character; not in a team.\n");
 		return false;
 	}
 
@@ -5052,7 +5052,7 @@ class CInfoIntermission : public CPointEntity
 
 void CInfoIntermission::Spawn()
 {
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 	pev->solid = SOLID_NOT;
 	pev->effects = EF_NODRAW;
 	pev->v_angle = g_vecZero;

@@ -27,11 +27,6 @@
 
 #define SF_PENDULUM_SWING 2 // spawnflag that makes a pendulum a rope swing.
 
-Vector VecBModelOrigin(entvars_t* pevBModel)
-{
-	return pevBModel->absmin + (pevBModel->size * 0.5);
-}
-
 /**
 *	@brief This is just a solid wall if not inhibited
 */
@@ -89,14 +84,14 @@ void CFuncWallToggle::TurnOff()
 {
 	pev->solid = SOLID_NOT;
 	pev->effects |= EF_NODRAW;
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 }
 
 void CFuncWallToggle::TurnOn()
 {
 	pev->solid = SOLID_BSP;
 	pev->effects &= ~EF_NODRAW;
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 }
 
 bool CFuncWallToggle::IsOn()
@@ -134,7 +129,7 @@ LINK_ENTITY_TO_CLASS(func_conveyor, CFuncConveyor);
 
 void CFuncConveyor::Spawn()
 {
-	SetMovedir(pev);
+	SetMovedir(this);
 	CFuncWall::Spawn();
 
 	if ((pev->spawnflags & SF_CONVEYOR_VISUAL) == 0)
@@ -390,7 +385,7 @@ void CFuncRotating::Spawn()
 		pev->movetype = MOVETYPE_PUSH;
 	}
 
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 	SetModel(STRING(pev->model));
 
 	SetUse(&CFuncRotating::RotatingUse);
@@ -438,10 +433,8 @@ void CFuncRotating::Precache()
 
 void CFuncRotating::HurtTouch(CBaseEntity* pOther)
 {
-	entvars_t* pevOther = pOther->pev;
-
 	// we can't hurt this thing, so we're not concerned with it
-	if (0 == pevOther->takedamage)
+	if (0 == pOther->pev->takedamage)
 		return;
 
 	// calculate damage based on rotation speed
@@ -449,7 +442,7 @@ void CFuncRotating::HurtTouch(CBaseEntity* pOther)
 
 	pOther->TakeDamage(this, this, pev->dmg, DMG_CRUSH);
 
-	pevOther->velocity = (pevOther->origin - VecBModelOrigin(pev)).Normalize() * pev->dmg;
+	pOther->pev->velocity = (pOther->pev->origin - VecBModelOrigin(this)).Normalize() * pev->dmg;
 }
 
 #define FANPITCHMIN 30
@@ -682,14 +675,14 @@ bool CPendulum::KeyValue(KeyValueData* pkvd)
 void CPendulum::Spawn()
 {
 	// set the axis of rotation
-	CBaseToggle::AxisDir(pev);
+	CBaseToggle::AxisDir(this);
 
 	if (FBitSet(pev->spawnflags, SF_DOOR_PASSABLE))
 		pev->solid = SOLID_NOT;
 	else
 		pev->solid = SOLID_BSP;
 	pev->movetype = MOVETYPE_PUSH;
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 	SetModel(STRING(pev->model));
 
 	if (m_distance == 0)
@@ -802,13 +795,11 @@ void CPendulum::Swing()
 
 void CPendulum::Touch(CBaseEntity* pOther)
 {
-	entvars_t* pevOther = pOther->pev;
-
 	if (pev->dmg <= 0)
 		return;
 
 	// we can't hurt this thing, so we're not concerned with it
-	if (0 == pevOther->takedamage)
+	if (0 == pOther->pev->takedamage)
 		return;
 
 	// calculate damage based on rotation speed
@@ -819,25 +810,23 @@ void CPendulum::Touch(CBaseEntity* pOther)
 
 	pOther->TakeDamage(this, this, damage, DMG_CRUSH);
 
-	pevOther->velocity = (pevOther->origin - VecBModelOrigin(pev)).Normalize() * damage;
+	pOther->pev->velocity = (pOther->pev->origin - VecBModelOrigin(this)).Normalize() * damage;
 }
 
 void CPendulum::RopeTouch(CBaseEntity* pOther)
 {
-	entvars_t* pevOther = pOther->pev;
-
 	if (!pOther->IsPlayer())
 	{ // not a player!
 		Logger->debug("Not a client");
 		return;
 	}
 
-	if (ENT(pevOther) == pev->enemy)
+	if (pOther->edict() == pev->enemy)
 	{ // this player already on the rope.
 		return;
 	}
 
 	pev->enemy = pOther->edict();
-	pevOther->velocity = g_vecZero;
-	pevOther->movetype = MOVETYPE_NONE;
+	pOther->pev->velocity = g_vecZero;
+	pOther->pev->movetype = MOVETYPE_NONE;
 }

@@ -127,9 +127,12 @@ void CDecal::TriggerDecal(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYP
 	// this is set up as a USE function for infodecals that have targetnames, so that the
 	// decal doesn't get applied until it is fired. (usually by a scripted sequence)
 	TraceResult trace;
-	int entityIndex;
 
 	UTIL_TraceLine(pev->origin - Vector(5, 5, 5), pev->origin + Vector(5, 5, 5), ignore_monsters, ENT(pev), &trace);
+
+	auto hit = CBaseEntity::Instance(trace.pHit);
+
+	const int entityIndex = (short)hit->entindex();
 
 	MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
 	WRITE_BYTE(TE_BSPDECAL);
@@ -137,10 +140,9 @@ void CDecal::TriggerDecal(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYP
 	WRITE_COORD(pev->origin.y);
 	WRITE_COORD(pev->origin.z);
 	WRITE_SHORT(pev->skin);
-	entityIndex = (short)ENTINDEX(trace.pHit);
 	WRITE_SHORT(entityIndex);
 	if (0 != entityIndex)
-		WRITE_SHORT(VARS(trace.pHit)->modelindex);
+		WRITE_SHORT(hit->pev->modelindex);
 	MESSAGE_END();
 
 	SetThink(&CDecal::SUB_Remove);
@@ -150,15 +152,13 @@ void CDecal::TriggerDecal(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYP
 void CDecal::StaticDecal()
 {
 	TraceResult trace;
-	int entityIndex, modelIndex;
 
 	UTIL_TraceLine(pev->origin - Vector(5, 5, 5), pev->origin + Vector(5, 5, 5), ignore_monsters, ENT(pev), &trace);
 
-	entityIndex = (short)ENTINDEX(trace.pHit);
-	if (0 != entityIndex)
-		modelIndex = VARS(trace.pHit)->modelindex;
-	else
-		modelIndex = 0;
+	auto hit = CBaseEntity::Instance(trace.pHit);
+
+	const int entityIndex = (short)hit->entindex();
+	const int modelIndex = 0 != entityIndex ? hit->pev->modelindex : 0;
 
 	g_engfuncs.pfnStaticDecal(pev->origin, pev->skin, entityIndex, modelIndex);
 

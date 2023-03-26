@@ -80,7 +80,7 @@ void DispatchKeyValue(edict_t* pentKeyvalue, KeyValueData* pkvd)
 
 	g_Server.CheckForNewMapStart(false);
 
-	EntvarsKeyvalue(VARS(pentKeyvalue), pkvd);
+	EntvarsKeyvalue(&pentKeyvalue->v, pkvd);
 
 	// If the key was an entity variable, or there's no class set yet, don't look for the object, it may
 	// not exist yet.
@@ -298,7 +298,7 @@ int DispatchRestore(edict_t* pent, SAVERESTOREDATA* pSaveData, int globalEntity)
 			pSaveData->vecLandmarkOffset = oldOffset;
 			if (pEntity)
 			{
-				UTIL_SetOrigin(pEntity->pev, pEntity->pev->origin);
+				pEntity->SetOrigin(pEntity->pev->origin);
 				pEntity->OverrideReset();
 			}
 		}
@@ -456,6 +456,11 @@ bool CBaseEntity::RequiredKeyValue(KeyValueData* pkvd)
 	return false;
 }
 
+void CBaseEntity::SetOrigin(const Vector& origin)
+{
+	g_engfuncs.pfnSetOrigin(edict(), origin);
+}
+
 void CBaseEntity::LoadReplacementFiles()
 {
 	LoadFileNameReplacementMap(m_ModelReplacement, m_ModelReplacementFileName);
@@ -550,12 +555,12 @@ bool CBaseEntity::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, floa
 	// (that is, no actual entity projectile was involved in the attack so use the shooter's origin).
 	if (attacker == inflictor)
 	{
-		vecTemp = inflictor->pev->origin - (VecBModelOrigin(pev));
+		vecTemp = inflictor->pev->origin - (VecBModelOrigin(this));
 	}
 	else
 	// an actual missile was involved.
 	{
-		vecTemp = inflictor->pev->origin - (VecBModelOrigin(pev));
+		vecTemp = inflictor->pev->origin - (VecBModelOrigin(this));
 	}
 
 	// this global is still used for glass and other non-monster killables, along with decals.
@@ -720,7 +725,7 @@ void CBaseEntity::MakeDormant()
 	// Don't think
 	pev->nextthink = 0;
 	// Relink
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 }
 
 bool CBaseEntity::IsDormant()

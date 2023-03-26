@@ -22,8 +22,6 @@
 #include "nodes.h"
 #include "doors.h"
 
-bool FEntIsVisible(entvars_t* pev, entvars_t* pevTarget);
-
 void CPointEntity::Spawn()
 {
 	pev->solid = SOLID_NOT;
@@ -201,25 +199,6 @@ void CBaseDelay::SUB_UseTargets(CBaseEntity* pActivator, USE_TYPE useType, float
 	}
 }
 
-void SetMovedir(entvars_t* pev)
-{
-	if (pev->angles == Vector(0, -1, 0))
-	{
-		pev->movedir = Vector(0, 0, 1);
-	}
-	else if (pev->angles == Vector(0, -2, 0))
-	{
-		pev->movedir = Vector(0, 0, -1);
-	}
-	else
-	{
-		UTIL_MakeVectors(pev->angles);
-		pev->movedir = gpGlobals->v_forward;
-	}
-
-	pev->angles = g_vecZero;
-}
-
 void CBaseDelay::DelayThink()
 {
 	CBaseEntity* pActivator = nullptr;
@@ -322,7 +301,7 @@ void CBaseToggle::LinearMoveDone()
 		return;
 	}
 
-	UTIL_SetOrigin(pev, m_vecFinalDest);
+	SetOrigin(m_vecFinalDest);
 	pev->velocity = g_vecZero;
 	pev->nextthink = -1;
 	if (m_pfnCallWhenMoveDone)
@@ -381,14 +360,14 @@ float CBaseToggle::AxisValue(int flags, const Vector& angles)
 	return angles.y;
 }
 
-void CBaseToggle::AxisDir(entvars_t* pev)
+void CBaseToggle::AxisDir(CBaseEntity* entity)
 {
-	if (FBitSet(pev->spawnflags, SF_DOOR_ROTATE_Z))
-		pev->movedir = Vector(0, 0, 1); // around z-axis
-	else if (FBitSet(pev->spawnflags, SF_DOOR_ROTATE_X))
-		pev->movedir = Vector(1, 0, 0); // around x-axis
+	if (FBitSet(entity->pev->spawnflags, SF_DOOR_ROTATE_Z))
+		entity->pev->movedir = Vector(0, 0, 1); // around z-axis
+	else if (FBitSet(entity->pev->spawnflags, SF_DOOR_ROTATE_X))
+		entity->pev->movedir = Vector(1, 0, 0); // around x-axis
 	else
-		pev->movedir = Vector(0, 1, 0); // around y-axis
+		entity->pev->movedir = Vector(0, 1, 0); // around y-axis
 }
 
 float CBaseToggle::AxisDelta(int flags, const Vector& angle1, const Vector& angle2)
@@ -405,15 +384,13 @@ float CBaseToggle::AxisDelta(int flags, const Vector& angle1, const Vector& angl
 /**
 *	@brief returns true if the passed entity is visible to caller, even if not infront ()
 */
-bool FEntIsVisible(
-	entvars_t* pev,
-	entvars_t* pevTarget)
+bool FEntIsVisible(CBaseEntity* entity, CBaseEntity* target)
 {
-	Vector vecSpot1 = pev->origin + pev->view_ofs;
-	Vector vecSpot2 = pevTarget->origin + pevTarget->view_ofs;
+	Vector vecSpot1 = entity->pev->origin + entity->pev->view_ofs;
+	Vector vecSpot2 = target->pev->origin + target->pev->view_ofs;
 	TraceResult tr;
 
-	UTIL_TraceLine(vecSpot1, vecSpot2, ignore_monsters, ENT(pev), &tr);
+	UTIL_TraceLine(vecSpot1, vecSpot2, ignore_monsters, entity->edict(), &tr);
 
 	if (0 != tr.fInOpen && 0 != tr.fInWater)
 		return false; // sight line crossed contents

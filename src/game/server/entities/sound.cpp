@@ -1101,12 +1101,12 @@ bool CEnvSound::KeyValue(KeyValueData* pkvd)
 }
 
 /**
-*	@brief returns true if the given sound entity (pev) is in range and can see the given player entity (pevTarget)
+*	@brief returns true if the given sound entity (pSound) is in range and can see the given player entity (target)
 */
-bool FEnvSoundInRange(CEnvSound* pSound, entvars_t* pevTarget, float& flRange)
+bool FEnvSoundInRange(CEnvSound* pSound, CBaseEntity* target, float& flRange)
 {
 	const Vector vecSpot1 = pSound->pev->origin + pSound->pev->view_ofs;
-	const Vector vecSpot2 = pevTarget->origin + pevTarget->view_ofs;
+	const Vector vecSpot2 = target->pev->origin + target->pev->view_ofs;
 	TraceResult tr;
 
 	UTIL_TraceLine(vecSpot1, vecSpot2, ignore_monsters, pSound->edict(), &tr);
@@ -1148,7 +1148,7 @@ void CEnvSound::Think()
 			{
 				// we're looking at a valid sound entity affecting
 				// player, make sure it's still valid, update range
-				if (FEnvSoundInRange(this, VARS(pentPlayer), flRange))
+				if (FEnvSoundInRange(this, pPlayer, flRange))
 				{
 					pPlayer->m_flSndRange = flRange;
 					return true;
@@ -1172,7 +1172,7 @@ void CEnvSound::Think()
 
 		// if we got this far, we're looking at an entity that is contending
 		// for current player sound. the closest entity to player wins.
-		if (FEnvSoundInRange(this, VARS(pentPlayer), flRange))
+		if (FEnvSoundInRange(this, pPlayer, flRange))
 		{
 			if (flRange < pPlayer->m_flSndRange || pPlayer->m_flSndRange == 0)
 			{

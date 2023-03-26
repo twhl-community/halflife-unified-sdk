@@ -397,7 +397,7 @@ void CBaseButton::Spawn()
 		pev->nextthink = gpGlobals->time + 0.5; // no hurry, make sure everything else spawns
 	}
 
-	SetMovedir(pev);
+	SetMovedir(this);
 
 	pev->movetype = MOVETYPE_PUSH;
 	pev->solid = SOLID_BSP;
@@ -693,7 +693,7 @@ void CRotButton::Spawn()
 	PrecacheSound(STRING(m_sounds));
 
 	// set the axis of rotation
-	CBaseToggle::AxisDir(pev);
+	CBaseToggle::AxisDir(this);
 
 	// check for clockwise rotation
 	if (FBitSet(pev->spawnflags, SF_DOOR_ROTATE_BACKWARDS))
@@ -798,7 +798,7 @@ LINK_ENTITY_TO_CLASS(momentary_rot_button, CMomentaryRotButton);
 
 void CMomentaryRotButton::Spawn()
 {
-	CBaseToggle::AxisDir(pev);
+	CBaseToggle::AxisDir(this);
 
 	if (pev->speed == 0)
 		pev->speed = 100;
@@ -823,7 +823,7 @@ void CMomentaryRotButton::Spawn()
 		pev->solid = SOLID_NOT;
 
 	pev->movetype = MOVETYPE_PUSH;
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 	SetModel(STRING(pev->model));
 
 	if (FStrEq("", STRING(m_sounds)))

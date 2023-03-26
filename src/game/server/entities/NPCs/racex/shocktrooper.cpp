@@ -332,7 +332,7 @@ void CShockTrooper::GibMonster()
 
 	if (CVAR_GET_FLOAT("violence_agibs") != 0) // Should never get here, but someone might call it directly
 	{
-		CGib::SpawnRandomGibs(pev, 6, ShockTrooperGibs); // Throw alien gibs
+		CGib::SpawnRandomGibs(this, 6, ShockTrooperGibs); // Throw alien gibs
 	}
 
 	// don't remove players!
@@ -537,7 +537,7 @@ bool CShockTrooper::CheckRangeAttack2(float flDot, float flDist)
 
 	if (FBitSet(pev->weapons, HGRUNT_HANDGRENADE))
 	{
-		Vector vecToss = VecCheckToss(pev, GetGunPosition(), vecTarget, 0.5);
+		Vector vecToss = VecCheckToss(this, GetGunPosition(), vecTarget, 0.5);
 
 		if (vecToss != g_vecZero)
 		{
@@ -558,7 +558,7 @@ bool CShockTrooper::CheckRangeAttack2(float flDot, float flDist)
 	}
 	else
 	{
-		Vector vecToss = VecCheckThrow(pev, GetGunPosition(), vecTarget, GetSkillFloat("shocktrooper_gspeed"sv), 0.5);
+		Vector vecToss = VecCheckThrow(this, GetGunPosition(), vecTarget, GetSkillFloat("shocktrooper_gspeed"sv), 0.5);
 
 		if (vecToss != g_vecZero)
 		{
@@ -792,7 +792,7 @@ void CShockTrooper::HandleAnimEvent(MonsterEvent_t* pEvent)
 	case STROOPER_AE_GREN_TOSS:
 	{
 		UTIL_MakeVectors(pev->angles);
-		// CGrenade::ShootTimed( pev, pev->origin + gpGlobals->v_forward * 34 + Vector (0, 0, 32), m_vecTossVelocity, 3.5 );
+		// CGrenade::ShootTimed(this, pev->origin + gpGlobals->v_forward * 34 + Vector (0, 0, 32), m_vecTossVelocity, 3.5);
 		CSpore::CreateSpore(pev->origin + Vector(0, 0, 98), m_vecTossVelocity, this, CSpore::SporeType::GRENADE, true, false);
 
 		m_fThrowGrenade = false;

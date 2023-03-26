@@ -91,7 +91,7 @@ void COFGeneWormCloud::Spawn()
 
 	SetModel("sprites/ballsmoke.spr");
 
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 
 	SetSize(g_vecZero, g_vecZero);
 
@@ -211,7 +211,7 @@ void COFGeneWormCloud::LaunchCloud(const Vector& origin, const Vector& aim, int 
 	pev->aiment = nullptr;
 	pev->movetype = MOVETYPE_FLY;
 
-	UTIL_SetOrigin(pev, origin);
+	SetOrigin(origin);
 
 	SetTouch(&COFGeneWormCloud::GeneWormCloudTouch);
 	m_bLaunched = true;
@@ -292,7 +292,7 @@ void COFGeneWormSpawn::Spawn()
 
 	SetModel("sprites/boss_glow.spr");
 
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 
 	SetSize(g_vecZero, g_vecZero);
 
@@ -480,7 +480,7 @@ void COFGeneWormSpawn::LaunchSpawn(const Vector& origin, const Vector& aim, int 
 
 	pev->frame = 0;
 
-	UTIL_SetOrigin(pev, origin);
+	SetOrigin(origin);
 
 	SetTouch(&COFGeneWormSpawn::GeneWormSpawnTouch);
 	m_bLaunched = true;
@@ -759,7 +759,7 @@ void COFGeneWorm::Spawn()
 
 	SetSize({-436.67, -720.49, -331.74}, {425.29, 164.85, 355.68});
 
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 
 	pev->flags |= FL_MONSTER;
 	pev->takedamage = DAMAGE_AIM;
@@ -803,7 +803,7 @@ void COFGeneWorm::Spawn()
 
 	m_flSpitStartTime = gpGlobals->time;
 
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 
 	pev->rendermode = kRenderTransTexture;
 
@@ -994,7 +994,7 @@ void COFGeneWorm::HuntThink()
 		// Keep the glow in place relative to the orifice
 		Vector vecOrigin, vecAngles;
 		GetAttachment(1, vecOrigin, vecAngles);
-		UTIL_SetOrigin(m_orificeGlow->pev, vecOrigin);
+		m_orificeGlow->SetOrigin(vecOrigin);
 	}
 
 	if (m_hEnemy)
@@ -1222,7 +1222,7 @@ void COFGeneWorm::CommandUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_
 
 		pev->solid = SOLID_BBOX;
 
-		UTIL_SetOrigin(pev, pev->origin);
+		SetOrigin(pev->origin);
 		EmitSound(CHAN_VOICE, "geneworm/geneworm_entry.wav", VOL_NORM, 0.1);
 	}
 }

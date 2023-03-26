@@ -338,7 +338,7 @@ float CLeech::ObstacleDistance(CBaseEntity* pTarget)
 	{
 		pev->speed = -LEECH_SWIM_SPEED * 0.5;
 		//		AILogger->debug("Stuck from ({}) to ({})", pev->oldorigin, pev->origin);
-		//		UTIL_SetOrigin( pev, pev->oldorigin );
+		//		SetOrigin(pev->oldorigin);
 	}
 
 	if (tr.flFraction != 1.0)

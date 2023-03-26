@@ -59,7 +59,7 @@ void CAirtank::Spawn()
 
 	SetModel(STRING(pev->model));
 	SetSize(Vector(-16, -16, 0), Vector(16, 16, 36));
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 
 	SetTouch(&CAirtank::TankTouch);
 	SetThink(&CAirtank::TankThink);

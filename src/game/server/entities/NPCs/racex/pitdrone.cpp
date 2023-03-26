@@ -46,7 +46,7 @@ public:
 
 	int Classify() override { return CLASS_NONE; }
 
-	static void Shoot(entvars_t* pevOwner, Vector vecStart, Vector vecVelocity, Vector vecAngles);
+	static void Shoot(CBaseEntity* owner, Vector vecStart, Vector vecVelocity, Vector vecAngles);
 	void EXPORT SpikeTouch(CBaseEntity* pOther);
 
 	void EXPORT StartTrail();
@@ -94,17 +94,17 @@ void CPitdroneSpike::Spawn()
 	m_maxFrame = (float)MODEL_FRAMES(pev->modelindex) - 1;
 }
 
-void CPitdroneSpike::Shoot(entvars_t* pevOwner, Vector vecStart, Vector vecVelocity, Vector vecAngles)
+void CPitdroneSpike::Shoot(CBaseEntity* owner, Vector vecStart, Vector vecVelocity, Vector vecAngles)
 {
 	CPitdroneSpike* pSpit = g_EntityDictionary->Create<CPitdroneSpike>("pitdronespike");
 
 	pSpit->pev->angles = vecAngles;
-	UTIL_SetOrigin(pSpit->pev, vecStart);
+	pSpit->SetOrigin(vecStart);
 
 	pSpit->Spawn();
 
 	pSpit->pev->velocity = vecVelocity;
-	pSpit->pev->owner = ENT(pevOwner);
+	pSpit->pev->owner = owner->edict();
 
 	pSpit->SetThink(&CPitdroneSpike::StartTrail);
 	pSpit->pev->nextthink = gpGlobals->time + 0.1;
@@ -135,7 +135,7 @@ void CPitdroneSpike::SpikeTouch(CBaseEntity* pOther)
 
 		const auto vecOrigin = pev->origin - vecDir * 6;
 
-		UTIL_SetOrigin(pev, vecOrigin);
+		SetOrigin(vecOrigin);
 
 		pev->angles = UTIL_VecToAngles(vecDir);
 		pev->solid = SOLID_NOT;
@@ -488,7 +488,7 @@ void CPitdrone::HandleAnimEvent(MonsterEvent_t* pEvent)
 			WRITE_BYTE(25);					  // noise ( client will divide by 100 )
 			MESSAGE_END();
 
-			CPitdroneSpike::Shoot(pev, vecSpitOffset, vecSpitDir * 900, UTIL_VecToAngles(vecSpitDir));
+			CPitdroneSpike::Shoot(this, vecSpitOffset, vecSpitDir * 900, UTIL_VecToAngles(vecSpitDir));
 
 			auto ammoSubModel = GetBodygroup(PitdroneBodygroup::Weapons);
 
@@ -1126,7 +1126,7 @@ void CPitdrone::GibMonster()
 	if (CVAR_GET_FLOAT("violence_agibs") != 0) // Should never get here, but someone might call it directly
 	{
 		// Note: the original doesn't check for German censorship
-		CGib::SpawnRandomGibs(pev, 6, PitDroneGibs); // Throw alien gibs
+		CGib::SpawnRandomGibs(this, 6, PitDroneGibs); // Throw alien gibs
 	}
 
 	// don't remove players!

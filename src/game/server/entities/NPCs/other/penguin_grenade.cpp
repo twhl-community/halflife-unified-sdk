@@ -227,7 +227,7 @@ void CPenguinGrenade::Spawn()
 
 	SetModel(STRING(pev->model));
 	SetSize(Vector(-4, -4, 0), Vector(4, 4, 8));
-	UTIL_SetOrigin(pev, pev->origin);
+	SetOrigin(pev->origin);
 
 	SetTouch(&CPenguinGrenade::SuperBounceTouch);
 	SetThink(&CPenguinGrenade::HuntThink);
