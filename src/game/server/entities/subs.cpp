@@ -189,8 +189,16 @@ void CBaseDelay::SUB_UseTargets(CBaseEntity* pActivator, USE_TYPE useType, float
 
 		for (auto killTarget : UTIL_FindEntitiesByTargetname(STRING(m_iszKillTarget)))
 		{
-			UTIL_Remove(killTarget);
-			CBaseEntity::IOLogger->debug("killing {}", STRING(killTarget->pev->classname));
+			if (UTIL_IsRemovableEntity(killTarget))
+			{
+				UTIL_Remove(killTarget);
+				CBaseEntity::IOLogger->debug("killing {}", STRING(killTarget->pev->classname));
+			}
+			else
+			{
+				CBaseEntity::IOLogger->debug("Can't kill \"{}\": not allowed to remove entities of this type",
+					STRING(killTarget->pev->classname));
+			}
 		}
 	}
 

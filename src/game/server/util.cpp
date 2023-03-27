@@ -342,6 +342,33 @@ CBaseEntity* UTIL_FindEntityGeneric(const char* szWhatever, Vector& vecSrc, floa
 	return pEntity;
 }
 
+CBaseEntity* UTIL_FindEntityByIdentifier(CBaseEntity* startEntity, const char* needle)
+{
+	auto list = UTIL_GetEntityList();
+
+	for (int index = startEntity ? (startEntity->entindex() + 1) : 1; index < gpGlobals->maxEntities; ++index)
+	{
+		auto entity = CBaseEntity::Instance(list + index);
+
+		if (!entity)
+		{
+			continue;
+		}
+
+		if (!FStringNull(entity->pev->targetname) && FStrEq(needle, entity->GetTargetname()))
+		{
+			return entity;
+		}
+
+		if (FStrEq(needle, entity->GetClassname()))
+		{
+			return entity;
+		}
+	}
+
+	return nullptr;
+}
+
 // returns a CBaseEntity pointer to a player by index.  Only returns if the player is spawned and connected
 // otherwise returns nullptr
 // Index is 1 based
@@ -1259,6 +1286,12 @@ void UTIL_Remove(CBaseEntity* pEntity)
 	if (!pEntity)
 		return;
 
+	// Ignore attempts to remove the world. This will cause all sorts of problems.
+	if (pEntity == CBaseEntity::World)
+	{
+		return;
+	}
+
 	pEntity->UpdateOnRemove();
 	pEntity->pev->flags |= FL_KILLME;
 	pEntity->pev->targetname = string_t::Null;
@@ -1272,6 +1305,29 @@ bool UTIL_IsValidEntity(edict_t* pent)
 	return true;
 }
 
+// Even though worldspawn should never be removed it shouldn't be listed here since we silently ignore it in UTIL_Remove.
+constexpr const char* EntitiesNotAllowedToBeRemoved[] =
+{
+	"player"
+};
+
+bool UTIL_IsRemovableEntity(CBaseEntity* entity)
+{
+	if (!entity)
+	{
+		return false;
+	}
+
+	for (auto className : EntitiesNotAllowedToBeRemoved)
+	{
+		if (entity->ClassnameIs(className))
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
 
 void UTIL_PrecacheOther(const char* szClassname)
 {

@@ -528,6 +528,22 @@ void PrintPageSearchResult(CBasePlayer* player, const PageSearchResult& result)
 	}
 }
 
+static CBaseEntity* FindNextEntityToRemove(CBaseEntity* startEntity, const char* needle)
+{
+	for (CBaseEntity* entity = startEntity; (entity = UTIL_FindEntityByIdentifier(entity, needle)) != nullptr;)
+	{
+		if (!UTIL_IsRemovableEntity(entity))
+		{
+			Con_Printf("Can't remove \"%s\": not allowed to remove entities of this type\n", STRING(entity->pev->classname));
+			continue;
+		}
+
+		return entity;
+	}
+
+	return nullptr;
+}
+
 void SV_CreateClientCommands()
 {
 	g_ClientCommands.Create("say", [](CBasePlayer* player, const auto& args)
@@ -693,6 +709,80 @@ void SV_CreateClientCommands()
 				{ return true; });
 
 			PrintPageSearchResult(player, result); },
+		{.Flags = ClientCommandFlag::Cheat});
+
+	g_ClientCommands.Create("ent_remove", [](CBasePlayer* player, const CommandArgs& args)
+		{
+			CBaseEntity* candidate;
+
+			if (args.Count() < 2)
+			{
+				candidate = UTIL_FindEntityForward(player);
+			}
+			else
+			{
+				candidate = FindNextEntityToRemove(nullptr, args.Argument(1));
+			}
+
+			if (candidate)
+			{
+				Con_Printf("Removed %s:%d (%s)\n", candidate->GetClassname(), candidate->entindex(), candidate->GetTargetname());
+				UTIL_Remove(candidate);
+			}
+		},
+		{.Flags = ClientCommandFlag::Cheat});
+
+	g_ClientCommands.Create("ent_remove_all", [](CBasePlayer* player, const CommandArgs& args)
+		{
+			if (args.Count() < 2)
+			{
+				Con_Printf("Usage: ent_remove_all <classname|targetname>\n");
+				return;
+			}
+
+			const char* needle = args.Argument(1);
+
+			int count = 0;
+
+			for (CBaseEntity* candidate = nullptr; (candidate = FindNextEntityToRemove(candidate, needle)) != nullptr;)
+			{
+				if (candidate)
+				{
+					++count;
+					UTIL_Remove(candidate);
+				}
+			}
+
+			Con_Printf("Removed %d entities matching \"%s\"\n", count, needle);
+		},
+		{.Flags = ClientCommandFlag::Cheat});
+
+	g_ClientCommands.Create("ent_setname", [](CBasePlayer* player, const CommandArgs& args)
+		{
+			if (args.Count() < 2)
+			{
+				Con_Printf("Usage: ent_setname <new targetname> [classname|targetname]\n");
+				return;
+			}
+
+			CBaseEntity* target;
+
+			if (args.Count() < 3)
+			{
+				target = UTIL_FindEntityForward(player);
+			}
+			else
+			{
+				target = UTIL_FindEntityByIdentifier(nullptr, args.Argument(2));
+			}
+
+			if (target)
+			{
+				const char* name = args.Argument(1);
+				Con_Printf("Set the name of %s to %s\n", target->GetClassname(), name);
+				target->pev->targetname = ALLOC_STRING(name);
+			}
+		},
 		{.Flags = ClientCommandFlag::Cheat});
 }
 

@@ -129,6 +129,11 @@ CBaseEntity* UTIL_FindEntityByTarget(CBaseEntity* pStartEntity, const char* szNa
 CBaseEntity* UTIL_FindEntityGeneric(const char* szName, Vector& vecSrc, float flRadius);
 
 /**
+ *	@brief Finds entities by an identifier matching either classname or targetname.
+ */
+CBaseEntity* UTIL_FindEntityByIdentifier(CBaseEntity* startEntity, const char* needle);
+
+/**
  *	@brief returns a CBasePlayer pointer to a player by index.
  *	Only returns if the player is spawned and connected, otherwise returns nullptr.
  *	@param playerIndex 1 based player index
@@ -206,6 +211,12 @@ float UTIL_AngleDistance(float next, float cur);
 char* UTIL_VarArgs(const char* format, ...);
 void UTIL_Remove(CBaseEntity* pEntity);
 bool UTIL_IsValidEntity(edict_t* pent);
+
+/**
+ *	@brief Returns whether the given entity can be removed if requested by players or designers (killtarget).
+ */
+bool UTIL_IsRemovableEntity(CBaseEntity* entity);
+
 bool UTIL_TeamsMatch(const char* pTeamName1, const char* pTeamName2);
 
 // Use for ease-in, ease-out style interpolation (accel/decel)
@@ -285,8 +296,8 @@ void UTIL_StripToken(const char* pKey, char* pDest); // for redundant keynames
 void SetMovedir(CBaseEntity* entity);
 
 /**
-*	@brief calculates origin of a bmodel from absmin/size because all bmodel origins are 0 0 0
-*/
+ *	@brief calculates origin of a bmodel from absmin/size because all bmodel origins are 0 0 0
+ */
 Vector VecBModelOrigin(CBaseEntity* bModel);
 
 //
