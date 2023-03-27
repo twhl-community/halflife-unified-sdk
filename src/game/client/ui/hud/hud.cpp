@@ -159,11 +159,14 @@ int CHud::GetSpriteIndex(const char* SpriteName)
 	return -1; // invalid sprite
 }
 
-void CHud::VidInit()
+void CHud::UpdateScreenInfo()
 {
 	m_scrinfo.iSize = sizeof(m_scrinfo);
 	GetScreenInfo(&m_scrinfo);
+}
 
+void CHud::VidInit()
+{
 	// ----------
 	// Load Sprites
 	// ---------

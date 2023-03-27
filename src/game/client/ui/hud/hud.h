@@ -813,6 +813,7 @@ public:
 
 	void Init();
 	void Shutdown();
+	void UpdateScreenInfo();
 	void VidInit();
 	void Think();
 	bool Redraw(float flTime, bool intermission);

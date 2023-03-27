@@ -72,6 +72,8 @@ void ClientLibrary::VidInit()
 
 	// Hud vid init has been delayed until after the network data file has been received to allow use of its data.
 	// gHUD.VidInit();
+	// Needed by some UI code before the network data file is loaded.
+	gHUD.UpdateScreenInfo();
 
 	g_ClientPrediction.Reset();
 }
