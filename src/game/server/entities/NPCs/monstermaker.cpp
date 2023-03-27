@@ -21,6 +21,11 @@
 #define SF_MONSTERMAKER_MONSTERCLIP 8 //!< Children are blocked by monsterclip
 
 /**
+ *	@brief Amount of @c monstermaker child keys that can be passed on to children on creation.
+ */
+constexpr int MaxMonsterMakerChildKeys = 64;
+
+/**
  *	@brief this entity creates monsters during the game.
  */
 class CMonsterMaker : public CBaseMonster
@@ -72,6 +77,11 @@ public:
 
 	bool m_fActive;
 	bool m_fFadeChildren; // should we make the children fadeout?
+
+	string_t m_ChildKeys[MaxMonsterMakerChildKeys];
+	string_t m_ChildValues[MaxMonsterMakerChildKeys];
+
+	int m_ChildKeyCount = 0;
 };
 
 LINK_ENTITY_TO_CLASS(monstermaker, CMonsterMaker);
@@ -85,6 +95,9 @@ TYPEDESCRIPTION CMonsterMaker::m_SaveData[] =
 		DEFINE_FIELD(CMonsterMaker, m_iMaxLiveChildren, FIELD_INTEGER),
 		DEFINE_FIELD(CMonsterMaker, m_fActive, FIELD_BOOLEAN),
 		DEFINE_FIELD(CMonsterMaker, m_fFadeChildren, FIELD_BOOLEAN),
+		DEFINE_ARRAY(CMonsterMaker, m_ChildKeys, FIELD_STRING, MaxMonsterMakerChildKeys),
+		DEFINE_ARRAY(CMonsterMaker, m_ChildValues, FIELD_STRING, MaxMonsterMakerChildKeys),
+		DEFINE_FIELD(CMonsterMaker, m_ChildKeyCount, FIELD_INTEGER),
 };
 
 IMPLEMENT_SAVERESTORE(CMonsterMaker, CBaseMonster);
@@ -104,6 +117,23 @@ bool CMonsterMaker::KeyValue(KeyValueData* pkvd)
 	else if (FStrEq(pkvd->szKeyName, "monstertype"))
 	{
 		m_iszMonsterClassname = ALLOC_STRING(pkvd->szValue);
+		return true;
+	}
+	// Pass this key on to children.
+	else if (pkvd->szKeyName[0] == '#')
+	{
+		if (m_ChildKeyCount < MaxMonsterMakerChildKeys)
+		{
+			m_ChildKeys[m_ChildKeyCount] = ALLOC_STRING(pkvd->szKeyName + 1);
+			m_ChildValues[m_ChildKeyCount] = ALLOC_STRING(pkvd->szValue);
+			++m_ChildKeyCount;
+		}
+		else
+		{
+			AILogger->warn("{}:{} ({}): Too many child keys specified (> {})",
+				GetClassname(), entindex(), GetTargetname(), MaxMonsterMakerChildKeys);
+		}
+
 		return true;
 	}
 
@@ -215,6 +245,21 @@ void CMonsterMaker::MakeMonster()
 	// Children hit monsterclip brushes
 	if ((pev->spawnflags & SF_MONSTERMAKER_MONSTERCLIP) != 0)
 		SetBits(entity->pev->spawnflags, SF_MONSTER_HITMONSTERCLIP);
+
+	// Pass any keyvalues specified by the designer.
+	if (m_ChildKeyCount > 0)
+	{
+		KeyValueData kvd{.szClassName = STRING(m_iszMonsterClassname)};
+
+		for (int i = 0; i < m_ChildKeyCount; ++i)
+		{
+			kvd.szKeyName = STRING(m_ChildKeys[i]);
+			kvd.szValue = STRING(m_ChildValues[i]);
+			kvd.fHandled = 0;
+
+			DispatchKeyValue(entity->edict(), &kvd);
+		}
+	}
 
 	DispatchSpawn(entity->edict());
 	entity->pev->owner = edict();
