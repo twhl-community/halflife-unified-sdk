@@ -59,6 +59,13 @@ void CHudSayText::InitHUDData()
 
 bool CHudSayText::VidInit()
 {
+	// Get font-related information.
+	int lineWidth = 0;
+	GetConsoleStringSize("", &lineWidth, &m_LineHeight);
+
+	// Calculate text area starting position now so chat input can position itself correctly.
+	m_YStart = ScreenHeight - 60 - (m_LineHeight * (MAX_LINES + 2));
+
 	return true;
 }
 
@@ -220,8 +227,6 @@ void CHudSayText::SayTextPrint(const char* pszBuf, int iBufSize, int clientIndex
 
 	m_iFlags |= HUD_ACTIVE;
 	PlaySound("misc/talk.wav", 1);
-
-	m_YStart = ScreenHeight - 60 - (m_LineHeight * (MAX_LINES + 2));
 }
 
 void CHudSayText::EnsureTextFitsInOneLineAndWrapIfHaveTo(int line)
@@ -312,4 +317,10 @@ void CHudSayText::EnsureTextFitsInOneLineAndWrapIfHaveTo(int line)
 			}
 		}
 	}
+}
+
+int CHudSayText::GetChatYInputPosition() const
+{
+	// The input position is above the text area, separated by an empty line.
+	return m_YStart - m_LineHeight * 2;
 }

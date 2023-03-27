@@ -311,6 +311,8 @@ public:
 	void EnsureTextFitsInOneLineAndWrapIfHaveTo(int line);
 	friend class CHudSpectator;
 
+	int GetChatYInputPosition() const;
+
 private:
 	static int GetMaxLineWidth();
 

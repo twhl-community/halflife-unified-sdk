@@ -23,6 +23,9 @@ Sets the location of the input for chat text
 
 void DLLEXPORT HUD_ChatInputPosition(int* x, int* y)
 {
+	*y = gHUD.m_SayText.GetChatYInputPosition();
+
+	/*
 	if (g_iUser1 != 0 || 0 != gEngfuncs.IsSpectateOnly())
 	{
 		if (gHUD.m_Spectator.m_pip->value == INSET_OFF)
@@ -34,6 +37,7 @@ void DLLEXPORT HUD_ChatInputPosition(int* x, int* y)
 			*y = YRES(gHUD.m_Spectator.m_OverviewData.insetWindowHeight + 5);
 		}
 	}
+	*/
 }
 
 //////////////////////////////////////////////////////////////////////
