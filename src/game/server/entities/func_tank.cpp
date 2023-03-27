@@ -1018,7 +1018,7 @@ void CFuncTankRocket::Fire(const Vector& barrelEnd, const Vector& forward, CBase
 		{
 			for (i = 0; i < bulletCount; i++)
 			{
-				Create("rpg_rocket", barrelEnd, pev->angles, edict());
+				Create("rpg_rocket", barrelEnd, pev->angles, this);
 			}
 			CFuncTank::Fire(barrelEnd, forward, this);
 		}
@@ -1062,7 +1062,7 @@ void CFuncTankMortar::Fire(const Vector& barrelEnd, const Vector& forward, CBase
 
 			TankTrace(barrelEnd, forward, gTankSpread[m_spread], tr);
 
-			ExplosionCreate(tr.vecEndPos, pev->angles, edict(), pev->impulse, true);
+			ExplosionCreate(tr.vecEndPos, pev->angles, this, pev->impulse, true);
 
 			CFuncTank::Fire(barrelEnd, forward, this);
 		}

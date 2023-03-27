@@ -714,7 +714,7 @@ void CApache::FireRocket()
 		break;
 	}
 
-	CBaseEntity* pRocket = CBaseEntity::Create("hvr_rocket", vecSrc, pev->angles, edict());
+	CBaseEntity* pRocket = CBaseEntity::Create("hvr_rocket", vecSrc, pev->angles, this);
 	if (pRocket)
 	{
 		MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, vecSrc);

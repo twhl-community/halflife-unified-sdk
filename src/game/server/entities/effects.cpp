@@ -1986,7 +1986,7 @@ void CEnvBeverage::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE u
 		return;
 	}
 
-	CBaseEntity* pCan = CBaseEntity::Create("item_sodacan", pev->origin, pev->angles, edict());
+	CBaseEntity* pCan = CBaseEntity::Create("item_sodacan", pev->origin, pev->angles, this);
 
 	if (pev->skin == 6)
 	{

@@ -50,7 +50,7 @@ void Weapons_RegisterAmmoTypes()
 	CBasePlayerWeapon::WeaponsLogger->debug("Registered {} ammo types", g_AmmoTypes.GetCount());
 }
 
-void FindHullIntersection(const Vector& vecSrc, TraceResult& tr, const Vector& mins, const Vector& maxs, edict_t* pEntity)
+void FindHullIntersection(const Vector& vecSrc, TraceResult& tr, const Vector& mins, const Vector& maxs, CBaseEntity* pEntity)
 {
 	int i, j, k;
 	float distance;
@@ -62,7 +62,7 @@ void FindHullIntersection(const Vector& vecSrc, TraceResult& tr, const Vector& m
 	distance = 1e6f;
 
 	vecHullEnd = vecSrc + ((vecHullEnd - vecSrc) * 2);
-	UTIL_TraceLine(vecSrc, vecHullEnd, dont_ignore_monsters, pEntity, &tmpTrace);
+	UTIL_TraceLine(vecSrc, vecHullEnd, dont_ignore_monsters, pEntity->edict(), &tmpTrace);
 	if (tmpTrace.flFraction < 1.0)
 	{
 		tr = tmpTrace;
@@ -79,7 +79,7 @@ void FindHullIntersection(const Vector& vecSrc, TraceResult& tr, const Vector& m
 				vecEnd.y = vecHullEnd.y + minmaxs[j]->y;
 				vecEnd.z = vecHullEnd.z + minmaxs[k]->z;
 
-				UTIL_TraceLine(vecSrc, vecEnd, dont_ignore_monsters, pEntity, &tmpTrace);
+				UTIL_TraceLine(vecSrc, vecEnd, dont_ignore_monsters, pEntity->edict(), &tmpTrace);
 				if (tmpTrace.flFraction < 1.0)
 				{
 					float thisDistance = (tmpTrace.vecEndPos - vecSrc).Length();

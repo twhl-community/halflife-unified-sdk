@@ -793,7 +793,7 @@ struct fmt::formatter<PlayerLogInfo>
 			STRING(info.Player.pev->netname),
 			g_engfuncs.pfnGetPlayerUserId(edict),
 			GETPLAYERAUTHID(edict),
-			GetTeamName(edict));
+			GetTeamName(&info.Player));
 	}
 };
 

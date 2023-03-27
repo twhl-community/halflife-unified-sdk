@@ -76,31 +76,29 @@ int ToTeamIndex(const CTFTeam team)
 	return static_cast<int>(team) - 1;
 }
 
-const char* GetTeamName(edict_t* pEntity)
+const char* GetTeamName(CBasePlayer* pEntity)
 {
 	if (g_pGameRules->IsCTF())
 	{
-		auto pPlayer = static_cast<CBasePlayer*>(CBaseEntity::Instance(pEntity));
-
-		if (pPlayer->m_iTeamNum == CTFTeam::None)
+		if (pEntity->m_iTeamNum == CTFTeam::None)
 		{
 			return "spectator";
 		}
 
-		return team_names[(int)pPlayer->m_iTeamNum - 1];
+		return team_names[(int)pEntity->m_iTeamNum - 1];
 	}
 	else
 	{
 		// A bit counterintuitive, this basically means each player model is a team
 		if (g_pGameRules->IsDeathmatch() && g_pGameRules->IsTeamplay())
 		{
-			return g_engfuncs.pfnInfoKeyValue(g_engfuncs.pfnGetInfoKeyBuffer(pEntity), "model");
+			return g_engfuncs.pfnInfoKeyValue(g_engfuncs.pfnGetInfoKeyBuffer(pEntity->edict()), "model");
 		}
 		else
 		{
 			static char szTmp[256];
 
-			snprintf(szTmp, sizeof(szTmp), "%i", g_engfuncs.pfnGetPlayerUserId(pEntity));
+			snprintf(szTmp, sizeof(szTmp), "%i", g_engfuncs.pfnGetPlayerUserId(pEntity->edict()));
 			return szTmp;
 		}
 	}
@@ -802,13 +800,11 @@ bool CHalfLifeCTFplay::FPlayerCanTakeDamage(CBasePlayer* pPlayer, CBaseEntity* p
 	return CHalfLifeMultiplay::FPlayerCanTakeDamage(pPlayer, pAttacker);
 }
 
-bool CHalfLifeCTFplay::ShouldAutoAim(CBasePlayer* pPlayer, edict_t* target)
+bool CHalfLifeCTFplay::ShouldAutoAim(CBasePlayer* pPlayer, CBaseEntity* target)
 {
-	auto v4 = CBaseEntity::Instance(target);
-
-	if (v4 && v4->IsPlayer())
+	if (target && target->IsPlayer())
 	{
-		return PlayerRelationship(pPlayer, v4) != GR_TEAMMATE;
+		return PlayerRelationship(pPlayer, target) != GR_TEAMMATE;
 	}
 
 	return true;
@@ -1012,8 +1008,8 @@ void CHalfLifeCTFplay::PlayerKilled(CBasePlayer* pVictim, CBaseEntity* pKiller, 
 				char szTeamName1[256];
 				char szTeamName2[256];
 
-				strncpy(szTeamName1, GetTeamName(pKiller->edict()), sizeof(szTeamName1));
-				strncpy(szTeamName2, GetTeamName(pVictim->edict()), sizeof(szTeamName2));
+				strncpy(szTeamName1, GetTeamName(killerPlayer), sizeof(szTeamName1));
+				strncpy(szTeamName2, GetTeamName(pVictim), sizeof(szTeamName2));
 
 				szTeamName1[sizeof(szTeamName1) - 1] = 0;
 				szTeamName2[sizeof(szTeamName2) - 1] = 0;
@@ -1283,7 +1279,7 @@ void CHalfLifeCTFplay::ChangePlayerTeam(CBasePlayer* pPlayer, const char* pCharN
 		g_engfuncs.pfnWriteByte(0);
 		g_engfuncs.pfnMessageEnd();
 
-		const auto pszTeamName = GetTeamName(pPlayer->edict());
+		const auto pszTeamName = GetTeamName(pPlayer);
 
 		Logger->trace("{} joined team \"{}\"", PlayerLogInfo{*pPlayer}, pszTeamName);
 

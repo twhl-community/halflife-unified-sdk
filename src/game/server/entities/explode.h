@@ -22,4 +22,4 @@
 #define SF_ENVEXPLOSION_NODECAL (1 << 4)	//!< don't make a scorch mark
 #define SF_ENVEXPLOSION_NOSPARKS (1 << 5)	//!< don't make a scorch mark
 
-void ExplosionCreate(const Vector& center, const Vector& angles, edict_t* pOwner, int magnitude, bool doDamage);
+void ExplosionCreate(const Vector& center, const Vector& angles, CBaseEntity* owner, int magnitude, bool doDamage);

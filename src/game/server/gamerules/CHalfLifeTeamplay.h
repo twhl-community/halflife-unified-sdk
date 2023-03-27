@@ -34,7 +34,7 @@ public:
 	bool FPlayerCanTakeDamage(CBasePlayer* pPlayer, CBaseEntity* pAttacker) override;
 	int PlayerRelationship(CBaseEntity* pPlayer, CBaseEntity* pTarget) override;
 	const char* GetTeamID(CBaseEntity* pEntity) override;
-	bool ShouldAutoAim(CBasePlayer* pPlayer, edict_t* target) override;
+	bool ShouldAutoAim(CBasePlayer* pPlayer, CBaseEntity* target) override;
 	int IPointsForKill(CBasePlayer* pAttacker, CBasePlayer* pKilled) override;
 	void InitHUD(CBasePlayer* pl) override;
 	void DeathNotice(CBasePlayer* pVictim, CBaseEntity* pKiller, CBaseEntity* inflictor) override;

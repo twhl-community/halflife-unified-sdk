@@ -454,7 +454,7 @@ void CTripmine::PrimaryAttack()
 		{
 			Vector angles = UTIL_VecToAngles(tr.vecPlaneNormal);
 
-			Create("monster_tripmine", tr.vecEndPos + tr.vecPlaneNormal * 8, angles, m_pPlayer->edict());
+			Create("monster_tripmine", tr.vecEndPos + tr.vecPlaneNormal * 8, angles, m_pPlayer);
 
 			m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]--;
 

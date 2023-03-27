@@ -34,7 +34,7 @@ public:
 
 	int PlayerRelationship(CBaseEntity* pPlayer, CBaseEntity* pTarget) override;
 
-	bool ShouldAutoAim(CBasePlayer* pPlayer, edict_t* target) override;
+	bool ShouldAutoAim(CBasePlayer* pPlayer, CBaseEntity* target) override;
 
 	int IPointsForKill(CBasePlayer* pAttacker, CBasePlayer* pKilled) override;
 

@@ -75,7 +75,7 @@ public:
 
 	bool FPlayerCanTakeDamage(CBasePlayer* pPlayer, CBaseEntity* pAttacker) override;
 
-	bool ShouldAutoAim(CBasePlayer* pPlayer, edict_t* target) override;
+	bool ShouldAutoAim(CBasePlayer* pPlayer, CBaseEntity* target) override;
 
 	void PlayerSpawn(CBasePlayer* pPlayer) override;
 

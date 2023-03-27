@@ -159,7 +159,7 @@ void COFTorchAlly::TraceAttack(CBaseEntity* attacker, float flDamage, Vector vec
 		// Make sure it kills this grunt
 		bitsDamageType = DMG_ALWAYSGIB | DMG_BLAST;
 		flDamage = pev->health;
-		ExplosionCreate(ptr->vecEndPos, pev->angles, edict(), 100, true);
+		ExplosionCreate(ptr->vecEndPos, pev->angles, this, 100, true);
 	}
 
 	CBaseHGruntAlly::TraceAttack(attacker, flDamage, vecDir, ptr, bitsDamageType);

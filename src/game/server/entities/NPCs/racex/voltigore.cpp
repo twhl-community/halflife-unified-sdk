@@ -32,7 +32,7 @@ public:
 
 	static COFChargedBolt* ChargedBoltCreate();
 
-	void LaunchChargedBolt(const Vector& vecAim, edict_t* pOwner, int nSpeed, int nAcceleration);
+	void LaunchChargedBolt(const Vector& vecAim, CBaseEntity* owner, int nSpeed, int nAcceleration);
 
 	void SetAttachment(CBaseAnimating* pAttachEnt, int iAttachIdx);
 
@@ -139,10 +139,10 @@ COFChargedBolt* COFChargedBolt::ChargedBoltCreate()
 	return pBolt;
 }
 
-void COFChargedBolt::LaunchChargedBolt(const Vector& vecAim, edict_t* pOwner, int nSpeed, int nAcceleration)
+void COFChargedBolt::LaunchChargedBolt(const Vector& vecAim, CBaseEntity* owner, int nSpeed, int nAcceleration)
 {
 	pev->angles = vecAim;
-	pev->owner = pOwner;
+	SetOwner(owner);
 	pev->velocity = vecAim * nSpeed;
 
 	pev->speed = nSpeed;
@@ -429,7 +429,7 @@ void COFVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 			COFChargedBolt* bolt = m_pChargedBolt.Entity<COFChargedBolt>();
 
-			bolt->LaunchChargedBolt(direction, edict(), 1000, 10);
+			bolt->LaunchChargedBolt(direction, this, 1000, 10);
 
 			// We no longer have to manage the bolt now
 			m_pChargedBolt = nullptr;

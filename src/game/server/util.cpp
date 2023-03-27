@@ -49,13 +49,13 @@ CBaseEntity* UTIL_FindEntityForward(CBaseEntity* pMe)
 	return nullptr;
 }
 
-void UTIL_ParametricRocket(CBaseEntity* entity, Vector vecOrigin, Vector vecAngles, edict_t* owner)
+void UTIL_ParametricRocket(CBaseEntity* entity, Vector vecOrigin, Vector vecAngles, CBaseEntity* owner)
 {
 	entity->pev->startpos = vecOrigin;
 	// Trace out line to end pos
 	TraceResult tr;
 	UTIL_MakeVectors(vecAngles);
-	UTIL_TraceLine(entity->pev->startpos, entity->pev->startpos + gpGlobals->v_forward * 8192, ignore_monsters, owner, &tr);
+	UTIL_TraceLine(entity->pev->startpos, entity->pev->startpos + gpGlobals->v_forward * 8192, ignore_monsters, owner->edict(), &tr);
 	entity->pev->endpos = tr.vecEndPos;
 
 	// Now compute how long it will take based on current velocity
@@ -156,7 +156,6 @@ Vector UTIL_VecToAngles(const Vector& vec)
 	return out;
 }
 
-//	float UTIL_MoveToOrigin( edict_t *pent, const Vector vecGoal, float flDist, int iMoveType )
 void UTIL_MoveToOrigin(edict_t* pent, const Vector& vecGoal, float flDist, int iMoveType)
 {
 	MOVE_TO_ORIGIN(pent, vecGoal, flDist, iMoveType);

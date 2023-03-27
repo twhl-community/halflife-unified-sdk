@@ -734,12 +734,12 @@ void CBreakable::Die()
 	SetThink(&CBreakable::SUB_Remove);
 	pev->nextthink = pev->ltime + 0.1;
 	if (!FStringNull(m_iszSpawnObject))
-		CBaseEntity::Create(STRING(m_iszSpawnObject), VecBModelOrigin(this), pev->angles, edict());
+		CBaseEntity::Create(STRING(m_iszSpawnObject), VecBModelOrigin(this), pev->angles, this);
 
 
 	if (Explodable())
 	{
-		ExplosionCreate(Center(), pev->angles, edict(), ExplosionMagnitude(), true);
+		ExplosionCreate(Center(), pev->angles, this, ExplosionMagnitude(), true);
 	}
 }
 

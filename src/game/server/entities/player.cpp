@@ -659,7 +659,7 @@ void CBasePlayer::PackDeadPlayerItems()
 	}
 
 	// create a box to pack the stuff into.
-	CWeaponBox* pWeaponBox = (CWeaponBox*)CBaseEntity::Create("weaponbox", pev->origin, pev->angles, edict());
+	CWeaponBox* pWeaponBox = (CWeaponBox*)CBaseEntity::Create("weaponbox", pev->origin, pev->angles, this);
 
 	pWeaponBox->pev->angles.x = 0; // don't let weaponbox tilt.
 	pWeaponBox->pev->angles.z = 0;
@@ -1536,16 +1536,16 @@ void CBasePlayer::Jump()
 // This is a glorious hack to find free space when you've crouched into some solid space
 // Our crouching collisions do not work correctly for some reason and this is easier
 // than fixing the problem :(
-void FixPlayerCrouchStuck(edict_t* pPlayer)
+void FixPlayerCrouchStuck(CBaseEntity* pPlayer)
 {
 	TraceResult trace;
 
 	// Move up as many as 18 pixels if the player is stuck.
 	for (int i = 0; i < 18; i++)
 	{
-		UTIL_TraceHull(pPlayer->v.origin, pPlayer->v.origin, dont_ignore_monsters, head_hull, pPlayer, &trace);
+		UTIL_TraceHull(pPlayer->pev->origin, pPlayer->pev->origin, dont_ignore_monsters, head_hull, pPlayer->edict(), &trace);
 		if (0 != trace.fStartSolid)
-			pPlayer->v.origin.z++;
+			pPlayer->pev->origin.z++;
 		else
 			break;
 	}
@@ -2941,7 +2941,7 @@ bool CBasePlayer::Restore(CRestore& restore)
 	if (FBitSet(pev->flags, FL_DUCKING))
 	{
 		// Use the crouch HACK
-		// FixPlayerCrouchStuck( edict() );
+		// FixPlayerCrouchStuck(this);
 		// Don't need to do this with new player prediction code.
 		SetSize(VEC_DUCK_HULL_MIN, VEC_DUCK_HULL_MAX);
 	}
@@ -4405,13 +4405,15 @@ Vector CBasePlayer::AutoaimDeflection(const Vector& vecSrc, float flDist, float 
 			continue;
 		if (pEdict == edict())
 			continue;
-		//		if (pev->team > 0 && pEdict->v.team == pev->team)
-		//			continue;	// don't aim at teammate
-		if (!g_pGameRules->ShouldAutoAim(this, pEdict))
-			continue;
 
 		pEntity = Instance(pEdict);
+
 		if (pEntity == nullptr)
+			continue;
+
+		//		if (pev->team > 0 && pEdict->v.team == pev->team)
+		//			continue;	// don't aim at teammate
+		if (!g_pGameRules->ShouldAutoAim(this, pEntity))
 			continue;
 
 		if (!pEntity->IsAlive())
@@ -4556,7 +4558,7 @@ void CBasePlayer::DropPlayerWeapon(const char* pszItemName)
 
 			ClearWeaponBit(weapon->m_iId); // take item off hud
 
-			CWeaponBox* pWeaponBox = (CWeaponBox*)CBaseEntity::Create("weaponbox", pev->origin + gpGlobals->v_forward * 10, pev->angles, edict());
+			CWeaponBox* pWeaponBox = (CWeaponBox*)CBaseEntity::Create("weaponbox", pev->origin + gpGlobals->v_forward * 10, pev->angles, this);
 			pWeaponBox->pev->angles.x = 0;
 			pWeaponBox->pev->angles.z = 0;
 			pWeaponBox->PackWeapon(weapon);

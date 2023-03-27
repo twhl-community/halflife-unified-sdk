@@ -227,18 +227,18 @@ class CXenTreeTrigger : public CBaseEntity
 {
 public:
 	void Touch(CBaseEntity* pOther) override;
-	static CXenTreeTrigger* TriggerCreate(edict_t* pOwner, const Vector& position);
+	static CXenTreeTrigger* TriggerCreate(CBaseEntity* owner, const Vector& position);
 };
 
 LINK_ENTITY_TO_CLASS(xen_ttrigger, CXenTreeTrigger);
 
-CXenTreeTrigger* CXenTreeTrigger::TriggerCreate(edict_t* pOwner, const Vector& position)
+CXenTreeTrigger* CXenTreeTrigger::TriggerCreate(CBaseEntity* owner, const Vector& position)
 {
 	CXenTreeTrigger* pTrigger = g_EntityDictionary->Create<CXenTreeTrigger>("xen_ttrigger");
 	pTrigger->pev->origin = position;
 	pTrigger->pev->solid = SOLID_TRIGGER;
 	pTrigger->pev->movetype = MOVETYPE_NONE;
-	pTrigger->pev->owner = pOwner;
+	pTrigger->SetOwner(owner);
 
 	return pTrigger;
 }
@@ -318,7 +318,7 @@ void CXenTree::Spawn()
 	AngleVectors(pev->angles, &triggerPosition, nullptr, nullptr);
 	triggerPosition = pev->origin + (triggerPosition * 64);
 	// Create the trigger
-	m_pTrigger = CXenTreeTrigger::TriggerCreate(edict(), triggerPosition);
+	m_pTrigger = CXenTreeTrigger::TriggerCreate(this, triggerPosition);
 	m_pTrigger->SetSize(Vector(-24, -24, 0), Vector(24, 24, 128));
 }
 

@@ -422,7 +422,7 @@ void CAGrunt::HandleAnimEvent(MonsterEvent_t* pEvent)
 		WRITE_BYTE(128);				 // brightness
 		MESSAGE_END();
 
-		CBaseEntity* pHornet = CBaseEntity::Create("hornet", vecArmPos, UTIL_VecToAngles(vecDirToEnemy), edict());
+		CBaseEntity* pHornet = CBaseEntity::Create("hornet", vecArmPos, UTIL_VecToAngles(vecDirToEnemy), this);
 		UTIL_MakeVectors(pHornet->pev->angles);
 		pHornet->pev->velocity = gpGlobals->v_forward * 300;
 

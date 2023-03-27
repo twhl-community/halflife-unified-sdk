@@ -311,15 +311,13 @@ void CSatchel::PrimaryAttack()
 	{
 		SendWeaponAnim(SATCHEL_RADIO_FIRE);
 
-		edict_t* pPlayer = m_pPlayer->edict();
-
 		CBaseEntity* pSatchel = nullptr;
 
 		while ((pSatchel = UTIL_FindEntityInSphere(pSatchel, m_pPlayer->pev->origin, 4096)) != nullptr)
 		{
 			if (pSatchel->ClassnameIs("monster_satchel"))
 			{
-				if (pSatchel->pev->owner == pPlayer)
+				if (pSatchel->GetOwner() == m_pPlayer)
 				{
 					pSatchel->Use(m_pPlayer, m_pPlayer, USE_ON, 0);
 					m_chargeReady = 2;
@@ -358,7 +356,7 @@ void CSatchel::Throw()
 		Vector vecSrc = m_pPlayer->pev->origin;
 		Vector vecThrow = gpGlobals->v_forward * 274 + m_pPlayer->pev->velocity;
 
-		CBaseEntity* pSatchel = Create("monster_satchel", vecSrc, Vector(0, 0, 0), m_pPlayer->edict());
+		CBaseEntity* pSatchel = Create("monster_satchel", vecSrc, Vector(0, 0, 0), m_pPlayer);
 		pSatchel->pev->velocity = vecThrow;
 		pSatchel->pev->avelocity.y = 400;
 

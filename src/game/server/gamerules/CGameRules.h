@@ -174,7 +174,7 @@ public:
 	*/
 	virtual bool FPlayerCanTakeDamage(CBasePlayer* pPlayer, CBaseEntity* pAttacker) { return true; }
 
-	virtual bool ShouldAutoAim(CBasePlayer* pPlayer, edict_t* target) { return true; }
+	virtual bool ShouldAutoAim(CBasePlayer* pPlayer, CBaseEntity* target) { return true; }
 
 	// Client spawn/respawn control
 	/**
@@ -344,7 +344,7 @@ inline CGameRules* g_pGameRules = nullptr;
 inline bool g_fGameOver;
 inline bool g_teamplay = false;
 
-const char* GetTeamName(edict_t* pEntity);
+const char* GetTeamName(CBasePlayer* pEntity);
 
 class GameRulesCanHaveItemVisitor : public IItemVisitor
 {

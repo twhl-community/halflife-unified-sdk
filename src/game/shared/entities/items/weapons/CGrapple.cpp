@@ -300,7 +300,7 @@ void CGrapple::PrimaryAttack()
 				// If we've hit a solid object see if we're hurting it
 				if (!tr.pHit || FNullEnt(tr.pHit) || GET_PRIVATE<CBaseEntity>(tr.pHit)->IsBSPModel())
 				{
-					FindHullIntersection(vecSrc, tr, VEC_DUCK_HULL_MIN, VEC_DUCK_HULL_MAX, m_pPlayer->edict());
+					FindHullIntersection(vecSrc, tr, VEC_DUCK_HULL_MIN, VEC_DUCK_HULL_MAX, m_pPlayer);
 				}
 			}
 		}

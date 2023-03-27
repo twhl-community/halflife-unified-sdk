@@ -46,7 +46,7 @@ public:
 
 	static COFGeneWormCloud* GeneWormCloudCreate(const Vector& origin);
 
-	void LaunchCloud(const Vector& origin, const Vector& aim, int nSpeed, edict_t* pOwner, float fadeTime);
+	void LaunchCloud(const Vector& origin, const Vector& aim, int nSpeed, CBaseEntity* owner, float fadeTime);
 
 	float m_lastTime;
 	float m_maxFrame;
@@ -195,11 +195,11 @@ COFGeneWormCloud* COFGeneWormCloud::GeneWormCloudCreate(const Vector& origin)
 	return pCloud;
 }
 
-void COFGeneWormCloud::LaunchCloud(const Vector& origin, const Vector& aim, int nSpeed, edict_t* pOwner, float fadeTime)
+void COFGeneWormCloud::LaunchCloud(const Vector& origin, const Vector& aim, int nSpeed, CBaseEntity* owner, float fadeTime)
 {
-	pev->angles = pOwner->v.angles;
+	pev->angles = owner->pev->angles;
 
-	pev->owner = pOwner;
+	SetOwner(owner);
 
 	pev->velocity = aim * nSpeed;
 
@@ -239,7 +239,7 @@ public:
 
 	static COFGeneWormSpawn* GeneWormSpawnCreate(const Vector& origin);
 
-	void LaunchSpawn(const Vector& origin, const Vector& aim, int nSpeed, edict_t* pOwner, float flBirthTime);
+	void LaunchSpawn(const Vector& origin, const Vector& aim, int nSpeed, CBaseEntity* owner, float flBirthTime);
 
 	void CreateWarpBeams(int side);
 
@@ -460,12 +460,12 @@ COFGeneWormSpawn* COFGeneWormSpawn::GeneWormSpawnCreate(const Vector& origin)
 	return pSpawn;
 }
 
-void COFGeneWormSpawn::LaunchSpawn(const Vector& origin, const Vector& aim, int nSpeed, edict_t* pOwner, float flBirthTime)
+void COFGeneWormSpawn::LaunchSpawn(const Vector& origin, const Vector& aim, int nSpeed, CBaseEntity* owner, float flBirthTime)
 {
 	pev->movetype = MOVETYPE_FLY;
 
-	pev->angles = pOwner->v.angles;
-	pev->owner = pOwner;
+	pev->angles = owner->pev->angles;
+	SetOwner(owner);
 	pev->velocity = aim * nSpeed;
 
 	pev->speed = nSpeed;
@@ -1057,7 +1057,9 @@ void COFGeneWorm::HuntThink()
 
 				m_pCloud->TurnOn();
 
-				m_pCloud->LaunchCloud(vecOrigin, (m_hEnemy->pev->origin + m_hEnemy->pev->view_ofs - vecOrigin).Normalize() + Vector(0, 0, RANDOM_FLOAT(-0.01, 0.01)), 1000, edict(), 35);
+				m_pCloud->LaunchCloud(vecOrigin,
+					(m_hEnemy->pev->origin + m_hEnemy->pev->view_ofs - vecOrigin).Normalize() + Vector(0, 0, RANDOM_FLOAT(-0.01, 0.01)),
+					1000, this, 35);
 
 				m_pCloud = nullptr;
 			}
@@ -1618,7 +1620,7 @@ void COFGeneWorm::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 			EmitSoundDyn(CHAN_WEAPON, pSpawnSounds[RANDOM_LONG(0, std::size(pSpawnSounds) - 1)], VOL_NORM, 0.1, 0, RANDOM_LONG(-5, 5) + 100);
 
-			m_orificeGlow->LaunchSpawn(vecPos, gpGlobals->v_forward, RANDOM_LONG(0, 50) + 300, edict(), 2);
+			m_orificeGlow->LaunchSpawn(vecPos, gpGlobals->v_forward, RANDOM_LONG(0, 50) + 300, this, 2);
 
 			m_orificeGlow = nullptr;
 		}
