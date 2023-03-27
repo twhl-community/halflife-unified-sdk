@@ -57,6 +57,8 @@ public:
 
 	void Spawn() override;
 
+	void UpdateOnRemove() override;
+
 	void Think() override;
 
 	void Touch(CBaseEntity* pOther) override;

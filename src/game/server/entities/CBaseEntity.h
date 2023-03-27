@@ -341,8 +341,9 @@ public:
 
 	/**
 	*	@brief This updates global tables that need to know about entities being removed
+	*	Entities should override this to clean up any effects they create that do not remove themselves.
 	*/
-	void UpdateOnRemove();
+	virtual void UpdateOnRemove();
 
 	// common member functions
 	/**

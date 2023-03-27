@@ -60,6 +60,8 @@ public:
 	bool Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
+	void UpdateOnRemove() override;
+
 	/**
 	*	@brief remove all beams
 	*/
@@ -745,6 +747,12 @@ void CISlave::ZapBeam(int side)
 		pEntity->TraceAttack(this, GetSkillFloat("islave_dmg_zap"sv), vecAim, &tr, DMG_SHOCK);
 	}
 	EmitAmbientSound(tr.vecEndPos, "weapons/electro4.wav", 0.5, ATTN_NORM, 0, RANDOM_LONG(140, 160));
+}
+
+void CISlave::UpdateOnRemove()
+{
+	ClearBeams();
+	CSquadMonster::UpdateOnRemove();
 }
 
 void CISlave::ClearBeams()

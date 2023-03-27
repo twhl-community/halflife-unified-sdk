@@ -576,6 +576,17 @@ public:
 		CBaseMonster::Killed(attacker, iGib);
 	}
 
+	void UpdateOnRemove() override
+	{
+		if (m_orificeGlow)
+		{
+			UTIL_Remove(m_orificeGlow);
+			m_orificeGlow = nullptr;
+		}
+
+		CBaseMonster::UpdateOnRemove();
+	}
+
 	bool FVisible(CBaseEntity* pEntity) override;
 
 	bool FVisible(const Vector& vecOrigin) override;

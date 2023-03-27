@@ -61,6 +61,7 @@ public:
 	void Precache() override;
 	void Touch(CBaseEntity* pOther) override;
 	void Think() override;
+	void UpdateOnRemove() override;
 
 	void LightOn();
 	void LightOff();
@@ -157,6 +158,17 @@ void CXenPLight::Touch(CBaseEntity* pOther)
 			SetActivity(ACT_CROUCH);
 		}
 	}
+}
+
+void CXenPLight::UpdateOnRemove()
+{
+	if (m_pGlow)
+	{
+		UTIL_Remove(m_pGlow);
+		m_pGlow = nullptr;
+	}
+
+	CActAnimating::UpdateOnRemove();
 }
 
 void CXenPLight::LightOn()
@@ -270,6 +282,8 @@ public:
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 	void Attack();
 	int Classify() override { return CLASS_BARNACLE; }
+
+	void UpdateOnRemove() override;
 
 	bool Save(CSave& save) override;
 	bool Restore(CRestore& restore) override;
@@ -419,6 +433,17 @@ void CXenTree::Think()
 	case ACT_IDLE:
 		break;
 	}
+}
+
+void CXenTree::UpdateOnRemove()
+{
+	if (m_pTrigger)
+	{
+		UTIL_Remove(m_pTrigger);
+		m_pTrigger = nullptr;
+	}
+
+	CActAnimating::UpdateOnRemove();
 }
 
 // UNDONE:	These need to smoke somehow when they take damage

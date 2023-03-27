@@ -228,6 +228,10 @@ public:
 	void Killed(CBaseEntity* attacker, int iGib) override;
 	void DeathEffect();
 
+	void DestroyEffects();
+
+	void UpdateOnRemove() override;
+
 	void EyeOff();
 	void EyeOn(int level);
 	void EyeUpdate();
@@ -854,10 +858,23 @@ void CGargantua::DeathEffect()
 
 void CGargantua::Killed(CBaseEntity* attacker, int iGib)
 {
+	DestroyEffects();
+	CBaseMonster::Killed(attacker, GIB_NEVER);
+}
+
+void CGargantua::DestroyEffects()
+{
 	EyeOff();
 	UTIL_Remove(m_pEyeGlow);
 	m_pEyeGlow = nullptr;
-	CBaseMonster::Killed(attacker, GIB_NEVER);
+
+	FlameDestroy();
+}
+
+void CGargantua::UpdateOnRemove()
+{
+	DestroyEffects();
+	CBaseMonster::UpdateOnRemove();
 }
 
 bool CGargantua::CheckMeleeAttack1(float flDot, float flDist)

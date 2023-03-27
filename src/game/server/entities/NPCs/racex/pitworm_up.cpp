@@ -96,6 +96,10 @@ public:
 
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 
+	void UpdateOnRemove() override;
+
+	void RemoveEffects();
+
 	void EXPORT StartupThink();
 
 	void EXPORT HuntThink();
@@ -630,17 +634,7 @@ void COFPitWormUp::DyingThink()
 
 		m_flDeathStartTime = gpGlobals->time;
 
-		if (m_pBeam)
-		{
-			UTIL_Remove(m_pBeam);
-			m_pBeam = nullptr;
-		}
-
-		if (m_pSprite)
-		{
-			UTIL_Remove(m_pSprite);
-			m_pSprite = nullptr;
-		}
+		RemoveEffects();
 
 		SetTouch(nullptr);
 		SetUse(nullptr);
@@ -1348,6 +1342,27 @@ void COFPitWormUp::HandleAnimEvent(MonsterEvent_t* pEvent)
 	}
 }
 
+void COFPitWormUp::UpdateOnRemove()
+{
+	RemoveEffects();
+	CBaseMonster::UpdateOnRemove();
+}
+
+void COFPitWormUp::RemoveEffects()
+{
+	if (m_pBeam)
+	{
+		UTIL_Remove(m_pBeam);
+		m_pBeam = nullptr;
+	}
+
+	if (m_pSprite)
+	{
+		UTIL_Remove(m_pSprite);
+		m_pSprite = nullptr;
+	}
+}
+
 class COFPitWormSteamTrigger : public CPointEntity
 {
 public:
@@ -1754,6 +1769,17 @@ public:
 	void RunAI() override;
 
 	void SetObjectCollisionBox() override;
+
+	void UpdateOnRemove() override
+	{
+		if (m_pBeam)
+		{
+			UTIL_Remove(m_pBeam);
+			m_pBeam = nullptr;
+		}
+
+		CBaseMonster::UpdateOnRemove();
+	}
 
 	static const char* pChildDieSounds[];
 	static const char* pSackSounds[];

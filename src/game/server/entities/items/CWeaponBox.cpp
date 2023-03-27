@@ -70,13 +70,18 @@ void CWeaponBox::Spawn()
 	SetModel(STRING(pev->model));
 }
 
-void CWeaponBox::Kill()
+void CWeaponBox::UpdateOnRemove()
+{
+	RemoveWeapons();
+	CBaseEntity::UpdateOnRemove();
+}
+
+void CWeaponBox::RemoveWeapons()
 {
 	CBasePlayerWeapon* weapon;
-	int i;
 
 	// destroy the weapons
-	for (i = 0; i < MAX_WEAPON_SLOTS; i++)
+	for (int i = 0; i < MAX_WEAPON_SLOTS; ++i)
 	{
 		weapon = m_rgpPlayerWeapons[i];
 
@@ -87,6 +92,11 @@ void CWeaponBox::Kill()
 			weapon = weapon->m_pNext;
 		}
 	}
+}
+
+void CWeaponBox::Kill()
+{
+	RemoveWeapons();
 
 	// remove the box
 	UTIL_Remove(this);

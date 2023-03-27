@@ -43,6 +43,10 @@ public:
 	int GiveAmmo(int iCount, const AmmoType* type, int* pIndex = nullptr);
 	void SetObjectCollisionBox() override;
 
+	void UpdateOnRemove() override;
+
+	void RemoveWeapons();
+
 	/**
 	*	@brief the think function that removes the box from the world.
 	*/

@@ -77,6 +77,10 @@ public:
 	void Killed(CBaseEntity* attacker, int iGib) override;
 	void GibMonster() override;
 
+	void UpdateOnRemove() override;
+
+	void RemoveBalls();
+
 	CSprite* m_pBall[2];   // hand balls
 	int m_iBall[2];		   // how bright it should be
 	float m_iBallTime[2];  // when it should be that color
@@ -199,7 +203,18 @@ void CController::Killed(CBaseEntity* attacker, int iGib)
 
 void CController::GibMonster()
 {
-	// delete balls
+	RemoveBalls();
+	CSquadMonster::GibMonster();
+}
+
+void CController::UpdateOnRemove()
+{
+	RemoveBalls();
+	CSquadMonster::UpdateOnRemove();
+}
+
+void CController::RemoveBalls()
+{
 	if (m_pBall[0])
 	{
 		UTIL_Remove(m_pBall[0]);
@@ -210,7 +225,6 @@ void CController::GibMonster()
 		UTIL_Remove(m_pBall[1]);
 		m_pBall[1] = nullptr;
 	}
-	CSquadMonster::GibMonster();
 }
 
 void CController::PainSound()

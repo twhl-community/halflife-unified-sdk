@@ -213,6 +213,47 @@ void CRope::Spawn()
 	pev->nextthink = gpGlobals->time + 0.01;
 }
 
+void CRope::UpdateOnRemove()
+{
+	for (auto& segment : seg)
+	{
+		if (segment)
+		{
+			UTIL_Remove(segment);
+			segment = nullptr;
+		}
+	}
+
+	for (auto& segment : altseg)
+	{
+		if (segment)
+		{
+			UTIL_Remove(segment);
+			segment = nullptr;
+		}
+	}
+
+	for (auto& system : m_CurrentSys)
+	{
+		if (system)
+		{
+			UTIL_Remove(system);
+			system = nullptr;
+		}
+	}
+
+	for (auto& system : m_TargetSys)
+	{
+		if (system)
+		{
+			UTIL_Remove(system);
+			system = nullptr;
+		}
+	}
+
+	BaseClass::UpdateOnRemove();
+}
+
 void CRope::Think()
 {
 	if (!m_bSpringsInitialized)

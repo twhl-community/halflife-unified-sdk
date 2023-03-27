@@ -35,6 +35,7 @@ public:
 	int Classify() override { return CLASS_ALIEN_MILITARY; }
 	int BloodColor() override { return BLOOD_COLOR_YELLOW; }
 	void Killed(CBaseEntity* attacker, int iGib) override;
+	void UpdateOnRemove() override;
 	void GibMonster() override;
 
 	void SetObjectCollisionBox() override
@@ -415,6 +416,26 @@ void CNihilanth::StartupThink()
 void CNihilanth::Killed(CBaseEntity* attacker, int iGib)
 {
 	CBaseMonster::Killed(attacker, iGib);
+}
+
+void CNihilanth::UpdateOnRemove()
+{
+	if (m_pBall)
+	{
+		UTIL_Remove(m_pBall);
+		m_pBall = nullptr;
+	}
+
+	for (auto& sphere : m_hSphere)
+	{
+		if (CBaseEntity* entity = sphere; entity)
+		{
+			UTIL_Remove(entity);
+			sphere = nullptr;
+		}
+	}
+
+	CBaseMonster::UpdateOnRemove();
 }
 
 void CNihilanth::DyingThink()

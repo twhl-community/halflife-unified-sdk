@@ -80,6 +80,7 @@ void CBaseEntity::SUB_Remove() {}
 void CBaseEntity::EmitSound(int channel, const char* sample, float volume, float attenuation) {}
 void CBaseEntity::EmitSoundDyn(int channel, const char* sample, float volume, float attenuation, int flags, int pitch) {}
 void CBaseEntity::StopSound(int channel, const char* sample) {}
+void CBaseEntity::UpdateOnRemove() {}
 
 // CBaseDelay Stubs
 bool CBaseDelay::KeyValue(KeyValueData*) { return false; }

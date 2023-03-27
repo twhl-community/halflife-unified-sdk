@@ -1069,6 +1069,17 @@ void CLaser::StrikeThink()
 	pev->nextthink = gpGlobals->time + 0.1;
 }
 
+void CLaser::UpdateOnRemove()
+{
+	if (m_pSprite)
+	{
+		UTIL_Remove(m_pSprite);
+		m_pSprite = nullptr;
+	}
+
+	CBeam::UpdateOnRemove();
+}
+
 class CGlow : public CPointEntity
 {
 public:
@@ -2113,6 +2124,8 @@ public:
 	void Precache() override;
 	void Spawn() override;
 
+	void UpdateOnRemove() override;
+
 	void EXPORT WarpBallUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
 	void EXPORT BallThink();
@@ -2214,12 +2227,30 @@ void CWarpBall::Spawn()
 	SetUse(&CWarpBall::WarpBallUse);
 }
 
+void CWarpBall::UpdateOnRemove()
+{
+	if (m_pBeams)
+	{
+		UTIL_Remove(m_pBeams);
+		m_pBeams = nullptr;
+	}
+
+	if (m_pSprite)
+	{
+		UTIL_Remove(m_pSprite);
+		m_pSprite = nullptr;
+	}
+
+	CBaseEntity::UpdateOnRemove();
+}
+
 void CWarpBall::WarpBallUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
 	if (!m_fPlaying)
 	{
 		if (!FStringNull(m_iszWarpTarget))
 		{
+			// TODO: don't use the old engine function
 			auto targetEntity = g_engfuncs.pfnFindEntityByString(nullptr, "targetname", STRING(m_iszWarpTarget));
 			if (targetEntity)
 				SetOrigin(targetEntity->v.origin);
@@ -2237,13 +2268,8 @@ void CWarpBall::WarpBallUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_T
 
 		if (m_pSprite)
 		{
-			m_pSprite->pev->rendermode = kRenderGlow;
-			m_pSprite->pev->rendercolor.x = 77;
-			m_pSprite->pev->rendercolor.y = 210;
-			m_pSprite->pev->rendercolor.z = 130;
-			m_pSprite->pev->renderamt = 255;
-			m_pSprite->pev->renderfx = kRenderFxNoDissipation;
-			m_pSprite->pev->scale = 1;
+			m_pSprite->SetTransparency(kRenderGlow, 77, 210, 130, 255, kRenderFxNoDissipation);
+			m_pSprite->SetScale(1);
 			m_pSprite->pev->framerate = 10;
 			m_pSprite->TurnOn();
 		}
@@ -2262,12 +2288,10 @@ void CWarpBall::WarpBallUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_T
 			m_pBeams->m_boltWidth = 18;
 			m_pBeams->m_life = 0.5;
 
-			m_pBeams->pev->rendercolor.x = 0;
-			m_pBeams->pev->rendercolor.y = 255;
-			m_pBeams->pev->rendercolor.z = 0;
+			m_pBeams->SetColor(0, 255, 0);
 
-			m_pBeams->pev->spawnflags |= 0x20u;
-			m_pBeams->pev->spawnflags |= 2u;
+			m_pBeams->pev->spawnflags |= SF_BEAM_SPARKEND;
+			m_pBeams->pev->spawnflags |= SF_BEAM_TOGGLE;
 
 			m_pBeams->m_radius = m_flBeamRadius;
 			m_pBeams->m_iszStartEntity = pev->targetname;

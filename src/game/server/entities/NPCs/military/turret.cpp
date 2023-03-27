@@ -52,6 +52,8 @@ public:
 	int BloodColor() override { return DONT_BLEED; }
 	void GibMonster() override {} // UNDONE: Throw turret gibs?
 
+	void UpdateOnRemove() override;
+
 	// Think functions
 
 	void EXPORT ActiveThink();
@@ -1024,6 +1026,20 @@ bool CBaseTurret::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, floa
 	}
 
 	return true;
+}
+
+void CBaseTurret::UpdateOnRemove()
+{
+	if (m_pEyeGlow)
+	{
+		UTIL_Remove(m_pEyeGlow);
+		m_pEyeGlow = nullptr;
+	}
+
+	// Stop looping sound.
+	StopSound(CHAN_STATIC, "turret/tu_active2.wav");
+
+	CBaseMonster::UpdateOnRemove();
 }
 
 bool CBaseTurret::MoveTurret()
