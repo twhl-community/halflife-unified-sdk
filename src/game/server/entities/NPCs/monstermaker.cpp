@@ -225,14 +225,18 @@ void CMonsterMaker::MakeMonster()
 		entity->pev->targetname = pev->netname;
 	}
 
-	m_cLiveChildren++; // count this monster
-	m_cNumMonsters--;
+	++m_cLiveChildren; // count this monster
 
-	if (m_cNumMonsters == 0)
+	if (m_cNumMonsters != -1)
 	{
-		// Disable this forever.  Don't kill it because it still gets death notices
-		SetThink(nullptr);
-		SetUse(nullptr);
+		--m_cNumMonsters;
+
+		if (m_cNumMonsters == 0)
+		{
+			// Disable this forever.  Don't kill it because it still gets death notices
+			SetThink(nullptr);
+			SetUse(nullptr);
+		}
 	}
 }
 
@@ -270,7 +274,7 @@ void CMonsterMaker::MakerThink()
 void CMonsterMaker::DeathNotice(CBaseEntity* child)
 {
 	// ok, we've gotten the deathnotice from our child, now clear out its owner if we don't want it to fade.
-	m_cLiveChildren--;
+	--m_cLiveChildren;
 
 	if (!m_fFadeChildren)
 	{
