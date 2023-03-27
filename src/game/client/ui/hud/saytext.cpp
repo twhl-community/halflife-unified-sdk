@@ -26,20 +26,11 @@
 
 Vector* GetClientColor(int clientIndex);
 
-#define MAX_LINES 5
-#define MAX_CHARS_PER_LINE 256 /* it can be less than this, depending on char size */
-
 // allow 20 pixels on either side of the text
-#define MAX_LINE_WIDTH (ScreenWidth - 40)
-#define LINE_START 10
-
-static char g_szLineBuffer[MAX_LINES + 1][MAX_CHARS_PER_LINE];
-static Vector* g_pflNameColors[MAX_LINES + 1];
-static int g_iNameLengths[MAX_LINES + 1];
-static float flScrollTime = 0; // the time at which the lines next scroll up
-
-static int Y_START = 0;
-static int line_height = 0;
+int CHudSayText::GetMaxLineWidth()
+{
+	return ScreenWidth - 40;
+}
 
 bool CHudSayText::Init()
 {
@@ -61,9 +52,9 @@ bool CHudSayText::Init()
 
 void CHudSayText::InitHUDData()
 {
-	memset(g_szLineBuffer, 0, sizeof g_szLineBuffer);
-	memset(g_pflNameColors, 0, sizeof g_pflNameColors);
-	memset(g_iNameLengths, 0, sizeof g_iNameLengths);
+	memset(m_LineBuffer, 0, sizeof m_LineBuffer);
+	memset(m_NameColors, 0, sizeof m_NameColors);
+	memset(m_NameLengths, 0, sizeof m_NameLengths);
 }
 
 bool CHudSayText::VidInit()
@@ -72,17 +63,17 @@ bool CHudSayText::VidInit()
 }
 
 
-int ScrollTextUp()
+int CHudSayText::ScrollTextUp()
 {
-	g_szLineBuffer[MAX_LINES][0] = 0;
-	memmove(g_szLineBuffer[0], g_szLineBuffer[1], sizeof(g_szLineBuffer) - sizeof(g_szLineBuffer[0])); // overwrite the first line
-	memmove(&g_pflNameColors[0], &g_pflNameColors[1], sizeof(g_pflNameColors) - sizeof(g_pflNameColors[0]));
-	memmove(&g_iNameLengths[0], &g_iNameLengths[1], sizeof(g_iNameLengths) - sizeof(g_iNameLengths[0]));
-	g_szLineBuffer[MAX_LINES - 1][0] = 0;
+	m_LineBuffer[MAX_LINES][0] = 0;
+	memmove(m_LineBuffer[0], m_LineBuffer[1], sizeof(m_LineBuffer) - sizeof(m_LineBuffer[0])); // overwrite the first line
+	memmove(&m_NameColors[0], &m_NameColors[1], sizeof(m_NameColors) - sizeof(m_NameColors[0]));
+	memmove(&m_NameLengths[0], &m_NameLengths[1], sizeof(m_NameLengths) - sizeof(m_NameLengths[0]));
+	m_LineBuffer[MAX_LINES - 1][0] = 0;
 
-	if (g_szLineBuffer[0][0] == ' ') // also scroll up following lines
+	if (m_LineBuffer[0][0] == ' ') // also scroll up following lines
 	{
-		g_szLineBuffer[0][0] = 2;
+		m_LineBuffer[0][0] = 2;
 		return 1 + ScrollTextUp();
 	}
 
@@ -91,22 +82,19 @@ int ScrollTextUp()
 
 bool CHudSayText::Draw(float flTime)
 {
-	int y = Y_START;
+	int y = m_YStart;
 
 	if ((gViewPort && !gViewPort->AllowedToPrintText()) || 0 == m_HUD_saytext->value)
 		return true;
 
-	// make sure the scrolltime is within reasonable bounds,  to guard against the clock being reset
-	flScrollTime = std::min(flScrollTime, flTime + m_HUD_saytext_time->value);
+	// make sure the scrolltime is within reasonable bounds, to guard against the clock being reset
+	m_ScrollTime = std::min(m_ScrollTime, flTime + m_HUD_saytext_time->value);
 
-	// make sure the scrolltime is within reasonable bounds,  to guard against the clock being reset
-	flScrollTime = std::min(flScrollTime, flTime + m_HUD_saytext_time->value);
-
-	if (flScrollTime <= flTime)
+	if (m_ScrollTime <= flTime)
 	{
-		if ('\0' != *g_szLineBuffer[0])
+		if ('\0' != *m_LineBuffer[0])
 		{
-			flScrollTime = flTime + m_HUD_saytext_time->value;
+			m_ScrollTime = flTime + m_HUD_saytext_time->value;
 			// push the console up
 			ScrollTextUp();
 		}
@@ -127,40 +115,40 @@ bool CHudSayText::Draw(float flTime)
 
 	for (int i = 0; i < MAX_LINES; i++)
 	{
-		if ('\0' != *g_szLineBuffer[i])
+		if ('\0' != *m_LineBuffer[i])
 		{
-			if (*g_szLineBuffer[i] == 2 && g_pflNameColors[i])
+			if (*m_LineBuffer[i] == 2 && m_NameColors[i])
 			{
 				// it's a saytext string
 
 				// Make a copy we can freely modify
-				strncpy(line, g_szLineBuffer[i], sizeof(line) - 1);
+				strncpy(line, m_LineBuffer[i], sizeof(line) - 1);
 				line[sizeof(line) - 1] = '\0';
 
 				// draw the first x characters in the player color
-				const std::size_t playerNameEndIndex = std::min(g_iNameLengths[i], MAX_PLAYER_NAME_LENGTH + 31);
+				const std::size_t playerNameEndIndex = std::min(m_NameLengths[i], MAX_PLAYER_NAME_LENGTH + 31);
 
 				// Cut off the actual text so we can print player name
 				line[playerNameEndIndex] = '\0';
 
-				gEngfuncs.pfnDrawSetTextColor(g_pflNameColors[i]->x, g_pflNameColors[i]->y, g_pflNameColors[i]->z);
+				gEngfuncs.pfnDrawSetTextColor(m_NameColors[i]->x, m_NameColors[i]->y, m_NameColors[i]->z);
 				const int x = DrawConsoleString(LINE_START, y, line + 1); // don't draw the control code at the start
 
 				// Reset last character
-				line[playerNameEndIndex] = g_szLineBuffer[i][playerNameEndIndex];
+				line[playerNameEndIndex] = m_LineBuffer[i][playerNameEndIndex];
 
 				// color is reset after each string draw
 				// Print the text without player name
-				DrawConsoleString(x, y, line + g_iNameLengths[i]);
+				DrawConsoleString(x, y, line + m_NameLengths[i]);
 			}
 			else
 			{
 				// normal draw
-				DrawConsoleString(LINE_START, y, g_szLineBuffer[i]);
+				DrawConsoleString(LINE_START, y, m_LineBuffer[i]);
 			}
 		}
 
-		y += line_height;
+		y += m_LineHeight;
 	}
 
 	return true;
@@ -188,7 +176,7 @@ void CHudSayText::SayTextPrint(const char* pszBuf, int iBufSize, int clientIndex
 	// find an empty string slot
 	for (i = 0; i < MAX_LINES; i++)
 	{
-		if ('\0' == *g_szLineBuffer[i])
+		if ('\0' == *m_LineBuffer[i])
 			break;
 	}
 	if (i == MAX_LINES)
@@ -198,8 +186,8 @@ void CHudSayText::SayTextPrint(const char* pszBuf, int iBufSize, int clientIndex
 		i = MAX_LINES - 1;
 	}
 
-	g_iNameLengths[i] = 0;
-	g_pflNameColors[i] = nullptr;
+	m_NameLengths[i] = 0;
+	m_NameColors[i] = nullptr;
 
 	// if it's a say message, search for the players name in the string
 	if (*pszBuf == 2 && clientIndex > 0)
@@ -213,13 +201,13 @@ void CHudSayText::SayTextPrint(const char* pszBuf, int iBufSize, int clientIndex
 
 			if (nameInString)
 			{
-				g_iNameLengths[i] = strlen(pName) + (nameInString - pszBuf);
-				g_pflNameColors[i] = GetClientColor(clientIndex);
+				m_NameLengths[i] = strlen(pName) + (nameInString - pszBuf);
+				m_NameColors[i] = GetClientColor(clientIndex);
 			}
 		}
 	}
 
-	strncpy(g_szLineBuffer[i], pszBuf, MAX_CHARS_PER_LINE);
+	strncpy(m_LineBuffer[i], pszBuf, MAX_CHARS_PER_LINE);
 
 	// make sure the text fits in one line
 	EnsureTextFitsInOneLineAndWrapIfHaveTo(i);
@@ -227,27 +215,27 @@ void CHudSayText::SayTextPrint(const char* pszBuf, int iBufSize, int clientIndex
 	// Set scroll time
 	if (i == 0)
 	{
-		flScrollTime = gHUD.m_flTime + m_HUD_saytext_time->value;
+		m_ScrollTime = gHUD.m_flTime + m_HUD_saytext_time->value;
 	}
 
 	m_iFlags |= HUD_ACTIVE;
 	PlaySound("misc/talk.wav", 1);
 
-	Y_START = ScreenHeight - 60 - (line_height * (MAX_LINES + 2));
+	m_YStart = ScreenHeight - 60 - (m_LineHeight * (MAX_LINES + 2));
 }
 
 void CHudSayText::EnsureTextFitsInOneLineAndWrapIfHaveTo(int line)
 {
 	int line_width = 0;
-	GetConsoleStringSize(g_szLineBuffer[line], &line_width, &line_height);
+	GetConsoleStringSize(m_LineBuffer[line], &line_width, &m_LineHeight);
 
-	if ((line_width + LINE_START) > MAX_LINE_WIDTH)
+	if ((line_width + LINE_START) > GetMaxLineWidth())
 	{ // string is too long to fit on line
 		// scan the string until we find what word is too long,  and wrap the end of the sentence after the word
 		int length = LINE_START;
 		int tmp_len = 0;
 		char* last_break = nullptr;
-		for (char* x = g_szLineBuffer[line]; *x != 0; x++)
+		for (char* x = m_LineBuffer[line]; *x != 0; x++)
 		{
 			// check for a color change, if so skip past it
 			if (x[0] == '/' && x[1] == '(')
@@ -267,14 +255,14 @@ void CHudSayText::EnsureTextFitsInOneLineAndWrapIfHaveTo(int line)
 			char buf[2];
 			buf[1] = 0;
 
-			if (*x == ' ' && x != g_szLineBuffer[line]) // store each line break,  except for the very first character
+			if (*x == ' ' && x != m_LineBuffer[line]) // store each line break,  except for the very first character
 				last_break = x;
 
 			buf[0] = *x; // get the length of the current character
-			GetConsoleStringSize(buf, &tmp_len, &line_height);
+			GetConsoleStringSize(buf, &tmp_len, &m_LineHeight);
 			length += tmp_len;
 
-			if (length > MAX_LINE_WIDTH)
+			if (length > GetMaxLineWidth())
 			{ // needs to be broken up
 				if (!last_break)
 					last_break = x - 1;
@@ -287,7 +275,7 @@ void CHudSayText::EnsureTextFitsInOneLineAndWrapIfHaveTo(int line)
 				{
 					for (j = 0; j < MAX_LINES; j++)
 					{
-						if ('\0' == *g_szLineBuffer[j])
+						if ('\0' == *m_LineBuffer[j])
 							break;
 					}
 					if (j == MAX_LINES)
@@ -295,25 +283,25 @@ void CHudSayText::EnsureTextFitsInOneLineAndWrapIfHaveTo(int line)
 						// need to make more room to display text, scroll stuff up then fix the pointers
 						int linesmoved = ScrollTextUp();
 						line -= linesmoved;
-						last_break = last_break - (sizeof(g_szLineBuffer[0]) * linesmoved);
+						last_break = last_break - (sizeof(m_LineBuffer[0]) * linesmoved);
 					}
 				} while (j == MAX_LINES);
 
 				// copy remaining string into next buffer,  making sure it starts with a space character
 				if ((char)*last_break == (char)' ')
 				{
-					int linelen = strlen(g_szLineBuffer[j]);
+					int linelen = strlen(m_LineBuffer[j]);
 					int remaininglen = strlen(last_break);
 
 					if ((linelen - remaininglen) <= MAX_CHARS_PER_LINE)
-						strcat(g_szLineBuffer[j], last_break);
+						strcat(m_LineBuffer[j], last_break);
 				}
 				else
 				{
-					if ((strlen(g_szLineBuffer[j]) - strlen(last_break) - 2) < MAX_CHARS_PER_LINE)
+					if ((strlen(m_LineBuffer[j]) - strlen(last_break) - 2) < MAX_CHARS_PER_LINE)
 					{
-						strcat(g_szLineBuffer[j], " ");
-						strcat(g_szLineBuffer[j], last_break);
+						strcat(m_LineBuffer[j], " ");
+						strcat(m_LineBuffer[j], last_break);
 					}
 				}
 

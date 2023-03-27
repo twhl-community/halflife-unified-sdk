@@ -312,9 +312,28 @@ public:
 	friend class CHudSpectator;
 
 private:
+	static int GetMaxLineWidth();
+
+	int ScrollTextUp();
+
+private:
+	static constexpr int MAX_LINES = 5;
+	static constexpr int MAX_CHARS_PER_LINE = 256; // it can be less than this, depending on char size
+
+	// allow 20 pixels on either side of the text
+	static constexpr int LINE_START = 10;
+
 	cvar_t* m_HUD_saytext;
 	cvar_t* m_HUD_saytext_time;
 	cvar_t* m_con_color;
+
+	char m_LineBuffer[MAX_LINES + 1][MAX_CHARS_PER_LINE]{};
+	Vector* m_NameColors[MAX_LINES + 1]{};
+	int m_NameLengths[MAX_LINES + 1]{};
+	float m_ScrollTime = 0; // the time at which the lines next scroll up
+
+	int m_YStart = 0;
+	int m_LineHeight = 0;
 };
 
 //
