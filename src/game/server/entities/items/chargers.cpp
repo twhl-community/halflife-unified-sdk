@@ -215,12 +215,19 @@ void CBaseCharger::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE u
 		EmitSound(CHAN_STATIC, m_DispensingSound, m_SoundVolume, ATTN_NORM);
 	}
 
+	int chargeToUse = m_ChargePerUse;
+
+	if (m_Juice != UnlimitedJuice)
+	{
+		chargeToUse = std::min(chargeToUse, m_Juice);
+	}
+
 	// charge the player
-	if (TryCharge(player, m_ChargePerUse))
+	if (TryCharge(player, chargeToUse))
 	{
 		if (m_Juice != UnlimitedJuice)
 		{
-			m_Juice = std::max(0, m_Juice - m_ChargePerUse);
+			m_Juice = std::max(0, m_Juice - chargeToUse);
 		}
 	}
 
