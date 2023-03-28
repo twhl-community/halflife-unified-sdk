@@ -173,7 +173,6 @@ public:
 
 
 	// these are time-sensitive things that we keep track of
-	float m_flTimeStepSound;  // when the last stepping sound was made
 	float m_flTimeWeaponIdle; // when to play another weapon idle animation.
 	float m_flSwimTime;		  // how long player has been underwater
 	float m_flDuckTime;		  // how long we've been ducking
