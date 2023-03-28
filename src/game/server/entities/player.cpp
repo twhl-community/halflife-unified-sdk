@@ -135,7 +135,6 @@ TYPEDESCRIPTION CBasePlayer::m_playerSaveData[] =
 		// DEFINE_ARRAY( CBasePlayer, m_szTextureName, FIELD_CHARACTER, TextureNameMax ), // Don't need to restore
 		// DEFINE_FIELD( CBasePlayer, m_chTextureType, FIELD_CHARACTER ), // Don't need to restore
 		// DEFINE_FIELD( CBasePlayer, m_fNoPlayerSound, FIELD_BOOLEAN ), // Don't need to restore, debug
-		// DEFINE_FIELD( CBasePlayer, m_iUpdateTime, FIELD_INTEGER ), // Don't need to restore
 		// DEFINE_FIELD( CBasePlayer, m_iClientHealth, FIELD_INTEGER ), // Don't restore, client needs reset
 		// DEFINE_FIELD( CBasePlayer, m_iClientBattery, FIELD_INTEGER ), // Don't restore, client needs reset
 		// DEFINE_FIELD( CBasePlayer, m_iClientHideHUD, FIELD_INTEGER ), // Don't restore, client needs reset
@@ -2881,9 +2880,7 @@ void CBasePlayer::Precache()
 	m_iClientBattery = -1;
 
 	m_iTrain |= TRAIN_NEW;
-
-	m_iUpdateTime = 5; // won't update for 1/2 a second
-
+    
 	if (gInitHUD)
 		m_fInitHUD = true;
 }
