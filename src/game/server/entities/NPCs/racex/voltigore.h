@@ -158,11 +158,10 @@ public:
 	float m_flNextWordTime;
 
 	EHANDLE m_pChargedBolt;
-
-	int m_iVoltigoreGibs;
+    
 	bool m_fDeathCharge;
 	float m_flDeathStartTime;
-
+    
 protected:
 	virtual bool CanUseRangeAttacks() const { return true; }
 	virtual bool BlowsUpOnDeath() const { return true; }

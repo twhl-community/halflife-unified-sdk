@@ -571,7 +571,7 @@ void COFVoltigore::Precache()
 
 	UTIL_PrecacheOther("charged_bolt");
 
-	m_iVoltigoreGibs = PrecacheModel("models/vgibs.mdl");
+	PrecacheModel("models/vgibs.mdl");
 }
 
 Task_t tlVoltigoreFail[] =
