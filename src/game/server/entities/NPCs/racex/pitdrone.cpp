@@ -688,6 +688,7 @@ void CPitdrone::Precache()
 	PrecacheSound("pitdrone/pit_drone_pain3.wav");
 	PrecacheSound("pitdrone/pit_drone_pain4.wav");
 	PrecacheSound("pitdrone/pit_drone_run_on_grate.wav");
+    PrecacheSound("pitdrone/pit_drone_eat.wav");
 	PrecacheSound("bullchicken/bc_bite2.wav");
 	PrecacheSound("bullchicken/bc_bite3.wav");
 }
