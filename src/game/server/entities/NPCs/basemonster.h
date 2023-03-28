@@ -112,7 +112,6 @@ public:
 	/**
 	*	@brief how much damage did monster (player) last take time based damage counters, decr. 1 per 2 seconds
 	*/
-	int m_lastDamageAmount;
 	int m_bloodColor;		//!< color of blood particless
 
 	int m_failSchedule; //!< Schedule type to choose if current schedule fails
