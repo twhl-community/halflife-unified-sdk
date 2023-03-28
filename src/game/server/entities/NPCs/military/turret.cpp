@@ -120,7 +120,6 @@ public:
 	Vector m_vecLastSight;
 	float m_flLastSight; // Last time we saw a target
 	float m_flMaxWait;	 // Max time to seach w/o a target
-	int m_iSearchSpeed;	 // Not Used!
 
 	// movement
 	float m_flStartYaw;
@@ -154,7 +153,6 @@ TYPEDESCRIPTION CBaseTurret::m_SaveData[] =
 		DEFINE_FIELD(CBaseTurret, m_vecLastSight, FIELD_POSITION_VECTOR),
 		DEFINE_FIELD(CBaseTurret, m_flLastSight, FIELD_TIME),
 		DEFINE_FIELD(CBaseTurret, m_flMaxWait, FIELD_FLOAT),
-		DEFINE_FIELD(CBaseTurret, m_iSearchSpeed, FIELD_INTEGER),
 
 		DEFINE_FIELD(CBaseTurret, m_flStartYaw, FIELD_FLOAT),
 		DEFINE_FIELD(CBaseTurret, m_vecCurAngles, FIELD_VECTOR),
@@ -217,11 +215,6 @@ bool CBaseTurret::KeyValue(KeyValueData* pkvd)
 	else if (FStrEq(pkvd->szKeyName, "orientation"))
 	{
 		m_iOrientation = atoi(pkvd->szValue);
-		return true;
-	}
-	else if (FStrEq(pkvd->szKeyName, "searchspeed"))
-	{
-		m_iSearchSpeed = atoi(pkvd->szValue);
 		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "turnrate"))
