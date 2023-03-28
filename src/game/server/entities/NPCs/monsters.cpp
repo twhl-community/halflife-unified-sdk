@@ -65,7 +65,6 @@ TYPEDESCRIPTION CBaseMonster::m_SaveData[] =
 		DEFINE_FIELD(CBaseMonster, m_vecLastPosition, FIELD_POSITION_VECTOR),
 		DEFINE_FIELD(CBaseMonster, m_iHintNode, FIELD_INTEGER),
 		DEFINE_FIELD(CBaseMonster, m_afMemory, FIELD_INTEGER),
-		DEFINE_FIELD(CBaseMonster, m_iMaxHealth, FIELD_INTEGER),
 
 		DEFINE_FIELD(CBaseMonster, m_vecEnemyLKP, FIELD_POSITION_VECTOR),
 		DEFINE_FIELD(CBaseMonster, m_cAmmoLoaded, FIELD_INTEGER),

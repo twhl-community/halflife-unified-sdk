@@ -98,8 +98,6 @@ public:
 
 	int m_afMemory;
 
-	int m_iMaxHealth; //!< keeps track of monster's maximum health value (for re-healing, etc)
-
 	Vector m_vecEnemyLKP; //!< last known position of enemy. (enemy's origin)
 
 	int m_cAmmoLoaded; //!< how much ammo is in the weapon (used to trigger reload anim sequences)
