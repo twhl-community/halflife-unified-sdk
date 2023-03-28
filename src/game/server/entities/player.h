@@ -236,7 +236,6 @@ public:
 	float m_flLastShotTime;
 	int m_iFlagCaptures;
 	int m_iCTFScore;
-	bool m_fWONAuthSent;
 
 	short m_iOffense;
 	short m_iDefense;
