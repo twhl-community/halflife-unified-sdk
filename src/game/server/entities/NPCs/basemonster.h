@@ -547,7 +547,7 @@ public:
 	*	@brief measures the difference between the way the monster is facing and determines
 	*	whether or not to select one of the 180 turn animations.
 	*/
-	void SetTurnActivity();
+	virtual void SetTurnActivity();
 
 	/**
 	*	@brief subtracts the volume of the given sound from the distance the sound source is from the caller,

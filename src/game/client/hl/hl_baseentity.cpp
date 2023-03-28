@@ -255,6 +255,7 @@ bool CBaseMonster::GiveHealth(float flHealth, int bitsDamageType) { return false
 bool CBaseMonster::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) { return false; }
 bool CBaseMonster::Restore(class CRestore&) { return true; }
 bool CBaseMonster::Save(class CSave&) { return true; }
+void CBaseMonster::SetTurnActivity() {}
 
 int TrainSpeed(int iSpeed, int iMax) { return 0; }
 void CBasePlayer::DeathSound() {}
