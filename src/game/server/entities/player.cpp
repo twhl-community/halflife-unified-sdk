@@ -73,7 +73,6 @@ TYPEDESCRIPTION CBasePlayer::m_playerSaveData[] =
     
 		DEFINE_FIELD(CBasePlayer, m_flTimeWeaponIdle, FIELD_TIME),
 		DEFINE_FIELD(CBasePlayer, m_flSwimTime, FIELD_TIME),
-		DEFINE_FIELD(CBasePlayer, m_flDuckTime, FIELD_TIME),
 		DEFINE_FIELD(CBasePlayer, m_flWallJumpTime, FIELD_TIME),
 
 		DEFINE_FIELD(CBasePlayer, m_flSuitUpdate, FIELD_TIME),
