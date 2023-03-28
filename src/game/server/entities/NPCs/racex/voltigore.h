@@ -156,7 +156,6 @@ public:
 	// three hacky fields for speech stuff. These don't really need to be saved.
 	float m_flNextSpeakTime;
 	float m_flNextWordTime;
-	int m_iLastWord;
 
 	EHANDLE m_pChargedBolt;
 

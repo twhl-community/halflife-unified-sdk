@@ -290,7 +290,6 @@ TYPEDESCRIPTION COFVoltigore::m_SaveData[] =
 		DEFINE_FIELD(COFVoltigore, m_flNextPainTime, FIELD_TIME),
 		DEFINE_FIELD(COFVoltigore, m_flNextSpeakTime, FIELD_TIME),
 		DEFINE_FIELD(COFVoltigore, m_flNextWordTime, FIELD_TIME),
-		DEFINE_FIELD(COFVoltigore, m_iLastWord, FIELD_INTEGER),
 		DEFINE_FIELD(COFVoltigore, m_pChargedBolt, FIELD_EHANDLE),
 };
 
