@@ -612,7 +612,7 @@ public:
 	*	Returns a pointer to the damaged entity in case the monster wishes to do other stuff to the victim (punchangle, etc)
 	*	Used for many contact-range melee attacks. Bites, claws, etc.
 	*/
-	CBaseEntity* CheckTraceHullAttack(float flDist, int iDamage, int iDmgType);
+	virtual CBaseEntity* CheckTraceHullAttack(float flDist, int iDamage, int iDmgType);
 
 	/**
 	*	@brief tells us if a monster is facing its ideal yaw.
