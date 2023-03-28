@@ -27,7 +27,10 @@
 #define MAX_WEAPONS 64 // ???
 constexpr int MAX_PLAYERS = 32;
 
+constexpr int MAX_ALWAYS_VISIBLE_WEAPON_SLOTS = 5;
 #define MAX_WEAPON_SLOTS 7 // hud item selection slots
+
+static_assert(MAX_WEAPON_SLOTS >= MAX_ALWAYS_VISIBLE_WEAPON_SLOTS);
 
 #define HIDEHUD_WEAPONS (1 << 0)
 #define HIDEHUD_FLASHLIGHT (1 << 1)

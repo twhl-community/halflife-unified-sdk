@@ -1205,9 +1205,23 @@ bool CHudAmmo::DrawWList(float flTime)
 	const Rect bucketRect = gHUD.GetSpriteRect(m_BucketSprites[0]);
 	const int bucketWidth = bucketRect.right - bucketRect.left;
 	const int bucketHeight = bucketRect.bottom - bucketRect.top;
+	
+	// Determine how many slots to draw.
+	// Half-Life has 5, Opposing Force has 7 and we want to support as many as 10, one for each number key.
+	int slotsToDraw = MAX_WEAPON_SLOTS;
+
+	for (int slot = MAX_WEAPON_SLOTS; slot > MAX_ALWAYS_VISIBLE_WEAPON_SLOTS; --slot)
+	{
+		if (gWR.GetHighestPositionInSlot(slot - 1) != -1)
+		{
+			break;
+		}
+
+		--slotsToDraw;
+	}
 
 	// Draw top line
-	for (i = 0; i < MAX_WEAPON_SLOTS; i++)
+	for (i = 0; i < slotsToDraw; i++)
 	{
 		int iWidth;
 
@@ -1241,7 +1255,7 @@ bool CHudAmmo::DrawWList(float flTime)
 	x = 10;
 
 	// Draw all of the buckets
-	for (i = 0; i < MAX_WEAPON_SLOTS; i++)
+	for (i = 0; i < slotsToDraw; i++)
 	{
 		y = bucketHeight + 10;
 
