@@ -138,8 +138,7 @@ public:
 
 	Vector m_DisplacerReturn;
 	int m_DisplacerSndRoomtype;
-
-	int m_iPlayerSound;		// the index of the sound list slot reserved for this player
+    
 	int m_iTargetVolume;	// ideal sound volume.
 	int m_iWeaponVolume;	// how loud the player's weapon is right now.
 	int m_iExtraSoundTypes; // additional classification for this weapon's sound
@@ -173,8 +172,6 @@ public:
     
 	// these are time-sensitive things that we keep track of
 	float m_flTimeWeaponIdle; // when to play another weapon idle animation.
-	float m_flSwimTime;		  // how long player has been underwater
-	float m_flWallJumpTime;	  // how long until next walljump
 
 	float m_flSuitUpdate;						 // when to play next suit update
 	int m_rgSuitPlayList[CSUITPLAYLIST];		 // next sentencenum to play for suit update
@@ -187,9 +184,6 @@ public:
 	float m_flgeigerRange; // range to nearest radiation source
 	float m_flgeigerDelay; // delay per update of range msg to client
 	int m_igeigerRangePrev;
-	int m_iStepLeft;					  // alternate left/right foot stepping sound
-	char m_szTextureName[TextureNameMax]; // current texture name we're standing on
-	char m_chTextureType;				  // current texture type
 
 	int m_idrowndmg;	  // track drowning damage taken
 	int m_idrownrestored; // track drowning damage restored

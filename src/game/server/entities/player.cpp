@@ -72,8 +72,6 @@ TYPEDESCRIPTION CBasePlayer::m_playerSaveData[] =
 		DEFINE_FIELD(CBasePlayer, m_afPhysicsFlags, FIELD_INTEGER),
     
 		DEFINE_FIELD(CBasePlayer, m_flTimeWeaponIdle, FIELD_TIME),
-		DEFINE_FIELD(CBasePlayer, m_flSwimTime, FIELD_TIME),
-		DEFINE_FIELD(CBasePlayer, m_flWallJumpTime, FIELD_TIME),
 
 		DEFINE_FIELD(CBasePlayer, m_flSuitUpdate, FIELD_TIME),
 		DEFINE_ARRAY(CBasePlayer, m_rgSuitPlayList, FIELD_INTEGER, CSUITPLAYLIST),
@@ -127,13 +125,9 @@ TYPEDESCRIPTION CBasePlayer::m_playerSaveData[] =
 		// DEFINE_FIELD( CBasePlayer, m_fDeadTime, FIELD_FLOAT ), // only used in multiplayer games
 		// DEFINE_FIELD( CBasePlayer, m_fGameHUDInitialized, FIELD_INTEGER ), // only used in multiplayer games
 		// DEFINE_FIELD( CBasePlayer, m_flStopExtraSoundTime, FIELD_TIME ),
-		// DEFINE_FIELD( CBasePlayer, m_iPlayerSound, FIELD_INTEGER ),	// Don't restore, set in Precache()
 		// DEFINE_FIELD( CBasePlayer, m_flgeigerRange, FIELD_FLOAT ),	// Don't restore, reset in Precache()
 		// DEFINE_FIELD( CBasePlayer, m_flgeigerDelay, FIELD_FLOAT ),	// Don't restore, reset in Precache()
 		// DEFINE_FIELD( CBasePlayer, m_igeigerRangePrev, FIELD_FLOAT ),	// Don't restore, reset in Precache()
-		// DEFINE_FIELD( CBasePlayer, m_iStepLeft, FIELD_INTEGER ), // Don't need to restore
-		// DEFINE_ARRAY( CBasePlayer, m_szTextureName, FIELD_CHARACTER, TextureNameMax ), // Don't need to restore
-		// DEFINE_FIELD( CBasePlayer, m_chTextureType, FIELD_CHARACTER ), // Don't need to restore
 		// DEFINE_FIELD( CBasePlayer, m_fNoPlayerSound, FIELD_BOOLEAN ), // Don't need to restore, debug
 		// DEFINE_FIELD( CBasePlayer, m_iClientHealth, FIELD_INTEGER ), // Don't restore, client needs reset
 		// DEFINE_FIELD( CBasePlayer, m_iClientBattery, FIELD_INTEGER ), // Don't restore, client needs reset
@@ -2770,7 +2764,6 @@ void CBasePlayer::Spawn()
 	m_flgeigerDelay = gpGlobals->time + 2.0; // wait a few seconds until user-defined message registrations
 											 // are recieved by all clients
     
-	m_iStepLeft = 0;
 	m_flFieldOfView = 0.5; // some monsters use this to determine whether or not the player is looking at them.
 
 	m_bloodColor = BLOOD_COLOR_RED;
@@ -2803,11 +2796,6 @@ void CBasePlayer::Spawn()
 	pev->view_ofs = VEC_VIEW;
 	Precache();
 	m_HackedGunPos = Vector(0, 32, 0);
-
-	if (m_iPlayerSound == SOUNDLIST_EMPTY)
-	{
-		Logger->debug("Couldn't alloc player sound slot!");
-	}
 
 	m_fNoPlayerSound = false; // normal sound behavior.
 
