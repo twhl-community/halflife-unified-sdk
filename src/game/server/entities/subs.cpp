@@ -231,8 +231,6 @@ TYPEDESCRIPTION CBaseToggle::m_SaveData[] =
 		DEFINE_FIELD(CBaseToggle, m_flMoveDistance, FIELD_FLOAT),
 		DEFINE_FIELD(CBaseToggle, m_flWait, FIELD_FLOAT),
 		DEFINE_FIELD(CBaseToggle, m_flLip, FIELD_FLOAT),
-		DEFINE_FIELD(CBaseToggle, m_flTWidth, FIELD_FLOAT),
-		DEFINE_FIELD(CBaseToggle, m_flTLength, FIELD_FLOAT),
 		DEFINE_FIELD(CBaseToggle, m_vecPosition1, FIELD_POSITION_VECTOR),
 		DEFINE_FIELD(CBaseToggle, m_vecPosition2, FIELD_POSITION_VECTOR),
 		DEFINE_FIELD(CBaseToggle, m_vecAngle1, FIELD_VECTOR), // UNDONE: Position could go through transition, but also angle?

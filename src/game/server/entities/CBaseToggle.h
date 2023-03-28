@@ -32,8 +32,6 @@ public:
 	float m_flMoveDistance;		// how far a door should slide or rotate
 	float m_flWait;
 	float m_flLip;
-	float m_flTWidth;  // for plats
-	float m_flTLength; // for plats
 
 	Vector m_vecPosition1;
 	Vector m_vecPosition2;

@@ -188,11 +188,6 @@ LINK_ENTITY_TO_CLASS(func_plat_trigger, CPlatTrigger);
 
 void CFuncPlat::Setup()
 {
-	if (m_flTLength == 0)
-		m_flTLength = 80;
-	if (m_flTWidth == 0)
-		m_flTWidth = 10;
-
 	pev->angles = g_vecZero;
 
 	pev->solid = SOLID_BSP;
