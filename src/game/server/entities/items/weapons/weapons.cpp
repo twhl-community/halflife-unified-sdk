@@ -415,6 +415,9 @@ ItemAddResult CBasePlayerWeapon::Apply(CBasePlayer* player)
 		{
 			player->EmitSound(CHAN_ITEM, "items/gunpickup2.wav", 1, ATTN_NORM);
 		}
+
+		// Clear out think functions so they don't try to run item spawn/respawn logic.
+		SetThink(nullptr);
 	}
 
 	return result;
