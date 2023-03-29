@@ -202,6 +202,14 @@ void CGameRules::BecomeSpectator(CBasePlayer* player, const CommandArgs& args)
 		ClientPrint(player, HUD_PRINTCONSOLE, "Spectator mode is disabled.\n");
 }
 
+CGameRules* InstallSinglePlayerGameRules()
+{
+	g_GameLogger->trace("Creating singleplayer gamerules");
+	// generic half-life
+	g_teamplay = false;
+	return new CHalfLifeRules;
+}
+
 CGameRules* InstallGameRules(CBaseEntity* pWorld)
 {
 	g_GameLogger->trace("Creating gamerules");
@@ -212,10 +220,7 @@ CGameRules* InstallGameRules(CBaseEntity* pWorld)
 	// TODO: need to be able to identify gamerules by name.
 	if (0 == gpGlobals->deathmatch)
 	{
-		g_GameLogger->trace("Creating singleplayer gamerules");
-		// generic half-life
-		g_teamplay = false;
-		return new CHalfLifeRules;
+		return InstallSinglePlayerGameRules();
 	}
 
 	if (coopplay.value > 0)

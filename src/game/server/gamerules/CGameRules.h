@@ -335,6 +335,8 @@ private:
 	ScopedClientCommand m_SpecModeCommand;
 };
 
+CGameRules* InstallSinglePlayerGameRules();
+
 /**
 *	@brief instantiate the proper game rules object
 */

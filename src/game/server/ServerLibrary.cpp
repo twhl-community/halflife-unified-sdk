@@ -169,6 +169,8 @@ void ServerLibrary::ShutdownServer(spdlog::format_string_t<Args...> fmt, Args&&.
 
 void ServerLibrary::NewMapStarted(bool loadGame)
 {
+	m_IsCurrentMapLoadedFromSaveGame = loadGame;
+
 	g_GameLogger->trace("Starting new map");
 
 	// Log some useful game info.
@@ -204,6 +206,14 @@ void ServerLibrary::NewMapStarted(bool loadGame)
 	else
 	{
 		ShutdownServer("Shutting down server due to error loading BSP data");
+	}
+
+	// We're loading a save game so we will always use singleplayer gamerules.
+	// Install it now so entities can access it during restore.
+	if (IsCurrentMapLoadedFromSaveGame())
+	{
+		delete g_pGameRules;
+		g_pGameRules = InstallSinglePlayerGameRules();
 	}
 
 	// Load the config files, which will initialize the map state as needed

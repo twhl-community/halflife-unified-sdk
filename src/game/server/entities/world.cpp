@@ -438,10 +438,14 @@ void CWorld::Precache()
 
 	CVAR_SET_STRING("room_type", "0"); // clear DSP
 
-	// Set up game rules
-	delete g_pGameRules;
+	// If we're loading a save game then this must be singleplayer, and gamerules has been installed by the ServerLibrary already.
+	if (!g_Server.IsCurrentMapLoadedFromSaveGame())
+	{
+		// Set up game rules
+		delete g_pGameRules;
 
-	g_pGameRules = InstallGameRules(this);
+		g_pGameRules = InstallGameRules(this);
+	}
 
 	//!!!UNDONE why is there so much Spawn code in the Precache function? I'll just keep it here
 

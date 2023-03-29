@@ -1390,7 +1390,8 @@ Vector VecBModelOrigin(CBaseEntity* bModel)
 
 bool UTIL_IsMultiplayer()
 {
-	return g_pGameRules->IsMultiplayer();
+	// Can be null during weapon registration.
+	return g_pGameRules && g_pGameRules->IsMultiplayer();
 }
 
 bool UTIL_IsCTF()

@@ -44,6 +44,8 @@ public:
 
 	MapState* GetMapState() { return &m_MapState; }
 
+	bool IsCurrentMapLoadedFromSaveGame() const { return m_IsCurrentMapLoadedFromSaveGame; }
+
 	bool Initialize() override;
 
 	void Shutdown() override;
@@ -118,6 +120,7 @@ private:
 	std::shared_ptr<const GameConfigDefinition<ServerConfigContext>> m_MapChangeConfigDefinition;
 
 	bool m_IsStartingNewMap = true;
+	bool m_IsCurrentMapLoadedFromSaveGame = false;
 
 	MapState m_MapState;
 };
