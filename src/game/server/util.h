@@ -71,7 +71,9 @@ inline void MESSAGE_BEGIN(int msg_dest, int msg_type, const float* pOrigin, entv
 #define VIEW_FIELD_ULTRA_NARROW (float)0.9 // +-25 degrees, more narrow check used to set up ranged attacks
 
 // All monsters need this data
+//TODO: convert into enum class? make sure the type is correct, add info about where to find these (Half-Life/valve/gfx/palette.bmp)
 #define DONT_BLEED -1
+constexpr byte BLOOD_COLOR_BRIGHT_BLUE = 208;
 #define BLOOD_COLOR_RED (byte)247
 #define BLOOD_COLOR_YELLOW (byte)195
 #define BLOOD_COLOR_GREEN BLOOD_COLOR_YELLOW

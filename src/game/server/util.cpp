@@ -1305,12 +1305,6 @@ bool UTIL_IsValidEntity(edict_t* pent)
 	return true;
 }
 
-// Even though worldspawn should never be removed it shouldn't be listed here since we silently ignore it in UTIL_Remove.
-constexpr const char* EntitiesNotAllowedToBeRemoved[] =
-{
-	"player"
-};
-
 bool UTIL_IsRemovableEntity(CBaseEntity* entity)
 {
 	if (!entity)
@@ -1318,12 +1312,9 @@ bool UTIL_IsRemovableEntity(CBaseEntity* entity)
 		return false;
 	}
 
-	for (auto className : EntitiesNotAllowedToBeRemoved)
+	if (ToBasePlayer(entity))
 	{
-		if (entity->ClassnameIs(className))
-		{
-			return false;
-		}
+		return false;
 	}
 
 	return true;

@@ -528,13 +528,14 @@ void PrintPageSearchResult(CBasePlayer* player, const PageSearchResult& result)
 	}
 }
 
-static CBaseEntity* FindNextEntityToRemove(CBaseEntity* startEntity, const char* needle)
+static CBaseEntity* FindNextEntityToRemove(CBasePlayer* player, CBaseEntity* startEntity, const char* needle)
 {
 	for (CBaseEntity* entity = startEntity; (entity = UTIL_FindEntityByIdentifier(entity, needle)) != nullptr;)
 	{
 		if (!UTIL_IsRemovableEntity(entity))
 		{
-			Con_Printf("Can't remove \"%s\": not allowed to remove entities of this type\n", STRING(entity->pev->classname));
+			UTIL_ConsolePrint(player->edict(), "Can't remove \"{}\": not allowed to remove entities of this type\n",
+				STRING(entity->pev->classname));
 			continue;
 		}
 
@@ -721,22 +722,22 @@ void SV_CreateClientCommands()
 			}
 			else
 			{
-				candidate = FindNextEntityToRemove(nullptr, args.Argument(1));
+				candidate = FindNextEntityToRemove(player, nullptr, args.Argument(1));
 			}
 
 			if (candidate)
 			{
-				Con_Printf("Removed %s:%d (%s)\n", candidate->GetClassname(), candidate->entindex(), candidate->GetTargetname());
+				UTIL_ConsolePrint(player->edict(), "Removed {}:{} ({})\n",
+					candidate->GetClassname(), candidate->entindex(), candidate->GetTargetname());
 				UTIL_Remove(candidate);
-			}
-		},
+			} },
 		{.Flags = ClientCommandFlag::Cheat});
 
 	g_ClientCommands.Create("ent_remove_all", [](CBasePlayer* player, const CommandArgs& args)
 		{
 			if (args.Count() < 2)
 			{
-				Con_Printf("Usage: ent_remove_all <classname|targetname>\n");
+				UTIL_ConsolePrint(player->edict(), "Usage: ent_remove_all <classname|targetname>\n");
 				return;
 			}
 
@@ -744,7 +745,7 @@ void SV_CreateClientCommands()
 
 			int count = 0;
 
-			for (CBaseEntity* candidate = nullptr; (candidate = FindNextEntityToRemove(candidate, needle)) != nullptr;)
+			for (CBaseEntity* candidate = nullptr; (candidate = FindNextEntityToRemove(player, candidate, needle)) != nullptr;)
 			{
 				if (candidate)
 				{
@@ -753,15 +754,14 @@ void SV_CreateClientCommands()
 				}
 			}
 
-			Con_Printf("Removed %d entities matching \"%s\"\n", count, needle);
-		},
+			UTIL_ConsolePrint(player->edict(),"Removed {} entities matching \"{}\"\n", count, needle); },
 		{.Flags = ClientCommandFlag::Cheat});
 
 	g_ClientCommands.Create("ent_setname", [](CBasePlayer* player, const CommandArgs& args)
 		{
 			if (args.Count() < 2)
 			{
-				Con_Printf("Usage: ent_setname <new targetname> [classname|targetname]\n");
+				UTIL_ConsolePrint(player->edict(), "Usage: ent_setname <new targetname> [classname|targetname]\n");
 				return;
 			}
 
@@ -779,10 +779,101 @@ void SV_CreateClientCommands()
 			if (target)
 			{
 				const char* name = args.Argument(1);
-				Con_Printf("Set the name of %s to %s\n", target->GetClassname(), name);
+				UTIL_ConsolePrint(player->edict(), "Set the name of {} to {}\n", target->GetClassname(), name);
 				target->pev->targetname = ALLOC_STRING(name);
+			} },
+		{.Flags = ClientCommandFlag::Cheat});
+
+	g_ClientCommands.Create("ent_show_origin", [](CBasePlayer* player, const CommandArgs& args)
+		{
+			if (args.Count() < 2)
+			{
+				UTIL_ConsolePrint(player->edict(), "Usage: ent_show_origin <targetname>\n");
+				return;
 			}
-		},
+
+			CBaseEntity* target = UTIL_FindEntityByTargetname(nullptr, args.Argument(1));
+
+			if (target)
+			{
+				MESSAGE_BEGIN(MSG_ONE, SVC_TEMPENTITY, nullptr, player->edict());
+				WRITE_BYTE(TE_FIREFIELD);
+				WRITE_COORD_VECTOR(target->pev->origin);
+				WRITE_SHORT(0);
+				WRITE_SHORT(g_sModelIndexLaserDot);
+				WRITE_BYTE(1);
+				WRITE_BYTE(TEFIRE_FLAG_ADDITIVE);
+				WRITE_BYTE(100); // Stick around for 10 seconds.
+				MESSAGE_END();
+
+				UTIL_ConsolePrint(player->edict(), "Origin: {}\n", target->pev->origin);
+			}
+			else
+			{
+				UTIL_ConsolePrint(player->edict(), "No entity found\n");
+			} },
+		{.Flags = ClientCommandFlag::Cheat});
+
+	g_ClientCommands.Create("ent_show_center", [](CBasePlayer* player, const CommandArgs& args)
+		{
+			if (args.Count() < 2)
+			{
+				UTIL_ConsolePrint(player->edict(), "Usage: ent_show_center <targetname>\n");
+				return;
+			}
+
+			CBaseEntity* target = UTIL_FindEntityByTargetname(nullptr, args.Argument(1));
+
+			if (target)
+			{
+				const Vector center = target->Center();
+
+				MESSAGE_BEGIN(MSG_ONE, SVC_TEMPENTITY, nullptr, player->edict());
+				WRITE_BYTE(TE_FIREFIELD);
+				WRITE_COORD_VECTOR(center);
+				WRITE_SHORT(0);
+				WRITE_SHORT(g_sModelIndexLaserDot);
+				WRITE_BYTE(1);
+				WRITE_BYTE(TEFIRE_FLAG_ADDITIVE);
+				WRITE_BYTE(100); // Stick around for 10 seconds.
+				MESSAGE_END();
+
+				UTIL_ConsolePrint(player->edict(), "Center: {}\n", center);
+			}
+			else
+			{
+				UTIL_ConsolePrint(player->edict(), "No entity found\n");
+			} },
+		{.Flags = ClientCommandFlag::Cheat});
+
+	g_ClientCommands.Create("ent_show_bbox", [](CBasePlayer* player, const CommandArgs& args)
+		{
+			if (args.Count() < 2)
+			{
+				UTIL_ConsolePrint(player->edict(), "Usage: ent_show_bbox <targetname>\n");
+				return;
+			}
+
+			CBaseEntity* target = UTIL_FindEntityByTargetname(nullptr, args.Argument(1));
+
+			if (target)
+			{
+				MESSAGE_BEGIN(MSG_ONE, SVC_TEMPENTITY, nullptr, player->edict());
+				WRITE_BYTE(TE_BOX);
+				WRITE_COORD_VECTOR(target->pev->absmin);
+				WRITE_COORD_VECTOR(target->pev->absmax);
+				WRITE_SHORT(100); // Stick around for 10 seconds.
+				WRITE_BYTE(0);
+				WRITE_BYTE(0);
+				WRITE_BYTE(255);
+				MESSAGE_END();
+
+				UTIL_ConsolePrint(player->edict(), "BBox: min {} max {}\n", target->pev->absmin, target->pev->absmax);
+			}
+			else
+			{
+				UTIL_ConsolePrint(player->edict(), "No entity found\n");
+			} },
 		{.Flags = ClientCommandFlag::Cheat});
 }
 
