@@ -216,8 +216,11 @@ ItemAddResult CBaseItem::AddToPlayer(CBasePlayer* player)
 	// Do this after doing the above so the respawned item exists and state changes have occurred.
 	SUB_UseTargets(player, USE_TOGGLE, 0);
 
-	// Fire with USE_OFF so targets can be controlled more easily.
-	FireTargets(STRING(m_TriggerOnDespawn), player, this, USE_OFF, 0);
+	if (!FStringNull(m_TriggerOnDespawn))
+	{
+		// Fire with USE_OFF so targets can be controlled more easily.
+		FireTargets(STRING(m_TriggerOnDespawn), player, this, USE_OFF, 0);
+	}
 
 	return result;
 #else
@@ -287,7 +290,10 @@ void CBaseItem::Materialize()
 	SetTouch(&CBaseItem::ItemTouch);
 	SetThink(nullptr);
 
-	FireTargets(STRING(m_TriggerOnSpawn), this, this, USE_ON, 0);
+	if (!FStringNull(m_TriggerOnSpawn))
+	{
+		FireTargets(STRING(m_TriggerOnSpawn), this, this, USE_ON, 0);
+	}
 #endif
 }
 
