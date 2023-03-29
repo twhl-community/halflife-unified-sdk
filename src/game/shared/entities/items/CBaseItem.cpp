@@ -89,11 +89,7 @@ void CBaseItem::SetupItem(const Vector& mins, const Vector& maxs)
 		pev->movetype = MOVETYPE_TOSS;
 	}
 
-	// Start as BBOX, switch to TRIGGER once at rest.
-	// Prevents items with point size bounds from being picked up until after they've materialized.
-	// This prevents weapons from being picked up, added to the player's inventory and then
-	// trying to materialize which triggers pickup logic again.
-	pev->solid = SOLID_BBOX;
+	pev->solid = SOLID_TRIGGER;
 
 	SetSize(mins, maxs);
 	SetOrigin(pev->origin);
