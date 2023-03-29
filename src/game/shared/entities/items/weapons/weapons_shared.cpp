@@ -20,36 +20,6 @@
 #include "com_weapons.h"
 #endif
 
-void Weapons_RegisterAmmoTypes()
-{
-	g_AmmoTypes.Clear();
-
-	g_AmmoTypes.Register("9mm", _9MM_MAX_CARRY);
-	g_AmmoTypes.Register("357", _357_MAX_CARRY);
-
-	g_AmmoTypes.Register("ARgrenades", M203_GRENADE_MAX_CARRY);
-	g_AmmoTypes.Register("buckshot", BUCKSHOT_MAX_CARRY);
-	g_AmmoTypes.Register("bolts", BOLT_MAX_CARRY);
-
-	g_AmmoTypes.Register("rockets", ROCKET_MAX_CARRY);
-	g_AmmoTypes.Register("uranium", URANIUM_MAX_CARRY);
-	g_AmmoTypes.Register("Hornets", HORNET_MAX_CARRY);
-
-	g_AmmoTypes.Register("Hand Grenade", HANDGRENADE_MAX_CARRY, "weapon_handgrenade");
-	g_AmmoTypes.Register("Satchel Charge", SATCHEL_MAX_CARRY, "weapon_satchel");
-	g_AmmoTypes.Register("Trip Mine", TRIPMINE_MAX_CARRY, "weapon_tripmine");
-	g_AmmoTypes.Register("Snarks", SNARK_MAX_CARRY, "weapon_snark");
-	g_AmmoTypes.Register("Penguins", PENGUIN_MAX_CARRY, "weapon_penguin");
-	
-	g_AmmoTypes.Register("556", M249_MAX_CARRY);
-	g_AmmoTypes.Register("762", SNIPERRIFLE_MAX_CARRY);
-
-	g_AmmoTypes.Register("spores", SPORELAUNCHER_MAX_CARRY);
-	g_AmmoTypes.Register("shock", SHOCKRIFLE_MAX_CLIP);
-
-	CBasePlayerWeapon::WeaponsLogger->debug("Registered {} ammo types", g_AmmoTypes.GetCount());
-}
-
 void FindHullIntersection(const Vector& vecSrc, TraceResult& tr, const Vector& mins, const Vector& maxs, CBaseEntity* pEntity)
 {
 	int i, j, k;

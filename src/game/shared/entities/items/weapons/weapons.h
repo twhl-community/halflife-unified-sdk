@@ -221,7 +221,7 @@ enum class WeaponState
 	OnTarget
 };
 
-void Weapons_RegisterAmmoTypes();
+void Weapon_RegisterWeaponData();
 
 constexpr int RefillAllAmmoAmount = -1;
 

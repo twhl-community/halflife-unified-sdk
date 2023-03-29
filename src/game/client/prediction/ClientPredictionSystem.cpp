@@ -97,15 +97,7 @@ void ClientPredictionSystem::InitializeEntities()
 		// Allocate a slot for the local player
 		m_Player = CreatePlayer();
 
-		// Precache weapons in a well-defined order so the client initializes its local data the same way as the server.
-		// TODO: This is only necessary until weapon data is sent over the network.
-		const auto classNames = g_WeaponDictionary->GetClassNames();
-
-		std::vector<std::string_view> sortedClassNames{classNames.begin(), classNames.end()};
-
-		std::ranges::sort(sortedClassNames);
-
-		for (const auto& className : sortedClassNames)
+		for (const auto& className : g_WeaponDictionary->GetClassNames())
 		{
 			PrepWeapon(className, m_Player);
 		}

@@ -216,6 +216,9 @@ void ServerLibrary::NewMapStarted(bool loadGame)
 		g_pGameRules = InstallSinglePlayerGameRules();
 	}
 
+	// This must be done before any entities are created, and after gamerules have been installed.
+	Weapon_RegisterWeaponData();
+
 	// Load the config files, which will initialize the map state as needed
 	LoadServerConfigFiles();
 

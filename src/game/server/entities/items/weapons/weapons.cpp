@@ -141,26 +141,63 @@ void ExplodeModel(const Vector& vecOrigin, float speed, int model, int count)
 }
 #endif
 
-/**
-*	@brief Precaches the weapon and queues the weapon info for sending to clients
-*/
-void UTIL_PrecacheOtherWeapon(const char* szClassname)
+void Weapons_RegisterAmmoTypes()
 {
-	auto entity = g_WeaponDictionary->Create(szClassname);
-	if (FNullEnt(entity))
+	g_AmmoTypes.Clear();
+
+	g_AmmoTypes.Register("9mm", _9MM_MAX_CARRY);
+	g_AmmoTypes.Register("357", _357_MAX_CARRY);
+
+	g_AmmoTypes.Register("ARgrenades", M203_GRENADE_MAX_CARRY);
+	g_AmmoTypes.Register("buckshot", BUCKSHOT_MAX_CARRY);
+	g_AmmoTypes.Register("bolts", BOLT_MAX_CARRY);
+
+	g_AmmoTypes.Register("rockets", ROCKET_MAX_CARRY);
+	g_AmmoTypes.Register("uranium", URANIUM_MAX_CARRY);
+	g_AmmoTypes.Register("Hornets", HORNET_MAX_CARRY);
+
+	g_AmmoTypes.Register("Hand Grenade", HANDGRENADE_MAX_CARRY, "weapon_handgrenade");
+	g_AmmoTypes.Register("Satchel Charge", SATCHEL_MAX_CARRY, "weapon_satchel");
+	g_AmmoTypes.Register("Trip Mine", TRIPMINE_MAX_CARRY, "weapon_tripmine");
+	g_AmmoTypes.Register("Snarks", SNARK_MAX_CARRY, "weapon_snark");
+	g_AmmoTypes.Register("Penguins", PENGUIN_MAX_CARRY, "weapon_penguin");
+
+	g_AmmoTypes.Register("556", M249_MAX_CARRY);
+	g_AmmoTypes.Register("762", SNIPERRIFLE_MAX_CARRY);
+
+	g_AmmoTypes.Register("spores", SPORELAUNCHER_MAX_CARRY);
+	g_AmmoTypes.Register("shock", SHOCKRIFLE_MAX_CLIP);
+
+	CBasePlayerWeapon::WeaponsLogger->debug("Registered {} ammo types", g_AmmoTypes.GetCount());
+}
+
+void Weapon_RegisterWeaponTypes()
+{
+	g_WeaponData.Clear();
+
+	// This will also try to load cycler_weapon but it doesn't return any item data so that's fine.
+	for (const auto& className : g_WeaponDictionary->GetClassNames())
 	{
-		CBaseEntity::Logger->error("NULL Ent in UTIL_PrecacheOtherWeapon");
-		return;
+		auto entity = g_WeaponDictionary->Create(className);
+		if (FNullEnt(entity))
+		{
+			CBaseEntity::Logger->error("NULL Ent in Weapon_RegisterWeaponTypes");
+			continue;
+		}
+
+		if (WeaponInfo info; entity->GetWeaponInfo(info))
+		{
+			g_WeaponData.Register(std::move(info));
+		}
+
+		REMOVE_ENTITY(entity->edict());
 	}
+}
 
-	entity->Precache();
-
-	if (WeaponInfo info; entity->GetWeaponInfo(info))
-	{
-		g_WeaponData.Register(std::move(info));
-	}
-
-	REMOVE_ENTITY(entity->edict());
+void Weapon_RegisterWeaponData()
+{
+	Weapons_RegisterAmmoTypes();
+	Weapon_RegisterWeaponTypes();
 }
 
 // called by worldspawn
@@ -168,20 +205,16 @@ void W_Precache()
 {
 	g_GameLogger->trace("Precaching weapon assets");
 
-	g_WeaponData.Clear();
-
-	Weapons_RegisterAmmoTypes();
-
 	// custom items...
 
 	// common world objects
+	// TODO: precache all items instead of just weapons.
 	UTIL_PrecacheOther("item_suit");
 	UTIL_PrecacheOther("item_battery");
 	UTIL_PrecacheOther("item_antidote");
 	UTIL_PrecacheOther("item_longjump");
 
-	// Precache weapons in a well-defined order so the client initializes its local data the same way as the server.
-	// TODO: This is only necessary until weapon data is sent over the network.
+	// Precache weapons in a well-defined order so the precache list is always the same.
 	const auto classNames = g_WeaponDictionary->GetClassNames();
 
 	std::vector<std::string_view> sortedClassNames{classNames.begin(), classNames.end()};
@@ -191,7 +224,7 @@ void W_Precache()
 	// This will also try to precache cycler_weapon but it doesn't return any item data so that's fine.
 	for (const auto& className : sortedClassNames)
 	{
-		UTIL_PrecacheOtherWeapon(className.data());
+		UTIL_PrecacheOther(className.data());
 	}
 
 	UTIL_PrecacheOther("ammo_buckshot");
