@@ -3163,7 +3163,7 @@ static CBaseItem* GiveNamedItem_Common(CBasePlayer* player, const char* pszName)
 	}
 
 	entity->pev->origin = player->pev->origin;
-	entity->m_RespawnMode = ItemRespawnMode::Never;
+	entity->m_RespawnDelay = ITEM_NEVER_RESPAWN_DELAY;
 
 	DispatchSpawn(entity->edict());
 

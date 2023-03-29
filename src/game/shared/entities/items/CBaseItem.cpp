@@ -19,7 +19,6 @@
 #ifndef CLIENT_DLL
 TYPEDESCRIPTION CBaseItem::m_SaveData[] =
 	{
-		DEFINE_FIELD(CBaseItem, m_RespawnMode, FIELD_INTEGER),
 		DEFINE_FIELD(CBaseItem, m_RespawnDelay, FIELD_FLOAT),
 		DEFINE_FIELD(CBaseItem, m_FallMode, FIELD_INTEGER),
 		DEFINE_FIELD(CBaseItem, m_StayVisibleDuringRespawn, FIELD_BOOLEAN),
@@ -34,18 +33,13 @@ IMPLEMENT_SAVERESTORE(CBaseItem, CBaseAnimating);
 
 bool CBaseItem::KeyValue(KeyValueData* pkvd)
 {
-	if (FStrEq(pkvd->szKeyName, "respawn_mode"))
-	{
-		m_RespawnMode = std::clamp(static_cast<ItemRespawnMode>(atoi(pkvd->szValue)), ItemRespawnMode::Default, ItemRespawnMode::Never);
-		return true;
-	}
-	else if (FStrEq(pkvd->szKeyName, "respawn_delay"))
+	if (FStrEq(pkvd->szKeyName, "respawn_delay"))
 	{
 		m_RespawnDelay = atof(pkvd->szValue);
 
 		if (m_RespawnDelay < 0)
 		{
-			m_RespawnDelay = ITEM_DEFAULT_RESPAWN_DELAY;
+			m_RespawnDelay = ITEM_NEVER_RESPAWN_DELAY;
 		}
 
 		return true;

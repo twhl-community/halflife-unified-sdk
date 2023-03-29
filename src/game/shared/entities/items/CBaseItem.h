@@ -27,13 +27,6 @@ enum class ItemType
 	Consumable			//!< This item will be consumed on use.
 };
 
-enum class ItemRespawnMode
-{
-	Default = 0,
-	Always,
-	Never
-};
-
 enum class ItemFallMode
 {
 	Fall = 0,	//!< MOVETYPE_TOSS with fall-to-ground logic
@@ -47,7 +40,8 @@ enum class ItemAddResult
 	AddedAsDuplicate //!< Ammo extracted and marked for removal.
 };
 
-constexpr float ITEM_DEFAULT_RESPAWN_DELAY = -1;
+constexpr float ITEM_DEFAULT_RESPAWN_DELAY = -2;
+constexpr float ITEM_NEVER_RESPAWN_DELAY = -1;
 
 /**
 *	@brief Interface for item visitors.
@@ -127,8 +121,6 @@ private:
 	CBaseItem* Respawn();
 
 public:
-	ItemRespawnMode m_RespawnMode = ItemRespawnMode::Default;
-
 	float m_RespawnDelay = ITEM_DEFAULT_RESPAWN_DELAY;
 
 protected:

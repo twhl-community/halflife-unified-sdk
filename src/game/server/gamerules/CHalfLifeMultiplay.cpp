@@ -800,13 +800,18 @@ void CHalfLifeMultiplay::PlayerGotItem(CBasePlayer* player, CBaseItem* item)
 
 bool CHalfLifeMultiplay::ItemShouldRespawn(CBaseItem* item)
 {
-	return item->m_RespawnMode != ItemRespawnMode::Never;
+	return item->m_RespawnDelay >= 0 || item->m_RespawnDelay == ITEM_DEFAULT_RESPAWN_DELAY;
 }
 
 
 
 float CHalfLifeMultiplay::ItemRespawnTime(CBaseItem* item)
 {
+	if (item->m_RespawnDelay == ITEM_NEVER_RESPAWN_DELAY)
+	{
+		return -1;
+	}
+
 	if (item->m_RespawnDelay != ITEM_DEFAULT_RESPAWN_DELAY)
 	{
 		return gpGlobals->time + item->m_RespawnDelay;

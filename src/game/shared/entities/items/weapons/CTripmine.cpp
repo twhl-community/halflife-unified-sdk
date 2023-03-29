@@ -190,7 +190,7 @@ void CTripmineGrenade::PowerupThink()
 		StopSound(CHAN_VOICE, "weapons/mine_deploy.wav");
 		StopSound(CHAN_BODY, "weapons/mine_charge.wav");
 		CTripmine* pMine = static_cast<CTripmine*>(Create("weapon_tripmine", pev->origin + m_vecDir * 24, pev->angles));
-		pMine->m_RespawnMode = ItemRespawnMode::Never;
+		pMine->m_RespawnDelay = ITEM_NEVER_RESPAWN_DELAY;
 
 		SetThink(&CTripmineGrenade::SUB_Remove);
 		KillBeam();

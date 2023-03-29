@@ -376,7 +376,6 @@ CBasePlayerWeapon* CBasePlayerWeapon::GetItemToRespawn(const Vector& respawnPoin
 	newWeapon->m_SoundReplacement = m_SoundReplacement;
 	newWeapon->m_SentenceReplacement = m_SentenceReplacement;
 
-	newWeapon->m_RespawnMode = m_RespawnMode;
 	newWeapon->m_RespawnDelay = m_RespawnDelay;
 
 	newWeapon->m_FallMode = m_FallMode;

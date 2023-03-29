@@ -140,13 +140,18 @@ void CHalfLifeRules::PlayerGotItem(CBasePlayer* player, CBaseItem* item)
 bool CHalfLifeRules::ItemShouldRespawn(CBaseItem* item)
 {
 	// Items don't respawn in singleplayer by default
-	return item->m_RespawnMode == ItemRespawnMode::Always;
+	return item->m_RespawnDelay >= 0;
 }
 
 float CHalfLifeRules::ItemRespawnTime(CBaseItem* item)
 {
+	if (item->m_RespawnDelay == ITEM_NEVER_RESPAWN_DELAY)
+	{
+		return -1;
+	}
+
 	// Allow respawn if it has a custom delay
-	if (item->m_RespawnDelay != ITEM_DEFAULT_RESPAWN_DELAY)
+	if (item->m_RespawnDelay >= ITEM_DEFAULT_RESPAWN_DELAY)
 	{
 		return gpGlobals->time + item->m_RespawnDelay;
 	}
@@ -163,7 +168,7 @@ Vector CHalfLifeRules::ItemRespawnSpot(CBaseItem* item)
 float CHalfLifeRules::ItemTryRespawn(CBaseItem* item)
 {
 	// If it has a custom delay then it can spawn when it first checks, otherwise never respawn
-	if (item->m_RespawnDelay != ITEM_DEFAULT_RESPAWN_DELAY)
+	if (item->m_RespawnDelay >= ITEM_DEFAULT_RESPAWN_DELAY)
 	{
 		return 0;
 	}

@@ -202,7 +202,7 @@ bool CWeaponBox::PackWeapon(CBasePlayerWeapon* weapon)
 		weapon->m_pNext = nullptr;
 	}
 
-	weapon->m_RespawnMode = ItemRespawnMode::Never;
+	weapon->m_RespawnDelay = ITEM_NEVER_RESPAWN_DELAY;
 	weapon->pev->movetype = MOVETYPE_NONE;
 	weapon->pev->solid = SOLID_NOT;
 	weapon->pev->effects = EF_NODRAW;
