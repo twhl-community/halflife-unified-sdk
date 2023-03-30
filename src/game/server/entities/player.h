@@ -103,7 +103,10 @@ enum sbar_data
 
 enum Cheat
 {
-	InfiniteAir = 0,
+	Godmode = 0,
+	Notarget,
+	Noclip,
+	InfiniteAir,
 	InfiniteArmor,
 };
 

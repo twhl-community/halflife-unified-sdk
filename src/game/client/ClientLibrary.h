@@ -72,6 +72,8 @@ protected:
 private:
 	SDL_Window* FindWindow();
 
+	void AddCheatCommands();
+
 private:
 	bool m_IsConnected = false;
 	float m_ConnectionTime = 0;

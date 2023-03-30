@@ -144,6 +144,12 @@ struct cl_enginefunc_t
 	cvar_t* (*pfnRegisterVariable)(const char* szName, const char* szValue, int flags);
 	float (*pfnGetCvarFloat)(const char* szName);
 	const char* (*pfnGetCvarString)(const char* szName);
+
+	/**
+	 *	@brief Registers a command.
+	 *	@param pfnEngSrc_function Callback to invoke when the command is executed.
+	 *		If null, the command is forwarded to the server.
+	 */
 	int (*pfnAddCommand)(const char* cmd_name, void (*pfnEngSrc_function)());
 	int (*pfnHookUserMsg)(const char* szMsgName, pfnUserMsgHook pfn);
 	int (*pfnServerCmd)(const char* szCmdString);

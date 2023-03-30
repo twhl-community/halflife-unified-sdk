@@ -640,6 +640,18 @@ void SV_CreateClientCommands()
 			if (player->IsObserver())
 				player->Observer_FindNextPlayer(atoi(args.Argument(1)) != 0); });
 
+	g_ClientCommands.Create("cheat_god", [](CBasePlayer* player, const CommandArgs& args)
+		{ player->ToggleCheat(Cheat::Godmode); },
+		{.Flags = ClientCommandFlag::Cheat});
+
+	g_ClientCommands.Create("cheat_notarget", [](CBasePlayer* player, const CommandArgs& args)
+		{ player->ToggleCheat(Cheat::Notarget); },
+		{.Flags = ClientCommandFlag::Cheat});
+
+	g_ClientCommands.Create("cheat_noclip", [](CBasePlayer* player, const CommandArgs& args)
+		{ player->ToggleCheat(Cheat::Noclip); },
+		{.Flags = ClientCommandFlag::Cheat});
+
 	g_ClientCommands.Create("cheat_infiniteair", [](CBasePlayer* player, const CommandArgs& args)
 		{ player->ToggleCheat(Cheat::InfiniteAir); },
 		{.Flags = ClientCommandFlag::Cheat});

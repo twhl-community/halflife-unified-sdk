@@ -4966,20 +4966,95 @@ void CBasePlayer::SendScoreInfoAll()
 	SendScoreInfoMessage(this);
 }
 
+static edict_t* SV_TestEntityPosition(CBaseEntity* ent)
+{
+	// Need to use this trace function so the engine checks the hull during collision tests.
+	TraceResult tr;
+	TRACE_MONSTER_HULL(ent->edict(), ent->pev->origin, ent->pev->origin, dont_ignore_monsters, nullptr, &tr);
+
+	if (tr.fStartSolid != 0)
+	{
+		return tr.pHit;
+	}
+
+	return nullptr;
+}
+
+static bool FindPassableSpace(CBaseEntity* ent, const Vector& direction, float step)
+{
+	for (int i = 100; i > 0; --i)
+	{
+		ent->pev->origin = ent->pev->origin + step * direction;
+
+		if (!SV_TestEntityPosition(ent))
+		{
+			ent->pev->oldorigin = ent->pev->origin;
+			return true;
+		}
+	}
+
+	return false;
+}
+
+static void Noclip_Toggle(CBasePlayer* player)
+{
+	if (player->pev->movetype == MOVETYPE_NOCLIP)
+	{
+		player->pev->movetype = MOVETYPE_WALK;
+
+		player->pev->oldorigin = player->pev->origin;
+
+		if (SV_TestEntityPosition(player))
+		{
+			Vector forward, right, up;
+			AngleVectors(player->pev->v_angle, forward, right, up);
+
+			// Try to find a valid position near the player.
+			if (!FindPassableSpace(player, forward, 1) &&
+				!FindPassableSpace(player, right, 1) &&
+				!FindPassableSpace(player, right, -1) &&
+				!FindPassableSpace(player, up, 1) &&
+				!FindPassableSpace(player, up, -1) &&
+				!FindPassableSpace(player, forward, -1))
+			{
+				Con_DPrintf("Can't find the world\n");
+			}
+
+			player->pev->origin = player->pev->oldorigin;
+		}
+	}
+	else
+	{
+		player->pev->movetype = MOVETYPE_NOCLIP;
+	}
+}
+
 void CBasePlayer::ToggleCheat(Cheat cheat)
 {
 	switch (cheat)
 	{
+	case Cheat::Godmode:
+		pev->flags ^= FL_GODMODE;
+		UTIL_ConsolePrint(edict(), "godmode {}\n", (pev->flags & FL_GODMODE) != 0 ? "ON" : "OFF");
+		break;
+	case Cheat::Notarget:
+		pev->flags ^= FL_NOTARGET;
+		UTIL_ConsolePrint(edict(), "notarget {}\n", (pev->flags & FL_NOTARGET) != 0 ? "ON" : "OFF");
+		break;
+	case Cheat::Noclip:
+		Noclip_Toggle(this);
+		UTIL_ConsolePrint(edict(), "noclip {}\n", pev->movetype == MOVETYPE_NOCLIP ? "ON" : "OFF");
+		break;
 	case Cheat::InfiniteAir:
-		Logger->debug("Infinite air: {}", m_bInfiniteAir ? "OFF" : "ON");
 		m_bInfiniteAir = !m_bInfiniteAir;
+		UTIL_ConsolePrint(edict(), "Infinite air: {}\n", m_bInfiniteAir ? "ON" : "OFF");
 		break;
 	case Cheat::InfiniteArmor:
-		Logger->debug("Infinite armor: {}", m_bInfiniteArmor ? "OFF" : "ON");
 		m_bInfiniteArmor = !m_bInfiniteArmor;
+		UTIL_ConsolePrint(edict(), "Infinite armor: {}\n", m_bInfiniteArmor ? "ON" : "OFF");
 		break;
 	default:
-		Logger->debug("Bogus cheat value!");
+		UTIL_ConsolePrint(edict(), "Bogus cheat value!\n");
 	}
 }
 
