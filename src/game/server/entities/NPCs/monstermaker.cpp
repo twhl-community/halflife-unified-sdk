@@ -257,6 +257,12 @@ void CMonsterMaker::MakeMonster()
 			kvd.szValue = STRING(m_ChildValues[i]);
 			kvd.fHandled = 0;
 
+			// Skip the classname the same way the engine does.
+			if (FStrEq(kvd.szValue, STRING(m_iszMonsterClassname)))
+			{
+				continue;
+			}
+
 			DispatchKeyValue(entity->edict(), &kvd);
 		}
 	}
