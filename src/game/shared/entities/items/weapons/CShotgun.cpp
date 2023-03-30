@@ -73,8 +73,8 @@ void CShotgun::Precache()
 bool CShotgun::GetWeaponInfo(WeaponInfo& info)
 {
 	info.Name = STRING(pev->classname);
-	info.AmmoType1 = "buckshot";
-	info.MagazineSize1 = SHOTGUN_MAX_CLIP;
+	info.AttackModeInfo[0].AmmoType = "buckshot";
+	info.AttackModeInfo[0].MagazineSize = SHOTGUN_MAX_CLIP;
 	info.Slot = 2;
 	info.Position = 1;
 	info.Id = WEAPON_SHOTGUN;

@@ -307,9 +307,9 @@ void CEagle::UpdateLaser()
 
 bool CEagle::GetWeaponInfo(WeaponInfo& info)
 {
-	info.AmmoType1 = "357";
+	info.AttackModeInfo[0].AmmoType = "357";
 	info.Name = STRING(pev->classname);
-	info.MagazineSize1 = EAGLE_MAX_CLIP;
+	info.AttackModeInfo[0].MagazineSize = EAGLE_MAX_CLIP;
 	info.Slot = 1;
 	info.Position = 2;
 	info.Id = WEAPON_EAGLE;

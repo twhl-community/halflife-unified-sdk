@@ -392,8 +392,8 @@ void CTripmine::Precache()
 bool CTripmine::GetWeaponInfo(WeaponInfo& info)
 {
 	info.Name = STRING(pev->classname);
-	info.AmmoType1 = "Trip Mine";
-	info.MagazineSize1 = WEAPON_NOCLIP;
+	info.AttackModeInfo[0].AmmoType = "Trip Mine";
+	info.AttackModeInfo[0].MagazineSize = WEAPON_NOCLIP;
 	info.Slot = 4;
 	info.Position = 2;
 	info.Id = WEAPON_TRIPMINE;

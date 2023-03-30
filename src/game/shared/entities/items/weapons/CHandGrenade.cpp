@@ -42,8 +42,8 @@ void CHandGrenade::Precache()
 bool CHandGrenade::GetWeaponInfo(WeaponInfo& info)
 {
 	info.Name = STRING(pev->classname);
-	info.AmmoType1 = "Hand Grenade";
-	info.MagazineSize1 = WEAPON_NOCLIP;
+	info.AttackModeInfo[0].AmmoType = "Hand Grenade";
+	info.AttackModeInfo[0].MagazineSize = WEAPON_NOCLIP;
 	info.Slot = 4;
 	info.Position = 0;
 	info.Id = WEAPON_HANDGRENADE;

@@ -48,7 +48,7 @@ void CCrowbar::Precache()
 bool CCrowbar::GetWeaponInfo(WeaponInfo& info)
 {
 	info.Name = STRING(pev->classname);
-	info.MagazineSize1 = WEAPON_NOCLIP;
+	info.AttackModeInfo[0].MagazineSize = WEAPON_NOCLIP;
 	info.Slot = 0;
 	info.Position = 0;
 	info.Id = WEAPON_CROWBAR;

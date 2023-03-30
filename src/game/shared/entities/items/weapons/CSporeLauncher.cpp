@@ -299,9 +299,9 @@ void CSporeLauncher::Reload()
 
 bool CSporeLauncher::GetWeaponInfo(WeaponInfo& info)
 {
-	info.AmmoType1 = "spores";
+	info.AttackModeInfo[0].AmmoType = "spores";
 	info.Name = STRING(pev->classname);
-	info.MagazineSize1 = SPORELAUNCHER_MAX_CLIP;
+	info.AttackModeInfo[0].MagazineSize = SPORELAUNCHER_MAX_CLIP;
 	info.Slot = 6;
 	info.Position = 0;
 	info.Id = WEAPON_SPORELAUNCHER;

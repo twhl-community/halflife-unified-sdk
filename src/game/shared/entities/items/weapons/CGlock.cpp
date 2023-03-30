@@ -49,8 +49,8 @@ void CGlock::Precache()
 bool CGlock::GetWeaponInfo(WeaponInfo& info)
 {
 	info.Name = STRING(pev->classname);
-	info.AmmoType1 = "9mm";
-	info.MagazineSize1 = GLOCK_MAX_CLIP;
+	info.AttackModeInfo[0].AmmoType = "9mm";
+	info.AttackModeInfo[0].MagazineSize = GLOCK_MAX_CLIP;
 	info.Slot = 1;
 	info.Position = 0;
 	info.Id = WEAPON_GLOCK;

@@ -48,10 +48,18 @@ void WeaponDataSystem::HandleNetworkDataBlock(NetworkDataBlock& block)
 			data.emplace("Weight", info.Weight);
 			data.emplace("Flags", info.Flags);
 
-			data.emplace("Ammo1", info.AmmoType1.c_str());
-			data.emplace("MagazineSize1", info.MagazineSize1);
+			auto attackModeInfo = json::array();
 
-			data.emplace("Ammo2", info.AmmoType2.c_str());
+			for (const auto& attackMode : info.AttackModeInfo)
+			{
+				auto attackModeInfoObject = json::object();
+				attackModeInfoObject.emplace("Ammo", attackMode.AmmoType.c_str());
+				attackModeInfoObject.emplace("MagazineSize", attackMode.MagazineSize);
+
+				attackModeInfo.push_back(std::move(attackModeInfoObject));
+			}
+
+			data.emplace("AttackModeInfo", std::move(attackModeInfo));
 
 			block.Data.push_back(std::move(data));
 		}
@@ -72,10 +80,21 @@ void WeaponDataSystem::HandleNetworkDataBlock(NetworkDataBlock& block)
 			info.Weight = data.value("Weight", 0);
 			info.Flags = data.value("Flags", 0);
 
-			info.AmmoType1 = data.value("Ammo1", "").c_str();
-			info.MagazineSize1 = data.value("MagazineSize1", 0);
+			auto attackModeInfo = data.find("AttackModeInfo");
 
-			info.AmmoType2 = data.value("Ammo2", "").c_str();
+			if (attackModeInfo == data.end())
+			{
+				block.ErrorMessage = "Invalid weapon info received from server";
+				return;
+			}
+
+			for (int i = 0; i < MAX_WEAPON_ATTACK_MODES; ++i)
+			{
+				const auto& modeInfo = attackModeInfo->at(i);
+
+				info.AttackModeInfo[i].AmmoType = modeInfo.value("Ammo", "").c_str();
+				info.AttackModeInfo[i].MagazineSize = modeInfo.value("MagazineSize", 0);
+			}
 
 			if (Register(std::move(info)) == -1)
 			{
@@ -149,10 +168,17 @@ int WeaponDataSystem::Register(WeaponInfo&& info)
 		return -1;
 	}
 
-	if (info.MagazineSize1 < -1)
+	if (info.AttackModeInfo[0].MagazineSize < -1)
 	{
 		assert(!"Invalid weapon max magazine 1 value");
 		CBasePlayerWeapon::WeaponsLogger->error("Invalid weapon max magazine 1 value");
+		return -1;
+	}
+
+	if (info.AttackModeInfo[1].MagazineSize < -1)
+	{
+		assert(!"Invalid weapon max magazine 2 value");
+		CBasePlayerWeapon::WeaponsLogger->error("Invalid weapon max magazine 2 value");
 		return -1;
 	}
 

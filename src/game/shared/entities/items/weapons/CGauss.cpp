@@ -77,8 +77,8 @@ void CGauss::Precache()
 bool CGauss::GetWeaponInfo(WeaponInfo& info)
 {
 	info.Name = STRING(pev->classname);
-	info.AmmoType1 = "uranium";
-	info.MagazineSize1 = WEAPON_NOCLIP;
+	info.AttackModeInfo[0].AmmoType = "uranium";
+	info.AttackModeInfo[0].MagazineSize = WEAPON_NOCLIP;
 	info.Slot = 3;
 	info.Position = 1;
 	info.Id = WEAPON_GAUSS;

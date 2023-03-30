@@ -217,8 +217,8 @@ void CCrossbow::Precache()
 bool CCrossbow::GetWeaponInfo(WeaponInfo& info)
 {
 	info.Name = STRING(pev->classname);
-	info.AmmoType1 = "bolts";
-	info.MagazineSize1 = CROSSBOW_MAX_CLIP;
+	info.AttackModeInfo[0].AmmoType = "bolts";
+	info.AttackModeInfo[0].MagazineSize = CROSSBOW_MAX_CLIP;
 	info.Slot = 2;
 	info.Position = 2;
 	info.Id = WEAPON_CROSSBOW;

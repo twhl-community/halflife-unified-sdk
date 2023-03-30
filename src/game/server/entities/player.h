@@ -439,6 +439,8 @@ public:
 	*/
 	int GiveAmmo(int iAmount, const char* szName);
 
+	int GiveMagazine(CBasePlayerWeapon* weapon, int attackMode);
+
 	/**
 	*	@brief makes sure the client has all the necessary ammo info, if values have changed
 	*/

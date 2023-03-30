@@ -660,6 +660,28 @@ void SV_CreateClientCommands()
 		{ player->ToggleCheat(Cheat::InfiniteArmor); },
 		{.Flags = ClientCommandFlag::Cheat});
 
+	g_ClientCommands.Create("cheat_givemagazine", [](CBasePlayer* player, const CommandArgs& args)
+		{
+			int attackMode = 0;
+
+			if (args.Count() >= 2)
+			{
+				attackMode = atoi(args.Argument(1));
+
+				if (attackMode < 0 || attackMode >= MAX_WEAPON_ATTACK_MODES)
+				{
+					UTIL_ConsolePrint(player->edict(), "Invalid weapon attack mode\n");
+					return;
+				}
+			}
+
+			if (player->GiveMagazine(player->m_pActiveWeapon, attackMode) != -1)
+			{
+				player->EmitSound(CHAN_ITEM, DefaultItemPickupSound, VOL_NORM, ATTN_NORM);
+			}
+		},
+		{.Flags = ClientCommandFlag::Cheat});
+
 	g_ClientCommands.Create("ent_find_by_classname", [](CBasePlayer* player, const CommandArgs& args)
 		{
 			if (args.Count() > 1)
@@ -1231,6 +1253,9 @@ void ClientPrecache()
 	UTIL_PrecacheSound("player/geiger1.wav");
 
 	UTIL_PrecacheSound("ctf/pow_big_jump.wav");
+
+	// for cheat_givemagazine
+	UTIL_PrecacheSound(DefaultItemPickupSound);
 
 	if (giPrecacheGrunt)
 		UTIL_PrecacheOther("monster_human_grunt");

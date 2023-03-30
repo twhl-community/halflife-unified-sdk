@@ -542,7 +542,7 @@ void CGrapple::DestroyEffect()
 bool CGrapple::GetWeaponInfo(WeaponInfo& info)
 {
 	info.Name = STRING(pev->classname);
-	info.MagazineSize1 = WEAPON_NOCLIP;
+	info.AttackModeInfo[0].MagazineSize = WEAPON_NOCLIP;
 	info.Slot = 0;
 	info.Position = 3;
 	info.Id = WEAPON_GRAPPLE;

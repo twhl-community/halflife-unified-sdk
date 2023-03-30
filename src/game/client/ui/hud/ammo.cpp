@@ -58,8 +58,11 @@ void WeaponsResource::InitializeWeapons()
 		auto& weapon = rgWeapons[i + 1];
 
 		weapon.Info = info;
-		weapon.AmmoType1 = g_AmmoTypes.GetByName(info->AmmoType1.c_str());
-		weapon.AmmoType2 = g_AmmoTypes.GetByName(info->AmmoType2.c_str());
+
+		for (int j = 0; j < MAX_WEAPON_ATTACK_MODES; ++j)
+		{
+			weapon.AmmoTypes[j] = g_AmmoTypes.GetByName(info->AttackModeInfo[j].AmmoType.c_str());
+		}
 
 		LoadWeaponSprites(&weapon);
 	}
@@ -142,12 +145,12 @@ bool WeaponsResource::HasAmmo(WEAPON* p)
 		return false;
 
 	// weapons with no primary ammo or unlimited ammo can always be selected
-	if (!p->AmmoType1 || p->AmmoType1->MaximumCapacity == WEAPON_NOCLIP)
+	if (!p->AmmoTypes[0] || p->AmmoTypes[0]->MaximumCapacity == WEAPON_NOCLIP)
 		return true;
 
 	return p->AmmoInMagazine > 0 ||
-		   0 != CountAmmo(p->AmmoType1) ||
-		   0 != CountAmmo(p->AmmoType2) ||
+		   0 != CountAmmo(p->AmmoTypes[0]) ||
+		   0 != CountAmmo(p->AmmoTypes[1]) ||
 		   (p->Info->Flags & ITEM_FLAG_SELECTONEMPTY) != 0;
 }
 
@@ -444,12 +447,12 @@ HSPRITE* WeaponsResource::GetAmmoPicFromWeapon(int iAmmoId, Rect& rect)
 			continue;
 		}
 
-		if (weapon.AmmoType1 && weapon.AmmoType1->Id == iAmmoId)
+		if (weapon.AmmoTypes[0] && weapon.AmmoTypes[0]->Id == iAmmoId)
 		{
 			rect = weapon.rcAmmo;
 			return &weapon.hAmmo;
 		}
-		else if (weapon.AmmoType2 && weapon.AmmoType2->Id == iAmmoId)
+		else if (weapon.AmmoTypes[1] && weapon.AmmoTypes[1]->Id == iAmmoId)
 		{
 			rect = weapon.rcAmmo2;
 			return &weapon.hAmmo2;
@@ -1028,7 +1031,7 @@ bool CHudAmmo::Draw(float flTime)
 	WEAPON* pw = m_pWeapon; // shorthand
 
 	// SPR_Draw Ammo
-	if (!m_pWeapon->AmmoType1 && !m_pWeapon->AmmoType2)
+	if (!m_pWeapon->AmmoTypes[0] && !m_pWeapon->AmmoTypes[1])
 		return false;
 
 
@@ -1047,7 +1050,7 @@ bool CHudAmmo::Draw(float flTime)
 	y = ScreenHeight - gHUD.m_iFontHeight - gHUD.m_iFontHeight / 2;
 
 	// Does weapon have any ammo at all?
-	if (m_pWeapon->AmmoType1)
+	if (m_pWeapon->AmmoTypes[0])
 	{
 		int iIconWidth = m_pWeapon->rcAmmo.right - m_pWeapon->rcAmmo.left;
 
@@ -1074,13 +1077,13 @@ bool CHudAmmo::Draw(float flTime)
 			x += iBarWidth + AmmoWidth / 2;
 
 			// GL Seems to need the color to be scaled
-			x = gHUD.DrawHudNumber(x, y, iFlags | DHN_3DIGITS, gWR.CountAmmo(m_pWeapon->AmmoType1), color);
+			x = gHUD.DrawHudNumber(x, y, iFlags | DHN_3DIGITS, gWR.CountAmmo(m_pWeapon->AmmoTypes[0]), color);
 		}
 		else
 		{
 			// SPR_Draw a bullets only line
 			x = ScreenWidth - 4 * AmmoWidth - iIconWidth;
-			x = gHUD.DrawHudNumber(x, y, iFlags | DHN_3DIGITS, gWR.CountAmmo(m_pWeapon->AmmoType1), color);
+			x = gHUD.DrawHudNumber(x, y, iFlags | DHN_3DIGITS, gWR.CountAmmo(m_pWeapon->AmmoTypes[0]), color);
 		}
 
 		// Draw the ammo Icon
@@ -1090,16 +1093,16 @@ bool CHudAmmo::Draw(float flTime)
 	}
 
 	// Does weapon have seconday ammo?
-	if (m_pWeapon->AmmoType2)
+	if (m_pWeapon->AmmoTypes[1])
 	{
 		int iIconWidth = m_pWeapon->rcAmmo2.right - m_pWeapon->rcAmmo2.left;
 
 		// Do we have secondary ammo?
-		if (gWR.CountAmmo(m_pWeapon->AmmoType2) > 0)
+		if (gWR.CountAmmo(m_pWeapon->AmmoTypes[1]) > 0)
 		{
 			y -= gHUD.m_iFontHeight + gHUD.m_iFontHeight / 4;
 			x = ScreenWidth - 4 * AmmoWidth - iIconWidth;
-			x = gHUD.DrawHudNumber(x, y, iFlags | DHN_3DIGITS, gWR.CountAmmo(m_pWeapon->AmmoType2), color);
+			x = gHUD.DrawHudNumber(x, y, iFlags | DHN_3DIGITS, gWR.CountAmmo(m_pWeapon->AmmoTypes[1]), color);
 
 			// Draw the ammo Icon
 			SPR_Set(m_pWeapon->hAmmo2, color);
@@ -1145,21 +1148,21 @@ void DrawAmmoBar(WEAPON* p, int x, int y, int width, int height)
 	if (!p)
 		return;
 
-	if (p->AmmoType1)
+	if (p->AmmoTypes[0])
 	{
-		if (0 == gWR.CountAmmo(p->AmmoType1))
+		if (0 == gWR.CountAmmo(p->AmmoTypes[0]))
 			return;
 
-		float f = (float)gWR.CountAmmo(p->AmmoType1) / (float)p->AmmoType1->MaximumCapacity;
+		float f = (float)gWR.CountAmmo(p->AmmoTypes[0]) / (float)p->AmmoTypes[0]->MaximumCapacity;
 
 		x = DrawBar(x, y, width, height, f);
 
 
 		// Do we have secondary ammo too?
 
-		if (p->AmmoType2)
+		if (p->AmmoTypes[1])
 		{
-			f = (float)gWR.CountAmmo(p->AmmoType2) / (float)p->AmmoType2->MaximumCapacity;
+			f = (float)gWR.CountAmmo(p->AmmoTypes[1]) / (float)p->AmmoTypes[1]->MaximumCapacity;
 
 			x += 5; //!!!
 

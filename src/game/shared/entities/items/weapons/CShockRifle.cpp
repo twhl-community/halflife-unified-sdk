@@ -278,9 +278,9 @@ void CShockRifle::RechargeAmmo(bool bLoud)
 
 bool CShockRifle::GetWeaponInfo(WeaponInfo& info)
 {
-	info.AmmoType1 = "shock";
+	info.AttackModeInfo[0].AmmoType = "shock";
 	info.Name = STRING(pev->classname);
-	info.MagazineSize1 = WEAPON_NOCLIP;
+	info.AttackModeInfo[0].MagazineSize = WEAPON_NOCLIP;
 	info.Flags = ITEM_FLAG_NOAUTORELOAD | ITEM_FLAG_NOAUTOSWITCHEMPTY;
 	info.Slot = 6;
 	info.Position = 1;

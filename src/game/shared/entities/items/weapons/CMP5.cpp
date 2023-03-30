@@ -61,9 +61,13 @@ void CMP5::Precache()
 bool CMP5::GetWeaponInfo(WeaponInfo& info)
 {
 	info.Name = STRING(pev->classname);
-	info.AmmoType1 = "9mm";
-	info.AmmoType2 = "ARgrenades";
-	info.MagazineSize1 = MP5_MAX_CLIP;
+
+	info.AttackModeInfo[0].AmmoType = "9mm";
+	info.AttackModeInfo[0].MagazineSize = MP5_MAX_CLIP;
+
+	info.AttackModeInfo[1].AmmoType = "ARgrenades";
+	info.AttackModeInfo[1].MagazineSize = WEAPON_NOCLIP; // AR grenades don't use magazines.
+
 	info.Slot = 2;
 	info.Position = 0;
 	info.Id = WEAPON_MP5;

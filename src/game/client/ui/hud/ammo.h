@@ -15,14 +15,17 @@
 
 #pragma once
 
+#include <array>
+
+#include "cdll_dll.h"
+
 struct AmmoType;
 struct WeaponInfo;
 
 struct WEAPON
 {
 	const WeaponInfo* Info{};
-	const AmmoType* AmmoType1{};
-	const AmmoType* AmmoType2{};
+	std::array<const AmmoType*, MAX_WEAPON_ATTACK_MODES> AmmoTypes{};
 
 	int AmmoInMagazine{0};
 

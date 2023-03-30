@@ -30,8 +30,8 @@ void CPython::OnCreate()
 bool CPython::GetWeaponInfo(WeaponInfo& info)
 {
 	info.Name = STRING(pev->classname);
-	info.AmmoType1 = "357";
-	info.MagazineSize1 = PYTHON_MAX_CLIP;
+	info.AttackModeInfo[0].AmmoType = "357";
+	info.AttackModeInfo[0].MagazineSize = PYTHON_MAX_CLIP;
 	info.Slot = 1;
 	info.Position = 1;
 	info.Id = WEAPON_PYTHON;

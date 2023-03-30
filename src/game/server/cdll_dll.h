@@ -25,6 +25,14 @@
 #include "palette.h"
 
 #define MAX_WEAPONS 64 // ???
+
+/**
+ *	@brief Maximum number of attack modes that weapons can have.
+ *	@details These are PrimaryAttack, SecondaryAttack.
+ *	If more are added then this needs to be changed so ammo types can be associated with them.
+ */
+constexpr int MAX_WEAPON_ATTACK_MODES = 2;
+
 constexpr int MAX_PLAYERS = 32;
 
 constexpr int MAX_ALWAYS_VISIBLE_WEAPON_SLOTS = 5;

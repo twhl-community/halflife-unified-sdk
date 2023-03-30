@@ -421,10 +421,11 @@ public:
 
 	int iItemSlot() { return m_WeaponInfo->Slot; } // return 0 to MAX_ITEMS_SLOTS, used in hud
 	int iItemPosition() { return m_WeaponInfo->Position; }
-	const char* pszAmmo1() { return !m_WeaponInfo->AmmoType1.empty() ? m_WeaponInfo->AmmoType1.c_str() : nullptr; }
-	const char* pszAmmo2() { return !m_WeaponInfo->AmmoType2.empty() ? m_WeaponInfo->AmmoType2.c_str() : nullptr; }
+	const char* pszAmmo1() { return !m_WeaponInfo->AttackModeInfo[0].AmmoType.empty() ? m_WeaponInfo->AttackModeInfo[0].AmmoType.c_str() : nullptr; }
+	const char* pszAmmo2() { return !m_WeaponInfo->AttackModeInfo[1].AmmoType.empty() ? m_WeaponInfo->AttackModeInfo[1].AmmoType.c_str() : nullptr; }
 	const char* pszName() { return m_WeaponInfo->Name.c_str(); }
-	int iMaxClip() { return m_WeaponInfo->MagazineSize1; }
+	int iMaxClip() { return m_WeaponInfo->AttackModeInfo[0].MagazineSize; }
+	int MagazineSize2() { return m_WeaponInfo->AttackModeInfo[1].MagazineSize; }
 	int iWeight() { return m_WeaponInfo->Weight; }
 	int iFlags() { return m_WeaponInfo->Flags; }
 

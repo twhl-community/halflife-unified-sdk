@@ -300,8 +300,8 @@ void CRpg::Precache()
 bool CRpg::GetWeaponInfo(WeaponInfo& info)
 {
 	info.Name = STRING(pev->classname);
-	info.AmmoType1 = "rockets";
-	info.MagazineSize1 = RPG_MAX_CLIP;
+	info.AttackModeInfo[0].AmmoType = "rockets";
+	info.AttackModeInfo[0].MagazineSize = RPG_MAX_CLIP;
 	info.Slot = 3;
 	info.Position = 0;
 	info.Id = WEAPON_RPG;

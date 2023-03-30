@@ -3762,6 +3762,33 @@ int CBasePlayer::GiveAmmo(int iCount, const char* szName)
 	return type->Id;
 }
 
+int CBasePlayer::GiveMagazine(CBasePlayerWeapon* weapon, int attackMode)
+{
+	if (!weapon)
+	{
+		return -1;
+	}
+
+	assert(attackMode >= 0 && attackMode < MAX_WEAPON_ATTACK_MODES);
+
+	const auto& attackModeInfo = weapon->m_WeaponInfo->AttackModeInfo[attackMode];
+
+	if (attackModeInfo.AmmoType.empty())
+	{
+		return -1;
+	}
+
+	int magazineSize = attackModeInfo.MagazineSize;
+
+	// If the weapon does not use magazines, just give one unit of ammo instead.
+	if (magazineSize == WEAPON_NOCLIP)
+	{
+		magazineSize = 1;
+	}
+
+	return GiveAmmo(magazineSize, attackModeInfo.AmmoType.c_str());
+}
+
 void CBasePlayer::ItemPreFrame()
 {
 	if (m_flNextAttack > UTIL_WeaponTimeBase())

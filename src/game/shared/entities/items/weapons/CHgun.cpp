@@ -76,8 +76,8 @@ void CHgun::AddToPlayer(CBasePlayer* pPlayer)
 bool CHgun::GetWeaponInfo(WeaponInfo& info)
 {
 	info.Name = STRING(pev->classname);
-	info.AmmoType1 = "Hornets";
-	info.MagazineSize1 = WEAPON_NOCLIP;
+	info.AttackModeInfo[0].AmmoType = "Hornets";
+	info.AttackModeInfo[0].MagazineSize = WEAPON_NOCLIP;
 	info.Slot = 3;
 	info.Position = 3;
 	info.Id = WEAPON_HORNETGUN;

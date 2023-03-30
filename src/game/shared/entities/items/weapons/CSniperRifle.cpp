@@ -189,9 +189,9 @@ void CSniperRifle::Reload()
 
 bool CSniperRifle::GetWeaponInfo(WeaponInfo& info)
 {
-	info.AmmoType1 = "762";
+	info.AttackModeInfo[0].AmmoType = "762";
 	info.Name = STRING(pev->classname);
-	info.MagazineSize1 = SNIPERRIFLE_MAX_CLIP;
+	info.AttackModeInfo[0].MagazineSize = SNIPERRIFLE_MAX_CLIP;
 	info.Slot = 5;
 	info.Position = 2;
 	info.Id = WEAPON_SNIPERRIFLE;

@@ -190,9 +190,9 @@ void CPenguin::SecondaryAttack()
 
 bool CPenguin::GetWeaponInfo(WeaponInfo& info)
 {
-	info.AmmoType1 = "Penguins";
+	info.AttackModeInfo[0].AmmoType = "Penguins";
 	info.Name = STRING(pev->classname);
-	info.MagazineSize1 = WEAPON_NOCLIP;
+	info.AttackModeInfo[0].MagazineSize = WEAPON_NOCLIP;
 	info.Slot = 4;
 	info.Position = 4;
 	info.Id = WEAPON_PENGUIN;

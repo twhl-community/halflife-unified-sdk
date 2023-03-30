@@ -508,7 +508,7 @@ void CPipewrench::SetWeaponData(const weapon_data_t& data)
 bool CPipewrench::GetWeaponInfo(WeaponInfo& info)
 {
 	info.Name = STRING(pev->classname);
-	info.MagazineSize1 = WEAPON_NOCLIP;
+	info.AttackModeInfo[0].MagazineSize = WEAPON_NOCLIP;
 	info.Slot = 0;
 	info.Position = 1;
 	info.Id = WEAPON_PIPEWRENCH;

@@ -23,6 +23,12 @@
 #include "networking/NetworkDataSystem.h"
 #include "utils/GameSystem.h"
 
+struct WeaponAttackMode
+{
+	eastl::fixed_string<char, 32> AmmoType;
+	int MagazineSize{WEAPON_NOCLIP};
+};
+
 struct WeaponInfo
 {
 	int Id{WEAPON_NONE};
@@ -32,11 +38,8 @@ struct WeaponInfo
 	int Position{0};
 	int Weight{0}; //!< this value used to determine this weapon's importance in autoselection.
 	int Flags{0};
-	
-	eastl::fixed_string<char, 32> AmmoType1;
-	int MagazineSize1{WEAPON_NOCLIP};
 
-	eastl::fixed_string<char, 32> AmmoType2;
+	std::array<WeaponAttackMode, MAX_WEAPON_ATTACK_MODES> AttackModeInfo;
 };
 
 /**

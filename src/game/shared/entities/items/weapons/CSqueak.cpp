@@ -430,8 +430,8 @@ void CSqueak::Precache()
 bool CSqueak::GetWeaponInfo(WeaponInfo& info)
 {
 	info.Name = STRING(pev->classname);
-	info.AmmoType1 = "Snarks";
-	info.MagazineSize1 = WEAPON_NOCLIP;
+	info.AttackModeInfo[0].AmmoType = "Snarks";
+	info.AttackModeInfo[0].MagazineSize = WEAPON_NOCLIP;
 	info.Slot = 4;
 	info.Position = 3;
 	info.Id = WEAPON_SNARK;

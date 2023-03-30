@@ -418,9 +418,9 @@ void CDisplacer::AltFireThink()
 
 bool CDisplacer::GetWeaponInfo(WeaponInfo& info)
 {
-	info.AmmoType1 = "uranium";
+	info.AttackModeInfo[0].AmmoType = "uranium";
 	info.Name = STRING(pev->classname);
-	info.MagazineSize1 = WEAPON_NOCLIP;
+	info.AttackModeInfo[0].MagazineSize = WEAPON_NOCLIP;
 	info.Slot = 5;
 	info.Position = 1;
 	info.Id = WEAPON_DISPLACER;

@@ -263,7 +263,7 @@ void CKnife::Smack()
 bool CKnife::GetWeaponInfo(WeaponInfo& info)
 {
 	info.Name = STRING(pev->classname);
-	info.MagazineSize1 = WEAPON_NOCLIP;
+	info.AttackModeInfo[0].MagazineSize = WEAPON_NOCLIP;
 	info.Slot = 0;
 	info.Position = 2;
 	info.Id = WEAPON_KNIFE;

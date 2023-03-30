@@ -308,9 +308,9 @@ int CM249::RecalculateBody(int iClip)
 
 bool CM249::GetWeaponInfo(WeaponInfo& info)
 {
-	info.AmmoType1 = "556";
+	info.AttackModeInfo[0].AmmoType = "556";
 	info.Name = STRING(pev->classname);
-	info.MagazineSize1 = M249_MAX_CLIP;
+	info.AttackModeInfo[0].MagazineSize = M249_MAX_CLIP;
 	info.Slot = 5;
 	info.Position = 0;
 	info.Id = WEAPON_M249;

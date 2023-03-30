@@ -89,18 +89,18 @@ void CBasePlayerWeapon::LinkWeaponInfo()
 	}
 
 	// (re)initialize ammo type indices.
-	if (!m_WeaponInfo->AmmoType1.empty())
+	if (!m_WeaponInfo->AttackModeInfo[0].AmmoType.empty())
 	{
-		m_iPrimaryAmmoType = g_AmmoTypes.IndexOf(m_WeaponInfo->AmmoType1.c_str());
+		m_iPrimaryAmmoType = g_AmmoTypes.IndexOf(m_WeaponInfo->AttackModeInfo[0].AmmoType.c_str());
 	}
 	else
 	{
 		m_iPrimaryAmmoType = -1;
 	}
 
-	if (!m_WeaponInfo->AmmoType2.empty())
+	if (!m_WeaponInfo->AttackModeInfo[1].AmmoType.empty())
 	{
-		m_iSecondaryAmmoType = g_AmmoTypes.IndexOf(m_WeaponInfo->AmmoType2.c_str());
+		m_iSecondaryAmmoType = g_AmmoTypes.IndexOf(m_WeaponInfo->AttackModeInfo[1].AmmoType.c_str());
 	}
 	else
 	{
