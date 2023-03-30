@@ -24,6 +24,9 @@
 
 #include "palette.h"
 
+constexpr int MAX_COORD_INTEGER = 4096;
+constexpr int MAX_EXTENT = 2 * MAX_COORD_INTEGER;
+
 #define MAX_WEAPONS 64 // ???
 
 /**

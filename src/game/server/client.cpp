@@ -545,6 +545,57 @@ static CBaseEntity* FindNextEntityToRemove(CBasePlayer* player, CBaseEntity* sta
 	return nullptr;
 }
 
+static CBaseEntity* TryCreateEntity(CBasePlayer* player, const char* className, const Vector& angles,
+	const CommandArgs& args, int firstKeyValue)
+{
+	Vector forward;
+	AngleVectors(player->pev->v_angle, &forward, nullptr, nullptr);
+
+	Vector origin = player->pev->origin + forward * MAX_EXTENT;
+
+	TraceResult tr;
+	UTIL_TraceLine(player->pev->origin, origin, dont_ignore_monsters, player->edict(), &tr);
+
+	if (tr.fStartSolid != 0)
+	{
+		UTIL_ConsolePrint(player->edict(), "Cannot create entity in solid object\n");
+		return nullptr;
+	}
+
+	auto entity = CBaseEntity::Create(className, tr.vecEndPos, angles, nullptr, false);
+
+	if (!entity)
+	{
+		return nullptr;
+	}
+
+	const int keyValues = args.Count();
+
+	KeyValueData kvd{.szClassName = className};
+
+	for (int i = firstKeyValue; i < args.Count(); i += 2)
+	{
+		kvd.szKeyName = args.Argument(i);
+		kvd.szValue = args.Argument(i + 1);
+		kvd.fHandled = 0;
+
+		// Skip the classname the same way the engine does.
+		if (FStrEq(kvd.szValue, className))
+		{
+			continue;
+		}
+
+		DispatchKeyValue(entity->edict(), &kvd);
+	}
+
+	if (DispatchSpawn(entity->edict()) == -1)
+	{
+		UTIL_ConsolePrint(player->edict(), "Entity was removed during spawn\n");
+	}
+
+	return entity;
+}
+
 void SV_CreateClientCommands()
 {
 	g_ClientCommands.Create("say", [](CBasePlayer* player, const auto& args)
@@ -908,6 +959,56 @@ void SV_CreateClientCommands()
 			{
 				UTIL_ConsolePrint(player->edict(), "No entity found\n");
 			} },
+		{.Flags = ClientCommandFlag::Cheat});
+
+	g_ClientCommands.Create("ent_create", [](CBasePlayer* player, const CommandArgs& args)
+		{
+			if (args.Count() < 2)
+			{
+				UTIL_ConsolePrint(player->edict(), "Usage: ent_create <classname> [<key> <value> <key2> <value2> ...]\n");
+				return;
+			}
+
+			const char* className = args.Argument(1);
+
+			TryCreateEntity(player, className, vec3_origin, args, 2);
+		},
+		{.Flags = ClientCommandFlag::Cheat});
+
+	g_ClientCommands.Create("npc_create", [](CBasePlayer* player, const CommandArgs& args)
+		{
+			if (args.Count() < 2)
+			{
+				UTIL_ConsolePrint(player->edict(), "Usage: npc_create <classname> [<key> <value> <key2> <value2> ...]\n");
+				return;
+			}
+
+			const char* className = args.Argument(1);
+
+			auto entity = TryCreateEntity(player, className, player->pev->v_angle, args, 2);
+
+			if (!entity)
+			{
+				return;
+			}
+
+			// Move NPC up based on its bounding box.
+			if (entity->pev->mins.z < 0)
+			{
+				entity->pev->origin.z -= entity->pev->mins.z;
+			}
+
+			if ((entity->pev->flags & FL_FLY) == 0 && entity->pev->movetype != MOVETYPE_FLY)
+			{
+				// See if the NPC is stuck in something.
+				if (DROP_TO_FLOOR(entity->edict()) == 0)
+				{
+					UTIL_ConsolePrint(player->edict(), "NPC fell out of level\n");
+					UTIL_Remove(entity);
+				}
+			}
+
+		},
 		{.Flags = ClientCommandFlag::Cheat});
 }
 
