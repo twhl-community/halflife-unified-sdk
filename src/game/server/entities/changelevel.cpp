@@ -20,6 +20,7 @@
 
 #include "cbase.h"
 #include "changelevel.h"
+#include "ServerLibrary.h"
 #include "shake.h"
 
 LINK_ENTITY_TO_CLASS(info_landmark, CPointEntity);
@@ -84,6 +85,7 @@ TYPEDESCRIPTION CChangeLevel::m_SaveData[] =
 		DEFINE_ARRAY(CChangeLevel, m_szLandmarkName, FIELD_CHARACTER, cchMapNameMost),
 		DEFINE_FIELD(CChangeLevel, m_changeTarget, FIELD_STRING),
 		DEFINE_FIELD(CChangeLevel, m_changeTargetDelay, FIELD_FLOAT),
+		DEFINE_FIELD(CChangeLevel, m_UsePersistentLevelChange, FIELD_BOOLEAN),
 };
 
 IMPLEMENT_SAVERESTORE(CChangeLevel, CBaseTrigger);
@@ -114,6 +116,11 @@ bool CChangeLevel::KeyValue(KeyValueData* pkvd)
 		m_changeTargetDelay = atof(pkvd->szValue);
 		return true;
 	}
+	else if (FStrEq(pkvd->szKeyName, "use_persistent_level_change"))
+	{
+		m_UsePersistentLevelChange = atoi(pkvd->szValue) != 0;
+		return true;
+	}
 
 	return CBaseTrigger::KeyValue(pkvd);
 }
@@ -123,8 +130,8 @@ void CChangeLevel::Spawn()
 	if (FStrEq(m_szMapName, ""))
 		Logger->debug("a trigger_changelevel doesn't have a map");
 
-	if (FStrEq(m_szLandmarkName, ""))
-		Logger->debug("trigger_changelevel to {} doesn't have a landmark", m_szMapName);
+	if (m_UsePersistentLevelChange && FStrEq(m_szLandmarkName, ""))
+		Logger->debug("Persistent trigger_changelevel to {} doesn't have a landmark", m_szMapName);
 
 	if (0 == stricmp(m_szMapName, STRING(gpGlobals->mapname)))
 	{
@@ -150,7 +157,12 @@ CBaseEntity* CChangeLevel::FindLandmark(const char* pLandmarkName)
 			return landmark;
 	}
 
-	Logger->error("Can't find landmark {}", pLandmarkName);
+	// Only an error if a name was specified.
+	if (!FStrEq(pLandmarkName, ""))
+	{
+		Logger->error("Can't find landmark {}", pLandmarkName);
+	}
+
 	return nullptr;
 }
 
@@ -159,13 +171,33 @@ void CChangeLevel::UseChangeLevel(CBaseEntity* pActivator, CBaseEntity* pCaller,
 	ChangeLevelNow(pActivator);
 }
 
+// This differs from the engine's version in that it allows non-persistent level changes to use landmarks.
+static void QueueChangelevel(const char* mapName, const char* landmarkName, bool usePersistentLevelChange)
+{
+	static int lastSpawnCount = 0;
+
+	// Only queue a single level change at a time.
+	if (g_Server.GetSpawnCount() == lastSpawnCount)
+	{
+		return;
+	}
+
+	lastSpawnCount = g_Server.GetSpawnCount();
+
+	// Persistent level changes only work in singleplayer.
+	if (usePersistentLevelChange && gpGlobals->maxClients == 1)
+	{
+		SERVER_COMMAND(fmt::format("changelevel2 {} {}\n", mapName, landmarkName).c_str());
+	}
+	else
+	{
+		SERVER_COMMAND(fmt::format("changelevel {} {}\n", mapName, landmarkName).c_str());
+	}
+}
+
 void CChangeLevel::ChangeLevelNow(CBaseEntity* pActivator)
 {
 	ASSERT(!FStrEq(m_szMapName, ""));
-
-	// Don't work in deathmatch
-	if (g_pGameRules->IsDeathmatch())
-		return;
 
 	// Some people are firing these multiple times in a frame, disable
 	if (gpGlobals->time == pev->dmgtime)
@@ -212,10 +244,7 @@ void CChangeLevel::ChangeLevelNow(CBaseEntity* pActivator)
 	// Logger->debug("Level touches {} levels", ChangeList(levels, std::size(levels)));
 	Logger->debug("CHANGE LEVEL: {} {}", m_szMapName, landmarkNameInNextMap);
 
-	// Note: passing nullptr for landmark name uses the changelevel console command (entities don't transition);
-	// passing any string uses changelevel2 (entities do transition).
-	// The engine copies the names so they don't need to be stored in global variables.
-	CHANGE_LEVEL(m_szMapName, landmarkNameInNextMap);
+	QueueChangelevel(m_szMapName, landmarkNameInNextMap, m_UsePersistentLevelChange);
 }
 
 void CChangeLevel::TouchChangeLevel(CBaseEntity* pOther)

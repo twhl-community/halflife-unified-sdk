@@ -46,6 +46,8 @@ public:
 
 	bool IsCurrentMapLoadedFromSaveGame() const { return m_IsCurrentMapLoadedFromSaveGame; }
 
+	int GetSpawnCount() const { return m_SpawnCount; }
+
 	bool Initialize() override;
 
 	void Shutdown() override;
@@ -121,6 +123,8 @@ private:
 
 	bool m_IsStartingNewMap = true;
 	bool m_IsCurrentMapLoadedFromSaveGame = false;
+
+	int m_SpawnCount = 0;
 
 	MapState m_MapState;
 };

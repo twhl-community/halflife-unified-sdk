@@ -171,6 +171,8 @@ void ServerLibrary::NewMapStarted(bool loadGame)
 {
 	m_IsCurrentMapLoadedFromSaveGame = loadGame;
 
+	++m_SpawnCount;
+
 	g_GameLogger->trace("Starting new map");
 
 	// Log some useful game info.

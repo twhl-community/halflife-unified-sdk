@@ -61,4 +61,6 @@ public:
 	char m_szLandmarkName[cchMapNameMost]; // trigger_changelevel only:  landmark on next map
 	string_t m_changeTarget;
 	float m_changeTargetDelay;
+
+	bool m_UsePersistentLevelChange = true;
 };
