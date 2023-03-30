@@ -3427,7 +3427,7 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse)
 		if (!giPrecacheGrunt)
 		{
 			giPrecacheGrunt = true;
-			Logger->debug("You must now restart to use Grunt-o-matic.");
+			Con_DPrintf("You must now restart to use Grunt-o-matic.\n");
 		}
 		else
 		{
@@ -3504,12 +3504,12 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse)
 	{
 		if (m_fNoPlayerSound)
 		{
-			Logger->debug("Player is audible");
+			Con_DPrintf("Player is audible\n");
 			m_fNoPlayerSound = false;
 		}
 		else
 		{
-			Logger->debug("Player is silent");
+			Con_DPrintf("Player is silent\n");
 			m_fNoPlayerSound = true;
 		}
 		break;
@@ -3520,26 +3520,20 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse)
 		pEntity = UTIL_FindEntityForward(this);
 		if (pEntity)
 		{
-			eastl::fixed_string<char, 512 + 1> buffer;
-
-			auto inserter = std::back_inserter(buffer);
-
-			fmt::format_to(inserter, "Classname: {}", pEntity->GetClassname());
+			Con_DPrintf("Classname: %s", pEntity->GetClassname());
 
 			if (!FStringNull(pEntity->pev->targetname))
 			{
-				fmt::format_to(inserter, " - Targetname: {}\n", pEntity->GetTargetname());
+				Con_DPrintf(" - Targetname: %s\n", pEntity->GetTargetname());
 			}
 			else
 			{
-				fmt::format_to(inserter, " - TargetName: No Targetname\n");
+				Con_DPrintf(" - TargetName: No Targetname\n");
 			}
 
-			fmt::format_to(inserter, "Model: {}\n", pEntity->GetModelName());
+			Con_DPrintf("Model: %s\n", pEntity->GetModelName());
 			if (!FStringNull(pEntity->pev->globalname))
-				fmt::format_to(inserter, "Globalname: {}", pEntity->GetGlobalname());
-
-			Logger->debug(spdlog::string_view_t{buffer.c_str(), buffer.size()});
+				Con_DPrintf("Globalname: %s\n", pEntity->GetGlobalname());
 		}
 		break;
 
@@ -3556,7 +3550,7 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse)
 			pWorld = tr.pHit;
 		const char* pTextureName = TRACE_TEXTURE(pWorld, start, end);
 		if (pTextureName)
-			Logger->debug("Texture: {} ({})", pTextureName, g_MaterialSystem.FindTextureType(pTextureName));
+			Con_DPrintf("Texture: %s (%s)\n", pTextureName, g_MaterialSystem.FindTextureType(pTextureName));
 	}
 	break;
 	case 195: // show shortest paths for entire level to nearest node
@@ -3576,7 +3570,7 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse)
 	break;
 	case 199: // show nearest node and all connections
 	{
-		Logger->debug("{}", WorldGraph.FindNearestNode(pev->origin, bits_NODE_GROUP_REALM));
+		Con_DPrintf("%s\n", WorldGraph.FindNearestNode(pev->origin, bits_NODE_GROUP_REALM));
 		WorldGraph.ShowNodeConnections(WorldGraph.FindNearestNode(pev->origin, bits_NODE_GROUP_REALM));
 	}
 	break;
