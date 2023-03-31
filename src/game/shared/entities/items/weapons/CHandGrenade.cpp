@@ -219,3 +219,15 @@ void CHandGrenade::WeaponIdle()
 		SendWeaponAnim(iAnim);
 	}
 }
+
+void CHandGrenade::GetWeaponData(weapon_data_t& data)
+{
+	data.fuser2 = m_flStartThrow;
+	data.fuser3 = m_flReleaseThrow;
+}
+
+void CHandGrenade::SetWeaponData(const weapon_data_t& data)
+{
+	m_flStartThrow = data.fuser2;
+	m_flReleaseThrow = data.fuser3;
+}

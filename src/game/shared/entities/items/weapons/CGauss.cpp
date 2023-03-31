@@ -567,6 +567,16 @@ void CGauss::SendStopEvent(bool sendToHost)
 	PLAYBACK_EVENT_FULL(flags, m_pPlayer->edict(), m_usGaussFire, 0.01, m_pPlayer->pev->origin, m_pPlayer->pev->angles, 0.0, 0.0, 0, 0, 0, 1);
 }
 
+void CGauss::GetWeaponData(weapon_data_t& data)
+{
+	data.iuser2 = m_fInAttack;
+}
+
+void CGauss::SetWeaponData(const weapon_data_t& data)
+{
+	m_fInAttack = data.iuser2;
+}
+
 class CGaussAmmo : public CBasePlayerAmmo
 {
 public:

@@ -507,6 +507,16 @@ void CEgon::EndAttack()
 	DestroyEffect();
 }
 
+void CEgon::GetWeaponData(weapon_data_t& data)
+{
+	data.iuser3 = m_fireState;
+}
+
+void CEgon::SetWeaponData(const weapon_data_t& data)
+{
+	m_fireState = data.iuser3;
+}
+
 class CEgonAmmo : public CBasePlayerAmmo
 {
 public:

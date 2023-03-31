@@ -423,6 +423,16 @@ void CSatchel::WeaponIdle()
 	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10, 15); // how long till we do this again.
 }
 
+void CSatchel::GetWeaponData(weapon_data_t& data)
+{
+	data.iuser1 = m_chargeReady;
+}
+
+void CSatchel::SetWeaponData(const weapon_data_t& data)
+{
+	m_chargeReady = data.iuser1;
+}
+
 void DeactivateSatchels(CBasePlayer* pOwner)
 {
 	for (auto satchel : UTIL_FindEntitiesByClassname<CSatchelCharge>("monster_satchel"))

@@ -66,4 +66,11 @@ public:
 		return false;
 #endif
 	}
+
+	void GetWeaponData(weapon_data_t& data) override;
+
+	void SetWeaponData(const weapon_data_t& data) override;
+
+private:
+	int m_chargeReady;
 };

@@ -103,6 +103,10 @@ public:
 #endif
 	}
 
+	void GetWeaponData(weapon_data_t& data) override;
+
+	void SetWeaponData(const weapon_data_t& data) override;
+
 	unsigned short m_usEgonStop;
 
 private:
@@ -110,6 +114,7 @@ private:
 	EGON_FIREMODE m_fireMode;
 	float m_shakeTime;
 	bool m_deployed;
+	int m_fireState;
 
 	unsigned short m_usEgonFire;
 };

@@ -569,14 +569,6 @@ public:
 	Vector m_CustomHullMax{vec3_origin};
 	bool m_HasCustomHullMin{false};
 	bool m_HasCustomHullMax{false};
-
-	// Special stuff for grenades and satchels.
-	float m_flStartThrow;
-	float m_flReleaseThrow;
-	int m_chargeReady;
-	int m_fInAttack;
-
-	int m_fireState;
 };
 
 inline bool FNullEnt(CBaseEntity* ent) { return (ent == nullptr) || FNullEnt(ent->edict()); }

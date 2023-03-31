@@ -2044,11 +2044,6 @@ int GetWeaponData(edict_t* player, weapon_data_t* info)
 						item->m_fInReload = static_cast<int>(gun->m_fInReload);
 						item->m_fInSpecialReload = gun->m_fInSpecialReload;
 						item->fuser1 = std::max(gun->pev->fuser1, -0.001f);
-						item->fuser2 = gun->m_flStartThrow;
-						item->fuser3 = gun->m_flReleaseThrow;
-						item->iuser1 = gun->m_chargeReady;
-						item->iuser2 = gun->m_fInAttack;
-						item->iuser3 = gun->m_fireState;
 
 						gun->GetWeaponData(*item);
 
