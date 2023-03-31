@@ -105,7 +105,6 @@ public:
 };
 
 LINK_ENTITY_TO_CLASS(monster_alien_slave, CISlave);
-LINK_ENTITY_TO_CLASS(monster_vortigaunt, CISlave);
 
 TYPEDESCRIPTION CISlave::m_SaveData[] =
 	{
