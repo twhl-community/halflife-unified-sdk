@@ -249,14 +249,14 @@ void CBaseCharger::Off()
 		SetThink(&CBaseCharger::Recharge);
 	}
 	else
-		SetThink(&CBaseCharger::SUB_DoNothing);
+		SetThink(nullptr);
 }
 
 void CBaseCharger::Recharge()
 {
 	m_Juice = m_TotalJuice;
 	pev->frame = 0;
-	SetThink(&CBaseCharger::SUB_DoNothing);
+	SetThink(nullptr);
 
 	if (m_Juice != 0)
 	{

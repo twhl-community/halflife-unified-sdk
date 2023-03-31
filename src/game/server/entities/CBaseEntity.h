@@ -352,12 +352,6 @@ public:
 	void EXPORT SUB_Remove();
 
 	/**
-	*	@brief Convenient way to explicitly do nothing (passed to functions that require a method)
-	*	TODO: probably obsolete, replace with nullptr
-	*/
-	void EXPORT SUB_DoNothing();
-
-	/**
 	*	@brief slowly fades a entity out, then removes it.
 	*	DON'T USE ME FOR GIBS AND STUFF IN MULTIPLAYER!
 	*	SET A FUTURE THINK AND A RENDERMODE!!

@@ -82,10 +82,6 @@ void CBaseEntity::SUB_Remove()
 	REMOVE_ENTITY(ENT(pev));
 }
 
-void CBaseEntity::SUB_DoNothing()
-{
-}
-
 TYPEDESCRIPTION CBaseDelay::m_SaveData[] =
 	{
 		DEFINE_FIELD(CBaseDelay, m_flDelay, FIELD_FLOAT),

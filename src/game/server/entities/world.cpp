@@ -117,7 +117,7 @@ void CDecal::Spawn()
 	else
 	{
 		// if there IS a targetname, the decal sprays itself on when it is triggered.
-		SetThink(&CDecal::SUB_DoNothing);
+		SetThink(nullptr);
 		SetUse(&CDecal::TriggerDecal);
 	}
 }

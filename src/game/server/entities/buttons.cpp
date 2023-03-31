@@ -234,7 +234,7 @@ void CMultiSource::Register()
 	m_iTotal = 0;
 	memset(m_rgEntities, 0, MS_MAX_TARGETS * sizeof(EHANDLE));
 
-	SetThink(&CMultiSource::SUB_DoNothing);
+	SetThink(nullptr);
 
 	// search for all entities which target this multisource (pev->targetname)
 	for (auto target : UTIL_FindEntitiesByTarget(STRING(pev->targetname)))

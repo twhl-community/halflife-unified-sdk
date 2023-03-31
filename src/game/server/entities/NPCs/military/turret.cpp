@@ -390,7 +390,7 @@ void CBaseTurret::Initialize()
 		pev->nextthink = gpGlobals->time + .1;
 	}
 	else
-		SetThink(&CBaseTurret::SUB_DoNothing);
+		SetThink(nullptr);
 }
 
 void CBaseTurret::TurretUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
@@ -715,7 +715,7 @@ void CBaseTurret::Retire()
 				pev->nextthink = gpGlobals->time + .1;
 			}
 			else
-				SetThink(&CBaseTurret::SUB_DoNothing);
+				SetThink(nullptr);
 		}
 	}
 	else

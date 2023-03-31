@@ -668,7 +668,7 @@ bool CBaseMonster::CineCleanup()
 			SetTouch(nullptr);
 		}
 		else
-			SUB_StartFadeOut(); // SetThink( SUB_DoNothing );
+			SUB_StartFadeOut(); // SetThink(nullptr);
 		// This turns off animation & physics in case their origin ends up stuck in the world or something
 		StopAnimation();
 		pev->movetype = MOVETYPE_NONE;
