@@ -1114,18 +1114,16 @@ void ClientUserInfoChanged(edict_t* pEntity, char* infobuffer)
 	g_pGameRules->ClientUserInfoChanged(player, infobuffer);
 }
 
-static int g_serveractive = 0;
-
 void ServerDeactivate()
 {
 	// It's possible that the engine will call this function more times than is necessary
 	//  Therefore, only run it one time for each call to ServerActivate
-	if (g_serveractive != 1)
+	if (!g_serveractive)
 	{
 		return;
 	}
 
-	g_serveractive = 0;
+	g_serveractive = false;
 
 	// Peform any shutdown operations here...
 	//
@@ -1137,7 +1135,7 @@ void ServerActivate(edict_t* pEdictList, int edictCount, int clientMax)
 	CBaseEntity* pClass;
 
 	// Every call to ServerActivate should be matched by a call to ServerDeactivate
-	g_serveractive = 1;
+	g_serveractive = true;
 
 	g_Server.PreMapActivate();
 

@@ -214,9 +214,6 @@ CGameRules* InstallGameRules(CBaseEntity* pWorld)
 {
 	g_GameLogger->trace("Creating gamerules");
 
-	SERVER_COMMAND("exec game.cfg\n");
-	SERVER_EXECUTE();
-
 	// TODO: need to be able to identify gamerules by name.
 	if (0 == gpGlobals->deathmatch)
 	{

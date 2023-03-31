@@ -124,6 +124,8 @@ private:
 	bool m_IsStartingNewMap = true;
 	bool m_IsCurrentMapLoadedFromSaveGame = false;
 
+	int m_InNewMapStartedCount = 0;
+
 	int m_SpawnCount = 0;
 
 	MapState m_MapState;

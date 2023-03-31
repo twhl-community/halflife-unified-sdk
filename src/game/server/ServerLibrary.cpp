@@ -173,6 +173,42 @@ void ServerLibrary::NewMapStarted(bool loadGame)
 
 	++m_SpawnCount;
 
+	// Need to check if we're getting multiple map start commands in the same frame.
+	m_IsStartingNewMap = true;
+	++m_InNewMapStartedCount;
+
+	// Execute any commands still queued up so cvars have the correct value.
+	SERVER_EXECUTE();
+
+	m_IsStartingNewMap = false;
+	--m_InNewMapStartedCount;
+
+	// If multiple map change commands are executed in the same frame then this will break the server's internal state.
+
+	// Note that this will not happen the first time you load multiple maps after launching the client.
+	// Console commands are processed differently when the server dll is loaded so
+	// it will load the maps in reverse order.
+
+	// This is because when the server dll is about to load it first executes remaining console commands.
+	// If there are more map commands those will also try to load the server dll,
+	// executing remaining commands in the process,
+	// followed by the remaining map commands executing in reverse order.
+	// Thus the second command is executed first, then control returns to the first map load command
+	// which then continues loading.
+	if (m_InNewMapStartedCount > 0)
+	{
+		// Reset so we clear to a good state.
+		m_IsStartingNewMap = true;
+		m_InNewMapStartedCount = 0;
+
+		// This engine function triggers a Host_Error when the first character has
+		// a value <= to the whitespace character ' '.
+		// It prints the entire string, so we can use this as a poor man's Host_Error.
+		g_engfuncs.pfnForceUnmodified(force_exactfile, nullptr, nullptr,
+			" \nERROR: Cannot execute multiple map load commands at the same time\n");
+		return;
+	}
+
 	g_GameLogger->trace("Starting new map");
 
 	// Log some useful game info.
