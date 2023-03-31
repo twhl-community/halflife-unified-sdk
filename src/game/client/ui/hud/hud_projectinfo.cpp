@@ -41,7 +41,12 @@ bool CHudProjectInfo::Draw(float flTime)
 	if (m_IsAlphaBuild || m_ShowProjectInfo->value > 0)
 	{
 		const int xPos = 20;
-		const int lineHeight = 20;
+		
+		int lineWidth, lineHeight;
+		GetConsoleStringSize("", &lineWidth, &lineHeight);
+
+		// Shrink line height a bit.
+		lineHeight = static_cast<int>(lineHeight * 0.9f);
 
 		int yPos = static_cast<int>(ScreenHeight * 0.05);
 
@@ -54,9 +59,8 @@ bool CHudProjectInfo::Draw(float flTime)
 		const auto libraryDrawer = [&](const LibraryInfo& info, const char* libraryName, const RGB24& libraryNameColor)
 		{
 			lineDrawer(fmt::format("{}:", libraryName), libraryNameColor);
-			lineDrawer(fmt::format("\tVersion: {}.{}.{}-{}", info.MajorVersion, info.MinorVersion, info.PatchVersion, info.ReleaseType));
-			lineDrawer(fmt::format("\tBranch: {}", info.BranchName));
-			lineDrawer(fmt::format("\tTag: {}", info.TagName));
+			lineDrawer(fmt::format("\tVersion: {}.{}.{}-{} | Branch: {} | Tag: {}",
+				info.MajorVersion, info.MinorVersion, info.PatchVersion, info.ReleaseType, info.BranchName, info.TagName));
 			lineDrawer(fmt::format("\tCommit Hash: {}", info.CommitHash));
 			lineDrawer(fmt::format("\tBuild Timestamp: {}", info.BuildTimestamp));
 		};

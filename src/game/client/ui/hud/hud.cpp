@@ -135,6 +135,7 @@ void CHud::Init()
 	m_FlagIcons.Init();
 	m_PlayerBrowse.Init();
 	m_ProjectInfo.Init();
+	m_DebugInfo.Init();
 	m_EntityInfo.Init();
 	GetClientVoiceMgr()->Init(&g_VoiceStatusHelper, (vgui::Panel**)&gViewPort);
 

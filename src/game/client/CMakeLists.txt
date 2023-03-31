@@ -178,6 +178,7 @@ target_sources(client PRIVATE
 	ui/hud/health.h
 	ui/hud/hud.cpp
 	ui/hud/hud.h
+	ui/hud/hud_debuginfo.cpp
 	ui/hud/hud_entityinfo.cpp
 	ui/hud/hud_flagicons.cpp
 	ui/hud/hud_msg.cpp

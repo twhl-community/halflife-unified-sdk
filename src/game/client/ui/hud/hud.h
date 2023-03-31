@@ -672,6 +672,20 @@ private:
 };
 
 /**
+ *	@brief Displays info about the local player and client state on the HUD.
+ */
+class CHudDebugInfo : public CHudBase
+{
+public:
+	bool Init() override;
+	bool VidInit() override;
+	bool Draw(float flTime) override;
+
+private:
+	cvar_t* m_ShowDebugInfo = nullptr;
+};
+
+/**
  *	@brief Displays info about a single entity on the HUD.
  */
 class CHudEntityInfo : public CHudBase
@@ -809,6 +823,7 @@ public:
 	CHudPlayerBrowse m_PlayerBrowse;
 
 	CHudProjectInfo m_ProjectInfo;
+	CHudDebugInfo m_DebugInfo;
 	CHudEntityInfo m_EntityInfo;
 
 	void Init();
