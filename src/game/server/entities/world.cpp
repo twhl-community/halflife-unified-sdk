@@ -451,9 +451,12 @@ void CWorld::Precache()
 
 	///!!!LATER - do we want a sound ent in deathmatch? (sjb)
 	pSoundEnt = g_EntityDictionary->Create<CSoundEnt>("soundent");
-	pSoundEnt->Spawn();
-
-	if (!pSoundEnt)
+	
+	if (pSoundEnt)
+	{
+		pSoundEnt->Spawn();
+	}
+	else
 	{
 		Logger->debug("**COULD NOT CREATE SOUNDENT**");
 	}

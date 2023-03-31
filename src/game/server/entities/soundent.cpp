@@ -131,8 +131,6 @@ void CSoundEnt::FreeSound(int iSound, int iPrevious)
 
 int CSoundEnt::IAllocSound()
 {
-	int iNewSound;
-
 	if (m_iFreeSound == SOUNDLIST_EMPTY)
 	{
 		// no free sound!
@@ -143,7 +141,7 @@ int CSoundEnt::IAllocSound()
 	// there is at least one sound available, so move it to the
 	// Active sound list, and return its SoundPool index.
 
-	iNewSound = m_iFreeSound; // copy the index of the next free sound
+	const int iNewSound = m_iFreeSound; // copy the index of the next free sound
 
 	m_iFreeSound = m_SoundPool[m_iFreeSound].m_iNext; // move the index down into the free list.
 
@@ -156,15 +154,13 @@ int CSoundEnt::IAllocSound()
 
 void CSoundEnt::InsertSound(int iType, const Vector& vecOrigin, int iVolume, float flDuration)
 {
-	int iThisSound;
-
 	if (!pSoundEnt)
 	{
 		// no sound ent!
 		return;
 	}
 
-	iThisSound = pSoundEnt->IAllocSound();
+	const int iThisSound = pSoundEnt->IAllocSound();
 
 	if (iThisSound == SOUNDLIST_EMPTY)
 	{
@@ -180,12 +176,10 @@ void CSoundEnt::InsertSound(int iType, const Vector& vecOrigin, int iVolume, flo
 
 void CSoundEnt::Initialize()
 {
-	int i;
-	int iSound;
-
-	m_cLastActiveSounds;
 	m_iFreeSound = 0;
 	m_iActiveSound = SOUNDLIST_EMPTY;
+
+	int i;
 
 	for (i = 0; i < MAX_WORLD_SOUNDS; i++)
 	{ // clear all sounds, and link them into the free sound list.
@@ -199,7 +193,7 @@ void CSoundEnt::Initialize()
 	// now reserve enough sounds for each client
 	for (i = 0; i < gpGlobals->maxClients; i++)
 	{
-		iSound = pSoundEnt->IAllocSound();
+		const int iSound = pSoundEnt->IAllocSound();
 
 		if (iSound == SOUNDLIST_EMPTY)
 		{
@@ -290,10 +284,10 @@ CSound* CSoundEnt::SoundPointerForIndex(int iIndex)
 
 int CSoundEnt::ClientSoundIndex(edict_t* pClient)
 {
-	int iReturn = ENTINDEX(pClient) - 1;
+	const int iReturn = ENTINDEX(pClient) - 1;
 
 #ifdef _DEBUG
-	if (iReturn < 0 || iReturn > gpGlobals->maxClients)
+	if (iReturn < 0 || iReturn >= gpGlobals->maxClients)
 	{
 		Logger->debug("** ClientSoundIndex returning a bogus value! **");
 	}
