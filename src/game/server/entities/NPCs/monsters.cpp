@@ -3097,10 +3097,19 @@ CBaseEntity* CBaseMonster::DropItem(const char* pszItemName, const Vector& vecPo
 		return nullptr;
 	}
 
-	CBaseEntity* pItem = CBaseEntity::Create(pszItemName, vecPos, vecAng, this);
+	// Only allow the creation of items
+	auto pItem = g_ItemDictionary->Create(pszItemName);
 
 	if (pItem)
 	{
+		pItem->SetOwner(this);
+		pItem->pev->origin = vecPos;
+		pItem->pev->angles = vecAng;
+
+		pItem->m_RespawnDelay = ITEM_NEVER_RESPAWN_DELAY;
+
+		DispatchSpawn(pItem->edict());
+
 		// do we want this behavior to be default?! (sjb)
 		pItem->pev->velocity = pev->velocity;
 		pItem->pev->avelocity = Vector(0, RANDOM_FLOAT(0, 100), 0);
