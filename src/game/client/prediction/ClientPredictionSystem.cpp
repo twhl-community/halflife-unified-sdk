@@ -235,16 +235,16 @@ void ClientPredictionSystem::WeaponsPostThink(local_state_t* from, local_state_t
 	localPlayer->m_iItems = static_cast<CTFItem::CTFItem>(from->client.iuser4);
 
 	// Stores all our ammo info, so the client side weapons can use them.
-	localPlayer->ammo_9mm = (int)from->client.vuser1[0];
-	localPlayer->ammo_357 = (int)from->client.vuser1[1];
-	localPlayer->ammo_argrens = (int)from->client.vuser1[2];
-	localPlayer->ammo_bolts = (int)from->client.ammo_nails; // is an int anyways...
-	localPlayer->ammo_buckshot = (int)from->client.ammo_shells;
-	localPlayer->ammo_uranium = (int)from->client.ammo_cells;
-	localPlayer->ammo_hornets = (int)from->client.vuser2[0];
-	localPlayer->ammo_rockets = (int)from->client.ammo_rockets;
-	localPlayer->ammo_spores = (int)from->client.vuser2.y;
-	localPlayer->ammo_762 = (int)from->client.vuser2.z;
+	localPlayer->SetAmmoCount("9mm", (int)from->client.vuser1[0]);
+	localPlayer->SetAmmoCount("357", (int)from->client.vuser1[1]);
+	localPlayer->SetAmmoCount("ARgrenades", (int)from->client.vuser1[2]);
+	localPlayer->SetAmmoCount("bolts", (int)from->client.ammo_nails); // is an int anyways...
+	localPlayer->SetAmmoCount("buckshot", (int)from->client.ammo_shells);
+	localPlayer->SetAmmoCount("uranium", (int)from->client.ammo_cells);
+	localPlayer->SetAmmoCount("Hornets", (int)from->client.vuser2[0]);
+	localPlayer->SetAmmoCount("rockets", (int)from->client.ammo_rockets);
+	localPlayer->SetAmmoCount("spores", (int)from->client.vuser2.y);
+	localPlayer->SetAmmoCount("762", (int)from->client.vuser2.z);
 
 
 	// Point to current weapon object
@@ -306,17 +306,17 @@ void ClientPredictionSystem::WeaponsPostThink(local_state_t* from, local_state_t
 	to->client.iuser4 = localPlayer->m_iItems;
 
 	// HL Weapons
-	to->client.vuser1[0] = localPlayer->ammo_9mm;
-	to->client.vuser1[1] = localPlayer->ammo_357;
-	to->client.vuser1[2] = localPlayer->ammo_argrens;
+	to->client.vuser1[0] = localPlayer->GetAmmoCount("9mm");
+	to->client.vuser1[1] = localPlayer->GetAmmoCount("357");
+	to->client.vuser1[2] = localPlayer->GetAmmoCount("ARgrenades");
 
-	to->client.ammo_nails = localPlayer->ammo_bolts;
-	to->client.ammo_shells = localPlayer->ammo_buckshot;
-	to->client.ammo_cells = localPlayer->ammo_uranium;
-	to->client.vuser2[0] = localPlayer->ammo_hornets;
-	to->client.ammo_rockets = localPlayer->ammo_rockets;
-	to->client.vuser2.y = localPlayer->ammo_spores;
-	to->client.vuser2.z = localPlayer->ammo_762;
+	to->client.ammo_nails = localPlayer->GetAmmoCount("bolts");
+	to->client.ammo_shells = localPlayer->GetAmmoCount("buckshot");
+	to->client.ammo_cells = localPlayer->GetAmmoCount("uranium");
+	to->client.vuser2[0] = localPlayer->GetAmmoCount("Hornets");
+	to->client.ammo_rockets = localPlayer->GetAmmoCount("rockets");
+	to->client.vuser2.y = localPlayer->GetAmmoCount("spores");
+	to->client.vuser2.z = localPlayer->GetAmmoCount("762");
 
 	// Make sure that weapon animation matches what the game .dll is telling us
 	//  over the wire ( fixes some animation glitches )

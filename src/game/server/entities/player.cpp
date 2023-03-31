@@ -1014,20 +1014,6 @@ void CBasePlayer::SetAnimation(PLAYER_ANIM playerAnim)
 	ResetSequenceInfo();
 }
 
-void CBasePlayer::TabulateAmmo()
-{
-	ammo_9mm = AmmoInventory(GetAmmoIndex("9mm"));
-	ammo_357 = AmmoInventory(GetAmmoIndex("357"));
-	ammo_argrens = AmmoInventory(GetAmmoIndex("ARgrenades"));
-	ammo_bolts = AmmoInventory(GetAmmoIndex("bolts"));
-	ammo_buckshot = AmmoInventory(GetAmmoIndex("buckshot"));
-	ammo_rockets = AmmoInventory(GetAmmoIndex("rockets"));
-	ammo_uranium = AmmoInventory(GetAmmoIndex("uranium"));
-	ammo_hornets = AmmoInventory(GetAmmoIndex("Hornets"));
-	ammo_spores = AmmoInventory(GetAmmoIndex("spores"));
-	ammo_762 = AmmoInventory(GetAmmoIndex("762"));
-}
-
 #define AIRTIME 12 // lung full of air lasts this many seconds
 
 void CBasePlayer::WaterMove()
@@ -2956,8 +2942,6 @@ bool CBasePlayer::Restore(CRestore& restore)
 
 	RenewItems();
 
-	TabulateAmmo();
-
 #if defined(CLIENT_WEAPONS)
 	// HACK:	This variable is saved/restored in CBaseMonster as a time variable, but we're using it
 	//			as just a counter.  Ideally, this needs its own variable that's saved as a plain float.
@@ -3751,8 +3735,6 @@ int CBasePlayer::GiveAmmo(int iCount, const char* szName)
 		MESSAGE_END();
 	}
 
-	TabulateAmmo();
-
 	return type->Id;
 }
 
@@ -3813,24 +3795,6 @@ void CBasePlayer::ItemPostFrame()
 		return;
 
 	m_pActiveWeapon->ItemPostFrame();
-}
-
-int CBasePlayer::AmmoInventory(int iAmmoIndex)
-{
-	if (iAmmoIndex == -1)
-	{
-		return -1;
-	}
-
-	return m_rgAmmo[iAmmoIndex];
-}
-
-int CBasePlayer::GetAmmoIndex(const char* psz)
-{
-	if (!psz)
-		return -1;
-
-	return g_AmmoTypes.IndexOf(psz);
 }
 
 void CBasePlayer::SendAmmoUpdate()

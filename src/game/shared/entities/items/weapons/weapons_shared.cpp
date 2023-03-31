@@ -165,7 +165,6 @@ bool CBasePlayerWeapon::DefaultDeploy(const char* szViewModel, const char* szWea
 		return false;
 
 #ifndef CLIENT_DLL
-	m_pPlayer->TabulateAmmo();
 	SetWeaponModels(szViewModel, szWeaponModel);
 	strcpy(m_pPlayer->m_szAnimExtention, szAnimExt);
 #else
@@ -293,8 +292,6 @@ void CBasePlayerWeapon::ItemPostFrame()
 		m_iClip += j;
 		m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] -= j;
 
-		m_pPlayer->TabulateAmmo();
-
 		m_fInReload = false;
 	}
 
@@ -310,7 +307,6 @@ void CBasePlayerWeapon::ItemPostFrame()
 			m_fFireOnEmpty = true;
 		}
 
-		m_pPlayer->TabulateAmmo();
 		SecondaryAttack();
 		m_pPlayer->pev->button &= ~IN_ATTACK2;
 	}
@@ -321,7 +317,6 @@ void CBasePlayerWeapon::ItemPostFrame()
 			m_fFireOnEmpty = true;
 		}
 
-		m_pPlayer->TabulateAmmo();
 		PrimaryAttack();
 	}
 	else if ((m_pPlayer->pev->button & IN_RELOAD) != 0 && iMaxClip() != WEAPON_NOCLIP && !m_fInReload)

@@ -297,8 +297,6 @@ ItemAddResult CBasePlayer::AddPlayerWeapon(CBasePlayerWeapon* weapon) { return I
 bool CBasePlayer::RemovePlayerWeapon(CBasePlayerWeapon* weapon) { return false; }
 void CBasePlayer::ItemPreFrame() {}
 void CBasePlayer::ItemPostFrame() {}
-int CBasePlayer::AmmoInventory(int iAmmoIndex) { return -1; }
-int CBasePlayer::GetAmmoIndex(const char* psz) { return -1; }
 void CBasePlayer::SendAmmoUpdate() {}
 void CBasePlayer::UpdateClientData() {}
 bool CBasePlayer::FBecomeProne() { return true; }
@@ -319,7 +317,6 @@ const char* CBasePlayer::TeamID() { return ""; }
 int CBasePlayer::GiveAmmo(int iCount, const char* szName) { return 0; }
 void CBasePlayer::AddPoints(int score, bool bAllowNegativeScore) {}
 void CBasePlayer::AddPointsToTeam(int score, bool bAllowNegativeScore) {}
-void CBasePlayer::TabulateAmmo() {}
 
 void ClearMultiDamage() {}
 void ApplyMultiDamage(CBaseEntity* inflictor, CBaseEntity* attacker) {}

@@ -476,7 +476,10 @@ public:
 	void BarnacleVictimBitten(CBaseEntity* pevBarnacle) override;
 	void BarnacleVictimReleased() override;
 	static int GetAmmoIndex(const char* psz);
-	int AmmoInventory(int iAmmoIndex);
+	int AmmoInventory(int iAmmoIndex) const;
+
+	int GetAmmoCount(const char* ammoName) const;
+	void SetAmmoCount(const char* ammoName, int count);
 
 	/**
 	*	@brief return player light level plus virtual muzzle flash
@@ -510,11 +513,6 @@ public:
 	*	@brief Returns the # of custom frames this player's custom clan logo contains.
 	*/
 	int GetCustomDecalFrames();
-
-	/**
-	*	@brief This function is used to find and store all the ammo we have into the ammo vars.
-	*/
-	void TabulateAmmo();
 
 	float m_flStartCharge;
 	float m_flAmmoStartCharge;

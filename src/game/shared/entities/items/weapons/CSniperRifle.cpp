@@ -158,7 +158,7 @@ void CSniperRifle::SecondaryAttack()
 
 void CSniperRifle::Reload()
 {
-	if (m_pPlayer->ammo_762 > 0)
+	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] > 0)
 	{
 		if (m_pPlayer->m_iFOV != 0)
 		{

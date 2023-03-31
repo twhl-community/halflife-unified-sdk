@@ -2134,16 +2134,16 @@ void UpdateClientData(const edict_t* ent, int sendweapons, clientdata_t* cd)
 			cd->m_flNextAttack = pl->m_flNextAttack;
 			cd->fuser2 = pl->m_flNextAmmoBurn;
 			cd->fuser3 = pl->m_flAmmoStartCharge;
-			cd->vuser1.x = pl->ammo_9mm;
-			cd->vuser1.y = pl->ammo_357;
-			cd->vuser1.z = pl->ammo_argrens;
-			cd->ammo_nails = pl->ammo_bolts;
-			cd->ammo_shells = pl->ammo_buckshot;
-			cd->ammo_rockets = pl->ammo_rockets;
-			cd->ammo_cells = pl->ammo_uranium;
-			cd->vuser2.x = pl->ammo_hornets;
-			cd->vuser2.y = pl->ammo_spores;
-			cd->vuser2.z = pl->ammo_762;
+			cd->vuser1.x = pl->GetAmmoCount("9mm");
+			cd->vuser1.y = pl->GetAmmoCount("357");
+			cd->vuser1.z = pl->GetAmmoCount("ARgrenades");
+			cd->ammo_nails = pl->GetAmmoCount("bolts");
+			cd->ammo_shells = pl->GetAmmoCount("buckshot");
+			cd->ammo_rockets = pl->GetAmmoCount("rockets");
+			cd->ammo_cells = pl->GetAmmoCount("uranium");
+			cd->vuser2.x = pl->GetAmmoCount("Hornets");
+			cd->vuser2.y = pl->GetAmmoCount("spores");
+			cd->vuser2.z = pl->GetAmmoCount("762");
 
 			if (pl->m_pActiveWeapon)
 			{

@@ -108,7 +108,7 @@ void CHgun::PrimaryAttack()
 {
 	Reload();
 
-	if (m_pPlayer->ammo_hornets <= 0)
+	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
 	{
 		return;
 	}
@@ -160,7 +160,7 @@ void CHgun::SecondaryAttack()
 {
 	Reload();
 
-	if (m_pPlayer->ammo_hornets <= 0)
+	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
 	{
 		return;
 	}
@@ -249,8 +249,6 @@ void CHgun::Reload()
 		m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]++;
 		m_flRechargeTime += 0.5;
 	}
-
-	m_pPlayer->TabulateAmmo();
 #endif
 }
 

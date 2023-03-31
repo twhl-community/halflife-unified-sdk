@@ -14,8 +14,42 @@
  ****/
 
 #include "cbase.h"
+#include "AmmoTypeSystem.h"
 
 LINK_ENTITY_TO_CLASS(player, CBasePlayer);
+
+int CBasePlayer::AmmoInventory(int iAmmoIndex) const
+{
+	if (iAmmoIndex == -1)
+	{
+		return -1;
+	}
+
+	return m_rgAmmo[iAmmoIndex];
+}
+
+int CBasePlayer::GetAmmoIndex(const char* psz)
+{
+	if (!psz)
+		return -1;
+
+	return g_AmmoTypes.IndexOf(psz);
+}
+
+int CBasePlayer::GetAmmoCount(const char* ammoName) const
+{
+	return AmmoInventory(GetAmmoIndex(ammoName));
+}
+
+void CBasePlayer::SetAmmoCount(const char* ammoName, int count)
+{
+	const int index = GetAmmoIndex(ammoName);
+
+	if (index != -1)
+	{
+		m_rgAmmo[index] = count;
+	}
+}
 
 void CBasePlayer::SelectItem(const char* pstr)
 {
