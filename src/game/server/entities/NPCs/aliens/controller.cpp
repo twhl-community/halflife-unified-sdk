@@ -1298,7 +1298,7 @@ void CControllerZapBall::ExplodeTouch(CBaseEntity* pOther)
 	{
 		TraceResult tr = UTIL_GetGlobalTrace();
 
-		auto owner = m_hOwner.Entity<CBaseEntity>();
+		CBaseEntity* owner = m_hOwner;
 		if (!owner)
 		{
 			owner = this;

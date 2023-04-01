@@ -326,7 +326,7 @@ void CDisplacer::AltFireThink()
 #ifndef CLIENT_DLL
 	if (g_pGameRules->IsCTF() && m_pPlayer->m_pFlag)
 	{
-		auto pFlag = static_cast<CTFGoalFlag*>(static_cast<CBaseEntity*>(m_pPlayer->m_pFlag));
+		CTFGoalFlag* pFlag = m_pPlayer->m_pFlag;
 
 		pFlag->DropFlag(m_pPlayer);
 	}

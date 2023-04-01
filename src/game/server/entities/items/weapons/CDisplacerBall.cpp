@@ -164,7 +164,7 @@ void CDisplacerBall::BallTouch(CBaseEntity* pOther)
 
 		if (g_pGameRules->IsCTF() && pPlayer->m_pFlag)
 		{
-			auto pFlag = static_cast<CTFGoalFlag*>(static_cast<CBaseEntity*>(pPlayer->m_pFlag));
+			CTFGoalFlag* pFlag = pPlayer->m_pFlag;
 
 			pFlag->DropFlag(pPlayer);
 

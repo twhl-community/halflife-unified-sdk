@@ -66,7 +66,7 @@ void CBaseHGruntAlly::GibMonster()
 {
 	if (m_hWaitMedic)
 	{
-		auto pMedic = m_hWaitMedic.Entity<COFSquadTalkMonster>();
+		COFSquadTalkMonster* pMedic = m_hWaitMedic;
 
 		if (pMedic->pev->deadflag != DEAD_NO)
 			m_hWaitMedic = nullptr;
@@ -184,7 +184,7 @@ bool CBaseHGruntAlly::CheckRangeAttack1(float flDot, float flDist)
 		{
 			TraceResult tr;
 
-			auto pEnemy = m_hEnemy.Entity<CBaseEntity>();
+			CBaseEntity* pEnemy = m_hEnemy;
 
 			// if (!pEnemy->IsPlayer() && flDist <= 64)
 			//{
@@ -1633,7 +1633,7 @@ Schedule_t* CBaseHGruntAlly::GetSchedule()
 
 		if (m_hWaitMedic)
 		{
-			auto pMedic = m_hWaitMedic.Entity<COFSquadTalkMonster>();
+			COFSquadTalkMonster* pMedic = m_hWaitMedic;
 
 			if (pMedic->pev->deadflag != DEAD_NO)
 				m_hWaitMedic = nullptr;
@@ -2164,7 +2164,7 @@ void CBaseHGruntAlly::Killed(CBaseEntity* attacker, int iGib)
 
 	if (m_hWaitMedic)
 	{
-		auto medic = m_hWaitMedic.Entity<COFSquadTalkMonster>();
+		COFSquadTalkMonster* medic = m_hWaitMedic;
 		if (DEAD_NO != medic->pev->deadflag)
 			m_hWaitMedic = nullptr;
 		else

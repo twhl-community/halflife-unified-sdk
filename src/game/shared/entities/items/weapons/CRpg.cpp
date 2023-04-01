@@ -46,8 +46,9 @@ CRpgRocket::~CRpgRocket()
 {
 	if (m_pLauncher)
 	{
+		//TODO: this probably needs to be put in UpdateOnRemove
 		// my launcher is still around, tell it I'm dead.
-		static_cast<CRpg*>(static_cast<CBaseEntity*>(m_pLauncher))->m_cActiveRockets--;
+		m_pLauncher->m_cActiveRockets--;
 	}
 }
 

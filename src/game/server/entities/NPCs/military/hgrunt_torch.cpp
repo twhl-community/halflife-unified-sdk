@@ -359,7 +359,7 @@ void COFTorchAlly::Killed(CBaseEntity* attacker, int iGib)
 	// TODO: is this even correct? Torch grunts have no medic capabilities
 	if (m_hTargetEnt != nullptr)
 	{
-		m_hTargetEnt.Entity<COFSquadTalkMonster>()->m_hWaitMedic = nullptr;
+		m_hTargetEnt.Get<COFSquadTalkMonster>()->m_hWaitMedic = nullptr;
 	}
 
 	if (m_fTorchActive)

@@ -798,7 +798,7 @@ void CTFGoalFlag::goal_item_touch(CBaseEntity* pOther)
 		if ((pPlayer->m_iItems & (CTFItem::BlackMesaFlag | CTFItem::OpposingForceFlag)) == 0)
 			return;
 
-		auto otherFlag = static_cast<CTFGoalFlag*>(static_cast<CBaseEntity*>(pPlayer->m_pFlag));
+		CTFGoalFlag* otherFlag = pPlayer->m_pFlag;
 
 		if (otherFlag)
 			otherFlag->ReturnFlag();

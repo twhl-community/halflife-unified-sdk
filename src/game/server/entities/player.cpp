@@ -41,6 +41,7 @@
 #include "client.h"
 #include "ServerLibrary.h"
 
+#include "ctf/ctf_goals.h"
 #include "rope/CRope.h"
 
 // #define DUCKFIX

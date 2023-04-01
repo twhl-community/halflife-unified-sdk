@@ -22,13 +22,13 @@ class COFSquadTalkMonster : public CTalkMonster
 {
 public:
 	// squad leader info
-	EHANDLE m_hSquadLeader;						   //!< who is my leader
-	EHANDLE m_hSquadMember[MAX_SQUAD_MEMBERS - 1]; //!< valid only for leader
+	EntityHandle<COFSquadTalkMonster> m_hSquadLeader; //!< who is my leader
+	EntityHandle<COFSquadTalkMonster> m_hSquadMember[MAX_SQUAD_MEMBERS - 1]; //!< valid only for leader
 	int m_afSquadSlots;
 	float m_flLastEnemySightTime; //!< last time anyone in the squad saw the enemy
 	bool m_fEnemyEluded;
 
-	EHANDLE m_hWaitMedic;
+	EntityHandle<COFSquadTalkMonster> m_hWaitMedic;
 	float m_flMedicWaitTime;
 	float m_flLastHitByPlayer;
 	int m_iPlayerHits;
@@ -57,7 +57,7 @@ public:
 	// squad functions still left in base class
 	COFSquadTalkMonster* MySquadLeader()
 	{
-		COFSquadTalkMonster* pSquadLeader = (COFSquadTalkMonster*)((CBaseEntity*)m_hSquadLeader);
+		COFSquadTalkMonster* pSquadLeader = m_hSquadLeader;
 		if (pSquadLeader != nullptr)
 			return pSquadLeader;
 		return this;
@@ -67,7 +67,7 @@ public:
 		if (i >= MAX_SQUAD_MEMBERS - 1)
 			return this;
 		else
-			return (COFSquadTalkMonster*)((CBaseEntity*)m_hSquadMember[i]);
+			return m_hSquadMember[i];
 	}
 	bool InSquad() { return m_hSquadLeader != nullptr; }
 	bool IsLeader() { return m_hSquadLeader == this; }

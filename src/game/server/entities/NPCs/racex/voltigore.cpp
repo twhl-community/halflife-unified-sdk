@@ -52,7 +52,7 @@ public:
 	static TYPEDESCRIPTION m_SaveData[];
 
 	int m_iShowerSparks;
-	EHANDLE m_pBeam[VOLTIGORE_BEAM_COUNT];
+	EntityHandle<CBeam> m_pBeam[VOLTIGORE_BEAM_COUNT];
 	int m_iBeams;
 	CBaseAnimating* m_pAttachEnt;
 	int m_iAttachIdx;
@@ -197,7 +197,7 @@ void COFChargedBolt::ArmBeam(int side)
 	if (flDist == 1.0)
 		return;
 
-	auto pBeam = m_pBeam[m_iBeams].Entity<CBeam>();
+	CBeam* pBeam = m_pBeam[m_iBeams];
 
 	if (!pBeam)
 	{
@@ -427,7 +427,7 @@ void COFVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
 			TraceResult tr;
 			UTIL_TraceLine(shootPosition, shootPosition + direction * 1024, dont_ignore_monsters, edict(), &tr);
 
-			COFChargedBolt* bolt = m_pChargedBolt.Entity<COFChargedBolt>();
+			COFChargedBolt* bolt = m_pChargedBolt;
 
 			bolt->LaunchChargedBolt(direction, this, 1000, 10);
 

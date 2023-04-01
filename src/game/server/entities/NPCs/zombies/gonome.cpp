@@ -229,7 +229,7 @@ public:
 
 	// TODO: needs to be EHANDLE, save/restored or a save during a windup will cause problems
 	COFGonomeGuts* m_pGonomeGuts = nullptr;
-	EHANDLE m_PlayerLocked;
+	EntityHandle<CBasePlayer> m_PlayerLocked;
 
 protected:
 	float GetOneSlashDamage() override { return GetSkillFloat("gonome_dmg_one_slash"sv); }
@@ -402,7 +402,7 @@ void COFGonome::HandleAnimEvent(MonsterEvent_t* pEvent)
 		if ((pev->origin - m_hEnemy->pev->origin).Length() < 48)
 		{
 			// Unfreeze previous player if they were locked.
-			auto prevPlayer = m_PlayerLocked.Entity<CBasePlayer>();
+			CBasePlayer* prevPlayer = m_PlayerLocked;
 			m_PlayerLocked = nullptr;
 
 			if (prevPlayer && prevPlayer->IsAlive())
@@ -410,12 +410,13 @@ void COFGonome::HandleAnimEvent(MonsterEvent_t* pEvent)
 				prevPlayer->EnableControl(true);
 			}
 
-			auto enemy = m_hEnemy.Entity<CBaseEntity>();
+			CBaseEntity* enemy = m_hEnemy;
 
 			if (enemy && enemy->IsPlayer() && enemy->IsAlive())
 			{
-				static_cast<CBasePlayer*>(enemy)->EnableControl(false);
-				m_PlayerLocked = enemy;
+				auto playerEnemy = static_cast<CBasePlayer*>(enemy);
+				playerEnemy->EnableControl(false);
+				m_PlayerLocked = playerEnemy;
 			}
 		}
 
@@ -438,7 +439,7 @@ void COFGonome::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 	case GONOME_AE_ATTACK_BITE_FINISH:
 	{
-		auto player = m_PlayerLocked.Entity<CBasePlayer>();
+		CBasePlayer* player = m_PlayerLocked;
 
 		if (player && player->IsAlive())
 		{
@@ -592,7 +593,7 @@ void COFGonome::Killed(CBaseEntity* attacker, int iGib)
 		m_pGonomeGuts = nullptr;
 	}
 
-	auto player = m_PlayerLocked.Entity<CBasePlayer>();
+	CBasePlayer* player = m_PlayerLocked;
 
 	if (player)
 	{
@@ -647,7 +648,7 @@ void COFGonome::SetActivity(Activity NewActivity)
 		m_pGonomeGuts = nullptr;
 	}
 
-	auto player = m_PlayerLocked.Entity<CBasePlayer>();
+	CBasePlayer* player = m_PlayerLocked;
 
 	if (player)
 	{

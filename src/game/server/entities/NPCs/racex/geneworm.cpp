@@ -1327,7 +1327,7 @@ void COFGeneWorm::NextActivity()
 
 bool COFGeneWorm::ClawAttack()
 {
-	auto pEnemy = m_hEnemy.Entity<CBaseEntity>();
+	CBaseEntity* pEnemy = m_hEnemy;
 
 	if (pEnemy)
 	{

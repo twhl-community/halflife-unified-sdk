@@ -190,7 +190,7 @@ public:
 
 	string_t GetNodePresequence()
 	{
-		CInfoBM* pTarget = (CInfoBM*)(CBaseEntity*)m_hTargetEnt;
+		CInfoBM* pTarget = m_hTargetEnt.Get<CInfoBM>();
 		if (pTarget)
 		{
 			return pTarget->m_preSequence;

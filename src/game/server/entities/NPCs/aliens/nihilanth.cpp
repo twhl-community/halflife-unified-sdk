@@ -19,6 +19,66 @@
 #define N_SCALE 15
 #define N_SPHERES 20
 
+class CNihilanth;
+
+/**
+ *	@brief Bouncy ball attack
+ */
+class CNihilanthHVR : public CBaseMonster
+{
+public:
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
+	static TYPEDESCRIPTION m_SaveData[];
+
+	void Spawn() override;
+	void Precache() override;
+
+	void CircleInit(CBaseEntity* pTarget);
+	void AbsorbInit();
+	void TeleportInit(CNihilanth* pOwner, CBaseEntity* pEnemy, CBaseEntity* pTarget, CBaseEntity* pTouch);
+	void GreenBallInit();
+	void ZapInit(CBaseEntity* pEnemy);
+
+	void EXPORT HoverThink();
+	bool CircleTarget(Vector vecTarget);
+	void EXPORT DissipateThink();
+
+	void EXPORT ZapThink();
+	void EXPORT TeleportThink();
+	void EXPORT TeleportTouch(CBaseEntity* pOther);
+
+	void EXPORT RemoveTouch(CBaseEntity* pOther);
+	void EXPORT BounceTouch(CBaseEntity* pOther);
+	void EXPORT ZapTouch(CBaseEntity* pOther);
+
+	CBaseEntity* RandomClassname(const char* szName);
+
+	// void EXPORT SphereUse( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
+
+	void MovetoTarget(Vector vecTarget);
+	virtual void Crawl();
+
+	float m_flIdealVel;
+	Vector m_vecIdeal;
+	CNihilanth* m_pNihilanth;
+	EHANDLE m_hTouch;
+	int m_nFrames;
+};
+
+LINK_ENTITY_TO_CLASS(nihilanth_energy_ball, CNihilanthHVR);
+
+TYPEDESCRIPTION CNihilanthHVR::m_SaveData[] =
+	{
+		DEFINE_FIELD(CNihilanthHVR, m_flIdealVel, FIELD_FLOAT),
+		DEFINE_FIELD(CNihilanthHVR, m_vecIdeal, FIELD_VECTOR),
+		DEFINE_FIELD(CNihilanthHVR, m_pNihilanth, FIELD_CLASSPTR),
+		DEFINE_FIELD(CNihilanthHVR, m_hTouch, FIELD_EHANDLE),
+		DEFINE_FIELD(CNihilanthHVR, m_nFrames, FIELD_INTEGER),
+};
+
+IMPLEMENT_SAVERESTORE(CNihilanthHVR, CBaseMonster);
+
 /**
 *	@brief final Boss monster
 */
@@ -110,7 +170,7 @@ public:
 
 	EHANDLE m_hRecharger;
 
-	EHANDLE m_hSphere[N_SPHERES];
+	EntityHandle<CNihilanthHVR> m_hSphere[N_SPHERES];
 	int m_iActiveSpheres;
 
 	float m_flAdj;
@@ -127,7 +187,7 @@ public:
 	float m_flShootEnd;
 	float m_flShootTime;
 
-	EHANDLE m_hFriend[3];
+	EntityHandle<CBaseMonster> m_hFriend[3];
 };
 
 LINK_ENTITY_TO_CLASS(monster_nihilanth, CNihilanth);
@@ -167,64 +227,6 @@ TYPEDESCRIPTION CNihilanth::m_SaveData[] =
 };
 
 IMPLEMENT_SAVERESTORE(CNihilanth, CBaseMonster);
-
-/**
-*	@brief Bouncy ball attack
-*/
-class CNihilanthHVR : public CBaseMonster
-{
-public:
-	bool Save(CSave& save) override;
-	bool Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
-
-	void Spawn() override;
-	void Precache() override;
-
-	void CircleInit(CBaseEntity* pTarget);
-	void AbsorbInit();
-	void TeleportInit(CNihilanth* pOwner, CBaseEntity* pEnemy, CBaseEntity* pTarget, CBaseEntity* pTouch);
-	void GreenBallInit();
-	void ZapInit(CBaseEntity* pEnemy);
-
-	void EXPORT HoverThink();
-	bool CircleTarget(Vector vecTarget);
-	void EXPORT DissipateThink();
-
-	void EXPORT ZapThink();
-	void EXPORT TeleportThink();
-	void EXPORT TeleportTouch(CBaseEntity* pOther);
-
-	void EXPORT RemoveTouch(CBaseEntity* pOther);
-	void EXPORT BounceTouch(CBaseEntity* pOther);
-	void EXPORT ZapTouch(CBaseEntity* pOther);
-
-	CBaseEntity* RandomClassname(const char* szName);
-
-	// void EXPORT SphereUse( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
-
-	void MovetoTarget(Vector vecTarget);
-	virtual void Crawl();
-
-	float m_flIdealVel;
-	Vector m_vecIdeal;
-	CNihilanth* m_pNihilanth;
-	EHANDLE m_hTouch;
-	int m_nFrames;
-};
-
-LINK_ENTITY_TO_CLASS(nihilanth_energy_ball, CNihilanthHVR);
-
-TYPEDESCRIPTION CNihilanthHVR::m_SaveData[] =
-	{
-		DEFINE_FIELD(CNihilanthHVR, m_flIdealVel, FIELD_FLOAT),
-		DEFINE_FIELD(CNihilanthHVR, m_vecIdeal, FIELD_VECTOR),
-		DEFINE_FIELD(CNihilanthHVR, m_pNihilanth, FIELD_CLASSPTR),
-		DEFINE_FIELD(CNihilanthHVR, m_hTouch, FIELD_EHANDLE),
-		DEFINE_FIELD(CNihilanthHVR, m_nFrames, FIELD_INTEGER),
-};
-
-IMPLEMENT_SAVERESTORE(CNihilanthHVR, CBaseMonster);
 
 const char* CNihilanth::pAttackSounds[] =
 	{
@@ -643,7 +645,7 @@ void CNihilanth::MakeFriend(Vector vecStart)
 		if (m_hFriend[i] != nullptr && !m_hFriend[i]->IsAlive())
 		{
 			if (pev->rendermode == kRenderNormal) // don't do it if they are already fading
-				m_hFriend[i]->MyMonsterPointer()->FadeMonster();
+				m_hFriend[i]->FadeMonster();
 			m_hFriend[i] = nullptr;
 		}
 
@@ -658,7 +660,7 @@ void CNihilanth::MakeFriend(Vector vecStart)
 					TraceResult tr;
 					UTIL_TraceHull(node.m_vecOrigin + Vector(0, 0, 32), node.m_vecOrigin + Vector(0, 0, 32), dont_ignore_monsters, large_hull, nullptr, &tr);
 					if (tr.fStartSolid == 0)
-						m_hFriend[i] = Create("monster_alien_controller", node.m_vecOrigin, pev->angles);
+						m_hFriend[i] = static_cast<CBaseMonster*>(Create("monster_alien_controller", node.m_vecOrigin, pev->angles));
 				}
 			}
 			else
@@ -670,7 +672,7 @@ void CNihilanth::MakeFriend(Vector vecStart)
 					TraceResult tr;
 					UTIL_TraceHull(node.m_vecOrigin + Vector(0, 0, 36), node.m_vecOrigin + Vector(0, 0, 36), dont_ignore_monsters, human_hull, nullptr, &tr);
 					if (tr.fStartSolid == 0)
-						m_hFriend[i] = Create("monster_alien_slave", node.m_vecOrigin, pev->angles);
+						m_hFriend[i] = static_cast<CBaseMonster*>(Create("monster_alien_slave", node.m_vecOrigin, pev->angles));
 				}
 			}
 			if (m_hFriend[i] != nullptr)
@@ -975,7 +977,7 @@ bool CNihilanth::AbsorbSphere()
 	{
 		if (m_hSphere[i] != nullptr)
 		{
-			CNihilanthHVR* pSphere = (CNihilanthHVR*)((CBaseEntity*)m_hSphere[i]);
+			CNihilanthHVR* pSphere = m_hSphere[i];
 			pSphere->AbsorbInit();
 			m_hSphere[i] = nullptr;
 			m_iActiveSpheres--;
@@ -1022,7 +1024,7 @@ void CNihilanth::TargetSphere(USE_TYPE useType, float value)
 	{
 		if (m_hSphere[i] != nullptr)
 		{
-			pSphere = m_hSphere[i]->MyMonsterPointer();
+			pSphere = m_hSphere[i];
 			if (pSphere->m_hEnemy == nullptr)
 				break;
 		}

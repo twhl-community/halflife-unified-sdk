@@ -149,7 +149,7 @@ static void SendFlagIcons(CBasePlayer* player, CTFGoalFlag* team1Flag, CTFGoalFl
 {
 	if (team1Flag || team2Flag)
 	{
-		auto pMyFlag = static_cast<CTFGoalFlag*>(static_cast<CBaseEntity*>(player->m_pFlag));
+		CTFGoalFlag* pMyFlag = player->m_pFlag;
 
 		if (team1Flag)
 		{
@@ -651,7 +651,7 @@ bool CHalfLifeCTFplay::ClientConnected(edict_t* pEntity, const char* pszName, co
 
 			if (pPlayer && pPlayer->m_iItems != CTFItem::None)
 			{
-				auto pFlag = static_cast<CTFGoalFlag*>(pPlayer->m_pFlag.operator CBaseEntity*());
+				CTFGoalFlag* pFlag = pPlayer->m_pFlag;
 
 				if (pFlag)
 				{
@@ -734,7 +734,7 @@ void CHalfLifeCTFplay::ClientDisconnected(edict_t* pClient)
 		{
 			if (!g_fGameOver)
 			{
-				auto pFlag = static_cast<CTFGoalFlag*>(v2->m_pFlag.operator CBaseEntity*());
+				CTFGoalFlag* pFlag = v2->m_pFlag;
 
 				if (pFlag)
 				{
@@ -1084,7 +1084,7 @@ void CHalfLifeCTFplay::PlayerKilled(CBasePlayer* pVictim, CBaseEntity* pKiller, 
 			{
 				for (auto pPlayer : UTIL_FindPlayers())
 				{
-					auto pFlag = pPlayer->m_pFlag.Entity<CTFGoalFlag>();
+					CTFGoalFlag* pFlag = pPlayer->m_pFlag;
 
 					if (pFlag)
 					{
@@ -1120,7 +1120,7 @@ void CHalfLifeCTFplay::PlayerKilled(CBasePlayer* pVictim, CBaseEntity* pKiller, 
 
 	if (pVictim->IsPlayer() && !g_fGameOver)
 	{
-		auto pFlag = pVictim->m_pFlag.Entity<CTFGoalFlag>();
+		CTFGoalFlag* pFlag = pVictim->m_pFlag;
 
 		if (pFlag)
 		{
@@ -1235,7 +1235,7 @@ void CHalfLifeCTFplay::ChangePlayerTeam(CBasePlayer* pPlayer, const char* pCharN
 				{
 					if (pPlayer->m_pFlag)
 					{
-						pPlayer->m_pFlag.Entity<CTFGoalFlag>()->DropFlag(pPlayer);
+						pPlayer->m_pFlag->DropFlag(pPlayer);
 					}
 
 					if ((pPlayer->m_iItems & CTFItem::ItemsMask) != 0)
@@ -1351,7 +1351,7 @@ void CHalfLifeCTFplay::ChangePlayerTeam(CBasePlayer* pPlayer, const char* pCharN
 		{
 			if (pPlayer->m_pFlag)
 			{
-				pPlayer->m_pFlag.Entity<CTFGoalFlag>()->DropFlag(pPlayer);
+				pPlayer->m_pFlag->DropFlag(pPlayer);
 			}
 
 			if ((pPlayer->m_iItems & CTFItem::ItemsMask) != 0)

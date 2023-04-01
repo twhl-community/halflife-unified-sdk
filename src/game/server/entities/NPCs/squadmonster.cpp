@@ -315,7 +315,7 @@ bool CSquadMonster::CheckEnemy(CBaseEntity* pEnemy)
 	iUpdatedLKP = CBaseMonster::CheckEnemy(m_hEnemy);
 
 	// communicate with squad members about the enemy IF this individual has the same enemy as the squad leader.
-	if (InSquad() && (CBaseEntity*)m_hEnemy == MySquadLeader()->m_hEnemy)
+	if (InSquad() && m_hEnemy == MySquadLeader()->m_hEnemy)
 	{
 		if (iUpdatedLKP)
 		{
@@ -523,7 +523,7 @@ bool CSquadMonster::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, fl
 
 		for (int i = 0; i < MAX_SQUAD_MEMBERS - 1; ++i)
 		{
-			auto squadMember = squadLeader->m_hSquadMember[i].Entity<CSquadMonster>();
+			CSquadMonster* squadMember = squadLeader->m_hSquadMember[i];
 
 			if (squadMember)
 			{

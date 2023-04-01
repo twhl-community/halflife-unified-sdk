@@ -1184,7 +1184,7 @@ public:
 	int ObjectCaps() override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 	static TYPEDESCRIPTION m_SaveData[];
 
-	EHANDLE m_hPlayer;
+	EntityHandle<CBasePlayer> m_hPlayer;
 	EHANDLE m_hTarget;
 	CBaseEntity* m_pentPath;
 	string_t m_sPath;
@@ -1284,7 +1284,7 @@ void CTriggerCamera::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE
 
 	auto player = static_cast<CBasePlayer*>(pActivator);
 
-	m_hPlayer = pActivator;
+	m_hPlayer = player;
 
 	m_flReturnTime = gpGlobals->time + m_flWait;
 	pev->speed = m_initialSpeed;
@@ -1370,7 +1370,7 @@ void CTriggerCamera::FollowTarget()
 
 	if (m_hTarget == nullptr || m_flReturnTime < gpGlobals->time)
 	{
-		auto player = static_cast<CBasePlayer*>(static_cast<CBaseEntity*>(m_hPlayer));
+		CBasePlayer* player = m_hPlayer;
 
 		if (player->IsAlive())
 		{

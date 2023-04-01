@@ -15,6 +15,8 @@
 
 #pragma once
 
+class COFChargedBolt;
+
 enum
 {
 	SCHED_VOLTIGORE_THREAT_DISPLAY = LAST_COMMON_SCHEDULE + 1,
@@ -158,7 +160,7 @@ public:
 	float m_flNextWordTime;
 	int m_iLastWord;
 
-	EHANDLE m_pChargedBolt;
+	EntityHandle<COFChargedBolt> m_pChargedBolt;
 
 	int m_iVoltigoreGibs;
 	bool m_fDeathCharge;

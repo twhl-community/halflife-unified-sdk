@@ -58,7 +58,7 @@ public:
 	 *	or @c nullptr if it does not point to a valid entity.
 	 */
 	template <typename TOtherBaseEntity>
-	TOtherBaseEntity* Entity();
+	TOtherBaseEntity* Get() const;
 
 	operator TBaseEntity*();
 	TBaseEntity* operator->();
@@ -82,9 +82,9 @@ typename TBaseEntity* EntityHandle<TBaseEntity>::Get() const
 
 template <typename TBaseEntity>
 template <typename TOtherBaseEntity>
-typename TOtherBaseEntity* EntityHandle<TBaseEntity>::Entity()
+typename TOtherBaseEntity* EntityHandle<TBaseEntity>::Get() const
 {
-	auto entity = Get();
+	auto entity = this->Get();
 
 	// In debug builds this verifies that the dynamic type is the expected type.
 	assert(!entity || dynamic_cast<TOtherBaseEntity*>(entity));

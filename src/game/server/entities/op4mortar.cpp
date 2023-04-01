@@ -435,7 +435,7 @@ void COp4Mortar::MortarThink()
 			m_hEnemy = FindTarget();
 		}
 
-		auto pEnemy = m_hEnemy.Entity<CBaseEntity>();
+		CBaseEntity* pEnemy = m_hEnemy;
 
 		if (pEnemy)
 		{

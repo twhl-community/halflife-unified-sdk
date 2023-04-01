@@ -23,6 +23,7 @@
 #include "sound/MaterialSystem.h"
 
 class CRope;
+class CTFGoalFlag;
 
 #define PLAYER_FATAL_FALL_SPEED 1024															  // approx 60 feet
 #define PLAYER_MAX_SAFE_FALL_SPEED 580															  // approx 20 feet
@@ -230,7 +231,7 @@ public:
 	CTFTeam m_iNewTeamNum;
 	CTFItem::CTFItem m_iItems;
 	unsigned int m_iClientItems;
-	EHANDLE m_pFlag;
+	EntityHandle<CTFGoalFlag> m_pFlag;
 	int m_iCurrentMenu;
 	float m_flNextHEVCharge;
 	float m_flNextHealthCharge;

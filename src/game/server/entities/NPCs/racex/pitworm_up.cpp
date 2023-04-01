@@ -914,7 +914,7 @@ void COFPitWormUp::StrafeBeam()
 
 void COFPitWormUp::TrackEnemy()
 {
-	auto pEnemy = m_hEnemy.Entity<CBaseEntity>();
+	CBaseEntity* pEnemy = m_hEnemy;
 
 	Vector vecEyePos, vecEyeAng;
 	GetAttachment(0, vecEyePos, vecEyeAng);
@@ -1731,7 +1731,7 @@ public:
 	{
 		if (flDist <= 1024.0 && gpGlobals->time > m_spikeTime)
 		{
-			auto enemy = static_cast<CBaseEntity*>(m_hEnemy);
+			CBaseEntity* enemy = m_hEnemy;
 
 			if (enemy && FVisible(enemy))
 			{
@@ -2466,7 +2466,7 @@ void COFPitWorm::UpdateEye()
 
 void COFPitWorm::TrackEnemy()
 {
-	auto enemy = static_cast<CBaseEntity*>(m_hEnemy);
+	CBaseEntity* enemy = m_hEnemy;
 
 	Vector vecEyePos, vecEyeAng;
 	GetAttachment(0, vecEyePos, vecEyeAng);
@@ -2530,11 +2530,11 @@ void COFPitWorm::RunAI()
 		if (HasConditions(bits_COND_SEE_DISLIKE | bits_COND_SEE_HATE | bits_COND_SEE_NEMESIS))
 		{
 			auto enemy = BestVisibleEnemy();
-			if (static_cast<CBaseEntity*>(m_hEnemy) != enemy)
+			if (m_hEnemy != enemy)
 			{
 				if (enemy)
 				{
-					PushEnemy(static_cast<CBaseEntity*>(m_hEnemy), m_vecEnemyLKP);
+					PushEnemy(m_hEnemy, m_vecEnemyLKP);
 					SetConditions(bits_COND_NEW_ENEMY);
 					m_hEnemy = enemy;
 					m_vecEnemyLKP = m_hEnemy->pev->origin;

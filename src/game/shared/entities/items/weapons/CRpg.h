@@ -98,5 +98,5 @@ public:
 
 	int m_iTrail;
 	float m_flIgniteTime;
-	EHANDLE m_pLauncher; // handle back to the launcher that fired me.
+	EntityHandle<CRpg> m_pLauncher; // handle back to the launcher that fired me.
 };

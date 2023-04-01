@@ -223,7 +223,7 @@ void COFSquadTalkMonster::SquadMakeEnemy(CBaseEntity* pEnemy)
 
 	for (auto& squadMemberHandle : squadLeader->m_hSquadMember)
 	{
-		auto squadMember = squadMemberHandle.Entity<COFSquadTalkMonster>();
+		COFSquadTalkMonster* squadMember = squadMemberHandle;
 
 		if (squadMember)
 		{
@@ -386,7 +386,7 @@ bool COFSquadTalkMonster::CheckEnemy(CBaseEntity* pEnemy)
 	iUpdatedLKP = CTalkMonster::CheckEnemy(m_hEnemy);
 
 	// communicate with squad members about the enemy IF this individual has the same enemy as the squad leader.
-	if (InSquad() && (CBaseEntity*)m_hEnemy == MySquadLeader()->m_hEnemy)
+	if (InSquad() && m_hEnemy == MySquadLeader()->m_hEnemy)
 	{
 		if (iUpdatedLKP)
 		{
@@ -620,7 +620,7 @@ COFSquadTalkMonster* COFSquadTalkMonster::MySquadMedic()
 {
 	for (auto& member : m_hSquadMember)
 	{
-		auto pMember = member.Entity<COFSquadTalkMonster>();
+		COFSquadTalkMonster* pMember = member;
 
 		if (pMember && pMember->ClassnameIs("monster_human_medic_ally"))
 		{
