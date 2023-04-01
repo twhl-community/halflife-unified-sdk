@@ -3791,6 +3791,10 @@ void CBasePlayer::ItemPostFrame()
 
 	ImpulseCommands();
 
+	// check again if the player is using a tank if they started using it in PlayerUse
+	if (m_pTank != nullptr)
+		return;
+
 	if (!m_pActiveWeapon)
 		return;
 
