@@ -72,7 +72,7 @@ void CEagle::Holster()
 #ifndef CLIENT_DLL
 	if (m_pLaser)
 	{
-		m_pLaser->Killed(nullptr, GIB_NEVER);
+		UTIL_Remove(m_pLaser);
 		m_pLaser = nullptr;
 		m_bSpotVisible = false;
 	}
@@ -241,8 +241,7 @@ void CEagle::SecondaryAttack()
 	{
 		if (m_pLaser)
 		{
-			m_pLaser->Killed(nullptr, GIB_NEVER);
-
+			UTIL_Remove(m_pLaser);
 			m_pLaser = nullptr;
 
 			EmitSound(CHAN_WEAPON, "weapons/desert_eagle_sight2.wav", VOL_NORM, ATTN_NORM);

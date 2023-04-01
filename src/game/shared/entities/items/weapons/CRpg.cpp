@@ -350,7 +350,7 @@ void CRpg::Holster()
 #ifndef CLIENT_DLL
 	if (m_pSpot)
 	{
-		m_pSpot->Killed(nullptr, GIB_NEVER);
+		UTIL_Remove(m_pSpot);
 		m_pSpot = nullptr;
 	}
 #endif
@@ -407,7 +407,7 @@ void CRpg::SecondaryAttack()
 #ifndef CLIENT_DLL
 	if (!m_fSpotActive && m_pSpot)
 	{
-		m_pSpot->Killed(nullptr, GIB_NORMAL);
+		UTIL_Remove(m_pSpot);
 		m_pSpot = nullptr;
 	}
 #endif
