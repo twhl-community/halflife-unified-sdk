@@ -2068,10 +2068,16 @@ engine sets cd to 0 before calling.
 */
 void UpdateClientData(const edict_t* ent, int sendweapons, clientdata_t* cd)
 {
-	if (!ent || !ent->pvPrivateData)
+	if (!ent)
 		return;
 
 	auto pl = GET_PRIVATE<CBasePlayer>(const_cast<edict_t*>(ent));
+
+	if (!pl)
+	{
+		return;
+	}
+
 	CBaseEntity* viewEntity = pl;
 	CBasePlayer* plOrg = pl;
 
@@ -2092,7 +2098,6 @@ void UpdateClientData(const edict_t* ent, int sendweapons, clientdata_t* cd)
 
 	cd->waterlevel = viewEntity->pev->waterlevel;
 	cd->watertype = viewEntity->pev->watertype;
-	cd->weapons = viewEntity->pev->weapons;
 
 	// Vectors
 	cd->origin = viewEntity->pev->origin;
@@ -2109,7 +2114,6 @@ void UpdateClientData(const edict_t* ent, int sendweapons, clientdata_t* cd)
 	strcpy(cd->physinfo, ENGINE_GETPHYSINFO(ent));
 
 	cd->maxspeed = viewEntity->pev->maxspeed;
-	cd->fov = pl ? pl->m_iFOV : plOrg->m_iFOV; // Use actual player FOV if target is not a player.
 	cd->weaponanim = viewEntity->pev->weaponanim;
 
 	cd->pushmsec = viewEntity->pev->pushmsec;
@@ -2119,7 +2123,18 @@ void UpdateClientData(const edict_t* ent, int sendweapons, clientdata_t* cd)
 	cd->iuser1 = plOrg->pev->iuser1;
 	cd->iuser2 = plOrg->pev->iuser2;
 
-	cd->iuser4 = pl ? pl->m_iItems : CTFItem::None; // Non-players don't have items.
+	if (pl)
+	{
+		cd->weapons = pl->m_HudFlags;
+		cd->fov = pl->m_iFOV;
+		cd->iuser4 = pl->m_iItems;
+	}
+	else
+	{
+		cd->weapons = 0; // Non-players don't have hud flags.
+		cd->fov = plOrg->m_iFOV; // Use actual player FOV if target is not a player.
+		cd->iuser4 = CTFItem::None; // Non-players don't have items.
+	}
 
 #if defined(CLIENT_WEAPONS)
 	if (0 != sendweapons)

@@ -44,6 +44,8 @@ void CHud::MsgFunc_ResetHUD(const char* pszName, int iSize, void* pbuf)
 	// Reset weapon bits.
 	m_iWeaponBits = 0ULL;
 
+	m_HudFlags = 0U;
+
 	// reset sensitivity
 	m_flMouseSensitivity = 0;
 

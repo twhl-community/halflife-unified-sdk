@@ -269,6 +269,8 @@ public:
 	// Not saved, used to update client.
 	std::uint64_t m_ClientWeaponBits;
 
+	std::uint32_t m_HudFlags = 0;
+
 	// shared ammo slots
 	int m_rgAmmo[MAX_AMMO_TYPES];
 	int m_rgAmmoLast[MAX_AMMO_TYPES];
@@ -612,18 +614,18 @@ inline void CBasePlayer::ClearWeaponBit(int id)
 
 inline bool CBasePlayer::HasSuit() const
 {
-	return (m_WeaponBits & (1ULL << WEAPON_SUIT)) != 0;
+	return (m_HudFlags & (1U << HUD_HASSUIT)) != 0;
 }
 
 inline void CBasePlayer::SetHasSuit(bool hasSuit)
 {
 	if (hasSuit)
 	{
-		SetWeaponBit(WEAPON_SUIT);
+		m_HudFlags |= 1U << HUD_HASSUIT;
 	}
 	else
 	{
-		ClearWeaponBit(WEAPON_SUIT);
+		m_HudFlags &= ~(1U << HUD_HASSUIT);
 	}
 }
 

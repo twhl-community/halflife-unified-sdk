@@ -88,6 +88,7 @@ TYPEDESCRIPTION CBasePlayer::m_playerSaveData[] =
 		DEFINE_FIELD(CBasePlayer, m_pActiveWeapon, FIELD_CLASSPTR),
 		DEFINE_FIELD(CBasePlayer, m_pLastWeapon, FIELD_CLASSPTR),
 		DEFINE_FIELD(CBasePlayer, m_WeaponBits, FIELD_INT64),
+		DEFINE_FIELD(CBasePlayer, m_HudFlags, FIELD_INTEGER),
 
 		DEFINE_ARRAY(CBasePlayer, m_rgAmmo, FIELD_INTEGER, MAX_AMMO_TYPES),
 		DEFINE_FIELD(CBasePlayer, m_idrowndmg, FIELD_INTEGER),

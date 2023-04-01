@@ -62,7 +62,6 @@ enum WeaponId
 	WEAPON_GLOCK,
 	WEAPON_PYTHON,
 	WEAPON_MP5,
-	WEAPON_CHAINGUN,
 	WEAPON_CROSSBOW,
 	WEAPON_SHOTGUN,
 	WEAPON_RPG,
@@ -83,8 +82,11 @@ enum WeaponId
 	WEAPON_SNIPERRIFLE,
 	WEAPON_KNIFE,
 	WEAPON_PENGUIN,
+};
 
-	WEAPON_SUIT = 31
+enum HudFlag
+{
+	HUD_HASSUIT = 0, //!< The player has the HEV suit.
 };
 
 /**

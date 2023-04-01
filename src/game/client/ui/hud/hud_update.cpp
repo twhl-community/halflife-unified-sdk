@@ -30,8 +30,8 @@ bool CHud::UpdateClientData(client_data_t* cdata, float time)
 	memcpy(m_vecAngles, cdata->viewangles, sizeof(Vector));
 
 	m_iKeyBits = CL_ButtonBits(false);
-	// Handled in MsgFunc_Weapons now.
-	// m_iWeaponBits = cdata->iWeaponBits;
+	// Weapon bits are now used for passing hud flags. MsgFunc_Weapons passes the weapon bits.
+	m_HudFlags = cdata->iWeaponBits;
 
 	in_fov = cdata->fov;
 

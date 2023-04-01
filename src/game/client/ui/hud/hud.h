@@ -778,12 +778,12 @@ public:
 
 	bool HasSuit() const
 	{
-		return HasWeapon(WEAPON_SUIT);
+		return (m_HudFlags & (1U << HUD_HASSUIT)) != 0;
 	}
 
 	bool HasAnyWeapons() const
 	{
-		return (m_iWeaponBits & ~(1ULL << WEAPON_SUIT)) != 0;
+		return m_iWeaponBits != 0;
 	}
 
 public:
@@ -853,6 +853,7 @@ public:
 	SCREENINFO m_scrinfo;
 
 	std::uint64_t m_iWeaponBits = 0;
+	std::uint32_t m_HudFlags = 0;
 	bool m_fPlayerDead = false;
 	bool m_iIntermission = false;
 
