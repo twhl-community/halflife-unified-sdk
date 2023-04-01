@@ -142,16 +142,7 @@ LINK_ENTITY_TO_CLASS(multisource, CMultiSource);
 
 bool CMultiSource::KeyValue(KeyValueData* pkvd)
 {
-	if (FStrEq(pkvd->szKeyName, "style") ||
-		FStrEq(pkvd->szKeyName, "height") ||
-		FStrEq(pkvd->szKeyName, "killtarget") ||
-		FStrEq(pkvd->szKeyName, "value1") ||
-		FStrEq(pkvd->szKeyName, "value2") ||
-		FStrEq(pkvd->szKeyName, "value3"))
-	{
-		return true;
-	}
-	else if (FStrEq(pkvd->szKeyName, "globalstate"))
+	if (FStrEq(pkvd->szKeyName, "globalstate"))
 	{
 		m_globalstate = ALLOC_STRING(pkvd->szValue);
 		return true;
@@ -1046,15 +1037,6 @@ bool CEnvSpark::KeyValue(KeyValueData* pkvd)
 	if (FStrEq(pkvd->szKeyName, "MaxDelay"))
 	{
 		m_flDelay = atof(pkvd->szValue);
-		return true;
-	}
-	else if (FStrEq(pkvd->szKeyName, "style") ||
-			 FStrEq(pkvd->szKeyName, "height") ||
-			 FStrEq(pkvd->szKeyName, "killtarget") ||
-			 FStrEq(pkvd->szKeyName, "value1") ||
-			 FStrEq(pkvd->szKeyName, "value2") ||
-			 FStrEq(pkvd->szKeyName, "value3"))
-	{
 		return true;
 	}
 

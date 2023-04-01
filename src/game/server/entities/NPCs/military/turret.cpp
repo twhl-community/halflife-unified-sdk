@@ -229,12 +229,6 @@ bool CBaseTurret::KeyValue(KeyValueData* pkvd)
 		m_iBaseTurnRate = atoi(pkvd->szValue);
 		return true;
 	}
-	else if (FStrEq(pkvd->szKeyName, "style") ||
-			 FStrEq(pkvd->szKeyName, "height") ||
-			 FStrEq(pkvd->szKeyName, "value1") ||
-			 FStrEq(pkvd->szKeyName, "value2") ||
-			 FStrEq(pkvd->szKeyName, "value3"))
-		return true;
 
 	return CBaseMonster::KeyValue(pkvd);
 }
