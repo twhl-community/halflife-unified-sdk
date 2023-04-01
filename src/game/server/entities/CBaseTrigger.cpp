@@ -56,3 +56,68 @@ bool CBaseTrigger::KeyValue(KeyValueData* pkvd)
 
 	return CBaseToggle::KeyValue(pkvd);
 }
+
+void CBaseTrigger::ActivateMultiTrigger(CBaseEntity* pActivator)
+{
+	if (pev->nextthink > gpGlobals->time)
+		return; // still waiting for reset time
+
+	if (!UTIL_IsMasterTriggered(m_sMaster, pActivator))
+		return;
+
+	if (!FStringNull(pev->noise))
+		EmitSound(CHAN_VOICE, STRING(pev->noise), 1, ATTN_NORM);
+
+	// don't trigger again until reset
+	// pev->takedamage = DAMAGE_NO;
+
+	m_hActivator = pActivator;
+	SUB_UseTargets(m_hActivator, USE_TOGGLE, 0);
+
+	if (!FStringNull(pev->message) && pActivator->IsPlayer())
+	{
+		UTIL_ShowMessage(STRING(pev->message), pActivator);
+		//		CLIENT_PRINTF( ENT( pActivator->pev ), print_center, STRING(pev->message) );
+	}
+
+	if (m_flWait > 0)
+	{
+		SetThink(&CBaseTrigger::MultiWaitOver);
+		pev->nextthink = gpGlobals->time + m_flWait;
+	}
+	else
+	{
+		// we can't just remove (self) here, because this is a touch function
+		// called while C code is looping through area links...
+		SetTouch(nullptr);
+		pev->nextthink = gpGlobals->time + 0.1;
+		SetThink(&CBaseTrigger::SUB_Remove);
+	}
+}
+
+void CBaseTrigger::MultiWaitOver()
+{
+	//	if (pev->max_health)
+	//		{
+	//		pev->health		= pev->max_health;
+	//		pev->takedamage	= DAMAGE_YES;
+	//		pev->solid		= SOLID_BBOX;
+	//		}
+	SetThink(nullptr);
+}
+
+void CBaseTrigger::ToggleUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
+{
+	if (pev->solid == SOLID_NOT)
+	{ // if the trigger is off, turn it on
+		pev->solid = SOLID_TRIGGER;
+
+		// Force retouch
+		gpGlobals->force_retouch++;
+	}
+	else
+	{ // turn the trigger off
+		pev->solid = SOLID_NOT;
+	}
+	SetOrigin(pev->origin);
+}

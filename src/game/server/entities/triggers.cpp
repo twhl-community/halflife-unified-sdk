@@ -498,6 +498,11 @@ public:
 	void Spawn() override;
 
 	/**
+	 *	@brief When touched, a hurt trigger does DMG points of damage each half-second
+	 */
+	void EXPORT HurtTouch(CBaseEntity* pOther);
+
+	/**
 	*	@brief trigger hurt that causes radiation will do a radius check and set the player's geiger counter level
 	*	according to distance from center of trigger
 	*/
@@ -505,61 +510,6 @@ public:
 };
 
 LINK_ENTITY_TO_CLASS(trigger_hurt, CTriggerHurt);
-
-class CTriggerMonsterJump : public CBaseTrigger
-{
-public:
-	void Spawn() override;
-	void Touch(CBaseEntity* pOther) override;
-	void Think() override;
-};
-
-LINK_ENTITY_TO_CLASS(trigger_monsterjump, CTriggerMonsterJump);
-
-void CTriggerMonsterJump::Spawn()
-{
-	SetMovedir(this);
-
-	InitTrigger();
-
-	pev->nextthink = 0;
-	pev->speed = 200;
-	m_flHeight = 150;
-
-	if (!FStringNull(pev->targetname))
-	{ // if targetted, spawn turned off
-		pev->solid = SOLID_NOT;
-		SetOrigin(pev->origin); // Unlink from trigger list
-		SetUse(&CTriggerMonsterJump::ToggleUse);
-	}
-}
-
-void CTriggerMonsterJump::Think()
-{
-	pev->solid = SOLID_NOT;			  // kill the trigger for now !!!UNDONE
-	SetOrigin(pev->origin); // Unlink from trigger list
-	SetThink(nullptr);
-}
-
-void CTriggerMonsterJump::Touch(CBaseEntity* pOther)
-{
-	if (!FBitSet(pOther->pev->flags, FL_MONSTER))
-	{ // touched by a non-monster.
-		return;
-	}
-
-	pOther->pev->origin.z += 1;
-
-	if (FBitSet(pOther->pev->flags, FL_ONGROUND))
-	{ // clear the onground so physics don't bitch
-		pOther->pev->flags &= ~FL_ONGROUND;
-	}
-
-	// toss the monster!
-	pOther->pev->velocity = pev->movedir * pev->speed;
-	pOther->pev->velocity.z += m_flHeight;
-	pev->nextthink = gpGlobals->time;
-}
 
 void CTriggerHurt::Spawn()
 {
@@ -587,76 +537,7 @@ void CTriggerHurt::Spawn()
 	SetOrigin(pev->origin); // Link into the list
 }
 
-void CTriggerHurt::RadiationThink()
-{
-
-	edict_t* pentPlayer;
-	CBasePlayer* pPlayer = nullptr;
-	float flRange;
-	Vector vecSpot1;
-	Vector vecSpot2;
-	Vector vecRange;
-	Vector origin;
-	Vector view_ofs;
-
-	// check to see if a player is in pvs
-	// if not, continue
-
-	// set origin to center of trigger so that this check works
-	origin = pev->origin;
-	view_ofs = pev->view_ofs;
-
-	pev->origin = (pev->absmin + pev->absmax) * 0.5;
-	pev->view_ofs = pev->view_ofs * 0.0;
-
-	pentPlayer = FIND_CLIENT_IN_PVS(edict());
-
-	pev->origin = origin;
-	pev->view_ofs = view_ofs;
-
-	// reset origin
-
-	if (!FNullEnt(pentPlayer))
-	{
-
-		pPlayer = GET_PRIVATE<CBasePlayer>(pentPlayer);
-
-		// get range to player;
-
-		vecSpot1 = (pev->absmin + pev->absmax) * 0.5;
-		vecSpot2 = (pPlayer->pev->absmin + pPlayer->pev->absmax) * 0.5;
-
-		vecRange = vecSpot1 - vecSpot2;
-		flRange = vecRange.Length();
-
-		// if player's current geiger counter range is larger
-		// than range to this trigger hurt, reset player's
-		// geiger counter range
-
-		if (pPlayer->m_flgeigerRange >= flRange)
-			pPlayer->m_flgeigerRange = flRange;
-	}
-
-	pev->nextthink = gpGlobals->time + 0.25;
-}
-
-void CBaseTrigger::ToggleUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
-{
-	if (pev->solid == SOLID_NOT)
-	{ // if the trigger is off, turn it on
-		pev->solid = SOLID_TRIGGER;
-
-		// Force retouch
-		gpGlobals->force_retouch++;
-	}
-	else
-	{ // turn the trigger off
-		pev->solid = SOLID_NOT;
-	}
-	SetOrigin(pev->origin);
-}
-
-void CBaseTrigger::HurtTouch(CBaseEntity* pOther)
+void CTriggerHurt::HurtTouch(CBaseEntity* pOther)
 {
 	float fldmg;
 
@@ -779,6 +660,114 @@ void CBaseTrigger::HurtTouch(CBaseEntity* pOther)
 	}
 }
 
+void CTriggerHurt::RadiationThink()
+{
+
+	edict_t* pentPlayer;
+	CBasePlayer* pPlayer = nullptr;
+	float flRange;
+	Vector vecSpot1;
+	Vector vecSpot2;
+	Vector vecRange;
+	Vector origin;
+	Vector view_ofs;
+
+	// check to see if a player is in pvs
+	// if not, continue
+
+	// set origin to center of trigger so that this check works
+	origin = pev->origin;
+	view_ofs = pev->view_ofs;
+
+	pev->origin = (pev->absmin + pev->absmax) * 0.5;
+	pev->view_ofs = pev->view_ofs * 0.0;
+
+	pentPlayer = FIND_CLIENT_IN_PVS(edict());
+
+	pev->origin = origin;
+	pev->view_ofs = view_ofs;
+
+	// reset origin
+
+	if (!FNullEnt(pentPlayer))
+	{
+
+		pPlayer = GET_PRIVATE<CBasePlayer>(pentPlayer);
+
+		// get range to player;
+
+		vecSpot1 = (pev->absmin + pev->absmax) * 0.5;
+		vecSpot2 = (pPlayer->pev->absmin + pPlayer->pev->absmax) * 0.5;
+
+		vecRange = vecSpot1 - vecSpot2;
+		flRange = vecRange.Length();
+
+		// if player's current geiger counter range is larger
+		// than range to this trigger hurt, reset player's
+		// geiger counter range
+
+		if (pPlayer->m_flgeigerRange >= flRange)
+			pPlayer->m_flgeigerRange = flRange;
+	}
+
+	pev->nextthink = gpGlobals->time + 0.25;
+}
+
+class CTriggerMonsterJump : public CBaseTrigger
+{
+public:
+	void Spawn() override;
+	void Touch(CBaseEntity* pOther) override;
+	void Think() override;
+};
+
+LINK_ENTITY_TO_CLASS(trigger_monsterjump, CTriggerMonsterJump);
+
+void CTriggerMonsterJump::Spawn()
+{
+	SetMovedir(this);
+
+	InitTrigger();
+
+	pev->nextthink = 0;
+	pev->speed = 200;
+	m_flHeight = 150;
+
+	if (!FStringNull(pev->targetname))
+	{ // if targetted, spawn turned off
+		pev->solid = SOLID_NOT;
+		SetOrigin(pev->origin); // Unlink from trigger list
+		SetUse(&CTriggerMonsterJump::ToggleUse);
+	}
+}
+
+void CTriggerMonsterJump::Think()
+{
+	pev->solid = SOLID_NOT; // kill the trigger for now !!!UNDONE
+	SetOrigin(pev->origin); // Unlink from trigger list
+	SetThink(nullptr);
+}
+
+void CTriggerMonsterJump::Touch(CBaseEntity* pOther)
+{
+	if (!FBitSet(pOther->pev->flags, FL_MONSTER))
+	{ // touched by a non-monster.
+		return;
+	}
+
+	pOther->pev->origin.z += 1;
+
+	if (FBitSet(pOther->pev->flags, FL_ONGROUND))
+	{ // clear the onground so physics don't bitch
+		pOther->pev->flags &= ~FL_ONGROUND;
+	}
+
+	// toss the monster!
+	pOther->pev->velocity = pev->movedir * pev->speed;
+	pOther->pev->velocity.z += m_flHeight;
+	pev->nextthink = gpGlobals->time;
+}
+
 /**
 *	@brief Variable sized repeatable trigger. Must be targeted at one or more entities.
 */
@@ -786,6 +775,13 @@ class CTriggerMultiple : public CBaseTrigger
 {
 public:
 	void Spawn() override;
+
+	void EXPORT MultiTouch(CBaseEntity* pOther);
+
+	/**
+	 *	@brief the wait time has passed, so set back up for another activation
+	 */
+	void EXPORT MultiWaitOver();
 };
 
 LINK_ENTITY_TO_CLASS(trigger_multiple, CTriggerMultiple);
@@ -801,25 +797,7 @@ void CTriggerMultiple::Spawn()
 	SetTouch(&CTriggerMultiple::MultiTouch);
 }
 
-/**
-*	@brief Variable sized trigger. Triggers once, then removes itself.
-*/
-class CTriggerOnce : public CTriggerMultiple
-{
-public:
-	void Spawn() override;
-};
-
-LINK_ENTITY_TO_CLASS(trigger_once, CTriggerOnce);
-
-void CTriggerOnce::Spawn()
-{
-	m_flWait = -1;
-
-	CTriggerMultiple::Spawn();
-}
-
-void CBaseTrigger::MultiTouch(CBaseEntity* pOther)
+void CTriggerMultiple::MultiTouch(CBaseEntity* pOther)
 {
 	// Only touch clients, monsters, or pushables (depending on flags)
 	if (((pOther->pev->flags & FL_CLIENT) != 0 && (pev->spawnflags & SF_TRIGGER_NOCLIENTS) == 0) ||
@@ -841,56 +819,49 @@ void CBaseTrigger::MultiTouch(CBaseEntity* pOther)
 	}
 }
 
-void CBaseTrigger::ActivateMultiTrigger(CBaseEntity* pActivator)
+/**
+*	@brief Variable sized trigger. Triggers once, then removes itself.
+*/
+class CTriggerOnce : public CTriggerMultiple
 {
-	if (pev->nextthink > gpGlobals->time)
-		return; // still waiting for reset time
+public:
+	void Spawn() override;
+};
 
-	if (!UTIL_IsMasterTriggered(m_sMaster, pActivator))
-		return;
+LINK_ENTITY_TO_CLASS(trigger_once, CTriggerOnce);
 
-	if (!FStringNull(pev->noise))
-		EmitSound(CHAN_VOICE, STRING(pev->noise), 1, ATTN_NORM);
+void CTriggerOnce::Spawn()
+{
+	m_flWait = -1;
 
-	// don't trigger again until reset
-	// pev->takedamage = DAMAGE_NO;
-
-	m_hActivator = pActivator;
-	SUB_UseTargets(m_hActivator, USE_TOGGLE, 0);
-
-	if (!FStringNull(pev->message) && pActivator->IsPlayer())
-	{
-		UTIL_ShowMessage(STRING(pev->message), pActivator);
-		//		CLIENT_PRINTF( ENT( pActivator->pev ), print_center, STRING(pev->message) );
-	}
-
-	if (m_flWait > 0)
-	{
-		SetThink(&CBaseTrigger::MultiWaitOver);
-		pev->nextthink = gpGlobals->time + m_flWait;
-	}
-	else
-	{
-		// we can't just remove (self) here, because this is a touch function
-		// called while C code is looping through area links...
-		SetTouch(nullptr);
-		pev->nextthink = gpGlobals->time + 0.1;
-		SetThink(&CBaseTrigger::SUB_Remove);
-	}
+	CTriggerMultiple::Spawn();
 }
 
-void CBaseTrigger::MultiWaitOver()
+/**
+*	@brief Acts as an intermediary for an action that takes multiple inputs.
+*/
+class CTriggerCounter : public CBaseTrigger
 {
-	//	if (pev->max_health)
-	//		{
-	//		pev->health		= pev->max_health;
-	//		pev->takedamage	= DAMAGE_YES;
-	//		pev->solid		= SOLID_BBOX;
-	//		}
-	SetThink(nullptr);
+public:
+	void Spawn() override;
+
+	void EXPORT CounterUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+};
+
+LINK_ENTITY_TO_CLASS(trigger_counter, CTriggerCounter);
+
+void CTriggerCounter::Spawn()
+{
+	// By making the flWait be -1, this counter-trigger will disappear after it's activated
+	// (but of course it needs cTriggersLeft "uses" before that happens).
+	m_flWait = -1;
+
+	if (m_cTriggersLeft == 0)
+		m_cTriggersLeft = 2;
+	SetUse(&CTriggerCounter::CounterUse);
 }
 
-void CBaseTrigger::CounterUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
+void CTriggerCounter::CounterUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
 	m_cTriggersLeft--;
 	m_hActivator = pActivator;
@@ -931,28 +902,6 @@ void CBaseTrigger::CounterUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE
 		Logger->debug("Sequence completed!");
 
 	ActivateMultiTrigger(m_hActivator);
-}
-
-/**
-*	@brief Acts as an intermediary for an action that takes multiple inputs.
-*/
-class CTriggerCounter : public CBaseTrigger
-{
-public:
-	void Spawn() override;
-};
-
-LINK_ENTITY_TO_CLASS(trigger_counter, CTriggerCounter);
-
-void CTriggerCounter::Spawn()
-{
-	// By making the flWait be -1, this counter-trigger will disappear after it's activated
-	// (but of course it needs cTriggersLeft "uses" before that happens).
-	m_flWait = -1;
-
-	if (m_cTriggersLeft == 0)
-		m_cTriggersLeft = 2;
-	SetUse(&CTriggerCounter::CounterUse);
 }
 
 /**
@@ -1065,7 +1014,25 @@ void CTriggerPush::Touch(CBaseEntity* pOther)
 	}
 }
 
-void CBaseTrigger::TeleportTouch(CBaseEntity* pOther)
+class CTriggerTeleport : public CBaseTrigger
+{
+public:
+	void Spawn() override;
+
+	void EXPORT TeleportTouch(CBaseEntity* pOther);
+};
+
+LINK_ENTITY_TO_CLASS(trigger_teleport, CTriggerTeleport);
+LINK_ENTITY_TO_CLASS(info_teleport_destination, CPointEntity);
+
+void CTriggerTeleport::Spawn()
+{
+	InitTrigger();
+
+	SetTouch(&CTriggerTeleport::TeleportTouch);
+}
+
+void CTriggerTeleport::TeleportTouch(CBaseEntity* pOther)
 {
 	// Only teleport monsters or clients
 	if (!FBitSet(pOther->pev->flags, FL_CLIENT | FL_MONSTER))
@@ -1117,23 +1084,6 @@ void CBaseTrigger::TeleportTouch(CBaseEntity* pOther)
 	pOther->pev->fixangle = FIXANGLE_ABSOLUTE;
 	pOther->pev->velocity = pOther->pev->basevelocity = g_vecZero;
 }
-
-class CTriggerTeleport : public CBaseTrigger
-{
-public:
-	void Spawn() override;
-};
-
-LINK_ENTITY_TO_CLASS(trigger_teleport, CTriggerTeleport);
-
-void CTriggerTeleport::Spawn()
-{
-	InitTrigger();
-
-	SetTouch(&CTriggerTeleport::TeleportTouch);
-}
-
-LINK_ENTITY_TO_CLASS(info_teleport_destination, CPointEntity);
 
 class CTriggerGravity : public CBaseTrigger
 {
