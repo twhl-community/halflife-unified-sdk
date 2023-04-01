@@ -61,6 +61,8 @@ cvar_t multipower = {"mp_multipower", "0", FCVAR_SERVER};
 cvar_t sv_entityinfo_enabled{"sv_entityinfo_enabled", "0", FCVAR_SERVER};
 cvar_t sv_entityinfo_eager{"sv_entityinfo_eager", "1", FCVAR_SERVER};
 
+cvar_t sv_schedule_debug{"sv_schedule_debug", "0", FCVAR_SERVER};
+
 // Register your console variables here
 // This gets called one time when the game is initialied
 void GameDLLInit()
@@ -114,6 +116,13 @@ void GameDLLInit()
 	CVAR_REGISTER(&sv_entityinfo_eager);
 
 	// END REGISTER CVARS FOR OPPOSING FORCE
+
+	// Default to on in debug builds to match original behavior.
+#ifdef DEBUG
+	sv_schedule_debug.string = "1";
+#endif
+
+	CVAR_REGISTER(&sv_schedule_debug);
 
 	// Link user messages immediately so there are no race conditions.
 	LinkUserMessages();

@@ -52,6 +52,8 @@ extern cvar_t spamdelay;
 extern cvar_t sv_entityinfo_enabled;
 extern cvar_t sv_entityinfo_eager;
 
+extern cvar_t sv_schedule_debug;
+
 // Engine Cvars
 inline cvar_t* g_psv_gravity;
 inline cvar_t* g_psv_aim;

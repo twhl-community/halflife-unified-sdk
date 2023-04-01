@@ -145,17 +145,18 @@ bool CBaseMonster::FScheduleValid()
 
 	if (HasConditions(m_pSchedule->iInterruptMask | bits_COND_SCHEDULE_DONE | bits_COND_TASK_FAILED))
 	{
-#ifdef DEBUG
-		if (HasConditions(bits_COND_TASK_FAILED) && m_failSchedule == SCHED_NONE)
+		if (sv_schedule_debug.value != 0)
 		{
-			// fail! Send a visual indicator.
-			AILogger->debug("Schedule: {} Failed", m_pSchedule->pName);
+			if (HasConditions(bits_COND_TASK_FAILED) && m_failSchedule == SCHED_NONE)
+			{
+				// fail! Send a visual indicator.
+				AILogger->debug("Schedule: {} Failed", m_pSchedule->pName);
 
-			Vector tmp = pev->origin;
-			tmp.z = pev->absmax.z + 16;
-			UTIL_Sparks(tmp);
+				Vector tmp = pev->origin;
+				tmp.z = pev->absmax.z + 16;
+				UTIL_Sparks(tmp);
+			}
 		}
-#endif // DEBUG
 
 		// some condition has interrupted the schedule, or the schedule is done
 		return false;
