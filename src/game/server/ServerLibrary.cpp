@@ -13,6 +13,7 @@
  *
  ****/
 
+#include <chrono>
 #include <regex>
 #include <stdexcept>
 #include <string_view>
@@ -376,6 +377,8 @@ void ServerLibrary::CreateConfigDefinitions()
 
 void ServerLibrary::LoadServerConfigFiles()
 {
+	const auto start = std::chrono::high_resolution_clock::now();
+
 	ServerConfigContext context{.State = m_MapState};
 
 	if (const auto cfgFile = servercfgfile.string; cfgFile && '\0' != cfgFile[0])
@@ -396,9 +399,17 @@ void ServerLibrary::LoadServerConfigFiles()
 	g_MaterialSystem.LoadMaterials(context.MaterialsFiles);
 	g_Skill.LoadSkillConfigFiles(context.SkillFiles);
 
-	m_MapState.m_GlobalModelReplacement = g_ReplacementMaps.LoadMultiple(context.GlobalModelReplacementFiles, {.CaseSensitive = false});
-	m_MapState.m_GlobalSentenceReplacement = g_ReplacementMaps.LoadMultiple(context.GlobalSentenceReplacementFiles, {.CaseSensitive = true});
-	m_MapState.m_GlobalSoundReplacement = g_ReplacementMaps.LoadMultiple(context.GlobalSoundReplacementFiles, {.CaseSensitive = false});
+	m_MapState.m_GlobalModelReplacement = g_ReplacementMaps.LoadMultiple(
+		context.GlobalModelReplacementFiles, {.CaseSensitive = false});
+	m_MapState.m_GlobalSentenceReplacement = g_ReplacementMaps.LoadMultiple(
+		context.GlobalSentenceReplacementFiles, {.CaseSensitive = true});
+	m_MapState.m_GlobalSoundReplacement = g_ReplacementMaps.LoadMultiple(
+		context.GlobalSoundReplacementFiles, {.CaseSensitive = false});
+
+	const auto timeElapsed = std::chrono::high_resolution_clock::now() - start;
+
+	g_GameLogger->trace("Server configurations loaded in {}ms",
+		std::chrono::duration_cast<std::chrono::milliseconds>(timeElapsed).count());
 }
 
 void ServerLibrary::LoadMapChangeConfigFile()
