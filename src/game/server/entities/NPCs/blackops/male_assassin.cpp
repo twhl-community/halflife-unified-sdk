@@ -126,7 +126,7 @@ void CMOFAssassin::GibMonster()
 		CBaseEntity* pGun;
 		if (FBitSet(pev->weapons, HGRUNT_9MMAR))
 		{
-			pGun = DropItem("weapon_9mmAR", vecGunPos, vecGunAngles);
+			pGun = DropItem("weapon_9mmar", vecGunPos, vecGunAngles);
 		}
 		else
 		{
@@ -140,7 +140,7 @@ void CMOFAssassin::GibMonster()
 
 		if (FBitSet(pev->weapons, HGRUNT_GRENADELAUNCHER))
 		{
-			pGun = DropItem("ammo_ARgrenades", vecGunPos, vecGunAngles);
+			pGun = DropItem("ammo_argrenades", vecGunPos, vecGunAngles);
 			if (pGun)
 			{
 				pGun->pev->velocity = Vector(RANDOM_FLOAT(-100, 100), RANDOM_FLOAT(-100, 100), RANDOM_FLOAT(200, 300));
@@ -270,7 +270,7 @@ void CMOFAssassin::HandleAnimEvent(MonsterEvent_t* pEvent)
 		// now spawn a gun.
 		if (FBitSet(pev->weapons, HGRUNT_9MMAR))
 		{
-			DropItem("weapon_9mmAR", vecGunPos, vecGunAngles);
+			DropItem("weapon_9mmar", vecGunPos, vecGunAngles);
 		}
 		else
 		{
@@ -278,7 +278,7 @@ void CMOFAssassin::HandleAnimEvent(MonsterEvent_t* pEvent)
 		}
 		if (FBitSet(pev->weapons, HGRUNT_GRENADELAUNCHER))
 		{
-			DropItem("ammo_ARgrenades", BodyTarget(pev->origin), vecGunAngles);
+			DropItem("ammo_argrenades", BodyTarget(pev->origin), vecGunAngles);
 		}
 	}
 	break;

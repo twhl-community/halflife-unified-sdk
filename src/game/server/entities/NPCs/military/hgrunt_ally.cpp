@@ -157,7 +157,7 @@ void CHGruntAlly::DropWeapon(bool applyVelocity)
 		}
 		else
 		{
-			pGun = DropItem("weapon_9mmAR", vecGunPos, vecGunAngles);
+			pGun = DropItem("weapon_9mmar", vecGunPos, vecGunAngles);
 		}
 		if (pGun && applyVelocity)
 		{
@@ -167,7 +167,7 @@ void CHGruntAlly::DropWeapon(bool applyVelocity)
 
 		if (FBitSet(pev->weapons, HGruntAllyWeaponFlag::GrenadeLauncher))
 		{
-			pGun = DropItem("ammo_ARgrenades", vecGunPos, vecGunAngles);
+			pGun = DropItem("ammo_argrenades", vecGunPos, vecGunAngles);
 			if (pGun && applyVelocity)
 			{
 				pGun->pev->velocity = Vector(RANDOM_FLOAT(-100, 100), RANDOM_FLOAT(-100, 100), RANDOM_FLOAT(200, 300));

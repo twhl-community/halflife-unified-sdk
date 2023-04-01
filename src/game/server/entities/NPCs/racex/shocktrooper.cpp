@@ -2204,7 +2204,7 @@ bool CDeadShockTrooper::KeyValue(KeyValueData* pkvd)
 	return CBaseMonster::KeyValue(pkvd);
 }
 
-LINK_ENTITY_TO_CLASS(monster_ShockTrooper_dead, CDeadShockTrooper);
+LINK_ENTITY_TO_CLASS(monster_shocktrooper_dead, CDeadShockTrooper);
 
 void CDeadShockTrooper::Spawn()
 {

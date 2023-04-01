@@ -131,7 +131,7 @@ void FireTargets(const char* targetName, CBaseEntity* pActivator, CBaseEntity* p
 	}
 }
 
-LINK_ENTITY_TO_CLASS(DelayedUse, CBaseDelay);
+LINK_ENTITY_TO_CLASS(delayed_use, CBaseDelay);
 
 void CBaseDelay::SUB_UseTargets(CBaseEntity* pActivator, USE_TYPE useType, float value)
 {
@@ -147,7 +147,7 @@ void CBaseDelay::SUB_UseTargets(CBaseEntity* pActivator, USE_TYPE useType, float
 	if (m_flDelay != 0)
 	{
 		// create a temp object to fire at a later time
-		CBaseDelay* pTemp = g_EntityDictionary->Create<CBaseDelay>("DelayedUse");
+		CBaseDelay* pTemp = g_EntityDictionary->Create<CBaseDelay>("delayed_use");
 
 		pTemp->pev->nextthink = gpGlobals->time + m_flDelay;
 

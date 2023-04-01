@@ -15,7 +15,9 @@
 
 #pragma once
 
+#include <algorithm>
 #include <cassert>
+#include <cctype>
 #include <concepts>
 #include <ranges>
 #include <string_view>
@@ -179,8 +181,8 @@ public:
 	}
 
 	/**
-	*	@brief Destroys the CBaseEntity object. Does not free the associated edict.
-	*/
+	 *	@brief Destroys the CBaseEntity object. Does not free the associated edict.
+	 */
 	void Destroy(CBaseEntity* entity)
 	{
 		if (!entity)
@@ -256,6 +258,16 @@ template <typename TEntity>
 void RegisterEntityDescriptor(EntityDescriptor<TEntity>* descriptor)
 {
 	assert(descriptor);
+
+#ifndef NDEBUG
+	const auto name = descriptor->GetClassName();
+
+	if (std::find_if(name.begin(), name.end(), [](auto c)
+			{ return std::isupper(c) != 0; }) != name.end())
+	{
+		assert(!"Entity classnames should not contain uppercase letters");
+	}
+#endif
 
 	// This is where each dictionary is initially constructed and built to add all entity classes.
 	// Ideally some form of reflection would be used to build these dictionaries after the initial dictionary has been created,

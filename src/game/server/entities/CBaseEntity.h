@@ -378,7 +378,7 @@ public:
 		int iTracerFreq = 4, int iDamage = 0, CBaseEntity* attacker = nullptr, int shared_rand = 0);
 
 	/**
-	*	@brief If self.delay is set, a DelayedUse entity will be created that will actually
+	*	@brief If self.delay is set, a delayed_use entity will be created that will actually
 	*	do the SUB_UseTargets after that many seconds have passed.
 	*	Removes all entities with a targetname that match self.killtarget,
 	*	and removes them, so some events can remove other triggers.

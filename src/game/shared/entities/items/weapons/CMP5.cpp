@@ -17,7 +17,7 @@
 #include "CMP5.h"
 #include "UserMessages.h"
 
-LINK_ENTITY_TO_CLASS(weapon_9mmAR, CMP5);
+LINK_ENTITY_TO_CLASS(weapon_9mmar, CMP5);
 
 void CMP5::OnCreate()
 {
@@ -257,7 +257,7 @@ public:
 	}
 };
 
-LINK_ENTITY_TO_CLASS(ammo_9mmAR, CMP5AmmoClip);
+LINK_ENTITY_TO_CLASS(ammo_9mmar, CMP5AmmoClip);
 
 class CMP5Chainammo : public CBasePlayerAmmo
 {
@@ -285,4 +285,4 @@ public:
 	}
 };
 
-LINK_ENTITY_TO_CLASS(ammo_ARgrenades, CMP5AmmoGrenade);
+LINK_ENTITY_TO_CLASS(ammo_argrenades, CMP5AmmoGrenade);

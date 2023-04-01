@@ -29,9 +29,9 @@ const char* CBreakable::pSpawnObjects[] =
 		"item_healthkit",	  // 2
 		"weapon_9mmhandgun",  // 3
 		"ammo_9mmclip",		  // 4
-		"weapon_9mmAR",		  // 5
-		"ammo_9mmAR",		  // 6
-		"ammo_ARgrenades",	  // 7
+		"weapon_9mmar",		  // 5
+		"ammo_9mmar",		  // 6
+		"ammo_argrenades",	  // 7
 		"weapon_shotgun",	  // 8
 		"ammo_buckshot",	  // 9
 		"weapon_crossbow",	  // 10

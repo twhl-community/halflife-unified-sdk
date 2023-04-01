@@ -229,8 +229,8 @@ void W_Precache()
 
 	UTIL_PrecacheOther("ammo_buckshot");
 	UTIL_PrecacheOther("ammo_9mmclip");
-	UTIL_PrecacheOther("ammo_9mmAR");
-	UTIL_PrecacheOther("ammo_ARgrenades");
+	UTIL_PrecacheOther("ammo_9mmar");
+	UTIL_PrecacheOther("ammo_argrenades");
 	UTIL_PrecacheOther("ammo_357");
 	UTIL_PrecacheOther("ammo_gaussclip");
 	UTIL_PrecacheOther("ammo_rpgclip");
