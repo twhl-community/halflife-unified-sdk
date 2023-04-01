@@ -18,6 +18,8 @@
 *	functions dealing with damage infliction & death
 */
 
+#include <EASTL/fixed_vector.h>
+
 #include "cbase.h"
 #include "func_break.h"
 
@@ -166,19 +168,17 @@ void CGib::SpawnHeadGib(CBaseEntity* victim)
 
 void CGib::SpawnRandomGibs(CBaseEntity* victim, int cGibs, const GibData& gibData)
 {
-	// Track the number of uses of a particular submodel so we can avoid spawning too many of the same
-	auto pLimitTracking = gibData.Limits != nullptr ? reinterpret_cast<int*>(stackalloc(sizeof(int) * gibData.SubModelCount)) : nullptr;
+	// Track the number of uses of a particular submodel so we can avoid spawning too many of the same submodel
+	eastl::fixed_vector<int, 64> limitTracking;
 
-	if (pLimitTracking)
+	if (gibData.Limits)
 	{
-		memset(pLimitTracking, 0, sizeof(int) * gibData.SubModelCount);
+		limitTracking.resize(gibData.SubModelCount);
 	}
 
-	auto currentBody = 0;
+	int currentBody = 0;
 
-	int cSplat;
-
-	for (cSplat = 0; cSplat < cGibs; cSplat++)
+	for (int cSplat = 0; cSplat < cGibs; cSplat++)
 	{
 		CGib* pGib = g_EntityDictionary->Create<CGib>("gib");
 
@@ -191,16 +191,25 @@ void CGib::SpawnRandomGibs(CBaseEntity* victim, int cGibs, const GibData& gibDat
 		{
 			pGib->Spawn(gibData.ModelName);
 
-			if (pLimitTracking)
+			if (gibData.Limits)
 			{
-				if (pLimitTracking[currentBody] >= gibData.Limits[currentBody].MaxGibs)
+				if (limitTracking[currentBody] >= gibData.Limits[currentBody].MaxGibs)
 				{
 					++currentBody;
+
+					// We've hit the limit, stop spawning gibs.
+					// This should only happen if calling code told us to spawn more gibs than the provided submodel limits allow for.
+					if (currentBody >= gibData.SubModelCount)
+					{
+						Logger->warn("Too many gibs spawned; gib submodel limit reached (code configuration issue)");
+						UTIL_Remove(pGib);
+						return;
+					}
 				}
 
 				pGib->pev->body = currentBody;
 
-				++pLimitTracking[currentBody];
+				++limitTracking[currentBody];
 			}
 			else
 			{
@@ -249,8 +258,6 @@ void CGib::SpawnRandomGibs(CBaseEntity* victim, int cGibs, const GibData& gibDat
 		}
 		pGib->LimitVelocity();
 	}
-
-	stackfree(pLimitTracking);
 }
 
 // start at one to avoid throwing random amounts of skulls (0th gib)

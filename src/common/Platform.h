@@ -92,25 +92,13 @@ static_assert(sizeof(string_t) == sizeof(string_t_value), "string_t must not con
 #define DLLEXPORT __declspec(dllexport)
 #define DLLHIDDEN
 
-#define stackalloc(size) _alloca(size)
-
-// Note: an implementation of stackfree must safely ignore null pointers
-#define stackfree(address)
-
 #else // WIN32
-#include <alloca.h>
 
 #define stricmp strcasecmp
 #define strnicmp strncasecmp
-#define _alloca alloca
 
 #define DLLEXPORT __attribute__((visibility("default")))
 #define DLLHIDDEN __attribute__((visibility("hidden")))
-
-#define stackalloc(size) alloca(size)
-
-// Note: an implementation of stackfree must safely ignore null pointers
-#define stackfree(address)
 
 #endif // WIN32
 

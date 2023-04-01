@@ -1153,7 +1153,7 @@ const GibLimit VoltigoreGibLimits[] =
 		{2},
 };
 
-const GibData VoltigoreGibs = {"models/vgibs.mdl", 0, 9, VoltigoreGibLimits};
+const GibData VoltigoreGibs = {"models/vgibs.mdl", 0, std::ssize(VoltigoreGibLimits), VoltigoreGibLimits};
 
 void COFVoltigore::GibMonster()
 {
