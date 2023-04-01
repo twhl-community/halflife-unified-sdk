@@ -262,6 +262,10 @@ void ServerLibrary::NewMapStarted(bool loadGame)
 	LoadServerConfigFiles();
 
 	sentences::g_Sentences.NewMapStarted();
+
+	// Reset sky name to its default value. If the map specifies its own sky
+	// it will be set in CWorld::KeyValue or restored by the engine on save game load.
+	CVAR_SET_STRING("sv_skyname", DefaultSkyName);
 }
 
 void ServerLibrary::PreMapActivate()

@@ -27,6 +27,12 @@
 constexpr int MAX_COORD_INTEGER = 4096;
 constexpr int MAX_EXTENT = 2 * MAX_COORD_INTEGER;
 
+/**
+ *	@brief Default sky to set if the map does not provide one.
+ *	Should match the default value of the engine's @c sv_skyname cvar.
+ */
+constexpr char DefaultSkyName[] = "desert";
+
 #define MAX_WEAPONS 64 // ???
 
 /**

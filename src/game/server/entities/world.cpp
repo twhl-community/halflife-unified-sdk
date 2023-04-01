@@ -624,6 +624,7 @@ bool CWorld::KeyValue(KeyValueData* pkvd)
 	if (FStrEq(pkvd->szKeyName, "skyname"))
 	{
 		// Sent over net now.
+		// Reset to default in ServerLibrary::NewMapStarted.
 		CVAR_SET_STRING("sv_skyname", pkvd->szValue);
 		return true;
 	}
