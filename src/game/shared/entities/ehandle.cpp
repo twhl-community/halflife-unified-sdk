@@ -16,48 +16,31 @@
 #include "cbase.h"
 #include "ehandle.h"
 
-edict_t* EHANDLE::Get()
+edict_t* BaseEntityHandle::GetEdict() const
 {
-	if (m_pent)
-	{
-		if (m_pent->serialnumber == m_serialnumber)
-			return m_pent;
-		else
-			return nullptr;
-	}
-	return nullptr;
-};
+	if (!m_Edict)
+		return nullptr;
 
-edict_t* EHANDLE::Set(edict_t* pent)
-{
-	m_pent = pent;
-	if (pent)
-		m_serialnumber = m_pent->serialnumber;
-	return pent;
+	if (m_Edict->serialnumber != m_SerialNumber)
+		return nullptr;
+
+	return m_Edict;
 }
 
-EHANDLE::operator CBaseEntity*()
+CBaseEntity* BaseEntityHandle::InternalGetEntity() const
 {
-	return (CBaseEntity*)GET_PRIVATE(Get());
+	return (CBaseEntity*)GET_PRIVATE(GetEdict());
 }
 
-CBaseEntity* EHANDLE::operator=(CBaseEntity* pEntity)
+void BaseEntityHandle::InternalSetEntity(CBaseEntity* entity)
 {
-	if (pEntity)
+	if (!entity)
 	{
-		m_pent = ENT(pEntity->pev);
-		if (m_pent)
-			m_serialnumber = m_pent->serialnumber;
+		m_Edict = nullptr;
+		m_SerialNumber = 0;
+		return;
 	}
-	else
-	{
-		m_pent = nullptr;
-		m_serialnumber = 0;
-	}
-	return pEntity;
-}
 
-CBaseEntity* EHANDLE::operator->()
-{
-	return (CBaseEntity*)GET_PRIVATE(Get());
+	m_Edict = entity->edict();
+	m_SerialNumber = m_Edict->serialnumber;
 }

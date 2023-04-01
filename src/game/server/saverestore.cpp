@@ -533,7 +533,7 @@ bool CSave::WriteFields(const char* pname, void* pBaseData, TYPEDESCRIPTION* pFi
 					entityArray[j] = EntityIndex(((edict_t**)pOutputData)[j]);
 					break;
 				case FIELD_EHANDLE:
-					entityArray[j] = EntityIndex((CBaseEntity*)(((EHANDLE*)pOutputData)[j]));
+					entityArray[j] = EntityIndex(((BaseEntityHandle*)pOutputData)[j].InternalGetEntity());
 					break;
 				}
 			}
@@ -737,13 +737,11 @@ int CRestore::ReadField(void* pBaseData, TYPEDESCRIPTION* pFields, int fieldCoun
 						break;
 					case FIELD_EHANDLE:
 						// Input and Output sizes are different!
-						pOutputData = (char*)pOutputData + j * (sizeof(EHANDLE) - gSizes[pTest->fieldType]);
+						pOutputData = (char*)pOutputData + j * (sizeof(BaseEntityHandle) - gSizes[pTest->fieldType]);
 						entityIndex = *(int*)pInputData;
 						pent = EntityFromIndex(entityIndex);
-						if (pent)
-							*((EHANDLE*)pOutputData) = CBaseEntity::Instance(pent);
-						else
-							*((EHANDLE*)pOutputData) = nullptr;
+
+						((BaseEntityHandle*)pOutputData)->InternalSetEntity(pent ? CBaseEntity::Instance(pent) : nullptr);
 						break;
 					case FIELD_VECTOR:
 						((float*)pOutputData)[0] = ((float*)pInputData)[0];
