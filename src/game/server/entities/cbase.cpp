@@ -80,6 +80,14 @@ void DispatchKeyValue(edict_t* pentKeyvalue, KeyValueData* pkvd)
 
 	g_Server.CheckForNewMapStart(false);
 
+	// Don't allow classname changes once the classname has been set.
+	if (!FStringNull(pentKeyvalue->v.classname) && FStrEq(pkvd->szKeyName, "classname"))
+	{
+		CBaseEntity::Logger->debug("{}: Duplicate classname \"{}\" ignored",
+			STRING(pentKeyvalue->v.classname), pkvd->szValue);
+		return;
+	}
+
 	EntvarsKeyvalue(&pentKeyvalue->v, pkvd);
 
 	// If the key was an entity variable, or there's no class set yet, don't look for the object, it may
@@ -93,7 +101,7 @@ void DispatchKeyValue(edict_t* pentKeyvalue, KeyValueData* pkvd)
 	if (!pEntity)
 		return;
 
-	pkvd->fHandled = pEntity->RequiredKeyValue(pkvd);
+	pkvd->fHandled = static_cast<int32>(pEntity->RequiredKeyValue(pkvd));
 
 	if (pkvd->fHandled != 0)
 	{
