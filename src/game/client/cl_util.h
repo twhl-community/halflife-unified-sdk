@@ -86,8 +86,8 @@ inline void FillRGBA(int x, int y, int width, int height, const RGB24& color, in
 #define XPROJECT(x) ((1.0f + (x)) * ScreenWidth * 0.5f)
 #define YPROJECT(y) ((1.0f - (y)) * ScreenHeight * 0.5f)
 
-#define XRES(x) (x * ((float)ScreenWidth / 640))
-#define YRES(y) (y * ((float)ScreenHeight / 480))
+#define XRES(x) ((x) * ((float)ScreenWidth / 640))
+#define YRES(y) ((y) * ((float)ScreenHeight / 480))
 
 #define GetScreenInfo (*gEngfuncs.pfnGetScreenInfo)
 #define ServerCmd (*gEngfuncs.pfnServerCmd)
