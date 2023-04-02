@@ -450,7 +450,7 @@ void EntvarsKeyvalue(entvars_t* pev, KeyValueData* pkvd)
 				break;
 
 			default:
-			case FIELD_EVARS:
+			case FIELD_DEPRECATED2:
 			case FIELD_CLASSPTR:
 			case FIELD_EDICT:
 			case FIELD_DEPRECATED1:
@@ -514,7 +514,6 @@ bool CSave::WriteFields(const char* pname, void* pBaseData, TYPEDESCRIPTION* pFi
 			WriteString(pTest->fieldName, (string_t*)pOutputData, pTest->fieldSize);
 			break;
 		case FIELD_CLASSPTR:
-		case FIELD_EVARS:
 		case FIELD_EDICT:
 		case FIELD_EHANDLE:
 			if (pTest->fieldSize > MAX_ENTITYARRAY)
@@ -523,9 +522,6 @@ bool CSave::WriteFields(const char* pname, void* pBaseData, TYPEDESCRIPTION* pFi
 			{
 				switch (pTest->fieldType)
 				{
-				case FIELD_EVARS:
-					entityArray[j] = EntityIndex(((entvars_t**)pOutputData)[j]);
-					break;
 				case FIELD_CLASSPTR:
 					entityArray[j] = EntityIndex(((CBaseEntity**)pOutputData)[j]);
 					break;
@@ -585,6 +581,7 @@ bool CSave::WriteFields(const char* pname, void* pBaseData, TYPEDESCRIPTION* pFi
 			break;
 
 		case FIELD_DEPRECATED1:
+		case FIELD_DEPRECATED2:
 		default:
 			Logger->error("Bad field type");
 		}
@@ -714,14 +711,6 @@ int CRestore::ReadField(void* pBaseData, TYPEDESCRIPTION* pFields, int fieldCoun
 							}
 						}
 						break;
-					case FIELD_EVARS:
-						entityIndex = *(int*)pInputData;
-						pent = EntityFromIndex(entityIndex);
-						if (pent)
-							*((entvars_t**)pOutputData) = VARS(pent);
-						else
-							*((entvars_t**)pOutputData) = nullptr;
-						break;
 					case FIELD_CLASSPTR:
 						entityIndex = *(int*)pInputData;
 						pent = EntityFromIndex(entityIndex);
@@ -791,6 +780,7 @@ int CRestore::ReadField(void* pBaseData, TYPEDESCRIPTION* pFields, int fieldCoun
 						break;
 
 					case FIELD_DEPRECATED1:
+					case FIELD_DEPRECATED2:
 					default:
 						Logger->error("Bad field type");
 					}

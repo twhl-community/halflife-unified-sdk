@@ -510,7 +510,7 @@ public:
 	bool Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
-	entvars_t* m_pevCurrentTarget;
+	EHANDLE m_CurrentTarget;
 	bool m_activated;
 };
 
@@ -518,7 +518,7 @@ LINK_ENTITY_TO_CLASS(func_train, CFuncTrain);
 
 TYPEDESCRIPTION CFuncTrain::m_SaveData[] =
 	{
-		DEFINE_FIELD(CFuncTrain, m_pevCurrentTarget, FIELD_EVARS),
+		DEFINE_FIELD(CFuncTrain, m_CurrentTarget, FIELD_EHANDLE),
 		DEFINE_FIELD(CFuncTrain, m_activated, FIELD_BOOLEAN),
 };
 
@@ -558,15 +558,15 @@ void CFuncTrain::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE use
 void CFuncTrain::Wait()
 {
 	// Fire the pass target if there is one
-	if (!FStringNull(m_pevCurrentTarget->message))
+	if (!FStringNull(m_CurrentTarget->pev->message))
 	{
-		FireTargets(STRING(m_pevCurrentTarget->message), this, this, USE_TOGGLE, 0);
-		if (FBitSet(m_pevCurrentTarget->spawnflags, SF_CORNER_FIREONCE))
-			m_pevCurrentTarget->message = string_t::Null;
+		FireTargets(STRING(m_CurrentTarget->pev->message), this, this, USE_TOGGLE, 0);
+		if (FBitSet(m_CurrentTarget->pev->spawnflags, SF_CORNER_FIREONCE))
+			m_CurrentTarget->pev->message = string_t::Null;
 	}
 
 	// need pointer to LAST target.
-	if (FBitSet(m_pevCurrentTarget->spawnflags, SF_TRAIN_WAIT_RETRIGGER) || (pev->spawnflags & SF_TRAIN_WAIT_RETRIGGER) != 0)
+	if (FBitSet(m_CurrentTarget->pev->spawnflags, SF_TRAIN_WAIT_RETRIGGER) || (pev->spawnflags & SF_TRAIN_WAIT_RETRIGGER) != 0)
 	{
 		pev->spawnflags |= SF_TRAIN_WAIT_RETRIGGER;
 		// clear the sound channel.
@@ -613,16 +613,16 @@ void CFuncTrain::Next()
 	pev->target = pTarg->pev->target;
 	m_flWait = pTarg->GetDelay();
 
-	if (m_pevCurrentTarget && m_pevCurrentTarget->speed != 0)
+	if (m_CurrentTarget && m_CurrentTarget->pev->speed != 0)
 	{ // don't copy speed from target if it is 0 (uninitialized)
-		pev->speed = m_pevCurrentTarget->speed;
+		pev->speed = m_CurrentTarget->pev->speed;
 		Logger->trace("Train {} speed to {:4.2f}", STRING(pev->targetname), pev->speed);
 	}
-	m_pevCurrentTarget = pTarg->pev; // keep track of this since path corners change our target for us.
+	m_CurrentTarget = pTarg; // keep track of this since path corners change our target for us.
 
 	pev->enemy = pTarg->edict(); // hack
 
-	if (FBitSet(m_pevCurrentTarget->spawnflags, SF_CORNER_TELEPORT))
+	if (FBitSet(m_CurrentTarget->pev->spawnflags, SF_CORNER_TELEPORT))
 	{
 		// Path corner has indicated a teleport to the next corner.
 		SetBits(pev->effects, EF_NOINTERP);
@@ -658,7 +658,7 @@ void CFuncTrain::Activate()
 		}
 
 		pev->target = target->pev->target;
-		m_pevCurrentTarget = target->pev; // keep track of this since path corners change our target for us.
+		m_CurrentTarget = target; // keep track of this since path corners change our target for us.
 
 		SetOrigin(target->pev->origin - (pev->mins + pev->maxs) * 0.5);
 
@@ -756,7 +756,7 @@ public:
 	bool Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
-	entvars_t* m_pevCurrentTarget;
+	EHANDLE m_CurrentTarget;
 	bool m_activated;
 
 	float m_maxFrame;
@@ -772,7 +772,7 @@ LINK_ENTITY_TO_CLASS(env_spritetrain, CSpriteTrain);
 
 TYPEDESCRIPTION CSpriteTrain::m_SaveData[] =
 	{
-		DEFINE_FIELD(CSpriteTrain, m_pevCurrentTarget, FIELD_EVARS),
+		DEFINE_FIELD(CSpriteTrain, m_CurrentTarget, FIELD_EHANDLE),
 		DEFINE_FIELD(CSpriteTrain, m_activated, FIELD_BOOLEAN),
 		DEFINE_FIELD(CSpriteTrain, m_maxFrame, FIELD_FLOAT),
 		DEFINE_FIELD(CSpriteTrain, m_lastTime, FIELD_TIME),
@@ -859,15 +859,15 @@ void CSpriteTrain::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE u
 void CSpriteTrain::Wait()
 {
 	// Fire the pass target if there is one
-	if (!FStringNull(m_pevCurrentTarget->message))
+	if (!FStringNull(m_CurrentTarget->pev->message))
 	{
-		FireTargets(STRING(m_pevCurrentTarget->message), this, this, USE_TOGGLE, 0);
-		if (FBitSet(m_pevCurrentTarget->spawnflags, SF_CORNER_FIREONCE))
-			m_pevCurrentTarget->message = string_t::Null;
+		FireTargets(STRING(m_CurrentTarget->pev->message), this, this, USE_TOGGLE, 0);
+		if (FBitSet(m_CurrentTarget->pev->spawnflags, SF_CORNER_FIREONCE))
+			m_CurrentTarget->pev->message = string_t::Null;
 	}
 
 	// need pointer to LAST target.
-	if (FBitSet(m_pevCurrentTarget->spawnflags, SF_TRAIN_WAIT_RETRIGGER) || (pev->spawnflags & SF_TRAIN_WAIT_RETRIGGER) != 0)
+	if (FBitSet(m_CurrentTarget->pev->spawnflags, SF_TRAIN_WAIT_RETRIGGER) || (pev->spawnflags & SF_TRAIN_WAIT_RETRIGGER) != 0)
 	{
 		pev->spawnflags |= SF_TRAIN_WAIT_RETRIGGER;
 		// clear the sound channel.
@@ -915,16 +915,16 @@ void CSpriteTrain::Next()
 	pev->target = pTarg->pev->target;
 	m_flWait = pTarg->GetDelay();
 
-	if (m_pevCurrentTarget && m_pevCurrentTarget->speed != 0)
+	if (m_CurrentTarget && m_CurrentTarget->pev->speed != 0)
 	{ // don't copy speed from target if it is 0 (uninitialized)
-		pev->speed = m_pevCurrentTarget->speed;
+		pev->speed = m_CurrentTarget->pev->speed;
 		Logger->trace("Train {} speed to {:4.2f}", STRING(pev->targetname), pev->speed);
 	}
-	m_pevCurrentTarget = pTarg->pev; // keep track of this since path corners change our target for us.
+	m_CurrentTarget = pTarg; // keep track of this since path corners change our target for us.
 
 	pev->enemy = pTarg->edict(); // hack
 
-	if (FBitSet(m_pevCurrentTarget->spawnflags, SF_CORNER_TELEPORT))
+	if (FBitSet(m_CurrentTarget->pev->spawnflags, SF_CORNER_TELEPORT))
 	{
 		// Path corner has indicated a teleport to the next corner.
 		SetBits(pev->effects, EF_NOINTERP);
@@ -960,7 +960,7 @@ void CSpriteTrain::Activate()
 		}
 
 		pev->target = target->pev->target;
-		m_pevCurrentTarget = target->pev; // keep track of this since path corners change our target for us.
+		m_CurrentTarget = target; // keep track of this since path corners change our target for us.
 
 		SetOrigin(target->pev->origin - (pev->mins + pev->maxs) * 0.5);
 

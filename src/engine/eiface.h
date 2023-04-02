@@ -364,7 +364,7 @@ enum FIELDTYPE
 	FIELD_DEPRECATED1,		// An entity offset (EOFFSET). Deprecated, do not use.
 	FIELD_CLASSPTR,			// CBaseEntity *
 	FIELD_EHANDLE,			// Entity handle
-	FIELD_EVARS,			// EVARS *
+	FIELD_DEPRECATED2,		// EVARS *. Deprecated, do not use.
 	FIELD_EDICT,			// edict_t *, or edict_t *  (same thing)
 	FIELD_VECTOR,			// Any vector
 	FIELD_POSITION_VECTOR,	// A world coordinate (these are fixed up across level transitions automagically)
