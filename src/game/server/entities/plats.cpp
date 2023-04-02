@@ -497,7 +497,6 @@ public:
 
 	void Blocked(CBaseEntity* pOther) override;
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
-	bool KeyValue(KeyValueData* pkvd) override;
 
 
 	void EXPORT Wait();
@@ -512,7 +511,6 @@ public:
 	static TYPEDESCRIPTION m_SaveData[];
 
 	entvars_t* m_pevCurrentTarget;
-	int m_sounds;
 	bool m_activated;
 };
 
@@ -520,23 +518,11 @@ LINK_ENTITY_TO_CLASS(func_train, CFuncTrain);
 
 TYPEDESCRIPTION CFuncTrain::m_SaveData[] =
 	{
-		DEFINE_FIELD(CFuncTrain, m_sounds, FIELD_INTEGER),
 		DEFINE_FIELD(CFuncTrain, m_pevCurrentTarget, FIELD_EVARS),
 		DEFINE_FIELD(CFuncTrain, m_activated, FIELD_BOOLEAN),
 };
 
 IMPLEMENT_SAVERESTORE(CFuncTrain, CBasePlatTrain);
-
-bool CFuncTrain::KeyValue(KeyValueData* pkvd)
-{
-	if (FStrEq(pkvd->szKeyName, "sounds"))
-	{
-		m_sounds = atoi(pkvd->szValue);
-		return true;
-	}
-
-	return CBasePlatTrain::KeyValue(pkvd);
-}
 
 void CFuncTrain::Blocked(CBaseEntity* pOther)
 
@@ -771,7 +757,6 @@ public:
 	static TYPEDESCRIPTION m_SaveData[];
 
 	entvars_t* m_pevCurrentTarget;
-	int m_sounds;
 	bool m_activated;
 
 	float m_maxFrame;
@@ -787,7 +772,6 @@ LINK_ENTITY_TO_CLASS(env_spritetrain, CSpriteTrain);
 
 TYPEDESCRIPTION CSpriteTrain::m_SaveData[] =
 	{
-		DEFINE_FIELD(CSpriteTrain, m_sounds, FIELD_INTEGER),
 		DEFINE_FIELD(CSpriteTrain, m_pevCurrentTarget, FIELD_EVARS),
 		DEFINE_FIELD(CSpriteTrain, m_activated, FIELD_BOOLEAN),
 		DEFINE_FIELD(CSpriteTrain, m_maxFrame, FIELD_FLOAT),
