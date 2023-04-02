@@ -68,21 +68,21 @@ public:
 };
 
 template <typename TBaseEntity>
-typename TBaseEntity* EntityHandle<TBaseEntity>::operator=(TBaseEntity* entity)
+TBaseEntity* EntityHandle<TBaseEntity>::operator=(TBaseEntity* entity)
 {
 	InternalSetEntity(entity);
 	return entity;
 }
 
 template <typename TBaseEntity>
-typename TBaseEntity* EntityHandle<TBaseEntity>::Get() const
+TBaseEntity* EntityHandle<TBaseEntity>::Get() const
 {
 	return static_cast<TBaseEntity*>(InternalGetEntity());
 }
 
 template <typename TBaseEntity>
 template <typename TOtherBaseEntity>
-typename TOtherBaseEntity* EntityHandle<TBaseEntity>::Get() const
+TOtherBaseEntity* EntityHandle<TBaseEntity>::Get() const
 {
 	auto entity = this->Get();
 
@@ -99,7 +99,7 @@ EntityHandle<TBaseEntity>::operator TBaseEntity*()
 }
 
 template <typename TBaseEntity>
-typename TBaseEntity* EntityHandle<TBaseEntity>::operator->()
+TBaseEntity* EntityHandle<TBaseEntity>::operator->()
 {
 	return Get();
 }
