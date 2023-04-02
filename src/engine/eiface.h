@@ -365,7 +365,7 @@ enum FIELDTYPE
 	FIELD_CLASSPTR,			// CBaseEntity *
 	FIELD_EHANDLE,			// Entity handle
 	FIELD_DEPRECATED2,		// EVARS *. Deprecated, do not use.
-	FIELD_EDICT,			// edict_t *, or edict_t *  (same thing)
+	FIELD_EDICT,			// edict_t*. Deprecated, only used by the engine and entvars_t. Do not use.
 	FIELD_VECTOR,			// Any vector
 	FIELD_POSITION_VECTOR,	// A world coordinate (these are fixed up across level transitions automagically)
 	FIELD_POINTER,			// Arbitrary data pointer... to be removed, use an array of FIELD_CHARACTER
