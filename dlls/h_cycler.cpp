@@ -394,7 +394,7 @@ class CWreckage : public CBaseMonster
 	void Precache() override;
 	void Think() override;
 
-	int m_flStartTime;
+	float m_flStartTime;
 };
 TYPEDESCRIPTION CWreckage::m_SaveData[] =
 	{
