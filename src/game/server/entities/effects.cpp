@@ -397,23 +397,6 @@ public:
 LINK_ENTITY_TO_CLASS(env_lightning, CLightning);
 LINK_ENTITY_TO_CLASS(env_beam, CLightning);
 
-// UNDONE: Jay -- This is only a test
-#if _DEBUG
-class CTripBeam : public CLightning
-{
-	void Spawn() override;
-};
-LINK_ENTITY_TO_CLASS(trip_beam, CTripBeam);
-
-void CTripBeam::Spawn()
-{
-	CLightning::Spawn();
-	SetTouch(&CTripBeam::TriggerTouch);
-	pev->solid = SOLID_TRIGGER;
-	RelinkBeam();
-}
-#endif
-
 TYPEDESCRIPTION CLightning::m_SaveData[] =
 	{
 		DEFINE_FIELD(CLightning, m_active, FIELD_BOOLEAN),
