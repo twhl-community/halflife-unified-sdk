@@ -27,6 +27,8 @@ The following types of changes are **out of scope**:
 
 If you need help setting up the SDK or developing a mod please ask on the [TWHL website](https://twhl.info/) or on its [Discord server](https://discord.gg/jEw8EqD).
 
+The TWHL wiki has tutorials to guide you through making a mod: https://twhl.info/wiki/page/Half-Life_Programming_-_Getting_Started
+
 See the `#welcome` channel for more information about the Discord server. Please do not use the `#unified-sdk` channel for general help requests, there are channels for modding help.
 
 See the TWHL thread for status updates about these projects: https://twhl.info/thread/view/20055
