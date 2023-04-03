@@ -78,7 +78,7 @@ public:
 	void WritePositionVector(const char* pname, const Vector& value);			// Offset for landmark if necessary
 	void WritePositionVector(const char* pname, const float* value, int count); // array of pos vectors
 	void WriteFunction(const char* pname, void** value, int count);				// Save a function pointer
-	bool WriteFields(const char* pname, void* pBaseData, const TYPEDESCRIPTION* pFields, int fieldCount);
+	bool WriteFields(const char* pname, void* pBaseData, const DataFieldDescription* pFields, int fieldCount);
 
 	bool WriteFields(void* baseData, const DataMap& dataMap);
 
@@ -102,9 +102,9 @@ class CRestore : public CSaveRestoreBuffer
 public:
 	using CSaveRestoreBuffer::CSaveRestoreBuffer;
 
-	bool ReadFields(const char* pname, void* pBaseData, const TYPEDESCRIPTION* pFields, int fieldCount);
+	bool ReadFields(const char* pname, void* pBaseData, const DataFieldDescription* pFields, int fieldCount);
 	bool ReadFields(void* baseData, const DataMap& dataMap);
-	int ReadField(void* pBaseData, const TYPEDESCRIPTION* pFields, int fieldCount, int startField, int size, char* pName, void* pData);
+	int ReadField(void* pBaseData, const DataFieldDescription* pFields, int fieldCount, int startField, int size, char* pName, void* pData);
 	int ReadInt();
 	short ReadShort();
 	int ReadNamedInt(const char* pName);

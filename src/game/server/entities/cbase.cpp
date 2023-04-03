@@ -12,6 +12,9 @@
  *   without written permission from Valve LLC.
  *
  ****/
+
+#include <unordered_map>
+
 #include "cbase.h"
 #include "ServerLibrary.h"
 #include "pm_shared.h"
@@ -201,9 +204,9 @@ void OnFreeEntPrivateData(edict_t* pEdict)
 }
 
 /**
-*	@brief Find the matching global entity.
-*	Spit out an error if the designer made entities of different classes with the same global name
-*/
+ *	@brief Find the matching global entity.
+ *	Spit out an error if the designer made entities of different classes with the same global name
+ */
 CBaseEntity* FindGlobalEntity(string_t classname, string_t globalname)
 {
 	auto pReturn = UTIL_FindEntityByString(nullptr, "globalname", STRING(globalname));
@@ -345,6 +348,65 @@ void DispatchObjectCollsionBox(edict_t* pent)
 		SetObjectCollisionBox(&pent->v);
 }
 
+// The engine uses the old type description data, so we need to translate it to the game's version.
+static FIELDTYPE RemapEngineFieldType(ENGINEFIELDTYPE fieldType)
+{
+	// The engine only uses these data types.
+	// Some custom engine may use others, but those engines are not supported.
+	switch (fieldType)
+	{
+	case ENGINEFIELDTYPE::FIELD_FLOAT: return FIELD_FLOAT;
+	case ENGINEFIELDTYPE::FIELD_STRING: return FIELD_STRING;
+	case ENGINEFIELDTYPE::FIELD_EDICT: return FIELD_EDICT;
+	case ENGINEFIELDTYPE::FIELD_VECTOR: return FIELD_VECTOR;
+	case ENGINEFIELDTYPE::FIELD_INTEGER: return FIELD_INTEGER;
+	case ENGINEFIELDTYPE::FIELD_CHARACTER: return FIELD_CHARACTER;
+	case ENGINEFIELDTYPE::FIELD_TIME: return FIELD_TIME;
+
+	default: return FIELD_TYPECOUNT;
+	}
+}
+
+struct EngineDataMap
+{
+	std::unique_ptr<const DataFieldDescription[]> TypeDescriptions;
+	DataMap DataMap;
+};
+
+std::unordered_map<const TYPEDESCRIPTION*, std::unique_ptr<const EngineDataMap>> g_EngineTypeDescriptionsToGame;
+
+static const DataMap* GetOrCreateDataMap(const char* className, const TYPEDESCRIPTION* fields, int fieldCount)
+{
+	auto it = g_EngineTypeDescriptionsToGame.find(fields);
+
+	if (it == g_EngineTypeDescriptionsToGame.end())
+	{
+		auto typeDescriptions = std::make_unique<DataFieldDescription[]>(fieldCount);
+
+		for (int i = 0; i < fieldCount; ++i)
+		{
+			const auto& src = fields[i];
+			auto& dest = typeDescriptions[i];
+
+			dest.fieldType = RemapEngineFieldType(src.fieldType);
+			dest.fieldName = src.fieldName;
+			dest.fieldOffset = src.fieldOffset;
+			dest.fieldSize = src.fieldSize;
+			dest.flags = src.flags;
+		}
+
+		auto engineDataMap = std::make_unique<EngineDataMap>();
+
+		engineDataMap->DataMap.ClassName = className;
+		engineDataMap->DataMap.Descriptions = {typeDescriptions.get(), static_cast<std::size_t>(fieldCount)};
+		engineDataMap->TypeDescriptions = std::move(typeDescriptions);
+
+		it = g_EngineTypeDescriptionsToGame.emplace(fields, std::move(engineDataMap)).first;
+	}
+
+	return &it->second->DataMap;
+}
+
 void SaveWriteFields(SAVERESTOREDATA* pSaveData, const char* pname, void* pBaseData, TYPEDESCRIPTION* pFields, int fieldCount)
 {
 	if (!CSaveRestoreBuffer::IsValidSaveRestoreData(pSaveData))
@@ -352,8 +414,10 @@ void SaveWriteFields(SAVERESTOREDATA* pSaveData, const char* pname, void* pBaseD
 		return;
 	}
 
+	auto dataMap = GetOrCreateDataMap(pname, pFields, fieldCount);
+
 	CSave saveHelper(*pSaveData);
-	saveHelper.WriteFields(pname, pBaseData, pFields, fieldCount);
+	saveHelper.WriteFields(pBaseData, *dataMap);
 }
 
 void SaveReadFields(SAVERESTOREDATA* pSaveData, const char* pname, void* pBaseData, TYPEDESCRIPTION* pFields, int fieldCount)
@@ -373,8 +437,10 @@ void SaveReadFields(SAVERESTOREDATA* pSaveData, const char* pname, void* pBaseDa
 	// Always check if the player is stuck when loading a save game.
 	g_CheckForPlayerStuck = true;
 
+	auto dataMap = GetOrCreateDataMap(pname, pFields, fieldCount);
+
 	CRestore restoreHelper(*pSaveData);
-	restoreHelper.ReadFields(pname, pBaseData, pFields, fieldCount);
+	restoreHelper.ReadFields(pBaseData, *dataMap);
 }
 
 static void CheckForBackwardsBounds(CBaseEntity* entity)

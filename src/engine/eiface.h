@@ -357,7 +357,7 @@ struct SAVERESTOREDATA
 *	FIELD_TIME
 *	They must remain supported.
 */
-enum FIELDTYPE
+enum class ENGINEFIELDTYPE
 {
 	FIELD_FLOAT = 0,		// Any floating point value
 	FIELD_STRING,			// A string ID (return from ALLOC_STRING)
@@ -378,10 +378,6 @@ enum FIELDTYPE
 	FIELD_MODELNAME,		// Engine string that is a model name (needs precache)
 	FIELD_SOUNDNAME,		// Engine string that is a sound name (needs precache)
 
-	FIELD_ENGINETYPECOUNT,	// All preceding types are known to the engine and must remain.
-
-	FIELD_INT64 = FIELD_ENGINETYPECOUNT, // 64 bit integer
-
 	FIELD_TYPECOUNT, // MUST BE LAST
 };
 
@@ -389,7 +385,7 @@ enum FIELDTYPE
 
 struct TYPEDESCRIPTION
 {
-	FIELDTYPE fieldType;
+	ENGINEFIELDTYPE fieldType;
 	const char* fieldName;
 	int fieldOffset;
 	short fieldSize;
