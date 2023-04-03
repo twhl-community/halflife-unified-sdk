@@ -31,7 +31,6 @@ public:
 	CSaveRestoreBuffer(SAVERESTOREDATA& data);
 	~CSaveRestoreBuffer();
 
-	int EntityIndex(entvars_t* pevLookup);
 	int EntityIndex(edict_t* pentLookup);
 	int EntityIndex(CBaseEntity* pEntity);
 

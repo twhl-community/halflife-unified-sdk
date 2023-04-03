@@ -27,14 +27,11 @@ static int gSizes[FIELD_TYPECOUNT] =
 	{
 		sizeof(float),	   // FIELD_FLOAT
 		sizeof(int),	   // FIELD_STRING
-		0,				   // FIELD_DEPRECATED1
 		sizeof(int),	   // FIELD_CLASSPTR
 		sizeof(int),	   // FIELD_EHANDLE
-		sizeof(int),	   // FIELD_entvars_t
 		sizeof(int),	   // FIELD_EDICT
 		sizeof(float) * 3, // FIELD_VECTOR
 		sizeof(float) * 3, // FIELD_POSITION_VECTOR
-		sizeof(int*),	   // FIELD_POINTER
 		sizeof(int),	   // FIELD_INTEGER
 #ifdef GNUC
 		sizeof(int*) * 2, // FIELD_FUNCTION
@@ -62,14 +59,7 @@ int CSaveRestoreBuffer::EntityIndex(CBaseEntity* pEntity)
 {
 	if (pEntity == nullptr)
 		return -1;
-	return EntityIndex(pEntity->pev);
-}
-
-int CSaveRestoreBuffer::EntityIndex(entvars_t* pevLookup)
-{
-	if (pevLookup == nullptr)
-		return -1;
-	return EntityIndex(ENT(pevLookup));
+	return EntityIndex(pEntity->edict());
 }
 
 int CSaveRestoreBuffer::EntityIndex(edict_t* pentLookup)
@@ -335,11 +325,8 @@ void EntvarsKeyvalue(entvars_t* pev, KeyValueData* pkvd)
 				break;
 
 			default:
-			case FIELD_DEPRECATED2:
 			case FIELD_CLASSPTR:
 			case FIELD_EDICT:
-			case FIELD_DEPRECATED1:
-			case FIELD_POINTER:
 				CBaseEntity::Logger->error("Bad field in entity!!");
 				break;
 			}
@@ -451,17 +438,10 @@ bool CSave::WriteFields(const char* pname, void* pBaseData, const DataFieldDescr
 			WriteData(pTest->fieldName, pTest->fieldSize, ((char*)pOutputData));
 			break;
 
-			// For now, just write the address out, we're not going to change memory while doing this yet!
-		case FIELD_POINTER:
-			WriteInt(pTest->fieldName, (int*)(char*)pOutputData, pTest->fieldSize);
-			break;
-
 		case FIELD_FUNCTION:
 			WriteFunction(pTest->fieldName, (void**)pOutputData, pTest->fieldSize);
 			break;
 
-		case FIELD_DEPRECATED1:
-		case FIELD_DEPRECATED2:
 		default:
 			Logger->error("Bad field type");
 		}
@@ -654,9 +634,6 @@ int CRestore::ReadField(void* pBaseData, const DataFieldDescription* pFields, in
 						*((char*)pOutputData) = *(char*)pInputData;
 						break;
 
-					case FIELD_POINTER:
-						*((int*)pOutputData) = *(int*)pInputData;
-						break;
 					case FIELD_FUNCTION:
 						if (strlen((char*)pInputData) == 0)
 							*((int*)pOutputData) = 0;
@@ -664,8 +641,6 @@ int CRestore::ReadField(void* pBaseData, const DataFieldDescription* pFields, in
 							*((int*)pOutputData) = FUNCTION_FROM_NAME((char*)pInputData);
 						break;
 
-					case FIELD_DEPRECATED1:
-					case FIELD_DEPRECATED2:
 					default:
 						Logger->error("Bad field type");
 					}
