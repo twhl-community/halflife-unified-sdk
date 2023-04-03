@@ -469,10 +469,10 @@ bool CSave::WriteEntVars(const char* pname, entvars_t* pev)
 	return WriteFields(pname, pev, gEntvarsDescription, std::size(gEntvarsDescription));
 }
 
-bool CSave::WriteFields(const char* pname, void* pBaseData, TYPEDESCRIPTION* pFields, int fieldCount)
+bool CSave::WriteFields(const char* pname, void* pBaseData, const TYPEDESCRIPTION* pFields, int fieldCount)
 {
 	int i, j, actualCount, emptyCount;
-	TYPEDESCRIPTION* pTest;
+	const TYPEDESCRIPTION* pTest;
 	int entityArray[MAX_ENTITYARRAY];
 	byte boolArray[MAX_ENTITYARRAY];
 
@@ -643,10 +643,10 @@ void CSave::BufferData(const char* pdata, int size)
 //
 // --------------------------------------------------------------
 
-int CRestore::ReadField(void* pBaseData, TYPEDESCRIPTION* pFields, int fieldCount, int startField, int size, char* pName, void* pData)
+int CRestore::ReadField(void* pBaseData, const TYPEDESCRIPTION* pFields, int fieldCount, int startField, int size, char* pName, void* pData)
 {
 	int i, j, stringCount, fieldNumber, entityIndex;
-	TYPEDESCRIPTION* pTest;
+	const TYPEDESCRIPTION* pTest;
 	float timeData;
 	Vector position;
 	edict_t* pent;
@@ -804,7 +804,7 @@ bool CRestore::ReadEntVars(const char* pname, entvars_t* pev)
 	return ReadFields(pname, pev, gEntvarsDescription, std::size(gEntvarsDescription));
 }
 
-bool CRestore::ReadFields(const char* pname, void* pBaseData, TYPEDESCRIPTION* pFields, int fieldCount)
+bool CRestore::ReadFields(const char* pname, void* pBaseData, const TYPEDESCRIPTION* pFields, int fieldCount)
 {
 	unsigned short i, token;
 	int lastField, fileCount;
