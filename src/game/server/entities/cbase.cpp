@@ -21,8 +21,6 @@
 #include "world.h"
 #include "sound/ServerSoundSystem.h"
 
-void EntvarsKeyvalue(entvars_t* pev, KeyValueData* pkvd);
-
 static void SetObjectCollisionBox(entvars_t* pev);
 
 int DispatchSpawn(edict_t* pent)
@@ -74,6 +72,46 @@ int DispatchSpawn(edict_t* pent)
 	}
 
 	return 0;
+}
+
+void EntvarsKeyvalue(entvars_t* pev, KeyValueData* pkvd)
+{
+	for (const auto& field : entvars_t::GetLocalDataMap()->Descriptions)
+	{
+		if (!stricmp(field.fieldName, pkvd->szKeyName))
+		{
+			switch (field.fieldType)
+			{
+			case FIELD_MODELNAME:
+			case FIELD_SOUNDNAME:
+			case FIELD_STRING:
+				(*(string_t*)((char*)pev + field.fieldOffset)) = ALLOC_STRING(pkvd->szValue);
+				break;
+
+			case FIELD_TIME:
+			case FIELD_FLOAT:
+				(*(float*)((char*)pev + field.fieldOffset)) = atof(pkvd->szValue);
+				break;
+
+			case FIELD_INTEGER:
+				(*(int*)((char*)pev + field.fieldOffset)) = atoi(pkvd->szValue);
+				break;
+
+			case FIELD_POSITION_VECTOR:
+			case FIELD_VECTOR:
+				UTIL_StringToVector(*((Vector*)((char*)pev + field.fieldOffset)), pkvd->szValue);
+				break;
+
+			default:
+			case FIELD_CLASSPTR:
+			case FIELD_EDICT:
+				CBaseEntity::Logger->error("Bad field in entity!!");
+				break;
+			}
+			pkvd->fHandled = 1;
+			return;
+		}
+	}
 }
 
 void DispatchKeyValue(edict_t* pentKeyvalue, KeyValueData* pkvd)
@@ -367,6 +405,24 @@ static FIELDTYPE RemapEngineFieldType(ENGINEFIELDTYPE fieldType)
 	}
 }
 
+static const IDataFieldSerializer* RemapEngineFieldTypeToSerializer(ENGINEFIELDTYPE fieldType)
+{
+	// The engine only uses these data types.
+	// Some custom engine may use others, but those engines are not supported.
+	switch (fieldType)
+	{
+	case ENGINEFIELDTYPE::FIELD_FLOAT: return &FieldTypeToSerializerMapper<FIELD_FLOAT>::Serializer;
+	case ENGINEFIELDTYPE::FIELD_STRING: return &FieldTypeToSerializerMapper<FIELD_STRING>::Serializer;
+	case ENGINEFIELDTYPE::FIELD_EDICT: return &FieldTypeToSerializerMapper<FIELD_EDICT>::Serializer;
+	case ENGINEFIELDTYPE::FIELD_VECTOR: return &FieldTypeToSerializerMapper<FIELD_VECTOR>::Serializer;
+	case ENGINEFIELDTYPE::FIELD_INTEGER: return &FieldTypeToSerializerMapper<FIELD_INTEGER>::Serializer;
+	case ENGINEFIELDTYPE::FIELD_CHARACTER: return &FieldTypeToSerializerMapper<FIELD_CHARACTER>::Serializer;
+	case ENGINEFIELDTYPE::FIELD_TIME: return &FieldTypeToSerializerMapper<FIELD_TIME>::Serializer;
+
+	default: return nullptr;
+	}
+}
+
 struct EngineDataMap
 {
 	std::unique_ptr<const DataFieldDescription[]> TypeDescriptions;
@@ -389,6 +445,7 @@ static const DataMap* GetOrCreateDataMap(const char* className, const TYPEDESCRI
 			auto& dest = typeDescriptions[i];
 
 			dest.fieldType = RemapEngineFieldType(src.fieldType);
+			dest.Serializer = RemapEngineFieldTypeToSerializer(src.fieldType);
 			dest.fieldName = src.fieldName;
 			dest.fieldOffset = src.fieldOffset;
 			dest.fieldSize = src.fieldSize;

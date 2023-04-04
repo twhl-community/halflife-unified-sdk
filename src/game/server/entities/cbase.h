@@ -50,6 +50,7 @@ CBaseEntity
 #include "skill.h"
 #include "game.h"
 #include "CGameRules.h"
+#include "CGlobalState.h"
 
 #include "basemonster.h"
 #include "CBaseAnimating.h"

@@ -528,7 +528,7 @@ public:
 	static CBaseEntity* Create(const char* szName, const Vector& vecOrigin, const Vector& vecAngles, CBaseEntity* owner = nullptr, bool callSpawn = true);
 
 	virtual bool FBecomeProne() { return false; }
-	edict_t* edict() { return ENT(pev); }
+	edict_t* edict() const { return ENT(pev); }
 	int entindex() { return ENTINDEX(edict()); }
 
 	virtual Vector Center() { return (pev->absmax + pev->absmin) * 0.5; } // center point of entity

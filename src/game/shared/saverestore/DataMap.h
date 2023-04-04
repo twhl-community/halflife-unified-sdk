@@ -15,39 +15,142 @@
 
 #pragma once
 
+#include <cstddef>
+#include <cstdint>
+#include <cstring>
 #include <span>
 #include <type_traits>
 
 #include "Platform.h"
 #include "ClassData.h"
-
-struct TYPEDESCRIPTION;
+#include "DataFieldSerializers.h"
 
 enum FIELDTYPE
 {
-	FIELD_FLOAT = 0,		// Any floating point value
-	FIELD_STRING,			// A string ID (return from ALLOC_STRING)
-	FIELD_CLASSPTR,			// CBaseEntity *
-	FIELD_EHANDLE,			// Entity handle
-	FIELD_EDICT,			// edict_t*. Deprecated, only used by the engine and entvars_t. Do not use.
-	FIELD_VECTOR,			// Any vector
-	FIELD_POSITION_VECTOR,	// A world coordinate (these are fixed up across level transitions automagically)
-	FIELD_INTEGER,			// Any integer or enum
-	FIELD_FUNCTION,			// A class function pointer (Think, Use, etc)
-	FIELD_BOOLEAN,			// boolean, implemented as an int, I may use this as a hint for compression
-	FIELD_SHORT,			// 2 byte integer
-	FIELD_CHARACTER,		// a byte
-	FIELD_TIME,				// a floating point time (these are fixed up automatically too!)
-	FIELD_MODELNAME,		// Engine string that is a model name (needs precache)
-	FIELD_SOUNDNAME,		// Engine string that is a sound name (needs precache)
-	FIELD_INT64,			// 64 bit integer
+	FIELD_CHARACTER = 0,   // a byte
+	FIELD_BOOLEAN,		   // boolean, implemented as an int, I may use this as a hint for compression
+	FIELD_SHORT,		   // 2 byte integer
+	FIELD_INTEGER,		   // Any integer or enum
+	FIELD_INT64,		   // 64 bit integer
+	FIELD_FLOAT,		   // Any floating point value
+	FIELD_TIME,			   // a floating point time (these are fixed up automatically too!)
+	FIELD_STRING,		   // A string ID (return from ALLOC_STRING)
+	FIELD_MODELNAME,	   // Engine string that is a model name (needs precache)
+	FIELD_SOUNDNAME,	   // Engine string that is a sound name (needs precache)
+	FIELD_EDICT,		   // edict_t*. Deprecated, only used by the engine and entvars_t. Do not use.
+	FIELD_CLASSPTR,		   // CBaseEntity *
+	FIELD_EHANDLE,		   // Entity handle
+	FIELD_VECTOR,		   // Any vector
+	FIELD_POSITION_VECTOR, // A world coordinate (these are fixed up across level transitions automagically)
+	FIELD_FUNCTION,		   // A class function pointer (Think, Use, etc)
 
-	FIELD_TYPECOUNT,		// MUST BE LAST
+	FIELD_TYPECOUNT, // MUST BE LAST. Not a valid type.
+};
+
+// Specialize this type for each field type to map it to its serializer.
+template <FIELDTYPE Type>
+struct FieldTypeToSerializerMapper;
+
+template <>
+struct FieldTypeToSerializerMapper<FIELD_CHARACTER>
+{
+	static const inline DataFieldValueSerializer<std::byte> Serializer;
+};
+
+template <>
+struct FieldTypeToSerializerMapper<FIELD_BOOLEAN>
+{
+	static const inline DataFieldBooleanSerializer Serializer;
+};
+
+template <>
+struct FieldTypeToSerializerMapper<FIELD_SHORT>
+{
+	static const inline DataFieldValueSerializer<short> Serializer;
+};
+
+template <>
+struct FieldTypeToSerializerMapper<FIELD_INTEGER>
+{
+	static const inline DataFieldValueSerializer<int> Serializer;
+};
+
+template <>
+struct FieldTypeToSerializerMapper<FIELD_INT64>
+{
+	static const inline DataFieldValueSerializer<std::uint64_t> Serializer;
+};
+
+template <>
+struct FieldTypeToSerializerMapper<FIELD_FLOAT>
+{
+	static const inline DataFieldValueSerializer<float> Serializer;
+};
+
+template <>
+struct FieldTypeToSerializerMapper<FIELD_TIME>
+{
+	static const inline DataFieldTimeSerializer Serializer;
+};
+
+template <>
+struct FieldTypeToSerializerMapper<FIELD_STRING>
+{
+	static const inline DataFieldStringOffsetSerializer Serializer;
+};
+
+template <>
+struct FieldTypeToSerializerMapper<FIELD_MODELNAME>
+{
+	static const inline DataFieldModelStringOffsetSerializer Serializer;
+};
+
+template <>
+struct FieldTypeToSerializerMapper<FIELD_SOUNDNAME>
+{
+	static const inline DataFieldSoundStringOffsetSerializer Serializer;
+};
+
+template <>
+struct FieldTypeToSerializerMapper<FIELD_EDICT>
+{
+	static const inline DataFieldEdictSerializer Serializer;
+};
+
+template <>
+struct FieldTypeToSerializerMapper<FIELD_CLASSPTR>
+{
+	static const inline DataFieldClassPointerSerializer Serializer;
+};
+
+template <>
+struct FieldTypeToSerializerMapper<FIELD_EHANDLE>
+{
+	static const inline DataFieldEntityHandleSerializer Serializer;
+};
+
+template <>
+struct FieldTypeToSerializerMapper<FIELD_VECTOR>
+{
+	static const inline DataFieldVectorSerializer Serializer;
+};
+
+template <>
+struct FieldTypeToSerializerMapper<FIELD_POSITION_VECTOR>
+{
+	static const inline DataFieldPositionVectorSerializer Serializer;
+};
+
+template <>
+struct FieldTypeToSerializerMapper<FIELD_FUNCTION>
+{
+	static const inline DataFieldFunctionPointerSerializer Serializer;
 };
 
 struct DataFieldDescription
 {
 	FIELDTYPE fieldType;
+	const IDataFieldSerializer* Serializer;
 	const char* fieldName;
 	int fieldOffset;
 	short fieldSize;
@@ -155,7 +258,7 @@ public:                                      \
  */
 #define END_DATAMAP()                                                         \
 	{                                                                         \
-		FIELD_TYPECOUNT, nullptr, -1, -1, 0                                   \
+		FIELD_TYPECOUNT, nullptr, nullptr, -1, -1, 0                          \
 	}                                                                         \
 	}                                                                         \
 	;                                                                         \
@@ -170,16 +273,16 @@ public:                                      \
 	BEGIN_DATAMAP(thisClass)            \
 	END_DATAMAP()
 
-#define RAW_DEFINE_FIELD(fieldName, fieldType, count, flags)                \
-	{                                                                       \
-		fieldType, #fieldName, offsetof(ThisClass, fieldName), count, flags \
+#define RAW_DEFINE_FIELD(fieldName, fieldType, serializer, count, flags)                \
+	{                                                                                   \
+		fieldType, serializer, #fieldName, offsetof(ThisClass, fieldName), count, flags \
 	}
 
 #define DEFINE_FIELD(fieldName, fieldType) \
-	RAW_DEFINE_FIELD(fieldName, fieldType, 1, 0)
+	RAW_DEFINE_FIELD(fieldName, fieldType, &FieldTypeToSerializerMapper<fieldType>::Serializer, 1, 0)
 
 #define DEFINE_ARRAY(fieldName, fieldType, count) \
-	RAW_DEFINE_FIELD(fieldName, fieldType, count, 0)
+	RAW_DEFINE_FIELD(fieldName, fieldType, &FieldTypeToSerializerMapper<fieldType>::Serializer, count, 0)
 
 #define DEFINE_GLOBAL_FIELD(fieldName, fieldType) \
-	RAW_DEFINE_FIELD(fieldName, fieldType, 1, FTYPEDESC_GLOBAL)
+	RAW_DEFINE_FIELD(fieldName, fieldType, &FieldTypeToSerializerMapper<fieldType>::Serializer, 1, FTYPEDESC_GLOBAL)

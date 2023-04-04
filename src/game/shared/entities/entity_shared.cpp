@@ -148,15 +148,14 @@ DEFINE_FIELD(m_pGoalEnt, FIELD_CLASSPTR),
 bool CBaseEntity::Save(CSave& save)
 {
 #ifndef CLIENT_DLL
-	if (auto entvarsMap = entvars_t::GetLocalDataMap();
-		!save.WriteFields(entvarsMap->ClassName, pev, entvarsMap->Descriptions.data(), entvarsMap->Descriptions.size()))
+	if (auto entvarsMap = entvars_t::GetLocalDataMap(); !save.WriteFields(pev, *entvarsMap))
 	{
 		return false;
 	}
 
 	for (auto dataMap = GetDataMap(); dataMap; dataMap = dataMap->BaseMap)
 	{
-		if (!save.WriteFields(dataMap->ClassName, this, dataMap->Descriptions.data(), dataMap->Descriptions.size()))
+		if (!save.WriteFields(this, *dataMap))
 		{
 			return false;
 		}

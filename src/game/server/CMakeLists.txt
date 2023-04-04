@@ -16,6 +16,7 @@ target_include_directories(server PRIVATE
 	../../common
 	../shared
 	../shared/player_movement
+	../shared/saverestore
 	../shared/utils
 	../../public)
 	
@@ -26,6 +27,8 @@ target_sources(server PRIVATE
 	activity.h
 	activitymap.h
 	cdll_dll.h
+	CGlobalState.cpp
+	CGlobalState.h
 	client.cpp
 	client.h
 	ClientCommandRegistry.cpp
@@ -41,8 +44,6 @@ target_sources(server PRIVATE
 	nodes.h
 	plane.cpp
 	plane.h
-	saverestore.cpp
-	saverestore.h
 	ServerConfigContext.h
 	ServerLibrary.cpp
 	ServerLibrary.h
@@ -275,7 +276,6 @@ target_sources(server PRIVATE
 	../../common/common_types.h
 	../../common/const.h
 	../../common/cvardef.h
-	../../common/DataMap.h
 	../../common/director_cmds.h
 	../../common/entity_state.h
 	../../common/entity_types.h

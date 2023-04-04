@@ -31,6 +31,9 @@ public:
 	CBaseEntity* InternalGetEntity() const;
 	void InternalSetEntity(CBaseEntity* entity);
 
+	constexpr bool operator==(const BaseEntityHandle& other) const = default;
+	constexpr bool operator!=(const BaseEntityHandle& other) const = default;
+
 private:
 	edict_t* m_Edict = nullptr;
 	int m_SerialNumber = 0;

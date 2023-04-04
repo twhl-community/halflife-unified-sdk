@@ -53,6 +53,7 @@ target_include_directories(client PRIVATE
 	../../common
 	../shared
 	../shared/player_movement
+	../shared/saverestore
 	../shared/utils
 	../../engine
 	../../../utils/vgui/include
@@ -245,7 +246,6 @@ target_sources(client PRIVATE
 	../../common/const.h
 	../../common/con_nprint.h
 	../../common/cvardef.h
-	../../common/DataMap.h
 	../../common/demo_api.h
 	../../common/director_cmds.h
 	../../common/dlight.h
