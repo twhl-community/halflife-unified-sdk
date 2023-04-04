@@ -15,11 +15,9 @@
 
 #pragma once
 
-#include <cstddef>
-#include <cstdint>
-#include <cstring>
 #include <span>
 #include <type_traits>
+#include <variant>
 
 #include "Platform.h"
 #include "ClassData.h"
@@ -157,6 +155,8 @@ struct DataFieldDescription
 	short flags;
 };
 
+using DataMember = std::variant<DataFieldDescription>;
+
 /**
  *	@brief Stores a list of type descriptions and a reference to a base class data map.
  */
@@ -169,7 +169,7 @@ struct DataMap final
 	 */
 	const DataMap* BaseMap{};
 
-	std::span<const DataFieldDescription> Descriptions;
+	std::span<const DataMember> Members;
 };
 
 #define DECLARE_DATAMAP_COMMON()             \
@@ -227,7 +227,7 @@ public:                                      \
 		const char* const className = #thisClass;                      \
 		using ThisClass = thisClass;                                   \
                                                                        \
-		static const DataFieldDescription descriptions[] =             \
+		static const DataMember members[] =                            \
 		{
 
 /**
@@ -256,17 +256,16 @@ public:                                      \
  *	@brief Ends the datamap definition. Append a semicolon to the end.
  *	@details Empty description because zero-length arrays are not allowed.
  */
-#define END_DATAMAP()                                                         \
-	{                                                                         \
-		FIELD_TYPECOUNT, nullptr, nullptr, -1, -1, 0                          \
-	}                                                                         \
-	}                                                                         \
-	;                                                                         \
-                                                                              \
-	return {                                                                  \
-		.ClassName{className},                                                \
-		.BaseMap{ThisClass::GetBaseMap()},                                    \
-		.Descriptions{std::begin(descriptions), std::end(descriptions) - 1}}; \
+#define END_DATAMAP()                                          \
+	{                                                          \
+	}                                                          \
+	}                                                          \
+	;                                                          \
+                                                               \
+	return {                                                   \
+		.ClassName{className},                                 \
+		.BaseMap{ThisClass::GetBaseMap()},                     \
+		.Members{std::begin(members), std::end(members) - 1}}; \
 	}
 
 #define DEFINE_DUMMY_DATAMAP(thisClass) \
@@ -274,6 +273,7 @@ public:                                      \
 	END_DATAMAP()
 
 #define RAW_DEFINE_FIELD(fieldName, fieldType, serializer, count, flags)                \
+	DataFieldDescription                                                                \
 	{                                                                                   \
 		fieldType, serializer, #fieldName, offsetof(ThisClass, fieldName), count, flags \
 	}

@@ -76,30 +76,32 @@ int DispatchSpawn(edict_t* pent)
 
 void EntvarsKeyvalue(entvars_t* pev, KeyValueData* pkvd)
 {
-	for (const auto& field : entvars_t::GetLocalDataMap()->Descriptions)
+	for (const auto& member : entvars_t::GetLocalDataMap()->Members)
 	{
-		if (!stricmp(field.fieldName, pkvd->szKeyName))
+		auto field = std::get_if<DataFieldDescription>(&member);
+
+		if (field && !stricmp(field->fieldName, pkvd->szKeyName))
 		{
-			switch (field.fieldType)
+			switch (field->fieldType)
 			{
 			case FIELD_MODELNAME:
 			case FIELD_SOUNDNAME:
 			case FIELD_STRING:
-				(*(string_t*)((char*)pev + field.fieldOffset)) = ALLOC_STRING(pkvd->szValue);
+				(*(string_t*)((char*)pev + field->fieldOffset)) = ALLOC_STRING(pkvd->szValue);
 				break;
 
 			case FIELD_TIME:
 			case FIELD_FLOAT:
-				(*(float*)((char*)pev + field.fieldOffset)) = atof(pkvd->szValue);
+				(*(float*)((char*)pev + field->fieldOffset)) = atof(pkvd->szValue);
 				break;
 
 			case FIELD_INTEGER:
-				(*(int*)((char*)pev + field.fieldOffset)) = atoi(pkvd->szValue);
+				(*(int*)((char*)pev + field->fieldOffset)) = atoi(pkvd->szValue);
 				break;
 
 			case FIELD_POSITION_VECTOR:
 			case FIELD_VECTOR:
-				UTIL_StringToVector(*((Vector*)((char*)pev + field.fieldOffset)), pkvd->szValue);
+				UTIL_StringToVector(*((Vector*)((char*)pev + field->fieldOffset)), pkvd->szValue);
 				break;
 
 			default:
@@ -425,7 +427,7 @@ static const IDataFieldSerializer* RemapEngineFieldTypeToSerializer(ENGINEFIELDT
 
 struct EngineDataMap
 {
-	std::unique_ptr<const DataFieldDescription[]> TypeDescriptions;
+	std::unique_ptr<const DataMember[]> TypeDescriptions;
 	DataMap DataMap;
 };
 
@@ -437,25 +439,27 @@ static const DataMap* GetOrCreateDataMap(const char* className, const TYPEDESCRI
 
 	if (it == g_EngineTypeDescriptionsToGame.end())
 	{
-		auto typeDescriptions = std::make_unique<DataFieldDescription[]>(fieldCount);
+		auto typeDescriptions = std::make_unique<DataMember[]>(fieldCount);
 
 		for (int i = 0; i < fieldCount; ++i)
 		{
 			const auto& src = fields[i];
-			auto& dest = typeDescriptions[i];
 
-			dest.fieldType = RemapEngineFieldType(src.fieldType);
-			dest.Serializer = RemapEngineFieldTypeToSerializer(src.fieldType);
-			dest.fieldName = src.fieldName;
-			dest.fieldOffset = src.fieldOffset;
-			dest.fieldSize = src.fieldSize;
-			dest.flags = src.flags;
+			DataFieldDescription dest{
+				.fieldType = RemapEngineFieldType(src.fieldType),
+				.Serializer = RemapEngineFieldTypeToSerializer(src.fieldType),
+				.fieldName = src.fieldName,
+				.fieldOffset = src.fieldOffset,
+				.fieldSize = src.fieldSize,
+				.flags = src.flags};
+
+			typeDescriptions[i] = dest;
 		}
 
 		auto engineDataMap = std::make_unique<EngineDataMap>();
 
 		engineDataMap->DataMap.ClassName = className;
-		engineDataMap->DataMap.Descriptions = {typeDescriptions.get(), static_cast<std::size_t>(fieldCount)};
+		engineDataMap->DataMap.Members = {typeDescriptions.get(), static_cast<std::size_t>(fieldCount)};
 		engineDataMap->TypeDescriptions = std::move(typeDescriptions);
 
 		it = g_EngineTypeDescriptionsToGame.emplace(fields, std::move(engineDataMap)).first;

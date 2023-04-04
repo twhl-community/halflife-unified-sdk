@@ -156,11 +156,18 @@ bool CSave::WriteFields(void* baseData, const DataMap& dataMap)
 		return false;
 	}
 
-	for (const auto& field : dataMap.Descriptions)
+	for (const auto& member : dataMap.Members)
 	{
-		auto fields = reinterpret_cast<const std::byte*>(baseData) + field.fieldOffset;
+		auto field = std::get_if<DataFieldDescription>(&member);
 
-		auto serializer = field.Serializer;
+		if (!field)
+		{
+			continue;
+		}
+
+		auto fields = reinterpret_cast<const std::byte*>(baseData) + field->fieldOffset;
+
+		auto serializer = field->Serializer;
 
 		if (!serializer)
 		{
@@ -168,14 +175,14 @@ bool CSave::WriteFields(void* baseData, const DataMap& dataMap)
 			continue;
 		}
 
-		if (DataEmpty(fields, field.fieldSize * serializer->GetFieldSize()))
+		if (DataEmpty(fields, field->fieldSize * serializer->GetFieldSize()))
 			continue;
 
-		auto fieldSize = WriteHeader(field.fieldName, 0);
+		auto fieldSize = WriteHeader(field->fieldName, 0);
 
 		const auto startPosition = m_data.pCurrentData;
 
-		serializer->Serialize(*this, fields, field.fieldSize);
+		serializer->Serialize(*this, fields, field->fieldSize);
 
 		WriteCount(fieldSize, m_data.pCurrentData - startPosition);
 
@@ -274,12 +281,19 @@ bool CRestore::ReadFields(void* baseData, const DataMap& dataMap)
 	int lastField = 0; // Make searches faster, most data is read/written in the same order
 
 	// Clear out base data
-	for (const auto& field : dataMap.Descriptions)
+	for (const auto& member : dataMap.Members)
 	{
-		// Don't clear global fields
-		if (!m_global || (field.flags & FTYPEDESC_GLOBAL) == 0)
+		auto field = std::get_if<DataFieldDescription>(&member);
+
+		if (!field)
 		{
-			auto serializer = field.Serializer;
+			continue;
+		}
+
+		// Don't clear global fields
+		if (!m_global || (field->flags & FTYPEDESC_GLOBAL) == 0)
+		{
+			auto serializer = field->Serializer;
 
 			if (!serializer)
 			{
@@ -287,8 +301,8 @@ bool CRestore::ReadFields(void* baseData, const DataMap& dataMap)
 				continue;
 			}
 
-			std::memset(reinterpret_cast<std::byte*>(baseData) + field.fieldOffset, 0,
-				field.fieldSize * serializer->GetFieldSize());
+			std::memset(reinterpret_cast<std::byte*>(baseData) + field->fieldOffset, 0,
+				field->fieldSize * serializer->GetFieldSize());
 		}
 	}
 
@@ -306,16 +320,23 @@ bool CRestore::ReadFields(void* baseData, const DataMap& dataMap)
 
 int CRestore::ReadField(void* baseData, const DataMap& dataMap, const char* fieldName, int startField, std::byte* data, int size)
 {
-	for (std::size_t i = 0; i < dataMap.Descriptions.size(); ++i)
+	for (std::size_t i = 0; i < dataMap.Members.size(); ++i)
 	{
-		const int fieldNumber = (i + startField) % int(dataMap.Descriptions.size());
-		const auto& field = dataMap.Descriptions[fieldNumber];
+		const int fieldNumber = (i + startField) % int(dataMap.Members.size());
+		const auto& member = dataMap.Members[fieldNumber];
 
-		if (!stricmp(field.fieldName, fieldName))
+		auto field = std::get_if<DataFieldDescription>(&member);
+
+		if (!field)
 		{
-			if (!m_global || (field.flags & FTYPEDESC_GLOBAL) == 0)
+			continue;
+		}
+
+		if (!stricmp(field->fieldName, fieldName))
+		{
+			if (!m_global || (field->flags & FTYPEDESC_GLOBAL) == 0)
 			{
-				auto serializer = field.Serializer;
+				auto serializer = field->Serializer;
 
 				if (!serializer)
 				{
@@ -327,7 +348,7 @@ int CRestore::ReadField(void* baseData, const DataMap& dataMap, const char* fiel
 				m_ReadSize = size;
 				m_HasOverflowed = false;
 
-				serializer->Deserialize(*this, reinterpret_cast<std::byte*>(baseData) + field.fieldOffset, field.fieldSize);
+				serializer->Deserialize(*this, reinterpret_cast<std::byte*>(baseData) + field->fieldOffset, field->fieldSize);
 			}
 #if 0
 			else
