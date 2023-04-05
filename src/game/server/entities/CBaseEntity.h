@@ -269,8 +269,6 @@ public:
 	virtual bool IsMoving() { return pev->velocity != g_vecZero; }
 	virtual void OverrideReset() {}
 	virtual int DamageDecal(int bitsDamageType);
-	// This is ONLY used by the node graph to test movement through a door
-	virtual void SetToggleState(int state) {}
 	virtual bool OnControls(CBaseEntity* controller) { return false; }
 	virtual bool IsAlive() { return (pev->deadflag == DEAD_NO) && pev->health > 0; }
 	virtual bool IsBSPModel() { return pev->solid == SOLID_BSP || pev->movetype == MOVETYPE_PUSHSTEP; }

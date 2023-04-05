@@ -40,8 +40,6 @@ public:
 			return (CBaseToggle::ObjectCaps() & ~FCAP_ACROSS_TRANSITION);
 	};
 
-	void SetToggleState(int state) override;
-
 	// used to selectivly override defaults
 	/**
 	*	@brief Doors not tied to anything (e.g. button, another door) can be touched, to make them activate.
@@ -296,14 +294,6 @@ void CBaseDoor::Spawn()
 	}
 	else // touchable button
 		SetTouch(&CBaseDoor::DoorTouch);
-}
-
-void CBaseDoor::SetToggleState(int state)
-{
-	if (state == TS_AT_TOP)
-		SetOrigin(m_vecPosition2);
-	else
-		SetOrigin(m_vecPosition1);
 }
 
 void CBaseDoor::Precache()
@@ -601,7 +591,6 @@ class CRotDoor : public CBaseDoor
 {
 public:
 	void Spawn() override;
-	void SetToggleState(int state) override;
 };
 
 LINK_ENTITY_TO_CLASS(func_door_rotating, CRotDoor);
@@ -653,16 +642,6 @@ void CRotDoor::Spawn()
 	}
 	else // touchable button
 		SetTouch(&CRotDoor::DoorTouch);
-}
-
-void CRotDoor::SetToggleState(int state)
-{
-	if (state == TS_AT_TOP)
-		pev->angles = m_vecAngle2;
-	else
-		pev->angles = m_vecAngle1;
-
-	SetOrigin(pev->origin);
 }
 
 class CMomentaryDoor : public CBaseToggle
