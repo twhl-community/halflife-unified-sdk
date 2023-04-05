@@ -2486,7 +2486,7 @@ class CTriggerKillNoGib : public CBaseTrigger
 public:
 	void Spawn() override;
 
-	void KillTouch(CBaseEntity* pOther);
+	void EXPORT KillTouch(CBaseEntity* pOther);
 };
 
 LINK_ENTITY_TO_CLASS(trigger_kill_nogib, CTriggerKillNoGib);

@@ -32,7 +32,7 @@ public:
 
 	void EXPORT FlagCarryThink();
 
-	void goal_item_dropthink();
+	void EXPORT goal_item_dropthink();
 
 	void Spawn() override;
 
