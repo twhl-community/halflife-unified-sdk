@@ -428,7 +428,7 @@ static const IDataFieldSerializer* RemapEngineFieldTypeToSerializer(ENGINEFIELDT
 struct EngineDataMap
 {
 	std::unique_ptr<const DataMember[]> TypeDescriptions;
-	DataMap DataMap;
+	DataMap Map;
 };
 
 std::unordered_map<const TYPEDESCRIPTION*, std::unique_ptr<const EngineDataMap>> g_EngineTypeDescriptionsToGame;
@@ -458,14 +458,14 @@ static const DataMap* GetOrCreateDataMap(const char* className, const TYPEDESCRI
 
 		auto engineDataMap = std::make_unique<EngineDataMap>();
 
-		engineDataMap->DataMap.ClassName = className;
-		engineDataMap->DataMap.Members = {typeDescriptions.get(), static_cast<std::size_t>(fieldCount)};
+		engineDataMap->Map.ClassName = className;
+		engineDataMap->Map.Members = {typeDescriptions.get(), static_cast<std::size_t>(fieldCount)};
 		engineDataMap->TypeDescriptions = std::move(typeDescriptions);
 
 		it = g_EngineTypeDescriptionsToGame.emplace(fields, std::move(engineDataMap)).first;
 	}
 
-	return &it->second->DataMap;
+	return &it->second->Map;
 }
 
 void SaveWriteFields(SAVERESTOREDATA* pSaveData, const char* pname, void* pBaseData, TYPEDESCRIPTION* pFields, int fieldCount)
