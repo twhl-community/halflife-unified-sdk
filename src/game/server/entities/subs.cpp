@@ -236,7 +236,6 @@ DEFINE_FIELD(m_toggle_state, FIELD_INTEGER),
 	DEFINE_FIELD(m_pfnCallWhenMoveDone, FIELD_FUNCTIONPOINTER),
 	DEFINE_FIELD(m_vecFinalDest, FIELD_POSITION_VECTOR),
 	DEFINE_FIELD(m_vecFinalAngle, FIELD_VECTOR),
-	DEFINE_FIELD(m_sMaster, FIELD_STRING),
 	DEFINE_FIELD(m_bitsDamageInflict, FIELD_INTEGER), // damage type inflicted
 	DEFINE_FUNCTION(LinearMoveDone),
 	DEFINE_FUNCTION(AngularMoveDone),
@@ -252,11 +251,6 @@ bool CBaseToggle::KeyValue(KeyValueData* pkvd)
 	else if (FStrEq(pkvd->szKeyName, "wait"))
 	{
 		m_flWait = atof(pkvd->szValue);
-		return true;
-	}
-	else if (FStrEq(pkvd->szKeyName, "master"))
-	{
-		m_sMaster = ALLOC_STRING(pkvd->szValue);
 		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "distance"))

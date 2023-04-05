@@ -229,7 +229,7 @@ public:
 	/**
 	*	@brief Cache user-entity-field values until spawn is called.
 	*/
-	virtual bool KeyValue(KeyValueData* pkvd) { return false; }
+	virtual bool KeyValue(KeyValueData* pkvd);
 	bool Save(CSave& save);
 	bool Restore(CRestore& restore);
 	virtual void PostRestore();
@@ -544,6 +544,15 @@ public:
 	void EmitSoundDyn(int channel, const char* sample, float volume, float attenuation, int flags, int pitch);
 	void EmitAmbientSound(const Vector& vecOrigin, const char* samp, float vol, float attenuation, int fFlags, int pitch);
 	void StopSound(int channel, const char* sample);
+
+	/**
+	*	@brief If this entity has a master switch, this is the targetname.
+	*	A master switch must be of the multisource or game_team_master type.
+	*	If all of the switches in the multisource have been triggered,
+	*	then the entity will be allowed to operate.
+	*	Otherwise, it will be deactivated.
+	*/
+	string_t m_sMaster;
 
 	string_t m_ModelReplacementFileName;
 	string_t m_SoundReplacementFileName;

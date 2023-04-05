@@ -24,24 +24,13 @@
 class CRuleEntity : public CBaseEntity
 {
 	DECLARE_CLASS(CRuleEntity, CBaseEntity);
-	DECLARE_DATAMAP();
 
 public:
 	void Spawn() override;
-	bool KeyValue(KeyValueData* pkvd) override;
-
-	void SetMaster(string_t iszMaster) { m_iszMaster = iszMaster; }
 
 protected:
 	bool CanFireForActivator(CBaseEntity* pActivator);
-
-private:
-	string_t m_iszMaster;
 };
-
-BEGIN_DATAMAP(CRuleEntity)
-DEFINE_FIELD(m_iszMaster, FIELD_STRING),
-	END_DATAMAP();
 
 void CRuleEntity::Spawn()
 {
@@ -50,22 +39,11 @@ void CRuleEntity::Spawn()
 	pev->effects = EF_NODRAW;
 }
 
-bool CRuleEntity::KeyValue(KeyValueData* pkvd)
-{
-	if (FStrEq(pkvd->szKeyName, "master"))
-	{
-		SetMaster(ALLOC_STRING(pkvd->szValue));
-		return true;
-	}
-
-	return CBaseEntity::KeyValue(pkvd);
-}
-
 bool CRuleEntity::CanFireForActivator(CBaseEntity* pActivator)
 {
-	if (!FStringNull(m_iszMaster))
+	if (!FStringNull(m_sMaster))
 	{
-		if (UTIL_IsMasterTriggered(m_iszMaster, pActivator))
+		if (UTIL_IsMasterTriggered(m_sMaster, pActivator))
 			return true;
 		else
 			return false;

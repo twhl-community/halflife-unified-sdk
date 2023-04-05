@@ -81,11 +81,5 @@ public:
 	static float AxisValue(int flags, const Vector& angles);
 	static void AxisDir(CBaseEntity* entity);
 	static float AxisDelta(int flags, const Vector& angle1, const Vector& angle2);
-
-	string_t m_sMaster; // If this button has a master switch, this is the targetname.
-						// A master switch must be of the multisource type. If all
-						// of the switches in the multisource have been triggered, then
-						// the button will be allowed to operate. Otherwise, it will be
-						// deactivated.
 };
 #define SetMoveDone(a) m_pfnCallWhenMoveDone = static_cast<decltype(CBaseToggle::m_pfnCallWhenMoveDone)>(a)

@@ -32,11 +32,6 @@ bool CTFSpawn::KeyValue(KeyValueData* pkvd)
 		team_no = static_cast<CTFTeam>(atoi(pkvd->szValue));
 		return true;
 	}
-	else if (FStrEq("master", pkvd->szKeyName))
-	{
-		pev->netname = ALLOC_STRING(pkvd->szValue);
-		return true;
-	}
 
 	return CBaseEntity::KeyValue(pkvd);
 }
@@ -49,7 +44,7 @@ void CTFSpawn::Spawn()
 		return;
 	}
 
-	pev->netname = pev->classname;
+	m_sMaster = pev->classname;
 
 	// Change the classname to the owning team's spawn name
 	pev->classname = MAKE_STRING(sTeamSpawnNames[static_cast<int>(team_no)]);
@@ -61,5 +56,5 @@ bool CTFSpawn::IsTriggered(CBaseEntity* pEntity)
 	if (!FStringNull(pev->targetname) && STRING(pev->targetname))
 		return m_fState;
 	else
-		return UTIL_IsMasterTriggered(pev->netname, pEntity);
+		return UTIL_IsMasterTriggered(m_sMaster, pEntity);
 }

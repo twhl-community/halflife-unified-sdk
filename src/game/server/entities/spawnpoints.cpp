@@ -19,22 +19,9 @@
 LINK_ENTITY_TO_CLASS(info_player_start, CPointEntity);
 LINK_ENTITY_TO_CLASS(info_player_deathmatch, CBaseDMStart);
 
-bool CBaseDMStart::KeyValue(KeyValueData* pkvd)
-{
-	if (FStrEq(pkvd->szKeyName, "master"))
-	{
-		pev->netname = ALLOC_STRING(pkvd->szValue);
-		return true;
-	}
-
-	return CPointEntity::KeyValue(pkvd);
-}
-
 bool CBaseDMStart::IsTriggered(CBaseEntity* pEntity)
 {
-	bool master = UTIL_IsMasterTriggered(pev->netname, pEntity);
-
-	return master;
+	return UTIL_IsMasterTriggered(m_sMaster, pEntity);
 }
 
 /**

@@ -20,7 +20,6 @@
 class CBaseDMStart : public CPointEntity
 {
 public:
-	bool KeyValue(KeyValueData* pkvd) override;
 	bool IsTriggered(CBaseEntity* pEntity) override;
 };
 

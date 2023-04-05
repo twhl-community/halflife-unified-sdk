@@ -135,6 +135,8 @@ DEFINE_FIELD(m_pGoalEnt, FIELD_CLASSPTR),
 	DEFINE_FIELD(m_pfnUse, FIELD_FUNCTIONPOINTER),
 	DEFINE_FIELD(m_pfnBlocked, FIELD_FUNCTIONPOINTER),
 
+	DEFINE_FIELD(m_sMaster, FIELD_STRING),
+
 	DEFINE_FIELD(m_ModelReplacementFileName, FIELD_STRING),
 	DEFINE_FIELD(m_SoundReplacementFileName, FIELD_STRING),
 	DEFINE_FIELD(m_SentenceReplacementFileName, FIELD_STRING),
@@ -149,6 +151,17 @@ DEFINE_FIELD(m_pGoalEnt, FIELD_CLASSPTR),
 	DEFINE_FUNCTION(SUB_FadeOut),
 	DEFINE_FUNCTION(SUB_CallUseToggle),
 	END_DATAMAP();
+
+bool CBaseEntity::KeyValue(KeyValueData* pkvd)
+{
+	if (FStrEq(pkvd->szKeyName, "master"))
+	{
+		m_sMaster = ALLOC_STRING(pkvd->szValue);
+		return true;
+	}
+
+	return false;
+}
 
 bool CBaseEntity::Save(CSave& save)
 {
