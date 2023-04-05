@@ -51,7 +51,7 @@ struct ReplacementMap;
 // UNDONE: This will ignore transition volumes (trigger_transition), but not the PVS!!!
 #define FCAP_FORCE_TRANSITION 0x00000080 // ALWAYS goes across transitions
 
-enum USE_TYPE
+enum USE_TYPE : int
 {
 	USE_OFF = 0,
 	USE_ON = 1,

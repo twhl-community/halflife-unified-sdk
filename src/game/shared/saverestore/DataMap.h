@@ -24,7 +24,7 @@
 #include "ClassData.h"
 #include "DataFieldSerializers.h"
 
-enum USE_TYPE;
+enum USE_TYPE : int;
 
 class SINGLE_INHERITANCE CBaseEntity;
 
