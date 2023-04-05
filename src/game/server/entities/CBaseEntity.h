@@ -420,10 +420,17 @@ public:
 
 private:
 	// Ugly code to lookup all functions to make sure they are exported when set.
-	void FunctionCheck(const void* pFunction, const char* name)
+	void FunctionCheck(const BASEPTR pFunction, const char* name)
 	{
-		if (pFunction && !DataMap_FindFunctionName(*GetDataMap(), DataMap_ConvertFunctionPointer(pFunction)))
-			CBaseEntity::Logger->error("No DEFINE_FUNCTION for: {}:{} ({})", GetClassname(), name, pFunction);
+		if (pFunction && !DataMap_FindFunctionName(*GetDataMap(), pFunction))
+		{
+			// Pointer to member functions store the function address as a pointer at the start of the variable,
+			// so this extracts that and turns it into an address we can use.
+			// This only works if the function is non-virtual.
+			// Note that this is incredibly ugly and should be changed when possible to not rely on implementation details.
+			CBaseEntity::Logger->error("No DEFINE_FUNCTION for: {}:{} ({})",
+				GetClassname(), name, *reinterpret_cast<const void* const*>(&pFunction));
+		}
 	}
 
 	template <typename T, typename Dest, typename Source>
@@ -441,13 +448,7 @@ private:
 		pointer = static_cast<Dest>(func);
 
 #ifdef _DEBUG
-		// Pointer to member functions store the function address as a pointer at the start of the variable,
-		// so this extracts that and turns it into an address we can use.
-		// This only works if the function is non-virtual.
-		// Note that this is incredibly ugly and should be changed when possible to not rely on implementation details.
-		const void* address = reinterpret_cast<const void*>(*reinterpret_cast<const int*>(&pointer));
-
-		FunctionCheck(address, name);
+		FunctionCheck(DataMap_ConvertFunctionPointer(pointer), name);
 #endif
 
 		return pointer;
