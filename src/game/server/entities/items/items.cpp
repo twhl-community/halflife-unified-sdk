@@ -219,6 +219,12 @@ public:
 
 	bool AddItem(CBasePlayer* player) override
 	{
+		return AddItemCore(player, true);
+	}
+
+protected:
+	bool AddItemCore(CBasePlayer* player, bool playHEVSound)
+	{
 		if (player->pev->deadflag != DEAD_NO)
 		{
 			return false;
@@ -244,18 +250,21 @@ public:
 			{
 				player->EmitSound(CHAN_ITEM, "items/gunpickup2.wav", 1, ATTN_NORM);
 
-				// Suit reports new power level
-				// For some reason this wasn't working in release build -- round it.
-				int pct = (int)((float)(player->pev->armorvalue * 100.0) * (1.0 / MAX_NORMAL_BATTERY) + 0.5);
-				pct = (pct / 5);
-				if (pct > 0)
-					pct--;
+				if (playHEVSound)
+				{
+					// Suit reports new power level
+					// For some reason this wasn't working in release build -- round it.
+					int pct = (int)((float)(player->pev->armorvalue * 100.0) * (1.0 / MAX_NORMAL_BATTERY) + 0.5);
+					pct = (pct / 5);
+					if (pct > 0)
+						pct--;
 
-				char szcharge[64];
-				sprintf(szcharge, "!HEV_%1dP", pct);
+					char szcharge[64];
+					sprintf(szcharge, "!HEV_%1dP", pct);
 
-				// EMIT_SOUND_SUIT(this, szcharge);
-				player->SetSuitUpdate(szcharge, false, SUIT_NEXT_IN_30SEC);
+					// EMIT_SOUND_SUIT(this, szcharge);
+					player->SetSuitUpdate(szcharge, false, SUIT_NEXT_IN_30SEC);
+				}
 			}
 
 			return true;
@@ -282,6 +291,11 @@ public:
 		m_ArmorAmount = 40; // TODO: add to skill.json
 		pev->model = MAKE_STRING("models/barney_helmet.mdl");
 	}
+
+	bool AddItem(CBasePlayer* player) override
+	{
+		return AddItemCore(player, false);
+	}
 };
 
 LINK_ENTITY_TO_CLASS(item_helmet, CItemHelmet);
@@ -294,6 +308,11 @@ public:
 		CItem::OnCreate();
 		m_ArmorAmount = 60; // TODO: add to skill.json
 		pev->model = MAKE_STRING("models/barney_vest.mdl");
+	}
+
+	bool AddItem(CBasePlayer* player) override
+	{
+		return AddItemCore(player, false);
 	}
 };
 
