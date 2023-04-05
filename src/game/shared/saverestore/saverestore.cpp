@@ -148,7 +148,7 @@ bool CSaveRestoreBuffer::IsValidSaveRestoreData(SAVERESTOREDATA* data)
 
 bool CSave::WriteFields(void* baseData, const DataMap& dataMap)
 {
-	WriteHeader(dataMap.ClassName, 0);
+	WriteHeader(dataMap.ClassName, sizeof(int));
 	auto fieldCount = WriteValue(int(0));
 
 	if (!fieldCount)
