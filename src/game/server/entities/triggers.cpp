@@ -1560,12 +1560,18 @@ void CTriggerPlayerFreeze::PlayerFreezeDelay()
  */
 class CTriggerKillNoGib : public CBaseTrigger
 {
+	DECLARE_CLASS(CTriggerKillNoGib, CBaseTrigger);
+	DECLARE_DATAMAP();
+
 public:
 	void Spawn() override;
 
-	// TODO: needs to be added to the datamap. check if it's missing in original op4
 	void KillTouch(CBaseEntity* pOther);
 };
+
+BEGIN_DATAMAP(CTriggerKillNoGib)
+DEFINE_FUNCTION(KillTouch),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(trigger_kill_nogib, CTriggerKillNoGib);
 

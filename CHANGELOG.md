@@ -821,6 +821,7 @@ Many changes have been made since 2019. All changes made after [[this|https://gi
 
 * Force Pitworm animations to interpolate to fix stuttering movement [Unified SDK #434](SamVanheer/halflife-unified-sdk#434) (Thanks [malortie](https://github.com/malortie))
 * Implemented snow footsteps and impact sounds, changed snow material type ID to `O` to match Opposing Force
+* Added missing EXPORT to a few Opposing Force entities
 
 ## Changes in V1.0.0 Beta 011
 

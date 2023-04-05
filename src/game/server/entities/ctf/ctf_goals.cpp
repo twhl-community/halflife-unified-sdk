@@ -250,6 +250,7 @@ BEGIN_DATAMAP(CTFGoalFlag)
 DEFINE_FUNCTION(PlaceItem),
 	DEFINE_FUNCTION(ReturnFlag),
 	DEFINE_FUNCTION(FlagCarryThink),
+	DEFINE_FUNCTION(goal_item_dropthink),
 	DEFINE_FUNCTION(ReturnFlagThink),
 	DEFINE_FUNCTION(ScoreFlagTouch),
 	DEFINE_FUNCTION(goal_item_touch),
