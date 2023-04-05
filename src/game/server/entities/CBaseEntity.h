@@ -377,7 +377,7 @@ public:
 	bool Intersects(CBaseEntity* pOther);
 	void MakeDormant();
 	bool IsDormant();
-	bool IsLockedByMaster() { return false; }
+	bool IsLockedByMaster();
 
 	static CBaseEntity* Instance(edict_t* pent)
 	{
@@ -553,6 +553,7 @@ public:
 	*	Otherwise, it will be deactivated.
 	*/
 	string_t m_sMaster;
+	EHANDLE m_hActivator;
 
 	string_t m_ModelReplacementFileName;
 	string_t m_SoundReplacementFileName;

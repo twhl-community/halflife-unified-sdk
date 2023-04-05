@@ -45,7 +45,6 @@ public:
 
 	int m_cTriggersLeft; // trigger_counter only, # of activations remaining
 	float m_flHeight;
-	EHANDLE m_hActivator;
 	TBASEPTR<CBaseToggle> m_pfnCallWhenMoveDone;
 	Vector m_vecFinalDest;
 	Vector m_vecFinalAngle;
@@ -75,8 +74,6 @@ public:
 	*	@brief After rotating, set angle to exact final angle, call "move done" function
 	*/
 	void AngularMoveDone();
-
-	bool IsLockedByMaster();
 
 	static float AxisValue(int flags, const Vector& angles);
 	static void AxisDir(CBaseEntity* entity);

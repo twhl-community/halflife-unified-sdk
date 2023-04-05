@@ -815,6 +815,11 @@ bool CBaseEntity::IsDormant()
 	return FBitSet(pev->flags, FL_DORMANT);
 }
 
+bool CBaseEntity::IsLockedByMaster()
+{
+	return !FStringNull(m_sMaster) && !UTIL_IsMasterTriggered(m_sMaster, m_hActivator);
+}
+
 bool CBaseEntity::IsInWorld()
 {
 	// position

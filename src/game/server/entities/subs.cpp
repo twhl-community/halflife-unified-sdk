@@ -157,17 +157,9 @@ void CBaseDelay::SUB_UseTargets(CBaseEntity* pActivator, USE_TYPE useType, float
 		pTemp->m_flDelay = 0; // prevent "recursion"
 		pTemp->pev->target = pev->target;
 
-		// HACKHACK
-		// This wasn't in the release build of Half-Life.  We should have moved m_hActivator into this class
-		// but changing member variable hierarchy would break save/restore without some ugly code.
-		// This code is not as ugly as that code
 		if (pActivator && pActivator->IsPlayer()) // If a player activates, then save it
 		{
-			pTemp->pev->owner = pActivator->edict();
-		}
-		else
-		{
-			pTemp->pev->owner = nullptr;
+			pTemp->m_hActivator = pActivator;
 		}
 
 		return;
@@ -207,12 +199,9 @@ void CBaseDelay::SUB_UseTargets(CBaseEntity* pActivator, USE_TYPE useType, float
 
 void CBaseDelay::DelayThink()
 {
-	CBaseEntity* pActivator = nullptr;
+	// If a player activated this on delay
+	CBaseEntity* pActivator = m_hActivator;
 
-	if (pev->owner != nullptr) // A player activated this on delay
-	{
-		pActivator = CBaseEntity::Instance(pev->owner);
-	}
 	// The use type is cached (and stashed) in pev->button
 	SUB_UseTargets(pActivator, (USE_TYPE)pev->button, 0);
 	REMOVE_ENTITY(ENT(pev));
@@ -232,7 +221,6 @@ DEFINE_FIELD(m_toggle_state, FIELD_INTEGER),
 	DEFINE_FIELD(m_vecAngle2, FIELD_VECTOR), // UNDONE: Position could go through transition, but also angle?
 	DEFINE_FIELD(m_cTriggersLeft, FIELD_INTEGER),
 	DEFINE_FIELD(m_flHeight, FIELD_FLOAT),
-	DEFINE_FIELD(m_hActivator, FIELD_EHANDLE),
 	DEFINE_FIELD(m_pfnCallWhenMoveDone, FIELD_FUNCTIONPOINTER),
 	DEFINE_FIELD(m_vecFinalDest, FIELD_POSITION_VECTOR),
 	DEFINE_FIELD(m_vecFinalAngle, FIELD_VECTOR),
@@ -305,11 +293,6 @@ void CBaseToggle::LinearMoveDone()
 	pev->nextthink = -1;
 	if (m_pfnCallWhenMoveDone)
 		(this->*m_pfnCallWhenMoveDone)();
-}
-
-bool CBaseToggle::IsLockedByMaster()
-{
-	return !FStringNull(m_sMaster) && !UTIL_IsMasterTriggered(m_sMaster, m_hActivator);
 }
 
 void CBaseToggle::AngularMove(Vector vecDestAngle, float flSpeed)
