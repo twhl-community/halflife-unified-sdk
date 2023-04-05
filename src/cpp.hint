@@ -53,9 +53,10 @@ public:                                      \
                                                                        \
 	DataMap thisClass::InternalCreateDataMap()                         \
 	{                                                                  \
+		const char* const className = #thisClass;                      \
 		using ThisClass = thisClass;                                   \
                                                                        \
-		static const TYPEDESCRIPTION descriptions[] =                  \
+		static const DataMember members[] =                            \
 		{
 
 #define BEGIN_DATAMAP_NOBASE(thisClass)    \
@@ -66,44 +67,44 @@ public:                                      \
                                            \
 	_BEGIN_DATAMAP_COMMON(thisClass)
 
-#define BEGIN_DATAMAP(thisClass)                    \
-	const DataMap* thisClass::GetBaseMap()          \
-	{                                               \
-		return thisClass::BaseClass::GetLocalMap(); \
-	}                                               \
-                                                    \
+#define BEGIN_DATAMAP(thisClass)                        \
+	const DataMap* thisClass::GetBaseMap()              \
+	{                                                   \
+		return thisClass::BaseClass::GetLocalDataMap(); \
+	}                                                   \
+                                                        \
 	_BEGIN_DATAMAP_COMMON(thisClass)
 
-#define END_DATAMAP()                                                         \
-	{                                                                         \
-		FIELD_TYPECOUNT, nullptr, -1, -1, 0                                   \
-	}                                                                         \
-	}                                                                         \
-	;                                                                         \
-                                                                              \
-	return {                                                                  \
-		.BaseMap{ThisClass::GetBaseMap()},                                    \
-		.Descriptions{std::begin(descriptions), std::end(descriptions) - 1}}; \
+#define END_DATAMAP()                                          \
+	{                                                          \
+	}                                                          \
+	}                                                          \
+	;                                                          \
+                                                               \
+	return {                                                   \
+		.ClassName{className},                                 \
+		.BaseMap{ThisClass::GetBaseMap()},                     \
+		.Members{std::begin(members), std::end(members) - 1}}; \
 	}
 
-#define RAW_DEFINE_FIELD(fieldName, fieldType, count, flags)                \
-	{                                                                       \
-		fieldType, #fieldName, offsetof(ThisClass, fieldName), count, flags \
+#define DEFINE_DUMMY_DATAMAP(thisClass) \
+	BEGIN_DATAMAP(thisClass)            \
+	END_DATAMAP()
+
+#define RAW_DEFINE_FIELD(fieldName, fieldType, serializer, count, flags)                \
+	DataFieldDescription                                                                \
+	{                                                                                   \
+		fieldType, serializer, #fieldName, offsetof(ThisClass, fieldName), count, flags \
 	}
 
 #define DEFINE_FIELD(fieldName, fieldType) \
-	RAW_DEFINE_FIELD(fieldName, fieldType, 1, 0)
+	RAW_DEFINE_FIELD(fieldName, fieldType, &FieldTypeToSerializerMapper<fieldType>::Serializer, 1, 0)
 
 #define DEFINE_ARRAY(fieldName, fieldType, count) \
-	RAW_DEFINE_FIELD(fieldName, fieldType, count, 0)
+	RAW_DEFINE_FIELD(fieldName, fieldType, &FieldTypeToSerializerMapper<fieldType>::Serializer, count, 0)
 
 #define DEFINE_GLOBAL_FIELD(fieldName, fieldType) \
-	RAW_DEFINE_FIELD(fieldName, fieldType, 1, FTYPEDESC_GLOBAL)
+	RAW_DEFINE_FIELD(fieldName, fieldType, &FieldTypeToSerializerMapper<fieldType>::Serializer, 1, FTYPEDESC_GLOBAL)
 
 #define LINK_ENTITY_TO_CLASS(mapClassName, DLLClassName) extern "C" DLLEXPORT void mapClassName(entvars_t*) {}
-#define IMPLEMENT_SAVERESTORE(derivedClass, baseClass) bool derivedClass::Save(CSave&) {} bool derivedClass::Restore(CRestore&) {}
 #define IMPLEMENT_CUSTOM_SCHEDULES(derivedClass, baseClass) Schedule_t* derivedClass::ScheduleFromName(const char* pName) {}
-
-//Client side macros
-#define DECLARE_MESSAGE(y, x) int __MsgFunc_##x(const char* pszName, int iSize, void* pbuf) {}
-#define DECLARE_COMMAND(y, x) void __CmdFunc_##x() {}
