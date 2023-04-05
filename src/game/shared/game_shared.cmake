@@ -8,6 +8,8 @@ function(add_game_shared_sources target)
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/ProjectInfoSystem.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/voice_common.h
 			
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/CommandWhitelist.cpp
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/CommandWhitelist.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/ConditionEvaluator.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/ConditionEvaluator.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/GameConfigIncludeStack.h

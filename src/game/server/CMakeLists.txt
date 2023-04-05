@@ -90,6 +90,7 @@ target_sources(server PRIVATE
 	entities/func_tank.cpp
 	entities/h_cycler.cpp
 	entities/lights.cpp
+	entities/logic_entities.cpp
 	entities/maprules.cpp
 	entities/maprules.h
 	entities/monsterevent.h

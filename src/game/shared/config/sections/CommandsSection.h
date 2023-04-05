@@ -16,16 +16,15 @@
 #pragma once
 
 #include <iterator>
-#include <optional>
 #include <regex>
 #include <string>
 #include <string_view>
-#include <unordered_set>
 
 #include <fmt/format.h>
 
 #include <spdlog/logger.h>
 
+#include "config/CommandWhitelist.h"
 #include "config/GameConfig.h"
 
 #include "utils/JSONSystem.h"
@@ -43,7 +42,7 @@ public:
 	/**
 	 *	@param commandWhitelist If provided, only commands listed in this whitelist are allowed to be executed.
 	 */
-	explicit CommandsSection(std::optional<std::unordered_set<std::string>>&& commandWhitelist = {})
+	explicit CommandsSection(const CommandWhitelist* commandWhitelist = nullptr)
 		: m_CommandWhitelist(std::move(commandWhitelist))
 	{
 	}
@@ -144,5 +143,5 @@ private:
 	}
 
 private:
-	const std::optional<std::unordered_set<std::string>> m_CommandWhitelist;
+	const CommandWhitelist* m_CommandWhitelist;
 };

@@ -16,8 +16,6 @@
 #pragma once
 
 #include <memory>
-#include <string>
-#include <unordered_set>
 
 #include "GameLibrary.h"
 #include "MapState.h"
@@ -109,8 +107,6 @@ private:
 	void LoadServerConfigFiles();
 
 	void LoadMapChangeConfigFile();
-
-	std::unordered_set<std::string> GetMapConfigCommandWhitelist();
 
 private:
 	cvar_t* m_AllowDownload{};
