@@ -23,11 +23,11 @@ public:
 	void Precache() override;
 	void Spawn() override;
 
-	void EXPORT BurnThink();
+	void BurnThink();
 
-	void EXPORT FlyThink();
+	void FlyThink();
 
-	void EXPORT MortarExplodeTouch(CBaseEntity* pOther);
+	void MortarExplodeTouch(CBaseEntity* pOther);
 
 	static CMortarShell* CreateMortarShell(Vector vecOrigin, Vector vecAngles, CBaseEntity* pOwner, int velocity);
 
@@ -41,6 +41,9 @@ BEGIN_DATAMAP(CMortarShell)
 DEFINE_FIELD(m_velocity, FIELD_INTEGER),
 	DEFINE_FIELD(m_flIgniteTime, FIELD_TIME),
 	DEFINE_FIELD(m_iSoundedOff, FIELD_BOOLEAN),
+	DEFINE_FUNCTION(BurnThink),
+	DEFINE_FUNCTION(FlyThink),
+	DEFINE_FUNCTION(MortarExplodeTouch),
 	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(mortar_shell, CMortarShell);
@@ -233,7 +236,7 @@ public:
 
 	int ObjectCaps() override { return 0; }
 
-	void EXPORT MortarThink();
+	void MortarThink();
 
 	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 
@@ -296,6 +299,7 @@ DEFINE_FIELD(d_x, FIELD_INTEGER),
 	DEFINE_FIELD(m_vGunAngle, FIELD_VECTOR),
 	DEFINE_FIELD(m_vIdealGunVector, FIELD_VECTOR),
 	DEFINE_FIELD(m_vIdealGunAngle, FIELD_VECTOR),
+	DEFINE_FUNCTION(MortarThink),
 	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(op4mortar, COp4Mortar);
@@ -784,7 +788,7 @@ public:
 
 	void Spawn() override;
 
-	void EXPORT Reverse();
+	void Reverse();
 
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
@@ -797,6 +801,7 @@ BEGIN_DATAMAP(COp4MortarController)
 DEFINE_FIELD(m_direction, FIELD_INTEGER),
 	DEFINE_FIELD(m_controller, FIELD_INTEGER),
 	DEFINE_FIELD(m_lastpush, FIELD_FLOAT),
+	DEFINE_FUNCTION(Reverse),
 	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(func_op4mortarcontroller, COp4MortarController);

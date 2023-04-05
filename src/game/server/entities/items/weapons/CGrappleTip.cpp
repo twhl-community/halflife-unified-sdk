@@ -18,6 +18,12 @@
 
 #include "CGrappleTip.h"
 
+BEGIN_DATAMAP(CGrappleTip)
+DEFINE_FUNCTION(FlyThink),
+	DEFINE_FUNCTION(OffsetThink),
+	DEFINE_FUNCTION(TongueTouch),
+	END_DATAMAP();
+
 LINK_ENTITY_TO_CLASS(grapple_tip, CGrappleTip);
 
 namespace

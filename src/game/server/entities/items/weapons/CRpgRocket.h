@@ -15,26 +15,26 @@
 
 #pragma once
 
-#include "CPointEntity.h"
+#include "weapons.h"
 
-#define MS_MAX_TARGETS 32
+class CRpg;
 
-class CMultiSource : public CPointEntity
+class CRpgRocket : public CGrenade
 {
-	DECLARE_CLASS(CMultiSource, CPointEntity);
+	DECLARE_CLASS(CRpgRocket, CGrenade);
 	DECLARE_DATAMAP();
 
 public:
+	~CRpgRocket() override;
+
 	void Spawn() override;
-	bool KeyValue(KeyValueData* pkvd) override;
-	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
-	int ObjectCaps() override { return (CPointEntity::ObjectCaps() | FCAP_MASTER); }
-	bool IsTriggered(CBaseEntity* pActivator) override;
-	void Register();
+	void Precache() override;
+	void FollowThink();
+	void IgniteThink();
+	void RocketTouch(CBaseEntity* pOther);
+	static CRpgRocket* CreateRpgRocket(Vector vecOrigin, Vector vecAngles, CBaseEntity* pOwner, CRpg* pLauncher);
 
-	EHANDLE m_rgEntities[MS_MAX_TARGETS];
-	int m_rgTriggered[MS_MAX_TARGETS];
-
-	int m_iTotal;
-	string_t m_globalstate;
+	int m_iTrail;
+	float m_flIgniteTime;
+	EntityHandle<CRpg> m_pLauncher; // handle back to the launcher that fired me.
 };

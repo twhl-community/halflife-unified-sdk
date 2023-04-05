@@ -26,6 +26,13 @@
 
 #include "CDisplacer.h"
 
+BEGIN_DATAMAP(CDisplacer)
+DEFINE_FUNCTION(SpinupThink),
+	DEFINE_FUNCTION(AltSpinupThink),
+	DEFINE_FUNCTION(FireThink),
+	DEFINE_FUNCTION(AltFireThink),
+	END_DATAMAP();
+
 LINK_ENTITY_TO_CLASS(weapon_displacer, CDisplacer);
 
 void CDisplacer::OnCreate()

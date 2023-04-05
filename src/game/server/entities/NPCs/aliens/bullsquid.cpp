@@ -48,7 +48,7 @@ public:
 
 	static void Shoot(CBaseEntity* owner, Vector vecStart, Vector vecVelocity);
 	void Touch(CBaseEntity* pOther) override;
-	void EXPORT Animate();
+	void Animate();
 
 	int m_maxFrame;
 };
@@ -57,6 +57,7 @@ LINK_ENTITY_TO_CLASS(squidspit, CSquidSpit);
 
 BEGIN_DATAMAP(CSquidSpit)
 DEFINE_FIELD(m_maxFrame, FIELD_INTEGER),
+	DEFINE_FUNCTION(Animate),
 	END_DATAMAP();
 
 void CSquidSpit::Spawn()

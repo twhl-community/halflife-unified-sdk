@@ -25,6 +25,10 @@ DEFINE_FIELD(m_RespawnDelay, FIELD_FLOAT),
 	DEFINE_FIELD(m_PlayPickupSound, FIELD_BOOLEAN),
 	DEFINE_FIELD(m_TriggerOnSpawn, FIELD_STRING),
 	DEFINE_FIELD(m_TriggerOnDespawn, FIELD_STRING),
+	DEFINE_FUNCTION(FallThink),
+	DEFINE_FUNCTION(ItemTouch),
+	DEFINE_FUNCTION(Materialize),
+	DEFINE_FUNCTION(AttemptToMaterialize),
 	END_DATAMAP();
 
 bool CBaseItem::KeyValue(KeyValueData* pkvd)

@@ -35,6 +35,7 @@ enum KnifeAnim
 class CKnife : public CBasePlayerWeapon
 {
 	DECLARE_CLASS(CKnife, CBasePlayerWeapon);
+	DECLARE_DATAMAP();
 
 public:
 	void OnCreate() override;
@@ -49,9 +50,9 @@ public:
 
 	bool Swing(const bool bFirst);
 
-	void EXPORT SwingAgain();
+	void SwingAgain();
 
-	void EXPORT Smack();
+	void Smack();
 
 	bool GetWeaponInfo(WeaponInfo& info) override;
 

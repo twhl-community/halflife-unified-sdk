@@ -87,6 +87,11 @@ DEFINE_FIELD(m_hEnemy, FIELD_EHANDLE),
 	DEFINE_FIELD(m_scriptState, FIELD_INTEGER),
 	DEFINE_FIELD(m_pCine, FIELD_CLASSPTR),
 	DEFINE_FIELD(m_AllowItemDropping, FIELD_BOOLEAN),
+
+	DEFINE_FUNCTION(MonsterUse),
+	DEFINE_FUNCTION(CallMonsterThink),
+	DEFINE_FUNCTION(CorpseFallThink),
+	DEFINE_FUNCTION(MonsterInitThink),
 	END_DATAMAP();
 
 void CBaseMonster::PostRestore()

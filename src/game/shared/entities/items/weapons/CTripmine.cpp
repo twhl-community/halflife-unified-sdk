@@ -32,10 +32,10 @@ public:
 
 	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 
-	void EXPORT WarningThink();
-	void EXPORT PowerupThink();
-	void EXPORT BeamBreakThink();
-	void EXPORT DelayDeathThink();
+	void WarningThink();
+	void PowerupThink();
+	void BeamBreakThink();
+	void DelayDeathThink();
 	void Killed(CBaseEntity* attacker, int iGib) override;
 
 	void MakeBeam();
@@ -66,6 +66,10 @@ DEFINE_FIELD(m_flPowerUp, FIELD_TIME),
 	DEFINE_FIELD(m_posOwner, FIELD_POSITION_VECTOR),
 	DEFINE_FIELD(m_angleOwner, FIELD_VECTOR),
 	DEFINE_FIELD(m_RealOwner, FIELD_EHANDLE),
+	DEFINE_FUNCTION(WarningThink),
+	DEFINE_FUNCTION(PowerupThink),
+	DEFINE_FUNCTION(BeamBreakThink),
+	DEFINE_FUNCTION(DelayDeathThink),
 	END_DATAMAP();
 
 void CTripmineGrenade::OnCreate()

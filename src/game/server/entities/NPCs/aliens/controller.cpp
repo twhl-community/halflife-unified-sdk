@@ -1045,18 +1045,30 @@ void CController::MoveExecute(CBaseEntity* pTargetEnt, const Vector& vecDir, flo
 */
 class CControllerHeadBall : public CBaseMonster
 {
+	DECLARE_CLASS(CControllerHeadBall, CBaseMonster);
+	DECLARE_DATAMAP();
+
+public:
 	void Spawn() override;
 	void Precache() override;
-	void EXPORT HuntThink();
-	void EXPORT DieThink();
-	void EXPORT BounceTouch(CBaseEntity* pOther);
+	void HuntThink();
+	void DieThink();
+	void BounceTouch(CBaseEntity* pOther);
 	void MovetoTarget(Vector vecTarget);
 	void Crawl();
+
+private:
 	int m_iTrail;
 	int m_flNextAttack;
 	Vector m_vecIdeal;
 	EHANDLE m_hOwner;
 };
+
+BEGIN_DATAMAP(CControllerHeadBall)
+DEFINE_FUNCTION(HuntThink),
+	DEFINE_FUNCTION(DieThink),
+	DEFINE_FUNCTION(BounceTouch),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(controller_head_ball, CControllerHeadBall);
 
@@ -1234,13 +1246,23 @@ void CControllerHeadBall::BounceTouch(CBaseEntity* pOther)
 
 class CControllerZapBall : public CBaseMonster
 {
+	DECLARE_CLASS(CControllerZapBall, CBaseMonster);
+	DECLARE_DATAMAP();
+
+public:
 	void Spawn() override;
 	void Precache() override;
-	void EXPORT AnimateThink();
-	void EXPORT ExplodeTouch(CBaseEntity* pOther);
+	void AnimateThink();
+	void ExplodeTouch(CBaseEntity* pOther);
 
+private:
 	EHANDLE m_hOwner;
 };
+
+BEGIN_DATAMAP(CControllerZapBall)
+DEFINE_FUNCTION(AnimateThink),
+	DEFINE_FUNCTION(ExplodeTouch),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(controller_energy_ball, CControllerZapBall);
 

@@ -147,7 +147,7 @@ public:
 	void Spawn() override;
 	void Precache() override;
 
-	void EXPORT SittingThink();
+	void SittingThink();
 	int Classify() override;
 
 	void SetAnswerQuestion(CTalkMonster* pSpeaker) override;

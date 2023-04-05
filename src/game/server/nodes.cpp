@@ -1447,18 +1447,27 @@ int CGraph::RejectInlineLinks(CLink* pLinkPool, FSFile& file)
 //=========================================================
 class CTestHull : public CBaseMonster
 {
+	DECLARE_CLASS(CTestHull, CBaseMonster);
+	DECLARE_DATAMAP();
 
 public:
 	void Spawn(CBaseEntity* masterNode);
 	int ObjectCaps() override { return CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
-	void EXPORT CallBuildNodeGraph();
+	void CallBuildNodeGraph();
 	void BuildNodeGraph();
-	void EXPORT ShowBadNode();
-	void EXPORT DropDelay();
-	void EXPORT PathFind();
+	void ShowBadNode();
+	void DropDelay();
+	void PathFind();
 
 	Vector vecBadNodeOrigin;
 };
+
+BEGIN_DATAMAP(CTestHull)
+DEFINE_FUNCTION(CallBuildNodeGraph),
+	DEFINE_FUNCTION(ShowBadNode),
+	DEFINE_FUNCTION(DropDelay),
+	DEFINE_FUNCTION(PathFind),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(testhull, CTestHull);
 
@@ -3428,6 +3437,9 @@ EnoughSaid:
 //=========================================================
 class CNodeViewer : public CBaseEntity
 {
+	DECLARE_CLASS(CNodeViewer, CBaseEntity);
+	DECLARE_DATAMAP();
+
 public:
 	void Spawn() override;
 
@@ -3442,8 +3454,13 @@ public:
 
 	void FindNodeConnections(int iNode);
 	void AddNode(int iFrom, int iTo);
-	void EXPORT DrawThink();
+	void DrawThink();
 };
+
+BEGIN_DATAMAP(CNodeViewer)
+DEFINE_FUNCTION(DrawThink),
+	END_DATAMAP();
+
 LINK_ENTITY_TO_CLASS(node_viewer, CNodeViewer);
 LINK_ENTITY_TO_CLASS(node_viewer_human, CNodeViewer);
 LINK_ENTITY_TO_CLASS(node_viewer_fly, CNodeViewer);

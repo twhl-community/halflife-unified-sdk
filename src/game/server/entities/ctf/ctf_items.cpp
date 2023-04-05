@@ -20,6 +20,13 @@
 const auto SF_ITEMCTF_RANDOM_SPAWN = 1 << 2;
 const auto SF_ITEMCTF_IGNORE_TEAM = 1 << 3;
 
+BEGIN_DATAMAP(CItemCTF)
+DEFINE_FUNCTION(DropPreThink),
+	DEFINE_FUNCTION(DropThink),
+	DEFINE_FUNCTION(CarryThink),
+	DEFINE_FUNCTION(ItemTouch),
+	END_DATAMAP();
+
 CItemSpawnCTF* CItemCTF::m_pLastSpawn = nullptr;
 
 bool CItemCTF::KeyValue(KeyValueData* pkvd)

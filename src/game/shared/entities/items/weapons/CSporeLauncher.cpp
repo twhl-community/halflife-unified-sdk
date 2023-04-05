@@ -349,6 +349,7 @@ enum SporeAmmoBody
 class CSporeAmmo : public CBasePlayerAmmo
 {
 	DECLARE_CLASS(CSporeAmmo, CBasePlayerAmmo);
+	DECLARE_DATAMAP();
 
 public:
 	void OnCreate() override
@@ -442,7 +443,7 @@ public:
 		return GiveAmmo(player, m_AmmoAmount, STRING(m_AmmoName), "weapons/spore_ammo.wav");
 	}
 
-	void EXPORT Idling()
+	void Idling()
 	{
 		switch (pev->sequence)
 		{
@@ -478,7 +479,7 @@ public:
 		}
 	}
 
-	void EXPORT SporeTouch(CBaseEntity* pOther)
+	void SporeTouch(CBaseEntity* pOther)
 	{
 		if (!pOther->IsPlayer() || pev->body == SPOREAMMOBODY_EMPTY)
 			return;
@@ -497,6 +498,11 @@ public:
 		}
 	}
 };
+
+BEGIN_DATAMAP(CSporeAmmo)
+DEFINE_FUNCTION(Idling),
+	DEFINE_FUNCTION(SporeTouch),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(ammo_spore, CSporeAmmo);
 #endif

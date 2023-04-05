@@ -28,6 +28,7 @@ DEFINE_FIELD(m_hSquadLeader, FIELD_EHANDLE),
 	DEFINE_FIELD(m_flLastEnemySightTime, FIELD_TIME),
 
 	DEFINE_FIELD(m_iMySlot, FIELD_INTEGER),
+	DEFINE_FUNCTION(FollowerUse),
 	END_DATAMAP();
 
 bool COFSquadTalkMonster::OccupySlot(int iDesiredSlots)

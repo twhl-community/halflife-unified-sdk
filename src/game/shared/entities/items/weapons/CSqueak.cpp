@@ -36,8 +36,8 @@ public:
 	void Spawn() override;
 	void Precache() override;
 	int Classify() override;
-	void EXPORT SuperBounceTouch(CBaseEntity* pOther);
-	void EXPORT HuntThink();
+	void SuperBounceTouch(CBaseEntity* pOther);
+	void HuntThink();
 	int BloodColor() override { return BLOOD_COLOR_YELLOW; }
 	void Killed(CBaseEntity* attacker, int iGib) override;
 	void GibMonster() override;
@@ -66,6 +66,8 @@ DEFINE_FIELD(m_flDie, FIELD_TIME),
 	DEFINE_FIELD(m_flNextHit, FIELD_TIME),
 	DEFINE_FIELD(m_posPrev, FIELD_POSITION_VECTOR),
 	DEFINE_FIELD(m_hOwner, FIELD_EHANDLE),
+	DEFINE_FUNCTION(SuperBounceTouch),
+	DEFINE_FUNCTION(HuntThink),
 	END_DATAMAP();
 
 #define SQUEEK_DETONATE_DELAY 15.0

@@ -53,7 +53,7 @@ public:
 	/**
 	*	@brief the think function that removes the box from the world.
 	*/
-	void EXPORT Kill();
+	void Kill();
 
 	/**
 	*	@brief is a weapon of this type already packed in this box?

@@ -41,17 +41,17 @@ public:
 	/**
 	 *	@brief activates/deactivates the monster maker
 	 */
-	void EXPORT ToggleUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void ToggleUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
 	/**
 	 *	@brief drops one monster from the monstermaker each time we call this.
 	 */
-	void EXPORT CyclicUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void CyclicUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
 	/**
 	 *	@brief creates a new monster every so often
 	 */
-	void EXPORT MakerThink();
+	void MakerThink();
 
 	/**
 	 *	@brief monster maker children use this to tell the monster maker that they have died.
@@ -95,6 +95,9 @@ DEFINE_FIELD(m_iszMonsterClassname, FIELD_STRING),
 	DEFINE_ARRAY(m_ChildKeys, FIELD_STRING, MaxMonsterMakerChildKeys),
 	DEFINE_ARRAY(m_ChildValues, FIELD_STRING, MaxMonsterMakerChildKeys),
 	DEFINE_FIELD(m_ChildKeyCount, FIELD_INTEGER),
+	DEFINE_FUNCTION(ToggleUse),
+	DEFINE_FUNCTION(CyclicUse),
+	DEFINE_FUNCTION(MakerThink),
 	END_DATAMAP();
 
 bool CMonsterMaker::KeyValue(KeyValueData* pkvd)

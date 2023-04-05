@@ -25,6 +25,9 @@ void DumpCTFFlagInfo(CBasePlayer* pPlayer);
 
 class CTFGoal : public CBaseAnimating
 {
+	DECLARE_CLASS(CTFGoal, CBaseAnimating);
+	DECLARE_DATAMAP();
+
 public:
 	int Classify() override { return CLASS_NONE; }
 
@@ -36,7 +39,7 @@ public:
 
 	void StartGoal();
 
-	void EXPORT PlaceGoal();
+	void PlaceGoal();
 
 	int m_iGoalNum;
 	int m_iGoalState;
@@ -46,10 +49,13 @@ public:
 
 class CTFGoalBase : public CTFGoal
 {
+	DECLARE_CLASS(CTFGoalBase, CTFGoal);
+	DECLARE_DATAMAP();
+
 public:
 	int Classify() override { return CLASS_NONE; }
 
-	void EXPORT BaseThink();
+	void BaseThink();
 
 	void Spawn() override;
 
@@ -58,30 +64,33 @@ public:
 
 class CTFGoalFlag : public CTFGoal
 {
+	DECLARE_CLASS(CTFGoalFlag, CTFGoal);
+	DECLARE_DATAMAP();
+
 public:
 	void Precache() override;
 
-	void EXPORT PlaceItem();
+	void PlaceItem();
 
-	void EXPORT ReturnFlag();
+	void ReturnFlag();
 
-	void EXPORT FlagCarryThink();
+	void FlagCarryThink();
 
 	void goal_item_dropthink();
 
 	void Spawn() override;
 
-	void EXPORT ReturnFlagThink();
+	void ReturnFlagThink();
 
 	void StartItem();
 
-	void EXPORT ScoreFlagTouch(CBasePlayer* pOther);
+	void ScoreFlagTouch(CBasePlayer* pOther);
 
 	void TurnOnLight(CBasePlayer* pPlayer);
 
 	void GiveFlagToPlayer(CBasePlayer* pPlayer);
 
-	void EXPORT goal_item_touch(CBaseEntity* pOther);
+	void goal_item_touch(CBaseEntity* pOther);
 
 	void SetDropTouch();
 

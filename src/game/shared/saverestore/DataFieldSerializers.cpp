@@ -15,6 +15,7 @@
 
 #include "cbase.h"
 #include "DataFieldSerializers.h"
+#include "DataMap.h"
 
 void DataFieldTimeSerializer::Serialize(CSave& save, const std::byte* fields, std::size_t count) const
 {
@@ -267,11 +268,13 @@ std::size_t DataFieldFunctionPointerSerializer::GetFieldSize() const
 
 void DataFieldFunctionPointerSerializer::Serialize(CSave& save, const std::byte* fields, std::size_t count) const
 {
+	const auto dataMap = save.GetCurrentDataMap();
+
 	auto address = reinterpret_cast<const BASEPTR*>(fields);
 
 	for (std::size_t i = 0; i < count; ++i)
 	{
-		const char* functionName = NAME_FOR_FUNCTION(*reinterpret_cast<const uint32*>(address));
+		const char* functionName = DataMap_FindFunctionName(*dataMap, *address);
 
 		if (functionName)
 		{
@@ -288,6 +291,8 @@ void DataFieldFunctionPointerSerializer::Serialize(CSave& save, const std::byte*
 
 void DataFieldFunctionPointerSerializer::Deserialize(CRestore& restore, std::byte* fields, std::size_t count) const
 {
+	const auto dataMap = restore.GetCurrentDataMap();
+
 	auto readAddress = reinterpret_cast<const char*>(restore.GetReadAddress());
 	auto address = reinterpret_cast<BASEPTR*>(fields);
 
@@ -303,7 +308,7 @@ void DataFieldFunctionPointerSerializer::Deserialize(CRestore& restore, std::byt
 		{
 			// HACK: get around language rules to convert the pointer.
 			// TODO: get rid of this when the function table is set up.
-			auto functionAddress = reinterpret_cast<void*>(FUNCTION_FROM_NAME(readAddress));
+			auto functionAddress = DataMap_FindFunctionAddress(*dataMap, readAddress);
 			*address = *reinterpret_cast<BASEPTR*>(&functionAddress);
 		}
 

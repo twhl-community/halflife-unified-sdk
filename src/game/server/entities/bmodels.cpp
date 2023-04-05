@@ -248,22 +248,22 @@ public:
 	/**
 	*	@brief accelerates a non-moving func_rotating up to its speed
 	*/
-	void EXPORT SpinUp();
+	void SpinUp();
 
 	/**
 	*	@brief decelerates a moving func_rotating to a standstill.
 	*/
-	void EXPORT SpinDown();
+	void SpinDown();
 
 	bool KeyValue(KeyValueData* pkvd) override;
 
 	/**
 	*	@brief will hurt others based on how fast the brush is spinning
 	*/
-	void EXPORT HurtTouch(CBaseEntity* pOther);
+	void HurtTouch(CBaseEntity* pOther);
 
-	void EXPORT RotatingUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-	void EXPORT Rotate();
+	void RotatingUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void Rotate();
 
 	/**
 	*	@brief ramp pitch and volume up to final values,
@@ -287,6 +287,11 @@ DEFINE_FIELD(m_flFanFriction, FIELD_FLOAT),
 	DEFINE_FIELD(m_flVolume, FIELD_FLOAT),
 	DEFINE_FIELD(m_pitch, FIELD_FLOAT),
 	DEFINE_FIELD(m_sounds, FIELD_SOUNDNAME),
+	DEFINE_FUNCTION(SpinUp),
+	DEFINE_FUNCTION(SpinDown),
+	DEFINE_FUNCTION(HurtTouch),
+	DEFINE_FUNCTION(RotatingUse),
+	DEFINE_FUNCTION(Rotate),
 	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(func_rotating, CFuncRotating);
@@ -618,11 +623,11 @@ class CPendulum : public CBaseEntity
 public:
 	void Spawn() override;
 	bool KeyValue(KeyValueData* pkvd) override;
-	void EXPORT Swing();
-	void EXPORT PendulumUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-	void EXPORT Stop();
+	void Swing();
+	void PendulumUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void Stop();
 	void Touch(CBaseEntity* pOther) override;
-	void EXPORT RopeTouch(CBaseEntity* pOther); // this touch func makes the pendulum a rope
+	void RopeTouch(CBaseEntity* pOther); // this touch func makes the pendulum a rope
 	int ObjectCaps() override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 	void Blocked(CBaseEntity* pOther) override;
 
@@ -647,6 +652,10 @@ DEFINE_FIELD(m_accel, FIELD_FLOAT),
 	DEFINE_FIELD(m_dampSpeed, FIELD_FLOAT),
 	DEFINE_FIELD(m_center, FIELD_VECTOR),
 	DEFINE_FIELD(m_start, FIELD_VECTOR),
+	DEFINE_FUNCTION(Swing),
+	DEFINE_FUNCTION(PendulumUse),
+	DEFINE_FUNCTION(Stop),
+	DEFINE_FUNCTION(RopeTouch),
 	END_DATAMAP();
 
 bool CPendulum::KeyValue(KeyValueData* pkvd)

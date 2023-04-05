@@ -46,6 +46,8 @@ DEFINE_FIELD(m_pPlayer, FIELD_CLASSPTR),
 	DEFINE_FIELD(m_WorldModel, FIELD_STRING),
 	DEFINE_FIELD(m_ViewModel, FIELD_STRING),
 	DEFINE_FIELD(m_PlayerModel, FIELD_STRING),
+	DEFINE_FUNCTION(DestroyItem),
+	DEFINE_FUNCTION(CallDoRetireWeapon),
 	END_DATAMAP();
 
 // m_AmmoName isn't saved here because it's initialized by all derived classes.

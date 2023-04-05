@@ -128,6 +128,7 @@ DEFINE_ARRAY(m_rgEntities, FIELD_EHANDLE, MS_MAX_TARGETS),
 	DEFINE_ARRAY(m_rgTriggered, FIELD_INTEGER, MS_MAX_TARGETS),
 	DEFINE_FIELD(m_iTotal, FIELD_INTEGER),
 	DEFINE_FIELD(m_globalstate, FIELD_STRING),
+	DEFINE_FUNCTION(Register),
 	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(multisource, CMultiSource);
@@ -257,6 +258,12 @@ DEFINE_FIELD(m_fStayPushed, FIELD_BOOLEAN),
 	DEFINE_FIELD(m_UnlockedSentence, FIELD_STRING),
 	DEFINE_FIELD(m_strChangeTarget, FIELD_STRING),
 	//	DEFINE_FIELD(m_ls, FIELD_???),   // This is restored in Precache()
+	DEFINE_FUNCTION(ButtonTouch),
+	DEFINE_FUNCTION(ButtonSpark),
+	DEFINE_FUNCTION(TriggerAndWait),
+	DEFINE_FUNCTION(ButtonReturn),
+	DEFINE_FUNCTION(ButtonBackHome),
+	DEFINE_FUNCTION(ButtonUse),
 	END_DATAMAP();
 
 void CBaseButton::Precache()
@@ -743,8 +750,8 @@ public:
 		return flags | FCAP_CONTINUOUS_USE;
 	}
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
-	void EXPORT Off();
-	void EXPORT Return();
+	void Off();
+	void Return();
 	void UpdateSelf(float value);
 	void UpdateSelfReturn(float value);
 	void UpdateAllButtons(float value, bool start);
@@ -767,6 +774,8 @@ DEFINE_FIELD(m_lastUsed, FIELD_BOOLEAN),
 	DEFINE_FIELD(m_start, FIELD_VECTOR),
 	DEFINE_FIELD(m_end, FIELD_VECTOR),
 	DEFINE_FIELD(m_sounds, FIELD_SOUNDNAME),
+	DEFINE_FUNCTION(Off),
+	DEFINE_FUNCTION(Return),
 	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(momentary_rot_button, CMomentaryRotButton);
@@ -960,9 +969,9 @@ class CEnvSpark : public CPointEntity
 public:
 	void Spawn() override;
 	void Precache() override;
-	void EXPORT SparkThink();
-	void EXPORT SparkStart(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-	void EXPORT SparkStop(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void SparkThink();
+	void SparkStart(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void SparkStop(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 	bool KeyValue(KeyValueData* pkvd) override;
 
 	float m_flDelay;
@@ -970,6 +979,9 @@ public:
 
 BEGIN_DATAMAP(CEnvSpark)
 DEFINE_FIELD(m_flDelay, FIELD_FLOAT),
+	DEFINE_FUNCTION(SparkThink),
+	DEFINE_FUNCTION(SparkStart),
+	DEFINE_FUNCTION(SparkStop),
 	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(env_spark, CEnvSpark);
@@ -1022,20 +1034,20 @@ bool CEnvSpark::KeyValue(KeyValueData* pkvd)
 	return CBaseEntity::KeyValue(pkvd);
 }
 
-void EXPORT CEnvSpark::SparkThink()
+void CEnvSpark::SparkThink()
 {
 	pev->nextthink = gpGlobals->time + 0.1 + RANDOM_FLOAT(0, m_flDelay);
 	DoSpark(this, pev->origin);
 }
 
-void EXPORT CEnvSpark::SparkStart(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
+void CEnvSpark::SparkStart(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
 	SetUse(&CEnvSpark::SparkStop);
 	SetThink(&CEnvSpark::SparkThink);
 	pev->nextthink = gpGlobals->time + (0.1 + RANDOM_FLOAT(0, m_flDelay));
 }
 
-void EXPORT CEnvSpark::SparkStop(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
+void CEnvSpark::SparkStop(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
 	SetUse(&CEnvSpark::SparkStart);
 	SetThink(nullptr);

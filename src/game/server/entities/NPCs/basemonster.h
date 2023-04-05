@@ -150,7 +150,7 @@ public:
 	/**
 	*	@brief will make a monster angry at whomever activated it.
 	*/
-	void EXPORT MonsterUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void MonsterUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
 	// overrideable Monster member functions
 
@@ -200,7 +200,7 @@ public:
 	*	@brief calls out to core AI functions and handles this monster's specific animation events
 	*/
 	virtual void MonsterThink();
-	void EXPORT CallMonsterThink() { this->MonsterThink(); }
+	void CallMonsterThink() { this->MonsterThink(); }
 
 	/**
 	*	@brief returns an integer that describes the relationship between two types of monster.
@@ -220,12 +220,12 @@ public:
 	virtual void MonsterInitDead();
 
 	virtual void BecomeDead();
-	void EXPORT CorpseFallThink();
+	void CorpseFallThink();
 
 	/**
 	*	@brief Calls StartMonster. Startmonster is virtual, but this function cannot be
 	*/
-	void EXPORT MonsterInitThink();
+	void MonsterInitThink();
 
 	/**
 	*	@brief final bit of initization before a monster is turned over to the AI.

@@ -193,7 +193,7 @@ public:
 	virtual void DeclineFollowing() {}
 	void LimitFollowers(CBaseEntity* pPlayer, int maxFollowers);
 
-	void EXPORT FollowerUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void FollowerUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
 	/**
 	*	@brief Prepare this talking monster to answer question

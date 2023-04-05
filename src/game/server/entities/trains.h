@@ -60,7 +60,7 @@ public:
 	CPathTrack* GetPrevious();
 
 #if PATH_SPARKLE_DEBUG
-	void EXPORT Sparkle();
+	void Sparkle();
 #endif
 
 	float m_length;
@@ -83,10 +83,10 @@ public:
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 	bool KeyValue(KeyValueData* pkvd) override;
 
-	void EXPORT Next();
-	void EXPORT Find();
-	void EXPORT NearestPath();
-	void EXPORT DeadEnd();
+	void Next();
+	void Find();
+	void NearestPath();
+	void DeadEnd();
 
 	void NextThink(float thinkTime, bool alwaysThink);
 

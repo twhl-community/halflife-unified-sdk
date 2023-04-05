@@ -31,7 +31,7 @@ public:
 	void InitBeams();
 	void ClearBeams();
 
-	void EXPORT ShutdownChargedBolt();
+	void ShutdownChargedBolt();
 
 	static COFChargedBolt* ChargedBoltCreate();
 
@@ -44,11 +44,11 @@ public:
 	*/
 	void ArmBeam(int side);
 
-	void EXPORT AttachThink();
+	void AttachThink();
 
-	void EXPORT FlyThink();
+	void FlyThink();
 
-	void EXPORT ChargedBoltTouch(CBaseEntity* pOther);
+	void ChargedBoltTouch(CBaseEntity* pOther);
 
 	int m_iShowerSparks;
 	EntityHandle<CBeam> m_pBeam[VOLTIGORE_BEAM_COUNT];
@@ -65,6 +65,10 @@ DEFINE_FIELD(m_iShowerSparks, FIELD_INTEGER),
 	DEFINE_FIELD(m_iBeams, FIELD_INTEGER),
 	DEFINE_FIELD(m_pAttachEnt, FIELD_CLASSPTR),
 	DEFINE_FIELD(m_iAttachIdx, FIELD_INTEGER),
+	DEFINE_FUNCTION(ShutdownChargedBolt),
+	DEFINE_FUNCTION(AttachThink),
+	DEFINE_FUNCTION(FlyThink),
+	DEFINE_FUNCTION(ChargedBoltTouch),
 	END_DATAMAP();
 
 void COFChargedBolt::Precache()
@@ -287,6 +291,7 @@ DEFINE_ARRAY(m_pBeam, FIELD_EHANDLE, VOLTIGORE_BEAM_COUNT),
 	DEFINE_FIELD(m_flNextWordTime, FIELD_TIME),
 	DEFINE_FIELD(m_iLastWord, FIELD_INTEGER),
 	DEFINE_FIELD(m_pChargedBolt, FIELD_EHANDLE),
+	DEFINE_FUNCTION(CallDeathGibThink),
 	END_DATAMAP();
 
 void COFVoltigore::OnCreate()

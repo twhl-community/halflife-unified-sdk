@@ -48,10 +48,15 @@ public:
 	// Data is only valid if it's a valid pointer and if it has a token list
 	[[nodiscard]] static bool IsValidSaveRestoreData(SAVERESTOREDATA* data);
 
+	const DataMap* GetCurrentDataMap() const { return m_CurrentDataMap; }
+
 protected:
 	SAVERESTOREDATA& m_data;
 	void BufferRewind(int size);
 	unsigned int HashString(const char* pszToken);
+
+protected:
+	const DataMap* m_CurrentDataMap{};
 };
 
 

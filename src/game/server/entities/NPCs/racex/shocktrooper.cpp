@@ -2113,12 +2113,19 @@ void CShockTrooper::MonsterThink()
 */
 class CShockTrooperRepel : public CBaseMonster
 {
+	DECLARE_CLASS(CShockTrooperRepel, CBaseMonster);
+	DECLARE_DATAMAP();
+
 public:
 	void Spawn() override;
 	void Precache() override;
-	void EXPORT RepelUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void RepelUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 	int m_iSpriteTexture; // Don't save, precache
 };
+
+BEGIN_DATAMAP(CShockTrooperRepel)
+DEFINE_FUNCTION(RepelUse),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(monster_shocktrooper_repel, CShockTrooperRepel);
 

@@ -25,6 +25,7 @@
 #include "CHalfLifeCTFplay.h"
 #include "ctf/ctf_goals.h"
 #include "ctf/ctf_items.h"
+#include "items/weapons/CSatchelCharge.h"
 
 #include "pm_shared.h"
 

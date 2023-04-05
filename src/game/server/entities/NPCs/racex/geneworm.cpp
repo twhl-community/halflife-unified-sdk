@@ -35,9 +35,9 @@ public:
 	void Precache() override;
 	void Spawn() override;
 
-	void EXPORT GeneWormCloudThink();
+	void GeneWormCloudThink();
 
-	void EXPORT GeneWormCloudTouch(CBaseEntity* pOther);
+	void GeneWormCloudTouch(CBaseEntity* pOther);
 
 	void RunGeneWormCloud(float frames);
 
@@ -67,6 +67,8 @@ DEFINE_FIELD(m_lastTime, FIELD_FLOAT),
 	DEFINE_FIELD(m_fadeRender, FIELD_FLOAT),
 	DEFINE_FIELD(m_damageTimer, FIELD_FLOAT),
 	DEFINE_FIELD(m_fSinking, FIELD_BOOLEAN),
+	DEFINE_FUNCTION(GeneWormCloudThink),
+	DEFINE_FUNCTION(GeneWormCloudTouch),
 	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(env_genewormcloud, COFGeneWormCloud);
@@ -224,9 +226,9 @@ public:
 	void Precache() override;
 	void Spawn() override;
 
-	void EXPORT GeneWormSpawnThink();
+	void GeneWormSpawnThink();
 
-	void EXPORT GeneWormSpawnTouch(CBaseEntity* pOther);
+	void GeneWormSpawnTouch(CBaseEntity* pOther);
 
 	void RunGeneWormSpawn(float frames);
 
@@ -262,6 +264,8 @@ DEFINE_FIELD(m_lastTime, FIELD_FLOAT),
 	DEFINE_FIELD(m_bTrooperDropped, FIELD_BOOLEAN),
 	DEFINE_ARRAY(m_pBeam, FIELD_CLASSPTR, GENEWORM_SPAWN_BEAM_COUNT),
 	DEFINE_FIELD(m_iBeams, FIELD_INTEGER),
+	DEFINE_FUNCTION(GeneWormSpawnThink),
+	DEFINE_FUNCTION(GeneWormSpawnTouch),
 	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(env_genewormspawn, COFGeneWormSpawn);
@@ -584,17 +588,17 @@ public:
 
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 
-	void EXPORT StartupThink();
+	void StartupThink();
 
-	void EXPORT HuntThink();
+	void HuntThink();
 
-	void EXPORT DyingThink();
+	void DyingThink();
 
-	void EXPORT NullThink();
+	void NullThink();
 
-	void EXPORT HitTouch(CBaseEntity* pOther);
+	void HitTouch(CBaseEntity* pOther);
 
-	void EXPORT CommandUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void CommandUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
 	void NextActivity();
 
@@ -680,6 +684,12 @@ DEFINE_FIELD(m_flNextPainSound, FIELD_TIME),
 	DEFINE_FIELD(m_flDeathStart, FIELD_TIME),
 	DEFINE_FIELD(m_fHasEntered, FIELD_BOOLEAN),
 	DEFINE_FIELD(m_flMadDelayTime, FIELD_FLOAT),
+	DEFINE_FUNCTION(StartupThink),
+	DEFINE_FUNCTION(HuntThink),
+	DEFINE_FUNCTION(DyingThink),
+	DEFINE_FUNCTION(NullThink),
+	DEFINE_FUNCTION(HitTouch),
+	DEFINE_FUNCTION(CommandUse),
 	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(monster_geneworm, COFGeneWorm);

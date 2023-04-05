@@ -16,6 +16,10 @@
 #include "cbase.h"
 #include "CLaserSpot.h"
 
+BEGIN_DATAMAP(CLaserSpot)
+DEFINE_FUNCTION(Revive),
+	END_DATAMAP();
+
 LINK_ENTITY_TO_CLASS(laser_spot, CLaserSpot);
 
 CLaserSpot* CLaserSpot::CreateSpot()

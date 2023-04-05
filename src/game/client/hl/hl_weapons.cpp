@@ -245,7 +245,6 @@ void HUD_SetupServerEngineInterface()
 
 	// Fake functions
 	g_engfuncs.pfnPrecacheEvent = stub_PrecacheEvent;
-	g_engfuncs.pfnNameForFunction = stub_NameForFunction;
 	g_engfuncs.pfnSetModel = stub_SetModel;
 	g_engfuncs.pfnSetClientMaxspeed = HUD_SetMaxSpeed;
 

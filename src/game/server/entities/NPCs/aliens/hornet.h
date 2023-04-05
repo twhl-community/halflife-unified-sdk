@@ -50,20 +50,20 @@ public:
 	/**
 	*	@brief starts a hornet out tracking its target
 	*/
-	void EXPORT StartTrack();
+	void StartTrack();
 
 	/**
 	*	@brief starts a hornet out just flying straight.
 	*/
-	void EXPORT StartDart();
+	void StartDart();
 
 	/**
 	*	@brief Hornet is flying, gently tracking target
 	*/
-	void EXPORT TrackTarget();
-	void EXPORT TrackTouch(CBaseEntity* pOther);
-	void EXPORT DartTouch(CBaseEntity* pOther);
-	void EXPORT DieTouch(CBaseEntity* pOther);
+	void TrackTarget();
+	void TrackTouch(CBaseEntity* pOther);
+	void DartTouch(CBaseEntity* pOther);
+	void DieTouch(CBaseEntity* pOther);
 
 	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 

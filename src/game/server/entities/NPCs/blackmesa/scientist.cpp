@@ -1073,6 +1073,7 @@ BEGIN_DATAMAP(CSittingScientist)
 // Don't need to save/restore m_baseSequence (recalced)
 DEFINE_FIELD(m_headTurn, FIELD_INTEGER),
 	DEFINE_FIELD(m_flResponseDelay, FIELD_FLOAT),
+	DEFINE_FUNCTION(SittingThink),
 	END_DATAMAP();
 
 // animation sequence aliases

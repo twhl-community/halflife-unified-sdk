@@ -50,7 +50,7 @@ public:
 	void Spawn() override;
 	void Precache() override;
 	bool KeyValue(KeyValueData* pkvd) override;
-	void EXPORT BreakTouch(CBaseEntity* pOther);
+	void BreakTouch(CBaseEntity* pOther);
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
 	/**
@@ -71,7 +71,7 @@ public:
 
 	int DamageDecal(int bitsDamageType) override;
 
-	void EXPORT Die();
+	void Die();
 	int ObjectCaps() override { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
 
 	inline bool Explodable() { return ExplosionMagnitude() > 0; }

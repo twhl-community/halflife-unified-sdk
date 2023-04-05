@@ -92,6 +92,8 @@ static_assert(sizeof(string_t) == sizeof(string_t_value), "string_t must not con
 #define DLLEXPORT __declspec(dllexport)
 #define DLLHIDDEN
 
+#define SINGLE_INHERITANCE __single_inheritance
+
 #else // WIN32
 
 #define stricmp strcasecmp
@@ -99,6 +101,8 @@ static_assert(sizeof(string_t) == sizeof(string_t_value), "string_t must not con
 
 #define DLLEXPORT __attribute__((visibility("default")))
 #define DLLHIDDEN __attribute__((visibility("hidden")))
+
+#define SINGLE_INHERITANCE
 
 #endif // WIN32
 

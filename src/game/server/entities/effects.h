@@ -49,8 +49,8 @@ public:
 			flags = FCAP_DONT_SAVE;
 		return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION) | flags;
 	}
-	void EXPORT AnimateThink();
-	void EXPORT ExpandThink();
+	void AnimateThink();
+	void ExpandThink();
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 	void Animate(float frames);
 	void Expand(float scaleSpeed, float fadeSpeed);
@@ -96,7 +96,7 @@ public:
 		pev->nextthink = gpGlobals->time;
 	}
 
-	void EXPORT AnimateUntilDead();
+	void AnimateUntilDead();
 
 	static CSprite* SpriteCreate(const char* pSpriteName, const Vector& origin, bool animate);
 
@@ -107,6 +107,9 @@ private:
 
 class CBeam : public CBaseEntity
 {
+	DECLARE_CLASS(CBeam, CBaseEntity);
+	DECLARE_DATAMAP();
+
 public:
 	void Spawn() override;
 	void Precache() override;
@@ -118,7 +121,7 @@ public:
 		return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION) | flags;
 	}
 
-	void EXPORT TriggerTouch(CBaseEntity* pOther);
+	void TriggerTouch(CBaseEntity* pOther);
 
 	// These functions are here to show the way beams are encoded as entities.
 	// Encoding beams as entities simplifies their management in the client/server architecture
@@ -212,7 +215,7 @@ public:
 
 	void FireAtPoint(TraceResult& point);
 
-	void EXPORT StrikeThink();
+	void StrikeThink();
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
 	void UpdateOnRemove() override;

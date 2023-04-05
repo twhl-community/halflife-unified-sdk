@@ -38,7 +38,7 @@ public:
 	void Precache() override;
 	bool KeyValue(KeyValueData* pkvd) override;
 
-	void EXPORT FizzThink();
+	void FizzThink();
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
 	int ObjectCaps() override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
@@ -57,6 +57,7 @@ DEFINE_FIELD(m_density, FIELD_INTEGER),
 	DEFINE_FIELD(m_state, FIELD_BOOLEAN),
 	// Let spawn restore this!
 	//	DEFINE_FIELD(m_bubbleModel, FIELD_INTEGER),
+	DEFINE_FUNCTION(FizzThink),
 	END_DATAMAP();
 
 #define SF_BUBBLES_STARTOFF 0x0001
@@ -144,6 +145,10 @@ void CBubbling::FizzThink()
 	else
 		pev->nextthink = gpGlobals->time + 2.5 - (0.1 * m_frequency);
 }
+
+BEGIN_DATAMAP(CBeam)
+DEFINE_FUNCTION(TriggerTouch),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(beam, CBeam);
 
@@ -348,13 +353,13 @@ public:
 	bool KeyValue(KeyValueData* pkvd) override;
 	void Activate() override;
 
-	void EXPORT StrikeThink();
-	void EXPORT DamageThink();
+	void StrikeThink();
+	void DamageThink();
 	void RandomArea();
 	void RandomPoint(Vector& vecSrc);
 	void Zap(const Vector& vecSrc, const Vector& vecDest);
-	void EXPORT StrikeUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-	void EXPORT ToggleUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void StrikeUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void ToggleUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
 	inline bool ServerSide()
 	{
@@ -407,6 +412,10 @@ DEFINE_FIELD(m_active, FIELD_BOOLEAN),
 	DEFINE_FIELD(m_iszSpriteName, FIELD_STRING),
 	DEFINE_FIELD(m_frameStart, FIELD_INTEGER),
 	DEFINE_FIELD(m_radius, FIELD_FLOAT),
+	DEFINE_FUNCTION(StrikeThink),
+	DEFINE_FUNCTION(DamageThink),
+	DEFINE_FUNCTION(StrikeUse),
+	DEFINE_FUNCTION(ToggleUse),
 	END_DATAMAP();
 
 void CLightning::Spawn()
@@ -894,6 +903,7 @@ BEGIN_DATAMAP(CLaser)
 DEFINE_FIELD(m_pSprite, FIELD_CLASSPTR),
 	DEFINE_FIELD(m_iszSpriteName, FIELD_STRING),
 	DEFINE_FIELD(m_firePosition, FIELD_POSITION_VECTOR),
+	DEFINE_FUNCTION(StrikeThink),
 	END_DATAMAP();
 
 void CLaser::Spawn()
@@ -1110,6 +1120,9 @@ LINK_ENTITY_TO_CLASS(env_sprite, CSprite);
 BEGIN_DATAMAP(CSprite)
 DEFINE_FIELD(m_lastTime, FIELD_TIME),
 	DEFINE_FIELD(m_maxFrame, FIELD_FLOAT),
+	DEFINE_FUNCTION(AnimateThink),
+	DEFINE_FUNCTION(ExpandThink),
+	DEFINE_FUNCTION(AnimateUntilDead),
 	END_DATAMAP();
 
 void CSprite::Spawn()
@@ -1276,7 +1289,7 @@ public:
 	void Spawn() override;
 	void Precache() override;
 	bool KeyValue(KeyValueData* pkvd) override;
-	void EXPORT ShootThink();
+	void ShootThink();
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
 	virtual CGib* CreateGib();
@@ -1298,6 +1311,7 @@ DEFINE_FIELD(m_iGibs, FIELD_INTEGER),
 	DEFINE_FIELD(m_flGibVelocity, FIELD_FLOAT),
 	DEFINE_FIELD(m_flVariance, FIELD_FLOAT),
 	DEFINE_FIELD(m_flGibLife, FIELD_FLOAT),
+	DEFINE_FUNCTION(ShootThink),
 	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(gibshooter, CGibShooter);
@@ -1998,13 +2012,21 @@ void CEnvBeverage::Spawn()
 */
 class CItemSoda : public CBaseEntity
 {
+	DECLARE_CLASS(CItemSoda, CBaseEntity);
+	DECLARE_DATAMAP();
+
 public:
 	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
-	void EXPORT CanThink();
-	void EXPORT CanTouch(CBaseEntity* pOther);
+	void CanThink();
+	void CanTouch(CBaseEntity* pOther);
 };
+
+BEGIN_DATAMAP(CItemSoda)
+DEFINE_FUNCTION(CanThink),
+	DEFINE_FUNCTION(CanTouch),
+	END_DATAMAP();
 
 void CItemSoda::OnCreate()
 {
@@ -2089,9 +2111,9 @@ public:
 
 	void UpdateOnRemove() override;
 
-	void EXPORT WarpBallUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void WarpBallUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
-	void EXPORT BallThink();
+	void BallThink();
 
 	static CWarpBall* CreateWarpBall(Vector vecOrigin)
 	{
@@ -2135,6 +2157,8 @@ DEFINE_FIELD(m_iBeams, FIELD_INTEGER),
 	DEFINE_FIELD(m_fBeamsCleared, FIELD_BOOLEAN),
 	DEFINE_FIELD(m_pBeams, FIELD_CLASSPTR),
 	DEFINE_FIELD(m_pSprite, FIELD_CLASSPTR),
+	DEFINE_FUNCTION(WarpBallUse),
+	DEFINE_FUNCTION(BallThink),
 	END_DATAMAP();
 
 bool CWarpBall::KeyValue(KeyValueData* pkvd)

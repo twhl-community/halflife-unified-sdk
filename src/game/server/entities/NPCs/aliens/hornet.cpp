@@ -25,6 +25,12 @@ BEGIN_DATAMAP(CHornet)
 DEFINE_FIELD(m_flStopAttack, FIELD_TIME),
 	DEFINE_FIELD(m_iHornetType, FIELD_INTEGER),
 	DEFINE_FIELD(m_flFlySpeed, FIELD_FLOAT),
+	DEFINE_FUNCTION(StartTrack),
+	DEFINE_FUNCTION(StartDart),
+	DEFINE_FUNCTION(TrackTarget),
+	DEFINE_FUNCTION(TrackTouch),
+	DEFINE_FUNCTION(DartTouch),
+	DEFINE_FUNCTION(DieTouch),
 	END_DATAMAP();
 
 bool CHornet::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType)

@@ -39,21 +39,21 @@ public:
 	void GreenBallInit();
 	void ZapInit(CBaseEntity* pEnemy);
 
-	void EXPORT HoverThink();
+	void HoverThink();
 	bool CircleTarget(Vector vecTarget);
-	void EXPORT DissipateThink();
+	void DissipateThink();
 
-	void EXPORT ZapThink();
-	void EXPORT TeleportThink();
-	void EXPORT TeleportTouch(CBaseEntity* pOther);
+	void ZapThink();
+	void TeleportThink();
+	void TeleportTouch(CBaseEntity* pOther);
 
-	void EXPORT RemoveTouch(CBaseEntity* pOther);
-	void EXPORT BounceTouch(CBaseEntity* pOther);
-	void EXPORT ZapTouch(CBaseEntity* pOther);
+	void RemoveTouch(CBaseEntity* pOther);
+	void BounceTouch(CBaseEntity* pOther);
+	void ZapTouch(CBaseEntity* pOther);
 
 	CBaseEntity* RandomClassname(const char* szName);
 
-	// void EXPORT SphereUse( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
+	// void SphereUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 
 	void MovetoTarget(Vector vecTarget);
 	virtual void Crawl();
@@ -73,6 +73,15 @@ DEFINE_FIELD(m_flIdealVel, FIELD_FLOAT),
 	DEFINE_FIELD(m_pNihilanth, FIELD_CLASSPTR),
 	DEFINE_FIELD(m_hTouch, FIELD_EHANDLE),
 	DEFINE_FIELD(m_nFrames, FIELD_INTEGER),
+	DEFINE_FUNCTION(HoverThink),
+	DEFINE_FUNCTION(DissipateThink),
+	DEFINE_FUNCTION(ZapThink),
+	DEFINE_FUNCTION(TeleportThink),
+	DEFINE_FUNCTION(TeleportTouch),
+	DEFINE_FUNCTION(RemoveTouch),
+	DEFINE_FUNCTION(BounceTouch),
+	DEFINE_FUNCTION(ZapTouch),
+	//DEFINE_FUNCTION(SphereUse),
 	END_DATAMAP();
 
 /**
@@ -101,13 +110,13 @@ public:
 
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 
-	void EXPORT StartupThink();
-	void EXPORT HuntThink();
-	void EXPORT CrashTouch(CBaseEntity* pOther);
-	void EXPORT DyingThink();
-	void EXPORT StartupUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-	void EXPORT NullThink();
-	void EXPORT CommandUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void StartupThink();
+	void HuntThink();
+	void CrashTouch(CBaseEntity* pOther);
+	void DyingThink();
+	void StartupUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void NullThink();
+	void CommandUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
 	void FloatSequence();
 	void NextActivity();
@@ -218,6 +227,13 @@ DEFINE_FIELD(m_flForce, FIELD_FLOAT),
 	DEFINE_FIELD(m_flShootEnd, FIELD_TIME),
 	DEFINE_FIELD(m_flShootTime, FIELD_TIME),
 	DEFINE_ARRAY(m_hFriend, FIELD_EHANDLE, 3),
+	DEFINE_FUNCTION(StartupThink),
+	DEFINE_FUNCTION(HuntThink),
+	DEFINE_FUNCTION(CrashTouch),
+	DEFINE_FUNCTION(DyingThink),
+	DEFINE_FUNCTION(StartupUse),
+	DEFINE_FUNCTION(NullThink),
+	DEFINE_FUNCTION(CommandUse),
 	END_DATAMAP();
 
 const char* CNihilanth::pAttackSounds[] =

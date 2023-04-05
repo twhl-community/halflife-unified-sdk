@@ -44,8 +44,8 @@ public:
 	void Spawn() override;
 	void Precache() override;
 
-	void EXPORT SwimThink();
-	void EXPORT DeadThink();
+	void SwimThink();
+	void DeadThink();
 	void Touch(CBaseEntity* pOther) override
 	{
 		if (pOther->IsPlayer())
@@ -126,6 +126,8 @@ DEFINE_FIELD(m_flTurning, FIELD_FLOAT),
 	DEFINE_FIELD(m_zTime, FIELD_TIME),
 	DEFINE_FIELD(m_stateTime, FIELD_TIME),
 	DEFINE_FIELD(m_attackSoundTime, FIELD_TIME),
+	DEFINE_FUNCTION(SwimThink),
+	DEFINE_FUNCTION(DeadThink),
 	END_DATAMAP();
 
 const char* CLeech::pAttackSounds[] =

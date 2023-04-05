@@ -67,29 +67,29 @@ public:
 	/**
 	*	@brief Touching a button simply "activates" it.
 	*/
-	void EXPORT ButtonTouch(CBaseEntity* pOther);
+	void ButtonTouch(CBaseEntity* pOther);
 
 	/**
 	*	@brief Makes flagged buttons spark when turned off
 	*/
-	void EXPORT ButtonSpark();
+	void ButtonSpark();
 
 	/**
 	*	@brief Button has reached the "in/up" position.  Activate its "targets", and pause before "popping out".
 	*/
-	void EXPORT TriggerAndWait();
+	void TriggerAndWait();
 
 	/**
 	*	@brief Starts the button moving "out/down".
 	*/
-	void EXPORT ButtonReturn();
+	void ButtonReturn();
 
 	/**
 	*	@brief Button has returned to start state. Quiesce it.
 	*/
-	void EXPORT ButtonBackHome();
+	void ButtonBackHome();
 
-	void EXPORT ButtonUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void ButtonUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 
 	enum BUTTON_CODE

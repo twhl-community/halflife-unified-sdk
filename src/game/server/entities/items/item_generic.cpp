@@ -19,18 +19,26 @@ const auto SF_ITEMGENERIC_SOLID = 1 << 1;
 
 class CGenericItem : public CBaseAnimating
 {
+	DECLARE_CLASS(CGenericItem, CBaseAnimating);
+	DECLARE_DATAMAP();
+
 public:
 	bool KeyValue(KeyValueData* pkvd) override;
 	void Precache() override;
 	void Spawn() override;
 
-	void EXPORT StartItem();
-	void EXPORT AnimateThink();
+	void StartItem();
+	void AnimateThink();
 
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
 	string_t m_iSequence;
 };
+
+BEGIN_DATAMAP(CGenericItem)
+DEFINE_FUNCTION(StartItem),
+	DEFINE_FUNCTION(AnimateThink),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(item_generic, CGenericItem);
 

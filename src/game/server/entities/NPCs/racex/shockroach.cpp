@@ -71,7 +71,7 @@ public:
 	/**
 	*	@brief this is the shock roach's touch function when it is in the air
 	*/
-	void EXPORT LeapTouch(CBaseEntity* pOther);
+	void LeapTouch(CBaseEntity* pOther);
 
 	/**
 	*	@brief returns the real center of the shock roach.
@@ -114,6 +114,7 @@ LINK_ENTITY_TO_CLASS(monster_shockroach, COFShockRoach);
 
 BEGIN_DATAMAP(COFShockRoach)
 DEFINE_FIELD(m_flBirthTime, FIELD_TIME),
+	DEFINE_FUNCTION(LeapTouch),
 	END_DATAMAP();
 
 DEFINE_CUSTOM_SCHEDULES(COFShockRoach){

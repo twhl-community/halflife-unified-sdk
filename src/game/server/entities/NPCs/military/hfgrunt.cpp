@@ -45,6 +45,9 @@ LINK_ENTITY_TO_CLASS(monster_human_friendly_grunt, CHFGrunt);
  */
 class CHFGruntRepel : public CHGruntRepel
 {
+	DECLARE_CLASS(CHFGruntRepel, CHGruntRepel);
+	DECLARE_DATAMAP();
+
 public:
 	void Precache() override
 	{
@@ -57,11 +60,15 @@ public:
 		SetUse(&CHFGruntRepel::RepelUse);
 	}
 
-	void EXPORT RepelUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
+	void RepelUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 	{
 		CreateMonster("monster_human_friendly_grunt");
 	}
 };
+
+BEGIN_DATAMAP(CHFGruntRepel)
+DEFINE_FUNCTION(RepelUse),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(monster_fgrunt_repel, CHFGruntRepel);
 

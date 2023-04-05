@@ -19,6 +19,11 @@
 #define KNIFE_BODYHIT_VOLUME 128
 #define KNIFE_WALLHIT_VOLUME 512
 
+BEGIN_DATAMAP(CKnife)
+DEFINE_FUNCTION(SwingAgain),
+	DEFINE_FUNCTION(Smack),
+	END_DATAMAP();
+
 LINK_ENTITY_TO_CLASS(weapon_knife, CKnife);
 
 void CKnife::OnCreate()

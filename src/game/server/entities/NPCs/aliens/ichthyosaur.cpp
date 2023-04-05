@@ -50,8 +50,8 @@ public:
 	void Killed(CBaseEntity* attacker, int iGib) override;
 	void BecomeDead() override;
 
-	void EXPORT CombatUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-	void EXPORT BiteTouch(CBaseEntity* pOther);
+	void CombatUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void BiteTouch(CBaseEntity* pOther);
 
 	void StartTask(Task_t* pTask) override;
 	void RunTask(Task_t* pTask) override;
@@ -119,6 +119,8 @@ DEFINE_FIELD(m_SaveVelocity, FIELD_VECTOR),
 	DEFINE_FIELD(m_flMinSpeed, FIELD_FLOAT),
 	DEFINE_FIELD(m_flMaxDist, FIELD_FLOAT),
 	DEFINE_FIELD(m_flNextAlert, FIELD_TIME),
+	DEFINE_FUNCTION(CombatUse),
+	DEFINE_FUNCTION(BiteTouch),
 	END_DATAMAP();
 
 const char* CIchthyosaur::pIdleSounds[] =

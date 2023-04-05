@@ -43,8 +43,8 @@ public:
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
 private:
-	void EXPORT Off();
-	void EXPORT Recharge();
+	void Off();
+	void Recharge();
 
 	void CheckIfOutOfCharge(bool fireTargets);
 
@@ -83,6 +83,8 @@ DEFINE_FIELD(m_FireOnRecharge, FIELD_STRING),
 	DEFINE_FIELD(m_TotalJuice, FIELD_INTEGER),
 	DEFINE_FIELD(m_RechargeDelay, FIELD_INTEGER),
 	DEFINE_FIELD(m_ChargePerUse, FIELD_INTEGER),
+	DEFINE_FUNCTION(Off),
+	DEFINE_FUNCTION(Recharge),
 	END_DATAMAP();
 
 bool CBaseCharger::KeyValue(KeyValueData* pkvd)

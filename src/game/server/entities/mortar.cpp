@@ -35,7 +35,7 @@ public:
 	/**
 	*	@brief If connected to a table, then use the table controllers, else hit where the trigger is.
 	*/
-	void EXPORT FieldUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void FieldUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
 	string_t m_iszXController;
 	string_t m_iszYController;
@@ -54,6 +54,7 @@ DEFINE_FIELD(m_iszXController, FIELD_STRING),
 	DEFINE_FIELD(m_flDelay, FIELD_FLOAT),
 	DEFINE_FIELD(m_iCount, FIELD_INTEGER),
 	DEFINE_FIELD(m_fControl, FIELD_INTEGER),
+	DEFINE_FUNCTION(FieldUse),
 	END_DATAMAP();
 
 bool CFuncMortarField::KeyValue(KeyValueData* pkvd)
@@ -172,14 +173,21 @@ void CFuncMortarField::FieldUse(CBaseEntity* pActivator, CBaseEntity* pCaller, U
 
 class CMortar : public CGrenade
 {
+	DECLARE_CLASS(CMortar, CGrenade);
+	DECLARE_DATAMAP();
+
 public:
 	void Spawn() override;
 	void Precache() override;
 
-	void EXPORT MortarExplode();
+	void MortarExplode();
 
 	int m_spriteTexture;
 };
+
+BEGIN_DATAMAP(CMortar)
+DEFINE_FUNCTION(MortarExplode),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(monster_mortar, CMortar);
 

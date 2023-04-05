@@ -19,6 +19,10 @@
 #include "UserMessages.h"
 #include "ctf_goals.h"
 
+BEGIN_DATAMAP(CTFGoal)
+DEFINE_FUNCTION(PlaceGoal),
+	END_DATAMAP();
+
 bool CTFGoal::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq("goal_no", pkvd->szKeyName))
@@ -119,6 +123,10 @@ void CTFGoal::PlaceGoal()
 	pev->velocity = g_vecZero;
 	pev->oldorigin = pev->origin;
 }
+
+BEGIN_DATAMAP(CTFGoalBase)
+DEFINE_FUNCTION(BaseThink),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(item_ctfbase, CTFGoalBase);
 
@@ -237,6 +245,15 @@ void DumpCTFFlagInfo(CBasePlayer* pPlayer)
 		}
 	}
 }
+
+BEGIN_DATAMAP(CTFGoalFlag)
+DEFINE_FUNCTION(PlaceItem),
+	DEFINE_FUNCTION(ReturnFlag),
+	DEFINE_FUNCTION(FlagCarryThink),
+	DEFINE_FUNCTION(ReturnFlagThink),
+	DEFINE_FUNCTION(ScoreFlagTouch),
+	DEFINE_FUNCTION(goal_item_touch),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(item_ctfflag, CTFGoalFlag);
 

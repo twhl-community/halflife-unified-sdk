@@ -64,6 +64,15 @@ const char* const displace[] =
 		"monster_shocktrooper"};
 }
 
+BEGIN_DATAMAP(CDisplacerBall)
+DEFINE_FUNCTION(BallTouch),
+	DEFINE_FUNCTION(FlyThink),
+	DEFINE_FUNCTION(FlyThink2),
+	DEFINE_FUNCTION(FizzleThink),
+	DEFINE_FUNCTION(ExplodeThink),
+	DEFINE_FUNCTION(KillThink),
+	END_DATAMAP();
+
 LINK_ENTITY_TO_CLASS(displacer_ball, CDisplacerBall);
 
 void CDisplacerBall::Precache()

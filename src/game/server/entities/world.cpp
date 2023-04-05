@@ -88,12 +88,20 @@ DLL_DECALLIST gDecals[] = {
 
 class CDecal : public CBaseEntity
 {
+	DECLARE_CLASS(CDecal, CBaseEntity);
+	DECLARE_DATAMAP();
+
 public:
 	void Spawn() override;
 	bool KeyValue(KeyValueData* pkvd) override;
-	void EXPORT StaticDecal();
-	void EXPORT TriggerDecal(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void StaticDecal();
+	void TriggerDecal(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 };
+
+BEGIN_DATAMAP(CDecal)
+DEFINE_FUNCTION(StaticDecal),
+	DEFINE_FUNCTION(TriggerDecal),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(infodecal, CDecal);
 

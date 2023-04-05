@@ -274,12 +274,15 @@ protected:
 
 class CBaseHGruntAllyRepel : public CBaseMonster
 {
+	DECLARE_CLASS(CBaseHGruntAllyRepel, CBaseMonster);
+	DECLARE_DATAMAP();
+
 public:
 	bool KeyValue(KeyValueData* pkvd) override;
 
 	void Spawn() override;
 	void Precache() override;
-	void EXPORT RepelUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void RepelUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 	int m_iSpriteTexture; // Don't save, precache
 
 	// TODO: needs save/restore (not in op4)

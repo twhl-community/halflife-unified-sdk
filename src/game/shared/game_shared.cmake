@@ -104,6 +104,7 @@ function(add_game_shared_sources target)
 			
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/saverestore/DataFieldSerializers.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/saverestore/DataFieldSerializers.h
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/saverestore/DataMap.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/saverestore/DataMap.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/saverestore/saverestore.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/saverestore/saverestore.h

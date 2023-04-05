@@ -16,6 +16,11 @@
 #include "cbase.h"
 #include "CBaseTrigger.h"
 
+BEGIN_DATAMAP(CBaseTrigger)
+DEFINE_FUNCTION(MultiWaitOver),
+	DEFINE_FUNCTION(ToggleUse),
+	END_DATAMAP();
+
 LINK_ENTITY_TO_CLASS(trigger, CBaseTrigger);
 
 void CBaseTrigger::InitTrigger()

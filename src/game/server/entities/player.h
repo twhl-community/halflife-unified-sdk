@@ -455,7 +455,7 @@ private:
 
 public:
 	void WaterMove();
-	void EXPORT PlayerDeathThink();
+	void PlayerDeathThink();
 	void PlayerUse();
 
 	/**

@@ -144,6 +144,10 @@ target_sources(server PRIVATE
 	entities/items/weapons/CGrappleTip.h
 	entities/items/weapons/CLaserSpot.cpp
 	entities/items/weapons/CLaserSpot.h
+	entities/items/weapons/CRpgRocket.cpp
+	entities/items/weapons/CRpgRocket.h
+	entities/items/weapons/CSatchelCharge.cpp
+	entities/items/weapons/CSatchelCharge.h
 	entities/items/weapons/CShockBeam.cpp
 	entities/items/weapons/CShockBeam.h
 	entities/items/weapons/CSpore.cpp

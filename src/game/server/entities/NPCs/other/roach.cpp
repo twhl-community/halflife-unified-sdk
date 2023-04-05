@@ -27,12 +27,15 @@
 */
 class CRoach : public CBaseMonster
 {
+	DECLARE_CLASS(CRoach, CBaseMonster);
+	DECLARE_DATAMAP();
+
 public:
 	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	void SetYawSpeed() override;
-	void EXPORT MonsterThink() override;
+	void MonsterThink() override;
 	void Move(float flInterval) override;
 
 	/**
@@ -40,7 +43,7 @@ public:
 	*/
 	void PickNewDest(int iCondition);
 
-	void EXPORT Touch(CBaseEntity* pOther) override;
+	void Touch(CBaseEntity* pOther) override;
 	void Killed(CBaseEntity* attacker, int iGib) override;
 
 	float m_flLastLightLevel;
@@ -59,6 +62,12 @@ public:
 	int m_iMode;
 	// -----------------------------
 };
+
+BEGIN_DATAMAP(CRoach)
+DEFINE_FUNCTION(MonsterThink),
+	DEFINE_FUNCTION(Touch),
+	END_DATAMAP();
+
 LINK_ENTITY_TO_CLASS(monster_cockroach, CRoach);
 
 void CRoach::OnCreate()

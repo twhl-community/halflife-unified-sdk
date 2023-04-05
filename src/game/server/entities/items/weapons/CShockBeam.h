@@ -28,13 +28,13 @@ public:
 
 	int Classify() override { return CLASS_NONE; }
 
-	void EXPORT FlyThink();
+	void FlyThink();
 
-	void EXPORT ExplodeThink();
+	void ExplodeThink();
 
-	void EXPORT WaterExplodeThink();
+	void WaterExplodeThink();
 
-	void EXPORT BallTouch(CBaseEntity* pOther);
+	void BallTouch(CBaseEntity* pOther);
 
 	static CShockBeam* CreateShockBeam(const Vector& vecOrigin, const Vector& vecAngles, CBaseEntity* pOwner);
 

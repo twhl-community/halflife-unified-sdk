@@ -105,7 +105,7 @@ public:
 
 	void HealOff();
 
-	void EXPORT HealerUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void HealerUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
 	void HealerActivate(CBaseMonster* pTarget);
 
@@ -155,6 +155,7 @@ DEFINE_FIELD(m_flFollowCheckTime, FIELD_FLOAT),
 	DEFINE_FIELD(m_fHealActive, FIELD_BOOLEAN),
 	DEFINE_FIELD(m_flLastShot, FIELD_TIME),
 	DEFINE_FIELD(m_WeaponGroup, FIELD_INTEGER),
+	DEFINE_FUNCTION(HealerUse),
 	END_DATAMAP();
 
 void COFMedicAlly::OnCreate()

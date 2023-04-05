@@ -123,6 +123,9 @@ void CBasePlatTrain::Precache()
 */
 class CFuncPlat : public CBasePlatTrain
 {
+	DECLARE_CLASS(CFuncPlat, CBasePlatTrain);
+	DECLARE_DATAMAP();
+
 public:
 	void Spawn() override;
 	void Precache() override;
@@ -133,11 +136,11 @@ public:
 	/**
 	*	@brief Start bringing platform down.
 	*/
-	void EXPORT PlatUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void PlatUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
-	void EXPORT CallGoDown() { GoDown(); }
-	void EXPORT CallHitTop() { HitTop(); }
-	void EXPORT CallHitBottom() { HitBottom(); }
+	void CallGoDown() { GoDown(); }
+	void CallHitTop() { HitTop(); }
+	void CallHitBottom() { HitBottom(); }
 
 	/**
 	*	@brief Platform is at bottom, now starts moving up
@@ -159,6 +162,13 @@ public:
 	*/
 	virtual void HitBottom();
 };
+
+BEGIN_DATAMAP(CFuncPlat)
+DEFINE_FUNCTION(PlatUse),
+	DEFINE_FUNCTION(CallGoDown),
+	DEFINE_FUNCTION(CallHitTop),
+	DEFINE_FUNCTION(CallHitBottom),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(func_plat, CFuncPlat);
 
@@ -495,12 +505,12 @@ public:
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
 
-	void EXPORT Wait();
+	void Wait();
 
 	/**
 	*	@brief path corner needs to change to next target
 	*/
-	void EXPORT Next();
+	void Next();
 
 	EHANDLE m_CurrentTarget;
 	bool m_activated;
@@ -511,6 +521,8 @@ LINK_ENTITY_TO_CLASS(func_train, CFuncTrain);
 BEGIN_DATAMAP(CFuncTrain)
 DEFINE_FIELD(m_CurrentTarget, FIELD_EHANDLE),
 	DEFINE_FIELD(m_activated, FIELD_BOOLEAN),
+	DEFINE_FUNCTION(Wait),
+	DEFINE_FUNCTION(Next),
 	END_DATAMAP();
 
 void CFuncTrain::Blocked(CBaseEntity* pOther)
@@ -731,12 +743,12 @@ public:
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
 
-	void EXPORT Wait();
+	void Wait();
 
 	/**
 	*	@brief path corner needs to change to next target
 	*/
-	void EXPORT Next();
+	void Next();
 
 	void Think() override;
 
@@ -767,6 +779,8 @@ DEFINE_FIELD(m_CurrentTarget, FIELD_EHANDLE),
 	DEFINE_FIELD(m_nexting, FIELD_BOOLEAN),
 	DEFINE_FIELD(m_nextTime, FIELD_FLOAT),
 	DEFINE_FIELD(m_waitTime, FIELD_FLOAT),
+	DEFINE_FUNCTION(Wait),
+	DEFINE_FUNCTION(Next),
 	END_DATAMAP();
 
 void CSpriteTrain::Animate(float frames)
@@ -1081,6 +1095,11 @@ DEFINE_FIELD(m_ppath, FIELD_CLASSPTR),
 	DEFINE_FIELD(m_flVolume, FIELD_FLOAT),
 	DEFINE_FIELD(m_flBank, FIELD_FLOAT),
 	DEFINE_FIELD(m_oldSpeed, FIELD_FLOAT),
+
+	DEFINE_FUNCTION(Next),
+	DEFINE_FUNCTION(Find),
+	DEFINE_FUNCTION(NearestPath),
+	DEFINE_FUNCTION(DeadEnd),
 	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(func_tracktrain, CFuncTrackTrain);
@@ -1628,11 +1647,18 @@ void CFuncTrackTrain::Precache()
 */
 class CFuncTrainControls : public CBaseEntity
 {
+	DECLARE_CLASS(CFuncTrainControls, CBaseEntity);
+	DECLARE_DATAMAP();
+
 public:
 	int ObjectCaps() override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 	void Spawn() override;
-	void EXPORT Find();
+	void Find();
 };
+
+BEGIN_DATAMAP(CFuncTrainControls)
+DEFINE_FUNCTION(Find),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(func_traincontrols, CFuncTrainControls);
 
@@ -1698,12 +1724,12 @@ public:
 	void Precache() override;
 
 	//	void	Blocked() override;
-	void EXPORT GoUp() override;
-	void EXPORT GoDown() override;
+	void GoUp() override;
+	void GoDown() override;
 
 	bool KeyValue(KeyValueData* pkvd) override;
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
-	void EXPORT Find();
+	void Find();
 	TRAIN_CODE EvaluateTrain(CPathTrack* pcurrent);
 	void UpdateTrain(Vector& dest);
 	void HitBottom() override;
@@ -1744,6 +1770,9 @@ DEFINE_GLOBAL_FIELD(m_trackTop, FIELD_CLASSPTR),
 	DEFINE_FIELD(m_code, FIELD_INTEGER),
 	DEFINE_FIELD(m_targetState, FIELD_INTEGER),
 	DEFINE_FIELD(m_use, FIELD_BOOLEAN),
+	DEFINE_FUNCTION(GoUp),
+	DEFINE_FUNCTION(GoDown),
+	DEFINE_FUNCTION(Find),
 	END_DATAMAP();
 
 void CFuncTrackChange::Spawn()
@@ -2148,9 +2177,9 @@ class CGunTarget : public CBaseMonster
 public:
 	void Spawn() override;
 	void Activate() override;
-	void EXPORT Next();
-	void EXPORT Start();
-	void EXPORT Wait();
+	void Next();
+	void Start();
+	void Wait();
 	void Stop() override;
 
 	int BloodColor() override { return DONT_BLEED; }
@@ -2169,6 +2198,9 @@ LINK_ENTITY_TO_CLASS(func_guntarget, CGunTarget);
 
 BEGIN_DATAMAP(CGunTarget)
 DEFINE_FIELD(m_on, FIELD_BOOLEAN),
+	DEFINE_FUNCTION(Next),
+	DEFINE_FUNCTION(Start),
+	DEFINE_FUNCTION(Wait),
 	END_DATAMAP();
 
 void CGunTarget::Spawn()

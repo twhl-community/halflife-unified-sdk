@@ -182,6 +182,9 @@ struct GibData
 */
 class CGib : public CBaseEntity
 {
+	DECLARE_CLASS(CGib, CBaseEntity);
+	DECLARE_DATAMAP();
+
 public:
 	/**
 	*	@brief Throw a chunk
@@ -191,19 +194,19 @@ public:
 	/**
 	*	@brief Gib bounces on the ground or wall, sponges some blood down, too!
 	*/
-	void EXPORT BounceGibTouch(CBaseEntity* pOther);
+	void BounceGibTouch(CBaseEntity* pOther);
 
 	/**
 	*	@brief Sticky gib puts blood on the wall and stays put.
 	*/
-	void EXPORT StickyGibTouch(CBaseEntity* pOther);
+	void StickyGibTouch(CBaseEntity* pOther);
 
 	/**
 	*	@brief in order to emit their meaty scent from the proper location,
 	*	gibs should wait until they stop bouncing to emit their scent.
 	*	That's what this function does.
 	*/
-	void EXPORT WaitTillLand();
+	void WaitTillLand();
 	void LimitVelocity();
 
 	int ObjectCaps() override { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION) | FCAP_DONT_SAVE; }

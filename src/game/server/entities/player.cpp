@@ -127,6 +127,8 @@ DEFINE_FIELD(m_SuitLightType, FIELD_INTEGER),
 	DEFINE_FIELD(m_bInfiniteAir, FIELD_BOOLEAN),
 	DEFINE_FIELD(m_bInfiniteArmor, FIELD_BOOLEAN),
 
+	DEFINE_FUNCTION(PlayerDeathThink),
+
 	// DEFINE_FIELD(m_fDeadTime, FIELD_FLOAT), // only used in multiplayer games
 	// DEFINE_FIELD(m_fGameHUDInitialized, FIELD_INTEGER), // only used in multiplayer games
 	// DEFINE_FIELD(m_flStopExtraSoundTime, FIELD_TIME),

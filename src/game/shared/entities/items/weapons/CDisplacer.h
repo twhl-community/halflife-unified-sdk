@@ -39,6 +39,7 @@ static const size_t DISPLACER_NUM_BEAMS = 4;
 class CDisplacer : public CBasePlayerWeapon
 {
 	DECLARE_CLASS(CDisplacer, CBasePlayerWeapon);
+	DECLARE_DATAMAP();
 
 public:
 	void OnCreate() override;
@@ -57,13 +58,13 @@ public:
 
 	void Reload() override;
 
-	void EXPORT SpinupThink();
+	void SpinupThink();
 
-	void EXPORT AltSpinupThink();
+	void AltSpinupThink();
 
-	void EXPORT FireThink();
+	void FireThink();
 
-	void EXPORT AltFireThink();
+	void AltFireThink();
 
 	bool GetWeaponInfo(WeaponInfo& info) override;
 

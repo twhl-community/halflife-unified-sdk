@@ -60,6 +60,9 @@ Schedule_t slHCRangeAttack1Fast[] =
 */
 class CHeadCrab : public CBaseMonster
 {
+	DECLARE_CLASS(CHeadCrab, CBaseMonster);
+	DECLARE_DATAMAP();
+
 public:
 	void OnCreate() override;
 	void Spawn() override;
@@ -71,7 +74,7 @@ public:
 	/**
 	*	@brief this is the headcrab's touch function when it is in the air
 	*/
-	void EXPORT LeapTouch(CBaseEntity* pOther);
+	void LeapTouch(CBaseEntity* pOther);
 
 	/**
 	*	@brief returns the real center of the headcrab.
@@ -104,6 +107,10 @@ public:
 	static const char* pDeathSounds[];
 	static const char* pBiteSounds[];
 };
+
+BEGIN_DATAMAP(CHeadCrab)
+DEFINE_FUNCTION(LeapTouch),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(monster_headcrab, CHeadCrab);
 

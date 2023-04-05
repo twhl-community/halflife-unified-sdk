@@ -42,7 +42,7 @@ public:
 	void Spawn() override;
 	void Precache() override;
 	bool KeyValue(KeyValueData* pkvd) override;
-	void EXPORT TurretUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void TurretUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
 	void TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
 	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
@@ -59,34 +59,34 @@ public:
 
 	// Think functions
 
-	void EXPORT ActiveThink();
+	void ActiveThink();
 
 	/**
 	*	@brief This search function will sit with the turret deployed and look for a new target.
 	*	After a set amount of time, the barrel will spin down. After m_flMaxWait, the turret will retract.
 	*/
-	void EXPORT SearchThink();
+	void SearchThink();
 
 	/**
 	*	@brief This think function will deploy the turret when something comes into range.
 	*	This is for automatically activated turrets.
 	*/
-	void EXPORT AutoSearchThink();
-	void EXPORT TurretDeath();
+	void AutoSearchThink();
+	void TurretDeath();
 
-	virtual void EXPORT SpinDownCall() { m_iSpin = false; }
-	virtual void EXPORT SpinUpCall() { m_iSpin = true; }
+	virtual void SpinDownCall() { m_iSpin = false; }
+	virtual void SpinUpCall() { m_iSpin = true; }
 
 	// void SpinDown();
-	// float EXPORT SpinDownCall() { return SpinDown(); }
+	// float SpinDownCall() { return SpinDown(); }
 
 	// virtual float SpinDown() { return 0;}
 	// virtual float Retire() { return 0;}
 
-	void EXPORT Deploy();
-	void EXPORT Retire();
+	void Deploy();
+	void Retire();
 
-	void EXPORT Initialize();
+	void Initialize();
 
 	virtual void Ping();
 	virtual void EyeOn();
@@ -159,6 +159,18 @@ DEFINE_FIELD(m_flMaxSpin, FIELD_FLOAT),
 
 	DEFINE_FIELD(m_flPingTime, FIELD_TIME),
 	DEFINE_FIELD(m_flSpinUpTime, FIELD_TIME),
+
+	DEFINE_FUNCTION(TurretUse),
+	DEFINE_FUNCTION(ActiveThink),
+	DEFINE_FUNCTION(SearchThink),
+	DEFINE_FUNCTION(AutoSearchThink),
+	DEFINE_FUNCTION(TurretDeath),
+	DEFINE_FUNCTION(SpinDownCall),
+	DEFINE_FUNCTION(SpinUpCall),
+	//DEFINE_FUNCTION(SpinDownCall),
+	DEFINE_FUNCTION(Deploy),
+	DEFINE_FUNCTION(Retire),
+	DEFINE_FUNCTION(Initialize),
 	END_DATAMAP();
 
 class CTurret : public CBaseTurret
@@ -1121,15 +1133,23 @@ int CBaseTurret::Classify()
 */
 class CSentry : public CBaseTurret
 {
+	DECLARE_CLASS(CSentry, CBaseTurret);
+	DECLARE_DATAMAP();
+
 public:
 	void OnCreate() override;
 	void Spawn() override;
 	// other functions
 	void Shoot(Vector& vecSrc, Vector& vecDirToEnemy) override;
 	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
-	void EXPORT SentryTouch(CBaseEntity* pOther);
-	void EXPORT SentryDeath();
+	void SentryTouch(CBaseEntity* pOther);
+	void SentryDeath();
 };
+
+BEGIN_DATAMAP(CSentry)
+DEFINE_FUNCTION(SentryTouch),
+	DEFINE_FUNCTION(SentryDeath),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(monster_sentry, CSentry);
 

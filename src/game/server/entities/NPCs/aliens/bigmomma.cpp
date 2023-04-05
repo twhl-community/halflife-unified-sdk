@@ -95,7 +95,7 @@ public:
 
 	static CBMortar* Shoot(CBaseEntity* owner, Vector vecStart, Vector vecVelocity);
 	void Touch(CBaseEntity* pOther) override;
-	void EXPORT Animate();
+	void Animate();
 
 	int m_maxFrame;
 };
@@ -104,6 +104,7 @@ LINK_ENTITY_TO_CLASS(bmortar, CBMortar);
 
 BEGIN_DATAMAP(CBMortar)
 DEFINE_FIELD(m_maxFrame, FIELD_INTEGER),
+	DEFINE_FUNCTION(Animate),
 	END_DATAMAP();
 
 #define BIG_AE_STEP1 1		// Footstep left

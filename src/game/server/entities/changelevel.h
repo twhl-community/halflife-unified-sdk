@@ -34,9 +34,9 @@ public:
 	/**
 	*	@brief allows level transitions to be triggered by buttons, etc.
 	*/
-	void EXPORT UseChangeLevel(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void UseChangeLevel(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
-	void EXPORT TouchChangeLevel(CBaseEntity* pOther);
+	void TouchChangeLevel(CBaseEntity* pOther);
 	void ChangeLevelNow(CBaseEntity* pActivator);
 
 	static CBaseEntity* FindLandmark(const char* pLandmarkName);

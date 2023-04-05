@@ -50,9 +50,9 @@ public:
 	int Classify() override { return CLASS_NONE; }
 
 	static void Shoot(CBaseEntity* owner, Vector vecStart, Vector vecVelocity, Vector vecAngles);
-	void EXPORT SpikeTouch(CBaseEntity* pOther);
+	void SpikeTouch(CBaseEntity* pOther);
 
-	void EXPORT StartTrail();
+	void StartTrail();
 
 	int m_maxFrame;
 };
@@ -61,6 +61,8 @@ LINK_ENTITY_TO_CLASS(pitdronespike, CPitdroneSpike);
 
 BEGIN_DATAMAP(CPitdroneSpike)
 DEFINE_FIELD(m_maxFrame, FIELD_INTEGER),
+	DEFINE_FUNCTION(SpikeTouch),
+	DEFINE_FUNCTION(StartTrail),
 	END_DATAMAP();
 
 void CPitdroneSpike::Precache()

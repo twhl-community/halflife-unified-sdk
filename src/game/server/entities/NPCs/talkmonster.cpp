@@ -37,6 +37,7 @@ DEFINE_FIELD(m_bitsSaid, FIELD_INTEGER),
 	DEFINE_FIELD(m_flStopTalkTime, FIELD_TIME),
 	DEFINE_FIELD(m_hTalkTarget, FIELD_EHANDLE),
 	DEFINE_FIELD(m_fStartSuspicious, FIELD_BOOLEAN),
+	DEFINE_FUNCTION(FollowerUse),
 	END_DATAMAP();
 
 //=========================================================

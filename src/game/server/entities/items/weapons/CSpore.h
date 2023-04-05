@@ -39,15 +39,15 @@ public:
 
 	void BounceSound() override;
 
-	void EXPORT IgniteThink();
+	void IgniteThink();
 
-	void EXPORT FlyThink();
+	void FlyThink();
 
-	void EXPORT GibThink();
+	void GibThink();
 
-	void EXPORT RocketTouch(CBaseEntity* pOther);
+	void RocketTouch(CBaseEntity* pOther);
 
-	void EXPORT MyBounceTouch(CBaseEntity* pOther);
+	void MyBounceTouch(CBaseEntity* pOther);
 
 	static CSpore* CreateSpore(
 		const Vector& vecOrigin, const Vector& vecAngles, CBaseEntity* pOwner,

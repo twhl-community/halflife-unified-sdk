@@ -19,6 +19,11 @@
 #define CROWBAR_BODYHIT_VOLUME 128
 #define CROWBAR_WALLHIT_VOLUME 512
 
+BEGIN_DATAMAP(CCrowbar)
+DEFINE_FUNCTION(SwingAgain),
+	DEFINE_FUNCTION(Smack),
+	END_DATAMAP();
+
 LINK_ENTITY_TO_CLASS(weapon_crowbar, CCrowbar);
 
 void CCrowbar::OnCreate()

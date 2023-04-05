@@ -44,9 +44,9 @@ public:
 	void Precache() override;
 	void Spawn() override;
 
-	void EXPORT BlowerCannonStart(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-	void EXPORT BlowerCannonStop(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-	void EXPORT BlowerCannonThink();
+	void BlowerCannonStart(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void BlowerCannonStop(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void BlowerCannonThink();
 
 	// TODO: probably shadowing CBaseDelay
 	float m_flDelay;
@@ -60,6 +60,9 @@ DEFINE_FIELD(m_flDelay, FIELD_FLOAT),
 	DEFINE_FIELD(m_iZOffset, FIELD_INTEGER),
 	DEFINE_FIELD(m_iWeaponType, FIELD_INTEGER),
 	DEFINE_FIELD(m_iFireType, FIELD_INTEGER),
+	DEFINE_FUNCTION(BlowerCannonStart),
+	DEFINE_FUNCTION(BlowerCannonStop),
+	DEFINE_FUNCTION(BlowerCannonThink),
 	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(env_blowercannon, CBlowerCannon);

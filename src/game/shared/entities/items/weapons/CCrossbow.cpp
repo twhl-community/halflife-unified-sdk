@@ -23,18 +23,28 @@
 
 class CCrossbowBolt : public CBaseEntity
 {
+	DECLARE_CLASS(CCrossbowBolt, CBaseEntity);
+	DECLARE_DATAMAP();
+
+public:
 	void Spawn() override;
 	void Precache() override;
 	int Classify() override;
-	void EXPORT BubbleThink();
-	void EXPORT BoltTouch(CBaseEntity* pOther);
-	void EXPORT ExplodeThink();
+	void BubbleThink();
+	void BoltTouch(CBaseEntity* pOther);
+	void ExplodeThink();
 
-	int m_iTrail;
-
-public:
 	static CCrossbowBolt* BoltCreate();
+
+private:
+	int m_iTrail;
 };
+
+BEGIN_DATAMAP(CCrossbowBolt)
+DEFINE_FUNCTION(BubbleThink),
+	DEFINE_FUNCTION(BoltTouch),
+	DEFINE_FUNCTION(ExplodeThink),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(crossbow_bolt, CCrossbowBolt);
 

@@ -22,6 +22,9 @@ class CItemSpawnCTF;
 
 class CItemCTF : public CBaseAnimating
 {
+	DECLARE_CLASS(CItemCTF, CBaseAnimating);
+	DECLARE_DATAMAP();
+
 public:
 	static CItemSpawnCTF* m_pLastSpawn;
 
@@ -36,13 +39,13 @@ public:
 		pev->absmax = pev->origin + Vector(16, 16, 48);
 	}
 
-	void EXPORT DropPreThink();
+	void DropPreThink();
 
-	void EXPORT DropThink();
+	void DropThink();
 
-	void EXPORT CarryThink();
+	void CarryThink();
 
-	void EXPORT ItemTouch(CBaseEntity* pOther);
+	void ItemTouch(CBaseEntity* pOther);
 
 	virtual void RemoveEffect(CBasePlayer* pPlayer) {}
 

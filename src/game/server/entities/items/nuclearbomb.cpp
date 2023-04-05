@@ -72,6 +72,9 @@ void COFNuclearBombButton::SetNuclearBombButton(bool fOn)
 
 class COFNuclearBombTimer : public CBaseEntity
 {
+	DECLARE_CLASS(COFNuclearBombTimer, CBaseEntity);
+	DECLARE_DATAMAP();
+
 public:
 	int ObjectCaps() override { return FCAP_DONT_SAVE; }
 
@@ -79,13 +82,17 @@ public:
 	void Precache() override;
 	void Spawn() override;
 
-	void EXPORT NuclearBombTimerThink();
+	void NuclearBombTimerThink();
 
 	void SetNuclearBombTimer(bool fOn);
 
 	bool bPlayBombSound;
 	bool bBombSoundPlaying;
 };
+
+BEGIN_DATAMAP(COFNuclearBombTimer)
+DEFINE_FUNCTION(NuclearBombTimerThink),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(item_nuclearbombtimer, COFNuclearBombTimer);
 

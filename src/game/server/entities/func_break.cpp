@@ -129,6 +129,8 @@ DEFINE_FIELD(m_Material, FIELD_INTEGER),
 	DEFINE_FIELD(m_angle, FIELD_FLOAT),
 	DEFINE_FIELD(m_iszGibModel, FIELD_STRING),
 	DEFINE_FIELD(m_iszSpawnObject, FIELD_STRING),
+	DEFINE_FUNCTION(BreakTouch),
+	DEFINE_FUNCTION(Die),
 
 	// Explosion magnitude is stored in pev->impulse
 	END_DATAMAP();
@@ -773,7 +775,7 @@ public:
 	*/
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
-	void EXPORT StopPushSound();
+	void StopPushSound();
 	//	virtual void	SetActivator( CBaseEntity *pActivator ) { m_pPusher = pActivator; }
 
 	int ObjectCaps() override { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION) | FCAP_CONTINUOUS_USE; }
@@ -792,6 +794,7 @@ public:
 BEGIN_DATAMAP(CPushable)
 DEFINE_FIELD(m_maxSpeed, FIELD_FLOAT),
 	DEFINE_FIELD(m_soundTime, FIELD_TIME),
+	//DEFINE_FUNCTION(StopPushSound),
 	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(func_pushable, CPushable);

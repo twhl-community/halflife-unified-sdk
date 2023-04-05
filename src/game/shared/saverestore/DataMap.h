@@ -16,12 +16,30 @@
 #pragma once
 
 #include <span>
+#include <string>
 #include <type_traits>
 #include <variant>
 
 #include "Platform.h"
 #include "ClassData.h"
 #include "DataFieldSerializers.h"
+
+enum USE_TYPE;
+
+class SINGLE_INHERITANCE CBaseEntity;
+
+template <typename T>
+using TBASEPTR = void (T::*)();
+
+template <typename T>
+using TENTITYFUNCPTR = void (T::*)(CBaseEntity* pOther);
+
+template <typename T>
+using TUSEPTR = void (T::*)(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+
+using BASEPTR = TBASEPTR<CBaseEntity>;
+using ENTITYFUNCPTR = TENTITYFUNCPTR<CBaseEntity>;
+using USEPTR = TUSEPTR<CBaseEntity>;
 
 enum FIELDTYPE
 {
@@ -40,7 +58,7 @@ enum FIELDTYPE
 	FIELD_EHANDLE,		   // Entity handle
 	FIELD_VECTOR,		   // Any vector
 	FIELD_POSITION_VECTOR, // A world coordinate (these are fixed up across level transitions automagically)
-	FIELD_FUNCTION,		   // A class function pointer (Think, Use, etc)
+	FIELD_FUNCTIONPOINTER, // A class function pointer (Think, Use, etc)
 
 	FIELD_TYPECOUNT, // MUST BE LAST. Not a valid type.
 };
@@ -140,7 +158,7 @@ struct FieldTypeToSerializerMapper<FIELD_POSITION_VECTOR>
 };
 
 template <>
-struct FieldTypeToSerializerMapper<FIELD_FUNCTION>
+struct FieldTypeToSerializerMapper<FIELD_FUNCTIONPOINTER>
 {
 	static const inline DataFieldFunctionPointerSerializer Serializer;
 };
@@ -155,7 +173,13 @@ struct DataFieldDescription
 	short flags;
 };
 
-using DataMember = std::variant<DataFieldDescription>;
+struct DataFunctionDescription
+{
+	std::string Name;
+	BASEPTR Address;
+};
+
+using DataMember = std::variant<DataFieldDescription, DataFunctionDescription>;
 
 /**
  *	@brief Stores a list of type descriptions and a reference to a base class data map.
@@ -286,3 +310,24 @@ public:                                      \
 
 #define DEFINE_GLOBAL_FIELD(fieldName, fieldType) \
 	RAW_DEFINE_FIELD(fieldName, fieldType, &FieldTypeToSerializerMapper<fieldType>::Serializer, 1, FTYPEDESC_GLOBAL)
+
+// Normally, converting one pointer to member function type to another is not allowed.
+// Converting a pointer to pointer does work, so this works as expected on the platforms we support.
+template <typename TFunctionPointer>
+BASEPTR DataMap_ConvertFunctionPointer(TFunctionPointer pointer)
+{
+	// If these aren't the same size then the cast will produce an invalid pointer.
+	static_assert(sizeof(BASEPTR) == sizeof(TFunctionPointer));
+
+	return *reinterpret_cast<BASEPTR*>(&pointer);
+}
+
+#define DEFINE_FUNCTION(functionName)                                \
+	DataFunctionDescription                                          \
+	{                                                                \
+		std::string{className} + #functionName,                      \
+			DataMap_ConvertFunctionPointer(&ThisClass::functionName) \
+	}
+
+BASEPTR DataMap_FindFunctionAddress(const DataMap& dataMap, const char* name);
+const char* DataMap_FindFunctionName(const DataMap& dataMap, BASEPTR address);

@@ -51,8 +51,6 @@ struct ReplacementMap;
 // UNDONE: This will ignore transition volumes (trigger_transition), but not the PVS!!!
 #define FCAP_FORCE_TRANSITION 0x00000080 // ALWAYS goes across transitions
 
-#define EXPORT DLLEXPORT
-
 enum USE_TYPE
 {
 	USE_OFF = 0,
@@ -60,19 +58,6 @@ enum USE_TYPE
 	USE_SET = 2,
 	USE_TOGGLE = 3
 };
-
-template <typename T>
-using TBASEPTR = void (T::*)();
-
-template <typename T>
-using TENTITYFUNCPTR = void (T::*)(CBaseEntity* pOther);
-
-template <typename T>
-using TUSEPTR = void (T::*)(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-
-using BASEPTR = TBASEPTR<CBaseEntity>;
-using ENTITYFUNCPTR = TENTITYFUNCPTR<CBaseEntity>;
-using USEPTR = TUSEPTR<CBaseEntity>;
 
 // For CLASSIFY
 #define CLASS_NONE 0
@@ -136,7 +121,7 @@ void FireTargets(const char* targetName, CBaseEntity* pActivator, CBaseEntity* p
 /**
 *	@brief Base Entity. All entity types derive from this
 */
-class CBaseEntity
+class SINGLE_INHERITANCE CBaseEntity
 {
 	DECLARE_CLASS_NOBASE(CBaseEntity);
 	DECLARE_DATAMAP_NOBASE();
@@ -351,16 +336,16 @@ public:
 	/**
 	*	@brief Convenient way to delay removing oneself
 	*/
-	void EXPORT SUB_Remove();
+	void SUB_Remove();
 
 	/**
 	*	@brief slowly fades a entity out, then removes it.
 	*	DON'T USE ME FOR GIBS AND STUFF IN MULTIPLAYER!
 	*	SET A FUTURE THINK AND A RENDERMODE!!
 	*/
-	void EXPORT SUB_StartFadeOut();
-	void EXPORT SUB_FadeOut();
-	void EXPORT SUB_CallUseToggle() { this->Use(this, this, USE_TOGGLE, 0); }
+	void SUB_StartFadeOut();
+	void SUB_FadeOut();
+	void SUB_CallUseToggle() { this->Use(this, this, USE_TOGGLE, 0); }
 	bool ShouldToggle(USE_TYPE useType, bool currentState);
 
 	/**
@@ -437,8 +422,8 @@ private:
 	// Ugly code to lookup all functions to make sure they are exported when set.
 	void FunctionCheck(const void* pFunction, const char* name)
 	{
-		if (pFunction && !NAME_FOR_FUNCTION((uint32)pFunction))
-			CBaseEntity::Logger->error("No EXPORT: {}:{} ({:#08X})", GetClassname(), name, (uint32)pFunction);
+		if (pFunction && !DataMap_FindFunctionName(*GetDataMap(), DataMap_ConvertFunctionPointer(pFunction)))
+			CBaseEntity::Logger->error("No DEFINE_FUNCTION for: {}:{} ({})", GetClassname(), name, pFunction);
 	}
 
 	template <typename T, typename Dest, typename Source>

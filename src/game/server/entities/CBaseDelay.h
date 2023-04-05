@@ -33,5 +33,5 @@ public:
 
 	// common member functions
 	void SUB_UseTargets(CBaseEntity* pActivator, USE_TYPE useType, float value);
-	void EXPORT DelayThink();
+	void DelayThink();
 };

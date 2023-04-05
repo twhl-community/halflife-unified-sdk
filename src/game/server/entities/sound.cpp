@@ -120,13 +120,13 @@ public:
 	*	If the ambient is a looping sound, mark sound as active (m_fActive) if it's playing, innactive if not.
 	*	If the sound is not a looping sound, never mark it as active.
 	*/
-	void EXPORT ToggleUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void ToggleUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
 	/**
 	*	@brief Think at 5hz if we are dynamically modifying pitch or volume of the playing sound.
 	*	This function will ramp pitch and/or volume up or down, modify pitch/volume with lfo if active.
 	*/
-	void EXPORT RampThink();
+	void RampThink();
 
 	/**
 	*	@brief Init all ramp params in preparation to play a new sound
@@ -155,6 +155,8 @@ DEFINE_FIELD(m_flAttenuation, FIELD_FLOAT),
 	// The right way to do this is to split the input parms (read in keyvalue) into members and re-init this
 	// struct in Precache(), but it's unlikely that the struct will change, so it's not worth the time right now.
 	DEFINE_ARRAY(m_dpv, FIELD_CHARACTER, sizeof(dynpitchvol_t)),
+	DEFINE_FUNCTION(ToggleUse),
+	DEFINE_FUNCTION(RampThink),
 	END_DATAMAP();
 
 void CAmbientGeneric::Spawn()
@@ -845,9 +847,9 @@ public:
 
 	bool KeyValue(KeyValueData* pkvd) override;
 	void Spawn() override;
-	void EXPORT TriggerUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void TriggerUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
-	void EXPORT RadiusThink();
+	void RadiusThink();
 
 private:
 	std::string GetCommand() const;
@@ -866,6 +868,8 @@ DEFINE_FIELD(m_FileName, FIELD_STRING),
 	DEFINE_FIELD(m_Command, FIELD_INTEGER),
 	DEFINE_FIELD(m_TargetSelector, FIELD_INTEGER),
 	DEFINE_FIELD(m_Radius, FIELD_FLOAT),
+	DEFINE_FUNCTION(TriggerUse),
+	DEFINE_FUNCTION(RadiusThink),
 	END_DATAMAP();
 
 bool CAmbientMusic::KeyValue(KeyValueData* pkvd)
@@ -1393,9 +1397,9 @@ public:
 	/**
 	*	@brief if an announcement is pending, cancel it. If no announcement is pending, start one.
 	*/
-	void EXPORT ToggleUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void ToggleUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
-	void EXPORT SpeakerThink();
+	void SpeakerThink();
 
 	int ObjectCaps() override { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
 
@@ -1406,6 +1410,8 @@ LINK_ENTITY_TO_CLASS(speaker, CSpeaker);
 
 BEGIN_DATAMAP(CSpeaker)
 DEFINE_FIELD(m_preset, FIELD_INTEGER),
+	DEFINE_FUNCTION(ToggleUse),
+	DEFINE_FUNCTION(SpeakerThink),
 	END_DATAMAP();
 
 void CSpeaker::Spawn()

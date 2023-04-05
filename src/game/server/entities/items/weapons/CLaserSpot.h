@@ -19,6 +19,9 @@
 
 class CLaserSpot : public CBaseEntity
 {
+	DECLARE_CLASS(CLaserSpot, CBaseEntity);
+	DECLARE_DATAMAP();
+
 public:
 	void Spawn() override;
 	void Precache() override;
@@ -33,7 +36,7 @@ public:
 	/**
 	*	@brief bring a suspended laser sight back.
 	*/
-	void EXPORT Revive();
+	void Revive();
 
 	static CLaserSpot* CreateSpot();
 };

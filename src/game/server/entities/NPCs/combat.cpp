@@ -27,6 +27,12 @@
 #define HUMAN_GIB_COUNT 6
 #define ALIEN_GIB_COUNT 4
 
+BEGIN_DATAMAP(CGib)
+DEFINE_FUNCTION(BounceGibTouch),
+	DEFINE_FUNCTION(StickyGibTouch),
+	DEFINE_FUNCTION(WaitTillLand),
+	END_DATAMAP();
+
 LINK_ENTITY_TO_CLASS(gib, CGib);
 
 // HACKHACK -- The gib velocity equations don't work

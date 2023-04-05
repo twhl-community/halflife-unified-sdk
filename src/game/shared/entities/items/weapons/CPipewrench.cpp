@@ -23,6 +23,9 @@ BEGIN_DATAMAP(CPipewrench)
 DEFINE_FIELD(m_flBigSwingStart, FIELD_TIME),
 	DEFINE_FIELD(m_iSwing, FIELD_INTEGER),
 	DEFINE_FIELD(m_iSwingMode, FIELD_INTEGER),
+	DEFINE_FUNCTION(SwingAgain),
+	DEFINE_FUNCTION(Smack),
+	DEFINE_FUNCTION(BigSwing),
 	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(weapon_pipewrench, CPipewrench);

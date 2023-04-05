@@ -48,6 +48,15 @@ DEFINE_FIELD(m_pGoalEnt, FIELD_CLASSPTR),
 
 	DEFINE_FIELD(m_iDoLeftSmokePuff, FIELD_INTEGER),
 	DEFINE_FIELD(m_iDoRightSmokePuff, FIELD_INTEGER),
+
+	DEFINE_FUNCTION(FlyThink),
+	DEFINE_FUNCTION(DeployThink),
+	DEFINE_FUNCTION(HitTouch),
+	DEFINE_FUNCTION(FindAllThink),
+	DEFINE_FUNCTION(HoverThink),
+	DEFINE_FUNCTION(CrashTouch),
+	DEFINE_FUNCTION(DyingThink),
+	DEFINE_FUNCTION(CommandUse),
 	END_DATAMAP();
 
 void COsprey::OnCreate()

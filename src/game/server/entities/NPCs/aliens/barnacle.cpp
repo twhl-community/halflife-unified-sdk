@@ -41,8 +41,8 @@ public:
 	CBaseEntity* TongueTouchEnt(float& flLength);
 	int Classify() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
-	void EXPORT BarnacleThink();
-	void EXPORT WaitTillDead();
+	void BarnacleThink();
+	void WaitTillDead();
 	void Killed(CBaseEntity* attacker, int iGib) override;
 	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 
@@ -63,6 +63,8 @@ DEFINE_FIELD(m_flAltitude, FIELD_FLOAT),
 	DEFINE_FIELD(m_fTongueExtended, FIELD_BOOLEAN),
 	DEFINE_FIELD(m_fLiftingPrey, FIELD_BOOLEAN),
 	DEFINE_FIELD(m_flTongueAdj, FIELD_FLOAT),
+	DEFINE_FUNCTION(BarnacleThink),
+	DEFINE_FUNCTION(WaitTillDead),
 	END_DATAMAP();
 
 void CBarnacle::OnCreate()

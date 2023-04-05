@@ -32,11 +32,14 @@ enum crowbar_e
 
 class CCrowbar : public CBasePlayerWeapon
 {
+	DECLARE_CLASS(CCrowbar, CBasePlayerWeapon);
+	DECLARE_DATAMAP();
+
 public:
 	void OnCreate() override;
 	void Precache() override;
-	void EXPORT SwingAgain();
-	void EXPORT Smack();
+	void SwingAgain();
+	void Smack();
 	bool GetWeaponInfo(WeaponInfo& info) override;
 
 	void PrimaryAttack() override;

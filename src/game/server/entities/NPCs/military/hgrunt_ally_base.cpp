@@ -2172,6 +2172,10 @@ void CBaseHGruntAlly::Killed(CBaseEntity* attacker, int iGib)
 	COFSquadTalkMonster::Killed(attacker, iGib);
 }
 
+BEGIN_DATAMAP(CBaseHGruntAllyRepel)
+DEFINE_FUNCTION(RepelUse),
+	END_DATAMAP();
+
 bool CBaseHGruntAllyRepel::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq(pkvd->szKeyName, "head"))

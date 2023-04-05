@@ -85,6 +85,7 @@ void CBaseEntity::SUB_Remove()
 BEGIN_DATAMAP(CBaseDelay)
 DEFINE_FIELD(m_flDelay, FIELD_FLOAT),
 	DEFINE_FIELD(m_iszKillTarget, FIELD_STRING),
+	DEFINE_FUNCTION(DelayThink),
 	END_DATAMAP();
 
 bool CBaseDelay::KeyValue(KeyValueData* pkvd)
@@ -232,11 +233,13 @@ DEFINE_FIELD(m_toggle_state, FIELD_INTEGER),
 	DEFINE_FIELD(m_cTriggersLeft, FIELD_INTEGER),
 	DEFINE_FIELD(m_flHeight, FIELD_FLOAT),
 	DEFINE_FIELD(m_hActivator, FIELD_EHANDLE),
-	DEFINE_FIELD(m_pfnCallWhenMoveDone, FIELD_FUNCTION),
+	DEFINE_FIELD(m_pfnCallWhenMoveDone, FIELD_FUNCTIONPOINTER),
 	DEFINE_FIELD(m_vecFinalDest, FIELD_POSITION_VECTOR),
 	DEFINE_FIELD(m_vecFinalAngle, FIELD_VECTOR),
 	DEFINE_FIELD(m_sMaster, FIELD_STRING),
 	DEFINE_FIELD(m_bitsDamageInflict, FIELD_INTEGER), // damage type inflicted
+	DEFINE_FUNCTION(LinearMoveDone),
+	DEFINE_FUNCTION(AngularMoveDone),
 	END_DATAMAP();
 
 bool CBaseToggle::KeyValue(KeyValueData* pkvd)

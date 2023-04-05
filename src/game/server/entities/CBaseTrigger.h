@@ -20,6 +20,7 @@
 class CBaseTrigger : public CBaseToggle
 {
 	DECLARE_CLASS(CBaseTrigger, CBaseToggle);
+	DECLARE_DATAMAP();
 
 public:
 	bool KeyValue(KeyValueData* pkvd) override;
@@ -29,12 +30,12 @@ public:
 	/**
 	*	@brief the wait time has passed, so set back up for another activation
 	*/
-	void EXPORT MultiWaitOver();
+	void MultiWaitOver();
 
 	/**
 	*	@brief If this is the USE function for a trigger, its state will toggle every time it's fired
 	*/
-	void EXPORT ToggleUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void ToggleUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
 	void InitTrigger();
 

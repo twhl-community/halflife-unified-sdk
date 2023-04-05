@@ -82,8 +82,7 @@ public:
 	*/
 	void Activate() override;
 
-	// void EXPORT CineSpawnThink();
-	void EXPORT CineThink();
+	void CineThink();
 	void Pain();
 	void Die();
 

@@ -63,7 +63,7 @@ public:
 	/**
 	*	@brief After moving, set origin to exact final destination, call "move done" function
 	*/
-	void EXPORT LinearMoveDone();
+	void LinearMoveDone();
 
 	/**
 	*	@brief calculate pev->velocity and pev->nextthink to reach vecDest from pev->origin traveling at flSpeed
@@ -74,7 +74,7 @@ public:
 	/**
 	*	@brief After rotating, set angle to exact final angle, call "move done" function
 	*/
-	void EXPORT AngularMoveDone();
+	void AngularMoveDone();
 
 	bool IsLockedByMaster();
 

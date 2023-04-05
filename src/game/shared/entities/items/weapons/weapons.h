@@ -31,16 +31,13 @@ class CBasePlayerWeapon;
 void W_Precache();
 
 /**
-*	@brief removes all satchels owned by the provided player. Should only be used upon death.
-*	Made this global on purpose.
-*/
-void DeactivateSatchels(CBasePlayer* pOwner);
-
-/**
 *	@brief Contact Grenade / Timed grenade / Satchel Charge
 */
 class CGrenade : public CBaseMonster
 {
+	DECLARE_CLASS(CGrenade, CBaseMonster);
+	DECLARE_DATAMAP();
+
 public:
 	void OnCreate() override;
 	void Precache() override;
@@ -59,20 +56,20 @@ public:
 
 	void Explode(Vector vecSrc, Vector vecAim);
 	void Explode(TraceResult* pTrace, int bitsDamageType);
-	void EXPORT Smoke();
+	void Smoke();
 
-	void EXPORT BounceTouch(CBaseEntity* pOther);
-	void EXPORT SlideTouch(CBaseEntity* pOther);
+	void BounceTouch(CBaseEntity* pOther);
+	void SlideTouch(CBaseEntity* pOther);
 
 	/**
 	*	@brief Contact grenade, explode when it touches something
 	*/
-	void EXPORT ExplodeTouch(CBaseEntity* pOther);
-	void EXPORT DangerSoundThink();
-	void EXPORT PreDetonate();
-	void EXPORT Detonate();
-	void EXPORT DetonateUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-	void EXPORT TumbleThink();
+	void ExplodeTouch(CBaseEntity* pOther);
+	void DangerSoundThink();
+	void PreDetonate();
+	void Detonate();
+	void DetonateUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void TumbleThink();
 
 	virtual void BounceSound();
 	int BloodColor() override { return DONT_BLEED; }
@@ -288,7 +285,7 @@ public:
 	bool AddPrimaryAmmo(CBasePlayerWeapon* origin, int iCount, const char* szName, int iMaxClip);
 	bool AddSecondaryAmmo(int iCount, const char* szName);
 
-	void EXPORT DestroyItem();
+	void DestroyItem();
 
 	/**
 	*	@brief returns false if struct not filled out
@@ -396,7 +393,7 @@ public:
 	void RetireWeapon();
 
 	// Can't use virtual functions as think functions so this wrapper is needed.
-	void EXPORT CallDoRetireWeapon()
+	void CallDoRetireWeapon()
 	{
 		DoRetireWeapon();
 	}

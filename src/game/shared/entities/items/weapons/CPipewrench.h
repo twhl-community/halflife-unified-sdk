@@ -50,13 +50,13 @@ private:
 public:
 	void OnCreate() override;
 	void Precache() override;
-	void EXPORT SwingAgain();
-	void EXPORT Smack();
+	void SwingAgain();
+	void Smack();
 
 	void PrimaryAttack() override;
 	void SecondaryAttack() override;
 	bool Swing(const bool bFirst);
-	void EXPORT BigSwing();
+	void BigSwing();
 	bool Deploy() override;
 	void Holster() override;
 	void WeaponIdle() override;

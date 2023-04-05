@@ -74,6 +74,7 @@ DEFINE_FIELD(m_iszIdle, FIELD_STRING),
 	DEFINE_FIELD(m_saved_effects, FIELD_INTEGER),
 	DEFINE_FIELD(m_iFinishSchedule, FIELD_INTEGER),
 	DEFINE_FIELD(m_interruptable, FIELD_BOOLEAN),
+	DEFINE_FUNCTION(CineThink),
 	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(scripted_sequence, CCineMonster);
@@ -761,8 +762,8 @@ public:
 	void Spawn() override;
 	bool KeyValue(KeyValueData* pkvd) override;
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
-	void EXPORT FindThink();
-	void EXPORT DelayThink();
+	void FindThink();
+	void DelayThink();
 	int ObjectCaps() override { return (CBaseToggle::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
 
 	CBaseMonster* FindEntity();
@@ -797,6 +798,8 @@ DEFINE_FIELD(m_iszSentence, FIELD_STRING),
 	DEFINE_FIELD(m_flVolume, FIELD_FLOAT),
 	DEFINE_FIELD(m_active, FIELD_BOOLEAN),
 	DEFINE_FIELD(m_iszListener, FIELD_STRING),
+	DEFINE_FUNCTION(FindThink),
+	DEFINE_FUNCTION(DelayThink),
 	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(scripted_sentence, CScriptedSentence);

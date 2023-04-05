@@ -20,6 +20,18 @@ LINK_ENTITY_TO_CLASS(grenade, CGrenade);
 // Grenades flagged with this will be triggered when the owner calls detonateSatchelCharges
 #define SF_DETONATE 0x0001
 
+BEGIN_DATAMAP(CGrenade)
+DEFINE_FUNCTION(Smoke),
+	DEFINE_FUNCTION(BounceTouch),
+	DEFINE_FUNCTION(SlideTouch),
+	DEFINE_FUNCTION(ExplodeTouch),
+	DEFINE_FUNCTION(DangerSoundThink),
+	DEFINE_FUNCTION(PreDetonate),
+	DEFINE_FUNCTION(Detonate),
+	DEFINE_FUNCTION(DetonateUse),
+	DEFINE_FUNCTION(TumbleThink),
+	END_DATAMAP();
+
 void CGrenade::OnCreate()
 {
 	CBaseMonster::OnCreate();

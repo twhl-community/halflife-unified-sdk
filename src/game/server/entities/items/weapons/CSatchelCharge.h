@@ -15,26 +15,31 @@
 
 #pragma once
 
-#include "CPointEntity.h"
+#include "weapons.h"
 
-#define MS_MAX_TARGETS 32
-
-class CMultiSource : public CPointEntity
+class CSatchelCharge : public CGrenade
 {
-	DECLARE_CLASS(CMultiSource, CPointEntity);
+	DECLARE_CLASS(CSatchelCharge, CGrenade);
 	DECLARE_DATAMAP();
 
 public:
+	void OnCreate() override;
 	void Spawn() override;
-	bool KeyValue(KeyValueData* pkvd) override;
-	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
-	int ObjectCaps() override { return (CPointEntity::ObjectCaps() | FCAP_MASTER); }
-	bool IsTriggered(CBaseEntity* pActivator) override;
-	void Register();
+	void Precache() override;
+	void BounceSound() override;
 
-	EHANDLE m_rgEntities[MS_MAX_TARGETS];
-	int m_rgTriggered[MS_MAX_TARGETS];
+	void SatchelSlide(CBaseEntity* pOther);
+	void SatchelThink();
 
-	int m_iTotal;
-	string_t m_globalstate;
+public:
+	/**
+	 *	@brief do whatever it is we do to an orphaned satchel when we don't want it in the world anymore.
+	 */
+	void Deactivate();
 };
+
+/**
+ *	@brief removes all satchels owned by the provided player. Should only be used upon death.
+ *	Made this global on purpose.
+ */
+void DeactivateSatchels(CBasePlayer* pOwner);

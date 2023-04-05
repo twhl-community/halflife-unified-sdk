@@ -138,7 +138,7 @@ public:
 	MONSTERSTATE GetIdealState() override;
 	Schedule_t* GetScheduleOfType(int iType) override;
 
-	void EXPORT FollowerUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void FollowerUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
 	COFSquadTalkMonster* MySquadMedic();
 

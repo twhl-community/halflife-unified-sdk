@@ -156,6 +156,8 @@ bool CSave::WriteFields(void* baseData, const DataMap& dataMap)
 		return false;
 	}
 
+	m_CurrentDataMap = &dataMap;
+
 	for (const auto& member : dataMap.Members)
 	{
 		auto field = std::get_if<DataFieldDescription>(&member);
@@ -189,6 +191,8 @@ bool CSave::WriteFields(void* baseData, const DataMap& dataMap)
 		// Empty fields will not be written, write out the actual number of fields to be written
 		++(*fieldCount);
 	}
+
+	m_CurrentDataMap = nullptr;
 
 	return true;
 }
@@ -280,6 +284,8 @@ bool CRestore::ReadFields(void* baseData, const DataMap& dataMap)
 
 	int lastField = 0; // Make searches faster, most data is read/written in the same order
 
+	m_CurrentDataMap = &dataMap;
+
 	// Clear out base data
 	for (const auto& member : dataMap.Members)
 	{
@@ -314,6 +320,8 @@ bool CRestore::ReadFields(void* baseData, const DataMap& dataMap)
 		lastField = ReadField(baseData, dataMap, m_data.pTokens[header.token], lastField, header.pData, header.size);
 		lastField++;
 	}
+
+	m_CurrentDataMap = nullptr;
 
 	return true;
 }

@@ -47,7 +47,7 @@ public:
 	/**
 	*	@brief Sets toucher's friction to m_frictionFraction (1.0 = normal friction)
 	*/
-	void EXPORT ChangeFriction(CBaseEntity* pOther);
+	void ChangeFriction(CBaseEntity* pOther);
 
 	int ObjectCaps() override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 
@@ -58,6 +58,7 @@ LINK_ENTITY_TO_CLASS(func_friction, CFrictionModifier);
 
 BEGIN_DATAMAP(CFrictionModifier)
 DEFINE_FIELD(m_frictionFraction, FIELD_FLOAT),
+	DEFINE_FUNCTION(ChangeFriction),
 	END_DATAMAP();
 
 void CFrictionModifier::Spawn()
@@ -241,11 +242,11 @@ class CMultiManager : public CBaseToggle
 public:
 	bool KeyValue(KeyValueData* pkvd) override;
 	void Spawn() override;
-	void EXPORT ManagerThink();
-	void EXPORT ManagerUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void ManagerThink();
+	void ManagerUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
 #if _DEBUG
-	void EXPORT ManagerReport();
+	void ManagerReport();
 #endif
 
 	bool HasTarget(string_t targetname) override;
@@ -278,6 +279,12 @@ DEFINE_FIELD(m_cTargets, FIELD_INTEGER),
 	DEFINE_FIELD(m_startTime, FIELD_TIME),
 	DEFINE_ARRAY(m_iTargetName, FIELD_STRING, MAX_MULTI_TARGETS),
 	DEFINE_ARRAY(m_flTargetDelay, FIELD_FLOAT, MAX_MULTI_TARGETS),
+	DEFINE_FUNCTION(ManagerThink),
+	DEFINE_FUNCTION(ManagerUse),
+
+#if _DEBUG
+	DEFINE_FUNCTION(ManagerReport),
+#endif
 	END_DATAMAP();
 
 bool CMultiManager::KeyValue(KeyValueData* pkvd)
@@ -477,20 +484,28 @@ void CRenderFxManager::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TY
 */
 class CTriggerHurt : public CBaseTrigger
 {
+	DECLARE_CLASS(CTriggerHurt, CBaseTrigger);
+	DECLARE_DATAMAP();
+
 public:
 	void Spawn() override;
 
 	/**
 	 *	@brief When touched, a hurt trigger does DMG points of damage each half-second
 	 */
-	void EXPORT HurtTouch(CBaseEntity* pOther);
+	void HurtTouch(CBaseEntity* pOther);
 
 	/**
 	*	@brief trigger hurt that causes radiation will do a radius check and set the player's geiger counter level
 	*	according to distance from center of trigger
 	*/
-	void EXPORT RadiationThink();
+	void RadiationThink();
 };
+
+BEGIN_DATAMAP(CTriggerHurt)
+DEFINE_FUNCTION(HurtTouch),
+	DEFINE_FUNCTION(RadiationThink),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(trigger_hurt, CTriggerHurt);
 
@@ -756,16 +771,18 @@ void CTriggerMonsterJump::Touch(CBaseEntity* pOther)
 */
 class CTriggerMultiple : public CBaseTrigger
 {
+	DECLARE_CLASS(CTriggerMultiple, CBaseTrigger);
+	DECLARE_DATAMAP();
+
 public:
 	void Spawn() override;
 
-	void EXPORT MultiTouch(CBaseEntity* pOther);
-
-	/**
-	 *	@brief the wait time has passed, so set back up for another activation
-	 */
-	void EXPORT MultiWaitOver();
+	void MultiTouch(CBaseEntity* pOther);
 };
+
+BEGIN_DATAMAP(CTriggerMultiple)
+DEFINE_FUNCTION(MultiTouch),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(trigger_multiple, CTriggerMultiple);
 
@@ -825,11 +842,18 @@ void CTriggerOnce::Spawn()
 */
 class CTriggerCounter : public CBaseTrigger
 {
+	DECLARE_CLASS(CTriggerCounter, CBaseTrigger);
+	DECLARE_DATAMAP();
+
 public:
 	void Spawn() override;
 
-	void EXPORT CounterUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void CounterUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 };
+
+BEGIN_DATAMAP(CTriggerCounter)
+	DEFINE_FUNCTION(CounterUse),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(trigger_counter, CTriggerCounter);
 
@@ -999,11 +1023,18 @@ void CTriggerPush::Touch(CBaseEntity* pOther)
 
 class CTriggerTeleport : public CBaseTrigger
 {
+	DECLARE_CLASS(CTriggerTeleport, CBaseTrigger);
+	DECLARE_DATAMAP();
+
 public:
 	void Spawn() override;
 
-	void EXPORT TeleportTouch(CBaseEntity* pOther);
+	void TeleportTouch(CBaseEntity* pOther);
 };
+
+BEGIN_DATAMAP(CTriggerTeleport)
+DEFINE_FUNCTION(TeleportTouch),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(trigger_teleport, CTriggerTeleport);
 LINK_ENTITY_TO_CLASS(info_teleport_destination, CPointEntity);
@@ -1070,10 +1101,17 @@ void CTriggerTeleport::TeleportTouch(CBaseEntity* pOther)
 
 class CTriggerGravity : public CBaseTrigger
 {
+	DECLARE_CLASS(CTriggerGravity, CBaseTrigger);
+	DECLARE_DATAMAP();
+
 public:
 	void Spawn() override;
-	void EXPORT GravityTouch(CBaseEntity* pOther);
+	void GravityTouch(CBaseEntity* pOther);
 };
+
+BEGIN_DATAMAP(CTriggerGravity)
+DEFINE_FUNCTION(GravityTouch),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(trigger_gravity, CTriggerGravity);
 
@@ -1158,7 +1196,7 @@ public:
 	void Spawn() override;
 	bool KeyValue(KeyValueData* pkvd) override;
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
-	void EXPORT FollowTarget();
+	void FollowTarget();
 	void Move();
 
 	int ObjectCaps() override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
@@ -1194,6 +1232,7 @@ DEFINE_FIELD(m_hPlayer, FIELD_EHANDLE),
 	DEFINE_FIELD(m_acceleration, FIELD_FLOAT),
 	DEFINE_FIELD(m_deceleration, FIELD_FLOAT),
 	DEFINE_FIELD(m_state, FIELD_BOOLEAN),
+	DEFINE_FUNCTION(FollowTarget),
 	END_DATAMAP();
 
 void CTriggerCamera::Spawn()
@@ -1461,7 +1500,7 @@ public:
 
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
-	void EXPORT PlayerFreezeDelay();
+	void PlayerFreezeDelay();
 
 public:
 	bool m_bUnFrozen;
@@ -1469,6 +1508,7 @@ public:
 
 BEGIN_DATAMAP(CTriggerPlayerFreeze)
 DEFINE_FIELD(m_bUnFrozen, FIELD_BOOLEAN),
+	DEFINE_FUNCTION(PlayerFreezeDelay),
 	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(trigger_playerfreeze, CTriggerPlayerFreeze);
@@ -1523,6 +1563,7 @@ class CTriggerKillNoGib : public CBaseTrigger
 public:
 	void Spawn() override;
 
+	// TODO: needs to be added to the datamap. check if it's missing in original op4
 	void KillTouch(CBaseEntity* pOther);
 };
 
@@ -1548,12 +1589,17 @@ void CTriggerKillNoGib::KillTouch(CBaseEntity* pOther)
 class CTriggerXenReturn : public CBaseTrigger
 {
 	DECLARE_CLASS(CTriggerXenReturn, CBaseTrigger);
+	DECLARE_DATAMAP();
 
 public:
 	void Spawn() override;
 
-	void EXPORT ReturnTouch(CBaseEntity* pOther);
+	void ReturnTouch(CBaseEntity* pOther);
 };
+
+BEGIN_DATAMAP(CTriggerXenReturn)
+DEFINE_FUNCTION(ReturnTouch),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(trigger_xen_return, CTriggerXenReturn);
 
@@ -1633,7 +1679,7 @@ public:
 	void Precache() override;
 	void Spawn() override;
 
-	void EXPORT GeneWormHitTouch(CBaseEntity* pOther);
+	void GeneWormHitTouch(CBaseEntity* pOther);
 
 	static const char* pAttackSounds[];
 
@@ -1642,6 +1688,7 @@ public:
 
 BEGIN_DATAMAP(COFTriggerGeneWormHit)
 DEFINE_FIELD(m_flLastDamageTime, FIELD_TIME),
+	DEFINE_FUNCTION(GeneWormHitTouch),
 	END_DATAMAP();
 
 const char* COFTriggerGeneWormHit::pAttackSounds[] =

@@ -82,9 +82,9 @@ public:
 	 *	Once we're sure that the object is grounded,
 	 *	we change its solid type to trigger and set it in a large box that helps the player get it.
 	 */
-	void EXPORT FallThink();
+	void FallThink();
 
-	void EXPORT ItemTouch(CBaseEntity* pOther);
+	void ItemTouch(CBaseEntity* pOther);
 
 	/**
 	*	@brief Tries to given this item to the player.
@@ -94,13 +94,13 @@ public:
 	/**
 	 *	@brief make an item visible and tangible.
 	 */
-	void EXPORT Materialize();
+	void Materialize();
 
 	/**
 	 *	@brief the item is trying to rematerialize, should it do so now or wait longer?
 	 *	the item desires to become visible and tangible, if the game rules allow for it.
 	 */
-	void EXPORT AttemptToMaterialize();
+	void AttemptToMaterialize();
 
 protected:
 	void SetupItem(const Vector& mins, const Vector& maxs);

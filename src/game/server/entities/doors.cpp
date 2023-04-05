@@ -46,7 +46,7 @@ public:
 	/**
 	*	@brief Doors not tied to anything (e.g. button, another door) can be touched, to make them activate.
 	*/
-	void EXPORT DoorTouch(CBaseEntity* pOther);
+	void DoorTouch(CBaseEntity* pOther);
 
 	// local functions
 	/**
@@ -57,22 +57,22 @@ public:
 	/**
 	*	@brief Starts the door going to its "up" position (simply ToggleData->vecPosition2).
 	*/
-	void EXPORT DoorGoUp();
+	void DoorGoUp();
 
 	/**
 	*	@brief Starts the door going to its "down" position (simply ToggleData->vecPosition1).
 	*/
-	void EXPORT DoorGoDown();
+	void DoorGoDown();
 
 	/**
 	*	@brief The door has reached the "up" position. Either go back down, or wait for another activation.
 	*/
-	void EXPORT DoorHitTop();
+	void DoorHitTop();
 
 	/**
 	*	@brief The door has reached the "down" position. Back to quiescence.
 	*/
-	void EXPORT DoorHitBottom();
+	void DoorHitBottom();
 
 	byte m_bHealthValue; // some doors are medi-kit doors, they give players health
 
@@ -96,6 +96,11 @@ DEFINE_FIELD(m_bHealthValue, FIELD_CHARACTER),
 	DEFINE_FIELD(m_LockedSentence, FIELD_STRING),
 	DEFINE_FIELD(m_UnlockedSound, FIELD_SOUNDNAME),
 	DEFINE_FIELD(m_UnlockedSentence, FIELD_STRING),
+	DEFINE_FUNCTION(DoorTouch),
+	DEFINE_FUNCTION(DoorGoUp),
+	DEFINE_FUNCTION(DoorGoDown),
+	DEFINE_FUNCTION(DoorHitTop),
+	DEFINE_FUNCTION(DoorHitBottom),
 	END_DATAMAP();
 
 #define DOOR_SENTENCEWAIT 6
@@ -676,8 +681,8 @@ public:
 	/**
 	*	@brief The door has reached needed position.
 	*/
-	void EXPORT DoorMoveDone();
-	void EXPORT StopMoveSound();
+	void DoorMoveDone();
+	void StopMoveSound();
 
 	string_t m_MoveSound; // sound a door makes while moving
 	string_t m_StopSound;
@@ -688,6 +693,8 @@ LINK_ENTITY_TO_CLASS(momentary_door, CMomentaryDoor);
 BEGIN_DATAMAP(CMomentaryDoor)
 DEFINE_FIELD(m_MoveSound, FIELD_SOUNDNAME),
 	DEFINE_FIELD(m_StopSound, FIELD_SOUNDNAME),
+	DEFINE_FUNCTION(DoorMoveDone),
+	DEFINE_FUNCTION(StopMoveSound),
 	END_DATAMAP();
 
 void CMomentaryDoor::Spawn()

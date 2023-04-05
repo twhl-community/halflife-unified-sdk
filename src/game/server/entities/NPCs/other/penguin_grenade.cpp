@@ -33,13 +33,13 @@ public:
 	void OnCreate() override;
 	void Precache() override;
 	void GibMonster() override;
-	void EXPORT SuperBounceTouch(CBaseEntity* pOther);
+	void SuperBounceTouch(CBaseEntity* pOther);
 	void Spawn() override;
 
 	int Classify() override;
 	int IRelationship(CBaseEntity* pTarget) override;
 	void Killed(CBaseEntity* attacker, int iGib) override;
-	void EXPORT HuntThink();
+	void HuntThink();
 	void Smoke();
 	int BloodColor() override;
 
@@ -63,6 +63,8 @@ DEFINE_FIELD(m_flDie, FIELD_TIME),
 	DEFINE_FIELD(m_flNextHit, FIELD_TIME),
 	DEFINE_FIELD(m_posPrev, FIELD_POSITION_VECTOR),
 	DEFINE_FIELD(m_hOwner, FIELD_EHANDLE),
+	DEFINE_FUNCTION(SuperBounceTouch),
+	DEFINE_FUNCTION(HuntThink),
 	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(monster_penguin, CPenguinGrenade);

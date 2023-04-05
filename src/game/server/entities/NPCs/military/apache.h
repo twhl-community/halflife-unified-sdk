@@ -40,12 +40,12 @@ public:
 		pev->absmax = pev->origin + Vector(300, 300, 8);
 	}
 
-	void EXPORT HuntThink();
-	void EXPORT FlyTouch(CBaseEntity* pOther);
-	void EXPORT CrashTouch(CBaseEntity* pOther);
-	void EXPORT DyingThink();
-	void EXPORT StartupUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-	void EXPORT NullThink();
+	void HuntThink();
+	void FlyTouch(CBaseEntity* pOther);
+	void CrashTouch(CBaseEntity* pOther);
+	void DyingThink();
+	void StartupUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void NullThink();
 
 	void ShowDamage();
 	void Flight();

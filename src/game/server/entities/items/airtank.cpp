@@ -23,8 +23,8 @@ public:
 	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
-	void EXPORT TankThink();
-	void EXPORT TankTouch(CBaseEntity* pOther);
+	void TankThink();
+	void TankTouch(CBaseEntity* pOther);
 	int BloodColor() override { return DONT_BLEED; }
 	void Killed(CBaseEntity* attacker, int iGib) override;
 
@@ -35,6 +35,8 @@ LINK_ENTITY_TO_CLASS(item_airtank, CAirtank);
 
 BEGIN_DATAMAP(CAirtank)
 DEFINE_FIELD(m_state, FIELD_BOOLEAN),
+	DEFINE_FUNCTION(TankThink),
+	DEFINE_FUNCTION(TankTouch),
 	END_DATAMAP();
 
 void CAirtank::OnCreate()

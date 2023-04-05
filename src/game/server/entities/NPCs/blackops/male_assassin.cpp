@@ -418,11 +418,18 @@ bool CMOFAssassin::KeyValue(KeyValueData* pkvd)
 
 class CMOFAssassinRepel : public CHGruntRepel
 {
+	DECLARE_CLASS(CMOFAssassinRepel, CHGruntRepel);
+	DECLARE_DATAMAP();
+
 public:
 	void Precache() override;
 	void Spawn() override;
-	void EXPORT RepelUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void RepelUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 };
+
+BEGIN_DATAMAP(CMOFAssassinRepel)
+DEFINE_FUNCTION(RepelUse),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(monster_assassin_repel, CMOFAssassinRepel);
 void CMOFAssassinRepel::Precache()

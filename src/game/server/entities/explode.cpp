@@ -103,7 +103,7 @@ class CEnvExplosion : public CBaseMonster
 
 public:
 	void Spawn() override;
-	void EXPORT Smoke();
+	void Smoke();
 	bool KeyValue(KeyValueData* pkvd) override;
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
@@ -114,6 +114,7 @@ public:
 BEGIN_DATAMAP(CEnvExplosion)
 DEFINE_FIELD(m_iMagnitude, FIELD_INTEGER),
 	DEFINE_FIELD(m_spriteScale, FIELD_INTEGER),
+	DEFINE_FUNCTION(Smoke),
 	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(env_explosion, CEnvExplosion);

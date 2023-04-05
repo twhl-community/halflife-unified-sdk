@@ -33,7 +33,7 @@ public:
 
 	void Touch(CBaseEntity* pOther) override;
 
-	void EXPORT Animate();
+	void Animate();
 
 	static void Shoot(CBaseEntity* owner, Vector vecStart, Vector vecVelocity);
 
@@ -46,6 +46,7 @@ public:
 
 BEGIN_DATAMAP(COFGonomeGuts)
 DEFINE_FIELD(m_maxFrame, FIELD_INTEGER),
+	DEFINE_FUNCTION(Animate),
 	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(gonomeguts, COFGonomeGuts);

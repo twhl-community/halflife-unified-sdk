@@ -37,6 +37,12 @@ DEFINE_FIELD(m_iRockets, FIELD_INTEGER),
 	DEFINE_FIELD(m_pBeam, FIELD_CLASSPTR),
 	DEFINE_FIELD(m_flGoalSpeed, FIELD_FLOAT),
 	DEFINE_FIELD(m_iDoSmokePuff, FIELD_INTEGER),
+	DEFINE_FUNCTION(HuntThink),
+	DEFINE_FUNCTION(FlyTouch),
+	DEFINE_FUNCTION(CrashTouch),
+	DEFINE_FUNCTION(DyingThink),
+	DEFINE_FUNCTION(StartupUse),
+	DEFINE_FUNCTION(NullThink),
 	END_DATAMAP();
 
 void CApache::OnCreate()
@@ -910,8 +916,8 @@ class CApacheHVR : public CGrenade
 public:
 	void Spawn() override;
 	void Precache() override;
-	void EXPORT IgniteThink();
-	void EXPORT AccelerateThink();
+	void IgniteThink();
+	void AccelerateThink();
 
 	int m_iTrail;
 	Vector m_vecForward;
@@ -922,6 +928,8 @@ LINK_ENTITY_TO_CLASS(hvr_rocket, CApacheHVR);
 BEGIN_DATAMAP(CApacheHVR)
 //	DEFINE_FIELD(m_iTrail, FIELD_INTEGER),	// Dont' save, precache
 DEFINE_FIELD(m_vecForward, FIELD_VECTOR),
+	DEFINE_FUNCTION(IgniteThink),
+	DEFINE_FUNCTION(AccelerateThink),
 	END_DATAMAP();
 
 void CApacheHVR::Spawn()

@@ -52,14 +52,14 @@ public:
 		pev->absmax = pev->origin + Vector(400, 400, 850);
 	}
 
-	void EXPORT Cycle();
-	void EXPORT CommandUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-	void EXPORT Start();
-	void EXPORT DieThink();
+	void Cycle();
+	void CommandUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void Start();
+	void DieThink();
 
-	void EXPORT Test();
+	void Test();
 
-	void EXPORT HitTouch(CBaseEntity* pOther);
+	void HitTouch(CBaseEntity* pOther);
 
 	float HearingSensitivity() override { return 2.0; }
 
@@ -165,6 +165,12 @@ DEFINE_FIELD(m_flInitialYaw, FIELD_FLOAT),
 	DEFINE_FIELD(m_vecPrevSound, FIELD_POSITION_VECTOR),
 	DEFINE_FIELD(m_flPrevSoundTime, FIELD_TIME),
 	DEFINE_ARRAY(m_Heights, FIELD_FLOAT, TENTACLE_NUM_HEIGHTS),
+	DEFINE_FUNCTION(Cycle),
+	DEFINE_FUNCTION(CommandUse),
+	DEFINE_FUNCTION(Start),
+	DEFINE_FUNCTION(DieThink),
+	DEFINE_FUNCTION(Test),
+	DEFINE_FUNCTION(HitTouch),
 	END_DATAMAP();
 
 // animation sequence aliases

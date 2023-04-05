@@ -31,7 +31,6 @@ void HUD_SetLastOrg();
 void HUD_SetupServerEngineInterface();
 
 unsigned short stub_PrecacheEvent(int type, const char* s);
-const char* stub_NameForFunction(uint32 function);
 void stub_SetModel(edict_t* e, const char* m);
 
 

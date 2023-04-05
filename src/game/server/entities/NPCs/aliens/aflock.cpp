@@ -58,22 +58,22 @@ public:
 	void Spawn() override;
 	void Precache() override;
 	void SpawnCommonCode();
-	void EXPORT IdleThink();
+	void IdleThink();
 	void BoidAdvanceFrame();
 
 	/**
 	*	@brief Leader boid calls this to form a flock from surrounding boids
 	*/
-	void EXPORT FormFlock();
+	void FormFlock();
 
 	/**
 	*	@brief player enters the pvs, so get things going.
 	*/
-	void EXPORT Start();
+	void Start();
 
-	void EXPORT FlockLeaderThink();
-	void EXPORT FlockFollowerThink();
-	void EXPORT FallHack();
+	void FlockLeaderThink();
+	void FlockFollowerThink();
+	void FallHack();
 	void MakeSound();
 
 	/**
@@ -132,6 +132,12 @@ DEFINE_FIELD(m_pSquadLeader, FIELD_CLASSPTR),
 	DEFINE_FIELD(m_flFakeBlockedTime, FIELD_TIME),
 	DEFINE_FIELD(m_flAlertTime, FIELD_TIME),
 	//	DEFINE_FIELD(m_flFlockNextSoundTime, FIELD_TIME),	// don't need to save
+	DEFINE_FUNCTION(IdleThink),
+	DEFINE_FUNCTION(FormFlock),
+	DEFINE_FUNCTION(Start),
+	DEFINE_FUNCTION(FlockLeaderThink),
+	DEFINE_FUNCTION(FlockFollowerThink),
+	DEFINE_FUNCTION(FallHack),
 	END_DATAMAP();
 
 void CFlockingFlyer::OnCreate()

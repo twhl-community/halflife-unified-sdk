@@ -23,6 +23,7 @@
 
 #include "CHalfLifeCTFplay.h"
 #include "items/CBaseItem.h"
+#include "items/weapons/CSatchelCharge.h"
 
 CVoiceGameMgr g_VoiceGameMgr;
 

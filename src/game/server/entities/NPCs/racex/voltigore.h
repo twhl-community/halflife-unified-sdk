@@ -103,7 +103,7 @@ public:
 
 	void ClearBeams();
 
-	void EXPORT CallDeathGibThink();
+	void CallDeathGibThink();
 
 	virtual void DeathGibThink();
 

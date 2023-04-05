@@ -99,19 +99,19 @@ public:
 
 	void RemoveEffects();
 
-	void EXPORT StartupThink();
+	void StartupThink();
 
-	void EXPORT HuntThink();
+	void HuntThink();
 
-	void EXPORT DyingThink();
+	void DyingThink();
 
-	void EXPORT NullThink();
+	void NullThink();
 
-	void EXPORT HitTouch(CBaseEntity* pOther);
+	void HitTouch(CBaseEntity* pOther);
 
-	void EXPORT CommandUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void CommandUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
-	void EXPORT StartupUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void StartupUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
 	void ChangeLevel();
 
@@ -242,6 +242,13 @@ DEFINE_FIELD(m_flNextPainSound, FIELD_TIME),
 	DEFINE_FIELD(m_flLastBlinkTime, FIELD_FLOAT),
 	DEFINE_FIELD(m_flLastBlinkInterval, FIELD_FLOAT),
 	DEFINE_FIELD(m_flLastEventTime, FIELD_FLOAT),
+	DEFINE_FUNCTION(StartupThink),
+	DEFINE_FUNCTION(HuntThink),
+	DEFINE_FUNCTION(DyingThink),
+	DEFINE_FUNCTION(NullThink),
+	DEFINE_FUNCTION(HitTouch),
+	DEFINE_FUNCTION(CommandUse),
+	DEFINE_FUNCTION(StartupUse),
 	END_DATAMAP();
 
 const char* COFPitWormUp::pAttackSounds[] =
@@ -1413,13 +1420,14 @@ public:
 
 	void Spawn() override;
 
-	void EXPORT StartNode();
+	void StartNode();
 
 	string_t m_preSequence;
 };
 
 BEGIN_DATAMAP(COFInfoPW)
 DEFINE_FIELD(m_preSequence, FIELD_STRING),
+	DEFINE_FUNCTION(StartNode),
 	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(info_pitworm, COFInfoPW);
@@ -1469,12 +1477,19 @@ void COFInfoPW::StartNode()
 
 class COFPitWormGib : public CBaseEntity
 {
+	DECLARE_CLASS(COFPitWormGib, CBaseEntity);
+	DECLARE_DATAMAP();
+
 public:
 	void Precache() override;
 	void Spawn() override;
 
-	void EXPORT GibFloat();
+	void GibFloat();
 };
+
+BEGIN_DATAMAP(COFPitWormGib)
+DEFINE_FUNCTION(GibFloat),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(pitworm_gib, COFPitWormGib);
 
@@ -1536,7 +1551,7 @@ public:
 	void Spawn() override;
 	void Precache() override;
 	bool KeyValue(KeyValueData* pkvd) override;
-	void EXPORT ShootThink();
+	void ShootThink();
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
 	virtual COFPitWormGib* CreateGib();
@@ -1556,6 +1571,7 @@ DEFINE_FIELD(m_iGibs, FIELD_INTEGER),
 	DEFINE_FIELD(m_iGibMaterial, FIELD_INTEGER),
 	DEFINE_FIELD(m_flGibVelocity, FIELD_FLOAT),
 	DEFINE_FIELD(m_flVariance, FIELD_FLOAT),
+	DEFINE_FUNCTION(ShootThink),
 	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(pitworm_gibshooter, COFPitWormGibShooter);
@@ -1748,7 +1764,7 @@ public:
 
 	void StrafeBeam();
 
-	void EXPORT StartupUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void StartupUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
 	void UpdateEye();
 
@@ -1820,6 +1836,7 @@ DEFINE_FIELD(m_nodeTime, FIELD_TIME),
 	DEFINE_FIELD(m_flBeamExpireTime, FIELD_FLOAT),
 	DEFINE_FIELD(m_flBeamDir, FIELD_FLOAT),
 	DEFINE_FIELD(m_NextActivity, FIELD_INTEGER),
+	DEFINE_FUNCTION(StartupUse),
 	END_DATAMAP();
 
 const char* COFPitWorm::pChildDieSounds[] =

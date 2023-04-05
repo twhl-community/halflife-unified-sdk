@@ -2001,6 +2001,10 @@ Schedule_t* CHGrunt::GetScheduleOfType(int Type)
 	}
 }
 
+BEGIN_DATAMAP(CHGruntRepel)
+DEFINE_FUNCTION(RepelUse),
+	END_DATAMAP();
+
 LINK_ENTITY_TO_CLASS(monster_grunt_repel, CHGruntRepel);
 
 void CHGruntRepel::Spawn()
