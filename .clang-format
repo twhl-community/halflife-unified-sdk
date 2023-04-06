@@ -33,6 +33,7 @@ IndentPPDirectives: None
 IndentWidth: 4
 MaxEmptyLinesToKeep: 10
 NamespaceIndentation: None
+PackConstructorInitializers: Never
 PointerAlignment: Left
 SortIncludes: false
 SortUsingDeclarations: false
