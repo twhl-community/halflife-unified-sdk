@@ -50,6 +50,8 @@ bool ClientLibrary::Initialize()
 		return false;
 	}
 
+	g_UILogger = g_Logging.CreateLogger("ui");
+
 	AddCheatCommands();
 
 	TempEntity_Initialize();
@@ -100,6 +102,8 @@ void ClientLibrary::ClientActivated()
 void ClientLibrary::Shutdown()
 {
 	sound::g_SoundSystem.reset();
+
+	g_UILogger.reset();
 
 	GameLibrary::Shutdown();
 

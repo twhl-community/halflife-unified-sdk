@@ -92,3 +92,5 @@ private:
 inline ClientLibrary g_Client;
 
 inline cvar_t* r_decals = nullptr;
+
+inline std::shared_ptr<spdlog::logger> g_UILogger;
