@@ -121,7 +121,12 @@ void DispatchKeyValue(edict_t* pentKeyvalue, KeyValueData* pkvd)
 	if (!pkvd || !pentKeyvalue)
 		return;
 
-	g_Server.CheckForNewMapStart(false);
+	if (g_Server.CheckForNewMapStart(false))
+	{
+		// HACK: If we get here that means we're loading a new map and we're setting worldspawn's classname.
+		// We've wiped out com_token by calling SERVER_EXECUTE() which stores the classname so we need to reset it.
+		pkvd->szValue = "worldspawn";
+	}
 
 	// Don't allow classname changes once the classname has been set.
 	if (!FStringNull(pentKeyvalue->v.classname) && FStrEq(pkvd->szKeyName, "classname"))
