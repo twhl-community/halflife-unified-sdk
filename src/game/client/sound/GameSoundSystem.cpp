@@ -950,6 +950,15 @@ void GameSoundSystem::Spatialize(Channel& channel, int messagenum)
 		// Entities without a model are not sent to the client so there is no point in updating their position.
 		if (entity && entity->model && entity->curstate.messagenum == messagenum)
 		{
+			ALint isRelative = AL_FALSE;
+			alGetSourcei(channel.Source.Id, AL_SOURCE_RELATIVE, &isRelative);
+
+			// Don't update relative sources (always vec3_origin).
+			if (isRelative != AL_FALSE)
+			{
+				return;
+			}
+
 			if (entity->model->type == mod_brush)
 			{
 				alSourcefv(channel.Source.Id, AL_POSITION, entity->origin + (entity->model->mins + entity->model->maxs) * 0.5f);
