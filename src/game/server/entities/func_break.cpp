@@ -17,38 +17,6 @@
 #include "func_break.h"
 #include "explode.h"
 
-/**
-*	@brief Just add more items to the bottom of this array and they will automagically be supported
-*	This is done instead of just a classname in the FGD so we can control which entities can
-*	be spawned, and still remain fairly flexible
-*/
-const char* CBreakable::pSpawnObjects[] =
-	{
-		nullptr,			  // 0
-		"item_battery",		  // 1
-		"item_healthkit",	  // 2
-		"weapon_9mmhandgun",  // 3
-		"ammo_9mmclip",		  // 4
-		"weapon_9mmar",		  // 5
-		"ammo_9mmar",		  // 6
-		"ammo_argrenades",	  // 7
-		"weapon_shotgun",	  // 8
-		"ammo_buckshot",	  // 9
-		"weapon_crossbow",	  // 10
-		"ammo_crossbow",	  // 11
-		"weapon_357",		  // 12
-		"ammo_357",			  // 13
-		"weapon_rpg",		  // 14
-		"ammo_rpgclip",		  // 15
-		"ammo_gaussclip",	  // 16
-		"weapon_handgrenade", // 17
-		"weapon_tripmine",	  // 18
-		"weapon_satchel",	  // 19
-		"weapon_snark",		  // 20
-		"weapon_hornetgun",	  // 21
-		"weapon_penguin",
-};
-
 bool CBreakable::KeyValue(KeyValueData* pkvd)
 {
 	// UNDONE_WC: explicitly ignoring these fields, but they shouldn't be in the map file!
@@ -101,9 +69,7 @@ bool CBreakable::KeyValue(KeyValueData* pkvd)
 	}
 	else if (FStrEq(pkvd->szKeyName, "spawnobject"))
 	{
-		int object = atoi(pkvd->szValue);
-		if (object > 0 && static_cast<std::size_t>(object) < std::size(pSpawnObjects))
-			m_iszSpawnObject = MAKE_STRING(pSpawnObjects[object]);
+		m_iszSpawnObject = ALLOC_STRING(pkvd->szValue);
 		return true;
 	}
 	else if (FStrEq(pkvd->szKeyName, "explodemagnitude"))
@@ -337,6 +303,14 @@ void CBreakable::Precache()
 		pGibName = STRING(m_iszGibModel);
 
 	m_idShard = PrecacheModel(pGibName);
+
+	// Only allow items to be spawned.
+	if (!g_ItemDictionary->Find(STRING(m_iszSpawnObject)))
+	{
+		Logger->error("{}:{}:{}: Cannot spawn entity \"{}\": not an item",
+			GetClassname(), entindex(), GetTargetname(), STRING(m_iszSpawnObject));
+		m_iszSpawnObject = string_t::Null;
+	}
 
 	// Precache the spawn item's data
 	if (!FStringNull(m_iszSpawnObject))
