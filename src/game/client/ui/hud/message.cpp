@@ -25,6 +25,8 @@ client_textmessage_t g_pCustomMessage;
 const char* g_pCustomName = "Custom";
 char g_pCustomText[1024];
 
+constexpr std::string_view NetMessagePrefix{"__NETMESSAGE__"sv};
+
 bool CHudMessage::Init()
 {
 	g_ClientUserMessages.RegisterHandler("HudText", &CHudMessage::MsgFunc_HudText, this);
@@ -420,41 +422,50 @@ bool CHudMessage::Draw(float fTime)
 
 void CHudMessage::MessageAdd(const char* pName, float time)
 {
-	int i, j;
 	client_textmessage_t* tempMessage;
 
-	for (i = 0; i < maxHUDMessages; i++)
+	// Trim off a leading # if it's there
+	if (pName[0] == '#')
+		tempMessage = TextMessageGet(pName + 1);
+	else
+		tempMessage = TextMessageGet(pName);
+
+	// If we couldnt find it in the titles.txt, just create it
+	if (!tempMessage)
 	{
+		g_pCustomMessage.effect = 2;
+		g_pCustomMessage.r1 = g_pCustomMessage.g1 = g_pCustomMessage.b1 = g_pCustomMessage.a1 = 100;
+		g_pCustomMessage.r2 = 240;
+		g_pCustomMessage.g2 = 110;
+		g_pCustomMessage.b2 = 0;
+		g_pCustomMessage.a2 = 0;
+		g_pCustomMessage.x = -1; // Centered
+		g_pCustomMessage.y = 0.7;
+		g_pCustomMessage.fadein = 0.01;
+		g_pCustomMessage.fadeout = 1.5;
+		g_pCustomMessage.fxtime = 0.25;
+		g_pCustomMessage.holdtime = 5;
+		g_pCustomMessage.pName = g_pCustomName;
+		strcpy(g_pCustomText, pName);
+		g_pCustomMessage.pMessage = g_pCustomText;
+
+		tempMessage = &g_pCustomMessage;
+	}
+
+	for (int i = 0; i < maxHUDMessages; i++)
+	{
+		// If this is a net message (game_text or plugin) then the same object is overwritten,
+		// so clear out the original message to reuse it.
+		// This fixes certain effects not resetting correctly.
+		if (tempMessage == m_pMessages[i] &&
+			strncmp(tempMessage->pName, NetMessagePrefix.data(), NetMessagePrefix.size()) == 0)
+		{
+			m_pMessages[i] = nullptr;
+		}
+
 		if (!m_pMessages[i])
 		{
-			// Trim off a leading # if it's there
-			if (pName[0] == '#')
-				tempMessage = TextMessageGet(pName + 1);
-			else
-				tempMessage = TextMessageGet(pName);
-			// If we couldnt find it in the titles.txt, just create it
-			if (!tempMessage)
-			{
-				g_pCustomMessage.effect = 2;
-				g_pCustomMessage.r1 = g_pCustomMessage.g1 = g_pCustomMessage.b1 = g_pCustomMessage.a1 = 100;
-				g_pCustomMessage.r2 = 240;
-				g_pCustomMessage.g2 = 110;
-				g_pCustomMessage.b2 = 0;
-				g_pCustomMessage.a2 = 0;
-				g_pCustomMessage.x = -1; // Centered
-				g_pCustomMessage.y = 0.7;
-				g_pCustomMessage.fadein = 0.01;
-				g_pCustomMessage.fadeout = 1.5;
-				g_pCustomMessage.fxtime = 0.25;
-				g_pCustomMessage.holdtime = 5;
-				g_pCustomMessage.pName = g_pCustomName;
-				strcpy(g_pCustomText, pName);
-				g_pCustomMessage.pMessage = g_pCustomText;
-
-				tempMessage = &g_pCustomMessage;
-			}
-
-			for (j = 0; j < maxHUDMessages; j++)
+			for (int j = 0; j < maxHUDMessages; j++)
 			{
 				if (m_pMessages[j])
 				{
