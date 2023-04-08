@@ -30,6 +30,9 @@ DEFINE_DUMMY_DATAMAP(CBaseToggle);
 DEFINE_DUMMY_DATAMAP(CBaseMonster);
 DEFINE_DUMMY_DATAMAP(CBasePlayer);
 
+BEGIN_CUSTOM_SCHEDULES_NOBASE(CBaseMonster)
+END_CUSTOM_SCHEDULES();
+
 bool SkillSystem::Initialize() { return true; }
 void SkillSystem::Shutdown() {}
 float SkillSystem::GetValue(std::string_view) const { return 0; }
@@ -241,11 +244,11 @@ bool CBaseMonster::HasHumanGibs() { return false; }
 bool CBaseMonster::HasAlienGibs() { return false; }
 Activity CBaseMonster::GetDeathActivity() { return ACT_DIE_HEADSHOT; }
 MONSTERSTATE CBaseMonster::GetIdealState() { return MONSTERSTATE_ALERT; }
-Schedule_t* CBaseMonster::GetScheduleOfType(int Type) { return nullptr; }
-Schedule_t* CBaseMonster::GetSchedule() { return nullptr; }
-void CBaseMonster::RunTask(Task_t* pTask) {}
-void CBaseMonster::StartTask(Task_t* pTask) {}
-Schedule_t* CBaseMonster::ScheduleFromName(const char* pName) { return nullptr; }
+const Schedule_t* CBaseMonster::GetScheduleOfType(int Type) { return nullptr; }
+const Schedule_t* CBaseMonster::GetSchedule() { return nullptr; }
+void CBaseMonster::RunTask(const Task_t* pTask) {}
+void CBaseMonster::StartTask(const Task_t* pTask) {}
+const Schedule_t* CBaseMonster::ScheduleFromName(const char* pName) const { return nullptr; }
 void CBaseMonster::BecomeDead() {}
 void CBaseMonster::RunAI() {}
 void CBaseMonster::Killed(CBaseEntity* attacker, int iGib) {}

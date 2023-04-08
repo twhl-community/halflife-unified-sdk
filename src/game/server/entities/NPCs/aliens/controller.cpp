@@ -28,6 +28,7 @@ class CController : public CSquadMonster
 {
 	DECLARE_CLASS(CController, CSquadMonster);
 	DECLARE_DATAMAP();
+	DECLARE_CUSTOM_SCHEDULES();
 
 public:
 	void OnCreate() override;
@@ -42,11 +43,10 @@ public:
 	bool CheckRangeAttack1(float flDot, float flDist) override; //!< shoot a bigass energy ball out of their head
 	bool CheckRangeAttack2(float flDot, float flDist) override; //!< head
 	bool CheckMeleeAttack1(float flDot, float flDist) override; //!< block, throw
-	Schedule_t* GetSchedule() override;
-	Schedule_t* GetScheduleOfType(int Type) override;
-	void StartTask(Task_t* pTask) override;
-	void RunTask(Task_t* pTask) override;
-	CUSTOM_SCHEDULES;
+	const Schedule_t* GetSchedule() override;
+	const Schedule_t* GetScheduleOfType(int Type) override;
+	void StartTask(const Task_t* pTask) override;
+	void RunTask(const Task_t* pTask) override;
 
 	void Stop() override;
 	void Move(float flInterval) override;
@@ -443,16 +443,14 @@ Schedule_t slControllerFail[] =
 			"ControllerFail"},
 };
 
-DEFINE_CUSTOM_SCHEDULES(CController){
-	slControllerChaseEnemy,
+BEGIN_CUSTOM_SCHEDULES(CController)
+slControllerChaseEnemy,
 	slControllerStrafe,
 	slControllerTakeCover,
-	slControllerFail,
-};
+	slControllerFail
+	END_CUSTOM_SCHEDULES();
 
-IMPLEMENT_CUSTOM_SCHEDULES(CController, CSquadMonster);
-
-void CController::StartTask(Task_t* pTask)
+void CController::StartTask(const Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
@@ -573,7 +571,7 @@ int CController::LookupFloat()
 	}
 }
 
-void CController::RunTask(Task_t* pTask)
+void CController::RunTask(const Task_t* pTask)
 {
 
 	if (m_flShootEnd > gpGlobals->time)
@@ -671,7 +669,7 @@ void CController::RunTask(Task_t* pTask)
 	}
 }
 
-Schedule_t* CController::GetSchedule()
+const Schedule_t* CController::GetSchedule()
 {
 	switch (m_MonsterState)
 	{
@@ -699,7 +697,7 @@ Schedule_t* CController::GetSchedule()
 	return CSquadMonster::GetSchedule();
 }
 
-Schedule_t* CController::GetScheduleOfType(int Type)
+const Schedule_t* CController::GetScheduleOfType(int Type)
 {
 	// AILogger->debug( "{}", m_iFrustration);
 	switch (Type)

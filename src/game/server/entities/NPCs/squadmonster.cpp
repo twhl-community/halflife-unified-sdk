@@ -497,7 +497,7 @@ bool CSquadMonster::SquadMemberInRange(const Vector& vecLocation, float flDist)
 
 extern Schedule_t slChaseEnemyFailed[];
 
-Schedule_t* CSquadMonster::GetScheduleOfType(int iType)
+const Schedule_t* CSquadMonster::GetScheduleOfType(int iType)
 {
 	switch (iType)
 	{

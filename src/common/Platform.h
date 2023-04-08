@@ -31,6 +31,7 @@
 
 // Misc C-runtime library headers
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <cctype>
 #include <climits>
@@ -44,6 +45,7 @@
 #include <iterator>
 #include <string>
 #include <string_view>
+#include <type_traits>
 
 #include <EASTL/fixed_string.h>
 

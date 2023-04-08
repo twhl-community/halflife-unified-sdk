@@ -55,6 +55,7 @@ class CAGrunt : public CSquadMonster
 {
 	DECLARE_CLASS(CAGrunt, CSquadMonster);
 	DECLARE_DATAMAP();
+	DECLARE_CUSTOM_SCHEDULES();
 
 public:
 	void OnCreate() override;
@@ -70,8 +71,8 @@ public:
 		pev->absmax = pev->origin + Vector(32, 32, 85);
 	}
 
-	Schedule_t* GetSchedule() override;
-	Schedule_t* GetScheduleOfType(int Type) override;
+	const Schedule_t* GetSchedule() override;
+	const Schedule_t* GetScheduleOfType(int Type) override;
 
 	/**
 	*	@brief this is overridden for alien grunts because they can use their smart weapons against unseen enemies.
@@ -84,7 +85,7 @@ public:
 	*/
 	bool CheckMeleeAttack1(float flDot, float flDist) override;
 	bool CheckRangeAttack1(float flDot, float flDist) override;
-	void StartTask(Task_t* pTask) override;
+	void StartTask(const Task_t* pTask) override;
 	void AlertSound() override;
 	void DeathSound() override;
 	void PainSound() override;
@@ -94,7 +95,6 @@ public:
 	int IRelationship(CBaseEntity* pTarget) override;
 	void StopTalking();
 	bool ShouldSpeak();
-	CUSTOM_SCHEDULES;
 
 	static const char* pAttackHitSounds[];
 	static const char* pAttackMissSounds[];
@@ -776,8 +776,8 @@ Schedule_t slAGruntThreatDisplay[] =
 			"AGruntThreatDisplay"},
 };
 
-DEFINE_CUSTOM_SCHEDULES(CAGrunt){
-	slAGruntFail,
+BEGIN_CUSTOM_SCHEDULES(CAGrunt)
+slAGruntFail,
 	slAGruntCombatFail,
 	slAGruntStandoff,
 	slAGruntSuppress,
@@ -785,10 +785,8 @@ DEFINE_CUSTOM_SCHEDULES(CAGrunt){
 	slAGruntHiddenRangeAttack,
 	slAGruntTakeCoverFromEnemy,
 	slAGruntVictoryDance,
-	slAGruntThreatDisplay,
-};
-
-IMPLEMENT_CUSTOM_SCHEDULES(CAGrunt, CSquadMonster);
+	slAGruntThreatDisplay
+	END_CUSTOM_SCHEDULES();
 
 bool CAGrunt::FCanCheckAttacks()
 {
@@ -846,7 +844,7 @@ bool CAGrunt::CheckRangeAttack1(float flDot, float flDist)
 	return m_fCanHornetAttack;
 }
 
-void CAGrunt::StartTask(Task_t* pTask)
+void CAGrunt::StartTask(const Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
@@ -944,7 +942,7 @@ void CAGrunt::StartTask(Task_t* pTask)
 	}
 }
 
-Schedule_t* CAGrunt::GetSchedule()
+const Schedule_t* CAGrunt::GetSchedule()
 {
 	if (HasConditions(bits_COND_HEAR_SOUND))
 	{
@@ -1005,7 +1003,7 @@ Schedule_t* CAGrunt::GetSchedule()
 	return CSquadMonster::GetSchedule();
 }
 
-Schedule_t* CAGrunt::GetScheduleOfType(int Type)
+const Schedule_t* CAGrunt::GetScheduleOfType(int Type)
 {
 	switch (Type)
 	{

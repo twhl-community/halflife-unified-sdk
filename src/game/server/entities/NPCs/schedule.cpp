@@ -52,7 +52,7 @@ bool CBaseMonster::FScheduleDone()
 	return false;
 }
 
-void CBaseMonster::ChangeSchedule(Schedule_t* pNewSchedule)
+void CBaseMonster::ChangeSchedule(const Schedule_t* pNewSchedule)
 {
 	ASSERT(pNewSchedule != nullptr);
 
@@ -83,7 +83,7 @@ void CBaseMonster::ChangeSchedule(Schedule_t* pNewSchedule)
 #if 0
 	if (ClassnameIs("monster_human_grunt"))
 	{
-		Task_t* pTask = GetTask();
+		const Task_t* pTask = GetTask();
 
 		if (pTask)
 		{
@@ -167,7 +167,7 @@ bool CBaseMonster::FScheduleValid()
 
 void CBaseMonster::MaintainSchedule()
 {
-	Schedule_t* pNewSchedule;
+	const Schedule_t* pNewSchedule;
 	int i;
 
 	// UNDONE: Tune/fix this 10... This is just here so infinite loops are impossible
@@ -227,7 +227,7 @@ void CBaseMonster::MaintainSchedule()
 
 		if (m_iTaskStatus == TASKSTATUS_NEW)
 		{
-			Task_t* pTask = GetTask();
+			const Task_t* pTask = GetTask();
 			ASSERT(pTask != nullptr);
 			TaskBegin();
 			StartTask(pTask);
@@ -245,7 +245,7 @@ void CBaseMonster::MaintainSchedule()
 
 	if (TaskIsRunning())
 	{
-		Task_t* pTask = GetTask();
+		const Task_t* pTask = GetTask();
 		ASSERT(pTask != nullptr);
 		RunTask(pTask);
 	}
@@ -259,7 +259,7 @@ void CBaseMonster::MaintainSchedule()
 	}
 }
 
-void CBaseMonster::RunTask(Task_t* pTask)
+void CBaseMonster::RunTask(const Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
@@ -523,7 +523,7 @@ void CBaseMonster::SetTurnActivity()
 	}
 }
 
-void CBaseMonster::StartTask(Task_t* pTask)
+void CBaseMonster::StartTask(const Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
@@ -616,9 +616,7 @@ void CBaseMonster::StartTask(Task_t* pTask)
 	}
 	case TASK_SET_SCHEDULE:
 	{
-		Schedule_t* pNewSchedule;
-
-		pNewSchedule = GetScheduleOfType((int)pTask->flData);
+		const Schedule_t* pNewSchedule = GetScheduleOfType((int)pTask->flData);
 
 		if (pNewSchedule)
 		{
@@ -1314,7 +1312,7 @@ void CBaseMonster::StartTask(Task_t* pTask)
 	}
 }
 
-Task_t* CBaseMonster::GetTask()
+const Task_t* CBaseMonster::GetTask()
 {
 	if (m_iScheduleIndex < 0 || m_iScheduleIndex >= m_pSchedule->cTasks)
 	{
@@ -1327,7 +1325,7 @@ Task_t* CBaseMonster::GetTask()
 	}
 }
 
-Schedule_t* CBaseMonster::GetSchedule()
+const Schedule_t* CBaseMonster::GetSchedule()
 {
 	switch (m_MonsterState)
 	{

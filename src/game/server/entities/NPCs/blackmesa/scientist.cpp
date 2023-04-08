@@ -271,8 +271,8 @@ Schedule_t slFear[] =
 			"Fear"},
 };
 
-DEFINE_CUSTOM_SCHEDULES(CScientist){
-	slFollow,
+BEGIN_CUSTOM_SCHEDULES(CScientist)
+slFollow,
 	slFaceTarget,
 	slIdleSciStand,
 	slFear,
@@ -283,10 +283,8 @@ DEFINE_CUSTOM_SCHEDULES(CScientist){
 	slStopFollowing,
 	slSciPanic,
 	slFollowScared,
-	slFaceTargetScared,
-};
-
-IMPLEMENT_CUSTOM_SCHEDULES(CScientist, CTalkMonster);
+	slFaceTargetScared
+	END_CUSTOM_SCHEDULES();
 
 void CScientist::OnCreate()
 {
@@ -321,7 +319,7 @@ Activity CScientist::GetStoppedActivity()
 	return CTalkMonster::GetStoppedActivity();
 }
 
-void CScientist::StartTask(Task_t* pTask)
+void CScientist::StartTask(const Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
@@ -386,7 +384,7 @@ void CScientist::StartTask(Task_t* pTask)
 	}
 }
 
-void CScientist::RunTask(Task_t* pTask)
+void CScientist::RunTask(const Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
@@ -708,9 +706,9 @@ void CScientist::SetActivity(Activity newActivity)
 	CTalkMonster::SetActivity(newActivity);
 }
 
-Schedule_t* CScientist::GetScheduleOfType(int Type)
+const Schedule_t* CScientist::GetScheduleOfType(int Type)
 {
-	Schedule_t* psched;
+	const Schedule_t* psched;
 
 	switch (Type)
 	{
@@ -763,7 +761,7 @@ Schedule_t* CScientist::GetScheduleOfType(int Type)
 	return CTalkMonster::GetScheduleOfType(Type);
 }
 
-Schedule_t* CScientist::GetSchedule()
+const Schedule_t* CScientist::GetSchedule()
 {
 	// so we don't keep calling through the EHANDLE stuff
 	CBaseEntity* pEnemy = m_hEnemy;

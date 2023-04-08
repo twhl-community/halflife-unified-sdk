@@ -31,6 +31,7 @@ class CISlave : public CSquadMonster
 {
 	DECLARE_CLASS(CISlave, CSquadMonster);
 	DECLARE_DATAMAP();
+	DECLARE_CUSTOM_SCHEDULES();
 
 public:
 	void OnCreate() override;
@@ -54,10 +55,9 @@ public:
 
 	void Killed(CBaseEntity* attacker, int iGib) override;
 
-	void StartTask(Task_t* pTask) override;
-	Schedule_t* GetSchedule() override;
-	Schedule_t* GetScheduleOfType(int Type) override;
-	CUSTOM_SCHEDULES;
+	void StartTask(const Task_t* pTask) override;
+	const Schedule_t* GetSchedule() override;
+	const Schedule_t* GetScheduleOfType(int Type) override;
 
 	void UpdateOnRemove() override;
 
@@ -467,7 +467,7 @@ bool CISlave::CheckRangeAttack2(float flDot, float flDist)
 		return false;
 }
 
-void CISlave::StartTask(Task_t* pTask)
+void CISlave::StartTask(const Task_t* pTask)
 {
 	ClearBeams();
 
@@ -553,13 +553,11 @@ Schedule_t slSlaveAttack1[] =
 			"Slave Range Attack1"},
 };
 
-DEFINE_CUSTOM_SCHEDULES(CISlave){
-	slSlaveAttack1,
-};
+BEGIN_CUSTOM_SCHEDULES(CISlave)
+slSlaveAttack1
+END_CUSTOM_SCHEDULES();
 
-IMPLEMENT_CUSTOM_SCHEDULES(CISlave, CSquadMonster);
-
-Schedule_t* CISlave::GetSchedule()
+const Schedule_t* CISlave::GetSchedule()
 {
 	ClearBeams();
 
@@ -615,7 +613,7 @@ Schedule_t* CISlave::GetSchedule()
 	return CSquadMonster::GetSchedule();
 }
 
-Schedule_t* CISlave::GetScheduleOfType(int Type)
+const Schedule_t* CISlave::GetScheduleOfType(int Type)
 {
 	switch (Type)
 	{

@@ -15,6 +15,8 @@
 
 #pragma once
 
+#include <span>
+
 #include "CBaseToggle.h"
 #include "monsters.h"
 
@@ -37,13 +39,86 @@ enum NPCWeaponState
 #define ROUTE_SIZE 8	  //!< how many waypoints a monster can store at one time
 #define MAX_OLD_ENEMIES 4 //!< how many old enemies to remember
 
+struct ScheduleList
+{
+	const ScheduleList* BaseList{};
+	std::span<const Schedule_t*> Schedules;
+};
+
+#define DECLARE_CUSTOM_SCHEDULES_COMMON()              \
+private:                                               \
+	static const ScheduleList m_ScheduleList;          \
+                                                       \
+public:                                                \
+	static const ScheduleList* GetLocalScheduleList(); \
+	static const ScheduleList* GetBaseScheduleList()
+
+#define DECLARE_CUSTOM_SCHEDULES_NOBASE() \
+	DECLARE_CUSTOM_SCHEDULES_COMMON();    \
+	virtual const ScheduleList* GetScheduleList() const
+
+#define DECLARE_CUSTOM_SCHEDULES()     \
+	DECLARE_CUSTOM_SCHEDULES_COMMON(); \
+	const ScheduleList* GetScheduleList() const override
+
 /**
-*	@brief generic Monster
-*/
+ *	@brief Creates a schedule list for type @c ThisClass containing @c schedules
+ */
+template <typename ThisClass, typename... Args>
+ScheduleList CreateScheduleList(Args&&... schedules)
+{
+	// The cast ensures that only schedule pointers (and arrays decaying to pointers) are accepted.
+	static std::array Schedules{static_cast<const Schedule_t*>(schedules)...};
+
+	return ScheduleList{
+		.BaseList = ThisClass::GetBaseScheduleList(),
+		.Schedules = Schedules};
+}
+
+// Overload for creating empty schedule lists.
+template <typename ThisClass>
+ScheduleList CreateScheduleList()
+{
+	return ScheduleList{
+		.BaseList = ThisClass::GetBaseScheduleList()};
+}
+
+#define BEGIN_CUSTOM_SCHEDULES_COMMON(thisClass)           \
+	const ScheduleList* thisClass::GetLocalScheduleList()  \
+	{                                                      \
+		return &m_ScheduleList;                            \
+	}                                                      \
+	const ScheduleList* thisClass::GetScheduleList() const \
+	{                                                      \
+		return &m_ScheduleList;                            \
+	}                                                      \
+const ScheduleList thisClass::m_ScheduleList = CreateScheduleList<thisClass>(
+
+#define BEGIN_CUSTOM_SCHEDULES_NOBASE(thisClass)         \
+	const ScheduleList* thisClass::GetBaseScheduleList() \
+	{                                                    \
+		return nullptr;                                  \
+	}                                                    \
+	BEGIN_CUSTOM_SCHEDULES_COMMON(thisClass)
+
+#define BEGIN_CUSTOM_SCHEDULES(thisClass)                    \
+	const ScheduleList* thisClass::GetBaseScheduleList()     \
+	{                                                        \
+		return thisClass::BaseClass::GetLocalScheduleList(); \
+	}                                                        \
+	BEGIN_CUSTOM_SCHEDULES_COMMON(thisClass)
+
+#define END_CUSTOM_SCHEDULES() \
+	)
+
+/**
+ *	@brief generic Monster
+ */
 class CBaseMonster : public CBaseToggle
 {
 	DECLARE_CLASS(CBaseMonster, CBaseToggle);
 	DECLARE_DATAMAP();
+	DECLARE_CUSTOM_SCHEDULES_NOBASE();
 
 private:
 	int m_afConditions;
@@ -81,7 +156,7 @@ public:
 	MONSTERSTATE m_IdealMonsterState; //!< monster should change to this state
 
 	int m_iTaskStatus;
-	Schedule_t* m_pSchedule;
+	const Schedule_t* m_pSchedule;
 	int m_iScheduleIndex;
 
 	WayPoint_t m_Route[ROUTE_SIZE]; //!< Positions of movement
@@ -115,10 +190,10 @@ public:
 	byte m_rgbTimeBasedDamage[CDMG_TIMEBASED];
 
 	/**
-	*	@brief how much damage did monster (player) last take time based damage counters, decr. 1 per 2 seconds
-	*/
+	 *	@brief how much damage did monster (player) last take time based damage counters, decr. 1 per 2 seconds
+	 */
 	int m_lastDamageAmount;
-	int m_bloodColor;		//!< color of blood particless
+	int m_bloodColor; //!< color of blood particless
 
 	int m_failSchedule; //!< Schedule type to choose if current schedule fails
 
@@ -143,13 +218,13 @@ public:
 	void PostRestore() override;
 
 	/**
-	*	@brief !!! netname entvar field is used in squadmonster for groupname!!!
-	*/
+	 *	@brief !!! netname entvar field is used in squadmonster for groupname!!!
+	 */
 	bool KeyValue(KeyValueData* pkvd) override;
 
 	/**
-	*	@brief will make a monster angry at whomever activated it.
-	*/
+	 *	@brief will make a monster angry at whomever activated it.
+	 */
 	void MonsterUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
 	// overrideable Monster member functions
@@ -159,18 +234,18 @@ public:
 	CBaseMonster* MyMonsterPointer() override { return this; }
 
 	/**
-	*	@brief Base class monster function to find enemies or food by sight.
-	*	@details Sets the sight bits of the m_afConditions mask to indicate which types of entities were sighted.
-	*	Function also sets the Looker's m_pLink to the head of a link list that contains all visible ents.
-	*	(linked via each ent's m_pLink field)
-	*	@param iDistance distance ( in units ) that the monster can see.
-	*/
+	 *	@brief Base class monster function to find enemies or food by sight.
+	 *	@details Sets the sight bits of the m_afConditions mask to indicate which types of entities were sighted.
+	 *	Function also sets the Looker's m_pLink to the head of a link list that contains all visible ents.
+	 *	(linked via each ent's m_pLink field)
+	 *	@param iDistance distance ( in units ) that the monster can see.
+	 */
 	virtual void Look(int iDistance); //!< basic sight function for monsters
 	virtual void RunAI();			  //!< core ai function!
 
 	/**
-	*	@brief monsters dig through the active sound list for any sounds that may interest them. (smells, too!)
-	*/
+	 *	@brief monsters dig through the active sound list for any sounds that may interest them. (smells, too!)
+	 */
 	void Listen();
 
 	bool IsAlive() override { return (pev->deadflag != DEAD_DEAD); }
@@ -178,94 +253,94 @@ public:
 
 	// Basic Monster AI functions
 	/**
-	*	@brief turns a monster towards its ideal_yaw
-	*/
+	 *	@brief turns a monster towards its ideal_yaw
+	 */
 	virtual float ChangeYaw(int speed);
 
 	/**
-	*	@brief turns a directional vector into a yaw value that points down that vector.
-	*/
+	 *	@brief turns a directional vector into a yaw value that points down that vector.
+	 */
 	float VecToYaw(Vector vecDir);
 
 	/**
-	*	@brief returns the difference (in degrees) between monster's current yaw and ideal_yaw
-	*	Positive result is left turn, negative is right turn
-	*/
+	 *	@brief returns the difference (in degrees) between monster's current yaw and ideal_yaw
+	 *	Positive result is left turn, negative is right turn
+	 */
 	float FlYawDiff();
 
 	float DamageForce(float damage);
 
 	// stuff written for new state machine
 	/**
-	*	@brief calls out to core AI functions and handles this monster's specific animation events
-	*/
+	 *	@brief calls out to core AI functions and handles this monster's specific animation events
+	 */
 	virtual void MonsterThink();
 	void CallMonsterThink() { this->MonsterThink(); }
 
 	/**
-	*	@brief returns an integer that describes the relationship between two types of monster.
-	*/
+	 *	@brief returns an integer that describes the relationship between two types of monster.
+	 */
 	virtual int IRelationship(CBaseEntity* pTarget);
 
 	/**
-	*	@brief after a monster is spawned, it needs to be dropped into the world, checked for mobility problems,
-	*	and put on the proper path, if any. This function does all of those things after the monster spawns.
-	*	Any initialization that should take place for all monsters goes here.
-	*/
+	 *	@brief after a monster is spawned, it needs to be dropped into the world, checked for mobility problems,
+	 *	and put on the proper path, if any. This function does all of those things after the monster spawns.
+	 *	Any initialization that should take place for all monsters goes here.
+	 */
 	virtual void MonsterInit();
 
 	/**
-	*	@brief Call after animation/pose is set up
-	*/
+	 *	@brief Call after animation/pose is set up
+	 */
 	virtual void MonsterInitDead();
 
 	virtual void BecomeDead();
 	void CorpseFallThink();
 
 	/**
-	*	@brief Calls StartMonster. Startmonster is virtual, but this function cannot be
-	*/
+	 *	@brief Calls StartMonster. Startmonster is virtual, but this function cannot be
+	 */
 	void MonsterInitThink();
 
 	/**
-	*	@brief final bit of initization before a monster is turned over to the AI.
-	*/
+	 *	@brief final bit of initization before a monster is turned over to the AI.
+	 */
 	virtual void StartMonster();
 
 	/**
-	*	@brief finds best visible enemy for attack
-	*	@details this functions searches the link list whose head is the caller's m_pLink field,
-	*	and returns a pointer to the enemy entity in that list that is nearest the caller.
-	*/
+	 *	@brief finds best visible enemy for attack
+	 *	@details this functions searches the link list whose head is the caller's m_pLink field,
+	 *	and returns a pointer to the enemy entity in that list that is nearest the caller.
+	 */
 	virtual CBaseEntity* BestVisibleEnemy();
 
 	/**
-	*	@brief returns true is the passed ent is in the caller's forward view cone.
-	*	The dot product is performed in 2d, making the view cone infinitely tall.
-	*/
+	 *	@brief returns true is the passed ent is in the caller's forward view cone.
+	 *	The dot product is performed in 2d, making the view cone infinitely tall.
+	 */
 	virtual bool FInViewCone(CBaseEntity* pEntity);
 
 	/**
-	*	@brief returns true is the passed vector is in the caller's forward view cone.
-	*	The dot product is performed in 2d, making the view cone infinitely tall.
-	*/
+	 *	@brief returns true is the passed vector is in the caller's forward view cone.
+	 *	The dot product is performed in 2d, making the view cone infinitely tall.
+	 */
 	virtual bool FInViewCone(Vector* pOrigin);
 
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 
 	/**
-	*	@brief check validity of a straight move through space
-	*	returns true if the caller can walk a straight line from its current origin to the given location.
-	*	If so, don't use the node graph!
-	*	@details if a valid pointer to a int is passed,
-	*	the function will fill that int with the distance that the check reached before hitting something.
-	*	THIS ONLY HAPPENS IF THE LOCAL MOVE CHECK FAILS!
-	*/
+	 *	@brief check validity of a straight move through space
+	 *	returns true if the caller can walk a straight line from its current origin to the given location.
+	 *	If so, don't use the node graph!
+	 *	@details if a valid pointer to a int is passed,
+	 *	the function will fill that int with the distance that the check reached before hitting something.
+	 *	THIS ONLY HAPPENS IF THE LOCAL MOVE CHECK FAILS!
+	 */
 	virtual int CheckLocalMove(const Vector& vecStart, const Vector& vecEnd, CBaseEntity* pTarget, float* pflDist);
 
 	/**
-	*	@brief take a single step towards the next ROUTE location
-	*/
+	 *	@brief take a single step towards the next ROUTE location
+	 */
 	virtual void Move(float flInterval = 0.1);
 	virtual void MoveExecute(CBaseEntity* pTargetEnt, const Vector& vecDir, float flInterval);
 	virtual bool ShouldAdvanceRoute(float flWaypointDist);
@@ -274,8 +349,8 @@ public:
 	virtual void Stop() { m_IdealActivity = GetStoppedActivity(); }
 
 	/**
-	*	@brief This will stop animation until you call ResetSequenceInfo() at some point in the future
-	*/
+	 *	@brief This will stop animation until you call ResetSequenceInfo() at some point in the future
+	 */
 	inline void StopAnimation() { pev->framerate = 0; }
 
 	// these functions will survey conditions and set appropriate conditions bits for attack types.
@@ -286,62 +361,60 @@ public:
 	virtual bool CheckMeleeAttack2(float flDot, float flDist);
 
 	/**
-	*	@brief Returns true if monster's m_pSchedule is anything other than nullptr.
-	*/
+	 *	@brief Returns true if monster's m_pSchedule is anything other than nullptr.
+	 */
 	bool FHaveSchedule();
 
 	/**
-	*	@brief returns true as long as the current schedule is still the proper schedule to be executing,
-	*	taking into account all conditions
-	*/
+	 *	@brief returns true as long as the current schedule is still the proper schedule to be executing,
+	 *	taking into account all conditions
+	 */
 	bool FScheduleValid();
 
 	/**
-	*	@brief blanks out the caller's schedule pointer and index.
-	*/
+	 *	@brief blanks out the caller's schedule pointer and index.
+	 */
 	void ClearSchedule();
 
 	/**
-	*	@brief Returns true if the caller is on the last task in the schedule
-	*/
+	 *	@brief Returns true if the caller is on the last task in the schedule
+	 */
 	bool FScheduleDone();
 
 	/**
-	*	@brief replaces the monster's schedule pointer with the passed pointer, and sets the ScheduleIndex back to 0
-	*/
-	void ChangeSchedule(Schedule_t* pNewSchedule);
+	 *	@brief replaces the monster's schedule pointer with the passed pointer, and sets the ScheduleIndex back to 0
+	 */
+	void ChangeSchedule(const Schedule_t* pNewSchedule);
 
 	/**
-	*	@brief increments the ScheduleIndex
-	*/
+	 *	@brief increments the ScheduleIndex
+	 */
 	void NextScheduledTask();
-	Schedule_t* ScheduleInList(const char* pName, Schedule_t** pList, int listCount);
 
-	virtual Schedule_t* ScheduleFromName(const char* pName);
-	static Schedule_t* m_scheduleList[];
+	const Schedule_t* ScheduleFromName(const char* pName) const;
 
 	/**
-	*	@brief does all the per-think schedule maintenance.
-	*	ensures that the monster leaves this function with a valid schedule!
-	*/
+	 *	@brief does all the per-think schedule maintenance.
+	 *	ensures that the monster leaves this function with a valid schedule!
+	 */
 	void MaintainSchedule();
 
 	/**
-	*	@brief selects the correct activity and performs any necessary calculations to start the next task on the schedule.
-	*/
-	virtual void StartTask(Task_t* pTask);
-	virtual void RunTask(Task_t* pTask);
+	 *	@brief selects the correct activity and performs any necessary calculations to start the next task on the schedule.
+	 */
+	virtual void StartTask(const Task_t* pTask);
+	virtual void RunTask(const Task_t* pTask);
 
 	/**
-	*	@brief returns a pointer to one of the monster's available schedules of the indicated type.
-	*/
-	virtual Schedule_t* GetScheduleOfType(int Type);
+	 *	@brief returns a pointer to one of the monster's available schedules of the indicated type.
+	 */
+	virtual const Schedule_t* GetScheduleOfType(int Type);
 
 	/**
-	*	@brief Decides which type of schedule best suits the monster's current state and conditions.
-	*	Then calls monster's member function to get a pointer to a schedule of the proper type.
-	*/
-	virtual Schedule_t* GetSchedule();
+	 *	@brief Decides which type of schedule best suits the monster's current state and conditions.
+	 *	Then calls monster's member function to get a pointer to a schedule of the proper type.
+	 */
+	virtual const Schedule_t* GetSchedule();
 	virtual void ScheduleChange() {}
 
 	/*
@@ -355,11 +428,11 @@ public:
 	*/
 
 	/**
-	*	@brief determines whether or not the monster can play the scripted sequence or AI sequence
-	*	that is trying to possess it.
-	*	@param fDisregardState If set, the monster will be sucked into the script no matter what state it is in.
-	*		ONLY Scripted AI ents should allow this.
-	*/
+	 *	@brief determines whether or not the monster can play the scripted sequence or AI sequence
+	 *	that is trying to possess it.
+	 *	@param fDisregardState If set, the monster will be sucked into the script no matter what state it is in.
+	 *		ONLY Scripted AI ents should allow this.
+	 */
 	virtual bool CanPlaySequence(bool fDisregardState, int interruptLevel);
 
 	virtual bool CanPlaySentence(bool fDisregardState)
@@ -379,13 +452,13 @@ public:
 	virtual void SentenceStop();
 
 	/**
-	*	@brief returns a pointer to the current scheduled task. nullptr if there's a problem.
-	*/
-	Task_t* GetTask();
+	 *	@brief returns a pointer to the current scheduled task. nullptr if there's a problem.
+	 */
+	const Task_t* GetTask();
 
 	/**
-	*	@brief surveys the Conditions information available and finds the best new state for a monster.
-	*/
+	 *	@brief surveys the Conditions information available and finds the best new state for a monster.
+	 */
 	virtual MONSTERSTATE GetIdealState();
 
 	virtual void SetActivity(Activity NewActivity);
@@ -394,32 +467,32 @@ public:
 	virtual void ReportAIState();
 
 	/**
-	*	@brief sets all of the bits for attacks that the monster is capable of carrying out on the passed entity.
-	*/
+	 *	@brief sets all of the bits for attacks that the monster is capable of carrying out on the passed entity.
+	 */
 	void CheckAttacks(CBaseEntity* pTarget, float flDist);
 
 	/**
-	*	@brief part of the Condition collection process,
-	*	gets and stores data and conditions pertaining to a monster's enemy.
-	*	Returns true if Enemy LKP was updated.
-	*/
+	 *	@brief part of the Condition collection process,
+	 *	gets and stores data and conditions pertaining to a monster's enemy.
+	 *	Returns true if Enemy LKP was updated.
+	 */
 	virtual bool CheckEnemy(CBaseEntity* pEnemy);
 
 	/**
-	*	@brief remember the last few enemies, always remember the player
-	*/
+	 *	@brief remember the last few enemies, always remember the player
+	 */
 	void PushEnemy(CBaseEntity* pEnemy, Vector& vecLastKnownPos);
 
 	/**
-	*	@brief try remembering the last few enemies
-	*/
+	 *	@brief try remembering the last few enemies
+	 */
 	bool PopEnemy();
 
 	/**
-	*	@brief tries to build an entire node path from the callers origin to the passed vector.
-	*	If this is possible, ROUTE_SIZE waypoints will be copied into the callers m_Route.
-	*	@return true if the operation succeeds (path is valid) or false if failed (no path exists)
-	*/
+	 *	@brief tries to build an entire node path from the callers origin to the passed vector.
+	 *	If this is possible, ROUTE_SIZE waypoints will be copied into the callers m_Route.
+	 *	@return true if the operation succeeds (path is valid) or false if failed (no path exists)
+	 */
 	bool FGetNodeRoute(Vector vecDest);
 
 	inline void TaskComplete()
@@ -435,93 +508,93 @@ public:
 	inline bool MovementIsComplete() { return (m_movementGoal == MOVEGOAL_NONE); }
 
 	/**
-	*	@brief returns an integer with all Conditions bits that are currently set and
-	*	also set in the current schedule's Interrupt mask.
-	*/
+	 *	@brief returns an integer with all Conditions bits that are currently set and
+	 *	also set in the current schedule's Interrupt mask.
+	 */
 	int IScheduleFlags();
 
 	/**
-	*	@brief after calculating a path to the monster's target,
-	*	this function copies as many waypoints as possible from that path to the monster's Route array
-	*/
+	 *	@brief after calculating a path to the monster's target,
+	 *	this function copies as many waypoints as possible from that path to the monster's Route array
+	 */
 	bool FRefreshRoute();
 
 	/**
-	*	@brief returns true is the Route is cleared out (invalid)
-	*/
+	 *	@brief returns true is the Route is cleared out (invalid)
+	 */
 	bool FRouteClear();
 
 	/**
-	*	@brief Attempts to make the route more direct by cutting out unnecessary nodes & cutting corners.
-	*/
+	 *	@brief Attempts to make the route more direct by cutting out unnecessary nodes & cutting corners.
+	 */
 	void RouteSimplify(CBaseEntity* pTargetEnt);
 
 	/**
-	*	@brief poorly named function that advances the m_iRouteIndex.
-	*	If it goes beyond ROUTE_SIZE, the route is refreshed.
-	*/
+	 *	@brief poorly named function that advances the m_iRouteIndex.
+	 *	If it goes beyond ROUTE_SIZE, the route is refreshed.
+	 */
 	void AdvanceRoute(float distance);
 
 	/**
-	*	@brief tries to overcome local obstacles by triangulating a path around them.
-	*	@param pApex is how far the obstruction that we are trying to triangulate around is from the monster.
-	*/
+	 *	@brief tries to overcome local obstacles by triangulating a path around them.
+	 *	@param pApex is how far the obstruction that we are trying to triangulate around is from the monster.
+	 */
 	virtual bool FTriangulate(const Vector& vecStart, const Vector& vecEnd, float flDist, CBaseEntity* pTargetEnt, Vector* pApex);
 
 	/**
-	*	@brief gets a yaw value for the caller that would face the supplied vector.
-	*	Value is stuffed into the monster's ideal_yaw
-	*/
+	 *	@brief gets a yaw value for the caller that would face the supplied vector.
+	 *	Value is stuffed into the monster's ideal_yaw
+	 */
 	void MakeIdealYaw(Vector vecTarget);
 
 	/**
-	*	@brief allows different yaw_speeds for each activity
-	*/
+	 *	@brief allows different yaw_speeds for each activity
+	 */
 	virtual void SetYawSpeed() {}
 
 	bool BuildRoute(const Vector& vecGoal, int iMoveFlag, CBaseEntity* pTarget);
 
 	/**
-	*	@brief tries to build a route as close to the target as possible, even if there isn't a path to the final point.
-	*	@details If supplied, search will return a node at least as far away as MinDist from vecThreat,
-	*	but no farther than MaxDist.
-	*	if MaxDist isn't supplied, it defaults to a reasonable value
-	*/
+	 *	@brief tries to build a route as close to the target as possible, even if there isn't a path to the final point.
+	 *	@details If supplied, search will return a node at least as far away as MinDist from vecThreat,
+	 *	but no farther than MaxDist.
+	 *	if MaxDist isn't supplied, it defaults to a reasonable value
+	 */
 	virtual bool BuildNearestRoute(Vector vecThreat, Vector vecViewOffset, float flMinDist, float flMaxDist);
 	int RouteClassify(int iMoveFlag);
 
 	/**
-	*	@brief Rebuilds the existing route so that the supplied vector and moveflags are the first waypoint in the route,
-	*	and fills the rest of the route with as much of the pre-existing route as possible
-	*/
+	 *	@brief Rebuilds the existing route so that the supplied vector and moveflags are the first waypoint in the route,
+	 *	and fills the rest of the route with as much of the pre-existing route as possible
+	 */
 	void InsertWaypoint(Vector vecLocation, int afMoveFlags);
 
 	/**
-	*	@brief attempts to locate a spot in the world directly to the left or right of the caller
-	*	that will conceal them from view of pSightEnt
-	*/
+	 *	@brief attempts to locate a spot in the world directly to the left or right of the caller
+	 *	that will conceal them from view of pSightEnt
+	 */
 	bool FindLateralCover(const Vector& vecThreat, const Vector& vecViewOffset);
 
 	/**
-	*	@brief tries to find a nearby node that will hide the caller from its enemy.
-	*	@details If supplied, search will return a node at least as far away as MinDist, but no farther than MaxDist.
-	*	if MaxDist isn't supplied, it defaults to a reasonable value
-	*/
+	 *	@brief tries to find a nearby node that will hide the caller from its enemy.
+	 *	@details If supplied, search will return a node at least as far away as MinDist, but no farther than MaxDist.
+	 *	if MaxDist isn't supplied, it defaults to a reasonable value
+	 */
 	virtual bool FindCover(Vector vecThreat, Vector vecViewOffset, float flMinDist, float flMaxDist);
 	virtual bool FValidateCover(const Vector& vecCoverLocation) { return true; }
 	virtual float CoverRadius() { return 784; } //!< Default cover radius
 
 	/**
-	*	@brief prequalifies a monster to do more fine checking of potential attacks.
-	*/
+	 *	@brief prequalifies a monster to do more fine checking of potential attacks.
+	 */
 	virtual bool FCanCheckAttacks();
 	virtual void CheckAmmo() {}
 
 	/**
-	*	@brief before a set of conditions is allowed to interrupt a monster's schedule,
-	*	this function removes conditions that we have flagged to interrupt the current schedule,
-	*	but may not want to interrupt the schedule every time. (Pain, for instance)
-	*/
+	 *	@brief before a set of conditions is allowed to interrupt a monster's schedule,
+	 *	this function removes conditions that we have flagged to interrupt the current schedule,
+	 *	but may not want to interrupt the schedule every time. (Pain, for instance)
+	 */
 	virtual int IgnoreConditions();
 
 	inline void SetConditions(int iConditions) { m_afConditions |= iConditions; }
@@ -540,22 +613,22 @@ public:
 	}
 
 	/**
-	*	@brief tells use whether or not the monster cares about the type of Hint Node given
-	*/
+	 *	@brief tells use whether or not the monster cares about the type of Hint Node given
+	 */
 	virtual bool FValidateHintType(short sHint);
 	int FindHintNode();
 	virtual bool FCanActiveIdle();
 
 	/**
-	*	@brief measures the difference between the way the monster is facing and determines
-	*	whether or not to select one of the 180 turn animations.
-	*/
+	 *	@brief measures the difference between the way the monster is facing and determines
+	 *	whether or not to select one of the 180 turn animations.
+	 */
 	void SetTurnActivity();
 
 	/**
-	*	@brief subtracts the volume of the given sound from the distance the sound source is from the caller,
-	*	and returns that value, which is considered to be the 'local' volume of the sound.
-	*/
+	 *	@brief subtracts the volume of the given sound from the distance the sound source is from the caller,
+	 *	and returns that value, which is considered to be the 'local' volume of the sound.
+	 */
 	float FLSoundVolume(CSound* pSound);
 
 	bool MoveToNode(Activity movementAct, float waitTime, const Vector& goal);
@@ -564,87 +637,87 @@ public:
 	bool MoveToEnemy(Activity movementAct, float waitTime);
 
 	/**
-	*	@brief Returns the time when the door will be open
-	*/
+	 *	@brief Returns the time when the door will be open
+	 */
 	float OpenDoorAndWait(CBaseEntity* door);
 
 	/**
-	*	@brief returns a bit mask indicating which types of sounds this monster regards.
-	*	In the base class implementation, monsters care about all sounds, but no scents.
-	*/
+	 *	@brief returns a bit mask indicating which types of sounds this monster regards.
+	 *	In the base class implementation, monsters care about all sounds, but no scents.
+	 */
 	virtual int ISoundMask();
 
 	/**
-	*	@brief returns a pointer to the sound the monster should react to. Right now responds only to nearest sound.
-	*/
+	 *	@brief returns a pointer to the sound the monster should react to. Right now responds only to nearest sound.
+	 */
 	virtual CSound* PBestSound();
 
 	/**
-	*	@brief returns a pointer to the scent the monster should react to. Right now responds only to nearest scent.
-	*/
+	 *	@brief returns a pointer to the scent the monster should react to. Right now responds only to nearest scent.
+	 */
 	virtual CSound* PBestScent();
 
 	virtual float HearingSensitivity() { return 1.0; }
 
 	/**
-	*	@brief tries to send a monster into PRONE state.
-	*	right now only used when a barnacle snatches someone, so may have some special case stuff for that.
-	*/
+	 *	@brief tries to send a monster into PRONE state.
+	 *	right now only used when a barnacle snatches someone, so may have some special case stuff for that.
+	 */
 	bool FBecomeProne() override;
 
 	/**
-	*	@brief called by Barnacle victims when the barnacle pulls their head into its mouth
-	*/
+	 *	@brief called by Barnacle victims when the barnacle pulls their head into its mouth
+	 */
 	virtual void BarnacleVictimBitten(CBaseEntity* pevBarnacle);
 
 	/**
-	*	@brief called by barnacle victims when the host barnacle is killed.
-	*/
+	 *	@brief called by barnacle victims when the host barnacle is killed.
+	 */
 	virtual void BarnacleVictimReleased();
 
 	/**
-	*	@brief queries the monster's model for $eyeposition and copies that vector to the monster's view_ofs
-	*/
+	 *	@brief queries the monster's model for $eyeposition and copies that vector to the monster's view_ofs
+	 */
 	void SetEyePosition();
 
 	bool FShouldEat();				//!< see if a monster is 'hungry'
 	void Eat(float flFullDuration); //!< make the monster 'full' for a while.
 
 	/**
-	*	@brief expects a length to trace, amount of damage to do, and damage type.
-	*	Returns a pointer to the damaged entity in case the monster wishes to do other stuff to the victim (punchangle, etc)
-	*	Used for many contact-range melee attacks. Bites, claws, etc.
-	*/
+	 *	@brief expects a length to trace, amount of damage to do, and damage type.
+	 *	Returns a pointer to the damaged entity in case the monster wishes to do other stuff to the victim (punchangle, etc)
+	 *	Used for many contact-range melee attacks. Bites, claws, etc.
+	 */
 	CBaseEntity* CheckTraceHullAttack(float flDist, int iDamage, int iDmgType);
 
 	/**
-	*	@brief tells us if a monster is facing its ideal yaw.
-	*	Created this function because many spots in the code were checking the yawdiff against this magic number.
-	*	Nicer to have it in one place if we're gonna be stuck with it.
-	*/
+	 *	@brief tells us if a monster is facing its ideal yaw.
+	 *	Created this function because many spots in the code were checking the yawdiff against this magic number.
+	 *	Nicer to have it in one place if we're gonna be stuck with it.
+	 */
 	bool FacingIdeal();
 
 	/**
-	*	@brief checks the monster's AI Trigger Conditions, if there is a condition, then checks to see if condition is met.
-	*	If yes, the monster's TriggerTarget is fired.
-	*	@return true if the target is fired.
-	*/
+	 *	@brief checks the monster's AI Trigger Conditions, if there is a condition, then checks to see if condition is met.
+	 *	If yes, the monster's TriggerTarget is fired.
+	 *	@return true if the target is fired.
+	 */
 	bool FCheckAITrigger();
 
 	/**
-	*	@brief check to see if the monster's bounding box is lying flat on a surface
-	*	(traces from all four corners are same length.)
-	*/
+	 *	@brief check to see if the monster's bounding box is lying flat on a surface
+	 *	(traces from all four corners are same length.)
+	 */
 	bool BBoxFlat();
 
 	/**
-	*	@brief this function runs after conditions are collected and before scheduling code is run.
-	*/
+	 *	@brief this function runs after conditions are collected and before scheduling code is run.
+	 */
 	virtual void PrescheduleThink() {}
 
 	/**
-	*	@brief tries to find the best suitable enemy for the monster.
-	*/
+	 *	@brief tries to find the best suitable enemy for the monster.
+	 */
 	bool GetEnemy();
 
 	void MakeDamageBloodDecal(int cCount, float flNoise, TraceResult* ptr, const Vector& vecDir);
@@ -652,19 +725,19 @@ public:
 
 	// combat functions
 	/**
-	*	@brief determines the best type of death anim to play.
-	*/
+	 *	@brief determines the best type of death anim to play.
+	 */
 	virtual Activity GetDeathActivity();
 
 	/**
-	*	@brief determines the best type of flinch anim to play.
-	*/
+	 *	@brief determines the best type of flinch anim to play.
+	 */
 	Activity GetSmallFlinchActivity();
 	void Killed(CBaseEntity* attacker, int iGib) override;
 
 	/**
-	*	@brief create some gore and get rid of a monster's model.
-	*/
+	 *	@brief create some gore and get rid of a monster's model.
+	 */
 	virtual void GibMonster();
 
 	bool ShouldGibMonster(int iGib);
@@ -676,8 +749,8 @@ public:
 	Vector ShootAtEnemy(const Vector& shootOrigin);
 
 	/**
-	*	@brief position to shoot at
-	*/
+	 *	@brief position to shoot at
+	 */
 	Vector BodyTarget(const Vector& posSrc) override { return Center() * 0.75 + EyePosition() * 0.25; }
 
 	virtual Vector GetGunPosition();
@@ -685,17 +758,17 @@ public:
 	bool GiveHealth(float flHealth, int bitsDamageType) override;
 
 	/**
-	*	@brief The damage is coming from inflictor, but get mad at attacker
-	*	This should be the only function that ever reduces health.
-	*	@details Time-based damage: only occurs while the monster is within the trigger_hurt.
-	*	When a monster is poisoned via an arrow etc it takes all the poison damage at once.
-	*	@param bitsDamageType indicates the type of damage sustained, ie: DMG_SHOCK
-	*/
+	 *	@brief The damage is coming from inflictor, but get mad at attacker
+	 *	This should be the only function that ever reduces health.
+	 *	@details Time-based damage: only occurs while the monster is within the trigger_hurt.
+	 *	When a monster is poisoned via an arrow etc it takes all the poison damage at once.
+	 *	@param bitsDamageType indicates the type of damage sustained, ie: DMG_SHOCK
+	 */
 	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 
 	/**
-	*	@brief takedamage function called when a monster's corpse is damaged.
-	*/
+	 *	@brief takedamage function called when a monster's corpse is damaged.
+	 */
 	bool DeadTakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType);
 
 	void RadiusDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int iClassIgnore, int bitsDamageType);
@@ -703,13 +776,13 @@ public:
 	bool IsMoving() override { return m_movementGoal != MOVEGOAL_NONE; }
 
 	/**
-	*	@brief zeroes out the monster's route array and goal
-	*/
+	 *	@brief zeroes out the monster's route array and goal
+	 */
 	void RouteClear();
 
 	/**
-	*	@brief clears out a route to be changed, but keeps goal intact.
-	*/
+	 *	@brief clears out a route to be changed, but keeps goal intact.
+	 */
 	void RouteNew();
 
 	virtual void DeathSound() {}

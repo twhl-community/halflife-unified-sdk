@@ -91,6 +91,7 @@ class CTalkMonster : public CBaseMonster
 {
 	DECLARE_CLASS(CTalkMonster, CBaseMonster);
 	DECLARE_DATAMAP();
+	DECLARE_CUSTOM_SCHEDULES();
 
 public:
 	/**
@@ -125,9 +126,9 @@ public:
 	CTalkMonster* MyTalkMonsterPointer() override { return this; }
 
 	// AI functions
-	Schedule_t* GetScheduleOfType(int Type) override;
-	void StartTask(Task_t* pTask) override;
-	void RunTask(Task_t* pTask) override;
+	const Schedule_t* GetScheduleOfType(int Type) override;
+	void StartTask(const Task_t* pTask) override;
+	void RunTask(const Task_t* pTask) override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 	void PrescheduleThink() override;
 
@@ -217,7 +218,6 @@ public:
 	bool m_fStartSuspicious;
 
 	EHANDLE m_hTalkTarget; //!< who to look at while talking
-	CUSTOM_SCHEDULES;
 };
 
 template <typename Callback>

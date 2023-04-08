@@ -32,8 +32,8 @@ public:
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 	int ISoundMask() override;
 
-	void StartTask(Task_t* pTask) override;
-	void RunTask(Task_t* pTask) override;
+	void StartTask(const Task_t* pTask) override;
+	void RunTask(const Task_t* pTask) override;
 	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 	void TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
 
@@ -115,7 +115,7 @@ void CGMan::Precache()
 	PrecacheModel(STRING(pev->model));
 }
 
-void CGMan::StartTask(Task_t* pTask)
+void CGMan::StartTask(const Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
@@ -129,7 +129,7 @@ void CGMan::StartTask(Task_t* pTask)
 	CBaseMonster::StartTask(pTask);
 }
 
-void CGMan::RunTask(Task_t* pTask)
+void CGMan::RunTask(const Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{

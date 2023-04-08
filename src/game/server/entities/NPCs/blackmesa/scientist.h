@@ -83,6 +83,7 @@ class CScientist : public CTalkMonster
 {
 	DECLARE_CLASS(CScientist, CTalkMonster);
 	DECLARE_DATAMAP();
+	DECLARE_CUSTOM_SCHEDULES();
 
 public:
 	void OnCreate() override;
@@ -93,8 +94,8 @@ public:
 	void SetYawSpeed() override;
 	int Classify() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
-	void RunTask(Task_t* pTask) override;
-	void StartTask(Task_t* pTask) override;
+	void RunTask(const Task_t* pTask) override;
+	void StartTask(const Task_t* pTask) override;
 	int ObjectCaps() override { return CTalkMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
 	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 	int FriendNumber(int arrayNumber) override;
@@ -111,8 +112,8 @@ public:
 	virtual void Scream();
 
 	// Override these to set behavior
-	Schedule_t* GetScheduleOfType(int Type) override;
-	Schedule_t* GetSchedule() override;
+	const Schedule_t* GetScheduleOfType(int Type) override;
+	const Schedule_t* GetSchedule() override;
 	MONSTERSTATE GetIdealState() override;
 
 	void DeathSound() override;
@@ -121,8 +122,6 @@ public:
 	void TalkInit() override;
 
 	void Killed(CBaseEntity* attacker, int iGib) override;
-
-	CUSTOM_SCHEDULES;
 
 protected:
 	float m_painTime;

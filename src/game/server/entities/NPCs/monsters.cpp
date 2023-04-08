@@ -130,9 +130,7 @@ bool CBaseMonster::FShouldEat()
 
 void CBaseMonster::BarnacleVictimBitten(CBaseEntity* pevBarnacle)
 {
-	Schedule_t* pNewSchedule;
-
-	pNewSchedule = GetScheduleOfType(SCHED_BARNACLE_VICTIM_CHOMP);
+	const Schedule_t* pNewSchedule = GetScheduleOfType(SCHED_BARNACLE_VICTIM_CHOMP);
 
 	if (pNewSchedule)
 	{
@@ -2624,7 +2622,7 @@ void CBaseMonster::ReportAIState()
 		if (!pName)
 			pName = "Unknown";
 		fmt::format_to(inserter, "Schedule {}, ", pName);
-		Task_t* pTask = GetTask();
+		const Task_t* pTask = GetTask();
 		if (pTask)
 			fmt::format_to(inserter, "Task {} (#{}), ", pTask->iTask, m_iScheduleIndex);
 	}

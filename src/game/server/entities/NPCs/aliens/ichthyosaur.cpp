@@ -34,6 +34,7 @@ class CIchthyosaur : public CFlyingMonster
 {
 	DECLARE_CLASS(CIchthyosaur, CFlyingMonster);
 	DECLARE_DATAMAP();
+	DECLARE_CUSTOM_SCHEDULES();
 
 public:
 	void OnCreate() override;
@@ -42,10 +43,9 @@ public:
 	void SetYawSpeed() override;
 	int Classify() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
-	CUSTOM_SCHEDULES;
 
-	Schedule_t* GetSchedule() override;
-	Schedule_t* GetScheduleOfType(int Type) override;
+	const Schedule_t* GetSchedule() override;
+	const Schedule_t* GetScheduleOfType(int Type) override;
 
 	void Killed(CBaseEntity* attacker, int iGib) override;
 	void BecomeDead() override;
@@ -53,8 +53,8 @@ public:
 	void CombatUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 	void BiteTouch(CBaseEntity* pOther);
 
-	void StartTask(Task_t* pTask) override;
-	void RunTask(Task_t* pTask) override;
+	void StartTask(const Task_t* pTask) override;
+	void RunTask(const Task_t* pTask) override;
 
 	bool CheckMeleeAttack1(float flDot, float flDist) override;
 	bool CheckRangeAttack1(float flDot, float flDist) override; //!< swim in for a chomp
@@ -295,15 +295,13 @@ Schedule_t slFloat[] =
 			"Float"},
 };
 
-DEFINE_CUSTOM_SCHEDULES(CIchthyosaur){
-	slSwimAround,
+BEGIN_CUSTOM_SCHEDULES(CIchthyosaur)
+slSwimAround,
 	slSwimAgitated,
 	slCircleEnemy,
 	slTwitchDie,
-	slFloat,
-};
-
-IMPLEMENT_CUSTOM_SCHEDULES(CIchthyosaur, CFlyingMonster);
+	slFloat
+	END_CUSTOM_SCHEDULES();
 
 int CIchthyosaur::Classify()
 {
@@ -469,7 +467,7 @@ void CIchthyosaur::Precache()
 	PRECACHE_SOUND_ARRAY(pPainSounds);
 }
 
-Schedule_t* CIchthyosaur::GetSchedule()
+const Schedule_t* CIchthyosaur::GetSchedule()
 {
 	// AILogger->debug("GetSchedule()");
 	switch (m_MonsterState)
@@ -509,7 +507,7 @@ Schedule_t* CIchthyosaur::GetSchedule()
 	return CFlyingMonster::GetSchedule();
 }
 
-Schedule_t* CIchthyosaur::GetScheduleOfType(int Type)
+const Schedule_t* CIchthyosaur::GetScheduleOfType(int Type)
 {
 	// AILogger->debug("GetScheduleOfType({}) {}", Type, m_bOnAttack);
 	switch (Type)
@@ -535,7 +533,7 @@ Schedule_t* CIchthyosaur::GetScheduleOfType(int Type)
 	return CBaseMonster::GetScheduleOfType(Type);
 }
 
-void CIchthyosaur::StartTask(Task_t* pTask)
+void CIchthyosaur::StartTask(const Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
@@ -575,7 +573,7 @@ void CIchthyosaur::StartTask(Task_t* pTask)
 	}
 }
 
-void CIchthyosaur::RunTask(Task_t* pTask)
+void CIchthyosaur::RunTask(const Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{

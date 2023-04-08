@@ -89,6 +89,7 @@ class CShockTrooper : public CSquadMonster
 {
 	DECLARE_CLASS(CShockTrooper, CSquadMonster);
 	DECLARE_DATAMAP();
+	DECLARE_CUSTOM_SCHEDULES();
 
 public:
 	void OnCreate() override;
@@ -136,8 +137,8 @@ public:
 	void CheckAmmo() override;
 
 	void SetActivity(Activity NewActivity) override;
-	void StartTask(Task_t* pTask) override;
-	void RunTask(Task_t* pTask) override;
+	void StartTask(const Task_t* pTask) override;
+	void RunTask(const Task_t* pTask) override;
 	void PainSound() override;
 	void IdleSound() override;
 
@@ -166,8 +167,8 @@ public:
 	void SpeakSentence();
 
 	CBaseEntity* Kick();
-	Schedule_t* GetSchedule() override;
-	Schedule_t* GetScheduleOfType(int Type) override;
+	const Schedule_t* GetSchedule() override;
+	const Schedule_t* GetScheduleOfType(int Type) override;
 
 	/**
 	*	@brief make sure we're not taking it in the helmet
@@ -192,8 +193,6 @@ public:
 	void JustSpoke();
 
 	void MonsterThink() override;
-
-	CUSTOM_SCHEDULES;
 
 	// checking the feasibility of a grenade toss is kind of costly, so we do it every couple of seconds,
 	// not every server frame.
@@ -922,7 +921,7 @@ void CShockTrooper::Precache()
 	iShockTrooperMuzzleFlash = PrecacheModel("sprites/muzzle_shock.spr");
 }
 
-void CShockTrooper::StartTask(Task_t* pTask)
+void CShockTrooper::StartTask(const Task_t* pTask)
 {
 	m_iTaskStatus = TASKSTATUS_RUNNING;
 
@@ -970,7 +969,7 @@ void CShockTrooper::StartTask(Task_t* pTask)
 	}
 }
 
-void CShockTrooper::RunTask(Task_t* pTask)
+void CShockTrooper::RunTask(const Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
@@ -1570,8 +1569,8 @@ Schedule_t slShockTrooperRepelLand[] =
 };
 
 
-DEFINE_CUSTOM_SCHEDULES(CShockTrooper){
-	slShockTrooperFail,
+BEGIN_CUSTOM_SCHEDULES(CShockTrooper)
+slShockTrooperFail,
 	slShockTrooperCombatFail,
 	slShockTrooperVictoryDance,
 	slShockTrooperEstablishLineOfFire,
@@ -1591,10 +1590,8 @@ DEFINE_CUSTOM_SCHEDULES(CShockTrooper){
 	slShockTrooperRangeAttack2,
 	slShockTrooperRepel,
 	slShockTrooperRepelAttack,
-	slShockTrooperRepelLand,
-};
-
-IMPLEMENT_CUSTOM_SCHEDULES(CShockTrooper, CSquadMonster);
+	slShockTrooperRepelLand
+	END_CUSTOM_SCHEDULES();
 
 void CShockTrooper::SetActivity(Activity NewActivity)
 {
@@ -1677,7 +1674,7 @@ void CShockTrooper::SetActivity(Activity NewActivity)
 	}
 }
 
-Schedule_t* CShockTrooper::GetSchedule()
+const Schedule_t* CShockTrooper::GetSchedule()
 {
 
 	// clear old sentence
@@ -1916,7 +1913,7 @@ Schedule_t* CShockTrooper::GetSchedule()
 	return CSquadMonster::GetSchedule();
 }
 
-Schedule_t* CShockTrooper::GetScheduleOfType(int Type)
+const Schedule_t* CShockTrooper::GetScheduleOfType(int Type)
 {
 	switch (Type)
 	{

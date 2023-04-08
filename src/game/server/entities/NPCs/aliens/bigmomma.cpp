@@ -149,6 +149,7 @@ class CBigMomma : public CBaseMonster
 {
 	DECLARE_CLASS(CBigMomma, CBaseMonster);
 	DECLARE_DATAMAP();
+	DECLARE_CUSTOM_SCHEDULES();
 
 public:
 	void OnCreate() override;
@@ -158,10 +159,10 @@ public:
 	void Activate() override;
 	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 
-	void RunTask(Task_t* pTask) override;
-	void StartTask(Task_t* pTask) override;
-	Schedule_t* GetSchedule() override;
-	Schedule_t* GetScheduleOfType(int Type) override;
+	void RunTask(const Task_t* pTask) override;
+	void StartTask(const Task_t* pTask) override;
+	const Schedule_t* GetSchedule() override;
+	const Schedule_t* GetScheduleOfType(int Type) override;
 	void TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
 
 	void NodeStart(string_t iszNextNode);
@@ -275,8 +276,6 @@ public:
 	static const char* pAlertSounds[];
 	static const char* pPainSounds[];
 	static const char* pFootSounds[];
-
-	CUSTOM_SCHEDULES;
 
 private:
 	float m_nodeTime;
@@ -794,14 +793,12 @@ Schedule_t slNodeFail[] =
 			"NodeFail"},
 };
 
-DEFINE_CUSTOM_SCHEDULES(CBigMomma){
-	slBigNode,
-	slNodeFail,
-};
+BEGIN_CUSTOM_SCHEDULES(CBigMomma)
+slBigNode,
+	slNodeFail
+	END_CUSTOM_SCHEDULES();
 
-IMPLEMENT_CUSTOM_SCHEDULES(CBigMomma, CBaseMonster);
-
-Schedule_t* CBigMomma::GetScheduleOfType(int Type)
+const Schedule_t* CBigMomma::GetScheduleOfType(int Type)
 {
 	switch (Type)
 	{
@@ -827,7 +824,7 @@ bool CBigMomma::ShouldGoToNode()
 	return false;
 }
 
-Schedule_t* CBigMomma::GetSchedule()
+const Schedule_t* CBigMomma::GetSchedule()
 {
 	if (ShouldGoToNode())
 	{
@@ -837,7 +834,7 @@ Schedule_t* CBigMomma::GetSchedule()
 	return CBaseMonster::GetSchedule();
 }
 
-void CBigMomma::StartTask(Task_t* pTask)
+void CBigMomma::StartTask(const Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
@@ -946,7 +943,7 @@ void CBigMomma::StartTask(Task_t* pTask)
 	}
 }
 
-void CBigMomma::RunTask(Task_t* pTask)
+void CBigMomma::RunTask(const Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{

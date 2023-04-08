@@ -62,13 +62,14 @@ class CHeadCrab : public CBaseMonster
 {
 	DECLARE_CLASS(CHeadCrab, CBaseMonster);
 	DECLARE_DATAMAP();
+	DECLARE_CUSTOM_SCHEDULES();
 
 public:
 	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
-	void RunTask(Task_t* pTask) override;
-	void StartTask(Task_t* pTask) override;
+	void RunTask(const Task_t* pTask) override;
+	void StartTask(const Task_t* pTask) override;
 	void SetYawSpeed() override;
 
 	/**
@@ -96,9 +97,7 @@ public:
 	virtual float GetDamageAmount() { return GetSkillFloat("headcrab_dmg_bite"sv); }
 	virtual int GetVoicePitch() { return 100; }
 	virtual float GetSoundVolue() { return 1.0; }
-	Schedule_t* GetScheduleOfType(int Type) override;
-
-	CUSTOM_SCHEDULES;
+	const Schedule_t* GetScheduleOfType(int Type) override;
 
 	static const char* pIdleSounds[];
 	static const char* pAlertSounds[];
@@ -114,12 +113,10 @@ DEFINE_FUNCTION(LeapTouch),
 
 LINK_ENTITY_TO_CLASS(monster_headcrab, CHeadCrab);
 
-DEFINE_CUSTOM_SCHEDULES(CHeadCrab){
-	slHCRangeAttack1,
-	slHCRangeAttack1Fast,
-};
-
-IMPLEMENT_CUSTOM_SCHEDULES(CHeadCrab, CBaseMonster);
+BEGIN_CUSTOM_SCHEDULES(CHeadCrab)
+slHCRangeAttack1,
+	slHCRangeAttack1Fast
+	END_CUSTOM_SCHEDULES();
 
 const char* CHeadCrab::pIdleSounds[] =
 	{
@@ -298,7 +295,7 @@ void CHeadCrab::Precache()
 	PrecacheModel(STRING(pev->model));
 }
 
-void CHeadCrab::RunTask(Task_t* pTask)
+void CHeadCrab::RunTask(const Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
@@ -352,7 +349,7 @@ void CHeadCrab::PrescheduleThink()
 	}
 }
 
-void CHeadCrab::StartTask(Task_t* pTask)
+void CHeadCrab::StartTask(const Task_t* pTask)
 {
 	m_iTaskStatus = TASKSTATUS_RUNNING;
 
@@ -424,7 +421,7 @@ void CHeadCrab::DeathSound()
 	EmitSoundDyn(CHAN_VOICE, RANDOM_SOUND_ARRAY(pDeathSounds), GetSoundVolue(), ATTN_IDLE, 0, GetVoicePitch());
 }
 
-Schedule_t* CHeadCrab::GetScheduleOfType(int Type)
+const Schedule_t* CHeadCrab::GetScheduleOfType(int Type)
 {
 	switch (Type)
 	{
@@ -446,7 +443,7 @@ public:
 	void SetYawSpeed() override;
 	float GetDamageAmount() override { return GetSkillFloat("headcrab_dmg_bite"sv) * 0.3; }
 	bool CheckRangeAttack1(float flDot, float flDist) override;
-	Schedule_t* GetScheduleOfType(int Type) override;
+	const Schedule_t* GetScheduleOfType(int Type) override;
 	int GetVoicePitch() override { return PITCH_NORM + RANDOM_LONG(40, 50); }
 	float GetSoundVolue() override { return 0.8; }
 };
@@ -489,7 +486,7 @@ bool CBabyCrab::CheckRangeAttack1(float flDot, float flDist)
 	return false;
 }
 
-Schedule_t* CBabyCrab::GetScheduleOfType(int Type)
+const Schedule_t* CBabyCrab::GetScheduleOfType(int Type)
 {
 	switch (Type)
 	{

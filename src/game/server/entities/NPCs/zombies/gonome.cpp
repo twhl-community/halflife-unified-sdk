@@ -175,6 +175,7 @@ class COFGonome : public CZombie
 {
 	DECLARE_CLASS(COFGonome, CZombie);
 	DECLARE_DATAMAP();
+	DECLARE_CUSTOM_SCHEDULES();
 
 public:
 	void OnCreate() override;
@@ -205,15 +206,13 @@ public:
 
 	bool CheckMeleeAttack1(float flDot, float flDist) override;
 
-	Schedule_t* GetScheduleOfType(int Type) override;
+	const Schedule_t* GetScheduleOfType(int Type) override;
 
 	void Killed(CBaseEntity* attacker, int iGib) override;
 
-	void StartTask(Task_t* pTask) override;
+	void StartTask(const Task_t* pTask) override;
 
 	void SetActivity(Activity NewActivity) override;
-
-	CUSTOM_SCHEDULES;
 
 	float m_flNextThrowTime = 0;
 
@@ -267,12 +266,9 @@ Schedule_t slGonomeVictoryDance[] =
 		},
 };
 
-DEFINE_CUSTOM_SCHEDULES(COFGonome){
-	slGonomeVictoryDance,
-};
-
-// TODO: need to use CZombie instead of CBaseMonster
-IMPLEMENT_CUSTOM_SCHEDULES(COFGonome, CBaseMonster);
+BEGIN_CUSTOM_SCHEDULES(COFGonome)
+slGonomeVictoryDance
+END_CUSTOM_SCHEDULES();
 
 void COFGonome::OnCreate()
 {
@@ -564,7 +560,7 @@ bool COFGonome::CheckRangeAttack1(float flDot, float flDist)
 	return false;
 }
 
-Schedule_t* COFGonome::GetScheduleOfType(int Type)
+const Schedule_t* COFGonome::GetScheduleOfType(int Type)
 {
 	if (Type == SCHED_VICTORY_DANCE)
 		return slGonomeVictoryDance;
@@ -593,7 +589,7 @@ void COFGonome::Killed(CBaseEntity* attacker, int iGib)
 	CBaseMonster::Killed(attacker, iGib);
 }
 
-void COFGonome::StartTask(Task_t* pTask)
+void COFGonome::StartTask(const Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{

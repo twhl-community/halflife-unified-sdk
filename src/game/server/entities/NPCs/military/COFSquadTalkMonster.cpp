@@ -564,9 +564,10 @@ bool COFSquadTalkMonster::SquadMemberInRange(const Vector& vecLocation, float fl
 	return false;
 }
 
+// TODO: should be in schedule list?
 extern Schedule_t slChaseEnemyFailed[];
 
-Schedule_t* COFSquadTalkMonster::GetScheduleOfType(int iType)
+const Schedule_t* COFSquadTalkMonster::GetScheduleOfType(int iType)
 {
 	switch (iType)
 	{

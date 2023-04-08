@@ -92,7 +92,7 @@ protected:
 
 	std::tuple<int, Activity> GetSequenceForActivity(Activity NewActivity) override;
 
-	Schedule_t* GetTorchSchedule() override;
+	const Schedule_t* GetTorchSchedule() override;
 
 	bool CanTakeCoverAndReload() const override { return true; }
 };
@@ -339,7 +339,7 @@ std::tuple<int, Activity> COFTorchAlly::GetSequenceForActivity(Activity NewActiv
 	return {iSequence, NewActivity};
 }
 
-Schedule_t* COFTorchAlly::GetTorchSchedule()
+const Schedule_t* COFTorchAlly::GetTorchSchedule()
 {
 	if (GetBodygroup(TorchAllyBodygroup::Torch) == TorchTorchState::Drawn)
 	{

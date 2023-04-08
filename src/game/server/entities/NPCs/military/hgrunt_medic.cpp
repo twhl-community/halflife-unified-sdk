@@ -82,6 +82,7 @@ class COFMedicAlly : public CBaseHGruntAlly
 {
 	DECLARE_CLASS(COFMedicAlly, CBaseHGruntAlly);
 	DECLARE_DATAMAP();
+	DECLARE_CUSTOM_SCHEDULES();
 
 public:
 	void OnCreate() override;
@@ -89,11 +90,11 @@ public:
 	void Spawn() override;
 	void Precache() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
-	void StartTask(Task_t* pTask) override;
-	void RunTask(Task_t* pTask) override;
+	void StartTask(const Task_t* pTask) override;
+	void RunTask(const Task_t* pTask) override;
 	void Shoot();
 
-	Schedule_t* GetScheduleOfType(int Type) override;
+	const Schedule_t* GetScheduleOfType(int Type) override;
 
 	int ObjectCaps() override;
 
@@ -108,8 +109,6 @@ public:
 	void HealerUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
 	void HealerActivate(CBaseMonster* pTarget);
-
-	CUSTOM_SCHEDULES;
 
 	int m_iHealCharge;
 	bool m_fUseHealing;
@@ -138,7 +137,7 @@ protected:
 
 	std::tuple<int, Activity> GetSequenceForActivity(Activity NewActivity) override;
 
-	Schedule_t* GetHealSchedule() override;
+	const Schedule_t* GetHealSchedule() override;
 };
 
 LINK_ENTITY_TO_CLASS(monster_human_medic_ally, COFMedicAlly);
@@ -364,7 +363,7 @@ void COFMedicAlly::Precache()
 	CBaseHGruntAlly::Precache();
 }
 
-void COFMedicAlly::StartTask(Task_t* pTask)
+void COFMedicAlly::StartTask(const Task_t* pTask)
 {
 	m_iTaskStatus = TASKSTATUS_RUNNING;
 
@@ -435,7 +434,7 @@ void COFMedicAlly::StartTask(Task_t* pTask)
 	}
 }
 
-void COFMedicAlly::RunTask(Task_t* pTask)
+void COFMedicAlly::RunTask(const Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
@@ -556,14 +555,12 @@ Schedule_t slMedicAllyHealTarget[] =
 			"Medic Ally Heal Target"},
 };
 
-DEFINE_CUSTOM_SCHEDULES(COFMedicAlly){
-	slMedicAllyNewHealTarget,
+BEGIN_CUSTOM_SCHEDULES(COFMedicAlly)
+slMedicAllyNewHealTarget,
 	slMedicAllyDrawNeedle,
 	slMedicAllyDrawGun,
-	slMedicAllyHealTarget,
-};
-
-IMPLEMENT_CUSTOM_SCHEDULES(COFMedicAlly, CBaseHGruntAlly);
+	slMedicAllyHealTarget
+	END_CUSTOM_SCHEDULES();
 
 std::tuple<int, Activity> COFMedicAlly::GetSequenceForActivity(Activity NewActivity)
 {
@@ -591,7 +588,7 @@ std::tuple<int, Activity> COFMedicAlly::GetSequenceForActivity(Activity NewActiv
 	return {iSequence, NewActivity};
 }
 
-Schedule_t* COFMedicAlly::GetHealSchedule()
+const Schedule_t* COFMedicAlly::GetHealSchedule()
 {
 	if (m_fHealing)
 	{
@@ -611,7 +608,7 @@ Schedule_t* COFMedicAlly::GetHealSchedule()
 	return nullptr;
 }
 
-Schedule_t* COFMedicAlly::GetScheduleOfType(int Type)
+const Schedule_t* COFMedicAlly::GetScheduleOfType(int Type)
 {
 	switch (Type)
 	{

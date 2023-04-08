@@ -60,6 +60,7 @@ class CHoundeye : public CSquadMonster
 {
 	DECLARE_CLASS(CHoundeye, CSquadMonster);
 	DECLARE_DATAMAP();
+	DECLARE_CUSTOM_SCHEDULES();
 
 public:
 	void OnCreate() override;
@@ -74,8 +75,8 @@ public:
 	void WarnSound();
 	void PainSound() override;
 	void IdleSound() override;
-	void StartTask(Task_t* pTask) override;
-	void RunTask(Task_t* pTask) override;
+	void StartTask(const Task_t* pTask) override;
+	void RunTask(const Task_t* pTask) override;
 	void SonicAttack();
 	void PrescheduleThink() override;
 	void SetActivity(Activity NewActivity) override;
@@ -92,10 +93,8 @@ public:
 	bool CheckRangeAttack1(float flDot, float flDist) override;
 	bool FValidateHintType(short sHint) override;
 	bool FCanActiveIdle() override;
-	Schedule_t* GetScheduleOfType(int Type) override;
-	Schedule_t* GetSchedule() override;
-
-	CUSTOM_SCHEDULES;
+	const Schedule_t* GetScheduleOfType(int Type) override;
+	const Schedule_t* GetSchedule() override;
 
 	int m_iSpriteTexture;
 	bool m_fAsleep;			// some houndeyes sleep in idle mode if this is set, the houndeye is lying down
@@ -608,7 +607,7 @@ void CHoundeye::SonicAttack()
 	}
 }
 
-void CHoundeye::StartTask(Task_t* pTask)
+void CHoundeye::StartTask(const Task_t* pTask)
 {
 	m_iTaskStatus = TASKSTATUS_RUNNING;
 
@@ -707,7 +706,7 @@ void CHoundeye::StartTask(Task_t* pTask)
 	}
 }
 
-void CHoundeye::RunTask(Task_t* pTask)
+void CHoundeye::RunTask(const Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
@@ -1045,8 +1044,8 @@ Schedule_t slHoundCombatFailNoPVS[] =
 			"HoundCombatFailNoPVS"},
 };
 
-DEFINE_CUSTOM_SCHEDULES(CHoundeye){
-	slHoundGuardPack,
+BEGIN_CUSTOM_SCHEDULES(CHoundeye)
+slHoundGuardPack,
 	slHoundRangeAttack,
 	&slHoundRangeAttack[1],
 	slHoundSleep,
@@ -1056,12 +1055,10 @@ DEFINE_CUSTOM_SCHEDULES(CHoundeye){
 	slHoundAgitated,
 	slHoundHopRetreat,
 	slHoundCombatFailPVS,
-	slHoundCombatFailNoPVS,
-};
+	slHoundCombatFailNoPVS
+	END_CUSTOM_SCHEDULES();
 
-IMPLEMENT_CUSTOM_SCHEDULES(CHoundeye, CSquadMonster);
-
-Schedule_t* CHoundeye::GetScheduleOfType(int Type)
+const Schedule_t* CHoundeye::GetScheduleOfType(int Type)
 {
 	if (m_fAsleep)
 	{
@@ -1171,7 +1168,7 @@ Schedule_t* CHoundeye::GetScheduleOfType(int Type)
 	}
 }
 
-Schedule_t* CHoundeye::GetSchedule()
+const Schedule_t* CHoundeye::GetSchedule()
 {
 	switch (m_MonsterState)
 	{

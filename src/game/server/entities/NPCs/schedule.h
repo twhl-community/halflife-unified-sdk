@@ -213,7 +213,7 @@ struct Task_t
 struct Schedule_t
 {
 
-	Task_t* pTasklist;
+	const Task_t* pTasklist;
 	int cTasks;
 	int iInterruptMask; // a bit mask of conditions that can interrupt this schedule
 

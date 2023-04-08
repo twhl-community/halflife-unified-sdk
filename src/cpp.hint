@@ -106,5 +106,49 @@ public:                                      \
 #define DEFINE_GLOBAL_FIELD(fieldName, fieldType) \
 	RAW_DEFINE_FIELD(fieldName, fieldType, &FieldTypeToSerializerMapper<fieldType>::Serializer, 1, FTYPEDESC_GLOBAL)
 
+// Schedule macros
+#define DECLARE_CUSTOM_SCHEDULES_COMMON()        \
+private:                                         \
+	static ScheduleList m_ScheduleList;          \
+                                                 \
+public:                                          \
+	static ScheduleList* GetLocalScheduleList(); \
+	static ScheduleList* GetBaseScheduleList()
+
+#define DECLARE_CUSTOM_SCHEDULES_NOBASE() \
+	DECLARE_CUSTOM_SCHEDULES_COMMON();    \
+	virtual ScheduleList* GetScheduleList() const
+
+#define DECLARE_CUSTOM_SCHEDULES()     \
+	DECLARE_CUSTOM_SCHEDULES_COMMON(); \
+	ScheduleList* GetScheduleList() const override
+	
+#define BEGIN_CUSTOM_SCHEDULES_COMMON(thisClass)     \
+	ScheduleList* thisClass::GetLocalScheduleList()  \
+	{                                                \
+		return &m_ScheduleList;                      \
+	}                                                \
+	ScheduleList* thisClass::GetScheduleList() const \
+	{                                                \
+		return &m_ScheduleList;                      \
+	}                                                \
+ScheduleList thisClass::m_ScheduleList = CreateScheduleList<thisClass>(
+
+#define BEGIN_CUSTOM_SCHEDULES_NOBASE(thisClass)   \
+	ScheduleList* thisClass::GetBaseScheduleList() \
+	{                                              \
+		return nullptr;                            \
+	}                                              \
+	BEGIN_CUSTOM_SCHEDULES_COMMON(thisClass)
+
+#define BEGIN_CUSTOM_SCHEDULES(thisClass)                    \
+	ScheduleList* thisClass::GetBaseScheduleList()           \
+	{                                                        \
+		return thisClass::BaseClass::GetLocalScheduleList(); \
+	}                                                        \
+	BEGIN_CUSTOM_SCHEDULES_COMMON(thisClass)
+
+#define END_CUSTOM_SCHEDULES() \
+	)
+
 #define LINK_ENTITY_TO_CLASS(mapClassName, DLLClassName) extern "C" DLLEXPORT void mapClassName(entvars_t*) {}
-#define IMPLEMENT_CUSTOM_SCHEDULES(derivedClass, baseClass) Schedule_t* derivedClass::ScheduleFromName(const char* pName) {}

@@ -42,6 +42,7 @@ class CHAssassin : public CBaseMonster
 {
 	DECLARE_CLASS(CHAssassin, CBaseMonster);
 	DECLARE_DATAMAP();
+	DECLARE_CUSTOM_SCHEDULES();
 
 public:
 	void OnCreate() override;
@@ -52,8 +53,8 @@ public:
 	int ISoundMask() override;
 	void Shoot();
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
-	Schedule_t* GetSchedule() override;
-	Schedule_t* GetScheduleOfType(int Type) override;
+	const Schedule_t* GetSchedule() override;
+	const Schedule_t* GetScheduleOfType(int Type) override;
 
 	/**
 	*	@brief jump like crazy if the enemy gets too close.
@@ -72,12 +73,11 @@ public:
 	*/
 	bool CheckRangeAttack2(float flDot, float flDist) override; // throw grenade
 
-	void StartTask(Task_t* pTask) override;
+	void StartTask(const Task_t* pTask) override;
 	void RunAI() override;
-	void RunTask(Task_t* pTask) override;
+	void RunTask(const Task_t* pTask) override;
 	void DeathSound() override;
 	void IdleSound() override;
-	CUSTOM_SCHEDULES;
 
 	float m_flLastShot;
 	float m_flDiviation;
@@ -501,8 +501,8 @@ Schedule_t slAssassinJumpLand[] =
 			"AssassinJumpLand"},
 };
 
-DEFINE_CUSTOM_SCHEDULES(CHAssassin){
-	slAssassinFail,
+BEGIN_CUSTOM_SCHEDULES(CHAssassin)
+slAssassinFail,
 	slAssassinExposed,
 	slAssassinTakeCoverFromEnemy,
 	slAssassinTakeCoverFromEnemy2,
@@ -511,10 +511,8 @@ DEFINE_CUSTOM_SCHEDULES(CHAssassin){
 	slAssassinHunt,
 	slAssassinJump,
 	slAssassinJumpAttack,
-	slAssassinJumpLand,
-};
-
-IMPLEMENT_CUSTOM_SCHEDULES(CHAssassin, CBaseMonster);
+	slAssassinJumpLand
+	END_CUSTOM_SCHEDULES();
 
 bool CHAssassin::CheckMeleeAttack1(float flDot, float flDist)
 {
@@ -645,7 +643,7 @@ void CHAssassin::RunAI()
 	}
 }
 
-void CHAssassin::StartTask(Task_t* pTask)
+void CHAssassin::StartTask(const Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
@@ -667,7 +665,7 @@ void CHAssassin::StartTask(Task_t* pTask)
 	}
 }
 
-void CHAssassin::RunTask(Task_t* pTask)
+void CHAssassin::RunTask(const Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
@@ -707,7 +705,7 @@ void CHAssassin::RunTask(Task_t* pTask)
 	}
 }
 
-Schedule_t* CHAssassin::GetSchedule()
+const Schedule_t* CHAssassin::GetSchedule()
 {
 	switch (m_MonsterState)
 	{
@@ -835,7 +833,7 @@ Schedule_t* CHAssassin::GetSchedule()
 	return CBaseMonster::GetSchedule();
 }
 
-Schedule_t* CHAssassin::GetScheduleOfType(int Type)
+const Schedule_t* CHAssassin::GetScheduleOfType(int Type)
 {
 	// AILogger->debug("{}", m_iFrustration);
 	switch (Type)

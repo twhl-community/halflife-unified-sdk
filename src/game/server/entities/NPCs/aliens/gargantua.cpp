@@ -198,6 +198,7 @@ class CGargantua : public CBaseMonster
 {
 	DECLARE_CLASS(CGargantua, CBaseMonster);
 	DECLARE_DATAMAP();
+	DECLARE_CUSTOM_SCHEDULES();
 
 public:
 	void OnCreate() override;
@@ -218,9 +219,9 @@ public:
 		pev->absmax = pev->origin + Vector(80, 80, 214);
 	}
 
-	Schedule_t* GetScheduleOfType(int Type) override;
-	void StartTask(Task_t* pTask) override;
-	void RunTask(Task_t* pTask) override;
+	const Schedule_t* GetScheduleOfType(int Type) override;
+	void StartTask(const Task_t* pTask) override;
+	void RunTask(const Task_t* pTask) override;
 
 	void PrescheduleThink() override;
 
@@ -242,8 +243,6 @@ public:
 	inline bool FlameIsOn() { return m_pFlame[0] != nullptr; }
 
 	void FlameDamage(Vector vecStart, Vector vecEnd, CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int iClassIgnore, int bitsDamageType);
-
-	CUSTOM_SCHEDULES;
 
 private:
 	static const char* pAttackHitSounds[];
@@ -430,12 +429,10 @@ Schedule_t slGargSwipe[] =
 			"GargSwipe"},
 };
 
-DEFINE_CUSTOM_SCHEDULES(CGargantua){
-	slGargFlame,
-	slGargSwipe,
-};
-
-IMPLEMENT_CUSTOM_SCHEDULES(CGargantua, CBaseMonster);
+BEGIN_CUSTOM_SCHEDULES(CGargantua)
+slGargFlame,
+	slGargSwipe
+	END_CUSTOM_SCHEDULES();
 
 void CGargantua::OnCreate()
 {
@@ -983,7 +980,7 @@ CBaseEntity* CGargantua::GargantuaCheckTraceHullAttack(float flDist, int iDamage
 	return nullptr;
 }
 
-Schedule_t* CGargantua::GetScheduleOfType(int Type)
+const Schedule_t* CGargantua::GetScheduleOfType(int Type)
 {
 	// HACKHACK - turn off the flames if they are on and garg goes scripted / dead
 	if (FlameIsOn())
@@ -1001,7 +998,7 @@ Schedule_t* CGargantua::GetScheduleOfType(int Type)
 	return CBaseMonster::GetScheduleOfType(Type);
 }
 
-void CGargantua::StartTask(Task_t* pTask)
+void CGargantua::StartTask(const Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
@@ -1029,7 +1026,7 @@ void CGargantua::StartTask(Task_t* pTask)
 	}
 }
 
-void CGargantua::RunTask(Task_t* pTask)
+void CGargantua::RunTask(const Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{

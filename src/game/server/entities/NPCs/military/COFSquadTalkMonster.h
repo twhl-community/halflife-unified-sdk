@@ -136,7 +136,7 @@ public:
 	*	@brief surveys the Conditions information available and finds the best new state for a monster.
 	*/
 	MONSTERSTATE GetIdealState() override;
-	Schedule_t* GetScheduleOfType(int iType) override;
+	const Schedule_t* GetScheduleOfType(int iType) override;
 
 	void FollowerUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 

@@ -300,8 +300,8 @@ Schedule_t slTlkIdleEyecontact[] =
 			"TlkIdleEyecontact"},
 };
 
-DEFINE_CUSTOM_SCHEDULES(CTalkMonster){
-	slIdleResponse,
+BEGIN_CUSTOM_SCHEDULES(CTalkMonster)
+slIdleResponse,
 	slIdleSpeak,
 	slIdleHello,
 	slIdleSpeakWait,
@@ -311,10 +311,8 @@ DEFINE_CUSTOM_SCHEDULES(CTalkMonster){
 	slMoveAwayFail,
 	slTlkIdleWatchClient,
 	&slTlkIdleWatchClient[1],
-	slTlkIdleEyecontact,
-};
-
-IMPLEMENT_CUSTOM_SCHEDULES(CTalkMonster, CBaseMonster);
+	slTlkIdleEyecontact
+	END_CUSTOM_SCHEDULES();
 
 void CTalkMonster::OnCreate()
 {
@@ -324,7 +322,7 @@ void CTalkMonster::OnCreate()
 	m_voicePitch = 100;
 }
 
-void CTalkMonster::StartTask(Task_t* pTask)
+void CTalkMonster::StartTask(const Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
@@ -444,7 +442,7 @@ void CTalkMonster::StartTask(Task_t* pTask)
 	}
 }
 
-void CTalkMonster::RunTask(Task_t* pTask)
+void CTalkMonster::RunTask(const Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
@@ -1045,7 +1043,7 @@ bool CTalkMonster::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, flo
 	return CBaseMonster::TakeDamage(inflictor, attacker, flDamage, bitsDamageType);
 }
 
-Schedule_t* CTalkMonster::GetScheduleOfType(int Type)
+const Schedule_t* CTalkMonster::GetScheduleOfType(int Type)
 {
 	switch (Type)
 	{

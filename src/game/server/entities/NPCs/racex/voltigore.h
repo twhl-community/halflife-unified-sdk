@@ -50,6 +50,7 @@ class COFVoltigore : public CSquadMonster
 {
 	DECLARE_CLASS(COFVoltigore, CSquadMonster);
 	DECLARE_DATAMAP();
+	DECLARE_CUSTOM_SCHEDULES();
 
 public:
 	void OnCreate() override;
@@ -65,8 +66,8 @@ public:
 		pev->absmax = pev->origin + Vector(80, 80, 90);
 	}
 
-	Schedule_t* GetSchedule() override;
-	Schedule_t* GetScheduleOfType(int Type) override;
+	const Schedule_t* GetSchedule() override;
+	const Schedule_t* GetScheduleOfType(int Type) override;
 
 	/**
 	*	@brief this is overridden for alien grunts because they can use their smart weapons against unseen enemies.
@@ -80,8 +81,8 @@ public:
 	bool CheckMeleeAttack1(float flDot, float flDist) override;
 
 	bool CheckRangeAttack1(float flDot, float flDist) override;
-	void StartTask(Task_t* pTask) override;
-	void RunTask(Task_t* pTask) override;
+	void StartTask(const Task_t* pTask) override;
+	void RunTask(const Task_t* pTask) override;
 	void AlertSound() override;
 	void PainSound() override;
 	void TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
@@ -110,8 +111,6 @@ public:
 	void GibMonster() override;
 
 	void Killed(CBaseEntity* attacker, int iGib) override;
-
-	CUSTOM_SCHEDULES;
 
 	static constexpr const char* pAttackHitSounds[] =
 		{

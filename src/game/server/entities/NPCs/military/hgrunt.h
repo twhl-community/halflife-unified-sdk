@@ -112,6 +112,7 @@ class CHGrunt : public CSquadMonster
 {
 	DECLARE_CLASS(CHGrunt, CSquadMonster);
 	DECLARE_DATAMAP();
+	DECLARE_CUSTOM_SCHEDULES();
 
 public:
 	void OnCreate() override;
@@ -157,8 +158,8 @@ public:
 	*/
 	void CheckAmmo() override;
 	void SetActivity(Activity NewActivity) override;
-	void StartTask(Task_t* pTask) override;
-	void RunTask(Task_t* pTask) override;
+	void StartTask(const Task_t* pTask) override;
+	void RunTask(const Task_t* pTask) override;
 	void DeathSound() override;
 	void PainSound() override;
 	void IdleSound() override;
@@ -188,8 +189,8 @@ public:
 	void SpeakSentence();
 
 	CBaseEntity* Kick();
-	Schedule_t* GetSchedule() override;
-	Schedule_t* GetScheduleOfType(int Type) override;
+	const Schedule_t* GetSchedule() override;
+	const Schedule_t* GetScheduleOfType(int Type) override;
 
 	/**
 	*	@brief make sure we're not taking it in the helmet
@@ -212,8 +213,6 @@ public:
 	*/
 	virtual bool FOkToSpeak();
 	void JustSpoke();
-
-	CUSTOM_SCHEDULES;
 
 	// checking the feasibility of a grenade toss is kind of costly, so we do it every couple of seconds,
 	// not every server frame.

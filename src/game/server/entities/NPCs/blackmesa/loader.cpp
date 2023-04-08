@@ -38,7 +38,7 @@ public:
 
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 
-	void StartTask(Task_t* pTask) override;
+	void StartTask(const Task_t* pTask) override;
 
 	void SetTurnActivity();
 };
@@ -106,7 +106,7 @@ void COFLoader::HandleAnimEvent(MonsterEvent_t* pEvent)
 	CBaseMonster::HandleAnimEvent(pEvent);
 }
 
-void COFLoader::StartTask(Task_t* pTask)
+void COFLoader::StartTask(const Task_t* pTask)
 {
 	float newYawAngle;
 

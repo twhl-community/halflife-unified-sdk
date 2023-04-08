@@ -118,14 +118,12 @@ Schedule_t slIdleBaStand[] =
 			"IdleStand"},
 };
 
-DEFINE_CUSTOM_SCHEDULES(CBarney){
-	slBaFollow,
+BEGIN_CUSTOM_SCHEDULES(CBarney)
+slBaFollow,
 	slBarneyEnemyDraw,
 	slBaFaceTarget,
-	slIdleBaStand,
-};
-
-IMPLEMENT_CUSTOM_SCHEDULES(CBarney, CTalkMonster);
+	slIdleBaStand
+	END_CUSTOM_SCHEDULES();
 
 void CBarney::OnCreate()
 {
@@ -135,12 +133,12 @@ void CBarney::OnCreate()
 	pev->model = MAKE_STRING("models/barney.mdl");
 }
 
-void CBarney::StartTask(Task_t* pTask)
+void CBarney::StartTask(const Task_t* pTask)
 {
 	CTalkMonster::StartTask(pTask);
 }
 
-void CBarney::RunTask(Task_t* pTask)
+void CBarney::RunTask(const Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
@@ -492,9 +490,9 @@ void CBarney::Killed(CBaseEntity* attacker, int iGib)
 	CTalkMonster::Killed(attacker, iGib);
 }
 
-Schedule_t* CBarney::GetScheduleOfType(int Type)
+const Schedule_t* CBarney::GetScheduleOfType(int Type)
 {
-	Schedule_t* psched;
+	const Schedule_t* psched;
 
 	switch (Type)
 	{
@@ -542,7 +540,7 @@ void CBarney::SpeakKilledEnemy()
 	PlaySentence("BA_KILL", 4, VOL_NORM, ATTN_NORM);
 }
 
-Schedule_t* CBarney::GetSchedule()
+const Schedule_t* CBarney::GetSchedule()
 {
 	if (HasConditions(bits_COND_HEAR_SOUND))
 	{

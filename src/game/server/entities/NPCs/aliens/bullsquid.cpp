@@ -168,6 +168,7 @@ class CBullsquid : public CBaseMonster
 {
 	DECLARE_CLASS(CBullsquid, CBaseMonster);
 	DECLARE_DATAMAP();
+	DECLARE_CUSTOM_SCHEDULES();
 
 public:
 	void OnCreate() override;
@@ -187,8 +188,8 @@ public:
 	*	@brief OVERRIDDEN for bullsquid because it needs to know explicitly when the last attempt to chase the enemy failed,
 	*	since that impacts its attack choices.
 	*/
-	void StartTask(Task_t* pTask) override;
-	void RunTask(Task_t* pTask) override;
+	void StartTask(const Task_t* pTask) override;
+	void RunTask(const Task_t* pTask) override;
 
 	/**
 	*	@brief bullsquid is a big guy, so has a longer melee range than most monsters. This is the tailwhip attack
@@ -204,8 +205,8 @@ public:
 	bool CheckRangeAttack1(float flDot, float flDist) override;
 	void RunAI() override;
 	bool FValidateHintType(short sHint) override;
-	Schedule_t* GetSchedule() override;
-	Schedule_t* GetScheduleOfType(int Type) override;
+	const Schedule_t* GetSchedule() override;
+	const Schedule_t* GetScheduleOfType(int Type) override;
 
 	/**
 	*	@brief overridden for bullsquid so we can keep track of how much time has passed since it was last injured
@@ -223,8 +224,6 @@ public:
 	*	a while if something injures it.
 	*/
 	MONSTERSTATE GetIdealState() override;
-
-	CUSTOM_SCHEDULES;
 
 	bool m_fCanThreatDisplay; // this is so the squid only does the "I see a headcrab!" dance one time.
 
@@ -933,18 +932,17 @@ Schedule_t slSquidWallow[] =
 
 			"SquidWallow"}};
 
-DEFINE_CUSTOM_SCHEDULES(CBullsquid){
-	slSquidRangeAttack1,
+BEGIN_CUSTOM_SCHEDULES(CBullsquid)
+slSquidRangeAttack1,
 	slSquidChaseEnemy,
 	slSquidHurtHop,
 	slSquidSeeCrab,
 	slSquidEat,
 	slSquidSniffAndEat,
-	slSquidWallow};
+	slSquidWallow
+	END_CUSTOM_SCHEDULES();
 
-IMPLEMENT_CUSTOM_SCHEDULES(CBullsquid, CBaseMonster);
-
-Schedule_t* CBullsquid::GetSchedule()
+const Schedule_t* CBullsquid::GetSchedule()
 {
 	switch (m_MonsterState)
 	{
@@ -1046,7 +1044,7 @@ Schedule_t* CBullsquid::GetSchedule()
 	return CBaseMonster::GetSchedule();
 }
 
-Schedule_t* CBullsquid::GetScheduleOfType(int Type)
+const Schedule_t* CBullsquid::GetScheduleOfType(int Type)
 {
 	switch (Type)
 	{
@@ -1076,7 +1074,7 @@ Schedule_t* CBullsquid::GetScheduleOfType(int Type)
 	return CBaseMonster::GetScheduleOfType(Type);
 }
 
-void CBullsquid::StartTask(Task_t* pTask)
+void CBullsquid::StartTask(const Task_t* pTask)
 {
 	m_iTaskStatus = TASKSTATUS_RUNNING;
 
@@ -1127,7 +1125,7 @@ void CBullsquid::StartTask(Task_t* pTask)
 	}
 }
 
-void CBullsquid::RunTask(Task_t* pTask)
+void CBullsquid::RunTask(const Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{

@@ -59,13 +59,14 @@ class COFShockRoach : public CBaseMonster
 {
 	DECLARE_CLASS(COFShockRoach, CBaseMonster);
 	DECLARE_DATAMAP();
+	DECLARE_CUSTOM_SCHEDULES();
 
 public:
 	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
-	void RunTask(Task_t* pTask) override;
-	void StartTask(Task_t* pTask) override;
+	void RunTask(const Task_t* pTask) override;
+	void StartTask(const Task_t* pTask) override;
 	void SetYawSpeed() override;
 
 	/**
@@ -94,14 +95,12 @@ public:
 	virtual float GetDamageAmount() { return GetSkillFloat("shockroach_dmg_bite"sv); }
 	virtual int GetVoicePitch() { return 100; }
 	virtual float GetSoundVolue() { return 1.0; }
-	Schedule_t* GetScheduleOfType(int Type) override;
+	const Schedule_t* GetScheduleOfType(int Type) override;
 
 	void MonsterThink() override;
 
 	float m_flBirthTime;
 	bool m_fRoachSolid;
-
-	CUSTOM_SCHEDULES;
 
 	static const char* pIdleSounds[];
 	static const char* pAlertSounds[];
@@ -117,12 +116,10 @@ DEFINE_FIELD(m_flBirthTime, FIELD_TIME),
 	DEFINE_FUNCTION(LeapTouch),
 	END_DATAMAP();
 
-DEFINE_CUSTOM_SCHEDULES(COFShockRoach){
-	slRCRangeAttack1,
-	slRCRangeAttack1Fast,
-};
-
-IMPLEMENT_CUSTOM_SCHEDULES(COFShockRoach, CBaseMonster);
+BEGIN_CUSTOM_SCHEDULES(COFShockRoach)
+slRCRangeAttack1,
+	slRCRangeAttack1Fast
+	END_CUSTOM_SCHEDULES();
 
 const char* COFShockRoach::pIdleSounds[] =
 	{
@@ -296,7 +293,7 @@ void COFShockRoach::Precache()
 	PrecacheModel(STRING(pev->model));
 }
 
-void COFShockRoach::RunTask(Task_t* pTask)
+void COFShockRoach::RunTask(const Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
@@ -364,7 +361,7 @@ void COFShockRoach::PrescheduleThink()
 	}
 }
 
-void COFShockRoach::StartTask(Task_t* pTask)
+void COFShockRoach::StartTask(const Task_t* pTask)
 {
 	m_iTaskStatus = TASKSTATUS_RUNNING;
 
@@ -436,7 +433,7 @@ void COFShockRoach::DeathSound()
 {
 }
 
-Schedule_t* COFShockRoach::GetScheduleOfType(int Type)
+const Schedule_t* COFShockRoach::GetScheduleOfType(int Type)
 {
 	switch (Type)
 	{

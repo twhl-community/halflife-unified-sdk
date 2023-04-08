@@ -804,7 +804,7 @@ void CHGrunt::Precache()
 	m_iShotgunShell = PrecacheModel("models/shotgunshell.mdl");
 }
 
-void CHGrunt::StartTask(Task_t* pTask)
+void CHGrunt::StartTask(const Task_t* pTask)
 {
 	m_iTaskStatus = TASKSTATUS_RUNNING;
 
@@ -852,7 +852,7 @@ void CHGrunt::StartTask(Task_t* pTask)
 	}
 }
 
-void CHGrunt::RunTask(Task_t* pTask)
+void CHGrunt::RunTask(const Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
@@ -1466,8 +1466,8 @@ Schedule_t slGruntRepelLand[] =
 			"Repel Land"},
 };
 
-DEFINE_CUSTOM_SCHEDULES(CHGrunt){
-	slGruntFail,
+BEGIN_CUSTOM_SCHEDULES(CHGrunt)
+slGruntFail,
 	slGruntCombatFail,
 	slGruntVictoryDance,
 	slGruntEstablishLineOfFire,
@@ -1487,10 +1487,8 @@ DEFINE_CUSTOM_SCHEDULES(CHGrunt){
 	slGruntRangeAttack2,
 	slGruntRepel,
 	slGruntRepelAttack,
-	slGruntRepelLand,
-};
-
-IMPLEMENT_CUSTOM_SCHEDULES(CHGrunt, CSquadMonster);
+	slGruntRepelLand
+	END_CUSTOM_SCHEDULES();
 
 std::tuple<int, Activity> CHGrunt::GetSequenceForActivity(Activity NewActivity)
 {
@@ -1604,7 +1602,7 @@ void CHGrunt::SetActivity(Activity NewActivity)
 	}
 }
 
-Schedule_t* CHGrunt::GetSchedule()
+const Schedule_t* CHGrunt::GetSchedule()
 {
 
 	// clear old sentence
@@ -1850,7 +1848,7 @@ Schedule_t* CHGrunt::GetSchedule()
 	return CSquadMonster::GetSchedule();
 }
 
-Schedule_t* CHGrunt::GetScheduleOfType(int Type)
+const Schedule_t* CHGrunt::GetScheduleOfType(int Type)
 {
 	switch (Type)
 	{

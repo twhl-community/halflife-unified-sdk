@@ -729,17 +729,15 @@ Schedule_t slVoltigoreThreatDisplay[] =
 			"VoltigoreThreatDisplay"},
 };
 
-DEFINE_CUSTOM_SCHEDULES(COFVoltigore){
-	slVoltigoreFail,
+BEGIN_CUSTOM_SCHEDULES(COFVoltigore)
+slVoltigoreFail,
 	slVoltigoreCombatFail,
 	slVoltigoreStandoff,
 	slVoltigoreRangeAttack1,
 	slVoltigoreTakeCoverFromEnemy,
 	slVoltigoreVictoryDance,
-	slVoltigoreThreatDisplay,
-};
-
-IMPLEMENT_CUSTOM_SCHEDULES(COFVoltigore, CSquadMonster);
+	slVoltigoreThreatDisplay
+	END_CUSTOM_SCHEDULES();
 
 bool COFVoltigore::FCanCheckAttacks()
 {
@@ -796,7 +794,7 @@ bool COFVoltigore::CheckRangeAttack1(float flDot, float flDist)
 	return false;
 }
 
-void COFVoltigore::StartTask(Task_t* pTask)
+void COFVoltigore::StartTask(const Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
@@ -873,7 +871,7 @@ void COFVoltigore::StartTask(Task_t* pTask)
 	}
 }
 
-void COFVoltigore::RunTask(Task_t* pTask)
+void COFVoltigore::RunTask(const Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
@@ -917,7 +915,7 @@ void COFVoltigore::RunTask(Task_t* pTask)
 	}
 }
 
-Schedule_t* COFVoltigore::GetSchedule()
+const Schedule_t* COFVoltigore::GetSchedule()
 {
 	if (HasConditions(bits_COND_HEAR_SOUND))
 	{
@@ -977,7 +975,7 @@ Schedule_t* COFVoltigore::GetSchedule()
 	return CSquadMonster::GetSchedule();
 }
 
-Schedule_t* COFVoltigore::GetScheduleOfType(int Type)
+const Schedule_t* COFVoltigore::GetScheduleOfType(int Type)
 {
 	switch (Type)
 	{

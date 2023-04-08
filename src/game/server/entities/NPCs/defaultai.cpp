@@ -833,77 +833,73 @@ Schedule_t slTakeCoverFromEnemy[] =
 			"tlTakeCoverFromEnemy"},
 };
 
-Schedule_t* CBaseMonster::m_scheduleList[] =
-	{
-		slIdleStand,
-		slIdleTrigger,
-		slIdleWalk,
-		slAmbush,
-		slActiveIdle,
-		slWakeAngry,
-		slAlertFace,
-		slAlertSmallFlinch,
-		slAlertStand,
-		slInvestigateSound,
-		slCombatStand,
-		slCombatFace,
-		slStandoff,
-		slArmWeapon,
-		slReload,
-		slRangeAttack1,
-		slRangeAttack2,
-		slPrimaryMeleeAttack,
-		slSecondaryMeleeAttack,
-		slSpecialAttack1,
-		slSpecialAttack2,
-		slChaseEnemy,
-		slChaseEnemyFailed,
-		slSmallFlinch,
-		slDie,
-		slVictoryDance,
-		slBarnacleVictimGrab,
-		slBarnacleVictimChomp,
-		slError,
-		slWalkToScript,
-		slRunToScript,
-		slWaitScript,
-		slFaceScript,
-		slCower,
-		slTakeCoverFromOrigin,
-		slTakeCoverFromBestSound,
-		slTakeCoverFromEnemy,
-		slFail};
+BEGIN_CUSTOM_SCHEDULES_NOBASE(CBaseMonster)
+slIdleStand,
+	slIdleTrigger,
+	slIdleWalk,
+	slAmbush,
+	slActiveIdle,
+	slWakeAngry,
+	slAlertFace,
+	slAlertSmallFlinch,
+	slAlertStand,
+	slInvestigateSound,
+	slCombatStand,
+	slCombatFace,
+	slStandoff,
+	slArmWeapon,
+	slReload,
+	slRangeAttack1,
+	slRangeAttack2,
+	slPrimaryMeleeAttack,
+	slSecondaryMeleeAttack,
+	slSpecialAttack1,
+	slSpecialAttack2,
+	slChaseEnemy,
+	slChaseEnemyFailed,
+	slSmallFlinch,
+	slDie,
+	slVictoryDance,
+	slBarnacleVictimGrab,
+	slBarnacleVictimChomp,
+	slError,
+	slWalkToScript,
+	slRunToScript,
+	slWaitScript,
+	slFaceScript,
+	slCower,
+	slTakeCoverFromOrigin,
+	slTakeCoverFromBestSound,
+	slTakeCoverFromEnemy,
+	slFail
+	END_CUSTOM_SCHEDULES();
 
-Schedule_t* CBaseMonster::ScheduleFromName(const char* pName)
+const Schedule_t* CBaseMonster::ScheduleFromName(const char* pName) const
 {
-	return ScheduleInList(pName, m_scheduleList, std::size(m_scheduleList));
-}
-
-Schedule_t* CBaseMonster::ScheduleInList(const char* pName, Schedule_t** pList, int listCount)
-{
-	int i;
-
 	if (!pName)
 	{
 		AILogger->debug("{} set to unnamed schedule!", STRING(pev->classname));
 		return nullptr;
 	}
 
-
-	for (i = 0; i < listCount; i++)
+	for (auto list = GetScheduleList(); list; list = list->BaseList)
 	{
-		if (!pList[i]->pName)
+		for (const auto schedule : list->Schedules)
 		{
-			AILogger->debug("Unnamed schedule!");
-			continue;
+			if (!schedule->pName)
+			{
+				AILogger->debug("Unnamed schedule!");
+				continue;
+			}
+			if (stricmp(pName, schedule->pName) == 0)
+				return schedule;
 		}
-		if (stricmp(pName, pList[i]->pName) == 0)
-			return pList[i];
 	}
+
 	return nullptr;
 }
 
-Schedule_t* CBaseMonster::GetScheduleOfType(int Type)
+const Schedule_t* CBaseMonster::GetScheduleOfType(int Type)
 {
 	//	AILogger->debug("Sched Type:{}", Type);
 	switch (Type)

@@ -205,6 +205,7 @@ class CPitdrone : public CBaseMonster
 {
 	DECLARE_CLASS(CPitdrone, CBaseMonster);
 	DECLARE_DATAMAP();
+	DECLARE_CUSTOM_SCHEDULES();
 
 public:
 	void OnCreate() override;
@@ -217,8 +218,8 @@ public:
 	void IdleSound() override;
 	void PainSound() override;
 	void AlertSound() override;
-	void StartTask(Task_t* pTask) override;
-	void RunTask(Task_t* pTask) override;
+	void StartTask(const Task_t* pTask) override;
+	void RunTask(const Task_t* pTask) override;
 	bool CheckMeleeAttack1(float flDot, float flDist) override;
 	bool CheckMeleeAttack2(float flDot, float flDist) override;
 	bool CheckRangeAttack1(float flDot, float flDist) override;
@@ -229,16 +230,14 @@ public:
 	void RunAI() override;
 
 	bool FValidateHintType(short sHint) override;
-	Schedule_t* GetSchedule() override;
-	Schedule_t* GetScheduleOfType(int Type) override;
+	const Schedule_t* GetSchedule() override;
+	const Schedule_t* GetScheduleOfType(int Type) override;
 	int IRelationship(CBaseEntity* pTarget) override;
 	int IgnoreConditions() override;
 
 	void CheckAmmo() override;
 	void GibMonster() override;
 	bool KeyValue(KeyValueData* pkvd) override;
-
-	CUSTOM_SCHEDULES;
 
 	float m_flLastHurtTime;	 //!< we keep track of this, because if something hurts a squid, it will forget about its love of headcrabs for a while.
 	float m_flNextSpikeTime; //!< last time the pit drone used the spike attack.
@@ -908,19 +907,18 @@ Schedule_t slPitdroneWaitInCover[] =
 
 			"PitdroneWaitInCover"}};
 
-DEFINE_CUSTOM_SCHEDULES(CPitdrone){
-	slPitdroneRangeAttack1,
+BEGIN_CUSTOM_SCHEDULES(CPitdrone)
+slPitdroneRangeAttack1,
 	slPitdroneChaseEnemy,
 	slPitdroneHurtHop,
 	slPitdroneEat,
 	slPitdroneSniffAndEat,
 	slPitdroneWallow,
 	slPitdroneHideReload,
-	slPitdroneWaitInCover};
+	slPitdroneWaitInCover
+	END_CUSTOM_SCHEDULES();
 
-IMPLEMENT_CUSTOM_SCHEDULES(CPitdrone, CBaseMonster);
-
-Schedule_t* CPitdrone::GetSchedule()
+const Schedule_t* CPitdrone::GetSchedule()
 {
 	switch (m_MonsterState)
 	{
@@ -1012,7 +1010,7 @@ Schedule_t* CPitdrone::GetSchedule()
 	return CBaseMonster::GetSchedule();
 }
 
-Schedule_t* CPitdrone::GetScheduleOfType(int Type)
+const Schedule_t* CPitdrone::GetScheduleOfType(int Type)
 {
 	switch (Type)
 	{
@@ -1047,7 +1045,7 @@ Schedule_t* CPitdrone::GetScheduleOfType(int Type)
 	return CBaseMonster::GetScheduleOfType(Type);
 }
 
-void CPitdrone::StartTask(Task_t* pTask)
+void CPitdrone::StartTask(const Task_t* pTask)
 {
 	m_iTaskStatus = TASKSTATUS_RUNNING;
 
@@ -1080,7 +1078,7 @@ void CPitdrone::StartTask(Task_t* pTask)
 	}
 }
 
-void CPitdrone::RunTask(Task_t* pTask)
+void CPitdrone::RunTask(const Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{

@@ -275,8 +275,6 @@ void CCineMonster::PossessEntity()
 
 void CCineAI::PossessEntity()
 {
-	Schedule_t* pNewSchedule;
-
 	CBaseEntity* pEntity = m_hTargetEnt;
 	CBaseMonster* pTarget = nullptr;
 	if (pEntity)
@@ -349,7 +347,7 @@ void CCineAI::PossessEntity()
 		// Already in a scripted state?
 		if (pTarget->m_MonsterState == MONSTERSTATE_SCRIPT)
 		{
-			pNewSchedule = pTarget->GetScheduleOfType(SCHED_AISCRIPT);
+			const Schedule_t* pNewSchedule = pTarget->GetScheduleOfType(SCHED_AISCRIPT);
 			pTarget->ChangeSchedule(pNewSchedule);
 		}
 	}

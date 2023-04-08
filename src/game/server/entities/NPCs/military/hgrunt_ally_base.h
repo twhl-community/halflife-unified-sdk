@@ -89,6 +89,7 @@ class CBaseHGruntAlly : public COFSquadTalkMonster
 {
 	DECLARE_CLASS(CBaseHGruntAlly, COFSquadTalkMonster);
 	DECLARE_DATAMAP();
+	DECLARE_CUSTOM_SCHEDULES();
 
 public:
 	void OnCreate() override;
@@ -135,8 +136,8 @@ public:
 	 */
 	void CheckAmmo() override;
 	void SetActivity(Activity NewActivity) override;
-	void StartTask(Task_t* pTask) override;
-	void RunTask(Task_t* pTask) override;
+	void StartTask(const Task_t* pTask) override;
+	void RunTask(const Task_t* pTask) override;
 	void DeathSound() override;
 	void PainSound() override;
 	void IdleSound() override;
@@ -164,8 +165,8 @@ public:
 	void SpeakSentence();
 
 	CBaseEntity* Kick();
-	Schedule_t* GetSchedule() override;
-	Schedule_t* GetScheduleOfType(int Type) override;
+	const Schedule_t* GetSchedule() override;
+	const Schedule_t* GetScheduleOfType(int Type) override;
 
 	/**
 	 *	@brief make sure we're not taking it in the helmet
@@ -201,8 +202,6 @@ public:
 	{
 		return COFSquadTalkMonster::GetIdealState();
 	}
-
-	CUSTOM_SCHEDULES;
 
 	bool m_lastAttackCheck;
 
@@ -262,12 +261,12 @@ protected:
 	/**
 	 *	@brief For medic grunts, lets them provide a schedule to handle healing
 	 */
-	virtual Schedule_t* GetHealSchedule() { return nullptr; }
+	virtual const Schedule_t* GetHealSchedule() { return nullptr; }
 
 	/**
 	 *	@brief For torch grunts, lets them provide a schedule to handle torch use
 	 */
-	virtual Schedule_t* GetTorchSchedule() { return nullptr; }
+	virtual const Schedule_t* GetTorchSchedule() { return nullptr; }
 
 	virtual bool CanTakeCoverAndReload() const { return !!pev->weapons; }
 };

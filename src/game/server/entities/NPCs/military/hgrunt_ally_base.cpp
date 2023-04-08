@@ -691,7 +691,7 @@ void CBaseHGruntAlly::Precache()
 	COFSquadTalkMonster::Precache();
 }
 
-void CBaseHGruntAlly::StartTask(Task_t* pTask)
+void CBaseHGruntAlly::StartTask(const Task_t* pTask)
 {
 	m_iTaskStatus = TASKSTATUS_RUNNING;
 
@@ -739,7 +739,7 @@ void CBaseHGruntAlly::StartTask(Task_t* pTask)
 	}
 }
 
-void CBaseHGruntAlly::RunTask(Task_t* pTask)
+void CBaseHGruntAlly::RunTask(const Task_t* pTask)
 {
 	switch (pTask->iTask)
 	{
@@ -1436,8 +1436,8 @@ Schedule_t slGruntAllyIdleStand[] =
 			"IdleStand"},
 };
 
-DEFINE_CUSTOM_SCHEDULES(CBaseHGruntAlly){
-	slGruntAllyFollow,
+BEGIN_CUSTOM_SCHEDULES(CBaseHGruntAlly)
+slGruntAllyFollow,
 	slGruntAllyFaceTarget,
 	slGruntAllyIdleStand,
 	slGruntAllyFail,
@@ -1460,10 +1460,8 @@ DEFINE_CUSTOM_SCHEDULES(CBaseHGruntAlly){
 	slGruntAllyRangeAttack2,
 	slGruntAllyRepel,
 	slGruntAllyRepelAttack,
-	slGruntAllyRepelLand,
-};
-
-IMPLEMENT_CUSTOM_SCHEDULES(CBaseHGruntAlly, COFSquadTalkMonster);
+	slGruntAllyRepelLand
+	END_CUSTOM_SCHEDULES();
 
 std::tuple<int, Activity> CBaseHGruntAlly::GetSequenceForActivity(Activity NewActivity)
 {
@@ -1549,7 +1547,7 @@ void CBaseHGruntAlly::SetActivity(Activity NewActivity)
 	}
 }
 
-Schedule_t* CBaseHGruntAlly::GetSchedule()
+const Schedule_t* CBaseHGruntAlly::GetSchedule()
 {
 	// clear old sentence
 	m_iSentence = HGRUNT_SENT_NONE;
@@ -1899,7 +1897,7 @@ Schedule_t* CBaseHGruntAlly::GetSchedule()
 	return COFSquadTalkMonster::GetSchedule();
 }
 
-Schedule_t* CBaseHGruntAlly::GetScheduleOfType(int Type)
+const Schedule_t* CBaseHGruntAlly::GetScheduleOfType(int Type)
 {
 	switch (Type)
 	{
