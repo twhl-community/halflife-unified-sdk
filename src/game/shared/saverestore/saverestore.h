@@ -48,6 +48,8 @@ public:
 	// Data is only valid if it's a valid pointer and if it has a token list
 	[[nodiscard]] static bool IsValidSaveRestoreData(SAVERESTOREDATA* data);
 
+	const DataMap* GetCurrentCompleteDataMap() const { return m_CurrentCompleteDataMap; }
+
 	const DataMap* GetCurrentDataMap() const { return m_CurrentDataMap; }
 
 protected:
@@ -56,6 +58,7 @@ protected:
 	unsigned int HashString(const char* pszToken);
 
 protected:
+	const DataMap* m_CurrentCompleteDataMap{};
 	const DataMap* m_CurrentDataMap{};
 };
 
@@ -65,7 +68,7 @@ class CSave : public CSaveRestoreBuffer
 public:
 	using CSaveRestoreBuffer::CSaveRestoreBuffer;
 
-	bool WriteFields(void* baseData, const DataMap& dataMap);
+	bool WriteFields(void* baseData, const DataMap& completeDataMap, const DataMap& currentDataMap);
 
 	std::byte* GetWriteAddress();
 
@@ -98,7 +101,7 @@ class CRestore : public CSaveRestoreBuffer
 public:
 	using CSaveRestoreBuffer::CSaveRestoreBuffer;
 
-	bool ReadFields(void* baseData, const DataMap& dataMap);
+	bool ReadFields(void* baseData, const DataMap& completeDataMap, const DataMap& currentDataMap);
 	int ReadField(void* baseData, const DataMap& dataMap, const char* fieldName, int startField, std::byte* data, int size);
 	bool Empty();
 	void SetGlobalMode(bool global) { m_global = global; }

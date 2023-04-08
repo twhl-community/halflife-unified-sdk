@@ -167,14 +167,16 @@ bool CBaseEntity::KeyValue(KeyValueData* pkvd)
 bool CBaseEntity::Save(CSave& save)
 {
 #ifndef CLIENT_DLL
-	if (auto entvarsMap = entvars_t::GetLocalDataMap(); !save.WriteFields(pev, *entvarsMap))
+	if (auto entvarsMap = entvars_t::GetLocalDataMap(); !save.WriteFields(pev, *entvarsMap, *entvarsMap))
 	{
 		return false;
 	}
 
-	for (auto dataMap = GetDataMap(); dataMap; dataMap = dataMap->BaseMap)
+	auto completeDataMap = GetDataMap();
+
+	for (auto dataMap = completeDataMap; dataMap; dataMap = dataMap->BaseMap)
 	{
-		if (!save.WriteFields(this, *dataMap))
+		if (!save.WriteFields(this, *completeDataMap, *dataMap))
 		{
 			return false;
 		}
@@ -187,14 +189,16 @@ bool CBaseEntity::Save(CSave& save)
 bool CBaseEntity::Restore(CRestore& restore)
 {
 #ifndef CLIENT_DLL
-	if (!restore.ReadFields(pev, *entvars_t::GetLocalDataMap()))
+	if (!restore.ReadFields(pev, *entvars_t::GetLocalDataMap(), *entvars_t::GetLocalDataMap()))
 	{
 		return false;
 	}
 
-	for (auto dataMap = GetDataMap(); dataMap; dataMap = dataMap->BaseMap)
+	auto completeDataMap = GetDataMap();
+
+	for (auto dataMap = completeDataMap; dataMap; dataMap = dataMap->BaseMap)
 	{
-		if (!restore.ReadFields(this, *dataMap))
+		if (!restore.ReadFields(this, *completeDataMap, *dataMap))
 		{
 			return false;
 		}

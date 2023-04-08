@@ -284,7 +284,7 @@ int DispatchRestore(edict_t* pent, SAVERESTOREDATA* pSaveData, int globalEntity)
 		{
 			CRestore tmpRestore(*pSaveData);
 			tmpRestore.PrecacheMode(false);
-			tmpRestore.ReadFields(&tmpVars, *entvars_t::GetLocalDataMap());
+			tmpRestore.ReadFields(&tmpVars, *entvars_t::GetLocalDataMap(), * entvars_t::GetLocalDataMap());
 
 			// HACKHACK - reset the save pointers, we're going to restore for real this time
 			pSaveData->size = pSaveData->pTable[pSaveData->currentIndex].location;
@@ -483,7 +483,7 @@ void SaveWriteFields(SAVERESTOREDATA* pSaveData, const char* pname, void* pBaseD
 	auto dataMap = GetOrCreateDataMap(pname, pFields, fieldCount);
 
 	CSave saveHelper(*pSaveData);
-	saveHelper.WriteFields(pBaseData, *dataMap);
+	saveHelper.WriteFields(pBaseData, *dataMap, *dataMap);
 }
 
 void SaveReadFields(SAVERESTOREDATA* pSaveData, const char* pname, void* pBaseData, TYPEDESCRIPTION* pFields, int fieldCount)
@@ -506,7 +506,7 @@ void SaveReadFields(SAVERESTOREDATA* pSaveData, const char* pname, void* pBaseDa
 	auto dataMap = GetOrCreateDataMap(pname, pFields, fieldCount);
 
 	CRestore restoreHelper(*pSaveData);
-	restoreHelper.ReadFields(pBaseData, *dataMap);
+	restoreHelper.ReadFields(pBaseData, *dataMap, *dataMap);
 }
 
 static void CheckForBackwardsBounds(CBaseEntity* entity)

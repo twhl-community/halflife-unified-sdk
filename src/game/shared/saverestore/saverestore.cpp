@@ -146,9 +146,9 @@ bool CSaveRestoreBuffer::IsValidSaveRestoreData(SAVERESTOREDATA* data)
 	return isValid;
 }
 
-bool CSave::WriteFields(void* baseData, const DataMap& dataMap)
+bool CSave::WriteFields(void* baseData, const DataMap& completeDataMap, const DataMap& currentDataMap)
 {
-	WriteHeader(dataMap.ClassName, sizeof(int));
+	WriteHeader(currentDataMap.ClassName, sizeof(int));
 	auto fieldCount = WriteValue(int(0));
 
 	if (!fieldCount)
@@ -156,9 +156,10 @@ bool CSave::WriteFields(void* baseData, const DataMap& dataMap)
 		return false;
 	}
 
-	m_CurrentDataMap = &dataMap;
+	m_CurrentCompleteDataMap = &completeDataMap;
+	m_CurrentDataMap = &currentDataMap;
 
-	for (const auto& member : dataMap.Members)
+	for (const auto& member : currentDataMap.Members)
 	{
 		auto field = std::get_if<DataFieldDescription>(&member);
 
@@ -193,6 +194,7 @@ bool CSave::WriteFields(void* baseData, const DataMap& dataMap)
 	}
 
 	m_CurrentDataMap = nullptr;
+	m_CurrentCompleteDataMap = nullptr;
 
 	return true;
 }
@@ -263,7 +265,7 @@ bool CSave::DataEmpty(const std::byte* pdata, int size)
 	return true;
 }
 
-bool CRestore::ReadFields(void* baseData, const DataMap& dataMap)
+bool CRestore::ReadFields(void* baseData, const DataMap& completeDataMap, const DataMap& currentDataMap)
 {
 	const int headerSize = BufferReadValue<short>();
 
@@ -272,9 +274,9 @@ bool CRestore::ReadFields(void* baseData, const DataMap& dataMap)
 	const int headerToken = BufferReadValue<short>();
 
 	// Check the struct name
-	if (headerToken != TokenHash(dataMap.ClassName)) // Field Set marker
+	if (headerToken != TokenHash(currentDataMap.ClassName)) // Field Set marker
 	{
-		// Logger->error("Expected {} found {}!", dataMap.ClassName, BufferPointer());
+		// Logger->error("Expected {} found {}!", currentDataMap.ClassName, BufferPointer());
 		BufferRewind(2 * sizeof(short));
 		return false;
 	}
@@ -284,10 +286,11 @@ bool CRestore::ReadFields(void* baseData, const DataMap& dataMap)
 
 	int lastField = 0; // Make searches faster, most data is read/written in the same order
 
-	m_CurrentDataMap = &dataMap;
+	m_CurrentCompleteDataMap = &completeDataMap;
+	m_CurrentDataMap = &currentDataMap;
 
 	// Clear out base data
-	for (const auto& member : dataMap.Members)
+	for (const auto& member : currentDataMap.Members)
 	{
 		auto field = std::get_if<DataFieldDescription>(&member);
 
@@ -317,11 +320,12 @@ bool CRestore::ReadFields(void* baseData, const DataMap& dataMap)
 	for (int field = 0; field < fileCount; ++field)
 	{
 		BufferReadHeader(header);
-		lastField = ReadField(baseData, dataMap, m_data.pTokens[header.token], lastField, header.pData, header.size);
+		lastField = ReadField(baseData, currentDataMap, m_data.pTokens[header.token], lastField, header.pData, header.size);
 		lastField++;
 	}
 
 	m_CurrentDataMap = nullptr;
+	m_CurrentCompleteDataMap = nullptr;
 
 	return true;
 }

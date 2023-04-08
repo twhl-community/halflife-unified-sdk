@@ -117,13 +117,13 @@ DEFINE_ARRAY(name, FIELD_CHARACTER, 64),
 
 bool CGlobalState::Save(CSave& save)
 {
-	if (!save.WriteFields(this, *GetDataMap()))
+	if (!save.WriteFields(this, *GetDataMap(), *GetDataMap()))
 		return false;
 
 	globalentity_t* pEntity = m_pList;
 	for (int i = 0; i < m_listCount && pEntity; i++)
 	{
-		if (!save.WriteFields(pEntity, *pEntity->GetDataMap()))
+		if (!save.WriteFields(pEntity, *pEntity->GetDataMap(), *pEntity->GetDataMap()))
 			return false;
 
 		pEntity = pEntity->pNext;
@@ -137,7 +137,7 @@ bool CGlobalState::Restore(CRestore& restore)
 	globalentity_t tmpEntity;
 
 	ClearStates();
-	if (!restore.ReadFields(this, *GetDataMap()))
+	if (!restore.ReadFields(this, *GetDataMap(), *GetDataMap()))
 		return false;
 
 	const int listCount = m_listCount; // Get new list count
@@ -145,7 +145,7 @@ bool CGlobalState::Restore(CRestore& restore)
 
 	for (int i = 0; i < listCount; i++)
 	{
-		if (!restore.ReadFields(&tmpEntity, *tmpEntity.GetDataMap()))
+		if (!restore.ReadFields(&tmpEntity, *tmpEntity.GetDataMap(), *tmpEntity.GetDataMap()))
 			return false;
 		EntityAdd(MAKE_STRING(tmpEntity.name), MAKE_STRING(tmpEntity.levelName), tmpEntity.state);
 	}

@@ -268,7 +268,7 @@ std::size_t DataFieldFunctionPointerSerializer::GetFieldSize() const
 
 void DataFieldFunctionPointerSerializer::Serialize(CSave& save, const std::byte* fields, std::size_t count) const
 {
-	const auto dataMap = save.GetCurrentDataMap();
+	const auto dataMap = save.GetCurrentCompleteDataMap();
 
 	auto address = reinterpret_cast<const BASEPTR*>(fields);
 
@@ -291,7 +291,7 @@ void DataFieldFunctionPointerSerializer::Serialize(CSave& save, const std::byte*
 
 void DataFieldFunctionPointerSerializer::Deserialize(CRestore& restore, std::byte* fields, std::size_t count) const
 {
-	const auto dataMap = restore.GetCurrentDataMap();
+	const auto dataMap = restore.GetCurrentCompleteDataMap();
 
 	auto readAddress = reinterpret_cast<const char*>(restore.GetReadAddress());
 	auto address = reinterpret_cast<BASEPTR*>(fields);
