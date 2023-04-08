@@ -23,4 +23,11 @@
 			<Item Name="[message]">pev->message</Item>
 		</Expand>
 	</Type>
+	
+	<Type Name="EntityHandle&lt;*&gt;">
+		<DisplayString Condition="m_Edict != nullptr &amp;&amp; m_Edict-&gt;serialnumber == m_SerialNumber &amp;&amp; m_Edict-&gt;pvPrivateData != nullptr">
+			{{ {(CBaseEntity*) m_Edict->pvPrivateData} }}
+		</DisplayString>
+		<DisplayString>{{ Null entity handle }}</DisplayString>
+	</Type>
 </AutoVisualizer>

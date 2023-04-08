@@ -216,7 +216,7 @@ bool CMultiSource::IsTriggered(CBaseEntity*)
 void CMultiSource::Register()
 {
 	m_iTotal = 0;
-	memset(m_rgEntities, 0, MS_MAX_TARGETS * sizeof(EHANDLE));
+	std::fill(std::begin(m_rgEntities), std::end(m_rgEntities), EHANDLE{});
 
 	SetThink(nullptr);
 
