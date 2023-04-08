@@ -213,18 +213,13 @@ DEFINE_FIELD(m_toggle_state, FIELD_INTEGER),
 	DEFINE_FIELD(m_flMoveDistance, FIELD_FLOAT),
 	DEFINE_FIELD(m_flWait, FIELD_FLOAT),
 	DEFINE_FIELD(m_flLip, FIELD_FLOAT),
-	DEFINE_FIELD(m_flTWidth, FIELD_FLOAT),
-	DEFINE_FIELD(m_flTLength, FIELD_FLOAT),
 	DEFINE_FIELD(m_vecPosition1, FIELD_POSITION_VECTOR),
 	DEFINE_FIELD(m_vecPosition2, FIELD_POSITION_VECTOR),
 	DEFINE_FIELD(m_vecAngle1, FIELD_VECTOR), // UNDONE: Position could go through transition, but also angle?
 	DEFINE_FIELD(m_vecAngle2, FIELD_VECTOR), // UNDONE: Position could go through transition, but also angle?
-	DEFINE_FIELD(m_cTriggersLeft, FIELD_INTEGER),
-	DEFINE_FIELD(m_flHeight, FIELD_FLOAT),
 	DEFINE_FIELD(m_pfnCallWhenMoveDone, FIELD_FUNCTIONPOINTER),
 	DEFINE_FIELD(m_vecFinalDest, FIELD_POSITION_VECTOR),
 	DEFINE_FIELD(m_vecFinalAngle, FIELD_VECTOR),
-	DEFINE_FIELD(m_bitsDamageInflict, FIELD_INTEGER), // damage type inflicted
 	DEFINE_FUNCTION(LinearMoveDone),
 	DEFINE_FUNCTION(AngularMoveDone),
 	END_DATAMAP();

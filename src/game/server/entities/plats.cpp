@@ -44,12 +44,14 @@ public:
 	string_t m_MoveSound; // sound a plat makes while moving
 	string_t m_StopSound; // sound a plat makes when it stops
 	float m_volume;		  // Sound volume
+	float m_flHeight;
 };
 
 BEGIN_DATAMAP(CBasePlatTrain)
 DEFINE_FIELD(m_MoveSound, FIELD_SOUNDNAME),
 	DEFINE_FIELD(m_StopSound, FIELD_SOUNDNAME),
 	DEFINE_FIELD(m_volume, FIELD_FLOAT),
+	DEFINE_FIELD(m_flHeight, FIELD_FLOAT),
 	END_DATAMAP();
 
 bool CBasePlatTrain::KeyValue(KeyValueData* pkvd)
@@ -194,11 +196,6 @@ LINK_ENTITY_TO_CLASS(func_plat_trigger, CPlatTrigger);
 
 void CFuncPlat::Setup()
 {
-	if (m_flTLength == 0)
-		m_flTLength = 80;
-	if (m_flTWidth == 0)
-		m_flTWidth = 10;
-
 	pev->angles = g_vecZero;
 
 	pev->solid = SOLID_BSP;

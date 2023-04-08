@@ -48,16 +48,6 @@ bool CBaseTrigger::KeyValue(KeyValueData* pkvd)
 		pev->dmg = atof(pkvd->szValue);
 		return true;
 	}
-	else if (FStrEq(pkvd->szKeyName, "count"))
-	{
-		m_cTriggersLeft = (int)atof(pkvd->szValue);
-		return true;
-	}
-	else if (FStrEq(pkvd->szKeyName, "damagetype"))
-	{
-		m_bitsDamageInflict = atoi(pkvd->szValue);
-		return true;
-	}
 
 	return CBaseToggle::KeyValue(pkvd);
 }

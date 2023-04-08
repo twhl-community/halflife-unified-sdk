@@ -488,6 +488,7 @@ class CTriggerHurt : public CBaseTrigger
 	DECLARE_DATAMAP();
 
 public:
+	bool KeyValue(KeyValueData* pkvd) override;
 	void Spawn() override;
 
 	/**
@@ -500,14 +501,29 @@ public:
 	*	according to distance from center of trigger
 	*/
 	void RadiationThink();
+
+private:
+	int m_bitsDamageInflict; // DMG_ damage type that the trigger does
 };
 
 BEGIN_DATAMAP(CTriggerHurt)
-DEFINE_FUNCTION(HurtTouch),
+DEFINE_FIELD(m_bitsDamageInflict, FIELD_INTEGER),
+	DEFINE_FUNCTION(HurtTouch),
 	DEFINE_FUNCTION(RadiationThink),
 	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(trigger_hurt, CTriggerHurt);
+
+bool CTriggerHurt::KeyValue(KeyValueData* pkvd)
+{
+	if (FStrEq(pkvd->szKeyName, "damagetype"))
+	{
+		m_bitsDamageInflict = atoi(pkvd->szValue);
+		return true;
+	}
+
+	return BaseClass::KeyValue(pkvd);
+}
 
 void CTriggerHurt::Spawn()
 {
@@ -713,11 +729,21 @@ void CTriggerHurt::RadiationThink()
 
 class CTriggerMonsterJump : public CBaseTrigger
 {
+	DECLARE_CLASS(CTriggerMonsterJump, CBaseTrigger);
+	DECLARE_DATAMAP();
+
 public:
 	void Spawn() override;
 	void Touch(CBaseEntity* pOther) override;
 	void Think() override;
+
+private:
+	float m_flHeight;
 };
+
+BEGIN_DATAMAP(CTriggerMonsterJump)
+DEFINE_FIELD(m_flHeight, FIELD_FLOAT),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(trigger_monsterjump, CTriggerMonsterJump);
 
@@ -846,16 +872,32 @@ class CTriggerCounter : public CBaseTrigger
 	DECLARE_DATAMAP();
 
 public:
+	bool KeyValue(KeyValueData* pkvd) override;
 	void Spawn() override;
 
 	void CounterUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+
+private:
+	int m_cTriggersLeft; // trigger_counter only, # of activations remaining
 };
 
 BEGIN_DATAMAP(CTriggerCounter)
+DEFINE_FIELD(m_cTriggersLeft, FIELD_INTEGER),
 	DEFINE_FUNCTION(CounterUse),
 	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(trigger_counter, CTriggerCounter);
+
+bool CTriggerCounter::KeyValue(KeyValueData* pkvd)
+{
+	if (FStrEq(pkvd->szKeyName, "count"))
+	{
+		m_cTriggersLeft = atoi(pkvd->szValue);
+		return true;
+	}
+
+	return BaseClass::KeyValue(pkvd);
+}
 
 void CTriggerCounter::Spawn()
 {

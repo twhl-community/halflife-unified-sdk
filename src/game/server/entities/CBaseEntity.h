@@ -431,6 +431,7 @@ private:
 		}
 	}
 
+public:
 	template <typename T, typename Dest, typename Source>
 	Dest FunctionSet(Dest& pointer, Source func, const char* name)
 	{
@@ -452,7 +453,6 @@ private:
 		return pointer;
 	}
 
-public:
 	template <typename T>
 	BASEPTR ThinkSet(TBASEPTR<T> func, const char* name)
 	{

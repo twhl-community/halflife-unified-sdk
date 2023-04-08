@@ -19,6 +19,10 @@
 
 #define SF_ITEM_USE_ONLY 256 //  ITEM_USE_ONLY = BUTTON_USE_ONLY = DOOR_USE_ONLY!!!
 
+class CBaseToggle;
+
+using MoveDonePtr = TBASEPTR<CBaseToggle>;
+
 /**
 *	@brief generic Toggle entity.
 */
@@ -35,21 +39,15 @@ public:
 	float m_flMoveDistance;		// how far a door should slide or rotate
 	float m_flWait;
 	float m_flLip;
-	float m_flTWidth;  // for plats
-	float m_flTLength; // for plats
 
 	Vector m_vecPosition1;
 	Vector m_vecPosition2;
 	Vector m_vecAngle1;
 	Vector m_vecAngle2;
 
-	int m_cTriggersLeft; // trigger_counter only, # of activations remaining
-	float m_flHeight;
-	TBASEPTR<CBaseToggle> m_pfnCallWhenMoveDone;
+	MoveDonePtr m_pfnCallWhenMoveDone;
 	Vector m_vecFinalDest;
 	Vector m_vecFinalAngle;
-
-	int m_bitsDamageInflict; // DMG_ damage type that the door or tigger does
 
 	float GetDelay() override { return m_flWait; }
 
@@ -78,5 +76,12 @@ public:
 	static float AxisValue(int flags, const Vector& angles);
 	static void AxisDir(CBaseEntity* entity);
 	static float AxisDelta(int flags, const Vector& angle1, const Vector& angle2);
+
+	template <typename T>
+	MoveDonePtr MoveDoneSet(TBASEPTR<T> func, const char* name)
+	{
+		return FunctionSet<T>(m_pfnCallWhenMoveDone, func, name);
+	}
 };
-#define SetMoveDone(a) m_pfnCallWhenMoveDone = static_cast<decltype(CBaseToggle::m_pfnCallWhenMoveDone)>(a)
+
+#define SetMoveDone(a) MoveDoneSet(a, #a)
