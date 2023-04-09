@@ -24,8 +24,8 @@
 extern int iHornetPuff;
 
 /**
-*	@brief this is the projectile that the Alien Grunt fires.
-*/
+ *	@brief this is the projectile that the Alien Grunt fires.
+ */
 class CHornet : public CBaseMonster
 {
 	DECLARE_CLASS(CHornet, CBaseMonster);
@@ -36,30 +36,30 @@ public:
 	void Precache() override;
 
 	/**
-	*	@brief ID's Hornet as their owner
-	*/
+	 *	@brief ID's Hornet as their owner
+	 */
 	int Classify() override;
 
 	/**
-	*	@brief hornets will never get mad at each other, no matter who the owner is.
-	*/
+	 *	@brief hornets will never get mad at each other, no matter who the owner is.
+	 */
 	int IRelationship(CBaseEntity* pTarget) override;
 
 	void IgniteTrail();
 
 	/**
-	*	@brief starts a hornet out tracking its target
-	*/
+	 *	@brief starts a hornet out tracking its target
+	 */
 	void StartTrack();
 
 	/**
-	*	@brief starts a hornet out just flying straight.
-	*/
+	 *	@brief starts a hornet out just flying straight.
+	 */
 	void StartDart();
 
 	/**
-	*	@brief Hornet is flying, gently tracking target
-	*/
+	 *	@brief Hornet is flying, gently tracking target
+	 */
 	void TrackTarget();
 	void TrackTouch(CBaseEntity* pOther);
 	void DartTouch(CBaseEntity* pOther);

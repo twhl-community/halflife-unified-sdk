@@ -65,7 +65,8 @@ BitmapTGA* LoadTGAForRes(const char* pImageName)
 
 //===========================================================
 // All TFC Hud buttons are derived from this one.
-CommandButton::CommandButton(const char* text, int x, int y, int wide, int tall, bool bNoHighlight) : Button("", x, y, wide, tall)
+CommandButton::CommandButton(const char* text, int x, int y, int wide, int tall, bool bNoHighlight)
+	: Button("", x, y, wide, tall)
 {
 	m_iPlayerClass = 0;
 	m_bNoHighlight = bNoHighlight;
@@ -74,7 +75,8 @@ CommandButton::CommandButton(const char* text, int x, int y, int wide, int tall,
 	setText(text);
 }
 
-CommandButton::CommandButton(int iPlayerClass, const char* text, int x, int y, int wide, int tall, bool bFlat) : Button("", x, y, wide, tall)
+CommandButton::CommandButton(int iPlayerClass, const char* text, int x, int y, int wide, int tall, bool bFlat)
+	: Button("", x, y, wide, tall)
 {
 	m_iPlayerClass = iPlayerClass;
 	m_bNoHighlight = false;
@@ -83,7 +85,8 @@ CommandButton::CommandButton(int iPlayerClass, const char* text, int x, int y, i
 	setText(text);
 }
 
-CommandButton::CommandButton(const char* text, int x, int y, int wide, int tall, bool bNoHighlight, bool bFlat) : Button("", x, y, wide, tall)
+CommandButton::CommandButton(const char* text, int x, int y, int wide, int tall, bool bNoHighlight, bool bFlat)
+	: Button("", x, y, wide, tall)
 {
 	m_iPlayerClass = 0;
 	m_bFlat = bFlat;
@@ -312,14 +315,16 @@ bool ClassButton::IsNotValid()
 
 //===========================================================
 // Button with Class image beneath it
-CImageLabel::CImageLabel(const char* pImageName, int x, int y) : Label("", x, y)
+CImageLabel::CImageLabel(const char* pImageName, int x, int y)
+	: Label("", x, y)
 {
 	setContentFitted(true);
 	m_pTGA = LoadTGAForRes(pImageName);
 	Label::setImage(m_pTGA);
 }
 
-CImageLabel::CImageLabel(const char* pImageName, int x, int y, int wide, int tall) : Label("", x, y, wide, tall)
+CImageLabel::CImageLabel(const char* pImageName, int x, int y, int wide, int tall)
+	: Label("", x, y, wide, tall)
 {
 	setContentFitted(true);
 	m_pTGA = LoadTGAForRes(pImageName);
@@ -416,7 +421,8 @@ void CCommandMenu::paintBackground()
 //=================================================================================
 // CUSTOM SCROLLPANEL
 //=================================================================================
-CTFScrollButton::CTFScrollButton(int iArrow, const char* text, int x, int y, int wide, int tall) : CommandButton(text, x, y, wide, tall)
+CTFScrollButton::CTFScrollButton(int iArrow, const char* text, int x, int y, int wide, int tall)
+	: CommandButton(text, x, y, wide, tall)
 {
 	// Set text color to orange
 	setFgColor(Scheme::sc_primary1);
@@ -496,7 +502,8 @@ void CTFSlider::paintBackground()
 	}
 }
 
-CTFScrollPanel::CTFScrollPanel(int x, int y, int wide, int tall) : ScrollPanel(x, y, wide, tall)
+CTFScrollPanel::CTFScrollPanel(int x, int y, int wide, int tall)
+	: ScrollPanel(x, y, wide, tall)
 {
 	ScrollBar* pScrollBar = getVerticalScrollBar();
 	pScrollBar->setButton(new CTFScrollButton(ARROW_UP, "", 0, 0, 16, 16), 0);

@@ -41,7 +41,7 @@ bool CHudProjectInfo::Draw(float flTime)
 	if (m_IsAlphaBuild || m_ShowProjectInfo->value > 0)
 	{
 		const int xPos = 20;
-		
+
 		int lineWidth, lineHeight;
 		GetConsoleStringSize("", &lineWidth, &lineHeight);
 

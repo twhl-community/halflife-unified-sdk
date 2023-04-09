@@ -66,7 +66,9 @@ private:
 };
 
 inline RiffChunkReader::RiffChunkReader(const std::byte* data, std::size_t size)
-	: m_Data(data), m_Size(size), m_ReadPosition(data)
+	: m_Data(data),
+	  m_Size(size),
+	  m_ReadPosition(data)
 {
 }
 

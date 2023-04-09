@@ -16,8 +16,8 @@
 #include "cbase.h"
 
 /**
-*	@brief environmental monster
-*/
+ *	@brief environmental monster
+ */
 class CRat : public CBaseMonster
 {
 public:

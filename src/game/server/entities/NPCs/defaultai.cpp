@@ -14,9 +14,9 @@
  ****/
 
 /**
-*	@file
-*	Default behaviors.
-*/
+ *	@file
+ *	Default behaviors.
+ */
 
 #include "cbase.h"
 #include "defaultai.h"
@@ -147,10 +147,10 @@ Task_t tlActiveIdle[] =
 };
 
 /**
-*	@brief !!!BUGBUG - if this schedule doesn't complete on its own, the monster's HintNode will not be cleared,
-*	and the rest of the monster's group will avoid that node because they think the group member
-*	that was previously interrupted is still using that node to active idle.
-*/
+ *	@brief !!!BUGBUG - if this schedule doesn't complete on its own, the monster's HintNode will not be cleared,
+ *	and the rest of the monster's group will avoid that node because they think the group member
+ *	that was previously interrupted is still using that node to active idle.
+ */
 Schedule_t slActiveIdle[] =
 	{
 		{tlActiveIdle,
@@ -212,8 +212,8 @@ Task_t tlAlertSmallFlinch[] =
 };
 
 /**
-*	@brief shot, but didn't see attacker, flinch then face
-*/
+ *	@brief shot, but didn't see attacker, flinch then face
+ */
 Schedule_t slAlertSmallFlinch[] =
 	{
 		{tlAlertSmallFlinch,
@@ -273,8 +273,8 @@ Task_t tlInvestigateSound[] =
 };
 
 /**
-*	@brief sends a monster to the location of the sound that was just heard, to check things out.
-*/
+ *	@brief sends a monster to the location of the sound that was just heard, to check things out.
+ */
 Schedule_t slInvestigateSound[] =
 	{
 		{tlInvestigateSound,
@@ -335,9 +335,9 @@ Task_t tlStandoff[] =
 };
 
 /**
-*	@brief Used in combat when a monster is hiding in cover or the enemy has moved out of sight.
-*	Should we look around in this schedule?
-*/
+ *	@brief Used in combat when a monster is hiding in cover or the enemy has moved out of sight.
+ *	Should we look around in this schedule?
+ */
 Schedule_t slStandoff[] =
 	{
 		{tlStandoff,
@@ -569,8 +569,8 @@ Task_t tlSmallFlinch[] =
 };
 
 /**
-*	@brief played when minor damage is taken.
-*/
+ *	@brief played when minor damage is taken.
+ */
 Schedule_t slSmallFlinch[] =
 	{
 		{tlSmallFlinch,
@@ -621,9 +621,9 @@ Task_t tlBarnacleVictimGrab[] =
 };
 
 /**
-*	@brief barnacle tongue just hit the monster, so play a hit animation,
-*	then play a cycling pull animation as the creature is hoisting the monster.
-*/
+ *	@brief barnacle tongue just hit the monster, so play a hit animation,
+ *	then play a cycling pull animation as the creature is hoisting the monster.
+ */
 Schedule_t slBarnacleVictimGrab[] =
 	{
 		{tlBarnacleVictimGrab,
@@ -641,9 +641,9 @@ Task_t tlBarnacleVictimChomp[] =
 };
 
 /**
-*	@brief barnacle has pulled the prey to its mouth.
-*	Victim should play the BARNACLE_CHOMP animation once, then loop the BARNACLE_CHEW animation indefinitely
-*/
+ *	@brief barnacle has pulled the prey to its mouth.
+ *	Victim should play the BARNACLE_CHOMP animation once, then loop the BARNACLE_CHEW animation indefinitely
+ */
 Schedule_t slBarnacleVictimChomp[] =
 	{
 		{tlBarnacleVictimChomp,
@@ -659,8 +659,8 @@ Task_t tlError[] =
 };
 
 /**
-*	@brief Universal error schedule.
-*/
+ *	@brief Universal error schedule.
+ */
 Schedule_t slError[] =
 	{
 		{tlError,
@@ -753,8 +753,8 @@ Task_t tlCower[] =
 };
 
 /**
-*	@brief this is what is usually done when attempts to escape danger fail.
-*/
+ *	@brief this is what is usually done when attempts to escape danger fail.
+ */
 Schedule_t slCower[] =
 	{
 		{tlCower,
@@ -775,8 +775,8 @@ Task_t tlTakeCoverFromOrigin[] =
 };
 
 /**
-*	@brief move away from where you're currently standing.
-*/
+ *	@brief move away from where you're currently standing.
+ */
 Schedule_t slTakeCoverFromOrigin[] =
 	{
 		{tlTakeCoverFromOrigin,
@@ -797,8 +797,8 @@ Task_t tlTakeCoverFromBestSound[] =
 };
 
 /**
-*	@brief hide from the loudest sound source
-*/
+ *	@brief hide from the loudest sound source
+ */
 Schedule_t slTakeCoverFromBestSound[] =
 	{
 		{tlTakeCoverFromBestSound,
@@ -822,8 +822,8 @@ Task_t tlTakeCoverFromEnemy[] =
 };
 
 /**
-*	@brief Take cover from enemy! Tries lateral cover before node cover!
-*/
+ *	@brief Take cover from enemy! Tries lateral cover before node cover!
+ */
 Schedule_t slTakeCoverFromEnemy[] =
 	{
 		{tlTakeCoverFromEnemy,

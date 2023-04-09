@@ -22,8 +22,8 @@
 #include "CSporeLauncher.h"
 
 BEGIN_DATAMAP(CSporeLauncher)
-		DEFINE_FIELD(m_ReloadState, FIELD_INTEGER),
-END_DATAMAP();
+DEFINE_FIELD(m_ReloadState, FIELD_INTEGER),
+	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(weapon_sporelauncher, CSporeLauncher);
 

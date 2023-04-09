@@ -62,13 +62,13 @@ public:
 	void BoidAdvanceFrame();
 
 	/**
-	*	@brief Leader boid calls this to form a flock from surrounding boids
-	*/
+	 *	@brief Leader boid calls this to form a flock from surrounding boids
+	 */
 	void FormFlock();
 
 	/**
-	*	@brief player enters the pvs, so get things going.
-	*/
+	 *	@brief player enters the pvs, so get things going.
+	 */
 	void Start();
 
 	void FlockLeaderThink();
@@ -77,21 +77,21 @@ public:
 	void MakeSound();
 
 	/**
-	*	@brief Searches for boids that are too close and pushes them away
-	*/
+	 *	@brief Searches for boids that are too close and pushes them away
+	 */
 	void SpreadFlock();
 
 	/**
-	*	@brief Alters the caller's course if he's too close to others
-	*	This function should **ONLY** be called when Caller's velocity is normalized!!
-	*/
+	 *	@brief Alters the caller's course if he's too close to others
+	 *	This function should **ONLY** be called when Caller's velocity is normalized!!
+	 */
 	void SpreadFlock2();
 
 	void Killed(CBaseEntity* attacker, int iGib) override;
 
 	/**
-	*	@brief returns true if there is an obstacle ahead
-	*/
+	 *	@brief returns true if there is an obstacle ahead
+	 */
 	bool FPathBlocked();
 	// void KeyValue( KeyValueData *pkvd ) override;
 

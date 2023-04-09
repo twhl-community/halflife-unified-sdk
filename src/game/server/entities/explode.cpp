@@ -14,16 +14,16 @@
  ****/
 
 /**
-*	@file
-*	Explosion-related code
-*/
+ *	@file
+ *	Explosion-related code
+ */
 
 #include "cbase.h"
 #include "explode.h"
 
 /**
-*	@brief Spark Shower
-*/
+ *	@brief Spark Shower
+ */
 class CShower : public CBaseEntity
 {
 public:

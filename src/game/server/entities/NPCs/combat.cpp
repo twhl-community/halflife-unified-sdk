@@ -14,9 +14,9 @@
  ****/
 
 /**
-*	@file
-*	functions dealing with damage infliction & death
-*/
+ *	@file
+ *	functions dealing with damage infliction & death
+ */
 
 #include <EASTL/fixed_vector.h>
 

@@ -84,9 +84,9 @@ enum
 };
 
 /**
-*	@brief Talking monster base class
-*	Used for scientists and barneys
-*/
+ *	@brief Talking monster base class
+ *	Used for scientists and barneys
+ */
 class CTalkMonster : public CBaseMonster
 {
 	DECLARE_CLASS(CTalkMonster, CBaseMonster);
@@ -95,13 +95,13 @@ class CTalkMonster : public CBaseMonster
 
 public:
 	/**
-	*	@brief monsters derived from ctalkmonster should call this in precache()
-	*/
+	 *	@brief monsters derived from ctalkmonster should call this in precache()
+	 */
 	virtual void TalkInit();
 
 	/**
-	*	@brief Scan for nearest, visible friend. If fPlayer is true, look for nearest player
-	*/
+	 *	@brief Scan for nearest, visible friend. If fPlayer is true, look for nearest player
+	 */
 	CBaseEntity* FindNearestFriend(bool fPlayer);
 	float TargetDistance();
 	void StopTalking() { SentenceStop(); }
@@ -137,43 +137,43 @@ public:
 	int GetVoicePitch();
 
 	/**
-	*	@brief Respond to a previous question
-	*/
+	 *	@brief Respond to a previous question
+	 */
 	void IdleRespond();
 
 	/**
-	*	@brief ask question of nearby friend, or make statement
-	*/
+	 *	@brief ask question of nearby friend, or make statement
+	 */
 	bool FIdleSpeak();
 
 	bool FIdleStare();
 
 	/**
-	*	@brief Try to greet player first time he's seen
-	*/
+	 *	@brief Try to greet player first time he's seen
+	 */
 	bool FIdleHello();
 
 	/**
-	*	@brief turn head towards supplied origin
-	*/
+	 *	@brief turn head towards supplied origin
+	 */
 	void IdleHeadTurn(Vector& vecFriend);
 	bool FOkToSpeak();
 
 	/**
-	*	@brief try to smell something
-	*/
+	 *	@brief try to smell something
+	 */
 	void TrySmellTalk();
 	void AlertFriends();
 	void ShutUpFriends();
 
 	/**
-	*	@brief am I saying a sentence right now?
-	*/
+	 *	@brief am I saying a sentence right now?
+	 */
 	bool IsTalking();
 
 	/**
-	*	@brief set a timer that tells us when the monster is done talking.
-	*/
+	 *	@brief set a timer that tells us when the monster is done talking.
+	 */
 	void Talk(float flDuration);
 
 	/**
@@ -197,8 +197,8 @@ public:
 	void FollowerUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
 	/**
-	*	@brief Prepare this talking monster to answer question
-	*/
+	 *	@brief Prepare this talking monster to answer question
+	 */
 	virtual void SetAnswerQuestion(CTalkMonster* pSpeaker);
 	virtual int FriendNumber(int arrayNumber) { return arrayNumber; }
 

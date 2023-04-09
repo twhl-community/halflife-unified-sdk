@@ -24,9 +24,9 @@ struct BspData
 };
 
 /**
-*	@brief Loads BSP data into memory for use.
-*	Extend as needed if more data is required.
-*/
+ *	@brief Loads BSP data into memory for use.
+ *	Extend as needed if more data is required.
+ */
 class BspLoader final
 {
 public:

@@ -103,7 +103,8 @@ void ScorePanel::HitTestPanel::internalMousePressed(MouseCode code)
 //-----------------------------------------------------------------------------
 // Purpose: Create the ScoreBoard panel
 //-----------------------------------------------------------------------------
-ScorePanel::ScorePanel(int x, int y, int wide, int tall) : Panel(x, y, wide, tall)
+ScorePanel::ScorePanel(int x, int y, int wide, int tall)
+	: Panel(x, y, wide, tall)
 {
 	CSchemeManager* pSchemes = gViewPort->GetSchemeManager();
 	SchemeHandle_t hTitleScheme = pSchemes->getSchemeHandle("Scoreboard Title Text");

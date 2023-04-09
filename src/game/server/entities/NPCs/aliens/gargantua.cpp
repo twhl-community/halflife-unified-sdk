@@ -258,13 +258,13 @@ private:
 	static const char* pBreatheSounds[];
 
 	/**
-	*	@brief expects a length to trace, amount of damage to do, and damage type.
-	*	Used for many contact-range melee attacks. Bites, claws, etc.
-	*	@details Overridden for Gargantua because his swing starts lower as a percentage of his height
-	*	(otherwise he swings over the players head)
-	*	@return A pointer to the damaged entity in case the monster
-	*		wishes to do other stuff to the victim (punchangle, etc)
-	*/
+	 *	@brief expects a length to trace, amount of damage to do, and damage type.
+	 *	Used for many contact-range melee attacks. Bites, claws, etc.
+	 *	@details Overridden for Gargantua because his swing starts lower as a percentage of his height
+	 *	(otherwise he swings over the players head)
+	 *	@return A pointer to the damaged entity in case the monster
+	 *		wishes to do other stuff to the victim (punchangle, etc)
+	 */
 	CBaseEntity* GargantuaCheckTraceHullAttack(float flDist, int iDamage, int iDmgType);
 
 	CSprite* m_pEyeGlow; // Glow around the eyes

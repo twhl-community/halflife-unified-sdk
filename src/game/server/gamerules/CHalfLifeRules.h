@@ -18,8 +18,8 @@
 #include "CGameRules.h"
 
 /**
-*	@brief rules for the single player Half-Life game
-*/
+ *	@brief rules for the single player Half-Life game
+ */
 class CHalfLifeRules : public CGameRules
 {
 public:

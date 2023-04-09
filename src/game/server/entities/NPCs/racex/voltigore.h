@@ -44,8 +44,8 @@ enum
 constexpr int VOLTIGORE_BEAM_COUNT = 8;
 
 /**
-*	@brief Tank like alien
-*/
+ *	@brief Tank like alien
+ */
 class COFVoltigore : public CSquadMonster
 {
 	DECLARE_CLASS(COFVoltigore, CSquadMonster);
@@ -70,14 +70,14 @@ public:
 	const Schedule_t* GetScheduleOfType(int Type) override;
 
 	/**
-	*	@brief this is overridden for alien grunts because they can use their smart weapons against unseen enemies.
-	*	Base class doesn't attack anyone it can't see.
-	*/
+	 *	@brief this is overridden for alien grunts because they can use their smart weapons against unseen enemies.
+	 *	Base class doesn't attack anyone it can't see.
+	 */
 	bool FCanCheckAttacks() override;
 
 	/**
-	*	@brief alien grunts zap the crap out of any enemy that gets too close.
-	*/
+	 *	@brief alien grunts zap the crap out of any enemy that gets too close.
+	 */
 	bool CheckMeleeAttack1(float flDot, float flDist) override;
 
 	bool CheckRangeAttack1(float flDot, float flDist) override;
@@ -88,18 +88,18 @@ public:
 	void TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
 
 	/**
-	*	@brief overridden because Human Grunts are Voltigore's nemesis.
-	*/
+	 *	@brief overridden because Human Grunts are Voltigore's nemesis.
+	 */
 	int IRelationship(CBaseEntity* pTarget) override;
 
 	/**
-	*	@brief won't speak again for 10-20 seconds.
-	*/
+	 *	@brief won't speak again for 10-20 seconds.
+	 */
 	void StopTalking();
 
 	/**
-	*	@brief Should this voltigore be talking?
-	*/
+	 *	@brief Should this voltigore be talking?
+	 */
 	bool ShouldSpeak();
 
 	void ClearBeams();

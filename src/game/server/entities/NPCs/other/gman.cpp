@@ -16,8 +16,8 @@
 #include "cbase.h"
 
 /**
-*	@brief misunderstood servant of the people
-*/
+ *	@brief misunderstood servant of the people
+ */
 class CGMan : public CBaseMonster
 {
 	DECLARE_CLASS(CGMan, CBaseMonster);

@@ -119,8 +119,8 @@ constexpr int CLASS_LAST = CLASS_ALIEN_RACE_X;
 void FireTargets(const char* targetName, CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
 /**
-*	@brief Base Entity. All entity types derive from this
-*/
+ *	@brief Base Entity. All entity types derive from this
+ */
 class SINGLE_INHERITANCE CBaseEntity
 {
 	DECLARE_CLASS_NOBASE(CBaseEntity);
@@ -214,8 +214,8 @@ public:
 	virtual void Spawn() {}
 
 	/**
-	*	@brief precaches all resources this entity needs
-	*/
+	 *	@brief precaches all resources this entity needs
+	 */
 	virtual void Precache() {}
 
 	/**
@@ -227,8 +227,8 @@ public:
 	void LoadReplacementFiles();
 
 	/**
-	*	@brief Cache user-entity-field values until spawn is called.
-	*/
+	 *	@brief Cache user-entity-field values until spawn is called.
+	 */
 	virtual bool KeyValue(KeyValueData* pkvd);
 	bool Save(CSave& save);
 	bool Restore(CRestore& restore);
@@ -237,23 +237,23 @@ public:
 	virtual void Activate() {}
 
 	/**
-	*	@brief Setup the object->object collision box (pev->mins / pev->maxs is the object->world collision box)
-	*/
+	 *	@brief Setup the object->object collision box (pev->mins / pev->maxs is the object->world collision box)
+	 */
 	virtual void SetObjectCollisionBox();
 
 	/**
-	*	@brief returns the type of group (i.e, "houndeye", or "human military") so that monsters
-	*	with different classnames still realize that they are teammates. (overridden for monsters that form groups)
-	*/
+	 *	@brief returns the type of group (i.e, "houndeye", or "human military") so that monsters
+	 *	with different classnames still realize that they are teammates. (overridden for monsters that form groups)
+	 */
 	virtual int Classify() { return CLASS_NONE; }
 	virtual void DeathNotice(CBaseEntity* child) {} // monster maker children use this to tell the monster maker that they have died.
 
 	virtual void TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType);
 
 	/**
-	*	@brief inflict damage on this entity.
-	*	@param bitsDamageType indicates type of damage inflicted, ie: DMG_CRUSH
-	*/
+	 *	@brief inflict damage on this entity.
+	 *	@param bitsDamageType indicates type of damage inflicted, ie: DMG_CRUSH
+	 */
 	virtual bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType);
 
 	virtual bool GiveHealth(float flHealth, int bitsDamageType);
@@ -325,51 +325,51 @@ public:
 	}
 
 	/**
-	*	@brief This updates global tables that need to know about entities being removed
-	*	Entities should override this to clean up any effects they create that do not remove themselves.
-	*/
+	 *	@brief This updates global tables that need to know about entities being removed
+	 *	Entities should override this to clean up any effects they create that do not remove themselves.
+	 */
 	virtual void UpdateOnRemove();
 
 	// common member functions
 	/**
-	*	@brief Convenient way to delay removing oneself
-	*/
+	 *	@brief Convenient way to delay removing oneself
+	 */
 	void SUB_Remove();
 
 	/**
-	*	@brief slowly fades a entity out, then removes it.
-	*	DON'T USE ME FOR GIBS AND STUFF IN MULTIPLAYER!
-	*	SET A FUTURE THINK AND A RENDERMODE!!
-	*/
+	 *	@brief slowly fades a entity out, then removes it.
+	 *	DON'T USE ME FOR GIBS AND STUFF IN MULTIPLAYER!
+	 *	SET A FUTURE THINK AND A RENDERMODE!!
+	 */
 	void SUB_StartFadeOut();
 	void SUB_FadeOut();
 	void SUB_CallUseToggle() { this->Use(this, this, USE_TOGGLE, 0); }
 	bool ShouldToggle(USE_TYPE useType, bool currentState);
 
 	/**
-	*	@brief Go to the trouble of combining multiple pellets into a single damage call.
-	*	This version is used by Monsters.
-	*/
+	 *	@brief Go to the trouble of combining multiple pellets into a single damage call.
+	 *	This version is used by Monsters.
+	 */
 	void FireBullets(unsigned int cShots, Vector vecSrc, Vector vecDirShooting, Vector vecSpread,
 		float flDistance, int iBulletType,
 		int iTracerFreq = 4, int iDamage = 0, CBaseEntity* attacker = nullptr);
 
 	/**
-	*	@brief Go to the trouble of combining multiple pellets into a single damage call.
-	*	This version is used by Players, uses the random seed generator to sync client and server side shots.
-	*/
+	 *	@brief Go to the trouble of combining multiple pellets into a single damage call.
+	 *	This version is used by Players, uses the random seed generator to sync client and server side shots.
+	 */
 	Vector FireBulletsPlayer(unsigned int cShots, Vector vecSrc, Vector vecDirShooting, Vector vecSpread,
 		float flDistance, int iBulletType,
 		int iTracerFreq = 4, int iDamage = 0, CBaseEntity* attacker = nullptr, int shared_rand = 0);
 
 	/**
-	*	@brief If self.delay is set, a delayed_use entity will be created that will actually
-	*	do the SUB_UseTargets after that many seconds have passed.
-	*	Removes all entities with a targetname that match self.killtarget,
-	*	and removes them, so some events can remove other triggers.
-	*	Search for (string)targetname in all entities that
-	*	match (string)self.target and call their .use function (if they have one)
-	*/
+	 *	@brief If self.delay is set, a delayed_use entity will be created that will actually
+	 *	do the SUB_UseTargets after that many seconds have passed.
+	 *	Removes all entities with a targetname that match self.killtarget,
+	 *	and removes them, so some events can remove other triggers.
+	 *	Search for (string)targetname in all entities that
+	 *	match (string)self.target and call their .use function (if they have one)
+	 */
 	void SUB_UseTargets(CBaseEntity* pActivator, USE_TYPE useType, float value);
 	// Do the bounding boxes of these two intersect?
 	bool Intersects(CBaseEntity* pOther);
@@ -523,13 +523,13 @@ public:
 	virtual int Illumination() { return GETENTITYILLUM(ENT(pev)); }
 
 	/**
-	*	@brief returns true if a line can be traced from the caller's eyes to the target
-	*/
+	 *	@brief returns true if a line can be traced from the caller's eyes to the target
+	 */
 	virtual bool FVisible(CBaseEntity* pEntity);
 
 	/**
-	*	@brief returns true if a line can be traced from the caller's eyes to the target vector
-	*/
+	 *	@brief returns true if a line can be traced from the caller's eyes to the target vector
+	 */
 	virtual bool FVisible(const Vector& vecOrigin);
 
 	static float GetSkillFloat(std::string_view name)
@@ -544,12 +544,12 @@ public:
 	void StopSound(int channel, const char* sample);
 
 	/**
-	*	@brief If this entity has a master switch, this is the targetname.
-	*	A master switch must be of the multisource or game_team_master type.
-	*	If all of the switches in the multisource have been triggered,
-	*	then the entity will be allowed to operate.
-	*	Otherwise, it will be deactivated.
-	*/
+	 *	@brief If this entity has a master switch, this is the targetname.
+	 *	A master switch must be of the multisource or game_team_master type.
+	 *	If all of the switches in the multisource have been triggered,
+	 *	then the entity will be allowed to operate.
+	 *	Otherwise, it will be deactivated.
+	 */
 	string_t m_sMaster;
 	EHANDLE m_hActivator;
 

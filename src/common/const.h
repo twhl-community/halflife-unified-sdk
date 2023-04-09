@@ -150,9 +150,9 @@ struct edict_t;
 // byte (scroll speed in 0.1's)
 
 /**
-*	@brief Send using gmsgTempEntity instead of SVC_TEMPENTITY.
-*	particle effect plus ricochet sound
-*/
+ *	@brief Send using gmsgTempEntity instead of SVC_TEMPENTITY.
+ *	particle effect plus ricochet sound
+ */
 #define TE_GUNSHOT 2
 // coord coord coord (position)
 
@@ -442,9 +442,9 @@ struct edict_t;
 // byte (flags)
 
 /**
-*	@brief Use UTIL_GunshotDecalTrace instead.
-*	decal and ricochet sound
-*/
+ *	@brief Use UTIL_GunshotDecalTrace instead.
+ *	decal and ricochet sound
+ */
 #define TE_GUNSHOTDECAL 109
 // coord, coord, coord (position)
 // short (entity index???)
@@ -563,9 +563,9 @@ struct edict_t;
 // byte (entity index of player)
 
 /**
-*	@brief Do not use, plays sounds using the engine's sound system.
-*	Obsolete, replaced by client side weapon prediction.
-*/
+ *	@brief Do not use, plays sounds using the engine's sound system.
+ *	Obsolete, replaced by client side weapon prediction.
+ */
 #define TE_MULTIGUNSHOT 126 // much more compact shotgun message
 // This message is used to make a client approximate a 'spray' of gunfire.
 // Any weapon that fires more than one bullet per frame and fires in a bit of a spread is
@@ -617,16 +617,16 @@ struct edict_t;
 #define CONTENTS_LAVA -5
 #define CONTENTS_SKY -6
 // These additional contents constants are defined in bspfile.h
-#define	CONTENTS_ORIGIN		-7		// removed at csg time
-#define	CONTENTS_CLIP		-8		// changed to contents_solid
-#define	CONTENTS_CURRENT_0		-9
-#define	CONTENTS_CURRENT_90		-10
-#define	CONTENTS_CURRENT_180	-11
-#define	CONTENTS_CURRENT_270	-12
-#define	CONTENTS_CURRENT_UP		-13
-#define	CONTENTS_CURRENT_DOWN	-14
+#define CONTENTS_ORIGIN -7 // removed at csg time
+#define CONTENTS_CLIP -8   // changed to contents_solid
+#define CONTENTS_CURRENT_0 -9
+#define CONTENTS_CURRENT_90 -10
+#define CONTENTS_CURRENT_180 -11
+#define CONTENTS_CURRENT_270 -12
+#define CONTENTS_CURRENT_UP -13
+#define CONTENTS_CURRENT_DOWN -14
 
-#define CONTENTS_TRANSLUCENT	-15
+#define CONTENTS_TRANSLUCENT -15
 
 #define CONTENTS_LADDER -16
 
@@ -672,8 +672,8 @@ constexpr int NUM_HULLS = 4;
 
 // view angle update types for fixangle
 constexpr int FIXANGLE_NONE = 0;
-constexpr int FIXANGLE_ABSOLUTE = 1;	//!< Force view angles
-constexpr int FIXANGLE_RELATIVE = 2;	//!< Add avelocity yaw to view angles
+constexpr int FIXANGLE_ABSOLUTE = 1; //!< Force view angles
+constexpr int FIXANGLE_RELATIVE = 2; //!< Add avelocity yaw to view angles
 
 // buttons
 #include "in_buttons.h"

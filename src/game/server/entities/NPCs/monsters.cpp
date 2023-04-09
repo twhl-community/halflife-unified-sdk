@@ -14,9 +14,9 @@
  ****/
 
 /**
-*	@file
-*	Monster-related utility code
-*/
+ *	@file
+ *	Monster-related utility code
+ */
 
 #include <EASTL/fixed_string.h>
 
@@ -1127,9 +1127,9 @@ int CBaseMonster::CheckLocalMove(const Vector& vecStart, const Vector& vecEnd, C
 	vecStartPos = pev->origin;
 
 
-	flYaw = VectorToYaw(vecEnd - vecStart);	  // build a yaw that points to the goal.
-	flDist = (vecEnd - vecStart).Length2D();  // get the distance.
-	iReturn = LOCALMOVE_VALID;				  // assume everything will be ok.
+	flYaw = VectorToYaw(vecEnd - vecStart);	 // build a yaw that points to the goal.
+	flDist = (vecEnd - vecStart).Length2D(); // get the distance.
+	iReturn = LOCALMOVE_VALID;				 // assume everything will be ok.
 
 	// move the monster to the start of the local move that's to be checked.
 	SetOrigin(vecStart); // !!!BUGBUG - won't this fire triggers? - nope, SetOrigin doesn't fire

@@ -37,7 +37,7 @@ void SetBodygroup(void* pmodel, entvars_t* pev, int iGroup, int iValue);
 int GetBodygroup(void* pmodel, entvars_t* pev, int iGroup);
 
 int GetAnimationEvent(void* pmodel, entvars_t* pev, MonsterEvent_t* pMonsterEvent, float flStart, float flEnd, int index);
-bool ExtractBbox(void* pmodel, int sequence, Vector&mins, Vector& maxs);
+bool ExtractBbox(void* pmodel, int sequence, Vector& mins, Vector& maxs);
 
 // From /engine/studio.h
 #define STUDIO_LOOPING 0x0001

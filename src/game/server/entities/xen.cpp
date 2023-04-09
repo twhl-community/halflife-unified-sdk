@@ -474,8 +474,8 @@ class CXenSporeLarge : public CXenSpore
 };
 
 /**
-*	@brief Fake collision box for big spores
-*/
+ *	@brief Fake collision box for big spores
+ */
 class CXenHull : public CPointEntity
 {
 public:

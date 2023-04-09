@@ -107,7 +107,9 @@ struct GameConfigDefinition
 		std::shared_ptr<spdlog::logger> logger,
 		std::string&& name,
 		std::vector<std::unique_ptr<const GameConfigSection<DataContext>>>&& sections)
-		: m_Logger(logger), m_Name(std::move(name)), m_Sections(std::move(sections))
+		: m_Logger(logger),
+		  m_Name(std::move(name)),
+		  m_Sections(std::move(sections))
 	{
 	}
 

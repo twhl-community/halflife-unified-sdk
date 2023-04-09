@@ -42,7 +42,8 @@ public:
 	Label(const char* text, int x, int y);
 	Label(const char* text);
 
-	inline Label() : Panel(0, 0, 10, 10)
+	inline Label()
+		: Panel(0, 0, 10, 10)
 	{
 		init(1, "", true);
 	}

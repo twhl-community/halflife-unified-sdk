@@ -25,8 +25,8 @@
 #define ISLAVE_MAX_BEAMS 8
 
 /**
-*	@brief Alien slave monster
-*/
+ *	@brief Alien slave monster
+ */
 class CISlave : public CSquadMonster
 {
 	DECLARE_CLASS(CISlave, CSquadMonster);
@@ -62,28 +62,28 @@ public:
 	void UpdateOnRemove() override;
 
 	/**
-	*	@brief remove all beams
-	*/
+	 *	@brief remove all beams
+	 */
 	void ClearBeams();
 
 	/**
-	*	@brief small beam from arm to nearby geometry
-	*/
+	 *	@brief small beam from arm to nearby geometry
+	 */
 	void ArmBeam(int side);
 
 	/**
-	*	@brief regenerate dead colleagues
-	*/
+	 *	@brief regenerate dead colleagues
+	 */
 	void WackBeam(int side, CBaseEntity* pEntity);
 
 	/**
-	*	@brief heavy damage directly forward
-	*/
+	 *	@brief heavy damage directly forward
+	 */
 	void ZapBeam(int side);
 
 	/**
-	*	@brief brighten all beams
-	*/
+	 *	@brief brighten all beams
+	 */
 	void BeamGlow();
 
 	int m_iBravery;

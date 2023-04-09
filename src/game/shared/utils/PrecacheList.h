@@ -32,7 +32,10 @@ public:
 		std::shared_ptr<spdlog::logger> logger,
 		ValidationFunction validationFunction = nullptr,
 		EnginePrecacheFunction enginePrecacheFunction = nullptr)
-		: m_Type(type), m_Logger(logger), m_ValidationFunction(validationFunction), m_EnginePrecacheFunction(enginePrecacheFunction)
+		: m_Type(type),
+		  m_Logger(logger),
+		  m_ValidationFunction(validationFunction),
+		  m_EnginePrecacheFunction(enginePrecacheFunction)
 	{
 		assert(!type.empty());
 		assert(logger);
@@ -53,9 +56,9 @@ public:
 	int Add(const char* str);
 
 	/**
-	*	@brief Adds a string directly without validation.
-	*	Only to be used for adding files precached by the engine.
-	*/
+	 *	@brief Adds a string directly without validation.
+	 *	Only to be used for adding files precached by the engine.
+	 */
 	void AddUnchecked(const char* str);
 
 	void Clear();

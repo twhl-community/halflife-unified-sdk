@@ -36,8 +36,8 @@ enum
 #define bits_MEMORY_BADJUMP (bits_MEMORY_CUSTOM1)
 
 /**
-*	@brief Human assassin, fast and stealthy
-*/
+ *	@brief Human assassin, fast and stealthy
+ */
 class CHAssassin : public CBaseMonster
 {
 	DECLARE_CLASS(CHAssassin, CBaseMonster);
@@ -57,20 +57,20 @@ public:
 	const Schedule_t* GetScheduleOfType(int Type) override;
 
 	/**
-	*	@brief jump like crazy if the enemy gets too close.
-	*/
+	 *	@brief jump like crazy if the enemy gets too close.
+	 */
 	bool CheckMeleeAttack1(float flDot, float flDist) override; // jump
 
 	// bool CheckMeleeAttack2 ( float flDot, float flDist ) override;
 
 	/**
-	*	@brief drop a cap in their ass
-	*/
+	 *	@brief drop a cap in their ass
+	 */
 	bool CheckRangeAttack1(float flDot, float flDist) override; // shoot
 
 	/**
-	*	@brief toss grenade is enemy gets in the way and is too close.
-	*/
+	 *	@brief toss grenade is enemy gets in the way and is too close.
+	 */
 	bool CheckRangeAttack2(float flDot, float flDist) override; // throw grenade
 
 	void StartTask(const Task_t* pTask) override;
@@ -334,8 +334,8 @@ Task_t tlAssassinTakeCoverFromEnemy[] =
 };
 
 /**
-*	@brief Tries lateral cover before node cover!
-*/
+ *	@brief Tries lateral cover before node cover!
+ */
 Schedule_t slAssassinTakeCoverFromEnemy[] =
 	{
 		{tlAssassinTakeCoverFromEnemy,
@@ -363,8 +363,8 @@ Task_t tlAssassinTakeCoverFromEnemy2[] =
 };
 
 /**
-*	@brief Tries lateral cover before node cover!
-*/
+ *	@brief Tries lateral cover before node cover!
+ */
 Schedule_t slAssassinTakeCoverFromEnemy2[] =
 	{
 		{tlAssassinTakeCoverFromEnemy2,
@@ -389,8 +389,8 @@ Task_t tlAssassinTakeCoverFromBestSound[] =
 };
 
 /**
-*	@brief hide from the loudest sound source
-*/
+ *	@brief hide from the loudest sound source
+ */
 Schedule_t slAssassinTakeCoverFromBestSound[] =
 	{
 		{tlAssassinTakeCoverFromBestSound,

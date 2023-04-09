@@ -114,7 +114,7 @@ void CGenericItem::Spawn()
 		Vector mins, maxs;
 
 		pev->solid = SOLID_SLIDEBOX;
-		
+
 		ExtractBbox(sequence, mins, maxs);
 
 		SetSize(mins, maxs);

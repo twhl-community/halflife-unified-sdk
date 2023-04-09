@@ -27,7 +27,8 @@ public:
 	constexpr Vector2D& operator=(const Vector2D&) = default;
 
 	constexpr Vector2D(float X, float Y)
-		: x(X), y(Y)
+		: x(X),
+		  y(Y)
 	{
 	}
 
@@ -77,7 +78,9 @@ public:
 	constexpr Vector& operator=(const Vector&) = default;
 
 	constexpr Vector(float X, float Y, float Z)
-		: x(X), y(Y), z(Z)
+		: x(X),
+		  y(Y),
+		  z(Z)
 	{
 	}
 

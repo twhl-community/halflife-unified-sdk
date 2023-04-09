@@ -36,8 +36,8 @@ enum
 };
 
 /**
-*	@brief Bullsquid's spit projectile
-*/
+ *	@brief Bullsquid's spit projectile
+ */
 class CSquidSpit : public CBaseEntity
 {
 	DECLARE_CLASS(CSquidSpit, CBaseEntity);
@@ -162,8 +162,8 @@ void CSquidSpit::Touch(CBaseEntity* pOther)
 #define BSQUID_AE_THROW (6)
 
 /**
-*	@brief big, spotty tentacle-mouthed meanie.
-*/
+ *	@brief big, spotty tentacle-mouthed meanie.
+ */
 class CBullsquid : public CBaseMonster
 {
 	DECLARE_CLASS(CBullsquid, CBaseMonster);
@@ -185,22 +185,22 @@ public:
 	void AttackSound();
 
 	/**
-	*	@brief OVERRIDDEN for bullsquid because it needs to know explicitly when the last attempt to chase the enemy failed,
-	*	since that impacts its attack choices.
-	*/
+	 *	@brief OVERRIDDEN for bullsquid because it needs to know explicitly when the last attempt to chase the enemy failed,
+	 *	since that impacts its attack choices.
+	 */
 	void StartTask(const Task_t* pTask) override;
 	void RunTask(const Task_t* pTask) override;
 
 	/**
-	*	@brief bullsquid is a big guy, so has a longer melee range than most monsters. This is the tailwhip attack
-	*/
+	 *	@brief bullsquid is a big guy, so has a longer melee range than most monsters. This is the tailwhip attack
+	 */
 	bool CheckMeleeAttack1(float flDot, float flDist) override;
 
 	/**
-	*	@brief bullsquid is a big guy, so has a longer melee range than most monsters.
-	*	This is the bite attack.
-	*	this attack will not be performed if the tailwhip attack is valid.
-	*/
+	 *	@brief bullsquid is a big guy, so has a longer melee range than most monsters.
+	 *	This is the bite attack.
+	 *	this attack will not be performed if the tailwhip attack is valid.
+	 */
 	bool CheckMeleeAttack2(float flDot, float flDist) override;
 	bool CheckRangeAttack1(float flDot, float flDist) override;
 	void RunAI() override;
@@ -209,20 +209,20 @@ public:
 	const Schedule_t* GetScheduleOfType(int Type) override;
 
 	/**
-	*	@brief overridden for bullsquid so we can keep track of how much time has passed since it was last injured
-	*/
+	 *	@brief overridden for bullsquid so we can keep track of how much time has passed since it was last injured
+	 */
 	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 
 	/**
-	*	@brief overridden for bullsquid so that it can be made to ignore its love of headcrabs for a while.
-	*/
+	 *	@brief overridden for bullsquid so that it can be made to ignore its love of headcrabs for a while.
+	 */
 	int IRelationship(CBaseEntity* pTarget) override;
 	int IgnoreConditions() override;
 
 	/**
-	*	@brief Overridden for Bullsquid to deal with the feature that makes it lose interest in headcrabs for
-	*	a while if something injures it.
-	*/
+	 *	@brief Overridden for Bullsquid to deal with the feature that makes it lose interest in headcrabs for
+	 *	a while if something injures it.
+	 */
 	MONSTERSTATE GetIdealState() override;
 
 	bool m_fCanThreatDisplay; // this is so the squid only does the "I see a headcrab!" dance one time.
@@ -845,8 +845,8 @@ Task_t tlSquidEat[] =
 };
 
 /**
-*	@brief squid walks to something tasty and eats it.
-*/
+ *	@brief squid walks to something tasty and eats it.
+ */
 Schedule_t slSquidEat[] =
 	{
 		{tlSquidEat,
@@ -881,10 +881,10 @@ Task_t tlSquidSniffAndEat[] =
 };
 
 /**
-*	@brief this is a bit different than just Eat.
-*	We use this schedule when the food is far away, occluded, or behind the squid.
-*	This schedule plays a sniff animation before going to the source of food.
-*/
+ *	@brief this is a bit different than just Eat.
+ *	We use this schedule when the food is far away, occluded, or behind the squid.
+ *	This schedule plays a sniff animation before going to the source of food.
+ */
 Schedule_t slSquidSniffAndEat[] =
 	{
 		{tlSquidSniffAndEat,
@@ -916,8 +916,8 @@ Task_t tlSquidWallow[] =
 };
 
 /**
-*	@brief squid does this to stinky things.
-*/
+ *	@brief squid does this to stinky things.
+ */
 Schedule_t slSquidWallow[] =
 	{
 		{tlSquidWallow,

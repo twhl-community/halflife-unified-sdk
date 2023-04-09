@@ -68,7 +68,9 @@ private:
 	LineBorder m_Border;
 
 public:
-	ScrollBarButton(const char* filename, int x, int y, int wide, int tall) : m_Border(Color(60, 60, 60, 0)), Button("", x, y, wide, tall)
+	ScrollBarButton(const char* filename, int x, int y, int wide, int tall)
+		: m_Border(Color(60, 60, 60, 0)),
+		  Button("", x, y, wide, tall)
 	{
 		Image* image = vgui_LoadTGA(filename);
 		if (image)
@@ -102,7 +104,8 @@ public:
 //			tall -
 //			vertical -
 //-----------------------------------------------------------------------------
-ScrollBar2::ScrollBar2(int x, int y, int wide, int tall, bool vertical) : Panel(x, y, wide, tall)
+ScrollBar2::ScrollBar2(int x, int y, int wide, int tall, bool vertical)
+	: Panel(x, y, wide, tall)
 {
 	_slider = nullptr;
 	_button[0] = nullptr;

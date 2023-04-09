@@ -14,9 +14,9 @@
  ****/
 
 /**
-*	@file
-*	base class monster functions for controlling core AI.
-*/
+ *	@file
+ *	base class monster functions for controlling core AI.
+ */
 
 #include "cbase.h"
 

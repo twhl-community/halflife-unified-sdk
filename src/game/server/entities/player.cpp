@@ -13,9 +13,9 @@
  *
  ****/
 /**
-*	@file
-*	functions dealing with the player
-*/
+ *	@file
+ *	functions dealing with the player
+ */
 
 #include <limits>
 
@@ -390,11 +390,11 @@ bool CBasePlayer::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, floa
 
 	// tell director about it
 	MESSAGE_BEGIN(MSG_SPEC, SVC_DIRECTOR);
-	WRITE_BYTE(9);							// command length in bytes
-	WRITE_BYTE(DRC_CMD_EVENT);				// take damage event
-	WRITE_SHORT(entindex());				// index number of primary entity
-	WRITE_SHORT(inflictor->entindex());		// index number of secondary entity
-	WRITE_LONG(5);							// eventflags (priority and flags)
+	WRITE_BYTE(9);						// command length in bytes
+	WRITE_BYTE(DRC_CMD_EVENT);			// take damage event
+	WRITE_SHORT(entindex());			// index number of primary entity
+	WRITE_SHORT(inflictor->entindex()); // index number of secondary entity
+	WRITE_LONG(5);						// eventflags (priority and flags)
 	MESSAGE_END();
 
 
@@ -3029,8 +3029,8 @@ const char* CBasePlayer::TeamID()
 }
 
 /**
-*	@brief !!!UNDONE:ultra temporary SprayCan entity to apply decal frame at a time. For PreAlpha CD
-*/
+ *	@brief !!!UNDONE:ultra temporary SprayCan entity to apply decal frame at a time. For PreAlpha CD
+ */
 class CSprayCan : public CBaseEntity
 {
 public:
@@ -5098,8 +5098,8 @@ void CDeadHEV::Spawn()
 }
 
 /**
-*	@brief Multiplayer intermission spots.
-*/
+ *	@brief Multiplayer intermission spots.
+ */
 class CInfoIntermission : public CPointEntity
 {
 	void Spawn() override;

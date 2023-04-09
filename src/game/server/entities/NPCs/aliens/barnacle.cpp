@@ -22,8 +22,8 @@
 #define BARNACLE_AE_PUKEGIB 2
 
 /**
-*	@brief stationary ceiling mounted 'fishing' monster
-*/
+ *	@brief stationary ceiling mounted 'fishing' monster
+ */
 class CBarnacle : public CBaseMonster
 {
 	DECLARE_CLASS(CBarnacle, CBaseMonster);
@@ -35,9 +35,9 @@ public:
 	void Precache() override;
 
 	/**
-	*	@brief does a trace along the barnacle's tongue to see if any entity is touching it.
-	*	Also stores the length of the trace in the float reference provided.
-	*/
+	 *	@brief does a trace along the barnacle's tongue to see if any entity is touching it.
+	 *	Also stores the length of the trace in the float reference provided.
+	 */
 	CBaseEntity* TongueTouchEnt(float& flLength);
 	int Classify() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;

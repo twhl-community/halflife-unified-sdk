@@ -101,7 +101,8 @@ private:
 class CLabelHeader : public Label
 {
 public:
-	CLabelHeader() : Label("")
+	CLabelHeader()
+		: Label("")
 	{
 		_dualImage = new CTextImage2();
 		_dualImage->setColor2(Color(255, 170, 0, 0));

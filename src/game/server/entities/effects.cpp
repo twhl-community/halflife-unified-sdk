@@ -24,8 +24,8 @@
 #define SF_FUNNEL_REVERSE 1 // funnel effect repels particles instead of attracting them.
 
 /**
-*	@brief Lightning target, just alias landmark
-*/
+ *	@brief Lightning target, just alias landmark
+ */
 LINK_ENTITY_TO_CLASS(info_target, CPointEntity);
 
 class CBubbling : public CBaseEntity
@@ -1532,8 +1532,8 @@ CGib* CEnvShooter::CreateGib()
 }
 
 /**
-*	@brief Blood effects
-*/
+ *	@brief Blood effects
+ */
 class CBlood : public CPointEntity
 {
 public:
@@ -1642,8 +1642,8 @@ void CBlood::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType
 }
 
 /**
-*	@brief Screen shake
-*/
+ *	@brief Screen shake
+ */
 class CShake : public CPointEntity
 {
 public:
@@ -1895,8 +1895,8 @@ void CMessage::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useTy
 }
 
 /**
-*	@brief FunnelEffect
-*/
+ *	@brief FunnelEffect
+ */
 class CEnvFunnel : public CBaseDelay
 {
 public:
@@ -1947,10 +1947,10 @@ void CEnvFunnel::Spawn()
 }
 
 /**
-*	@brief Beverage Dispenser
-*	overloaded pev->frags, is now a flag for whether or not a can is stuck in the dispenser.
-*	overloaded pev->health, is now how many cans remain in the machine.
-*/
+ *	@brief Beverage Dispenser
+ *	overloaded pev->frags, is now a flag for whether or not a can is stuck in the dispenser.
+ *	overloaded pev->health, is now how many cans remain in the machine.
+ */
 class CEnvBeverage : public CBaseDelay
 {
 public:
@@ -2008,8 +2008,8 @@ void CEnvBeverage::Spawn()
 }
 
 /**
-*	@brief Soda can
-*/
+ *	@brief Soda can
+ */
 class CItemSoda : public CBaseEntity
 {
 	DECLARE_CLASS(CItemSoda, CBaseEntity);

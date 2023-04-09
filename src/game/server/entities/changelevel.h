@@ -20,8 +20,8 @@
 #define SF_CHANGELEVEL_USEONLY 0x0002
 
 /**
-*	@brief When the player touches this, he gets sent to the map listed in the "map" variable.
-*/
+ *	@brief When the player touches this, he gets sent to the map listed in the "map" variable.
+ */
 class CChangeLevel : public CBaseTrigger
 {
 	DECLARE_CLASS(CChangeLevel, CBaseTrigger);
@@ -32,8 +32,8 @@ public:
 	bool KeyValue(KeyValueData* pkvd) override;
 
 	/**
-	*	@brief allows level transitions to be triggered by buttons, etc.
-	*/
+	 *	@brief allows level transitions to be triggered by buttons, etc.
+	 */
 	void UseChangeLevel(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
 	void TouchChangeLevel(CBaseEntity* pOther);
@@ -42,15 +42,15 @@ public:
 	static CBaseEntity* FindLandmark(const char* pLandmarkName);
 
 	/**
-	*	@brief This builds the list of all transitions on this level and
-	*	which entities are in their PVS's and can/should be moved across.
-	*/
+	 *	@brief This builds the list of all transitions on this level and
+	 *	which entities are in their PVS's and can/should be moved across.
+	 */
 	static int ChangeList(LEVELLIST* pLevelList, int maxList);
 
 	/**
-	*	@brief Add a transition to the list, but ignore duplicates
-	*	(a designer may have placed multiple trigger_changelevels with the same landmark)
-	*/
+	 *	@brief Add a transition to the list, but ignore duplicates
+	 *	(a designer may have placed multiple trigger_changelevels with the same landmark)
+	 */
 	static bool AddTransitionToList(LEVELLIST* pLevelList, int listCount, const char* pMapName, const char* pLandmarkName, CBaseEntity* pentLandmark);
 
 	static bool InTransitionVolume(CBaseEntity* pEntity, char* pVolumeName);

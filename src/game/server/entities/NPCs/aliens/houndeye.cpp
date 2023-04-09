@@ -54,8 +54,8 @@ enum
 #define HOUND_AE_CLOSE_EYE 7
 
 /**
-*	@brief spooky sonic dog.
-*/
+ *	@brief spooky sonic dog.
+ */
 class CHoundeye : public CSquadMonster
 {
 	DECLARE_CLASS(CHoundeye, CSquadMonster);
@@ -82,14 +82,14 @@ public:
 	void SetActivity(Activity NewActivity) override;
 
 	/**
-	*	@brief writes a color vector to the network based on the size of the group.
-	*/
+	 *	@brief writes a color vector to the network based on the size of the group.
+	 */
 	void WriteBeamColor();
 
 	/**
-	*	@brief overridden for houndeyes so that they try to get within half of their max attack radius
-	*	before attacking, so as to increase their chances of doing damage.
-	*/
+	 *	@brief overridden for houndeyes so that they try to get within half of their max attack radius
+	 *	before attacking, so as to increase their chances of doing damage.
+	 */
 	bool CheckRangeAttack1(float flDot, float flDist) override;
 	bool FValidateHintType(short sHint) override;
 	bool FCanActiveIdle() override;
@@ -888,8 +888,8 @@ Task_t tlHoundSleep[] =
 };
 
 /**
-*	@brief lie down and fall asleep
-*/
+ *	@brief lie down and fall asleep
+ */
 Schedule_t slHoundSleep[] =
 	{
 		{tlHoundSleep,
@@ -915,8 +915,8 @@ Task_t tlHoundWakeLazy[] =
 };
 
 /**
-*	@brief wake and stand up lazily
-*/
+ *	@brief wake and stand up lazily
+ */
 Schedule_t slHoundWakeLazy[] =
 	{
 		{tlHoundWakeLazy,
@@ -935,8 +935,8 @@ Task_t tlHoundWakeUrgent[] =
 };
 
 /**
-*	@brief wake and stand up with great urgency!
-*/
+ *	@brief wake and stand up with great urgency!
+ */
 Schedule_t slHoundWakeUrgent[] =
 	{
 		{tlHoundWakeUrgent,
@@ -1008,8 +1008,8 @@ Task_t tlHoundCombatFailPVS[] =
 };
 
 /**
-*	@brief hound fails in combat with client in the PVS
-*/
+ *	@brief hound fails in combat with client in the PVS
+ */
 Schedule_t slHoundCombatFailPVS[] =
 	{
 		{tlHoundCombatFailPVS,
@@ -1031,8 +1031,8 @@ Task_t tlHoundCombatFailNoPVS[] =
 };
 
 /**
-*	@brief hound fails in combat with no client in the PVS. Don't keep peeping!
-*/
+ *	@brief hound fails in combat with no client in the PVS. Don't keep peeping!
+ */
 Schedule_t slHoundCombatFailNoPVS[] =
 	{
 		{tlHoundCombatFailNoPVS,

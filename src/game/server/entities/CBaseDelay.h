@@ -18,8 +18,8 @@
 #include "CBaseEntity.h"
 
 /**
-*	@brief generic Delay entity.
-*/
+ *	@brief generic Delay entity.
+ */
 class CBaseDelay : public CBaseEntity
 {
 	DECLARE_CLASS(CBaseDelay, CBaseEntity);

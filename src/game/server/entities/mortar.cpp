@@ -16,9 +16,9 @@
 #include "cbase.h"
 
 /**
-*	@brief the "LaBuznik" mortar device
-*	Drops bombs from above
-*/
+ *	@brief the "LaBuznik" mortar device
+ *	Drops bombs from above
+ */
 class CFuncMortarField : public CBaseToggle
 {
 	DECLARE_CLASS(CFuncMortarField, CBaseToggle);
@@ -33,8 +33,8 @@ public:
 	int ObjectCaps() override { return CBaseToggle::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 
 	/**
-	*	@brief If connected to a table, then use the table controllers, else hit where the trigger is.
-	*/
+	 *	@brief If connected to a table, then use the table controllers, else hit where the trigger is.
+	 */
 	void FieldUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
 	string_t m_iszXController;

@@ -14,9 +14,9 @@
  ****/
 
 /**
-*	@file
-*	Entities relating to level changes and save games.
-*/
+ *	@file
+ *	Entities relating to level changes and save games.
+ */
 
 #include "cbase.h"
 #include "changelevel.h"
@@ -26,9 +26,9 @@
 LINK_ENTITY_TO_CLASS(info_landmark, CPointEntity);
 
 /**
-*	@brief Define space that travels across a level transition
-*	@details Derive from point entity so this doesn't move across levels
-*/
+ *	@brief Define space that travels across a level transition
+ *	@details Derive from point entity so this doesn't move across levels
+ */
 class CTriggerVolume : public CPointEntity
 {
 public:
@@ -47,8 +47,8 @@ void CTriggerVolume::Spawn()
 }
 
 /**
-*	@brief Fires a target after level transition and then dies
-*/
+ *	@brief Fires a target after level transition and then dies
+ */
 class CFireAndDie : public CBaseDelay
 {
 public:

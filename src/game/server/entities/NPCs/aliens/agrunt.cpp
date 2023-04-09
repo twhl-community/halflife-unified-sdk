@@ -49,8 +49,8 @@ int iAgruntMuzzleFlash;
 #define AGRUNT_MELEE_DIST 100
 
 /**
-*	@brief Dominant, warlike alien grunt monster
-*/
+ *	@brief Dominant, warlike alien grunt monster
+ */
 class CAGrunt : public CSquadMonster
 {
 	DECLARE_CLASS(CAGrunt, CSquadMonster);
@@ -75,14 +75,14 @@ public:
 	const Schedule_t* GetScheduleOfType(int Type) override;
 
 	/**
-	*	@brief this is overridden for alien grunts because they can use their smart weapons against unseen enemies.
-	*	Base class doesn't attack anyone it can't see.
-	*/
+	 *	@brief this is overridden for alien grunts because they can use their smart weapons against unseen enemies.
+	 *	Base class doesn't attack anyone it can't see.
+	 */
 	bool FCanCheckAttacks() override;
 
 	/**
-	*	@brief alien grunts zap the crap out of any enemy that gets too close.
-	*/
+	 *	@brief alien grunts zap the crap out of any enemy that gets too close.
+	 */
 	bool CheckMeleeAttack1(float flDot, float flDist) override;
 	bool CheckRangeAttack1(float flDot, float flDist) override;
 	void StartTask(const Task_t* pTask) override;
@@ -624,9 +624,9 @@ Task_t tlAGruntStandoff[] =
 };
 
 /**
-*	@brief Used in combat when a monster is hiding in cover or the enemy has moved out of sight.
-*	Should we look around in this schedule?
-*/
+ *	@brief Used in combat when a monster is hiding in cover or the enemy has moved out of sight.
+ *	Should we look around in this schedule?
+ */
 Schedule_t slAGruntStandoff[] =
 	{
 		{tlAGruntStandoff,
@@ -710,8 +710,8 @@ Task_t tlAGruntTakeCoverFromEnemy[] =
 };
 
 /**
-*	@brief Tries lateral cover before node cover!
-*/
+ *	@brief Tries lateral cover before node cover!
+ */
 Schedule_t slAGruntTakeCoverFromEnemy[] =
 	{
 		{tlAGruntTakeCoverFromEnemy,

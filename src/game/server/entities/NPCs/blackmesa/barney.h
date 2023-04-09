@@ -44,13 +44,13 @@ public:
 	int ISoundMask() override;
 
 	/**
-	*	@brief shoots one round from the pistol at the enemy barney is facing.
-	*/
+	 *	@brief shoots one round from the pistol at the enemy barney is facing.
+	 */
 	virtual void GuardFirePistol();
 
 	/**
-	*	@brief barney says "Freeze!"
-	*/
+	 *	@brief barney says "Freeze!"
+	 */
 	void AlertSound() override;
 
 	int Classify() override;

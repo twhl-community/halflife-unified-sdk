@@ -14,9 +14,9 @@
  ****/
 
 /**
-*	@file
-*	spawn and use functions for editor-placed triggers
-*/
+ *	@file
+ *	spawn and use functions for editor-placed triggers
+ */
 
 #include "cbase.h"
 #include "CBaseTrigger.h"
@@ -33,8 +33,8 @@
 #define SF_TRIGGER_HURT_CLIENTONLYTOUCH 32 // only clients may touch this trigger.
 
 /**
-*	@brief Modifies an entity's friction
-*/
+ *	@brief Modifies an entity's friction
+ */
 class CFrictionModifier : public CBaseEntity
 {
 	DECLARE_CLASS(CFrictionModifier, CBaseEntity);
@@ -45,8 +45,8 @@ public:
 	bool KeyValue(KeyValueData* pkvd) override;
 
 	/**
-	*	@brief Sets toucher's friction to m_frictionFraction (1.0 = normal friction)
-	*/
+	 *	@brief Sets toucher's friction to m_frictionFraction (1.0 = normal friction)
+	 */
 	void ChangeFriction(CBaseEntity* pOther);
 
 	int ObjectCaps() override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
@@ -89,9 +89,9 @@ bool CFrictionModifier::KeyValue(KeyValueData* pkvd)
 #define SF_AUTO_FIREONCE 0x0001
 
 /**
-*	@brief This trigger will fire when the level spawns (or respawns if not fire once)
-*	It will check a global state before firing. It supports delay and killtargets
-*/
+ *	@brief This trigger will fire when the level spawns (or respawns if not fire once)
+ *	It will check a global state before firing. It supports delay and killtargets
+ */
 class CAutoTrigger : public CBaseDelay
 {
 	DECLARE_CLASS(CAutoTrigger, CBaseDelay);
@@ -230,10 +230,10 @@ void CTriggerRelay::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE 
 constexpr int MAX_MULTI_TARGETS = 16; // maximum number of targets a single multi_manager entity may be assigned.
 
 /**
-*	@brief when fired, will fire up to MAX_MULTI_TARGETS targets at specified times.
-*	@details FLAG: THREAD (create clones when triggered)
-*	FLAG: CLONE (this is a clone for a threaded execution)
-*/
+ *	@brief when fired, will fire up to MAX_MULTI_TARGETS targets at specified times.
+ *	@details FLAG: THREAD (create clones when triggered)
+ *	FLAG: CLONE (this is a clone for a threaded execution)
+ */
 class CMultiManager : public CBaseToggle
 {
 	DECLARE_CLASS(CMultiManager, CBaseToggle);
@@ -444,9 +444,9 @@ void CMultiManager::ManagerReport()
 #define SF_RENDER_MASKCOLOR (1 << 3)
 
 /**
-*	@brief This entity will copy its render parameters (renderfx, rendermode, rendercolor, renderamt)
-*	to its targets when triggered.
-*/
+ *	@brief This entity will copy its render parameters (renderfx, rendermode, rendercolor, renderamt)
+ *	to its targets when triggered.
+ */
 class CRenderFxManager : public CBaseEntity
 {
 public:
@@ -480,8 +480,8 @@ void CRenderFxManager::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TY
 }
 
 /**
-*	@brief hurts anything that touches it. if the trigger has a targetname, firing it will toggle state
-*/
+ *	@brief hurts anything that touches it. if the trigger has a targetname, firing it will toggle state
+ */
 class CTriggerHurt : public CBaseTrigger
 {
 	DECLARE_CLASS(CTriggerHurt, CBaseTrigger);
@@ -497,9 +497,9 @@ public:
 	void HurtTouch(CBaseEntity* pOther);
 
 	/**
-	*	@brief trigger hurt that causes radiation will do a radius check and set the player's geiger counter level
-	*	according to distance from center of trigger
-	*/
+	 *	@brief trigger hurt that causes radiation will do a radius check and set the player's geiger counter level
+	 *	according to distance from center of trigger
+	 */
 	void RadiationThink();
 
 private:
@@ -793,8 +793,8 @@ void CTriggerMonsterJump::Touch(CBaseEntity* pOther)
 }
 
 /**
-*	@brief Variable sized repeatable trigger. Must be targeted at one or more entities.
-*/
+ *	@brief Variable sized repeatable trigger. Must be targeted at one or more entities.
+ */
 class CTriggerMultiple : public CBaseTrigger
 {
 	DECLARE_CLASS(CTriggerMultiple, CBaseTrigger);
@@ -846,8 +846,8 @@ void CTriggerMultiple::MultiTouch(CBaseEntity* pOther)
 }
 
 /**
-*	@brief Variable sized trigger. Triggers once, then removes itself.
-*/
+ *	@brief Variable sized trigger. Triggers once, then removes itself.
+ */
 class CTriggerOnce : public CTriggerMultiple
 {
 public:
@@ -864,8 +864,8 @@ void CTriggerOnce::Spawn()
 }
 
 /**
-*	@brief Acts as an intermediary for an action that takes multiple inputs.
-*/
+ *	@brief Acts as an intermediary for an action that takes multiple inputs.
+ */
 class CTriggerCounter : public CBaseTrigger
 {
 	DECLARE_CLASS(CTriggerCounter, CBaseTrigger);
@@ -954,8 +954,8 @@ void CTriggerCounter::CounterUse(CBaseEntity* pActivator, CBaseEntity* pCaller, 
 }
 
 /**
-*	@brief makes an area vertically negotiable
-*/
+ *	@brief makes an area vertically negotiable
+ */
 class CLadder : public CBaseTrigger
 {
 public:
@@ -993,8 +993,8 @@ void CLadder::Spawn()
 }
 
 /**
-*	@brief Pushes the player
-*/
+ *	@brief Pushes the player
+ */
 class CTriggerPush : public CBaseTrigger
 {
 public:

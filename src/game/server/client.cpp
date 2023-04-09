@@ -729,8 +729,7 @@ void SV_CreateClientCommands()
 			if (player->GiveMagazine(player->m_pActiveWeapon, attackMode) != -1)
 			{
 				player->EmitSound(CHAN_ITEM, DefaultItemPickupSound, VOL_NORM, ATTN_NORM);
-			}
-		},
+			} },
 		{.Flags = ClientCommandFlag::Cheat});
 
 	g_ClientCommands.Create("ent_find_by_classname", [](CBasePlayer* player, const CommandArgs& args)
@@ -971,8 +970,7 @@ void SV_CreateClientCommands()
 
 			const char* className = args.Argument(1);
 
-			TryCreateEntity(player, className, vec3_origin, args, 2);
-		},
+			TryCreateEntity(player, className, vec3_origin, args, 2); },
 		{.Flags = ClientCommandFlag::Cheat});
 
 	g_ClientCommands.Create("npc_create", [](CBasePlayer* player, const CommandArgs& args)
@@ -1007,7 +1005,6 @@ void SV_CreateClientCommands()
 					UTIL_Remove(entity);
 				}
 			}
-
 		},
 		{.Flags = ClientCommandFlag::Cheat});
 }
@@ -2131,8 +2128,8 @@ void UpdateClientData(const edict_t* ent, int sendweapons, clientdata_t* cd)
 	}
 	else
 	{
-		cd->weapons = 0; // Non-players don't have hud flags.
-		cd->fov = plOrg->m_iFOV; // Use actual player FOV if target is not a player.
+		cd->weapons = 0;			// Non-players don't have hud flags.
+		cd->fov = plOrg->m_iFOV;	// Use actual player FOV if target is not a player.
 		cd->iuser4 = CTFItem::None; // Non-players don't have items.
 	}
 

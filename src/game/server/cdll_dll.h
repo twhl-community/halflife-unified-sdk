@@ -96,8 +96,8 @@ enum HudFlag
 };
 
 /**
-*	@brief Indicates that a weapon does not use magazines.
-*/
+ *	@brief Indicates that a weapon does not use magazines.
+ */
 constexpr int WEAPON_NOCLIP = -1;
 
 enum class SuitLightType

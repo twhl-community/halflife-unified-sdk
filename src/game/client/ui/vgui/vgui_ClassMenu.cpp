@@ -50,7 +50,8 @@
 #define CLASSMENU_WINDOW_PLAYERS_Y YRES(42)
 
 // Creation
-CClassMenuPanel::CClassMenuPanel(int iTrans, bool iRemoveMe, int x, int y, int wide, int tall) : CMenuPanel(iTrans, iRemoveMe, x, y, wide, tall)
+CClassMenuPanel::CClassMenuPanel(int iTrans, bool iRemoveMe, int x, int y, int wide, int tall)
+	: CMenuPanel(iTrans, iRemoveMe, x, y, wide, tall)
 {
 	memset(m_pClassImages, 0, sizeof(m_pClassImages));
 

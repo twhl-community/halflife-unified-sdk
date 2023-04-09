@@ -28,8 +28,8 @@ constexpr int TENTACLE_NUM_HEIGHTS = 4;
 constexpr float TENTACLE_HEIGHT_LEVEL_OFFSET = 40;
 
 /**
-*	@brief silo of death tentacle monster
-*/
+ *	@brief silo of death tentacle monster
+ */
 class CTentacle : public CBaseMonster
 {
 	DECLARE_CLASS(CTentacle, CBaseMonster);

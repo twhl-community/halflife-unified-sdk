@@ -116,7 +116,7 @@ struct efx_api_t
 	void (*R_BubbleTrail)(float* start, float* end, float height, int modelIndex, int count, float speed);
 	void (*R_BulletImpactParticles)(const float* pos);
 	void (*R_EntityParticles)(cl_entity_t* ent);
-	[[deprecated("Use R_Explosion in ISoundSystem.h instead")]]  void (*R_Explosion)(const float* pos, int model, float scale, float framerate, int flags);
+	[[deprecated("Use R_Explosion in ISoundSystem.h instead")]] void (*R_Explosion)(const float* pos, int model, float scale, float framerate, int flags);
 	void (*R_FizzEffect)(cl_entity_t* pent, int modelIndex, int density);
 	void (*R_FireField)(float* org, int radius, int modelIndex, int count, int flags, float life);
 	void (*R_FlickerParticles)(const float* org);
@@ -151,8 +151,8 @@ struct efx_api_t
 	void (*R_StreakSplash)(float* pos, float* dir, int color, int count, float speed, int velocityMin, int velocityMax);
 
 	/**
-	*	@param start Modified by function.
-	*/
+	 *	@param start Modified by function.
+	 */
 	void (*R_TracerEffect)(float* start, const float* end);
 
 	void (*R_UserTracerParticle)(float* org, float* vel, float life, int colorIndex, float length, unsigned char deathcontext, void (*deathfunc)(particle_t* particle));

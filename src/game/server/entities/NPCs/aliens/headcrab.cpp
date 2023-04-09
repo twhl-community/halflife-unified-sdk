@@ -56,8 +56,8 @@ Schedule_t slHCRangeAttack1Fast[] =
 };
 
 /**
-*	@brief tiny, jumpy alien parasite
-*/
+ *	@brief tiny, jumpy alien parasite
+ */
 class CHeadCrab : public CBaseMonster
 {
 	DECLARE_CLASS(CHeadCrab, CBaseMonster);
@@ -73,14 +73,14 @@ public:
 	void SetYawSpeed() override;
 
 	/**
-	*	@brief this is the headcrab's touch function when it is in the air
-	*/
+	 *	@brief this is the headcrab's touch function when it is in the air
+	 */
 	void LeapTouch(CBaseEntity* pOther);
 
 	/**
-	*	@brief returns the real center of the headcrab.
-	*	The bounding box is much larger than the actual creature so this is needed for targeting
-	*/
+	 *	@brief returns the real center of the headcrab.
+	 *	The bounding box is much larger than the actual creature so this is needed for targeting
+	 */
 	Vector Center() override;
 	Vector BodyTarget(const Vector& posSrc) override;
 	void PainSound() override;

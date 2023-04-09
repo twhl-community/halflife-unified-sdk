@@ -119,18 +119,18 @@ class CBasePlayer : public CBaseMonster
 public:
 	// Spectator camera
 	/**
-	*	@brief Find the next client in the game for this player to spectate
-	*/
+	 *	@brief Find the next client in the game for this player to spectate
+	 */
 	void Observer_FindNextPlayer(bool bReverse);
 
 	/**
-	*	@brief Handle buttons in observer mode
-	*/
+	 *	@brief Handle buttons in observer mode
+	 */
 	void Observer_HandleButtons();
 
 	/**
-	*	@brief Attempt to change the observer mode
-	*/
+	 *	@brief Attempt to change the observer mode
+	 */
 	void Observer_SetMode(int iMode);
 
 	void Observer_CheckTarget();
@@ -287,7 +287,7 @@ public:
 	int m_lastx, m_lasty; // These are the previous update's crosshair angles, DON"T SAVE/RESTORE
 
 	int m_nCustomSprayFrames = -1; // Custom clan logo frames for this player
-	float m_flNextDecalTime;  // next time this player can spray a decal
+	float m_flNextDecalTime;	   // next time this player can spray a decal
 
 	char m_szTeamName[TEAM_NAME_LENGTH];
 
@@ -304,11 +304,11 @@ public:
 	void TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
 
 	/**
-	*	@brief NOTE: each call to TakeDamage with bitsDamageType set to
-	*	a time-based damage type will cause the damage time countdown to be reset.
-	*	Thus the ongoing effects of poison, radiation etc are implemented
-	*	with subsequent calls to TakeDamage using DMG_GENERIC.
-	*/
+	 *	@brief NOTE: each call to TakeDamage with bitsDamageType set to
+	 *	a time-based damage type will cause the damage time countdown to be reset.
+	 *	Thus the ongoing effects of poison, radiation etc are implemented
+	 *	with subsequent calls to TakeDamage using DMG_GENERIC.
+	 */
 	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 	void Killed(CBaseEntity* attacker, int iGib) override;
 	Vector BodyTarget(const Vector& posSrc) override { return Center() + pev->view_ofs * RANDOM_FLOAT(0.5, 1.1); } // position to shoot at
@@ -323,15 +323,15 @@ public:
 	void PostRestore() override;
 
 	/**
-	*	@brief Marks everything as new so the player will resend this to the hud.
-	*/
+	 *	@brief Marks everything as new so the player will resend this to the hud.
+	 */
 	void RenewItems();
 
 	/**
-	*	@brief call this when a player dies to pack up the appropriate weapons and ammo items,
-	*	and to destroy anything that shouldn't be packed.
-	*	This is pretty brute force :(
-	*/
+	 *	@brief call this when a player dies to pack up the appropriate weapons and ammo items,
+	 *	and to destroy anything that shouldn't be packed.
+	 *	This is pretty brute force :(
+	 */
 	void PackDeadPlayerItems();
 	void RemoveAllItems(bool removeSuit);
 	bool SwitchWeapon(CBasePlayerWeapon* weapon);
@@ -351,11 +351,11 @@ public:
 	void SetHasLongJump(bool hasLongJump);
 
 	/**
-	*	@brief resends any changed player HUD info to the client.
-	*	Called every frame by PlayerPreThink
-	*	Also called at start of demo recording and playback by ForceClientDllUpdate to ensure the demo gets messages
-	*	reflecting all of the HUD state info.
-	*/
+	 *	@brief resends any changed player HUD info to the client.
+	 *	Called every frame by PlayerPreThink
+	 *	Also called at start of demo recording and playback by ForceClientDllUpdate to ensure the demo gets messages
+	 *	reflecting all of the HUD state info.
+	 */
 	virtual void UpdateClientData();
 
 	void UpdateCTFHud();
@@ -374,16 +374,16 @@ public:
 	void SetSuitLightType(SuitLightType type);
 
 	/**
-	*	@brief updates the position of the player's reserved sound slot in the sound list.
-	*/
+	 *	@brief updates the position of the player's reserved sound slot in the sound list.
+	 */
 	void UpdatePlayerSound();
 	void DeathSound() override;
 
 	int Classify() override;
 
 	/**
-	*	@brief Set the activity based on an event or current state
-	*/
+	 *	@brief Set the activity based on an event or current state
+	 */
 	void SetAnimation(PLAYER_ANIM playerAnim);
 	char m_szAnimExtention[32];
 
@@ -392,8 +392,8 @@ public:
 	void CheatImpulseCommands(int iImpulse);
 
 	/**
-	*	@brief find an intermission spot and send the player off into observer mode
-	*/
+	 *	@brief find an intermission spot and send the player off into observer mode
+	 */
 	void StartDeathCam();
 	void StartObserver(Vector vecPosition, Vector vecViewAngle);
 
@@ -401,15 +401,15 @@ public:
 	void AddPointsToTeam(int score, bool bAllowNegativeScore);
 
 	/**
-	*	@brief Add a weapon to the player (Item == Weapon == Selectable Object)
-	*/
+	 *	@brief Add a weapon to the player (Item == Weapon == Selectable Object)
+	 */
 	ItemAddResult AddPlayerWeapon(CBasePlayerWeapon* weapon);
 
 	bool RemovePlayerWeapon(CBasePlayerWeapon* weapon);
 
 	/**
-	*	@brief drop the named item, or if no name, the active item.
-	*/
+	 *	@brief drop the named item, or if no name, the active item.
+	 */
 	void DropPlayerWeapon(const char* pszItemName);
 
 	bool HasPlayerWeapon(CBasePlayerWeapon* checkWeapon);
@@ -425,28 +425,28 @@ private:
 
 public:
 	/**
-	*	@brief Called every frame by the player PreThink
-	*/
+	 *	@brief Called every frame by the player PreThink
+	 */
 	void ItemPreFrame();
 
 	/**
-	*	@brief Called every frame by the player PostThink
-	*/
+	 *	@brief Called every frame by the player PostThink
+	 */
 	void ItemPostFrame();
 	void GiveNamedItem(const char* szName);
 	void GiveNamedItem(const char* szName, int defaultAmmo);
 	void EnableControl(bool fControl);
 
 	/**
-	*	@brief Returns the unique ID for the ammo, or -1 if error
-	*/
+	 *	@brief Returns the unique ID for the ammo, or -1 if error
+	 */
 	int GiveAmmo(int iAmount, const char* szName);
 
 	int GiveMagazine(CBasePlayerWeapon* weapon, int attackMode);
 
 	/**
-	*	@brief makes sure the client has all the necessary ammo info, if values have changed
-	*/
+	 *	@brief makes sure the client has all the necessary ammo info, if values have changed
+	 */
 	void SendAmmoUpdate();
 	void SendSingleAmmoUpdate(int ammoIndex);
 
@@ -459,17 +459,17 @@ public:
 	void PlayerUse();
 
 	/**
-	*	@brief Play suit update if it's time
-	*/
+	 *	@brief Play suit update if it's time
+	 */
 	void CheckSuitUpdate();
 
 	/**
-	*	@brief add sentence to suit playlist queue.
-	*	@param fgroup if true, then name is a sentence group (HEV_AA),
-	*		otherwise name is a specific sentence name ie: !HEV_AA0.
-	*	@param iNoRepeat if specified, then we won't repeat playback of this word or sentence
-	*		for at least that number of seconds.
-	*/
+	 *	@brief add sentence to suit playlist queue.
+	 *	@param fgroup if true, then name is a sentence group (HEV_AA),
+	 *		otherwise name is a specific sentence name ie: !HEV_AA0.
+	 *	@param iNoRepeat if specified, then we won't repeat playback of this word or sentence
+	 *		for at least that number of seconds.
+	 */
 	void SetSuitUpdate(const char* name, bool fgroup, int iNoRepeat);
 
 	void UpdateGeigerCounter();
@@ -485,36 +485,36 @@ public:
 	void SetAmmoCount(const char* ammoName, int count);
 
 	/**
-	*	@brief return player light level plus virtual muzzle flash
-	*/
+	 *	@brief return player light level plus virtual muzzle flash
+	 */
 	int Illumination() override;
 
 	void ResetAutoaim();
 
 	/**
-	*	@brief set crosshair position to point to enemey
-	*/
+	 *	@brief set crosshair position to point to enemey
+	 */
 	Vector GetAutoaimVector(float flDelta);
 
 	Vector GetAutoaimVectorFromPoint(const Vector& vecSrc, float flDelta);
 	Vector AutoaimDeflection(const Vector& vecSrc, float flDist, float flDelta);
 
 	/**
-	*	@brief When recording a demo, we need to have the server tell us the entire client state
-	*	so that the client side .dll can behave correctly.
-	*	Reset stuff so that the state is transmitted.
-	*/
+	 *	@brief When recording a demo, we need to have the server tell us the entire client state
+	 *	so that the client side .dll can behave correctly.
+	 *	Reset stuff so that the state is transmitted.
+	 */
 	void ForceClientDllUpdate();
 
 	/**
-	*	@brief UNDONE:  Determine real frame limit, 8 is a placeholder.
-	*	Note:  -1 means no custom frames present.
-	*/
+	 *	@brief UNDONE:  Determine real frame limit, 8 is a placeholder.
+	 *	Note:  -1 means no custom frames present.
+	 */
 	void SetCustomDecalFrames(int nFrames);
 
 	/**
-	*	@brief Returns the # of custom frames this player's custom clan logo contains.
-	*/
+	 *	@brief Returns the # of custom frames this player's custom clan logo contains.
+	 */
 	int GetCustomDecalFrames();
 
 	float m_flStartCharge;
@@ -642,14 +642,16 @@ public:
 
 public:
 	CPlayerIterator()
-		: m_pPlayer(nullptr), m_iNextIndex(gpGlobals->maxClients + 1)
+		: m_pPlayer(nullptr),
+		  m_iNextIndex(gpGlobals->maxClients + 1)
 	{
 	}
 
 	CPlayerIterator(const CPlayerIterator&) = default;
 
 	CPlayerIterator(CBasePlayer* pPlayer)
-		: m_pPlayer(pPlayer), m_iNextIndex(pPlayer ? pPlayer->entindex() + 1 : FirstPlayerIndex)
+		: m_pPlayer(pPlayer),
+		  m_iNextIndex(pPlayer ? pPlayer->entindex() + 1 : FirstPlayerIndex)
 	{
 	}
 

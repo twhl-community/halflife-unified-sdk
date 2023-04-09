@@ -50,8 +50,8 @@ public:
 	void TrackTarget();
 
 	/**
-	*	@brief Fire targets and spawn sprites
-	*/
+	 *	@brief Fire targets and spawn sprites
+	 */
 	virtual void Fire(const Vector& barrelEnd, const Vector& forward, CBaseEntity* attacker);
 	virtual Vector UpdateTargetPosition(CBaseEntity* pTarget)
 	{
@@ -93,8 +93,8 @@ public:
 	}
 
 	/**
-	*	@brief If barrel is offset, add in additional rotation
-	*/
+	 *	@brief If barrel is offset, add in additional rotation
+	 */
 	void AdjustAnglesForBarrel(Vector& angles, float distance);
 
 	bool OnControls(CBaseEntity* controller) override;
@@ -102,8 +102,8 @@ public:
 	void StopControl();
 
 	/**
-	*	@brief Called each frame by the player's ItemPostFrame
-	*/
+	 *	@brief Called each frame by the player's ItemPostFrame
+	 */
 	void ControllerPostFrame();
 
 

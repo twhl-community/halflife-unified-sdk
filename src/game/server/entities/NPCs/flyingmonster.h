@@ -16,8 +16,8 @@
 #pragma once
 
 /**
-*	@brief Base class for flying monsters.  This overrides the movement test & execution code from CBaseMonster
-*/
+ *	@brief Base class for flying monsters.  This overrides the movement test & execution code from CBaseMonster
+ */
 class CFlyingMonster : public CBaseMonster
 {
 public:

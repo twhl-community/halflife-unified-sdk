@@ -1009,24 +1009,24 @@ bool CScriptedSentence::StartSentence(CBaseMonster* pTarget)
 }
 
 /**
-*	@brief this is the cool comment I cut-and-pasted
-*/
+ *	@brief this is the cool comment I cut-and-pasted
+ */
 class CFurniture : public CBaseMonster
 {
 public:
 	void OnCreate() override;
 
 	/**
-	*	@brief This used to have something to do with bees flying,
-	*	but now it only initializes moving furniture in scripted sequences
-	*/
+	 *	@brief This used to have something to do with bees flying,
+	 *	but now it only initializes moving furniture in scripted sequences
+	 */
 	void Spawn() override;
 
 	void Die();
 
 	/**
-	*	@brief ID's Furniture as neutral (noone will attack it)
-	*/
+	 *	@brief ID's Furniture as neutral (noone will attack it)
+	 */
 	int Classify() override;
 
 	int ObjectCaps() override { return (CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }

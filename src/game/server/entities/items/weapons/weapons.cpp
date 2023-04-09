@@ -13,9 +13,9 @@
  *
  ****/
 /**
-*	@file
-*	functions governing the selection/use of weapons for players
-*/
+ *	@file
+ *	functions governing the selection/use of weapons for players
+ */
 
 #include "cbase.h"
 #include "AmmoTypeSystem.h"

@@ -32,8 +32,8 @@
 #define DEBUG_BEAMS 0
 
 /**
-*	@brief basic little swimming monster
-*/
+ *	@brief basic little swimming monster
+ */
 class CLeech : public CBaseMonster
 {
 	DECLARE_CLASS(CLeech, CBaseMonster);
@@ -70,8 +70,8 @@ public:
 	void UpdateMotion();
 
 	/**
-	*	@brief returns normalized distance to obstacle
-	*/
+	 *	@brief returns normalized distance to obstacle
+	 */
 	float ObstacleDistance(CBaseEntity* pTarget);
 
 	void MakeVectors();

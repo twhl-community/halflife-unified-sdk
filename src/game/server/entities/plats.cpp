@@ -14,9 +14,9 @@
  ****/
 
 /**
-*	@file
-*	spawn, think, and touch functions for trains, etc
-*/
+ *	@file
+ *	spawn, think, and touch functions for trains, etc
+ */
 
 #include "cbase.h"
 #include "client.h"
@@ -115,14 +115,14 @@ void CBasePlatTrain::Precache()
 }
 
 /**
-*	@details Plats are always drawn in the extended position, so they will light correctly.
-*
-*	If the plat is the target of another trigger or button, it will start out disabled in
-*	the extended position until it is trigger, when it will lower and become a normal plat.
-*	
-*	If the "height" key is set, that will determine the amount the plat moves, instead of
-*	being implicitly determined by the model's height.
-*/
+ *	@details Plats are always drawn in the extended position, so they will light correctly.
+ *
+ *	If the plat is the target of another trigger or button, it will start out disabled in
+ *	the extended position until it is trigger, when it will lower and become a normal plat.
+ *
+ *	If the "height" key is set, that will determine the amount the plat moves, instead of
+ *	being implicitly determined by the model's height.
+ */
 class CFuncPlat : public CBasePlatTrain
 {
 	DECLARE_CLASS(CFuncPlat, CBasePlatTrain);
@@ -136,8 +136,8 @@ public:
 	void Blocked(CBaseEntity* pOther) override;
 
 	/**
-	*	@brief Start bringing platform down.
-	*/
+	 *	@brief Start bringing platform down.
+	 */
 	void PlatUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
 	void CallGoDown() { GoDown(); }
@@ -145,23 +145,23 @@ public:
 	void CallHitBottom() { HitBottom(); }
 
 	/**
-	*	@brief Platform is at bottom, now starts moving up
-	*/
+	 *	@brief Platform is at bottom, now starts moving up
+	 */
 	virtual void GoUp();
 
 	/**
-	*	@brief Platform is at top, now starts moving down.
-	*/
+	 *	@brief Platform is at top, now starts moving down.
+	 */
 	virtual void GoDown();
 
 	/**
-	*	@brief Platform has hit top. Pauses, then starts back down again.
-	*/
+	 *	@brief Platform has hit top. Pauses, then starts back down again.
+	 */
 	virtual void HitTop();
 
 	/**
-	*	@brief Platform has hit bottom. Stops and waits forever.
-	*/
+	 *	@brief Platform has hit bottom. Stops and waits forever.
+	 */
 	virtual void HitBottom();
 };
 
@@ -181,13 +181,13 @@ public:
 	int ObjectCaps() override { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION) | FCAP_DONT_SAVE; }
 
 	/**
-	*	@brief Create a trigger entity for a platform.
-	*/
+	 *	@brief Create a trigger entity for a platform.
+	 */
 	void SpawnInsideTrigger(CFuncPlat* pPlatform);
 
 	/**
-	*	@brief When the platform's trigger field is touched, the platform ???
-	*/
+	 *	@brief When the platform's trigger field is touched, the platform ???
+	 */
 	void Touch(CBaseEntity* pOther) override;
 	EntityHandle<CFuncPlat> m_hPlatform;
 };
@@ -412,8 +412,8 @@ public:
 LINK_ENTITY_TO_CLASS(func_platrot, CFuncPlatRot);
 
 BEGIN_DATAMAP(CFuncPlatRot)
-		DEFINE_FIELD(m_end, FIELD_VECTOR),
-		DEFINE_FIELD(m_start, FIELD_VECTOR),
+DEFINE_FIELD(m_end, FIELD_VECTOR),
+	DEFINE_FIELD(m_start, FIELD_VECTOR),
 	END_DATAMAP();
 
 void CFuncPlatRot::SetupRotation()
@@ -483,11 +483,11 @@ void CFuncPlatRot::RotMove(Vector& destAngle, float time)
 }
 
 /**
-*	@brief Trains are moving platforms that players can ride.
-*	The targets origin specifies the min point of the train at each corner.
-*	The train spawns at the first target it is pointing at.
-*	If the train is the target of a button or trigger, it will not begin moving until activated.
-*/
+ *	@brief Trains are moving platforms that players can ride.
+ *	The targets origin specifies the min point of the train at each corner.
+ *	The train spawns at the first target it is pointing at.
+ *	If the train is the target of a button or trigger, it will not begin moving until activated.
+ */
 class CFuncTrain : public CBasePlatTrain
 {
 	DECLARE_CLASS(CFuncTrain, CBasePlatTrain);
@@ -505,8 +505,8 @@ public:
 	void Wait();
 
 	/**
-	*	@brief path corner needs to change to next target
-	*/
+	 *	@brief path corner needs to change to next target
+	 */
 	void Next();
 
 	EHANDLE m_CurrentTarget;
@@ -743,8 +743,8 @@ public:
 	void Wait();
 
 	/**
-	*	@brief path corner needs to change to next target
-	*/
+	 *	@brief path corner needs to change to next target
+	 */
 	void Next();
 
 	void Think() override;
@@ -1640,8 +1640,8 @@ void CFuncTrackTrain::Precache()
 }
 
 /**
-*	@brief This class defines the volume of space that the player must stand in to control the train
-*/
+ *	@brief This class defines the volume of space that the player must stand in to control the train
+ */
 class CFuncTrainControls : public CBaseEntity
 {
 	DECLARE_CLASS(CFuncTrainControls, CBaseEntity);
@@ -1706,11 +1706,11 @@ enum TRAIN_CODE
 };
 
 /**
-*	@brief Track changer / Train elevator
-*	@details This entity is a rotating/moving platform that will carry a train to a new track.
-*	It must be larger in X-Y planar area than the train,
-*	since it must contain the train within these dimensions in order to operate when the train is near it.
-*/
+ *	@brief Track changer / Train elevator
+ *	@details This entity is a rotating/moving platform that will carry a train to a new track.
+ *	It must be larger in X-Y planar area than the train,
+ *	since it must contain the train within these dimensions in order to operate when the train is near it.
+ */
 class CFuncTrackChange : public CFuncPlatRot
 {
 	DECLARE_CLASS(CFuncTrackChange, CFuncPlatRot);
@@ -2162,10 +2162,10 @@ void CFuncTrackAuto::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE
 #define FGUNTARGET_START_ON 0x0001
 
 /**
-*	@details pev->speed is the travel speed
-*	pev->health is current health
-*	pev->max_health is the amount to reset to each time it starts
-*/
+ *	@details pev->speed is the travel speed
+ *	pev->health is current health
+ *	pev->max_health is the amount to reset to each time it starts
+ */
 class CGunTarget : public CBaseMonster
 {
 	DECLARE_CLASS(CGunTarget, CBaseMonster);

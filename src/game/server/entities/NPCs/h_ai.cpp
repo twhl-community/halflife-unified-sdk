@@ -14,11 +14,11 @@
  ****/
 
 /**
-*	@file
-*	halflife specific ai code
-*	AI UTILITY FUNCTIONS
-*	!!!UNDONE - move CBaseMonster functions to monsters.cpp
-*/
+ *	@file
+ *	halflife specific ai code
+ *	AI UTILITY FUNCTIONS
+ *	!!!UNDONE - move CBaseMonster functions to monsters.cpp
+ */
 
 #include "cbase.h"
 

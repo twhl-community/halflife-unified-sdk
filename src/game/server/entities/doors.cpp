@@ -17,8 +17,8 @@
 #include "doors.h"
 
 /**
-*	@brief if two doors touch, they are assumed to be connected and operate as a unit.
-*/
+ *	@brief if two doors touch, they are assumed to be connected and operate as a unit.
+ */
 class CBaseDoor : public CBaseToggle
 {
 	DECLARE_CLASS(CBaseDoor, CBaseToggle);
@@ -42,34 +42,34 @@ public:
 
 	// used to selectivly override defaults
 	/**
-	*	@brief Doors not tied to anything (e.g. button, another door) can be touched, to make them activate.
-	*/
+	 *	@brief Doors not tied to anything (e.g. button, another door) can be touched, to make them activate.
+	 */
 	void DoorTouch(CBaseEntity* pOther);
 
 	// local functions
 	/**
-	*	@brief Causes the door to "do its thing", i.e. start moving, and cascade activation.
-	*/
+	 *	@brief Causes the door to "do its thing", i.e. start moving, and cascade activation.
+	 */
 	bool DoorActivate();
 
 	/**
-	*	@brief Starts the door going to its "up" position (simply ToggleData->vecPosition2).
-	*/
+	 *	@brief Starts the door going to its "up" position (simply ToggleData->vecPosition2).
+	 */
 	void DoorGoUp();
 
 	/**
-	*	@brief Starts the door going to its "down" position (simply ToggleData->vecPosition1).
-	*/
+	 *	@brief Starts the door going to its "down" position (simply ToggleData->vecPosition1).
+	 */
 	void DoorGoDown();
 
 	/**
-	*	@brief The door has reached the "up" position. Either go back down, or wait for another activation.
-	*/
+	 *	@brief The door has reached the "up" position. Either go back down, or wait for another activation.
+	 */
 	void DoorHitTop();
 
 	/**
-	*	@brief The door has reached the "down" position. Back to quiescence.
-	*/
+	 *	@brief The door has reached the "down" position. Back to quiescence.
+	 */
 	void DoorHitBottom();
 
 	byte m_bHealthValue; // some doors are medi-kit doors, they give players health
@@ -245,8 +245,8 @@ bool CBaseDoor::KeyValue(KeyValueData* pkvd)
 LINK_ENTITY_TO_CLASS(func_door, CBaseDoor);
 
 /**
-*	@brief func_water - same as a door.
-*/
+ *	@brief func_water - same as a door.
+ */
 LINK_ENTITY_TO_CLASS(func_water, CBaseDoor);
 
 void CBaseDoor::Spawn()
@@ -658,8 +658,8 @@ public:
 	int ObjectCaps() override { return CBaseToggle::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 
 	/**
-	*	@brief The door has reached needed position.
-	*/
+	 *	@brief The door has reached needed position.
+	 */
 	void DoorMoveDone();
 	void StopMoveSound();
 

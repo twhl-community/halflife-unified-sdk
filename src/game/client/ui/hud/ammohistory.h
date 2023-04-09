@@ -30,7 +30,7 @@ private:
 	std::array<WEAPON, MAX_WEAPONS> rgWeapons; // Weapons Array
 
 	// counts of weapons * ammo
-	std::array<std::vector<WEAPON*>, MAX_WEAPON_SLOTS> rgSlots;	// The slots currently in use by weapons.
+	std::array<std::vector<WEAPON*>, MAX_WEAPON_SLOTS> rgSlots; // The slots currently in use by weapons.
 	int riAmmo[MAX_AMMO_TYPES];									// count of each ammo type
 
 public:

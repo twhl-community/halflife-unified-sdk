@@ -13,9 +13,9 @@
  *
  ****/
 /**
-*	@file
-*	precaches and defs for entities and other data that must always be available.
-*/
+ *	@file
+ *	precaches and defs for entities and other data that must always be available.
+ */
 
 #include "cbase.h"
 #include "CCorpse.h"
@@ -28,8 +28,8 @@
 #include "ctf/ctf_items.h"
 
 /**
-*	@details This must match the list in util.h
-*/
+ *	@details This must match the list in util.h
+ */
 DLL_DECALLIST gDecals[] = {
 	{"{shot1", 0},		 // DECAL_GUNSHOT1
 	{"{shot2", 0},		 // DECAL_GUNSHOT2
@@ -268,7 +268,7 @@ void CWorld::Precache()
 
 	///!!!LATER - do we want a sound ent in deathmatch? (sjb)
 	pSoundEnt = g_EntityDictionary->Create<CSoundEnt>("soundent");
-	
+
 	if (pSoundEnt)
 	{
 		pSoundEnt->Spawn();
@@ -437,7 +437,7 @@ void CWorld::Precache()
 
 bool CWorld::KeyValue(KeyValueData* pkvd)
 {
-	//ignore the "wad" field.
+	// ignore the "wad" field.
 	if (FStrEq(pkvd->szKeyName, "skyname"))
 	{
 		// Sent over net now.

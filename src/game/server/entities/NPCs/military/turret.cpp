@@ -48,8 +48,8 @@ public:
 	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 
 	/**
-	*	@brief ID as a machine
-	*/
+	 *	@brief ID as a machine
+	 */
 	int Classify() override;
 
 	int BloodColor() override { return DONT_BLEED; }
@@ -62,15 +62,15 @@ public:
 	void ActiveThink();
 
 	/**
-	*	@brief This search function will sit with the turret deployed and look for a new target.
-	*	After a set amount of time, the barrel will spin down. After m_flMaxWait, the turret will retract.
-	*/
+	 *	@brief This search function will sit with the turret deployed and look for a new target.
+	 *	After a set amount of time, the barrel will spin down. After m_flMaxWait, the turret will retract.
+	 */
 	void SearchThink();
 
 	/**
-	*	@brief This think function will deploy the turret when something comes into range.
-	*	This is for automatically activated turrets.
-	*/
+	 *	@brief This think function will deploy the turret when something comes into range.
+	 *	This is for automatically activated turrets.
+	 */
 	void AutoSearchThink();
 	void TurretDeath();
 
@@ -167,7 +167,7 @@ DEFINE_FIELD(m_flMaxSpin, FIELD_FLOAT),
 	DEFINE_FUNCTION(TurretDeath),
 	DEFINE_FUNCTION(SpinDownCall),
 	DEFINE_FUNCTION(SpinUpCall),
-	//DEFINE_FUNCTION(SpinDownCall),
+	// DEFINE_FUNCTION(SpinDownCall),
 	DEFINE_FUNCTION(Deploy),
 	DEFINE_FUNCTION(Retire),
 	DEFINE_FUNCTION(Initialize),
@@ -1129,8 +1129,8 @@ int CBaseTurret::Classify()
 }
 
 /**
-*	@brief smallest turret, placed near grunt entrenchments
-*/
+ *	@brief smallest turret, placed near grunt entrenchments
+ */
 class CSentry : public CBaseTurret
 {
 	DECLARE_CLASS(CSentry, CBaseTurret);

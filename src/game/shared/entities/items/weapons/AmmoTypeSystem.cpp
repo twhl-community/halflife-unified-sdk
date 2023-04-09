@@ -154,7 +154,7 @@ int AmmoTypeSystem::Register(std::string_view name, int maximumCapacity, std::st
 	}
 
 	if (!weaponName.empty() && std::find_if_not(weaponName.begin(), weaponName.end(), [](auto& c)
-						  { return std::isalnum(c) || c == '_'; }) != weaponName.end())
+								   { return std::isalnum(c) || c == '_'; }) != weaponName.end())
 	{
 		assert(!"Invalid ammo type weapon name");
 		CBasePlayerWeapon::WeaponsLogger->error("Attempting to register ammo type \"{}\" with invalid weapon name \"{}\"", name, weaponName);

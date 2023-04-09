@@ -36,7 +36,8 @@ struct ReplacementMap
 	ReplacementMap() = default;
 
 	ReplacementMap(Replacements&& replacements, bool caseSensitive)
-		: m_Replacements(std::move(replacements)), m_CaseSensitive(caseSensitive)
+		: m_Replacements(std::move(replacements)),
+		  m_CaseSensitive(caseSensitive)
 	{
 	}
 

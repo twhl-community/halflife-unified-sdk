@@ -526,7 +526,7 @@ void GameSoundSystem::MsgFunc_EmitSound(const char* pszName, BufferReader& reade
 			m_Logger->error("MsgFunc_EmitSound: Invalid sentence index {}", soundIndex);
 			return;
 		}
-		
+
 		Filename sample;
 		fmt::format_to(std::back_inserter(sample), "!{}", sentence->Name.c_str());
 

@@ -699,9 +699,9 @@ void CHalfLifeMultiplay::DeathNotice(CBasePlayer* pVictim, CBaseEntity* pKiller,
 		killer_weapon_name += 5;
 
 	MESSAGE_BEGIN(MSG_ALL, gmsgDeathMsg);
-	WRITE_BYTE(killer_index);				// the killer
-	WRITE_BYTE(pVictim->entindex());		// the victim
-	WRITE_STRING(killer_weapon_name);		// what they were killed by (should this be a string?)
+	WRITE_BYTE(killer_index);		  // the killer
+	WRITE_BYTE(pVictim->entindex());  // the victim
+	WRITE_STRING(killer_weapon_name); // what they were killed by (should this be a string?)
 	MESSAGE_END();
 
 	// replace the code names with the 'real' names
@@ -727,14 +727,14 @@ void CHalfLifeMultiplay::DeathNotice(CBasePlayer* pVictim, CBaseEntity* pKiller,
 	}
 
 	MESSAGE_BEGIN(MSG_SPEC, SVC_DIRECTOR);
-	WRITE_BYTE(9);							// command length in bytes
-	WRITE_BYTE(DRC_CMD_EVENT);				// player killed
-	WRITE_SHORT(pVictim->entindex());		// index number of primary entity
+	WRITE_BYTE(9);					  // command length in bytes
+	WRITE_BYTE(DRC_CMD_EVENT);		  // player killed
+	WRITE_SHORT(pVictim->entindex()); // index number of primary entity
 	if (inflictor)
 		WRITE_SHORT(inflictor->entindex()); // index number of secondary entity
 	else
-		WRITE_SHORT(pKiller->entindex());	// index number of secondary entity
-	WRITE_LONG(7 | DRC_FLAG_DRAMATIC);		// eventflags (priority and flags)
+		WRITE_SHORT(pKiller->entindex()); // index number of secondary entity
+	WRITE_LONG(7 | DRC_FLAG_DRAMATIC);	  // eventflags (priority and flags)
 	MESSAGE_END();
 
 	//  Print a standard message
@@ -945,8 +945,8 @@ struct mapcycle_t
 };
 
 /**
-*	@brief Clean up memory used by mapcycle when switching it
-*/
+ *	@brief Clean up memory used by mapcycle when switching it
+ */
 void DestroyMapCycle(mapcycle_t* cycle)
 {
 	mapcycle_item_t *p, *n, *start;
@@ -969,8 +969,8 @@ void DestroyMapCycle(mapcycle_t* cycle)
 }
 
 /**
-*	@brief Parses mapcycle.txt file into mapcycle_t structure
-*/
+ *	@brief Parses mapcycle.txt file into mapcycle_t structure
+ */
 bool ReloadMapCycleFile(const char* filename, mapcycle_t* cycle)
 {
 	char szBuffer[MAX_RULE_BUFFER];
@@ -1086,8 +1086,8 @@ bool ReloadMapCycleFile(const char* filename, mapcycle_t* cycle)
 }
 
 /**
-*	@brief Determine the current # of active players on the server for map cycling logic
-*/
+ *	@brief Determine the current # of active players on the server for map cycling logic
+ */
 int CountPlayers()
 {
 	int num = 0;
@@ -1106,8 +1106,8 @@ int CountPlayers()
 }
 
 /**
-*	@brief Parse commands/key value pairs to issue right after map xxx command is issued on server level transition
-*/
+ *	@brief Parse commands/key value pairs to issue right after map xxx command is issued on server level transition
+ */
 void ExtractCommandString(char* s, char* szCommand)
 {
 	// Now make rules happen
@@ -1156,8 +1156,8 @@ void ExtractCommandString(char* s, char* szCommand)
 }
 
 /**
-*	@brief Server is changing to a new level, check mapcycle.txt for map name and setup info
-*/
+ *	@brief Server is changing to a new level, check mapcycle.txt for map name and setup info
+ */
 void CHalfLifeMultiplay::ChangeLevel()
 {
 	static char szPreviousMapCycleFile[256];

@@ -704,7 +704,7 @@ void CHudSpectator::DirectorMessage(BufferReader& reader)
 		v2[0] = reader.ReadCoord(); // view angle
 		v2[1] = reader.ReadCoord(); // vJumpAngles
 		v2[2] = reader.ReadCoord();
-		f1 = reader.ReadByte(); // fov
+		f1 = reader.ReadByte();	 // fov
 		i1 = reader.ReadShort(); // target
 
 		if (0 != m_autoDirector->value)
@@ -730,10 +730,10 @@ void CHudSpectator::DirectorMessage(BufferReader& reader)
 		msg->x = reader.ReadFloat(); // x pos
 		msg->y = reader.ReadFloat(); // y pos
 
-		msg->fadein = reader.ReadFloat();	  // fadein
-		msg->fadeout = reader.ReadFloat();  // fadeout
+		msg->fadein = reader.ReadFloat();	// fadein
+		msg->fadeout = reader.ReadFloat();	// fadeout
 		msg->holdtime = reader.ReadFloat(); // holdtime
-		msg->fxtime = reader.ReadFloat();	  // fxtime;
+		msg->fxtime = reader.ReadFloat();	// fxtime;
 
 		strncpy(m_HUDMessageText[m_lastHudMessage], reader.ReadString(), 128);
 		m_HUDMessageText[m_lastHudMessage][127] = 0; // text
@@ -765,9 +765,9 @@ void CHudSpectator::DirectorMessage(BufferReader& reader)
 
 
 	case DRC_CMD_STATUS:
-		reader.ReadLong();					  // total number of spectator slots
+		reader.ReadLong();						// total number of spectator slots
 		m_iSpectatorNumber = reader.ReadLong(); // total number of spectator
-		reader.ReadShort();					  // total number of relay proxies
+		reader.ReadShort();						// total number of relay proxies
 
 		gViewPort->UpdateSpectatorPanel();
 		break;

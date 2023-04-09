@@ -39,10 +39,10 @@ bool ProjectInfoSystem::Initialize()
 	g_ConCommands.CreateCommand("projectinfo_print", [this](const auto&)
 		{ PrintLocalInfo(); });
 
-	#ifdef CLIENT_DLL
+#ifdef CLIENT_DLL
 	g_ConCommands.CreateCommand("projectinfo_print_all", [this](const auto&)
 		{ PrintAllInfo(); });
-	#endif
+#endif
 
 	return true;
 }

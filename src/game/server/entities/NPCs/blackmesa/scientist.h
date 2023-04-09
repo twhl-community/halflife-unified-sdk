@@ -77,8 +77,8 @@ enum
 #define SCIENTIST_AE_NEEDLEOFF (3)
 
 /**
-*	@brief human scientist (passive lab worker)
-*/
+ *	@brief human scientist (passive lab worker)
+ */
 class CScientist : public CTalkMonster
 {
 	DECLARE_CLASS(CScientist, CTalkMonster);

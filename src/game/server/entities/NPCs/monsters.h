@@ -16,9 +16,9 @@
 #pragma once
 
 /**
-*	@file
-*	Monster-related utility code
-*/
+ *	@file
+ *	Monster-related utility code
+ */
 
 // CHECKLOCALMOVE result types
 #define LOCALMOVE_INVALID 0					 //!< move is not possible
@@ -74,28 +74,28 @@ inline bool g_fDrawLines = false;
 void UTIL_MoveToOrigin(edict_t* pent, const Vector& vecGoal, float flDist, int iMoveType);
 
 /**
-*	@brief returns the velocity at which an object should be lobbed from vecspot1 to land near vecspot2.
-*	@return g_vecZero if toss is not feasible.
-*/
+ *	@brief returns the velocity at which an object should be lobbed from vecspot1 to land near vecspot2.
+ *	@return g_vecZero if toss is not feasible.
+ */
 Vector VecCheckToss(CBaseEntity* entity, const Vector& vecSpot1, Vector vecSpot2, float flGravityAdj = 1.0);
 
 /**
-*	@brief returns the velocity vector at which an object should be thrown from vecspot1 to hit vecspot2.
-*	@return g_vecZero if throw is not feasible.
-*/
+ *	@brief returns the velocity vector at which an object should be thrown from vecspot1 to hit vecspot2.
+ *	@return g_vecZero if throw is not feasible.
+ */
 Vector VecCheckThrow(CBaseEntity* entity, const Vector& vecSpot1, Vector vecSpot2, float flSpeed, float flGravityAdj = 1.0);
 
 /**
-*	@brief tosses a brass shell from passed origin at passed velocity
-*/
+ *	@brief tosses a brass shell from passed origin at passed velocity
+ */
 void EjectBrass(const Vector& vecOrigin, const Vector& vecVelocity, float rotation, int model, int soundtype);
 void ExplodeModel(const Vector& vecOrigin, float speed, int model, int count);
 bool IsFacing(CBaseEntity* pevTest, const Vector& reference);
 
 /**
-*	@brief a more accurate ( and slower ) version of FVisible.
-*	!!!UNDONE - make this CBaseMonster?
-*/
+ *	@brief a more accurate ( and slower ) version of FVisible.
+ *	!!!UNDONE - make this CBaseMonster?
+ */
 bool FBoxVisible(CBaseEntity* looker, CBaseEntity* target, Vector& vecTargetOrigin, float flSize = 0.0);
 
 void DrawRoute(CBaseEntity* entity, WayPoint_t* m_Route, int m_iRouteIndex, int r, int g, int b);
@@ -124,9 +124,9 @@ void DrawRoute(CBaseEntity* entity, WayPoint_t* m_Route, int m_iRouteIndex, int 
 #define bits_MEMORY_CUSTOM1 (1 << 31)	   //!< Monster-specific memory
 
 /**
-*	@brief trigger conditions for scripted AI
-*	these MUST match the CHOICES interface in halflife.fgd for the base monster
-*/
+ *	@brief trigger conditions for scripted AI
+ *	these MUST match the CHOICES interface in halflife.fgd for the base monster
+ */
 enum
 {
 	AITRIGGER_NONE = 0,
@@ -178,8 +178,8 @@ struct GibData
 };
 
 /**
-*	@brief A gib is a chunk of a body, or a piece of wood/metal/rocks/etc.
-*/
+ *	@brief A gib is a chunk of a body, or a piece of wood/metal/rocks/etc.
+ */
 class CGib : public CBaseEntity
 {
 	DECLARE_CLASS(CGib, CBaseEntity);
@@ -187,25 +187,25 @@ class CGib : public CBaseEntity
 
 public:
 	/**
-	*	@brief Throw a chunk
-	*/
+	 *	@brief Throw a chunk
+	 */
 	void Spawn(const char* szGibModel);
 
 	/**
-	*	@brief Gib bounces on the ground or wall, sponges some blood down, too!
-	*/
+	 *	@brief Gib bounces on the ground or wall, sponges some blood down, too!
+	 */
 	void BounceGibTouch(CBaseEntity* pOther);
 
 	/**
-	*	@brief Sticky gib puts blood on the wall and stays put.
-	*/
+	 *	@brief Sticky gib puts blood on the wall and stays put.
+	 */
 	void StickyGibTouch(CBaseEntity* pOther);
 
 	/**
-	*	@brief in order to emit their meaty scent from the proper location,
-	*	gibs should wait until they stop bouncing to emit their scent.
-	*	That's what this function does.
-	*/
+	 *	@brief in order to emit their meaty scent from the proper location,
+	 *	gibs should wait until they stop bouncing to emit their scent.
+	 *	That's what this function does.
+	 */
 	void WaitTillLand();
 	void LimitVelocity();
 

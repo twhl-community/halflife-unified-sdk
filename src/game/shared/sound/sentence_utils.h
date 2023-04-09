@@ -86,7 +86,8 @@ class SentencesListParser final
 {
 public:
 	SentencesListParser(std::string_view contents, spdlog::logger& logger)
-		: m_Contents(contents), m_Logger(logger)
+		: m_Contents(contents),
+		  m_Logger(logger)
 	{
 	}
 
@@ -117,7 +118,8 @@ struct SentenceWordParser final
 	SentenceWordParameters Parameters;
 
 	explicit SentenceWordParser(std::string_view sentence)
-		: Sentence(sentence), m_Next(Sentence.begin())
+		: Sentence(sentence),
+		  m_Next(Sentence.begin())
 	{
 	}
 

@@ -18,8 +18,8 @@
 #include "CBaseEntity.h"
 
 /**
-*	@brief Body queue class here.... It's really just CBaseEntity
-*/
+ *	@brief Body queue class here.... It's really just CBaseEntity
+ */
 class CCorpse : public CBaseEntity
 {
 	int ObjectCaps() override { return FCAP_DONT_SAVE; }
@@ -29,7 +29,7 @@ inline CBaseEntity* g_pBodyQueueHead = nullptr;
 
 void InitBodyQue();
 
-	/**
+/**
  *	@brief make a body que entry for the given ent so the ent can be respawned elsewhere
  *	@details GLOBALS ASSUMED SET:  g_pBodyQueueHead
  */

@@ -199,8 +199,8 @@ enum PitdroneWeapon
 }
 
 /**
-*	@brief medium sized, fires sharp teeth like spikes and swipes with sharp appendages
-*/
+ *	@brief medium sized, fires sharp teeth like spikes and swipes with sharp appendages
+ */
 class CPitdrone : public CBaseMonster
 {
 	DECLARE_CLASS(CPitdrone, CBaseMonster);
@@ -225,8 +225,8 @@ public:
 	bool CheckRangeAttack1(float flDot, float flDist) override;
 
 	/**
-	*	@brief overridden for bullsquid because there are things that need to be checked every think.
-	*/
+	 *	@brief overridden for bullsquid because there are things that need to be checked every think.
+	 */
 	void RunAI() override;
 
 	bool FValidateHintType(short sHint) override;

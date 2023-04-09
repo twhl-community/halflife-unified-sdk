@@ -81,12 +81,12 @@ DEFINE_FIELD(m_flIdealVel, FIELD_FLOAT),
 	DEFINE_FUNCTION(RemoveTouch),
 	DEFINE_FUNCTION(BounceTouch),
 	DEFINE_FUNCTION(ZapTouch),
-	//DEFINE_FUNCTION(SphereUse),
+	// DEFINE_FUNCTION(SphereUse),
 	END_DATAMAP();
 
 /**
-*	@brief final Boss monster
-*/
+ *	@brief final Boss monster
+ */
 class CNihilanth : public CBaseMonster
 {
 	DECLARE_CLASS(CNihilanth, CBaseMonster);

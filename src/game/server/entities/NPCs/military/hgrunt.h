@@ -122,40 +122,40 @@ public:
 	int Classify() override;
 
 	/**
-	*	@brief Overridden for human grunts because they hear the DANGER sound
-	*	that is made by hand grenades and other dangerous items.
-	*/
+	 *	@brief Overridden for human grunts because they hear the DANGER sound
+	 *	that is made by hand grenades and other dangerous items.
+	 */
 	int ISoundMask() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 
 	/**
-	*	@brief this is overridden for human grunts because they can throw/shoot grenades when they can't see their
-	*	target and the base class doesn't check attacks if the monster cannot see its enemy.
-	*	@details !!!BUGBUG - this gets called before a 3-round burst is fired
-	*	which means that a friendly can still be hit with up to 2 rounds.
-	*	ALSO, grenades will not be tossed if there is a friendly in front, this is a bad bug.
-	*	Friendly machine gun fire avoidance will unecessarily prevent the throwing of a grenade as well.
-	*/
+	 *	@brief this is overridden for human grunts because they can throw/shoot grenades when they can't see their
+	 *	target and the base class doesn't check attacks if the monster cannot see its enemy.
+	 *	@details !!!BUGBUG - this gets called before a 3-round burst is fired
+	 *	which means that a friendly can still be hit with up to 2 rounds.
+	 *	ALSO, grenades will not be tossed if there is a friendly in front, this is a bad bug.
+	 *	Friendly machine gun fire avoidance will unecessarily prevent the throwing of a grenade as well.
+	 */
 	bool FCanCheckAttacks() override;
 
 	bool CheckMeleeAttack1(float flDot, float flDist) override;
 
 	/**
-	*	@brief overridden for HGrunt, cause FCanCheckAttacks() doesn't disqualify all attacks based on
-	*	whether or not the enemy is occluded because unlike the base class,
-	*	the HGrunt can attack when the enemy is occluded (throw grenade over wall, etc).
-	*	We must disqualify the machine gun attack if the enemy is occluded.
-	*/
+	 *	@brief overridden for HGrunt, cause FCanCheckAttacks() doesn't disqualify all attacks based on
+	 *	whether or not the enemy is occluded because unlike the base class,
+	 *	the HGrunt can attack when the enemy is occluded (throw grenade over wall, etc).
+	 *	We must disqualify the machine gun attack if the enemy is occluded.
+	 */
 	bool CheckRangeAttack1(float flDot, float flDist) override;
 
 	/**
-	*	@brief this checks the Grunt's grenade attack.
-	*/
+	 *	@brief this checks the Grunt's grenade attack.
+	 */
 	bool CheckRangeAttack2(float flDot, float flDist) override;
 
 	/**
-	*	@brief overridden for the grunt because he actually uses ammo! (base class doesn't)
-	*/
+	 *	@brief overridden for the grunt because he actually uses ammo! (base class doesn't)
+	 */
 	void CheckAmmo() override;
 	void SetActivity(Activity NewActivity) override;
 	void StartTask(const Task_t* pTask) override;
@@ -165,8 +165,8 @@ public:
 	void IdleSound() override;
 
 	/**
-	*	@brief return the end of the barrel
-	*/
+	 *	@brief return the end of the barrel
+	 */
 	Vector GetGunPosition() override;
 
 	virtual void Shoot(bool firstShotInBurst);
@@ -174,18 +174,18 @@ public:
 	void PrescheduleThink() override;
 
 	/**
-	*	@brief make gun fly through the air.
-	*/
+	 *	@brief make gun fly through the air.
+	 */
 	void GibMonster() override;
 
 	/**
-	*	@brief say your cued up sentence.
-	*	@details Some grunt sentences (take cover and charge) rely on actually being able to execute the intended action.
-	*	It's really lame when a grunt says 'COVER ME' and then doesn't move.
-	*	The problem is that the sentences were played when the decision to TRY to move to cover was made.
-	*	Now the sentence is played after we know for sure that there is a valid path.
-	*	The schedule may still fail but in most cases, well after the grunt has started moving.
-	*/
+	 *	@brief say your cued up sentence.
+	 *	@details Some grunt sentences (take cover and charge) rely on actually being able to execute the intended action.
+	 *	It's really lame when a grunt says 'COVER ME' and then doesn't move.
+	 *	The problem is that the sentences were played when the decision to TRY to move to cover was made.
+	 *	Now the sentence is played after we know for sure that there is a valid path.
+	 *	The schedule may still fail but in most cases, well after the grunt has started moving.
+	 */
 	void SpeakSentence();
 
 	CBaseEntity* Kick();
@@ -193,24 +193,24 @@ public:
 	const Schedule_t* GetScheduleOfType(int Type) override;
 
 	/**
-	*	@brief make sure we're not taking it in the helmet
-	*/
+	 *	@brief make sure we're not taking it in the helmet
+	 */
 	void TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
 
 	/**
-	*	@brief overridden for the grunt because the grunt needs to forget that he is in cover if he's hurt.
-	*	(Obviously not in a safe place anymore).
-	*/
+	 *	@brief overridden for the grunt because the grunt needs to forget that he is in cover if he's hurt.
+	 *	(Obviously not in a safe place anymore).
+	 */
 	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 
 	/**
-	*	@brief overridden because Alien Grunts are Human Grunt's nemesis.
-	*/
+	 *	@brief overridden because Alien Grunts are Human Grunt's nemesis.
+	 */
 	int IRelationship(CBaseEntity* pTarget) override;
 
 	/**
-	*	@brief someone else is talking - don't speak
-	*/
+	 *	@brief someone else is talking - don't speak
+	 */
 	virtual bool FOkToSpeak();
 	void JustSpoke();
 

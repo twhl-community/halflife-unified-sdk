@@ -115,7 +115,7 @@ void CHudHealth::MsgFunc_Health(const char* pszName, BufferReader& reader)
 
 void CHudHealth::MsgFunc_Damage(const char* pszName, BufferReader& reader)
 {
-	int armor = reader.ReadByte();	   // armor
+	int armor = reader.ReadByte();		 // armor
 	int damageTaken = reader.ReadByte(); // health
 	long bitsDamage = reader.ReadLong(); // damage bits
 

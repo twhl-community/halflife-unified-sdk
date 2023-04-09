@@ -95,7 +95,7 @@ void PM_PlaySound(int channel, const char* sample, float volume, float attenuati
 	}
 #endif
 
-	//pmove->PM_PlaySound(channel, sample, volume, attenuation, fFlags, pitch);
+	// pmove->PM_PlaySound(channel, sample, volume, attenuation, fFlags, pitch);
 }
 
 void PM_PlayStepSound(int step, float fvol)
@@ -711,8 +711,8 @@ int PM_FlyMove()
 
 	numbumps = 4; // Bump up to four times
 
-	blocked = 0;									// Assume not blocked
-	numplanes = 0;									//  and not sliding along any planes
+	blocked = 0;						 // Assume not blocked
+	numplanes = 0;						 //  and not sliding along any planes
 	original_velocity = pmove->velocity; // Store original velocity
 	primal_velocity = pmove->velocity;
 
@@ -1024,7 +1024,7 @@ void PM_WalkMove()
 
 	// Try sliding forward both on ground and up 16 pixels
 	//  take the move that goes farthest
-	original = pmove->origin;	  // Save out original pos &
+	original = pmove->origin;	   // Save out original pos &
 	originalvel = pmove->velocity; //  velocity.
 
 	// Slide move

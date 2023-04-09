@@ -14,9 +14,9 @@
  ****/
 
 /**
-*	@file
-*	functions and data pertaining to the monsters' AI scheduling system.
-*/
+ *	@file
+ *	functions and data pertaining to the monsters' AI scheduling system.
+ */
 
 #include "cbase.h"
 #include "scripted.h"

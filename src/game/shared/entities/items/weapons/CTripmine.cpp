@@ -359,7 +359,7 @@ void CTripmine::OnCreate()
 void CTripmine::Spawn()
 {
 	CBasePlayerWeapon::Spawn();
-	
+
 	pev->frame = 0;
 	pev->body = 3;
 	pev->sequence = TRIPMINE_GROUND;

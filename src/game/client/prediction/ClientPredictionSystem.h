@@ -41,7 +41,7 @@ public:
 	void PostInitialize() override {}
 
 	void Shutdown() override;
-	
+
 	void Reset();
 
 	void InitializeEntities();

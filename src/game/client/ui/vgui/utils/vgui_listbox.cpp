@@ -12,10 +12,11 @@
 using namespace vgui;
 
 
-CListBox::CListBox() : Panel(0, 0, 0, 0),
-					   m_ItemsPanel(0, 0, 0, 0),
-					   m_ScrollBar(0, 0, 0, 0, true),
-					   m_Slider(0, 0, 10, 40, true)
+CListBox::CListBox()
+	: Panel(0, 0, 0, 0),
+	  m_ItemsPanel(0, 0, 0, 0),
+	  m_ScrollBar(0, 0, 0, 0, true),
+	  m_Slider(0, 0, 10, 40, true)
 {
 	m_Signal.m_pListBox = this;
 

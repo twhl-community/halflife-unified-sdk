@@ -143,15 +143,15 @@ public:
 	void IdleSound() override;
 
 	/**
-	*	@brief return the end of the barrel
-	*/
+	 *	@brief return the end of the barrel
+	 */
 	Vector GetGunPosition() override;
 
 	void PrescheduleThink() override;
 
 	/**
-	*	@brief make gun fly through the air.
-	*/
+	 *	@brief make gun fly through the air.
+	 */
 	void GibMonster() override;
 
 	/**
@@ -180,8 +180,8 @@ public:
 	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 
 	/**
-	*	@brief someone else is talking - don't speak
-	*/
+	 *	@brief someone else is talking - don't speak
+	 */
 	bool FOkToSpeak();
 
 	void JustSpoke();

@@ -20,8 +20,8 @@
 #include "scientist.h"
 
 /**
-*	@brief human scientist (passive lab worker)
-*/
+ *	@brief human scientist (passive lab worker)
+ */
 class CCleansuitScientist : public CScientist
 {
 public:

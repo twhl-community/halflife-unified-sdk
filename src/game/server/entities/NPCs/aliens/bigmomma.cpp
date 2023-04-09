@@ -19,8 +19,8 @@
 #define SF_INFOBM_WAIT 0x0002
 
 /**
-*	@brief AI Nodes for Big Momma
-*/
+ *	@brief AI Nodes for Big Momma
+ */
 class CInfoBM : public CPointEntity
 {
 	DECLARE_CLASS(CInfoBM, CPointEntity);
@@ -83,8 +83,8 @@ bool CInfoBM::KeyValue(KeyValueData* pkvd)
 }
 
 /**
-*	@brief Mortar shot entity
-*/
+ *	@brief Mortar shot entity
+ */
 class CBMortar : public CBaseEntity
 {
 	DECLARE_CLASS(CBMortar, CBaseEntity);

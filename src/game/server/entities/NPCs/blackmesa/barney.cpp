@@ -56,8 +56,8 @@ Task_t tlBarneyEnemyDraw[] =
 };
 
 /**
-*	@brief much better looking draw schedule for when barney knows who he's gonna attack.
-*/
+ *	@brief much better looking draw schedule for when barney knows who he's gonna attack.
+ */
 Schedule_t slBarneyEnemyDraw[] =
 	{
 		{tlBarneyEnemyDraw,
@@ -641,12 +641,12 @@ bool CBarney::KeyValue(KeyValueData* pkvd)
 }
 
 /**
-*	@brief DEAD BARNEY PROP
-*	@details Designer selects a pose in worldcraft, 0 through num_poses-1
-*	this value is added to what is selected as the 'first dead pose' among the monster's normal animations.
-*	All dead poses must appear sequentially in the model file.
-*	Be sure and set the m_iFirstPose properly!
-*/
+ *	@brief DEAD BARNEY PROP
+ *	@details Designer selects a pose in worldcraft, 0 through num_poses-1
+ *	this value is added to what is selected as the 'first dead pose' among the monster's normal animations.
+ *	All dead poses must appear sequentially in the model file.
+ *	Be sure and set the m_iFirstPose properly!
+ */
 class CDeadBarney : public CBaseMonster
 {
 public:

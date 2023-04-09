@@ -24,8 +24,8 @@
 constexpr float BabyVoltigoreMeleeDist = 64;
 
 /**
-*	@brief Tank like alien
-*/
+ *	@brief Tank like alien
+ */
 class COFBabyVoltigore : public COFVoltigore
 {
 public:
@@ -42,10 +42,10 @@ public:
 	void PainSound() override;
 
 	/**
-	*	@brief expects a length to trace, amount of damage to do, and damage type.
-	*	Returns a pointer to the damaged entity in case the monster wishes to do other stuff to the victim (punchangle, etc)
-	*	Used for many contact-range melee attacks. Bites, claws, etc.
-	*/
+	 *	@brief expects a length to trace, amount of damage to do, and damage type.
+	 *	Returns a pointer to the damaged entity in case the monster wishes to do other stuff to the victim (punchangle, etc)
+	 *	Used for many contact-range melee attacks. Bites, claws, etc.
+	 */
 	CBaseEntity* CheckTraceHullAttack(float flDist, int iDamage, int iDmgType);
 
 protected:

@@ -284,7 +284,7 @@ int DispatchRestore(edict_t* pent, SAVERESTOREDATA* pSaveData, int globalEntity)
 		{
 			CRestore tmpRestore(*pSaveData);
 			tmpRestore.PrecacheMode(false);
-			tmpRestore.ReadFields(&tmpVars, *entvars_t::GetLocalDataMap(), * entvars_t::GetLocalDataMap());
+			tmpRestore.ReadFields(&tmpVars, *entvars_t::GetLocalDataMap(), *entvars_t::GetLocalDataMap());
 
 			// HACKHACK - reset the save pointers, we're going to restore for real this time
 			pSaveData->size = pSaveData->pTable[pSaveData->currentIndex].location;

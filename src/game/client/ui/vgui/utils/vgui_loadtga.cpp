@@ -20,7 +20,8 @@ public:
 	MemoryInputStream() = default;
 
 	MemoryInputStream(const uchar* data, std::size_t dataLen)
-		: m_pData(data), m_DataLen(dataLen)
+		: m_pData(data),
+		  m_DataLen(dataLen)
 	{
 	}
 

@@ -345,7 +345,7 @@ void PlaySound(const char* szSound, float vol)
 
 	CL_StartSound(g_ViewEntity, CHAN_ITEM, szSound, v_origin, vol, 1.0, PITCH_NORM, 0);
 
-	//gEngfuncs.pfnPlaySoundByName(szSound, vol);
+	// gEngfuncs.pfnPlaySoundByName(szSound, vol);
 }
 
 void PlaySoundByNameAtLocation(const char* szSound, float volume, const Vector& origin)
@@ -483,7 +483,7 @@ void CL_TempEntPlaySound(TEMPENTITY* pTemp, float damp)
 
 	CL_StartSound(-1, CHAN_AUTO, sounds[gEngfuncs.pfnRandomLong(0, count)], pTemp->entity.origin, fvol, 1.0, pitch, 0);
 
-	//S_StartDynamicSound(-1, CHAN_AUTO, sounds[gEngfuncs.pfnRandomLong(0, count)], pTemp->entity.origin, fvol, 1.0, 0, pitch);
+	// S_StartDynamicSound(-1, CHAN_AUTO, sounds[gEngfuncs.pfnRandomLong(0, count)], pTemp->entity.origin, fvol, 1.0, 0, pitch);
 }
 
 constexpr const char* RicochetSounds[] =
@@ -507,11 +507,10 @@ void R_RicochetSound(const Vector& pos)
 }
 
 constexpr const char* ExplosionSounds[] =
-{
-	"weapons/explode3.wav",
-	"weapons/explode4.wav",
-	"weapons/explode5.wav"
-};
+	{
+		"weapons/explode3.wav",
+		"weapons/explode4.wav",
+		"weapons/explode5.wav"};
 
 void R_Explosion(const Vector& pos, int model, float scale, float framerate, int flags)
 {

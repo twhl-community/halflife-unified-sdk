@@ -13,9 +13,9 @@
  *
  ****/
 /**
-*	@file
-*	spawn and think functions for editor-placed lights
-*/
+ *	@file
+ *	spawn and think functions for editor-placed lights
+ */
 
 #include "cbase.h"
 
@@ -106,8 +106,8 @@ void CLight::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType
 }
 
 /**
-*	@brief shut up spawn functions for new spotlights
-*/
+ *	@brief shut up spawn functions for new spotlights
+ */
 LINK_ENTITY_TO_CLASS(light_spot, CLight);
 
 class CEnvLight : public CLight

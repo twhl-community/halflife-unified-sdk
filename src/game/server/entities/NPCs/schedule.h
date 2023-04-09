@@ -14,9 +14,9 @@
  ****/
 
 /**
-*	@file
-*	Scheduling
-*/
+ *	@file
+ *	Scheduling
+ */
 
 #pragma once
 
@@ -27,8 +27,8 @@
 #define TASKSTATUS_COMPLETE 4		  //!< Completed, get next task
 
 /**
-*	@brief These are the schedule types
-*/
+ *	@brief These are the schedule types
+ */
 enum SCHEDULE_TYPE
 {
 	SCHED_NONE = 0,
@@ -78,8 +78,8 @@ enum SCHEDULE_TYPE
 };
 
 /**
-*	@brief These are the shared task
-*/
+ *	@brief These are the shared task
+ */
 enum SHARED_TASKS
 {
 	TASK_INVALID = 0,
@@ -178,8 +178,8 @@ enum SHARED_TASKS
 };
 
 /**
-*	@brief These go in the flData member of the TASK_WALK_TO_TARGET, TASK_RUN_TO_TARGET
-*/
+ *	@brief These go in the flData member of the TASK_WALK_TO_TARGET, TASK_RUN_TO_TARGET
+ */
 enum
 {
 	TARGET_MOVE_NORMAL = 0,
@@ -187,11 +187,11 @@ enum
 };
 
 /**
-*	@brief A goal should be used for a task that requires several schedules to complete.
-*	The goal index should indicate which schedule (ordinally) the monster is running.
-*	That way, when tasks fail, the AI can make decisions based on the context of the
-*	current goal and sequence rather than just the current schedule.
-*/
+ *	@brief A goal should be used for a task that requires several schedules to complete.
+ *	The goal index should indicate which schedule (ordinally) the monster is running.
+ *	That way, when tasks fail, the AI can make decisions based on the context of the
+ *	current goal and sequence rather than just the current schedule.
+ */
 enum
 {
 	GOAL_ATTACK_ENEMY,

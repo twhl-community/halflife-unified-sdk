@@ -494,7 +494,7 @@ void CStatsMenuPanel::MsgFunc_StatsPlayer(const char* pszName, BufferReader& rea
 	const int iShieldTime = reader.ReadShort();
 	const int iJumpVal = reader.ReadShort();
 
-	if (playerIndex <= 0 || playerIndex >+ MAX_PLAYERS_HUD)
+	if (playerIndex <= 0 || playerIndex > +MAX_PLAYERS_HUD)
 	{
 		return;
 	}

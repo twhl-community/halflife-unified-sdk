@@ -405,7 +405,7 @@ void CSqueak::OnCreate()
 void CSqueak::Spawn()
 {
 	CBasePlayerWeapon::Spawn();
-	
+
 	pev->sequence = 1;
 	pev->animtime = gpGlobals->time;
 	pev->framerate = 1.0;

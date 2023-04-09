@@ -18,8 +18,8 @@
 #include "cbase.h"
 
 // special deathmatch shotgun spreads
-constexpr Vector VECTOR_CONE_DM_SHOTGUN{0.08716f, 0.04362f, 0.00f};			// 10 degrees by 5 degrees
-constexpr Vector VECTOR_CONE_DM_DOUBLESHOTGUN{0.17365f, 0.04362f, 0.00f};	// 20 degrees by 5 degrees
+constexpr Vector VECTOR_CONE_DM_SHOTGUN{0.08716f, 0.04362f, 0.00f};		  // 10 degrees by 5 degrees
+constexpr Vector VECTOR_CONE_DM_DOUBLESHOTGUN{0.17365f, 0.04362f, 0.00f}; // 20 degrees by 5 degrees
 
 enum shotgun_e
 {

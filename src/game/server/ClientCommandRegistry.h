@@ -35,7 +35,9 @@ class ClientCommand final
 {
 public:
 	ClientCommand(std::string_view name, ClientCommandFlags flags, std::function<void(CBasePlayer*, const CommandArgs&)>&& function)
-		: Name(name), Flags(flags), Function(std::move(function))
+		: Name(name),
+		  Flags(flags),
+		  Function(std::move(function))
 	{
 	}
 
@@ -53,7 +55,8 @@ public:
 	ScopedClientCommand() = default;
 
 	ScopedClientCommand(ClientCommandRegistry* registry, const ClientCommand* command)
-		: Registry(registry), Command(command)
+		: Registry(registry),
+		  Command(command)
 	{
 	}
 
@@ -113,7 +116,8 @@ private:
 inline ClientCommandRegistry g_ClientCommands;
 
 inline ScopedClientCommand::ScopedClientCommand(ScopedClientCommand&& other) noexcept
-	: Registry(other.Registry), Command(other.Command)
+	: Registry(other.Registry),
+	  Command(other.Command)
 {
 	other.Registry = nullptr;
 	other.Command = nullptr;

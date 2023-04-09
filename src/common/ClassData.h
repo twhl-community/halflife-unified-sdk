@@ -19,7 +19,7 @@
  *	@brief Defines the typedef @c ThisClass.
  */
 #define DECLARE_CLASS_NOBASE(thisClass) \
-public:									\
+public:                                 \
 	using ThisClass = thisClass
 
 /**

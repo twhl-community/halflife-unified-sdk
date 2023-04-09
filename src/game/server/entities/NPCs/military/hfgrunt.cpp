@@ -20,8 +20,8 @@
 int g_fFGruntQuestion; //!< true if an idle grunt asked a question. Cleared when someone answers.
 
 /**
-*	@brief friendly hgrunt
-*/
+ *	@brief friendly hgrunt
+ */
 class CHFGrunt : public CHGrunt
 {
 public:

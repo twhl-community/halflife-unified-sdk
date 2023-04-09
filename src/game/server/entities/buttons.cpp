@@ -14,9 +14,9 @@
  ****/
 
 /**
-*	@file
-*	button-related code
-*/
+ *	@file
+ *	button-related code
+ */
 
 #include "cbase.h"
 #include "doors.h"
@@ -656,8 +656,8 @@ void CBaseButton::ButtonBackHome()
 }
 
 /**
-*	@brief Rotating button (aka "lever")
-*/
+ *	@brief Rotating button (aka "lever")
+ */
 class CRotButton : public CBaseButton
 {
 public:
@@ -728,10 +728,10 @@ void CRotButton::Spawn()
 
 
 /**
-*	@brief Make this button behave like a door (HACKHACK)
-*	This will disable use and make the button solid
-*	rotating buttons were made SOLID_NOT by default since their were some collision problems with them...
-*/
+ *	@brief Make this button behave like a door (HACKHACK)
+ *	This will disable use and make the button solid
+ *	rotating buttons were made SOLID_NOT by default since their were some collision problems with them...
+ */
 #define SF_MOMENTARY_DOOR 0x0001
 
 class CMomentaryRotButton : public CBaseToggle

@@ -28,7 +28,8 @@
 namespace sound
 {
 SentencesSystem::SentencesSystem(std::shared_ptr<spdlog::logger> logger, SoundCache* soundCache)
-	: m_Logger(logger), m_SoundCache(soundCache)
+	: m_Logger(logger),
+	  m_SoundCache(soundCache)
 {
 }
 

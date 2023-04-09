@@ -1002,8 +1002,8 @@ Task_t tlGruntEstablishLineOfFire[] =
 };
 
 /**
-*	@brief move to a position that allows the grunt to attack.
-*/
+ *	@brief move to a position that allows the grunt to attack.
+ */
 Schedule_t slGruntEstablishLineOfFire[] =
 	{
 		{tlGruntEstablishLineOfFire,
@@ -1028,8 +1028,8 @@ Task_t tlGruntFoundEnemy[] =
 };
 
 /**
-*	@brief grunt established sight with an enemy that was hiding from the squad.
-*/
+ *	@brief grunt established sight with an enemy that was hiding from the squad.
+ */
 Schedule_t slGruntFoundEnemy[] =
 	{
 		{tlGruntFoundEnemy,
@@ -1084,8 +1084,8 @@ Task_t tlGruntSignalSuppress[] =
 };
 
 /**
-*	@brief don't stop shooting until the clip is empty or grunt gets hurt.
-*/
+ *	@brief don't stop shooting until the clip is empty or grunt gets hurt.
+ */
 Schedule_t slGruntSignalSuppress[] =
 	{
 		{tlGruntSignalSuppress,
@@ -1144,9 +1144,9 @@ Task_t tlGruntWaitInCover[] =
 };
 
 /**
-*	@brief we don't allow danger or the ability to attack to break a grunt's run to cover schedule,
-*	but when a grunt is in cover, we do want them to attack if they can.
-*/
+ *	@brief we don't allow danger or the ability to attack to break a grunt's run to cover schedule,
+ *	but when a grunt is in cover, we do want them to attack if they can.
+ */
 Schedule_t slGruntWaitInCover[] =
 	{
 		{tlGruntWaitInCover,
@@ -1201,8 +1201,8 @@ Task_t tlGruntGrenadeCover1[] =
 };
 
 /**
-*	@brief drop grenade then run to cover.
-*/
+ *	@brief drop grenade then run to cover.
+ */
 Schedule_t slGruntGrenadeCover[] =
 	{
 		{tlGruntGrenadeCover1,
@@ -1220,8 +1220,8 @@ Task_t tlGruntTossGrenadeCover1[] =
 };
 
 /**
-*	@brief drop grenade then run to cover.
-*/
+ *	@brief drop grenade then run to cover.
+ */
 Schedule_t slGruntTossGrenadeCover[] =
 	{
 		{tlGruntTossGrenadeCover1,
@@ -1243,8 +1243,8 @@ Task_t tlGruntTakeCoverFromBestSound[] =
 };
 
 /**
-*	@brief hide from the loudest sound source (to run from grenade)
-*/
+ *	@brief hide from the loudest sound source (to run from grenade)
+ */
 Schedule_t slGruntTakeCoverFromBestSound[] =
 	{
 		{tlGruntTakeCoverFromBestSound,
@@ -1285,8 +1285,8 @@ Task_t tlGruntSweep[] =
 };
 
 /**
-*	@brief Do a turning sweep of the area
-*/
+ *	@brief Do a turning sweep of the area
+ */
 Schedule_t slGruntSweep[] =
 	{
 		{tlGruntSweep,
@@ -1324,9 +1324,9 @@ Task_t tlGruntRangeAttack1A[] =
 };
 
 /**
-*	@brief Overridden because base class stops attacking when the enemy is occluded.
-*	grunt's grenade toss requires the enemy be occluded.
-*/
+ *	@brief Overridden because base class stops attacking when the enemy is occluded.
+ *	grunt's grenade toss requires the enemy be occluded.
+ */
 Schedule_t slGruntRangeAttack1A[] =
 	{
 		{tlGruntRangeAttack1A,
@@ -1361,9 +1361,9 @@ Task_t tlGruntRangeAttack1B[] =
 };
 
 /**
-*	@brief Overridden because base class stops attacking when the enemy is occluded.
-*	grunt's grenade toss requires the enemy be occluded.
-*/
+ *	@brief Overridden because base class stops attacking when the enemy is occluded.
+ *	grunt's grenade toss requires the enemy be occluded.
+ */
 Schedule_t slGruntRangeAttack1B[] =
 	{
 		{tlGruntRangeAttack1B,
@@ -1389,9 +1389,9 @@ Task_t tlGruntRangeAttack2[] =
 };
 
 /**
-*	@brief Overridden because base class stops attacking when the enemy is occluded.
-*	grunt's grenade toss requires the enemy be occluded.
-*/
+ *	@brief Overridden because base class stops attacking when the enemy is occluded.
+ *	grunt's grenade toss requires the enemy be occluded.
+ */
 Schedule_t slGruntRangeAttack2[] =
 	{
 		{tlGruntRangeAttack2,

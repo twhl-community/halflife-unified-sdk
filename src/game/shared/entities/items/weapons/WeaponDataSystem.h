@@ -43,8 +43,8 @@ struct WeaponInfo
 };
 
 /**
-*	@brief Handles the networking of weapon metadata from server to client.
-*/
+ *	@brief Handles the networking of weapon metadata from server to client.
+ */
 class WeaponDataSystem final : public IGameSystem, public INetworkDataBlockHandler
 {
 public:

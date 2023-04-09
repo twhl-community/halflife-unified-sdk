@@ -51,7 +51,8 @@ public:
 };
 }
 
-Slider2::Slider2(int x, int y, int wide, int tall, bool vertical) : Panel(x, y, wide, tall)
+Slider2::Slider2(int x, int y, int wide, int tall, bool vertical)
+	: Panel(x, y, wide, tall)
 {
 	_vertical = vertical;
 	_dragging = false;

@@ -38,8 +38,8 @@ enum Materials
 #define NUM_SHARDS 6 // this many shards spawned when breakable objects break;
 
 /**
-*	@brief bmodel that breaks into pieces after taking damage
-*/
+ *	@brief bmodel that breaks into pieces after taking damage
+ */
 class CBreakable : public CBaseDelay
 {
 	DECLARE_CLASS(CBreakable, CBaseDelay);
@@ -54,15 +54,15 @@ public:
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
 	/**
-	*	@brief play shard sound when func_breakable takes damage.
-	*	the more damage, the louder the shard sound.
-	*/
+	 *	@brief play shard sound when func_breakable takes damage.
+	 *	the more damage, the louder the shard sound.
+	 */
 	void DamageSound();
 
 	/**
-	*	@brief Special takedamage for func_breakable.
-	*	Allows us to make exceptions that are breakable-specific
-	*/
+	 *	@brief Special takedamage for func_breakable.
+	 *	Allows us to make exceptions that are breakable-specific
+	 */
 	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 	// To spark when hit
 	void TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;

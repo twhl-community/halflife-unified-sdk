@@ -25,8 +25,8 @@ bool CBaseDMStart::IsTriggered(CBaseEntity* pEntity)
 }
 
 /**
-*	@brief checks if the spot is clear of players
-*/
+ *	@brief checks if the spot is clear of players
+ */
 bool IsSpawnPointValid(CBaseEntity* pPlayer, CBaseEntity* pSpot)
 {
 	CBaseEntity* ent = nullptr;

@@ -18,8 +18,8 @@
 #include "CBaseToggle.h"
 
 /**
-*	@brief sounds that doors and buttons make when locked/unlocked
-*/
+ *	@brief sounds that doors and buttons make when locked/unlocked
+ */
 struct locksound_t
 {
 	string_t sLockedSound;		//!< sound a door makes when it's locked
@@ -37,18 +37,18 @@ struct locksound_t
 };
 
 /**
-*	@brief play door or button locked or unlocked sounds.
-*	@details pass in pointer to valid locksound struct.
-*	if flocked is true, play 'door is locked' sound, otherwise play 'door is unlocked' sound
-*	NOTE: this routine is shared by doors and buttons
-*/
+ *	@brief play door or button locked or unlocked sounds.
+ *	@details pass in pointer to valid locksound struct.
+ *	if flocked is true, play 'door is locked' sound, otherwise play 'door is unlocked' sound
+ *	NOTE: this routine is shared by doors and buttons
+ */
 void PlayLockSounds(CBaseEntity* entity, locksound_t* pls, bool flocked, bool fbutton);
 
 /**
-*	@brief Generic Button
-*	@details When a button is touched, it moves some distance in the direction of its angle,
-*	triggers all of its targets, waits some time, then returns to its original position where it can be triggered again.
-*/
+ *	@brief Generic Button
+ *	@details When a button is touched, it moves some distance in the direction of its angle,
+ *	triggers all of its targets, waits some time, then returns to its original position where it can be triggered again.
+ */
 class CBaseButton : public CBaseToggle
 {
 	DECLARE_CLASS(CBaseButton, CBaseToggle);
@@ -60,33 +60,33 @@ public:
 	bool KeyValue(KeyValueData* pkvd) override;
 
 	/**
-	*	@brief Starts the button moving "in/up".
-	*/
+	 *	@brief Starts the button moving "in/up".
+	 */
 	void ButtonActivate();
 
 	/**
-	*	@brief Touching a button simply "activates" it.
-	*/
+	 *	@brief Touching a button simply "activates" it.
+	 */
 	void ButtonTouch(CBaseEntity* pOther);
 
 	/**
-	*	@brief Makes flagged buttons spark when turned off
-	*/
+	 *	@brief Makes flagged buttons spark when turned off
+	 */
 	void ButtonSpark();
 
 	/**
-	*	@brief Button has reached the "in/up" position.  Activate its "targets", and pause before "popping out".
-	*/
+	 *	@brief Button has reached the "in/up" position.  Activate its "targets", and pause before "popping out".
+	 */
 	void TriggerAndWait();
 
 	/**
-	*	@brief Starts the button moving "out/down".
-	*/
+	 *	@brief Starts the button moving "out/down".
+	 */
 	void ButtonReturn();
 
 	/**
-	*	@brief Button has returned to start state. Quiesce it.
-	*/
+	 *	@brief Button has returned to start state. Quiesce it.
+	 */
 	void ButtonBackHome();
 
 	void ButtonUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);

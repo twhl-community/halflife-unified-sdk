@@ -17,11 +17,12 @@ using namespace vgui;
 
 
 
-CCheckButton2::CCheckButton2() : m_Label(""),
-								 m_pChecked(nullptr),
-								 m_pUnchecked(nullptr),
-								 m_pHandler(nullptr),
-								 m_CheckboxPanel(nullptr)
+CCheckButton2::CCheckButton2()
+	: m_Label(""),
+	  m_pChecked(nullptr),
+	  m_pUnchecked(nullptr),
+	  m_pHandler(nullptr),
+	  m_CheckboxPanel(nullptr)
 {
 	m_bOwnImages = false;
 	m_bChecked = false;

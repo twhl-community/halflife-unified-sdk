@@ -23,14 +23,14 @@ class CItem;
 
 enum class ItemType
 {
-	InventoryItem = 0,	//!< This item will be added to the player's inventory.
-	Consumable			//!< This item will be consumed on use.
+	InventoryItem = 0, //!< This item will be added to the player's inventory.
+	Consumable		   //!< This item will be consumed on use.
 };
 
 enum class ItemFallMode
 {
-	Fall = 0,	//!< MOVETYPE_TOSS with fall-to-ground logic
-	Float,		//!< MOVETYPE_FLY with no falling logic
+	Fall = 0, //!< MOVETYPE_TOSS with fall-to-ground logic
+	Float,	  //!< MOVETYPE_FLY with no falling logic
 };
 
 enum class ItemAddResult
@@ -44,8 +44,8 @@ constexpr float ITEM_DEFAULT_RESPAWN_DELAY = -2;
 constexpr float ITEM_NEVER_RESPAWN_DELAY = -1;
 
 /**
-*	@brief Interface for item visitors.
-*/
+ *	@brief Interface for item visitors.
+ */
 class IItemVisitor
 {
 public:
@@ -57,7 +57,7 @@ public:
 };
 
 /**
-*	@brief Base class for all items.
+ *	@brief Base class for all items.
  *	@details Handles item setup in the world, pickup on touch, respawning.
  */
 class CBaseItem : public CBaseAnimating
@@ -87,8 +87,8 @@ public:
 	void ItemTouch(CBaseEntity* pOther);
 
 	/**
-	*	@brief Tries to given this item to the player.
-	*/
+	 *	@brief Tries to given this item to the player.
+	 */
 	ItemAddResult AddToPlayer(CBasePlayer* player);
 
 	/**

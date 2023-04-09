@@ -20,10 +20,10 @@
 #include "sound/MaterialSystem.h"
 
 /**
-*	@brief runtime pitch shift and volume fadein/out structure
-*	@details NOTE: IF YOU CHANGE THIS STRUCT YOU MUST CHANGE THE SAVE/RESTORE VERSION NUMBER
-*	SEE BELOW (in the typedescription for the class)
-*/
+ *	@brief runtime pitch shift and volume fadein/out structure
+ *	@details NOTE: IF YOU CHANGE THIS STRUCT YOU MUST CHANGE THE SAVE/RESTORE VERSION NUMBER
+ *	SEE BELOW (in the typedescription for the class)
+ */
 struct dynpitchvol_t
 {
 	// NOTE: do not change the order of these parameters
@@ -69,8 +69,8 @@ struct dynpitchvol_t
 #define CDPVPRESETMAX 27
 
 /**
-*	@brief presets for runtime pitch and vol modulation of ambient sounds
-*/
+ *	@brief presets for runtime pitch and vol modulation of ambient sounds
+ */
 dynpitchvol_t rgdpvpreset[CDPVPRESETMAX] =
 	{
 		// pitch	pstart	spinup	spindwn	volrun	volstrt	fadein	fadeout	lfotype	lforate	modptch modvol	cspnup
@@ -103,8 +103,8 @@ dynpitchvol_t rgdpvpreset[CDPVPRESETMAX] =
 		{27, 128, 90, 10, 10, 10, 1, 20, 40, 1, 5, 10, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
 
 /**
-*	@brief general-purpose user-defined static sound
-*/
+ *	@brief general-purpose user-defined static sound
+ */
 class CAmbientGeneric : public CBaseEntity
 {
 	DECLARE_CLASS(CAmbientGeneric, CBaseEntity);
@@ -116,21 +116,21 @@ public:
 	void Precache() override;
 
 	/**
-	*	@brief turns an ambient sound on or off.
-	*	If the ambient is a looping sound, mark sound as active (m_fActive) if it's playing, innactive if not.
-	*	If the sound is not a looping sound, never mark it as active.
-	*/
+	 *	@brief turns an ambient sound on or off.
+	 *	If the ambient is a looping sound, mark sound as active (m_fActive) if it's playing, innactive if not.
+	 *	If the sound is not a looping sound, never mark it as active.
+	 */
 	void ToggleUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
 	/**
-	*	@brief Think at 5hz if we are dynamically modifying pitch or volume of the playing sound.
-	*	This function will ramp pitch and/or volume up or down, modify pitch/volume with lfo if active.
-	*/
+	 *	@brief Think at 5hz if we are dynamically modifying pitch or volume of the playing sound.
+	 *	This function will ramp pitch and/or volume up or down, modify pitch/volume with lfo if active.
+	 */
 	void RampThink();
 
 	/**
-	*	@brief Init all ramp params in preparation to play a new sound
-	*/
+	 *	@brief Init all ramp params in preparation to play a new sound
+	 */
 	void InitModulationParms();
 
 	int ObjectCaps() override { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
@@ -1040,13 +1040,13 @@ std::string CAmbientMusic::GetCommand() const
 }
 
 /**
-*	@brief A sound entity that will set player roomtype when player moves in range and sight.
-*	@details A client that is visible and in range of a sound entity will have its room_type set by that sound entity.
-*	If two or more sound entities are contending for a client,
-*	then the nearest sound entity to the client will set the client's room_type.
-*	A client's room_type will remain set to its prior value until a new in-range,
-*	visible sound entity resets a new room_type.
-*/
+ *	@brief A sound entity that will set player roomtype when player moves in range and sight.
+ *	@details A client that is visible and in range of a sound entity will have its room_type set by that sound entity.
+ *	If two or more sound entities are contending for a client,
+ *	then the nearest sound entity to the client will set the client's room_type.
+ *	A client's room_type will remain set to its prior value until a new in-range,
+ *	visible sound entity resets a new room_type.
+ */
 class CEnvSound : public CPointEntity
 {
 	DECLARE_CLASS(CEnvSound, CPointEntity);
@@ -1094,8 +1094,8 @@ bool CEnvSound::KeyValue(KeyValueData* pkvd)
 }
 
 /**
-*	@brief returns true if the given sound entity (pSound) is in range and can see the given player entity (target)
-*/
+ *	@brief returns true if the given sound entity (pSound) is in range and can see the given player entity (target)
+ */
 bool FEnvSoundInRange(CEnvSound* pSound, CBaseEntity* target, float& flRange)
 {
 	const Vector vecSpot1 = pSound->pev->origin + pSound->pev->view_ofs;
@@ -1199,11 +1199,11 @@ void CEnvSound::Spawn()
 // ===================== MATERIAL TYPE DETECTION, MAIN ROUTINES ========================
 
 /**
-*	@brief play a strike sound based on the texture that was hit by the attack traceline.
-*	VecSrc/VecEnd are the original traceline endpoints used by the attacker
-*	@param iBulletType the type of bullet that hit the texture.
-*	@return volume of strike instrument (crowbar) to play
-*/
+ *	@brief play a strike sound based on the texture that was hit by the attack traceline.
+ *	VecSrc/VecEnd are the original traceline endpoints used by the attacker
+ *	@param iBulletType the type of bullet that hit the texture.
+ *	@return volume of strike instrument (crowbar) to play
+ */
 float TEXTURETYPE_PlaySound(TraceResult* ptr, Vector vecSrc, Vector vecEnd, int iBulletType)
 {
 	// hit the world, try to play sound based on texture material type
@@ -1382,8 +1382,8 @@ float TEXTURETYPE_PlaySound(TraceResult* ptr, Vector vecSrc, Vector vecEnd, int 
 }
 
 /**
-*	@brief Used for announcements per level, for door lock/unlock spoken voice.
-*/
+ *	@brief Used for announcements per level, for door lock/unlock spoken voice.
+ */
 class CSpeaker : public CBaseEntity
 {
 	DECLARE_CLASS(CSpeaker, CBaseEntity);
@@ -1395,8 +1395,8 @@ public:
 	void Precache() override;
 
 	/**
-	*	@brief if an announcement is pending, cancel it. If no announcement is pending, start one.
-	*/
+	 *	@brief if an announcement is pending, cancel it. If no announcement is pending, start one.
+	 */
 	void ToggleUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
 	void SpeakerThink();

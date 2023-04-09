@@ -28,8 +28,8 @@
 #define EYE_LOOK 4
 
 /**
-*	@brief evil, satan fish monster
-*/
+ *	@brief evil, satan fish monster
+ */
 class CIchthyosaur : public CFlyingMonster
 {
 	DECLARE_CLASS(CIchthyosaur, CFlyingMonster);

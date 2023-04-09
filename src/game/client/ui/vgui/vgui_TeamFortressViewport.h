@@ -141,7 +141,8 @@ private:
 	int m_iState;
 
 public:
-	CommandLabel(const char* text, int x, int y, int wide, int tall) : Label(text, x, y, wide, tall)
+	CommandLabel(const char* text, int x, int y, int wide, int tall)
+		: Label(text, x, y, wide, tall)
 	{
 		m_iState = false;
 	}
@@ -231,7 +232,8 @@ private:
 	Color* UnArmedBorderColor;
 
 public:
-	ColorButton(const char* text, int x, int y, int wide, int tall, bool bNoHighlight, bool bFlat) : CommandButton(text, x, y, wide, tall, bNoHighlight, bFlat)
+	ColorButton(const char* text, int x, int y, int wide, int tall, bool bNoHighlight, bool bFlat)
+		: CommandButton(text, x, y, wide, tall, bNoHighlight, bFlat)
 	{
 		ArmedColor = nullptr;
 		UnArmedColor = nullptr;
@@ -322,7 +324,8 @@ class SpectButton : public CommandButton
 {
 private:
 public:
-	SpectButton(int iPlayerClass, const char* text, int x, int y, int wide, int tall) : CommandButton(text, x, y, wide, tall, false)
+	SpectButton(int iPlayerClass, const char* text, int x, int y, int wide, int tall)
+		: CommandButton(text, x, y, wide, tall, false)
 	{
 		Init();
 
@@ -370,7 +373,8 @@ private:
 	bool m_iDirection;
 
 public:
-	CCommandMenu(CCommandMenu* pParentMenu, int x, int y, int wide, int tall) : Panel(x, y, wide, tall)
+	CCommandMenu(CCommandMenu* pParentMenu, int x, int y, int wide, int tall)
+		: Panel(x, y, wide, tall)
 	{
 		m_pParentMenu = pParentMenu;
 		m_iXOffset = x;
@@ -380,7 +384,8 @@ public:
 	}
 
 
-	CCommandMenu(CCommandMenu* pParentMenu, bool direction, int x, int y, int wide, int tall) : Panel(x, y, wide, tall)
+	CCommandMenu(CCommandMenu* pParentMenu, bool direction, int x, int y, int wide, int tall)
+		: Panel(x, y, wide, tall)
 	{
 		m_pParentMenu = pParentMenu;
 		m_iXOffset = x;
@@ -422,7 +427,8 @@ private:
 	CImageLabel* m_pOpenButton;
 
 public:
-	DropDownButton(const char* text, int x, int y, int wide, int tall, bool bNoHighlight, bool bFlat) : ColorButton(text, x, y, wide, tall, bNoHighlight, bFlat)
+	DropDownButton(const char* text, int x, int y, int wide, int tall, bool bNoHighlight, bool bFlat)
+		: ColorButton(text, x, y, wide, tall, bNoHighlight, bFlat)
 	{
 		// Put a > to show it's a submenu
 		m_pOpenButton = new CImageLabel("arrowup", XRES(CMENU_SIZE_X - 2), YRES(BUTTON_SIZE_Y - 2));
@@ -452,7 +458,8 @@ private:
 	CImageLabel* m_pOpenButton;
 
 public:
-	CImageButton(const char* text, int x, int y, int wide, int tall, bool bNoHighlight, bool bFlat) : ColorButton(" ", x, y, wide, tall, bNoHighlight, bFlat)
+	CImageButton(const char* text, int x, int y, int wide, int tall, bool bNoHighlight, bool bFlat)
+		: ColorButton(" ", x, y, wide, tall, bNoHighlight, bFlat)
 	{
 		m_pOpenButton = new CImageLabel(text, 1, 1, wide - 2, tall - 2);
 		m_pOpenButton->setParent(this);
@@ -679,11 +686,13 @@ class CMenuHandler_StringCommandWatch : public CMenuHandler_StringCommand
 {
 private:
 public:
-	CMenuHandler_StringCommandWatch(const char* pszCommand) : CMenuHandler_StringCommand(pszCommand)
+	CMenuHandler_StringCommandWatch(const char* pszCommand)
+		: CMenuHandler_StringCommand(pszCommand)
 	{
 	}
 
-	CMenuHandler_StringCommandWatch(const char* pszCommand, bool iClose) : CMenuHandler_StringCommand(pszCommand, iClose)
+	CMenuHandler_StringCommandWatch(const char* pszCommand, bool iClose)
+		: CMenuHandler_StringCommand(pszCommand, iClose)
 	{
 	}
 
@@ -709,11 +718,13 @@ class CMenuHandler_StringCommandClassSelect : public CMenuHandler_StringCommand
 {
 private:
 public:
-	CMenuHandler_StringCommandClassSelect(const char* pszCommand) : CMenuHandler_StringCommand(pszCommand)
+	CMenuHandler_StringCommandClassSelect(const char* pszCommand)
+		: CMenuHandler_StringCommand(pszCommand)
 	{
 	}
 
-	CMenuHandler_StringCommandClassSelect(const char* pszCommand, bool iClose) : CMenuHandler_StringCommand(pszCommand, iClose)
+	CMenuHandler_StringCommandClassSelect(const char* pszCommand, bool iClose)
+		: CMenuHandler_StringCommand(pszCommand, iClose)
 	{
 	}
 
@@ -958,7 +969,8 @@ private:
 	CommandButton* m_pCommandButton;
 
 public:
-	CHandler_CommandButtonHighlight(CommandButton* pButton) : CHandler_ButtonHighlight(pButton)
+	CHandler_CommandButtonHighlight(CommandButton* pButton)
+		: CHandler_ButtonHighlight(pButton)
 	{
 		m_pCommandButton = pButton;
 	}
@@ -983,7 +995,8 @@ protected:
 	int m_iPlayerClass;
 
 public:
-	ClassButton(int iClass, const char* text, int x, int y, int wide, int tall, bool bNoHighlight) : CommandButton(text, x, y, wide, tall, bNoHighlight)
+	ClassButton(int iClass, const char* text, int x, int y, int wide, int tall, bool bNoHighlight)
+		: CommandButton(text, x, y, wide, tall, bNoHighlight)
 	{
 		m_iPlayerClass = iClass;
 	}
@@ -997,7 +1010,8 @@ private:
 	int m_iTeamNumber;
 
 public:
-	TeamButton(int iTeam, const char* text, int x, int y, int wide, int tall) : CommandButton(text, x, y, wide, tall)
+	TeamButton(int iTeam, const char* text, int x, int y, int wide, int tall)
+		: CommandButton(text, x, y, wide, tall)
 	{
 		m_iTeamNumber = iTeam;
 	}
@@ -1026,7 +1040,8 @@ private:
 	bool m_iFeignState;
 
 public:
-	FeignButton(bool iState, const char* text, int x, int y, int wide, int tall) : CommandButton(text, x, y, wide, tall)
+	FeignButton(bool iState, const char* text, int x, int y, int wide, int tall)
+		: CommandButton(text, x, y, wide, tall)
 	{
 		m_iFeignState = iState;
 	}
@@ -1044,7 +1059,8 @@ public:
 class SpectateButton : public CommandButton
 {
 public:
-	SpectateButton(const char* text, int x, int y, int wide, int tall, bool bNoHighlight) : CommandButton(text, x, y, wide, tall, bNoHighlight)
+	SpectateButton(const char* text, int x, int y, int wide, int tall, bool bNoHighlight)
+		: CommandButton(text, x, y, wide, tall, bNoHighlight)
 	{
 	}
 
@@ -1070,7 +1086,8 @@ private:
 	int m_iThisTeam;
 
 public:
-	DisguiseButton(int iValidTeamNumsBits, const char* text, int x, int y, int wide, int tall) : CommandButton(text, x, y, wide, tall, false)
+	DisguiseButton(int iValidTeamNumsBits, const char* text, int x, int y, int wide, int tall)
+		: CommandButton(text, x, y, wide, tall, false)
 	{
 		m_iValidTeamsBits = iValidTeamNumsBits;
 	}
@@ -1096,7 +1113,8 @@ private:
 	int m_iDetpackState;
 
 public:
-	DetpackButton(int iState, const char* text, int x, int y, int wide, int tall) : CommandButton(text, x, y, wide, tall)
+	DetpackButton(int iState, const char* text, int x, int y, int wide, int tall)
+		: CommandButton(text, x, y, wide, tall)
 	{
 		m_iDetpackState = iState;
 	}
@@ -1132,7 +1150,8 @@ public:
 		EXIT_TELEPORTER = 3
 	};
 
-	BuildButton(int iState, int iData, const char* text, int x, int y, int wide, int tall) : CommandButton(text, x, y, wide, tall)
+	BuildButton(int iState, int iData, const char* text, int x, int y, int wide, int tall)
+		: CommandButton(text, x, y, wide, tall)
 	{
 		m_iBuildState = iState;
 		m_iBuildData = iData;
@@ -1152,7 +1171,8 @@ private:
 	char m_szMapName[MAX_MAPNAME];
 
 public:
-	MapButton(const char* pMapName, const char* text, int x, int y, int wide, int tall) : CommandButton(text, x, y, wide, tall)
+	MapButton(const char* pMapName, const char* text, int x, int y, int wide, int tall)
+		: CommandButton(text, x, y, wide, tall)
 	{
 		sprintf(m_szMapName, "maps/%s.bsp", pMapName);
 	}
@@ -1180,7 +1200,11 @@ private:
 	int m_iTeamNum;
 
 public:
-	TeamOnlyCommandButton(int iTeamNum, const char* text, int x, int y, int wide, int tall, bool flat) : CommandButton(text, x, y, wide, tall, false, flat), m_iTeamNum(iTeamNum) {}
+	TeamOnlyCommandButton(int iTeamNum, const char* text, int x, int y, int wide, int tall, bool flat)
+		: CommandButton(text, x, y, wide, tall, false, flat),
+		  m_iTeamNum(iTeamNum)
+	{
+	}
 
 	virtual bool IsNotValid()
 	{
@@ -1203,7 +1227,8 @@ private:
 
 
 public:
-	ToggleCommandButton(const char* cvarname, const char* text, int x, int y, int wide, int tall, bool flat) : CommandButton(text, x, y, wide, tall, false, flat)
+	ToggleCommandButton(const char* cvarname, const char* text, int x, int y, int wide, int tall, bool flat)
+		: CommandButton(text, x, y, wide, tall, false, flat)
 	{
 		m_cvar = gEngfuncs.pfnGetCvarPointer(cvarname);
 
@@ -1282,7 +1307,8 @@ private:
 	CImageLabel* pLabelOn;
 
 public:
-	SpectToggleButton(const char* cvarname, const char* text, int x, int y, int wide, int tall, bool flat) : CommandButton(text, x, y, wide, tall, false, flat)
+	SpectToggleButton(const char* cvarname, const char* text, int x, int y, int wide, int tall, bool flat)
+		: CommandButton(text, x, y, wide, tall, false, flat)
 	{
 		m_cvar = gEngfuncs.pfnGetCvarPointer(cvarname);
 
@@ -1448,7 +1474,8 @@ private:
 	LineBorder* m_pBorder;
 
 public:
-	DragNDropPanel(int x, int y, int wide, int tall) : Panel(x, y, wide, tall)
+	DragNDropPanel(int x, int y, int wide, int tall)
+		: Panel(x, y, wide, tall)
 	{
 		m_bBeingDragged = false;
 
@@ -1478,7 +1505,8 @@ private:
 	int m_iTransparency;
 
 public:
-	CTransparentPanel(int iTrans, int x, int y, int wide, int tall) : Panel(x, y, wide, tall)
+	CTransparentPanel(int iTrans, int x, int y, int wide, int tall)
+		: Panel(x, y, wide, tall)
 	{
 		m_iTransparency = iTrans;
 	}
@@ -1506,13 +1534,15 @@ private:
 	float m_flOpenTime;
 
 public:
-	CMenuPanel(bool iRemoveMe, int x, int y, int wide, int tall) : CTransparentPanel(100, x, y, wide, tall)
+	CMenuPanel(bool iRemoveMe, int x, int y, int wide, int tall)
+		: CTransparentPanel(100, x, y, wide, tall)
 	{
 		Reset();
 		m_iRemoveMe = iRemoveMe;
 	}
 
-	CMenuPanel(int iTrans, bool iRemoveMe, int x, int y, int wide, int tall) : CTransparentPanel(iTrans, x, y, wide, tall)
+	CMenuPanel(int iTrans, bool iRemoveMe, int x, int y, int wide, int tall)
+		: CTransparentPanel(iTrans, x, y, wide, tall)
 	{
 		Reset();
 		m_iRemoveMe = iRemoveMe;
@@ -1591,7 +1621,8 @@ public:
 class CTFSlider : public Slider
 {
 public:
-	CTFSlider(int x, int y, int wide, int tall, bool vertical) : Slider(x, y, wide, tall, vertical){};
+	CTFSlider(int x, int y, int wide, int tall, bool vertical)
+		: Slider(x, y, wide, tall, vertical){};
 
 	virtual void paintBackground();
 };
@@ -1694,7 +1725,8 @@ private:
 	Label* m_pHealthLabel;
 
 public:
-	CHealthPanel(int x, int y, int wide, int tall) : DragNDropPanel(x, y, wide, tall)
+	CHealthPanel(int x, int y, int wide, int tall)
+		: DragNDropPanel(x, y, wide, tall)
 	{
 		// Load the Health icon
 		FileInputStream* fis = new FileInputStream(GetVGUITGAName("%d_hud_health"), false);

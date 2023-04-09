@@ -14,9 +14,9 @@
  ****/
 
 /**
-*	@file
-*	The Halflife Cycler Monsters
-*/
+ *	@file
+ *	The Halflife Cycler Monsters
+ */
 
 #include "cbase.h"
 
@@ -29,8 +29,8 @@ public:
 	int ObjectCaps() override { return (CBaseEntity::ObjectCaps() | FCAP_IMPULSE_USE); }
 
 	/**
-	*	@brief changes sequences when shot
-	*/
+	 *	@brief changes sequences when shot
+	 */
 	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 	void OnCreate() override;
 	void Spawn() override;
@@ -38,8 +38,8 @@ public:
 	// void Pain( float flDamage );
 
 	/**
-	*	@brief starts a rotation trend
-	*/
+	 *	@brief starts a rotation trend
+	 */
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
 	// Don't treat as a live target
@@ -318,8 +318,8 @@ void CWeaponCycler::SecondaryAttack()
 }
 
 /**
-*	@brief Flaming Wreakage
-*/
+ *	@brief Flaming Wreakage
+ */
 class CWreckage : public CBaseMonster
 {
 	DECLARE_CLASS(CWreckage, CBaseMonster);

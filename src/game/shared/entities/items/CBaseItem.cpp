@@ -128,7 +128,7 @@ void CBaseItem::Spawn()
 #ifndef CLIENT_DLL
 	Precache();
 
-	if(FStrEq(GetModelName(), ""))
+	if (FStrEq(GetModelName(), ""))
 	{
 		Logger->warn("{}:{} has no model", GetClassname(), entindex());
 	}

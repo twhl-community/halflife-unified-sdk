@@ -745,8 +745,8 @@ public:
 	bool KeyValue(KeyValueData* pkvd) override;
 
 	/**
-	*	@brief Pull the func_pushable
-	*/
+	 *	@brief Pull the func_pushable
+	 */
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
 	void StopPushSound();
@@ -768,7 +768,7 @@ public:
 BEGIN_DATAMAP(CPushable)
 DEFINE_FIELD(m_maxSpeed, FIELD_FLOAT),
 	DEFINE_FIELD(m_soundTime, FIELD_TIME),
-	//DEFINE_FUNCTION(StopPushSound),
+	// DEFINE_FUNCTION(StopPushSound),
 	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(func_pushable, CPushable);

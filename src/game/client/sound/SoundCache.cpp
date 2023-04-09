@@ -22,7 +22,8 @@
 namespace sound
 {
 SoundCache::SoundCache(std::shared_ptr<spdlog::logger> logger)
-	: m_Logger(logger), m_Loader(std::make_unique<nqr::NyquistIO>())
+	: m_Logger(logger),
+	  m_Loader(std::make_unique<nqr::NyquistIO>())
 {
 }
 

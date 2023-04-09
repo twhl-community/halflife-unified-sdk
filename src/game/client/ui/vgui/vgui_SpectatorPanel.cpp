@@ -44,7 +44,8 @@ void DLLEXPORT HUD_ChatInputPosition(int* x, int* y)
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-SpectatorPanel::SpectatorPanel(int x, int y, int wide, int tall) : Panel(x, y, wide, tall)
+SpectatorPanel::SpectatorPanel(int x, int y, int wide, int tall)
+	: Panel(x, y, wide, tall)
 {
 }
 

@@ -520,7 +520,9 @@ public:
 
 
 //================================================================
-TeamFortressViewport::TeamFortressViewport(int x, int y, int wide, int tall) : Panel(x, y, wide, tall), m_SchemeManager(wide, tall)
+TeamFortressViewport::TeamFortressViewport(int x, int y, int wide, int tall)
+	: Panel(x, y, wide, tall),
+	  m_SchemeManager(wide, tall)
 {
 	gViewPort = this;
 	m_iInitialized = false;

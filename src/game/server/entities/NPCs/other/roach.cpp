@@ -23,8 +23,8 @@
 #define ROACH_EAT 5
 
 /**
-*	@brief cockroach
-*/
+ *	@brief cockroach
+ */
 class CRoach : public CBaseMonster
 {
 	DECLARE_CLASS(CRoach, CBaseMonster);
@@ -39,8 +39,8 @@ public:
 	void Move(float flInterval) override;
 
 	/**
-	*	@brief Picks a new spot for roach to run to.
-	*/
+	 *	@brief Picks a new spot for roach to run to.
+	 */
 	void PickNewDest(int iCondition);
 
 	void Touch(CBaseEntity* pOther) override;
@@ -51,8 +51,8 @@ public:
 	int Classify() override;
 
 	/**
-	*	@brief overridden for the roach, which can virtually see 360 degrees.
-	*/
+	 *	@brief overridden for the roach, which can virtually see 360 degrees.
+	 */
 	void Look(int iDistance) override;
 
 	int ISoundMask() override;

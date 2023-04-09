@@ -14,9 +14,9 @@
  ****/
 
 /**
-*	@file
-*	spawn, think, and use functions for entities that use brush models
-*/
+ *	@file
+ *	spawn, think, and use functions for entities that use brush models
+ */
 
 #include "cbase.h"
 #include "doors.h"
@@ -28,8 +28,8 @@
 #define SF_PENDULUM_SWING 2 // spawnflag that makes a pendulum a rope swing.
 
 /**
-*	@brief This is just a solid wall if not inhibited
-*/
+ *	@brief This is just a solid wall if not inhibited
+ */
 class CFuncWall : public CBaseEntity
 {
 public:
@@ -170,8 +170,8 @@ void CFuncConveyor::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE 
 }
 
 /**
-*	@brief A simple entity that looks solid but lets you walk through it.
-*/
+ *	@brief A simple entity that looks solid but lets you walk through it.
+ */
 class CFuncIllusionary : public CBaseToggle
 {
 public:
@@ -207,11 +207,11 @@ void CFuncIllusionary::Spawn()
 }
 
 /**
-*	@brief Monster only clip brush
-*	@details This brush will be solid for any entity who has the FL_MONSTERCLIP flag set in pev->flags
-*	otherwise it will be invisible and not solid.
-*	This can be used to keep specific monsters out of certain areas
-*/
+ *	@brief Monster only clip brush
+ *	@details This brush will be solid for any entity who has the FL_MONSTERCLIP flag set in pev->flags
+ *	otherwise it will be invisible and not solid.
+ *	This can be used to keep specific monsters out of certain areas
+ */
 class CFuncMonsterClip : public CFuncWall
 {
 public:
@@ -246,29 +246,29 @@ public:
 	void Precache() override;
 
 	/**
-	*	@brief accelerates a non-moving func_rotating up to its speed
-	*/
+	 *	@brief accelerates a non-moving func_rotating up to its speed
+	 */
 	void SpinUp();
 
 	/**
-	*	@brief decelerates a moving func_rotating to a standstill.
-	*/
+	 *	@brief decelerates a moving func_rotating to a standstill.
+	 */
 	void SpinDown();
 
 	bool KeyValue(KeyValueData* pkvd) override;
 
 	/**
-	*	@brief will hurt others based on how fast the brush is spinning
-	*/
+	 *	@brief will hurt others based on how fast the brush is spinning
+	 */
 	void HurtTouch(CBaseEntity* pOther);
 
 	void RotatingUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 	void Rotate();
 
 	/**
-	*	@brief ramp pitch and volume up to final values,
-	*	based on difference between how fast we're going vs how fast we plan to go
-	*/
+	 *	@brief ramp pitch and volume up to final values,
+	 *	based on difference between how fast we're going vs how fast we plan to go
+	 */
 	void RampPitchVol(bool fUp);
 
 	void Blocked(CBaseEntity* pOther) override;

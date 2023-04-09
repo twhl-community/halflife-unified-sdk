@@ -99,41 +99,41 @@ public:
 	int Classify() override;
 
 	/**
-	*	@brief Overridden for human grunts because they hear the DANGER sound
-	*	that is made by hand grenades and other dangerous items.
-	*/
+	 *	@brief Overridden for human grunts because they hear the DANGER sound
+	 *	that is made by hand grenades and other dangerous items.
+	 */
 	int ISoundMask() override;
 
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 
 	/**
-	*	@brief this is overridden for human grunts because they can throw/shoot grenades when they can't see their
-	*	target and the base class doesn't check attacks if the monster cannot see its enemy.
-	*	@details !!!BUGBUG - this gets called before a 3-round burst is fired
-	*	which means that a friendly can still be hit with up to 2 rounds.
-	*	ALSO, grenades will not be tossed if there is a friendly in front, this is a bad bug.
-	*	Friendly machine gun fire avoidance will unecessarily prevent the throwing of a grenade as well.
-	*/
+	 *	@brief this is overridden for human grunts because they can throw/shoot grenades when they can't see their
+	 *	target and the base class doesn't check attacks if the monster cannot see its enemy.
+	 *	@details !!!BUGBUG - this gets called before a 3-round burst is fired
+	 *	which means that a friendly can still be hit with up to 2 rounds.
+	 *	ALSO, grenades will not be tossed if there is a friendly in front, this is a bad bug.
+	 *	Friendly machine gun fire avoidance will unecessarily prevent the throwing of a grenade as well.
+	 */
 	bool FCanCheckAttacks() override;
 
 	bool CheckMeleeAttack1(float flDot, float flDist) override;
 
 	/**
-	*	@brief overridden for Shock Trooper, cause FCanCheckAttacks() doesn't disqualify all attacks based on
-	*	whether or not the enemy is occluded because unlike the base class,
-	*	the Trooper can attack when the enemy is occluded (throw grenade over wall, etc).
-	*	We must disqualify the machine gun attack if the enemy is occluded.
-	*/
+	 *	@brief overridden for Shock Trooper, cause FCanCheckAttacks() doesn't disqualify all attacks based on
+	 *	whether or not the enemy is occluded because unlike the base class,
+	 *	the Trooper can attack when the enemy is occluded (throw grenade over wall, etc).
+	 *	We must disqualify the machine gun attack if the enemy is occluded.
+	 */
 	bool CheckRangeAttack1(float flDot, float flDist) override;
 
 	/**
-	*	@brief this checks the Grunt's grenade attack.
-	*/
+	 *	@brief this checks the Grunt's grenade attack.
+	 */
 	bool CheckRangeAttack2(float flDot, float flDist) override;
 
 	/**
-	*	@brief overridden for the grunt because he actually uses ammo! (base class doesn't)
-	*/
+	 *	@brief overridden for the grunt because he actually uses ammo! (base class doesn't)
+	 */
 	void CheckAmmo() override;
 
 	void SetActivity(Activity NewActivity) override;
@@ -143,27 +143,27 @@ public:
 	void IdleSound() override;
 
 	/**
-	*	@brief return the end of the barrel
-	*/
+	 *	@brief return the end of the barrel
+	 */
 	Vector GetGunPosition() override;
 
 	void Shoot();
 	void PrescheduleThink() override;
 
 	/**
-	*	@brief make gun fly through the air.
-	*/
+	 *	@brief make gun fly through the air.
+	 */
 	void GibMonster() override;
 
 	/**
-	*	@brief say your cued up sentence.
-	*	@details Some grunt sentences (take cover and charge) rely on
-	*	actually being able to execute the intended action.
-	*	It's really lame when a grunt says 'COVER ME' and then doesn't move.
-	*	The problem is that the sentences were played when the decision to TRY to move to cover was made.
-	*	Now the sentence is played after we know for sure that there is a valid path.
-	*	The schedule may still fail but in most cases, well after the grunt has started moving.
-	*/
+	 *	@brief say your cued up sentence.
+	 *	@details Some grunt sentences (take cover and charge) rely on
+	 *	actually being able to execute the intended action.
+	 *	It's really lame when a grunt says 'COVER ME' and then doesn't move.
+	 *	The problem is that the sentences were played when the decision to TRY to move to cover was made.
+	 *	Now the sentence is played after we know for sure that there is a valid path.
+	 *	The schedule may still fail but in most cases, well after the grunt has started moving.
+	 */
 	void SpeakSentence();
 
 	CBaseEntity* Kick();
@@ -171,24 +171,24 @@ public:
 	const Schedule_t* GetScheduleOfType(int Type) override;
 
 	/**
-	*	@brief make sure we're not taking it in the helmet
-	*/
+	 *	@brief make sure we're not taking it in the helmet
+	 */
 	void TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
 
 	/**
-	*	@brief overridden for the grunt because the grunt needs to forget that he is in cover if he's hurt.
-	*	(Obviously not in a safe place anymore).
-	*/
+	 *	@brief overridden for the grunt because the grunt needs to forget that he is in cover if he's hurt.
+	 *	(Obviously not in a safe place anymore).
+	 */
 	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 
 	/**
-	*	@brief overridden because Alien Grunts are Shock Trooper's nemesis.
-	*/
+	 *	@brief overridden because Alien Grunts are Shock Trooper's nemesis.
+	 */
 	int IRelationship(CBaseEntity* pTarget) override;
 
 	/**
-	*	@brief someone else is talking - don't speak
-	*/
+	 *	@brief someone else is talking - don't speak
+	 */
 	bool FOkToSpeak();
 	void JustSpoke();
 
@@ -1104,8 +1104,8 @@ Task_t tlShockTrooperEstablishLineOfFire[] =
 };
 
 /**
-*	@brief move to a position that allows the grunt to attack.
-*/
+ *	@brief move to a position that allows the grunt to attack.
+ */
 Schedule_t slShockTrooperEstablishLineOfFire[] =
 	{
 		{tlShockTrooperEstablishLineOfFire,
@@ -1130,8 +1130,8 @@ Task_t tlShockTrooperFoundEnemy[] =
 };
 
 /**
-*	@brief grunt established sight with an enemy that was hiding from the squad.
-*/
+ *	@brief grunt established sight with an enemy that was hiding from the squad.
+ */
 Schedule_t slShockTrooperFoundEnemy[] =
 	{
 		{tlShockTrooperFoundEnemy,
@@ -1186,8 +1186,8 @@ Task_t tlShockTrooperSignalSuppress[] =
 };
 
 /**
-*	@brief don't stop shooting until the clip is empty or grunt gets hurt.
-*/
+ *	@brief don't stop shooting until the clip is empty or grunt gets hurt.
+ */
 Schedule_t slShockTrooperSignalSuppress[] =
 	{
 		{tlShockTrooperSignalSuppress,
@@ -1246,9 +1246,9 @@ Task_t tlShockTrooperWaitInCover[] =
 };
 
 /**
-*	@brief we don't allow danger or the ability to attack to break a grunt's run to cover schedule,
-*	but when a grunt is in cover, we do want them to attack if they can.
-*/
+ *	@brief we don't allow danger or the ability to attack to break a grunt's run to cover schedule,
+ *	but when a grunt is in cover, we do want them to attack if they can.
+ */
 Schedule_t slShockTrooperWaitInCover[] =
 	{
 		{tlShockTrooperWaitInCover,
@@ -1303,8 +1303,8 @@ Task_t tlShockTrooperGrenadeCover1[] =
 };
 
 /**
-*	@brief drop grenade then run to cover.
-*/
+ *	@brief drop grenade then run to cover.
+ */
 Schedule_t slShockTrooperGrenadeCover[] =
 	{
 		{tlShockTrooperGrenadeCover1,
@@ -1322,8 +1322,8 @@ Task_t tlShockTrooperTossGrenadeCover1[] =
 };
 
 /**
-*	@brief drop grenade then run to cover.
-*/
+ *	@brief drop grenade then run to cover.
+ */
 Schedule_t slShockTrooperTossGrenadeCover[] =
 	{
 		{tlShockTrooperTossGrenadeCover1,
@@ -1345,8 +1345,8 @@ Task_t tlShockTrooperTakeCoverFromBestSound[] =
 };
 
 /**
-*	@brief hide from the loudest sound source (to run from grenade)
-*/
+ *	@brief hide from the loudest sound source (to run from grenade)
+ */
 Schedule_t slShockTrooperTakeCoverFromBestSound[] =
 	{
 		{tlShockTrooperTakeCoverFromBestSound,
@@ -1387,8 +1387,8 @@ Task_t tlShockTrooperSweep[] =
 };
 
 /**
-*	@brief Do a turning sweep of the area
-*/
+ *	@brief Do a turning sweep of the area
+ */
 Schedule_t slShockTrooperSweep[] =
 	{
 		{tlShockTrooperSweep,
@@ -1426,9 +1426,9 @@ Task_t tlShockTrooperRangeAttack1A[] =
 };
 
 /**
-*	@brief Overridden because base class stops attacking when the enemy is occluded.
-*	grunt's grenade toss requires the enemy be occluded.
-*/
+ *	@brief Overridden because base class stops attacking when the enemy is occluded.
+ *	grunt's grenade toss requires the enemy be occluded.
+ */
 Schedule_t slShockTrooperRangeAttack1A[] =
 	{
 		{tlShockTrooperRangeAttack1A,
@@ -1463,9 +1463,9 @@ Task_t tlShockTrooperRangeAttack1B[] =
 };
 
 /**
-*	@brief Overridden because base class stops attacking when the enemy is occluded.
-*	grunt's grenade toss requires the enemy be occluded.
-*/
+ *	@brief Overridden because base class stops attacking when the enemy is occluded.
+ *	grunt's grenade toss requires the enemy be occluded.
+ */
 Schedule_t slShockTrooperRangeAttack1B[] =
 	{
 		{tlShockTrooperRangeAttack1B,
@@ -1491,9 +1491,9 @@ Task_t tlShockTrooperRangeAttack2[] =
 };
 
 /**
-*	@brief Overridden because base class stops attacking when the enemy is occluded.
-*	grunt's grenade toss requires the enemy be occluded.
-*/
+ *	@brief Overridden because base class stops attacking when the enemy is occluded.
+ *	grunt's grenade toss requires the enemy be occluded.
+ */
 Schedule_t slShockTrooperRangeAttack2[] =
 	{
 		{tlShockTrooperRangeAttack2,
@@ -2106,8 +2106,8 @@ void CShockTrooper::MonsterThink()
 }
 
 /**
-*	@brief when triggered, spawns a monster_shocktrooper repelling down a line.
-*/
+ *	@brief when triggered, spawns a monster_shocktrooper repelling down a line.
+ */
 class CShockTrooperRepel : public CBaseMonster
 {
 	DECLARE_CLASS(CShockTrooperRepel, CBaseMonster);

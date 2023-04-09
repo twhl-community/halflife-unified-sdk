@@ -24,8 +24,8 @@ class CBaseToggle;
 using MoveDonePtr = TBASEPTR<CBaseToggle>;
 
 /**
-*	@brief generic Toggle entity.
-*/
+ *	@brief generic Toggle entity.
+ */
 class CBaseToggle : public CBaseAnimating
 {
 	DECLARE_CLASS(CBaseToggle, CBaseAnimating);
@@ -53,24 +53,24 @@ public:
 
 	// common member functions
 	/**
-	*	@brief calculate pev->velocity and pev->nextthink to reach vecDest from pev->origin traveling at flSpeed
-	*/
+	 *	@brief calculate pev->velocity and pev->nextthink to reach vecDest from pev->origin traveling at flSpeed
+	 */
 	void LinearMove(Vector vecDest, float flSpeed);
 
 	/**
-	*	@brief After moving, set origin to exact final destination, call "move done" function
-	*/
+	 *	@brief After moving, set origin to exact final destination, call "move done" function
+	 */
 	void LinearMoveDone();
 
 	/**
-	*	@brief calculate pev->velocity and pev->nextthink to reach vecDest from pev->origin traveling at flSpeed
-	*	Just like LinearMove, but rotational.
-	*/
+	 *	@brief calculate pev->velocity and pev->nextthink to reach vecDest from pev->origin traveling at flSpeed
+	 *	Just like LinearMove, but rotational.
+	 */
 	void AngularMove(Vector vecDestAngle, float flSpeed);
 
 	/**
-	*	@brief After rotating, set angle to exact final angle, call "move done" function
-	*/
+	 *	@brief After rotating, set angle to exact final angle, call "move done" function
+	 */
 	void AngularMoveDone();
 
 	static float AxisValue(int flags, const Vector& angles);

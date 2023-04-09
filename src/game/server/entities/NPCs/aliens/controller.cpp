@@ -1039,8 +1039,8 @@ void CController::MoveExecute(CBaseEntity* pTargetEnt, const Vector& vecDir, flo
 }
 
 /**
-*	@brief Controller bouncy ball attack
-*/
+ *	@brief Controller bouncy ball attack
+ */
 class CControllerHeadBall : public CBaseMonster
 {
 	DECLARE_CLASS(CControllerHeadBall, CBaseMonster);

@@ -37,7 +37,8 @@ struct ContextSwitcher
 	const bool Success;
 
 	ContextSwitcher(ALCcontext* context, spdlog::logger& logger)
-		: Previous(alcGetCurrentContext()), Success(ALC_FALSE != alcMakeContextCurrent(context))
+		: Previous(alcGetCurrentContext()),
+		  Success(ALC_FALSE != alcMakeContextCurrent(context))
 	{
 		if (!Success)
 		{

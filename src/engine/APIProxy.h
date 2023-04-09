@@ -129,7 +129,8 @@ struct cldll_func_t
  */
 struct cl_enginefunc_t
 {
-	HSPRITE (*pfnSPR_Load)(const char* szPicName);
+	HSPRITE (*pfnSPR_Load)
+	(const char* szPicName);
 	int (*pfnSPR_Frames)(HSPRITE hPic);
 	int (*pfnSPR_Height)(HSPRITE hPic, int frame);
 	int (*pfnSPR_Width)(HSPRITE hPic, int frame);

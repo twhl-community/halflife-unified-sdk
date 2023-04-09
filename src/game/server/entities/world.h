@@ -24,8 +24,8 @@
 
 // this moved here from world.cpp, to allow classes to be derived from it
 /**
-*	@brief This spawns first when each level begins.
-*/
+ *	@brief This spawns first when each level begins.
+ */
 class CWorld : public CBaseEntity
 {
 public:

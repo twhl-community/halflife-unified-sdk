@@ -40,8 +40,8 @@ public:
 	void SetAttachment(CBaseAnimating* pAttachEnt, int iAttachIdx);
 
 	/**
-	*	@brief small beam from arm to nearby geometry
-	*/
+	 *	@brief small beam from arm to nearby geometry
+	 */
 	void ArmBeam(int side);
 
 	void AttachThink();
@@ -617,9 +617,9 @@ Task_t tlVoltigoreStandoff[] =
 };
 
 /**
-*	@brief Used in combat when a monster is hiding in cover or the enemy has moved out of sight.
-*	Should we look around in this schedule?
-*/
+ *	@brief Used in combat when a monster is hiding in cover or the enemy has moved out of sight.
+ *	Should we look around in this schedule?
+ */
 Schedule_t slVoltigoreStandoff[] =
 	{
 		{tlVoltigoreStandoff,

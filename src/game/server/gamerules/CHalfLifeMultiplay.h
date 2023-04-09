@@ -18,8 +18,8 @@
 #include "CGameRules.h"
 
 /**
-*	@brief rules for the basic half life multiplayer competition
-*/
+ *	@brief rules for the basic half life multiplayer competition
+ */
 class CHalfLifeMultiplay : public CGameRules
 {
 public:
