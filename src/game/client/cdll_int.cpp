@@ -246,7 +246,8 @@ Called when a director event message was received
 
 void DLLEXPORT HUD_DirectorMessage(int iSize, void* pbuf)
 {
-	gHUD.m_Spectator.DirectorMessage(iSize, pbuf);
+	BufferReader reader{{reinterpret_cast<std::byte*>(pbuf), static_cast<std::size_t>(iSize)}};
+	gHUD.m_Spectator.DirectorMessage(reader);
 }
 
 void CL_UnloadParticleMan()

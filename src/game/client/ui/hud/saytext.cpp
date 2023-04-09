@@ -161,12 +161,10 @@ bool CHudSayText::Draw(float flTime)
 	return true;
 }
 
-void CHudSayText::MsgFunc_SayText(const char* pszName, int iSize, void* pbuf)
+void CHudSayText::MsgFunc_SayText(const char* pszName, BufferReader& reader)
 {
-	BEGIN_READ(pbuf, iSize);
-
-	int client_index = READ_BYTE(); // the client who spoke the message
-	SayTextPrint(READ_STRING(), iSize - 1, client_index);
+	int client_index = reader.ReadByte(); // the client who spoke the message
+	SayTextPrint(reader.ReadString(), reader.GetSize() - 1, client_index);
 }
 
 void CHudSayText::SayTextPrint(const char* pszBuf, int iBufSize, int clientIndex)

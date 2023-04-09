@@ -645,34 +645,35 @@ bool CHudSpectator::Draw(float flTime)
 }
 
 
-void CHudSpectator::DirectorMessage(int iSize, void* pbuf)
+void CHudSpectator::DirectorMessage(BufferReader& reader)
 {
 	float f1, f2;
 	char* string;
 	Vector v1, v2;
 	int i1, i2, i3;
 
-	BEGIN_READ(pbuf, iSize);
-
-	int cmd = READ_BYTE();
+	int cmd = reader.ReadByte();
 
 	switch (cmd) // director command byte
 	{
 	case DRC_CMD_START:
+	{
 		// now we have to do some things clientside, since the proxy doesn't know our mod
 		g_iPlayerClass = 0;
 		g_iTeamNumber = 0;
 
 		// fake a InitHUD & ResetHUD message
-		gHUD.MsgFunc_InitHUD(nullptr, 0, nullptr);
-		gHUD.MsgFunc_ResetHUD(nullptr, 0, nullptr);
+		BufferReader reader;
+		gHUD.MsgFunc_InitHUD(nullptr, reader);
+		gHUD.MsgFunc_ResetHUD(nullptr, reader);
 
 		break;
+	}
 
 	case DRC_CMD_EVENT: // old director style message
-		m_lastPrimaryObject = READ_WORD();
-		m_lastSecondaryObject = READ_WORD();
-		m_iObserverFlags = READ_LONG();
+		m_lastPrimaryObject = reader.ReadShort();
+		m_lastSecondaryObject = reader.ReadShort();
+		m_iObserverFlags = reader.ReadLong();
 
 		if (0 != m_autoDirector->value)
 		{
@@ -690,21 +691,21 @@ void CHudSpectator::DirectorMessage(int iSize, void* pbuf)
 	case DRC_CMD_MODE:
 		if (0 != m_autoDirector->value)
 		{
-			SetModes(READ_BYTE(), -1);
+			SetModes(reader.ReadByte(), -1);
 		}
 		break;
 
 
 	case DRC_CMD_CAMERA:
-		v1[0] = READ_COORD(); // position
-		v1[1] = READ_COORD();
-		v1[2] = READ_COORD(); // vJumpOrigin
+		v1[0] = reader.ReadCoord(); // position
+		v1[1] = reader.ReadCoord();
+		v1[2] = reader.ReadCoord(); // vJumpOrigin
 
-		v2[0] = READ_COORD(); // view angle
-		v2[1] = READ_COORD(); // vJumpAngles
-		v2[2] = READ_COORD();
-		f1 = READ_BYTE(); // fov
-		i1 = READ_WORD(); // target
+		v2[0] = reader.ReadCoord(); // view angle
+		v2[1] = reader.ReadCoord(); // vJumpAngles
+		v2[2] = reader.ReadCoord();
+		f1 = reader.ReadByte(); // fov
+		i1 = reader.ReadShort(); // target
 
 		if (0 != m_autoDirector->value)
 		{
@@ -718,23 +719,23 @@ void CHudSpectator::DirectorMessage(int iSize, void* pbuf)
 	{
 		client_textmessage_t* msg = &m_HUDMessages[m_lastHudMessage];
 
-		msg->effect = READ_BYTE(); // effect
+		msg->effect = reader.ReadByte(); // effect
 
-		UnpackRGB((int&)msg->r1, (int&)msg->g1, (int&)msg->b1, READ_LONG()); // color
+		UnpackRGB((int&)msg->r1, (int&)msg->g1, (int&)msg->b1, reader.ReadLong()); // color
 		msg->r2 = msg->r1;
 		msg->g2 = msg->g1;
 		msg->b2 = msg->b1;
 		msg->a2 = msg->a1 = 0xFF; // not transparent
 
-		msg->x = READ_FLOAT(); // x pos
-		msg->y = READ_FLOAT(); // y pos
+		msg->x = reader.ReadFloat(); // x pos
+		msg->y = reader.ReadFloat(); // y pos
 
-		msg->fadein = READ_FLOAT();	  // fadein
-		msg->fadeout = READ_FLOAT();  // fadeout
-		msg->holdtime = READ_FLOAT(); // holdtime
-		msg->fxtime = READ_FLOAT();	  // fxtime;
+		msg->fadein = reader.ReadFloat();	  // fadein
+		msg->fadeout = reader.ReadFloat();  // fadeout
+		msg->holdtime = reader.ReadFloat(); // holdtime
+		msg->fxtime = reader.ReadFloat();	  // fxtime;
 
-		strncpy(m_HUDMessageText[m_lastHudMessage], READ_STRING(), 128);
+		strncpy(m_HUDMessageText[m_lastHudMessage], reader.ReadString(), 128);
 		m_HUDMessageText[m_lastHudMessage][127] = 0; // text
 
 		msg->pMessage = m_HUDMessageText[m_lastHudMessage];
@@ -749,8 +750,8 @@ void CHudSpectator::DirectorMessage(int iSize, void* pbuf)
 	break;
 
 	case DRC_CMD_SOUND:
-		string = READ_STRING();
-		f1 = READ_FLOAT();
+		string = reader.ReadString();
+		f1 = reader.ReadFloat();
 
 		// gEngfuncs.Con_Printf("DRC_CMD_FX_SOUND: %s %.2f\n", string, value );
 		EV_PlaySound(0, v_origin, CHAN_BODY, string, f1, ATTN_NORM, 0, PITCH_NORM);
@@ -758,39 +759,39 @@ void CHudSpectator::DirectorMessage(int iSize, void* pbuf)
 		break;
 
 	case DRC_CMD_TIMESCALE:
-		f1 = READ_FLOAT(); // ignore this command (maybe show slowmo sign)
+		f1 = reader.ReadFloat(); // ignore this command (maybe show slowmo sign)
 		break;
 
 
 
 	case DRC_CMD_STATUS:
-		READ_LONG();					  // total number of spectator slots
-		m_iSpectatorNumber = READ_LONG(); // total number of spectator
-		READ_WORD();					  // total number of relay proxies
+		reader.ReadLong();					  // total number of spectator slots
+		m_iSpectatorNumber = reader.ReadLong(); // total number of spectator
+		reader.ReadShort();					  // total number of relay proxies
 
 		gViewPort->UpdateSpectatorPanel();
 		break;
 
 	case DRC_CMD_BANNER:
-		// gEngfuncs.Con_DPrintf("GUI: Banner %s\n",READ_STRING() ); // name of banner tga eg gfx/temp/7454562234563475.tga
-		gViewPort->m_pSpectatorPanel->m_TopBanner->LoadImage(READ_STRING());
+		// gEngfuncs.Con_DPrintf("GUI: Banner %s\n",reader.ReadString() ); // name of banner tga eg gfx/temp/7454562234563475.tga
+		gViewPort->m_pSpectatorPanel->m_TopBanner->LoadImage(reader.ReadString());
 		gViewPort->UpdateSpectatorPanel();
 		break;
 
 	case DRC_CMD_STUFFTEXT:
-		gEngfuncs.pfnFilteredClientCmd(READ_STRING());
+		gEngfuncs.pfnFilteredClientCmd(reader.ReadString());
 		break;
 
 	case DRC_CMD_CAMPATH:
-		v1[0] = READ_COORD(); // position
-		v1[1] = READ_COORD();
-		v1[2] = READ_COORD(); // vJumpOrigin
+		v1[0] = reader.ReadCoord(); // position
+		v1[1] = reader.ReadCoord();
+		v1[2] = reader.ReadCoord(); // vJumpOrigin
 
-		v2[0] = READ_COORD(); // view angle
-		v2[1] = READ_COORD(); // vJumpAngles
-		v2[2] = READ_COORD();
-		f1 = READ_BYTE(); // FOV
-		i1 = READ_BYTE(); // flags
+		v2[0] = reader.ReadCoord(); // view angle
+		v2[1] = reader.ReadCoord(); // vJumpAngles
+		v2[2] = reader.ReadCoord();
+		f1 = reader.ReadByte(); // FOV
+		i1 = reader.ReadByte(); // flags
 
 		if (0 != m_autoDirector->value)
 		{
@@ -800,22 +801,22 @@ void CHudSpectator::DirectorMessage(int iSize, void* pbuf)
 		break;
 
 	case DRC_CMD_WAYPOINTS:
-		i1 = READ_BYTE();
+		i1 = reader.ReadByte();
 		m_NumWayPoints = 0;
 		m_WayPoint = 0;
 		for (i2 = 0; i2 < i1; i2++)
 		{
-			f1 = gHUD.m_flTime + (float)(READ_SHORT()) / 100.0f;
+			f1 = gHUD.m_flTime + (float)(reader.ReadShort()) / 100.0f;
 
-			v1[0] = READ_COORD(); // position
-			v1[1] = READ_COORD();
-			v1[2] = READ_COORD(); // vJumpOrigin
+			v1[0] = reader.ReadCoord(); // position
+			v1[1] = reader.ReadCoord();
+			v1[2] = reader.ReadCoord(); // vJumpOrigin
 
-			v2[0] = READ_COORD(); // view angle
-			v2[1] = READ_COORD(); // vJumpAngles
-			v2[2] = READ_COORD();
-			f2 = READ_BYTE(); // fov
-			i3 = READ_BYTE(); // flags
+			v2[0] = reader.ReadCoord(); // view angle
+			v2[1] = reader.ReadCoord(); // vJumpAngles
+			v2[2] = reader.ReadCoord();
+			f2 = reader.ReadByte(); // fov
+			i3 = reader.ReadByte(); // flags
 
 			AddWaypoint(f1, v1, v2, f2, i3);
 		}
@@ -918,7 +919,8 @@ void CHudSpectator::FindNextPlayer(bool bReverse)
 	}
 
 	iJumpSpectator = true;
-	gViewPort->MsgFunc_ResetFade(nullptr, 0, nullptr);
+	BufferReader reader;
+	gViewPort->MsgFunc_ResetFade(nullptr, reader);
 }
 
 
@@ -975,7 +977,8 @@ void CHudSpectator::FindPlayer(const char* name)
 	}
 
 	iJumpSpectator = true;
-	gViewPort->MsgFunc_ResetFade(nullptr, 0, nullptr);
+	BufferReader reader;
+	gViewPort->MsgFunc_ResetFade(nullptr, reader);
 }
 
 void CHudSpectator::HandleButtonsDown(int ButtonPressed)
@@ -1193,12 +1196,14 @@ void CHudSpectator::SetModes(int iNewMainMode, int iNewInsetMode)
 			gHUD.m_Ammo.SetCrosshair(0, m_crosshairRect);
 		}
 
-		gViewPort->MsgFunc_ResetFade(nullptr, 0, nullptr);
+		BufferReader reader;
+		gViewPort->MsgFunc_ResetFade(nullptr, reader);
 
 		char string[128];
 		sprintf(string, "#Spec_Mode%d", g_iUser1);
 		sprintf(string, "%c%s", HUD_PRINTCENTER, CHudTextMessage::BufferedLocaliseTextString(string));
-		gHUD.m_TextMessage.MsgFunc_TextMsg(nullptr, strlen(string) + 1, string);
+		reader = BufferReader{{reinterpret_cast<std::byte*>(string), strlen(string) + 1}};
+		gHUD.m_TextMessage.MsgFunc_TextMsg(nullptr, reader);
 	}
 
 	gViewPort->UpdateSpectatorPanel();

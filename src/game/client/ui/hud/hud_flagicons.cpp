@@ -131,19 +131,18 @@ void CHudFlagIcons::DisableFlag(const char* pszFlagName, unsigned char team_idx)
 	}
 }
 
-void CHudFlagIcons::MsgFunc_FlagIcon(const char* pszName, int iSize, void* pbuf)
+void CHudFlagIcons::MsgFunc_FlagIcon(const char* pszName, BufferReader& reader)
 {
-	BEGIN_READ(pbuf, iSize);
-	const bool isActive = 0 != READ_BYTE();
-	const char* flagName = READ_STRING();
-	const int team_idx = READ_BYTE();
+	const bool isActive = 0 != reader.ReadByte();
+	const char* flagName = reader.ReadString();
+	const int team_idx = reader.ReadByte();
 
 	if (isActive)
 	{
-		const int r = READ_BYTE();
-		const int g = READ_BYTE();
-		const int b = READ_BYTE();
-		const int score = READ_BYTE();
+		const int r = reader.ReadByte();
+		const int g = reader.ReadByte();
+		const int b = reader.ReadByte();
+		const int score = reader.ReadByte();
 		EnableFlag(flagName, team_idx, r, g, b, score);
 		m_iFlags |= HUD_ACTIVE;
 	}
@@ -153,14 +152,13 @@ void CHudFlagIcons::MsgFunc_FlagIcon(const char* pszName, int iSize, void* pbuf)
 	}
 }
 
-void CHudFlagIcons::MsgFunc_FlagTimer(const char* pszName, int iSize, void* pbuf)
+void CHudFlagIcons::MsgFunc_FlagTimer(const char* pszName, BufferReader& reader)
 {
-	BEGIN_READ(pbuf, iSize);
-	m_bIsTimer = READ_BYTE() != 0;
+	m_bIsTimer = reader.ReadByte() != 0;
 
 	if (m_bIsTimer)
 	{
-		m_flTimeLimit = READ_SHORT();
+		m_flTimeLimit = reader.ReadShort();
 		m_bTimerReset = true;
 	}
 }

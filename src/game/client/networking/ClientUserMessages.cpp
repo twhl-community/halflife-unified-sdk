@@ -74,7 +74,8 @@ bool ClientUserMessages::DispatchUserMessage(const char* pszName, int iSize, voi
 
 	if (auto it = m_Handlers.find(pszName); it != m_Handlers.end())
 	{
-		it->second.Handler(pszName, iSize, pbuf);
+		BufferReader reader{{reinterpret_cast<std::byte*>(pbuf), static_cast<std::size_t>(iSize)}};
+		it->second.Handler(pszName, reader);
 		return 1;
 	}
 

@@ -586,15 +586,13 @@ void CVoiceStatus::UpdateBanButton(int iClient)
 }
 
 
-void CVoiceStatus::HandleVoiceMaskMsg(int iSize, void* pbuf)
+void CVoiceStatus::HandleVoiceMaskMsg(BufferReader& reader)
 {
-	BEGIN_READ(pbuf, iSize);
-
 	unsigned long dw;
 	for (dw = 0; dw < VOICE_MAX_PLAYERS_DW; dw++)
 	{
-		m_AudiblePlayers.SetDWord(dw, (unsigned long)READ_LONG());
-		m_ServerBannedPlayers.SetDWord(dw, (unsigned long)READ_LONG());
+		m_AudiblePlayers.SetDWord(dw, (unsigned long)reader.ReadLong());
+		m_ServerBannedPlayers.SetDWord(dw, (unsigned long)reader.ReadLong());
 
 		if (0 != gEngfuncs.pfnGetCvarFloat("voice_clientdebug"))
 		{
@@ -609,10 +607,10 @@ void CVoiceStatus::HandleVoiceMaskMsg(int iSize, void* pbuf)
 		}
 	}
 
-	m_bServerModEnable = READ_BYTE();
+	m_bServerModEnable = reader.ReadByte();
 }
 
-void CVoiceStatus::HandleReqStateMsg(int iSize, void* pbuf)
+void CVoiceStatus::HandleReqStateMsg(BufferReader& reader)
 {
 	if (0 != gEngfuncs.pfnGetCvarFloat("voice_clientdebug"))
 	{

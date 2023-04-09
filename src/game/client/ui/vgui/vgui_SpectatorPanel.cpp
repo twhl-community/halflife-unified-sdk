@@ -292,7 +292,8 @@ void SpectatorPanel::ShowMenu(bool isVisible)
 			snprintf(string, sizeof(string) - 1, "%c%s", HUD_PRINTCENTER, CHudTextMessage::BufferedLocaliseTextString("#Spec_Duck"));
 			string[sizeof(string) - 1] = '\0';
 
-			gHUD.m_TextMessage.MsgFunc_TextMsg(nullptr, strlen(string) + 1, string);
+			BufferReader reader{{reinterpret_cast<std::byte*>(string), strlen(string) + 1}};
+			gHUD.m_TextMessage.MsgFunc_TextMsg(nullptr, reader);
 		}
 	}
 

@@ -21,6 +21,8 @@
 #include <string>
 #include <unordered_map>
 
+class BufferReader;
+
 /**
  *	@brief Handles the registration and delegation of user message handlers.
  *	Allows the use of member functions.
@@ -28,7 +30,7 @@
 class ClientUserMessages final
 {
 public:
-	using MessageHandler = std::function<void(const char* pszName, int iSize, void* pbuf)>;
+	using MessageHandler = std::function<void(const char* pszName, BufferReader& reader)>;
 
 private:
 	struct Element
@@ -51,13 +53,13 @@ public:
 	 *	@brief Registers an object member function as a handler.
 	 */
 	template <typename T>
-	void RegisterHandler(std::string_view name, void (T::*handler)(const char* pszName, int iSize, void* pbuf), T* instance)
+	void RegisterHandler(std::string_view name, void (T::*handler)(const char* pszName, BufferReader& reader), T* instance)
 	{
 		assert(handler);
 		assert(instance);
 
-		RegisterHandler(name, [handler, instance](const char* pszName, int iSize, void* pbuf)
-			{ return (instance->*handler)(pszName, iSize, pbuf); });
+		RegisterHandler(name, [handler, instance](const char* pszName, BufferReader& reader)
+			{ return (instance->*handler)(pszName, reader); });
 	}
 
 	/**
@@ -65,13 +67,13 @@ public:
 	 *	The handler does not take the message name as a parameter.
 	 */
 	template <typename T>
-	void RegisterHandler(std::string_view name, void (T::*handler)(int iSize, void* pbuf), T* instance)
+	void RegisterHandler(std::string_view name, void (T::*handler)(BufferReader& reader), T* instance)
 	{
 		assert(handler);
 		assert(instance);
 
-		RegisterHandler(name, [handler, instance](const char* pszName, int iSize, void* pbuf)
-			{ return (instance->*handler)(iSize, pbuf); });
+		RegisterHandler(name, [handler, instance](const char* pszName, BufferReader& reader)
+			{ return (instance->*handler)(reader); });
 	}
 
 	void Clear();

@@ -325,13 +325,12 @@ void CStatsMenuPanel::SetPlayerImage(const char* szImage)
 	}
 }
 
-void CStatsMenuPanel::MsgFunc_StatsInfo(const char* pszName, int iSize, void* pbuf)
+void CStatsMenuPanel::MsgFunc_StatsInfo(const char* pszName, BufferReader& reader)
 {
-	BEGIN_READ(pbuf, iSize);
-	const int teamNum = READ_BYTE();
-	g_iWinningTeam = READ_BYTE();
-	const int iNumPlayers = READ_BYTE();
-	const int chunkId = READ_BYTE();
+	const int teamNum = reader.ReadByte();
+	g_iWinningTeam = reader.ReadByte();
+	const int iNumPlayers = reader.ReadByte();
+	const int chunkId = reader.ReadByte();
 
 	// TODO: define constants for team counts and such
 	if (teamNum < 0 || teamNum > 2)
@@ -355,39 +354,39 @@ void CStatsMenuPanel::MsgFunc_StatsInfo(const char* pszName, int iSize, void* pb
 	switch (chunkId)
 	{
 	case 0:
-		strcpy(g_TeamStatInfo[teamNum].szMVP, READ_STRING());
-		g_TeamStatInfo[teamNum].iMVPVal = READ_SHORT();
-		strcpy(g_TeamStatInfo[teamNum].szMostKills, READ_STRING());
-		g_TeamStatInfo[teamNum].iKillsVal = READ_SHORT();
-		strcpy(g_TeamStatInfo[teamNum].szMostCTF, READ_STRING());
-		g_TeamStatInfo[teamNum].iCTFVal = READ_SHORT();
-		strcpy(g_TeamStatInfo[teamNum].szMostOff, READ_STRING());
-		g_TeamStatInfo[teamNum].iOffVal = READ_SHORT();
-		strcpy(g_TeamStatInfo[teamNum].szMostDef, READ_STRING());
-		g_TeamStatInfo[teamNum].iDefVal = READ_SHORT();
-		strcpy(g_TeamStatInfo[teamNum].szMostSnipe, READ_STRING());
-		g_TeamStatInfo[teamNum].iSnipeVal = READ_SHORT();
-		strcpy(g_TeamStatInfo[teamNum].szMostBarnacle, READ_STRING());
-		g_TeamStatInfo[teamNum].iBarnacleVal = READ_SHORT();
+		strcpy(g_TeamStatInfo[teamNum].szMVP, reader.ReadString());
+		g_TeamStatInfo[teamNum].iMVPVal = reader.ReadShort();
+		strcpy(g_TeamStatInfo[teamNum].szMostKills, reader.ReadString());
+		g_TeamStatInfo[teamNum].iKillsVal = reader.ReadShort();
+		strcpy(g_TeamStatInfo[teamNum].szMostCTF, reader.ReadString());
+		g_TeamStatInfo[teamNum].iCTFVal = reader.ReadShort();
+		strcpy(g_TeamStatInfo[teamNum].szMostOff, reader.ReadString());
+		g_TeamStatInfo[teamNum].iOffVal = reader.ReadShort();
+		strcpy(g_TeamStatInfo[teamNum].szMostDef, reader.ReadString());
+		g_TeamStatInfo[teamNum].iDefVal = reader.ReadShort();
+		strcpy(g_TeamStatInfo[teamNum].szMostSnipe, reader.ReadString());
+		g_TeamStatInfo[teamNum].iSnipeVal = reader.ReadShort();
+		strcpy(g_TeamStatInfo[teamNum].szMostBarnacle, reader.ReadString());
+		g_TeamStatInfo[teamNum].iBarnacleVal = reader.ReadShort();
 		break;
 
 	case 1:
-		strcpy(g_TeamStatInfo[teamNum].szMostDeaths, READ_STRING());
-		g_TeamStatInfo[teamNum].iDeathsVal = READ_SHORT();
-		strcpy(g_TeamStatInfo[teamNum].szMostSuicides, READ_STRING());
-		g_TeamStatInfo[teamNum].iSuicidesVal = READ_SHORT();
-		strcpy(g_TeamStatInfo[teamNum].szMostDamage, READ_STRING());
-		g_TeamStatInfo[teamNum].iDamageVal = READ_SHORT();
-		strcpy(g_TeamStatInfo[teamNum].szMostAccel, READ_STRING());
-		g_TeamStatInfo[teamNum].iAccelVal = READ_SHORT();
-		strcpy(g_TeamStatInfo[teamNum].szMostBackpack, READ_STRING());
-		g_TeamStatInfo[teamNum].iBackpackVal = READ_SHORT();
-		strcpy(g_TeamStatInfo[teamNum].szMostHealth, READ_STRING());
-		g_TeamStatInfo[teamNum].iHealthVal = READ_SHORT();
-		strcpy(g_TeamStatInfo[teamNum].szMostShield, READ_STRING());
-		g_TeamStatInfo[teamNum].iShieldVal = READ_SHORT();
-		strcpy(g_TeamStatInfo[teamNum].szMostJump, READ_STRING());
-		g_TeamStatInfo[teamNum].iJumpVal = READ_SHORT();
+		strcpy(g_TeamStatInfo[teamNum].szMostDeaths, reader.ReadString());
+		g_TeamStatInfo[teamNum].iDeathsVal = reader.ReadShort();
+		strcpy(g_TeamStatInfo[teamNum].szMostSuicides, reader.ReadString());
+		g_TeamStatInfo[teamNum].iSuicidesVal = reader.ReadShort();
+		strcpy(g_TeamStatInfo[teamNum].szMostDamage, reader.ReadString());
+		g_TeamStatInfo[teamNum].iDamageVal = reader.ReadShort();
+		strcpy(g_TeamStatInfo[teamNum].szMostAccel, reader.ReadString());
+		g_TeamStatInfo[teamNum].iAccelVal = reader.ReadShort();
+		strcpy(g_TeamStatInfo[teamNum].szMostBackpack, reader.ReadString());
+		g_TeamStatInfo[teamNum].iBackpackVal = reader.ReadShort();
+		strcpy(g_TeamStatInfo[teamNum].szMostHealth, reader.ReadString());
+		g_TeamStatInfo[teamNum].iHealthVal = reader.ReadShort();
+		strcpy(g_TeamStatInfo[teamNum].szMostShield, reader.ReadString());
+		g_TeamStatInfo[teamNum].iShieldVal = reader.ReadShort();
+		strcpy(g_TeamStatInfo[teamNum].szMostJump, reader.ReadString());
+		g_TeamStatInfo[teamNum].iJumpVal = reader.ReadShort();
 		break;
 	}
 
@@ -476,25 +475,24 @@ void CStatsMenuPanel::MsgFunc_StatsInfo(const char* pszName, int iSize, void* pb
 	m_pStatsWindow[teamNum]->setSize(wide, tall);
 }
 
-void CStatsMenuPanel::MsgFunc_StatsPlayer(const char* pszName, int iSize, void* pbuf)
+void CStatsMenuPanel::MsgFunc_StatsPlayer(const char* pszName, BufferReader& reader)
 {
-	BEGIN_READ(pbuf, iSize);
-	const int playerIndex = READ_BYTE();
-	const int iMVPVal = READ_SHORT();
-	const int iKillsVal = READ_SHORT();
-	const int iCTFVal = READ_SHORT();
-	const int iOffVal = READ_SHORT();
-	const int iDefVal = READ_SHORT();
-	const int iSnipeVal = READ_SHORT();
-	const int iBarnacleVal = READ_SHORT();
-	const int iDeathsVal = READ_SHORT();
-	const int iSuicidesVal = READ_SHORT();
-	const int iDamageVal = READ_SHORT();
-	const int iAccelVal = READ_SHORT();
-	const int iBackpackVal = READ_SHORT();
-	const int iHealthVal = READ_SHORT();
-	const int iShieldTime = READ_SHORT();
-	const int iJumpVal = READ_SHORT();
+	const int playerIndex = reader.ReadByte();
+	const int iMVPVal = reader.ReadShort();
+	const int iKillsVal = reader.ReadShort();
+	const int iCTFVal = reader.ReadShort();
+	const int iOffVal = reader.ReadShort();
+	const int iDefVal = reader.ReadShort();
+	const int iSnipeVal = reader.ReadShort();
+	const int iBarnacleVal = reader.ReadShort();
+	const int iDeathsVal = reader.ReadShort();
+	const int iSuicidesVal = reader.ReadShort();
+	const int iDamageVal = reader.ReadShort();
+	const int iAccelVal = reader.ReadShort();
+	const int iBackpackVal = reader.ReadShort();
+	const int iHealthVal = reader.ReadShort();
+	const int iShieldTime = reader.ReadShort();
+	const int iJumpVal = reader.ReadShort();
 
 	if (playerIndex <= 0 || playerIndex >+ MAX_PLAYERS_HUD)
 	{

@@ -20,6 +20,7 @@
 #include "vgui_defaultinputsignal.h"
 
 
+class BufferReader;
 class CVoiceStatus;
 
 
@@ -107,10 +108,10 @@ public:
 	void CreateEntities();
 
 	// Called when the server registers a change to who this client can hear.
-	void HandleVoiceMaskMsg(int iSize, void* pbuf);
+	void HandleVoiceMaskMsg(BufferReader& reader);
 
 	// The server sends this message initially to tell the client to send their state.
-	void HandleReqStateMsg(int iSize, void* pbuf);
+	void HandleReqStateMsg(BufferReader& reader);
 
 
 	// Squelch mode functions.

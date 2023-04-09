@@ -70,20 +70,18 @@ bool CHudFlashlight::VidInit()
 	return true;
 }
 
-void CHudFlashlight::MsgFunc_FlashBat(const char* pszName, int iSize, void* pbuf)
+void CHudFlashlight::MsgFunc_FlashBat(const char* pszName, BufferReader& reader)
 {
-	BEGIN_READ(pbuf, iSize);
-	int x = READ_BYTE();
+	int x = reader.ReadByte();
 	m_iBat = x;
 	m_flBat = ((float)x) / 100.0;
 }
 
-void CHudFlashlight::MsgFunc_Flashlight(const char* pszName, int iSize, void* pbuf)
+void CHudFlashlight::MsgFunc_Flashlight(const char* pszName, BufferReader& reader)
 {
-	BEGIN_READ(pbuf, iSize);
-	m_SuitLightType = static_cast<SuitLightType>(READ_BYTE());
-	m_fOn = 0 != READ_BYTE();
-	int x = READ_BYTE();
+	m_SuitLightType = static_cast<SuitLightType>(reader.ReadByte());
+	m_fOn = 0 != reader.ReadByte();
+	int x = reader.ReadByte();
 	m_iBat = x;
 	m_flBat = ((float)x) / 100.0;
 

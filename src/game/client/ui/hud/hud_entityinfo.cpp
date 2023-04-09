@@ -88,13 +88,11 @@ bool CHudEntityInfo::Draw(float flTime)
 	return true;
 }
 
-void CHudEntityInfo::MsgFunc_EntityInfo(const char* pszName, int iSize, void* pbuf)
+void CHudEntityInfo::MsgFunc_EntityInfo(const char* pszName, BufferReader& reader)
 {
-	BEGIN_READ(pbuf, iSize);
-
 	m_EntityInfo = {};
 
-	m_EntityInfo.Classname = READ_STRING();
+	m_EntityInfo.Classname = reader.ReadString();
 
 	// Nothing to draw, skip rest of message.
 	if (m_EntityInfo.Classname.empty())
@@ -102,8 +100,8 @@ void CHudEntityInfo::MsgFunc_EntityInfo(const char* pszName, int iSize, void* pb
 		return;
 	}
 
-	m_EntityInfo.Health = READ_LONG();
-	m_EntityInfo.Color = READ_RGB24();
+	m_EntityInfo.Health = reader.ReadLong();
+	m_EntityInfo.Color = reader.ReadRGB24();
 
 	m_DrawEndTime = gHUD.m_flTime + EntityInfoDrawTime;
 }

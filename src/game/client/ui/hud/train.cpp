@@ -60,12 +60,10 @@ bool CHudTrain::Draw(float fTime)
 }
 
 
-void CHudTrain::MsgFunc_Train(const char* pszName, int iSize, void* pbuf)
+void CHudTrain::MsgFunc_Train(const char* pszName, BufferReader& reader)
 {
-	BEGIN_READ(pbuf, iSize);
-
 	// update Train data
-	m_iPos = READ_BYTE();
+	m_iPos = reader.ReadByte();
 
 	if (0 != m_iPos)
 		m_iFlags |= HUD_ACTIVE;

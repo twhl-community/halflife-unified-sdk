@@ -416,11 +416,9 @@ void CTeamMenuPanel::SetActiveInfo(int iInput)
 	m_pScrollPanel->validate();
 }
 
-void CTeamMenuPanel::MsgFunc_TeamFull(const char* pszName, int iSize, void* pbuf)
+void CTeamMenuPanel::MsgFunc_TeamFull(const char* pszName, BufferReader& reader)
 {
-	BEGIN_READ(pbuf, iSize);
-
-	m_pTeamFull->setVisible(READ_BYTE() != 0);
+	m_pTeamFull->setVisible(reader.ReadByte() != 0);
 
 	m_flTeamFullReset = gHUD.m_flTime + 2.0;
 }

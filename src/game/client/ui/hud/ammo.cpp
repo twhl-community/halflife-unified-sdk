@@ -535,50 +535,43 @@ void WeaponsResource::SelectSlot(int iSlot, bool fAdvance, int iDirection)
 //
 // AmmoX  -- Update the count of a known type of ammo
 //
-void CHudAmmo::MsgFunc_AmmoX(const char* pszName, int iSize, void* pbuf)
+void CHudAmmo::MsgFunc_AmmoX(const char* pszName, BufferReader& reader)
 {
-	BEGIN_READ(pbuf, iSize);
-
-	int iIndex = READ_BYTE();
-	int iCount = READ_BYTE();
+	int iIndex = reader.ReadByte();
+	int iCount = reader.ReadByte();
 
 	gWR.SetAmmo(iIndex, abs(iCount));
 }
 
-void CHudAmmo::MsgFunc_AmmoPickup(const char* pszName, int iSize, void* pbuf)
+void CHudAmmo::MsgFunc_AmmoPickup(const char* pszName, BufferReader& reader)
 {
-	BEGIN_READ(pbuf, iSize);
-	int iIndex = READ_BYTE();
-	int iCount = READ_BYTE();
+	int iIndex = reader.ReadByte();
+	int iCount = reader.ReadByte();
 
 	// Add ammo to the history
 	gHR.AddToHistory(HISTSLOT_AMMO, iIndex, abs(iCount));
 }
 
-void CHudAmmo::MsgFunc_WeapPickup(const char* pszName, int iSize, void* pbuf)
+void CHudAmmo::MsgFunc_WeapPickup(const char* pszName, BufferReader& reader)
 {
-	BEGIN_READ(pbuf, iSize);
-	int iIndex = READ_BYTE();
+	int iIndex = reader.ReadByte();
 
 	// Add the weapon to the history
 	gHR.AddToHistory(HISTSLOT_WEAP, iIndex);
 }
 
-void CHudAmmo::MsgFunc_ItemPickup(const char* pszName, int iSize, void* pbuf)
+void CHudAmmo::MsgFunc_ItemPickup(const char* pszName, BufferReader& reader)
 {
-	BEGIN_READ(pbuf, iSize);
-	const char* szName = READ_STRING();
+	const char* szName = reader.ReadString();
 
 	// Add the weapon to the history
 	gHR.AddToHistory(HISTSLOT_ITEM, szName);
 }
 
 
-void CHudAmmo::MsgFunc_HideWeapon(const char* pszName, int iSize, void* pbuf)
+void CHudAmmo::MsgFunc_HideWeapon(const char* pszName, BufferReader& reader)
 {
-	BEGIN_READ(pbuf, iSize);
-
-	gHUD.m_iHideHUDDisplay = READ_BYTE();
+	gHUD.m_iHideHUDDisplay = reader.ReadByte();
 
 	if (0 != gEngfuncs.IsSpectateOnly())
 		return;
@@ -605,15 +598,13 @@ void CHudAmmo::MsgFunc_HideWeapon(const char* pszName, int iSize, void* pbuf)
 //  counts are updated with AmmoX. Server assures that the Weapon ammo type
 //  numbers match a real ammo type.
 //
-void CHudAmmo::MsgFunc_CurWeapon(const char* pszName, int iSize, void* pbuf)
+void CHudAmmo::MsgFunc_CurWeapon(const char* pszName, BufferReader& reader)
 {
 	static Rect nullrc;
 
-	BEGIN_READ(pbuf, iSize);
-
-	const WeaponState iState = static_cast<WeaponState>(READ_BYTE());
-	int iId = READ_CHAR();
-	int iClip = READ_CHAR();
+	const WeaponState iState = static_cast<WeaponState>(reader.ReadByte());
+	int iId = reader.ReadChar();
+	int iClip = reader.ReadChar();
 
 	// detect if we're also on target
 	const bool onTarget = iState > WeaponState::Active;

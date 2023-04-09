@@ -261,7 +261,6 @@ target_sources(client PRIVATE
 	../../common/mathlib.h
 	../../common/netadr.h
 	../../common/net_api.h
-	../../common/parsemsg.cpp
 	../../common/parsemsg.h
 	../../common/particledef.h
 	../../common/Platform.h

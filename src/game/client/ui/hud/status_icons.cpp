@@ -103,18 +103,16 @@ bool CHudStatusIcons::Draw(float flTime)
 //		byte   : red
 //		byte   : green
 //		byte   : blue
-void CHudStatusIcons::MsgFunc_StatusIcon(const char* pszName, int iSize, void* pbuf)
+void CHudStatusIcons::MsgFunc_StatusIcon(const char* pszName, BufferReader& reader)
 {
-	BEGIN_READ(pbuf, iSize);
-
-	const bool ShouldEnable = 0 != READ_BYTE();
-	char* pszIconName = READ_STRING();
+	const bool ShouldEnable = 0 != reader.ReadByte();
+	char* pszIconName = reader.ReadString();
 	if (ShouldEnable)
 	{
 		RGB24 color;
-		color.Red = READ_BYTE();
-		color.Green = READ_BYTE();
-		color.Blue = READ_BYTE();
+		color.Red = reader.ReadByte();
+		color.Green = reader.ReadByte();
+		color.Blue = reader.ReadByte();
 		EnableIcon(pszIconName, color);
 		m_iFlags |= HUD_ACTIVE;
 	}
@@ -124,26 +122,24 @@ void CHudStatusIcons::MsgFunc_StatusIcon(const char* pszName, int iSize, void* p
 	}
 }
 
-void CHudStatusIcons::MsgFunc_CustomIcon(const char* pszName, int iSize, void* pbuf)
+void CHudStatusIcons::MsgFunc_CustomIcon(const char* pszName, BufferReader& reader)
 {
-	BEGIN_READ(pbuf, iSize);
-
-	const bool ShouldEnable = 0 != READ_BYTE();
-	int index = READ_BYTE();
+	const bool ShouldEnable = 0 != reader.ReadByte();
+	int index = reader.ReadByte();
 
 	if (ShouldEnable)
 	{
-		char* pszIconName = READ_STRING();
+		char* pszIconName = reader.ReadString();
 		RGB24 color;
-		color.Red = READ_BYTE();
-		color.Green = READ_BYTE();
-		color.Blue = READ_BYTE();
+		color.Red = reader.ReadByte();
+		color.Green = reader.ReadByte();
+		color.Blue = reader.ReadByte();
 
 		Rect aRect;
-		aRect.left = READ_BYTE();
-		aRect.top = READ_BYTE();
-		aRect.right = READ_BYTE();
-		aRect.bottom = READ_BYTE();
+		aRect.left = reader.ReadByte();
+		aRect.top = reader.ReadByte();
+		aRect.right = reader.ReadByte();
+		aRect.bottom = reader.ReadByte();
 
 		EnableCustomIcon(index, pszIconName, color, aRect);
 		m_iFlags |= HUD_ACTIVE;

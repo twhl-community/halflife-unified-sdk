@@ -106,12 +106,10 @@ bool CHudPlayerBrowse::Draw(float flTime)
 	return true;
 }
 
-void CHudPlayerBrowse::MsgFunc_PlyrBrowse(const char* pszName, int iSize, void* pbuf)
+void CHudPlayerBrowse::MsgFunc_PlyrBrowse(const char* pszName, BufferReader& reader)
 {
-	BEGIN_READ(pbuf, iSize);
-
-	m_fFriendly = READ_BYTE() != 0;
-	m_iNewTeamNum = READ_BYTE();
+	m_fFriendly = reader.ReadByte() != 0;
+	m_iNewTeamNum = reader.ReadByte();
 	m_szNewLineBuffer[0] = 0;
 
 	if (m_iNewTeamNum > 0)
@@ -126,11 +124,11 @@ void CHudPlayerBrowse::MsgFunc_PlyrBrowse(const char* pszName, int iSize, void* 
 	}
 
 	// TODO: unsafe use of strncat count parameter
-	strncat(m_szNewLineBuffer, READ_STRING(), iSize - 3);
+	strncat(m_szNewLineBuffer, reader.ReadString(), reader.GetSize() - 3);
 
 	if ('\0' != m_szNewLineBuffer[0])
 	{
-		const int items = READ_BYTE();
+		const int items = reader.ReadByte();
 
 		if (0 != items)
 		{
@@ -175,8 +173,8 @@ void CHudPlayerBrowse::MsgFunc_PlyrBrowse(const char* pszName, int iSize, void* 
 			memset(&m_PowerupSprite, 0, sizeof(m_PowerupSprite));
 		}
 
-		m_iHealth = READ_BYTE();
-		m_iArmor = READ_BYTE();
+		m_iHealth = reader.ReadByte();
+		m_iArmor = reader.ReadByte();
 
 		if (m_fFriendly || 0 == m_iNewTeamNum)
 		{

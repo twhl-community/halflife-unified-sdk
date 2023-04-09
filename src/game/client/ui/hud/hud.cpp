@@ -141,7 +141,8 @@ void CHud::Init()
 
 	m_Menu.Init();
 
-	MsgFunc_ResetHUD(nullptr, 0, nullptr);
+	BufferReader reader;
+	MsgFunc_ResetHUD(nullptr, reader);
 }
 
 void CHud::Shutdown()
@@ -211,13 +212,11 @@ void CHud::VidInit()
 	}
 }
 
-void CHud::MsgFunc_HudColor(const char* pszName, int iSize, void* pbuf)
+void CHud::MsgFunc_HudColor(const char* pszName, BufferReader& reader)
 {
-	BEGIN_READ(pbuf, iSize);
-
-	m_HudColor.Red = READ_BYTE();
-	m_HudColor.Green = READ_BYTE();
-	m_HudColor.Blue = READ_BYTE();
+	m_HudColor.Red = reader.ReadByte();
+	m_HudColor.Green = reader.ReadByte();
+	m_HudColor.Blue = reader.ReadByte();
 
 	// Sync item color up if we're not in NVG mode
 	if (!m_NightVisionState)
@@ -226,12 +225,10 @@ void CHud::MsgFunc_HudColor(const char* pszName, int iSize, void* pbuf)
 	}
 }
 
-void CHud::MsgFunc_Logo(const char* pszName, int iSize, void* pbuf)
+void CHud::MsgFunc_Logo(const char* pszName, BufferReader& reader)
 {
-	BEGIN_READ(pbuf, iSize);
-
 	// update Train data
-	m_ShowLogo = READ_BYTE() != 0;
+	m_ShowLogo = reader.ReadByte() != 0;
 }
 
 float g_lastFOV = 0.0;
@@ -328,11 +325,9 @@ float HUD_GetFOV()
 	return g_lastFOV;
 }
 
-void CHud::MsgFunc_SetFOV(const char* pszName, int iSize, void* pbuf)
+void CHud::MsgFunc_SetFOV(const char* pszName, BufferReader& reader)
 {
-	BEGIN_READ(pbuf, iSize);
-
-	int newfov = READ_BYTE();
+	int newfov = reader.ReadByte();
 	int def_fov = CVAR_GET_FLOAT("default_fov");
 
 	// Weapon prediction already takes care of changing the fog. ( g_lastFOV ).

@@ -85,7 +85,7 @@ public:
 	void HandleButtonsUp(int ButtonPressed);
 	void FindNextPlayer(bool bReverse);
 	void FindPlayer(const char* name);
-	void DirectorMessage(int iSize, void* pbuf);
+	void DirectorMessage(BufferReader& reader);
 	void SetSpectatorStartPosition();
 	bool Init() override;
 	bool VidInit() override;

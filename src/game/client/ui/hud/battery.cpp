@@ -47,12 +47,11 @@ bool CHudBattery::VidInit()
 	return true;
 }
 
-void CHudBattery::MsgFunc_Battery(const char* pszName, int iSize, void* pbuf)
+void CHudBattery::MsgFunc_Battery(const char* pszName, BufferReader& reader)
 {
 	m_iFlags |= HUD_ACTIVE;
 
-	BEGIN_READ(pbuf, iSize);
-	int x = READ_SHORT();
+	int x = reader.ReadShort();
 
 	if (x != m_iBat)
 	{

@@ -494,11 +494,9 @@ void CHudMessage::MessageAdd(const char* pName, float time)
 }
 
 
-void CHudMessage::MsgFunc_HudText(const char* pszName, int iSize, void* pbuf)
+void CHudMessage::MsgFunc_HudText(const char* pszName, BufferReader& reader)
 {
-	BEGIN_READ(pbuf, iSize);
-
-	char* pString = READ_STRING();
+	char* pString = reader.ReadString();
 
 	MessageAdd(pString, gHUD.m_flTime);
 	// Remember the time -- to fix up level transitions
@@ -510,13 +508,11 @@ void CHudMessage::MsgFunc_HudText(const char* pszName, int iSize, void* pbuf)
 }
 
 
-void CHudMessage::MsgFunc_GameTitle(const char* pszName, int iSize, void* pbuf)
+void CHudMessage::MsgFunc_GameTitle(const char* pszName, BufferReader& reader)
 {
-	BEGIN_READ(pbuf, iSize);
-
 	// Pick the right title.
 	// This is a temporary hack. The UI needs to be rewritten so this supports the official games and uses the HL1 title for everything else.
-	const std::string gameName = READ_STRING();
+	const std::string gameName = reader.ReadString();
 
 	std::string titleName = gameName;
 

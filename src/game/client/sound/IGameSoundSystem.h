@@ -57,6 +57,6 @@ struct IGameSoundSystem : public INetworkDataBlockHandler
 
 	virtual void StopAllSounds() = 0;
 
-	virtual void MsgFunc_EmitSound(const char* pszName, int iSize, void* pbuf) = 0;
+	virtual void MsgFunc_EmitSound(const char* pszName, BufferReader& reader) = 0;
 };
 }

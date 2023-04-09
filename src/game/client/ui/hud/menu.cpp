@@ -224,13 +224,11 @@ void CHudMenu::SelectMenuItem(int menu_item)
 //		byte : a boolean, true if there is more string yet to be received before displaying the menu, false if it's the last string
 //		string: menu string to display
 // if this message is never received, then scores will simply be the combined totals of the players.
-void CHudMenu::MsgFunc_ShowMenu(const char* pszName, int iSize, void* pbuf)
+void CHudMenu::MsgFunc_ShowMenu(const char* pszName, BufferReader& reader)
 {
-	BEGIN_READ(pbuf, iSize);
-
-	m_bitsValidSlots = READ_SHORT();
-	int DisplayTime = READ_CHAR();
-	bool NeedMore = READ_BYTE() != 0;
+	m_bitsValidSlots = reader.ReadShort();
+	int DisplayTime = reader.ReadChar();
+	bool NeedMore = reader.ReadByte() != 0;
 
 	if (DisplayTime > 0)
 		m_flShutoffTime = DisplayTime + gHUD.m_flTime;
@@ -241,11 +239,11 @@ void CHudMenu::MsgFunc_ShowMenu(const char* pszName, int iSize, void* pbuf)
 	{
 		if (!m_fWaitingForMore) // this is the start of a new menu
 		{
-			strncpy(g_szPrelocalisedMenuString, READ_STRING(), MAX_MENU_STRING);
+			strncpy(g_szPrelocalisedMenuString, reader.ReadString(), MAX_MENU_STRING);
 		}
 		else
 		{ // append to the current menu string
-			strncat(g_szPrelocalisedMenuString, READ_STRING(), MAX_MENU_STRING - strlen(g_szPrelocalisedMenuString));
+			strncat(g_szPrelocalisedMenuString, reader.ReadString(), MAX_MENU_STRING - strlen(g_szPrelocalisedMenuString));
 		}
 		g_szPrelocalisedMenuString[MAX_MENU_STRING - 1] = 0; // ensure null termination (strncat/strncpy does not)
 

@@ -545,16 +545,15 @@ void CHudScoreboard::GetAllPlayersInfo()
 	}
 }
 
-void CHudScoreboard::MsgFunc_ScoreInfo(const char* pszName, int iSize, void* pbuf)
+void CHudScoreboard::MsgFunc_ScoreInfo(const char* pszName, BufferReader& reader)
 {
 	m_iFlags |= HUD_ACTIVE;
 
-	BEGIN_READ(pbuf, iSize);
-	short cl = READ_BYTE();
-	short frags = READ_SHORT();
-	short deaths = READ_SHORT();
-	short playerclass = READ_SHORT();
-	short teamnumber = READ_SHORT();
+	short cl = reader.ReadByte();
+	short frags = reader.ReadShort();
+	short deaths = reader.ReadShort();
+	short playerclass = reader.ReadShort();
+	short teamnumber = reader.ReadShort();
 
 	if (cl > 0 && cl <= MAX_PLAYERS_HUD)
 	{
@@ -571,18 +570,17 @@ void CHudScoreboard::MsgFunc_ScoreInfo(const char* pszName, int iSize, void* pbu
 // accepts two values:
 //		byte: client number
 //		string: client team name
-void CHudScoreboard::MsgFunc_TeamInfo(const char* pszName, int iSize, void* pbuf)
+void CHudScoreboard::MsgFunc_TeamInfo(const char* pszName, BufferReader& reader)
 {
-	BEGIN_READ(pbuf, iSize);
-	short cl = READ_BYTE();
+	short cl = reader.ReadByte();
 
 	if (cl > 0 && cl <= MAX_PLAYERS_HUD)
 	{ // set the players team
-		strncpy(g_PlayerExtraInfo[cl].teamname, READ_STRING(), MAX_TEAM_NAME);
+		strncpy(g_PlayerExtraInfo[cl].teamname, reader.ReadString(), MAX_TEAM_NAME);
 
 		if (gHUD.m_Teamplay == 2)
 		{
-			g_PlayerExtraInfo[cl].teamid = READ_BYTE();
+			g_PlayerExtraInfo[cl].teamid = reader.ReadByte();
 		}
 	}
 
@@ -653,10 +651,9 @@ void CHudScoreboard::MsgFunc_TeamInfo(const char* pszName, int iSize, void* pbuf
 //		short: teams kills
 //		short: teams deaths
 // if this message is never received, then scores will simply be the combined totals of the players.
-void CHudScoreboard::MsgFunc_TeamScore(const char* pszName, int iSize, void* pbuf)
+void CHudScoreboard::MsgFunc_TeamScore(const char* pszName, BufferReader& reader)
 {
-	BEGIN_READ(pbuf, iSize);
-	char* TeamName = READ_STRING();
+	char* TeamName = reader.ReadString();
 
 	// find the team matching the name
 	int i;
@@ -670,17 +667,16 @@ void CHudScoreboard::MsgFunc_TeamScore(const char* pszName, int iSize, void* pbu
 
 	// use this new score data instead of combined player scores
 	g_TeamInfo[i].scores_overriden = true;
-	g_TeamInfo[i].frags = READ_SHORT();
-	g_TeamInfo[i].deaths = READ_SHORT();
+	g_TeamInfo[i].frags = reader.ReadShort();
+	g_TeamInfo[i].deaths = reader.ReadShort();
 }
 
-void CHudScoreboard::MsgFunc_PlayerIcon(const char* pszName, int iSize, void* pbuf)
+void CHudScoreboard::MsgFunc_PlayerIcon(const char* pszName, BufferReader& reader)
 {
-	BEGIN_READ(pbuf, iSize);
-	const short playerIndex = READ_BYTE();
-	const bool isActive = 0 != READ_BYTE();
-	const int iconIndex = READ_BYTE();
-	const unsigned char itemId = READ_BYTE();
+	const short playerIndex = reader.ReadByte();
+	const bool isActive = 0 != reader.ReadByte();
+	const int iconIndex = reader.ReadByte();
+	const unsigned char itemId = reader.ReadByte();
 
 	if (playerIndex > MAX_PLAYERS_HUD)
 		return;
@@ -801,11 +797,10 @@ void CHudScoreboard::MsgFunc_PlayerIcon(const char* pszName, int iSize, void* pb
 	m_iFlags |= HUD_ACTIVE;
 }
 
-void CHudScoreboard::MsgFunc_CTFScore(const char* pszName, int iSize, void* pbuf)
+void CHudScoreboard::MsgFunc_CTFScore(const char* pszName, BufferReader& reader)
 {
-	BEGIN_READ(pbuf, iSize);
-	const int playerIndex = READ_BYTE();
-	const int score = READ_BYTE();
+	const int playerIndex = reader.ReadByte();
+	const int score = reader.ReadByte();
 
 	if (playerIndex >= 1 && playerIndex <= MAX_PLAYERS_HUD)
 	{

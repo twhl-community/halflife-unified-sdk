@@ -33,7 +33,7 @@ struct DummyGameSoundSystem final : public IGameSoundSystem
 
 	void StopAllSounds() override {}
 
-	void MsgFunc_EmitSound(const char* pszName, int iSize, void* pbuf) override {}
+	void MsgFunc_EmitSound(const char* pszName, BufferReader& reader) override {}
 };
 
 struct DummyMusicSystem final : public IMusicSystem

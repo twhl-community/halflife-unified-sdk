@@ -590,26 +590,26 @@ public:
 	bool GetAllowSpectators() { return m_iAllowSpectators; };
 
 	// Message Handlers
-	void MsgFunc_ValClass(const char* pszName, int iSize, void* pbuf);
-	void MsgFunc_TeamNames(const char* pszName, int iSize, void* pbuf);
-	void MsgFunc_Feign(const char* pszName, int iSize, void* pbuf);
-	void MsgFunc_Detpack(const char* pszName, int iSize, void* pbuf);
-	void MsgFunc_VGUIMenu(const char* pszName, int iSize, void* pbuf);
-	void MsgFunc_MOTD(const char* pszName, int iSize, void* pbuf);
-	void MsgFunc_BuildSt(const char* pszName, int iSize, void* pbuf);
-	void MsgFunc_RandomPC(const char* pszName, int iSize, void* pbuf);
-	void MsgFunc_ServerName(const char* pszName, int iSize, void* pbuf);
-	void MsgFunc_ScoreInfo(const char* pszName, int iSize, void* pbuf);
-	void MsgFunc_TeamScore(const char* pszName, int iSize, void* pbuf);
-	void MsgFunc_TeamInfo(const char* pszName, int iSize, void* pbuf);
-	void MsgFunc_Spectator(const char* pszName, int iSize, void* pbuf);
-	void MsgFunc_AllowSpec(const char* pszName, int iSize, void* pbuf);
-	void MsgFunc_SpecFade(const char* pszName, int iSize, void* pbuf);
-	void MsgFunc_ResetFade(const char* pszName, int iSize, void* pbuf);
-	void MsgFunc_TeamFull(const char* pszName, int iSize, void* pbuf);
-	void MsgFunc_SetMenuTeam(const char* pszName, int iSize, void* pbuf);
-	void MsgFunc_StatsInfo(const char* pszName, int iSize, void* pbuf);
-	void MsgFunc_StatsPlayer(const char* pszName, int iSize, void* pbuf);
+	void MsgFunc_ValClass(const char* pszName, BufferReader& reader);
+	void MsgFunc_TeamNames(const char* pszName, BufferReader& reader);
+	void MsgFunc_Feign(const char* pszName, BufferReader& reader);
+	void MsgFunc_Detpack(const char* pszName, BufferReader& reader);
+	void MsgFunc_VGUIMenu(const char* pszName, BufferReader& reader);
+	void MsgFunc_MOTD(const char* pszName, BufferReader& reader);
+	void MsgFunc_BuildSt(const char* pszName, BufferReader& reader);
+	void MsgFunc_RandomPC(const char* pszName, BufferReader& reader);
+	void MsgFunc_ServerName(const char* pszName, BufferReader& reader);
+	void MsgFunc_ScoreInfo(const char* pszName, BufferReader& reader);
+	void MsgFunc_TeamScore(const char* pszName, BufferReader& reader);
+	void MsgFunc_TeamInfo(const char* pszName, BufferReader& reader);
+	void MsgFunc_Spectator(const char* pszName, BufferReader& reader);
+	void MsgFunc_AllowSpec(const char* pszName, BufferReader& reader);
+	void MsgFunc_SpecFade(const char* pszName, BufferReader& reader);
+	void MsgFunc_ResetFade(const char* pszName, BufferReader& reader);
+	void MsgFunc_TeamFull(const char* pszName, BufferReader& reader);
+	void MsgFunc_SetMenuTeam(const char* pszName, BufferReader& reader);
+	void MsgFunc_StatsInfo(const char* pszName, BufferReader& reader);
+	void MsgFunc_StatsPlayer(const char* pszName, BufferReader& reader);
 
 	// Input
 	bool SlotInput(int iSlot);
@@ -1682,7 +1682,7 @@ public:
 		}
 	}
 
-	void MsgFunc_TeamFull(const char* pszName, int iSize, void* pbuf);
+	void MsgFunc_TeamFull(const char* pszName, BufferReader& reader);
 };
 
 //=========================================================

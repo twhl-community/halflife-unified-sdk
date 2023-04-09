@@ -39,8 +39,8 @@ public:
 	bool VidInit() override;
 	bool Draw(float fTime) override;
 	void Reset() override;
-	void MsgFunc_Health(const char* pszName, int iSize, void* pbuf);
-	void MsgFunc_Damage(const char* pszName, int iSize, void* pbuf);
+	void MsgFunc_Health(const char* pszName, BufferReader& reader);
+	void MsgFunc_Damage(const char* pszName, BufferReader& reader);
 	int m_iHealth;
 	int m_HUD_cross;
 	float m_fAttackFront, m_fAttackRear, m_fAttackLeft, m_fAttackRight;

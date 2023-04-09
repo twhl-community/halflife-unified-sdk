@@ -461,16 +461,14 @@ void GameSoundSystem::StopAllSounds()
 	m_Channels.clear();
 }
 
-void GameSoundSystem::MsgFunc_EmitSound(const char* pszName, int iSize, void* pbuf)
+void GameSoundSystem::MsgFunc_EmitSound(const char* pszName, BufferReader& reader)
 {
-	BEGIN_READ(pbuf, iSize);
+	const int flags = reader.ReadByte();
 
-	const int flags = READ_BYTE();
-
-	const float volume = (flags & SND_VOLUME) != 0 ? READ_BYTE() / 255.f : 1;
-	const float attenuation = (flags & SND_ATTENUATION) != 0 ? READ_BYTE() / 64.f : 1;
-	const int channel = READ_BYTE();
-	const int entityIndex = READ_SHORT();
+	const float volume = (flags & SND_VOLUME) != 0 ? reader.ReadByte() / 255.f : 1;
+	const float attenuation = (flags & SND_ATTENUATION) != 0 ? reader.ReadByte() / 64.f : 1;
+	const int channel = reader.ReadByte();
+	const int entityIndex = reader.ReadShort();
 
 	int soundIndex;
 
@@ -478,19 +476,19 @@ void GameSoundSystem::MsgFunc_EmitSound(const char* pszName, int iSize, void* pb
 	{
 		// Cast the signed short back to an unsigned short so the index is correct.
 		// See ServerSoundSystem::EmitSound for why this is needed.
-		soundIndex = static_cast<std::uint16_t>(READ_SHORT());
+		soundIndex = static_cast<std::uint16_t>(reader.ReadShort());
 	}
 	else
 	{
-		soundIndex = READ_BYTE();
+		soundIndex = reader.ReadByte();
 	}
 
 	Vector origin;
-	origin.x = READ_COORD();
-	origin.y = READ_COORD();
-	origin.z = READ_COORD();
+	origin.x = reader.ReadCoord();
+	origin.y = reader.ReadCoord();
+	origin.z = reader.ReadCoord();
 
-	const int pitch = (flags & SND_PITCH) != 0 ? READ_BYTE() : 100;
+	const int pitch = (flags & SND_PITCH) != 0 ? reader.ReadByte() : 100;
 
 	const auto entity = gEngfuncs.GetEntityByIndex(entityIndex);
 

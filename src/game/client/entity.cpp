@@ -755,37 +755,37 @@ cl_entity_t DLLEXPORT* HUD_GetUserEntity(int index)
 #endif
 }
 
-static void CL_ParseGunshot()
+static void CL_ParseGunshot(BufferReader& reader)
 {
-	const Vector pos = READ_COORDVECTOR();
+	const Vector pos = reader.ReadCoordVector();
 	gEngfuncs.pEfxAPI->R_RunParticleEffect(pos, vec3_origin, 0, 20);
 	R_RicochetSound(pos);
 }
 
-static void CL_ParseExplosion()
+static void CL_ParseExplosion(BufferReader& reader)
 {
-	const Vector pos = READ_COORDVECTOR();
-	const int spriteIndex = READ_SHORT();
+	const Vector pos = reader.ReadCoordVector();
+	const int spriteIndex = reader.ReadShort();
 
-	const float scale = READ_BYTE() * 0.1f;
-	const float framerate = READ_BYTE();
-	const int flags = READ_BYTE();
+	const float scale = reader.ReadByte() * 0.1f;
+	const float framerate = reader.ReadByte();
+	const int flags = reader.ReadByte();
 
 	R_Explosion(pos, spriteIndex, scale, framerate, flags);
 }
 
-static void CL_ParseTarExplosion()
+static void CL_ParseTarExplosion(BufferReader& reader)
 {
-	const Vector pos = READ_COORDVECTOR();
+	const Vector pos = reader.ReadCoordVector();
 	gEngfuncs.pEfxAPI->R_BlobExplosion(pos);
 	CL_StartSound(-1, CHAN_AUTO, "weapons/explode3.wav", pos, VOL_NORM, 1.0f, PITCH_NORM, 0);
 }
 
-static void CL_ParseExplosion2()
+static void CL_ParseExplosion2(BufferReader& reader)
 {
-	const Vector pos = READ_COORDVECTOR();
-	const int colorStart = READ_BYTE();
-	const int colorLength = READ_BYTE();
+	const Vector pos = reader.ReadCoordVector();
+	const int colorStart = reader.ReadByte();
+	const int colorLength = reader.ReadByte();
 
 	gEngfuncs.pEfxAPI->R_ParticleExplosion2(pos, colorStart, colorLength);
 
@@ -798,11 +798,11 @@ static void CL_ParseExplosion2()
 	CL_StartSound(-1, CHAN_AUTO, "weapons/explode3.wav", pos, VOL_NORM, 0.6f, PITCH_NORM, 0);
 }
 
-static void CL_ParseGunshotDecal()
+static void CL_ParseGunshotDecal(BufferReader& reader)
 {
-	const Vector pos = READ_COORDVECTOR();
-	const int entityIndex = READ_SHORT();
-	const int decalId = READ_BYTE();
+	const Vector pos = reader.ReadCoordVector();
+	const int entityIndex = reader.ReadShort();
+	const int decalId = reader.ReadByte();
 
 	gEngfuncs.pEfxAPI->R_BulletImpactParticles(pos);
 
@@ -825,10 +825,10 @@ static void CL_ParseGunshotDecal()
 	}
 }
 
-static void CL_ParseArmorRicochet()
+static void CL_ParseArmorRicochet(BufferReader& reader)
 {
-	const Vector pos = READ_COORDVECTOR();
-	const float life = READ_BYTE() * 0.1f;
+	const Vector pos = reader.ReadCoordVector();
+	const float life = reader.ReadByte() * 0.1f;
 
 	const auto model = gEngfuncs.CL_LoadModel("sprites/richo1.spr", nullptr);
 
@@ -837,11 +837,9 @@ static void CL_ParseArmorRicochet()
 	R_RicochetSound(pos);
 }
 
-static void MsgFunc_TempEntity(const char* name, int size, void* buf)
+static void MsgFunc_TempEntity(const char* name, BufferReader& reader)
 {
-	BEGIN_READ(buf, size);
-
-	const int type = READ_BYTE();
+	const int type = reader.ReadByte();
 
 	switch (type)
 	{
@@ -850,27 +848,27 @@ static void MsgFunc_TempEntity(const char* name, int size, void* buf)
 		return;
 
 	case TE_GUNSHOT:
-		CL_ParseGunshot();
+		CL_ParseGunshot(reader);
 		break;
 
 	case TE_EXPLOSION:
-		CL_ParseExplosion();
+		CL_ParseExplosion(reader);
 		break;
 
 	case TE_TAREXPLOSION:
-		CL_ParseTarExplosion();
+		CL_ParseTarExplosion(reader);
 		break;
 
 	case TE_EXPLOSION2:
-		CL_ParseExplosion2();
+		CL_ParseExplosion2(reader);
 		break;
 
 	case TE_GUNSHOTDECAL:
-		CL_ParseGunshotDecal();
+		CL_ParseGunshotDecal(reader);
 		break;
 
 	case TE_ARMOR_RICOCHET:
-		CL_ParseArmorRicochet();
+		CL_ParseArmorRicochet(reader);
 		break;
 	}
 }

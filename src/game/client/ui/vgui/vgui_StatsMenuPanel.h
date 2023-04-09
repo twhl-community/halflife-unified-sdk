@@ -18,8 +18,8 @@ public:
 	virtual void Update() {}
 	void SaveStats() {}
 
-	void MsgFunc_StatsInfo(const char* pszName, int iSize, void* pbuf);
-	void MsgFunc_StatsPlayer(const char* pszName, int iSize, void* pbuf);
+	void MsgFunc_StatsInfo(const char* pszName, BufferReader& reader);
+	void MsgFunc_StatsPlayer(const char* pszName, BufferReader& reader);
 
 public:
 	CTransparentPanel* m_pClassInfoPanel[StatsTeamsCount];
