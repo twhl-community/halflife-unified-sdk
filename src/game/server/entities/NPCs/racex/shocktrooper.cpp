@@ -357,7 +357,7 @@ bool CShockTrooper::FOkToSpeak()
 	}
 
 	// if player is not in pvs, don't speak
-	//	if (FNullEnt(FIND_CLIENT_IN_PVS(edict())))
+	//	if (!UTIL_FindClientInPVS(this))
 	//		return false;
 
 	return true;

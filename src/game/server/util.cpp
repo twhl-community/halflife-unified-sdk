@@ -369,6 +369,26 @@ CBasePlayer* UTIL_FindNearestPlayer(const Vector& origin)
 	return player;
 }
 
+CBasePlayer* UTIL_FindClientInPVS(CBaseEntity* entity)
+{
+	// pfnFindClientInPVS returns the world if no players could be found.
+	// We translate this to nullptr to allow the return type to be CBasePlayer*.
+
+	if (!entity)
+	{
+		return nullptr;
+	}
+
+	auto result = g_engfuncs.pfnFindClientInPVS(entity->edict());
+
+	if (FNullEnt(result))
+	{
+		return nullptr;
+	}
+
+	return ToBasePlayer(result);
+}
+
 void UTIL_MakeVectors(const Vector& vecAngles)
 {
 	AngleVectors(vecAngles, gpGlobals->v_forward, gpGlobals->v_right, gpGlobals->v_up);

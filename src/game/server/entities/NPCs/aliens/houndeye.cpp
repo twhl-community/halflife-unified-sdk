@@ -1145,7 +1145,7 @@ const Schedule_t* CHoundeye::GetScheduleOfType(int Type)
 	{
 		if (m_MonsterState == MONSTERSTATE_COMBAT)
 		{
-			if (!FNullEnt(FIND_CLIENT_IN_PVS(edict())))
+			if (UTIL_FindClientInPVS(this))
 			{
 				// client in PVS
 				return &slHoundCombatFailPVS[0];

@@ -676,9 +676,6 @@ void CTriggerHurt::HurtTouch(CBaseEntity* pOther)
 
 void CTriggerHurt::RadiationThink()
 {
-
-	edict_t* pentPlayer;
-	CBasePlayer* pPlayer = nullptr;
 	float flRange;
 	Vector vecSpot1;
 	Vector vecSpot2;
@@ -696,22 +693,19 @@ void CTriggerHurt::RadiationThink()
 	pev->origin = (pev->absmin + pev->absmax) * 0.5;
 	pev->view_ofs = pev->view_ofs * 0.0;
 
-	pentPlayer = FIND_CLIENT_IN_PVS(edict());
+	CBasePlayer* player = UTIL_FindClientInPVS(this);
 
 	pev->origin = origin;
 	pev->view_ofs = view_ofs;
 
 	// reset origin
 
-	if (!FNullEnt(pentPlayer))
+	if (player)
 	{
-
-		pPlayer = GET_PRIVATE<CBasePlayer>(pentPlayer);
-
 		// get range to player;
 
 		vecSpot1 = (pev->absmin + pev->absmax) * 0.5;
-		vecSpot2 = (pPlayer->pev->absmin + pPlayer->pev->absmax) * 0.5;
+		vecSpot2 = (player->pev->absmin + player->pev->absmax) * 0.5;
 
 		vecRange = vecSpot1 - vecSpot2;
 		flRange = vecRange.Length();
@@ -720,8 +714,8 @@ void CTriggerHurt::RadiationThink()
 		// than range to this trigger hurt, reset player's
 		// geiger counter range
 
-		if (pPlayer->m_flgeigerRange >= flRange)
-			pPlayer->m_flgeigerRange = flRange;
+		if (player->m_flgeigerRange >= flRange)
+			player->m_flgeigerRange = flRange;
 	}
 
 	pev->nextthink = gpGlobals->time + 0.25;

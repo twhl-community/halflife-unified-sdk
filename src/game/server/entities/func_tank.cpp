@@ -585,7 +585,7 @@ void CFuncTank::Think()
 void CFuncTank::TrackTarget()
 {
 	TraceResult tr;
-	edict_t* pPlayer = FIND_CLIENT_IN_PVS(edict());
+	CBasePlayer* pPlayer = UTIL_FindClientInPVS(this);
 	bool updateTime = false, lineOfSight;
 	Vector angles, direction, targetPosition, barrelEnd;
 	CBaseEntity* pTarget;
@@ -605,7 +605,7 @@ void CFuncTank::TrackTarget()
 		else
 			return;
 
-		if (FNullEnt(pPlayer))
+		if (!pPlayer)
 		{
 			if (IsActive())
 				pev->nextthink = pev->ltime + 2; // Wait 2 secs
@@ -619,7 +619,7 @@ void CFuncTank::TrackTarget()
 		}
 		else
 		{
-			pTarget = FindTarget(GET_PRIVATE<CBaseEntity>(pPlayer));
+			pTarget = FindTarget(pPlayer);
 			if (!pTarget)
 			{
 				m_hEnemy = nullptr;

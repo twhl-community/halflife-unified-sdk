@@ -1123,27 +1123,26 @@ void CEnvSound::Think()
 {
 	const bool shouldThinkFast = [this]()
 	{
-		// get pointer to client if visible; FIND_CLIENT_IN_PVS will
+		// get pointer to client if visible; UTIL_FindClientInPVS will
 		// cycle through visible clients on consecutive calls.
-		edict_t* pentPlayer = FIND_CLIENT_IN_PVS(edict());
+		CBasePlayer* player = UTIL_FindClientInPVS(this);
 
-		if (FNullEnt(pentPlayer))
+		if (!player)
 			return false; // no player in pvs of sound entity, slow it down
 
 		// check to see if this is the sound entity that is currently affecting this player
-		auto pPlayer = GET_PRIVATE<CBasePlayer>(pentPlayer);
 		float flRange;
 
-		if (pPlayer->m_SndLast && pPlayer->m_SndLast == this)
+		if (player->m_SndLast && player->m_SndLast == this)
 		{
 			// this is the entity currently affecting player, check for validity
-			if (pPlayer->m_SndRoomtype != 0 && pPlayer->m_flSndRange != 0)
+			if (player->m_SndRoomtype != 0 && player->m_flSndRange != 0)
 			{
 				// we're looking at a valid sound entity affecting
 				// player, make sure it's still valid, update range
-				if (FEnvSoundInRange(this, pPlayer, flRange))
+				if (FEnvSoundInRange(this, player, flRange))
 				{
-					pPlayer->m_flSndRange = flRange;
+					player->m_flSndRange = flRange;
 					return true;
 				}
 				else
@@ -1153,8 +1152,8 @@ void CEnvSound::Think()
 					// NOTE: we do not actually change the player's room_type
 					// NOTE: until we have a new valid room_type to change it to.
 
-					pPlayer->m_SndLast = nullptr;
-					pPlayer->m_flSndRange = 0;
+					player->m_SndLast = nullptr;
+					player->m_flSndRange = 0;
 				}
 			}
 
@@ -1165,14 +1164,14 @@ void CEnvSound::Think()
 
 		// if we got this far, we're looking at an entity that is contending
 		// for current player sound. the closest entity to player wins.
-		if (FEnvSoundInRange(this, pPlayer, flRange))
+		if (FEnvSoundInRange(this, player, flRange))
 		{
-			if (flRange < pPlayer->m_flSndRange || pPlayer->m_flSndRange == 0)
+			if (flRange < player->m_flSndRange || player->m_flSndRange == 0)
 			{
 				// new entity is closer to player, so it wins.
-				pPlayer->m_SndLast = this;
-				pPlayer->m_SndRoomtype = m_Roomtype;
-				pPlayer->m_flSndRange = flRange;
+				player->m_SndLast = this;
+				player->m_SndRoomtype = m_Roomtype;
+				player->m_flSndRange = flRange;
 
 				// New room type is sent to player in CBasePlayer::UpdateClientData.
 
