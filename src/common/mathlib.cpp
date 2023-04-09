@@ -428,8 +428,65 @@ void VectorAngles(const Vector& forward, Vector& angles)
 	angles[2] = 0;
 }
 
+Vector UTIL_VecToAngles(const Vector& vec)
+{
+	Vector out;
+	VectorAngles(vec, out);
+	return out;
+}
+
+float VectorToYaw(const Vector& forward)
+{
+	if (forward[1] == 0 && forward[0] == 0)
+	{
+		return 0;
+	}
+
+	float yaw = (atan2(forward[1], forward[0]) * 180 / PI);
+
+	if (yaw < 0)
+	{
+		yaw += 360;
+	}
+
+	return yaw;
+}
+
 float anglemod(float a)
 {
 	a = (360.0 / 65536) * ((int)(a * (65536 / 360.0)) & 65535);
 	return a;
+}
+
+// ripped this out of the engine
+float UTIL_AngleMod(float a)
+{
+	if (a < 0)
+	{
+		a = a + 360 * ((int)(a / 360) + 1);
+	}
+	else if (a >= 360)
+	{
+		a = a - 360 * ((int)(a / 360));
+	}
+	// a = (360.0/65536) * ((int)(a*(65536/360.0)) & 65535);
+	return a;
+}
+
+float UTIL_AngleDiff(float destAngle, float srcAngle)
+{
+	float delta;
+
+	delta = destAngle - srcAngle;
+	if (destAngle > srcAngle)
+	{
+		if (delta >= 180)
+			delta -= 360;
+	}
+	else
+	{
+		if (delta <= -180)
+			delta += 360;
+	}
+	return delta;
 }

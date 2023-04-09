@@ -445,7 +445,7 @@ void CScientist::RunTask(const Task_t* pTask)
 		{
 			if (TargetDistance() > 90)
 				TaskComplete();
-			pev->ideal_yaw = UTIL_VecToYaw(m_hTargetEnt->pev->origin - pev->origin);
+			pev->ideal_yaw = VectorToYaw(m_hTargetEnt->pev->origin - pev->origin);
 			ChangeYaw(pev->yaw_speed);
 		}
 		break;

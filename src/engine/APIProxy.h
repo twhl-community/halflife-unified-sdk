@@ -46,6 +46,8 @@ struct cmdalias_t
 	char* value;
 };
 
+typedef int HSPRITE; // handle to a graphic
+
 /**
  *	@brief Functions exported by the client .dll
  */
@@ -140,7 +142,7 @@ struct cl_enginefunc_t
 	[[deprecated("Use g_HudSpriteConfig instead")]] client_sprite_t* (*pfnSPR_GetList)(const char* psz, int* piCount);
 	void (*pfnFillRGBA)(int x, int y, int width, int height, int r, int g, int b, int a);
 	int (*pfnGetScreenInfo)(SCREENINFO* pscrinfo);
-	void (*pfnSetCrosshair)(HSPRITE hspr, Rect rc, int r, int g, int b);
+	[[deprecated("Crosshair is drawn in CHudAmmo now")]] void (*pfnSetCrosshair)(HSPRITE hspr, Rect rc, int r, int g, int b);
 	cvar_t* (*pfnRegisterVariable)(const char* szName, const char* szValue, int flags);
 	float (*pfnGetCvarFloat)(const char* szName);
 	const char* (*pfnGetCvarString)(const char* szName);
@@ -204,7 +206,8 @@ struct cl_enginefunc_t
 	float (*pfnRandomFloat)(float flLow, float flHigh);
 	int32 (*pfnRandomLong)(int32 lLow, int32 lHigh);
 	void (*pfnHookEvent)(const char* name, void (*pfnEvent)(event_args_t* args));
-	int (*Con_IsVisible)();
+	// TODO: need to get rid of remaining references first.
+	/*[[deprecated("Always returns 0")]]*/ int (*Con_IsVisible)();
 	const char* (*pfnGetGameDirectory)();
 	cvar_t* (*pfnGetCvarPointer)(const char* szName);
 	const char* (*Key_LookupBinding)(const char* pBinding);
@@ -213,9 +216,9 @@ struct cl_enginefunc_t
 	void (*pfnSetScreenFade)(screenfade_t* fade);
 	void* (*VGui_GetPanel)();
 	void (*VGui_ViewportPaintBackground)(int extents[4]);
-	byte* (*COM_LoadFile)(const char* path, int usehunk, int* pLength);
+	[[deprecated("Use FileSystem_LoadFileIntoBuffer instead")]] byte* (*COM_LoadFile)(const char* path, int usehunk, int* pLength);
 	char* (*COM_ParseFile)(const char* data, char* token);
-	void (*COM_FreeFile)(void* buffer);
+	[[deprecated("Use FileSystem_LoadFileIntoBuffer instead")]] void (*COM_FreeFile)(void* buffer);
 	triangleapi_t* pTriAPI;
 	efx_api_t* pEfxAPI;
 	event_api_t* pEventAPI;
@@ -229,12 +232,12 @@ struct cl_enginefunc_t
 	const char* (*PlayerInfo_ValueForKey)(int playerNum, const char* key);
 	void (*PlayerInfo_SetValueForKey)(const char* key, const char* value);
 	qboolean (*GetPlayerUniqueID)(int iPlayer, char playerID[16]);
-	int (*GetTrackerIDForPlayer)(int playerSlot);
-	int (*GetPlayerForTrackerID)(int trackerID);
+	[[deprecated("Always returns 0")]] int (*GetTrackerIDForPlayer)(int playerSlot);
+	[[deprecated("Always returns 0")]] int (*GetPlayerForTrackerID)(int trackerID);
 	int (*pfnServerCmdUnreliable)(char* szCmdString);
 	void (*pfnGetMousePos)(Point* ppt);
 	void (*pfnSetMousePos)(int x, int y);
-	void (*pfnSetMouseEnable)(qboolean fEnable);
+	[[deprecated("Does nothing")]] void (*pfnSetMouseEnable)(qboolean fEnable);
 	cvar_t* (*GetFirstCvarPtr)();
 	unsigned int (*GetFirstCmdFunctionHandle)();
 	unsigned int (*GetNextCmdFunctionHandle)(unsigned int cmdhandle);
@@ -245,9 +248,9 @@ struct cl_enginefunc_t
 	void (*pfnSetFilterMode)(int mode);
 	void (*pfnSetFilterColor)(float r, float g, float b);
 	void (*pfnSetFilterBrightness)(float brightness);
-	sequenceEntry_s* (*pfnSequenceGet)(const char* fileName, const char* entryName);
+	[[deprecated("Sequence files are not used in this SDK")]] sequenceEntry_s* (*pfnSequenceGet)(const char* fileName, const char* entryName);
 	void (*pfnSPR_DrawGeneric)(int frame, int x, int y, const Rect* prc, int src, int dest, int w, int h);
-	sentenceEntry_s* (*pfnSequencePickSentence)(const char* sentenceName, int pickMethod, int* entryPicked);
+	[[deprecated("Sequence files are not used in this SDK")]] sentenceEntry_s* (*pfnSequencePickSentence)(const char* sentenceName, int pickMethod, int* entryPicked);
 	// draw a complete string
 	int (*pfnDrawString)(int x, int y, const char* str, int r, int g, int b);
 	int (*pfnDrawStringReverse)(int x, int y, const char* str, int r, int g, int b);
@@ -259,11 +262,11 @@ struct cl_enginefunc_t
 	void (*Cvar_Set)(const char* cvar, const char* value);
 	int (*pfnIsCareerMatch)();
 	[[deprecated("Use CL_StartSound in ISoundSystem.h instead")]] void (*pfnPlaySoundVoiceByName)(const char* szSound, float volume, int pitch);
-	void (*pfnPrimeMusicStream)(const char* szFilename, int looping);
+	[[deprecated("Use the OpenAL music system instead")]] void (*pfnPrimeMusicStream)(const char* szFilename, int looping);
 	double (*GetAbsoluteTime)();
-	void (*pfnProcessTutorMessageDecayBuffer)(int* buffer, int bufferLength);
-	void (*pfnConstructTutorMessageDecayBuffer)(int* buffer, int bufferLength);
-	void (*pfnResetTutorMessageDecayData)();
+	[[deprecated("Intended for Condition Zero only")]] void (*pfnProcessTutorMessageDecayBuffer)(int* buffer, int bufferLength);
+	[[deprecated("Intended for Condition Zero only")]] void (*pfnConstructTutorMessageDecayBuffer)(int* buffer, int bufferLength);
+	[[deprecated("Intended for Condition Zero only")]] void (*pfnResetTutorMessageDecayData)();
 	[[deprecated("Use CL_StartSound in ISoundSystem.h instead")]] void (*pfnPlaySoundByNameAtPitch)(const char* szSound, float volume, int pitch);
 	void (*pfnFillRGBABlend)(int x, int y, int width, int height, int r, int g, int b, int a);
 	int (*pfnGetAppID)();

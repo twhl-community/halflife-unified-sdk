@@ -1836,7 +1836,7 @@ void CTestHull::BuildNodeGraph()
 						MoveMode = WALKMOVE_NORMAL;
 					}
 
-					flYaw = UTIL_VecToYaw(pDestNode->m_vecOrigin - pev->origin);
+					flYaw = VectorToYaw(pDestNode->m_vecOrigin - pev->origin);
 
 					flDist = (vecSpot - pev->origin).Length2D();
 

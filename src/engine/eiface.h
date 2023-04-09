@@ -96,13 +96,13 @@ struct enginefuncs_t
 	int (*pfnModelFrames)(int modelIndex);
 	void (*pfnSetSize)(edict_t* e, const float* rgflMin, const float* rgflMax);
 	void (*pfnChangeLevel)(const char* s1, const char* s2);
-	void (*pfnGetSpawnParms)(edict_t* ent);
-	void (*pfnSaveSpawnParms)(edict_t* ent);
-	float (*pfnVecToYaw)(const float* rgflVector);
-	void (*pfnVecToAngles)(const float* rgflVectorIn, float* rgflVectorOut);
+	[[deprecated("Does not do anything")]] void (*pfnGetSpawnParms)(edict_t* ent);
+	[[deprecated("Does not do anything")]] void (*pfnSaveSpawnParms)(edict_t* ent);
+	[[deprecated("Use VectorToYaw instead")]] float (*pfnVecToYaw)(const float* rgflVector);
+	[[deprecated("Use VectorAngles or UTIL_VecToAngles instead")]] void (*pfnVecToAngles)(const float* rgflVectorIn, float* rgflVectorOut);
 	void (*pfnMoveToOrigin)(edict_t* ent, const float* pflGoal, float dist, int iMoveType);
-	void (*pfnChangeYaw)(edict_t* ent);
-	void (*pfnChangePitch)(edict_t* ent);
+	[[deprecated("Implemented in CBaseMonster::ChangeYaw")]] void (*pfnChangeYaw)(edict_t* ent);
+	[[deprecated("If needed, implement based on CBaseMonster::ChangeYaw")]] void (*pfnChangePitch)(edict_t* ent);
 	edict_t* (*pfnFindEntityByString)(edict_t* pEdictStartSearchAfter, const char* pszField, const char* pszValue);
 	int (*pfnGetEntityIllum)(edict_t* pEnt);
 	edict_t* (*pfnFindEntityInSphere)(edict_t* pEdictStartSearchAfter, const float* org, float rad);
@@ -112,8 +112,8 @@ struct enginefuncs_t
 	[[deprecated("Use AngleVectors instead")]] void (*pfnAngleVectors)(const float* rgflVector, float* forward, float* right, float* up);
 	edict_t* (*pfnCreateEntity)();
 	void (*pfnRemoveEntity)(edict_t* e);
-	edict_t* (*pfnCreateNamedEntity)(string_t_value className);
-	void (*pfnMakeStatic)(edict_t* ent);
+	[[deprecated("Use CBaseEntity::Create instead")]] edict_t* (*pfnCreateNamedEntity)(string_t_value className);
+	[[deprecated("Not implemented in the engine, does not work")]] void (*pfnMakeStatic)(edict_t* ent);
 	int (*pfnEntIsOnFloor)(edict_t* e);
 	int (*pfnDropToFloor)(edict_t* e);
 	int (*pfnWalkMove)(edict_t* ent, float yaw, float dist, int iMode);
@@ -126,7 +126,7 @@ struct enginefuncs_t
 	void (*pfnTraceHull)(const float* v1, const float* v2, int fNoMonsters, int hullNumber, edict_t* pentToSkip, TraceResult* ptr);
 	void (*pfnTraceModel)(const float* v1, const float* v2, int hullNumber, edict_t* pent, TraceResult* ptr);
 	const char* (*pfnTraceTexture)(edict_t* pTextureEntity, const float* v1, const float* v2);
-	void (*pfnTraceSphere)(const float* v1, const float* v2, int fNoMonsters, float radius, edict_t* pentToSkip, TraceResult* ptr);
+	[[deprecated("Not implemented shuts the game down with a fatal error")]] void (*pfnTraceSphere)(const float* v1, const float* v2, int fNoMonsters, float radius, edict_t* pentToSkip, TraceResult* ptr);
 	void (*pfnGetAimVector)(edict_t* ent, float speed, float* rgflReturn);
 	void (*pfnServerCommand)(const char* str);
 	void (*pfnServerExecute)();
@@ -151,24 +151,24 @@ struct enginefuncs_t
 	void (*pfnCVarSetFloat)(const char* szVarName, float flValue);
 	void (*pfnCVarSetString)(const char* szVarName, const char* szValue);
 	void (*pfnAlertMessage)(ALERT_TYPE atype, const char* szFmt, ...);
-	void (*pfnEngineFprintf)(void* pfile, const char* szFmt, ...);
+	[[deprecated("Does not work, only prints an error message")]] void (*pfnEngineFprintf)(void* pfile, const char* szFmt, ...);
 	void* (*pfnPvAllocEntPrivateData)(edict_t* pEdict, int32 cb);
 	void* (*pfnPvEntPrivateData)(edict_t* pEdict);
 	void (*pfnFreeEntPrivateData)(edict_t* pEdict);
-	const char* (*pfnSzFromIndex)(int iString);
-	int (*pfnAllocString)(const char* szValue);
+	[[deprecated("Use STRING() instead")]] const char* (*pfnSzFromIndex)(int iString);
+	[[deprecated("Use ALLOC_STRING() instead")]] int (*pfnAllocString)(const char* szValue);
 	entvars_t* (*pfnGetVarsOfEnt)(edict_t* pEdict);
 	/**
-	*	@brief Still called by UTIL_GetEntityList so it can't be marked deprecated, but don't use this anywhere else.
-	*/
+	 *	@brief Still called by UTIL_GetEntityList so it can't be marked deprecated, but don't use this anywhere else.
+	 */
 	edict_t* (*pfnPEntityOfEntOffset)(int iEntOffset);
-	[[deprecated("Do not use entity offsets. Use entity indices or handles instead")]]  int (*pfnEntOffsetOfPEntity)(const edict_t* pEdict);
+	[[deprecated("Do not use entity offsets. Use entity indices or handles instead")]] int (*pfnEntOffsetOfPEntity)(const edict_t* pEdict);
 	int (*pfnIndexOfEdict)(const edict_t* pEdict);
 	edict_t* (*pfnPEntityOfEntIndex)(int iEntIndex);
 	edict_t* (*pfnFindEntityByVars)(entvars_t* pvars);
 	void* (*pfnGetModelPtr)(edict_t* pEdict);
 	int (*pfnRegUserMsg)(const char* pszName, int iSize);
-	void (*pfnAnimationAutomove)(const edict_t* pEdict, float flTime);
+	[[deprecated("Does nothing")]] void (*pfnAnimationAutomove)(const edict_t* pEdict, float flTime);
 	void (*pfnGetBonePosition)(const edict_t* pEdict, int iBone, float* rgflOrigin, float* rgflAngles);
 	[[deprecated("Use DataMap_FindFunctionAddress instead")]] uint32 (*pfnFunctionFromName)(const char* pName);
 	[[deprecated("Use DataMap_FindFunctionName instead")]] const char* (*pfnNameForFunction)(uint32 function);
@@ -187,13 +187,13 @@ struct enginefuncs_t
 	void (*pfnSetView)(const edict_t* pClient, const edict_t* pViewent);
 	float (*pfnTime)();
 	void (*pfnCrosshairAngle)(const edict_t* pClient, float pitch, float yaw);
-	byte* (*pfnLoadFileForMe)(const char* filename, int* pLength);
-	void (*pfnFreeFile)(void* buffer);
+	[[deprecated("Use FileSystem_LoadFileIntoBuffer instead")]] byte* (*pfnLoadFileForMe)(const char* filename, int* pLength);
+	[[deprecated("Use FileSystem_LoadFileIntoBuffer instead")]] void (*pfnFreeFile)(void* buffer);
 	void (*pfnEndSection)(const char* pszSectionName); // trigger_endsection
 	int (*pfnCompareFileTime)(const char* filename1, const char* filename2, int* iCompare);
 	void (*pfnGetGameDir)(char* szGetGameDir);
 	void (*pfnCvar_RegisterVariable)(cvar_t* variable);
-	void (*pfnFadeClientVolume)(const edict_t* pEdict, int fadePercent, int fadeOutSeconds, int holdTime, int fadeInSeconds);
+	[[deprecated("Does not work")]] void (*pfnFadeClientVolume)(const edict_t* pEdict, int fadePercent, int fadeOutSeconds, int holdTime, int fadeInSeconds);
 	void (*pfnSetClientMaxspeed)(const edict_t* pEdict, float fNewMaxspeed);
 	edict_t* (*pfnCreateFakeClient)(const char* netname); // returns nullptr if fake client can't be created
 	void (*pfnRunPlayerMove)(edict_t* fakeclient, const float* viewangles, float forwardmove, float sidemove, float upmove, unsigned short buttons, byte impulse, byte msec);
@@ -206,10 +206,12 @@ struct enginefuncs_t
 	void (*pfnStaticDecal)(const float* origin, int decalIndex, int entityIndex, int modelIndex);
 	int (*pfnPrecacheGeneric)(const char* s);
 	int (*pfnGetPlayerUserId)(edict_t* e); // returns the server assigned userid for this player.  useful for logging frags, etc.  returns -1 if the edict couldn't be found in the list of clients
-	void (*pfnBuildSoundMsg)(edict_t* entity, int channel, const char* sample, /*int*/ float volume, float attenuation, int fFlags, int pitch, int msg_dest, int msg_type, const float* pOrigin, edict_t* ed);
+	[[deprecated("Use the new sound system")]] void (*pfnBuildSoundMsg)(edict_t* entity, int channel, const char* sample,
+		float volume, float attenuation, int fFlags, int pitch, int msg_dest, int msg_type,
+		const float* pOrigin, edict_t* ed);
 	int (*pfnIsDedicatedServer)(); // is this a dedicated server?
 	cvar_t* (*pfnCVarGetPointer)(const char* szVarName);
-	unsigned int (*pfnGetPlayerWONId)(edict_t* e); // returns the server assigned WONid for this player.  useful for logging frags, etc.  returns -1 if the edict couldn't be found in the list of clients
+	[[deprecated("Always returns -1 in Steam HL")]] unsigned int (*pfnGetPlayerWONId)(edict_t* e);
 
 	// YWB 8/1/99 TFF Physics additions
 	void (*pfnInfo_RemoveKey)(char* s, const char* key);
@@ -257,11 +259,12 @@ struct enginefuncs_t
 	// PSV: Added for CZ training map
 	//	const char *(*pfnKeyNameForBinding)		( const char* pBinding );
 
-	sequenceEntry_s* (*pfnSequenceGet)(const char* fileName, const char* entryName);
-	sentenceEntry_s* (*pfnSequencePickSentence)(const char* groupName, int pickMethod, int* picked);
+	[[deprecated("Sequence files are not used in this SDK")]] sequenceEntry_s* (*pfnSequenceGet)(const char* fileName, const char* entryName);
+
+	[[deprecated("Sequence files are not used in this SDK")]] sentenceEntry_s* (*pfnSequencePickSentence)(const char* groupName, int pickMethod, int* picked);
 
 	// LH: Give access to filesize via filesystem
-	int (*pfnGetFileSize)(const char* filename);
+	[[deprecated("Use g_pFileSystem->Size() instead")]] int (*pfnGetFileSize)(const char* filename);
 
 	unsigned int (*pfnGetApproxWavePlayLen)(const char* filepath);
 	// MDC: Added for CZ career-mode
@@ -273,11 +276,11 @@ struct enginefuncs_t
 	// BGC: added to facilitate persistent storage of tutor message decay values for
 	// different career game profiles.  Also needs to persist regardless of mp.dll being
 	// destroyed and recreated.
-	void (*pfnRegisterTutorMessageShown)(int mid);
-	int (*pfnGetTimesTutorMessageShown)(int mid);
-	void (*ProcessTutorMessageDecayBuffer)(int* buffer, int bufferLength);
-	void (*ConstructTutorMessageDecayBuffer)(int* buffer, int bufferLength);
-	void (*ResetTutorMessageDecayData)();
+	[[deprecated("Intended for Condition Zero only")]] void (*pfnRegisterTutorMessageShown)(int mid);
+	[[deprecated("Intended for Condition Zero only")]] int (*pfnGetTimesTutorMessageShown)(int mid);
+	[[deprecated("Intended for Condition Zero only")]] void (*ProcessTutorMessageDecayBuffer)(int* buffer, int bufferLength);
+	[[deprecated("Intended for Condition Zero only")]] void (*ConstructTutorMessageDecayBuffer)(int* buffer, int bufferLength);
+	[[deprecated("Intended for Condition Zero only")]] void (*ResetTutorMessageDecayData)();
 
 	void (*pfnQueryClientCvarValue)(const edict_t* player, const char* cvarName);
 	void (*pfnQueryClientCvarValue2)(const edict_t* player, const char* cvarName, int requestID);
@@ -347,36 +350,36 @@ struct SAVERESTOREDATA
 };
 
 /**
-*	@details The Steam version of the engine uses the following types:
-*	FIELD_FLOAT
-*	FIELD_STRING
-*	FIELD_EDICT
-*	FIELD_VECTOR
-*	FIELD_INTEGER
-*	FIELD_CHARACTER
-*	FIELD_TIME
-*	They must remain supported.
-*/
+ *	@details The Steam version of the engine uses the following types:
+ *	FIELD_FLOAT
+ *	FIELD_STRING
+ *	FIELD_EDICT
+ *	FIELD_VECTOR
+ *	FIELD_INTEGER
+ *	FIELD_CHARACTER
+ *	FIELD_TIME
+ *	They must remain supported.
+ */
 enum class ENGINEFIELDTYPE
 {
-	FIELD_FLOAT = 0,		// Any floating point value
-	FIELD_STRING,			// A string ID (return from ALLOC_STRING)
-	FIELD_DEPRECATED1,		// An entity offset (EOFFSET). Deprecated, do not use.
-	FIELD_CLASSPTR,			// CBaseEntity *
-	FIELD_EHANDLE,			// Entity handle
-	FIELD_DEPRECATED2,		// EVARS *. Deprecated, do not use.
-	FIELD_EDICT,			// edict_t*. Deprecated, only used by the engine and entvars_t. Do not use.
-	FIELD_VECTOR,			// Any vector
-	FIELD_POSITION_VECTOR,	// A world coordinate (these are fixed up across level transitions automagically)
-	FIELD_POINTER,			// Arbitrary data pointer... to be removed, use an array of FIELD_CHARACTER
-	FIELD_INTEGER,			// Any integer or enum
-	FIELD_FUNCTION,			// A class function pointer (Think, Use, etc)
-	FIELD_BOOLEAN,			// boolean, implemented as an int, I may use this as a hint for compression
-	FIELD_SHORT,			// 2 byte integer
-	FIELD_CHARACTER,		// a byte
-	FIELD_TIME,				// a floating point time (these are fixed up automatically too!)
-	FIELD_MODELNAME,		// Engine string that is a model name (needs precache)
-	FIELD_SOUNDNAME,		// Engine string that is a sound name (needs precache)
+	FIELD_FLOAT = 0,	   // Any floating point value
+	FIELD_STRING,		   // A string ID (return from ALLOC_STRING)
+	FIELD_DEPRECATED1,	   // An entity offset (EOFFSET). Deprecated, do not use.
+	FIELD_CLASSPTR,		   // CBaseEntity *
+	FIELD_EHANDLE,		   // Entity handle
+	FIELD_DEPRECATED2,	   // EVARS *. Deprecated, do not use.
+	FIELD_EDICT,		   // edict_t*. Deprecated, only used by the engine and entvars_t. Do not use.
+	FIELD_VECTOR,		   // Any vector
+	FIELD_POSITION_VECTOR, // A world coordinate (these are fixed up across level transitions automagically)
+	FIELD_POINTER,		   // Arbitrary data pointer... to be removed, use an array of FIELD_CHARACTER
+	FIELD_INTEGER,		   // Any integer or enum
+	FIELD_FUNCTION,		   // A class function pointer (Think, Use, etc)
+	FIELD_BOOLEAN,		   // boolean, implemented as an int, I may use this as a hint for compression
+	FIELD_SHORT,		   // 2 byte integer
+	FIELD_CHARACTER,	   // a byte
+	FIELD_TIME,			   // a floating point time (these are fixed up automatically too!)
+	FIELD_MODELNAME,	   // Engine string that is a model name (needs precache)
+	FIELD_SOUNDNAME,	   // Engine string that is a sound name (needs precache)
 
 	FIELD_TYPECOUNT, // MUST BE LAST
 };

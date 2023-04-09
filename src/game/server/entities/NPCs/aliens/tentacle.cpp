@@ -525,7 +525,7 @@ void CTentacle::Cycle()
 		m_flPrevSoundTime = gpGlobals->time;
 		m_vecPrevSound = pSound->m_vecOrigin;
 
-		m_flSoundYaw = UTIL_VecToYaw(vecDir) - m_flInitialYaw;
+		m_flSoundYaw = VectorToYaw(vecDir) - m_flInitialYaw;
 		m_iSoundLevel = Level(vecDir.z);
 
 		if (m_flSoundYaw < -180)

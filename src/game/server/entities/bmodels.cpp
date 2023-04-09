@@ -203,7 +203,7 @@ void CFuncIllusionary::Spawn()
 	// I'd rather eat the network bandwidth of this than figure out how to save/restore
 	// these entities after they have been moved to the client, or respawn them ala Quake
 	// Perhaps we can do this in deathmatch only.
-	//	MAKE_STATIC(ENT(pev));
+	//	g_engfuncs.pfnMakeStatic(ENT(pev));
 }
 
 /**

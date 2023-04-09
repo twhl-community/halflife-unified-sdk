@@ -113,11 +113,6 @@ inline bool FStrEq(const char* sz1, const char* sz2)
 }
 
 // Misc. Prototypes
-float UTIL_VecToYaw(const Vector& vec);
-Vector UTIL_VecToAngles(const Vector& vec);
-float UTIL_AngleMod(float a);
-float UTIL_AngleDiff(float destAngle, float srcAngle);
-
 CBaseEntity* UTIL_FindEntityInSphere(CBaseEntity* pStartEntity, const Vector& vecCenter, float flRadius);
 CBaseEntity* UTIL_FindEntityByString(CBaseEntity* pStartEntity, const char* szKeyword, const char* szValue);
 CBaseEntity* UTIL_FindEntityByClassname(CBaseEntity* pStartEntity, const char* szName);

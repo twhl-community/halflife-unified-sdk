@@ -286,7 +286,7 @@ void CBaseMonster::RunTask(const Task_t* pTask)
 			pTarget = m_hEnemy;
 		if (pTarget)
 		{
-			pev->ideal_yaw = UTIL_VecToYaw(pTarget->pev->origin - pev->origin);
+			pev->ideal_yaw = VectorToYaw(pTarget->pev->origin - pev->origin);
 			ChangeYaw(pev->yaw_speed);
 		}
 		if (m_fSequenceFinished)

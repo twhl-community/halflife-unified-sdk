@@ -1127,7 +1127,7 @@ int CBaseMonster::CheckLocalMove(const Vector& vecStart, const Vector& vecEnd, C
 	vecStartPos = pev->origin;
 
 
-	flYaw = UTIL_VecToYaw(vecEnd - vecStart); // build a yaw that points to the goal.
+	flYaw = VectorToYaw(vecEnd - vecStart);	  // build a yaw that points to the goal.
 	flDist = (vecEnd - vecStart).Length2D();  // get the distance.
 	iReturn = LOCALMOVE_VALID;				  // assume everything will be ok.
 
@@ -1757,7 +1757,7 @@ bool CBaseMonster::ShouldAdvanceRoute(float flWaypointDist)
 
 void CBaseMonster::MoveExecute(CBaseEntity* pTargetEnt, const Vector& vecDir, float flInterval)
 {
-	//	float flYaw = UTIL_VecToYaw ( m_Route[ m_iRouteIndex ].vecLocation - pev->origin );// build a yaw that points to the goal.
+	//	float flYaw = VectorToYaw(m_Route[ m_iRouteIndex ].vecLocation - pev->origin);// build a yaw that points to the goal.
 	//	WALK_MOVE( ENT(pev), flYaw, m_flGroundSpeed * flInterval, WALKMOVE_NORMAL );
 	if (m_IdealActivity != m_movementActivity)
 		m_IdealActivity = m_movementActivity;
@@ -2213,18 +2213,18 @@ void CBaseMonster::MakeIdealYaw(Vector vecTarget)
 		vecProjection.x = -vecTarget.y;
 		vecProjection.y = vecTarget.x;
 
-		pev->ideal_yaw = UTIL_VecToYaw(vecProjection - pev->origin);
+		pev->ideal_yaw = VectorToYaw(vecProjection - pev->origin);
 	}
 	else if (m_movementActivity == ACT_STRAFE_RIGHT)
 	{
 		vecProjection.x = vecTarget.y;
 		vecProjection.y = vecTarget.x;
 
-		pev->ideal_yaw = UTIL_VecToYaw(vecProjection - pev->origin);
+		pev->ideal_yaw = VectorToYaw(vecProjection - pev->origin);
 	}
 	else
 	{
-		pev->ideal_yaw = UTIL_VecToYaw(vecTarget - pev->origin);
+		pev->ideal_yaw = VectorToYaw(vecTarget - pev->origin);
 	}
 }
 
@@ -2310,7 +2310,7 @@ float CBaseMonster::VecToYaw(Vector vecDir)
 	if (vecDir.x == 0 && vecDir.y == 0 && vecDir.z == 0)
 		return pev->angles.y;
 
-	return UTIL_VecToYaw(vecDir);
+	return VectorToYaw(vecDir);
 }
 
 void CBaseMonster::SetEyePosition()

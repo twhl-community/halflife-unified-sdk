@@ -80,5 +80,9 @@ float AngleBetweenVectors(const Vector& v1, const Vector& v2);
 
 void VectorMatrix(const Vector& forward, Vector& right, Vector& up);
 void VectorAngles(const Vector& forward, Vector& angles);
+Vector UTIL_VecToAngles(const Vector& vec);
+float VectorToYaw(const Vector& forward);
 
 float anglemod(float a);
+float UTIL_AngleMod(float a);
+float UTIL_AngleDiff(float destAngle, float srcAngle);

@@ -116,46 +116,6 @@ CBasePlayer* UTIL_GetLocalPlayer()
 	return static_cast<CBasePlayer*>(UTIL_PlayerByIndex(1));
 }
 
-// ripped this out of the engine
-float UTIL_AngleMod(float a)
-{
-	if (a < 0)
-	{
-		a = a + 360 * ((int)(a / 360) + 1);
-	}
-	else if (a >= 360)
-	{
-		a = a - 360 * ((int)(a / 360));
-	}
-	// a = (360.0/65536) * ((int)(a*(65536/360.0)) & 65535);
-	return a;
-}
-
-float UTIL_AngleDiff(float destAngle, float srcAngle)
-{
-	float delta;
-
-	delta = destAngle - srcAngle;
-	if (destAngle > srcAngle)
-	{
-		if (delta >= 180)
-			delta -= 360;
-	}
-	else
-	{
-		if (delta <= -180)
-			delta += 360;
-	}
-	return delta;
-}
-
-Vector UTIL_VecToAngles(const Vector& vec)
-{
-	Vector out;
-	VEC_TO_ANGLES(vec, out);
-	return out;
-}
-
 void UTIL_MoveToOrigin(edict_t* pent, const Vector& vecGoal, float flDist, int iMoveType)
 {
 	MOVE_TO_ORIGIN(pent, vecGoal, flDist, iMoveType);
@@ -751,11 +711,6 @@ TraceResult UTIL_GetGlobalTrace()
 	tr.vecPlaneNormal = gpGlobals->trace_plane_normal;
 	tr.iHitgroup = gpGlobals->trace_hitgroup;
 	return tr;
-}
-
-float UTIL_VecToYaw(const Vector& vec)
-{
-	return VEC_TO_YAW(vec);
 }
 
 void UTIL_ParticleEffect(const Vector& vecOrigin, const Vector& vecDirection, unsigned int ulColor, unsigned int ulCount)

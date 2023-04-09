@@ -551,7 +551,7 @@ void CLeech::SwimThink()
 			if (location.Length() < 40)
 				SetConditions(bits_COND_CAN_MELEE_ATTACK1);
 			// Turn towards target ent
-			targetYaw = UTIL_VecToYaw(location);
+			targetYaw = VectorToYaw(location);
 
 			targetYaw = UTIL_AngleDiff(targetYaw, UTIL_AngleMod(pev->angles.y));
 
