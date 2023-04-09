@@ -171,7 +171,7 @@ void CEnvExplosion::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE 
 
 	vecSpot = pev->origin + Vector(0, 0, 8);
 
-	UTIL_TraceLine(vecSpot, vecSpot + Vector(0, 0, -40), ignore_monsters, ENT(pev), &tr);
+	UTIL_TraceLine(vecSpot, vecSpot + Vector(0, 0, -40), ignore_monsters, edict(), &tr);
 
 	// Pull out of the wall a bit
 	if (tr.flFraction != 1.0)

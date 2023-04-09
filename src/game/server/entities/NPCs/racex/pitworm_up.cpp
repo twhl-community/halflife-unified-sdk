@@ -1973,9 +1973,9 @@ void COFPitWorm::StartMonster()
 	if (pev->movetype != MOVETYPE_FLY && !FBitSet(pev->spawnflags, SF_MONSTER_FALL_TO_GROUND))
 	{
 		pev->origin.z += 1;
-		DROP_TO_FLOOR(ENT(pev));
+		DROP_TO_FLOOR(edict());
 		// Try to move the monster to make sure it's not stuck in a brush.
-		if (!WALK_MOVE(ENT(pev), 0, 0, WALKMOVE_NORMAL))
+		if (!WALK_MOVE(edict(), 0, 0, WALKMOVE_NORMAL))
 		{
 			Logger->error("Monster {} stuck in wall--level design error", STRING(pev->classname));
 			pev->effects = EF_BRIGHTFIELD;

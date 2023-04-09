@@ -400,18 +400,6 @@ public:
 		return ent;
 	}
 
-	template <typename T>
-	static T* Instance(edict_t* pent)
-	{
-		if (!pent)
-			pent = INDEXENT(0);
-		CBaseEntity* pEnt = (CBaseEntity*)GET_PRIVATE(pent);
-		return static_cast<T*>(pEnt);
-	}
-
-	template <typename T>
-	static T* Instance(entvars_t* pev) { return Instance<T>(ENT(pev)); }
-
 	// Ugly technique to override base member functions
 	// Normally it's illegal to cast a pointer to a member function of a derived class to a pointer to a
 	// member function of a base class.  static_cast is a sleezy way around that problem.
@@ -520,7 +508,7 @@ public:
 	virtual Vector EarPosition() { return pev->origin + pev->view_ofs; }  // position of ears
 	virtual Vector BodyTarget(const Vector& posSrc) { return Center(); }  // position to shoot at
 
-	virtual int Illumination() { return GETENTITYILLUM(ENT(pev)); }
+	virtual int Illumination() { return GETENTITYILLUM(edict()); }
 
 	/**
 	 *	@brief returns true if a line can be traced from the caller's eyes to the target

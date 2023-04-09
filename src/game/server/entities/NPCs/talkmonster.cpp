@@ -701,7 +701,7 @@ CBaseEntity* CTalkMonster::FindNearestFriend(bool fPlayer)
 
 		if (range > (vecStart - vecCheck).Length())
 		{
-			UTIL_TraceLine(vecStart, vecCheck, ignore_monsters, ENT(pev), &tr);
+			UTIL_TraceLine(vecStart, vecCheck, ignore_monsters, edict(), &tr);
 
 			if (tr.flFraction == 1.0)
 			{

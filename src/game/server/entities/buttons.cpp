@@ -77,7 +77,7 @@ void CEnvGlobal::Spawn()
 {
 	if (FStringNull(m_globalstate))
 	{
-		REMOVE_ENTITY(ENT(pev));
+		REMOVE_ENTITY(edict());
 		return;
 	}
 	if (FBitSet(pev->spawnflags, SF_GLOBAL_SET))

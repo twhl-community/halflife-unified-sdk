@@ -177,7 +177,7 @@ void CFlockingFlyerFlock::Spawn()
 	Precache();
 	SpawnFlock();
 
-	REMOVE_ENTITY(ENT(pev)); // dump the spawn ent
+	REMOVE_ENTITY(edict()); // dump the spawn ent
 }
 
 void CFlockingFlyerFlock::Precache()
@@ -517,7 +517,7 @@ bool CFlockingFlyer::FPathBlocked()
 	fBlocked = false; // assume the way ahead is clear
 
 	// check for obstacle ahead
-	UTIL_TraceLine(pev->origin, pev->origin + gpGlobals->v_forward * AFLOCK_CHECK_DIST, ignore_monsters, ENT(pev), &tr);
+	UTIL_TraceLine(pev->origin, pev->origin + gpGlobals->v_forward * AFLOCK_CHECK_DIST, ignore_monsters, edict(), &tr);
 	if (tr.flFraction != 1.0)
 	{
 		m_flLastBlockedTime = gpGlobals->time;
@@ -525,14 +525,14 @@ bool CFlockingFlyer::FPathBlocked()
 	}
 
 	// extra wide checks
-	UTIL_TraceLine(pev->origin + gpGlobals->v_right * 12, pev->origin + gpGlobals->v_right * 12 + gpGlobals->v_forward * AFLOCK_CHECK_DIST, ignore_monsters, ENT(pev), &tr);
+	UTIL_TraceLine(pev->origin + gpGlobals->v_right * 12, pev->origin + gpGlobals->v_right * 12 + gpGlobals->v_forward * AFLOCK_CHECK_DIST, ignore_monsters, edict(), &tr);
 	if (tr.flFraction != 1.0)
 	{
 		m_flLastBlockedTime = gpGlobals->time;
 		fBlocked = true;
 	}
 
-	UTIL_TraceLine(pev->origin - gpGlobals->v_right * 12, pev->origin - gpGlobals->v_right * 12 + gpGlobals->v_forward * AFLOCK_CHECK_DIST, ignore_monsters, ENT(pev), &tr);
+	UTIL_TraceLine(pev->origin - gpGlobals->v_right * 12, pev->origin - gpGlobals->v_right * 12 + gpGlobals->v_forward * AFLOCK_CHECK_DIST, ignore_monsters, edict(), &tr);
 	if (tr.flFraction != 1.0)
 	{
 		m_flLastBlockedTime = gpGlobals->time;
@@ -587,11 +587,11 @@ void CFlockingFlyer::FlockLeaderThink()
 	if (!m_fTurning) // something in the way and boid is not already turning to avoid
 	{
 		// measure clearance on left and right to pick the best dir to turn
-		UTIL_TraceLine(pev->origin, pev->origin + gpGlobals->v_right * AFLOCK_CHECK_DIST, ignore_monsters, ENT(pev), &tr);
+		UTIL_TraceLine(pev->origin, pev->origin + gpGlobals->v_right * AFLOCK_CHECK_DIST, ignore_monsters, edict(), &tr);
 		vecDist = (tr.vecEndPos - pev->origin);
 		flRightSide = vecDist.Length();
 
-		UTIL_TraceLine(pev->origin, pev->origin - gpGlobals->v_right * AFLOCK_CHECK_DIST, ignore_monsters, ENT(pev), &tr);
+		UTIL_TraceLine(pev->origin, pev->origin - gpGlobals->v_right * AFLOCK_CHECK_DIST, ignore_monsters, edict(), &tr);
 		vecDist = (tr.vecEndPos - pev->origin);
 		flLeftSide = vecDist.Length();
 
@@ -627,7 +627,7 @@ void CFlockingFlyer::FlockLeaderThink()
 	pev->velocity = gpGlobals->v_forward * pev->speed;
 
 	// check and make sure we aren't about to plow into the ground, don't let it happen
-	UTIL_TraceLine(pev->origin, pev->origin - gpGlobals->v_up * 16, ignore_monsters, ENT(pev), &tr);
+	UTIL_TraceLine(pev->origin, pev->origin - gpGlobals->v_up * 16, ignore_monsters, edict(), &tr);
 	if (tr.flFraction != 1.0 && pev->velocity.z < 0)
 		pev->velocity.z = 0;
 
@@ -746,11 +746,11 @@ void CFlockingFlyer::FlockFollowerThink()
 			UTIL_MakeVectors ( pev->angles );
 
 			// measure clearance on left and right to pick the best dir to turn
-			UTIL_TraceLine(pev->origin, pev->origin + gpGlobals->v_right * AFLOCK_CHECK_DIST, ignore_monsters, ENT(pev), &tr);
+			UTIL_TraceLine(pev->origin, pev->origin + gpGlobals->v_right * AFLOCK_CHECK_DIST, ignore_monsters, edict(), &tr);
 			vecDist = (tr.vecEndPos - pev->origin);
 			flRightSide = vecDist.Length();
 
-			UTIL_TraceLine(pev->origin, pev->origin - gpGlobals->v_right * AFLOCK_CHECK_DIST, ignore_monsters, ENT(pev), &tr);
+			UTIL_TraceLine(pev->origin, pev->origin - gpGlobals->v_right * AFLOCK_CHECK_DIST, ignore_monsters, edict(), &tr);
 			vecDist = (tr.vecEndPos - pev->origin);
 			flLeftSide = vecDist.Length();
 

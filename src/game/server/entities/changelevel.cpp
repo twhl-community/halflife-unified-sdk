@@ -419,7 +419,7 @@ void CTriggerSave::Spawn()
 {
 	if (g_pGameRules->IsDeathmatch())
 	{
-		REMOVE_ENTITY(ENT(pev));
+		REMOVE_ENTITY(edict());
 		return;
 	}
 
@@ -481,7 +481,7 @@ void CTriggerEndSection::Spawn()
 {
 	if (g_pGameRules->IsDeathmatch())
 	{
-		REMOVE_ENTITY(ENT(pev));
+		REMOVE_ENTITY(edict());
 		return;
 	}
 

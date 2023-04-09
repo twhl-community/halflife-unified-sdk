@@ -303,7 +303,7 @@ void CTalkMonster::EnumFriends(Callback callback, bool trace)
 			vecCheck.z = pFriend->pev->absmax.z;
 
 			TraceResult tr;
-			UTIL_TraceLine(pev->origin, vecCheck, ignore_monsters, ENT(pev), &tr);
+			UTIL_TraceLine(pev->origin, vecCheck, ignore_monsters, edict(), &tr);
 
 			if (tr.flFraction != 1.0)
 			{

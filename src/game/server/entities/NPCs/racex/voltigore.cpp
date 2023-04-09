@@ -185,7 +185,7 @@ void COFChargedBolt::ArmBeam(int side)
 	{
 		Vector vecAim = gpGlobals->v_right * side * RANDOM_FLOAT(0, 1) + gpGlobals->v_up * RANDOM_FLOAT(-1, 1);
 		TraceResult tr1;
-		UTIL_TraceLine(vecSrc, vecSrc + vecAim * 512, dont_ignore_monsters, ENT(pev), &tr1);
+		UTIL_TraceLine(vecSrc, vecSrc + vecAim * 512, dont_ignore_monsters, edict(), &tr1);
 		if (flDist > tr1.flFraction)
 		{
 			tr = tr1;
@@ -779,8 +779,8 @@ bool COFVoltigore::CheckRangeAttack1(float flDot, float flDist)
 		// !!!LATER - we may wish to do something different for projectile weapons as opposed to instant-hit
 		UTIL_MakeVectors(pev->angles);
 		GetAttachment(0, vecArmPos, vecArmDir);
-		//		UTIL_TraceLine( vecArmPos, vecArmPos + gpGlobals->v_forward * 256, ignore_monsters, ENT(pev), &tr);
-		UTIL_TraceLine(vecArmPos, m_hEnemy->BodyTarget(vecArmPos), dont_ignore_monsters, ENT(pev), &tr);
+		//		UTIL_TraceLine( vecArmPos, vecArmPos + gpGlobals->v_forward * 256, ignore_monsters, edict(), &tr);
+		UTIL_TraceLine(vecArmPos, m_hEnemy->BodyTarget(vecArmPos), dont_ignore_monsters, edict(), &tr);
 
 		if (tr.flFraction == 1.0 || tr.pHit == m_hEnemy->edict())
 		{

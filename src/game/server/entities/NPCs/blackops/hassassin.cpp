@@ -522,7 +522,7 @@ bool CHAssassin::CheckMeleeAttack1(float flDot, float flDist)
 
 		Vector vecDest = pev->origin + Vector(RANDOM_FLOAT(-64, 64), RANDOM_FLOAT(-64, 64), 160);
 
-		UTIL_TraceHull(pev->origin + Vector(0, 0, 36), vecDest + Vector(0, 0, 36), dont_ignore_monsters, human_hull, ENT(pev), &tr);
+		UTIL_TraceHull(pev->origin + Vector(0, 0, 36), vecDest + Vector(0, 0, 36), dont_ignore_monsters, human_hull, edict(), &tr);
 
 		if (0 != tr.fStartSolid || tr.flFraction < 1.0)
 		{
@@ -549,7 +549,7 @@ bool CHAssassin::CheckRangeAttack1(float flDot, float flDist)
 		Vector vecSrc = GetGunPosition();
 
 		// verify that a bullet fired from the gun will hit the enemy before the world.
-		UTIL_TraceLine(vecSrc, m_hEnemy->BodyTarget(vecSrc), dont_ignore_monsters, ENT(pev), &tr);
+		UTIL_TraceLine(vecSrc, m_hEnemy->BodyTarget(vecSrc), dont_ignore_monsters, edict(), &tr);
 
 		if (tr.flFraction == 1 || tr.pHit == m_hEnemy->edict())
 		{

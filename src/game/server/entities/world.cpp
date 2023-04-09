@@ -110,7 +110,7 @@ void CDecal::Spawn()
 {
 	if (pev->skin < 0 || (0 != gpGlobals->deathmatch && FBitSet(pev->spawnflags, SF_DECAL_NOTINDEATHMATCH)))
 	{
-		REMOVE_ENTITY(ENT(pev));
+		REMOVE_ENTITY(edict());
 		return;
 	}
 
@@ -134,7 +134,7 @@ void CDecal::TriggerDecal(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYP
 	// decal doesn't get applied until it is fired. (usually by a scripted sequence)
 	TraceResult trace;
 
-	UTIL_TraceLine(pev->origin - Vector(5, 5, 5), pev->origin + Vector(5, 5, 5), ignore_monsters, ENT(pev), &trace);
+	UTIL_TraceLine(pev->origin - Vector(5, 5, 5), pev->origin + Vector(5, 5, 5), ignore_monsters, edict(), &trace);
 
 	auto hit = CBaseEntity::Instance(trace.pHit);
 
@@ -159,7 +159,7 @@ void CDecal::StaticDecal()
 {
 	TraceResult trace;
 
-	UTIL_TraceLine(pev->origin - Vector(5, 5, 5), pev->origin + Vector(5, 5, 5), ignore_monsters, ENT(pev), &trace);
+	UTIL_TraceLine(pev->origin - Vector(5, 5, 5), pev->origin + Vector(5, 5, 5), ignore_monsters, edict(), &trace);
 
 	auto hit = CBaseEntity::Instance(trace.pHit);
 

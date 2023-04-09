@@ -1234,7 +1234,7 @@ float TEXTURETYPE_PlaySound(TraceResult* ptr, Vector vecSrc, Vector vecEnd, int 
 
 		// get texture from entity or world (world is ent(0))
 		if (pEntity)
-			pTextureName = TRACE_TEXTURE(ENT(pEntity->pev), vecSrc, vecEnd);
+			pTextureName = TRACE_TEXTURE(pEntity->edict(), vecSrc, vecEnd);
 		else
 			pTextureName = TRACE_TEXTURE(CBaseEntity::World->edict(), vecSrc, vecEnd);
 

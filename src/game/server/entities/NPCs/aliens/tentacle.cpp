@@ -705,10 +705,10 @@ void CTentacle::Cycle()
 			TraceResult tr1, tr2;
 
 			vecSrc = pev->origin + Vector(0, 0, MyHeight() - 4);
-			UTIL_TraceLine(vecSrc, vecSrc + gpGlobals->v_forward * 512, ignore_monsters, ENT(pev), &tr1);
+			UTIL_TraceLine(vecSrc, vecSrc + gpGlobals->v_forward * 512, ignore_monsters, edict(), &tr1);
 
 			vecSrc = pev->origin + Vector(0, 0, MyHeight() + 8);
-			UTIL_TraceLine(vecSrc, vecSrc + gpGlobals->v_forward * 512, ignore_monsters, ENT(pev), &tr2);
+			UTIL_TraceLine(vecSrc, vecSrc + gpGlobals->v_forward * 512, ignore_monsters, edict(), &tr2);
 
 			// AILogger->debug("{} {}", tr1.flFraction * 512, tr2.flFraction * 512);
 

@@ -536,7 +536,7 @@ void CNihilanth::DyingThink()
 
 	TraceResult tr;
 
-	UTIL_TraceLine(vecSrc, vecSrc + vecDir * 4096, ignore_monsters, ENT(pev), &tr);
+	UTIL_TraceLine(vecSrc, vecSrc + vecDir * 4096, ignore_monsters, edict(), &tr);
 
 	MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
 	WRITE_BYTE(TE_BEAMENTPOINT);

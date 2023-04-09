@@ -714,7 +714,7 @@ void CGib::BounceGibTouch(CBaseEntity* pOther)
 		if (g_Language != LANGUAGE_GERMAN && m_cBloodDecals > 0 && m_bloodColor != DONT_BLEED)
 		{
 			vecSpot = pev->origin + Vector(0, 0, 8); // move up a bit, and trace down.
-			UTIL_TraceLine(vecSpot, vecSpot + Vector(0, 0, -24), ignore_monsters, ENT(pev), &tr);
+			UTIL_TraceLine(vecSpot, vecSpot + Vector(0, 0, -24), ignore_monsters, edict(), &tr);
 
 			UTIL_BloodDecalTrace(&tr, m_bloodColor);
 
@@ -746,7 +746,7 @@ void CGib::StickyGibTouch(CBaseEntity* pOther)
 		return;
 	}
 
-	UTIL_TraceLine(pev->origin, pev->origin + pev->velocity * 32, ignore_monsters, ENT(pev), &tr);
+	UTIL_TraceLine(pev->origin, pev->origin + pev->velocity * 32, ignore_monsters, edict(), &tr);
 
 	UTIL_BloodDecalTrace(&tr, m_bloodColor);
 
@@ -1079,7 +1079,7 @@ CBaseEntity* CBaseMonster::CheckTraceHullAttack(float flDist, int iDamage, int i
 	vecStart.z += pev->size.z * 0.5;
 	Vector vecEnd = vecStart + (gpGlobals->v_forward * flDist);
 
-	UTIL_TraceHull(vecStart, vecEnd, dont_ignore_monsters, head_hull, ENT(pev), &tr);
+	UTIL_TraceHull(vecStart, vecEnd, dont_ignore_monsters, head_hull, edict(), &tr);
 
 	if (tr.pHit)
 	{
@@ -1156,7 +1156,7 @@ bool CBaseEntity::FVisible(CBaseEntity* pEntity)
 	vecLookerOrigin = pev->origin + pev->view_ofs; // look through the caller's 'eyes'
 	vecTargetOrigin = pEntity->EyePosition();
 
-	UTIL_TraceLine(vecLookerOrigin, vecTargetOrigin, ignore_monsters, ignore_glass, ENT(pev) /*pentIgnore*/, &tr);
+	UTIL_TraceLine(vecLookerOrigin, vecTargetOrigin, ignore_monsters, ignore_glass, edict() /*pentIgnore*/, &tr);
 
 	if (tr.flFraction != 1.0)
 	{
@@ -1175,7 +1175,7 @@ bool CBaseEntity::FVisible(const Vector& vecOrigin)
 
 	vecLookerOrigin = EyePosition(); // look through the caller's 'eyes'
 
-	UTIL_TraceLine(vecLookerOrigin, vecOrigin, ignore_monsters, ignore_glass, ENT(pev) /*pentIgnore*/, &tr);
+	UTIL_TraceLine(vecLookerOrigin, vecOrigin, ignore_monsters, ignore_glass, edict() /*pentIgnore*/, &tr);
 
 	if (tr.flFraction != 1.0)
 	{
@@ -1274,7 +1274,7 @@ void CBaseEntity::FireBullets(unsigned int cShots, Vector vecSrc, Vector vecDirS
 		Vector vecEnd;
 
 		vecEnd = vecSrc + vecDir * flDistance;
-		UTIL_TraceLine(vecSrc, vecEnd, dont_ignore_monsters, ENT(pev) /*pentIgnore*/, &tr);
+		UTIL_TraceLine(vecSrc, vecEnd, dont_ignore_monsters, edict() /*pentIgnore*/, &tr);
 
 		if (iTracerFreq != 0 && (tracerCount++ % iTracerFreq) == 0)
 		{
@@ -1424,7 +1424,7 @@ Vector CBaseEntity::FireBulletsPlayer(unsigned int cShots, Vector vecSrc, Vector
 		Vector vecEnd;
 
 		vecEnd = vecSrc + vecDir * flDistance;
-		UTIL_TraceLine(vecSrc, vecEnd, dont_ignore_monsters, ENT(pev) /*pentIgnore*/, &tr);
+		UTIL_TraceLine(vecSrc, vecEnd, dont_ignore_monsters, edict() /*pentIgnore*/, &tr);
 
 		// do damage, paint decals
 		if (tr.flFraction != 1.0)
@@ -1584,7 +1584,7 @@ void CBaseEntity::TraceBleed(float flDamage, Vector vecDir, TraceResult* ptr, in
 		vecTraceDir.y += RANDOM_FLOAT(-flNoise, flNoise);
 		vecTraceDir.z += RANDOM_FLOAT(-flNoise, flNoise);
 
-		UTIL_TraceLine(ptr->vecEndPos, ptr->vecEndPos + vecTraceDir * -172, ignore_monsters, ENT(pev), &Bloodtr);
+		UTIL_TraceLine(ptr->vecEndPos, ptr->vecEndPos + vecTraceDir * -172, ignore_monsters, edict(), &Bloodtr);
 
 		if (Bloodtr.flFraction != 1.0)
 		{
@@ -1622,7 +1622,7 @@ void CBaseMonster::MakeDamageBloodDecal(int cCount, float flNoise, TraceResult* 
 		vecTraceDir.y += RANDOM_FLOAT(-flNoise, flNoise);
 		vecTraceDir.z += RANDOM_FLOAT(-flNoise, flNoise);
 
-		UTIL_TraceLine(ptr->vecEndPos, ptr->vecEndPos + vecTraceDir * 172, ignore_monsters, ENT(pev), &Bloodtr);
+		UTIL_TraceLine(ptr->vecEndPos, ptr->vecEndPos + vecTraceDir * 172, ignore_monsters, edict(), &Bloodtr);
 
 		/*
 				MESSAGE_BEGIN( MSG_BROADCAST, SVC_TEMPENTITY );

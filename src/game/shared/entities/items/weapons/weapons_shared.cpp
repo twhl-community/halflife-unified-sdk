@@ -156,7 +156,7 @@ void CBasePlayerWeapon::SendWeaponAnim(int iAnim, int body)
 		return;
 #endif
 
-	MESSAGE_BEGIN(MSG_ONE, SVC_WEAPONANIM, nullptr, m_pPlayer->pev);
+	MESSAGE_BEGIN(MSG_ONE, SVC_WEAPONANIM, nullptr, m_pPlayer->edict());
 	WRITE_BYTE(iAnim);	   // sequence number
 	WRITE_BYTE(pev->body); // weaponmodel bodygroup.
 	MESSAGE_END();

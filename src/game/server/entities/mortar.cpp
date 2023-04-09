@@ -160,7 +160,7 @@ void CFuncMortarField::FieldUse(CBaseEntity* pActivator, CBaseEntity* pCaller, U
 		vecSpot.y += RANDOM_FLOAT(-m_flSpread, m_flSpread);
 
 		TraceResult tr;
-		UTIL_TraceLine(vecSpot, vecSpot + Vector(0, 0, -1) * 4096, ignore_monsters, ENT(pev), &tr);
+		UTIL_TraceLine(vecSpot, vecSpot + Vector(0, 0, -1) * 4096, ignore_monsters, edict(), &tr);
 
 		CBaseEntity* pMortar = Create("monster_mortar", tr.vecEndPos, Vector(0, 0, 0), pActivator);
 		pMortar->pev->nextthink = gpGlobals->time + t;
@@ -260,7 +260,7 @@ void CMortar::MortarExplode()
 #endif
 
 	TraceResult tr;
-	UTIL_TraceLine(pev->origin + Vector(0, 0, 1024), pev->origin - Vector(0, 0, 1024), dont_ignore_monsters, ENT(pev), &tr);
+	UTIL_TraceLine(pev->origin + Vector(0, 0, 1024), pev->origin - Vector(0, 0, 1024), dont_ignore_monsters, edict(), &tr);
 
 	Explode(&tr, DMG_BLAST | DMG_MORTAR);
 	UTIL_ScreenShake(tr.vecEndPos, 25.0, 150.0, 1.0, 750);

@@ -777,7 +777,7 @@ void CLightning::RandomArea()
 		Vector vecDir1 = Vector(RANDOM_FLOAT(-1.0, 1.0), RANDOM_FLOAT(-1.0, 1.0), RANDOM_FLOAT(-1.0, 1.0));
 		vecDir1 = vecDir1.Normalize();
 		TraceResult tr1;
-		UTIL_TraceLine(vecSrc, vecSrc + vecDir1 * m_radius, ignore_monsters, ENT(pev), &tr1);
+		UTIL_TraceLine(vecSrc, vecSrc + vecDir1 * m_radius, ignore_monsters, edict(), &tr1);
 
 		if (tr1.flFraction == 1.0)
 			continue;
@@ -789,7 +789,7 @@ void CLightning::RandomArea()
 		} while (DotProduct(vecDir1, vecDir2) > 0);
 		vecDir2 = vecDir2.Normalize();
 		TraceResult tr2;
-		UTIL_TraceLine(vecSrc, vecSrc + vecDir2 * m_radius, ignore_monsters, ENT(pev), &tr2);
+		UTIL_TraceLine(vecSrc, vecSrc + vecDir2 * m_radius, ignore_monsters, edict(), &tr2);
 
 		if (tr2.flFraction == 1.0)
 			continue;
@@ -797,7 +797,7 @@ void CLightning::RandomArea()
 		if ((tr1.vecEndPos - tr2.vecEndPos).Length() < m_radius * 0.1)
 			continue;
 
-		UTIL_TraceLine(tr1.vecEndPos, tr2.vecEndPos, ignore_monsters, ENT(pev), &tr2);
+		UTIL_TraceLine(tr1.vecEndPos, tr2.vecEndPos, ignore_monsters, edict(), &tr2);
 
 		if (tr2.flFraction != 1.0)
 			continue;
@@ -817,7 +817,7 @@ void CLightning::RandomPoint(Vector& vecSrc)
 		Vector vecDir1 = Vector(RANDOM_FLOAT(-1.0, 1.0), RANDOM_FLOAT(-1.0, 1.0), RANDOM_FLOAT(-1.0, 1.0));
 		vecDir1 = vecDir1.Normalize();
 		TraceResult tr1;
-		UTIL_TraceLine(vecSrc, vecSrc + vecDir1 * m_radius, ignore_monsters, ENT(pev), &tr1);
+		UTIL_TraceLine(vecSrc, vecSrc + vecDir1 * m_radius, ignore_monsters, edict(), &tr1);
 
 		if ((tr1.vecEndPos - vecSrc).Length() < m_radius * 0.1)
 			continue;

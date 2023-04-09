@@ -130,7 +130,7 @@ void CStomp::Think()
 	vecStart.z += 30;
 	Vector vecEnd = vecStart + (pev->movedir * pev->speed * deltaTime);
 
-	UTIL_TraceHull(vecStart, vecEnd, dont_ignore_monsters, head_hull, ENT(pev), &tr);
+	UTIL_TraceHull(vecStart, vecEnd, dont_ignore_monsters, head_hull, edict(), &tr);
 
 	if (tr.pHit && tr.pHit != pev->owner)
 	{
@@ -629,7 +629,7 @@ void CGargantua::FlameDamage(Vector vecStart, Vector vecEnd, CBaseEntity* inflic
 
 			Vector vecSrc = vecMid + dist * vecAim;
 
-			UTIL_TraceLine(vecSrc, vecSpot, dont_ignore_monsters, ENT(pev), &tr);
+			UTIL_TraceLine(vecSrc, vecSpot, dont_ignore_monsters, edict(), &tr);
 
 			if (tr.flFraction == 1.0 || tr.pHit == pEntity->edict())
 			{ // the explosion can 'see' this entity, so hurt them!
@@ -963,7 +963,7 @@ CBaseEntity* CGargantua::GargantuaCheckTraceHullAttack(float flDist, int iDamage
 	vecStart.z += 64;
 	Vector vecEnd = vecStart + (gpGlobals->v_forward * flDist) - (gpGlobals->v_up * flDist * 0.3);
 
-	UTIL_TraceHull(vecStart, vecEnd, dont_ignore_monsters, head_hull, ENT(pev), &tr);
+	UTIL_TraceHull(vecStart, vecEnd, dont_ignore_monsters, head_hull, edict(), &tr);
 
 	if (tr.pHit)
 	{

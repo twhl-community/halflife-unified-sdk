@@ -39,7 +39,7 @@ public:
 
 void CNullEntity::Spawn()
 {
-	REMOVE_ENTITY(ENT(pev));
+	REMOVE_ENTITY(edict());
 }
 
 LINK_ENTITY_TO_CLASS(info_null, CNullEntity);
@@ -79,7 +79,7 @@ void CBaseEntity::SUB_Remove()
 		Logger->debug("SUB_Remove called on entity \"{}\" ({}) with health > 0", STRING(pev->targetname), STRING(pev->classname));
 	}
 
-	REMOVE_ENTITY(ENT(pev));
+	REMOVE_ENTITY(edict());
 }
 
 BEGIN_DATAMAP(CBaseDelay)
@@ -204,7 +204,7 @@ void CBaseDelay::DelayThink()
 
 	// The use type is cached (and stashed) in pev->button
 	SUB_UseTargets(pActivator, (USE_TYPE)pev->button, 0);
-	REMOVE_ENTITY(ENT(pev));
+	REMOVE_ENTITY(edict());
 }
 
 BEGIN_DATAMAP(CBaseToggle)

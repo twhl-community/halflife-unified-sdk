@@ -57,11 +57,6 @@ edict_t* UTIL_GetEntityList();
  */
 CBasePlayer* UTIL_GetLocalPlayer();
 
-inline void MESSAGE_BEGIN(int msg_dest, int msg_type, const float* pOrigin, entvars_t* ent)
-{
-	(*g_engfuncs.pfnMessageBegin)(msg_dest, msg_type, pOrigin, ENT(ent));
-}
-
 #define cchMapNameMost 32
 
 // Dot products for view cone checking

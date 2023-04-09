@@ -219,9 +219,9 @@ void CItemCTF::DropThink()
 
 void CItemCTF::CarryThink()
 {
-	auto pOwner = Instance<CBasePlayer>(pev->owner);
+	auto pOwner = ToBasePlayer(GetOwner());
 
-	if (pOwner && pOwner->IsPlayer())
+	if (pOwner)
 	{
 		if ((m_iItemFlag & pOwner->m_iItems) != 0)
 		{

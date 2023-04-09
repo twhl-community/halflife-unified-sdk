@@ -198,7 +198,7 @@ bool CBaseHGruntAlly::CheckRangeAttack1(float flDot, float flDist)
 			const auto targetPosition = targetOrigin - pEnemy->pev->origin + m_vecEnemyLKP;
 
 			// verify that a bullet fired from the gun will hit the enemy before the world.
-			UTIL_TraceLine(vecSrc, targetPosition, dont_ignore_monsters, ENT(pev), &tr);
+			UTIL_TraceLine(vecSrc, targetPosition, dont_ignore_monsters, edict(), &tr);
 
 			m_lastAttackCheck = tr.flFraction == 1.0 ? true : tr.pHit && GET_PRIVATE(tr.pHit) == pEnemy;
 
@@ -517,7 +517,7 @@ CBaseEntity* CBaseHGruntAlly::Kick()
 	vecStart.z += pev->size.z * 0.5;
 	Vector vecEnd = vecStart + (gpGlobals->v_forward * 70);
 
-	UTIL_TraceHull(vecStart, vecEnd, dont_ignore_monsters, head_hull, ENT(pev), &tr);
+	UTIL_TraceHull(vecStart, vecEnd, dont_ignore_monsters, head_hull, edict(), &tr);
 
 	if (tr.pHit)
 	{
@@ -2212,7 +2212,7 @@ void CBaseHGruntAllyRepel::Precache()
 void CBaseHGruntAllyRepel::RepelUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
 	TraceResult tr;
-	UTIL_TraceLine(pev->origin, pev->origin + Vector(0, 0, -4096.0), dont_ignore_monsters, ENT(pev), &tr);
+	UTIL_TraceLine(pev->origin, pev->origin + Vector(0, 0, -4096.0), dont_ignore_monsters, edict(), &tr);
 	/*
 	if ( tr.pHit && Instance( tr.pHit )->pev->solid != SOLID_BSP)
 		return nullptr;

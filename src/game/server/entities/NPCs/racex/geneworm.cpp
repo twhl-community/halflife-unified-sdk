@@ -498,7 +498,7 @@ void COFGeneWormSpawn::CreateWarpBeams(int side)
 	{
 		Vector vecAim = gpGlobals->v_right * side * RANDOM_FLOAT(0, 1) + gpGlobals->v_up * RANDOM_FLOAT(-1, 1);
 		TraceResult tr1;
-		UTIL_TraceLine(vecSrc, vecSrc + vecAim * 512, dont_ignore_monsters, ENT(pev), &tr1);
+		UTIL_TraceLine(vecSrc, vecSrc + vecAim * 512, dont_ignore_monsters, edict(), &tr1);
 		if (flDist > tr1.flFraction)
 		{
 			tr = tr1;

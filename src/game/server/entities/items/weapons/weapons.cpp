@@ -477,7 +477,7 @@ bool CBasePlayerWeapon::UpdateClientData(CBasePlayer* pPlayer)
 
 	if (bSend)
 	{
-		MESSAGE_BEGIN(MSG_ONE, gmsgCurWeapon, nullptr, pPlayer->pev);
+		MESSAGE_BEGIN(MSG_ONE, gmsgCurWeapon, nullptr, pPlayer->edict());
 		WRITE_BYTE(static_cast<int>(state));
 		WRITE_BYTE(m_iId);
 		WRITE_BYTE(m_iClip);

@@ -1031,11 +1031,11 @@ void CController::MoveExecute(CBaseEntity* pTargetEnt, const Vector& vecDir, flo
 	// AILogger->debug("move {:.4f} : {}", vecDir, flInterval);
 
 	// float flTotal = m_flGroundSpeed * pev->framerate * flInterval;
-	// UTIL_MoveToOrigin ( ENT(pev), m_Route[ m_iRouteIndex ].vecLocation, flTotal, MOVE_STRAFE );
+	// UTIL_MoveToOrigin ( edict(), m_Route[ m_iRouteIndex ].vecLocation, flTotal, MOVE_STRAFE );
 
 	m_velocity = m_velocity * 0.8 + m_flGroundSpeed * vecDir * 0.2;
 
-	UTIL_MoveToOrigin(ENT(pev), pev->origin + m_velocity, m_velocity.Length() * flInterval, MOVE_STRAFE);
+	UTIL_MoveToOrigin(edict(), pev->origin + m_velocity, m_velocity.Length() * flInterval, MOVE_STRAFE);
 }
 
 /**
@@ -1140,7 +1140,7 @@ void CControllerHeadBall::HuntThink()
 	{
 		TraceResult tr;
 
-		UTIL_TraceLine(pev->origin, m_hEnemy->Center(), dont_ignore_monsters, ENT(pev), &tr);
+		UTIL_TraceLine(pev->origin, m_hEnemy->Center(), dont_ignore_monsters, edict(), &tr);
 
 		CBaseEntity* pEntity = CBaseEntity::Instance(tr.pHit);
 		if (pEntity != nullptr && 0 != pEntity->pev->takedamage)

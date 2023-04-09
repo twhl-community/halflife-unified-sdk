@@ -207,7 +207,7 @@ CBaseEntity* COFBabyVoltigore::CheckTraceHullAttack(float flDist, int iDamage, i
 	vecStart.z += pev->size.z;
 	Vector vecEnd = vecStart + (gpGlobals->v_forward * flDist);
 
-	UTIL_TraceHull(vecStart, vecEnd, dont_ignore_monsters, head_hull, ENT(pev), &tr);
+	UTIL_TraceHull(vecStart, vecEnd, dont_ignore_monsters, head_hull, edict(), &tr);
 
 	if (tr.pHit)
 	{

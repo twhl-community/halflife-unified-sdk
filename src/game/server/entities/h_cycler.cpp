@@ -71,7 +71,7 @@ void CCycler::Spawn()
 	if (!szModel || '\0' == *szModel)
 	{
 		CBaseEntity::Logger->error("cycler at {:.0f} missing modelname", pev->origin);
-		REMOVE_ENTITY(ENT(pev));
+		REMOVE_ENTITY(edict());
 		return;
 	}
 
@@ -303,7 +303,7 @@ void CWeaponCycler::SecondaryAttack()
 	pev->sequence = (pev->sequence + 1) % 8;
 
 	pev->modelindex = m_iModel;
-	void* pmodel = GET_MODEL_PTR(ENT(pev));
+	void* pmodel = GET_MODEL_PTR(edict());
 	GetSequenceInfo(pmodel, pev, flFrameRate, flGroundSpeed);
 	pev->modelindex = 0;
 

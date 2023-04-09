@@ -66,13 +66,13 @@ void CLight::Spawn()
 {
 	if (FStringNull(pev->targetname))
 	{ // inert light
-		REMOVE_ENTITY(ENT(pev));
+		REMOVE_ENTITY(edict());
 		return;
 	}
 
 	if (m_iStyle >= 32)
 	{
-		//		CHANGE_METHOD(ENT(pev), em_use, light_use);
+		//		CHANGE_METHOD(edict(), em_use, light_use);
 		if (FBitSet(pev->spawnflags, SF_LIGHT_START_OFF))
 			LIGHT_STYLE(m_iStyle, "a");
 		else if (!FStringNull(m_iszPattern))

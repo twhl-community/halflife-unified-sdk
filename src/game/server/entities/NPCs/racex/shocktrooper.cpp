@@ -439,7 +439,7 @@ bool CShockTrooper::CheckRangeAttack1(float flDot, float flDist)
 		Vector vecSrc = GetGunPosition();
 
 		// verify that a bullet fired from the gun will hit the enemy before the world.
-		UTIL_TraceLine(vecSrc, m_hEnemy->BodyTarget(vecSrc), ignore_monsters, ignore_glass, ENT(pev), &tr);
+		UTIL_TraceLine(vecSrc, m_hEnemy->BodyTarget(vecSrc), ignore_monsters, ignore_glass, edict(), &tr);
 
 		if (tr.flFraction == 1.0)
 		{
@@ -692,7 +692,7 @@ CBaseEntity* CShockTrooper::Kick()
 	vecStart.z += pev->size.z * 0.5;
 	Vector vecEnd = vecStart + (gpGlobals->v_forward * 70);
 
-	UTIL_TraceHull(vecStart, vecEnd, dont_ignore_monsters, head_hull, ENT(pev), &tr);
+	UTIL_TraceHull(vecStart, vecEnd, dont_ignore_monsters, head_hull, edict(), &tr);
 
 	if (tr.pHit)
 	{
@@ -2143,7 +2143,7 @@ void CShockTrooperRepel::Precache()
 void CShockTrooperRepel::RepelUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
 	TraceResult tr;
-	UTIL_TraceLine(pev->origin, pev->origin + Vector(0, 0, -4096.0), dont_ignore_monsters, ENT(pev), &tr);
+	UTIL_TraceLine(pev->origin, pev->origin + Vector(0, 0, -4096.0), dont_ignore_monsters, edict(), &tr);
 	/*
 	if ( tr.pHit && Instance( tr.pHit )->pev->solid != SOLID_BSP)
 		return nullptr;

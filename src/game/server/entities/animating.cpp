@@ -57,28 +57,28 @@ float CBaseAnimating::StudioFrameAdvance(float flInterval)
 int CBaseAnimating::LookupActivity(int activity)
 {
 	ASSERT(activity != 0);
-	void* pmodel = GET_MODEL_PTR(ENT(pev));
+	void* pmodel = GET_MODEL_PTR(edict());
 
 	return ::LookupActivity(pmodel, pev, activity);
 }
 
 int CBaseAnimating::LookupActivityHeaviest(int activity)
 {
-	void* pmodel = GET_MODEL_PTR(ENT(pev));
+	void* pmodel = GET_MODEL_PTR(edict());
 
 	return ::LookupActivityHeaviest(pmodel, pev, activity);
 }
 
 int CBaseAnimating::LookupSequence(const char* label)
 {
-	void* pmodel = GET_MODEL_PTR(ENT(pev));
+	void* pmodel = GET_MODEL_PTR(edict());
 
 	return ::LookupSequence(pmodel, label);
 }
 
 void CBaseAnimating::ResetSequenceInfo()
 {
-	void* pmodel = GET_MODEL_PTR(ENT(pev));
+	void* pmodel = GET_MODEL_PTR(edict());
 
 	GetSequenceInfo(pmodel, pev, m_flFrameRate, m_flGroundSpeed);
 	m_fSequenceLoops = ((GetSequenceFlags() & STUDIO_LOOPING) != 0);
@@ -90,7 +90,7 @@ void CBaseAnimating::ResetSequenceInfo()
 
 int CBaseAnimating::GetSequenceFlags()
 {
-	void* pmodel = GET_MODEL_PTR(ENT(pev));
+	void* pmodel = GET_MODEL_PTR(edict());
 
 	return ::GetSequenceFlags(pmodel, pev);
 }
@@ -99,7 +99,7 @@ void CBaseAnimating::DispatchAnimEvents(float flInterval)
 {
 	MonsterEvent_t event;
 
-	void* pmodel = GET_MODEL_PTR(ENT(pev));
+	void* pmodel = GET_MODEL_PTR(edict());
 
 	if (!pmodel)
 	{
@@ -129,14 +129,14 @@ void CBaseAnimating::DispatchAnimEvents(float flInterval)
 
 float CBaseAnimating::SetBoneController(int iController, float flValue)
 {
-	void* pmodel = GET_MODEL_PTR(ENT(pev));
+	void* pmodel = GET_MODEL_PTR(edict());
 
 	return SetController(pmodel, pev, iController, flValue);
 }
 
 void CBaseAnimating::InitBoneControllers()
 {
-	void* pmodel = GET_MODEL_PTR(ENT(pev));
+	void* pmodel = GET_MODEL_PTR(edict());
 
 	SetController(pmodel, pev, 0, 0.0);
 	SetController(pmodel, pev, 1, 0.0);
@@ -146,24 +146,24 @@ void CBaseAnimating::InitBoneControllers()
 
 float CBaseAnimating::SetBlending(int iBlender, float flValue)
 {
-	void* pmodel = GET_MODEL_PTR(ENT(pev));
+	void* pmodel = GET_MODEL_PTR(edict());
 
 	return ::SetBlending(pmodel, pev, iBlender, flValue);
 }
 
 void CBaseAnimating::GetBonePosition(int iBone, Vector& origin, Vector& angles)
 {
-	GET_BONE_POSITION(ENT(pev), iBone, origin, angles);
+	GET_BONE_POSITION(edict(), iBone, origin, angles);
 }
 
 void CBaseAnimating::GetAttachment(int iAttachment, Vector& origin, Vector& angles)
 {
-	GET_ATTACHMENT(ENT(pev), iAttachment, origin, angles);
+	GET_ATTACHMENT(edict(), iAttachment, origin, angles);
 }
 
 int CBaseAnimating::FindTransition(int iEndingSequence, int iGoalSequence, int* piDir)
 {
-	void* pmodel = GET_MODEL_PTR(ENT(pev));
+	void* pmodel = GET_MODEL_PTR(edict());
 
 	if (piDir == nullptr)
 	{
@@ -184,17 +184,17 @@ void CBaseAnimating::GetAutomovement(Vector& origin, Vector& angles, float flInt
 
 void CBaseAnimating::SetBodygroup(int iGroup, int iValue)
 {
-	::SetBodygroup(GET_MODEL_PTR(ENT(pev)), pev, iGroup, iValue);
+	::SetBodygroup(GET_MODEL_PTR(edict()), pev, iGroup, iValue);
 }
 
 int CBaseAnimating::GetBodygroup(int iGroup) const
 {
-	return ::GetBodygroup(GET_MODEL_PTR(ENT(pev)), pev, iGroup);
+	return ::GetBodygroup(GET_MODEL_PTR(edict()), pev, iGroup);
 }
 
 int CBaseAnimating::GetBodygroupSubmodelCount(int group)
 {
-	auto pstudiohdr = reinterpret_cast<studiohdr_t*>(GET_MODEL_PTR(ENT(pev)));
+	auto pstudiohdr = reinterpret_cast<studiohdr_t*>(GET_MODEL_PTR(edict()));
 
 	if (!pstudiohdr)
 		return 1;
@@ -209,7 +209,7 @@ int CBaseAnimating::GetBodygroupSubmodelCount(int group)
 
 bool CBaseAnimating::ExtractBbox(int sequence, Vector& mins, Vector& maxs)
 {
-	return ::ExtractBbox(GET_MODEL_PTR(ENT(pev)), sequence, mins, maxs);
+	return ::ExtractBbox(GET_MODEL_PTR(edict()), sequence, mins, maxs);
 }
 
 void CBaseAnimating::SetSequenceBox()

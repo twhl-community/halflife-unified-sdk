@@ -311,7 +311,7 @@ int DispatchRestore(edict_t* pent, SAVERESTOREDATA* pSaveData, int globalEntity)
 				restoreHelper.SetGlobalMode(true); // Don't overwrite global fields
 				pSaveData->vecLandmarkOffset = (pSaveData->vecLandmarkOffset - pNewEntity->pev->mins) + tmpVars.mins;
 				pEntity = pNewEntity; // we're going to restore this data OVER the old entity
-				pent = ENT(pEntity->pev);
+				pent = pEntity->edict();
 				// Update the global table to say that the global definition of this entity should come from this level
 				gGlobalState.EntityUpdate(pEntity->pev->globalname, gpGlobals->mapname);
 			}

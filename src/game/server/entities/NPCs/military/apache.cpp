@@ -790,7 +790,7 @@ bool CApache::FireGun()
 #else
 		static float flNext;
 		TraceResult tr;
-		UTIL_TraceLine(posGun, posGun + vecGun * 8192, dont_ignore_monsters, ENT(pev), &tr);
+		UTIL_TraceLine(posGun, posGun + vecGun * 8192, dont_ignore_monsters, edict(), &tr);
 
 		if (!m_pBeam)
 		{

@@ -157,7 +157,7 @@ void CTripmineGrenade::PowerupThink()
 		// find an owner
 		edict_t* oldowner = pev->owner;
 		pev->owner = nullptr;
-		UTIL_TraceLine(pev->origin + m_vecDir * 8, pev->origin - m_vecDir * 32, dont_ignore_monsters, ENT(pev), &tr);
+		UTIL_TraceLine(pev->origin + m_vecDir * 8, pev->origin - m_vecDir * 32, dont_ignore_monsters, edict(), &tr);
 		if (0 != tr.fStartSolid || (oldowner && tr.pHit == oldowner))
 		{
 			pev->owner = oldowner;
@@ -227,7 +227,7 @@ void CTripmineGrenade::MakeBeam()
 
 	// AIlogger->debug("serverflags {}", gpGlobals->serverflags);
 
-	UTIL_TraceLine(pev->origin, m_vecEnd, dont_ignore_monsters, ENT(pev), &tr);
+	UTIL_TraceLine(pev->origin, m_vecEnd, dont_ignore_monsters, edict(), &tr);
 
 	m_flBeamLength = tr.flFraction;
 
@@ -256,7 +256,7 @@ void CTripmineGrenade::BeamBreakThink()
 
 	// HACKHACK Set simple box using this really nice global!
 	gpGlobals->trace_flags = FTRACE_SIMPLEBOX;
-	UTIL_TraceLine(pev->origin, m_vecEnd, dont_ignore_monsters, ENT(pev), &tr);
+	UTIL_TraceLine(pev->origin, m_vecEnd, dont_ignore_monsters, edict(), &tr);
 
 	// AILogger->debug("{} : {}", tr.flFraction, m_flBeamLength);
 
@@ -267,7 +267,7 @@ void CTripmineGrenade::BeamBreakThink()
 		TraceResult tr2;
 		// Clear out old owner so it can be hit by traces.
 		pev->owner = nullptr;
-		UTIL_TraceLine(pev->origin + m_vecDir * 8, pev->origin - m_vecDir * 32, dont_ignore_monsters, ENT(pev), &tr2);
+		UTIL_TraceLine(pev->origin + m_vecDir * 8, pev->origin - m_vecDir * 32, dont_ignore_monsters, edict(), &tr2);
 		MakeBeam();
 		if (tr2.pHit)
 		{
@@ -340,7 +340,7 @@ void CTripmineGrenade::DelayDeathThink()
 {
 	KillBeam();
 	TraceResult tr;
-	UTIL_TraceLine(pev->origin + m_vecDir * 8, pev->origin - m_vecDir * 64, dont_ignore_monsters, ENT(pev), &tr);
+	UTIL_TraceLine(pev->origin + m_vecDir * 8, pev->origin - m_vecDir * 64, dont_ignore_monsters, edict(), &tr);
 
 	Explode(&tr, DMG_BLAST);
 }
@@ -435,7 +435,7 @@ void CTripmine::PrimaryAttack()
 
 	TraceResult tr;
 
-	UTIL_TraceLine(vecSrc, vecSrc + vecAiming * 128, dont_ignore_monsters, ENT(m_pPlayer->pev), &tr);
+	UTIL_TraceLine(vecSrc, vecSrc + vecAiming * 128, dont_ignore_monsters, m_pPlayer->edict(), &tr);
 
 	int flags;
 #ifdef CLIENT_WEAPONS

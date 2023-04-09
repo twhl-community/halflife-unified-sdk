@@ -704,7 +704,7 @@ bool CBaseMonster::CineCleanup()
 			pev->origin.z += 1;
 
 			pev->flags |= FL_ONGROUND;
-			int drop = DROP_TO_FLOOR(ENT(pev));
+			int drop = DROP_TO_FLOOR(edict());
 
 			// Origin in solid?  Set to org at the end of the sequence
 			if (drop < 0)

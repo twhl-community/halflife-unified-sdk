@@ -218,7 +218,7 @@ bool CBarney::CheckRangeAttack1(float flDot, float flDist)
 			Vector shootOrigin = pev->origin + Vector(0, 0, 55);
 			CBaseEntity* pEnemy = m_hEnemy;
 			Vector shootTarget = ((pEnemy->BodyTarget(shootOrigin) - pEnemy->pev->origin) + m_vecEnemyLKP);
-			UTIL_TraceLine(shootOrigin, shootTarget, dont_ignore_monsters, ENT(pev), &tr);
+			UTIL_TraceLine(shootOrigin, shootTarget, dont_ignore_monsters, edict(), &tr);
 			m_checkAttackTime = gpGlobals->time + 1;
 			if (tr.flFraction == 1.0 || (tr.pHit != nullptr && CBaseEntity::Instance(tr.pHit) == pEnemy))
 				m_lastAttackCheck = true;

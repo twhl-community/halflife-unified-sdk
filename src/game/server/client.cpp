@@ -421,14 +421,14 @@ void Host_Say(CBasePlayer* player, bool teamonly)
 			if (!client->IsObserver())
 				continue;
 
-		MESSAGE_BEGIN(MSG_ONE, gmsgSayText, nullptr, client->pev);
+		MESSAGE_BEGIN(MSG_ONE, gmsgSayText, nullptr, client->edict());
 		WRITE_BYTE(player->entindex());
 		WRITE_STRING(text);
 		MESSAGE_END();
 	}
 
 	// print to the sending client
-	MESSAGE_BEGIN(MSG_ONE, gmsgSayText, nullptr, player->pev);
+	MESSAGE_BEGIN(MSG_ONE, gmsgSayText, nullptr, player->edict());
 	WRITE_BYTE(player->entindex());
 	WRITE_STRING(text);
 	MESSAGE_END();
