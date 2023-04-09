@@ -305,7 +305,7 @@ void CBreakable::Precache()
 	m_idShard = PrecacheModel(pGibName);
 
 	// Only allow items to be spawned.
-	if (!g_ItemDictionary->Find(STRING(m_iszSpawnObject)))
+	if (!FStringNull(m_iszSpawnObject) && !g_ItemDictionary->Find(STRING(m_iszSpawnObject)))
 	{
 		Logger->error("{}:{}:{}: Cannot spawn entity \"{}\": not an item",
 			GetClassname(), entindex(), GetTargetname(), STRING(m_iszSpawnObject));
