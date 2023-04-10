@@ -26,7 +26,6 @@
 #include "ConCommandSystem.h"
 #include "GameLibrary.h"
 #include "JSONSystem.h"
-#include "config/ConditionEvaluator.h"
 
 using namespace std::literals;
 
@@ -41,28 +40,13 @@ static std::string GetSkillConfigSchema()
 {{
 	"$schema": "http://json-schema.org/draft-07/schema#",
 	"title": "Skill System Configuration",
-	"type": "array",
-	"items": {{
-		"type": "object",
-		"properties": {{
-			"Description": {{
-				"type": "string"
-			}},
-			"Condition": {{
-				"type": "string"
-			}},
-			"Variables": {{
-				"type": "object",
-				"patternProperties": {{
-					"{}": {{
-						"type": "number"
-					}}
-				}},
-				"additionalProperties": false
-			}}
-		}},
-		"required": ["Variables"]
-	}}
+	"type": "object",
+	"patternProperties": {{
+		"{}": {{
+			"type": "number"
+		}}
+	}},
+	"additionalProperties": false
 }}
 )",
 		SkillVariableNameRegexPattern);
@@ -281,98 +265,38 @@ void SkillSystem::RemoveValue(std::string_view name)
 
 bool SkillSystem::ParseConfiguration(const json& input)
 {
-	if (!input.is_array())
+	if (!input.is_object())
 	{
 		return false;
 	}
 
-	// Apply each section in order of occurrence.
-	for (const auto& section : input)
+	for (const auto& item : input.items())
 	{
-		if (!section.is_object())
+		const json value = item.value();
+
+		if (!value.is_number())
+		{
+			// Already validated by schema.
+			continue;
+		}
+
+		// Get the skill variable base name and skill level.
+		const auto maybeVariableName = TryParseSkillVariableName(item.key(), *m_Logger);
+
+		if (!maybeVariableName.has_value())
 		{
 			continue;
 		}
 
-		if (m_Logger->should_log(spdlog::level::trace))
+		const auto& variableName = maybeVariableName.value();
+
+		const auto valueFloat = value.get<float>();
+
+		const auto& skillLevel = std::get<1>(variableName);
+
+		if (!skillLevel.has_value() || skillLevel.value() == GetSkillLevel())
 		{
-			const auto description = section.value<std::string>("Description", "Skill configuration section");
-
-			m_Logger->trace("Processing section \"{}\"", description);
-		}
-
-		if (const auto it = section.find("Condition"); it != section.end())
-		{
-			// Evaluate condition to determine whether to apply this section.
-
-			if (!it->is_string())
-			{
-				continue;
-			}
-
-			const auto result = g_ConditionEvaluator.Evaluate(it->get<std::string>());
-
-			if (!result.has_value())
-			{
-				m_Logger->error("Error evaluating condition");
-				continue;
-			}
-
-			if (!result.value())
-			{
-				m_Logger->debug("Skipping section because condition evaluated false");
-				continue;
-			}
-
-			m_Logger->debug("Applying section because condition evaluated true");
-		}
-		else
-		{
-			m_Logger->debug("Applying section unconditionally");
-		}
-
-		const auto it = section.find("Variables");
-
-		if (it == section.end())
-		{
-			continue;
-		}
-
-		const auto& variables = *it;
-
-		if (!variables.is_object())
-		{
-			continue;
-		}
-
-		for (const auto& item : variables.items())
-		{
-			const json value = item.value();
-
-			if (!value.is_number())
-			{
-				// Already validated by schema.
-				continue;
-			}
-
-			// Get the skill variable base name and skill level.
-			const auto maybeVariableName = TryParseSkillVariableName(item.key(), *m_Logger);
-
-			if (!maybeVariableName.has_value())
-			{
-				continue;
-			}
-
-			const auto& variableName = maybeVariableName.value();
-
-			const auto valueFloat = value.get<float>();
-
-			const auto& skillLevel = std::get<1>(variableName);
-
-			if (!skillLevel.has_value() || skillLevel.value() == GetSkillLevel())
-			{
-				SetValue(std::get<0>(variableName), valueFloat);
-			}
+			SetValue(std::get<0>(variableName), valueFloat);
 		}
 	}
 
