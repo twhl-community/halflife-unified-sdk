@@ -465,14 +465,94 @@ void CPlayerHasSuit::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE
 	{
 		if (!FStringNull(m_PassTarget))
 		{
-			FireTargets(STRING(m_PassTarget), pActivator, pCaller, USE_TOGGLE, 0);
+			FireTargets(STRING(m_PassTarget), pActivator, this, USE_TOGGLE, 0);
 		}
 	}
 	else
 	{
 		if (!FStringNull(m_FailTarget))
 		{
-			FireTargets(STRING(m_FailTarget), pActivator, pCaller, USE_TOGGLE, 0);
+			FireTargets(STRING(m_FailTarget), pActivator, this, USE_TOGGLE, 0);
 		}
 	}
 }
+
+class CPlayerHasWeapon : public CPointEntity
+{
+	DECLARE_CLASS(CPlayerHasWeapon, CPointEntity);
+	DECLARE_DATAMAP();
+
+public:
+	bool KeyValue(KeyValueData* pkvd) override;
+	void Spawn() override;
+
+	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+
+private:
+	string_t m_PassTarget;
+	string_t m_FailTarget;
+	string_t m_WeaponName;
+};
+
+LINK_ENTITY_TO_CLASS(player_hasweapon, CPlayerHasWeapon);
+
+BEGIN_DATAMAP(CPlayerHasWeapon)
+DEFINE_FIELD(m_PassTarget, FIELD_STRING),
+	DEFINE_FIELD(m_FailTarget, FIELD_STRING),
+	DEFINE_FIELD(m_WeaponName, FIELD_STRING),
+	END_DATAMAP();
+
+bool CPlayerHasWeapon::KeyValue(KeyValueData* pkvd)
+{
+	if (FStrEq(pkvd->szKeyName, "pass_target"))
+	{
+		m_PassTarget = ALLOC_STRING(pkvd->szValue);
+		return true;
+	}
+	else if (FStrEq(pkvd->szKeyName, "fail_target"))
+	{
+		m_FailTarget = ALLOC_STRING(pkvd->szValue);
+		return true;
+	}
+	else if (FStrEq(pkvd->szKeyName, "weapon_name"))
+	{
+		m_WeaponName = ALLOC_STRING(pkvd->szValue);
+		return true;
+	}
+
+	return BaseClass::KeyValue(pkvd);
+}
+
+void CPlayerHasWeapon::Spawn()
+{
+	if (FStringNull(m_WeaponName))
+	{
+		Logger->warn("{}:{}:{}: No weapon name set", GetClassname(), entindex(), GetTargetname());
+	}
+}
+
+void CPlayerHasWeapon::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
+{
+	auto player = ToBasePlayer(pActivator);
+
+	if (!player)
+	{
+		return;
+	}
+
+	if (player->HasNamedPlayerWeapon(STRING(m_WeaponName)))
+	{
+		if (!FStringNull(m_PassTarget))
+		{
+			FireTargets(STRING(m_PassTarget), pActivator, this, USE_TOGGLE, 0);
+		}
+	}
+	else
+	{
+		if (!FStringNull(m_FailTarget))
+		{
+			FireTargets(STRING(m_FailTarget), pActivator, this, USE_TOGGLE, 0);
+		}
+	}
+}
+
