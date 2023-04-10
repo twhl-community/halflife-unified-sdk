@@ -12,9 +12,6 @@
  *   without written permission from Valve LLC.
  *
  ****/
-//=========================================================
-// skill.h - skill level concerns
-//=========================================================
 
 #pragma once
 
@@ -48,6 +45,9 @@ constexpr bool IsValidSkillLevel(SkillLevel skillLevel)
 	return skillLevel >= SkillLevel::Easy && skillLevel <= SkillLevel::Hard;
 }
 
+/**
+ *	@brief Loads skill variables from files and provides a means of looking them up.
+ */
 class SkillSystem final : public IGameSystem
 {
 private:

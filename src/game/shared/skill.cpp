@@ -12,9 +12,6 @@
  *   without written permission from Valve LLC.
  *
  ****/
-//=========================================================
-// skill.cpp - code for skill level concerns
-//=========================================================
 
 #include <algorithm>
 #include <cctype>

@@ -33,10 +33,6 @@ DEFINE_DUMMY_DATAMAP(CBasePlayer);
 BEGIN_CUSTOM_SCHEDULES_NOBASE(CBaseMonster)
 END_CUSTOM_SCHEDULES();
 
-bool SkillSystem::Initialize() { return true; }
-void SkillSystem::Shutdown() {}
-float SkillSystem::GetValue(std::string_view) const { return 0; }
-
 // CBaseEntity Stubs
 void CBaseEntity::SetOrigin(const Vector& origin)
 {

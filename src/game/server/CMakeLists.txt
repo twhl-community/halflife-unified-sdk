@@ -47,8 +47,6 @@ target_sources(server PRIVATE
 	ServerConfigContext.h
 	ServerLibrary.cpp
 	ServerLibrary.h
-	skill.cpp
-	skill.h
 	UserMessages.cpp
 	UserMessages.h
 	util.cpp
