@@ -53,7 +53,7 @@ inline globalvars_t* gpGlobals = nullptr;
 edict_t* UTIL_GetEntityList();
 
 /**
- *	@brief Gets the local player in singleplayer, or @c nullptr in multiplayer.
+ *	@brief Gets the local player in singleplayer, or the first player on the server in multiplayer.
  */
 CBasePlayer* UTIL_GetLocalPlayer();
 

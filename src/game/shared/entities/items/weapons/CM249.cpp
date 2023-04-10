@@ -245,7 +245,7 @@ void CM249::PrimaryAttack()
 	if (vecInvPushDir.z >= 10.0)
 		flNewZVel = vecInvPushDir.z;
 
-	if (!g_pGameRules->IsDeathmatch())
+	if (!g_pGameRules->IsMultiplayer())
 	{
 		m_pPlayer->pev->velocity = m_pPlayer->pev->velocity - vecInvPushDir;
 

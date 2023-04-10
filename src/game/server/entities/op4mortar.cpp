@@ -391,6 +391,9 @@ void COp4Mortar::Spawn()
 
 	m_vGunAngle = g_vecZero;
 
+	// Set the eye height to roughly the center of the model so the entity can find enemies in PVS.
+	pev->view_ofs = {0, 0, 64};
+
 	m_lastupdate = gpGlobals->time;
 
 	m_zeroYaw = UTIL_AngleMod(pev->angles.y + 180.0);
@@ -580,7 +583,7 @@ void COp4Mortar::AIUpdatePosition()
 
 CBaseEntity* COp4Mortar::FindTarget()
 {
-	auto pPlayerTarget = UTIL_GetLocalPlayer();
+	auto pPlayerTarget = UTIL_FindClientInPVS(this);
 
 	if (!pPlayerTarget)
 		return pPlayerTarget;

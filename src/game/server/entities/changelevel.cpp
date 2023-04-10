@@ -204,26 +204,29 @@ void CChangeLevel::ChangeLevelNow(CBaseEntity* pActivator)
 
 	pev->dmgtime = gpGlobals->time;
 
-
-	CBaseEntity* pPlayer = UTIL_GetLocalPlayer();
-	if (!InTransitionVolume(pPlayer, m_szLandmarkName))
+	// This only works as intended in singleplayer.
+	if (!g_pGameRules->IsMultiplayer())
 	{
-		Logger->debug("Player isn't in the transition volume {}, aborting", m_szLandmarkName);
-		return;
-	}
-
-	// Create an entity to fire the changetarget
-	if (!FStringNull(m_changeTarget))
-	{
-		CFireAndDie* pFireAndDie = g_EntityDictionary->Create<CFireAndDie>("fireanddie");
-		if (pFireAndDie)
+		CBaseEntity* pPlayer = UTIL_GetLocalPlayer();
+		if (!InTransitionVolume(pPlayer, m_szLandmarkName))
 		{
-			// Set target and delay
-			pFireAndDie->pev->target = m_changeTarget;
-			pFireAndDie->m_flDelay = m_changeTargetDelay;
-			pFireAndDie->pev->origin = pPlayer->pev->origin;
-			// Call spawn
-			DispatchSpawn(pFireAndDie->edict());
+			Logger->debug("Player isn't in the transition volume {}, aborting", m_szLandmarkName);
+			return;
+		}
+
+		// Create an entity to fire the changetarget
+		if (!FStringNull(m_changeTarget))
+		{
+			CFireAndDie* pFireAndDie = g_EntityDictionary->Create<CFireAndDie>("fireanddie");
+			if (pFireAndDie)
+			{
+				// Set target and delay
+				pFireAndDie->pev->target = m_changeTarget;
+				pFireAndDie->m_flDelay = m_changeTargetDelay;
+				pFireAndDie->pev->origin = pPlayer->pev->origin;
+				// Call spawn
+				DispatchSpawn(pFireAndDie->edict());
+			}
 		}
 	}
 
@@ -417,7 +420,7 @@ LINK_ENTITY_TO_CLASS(trigger_autosave, CTriggerSave);
 
 void CTriggerSave::Spawn()
 {
-	if (g_pGameRules->IsDeathmatch())
+	if (g_pGameRules->IsMultiplayer())
 	{
 		REMOVE_ENTITY(edict());
 		return;
@@ -479,7 +482,7 @@ void CTriggerEndSection::EndSectionUse(CBaseEntity* pActivator, CBaseEntity* pCa
 
 void CTriggerEndSection::Spawn()
 {
-	if (g_pGameRules->IsDeathmatch())
+	if (g_pGameRules->IsMultiplayer())
 	{
 		REMOVE_ENTITY(edict());
 		return;
@@ -604,7 +607,7 @@ void CRevertSaved::MessageThink()
 
 void CRevertSaved::LoadThink()
 {
-	if (0 == gpGlobals->deathmatch)
+	if (!g_pGameRules->IsMultiplayer())
 	{
 		SERVER_COMMAND("reload\n");
 	}

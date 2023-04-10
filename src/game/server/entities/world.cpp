@@ -108,7 +108,7 @@ LINK_ENTITY_TO_CLASS(infodecal, CDecal);
 // UNDONE:  These won't get sent to joining players in multi-player
 void CDecal::Spawn()
 {
-	if (pev->skin < 0 || (0 != gpGlobals->deathmatch && FBitSet(pev->spawnflags, SF_DECAL_NOTINDEATHMATCH)))
+	if (pev->skin < 0 || (g_pGameRules->IsMultiplayer() && FBitSet(pev->spawnflags, SF_DECAL_NOTINDEATHMATCH)))
 	{
 		REMOVE_ENTITY(edict());
 		return;

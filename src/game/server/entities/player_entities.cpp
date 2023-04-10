@@ -149,7 +149,7 @@ void CPlayerSetSuitLightType::Use(CBaseEntity* pActivator, CBaseEntity* pCaller,
 	{
 		CBasePlayer* player = ToBasePlayer(pActivator);
 
-		if (!player && !g_pGameRules->IsDeathmatch())
+		if (!player && !g_pGameRules->IsMultiplayer())
 		{
 			player = UTIL_GetLocalPlayer();
 		}
@@ -275,7 +275,7 @@ void CStripWeapons::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE 
 	{
 		CBasePlayer* player = ToBasePlayer(pActivator);
 
-		if (!player && !g_pGameRules->IsDeathmatch())
+		if (!player && !g_pGameRules->IsMultiplayer())
 		{
 			player = UTIL_GetLocalPlayer();
 		}

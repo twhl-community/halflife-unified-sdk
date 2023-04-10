@@ -126,7 +126,7 @@ static CBaseEntity* EntTrySelectSpawnPoint(CBasePlayer* pPlayer)
 		if (!FNullEnt(pSpot))
 			return pSpot;
 	}
-	else if (g_pGameRules->IsDeathmatch())
+	else if (g_pGameRules->IsMultiplayer())
 	{
 		pSpot = g_pLastSpawn;
 		// Randomize the start spot

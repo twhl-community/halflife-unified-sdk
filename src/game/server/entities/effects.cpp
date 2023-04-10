@@ -1607,14 +1607,13 @@ Vector CBlood::BloodPosition(CBaseEntity* pActivator)
 {
 	if ((pev->spawnflags & SF_BLOOD_PLAYER) != 0)
 	{
-		CBaseEntity* pPlayer;
+		CBasePlayer* pPlayer = ToBasePlayer(pActivator);
 
-		if (pActivator && pActivator->IsPlayer())
+		if (!pPlayer && !g_pGameRules->IsMultiplayer())
 		{
-			pPlayer = pActivator;
-		}
-		else
 			pPlayer = UTIL_GetLocalPlayer();
+		}
+
 		if (pPlayer)
 			return (pPlayer->pev->origin + pPlayer->pev->view_ofs) + Vector(RANDOM_FLOAT(-10, 10), RANDOM_FLOAT(-10, 10), RANDOM_FLOAT(-10, 10));
 	}
@@ -1869,18 +1868,16 @@ bool CMessage::KeyValue(KeyValueData* pkvd)
 
 void CMessage::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
-	CBaseEntity* pPlayer = nullptr;
-
 	if ((pev->spawnflags & SF_MESSAGE_ALL) != 0)
 		UTIL_ShowMessageAll(STRING(pev->message));
 	else
 	{
-		if (pActivator && pActivator->IsPlayer())
-			pPlayer = pActivator;
-		else
+		CBasePlayer* pPlayer = ToBasePlayer(pActivator);
+		if (!pPlayer  && !g_pGameRules->IsMultiplayer())
 		{
 			pPlayer = UTIL_GetLocalPlayer();
 		}
+
 		if (pPlayer)
 			UTIL_ShowMessage(STRING(pev->message), pPlayer);
 	}

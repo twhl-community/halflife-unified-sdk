@@ -4428,7 +4428,7 @@ Vector CBasePlayer::AutoaimDeflection(const Vector& vecSrc, float flDist, float 
 		// don't shoot at friends
 		if (IRelationship(pEntity) < 0)
 		{
-			if (!pEntity->IsPlayer() && !g_pGameRules->IsDeathmatch())
+			if (!pEntity->IsPlayer() && !g_pGameRules->IsMultiplayer())
 				// Logger->debug("friend");
 				continue;
 		}

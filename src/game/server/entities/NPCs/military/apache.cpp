@@ -658,11 +658,9 @@ void CApache::Flight()
 
 		m_iSoundState = SND_CHANGE_PITCH; // hack for going through level transitions
 	}
-	else
+	else if (!g_pGameRules->IsMultiplayer())
 	{
-		CBaseEntity* pPlayer = nullptr;
-
-		pPlayer = UTIL_GetLocalPlayer();
+		CBaseEntity* pPlayer = UTIL_GetLocalPlayer();
 		// UNDONE: this needs to send different sounds to every player for multiplayer.
 		if (pPlayer)
 		{

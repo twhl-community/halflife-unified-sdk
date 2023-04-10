@@ -1010,15 +1010,9 @@ void CBaseMonster::StartTask(const Task_t* pTask)
 	break;
 	case TASK_GET_PATH_TO_SPOT:
 	{
-		CBaseEntity* pPlayer = UTIL_GetLocalPlayer();
+		CBaseEntity* pPlayer = UTIL_FindNearestPlayer(EyePosition());
 
-		// Fall back to using the world if no player exists (Matches original behavior).
-		if (!pPlayer)
-		{
-			pPlayer = World;
-		}
-
-		if (BuildRoute(m_vecMoveGoal, bits_MF_TO_LOCATION, pPlayer))
+		if (pPlayer && BuildRoute(m_vecMoveGoal, bits_MF_TO_LOCATION, pPlayer))
 		{
 			TaskComplete();
 		}

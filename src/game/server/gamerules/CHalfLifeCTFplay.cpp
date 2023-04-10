@@ -91,7 +91,7 @@ const char* GetTeamName(CBasePlayer* pEntity)
 	else
 	{
 		// A bit counterintuitive, this basically means each player model is a team
-		if (g_pGameRules->IsDeathmatch() && g_pGameRules->IsTeamplay())
+		if (g_pGameRules->IsMultiplayer() && g_pGameRules->IsTeamplay())
 		{
 			return g_engfuncs.pfnInfoKeyValue(g_engfuncs.pfnGetInfoKeyBuffer(pEntity->edict()), "model");
 		}

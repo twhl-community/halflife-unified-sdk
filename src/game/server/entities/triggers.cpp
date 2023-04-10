@@ -1325,7 +1325,10 @@ void CTriggerCamera::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE
 	}
 	if (!pActivator || !pActivator->IsPlayer())
 	{
-		pActivator = UTIL_GetLocalPlayer();
+		if (!g_pGameRules->IsMultiplayer())
+		{
+			pActivator = UTIL_GetLocalPlayer();
+		}
 
 		if (!pActivator)
 		{
@@ -1333,7 +1336,7 @@ void CTriggerCamera::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE
 		}
 	}
 
-	auto player = static_cast<CBasePlayer*>(pActivator);
+	auto player = ToBasePlayer(pActivator);
 
 	m_hPlayer = player;
 
@@ -1530,65 +1533,63 @@ class CTriggerPlayerFreeze : public CBaseDelay
 	DECLARE_DATAMAP();
 
 public:
-	void PostRestore() override;
-
-	void Spawn() override;
+	bool KeyValue(KeyValueData* pkvd) override;
 
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
-	void PlayerFreezeDelay();
-
 public:
-	bool m_bUnFrozen;
+	bool m_AllPlayers = false;
+	bool m_bUnFrozen = true;
 };
 
 BEGIN_DATAMAP(CTriggerPlayerFreeze)
-DEFINE_FIELD(m_bUnFrozen, FIELD_BOOLEAN),
-	DEFINE_FUNCTION(PlayerFreezeDelay),
+DEFINE_FIELD(m_AllPlayers, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_bUnFrozen, FIELD_BOOLEAN),
 	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(trigger_playerfreeze, CTriggerPlayerFreeze);
 
-void CTriggerPlayerFreeze::PostRestore()
+bool CTriggerPlayerFreeze::KeyValue(KeyValueData* pkvd)
 {
-	if (!m_bUnFrozen)
+	if (FStrEq(pkvd->szKeyName, "all_players"))
 	{
-		SetThink(&CTriggerPlayerFreeze::PlayerFreezeDelay);
-		pev->nextthink = gpGlobals->time + 0.5;
+		m_AllPlayers = atoi(pkvd->szValue) != 0;
+		return true;
 	}
-}
 
-void CTriggerPlayerFreeze::Spawn()
-{
-	if (g_pGameRules->IsDeathmatch())
-		REMOVE_ENTITY(edict());
-	else
-		m_bUnFrozen = true;
+	return BaseClass::KeyValue(pkvd);
 }
 
 void CTriggerPlayerFreeze::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
 	m_bUnFrozen = !m_bUnFrozen;
 
-	// TODO: not made for multiplayer
-	auto pPlayer = UTIL_GetLocalPlayer();
-
-	if (!pPlayer)
+	const auto executor = [this](CBasePlayer* player)
 	{
-		return;
-	}
-
-	pPlayer->EnableControl(m_bUnFrozen);
-}
-
-void CTriggerPlayerFreeze::PlayerFreezeDelay()
-{
-	auto player = static_cast<CBasePlayer*>(UTIL_PlayerByIndex(1));
-
-	if (player)
 		player->EnableControl(m_bUnFrozen);
+	};
 
-	SetThink(nullptr);
+	if (m_AllPlayers)
+	{
+		for (auto player : UTIL_FindPlayers())
+		{
+			executor(player);
+		}
+	}
+	else
+	{
+		CBasePlayer* player = ToBasePlayer(pActivator);
+
+		if (!player && !g_pGameRules->IsMultiplayer())
+		{
+			player = UTIL_GetLocalPlayer();
+		}
+
+		if (player)
+		{
+			executor(player);
+		}
+	}
 }
 
 /**

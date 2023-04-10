@@ -450,7 +450,7 @@ void CTalkMonster::RunTask(const Task_t* pTask)
 	case TASK_TLK_LOOK_AT_CLIENT:
 	{
 		// Get edict for one player
-		CBaseEntity* pPlayer = UTIL_GetLocalPlayer();
+		CBaseEntity* pPlayer = UTIL_FindNearestPlayer(EyePosition());
 
 		// track head to the client for a while.
 		if (pPlayer &&
@@ -494,7 +494,7 @@ void CTalkMonster::RunTask(const Task_t* pTask)
 	case TASK_FACE_PLAYER:
 	{
 		// Get edict for one player
-		CBaseEntity* pPlayer = UTIL_GetLocalPlayer();
+		CBaseEntity* pPlayer = UTIL_FindNearestPlayer(EyePosition());
 
 		if (pPlayer)
 		{
@@ -1100,7 +1100,7 @@ const Schedule_t* CTalkMonster::GetScheduleOfType(int Type)
 
 		if (!IsTalking() && HasConditions(bits_COND_SEE_CLIENT) && RANDOM_LONG(0, 6) == 0)
 		{
-			CBaseEntity* pPlayer = UTIL_GetLocalPlayer();
+			CBaseEntity* pPlayer = UTIL_FindNearestPlayer(EyePosition());
 
 			if (pPlayer)
 			{

@@ -118,7 +118,7 @@ void ClientDisconnect(edict_t* pEntity)
 // called by ClientKill and DeadThink
 void respawn(CBasePlayer* player, bool fCopyCorpse)
 {
-	if (0 != gpGlobals->coop || 0 != gpGlobals->deathmatch)
+	if (g_pGameRules->IsMultiplayer())
 	{
 		if (fCopyCorpse)
 		{
