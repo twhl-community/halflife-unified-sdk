@@ -50,14 +50,6 @@
 #include "sound/ServerSoundSystem.h"
 
 cvar_t servercfgfile = {"sv_servercfgfile", "cfg/server/server.json", FCVAR_NOEXTRAWHITEPACE | FCVAR_ISPATH};
-cvar_t mapchangecfgfile = {"sv_mapchangecfgfile", "", FCVAR_NOEXTRAWHITEPACE | FCVAR_ISPATH};
-
-template <typename DataContext>
-static void AddCommonConfigSections(std::vector<std::unique_ptr<const GameConfigSection<DataContext>>>& sections)
-{
-	// Always add this
-	sections.push_back(std::make_unique<EchoSection<DataContext>>());
-}
 
 ServerLibrary::ServerLibrary() = default;
 ServerLibrary::~ServerLibrary() = default;
@@ -90,7 +82,6 @@ bool ServerLibrary::Initialize()
 	SV_CreateClientCommands();
 
 	g_engfuncs.pfnCVarRegister(&servercfgfile);
-	g_engfuncs.pfnCVarRegister(&mapchangecfgfile);
 
 	RegisterCommandWhitelistSchema();
 
@@ -105,7 +96,6 @@ bool ServerLibrary::Initialize()
 void ServerLibrary::Shutdown()
 {
 	m_MapConfigDefinition.reset();
-	m_MapChangeConfigDefinition.reset();
 	m_ServerConfigDefinition.reset();
 
 	CVoiceGameMgr::Logger.reset();
@@ -258,8 +248,6 @@ void ServerLibrary::PreMapActivate()
 
 void ServerLibrary::PostMapActivate()
 {
-	LoadMapChangeConfigFile();
-
 	if (!g_NetworkData.GenerateNetworkDataFile())
 	{
 		ShutdownServer("Shutting down server due to fatal error writing network data file");
@@ -319,25 +307,13 @@ void ServerLibrary::SetEntLogLevels(spdlog::level::level_enum level)
 
 void ServerLibrary::CreateConfigDefinitions()
 {
-	const auto addMapAndServerSections = [](std::vector<std::unique_ptr<const GameConfigSection<ServerConfigContext>>>& sections)
-	{
-		sections.push_back(std::make_unique<SentencesSection>());
-		sections.push_back(std::make_unique<MaterialsSection>());
-		sections.push_back(std::make_unique<SkillSection>());
-		sections.push_back(std::make_unique<GlobalModelReplacementSection>());
-		sections.push_back(std::make_unique<GlobalSentenceReplacementSection>());
-		sections.push_back(std::make_unique<GlobalSoundReplacementSection>());
-		sections.push_back(std::make_unique<HudColorSection>());
-		sections.push_back(std::make_unique<SuitLightTypeSection>());
-	};
-
 	m_ServerConfigDefinition = g_GameConfigSystem.CreateDefinition("ServerGameConfig", [&]()
 		{
 			std::vector<std::unique_ptr<const GameConfigSection<ServerConfigContext>>> sections;
 
-			AddCommonConfigSections(sections);
+			// Server configs only get common and command sections. All other configuration is handled elsewhere.
+			sections.push_back(std::make_unique<EchoSection<ServerConfigContext>>());
 			sections.push_back(std::make_unique<CommandsSection<ServerConfigContext>>());
-			addMapAndServerSections(sections);
 
 			return sections; }());
 
@@ -345,19 +321,16 @@ void ServerLibrary::CreateConfigDefinitions()
 		{
 			std::vector<std::unique_ptr<const GameConfigSection<ServerConfigContext>>> sections;
 
-			AddCommonConfigSections(sections);
+			sections.push_back(std::make_unique<EchoSection<ServerConfigContext>>());
 			sections.push_back(std::make_unique<CommandsSection<ServerConfigContext>>(&g_CommandWhitelist));
-			addMapAndServerSections(sections);
-
-			return sections; }());
-
-	m_MapChangeConfigDefinition = g_GameConfigSystem.CreateDefinition("MapChangeGameConfig", []()
-		{
-			std::vector<std::unique_ptr<const GameConfigSection<ServerConfigContext>>> sections;
-
-			//Limit the map change config to commands only, configuration should be handled by other cfg files
-			AddCommonConfigSections(sections);
-			sections.push_back(std::make_unique<CommandsSection<ServerConfigContext>>());
+			sections.push_back(std::make_unique<SentencesSection>());
+			sections.push_back(std::make_unique<MaterialsSection>());
+			sections.push_back(std::make_unique<SkillSection>());
+			sections.push_back(std::make_unique<GlobalModelReplacementSection>());
+			sections.push_back(std::make_unique<GlobalSentenceReplacementSection>());
+			sections.push_back(std::make_unique<GlobalSoundReplacementSection>());
+			sections.push_back(std::make_unique<HudColorSection>());
+			sections.push_back(std::make_unique<SuitLightTypeSection>());
 
 			return sections; }());
 }
@@ -384,6 +357,16 @@ void ServerLibrary::LoadServerConfigFiles()
 	const auto start = std::chrono::high_resolution_clock::now();
 
 	ServerConfigContext context{.State = m_MapState};
+
+	// Initialize file lists to their defaults.
+	context.SentencesFiles.push_back("sound/sentences.txt");
+	context.MaterialsFiles.push_back("sound/materials.json");
+	context.SkillFiles.push_back("cfg/skill.json");
+
+	if (gpGlobals->maxClients > 1)
+	{
+		context.SkillFiles.push_back("cfg/skill_multiplayer.json");
+	}
 
 	if (const auto cfgFile = servercfgfile.string; cfgFile && '\0' != cfgFile[0])
 	{
@@ -414,15 +397,4 @@ void ServerLibrary::LoadServerConfigFiles()
 
 	g_GameLogger->trace("Server configurations loaded in {}ms",
 		std::chrono::duration_cast<std::chrono::milliseconds>(timeElapsed).count());
-}
-
-void ServerLibrary::LoadMapChangeConfigFile()
-{
-	ServerConfigContext context{.State = m_MapState};
-
-	if (const auto cfgFile = mapchangecfgfile.string; cfgFile && '\0' != cfgFile[0])
-	{
-		g_GameLogger->trace("Loading map change config file");
-		m_MapChangeConfigDefinition->TryLoad(cfgFile, {.Data = context, .PathID = "GAMECONFIG"});
-	}
 }

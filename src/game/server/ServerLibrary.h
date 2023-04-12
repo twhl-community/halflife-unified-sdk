@@ -108,8 +108,6 @@ private:
 
 	void LoadServerConfigFiles();
 
-	void LoadMapChangeConfigFile();
-
 private:
 	cvar_t* m_AllowDownload{};
 	cvar_t* m_SendResources{};
@@ -117,7 +115,6 @@ private:
 
 	std::shared_ptr<const GameConfigDefinition<ServerConfigContext>> m_ServerConfigDefinition;
 	std::shared_ptr<const GameConfigDefinition<ServerConfigContext>> m_MapConfigDefinition;
-	std::shared_ptr<const GameConfigDefinition<ServerConfigContext>> m_MapChangeConfigDefinition;
 
 	bool m_IsStartingNewMap = true;
 	bool m_IsCurrentMapLoadedFromSaveGame = false;
