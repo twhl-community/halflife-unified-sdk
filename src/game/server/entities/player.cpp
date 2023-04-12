@@ -3306,9 +3306,6 @@ void CBasePlayer::ImpulseCommands()
 {
 	TraceResult tr; // UNDONE: kill me! This is temporary for PreAlpha CDs
 
-	// Handle use events
-	PlayerUse();
-
 	int iImpulse = pev->impulse;
 	switch (iImpulse)
 	{
@@ -3774,7 +3771,15 @@ void CBasePlayer::ItemPostFrame()
 	if (m_pTank != nullptr)
 		return;
 
-	if (m_flNextAttack > UTIL_WeaponTimeBase())
+	const bool canUseItem = m_flNextAttack <= UTIL_WeaponTimeBase();
+
+	if (canUseItem || GetSkillFloat("allow_use_while_busy"))
+	{
+		// Handle use events
+		PlayerUse();
+	}
+
+	if (!canUseItem)
 	{
 		return;
 	}
