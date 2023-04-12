@@ -20,12 +20,20 @@
 #include <regex>
 #include <tuple>
 
+#include <EASTL/fixed_vector.h>
+
 #include "cbase.h"
 #include "skill.h"
 
 #include "ConCommandSystem.h"
 #include "GameLibrary.h"
 #include "JSONSystem.h"
+
+#ifndef CLIENT_DLL
+#include "UserMessages.h"
+#else
+#include "networking/ClientUserMessages.h"
+#endif
 
 using namespace std::literals;
 
@@ -92,20 +100,45 @@ bool SkillSystem::Initialize()
 
 	g_JSON.RegisterSchema(SkillConfigSchemaName, &GetSkillConfigSchema);
 
+	g_NetworkData.RegisterHandler("Skill", this);
+
+#ifndef CLIENT_DLL
 	g_ConCommands.CreateCommand(
 		"sk_find", [this](const auto& args)
 		{
-			if (args.Count() != 2)
+			if (args.Count() < 2)
 			{
-				Con_Printf("Usage: %s <search_term>\nUse * to list all keys\n", args.Argument(0));
+				Con_Printf("Usage: %s <search_term> [filter]\nUse * to list all keys\nFilters: networkedonly, all\n", args.Argument(0));
 				return;
 			}
 
 			const std::string_view searchTerm{args.Argument(1)};
 
-			const auto printer = [](const SkillVariable& variable)
+			bool networkedOnly = false;
+
+			if (args.Count() >= 3)
 			{
-				Con_Printf("%s = %.2f\n", variable.Name.c_str(), variable.Value);
+				if (FStrEq("networkedonly", args.Argument(2)))
+				{
+					networkedOnly = true;
+				}
+				else if (!FStrEq("all", args.Argument(2)))
+				{
+					Con_Printf("Unknown filter option\n");
+					return;
+				}
+			}
+
+			const auto printer = [=](const SkillVariable& variable)
+			{
+				if (networkedOnly && variable.NetworkIndex == NotNetworkedIndex)
+				{
+					return;
+				}
+
+				Con_Printf("%s = %.2f%s\n",
+					variable.Name.c_str(), variable.CurrentValue,
+					variable.NetworkIndex != NotNetworkedIndex ? " (Networked)"  : "");
 			};
 
 			//TODO: maybe replace this with proper wildcard searching at some point.
@@ -152,31 +185,9 @@ bool SkillSystem::Initialize()
 
 			SetValue(name, value); },
 		CommandLibraryPrefix::No);
-
-	g_ConCommands.CreateCommand(
-		"sk_remove", [this](const auto& args)
-		{
-			if (args.Count() != 2)
-			{
-				Con_Printf("Usage: %s <name>\n", args.Argument(0));
-				return;
-			}
-
-			RemoveValue(args.Argument(1)); },
-		CommandLibraryPrefix::No);
-
-	// Don't name this sk_remove_all because the console will always autocomplete sk_remove to that.
-	g_ConCommands.CreateCommand(
-		"sk_reset", [this](const auto& args)
-		{
-			if (args.Count() != 1)
-			{
-				Con_Printf("Usage: %s\n", args.Argument(0));
-				return;
-			}
-
-			m_SkillVariables.clear(); },
-		CommandLibraryPrefix::No);
+#else
+	g_ClientUserMessages.RegisterHandler("SkillVars", &SkillSystem::MsgFunc_SkillVars, this);
+#endif
 
 	return true;
 }
@@ -184,6 +195,59 @@ bool SkillSystem::Initialize()
 void SkillSystem::Shutdown()
 {
 	m_Logger.reset();
+}
+
+void SkillSystem::HandleNetworkDataBlock(NetworkDataBlock& block)
+{
+	if (block.Mode == NetworkDataMode::Serialize)
+	{
+		eastl::fixed_string<SkillVariable*, MaxNetworkedVariables> variables;
+
+		for (auto& variable : m_SkillVariables)
+		{
+			if (variable.NetworkIndex != NotNetworkedIndex)
+			{
+				variables.push_back(&variable);
+			}
+		}
+
+		std::sort(variables.begin(), variables.end(), [](const auto lhs, const auto rhs)
+			{ return lhs->NetworkIndex < rhs->NetworkIndex; });
+
+		block.Data = json::array();
+
+		for (auto variable : variables)
+		{
+			json varData = json::object();
+
+			varData.emplace("Name", variable->Name);
+			varData.emplace("Value", variable->CurrentValue);
+
+			// So SendAllNetworkedSkillVars only sends variables that have changed compared to the configured value.
+			variable->NetworkedValue = variable->CurrentValue;
+
+			block.Data.push_back(std::move(varData));
+		}
+	}
+	else
+	{
+		m_SkillVariables.clear();
+		m_NextNetworkedIndex = 0;
+
+		for (const auto& varData : block.Data)
+		{
+			auto name = varData.value<std::string>("Name", "");
+			const float value = varData.value<float>("Value", 0.f);
+
+			if (name.empty())
+			{
+				block.ErrorMessage = "Invalid skill variable name";
+				return;
+			}
+
+			DefineVariable(std::move(name), value, {.Networked = true});
+		}
+	}
 }
 
 void SkillSystem::LoadSkillConfigFiles(std::span<const std::string> fileNames)
@@ -196,7 +260,20 @@ void SkillSystem::LoadSkillConfigFiles(std::span<const std::string> fileNames)
 	SetSkillLevel(static_cast<SkillLevel>(iSkill));
 
 	// Erase all previous data.
-	m_SkillVariables.clear();
+	for (auto it = m_SkillVariables.begin(); it != m_SkillVariables.end();)
+	{
+		if ((it->Flags & VarFlag_IsExplicitlyDefined) != 0)
+		{
+			it->CurrentValue = it->InitialValue;
+			++it;
+		}
+		else
+		{
+			it = m_SkillVariables.erase(it);
+		}
+	}
+
+	m_LoadingSkillFiles = true;
 
 	for (const auto& fileName : fileNames)
 	{
@@ -211,27 +288,74 @@ void SkillSystem::LoadSkillConfigFiles(std::span<const std::string> fileNames)
 			m_Logger->error("Error loading skill configuration file \"{}\"", fileName);
 		}
 	}
+
+	m_LoadingSkillFiles = false;
 }
 
-float SkillSystem::GetValue(std::string_view name) const
+void SkillSystem::DefineVariable(std::string name, float initialValue, const SkillVarConstraints& constraints)
 {
-	float value = 0;
+	auto it = std::find_if(m_SkillVariables.begin(), m_SkillVariables.end(), [&](const auto& variable)
+		{ return variable.Name == name; });
 
+	if (it != m_SkillVariables.end())
+	{
+		m_Logger->error("Cannot define variable \"{}\": already defined", name);
+		assert(!"Variable already defined");
+		return;
+	}
+
+	SkillVarConstraints updatedConstraints = constraints;
+
+	int networkIndex = NotNetworkedIndex;
+
+	if (updatedConstraints.Networked)
+	{
+		if (m_NextNetworkedIndex < LargestNetworkedIndex)
+		{
+			networkIndex = m_NextNetworkedIndex++;
+		}
+		else
+		{
+			m_Logger->error("Cannot define variable \"{}\": Too many networked variables", name);
+			assert(!"Too many networked variables");
+		}
+	}
+
+	if (updatedConstraints.Minimum && updatedConstraints.Maximum)
+	{
+		if (updatedConstraints.Minimum > updatedConstraints.Maximum)
+		{
+			m_Logger->warn("Variable \"{}\" has inverted bounds", name);
+			std::swap(updatedConstraints.Minimum, updatedConstraints.Maximum);
+		}
+	}
+
+	initialValue = ClampValue(initialValue, updatedConstraints);
+
+	SkillVariable variable{
+		.Name = std::move(name),
+		.CurrentValue = initialValue,
+		.InitialValue = initialValue,
+		.Constraints = updatedConstraints,
+		.NetworkIndex = networkIndex,
+		.Flags = VarFlag_IsExplicitlyDefined
+	};
+
+	m_SkillVariables.emplace_back(std::move(variable));
+}
+
+float SkillSystem::GetValue(std::string_view name, float defaultValue) const
+{
 	if (const auto it = std::find_if(m_SkillVariables.begin(), m_SkillVariables.end(), [&](const auto& variable)
 			{ return variable.Name == name; });
 		it != m_SkillVariables.end())
 	{
-		value = it->Value;
-
-		if (value > 0)
-		{
-			return value;
-		}
+		return it->CurrentValue;
 	}
 
-	m_Logger->debug("Got a zero for {}{}", name, m_SkillLevel);
+	m_Logger->debug("Undefined variable {}{}", name, m_SkillLevel);
 
-	return value;
+	return defaultValue;
 }
 
 void SkillSystem::SetValue(std::string_view name, float value)
@@ -241,26 +365,93 @@ void SkillSystem::SetValue(std::string_view name, float value)
 
 	if (it == m_SkillVariables.end())
 	{
-		m_SkillVariables.emplace_back(std::string{name}, float{});
+		SkillVariable variable{
+			.Name = std::string{name},
+			.CurrentValue = 0,
+			.InitialValue = 0};
+
+		m_SkillVariables.emplace_back(std::move(variable));
 
 		it = m_SkillVariables.end() - 1;
 	}
 
-	if (it->Value != value)
+	value = ClampValue(value, it->Constraints);
+
+	if (it->CurrentValue != value)
 	{
-		m_Logger->debug("Skill value \"{}\" changed to \"{}\"", name, value);
-		it->Value = value;
+		m_Logger->debug("Skill value \"{}\" changed to \"{}\"{}",
+			name, value, it->NetworkIndex != NotNetworkedIndex ? " (Networked)" : "");
+
+		it->CurrentValue = value;
+
+#ifndef CLIENT_DLL
+		if (!m_LoadingSkillFiles)
+		{
+			if (it->NetworkIndex != NotNetworkedIndex)
+			{
+				MESSAGE_BEGIN(MSG_ALL, gmsgSkillVars);
+				WRITE_BYTE(it->NetworkIndex);
+				WRITE_FLOAT(it->CurrentValue);
+				MESSAGE_END();
+			}
+		}
+#endif
 	}
 }
 
-void SkillSystem::RemoveValue(std::string_view name)
+#ifndef CLIENT_DLL
+void SkillSystem::SendAllNetworkedSkillVars(CBasePlayer* player)
 {
-	if (const auto it = std::find_if(m_SkillVariables.begin(), m_SkillVariables.end(), [&](const auto& variable)
-			{ return variable.Name == name; });
-		it != m_SkillVariables.end())
+	// Send skill vars in bursts.
+	const int maxMessageSize = int(MaxUserMessageLength) / SingleMessageSize;
+
+	int totalMessageSize = 0;
+
+	MESSAGE_BEGIN(MSG_ONE, gmsgSkillVars, nullptr, player->edict());
+
+	for (const auto& variable : m_SkillVariables)
 	{
-		m_SkillVariables.erase(it);
+		if (variable.NetworkIndex == NotNetworkedIndex)
+		{
+			continue;
+		}
+
+		// Player already has these from networked data.
+		if (variable.CurrentValue == variable.NetworkedValue)
+		{
+			continue;
+		}
+
+		if (totalMessageSize >= maxMessageSize)
+		{
+			MESSAGE_END();
+			MESSAGE_BEGIN(MSG_ONE, gmsgSkillVars, nullptr, player->edict());
+			totalMessageSize = 0;
+		}
+
+		WRITE_BYTE(variable.NetworkIndex);
+		WRITE_FLOAT(variable.CurrentValue);
+
+		totalMessageSize += SingleMessageSize;
 	}
+
+	MESSAGE_END();
+}
+#endif
+
+float SkillSystem::ClampValue(float value, const SkillVarConstraints& constraints)
+{
+	if (constraints.Minimum)
+	{
+		value = std::max(*constraints.Minimum, value);
+	}
+
+	if (constraints.Maximum)
+	{
+		value = std::min(*constraints.Maximum, value);
+	}
+
+	return value;
 }
 
 bool SkillSystem::ParseConfiguration(const json& input)
@@ -302,3 +493,37 @@ bool SkillSystem::ParseConfiguration(const json& input)
 
 	return true;
 }
+
+#ifdef CLIENT_DLL
+void SkillSystem::MsgFunc_SkillVars(BufferReader& reader)
+{
+	const int messageCount = reader.GetSize() / SingleMessageSize;
+
+	for (int i = 0; i < messageCount; ++i)
+	{
+		[&]()
+		{
+			const int networkIndex = reader.ReadByte();
+			const float value = reader.ReadFloat();
+
+			if (networkIndex < 0 || networkIndex >= m_NextNetworkedIndex)
+			{
+				m_Logger->error("Invalid network index {} received for networked skill variable", networkIndex);
+				return;
+			}
+
+			for (auto& variable : m_SkillVariables)
+			{
+				if (variable.NetworkIndex == networkIndex)
+				{
+					// Don't need to log since the server logs the change. The client only follows its lead.
+					variable.CurrentValue = value;
+					return;
+				}
+			}
+
+			m_Logger->error("Could not find networked skill variable with index {}", networkIndex);
+		}();
+	}
+}
+#endif

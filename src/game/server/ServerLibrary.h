@@ -104,6 +104,8 @@ private:
 
 	void CreateConfigDefinitions();
 
+	void DefineSkillVariables();
+
 	void LoadServerConfigFiles();
 
 	void LoadMapChangeConfigFile();

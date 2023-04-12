@@ -75,4 +75,6 @@ inline int gmsgEmitSound = 0;
 
 inline int gmsgTempEntity = 0;
 
+inline int gmsgSkillVars = 0;
+
 void LinkUserMessages();

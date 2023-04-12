@@ -97,6 +97,7 @@ bool ServerLibrary::Initialize()
 	LoadCommandWhitelist();
 
 	CreateConfigDefinitions();
+	DefineSkillVariables();
 
 	return true;
 }
@@ -292,7 +293,6 @@ void ServerLibrary::PlayerActivating(CBasePlayer* player)
 void ServerLibrary::AddGameSystems()
 {
 	GameLibrary::AddGameSystems();
-	g_GameSystems.Add(&g_Skill);
 	g_GameSystems.Add(&sound::g_ServerSound);
 	g_GameSystems.Add(&sentences::g_Sentences);
 }
@@ -360,6 +360,10 @@ void ServerLibrary::CreateConfigDefinitions()
 			sections.push_back(std::make_unique<CommandsSection<ServerConfigContext>>());
 
 			return sections; }());
+}
+
+void ServerLibrary::DefineSkillVariables()
+{
 }
 
 void ServerLibrary::LoadServerConfigFiles()
