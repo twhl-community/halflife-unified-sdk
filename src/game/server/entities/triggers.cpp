@@ -218,6 +218,11 @@ void CTriggerRelay::Spawn()
 
 void CTriggerRelay::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
+	if (!UTIL_IsMasterTriggered(m_sMaster, pActivator))
+	{
+		return;
+	}
+
 	SUB_UseTargets(this, triggerType, 0);
 	if ((pev->spawnflags & SF_RELAY_FIREONCE) != 0)
 		UTIL_Remove(this);
