@@ -568,36 +568,6 @@ bool CBasePlayerWeapon::AddSecondaryAmmo(int iCount, const char* szName)
 	return iIdAmmo > 0;
 }
 
-bool CBasePlayerWeapon::IsUseable()
-{
-	if (m_iClip > 0)
-	{
-		return true;
-	}
-
-	// Weapon doesn't use ammo.
-	if (m_iPrimaryAmmoType == -1)
-	{
-		return true;
-	}
-
-	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] > 0)
-	{
-		return true;
-	}
-
-	if (m_iSecondaryAmmoType != -1)
-	{
-		if (m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType] > 0)
-		{
-			return true;
-		}
-	}
-
-	// clip is empty (or nonexistant) and the player has no more ammo of this type.
-	return false;
-}
-
 void CBasePlayerWeapon::SetWeaponModels(const char* viewModel, const char* weaponModel)
 {
 	// These are stored off to restore the models on save game load, so they must not use the replaced name.

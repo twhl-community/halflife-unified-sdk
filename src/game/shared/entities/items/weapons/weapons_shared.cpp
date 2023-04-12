@@ -270,6 +270,36 @@ bool CBasePlayerWeapon::PlayEmptySound()
 	return false;
 }
 
+bool CBasePlayerWeapon::IsUseable()
+{
+	if (m_iClip > 0)
+	{
+		return true;
+	}
+
+	// Weapon doesn't use ammo.
+	if (m_iPrimaryAmmoType == -1)
+	{
+		return true;
+	}
+
+	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] > 0)
+	{
+		return true;
+	}
+
+	if (m_iSecondaryAmmoType != -1)
+	{
+		if (m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType] > 0)
+		{
+			return true;
+		}
+	}
+
+	// clip is empty (or nonexistant) and the player has no more ammo of this type.
+	return false;
+}
+
 bool CanAttack(float attack_time, float curtime, bool isPredicted)
 {
 #if defined(CLIENT_WEAPONS)
@@ -366,18 +396,18 @@ void CBasePlayerWeapon::ItemPostFrame()
 
 		m_fFireOnEmpty = false;
 
-#ifndef CLIENT_DLL
 		if (!IsUseable() && m_flNextPrimaryAttack < (UseDecrement() ? 0.0 : gpGlobals->time))
 		{
+#ifndef CLIENT_DLL
 			// weapon isn't useable, switch.
 			if ((iFlags() & ITEM_FLAG_NOAUTOSWITCHEMPTY) == 0 && g_pGameRules->GetNextBestWeapon(m_pPlayer, this))
 			{
 				m_flNextPrimaryAttack = (UseDecrement() ? 0.0 : gpGlobals->time) + 0.3;
 				return;
 			}
+#endif
 		}
 		else
-#endif
 		{
 			// weapon is useable. Reload if empty and weapon has waited as long as it has to after firing
 			if (m_iClip == 0 && (iFlags() & ITEM_FLAG_NOAUTORELOAD) == 0 && m_flNextPrimaryAttack < (UseDecrement() ? 0.0 : gpGlobals->time))

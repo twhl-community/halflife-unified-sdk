@@ -332,7 +332,6 @@ void CBasePlayerWeapon::AttachToPlayer(CBasePlayer* pPlayer) {}
 bool CBasePlayerWeapon::AddDuplicate(CBasePlayerWeapon* original) { return false; }
 void CBasePlayerWeapon::AddToPlayer(CBasePlayer* pPlayer) {}
 bool CBasePlayerWeapon::UpdateClientData(CBasePlayer* pPlayer) { return false; }
-bool CBasePlayerWeapon::IsUseable() { return true; }
 bool CBasePlayerWeapon::ExtractAmmo(CBasePlayerWeapon* weapon) { return false; }
 bool CBasePlayerWeapon::ExtractClipAmmo(CBasePlayerWeapon* weapon) { return false; }
 void CBasePlayerWeapon::RetireWeapon() {}

@@ -234,6 +234,11 @@ void CRpg::SecondaryAttack()
 
 void CRpg::WeaponIdle()
 {
+	if ((m_pPlayer->pev->button & (IN_ATTACK | IN_ATTACK2)) == 0)
+	{
+		ResetEmptySound();
+	}
+
 	UpdateSpot();
 
 	if (m_flTimeWeaponIdle > UTIL_WeaponTimeBase())
@@ -262,7 +267,6 @@ void CRpg::WeaponIdle()
 			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 6.1;
 		}
 
-		ResetEmptySound();
 		SendWeaponAnim(iAnim);
 	}
 	else
