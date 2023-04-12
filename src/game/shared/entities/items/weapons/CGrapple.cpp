@@ -252,7 +252,7 @@ void CGrapple::PrimaryAttack()
 
 		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.1;
 
-		if (UTIL_IsMultiplayer())
+		if (g_Skill.GetValue("grapple_fast") != 0)
 		{
 			m_flShootTime = gpGlobals->time;
 		}
@@ -331,11 +331,6 @@ void CGrapple::PrimaryAttack()
 
 						float flDamage = GetSkillFloat("plr_grapple"sv);
 
-						if (g_pGameRules->IsMultiplayer())
-						{
-							flDamage *= 2;
-						}
-
 						pHit->TraceAttack(this, flDamage, gpGlobals->v_forward, &tr, DMG_ALWAYSGIB | DMG_CLUB);
 
 						ApplyMultiDamage(m_pPlayer, m_pPlayer);
@@ -367,15 +362,7 @@ void CGrapple::PrimaryAttack()
 	}
 #endif
 
-	const bool useNewGrapple =
-#ifdef CLIENT_DLL
-		gEngfuncs.pfnGetCvarFloat("sv_oldgrapple") != 1
-#else
-		oldgrapple.value != 1
-#endif
-		;
-
-	if (UTIL_IsMultiplayer() && (UTIL_IsCTF() || useNewGrapple))
+	if (g_Skill.GetValue("grapple_fast") != 0)
 	{
 		m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase();
 	}
@@ -441,15 +428,7 @@ void CGrapple::EndAttack()
 
 	m_flTimeWeaponIdle = UTIL_WeaponTimeBase();
 
-	const bool useNewGrapple =
-#ifdef CLIENT_DLL
-		gEngfuncs.pfnGetCvarFloat("sv_oldgrapple") != 1
-#else
-		oldgrapple.value != 1
-#endif
-		;
-
-	if (UTIL_IsMultiplayer() && (UTIL_IsCTF() || useNewGrapple))
+	if (g_Skill.GetValue("grapple_fast") != 0)
 	{
 		m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase();
 	}

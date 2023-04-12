@@ -19,6 +19,11 @@
 
 LINK_ENTITY_TO_CLASS(weapon_357, CPython);
 
+inline bool UseLaserSight()
+{
+	return g_Skill.GetValue("revolver_laser_sight") != 0;
+}
+
 void CPython::OnCreate()
 {
 	CBasePlayerWeapon::OnCreate();
@@ -68,7 +73,7 @@ void CPython::Precache()
 
 bool CPython::Deploy()
 {
-	if (UTIL_IsMultiplayer())
+	if (UseLaserSight())
 	{
 		// enable laser sight geometry.
 		pev->body = 1;
@@ -97,7 +102,7 @@ void CPython::Holster()
 
 void CPython::SecondaryAttack()
 {
-	if (!UTIL_IsMultiplayer())
+	if (!UseLaserSight())
 	{
 		return;
 	}
@@ -181,7 +186,7 @@ void CPython::Reload()
 		m_pPlayer->m_iFOV = 0; // 0 means reset to default fov
 	}
 
-	const bool bUseScope = UTIL_IsMultiplayer();
+	const bool bUseScope = UseLaserSight();
 
 	DefaultReload(6, PYTHON_RELOAD, 2.0, bUseScope ? 1 : 0);
 }
@@ -218,9 +223,29 @@ void CPython::WeaponIdle()
 		m_flTimeWeaponIdle = (170.0 / 30.0);
 	}
 
-	const bool bUseScope = UTIL_IsMultiplayer();
+	const bool bUseScope = UseLaserSight();
 
 	SendWeaponAnim(iAnim, bUseScope ? 1 : 0);
+}
+
+void CPython::ItemPostFrame()
+{
+	const int currentBody = UseLaserSight() ? 1 : 0;
+
+	// Check if we need to reset the laser sight.
+	if (currentBody != pev->body)
+	{
+		pev->body = currentBody;
+
+		m_flTimeWeaponIdle = 0;
+
+		if (!UseLaserSight() && m_pPlayer->m_iFOV != 0)
+		{
+			m_pPlayer->m_iFOV = 0; // 0 means reset to default fov
+		}
+	}
+
+	BaseClass::ItemPostFrame();
 }
 
 class CPythonAmmo : public CBasePlayerAmmo

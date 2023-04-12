@@ -364,6 +364,19 @@ void ServerLibrary::CreateConfigDefinitions()
 
 void ServerLibrary::DefineSkillVariables()
 {
+	g_Skill.DefineVariable("revolver_laser_sight", 0, {.Networked = true});
+	g_Skill.DefineVariable("smg_wide_spread", 0, {.Networked = true});
+	g_Skill.DefineVariable("shotgun_single_tight_spread", 0, {.Networked = true});
+	g_Skill.DefineVariable("shotgun_double_wide_spread", 0, {.Networked = true});
+	g_Skill.DefineVariable("crossbow_sniper_bolt", 0, {.Networked = true});
+	g_Skill.DefineVariable("gauss_charge_time", 4, {.Minimum = 0.1f, .Maximum = 10.f, .Networked = true});
+	g_Skill.DefineVariable("gauss_fast_ammo_use", 0, {.Networked = true});
+	g_Skill.DefineVariable("gauss_damage_radius", 2.5f, {.Minimum = 0});
+	g_Skill.DefineVariable("egon_narrow_ammo_per_second", 6, {.Minimum = 0});
+	g_Skill.DefineVariable("egon_wide_ammo_per_second", 10, {.Minimum = 0});
+	g_Skill.DefineVariable("grapple_fast", 0, {.Networked = true});
+	g_Skill.DefineVariable("m249_wide_spread", 0, {.Networked = true});
+	g_Skill.DefineVariable("shockrifle_fast", 0, {.Networked = true});
 }
 
 void ServerLibrary::LoadServerConfigFiles()

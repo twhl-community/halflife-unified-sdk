@@ -413,7 +413,7 @@ void CDisplacer::AltFireThink()
 
 		m_flTimeWeaponIdle = UTIL_WeaponTimeBase();
 
-		if (!UTIL_IsMultiplayer())
+		if (!g_pGameRules->IsMultiplayer())
 			m_pPlayer->pev->gravity = 0.6;
 	}
 	else

@@ -46,7 +46,6 @@ extern cvar_t multipower;
 extern cvar_t ctf_autoteam;
 extern cvar_t coopplay;
 extern cvar_t coopweprespawn;
-extern cvar_t oldgrapple;
 extern cvar_t spamdelay;
 
 extern cvar_t sv_entityinfo_enabled;

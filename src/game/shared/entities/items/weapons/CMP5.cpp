@@ -126,7 +126,7 @@ void CMP5::PrimaryAttack()
 	Vector vecAiming = m_pPlayer->GetAutoaimVector(AUTOAIM_5DEGREES);
 	Vector vecDir;
 
-	if (UTIL_IsMultiplayer())
+	if (g_Skill.GetValue("smg_wide_spread") != 0)
 	{
 		// optimized multiplayer. Widened to make it easier to hit a moving player
 		vecDir = m_pPlayer->FireBulletsPlayer(1, vecSrc, vecAiming, VECTOR_CONE_6DEGREES, 8192, BULLET_PLAYER_MP5, 2, 0, m_pPlayer, m_pPlayer->random_seed);

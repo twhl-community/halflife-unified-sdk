@@ -125,7 +125,7 @@ void CShotgun::PrimaryAttack()
 
 	Vector vecDir;
 
-	if (UTIL_IsMultiplayer())
+	if (g_Skill.GetValue("shotgun_single_tight_spread") != 0)
 	{
 		vecDir = m_pPlayer->FireBulletsPlayer(4, vecSrc, vecAiming, VECTOR_CONE_DM_SHOTGUN, 2048, BULLET_PLAYER_BUCKSHOT, 0, 0, m_pPlayer, m_pPlayer->random_seed);
 	}
@@ -194,7 +194,7 @@ void CShotgun::SecondaryAttack()
 
 	Vector vecDir;
 
-	if (UTIL_IsMultiplayer())
+	if (g_Skill.GetValue("shotgun_double_wide_spread") != 0)
 	{
 		// tuned for deathmatch
 		vecDir = m_pPlayer->FireBulletsPlayer(8, vecSrc, vecAiming, VECTOR_CONE_DM_DOUBLESHOTGUN, 2048, BULLET_PLAYER_BUCKSHOT, 0, 0, m_pPlayer, m_pPlayer->random_seed);

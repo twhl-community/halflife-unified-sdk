@@ -164,7 +164,7 @@ bool CCrowbar::Swing(bool fFirst)
 
 		ClearMultiDamage();
 
-		if ((m_flNextPrimaryAttack + 1 < UTIL_WeaponTimeBase()) || g_pGameRules->IsMultiplayer())
+		if ((m_flNextPrimaryAttack + 1 < UTIL_WeaponTimeBase()) || g_Skill.GetValue("crowbar_full_damage") != 0)
 		{
 			// first swing does full damage
 			pEntity->TraceAttack(m_pPlayer, GetSkillFloat("plr_crowbar"sv), gpGlobals->v_forward, &tr, DMG_CLUB);

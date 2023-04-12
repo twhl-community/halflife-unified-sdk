@@ -203,7 +203,7 @@ bool CPipewrench::Swing(const bool bFirst)
 		{
 			ClearMultiDamage();
 
-			if ((m_flNextPrimaryAttack + 1 < UTIL_WeaponTimeBase()) || g_pGameRules->IsMultiplayer())
+			if ((m_flNextPrimaryAttack + 1 < UTIL_WeaponTimeBase()) || g_Skill.GetValue("pipewrench_full_damage") != 0)
 			{
 				// first swing does full damage
 				pEntity->TraceAttack(m_pPlayer, GetSkillFloat("plr_pipewrench"sv), gpGlobals->v_forward, &tr, DMG_CLUB);
@@ -356,7 +356,7 @@ void CPipewrench::BigSwing()
 			ClearMultiDamage();
 
 			float flDamage = (gpGlobals->time - m_flBigSwingStart) * GetSkillFloat("plr_pipewrench"sv) + 25.0f;
-			if ((m_flNextPrimaryAttack + 1 < UTIL_WeaponTimeBase()) || g_pGameRules->IsMultiplayer())
+			if ((m_flNextPrimaryAttack + 1 < UTIL_WeaponTimeBase()) || g_Skill.GetValue("pipewrench_full_damage") != 0)
 			{
 				// first swing does full damage
 				pEntity->TraceAttack(m_pPlayer, flDamage, gpGlobals->v_forward, &tr, DMG_CLUB);

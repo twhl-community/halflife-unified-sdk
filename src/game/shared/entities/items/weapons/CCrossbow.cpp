@@ -159,7 +159,7 @@ void CCrossbowBolt::BoltTouch(CBaseEntity* pOther)
 		}
 	}
 
-	if (g_pGameRules->IsMultiplayer())
+	if (g_Skill.GetValue("crossbow_explosive_bolt") != 0)
 	{
 		SetThink(&CCrossbowBolt::ExplodeThink);
 		pev->nextthink = gpGlobals->time + 0.1;
@@ -269,7 +269,7 @@ void CCrossbow::Holster()
 
 void CCrossbow::PrimaryAttack()
 {
-	if (m_pPlayer->m_iFOV != 0 && UTIL_IsMultiplayer())
+	if (m_pPlayer->m_iFOV != 0 && g_Skill.GetValue("crossbow_sniper_bolt") != 0)
 	{
 		FireSniperBolt();
 		return;

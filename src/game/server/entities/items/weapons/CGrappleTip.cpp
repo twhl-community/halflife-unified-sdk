@@ -129,7 +129,6 @@ void CGrappleTip::Spawn()
 
 void CGrappleTip::FlyThink()
 {
-#ifndef CLIENT_DLL
 	UTIL_MakeAimVectors(pev->angles);
 
 	pev->angles = UTIL_VecToAngles(gpGlobals->v_forward);
@@ -138,34 +137,13 @@ void CGrappleTip::FlyThink()
 
 	pev->velocity = pev->velocity * 0.2 + (flNewVel * gpGlobals->v_forward);
 
-	float maxSpeed;
-
-	if (!UTIL_IsMultiplayer())
-	{
-		if (oldgrapple.value != 1)
-		{
-			maxSpeed = 1600;
-		}
-		else
-		{
-			maxSpeed = 750;
-		}
-	}
-	else if (UTIL_IsCTF() || oldgrapple.value != 1)
-	{
-		maxSpeed = 2000;
-	}
-	else
-	{
-		maxSpeed = 1600;
-	}
+	const float maxSpeed = g_Skill.GetValue("grapple_fast") != 0 ? 2000 : 1600;
 
 	// TODO: should probably clamp at sv_maxvelocity to prevent the tip from going off course.
 	if (pev->velocity.Length() > maxSpeed)
 	{
 		pev->velocity = pev->velocity.Normalize() * maxSpeed;
 	}
-#endif
 
 	pev->nextthink = gpGlobals->time + 0.02;
 }

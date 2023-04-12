@@ -30,12 +30,7 @@ DEFINE_FIELD(m_fInAttack, FIELD_INTEGER),
 
 float CGauss::GetFullChargeTime()
 {
-	if (UTIL_IsMultiplayer())
-	{
-		return 1.5;
-	}
-
-	return 4;
+	return g_Skill.GetValue("gauss_charge_time");
 }
 
 void CGauss::OnCreate()
@@ -198,7 +193,7 @@ void CGauss::SecondaryAttack()
 			// during the charging process, eat one bit of ammo every once in a while
 			if (UTIL_WeaponTimeBase() >= m_pPlayer->m_flNextAmmoBurn && m_pPlayer->m_flNextAmmoBurn != 1000)
 			{
-				if (UTIL_IsMultiplayer())
+				if (g_Skill.GetValue("gauss_fast_ammo_use") != 0)
 				{
 					m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]--;
 					m_pPlayer->m_flNextAmmoBurn = UTIL_WeaponTimeBase() + 0.1;
@@ -306,10 +301,9 @@ void CGauss::StartFire()
 			m_pPlayer->pev->velocity = m_pPlayer->pev->velocity - gpGlobals->v_forward * flDamage * 5;
 		}
 
-		if (!g_pGameRules->IsMultiplayer())
-
+		if (g_Skill.GetValue("gauss_vertical_force") == 0)
 		{
-			// in deathmatch, gauss can pop you up into the air. Not in single play.
+			// Don't pop you up into the air.
 			m_pPlayer->pev->velocity.z = flZVel;
 		}
 #endif
@@ -443,17 +437,7 @@ void CGauss::Fire(Vector vecOrigSrc, Vector vecDir, float flDamage)
 
 							// exit blast damage
 							// m_pPlayer->RadiusDamage( beam_tr.vecEndPos + vecDir * 8, pev, m_pPlayer->pev, flDamage, CLASS_NONE, DMG_BLAST );
-							float damage_radius;
-
-
-							if (g_pGameRules->IsMultiplayer())
-							{
-								damage_radius = flDamage * 1.75; // Old code == 2.5
-							}
-							else
-							{
-								damage_radius = flDamage * 2.5;
-							}
+							const float damage_radius = flDamage * g_Skill.GetValue("gauss_damage_radius");
 
 							::RadiusDamage(beam_tr.vecEndPos + vecDir * 8, this, m_pPlayer, flDamage, damage_radius, CLASS_NONE, DMG_BLAST);
 

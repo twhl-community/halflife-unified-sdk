@@ -158,16 +158,13 @@ void CM249::PrimaryAttack()
 
 	Vector vecSpread;
 
-	if (UTIL_IsMultiplayer())
+	if (g_Skill.GetValue("m249_wide_spread") != 0)
 	{
 		if ((m_pPlayer->pev->button & IN_DUCK) != 0)
 		{
 			vecSpread = VECTOR_CONE_3DEGREES;
 		}
-		else if ((m_pPlayer->pev->button & (IN_MOVERIGHT |
-											   IN_MOVELEFT |
-											   IN_FORWARD |
-											   IN_BACK)) != 0)
+		else if ((m_pPlayer->pev->button & (IN_MOVERIGHT | IN_MOVELEFT | IN_FORWARD | IN_BACK)) != 0)
 		{
 			vecSpread = VECTOR_CONE_15DEGREES;
 		}
@@ -182,10 +179,7 @@ void CM249::PrimaryAttack()
 		{
 			vecSpread = VECTOR_CONE_2DEGREES;
 		}
-		else if ((m_pPlayer->pev->button & (IN_MOVERIGHT |
-											   IN_MOVELEFT |
-											   IN_FORWARD |
-											   IN_BACK)) != 0)
+		else if ((m_pPlayer->pev->button & (IN_MOVERIGHT | IN_MOVELEFT | IN_FORWARD | IN_BACK)) != 0)
 		{
 			vecSpread = VECTOR_CONE_10DEGREES;
 		}

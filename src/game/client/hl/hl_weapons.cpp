@@ -351,8 +351,3 @@ bool UTIL_IsMultiplayer()
 {
 	return gEngfuncs.GetMaxClients() != 1;
 }
-
-bool UTIL_IsCTF()
-{
-	return giTeamplay == 2;
-}

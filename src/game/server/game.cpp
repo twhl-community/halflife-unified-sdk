@@ -51,8 +51,6 @@ cvar_t coopplay = {"mp_coopplay", "0", FCVAR_SERVER};
 cvar_t defaultcoop = {"mp_defaultcoop", "0", FCVAR_SERVER};
 cvar_t coopweprespawn = {"mp_coopweprespawn", "0", FCVAR_SERVER};
 
-cvar_t oldgrapple = {"sv_oldgrapple", "0", FCVAR_SERVER};
-
 cvar_t spamdelay = {"sv_spamdelay", "3.0", FCVAR_SERVER};
 cvar_t multipower = {"mp_multipower", "0", FCVAR_SERVER};
 
@@ -106,8 +104,6 @@ void GameDLLInit()
 	CVAR_REGISTER(&coopplay);
 	CVAR_REGISTER(&defaultcoop);
 	CVAR_REGISTER(&coopweprespawn);
-
-	CVAR_REGISTER(&oldgrapple);
 
 	CVAR_REGISTER(&spamdelay);
 	CVAR_REGISTER(&multipower);

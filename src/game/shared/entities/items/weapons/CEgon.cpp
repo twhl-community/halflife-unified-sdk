@@ -265,22 +265,19 @@ void CEgon::Fire(const Vector& vecOrigSrc, const Vector& vecDir)
 			}
 			ApplyMultiDamage(m_pPlayer, m_pPlayer);
 
-			if (g_pGameRules->IsMultiplayer())
+			if (gpGlobals->time >= m_flAmmoUseTime)
 			{
-				// multiplayer uses 1 ammo every 1/10th second
-				if (gpGlobals->time >= m_flAmmoUseTime)
+				const float ammoPerSecond = GetSkillFloat("egon_narrow_ammo_per_second");
+
+				if (ammoPerSecond > 0)
 				{
 					UseAmmo(1);
-					m_flAmmoUseTime = gpGlobals->time + 0.1;
+					m_flAmmoUseTime = gpGlobals->time + (1 / ammoPerSecond);
 				}
-			}
-			else
-			{
-				// single player, use 3 ammo/second
-				if (gpGlobals->time >= m_flAmmoUseTime)
+				else
 				{
-					UseAmmo(1);
-					m_flAmmoUseTime = gpGlobals->time + 0.166;
+					// Re-check in 5 seconds in case skill var changes.
+					m_flAmmoUseTime = gpGlobals->time + 5;
 				}
 			}
 
@@ -302,7 +299,7 @@ void CEgon::Fire(const Vector& vecOrigSrc, const Vector& vecDir)
 			}
 			ApplyMultiDamage(m_pPlayer, m_pPlayer);
 
-			if (g_pGameRules->IsMultiplayer())
+			if (GetSkillFloat("egon_wide_radius_damage") != 0)
 			{
 				// radius damage a little more potent in multiplayer.
 				::RadiusDamage(tr.vecEndPos, this, m_pPlayer, GetSkillFloat("plr_egon_wide"sv) / 4, 128, CLASS_NONE, DMG_ENERGYBEAM | DMG_BLAST | DMG_ALWAYSGIB);
@@ -311,22 +308,19 @@ void CEgon::Fire(const Vector& vecOrigSrc, const Vector& vecDir)
 			if (!m_pPlayer->IsAlive())
 				return;
 
-			if (g_pGameRules->IsMultiplayer())
+			if (gpGlobals->time >= m_flAmmoUseTime)
 			{
-				// multiplayer uses 5 ammo/second
-				if (gpGlobals->time >= m_flAmmoUseTime)
+				const float ammoPerSecond = GetSkillFloat("egon_wide_ammo_per_second");
+
+				if (ammoPerSecond > 0)
 				{
 					UseAmmo(1);
-					m_flAmmoUseTime = gpGlobals->time + 0.2;
+					m_flAmmoUseTime = gpGlobals->time + (1 / ammoPerSecond);
 				}
-			}
-			else
-			{
-				// Wide mode uses 10 charges per second in single player
-				if (gpGlobals->time >= m_flAmmoUseTime)
+				else
 				{
-					UseAmmo(1);
-					m_flAmmoUseTime = gpGlobals->time + 0.1;
+					// Re-check in 5 seconds in case skill var changes.
+					m_flAmmoUseTime = gpGlobals->time + 5;
 				}
 			}
 

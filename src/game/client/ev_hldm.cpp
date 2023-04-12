@@ -592,7 +592,7 @@ void EV_FireShotGunDouble(event_args_t* args)
 	EV_GetGunPosition(args, vecSrc, origin);
 	vecAiming = forward;
 
-	if (gEngfuncs.GetMaxClients() > 1)
+	if (g_Skill.GetValue("shotgun_double_wide_spread") != 0)
 	{
 		EV_HLDM_FireBullets(idx, forward, right, up, 8, vecSrc, vecAiming, 2048, BULLET_PLAYER_BUCKSHOT, 0,
 			&tracerCount[idx - 1], VECTOR_CONE_DM_DOUBLESHOTGUN.x, VECTOR_CONE_DM_DOUBLESHOTGUN.y);
@@ -644,7 +644,7 @@ void EV_FireShotGunSingle(event_args_t* args)
 	EV_GetGunPosition(args, vecSrc, origin);
 	vecAiming = forward;
 
-	if (gEngfuncs.GetMaxClients() > 1)
+	if (g_Skill.GetValue("shotgun_single_tight_spread") != 0)
 	{
 		EV_HLDM_FireBullets(idx, forward, right, up, 4, vecSrc, vecAiming, 2048, BULLET_PLAYER_BUCKSHOT, 0,
 			&tracerCount[idx - 1], VECTOR_CONE_DM_SHOTGUN.x, VECTOR_CONE_DM_SHOTGUN.y);
@@ -766,10 +766,7 @@ void EV_FirePython(event_args_t* args)
 
 	if (EV_IsLocal(idx))
 	{
-		// Python uses different body in multiplayer versus single player
-		const bool multiplayer = gEngfuncs.GetMaxClients() != 1;
-
-		const auto body = multiplayer ? 1 : 0;
+		const auto body = g_Skill.GetValue("revolver_laser_sight") ? 1 : 0;
 
 		// Add muzzle flash to current weapon model
 		EV_MuzzleFlash();
