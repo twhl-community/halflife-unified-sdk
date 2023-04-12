@@ -206,7 +206,6 @@ CGameRules* InstallSinglePlayerGameRules()
 {
 	g_GameLogger->trace("Creating singleplayer gamerules");
 	// generic half-life
-	g_teamplay = false;
 	return new CHalfLifeRules;
 }
 
@@ -238,21 +237,18 @@ CGameRules* InstallGameRules(CBaseEntity* pWorld)
 			g_GameLogger->trace("Creating teamplay gamerules");
 			// teamplay
 
-			g_teamplay = true;
 			return new CHalfLifeTeamplay;
 		}
 		if ((int)gpGlobals->deathmatch == 1)
 		{
 			g_GameLogger->trace("Creating deathmatch gamerules");
 			// vanilla deathmatch
-			g_teamplay = false;
 			return new CHalfLifeMultiplay;
 		}
 		else
 		{
 			g_GameLogger->trace("Creating deathmatch gamerules");
 			// vanilla deathmatch??
-			g_teamplay = false;
 			return new CHalfLifeMultiplay;
 		}
 	}

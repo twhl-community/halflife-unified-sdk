@@ -344,7 +344,6 @@ CGameRules* InstallGameRules(CBaseEntity* pWorld);
 
 inline CGameRules* g_pGameRules = nullptr;
 inline bool g_fGameOver;
-inline bool g_teamplay = false;
 
 const char* GetTeamName(CBasePlayer* pEntity);
 

@@ -32,7 +32,7 @@ class CMultiplayGameMgrHelper : public IVoiceGameMgrHelper
 public:
 	bool CanPlayerHearPlayer(CBasePlayer* pListener, CBasePlayer* pTalker) override
 	{
-		if (g_teamplay)
+		if (g_pGameRules->IsTeamplay())
 		{
 			if (g_pGameRules->PlayerRelationship(pListener, pTalker) != GR_TEAMMATE)
 			{
