@@ -36,9 +36,9 @@ public:
 	bool FShouldSwitchWeapon(CBasePlayer* pPlayer, CBasePlayerWeapon* pWeapon) override;
 	bool GetNextBestWeapon(CBasePlayer* pPlayer, CBasePlayerWeapon* pCurrentWeapon, bool alwaysSearch = false) override;
 
-	bool IsMultiplayer() override;
-	bool IsDeathmatch() override;
-	bool IsCoOp() override;
+	bool IsMultiplayer() override { return false; }
+	bool IsDeathmatch() override { return false; }
+	bool IsCoOp() override { return false; }
 	bool IsCTF() override { return false; }
 
 	bool ClientConnected(edict_t* pEntity, const char* pszName, const char* pszAddress, char szRejectReason[128]) override;
@@ -73,7 +73,7 @@ public:
 	bool FAllowMonsters() override;
 
 	const char* GetTeamID(CBaseEntity* pEntity) override { return ""; }
-	int PlayerRelationship(CBaseEntity* pPlayer, CBaseEntity* pTarget) override;
+	int PlayerRelationship(CBasePlayer* pPlayer, CBaseEntity* pTarget) override;
 
 private:
 	ScopedClientCommand m_VModEnableCommand;

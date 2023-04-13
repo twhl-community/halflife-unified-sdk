@@ -36,9 +36,9 @@ public:
 
 	bool FShouldSwitchWeapon(CBasePlayer* pPlayer, CBasePlayerWeapon* pWeapon) override;
 
-	bool IsMultiplayer() override;
-	bool IsDeathmatch() override;
-	bool IsCoOp() override;
+	bool IsMultiplayer() override { return true; }
+	bool IsDeathmatch() override { return true; }
+	bool IsCoOp() override { return false; }
 	bool IsCTF() override { return false; }
 
 	bool ClientConnected(edict_t* pEntity, const char* pszName, const char* pszAddress, char szRejectReason[128]) override;
@@ -78,7 +78,7 @@ public:
 	int DeadPlayerAmmo(CBasePlayer* pPlayer) override;
 
 	const char* GetTeamID(CBaseEntity* pEntity) override { return ""; }
-	int PlayerRelationship(CBaseEntity* pPlayer, CBaseEntity* pTarget) override;
+	int PlayerRelationship(CBasePlayer* pPlayer, CBaseEntity* pTarget) override;
 
 	bool PlayTextureSounds() override { return false; }
 	bool PlayFootstepSounds(CBasePlayer* pl, float fvol) override;

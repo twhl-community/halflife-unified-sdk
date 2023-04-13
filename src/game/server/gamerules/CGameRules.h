@@ -34,15 +34,6 @@ enum
 {
 	GR_NONE = 0,
 
-	GR_WEAPON_RESPAWN_YES,
-	GR_WEAPON_RESPAWN_NO,
-
-	GR_AMMO_RESPAWN_YES,
-	GR_AMMO_RESPAWN_NO,
-
-	GR_ITEM_RESPAWN_YES,
-	GR_ITEM_RESPAWN_NO,
-
 	GR_PLR_DROP_GUN_ALL,
 	GR_PLR_DROP_GUN_ACTIVE,
 	GR_PLR_DROP_GUN_NO,
@@ -305,7 +296,7 @@ public:
 	/**
 	 *	@brief What is the player's relationship with this entity?
 	 */
-	virtual int PlayerRelationship(CBaseEntity* pPlayer, CBaseEntity* pTarget) = 0;
+	virtual int PlayerRelationship(CBasePlayer* pPlayer, CBaseEntity* pTarget) = 0;
 
 	virtual int GetTeamIndex(const char* pTeamName) { return -1; }
 	virtual const char* GetIndexedTeamName(int teamIndex) { return ""; }

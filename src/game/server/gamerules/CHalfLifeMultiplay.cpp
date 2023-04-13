@@ -149,29 +149,31 @@ void CHalfLifeMultiplay::ClientUserInfoChanged(CBasePlayer* pPlayer, char* infob
 }
 
 // longest the intermission can last, in seconds
-#define MAX_INTERMISSION_TIME 120
+constexpr int MAX_INTERMISSION_TIME = 120;
+
+static int GetChatTime()
+{
+	// bounds check
+	const int time = int(mp_chattime.value);
+
+	const int clampedTime = std::clamp(time, 1, MAX_INTERMISSION_TIME);
+
+	if (time != clampedTime)
+	{
+		g_engfuncs.pfnCvar_DirectSet(&mp_chattime, UTIL_ToString(clampedTime).c_str());
+	}
+
+	return clampedTime;
+}
 
 void CHalfLifeMultiplay::Think()
 {
 	g_VoiceGameMgr.Update(gpGlobals->frametime);
 
 	///// Check game rules /////
-	static int last_frags;
-	static int last_time;
-
-	int frags_remaining = 0;
-	int time_remaining = 0;
-
 	if (g_fGameOver) // someone else quit the game already
 	{
-		// bounds check
-		int time = (int)CVAR_GET_FLOAT("mp_chattime");
-		if (time < 1)
-			CVAR_SET_STRING("mp_chattime", "1");
-		else if (time > MAX_INTERMISSION_TIME)
-			CVAR_SET_STRING("mp_chattime", UTIL_ToString(MAX_INTERMISSION_TIME).c_str());
-
-		m_flIntermissionEndTime = m_flIntermissionStartTime + mp_chattime.value;
+		m_flIntermissionEndTime = m_flIntermissionStartTime + GetChatTime();
 
 		// check to see if we should change levels now
 		if (m_flIntermissionEndTime < gpGlobals->time)
@@ -184,16 +186,17 @@ void CHalfLifeMultiplay::Think()
 		return;
 	}
 
-	float flTimeLimit = timelimit.value * 60;
-	float flFragLimit = fraglimit.value;
-
-	time_remaining = (int)(0 != flTimeLimit ? (flTimeLimit - gpGlobals->time) : 0);
+	const float flTimeLimit = timelimit.value * 60;
 
 	if (flTimeLimit != 0 && gpGlobals->time >= flTimeLimit)
 	{
 		GoToIntermission();
 		return;
 	}
+
+	const float flFragLimit = fraglimit.value;
+
+	int frags_remaining = 0;
 
 	if (0 != flFragLimit)
 	{
@@ -224,35 +227,26 @@ void CHalfLifeMultiplay::Think()
 		frags_remaining = bestfrags;
 	}
 
+	static int last_frags;
+
 	// Updates when frags change
 	if (frags_remaining != last_frags)
 	{
-		g_engfuncs.pfnCvar_DirectSet(&fragsleft, UTIL_VarArgs("%i", frags_remaining));
+		g_engfuncs.pfnCvar_DirectSet(&fragsleft, UTIL_ToString(frags_remaining).c_str());
 	}
+
+	const int time_remaining = (int)(0 != flTimeLimit ? (flTimeLimit - gpGlobals->time) : 0);
+
+	static int last_time;
 
 	// Updates once per second
 	if (timeleft.value != last_time)
 	{
-		g_engfuncs.pfnCvar_DirectSet(&timeleft, UTIL_VarArgs("%i", time_remaining));
+		g_engfuncs.pfnCvar_DirectSet(&timeleft, UTIL_ToString(time_remaining).c_str());
 	}
 
 	last_frags = frags_remaining;
 	last_time = time_remaining;
-}
-
-bool CHalfLifeMultiplay::IsMultiplayer()
-{
-	return true;
-}
-
-bool CHalfLifeMultiplay::IsDeathmatch()
-{
-	return true;
-}
-
-bool CHalfLifeMultiplay::IsCoOp()
-{
-	return false;
 }
 
 bool CHalfLifeMultiplay::FShouldSwitchWeapon(CBasePlayer* pPlayer, CBasePlayerWeapon* pWeapon)
@@ -437,18 +431,14 @@ void CHalfLifeMultiplay::ClientDisconnected(edict_t* pClient)
 
 float CHalfLifeMultiplay::FlPlayerFallDamage(CBasePlayer* pPlayer)
 {
-	int iFallDamage = (int)falldamage.value;
-
-	switch (iFallDamage)
+	switch (int(falldamage.value))
 	{
 	case 1: // progressive
 		pPlayer->m_flFallVelocity -= PLAYER_MAX_SAFE_FALL_SPEED;
 		return pPlayer->m_flFallVelocity * DAMAGE_FOR_FALL_SPEED;
-		break;
 	default:
 	case 0: // fixed
 		return 10;
-		break;
 	}
 }
 
@@ -547,20 +537,17 @@ void CHalfLifeMultiplay::PlayerThink(CBasePlayer* pPlayer)
 
 void CHalfLifeMultiplay::PlayerSpawn(CBasePlayer* pPlayer)
 {
-	bool addDefault;
-	CBaseEntity* pWeaponEntity = nullptr;
-
 	// Ensure the player switches to the Glock on spawn regardless of setting
 	const int originalAutoWepSwitch = pPlayer->m_iAutoWepSwitch;
 	pPlayer->m_iAutoWepSwitch = 1;
 
 	pPlayer->SetHasSuit(true);
 
-	addDefault = true;
+	bool addDefault = true;
 
-	while (pWeaponEntity = UTIL_FindEntityByClassname(pWeaponEntity, "game_player_equip"))
+	for (auto weaponEntity : UTIL_FindEntitiesByClassname("game_player_equip"))
 	{
-		pWeaponEntity->Touch(pPlayer);
+		weaponEntity->Touch(pPlayer);
 		addDefault = false;
 	}
 
@@ -602,23 +589,19 @@ void CHalfLifeMultiplay::PlayerKilled(CBasePlayer* pVictim, CBaseEntity* pKiller
 
 	pVictim->m_iDeaths += 1;
 
-
 	FireTargets("game_playerdie", pVictim, pVictim, USE_TOGGLE, 0);
-	CBasePlayer* peKiller = nullptr;
-	CBaseEntity* ktmp = CBaseEntity::Instance(pKiller);
-	if (ktmp && ktmp->IsPlayer())
-		peKiller = (CBasePlayer*)ktmp;
+	CBasePlayer* peKiller = ToBasePlayer(pKiller);
 
 	if (pVictim == pKiller)
 	{ // killed self
 		pKiller->pev->frags -= 1;
 	}
-	else if (ktmp && ktmp->IsPlayer())
+	else if (peKiller)
 	{
 		// if a player dies in a deathmatch game and the killer is a client, award the killer some points
 		pKiller->pev->frags += IPointsForKill(peKiller, pVictim);
 
-		FireTargets("game_playerkill", ktmp, ktmp, USE_TOGGLE, 0);
+		FireTargets("game_playerkill", peKiller, peKiller, USE_TOGGLE, 0);
 	}
 	else
 	{ // killed by the world
@@ -630,15 +613,12 @@ void CHalfLifeMultiplay::PlayerKilled(CBasePlayer* pVictim, CBaseEntity* pKiller
 	pVictim->SendScoreInfoAll();
 
 	// killers score, if it's a player
-	CBaseEntity* ep = CBaseEntity::Instance(pKiller);
-	if (ep && ep->IsPlayer())
+	if (peKiller)
 	{
-		CBasePlayer* PK = (CBasePlayer*)ep;
-
-		PK->SendScoreInfoAll();
+		peKiller->SendScoreInfoAll();
 
 		// let the killer paint another decal as soon as he'd like.
-		PK->m_flNextDecalTime = gpGlobals->time;
+		peKiller->m_flNextDecalTime = gpGlobals->time;
 	}
 
 	if (pVictim->HasNamedPlayerWeapon("weapon_satchel"))
@@ -671,7 +651,7 @@ void CHalfLifeMultiplay::DeathNotice(CBasePlayer* pVictim, CBaseEntity* pKiller,
 			if (inflictor == pKiller)
 			{
 				// If the inflictor is the killer,  then it must be their current weapon doing the damage
-				CBasePlayer* pPlayer = (CBasePlayer*)CBaseEntity::Instance(pKiller);
+				CBasePlayer* pPlayer = ToBasePlayer(pKiller);
 
 				if (pPlayer->m_pActiveWeapon)
 				{
@@ -718,7 +698,7 @@ void CHalfLifeMultiplay::DeathNotice(CBasePlayer* pVictim, CBaseEntity* pKiller,
 	}
 	else if ((pKiller->pev->flags & FL_CLIENT) != 0)
 	{
-		CBasePlayer* Killer = static_cast<CBasePlayer*>(CBaseEntity::Instance(pKiller));
+		CBasePlayer* Killer = ToBasePlayer(pKiller);
 		Logger->trace("{} killed {} with \"{}\"", PlayerLogInfo{*Killer}, PlayerLogInfo{*pVictim}, killer_weapon_name);
 	}
 	else
@@ -804,8 +784,6 @@ bool CHalfLifeMultiplay::ItemShouldRespawn(CBaseItem* item)
 	return item->m_RespawnDelay >= 0 || item->m_RespawnDelay == ITEM_DEFAULT_RESPAWN_DELAY;
 }
 
-
-
 float CHalfLifeMultiplay::ItemRespawnTime(CBaseItem* item)
 {
 	if (item->m_RespawnDelay == ITEM_NEVER_RESPAWN_DELAY)
@@ -875,7 +853,7 @@ CBaseEntity* CHalfLifeMultiplay::GetPlayerSpawnSpot(CBasePlayer* pPlayer)
 	return pSpawnSpot;
 }
 
-int CHalfLifeMultiplay::PlayerRelationship(CBaseEntity* pPlayer, CBaseEntity* pTarget)
+int CHalfLifeMultiplay::PlayerRelationship(CBasePlayer* pPlayer, CBaseEntity* pTarget)
 {
 	// half life deathmatch has only enemies
 	return GR_NOTTEAMMATE;
@@ -902,8 +880,6 @@ bool CHalfLifeMultiplay::FAllowMonsters()
 	return (allowmonsters.value != 0);
 }
 
-#define INTERMISSION_TIME 6
-
 void CHalfLifeMultiplay::GoToIntermission()
 {
 	if (g_fGameOver)
@@ -914,14 +890,7 @@ void CHalfLifeMultiplay::GoToIntermission()
 	MESSAGE_BEGIN(MSG_ALL, SVC_INTERMISSION);
 	MESSAGE_END();
 
-	// bounds check
-	int time = (int)CVAR_GET_FLOAT("mp_chattime");
-	if (time < 1)
-		CVAR_SET_STRING("mp_chattime", "1");
-	else if (time > MAX_INTERMISSION_TIME)
-		CVAR_SET_STRING("mp_chattime", UTIL_ToString(MAX_INTERMISSION_TIME).c_str());
-
-	m_flIntermissionEndTime = gpGlobals->time + ((int)mp_chattime.value);
+	m_flIntermissionEndTime = gpGlobals->time + GetChatTime();
 	m_flIntermissionStartTime = gpGlobals->time;
 
 	g_fGameOver = true;

@@ -20,7 +20,6 @@
 #include "items/CBaseItem.h"
 
 CHalfLifeCoopplay::CHalfLifeCoopplay()
-	: CHalfLifeMultiplay()
 {
 	m_DisableDeathMessages = false;
 	m_DisableDeathPenalty = false;
@@ -46,21 +45,19 @@ void CHalfLifeCoopplay::UpdateGameMode(CBasePlayer* pPlayer)
 
 void CHalfLifeCoopplay::MonsterKilled(CBaseMonster* pVictim, CBaseEntity* pKiller, CBaseEntity* inflictor)
 {
-	auto killer = CBaseEntity::Instance(pKiller);
+	auto killer = ToBasePlayer(pKiller);
 
-	if (killer->IsPlayer() && !pVictim->IsPlayer())
+	if (killer && !pVictim->IsPlayer())
 	{
-		auto killerPlayer = static_cast<CBasePlayer*>(killer);
+		const int points = IPointsForMonsterKill(killer, pVictim);
 
-		const int points = IPointsForMonsterKill(killerPlayer, pVictim);
+		killer->pev->frags += points;
 
-		killerPlayer->pev->frags += points;
-
-		killerPlayer->SendScoreInfoAll();
+		killer->SendScoreInfoAll();
 	}
 }
 
-int CHalfLifeCoopplay::PlayerRelationship(CBaseEntity* pPlayer, CBaseEntity* pTarget)
+int CHalfLifeCoopplay::PlayerRelationship(CBasePlayer* pPlayer, CBaseEntity* pTarget)
 {
 	return GR_TEAMMATE;
 }
@@ -154,7 +151,6 @@ float CHalfLifeCoopplay::ItemTryRespawn(CBaseItem* item)
 
 	return 0;
 }
-
 
 bool CHalfLifeCoopplay::FPlayerCanTakeDamage(CBasePlayer* pPlayer, CBaseEntity* pAttacker)
 {

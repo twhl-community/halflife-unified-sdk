@@ -34,9 +34,9 @@ public:
 	std::string_view GetGameModeName() const override { return GameModeName; }
 
 	void ClientUserInfoChanged(CBasePlayer* pPlayer, char* infobuffer) override;
-	bool IsTeamplay() override;
+	bool IsTeamplay() override { return true; }
 	bool FPlayerCanTakeDamage(CBasePlayer* pPlayer, CBaseEntity* pAttacker) override;
-	int PlayerRelationship(CBaseEntity* pPlayer, CBaseEntity* pTarget) override;
+	int PlayerRelationship(CBasePlayer* pPlayer, CBaseEntity* pTarget) override;
 	const char* GetTeamID(CBaseEntity* pEntity) override;
 	bool ShouldAutoAim(CBasePlayer* pPlayer, CBaseEntity* target) override;
 	int IPointsForKill(CBasePlayer* pAttacker, CBasePlayer* pKilled) override;

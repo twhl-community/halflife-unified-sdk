@@ -95,7 +95,7 @@ public:
 
 	const char* GetTeamID(CBaseEntity* pEntity) override;
 
-	int PlayerRelationship(CBaseEntity* pPlayer, CBaseEntity* pTarget) override;
+	int PlayerRelationship(CBasePlayer* pPlayer, CBaseEntity* pTarget) override;
 
 	int GetTeamIndex(const char* pTeamName) override;
 

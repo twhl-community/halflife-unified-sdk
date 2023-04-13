@@ -36,7 +36,7 @@ public:
 
 	void MonsterKilled(CBaseMonster* pVictim, CBaseEntity* pKiller, CBaseEntity* inflictor) override;
 
-	int PlayerRelationship(CBaseEntity* pPlayer, CBaseEntity* pTarget) override;
+	int PlayerRelationship(CBasePlayer* pPlayer, CBaseEntity* pTarget) override;
 
 	bool ShouldAutoAim(CBasePlayer* pPlayer, CBaseEntity* target) override;
 

@@ -29,21 +29,6 @@ void CHalfLifeRules::Think()
 {
 }
 
-bool CHalfLifeRules::IsMultiplayer()
-{
-	return false;
-}
-
-bool CHalfLifeRules::IsDeathmatch()
-{
-	return false;
-}
-
-bool CHalfLifeRules::IsCoOp()
-{
-	return false;
-}
-
 bool CHalfLifeRules::FShouldSwitchWeapon(CBasePlayer* pPlayer, CBasePlayerWeapon* pWeapon)
 {
 	if (!pPlayer->m_pActiveWeapon)
@@ -191,7 +176,7 @@ int CHalfLifeRules::DeadPlayerAmmo(CBasePlayer* pPlayer)
 	return GR_PLR_DROP_AMMO_NO;
 }
 
-int CHalfLifeRules::PlayerRelationship(CBaseEntity* pPlayer, CBaseEntity* pTarget)
+int CHalfLifeRules::PlayerRelationship(CBasePlayer* pPlayer, CBaseEntity* pTarget)
 {
 	// why would a single player in half life need this?
 	return GR_NOTTEAMMATE;

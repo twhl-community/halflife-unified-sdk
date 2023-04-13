@@ -1163,12 +1163,16 @@ const char* CHalfLifeCTFplay::GetTeamID(CBaseEntity* pEntity)
 	return "";
 }
 
-int CHalfLifeCTFplay::PlayerRelationship(CBaseEntity* pPlayer, CBaseEntity* pTarget)
+int CHalfLifeCTFplay::PlayerRelationship(CBasePlayer* pPlayer, CBaseEntity* pTarget)
 {
-	if (pTarget && pPlayer)
+	if (!pTarget || !pPlayer || !pTarget->IsPlayer())
 	{
-		if (pTarget->IsPlayer())
-			return static_cast<CBasePlayer*>(pPlayer)->m_iTeamNum == static_cast<CBasePlayer*>(pTarget)->m_iTeamNum ? GR_TEAMMATE : GR_NOTTEAMMATE;
+		return GR_NOTTEAMMATE;
+	}
+
+	if (pPlayer->m_iTeamNum == static_cast<CBasePlayer*>(pTarget)->m_iTeamNum)
+	{
+		return GR_TEAMMATE;
 	}
 
 	return GR_NOTTEAMMATE;
