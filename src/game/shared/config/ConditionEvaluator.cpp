@@ -66,6 +66,12 @@ static bool GetDedicatedServer()
 {
 	return !GetListenServer();
 }
+
+static std::string GetGameMode()
+{
+	assert(g_pGameRules);
+	return std::string{g_pGameRules->GetGameModeName()};
+}
 }
 #endif
 
@@ -81,6 +87,7 @@ static void RegisterGameConfigConditionalsScriptAPI(asIScriptEngine& engine)
 	engine.RegisterGlobalFunction("bool get_Multiplayer() property", asFUNCTION(GetMultiplayer), asCALL_CDECL);
 	engine.RegisterGlobalFunction("bool get_ListenServer() property", asFUNCTION(GetListenServer), asCALL_CDECL);
 	engine.RegisterGlobalFunction("bool get_DedicatedServer() property", asFUNCTION(GetDedicatedServer), asCALL_CDECL);
+	engine.RegisterGlobalFunction("string get_GameMode() property", asFUNCTION(GetGameMode), asCALL_CDECL);
 #endif
 }
 
@@ -124,7 +131,7 @@ std::optional<bool> ConditionEvaluator::Evaluate(std::string_view conditional)
 
 	// Wrap the conditional in a function we can call
 	{
-		const auto script{fmt::format("bool Evaluate() {{ return {}; }}", conditional)};
+		const auto script{fmt::format("bool Evaluate() {{ return ({}); }}", conditional)};
 
 		// Engine message callback reports any errors
 		const int addResult = module->AddScriptSection("conditional", script.c_str(), script.size());
