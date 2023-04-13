@@ -268,6 +268,8 @@ target_sources(server PRIVATE
 	gamerules/CHalfLifeRules.h
 	gamerules/CHalfLifeTeamplay.cpp
 	gamerules/CHalfLifeTeamplay.h
+	gamerules/MapCycleSystem.cpp
+	gamerules/MapCycleSystem.h
 	
 	sound/SentencesSystem.cpp
 	sound/SentencesSystem.h

@@ -41,6 +41,8 @@
 #include "config/sections/HudColorSection.h"
 #include "config/sections/SuitLightTypeSection.h"
 
+#include "gamerules/MapCycleSystem.h"
+
 #include "models/BspLoader.h"
 
 #include "networking/NetworkDataSystem.h"
@@ -289,6 +291,7 @@ void ServerLibrary::AddGameSystems()
 	GameLibrary::AddGameSystems();
 	g_GameSystems.Add(&sound::g_ServerSound);
 	g_GameSystems.Add(&sentences::g_Sentences);
+	g_GameSystems.Add(&g_MapCycleSystem);
 }
 
 void ServerLibrary::SetEntLogLevels(spdlog::level::level_enum level)

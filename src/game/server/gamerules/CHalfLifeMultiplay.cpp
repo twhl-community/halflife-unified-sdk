@@ -22,6 +22,7 @@
 #include "UserMessages.h"
 
 #include "CHalfLifeCTFplay.h"
+#include "MapCycleSystem.h"
 #include "items/CBaseItem.h"
 #include "items/weapons/CSatchelCharge.h"
 
@@ -927,164 +928,6 @@ void CHalfLifeMultiplay::GoToIntermission()
 	m_iEndIntermissionButtonHit = false;
 }
 
-#define MAX_RULE_BUFFER 1024
-
-struct mapcycle_item_t
-{
-	mapcycle_item_t* next;
-
-	char mapname[32];
-	int minplayers, maxplayers;
-	char rulebuffer[MAX_RULE_BUFFER];
-};
-
-struct mapcycle_t
-{
-	mapcycle_item_t* items;
-	mapcycle_item_t* next_item;
-};
-
-/**
- *	@brief Clean up memory used by mapcycle when switching it
- */
-void DestroyMapCycle(mapcycle_t* cycle)
-{
-	mapcycle_item_t *p, *n, *start;
-	p = cycle->items;
-	if (p)
-	{
-		start = p;
-		p = p->next;
-		while (p != start)
-		{
-			n = p->next;
-			delete p;
-			p = n;
-		}
-
-		delete cycle->items;
-	}
-	cycle->items = nullptr;
-	cycle->next_item = nullptr;
-}
-
-/**
- *	@brief Parses mapcycle.txt file into mapcycle_t structure
- */
-bool ReloadMapCycleFile(const char* filename, mapcycle_t* cycle)
-{
-	char szBuffer[MAX_RULE_BUFFER];
-	char szMap[32];
-
-	const auto fileContents = FileSystem_LoadFileIntoBuffer(filename, FileContentFormat::Text);
-
-	bool hasbuffer;
-	mapcycle_item_t *item, *newlist = nullptr, *next;
-
-	if (fileContents.size() > 1)
-	{
-		const char* pFileList = reinterpret_cast<const char*>(fileContents.data());
-
-		// the first map name in the file becomes the default
-		while (true)
-		{
-			hasbuffer = false;
-			memset(szBuffer, 0, MAX_RULE_BUFFER);
-
-			pFileList = COM_Parse(pFileList);
-			if (strlen(com_token) <= 0)
-				break;
-
-			strcpy(szMap, com_token);
-
-			// Any more tokens on this line?
-			if (COM_TokenWaiting(pFileList))
-			{
-				pFileList = COM_Parse(pFileList);
-				if (strlen(com_token) > 0)
-				{
-					hasbuffer = true;
-					strcpy(szBuffer, com_token);
-				}
-			}
-
-			// Check map
-			if (IS_MAP_VALID(szMap))
-			{
-				// Create entry
-				char* s;
-
-				item = new mapcycle_item_t;
-
-				strcpy(item->mapname, szMap);
-
-				item->minplayers = 0;
-				item->maxplayers = 0;
-
-				memset(item->rulebuffer, 0, MAX_RULE_BUFFER);
-
-				if (hasbuffer)
-				{
-					s = g_engfuncs.pfnInfoKeyValue(szBuffer, "minplayers");
-					if (s && '\0' != s[0])
-					{
-						item->minplayers = std::clamp(atoi(s), 0, gpGlobals->maxClients);
-					}
-					s = g_engfuncs.pfnInfoKeyValue(szBuffer, "maxplayers");
-					if (s && '\0' != s[0])
-					{
-						item->maxplayers = std::clamp(atoi(s), 0, gpGlobals->maxClients);
-					}
-
-					// Remove keys
-					//
-					g_engfuncs.pfnInfo_RemoveKey(szBuffer, "minplayers");
-					g_engfuncs.pfnInfo_RemoveKey(szBuffer, "maxplayers");
-
-					strcpy(item->rulebuffer, szBuffer);
-				}
-
-				item->next = cycle->items;
-				cycle->items = item;
-			}
-			else
-			{
-				CGameRules::Logger->debug("Skipping {} from mapcycle, not a valid map", szMap);
-			}
-		}
-	}
-
-	// Fixup circular list pointer
-	item = cycle->items;
-
-	// Reverse it to get original order
-	while (item)
-	{
-		next = item->next;
-		item->next = newlist;
-		newlist = item;
-		item = next;
-	}
-	cycle->items = newlist;
-	item = cycle->items;
-
-	// Didn't parse anything
-	if (!item)
-	{
-		return false;
-	}
-
-	while (item->next)
-	{
-		item = item->next;
-	}
-	item->next = cycle->items;
-
-	cycle->next_item = item->next;
-
-	return true;
-}
-
 /**
  *	@brief Determine the current # of active players on the server for map cycling logic
  */
@@ -1105,184 +948,34 @@ int CountPlayers()
 	return num;
 }
 
-/**
- *	@brief Parse commands/key value pairs to issue right after map xxx command is issued on server level transition
- */
-void ExtractCommandString(char* s, char* szCommand)
-{
-	// Now make rules happen
-	char pkey[512];
-	char value[512]; // use two buffers so compares
-					 // work without stomping on each other
-	char* o;
-
-	if (*s == '\\')
-		s++;
-
-	while (true)
-	{
-		o = pkey;
-		while (*s != '\\')
-		{
-			if ('\0' == *s)
-				return;
-			*o++ = *s++;
-		}
-		*o = 0;
-		s++;
-
-		o = value;
-
-		while (*s != '\\' && '\0' != *s)
-		{
-			if ('\0' == *s)
-				return;
-			*o++ = *s++;
-		}
-		*o = 0;
-
-		strcat(szCommand, pkey);
-		if (strlen(value) > 0)
-		{
-			strcat(szCommand, " ");
-			strcat(szCommand, value);
-		}
-		strcat(szCommand, "\n");
-
-		if ('\0' == *s)
-			return;
-		s++;
-	}
-}
-
-/**
- *	@brief Server is changing to a new level, check mapcycle.txt for map name and setup info
- */
 void CHalfLifeMultiplay::ChangeLevel()
 {
-	static char szPreviousMapCycleFile[256];
-	static mapcycle_t mapcycle;
+	const int curplayers = CountPlayers();
 
-	char szNextMap[32];
-	char szFirstMapInList[32];
-	char szCommands[1500];
-	char szRules[1500];
-	int minplayers = 0, maxplayers = 0;
-	strcpy(szFirstMapInList, "hldm1"); // the absolute default level is hldm1
+	const MapCycleItem* item = g_MapCycleSystem.GetMapCycle()->GetNextMap(curplayers);
 
-	int curplayers;
-	bool do_cycle = true;
+	eastl::fixed_string<char, cchMapNameMost> nextMap;
 
-	// find the map to change to
-	const char* mapcfile = CVAR_GET_STRING("mapcyclefile");
-	ASSERT(mapcfile != nullptr);
-
-	szCommands[0] = '\0';
-	szRules[0] = '\0';
-
-	curplayers = CountPlayers();
-
-	// Has the map cycle filename changed?
-	if (stricmp(mapcfile, szPreviousMapCycleFile))
+	if (item && IS_MAP_VALID(item->MapName.c_str()))
 	{
-		strcpy(szPreviousMapCycleFile, mapcfile);
-
-		DestroyMapCycle(&mapcycle);
-
-		if (!ReloadMapCycleFile(mapcfile, &mapcycle) || (!mapcycle.items))
-		{
-			CGameRules::Logger->debug("Unable to load map cycle file {}", mapcfile);
-			do_cycle = false;
-		}
+		nextMap = item->MapName;
 	}
-
-	if (do_cycle && mapcycle.items)
+	else
 	{
-		bool keeplooking = false;
-		bool found = false;
-		mapcycle_item_t* item;
-
-		// Assume current map
-		strcpy(szNextMap, STRING(gpGlobals->mapname));
-		strcpy(szFirstMapInList, STRING(gpGlobals->mapname));
-
-		// Traverse list
-		for (item = mapcycle.next_item; item->next != mapcycle.next_item; item = item->next)
-		{
-			keeplooking = false;
-
-			ASSERT(item != nullptr);
-
-			if (item->minplayers != 0)
-			{
-				if (curplayers >= item->minplayers)
-				{
-					found = true;
-					minplayers = item->minplayers;
-				}
-				else
-				{
-					keeplooking = true;
-				}
-			}
-
-			if (item->maxplayers != 0)
-			{
-				if (curplayers <= item->maxplayers)
-				{
-					found = true;
-					maxplayers = item->maxplayers;
-				}
-				else
-				{
-					keeplooking = true;
-				}
-			}
-
-			if (keeplooking)
-				continue;
-
-			found = true;
-			break;
-		}
-
-		if (!found)
-		{
-			item = mapcycle.next_item;
-		}
-
-		// Increment next item pointer
-		mapcycle.next_item = item->next;
-
-		// Perform logic on current item
-		strcpy(szNextMap, item->mapname);
-
-		ExtractCommandString(item->rulebuffer, szCommands);
-		strcpy(szRules, item->rulebuffer);
-	}
-
-	if (!IS_MAP_VALID(szNextMap))
-	{
-		strcpy(szNextMap, szFirstMapInList);
+		// Fall back to restarting the current map if we can't determine which map to switch to.
+		nextMap = STRING(gpGlobals->mapname);
 	}
 
 	g_fGameOver = true;
 
-	CGameRules::Logger->debug("CHANGE LEVEL: {}", szNextMap);
-	if (0 != minplayers || 0 != maxplayers)
+	CGameRules::Logger->debug("CHANGE LEVEL: {}", nextMap.c_str());
+
+	if (item && (item->MinPlayers != 0 || item->MaxPlayers != 0))
 	{
-		CGameRules::Logger->debug("PLAYER COUNT:  min {} max {} current {}", minplayers, maxplayers, curplayers);
-	}
-	if (strlen(szRules) > 0)
-	{
-		CGameRules::Logger->debug("RULES:  {}", szRules);
+		CGameRules::Logger->debug("PLAYER COUNT:  min {} max {} current {}", item->MinPlayers, item->MaxPlayers, curplayers);
 	}
 
-	CHANGE_LEVEL(szNextMap, nullptr);
-	if (strlen(szCommands) > 0)
-	{
-		SERVER_COMMAND(szCommands);
-	}
+	CHANGE_LEVEL(nextMap.c_str(), nullptr);
 }
 
 #define MAX_MOTD_CHUNK 60

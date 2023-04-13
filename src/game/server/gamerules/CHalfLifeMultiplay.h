@@ -88,6 +88,9 @@ public:
 	void EndMultiplayerGame() override { GoToIntermission(); }
 
 protected:
+	/**
+	 *	@brief Server is changing to a new level, check mapcycle.json for map name and setup info
+	 */
 	virtual void ChangeLevel();
 	virtual void GoToIntermission();
 	float m_flIntermissionStartTime = 0;
