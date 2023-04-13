@@ -1081,6 +1081,7 @@ void CHalfLifeCTFplay::PlayerKilled(CBasePlayer* pVictim, CBaseEntity* pKiller, 
 				}
 			}
 
+			// TODO: maxclients check makes no sense
 			if (pKiller != pVictim && gpGlobals->maxClients > 0)
 			{
 				for (auto pPlayer : UTIL_FindPlayers())

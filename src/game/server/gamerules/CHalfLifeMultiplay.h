@@ -23,8 +23,12 @@
 class CHalfLifeMultiplay : public CGameRules
 {
 public:
+	static constexpr std::string_view GameModeName{"deathmatch"sv};
+
 	CHalfLifeMultiplay();
 	~CHalfLifeMultiplay() override;
+
+	std::string_view GetGameModeName() const override { return GameModeName; }
 
 	void Think() override;
 	bool IsAllowedToSpawn(CBaseEntity* pEntity) override;

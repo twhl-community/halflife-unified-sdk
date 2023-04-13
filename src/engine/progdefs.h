@@ -24,9 +24,9 @@ struct globalvars_t
 	float force_retouch;
 	string_t mapname;
 	string_t startspot;
-	float deathmatch;
-	float coop;
-	float teamplay;
+	[[deprecated("Use g_pGameRules->IsDeathmatch() instead")]] float deathmatch;
+	[[deprecated("Use g_pGameRules->IsCoOp() instead")]] float coop;
+	[[deprecated("Use g_pGameRules->IsTeamPlay() instead")]] float teamplay;
 	float serverflags;
 	float found_secrets;
 	Vector v_forward;
@@ -44,7 +44,7 @@ struct globalvars_t
 	int trace_hitgroup;
 	int trace_flags;
 	int msg_entity;
-	int cdAudioTrack;
+	[[deprecated("Use the music client command instead")]] int cdAudioTrack;
 	int maxClients;
 	int maxEntities;
 	const char* pStringBase;

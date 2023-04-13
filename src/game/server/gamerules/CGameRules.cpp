@@ -13,6 +13,10 @@
  *
  ****/
 
+#include <algorithm>
+#include <string>
+#include <vector>
+
 #include "cbase.h"
 #include "GameLibrary.h"
 #include "CGameRules.h"
@@ -22,7 +26,6 @@
 #include "CHalfLifeRules.h"
 #include "CHalfLifeTeamplay.h"
 #include "spawnpoints.h"
-#include "world.h"
 #include "UserMessages.h"
 #include "items/weapons/AmmoTypeSystem.h"
 
@@ -202,54 +205,96 @@ void CGameRules::BecomeSpectator(CBasePlayer* player, const CommandArgs& args)
 		ClientPrint(player, HUD_PRINTCONSOLE, "Spectator mode is disabled.\n");
 }
 
-CGameRules* InstallSinglePlayerGameRules()
+template <typename TGameRules>
+CGameRules* CreateGameRules()
 {
-	g_GameLogger->trace("Creating singleplayer gamerules");
-	// generic half-life
-	return new CHalfLifeRules;
+	return new TGameRules();
 }
 
-CGameRules* InstallGameRules(CBaseEntity* pWorld)
-{
-	g_GameLogger->trace("Creating gamerules");
+using GameRulesFactory = CGameRules* (*)();
 
-	// TODO: need to be able to identify gamerules by name.
-	if (0 == gpGlobals->deathmatch)
+using GameRulesEntry = std::pair<std::string, GameRulesFactory>;
+
+template <typename TGameRules>
+GameRulesEntry CreateGameRulesEntry()
+{
+	return {std::string{TGameRules::GameModeName}, &CreateGameRules<TGameRules>};
+}
+
+// Map of all multiplayer gamerules.
+static const std::vector<GameRulesEntry> GameRulesList{
+	CreateGameRulesEntry<CHalfLifeMultiplay>(),
+	CreateGameRulesEntry<CHalfLifeTeamplay>(),
+	CreateGameRulesEntry<CHalfLifeCTFplay>(),
+	CreateGameRulesEntry<CHalfLifeCoopplay>()};
+
+CGameRules* InstallGameRules(std::string_view gameModeName)
+{
+	CGameRules::Logger->trace("Creating gamerules");
+
+	if (gpGlobals->maxClients == 1)
 	{
-		return InstallSinglePlayerGameRules();
+		if (!gameModeName.empty())
+		{
+			CGameRules::Logger->info("Ignoring gamemode setting {} in singleplayer", gameModeName);
+		}
+
+		CGameRules::Logger->trace("Creating singleplayer gamerules");
+		// generic half-life
+		return CreateGameRules<CHalfLifeRules>();
 	}
 
-	if (coopplay.value > 0)
+	if (!gameModeName.empty())
 	{
-		g_GameLogger->trace("Creating coop gamerules");
-		return new CHalfLifeCoopplay();
+		if (auto it = std::find_if(GameRulesList.begin(), GameRulesList.end(), [&](const auto& candidate)
+				{ return candidate.first == gameModeName; });
+			it != GameRulesList.end())
+		{
+			CGameRules::Logger->trace("Creating {} gamerules", gameModeName);
+			return it->second();
+		}
+
+		CGameRules::Logger->error("Couldn't create {} gamerules, falling back to deathmatch game mode", gameModeName);
 	}
 	else
 	{
-		if ((pWorld->pev->spawnflags & SF_WORLD_CTF) != 0)
-		{
-			g_GameLogger->trace("Creating ctf gamerules");
-			return new CHalfLifeCTFplay();
-		}
+		CGameRules::Logger->trace("Autodetected deathmatch game mode");
+	}
 
-		if (teamplay.value > 0)
-		{
-			g_GameLogger->trace("Creating teamplay gamerules");
-			// teamplay
+	CGameRules::Logger->trace("Creating deathmatch gamerules");
 
-			return new CHalfLifeTeamplay;
-		}
-		if ((int)gpGlobals->deathmatch == 1)
-		{
-			g_GameLogger->trace("Creating deathmatch gamerules");
-			// vanilla deathmatch
-			return new CHalfLifeMultiplay;
-		}
-		else
-		{
-			g_GameLogger->trace("Creating deathmatch gamerules");
-			// vanilla deathmatch??
-			return new CHalfLifeMultiplay;
-		}
+	return CreateGameRules<CHalfLifeMultiplay>();
+}
+
+const char* GameModeIndexToString(int index)
+{
+	// Autodetect game mode.
+	if (index == 0)
+	{
+		return "";
+	}
+
+	--index;
+
+	if (index < 0 || static_cast<std::size_t>(index) >= GameRulesList.size())
+	{
+		CGameRules::Logger->error("Invalid mp_createserver_gamemode value");
+		return "";
+	}
+
+	return GameRulesList[index].first.c_str();
+}
+
+void PrintMultiplayerGameModes()
+{
+	Con_Printf("Singleplayer always uses singleplayer gamerules\n");
+	Con_Printf("Set mp_gamemode to \"autodetect\" to autodetect the game mode\n");
+
+	Con_Printf("%.*s (not an option for mp_gamemode)\n",
+		static_cast<int>(CHalfLifeRules::GameModeName.size()), CHalfLifeRules::GameModeName.data());
+
+	for (const auto& gameMode : GameRulesList)
+	{
+		Con_Printf("%s\n", gameMode.first.c_str());
 	}
 }

@@ -16,6 +16,7 @@
 #pragma once
 
 #include <memory>
+#include <optional>
 #include <stdexcept>
 #include <string>
 #include <string_view>
@@ -33,14 +34,7 @@
 #include "utils/string_utils.h"
 
 template <typename DataContext>
-struct GameConfigDefinition;
-
-template <typename DataContext>
-struct GameConfigLoadParameters final
-{
-	DataContext& Data;
-	const char* PathID = nullptr;
-};
+class GameConfigDefinition;
 
 template <typename DataContext>
 struct GameConfigContext final
@@ -93,6 +87,52 @@ public:
 	virtual bool TryParse(GameConfigContext<DataContext>& context) const = 0;
 };
 
+struct GameConfigFileData
+{
+	std::string FileName;
+	json Data;
+};
+
+struct GameModeConfiguration final
+{
+	std::string GameMode;
+	bool AllowOverride{true};
+};
+
+/**
+ *	@brief Contains the contents of a loaded game configuration, ready to be parsed.
+ */
+template <typename DataContext>
+class GameConfig final
+{
+public:
+	explicit GameConfig(const GameConfigDefinition<DataContext>* definition,
+		std::shared_ptr<spdlog::logger> logger,
+		std::vector<GameConfigFileData>&& contents)
+		: m_Definition(definition),
+		  m_Logger(logger),
+		  m_Contents(std::move(contents))
+	{
+	}
+
+	GameModeConfiguration GetGameModeConfiguration() const;
+
+	void Parse(DataContext& dataContext) const;
+
+private:
+	void ParseSectionGroups(DataContext& dataContext, const GameConfigFileData& input) const;
+
+	void ParseSections(DataContext& dataContext, std::string_view configFileName, const json& sectionGroup) const;
+
+	bool ShouldProcessSectionGroup(const json& input) const;
+
+private:
+	const GameConfigDefinition<DataContext>* m_Definition;
+	std::shared_ptr<spdlog::logger> m_Logger;
+	// List of loaded file contents, in parse order.
+	std::vector<GameConfigFileData> m_Contents;
+};
+
 /**
  *	@brief Immutable definition of a game configuration.
  *	Contains a set of sections that configuration files can use.
@@ -101,14 +141,17 @@ public:
  *	@tparam DataContext Type of the data context this definition operates on.
  */
 template <typename DataContext>
-struct GameConfigDefinition
+class GameConfigDefinition
 {
+public:
 	GameConfigDefinition(
 		std::shared_ptr<spdlog::logger> logger,
 		std::string&& name,
+		bool hasGameModeConfig,
 		std::vector<std::unique_ptr<const GameConfigSection<DataContext>>>&& sections)
 		: m_Logger(logger),
 		  m_Name(std::move(name)),
+		  m_HasGameModeConfig(hasGameModeConfig),
 		  m_Sections(std::move(sections))
 	{
 	}
@@ -128,31 +171,25 @@ struct GameConfigDefinition
 	 */
 	std::string GetSchema() const;
 
-	bool TryLoad(const char* fileName, const GameConfigLoadParameters<DataContext>& parameters = {}) const;
+	std::optional<GameConfig<DataContext>> TryLoad(const char* fileName, const char* pathID = nullptr) const;
 
 private:
 	struct LoadContext
 	{
-		const GameConfigLoadParameters<DataContext>& Parameters;
+		const char* PathID{};
 		GameConfigIncludeStack& IncludeStack;
 		int Depth = 1;
+		std::vector<GameConfigFileData> Contents;
 	};
 
 	bool TryLoadCore(LoadContext& loadContext, const char* fileName) const;
 
-	void ParseConfig(LoadContext& loadContext, std::string_view configFileName, const json& input) const;
-
 	void ParseIncludedFiles(LoadContext& loadContext, const json& input) const;
-
-	void ParseSectionGroups(LoadContext& loadContext, std::string_view configFileName, const json& input) const;
-
-	void ParseSections(LoadContext& loadContext, std::string_view configFileName, const json& sectionGroup) const;
-
-	bool ShouldProcessSectionGroup(const json& input) const;
 
 private:
 	std::shared_ptr<spdlog::logger> m_Logger;
 	std::string m_Name;
+	bool m_HasGameModeConfig;
 	std::vector<std::unique_ptr<const GameConfigSection<DataContext>>> m_Sections;
 };
 
@@ -175,13 +212,152 @@ public:
 
 	template <typename DataContext>
 	std::shared_ptr<const GameConfigDefinition<DataContext>> CreateDefinition(
-		std::string&& name, std::vector<std::unique_ptr<const GameConfigSection<DataContext>>>&& sections);
+		std::string&& name, bool hasGameModeConfig,
+		std::vector<std::unique_ptr<const GameConfigSection<DataContext>>>&& sections);
 
 private:
 	std::shared_ptr<spdlog::logger> m_Logger;
 };
 
 inline GameConfigSystem g_GameConfigSystem;
+
+template <typename DataContext>
+GameModeConfiguration GameConfig<DataContext>::GetGameModeConfiguration() const
+{
+	GameModeConfiguration config;
+
+	for (const auto& data : m_Contents)
+	{
+		try
+		{
+			if (auto gameMode = data.Data.find("GameMode"); gameMode != data.Data.end())
+			{
+				config.GameMode = gameMode->get<std::string>();
+			}
+
+			config.AllowOverride = data.Data.value<bool>("AllowGameModeOverride", config.AllowOverride);
+		}
+		catch (const std::exception& e)
+		{
+			m_Logger->error("Error parsing map configuration: {}", e.what());
+		}
+	}
+
+	return config;
+}
+
+template <typename DataContext>
+void GameConfig<DataContext>::Parse(DataContext& dataContext) const
+{
+	for (const auto& data : m_Contents)
+	{
+		try
+		{
+			ParseSectionGroups(dataContext, data);
+		}
+		catch (const std::exception& e)
+		{
+			m_Logger->error("Error parsing map configuration: {}", e.what());
+		}
+	}
+}
+
+template <typename DataContext>
+void GameConfig<DataContext>::ParseSectionGroups(DataContext& dataContext, const GameConfigFileData& input) const
+{
+	const auto sectionGroups = input.Data.find("SectionGroups");
+
+	if (sectionGroups == input.Data.end() || !sectionGroups->is_array())
+	{
+		return;
+	}
+
+	for (std::size_t index = 0; const auto& sectionGroup : *sectionGroups)
+	{
+		m_Logger->trace("Entering section group {}", index);
+
+		if (ShouldProcessSectionGroup(sectionGroup))
+		{
+			ParseSections(dataContext, input.FileName, sectionGroup);
+		}
+
+		m_Logger->trace("Exiting section group {}", index);
+
+		++index;
+	}
+}
+
+template <typename DataContext>
+void GameConfig<DataContext>::ParseSections(DataContext& dataContext, std::string_view configFileName, const json& sectionGroup) const
+{
+	const auto sections = sectionGroup.find("Sections");
+
+	if (sections == sectionGroup.end() || !sections->is_object())
+	{
+		return;
+	}
+
+	m_Logger->trace("{} sections in group", sections->size());
+
+	for (const auto& [name, section] : sections->items())
+	{
+		m_Logger->debug("Processing section \"{}\" ({})", name, section.type_name());
+
+		if (const auto sectionObj = m_Definition->FindSection(name); sectionObj)
+		{
+			if (sectionObj->GetType() != section.type())
+			{
+				continue;
+			}
+
+			GameConfigContext<DataContext> context{
+				.ConfigFileName = configFileName,
+				.Input = section,
+				.Definition = *m_Definition,
+				.Logger = *m_Logger,
+				.Data = dataContext};
+
+			if (!sectionObj->TryParse(context))
+			{
+				m_Logger->error("Error parsing section \"{}\"", sectionObj->GetName());
+			}
+		}
+		else
+		{
+			m_Logger->warn("Unknown section \"{}\"", name);
+		}
+	}
+}
+
+template <typename DataContext>
+bool GameConfig<DataContext>::ShouldProcessSectionGroup(const json& input) const
+{
+	if (const auto condition = Trim(input.value("Condition"sv, ""sv)); !condition.empty())
+	{
+		m_Logger->trace("Testing section group condition \"{}\"", condition);
+
+		const auto shouldUseSection = g_ConditionEvaluator.Evaluate(condition);
+
+		if (!shouldUseSection.has_value())
+		{
+			// Error already reported
+			m_Logger->trace("Skipping section group because an error occurred while evaluating condition");
+			return false;
+		}
+
+		if (!shouldUseSection.value())
+		{
+			m_Logger->trace("Skipping section group because condition evaluated false");
+			return false;
+		}
+		else
+		{
+			m_Logger->trace("Using section group because condition evaluated true");
+		}
+	}
+
+	return true;
+}
 
 template <typename DataContext>
 inline const GameConfigSection<DataContext>* GameConfigDefinition<DataContext>::FindSection(std::string_view name) const
@@ -249,6 +425,17 @@ inline std::string GameConfigDefinition<DataContext>::GetSchema() const
 		return buffer;
 	}();
 
+	const std::string_view gameModeConfig = R"("GameMode": {
+			"title": "Game Mode",
+			"description": "Game mode to use for this map",
+			"type": "string"
+		},
+		"AllowGameModeOverride": {
+			"title": "Allow Game Mode Override",
+			"description": "Allow the server to override the game mode using mp_gamemode",
+			"type": "boolean"
+		},)"sv;
+
 	return fmt::format(R"(
 {{
 	"$schema": "http://json-schema.org/draft-07/schema#",
@@ -265,6 +452,7 @@ inline std::string GameConfigDefinition<DataContext>::GetSchema() const
 				"pattern": "^[\\w/]+.json$"
 			}}
 		}},
+		{}
 		"SectionGroups": {{
 			"title": "Section groups",
 			"type": "array",
@@ -291,11 +479,12 @@ inline std::string GameConfigDefinition<DataContext>::GetSchema() const
 	}}
 }}
 )",
-		this->GetName(), sections);
+		this->GetName(), m_HasGameModeConfig ? gameModeConfig : "", sections);
 }
 
 template <typename DataContext>
-bool GameConfigDefinition<DataContext>::TryLoad(const char* fileName, const GameConfigLoadParameters<DataContext>& parameters) const
+std::optional<GameConfig<DataContext>> GameConfigDefinition<DataContext>::TryLoad(
+	const char* fileName, const char* pathID) const
 {
 	GameConfigIncludeStack includeStack;
 
@@ -303,10 +492,15 @@ bool GameConfigDefinition<DataContext>::TryLoad(const char* fileName, const Game
 	includeStack.Add(fileName);
 
 	LoadContext loadContext{
-		.Parameters = parameters,
+		.PathID = pathID,
 		.IncludeStack = includeStack};
 
-	return TryLoadCore(loadContext, fileName);
+	if (!TryLoadCore(loadContext, fileName))
+	{
+		return {};
+	}
+
+	return GameConfig<DataContext>{this, m_Logger, std::move(loadContext.Contents)};
 }
 
 template <typename DataContext>
@@ -316,10 +510,11 @@ bool GameConfigDefinition<DataContext>::TryLoadCore(LoadContext& loadContext, co
 
 	auto result = g_JSON.ParseJSONFile(
 		fileName,
-		{.SchemaName = GetName(), .PathID = loadContext.Parameters.PathID},
-		[&, this](const json& input)
+		{.SchemaName = GetName(), .PathID = loadContext.PathID},
+		[&, this](json& input)
 		{
-			ParseConfig(loadContext, fileName, input);
+			ParseIncludedFiles(loadContext, input);
+			loadContext.Contents.emplace_back(fileName, std::move(input));
 			return true; // Just return something so optional doesn't complain.
 		});
 
@@ -333,16 +528,6 @@ bool GameConfigDefinition<DataContext>::TryLoadCore(LoadContext& loadContext, co
 	}
 
 	return result.has_value();
-}
-
-template <typename DataContext>
-void GameConfigDefinition<DataContext>::ParseConfig(LoadContext& loadContext, std::string_view configFileName, const json& input) const
-{
-	if (input.is_object())
-	{
-		ParseIncludedFiles(loadContext, input);
-		ParseSectionGroups(loadContext, configFileName, input);
-	}
 }
 
 template <typename DataContext>
@@ -398,107 +583,12 @@ void GameConfigDefinition<DataContext>::ParseIncludedFiles(LoadContext& loadCont
 }
 
 template <typename DataContext>
-void GameConfigDefinition<DataContext>::ParseSectionGroups(LoadContext& loadContext, std::string_view configFileName, const json& input) const
-{
-	const auto sectionGroups = input.find("SectionGroups");
-
-	if (sectionGroups == input.end() || !sectionGroups->is_array())
-	{
-		return;
-	}
-
-	for (std::size_t index = 0; const auto& sectionGroup : *sectionGroups)
-	{
-		m_Logger->trace("Entering section group {}", index);
-
-		if (ShouldProcessSectionGroup(sectionGroup))
-		{
-			ParseSections(loadContext, configFileName, sectionGroup);
-		}
-
-		m_Logger->trace("Exiting section group {}", index);
-
-		++index;
-	}
-}
-
-template <typename DataContext>
-void GameConfigDefinition<DataContext>::ParseSections(LoadContext& loadContext, std::string_view configFileName, const json& sectionGroup) const
-{
-	const auto sections = sectionGroup.find("Sections");
-
-	if (sections == sectionGroup.end() || !sections->is_object())
-	{
-		return;
-	}
-
-	m_Logger->trace("{} sections in group", sections->size());
-
-	for (const auto& [name, section] : sections->items())
-	{
-		m_Logger->debug("Processing section \"{}\" ({})", name, section.type_name());
-
-		if (const auto sectionObj = FindSection(name); sectionObj)
-		{
-			if (sectionObj->GetType() != section.type())
-			{
-				continue;
-			}
-
-			GameConfigContext<DataContext> context{
-				.ConfigFileName = configFileName,
-				.Input = section,
-				.Definition = *this,
-				.Logger = *m_Logger,
-				.Data = loadContext.Parameters.Data};
-
-			if (!sectionObj->TryParse(context))
-			{
-				m_Logger->error("Error parsing section \"{}\"", sectionObj->GetName());
-			}
-		}
-		else
-		{
-			m_Logger->warn("Unknown section \"{}\"", name);
-		}
-	}
-}
-
-template <typename DataContext>
-bool GameConfigDefinition<DataContext>::ShouldProcessSectionGroup(const json& input) const
-{
-	if (const auto condition = Trim(input.value("Condition"sv, ""sv)); !condition.empty())
-	{
-		m_Logger->trace("Testing section group condition \"{}\"", condition);
-
-		const auto shouldUseSection = g_ConditionEvaluator.Evaluate(condition);
-
-		if (!shouldUseSection.has_value())
-		{
-			// Error already reported
-			m_Logger->trace("Skipping section group because an error occurred while evaluating condition");
-			return false;
-		}
-
-		if (!shouldUseSection.value())
-		{
-			m_Logger->trace("Skipping section group because condition evaluated false");
-			return false;
-		}
-		else
-		{
-			m_Logger->trace("Using section group because condition evaluated true");
-		}
-	}
-
-	return true;
-}
-
-template <typename DataContext>
 inline std::shared_ptr<const GameConfigDefinition<DataContext>> GameConfigSystem::CreateDefinition(
-	std::string&& name, std::vector<std::unique_ptr<const GameConfigSection<DataContext>>>&& sections)
+	std::string&& name, bool hasGameModeConfig,
+	std::vector<std::unique_ptr<const GameConfigSection<DataContext>>>&& sections)
 {
-	auto definition = std::make_shared<const GameConfigDefinition<DataContext>>(m_Logger, std::move(name), std::move(sections));
+	auto definition = std::make_shared<const GameConfigDefinition<DataContext>>(
+		m_Logger, std::move(name), hasGameModeConfig, std::move(sections));
 
 	g_JSON.RegisterSchema(std::string{definition->GetName()}, [=]()
 		{ return definition->GetSchema(); });

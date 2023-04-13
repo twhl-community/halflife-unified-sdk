@@ -255,15 +255,6 @@ void CWorld::Precache()
 
 	CVAR_SET_STRING("room_type", "0"); // clear DSP
 
-	// If we're loading a save game then this must be singleplayer, and gamerules has been installed by the ServerLibrary already.
-	if (!g_Server.IsCurrentMapLoadedFromSaveGame())
-	{
-		// Set up game rules
-		delete g_pGameRules;
-
-		g_pGameRules = InstallGameRules(this);
-	}
-
 	//!!!UNDONE why is there so much Spawn code in the Precache function? I'll just keep it here
 
 	///!!!LATER - do we want a sound ent in deathmatch? (sjb)
@@ -423,15 +414,6 @@ void CWorld::Precache()
 		CVAR_SET_FLOAT("mp_defaultteam", 0);
 	}
 
-	if ((pev->spawnflags & SF_WORLD_COOP) != 0)
-	{
-		CVAR_SET_FLOAT("mp_defaultcoop", 1);
-	}
-	else
-	{
-		CVAR_SET_FLOAT("mp_defaultcoop", 0);
-	}
-
 	CVAR_SET_FLOAT("sv_wateramp", pev->scale);
 }
 
@@ -493,14 +475,6 @@ bool CWorld::KeyValue(KeyValueData* pkvd)
 		if (0 != atoi(pkvd->szValue))
 		{
 			pev->spawnflags |= SF_WORLD_FORCETEAM;
-		}
-		return true;
-	}
-	else if (FStrEq(pkvd->szKeyName, "defaultctf"))
-	{
-		if (0 != atoi(pkvd->szValue))
-		{
-			pev->spawnflags |= SF_WORLD_CTF;
 		}
 		return true;
 	}

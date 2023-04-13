@@ -184,7 +184,7 @@ static void QueueChangelevel(const char* mapName, const char* landmarkName, bool
 	lastSpawnCount = g_Server.GetSpawnCount();
 
 	// Persistent level changes only work in singleplayer.
-	if (usePersistentLevelChange && gpGlobals->maxClients == 1)
+	if (usePersistentLevelChange && !g_pGameRules->IsMultiplayer())
 	{
 		SERVER_COMMAND(fmt::format("changelevel2 {} {}\n", mapName, landmarkName).c_str());
 	}

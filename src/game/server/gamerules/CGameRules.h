@@ -16,6 +16,7 @@
 #pragma once
 
 #include <memory>
+#include <string_view>
 
 #include <spdlog/logger.h>
 
@@ -75,6 +76,11 @@ enum
 
 constexpr int ChargerRechargeDelayNever = -1;
 
+/**
+ *	@brief Manages the rules for the current game mode.
+ *	@details Each subclass should define a <tt>static constexpr std::string_view GameModeName</tt> member and
+ *		override @c GetGameModeName.
+ */
 class CGameRules
 {
 public:
@@ -82,6 +88,8 @@ public:
 
 	CGameRules();
 	virtual ~CGameRules() = default;
+
+	virtual std::string_view GetGameModeName() const = 0;
 
 	/**
 	 *	@brief runs every server frame, should handle any timer tasks, periodic events, etc.
@@ -335,12 +343,14 @@ private:
 	ScopedClientCommand m_SpecModeCommand;
 };
 
-CGameRules* InstallSinglePlayerGameRules();
-
 /**
  *	@brief instantiate the proper game rules object
  */
-CGameRules* InstallGameRules(CBaseEntity* pWorld);
+CGameRules* InstallGameRules(std::string_view gameModeName);
+
+const char* GameModeIndexToString(int index);
+
+void PrintMultiplayerGameModes();
 
 inline CGameRules* g_pGameRules = nullptr;
 inline bool g_fGameOver;

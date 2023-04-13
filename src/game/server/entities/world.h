@@ -19,8 +19,6 @@
 
 #define SF_WORLD_DARK 0x0001	  // Fade from black at startup
 #define SF_WORLD_FORCETEAM 0x0004 // Force teams
-#define SF_WORLD_CTF 0x0008		  // CTF gamemode
-#define SF_WORLD_COOP 0x0010	  // Co-op gamemode
 
 // this moved here from world.cpp, to allow classes to be derived from it
 /**

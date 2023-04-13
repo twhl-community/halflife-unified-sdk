@@ -24,7 +24,6 @@ extern cvar_t displaysoundlist;
 // multiplayer server rules
 extern cvar_t fragsleft;
 extern cvar_t timeleft;
-extern cvar_t teamplay;
 extern cvar_t fraglimit;
 extern cvar_t timelimit;
 extern cvar_t friendlyfire;
@@ -44,7 +43,6 @@ extern cvar_t mp_chattime;
 extern cvar_t ctf_capture;
 extern cvar_t multipower;
 extern cvar_t ctf_autoteam;
-extern cvar_t coopplay;
 extern cvar_t coopweprespawn;
 extern cvar_t spamdelay;
 

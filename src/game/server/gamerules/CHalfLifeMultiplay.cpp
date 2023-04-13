@@ -251,7 +251,7 @@ bool CHalfLifeMultiplay::IsDeathmatch()
 
 bool CHalfLifeMultiplay::IsCoOp()
 {
-	return 0 != gpGlobals->coop;
+	return false;
 }
 
 bool CHalfLifeMultiplay::FShouldSwitchWeapon(CBasePlayer* pPlayer, CBasePlayerWeapon* pWeapon)

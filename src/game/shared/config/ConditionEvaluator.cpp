@@ -46,15 +46,15 @@ struct TimeoutHandler
 #ifndef CLIENT_DLL
 namespace
 {
-// TODO: need to get this from gamerules
-static bool GetSingleplayer()
-{
-	return gpGlobals->deathmatch == 0;
-}
-
 static bool GetMultiplayer()
 {
-	return gpGlobals->deathmatch != 0;
+	assert(g_pGameRules);
+	return g_pGameRules->IsMultiplayer();
+}
+
+static bool GetSingleplayer()
+{
+	return !GetMultiplayer();
 }
 
 static bool GetListenServer()

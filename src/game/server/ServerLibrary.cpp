@@ -50,6 +50,8 @@
 #include "sound/ServerSoundSystem.h"
 
 cvar_t servercfgfile = {"sv_servercfgfile", "cfg/server/server.json", FCVAR_NOEXTRAWHITEPACE | FCVAR_ISPATH};
+cvar_t mp_gamemode = {"mp_gamemode", "", FCVAR_SERVER};
+cvar_t mp_createserver_gamemode = {"mp_createserver_gamemode", "", FCVAR_SERVER};
 
 ServerLibrary::ServerLibrary() = default;
 ServerLibrary::~ServerLibrary() = default;
@@ -82,6 +84,13 @@ bool ServerLibrary::Initialize()
 	SV_CreateClientCommands();
 
 	g_engfuncs.pfnCVarRegister(&servercfgfile);
+	g_engfuncs.pfnCVarRegister(&mp_gamemode);
+	g_engfuncs.pfnCVarRegister(&mp_createserver_gamemode);
+
+	g_ConCommands.CreateCommand(
+		"mp_list_gamemodes", [](const auto&)
+		{ PrintMultiplayerGameModes(); },
+		CommandLibraryPrefix::No);
 
 	RegisterCommandWhitelistSchema();
 
@@ -154,6 +163,11 @@ void ServerLibrary::NewMapStarted(bool loadGame)
 
 	// Execute any commands still queued up so cvars have the correct value.
 	SERVER_EXECUTE();
+	// These extra executions are needed to overcome the engine's inserting of wait commands that
+	// delay server settings configured in the Create Server dialog from being set.
+	// We need those settings to configure our gamerules so we're brute forcing the additional executions.
+	SERVER_EXECUTE();
+	SERVER_EXECUTE();
 
 	m_IsStartingNewMap = false;
 	--m_InNewMapStartedCount;
@@ -221,19 +235,11 @@ void ServerLibrary::NewMapStarted(bool loadGame)
 		ShutdownServer("Shutting down server due to error loading BSP data");
 	}
 
-	// We're loading a save game so we will always use singleplayer gamerules.
-	// Install it now so entities can access it during restore.
-	if (IsCurrentMapLoadedFromSaveGame())
-	{
-		delete g_pGameRules;
-		g_pGameRules = InstallSinglePlayerGameRules();
-	}
+	// Load the config files, which will initialize the map state as needed
+	LoadServerConfigFiles();
 
 	// This must be done before any entities are created, and after gamerules have been installed.
 	Weapon_RegisterWeaponData();
-
-	// Load the config files, which will initialize the map state as needed
-	LoadServerConfigFiles();
 
 	sentences::g_Sentences.NewMapStarted();
 
@@ -307,7 +313,7 @@ void ServerLibrary::SetEntLogLevels(spdlog::level::level_enum level)
 
 void ServerLibrary::CreateConfigDefinitions()
 {
-	m_ServerConfigDefinition = g_GameConfigSystem.CreateDefinition("ServerGameConfig", [&]()
+	m_ServerConfigDefinition = g_GameConfigSystem.CreateDefinition("ServerGameConfig", false, [&]()
 		{
 			std::vector<std::unique_ptr<const GameConfigSection<ServerConfigContext>>> sections;
 
@@ -317,7 +323,7 @@ void ServerLibrary::CreateConfigDefinitions()
 
 			return sections; }());
 
-	m_MapConfigDefinition = g_GameConfigSystem.CreateDefinition("MapGameConfig", [&, this]()
+	m_MapConfigDefinition = g_GameConfigSystem.CreateDefinition("MapGameConfig", true, [&, this]()
 		{
 			std::vector<std::unique_ptr<const GameConfigSection<ServerConfigContext>>> sections;
 
@@ -356,6 +362,58 @@ void ServerLibrary::LoadServerConfigFiles()
 {
 	const auto start = std::chrono::high_resolution_clock::now();
 
+	std::optional<GameConfig<ServerConfigContext>> mapConfig;
+
+	// Check if the file exists so we don't get errors about it during loading
+	if (const auto mapCfgFileName = fmt::format("cfg/maps/{}.json", STRING(gpGlobals->mapname));
+		g_pFileSystem->FileExists(mapCfgFileName.c_str()))
+	{
+		g_GameLogger->trace("Loading map config file");
+		mapConfig = m_MapConfigDefinition->TryLoad(mapCfgFileName.c_str());
+	}
+
+	GameModeConfiguration gameModeConfig;
+
+	if (mapConfig)
+	{
+		gameModeConfig = mapConfig->GetGameModeConfiguration();
+	}
+
+	// The Create Server dialog only accepts lists with numeric values so we need to remap it to the game mode name.
+	if (mp_createserver_gamemode.string[0] != '\0')
+	{
+		g_engfuncs.pfnCvar_DirectSet(&mp_gamemode, GameModeIndexToString(int(mp_createserver_gamemode.value)));
+		g_engfuncs.pfnCvar_DirectSet(&mp_createserver_gamemode, "");
+	}
+
+	if (gameModeConfig.AllowOverride && mp_gamemode.string[0] != '\0')
+	{
+		if (gameModeConfig.GameMode.empty())
+		{
+			CGameRules::Logger->trace("Setting server configured game mode {}", mp_gamemode.string);
+		}
+		else
+		{
+			CGameRules::Logger->trace("Overriding map configured game mode {} with server configured game mode {}",
+				gameModeConfig.GameMode, mp_gamemode.string);
+		}
+
+		gameModeConfig.GameMode = mp_gamemode.string;
+	}
+	else if (!gameModeConfig.GameMode.empty())
+	{
+		CGameRules::Logger->trace("Using map configured game mode {}", gameModeConfig.GameMode);
+	}
+	else
+	{
+		CGameRules::Logger->trace("Using autodetected game mode");
+	}
+
+	delete g_pGameRules;
+	g_pGameRules = InstallGameRules(gameModeConfig.GameMode);
+
+	assert(g_pGameRules);
+
 	ServerConfigContext context{.State = m_MapState};
 
 	// Initialize file lists to their defaults.
@@ -363,7 +421,7 @@ void ServerLibrary::LoadServerConfigFiles()
 	context.MaterialsFiles.push_back("sound/materials.json");
 	context.SkillFiles.push_back("cfg/skill.json");
 
-	if (gpGlobals->maxClients > 1)
+	if (g_pGameRules->IsMultiplayer())
 	{
 		context.SkillFiles.push_back("cfg/skill_multiplayer.json");
 	}
@@ -371,15 +429,16 @@ void ServerLibrary::LoadServerConfigFiles()
 	if (const auto cfgFile = servercfgfile.string; cfgFile && '\0' != cfgFile[0])
 	{
 		g_GameLogger->trace("Loading server config file");
-		m_ServerConfigDefinition->TryLoad(cfgFile, {.Data = context, .PathID = "GAMECONFIG"});
+			
+		if (auto config = m_ServerConfigDefinition->TryLoad(cfgFile, "GAMECONFIG"); config)
+		{
+			config->Parse(context);
+		}
 	}
 
-	// Check if the file exists so we don't get errors about it during loading
-	if (const auto mapCfgFileName = fmt::format("cfg/maps/{}.json", STRING(gpGlobals->mapname));
-		g_pFileSystem->FileExists(mapCfgFileName.c_str()))
+	if (mapConfig)
 	{
-		g_GameLogger->trace("Loading map config file");
-		m_MapConfigDefinition->TryLoad(mapCfgFileName.c_str(), {.Data = context});
+		mapConfig->Parse(context);
 	}
 
 	sentences::g_Sentences.LoadSentences(context.SentencesFiles);

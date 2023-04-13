@@ -27,7 +27,11 @@
 class CHalfLifeTeamplay : public CHalfLifeMultiplay
 {
 public:
+	static constexpr std::string_view GameModeName{"teamplay"sv};
+
 	CHalfLifeTeamplay();
+
+	std::string_view GetGameModeName() const override { return GameModeName; }
 
 	void ClientUserInfoChanged(CBasePlayer* pPlayer, char* infobuffer) override;
 	bool IsTeamplay() override;

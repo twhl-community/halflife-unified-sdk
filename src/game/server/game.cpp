@@ -23,7 +23,6 @@ cvar_t fragsleft = {"mp_fragsleft", "0", FCVAR_SERVER | FCVAR_UNLOGGED}; // Don'
 cvar_t timeleft = {"mp_timeleft", "0", FCVAR_SERVER | FCVAR_UNLOGGED};	 // "      "
 
 // multiplayer server rules
-cvar_t teamplay = {"mp_teamplay", "0", FCVAR_SERVER};
 cvar_t fraglimit = {"mp_fraglimit", "0", FCVAR_SERVER};
 cvar_t timelimit = {"mp_timelimit", "0", FCVAR_SERVER};
 cvar_t friendlyfire = {"mp_friendlyfire", "0", FCVAR_SERVER};
@@ -47,8 +46,6 @@ cvar_t mp_chattime = {"mp_chattime", "10", FCVAR_SERVER};
 cvar_t ctfplay = {"mp_ctfplay", "0", FCVAR_SERVER};
 cvar_t ctf_autoteam = {"mp_ctf_autoteam", "0", FCVAR_SERVER};
 cvar_t ctf_capture = {"mp_ctf_capture", "0", FCVAR_SERVER};
-cvar_t coopplay = {"mp_coopplay", "0", FCVAR_SERVER};
-cvar_t defaultcoop = {"mp_defaultcoop", "0", FCVAR_SERVER};
 cvar_t coopweprespawn = {"mp_coopweprespawn", "0", FCVAR_SERVER};
 
 cvar_t spamdelay = {"sv_spamdelay", "3.0", FCVAR_SERVER};
@@ -75,7 +72,6 @@ void GameDLLInit()
 	CVAR_REGISTER(&displaysoundlist);
 	CVAR_REGISTER(&allow_spectators);
 
-	CVAR_REGISTER(&teamplay);
 	CVAR_REGISTER(&fraglimit);
 	CVAR_REGISTER(&timelimit);
 
@@ -101,8 +97,6 @@ void GameDLLInit()
 	CVAR_REGISTER(&ctfplay);
 	CVAR_REGISTER(&ctf_autoteam);
 	CVAR_REGISTER(&ctf_capture);
-	CVAR_REGISTER(&coopplay);
-	CVAR_REGISTER(&defaultcoop);
 	CVAR_REGISTER(&coopweprespawn);
 
 	CVAR_REGISTER(&spamdelay);

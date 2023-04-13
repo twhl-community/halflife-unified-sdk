@@ -1222,7 +1222,6 @@ void StartFrame()
 	if (g_fGameOver)
 		return;
 
-	gpGlobals->teamplay = teamplay.value;
 	g_ulFrameCount++;
 }
 

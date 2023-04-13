@@ -56,7 +56,11 @@ private:
 	};
 
 public:
+	static constexpr std::string_view GameModeName{"ctf"sv};
+
 	CHalfLifeCTFplay();
+
+	std::string_view GetGameModeName() const override { return GameModeName; }
 
 	void Think() override;
 
