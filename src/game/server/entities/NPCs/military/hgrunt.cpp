@@ -607,26 +607,29 @@ void CHGrunt::HandleAnimEvent(MonsterEvent_t* pEvent)
 	{
 	case HGRUNT_AE_DROP_GUN:
 	{
-		Vector vecGunPos;
-		Vector vecGunAngles;
-
-		GetAttachment(0, vecGunPos, vecGunAngles);
-
-		// switch to body group with no gun.
-		SetBodygroup(HGruntBodyGroup::Weapons, HGruntWeapon::Blank);
-
-		// now spawn a gun.
-		if (FBitSet(pev->weapons, HGRUNT_SHOTGUN))
+		if (GetBodygroup(HGruntBodyGroup::Weapons) != HGruntWeapon::Blank)
 		{
-			DropItem("weapon_shotgun", vecGunPos, vecGunAngles);
-		}
-		else
-		{
-			DropItem("weapon_9mmar", vecGunPos, vecGunAngles);
-		}
-		if (FBitSet(pev->weapons, HGRUNT_GRENADELAUNCHER))
-		{
-			DropItem("ammo_argrenades", BodyTarget(pev->origin), vecGunAngles);
+			Vector vecGunPos;
+			Vector vecGunAngles;
+
+			GetAttachment(0, vecGunPos, vecGunAngles);
+
+			// switch to body group with no gun.
+			SetBodygroup(HGruntBodyGroup::Weapons, HGruntWeapon::Blank);
+
+			// now spawn a gun.
+			if (FBitSet(pev->weapons, HGRUNT_SHOTGUN))
+			{
+				DropItem("weapon_shotgun", vecGunPos, vecGunAngles);
+			}
+			else
+			{
+				DropItem("weapon_9mmar", vecGunPos, vecGunAngles);
+			}
+			if (FBitSet(pev->weapons, HGRUNT_GRENADELAUNCHER))
+			{
+				DropItem("ammo_argrenades", BodyTarget(pev->origin), vecGunAngles);
+			}
 		}
 	}
 	break;
