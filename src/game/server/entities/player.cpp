@@ -3125,10 +3125,10 @@ void CBloodSplat::Spray()
 	pev->nextthink = gpGlobals->time + 0.1;
 }
 
-static CBaseItem* GiveNamedItem_Common(CBasePlayer* player, const char* pszName)
+static CBaseItem* GiveNamedItem_Common(CBasePlayer* player, std::string_view className)
 {
 	// Only give items to player.
-	auto entity = g_ItemDictionary->Create(pszName);
+	auto entity = g_ItemDictionary->Create(className);
 
 	if (FNullEnt(entity))
 	{
@@ -3144,9 +3144,9 @@ static CBaseItem* GiveNamedItem_Common(CBasePlayer* player, const char* pszName)
 	return entity;
 }
 
-void CBasePlayer::GiveNamedItem(const char* szName)
+void CBasePlayer::GiveNamedItem(std::string_view className)
 {
-	auto entity = GiveNamedItem_Common(this, szName);
+	auto entity = GiveNamedItem_Common(this, className);
 
 	if (!entity)
 	{
@@ -3159,9 +3159,9 @@ void CBasePlayer::GiveNamedItem(const char* szName)
 	}
 }
 
-void CBasePlayer::GiveNamedItem(const char* szName, int defaultAmmo)
+void CBasePlayer::GiveNamedItem(std::string_view className, int defaultAmmo)
 {
-	auto entity = GiveNamedItem_Common(this, szName);
+	auto entity = GiveNamedItem_Common(this, className);
 
 	if (!entity)
 	{
@@ -3410,45 +3410,32 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse)
 
 
 	case 101:
-		GiveNamedItem("item_suit");
-		GiveNamedItem("item_battery");
-		GiveNamedItem("weapon_crowbar");
-		GiveNamedItem("weapon_9mmhandgun");
-		GiveNamedItem("ammo_9mmclip");
-		GiveNamedItem("weapon_shotgun");
-		GiveNamedItem("ammo_buckshot");
-		GiveNamedItem("weapon_9mmar");
-		GiveNamedItem("ammo_9mmar");
-		GiveNamedItem("ammo_argrenades");
-		GiveNamedItem("weapon_handgrenade");
-		GiveNamedItem("weapon_tripmine");
+	{
+		const bool hasActiveWeapon = m_pActiveWeapon != nullptr;
 
-		GiveNamedItem("weapon_357");
-		GiveNamedItem("ammo_357");
-		GiveNamedItem("weapon_crossbow");
-		GiveNamedItem("ammo_crossbow");
-		GiveNamedItem("weapon_egon");
-		GiveNamedItem("weapon_gauss");
-		GiveNamedItem("ammo_gaussclip");
-		GiveNamedItem("weapon_rpg");
-		GiveNamedItem("ammo_rpgclip");
-		GiveNamedItem("weapon_satchel");
-		GiveNamedItem("weapon_snark");
-		GiveNamedItem("weapon_hornetgun");
+		SetHasSuit(true);
 
-		GiveNamedItem("weapon_eagle");
-		GiveNamedItem("weapon_sporelauncher");
-		GiveNamedItem("weapon_shockrifle");
-		GiveNamedItem("weapon_knife");
-		GiveNamedItem("weapon_m249");
-		GiveNamedItem("weapon_pipewrench");
-		GiveNamedItem("weapon_grapple");
-		GiveNamedItem("weapon_sniperrifle");
-		GiveNamedItem("weapon_displacer");
-		// TODO: not given
-		// GiveNamedItem( "ammo_762" );
+		pev->armorvalue = MAX_NORMAL_BATTERY;
+
+		for (auto weapon : g_WeaponDictionary->GetClassNames())
+		{
+			GiveNamedItem(weapon);
+		}
+
+		for (int i = 1; i < g_AmmoTypes.GetCount(); ++i)
+		{
+			auto ammoType = g_AmmoTypes.GetByIndex(i);
+			SetAmmoCount(ammoType->Name.c_str(), ammoType->MaximumCapacity);
+		}
+
+		// Default to the MP5.
+		if (!hasActiveWeapon)
+		{
+			SelectItem("weapon_9mmar");
+		}
 
 		break;
+	}
 
 	case 102:
 		// Gibbage!!!

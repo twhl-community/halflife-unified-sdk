@@ -433,8 +433,8 @@ public:
 	 *	@brief Called every frame by the player PostThink
 	 */
 	void ItemPostFrame();
-	void GiveNamedItem(const char* szName);
-	void GiveNamedItem(const char* szName, int defaultAmmo);
+	void GiveNamedItem(std::string_view className);
+	void GiveNamedItem(std::string_view className, int defaultAmmo);
 	void EnableControl(bool fControl);
 
 	/**
