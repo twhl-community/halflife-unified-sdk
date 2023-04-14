@@ -175,7 +175,6 @@ void Weapon_RegisterWeaponTypes()
 {
 	g_WeaponData.Clear();
 
-	// This will also try to load cycler_weapon but it doesn't return any item data so that's fine.
 	for (const auto& className : g_WeaponDictionary->GetClassNames())
 	{
 		auto entity = g_WeaponDictionary->Create(className);
@@ -221,7 +220,6 @@ void W_Precache()
 
 	std::ranges::sort(sortedClassNames);
 
-	// This will also try to precache cycler_weapon but it doesn't return any item data so that's fine.
 	for (const auto& className : sortedClassNames)
 	{
 		UTIL_PrecacheOther(className.data());
