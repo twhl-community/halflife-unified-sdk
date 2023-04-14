@@ -3422,9 +3422,9 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse)
 			GiveNamedItem(weapon);
 		}
 
-		for (int i = 1; i < g_AmmoTypes.GetCount(); ++i)
+		for (int i = 0; i < g_AmmoTypes.GetCount(); ++i)
 		{
-			auto ammoType = g_AmmoTypes.GetByIndex(i);
+			auto ammoType = g_AmmoTypes.GetByIndex(i + 1);
 			SetAmmoCount(ammoType->Name.c_str(), ammoType->MaximumCapacity);
 		}
 
