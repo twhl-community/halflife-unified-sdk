@@ -554,6 +554,8 @@ public:
 
 	int m_iAutoWepSwitch;
 
+	bool m_HasActivated = false;
+
 	bool m_bRestored;
 
 	// True if the player is currently spawning.
