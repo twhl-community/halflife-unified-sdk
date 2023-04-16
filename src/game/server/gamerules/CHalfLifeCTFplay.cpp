@@ -817,26 +817,7 @@ void CHalfLifeCTFplay::PlayerSpawn(CBasePlayer* pPlayer)
 	{
 		if (0 == pPlayer->pev->iuser1)
 		{
-			const int savedAutoWepSwitch = pPlayer->m_iAutoWepSwitch;
-			pPlayer->m_iAutoWepSwitch = 1;
-			pPlayer->SetHasSuit(true);
-
-			auto useDefault = true;
-
-			for (auto pEquip : UTIL_FindEntitiesByClassname("game_player_equip"))
-			{
-				useDefault = false;
-
-				pEquip->Touch(pPlayer);
-			}
-
-			if (useDefault)
-			{
-				pPlayer->GiveNamedItem("weapon_pipewrench");
-				pPlayer->GiveNamedItem("weapon_eagle");
-				pPlayer->GiveNamedItem("weapon_grapple");
-				pPlayer->GiveAmmo(DEAGLE_DEFAULT_GIVE * 3, "357");
-			}
+			CGameRules::PlayerSpawn(pPlayer);
 
 			for (auto pFlag : UTIL_FindEntitiesByClassname<CTFGoalFlag>("item_ctfflag"))
 			{
@@ -868,8 +849,6 @@ void CHalfLifeCTFplay::PlayerSpawn(CBasePlayer* pPlayer)
 
 			InitItemsForPlayer(pPlayer);
 			DisplayTeamFlags(pPlayer);
-
-			pPlayer->m_iAutoWepSwitch = savedAutoWepSwitch;
 		}
 	}
 }

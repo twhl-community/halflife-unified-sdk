@@ -25,6 +25,7 @@
 #include "CHalfLifeMultiplay.h"
 #include "CHalfLifeRules.h"
 #include "CHalfLifeTeamplay.h"
+#include "SpawnInventorySystem.h"
 #include "spawnpoints.h"
 #include "UserMessages.h"
 #include "items/weapons/AmmoTypeSystem.h"
@@ -76,6 +77,16 @@ CGameRules::CGameRules()
 			// new spectator mode
 			if (player->IsObserver())
 				player->Observer_SetMode(atoi(CMD_ARGV(1))); });
+}
+
+void CGameRules::SetupPlayerInventory(CBasePlayer* player)
+{
+	// Originally game_player_equip entities were triggered in PlayerSpawn to set up the player's inventory.
+	// This is now handled by naming them game_playerspawn (see CBasePlayer::UpdateClientData).
+	// Handling it there avoids edge cases where this function is called during ClientPutInServer.
+	// It is not possible to send messages to clients during that function so ammo change messages are ignored.
+
+	g_SpawnInventory.GetInventory()->ApplyToPlayer(player);
 }
 
 CBasePlayerWeapon* CGameRules::FindNextBestWeapon(CBasePlayer* pPlayer, CBasePlayerWeapon* pCurrentWeapon)
@@ -164,6 +175,12 @@ bool CGameRules::CanHaveAmmo(CBasePlayer* pPlayer, const char* pszAmmoName)
 	}
 
 	return false;
+}
+
+void CGameRules::PlayerSpawn(CBasePlayer* pPlayer)
+{
+	SetupPlayerInventory(pPlayer);
+	pPlayer->m_FireSpawnTarget = true;
 }
 
 CBaseEntity* CGameRules::GetPlayerSpawnSpot(CBasePlayer* pPlayer)

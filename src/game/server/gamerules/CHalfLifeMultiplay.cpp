@@ -23,6 +23,7 @@
 
 #include "CHalfLifeCTFplay.h"
 #include "MapCycleSystem.h"
+#include "PlayerInventory.h"
 #include "items/CBaseItem.h"
 #include "items/weapons/CSatchelCharge.h"
 
@@ -537,30 +538,9 @@ void CHalfLifeMultiplay::PlayerThink(CBasePlayer* pPlayer)
 
 void CHalfLifeMultiplay::PlayerSpawn(CBasePlayer* pPlayer)
 {
-	// Ensure the player switches to the Glock on spawn regardless of setting
-	const int originalAutoWepSwitch = pPlayer->m_iAutoWepSwitch;
-	pPlayer->m_iAutoWepSwitch = 1;
-
-	pPlayer->SetHasSuit(true);
-
-	bool addDefault = true;
-
-	for (auto weaponEntity : UTIL_FindEntitiesByClassname("game_player_equip"))
-	{
-		weaponEntity->Touch(pPlayer);
-		addDefault = false;
-	}
-
-	if (addDefault)
-	{
-		pPlayer->GiveNamedItem("weapon_crowbar");
-		pPlayer->GiveNamedItem("weapon_9mmhandgun");
-		pPlayer->GiveAmmo(68, "9mm"); // 4 full reloads
-	}
+	CGameRules::PlayerSpawn(pPlayer);
 
 	InitItemsForPlayer(pPlayer);
-
-	pPlayer->m_iAutoWepSwitch = originalAutoWepSwitch;
 }
 
 bool CHalfLifeMultiplay::FPlayerCanRespawn(CBasePlayer* pPlayer)

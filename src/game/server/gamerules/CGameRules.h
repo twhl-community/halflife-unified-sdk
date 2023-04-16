@@ -179,7 +179,7 @@ public:
 	/**
 	 *	@brief called by CBasePlayer::Spawn just before releasing player into the game
 	 */
-	virtual void PlayerSpawn(CBasePlayer* pPlayer) = 0;
+	virtual void PlayerSpawn(CBasePlayer* pPlayer);
 
 	/**
 	 *	@brief called by CBasePlayer::PreThink every frame, before physics are run and after keys are accepted
@@ -325,6 +325,8 @@ public:
 	virtual void EndMultiplayerGame() {}
 
 protected:
+	void SetupPlayerInventory(CBasePlayer* player);
+
 	CBasePlayerWeapon* FindNextBestWeapon(CBasePlayer* pPlayer, CBasePlayerWeapon* pCurrentWeapon);
 
 	virtual void BecomeSpectator(CBasePlayer* player, const CommandArgs& args);

@@ -77,10 +77,6 @@ float CHalfLifeRules::FlPlayerFallDamage(CBasePlayer* pPlayer)
 	return pPlayer->m_flFallVelocity * DAMAGE_FOR_FALL_SPEED;
 }
 
-void CHalfLifeRules::PlayerSpawn(CBasePlayer* pPlayer)
-{
-}
-
 bool CHalfLifeRules::AllowAutoTargetCrosshair()
 {
 	return (g_Skill.GetSkillLevel() == SkillLevel::Easy);

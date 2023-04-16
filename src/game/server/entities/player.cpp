@@ -127,6 +127,10 @@ DEFINE_FIELD(m_SuitLightType, FIELD_INTEGER),
 	DEFINE_FIELD(m_bInfiniteAir, FIELD_BOOLEAN),
 	DEFINE_FIELD(m_bInfiniteArmor, FIELD_BOOLEAN),
 
+	// Save this in the unlikely case where the player spawns and saves and loads
+	// in the split second between spawning and the first update.
+	DEFINE_FIELD(m_FireSpawnTarget, FIELD_BOOLEAN),
+
 	DEFINE_FUNCTION(PlayerDeathThink),
 
 	// DEFINE_FIELD(m_fDeadTime, FIELD_FLOAT), // only used in multiplayer games
@@ -3125,7 +3129,7 @@ void CBloodSplat::Spray()
 	pev->nextthink = gpGlobals->time + 0.1;
 }
 
-static CBaseItem* GiveNamedItem_Common(CBasePlayer* player, std::string_view className)
+CBaseItem* CBasePlayer::GiveNamedItem(std::string_view className, std::optional<int> defaultAmmo)
 {
 	// Only give items to player.
 	auto entity = g_ItemDictionary->Create(className);
@@ -3136,47 +3140,26 @@ static CBaseItem* GiveNamedItem_Common(CBasePlayer* player, std::string_view cla
 		return nullptr;
 	}
 
-	entity->pev->origin = player->pev->origin;
+	entity->pev->origin = pev->origin;
 	entity->m_RespawnDelay = ITEM_NEVER_RESPAWN_DELAY;
 
 	DispatchSpawn(entity->edict());
 
+	if (defaultAmmo)
+	{
+		if (auto weapon = dynamic_cast<CBasePlayerWeapon*>(entity); weapon)
+		{
+			weapon->m_iDefaultAmmo = *defaultAmmo;
+		}
+	}
+
+	if (entity->AddToPlayer(this) != ItemAddResult::Added)
+	{
+		g_engfuncs.pfnRemoveEntity(entity->edict());
+		return nullptr;
+	}
+
 	return entity;
-}
-
-void CBasePlayer::GiveNamedItem(std::string_view className)
-{
-	auto entity = GiveNamedItem_Common(this, className);
-
-	if (!entity)
-	{
-		return;
-	}
-
-	if (entity->AddToPlayer(this) != ItemAddResult::Added)
-	{
-		g_engfuncs.pfnRemoveEntity(entity->edict());
-	}
-}
-
-void CBasePlayer::GiveNamedItem(std::string_view className, int defaultAmmo)
-{
-	auto entity = GiveNamedItem_Common(this, className);
-
-	if (!entity)
-	{
-		return;
-	}
-
-	if (auto weapon = dynamic_cast<CBasePlayerWeapon*>(entity); weapon)
-	{
-		weapon->m_iDefaultAmmo = defaultAmmo;
-	}
-
-	if (entity->AddToPlayer(this) != ItemAddResult::Added)
-	{
-		g_engfuncs.pfnRemoveEntity(entity->edict());
-	}
 }
 
 int CBasePlayer::GetFlashlightFlag() const
@@ -3865,14 +3848,28 @@ void CBasePlayer::UpdateClientData()
 			}
 		}
 
-		FireTargets("game_playerspawn", this, this, USE_TOGGLE, 0);
-
 		if (g_pGameRules->IsMultiplayer())
 		{
 			RefreshCustomHUD(this);
 		}
 
 		InitStatusBar();
+	}
+
+	if (m_FireSpawnTarget)
+	{
+		m_FireSpawnTarget = false;
+
+		// In case a game_player_equip is triggered, this ensures the player equips the last weapon given.
+		const int savedAutoWepSwitch = m_iAutoWepSwitch;
+		m_iAutoWepSwitch = 1;
+
+		// This counts as spawning, it suppresses weapon pickup notifications.
+		m_bIsSpawning = true;
+		FireTargets("game_playerspawn", this, this, USE_TOGGLE, 0);
+		m_bIsSpawning = false;
+
+		m_iAutoWepSwitch = savedAutoWepSwitch;
 	}
 
 	if (m_iHideHUD != m_iClientHideHUD)

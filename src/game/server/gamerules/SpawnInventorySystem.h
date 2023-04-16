@@ -15,26 +15,29 @@
 
 #pragma once
 
-#include <string>
-#include <vector>
+#include <memory>
 
-#include "MapState.h"
-#include "gamerules/PlayerInventory.h"
+#include <spdlog/logger.h>
+
+#include "PlayerInventory.h"
 
 /**
- *	@brief Context used by config section parsers.
+ *	@brief Stores the inventory for players when they (re-)spawn.
  */
-struct ServerConfigContext
+class SpawnInventorySystem final
 {
-	MapState& State;
+public:
+	const PlayerInventory* GetInventory() const { return &m_Inventory; }
 
-	std::vector<std::string> SentencesFiles;
-	std::vector<std::string> MaterialsFiles;
-	std::vector<std::string> SkillFiles;
+	PlayerInventory* GetInventory() { return &m_Inventory; }
 
-	std::vector<std::string> GlobalModelReplacementFiles;
-	std::vector<std::string> GlobalSentenceReplacementFiles;
-	std::vector<std::string> GlobalSoundReplacementFiles;
+	void SetInventory(PlayerInventory&& inventory)
+	{
+		m_Inventory = std::move(inventory);
+	}
 
-	PlayerInventory SpawnInventory;
+private:
+	PlayerInventory m_Inventory;
 };
+
+inline SpawnInventorySystem g_SpawnInventory;

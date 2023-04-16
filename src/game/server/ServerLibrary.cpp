@@ -39,9 +39,11 @@
 #include "config/sections/GameDataFilesSections.h"
 #include "config/sections/GlobalReplacementFilesSections.h"
 #include "config/sections/HudColorSection.h"
+#include "config/sections/SpawnInventorySection.h"
 #include "config/sections/SuitLightTypeSection.h"
 
 #include "gamerules/MapCycleSystem.h"
+#include "gamerules/SpawnInventorySystem.h"
 
 #include "models/BspLoader.h"
 
@@ -340,6 +342,7 @@ void ServerLibrary::CreateConfigDefinitions()
 			sections.push_back(std::make_unique<GlobalSoundReplacementSection>());
 			sections.push_back(std::make_unique<HudColorSection>());
 			sections.push_back(std::make_unique<SuitLightTypeSection>());
+			sections.push_back(std::make_unique<SpawnInventorySection>());
 
 			return sections; }());
 }
@@ -454,6 +457,8 @@ void ServerLibrary::LoadServerConfigFiles()
 		context.GlobalSentenceReplacementFiles, {.CaseSensitive = true});
 	m_MapState.m_GlobalSoundReplacement = g_ReplacementMaps.LoadMultiple(
 		context.GlobalSoundReplacementFiles, {.CaseSensitive = false});
+
+	g_SpawnInventory.SetInventory(std::move(context.SpawnInventory));
 
 	const auto timeElapsed = std::chrono::high_resolution_clock::now() - start;
 

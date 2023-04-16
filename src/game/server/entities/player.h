@@ -15,6 +15,8 @@
 
 #pragma once
 
+#include <optional>
+
 #include "basemonster.h"
 #include "CGameRules.h"
 #include "ctf/CTFDefs.h"
@@ -22,6 +24,7 @@
 #include "items/CBaseItem.h"
 #include "sound/MaterialSystem.h"
 
+class CBaseItem;
 class CRope;
 class CTFGoalFlag;
 
@@ -433,8 +436,7 @@ public:
 	 *	@brief Called every frame by the player PostThink
 	 */
 	void ItemPostFrame();
-	void GiveNamedItem(std::string_view className);
-	void GiveNamedItem(std::string_view className, int defaultAmmo);
+	CBaseItem* GiveNamedItem(std::string_view className, std::optional<int> defaultAmmo = std::nullopt);
 	void EnableControl(bool fControl);
 
 	/**
@@ -556,6 +558,9 @@ public:
 
 	// True if the player is currently spawning.
 	bool m_bIsSpawning = false;
+
+	// Whether to fire game_playerspawn next time we check for updates.
+	bool m_FireSpawnTarget = false;
 
 	bool IsOnRope() const { return (m_afPhysicsFlags & PFLAG_ONROPE) != 0; }
 

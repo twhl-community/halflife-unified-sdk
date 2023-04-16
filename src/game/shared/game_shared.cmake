@@ -23,6 +23,7 @@ function(add_game_shared_sources target)
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/sections/GameDataFilesSections.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/sections/GlobalReplacementFilesSections.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/sections/HudColorSection.h
+			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/sections/SpawnInventorySection.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/sections/SuitLightTypeSection.h
 			
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/entities/ehandle.cpp

@@ -270,6 +270,9 @@ target_sources(server PRIVATE
 	gamerules/CHalfLifeTeamplay.h
 	gamerules/MapCycleSystem.cpp
 	gamerules/MapCycleSystem.h
+	gamerules/PlayerInventory.cpp
+	gamerules/PlayerInventory.h
+	gamerules/SpawnInventorySystem.h
 	
 	sound/SentencesSystem.cpp
 	sound/SentencesSystem.h
