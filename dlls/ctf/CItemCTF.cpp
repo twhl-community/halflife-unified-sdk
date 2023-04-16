@@ -116,100 +116,99 @@ void CItemCTF::DropThink()
 
 	pev->origin = pev->oldorigin;
 
-	auto nTested = 0;
-	CItemSpawnCTF* pSpawn = nullptr;
-
-	auto searchedForSpawns = false;
+	int nTested = 0;
+	CItemSpawnCTF* spawn = nullptr;
 
 	if ((pev->spawnflags & SF_ITEMCTF_IGNORE_TEAM) == 0)
 	{
-		for (auto i = 0; i <= 1; ++i)
+		int iLosingTeam, iScoreDiff;
+		GetLosingTeam(iLosingTeam, iScoreDiff);
+
+		for (int i = 0; i < 2; ++i)
 		{
-			searchedForSpawns = true;
+			if (i == 0)
+				spawn = m_pLastSpawn;
+			else
+				spawn = nullptr;
 
-			int iLosingTeam, iScoreDiff;
-			GetLosingTeam(iLosingTeam, iScoreDiff);
-
-			auto pFirstSpawn = i != 0 ? nullptr : m_pLastSpawn;
-
-			for (auto pCandidate : UTIL_FindEntitiesByClassname<CItemSpawnCTF>("info_ctfspawn_powerup", pFirstSpawn))
+			while ((spawn = (CItemSpawnCTF*)UTIL_FindEntityByClassname(spawn, "info_ctfspawn_powerup")) != nullptr)
 			{
-				if (iScoreDiff == 0 || (iScoreDiff == 1 && ((RANDOM_LONG(0, 1) && pCandidate->team_no == CTFTeam::None) || (RANDOM_LONG(0, 1) && pCandidate->team_no == static_cast<CTFTeam>(iLosingTeam + 1)))) || (iScoreDiff > 1 && pCandidate->team_no == static_cast<CTFTeam>(iLosingTeam + 1)))
+				// Assume occupied until proven otherwise.
+				bool nOccupied = true;
+
+				if (iScoreDiff == 0 ||
+					(iScoreDiff == 1 && (g_engfuncs.pfnRandomLong(0, 1) != 0 && spawn->team_no == CTFTeam::None ||
+											g_engfuncs.pfnRandomLong(0, 1) != 0 && spawn->team_no == CTFTeam(iLosingTeam + 1))) ||
+					(iScoreDiff > 1 && spawn->team_no == CTFTeam(iLosingTeam + 1)))
 				{
+					nOccupied = false;
 					++nTested;
 
-					auto nOccupied = false;
-					for (CBaseEntity* pEntity = nullptr; (pEntity = UTIL_FindEntityInSphere(pEntity, pCandidate->pev->origin, 128));)
+					for (CBaseEntity* test = nullptr; (test = UTIL_FindEntityInSphere(test, spawn->pev->origin, 128)) != nullptr;)
 					{
-						if (pEntity->Classify() == CLASS_CTFITEM && this != pEntity)
+						if (test->Classify() == CLASS_CTFITEM && this != test)
 						{
 							nOccupied = true;
-						}
-					}
-
-					if (!nOccupied)
-					{
-						pev->origin = pCandidate->pev->origin;
-
-						if (RANDOM_LONG(0, 1))
-						{
-							searchedForSpawns = false;
-							pSpawn = pCandidate;
 							break;
 						}
 					}
 				}
+
+				if (!nOccupied)
+				{
+					pev->origin = spawn->pev->origin;
+					if (g_engfuncs.pfnRandomLong(0, 1) != 0)
+					{
+						break;
+					}
+				}
 			}
 
-			if (pSpawn == m_pLastSpawn)
+			if (spawn == m_pLastSpawn)
 				break;
 
-			if (!searchedForSpawns)
+			if (spawn)
 				break;
 		}
 	}
 
-	if (pev->origin == pev->oldorigin && !pSpawn)
+	if (!spawn && pev->origin == pev->oldorigin)
 	{
-		for (auto pCandidate : UTIL_FindEntitiesByClassname<CItemSpawnCTF>("info_ctfspawn_powerup"))
+		for (spawn = nullptr; (spawn = (CItemSpawnCTF*)UTIL_FindEntityByClassname(spawn, "info_ctfspawn_powerup")) != nullptr;)
 		{
-			auto nOccupied = false;
-			for (CBaseEntity* pEntity = nullptr; (pEntity = UTIL_FindEntityInSphere(pEntity, pCandidate->pev->origin, 128));)
+			bool nOccupied = false;
+
+			for (CBaseEntity* test = nullptr; (test = UTIL_FindEntityInSphere(test, spawn->pev->origin, 128)) != nullptr;)
 			{
-				if (pEntity->Classify() == CLASS_CTFITEM && this != pEntity)
+				if (test->Classify() == CLASS_CTFITEM && this != test)
 				{
 					nOccupied = true;
+					break;
 				}
 			}
 
 			if (!nOccupied)
 			{
-				pev->origin = pSpawn->pev->origin;
-
-				if (RANDOM_LONG(0, 1))
+				pev->origin = spawn->pev->origin;
+				if (g_engfuncs.pfnRandomLong(0, 1) != 0)
 				{
-					pSpawn = pCandidate;
 					break;
 				}
 			}
 		}
-
-		if (!pSpawn)
-		{
-			searchedForSpawns = true;
-		}
 	}
 
-	if (searchedForSpawns && nTested > 0)
-		ALERT(at_console, "Warning: No available spawn points found.  Powerup returned to original coordinates.");
+	m_pLastSpawn = spawn;
 
-	m_pLastSpawn = pSpawn;
+	if (!spawn && nTested > 0)
+		ALERT(at_console, "Warning: No available spawn points found.  Powerup returned to original coordinates.");
 
 	UTIL_SetOrigin(pev, pev->origin);
 
-	if (0 == g_engfuncs.pfnDropToFloor(edict()))
+	if (g_engfuncs.pfnDropToFloor(edict()) == 0)
 	{
-		ALERT(at_error, "Item %s fell out of level at %f,%f,%f", STRING(pev->classname), pev->origin.x, pev->origin.y, pev->origin.z);
+		ALERT(at_error, "Item %s fell out of level at %f,%f,%f",
+			STRING(pev->classname), pev->origin.x, pev->origin.y, pev->origin.z);
 		UTIL_Remove(this);
 	}
 }

@@ -12,6 +12,7 @@ Many changes have been made since 2019. All changes made after [[this|https://gi
 * Implemented snow footsteps and impact sounds, changed snow material type ID to `O` to match Opposing Force
 * Added missing EXPORT to a few Opposing Force entities
 * Fixed M249 using wrong spread in singleplayer when standing still and ducking
+* Fixed Capture The Flag items crashing on respawn
 
 ## Changes in V1.0.0 Beta 011
 
