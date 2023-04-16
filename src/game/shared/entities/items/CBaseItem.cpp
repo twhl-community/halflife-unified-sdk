@@ -180,6 +180,11 @@ void CBaseItem::ItemTouch(CBaseEntity* pOther)
 ItemAddResult CBaseItem::AddToPlayer(CBasePlayer* player)
 {
 #ifndef CLIENT_DLL
+	if (player->IsObserver())
+	{
+		return ItemAddResult::NotAdded;
+	}
+
 	// ok, a player is touching this item, but can he have it?
 	if (!g_pGameRules->CanHaveItem(player, this))
 	{

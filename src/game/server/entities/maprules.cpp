@@ -778,12 +778,12 @@ void CGamePlayerEquip::Touch(CBaseEntity* pOther)
 
 void CGamePlayerEquip::EquipPlayer(CBaseEntity* pEntity)
 {
-	if (!pEntity || !pEntity->IsPlayer())
+	auto player = ToBasePlayer(pEntity);
+
+	if (!player)
 	{
 		return;
 	}
-
-	CBasePlayer* pPlayer = (CBasePlayer*)pEntity;
 
 	for (int i = 0; i < MAX_EQUIP; i++)
 	{
@@ -791,7 +791,7 @@ void CGamePlayerEquip::EquipPlayer(CBaseEntity* pEntity)
 			break;
 		for (int j = 0; j < m_weaponCount[i]; j++)
 		{
-			pPlayer->GiveNamedItem(STRING(m_weaponNames[i]));
+			player->GiveNamedItem(STRING(m_weaponNames[i]));
 		}
 	}
 }
