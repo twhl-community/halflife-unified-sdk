@@ -234,12 +234,12 @@ CGameRules* CreateGameRules()
 
 using GameRulesFactory = CGameRules* (*)();
 
-using GameRulesEntry = std::pair<std::string, GameRulesFactory>;
+using GameRulesEntry = std::pair<const char*, GameRulesFactory>;
 
 template <typename TGameRules>
 GameRulesEntry CreateGameRulesEntry()
 {
-	return {std::string{TGameRules::GameModeName}, &CreateGameRules<TGameRules>};
+	return {TGameRules::GameModeName, &CreateGameRules<TGameRules>};
 }
 
 // Map of all multiplayer gamerules.
@@ -303,7 +303,7 @@ const char* GameModeIndexToString(int index)
 		return "";
 	}
 
-	return GameRulesList[index].first.c_str();
+	return GameRulesList[index].first;
 }
 
 void PrintMultiplayerGameModes()
@@ -311,11 +311,10 @@ void PrintMultiplayerGameModes()
 	Con_Printf("Singleplayer always uses singleplayer gamerules\n");
 	Con_Printf("Set mp_gamemode to \"autodetect\" to autodetect the game mode\n");
 
-	Con_Printf("%.*s (not an option for mp_gamemode)\n",
-		static_cast<int>(CHalfLifeRules::GameModeName.size()), CHalfLifeRules::GameModeName.data());
+	Con_Printf("%s (not an option for mp_gamemode)\n", CHalfLifeRules::GameModeName);
 
 	for (const auto& gameMode : GameRulesList)
 	{
-		Con_Printf("%s\n", gameMode.first.c_str());
+		Con_Printf("%s\n", gameMode.first);
 	}
 }

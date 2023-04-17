@@ -257,6 +257,11 @@ void CWorld::Precache()
 
 	//!!!UNDONE why is there so much Spawn code in the Precache function? I'll just keep it here
 
+	// Set gamemode now that we have the world edict.
+	auto serverBuffer = g_engfuncs.pfnGetInfoKeyBuffer(this->edict());
+
+	g_engfuncs.pfnSetKeyValue(serverBuffer, "gm", g_pGameRules->GetGameModeName());
+
 	///!!!LATER - do we want a sound ent in deathmatch? (sjb)
 	pSoundEnt = g_EntityDictionary->Create<CSoundEnt>("soundent");
 

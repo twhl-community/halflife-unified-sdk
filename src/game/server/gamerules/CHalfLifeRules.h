@@ -23,11 +23,11 @@
 class CHalfLifeRules : public CGameRules
 {
 public:
-	static constexpr std::string_view GameModeName{"singleplayer"sv};
+	static constexpr char GameModeName[] = "singleplayer";
 
 	CHalfLifeRules();
 
-	std::string_view GetGameModeName() const override { return GameModeName; }
+	const char* GetGameModeName() const override { return GameModeName; }
 
 	void Think() override;
 	bool IsAllowedToSpawn(CBaseEntity* pEntity) override;

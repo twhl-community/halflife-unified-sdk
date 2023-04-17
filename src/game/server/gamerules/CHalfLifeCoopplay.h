@@ -20,11 +20,11 @@
 class CHalfLifeCoopplay : public CHalfLifeMultiplay
 {
 public:
-	static constexpr std::string_view GameModeName{"coop"sv};
+	static constexpr char GameModeName[] = "coop";
 
 	CHalfLifeCoopplay();
 
-	std::string_view GetGameModeName() const override { return GameModeName; }
+	const char* GetGameModeName() const override { return GameModeName; }
 
 	bool IsCoOp() override { return true; }
 	bool IsTeamplay() override { return true; }

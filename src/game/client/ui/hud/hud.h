@@ -685,6 +685,7 @@ public:
 
 private:
 	cvar_t* m_ShowDebugInfo = nullptr;
+	std::string m_GameMode;
 };
 
 /**

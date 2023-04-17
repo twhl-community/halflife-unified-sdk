@@ -30,6 +30,7 @@ bool CHudDebugInfo::Init()
 
 bool CHudDebugInfo::VidInit()
 {
+	m_GameMode = gEngfuncs.ServerInfo_ValueForKey("gm");
 	return true;
 }
 
@@ -60,6 +61,9 @@ bool CHudDebugInfo::Draw(float flTime)
 		{
 			lineDrawer("Map name:", {255, 128, 0});
 			lineDrawer(fmt::format("  {}", levelName));
+
+			lineDrawer("Game mode:", {255, 0, 255});
+			lineDrawer(fmt::format("  {}", m_GameMode));
 
 			lineDrawer("Player Origin:", {0, 255, 0});
 
