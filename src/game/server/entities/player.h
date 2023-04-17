@@ -555,6 +555,7 @@ public:
 	int m_iAutoWepSwitch;
 
 	bool m_Connected = false;
+	float m_ConnectTime = 0;
 
 	bool IsConnected() const { return m_Connected; }
 

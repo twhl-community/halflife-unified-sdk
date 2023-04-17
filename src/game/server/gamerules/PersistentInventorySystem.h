@@ -47,8 +47,6 @@ private:
 
 	bool m_InitializedInventories = false;
 	int m_ExpectedSpawnCount = 0;
-
-	float m_GracePeriodEndTime = 0;
 };
 
 inline PersistentInventorySystem g_PersistentInventory;

@@ -29,19 +29,7 @@ void PersistentInventorySystem::NewMapStarted()
 	{
 		// Persistent inventory is only used by co-op.
 		std::fill(m_Inventories.begin(), m_Inventories.end(), PersistentPlayerInventory{});
-		m_GracePeriodEndTime = 0;
 		return;
-	}
-
-	const float gracePeriod = g_Skill.GetValue("coop_persistent_inventory_grace_period", 0);
-
-	if (gracePeriod == -1)
-	{
-		m_GracePeriodEndTime = -1;
-	}
-	else
-	{
-		m_GracePeriodEndTime = gpGlobals->time + std::max(0.f, gracePeriod);
 	}
 }
 
@@ -82,8 +70,10 @@ bool PersistentInventorySystem::TryApplyToPlayer(CBasePlayer* player)
 		return false;
 	}
 
+	const float gracePeriod = g_Skill.GetValue("coop_persistent_inventory_grace_period", 0);
+
 	// Grace period ended, can't restore.
-	if (m_GracePeriodEndTime != -1 && gpGlobals->time >= m_GracePeriodEndTime)
+	if (gracePeriod != -1 && gpGlobals->time >= (player->m_ConnectTime + std::max(0.f, gracePeriod)))
 	{
 		return false;
 	}

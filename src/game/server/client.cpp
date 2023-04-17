@@ -192,6 +192,7 @@ void ClientPutInServer(edict_t* pEntity)
 	*/
 
 	pPlayer->m_Connected = true;
+	pPlayer->m_ConnectTime = gpGlobals->time;
 
 	g_LastPlayerJoinTime = gpGlobals->time;
 }
