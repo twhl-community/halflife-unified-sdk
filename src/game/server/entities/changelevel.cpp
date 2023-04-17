@@ -134,10 +134,15 @@ bool CChangeLevel::KeyValue(KeyValueData* pkvd)
 void CChangeLevel::Spawn()
 {
 	if (FStrEq(m_szMapName, ""))
-		Logger->debug("a trigger_changelevel doesn't have a map");
+		Logger->warn("a trigger_changelevel doesn't have a map");
 
 	if (m_UsePersistentLevelChange && FStrEq(m_szLandmarkName, ""))
-		Logger->debug("Persistent trigger_changelevel to {} doesn't have a landmark", m_szMapName);
+		Logger->warn("Persistent trigger_changelevel to {} doesn't have a landmark", m_szMapName);
+
+	if (g_pGameRules->IsMultiplayer() && !FStrEq(m_szLandmarkName, ""))
+	{
+		Logger->warn("trigger_changelevel doesn't support landmarks in multiplayer");
+	}
 
 	if (0 == stricmp(m_szMapName, STRING(gpGlobals->mapname)))
 	{
@@ -243,14 +248,19 @@ void CChangeLevel::ChangeLevelNow(CBaseEntity* pActivator)
 	// Init landmark to empty string
 	const char* landmarkNameInNextMap = "";
 
-	// look for a landmark entity
-	auto landmark = FindLandmark(m_szLandmarkName);
-	if (!FNullEnt(landmark))
+	if (!g_pGameRules->IsMultiplayer())
 	{
-		landmarkNameInNextMap = m_szLandmarkName;
-		gpGlobals->vecLandmarkOffset = landmark->pev->origin;
+		// look for a landmark entity
+		auto landmark = FindLandmark(m_szLandmarkName);
+		if (!FNullEnt(landmark))
+		{
+			landmarkNameInNextMap = m_szLandmarkName;
+			gpGlobals->vecLandmarkOffset = landmark->pev->origin;
+		}
 	}
+
 	// Logger->debug("Level touches {} levels", ChangeList(levels, std::size(levels)));
+
 	Logger->debug("CHANGE LEVEL: {} {}", m_szMapName, landmarkNameInNextMap);
 
 	if (m_UsePersistentInventory)
