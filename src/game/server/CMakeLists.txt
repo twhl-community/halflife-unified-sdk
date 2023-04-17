@@ -270,6 +270,8 @@ target_sources(server PRIVATE
 	gamerules/CHalfLifeTeamplay.h
 	gamerules/MapCycleSystem.cpp
 	gamerules/MapCycleSystem.h
+	gamerules/PersistentInventorySystem.cpp
+	gamerules/PersistentInventorySystem.h
 	gamerules/PlayerInventory.cpp
 	gamerules/PlayerInventory.h
 	gamerules/SpawnInventorySystem.h
