@@ -15,7 +15,40 @@
 
 #pragma once
 
+#include <array>
+#include <string>
+
+#include "cbase.h"
+#include "PlayerInventory.h"
+
+class CBasePlayer;
+
 class PersistentInventorySystem final
 {
+private:
+	struct PersistentPlayerInventory
+	{
+		std::string PlayerId;
+		PlayerInventory Inventory;
+	};
+
 public:
+	void NewMapStarted();
+
+	void InitializeFromPlayers();
+
+	bool TryApplyToPlayer(CBasePlayer* player);
+
+private:
+	static std::string GetPlayerId(CBasePlayer* player);
+
+private:
+	std::array<PersistentPlayerInventory, MAX_PLAYERS> m_Inventories;
+
+	bool m_InitializedInventories = false;
+	int m_ExpectedSpawnCount = 0;
+
+	float m_GracePeriodEndTime = 0;
 };
+
+inline PersistentInventorySystem g_PersistentInventory;

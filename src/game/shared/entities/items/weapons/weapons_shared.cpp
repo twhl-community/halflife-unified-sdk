@@ -15,6 +15,7 @@
 
 #include "cbase.h"
 #include "AmmoTypeSystem.h"
+#include "gamerules/PlayerInventory.h"
 
 #ifdef CLIENT_DLL
 #include "com_weapons.h"
@@ -425,5 +426,21 @@ void CBasePlayerWeapon::ItemPostFrame()
 	if (ShouldWeaponIdle())
 	{
 		WeaponIdle();
+	}
+}
+
+void CBasePlayerWeapon::SavePersistentState(PersistentWeaponState& state)
+{
+	state.Properties.emplace("Clip", m_iClip);
+}
+
+void CBasePlayerWeapon::LoadPersistentState(const PersistentWeaponState& state)
+{
+	if (auto it = state.Properties.find("Clip"); it != state.Properties.end())
+	{
+		if (auto value = std::any_cast<int>(&it->second); value)
+		{
+			m_iClip = *value;
+		}
 	}
 }

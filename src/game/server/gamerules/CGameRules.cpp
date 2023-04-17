@@ -25,6 +25,7 @@
 #include "CHalfLifeMultiplay.h"
 #include "CHalfLifeRules.h"
 #include "CHalfLifeTeamplay.h"
+#include "PersistentInventorySystem.h"
 #include "SpawnInventorySystem.h"
 #include "spawnpoints.h"
 #include "UserMessages.h"
@@ -86,7 +87,10 @@ void CGameRules::SetupPlayerInventory(CBasePlayer* player)
 	// Handling it there avoids edge cases where this function is called during ClientPutInServer.
 	// It is not possible to send messages to clients during that function so ammo change messages are ignored.
 
-	g_SpawnInventory.GetInventory()->ApplyToPlayer(player);
+	if (!g_PersistentInventory.TryApplyToPlayer(player))
+	{
+		g_SpawnInventory.GetInventory()->ApplyToPlayer(player);
+	}
 }
 
 CBasePlayerWeapon* CGameRules::FindNextBestWeapon(CBasePlayer* pPlayer, CBasePlayerWeapon* pCurrentWeapon)

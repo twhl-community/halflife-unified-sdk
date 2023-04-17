@@ -73,19 +73,23 @@ PlayerInventory PlayerInventory::CreateFromPlayer(CBasePlayer* player)
 	inventory.Health = player->pev->health;
 	inventory.Armor = player->pev->armorvalue;
 
-	for (int slot = 0; slot < MAX_WEAPON_SLOTS; ++slot)
-	{
-		for (auto weapon = player->m_rgpPlayerWeapons[slot]; weapon; weapon = weapon->m_pNext)
-		{
-			auto& data = inventory.m_WeaponData.emplace_back(weapon->GetClassname(), 0);
-		}
-	}
-
 	for (int i = 0; i < g_AmmoTypes.GetCount(); ++i)
 	{
 		auto ammoType = g_AmmoTypes.GetByIndex(i + 1);
 
 		inventory.SetAmmoCount(ammoType->Name.c_str(), player->AmmoInventory(ammoType->Id));
+	}
+
+	for (int slot = 0; slot < MAX_WEAPON_SLOTS; ++slot)
+	{
+		for (auto weapon = player->m_rgpPlayerWeapons[slot]; weapon; weapon = weapon->m_pNext)
+		{
+			auto& data = inventory.m_WeaponData.emplace_back(weapon->GetClassname(), 0);
+
+			PersistentWeaponState persistentState;
+			weapon->SavePersistentState(persistentState);
+			data.PersistentState = std::move(persistentState);
+		}
 	}
 
 	if (player->m_pActiveWeapon)
@@ -122,21 +126,29 @@ void PlayerInventory::ApplyToPlayer(CBasePlayer* player) const
 
 	const bool hasActiveWeapon = player->m_pActiveWeapon != nullptr;
 
+	// Set ammo first so weapons can reload themselves if needed.
+	for (const auto& ammoValue : m_AmmoValues)
+	{
+		player->SetAmmoCount(ammoValue.Name.c_str(), ammoValue.Count);
+	}
+
 	for (const auto& itemData : m_WeaponData)
 	{
 		auto item = player->GiveNamedItem(itemData.ClassName, itemData.DefaultAmmo);
 
-		if (!item)
+		if (!itemData.PersistentState)
 		{
 			continue;
 		}
 
-		// TODO: restore weapon state
-	}
+		auto weapon = dynamic_cast<CBasePlayerWeapon*>(item);
 
-	for (const auto& ammoValue : m_AmmoValues)
-	{
-		player->SetAmmoCount(ammoValue.Name.c_str(), ammoValue.Count);
+		if (!weapon)
+		{
+			continue;
+		}
+
+		weapon->LoadPersistentState(*itemData.PersistentState);
 	}
 
 	if (!hasActiveWeapon && !WeaponToSelect.empty())

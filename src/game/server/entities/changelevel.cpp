@@ -23,6 +23,8 @@
 #include "ServerLibrary.h"
 #include "shake.h"
 
+#include "gamerules/PersistentInventorySystem.h"
+
 LINK_ENTITY_TO_CLASS(info_landmark, CPointEntity);
 
 /**
@@ -118,6 +120,11 @@ bool CChangeLevel::KeyValue(KeyValueData* pkvd)
 	else if (FStrEq(pkvd->szKeyName, "use_persistent_level_change"))
 	{
 		m_UsePersistentLevelChange = atoi(pkvd->szValue) != 0;
+		return true;
+	}
+	else if (FStrEq(pkvd->szKeyName, "use_persistent_inventory"))
+	{
+		m_UsePersistentInventory = atoi(pkvd->szValue) != 0;
 		return true;
 	}
 
@@ -245,6 +252,11 @@ void CChangeLevel::ChangeLevelNow(CBaseEntity* pActivator)
 	}
 	// Logger->debug("Level touches {} levels", ChangeList(levels, std::size(levels)));
 	Logger->debug("CHANGE LEVEL: {} {}", m_szMapName, landmarkNameInNextMap);
+
+	if (m_UsePersistentInventory)
+	{
+		g_PersistentInventory.InitializeFromPlayers();
+	}
 
 	QueueChangelevel(m_szMapName, landmarkNameInNextMap, m_UsePersistentLevelChange);
 }

@@ -27,6 +27,7 @@
 
 class CBasePlayer;
 class CBasePlayerWeapon;
+struct PersistentWeaponState;
 
 void W_Precache();
 
@@ -386,6 +387,9 @@ public:
 	virtual void SetWeaponData(const weapon_data_t& data) {}
 
 	virtual void DecrementTimers() {}
+
+	virtual void SavePersistentState(PersistentWeaponState& state);
+	virtual void LoadPersistentState(const PersistentWeaponState& state);
 
 	/**
 	 *	@brief no more ammo for this gun, put it away.

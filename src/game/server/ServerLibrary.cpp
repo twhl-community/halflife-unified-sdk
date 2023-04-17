@@ -43,6 +43,7 @@
 #include "config/sections/SuitLightTypeSection.h"
 
 #include "gamerules/MapCycleSystem.h"
+#include "gamerules/PersistentInventorySystem.h"
 #include "gamerules/SpawnInventorySystem.h"
 
 #include "models/BspLoader.h"
@@ -245,6 +246,8 @@ void ServerLibrary::NewMapStarted(bool loadGame)
 	// This must be done before any entities are created, and after gamerules have been installed.
 	Weapon_RegisterWeaponData();
 
+	g_PersistentInventory.NewMapStarted();
+
 	sentences::g_Sentences.NewMapStarted();
 
 	// Reset sky name to its default value. If the map specifies its own sky
@@ -349,6 +352,10 @@ void ServerLibrary::CreateConfigDefinitions()
 
 void ServerLibrary::DefineSkillVariables()
 {
+	// Gamemode variables
+	g_Skill.DefineVariable("coop_persistent_inventory_grace_period", 60, {.Minimum = -1});
+
+	// Weapon variables
 	g_Skill.DefineVariable("revolver_laser_sight", 0, {.Networked = true});
 	g_Skill.DefineVariable("smg_wide_spread", 0, {.Networked = true});
 	g_Skill.DefineVariable("shotgun_single_tight_spread", 0, {.Networked = true});

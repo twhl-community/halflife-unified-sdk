@@ -15,16 +15,24 @@
 
 #pragma once
 
+#include <any>
 #include <optional>
 #include <string>
 #include <string_view>
+#include <unordered_map>
 #include <utility>
 
 #include <EASTL/fixed_vector.h>
 
 #include "cbase.h"
+#include "heterogeneous_lookup.h"
 
 class CBasePlayer;
+
+struct PersistentWeaponState
+{
+	std::unordered_map<std::string, std::any, TransparentStringHash, TransparentEqual> Properties;
+};
 
 /**
  *	@brief Represents a player's inventory.
@@ -38,6 +46,7 @@ private:
 		std::string ClassName;
 
 		std::optional<int> DefaultAmmo;
+		std::optional<PersistentWeaponState> PersistentState;
 	};
 
 	struct AmmoValue

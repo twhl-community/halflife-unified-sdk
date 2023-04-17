@@ -61,4 +61,7 @@ public:
 	float m_changeTargetDelay;
 
 	bool m_UsePersistentLevelChange = true;
+
+	// Co-op only, don't need to restore.
+	bool m_UsePersistentInventory = true;
 };
