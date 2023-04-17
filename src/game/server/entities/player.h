@@ -450,10 +450,10 @@ public:
 	 *	@brief makes sure the client has all the necessary ammo info, if values have changed
 	 */
 	void SendAmmoUpdate();
-	void SendSingleAmmoUpdate(int ammoIndex);
+	void SendSingleAmmoUpdate(int ammoIndex, bool clearLastState);
 
 private:
-	void InternalSendSingleAmmoUpdate(int ammoIndex);
+	void InternalSendSingleAmmoUpdate(int ammoIndex, bool clearLastState);
 
 public:
 	void WaterMove();
@@ -553,6 +553,10 @@ public:
 	void SetPrefsFromUserinfo(char* infobuffer);
 
 	int m_iAutoWepSwitch;
+
+	bool m_Connected = false;
+
+	bool IsConnected() const { return m_Connected; }
 
 	bool m_HasActivated = false;
 

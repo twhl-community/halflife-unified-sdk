@@ -3573,12 +3573,12 @@ ItemAddResult CBasePlayer::AddPlayerWeapon(CBasePlayerWeapon* weapon)
 		// Immediately update the ammo HUD so weapon pickup isn't sometimes red because the HUD doesn't know about regenerating/free ammo yet.
 		if (-1 != weapon->m_iPrimaryAmmoType)
 		{
-			SendSingleAmmoUpdate(CBasePlayer::GetAmmoIndex(weapon->pszAmmo1()));
+			SendSingleAmmoUpdate(CBasePlayer::GetAmmoIndex(weapon->pszAmmo1()), false);
 		}
 
 		if (-1 != weapon->m_iSecondaryAmmoType)
 		{
-			SendSingleAmmoUpdate(CBasePlayer::GetAmmoIndex(weapon->pszAmmo2()));
+			SendSingleAmmoUpdate(CBasePlayer::GetAmmoIndex(weapon->pszAmmo2()), false);
 		}
 
 		// Don't show weapon pickup if we're spawning or if it's an exhaustible weapon (will show ammo pickup instead).
@@ -3770,7 +3770,7 @@ void CBasePlayer::SendAmmoUpdate()
 {
 	for (int i = 0; i < MAX_AMMO_TYPES; i++)
 	{
-		InternalSendSingleAmmoUpdate(i);
+		InternalSendSingleAmmoUpdate(i, true);
 	}
 }
 
@@ -3786,21 +3786,30 @@ void CBasePlayer::SetHasLongJump(bool hasLongJump)
 	// TODO: CTF long jump integration
 }
 
-void CBasePlayer::SendSingleAmmoUpdate(int ammoIndex)
+void CBasePlayer::SendSingleAmmoUpdate(int ammoIndex, bool clearLastState)
 {
 	if (ammoIndex < 0 || ammoIndex >= MAX_AMMO_TYPES)
 	{
 		return;
 	}
 
-	InternalSendSingleAmmoUpdate(ammoIndex);
+	InternalSendSingleAmmoUpdate(ammoIndex, clearLastState);
 }
 
-void CBasePlayer::InternalSendSingleAmmoUpdate(int ammoIndex)
+void CBasePlayer::InternalSendSingleAmmoUpdate(int ammoIndex, bool clearLastState)
 {
+	// This can be called before the client has finished connecting, so ignore the request.
+	if (!IsConnected())
+	{
+		return;
+	}
+
 	if (m_rgAmmo[ammoIndex] != m_rgAmmoLast[ammoIndex])
 	{
-		m_rgAmmoLast[ammoIndex] = m_rgAmmo[ammoIndex];
+		if (clearLastState)
+		{
+			m_rgAmmoLast[ammoIndex] = m_rgAmmo[ammoIndex];
+		}
 
 		ASSERT(m_rgAmmo[ammoIndex] >= 0);
 		ASSERT(m_rgAmmo[ammoIndex] < 255);

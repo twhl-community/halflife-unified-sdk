@@ -102,6 +102,8 @@ void ClientDisconnect(edict_t* pEntity)
 
 	if (pPlayer)
 	{
+		pPlayer->m_Connected = false;
+
 		pPlayer->SetOrigin(pPlayer->pev->origin);
 
 		if (pPlayer->m_pTank != nullptr)
@@ -188,6 +190,8 @@ void ClientPutInServer(edict_t* pEntity)
 	pPlayer->pev->iuser1 = 0;	// disable any spec modes
 	pPlayer->pev->iuser2 = 0;
 	*/
+
+	pPlayer->m_Connected = true;
 
 	g_LastPlayerJoinTime = gpGlobals->time;
 }
