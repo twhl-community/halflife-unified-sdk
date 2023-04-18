@@ -35,6 +35,8 @@
 #include "parsemsg.h"
 #include "networking/ClientUserMessages.h"
 
+#include "cbase.h"
+
 class BufferReader;
 
 #define DHN_DRAWZERO 1

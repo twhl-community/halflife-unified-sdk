@@ -27,6 +27,7 @@
 #include "string_utils.h"
 #include "extdll.h"
 #include "enginecallback.h"
+#include "utils/JSONSystem.h"
 #include "utils/PrecacheList.h"
 
 extern globalvars_t* gpGlobals;

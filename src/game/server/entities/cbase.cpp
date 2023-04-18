@@ -20,6 +20,7 @@
 #include "pm_shared.h"
 #include "world.h"
 #include "sound/ServerSoundSystem.h"
+#include "utils/ReplacementMaps.h"
 
 static void SetObjectCollisionBox(entvars_t* pev);
 

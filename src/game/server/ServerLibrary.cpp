@@ -23,9 +23,11 @@
 
 #include "cbase.h"
 #include "client.h"
+#include "MapState.h"
 #include "nodes.h"
 #include "ProjectInfoSystem.h"
 #include "scripted.h"
+#include "ServerConfigContext.h"
 #include "ServerLibrary.h"
 #include "skill.h"
 #include "UserMessages.h"
@@ -63,6 +65,8 @@ ServerLibrary::~ServerLibrary() = default;
 
 bool ServerLibrary::Initialize()
 {
+	m_MapState = std::make_unique<MapState>();
+
 	// Make sure both use the same info on the server.
 	g_ProjectInfo.SetServerInfo(*g_ProjectInfo.GetLocalInfo());
 
@@ -218,7 +222,7 @@ void ServerLibrary::NewMapStarted(bool loadGame)
 	ClearStringPool();
 
 	// Initialize map state to its default state
-	m_MapState = MapState{};
+	*m_MapState = MapState{};
 
 	g_ReplacementMaps.Clear();
 
@@ -279,15 +283,15 @@ void ServerLibrary::PostMapActivate()
 void ServerLibrary::PlayerActivating(CBasePlayer* player)
 {
 	// Override the hud color.
-	if (m_MapState.m_HudColor)
+	if (m_MapState->m_HudColor)
 	{
-		player->SetHudColor(*m_MapState.m_HudColor);
+		player->SetHudColor(*m_MapState->m_HudColor);
 	}
 
 	// Override the light type.
-	if (m_MapState.m_LightType)
+	if (m_MapState->m_LightType)
 	{
-		player->SetSuitLightType(*m_MapState.m_LightType);
+		player->SetSuitLightType(*m_MapState->m_LightType);
 	}
 }
 
@@ -427,7 +431,7 @@ void ServerLibrary::LoadServerConfigFiles()
 
 	assert(g_pGameRules);
 
-	ServerConfigContext context{.State = m_MapState};
+	ServerConfigContext context{.State = *m_MapState};
 
 	// Initialize file lists to their defaults.
 	context.SentencesFiles.push_back("sound/sentences.txt");
@@ -458,11 +462,11 @@ void ServerLibrary::LoadServerConfigFiles()
 	g_MaterialSystem.LoadMaterials(context.MaterialsFiles);
 	g_Skill.LoadSkillConfigFiles(context.SkillFiles);
 
-	m_MapState.m_GlobalModelReplacement = g_ReplacementMaps.LoadMultiple(
+	m_MapState->m_GlobalModelReplacement = g_ReplacementMaps.LoadMultiple(
 		context.GlobalModelReplacementFiles, {.CaseSensitive = false});
-	m_MapState.m_GlobalSentenceReplacement = g_ReplacementMaps.LoadMultiple(
+	m_MapState->m_GlobalSentenceReplacement = g_ReplacementMaps.LoadMultiple(
 		context.GlobalSentenceReplacementFiles, {.CaseSensitive = true});
-	m_MapState.m_GlobalSoundReplacement = g_ReplacementMaps.LoadMultiple(
+	m_MapState->m_GlobalSoundReplacement = g_ReplacementMaps.LoadMultiple(
 		context.GlobalSoundReplacementFiles, {.CaseSensitive = false});
 
 	g_SpawnInventory.SetInventory(std::move(context.SpawnInventory));

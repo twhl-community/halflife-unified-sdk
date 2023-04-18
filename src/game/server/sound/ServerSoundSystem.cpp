@@ -16,9 +16,11 @@
 #include "cbase.h"
 #include "pm_defs.h"
 #include "pm_shared.h"
+#include "MapState.h"
 #include "ServerLibrary.h"
 #include "ServerSoundSystem.h"
 #include "UserMessages.h"
+#include "utils/ReplacementMaps.h"
 
 namespace sound
 {

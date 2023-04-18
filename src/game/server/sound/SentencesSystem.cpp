@@ -18,6 +18,7 @@
 #include <fmt/format.h>
 
 #include "cbase.h"
+#include "MapState.h"
 #include "SentencesSystem.h"
 #include "ServerLibrary.h"
 #include "networking/NetworkDataSystem.h"

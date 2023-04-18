@@ -18,13 +18,14 @@
 #include <memory>
 
 #include "GameLibrary.h"
-#include "MapState.h"
-#include "ServerConfigContext.h"
-
-#include "config/GameConfig.h"
 
 class CBasePlayer;
 struct cvar_t;
+class MapState;
+struct ServerConfigContext;
+
+template <typename DataContext>
+class GameConfigDefinition;
 
 /**
  *	@brief Handles core server actions
@@ -40,7 +41,7 @@ public:
 	ServerLibrary(ServerLibrary&&) = delete;
 	ServerLibrary& operator=(ServerLibrary&&) = delete;
 
-	MapState* GetMapState() { return &m_MapState; }
+	MapState* GetMapState() { return m_MapState.get(); }
 
 	bool IsCurrentMapLoadedFromSaveGame() const { return m_IsCurrentMapLoadedFromSaveGame; }
 
@@ -123,7 +124,7 @@ private:
 
 	int m_SpawnCount = 0;
 
-	MapState m_MapState;
+	std::unique_ptr<MapState> m_MapState;
 };
 
 inline ServerLibrary g_Server;

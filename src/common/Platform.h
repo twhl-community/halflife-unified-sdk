@@ -42,12 +42,17 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <functional>
 #include <iterator>
+#include <memory>
+#include <span>
 #include <string>
 #include <string_view>
 #include <type_traits>
+#include <unordered_map>
 
 #include <EASTL/fixed_string.h>
+#include <EASTL/fixed_vector.h>
 
 using namespace std::string_view_literals;
 
