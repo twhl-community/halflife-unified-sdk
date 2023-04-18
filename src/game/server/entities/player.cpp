@@ -4845,6 +4845,8 @@ bool CBasePlayer::Menu_Char_Input(int inp)
 
 	if (0 != pev->iuser1)
 	{
+		m_bIsSpawning = true;
+
 		pev->effects &= ~EF_NODRAW;
 		pev->flags &= FL_FAKECLIENT;
 		pev->flags |= FL_CLIENT;
@@ -4865,6 +4867,8 @@ bool CBasePlayer::Menu_Char_Input(int inp)
 
 		g_pGameRules->GetPlayerSpawnSpot(this);
 		g_pGameRules->PlayerSpawn(this);
+
+		m_bIsSpawning = false;
 	}
 
 	return true;
