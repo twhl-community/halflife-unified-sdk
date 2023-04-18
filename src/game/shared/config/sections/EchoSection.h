@@ -36,9 +36,7 @@ public:
 
 	bool TryParse(GameConfigContext<DataContext>& context) const override final
 	{
-		// If developer mode is on then this is a debug message, otherwise it's a trace message. Helps to prevent abuse.
-		context.Logger.log(g_pDeveloper->value > 0 ? spdlog::level::debug : spdlog::level::trace,
-			"{}", context.Input.template get<std::string>());
+		context.Logger.info("{}", context.Input.template get<std::string>());
 		return true;
 	}
 };
