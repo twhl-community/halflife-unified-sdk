@@ -40,7 +40,7 @@ jobs:
           -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/cmake/LinuxToolchain.cmake
         
       - name: Build
-        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} -j2
+        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} -j3
         
       - name: Install
         run: cmake --install ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
@@ -75,7 +75,7 @@ jobs:
           -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/cmake/WindowsToolchain.cmake -A Win32
         
       - name: Build
-        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} -j2
+        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} -j3
         
       - name: Install
         run: cmake --install ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
