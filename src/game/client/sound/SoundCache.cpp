@@ -320,7 +320,16 @@ std::optional<std::tuple<ALint, ALint>> SoundCache::TryLoadCuePoints(const std::
 	const int remainingSampleCount = *reinterpret_cast<const int*>(ltxtChunk->Data + 4);
 	const int sampleEndInBytes = cuePositionInBytes + remainingSampleCount;
 
-	std::get<1>(loopPoints) = convertRawSampleCount(sampleEndInBytes);
+	int loopSampleCount = convertRawSampleCount(sampleEndInBytes);
+
+	if (loopSampleCount == 0)
+	{
+		m_Logger->debug("Wave file \"{}\" has bad loop length value {}, falling back to total sample length",
+			fileName, remainingSampleCount);
+		loopSampleCount = sampleCount - convertRawSampleCount(cuePositionInBytes);
+	}
+
+	std::get<1>(loopPoints) = loopSampleCount;
 
 	m_Logger->trace("Loaded loop end point {} from file \"{}\"", std::get<1>(loopPoints), fileName);
 
