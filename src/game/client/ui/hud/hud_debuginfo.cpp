@@ -31,6 +31,13 @@ bool CHudDebugInfo::Init()
 bool CHudDebugInfo::VidInit()
 {
 	m_GameMode = gEngfuncs.ServerInfo_ValueForKey("gm");
+
+	// If the game mode string is empty then we've loaded a save game or moved through a level transition.
+	if (m_GameMode.empty())
+	{
+		m_GameMode = "singleplayer";
+	}
+
 	return true;
 }
 
@@ -59,6 +66,9 @@ bool CHudDebugInfo::Draw(float flTime)
 
 		if (const auto levelName = gEngfuncs.pfnGetLevelName(); levelName && '\0' != levelName[0] && localPlayer)
 		{
+			lineDrawer("Current game time:", {128, 64, 255});
+			lineDrawer(fmt::format("  {}", SecondsToTime(int(gHUD.m_flTime))));
+
 			lineDrawer("Map name:", {255, 128, 0});
 			lineDrawer(fmt::format("  {}", levelName));
 
