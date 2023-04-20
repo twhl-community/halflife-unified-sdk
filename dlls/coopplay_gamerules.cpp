@@ -118,7 +118,7 @@ float CHalfLifeCoopplay::FlPlayerSpawnTime(CBasePlayer* pPlayer)
 
 float CHalfLifeCoopplay::FlHealthChargerRechargeTime()
 {
-	return coopweprespawn.value > 1 ? 60 : 0;
+	return coopweprespawn.value > 0 ? 60 : 0;
 }
 
 int CHalfLifeCoopplay::DeadPlayerWeapons(CBasePlayer* pPlayer)

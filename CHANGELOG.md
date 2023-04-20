@@ -13,6 +13,7 @@ Many changes have been made since 2019. All changes made after [[this|https://gi
 * Added missing EXPORT to a few Opposing Force entities
 * Fixed M249 using wrong spread in singleplayer when standing still and ducking
 * Fixed Capture The Flag items crashing on respawn
+* Fixed Health Charger recharge time not using the correct value in Co-op
 
 ## Changes in V1.0.0 Beta 011
 
