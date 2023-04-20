@@ -50,11 +50,18 @@ constexpr bool IsValidSkillLevel(SkillLevel skillLevel)
 	return skillLevel >= SkillLevel::Easy && skillLevel <= SkillLevel::Hard;
 }
 
+enum class SkillVarType
+{
+	Float = 0,
+	Integer
+};
+
 struct SkillVarConstraints
 {
 	std::optional<float> Minimum{std::nullopt};
 	std::optional<float> Maximum{std::nullopt};
 	bool Networked{false};
+	SkillVarType Type{SkillVarType::Float};
 };
 
 /**

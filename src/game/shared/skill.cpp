@@ -441,6 +441,12 @@ void SkillSystem::SendAllNetworkedSkillVars(CBasePlayer* player)
 
 float SkillSystem::ClampValue(float value, const SkillVarConstraints& constraints)
 {
+	if (constraints.Type == SkillVarType::Integer)
+	{
+		// Round value to integer.
+		value = int(value);
+	}
+
 	if (constraints.Minimum)
 	{
 		value = std::max(*constraints.Minimum, value);
