@@ -317,7 +317,7 @@ bool CanAttack(float attack_time, float curtime, bool isPredicted)
 	}
 }
 
-void CBasePlayerWeapon::ItemPostFrame()
+void CBasePlayerWeapon::FinishReload(bool force)
 {
 	int maxClip = iMaxClip();
 
@@ -340,7 +340,7 @@ void CBasePlayerWeapon::ItemPostFrame()
 	}
 #endif
 
-	if ((m_fInReload) && (m_pPlayer->m_flNextAttack <= UTIL_WeaponTimeBase()))
+	if (force || (m_fInReload && m_pPlayer->m_flNextAttack <= UTIL_WeaponTimeBase()))
 	{
 		// complete the reload.
 		int j = std::min(maxClip - m_iClip, m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType));
@@ -351,6 +351,11 @@ void CBasePlayerWeapon::ItemPostFrame()
 
 		m_fInReload = false;
 	}
+}
+
+void CBasePlayerWeapon::ItemPostFrame()
+{
+	FinishReload(false);
 
 	if ((m_pPlayer->pev->button & IN_ATTACK) == 0)
 	{
@@ -442,12 +447,32 @@ int CBasePlayerWeapon::GetMagazine1() const
 
 void CBasePlayerWeapon::SetMagazine1(int count)
 {
-	m_iClip = std::max(-1, count);
+	if (count == WEAPON_NOCLIP)
+	{
+		m_iClip = WEAPON_NOCLIP;
+		return;
+	}
+
+	m_iClip = std::max(0, count);
 }
 
 void CBasePlayerWeapon::AdjustMagazine1(int count)
 {
-	assert(iMaxClip() != WEAPON_NOCLIP);
+	if (m_iClip == WEAPON_NOCLIP)
+	{
+		return;
+	}
+
+	if (count < 0)
+	{
+		// Subtract from reserve ammo first.
+		if (g_Skill.GetValue("bottomless_magazines") != 0)
+		{
+			const int amountAdjusted = m_pPlayer->AdjustAmmoByIndex(m_iPrimaryAmmoType, count);
+
+			count -= amountAdjusted;
+		}
+	}
 
 	m_iClip = std::clamp(m_iClip + count, 0, iMaxClip());
 }

@@ -429,7 +429,7 @@ public:
 	const char* pszAmmo1() { return !m_WeaponInfo->AttackModeInfo[0].AmmoType.empty() ? m_WeaponInfo->AttackModeInfo[0].AmmoType.c_str() : nullptr; }
 	const char* pszAmmo2() { return !m_WeaponInfo->AttackModeInfo[1].AmmoType.empty() ? m_WeaponInfo->AttackModeInfo[1].AmmoType.c_str() : nullptr; }
 	const char* pszName() { return m_WeaponInfo->Name.c_str(); }
-	int iMaxClip() { return m_WeaponInfo->AttackModeInfo[0].MagazineSize; }
+	int iMaxClip() const { return m_WeaponInfo->AttackModeInfo[0].MagazineSize; }
 	int MagazineSize2() { return m_WeaponInfo->AttackModeInfo[1].MagazineSize; }
 	int iWeight() { return m_WeaponInfo->Weight; }
 	int iFlags() { return m_WeaponInfo->Flags; }
@@ -438,6 +438,8 @@ protected:
 	CBasePlayerWeapon* GetItemToRespawn(const Vector& respawnPoint) override;
 
 	ItemAddResult Apply(CBasePlayer* player) override;
+
+	void FinishReload(bool force);
 
 public:
 	CBasePlayer* m_pPlayer;

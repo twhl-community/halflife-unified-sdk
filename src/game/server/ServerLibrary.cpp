@@ -380,6 +380,9 @@ void ServerLibrary::DefineSkillVariables()
 	g_Skill.DefineVariable("weapon_instant_respawn", 0, {.Minimum = 0, .Maximum = 1, .Type = SkillVarType::Integer});
 
 	// Weapon variables
+	g_Skill.DefineVariable("infinite_ammo", 0, {.Minimum = 0, .Maximum = 1, .Networked = true, .Type = SkillVarType::Integer});
+	g_Skill.DefineVariable("bottomless_magazines", 0, {.Minimum = 0, .Maximum = 1, .Networked = true, .Type = SkillVarType::Integer});
+
 	g_Skill.DefineVariable("revolver_laser_sight", 0, {.Networked = true});
 	g_Skill.DefineVariable("smg_wide_spread", 0, {.Networked = true});
 	g_Skill.DefineVariable("shotgun_single_tight_spread", 0, {.Networked = true});

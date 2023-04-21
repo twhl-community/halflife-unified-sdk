@@ -487,7 +487,7 @@ public:
 	void SetAmmoCount(const char* ammoName, int count);
 	void SetAmmoCountByIndex(int ammoIndex, int count);
 
-	void AdjustAmmoByIndex(int ammoIndex, int count);
+	int AdjustAmmoByIndex(int ammoIndex, int count);
 
 	/**
 	 *	@brief return player light level plus virtual muzzle flash
