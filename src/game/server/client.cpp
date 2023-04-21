@@ -567,7 +567,7 @@ static CBaseEntity* TryCreateEntity(CBasePlayer* player, const char* className, 
 		return nullptr;
 	}
 
-	auto entity = CBaseEntity::Create(className, tr.vecEndPos, angles, nullptr, false);
+	auto entity = CBaseEntity::Create(className, tr.vecEndPos, Vector{0, angles.y, 0}, nullptr, false);
 
 	if (!entity)
 	{
