@@ -21,10 +21,6 @@
 
 CHalfLifeCoopplay::CHalfLifeCoopplay()
 {
-	m_DisableDeathMessages = false;
-	m_DisableDeathPenalty = false;
-	g_engfuncs.pfnCVarSetFloat("mp_allowmonsters", 1);
-
 	m_MenuSelectCommand = g_ClientCommands.CreateScoped("menuselect", [](CBasePlayer* player, const auto& args)
 		{
 			if (CMD_ARGC() < 2)
@@ -92,22 +88,9 @@ int CHalfLifeCoopplay::IPointsForMonsterKill(CBasePlayer* pAttacker, CBaseMonste
 	return pKilled != nullptr ? 1 : 0;
 }
 
-float CHalfLifeCoopplay::FlPlayerFallDamage(CBasePlayer* pPlayer)
-{
-	// subtract off the speed at which a player is allowed to fall without being hurt,
-	// so damage will be based on speed beyond that, not the entire fall
-	pPlayer->m_flFallVelocity -= PLAYER_MAX_SAFE_FALL_SPEED;
-	return pPlayer->m_flFallVelocity * DAMAGE_FOR_FALL_SPEED;
-}
-
 float CHalfLifeCoopplay::FlPlayerSpawnTime(CBasePlayer* pPlayer)
 {
 	return gpGlobals->time;
-}
-
-int CHalfLifeCoopplay::HealthChargerRechargeTime()
-{
-	return coopweprespawn.value > 1 ? 60 : ChargerRechargeDelayNever;
 }
 
 int CHalfLifeCoopplay::DeadPlayerWeapons(CBasePlayer* pPlayer)
@@ -125,31 +108,6 @@ void CHalfLifeCoopplay::Think()
 {
 	if (g_fGameOver)
 		CHalfLifeMultiplay::Think();
-}
-
-bool CHalfLifeCoopplay::ItemShouldRespawn(CBaseItem* item)
-{
-	return coopweprespawn.value > 0 && CHalfLifeMultiplay::ItemShouldRespawn(item);
-}
-
-float CHalfLifeCoopplay::ItemRespawnTime(CBaseItem* item)
-{
-	if (coopweprespawn.value > 0)
-	{
-		return CHalfLifeMultiplay::ItemRespawnTime(item);
-	}
-
-	return -1;
-}
-
-float CHalfLifeCoopplay::ItemTryRespawn(CBaseItem* item)
-{
-	if (coopweprespawn.value > 0)
-	{
-		return CHalfLifeMultiplay::ItemTryRespawn(item);
-	}
-
-	return 0;
 }
 
 bool CHalfLifeCoopplay::FPlayerCanTakeDamage(CBasePlayer* pPlayer, CBaseEntity* pAttacker)

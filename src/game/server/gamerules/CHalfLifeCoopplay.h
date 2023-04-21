@@ -28,7 +28,6 @@ public:
 
 	bool IsCoOp() override { return true; }
 	bool IsTeamplay() override { return true; }
-	bool FAllowMonsters() override { return true; }
 
 	void UpdateGameMode(CBasePlayer* pPlayer) override;
 
@@ -44,13 +43,9 @@ public:
 
 	int IPointsForMonsterKill(CBasePlayer* pAttacker, CBaseMonster* pKilled) override;
 
-	float FlPlayerFallDamage(CBasePlayer* pPlayer) override;
-
 	bool FPlayerCanRespawn(CBasePlayer* pPlayer) override { return true; }
 
 	float FlPlayerSpawnTime(CBasePlayer* pPlayer) override;
-
-	int HealthChargerRechargeTime() override;
 
 	int DeadPlayerWeapons(CBasePlayer* pPlayer) override;
 
@@ -58,17 +53,13 @@ public:
 
 	void Think() override;
 
-	bool ItemShouldRespawn(CBaseItem* item) override;
-	float ItemRespawnTime(CBaseItem* item) override;
-	float ItemTryRespawn(CBaseItem* item) override;
-
 	bool FPlayerCanTakeDamage(CBasePlayer* pPlayer, CBaseEntity* pAttacker) override;
 
 	const char* GetGameDescription() override { return "HL Coopplay"; }
 
 private:
-	bool m_DisableDeathMessages;
-	bool m_DisableDeathPenalty;
+	bool m_DisableDeathMessages = false;
+	bool m_DisableDeathPenalty = false;
 
 	ScopedClientCommand m_MenuSelectCommand;
 };

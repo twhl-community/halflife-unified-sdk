@@ -26,16 +26,12 @@ cvar_t timeleft = {"mp_timeleft", "0", FCVAR_SERVER | FCVAR_UNLOGGED};	 // "    
 cvar_t fraglimit = {"mp_fraglimit", "0", FCVAR_SERVER};
 cvar_t timelimit = {"mp_timelimit", "0", FCVAR_SERVER};
 cvar_t friendlyfire = {"mp_friendlyfire", "0", FCVAR_SERVER};
-cvar_t falldamage = {"mp_falldamage", "0", FCVAR_SERVER};
-cvar_t weaponstay = {"mp_weaponstay", "0", FCVAR_SERVER};
 cvar_t forcerespawn = {"mp_forcerespawn", "1", FCVAR_SERVER};
-cvar_t flashlight = {"mp_flashlight", "0", FCVAR_SERVER};
 cvar_t aimcrosshair = {"mp_autocrosshair", "1", FCVAR_SERVER};
 cvar_t decalfrequency = {"decalfrequency", "30", FCVAR_SERVER};
 cvar_t teamlist = {"mp_teamlist", "hgrunt;scientist", FCVAR_SERVER};
 cvar_t teamoverride = {"mp_teamoverride", "1"};
 cvar_t defaultteam = {"mp_defaultteam", "0"};
-cvar_t allowmonsters = {"mp_allowmonsters", "0", FCVAR_SERVER};
 
 cvar_t allow_spectators = {"allow_spectators", "0.0", FCVAR_SERVER}; // 0 prevents players from being spectators
 
@@ -46,7 +42,6 @@ cvar_t mp_chattime = {"mp_chattime", "10", FCVAR_SERVER};
 cvar_t ctfplay = {"mp_ctfplay", "0", FCVAR_SERVER};
 cvar_t ctf_autoteam = {"mp_ctf_autoteam", "0", FCVAR_SERVER};
 cvar_t ctf_capture = {"mp_ctf_capture", "0", FCVAR_SERVER};
-cvar_t coopweprespawn = {"mp_coopweprespawn", "0", FCVAR_SERVER};
 
 cvar_t spamdelay = {"sv_spamdelay", "3.0", FCVAR_SERVER};
 cvar_t multipower = {"mp_multipower", "0", FCVAR_SERVER};
@@ -79,16 +74,12 @@ void GameDLLInit()
 	CVAR_REGISTER(&timeleft);
 
 	CVAR_REGISTER(&friendlyfire);
-	CVAR_REGISTER(&falldamage);
-	CVAR_REGISTER(&weaponstay);
 	CVAR_REGISTER(&forcerespawn);
-	CVAR_REGISTER(&flashlight);
 	CVAR_REGISTER(&aimcrosshair);
 	CVAR_REGISTER(&decalfrequency);
 	CVAR_REGISTER(&teamlist);
 	CVAR_REGISTER(&teamoverride);
 	CVAR_REGISTER(&defaultteam);
-	CVAR_REGISTER(&allowmonsters);
 
 	CVAR_REGISTER(&mp_chattime);
 
@@ -97,7 +88,6 @@ void GameDLLInit()
 	CVAR_REGISTER(&ctfplay);
 	CVAR_REGISTER(&ctf_autoteam);
 	CVAR_REGISTER(&ctf_capture);
-	CVAR_REGISTER(&coopweprespawn);
 
 	CVAR_REGISTER(&spamdelay);
 	CVAR_REGISTER(&multipower);

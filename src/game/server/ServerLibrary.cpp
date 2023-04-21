@@ -358,6 +358,26 @@ void ServerLibrary::DefineSkillVariables()
 {
 	// Gamemode variables
 	g_Skill.DefineVariable("coop_persistent_inventory_grace_period", 60, {.Minimum = -1});
+	g_Skill.DefineVariable("allow_monsters", 1, {.Minimum = 0, .Maximum = 1, .Type = SkillVarType::Integer});
+	g_Skill.DefineVariable("falldamagemode", 0,
+		{.Minimum = int(FallDamageMode::Fixed),
+			.Maximum = int(FallDamageMode::Progressive),
+			.Type = SkillVarType::Integer});
+
+	// Item variables
+	g_Skill.DefineVariable("healthcharger_recharge_time", -1,
+		{.Minimum = ChargerRechargeDelayNever, .Type = SkillVarType::Integer});
+	g_Skill.DefineVariable("hevcharger_recharge_time", -1,
+		{.Minimum = ChargerRechargeDelayNever, .Type = SkillVarType::Integer});
+
+	g_Skill.DefineVariable("weapon_respawn_time", ITEM_NEVER_RESPAWN_DELAY,
+		{.Minimum = - 1, .Type = SkillVarType::Integer});
+	g_Skill.DefineVariable("ammo_respawn_time", ITEM_NEVER_RESPAWN_DELAY,
+		{.Minimum = -1, .Type = SkillVarType::Integer});
+	g_Skill.DefineVariable("pickupitem_respawn_time", ITEM_NEVER_RESPAWN_DELAY,
+		{.Minimum = -1, .Type = SkillVarType::Integer});
+
+	g_Skill.DefineVariable("weapon_instant_respawn", 0, {.Minimum = 0, .Maximum = 1, .Type = SkillVarType::Integer});
 
 	// Weapon variables
 	g_Skill.DefineVariable("revolver_laser_sight", 0, {.Networked = true});
@@ -443,10 +463,15 @@ void ServerLibrary::LoadServerConfigFiles()
 		context.SkillFiles.push_back("cfg/skill_multiplayer.json");
 	}
 
+	if (g_pGameRules->IsCoOp())
+	{
+		context.SkillFiles.push_back("cfg/skill_coop.json");
+	}
+
 	if (const auto cfgFile = servercfgfile.string; cfgFile && '\0' != cfgFile[0])
 	{
 		g_GameLogger->trace("Loading server config file");
-			
+
 		if (auto config = m_ServerConfigDefinition->TryLoad(cfgFile, "GAMECONFIG"); config)
 		{
 			config->Parse(context);

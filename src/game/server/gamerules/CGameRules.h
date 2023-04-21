@@ -27,6 +27,12 @@ class CBaseMonster;
 class CBasePlayer;
 class CBasePlayerWeapon;
 
+enum class FallDamageMode
+{
+	Fixed = 0,
+	Progressive
+};
+
 /**
  *	@brief weapon respawning return codes
  */
@@ -54,10 +60,6 @@ enum
 	GR_ALLY,
 	GR_NEUTRAL,
 };
-
-#define ITEM_RESPAWN_TIME 30
-#define WEAPON_RESPAWN_TIME 20
-#define AMMO_RESPAWN_TIME 20
 
 /**
  *	@brief when we are within this close to running out of entities,
@@ -95,7 +97,7 @@ public:
 	/**
 	 *	@brief Are players allowed to switch on their flashlight
 	 */
-	virtual bool FAllowFlashlight() = 0;
+	bool FAllowFlashlight();
 
 	/**
 	 *	@brief should the player switch to this weapon?
@@ -166,7 +168,7 @@ public:
 	/**
 	 *	@brief this client just hit the ground after a fall. How much damage?
 	 */
-	virtual float FlPlayerFallDamage(CBasePlayer* pPlayer) = 0;
+	float FlPlayerFallDamage(CBasePlayer* pPlayer);
 
 	/**
 	 *	@brief can this player take damage from this attacker?
@@ -243,12 +245,12 @@ public:
 	/**
 	 *	@brief Should this item respawn?
 	 */
-	virtual bool ItemShouldRespawn(CBaseItem* item) = 0;
+	bool ItemShouldRespawn(CBaseItem* item);
 
 	/**
 	 *	@brief when may this item respawn?
 	 */
-	virtual float ItemRespawnTime(CBaseItem* item) = 0;
+	float ItemRespawnTime(CBaseItem* item);
 
 	/**
 	 *	@brief where in the world should this item respawn?
@@ -260,23 +262,23 @@ public:
 	 *	@brief can this player take more of this ammo?
 	 */
 	virtual bool CanHaveAmmo(CBasePlayer* pPlayer, const char* pszAmmoName);
-	virtual Vector ItemRespawnSpot(CBaseItem* item) = 0;
+	virtual Vector ItemRespawnSpot(CBaseItem* item);
 
 	/**
 	 *	@brief can i respawn now, and if not, when should i try again?
 	 *	Returns 0 if the item can respawn now, otherwise it returns the time at which it can try to spawn again.
 	 */
-	virtual float ItemTryRespawn(CBaseItem* item) = 0;
+	float ItemTryRespawn(CBaseItem* item);
 
 	/**
 	 *	@brief how long until a depleted HealthCharger recharges itself?
 	 */
-	virtual int HealthChargerRechargeTime() { return ChargerRechargeDelayNever; }
+	int HealthChargerRechargeTime();
 
 	/**
 	 *	@brief how long until a depleted HEV Charger recharges itself?
 	 */
-	virtual int HEVChargerRechargeTime() { return ChargerRechargeDelayNever; }
+	int HEVChargerRechargeTime();
 
 	/**
 	 *	@brief what do I do with a player's weapons when he's killed?
@@ -317,7 +319,7 @@ public:
 	/**
 	 *	@brief are monsters allowed
 	 */
-	virtual bool FAllowMonsters() = 0;
+	bool FAllowMonsters();
 
 	/**
 	 *	@brief Immediately end a multiplayer game
@@ -326,6 +328,8 @@ public:
 
 protected:
 	void SetupPlayerInventory(CBasePlayer* player);
+
+	float GetRespawnDelay(CBaseItem* item);
 
 	CBasePlayerWeapon* FindNextBestWeapon(CBasePlayer* pPlayer, CBasePlayerWeapon* pCurrentWeapon);
 
@@ -349,23 +353,3 @@ inline CGameRules* g_pGameRules = nullptr;
 inline bool g_fGameOver;
 
 const char* GetTeamName(CBasePlayer* pEntity);
-
-class GameRulesCanHaveItemVisitor : public IItemVisitor
-{
-public:
-	explicit GameRulesCanHaveItemVisitor(CGameRules* gameRules, CBasePlayer* player)
-		: GameRules(gameRules),
-		  Player(player)
-	{
-	}
-
-	void Visit(CBasePlayerAmmo* ammo) override {}
-
-	void Visit(CBasePlayerWeapon* weapon) override;
-
-	void Visit(CItem* pickupItem) override {}
-
-	CGameRules* const GameRules;
-	CBasePlayer* const Player;
-	bool CanHaveItem = true;
-};

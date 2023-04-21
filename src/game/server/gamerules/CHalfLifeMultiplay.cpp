@@ -47,93 +47,6 @@ public:
 };
 static CMultiplayGameMgrHelper g_GameMgrHelper;
 
-class MultiplayCanHaveItemVisitor final : public GameRulesCanHaveItemVisitor
-{
-public:
-	explicit MultiplayCanHaveItemVisitor(CHalfLifeMultiplay* gameRules, CBasePlayer* player)
-		: GameRulesCanHaveItemVisitor(gameRules, player)
-	{
-	}
-
-	void Visit(CBasePlayerWeapon* weapon) override
-	{
-		if (weaponstay.value > 0)
-		{
-			if ((weapon->iFlags() & ITEM_FLAG_LIMITINWORLD) == 0)
-			{
-				// check if the player already has this weapon
-				if (Player->HasPlayerWeapon(weapon))
-				{
-					CanHaveItem = false;
-					return;
-				}
-			}
-		}
-
-		GameRulesCanHaveItemVisitor::Visit(weapon);
-	}
-};
-
-class MultiplayItemRespawnTimeVisitor final : public IItemVisitor
-{
-public:
-	void Visit(CBasePlayerAmmo* ammo) override
-	{
-		RespawnTime = AMMO_RESPAWN_TIME;
-	}
-
-	void Visit(CBasePlayerWeapon* weapon) override
-	{
-		if (weaponstay.value > 0)
-		{
-			// make sure it's only certain weapons
-			if ((weapon->iFlags() & ITEM_FLAG_LIMITINWORLD) == 0)
-			{
-				RespawnTime = 0; // weapon respawns almost instantly
-				return;
-			}
-		}
-
-		RespawnTime = WEAPON_RESPAWN_TIME;
-	}
-
-	void Visit(CItem* pickupItem) override
-	{
-		RespawnTime = ITEM_RESPAWN_TIME;
-	}
-
-	// Don't respawn unknown items.
-	float RespawnTime = -1;
-};
-
-class MultiplayItemTryRespawnVisitor final : public IItemVisitor
-{
-public:
-	explicit MultiplayItemTryRespawnVisitor(CHalfLifeMultiplay* gameRules)
-		: GameRules(gameRules)
-	{
-	}
-
-	void Visit(CBasePlayerAmmo* ammo) override {}
-
-	void Visit(CBasePlayerWeapon* weapon) override
-	{
-		if (WEAPON_NONE != weapon->m_iId && (weapon->iFlags() & ITEM_FLAG_LIMITINWORLD) != 0)
-		{
-			if (NUMBER_OF_ENTITIES() < (gpGlobals->maxEntities - ENTITY_INTOLERANCE))
-				return;
-
-			// we're past the entity tolerance level, so delay the respawn
-			RespawnTime = GameRules->ItemRespawnTime(weapon);
-		}
-	}
-
-	void Visit(CItem* pickupItem) override {}
-
-	CHalfLifeMultiplay* const GameRules;
-	float RespawnTime = 0;
-};
-
 CHalfLifeMultiplay::CHalfLifeMultiplay()
 {
 	g_VoiceGameMgr.Init(&g_GameMgrHelper, gpGlobals->maxClients);
@@ -427,19 +340,6 @@ void CHalfLifeMultiplay::ClientDisconnected(edict_t* pClient)
 				}
 			}
 		}
-	}
-}
-
-float CHalfLifeMultiplay::FlPlayerFallDamage(CBasePlayer* pPlayer)
-{
-	switch (int(falldamage.value))
-	{
-	case 1: // progressive
-		pPlayer->m_flFallVelocity -= PLAYER_MAX_SAFE_FALL_SPEED;
-		return pPlayer->m_flFallVelocity * DAMAGE_FOR_FALL_SPEED;
-	default:
-	case 0: // fixed
-		return 10;
 	}
 }
 
@@ -748,50 +648,8 @@ void CHalfLifeMultiplay::DeathNotice(CBasePlayer* pVictim, CBaseEntity* pKiller,
 */
 }
 
-bool CHalfLifeMultiplay::CanHaveItem(CBasePlayer* player, CBaseItem* item)
-{
-	MultiplayCanHaveItemVisitor visitor{this, player};
-	item->Accept(visitor);
-	return visitor.CanHaveItem;
-}
-
 void CHalfLifeMultiplay::PlayerGotItem(CBasePlayer* player, CBaseItem* item)
 {
-}
-
-bool CHalfLifeMultiplay::ItemShouldRespawn(CBaseItem* item)
-{
-	return item->m_RespawnDelay >= 0 || item->m_RespawnDelay == ITEM_DEFAULT_RESPAWN_DELAY;
-}
-
-float CHalfLifeMultiplay::ItemRespawnTime(CBaseItem* item)
-{
-	if (item->m_RespawnDelay == ITEM_NEVER_RESPAWN_DELAY)
-	{
-		return -1;
-	}
-
-	if (item->m_RespawnDelay != ITEM_DEFAULT_RESPAWN_DELAY)
-	{
-		return gpGlobals->time + item->m_RespawnDelay;
-	}
-
-	MultiplayItemRespawnTimeVisitor visitor;
-	item->Accept(visitor);
-	return gpGlobals->time + visitor.RespawnTime;
-}
-
-
-Vector CHalfLifeMultiplay::ItemRespawnSpot(CBaseItem* item)
-{
-	return item->pev->origin;
-}
-
-float CHalfLifeMultiplay::ItemTryRespawn(CBaseItem* item)
-{
-	MultiplayItemTryRespawnVisitor visitor{this};
-	item->Accept(visitor);
-	return visitor.RespawnTime;
 }
 
 bool CHalfLifeMultiplay::IsAllowedToSpawn(CBaseEntity* pEntity)
@@ -800,16 +658,6 @@ bool CHalfLifeMultiplay::IsAllowedToSpawn(CBaseEntity* pEntity)
 	//		return false;
 
 	return true;
-}
-
-int CHalfLifeMultiplay::HealthChargerRechargeTime()
-{
-	return 60;
-}
-
-int CHalfLifeMultiplay::HEVChargerRechargeTime()
-{
-	return 30;
 }
 
 int CHalfLifeMultiplay::DeadPlayerWeapons(CBasePlayer* pPlayer)
@@ -848,16 +696,6 @@ bool CHalfLifeMultiplay::PlayFootstepSounds(CBasePlayer* pl, float fvol)
 		return true; // only make step sounds in multiplayer if the player is moving fast enough
 
 	return false;
-}
-
-bool CHalfLifeMultiplay::FAllowFlashlight()
-{
-	return flashlight.value != 0;
-}
-
-bool CHalfLifeMultiplay::FAllowMonsters()
-{
-	return (allowmonsters.value != 0);
 }
 
 void CHalfLifeMultiplay::GoToIntermission()

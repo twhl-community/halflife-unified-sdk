@@ -69,14 +69,6 @@ void CHalfLifeRules::ClientDisconnected(edict_t* pClient)
 {
 }
 
-float CHalfLifeRules::FlPlayerFallDamage(CBasePlayer* pPlayer)
-{
-	// subtract off the speed at which a player is allowed to fall without being hurt,
-	// so damage will be based on speed beyond that, not the entire fall
-	pPlayer->m_flFallVelocity -= PLAYER_MAX_SAFE_FALL_SPEED;
-	return pPlayer->m_flFallVelocity * DAMAGE_FOR_FALL_SPEED;
-}
-
 bool CHalfLifeRules::AllowAutoTargetCrosshair()
 {
 	return (g_Skill.GetSkillLevel() == SkillLevel::Easy);
@@ -109,52 +101,8 @@ void CHalfLifeRules::DeathNotice(CBasePlayer* pVictim, CBaseEntity* pKiller, CBa
 {
 }
 
-bool CHalfLifeRules::CanHaveItem(CBasePlayer* player, CBaseItem* item)
-{
-	return true;
-}
-
 void CHalfLifeRules::PlayerGotItem(CBasePlayer* player, CBaseItem* item)
 {
-}
-
-bool CHalfLifeRules::ItemShouldRespawn(CBaseItem* item)
-{
-	// Items don't respawn in singleplayer by default
-	return item->m_RespawnDelay >= 0;
-}
-
-float CHalfLifeRules::ItemRespawnTime(CBaseItem* item)
-{
-	if (item->m_RespawnDelay == ITEM_NEVER_RESPAWN_DELAY)
-	{
-		return -1;
-	}
-
-	// Allow respawn if it has a custom delay
-	if (item->m_RespawnDelay >= ITEM_DEFAULT_RESPAWN_DELAY)
-	{
-		return gpGlobals->time + item->m_RespawnDelay;
-	}
-
-	// No respawn
-	return -1;
-}
-
-Vector CHalfLifeRules::ItemRespawnSpot(CBaseItem* item)
-{
-	return item->pev->origin;
-}
-
-float CHalfLifeRules::ItemTryRespawn(CBaseItem* item)
-{
-	// If it has a custom delay then it can spawn when it first checks, otherwise never respawn
-	if (item->m_RespawnDelay >= ITEM_DEFAULT_RESPAWN_DELAY)
-	{
-		return 0;
-	}
-
-	return -1;
 }
 
 bool CHalfLifeRules::IsAllowedToSpawn(CBaseEntity* pEntity)
@@ -176,9 +124,4 @@ int CHalfLifeRules::PlayerRelationship(CBasePlayer* pPlayer, CBaseEntity* pTarge
 {
 	// why would a single player in half life need this?
 	return GR_NOTTEAMMATE;
-}
-
-bool CHalfLifeRules::FAllowMonsters()
-{
-	return true;
 }

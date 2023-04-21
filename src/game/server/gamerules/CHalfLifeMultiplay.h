@@ -32,7 +32,6 @@ public:
 
 	void Think() override;
 	bool IsAllowedToSpawn(CBaseEntity* pEntity) override;
-	bool FAllowFlashlight() override;
 
 	bool FShouldSwitchWeapon(CBasePlayer* pPlayer, CBasePlayerWeapon* pWeapon) override;
 
@@ -46,7 +45,6 @@ public:
 	void ClientDisconnected(edict_t* pClient) override;
 	void UpdateGameMode(CBasePlayer* pPlayer) override;
 
-	float FlPlayerFallDamage(CBasePlayer* pPlayer) override;
 	bool FPlayerCanTakeDamage(CBasePlayer* pPlayer, CBaseEntity* pAttacker) override;
 
 	void PlayerSpawn(CBasePlayer* pPlayer) override;
@@ -62,16 +60,7 @@ public:
 	void PlayerKilled(CBasePlayer* pVictim, CBaseEntity* pKiller, CBaseEntity* inflictor) override;
 	void DeathNotice(CBasePlayer* pVictim, CBaseEntity* pKiller, CBaseEntity* inflictor) override;
 
-	bool CanHaveItem(CBasePlayer* player, CBaseItem* item) override;
 	void PlayerGotItem(CBasePlayer* player, CBaseItem* item) override;
-
-	bool ItemShouldRespawn(CBaseItem* item) override;
-	float ItemRespawnTime(CBaseItem* item) override;
-	Vector ItemRespawnSpot(CBaseItem* item) override;
-	float ItemTryRespawn(CBaseItem* item) override;
-
-	int HealthChargerRechargeTime() override;
-	int HEVChargerRechargeTime() override;
 
 	int DeadPlayerWeapons(CBasePlayer* pPlayer) override;
 
@@ -82,8 +71,6 @@ public:
 
 	bool PlayTextureSounds() override { return false; }
 	bool PlayFootstepSounds(CBasePlayer* pl, float fvol) override;
-
-	bool FAllowMonsters() override;
 
 	void EndMultiplayerGame() override { GoToIntermission(); }
 

@@ -31,7 +31,6 @@ public:
 
 	void Think() override;
 	bool IsAllowedToSpawn(CBaseEntity* pEntity) override;
-	bool FAllowFlashlight() override { return true; }
 
 	bool FShouldSwitchWeapon(CBasePlayer* pPlayer, CBasePlayerWeapon* pWeapon) override;
 	bool GetNextBestWeapon(CBasePlayer* pPlayer, CBasePlayerWeapon* pCurrentWeapon, bool alwaysSearch = false) override;
@@ -45,8 +44,6 @@ public:
 	void InitHUD(CBasePlayer* pl) override;
 	void ClientDisconnected(edict_t* pClient) override;
 
-	float FlPlayerFallDamage(CBasePlayer* pPlayer) override;
-
 	void PlayerThink(CBasePlayer* pPlayer) override;
 	bool FPlayerCanRespawn(CBasePlayer* pPlayer) override;
 	float FlPlayerSpawnTime(CBasePlayer* pPlayer) override;
@@ -57,19 +54,11 @@ public:
 	void PlayerKilled(CBasePlayer* pVictim, CBaseEntity* pKiller, CBaseEntity* inflictor) override;
 	void DeathNotice(CBasePlayer* pVictim, CBaseEntity* pKiller, CBaseEntity* inflictor) override;
 
-	bool CanHaveItem(CBasePlayer* player, CBaseItem* item) override;
 	void PlayerGotItem(CBasePlayer* player, CBaseItem* item) override;
-
-	bool ItemShouldRespawn(CBaseItem* item) override;
-	float ItemRespawnTime(CBaseItem* item) override;
-	Vector ItemRespawnSpot(CBaseItem* item) override;
-	float ItemTryRespawn(CBaseItem* item) override;
 
 	int DeadPlayerWeapons(CBasePlayer* pPlayer) override;
 
 	int DeadPlayerAmmo(CBasePlayer* pPlayer) override;
-
-	bool FAllowMonsters() override;
 
 	const char* GetTeamID(CBaseEntity* pEntity) override { return ""; }
 	int PlayerRelationship(CBasePlayer* pPlayer, CBaseEntity* pTarget) override;

@@ -27,23 +27,18 @@ extern cvar_t timeleft;
 extern cvar_t fraglimit;
 extern cvar_t timelimit;
 extern cvar_t friendlyfire;
-extern cvar_t falldamage;
-extern cvar_t weaponstay;
 extern cvar_t forcerespawn;
-extern cvar_t flashlight;
 extern cvar_t aimcrosshair;
 extern cvar_t decalfrequency;
 extern cvar_t teamlist;
 extern cvar_t teamoverride;
 extern cvar_t defaultteam;
-extern cvar_t allowmonsters;
 extern cvar_t allow_spectators;
 extern cvar_t mp_chattime;
 
 extern cvar_t ctf_capture;
 extern cvar_t multipower;
 extern cvar_t ctf_autoteam;
-extern cvar_t coopweprespawn;
 extern cvar_t spamdelay;
 
 extern cvar_t sv_entityinfo_enabled;

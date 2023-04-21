@@ -31,40 +31,136 @@
 #include "UserMessages.h"
 #include "items/weapons/AmmoTypeSystem.h"
 
-void GameRulesCanHaveItemVisitor::Visit(CBasePlayerWeapon* weapon)
+class ItemRespawnTimeVisitor final : public IItemVisitor
 {
-	// only living players can have items
-	if (Player->pev->deadflag != DEAD_NO)
+public:
+	void Visit(CBasePlayerAmmo* ammo) override
 	{
-		CanHaveItem = false;
-		return;
+		RespawnTime = g_Skill.GetValue("ammo_respawn_time", ITEM_NEVER_RESPAWN_DELAY);
 	}
 
-	if (weapon->pszAmmo1())
+	void Visit(CBasePlayerWeapon* weapon) override
 	{
-		if (!GameRules->CanHaveAmmo(Player, weapon->pszAmmo1()))
+		RespawnTime = g_Skill.GetValue("weapon_respawn_time", ITEM_NEVER_RESPAWN_DELAY);
+
+		if (RespawnTime != ITEM_NEVER_RESPAWN_DELAY && g_Skill.GetValue("weapon_instant_respawn", 0) != 0)
 		{
-			// we can't carry anymore ammo for this gun. We can only
-			// have the gun if we aren't already carrying one of this type
+			// make sure it's only certain weapons
+			if ((weapon->iFlags() & ITEM_FLAG_LIMITINWORLD) == 0)
+			{
+				RespawnTime = 0; // weapon respawns almost instantly
+				return;
+			}
+		}
+	}
+
+	void Visit(CItem* pickupItem) override
+	{
+		RespawnTime = g_Skill.GetValue("pickupitem_respawn_time", ITEM_NEVER_RESPAWN_DELAY);
+	}
+
+	// Don't respawn unknown items.
+	float RespawnTime = ITEM_NEVER_RESPAWN_DELAY;
+};
+
+class ItemTryRespawnVisitor final : public IItemVisitor
+{
+public:
+	explicit ItemTryRespawnVisitor(CGameRules* gameRules)
+		: GameRules(gameRules)
+	{
+	}
+
+	void Visit(CBasePlayerAmmo* ammo) override
+	{
+		
+	}
+
+	void Visit(CBasePlayerWeapon* weapon) override
+	{
+		if (WEAPON_NONE != weapon->m_iId && (weapon->iFlags() & ITEM_FLAG_LIMITINWORLD) != 0)
+		{
+			if (NUMBER_OF_ENTITIES() < (gpGlobals->maxEntities - ENTITY_INTOLERANCE))
+				return;
+
+			// we're past the entity tolerance level, so delay the respawn
+			DelayRespawn = true;
+		}
+	}
+
+	void Visit(CItem* pickupItem) override
+	{
+	}
+
+	CGameRules* const GameRules;
+	bool DelayRespawn = false;
+};
+
+class GameRulesCanHaveItemVisitor : public IItemVisitor
+{
+public:
+	explicit GameRulesCanHaveItemVisitor(CGameRules* gameRules, CBasePlayer* player)
+		: GameRules(gameRules),
+		  Player(player)
+	{
+	}
+
+	void Visit(CBasePlayerAmmo* ammo) override {}
+
+	void Visit(CBasePlayerWeapon* weapon) override
+	{
+		if (g_Skill.GetValue("weapon_instant_respawn", 0) != 0)
+		{
+			if ((weapon->iFlags() & ITEM_FLAG_LIMITINWORLD) == 0)
+			{
+				// check if the player already has this weapon
+				if (Player->HasPlayerWeapon(weapon))
+				{
+					CanHaveItem = false;
+					return;
+				}
+			}
+		}
+
+		// only living players can have items
+		if (Player->pev->deadflag != DEAD_NO)
+		{
+			CanHaveItem = false;
+			return;
+		}
+
+		if (weapon->pszAmmo1())
+		{
+			if (!GameRules->CanHaveAmmo(Player, weapon->pszAmmo1()))
+			{
+				// we can't carry anymore ammo for this gun. We can only
+				// have the gun if we aren't already carrying one of this type
+				if (Player->HasPlayerWeapon(weapon))
+				{
+					CanHaveItem = false;
+					return;
+				}
+			}
+		}
+		else
+		{
+			// weapon doesn't use ammo, don't take another if you already have it.
 			if (Player->HasPlayerWeapon(weapon))
 			{
 				CanHaveItem = false;
 				return;
 			}
 		}
-	}
-	else
-	{
-		// weapon doesn't use ammo, don't take another if you already have it.
-		if (Player->HasPlayerWeapon(weapon))
-		{
-			CanHaveItem = false;
-			return;
-		}
+
+		// note: will fall through to here if GetItemInfo doesn't fill the struct!
 	}
 
-	// note: will fall through to here if GetItemInfo doesn't fill the struct!
-}
+	void Visit(CItem* pickupItem) override {}
+
+	CGameRules* const GameRules;
+	CBasePlayer* const Player;
+	bool CanHaveItem = true;
+};
 
 CGameRules::CGameRules()
 {
@@ -78,6 +174,26 @@ CGameRules::CGameRules()
 			// new spectator mode
 			if (player->IsObserver())
 				player->Observer_SetMode(atoi(CMD_ARGV(1))); });
+}
+
+bool CGameRules::FAllowFlashlight()
+{
+	return g_Skill.GetValue("allow_flashlight") != 0;
+}
+
+float CGameRules::FlPlayerFallDamage(CBasePlayer* pPlayer)
+{
+	switch (FallDamageMode(g_Skill.GetValue("falldamagemode")))
+	{
+	case FallDamageMode::Progressive:
+		// subtract off the speed at which a player is allowed to fall without being hurt,
+		// so damage will be based on speed beyond that, not the entire fall
+		pPlayer->m_flFallVelocity -= PLAYER_MAX_SAFE_FALL_SPEED;
+		return pPlayer->m_flFallVelocity * DAMAGE_FOR_FALL_SPEED;
+	default:
+	case FallDamageMode::Fixed:
+		return 10;
+	}
 }
 
 void CGameRules::SetupPlayerInventory(CBasePlayer* player)
@@ -164,6 +280,65 @@ bool CGameRules::GetNextBestWeapon(CBasePlayer* pPlayer, CBasePlayerWeapon* pCur
 	return false;
 }
 
+float CGameRules::GetRespawnDelay(CBaseItem* item)
+{
+	if (item->m_RespawnDelay == ITEM_NEVER_RESPAWN_DELAY)
+	{
+		return ITEM_NEVER_RESPAWN_DELAY;
+	}
+
+	if (item->m_RespawnDelay != ITEM_DEFAULT_RESPAWN_DELAY)
+	{
+		return item->m_RespawnDelay;
+	}
+
+	ItemRespawnTimeVisitor visitor;
+	item->Accept(visitor);
+	return visitor.RespawnTime;
+}
+
+bool CGameRules::ItemShouldRespawn(CBaseItem* item)
+{
+	const float delay = GetRespawnDelay(item);
+
+	return delay != ITEM_NEVER_RESPAWN_DELAY;
+}
+
+float CGameRules::ItemRespawnTime(CBaseItem* item)
+{
+	const float delay = GetRespawnDelay(item);
+
+	if (delay == ITEM_NEVER_RESPAWN_DELAY)
+	{
+		return ITEM_NEVER_RESPAWN_DELAY;
+	}
+
+	return gpGlobals->time + delay;
+}
+
+Vector CGameRules::ItemRespawnSpot(CBaseItem* item)
+{
+	return item->pev->origin;
+}
+
+float CGameRules::ItemTryRespawn(CBaseItem* item)
+{
+	ItemTryRespawnVisitor visitor{this};
+	item->Accept(visitor);
+
+	if (visitor.DelayRespawn)
+	{
+		const float delay = GetRespawnDelay(item);
+
+		// This function should only be called if the item has returned a valid delay from ItemRespawnTime.
+		assert(delay >= 0);
+
+		return delay;
+	}
+
+	return 0;
+}
+
 bool CGameRules::CanHaveAmmo(CBasePlayer* pPlayer, const char* pszAmmoName)
 {
 	if (pszAmmoName)
@@ -206,6 +381,21 @@ bool CGameRules::CanHaveItem(CBasePlayer* player, CBaseItem* item)
 	GameRulesCanHaveItemVisitor visitor{this, player};
 	item->Accept(visitor);
 	return visitor.CanHaveItem;
+}
+
+int CGameRules::HealthChargerRechargeTime()
+{
+	return g_Skill.GetValue("healthcharger_recharge_time", ChargerRechargeDelayNever);
+}
+
+int CGameRules::HEVChargerRechargeTime()
+{
+	return g_Skill.GetValue("hevcharger_recharge_time", ChargerRechargeDelayNever);
+}
+
+bool CGameRules::FAllowMonsters()
+{
+	return g_Skill.GetValue("allow_monsters", 1) != 0;
 }
 
 void CGameRules::BecomeSpectator(CBasePlayer* player, const CommandArgs& args)

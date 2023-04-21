@@ -4484,9 +4484,8 @@ int CBasePlayer::GetCustomDecalFrames()
 
 void CBasePlayer::DropPlayerWeapon(const char* pszItemName)
 {
-	if (!g_pGameRules->IsMultiplayer() || (weaponstay.value > 0))
+	if (g_Skill.GetValue("weapon_instant_respawn", 0) != 0)
 	{
-		// no dropping in single player.
 		return;
 	}
 
