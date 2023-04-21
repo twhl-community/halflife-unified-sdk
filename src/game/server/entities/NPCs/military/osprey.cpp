@@ -402,31 +402,35 @@ void COsprey::Flight()
 
 		m_iSoundState = SND_CHANGE_PITCH; // hack for going through level transitions
 	}
-	else if (!g_pGameRules->IsMultiplayer())
+	else
 	{
-		CBaseEntity* pPlayer = UTIL_GetLocalPlayer();
-		// UNDONE: this needs to send different sounds to every player for multiplayer.
-		if (pPlayer)
+		int pitch = 110;
+
+		if (!g_pGameRules->IsMultiplayer())
 		{
-			float pitch = DotProduct(m_velocity - pPlayer->pev->velocity, (pPlayer->pev->origin - pev->origin).Normalize());
-
-			pitch = (int)(100 + pitch / 75.0);
-
-			if (pitch > 250)
-				pitch = 250;
-			if (pitch < 50)
-				pitch = 50;
-
-			if (pitch == 100)
-				pitch = 101;
-
-			if (pitch != m_iPitch)
+			CBaseEntity* pPlayer = UTIL_GetLocalPlayer();
+			// UNDONE: this needs to send different sounds to every player for multiplayer.
+			if (pPlayer)
 			{
-				m_iPitch = pitch;
-				EmitSoundDyn(CHAN_STATIC, "apache/ap_rotor4.wav", 1.0, 0.15, SND_CHANGE_PITCH | SND_CHANGE_VOL, pitch);
-				// AILogger->debug("{:.0f}", pitch);
+				pitch = int(DotProduct(m_velocity - pPlayer->pev->velocity, (pPlayer->pev->origin - pev->origin).Normalize()));
+
+				pitch = 100 + (pitch / 75);
+
+				pitch = std::clamp(pitch, 50, 250);
+
+				if (pitch == 100)
+					pitch = 101;
 			}
 		}
+
+		// Always update sound in multiplayer so new players can hear it.
+		if (g_pGameRules->IsMultiplayer() || pitch != m_iPitch)
+		{
+			m_iPitch = pitch;
+			EmitSoundDyn(CHAN_STATIC, "apache/ap_rotor4.wav", 1.0, 0.15, SND_CHANGE_PITCH | SND_CHANGE_VOL, pitch);
+			// AILogger->debug("{:.0f}", pitch);
+		}
+
 		// EmitSoundDyn(CHAN_STATIC, "apache/ap_whine1.wav", flVol, 0.2, SND_CHANGE_PITCH | SND_CHANGE_VOL, pitch);
 	}
 }
