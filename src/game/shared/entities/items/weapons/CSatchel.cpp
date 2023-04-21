@@ -82,7 +82,7 @@ bool CSatchel::GetWeaponInfo(WeaponInfo& info)
 
 bool CSatchel::IsUseable()
 {
-	if (m_pPlayer->m_rgAmmo[PrimaryAmmoIndex()] > 0)
+	if (m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType) > 0)
 	{
 		// player is carrying some satchels
 		return true;
@@ -99,7 +99,7 @@ bool CSatchel::IsUseable()
 
 bool CSatchel::CanDeploy()
 {
-	if (m_pPlayer->m_rgAmmo[PrimaryAmmoIndex()] > 0)
+	if (m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType) > 0)
 	{
 		// player is carrying some satchels
 		return true;
@@ -148,7 +148,7 @@ void CSatchel::Holster()
 	}
 	m_pPlayer->EmitSound(CHAN_WEAPON, "common/null.wav", 1.0, ATTN_NORM);
 
-	if (0 == m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] && 0 == m_chargeReady)
+	if (0 == m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType) && 0 == m_chargeReady)
 	{
 		m_pPlayer->ClearWeaponBit(m_iId);
 		SetThink(&CSatchel::DestroyItem);
@@ -208,7 +208,7 @@ void CSatchel::SecondaryAttack()
 
 void CSatchel::Throw()
 {
-	if (0 != m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType])
+	if (0 != m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType))
 	{
 #ifndef CLIENT_DLL
 		Vector vecSrc = m_pPlayer->pev->origin;
@@ -230,7 +230,7 @@ void CSatchel::Throw()
 
 		m_chargeReady = 1;
 
-		m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]--;
+		m_pPlayer->AdjustAmmoByIndex(m_iPrimaryAmmoType, -1);
 
 		m_flNextPrimaryAttack = GetNextAttackDelay(1.0);
 		m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.5;
@@ -255,7 +255,7 @@ void CSatchel::WeaponIdle()
 		strcpy(m_pPlayer->m_szAnimExtention, "hive");
 		break;
 	case 2:
-		if (0 == m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType])
+		if (0 == m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType))
 		{
 			m_chargeReady = 0;
 			RetireWeapon();

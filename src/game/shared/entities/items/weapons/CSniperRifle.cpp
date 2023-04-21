@@ -85,7 +85,7 @@ void CSniperRifle::WeaponIdle()
 
 	if (m_flTimeWeaponIdle < UTIL_WeaponTimeBase())
 	{
-		if (0 != m_iClip)
+		if (0 != GetMagazine1())
 			SendWeaponAnim(SNIPERRIFLE_SLOWIDLE);
 		else
 			SendWeaponAnim(SNIPERRIFLE_SLOWIDLE2);
@@ -103,7 +103,7 @@ void CSniperRifle::PrimaryAttack()
 		return;
 	}
 
-	if (0 == m_iClip)
+	if (0 == GetMagazine1())
 	{
 		PlayEmptySound();
 		return;
@@ -111,7 +111,7 @@ void CSniperRifle::PrimaryAttack()
 
 	m_pPlayer->m_iWeaponVolume = QUIET_GUN_VOLUME;
 
-	--m_iClip;
+	AdjustMagazine1(-1);
 
 	m_pPlayer->SetAnimation(PLAYER_ATTACK1);
 
@@ -132,7 +132,7 @@ void CSniperRifle::PrimaryAttack()
 		m_pPlayer->edict(), m_usSniper, 0,
 		g_vecZero, g_vecZero,
 		vecShot.x, vecShot.y,
-		m_iClip, m_pPlayer->m_rgAmmo[PrimaryAmmoIndex()],
+		GetMagazine1(), m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType),
 		0, 0);
 
 	m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 2.0f;
@@ -153,14 +153,14 @@ void CSniperRifle::SecondaryAttack()
 
 void CSniperRifle::Reload()
 {
-	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] > 0)
+	if (m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType) > 0)
 	{
 		if (m_pPlayer->m_iFOV != 0)
 		{
 			ToggleZoom();
 		}
 
-		if (0 != m_iClip)
+		if (0 != GetMagazine1())
 		{
 			if (DefaultReload(SNIPERRIFLE_MAX_CLIP, SNIPERRIFLE_RELOAD3, 2.324, 1))
 			{

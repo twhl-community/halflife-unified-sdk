@@ -34,7 +34,7 @@ void CPipewrench::OnCreate()
 {
 	BaseClass::OnCreate();
 	m_iId = WEAPON_PIPEWRENCH;
-	m_iClip = WEAPON_NOCLIP;
+	SetMagazine1(WEAPON_NOCLIP);
 	m_WorldModel = pev->model = MAKE_STRING("models/w_pipe_wrench.mdl");
 }
 

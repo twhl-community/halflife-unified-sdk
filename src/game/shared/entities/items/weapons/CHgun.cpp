@@ -93,9 +93,9 @@ void CHgun::Holster()
 	SendWeaponAnim(HGUN_DOWN);
 
 	//!!!HACKHACK - can't select hornetgun if it's empty! no way to get ammo for it, either.
-	if (0 == m_pPlayer->m_rgAmmo[PrimaryAmmoIndex()])
+	if (0 == m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType))
 	{
-		m_pPlayer->m_rgAmmo[PrimaryAmmoIndex()] = 1;
+		m_pPlayer->SetAmmoCountByIndex(m_iPrimaryAmmoType, 1);
 	}
 }
 
@@ -103,7 +103,7 @@ void CHgun::PrimaryAttack()
 {
 	Reload();
 
-	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
+	if (m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType) <= 0)
 	{
 		return;
 	}
@@ -121,8 +121,7 @@ void CHgun::PrimaryAttack()
 	m_flRechargeTime = gpGlobals->time + 0.5;
 #endif
 
-	m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]--;
-
+	m_pPlayer->AdjustAmmoByIndex(m_iPrimaryAmmoType, -1);
 
 	m_pPlayer->m_iWeaponVolume = QUIET_GUN_VOLUME;
 	m_pPlayer->m_iWeaponFlash = DIM_GUN_FLASH;
@@ -155,7 +154,7 @@ void CHgun::SecondaryAttack()
 {
 	Reload();
 
-	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
+	if (m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType) <= 0)
 	{
 		return;
 	}
@@ -221,8 +220,7 @@ void CHgun::SecondaryAttack()
 
 	PLAYBACK_EVENT_FULL(flags, m_pPlayer->edict(), m_usHornetFire, 0.0, g_vecZero, g_vecZero, 0.0, 0.0, 0, 0, 0, 0);
 
-
-	m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]--;
+	m_pPlayer->AdjustAmmoByIndex(m_iPrimaryAmmoType, -1);
 	m_pPlayer->m_iWeaponVolume = NORMAL_GUN_VOLUME;
 	m_pPlayer->m_iWeaponFlash = DIM_GUN_FLASH;
 
@@ -236,14 +234,18 @@ void CHgun::SecondaryAttack()
 void CHgun::Reload()
 {
 #ifndef CLIENT_DLL
-	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] >= HORNET_MAX_CARRY)
+	int ammoCount = m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType);
+
+	if (m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType) >= HORNET_MAX_CARRY)
 		return;
 
-	while (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] < HORNET_MAX_CARRY && m_flRechargeTime < gpGlobals->time)
+	while (ammoCount < HORNET_MAX_CARRY && m_flRechargeTime < gpGlobals->time)
 	{
-		m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]++;
+		++ammoCount;
 		m_flRechargeTime += 0.5;
 	}
+
+	m_pPlayer->SetAmmoCountByIndex(m_iPrimaryAmmoType, ammoCount);
 #endif
 }
 

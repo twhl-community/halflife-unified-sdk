@@ -420,6 +420,10 @@ public:
 
 	void PrintState();
 
+	int GetMagazine1() const;
+	void SetMagazine1(int count);
+	void AdjustMagazine1(int count);
+
 	int iItemSlot() { return m_WeaponInfo->Slot; } // return 0 to MAX_ITEMS_SLOTS, used in hud
 	int iItemPosition() { return m_WeaponInfo->Position; }
 	const char* pszAmmo1() { return !m_WeaponInfo->AttackModeInfo[0].AmmoType.empty() ? m_WeaponInfo->AttackModeInfo[0].AmmoType.c_str() : nullptr; }

@@ -3665,7 +3665,7 @@ int CBasePlayer::GiveAmmo(int iCount, const char* szName)
 		return -1;
 	}
 
-	int iAdd = std::min(iCount, type->MaximumCapacity - m_rgAmmo[type->Id]);
+	const int iAdd = std::min(iCount, type->MaximumCapacity - m_rgAmmo[type->Id]);
 
 	// If we couldn't give any more ammo then just bow out. (Should already be handled by gamerules above).
 	if (iAdd <= 0)
@@ -3682,15 +3682,11 @@ int CBasePlayer::GiveAmmo(int iCount, const char* szName)
 
 	m_rgAmmo[type->Id] += iAdd;
 
-
-	if (0 != gmsgAmmoPickup) // make sure the ammo messages have been linked first
-	{
-		// Send the message that ammo has been picked up
-		MESSAGE_BEGIN(MSG_ONE, gmsgAmmoPickup, nullptr, edict());
-		WRITE_BYTE(GetAmmoIndex(szName)); // ammo ID
-		WRITE_BYTE(iAdd);				  // amount
-		MESSAGE_END();
-	}
+	// Send the message that ammo has been picked up
+	MESSAGE_BEGIN(MSG_ONE, gmsgAmmoPickup, nullptr, edict());
+	WRITE_BYTE(GetAmmoIndex(szName)); // ammo ID
+	WRITE_BYTE(iAdd);				  // amount
+	MESSAGE_END();
 
 	return type->Id;
 }

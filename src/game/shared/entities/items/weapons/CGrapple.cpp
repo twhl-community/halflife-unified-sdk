@@ -36,7 +36,7 @@ void CGrapple::OnCreate()
 {
 	BaseClass::OnCreate();
 	m_iId = WEAPON_GRAPPLE;
-	m_iClip = WEAPON_NOCLIP;
+	SetMagazine1(WEAPON_NOCLIP);
 	m_WorldModel = pev->model = MAKE_STRING("models/w_bgrap.mdl");
 }
 

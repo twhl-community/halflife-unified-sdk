@@ -111,7 +111,7 @@ void CGauss::PrimaryAttack()
 		return;
 	}
 
-	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] < 2)
+	if (m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType) < 2)
 	{
 		PlayEmptySound();
 		m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;
@@ -121,7 +121,7 @@ void CGauss::PrimaryAttack()
 	m_pPlayer->m_iWeaponVolume = GAUSS_PRIMARY_FIRE_VOLUME;
 	m_fPrimaryFire = true;
 
-	m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] -= 2;
+	m_pPlayer->AdjustAmmoByIndex(m_iPrimaryAmmoType, -2);
 
 	StartFire();
 	m_fInAttack = 0;
@@ -153,7 +153,7 @@ void CGauss::SecondaryAttack()
 
 	if (m_fInAttack == 0)
 	{
-		if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
+		if (m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType) <= 0)
 		{
 			m_pPlayer->EmitSound(CHAN_WEAPON, "weapons/357_cock1.wav", 0.8, ATTN_NORM);
 			m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;
@@ -162,7 +162,7 @@ void CGauss::SecondaryAttack()
 
 		m_fPrimaryFire = false;
 
-		m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]--; // take one ammo just to start the spin
+		m_pPlayer->AdjustAmmoByIndex(m_iPrimaryAmmoType, -1); // take one ammo just to start the spin
 		m_pPlayer->m_flNextAmmoBurn = UTIL_WeaponTimeBase();
 
 		// spin up
@@ -188,25 +188,25 @@ void CGauss::SecondaryAttack()
 	}
 	else
 	{
-		if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] > 0)
+		if (m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType) > 0)
 		{
 			// during the charging process, eat one bit of ammo every once in a while
 			if (UTIL_WeaponTimeBase() >= m_pPlayer->m_flNextAmmoBurn && m_pPlayer->m_flNextAmmoBurn != 1000)
 			{
+				m_pPlayer->AdjustAmmoByIndex(m_iPrimaryAmmoType, -1);
+
 				if (g_Skill.GetValue("gauss_fast_ammo_use") != 0)
 				{
-					m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]--;
 					m_pPlayer->m_flNextAmmoBurn = UTIL_WeaponTimeBase() + 0.1;
 				}
 				else
 				{
-					m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]--;
 					m_pPlayer->m_flNextAmmoBurn = UTIL_WeaponTimeBase() + 0.3;
 				}
 			}
 		}
 
-		if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
+		if (m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType) <= 0)
 		{
 			// out of ammo! force the gun to fire
 			StartFire();

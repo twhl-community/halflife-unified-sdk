@@ -464,7 +464,7 @@ void CSqueak::Holster()
 {
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;
 
-	if (0 == m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType])
+	if (0 == m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType))
 	{
 		m_pPlayer->ClearWeaponBit(m_iId);
 		SetThink(&CSqueak::DestroyItem);
@@ -478,7 +478,7 @@ void CSqueak::Holster()
 
 void CSqueak::PrimaryAttack()
 {
-	if (0 != m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType])
+	if (0 != m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType))
 	{
 		UTIL_MakeVectors(m_pPlayer->pev->v_angle);
 		TraceResult tr;
@@ -524,7 +524,7 @@ void CSqueak::PrimaryAttack()
 
 			m_pPlayer->m_iWeaponVolume = QUIET_GUN_VOLUME;
 
-			m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]--;
+			m_pPlayer->AdjustAmmoByIndex(m_iPrimaryAmmoType, -1);
 
 			m_fJustThrown = true;
 
@@ -547,7 +547,7 @@ void CSqueak::WeaponIdle()
 	{
 		m_fJustThrown = false;
 
-		if (0 == m_pPlayer->m_rgAmmo[PrimaryAmmoIndex()])
+		if (0 == m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType))
 		{
 			RetireWeapon();
 			return;

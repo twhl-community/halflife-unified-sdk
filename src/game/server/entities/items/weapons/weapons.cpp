@@ -423,7 +423,7 @@ bool CBasePlayerWeapon::AddDuplicate(CBasePlayerWeapon* original)
 void CBasePlayerWeapon::AddToPlayer(CBasePlayer* pPlayer)
 {
 	/*
-	if ((iFlags() & ITEM_FLAG_EXHAUSTIBLE) != 0 && m_iDefaultAmmo == 0 && m_iClip <= 0)
+	if ((iFlags() & ITEM_FLAG_EXHAUSTIBLE) != 0 && m_iDefaultAmmo == 0 && GetMagazine1() <= 0)
 	{
 		//This is an exhaustible weapon that has no ammo left. Don't add it, queue it up for destruction instead.
 		SetThink(&CSatchel::DestroyItem);
@@ -538,7 +538,7 @@ bool CBasePlayerWeapon::AddPrimaryAmmo(CBasePlayerWeapon* origin, int iCount, co
 		iIdAmmo = m_pPlayer->GiveAmmo(iCount, szName);
 	}
 
-	// m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] = iMaxCarry; // hack for testing
+	// m_pPlayer->SetAmmoCountByIndex(m_iPrimaryAmmoType, iMaxCarry); // hack for testing
 
 	if (iIdAmmo > 0)
 	{
@@ -557,7 +557,7 @@ bool CBasePlayerWeapon::AddSecondaryAmmo(int iCount, const char* szName)
 {
 	const int iIdAmmo = m_pPlayer->GiveAmmo(iCount, szName);
 
-	// m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType] = iMax; // hack for testing
+	// m_pPlayer->SetAmmoCountByIndex(m_iSecondaryAmmoType, iMax); // hack for testing
 
 	if (iIdAmmo > 0)
 	{

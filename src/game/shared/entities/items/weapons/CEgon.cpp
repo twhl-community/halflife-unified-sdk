@@ -116,7 +116,7 @@ float CEgon::GetDischargeInterval()
 
 bool CEgon::HasAmmo()
 {
-	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
+	if (m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType) <= 0)
 		return false;
 
 	return true;
@@ -124,10 +124,7 @@ bool CEgon::HasAmmo()
 
 void CEgon::UseAmmo(int count)
 {
-	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] >= count)
-		m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] -= count;
-	else
-		m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] = 0;
+	m_pPlayer->AdjustAmmoByIndex(m_iPrimaryAmmoType, -count);
 }
 
 void CEgon::Attack()

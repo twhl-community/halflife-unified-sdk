@@ -68,7 +68,7 @@ void CPenguin::Holster()
 {
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;
 
-	if (0 == m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType])
+	if (0 == m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType))
 	{
 		m_pPlayer->ClearWeaponBit(m_iId);
 		SetThink(&CPenguin::DestroyItem);
@@ -89,7 +89,7 @@ void CPenguin::WeaponIdle()
 	{
 		m_fJustThrown = false;
 
-		if (0 != m_pPlayer->m_rgAmmo[PrimaryAmmoIndex()])
+		if (0 != m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType))
 		{
 			SendWeaponAnim(PENGUIN_UP);
 			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10, 15);
@@ -127,7 +127,7 @@ void CPenguin::WeaponIdle()
 
 void CPenguin::PrimaryAttack()
 {
-	if (0 != m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType])
+	if (0 != m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType))
 	{
 		UTIL_MakeVectors(m_pPlayer->pev->v_angle);
 
@@ -169,7 +169,7 @@ void CPenguin::PrimaryAttack()
 				EmitSoundDyn(CHAN_VOICE, "squeek/sqk_hunt3.wav", VOL_NORM, ATTN_NORM, 0, 105);
 
 			m_pPlayer->m_iWeaponVolume = QUIET_GUN_VOLUME;
-			--m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType];
+			m_pPlayer->AdjustAmmoByIndex(m_iPrimaryAmmoType, -1);
 			m_fJustThrown = true;
 
 			m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 1.9;

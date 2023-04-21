@@ -191,8 +191,8 @@ void ClientPredictionSystem::WeaponsPostThink(local_state_t* from, local_state_t
 
 		pCurrent->m_iSecondaryAmmoType = (int)from->client.vuser3[2];
 		pCurrent->m_iPrimaryAmmoType = (int)from->client.vuser4[0];
-		localPlayer->m_rgAmmo[pCurrent->m_iPrimaryAmmoType] = (int)from->client.vuser4[1];
-		localPlayer->m_rgAmmo[pCurrent->m_iSecondaryAmmoType] = (int)from->client.vuser4[2];
+		localPlayer->SetAmmoCountByIndex(pCurrent->m_iPrimaryAmmoType, (int)from->client.vuser4[1]);
+		localPlayer->SetAmmoCountByIndex(pCurrent->m_iSecondaryAmmoType, (int)from->client.vuser4[2]);
 
 		pCurrent->SetWeaponData(*pfrom);
 	}
@@ -358,8 +358,8 @@ void ClientPredictionSystem::WeaponsPostThink(local_state_t* from, local_state_t
 
 		to->client.vuser3[2] = pCurrent->m_iSecondaryAmmoType;
 		to->client.vuser4[0] = pCurrent->m_iPrimaryAmmoType;
-		to->client.vuser4[1] = localPlayer->m_rgAmmo[pCurrent->m_iPrimaryAmmoType];
-		to->client.vuser4[2] = localPlayer->m_rgAmmo[pCurrent->m_iSecondaryAmmoType];
+		to->client.vuser4[1] = localPlayer->GetAmmoCountByIndex(pCurrent->m_iPrimaryAmmoType);
+		to->client.vuser4[2] = localPlayer->GetAmmoCountByIndex(pCurrent->m_iSecondaryAmmoType);
 
 		pCurrent->DecrementTimers();
 

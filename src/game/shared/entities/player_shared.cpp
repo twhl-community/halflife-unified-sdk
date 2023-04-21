@@ -18,16 +18,6 @@
 
 LINK_ENTITY_TO_CLASS(player, CBasePlayer);
 
-int CBasePlayer::AmmoInventory(int iAmmoIndex) const
-{
-	if (iAmmoIndex == -1)
-	{
-		return -1;
-	}
-
-	return m_rgAmmo[iAmmoIndex];
-}
-
 int CBasePlayer::GetAmmoIndex(const char* psz)
 {
 	if (!psz)
@@ -38,17 +28,45 @@ int CBasePlayer::GetAmmoIndex(const char* psz)
 
 int CBasePlayer::GetAmmoCount(const char* ammoName) const
 {
-	return AmmoInventory(GetAmmoIndex(ammoName));
+	return GetAmmoCountByIndex(GetAmmoIndex(ammoName));
+}
+
+int CBasePlayer::GetAmmoCountByIndex(int ammoIndex) const
+{
+	if (ammoIndex < 0 || ammoIndex >= MAX_AMMO_TYPES)
+	{
+		return - 1;
+	}
+
+	return m_rgAmmo[ammoIndex];
 }
 
 void CBasePlayer::SetAmmoCount(const char* ammoName, int count)
 {
-	const int index = GetAmmoIndex(ammoName);
+	SetAmmoCountByIndex(GetAmmoIndex(ammoName), count);
+}
 
-	if (index != -1)
+void CBasePlayer::SetAmmoCountByIndex(int ammoIndex, int count)
+{
+	if (ammoIndex < 0 || ammoIndex >= MAX_AMMO_TYPES)
 	{
-		m_rgAmmo[index] = count;
+		return;
 	}
+
+	m_rgAmmo[ammoIndex] = std::max(0, count);
+}
+
+void CBasePlayer::AdjustAmmoByIndex(int ammoIndex, int count)
+{
+	if (ammoIndex < 0 || ammoIndex >= MAX_AMMO_TYPES)
+	{
+		return;
+	}
+
+	const auto ammoType = g_AmmoTypes.GetByIndex(ammoIndex);
+
+	// Don't allow ammo to overflow capacity.
+	m_rgAmmo[ammoIndex] = std::clamp(m_rgAmmo[ammoIndex] + count, 0, ammoType->MaximumCapacity);
 }
 
 void CBasePlayer::SelectItem(const char* pstr)

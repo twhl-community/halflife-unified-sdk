@@ -345,7 +345,7 @@ bool CGameRules::CanHaveAmmo(CBasePlayer* pPlayer, const char* pszAmmoName)
 	{
 		if (const auto type = g_AmmoTypes.GetByName(pszAmmoName); type)
 		{
-			if (pPlayer->AmmoInventory(type->Id) < type->MaximumCapacity)
+			if (pPlayer->GetAmmoCountByIndex(type->Id) < type->MaximumCapacity)
 			{
 				// player has room for more of this type of ammo
 				return true;

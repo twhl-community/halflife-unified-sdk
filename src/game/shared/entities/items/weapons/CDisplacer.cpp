@@ -83,12 +83,12 @@ void CDisplacer::Holster()
 
 	if (m_pfnThink == &CDisplacer::SpinupThink)
 	{
-		m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] -= 20;
+		m_pPlayer->AdjustAmmoByIndex(m_iPrimaryAmmoType, -20);
 		SetThink(nullptr);
 	}
 	else if (m_pfnThink == &CDisplacer::AltSpinupThink)
 	{
-		m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] -= 60;
+		m_pPlayer->AdjustAmmoByIndex(m_iPrimaryAmmoType, -60);
 		SetThink(nullptr);
 	}
 }
@@ -125,7 +125,7 @@ void CDisplacer::WeaponIdle()
 
 void CDisplacer::PrimaryAttack()
 {
-	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] >= 20)
+	if (m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType) >= 20)
 	{
 		SetThink(&CDisplacer::SpinupThink);
 
@@ -147,7 +147,7 @@ void CDisplacer::PrimaryAttack()
 
 void CDisplacer::SecondaryAttack()
 {
-	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] >= 60)
+	if (m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType) >= 60)
 	{
 		SetThink(&CDisplacer::AltSpinupThink);
 
@@ -264,7 +264,7 @@ void CDisplacer::AltSpinupThink()
 
 void CDisplacer::FireThink()
 {
-	m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] -= 20;
+	m_pPlayer->AdjustAmmoByIndex(m_iPrimaryAmmoType, -20);
 
 	m_pPlayer->m_iWeaponVolume = LOUD_GUN_VOLUME;
 	m_pPlayer->m_iWeaponFlash = BRIGHT_GUN_FLASH;
@@ -302,7 +302,7 @@ void CDisplacer::FireThink()
 
 	CDisplacerBall::CreateDisplacerBall(vecSrc, vecAnglesAim, m_pPlayer);
 
-	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] == 0)
+	if (m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType) == 0)
 	{
 		m_pPlayer->SetSuitUpdate("!HEV_AMO0", SUIT_SENTENCE, SUIT_REPEAT_OK);
 	}
@@ -401,13 +401,13 @@ void CDisplacer::AltFireThink()
 		PLAYBACK_EVENT_FULL(flags, m_pPlayer->edict(), m_usFireDisplacer, 0, g_vecZero, g_vecZero,
 			0, 0, static_cast<int>(DisplacerMode::FIRED), 0, 1, 0);
 
-		m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] -= 60;
+		m_pPlayer->AdjustAmmoByIndex(m_iPrimaryAmmoType, -60);
 
 		CDisplacerBall::CreateDisplacerBall(m_pPlayer->m_DisplacerReturn, Vector(90, 0, 0), m_pPlayer);
 
-		if (0 == m_iClip)
+		if (0 == GetMagazine1())
 		{
-			if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
+			if (m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType) <= 0)
 				m_pPlayer->SetSuitUpdate("!HEV_AMO0", SUIT_SENTENCE, SUIT_REPEAT_OK);
 		}
 

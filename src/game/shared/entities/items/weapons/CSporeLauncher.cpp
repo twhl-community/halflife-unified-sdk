@@ -89,7 +89,9 @@ void CSporeLauncher::WeaponIdle()
 
 	if (m_flTimeWeaponIdle < UTIL_WeaponTimeBase())
 	{
-		if (m_iClip == 0 && m_ReloadState == ReloadState::NOT_RELOADING && 0 != m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType])
+		if (GetMagazine1() == 0 &&
+			m_ReloadState == ReloadState::NOT_RELOADING &&
+			0 != m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType))
 		{
 			Reload();
 		}
@@ -102,7 +104,7 @@ void CSporeLauncher::WeaponIdle()
 				maxClip *= 2;
 			}
 
-			if (m_iClip != maxClip && 0 != m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType])
+			if (GetMagazine1() != maxClip && 0 != m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType))
 			{
 				Reload();
 			}
@@ -144,7 +146,7 @@ void CSporeLauncher::WeaponIdle()
 
 void CSporeLauncher::PrimaryAttack()
 {
-	if (0 != m_iClip)
+	if (0 != GetMagazine1())
 	{
 		m_pPlayer->m_iWeaponVolume = LOUD_GUN_VOLUME;
 		m_pPlayer->m_iWeaponFlash = BRIGHT_GUN_FLASH;
@@ -184,7 +186,7 @@ void CSporeLauncher::PrimaryAttack()
 
 		PLAYBACK_EVENT(flags, m_pPlayer->edict(), m_usFireSpore);
 
-		--m_iClip;
+		AdjustMagazine1(-1);
 	}
 
 	m_flNextPrimaryAttack = m_flNextSecondaryAttack = m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.5;
@@ -194,7 +196,7 @@ void CSporeLauncher::PrimaryAttack()
 
 void CSporeLauncher::SecondaryAttack()
 {
-	if (0 != m_iClip)
+	if (0 != GetMagazine1())
 	{
 		m_pPlayer->m_iWeaponVolume = LOUD_GUN_VOLUME;
 		m_pPlayer->m_iWeaponFlash = BRIGHT_GUN_FLASH;
@@ -234,7 +236,7 @@ void CSporeLauncher::SecondaryAttack()
 
 		PLAYBACK_EVENT(flags, m_pPlayer->edict(), m_usFireSpore);
 
-		--m_iClip;
+		AdjustMagazine1(-1);
 	}
 
 	m_flNextPrimaryAttack = m_flNextSecondaryAttack = m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.5;
@@ -251,7 +253,7 @@ void CSporeLauncher::Reload()
 		maxClip *= 2;
 	}
 
-	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0 || m_iClip == maxClip)
+	if (m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType) <= 0 || GetMagazine1() == maxClip)
 		return;
 
 	// don't reload until recoil is done
@@ -286,8 +288,8 @@ void CSporeLauncher::Reload()
 	else
 	{
 		// Add them to the clip
-		m_iClip += 1;
-		m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] -= 1;
+		AdjustMagazine1(1);
+		m_pPlayer->AdjustAmmoByIndex(m_iPrimaryAmmoType, -1);
 		m_ReloadState = ReloadState::DO_RELOAD_EFFECTS;
 	}
 }

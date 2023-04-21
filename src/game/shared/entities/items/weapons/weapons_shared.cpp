@@ -178,11 +178,11 @@ bool CBasePlayerWeapon::CanDeploy()
 
 	if (pszAmmo1())
 	{
-		bHasAmmo |= (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] != 0);
+		bHasAmmo |= m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType) != 0;
 	}
 	if (pszAmmo2())
 	{
-		bHasAmmo |= (m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType] != 0);
+		bHasAmmo |= m_pPlayer->GetAmmoCountByIndex(m_iSecondaryAmmoType) != 0;
 	}
 	if (m_iClip > 0)
 	{
@@ -231,7 +231,7 @@ void CBasePlayerWeapon::Holster()
 
 bool CBasePlayerWeapon::DefaultReload(int iClipSize, int iAnim, float fDelay, int body)
 {
-	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
+	if (m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType) <= 0)
 		return false;
 
 	if ((m_pPlayer->m_iItems & CTFItem::Backpack) != 0)
@@ -239,7 +239,7 @@ bool CBasePlayerWeapon::DefaultReload(int iClipSize, int iAnim, float fDelay, in
 		iClipSize *= 2;
 	}
 
-	int j = std::min(iClipSize - m_iClip, m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]);
+	int j = std::min(iClipSize - m_iClip, m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType));
 
 	if (j <= 0)
 		return false;
@@ -284,14 +284,14 @@ bool CBasePlayerWeapon::IsUseable()
 		return true;
 	}
 
-	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] > 0)
+	if (m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType) > 0)
 	{
 		return true;
 	}
 
 	if (m_iSecondaryAmmoType != -1)
 	{
-		if (m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType] > 0)
+		if (m_pPlayer->GetAmmoCountByIndex(m_iSecondaryAmmoType) > 0)
 		{
 			return true;
 		}
@@ -327,17 +327,7 @@ void CBasePlayerWeapon::ItemPostFrame()
 	{
 		if (m_iClip > iMaxClip())
 		{
-			m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] += m_iClip - iMaxClip();
-
-			const auto type = g_AmmoTypes.GetByIndex(m_iPrimaryAmmoType);
-
-			assert(type);
-
-			if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] > type->MaximumCapacity)
-			{
-				m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] = type->MaximumCapacity;
-			}
-
+			m_pPlayer->AdjustAmmoByIndex(m_iPrimaryAmmoType, m_iClip - iMaxClip());
 			m_iClip = iMaxClip();
 		}
 	}
@@ -353,11 +343,11 @@ void CBasePlayerWeapon::ItemPostFrame()
 	if ((m_fInReload) && (m_pPlayer->m_flNextAttack <= UTIL_WeaponTimeBase()))
 	{
 		// complete the reload.
-		int j = std::min(maxClip - m_iClip, m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]);
+		int j = std::min(maxClip - m_iClip, m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType));
 
 		// Add them to the clip
 		m_iClip += j;
-		m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] -= j;
+		m_pPlayer->AdjustAmmoByIndex(m_iPrimaryAmmoType, -j);
 
 		m_fInReload = false;
 	}
@@ -369,7 +359,7 @@ void CBasePlayerWeapon::ItemPostFrame()
 
 	if ((m_pPlayer->pev->button & IN_ATTACK2) != 0 && CanAttack(m_flNextSecondaryAttack, gpGlobals->time, UseDecrement()))
 	{
-		if (pszAmmo2() && 0 == m_pPlayer->m_rgAmmo[SecondaryAmmoIndex()])
+		if (pszAmmo2() && 0 == m_pPlayer->GetAmmoCountByIndex(m_iSecondaryAmmoType))
 		{
 			m_fFireOnEmpty = true;
 		}
@@ -379,7 +369,7 @@ void CBasePlayerWeapon::ItemPostFrame()
 	}
 	else if ((m_pPlayer->pev->button & IN_ATTACK) != 0 && CanAttack(m_flNextPrimaryAttack, gpGlobals->time, UseDecrement()))
 	{
-		if ((m_iClip == 0 && pszAmmo1()) || (iMaxClip() == -1 && 0 == m_pPlayer->m_rgAmmo[PrimaryAmmoIndex()]))
+		if ((m_iClip == 0 && pszAmmo1()) || (iMaxClip() == -1 && 0 == m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType)))
 		{
 			m_fFireOnEmpty = true;
 		}
@@ -443,4 +433,21 @@ void CBasePlayerWeapon::LoadPersistentState(const PersistentWeaponState& state)
 			m_iClip = *value;
 		}
 	}
+}
+
+int CBasePlayerWeapon::GetMagazine1() const
+{
+	return m_iClip;
+}
+
+void CBasePlayerWeapon::SetMagazine1(int count)
+{
+	m_iClip = std::max(-1, count);
+}
+
+void CBasePlayerWeapon::AdjustMagazine1(int count)
+{
+	assert(iMaxClip() != WEAPON_NOCLIP);
+
+	m_iClip = std::clamp(m_iClip + count, 0, iMaxClip());
 }

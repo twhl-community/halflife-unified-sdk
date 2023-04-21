@@ -129,7 +129,7 @@ void CPython::PrimaryAttack()
 		return;
 	}
 
-	if (m_iClip <= 0)
+	if (GetMagazine1() <= 0)
 	{
 		if (m_fFireOnEmpty)
 		{
@@ -143,7 +143,7 @@ void CPython::PrimaryAttack()
 	m_pPlayer->m_iWeaponVolume = LOUD_GUN_VOLUME;
 	m_pPlayer->m_iWeaponFlash = BRIGHT_GUN_FLASH;
 
-	m_iClip--;
+	AdjustMagazine1(-1);
 
 	m_pPlayer->pev->effects = m_pPlayer->pev->effects | EF_MUZZLEFLASH;
 
@@ -168,7 +168,7 @@ void CPython::PrimaryAttack()
 
 	PLAYBACK_EVENT_FULL(flags, m_pPlayer->edict(), m_usFirePython, 0.0, g_vecZero, g_vecZero, vecDir.x, vecDir.y, 0, 0, 0, 0);
 
-	if (0 == m_iClip && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
+	if (0 == GetMagazine1() && m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType) <= 0)
 		// HEV suit - indicate out of ammo condition
 		m_pPlayer->SetSuitUpdate("!HEV_AMO0", false, 0);
 
@@ -178,7 +178,7 @@ void CPython::PrimaryAttack()
 
 void CPython::Reload()
 {
-	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
+	if (m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType) <= 0)
 		return;
 
 	if (m_pPlayer->m_iFOV != 0)

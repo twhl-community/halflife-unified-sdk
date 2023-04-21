@@ -246,7 +246,7 @@ void CCrossbow::IncrementAmmo(CBasePlayer* pPlayer)
 
 bool CCrossbow::Deploy()
 {
-	if (0 != m_iClip)
+	if (0 != GetMagazine1())
 		return DefaultDeploy("models/v_crossbow.mdl", "models/p_crossbow.mdl", CROSSBOW_DRAW1, "bow");
 	return DefaultDeploy("models/v_crossbow.mdl", "models/p_crossbow.mdl", CROSSBOW_DRAW2, "bow");
 }
@@ -261,7 +261,7 @@ void CCrossbow::Holster()
 	}
 
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;
-	if (0 != m_iClip)
+	if (0 != GetMagazine1())
 		SendWeaponAnim(CROSSBOW_HOLSTER1);
 	else
 		SendWeaponAnim(CROSSBOW_HOLSTER2);
@@ -283,7 +283,7 @@ void CCrossbow::FireSniperBolt()
 {
 	m_flNextPrimaryAttack = GetNextAttackDelay(0.75);
 
-	if (m_iClip == 0)
+	if (GetMagazine1() == 0)
 	{
 		PlayEmptySound();
 		return;
@@ -292,7 +292,7 @@ void CCrossbow::FireSniperBolt()
 	TraceResult tr;
 
 	m_pPlayer->m_iWeaponVolume = QUIET_GUN_VOLUME;
-	m_iClip--;
+	AdjustMagazine1(-1);
 
 	int flags;
 #if defined(CLIENT_WEAPONS)
@@ -301,7 +301,7 @@ void CCrossbow::FireSniperBolt()
 	flags = 0;
 #endif
 
-	PLAYBACK_EVENT_FULL(flags, m_pPlayer->edict(), m_usCrossbow2, 0.0, g_vecZero, g_vecZero, 0, 0, m_iClip, 0, 0, 0);
+	PLAYBACK_EVENT_FULL(flags, m_pPlayer->edict(), m_usCrossbow2, 0.0, g_vecZero, g_vecZero, 0, 0, GetMagazine1(), 0, 0, 0);
 
 	// player "shoot" animation
 	m_pPlayer->SetAnimation(PLAYER_ATTACK1);
@@ -325,7 +325,7 @@ void CCrossbow::FireSniperBolt()
 
 void CCrossbow::FireBolt()
 {
-	if (m_iClip == 0)
+	if (GetMagazine1() == 0)
 	{
 		PlayEmptySound();
 		return;
@@ -333,7 +333,7 @@ void CCrossbow::FireBolt()
 
 	m_pPlayer->m_iWeaponVolume = QUIET_GUN_VOLUME;
 
-	m_iClip--;
+	AdjustMagazine1(-1);
 
 	int flags;
 #if defined(CLIENT_WEAPONS)
@@ -342,7 +342,7 @@ void CCrossbow::FireBolt()
 	flags = 0;
 #endif
 
-	PLAYBACK_EVENT_FULL(flags, m_pPlayer->edict(), m_usCrossbow, 0.0, g_vecZero, g_vecZero, 0, 0, m_iClip, 0, 0, 0);
+	PLAYBACK_EVENT_FULL(flags, m_pPlayer->edict(), m_usCrossbow, 0.0, g_vecZero, g_vecZero, 0, 0, GetMagazine1(), 0, 0, 0);
 
 	// player "shoot" animation
 	m_pPlayer->SetAnimation(PLAYER_ATTACK1);
@@ -374,7 +374,7 @@ void CCrossbow::FireBolt()
 	pBolt->pev->avelocity.z = 10;
 #endif
 
-	if (0 == m_iClip && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
+	if (0 == GetMagazine1() && m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType) <= 0)
 		// HEV suit - indicate out of ammo condition
 		m_pPlayer->SetSuitUpdate("!HEV_AMO0", false, 0);
 
@@ -382,7 +382,7 @@ void CCrossbow::FireBolt()
 
 	m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.75;
 
-	if (m_iClip != 0)
+	if (GetMagazine1() != 0)
 		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 5.0;
 	else
 		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.75;
@@ -405,7 +405,7 @@ void CCrossbow::SecondaryAttack()
 
 void CCrossbow::Reload()
 {
-	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
+	if (m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType) <= 0)
 		return;
 
 	if (m_pPlayer->m_iFOV != 0)
@@ -430,7 +430,7 @@ void CCrossbow::WeaponIdle()
 		float flRand = UTIL_SharedRandomFloat(m_pPlayer->random_seed, 0, 1);
 		if (flRand <= 0.75)
 		{
-			if (0 != m_iClip)
+			if (0 != GetMagazine1())
 			{
 				SendWeaponAnim(CROSSBOW_IDLE1);
 			}
@@ -442,7 +442,7 @@ void CCrossbow::WeaponIdle()
 		}
 		else
 		{
-			if (0 != m_iClip)
+			if (0 != GetMagazine1())
 			{
 				SendWeaponAnim(CROSSBOW_FIDGET1);
 				m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 90.0 / 30.0;

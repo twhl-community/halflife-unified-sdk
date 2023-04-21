@@ -97,10 +97,10 @@ void CShotgun::PrimaryAttack()
 		return;
 	}
 
-	if (m_iClip <= 0)
+	if (GetMagazine1() <= 0)
 	{
 		Reload();
-		if (m_iClip == 0)
+		if (GetMagazine1() == 0)
 			PlayEmptySound();
 		return;
 	}
@@ -108,7 +108,7 @@ void CShotgun::PrimaryAttack()
 	m_pPlayer->m_iWeaponVolume = LOUD_GUN_VOLUME;
 	m_pPlayer->m_iWeaponFlash = NORMAL_GUN_FLASH;
 
-	m_iClip--;
+	AdjustMagazine1(-1);
 
 	int flags;
 #if defined(CLIENT_WEAPONS)
@@ -138,16 +138,16 @@ void CShotgun::PrimaryAttack()
 	PLAYBACK_EVENT_FULL(flags, m_pPlayer->edict(), m_usSingleFire, 0.0, g_vecZero, g_vecZero, vecDir.x, vecDir.y, 0, 0, 0, 0);
 
 
-	if (0 == m_iClip && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
+	if (0 == GetMagazine1() && m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType) <= 0)
 		// HEV suit - indicate out of ammo condition
 		m_pPlayer->SetSuitUpdate("!HEV_AMO0", false, 0);
 
-	// if (m_iClip != 0)
+	// if (GetMagazine1() != 0)
 	m_flPumpTime = gpGlobals->time + 0.5;
 
 	m_flNextPrimaryAttack = GetNextAttackDelay(0.75);
 	m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.75;
-	if (m_iClip != 0)
+	if (GetMagazine1() != 0)
 		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 5.0;
 	else
 		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 1;
@@ -164,7 +164,7 @@ void CShotgun::SecondaryAttack()
 		return;
 	}
 
-	if (m_iClip <= 1)
+	if (GetMagazine1() < 2)
 	{
 		Reload();
 		PlayEmptySound();
@@ -174,8 +174,7 @@ void CShotgun::SecondaryAttack()
 	m_pPlayer->m_iWeaponVolume = LOUD_GUN_VOLUME;
 	m_pPlayer->m_iWeaponFlash = NORMAL_GUN_FLASH;
 
-	m_iClip -= 2;
-
+	AdjustMagazine1(-2);
 
 	int flags;
 #if defined(CLIENT_WEAPONS)
@@ -207,16 +206,16 @@ void CShotgun::SecondaryAttack()
 
 	PLAYBACK_EVENT_FULL(flags, m_pPlayer->edict(), m_usDoubleFire, 0.0, g_vecZero, g_vecZero, vecDir.x, vecDir.y, 0, 0, 0, 0);
 
-	if (0 == m_iClip && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
+	if (0 == GetMagazine1() && m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType) <= 0)
 		// HEV suit - indicate out of ammo condition
 		m_pPlayer->SetSuitUpdate("!HEV_AMO0", false, 0);
 
-	// if (m_iClip != 0)
+	// if (GetMagazine1() != 0)
 	m_flPumpTime = gpGlobals->time + 0.95;
 
 	m_flNextPrimaryAttack = GetNextAttackDelay(1.5);
 	m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 1.5;
-	if (m_iClip != 0)
+	if (GetMagazine1() != 0)
 		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 6.0;
 	else
 		m_flTimeWeaponIdle = 1.5;
@@ -233,7 +232,7 @@ void CShotgun::Reload()
 		maxClip *= 2;
 	}
 
-	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0 || m_iClip == maxClip)
+	if (m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType) <= 0 || GetMagazine1() == maxClip)
 		return;
 
 	// don't reload until recoil is done
@@ -271,8 +270,8 @@ void CShotgun::Reload()
 	else
 	{
 		// Add them to the clip
-		m_iClip += 1;
-		m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] -= 1;
+		AdjustMagazine1(1);
+		m_pPlayer->AdjustAmmoByIndex(m_iPrimaryAmmoType, -1);
 		m_fInSpecialReload = 1;
 	}
 }
@@ -295,7 +294,7 @@ void CShotgun::WeaponIdle()
 
 	if (m_flTimeWeaponIdle < UTIL_WeaponTimeBase())
 	{
-		if (m_iClip == 0 && m_fInSpecialReload == 0 && 0 != m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType])
+		if (GetMagazine1() == 0 && m_fInSpecialReload == 0 && 0 != m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType))
 		{
 			Reload();
 		}
@@ -308,7 +307,7 @@ void CShotgun::WeaponIdle()
 				maxClip *= 2;
 			}
 
-			if (m_iClip != maxClip && 0 != m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType])
+			if (GetMagazine1() != maxClip && 0 != m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType))
 			{
 				Reload();
 			}

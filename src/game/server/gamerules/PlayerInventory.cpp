@@ -77,7 +77,7 @@ PlayerInventory PlayerInventory::CreateFromPlayer(CBasePlayer* player)
 	{
 		auto ammoType = g_AmmoTypes.GetByIndex(i + 1);
 
-		inventory.SetAmmoCount(ammoType->Name.c_str(), player->AmmoInventory(ammoType->Id));
+		inventory.SetAmmoCount(ammoType->Name.c_str(), player->GetAmmoCountByIndex(ammoType->Id));
 	}
 
 	for (int slot = 0; slot < MAX_WEAPON_SLOTS; ++slot)

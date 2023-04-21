@@ -2168,8 +2168,8 @@ void UpdateClientData(const edict_t* ent, int sendweapons, clientdata_t* cd)
 
 					cd->vuser3.z = gun->m_iSecondaryAmmoType;
 					cd->vuser4.x = gun->m_iPrimaryAmmoType;
-					cd->vuser4.y = pl->m_rgAmmo[gun->m_iPrimaryAmmoType];
-					cd->vuser4.z = pl->m_rgAmmo[gun->m_iSecondaryAmmoType];
+					cd->vuser4.y = pl->GetAmmoCountByIndex(gun->m_iPrimaryAmmoType);
+					cd->vuser4.z = pl->GetAmmoCountByIndex(gun->m_iSecondaryAmmoType);
 				}
 			}
 		}

@@ -105,7 +105,7 @@ void CMP5::PrimaryAttack()
 		return;
 	}
 
-	if (m_iClip <= 0)
+	if (GetMagazine1() <= 0)
 	{
 		PlayEmptySound();
 		m_flNextPrimaryAttack = 0.15;
@@ -115,7 +115,7 @@ void CMP5::PrimaryAttack()
 	m_pPlayer->m_iWeaponVolume = NORMAL_GUN_VOLUME;
 	m_pPlayer->m_iWeaponFlash = NORMAL_GUN_FLASH;
 
-	m_iClip--;
+	AdjustMagazine1(-1);
 
 	m_pPlayer->pev->effects = m_pPlayer->pev->effects | EF_MUZZLEFLASH;
 
@@ -146,7 +146,7 @@ void CMP5::PrimaryAttack()
 
 	PLAYBACK_EVENT_FULL(flags, m_pPlayer->edict(), m_usMP5, 0.0, g_vecZero, g_vecZero, vecDir.x, vecDir.y, 0, 0, 0, 0);
 
-	if (0 == m_iClip && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
+	if (0 == GetMagazine1() && m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType) <= 0)
 		// HEV suit - indicate out of ammo condition
 		m_pPlayer->SetSuitUpdate("!HEV_AMO0", false, 0);
 
@@ -168,7 +168,7 @@ void CMP5::SecondaryAttack()
 		return;
 	}
 
-	if (m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType] == 0)
+	if (m_pPlayer->GetAmmoCountByIndex(m_iSecondaryAmmoType) == 0)
 	{
 		PlayEmptySound();
 		return;
@@ -180,7 +180,7 @@ void CMP5::SecondaryAttack()
 	m_pPlayer->m_iExtraSoundTypes = bits_SOUND_DANGER;
 	m_pPlayer->m_flStopExtraSoundTime = UTIL_WeaponTimeBase() + 0.2;
 
-	m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType]--;
+	m_pPlayer->AdjustAmmoByIndex(m_iSecondaryAmmoType, -1);
 
 	// player "shoot" animation
 	m_pPlayer->SetAnimation(PLAYER_ATTACK1);
@@ -205,14 +205,14 @@ void CMP5::SecondaryAttack()
 	m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 1;
 	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 5; // idle pretty soon after shooting.
 
-	if (0 == m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType])
+	if (0 == m_pPlayer->GetAmmoCountByIndex(m_iSecondaryAmmoType))
 		// HEV suit - indicate out of ammo condition
 		m_pPlayer->SetSuitUpdate("!HEV_AMO0", false, 0);
 }
 
 void CMP5::Reload()
 {
-	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
+	if (m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType) <= 0)
 		return;
 
 	DefaultReload(MP5_MAX_CLIP, MP5_RELOAD, 1.5);

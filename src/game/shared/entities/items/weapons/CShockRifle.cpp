@@ -102,9 +102,9 @@ void CShockRifle::Holster()
 
 	SendWeaponAnim(SHOCKRIFLE_HOLSTER);
 
-	if (0 == m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType])
+	if (0 == m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType))
 	{
-		m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] = 1;
+		m_pPlayer->SetAmmoCountByIndex(m_iPrimaryAmmoType, 1);
 	}
 }
 
@@ -154,23 +154,25 @@ void CShockRifle::PrimaryAttack()
 
 		m_pPlayer->EmitSound(CHAN_ITEM, "weapons/shock_discharge.wav", flVolume, ATTN_NONE);
 
+		const int ammoCount = m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType);
+
 		RadiusDamage(
 			pev->origin,
 			m_pPlayer,
 			m_pPlayer,
-			m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] * 100.0,
-			m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] * 150.0,
+			ammoCount * 100.0,
+			ammoCount * 150.0,
 			CLASS_NONE,
 			DMG_ALWAYSGIB | DMG_BLAST);
 
-		m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] = 0;
+		m_pPlayer->SetAmmoCountByIndex(m_iPrimaryAmmoType, 0);
 
 		return;
 	}
 
 	Reload();
 
-	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
+	if (m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType) <= 0)
 	{
 		return;
 	}
@@ -178,7 +180,7 @@ void CShockRifle::PrimaryAttack()
 	m_pPlayer->m_iWeaponVolume = LOUD_GUN_VOLUME;
 	m_pPlayer->m_iWeaponFlash = BRIGHT_GUN_FLASH;
 
-	--m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType];
+	m_pPlayer->AdjustAmmoByIndex(m_iPrimaryAmmoType, -1);
 
 	m_flRechargeTime = gpGlobals->time + 1.0;
 
@@ -251,9 +253,11 @@ void CShockRifle::ItemPostFrame()
 
 void CShockRifle::RechargeAmmo(bool bLoud)
 {
-	while (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] < SHOCKRIFLE_DEFAULT_GIVE && m_flRechargeTime < gpGlobals->time)
+	int ammoCount = m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType);
+
+	while (ammoCount < SHOCKRIFLE_DEFAULT_GIVE && m_flRechargeTime < gpGlobals->time)
 	{
-		++m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType];
+		++ammoCount;
 
 		if (bLoud)
 		{
@@ -269,6 +273,8 @@ void CShockRifle::RechargeAmmo(bool bLoud)
 			m_flRechargeTime += 0.5;
 		}
 	}
+
+	m_pPlayer->SetAmmoCountByIndex(m_iPrimaryAmmoType, ammoCount);
 }
 
 bool CShockRifle::GetWeaponInfo(WeaponInfo& info)

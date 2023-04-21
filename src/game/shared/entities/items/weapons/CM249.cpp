@@ -123,7 +123,7 @@ void CM249::PrimaryAttack()
 		return;
 	}
 
-	if (m_iClip <= 0)
+	if (GetMagazine1() <= 0)
 	{
 		if (!m_fInReload)
 		{
@@ -135,9 +135,9 @@ void CM249::PrimaryAttack()
 		return;
 	}
 
-	--m_iClip;
+	AdjustMagazine1(-1);
 
-	pev->body = RecalculateBody(m_iClip);
+	pev->body = RecalculateBody(GetMagazine1());
 
 	m_bAlternatingEject = !m_bAlternatingEject;
 
@@ -209,9 +209,9 @@ void CM249::PrimaryAttack()
 		pev->body, 0,
 		m_bAlternatingEject ? 1 : 0, 0);
 
-	if (0 == m_iClip)
+	if (0 == GetMagazine1())
 	{
-		if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
+		if (m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType) <= 0)
 		{
 			m_pPlayer->SetSuitUpdate("!HEV_AMO0", SUIT_SENTENCE, SUIT_REPEAT_OK);
 		}

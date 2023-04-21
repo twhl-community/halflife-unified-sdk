@@ -412,7 +412,7 @@ void CTripmine::Holster()
 {
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;
 
-	if (0 == m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType])
+	if (0 == m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType))
 	{
 		// out of mines
 		m_pPlayer->ClearWeaponBit(m_iId);
@@ -426,7 +426,7 @@ void CTripmine::Holster()
 
 void CTripmine::PrimaryAttack()
 {
-	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
+	if (m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType) <= 0)
 		return;
 
 	UTIL_MakeVectors(m_pPlayer->pev->v_angle + m_pPlayer->pev->punchangle);
@@ -455,12 +455,12 @@ void CTripmine::PrimaryAttack()
 
 			Create("monster_tripmine", tr.vecEndPos + tr.vecPlaneNormal * 8, angles, m_pPlayer);
 
-			m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]--;
+			m_pPlayer->AdjustAmmoByIndex(m_iPrimaryAmmoType, -1);
 
 			// player "shoot" animation
 			m_pPlayer->SetAnimation(PLAYER_ATTACK1);
 
-			if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
+			if (m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType) <= 0)
 			{
 				// no more mines!
 				RetireWeapon();
@@ -488,7 +488,7 @@ void CTripmine::WeaponIdle()
 	if (m_flTimeWeaponIdle > UTIL_WeaponTimeBase())
 		return;
 
-	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] > 0)
+	if (m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType) > 0)
 	{
 		SendWeaponAnim(TRIPMINE_DRAW);
 	}
