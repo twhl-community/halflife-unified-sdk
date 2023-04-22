@@ -56,6 +56,8 @@
 #include "sound/SentencesSystem.h"
 #include "sound/ServerSoundSystem.h"
 
+constexpr char DefaultMapConfigFileName[] = "cfg/DefaultMapConfig.json";
+
 cvar_t servercfgfile = {"sv_servercfgfile", "cfg/server/server.json", FCVAR_NOEXTRAWHITEPACE | FCVAR_ISPATH};
 cvar_t mp_gamemode = {"mp_gamemode", "", FCVAR_SERVER};
 cvar_t mp_createserver_gamemode = {"mp_createserver_gamemode", "", FCVAR_SERVER};
@@ -403,15 +405,22 @@ void ServerLibrary::LoadServerConfigFiles()
 {
 	const auto start = std::chrono::high_resolution_clock::now();
 
-	std::optional<GameConfig<ServerConfigContext>> mapConfig;
+	std::string mapConfigFileName;
 
-	// Check if the file exists so we don't get errors about it during loading
-	if (const auto mapCfgFileName = fmt::format("cfg/maps/{}.json", STRING(gpGlobals->mapname));
+	// Use the map-specific cfg if it exists.
+	if (auto mapCfgFileName = fmt::format("cfg/maps/{}.json", STRING(gpGlobals->mapname));
 		g_pFileSystem->FileExists(mapCfgFileName.c_str()))
 	{
-		g_GameLogger->trace("Loading map config file");
-		mapConfig = m_MapConfigDefinition->TryLoad(mapCfgFileName.c_str());
+		mapConfigFileName = std::move(mapCfgFileName);
 	}
+	else
+	{
+		g_GameLogger->debug("Using default map config file \"{}\"", DefaultMapConfigFileName);
+		mapConfigFileName = DefaultMapConfigFileName;
+	}
+
+	g_GameLogger->trace("Loading map config file");
+	const std::optional<GameConfig<ServerConfigContext>> mapConfig = m_MapConfigDefinition->TryLoad(mapConfigFileName.c_str());
 
 	GameModeConfiguration gameModeConfig;
 
