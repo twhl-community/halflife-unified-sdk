@@ -378,6 +378,7 @@ void ServerLibrary::DefineSkillVariables()
 		{.Minimum = -1, .Type = SkillVarType::Integer});
 
 	g_Skill.DefineVariable("weapon_instant_respawn", 0, {.Minimum = 0, .Maximum = 1, .Type = SkillVarType::Integer});
+	g_Skill.DefineVariable("allow_weapon_dropping", 0, {.Minimum = 0, .Maximum = 1, .Type = SkillVarType::Integer});
 
 	// Weapon variables
 	g_Skill.DefineVariable("infinite_ammo", 0, {.Minimum = 0, .Maximum = 1, .Networked = true, .Type = SkillVarType::Integer});
