@@ -96,7 +96,7 @@ struct GameConfigFileData
 struct GameModeConfiguration final
 {
 	std::string GameMode;
-	bool AllowOverride{true};
+	bool IsLocked{false};
 };
 
 /**
@@ -235,7 +235,7 @@ GameModeConfiguration GameConfig<DataContext>::GetGameModeConfiguration() const
 				config.GameMode = gameMode->get<std::string>();
 			}
 
-			config.AllowOverride = data.Data.value<bool>("AllowGameModeOverride", config.AllowOverride);
+			config.IsLocked = data.Data.value<bool>("LockGameMode", config.IsLocked);
 		}
 		catch (const std::exception& e)
 		{
@@ -430,9 +430,9 @@ inline std::string GameConfigDefinition<DataContext>::GetSchema() const
 			"description": "Game mode to use for this map",
 			"type": "string"
 		},
-		"AllowGameModeOverride": {
-			"title": "Allow Game Mode Override",
-			"description": "Allow the server to override the game mode using mp_gamemode",
+		"LockGameMode": {
+			"title": "Lock Game Mode to configured setting",
+			"description": "Prevents the server from changing the game mode setting for this map",
 			"type": "boolean"
 		},)"sv;
 

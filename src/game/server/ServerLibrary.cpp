@@ -436,7 +436,7 @@ void ServerLibrary::LoadServerConfigFiles()
 		g_engfuncs.pfnCvar_DirectSet(&mp_createserver_gamemode, "");
 	}
 
-	if (gameModeConfig.AllowOverride && mp_gamemode.string[0] != '\0')
+	if (!gameModeConfig.IsLocked && mp_gamemode.string[0] != '\0')
 	{
 		if (gameModeConfig.GameMode.empty())
 		{
