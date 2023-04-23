@@ -337,7 +337,7 @@ void Host_Say(CBasePlayer* player, bool teamonly)
 
 	// Only limit chat in multiplayer.
 	// Not yet.
-	if (gpGlobals->maxClients > 1 && player->m_flNextChatTime > gpGlobals->time)
+	if (g_pGameRules->IsMultiplayer() && player->m_flNextChatTime > gpGlobals->time)
 		return;
 
 	if (!stricmp(pcmd, cpSay) || !stricmp(pcmd, cpSayTeam))
@@ -1100,7 +1100,7 @@ void ClientUserInfoChanged(edict_t* pEntity, char* infobuffer)
 		// Set the name
 		g_engfuncs.pfnSetClientKeyValue(player->entindex(), infobuffer, "name", sName);
 
-		if (gpGlobals->maxClients > 1)
+		if (g_pGameRules->IsMultiplayer())
 		{
 			char text[256];
 			sprintf(text, "* %s changed name to %s\n", STRING(pEntity->v.netname), g_engfuncs.pfnInfoKeyValue(infobuffer, "name"));

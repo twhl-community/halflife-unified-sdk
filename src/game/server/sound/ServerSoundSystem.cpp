@@ -238,7 +238,7 @@ void ServerSoundSystem::EmitSoundCore(CBaseEntity* entity, int channel, const ch
 	{
 		MESSAGE_BEGIN(MSG_PAS, gmsgEmitSound, origin);
 	}
-	else if (gpGlobals->maxClients == 1)
+	else if (!g_pGameRules->IsMultiplayer())
 	{
 		MESSAGE_BEGIN(MSG_BROADCAST, gmsgEmitSound);
 	}
