@@ -16,6 +16,10 @@
 #include "cbase.h"
 #include "CBaseEntity.h"
 
+#ifndef CLIENT_DLL
+#include "EntityTemplateSystem.h"
+#endif
+
 BEGIN_DATAMAP_NOBASE(entvars_t)
 DEFINE_FIELD(classname, FIELD_STRING),
 	DEFINE_GLOBAL_FIELD(globalname, FIELD_STRING),
@@ -161,6 +165,10 @@ void CBaseEntity::OnCreate()
 void CBaseEntity::Construct()
 {
 	OnCreate();
+
+#ifndef CLIENT_DLL
+	g_EntityTemplates.MaybeApplyTemplate(this);
+#endif
 }
 
 void CBaseEntity::OnDestroy()

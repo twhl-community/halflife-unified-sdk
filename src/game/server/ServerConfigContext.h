@@ -18,6 +18,7 @@
 #include <string>
 #include <vector>
 
+#include "EntityTemplateSystem.h"
 #include "MapState.h"
 #include "gamerules/PlayerInventory.h"
 
@@ -37,4 +38,6 @@ struct ServerConfigContext
 	std::vector<std::string> GlobalSoundReplacementFiles;
 
 	PlayerInventory SpawnInventory;
+
+	EntityTemplateMap EntityTemplates;
 };

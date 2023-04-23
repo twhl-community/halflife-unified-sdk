@@ -23,6 +23,7 @@
 
 #include "cbase.h"
 #include "client.h"
+#include "EntityTemplateSystem.h"
 #include "MapState.h"
 #include "nodes.h"
 #include "ProjectInfoSystem.h"
@@ -38,6 +39,7 @@
 #include "config/GameConfig.h"
 #include "config/sections/CommandsSection.h"
 #include "config/sections/EchoSection.h"
+#include "config/sections/EntityTemplatesSection.h"
 #include "config/sections/GameDataFilesSections.h"
 #include "config/sections/GlobalReplacementFilesSections.h"
 #include "config/sections/HudColorSection.h"
@@ -306,6 +308,7 @@ void ServerLibrary::AddGameSystems()
 	g_GameSystems.Add(&sound::g_ServerSound);
 	g_GameSystems.Add(&sentences::g_Sentences);
 	g_GameSystems.Add(&g_MapCycleSystem);
+	g_GameSystems.Add(&g_EntityTemplates);
 }
 
 void ServerLibrary::SetEntLogLevels(spdlog::level::level_enum level)
@@ -355,6 +358,7 @@ void ServerLibrary::CreateConfigDefinitions()
 			sections.push_back(std::make_unique<HudColorSection>());
 			sections.push_back(std::make_unique<SuitLightTypeSection>());
 			sections.push_back(std::make_unique<SpawnInventorySection>());
+			sections.push_back(std::make_unique<EntityTemplatesSection>());
 
 			return sections; }());
 }
@@ -511,6 +515,8 @@ void ServerLibrary::LoadServerConfigFiles()
 		context.GlobalSoundReplacementFiles, {.CaseSensitive = false});
 
 	g_SpawnInventory.SetInventory(std::move(context.SpawnInventory));
+
+	g_EntityTemplates.LoadTemplates(context.EntityTemplates);
 
 	const auto timeElapsed = std::chrono::high_resolution_clock::now() - start;
 

@@ -65,6 +65,7 @@ target_sources(server PRIVATE
 	config/sections/BaseFileNamesListSection.h
 	config/sections/CommandsSection.h
 	config/sections/EchoSection.h
+	config/sections/EntityTemplatesSection.h
 	config/sections/GameDataFilesSections.h
 	config/sections/GlobalReplacementFilesSections.h
 	config/sections/HudColorSection.h
@@ -97,6 +98,8 @@ target_sources(server PRIVATE
 	entities/doors.h
 	entities/effects.cpp
 	entities/effects.h
+	entities/EntityTemplateSystem.cpp
+	entities/EntityTemplateSystem.h
 	entities/explode.cpp
 	entities/explode.h
 	entities/func_break.cpp
