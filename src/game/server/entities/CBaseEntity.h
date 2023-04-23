@@ -205,11 +205,15 @@ public:
 	 */
 	virtual void OnCreate();
 
+	void Construct();
+
 	/**
 	 *	@brief Called immediately before the destructor is executed.
 	 *	@details Call the base class version at the end when overriding this function.
 	 */
 	virtual void OnDestroy();
+
+	void Destruct();
 
 	virtual void Spawn() {}
 

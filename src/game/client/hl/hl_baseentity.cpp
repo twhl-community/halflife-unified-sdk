@@ -58,16 +58,6 @@ void CBaseEntity::SetSize(const Vector& min, const Vector& max)
 	// Nothing.
 }
 
-void CBaseEntity::OnCreate()
-{
-	// Nothing.
-}
-
-void CBaseEntity::OnDestroy()
-{
-	// Nothing.
-}
-
 bool CBaseEntity::GiveHealth(float flHealth, int bitsDamageType) { return true; }
 bool CBaseEntity::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) { return true; }
 CBaseEntity* CBaseEntity::GetNextTarget() { return nullptr; }

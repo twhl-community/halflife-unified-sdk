@@ -142,7 +142,7 @@ protected:
 		entity->pev = pev;
 		entity->pev->classname = ALLOC_STRING_VIEW(className);
 
-		entity->OnCreate();
+		entity->Construct();
 
 		return entity;
 	}
@@ -190,7 +190,7 @@ public:
 			return;
 		}
 
-		entity->OnDestroy();
+		entity->Destruct();
 		delete entity;
 	}
 

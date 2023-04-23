@@ -654,16 +654,6 @@ void CBaseEntity::SetSize(const Vector& min, const Vector& max)
 	g_engfuncs.pfnSetSize(edict(), m_HasCustomHullMin ? m_CustomHullMin : min, m_HasCustomHullMax ? m_CustomHullMax : max);
 }
 
-void CBaseEntity::OnCreate()
-{
-	// Nothing.
-}
-
-void CBaseEntity::OnDestroy()
-{
-	// Nothing.
-}
-
 bool CBaseEntity::GiveHealth(float flHealth, int bitsDamageType)
 {
 	if (0 == pev->takedamage)

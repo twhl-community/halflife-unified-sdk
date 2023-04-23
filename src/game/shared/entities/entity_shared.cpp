@@ -153,6 +153,26 @@ DEFINE_FIELD(m_pGoalEnt, FIELD_CLASSPTR),
 	DEFINE_FUNCTION(SUB_CallUseToggle),
 	END_DATAMAP();
 
+void CBaseEntity::OnCreate()
+{
+	// Nothing.
+}
+
+void CBaseEntity::Construct()
+{
+	OnCreate();
+}
+
+void CBaseEntity::OnDestroy()
+{
+	// Nothing.
+}
+
+void CBaseEntity::Destruct()
+{
+	OnDestroy();
+}
+
 bool CBaseEntity::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq(pkvd->szKeyName, "master"))
