@@ -682,8 +682,9 @@ bool GameSoundSystem::SetupChannel(Channel& channel, int entityIndex, int channe
 	channel.Pitch = pitch;
 
 	// If attenuation is 0 then the sound will play everywhere.
+	// If the entity is the current view entity then it should always sound like it's playing "here".
 	// Make it relative to the listener to stop it from having 3D spatialization.
-	if (!isRelative && attenuation == 0)
+	if (!isRelative && (attenuation == 0 || entityIndex == g_ViewEntity))
 	{
 		isRelative = true;
 		alSourcefv(channel.Source.Id, AL_POSITION, vec3_origin);
