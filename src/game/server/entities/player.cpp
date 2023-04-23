@@ -2892,6 +2892,9 @@ void CBasePlayer::PostRestore()
 {
 	BaseClass::PostRestore();
 
+	m_Connected = true;
+	m_ConnectTime = gpGlobals->time;
+
 	SAVERESTOREDATA* pSaveData = (SAVERESTOREDATA*)gpGlobals->pSaveData;
 	// landmark isn't present.
 	if (0 == pSaveData->fUseLandmark)
