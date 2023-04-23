@@ -35,17 +35,7 @@ void CRpg::OnCreate()
 	m_iId = WEAPON_RPG;
 
 	m_fSpotActive = true;
-
-	if (UTIL_IsMultiplayer())
-	{
-		// more default ammo in multiplay.
-		m_iDefaultAmmo = RPG_DEFAULT_GIVE * 2;
-	}
-	else
-	{
-		m_iDefaultAmmo = RPG_DEFAULT_GIVE;
-	}
-
+	m_iDefaultAmmo = RPG_DEFAULT_GIVE;
 	m_WorldModel = pev->model = MAKE_STRING("models/w_rpg.mdl");
 }
 
@@ -316,14 +306,7 @@ public:
 	void OnCreate() override
 	{
 		CBasePlayerAmmo::OnCreate();
-
-		// hand out more ammo per rocket in multiplayer.
 		m_AmmoAmount = AMMO_RPGCLIP_GIVE;
-		if (UTIL_IsMultiplayer())
-		{
-			m_AmmoAmount *= 2;
-		}
-
 		m_AmmoName = MAKE_STRING("rockets");
 		pev->model = MAKE_STRING("models/w_rpgammo.mdl");
 	}
