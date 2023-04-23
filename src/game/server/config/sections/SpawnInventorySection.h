@@ -68,7 +68,7 @@ public:
 		"title": "Weapons to give to the player",
 		"type": "object",
 		"patternProperties": {
-			"^.*$": {
+			"^.+$": {
 				"title": "Weapon",
 				"type": "object",
 				"properties": {
