@@ -300,6 +300,9 @@ void ServerLibrary::PlayerActivating(CBasePlayer* player)
 void ServerLibrary::AddGameSystems()
 {
 	GameLibrary::AddGameSystems();
+	// Depends on Angelscript
+	g_GameSystems.Add(&g_ConditionEvaluator);
+	g_GameSystems.Add(&g_GameConfigSystem);
 	g_GameSystems.Add(&sound::g_ServerSound);
 	g_GameSystems.Add(&sentences::g_Sentences);
 	g_GameSystems.Add(&g_MapCycleSystem);

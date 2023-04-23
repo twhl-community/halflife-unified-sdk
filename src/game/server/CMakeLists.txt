@@ -55,6 +55,22 @@ target_sources(server PRIVATE
 	voice_gamemgr.cpp
 	voice_gamemgr.h
 	
+	config/CommandWhitelist.cpp
+	config/CommandWhitelist.h
+	config/ConditionEvaluator.cpp
+	config/ConditionEvaluator.h
+	config/GameConfigIncludeStack.h
+	config/GameConfig.cpp
+	config/GameConfig.h
+	config/sections/BaseFileNamesListSection.h
+	config/sections/CommandsSection.h
+	config/sections/EchoSection.h
+	config/sections/GameDataFilesSections.h
+	config/sections/GlobalReplacementFilesSections.h
+	config/sections/HudColorSection.h
+	config/sections/SpawnInventorySection.h
+	config/sections/SuitLightTypeSection.h
+	
 	entities/animating.cpp
 	entities/animation.cpp
 	entities/animation.h

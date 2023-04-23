@@ -21,9 +21,6 @@
 #include "skill.h"
 #include "WeaponDataSystem.h"
 
-#include "config/ConditionEvaluator.h"
-#include "config/GameConfig.h"
-
 #include "networking/NetworkDataSystem.h"
 
 #include "scripting/AS/ASManager.h"
@@ -91,9 +88,6 @@ void GameLibrary::AddGameSystems()
 	g_GameSystems.Add(&g_Logging);
 	g_GameSystems.Add(&g_NetworkData);
 	g_GameSystems.Add(&g_ASManager);
-	// Depends on Angelscript
-	g_GameSystems.Add(&g_ConditionEvaluator);
-	g_GameSystems.Add(&g_GameConfigSystem);
 	g_GameSystems.Add(&g_ReplacementMaps);
 	g_GameSystems.Add(&g_MaterialSystem);
 	g_GameSystems.Add(&g_ProjectInfo);

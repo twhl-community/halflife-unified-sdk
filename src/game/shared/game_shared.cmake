@@ -10,22 +10,6 @@ function(add_game_shared_sources target)
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/skill.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/voice_common.h
 			
-			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/CommandWhitelist.cpp
-			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/CommandWhitelist.h
-			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/ConditionEvaluator.cpp
-			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/ConditionEvaluator.h
-			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/GameConfigIncludeStack.h
-			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/GameConfig.cpp
-			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/GameConfig.h
-			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/sections/BaseFileNamesListSection.h
-			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/sections/CommandsSection.h
-			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/sections/EchoSection.h
-			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/sections/GameDataFilesSections.h
-			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/sections/GlobalReplacementFilesSections.h
-			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/sections/HudColorSection.h
-			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/sections/SpawnInventorySection.h
-			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/sections/SuitLightTypeSection.h
-			
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/entities/ehandle.cpp
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/entities/ehandle.h
 			${CMAKE_CURRENT_FUNCTION_LIST_DIR}/entities/EntityDictionary.h
