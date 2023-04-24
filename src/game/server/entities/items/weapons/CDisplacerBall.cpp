@@ -162,10 +162,8 @@ void CDisplacerBall::BallTouch(CBaseEntity* pOther)
 
 	UTIL_DecalTrace(&tr, DECAL_SCORCH1 + RANDOM_LONG(0, 1));
 
-	if (pOther->IsPlayer())
+	if (auto pPlayer = ToBasePlayer(pOther); pPlayer)
 	{
-		CBasePlayer* pPlayer = static_cast<CBasePlayer*>(pOther);
-
 		// Clear any flags set on player (onground, using grapple, etc).
 		pPlayer->pev->flags &= FL_FAKECLIENT;
 		pPlayer->pev->flags |= FL_CLIENT;
@@ -173,17 +171,11 @@ void CDisplacerBall::BallTouch(CBaseEntity* pOther)
 
 		if (g_pGameRules->IsCTF() && pPlayer->m_pFlag)
 		{
-			CTFGoalFlag* pFlag = pPlayer->m_pFlag;
+			pPlayer->m_pFlag->DropFlag(pPlayer);
 
-			pFlag->DropFlag(pPlayer);
-
-			auto pOwner = CBaseEntity::Instance(pev->owner);
-
-			if (pOwner->IsPlayer())
+			if (auto pOwner = ToBasePlayer(pev->owner); pOwner)
 			{
-				auto pOwnerPlayer = static_cast<CBasePlayer*>(pOwner);
-
-				if (pOwnerPlayer->m_iTeamNum != pPlayer->m_iTeamNum)
+				if (pOwner->m_iTeamNum != pPlayer->m_iTeamNum)
 				{
 					MESSAGE_BEGIN(MSG_ALL, gmsgCTFScore);
 					WRITE_BYTE(pPlayer->entindex());

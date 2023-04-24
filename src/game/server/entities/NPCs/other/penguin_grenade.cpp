@@ -124,20 +124,18 @@ void CPenguinGrenade::SuperBounceTouch(CBaseEntity* pOther)
 		if (g_pGameRules->IsMultiplayer())
 		{
 			// TODO: set to null earlier on, so this can never be valid
-			auto owner = CBaseEntity::Instance(pev->owner);
-
-			auto ownerPlayer = owner->IsPlayer() ? owner : nullptr;
+			auto owner = ToBasePlayer(pev->owner);
 
 			hurtTarget = true;
 
-			if (pOther->IsPlayer())
+			if (auto otherPlayer = ToBasePlayer(pOther); otherPlayer)
 			{
-				if (ownerPlayer)
+				if (owner)
 				{
 					hurtTarget = false;
-					if (ownerPlayer != pOther)
+					if (owner != otherPlayer)
 					{
-						hurtTarget = g_pGameRules->FPlayerCanTakeDamage(static_cast<CBasePlayer*>(pOther), ownerPlayer);
+						hurtTarget = g_pGameRules->FPlayerCanTakeDamage(otherPlayer, owner);
 					}
 				}
 			}

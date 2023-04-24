@@ -62,14 +62,9 @@ bool CPlayerSetHudColor::KeyValue(KeyValueData* pkvd)
 
 void CPlayerSetHudColor::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
-	if (!pActivator || !pActivator->IsPlayer())
-	{
-		return;
-	}
+	auto player = ToBasePlayer(pActivator);
 
-	auto player = static_cast<CBasePlayer*>(pActivator);
-
-	if (!player->IsNetClient())
+	if (!player || !player->IsNetClient())
 	{
 		return;
 	}

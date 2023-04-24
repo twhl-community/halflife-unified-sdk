@@ -133,10 +133,8 @@ void CGameScore::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE use
 		return;
 
 	// Only players can use this
-	if (pActivator->IsPlayer())
+	if (auto player = ToBasePlayer(pActivator); player)
 	{
-		auto player = static_cast<CBasePlayer*>(pActivator);
-
 		if (AwardToTeam())
 		{
 			player->AddPointsToTeam(Points(), AllowNegativeScore());
@@ -844,13 +842,14 @@ void CGamePlayerTeam::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYP
 	if (!CanFireForActivator(pActivator))
 		return;
 
-	if (pActivator->IsPlayer())
+	auto player = ToBasePlayer(pActivator);
+
+	if (player)
 	{
 		const char* pszTargetTeam = TargetTeamName(STRING(pev->target));
 		if (pszTargetTeam)
 		{
-			CBasePlayer* pPlayer = (CBasePlayer*)pActivator;
-			g_pGameRules->ChangePlayerTeam(pPlayer, pszTargetTeam, ShouldKillPlayer(), ShouldGibPlayer());
+			g_pGameRules->ChangePlayerTeam(player, pszTargetTeam, ShouldKillPlayer(), ShouldGibPlayer());
 		}
 	}
 

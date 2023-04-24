@@ -39,13 +39,13 @@ static CBasePlayer* FindPlayerByName(const char* pTestName)
 {
 	for (int i = 1; i <= gpGlobals->maxClients; i++)
 	{
-		CBaseEntity* pEnt = UTIL_PlayerByIndex(i);
+		CBasePlayer* pEnt = UTIL_PlayerByIndex(i);
 		if (pEnt)
 		{
 			const char* pNetName = STRING(pEnt->pev->netname);
 			if (stricmp(pNetName, pTestName) == 0)
 			{
-				return (CBasePlayer*)pEnt;
+				return pEnt;
 			}
 		}
 	}
@@ -201,18 +201,16 @@ void CVoiceGameMgr::UpdateMasks()
 
 	for (int iClient = 0; iClient < m_nMaxPlayers; iClient++)
 	{
-		CBaseEntity* pEnt = UTIL_PlayerByIndex(iClient + 1);
-		if (!pEnt || !pEnt->IsPlayer())
+		CBasePlayer* player = UTIL_PlayerByIndex(iClient + 1);
+		if (!player)
 			continue;
 
 		// Request the state of their "vmodenable" cvar.
 		if (g_bWantModEnable[iClient])
 		{
-			MESSAGE_BEGIN(MSG_ONE, m_msgRequestState, nullptr, pEnt->edict());
+			MESSAGE_BEGIN(MSG_ONE, m_msgRequestState, nullptr, player->edict());
 			MESSAGE_END();
 		}
-
-		CBasePlayer* pPlayer = (CBasePlayer*)pEnt;
 
 		CPlayerBitVec gameRulesMask;
 		if (g_PlayerModEnable[iClient])
@@ -220,8 +218,8 @@ void CVoiceGameMgr::UpdateMasks()
 			// Build a mask of who they can hear based on the game rules.
 			for (int iOtherClient = 0; iOtherClient < m_nMaxPlayers; iOtherClient++)
 			{
-				CBaseEntity* pEnt = UTIL_PlayerByIndex(iOtherClient + 1);
-				if (pEnt && (bAllTalk || m_pHelper->CanPlayerHearPlayer(pPlayer, (CBasePlayer*)pEnt)))
+				CBasePlayer* otherPlayer = UTIL_PlayerByIndex(iOtherClient + 1);
+				if (otherPlayer && (bAllTalk || m_pHelper->CanPlayerHearPlayer(player, otherPlayer)))
 				{
 					gameRulesMask[iOtherClient] = true;
 				}
@@ -235,7 +233,7 @@ void CVoiceGameMgr::UpdateMasks()
 			g_SentGameRulesMasks[iClient] = gameRulesMask;
 			g_SentBanMasks[iClient] = g_BanMasks[iClient];
 
-			MESSAGE_BEGIN(MSG_ONE, m_msgPlayerVoiceMask, nullptr, pPlayer->edict());
+			MESSAGE_BEGIN(MSG_ONE, m_msgPlayerVoiceMask, nullptr, player->edict());
 			int dw;
 			for (dw = 0; dw < VOICE_MAX_PLAYERS_DW; dw++)
 			{

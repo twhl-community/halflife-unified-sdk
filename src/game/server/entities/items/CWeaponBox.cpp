@@ -107,19 +107,20 @@ void CWeaponBox::Touch(CBaseEntity* pOther)
 		return;
 	}
 
-	if (!pOther->IsPlayer())
+	auto player = ToBasePlayer(pOther);
+
+	if (!player)
 	{
 		// only players may touch a weaponbox.
 		return;
 	}
 
-	if (!pOther->IsAlive())
+	if (!player->IsAlive())
 	{
 		// no dead guys.
 		return;
 	}
 
-	CBasePlayer* pPlayer = (CBasePlayer*)pOther;
 	int i;
 
 	// dole out ammo
@@ -128,7 +129,7 @@ void CWeaponBox::Touch(CBaseEntity* pOther)
 		if (!FStringNull(m_rgiszAmmo[i]))
 		{
 			// there's some ammo of this type.
-			pPlayer->GiveAmmo(m_rgAmmo[i], STRING(m_rgiszAmmo[i]));
+			player->GiveAmmo(m_rgAmmo[i], STRING(m_rgiszAmmo[i]));
 
 			// Logger->trace("Gave {} rounds of {}", m_rgAmmo[i], STRING(m_rgiszAmmo[i]));
 
@@ -155,9 +156,9 @@ void CWeaponBox::Touch(CBaseEntity* pOther)
 				weapon = m_rgpPlayerWeapons[i];
 				m_rgpPlayerWeapons[i] = m_rgpPlayerWeapons[i]->m_pNext; // unlink this weapon from the box
 
-				if (pPlayer->AddPlayerWeapon(weapon) == ItemAddResult::Added)
+				if (player->AddPlayerWeapon(weapon) == ItemAddResult::Added)
 				{
-					weapon->AttachToPlayer(pPlayer);
+					weapon->AttachToPlayer(player);
 				}
 			}
 		}

@@ -393,13 +393,12 @@ void COFGonome::HandleAnimEvent(MonsterEvent_t* pEvent)
 				prevPlayer->EnableControl(true);
 			}
 
-			CBaseEntity* enemy = m_hEnemy;
+			CBasePlayer* enemy = ToBasePlayer(m_hEnemy);
 
-			if (enemy && enemy->IsPlayer() && enemy->IsAlive())
+			if (enemy && enemy->IsAlive())
 			{
-				auto playerEnemy = static_cast<CBasePlayer*>(enemy);
-				playerEnemy->EnableControl(false);
-				m_PlayerLocked = playerEnemy;
+				enemy->EnableControl(false);
+				m_PlayerLocked = enemy;
 			}
 		}
 

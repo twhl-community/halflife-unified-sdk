@@ -43,13 +43,13 @@ void CBasePlayer::Observer_FindNextPlayer(bool bReverse)
 		if (iCurrent < 1)
 			iCurrent = gpGlobals->maxClients;
 
-		CBaseEntity* pEnt = UTIL_PlayerByIndex(iCurrent);
+		CBasePlayer* pEnt = UTIL_PlayerByIndex(iCurrent);
 		if (!pEnt)
 			continue;
 		if (pEnt == this)
 			continue;
 		// Don't spec observers or players who haven't picked a class yet
-		if (((CBasePlayer*)pEnt)->IsObserver() || (pEnt->pev->effects & EF_NODRAW) != 0)
+		if (pEnt->IsObserver() || (pEnt->pev->effects & EF_NODRAW) != 0)
 			continue;
 
 		// MOD AUTHORS: Add checks on target here.
@@ -225,11 +225,11 @@ void CBasePlayer::Observer_SetMode(int iMode)
 	// verify observer target again
 	if (m_hObserverTarget != nullptr)
 	{
-		CBaseEntity* pEnt = m_hObserverTarget;
+		CBasePlayer* pEnt = ToBasePlayer(m_hObserverTarget);
 
-		if ((pEnt == this) || (pEnt == nullptr))
+		if (pEnt == this || pEnt == nullptr)
 			m_hObserverTarget = nullptr;
-		else if (((CBasePlayer*)pEnt)->IsObserver() || (pEnt->pev->effects & EF_NODRAW) != 0)
+		else if (pEnt->IsObserver() || (pEnt->pev->effects & EF_NODRAW) != 0)
 			m_hObserverTarget = nullptr;
 	}
 

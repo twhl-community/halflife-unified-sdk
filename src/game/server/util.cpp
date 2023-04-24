@@ -113,7 +113,7 @@ edict_t* UTIL_GetEntityList()
 
 CBasePlayer* UTIL_GetLocalPlayer()
 {
-	return static_cast<CBasePlayer*>(UTIL_PlayerByIndex(1));
+	return UTIL_PlayerByIndex(1);
 }
 
 void UTIL_MoveToOrigin(edict_t* pent, const Vector& vecGoal, float flDist, int iMoveType)

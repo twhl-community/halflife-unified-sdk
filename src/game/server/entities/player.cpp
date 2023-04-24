@@ -329,12 +329,10 @@ bool CBasePlayer::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, floa
 
 	CBaseEntity* pAttacker = CBaseEntity::Instance(attacker);
 
-	if (pAttacker && pAttacker->IsPlayer())
+	if (auto attackerPlayer = ToBasePlayer(pAttacker); attackerPlayer)
 	{
-		auto pAttackerPlayer = static_cast<CBasePlayer*>(pAttacker);
-
 		// TODO: this is a pretty bad way to handle damage increase
-		if ((pAttackerPlayer->m_iItems & CTFItem::Acceleration) != 0)
+		if ((attackerPlayer->m_iItems & CTFItem::Acceleration) != 0)
 		{
 			flDamage *= 1.6;
 
@@ -342,7 +340,7 @@ bool CBasePlayer::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, floa
 		}
 		if (m_pFlag)
 		{
-			m_nLastShotBy = pAttackerPlayer->entindex();
+			m_nLastShotBy = attackerPlayer->entindex();
 			m_flLastShotTime = gpGlobals->time;
 		}
 	}
@@ -3063,18 +3061,10 @@ void CSprayCan::Spawn(CBaseEntity* owner)
 void CSprayCan::Think()
 {
 	TraceResult tr;
-	int playernum;
-	int nFrames;
-	CBasePlayer* pPlayer;
+	CBasePlayer* pPlayer = ToBasePlayer(pev->owner);
 
-	pPlayer = (CBasePlayer*)GET_PRIVATE(pev->owner);
-
-	if (pPlayer)
-		nFrames = pPlayer->GetCustomDecalFrames();
-	else
-		nFrames = -1;
-
-	playernum = ENTINDEX(pev->owner);
+	const int nFrames = pPlayer ? pPlayer->GetCustomDecalFrames() : -1;
+	const int playernum = ENTINDEX(pev->owner);
 
 	// Logger->debug("Spray by player {}, {} of {}", playernum, (int)(pev->frame + 1), nFrames);
 

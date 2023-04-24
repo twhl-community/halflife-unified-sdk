@@ -67,63 +67,65 @@ void CRopeSegment::Think()
 
 void CRopeSegment::Touch(CBaseEntity* pOther)
 {
-	if (pOther->IsPlayer())
+	auto player = ToBasePlayer(pOther);
+
+	if (!player)
 	{
-		auto pPlayer = static_cast<CBasePlayer*>(pOther);
+		return;
+	}
 
-		// Electrified wires deal damage.
-		if (m_bCauseDamage)
-		{
-			pOther->TakeDamage(this, this, 1, DMG_SHOCK);
-		}
+	// Electrified wires deal damage.
+	if (m_bCauseDamage)
+	{
+		pOther->TakeDamage(this, this, 1, DMG_SHOCK);
+	}
 
-		if (m_pSample->GetMasterRope()->IsAcceptingAttachment() && !pPlayer->IsOnRope())
+	if (m_pSample->GetMasterRope()->IsAcceptingAttachment() && !player->IsOnRope())
+	{
+		if (m_bCanBeGrabbed)
 		{
-			if (m_bCanBeGrabbed)
+			auto& data = m_pSample->GetData();
+
+			pOther->SetOrigin(data.mPosition);
+
+			player->SetOnRopeState(true);
+			player->SetRope(m_pSample->GetMasterRope());
+			m_pSample->GetMasterRope()->AttachObjectToSegment(this);
+
+			const Vector& vecVelocity = pOther->pev->velocity;
+
+			if (vecVelocity.Length() > 0.5)
 			{
-				auto& data = m_pSample->GetData();
+				// Apply some external force to move the rope.
+				data.mApplyExternalForce = true;
 
-				pOther->SetOrigin(data.mPosition);
+				data.mExternalForce = data.mExternalForce + vecVelocity * 750;
+			}
 
-				pPlayer->SetOnRopeState(true);
-				pPlayer->SetRope(m_pSample->GetMasterRope());
-				m_pSample->GetMasterRope()->AttachObjectToSegment(this);
+			if (m_pSample->GetMasterRope()->IsSoundAllowed())
+			{
+				EmitSound(CHAN_BODY, "items/grab_rope.wav", 1.0, ATTN_NORM);
+			}
+		}
+		else
+		{
+			// This segment cannot be grabbed, so grab the highest one if possible.
+			auto pRope = m_pSample->GetMasterRope();
 
-				const Vector& vecVelocity = pOther->pev->velocity;
+			CRopeSegment* pSegment;
 
-				if (vecVelocity.Length() > 0.5)
-				{
-					// Apply some external force to move the rope.
-					data.mApplyExternalForce = true;
-
-					data.mExternalForce = data.mExternalForce + vecVelocity * 750;
-				}
-
-				if (m_pSample->GetMasterRope()->IsSoundAllowed())
-				{
-					EmitSound(CHAN_BODY, "items/grab_rope.wav", 1.0, ATTN_NORM);
-				}
+			if (pRope->GetNumSegments() <= 4)
+			{
+				// Fewer than 5 segments exist, so allow grabbing the last one.
+				pSegment = pRope->GetSegments()[pRope->GetNumSegments() - 1];
+				pSegment->SetCanBeGrabbed(true);
 			}
 			else
 			{
-				// This segment cannot be grabbed, so grab the highest one if possible.
-				auto pRope = m_pSample->GetMasterRope();
-
-				CRopeSegment* pSegment;
-
-				if (pRope->GetNumSegments() <= 4)
-				{
-					// Fewer than 5 segments exist, so allow grabbing the last one.
-					pSegment = pRope->GetSegments()[pRope->GetNumSegments() - 1];
-					pSegment->SetCanBeGrabbed(true);
-				}
-				else
-				{
-					pSegment = pRope->GetSegments()[4];
-				}
-
-				pSegment->Touch(pOther);
+				pSegment = pRope->GetSegments()[4];
 			}
+
+			pSegment->Touch(pOther);
 		}
 	}
 }

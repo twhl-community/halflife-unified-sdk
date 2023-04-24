@@ -211,14 +211,11 @@ bool CHalfLifeMultiplay::ClientConnected(edict_t* pEntity, const char* pszName, 
 
 	for (int iPlayer = 1; iPlayer <= gpGlobals->maxClients; ++iPlayer)
 	{
-		auto pPlayer = static_cast<CBasePlayer*>(UTIL_PlayerByIndex(iPlayer));
+		auto pPlayer = UTIL_PlayerByIndex(iPlayer);
 
 		if (pPlayer)
 		{
-			if (pPlayer->IsPlayer())
-			{
-				playersInTeamsCount += (pPlayer->m_iTeamNum > CTFTeam::None) ? 1 : 0;
-			}
+			playersInTeamsCount += (pPlayer->m_iTeamNum > CTFTeam::None) ? 1 : 0;
 		}
 	}
 
@@ -226,7 +223,7 @@ bool CHalfLifeMultiplay::ClientConnected(edict_t* pEntity, const char* pszName, 
 	{
 		for (int iPlayer = 1; iPlayer <= gpGlobals->maxClients; ++iPlayer)
 		{
-			auto pPlayer = static_cast<CBasePlayer*>(UTIL_PlayerByIndex(iPlayer));
+			auto pPlayer = UTIL_PlayerByIndex(iPlayer);
 
 			if (pPlayer && pPlayer->m_iItems != CTFItem::None)
 			{
@@ -287,7 +284,7 @@ void CHalfLifeMultiplay::InitHUD(CBasePlayer* pl)
 	for (int i = 1; i <= gpGlobals->maxClients; i++)
 	{
 		// FIXME:  Probably don't need to cast this just to read m_iDeaths
-		CBasePlayer* plr = (CBasePlayer*)UTIL_PlayerByIndex(i);
+		CBasePlayer* plr = UTIL_PlayerByIndex(i);
 
 		if (plr)
 		{
@@ -306,7 +303,7 @@ void CHalfLifeMultiplay::ClientDisconnected(edict_t* pClient)
 {
 	if (pClient)
 	{
-		CBasePlayer* pPlayer = (CBasePlayer*)CBaseEntity::Instance(pClient);
+		CBasePlayer* pPlayer = ToBasePlayer(pClient);
 
 		if (pPlayer)
 		{

@@ -483,10 +483,10 @@ public:
 
 	void SporeTouch(CBaseEntity* pOther)
 	{
-		if (!pOther->IsPlayer() || pev->body == SPOREAMMOBODY_EMPTY)
-			return;
+		auto player = ToBasePlayer(pOther);
 
-		auto player = static_cast<CBasePlayer*>(pOther);
+		if (!player || pev->body == SPOREAMMOBODY_EMPTY)
+			return;
 
 		if (AddAmmo(player))
 		{

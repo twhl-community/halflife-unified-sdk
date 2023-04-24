@@ -238,7 +238,7 @@ void DisplayTeamFlags(CBasePlayer* pPlayer)
 	{
 		for (int i = 1; i <= gpGlobals->maxClients; ++i)
 		{
-			auto player = static_cast<CBasePlayer*>(UTIL_PlayerByIndex(i));
+			auto player = UTIL_PlayerByIndex(i);
 
 			if (player)
 			{
@@ -360,9 +360,9 @@ void FlushCTFPowerupTimes()
 {
 	for (auto pItem : UTIL_FindEntitiesByClassname<CItemCTF>("item_ctflongjump"))
 	{
-		auto pPlayer = GET_PRIVATE<CBasePlayer>(pItem->pev->owner);
+		auto pPlayer = ToBasePlayer(pItem->pev->owner);
 
-		if (pPlayer && pPlayer->IsPlayer())
+		if (pPlayer)
 		{
 			pPlayer->m_flJumpTime += gpGlobals->time - pItem->m_flPickupTime;
 		}
@@ -370,9 +370,9 @@ void FlushCTFPowerupTimes()
 
 	for (auto pItem : UTIL_FindEntitiesByClassname<CItemPortableHEVCTF>("item_ctfportablehev"))
 	{
-		auto pPlayer = GET_PRIVATE<CBasePlayer>(pItem->pev->owner);
+		auto pPlayer = ToBasePlayer(pItem->pev->owner);
 
-		if (pPlayer && pPlayer->IsPlayer())
+		if (pPlayer)
 		{
 			pPlayer->m_flShieldTime += gpGlobals->time - pItem->m_flPickupTime;
 		}
@@ -380,9 +380,9 @@ void FlushCTFPowerupTimes()
 
 	for (auto pItem : UTIL_FindEntitiesByClassname<CItemRegenerationCTF>("item_ctfregeneration"))
 	{
-		auto pPlayer = GET_PRIVATE<CBasePlayer>(pItem->pev->owner);
+		auto pPlayer = ToBasePlayer(pItem->pev->owner);
 
-		if (pPlayer && pPlayer->IsPlayer())
+		if (pPlayer)
 		{
 			pPlayer->m_flHealthTime += gpGlobals->time - pItem->m_flPickupTime;
 		}
@@ -390,9 +390,9 @@ void FlushCTFPowerupTimes()
 
 	for (auto pItem : UTIL_FindEntitiesByClassname<CItemBackpackCTF>("item_ctfbackpack"))
 	{
-		auto pPlayer = GET_PRIVATE<CBasePlayer>(pItem->pev->owner);
+		auto pPlayer = ToBasePlayer(pItem->pev->owner);
 
-		if (pPlayer && pPlayer->IsPlayer())
+		if (pPlayer)
 		{
 			pPlayer->m_flBackpackTime += gpGlobals->time - pItem->m_flPickupTime;
 		}
@@ -400,9 +400,9 @@ void FlushCTFPowerupTimes()
 
 	for (auto pItem : UTIL_FindEntitiesByClassname<CItemAcceleratorCTF>("item_ctfaccelerator"))
 	{
-		auto pPlayer = GET_PRIVATE<CBasePlayer>(pItem->pev->owner);
+		auto pPlayer = ToBasePlayer(pItem->pev->owner);
 
-		if (pPlayer && pPlayer->IsPlayer())
+		if (pPlayer)
 		{
 			pPlayer->m_flAccelTime += gpGlobals->time - pItem->m_flPickupTime;
 		}
@@ -550,10 +550,10 @@ void CHalfLifeCTFplay::Think()
 			{
 				auto pPlayer = UTIL_PlayerByIndex(m_iStatsPlayer);
 
-				if (pPlayer && pPlayer->IsPlayer())
+				if (pPlayer)
 				{
 					++iStat;
-					SendPlayerStatInfo(static_cast<CBasePlayer*>(pPlayer));
+					SendPlayerStatInfo(pPlayer);
 				}
 			}
 
@@ -633,14 +633,11 @@ bool CHalfLifeCTFplay::ClientConnected(edict_t* pEntity, const char* pszName, co
 
 	for (int iPlayer = 1; iPlayer <= gpGlobals->maxClients; ++iPlayer)
 	{
-		auto pPlayer = static_cast<CBasePlayer*>(UTIL_PlayerByIndex(iPlayer));
+		auto pPlayer = UTIL_PlayerByIndex(iPlayer);
 
 		if (pPlayer)
 		{
-			if (pPlayer->IsPlayer())
-			{
-				playersInTeamsCount += (pPlayer->m_iTeamNum > CTFTeam::None) ? 1 : 0;
-			}
+			playersInTeamsCount += (pPlayer->m_iTeamNum > CTFTeam::None) ? 1 : 0;
 		}
 	}
 
@@ -648,7 +645,7 @@ bool CHalfLifeCTFplay::ClientConnected(edict_t* pEntity, const char* pszName, co
 	{
 		for (int iPlayer = 1; iPlayer <= gpGlobals->maxClients; ++iPlayer)
 		{
-			auto pPlayer = static_cast<CBasePlayer*>(UTIL_PlayerByIndex(iPlayer));
+			auto pPlayer = UTIL_PlayerByIndex(iPlayer);
 
 			if (pPlayer && pPlayer->m_iItems != CTFItem::None)
 			{
@@ -710,7 +707,7 @@ void CHalfLifeCTFplay::InitHUD(CBasePlayer* pPlayer)
 
 	for (int iPlayer = 1; iPlayer <= gpGlobals->maxClients; ++iPlayer)
 	{
-		auto otherPlayer = static_cast<CBasePlayer*>(UTIL_PlayerByIndex(iPlayer));
+		auto otherPlayer = UTIL_PlayerByIndex(iPlayer);
 
 		if (otherPlayer)
 		{
@@ -730,7 +727,7 @@ void CHalfLifeCTFplay::ClientDisconnected(edict_t* pClient)
 {
 	if (pClient)
 	{
-		auto v2 = (CBasePlayer*)GET_PRIVATE(pClient);
+		auto v2 = ToBasePlayer(pClient);
 		if (v2)
 		{
 			if (!g_fGameOver)
@@ -872,9 +869,9 @@ void CHalfLifeCTFplay::PlayerThink(CBasePlayer* pPlayer)
 
 	if (0 != gmsgPlayerBrowse && tr.flFraction < 1.0 && pPlayer->m_iLastPlayerTrace != g_engfuncs.pfnIndexOfEdict(tr.pHit))
 	{
-		auto pOther = CBaseEntity::Instance(tr.pHit);
+		auto pOther = ToBasePlayer(tr.pHit);
 
-		if (!pOther->IsPlayer())
+		if (!pOther)
 		{
 			g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgPlayerBrowse, nullptr, pPlayer->edict());
 			g_engfuncs.pfnWriteByte(0);
@@ -884,19 +881,17 @@ void CHalfLifeCTFplay::PlayerThink(CBasePlayer* pPlayer)
 		}
 		else
 		{
-			auto pOtherPlayer = static_cast<CBasePlayer*>(pOther);
-
 			g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgPlayerBrowse, nullptr, pPlayer->edict());
-			g_engfuncs.pfnWriteByte(static_cast<int>(pOtherPlayer->m_iTeamNum == pPlayer->m_iTeamNum));
+			g_engfuncs.pfnWriteByte(static_cast<int>(pOther->m_iTeamNum == pPlayer->m_iTeamNum));
 
-			const auto v11 = 0 == pPlayer->pev->iuser1 ? pOtherPlayer->m_iTeamNum : CTFTeam::None;
+			const auto v11 = 0 == pPlayer->pev->iuser1 ? pOther->m_iTeamNum : CTFTeam::None;
 
 			g_engfuncs.pfnWriteByte((int)v11);
-			g_engfuncs.pfnWriteString(STRING(pOtherPlayer->pev->netname));
-			g_engfuncs.pfnWriteByte((byte)pOtherPlayer->m_iItems);
+			g_engfuncs.pfnWriteString(STRING(pOther->pev->netname));
+			g_engfuncs.pfnWriteByte((byte)pOther->m_iItems);
 			// Round health up to 0 to prevent wraparound
-			g_engfuncs.pfnWriteByte((byte)std::max(0.f, pOtherPlayer->pev->health));
-			g_engfuncs.pfnWriteByte((byte)pOtherPlayer->pev->armorvalue);
+			g_engfuncs.pfnWriteByte((byte)std::max(0.f, pOther->pev->health));
+			g_engfuncs.pfnWriteByte((byte)pOther->pev->armorvalue);
 			g_engfuncs.pfnMessageEnd();
 		}
 
@@ -956,11 +951,11 @@ void CHalfLifeCTFplay::PlayerKilled(CBasePlayer* pVictim, CBaseEntity* pKiller, 
 
 	if (!m_DisableDeathPenalty && !g_fGameOver)
 	{
-		auto killerPlayer = static_cast<CBasePlayer*>(pKiller);
+		auto killerPlayer = ToBasePlayer(pKiller);
 
 		if (pVictim->m_pFlag)
 		{
-			if (pKiller && pKiller->IsPlayer() && pVictim->m_iTeamNum != killerPlayer->m_iTeamNum)
+			if (killerPlayer && pVictim->m_iTeamNum != killerPlayer->m_iTeamNum)
 			{
 				++killerPlayer->m_iCTFScore;
 				++killerPlayer->m_iDefense;
@@ -1000,11 +995,11 @@ void CHalfLifeCTFplay::PlayerKilled(CBasePlayer* pVictim, CBaseEntity* pKiller, 
 			Logger->trace("{} triggered \"LostFlag\"", PlayerLogInfo{*pVictim});
 		}
 
-		if (pKiller && pKiller->IsPlayer())
+		if (killerPlayer)
 		{
 			const char* pszInflictorName = nullptr;
 
-			if (pKiller == inflictor)
+			if (killerPlayer == inflictor)
 			{
 				if (killerPlayer->m_pActiveWeapon)
 					pszInflictorName = g_WeaponData.GetByIndex(killerPlayer->m_pActiveWeapon->m_iId)->Name.c_str();
@@ -1026,12 +1021,12 @@ void CHalfLifeCTFplay::PlayerKilled(CBasePlayer* pVictim, CBaseEntity* pKiller, 
 				}
 			}
 
-			if (pKiller == pVictim)
+			if (killerPlayer == pVictim)
 				++killerPlayer->m_iSuicides;
 
 			for (auto pBase : UTIL_FindEntitiesByClassname<CTFGoalBase>("item_ctfbase"))
 			{
-				if (pKiller != pVictim && pBase->m_iGoalNum == (int)killerPlayer->m_iTeamNum)
+				if (killerPlayer != pVictim && pBase->m_iGoalNum == (int)killerPlayer->m_iTeamNum)
 				{
 					if (g_flBaseDefendDist >= (pVictim->pev->origin - pBase->pev->origin).Length())
 					{
@@ -1061,7 +1056,7 @@ void CHalfLifeCTFplay::PlayerKilled(CBasePlayer* pVictim, CBaseEntity* pKiller, 
 			}
 
 			// TODO: maxclients check makes no sense
-			if (pKiller != pVictim && gpGlobals->maxClients > 0)
+			if (killerPlayer != pVictim && gpGlobals->maxClients > 0)
 			{
 				for (auto pPlayer : UTIL_FindPlayers())
 				{
@@ -1144,12 +1139,14 @@ const char* CHalfLifeCTFplay::GetTeamID(CBaseEntity* pEntity)
 
 int CHalfLifeCTFplay::PlayerRelationship(CBasePlayer* pPlayer, CBaseEntity* pTarget)
 {
-	if (!pTarget || !pPlayer || !pTarget->IsPlayer())
+	auto targetPlayer = ToBasePlayer(pTarget);
+
+	if (!targetPlayer || !pPlayer)
 	{
 		return GR_NOTTEAMMATE;
 	}
 
-	if (pPlayer->m_iTeamNum == static_cast<CBasePlayer*>(pTarget)->m_iTeamNum)
+	if (pPlayer->m_iTeamNum == targetPlayer->m_iTeamNum)
 	{
 		return GR_TEAMMATE;
 	}
@@ -1451,7 +1448,7 @@ void CHalfLifeCTFplay::GoToIntermission()
 template <typename Format, typename... Args>
 static void InternalSendTeamStat(int playerIndex, const Format& format, const char* pszStatName, const int value, Args&&... args)
 {
-	auto pPlayer = static_cast<CBasePlayer*>(UTIL_PlayerByIndex(playerIndex));
+	auto pPlayer = UTIL_PlayerByIndex(playerIndex);
 
 	eastl::fixed_string<char, 64 + 1> name;
 
@@ -1533,7 +1530,7 @@ void CHalfLifeCTFplay::SendTeamStatInfo(CTFTeam iTeamNum)
 
 	for (int iPlayer = 1; iPlayer <= gpGlobals->maxClients; ++iPlayer)
 	{
-		auto pPlayer = (CBasePlayer*)UTIL_PlayerByIndex(iPlayer);
+		auto pPlayer = UTIL_PlayerByIndex(iPlayer);
 		if (pPlayer && pPlayer->IsPlayer() && (iTeamNum == CTFTeam::None || pPlayer->m_iTeamNum == iTeamNum))
 		{
 			if (FStringNull(pPlayer->pev->netname) || !STRING(pPlayer->pev->netname))

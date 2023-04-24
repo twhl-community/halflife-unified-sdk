@@ -239,33 +239,35 @@ void CItemCTF::CarryThink()
 
 void CItemCTF::ItemTouch(CBaseEntity* pOther)
 {
+	auto player = ToBasePlayer(pOther);
+
 	// TODO: really shouldn't be using the index here tbh
-	if (pOther->IsPlayer() && pOther->IsAlive() && (m_iLastTouched != pOther->entindex() || m_flNextTouchTime <= gpGlobals->time))
+	if (!player || !player->IsAlive() || (m_iLastTouched == player->entindex() && m_flNextTouchTime > gpGlobals->time))
 	{
-		m_iLastTouched = 0;
+		return;
+	}
 
-		auto player = static_cast<CBasePlayer*>(pOther);
+	m_iLastTouched = 0;
 
-		if (MyTouch(player))
-		{
-			SUB_UseTargets(pOther, USE_TOGGLE, 0);
-			SetTouch(nullptr);
+	if (MyTouch(player))
+	{
+		SUB_UseTargets(player, USE_TOGGLE, 0);
+		SetTouch(nullptr);
 
-			pev->movetype = MOVETYPE_NONE;
-			pev->solid = SOLID_NOT;
-			pev->effects |= EF_NODRAW;
+		pev->movetype = MOVETYPE_NONE;
+		pev->solid = SOLID_NOT;
+		pev->effects |= EF_NODRAW;
 
-			SetOrigin(pev->origin);
+		SetOrigin(pev->origin);
 
-			pev->owner = pOther->edict();
+		SetOwner(player);
 
-			SetThink(&CItemCTF::CarryThink);
-			pev->nextthink = gpGlobals->time + 20.0;
+		SetThink(&CItemCTF::CarryThink);
+		pev->nextthink = gpGlobals->time + 20.0;
 
-			m_flPickupTime = gpGlobals->time;
+		m_flPickupTime = gpGlobals->time;
 
-			CGameRules::Logger->trace("{} triggered \"take_{}_Powerup\"", PlayerLogInfo{*player}, m_pszItemName);
-		}
+		CGameRules::Logger->trace("{} triggered \"take_{}_Powerup\"", PlayerLogInfo{*player}, m_pszItemName);
 	}
 }
 
@@ -293,12 +295,11 @@ void CItemCTF::DropItem(CBasePlayer* pPlayer, bool bForceRespawn)
 
 	if (pev->owner)
 	{
-		auto pOwner = GET_PRIVATE<CBasePlayer>(pev->owner);
+		auto pOwner = ToBasePlayer(pev->owner);
 
 		if (pOwner)
 		{
-			if (pOwner->IsPlayer())
-				pOwner->m_iItems = static_cast<CTFItem::CTFItem>(pOwner->m_iItems & ~m_iItemFlag);
+			pOwner->m_iItems = static_cast<CTFItem::CTFItem>(pOwner->m_iItems & ~m_iItemFlag);
 		}
 
 		pev->owner = nullptr;
@@ -341,12 +342,11 @@ void CItemCTF::ScatterItem(CBasePlayer* pPlayer)
 
 	if (pev->owner)
 	{
-		auto pOwner = GET_PRIVATE<CBasePlayer>(pev->owner);
+		auto pOwner = ToBasePlayer(pev->owner);
 
 		if (pOwner)
 		{
-			if (pOwner->IsPlayer())
-				pOwner->m_iItems = static_cast<CTFItem::CTFItem>(pOwner->m_iItems & ~m_iItemFlag);
+			pOwner->m_iItems = static_cast<CTFItem::CTFItem>(pOwner->m_iItems & ~m_iItemFlag);
 		}
 
 		pev->owner = nullptr;
@@ -386,12 +386,11 @@ void CItemCTF::ThrowItem(CBasePlayer* pPlayer)
 
 	if (pev->owner)
 	{
-		auto pOwner = GET_PRIVATE<CBasePlayer>(pev->owner);
+		auto pOwner = ToBasePlayer(pev->owner);
 
 		if (pOwner)
 		{
-			if (pOwner->IsPlayer())
-				pOwner->m_iItems = static_cast<CTFItem::CTFItem>(pOwner->m_iItems & ~m_iItemFlag);
+			pOwner->m_iItems = static_cast<CTFItem::CTFItem>(pOwner->m_iItems & ~m_iItemFlag);
 		}
 
 		pev->owner = nullptr;

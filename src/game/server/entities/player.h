@@ -680,7 +680,7 @@ public:
 
 	void operator++()
 	{
-		m_pPlayer = static_cast<CBasePlayer*>(FindNextPlayer(m_iNextIndex, &m_iNextIndex));
+		m_pPlayer = FindNextPlayer(m_iNextIndex, &m_iNextIndex);
 	}
 
 	void operator++(int)
@@ -711,7 +711,7 @@ public:
 					*pOutNextIndex = index + 1;
 				}
 
-				return static_cast<CBasePlayer*>(pPlayer);
+				return pPlayer;
 			}
 
 			++index;
@@ -740,7 +740,7 @@ public:
 
 	iterator begin()
 	{
-		return {static_cast<CBasePlayer*>(CPlayerIterator::FindNextPlayer(CPlayerIterator::FirstPlayerIndex))};
+		return {CPlayerIterator::FindNextPlayer(CPlayerIterator::FirstPlayerIndex)};
 	}
 
 	iterator end()

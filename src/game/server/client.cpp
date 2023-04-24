@@ -98,7 +98,7 @@ void ClientDisconnect(edict_t* pEntity)
 	pEntity->v.takedamage = DAMAGE_NO; // don't attract autoaim
 	pEntity->v.solid = SOLID_NOT;	   // nonsolid
 
-	auto pPlayer = reinterpret_cast<CBasePlayer*>(GET_PRIVATE(pEntity));
+	auto pPlayer = ToBasePlayer(pEntity);
 
 	if (pPlayer)
 	{
@@ -146,7 +146,9 @@ Player entered the suicide command
 */
 void ClientKill(edict_t* pEntity)
 {
-	CBasePlayer* pl = GET_PRIVATE<CBasePlayer>(pEntity);
+	CBasePlayer* pl = ToBasePlayer(pEntity);
+
+	assert(pl);
 
 	// Only check for teams in CTF gamemode
 	if ((pl->pev->flags & FL_SPECTATOR) != 0 || (g_pGameRules->IsCTF() && pl->m_iTeamNum == CTFTeam::None))
@@ -1039,7 +1041,7 @@ void ExecuteClientCommand(edict_t* pEntity)
 		return;
 
 	const char* pcmd = CMD_ARGV(0);
-	auto player = GET_PRIVATE<CBasePlayer>(pEntity);
+	auto player = ToBasePlayer(pEntity);
 
 	if (auto clientCommand = g_ClientCommands.Find(pcmd); clientCommand)
 	{
@@ -1079,7 +1081,7 @@ void ClientUserInfoChanged(edict_t* pEntity, char* infobuffer)
 	if (!pEntity->pvPrivateData)
 		return;
 
-	auto player = GET_PRIVATE<CBasePlayer>(pEntity);
+	auto player = ToBasePlayer(pEntity);
 
 	// msg everyone if someone changes their name,  and it isn't the first time (changing no name to current name)
 	if (!FStringNull(pEntity->v.netname) && STRING(pEntity->v.netname)[0] != 0 && !FStrEq(STRING(pEntity->v.netname), g_engfuncs.pfnInfoKeyValue(infobuffer, "name")))
@@ -1176,7 +1178,7 @@ Called every frame before physics are run
 */
 void PlayerPreThink(edict_t* pEntity)
 {
-	CBasePlayer* pPlayer = (CBasePlayer*)GET_PRIVATE(pEntity);
+	CBasePlayer* pPlayer = ToBasePlayer(pEntity);
 
 	if (pPlayer)
 		pPlayer->PreThink();
@@ -1191,7 +1193,7 @@ Called every frame after physics are run
 */
 void PlayerPostThink(edict_t* pEntity)
 {
-	CBasePlayer* pPlayer = (CBasePlayer*)GET_PRIVATE(pEntity);
+	CBasePlayer* pPlayer = ToBasePlayer(pEntity);
 
 	if (pPlayer)
 		pPlayer->PostThink();
@@ -1399,7 +1401,7 @@ animation right now.
 */
 void PlayerCustomization(edict_t* pEntity, customization_t* pCust)
 {
-	CBasePlayer* pPlayer = (CBasePlayer*)GET_PRIVATE(pEntity);
+	CBasePlayer* pPlayer = ToBasePlayer(pEntity);
 
 	if (!pPlayer)
 	{
@@ -2011,7 +2013,7 @@ int GetWeaponData(edict_t* player, weapon_data_t* info)
 #if defined(CLIENT_WEAPONS)
 	int i;
 	weapon_data_t* item;
-	auto pl = GET_PRIVATE<CBasePlayer>(player);
+	auto pl = ToBasePlayer(player);
 
 	if (!pl)
 		return 1;
@@ -2072,7 +2074,7 @@ void UpdateClientData(const edict_t* ent, int sendweapons, clientdata_t* cd)
 	if (!ent)
 		return;
 
-	auto pl = GET_PRIVATE<CBasePlayer>(const_cast<edict_t*>(ent));
+	auto pl = ToBasePlayer(const_cast<edict_t*>(ent));
 
 	if (!pl)
 	{
@@ -2088,7 +2090,7 @@ void UpdateClientData(const edict_t* ent, int sendweapons, clientdata_t* cd)
 		if (pl->m_hObserverTarget)
 		{
 			viewEntity = pl->m_hObserverTarget;
-			pl = dynamic_cast<CBasePlayer*>(viewEntity);
+			pl = ToBasePlayer(viewEntity);
 		}
 	}
 
@@ -2187,7 +2189,7 @@ This is the time to examine the usercmd for anything extra.  This call happens e
 */
 void CmdStart(const edict_t* player, const usercmd_t* cmd, unsigned int random_seed)
 {
-	auto pl = GET_PRIVATE<CBasePlayer>(const_cast<edict_t*>(player));
+	auto pl = ToBasePlayer(const_cast<edict_t*>(player));
 
 	if (!pl)
 		return;
@@ -2209,7 +2211,7 @@ Each cmdstart is exactly matched with a cmd end, clean up any group trace flags,
 */
 void CmdEnd(const edict_t* player)
 {
-	auto pl = GET_PRIVATE<CBasePlayer>(const_cast<edict_t*>(player));
+	auto pl = ToBasePlayer(const_cast<edict_t*>(player));
 
 	if (!pl)
 		return;

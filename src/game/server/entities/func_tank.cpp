@@ -426,7 +426,9 @@ void CFuncTank::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useT
 	if ((pev->spawnflags & SF_TANK_CANCONTROL) != 0)
 	{ // player controlled turret
 
-		if (!pActivator->IsPlayer())
+		auto player = ToBasePlayer(pActivator);
+
+		if (!player)
 			return;
 
 		if (value == 2 && useType == USE_SET)
@@ -435,8 +437,8 @@ void CFuncTank::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useT
 		}
 		else if (!m_pController && useType != USE_OFF)
 		{
-			((CBasePlayer*)pActivator)->m_pTank = this;
-			StartControl((CBasePlayer*)pActivator);
+			player->m_pTank = this;
+			StartControl(player);
 		}
 		else
 		{

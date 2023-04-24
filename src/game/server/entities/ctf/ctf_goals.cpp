@@ -282,7 +282,7 @@ void CTFGoalFlag::ReturnFlag()
 {
 	if (pev->owner)
 	{
-		auto player = GET_PRIVATE<CBasePlayer>(pev->owner);
+		auto player = ToBasePlayer(pev->owner);
 		player->m_pFlag = nullptr;
 		player->m_iItems = static_cast<CTFItem::CTFItem>(player->m_iItems & ~(CTFItem::BlackMesaFlag | CTFItem::OpposingForceFlag));
 	}
@@ -356,15 +356,13 @@ void CTFGoalFlag::FlagCarryThink()
 	g_engfuncs.pfnWriteCoord(0);
 	g_engfuncs.pfnMessageEnd();
 
-	auto owner = CBaseEntity::Instance(pev->owner);
+	auto owner = ToBasePlayer(pev->owner);
 
 	bool hasFlag = false;
 
-	if (owner && owner->IsPlayer())
+	if (owner)
 	{
-		auto player = static_cast<CBasePlayer*>(owner);
-
-		if ((player->m_iItems & (CTFItem::BlackMesaFlag | CTFItem::OpposingForceFlag)) != 0)
+		if ((owner->m_iItems & (CTFItem::BlackMesaFlag | CTFItem::OpposingForceFlag)) != 0)
 		{
 			hasFlag = true;
 
@@ -372,7 +370,7 @@ void CTFGoalFlag::FlagCarryThink()
 
 			for (auto entity : UTIL_FindEntitiesByClassname<CTFGoalFlag>("item_ctfflag"))
 			{
-				if (static_cast<CTFTeam>(entity->m_iGoalNum) == player->m_iTeamNum)
+				if (static_cast<CTFTeam>(entity->m_iGoalNum) == owner->m_iTeamNum)
 				{
 					flagFound = entity->m_iGoalState == 1;
 					break;
@@ -381,18 +379,18 @@ void CTFGoalFlag::FlagCarryThink()
 
 			if (flagFound)
 			{
-				ClientPrint(player, HUD_PRINTCENTER, "#CTFPickUpFlagP");
+				ClientPrint(owner, HUD_PRINTCENTER, "#CTFPickUpFlagP");
 			}
 			else
 			{
-				ClientPrint(player, HUD_PRINTCENTER, "#CTFPickUpFlagG");
+				ClientPrint(owner, HUD_PRINTCENTER, "#CTFPickUpFlagG");
 			}
 
 			pev->nextthink = gpGlobals->time + 20.0;
 		}
 		else
 		{
-			player->m_iClientItems = CTFItem::BlackMesaFlag | CTFItem::OpposingForceFlag;
+			owner->m_iClientItems = CTFItem::BlackMesaFlag | CTFItem::OpposingForceFlag;
 		}
 	}
 
@@ -517,7 +515,7 @@ void CTFGoalFlag::ScoreFlagTouch(CBasePlayer* pPlayer)
 	{
 		for (int i = 1; i <= gpGlobals->maxClients; ++i)
 		{
-			auto player = static_cast<CBasePlayer*>(UTIL_PlayerByIndex(i));
+			auto player = UTIL_PlayerByIndex(i);
 
 			if (!player)
 			{
@@ -797,13 +795,13 @@ void CTFGoalFlag::GiveFlagToPlayer(CBasePlayer* pPlayer)
 
 void CTFGoalFlag::goal_item_touch(CBaseEntity* pOther)
 {
-	if (!pOther->IsPlayer())
+	auto pPlayer = ToBasePlayer(pOther);
+
+	if (!pPlayer)
 		return;
 
-	if (pOther->pev->health <= 0)
+	if (pPlayer->pev->health <= 0)
 		return;
-
-	auto pPlayer = static_cast<CBasePlayer*>(pOther);
 
 	if (static_cast<int>(pPlayer->m_iTeamNum) != m_iGoalNum)
 	{
@@ -851,7 +849,7 @@ void CTFGoalFlag::goal_item_touch(CBaseEntity* pOther)
 
 	for (int i = 1; i <= gpGlobals->maxClients; ++i)
 	{
-		auto player = static_cast<CBasePlayer*>(UTIL_PlayerByIndex(i));
+		auto player = UTIL_PlayerByIndex(i);
 
 		if (!player || (player->pev->flags & FL_SPECTATOR) != 0)
 		{

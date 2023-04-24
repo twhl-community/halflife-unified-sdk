@@ -1664,10 +1664,10 @@ void CTriggerXenReturn::Spawn()
 
 void CTriggerXenReturn::ReturnTouch(CBaseEntity* pOther)
 {
-	if (!pOther->IsPlayer())
-		return;
+	auto player = ToBasePlayer(pOther);
 
-	auto pPlayer = static_cast<CBasePlayer*>(pOther);
+	if (!player)
+		return;
 
 	float flDist = 8192;
 
@@ -1676,7 +1676,7 @@ void CTriggerXenReturn::ReturnTouch(CBaseEntity* pOther)
 	// Find the earth target nearest to the player's original location.
 	for (auto pDestination : UTIL_FindEntitiesByClassname("info_displacer_earth_target"))
 	{
-		const float flThisDist = (pPlayer->m_DisplacerReturn - pDestination->pev->origin).Length();
+		const float flThisDist = (player->m_DisplacerReturn - pDestination->pev->origin).Length();
 
 		if (flDist > flThisDist)
 		{
@@ -1688,27 +1688,27 @@ void CTriggerXenReturn::ReturnTouch(CBaseEntity* pOther)
 
 	if (!FNullEnt(pTarget))
 	{
-		pPlayer->pev->flags &= ~FL_SKIPLOCALHOST;
+		player->pev->flags &= ~FL_SKIPLOCALHOST;
 
 		auto vecDest = pTarget->pev->origin;
 
-		vecDest.z -= pPlayer->pev->mins.z;
+		vecDest.z -= player->pev->mins.z;
 		vecDest.z += 1;
 
-		pPlayer->SetOrigin(vecDest);
+		player->SetOrigin(vecDest);
 
-		pPlayer->pev->angles = pTarget->pev->angles;
-		pPlayer->pev->v_angle = pTarget->pev->angles;
-		pPlayer->pev->fixangle = FIXANGLE_ABSOLUTE;
+		player->pev->angles = pTarget->pev->angles;
+		player->pev->v_angle = pTarget->pev->angles;
+		player->pev->fixangle = FIXANGLE_ABSOLUTE;
 
-		pPlayer->pev->basevelocity = g_vecZero;
-		pPlayer->pev->velocity = g_vecZero;
+		player->pev->basevelocity = g_vecZero;
+		player->pev->velocity = g_vecZero;
 
-		pPlayer->pev->gravity = 1.0;
+		player->pev->gravity = 1.0;
 
-		pPlayer->m_SndRoomtype = pPlayer->m_DisplacerSndRoomtype;
+		player->m_SndRoomtype = player->m_DisplacerSndRoomtype;
 
-		pPlayer->EmitSound(CHAN_WEAPON, "weapons/displacer_self.wav", RANDOM_FLOAT(0.8, 0.9), ATTN_NORM);
+		player->EmitSound(CHAN_WEAPON, "weapons/displacer_self.wav", RANDOM_FLOAT(0.8, 0.9), ATTN_NORM);
 	}
 }
 
@@ -1870,58 +1870,60 @@ void CTriggerCTFGeneric::Spawn()
 
 void CTriggerCTFGeneric::Touch(CBaseEntity* pOther)
 {
-	if (m_flTriggerDelayTime <= gpGlobals->time)
+	if (m_flTriggerDelayTime > gpGlobals->time)
 	{
-		CBasePlayer* pOtherPlayer = nullptr;
-
-		if (pOther)
-		{
-			if (0 != score || !pOther->IsPlayer())
-			{
-				return;
-			}
-
-			pOtherPlayer = static_cast<CBasePlayer*>(pOther);
-
-			if (team_no != CTFTeam::None && team_no != pOtherPlayer->m_iTeamNum)
-			{
-				return;
-			}
-		}
-
-		SUB_UseTargets(this, triggerType, 0);
-
-		// TODO: constrain team_no input to valid values
-		if (0 != team_score)
-			teamscores[static_cast<int>(team_no) - 1] += team_score;
-
-		if (pOtherPlayer && score != 0)
-		{
-			pOtherPlayer->m_iCTFScore += score;
-			pOtherPlayer->m_iOffense += score;
-			g_engfuncs.pfnMessageBegin(MSG_ALL, gmsgCTFScore, nullptr, nullptr);
-			g_engfuncs.pfnWriteByte(pOtherPlayer->entindex());
-			g_engfuncs.pfnWriteByte(pOtherPlayer->m_iCTFScore);
-			g_engfuncs.pfnMessageEnd();
-
-			pOtherPlayer->SendScoreInfoAll();
-
-			CGameRules::Logger->trace("{} triggered \"{}\"", PlayerLogInfo{*pOtherPlayer}, STRING(pev->targetname));
-		}
-
-		if (0 != team_score)
-		{
-			// TOOD: not sure why this check is here since pev must be valid if the entity exists
-			if (!pOther && 0 == score && pev)
-			{
-				CGameRules::Logger->trace("World triggered \"{}\"", STRING(pev->targetname));
-			}
-
-			DisplayTeamFlags(nullptr);
-		}
-
-		m_flTriggerDelayTime = gpGlobals->time + trigger_delay;
+		return;
 	}
+
+	CBasePlayer* pOtherPlayer = nullptr;
+
+	if (pOther)
+	{
+		pOtherPlayer = ToBasePlayer(pOther);
+
+		if (0 != score || !pOtherPlayer)
+		{
+			return;
+		}
+
+		if (team_no != CTFTeam::None && team_no != pOtherPlayer->m_iTeamNum)
+		{
+			return;
+		}
+	}
+
+	SUB_UseTargets(this, triggerType, 0);
+
+	// TODO: constrain team_no input to valid values
+	if (0 != team_score)
+		teamscores[static_cast<int>(team_no) - 1] += team_score;
+
+	if (pOtherPlayer && score != 0)
+	{
+		pOtherPlayer->m_iCTFScore += score;
+		pOtherPlayer->m_iOffense += score;
+		g_engfuncs.pfnMessageBegin(MSG_ALL, gmsgCTFScore, nullptr, nullptr);
+		g_engfuncs.pfnWriteByte(pOtherPlayer->entindex());
+		g_engfuncs.pfnWriteByte(pOtherPlayer->m_iCTFScore);
+		g_engfuncs.pfnMessageEnd();
+
+		pOtherPlayer->SendScoreInfoAll();
+
+		CGameRules::Logger->trace("{} triggered \"{}\"", PlayerLogInfo{*pOtherPlayer}, STRING(pev->targetname));
+	}
+
+	if (0 != team_score)
+	{
+		// TOOD: not sure why this check is here since pev must be valid if the entity exists
+		if (!pOther && 0 == score && pev)
+		{
+			CGameRules::Logger->trace("World triggered \"{}\"", STRING(pev->targetname));
+		}
+
+		DisplayTeamFlags(nullptr);
+	}
+
+	m_flTriggerDelayTime = gpGlobals->time + trigger_delay;
 }
 
 bool CTriggerCTFGeneric::KeyValue(KeyValueData* pkvd)

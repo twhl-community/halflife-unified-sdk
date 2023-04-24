@@ -328,13 +328,11 @@ void COFShockRoach::LeapTouch(CBaseEntity* pOther)
 	}
 
 	// Give the player a shock rifle if they don't have one
-	if (pOther->IsPlayer())
+	if (auto player = ToBasePlayer(pOther); player)
 	{
-		auto pPlayer = static_cast<CBasePlayer*>(pOther);
-
-		if (!pPlayer->HasNamedPlayerWeapon("weapon_shockrifle"))
+		if (!player->HasNamedPlayerWeapon("weapon_shockrifle"))
 		{
-			pPlayer->GiveNamedItem("weapon_shockrifle");
+			player->GiveNamedItem("weapon_shockrifle");
 			SetTouch(nullptr);
 			UTIL_Remove(this);
 			return;
