@@ -188,7 +188,20 @@ void WeaponsResource::LoadWeaponSprites(WEAPON* pWeapon)
 	pWeapon->hAmmo = 0;
 	pWeapon->hAmmo2 = 0;
 
-	const auto sprites = g_HudSpriteConfig.Load(fmt::format("sprites/{}.json", pWeapon->Info->Name.c_str()).c_str());
+	const std::vector<HudSprite> sprites = [=]()
+	{
+		if (g_pFileSystem->FileExists(pWeapon->Info->HudConfigFileName.c_str()))
+		{
+			auto sprites = g_HudSpriteConfig.Load(pWeapon->Info->HudConfigFileName.c_str());
+
+			if (!sprites.empty())
+			{
+				return sprites;
+			}
+		}
+
+		return g_HudSpriteConfig.Load(fmt::format("sprites/{}.json", pWeapon->Info->Name.c_str()).c_str());
+	}();
 
 	if (sprites.empty())
 		return;

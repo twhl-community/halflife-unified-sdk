@@ -27,6 +27,8 @@
 #include "vgui_ScorePanel.h"
 #include "HudSpriteConfigSystem.h"
 
+#include "ui/hud/HudReplacementSystem.h"
+
 class CHLVoiceStatusHelper : public IVoiceStatusHelper
 {
 public:
@@ -177,10 +179,16 @@ void CHud::VidInit()
 	m_hsprLogo = 0;
 	m_hsprCursor = 0;
 
-	// Only load this once
+	// we need to load the hud.json, and all sprites within
+	m_Sprites.clear();
+
+	if (g_pFileSystem->FileExists(g_HudReplacements.HudReplacementFileName.c_str()))
+	{
+		m_Sprites = g_HudSpriteConfig.Load(g_HudReplacements.HudReplacementFileName.c_str());
+	}
+
 	if (m_Sprites.empty())
 	{
-		// we need to load the hud.json, and all sprites within
 		m_Sprites = g_HudSpriteConfig.Load("sprites/hud.json");
 	}
 

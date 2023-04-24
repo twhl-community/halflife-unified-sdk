@@ -43,6 +43,7 @@
 #include "config/sections/GameDataFilesSections.h"
 #include "config/sections/GlobalReplacementFilesSections.h"
 #include "config/sections/HudColorSection.h"
+#include "config/sections/HudReplacementSection.h"
 #include "config/sections/SpawnInventorySection.h"
 #include "config/sections/SuitLightTypeSection.h"
 
@@ -57,6 +58,8 @@
 #include "sound/MaterialSystem.h"
 #include "sound/SentencesSystem.h"
 #include "sound/ServerSoundSystem.h"
+
+#include "ui/hud/HudReplacementSystem.h"
 
 constexpr char DefaultMapConfigFileName[] = "cfg/DefaultMapConfig.json";
 
@@ -251,9 +254,6 @@ void ServerLibrary::NewMapStarted(bool loadGame)
 	// Load the config files, which will initialize the map state as needed
 	LoadServerConfigFiles();
 
-	// This must be done before any entities are created, and after gamerules have been installed.
-	Weapon_RegisterWeaponData();
-
 	g_PersistentInventory.NewMapStarted();
 
 	sentences::g_Sentences.NewMapStarted();
@@ -359,6 +359,7 @@ void ServerLibrary::CreateConfigDefinitions()
 			sections.push_back(std::make_unique<SuitLightTypeSection>());
 			sections.push_back(std::make_unique<SpawnInventorySection>());
 			sections.push_back(std::make_unique<EntityTemplatesSection>());
+			sections.push_back(std::make_unique<HudReplacementSection>());
 
 			return sections; }());
 }
@@ -517,6 +518,12 @@ void ServerLibrary::LoadServerConfigFiles()
 	g_SpawnInventory.SetInventory(std::move(context.SpawnInventory));
 
 	g_EntityTemplates.LoadTemplates(context.EntityTemplates);
+
+	// Register the weapons so we can then set the replacement filenames.
+	Weapon_RegisterWeaponData();
+
+	g_HudReplacements.HudReplacementFileName = std::move(context.HudReplacementFile);
+	g_HudReplacements.SetWeaponHudReplacementFiles(std::move(context.WeaponHudReplacementFiles));
 
 	const auto timeElapsed = std::chrono::high_resolution_clock::now() - start;
 

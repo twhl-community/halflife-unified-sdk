@@ -27,6 +27,8 @@
 
 #include "sound/MaterialSystem.h"
 
+#include "ui/hud/HudReplacementSystem.h"
+
 #include "utils/ConCommandSystem.h"
 #include "utils/GameSystem.h"
 #include "utils/JSONSystem.h"
@@ -94,6 +96,7 @@ void GameLibrary::AddGameSystems()
 	g_GameSystems.Add(&g_WeaponData);
 	g_GameSystems.Add(&g_AmmoTypes);
 	g_GameSystems.Add(&g_Skill);
+	g_GameSystems.Add(&g_HudReplacements);
 }
 
 void GameLibrary::SetEntLogLevels(spdlog::level::level_enum level)

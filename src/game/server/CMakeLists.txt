@@ -69,6 +69,7 @@ target_sources(server PRIVATE
 	config/sections/GameDataFilesSections.h
 	config/sections/GlobalReplacementFilesSections.h
 	config/sections/HudColorSection.h
+	config/sections/HudReplacementSection.h
 	config/sections/SpawnInventorySection.h
 	config/sections/SuitLightTypeSection.h
 	

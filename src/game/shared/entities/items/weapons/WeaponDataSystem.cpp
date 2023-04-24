@@ -61,6 +61,8 @@ void WeaponDataSystem::HandleNetworkDataBlock(NetworkDataBlock& block)
 
 			data.emplace("AttackModeInfo", std::move(attackModeInfo));
 
+			data.emplace("HudConfigFileName", info.HudConfigFileName);
+
 			block.Data.push_back(std::move(data));
 		}
 	}
@@ -95,6 +97,8 @@ void WeaponDataSystem::HandleNetworkDataBlock(NetworkDataBlock& block)
 				info.AttackModeInfo[i].AmmoType = modeInfo.value("Ammo", "").c_str();
 				info.AttackModeInfo[i].MagazineSize = modeInfo.value("MagazineSize", 0);
 			}
+
+			info.HudConfigFileName = data.value("HudConfigFileName", "");
 
 			if (Register(std::move(info)) == -1)
 			{
@@ -135,6 +139,11 @@ const WeaponInfo* WeaponDataSystem::GetByIndex(int index) const
 const WeaponInfo* WeaponDataSystem::GetByName(std::string_view name) const
 {
 	return GetByIndex(IndexOf(name));
+}
+
+WeaponInfo* WeaponDataSystem::GetMutableByName(std::string_view name)
+{
+	return const_cast<WeaponInfo*>(GetByName(name));
 }
 
 void WeaponDataSystem::Clear()
@@ -194,4 +203,16 @@ int WeaponDataSystem::Register(WeaponInfo&& info)
 	dest = std::move(info);
 
 	return info.Id;
+}
+
+void WeaponDataSystem::SetWeaponHudConfigFileName(std::string_view className, std::string&& fileName)
+{
+	auto type = GetMutableByName(className);
+
+	if (!type)
+	{
+		return;
+	}
+
+	type->HudConfigFileName = std::move(fileName);
 }

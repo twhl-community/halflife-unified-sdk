@@ -21,6 +21,7 @@
 #include "EntityTemplateSystem.h"
 #include "MapState.h"
 #include "gamerules/PlayerInventory.h"
+#include "ui/hud/HudReplacementSystem.h"
 
 /**
  *	@brief Context used by config section parsers.
@@ -40,4 +41,8 @@ struct ServerConfigContext
 	PlayerInventory SpawnInventory;
 
 	EntityTemplateMap EntityTemplates;
+
+	std::string HudReplacementFile;
+
+	WeaponHudReplacements WeaponHudReplacementFiles;
 };

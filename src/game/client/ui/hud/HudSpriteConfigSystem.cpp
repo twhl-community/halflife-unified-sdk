@@ -34,7 +34,7 @@ static std::string GetHudSpriteConfigSchema()
 			"properties": {{
 				"SpriteName": {{
 					"type": "string",
-					"pattern": "^\\w+$"
+					"pattern": "^[\\w/]+$"
 				}},
 				"Left": {{
 					"type": "integer"

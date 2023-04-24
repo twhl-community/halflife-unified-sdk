@@ -40,6 +40,9 @@ struct WeaponInfo
 	int Flags{0};
 
 	std::array<WeaponAttackMode, MAX_WEAPON_ATTACK_MODES> AttackModeInfo;
+
+	// Initialized from map config.
+	std::string HudConfigFileName{};
 };
 
 /**
@@ -74,6 +77,11 @@ public:
 	 *	@brief Registers a new weapon.
 	 */
 	int Register(WeaponInfo&& info);
+
+	void SetWeaponHudConfigFileName(std::string_view className, std::string&& fileName);
+
+private:
+	WeaponInfo* GetMutableByName(std::string_view name);
 
 private:
 	// Public indices are 1-based, private ones are 0-based.
