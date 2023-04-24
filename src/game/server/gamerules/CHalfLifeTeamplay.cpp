@@ -141,7 +141,7 @@ void CHalfLifeTeamplay::Think()
 
 void CHalfLifeTeamplay::UpdateGameMode(CBasePlayer* pPlayer)
 {
-	MESSAGE_BEGIN(MSG_ONE, gmsgGameMode, nullptr, pPlayer->edict());
+	MESSAGE_BEGIN(MSG_ONE, gmsgGameMode, nullptr, pPlayer);
 	WRITE_BYTE(1); // game mode teamplay
 	MESSAGE_END();
 }
@@ -179,7 +179,7 @@ void CHalfLifeTeamplay::InitHUD(CBasePlayer* pPlayer)
 	CHalfLifeMultiplay::InitHUD(pPlayer);
 
 	// Send down the team names
-	MESSAGE_BEGIN(MSG_ONE, gmsgTeamNames, nullptr, pPlayer->edict());
+	MESSAGE_BEGIN(MSG_ONE, gmsgTeamNames, nullptr, pPlayer);
 	WRITE_BYTE(num_teams);
 	for (int i = 0; i < num_teams; i++)
 	{
@@ -211,7 +211,7 @@ void CHalfLifeTeamplay::InitHUD(CBasePlayer* pPlayer)
 		CBaseEntity* plr = UTIL_PlayerByIndex(i);
 		if (plr && IsValidTeam(plr->TeamID()))
 		{
-			MESSAGE_BEGIN(MSG_ONE, gmsgTeamInfo, nullptr, pPlayer->edict());
+			MESSAGE_BEGIN(MSG_ONE, gmsgTeamInfo, nullptr, pPlayer);
 			WRITE_BYTE(plr->entindex());
 			WRITE_STRING(plr->TeamID());
 			MESSAGE_END();

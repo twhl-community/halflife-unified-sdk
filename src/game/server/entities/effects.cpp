@@ -1779,9 +1779,9 @@ void CFade::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType,
 
 	if ((pev->spawnflags & SF_FADE_ONLYONE) != 0)
 	{
-		if (pActivator->IsNetClient())
+		if (auto player = ToBasePlayer(pActivator); player && player->IsNetClient())
 		{
-			UTIL_ScreenFade(pActivator, pev->rendercolor, Duration(), HoldTime(), pev->renderamt, fadeFlags);
+			UTIL_ScreenFade(player, pev->rendercolor, Duration(), HoldTime(), pev->renderamt, fadeFlags);
 		}
 	}
 	else

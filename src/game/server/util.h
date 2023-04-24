@@ -17,8 +17,6 @@
 
 #include <fmt/core.h>
 
-#include <EASTL/fixed_string.h>
-
 #include "Platform.h"
 
 //
@@ -151,10 +149,10 @@ void UTIL_MakeInvVectors(const Vector& vec, globalvars_t* pgv);
 void UTIL_ParticleEffect(const Vector& vecOrigin, const Vector& vecDirection, unsigned int ulColor, unsigned int ulCount);
 void UTIL_ScreenShake(const Vector& center, float amplitude, float frequency, float duration, float radius);
 void UTIL_ScreenShakeAll(const Vector& center, float amplitude, float frequency, float duration);
-void UTIL_ShowMessage(const char* pString, CBaseEntity* pPlayer);
+void UTIL_ShowMessage(const char* pString, CBasePlayer* pPlayer);
 void UTIL_ShowMessageAll(const char* pString);
 void UTIL_ScreenFadeAll(const Vector& color, float fadeTime, float holdTime, int alpha, int flags);
-void UTIL_ScreenFade(CBaseEntity* pEntity, const Vector& color, float fadeTime, float fadeHold, int alpha, int flags);
+void UTIL_ScreenFade(CBasePlayer* pEntity, const Vector& color, float fadeTime, float fadeHold, int alpha, int flags);
 
 enum IGNORE_MONSTERS
 {
@@ -192,7 +190,7 @@ void UTIL_DecalTrace(TraceResult* pTrace, int decalNumber);
 void UTIL_PlayerDecalTrace(TraceResult* pTrace, int playernum, int decalNumber, bool bIsCustom);
 void UTIL_GunshotDecalTrace(TraceResult* pTrace, int decalNumber);
 void UTIL_ExplosionEffect(const Vector& explosionOrigin, int modelIndex, byte scale, int framerate, int flags,
-	int msg_dest, const float* pOrigin = nullptr, edict_t* ed = nullptr);
+	int msg_dest, const float* pOrigin = nullptr, CBasePlayer* player = nullptr);
 void UTIL_Sparks(const Vector& position);
 void UTIL_Ricochet(const Vector& position, float scale);
 void UTIL_StringToIntArray(int* pVector, int count, const char* pString);
@@ -235,29 +233,8 @@ void ClientPrint(CBasePlayer* client, int msg_dest, const char* msg_name,
 	const char* param1 = nullptr, const char* param2 = nullptr, const char* param3 = nullptr, const char* param4 = nullptr);
 
 // prints a message to the HUD say (chat)
-void UTIL_SayText(const char* pText, CBaseEntity* pEntity);
-void UTIL_SayTextAll(const char* pText, CBaseEntity* pEntity);
-
-/**
- *	@brief Prints to the given player's console.
- *	Uses fmtlib format strings.
- */
-template <typename... Args>
-void UTIL_ConsolePrint(edict_t* client, fmt::format_string<Args...> fmt, Args&&... args)
-{
-	eastl::fixed_string<char, 256> buf;
-	fmt::format_to(std::back_inserter(buf), fmt, std::forward<Args>(args)...);
-
-	CLIENT_PRINTF(client, print_console, buf.c_str());
-}
-
-/**
- *	@brief Prints to the given player's console.
- */
-inline void UTIL_ConsolePrint(edict_t* client, const char* msg)
-{
-	CLIENT_PRINTF(client, print_console, msg);
-}
+void UTIL_SayText(const char* pText, CBasePlayer* pEntity);
+void UTIL_SayTextAll(const char* pText, CBasePlayer* pEntity);
 
 struct hudtextparms_t
 {
@@ -275,7 +252,7 @@ struct hudtextparms_t
 
 // prints as transparent 'title' to the HUD
 void UTIL_HudMessageAll(const hudtextparms_t& textparms, const char* pMessage);
-void UTIL_HudMessage(CBaseEntity* pEntity, const hudtextparms_t& textparms, const char* pMessage);
+void UTIL_HudMessage(CBasePlayer* pEntity, const hudtextparms_t& textparms, const char* pMessage);
 
 // Sorta like FInViewCone, but for nonmonsters.
 float UTIL_DotPoints(const Vector& vecSrc, const Vector& vecCheck, const Vector& vecDir);

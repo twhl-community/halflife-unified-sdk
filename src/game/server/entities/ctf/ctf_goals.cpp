@@ -135,7 +135,7 @@ void CTFGoalBase::BaseThink()
 	Vector vecLightPos, vecLightAng;
 	GetAttachment(0, vecLightPos, vecLightAng);
 
-	g_engfuncs.pfnMessageBegin(MSG_BROADCAST, SVC_TEMPENTITY, nullptr, nullptr);
+	MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
 	g_engfuncs.pfnWriteByte(TE_ELIGHT);
 	g_engfuncs.pfnWriteShort(entindex() + 0x1000);
 	g_engfuncs.pfnWriteCoord(vecLightPos.x);
@@ -209,7 +209,7 @@ void CTFGoalBase::TurnOnLight(CBasePlayer* pPlayer)
 {
 	Vector vecLightPos, vecLightAng;
 	GetAttachment(0, vecLightPos, vecLightAng);
-	g_engfuncs.pfnMessageBegin(MSG_ONE, SVC_TEMPENTITY, nullptr, pPlayer->edict());
+	MESSAGE_BEGIN(MSG_ONE, SVC_TEMPENTITY, nullptr, pPlayer);
 	g_engfuncs.pfnWriteByte(TE_ELIGHT);
 
 	g_engfuncs.pfnWriteShort(entindex() + 0x1000);
@@ -332,7 +332,7 @@ void CTFGoalFlag::FlagCarryThink()
 	Vector vecLightPos, vecLightAng;
 	GetAttachment(0, vecLightPos, vecLightAng);
 
-	g_engfuncs.pfnMessageBegin(MSG_ALL, SVC_TEMPENTITY, nullptr, nullptr);
+	MESSAGE_BEGIN(MSG_ALL, SVC_TEMPENTITY);
 	g_engfuncs.pfnWriteByte(TE_ELIGHT);
 	g_engfuncs.pfnWriteShort(entindex() + 0x1000);
 	g_engfuncs.pfnWriteCoord(vecLightPos.x);
@@ -589,7 +589,7 @@ void CTFGoalFlag::ScoreFlagTouch(CBasePlayer* pPlayer)
 				pPlayer->m_iCTFScore += 10;
 				pPlayer->m_iOffense += 10;
 
-				g_engfuncs.pfnMessageBegin(MSG_ALL, gmsgCTFScore, nullptr, nullptr);
+				MESSAGE_BEGIN(MSG_ALL, gmsgCTFScore);
 				g_engfuncs.pfnWriteByte(pPlayer->entindex());
 				g_engfuncs.pfnWriteByte(pPlayer->m_iCTFScore);
 				g_engfuncs.pfnMessageEnd();
@@ -607,7 +607,7 @@ void CTFGoalFlag::ScoreFlagTouch(CBasePlayer* pPlayer)
 					auto returnPlayer = UTIL_PlayerByIndex(m_nReturnPlayer);
 					++pPlayer->m_iCTFScore;
 					++pPlayer->m_iOffense;
-					g_engfuncs.pfnMessageBegin(MSG_ALL, gmsgCTFScore, nullptr, nullptr);
+					MESSAGE_BEGIN(MSG_ALL, gmsgCTFScore);
 					g_engfuncs.pfnWriteByte(pPlayer->entindex());
 					g_engfuncs.pfnWriteByte(pPlayer->m_iCTFScore);
 					g_engfuncs.pfnMessageEnd();
@@ -642,7 +642,7 @@ void CTFGoalFlag::ScoreFlagTouch(CBasePlayer* pPlayer)
 				pPlayer->m_iCTFScore += 10;
 				pPlayer->m_iOffense += 10;
 
-				g_engfuncs.pfnMessageBegin(MSG_ALL, gmsgCTFScore, nullptr, nullptr);
+				MESSAGE_BEGIN(MSG_ALL, gmsgCTFScore);
 				g_engfuncs.pfnWriteByte(pPlayer->entindex());
 				g_engfuncs.pfnWriteByte(pPlayer->m_iCTFScore);
 				g_engfuncs.pfnMessageEnd();
@@ -663,7 +663,7 @@ void CTFGoalFlag::ScoreFlagTouch(CBasePlayer* pPlayer)
 					++pPlayer->m_iCTFScore;
 					++pPlayer->m_iOffense;
 
-					g_engfuncs.pfnMessageBegin(MSG_ALL, gmsgCTFScore, nullptr, nullptr);
+					MESSAGE_BEGIN(MSG_ALL, gmsgCTFScore);
 					g_engfuncs.pfnWriteByte(pPlayer->entindex());
 					g_engfuncs.pfnWriteByte(pPlayer->m_iCTFScore);
 					g_engfuncs.pfnMessageEnd();
@@ -692,7 +692,7 @@ void CTFGoalFlag::TurnOnLight(CBasePlayer* pPlayer)
 	Vector vecLightPos, vecLightAng;
 	GetAttachment(0, vecLightPos, vecLightAng);
 
-	g_engfuncs.pfnMessageBegin(MSG_ONE, SVC_TEMPENTITY, nullptr, pPlayer->edict());
+	MESSAGE_BEGIN(MSG_ONE, SVC_TEMPENTITY, nullptr, pPlayer);
 	g_engfuncs.pfnWriteByte(TE_ELIGHT);
 	g_engfuncs.pfnWriteShort(entindex() + 0x1000);
 	g_engfuncs.pfnWriteCoord(vecLightPos.x);
@@ -772,7 +772,7 @@ void CTFGoalFlag::GiveFlagToPlayer(CBasePlayer* pPlayer)
 	++pPlayer->m_iCTFScore;
 	++pPlayer->m_iOffense;
 
-	g_engfuncs.pfnMessageBegin(MSG_ALL, gmsgCTFScore, nullptr, nullptr);
+	MESSAGE_BEGIN(MSG_ALL, gmsgCTFScore);
 	g_engfuncs.pfnWriteByte(pPlayer->entindex());
 	g_engfuncs.pfnWriteByte(pPlayer->m_iCTFScore);
 	g_engfuncs.pfnMessageEnd();
@@ -869,7 +869,7 @@ void CTFGoalFlag::goal_item_touch(CBaseEntity* pOther)
 	++pPlayer->m_iCTFScore;
 	++pPlayer->m_iDefense;
 
-	g_engfuncs.pfnMessageBegin(MSG_ALL, gmsgCTFScore, nullptr, nullptr);
+	MESSAGE_BEGIN(MSG_ALL, gmsgCTFScore);
 	g_engfuncs.pfnWriteByte(pPlayer->entindex());
 	g_engfuncs.pfnWriteByte(pPlayer->m_iCTFScore);
 	g_engfuncs.pfnMessageEnd();

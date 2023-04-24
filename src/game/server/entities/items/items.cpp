@@ -95,7 +95,7 @@ public:
 		{
 			player->SetHasLongJump(true); // player now has longjump module
 
-			MESSAGE_BEGIN(MSG_ONE, gmsgItemPickup, nullptr, player->edict());
+			MESSAGE_BEGIN(MSG_ONE, gmsgItemPickup, nullptr, player);
 			WRITE_STRING(STRING(pev->classname));
 			MESSAGE_END();
 
@@ -160,7 +160,7 @@ public:
 
 		if (player->GiveHealth(amount, DMG_GENERIC))
 		{
-			MESSAGE_BEGIN(MSG_ONE, gmsgItemPickup, nullptr, player->edict());
+			MESSAGE_BEGIN(MSG_ONE, gmsgItemPickup, nullptr, player);
 			WRITE_STRING(STRING(pev->classname));
 			MESSAGE_END();
 
@@ -242,7 +242,7 @@ protected:
 			player->pev->armorvalue += amount;
 			player->pev->armorvalue = std::min(player->pev->armorvalue, static_cast<float>(MAX_NORMAL_BATTERY));
 
-			MESSAGE_BEGIN(MSG_ONE, gmsgItemPickup, nullptr, player->edict());
+			MESSAGE_BEGIN(MSG_ONE, gmsgItemPickup, nullptr, player);
 			WRITE_STRING(STRING(pev->classname));
 			MESSAGE_END();
 

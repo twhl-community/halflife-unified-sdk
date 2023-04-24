@@ -26,7 +26,7 @@ public:
 
 	bool KeyValue(KeyValueData* pkvd) override;
 
-	void UpdateUser(CBaseEntity* pPlayer);
+	void UpdateUser(CBasePlayer* pPlayer);
 
 	float m_flNextActiveTime;
 	int m_nCustomIndex;

@@ -407,7 +407,7 @@ void SkillSystem::SendAllNetworkedSkillVars(CBasePlayer* player)
 
 	int totalMessageSize = 0;
 
-	MESSAGE_BEGIN(MSG_ONE, gmsgSkillVars, nullptr, player->edict());
+	MESSAGE_BEGIN(MSG_ONE, gmsgSkillVars, nullptr, player);
 
 	for (const auto& variable : m_SkillVariables)
 	{
@@ -425,7 +425,7 @@ void SkillSystem::SendAllNetworkedSkillVars(CBasePlayer* player)
 		if (totalMessageSize >= maxMessageSize)
 		{
 			MESSAGE_END();
-			MESSAGE_BEGIN(MSG_ONE, gmsgSkillVars, nullptr, player->edict());
+			MESSAGE_BEGIN(MSG_ONE, gmsgSkillVars, nullptr, player);
 			totalMessageSize = 0;
 		}
 

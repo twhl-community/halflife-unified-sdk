@@ -181,14 +181,14 @@ void CBasePlayer::Observer_CheckProperties()
 			m_iFOV = target->m_iFOV;
 			m_iClientFOV = m_iFOV;
 			// write fov before wepon data, so zoomed crosshair is set correctly
-			MESSAGE_BEGIN(MSG_ONE, gmsgSetFOV, nullptr, edict());
+			MESSAGE_BEGIN(MSG_ONE, gmsgSetFOV, nullptr, this);
 			WRITE_BYTE(m_iFOV);
 			MESSAGE_END();
 
 
 			m_iObserverWeapon = weapon;
 			// send weapon update
-			MESSAGE_BEGIN(MSG_ONE, gmsgCurWeapon, nullptr, edict());
+			MESSAGE_BEGIN(MSG_ONE, gmsgCurWeapon, nullptr, this);
 			WRITE_BYTE(1); // 1 = current weapon, not on target
 			WRITE_BYTE(m_iObserverWeapon);
 			WRITE_BYTE(0); // clip
@@ -203,7 +203,7 @@ void CBasePlayer::Observer_CheckProperties()
 		{
 			m_iObserverWeapon = 0;
 
-			MESSAGE_BEGIN(MSG_ONE, gmsgCurWeapon, nullptr, edict());
+			MESSAGE_BEGIN(MSG_ONE, gmsgCurWeapon, nullptr, this);
 			WRITE_BYTE(1); // 1 = current weapon
 			WRITE_BYTE(m_iObserverWeapon);
 			WRITE_BYTE(0); // clip

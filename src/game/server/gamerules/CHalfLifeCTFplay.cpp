@@ -131,7 +131,7 @@ void GetLosingTeam(int& iTeamNum, int& iScoreDiff)
 
 static void SendFlagIcon(CBasePlayer* player, bool isActive, const char* flagName, int teamIndex)
 {
-	g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgFlagIcon, nullptr, player->edict());
+	MESSAGE_BEGIN(MSG_ONE, gmsgFlagIcon, nullptr, player);
 	g_engfuncs.pfnWriteByte(isActive ? 1 : 0);
 	g_engfuncs.pfnWriteString(flagName);
 	g_engfuncs.pfnWriteByte(teamIndex);
@@ -420,7 +420,7 @@ void InitItemsForPlayer(CBasePlayer* pPlayer)
 				// TODO: this can probably be optimized by finding the last item that the player is carrying and only sending that
 				if ((pOther->m_iItems & item.Mask) != 0)
 				{
-					g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgPlayerIcon, nullptr, pPlayer->edict());
+					MESSAGE_BEGIN(MSG_ONE, gmsgPlayerIcon, nullptr, pPlayer);
 					g_engfuncs.pfnWriteByte(pOther->entindex());
 					g_engfuncs.pfnWriteByte(item.IconColor.r);
 					g_engfuncs.pfnWriteByte(item.IconColor.g);
@@ -459,7 +459,7 @@ CHalfLifeCTFplay::CHalfLifeCTFplay()
 			if (player->m_iCurrentMenu == MENU_CLASS)
 			{
 				player->m_iCurrentMenu = MENU_TEAM;
-				g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgTeamFull, nullptr, player->edict());
+				MESSAGE_BEGIN(MSG_ONE, gmsgTeamFull, nullptr, player);
 				g_engfuncs.pfnWriteByte(0);
 				g_engfuncs.pfnMessageEnd();
 				player->m_iNewTeamNum = CTFTeam::None;
@@ -678,16 +678,15 @@ void CHalfLifeCTFplay::InitHUD(CBasePlayer* pPlayer)
 	DisplayTeamFlags(pPlayer);
 
 	auto v2 = 60.0f * timelimit.value;
-	auto v25 = pPlayer->edict();
 	if (v2 == 0)
 	{
-		g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgFlagTimer, nullptr, v25);
+		MESSAGE_BEGIN(MSG_ONE, gmsgFlagTimer, nullptr, pPlayer);
 		g_engfuncs.pfnWriteByte(0);
 		g_engfuncs.pfnMessageEnd();
 	}
 	else
 	{
-		g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgFlagTimer, nullptr, v25);
+		MESSAGE_BEGIN(MSG_ONE, gmsgFlagTimer, nullptr, pPlayer);
 		g_engfuncs.pfnWriteByte(1);
 		g_engfuncs.pfnWriteShort((int)(v2 - gpGlobals->time));
 		g_engfuncs.pfnMessageEnd();
@@ -713,7 +712,7 @@ void CHalfLifeCTFplay::InitHUD(CBasePlayer* pPlayer)
 		{
 			if (IsValidTeam(otherPlayer->TeamID()))
 			{
-				MESSAGE_BEGIN(MSG_ONE, gmsgTeamInfo, nullptr, pPlayer->edict());
+				MESSAGE_BEGIN(MSG_ONE, gmsgTeamInfo, nullptr, pPlayer);
 				g_engfuncs.pfnWriteByte(otherPlayer->entindex());
 				g_engfuncs.pfnWriteString(otherPlayer->TeamID());
 				g_engfuncs.pfnWriteByte((int)otherPlayer->m_iTeamNum);
@@ -758,7 +757,7 @@ void CHalfLifeCTFplay::ClientDisconnected(edict_t* pClient)
 
 			v2->RemoveAllItems(true);
 
-			g_engfuncs.pfnMessageBegin(MSG_ALL, gmsgSpectator, nullptr, nullptr);
+			MESSAGE_BEGIN(MSG_ALL, gmsgSpectator);
 			g_engfuncs.pfnWriteByte(g_engfuncs.pfnIndexOfEdict(pClient));
 			g_engfuncs.pfnWriteByte(0);
 			g_engfuncs.pfnMessageEnd();
@@ -785,7 +784,7 @@ void CHalfLifeCTFplay::ClientDisconnected(edict_t* pClient)
 
 void CHalfLifeCTFplay::UpdateGameMode(CBasePlayer* pPlayer)
 {
-	g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgGameMode, nullptr, pPlayer->edict());
+	MESSAGE_BEGIN(MSG_ONE, gmsgGameMode, nullptr, pPlayer);
 	g_engfuncs.pfnWriteByte(2);
 	g_engfuncs.pfnMessageEnd();
 }
@@ -873,7 +872,7 @@ void CHalfLifeCTFplay::PlayerThink(CBasePlayer* pPlayer)
 
 		if (!pOther)
 		{
-			g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgPlayerBrowse, nullptr, pPlayer->edict());
+			MESSAGE_BEGIN(MSG_ONE, gmsgPlayerBrowse, nullptr, pPlayer);
 			g_engfuncs.pfnWriteByte(0);
 			g_engfuncs.pfnWriteByte(0);
 			g_engfuncs.pfnWriteString("");
@@ -881,7 +880,7 @@ void CHalfLifeCTFplay::PlayerThink(CBasePlayer* pPlayer)
 		}
 		else
 		{
-			g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgPlayerBrowse, nullptr, pPlayer->edict());
+			MESSAGE_BEGIN(MSG_ONE, gmsgPlayerBrowse, nullptr, pPlayer);
 			g_engfuncs.pfnWriteByte(static_cast<int>(pOther->m_iTeamNum == pPlayer->m_iTeamNum));
 
 			const auto v11 = 0 == pPlayer->pev->iuser1 ? pOther->m_iTeamNum : CTFTeam::None;
@@ -1257,7 +1256,7 @@ void CHalfLifeCTFplay::ChangePlayerTeam(CBasePlayer* pPlayer, const char* pCharN
 		pPlayer->m_iClientFOV = 0;
 		pPlayer->m_iFOV = 0;
 
-		g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgSetFOV, nullptr, pPlayer->edict());
+		MESSAGE_BEGIN(MSG_ONE, gmsgSetFOV, nullptr, pPlayer);
 		g_engfuncs.pfnWriteByte(0);
 		g_engfuncs.pfnMessageEnd();
 
@@ -1293,11 +1292,11 @@ void CHalfLifeCTFplay::ChangePlayerTeam(CBasePlayer* pPlayer, const char* pCharN
 		pPlayer->SetSuitUpdate(nullptr, false, SUIT_REPEAT_OK);
 		pPlayer->m_iClientHealth = 100;
 
-		g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgHealth, nullptr, pPlayer->edict());
+		MESSAGE_BEGIN(MSG_ONE, gmsgHealth, nullptr, pPlayer);
 		g_engfuncs.pfnWriteShort(pPlayer->m_iClientHealth);
 		g_engfuncs.pfnMessageEnd();
 
-		g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgCurWeapon, nullptr, pPlayer->edict());
+		MESSAGE_BEGIN(MSG_ONE, gmsgCurWeapon, nullptr, pPlayer);
 		g_engfuncs.pfnWriteByte(0);
 		g_engfuncs.pfnWriteByte(255);
 		g_engfuncs.pfnWriteByte(255);
@@ -1306,7 +1305,7 @@ void CHalfLifeCTFplay::ChangePlayerTeam(CBasePlayer* pPlayer, const char* pCharN
 		pPlayer->m_iClientFOV = 0;
 		pPlayer->m_iFOV = 0;
 
-		g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgSetFOV, nullptr, pPlayer->edict());
+		MESSAGE_BEGIN(MSG_ONE, gmsgSetFOV, nullptr, pPlayer);
 		g_engfuncs.pfnWriteByte(0);
 		g_engfuncs.pfnMessageEnd();
 
@@ -1682,7 +1681,7 @@ void CHalfLifeCTFplay::SendTeamStatInfo(CTFTeam iTeamNum)
 		}
 	}
 
-	g_engfuncs.pfnMessageBegin(MSG_ALL, gmsgStatsInfo, nullptr, nullptr);
+	MESSAGE_BEGIN(MSG_ALL, gmsgStatsInfo);
 	g_engfuncs.pfnWriteByte(static_cast<int>(iTeamNum));
 
 	g_engfuncs.pfnWriteByte((int)GetWinningTeam());
@@ -1698,7 +1697,7 @@ void CHalfLifeCTFplay::SendTeamStatInfo(CTFTeam iTeamNum)
 	SendTeamStat(iMostBarnacle, "Most Barnacle Kills", iBarnacleVal);
 	g_engfuncs.pfnMessageEnd();
 
-	g_engfuncs.pfnMessageBegin(MSG_ALL, gmsgStatsInfo, nullptr, nullptr);
+	MESSAGE_BEGIN(MSG_ALL, gmsgStatsInfo);
 	g_engfuncs.pfnWriteByte(static_cast<int>(iTeamNum));
 
 	g_engfuncs.pfnWriteByte((int)GetWinningTeam());
@@ -1718,7 +1717,7 @@ void CHalfLifeCTFplay::SendTeamStatInfo(CTFTeam iTeamNum)
 
 void CHalfLifeCTFplay::SendPlayerStatInfo(CBasePlayer* pPlayer)
 {
-	g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgStatsPlayer, nullptr, pPlayer->edict());
+	MESSAGE_BEGIN(MSG_ONE, gmsgStatsPlayer, nullptr, pPlayer);
 
 	g_engfuncs.pfnWriteByte(pPlayer->entindex());
 

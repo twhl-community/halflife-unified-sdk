@@ -69,10 +69,13 @@ void CBaseTrigger::ActivateMultiTrigger(CBaseEntity* pActivator)
 	m_hActivator = pActivator;
 	SUB_UseTargets(m_hActivator, USE_TOGGLE, 0);
 
-	if (!FStringNull(pev->message) && pActivator->IsPlayer())
+	if (!FStringNull(pev->message))
 	{
-		UTIL_ShowMessage(STRING(pev->message), pActivator);
-		//		CLIENT_PRINTF( ENT( pActivator->pev ), print_center, STRING(pev->message) );
+		if (auto player = ToBasePlayer(pActivator); player)
+		{
+			UTIL_ShowMessage(STRING(pev->message), player);
+			// UTIL_ConsolePrint(player, STRING(pev->message));
+		}
 	}
 
 	if (m_flWait > 0)

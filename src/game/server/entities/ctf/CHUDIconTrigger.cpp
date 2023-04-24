@@ -38,8 +38,13 @@ void CHUDIconTrigger::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYP
 
 		SUB_UseTargets(m_hActivator, USE_TOGGLE, 0);
 
-		if (!FStringNull(pev->message) && pActivator->IsPlayer())
-			UTIL_ShowMessage(STRING(pev->message), pActivator);
+		if (!FStringNull(pev->message))
+		{
+			if (auto player = ToBasePlayer(pActivator); player)
+			{
+				UTIL_ShowMessage(STRING(pev->message), player);
+			}
+		}
 
 		switch (useType)
 		{
@@ -56,7 +61,7 @@ void CHUDIconTrigger::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYP
 			break;
 		}
 
-		g_engfuncs.pfnMessageBegin(MSG_ALL, gmsgCustomIcon, nullptr, nullptr);
+		MESSAGE_BEGIN(MSG_ALL, gmsgCustomIcon);
 		g_engfuncs.pfnWriteByte(static_cast<int>(m_fIsActive));
 		g_engfuncs.pfnWriteByte(m_nCustomIndex);
 
@@ -124,9 +129,9 @@ bool CHUDIconTrigger::KeyValue(KeyValueData* pkvd)
 	return false;
 }
 
-void CHUDIconTrigger::UpdateUser(CBaseEntity* pPlayer)
+void CHUDIconTrigger::UpdateUser(CBasePlayer* pPlayer)
 {
-	g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgCustomIcon, nullptr, pPlayer->edict());
+	MESSAGE_BEGIN(MSG_ONE, gmsgCustomIcon, nullptr, pPlayer);
 	g_engfuncs.pfnWriteByte(static_cast<int>(m_fIsActive));
 	g_engfuncs.pfnWriteByte(m_nCustomIndex);
 

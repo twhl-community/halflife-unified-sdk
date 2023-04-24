@@ -34,7 +34,7 @@ CHalfLifeCoopplay::CHalfLifeCoopplay()
 
 void CHalfLifeCoopplay::UpdateGameMode(CBasePlayer* pPlayer)
 {
-	g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgGameMode, nullptr, pPlayer->edict());
+	MESSAGE_BEGIN(MSG_ONE, gmsgGameMode, nullptr, pPlayer);
 	g_engfuncs.pfnWriteByte(1);
 	g_engfuncs.pfnMessageEnd();
 }

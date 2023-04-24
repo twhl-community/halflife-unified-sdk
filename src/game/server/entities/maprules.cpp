@@ -296,9 +296,9 @@ void CGameText::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useT
 	}
 	else
 	{
-		if (pActivator->IsNetClient())
+		if (auto player = ToBasePlayer(pActivator); player && player->IsNetClient())
 		{
-			UTIL_HudMessage(pActivator, m_textParms, MessageGet());
+			UTIL_HudMessage(player, m_textParms, MessageGet());
 		}
 	}
 }

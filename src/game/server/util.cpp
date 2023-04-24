@@ -457,7 +457,7 @@ void UTIL_ScreenShake(const Vector& center, float amplitude, float frequency, fl
 
 	for (i = 1; i <= gpGlobals->maxClients; i++)
 	{
-		CBaseEntity* pPlayer = UTIL_PlayerByIndex(i);
+		CBasePlayer* pPlayer = UTIL_PlayerByIndex(i);
 
 		if (!pPlayer || (pPlayer->pev->flags & FL_ONGROUND) == 0) // Don't shake if not onground
 			continue;
@@ -479,7 +479,7 @@ void UTIL_ScreenShake(const Vector& center, float amplitude, float frequency, fl
 		{
 			shake.amplitude = FixedUnsigned16(localAmplitude, 1 << 12); // 4.12 fixed
 
-			MESSAGE_BEGIN(MSG_ONE, gmsgShake, nullptr, pPlayer->edict()); // use the magic #1 for "one client"
+			MESSAGE_BEGIN(MSG_ONE, gmsgShake, nullptr, pPlayer);
 
 			WRITE_SHORT(shake.amplitude); // shake amount
 			WRITE_SHORT(shake.duration);  // shake lasts this long
@@ -510,12 +510,12 @@ void UTIL_ScreenFadeBuild(ScreenFade& fade, const Vector& color, float fadeTime,
 }
 
 
-void UTIL_ScreenFadeWrite(const ScreenFade& fade, CBaseEntity* pEntity)
+void UTIL_ScreenFadeWrite(const ScreenFade& fade, CBasePlayer* pEntity)
 {
 	if (!pEntity || !pEntity->IsNetClient())
 		return;
 
-	MESSAGE_BEGIN(MSG_ONE, gmsgFade, nullptr, pEntity->edict()); // use the magic #1 for "one client"
+	MESSAGE_BEGIN(MSG_ONE, gmsgFade, nullptr, pEntity);
 
 	WRITE_SHORT(fade.duration);	 // fade lasts this long
 	WRITE_SHORT(fade.holdTime);	 // fade lasts this long
@@ -531,22 +531,19 @@ void UTIL_ScreenFadeWrite(const ScreenFade& fade, CBaseEntity* pEntity)
 
 void UTIL_ScreenFadeAll(const Vector& color, float fadeTime, float fadeHold, int alpha, int flags)
 {
-	int i;
 	ScreenFade fade;
-
-
 	UTIL_ScreenFadeBuild(fade, color, fadeTime, fadeHold, alpha, flags);
 
-	for (i = 1; i <= gpGlobals->maxClients; i++)
+	for (int i = 1; i <= gpGlobals->maxClients; i++)
 	{
-		CBaseEntity* pPlayer = UTIL_PlayerByIndex(i);
+		CBasePlayer* pPlayer = UTIL_PlayerByIndex(i);
 
 		UTIL_ScreenFadeWrite(fade, pPlayer);
 	}
 }
 
 
-void UTIL_ScreenFade(CBaseEntity* pEntity, const Vector& color, float fadeTime, float fadeHold, int alpha, int flags)
+void UTIL_ScreenFade(CBasePlayer* pEntity, const Vector& color, float fadeTime, float fadeHold, int alpha, int flags)
 {
 	ScreenFade fade;
 
@@ -555,12 +552,12 @@ void UTIL_ScreenFade(CBaseEntity* pEntity, const Vector& color, float fadeTime, 
 }
 
 
-void UTIL_HudMessage(CBaseEntity* pEntity, const hudtextparms_t& textparms, const char* pMessage)
+void UTIL_HudMessage(CBasePlayer* pEntity, const hudtextparms_t& textparms, const char* pMessage)
 {
 	if (!pEntity || !pEntity->IsNetClient())
 		return;
 
-	MESSAGE_BEGIN(MSG_ONE, SVC_TEMPENTITY, nullptr, pEntity->edict());
+	MESSAGE_BEGIN(MSG_ONE, SVC_TEMPENTITY, nullptr, pEntity);
 	WRITE_BYTE(TE_TEXTMESSAGE);
 	WRITE_BYTE(textparms.channel & 0xFF);
 
@@ -601,11 +598,9 @@ void UTIL_HudMessage(CBaseEntity* pEntity, const hudtextparms_t& textparms, cons
 
 void UTIL_HudMessageAll(const hudtextparms_t& textparms, const char* pMessage)
 {
-	int i;
-
-	for (i = 1; i <= gpGlobals->maxClients; i++)
+	for (int i = 1; i <= gpGlobals->maxClients; i++)
 	{
-		CBaseEntity* pPlayer = UTIL_PlayerByIndex(i);
+		CBasePlayer* pPlayer = UTIL_PlayerByIndex(i);
 		if (pPlayer)
 			UTIL_HudMessage(pPlayer, textparms, pMessage);
 	}
@@ -631,7 +626,7 @@ void UTIL_ClientPrintAll(int msg_dest, const char* msg_name, const char* param1,
 
 void ClientPrint(CBasePlayer* client, int msg_dest, const char* msg_name, const char* param1, const char* param2, const char* param3, const char* param4)
 {
-	MESSAGE_BEGIN(MSG_ONE, gmsgTextMsg, nullptr, client->edict());
+	MESSAGE_BEGIN(MSG_ONE, gmsgTextMsg, nullptr, client);
 	WRITE_BYTE(msg_dest);
 	WRITE_STRING(msg_name);
 
@@ -647,18 +642,18 @@ void ClientPrint(CBasePlayer* client, int msg_dest, const char* msg_name, const 
 	MESSAGE_END();
 }
 
-void UTIL_SayText(const char* pText, CBaseEntity* pEntity)
+void UTIL_SayText(const char* pText, CBasePlayer* pEntity)
 {
 	if (!pEntity->IsNetClient())
 		return;
 
-	MESSAGE_BEGIN(MSG_ONE, gmsgSayText, nullptr, pEntity->edict());
+	MESSAGE_BEGIN(MSG_ONE, gmsgSayText, nullptr, pEntity);
 	WRITE_BYTE(pEntity->entindex());
 	WRITE_STRING(pText);
 	MESSAGE_END();
 }
 
-void UTIL_SayTextAll(const char* pText, CBaseEntity* pEntity)
+void UTIL_SayTextAll(const char* pText, CBasePlayer* pEntity)
 {
 	MESSAGE_BEGIN(MSG_ALL, gmsgSayText, nullptr);
 	WRITE_BYTE(pEntity->entindex());
@@ -666,12 +661,12 @@ void UTIL_SayTextAll(const char* pText, CBaseEntity* pEntity)
 	MESSAGE_END();
 }
 
-void UTIL_ShowMessage(const char* pString, CBaseEntity* pEntity)
+void UTIL_ShowMessage(const char* pString, CBasePlayer* pEntity)
 {
 	if (!pEntity || !pEntity->IsNetClient())
 		return;
 
-	MESSAGE_BEGIN(MSG_ONE, gmsgHudText, nullptr, pEntity->edict());
+	MESSAGE_BEGIN(MSG_ONE, gmsgHudText, nullptr, pEntity);
 	WRITE_STRING(pString);
 	MESSAGE_END();
 }
@@ -679,13 +674,10 @@ void UTIL_ShowMessage(const char* pString, CBaseEntity* pEntity)
 
 void UTIL_ShowMessageAll(const char* pString)
 {
-	int i;
-
 	// loop through all players
-
-	for (i = 1; i <= gpGlobals->maxClients; i++)
+	for (int i = 1; i <= gpGlobals->maxClients; i++)
 	{
-		CBaseEntity* pPlayer = UTIL_PlayerByIndex(i);
+		CBasePlayer* pPlayer = UTIL_PlayerByIndex(i);
 		if (pPlayer)
 			UTIL_ShowMessage(pString, pPlayer);
 	}
@@ -1063,9 +1055,9 @@ void UTIL_GunshotDecalTrace(TraceResult* pTrace, int decalNumber)
 }
 
 void UTIL_ExplosionEffect(const Vector& explosionOrigin, int modelIndex, byte scale, int framerate, int flags,
-	int msg_dest, const float* pOrigin, edict_t* ed)
+	int msg_dest, const float* pOrigin, CBasePlayer* player)
 {
-	MESSAGE_BEGIN(msg_dest, gmsgTempEntity, pOrigin, ed);
+	MESSAGE_BEGIN(msg_dest, gmsgTempEntity, pOrigin, player);
 	WRITE_BYTE(TE_EXPLOSION);
 	WRITE_COORD_VECTOR(explosionOrigin);
 	WRITE_SHORT(modelIndex);

@@ -470,7 +470,7 @@ bool CItemAcceleratorCTF::MyTouch(CBasePlayer* pPlayer)
 			if (pPlayer->HasSuit())
 			{
 				pPlayer->m_iItems = static_cast<CTFItem::CTFItem>(pPlayer->m_iItems | CTFItem::Acceleration);
-				MESSAGE_BEGIN(MSG_ONE, gmsgItemPickup, nullptr, pPlayer->edict());
+				MESSAGE_BEGIN(MSG_ONE, gmsgItemPickup, nullptr, pPlayer);
 				WRITE_STRING(STRING(pev->classname));
 				MESSAGE_END();
 				EmitSound(CHAN_VOICE, "items/ammopickup1.wav", VOL_NORM, ATTN_NORM);
@@ -517,7 +517,7 @@ bool CItemBackpackCTF::MyTouch(CBasePlayer* pPlayer)
 			if (pPlayer->HasSuit())
 			{
 				pPlayer->m_iItems = static_cast<CTFItem::CTFItem>(pPlayer->m_iItems | CTFItem::Backpack);
-				g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgItemPickup, nullptr, pPlayer->edict());
+				MESSAGE_BEGIN(MSG_ONE, gmsgItemPickup, nullptr, pPlayer);
 				g_engfuncs.pfnWriteString(STRING(pev->classname));
 				g_engfuncs.pfnMessageEnd();
 
@@ -600,7 +600,7 @@ bool CItemLongJumpCTF::MyTouch(CBasePlayer* pPlayer)
 
 				pPlayer->m_iItems = static_cast<CTFItem::CTFItem>(pPlayer->m_iItems | CTFItem::LongJump);
 
-				g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgItemPickup, nullptr, pPlayer->edict());
+				MESSAGE_BEGIN(MSG_ONE, gmsgItemPickup, nullptr, pPlayer);
 				g_engfuncs.pfnWriteString(STRING(pev->classname));
 				g_engfuncs.pfnMessageEnd();
 
@@ -667,7 +667,7 @@ bool CItemPortableHEVCTF::MyTouch(CBasePlayer* pPlayer)
 				pPlayer->m_iItems = static_cast<CTFItem::CTFItem>(pPlayer->m_iItems | CTFItem::PortableHEV);
 				pPlayer->m_fPlayingAChargeSound = false;
 
-				g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgItemPickup, nullptr, pPlayer->edict());
+				MESSAGE_BEGIN(MSG_ONE, gmsgItemPickup, nullptr, pPlayer);
 				g_engfuncs.pfnWriteString(STRING(pev->classname));
 				g_engfuncs.pfnMessageEnd();
 
@@ -734,7 +734,7 @@ bool CItemRegenerationCTF::MyTouch(CBasePlayer* pPlayer)
 				pPlayer->m_iItems = static_cast<CTFItem::CTFItem>(pPlayer->m_iItems | CTFItem::Regeneration);
 				pPlayer->m_fPlayingHChargeSound = false;
 
-				g_engfuncs.pfnMessageBegin(MSG_ONE, gmsgItemPickup, nullptr, pPlayer->edict());
+				MESSAGE_BEGIN(MSG_ONE, gmsgItemPickup, nullptr, pPlayer);
 				g_engfuncs.pfnWriteString(STRING(pev->classname));
 				g_engfuncs.pfnMessageEnd();
 

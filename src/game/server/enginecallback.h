@@ -55,10 +55,6 @@ inline enginefuncs_t g_engfuncs;
 #define RANDOM_FLOAT (*g_engfuncs.pfnRandomFloat)
 #define GETPLAYERAUTHID (*g_engfuncs.pfnGetPlayerAuthId)
 
-inline void MESSAGE_BEGIN(int msg_dest, int msg_type, const float* pOrigin = nullptr, edict_t* ed = nullptr)
-{
-	(*g_engfuncs.pfnMessageBegin)(msg_dest, msg_type, pOrigin, ed);
-}
 #define MESSAGE_END (*g_engfuncs.pfnMessageEnd)
 #define WRITE_BYTE (*g_engfuncs.pfnWriteByte)
 #define WRITE_CHAR (*g_engfuncs.pfnWriteChar)
@@ -109,7 +105,6 @@ inline T* GET_PRIVATE(edict_t* pent)
 #define REG_USER_MSG (*g_engfuncs.pfnRegUserMsg)
 #define GET_BONE_POSITION (*g_engfuncs.pfnGetBonePosition)
 #define TRACE_TEXTURE (*g_engfuncs.pfnTraceTexture)
-#define CLIENT_PRINTF (*g_engfuncs.pfnClientPrintf)
 #define CMD_ARGS (*g_engfuncs.pfnCmd_Args)
 #define CMD_ARGC (*g_engfuncs.pfnCmd_Argc)
 #define CMD_ARGV (*g_engfuncs.pfnCmd_Argv)

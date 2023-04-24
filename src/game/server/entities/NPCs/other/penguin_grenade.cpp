@@ -428,7 +428,7 @@ void CPenguinGrenade::Smoke()
 	}
 	else
 	{
-		g_engfuncs.pfnMessageBegin(MSG_PVS, SVC_TEMPENTITY, pev->origin, nullptr);
+		MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, pev->origin);
 		g_engfuncs.pfnWriteByte(TE_SMOKE);
 		g_engfuncs.pfnWriteCoord(pev->origin.x);
 		g_engfuncs.pfnWriteCoord(pev->origin.y);

@@ -17,6 +17,10 @@
 
 #include <optional>
 
+#include <fmt/core.h>
+
+#include <EASTL/fixed_string.h>
+
 #include "basemonster.h"
 #include "CGameRules.h"
 #include "ctf/CTFDefs.h"
@@ -819,6 +823,35 @@ struct fmt::formatter<PlayerLogInfo>
 			GetTeamName(&info.Player));
 	}
 };
+
+inline void MESSAGE_BEGIN(int msg_dest, int msg_type, const float* pOrigin = nullptr, CBasePlayer* player = nullptr)
+{
+	g_engfuncs.pfnMessageBegin(msg_dest, msg_type, pOrigin, player ? player->edict() : nullptr);
+}
+
+/**
+ *	@brief Prints to the given player's console.
+ *	Uses fmtlib format strings.
+ */
+template <typename... Args>
+void UTIL_ConsolePrint(CBasePlayer* player, fmt::format_string<Args...> fmt, Args&&... args)
+{
+	assert(player);
+
+	eastl::fixed_string<char, 256> buf;
+	fmt::format_to(std::back_inserter(buf), fmt, std::forward<Args>(args)...);
+
+	g_engfuncs.pfnClientPrintf(player->edict(), print_console, buf.c_str());
+}
+
+/**
+ *	@brief Prints to the given player's console.
+ */
+inline void UTIL_ConsolePrint(CBasePlayer* player, const char* msg)
+{
+	assert(player);
+	g_engfuncs.pfnClientPrintf(player->edict(), print_console, msg);
+}
 
 inline bool gInitHUD = true;
 inline bool giPrecacheGrunt = false;

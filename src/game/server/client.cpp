@@ -79,7 +79,7 @@ void ClientDisconnect(edict_t* pEntity)
 	if (!FStringNull(pEntity->v.netname))
 		snprintf(text, sizeof(text), "- %s has left the game\n", STRING(pEntity->v.netname));
 	text[sizeof(text) - 1] = 0;
-	MESSAGE_BEGIN(MSG_ALL, gmsgSayText, nullptr);
+	MESSAGE_BEGIN(MSG_ALL, gmsgSayText);
 	WRITE_BYTE(ENTINDEX(pEntity));
 	WRITE_STRING(text);
 	MESSAGE_END();
@@ -428,14 +428,14 @@ void Host_Say(CBasePlayer* player, bool teamonly)
 			if (!client->IsObserver())
 				continue;
 
-		MESSAGE_BEGIN(MSG_ONE, gmsgSayText, nullptr, client->edict());
+		MESSAGE_BEGIN(MSG_ONE, gmsgSayText, nullptr, client);
 		WRITE_BYTE(player->entindex());
 		WRITE_STRING(text);
 		MESSAGE_END();
 	}
 
 	// print to the sending client
-	MESSAGE_BEGIN(MSG_ONE, gmsgSayText, nullptr, player->edict());
+	MESSAGE_BEGIN(MSG_ONE, gmsgSayText, nullptr, player);
 	WRITE_BYTE(player->entindex());
 	WRITE_STRING(text);
 	MESSAGE_END();
@@ -476,7 +476,7 @@ PageSearchResult PageBasedEntitySearch(CBasePlayer* player, int desiredPage, Fun
 
 	const bool doPagination = desiredPage != 0;
 
-	UTIL_ConsolePrint(player->edict(), "entindex - classname - targetname - origin\n");
+	UTIL_ConsolePrint(player, "entindex - classname - targetname - origin\n");
 
 	for (auto entity : UTIL_FindEntities())
 	{
@@ -489,7 +489,7 @@ PageSearchResult PageBasedEntitySearch(CBasePlayer* player, int desiredPage, Fun
 
 		if (!doPagination || currentPage == desiredPage)
 		{
-			UTIL_ConsolePrint(player->edict(), "{} - {} - {} - {{{}}}\n",
+			UTIL_ConsolePrint(player, "{} - {} - {} - {{{}}}\n",
 				entity->entindex(), entity->GetClassname(), entity->GetTargetname(), entity->pev->origin);
 
 			if (!doPagination)
@@ -513,12 +513,12 @@ void PrintPageSearchResult(CBasePlayer* player, const PageSearchResult& result, 
 {
 	if (result.UsePagination)
 	{
-		UTIL_ConsolePrint(player->edict(), "{} entities having the {}: \"{}\" (page {} / {})\n",
+		UTIL_ConsolePrint(player, "{} entities having the {}: \"{}\" (page {} / {})\n",
 			result.TotalEntityCount, filterName, filterContents, result.DesiredPage, result.PageCount);
 	}
 	else
 	{
-		UTIL_ConsolePrint(player->edict(), "{} entities having the {}: \"{}\"\n",
+		UTIL_ConsolePrint(player, "{} entities having the {}: \"{}\"\n",
 			result.TotalEntityCount, filterName, filterContents);
 	}
 }
@@ -527,11 +527,12 @@ void PrintPageSearchResult(CBasePlayer* player, const PageSearchResult& result)
 {
 	if (result.UsePagination)
 	{
-		UTIL_ConsolePrint(player->edict(), "Total {} / {} entities (page {} / {})\n", result.TotalEntityCount, gpGlobals->maxEntities, result.DesiredPage, result.PageCount);
+		UTIL_ConsolePrint(player, "Total {} / {} entities (page {} / {})\n",
+			result.TotalEntityCount, gpGlobals->maxEntities, result.DesiredPage, result.PageCount);
 	}
 	else
 	{
-		UTIL_ConsolePrint(player->edict(), "Total {} / {} entities\n", result.TotalEntityCount, gpGlobals->maxEntities);
+		UTIL_ConsolePrint(player, "Total {} / {} entities\n", result.TotalEntityCount, gpGlobals->maxEntities);
 	}
 }
 
@@ -541,7 +542,7 @@ static CBaseEntity* FindNextEntityToRemove(CBasePlayer* player, CBaseEntity* sta
 	{
 		if (!UTIL_IsRemovableEntity(entity))
 		{
-			UTIL_ConsolePrint(player->edict(), "Can't remove \"{}\": not allowed to remove entities of this type\n",
+			UTIL_ConsolePrint(player, "Can't remove \"{}\": not allowed to remove entities of this type\n",
 				STRING(entity->pev->classname));
 			continue;
 		}
@@ -565,7 +566,7 @@ static CBaseEntity* TryCreateEntity(CBasePlayer* player, const char* className, 
 
 	if (tr.fStartSolid != 0)
 	{
-		UTIL_ConsolePrint(player->edict(), "Cannot create entity in solid object\n");
+		UTIL_ConsolePrint(player, "Cannot create entity in solid object\n");
 		return nullptr;
 	}
 
@@ -597,7 +598,7 @@ static CBaseEntity* TryCreateEntity(CBasePlayer* player, const char* className, 
 
 	if (DispatchSpawn(entity->edict()) == -1)
 	{
-		UTIL_ConsolePrint(player->edict(), "Entity was removed during spawn\n");
+		UTIL_ConsolePrint(player, "Entity was removed during spawn\n");
 	}
 
 	return entity;
@@ -634,7 +635,7 @@ void SV_CreateClientCommands()
 			}
 			else
 			{
-				UTIL_ConsolePrint(player->edict(), "\"fov\" is \"{}\"\n", player->m_iFOV);
+				UTIL_ConsolePrint(player, "\"fov\" is \"{}\"\n", player->m_iFOV);
 			} });
 
 	g_ClientCommands.Create("set_hud_color", [](CBasePlayer* player, const auto& args)
@@ -650,7 +651,7 @@ void SV_CreateClientCommands()
 			}
 			else
 			{
-				UTIL_ConsolePrint(player->edict(), "Usage: set_hud_color <r> <g> <b> (values in range 0-255)\n");
+				UTIL_ConsolePrint(player, "Usage: set_hud_color <r> <g> <b> (values in range 0-255)\n");
 			} },
 		{.Flags = ClientCommandFlag::Cheat});
 
@@ -666,7 +667,7 @@ void SV_CreateClientCommands()
 				}
 				else
 				{
-					UTIL_ConsolePrint(player->edict(), "Unknown suit light type \"{}\"\n", args.Argument(1));
+					UTIL_ConsolePrint(player, "Unknown suit light type \"{}\"\n", args.Argument(1));
 				}
 			} },
 		{.Flags = ClientCommandFlag::Cheat});
@@ -682,7 +683,7 @@ void SV_CreateClientCommands()
 			}
 			else
 			{
-				UTIL_ConsolePrint(player->edict(), "usage: selectweapon <weapon name>\n");
+				UTIL_ConsolePrint(player, "usage: selectweapon <weapon name>\n");
 			} });
 
 	g_ClientCommands.Create("lastinv", [](CBasePlayer* player, const auto& args)
@@ -728,7 +729,7 @@ void SV_CreateClientCommands()
 
 				if (attackMode < 0 || attackMode >= MAX_WEAPON_ATTACK_MODES)
 				{
-					UTIL_ConsolePrint(player->edict(), "Invalid weapon attack mode\n");
+					UTIL_ConsolePrint(player, "Invalid weapon attack mode\n");
 					return;
 				}
 			}
@@ -750,7 +751,7 @@ void SV_CreateClientCommands()
 			}
 			else
 			{
-				UTIL_ConsolePrint(player->edict(), "usage: ent_find_by_classname <classname> [page]\n");
+				UTIL_ConsolePrint(player, "usage: ent_find_by_classname <classname> [page]\n");
 			} },
 		{.Flags = ClientCommandFlag::Cheat});
 
@@ -765,7 +766,7 @@ void SV_CreateClientCommands()
 			}
 			else
 			{
-				UTIL_ConsolePrint(player->edict(), "usage: ent_find_by_targetname <targetname> [page]\n");
+				UTIL_ConsolePrint(player, "usage: ent_find_by_targetname <targetname> [page]\n");
 			} },
 		{.Flags = ClientCommandFlag::Cheat});
 
@@ -790,7 +791,7 @@ void SV_CreateClientCommands()
 			}
 			else
 			{
-				UTIL_ConsolePrint(player->edict(), "usage: ent_fire <targetname> [usetype] [value]\n");
+				UTIL_ConsolePrint(player, "usage: ent_fire <targetname> [usetype] [value]\n");
 			} },
 		{.Flags = ClientCommandFlag::Cheat});
 
@@ -818,7 +819,7 @@ void SV_CreateClientCommands()
 
 			if (candidate)
 			{
-				UTIL_ConsolePrint(player->edict(), "Removed {}:{} ({})\n",
+				UTIL_ConsolePrint(player, "Removed {}:{} ({})\n",
 					candidate->GetClassname(), candidate->entindex(), candidate->GetTargetname());
 				UTIL_Remove(candidate);
 			} },
@@ -828,7 +829,7 @@ void SV_CreateClientCommands()
 		{
 			if (args.Count() < 2)
 			{
-				UTIL_ConsolePrint(player->edict(), "Usage: ent_remove_all <classname|targetname>\n");
+				UTIL_ConsolePrint(player, "Usage: ent_remove_all <classname|targetname>\n");
 				return;
 			}
 
@@ -845,14 +846,14 @@ void SV_CreateClientCommands()
 				}
 			}
 
-			UTIL_ConsolePrint(player->edict(),"Removed {} entities matching \"{}\"\n", count, needle); },
+			UTIL_ConsolePrint(player,"Removed {} entities matching \"{}\"\n", count, needle); },
 		{.Flags = ClientCommandFlag::Cheat});
 
 	g_ClientCommands.Create("ent_setname", [](CBasePlayer* player, const CommandArgs& args)
 		{
 			if (args.Count() < 2)
 			{
-				UTIL_ConsolePrint(player->edict(), "Usage: ent_setname <new targetname> [classname|targetname]\n");
+				UTIL_ConsolePrint(player, "Usage: ent_setname <new targetname> [classname|targetname]\n");
 				return;
 			}
 
@@ -870,7 +871,7 @@ void SV_CreateClientCommands()
 			if (target)
 			{
 				const char* name = args.Argument(1);
-				UTIL_ConsolePrint(player->edict(), "Set the name of {} to {}\n", target->GetClassname(), name);
+				UTIL_ConsolePrint(player, "Set the name of {} to {}\n", target->GetClassname(), name);
 				target->pev->targetname = ALLOC_STRING(name);
 			} },
 		{.Flags = ClientCommandFlag::Cheat});
@@ -879,7 +880,7 @@ void SV_CreateClientCommands()
 		{
 			if (args.Count() < 2)
 			{
-				UTIL_ConsolePrint(player->edict(), "Usage: ent_show_origin <targetname>\n");
+				UTIL_ConsolePrint(player, "Usage: ent_show_origin <targetname>\n");
 				return;
 			}
 
@@ -887,7 +888,7 @@ void SV_CreateClientCommands()
 
 			if (target)
 			{
-				MESSAGE_BEGIN(MSG_ONE, SVC_TEMPENTITY, nullptr, player->edict());
+				MESSAGE_BEGIN(MSG_ONE, SVC_TEMPENTITY, nullptr, player);
 				WRITE_BYTE(TE_FIREFIELD);
 				WRITE_COORD_VECTOR(target->pev->origin);
 				WRITE_SHORT(0);
@@ -897,11 +898,11 @@ void SV_CreateClientCommands()
 				WRITE_BYTE(100); // Stick around for 10 seconds.
 				MESSAGE_END();
 
-				UTIL_ConsolePrint(player->edict(), "Origin: {}\n", target->pev->origin);
+				UTIL_ConsolePrint(player, "Origin: {}\n", target->pev->origin);
 			}
 			else
 			{
-				UTIL_ConsolePrint(player->edict(), "No entity found\n");
+				UTIL_ConsolePrint(player, "No entity found\n");
 			} },
 		{.Flags = ClientCommandFlag::Cheat});
 
@@ -909,7 +910,7 @@ void SV_CreateClientCommands()
 		{
 			if (args.Count() < 2)
 			{
-				UTIL_ConsolePrint(player->edict(), "Usage: ent_show_center <targetname>\n");
+				UTIL_ConsolePrint(player, "Usage: ent_show_center <targetname>\n");
 				return;
 			}
 
@@ -919,7 +920,7 @@ void SV_CreateClientCommands()
 			{
 				const Vector center = target->Center();
 
-				MESSAGE_BEGIN(MSG_ONE, SVC_TEMPENTITY, nullptr, player->edict());
+				MESSAGE_BEGIN(MSG_ONE, SVC_TEMPENTITY, nullptr, player);
 				WRITE_BYTE(TE_FIREFIELD);
 				WRITE_COORD_VECTOR(center);
 				WRITE_SHORT(0);
@@ -929,11 +930,11 @@ void SV_CreateClientCommands()
 				WRITE_BYTE(100); // Stick around for 10 seconds.
 				MESSAGE_END();
 
-				UTIL_ConsolePrint(player->edict(), "Center: {}\n", center);
+				UTIL_ConsolePrint(player, "Center: {}\n", center);
 			}
 			else
 			{
-				UTIL_ConsolePrint(player->edict(), "No entity found\n");
+				UTIL_ConsolePrint(player, "No entity found\n");
 			} },
 		{.Flags = ClientCommandFlag::Cheat});
 
@@ -941,7 +942,7 @@ void SV_CreateClientCommands()
 		{
 			if (args.Count() < 2)
 			{
-				UTIL_ConsolePrint(player->edict(), "Usage: ent_show_bbox <targetname>\n");
+				UTIL_ConsolePrint(player, "Usage: ent_show_bbox <targetname>\n");
 				return;
 			}
 
@@ -949,7 +950,7 @@ void SV_CreateClientCommands()
 
 			if (target)
 			{
-				MESSAGE_BEGIN(MSG_ONE, SVC_TEMPENTITY, nullptr, player->edict());
+				MESSAGE_BEGIN(MSG_ONE, SVC_TEMPENTITY, nullptr, player);
 				WRITE_BYTE(TE_BOX);
 				WRITE_COORD_VECTOR(target->pev->absmin);
 				WRITE_COORD_VECTOR(target->pev->absmax);
@@ -959,11 +960,11 @@ void SV_CreateClientCommands()
 				WRITE_BYTE(255);
 				MESSAGE_END();
 
-				UTIL_ConsolePrint(player->edict(), "BBox: min {} max {}\n", target->pev->absmin, target->pev->absmax);
+				UTIL_ConsolePrint(player, "BBox: min {} max {}\n", target->pev->absmin, target->pev->absmax);
 			}
 			else
 			{
-				UTIL_ConsolePrint(player->edict(), "No entity found\n");
+				UTIL_ConsolePrint(player, "No entity found\n");
 			} },
 		{.Flags = ClientCommandFlag::Cheat});
 
@@ -971,7 +972,7 @@ void SV_CreateClientCommands()
 		{
 			if (args.Count() < 2)
 			{
-				UTIL_ConsolePrint(player->edict(), "Usage: ent_create <classname> [<key> <value> <key2> <value2> ...]\n");
+				UTIL_ConsolePrint(player, "Usage: ent_create <classname> [<key> <value> <key2> <value2> ...]\n");
 				return;
 			}
 
@@ -984,7 +985,7 @@ void SV_CreateClientCommands()
 		{
 			if (args.Count() < 2)
 			{
-				UTIL_ConsolePrint(player->edict(), "Usage: npc_create <classname> [<key> <value> <key2> <value2> ...]\n");
+				UTIL_ConsolePrint(player, "Usage: npc_create <classname> [<key> <value> <key2> <value2> ...]\n");
 				return;
 			}
 
@@ -1008,7 +1009,7 @@ void SV_CreateClientCommands()
 				// See if the NPC is stuck in something.
 				if (DROP_TO_FLOOR(entity->edict()) == 0)
 				{
-					UTIL_ConsolePrint(player->edict(), "NPC fell out of level\n");
+					UTIL_ConsolePrint(player, "NPC fell out of level\n");
 					UTIL_Remove(entity);
 				}
 			}
@@ -1020,7 +1021,7 @@ bool UTIL_CheatsAllowed(CBasePlayer* player, std::string_view name)
 {
 	if (0 == g_psv_cheats->value)
 	{
-		UTIL_ConsolePrint(player->edict(), "The command \"{}\" can only be used when cheats are enabled\n", name);
+		UTIL_ConsolePrint(player, "The command \"{}\" can only be used when cheats are enabled\n", name);
 		return false;
 	}
 
@@ -1106,7 +1107,7 @@ void ClientUserInfoChanged(edict_t* pEntity, char* infobuffer)
 		{
 			char text[256];
 			sprintf(text, "* %s changed name to %s\n", STRING(pEntity->v.netname), g_engfuncs.pfnInfoKeyValue(infobuffer, "name"));
-			MESSAGE_BEGIN(MSG_ALL, gmsgSayText, nullptr);
+			MESSAGE_BEGIN(MSG_ALL, gmsgSayText);
 			WRITE_BYTE(player->entindex());
 			WRITE_STRING(text);
 			MESSAGE_END();

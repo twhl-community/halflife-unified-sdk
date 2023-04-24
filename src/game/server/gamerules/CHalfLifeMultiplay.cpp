@@ -253,7 +253,7 @@ bool CHalfLifeMultiplay::ClientConnected(edict_t* pEntity, const char* pszName, 
 
 void CHalfLifeMultiplay::UpdateGameMode(CBasePlayer* pPlayer)
 {
-	MESSAGE_BEGIN(MSG_ONE, gmsgGameMode, nullptr, pPlayer->edict());
+	MESSAGE_BEGIN(MSG_ONE, gmsgGameMode, nullptr, pPlayer);
 	WRITE_BYTE(0); // game mode none
 	MESSAGE_END();
 }
@@ -272,7 +272,7 @@ void CHalfLifeMultiplay::InitHUD(CBasePlayer* pl)
 	// it is just disabled for single play
 	pl->SendScoreInfo(pl);
 
-	SendMOTDToClient(pl->edict());
+	SendMOTDToClient(pl);
 
 	if (IsCTF())
 	{
@@ -294,7 +294,7 @@ void CHalfLifeMultiplay::InitHUD(CBasePlayer* pl)
 
 	if (g_fGameOver)
 	{
-		MESSAGE_BEGIN(MSG_ONE, SVC_INTERMISSION, nullptr, pl->edict());
+		MESSAGE_BEGIN(MSG_ONE, SVC_INTERMISSION, nullptr, pl);
 		MESSAGE_END();
 	}
 }
@@ -321,7 +321,7 @@ void CHalfLifeMultiplay::ClientDisconnected(edict_t* pClient)
 
 			pPlayer->RemoveAllItems(true); // destroy all of the players weapons and items
 
-			g_engfuncs.pfnMessageBegin(MSG_ALL, gmsgSpectator, nullptr, nullptr);
+			MESSAGE_BEGIN(MSG_ALL, gmsgSpectator);
 			g_engfuncs.pfnWriteByte(pPlayer->entindex());
 			g_engfuncs.pfnWriteByte(0);
 			g_engfuncs.pfnMessageEnd();
@@ -765,7 +765,7 @@ void CHalfLifeMultiplay::ChangeLevel()
 #define MAX_MOTD_CHUNK 60
 #define MAX_MOTD_LENGTH 1536 // (MAX_MOTD_CHUNK * 4)
 
-void CHalfLifeMultiplay::SendMOTDToClient(edict_t* client)
+void CHalfLifeMultiplay::SendMOTDToClient(CBasePlayer* player)
 {
 	// read from the MOTD.txt file
 	const auto fileContents = FileSystem_LoadFileIntoBuffer(CVAR_GET_STRING("motdfile"), FileContentFormat::Text);
@@ -775,7 +775,7 @@ void CHalfLifeMultiplay::SendMOTDToClient(edict_t* client)
 	const char* pFileList = aFileList;
 
 	// send the server name
-	MESSAGE_BEGIN(MSG_ONE, gmsgServerName, nullptr, client);
+	MESSAGE_BEGIN(MSG_ONE, gmsgServerName, nullptr, player);
 	WRITE_STRING(CVAR_GET_STRING("hostname"));
 	MESSAGE_END();
 
@@ -802,7 +802,7 @@ void CHalfLifeMultiplay::SendMOTDToClient(edict_t* client)
 
 		const bool moreToCome = pFileList[0] != '\0' && char_count < MAX_MOTD_LENGTH;
 
-		MESSAGE_BEGIN(MSG_ONE, gmsgMOTD, nullptr, client);
+		MESSAGE_BEGIN(MSG_ONE, gmsgMOTD, nullptr, player);
 		WRITE_BYTE(static_cast<int>(!moreToCome)); // false means there is still more message to come
 		WRITE_STRING(chunk);
 		MESSAGE_END();
