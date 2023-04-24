@@ -1096,6 +1096,12 @@ void CTriggerTeleport::TeleportTouch(CBaseEntity* pOther)
 	if (!UTIL_IsMasterTriggered(m_sMaster, pOther))
 		return;
 
+	// No target to teleport to.
+	if (FStrEq(GetTarget(), ""))
+	{
+		return;
+	}
+
 	if ((pev->spawnflags & SF_TRIGGER_ALLOWMONSTERS) == 0)
 	{ // no monsters allowed!
 		if (FBitSet(pOther->pev->flags, FL_MONSTER))
@@ -1112,7 +1118,7 @@ void CTriggerTeleport::TeleportTouch(CBaseEntity* pOther)
 		}
 	}
 
-	auto target = UTIL_FindEntityByTargetname(nullptr, STRING(pev->target));
+	auto target = UTIL_FindEntityByTargetname(nullptr, GetTarget());
 	if (FNullEnt(target))
 		return;
 
