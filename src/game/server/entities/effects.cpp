@@ -2231,10 +2231,9 @@ void CWarpBall::WarpBallUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_T
 	{
 		if (!FStringNull(m_iszWarpTarget))
 		{
-			// TODO: don't use the old engine function
-			auto targetEntity = g_engfuncs.pfnFindEntityByString(nullptr, "targetname", STRING(m_iszWarpTarget));
+			auto targetEntity = UTIL_FindEntityByTargetname(nullptr, STRING(m_iszWarpTarget));
 			if (targetEntity)
-				SetOrigin(targetEntity->v.origin);
+				SetOrigin(targetEntity->pev->origin);
 		}
 
 		SetModel("sprites/XFlare1.spr");
