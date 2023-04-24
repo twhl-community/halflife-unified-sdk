@@ -144,7 +144,7 @@ struct entvars_t
 
 	edict_t* chain; // Entity pointer when linked into a linked list
 	edict_t* dmg_inflictor;
-	edict_t* enemy;
+	edict_t* enemy; //!< Used by some NPC movement code in the engine to determine movement destination
 	edict_t* aiment; // entity pointer when MOVETYPE_FOLLOW
 	edict_t* owner;
 	edict_t* groundentity;

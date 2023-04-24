@@ -510,6 +510,7 @@ public:
 	void Next();
 
 	EHANDLE m_CurrentTarget;
+	EHANDLE m_LastTarget;
 	bool m_activated;
 };
 
@@ -517,6 +518,7 @@ LINK_ENTITY_TO_CLASS(func_train, CFuncTrain);
 
 BEGIN_DATAMAP(CFuncTrain)
 DEFINE_FIELD(m_CurrentTarget, FIELD_EHANDLE),
+	DEFINE_FIELD(m_LastTarget, FIELD_EHANDLE),
 	DEFINE_FIELD(m_activated, FIELD_BOOLEAN),
 	DEFINE_FUNCTION(Wait),
 	DEFINE_FUNCTION(Next),
@@ -545,8 +547,8 @@ void CFuncTrain::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE use
 	{
 		pev->spawnflags |= SF_TRAIN_WAIT_RETRIGGER;
 		// Pop back to last target if it's available
-		if (pev->enemy)
-			pev->target = pev->enemy->v.targetname;
+		if (m_LastTarget)
+			pev->target = m_LastTarget->pev->targetname;
 		pev->nextthink = 0;
 		pev->velocity = g_vecZero;
 		EmitSound(CHAN_VOICE, STRING(m_StopSound), m_volume, ATTN_NORM);
@@ -591,11 +593,8 @@ void CFuncTrain::Wait()
 
 void CFuncTrain::Next()
 {
-	CBaseEntity* pTarg;
-
-
 	// now find our next target
-	pTarg = GetNextTarget();
+	CBaseEntity* pTarg = GetNextTarget();
 
 	if (!pTarg)
 	{
@@ -618,7 +617,7 @@ void CFuncTrain::Next()
 	}
 	m_CurrentTarget = pTarg; // keep track of this since path corners change our target for us.
 
-	pev->enemy = pTarg->edict(); // hack
+	m_LastTarget = pTarg; // hack
 
 	if (FBitSet(m_CurrentTarget->pev->spawnflags, SF_CORNER_TELEPORT))
 	{
@@ -754,6 +753,7 @@ public:
 	void LinearMove(const Vector& vecDest, float flSpeed);
 
 	EHANDLE m_CurrentTarget;
+	EHANDLE m_LastTarget;
 	bool m_activated;
 
 	float m_maxFrame;
@@ -769,6 +769,7 @@ LINK_ENTITY_TO_CLASS(env_spritetrain, CSpriteTrain);
 
 BEGIN_DATAMAP(CSpriteTrain)
 DEFINE_FIELD(m_CurrentTarget, FIELD_EHANDLE),
+	DEFINE_FIELD(m_LastTarget, FIELD_EHANDLE),
 	DEFINE_FIELD(m_activated, FIELD_BOOLEAN),
 	DEFINE_FIELD(m_maxFrame, FIELD_FLOAT),
 	DEFINE_FIELD(m_lastTime, FIELD_TIME),
@@ -819,7 +820,6 @@ void CSpriteTrain::LinearMove(const Vector& vecDest, float flSpeed)
 }
 
 void CSpriteTrain::Blocked(CBaseEntity* pOther)
-
 {
 	if (pev->ltime < m_flActivateFinished)
 		return;
@@ -841,8 +841,8 @@ void CSpriteTrain::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE u
 	{
 		pev->spawnflags |= SF_TRAIN_WAIT_RETRIGGER;
 		// Pop back to last target if it's available
-		if (pev->enemy)
-			pev->target = pev->enemy->v.targetname;
+		if (m_LastTarget)
+			pev->target = m_LastTarget->pev->targetname;
 
 		pev->velocity = g_vecZero;
 		EmitSound(CHAN_VOICE, STRING(m_StopSound), m_volume, ATTN_NORM);
@@ -891,11 +891,8 @@ void CSpriteTrain::Wait()
 
 void CSpriteTrain::Next()
 {
-	CBaseEntity* pTarg;
-
-
 	// now find our next target
-	pTarg = GetNextTarget();
+	CBaseEntity* pTarg = GetNextTarget();
 
 	if (!pTarg)
 	{
@@ -918,7 +915,7 @@ void CSpriteTrain::Next()
 	}
 	m_CurrentTarget = pTarg; // keep track of this since path corners change our target for us.
 
-	pev->enemy = pTarg->edict(); // hack
+	m_LastTarget = pTarg; // hack
 
 	if (FBitSet(m_CurrentTarget->pev->spawnflags, SF_CORNER_TELEPORT))
 	{

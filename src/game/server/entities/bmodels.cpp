@@ -639,6 +639,8 @@ public:
 	float m_dampSpeed;
 	Vector m_center;
 	Vector m_start;
+
+	EHANDLE m_LastToucher;
 };
 
 LINK_ENTITY_TO_CLASS(func_pendulum, CPendulum);
@@ -652,6 +654,7 @@ DEFINE_FIELD(m_accel, FIELD_FLOAT),
 	DEFINE_FIELD(m_dampSpeed, FIELD_FLOAT),
 	DEFINE_FIELD(m_center, FIELD_VECTOR),
 	DEFINE_FIELD(m_start, FIELD_VECTOR),
+	DEFINE_FIELD(m_LastToucher, FIELD_EHANDLE),
 	DEFINE_FUNCTION(Swing),
 	DEFINE_FUNCTION(PendulumUse),
 	DEFINE_FUNCTION(Stop),
@@ -823,12 +826,12 @@ void CPendulum::RopeTouch(CBaseEntity* pOther)
 		return;
 	}
 
-	if (pOther->edict() == pev->enemy)
+	if (pOther == m_LastToucher)
 	{ // this player already on the rope.
 		return;
 	}
 
-	pev->enemy = pOther->edict();
+	m_LastToucher = pOther;
 	pOther->pev->velocity = g_vecZero;
 	pOther->pev->movetype = MOVETYPE_NONE;
 }
