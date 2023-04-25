@@ -14,6 +14,7 @@
  ****/
 
 #include "cbase.h"
+#include "UserMessages.h"
 #include "config/CommandWhitelist.h"
 
 class CLogicSetCVar : public CPointEntity
@@ -286,4 +287,23 @@ void CLogicSetSkillVar::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_T
 	g_Skill.SetValue(STRING(m_Name), m_Value);
 
 	SUB_UseTargets(pActivator, USE_TOGGLE, 0);
+}
+
+class CLogicCampaignSelect : public CPointEntity
+{
+	DECLARE_CLASS(CLogicCampaignSelect, CPointEntity);
+
+public:
+	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+};
+
+LINK_ENTITY_TO_CLASS(logic_campaignselect, CLogicCampaignSelect);
+
+void CLogicCampaignSelect::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
+{
+	if (auto player = ToBasePlayer(pActivator); player)
+	{
+		MESSAGE_BEGIN(MSG_ONE, gmsgCampaignSelect, nullptr, player);
+		MESSAGE_END();
+	}
 }

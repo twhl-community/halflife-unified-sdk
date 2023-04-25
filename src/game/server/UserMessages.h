@@ -77,4 +77,6 @@ inline int gmsgTempEntity = 0;
 
 inline int gmsgSkillVars = 0;
 
+inline int gmsgCampaignSelect = 0;
+
 void LinkUserMessages();

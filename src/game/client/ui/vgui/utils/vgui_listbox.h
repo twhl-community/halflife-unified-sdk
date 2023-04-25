@@ -28,6 +28,10 @@ public:
 	CListBox();
 	~CListBox();
 
+	ScrollBar2* GetScrollBar() { return &m_ScrollBar; }
+
+	int GetItemOffset() const { return m_ItemOffset; }
+
 	void Init();
 	void Term();
 

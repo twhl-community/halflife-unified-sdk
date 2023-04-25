@@ -171,6 +171,9 @@ void CHud::UpdateScreenInfo()
 
 void CHud::VidInit()
 {
+	// Show paused text by default.
+	gEngfuncs.Cvar_SetValue("showpause", 1);
+
 	// ----------
 	// Load Sprites
 	// ---------

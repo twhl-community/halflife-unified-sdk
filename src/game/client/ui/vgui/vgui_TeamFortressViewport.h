@@ -34,6 +34,7 @@ struct cvar_t;
 #define PC_MAX_TEAMS 2
 using namespace vgui;
 
+class CCampaignSelectPanel;
 class Cursor;
 class ScorePanel;
 class SpectatorPanel;
@@ -508,6 +509,9 @@ private:
 	void CreateSpectatorMenu();
 	void CreateStatsMenu();
 
+	void CreateCampaignSelectMenu();
+	void ShowCampaignSelectMenu();
+
 	// Scheme handler
 	CSchemeManager m_SchemeManager;
 
@@ -617,6 +621,7 @@ public:
 	void MsgFunc_SetMenuTeam(const char* pszName, BufferReader& reader);
 	void MsgFunc_StatsInfo(const char* pszName, BufferReader& reader);
 	void MsgFunc_StatsPlayer(const char* pszName, BufferReader& reader);
+	void MsgFunc_CmpgnSlct(BufferReader& reader);
 
 	// Input
 	bool SlotInput(int iSlot);
@@ -632,6 +637,7 @@ public:
 	// VGUI Menus
 	CMenuPanel* m_pCurrentMenu;
 	CTeamMenuPanel* m_pTeamMenu;
+	CCampaignSelectPanel* m_CampaignSelectMenu = nullptr;
 	int m_StandardMenu; // indexs in m_pCommandMenus
 	int m_SpectatorOptionsMenu;
 	int m_SpectatorCameraMenu;

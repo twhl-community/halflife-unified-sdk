@@ -47,6 +47,7 @@
 #include "demo_api.h"
 
 #include "vgui_int.h"
+#include "vgui_CampaignSelect.h"
 #include "vgui_TeamFortressViewport.h"
 #include "vgui_ScorePanel.h"
 #include "vgui_SpectatorPanel.h"
@@ -557,6 +558,8 @@ TeamFortressViewport::TeamFortressViewport(int x, int y, int wide, int tall)
 	g_ClientUserMessages.RegisterHandler("StatsInfo", &TeamFortressViewport::MsgFunc_StatsInfo, this);
 	g_ClientUserMessages.RegisterHandler("StatsPlayer", &TeamFortressViewport::MsgFunc_StatsPlayer, this);
 
+	g_ClientUserMessages.RegisterHandler("CmpgnSlct", &TeamFortressViewport::MsgFunc_CmpgnSlct, this);
+
 	g_ClientUserMessages.RegisterHandler("SpecFade", &TeamFortressViewport::MsgFunc_SpecFade, this);
 	g_ClientUserMessages.RegisterHandler("ResetFade", &TeamFortressViewport::MsgFunc_ResetFade, this);
 	g_ClientUserMessages.RegisterHandler("TeamFull", &TeamFortressViewport::MsgFunc_TeamFull, this);
@@ -626,6 +629,7 @@ TeamFortressViewport::TeamFortressViewport(int x, int y, int wide, int tall)
 	App::getInstance()->setScheme(pScheme);
 
 	// VGUI MENUS
+	CreateCampaignSelectMenu();
 	CreateTeamMenu();
 	CreateClassMenu();
 	CreateSpectatorMenu();
@@ -660,6 +664,10 @@ TeamFortressViewport::TeamFortressViewport(int x, int y, int wide, int tall)
 void TeamFortressViewport::Initialize()
 {
 	// Force each menu to Initialize
+	if (m_CampaignSelectMenu)
+	{
+		m_CampaignSelectMenu->Initialize();
+	}
 	if (m_pTeamMenu)
 	{
 		m_pTeamMenu->Initialize();
@@ -1817,6 +1825,36 @@ void TeamFortressViewport::CreateStatsMenu()
 	m_pStatsMenu->setVisible(false);
 }
 
+void TeamFortressViewport::CreateCampaignSelectMenu()
+{
+	m_CampaignSelectMenu = new CCampaignSelectPanel(100, 0, 0, ScreenWidth, ScreenHeight);
+	m_CampaignSelectMenu->setParent(this);
+	m_CampaignSelectMenu->setVisible(false);
+}
+
+void TeamFortressViewport::ShowCampaignSelectMenu()
+{
+	// Don't open menus in demo playback
+	if (0 != gEngfuncs.pDemoAPI->IsPlayingback())
+		return;
+
+	auto levelName = gEngfuncs.pfnGetLevelName();
+
+	// Only allow this menu to open on the campaign selection map.
+	if (!levelName || 0 != strcmp(levelName, "maps/hlu_campaignselect.bsp"))
+	{
+		return;
+	}
+
+	// Pause game but don't show the paused text.
+	gEngfuncs.Cvar_SetValue("showpause", 0);
+	gEngfuncs.pfnClientCmd("setpause\n");
+
+	m_CampaignSelectMenu->Reset();
+	m_CampaignSelectMenu->Open();
+	UpdateCursorState();
+}
+
 //======================================================================================
 // UPDATE HUD SECTIONS
 //======================================================================================
@@ -1835,7 +1873,11 @@ void TeamFortressViewport::UpdateOnPlayerInfo()
 void TeamFortressViewport::UpdateCursorState()
 {
 	// Need cursor if any VGUI window is up
-	if (m_pSpectatorPanel->m_menuVisible || m_pCurrentMenu || m_pTeamMenu->isVisible() || GetClientVoiceMgr()->IsInSquelchMode())
+	if (m_pSpectatorPanel->m_menuVisible ||
+		m_pCurrentMenu ||
+		m_pTeamMenu->isVisible() ||
+		m_CampaignSelectMenu->isVisible() ||
+		GetClientVoiceMgr()->IsInSquelchMode())
 	{
 		g_iVisibleMouse = true;
 		App::getInstance()->setCursorOveride(App::getInstance()->getScheme()->getCursor(Scheme::scu_arrow));
@@ -2301,4 +2343,9 @@ void TeamFortressViewport::MsgFunc_StatsInfo(const char* pszName, BufferReader& 
 void TeamFortressViewport::MsgFunc_StatsPlayer(const char* pszName, BufferReader& reader)
 {
 	return m_pStatsMenu->MsgFunc_StatsPlayer(pszName, reader);
+}
+
+void TeamFortressViewport::MsgFunc_CmpgnSlct(BufferReader& reader)
+{
+	ShowCampaignSelectMenu();
 }

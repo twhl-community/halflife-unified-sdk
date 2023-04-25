@@ -200,6 +200,10 @@ target_sources(client PRIVATE
 	ui/hud/text_message.cpp
 	ui/hud/train.cpp
 	
+	ui/vgui/CampaignSelectSystem.cpp
+	ui/vgui/CampaignSelectSystem.h
+	ui/vgui/vgui_CampaignSelect.cpp
+	ui/vgui/vgui_CampaignSelect.h
 	ui/vgui/vgui_ClassMenu.cpp
 	ui/vgui/vgui_CustomObjects.cpp
 	ui/vgui/vgui_int.cpp
