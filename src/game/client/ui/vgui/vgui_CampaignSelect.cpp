@@ -59,6 +59,23 @@ public:
 	}
 };
 
+class BorderedListBox : public CListBox
+{
+public:
+	using CListBox::CListBox;
+
+	void paint() override
+	{
+		CListBox::paint();
+
+		int wide, tall;
+		getSize(wide, tall);
+
+		drawSetColor(0, 112, 0, 0);
+		drawOutlinedRect(1, 1, wide - 1, tall - 1);
+	}
+};
+
 class CampaignStartButtonSignal : public ActionSignal
 {
 public:
@@ -117,9 +134,9 @@ CCampaignSelectPanel::CCampaignSelectPanel(int iTrans, int x, int y, int wide, i
 
 	int yOffset = 0;
 
-	m_CampaignList = new CListBox();
+	m_CampaignList = new BorderedListBox();
 	m_CampaignList->setParent(this);
-	m_CampaignList->setBounds(CAMPAIGNSELECT_WINDOW_X, CAMPAIGNSELECT_WINDOW_Y + yOffset, CAMPAIGNSELECT_WINDOW_SIZE_X, m_TextHeight);
+	m_CampaignList->setBounds(CAMPAIGNSELECT_WINDOW_X, CAMPAIGNSELECT_WINDOW_Y + yOffset, CAMPAIGNSELECT_WINDOW_SIZE_X / 3, m_TextHeight);
 
 	m_CampaignList->GetScrollBar()->getButton(0)->addActionSignal(new CampaignSelectionChangedButtonSignal(this));
 	m_CampaignList->GetScrollBar()->getButton(1)->addActionSignal(new CampaignSelectionChangedButtonSignal(this));
