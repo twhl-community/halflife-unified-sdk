@@ -75,7 +75,7 @@ void CListBox::AddItem(Panel* panel)
 	pItem->m_pNext = &m_Items;
 	pItem->m_pNext->m_pPrev = pItem->m_pPrev->m_pNext = pItem;
 
-	m_ScrollBar.setRange(0, GetScrollMax());
+	m_ScrollBar.setRange(0, GetScrollMax() - 1);
 	m_Slider.setRangeWindow(50);
 	m_Slider.setRangeWindowEnabled(true);
 
@@ -191,7 +191,7 @@ void CListBox::paintBackground()
 void CListBox::SetScrollRange(int maxScroll)
 {
 	m_iScrollMax = maxScroll;
-	m_ScrollBar.setRange(0, maxScroll);
+	m_ScrollBar.setRange(0, maxScroll - 1);
 	InternalLayout();
 }
 
