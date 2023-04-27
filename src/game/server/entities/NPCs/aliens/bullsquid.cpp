@@ -184,6 +184,8 @@ public:
 	void AlertSound() override;
 	void AttackSound();
 
+	bool HasAlienGibs() override { return true; }
+
 	/**
 	 *	@brief OVERRIDDEN for bullsquid because it needs to know explicitly when the last attempt to chase the enemy failed,
 	 *	since that impacts its attack choices.

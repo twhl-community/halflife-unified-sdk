@@ -43,6 +43,8 @@ public:
 	void Precache() override;
 	bool KeyValue(KeyValueData* pkvd) override;
 
+	bool HasAlienGibs() override { return true; }
+
 	// Don't allow the tentacle to go across transitions!!!
 	int ObjectCaps() override { return CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 

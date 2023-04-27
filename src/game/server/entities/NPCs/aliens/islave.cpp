@@ -48,6 +48,8 @@ public:
 	void TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
 	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 
+	bool HasAlienGibs() override { return true; }
+
 	void DeathSound() override;
 	void PainSound() override;
 	void AlertSound() override;
@@ -780,6 +782,8 @@ public:
 	void OnCreate() override;
 	void Spawn() override;
 	int Classify() override { return CLASS_ALIEN_PASSIVE; }
+
+	bool HasAlienGibs() override { return true; }
 
 	bool KeyValue(KeyValueData* pkvd) override;
 

@@ -43,6 +43,8 @@ public:
 	void SetYawSpeed() override;
 	int ISoundMask() override;
 
+	bool HasHumanGibs() override { return true; }
+
 	/**
 	 *	@brief shoots one round from the pistol at the enemy barney is facing.
 	 */

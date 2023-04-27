@@ -32,6 +32,8 @@ public:
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 	int IgnoreConditions() override;
 
+	bool HasAlienGibs() override { return true; }
+
 	float m_flNextFlinch = 0;
 
 	void PainSound() override;

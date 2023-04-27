@@ -36,6 +36,8 @@ public:
 	void SuperBounceTouch(CBaseEntity* pOther);
 	void Spawn() override;
 
+	bool HasAlienGibs() override { return true; }
+
 	int Classify() override;
 	int IRelationship(CBaseEntity* pTarget) override;
 	void Killed(CBaseEntity* attacker, int iGib) override;

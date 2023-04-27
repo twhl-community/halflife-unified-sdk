@@ -714,6 +714,8 @@ public:
 	void Spawn() override;
 	int Classify() override { return CLASS_ALIEN_PASSIVE; }
 
+	bool HasAlienGibs() override { return true; }
+
 	bool KeyValue(KeyValueData* pkvd) override;
 
 	int m_iPose; // which sequence to display	-- temporary, don't need to save

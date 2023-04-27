@@ -225,8 +225,6 @@ void CBaseMonster::RadiusDamage(CBaseEntity* inflictor, CBaseEntity* attacker, f
 void CBaseMonster::RadiusDamage(Vector vecSrc, CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int iClassIgnore, int bitsDamageType) {}
 void CBaseMonster::FadeMonster() {}
 void CBaseMonster::GibMonster() {}
-bool CBaseMonster::HasHumanGibs() { return false; }
-bool CBaseMonster::HasAlienGibs() { return false; }
 Activity CBaseMonster::GetDeathActivity() { return ACT_DIE_HEADSHOT; }
 MONSTERSTATE CBaseMonster::GetIdealState() { return MONSTERSTATE_ALERT; }
 const Schedule_t* CBaseMonster::GetScheduleOfType(int Type) { return nullptr; }

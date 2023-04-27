@@ -98,6 +98,8 @@ public:
 	void SetYawSpeed() override;
 	int Classify() override;
 
+	bool HasAlienGibs() override { return true; }
+
 	/**
 	 *	@brief Overridden for human grunts because they hear the DANGER sound
 	 *	that is made by hand grenades and other dangerous items.
@@ -2173,6 +2175,9 @@ public:
 	void OnCreate() override;
 	void Spawn() override;
 	int Classify() override { return CLASS_HUMAN_MILITARY; }
+
+	// TODO: needs to be alien gibs instead
+	bool HasHumanGibs() override { return true; }
 
 	bool KeyValue(KeyValueData* pkvd) override;
 

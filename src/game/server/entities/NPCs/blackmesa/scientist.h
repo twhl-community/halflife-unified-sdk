@@ -91,6 +91,8 @@ public:
 	void Spawn() override;
 	void Precache() override;
 
+	bool HasHumanGibs() override { return true; }
+
 	void SetYawSpeed() override;
 	int Classify() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;

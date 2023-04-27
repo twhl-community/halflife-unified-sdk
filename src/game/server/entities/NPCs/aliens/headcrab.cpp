@@ -94,6 +94,8 @@ public:
 	bool CheckRangeAttack2(float flDot, float flDist) override;
 	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 
+	bool HasAlienGibs() override { return true; }
+
 	virtual float GetDamageAmount() { return GetSkillFloat("headcrab_dmg_bite"sv); }
 	virtual int GetVoicePitch() { return 100; }
 	virtual float GetSoundVolue() { return 1.0; }

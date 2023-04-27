@@ -87,6 +87,8 @@ public:
 	int Classify() override { return CLASS_INSECT; }
 	int IRelationship(CBaseEntity* pTarget) override;
 
+	bool HasAlienGibs() override { return true; }
+
 	static const char* pAttackSounds[];
 	static const char* pAlertSounds[];
 

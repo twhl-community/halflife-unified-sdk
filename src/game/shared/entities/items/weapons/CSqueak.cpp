@@ -42,6 +42,8 @@ public:
 	void Killed(CBaseEntity* attacker, int iGib) override;
 	void GibMonster() override;
 
+	bool HasAlienGibs() override { return true; }
+
 private:
 	static float m_flNextBounceSoundTime;
 

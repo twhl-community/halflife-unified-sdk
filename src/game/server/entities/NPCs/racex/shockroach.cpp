@@ -69,6 +69,8 @@ public:
 	void StartTask(const Task_t* pTask) override;
 	void SetYawSpeed() override;
 
+	bool HasAlienGibs() override { return true; }
+
 	/**
 	 *	@brief this is the shock roach's touch function when it is in the air
 	 */

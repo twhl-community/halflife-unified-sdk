@@ -39,6 +39,8 @@ public:
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 	int ISoundMask() override;
 
+	bool HasHumanGibs() override { return true; }
+
 	void PlayScriptedSentence(const char* pszSentence, float duration, float volume, float attenuation, bool bConcurrent, CBaseEntity* pListener) override;
 
 	void MonsterThink() override;

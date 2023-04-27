@@ -56,6 +56,8 @@ public:
 	const Schedule_t* GetSchedule() override;
 	const Schedule_t* GetScheduleOfType(int Type) override;
 
+	bool HasHumanGibs() override { return true; }
+
 	/**
 	 *	@brief jump like crazy if the enemy gets too close.
 	 */

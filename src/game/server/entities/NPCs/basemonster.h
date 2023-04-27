@@ -742,8 +742,8 @@ public:
 
 	bool ShouldGibMonster(int iGib);
 	void CallGibMonster();
-	virtual bool HasHumanGibs();
-	virtual bool HasAlienGibs();
+	virtual bool HasHumanGibs() { return false; }
+	virtual bool HasAlienGibs() { return false; }
 	virtual void FadeMonster(); //!< Called instead of GibMonster() when gibs are disabled
 
 	Vector ShootAtEnemy(const Vector& shootOrigin);

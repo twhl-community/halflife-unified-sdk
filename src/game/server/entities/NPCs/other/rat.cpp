@@ -26,6 +26,8 @@ public:
 	void Precache() override;
 	void SetYawSpeed() override;
 	int Classify() override;
+
+	bool HasAlienGibs() override { return true; }
 };
 LINK_ENTITY_TO_CLASS(monster_rat, CRat);
 

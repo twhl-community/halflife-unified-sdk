@@ -81,6 +81,8 @@ public:
 	void PrescheduleThink() override;
 	void SetActivity(Activity NewActivity) override;
 
+	bool HasAlienGibs() override { return true; }
+
 	/**
 	 *	@brief writes a color vector to the network based on the size of the group.
 	 */
@@ -1221,6 +1223,8 @@ public:
 	void OnCreate() override;
 	void Spawn() override;
 	int Classify() override { return CLASS_ALIEN_PASSIVE; }
+
+	bool HasAlienGibs() override { return true; }
 
 	bool KeyValue(KeyValueData* pkvd) override;
 

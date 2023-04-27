@@ -224,6 +224,8 @@ public:
 	bool CheckMeleeAttack2(float flDot, float flDist) override;
 	bool CheckRangeAttack1(float flDot, float flDist) override;
 
+	bool HasAlienGibs() override { return true; }
+
 	/**
 	 *	@brief overridden for bullsquid because there are things that need to be checked every think.
 	 */

@@ -27,6 +27,8 @@ public:
 	int Classify() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 
+	bool HasAlienGibs() override { return true; }
+
 	void PainSound() override;
 	void AlertSound() override;
 	void IdleSound() override;

@@ -68,6 +68,8 @@ public:
 
 	int BloodColor() override { return BLOOD_COLOR_GREEN; }
 
+	bool HasAlienGibs() override { return true; }
+
 	int Classify() override { return CLASS_ALIEN_MILITARY; }
 
 	int ObjectCaps() override { return 0; }
@@ -1698,6 +1700,8 @@ public:
 	{
 		return CLASS_ALIEN_MONSTER;
 	}
+
+	bool HasAlienGibs() override { return true; }
 
 	void SetYawSpeed() override
 	{

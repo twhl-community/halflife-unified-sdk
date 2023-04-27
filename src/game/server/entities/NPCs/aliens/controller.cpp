@@ -33,6 +33,8 @@ class CController : public CSquadMonster
 public:
 	void OnCreate() override;
 
+	bool HasAlienGibs() override { return true; }
+
 	void Spawn() override;
 	void Precache() override;
 	void SetYawSpeed() override;

@@ -273,38 +273,6 @@ void CGib::SpawnRandomGibs(CBaseEntity* victim, int cGibs, bool human)
 	SpawnRandomGibs(victim, cGibs, human ? HumanGibs : AlienGibs);
 }
 
-bool CBaseMonster::HasHumanGibs()
-{
-	int myClass = Classify();
-
-	if (myClass == CLASS_HUMAN_MILITARY ||
-		myClass == CLASS_PLAYER_ALLY ||
-		myClass == CLASS_HUMAN_PASSIVE ||
-		myClass == CLASS_PLAYER ||
-		myClass == CLASS_HUMAN_MILITARY_FRIENDLY)
-
-		return true;
-
-	return false;
-}
-
-bool CBaseMonster::HasAlienGibs()
-{
-	int myClass = Classify();
-
-	if (myClass == CLASS_ALIEN_MILITARY ||
-		myClass == CLASS_ALIEN_MONSTER ||
-		myClass == CLASS_ALIEN_PASSIVE ||
-		myClass == CLASS_INSECT ||
-		myClass == CLASS_ALIEN_PREDATOR ||
-		myClass == CLASS_ALIEN_PREY ||
-		myClass == CLASS_ALIEN_RACE_X)
-
-		return true;
-
-	return false;
-}
-
 void CBaseMonster::FadeMonster()
 {
 	StopAnimation();

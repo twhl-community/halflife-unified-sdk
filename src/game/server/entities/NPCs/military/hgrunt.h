@@ -121,6 +121,8 @@ public:
 	void SetYawSpeed() override;
 	int Classify() override;
 
+	bool HasHumanGibs() override { return true; }
+
 	/**
 	 *	@brief Overridden for human grunts because they hear the DANGER sound
 	 *	that is made by hand grenades and other dangerous items.

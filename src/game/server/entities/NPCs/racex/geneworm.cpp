@@ -549,6 +549,8 @@ public:
 
 	int BloodColor() override { return BLOOD_COLOR_GREEN; }
 
+	bool HasAlienGibs() override { return true; }
+
 	// Don't gib ever
 	void GibMonster() override {}
 

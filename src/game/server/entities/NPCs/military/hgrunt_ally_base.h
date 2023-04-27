@@ -94,6 +94,8 @@ class CBaseHGruntAlly : public COFSquadTalkMonster
 public:
 	void OnCreate() override;
 
+	bool HasHumanGibs() override { return true; }
+
 	void Precache() override;
 	void SetYawSpeed() override;
 	int Classify() override;

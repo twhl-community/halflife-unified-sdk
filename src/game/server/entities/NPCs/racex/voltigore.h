@@ -66,6 +66,8 @@ public:
 		pev->absmax = pev->origin + Vector(80, 80, 90);
 	}
 
+	bool HasAlienGibs() override { return true; }
+
 	const Schedule_t* GetSchedule() override;
 	const Schedule_t* GetScheduleOfType(int Type) override;
 

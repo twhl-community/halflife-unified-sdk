@@ -210,6 +210,8 @@ public:
 	void TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 
+	bool HasAlienGibs() override { return true; }
+
 	bool CheckMeleeAttack1(float flDot, float flDist) override; //!< Swipe
 	bool CheckMeleeAttack2(float flDot, float flDist) override; //!< Flames
 	bool CheckRangeAttack1(float flDot, float flDist) override; //!< Stomp attack

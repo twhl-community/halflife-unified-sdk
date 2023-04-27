@@ -44,6 +44,8 @@ public:
 	int Classify() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 
+	bool HasAlienGibs() override { return true; }
+
 	const Schedule_t* GetSchedule() override;
 	const Schedule_t* GetScheduleOfType(int Type) override;
 

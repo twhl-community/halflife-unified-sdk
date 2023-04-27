@@ -38,6 +38,8 @@ public:
 	void MonsterThink() override;
 	void Move(float flInterval) override;
 
+	bool HasAlienGibs() override { return true; }
+
 	/**
 	 *	@brief Picks a new spot for roach to run to.
 	 */

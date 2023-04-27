@@ -301,6 +301,8 @@ public:
 	void Spawn() override;
 	void Pain();
 
+	bool HasHumanGibs() override { return true; }
+
 	//	void Think() override;
 	virtual void Jump();
 	virtual void Duck();

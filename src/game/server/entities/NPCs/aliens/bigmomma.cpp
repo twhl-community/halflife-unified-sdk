@@ -159,6 +159,8 @@ public:
 	void Activate() override;
 	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 
+	bool HasAlienGibs() override { return true; }
+
 	void RunTask(const Task_t* pTask) override;
 	void StartTask(const Task_t* pTask) override;
 	const Schedule_t* GetSchedule() override;

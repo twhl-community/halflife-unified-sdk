@@ -102,6 +102,8 @@ public:
 	void UpdateOnRemove() override;
 	void GibMonster() override;
 
+	bool HasAlienGibs() override { return true; }
+
 	void SetObjectCollisionBox() override
 	{
 		pev->absmin = pev->origin + Vector(-16 * N_SCALE, -16 * N_SCALE, -48 * N_SCALE);
