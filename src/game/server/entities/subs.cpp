@@ -47,10 +47,7 @@ LINK_ENTITY_TO_CLASS(info_null, CNullEntity);
 void CBaseEntity::UpdateOnRemove()
 {
 	// tell owner (if any) that we're dead.This is mostly for MonsterMaker functionality.
-	if (auto owner = GetOwner(); owner)
-	{
-		owner->DeathNotice(this);
-	}
+	MaybeNotifyOwnerOfDeath();
 
 	if (FBitSet(pev->flags, FL_GRAPHED))
 	{

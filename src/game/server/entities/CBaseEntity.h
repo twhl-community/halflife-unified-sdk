@@ -250,7 +250,12 @@ public:
 	 *	with different classnames still realize that they are teammates. (overridden for monsters that form groups)
 	 */
 	virtual int Classify() { return CLASS_NONE; }
+
+	bool m_InformedOwnerOfDeath = false;
+
 	virtual void DeathNotice(CBaseEntity* child) {} // monster maker children use this to tell the monster maker that they have died.
+
+	void MaybeNotifyOwnerOfDeath();
 
 	virtual void TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType);
 

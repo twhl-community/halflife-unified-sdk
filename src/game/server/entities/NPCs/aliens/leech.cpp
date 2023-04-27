@@ -641,9 +641,7 @@ void CLeech::Killed(CBaseEntity* attacker, int iGib)
 {
 	// AILogger->debug("Leech: killed");
 	//  tell owner ( if any ) that we're dead.This is mostly for MonsterMaker functionality.
-	CBaseEntity* pOwner = CBaseEntity::Instance(pev->owner);
-	if (pOwner)
-		pOwner->DeathNotice(this);
+	MaybeNotifyOwnerOfDeath();
 
 	// When we hit the ground, play the "death_end" activity
 	if (WaterLevel::Dry != pev->waterlevel)

@@ -572,11 +572,7 @@ void CBaseMonster::Killed(CBaseEntity* attacker, int iGib)
 	SetConditions(bits_COND_LIGHT_DAMAGE);
 
 	// tell owner ( if any ) that we're dead.This is mostly for MonsterMaker functionality.
-	CBaseEntity* pOwner = CBaseEntity::Instance(pev->owner);
-	if (pOwner)
-	{
-		pOwner->DeathNotice(this);
-	}
+	MaybeNotifyOwnerOfDeath();
 
 	if (ShouldGibMonster(iGib))
 	{

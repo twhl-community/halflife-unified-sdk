@@ -134,6 +134,8 @@ BEGIN_DATAMAP_NOBASE(CBaseEntity)
 DEFINE_FIELD(m_pGoalEnt, FIELD_CLASSPTR),
 	DEFINE_FIELD(m_EFlags, FIELD_CHARACTER),
 
+	DEFINE_FIELD(m_InformedOwnerOfDeath, FIELD_BOOLEAN),
+
 	DEFINE_FIELD(m_pfnThink, FIELD_FUNCTIONPOINTER), // UNDONE: Build table of these!!!
 	DEFINE_FIELD(m_pfnTouch, FIELD_FUNCTIONPOINTER),
 	DEFINE_FIELD(m_pfnUse, FIELD_FUNCTIONPOINTER),
@@ -253,4 +255,19 @@ void CBaseEntity::PostRestore()
 		SetSize(mins, maxs); // Reset them
 	}
 #endif
+}
+
+void CBaseEntity::MaybeNotifyOwnerOfDeath()
+{
+	if (m_InformedOwnerOfDeath)
+	{
+		return;
+	}
+
+	m_InformedOwnerOfDeath = true;
+
+	if (auto owner = GetOwner(); owner)
+	{
+		owner->DeathNotice(this);
+	}
 }
