@@ -33,6 +33,7 @@ class COFSquadTalkMonster;
 class CSound;
 class CSquadMonster;
 class CTalkMonster;
+class CItemCTF;
 struct ReplacementMap;
 
 #define MAX_PATH_SIZE 10 // max number of nodes available for a path.
@@ -76,7 +77,6 @@ enum USE_TYPE : int
 #define CLASS_ALIEN_BIOWEAPON 13		 // hornets and snarks.launched by the alien menace
 #define CLASS_HUMAN_MILITARY_FRIENDLY 14 // Opposing Force friendlies
 #define CLASS_ALIEN_RACE_X 15
-#define CLASS_CTFITEM 30
 #define CLASS_BARNACLE 99 // special because no one pays attention to it, and it eats a wide cross-section of creatures.
 
 // Defines the range of valid class values for use in IRelationship.
@@ -269,6 +269,7 @@ public:
 	virtual CTalkMonster* MyTalkMonsterPointer() { return nullptr; }
 	virtual CSquadMonster* MySquadMonsterPointer() { return nullptr; }
 	virtual COFSquadTalkMonster* MySquadTalkMonsterPointer() { return nullptr; }
+	virtual CItemCTF* MyItemCTFPointer() { return nullptr; }
 	virtual float GetDelay() { return 0; }
 	virtual bool IsMoving() { return pev->velocity != g_vecZero; }
 	virtual void OverrideReset() {}

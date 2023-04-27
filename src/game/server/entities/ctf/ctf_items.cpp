@@ -149,7 +149,7 @@ void CItemCTF::DropThink()
 
 					for (CBaseEntity* test = nullptr; (test = UTIL_FindEntityInSphere(test, spawn->pev->origin, 128)) != nullptr;)
 					{
-						if (test->Classify() == CLASS_CTFITEM && this != test)
+						if (test->MyItemCTFPointer() && this != test)
 						{
 							nOccupied = true;
 							break;
@@ -183,7 +183,7 @@ void CItemCTF::DropThink()
 
 			for (CBaseEntity* test = nullptr; (test = UTIL_FindEntityInSphere(test, spawn->pev->origin, 128)) != nullptr;)
 			{
-				if (test->Classify() == CLASS_CTFITEM && this != test)
+				if (test->MyItemCTFPointer() && this != test)
 				{
 					nOccupied = true;
 					break;

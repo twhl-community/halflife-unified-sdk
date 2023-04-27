@@ -29,6 +29,8 @@ public:
 	static CItemSpawnCTF* m_pLastSpawn;
 
 public:
+	CItemCTF* MyItemCTFPointer() override { return this; }
+
 	bool KeyValue(KeyValueData* pkvd) override;
 	void Precache() override;
 	void Spawn() override;
@@ -74,8 +76,6 @@ public:
 class CItemAcceleratorCTF : public CItemCTF
 {
 public:
-	int Classify() override { return CLASS_CTFITEM; }
-
 	void OnCreate() override;
 
 	void Precache() override;
@@ -99,8 +99,6 @@ public:
 	bool MyTouch(CBasePlayer* pPlayer) override;
 
 	void Spawn() override;
-
-	int Classify() override { return CLASS_CTFITEM; }
 };
 
 class CItemLongJumpCTF : public CItemCTF
@@ -115,8 +113,6 @@ public:
 	bool MyTouch(CBasePlayer* pPlayer) override;
 
 	void Spawn() override;
-
-	int Classify() override { return CLASS_CTFITEM; }
 };
 
 class CItemPortableHEVCTF : public CItemCTF
@@ -131,8 +127,6 @@ public:
 	bool MyTouch(CBasePlayer* pPlayer) override;
 
 	void Spawn() override;
-
-	int Classify() override { return CLASS_CTFITEM; }
 };
 
 class CItemRegenerationCTF : public CItemCTF
@@ -147,6 +141,4 @@ public:
 	bool MyTouch(CBasePlayer* pPlayer) override;
 
 	void Spawn() override;
-
-	int Classify() override { return CLASS_CTFITEM; }
 };
