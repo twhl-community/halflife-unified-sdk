@@ -49,7 +49,6 @@ public:
 	void Spawn() override;
 	void Precache() override;
 	void SetYawSpeed() override;
-	int Classify() override;
 	int ISoundMask() override;
 	void Shoot();
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
@@ -121,6 +120,8 @@ void CHAssassin::OnCreate()
 
 	pev->health = GetSkillFloat("hassassin_health"sv);
 	pev->model = MAKE_STRING("models/hassassin.mdl");
+
+	SetClassification("human_military");
 }
 
 void CHAssassin::DeathSound()
@@ -137,11 +138,6 @@ int CHAssassin::ISoundMask()
 		   bits_SOUND_COMBAT |
 		   bits_SOUND_DANGER |
 		   bits_SOUND_PLAYER;
-}
-
-int CHAssassin::Classify()
-{
-	return CLASS_HUMAN_MILITARY;
 }
 
 void CHAssassin::SetYawSpeed()

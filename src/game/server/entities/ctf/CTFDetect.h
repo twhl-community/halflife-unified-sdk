@@ -22,7 +22,5 @@ public:
 
 	bool KeyValue(KeyValueData* pkvd) override;
 
-	int Classify() override { return CLASS_NONE; }
-
 	int is_ctf;
 };

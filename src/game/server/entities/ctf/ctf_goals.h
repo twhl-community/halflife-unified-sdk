@@ -29,8 +29,6 @@ class CTFGoal : public CBaseAnimating
 	DECLARE_DATAMAP();
 
 public:
-	int Classify() override { return CLASS_NONE; }
-
 	bool KeyValue(KeyValueData* pkvd) override;
 
 	void Spawn() override;
@@ -53,8 +51,6 @@ class CTFGoalBase : public CTFGoal
 	DECLARE_DATAMAP();
 
 public:
-	int Classify() override { return CLASS_NONE; }
-
 	void BaseThink();
 
 	void Spawn() override;
@@ -99,8 +95,6 @@ public:
 	void DropFlag(CBasePlayer* pPlayer);
 
 	void DisplayFlagStatus(CBasePlayer* pPlayer);
-
-	int Classify() override { return CLASS_NONE; }
 
 	void SetObjectCollisionBox() override;
 

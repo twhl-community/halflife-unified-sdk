@@ -1024,11 +1024,6 @@ public:
 
 	void Die();
 
-	/**
-	 *	@brief ID's Furniture as neutral (noone will attack it)
-	 */
-	int Classify() override;
-
 	int ObjectCaps() override { return (CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
 };
 
@@ -1039,6 +1034,9 @@ void CFurniture::OnCreate()
 	CBaseMonster::OnCreate();
 
 	pev->health = 80000;
+
+	// ID's Furniture as neutral (noone will attack it)
+	SetClassification("none");
 }
 
 void CFurniture::Die()
@@ -1066,9 +1064,4 @@ void CFurniture::Spawn()
 	ResetSequenceInfo();
 	pev->frame = 0;
 	MonsterInit();
-}
-
-int CFurniture::Classify()
-{
-	return CLASS_NONE;
 }

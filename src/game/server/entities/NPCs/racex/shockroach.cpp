@@ -88,7 +88,6 @@ public:
 	void IdleSound() override;
 	void AlertSound() override;
 	void PrescheduleThink() override;
-	int Classify() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 	bool CheckRangeAttack1(float flDot, float flDist) override;
 	bool CheckRangeAttack2(float flDot, float flDist) override;
@@ -159,11 +158,8 @@ void COFShockRoach::OnCreate()
 
 	pev->health = GetSkillFloat("shockroach_health"sv);
 	pev->model = MAKE_STRING("models/w_shock_rifle.mdl");
-}
 
-int COFShockRoach::Classify()
-{
-	return CLASS_ALIEN_PREY;
+	SetClassification("alien_prey");
 }
 
 Vector COFShockRoach::Center()

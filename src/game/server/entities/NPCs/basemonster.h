@@ -280,7 +280,7 @@ public:
 	/**
 	 *	@brief returns an integer that describes the relationship between two types of monster.
 	 */
-	virtual int IRelationship(CBaseEntity* pTarget);
+	virtual Relationship IRelationship(CBaseEntity* pTarget);
 
 	/**
 	 *	@brief after a monster is spawned, it needs to be dropped into the world, checked for mobility problems,
@@ -746,6 +746,11 @@ public:
 	virtual bool HasAlienGibs() { return false; }
 	virtual void FadeMonster(); //!< Called instead of GibMonster() when gibs are disabled
 
+	/**
+	 *	@brief Is this some kind of biological weapon?
+	 */
+	virtual bool IsBioWeapon() const { return false; }
+
 	Vector ShootAtEnemy(const Vector& shootOrigin);
 
 	/**
@@ -771,8 +776,10 @@ public:
 	 */
 	bool DeadTakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType);
 
-	void RadiusDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int iClassIgnore, int bitsDamageType);
-	void RadiusDamage(Vector vecSrc, CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int iClassIgnore, int bitsDamageType);
+	void RadiusDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage,
+		int bitsDamageType, EntityClassification iClassIgnore = ENTCLASS_NONE);
+	void RadiusDamage(Vector vecSrc, CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage,
+		int bitsDamageType, EntityClassification iClassIgnore = ENTCLASS_NONE);
 	bool IsMoving() override { return m_movementGoal != MOVEGOAL_NONE; }
 
 	/**

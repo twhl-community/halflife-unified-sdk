@@ -96,7 +96,6 @@ public:
 	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
-	int Classify() override { return CLASS_ALIEN_MILITARY; }
 	int BloodColor() override { return BLOOD_COLOR_YELLOW; }
 	void Killed(CBaseEntity* attacker, int iGib) override;
 	void UpdateOnRemove() override;
@@ -285,6 +284,8 @@ void CNihilanth::OnCreate()
 
 	pev->max_health = pev->health = GetSkillFloat("nihilanth_health"sv);
 	pev->model = MAKE_STRING("models/nihilanth.mdl");
+
+	SetClassification("alien_military");
 }
 
 void CNihilanth::Spawn()
@@ -1520,7 +1521,7 @@ void CNihilanthHVR::ZapTouch(CBaseEntity* pOther)
 {
 	EmitAmbientSound(pev->origin, "weapons/electro4.wav", 1.0, ATTN_NORM, 0, RANDOM_LONG(90, 95));
 
-	RadiusDamage(this, this, 50, CLASS_NONE, DMG_SHOCK);
+	RadiusDamage(this, this, 50, DMG_SHOCK);
 	pev->velocity = pev->velocity * 0;
 
 	/*

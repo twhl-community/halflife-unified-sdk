@@ -205,7 +205,7 @@ void CEnvExplosion::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE 
 	// do damage
 	if ((pev->spawnflags & SF_ENVEXPLOSION_NODAMAGE) == 0)
 	{
-		RadiusDamage(this, this, m_iMagnitude, CLASS_NONE, DMG_BLAST);
+		RadiusDamage(this, this, m_iMagnitude, DMG_BLAST);
 	}
 
 	SetThink(&CEnvExplosion::Smoke);

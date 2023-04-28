@@ -181,7 +181,7 @@ void CSpore::IgniteThink()
 	WRITE_BYTE(80);
 	MESSAGE_END();
 
-	::RadiusDamage(pev->origin, this, GetOwner(), pev->dmg, 200, CLASS_NONE, DMG_ALWAYSGIB | DMG_BLAST);
+	::RadiusDamage(pev->origin, this, GetOwner(), pev->dmg, 200, DMG_ALWAYSGIB | DMG_BLAST);
 
 	SetThink(&CSpore::SUB_Remove);
 

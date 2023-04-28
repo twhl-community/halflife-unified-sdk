@@ -18,6 +18,13 @@
 
 LINK_ENTITY_TO_CLASS(player, CBasePlayer);
 
+void CBasePlayer::OnCreate()
+{
+	BaseClass::OnCreate();
+
+	SetClassification("player");
+}
+
 int CBasePlayer::GetAmmoIndex(const char* psz)
 {
 	if (!psz)

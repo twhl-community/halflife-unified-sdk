@@ -98,7 +98,6 @@ public:
 
 	void Precache() override;
 	void SetYawSpeed() override;
-	int Classify() override;
 
 	/**
 	 *	@brief Overridden for human grunts because they hear the DANGER sound

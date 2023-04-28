@@ -27,10 +27,11 @@ class COsprey : public CBaseMonster
 public:
 	int ObjectCaps() override { return CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 
+	bool IsMachine() const override { return true; }
+
 	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
-	int Classify() override { return CLASS_MACHINE; }
 	int BloodColor() override { return DONT_BLEED; }
 	void Killed(CBaseEntity* attacker, int iGib) override;
 

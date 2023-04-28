@@ -23,15 +23,10 @@ class CShockBeam : public CGrenade
 
 public:
 	void Precache() override;
-
 	void Spawn() override;
 
-	int Classify() override { return CLASS_NONE; }
-
 	void FlyThink();
-
 	void ExplodeThink();
-
 	void WaterExplodeThink();
 
 	void BallTouch(CBaseEntity* pOther);

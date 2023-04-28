@@ -25,21 +25,14 @@ private:
 
 public:
 	void Precache() override;
-
 	void Spawn() override;
-
-	int Classify() override;
 
 	void BallTouch(CBaseEntity* pOther);
 
 	void FlyThink();
-
 	void FlyThink2();
-
 	void FizzleThink();
-
 	void ExplodeThink();
-
 	void KillThink();
 
 	void InitBeams();

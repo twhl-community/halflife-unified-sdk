@@ -24,7 +24,6 @@ public:
 	void Spawn() override;
 	void Precache() override;
 	void SetYawSpeed() override;
-	int Classify() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 
 	bool HasAlienGibs() override { return true; }
@@ -48,11 +47,8 @@ void CBloater::OnCreate()
 
 	pev->health = 40;
 	pev->model = MAKE_STRING("models/floater.mdl");
-}
 
-int CBloater::Classify()
-{
-	return CLASS_ALIEN_MONSTER;
+	SetClassification("alien_monster");
 }
 
 void CBloater::SetYawSpeed()

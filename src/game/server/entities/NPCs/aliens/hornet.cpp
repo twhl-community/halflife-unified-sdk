@@ -43,6 +43,13 @@ bool CHornet::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float fl
 	return CBaseMonster::TakeDamage(inflictor, attacker, flDamage, bitsDamageType);
 }
 
+void CHornet::OnCreate()
+{
+	BaseClass::OnCreate();
+
+	SetClassification("alien_bioweapon");
+}
+
 void CHornet::Spawn()
 {
 	Precache();
@@ -120,24 +127,14 @@ void CHornet::Precache()
 	iHornetTrail = PrecacheModel("sprites/laserbeam.spr");
 }
 
-int CHornet::IRelationship(CBaseEntity* pTarget)
+Relationship CHornet::IRelationship(CBaseEntity* pTarget)
 {
 	if (pTarget->pev->modelindex == pev->modelindex)
 	{
-		return R_NO;
+		return Relationship::None;
 	}
 
 	return CBaseMonster::IRelationship(pTarget);
-}
-
-int CHornet::Classify()
-{
-	if (pev->owner && (pev->owner->v.flags & FL_CLIENT) != 0)
-	{
-		return CLASS_PLAYER_BIOWEAPON;
-	}
-
-	return CLASS_ALIEN_BIOWEAPON;
 }
 
 void CHornet::StartTrack()
@@ -350,7 +347,7 @@ void CHornet::TrackTouch(CBaseEntity* pOther)
 		return;
 	}
 
-	if (IRelationship(pOther) <= R_NO)
+	if (IRelationship(pOther) <= Relationship::None)
 	{
 		// hit something we don't want to hurt, so turn around.
 

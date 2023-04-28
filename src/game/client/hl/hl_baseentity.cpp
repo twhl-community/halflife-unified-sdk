@@ -167,7 +167,7 @@ void CBaseMonster::MonsterInitThink() {}
 void CBaseMonster::StartMonster() {}
 void CBaseMonster::MovementComplete() {}
 bool CBaseMonster::TaskIsRunning() { return false; }
-int CBaseMonster::IRelationship(CBaseEntity* pTarget) { return 0; }
+Relationship CBaseMonster::IRelationship(CBaseEntity* pTarget) { return Relationship::None; }
 bool CBaseMonster::FindCover(Vector vecThreat, Vector vecViewOffset, float flMinDist, float flMaxDist) { return false; }
 bool CBaseMonster::BuildNearestRoute(Vector vecThreat, Vector vecViewOffset, float flMinDist, float flMaxDist) { return false; }
 CBaseEntity* CBaseMonster::BestVisibleEnemy() { return nullptr; }
@@ -221,8 +221,8 @@ bool CBaseMonster::GetEnemy() { return false; }
 void CBaseMonster::TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) {}
 CBaseEntity* CBaseMonster::DropItem(const char* pszItemName, const Vector& vecPos, const Vector& vecAng) { return nullptr; }
 bool CBaseMonster::ShouldFadeOnDeath() { return false; }
-void CBaseMonster::RadiusDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int iClassIgnore, int bitsDamageType) {}
-void CBaseMonster::RadiusDamage(Vector vecSrc, CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int iClassIgnore, int bitsDamageType) {}
+void CBaseMonster::RadiusDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType, EntityClassification iClassIgnore) {}
+void CBaseMonster::RadiusDamage(Vector vecSrc, CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType, EntityClassification iClassIgnore) {}
 void CBaseMonster::FadeMonster() {}
 void CBaseMonster::GibMonster() {}
 Activity CBaseMonster::GetDeathActivity() { return ACT_DIE_HEADSHOT; }
@@ -255,7 +255,6 @@ void CBasePlayer::StartObserver(Vector vecPosition, Vector vecViewAngle) {}
 void CBasePlayer::PlayerUse() {}
 void CBasePlayer::Jump() {}
 void CBasePlayer::Duck() {}
-int CBasePlayer::Classify() { return 0; }
 void CBasePlayer::PreThink() {}
 void CBasePlayer::CheckTimeBasedDamage() {}
 void CBasePlayer::UpdateGeigerCounter() {}
@@ -329,4 +328,4 @@ void CBasePlayerAmmo::Spawn() {}
 bool CBasePlayerAmmo::AddAmmo(CBasePlayer* player) { return false; }
 
 void CSoundEnt::InsertSound(int iType, const Vector& vecOrigin, int iVolume, float flDuration) {}
-void RadiusDamage(Vector vecSrc, CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, float flRadius, int iClassIgnore, int bitsDamageType) {}
+void RadiusDamage(Vector vecSrc, CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, float flRadius, int bitsDamageType, EntityClassification iClassIgnore) {}

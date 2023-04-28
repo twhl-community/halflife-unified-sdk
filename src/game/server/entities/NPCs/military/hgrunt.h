@@ -119,7 +119,6 @@ public:
 	void Spawn() override;
 	void Precache() override;
 	void SetYawSpeed() override;
-	int Classify() override;
 
 	bool HasHumanGibs() override { return true; }
 
@@ -208,7 +207,7 @@ public:
 	/**
 	 *	@brief overridden because Alien Grunts are Human Grunt's nemesis.
 	 */
-	int IRelationship(CBaseEntity* pTarget) override;
+	Relationship IRelationship(CBaseEntity* pTarget) override;
 
 	/**
 	 *	@brief someone else is talking - don't speak
@@ -282,7 +281,6 @@ class CDeadHGrunt : public CBaseMonster
 public:
 	void OnCreate() override;
 	void Spawn() override;
-	int Classify() override { return CLASS_HUMAN_MILITARY; }
 
 	bool KeyValue(KeyValueData* pkvd) override;
 

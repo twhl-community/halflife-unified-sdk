@@ -38,7 +38,6 @@ public:
 	void Spawn() override;
 	void Precache() override;
 	void SetYawSpeed() override;
-	int Classify() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 
 	void RunAI() override;
@@ -146,11 +145,8 @@ void CController::OnCreate()
 
 	pev->health = GetSkillFloat("controller_health"sv);
 	pev->model = MAKE_STRING("models/controller.mdl");
-}
 
-int CController::Classify()
-{
-	return CLASS_ALIEN_MILITARY;
+	SetClassification("alien_military");
 }
 
 void CController::SetYawSpeed()

@@ -35,7 +35,6 @@ public:
 	void Spawn() override;
 	void Precache() override;
 	void SetYawSpeed() override;
-	int Classify() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 	int ISoundMask() override;
 
@@ -66,11 +65,8 @@ void CGenericMonster::OnCreate()
 	CBaseMonster::OnCreate();
 
 	pev->health = 8;
-}
 
-int CGenericMonster::Classify()
-{
-	return CLASS_PLAYER_ALLY;
+	SetClassification("player_ally");
 }
 
 void CGenericMonster::SetYawSpeed()

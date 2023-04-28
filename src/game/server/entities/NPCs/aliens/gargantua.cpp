@@ -205,7 +205,6 @@ public:
 	void Spawn() override;
 	void Precache() override;
 	void SetYawSpeed() override;
-	int Classify() override;
 	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 	void TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
@@ -244,7 +243,8 @@ public:
 	void FlameDestroy();
 	inline bool FlameIsOn() { return m_pFlame[0] != nullptr; }
 
-	void FlameDamage(Vector vecStart, Vector vecEnd, CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int iClassIgnore, int bitsDamageType);
+	void FlameDamage(Vector vecStart, Vector vecEnd, CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage,
+		int bitsDamageType, EntityClassification iClassIgnore);
 
 private:
 	static const char* pAttackHitSounds[];
@@ -442,6 +442,8 @@ void CGargantua::OnCreate()
 
 	pev->health = GetSkillFloat("gargantua_health"sv);
 	pev->model = MAKE_STRING("models/garg.mdl");
+
+	SetClassification("alien_monster");
 }
 
 void CGargantua::EyeOn(int level)
@@ -575,8 +577,8 @@ void CGargantua::FlameUpdate()
 				streaks = true;
 				UTIL_DecalTrace(&trace, DECAL_SMALLSCORCH1 + RANDOM_LONG(0, 2));
 			}
-			// RadiusDamage( trace.vecEndPos, this, this, GetSkillFloat("gargantua_dmg_fire"sv), CLASS_ALIEN_MONSTER, DMG_BURN );
-			FlameDamage(vecStart, trace.vecEndPos, this, this, GetSkillFloat("gargantua_dmg_fire"sv), CLASS_ALIEN_MONSTER, DMG_BURN);
+			// RadiusDamage(trace.vecEndPos, this, this, GetSkillFloat("gargantua_dmg_fire"sv), DMG_BURN, Classify());
+			FlameDamage(vecStart, trace.vecEndPos, this, this, GetSkillFloat("gargantua_dmg_fire"sv), DMG_BURN, Classify());
 
 			MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
 			WRITE_BYTE(TE_ELIGHT);
@@ -597,7 +599,8 @@ void CGargantua::FlameUpdate()
 		m_streakTime = gpGlobals->time;
 }
 
-void CGargantua::FlameDamage(Vector vecStart, Vector vecEnd, CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int iClassIgnore, int bitsDamageType)
+void CGargantua::FlameDamage(Vector vecStart, Vector vecEnd, CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage,
+	int bitsDamageType, EntityClassification iClassIgnore)
 {
 	CBaseEntity* pEntity = nullptr;
 	TraceResult tr;
@@ -616,7 +619,7 @@ void CGargantua::FlameDamage(Vector vecStart, Vector vecEnd, CBaseEntity* inflic
 		if (pEntity->pev->takedamage != DAMAGE_NO)
 		{
 			// UNDONE: this should check a damage mask, not an ignore
-			if (iClassIgnore != CLASS_NONE && pEntity->Classify() == iClassIgnore)
+			if (iClassIgnore != ENTCLASS_NONE && pEntity->Classify() == iClassIgnore)
 			{ // houndeyes don't hurt other houndeyes with their attack
 				continue;
 			}
@@ -691,11 +694,6 @@ void CGargantua::PrescheduleThink()
 		EyeOn(200);
 
 	EyeUpdate();
-}
-
-int CGargantua::Classify()
-{
-	return CLASS_ALIEN_MONSTER;
 }
 
 void CGargantua::SetYawSpeed()

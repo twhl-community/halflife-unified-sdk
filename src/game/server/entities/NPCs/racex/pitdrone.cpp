@@ -47,8 +47,6 @@ public:
 	void Precache() override;
 	void Spawn() override;
 
-	int Classify() override { return CLASS_NONE; }
-
 	static void Shoot(CBaseEntity* owner, Vector vecStart, Vector vecVelocity, Vector vecAngles);
 	void SpikeTouch(CBaseEntity* pOther);
 
@@ -213,7 +211,6 @@ public:
 	void Precache() override;
 	void SetYawSpeed() override;
 	int ISoundMask() override;
-	int Classify() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 	void IdleSound() override;
 	void PainSound() override;
@@ -234,7 +231,7 @@ public:
 	bool FValidateHintType(short sHint) override;
 	const Schedule_t* GetSchedule() override;
 	const Schedule_t* GetScheduleOfType(int Type) override;
-	int IRelationship(CBaseEntity* pTarget) override;
+	Relationship IRelationship(CBaseEntity* pTarget) override;
 	int IgnoreConditions() override;
 
 	void CheckAmmo() override;
@@ -260,6 +257,8 @@ void CPitdrone::OnCreate()
 
 	pev->health = GetSkillFloat("pitdrone_health"sv);
 	pev->model = MAKE_STRING("models/pit_drone.mdl");
+
+	SetClassification("alien_predator");
 }
 
 int CPitdrone::IgnoreConditions()
@@ -275,12 +274,12 @@ int CPitdrone::IgnoreConditions()
 	return iIgnore;
 }
 
-int CPitdrone::IRelationship(CBaseEntity* pTarget)
+Relationship CPitdrone::IRelationship(CBaseEntity* pTarget)
 {
 	// Always mark pit drones as allies
 	if (pTarget->ClassnameIs("monster_pitdrone"))
 	{
-		return R_AL;
+		return Relationship::Ally;
 	}
 
 	return CBaseMonster::IRelationship(pTarget);
@@ -367,11 +366,6 @@ int CPitdrone::ISoundMask()
 		   bits_SOUND_MEAT |
 		   bits_SOUND_GARBAGE |
 		   bits_SOUND_PLAYER;
-}
-
-int CPitdrone::Classify()
-{
-	return CLASS_ALIEN_PREDATOR;
 }
 
 void CPitdrone::IdleSound()

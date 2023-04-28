@@ -39,7 +39,6 @@ public:
 	 *	Also stores the length of the trace in the float reference provided.
 	 */
 	CBaseEntity* TongueTouchEnt(float& flLength);
-	int Classify() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 	void BarnacleThink();
 	void WaitTillDead();
@@ -73,11 +72,8 @@ void CBarnacle::OnCreate()
 
 	pev->health = 25;
 	pev->model = MAKE_STRING("models/barnacle.mdl");
-}
 
-int CBarnacle::Classify()
-{
-	return CLASS_ALIEN_MONSTER;
+	SetClassification("alien_monster");
 }
 
 void CBarnacle::HandleAnimEvent(MonsterEvent_t* pEvent)
@@ -410,7 +406,9 @@ CBaseEntity* CBarnacle::TongueTouchEnt(float& flLength)
 		for (int i = 0; i < count; i++)
 		{
 			// only clients and monsters
-			if (pList[i] != this && IRelationship(pList[i]) > R_NO && pList[i]->pev->deadflag == DEAD_NO) // this ent is one of our enemies. Barnacle tries to eat it.
+			if (pList[i] != this &&
+				IRelationship(pList[i]) > Relationship::None &&
+				pList[i]->pev->deadflag == DEAD_NO) // this ent is one of our enemies. Barnacle tries to eat it.
 			{
 				return pList[i];
 			}

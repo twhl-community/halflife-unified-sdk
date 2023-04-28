@@ -29,7 +29,6 @@ public:
 	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
-	int Classify() override { return CLASS_HUMAN_MILITARY; }
 	int BloodColor() override { return DONT_BLEED; }
 	void Killed(CBaseEntity* attacker, int iGib) override;
 	void GibMonster() override;

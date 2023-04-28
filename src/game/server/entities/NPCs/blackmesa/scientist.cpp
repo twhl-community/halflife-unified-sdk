@@ -292,6 +292,8 @@ void CScientist::OnCreate()
 
 	pev->health = GetSkillFloat("scientist_health"sv);
 	pev->model = MAKE_STRING("models/scientist.mdl");
+
+	SetClassification("human_passive");
 }
 
 void CScientist::DeclineFollowing()
@@ -453,10 +455,6 @@ void CScientist::RunTask(const Task_t* pTask)
 		CTalkMonster::RunTask(pTask);
 		break;
 	}
-}
-int CScientist::Classify()
-{
-	return CLASS_HUMAN_PASSIVE;
 }
 
 void CScientist::SetYawSpeed()
@@ -830,14 +828,14 @@ const Schedule_t* CScientist::GetSchedule()
 				break;
 			}
 
-			int relationship = R_NO;
+			Relationship relationship = Relationship::None;
 
 			// Nothing scary, just me and the player
 			if (pEnemy != nullptr)
 				relationship = IRelationship(pEnemy);
 
 			// UNDONE: Model fear properly, fix R_FR and add multiple levels of fear
-			if (relationship != R_DL && relationship != R_HT)
+			if (relationship != Relationship::Dislike && relationship != Relationship::Hate)
 			{
 				// If I'm already close enough to my target
 				if (TargetDistance() <= 128)
@@ -915,8 +913,10 @@ MONSTERSTATE CScientist::GetIdealState()
 		{
 			if (IsFollowing())
 			{
-				int relationship = IRelationship(m_hEnemy);
-				if (relationship != R_FR || relationship != R_HT && !HasConditions(bits_COND_LIGHT_DAMAGE | bits_COND_HEAVY_DAMAGE))
+				Relationship relationship = IRelationship(m_hEnemy);
+				if (relationship != Relationship::Fear ||
+					(relationship != Relationship::Hate &&
+						!HasConditions(bits_COND_LIGHT_DAMAGE | bits_COND_HEAVY_DAMAGE)))
 				{
 					// Don't go to combat if you're following the player
 					m_IdealMonsterState = MONSTERSTATE_ALERT;
@@ -996,7 +996,6 @@ class CDeadScientist : public CBaseMonster
 public:
 	void OnCreate() override;
 	void Spawn() override;
-	int Classify() override { return CLASS_HUMAN_PASSIVE; }
 
 	bool KeyValue(KeyValueData* pkvd) override;
 	int m_iPose; // which sequence to display
@@ -1014,6 +1013,8 @@ void CDeadScientist::OnCreate()
 	// Corpses have less health
 	pev->health = 8; // GetSkillFloat("scientist_health"sv);
 	pev->model = MAKE_STRING("models/scientist.mdl");
+
+	SetClassification("human_passive");
 }
 
 bool CDeadScientist::KeyValue(KeyValueData* pkvd)
@@ -1082,6 +1083,8 @@ void CSittingScientist::OnCreate()
 
 	pev->health = 50;
 	pev->model = MAKE_STRING("models/scientist.mdl");
+
+	SetClassification("human_passive");
 }
 
 void CSittingScientist::Spawn()
@@ -1126,11 +1129,6 @@ void CSittingScientist::Precache()
 {
 	m_baseSequence = LookupSequence("sitlookleft");
 	TalkInit();
-}
-
-int CSittingScientist::Classify()
-{
-	return CLASS_HUMAN_PASSIVE;
 }
 
 void CSittingScientist::SittingThink()

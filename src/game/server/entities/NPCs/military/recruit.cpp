@@ -32,7 +32,6 @@ class CRecruit : public CBarney
 {
 public:
 	int ObjectCaps() override { return FCAP_ACROSS_TRANSITION | FCAP_IMPULSE_USE; }
-	int Classify() override { return CLASS_HUMAN_MILITARY_FRIENDLY; }
 
 	void OnCreate() override
 	{
@@ -40,6 +39,7 @@ public:
 
 		pev->health = GetSkillFloat("barney_health"sv);
 		pev->model = MAKE_STRING("models/recruit.mdl");
+		SetClassification("human_military_ally");
 		m_SentenceReplacement = &RecruitSentenceReplacement;
 	}
 

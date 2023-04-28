@@ -26,11 +26,8 @@ void CZombie::OnCreate()
 
 	pev->health = GetSkillFloat("zombie_health"sv);
 	pev->model = MAKE_STRING("models/zombie.mdl");
-}
 
-int CZombie::Classify()
-{
-	return CLASS_ALIEN_MONSTER;
+	SetClassification("alien_monster");
 }
 
 void CZombie::SetYawSpeed()

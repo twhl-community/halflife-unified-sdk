@@ -39,6 +39,7 @@ class CBaseTurret : public CBaseMonster
 	DECLARE_DATAMAP();
 
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 	bool KeyValue(KeyValueData* pkvd) override;
@@ -50,7 +51,9 @@ public:
 	/**
 	 *	@brief ID as a machine
 	 */
-	int Classify() override;
+	EntityClassification Classify() override;
+
+	bool IsMachine() const override { return true; }
 
 	int BloodColor() override { return DONT_BLEED; }
 	void GibMonster() override {} // UNDONE: Throw turret gibs?
@@ -234,6 +237,13 @@ bool CBaseTurret::KeyValue(KeyValueData* pkvd)
 	}
 
 	return CBaseMonster::KeyValue(pkvd);
+}
+
+void CBaseTurret::OnCreate()
+{
+	BaseClass::OnCreate();
+
+	SetClassification("machine");
 }
 
 void CBaseTurret::Spawn()
@@ -1121,11 +1131,11 @@ bool CBaseTurret::MoveTurret()
 	return state;
 }
 
-int CBaseTurret::Classify()
+EntityClassification CBaseTurret::Classify()
 {
 	if (m_iOn || m_iAutoStart)
-		return CLASS_MACHINE;
-	return CLASS_NONE;
+		return BaseClass::Classify();
+	return ENTCLASS_NONE;
 }
 
 /**

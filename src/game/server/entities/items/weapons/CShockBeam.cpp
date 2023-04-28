@@ -133,7 +133,7 @@ void CShockBeam::WaterExplodeThink()
 
 	Explode();
 
-	::RadiusDamage(pev->origin, this, pOwner, 100.0, 150.0, CLASS_NONE, DMG_ALWAYSGIB | DMG_BLAST);
+	::RadiusDamage(pev->origin, this, pOwner, 100.0, 150.0, DMG_ALWAYSGIB | DMG_BLAST);
 
 	UTIL_Remove(this);
 }

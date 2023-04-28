@@ -261,7 +261,10 @@ void CBaseMonster::Look(int iDistance)
 			{
 				// the looker will want to consider this entity
 				// don't check anything else about an entity that can't be seen, or an entity that you don't care about.
-				if (IRelationship(pSightEnt) != R_NO && FInViewCone(pSightEnt) && !FBitSet(pSightEnt->pev->flags, FL_NOTARGET) && FVisible(pSightEnt))
+				if (IRelationship(pSightEnt) != Relationship::None &&
+					FInViewCone(pSightEnt) &&
+					!FBitSet(pSightEnt->pev->flags, FL_NOTARGET) &&
+					FVisible(pSightEnt))
 				{
 					if (pSightEnt->IsPlayer())
 					{
@@ -300,19 +303,19 @@ void CBaseMonster::Look(int iDistance)
 					// we see monsters other than the Enemy.
 					switch (IRelationship(pSightEnt))
 					{
-					case R_NM:
+					case Relationship::Nemesis:
 						iSighted |= bits_COND_SEE_NEMESIS;
 						break;
-					case R_HT:
+					case Relationship::Hate:
 						iSighted |= bits_COND_SEE_HATE;
 						break;
-					case R_DL:
+					case Relationship::Dislike:
 						iSighted |= bits_COND_SEE_DISLIKE;
 						break;
-					case R_FR:
+					case Relationship::Fear:
 						iSighted |= bits_COND_SEE_FEAR;
 						break;
-					case R_AL:
+					case Relationship::Ally:
 						break;
 					default:
 						AILogger->debug("{} can't assess {}", STRING(pev->classname), STRING(pSightEnt->pev->classname));
@@ -1957,28 +1960,9 @@ bool CBaseMonster::TaskIsRunning()
 	return false;
 }
 
-int CBaseMonster::IRelationship(CBaseEntity* pTarget)
+Relationship CBaseMonster::IRelationship(CBaseEntity* pTarget)
 {
-	static int iEnemy[16][16] =
-		{//   NONE	 MACH	 PLYR	 HPASS	 HMIL	 AMIL	 APASS	 AMONST	APREY	 APRED	 INSECT	PLRALY	PBWPN	ABWPN	HMILA	RACEX
-			/*NONE*/ {R_NO, R_NO, R_NO, R_NO, R_NO, R_NO, R_NO, R_NO, R_NO, R_NO, R_NO, R_NO, R_NO, R_NO, R_NO, R_NO},
-			/*MACHINE*/ {R_NO, R_NO, R_DL, R_DL, R_NO, R_DL, R_DL, R_DL, R_DL, R_DL, R_NO, R_DL, R_DL, R_DL, R_DL, R_DL},
-			/*PLAYER*/ {R_NO, R_DL, R_NO, R_NO, R_DL, R_DL, R_DL, R_DL, R_DL, R_DL, R_NO, R_NO, R_DL, R_DL, R_NO, R_DL},
-			/*HUMANPASSIVE*/ {R_NO, R_NO, R_AL, R_AL, R_HT, R_HT, R_NO, R_HT, R_DL, R_DL, R_NO, R_AL, R_NO, R_NO, R_DL, R_HT},
-			/*HUMANMILITAR*/ {R_NO, R_NO, R_HT, R_DL, R_NO, R_HT, R_DL, R_DL, R_DL, R_DL, R_NO, R_HT, R_NO, R_NO, R_HT, R_HT},
-			/*ALIENMILITAR*/ {R_NO, R_DL, R_HT, R_DL, R_HT, R_NO, R_NO, R_NO, R_NO, R_NO, R_NO, R_DL, R_NO, R_NO, R_DL, R_NO},
-			/*ALIENPASSIVE*/ {R_NO, R_NO, R_NO, R_NO, R_NO, R_NO, R_NO, R_NO, R_NO, R_NO, R_NO, R_NO, R_NO, R_NO, R_NO, R_NO},
-			/*ALIENMONSTER*/ {R_NO, R_DL, R_DL, R_DL, R_DL, R_NO, R_NO, R_NO, R_NO, R_NO, R_NO, R_DL, R_NO, R_NO, R_DL, R_NO},
-			/*ALIENPREY   */ {R_NO, R_NO, R_DL, R_DL, R_DL, R_NO, R_NO, R_NO, R_NO, R_FR, R_NO, R_DL, R_NO, R_NO, R_DL, R_NO},
-			/*ALIENPREDATO*/ {R_NO, R_NO, R_DL, R_DL, R_DL, R_NO, R_NO, R_NO, R_HT, R_DL, R_NO, R_DL, R_NO, R_NO, R_DL, R_NO},
-			/*INSECT*/ {R_FR, R_FR, R_FR, R_FR, R_FR, R_NO, R_FR, R_FR, R_FR, R_FR, R_NO, R_FR, R_NO, R_NO, R_FR, R_NO},
-			/*PLAYERALLY*/ {R_NO, R_DL, R_AL, R_AL, R_DL, R_DL, R_DL, R_DL, R_DL, R_DL, R_NO, R_NO, R_NO, R_NO, R_DL, R_DL},
-			/*PBIOWEAPON*/ {R_NO, R_NO, R_DL, R_DL, R_DL, R_DL, R_DL, R_DL, R_DL, R_DL, R_NO, R_DL, R_NO, R_DL, R_DL, R_DL},
-			/*ABIOWEAPON*/ {R_NO, R_NO, R_DL, R_DL, R_DL, R_AL, R_NO, R_DL, R_DL, R_NO, R_NO, R_DL, R_DL, R_NO, R_DL, R_DL},
-			/*HUMMILALLY*/ {R_NO, R_DL, R_AL, R_HT, R_DL, R_DL, R_DL, R_DL, R_DL, R_DL, R_NO, R_DL, R_NO, R_NO, R_AL, R_DL},
-			/*RACEX*/ {R_NO, R_DL, R_HT, R_DL, R_HT, R_NO, R_NO, R_NO, R_NO, R_NO, R_NO, R_DL, R_NO, R_DL, R_DL, R_NO}};
-
-	return iEnemy[Classify()][pTarget->Classify()];
+	return g_EntityClassifications.GetRelationship(Classify(), pTarget->Classify());
 }
 
 // UNDONE: Should this find the nearest node?
@@ -2161,12 +2145,11 @@ CBaseEntity* CBaseMonster::BestVisibleEnemy()
 	CBaseEntity* pNextEnt;
 	int iNearest;
 	int iDist;
-	int iBestRelationship;
 
 	iNearest = 8192; // so first visible entity will become the closest.
 	pNextEnt = m_pLink;
 	pReturn = nullptr;
-	iBestRelationship = R_NO;
+	Relationship iBestRelationship = Relationship::None;
 
 	while (pNextEnt != nullptr)
 	{
@@ -3047,7 +3030,7 @@ bool CBaseMonster::GetEnemy()
 				if (pNewEnemy->pev->owner != nullptr)
 				{
 					CBaseEntity* pOwner = Instance(pNewEnemy->GetOwner())->MyMonsterPointer();
-					if (pOwner && (pOwner->pev->flags & FL_MONSTER) != 0 && IRelationship(pOwner) != R_NO)
+					if (pOwner && (pOwner->pev->flags & FL_MONSTER) != 0 && IRelationship(pOwner) != Relationship::None)
 						PushEnemy(pOwner, m_vecEnemyLKP);
 				}
 			}

@@ -84,8 +84,7 @@ public:
 	void Killed(CBaseEntity* attacker, int iGib) override;
 	void Activate() override;
 	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
-	int Classify() override { return CLASS_INSECT; }
-	int IRelationship(CBaseEntity* pTarget) override;
+	Relationship IRelationship(CBaseEntity* pTarget) override;
 
 	bool HasAlienGibs() override { return true; }
 
@@ -151,6 +150,8 @@ void CLeech::OnCreate()
 
 	pev->health = GetSkillFloat("leech_health"sv);
 	pev->model = MAKE_STRING("models/leech.mdl");
+
+	SetClassification("insect");
 
 	// Just for fun
 	// pev->model = MAKE_STRING("models/icky.mdl");
@@ -235,10 +236,10 @@ void CLeech::SwitchLeechState()
 	}
 }
 
-int CLeech::IRelationship(CBaseEntity* pTarget)
+Relationship CLeech::IRelationship(CBaseEntity* pTarget)
 {
 	if (pTarget->IsPlayer())
-		return R_DL;
+		return Relationship::Dislike;
 	return CBaseMonster::IRelationship(pTarget);
 }
 

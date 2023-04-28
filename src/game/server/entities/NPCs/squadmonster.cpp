@@ -231,7 +231,7 @@ int CSquadMonster::SquadCount()
 int CSquadMonster::SquadRecruit(int searchRadius, int maxMembers)
 {
 	int squadCount;
-	int iMyClass = Classify(); // cache this monster's class
+	const auto iMyClass = Classify(); // cache this monster's class
 
 
 	// Don't recruit if I'm already in a group
@@ -279,7 +279,7 @@ int CSquadMonster::SquadRecruit(int searchRadius, int maxMembers)
 			{
 				// Can we recruit this guy?
 				if (!pRecruit->InSquad() && pRecruit->Classify() == iMyClass &&
-					((iMyClass != CLASS_ALIEN_MONSTER) || FStrEq(STRING(pev->classname), STRING(pRecruit->pev->classname))) &&
+					CanRecruit(pRecruit) &&
 					FStringNull(pRecruit->pev->netname))
 				{
 					TraceResult tr;

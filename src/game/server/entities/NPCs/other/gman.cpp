@@ -28,7 +28,6 @@ public:
 	void Spawn() override;
 	void Precache() override;
 	void SetYawSpeed() override;
-	int Classify() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 	int ISoundMask() override;
 
@@ -57,11 +56,8 @@ void CGMan::OnCreate()
 
 	pev->health = 100;
 	pev->model = MAKE_STRING("models/gman.mdl");
-}
 
-int CGMan::Classify()
-{
-	return CLASS_NONE;
+	SetClassification("none");
 }
 
 void CGMan::SetYawSpeed()

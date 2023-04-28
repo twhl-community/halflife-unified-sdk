@@ -21,8 +21,6 @@
 class COFLoader : public CBaseMonster
 {
 public:
-	int Classify() override { return CLASS_PLAYER_ALLY; }
-
 	int ISoundMask() override { return bits_SOUND_NONE; }
 
 	void OnCreate() override;
@@ -51,6 +49,8 @@ void COFLoader::OnCreate()
 
 	pev->health = 8;
 	pev->model = MAKE_STRING("models/loader.mdl");
+
+	SetClassification("player_ally");
 }
 
 void COFLoader::Precache()

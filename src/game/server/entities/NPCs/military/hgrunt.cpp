@@ -56,6 +56,8 @@ void CHGrunt::OnCreate()
 
 	pev->health = GetSkillFloat("hgrunt_health"sv);
 	pev->model = MAKE_STRING("models/hgrunt.mdl");
+
+	SetClassification("human_military");
 }
 
 int& CHGrunt::GetGruntQuestion()
@@ -78,11 +80,11 @@ void CHGrunt::SpeakSentence()
 	}
 }
 
-int CHGrunt::IRelationship(CBaseEntity* pTarget)
+Relationship CHGrunt::IRelationship(CBaseEntity* pTarget)
 {
 	if (pTarget->ClassnameIs("monster_alien_grunt") || (pTarget->ClassnameIs("monster_gargantua")))
 	{
-		return R_NM;
+		return Relationship::Nemesis;
 	}
 
 	return CSquadMonster::IRelationship(pTarget);
@@ -208,9 +210,7 @@ bool CHGrunt::CheckMeleeAttack1(float flDot, float flDist)
 		return false;
 	}
 
-	if (flDist <= 64 && flDot >= 0.7 &&
-		pEnemy->Classify() != CLASS_ALIEN_BIOWEAPON &&
-		pEnemy->Classify() != CLASS_PLAYER_BIOWEAPON)
+	if (flDist <= 64 && flDot >= 0.7 && !pEnemy->IsBioWeapon())
 	{
 		return true;
 	}
@@ -493,11 +493,6 @@ void CHGrunt::CheckAmmo()
 	{
 		SetConditions(bits_COND_NO_AMMO_LOADED);
 	}
-}
-
-int CHGrunt::Classify()
-{
-	return CLASS_HUMAN_MILITARY;
 }
 
 CBaseEntity* CHGrunt::Kick()
@@ -1698,15 +1693,19 @@ const Schedule_t* CHGrunt::GetSchedule()
 					// before he starts pluggin away.
 					if (FOkToSpeak()) // && RANDOM_LONG(0,1))
 					{
-						if ((m_hEnemy != nullptr) && m_hEnemy->IsPlayer())
-							// player
-							sentences::g_Sentences.PlayRndSz(this, "HG_ALERT", HGRUNT_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
-						else if ((m_hEnemy != nullptr) &&
-								 (m_hEnemy->Classify() != CLASS_PLAYER_ALLY) &&
-								 (m_hEnemy->Classify() != CLASS_HUMAN_PASSIVE) &&
-								 (m_hEnemy->Classify() != CLASS_MACHINE))
-							// monster
-							sentences::g_Sentences.PlayRndSz(this, "HG_MONST", HGRUNT_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
+						if (m_hEnemy)
+						{
+							if (m_hEnemy->IsPlayer())
+							{
+								// player
+								sentences::g_Sentences.PlayRndSz(this, "HG_ALERT", HGRUNT_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
+							}
+							else if (auto monster = m_hEnemy->MyMonsterPointer(); monster && monster->HasAlienGibs())
+							{
+								// monster
+								sentences::g_Sentences.PlayRndSz(this, "HG_MONST", HGRUNT_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
+							}
+						}
 
 						JustSpoke();
 					}
@@ -2066,6 +2065,8 @@ void CDeadHGrunt::OnCreate()
 	// Corpses have less health
 	pev->health = 8;
 	pev->model = MAKE_STRING("models/hgrunt.mdl");
+
+	SetClassification("human_military");
 }
 
 bool CDeadHGrunt::KeyValue(KeyValueData* pkvd)

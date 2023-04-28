@@ -61,16 +61,12 @@ class COFPitWormUp : public CBaseMonster
 
 public:
 	void OnCreate() override;
-
 	void Precache() override;
-
 	void Spawn() override;
 
 	int BloodColor() override { return BLOOD_COLOR_GREEN; }
 
 	bool HasAlienGibs() override { return true; }
-
-	int Classify() override { return CLASS_ALIEN_MILITARY; }
 
 	int ObjectCaps() override { return 0; }
 
@@ -292,6 +288,8 @@ void COFPitWormUp::OnCreate()
 
 	pev->health = GetSkillFloat("pitworm_health"sv);
 	pev->model = MAKE_STRING("models/pit_worm_up.mdl");
+
+	SetClassification("alien_military");
 }
 
 void COFPitWormUp::Precache()
@@ -1696,11 +1694,6 @@ class COFPitWorm : public CBaseMonster
 public:
 	void OnCreate() override;
 
-	int Classify() override
-	{
-		return CLASS_ALIEN_MONSTER;
-	}
-
 	bool HasAlienGibs() override { return true; }
 
 	void SetYawSpeed() override
@@ -1911,6 +1904,8 @@ void COFPitWorm::OnCreate()
 
 	pev->health = 150 * GetSkillFloat("bigmomma_health_factor"sv);
 	pev->model = MAKE_STRING("models/pit_worm.mdl");
+
+	SetClassification("alien_monster");
 }
 
 bool COFPitWorm::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType)

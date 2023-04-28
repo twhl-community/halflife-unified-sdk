@@ -30,8 +30,6 @@ class COFGeneWormCloud : public CBaseEntity
 	DECLARE_DATAMAP();
 
 public:
-	int Classify() override { return CLASS_NONE; }
-
 	void Precache() override;
 	void Spawn() override;
 
@@ -366,7 +364,7 @@ void COFGeneWormSpawn::RunGeneWormSpawn(float frames)
 					}
 					else
 					{
-						::RadiusDamage(pev->origin, this, this, 1000.0, 128.0, CLASS_NONE, DMG_ALWAYSGIB | DMG_SHOCK);
+						::RadiusDamage(pev->origin, this, this, 1000.0, 128.0, DMG_ALWAYSGIB | DMG_SHOCK);
 						CreateWarpBeams(1);
 						CreateWarpBeams(-1);
 					}
@@ -545,8 +543,6 @@ class COFGeneWorm : public CBaseMonster
 	DECLARE_DATAMAP();
 
 public:
-	int Classify() override { return CLASS_ALIEN_MONSTER; }
-
 	int BloodColor() override { return BLOOD_COLOR_GREEN; }
 
 	bool HasAlienGibs() override { return true; }
@@ -757,6 +753,8 @@ void COFGeneWorm::OnCreate()
 
 	pev->health = GetSkillFloat("geneworm_health"sv);
 	pev->model = MAKE_STRING("models/geneworm.mdl");
+
+	SetClassification("alien_monster");
 }
 
 void COFGeneWorm::Spawn()

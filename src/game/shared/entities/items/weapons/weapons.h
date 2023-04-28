@@ -564,7 +564,8 @@ int DamageDecal(CBaseEntity* pEntity, int bitsDamageType);
  *	@brief this entity is exploding, or otherwise needs to inflict damage upon entities within a certain range.
  *	only damage ents that can clearly be seen by the explosion!
  */
-void RadiusDamage(Vector vecSrc, CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, float flRadius, int iClassIgnore, int bitsDamageType);
+void RadiusDamage(Vector vecSrc, CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, float flRadius,
+	int bitsDamageType, EntityClassification iClassIgnore = ENTCLASS_NONE);
 
 /**
  *	@brief Collects multiple small damages into a single damage

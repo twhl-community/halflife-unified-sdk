@@ -38,8 +38,9 @@ public:
 
 	bool HasAlienGibs() override { return true; }
 
-	int Classify() override;
-	int IRelationship(CBaseEntity* pTarget) override;
+	bool IsBioWeapon() const override { return true; }
+
+	Relationship IRelationship(CBaseEntity* pTarget) override;
 	void Killed(CBaseEntity* attacker, int iGib) override;
 	void HuntThink();
 	void Smoke();
@@ -53,7 +54,6 @@ public:
 	float m_flNextHit;
 	Vector m_posPrev;
 	EHANDLE m_hOwner;
-	int m_iMyClass;
 };
 
 float CPenguinGrenade::m_flNextBounceSoundTime = 0;
@@ -77,6 +77,8 @@ void CPenguinGrenade::OnCreate()
 
 	pev->health = GetSkillFloat("snark_health"sv);
 	pev->model = MAKE_STRING("models/w_penguin.mdl");
+
+	SetClassification("alien_bioweapon");
 }
 
 void CPenguinGrenade::Precache()
@@ -253,37 +255,17 @@ void CPenguinGrenade::Spawn()
 	ResetSequenceInfo();
 }
 
-int CPenguinGrenade::Classify()
+Relationship CPenguinGrenade::IRelationship(CBaseEntity* pTarget)
 {
-	if (m_iMyClass != 0)
-		return m_iMyClass; // protect against recursion
+	const auto classification = pTarget->Classify();
 
-	if (m_hEnemy != nullptr)
+	if (g_EntityClassifications.ClassNameIs(classification, {"alien_military"}))
 	{
-		m_iMyClass = CLASS_INSECT; // no one cares about it
-		switch (m_hEnemy->Classify())
-		{
-		case CLASS_PLAYER:
-		case CLASS_HUMAN_PASSIVE:
-		case CLASS_HUMAN_MILITARY:
-			m_iMyClass = 0;
-			return CLASS_ALIEN_MILITARY; // barney's get mad, grunts get mad at it
-		}
-		m_iMyClass = 0;
+		return Relationship::Dislike;
 	}
-
-	return CLASS_ALIEN_BIOWEAPON;
-}
-
-int CPenguinGrenade::IRelationship(CBaseEntity* pTarget)
-{
-	if (pTarget->Classify() == CLASS_ALIEN_MILITARY)
+	else if (g_EntityClassifications.ClassNameIs(classification, {"player_ally"}))
 	{
-		return R_DL;
-	}
-	else if (pTarget->Classify() == CLASS_PLAYER_ALLY)
-	{
-		return R_AL;
+		return Relationship::Ally;
 	}
 	else
 	{
@@ -419,6 +401,24 @@ void CPenguinGrenade::HuntThink()
 	pev->angles = UTIL_VecToAngles(pev->velocity);
 	pev->angles.z = 0;
 	pev->angles.x = 0;
+
+	// Update classification
+	if (!HasCustomClassification())
+	{
+		// TODO: maybe use a different classification that has the expected relationships for these classes.
+		const char* classification = "alien_bioweapon";
+
+		if (m_hEnemy != nullptr)
+		{
+			if (g_EntityClassifications.ClassNameIs(m_hEnemy->Classify(), {"player", "human_passive", "human_military"}))
+			{
+				// barney's get mad, grunts get mad at it
+				classification = "alien_military";
+			}
+		}
+
+		SetClassification(classification);
+	}
 }
 
 void CPenguinGrenade::Smoke()

@@ -298,6 +298,7 @@ public:
 
 	char m_szTeamName[TEAM_NAME_LENGTH];
 
+	void OnCreate() override;
 	void Spawn() override;
 	void Pain();
 
@@ -387,8 +388,6 @@ public:
 	 */
 	void UpdatePlayerSound();
 	void DeathSound() override;
-
-	int Classify() override;
 
 	/**
 	 *	@brief Set the activity based on an event or current state

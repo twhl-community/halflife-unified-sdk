@@ -156,14 +156,7 @@ void CShockRifle::PrimaryAttack()
 
 		const int ammoCount = m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType);
 
-		RadiusDamage(
-			pev->origin,
-			m_pPlayer,
-			m_pPlayer,
-			ammoCount * 100.0,
-			ammoCount * 150.0,
-			CLASS_NONE,
-			DMG_ALWAYSGIB | DMG_BLAST);
+		RadiusDamage(pev->origin, m_pPlayer, m_pPlayer, ammoCount * 100, ammoCount * 150, DMG_ALWAYSGIB | DMG_BLAST);
 
 		m_pPlayer->SetAmmoCountByIndex(m_iPrimaryAmmoType, 0);
 

@@ -32,18 +32,16 @@ class CHornet : public CBaseMonster
 	DECLARE_DATAMAP();
 
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
 
-	/**
-	 *	@brief ID's Hornet as their owner
-	 */
-	int Classify() override;
+	bool IsBioWeapon() const override { return true; }
 
 	/**
 	 *	@brief hornets will never get mad at each other, no matter who the owner is.
 	 */
-	int IRelationship(CBaseEntity* pTarget) override;
+	Relationship IRelationship(CBaseEntity* pTarget) override;
 
 	void IgniteTrail();
 

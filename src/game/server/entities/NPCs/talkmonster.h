@@ -113,7 +113,7 @@ public:
 	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 	void Touch(CBaseEntity* pOther) override;
 	void Killed(CBaseEntity* attacker, int iGib) override;
-	int IRelationship(CBaseEntity* pTarget) override;
+	Relationship IRelationship(CBaseEntity* pTarget) override;
 	bool CanPlaySentence(bool fDisregardState) override;
 
 protected:
@@ -275,7 +275,7 @@ void CTalkMonster::ForEachFriend(Callback callback)
 
 		const auto relationship = IRelationship(talkMonster);
 
-		if (relationship != R_AL && relationship != R_NO)
+		if (relationship != Relationship::Ally && relationship != Relationship::None)
 		{
 			// Not a friend
 			continue;

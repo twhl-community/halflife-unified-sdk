@@ -33,14 +33,14 @@ class CDrillSergeant : public CBarney
 public:
 	int ObjectCaps() override { return FCAP_ACROSS_TRANSITION | FCAP_IMPULSE_USE; }
 
-	int Classify() override { return CLASS_HUMAN_MILITARY_FRIENDLY; }
-
 	void OnCreate() override
 	{
 		CBarney::OnCreate();
 
 		pev->health = GetSkillFloat("barney_health"sv);
 		pev->model = MAKE_STRING("models/drill.mdl");
+
+		SetClassification("human_military_ally");
 
 		m_SentenceReplacement = &DrillSergeantSentenceReplacement;
 	}

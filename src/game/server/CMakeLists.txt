@@ -65,6 +65,7 @@ target_sources(server PRIVATE
 	config/sections/BaseFileNamesListSection.h
 	config/sections/CommandsSection.h
 	config/sections/EchoSection.h
+	config/sections/EntityClassificationsSection.h
 	config/sections/EntityTemplatesSection.h
 	config/sections/GameDataFilesSections.h
 	config/sections/GlobalReplacementFilesSections.h

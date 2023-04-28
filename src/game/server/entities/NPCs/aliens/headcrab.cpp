@@ -88,7 +88,6 @@ public:
 	void IdleSound() override;
 	void AlertSound() override;
 	void PrescheduleThink() override;
-	int Classify() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 	bool CheckRangeAttack1(float flDot, float flDist) override;
 	bool CheckRangeAttack2(float flDot, float flDist) override;
@@ -160,11 +159,8 @@ void CHeadCrab::OnCreate()
 
 	pev->health = GetSkillFloat("headcrab_health"sv);
 	pev->model = MAKE_STRING("models/headcrab.mdl");
-}
 
-int CHeadCrab::Classify()
-{
-	return CLASS_ALIEN_PREY;
+	SetClassification("alien_prey");
 }
 
 Vector CHeadCrab::Center()

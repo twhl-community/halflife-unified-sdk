@@ -57,7 +57,6 @@ public:
 	void Spawn() override;
 	void Precache() override;
 	void SetYawSpeed() override;
-	int Classify() override;
 	int ISoundMask() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 	void SetObjectCollisionBox() override
@@ -92,7 +91,7 @@ public:
 	/**
 	 *	@brief overridden because Human Grunts are Voltigore's nemesis.
 	 */
-	int IRelationship(CBaseEntity* pTarget) override;
+	Relationship IRelationship(CBaseEntity* pTarget) override;
 
 	/**
 	 *	@brief won't speak again for 10-20 seconds.

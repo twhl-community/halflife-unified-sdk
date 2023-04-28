@@ -39,8 +39,7 @@ public:
 	void Precache() override;
 	void SetYawSpeed() override;
 	int ISoundMask() override;
-	int Classify() override;
-	int IRelationship(CBaseEntity* pTarget) override;
+	Relationship IRelationship(CBaseEntity* pTarget) override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 	bool CheckRangeAttack1(float flDot, float flDist) override; //!< normal beam attack
 	bool CheckRangeAttack2(float flDot, float flDist) override; //!< check bravery and try to resurect dead comrades
@@ -150,18 +149,15 @@ void CISlave::OnCreate()
 
 	pev->health = GetSkillFloat("islave_health"sv);
 	pev->model = MAKE_STRING("models/islave.mdl");
+
+	SetClassification("alien_military");
 }
 
-int CISlave::Classify()
-{
-	return CLASS_ALIEN_MILITARY;
-}
-
-int CISlave::IRelationship(CBaseEntity* pTarget)
+Relationship CISlave::IRelationship(CBaseEntity* pTarget)
 {
 	if ((pTarget->IsPlayer()))
 		if ((pev->spawnflags & SF_MONSTER_WAIT_UNTIL_PROVOKED) != 0 && (m_afMemory & bits_MEMORY_PROVOKED) == 0)
-			return R_NO;
+			return Relationship::None;
 	return CBaseMonster::IRelationship(pTarget);
 }
 
@@ -520,7 +516,7 @@ void CISlave::Precache()
 bool CISlave::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType)
 {
 	// don't slash one of your own
-	if ((bitsDamageType & DMG_SLASH) != 0 && attacker && IRelationship(Instance(attacker)) < R_DL)
+	if ((bitsDamageType & DMG_SLASH) != 0 && attacker && IRelationship(Instance(attacker)) < Relationship::Dislike)
 		return false;
 
 	// get provoked when injured
@@ -781,7 +777,6 @@ class CDeadISlave : public CBaseMonster
 public:
 	void OnCreate() override;
 	void Spawn() override;
-	int Classify() override { return CLASS_ALIEN_PASSIVE; }
 
 	bool HasAlienGibs() override { return true; }
 
@@ -813,6 +808,8 @@ void CDeadISlave::OnCreate()
 	// Corpses have less health
 	pev->health = 8; // GetSkillFloat("islave_health"sv);
 	pev->model = MAKE_STRING("models/islave.mdl");
+
+	SetClassification("alien_passive");
 }
 
 void CDeadISlave::Spawn()

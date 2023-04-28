@@ -66,7 +66,6 @@ public:
 	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
-	int Classify() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 	void SetYawSpeed() override;
 	void WarmUpSound();
@@ -82,6 +81,11 @@ public:
 	void SetActivity(Activity NewActivity) override;
 
 	bool HasAlienGibs() override { return true; }
+
+	bool CanRecruit(CSquadMonster* recruit) override
+	{
+		return recruit->ClassnameIs(GetClassname());
+	}
 
 	/**
 	 *	@brief writes a color vector to the network based on the size of the group.
@@ -119,11 +123,8 @@ void CHoundeye::OnCreate()
 
 	pev->health = GetSkillFloat("houndeye_health"sv);
 	pev->model = MAKE_STRING("models/houndeye.mdl");
-}
 
-int CHoundeye::Classify()
-{
-	return CLASS_ALIEN_MONSTER;
+	SetClassification("alien_monster");
 }
 
 bool CHoundeye::FValidateHintType(short sHint)
@@ -1222,7 +1223,6 @@ class CDeadHoundeye : public CBaseMonster
 public:
 	void OnCreate() override;
 	void Spawn() override;
-	int Classify() override { return CLASS_ALIEN_PASSIVE; }
 
 	bool HasAlienGibs() override { return true; }
 
@@ -1241,6 +1241,8 @@ void CDeadHoundeye::OnCreate()
 	// Corpses have less health
 	pev->health = 8;
 	pev->model = MAKE_STRING("models/houndeye_dead.mdl");
+
+	SetClassification("alien_passive");
 }
 
 bool CDeadHoundeye::KeyValue(KeyValueData* pkvd)

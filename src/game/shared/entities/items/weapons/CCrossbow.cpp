@@ -29,7 +29,6 @@ class CCrossbowBolt : public CBaseEntity
 public:
 	void Spawn() override;
 	void Precache() override;
-	int Classify() override;
 	void BubbleThink();
 	void BoltTouch(CBaseEntity* pOther);
 	void ExplodeThink();
@@ -84,11 +83,6 @@ void CCrossbowBolt::Precache()
 	PrecacheSound("weapons/xbow_hit1.wav");
 	PrecacheSound("fvox/beep.wav");
 	m_iTrail = PrecacheModel("sprites/streak.spr");
-}
-
-int CCrossbowBolt::Classify()
-{
-	return CLASS_NONE;
 }
 
 void CCrossbowBolt::BoltTouch(CBaseEntity* pOther)
@@ -192,7 +186,7 @@ void CCrossbowBolt::ExplodeThink()
 
 	pev->owner = nullptr; // can't traceline attack owner if this is set
 
-	::RadiusDamage(pev->origin, this, owner, pev->dmg, 128, CLASS_NONE, DMG_BLAST | DMG_ALWAYSGIB);
+	::RadiusDamage(pev->origin, this, owner, pev->dmg, 128, DMG_BLAST | DMG_ALWAYSGIB);
 
 	UTIL_Remove(this);
 }

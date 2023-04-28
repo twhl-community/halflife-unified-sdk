@@ -21,6 +21,8 @@
 #include "skill.h"
 #include "WeaponDataSystem.h"
 
+#include "entities/EntityClassificationSystem.h"
+
 #include "networking/NetworkDataSystem.h"
 
 #include "scripting/AS/ASManager.h"
@@ -97,6 +99,7 @@ void GameLibrary::AddGameSystems()
 	g_GameSystems.Add(&g_AmmoTypes);
 	g_GameSystems.Add(&g_Skill);
 	g_GameSystems.Add(&g_HudReplacements);
+	g_GameSystems.Add(&g_EntityClassifications);
 }
 
 void GameLibrary::SetEntLogLevels(spdlog::level::level_enum level)

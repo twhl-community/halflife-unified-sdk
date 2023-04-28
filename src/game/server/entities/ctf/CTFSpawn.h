@@ -20,8 +20,6 @@
 class CTFSpawn : public CBaseEntity
 {
 public:
-	int Classify() override { return CLASS_NONE; }
-
 	bool KeyValue(KeyValueData* pkvd) override;
 
 	void Spawn() override;

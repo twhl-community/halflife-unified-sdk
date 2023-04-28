@@ -158,7 +158,7 @@ void CMortarShell::MortarExplodeTouch(CBaseEntity* pOther)
 	auto pOwner = GetOwner();
 	pev->owner = nullptr;
 
-	RadiusDamage(this, pOwner, pev->dmg, CLASS_NONE, 64);
+	RadiusDamage(this, pOwner, pev->dmg, 64);
 
 	if (RANDOM_FLOAT(0, 1) >= 0.5)
 		UTIL_DecalTrace(&tr, DECAL_SCORCH2);
@@ -639,7 +639,7 @@ CBaseEntity* COp4Mortar::FindTarget()
 		if (!pMonster)
 			continue;
 
-		if (pMonster->IRelationship(pPlayerTarget) != R_AL)
+		if (pMonster->IRelationship(pPlayerTarget) != Relationship::Ally)
 			continue;
 
 		if ((pEntity->pev->flags & FL_NOTARGET) != 0)

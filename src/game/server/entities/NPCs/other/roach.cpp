@@ -50,7 +50,6 @@ public:
 
 	float m_flLastLightLevel;
 	float m_flNextSmellTime;
-	int Classify() override;
 
 	/**
 	 *	@brief overridden for the roach, which can virtually see 360 degrees.
@@ -78,16 +77,13 @@ void CRoach::OnCreate()
 
 	pev->health = 1;
 	pev->model = MAKE_STRING("models/roach.mdl");
+
+	SetClassification("insect");
 }
 
 int CRoach::ISoundMask()
 {
 	return bits_SOUND_CARCASS | bits_SOUND_MEAT;
-}
-
-int CRoach::Classify()
-{
-	return CLASS_INSECT;
 }
 
 void CRoach::Touch(CBaseEntity* pOther)
@@ -419,10 +415,10 @@ void CRoach::Look(int iDistance)
 				// we see monsters other than the Enemy.
 				switch (IRelationship(pSightEnt))
 				{
-				case R_FR:
+				case Relationship::Fear:
 					iSighted |= bits_COND_SEE_FEAR;
 					break;
-				case R_NO:
+				case Relationship::None:
 					break;
 				default:
 					AILogger->debug("{} can't asses {}", STRING(pev->classname), STRING(pSightEnt->pev->classname));

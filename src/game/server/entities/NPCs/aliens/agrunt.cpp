@@ -62,7 +62,6 @@ public:
 	void Spawn() override;
 	void Precache() override;
 	void SetYawSpeed() override;
-	int Classify() override;
 	int ISoundMask() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 	void SetObjectCollisionBox() override
@@ -94,7 +93,7 @@ public:
 	void AttackSound();
 	void PrescheduleThink() override;
 	void TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
-	int IRelationship(CBaseEntity* pTarget) override;
+	Relationship IRelationship(CBaseEntity* pTarget) override;
 	void StopTalking();
 	bool ShouldSpeak();
 
@@ -186,13 +185,15 @@ void CAGrunt::OnCreate()
 
 	pev->health = GetSkillFloat("agrunt_health"sv);
 	pev->model = MAKE_STRING("models/agrunt.mdl");
+
+	SetClassification("alien_military");
 }
 
-int CAGrunt::IRelationship(CBaseEntity* pTarget)
+Relationship CAGrunt::IRelationship(CBaseEntity* pTarget)
 {
 	if (pTarget->ClassnameIs("monster_human_grunt"))
 	{
-		return R_NM;
+		return Relationship::Nemesis;
 	}
 
 	return CSquadMonster::IRelationship(pTarget);
@@ -346,11 +347,6 @@ void CAGrunt::PainSound()
 	StopTalking();
 
 	EmitSound(CHAN_VOICE, RANDOM_SOUND_ARRAY(pPainSounds), 1.0, ATTN_NORM);
-}
-
-int CAGrunt::Classify()
-{
-	return CLASS_ALIEN_MILITARY;
 }
 
 void CAGrunt::SetYawSpeed()

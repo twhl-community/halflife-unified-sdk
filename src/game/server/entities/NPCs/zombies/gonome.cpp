@@ -712,7 +712,6 @@ class CDeadGonome : public CBaseMonster
 public:
 	void OnCreate() override;
 	void Spawn() override;
-	int Classify() override { return CLASS_ALIEN_PASSIVE; }
 
 	bool HasAlienGibs() override { return true; }
 
@@ -731,6 +730,8 @@ void CDeadGonome::OnCreate()
 	// Corpses have less health
 	pev->health = 8;
 	pev->model = MAKE_STRING("models/gonome.mdl");
+
+	SetClassification("alien_passive");
 }
 
 bool CDeadGonome::KeyValue(KeyValueData* pkvd)

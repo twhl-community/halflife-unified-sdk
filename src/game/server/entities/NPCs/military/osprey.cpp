@@ -65,6 +65,8 @@ void COsprey::OnCreate()
 
 	pev->health = 400;
 	pev->model = MAKE_STRING("models/osprey.mdl");
+
+	SetClassification("machine");
 }
 
 void COsprey::Spawn()
@@ -613,7 +615,7 @@ void COsprey::DyingThink()
 
 		EmitSound(CHAN_STATIC, "weapons/mortarhit.wav", 1.0, 0.3);
 
-		RadiusDamage(pev->origin, this, this, 300, CLASS_NONE, DMG_BLAST);
+		RadiusDamage(pev->origin, this, this, 300, DMG_BLAST);
 
 		// gibs
 		vecSpot = pev->origin + (pev->mins + pev->maxs) * 0.5;

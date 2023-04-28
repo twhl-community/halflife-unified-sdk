@@ -944,7 +944,7 @@ float CBaseMonster::DamageForce(float damage)
 	return force;
 }
 
-void RadiusDamage(Vector vecSrc, CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, float flRadius, int iClassIgnore, int bitsDamageType)
+void RadiusDamage(Vector vecSrc, CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, float flRadius, int bitsDamageType, EntityClassification iClassIgnore)
 {
 	CBaseEntity* pEntity = nullptr;
 	TraceResult tr;
@@ -969,7 +969,7 @@ void RadiusDamage(Vector vecSrc, CBaseEntity* inflictor, CBaseEntity* attacker, 
 		if (pEntity->pev->takedamage != DAMAGE_NO)
 		{
 			// UNDONE: this should check a damage mask, not an ignore
-			if (iClassIgnore != CLASS_NONE && pEntity->Classify() == iClassIgnore)
+			if (iClassIgnore != ENTCLASS_NONE && pEntity->Classify() == iClassIgnore)
 			{ // houndeyes don't hurt other houndeyes with their attack
 				continue;
 			}
@@ -1018,14 +1018,14 @@ void RadiusDamage(Vector vecSrc, CBaseEntity* inflictor, CBaseEntity* attacker, 
 	}
 }
 
-void CBaseMonster::RadiusDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int iClassIgnore, int bitsDamageType)
+void CBaseMonster::RadiusDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType, EntityClassification iClassIgnore)
 {
-	::RadiusDamage(pev->origin, inflictor, attacker, flDamage, flDamage * 2.5, iClassIgnore, bitsDamageType);
+	::RadiusDamage(pev->origin, inflictor, attacker, flDamage, flDamage * 2.5, bitsDamageType, iClassIgnore);
 }
 
-void CBaseMonster::RadiusDamage(Vector vecSrc, CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int iClassIgnore, int bitsDamageType)
+void CBaseMonster::RadiusDamage(Vector vecSrc, CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType, EntityClassification iClassIgnore)
 {
-	::RadiusDamage(vecSrc, inflictor, attacker, flDamage, flDamage * 2.5, iClassIgnore, bitsDamageType);
+	::RadiusDamage(vecSrc, inflictor, attacker, flDamage, flDamage * 2.5, bitsDamageType, iClassIgnore);
 }
 
 CBaseEntity* CBaseMonster::CheckTraceHullAttack(float flDist, int iDamage, int iDmgType)

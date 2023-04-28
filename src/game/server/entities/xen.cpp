@@ -276,7 +276,6 @@ public:
 	}
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 	void Attack();
-	int Classify() override { return CLASS_BARNACLE; }
 
 	void UpdateOnRemove() override;
 
@@ -298,6 +297,8 @@ void CXenTree::OnCreate()
 	CActAnimating::OnCreate();
 
 	pev->model = MAKE_STRING("models/tree.mdl");
+
+	SetClassification("alien_flora");
 }
 
 void CXenTree::Spawn()
@@ -480,7 +481,13 @@ class CXenHull : public CPointEntity
 {
 public:
 	static CXenHull* CreateHull(CBaseEntity* source, const Vector& mins, const Vector& maxs, const Vector& offset);
-	int Classify() override { return CLASS_BARNACLE; }
+
+	void OnCreate() override
+	{
+		BaseClass::OnCreate();
+
+		SetClassification("alien_flora");
+	}
 };
 
 CXenHull* CXenHull::CreateHull(CBaseEntity* source, const Vector& mins, const Vector& maxs, const Vector& offset)

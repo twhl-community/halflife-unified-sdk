@@ -59,7 +59,6 @@ class CDeadCleansuitScientist : public CBaseMonster
 public:
 	void OnCreate() override;
 	void Spawn() override;
-	int Classify() override { return CLASS_HUMAN_PASSIVE; }
 
 	bool KeyValue(KeyValueData* pkvd) override;
 	int m_iPose; // which sequence to display
@@ -87,6 +86,8 @@ void CDeadCleansuitScientist::OnCreate()
 	// Corpses have less health
 	pev->health = 8; // GetSkillFloat("scientist_health"sv);
 	pev->model = MAKE_STRING("models/cleansuit_scientist.mdl");
+
+	SetClassification("human_passive");
 }
 
 bool CDeadCleansuitScientist::KeyValue(KeyValueData* pkvd)

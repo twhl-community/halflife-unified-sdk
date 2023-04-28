@@ -55,7 +55,6 @@ public:
 	 */
 	void AlertSound() override;
 
-	int Classify() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 
 	void RunTask(const Task_t* pTask) override;

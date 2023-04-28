@@ -107,6 +107,8 @@ public:
 	 */
 	int SquadRecruit(int searchRadius, int maxMembers);
 
+	virtual bool CanRecruit(CSquadMonster* recruit) { return true; }
+
 	/**
 	 *	@brief return the number of members of this squad callable from leaders & followers
 	 */

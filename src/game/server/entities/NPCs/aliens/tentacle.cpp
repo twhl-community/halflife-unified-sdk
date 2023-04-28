@@ -73,8 +73,6 @@ public:
 	// TODO: should override base, but has different signature
 	bool CanPlaySequence(bool fDisregardState) { return true; }
 
-	int Classify() override;
-
 	int Level(float dz);
 	int MyLevel();
 	float MyHeight();
@@ -245,11 +243,8 @@ void CTentacle::OnCreate()
 
 	pev->health = 75;
 	pev->model = MAKE_STRING("models/tentacle2.mdl");
-}
 
-int CTentacle::Classify()
-{
-	return CLASS_ALIEN_MONSTER;
+	SetClassification("alien_monster");
 }
 
 void CTentacle::Spawn()

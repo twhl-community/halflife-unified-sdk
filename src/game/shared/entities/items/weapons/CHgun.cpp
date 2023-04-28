@@ -206,6 +206,8 @@ void CHgun::SecondaryAttack()
 	pHornet->pev->velocity = gpGlobals->v_forward * 1200;
 	pHornet->pev->angles = UTIL_VecToAngles(pHornet->pev->velocity);
 
+	pHornet->SetClassification("player_bioweapon");
+
 	pHornet->SetThink(&CHornet::StartDart);
 
 	m_flRechargeTime = gpGlobals->time + 0.5;

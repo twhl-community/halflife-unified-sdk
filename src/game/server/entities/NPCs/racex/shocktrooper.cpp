@@ -96,7 +96,6 @@ public:
 	void Spawn() override;
 	void Precache() override;
 	void SetYawSpeed() override;
-	int Classify() override;
 
 	bool HasAlienGibs() override { return true; }
 
@@ -186,7 +185,7 @@ public:
 	/**
 	 *	@brief overridden because Alien Grunts are Shock Trooper's nemesis.
 	 */
-	int IRelationship(CBaseEntity* pTarget) override;
+	Relationship IRelationship(CBaseEntity* pTarget) override;
 
 	/**
 	 *	@brief someone else is talking - don't speak
@@ -271,6 +270,8 @@ void CShockTrooper::OnCreate()
 
 	pev->health = GetSkillFloat("shocktrooper_health"sv);
 	pev->model = MAKE_STRING("models/strooper.mdl");
+
+	SetClassification("race_x");
 }
 
 void CShockTrooper::SpeakSentence()
@@ -288,11 +289,11 @@ void CShockTrooper::SpeakSentence()
 	}
 }
 
-int CShockTrooper::IRelationship(CBaseEntity* pTarget)
+Relationship CShockTrooper::IRelationship(CBaseEntity* pTarget)
 {
 	if (pTarget->ClassnameIs("monster_alien_grunt") || (pTarget->ClassnameIs("monster_gargantua")))
 	{
-		return R_NM;
+		return Relationship::Nemesis;
 	}
 
 	return CSquadMonster::IRelationship(pTarget);
@@ -417,9 +418,7 @@ bool CShockTrooper::CheckMeleeAttack1(float flDot, float flDist)
 		}
 	}
 
-	if (flDist <= 64 && flDot >= 0.7 &&
-		pEnemy->Classify() != CLASS_ALIEN_BIOWEAPON &&
-		pEnemy->Classify() != CLASS_PLAYER_BIOWEAPON)
+	if (flDist <= 64 && flDot >= 0.7 && !pEnemy->IsBioWeapon())
 	{
 		return true;
 	}
@@ -678,11 +677,6 @@ void CShockTrooper::CheckAmmo()
 	{
 		SetConditions(bits_COND_NO_AMMO_LOADED);
 	}
-}
-
-int CShockTrooper::Classify()
-{
-	return CLASS_ALIEN_RACE_X;
 }
 
 CBaseEntity* CShockTrooper::Kick()
@@ -1769,15 +1763,19 @@ const Schedule_t* CShockTrooper::GetSchedule()
 					// before he starts pluggin away.
 					if (FOkToSpeak()) // && RANDOM_LONG(0,1))
 					{
-						if ((m_hEnemy != nullptr) && m_hEnemy->IsPlayer())
-							// player
-							sentences::g_Sentences.PlayRndSz(this, "ST_ALERT", ShockTrooper_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
-						else if ((m_hEnemy != nullptr) &&
-								 (m_hEnemy->Classify() != CLASS_PLAYER_ALLY) &&
-								 (m_hEnemy->Classify() != CLASS_HUMAN_PASSIVE) &&
-								 (m_hEnemy->Classify() != CLASS_MACHINE))
-							// monster
-							sentences::g_Sentences.PlayRndSz(this, "ST_MONST", ShockTrooper_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
+						if (m_hEnemy)
+						{
+							if (m_hEnemy->IsPlayer())
+							{
+								// player
+								sentences::g_Sentences.PlayRndSz(this, "ST_ALERT", ShockTrooper_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
+							}
+							else if (auto monster = m_hEnemy->MyMonsterPointer(); monster && monster->HasAlienGibs())
+							{
+								// monster
+								sentences::g_Sentences.PlayRndSz(this, "ST_MONST", ShockTrooper_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
+							}
+						}
 
 						JustSpoke();
 					}
@@ -2174,7 +2172,6 @@ class CDeadShockTrooper : public CBaseMonster
 public:
 	void OnCreate() override;
 	void Spawn() override;
-	int Classify() override { return CLASS_HUMAN_MILITARY; }
 
 	// TODO: needs to be alien gibs instead
 	bool HasHumanGibs() override { return true; }
@@ -2194,6 +2191,9 @@ void CDeadShockTrooper::OnCreate()
 	// Corpses have less health
 	pev->health = 8;
 	pev->model = MAKE_STRING("models/strooper.mdl");
+
+	// TODO: should be race x
+	SetClassification("human_military");
 }
 
 bool CDeadShockTrooper::KeyValue(KeyValueData* pkvd)

@@ -25,7 +25,6 @@ public:
 	void Spawn() override;
 	void Precache() override;
 	void SetYawSpeed() override;
-	int Classify() override;
 
 	bool HasAlienGibs() override { return true; }
 };
@@ -37,11 +36,8 @@ void CRat::OnCreate()
 
 	pev->health = 8;
 	pev->model = MAKE_STRING("models/bigrat.mdl");
-}
 
-int CRat::Classify()
-{
-	return CLASS_INSECT;
+	SetClassification("insect");
 }
 
 void CRat::SetYawSpeed()

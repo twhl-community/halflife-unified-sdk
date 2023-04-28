@@ -51,6 +51,8 @@ void CApache::OnCreate()
 
 	pev->health = GetSkillFloat("apache_health"sv);
 	pev->model = MAKE_STRING("models/apache.mdl");
+
+	SetClassification("human_military");
 }
 
 void CApache::Spawn()
@@ -290,7 +292,7 @@ void CApache::DyingThink()
 
 		EmitSound(CHAN_STATIC, "weapons/mortarhit.wav", 1.0, 0.3);
 
-		RadiusDamage(pev->origin, this, this, 300, CLASS_NONE, DMG_BLAST);
+		RadiusDamage(pev->origin, this, this, 300, DMG_BLAST);
 
 		if (/*(pev->spawnflags & SF_NOWRECKAGE) == 0 && */ (pev->flags & FL_ONGROUND) != 0)
 		{

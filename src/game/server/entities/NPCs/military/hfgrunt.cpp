@@ -25,11 +25,11 @@ int g_fFGruntQuestion; //!< true if an idle grunt asked a question. Cleared when
 class CHFGrunt : public CHGrunt
 {
 public:
-	int IRelationship(CBaseEntity* pTarget) override
+	Relationship IRelationship(CBaseEntity* pTarget) override
 	{
 		// Players are allies
 		if (pTarget->IsPlayer())
-			return R_AL;
+			return Relationship::Ally;
 
 		return CHGrunt::IRelationship(pTarget);
 	}

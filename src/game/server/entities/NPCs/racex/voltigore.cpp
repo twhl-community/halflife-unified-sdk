@@ -26,8 +26,6 @@ public:
 	void Precache() override;
 	void Spawn() override;
 
-	int Classify() override { return CLASS_NONE; }
-
 	void InitBeams();
 	void ClearBeams();
 
@@ -274,7 +272,7 @@ void COFChargedBolt::ChargedBoltTouch(CBaseEntity* pOther)
 
 	ClearMultiDamage();
 
-	RadiusDamage(pev->origin, this, pevOwner, GetSkillFloat("voltigore_dmg_beam"sv), 128.0, CLASS_NONE, DMG_ALWAYSGIB | DMG_SHOCK);
+	RadiusDamage(pev->origin, this, pevOwner, GetSkillFloat("voltigore_dmg_beam"sv), 128.0, DMG_ALWAYSGIB | DMG_SHOCK);
 
 	SetThink(&COFChargedBolt::ShutdownChargedBolt);
 	pev->nextthink = gpGlobals->time + 0.5;
@@ -300,13 +298,15 @@ void COFVoltigore::OnCreate()
 
 	pev->health = GetSkillFloat("voltigore_health"sv);
 	pev->model = MAKE_STRING("models/voltigore.mdl");
+
+	SetClassification("alien_military");
 }
 
-int COFVoltigore::IRelationship(CBaseEntity* pTarget)
+Relationship COFVoltigore::IRelationship(CBaseEntity* pTarget)
 {
 	if (pTarget->ClassnameIs("monster_human_grunt"))
 	{
-		return R_NM;
+		return Relationship::Nemesis;
 	}
 
 	return CSquadMonster::IRelationship(pTarget);
@@ -380,11 +380,6 @@ void COFVoltigore::PainSound()
 	StopTalking();
 
 	EmitSound(CHAN_VOICE, pPainSounds[RANDOM_LONG(0, std::size(pPainSounds) - 1)], 1.0, ATTN_NORM);
-}
-
-int COFVoltigore::Classify()
-{
-	return CLASS_ALIEN_MILITARY;
 }
 
 void COFVoltigore::SetYawSpeed()
@@ -1132,7 +1127,7 @@ void COFVoltigore::DeathGibThink()
 
 		ClearMultiDamage();
 
-		::RadiusDamage(pev->origin, this, this, GetSkillFloat("voltigore_dmg_beam"sv), 160.0, CLASS_NONE, DMG_ALWAYSGIB | DMG_SHOCK);
+		::RadiusDamage(pev->origin, this, this, GetSkillFloat("voltigore_dmg_beam"sv), 160.0, DMG_ALWAYSGIB | DMG_SHOCK);
 	}
 }
 

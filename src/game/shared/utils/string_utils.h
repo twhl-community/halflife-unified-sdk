@@ -51,12 +51,13 @@ void ToUpper(std::string& text);
 [[nodiscard]] std::string ToLower(std::string_view text);
 [[nodiscard]] std::string ToUpper(std::string_view text);
 
+[[nodiscard]] int UTIL_CompareI(std::string_view lhs, std::string_view rhs);
+
 void UTIL_StringToVector(Vector& destination, std::string_view pString);
 int UTIL_StringToInteger(std::string_view str);
 
 // for handy use with ClientPrint params
 IntegerString UTIL_ToString(int iValue);
-
 
 /**
  *	@brief Parses a string that ends with an array index.

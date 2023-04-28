@@ -2169,6 +2169,7 @@ class CGunTarget : public CBaseMonster
 	DECLARE_DATAMAP();
 
 public:
+	void OnCreate() override;
 	void Spawn() override;
 	void Activate() override;
 	void Next();
@@ -2176,8 +2177,9 @@ public:
 	void Wait();
 	void Stop() override;
 
+	bool IsMachine() const override { return true; }
+
 	int BloodColor() override { return DONT_BLEED; }
-	int Classify() override { return CLASS_MACHINE; }
 	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 	Vector BodyTarget(const Vector& posSrc) override { return pev->origin; }
@@ -2196,6 +2198,13 @@ DEFINE_FIELD(m_on, FIELD_BOOLEAN),
 	DEFINE_FUNCTION(Start),
 	DEFINE_FUNCTION(Wait),
 	END_DATAMAP();
+
+void CGunTarget::OnCreate()
+{
+	BaseClass::OnCreate();
+
+	SetClassification("machine");
+}
 
 void CGunTarget::Spawn()
 {

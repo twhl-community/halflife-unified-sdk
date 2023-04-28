@@ -215,7 +215,6 @@ class CDeadOtis : public CBaseMonster
 public:
 	void OnCreate() override;
 	void Spawn() override;
-	int Classify() override { return CLASS_PLAYER_ALLY; }
 
 	bool KeyValue(KeyValueData* pkvd) override;
 
@@ -232,6 +231,8 @@ void CDeadOtis::OnCreate()
 	// Corpses have less health
 	pev->health = 8; // GetSkillFloat("otis_health"sv);
 	pev->model = MAKE_STRING("models/otis.mdl");
+
+	SetClassification("player_ally");
 }
 
 bool CDeadOtis::KeyValue(KeyValueData* pkvd)

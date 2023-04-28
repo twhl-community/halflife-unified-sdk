@@ -550,7 +550,7 @@ bool CBasePlayer::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, floa
 	{
 		auto enemy = pAttacker->MyMonsterPointer();
 
-		if (!enemy || enemy->IRelationship(this) == R_AL)
+		if (!enemy || enemy->IRelationship(this) == Relationship::Ally)
 		{
 			return fTookDamage;
 		}
@@ -1553,11 +1553,6 @@ void CBasePlayer::Duck()
 	}
 }
 
-int CBasePlayer::Classify()
-{
-	return CLASS_PLAYER;
-}
-
 void CBasePlayer::AddPoints(int score, bool bAllowNegativeScore)
 {
 	// Positive score always adds
@@ -1742,17 +1737,17 @@ void CBasePlayer::UpdateEntityInfo()
 		{
 			const auto classification = monster->Classify();
 
-			if (classification != CLASS_NONE && classification >= CLASS_FIRST && classification <= CLASS_LAST)
+			if (classification != ENTCLASS_NONE)
 			{
-				color = [](int relationship)
+				color = [](Relationship relationship)
 				{
 					// Make sure these are colorblind-friendly.
 					switch (relationship)
 					{
-					case R_AL: return RGB_BLUEISH;
-					case R_DL: [[fallthrough]];
-					case R_HT: [[fallthrough]];
-					case R_NM: return RGB_REDISH;
+					case Relationship::Ally: return RGB_BLUEISH;
+					case Relationship::Dislike: [[fallthrough]];
+					case Relationship::Hate: [[fallthrough]];
+					case Relationship::Nemesis: return RGB_REDISH;
 					default: return RGB_WHITE;
 					}
 				}(monster->IRelationship(this));
@@ -4419,7 +4414,7 @@ Vector CBasePlayer::AutoaimDeflection(const Vector& vecSrc, float flDist, float 
 		}
 
 		// don't shoot at friends
-		if (IRelationship(pEntity) < 0)
+		if (IRelationship(pEntity) < Relationship::None)
 		{
 			if (!pEntity->IsPlayer() && !g_pGameRules->IsMultiplayer())
 				// Logger->debug("friend");
@@ -5038,7 +5033,6 @@ class CDeadHEV : public CBaseMonster
 public:
 	void OnCreate() override;
 	void Spawn() override;
-	int Classify() override { return CLASS_HUMAN_MILITARY; }
 
 	bool KeyValue(KeyValueData* pkvd) override;
 
@@ -5055,6 +5049,8 @@ void CDeadHEV::OnCreate()
 	// Corpses have less health
 	pev->health = 8;
 	pev->model = MAKE_STRING("models/deadhaz.mdl");
+
+	SetClassification("human_military");
 }
 
 bool CDeadHEV::KeyValue(KeyValueData* pkvd)

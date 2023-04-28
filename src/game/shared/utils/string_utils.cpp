@@ -15,6 +15,8 @@
 
 #include <charconv>
 
+#include <EASTL/string.h>
+
 #include "Platform.h"
 
 #include "string_utils.h"
@@ -92,6 +94,11 @@ std::string ToUpper(std::string_view text)
 	ToUpper(result);
 
 	return result;
+}
+
+int UTIL_CompareI(std::string_view lhs, std::string_view rhs)
+{
+	return eastl::string::comparei(lhs.data(), lhs.data() + lhs.size(), rhs.data(), rhs.data() + rhs.size());
 }
 
 void UTIL_StringToVector(Vector& destination, std::string_view pString)

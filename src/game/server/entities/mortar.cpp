@@ -273,7 +273,7 @@ void CMortar::MortarExplode()
 
 	// ExplodeModel( pev->origin, 400, g_sModelIndexShrapnel, 30 );
 
-	RadiusDamage(this, GetOwner(), pev->dmg, CLASS_NONE, DMG_BLAST);
+	RadiusDamage(this, GetOwner(), pev->dmg, DMG_BLAST);
 
 	/*
 	if ( RANDOM_FLOAT ( 0 , 1 ) < 0.5 )

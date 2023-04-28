@@ -39,7 +39,6 @@ class CDeadZombieSoldier : public CBaseMonster
 public:
 	void OnCreate() override;
 	void Spawn() override;
-	int Classify() override { return CLASS_ALIEN_MONSTER; }
 
 	bool HasAlienGibs() override { return true; }
 
@@ -58,6 +57,8 @@ void CDeadZombieSoldier::OnCreate()
 	// Corpses have less health
 	pev->health = 8;
 	pev->model = MAKE_STRING("models/zombie_soldier.mdl");
+
+	SetClassification("alien_monster");
 }
 
 bool CDeadZombieSoldier::KeyValue(KeyValueData* pkvd)

@@ -176,7 +176,6 @@ public:
 	void Precache() override;
 	void SetYawSpeed() override;
 	int ISoundMask() override;
-	int Classify() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 	void IdleSound() override;
 	void PainSound() override;
@@ -218,7 +217,7 @@ public:
 	/**
 	 *	@brief overridden for bullsquid so that it can be made to ignore its love of headcrabs for a while.
 	 */
-	int IRelationship(CBaseEntity* pTarget) override;
+	Relationship IRelationship(CBaseEntity* pTarget) override;
 	int IgnoreConditions() override;
 
 	/**
@@ -247,6 +246,8 @@ void CBullsquid::OnCreate()
 
 	pev->health = GetSkillFloat("bullsquid_health"sv);
 	pev->model = MAKE_STRING("models/bullsquid.mdl");
+
+	SetClassification("alien_predator");
 }
 
 int CBullsquid::IgnoreConditions()
@@ -272,13 +273,13 @@ int CBullsquid::IgnoreConditions()
 	return iIgnore;
 }
 
-int CBullsquid::IRelationship(CBaseEntity* pTarget)
+Relationship CBullsquid::IRelationship(CBaseEntity* pTarget)
 {
 	if (gpGlobals->time - m_flLastHurtTime < 5 && pTarget->ClassnameIs("monster_headcrab"))
 	{
 		// if squid has been hurt in the last 5 seconds, and is getting relationship for a headcrab,
 		// tell squid to disregard crab.
-		return R_NO;
+		return Relationship::None;
 	}
 
 	return CBaseMonster::IRelationship(pTarget);
@@ -396,11 +397,6 @@ int CBullsquid::ISoundMask()
 		   bits_SOUND_MEAT |
 		   bits_SOUND_GARBAGE |
 		   bits_SOUND_PLAYER;
-}
-
-int CBullsquid::Classify()
-{
-	return CLASS_ALIEN_PREDATOR;
 }
 
 #define SQUID_ATTN_IDLE (float)1.5
@@ -994,7 +990,7 @@ const Schedule_t* CBullsquid::GetSchedule()
 
 		if (HasConditions(bits_COND_NEW_ENEMY))
 		{
-			if (m_fCanThreatDisplay && IRelationship(m_hEnemy) == R_HT)
+			if (m_fCanThreatDisplay && IRelationship(m_hEnemy) == Relationship::Hate)
 			{
 				// this means squid sees a headcrab!
 				m_fCanThreatDisplay = false; // only do the headcrab dance once per lifetime.

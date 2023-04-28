@@ -35,7 +35,6 @@ public:
 	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
-	int Classify() override;
 	void SuperBounceTouch(CBaseEntity* pOther);
 	void HuntThink();
 	int BloodColor() override { return BLOOD_COLOR_YELLOW; }
@@ -43,6 +42,8 @@ public:
 	void GibMonster() override;
 
 	bool HasAlienGibs() override { return true; }
+
+	bool IsBioWeapon() const override { return true; }
 
 private:
 	static float m_flNextBounceSoundTime;
@@ -54,7 +55,6 @@ private:
 	float m_flNextHit;
 	Vector m_posPrev;
 	EHANDLE m_hOwner;
-	int m_iMyClass;
 };
 
 float CSqueakGrenade::m_flNextBounceSoundTime = 0;
@@ -80,28 +80,8 @@ void CSqueakGrenade::OnCreate()
 
 	pev->health = GetSkillFloat("snark_health"sv);
 	pev->model = MAKE_STRING("models/w_squeak.mdl");
-}
 
-int CSqueakGrenade::Classify()
-{
-	if (m_iMyClass != 0)
-		return m_iMyClass; // protect against recursion
-
-	if (m_hEnemy != nullptr)
-	{
-		m_iMyClass = CLASS_INSECT; // no one cares about it
-		switch (m_hEnemy->Classify())
-		{
-		case CLASS_PLAYER:
-		case CLASS_HUMAN_PASSIVE:
-		case CLASS_HUMAN_MILITARY:
-			m_iMyClass = 0;
-			return CLASS_ALIEN_MILITARY; // barney's get mad, grunts get mad at it
-		}
-		m_iMyClass = 0;
-	}
-
-	return CLASS_ALIEN_BIOWEAPON;
+	SetClassification("alien_bioweapon");
 }
 
 void CSqueakGrenade::Spawn()
@@ -172,9 +152,9 @@ void CSqueakGrenade::Killed(CBaseEntity* attacker, int iGib)
 	UTIL_BloodDrips(pev->origin, g_vecZero, BloodColor(), 80);
 
 	if (m_hOwner != nullptr)
-		RadiusDamage(this, m_hOwner, pev->dmg, CLASS_NONE, DMG_BLAST);
+		RadiusDamage(this, m_hOwner, pev->dmg, DMG_BLAST);
 	else
-		RadiusDamage(this, this, pev->dmg, CLASS_NONE, DMG_BLAST);
+		RadiusDamage(this, this, pev->dmg, DMG_BLAST);
 
 	// reset owner so death message happens
 	if (m_hOwner != nullptr)
@@ -301,6 +281,24 @@ void CSqueakGrenade::HuntThink()
 	pev->angles = UTIL_VecToAngles(pev->velocity);
 	pev->angles.z = 0;
 	pev->angles.x = 0;
+
+	// Update classification
+	if (!HasCustomClassification())
+	{
+		// TODO: maybe use a different classification that has the expected relationships for these classes.
+		const char* classification = "alien_bioweapon";
+
+		if (m_hEnemy != nullptr)
+		{
+			if (g_EntityClassifications.ClassNameIs(m_hEnemy->Classify(), {"player", "human_passive", "human_military"}))
+			{
+				// barney's get mad, grunts get mad at it
+				classification = "alien_military";
+			}
+		}
+
+		SetClassification(classification);
+	}
 }
 
 void CSqueakGrenade::SuperBounceTouch(CBaseEntity* pOther)

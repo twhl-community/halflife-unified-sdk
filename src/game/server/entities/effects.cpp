@@ -2099,8 +2099,6 @@ class CWarpBall : public CBaseEntity
 	DECLARE_DATAMAP();
 
 public:
-	int Classify() override { return CLASS_NONE; }
-
 	bool KeyValue(KeyValueData* pkvd) override;
 
 	void Precache() override;
@@ -2296,7 +2294,7 @@ void CWarpBall::WarpBallUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_T
 
 		if (m_flDamageDelay == 0)
 		{
-			::RadiusDamage(pev->origin, this, this, 300, 48, CLASS_NONE, DMG_SHOCK);
+			::RadiusDamage(pev->origin, this, this, 300, 48, DMG_SHOCK);
 			m_fDamageApplied = true;
 		}
 		else
@@ -2337,7 +2335,7 @@ void CWarpBall::BallThink()
 		// TODO: this flag is probably supposed to be a "do radius damage" flag, but it isn't used in the Use method
 		if ((pev->spawnflags & SF_WARPBALL_DELAYED_DAMAGE) != 0 && !m_fDamageApplied && (gpGlobals->time - m_flWarpStart) >= m_flDamageDelay)
 		{
-			::RadiusDamage(pev->origin, this, this, 300, 48, CLASS_NONE, DMG_SHOCK);
+			::RadiusDamage(pev->origin, this, this, 300, 48, DMG_SHOCK);
 			m_fDamageApplied = true;
 		}
 

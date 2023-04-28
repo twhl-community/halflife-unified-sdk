@@ -39,6 +39,7 @@
 #include "config/GameConfig.h"
 #include "config/sections/CommandsSection.h"
 #include "config/sections/EchoSection.h"
+#include "config/sections/EntityClassificationsSection.h"
 #include "config/sections/EntityTemplatesSection.h"
 #include "config/sections/GameDataFilesSections.h"
 #include "config/sections/GlobalReplacementFilesSections.h"
@@ -46,6 +47,8 @@
 #include "config/sections/HudReplacementSection.h"
 #include "config/sections/SpawnInventorySection.h"
 #include "config/sections/SuitLightTypeSection.h"
+
+#include "entities/EntityClassificationSystem.h"
 
 #include "gamerules/MapCycleSystem.h"
 #include "gamerules/PersistentInventorySystem.h"
@@ -359,6 +362,7 @@ void ServerLibrary::CreateConfigDefinitions()
 			sections.push_back(std::make_unique<SuitLightTypeSection>());
 			sections.push_back(std::make_unique<SpawnInventorySection>());
 			sections.push_back(std::make_unique<EntityTemplatesSection>());
+			sections.push_back(std::make_unique<EntityClassificationsSection>());
 			sections.push_back(std::make_unique<HudReplacementSection>());
 
 			return sections; }());
@@ -489,6 +493,8 @@ void ServerLibrary::LoadServerConfigFiles()
 		context.SkillFiles.push_back("cfg/skill_coop.json");
 	}
 
+	context.EntityClassificationsFileName = "cfg/default_entity_classes.json";
+
 	if (const auto cfgFile = servercfgfile.string; cfgFile && '\0' != cfgFile[0])
 	{
 		g_GameLogger->trace("Loading server config file");
@@ -516,6 +522,8 @@ void ServerLibrary::LoadServerConfigFiles()
 		context.GlobalSoundReplacementFiles, {.CaseSensitive = false});
 
 	g_SpawnInventory.SetInventory(std::move(context.SpawnInventory));
+
+	g_EntityClassifications.Load(context.EntityClassificationsFileName);
 
 	g_EntityTemplates.LoadTemplates(context.EntityTemplates);
 

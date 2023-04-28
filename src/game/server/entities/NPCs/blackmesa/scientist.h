@@ -94,7 +94,6 @@ public:
 	bool HasHumanGibs() override { return true; }
 
 	void SetYawSpeed() override;
-	int Classify() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 	void RunTask(const Task_t* pTask) override;
 	void StartTask(const Task_t* pTask) override;
@@ -148,7 +147,6 @@ public:
 	void Precache() override;
 
 	void SittingThink();
-	int Classify() override;
 
 	void SetAnswerQuestion(CTalkMonster* pSpeaker) override;
 

@@ -134,6 +134,9 @@ BEGIN_DATAMAP_NOBASE(CBaseEntity)
 DEFINE_FIELD(m_pGoalEnt, FIELD_CLASSPTR),
 	DEFINE_FIELD(m_EFlags, FIELD_CHARACTER),
 
+	DEFINE_FIELD(m_ClassificationName, FIELD_STRING),
+	DEFINE_FIELD(m_HasCustomClassification, FIELD_BOOLEAN),
+
 	DEFINE_FIELD(m_InformedOwnerOfDeath, FIELD_BOOLEAN),
 
 	DEFINE_FIELD(m_pfnThink, FIELD_FUNCTIONPOINTER), // UNDONE: Build table of these!!!
@@ -190,6 +193,12 @@ bool CBaseEntity::KeyValue(KeyValueData* pkvd)
 		m_sMaster = ALLOC_STRING(pkvd->szValue);
 		return true;
 	}
+	else if (FStrEq(pkvd->szKeyName, "classification"))
+	{
+		SetClassification(pkvd->szValue);
+		m_HasCustomClassification = true;
+		return true;
+	}
 
 	return false;
 }
@@ -241,6 +250,9 @@ bool CBaseEntity::Restore(CRestore& restore)
 void CBaseEntity::PostRestore()
 {
 #ifndef CLIENT_DLL
+	// Reinitialize the classification
+	SetClassification(STRING(m_ClassificationName));
+
 	LoadReplacementFiles();
 
 	if (pev->modelindex != 0 && !FStringNull(pev->model))

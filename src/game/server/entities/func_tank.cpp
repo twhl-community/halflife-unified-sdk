@@ -513,7 +513,7 @@ CBaseEntity* CFuncTank::FindTarget(CBaseEntity* pvsPlayer)
 		if (!pMonster)
 			continue;
 
-		if (pMonster->IRelationship(pPlayerTarget) != R_AL)
+		if (pMonster->IRelationship(pPlayerTarget) != Relationship::Ally)
 			continue;
 
 		if ((pEntity->pev->flags & FL_NOTARGET) != 0)

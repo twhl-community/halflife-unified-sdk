@@ -42,6 +42,8 @@ struct ServerConfigContext
 
 	EntityTemplateMap EntityTemplates;
 
+	std::string EntityClassificationsFileName;
+
 	std::string HudReplacementFile;
 
 	WeaponHudReplacements WeaponHudReplacementFiles;

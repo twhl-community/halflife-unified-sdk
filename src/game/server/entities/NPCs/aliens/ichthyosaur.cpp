@@ -41,7 +41,6 @@ public:
 	void Spawn() override;
 	void Precache() override;
 	void SetYawSpeed() override;
-	int Classify() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 
 	bool HasAlienGibs() override { return true; }
@@ -170,6 +169,8 @@ void CIchthyosaur::OnCreate()
 
 	pev->health = GetSkillFloat("ichthyosaur_health"sv);
 	pev->model = MAKE_STRING("models/icky.mdl");
+
+	SetClassification("alien_monster");
 }
 
 #define EMIT_ICKY_SOUND(chan, array) \
@@ -304,11 +305,6 @@ slSwimAround,
 	slTwitchDie,
 	slFloat
 	END_CUSTOM_SCHEDULES();
-
-int CIchthyosaur::Classify()
-{
-	return CLASS_ALIEN_MONSTER;
-}
 
 bool CIchthyosaur::CheckMeleeAttack1(float flDot, float flDist)
 {

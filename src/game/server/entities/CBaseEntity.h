@@ -23,6 +23,7 @@
 #include "extdll.h"
 #include "util.h"
 #include "DataMap.h"
+#include "EntityClassificationSystem.h"
 #include "skill.h"
 
 class CBaseEntity;
@@ -59,29 +60,6 @@ enum USE_TYPE : int
 	USE_SET = 2,
 	USE_TOGGLE = 3
 };
-
-// For CLASSIFY
-#define CLASS_NONE 0
-#define CLASS_MACHINE 1
-#define CLASS_PLAYER 2
-#define CLASS_HUMAN_PASSIVE 3
-#define CLASS_HUMAN_MILITARY 4
-#define CLASS_ALIEN_MILITARY 5
-#define CLASS_ALIEN_PASSIVE 6
-#define CLASS_ALIEN_MONSTER 7
-#define CLASS_ALIEN_PREY 8
-#define CLASS_ALIEN_PREDATOR 9
-#define CLASS_INSECT 10
-#define CLASS_PLAYER_ALLY 11
-#define CLASS_PLAYER_BIOWEAPON 12		 // hornets and snarks.launched by players
-#define CLASS_ALIEN_BIOWEAPON 13		 // hornets and snarks.launched by the alien menace
-#define CLASS_HUMAN_MILITARY_FRIENDLY 14 // Opposing Force friendlies
-#define CLASS_ALIEN_RACE_X 15
-#define CLASS_BARNACLE 99 // special because no one pays attention to it, and it eats a wide cross-section of creatures.
-
-// Defines the range of valid class values for use in IRelationship.
-constexpr int CLASS_FIRST = CLASS_MACHINE;
-constexpr int CLASS_LAST = CLASS_ALIEN_RACE_X;
 
 // people gib if their health is <= this at the time of death
 #define GIB_HEALTH_VALUE -30
@@ -245,11 +223,55 @@ public:
 	 */
 	virtual void SetObjectCollisionBox();
 
+private:
+	string_t m_ClassificationName = MAKE_STRING(ENTCLASS_NONE_NAME);
+	EntityClassification m_Classification = ENTCLASS_NONE; // Not saved; reset on load.
+	bool m_HasCustomClassification = false;
+
+public:
+	const char* GetClassificationName() const
+	{
+		return STRING(m_ClassificationName);
+	}
+
+	EntityClassification GetClassification() const
+	{
+		return m_Classification;
+	}
+
+	bool HasCustomClassification() const
+	{
+		return m_HasCustomClassification;
+	}
+
+	void SetClassification(std::string_view name)
+	{
+		m_Classification = g_EntityClassifications.GetClass(name);
+
+		// If the classification doesn't exist then the name has to be changed as well.
+		if (m_Classification != ENTCLASS_NONE)
+		{
+			m_ClassificationName = ALLOC_STRING_VIEW(name);
+		}
+		else
+		{
+			m_ClassificationName = MAKE_STRING(ENTCLASS_NONE_NAME);
+		}
+	}
+
 	/**
 	 *	@brief returns the type of group (i.e, "houndeye", or "human military") so that monsters
 	 *	with different classnames still realize that they are teammates. (overridden for monsters that form groups)
 	 */
-	virtual int Classify() { return CLASS_NONE; }
+	virtual EntityClassification Classify()
+	{
+		return m_Classification;
+	}
+
+	/**
+	 *	@brief Is this some kind of machine?
+	 */
+	virtual bool IsMachine() const { return false; }
 
 	bool m_InformedOwnerOfDeath = false;
 

@@ -172,7 +172,6 @@ public:
 	bool ShouldGoToNode();
 
 	void SetYawSpeed() override;
-	int Classify() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 	void LayHeadcrab();
 
@@ -362,6 +361,8 @@ void CBigMomma::OnCreate()
 
 	pev->health = 150 * GetSkillFloat("bigmomma_health_factor"sv);
 	pev->model = MAKE_STRING("models/big_mom.mdl");
+
+	SetClassification("alien_monster");
 }
 
 bool CBigMomma::KeyValue(KeyValueData* pkvd)
@@ -374,11 +375,6 @@ bool CBigMomma::KeyValue(KeyValueData* pkvd)
 	}
 #endif
 	return CBaseMonster::KeyValue(pkvd);
-}
-
-int CBigMomma::Classify()
-{
-	return CLASS_ALIEN_MONSTER;
 }
 
 void CBigMomma::SetYawSpeed()
@@ -1141,6 +1137,6 @@ void CBMortar::Touch(CBaseEntity* pOther)
 
 	auto owner = GetOwner();
 
-	RadiusDamage(pev->origin, this, owner, GetSkillFloat("bigmomma_dmg_blast"sv), GetSkillFloat("bigmomma_radius_blast"sv), CLASS_NONE, DMG_ACID);
+	RadiusDamage(pev->origin, this, owner, GetSkillFloat("bigmomma_dmg_blast"sv), GetSkillFloat("bigmomma_radius_blast"sv), DMG_ACID);
 	UTIL_Remove(this);
 }

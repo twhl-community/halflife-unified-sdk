@@ -40,6 +40,8 @@ void CBaseHGruntAlly::OnCreate()
 {
 	COFSquadTalkMonster::OnCreate();
 
+	SetClassification("human_military_ally");
+
 	// get voice pitch
 	m_voicePitch = 100;
 }
@@ -161,9 +163,7 @@ bool CBaseHGruntAlly::CheckMeleeAttack1(float flDot, float flDist)
 		}
 	}
 
-	if (flDist <= 64 && flDot >= 0.7 &&
-		pEnemy->Classify() != CLASS_ALIEN_BIOWEAPON &&
-		pEnemy->Classify() != CLASS_PLAYER_BIOWEAPON)
+	if (flDist <= 64 && flDot >= 0.7 && !pEnemy->IsBioWeapon())
 	{
 		return true;
 	}
@@ -501,11 +501,6 @@ void CBaseHGruntAlly::CheckAmmo()
 	{
 		SetConditions(bits_COND_NO_AMMO_LOADED);
 	}
-}
-
-int CBaseHGruntAlly::Classify()
-{
-	return CLASS_HUMAN_MILITARY_FRIENDLY;
 }
 
 CBaseEntity* CBaseHGruntAlly::Kick()
@@ -1667,15 +1662,19 @@ const Schedule_t* CBaseHGruntAlly::GetSchedule()
 					// before he starts pluggin away.
 					if (FOkToSpeak()) // && RANDOM_LONG(0,1))
 					{
-						if ((m_hEnemy != nullptr) && m_hEnemy->IsPlayer())
-							// player
-							sentences::g_Sentences.PlayRndSz(this, "FG_ALERT", HGRUNT_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
-						else if ((m_hEnemy != nullptr) &&
-								 (m_hEnemy->Classify() != CLASS_PLAYER_ALLY) &&
-								 (m_hEnemy->Classify() != CLASS_HUMAN_PASSIVE) &&
-								 (m_hEnemy->Classify() != CLASS_MACHINE))
-							// monster
-							sentences::g_Sentences.PlayRndSz(this, "FG_MONST", HGRUNT_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
+						if (m_hEnemy)
+						{
+							if (m_hEnemy->IsPlayer())
+							{
+								// player
+								sentences::g_Sentences.PlayRndSz(this, "FG_ALERT", HGRUNT_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
+							}
+							else if (auto monster = m_hEnemy->MyMonsterPointer(); monster && monster->HasAlienGibs())
+							{
+								// monster
+								sentences::g_Sentences.PlayRndSz(this, "FG_MONST", HGRUNT_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
+							}
+						}
 
 						JustSpoke();
 					}
