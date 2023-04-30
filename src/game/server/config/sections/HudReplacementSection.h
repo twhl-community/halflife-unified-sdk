@@ -58,7 +58,10 @@ public:
 
 	bool TryParse(GameConfigContext<ServerConfigContext>& context) const override final
 	{
-		context.Data.HudReplacementFile = context.Input.value<std::string>("HudReplacementFile", "");
+		if (auto it = context.Input.find("HudReplacementFile"); it != context.Input.end())
+		{
+			context.Data.HudReplacementFile = it->get<std::string>();
+		}
 
 		if (auto it = context.Input.find("Weapons"); it != context.Input.end())
 		{
