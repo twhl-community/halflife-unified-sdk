@@ -36,8 +36,9 @@
 #include "tri.h"
 #include "vgui_TeamFortressViewport.h"
 
-
 #include "particleman.h"
+
+extern bool g_ResetMousePosition;
 
 void CL_LoadParticleMan();
 void CL_UnloadParticleMan();
@@ -134,6 +135,10 @@ int DLLEXPORT HUD_VidInit()
 	g_Client.VidInit();
 
 	VGui_Startup();
+
+	// Reset mouse position the first time the engine asks for an update so
+	// movement during map load doesn't impact in-game angles.
+	g_ResetMousePosition = true;
 
 	return 1;
 }
