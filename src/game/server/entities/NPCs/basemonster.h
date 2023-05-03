@@ -36,6 +36,13 @@ enum NPCWeaponState
 };
 }
 
+enum class PlayerAllyRelationship : int
+{
+	Default = 0,
+	No,
+	Yes
+};
+
 #define ROUTE_SIZE 8	  //!< how many waypoints a monster can store at one time
 #define MAX_OLD_ENEMIES 4 //!< how many old enemies to remember
 
@@ -204,6 +211,8 @@ public:
 
 	int m_iTriggerCondition;	 //!< for scripted AI, this is the condition that will cause the activation of the monster's TriggerTarget
 	string_t m_iszTriggerTarget; //!< name of target that should be fired.
+
+	PlayerAllyRelationship m_PlayerAllyRelationship = PlayerAllyRelationship::Default;
 
 	Vector m_HackedGunPos; //!< HACK until we can query end of gun
 

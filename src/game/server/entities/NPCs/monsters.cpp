@@ -81,6 +81,7 @@ DEFINE_FIELD(m_hEnemy, FIELD_EHANDLE),
 	DEFINE_FIELD(m_flDistLook, FIELD_FLOAT),
 	DEFINE_FIELD(m_iTriggerCondition, FIELD_INTEGER),
 	DEFINE_FIELD(m_iszTriggerTarget, FIELD_STRING),
+	DEFINE_FIELD(m_PlayerAllyRelationship, FIELD_INTEGER),
 
 	DEFINE_FIELD(m_HackedGunPos, FIELD_VECTOR),
 
@@ -1962,6 +1963,16 @@ bool CBaseMonster::TaskIsRunning()
 
 Relationship CBaseMonster::IRelationship(CBaseEntity* pTarget)
 {
+	if (pTarget->IsPlayer())
+	{
+		switch (m_PlayerAllyRelationship)
+		{
+		case PlayerAllyRelationship::No: return Relationship::Dislike;
+		case PlayerAllyRelationship::Yes: return Relationship::Ally;
+		default: break;
+		}
+	}
+
 	return g_EntityClassifications.GetRelationship(Classify(), pTarget->Classify());
 }
 
@@ -2670,6 +2681,13 @@ bool CBaseMonster::KeyValue(KeyValueData* pkvd)
 	else if (FStrEq(pkvd->szKeyName, "allow_item_dropping"))
 	{
 		m_AllowItemDropping = atoi(pkvd->szValue) != 0;
+		return true;
+	}
+	else if (FStrEq(pkvd->szKeyName, "is_player_ally"))
+	{
+		m_PlayerAllyRelationship = std::clamp(
+			PlayerAllyRelationship(atoi(pkvd->szValue)), PlayerAllyRelationship::Default, PlayerAllyRelationship::Yes);
+		return true;
 	}
 
 	return CBaseToggle::KeyValue(pkvd);
