@@ -264,19 +264,58 @@ CBaseEntity* UTIL_FindEntityByString(CBaseEntity* pStartEntity, const char* szKe
 	return nullptr;
 }
 
+template <typename Accessor>
+CBaseEntity* UTIL_FindEntityByAccessor(CBaseEntity* pStartEntity, const char* szName, Accessor accessor)
+{
+	if (!szName)
+	{
+		return nullptr;
+	}
+
+	auto list = UTIL_GetEntityList();
+
+	// TODO: the engine checks the highest entity index that's been used, not maxentities
+	for (int index = pStartEntity ? (pStartEntity->entindex() + 1) : 1; index < gpGlobals->maxEntities; ++index)
+	{
+		auto edict = &list[index];
+
+		if (edict->free)
+		{
+			continue;
+		}
+
+		auto str = accessor(&edict->v);
+
+		if (FStringNull(str))
+		{
+			continue;
+		}
+
+		if (0 == strcmp(STRING(str), szName))
+		{
+			return GET_PRIVATE<CBaseEntity>(edict);
+		}
+	}
+
+	return nullptr;
+}
+
 CBaseEntity* UTIL_FindEntityByClassname(CBaseEntity* pStartEntity, const char* szName)
 {
-	return UTIL_FindEntityByString(pStartEntity, "classname", szName);
+	return UTIL_FindEntityByAccessor(pStartEntity, szName, [](auto entity)
+		{ return entity->classname; });
 }
 
 CBaseEntity* UTIL_FindEntityByTargetname(CBaseEntity* pStartEntity, const char* szName)
 {
-	return UTIL_FindEntityByString(pStartEntity, "targetname", szName);
+	return UTIL_FindEntityByAccessor(pStartEntity, szName, [](auto entity)
+		{ return entity->targetname; });
 }
 
 CBaseEntity* UTIL_FindEntityByTarget(CBaseEntity* pStartEntity, const char* szName)
 {
-	return UTIL_FindEntityByString(pStartEntity, "target", szName);
+	return UTIL_FindEntityByAccessor(pStartEntity, szName, [](auto entity)
+		{ return entity->target; });
 }
 
 CBaseEntity* UTIL_FindEntityGeneric(const char* szWhatever, Vector& vecSrc, float flRadius)
