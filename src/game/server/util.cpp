@@ -272,28 +272,63 @@ CBaseEntity* UTIL_FindEntityByAccessor(CBaseEntity* pStartEntity, const char* sz
 		return nullptr;
 	}
 
+	std::string_view token{szName};
+
 	auto list = UTIL_GetEntityList();
 
+	int index = pStartEntity ? (pStartEntity->entindex() + 1) : 1;
+
 	// TODO: the engine checks the highest entity index that's been used, not maxentities
-	for (int index = pStartEntity ? (pStartEntity->entindex() + 1) : 1; index < gpGlobals->maxEntities; ++index)
+
+	// Allow the use of wildcards at the end of a token to perform prefix matching.
+	if (token.ends_with('*'))
 	{
-		auto edict = &list[index];
+		token = token.substr(0, token.size() - 1);
 
-		if (edict->free)
+		for (; index < gpGlobals->maxEntities; ++index)
 		{
-			continue;
+			auto edict = &list[index];
+
+			if (edict->free)
+			{
+				continue;
+			}
+
+			auto str = accessor(&edict->v);
+
+			if (FStringNull(str))
+			{
+				continue;
+			}
+
+			if (std::string_view(STRING(str)).starts_with(token))
+			{
+				return GET_PRIVATE<CBaseEntity>(edict);
+			}
 		}
-
-		auto str = accessor(&edict->v);
-
-		if (FStringNull(str))
+	}
+	else
+	{
+		for (; index < gpGlobals->maxEntities; ++index)
 		{
-			continue;
-		}
+			auto edict = &list[index];
 
-		if (0 == strcmp(STRING(str), szName))
-		{
-			return GET_PRIVATE<CBaseEntity>(edict);
+			if (edict->free)
+			{
+				continue;
+			}
+
+			auto str = accessor(&edict->v);
+
+			if (FStringNull(str))
+			{
+				continue;
+			}
+
+			if (token == STRING(str))
+			{
+				return GET_PRIVATE<CBaseEntity>(edict);
+			}
 		}
 	}
 
