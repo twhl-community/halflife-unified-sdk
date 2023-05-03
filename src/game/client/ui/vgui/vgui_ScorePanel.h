@@ -235,6 +235,13 @@ private:
 		void internalMousePressed(MouseCode code) override;
 	};
 
+	enum class TeamType
+	{
+		No = 0,
+		Yes = 1,
+		Spectators = 2,
+		Blank = 3,
+	};
 
 private:
 	Label m_TitleLabel;
@@ -268,7 +275,7 @@ public:
 
 	int m_iRows;
 	int m_iSortedRows[NUM_ROWS];
-	int m_iIsATeam[NUM_ROWS];
+	TeamType m_iIsATeam[NUM_ROWS];
 	bool m_bHasBeenSorted[MAX_PLAYERS_HUD];
 	int m_iLastKilledBy;
 	int m_fLastKillTime;
@@ -280,7 +287,7 @@ public:
 	void Update();
 
 	void SortTeams();
-	void SortPlayers(int iTeam, char* team);
+	void SortPlayers(TeamType iTeam, char* team);
 	int RebuildTeams();
 
 	void FillGrid();
