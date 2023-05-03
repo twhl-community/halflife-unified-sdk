@@ -229,13 +229,6 @@ void CMonsterMaker::MakeMonster()
 		return;
 	}
 
-	// If I have a target, fire!
-	if (!FStringNull(pev->target))
-	{
-		// delay already overloaded for this entity, so can't call SUB_UseTargets()
-		FireTargets(STRING(pev->target), this, this, USE_TOGGLE, 0);
-	}
-
 	entity->pev->origin = pev->origin;
 	entity->pev->angles = pev->angles;
 	SetBits(entity->pev->spawnflags, SF_MONSTER_FALL_TO_GROUND);
@@ -286,6 +279,14 @@ void CMonsterMaker::MakeMonster()
 			SetThink(nullptr);
 			SetUse(nullptr);
 		}
+	}
+
+	// If I have a target, fire!
+	// Do this after the monster has spawned and this monstermaker has finished so we can access the target entity.
+	if (!FStringNull(pev->target))
+	{
+		// delay already overloaded for this entity, so can't call SUB_UseTargets()
+		FireTargets(STRING(pev->target), this, this, USE_TOGGLE, 0);
 	}
 }
 
