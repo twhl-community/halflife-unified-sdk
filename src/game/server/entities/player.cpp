@@ -3484,7 +3484,7 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse)
 			pWorld = tr.pHit;
 		const char* pTextureName = TRACE_TEXTURE(pWorld, start, end);
 		if (pTextureName)
-			Con_DPrintf("Texture: %s (%s)\n", pTextureName, g_MaterialSystem.FindTextureType(pTextureName));
+			Con_DPrintf("Texture: %s (%c)\n", pTextureName, g_MaterialSystem.FindTextureType(pTextureName));
 	}
 	break;
 	case 195: // show shortest paths for entire level to nearest node
