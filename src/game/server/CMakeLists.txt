@@ -127,6 +127,7 @@ target_sources(server PRIVATE
 	entities/soundent.cpp
 	entities/soundent.h
 	entities/subs.cpp
+	entities/teleport_entities.cpp
 	entities/trains.h
 	entities/triggers.cpp
 	entities/world.cpp
