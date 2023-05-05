@@ -34,6 +34,7 @@ public:
 	void OnCreate() override
 	{
 		CScientist::OnCreate();
+		pev->model = MAKE_STRING("models/rosenberg.mdl");
 		m_SentenceReplacement = &RosenbergSentenceReplacement;
 	}
 
