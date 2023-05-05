@@ -30,6 +30,7 @@ public:
 	bool IsMachine() const override { return true; }
 
 	void OnCreate() override;
+	bool KeyValue(KeyValueData* pkvd) override;
 	void Spawn() override;
 	void Precache() override;
 	int BloodColor() override { return DONT_BLEED; }
@@ -73,7 +74,7 @@ public:
 	float m_flRightHealth;
 	float m_flLeftHealth;
 
-	int m_iUnits;
+	int m_iUnits = 0;
 	EHANDLE m_hGrunt[MAX_CARRY];
 	Vector m_vecOrigin[MAX_CARRY];
 	EHANDLE m_hRepel[4];

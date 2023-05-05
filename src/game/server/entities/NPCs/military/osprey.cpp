@@ -69,6 +69,17 @@ void COsprey::OnCreate()
 	SetClassification("machine");
 }
 
+bool COsprey::KeyValue(KeyValueData* pkvd)
+{
+	if (FStrEq(pkvd->szKeyName, "initial_capacity"))
+	{
+		m_iUnits = std::clamp(atoi(pkvd->szValue), 0, MAX_CARRY);
+		return true;
+	}
+
+	return BaseClass::KeyValue(pkvd);
+}
+
 void COsprey::Spawn()
 {
 	Precache();
@@ -138,28 +149,32 @@ void COsprey::CommandUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE
 
 void COsprey::FindAllThink()
 {
-	CBaseEntity* pEntity = nullptr;
-
-	m_iUnits = 0;
-
-	const auto monsterClassname = GetMonsterClassname();
-
-	while (m_iUnits < MAX_CARRY && (pEntity = UTIL_FindEntityByClassname(pEntity, monsterClassname)) != nullptr)
+	// Only search for units if the level designer didn't specify initial capacity.
+	// We can't set m_vecOrigin to a valid value here since we don't have one, so the default of world origin will be used.
+	if (m_iUnits == 0)
 	{
-		if (pEntity->IsAlive())
+		CBaseEntity* pEntity = nullptr;
+
+		const auto monsterClassname = GetMonsterClassname();
+
+		while (m_iUnits < MAX_CARRY && (pEntity = UTIL_FindEntityByClassname(pEntity, monsterClassname)) != nullptr)
 		{
-			m_hGrunt[m_iUnits] = pEntity;
-			m_vecOrigin[m_iUnits] = pEntity->pev->origin;
-			m_iUnits++;
+			if (pEntity->IsAlive())
+			{
+				m_hGrunt[m_iUnits] = pEntity;
+				m_vecOrigin[m_iUnits] = pEntity->pev->origin;
+				m_iUnits++;
+			}
+		}
+
+		if (m_iUnits == 0)
+		{
+			AILogger->debug("{} error: no grunts to resupply", STRING(pev->classname));
+			UTIL_Remove(this);
+			return;
 		}
 	}
 
-	if (m_iUnits == 0)
-	{
-		AILogger->debug("{} error: no grunts to resupply", STRING(pev->classname));
-		UTIL_Remove(this);
-		return;
-	}
 	SetThink(&COsprey::FlyThink);
 	pev->nextthink = gpGlobals->time + 0.1;
 	m_startTime = gpGlobals->time;
