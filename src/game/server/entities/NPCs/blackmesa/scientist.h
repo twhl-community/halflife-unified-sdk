@@ -100,7 +100,6 @@ public:
 	void StartTask(const Task_t* pTask) override;
 	int ObjectCaps() override { return CTalkMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
 	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
-	int FriendNumber(int arrayNumber) override;
 	void SetActivity(Activity newActivity) override;
 	Activity GetStoppedActivity() override;
 	int ISoundMask() override;
@@ -152,7 +151,6 @@ public:
 	int Classify() override;
 
 	void SetAnswerQuestion(CTalkMonster* pSpeaker) override;
-	int FriendNumber(int arrayNumber) override;
 
 	bool FIdleSpeak();
 	int m_baseSequence;

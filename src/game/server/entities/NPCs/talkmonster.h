@@ -200,7 +200,6 @@ public:
 	 *	@brief Prepare this talking monster to answer question
 	 */
 	virtual void SetAnswerQuestion(CTalkMonster* pSpeaker);
-	virtual int FriendNumber(int arrayNumber) { return arrayNumber; }
 
 	static float g_talkWaitTime;
 

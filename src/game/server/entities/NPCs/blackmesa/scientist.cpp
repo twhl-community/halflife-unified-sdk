@@ -991,14 +991,6 @@ void CScientist::Heal()
 	m_healTime = gpGlobals->time + 60;
 }
 
-int CScientist::FriendNumber(int arrayNumber)
-{
-	static int array[3] = {1, 2, 0};
-	if (arrayNumber < 3)
-		return array[arrayNumber];
-	return arrayNumber;
-}
-
 class CDeadScientist : public CBaseMonster
 {
 public:
@@ -1139,14 +1131,6 @@ void CSittingScientist::Precache()
 int CSittingScientist::Classify()
 {
 	return CLASS_HUMAN_PASSIVE;
-}
-
-int CSittingScientist::FriendNumber(int arrayNumber)
-{
-	static int array[3] = {2, 1, 0};
-	if (arrayNumber < 3)
-		return array[arrayNumber];
-	return arrayNumber;
 }
 
 void CSittingScientist::SittingThink()
