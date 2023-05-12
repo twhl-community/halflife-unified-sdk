@@ -168,7 +168,7 @@ struct efx_api_t
 	void (*R_AttachTentToPlayer)(int client, int modelIndex, float zoffset, float life);
 	void (*R_KillAttachedTents)(int client);
 	BEAM* (*R_BeamCirclePoints)(int type, float* start, float* end, int modelIndex, float life, float width, float amplitude, float brightness, float speed, int startFrame, float framerate, float r, float g, float b);
-	BEAM* (*R_BeamEntPoint)(int startEnt, float* end, int modelIndex, float life, float width, float amplitude, float brightness, float speed, int startFrame, float framerate, float r, float g, float b);
+	BEAM* (*R_BeamEntPoint)(int startEnt, const float* end, int modelIndex, float life, float width, float amplitude, float brightness, float speed, int startFrame, float framerate, float r, float g, float b);
 	BEAM* (*R_BeamEnts)(int startEnt, int endEnt, int modelIndex, float life, float width, float amplitude, float brightness, float speed, int startFrame, float framerate, float r, float g, float b);
 	BEAM* (*R_BeamFollow)(int startEnt, int modelIndex, float life, float width, float r, float g, float b, float brightness);
 	void (*R_BeamKill)(int deadEntity);

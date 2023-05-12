@@ -14,6 +14,7 @@
  ****/
 #include "cbase.h"
 #include "explode.h"
+#include "UserMessages.h"
 
 #define SF_TANK_ACTIVE 0x0001
 #define SF_TANK_PLAYER 0x0002
@@ -47,6 +48,7 @@ public:
 	bool KeyValue(KeyValueData* pkvd) override;
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 	void Think() override;
+	void PostRestore() override;
 	void TrackTarget();
 
 	/**
@@ -106,6 +108,10 @@ public:
 	 */
 	void ControllerPostFrame();
 
+	void UpdateOnRemove() override;
+
+private:
+	void CreateTargetLaser();
 
 protected:
 	CBasePlayer* m_pController;
@@ -148,6 +154,13 @@ protected:
 	// 0 - player only
 	// 1 - all targets allied to player
 	int m_iEnemyType;
+
+	bool m_EnableTargetLaser = false;
+	bool m_RecreateTargetLaser = false; // Don't save; used to restore the client side laser
+	string_t m_TargetLaserSpriteName = MAKE_STRING(g_pModelNameLaser);
+	int m_TargetLaserModelIndex = 0;
+	int m_TargetLaserWidth = 1;
+	Vector m_TargetLaserColor{255, 0, 0};
 };
 
 BEGIN_DATAMAP(CFuncTank)
@@ -177,6 +190,10 @@ DEFINE_FIELD(m_yawCenter, FIELD_FLOAT),
 	DEFINE_FIELD(m_flNextAttack, FIELD_TIME),
 	DEFINE_FIELD(m_iBulletDamage, FIELD_INTEGER),
 	DEFINE_FIELD(m_iEnemyType, FIELD_INTEGER),
+	DEFINE_FIELD(m_EnableTargetLaser, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_TargetLaserSpriteName, FIELD_STRING),
+	DEFINE_FIELD(m_TargetLaserWidth, FIELD_INTEGER),
+	DEFINE_FIELD(m_TargetLaserColor, FIELD_VECTOR),
 	END_DATAMAP();
 
 static Vector gTankSpread[] =
@@ -224,6 +241,8 @@ void CFuncTank::Precache()
 
 	if (!FStringNull(pev->noise))
 		PrecacheSound(STRING(pev->noise));
+
+	m_TargetLaserModelIndex = PrecacheModel(STRING(m_TargetLaserSpriteName));
 }
 
 bool CFuncTank::KeyValue(KeyValueData* pkvd)
@@ -333,6 +352,26 @@ bool CFuncTank::KeyValue(KeyValueData* pkvd)
 		m_iEnemyType = atoi(pkvd->szValue);
 		return true;
 	}
+	else if (FStrEq(pkvd->szKeyName, "enable_target_laser"))
+	{
+		m_EnableTargetLaser = atoi(pkvd->szValue) != 0;
+		return true;
+	}
+	else if (FStrEq(pkvd->szKeyName, "target_laser_sprite"))
+	{
+		m_TargetLaserSpriteName = ALLOC_STRING(pkvd->szValue);
+		return true;
+	}
+	else if (FStrEq(pkvd->szKeyName, "target_laser_width"))
+	{
+		m_TargetLaserWidth = std::clamp(atoi(pkvd->szValue), 0, 255);
+		return true;
+	}
+	else if (FStrEq(pkvd->szKeyName, "target_laser_color"))
+	{
+		UTIL_StringToVector(m_TargetLaserColor, pkvd->szValue);
+		return true;
+	}
 
 	return CBaseEntity::KeyValue(pkvd);
 }
@@ -375,12 +414,13 @@ bool CFuncTank::StartControl(CBasePlayer* pController)
 
 	pev->nextthink = pev->ltime + 0.1;
 
+	CreateTargetLaser();
+
 	return true;
 }
 
 void CFuncTank::StopControl()
 {
-	// TODO: bring back the controllers current weapon
 	if (!m_pController)
 		return;
 
@@ -390,11 +430,39 @@ void CFuncTank::StopControl()
 
 	m_pController->m_iHideHUD &= ~HIDEHUD_WEAPONS;
 
+	MESSAGE_BEGIN(MSG_ONE, gmsgTgtLaser, nullptr, m_pController);
+	WRITE_BYTE(0);
+	MESSAGE_END();
+
 	pev->nextthink = 0;
 	m_pController = nullptr;
 
 	if (IsActive())
 		pev->nextthink = pev->ltime + 1.0;
+}
+
+void CFuncTank::UpdateOnRemove()
+{
+	BaseClass::UpdateOnRemove();
+	StopControl();
+}
+
+void CFuncTank::CreateTargetLaser()
+{
+	if (!m_EnableTargetLaser)
+	{
+		return;
+	}
+
+	MESSAGE_BEGIN(MSG_ONE, gmsgTgtLaser, nullptr, m_pController);
+	WRITE_BYTE(1);
+	WRITE_SHORT(entindex());
+	WRITE_SHORT(m_TargetLaserModelIndex);
+	WRITE_BYTE(m_TargetLaserWidth);
+	WRITE_BYTE(m_TargetLaserColor.x);
+	WRITE_BYTE(m_TargetLaserColor.y);
+	WRITE_BYTE(m_TargetLaserColor.z);
+	MESSAGE_END();
 }
 
 void CFuncTank::ControllerPostFrame()
@@ -575,6 +643,15 @@ bool CFuncTank::InRange(float range)
 
 void CFuncTank::Think()
 {
+	if (m_RecreateTargetLaser)
+	{
+		if (m_pController && m_pController->m_HasActivated)
+		{
+			m_RecreateTargetLaser = false;
+			CreateTargetLaser();
+		}
+	}
+
 	pev->avelocity = g_vecZero;
 	TrackTarget();
 
@@ -582,6 +659,16 @@ void CFuncTank::Think()
 		StartRotSound();
 	else
 		StopRotSound();
+}
+
+void CFuncTank::PostRestore()
+{
+	BaseClass::PostRestore();
+
+	if (m_EnableTargetLaser)
+	{
+		m_RecreateTargetLaser = true;
+	}
 }
 
 void CFuncTank::TrackTarget()

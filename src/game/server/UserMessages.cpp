@@ -84,4 +84,6 @@ void LinkUserMessages()
 	gmsgSkillVars = REG_USER_MSG("SkillVars", -1);
 
 	gmsgCampaignSelect = REG_USER_MSG("CmpgnSlct", 0);
+
+	gmsgTgtLaser = REG_USER_MSG("TgtLaser", -1);
 }

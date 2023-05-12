@@ -16,3 +16,6 @@
 #pragma once
 
 void TempEntity_Initialize();
+
+void TempEntity_ResetTargetLaser();
+void TempEntity_UpdateTargetLaser();

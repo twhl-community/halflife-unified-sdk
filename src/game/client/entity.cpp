@@ -13,6 +13,7 @@
 #include "pm_defs.h"
 #include "pmtrace.h"
 #include "pm_shared.h"
+#include "r_studioint.h"
 #include "Exports.h"
 
 #include "particleman.h"
@@ -24,6 +25,8 @@
 #include "sound/ISoundSystem.h"
 
 #include "utils/ConCommandSystem.h"
+
+extern engine_studio_api_t IEngineStudio;
 
 void Game_AddObjects();
 
@@ -873,7 +876,122 @@ static void MsgFunc_TempEntity(const char* name, BufferReader& reader)
 	}
 }
 
+static BEAM* g_TargetLaser = nullptr;
+
+static void MsgFunc_TargetLaser(const char* name, BufferReader& reader)
+{
+	if (g_TargetLaser)
+	{
+		// Die immediately
+		g_TargetLaser->die = 0;
+		g_TargetLaser->brightness = 0;
+		g_TargetLaser = nullptr;
+	}
+
+	const bool enable = reader.ReadByte() != 0;
+
+	if (enable)
+	{
+		const int entityIndex = reader.ReadShort();
+		const int modelIndex = reader.ReadShort();
+		const short width = reader.ReadByte();
+
+		Vector color;
+
+		color.x = reader.ReadByte();
+		color.y = reader.ReadByte();
+		color.z = reader.ReadByte();
+
+		g_TargetLaser = gEngfuncs.pEfxAPI->R_BeamEntPoint(entityIndex, vec3_origin, modelIndex,
+			1.f, width, 0, 255, 10, 0, 10, color.x, color.y, color.z);
+
+		// Never dies on its own.
+		g_TargetLaser->die = std::numeric_limits<float>::max();
+
+		// Initialize laser end point for first frame.
+		TempEntity_UpdateTargetLaser();
+	}
+}
+
+void TempEntity_ResetTargetLaser()
+{
+	g_TargetLaser = nullptr;
+}
+
+physent_t* TempEntity_FindPhysent(cl_entity_t* entity)
+{
+	for (int i = 0; i < pmove->numphysent; ++i)
+	{
+		auto pe = &pmove->physents[i];
+
+		if (pe->info == entity->index)
+		{
+			return pe;
+		}
+	}
+
+	return nullptr;
+}
+
+int Physent_IndexOf(physent_t* pe)
+{
+	return pe - pmove->physents;
+}
+
+void TempEntity_UpdateTargetLaser()
+{
+	if (!g_TargetLaser)
+	{
+		return;
+	}
+
+	g_TargetLaser->brightness = 0;
+
+	auto tankEntity = gEngfuncs.GetEntityByIndex(g_TargetLaser->startEntity);
+
+	if (!tankEntity)
+	{
+		return;
+	}
+
+	// Find the physent that represents this entity so we can ignore it during the trace.
+	// This can be nullptr if there are too many visible entities on the server side,
+	// in which case we won't be able to hit it anyway.
+	auto tankPhysent = TempEntity_FindPhysent(tankEntity);
+
+	Vector forward;
+
+	AngleVectors(tankEntity->curstate.angles, &forward, nullptr, nullptr);
+
+	gEngfuncs.pEventAPI->EV_SetUpPlayerPrediction(0, 1);
+
+	// Store off the old count
+	gEngfuncs.pEventAPI->EV_PushPMStates();
+
+	auto localPlayer = gEngfuncs.GetLocalPlayer();
+
+	// Now add in all of the players.
+	gEngfuncs.pEventAPI->EV_SetSolidPlayers(localPlayer->index - 1);
+
+	gEngfuncs.pEventAPI->EV_SetTraceHull(2);
+
+	pmtrace_t tr;
+
+	gEngfuncs.pEventAPI->EV_PlayerTrace(
+		tankEntity->curstate.origin,
+		tankEntity->curstate.origin + forward * 8192,
+		PM_STUDIO_BOX, tankPhysent ? Physent_IndexOf(tankPhysent) : -1, &tr);
+
+	gEngfuncs.pEventAPI->EV_PopPMStates();
+
+	// Even if we didn't hit anything this is still the best we've got.
+	g_TargetLaser->target = tr.endpos;
+
+	g_TargetLaser->brightness = 255;
+}
+
 void TempEntity_Initialize()
 {
 	g_ClientUserMessages.RegisterHandler("TempEntity", &MsgFunc_TempEntity);
+	g_ClientUserMessages.RegisterHandler("TgtLaser", &MsgFunc_TargetLaser);
 }

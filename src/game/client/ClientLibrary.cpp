@@ -126,6 +126,11 @@ void ClientLibrary::RunFrame()
 
 	const bool isConnected = status.connected != 0;
 
+	if (!isConnected)
+	{
+		TempEntity_ResetTargetLaser();
+	}
+
 	auto mapName = gEngfuncs.pfnGetLevelName();
 
 	if (!mapName)
@@ -202,6 +207,11 @@ void ClientLibrary::RunFrame()
 	}
 
 	sound::g_SoundSystem->Update();
+
+	if (isConnected)
+	{
+		TempEntity_UpdateTargetLaser();
+	}
 }
 
 void ClientLibrary::OnUserMessageReceived()
