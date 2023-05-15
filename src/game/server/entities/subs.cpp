@@ -116,7 +116,9 @@ void FireTargets(const char* targetName, CBaseEntity* pActivator, CBaseEntity* p
 
 	CBaseEntity::IOLogger->debug("Firing: ({})", targetName);
 
-	for (auto target : UTIL_FindEntitiesByTargetname(targetName))
+	CBaseEntity* target = nullptr;
+
+	while ((target = UTIL_FindEntityByTargetname(target, targetName, pActivator, pCaller)) != nullptr)
 	{
 		if (target && (target->pev->flags & FL_KILLME) == 0) // Don't use dying ents
 		{
@@ -170,7 +172,9 @@ void CBaseDelay::SUB_UseTargets(CBaseEntity* pActivator, USE_TYPE useType, float
 	{
 		CBaseEntity::IOLogger->debug("KillTarget: {}", STRING(m_iszKillTarget));
 
-		for (auto killTarget : UTIL_FindEntitiesByTargetname(STRING(m_iszKillTarget)))
+		CBaseEntity* killTarget = nullptr;
+
+		while ((killTarget = UTIL_FindEntityByTargetname(killTarget, STRING(m_iszKillTarget), pActivator, this)) != nullptr)
 		{
 			if (UTIL_IsRemovableEntity(killTarget))
 			{

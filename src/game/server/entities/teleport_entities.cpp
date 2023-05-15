@@ -176,17 +176,7 @@ void CPointTeleport::TeleportUse(CBaseEntity* pActivator, CBaseEntity* pCaller, 
 	// Figure out who to teleport
 	const char* targetName = GetTarget();
 
-	CBaseEntity* teleportee = nullptr;
-
-	// TODO: need to generalize handling of this target type
-	if (FStrEq(targetName, "!activator"))
-	{
-		teleportee = pActivator;
-	}
-	else
-	{
-		teleportee = UTIL_FindEntityByTargetname(nullptr, targetName);
-	}
+	CBaseEntity* teleportee = UTIL_FindEntityByTargetname(nullptr, targetName, pActivator, this);
 
 	if (!teleportee)
 	{

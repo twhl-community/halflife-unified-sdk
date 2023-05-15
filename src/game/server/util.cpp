@@ -341,8 +341,32 @@ CBaseEntity* UTIL_FindEntityByClassname(CBaseEntity* pStartEntity, const char* s
 		{ return entity->classname; });
 }
 
-CBaseEntity* UTIL_FindEntityByTargetname(CBaseEntity* pStartEntity, const char* szName)
+CBaseEntity* UTIL_FindEntityByTargetname(CBaseEntity* pStartEntity, const char* szName, CBaseEntity* activator, CBaseEntity* caller)
 {
+	if (szName[0] == '!')
+	{
+		// Target selectors can only return one entity so bow out after the first iteration.
+		if (pStartEntity)
+		{
+			return nullptr;
+		}
+
+		++szName;
+
+		if (FStrEq(szName, "activator"))
+		{
+			return activator;
+		}
+		else if (FStrEq(szName, "caller"))
+		{
+			return caller;
+		}
+
+		CBaseEntity::Logger->warn("Invalid target selector \"{}\"", szName);
+
+		return nullptr;
+	}
+
 	return UTIL_FindEntityByAccessor(pStartEntity, szName, [](auto entity)
 		{ return entity->targetname; });
 }
