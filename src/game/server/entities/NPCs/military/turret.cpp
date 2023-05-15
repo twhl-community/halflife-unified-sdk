@@ -374,6 +374,12 @@ void CBaseTurret::Initialize()
 
 	if (m_iBaseTurnRate == 0)
 		m_iBaseTurnRate = TURRET_TURNRATE;
+	// Make sure the turn rate is non-zero so a turret killed immediately after deploying
+	// will rotate its pitch to its ideal angle.
+	if (m_fTurnRate == 0)
+	{
+		m_fTurnRate = TURRET_TURNRATE;
+	}
 	if (m_flMaxWait == 0)
 		m_flMaxWait = TURRET_MAXWAIT;
 	m_flStartYaw = pev->angles.y;
@@ -975,6 +981,7 @@ void CBaseTurret::TurretDeath()
 	{
 		pev->framerate = 0;
 		SetThink(nullptr);
+		FCheckAITrigger();
 	}
 }
 
@@ -1309,5 +1316,6 @@ void CSentry::SentryDeath()
 	{
 		pev->framerate = 0;
 		SetThink(nullptr);
+		FCheckAITrigger();
 	}
 }
