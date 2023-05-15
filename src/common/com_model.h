@@ -17,6 +17,9 @@ struct surfcache_t;
 #define STUDIO_EVENTS 2
 
 #define MAX_EDICTS 2048
+constexpr int MAX_SOUNDS = 512;
+constexpr int MAX_MODELS = 512;
+constexpr int MAX_GENERIC_FILES = 512;
 
 #define MAX_MODEL_NAME 64
 #define MAX_MAP_HULLS 4

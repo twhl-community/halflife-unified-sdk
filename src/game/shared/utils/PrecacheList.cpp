@@ -56,10 +56,13 @@ int PrecacheList::Add(const char* str)
 
 	m_Precaches.push_back(str);
 
-	// This should never happen since the engine doesn't precache anything until after the game has finished.
-	// If it does happen it's because something else is calling precache functions directly.
-	if (m_EnginePrecacheFunction)
+	// Only call into the engine if it's not at its maximum capacity.
+	// TODO: need to handle running out of precaches gracefully.
+	// TODO: This will cause problems when an invalid index or unprecached asset is used.
+	if (m_EnginePrecacheFunction && m_MaxEnginePrecaches > 0 && static_cast<unsigned int>(index) < m_MaxEnginePrecaches)
 	{
+		// This should never happen since the engine doesn't precache anything until after the game has finished.
+		// If it does happen it's because something else is calling precache functions directly.
 		// This call could cause a host error and may not return.
 		if (const int engineIndex = m_EnginePrecacheFunction(str); engineIndex != index)
 		{

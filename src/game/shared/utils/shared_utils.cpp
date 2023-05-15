@@ -18,6 +18,7 @@
 
 #include "cbase.h"
 #include "shared_utils.h"
+#include "com_model.h"
 #include "StringPool.h"
 
 #ifndef CLIENT_DLL
@@ -460,9 +461,12 @@ static const char* ValidateSound(const char* str, PrecacheList* list)
 
 void UTIL_CreatePrecacheLists()
 {
-	g_ModelPrecache = std::make_unique<PrecacheList>("model", g_PrecacheLogger, &ValidateModel, g_engfuncs.pfnPrecacheModel);
-	g_SoundPrecache = std::make_unique<PrecacheList>("sound", g_PrecacheLogger, &ValidateSound, g_engfuncs.pfnPrecacheSound);
-	g_GenericPrecache = std::make_unique<PrecacheList>("generic", g_PrecacheLogger, nullptr, g_engfuncs.pfnPrecacheGeneric);
+	g_ModelPrecache = std::make_unique<PrecacheList>("model", g_PrecacheLogger, &ValidateModel,
+		g_engfuncs.pfnPrecacheModel, MAX_MODELS);
+	g_SoundPrecache = std::make_unique<PrecacheList>("sound", g_PrecacheLogger, &ValidateSound,
+		g_engfuncs.pfnPrecacheSound, MAX_SOUNDS);
+	g_GenericPrecache = std::make_unique<PrecacheList>("generic", g_PrecacheLogger, nullptr,
+		g_engfuncs.pfnPrecacheGeneric, MAX_GENERIC_FILES);
 }
 
 const char* UTIL_CheckForGlobalModelReplacement(const char* s)
