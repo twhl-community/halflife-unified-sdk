@@ -155,11 +155,7 @@ void CBaseDelay::SUB_UseTargets(CBaseEntity* pActivator, USE_TYPE useType, float
 		pTemp->m_iszKillTarget = m_iszKillTarget;
 		pTemp->m_flDelay = 0; // prevent "recursion"
 		pTemp->pev->target = pev->target;
-
-		if (pActivator && pActivator->IsPlayer()) // If a player activates, then save it
-		{
-			pTemp->m_hActivator = pActivator;
-		}
+		pTemp->m_hActivator = pActivator;
 
 		return;
 	}
