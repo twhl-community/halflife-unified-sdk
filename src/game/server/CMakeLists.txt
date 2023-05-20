@@ -89,6 +89,8 @@ target_sources(server PRIVATE
 	entities/CBaseToggle.h
 	entities/CBaseTrigger.cpp
 	entities/CBaseTrigger.h
+	entities/CClientFog.cpp
+	entities/CClientFog.h
 	entities/CCorpse.cpp
 	entities/CCorpse.h
 	entities/changelevel.cpp

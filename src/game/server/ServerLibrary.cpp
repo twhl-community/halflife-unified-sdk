@@ -22,6 +22,7 @@
 #include <fmt/format.h>
 
 #include "cbase.h"
+#include "CClientFog.h"
 #include "client.h"
 #include "EntityTemplateSystem.h"
 #include "MapState.h"
@@ -300,6 +301,8 @@ void ServerLibrary::PlayerActivating(CBasePlayer* player)
 	{
 		player->SetSuitLightType(*m_MapState->m_LightType);
 	}
+
+	SendFogMessage(player);
 }
 
 void ServerLibrary::AddGameSystems()
@@ -537,4 +540,37 @@ void ServerLibrary::LoadServerConfigFiles()
 
 	g_GameLogger->trace("Server configurations loaded in {}ms",
 		std::chrono::duration_cast<std::chrono::milliseconds>(timeElapsed).count());
+}
+
+void ServerLibrary::SendFogMessage(CBasePlayer* player)
+{
+	MESSAGE_BEGIN(MSG_ONE, gmsgFog, nullptr, player);
+
+	auto fog = static_cast<CClientFog*>(UTIL_FindEntityByClassname(nullptr, "env_fog"));
+
+	if (fog)
+	{
+		CBaseEntity::Logger->debug("Map has fog!");
+
+		// TODO: Can probably send color as bytes instead.
+		WRITE_SHORT(fog->pev->rendercolor.x);
+		WRITE_SHORT(fog->pev->rendercolor.y);
+		WRITE_SHORT(fog->pev->rendercolor.z);
+		WRITE_COORD(fog->m_Density);
+		WRITE_COORD(fog->m_StartDistance);
+		WRITE_COORD(fog->m_StopDistance);
+		WRITE_SHORT(fog->pev->spawnflags);
+	}
+	else
+	{
+		WRITE_SHORT(0);
+		WRITE_SHORT(0);
+		WRITE_SHORT(0);
+		WRITE_COORD(0);
+		WRITE_COORD(0);
+		WRITE_COORD(0);
+		WRITE_SHORT(0);
+	}
+
+	MESSAGE_END();
 }

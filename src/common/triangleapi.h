@@ -50,7 +50,7 @@ struct triangleapi_t
 	void (*CullFace)(TRICULLSTYLE style);
 	int (*SpriteTexture)(model_t* pSpriteModel, int frame);
 	int (*WorldToScreen)(float* world, float* screen);					   // Returns 1 if it's z clipped
-	void (*Fog)(float flFogColor[3], float flStart, float flEnd, int bOn); // Works just like GL_FOG, flFogColor is r/g/b.
+	void (*Fog)(const float flFogColor[3], float flStart, float flEnd, int bOn); // Works just like GL_FOG, flFogColor is r/g/b.
 	void (*ScreenToWorld)(float* screen, float* world);
 	void (*GetMatrix)(const int pname, float* matrix);
 	int (*BoxInPVS)(float* mins, float* maxs);

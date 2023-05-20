@@ -86,4 +86,6 @@ void LinkUserMessages()
 	gmsgCampaignSelect = REG_USER_MSG("CmpgnSlct", 0);
 
 	gmsgTgtLaser = REG_USER_MSG("TgtLaser", -1);
+
+	gmsgFog = REG_USER_MSG("Fog", 14);
 }

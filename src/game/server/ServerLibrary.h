@@ -109,6 +109,8 @@ private:
 
 	void LoadServerConfigFiles();
 
+	void SendFogMessage(CBasePlayer* player);
+
 private:
 	cvar_t* m_AllowDownload{};
 	cvar_t* m_SendResources{};

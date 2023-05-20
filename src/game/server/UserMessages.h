@@ -81,4 +81,6 @@ inline int gmsgCampaignSelect = 0;
 
 inline int gmsgTgtLaser = 0;
 
+inline int gmsgFog = 0;
+
 void LinkUserMessages();

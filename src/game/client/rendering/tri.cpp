@@ -19,6 +19,16 @@
 
 #include "particleman.h"
 #include "tri.h"
+#include "view.h"
+
+void RenderFog()
+{
+	if (g_WaterLevel <= WaterLevel::Feet && g_FogDensity >= 0)
+	{
+		gEngfuncs.pTriAPI->FogParams(g_FogDensity, g_FogSkybox);
+		gEngfuncs.pTriAPI->Fog(g_FogColor, g_FogStartDistance, g_FogStopDistance, int(g_RenderFog));
+	}
+}
 
 /*
 =================
@@ -44,4 +54,6 @@ void DLLEXPORT HUD_DrawTransparentTriangles()
 {
 	if (g_pParticleMan)
 		g_pParticleMan->Update();
+
+	RenderFog();
 }

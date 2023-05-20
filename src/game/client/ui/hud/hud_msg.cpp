@@ -24,6 +24,9 @@
 
 #include "particleman.h"
 
+#include "tri.h"
+#include "triangleapi.h"
+
 extern int giTeamplay;
 
 extern BEAM* pBeam;
@@ -133,4 +136,28 @@ void CHud::MsgFunc_Weapons(const char* pszName, BufferReader& reader)
 	const std::uint64_t upperBits = reader.ReadLong();
 
 	m_iWeaponBits = (lowerBits & 0XFFFFFFFF) | ((upperBits & 0XFFFFFFFF) << 32ULL);
+}
+
+void CHud::MsgFunc_Fog(const char* pszName, BufferReader& reader)
+{
+	g_FogSkybox = 0;
+	// TODO: CZeror zeroes out g_iFogColor[3] (out of bounds write)
+	g_FogColor = vec3_origin;
+	g_FogDensity = 0;
+	g_FogStartDistance = 1000;
+	g_FogStopDistance = 3000;
+	g_RenderFog = false;
+
+	gEngfuncs.pTriAPI->FogParams(0, 0);
+	gEngfuncs.pTriAPI->Fog(g_FogColor, -1, -1, int(g_RenderFog));
+
+	g_FogColor[0] = reader.ReadShort();
+	g_FogColor[1] = reader.ReadShort();
+	g_FogColor[2] = reader.ReadShort();
+	g_FogDensity = reader.ReadCoord() / 1000;
+	g_FogStartDistance = reader.ReadCoord();
+	g_FogStopDistance = reader.ReadCoord();
+	g_FogSkybox = reader.ReadShort();
+
+	g_RenderFog = g_FogDensity != 0;
 }
