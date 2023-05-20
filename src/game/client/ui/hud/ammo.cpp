@@ -453,7 +453,7 @@ void CHudAmmo::Think()
 		gpActiveSel = nullptr;
 		gHUD.m_iKeyBits &= ~IN_ATTACK;
 
-		PlaySound("common/wpn_select.wav", 1);
+		PlaySound(CHAN_HUD_SOUND, "common/wpn_select.wav", 1);
 	}
 }
 
@@ -513,7 +513,7 @@ void WeaponsResource::SelectSlot(int iSlot, bool fAdvance, int iDirection)
 
 	if ((gpActiveSel == nullptr) || (gpActiveSel == (WEAPON*)1) || (iSlot != gpActiveSel->Info->Slot))
 	{
-		PlaySound("common/wpn_hudon.wav", 1);
+		PlaySound(CHAN_HUD_SOUND, "common/wpn_hudon.wav", 1);
 		p = GetFirstPos(iSlot);
 
 		if (p && fastSwitch) // check for fast weapon switch mode
@@ -531,7 +531,7 @@ void WeaponsResource::SelectSlot(int iSlot, bool fAdvance, int iDirection)
 	}
 	else
 	{
-		PlaySound("common/wpn_moveselect.wav", 1);
+		PlaySound(CHAN_HUD_SOUND, "common/wpn_moveselect.wav", 1);
 		if (gpActiveSel)
 			p = GetNextActivePos(gpActiveSel->Info->Slot, gpActiveSel->Info->Position);
 		if (!p)
@@ -761,7 +761,7 @@ void CHudAmmo::UserCmd_Close()
 	{
 		gpLastSel = gpActiveSel;
 		gpActiveSel = nullptr;
-		PlaySound("common/wpn_hudoff.wav", 1);
+		PlaySound(CHAN_HUD_SOUND, "common/wpn_hudoff.wav", 1);
 	}
 	else
 		EngineClientCmd("escape");

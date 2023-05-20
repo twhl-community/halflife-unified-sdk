@@ -64,7 +64,7 @@ void EV_PlaySound(int ent, const Vector& origin, int channel, const char* sample
 
 void EV_StopSound(int ent, int channel, const char* sample);
 
-void PlaySound(const char* szSound, float vol);
+void PlaySound(int channel, const char* szSound, float vol);
 void PlaySoundByNameAtLocation(const char* szSound, float volume, const Vector& origin);
 
 void CL_TempEntPlaySound(TEMPENTITY* pTemp, float damp);

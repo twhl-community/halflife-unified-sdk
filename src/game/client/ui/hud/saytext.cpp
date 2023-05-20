@@ -224,7 +224,7 @@ void CHudSayText::SayTextPrint(const char* pszBuf, int iBufSize, int clientIndex
 	}
 
 	m_iFlags |= HUD_ACTIVE;
-	PlaySound("misc/talk.wav", 1);
+	PlaySound(CHAN_HUD_SOUND, "misc/talk.wav", 1);
 }
 
 void CHudSayText::EnsureTextFitsInOneLineAndWrapIfHaveTo(int line)

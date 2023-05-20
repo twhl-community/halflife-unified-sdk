@@ -339,11 +339,11 @@ void EV_StopSound(int ent, int channel, const char* sample)
 	// gEngfuncs.pEventAPI->EV_StopSound(ent, channel, sample);
 }
 
-void PlaySound(const char* szSound, float vol)
+void PlaySound(int channel, const char* szSound, float vol)
 {
 	vol = std::clamp(vol, 0.f, 1.f);
 
-	CL_StartSound(g_ViewEntity, CHAN_ITEM, szSound, v_origin, vol, 1.0, PITCH_NORM, 0);
+	CL_StartSound(g_ViewEntity, channel, szSound, v_origin, vol, 1.0, PITCH_NORM, 0);
 
 	// gEngfuncs.pfnPlaySoundByName(szSound, vol);
 }

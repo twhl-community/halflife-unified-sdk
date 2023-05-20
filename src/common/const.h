@@ -646,6 +646,16 @@ struct edict_t;
 #define CHAN_NETWORKVOICE_END 500 // network voice data reserves slots (CHAN_NETWORKVOICE_BASE through CHAN_NETWORKVOICE_END).
 #define CHAN_BOT 501			  // channel used for bot chatter.
 
+/**
+ *	@brief Unique channel index used only for HUD sounds.
+ */
+constexpr int CHAN_HUD_SOUND = 601;
+
+/**
+ *	@brief Unique channel index used only for the geiger counter.
+ */
+constexpr int CHAN_GEIGER = 602;
+
 // attenuation values
 #define ATTN_NONE 0
 #define ATTN_NORM (float)0.8
