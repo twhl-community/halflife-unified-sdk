@@ -15,7 +15,21 @@
 
 #include "hud.h"
 #include "ProjectInfoSystem.h"
+#include "r_studioint.h"
 #include "view.h"
+
+extern engine_studio_api_t IEngineStudio;
+
+std::string_view GetRendererName()
+{
+	switch (IEngineStudio.IsHardware())
+	{
+	case 0: return "Software"sv;
+	case 1: return "OpenGL"sv;
+	case 2: return "Direct3D"sv; // Note: does not exist in Steam version.
+	default: return "Unknown"sv;
+	}
+}
 
 bool CHudDebugInfo::Init()
 {
@@ -66,6 +80,8 @@ bool CHudDebugInfo::Draw(float flTime)
 
 		if (const auto levelName = gEngfuncs.pfnGetLevelName(); levelName && '\0' != levelName[0] && localPlayer)
 		{
+			lineDrawer(fmt::format("Renderer: {}", GetRendererName()));
+
 			lineDrawer("Current game time:", {128, 64, 255});
 			lineDrawer(fmt::format("  {}", SecondsToTime(int(gHUD.m_flTime))));
 
