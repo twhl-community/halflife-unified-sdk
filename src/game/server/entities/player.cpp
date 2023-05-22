@@ -4868,9 +4868,16 @@ void CBasePlayer::EquipWeapon()
 		}
 
 		// Have a weapon equipped, but not deployed.
-		if (m_pActiveWeapon->CanDeploy() && m_pActiveWeapon->Deploy())
+		if (m_pActiveWeapon->CanDeploy())
 		{
-			return;
+			m_pActiveWeapon->m_ForceSendAnimations = true;
+			const bool result = m_pActiveWeapon->Deploy();
+			m_pActiveWeapon->m_ForceSendAnimations = false;
+
+			if (result)
+			{
+				return;
+			}
 		}
 	}
 
