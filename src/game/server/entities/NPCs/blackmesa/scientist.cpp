@@ -351,10 +351,14 @@ void CScientist::StartTask(const Task_t* pTask)
 		//{
 		Talk(2);
 		m_hTalkTarget = m_hEnemy;
-		if (m_hEnemy->IsPlayer())
-			PlaySentence("SC_PLFEAR", 5, VOL_NORM, ATTN_NORM);
-		else
-			PlaySentence("SC_FEAR", 5, VOL_NORM, ATTN_NORM);
+
+		if (m_hEnemy)
+		{
+			if (m_hEnemy->IsPlayer())
+				PlaySentence("SC_PLFEAR", 5, VOL_NORM, ATTN_NORM);
+			else
+				PlaySentence("SC_FEAR", 5, VOL_NORM, ATTN_NORM);
+		}
 		//}
 		TaskComplete();
 		break;
