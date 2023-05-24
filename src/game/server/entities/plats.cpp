@@ -551,6 +551,7 @@ void CFuncTrain::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE use
 			pev->target = m_LastTarget->pev->targetname;
 		pev->nextthink = 0;
 		pev->velocity = g_vecZero;
+		StopSound(CHAN_STATIC, STRING(m_MoveSound));
 		EmitSound(CHAN_VOICE, STRING(m_StopSound), m_volume, ATTN_NORM);
 	}
 }
