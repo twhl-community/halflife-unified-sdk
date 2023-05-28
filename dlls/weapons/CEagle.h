@@ -54,6 +54,9 @@ public:
 
 	void WeaponIdle() override;
 
+	// So the laser spot is always updated.
+	bool ShouldWeaponIdle() override { return true; }
+
 	void PrimaryAttack() override;
 
 	void SecondaryAttack() override;
