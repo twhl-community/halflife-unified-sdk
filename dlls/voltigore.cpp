@@ -1301,7 +1301,7 @@ void COFVoltigore::DeathGibThink()
 	{
 		for (auto i = 0; i < 2; ++i)
 		{
-			const auto side = static_cast<int>((i % 2) == 0);
+			const auto side = i == 0 ? -1 : 1;
 
 			UTIL_MakeAimVectors(pev->angles);
 
@@ -1337,7 +1337,7 @@ void COFVoltigore::DeathGibThink()
 
 			auto pHit = Instance(tr.pHit);
 
-			if (pHit)
+			if (pHit && pHit->pev->takedamage != DAMAGE_NO)
 			{
 				pBeam->PointEntInit(pev->origin + Vector(0, 0, 32), pHit->entindex());
 
