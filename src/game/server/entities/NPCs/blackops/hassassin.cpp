@@ -81,6 +81,8 @@ public:
 	void IdleSound() override;
 
 	float m_flLastShot;
+	float m_NextStepTime;
+	bool m_StepLeft = false;
 	float m_flDiviation;
 
 	float m_flNextJump;
@@ -101,6 +103,8 @@ LINK_ENTITY_TO_CLASS(monster_human_assassin, CHAssassin);
 
 BEGIN_DATAMAP(CHAssassin)
 DEFINE_FIELD(m_flLastShot, FIELD_TIME),
+	DEFINE_FIELD(m_NextStepTime, FIELD_TIME),
+	DEFINE_FIELD(m_StepLeft, FIELD_BOOLEAN),
 	DEFINE_FIELD(m_flDiviation, FIELD_FLOAT),
 
 	DEFINE_FIELD(m_flNextJump, FIELD_TIME),
@@ -618,23 +622,34 @@ void CHAssassin::RunAI()
 
 	if (m_Activity == ACT_RUN || m_Activity == ACT_WALK)
 	{
-		static bool iStep = false;
-		iStep = !iStep;
-		if (iStep)
+		if (m_NextStepTime < gpGlobals->time)
 		{
-			switch (RANDOM_LONG(0, 3))
+			// This code was adapted from the player's movement code.
+			// Note: because RunAI is called only 10 times a second the actual step time can vary
+			// depending on whether it aligns with the think interval.
+			m_NextStepTime = gpGlobals->time + (m_Activity == ACT_WALK ? 0.4f : 0.3f);
+
+			m_StepLeft = !m_StepLeft;
+
+			const int irand = RANDOM_LONG(0, 1) + (int(m_StepLeft) * 2);
+
+			const float fvol = 0.5f;
+
+			switch (irand)
 			{
+				// right foot
 			case 0:
-				EmitSound(CHAN_BODY, "player/pl_step1.wav", 0.5, ATTN_NORM);
+				EmitSound(CHAN_BODY, "player/pl_step1.wav", fvol, ATTN_NORM);
 				break;
 			case 1:
-				EmitSound(CHAN_BODY, "player/pl_step3.wav", 0.5, ATTN_NORM);
+				EmitSound(CHAN_BODY, "player/pl_step3.wav", fvol, ATTN_NORM);
 				break;
+				// left foot
 			case 2:
-				EmitSound(CHAN_BODY, "player/pl_step2.wav", 0.5, ATTN_NORM);
+				EmitSound(CHAN_BODY, "player/pl_step2.wav", fvol, ATTN_NORM);
 				break;
 			case 3:
-				EmitSound(CHAN_BODY, "player/pl_step4.wav", 0.5, ATTN_NORM);
+				EmitSound(CHAN_BODY, "player/pl_step4.wav", fvol, ATTN_NORM);
 				break;
 			}
 		}
