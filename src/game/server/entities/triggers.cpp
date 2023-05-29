@@ -428,6 +428,8 @@ void CMultiManager::ManagerUse(CBaseEntity* pActivator, CBaseEntity* pCaller, US
 
 	SetThink(&CMultiManager::ManagerThink);
 	pev->nextthink = gpGlobals->time;
+
+	IOLogger->trace("{}:{}:{} started", GetClassname(), entindex(), GetTargetname());
 }
 
 #if _DEBUG
