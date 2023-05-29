@@ -720,6 +720,21 @@ void CHAssassin::RunTask(const Task_t* pTask)
 
 const Schedule_t* CHAssassin::GetSchedule()
 {
+	// This needs to be checked before everything else so assassins will always land properly.
+	// Otherwise they'll be stuck with toss until they get into combat.
+	// Note: the assassin will attempt to attack at the end of the landing.
+	// flying?
+	if (pev->movetype == MOVETYPE_TOSS)
+	{
+		if ((pev->flags & FL_ONGROUND) != 0)
+		{
+			// AILogger->debug("landed");
+			// just landed
+			pev->movetype = MOVETYPE_STEP;
+			return GetScheduleOfType(SCHED_ASSASSIN_JUMP_LAND);
+		}
+	}
+
 	switch (m_MonsterState)
 	{
 	case MONSTERSTATE_IDLE:
@@ -755,6 +770,8 @@ const Schedule_t* CHAssassin::GetSchedule()
 		// flying?
 		if (pev->movetype == MOVETYPE_TOSS)
 		{
+			// Handled above now.
+			/*
 			if ((pev->flags & FL_ONGROUND) != 0)
 			{
 				// AILogger->debug("landed");
@@ -763,6 +780,7 @@ const Schedule_t* CHAssassin::GetSchedule()
 				return GetScheduleOfType(SCHED_ASSASSIN_JUMP_LAND);
 			}
 			else
+			*/
 			{
 				// AILogger->debug("jump");
 				// jump or jump/shoot
