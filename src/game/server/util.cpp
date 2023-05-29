@@ -1385,7 +1385,41 @@ bool UTIL_IsRemovableEntity(CBaseEntity* entity)
 	return true;
 }
 
-void UTIL_PrecacheOther(const char* szClassname)
+void UTIL_InitializeKeyValues(CBaseEntity* entity, string_t* keys, string_t* values, int numKeyValues)
+{
+	assert(numKeyValues >= 0);
+
+	if (numKeyValues <= 0)
+	{
+		return;
+	}
+
+	assert(keys);
+	assert(values);
+
+	auto edict = entity->edict();
+
+	const char* classname = entity->GetClassname();
+
+	KeyValueData kvd{.szClassName = classname};
+
+	for (int i = 0; i < numKeyValues; ++i)
+	{
+		kvd.szKeyName = STRING(keys[i]);
+		kvd.szValue = STRING(values[i]);
+		kvd.fHandled = 0;
+
+		// Skip the classname the same way the engine does.
+		if (FStrEq(kvd.szValue, classname))
+		{
+			continue;
+		}
+
+		DispatchKeyValue(edict, &kvd);
+	}
+}
+
+void UTIL_PrecacheOther(const char* szClassname, string_t* keys, string_t* values, int numKeyValues)
 {
 	auto entity = g_EntityDictionary->Create(szClassname);
 	if (FNullEnt(entity))
@@ -1394,9 +1428,16 @@ void UTIL_PrecacheOther(const char* szClassname)
 		return;
 	}
 
+	UTIL_InitializeKeyValues(entity, keys, values, numKeyValues);
+
 	entity->Precache();
 
 	REMOVE_ENTITY(entity->edict());
+}
+
+void UTIL_PrecacheOther(const char* szClassname)
+{
+	UTIL_PrecacheOther(szClassname, nullptr, nullptr, 0);
 }
 
 //=========================================================

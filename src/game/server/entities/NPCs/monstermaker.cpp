@@ -189,7 +189,7 @@ void CMonsterMaker::Precache()
 {
 	CBaseMonster::Precache();
 
-	UTIL_PrecacheOther(STRING(m_iszMonsterClassname));
+	UTIL_PrecacheOther(STRING(m_iszMonsterClassname), m_ChildKeys, m_ChildValues, m_ChildKeyCount);
 }
 
 void CMonsterMaker::MakeMonster()
@@ -238,25 +238,7 @@ void CMonsterMaker::MakeMonster()
 		SetBits(entity->pev->spawnflags, SF_MONSTER_HITMONSTERCLIP);
 
 	// Pass any keyvalues specified by the designer.
-	if (m_ChildKeyCount > 0)
-	{
-		KeyValueData kvd{.szClassName = STRING(m_iszMonsterClassname)};
-
-		for (int i = 0; i < m_ChildKeyCount; ++i)
-		{
-			kvd.szKeyName = STRING(m_ChildKeys[i]);
-			kvd.szValue = STRING(m_ChildValues[i]);
-			kvd.fHandled = 0;
-
-			// Skip the classname the same way the engine does.
-			if (FStrEq(kvd.szValue, STRING(m_iszMonsterClassname)))
-			{
-				continue;
-			}
-
-			DispatchKeyValue(entity->edict(), &kvd);
-		}
-	}
+	UTIL_InitializeKeyValues(entity, m_ChildKeys, m_ChildValues, m_ChildKeyCount);
 
 	DispatchSpawn(entity->edict());
 	entity->pev->owner = edict();

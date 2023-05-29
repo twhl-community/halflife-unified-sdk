@@ -219,7 +219,20 @@ float UTIL_WaterLevel(const Vector& position, float minz, float maxz);
 void UTIL_Bubbles(Vector mins, Vector maxs, int count);
 void UTIL_BubbleTrail(Vector from, Vector to, int count);
 
-// allows precacheing of other entities
+/**
+ *	@brief Initializes the given entity with the given list of keyvalue pairs.
+ */
+void UTIL_InitializeKeyValues(CBaseEntity* entity, string_t* keys, string_t* values, int numKeyValues);
+
+/**
+ *	@brief Allows precaching of other entities,
+ *	initializing it with the given pairs of keyvalues so custom settings precache correctly.
+ */
+void UTIL_PrecacheOther(const char* szClassname, string_t* keys, string_t* values, int numKeyValues);
+
+/**
+ *	@brief Allows precaching of other entities
+ */
 void UTIL_PrecacheOther(const char* szClassname);
 
 // prints a message to each client

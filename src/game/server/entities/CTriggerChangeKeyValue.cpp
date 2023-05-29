@@ -87,23 +87,9 @@ void CTriggerChangeKeyValue::Spawn()
 
 void CTriggerChangeKeyValue::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
-	char tmpkey[128];
-	char tmpvalue[128];
-
 	for (auto target : UTIL_FindEntitiesByTargetname(STRING(pev->target)))
 	{
-		for (int i = 0; i < m_cTargets; ++i)
-		{
-			strncpy(tmpkey, STRING(m_iKey[i]), sizeof(tmpkey) - 1);
-			tmpkey[sizeof(tmpkey) - 1] = '\0';
-
-			strncpy(tmpvalue, STRING(m_iValue[i]), sizeof(tmpvalue) - 1);
-			tmpvalue[sizeof(tmpvalue) - 1] = '\0';
-
-			KeyValueData kvd{.szClassName = STRING(target->pev->classname), .szKeyName = tmpkey, .szValue = tmpvalue, .fHandled = 0};
-
-			DispatchKeyValue(target->pev->pContainingEntity, &kvd);
-		}
+		UTIL_InitializeKeyValues(target, m_iKey, m_iValue, m_cTargets);
 
 		if (!FStringNull(m_changeTargetName))
 		{

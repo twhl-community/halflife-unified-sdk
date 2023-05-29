@@ -83,6 +83,12 @@ void EntityTemplateSystem::MaybeApplyTemplate(CBaseEntity* entity)
 
 	for (const auto& [key, value] : entityTemplate->second)
 	{
+		// Skip the classname the same way the engine does.
+		if (value == entity->GetClassname())
+		{
+			continue;
+		}
+
 		KeyValueData kvd{
 			.szClassName = entity->GetClassname(),
 			.szKeyName = key.c_str(),
@@ -101,6 +107,13 @@ std::unordered_map<std::string, std::string> EntityTemplateSystem::LoadTemplate(
 
 	for (const auto& [key, value] : input.items())
 	{
+		// Don't allow templates to change the class name.
+		if (key == "classname")
+		{
+			m_Logger->warn("Skipping template key \"{}\": not allowed in template", key);
+			continue;
+		}
+
 		keyValues.insert_or_assign(key, value.get<std::string>());
 	}
 
