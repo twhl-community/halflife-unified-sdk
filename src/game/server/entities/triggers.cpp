@@ -232,7 +232,7 @@ void CTriggerRelay::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE 
 #define SF_MULTIMAN_CLONE 0x80000000
 #define SF_MULTIMAN_THREAD 0x00000001
 
-constexpr int MAX_MULTI_TARGETS = 16; // maximum number of targets a single multi_manager entity may be assigned.
+constexpr int MAX_MULTI_TARGETS = 64; // maximum number of targets a single multi_manager entity may be assigned.
 
 /**
  *	@brief when fired, will fire up to MAX_MULTI_TARGETS targets at specified times.
