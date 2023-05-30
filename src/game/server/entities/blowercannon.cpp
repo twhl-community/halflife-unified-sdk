@@ -132,33 +132,35 @@ void CBlowerCannon::BlowerCannonStop(CBaseEntity* pActivator, CBaseEntity* pCall
 
 void CBlowerCannon::BlowerCannonThink()
 {
-	// TODO: can crash if target has been removed
-	auto pTarget = GetNextTarget()->pev;
-
-	auto distance = pTarget->origin - pev->origin;
-	distance.z += m_iZOffset;
-
-	auto angles = UTIL_VecToAngles(distance);
-	angles.z = -angles.z;
-
-	switch (m_iWeaponType)
+	// The target may be spawned later on so keep the cannon going.
+	if (auto pTarget = GetNextTarget(); pTarget)
 	{
-	case WeaponType::SporeRocket:
-	case WeaponType::SporeGrenade:
-		// TODO: simplify
-		CSpore::CreateSpore(pev->origin, angles, this, static_cast<CSpore::SporeType>((m_iWeaponType != WeaponType::SporeRocket ? 1 : 0) + static_cast<int>(CSpore::SporeType::ROCKET)), false, false);
-		break;
+		Vector distance = pTarget->pev->origin - pev->origin;
+		distance.z += m_iZOffset;
 
-	case WeaponType::ShockBeam:
-		CShockBeam::CreateShockBeam(pev->origin, angles, this);
-		break;
+		Vector angles = UTIL_VecToAngles(distance);
+		angles.z = -angles.z;
 
-	case WeaponType::DisplacerBall:
-		CDisplacerBall::CreateDisplacerBall(pev->origin, angles, this);
-		break;
+		switch (m_iWeaponType)
+		{
+		case WeaponType::SporeRocket:
+		case WeaponType::SporeGrenade:
+			CSpore::CreateSpore(pev->origin, angles, this,
+				m_iWeaponType == WeaponType::SporeRocket ? CSpore::SporeType::ROCKET : CSpore::SporeType::GRENADE,
+				false, false);
+			break;
 
-	default:
-		break;
+		case WeaponType::ShockBeam:
+			CShockBeam::CreateShockBeam(pev->origin, angles, this);
+			break;
+
+		case WeaponType::DisplacerBall:
+			CDisplacerBall::CreateDisplacerBall(pev->origin, angles, this);
+			break;
+
+		default:
+			break;
+		}
 	}
 
 	if (m_iFireType == FireType::FireOnTrigger)
