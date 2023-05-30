@@ -361,7 +361,6 @@ private:
 	int m_iBat;
 	int m_iBatMax;
 	float m_fFade;
-	int m_iHeight; // width of the battery innards
 };
 
 
