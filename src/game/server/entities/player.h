@@ -326,8 +326,14 @@ public:
 	bool ShouldFadeOnDeath() override { return false; }
 	bool IsPlayer() override { return true; } // Spectators should return false for this, they aren't "players" as far as game logic is concerned
 
-	bool IsNetClient() override { return true; } // Bots should return false for this, they can't receive NET messages
-												 // Spectators should return true for this
+	bool IsBot() const { return (pev->flags & FL_FAKECLIENT) != 0; }
+
+	/**
+	 *	@brief Bots should return false for this, they can't receive NET messages
+	 *	Spectators should return true for this
+	 */
+	bool IsNetClient() override { return !IsBot(); }
+
 	const char* TeamID() override;
 
 	void PostRestore() override;

@@ -55,6 +55,9 @@ target_sources(server PRIVATE
 	voice_gamemgr.cpp
 	voice_gamemgr.h
 	
+	bot/BotSystem.cpp
+	bot/BotSystem.h
+	
 	config/CommandWhitelist.cpp
 	config/CommandWhitelist.h
 	config/ConditionEvaluator.cpp

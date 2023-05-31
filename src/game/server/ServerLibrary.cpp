@@ -35,6 +35,8 @@
 #include "UserMessages.h"
 #include "voice_gamemgr.h"
 
+#include "bot/BotSystem.h"
+
 #include "config/CommandWhitelist.h"
 #include "config/ConditionEvaluator.h"
 #include "config/GameConfig.h"
@@ -156,6 +158,8 @@ void ServerLibrary::RunFrame()
 	ForceCvarToValue(m_AllowDownload, 1);
 	ForceCvarToValue(m_SendResources, 1);
 	ForceCvarToValue(m_AllowDLFile, 1);
+
+	g_Bots.RunFrame();
 }
 
 // Note: don't return after calling this to ensure that server state is still mostly correct.
@@ -315,6 +319,7 @@ void ServerLibrary::AddGameSystems()
 	g_GameSystems.Add(&sentences::g_Sentences);
 	g_GameSystems.Add(&g_MapCycleSystem);
 	g_GameSystems.Add(&g_EntityTemplates);
+	g_GameSystems.Add(&g_Bots);
 }
 
 void ServerLibrary::SetEntLogLevels(spdlog::level::level_enum level)
