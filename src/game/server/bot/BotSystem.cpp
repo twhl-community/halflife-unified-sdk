@@ -93,5 +93,13 @@ void BotSystem::AddBot(const char* name)
 	// Finish connecting, create player.
 	ClientPutInServer(fakeClient);
 
+	auto bot = GET_PRIVATE<CBasePlayer>(fakeClient);
+
+	auto infobuffer = g_engfuncs.pfnGetInfoKeyBuffer(fakeClient);
+
+	// Pick a random color to distinguish between bots.
+	g_engfuncs.pfnSetClientKeyValue(bot->entindex(), infobuffer, "topcolor", std::to_string(RANDOM_LONG(0, 255)).c_str());
+	g_engfuncs.pfnSetClientKeyValue(bot->entindex(), infobuffer, "bottomcolor", std::to_string(RANDOM_LONG(0, 255)).c_str());
+
 	// Do remaining logic at least one frame later to avoid race conditions.
 }
