@@ -43,6 +43,18 @@ void BotSystem::Shutdown()
 
 void BotSystem::RunFrame()
 {
+	// Handle level changes and other problematic time changes.
+	float frametime = std::abs(gpGlobals->time - m_LastUpdateTime);
+
+	if (frametime > 0.25f)
+	{
+		frametime = 0;
+	}
+
+	const byte msec = byte(frametime * 1000);
+
+	m_LastUpdateTime = gpGlobals->time;
+
 	for (auto player : UTIL_FindPlayers())
 	{
 		if (!player->IsConnected() || !player->IsBot())
@@ -65,7 +77,7 @@ void BotSystem::RunFrame()
 		player->pev->button = buttons;
 
 		// Now update the bot.
-		g_engfuncs.pfnRunPlayerMove(player->edict(), player->pev->angles, 0, 0, 0, player->pev->button, player->pev->impulse, gpGlobals->frametime);
+		g_engfuncs.pfnRunPlayerMove(player->edict(), player->pev->angles, 0, 0, 0, player->pev->button, player->pev->impulse, msec);
 	}
 }
 

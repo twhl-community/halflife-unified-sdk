@@ -43,6 +43,7 @@ private:
 
 private:
 	std::shared_ptr<spdlog::logger> m_Logger;
+	float m_LastUpdateTime = 0;
 };
 
 inline BotSystem g_Bots;
