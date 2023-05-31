@@ -1150,10 +1150,14 @@ TEMPENTITY* CL_TempEntAllocHigh(const float* org, model_t* model)
 	return ent;
 }
 
+static efx_api_t g_EngineEFXAPI{};
+
 void TempEntity_Initialize()
 {
 	// Override engine temp entity allocation to use our own list.
 	auto efx = gEngfuncs.pEfxAPI;
+
+	g_EngineEFXAPI = *efx;
 
 	efx->R_KillAttachedTents = &R_KillAttachedTents;
 	efx->CL_TempEntAlloc = &CL_TempEntAlloc;
@@ -1162,4 +1166,10 @@ void TempEntity_Initialize()
 
 	g_ClientUserMessages.RegisterHandler("TempEntity", &MsgFunc_TempEntity);
 	g_ClientUserMessages.RegisterHandler("TgtLaser", &MsgFunc_TargetLaser);
+}
+
+void TempEntity_Shutdown()
+{
+	// Restore original API. Necessary in case somebody uses Change Game to load another mod.
+	*gEngfuncs.pEfxAPI = g_EngineEFXAPI;
 }

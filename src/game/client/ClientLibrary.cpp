@@ -104,6 +104,8 @@ void ClientLibrary::ClientActivated()
 
 void ClientLibrary::Shutdown()
 {
+	TempEntity_Shutdown();
+
 	sound::g_SoundSystem.reset();
 
 	g_UILogger.reset();

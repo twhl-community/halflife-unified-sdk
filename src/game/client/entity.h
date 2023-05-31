@@ -16,6 +16,7 @@
 #pragma once
 
 void TempEntity_Initialize();
+void TempEntity_Shutdown();
 
 void CL_TempEntInit();
 
