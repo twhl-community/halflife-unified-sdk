@@ -44,9 +44,9 @@ void BotSystem::Shutdown()
 void BotSystem::RunFrame()
 {
 	// Handle level changes and other problematic time changes.
-	float frametime = std::abs(gpGlobals->time - m_LastUpdateTime);
+	float frametime = gpGlobals->time - m_LastUpdateTime;
 
-	if (frametime > 0.25f)
+	if (frametime > 0.25f || frametime < 0)
 	{
 		frametime = 0;
 	}
