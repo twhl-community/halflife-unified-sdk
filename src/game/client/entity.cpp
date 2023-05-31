@@ -1051,11 +1051,25 @@ void CL_TempEntPrepare(TEMPENTITY* pTemp, model_t* model)
 	pTemp->callback = 0;
 }
 
+static void WarnAboutTempEntOverflow()
+{
+	// Only print this once per frame to avoid frame drops.
+	static float lastTempEntOverflowWarningTime = 0;
+
+	const float time = gEngfuncs.GetClientTime();
+
+	if (time != lastTempEntOverflowWarningTime)
+	{
+		lastTempEntOverflowWarningTime = time;
+		Con_DPrintf("Overflow %d temporary ents!\n", MAX_TEMPENTS);
+	}
+}
+
 TEMPENTITY* CL_TempEntAlloc(const float* org, model_t* model)
 {
 	if (!gpTempEntFree)
 	{
-		Con_DPrintf("Overflow %d temporary ents!\n", MAX_TEMPENTS);
+		WarnAboutTempEntOverflow();
 		return nullptr;
 	}
 
@@ -1086,7 +1100,7 @@ TEMPENTITY* CL_TempEntAllocNoModel(const float* org)
 {
 	if (!gpTempEntFree)
 	{
-		Con_DPrintf("Overflow %d temporary ents!\n", MAX_TEMPENTS);
+		WarnAboutTempEntOverflow();
 		return nullptr;
 	}
 
