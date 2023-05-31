@@ -81,6 +81,8 @@ void ClientLibrary::VidInit()
 	gHUD.UpdateScreenInfo();
 
 	g_ClientPrediction.Reset();
+
+	CL_TempEntInit();
 }
 
 void ClientLibrary::PostInitialize()
@@ -129,6 +131,7 @@ void ClientLibrary::RunFrame()
 	if (!isConnected)
 	{
 		TempEntity_ResetTargetLaser();
+		CL_TempEntInit();
 	}
 
 	auto mapName = gEngfuncs.pfnGetLevelName();

@@ -32,6 +32,10 @@ void Game_AddObjects();
 
 bool g_iAlive = true;
 
+static TEMPENTITY gTempEnts[MAX_TEMPENTS];
+static TEMPENTITY* gpTempEntFree = nullptr;
+static TEMPENTITY* gpTempEntActive = nullptr;
+
 /*
 ========================
 HUD_AddEntity
@@ -371,6 +375,10 @@ void DLLEXPORT HUD_TempEntUpdate(
 	int (*Callback_AddVisibleEntity)(cl_entity_t* pEntity),
 	void (*Callback_TempEntPlaySound)(TEMPENTITY* pTemp, float damp))
 {
+	// Use our own temp ent list instead.
+	ppTempEntFree = &gpTempEntFree;
+	ppTempEntActive = &gpTempEntActive;
+
 	static int gTempEntFrame = 0;
 	int i;
 	TEMPENTITY *pTemp, *pnext, *pprev;
@@ -990,8 +998,168 @@ void TempEntity_UpdateTargetLaser()
 	g_TargetLaser->brightness = 255;
 }
 
+void CL_TempEntInit()
+{
+	memset(gTempEnts, 0, sizeof(gTempEnts));
+
+	for (int i = 0; i < MAX_TEMPENTS - 1; ++i)
+	{
+		gTempEnts[i].next = &gTempEnts[i + 1];
+	}
+
+	gTempEnts[MAX_TEMPENTS - 1].next = nullptr;
+
+	gpTempEntFree = gTempEnts;
+	gpTempEntActive = nullptr;
+}
+
+void R_KillAttachedTents(int client)
+{
+	// TODO: off by one here?
+	if (client < 0 || client > gEngfuncs.GetMaxClients())
+	{
+		Con_Printf("Bad client in R_KillAttachedTents()!\n");
+		return;
+	}
+
+	const float time = gEngfuncs.GetClientTime();
+
+	for (TEMPENTITY* i = gpTempEntActive; i; i = i->next)
+	{
+		if ((i->flags & FTENT_PLYRATTACHMENT) != 0 && i->clientIndex == client)
+		{
+			i->die = time;
+		}
+	}
+}
+
+void CL_TempEntPrepare(TEMPENTITY* pTemp, model_t* model)
+{
+	memset(&pTemp->entity, 0, sizeof(pTemp->entity));
+
+	pTemp->flags = 0;
+	pTemp->entity.curstate.colormap = 0;
+	pTemp->die = gEngfuncs.GetClientTime() + 0.75f;
+	pTemp->entity.model = model;
+	pTemp->entity.curstate.rendermode = 0;
+	pTemp->entity.curstate.renderfx = 0;
+	pTemp->fadeSpeed = 0.5;
+	pTemp->hitSound = 0;
+	pTemp->clientIndex = -1;
+	pTemp->bounceFactor = 1;
+	pTemp->hitcallback = 0;
+	pTemp->callback = 0;
+}
+
+TEMPENTITY* CL_TempEntAlloc(const float* org, model_t* model)
+{
+	if (!gpTempEntFree)
+	{
+		Con_DPrintf("Overflow %d temporary ents!\n", MAX_TEMPENTS);
+		return nullptr;
+	}
+
+	if (!model)
+	{
+		Con_DPrintf("efx.CL_TempEntAlloc: No model\n");
+		return nullptr;
+	}
+
+	TEMPENTITY* ent = gpTempEntFree;
+	gpTempEntFree = ent->next;
+
+	CL_TempEntPrepare(ent, model);
+
+	ent->priority = 0;
+
+	ent->entity.origin.x = org[0];
+	ent->entity.origin.y = org[1];
+	ent->entity.origin.z = org[2];
+
+	ent->next = gpTempEntActive;
+	gpTempEntActive = ent;
+
+	return ent;
+}
+
+TEMPENTITY* CL_TempEntAllocNoModel(const float* org)
+{
+	if (!gpTempEntFree)
+	{
+		Con_DPrintf("Overflow %d temporary ents!\n", MAX_TEMPENTS);
+		return nullptr;
+	}
+
+	TEMPENTITY* ent = gpTempEntFree;
+	gpTempEntFree = ent->next;
+
+	CL_TempEntPrepare(ent, nullptr);
+
+	ent->priority = 0;
+
+	ent->entity.origin.x = org[0];
+	ent->entity.origin.y = org[1];
+	ent->entity.origin.z = org[2];
+
+	ent->next = gpTempEntActive;
+	gpTempEntActive = ent;
+
+	return ent;
+}
+
+TEMPENTITY* CL_TempEntAllocHigh(const float* org, model_t* model)
+{
+	if (!model)
+	{
+		Con_DPrintf("temporary ent model invalid\n");
+		return nullptr;
+	}
+
+	TEMPENTITY* ent = gpTempEntFree;
+
+	if (gpTempEntFree)
+	{
+		gpTempEntFree = gpTempEntFree->next;
+		ent->next = gpTempEntActive;
+		gpTempEntActive = ent;
+	}
+	else
+	{
+		ent = gpTempEntActive;
+
+		while (ent && ent->priority != 0)
+		{
+			ent = ent->next;
+		}
+
+		if (!ent)
+		{
+			Con_DPrintf("Couldn't alloc a high priority TENT!\n");
+			return nullptr;
+		}
+	}
+
+	CL_TempEntPrepare(ent, model);
+
+	ent->priority = 1;
+
+	ent->entity.origin.x = org[0];
+	ent->entity.origin.y = org[1];
+	ent->entity.origin.z = org[2];
+
+	return ent;
+}
+
 void TempEntity_Initialize()
 {
+	// Override engine temp entity allocation to use our own list.
+	auto efx = gEngfuncs.pEfxAPI;
+
+	efx->R_KillAttachedTents = &R_KillAttachedTents;
+	efx->CL_TempEntAlloc = &CL_TempEntAlloc;
+	efx->CL_TempEntAllocNoModel = &CL_TempEntAllocNoModel;
+	efx->CL_TempEntAllocHigh = &CL_TempEntAllocHigh;
+
 	g_ClientUserMessages.RegisterHandler("TempEntity", &MsgFunc_TempEntity);
 	g_ClientUserMessages.RegisterHandler("TgtLaser", &MsgFunc_TargetLaser);
 }

@@ -17,5 +17,7 @@
 
 void TempEntity_Initialize();
 
+void CL_TempEntInit();
+
 void TempEntity_ResetTargetLaser();
 void TempEntity_UpdateTargetLaser();
