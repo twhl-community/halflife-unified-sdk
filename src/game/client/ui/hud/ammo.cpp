@@ -398,7 +398,8 @@ bool CHudAmmo::VidInit()
 
 	for (int i = 0; i < MAX_WEAPON_SLOTS; ++i)
 	{
-		m_BucketSprites[i] = gHUD.GetSpriteIndex(fmt::format("bucket{}", i + 1).c_str());
+		// 10 becomes 0
+		m_BucketSprites[i] = gHUD.GetSpriteIndex(fmt::format("bucket{}", (i + 1) % 10).c_str());
 	}
 
 	const Rect bucketRect = gHUD.GetSpriteRect(m_BucketSprites[0]);
