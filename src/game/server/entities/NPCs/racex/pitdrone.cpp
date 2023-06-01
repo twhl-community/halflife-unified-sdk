@@ -1105,10 +1105,9 @@ void CPitdrone::CheckAmmo()
 	}
 }
 
-const GibData PitDroneGibs = {"models/pit_drone_gibs.mdl", 0, 7};
-
 void CPitdrone::GibMonster()
 {
+	/*
 	EmitSound(CHAN_WEAPON, "common/bodysplat.wav", 1, ATTN_NORM);
 
 	if (CVAR_GET_FLOAT("violence_agibs") != 0) // Should never get here, but someone might call it directly
@@ -1116,6 +1115,9 @@ void CPitdrone::GibMonster()
 		// Note: the original doesn't check for German censorship
 		CGib::SpawnRandomGibs(this, 6, PitDroneGibs); // Throw alien gibs
 	}
+	*/
+
+	CGib::SpawnClientGibs(this, GibType::Pitdrone, 6, true, false);
 
 	// don't remove players!
 	SetThink(&CBaseMonster::SUB_Remove);

@@ -19,6 +19,7 @@
 
 #include "hud.h"
 #include "cbase.h"
+#include "client_gibs.h"
 #include "ClientLibrary.h"
 #include "entity.h"
 #include "net_api.h"
@@ -56,6 +57,7 @@ bool ClientLibrary::Initialize()
 	AddCheatCommands();
 
 	TempEntity_Initialize();
+	ClientGibs_Initialize();
 
 	return true;
 }

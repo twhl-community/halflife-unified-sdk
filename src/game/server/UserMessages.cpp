@@ -88,4 +88,6 @@ void LinkUserMessages()
 	gmsgTgtLaser = REG_USER_MSG("TgtLaser", -1);
 
 	gmsgFog = REG_USER_MSG("Fog", 14);
+
+	gmsgClientGibs = REG_USER_MSG("ClientGibs", 18);
 }

@@ -1184,6 +1184,9 @@ void TempEntity_Initialize()
 
 void TempEntity_Shutdown()
 {
-	// Restore original API. Necessary in case somebody uses Change Game to load another mod.
-	*gEngfuncs.pEfxAPI = g_EngineEFXAPI;
+	if (g_EngineEFXAPI.R_AllocParticle)
+	{
+		// Restore original API. Necessary in case somebody uses Change Game to load another mod.
+		*gEngfuncs.pEfxAPI = g_EngineEFXAPI;
+	}
 }

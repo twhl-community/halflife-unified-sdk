@@ -299,8 +299,6 @@ Relationship CShockTrooper::IRelationship(CBaseEntity* pTarget)
 	return CSquadMonster::IRelationship(pTarget);
 }
 
-const GibData ShockTrooperGibs = {"models/strooper_gibs.mdl", 0, 8};
-
 void CShockTrooper::GibMonster()
 {
 	Vector vecGunPos;
@@ -324,12 +322,16 @@ void CShockTrooper::GibMonster()
 		// TODO: change body group
 	}
 
+	/*
 	EmitSound(CHAN_WEAPON, "common/bodysplat.wav", 1, ATTN_NORM);
 
 	if (CVAR_GET_FLOAT("violence_agibs") != 0) // Should never get here, but someone might call it directly
 	{
 		CGib::SpawnRandomGibs(this, 6, ShockTrooperGibs); // Throw alien gibs
 	}
+	*/
+
+	CGib::SpawnClientGibs(this, GibType::ShockTrooper, 6, true, false);
 
 	// don't remove players!
 	SetThink(&CBaseMonster::SUB_Remove);

@@ -3410,7 +3410,8 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse)
 
 	case 102:
 		// Gibbage!!!
-		CGib::SpawnRandomGibs(this, 1, true);
+		//CGib::SpawnRandomGibs(this, 1, true);
+		CGib::SpawnClientGibs(this, GibType::Human, 1, false, false);
 		break;
 
 	case 103:

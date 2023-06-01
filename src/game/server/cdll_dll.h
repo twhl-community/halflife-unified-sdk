@@ -64,6 +64,30 @@ static_assert(MAX_WEAPON_SLOTS <= 10);
 #define HUD_PRINTTALK 3
 #define HUD_PRINTCENTER 4
 
+enum class GibVelocityMultiplier
+{
+	Fraction = 0,
+	Double = 1,
+	Quadruple = 2
+};
+
+// Hack: so we can select model + gib limit data
+enum class GibType
+{
+	None = 0, // Sound only
+	Human,
+	Alien,
+	Pitdrone,
+	Voltigore,
+	ShockTrooper,
+};
+
+// Flags are stored in the type variable to save a byte.
+constexpr int GibFlag_GibSound = 1 << 6;
+constexpr int GibFlag_SpawnHead = 1 << 7;
+
+constexpr int GibFlag_Mask = GibFlag_GibSound | GibFlag_SpawnHead;
+
 enum WeaponId
 {
 	WEAPON_NONE = 0,

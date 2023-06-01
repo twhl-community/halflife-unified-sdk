@@ -1131,25 +1131,8 @@ void COFVoltigore::DeathGibThink()
 	}
 }
 
-const GibLimit VoltigoreGibLimits[] =
-	{
-		{1},
-		{1},
-		{1},
-		{1},
-		{2},
-		{1},
-		{2},
-		{1},
-		{2},
-};
-
-const GibData VoltigoreGibs = {"models/vgibs.mdl", 0, std::ssize(VoltigoreGibLimits), VoltigoreGibLimits};
-
 void COFVoltigore::GibMonster()
 {
-	EmitSound(CHAN_WEAPON, "common/bodysplat.wav", 1, ATTN_NORM);
-
 	pev->renderfx = kRenderFxExplode;
 
 	pev->rendercolor.x = 255;
@@ -1161,12 +1144,18 @@ void COFVoltigore::GibMonster()
 	SetThink(&CBaseMonster::SUB_Remove);
 	pev->nextthink = gpGlobals->time + 0.15;
 
+	/*
+	EmitSound(CHAN_WEAPON, "common/bodysplat.wav", 1, ATTN_NORM);
+
 	// Note: the original didn't have the violence check
 	if (CVAR_GET_FLOAT("violence_agibs") != 0) // Should never get here, but someone might call it directly
 	{
 		// Gib spawning has been rewritten so the logic for limiting gib submodels is generalized
 		CGib::SpawnRandomGibs(this, 12, VoltigoreGibs); // Throw alien gibs
 	}
+	*/
+
+	CGib::SpawnClientGibs(this, GibType::Voltigore, 12, true, false);
 }
 
 void COFVoltigore::Killed(CBaseEntity* attacker, int iGib)

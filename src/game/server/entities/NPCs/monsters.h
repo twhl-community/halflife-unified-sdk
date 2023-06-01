@@ -169,6 +169,32 @@ struct GibData
 	const GibLimit* const Limits = nullptr;
 };
 
+#define GERMAN_GIB_COUNT 4
+#define HUMAN_GIB_COUNT 6
+#define ALIEN_GIB_COUNT 4
+
+// start at one to avoid throwing random amounts of skulls (0th gib)
+constexpr GibData HumanGibs = {"models/hgibs.mdl", 1, HUMAN_GIB_COUNT};
+constexpr GibData HumanHeadGibs = {"models/hgibs.mdl", 0, 1};
+constexpr GibData AlienGibs = {"models/agibs.mdl", 0, ALIEN_GIB_COUNT};
+constexpr GibData PitDroneGibs = {"models/pit_drone_gibs.mdl", 0, 7};
+constexpr GibData ShockTrooperGibs = {"models/strooper_gibs.mdl", 0, 8};
+
+constexpr GibLimit VoltigoreGibLimits[] =
+	{
+		{1},
+		{1},
+		{1},
+		{1},
+		{2},
+		{1},
+		{2},
+		{1},
+		{2},
+};
+
+constexpr GibData VoltigoreGibs = {"models/vgibs.mdl", 0, std::ssize(VoltigoreGibLimits), VoltigoreGibLimits};
+
 /**
  *	@brief A gib is a chunk of a body, or a piece of wood/metal/rocks/etc.
  */
@@ -206,6 +232,10 @@ public:
 	static void SpawnRandomGibs(CBaseEntity* victim, int cGibs, const GibData& gibData);
 	static void SpawnRandomGibs(CBaseEntity* victim, int cGibs, bool human);
 	static void SpawnStickyGibs(CBaseEntity* victim, Vector vecOrigin, int cGibs);
+
+	static void SpawnClientGibs(CBaseEntity* victim, const GibType type, bool playSound, bool spawnHead);
+
+	static void SpawnClientGibs(CBaseEntity* victim, const GibType type, int cGibs, bool playSound, bool spawnHead);
 
 	int m_bloodColor;
 	int m_cBloodDecals;

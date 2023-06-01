@@ -83,4 +83,6 @@ inline int gmsgTgtLaser = 0;
 
 inline int gmsgFog = 0;
 
+inline int gmsgClientGibs = 0;
+
 void LinkUserMessages();

@@ -22,10 +22,7 @@
 
 #include "cbase.h"
 #include "func_break.h"
-
-#define GERMAN_GIB_COUNT 4
-#define HUMAN_GIB_COUNT 6
-#define ALIEN_GIB_COUNT 4
+#include "UserMessages.h"
 
 BEGIN_DATAMAP(CGib)
 DEFINE_FUNCTION(BounceGibTouch),
@@ -264,13 +261,66 @@ void CGib::SpawnRandomGibs(CBaseEntity* victim, int cGibs, const GibData& gibDat
 	}
 }
 
-// start at one to avoid throwing random amounts of skulls (0th gib)
-const GibData HumanGibs = {"models/hgibs.mdl", 1, HUMAN_GIB_COUNT};
-const GibData AlienGibs = {"models/agibs.mdl", 0, ALIEN_GIB_COUNT};
-
 void CGib::SpawnRandomGibs(CBaseEntity* victim, int cGibs, bool human)
 {
 	SpawnRandomGibs(victim, cGibs, human ? HumanGibs : AlienGibs);
+}
+
+static void SpawnClientGibsCore(CBaseEntity* victim, const GibType type, int cGibs, bool playSound, bool spawnHead)
+{
+	if (!victim)
+	{
+		return;
+	}
+
+	MESSAGE_BEGIN(MSG_BROADCAST, gmsgClientGibs);
+	WRITE_SHORT(victim->entindex());
+	WRITE_BYTE(victim->BloodColor());
+	WRITE_BYTE(cGibs);
+	WRITE_COORD_VECTOR(victim->Center()); // Spawn in center since we can't get bounding box on the client side.
+	WRITE_COORD_VECTOR(g_vecAttackDir);
+
+	const auto multiplier = [=]()
+	{
+		if (victim->pev->health > -50)
+		{
+			return GibVelocityMultiplier::Fraction;
+		}
+		else if (victim->pev->health > -200)
+		{
+			return GibVelocityMultiplier::Double;
+		}
+
+		return GibVelocityMultiplier::Quadruple;
+	}();
+
+	WRITE_BYTE(int(multiplier));
+
+	int flags = int(type);
+
+	if (playSound)
+	{
+		flags |= GibFlag_GibSound;
+	}
+
+	if (spawnHead)
+	{
+		flags |= GibFlag_SpawnHead;
+	}
+
+	WRITE_BYTE(flags);
+
+	MESSAGE_END();
+}
+
+void CGib::SpawnClientGibs(CBaseEntity* victim, const GibType type, bool playSound, bool spawnHead)
+{
+	SpawnClientGibsCore(victim, type, 0, playSound, spawnHead);
+}
+
+void CGib::SpawnClientGibs(CBaseEntity* victim, const GibType type, int cGibs, bool playSound, bool spawnHead)
+{
+	SpawnClientGibsCore(victim, type, std::clamp(cGibs, 0, 255), playSound, spawnHead);
 }
 
 void CBaseMonster::FadeMonster()
@@ -286,28 +336,43 @@ void CBaseMonster::FadeMonster()
 
 void CBaseMonster::GibMonster()
 {
+	// Most of this is client side now to save on server side entities, network overhead and possible crashes.
 	bool gibbed = false;
 
-	EmitSound(CHAN_WEAPON, "common/bodysplat.wav", 1, ATTN_NORM);
+	//EmitSound(CHAN_WEAPON, "common/bodysplat.wav", 1, ATTN_NORM);
+
+	GibType type = GibType::None;
+	bool spawnHead = false;
 
 	// only humans throw skulls !!!UNDONE - eventually monsters will have their own sets of gibs
 	if (HasHumanGibs())
 	{
+		/*
 		if (CVAR_GET_FLOAT("violence_hgibs") != 0) // Only the player will ever get here
 		{
 			CGib::SpawnHeadGib(this);
 			CGib::SpawnRandomGibs(this, 4, true); // throw some human gibs.
 		}
+		*/
+
+		type = GibType::Human;
+		spawnHead = true;
 		gibbed = true;
 	}
 	else if (HasAlienGibs())
 	{
+		/*
 		if (CVAR_GET_FLOAT("violence_agibs") != 0) // Should never get here, but someone might call it directly
 		{
 			CGib::SpawnRandomGibs(this, 4, false); // Throw alien gibs
 		}
+		*/
+
+		type = GibType::Alien;
 		gibbed = true;
 	}
+
+	CGib::SpawnClientGibs(this, type, true, spawnHead);
 
 	if (!IsPlayer())
 	{
