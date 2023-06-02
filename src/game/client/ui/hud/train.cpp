@@ -33,25 +33,20 @@ bool CHudTrain::Init()
 
 bool CHudTrain::VidInit()
 {
-	m_hSprite = 0;
+	m_hSprite = gHUD.GetSprite(gHUD.GetSpriteIndex("train_controls"));
 
 	return true;
 }
 
 bool CHudTrain::Draw(float fTime)
 {
-	if (0 == m_hSprite)
-		m_hSprite = LoadSprite("sprites/%d_train.spr");
-
 	if (0 != m_iPos)
 	{
-		int x, y;
-
 		SPR_Set(m_hSprite, gHUD.m_HudColor);
 
 		// This should show up to the right and part way up the armor number
-		y = ScreenHeight - SPR_Height(m_hSprite, 0) - gHUD.m_iFontHeight;
-		x = ScreenWidth / 3 + SPR_Width(m_hSprite, 0) / 4;
+		const int y = ScreenHeight - SPR_Height(m_hSprite, 0) - gHUD.m_iFontHeight;
+		const int x = ScreenWidth / 3 + SPR_Width(m_hSprite, 0) / 4;
 
 		SPR_DrawAdditive(m_iPos - 1, x, y, nullptr);
 	}
