@@ -245,25 +245,27 @@ static void MsgFunc_ClientGibs(const char* name, BufferReader& reader)
 	{
 		switch (type)
 		{
+		case GibType::None: return nullptr;
 		case GibType::Human: return &HumanGibs;
 		case GibType::Alien: return &AlienGibs;
 		case GibType::Pitdrone: return &PitDroneGibs;
 		case GibType::Voltigore: return &VoltigoreGibs;
 		case GibType::ShockTrooper: return &ShockTrooperGibs;
-		default: return nullptr;
+		default:
+			g_GameLogger->error("Invalid gib type {}", int(type));
+			return nullptr;
 		}
 	}();
-
-	if (!gibData)
-	{
-		g_GameLogger->error("Invalid gib type {}", int(type));
-		return;
-	}
 
 	if ((flags & GibFlag_GibSound) != 0)
 	{
 		gEngfuncs.pEventAPI->EV_PlaySound(
 			entindex, origin, CHAN_WEAPON, "common/bodysplat.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+	}
+
+	if (!gibData)
+	{
+		return;
 	}
 
 	if (numGibs == 0)
