@@ -20,8 +20,6 @@
 
 #include "hud.h"
 
-#define PAIN_NAME "sprites/%d_pain.spr"
-
 int giDmgHeight, giDmgWidth;
 
 struct DamageType
@@ -81,7 +79,7 @@ void CHudHealth::Reset()
 
 bool CHudHealth::VidInit()
 {
-	m_hSprite = 0;
+	m_hSprite = gHUD.GetSprite(gHUD.GetSpriteIndex("pain_directions"));
 
 	m_HUD_cross = gHUD.GetSpriteIndex("cross");
 
@@ -170,9 +168,6 @@ bool CHudHealth::Draw(float flTime)
 
 	if ((gHUD.m_iHideHUDDisplay & HIDEHUD_HEALTH) != 0 || 0 != gEngfuncs.IsSpectateOnly())
 		return true;
-
-	if (0 == m_hSprite)
-		m_hSprite = LoadSprite(PAIN_NAME);
 
 	// Has health changed? Flash the health #
 	if (0 != m_fFade)
