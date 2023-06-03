@@ -35,6 +35,9 @@ See the TWHL thread for status updates about these projects: https://twhl.info/t
 
 Updated game assets provided by [Marc-Antoine Lortie](https://github.com/malortie).
 
+The source code for the C# tools can be found here: https://github.com/SamVanheer/HalfLife.UnifiedSdk-CSharp
+The map decompiler can be found here: https://github.com/SamVanheer/HalfLife.UnifiedSdk.MapDecompiler
+
 ## Documentation format
 
 All of the SDK's documentation is written in Markdown. Github allows you to view these files as well as navigate through them.
