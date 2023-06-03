@@ -308,7 +308,6 @@ void CBarney::Spawn()
 	SetBodygroup(GuardBodyGroup::Weapons, NPCWeaponState::Holstered + m_iGuardBody);
 
 	MonsterInit();
-	SetUse(&CBarney::FollowerUse);
 }
 
 void CBarney::Precache()

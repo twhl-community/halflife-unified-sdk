@@ -833,6 +833,46 @@ Schedule_t slTakeCoverFromEnemy[] =
 			"tlTakeCoverFromEnemy"},
 };
 
+Task_t tlFaceTarget[] =
+	{
+		{TASK_SET_ACTIVITY, (float)ACT_IDLE},
+		{TASK_FACE_TARGET, (float)0},
+		{TASK_SET_ACTIVITY, (float)ACT_IDLE},
+		{TASK_SET_SCHEDULE, (float)SCHED_TARGET_CHASE},
+};
+
+Schedule_t slFaceTarget[] =
+	{
+		{tlFaceTarget,
+			std::size(tlFaceTarget),
+			bits_COND_NEW_ENEMY |
+				bits_COND_LIGHT_DAMAGE |
+				bits_COND_HEAVY_DAMAGE |
+				bits_COND_HEAR_SOUND |
+				bits_COND_PROVOKED,
+			bits_SOUND_DANGER,
+			"FaceTarget"},
+};
+
+Task_t tlFollow[] =
+	{
+		{TASK_MOVE_TO_TARGET_RANGE, (float)128}, // Move within 128 of target ent (client)
+		{TASK_SET_SCHEDULE, (float)SCHED_TARGET_FACE},
+};
+
+Schedule_t slFollow[] =
+	{
+		{tlFollow,
+			std::size(tlFollow),
+			bits_COND_NEW_ENEMY |
+				bits_COND_LIGHT_DAMAGE |
+				bits_COND_HEAVY_DAMAGE |
+				bits_COND_HEAR_SOUND |
+				bits_COND_PROVOKED,
+			bits_SOUND_DANGER,
+			"Follow"},
+};
+
 BEGIN_CUSTOM_SCHEDULES_NOBASE(CBaseMonster)
 slIdleStand,
 	slIdleTrigger,
@@ -871,7 +911,9 @@ slIdleStand,
 	slTakeCoverFromOrigin,
 	slTakeCoverFromBestSound,
 	slTakeCoverFromEnemy,
-	slFail
+	slFail,
+	slFaceTarget,
+	slFollow
 	END_CUSTOM_SCHEDULES();
 
 const Schedule_t* CBaseMonster::ScheduleFromName(const char* pName) const
@@ -975,6 +1017,14 @@ const Schedule_t* CBaseMonster::GetScheduleOfType(int Type)
 	case SCHED_CHASE_ENEMY_FAILED:
 	{
 		return &slFail[0];
+	}
+	case SCHED_TARGET_FACE:
+	{
+		return &slFaceTarget[0];
+	}
+	case SCHED_TARGET_CHASE:
+	{
+		return &slFollow[0];
 	}
 	case SCHED_SMALL_FLINCH:
 	{

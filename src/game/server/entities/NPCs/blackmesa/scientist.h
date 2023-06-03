@@ -130,7 +130,6 @@ protected:
 
 	// Don't save, only used during spawn.
 	ScientistItem m_Item = ScientistItem::None;
-	bool m_AllowFollow = true;
 };
 
 /**

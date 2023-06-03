@@ -27,24 +27,24 @@ DEFINE_FIELD(m_painTime, FIELD_TIME),
 	DEFINE_FIELD(m_fearTime, FIELD_TIME),
 	END_DATAMAP();
 
-Task_t tlFollow[] =
+Task_t tlScientistFollow[] =
 	{
 		{TASK_SET_FAIL_SCHEDULE, (float)SCHED_CANT_FOLLOW}, // If you fail, bail out of follow
 		{TASK_MOVE_TO_TARGET_RANGE, (float)128},			// Move within 128 of target ent (client)
 															//	{ TASK_SET_SCHEDULE,		(float)SCHED_TARGET_FACE },
 };
 
-Schedule_t slFollow[] =
+Schedule_t slScientistFollow[] =
 	{
-		{tlFollow,
-			std::size(tlFollow),
+		{tlScientistFollow,
+			std::size(tlScientistFollow),
 			bits_COND_NEW_ENEMY |
 				bits_COND_LIGHT_DAMAGE |
 				bits_COND_HEAVY_DAMAGE |
 				bits_COND_HEAR_SOUND,
 			bits_SOUND_COMBAT |
 				bits_SOUND_DANGER,
-			"Follow"},
+			"ScientistFollow"},
 };
 
 Task_t tlFollowScared[] =
@@ -117,7 +117,7 @@ Schedule_t slHeal[] =
 			"Heal"},
 };
 
-Task_t tlFaceTarget[] =
+Task_t tlScientistFaceTarget[] =
 	{
 		{TASK_STOP_MOVING, (float)0},
 		{TASK_FACE_TARGET, (float)0},
@@ -125,16 +125,16 @@ Task_t tlFaceTarget[] =
 		{TASK_SET_SCHEDULE, (float)SCHED_TARGET_CHASE},
 };
 
-Schedule_t slFaceTarget[] =
+Schedule_t slScientistFaceTarget[] =
 	{
-		{tlFaceTarget,
-			std::size(tlFaceTarget),
+		{tlScientistFaceTarget,
+			std::size(tlScientistFaceTarget),
 			bits_COND_CLIENT_PUSH |
 				bits_COND_NEW_ENEMY |
 				bits_COND_HEAR_SOUND,
 			bits_SOUND_COMBAT |
 				bits_SOUND_DANGER,
-			"FaceTarget"},
+			"ScientistFaceTarget"},
 };
 
 Task_t tlSciPanic[] =
@@ -272,8 +272,8 @@ Schedule_t slFear[] =
 };
 
 BEGIN_CUSTOM_SCHEDULES(CScientist)
-slFollow,
-	slFaceTarget,
+slScientistFollow,
+	slScientistFaceTarget,
 	slIdleSciStand,
 	slFear,
 	slScientistCover,
@@ -520,11 +520,6 @@ bool CScientist::KeyValue(KeyValueData* pkvd)
 		m_Item = static_cast<ScientistItem>(atoi(pkvd->szValue));
 		return true;
 	}
-	else if (FStrEq(pkvd->szKeyName, "allow_follow"))
-	{
-		m_AllowFollow = atoi(pkvd->szValue) != 0;
-		return true;
-	}
 
 	return CTalkMonster::KeyValue(pkvd);
 }
@@ -584,11 +579,6 @@ void CScientist::Spawn()
 	SetBodygroup(ScientistBodygroup::Item, static_cast<int>(m_Item));
 
 	MonsterInit();
-
-	if (m_AllowFollow)
-	{
-		SetUse(&CScientist::FollowerUse);
-	}
 }
 
 void CScientist::Precache()
@@ -722,12 +712,12 @@ const Schedule_t* CScientist::GetScheduleOfType(int Type)
 		psched = CTalkMonster::GetScheduleOfType(Type);
 
 		if (psched == slIdleStand)
-			return slFaceTarget; // override this for different target face behavior
+			return slScientistFaceTarget; // override this for different target face behavior
 		else
 			return psched;
 
 	case SCHED_TARGET_CHASE:
-		return slFollow;
+		return slScientistFollow;
 
 	case SCHED_CANT_FOLLOW:
 		return slStopFollowing;

@@ -649,8 +649,6 @@ void CBaseHGruntAlly::SpawnCore()
 	m_flMedicWaitTime = gpGlobals->time;
 
 	MonsterInit();
-
-	SetUse(&CBaseHGruntAlly::FollowerUse);
 }
 
 void CBaseHGruntAlly::Precache()

@@ -28,7 +28,6 @@ DEFINE_FIELD(m_hSquadLeader, FIELD_EHANDLE),
 	DEFINE_FIELD(m_flLastEnemySightTime, FIELD_TIME),
 
 	DEFINE_FIELD(m_iMySlot, FIELD_INTEGER),
-	DEFINE_FUNCTION(FollowerUse),
 	END_DATAMAP();
 
 bool COFSquadTalkMonster::OccupySlot(int iDesiredSlots)
@@ -579,39 +578,6 @@ const Schedule_t* COFSquadTalkMonster::GetScheduleOfType(int iType)
 
 	default:
 		return CTalkMonster::GetScheduleOfType(iType);
-	}
-}
-
-void COFSquadTalkMonster::FollowerUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
-{
-	// Don't allow use during a scripted_sentence
-	if (m_useTime > gpGlobals->time)
-		return;
-
-	if (pCaller != nullptr && pCaller->IsPlayer())
-	{
-		// Pre-disaster followers can't be used
-		if ((pev->spawnflags & SF_MONSTER_PREDISASTER) != 0)
-		{
-			DeclineFollowing();
-		}
-		else if (CanFollow())
-		{
-			// Player can form squads of up to 6 NPCs
-			LimitFollowers(pCaller, 6);
-
-			if ((m_afMemory & bits_MEMORY_PROVOKED) != 0)
-				AILogger->debug("I'm not following you, you evil person!");
-			else
-			{
-				StartFollowing(pCaller);
-				SetBits(m_bitsSaid, bit_saidHelloPlayer); // Don't say hi after you've started following
-			}
-		}
-		else
-		{
-			StopFollowing(true);
-		}
 	}
 }
 

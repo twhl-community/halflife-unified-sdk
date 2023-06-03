@@ -88,11 +88,13 @@ DEFINE_FIELD(m_hEnemy, FIELD_EHANDLE),
 	DEFINE_FIELD(m_scriptState, FIELD_INTEGER),
 	DEFINE_FIELD(m_pCine, FIELD_CLASSPTR),
 	DEFINE_FIELD(m_AllowItemDropping, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_AllowFollow, FIELD_BOOLEAN),
 
 	DEFINE_FUNCTION(MonsterUse),
 	DEFINE_FUNCTION(CallMonsterThink),
 	DEFINE_FUNCTION(CorpseFallThink),
 	DEFINE_FUNCTION(MonsterInitThink),
+	DEFINE_FUNCTION(FollowerUse),
 	END_DATAMAP();
 
 void CBaseMonster::PostRestore()
@@ -1819,7 +1821,12 @@ void CBaseMonster::MonsterInit()
 
 	SetThink(&CBaseMonster::MonsterInitThink);
 	pev->nextthink = gpGlobals->time + 0.1;
-	SetUse(&CBaseMonster::MonsterUse);
+	//SetUse(&CBaseMonster::MonsterUse);
+
+	if (m_AllowFollow)
+	{
+		SetUse(&CBaseMonster::FollowerUse);
+	}
 }
 
 void CBaseMonster::MonsterInitThink()
@@ -1965,6 +1972,12 @@ Relationship CBaseMonster::IRelationship(CBaseEntity* pTarget)
 {
 	if (pTarget->IsPlayer())
 	{
+		// Hate player if they shoot you, even if otherwise friendly.
+		if ((m_afMemory & bits_MEMORY_PROVOKED) != 0)
+		{
+			return Relationship::Hate;
+		}
+
 		switch (m_PlayerAllyRelationship)
 		{
 		case PlayerAllyRelationship::No: return Relationship::Dislike;
@@ -2689,8 +2702,23 @@ bool CBaseMonster::KeyValue(KeyValueData* pkvd)
 			PlayerAllyRelationship(atoi(pkvd->szValue)), PlayerAllyRelationship::Default, PlayerAllyRelationship::Yes);
 		return true;
 	}
+	else if (FStrEq(pkvd->szKeyName, "allow_follow"))
+	{
+		m_AllowFollow = atoi(pkvd->szValue) != 0;
+		return true;
+	}
+	else if (FStrEq(pkvd->szKeyName, "UseSentence"))
+	{
+		m_iszUse = ALLOC_STRING(pkvd->szValue);
+		return true;
+	}
+	else if (FStrEq(pkvd->szKeyName, "UnUseSentence"))
+	{
+		m_iszUnUse = ALLOC_STRING(pkvd->szValue);
+		return true;
+	}
 
-	return CBaseToggle::KeyValue(pkvd);
+	return BaseClass::KeyValue(pkvd);
 }
 
 bool CBaseMonster::FCheckAITrigger()
@@ -3187,6 +3215,112 @@ void CBaseMonster::ClearShockEffect()
 		pev->renderamt = m_flOldRenderAmt;
 		m_flShockDuration = 0;
 		m_fShockEffect = false;
+	}
+}
+
+void CBaseMonster::StopFollowing(bool clearSchedule)
+{
+	if (IsFollowing())
+	{
+		if (IRelationship(m_hTargetEnt) == Relationship::Ally)
+		{
+			if (!FStringNull(m_iszUnUse))
+			{
+				PlaySentence(STRING(m_iszUnUse), RANDOM_FLOAT(2.8, 3.2), VOL_NORM, ATTN_IDLE);
+			}
+		}
+
+		if (m_movementGoal == MOVEGOAL_TARGETENT)
+			RouteClear(); // Stop him from walking toward the player
+		m_hTargetEnt = nullptr;
+		if (clearSchedule)
+			ClearSchedule();
+		if (m_hEnemy != nullptr)
+			m_IdealMonsterState = MONSTERSTATE_COMBAT;
+	}
+}
+
+void CBaseMonster::StartFollowing(CBaseEntity* pLeader)
+{
+	if (m_pCine)
+		m_pCine->CancelScript();
+
+	if (m_hEnemy != nullptr)
+		m_IdealMonsterState = MONSTERSTATE_ALERT;
+
+	m_hTargetEnt = pLeader;
+
+	if (!FStringNull(m_iszUse))
+	{
+		PlaySentence(STRING(m_iszUse), RANDOM_FLOAT(2.8, 3.2), VOL_NORM, ATTN_IDLE);
+	}
+
+	ClearSchedule();
+}
+
+bool CBaseMonster::CanFollow()
+{
+	if (m_MonsterState == MONSTERSTATE_SCRIPT || m_IdealMonsterState == MONSTERSTATE_SCRIPT)
+	{
+		if (!m_pCine->CanInterrupt())
+			return false;
+	}
+
+	if (!IsAlive())
+		return false;
+
+	return !IsFollowing();
+}
+
+// UNDONE: Keep a follow time in each follower, make a list of followers in this function and do LRU
+// UNDONE: Check this in Restore to keep restored monsters from joining a full list of followers
+void CBaseMonster::LimitFollowers(CBaseEntity* pPlayer, int maxFollowers)
+{
+	int count = 0;
+
+	// for each friend in this bsp...
+	EnumFriends([&](CBaseMonster* pFriend)
+		{
+			if (pFriend->IsAlive())
+			{
+				if (pFriend->m_hTargetEnt == pPlayer)
+				{
+					count++;
+					if (count > maxFollowers)
+						pFriend->StopFollowing(true);
+				}
+			} },
+		true);
+}
+
+void CBaseMonster::FollowerUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
+{
+	// Don't allow use during a scripted_sentence
+	if (m_useTime > gpGlobals->time)
+		return;
+
+	if (pCaller != nullptr && pCaller->IsPlayer())
+	{
+		// Pre-disaster followers can't be used
+		if ((pev->spawnflags & SF_MONSTER_PREDISASTER) != 0)
+		{
+			DeclineFollowing();
+		}
+		else if (CanFollow())
+		{
+			LimitFollowers(pCaller, GetMaxFollowers());
+
+			if (IRelationship(pCaller) != Relationship::Ally)
+				AILogger->debug("I'm not following you, you evil person!");
+			else
+			{
+				StartFollowing(pCaller);
+			}
+		}
+		else
+		{
+			StopFollowing(true);
+		}
 	}
 }
 

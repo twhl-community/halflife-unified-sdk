@@ -111,7 +111,6 @@ public:
 	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 	void Touch(CBaseEntity* pOther) override;
 	void Killed(CBaseEntity* attacker, int iGib) override;
-	Relationship IRelationship(CBaseEntity* pTarget) override;
 	bool CanPlaySentence(bool fDisregardState) override;
 
 protected:
@@ -174,25 +173,9 @@ public:
 	 */
 	void Talk(float flDuration);
 
-	/**
-	 *	@brief Invokes @c callback on each friend
-	 *	@details Return false to stop iteration
-	 */
-	template <typename Callback>
-	void ForEachFriend(Callback callback);
-
-	template <typename Callback>
-	void EnumFriends(Callback callback, bool trace);
-
 	// For following
-	bool CanFollow();
-	bool IsFollowing() { return m_hTargetEnt != nullptr && m_hTargetEnt->IsPlayer(); }
 	void StopFollowing(bool clearSchedule) override;
-	void StartFollowing(CBaseEntity* pLeader);
-	virtual void DeclineFollowing() {}
-	void LimitFollowers(CBaseEntity* pPlayer, int maxFollowers);
-
-	void FollowerUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void StartFollowing(CBaseEntity* pLeader) override;
 
 	/**
 	 *	@brief Prepare this talking monster to answer question
@@ -205,9 +188,6 @@ public:
 	int m_nSpeak;					  //!< number of times initiated talking
 	int m_voicePitch;				  //!< pitch of voice for this head
 	const char* m_szGrp[TLK_CGROUPS]; //!< sentence group names
-	float m_useTime;				  //!< Don't allow +USE until this time
-	string_t m_iszUse;				  //!< +USE sentence group (follow)
-	string_t m_iszUnUse;			  //!< +USE sentence group (stop following)
 
 	float m_flLastSaidSmelled; //!< last time we talked about something that stinks
 	float m_flStopTalkTime;	   //!< when in the future that I'll be done saying this sentence.
@@ -216,103 +196,6 @@ public:
 
 	EHANDLE m_hTalkTarget; //!< who to look at while talking
 };
-
-template <typename Callback>
-void CTalkMonster::ForEachFriend(Callback callback)
-{
-	// First pass: check for other NPCs of the same classification.
-	// This typically includes NPCs with the same entity class, but a modder may implement custom classifications.
-	const auto myClass = Classify();
-
-	for (auto friendEntity : UTIL_FindEntities())
-	{
-		if (friendEntity->IsPlayer())
-		{
-			// No players
-			continue;
-		}
-
-		auto talkMonster = friendEntity->MyTalkMonsterPointer();
-
-		if (!talkMonster)
-		{
-			// Not a talk monster, can't be a friend.
-			continue;
-		}
-
-		if (myClass != talkMonster->Classify())
-		{
-			continue;
-		}
-
-		callback(talkMonster);
-	}
-
-	// Second pass: check for other NPCs that are friendly to us
-	for (auto friendEntity : UTIL_FindEntities())
-	{
-		if (friendEntity->IsPlayer())
-		{
-			// No players
-			continue;
-		}
-
-		auto talkMonster = friendEntity->MyTalkMonsterPointer();
-
-		if (!talkMonster)
-		{
-			// Not a talk monster, can't be a friend.
-			continue;
-		}
-
-		if (myClass == talkMonster->Classify())
-		{
-			// Already checked these. Includes other NPCs of my type
-			continue;
-		}
-
-		const auto relationship = IRelationship(talkMonster);
-
-		if (relationship != Relationship::Ally && relationship != Relationship::None)
-		{
-			// Not a friend
-			continue;
-		}
-
-		callback(talkMonster);
-	}
-}
-
-template <typename Callback>
-void CTalkMonster::EnumFriends(Callback callback, bool trace)
-{
-	auto wrapper = [&](CTalkMonster* pFriend)
-	{
-		if (pFriend == this || !pFriend->IsAlive() || !(pFriend->pev->flags & FL_MONSTER))
-		{
-			// don't talk to self or dead people or non-monster entities
-			return;
-		}
-
-		if (trace)
-		{
-			Vector vecCheck = pFriend->pev->origin;
-			vecCheck.z = pFriend->pev->absmax.z;
-
-			TraceResult tr;
-			UTIL_TraceLine(pev->origin, vecCheck, ignore_monsters, edict(), &tr);
-
-			if (tr.flFraction != 1.0)
-			{
-				return;
-			}
-		}
-
-		callback(pFriend);
-	};
-
-	ForEachFriend(wrapper);
-}
 
 // Clients can push talkmonsters out of their way
 #define bits_COND_CLIENT_PUSH (bits_COND_SPECIAL1)

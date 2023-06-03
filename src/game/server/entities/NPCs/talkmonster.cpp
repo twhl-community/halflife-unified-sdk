@@ -37,7 +37,6 @@ DEFINE_FIELD(m_bitsSaid, FIELD_INTEGER),
 	DEFINE_FIELD(m_flStopTalkTime, FIELD_TIME),
 	DEFINE_FIELD(m_hTalkTarget, FIELD_EHANDLE),
 	DEFINE_FIELD(m_fStartSuspicious, FIELD_BOOLEAN),
-	DEFINE_FUNCTION(FollowerUse),
 	END_DATAMAP();
 
 //=========================================================
@@ -615,27 +614,6 @@ void CTalkMonster::ShutUpFriends()
 		true);
 }
 
-// UNDONE: Keep a follow time in each follower, make a list of followers in this function and do LRU
-// UNDONE: Check this in Restore to keep restored monsters from joining a full list of followers
-void CTalkMonster::LimitFollowers(CBaseEntity* pPlayer, int maxFollowers)
-{
-	int count = 0;
-
-	// for each friend in this bsp...
-	EnumFriends([&](CBaseEntity* pFriend)
-		{
-			if (CBaseMonster* pMonster = pFriend->MyMonsterPointer(); pMonster->IsAlive())
-			{
-				if (pMonster->m_hTargetEnt == pPlayer)
-				{
-					count++;
-					if (count > maxFollowers)
-						pMonster->StopFollowing(true);
-				}
-			} },
-		true);
-}
-
 float CTalkMonster::TargetDistance()
 {
 	// If we lose the player, or he dies, return a really large distance
@@ -1189,19 +1167,6 @@ void CTalkMonster::TrySmellTalk()
 	}
 }
 
-Relationship CTalkMonster::IRelationship(CBaseEntity* pTarget)
-{
-	if (pTarget->IsPlayer())
-	{
-		if ((m_afMemory & bits_MEMORY_PROVOKED) != 0)
-		{
-			return Relationship::Hate;
-		}
-	}
-
-	return CBaseMonster::IRelationship(pTarget);
-}
-
 void CTalkMonster::StopFollowing(bool clearSchedule)
 {
 	if (IsFollowing())
@@ -1244,73 +1209,19 @@ void CTalkMonster::StartFollowing(CBaseEntity* pLeader)
 	m_hTalkTarget = m_hTargetEnt;
 	ClearConditions(bits_COND_CLIENT_PUSH);
 	ClearSchedule();
-}
 
-bool CTalkMonster::CanFollow()
-{
-	if (m_MonsterState == MONSTERSTATE_SCRIPT || m_IdealMonsterState == MONSTERSTATE_SCRIPT)
-	{
-		if (!m_pCine->CanInterrupt())
-			return false;
-	}
-
-	if (!IsAlive())
-		return false;
-
-	return !IsFollowing();
-}
-
-void CTalkMonster::FollowerUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
-{
-	// Don't allow use during a scripted_sentence
-	if (m_useTime > gpGlobals->time)
-		return;
-
-	if (pCaller != nullptr && pCaller->IsPlayer())
-	{
-		// Pre-disaster followers can't be used
-		if ((pev->spawnflags & SF_MONSTER_PREDISASTER) != 0)
-		{
-			DeclineFollowing();
-		}
-		else if (CanFollow())
-		{
-			LimitFollowers(pCaller, 1);
-
-			if (IRelationship(pCaller) != Relationship::Ally)
-				AILogger->debug("I'm not following you, you evil person!");
-			else
-			{
-				StartFollowing(pCaller);
-				SetBits(m_bitsSaid, bit_saidHelloPlayer); // Don't say hi after you've started following
-			}
-		}
-		else
-		{
-			StopFollowing(true);
-		}
-	}
+	SetBits(m_bitsSaid, bit_saidHelloPlayer); // Don't say hi after you've started following
 }
 
 bool CTalkMonster::KeyValue(KeyValueData* pkvd)
 {
-	if (FStrEq(pkvd->szKeyName, "UseSentence"))
-	{
-		m_iszUse = ALLOC_STRING(pkvd->szValue);
-		return true;
-	}
-	else if (FStrEq(pkvd->szKeyName, "UnUseSentence"))
-	{
-		m_iszUnUse = ALLOC_STRING(pkvd->szValue);
-		return true;
-	}
-	else if (FStrEq(pkvd->szKeyName, "suspicious"))
+	if (FStrEq(pkvd->szKeyName, "suspicious"))
 	{
 		m_fStartSuspicious = atoi(pkvd->szValue) != 0;
 		return true;
 	}
 
-	return CBaseMonster::KeyValue(pkvd);
+	return BaseClass::KeyValue(pkvd);
 }
 
 void CTalkMonster::Precache()

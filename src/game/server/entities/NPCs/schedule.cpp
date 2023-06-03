@@ -1335,6 +1335,19 @@ const Schedule_t* CBaseMonster::GetSchedule()
 	}
 	case MONSTERSTATE_IDLE:
 	{
+		if (m_hEnemy == nullptr && IsFollowing())
+		{
+			if (!m_hTargetEnt->IsAlive())
+			{
+				// UNDONE: Comment about the recently dead player here?
+				StopFollowing(false);
+			}
+			else
+			{
+				return GetScheduleOfType(SCHED_TARGET_FACE);
+			}
+		}
+
 		if (HasConditions(bits_COND_HEAR_SOUND))
 		{
 			return GetScheduleOfType(SCHED_ALERT_FACE);

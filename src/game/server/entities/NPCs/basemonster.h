@@ -55,7 +55,7 @@ struct ScheduleList
 #define DECLARE_CUSTOM_SCHEDULES_COMMON()              \
 private:                                               \
 	static const ScheduleList m_ScheduleList;          \
-                                                       \
+													   \
 public:                                                \
 	static const ScheduleList* GetLocalScheduleList(); \
 	static const ScheduleList* GetBaseScheduleList()
@@ -223,6 +223,18 @@ public:
 	float m_flLastYawTime;
 
 	bool m_AllowItemDropping = true;
+
+	int ObjectCaps() override
+	{
+		int caps = BaseClass::ObjectCaps();
+
+		if (m_AllowFollow)
+		{
+			caps |= FCAP_IMPULSE_USE;
+		}
+
+		return caps;
+	}
 
 	void PostRestore() override;
 
@@ -806,8 +818,6 @@ public:
 	virtual void IdleSound() {}
 	virtual void PainSound() {}
 
-	virtual void StopFollowing(bool clearSchedule) {}
-
 	inline void Remember(int iMemory) { m_afMemory |= iMemory; }
 	inline void Forget(int iMemory) { m_afMemory &= ~iMemory; }
 	inline bool HasMemory(int iMemory)
@@ -846,4 +856,127 @@ public:
 	void AddShockEffect(float r, float g, float b, float size, float flShockDuration);
 	void UpdateShockEffect();
 	void ClearShockEffect();
+
+	/**
+	 *	@brief Invokes @c callback on each friend
+	 *	@details Return false to stop iteration
+	 */
+	template <typename Callback>
+	void ForEachFriend(Callback callback);
+
+	template <typename Callback>
+	void EnumFriends(Callback callback, bool trace);
+
+	// For following
+	bool m_AllowFollow = true;
+	float m_useTime;	 //!< Don't allow +USE until this time
+	string_t m_iszUse;	 //!< +USE sentence group (follow)
+	string_t m_iszUnUse; //!< +USE sentence group (stop following)
+
+	bool CanFollow();
+	bool IsFollowing() { return m_hTargetEnt != nullptr && m_hTargetEnt->IsPlayer(); }
+	virtual int GetMaxFollowers() const { return 1; } // TODO: inconsistent
+	virtual void StopFollowing(bool clearSchedule);
+	virtual void StartFollowing(CBaseEntity* pLeader);
+	virtual void DeclineFollowing() {}
+	void LimitFollowers(CBaseEntity* pPlayer, int maxFollowers);
+
+	void FollowerUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 };
+
+template <typename Callback>
+void CBaseMonster::ForEachFriend(Callback callback)
+{
+	// First pass: check for other NPCs of the same classification.
+	// This typically includes NPCs with the same entity class, but a modder may implement custom classifications.
+	const auto myClass = Classify();
+
+	for (auto friendEntity : UTIL_FindEntities())
+	{
+		if (friendEntity->IsPlayer())
+		{
+			// No players
+			continue;
+		}
+
+		auto monster = friendEntity->MyMonsterPointer();
+
+		if (!monster)
+		{
+			// Not a monster, can't be a friend.
+			continue;
+		}
+
+		if (myClass != monster->Classify())
+		{
+			continue;
+		}
+
+		callback(monster);
+	}
+
+	// Second pass: check for other NPCs that are friendly to us
+	for (auto friendEntity : UTIL_FindEntities())
+	{
+		if (friendEntity->IsPlayer())
+		{
+			// No players
+			continue;
+		}
+
+		auto monster = friendEntity->MyMonsterPointer();
+
+		if (!monster)
+		{
+			// Not a monster, can't be a friend.
+			continue;
+		}
+
+		if (myClass == monster->Classify())
+		{
+			// Already checked these. Includes other NPCs of my type
+			continue;
+		}
+
+		const auto relationship = IRelationship(monster);
+
+		if (relationship != Relationship::Ally && relationship != Relationship::None)
+		{
+			// Not a friend
+			continue;
+		}
+
+		callback(monster);
+	}
+}
+
+template <typename Callback>
+void CBaseMonster::EnumFriends(Callback callback, bool trace)
+{
+	auto wrapper = [&](CBaseMonster* pFriend)
+	{
+		if (pFriend == this || !pFriend->IsAlive() || !(pFriend->pev->flags & FL_MONSTER))
+		{
+			// don't talk to self or dead people or non-monster entities
+			return;
+		}
+
+		if (trace)
+		{
+			Vector vecCheck = pFriend->pev->origin;
+			vecCheck.z = pFriend->pev->absmax.z;
+
+			TraceResult tr;
+			UTIL_TraceLine(pev->origin, vecCheck, ignore_monsters, edict(), &tr);
+
+			if (tr.flFraction != 1.0)
+			{
+				return;
+			}
+		}
+
+		callback(pFriend);
+	};
+
+	ForEachFriend(wrapper);
+}

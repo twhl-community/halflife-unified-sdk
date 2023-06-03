@@ -140,7 +140,8 @@ public:
 	MONSTERSTATE GetIdealState() override;
 	const Schedule_t* GetScheduleOfType(int iType) override;
 
-	void FollowerUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	// Players can form squads of up to 6 NPCs.
+	int GetMaxFollowers() const override { return 6; }
 
 	COFSquadTalkMonster* MySquadMedic();
 
