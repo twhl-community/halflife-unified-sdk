@@ -40,6 +40,9 @@ void CBaseHGruntAlly::OnCreate()
 {
 	COFSquadTalkMonster::OnCreate();
 
+	m_iszUse = MAKE_STRING("FG_OK");
+	m_iszUnUse = MAKE_STRING("FG_WAIT");
+
 	SetClassification("human_military_ally");
 
 	// get voice pitch
@@ -2099,8 +2102,6 @@ void CBaseHGruntAlly::TalkInit()
 	m_szGrp[TLK_QUESTION] = "FG_QUESTION";
 	m_szGrp[TLK_IDLE] = "FG_IDLE";
 	m_szGrp[TLK_STARE] = "FG_STARE";
-	m_szGrp[TLK_USE] = "FG_OK";
-	m_szGrp[TLK_UNUSE] = "FG_WAIT";
 	m_szGrp[TLK_STOP] = "FG_STOP";
 
 	m_szGrp[TLK_NOSHOOT] = "FG_SCARED";

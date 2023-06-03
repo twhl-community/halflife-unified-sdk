@@ -133,6 +133,9 @@ void CBarney::OnCreate()
 	pev->model = MAKE_STRING("models/barney.mdl");
 
 	SetClassification("player_ally");
+
+	m_iszUse = MAKE_STRING("BA_OK");
+	m_iszUnUse = MAKE_STRING("BA_WAIT");
 }
 
 void CBarney::StartTask(const Task_t* pTask)
@@ -339,8 +342,6 @@ void CBarney::TalkInit()
 	m_szGrp[TLK_QUESTION] = "BA_QUESTION";
 	m_szGrp[TLK_IDLE] = "BA_IDLE";
 	m_szGrp[TLK_STARE] = "BA_STARE";
-	m_szGrp[TLK_USE] = "BA_OK";
-	m_szGrp[TLK_UNUSE] = "BA_WAIT";
 	m_szGrp[TLK_STOP] = "BA_STOP";
 
 	m_szGrp[TLK_NOSHOOT] = "BA_SCARED";

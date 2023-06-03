@@ -35,6 +35,10 @@ public:
 	{
 		CScientist::OnCreate();
 		pev->model = MAKE_STRING("models/rosenberg.mdl");
+
+		m_iszUse = MAKE_STRING("RO_OK");
+		m_iszUnUse = MAKE_STRING("RO_WAIT");
+
 		m_SentenceReplacement = &RosenbergSentenceReplacement;
 	}
 
@@ -82,8 +86,6 @@ void CRosenberg::TalkInit()
 	m_szGrp[TLK_QUESTION] = "RO_QUESTION";
 	m_szGrp[TLK_IDLE] = "RO_IDLE";
 	m_szGrp[TLK_STARE] = "RO_STARE";
-	m_szGrp[TLK_USE] = "RO_OK";
-	m_szGrp[TLK_UNUSE] = "RO_WAIT";
 	m_szGrp[TLK_STOP] = "RO_STOP";
 	m_szGrp[TLK_NOSHOOT] = "RO_SCARED";
 	m_szGrp[TLK_HELLO] = "RO_HELLO";

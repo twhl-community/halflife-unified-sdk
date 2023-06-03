@@ -741,7 +741,7 @@ void CTalkMonster::Touch(CBaseEntity* pOther)
 	if (pOther->IsPlayer())
 	{
 		// Ignore if pissed at player
-		if ((m_afMemory & bits_MEMORY_PROVOKED) != 0)
+		if (IRelationship(pOther) != Relationship::Ally)
 			return;
 
 		// Stay put during speech
@@ -1192,8 +1192,13 @@ void CTalkMonster::TrySmellTalk()
 Relationship CTalkMonster::IRelationship(CBaseEntity* pTarget)
 {
 	if (pTarget->IsPlayer())
+	{
 		if ((m_afMemory & bits_MEMORY_PROVOKED) != 0)
+		{
 			return Relationship::Hate;
+		}
+	}
+
 	return CBaseMonster::IRelationship(pTarget);
 }
 
@@ -1201,9 +1206,13 @@ void CTalkMonster::StopFollowing(bool clearSchedule)
 {
 	if (IsFollowing())
 	{
-		if ((m_afMemory & bits_MEMORY_PROVOKED) == 0)
+		if (IRelationship(m_hTargetEnt) == Relationship::Ally)
 		{
-			PlaySentence(m_szGrp[TLK_UNUSE], RANDOM_FLOAT(2.8, 3.2), VOL_NORM, ATTN_IDLE);
+			if (!FStringNull(m_iszUnUse))
+			{
+				PlaySentence(STRING(m_iszUnUse), RANDOM_FLOAT(2.8, 3.2), VOL_NORM, ATTN_IDLE);
+			}
+
 			m_hTalkTarget = m_hTargetEnt;
 		}
 
@@ -1226,7 +1235,12 @@ void CTalkMonster::StartFollowing(CBaseEntity* pLeader)
 		m_IdealMonsterState = MONSTERSTATE_ALERT;
 
 	m_hTargetEnt = pLeader;
-	PlaySentence(m_szGrp[TLK_USE], RANDOM_FLOAT(2.8, 3.2), VOL_NORM, ATTN_IDLE);
+
+	if (!FStringNull(m_iszUse))
+	{
+		PlaySentence(STRING(m_iszUse), RANDOM_FLOAT(2.8, 3.2), VOL_NORM, ATTN_IDLE);
+	}
+
 	m_hTalkTarget = m_hTargetEnt;
 	ClearConditions(bits_COND_CLIENT_PUSH);
 	ClearSchedule();
@@ -1263,7 +1277,7 @@ void CTalkMonster::FollowerUse(CBaseEntity* pActivator, CBaseEntity* pCaller, US
 		{
 			LimitFollowers(pCaller, 1);
 
-			if ((m_afMemory & bits_MEMORY_PROVOKED) != 0)
+			if (IRelationship(pCaller) != Relationship::Ally)
 				AILogger->debug("I'm not following you, you evil person!");
 			else
 			{
@@ -1301,8 +1315,5 @@ bool CTalkMonster::KeyValue(KeyValueData* pkvd)
 
 void CTalkMonster::Precache()
 {
-	if (!FStringNull(m_iszUse))
-		m_szGrp[TLK_USE] = STRING(m_iszUse);
-	if (!FStringNull(m_iszUnUse))
-		m_szGrp[TLK_UNUSE] = STRING(m_iszUnUse);
+	// Nothing.
 }

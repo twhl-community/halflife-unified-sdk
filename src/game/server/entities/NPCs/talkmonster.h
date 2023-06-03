@@ -34,8 +34,6 @@ enum TALKGROUPNAMES
 	TLK_QUESTION,
 	TLK_IDLE,
 	TLK_STARE,
-	TLK_USE,
-	TLK_UNUSE,
 	TLK_STOP,
 	TLK_NOSHOOT,
 	TLK_HELLO,
@@ -208,8 +206,8 @@ public:
 	int m_voicePitch;				  //!< pitch of voice for this head
 	const char* m_szGrp[TLK_CGROUPS]; //!< sentence group names
 	float m_useTime;				  //!< Don't allow +USE until this time
-	string_t m_iszUse;				  //!< Custom +USE sentence group (follow)
-	string_t m_iszUnUse;			  //!< Custom +USE sentence group (stop following)
+	string_t m_iszUse;				  //!< +USE sentence group (follow)
+	string_t m_iszUnUse;			  //!< +USE sentence group (stop following)
 
 	float m_flLastSaidSmelled; //!< last time we talked about something that stinks
 	float m_flStopTalkTime;	   //!< when in the future that I'll be done saying this sentence.

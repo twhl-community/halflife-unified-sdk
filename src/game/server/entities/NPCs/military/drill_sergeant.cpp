@@ -40,6 +40,9 @@ public:
 		pev->health = GetSkillFloat("barney_health"sv);
 		pev->model = MAKE_STRING("models/drill.mdl");
 
+		m_iszUse = MAKE_STRING("DR_OK");
+		m_iszUnUse = MAKE_STRING("DR_WAIT");
+
 		SetClassification("human_military_ally");
 
 		m_SentenceReplacement = &DrillSergeantSentenceReplacement;
@@ -55,8 +58,6 @@ public:
 		m_szGrp[TLK_QUESTION] = "DR_QUESTION";
 		m_szGrp[TLK_IDLE] = "DR_IDLE";
 		m_szGrp[TLK_STARE] = "DR_STARE";
-		m_szGrp[TLK_USE] = "DR_OK";
-		m_szGrp[TLK_UNUSE] = "DR_WAIT";
 		m_szGrp[TLK_STOP] = "DR_STOP";
 
 		m_szGrp[TLK_NOSHOOT] = "DR_SCARED";

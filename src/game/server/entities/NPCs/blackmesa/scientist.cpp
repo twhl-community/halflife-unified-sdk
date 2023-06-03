@@ -293,6 +293,9 @@ void CScientist::OnCreate()
 	pev->health = GetSkillFloat("scientist_health"sv);
 	pev->model = MAKE_STRING("models/scientist.mdl");
 
+	m_iszUse = MAKE_STRING("SC_OK");
+	m_iszUnUse = MAKE_STRING("SC_WAIT");
+
 	SetClassification("human_passive");
 }
 
@@ -614,8 +617,6 @@ void CScientist::TalkInit()
 	m_szGrp[TLK_QUESTION] = "SC_QUESTION";
 	m_szGrp[TLK_IDLE] = "SC_IDLE";
 	m_szGrp[TLK_STARE] = "SC_STARE";
-	m_szGrp[TLK_USE] = "SC_OK";
-	m_szGrp[TLK_UNUSE] = "SC_WAIT";
 	m_szGrp[TLK_STOP] = "SC_STOP";
 	m_szGrp[TLK_NOSHOOT] = "SC_SCARED";
 	m_szGrp[TLK_HELLO] = "SC_HELLO";

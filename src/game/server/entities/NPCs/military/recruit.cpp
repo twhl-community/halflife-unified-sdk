@@ -39,6 +39,10 @@ public:
 
 		pev->health = GetSkillFloat("barney_health"sv);
 		pev->model = MAKE_STRING("models/recruit.mdl");
+
+		m_iszUse = MAKE_STRING("RC_OK");
+		m_iszUnUse = MAKE_STRING("RC_WAIT");
+
 		SetClassification("human_military_ally");
 		m_SentenceReplacement = &RecruitSentenceReplacement;
 	}
@@ -53,8 +57,6 @@ public:
 		m_szGrp[TLK_QUESTION] = "RC_QUESTION";
 		m_szGrp[TLK_IDLE] = "RC_IDLE";
 		m_szGrp[TLK_STARE] = "RC_STARE";
-		m_szGrp[TLK_USE] = "RC_OK";
-		m_szGrp[TLK_UNUSE] = "RC_WAIT";
 		m_szGrp[TLK_STOP] = "RC_STOP";
 
 		m_szGrp[TLK_NOSHOOT] = "RC_SCARED";

@@ -96,6 +96,10 @@ void COtis::OnCreate()
 
 	pev->health = GetSkillFloat("otis_health"sv);
 	pev->model = MAKE_STRING("models/otis.mdl");
+
+	m_iszUse = MAKE_STRING("OT_OK");
+	m_iszUnUse = MAKE_STRING("OT_WAIT");
+
 	m_SentenceReplacement = &OtisSentenceReplacement;
 }
 
@@ -178,8 +182,6 @@ void COtis::TalkInit()
 	m_szGrp[TLK_QUESTION] = "OT_QUESTION";
 	m_szGrp[TLK_IDLE] = "OT_IDLE";
 	m_szGrp[TLK_STARE] = "OT_STARE";
-	m_szGrp[TLK_USE] = "OT_OK";
-	m_szGrp[TLK_UNUSE] = "OT_WAIT";
 	m_szGrp[TLK_STOP] = "OT_STOP";
 
 	m_szGrp[TLK_NOSHOOT] = "OT_SCARED";
