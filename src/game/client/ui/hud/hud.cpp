@@ -178,7 +178,6 @@ void CHud::VidInit()
 	// ----------
 	// Load Sprites
 	// ---------
-	//	m_hsprFont = LoadSprite("sprites/%d_font.spr");
 
 	m_hsprLogo = 0;
 	m_hsprCursor = 0;

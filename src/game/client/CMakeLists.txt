@@ -104,7 +104,6 @@ target_sources(client PRIVATE
 	interpolation.cpp
 	interpolation.h
 	player_info.h
-	util.cpp
 	view.cpp
 	view.h
 	

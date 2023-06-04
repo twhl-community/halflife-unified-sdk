@@ -165,8 +165,6 @@ inline int safe_sprintf(char* dst, int len_dst, const char* format, ...)
 	return 0;
 }
 
-HSPRITE LoadSprite(const char* pszName);
-
 inline bool UTIL_IsMapLoaded()
 {
 	const auto levelName = gEngfuncs.pfnGetLevelName();

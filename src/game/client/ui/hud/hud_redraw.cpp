@@ -168,7 +168,7 @@ bool CHud::Redraw(float flTime, bool intermission)
 		int x, y, i;
 
 		if (m_hsprLogo == 0)
-			m_hsprLogo = LoadSprite("sprites/%d_logo.spr");
+			m_hsprLogo = SPR_Load("sprites/640_logo.spr");
 
 		SPR_Set(m_hsprLogo, {250, 250, 250});
 
