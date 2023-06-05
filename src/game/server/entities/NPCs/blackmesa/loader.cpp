@@ -82,6 +82,7 @@ void COFLoader::Spawn()
 	m_flFieldOfView = 0.5f;
 	pev->takedamage = DAMAGE_NO;
 
+	m_AllowFollow = false;
 	MonsterInit();
 }
 

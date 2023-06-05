@@ -171,6 +171,7 @@ void CLeech::Spawn()
 
 	m_flFieldOfView = -0.5; // 180 degree FOV
 	m_flDistLook = 750;
+	m_AllowFollow = false;
 	MonsterInit();
 	SetThink(&CLeech::SwimThink);
 	SetUse(nullptr);

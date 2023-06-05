@@ -437,6 +437,9 @@ void CIchthyosaur::Spawn()
 
 	m_afCapability = bits_CAP_RANGE_ATTACK1 | bits_CAP_SWIM;
 
+	// Ichthyosaurs have their own use functions so never allow follow.
+	m_AllowFollow = false;
+
 	MonsterInit();
 
 	SetTouch(&CIchthyosaur::BiteTouch);
