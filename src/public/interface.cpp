@@ -144,7 +144,7 @@ CSysModule* Sys_LoadModule(const char* pModuleName)
 		if (szCwd[strlen(szCwd) - 1] == '/')
 			szCwd[strlen(szCwd) - 1] = 0;
 
-		fmt::format(std::back_inserter(absoluteModuleName), "{}/{}", szCwd, pModuleName);
+		fmt::format_to(std::back_inserter(absoluteModuleName), "{}/{}", szCwd, pModuleName);
 	}
 	else
 	{
