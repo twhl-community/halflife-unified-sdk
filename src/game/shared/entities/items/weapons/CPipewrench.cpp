@@ -219,8 +219,12 @@ bool CPipewrench::Swing(const bool bFirst)
 
 #endif
 
-		m_flNextPrimaryAttack = GetNextAttackDelay(0.5);
-		m_flNextSecondaryAttack = GetNextAttackDelay(0.5);
+		if (GetSkillFloat("chainsaw_melee") == 0)
+		{
+			m_flNextPrimaryAttack = GetNextAttackDelay(0.5);
+			m_flNextSecondaryAttack = GetNextAttackDelay(0.5);
+		}
+
 		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 1.0;
 
 #ifndef CLIENT_DLL
@@ -291,6 +295,12 @@ bool CPipewrench::Swing(const bool bFirst)
 		SetThink(&CPipewrench::Smack);
 		pev->nextthink = gpGlobals->time + 0.2;
 #endif
+
+		if (GetSkillFloat("chainsaw_melee") != 0)
+		{
+			m_flNextPrimaryAttack = GetNextAttackDelay(0.5);
+			m_flNextSecondaryAttack = GetNextAttackDelay(0.5);
+		}
 	}
 	return bDidHit;
 }

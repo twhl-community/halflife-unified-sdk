@@ -178,7 +178,10 @@ bool CCrowbar::Swing(bool fFirst)
 
 #endif
 
-		m_flNextPrimaryAttack = GetNextAttackDelay(0.25);
+		if (GetSkillFloat("chainsaw_melee") == 0)
+		{
+			m_flNextPrimaryAttack = GetNextAttackDelay(0.25);
+		}
 
 #ifndef CLIENT_DLL
 		// play thwack, smack, or dong sound
@@ -244,6 +247,12 @@ bool CCrowbar::Swing(bool fFirst)
 
 		m_pPlayer->m_iWeaponVolume = flVol * CROWBAR_WALLHIT_VOLUME;
 #endif
+
+		if (GetSkillFloat("chainsaw_melee") != 0)
+		{
+			m_flNextPrimaryAttack = GetNextAttackDelay(0.25);
+		}
+
 		SetThink(&CCrowbar::Smack);
 		pev->nextthink = gpGlobals->time + 0.2;
 	}

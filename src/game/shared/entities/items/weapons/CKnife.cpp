@@ -182,7 +182,10 @@ bool CKnife::Swing(const bool bFirst)
 
 #endif
 
-		m_flNextPrimaryAttack = GetNextAttackDelay(0.25);
+		if (GetSkillFloat("chainsaw_melee") == 0)
+		{
+			m_flNextPrimaryAttack = GetNextAttackDelay(0.25);
+		}
 
 #ifndef CLIENT_DLL
 
@@ -249,6 +252,11 @@ bool CKnife::Swing(const bool bFirst)
 		SetThink(&CKnife::Smack);
 		pev->nextthink = gpGlobals->time + 0.2;
 #endif
+
+		if (GetSkillFloat("chainsaw_melee") != 0)
+		{
+			m_flNextPrimaryAttack = GetNextAttackDelay(0.25);
+		}
 	}
 	return bDidHit;
 }
