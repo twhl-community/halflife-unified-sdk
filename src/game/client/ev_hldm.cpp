@@ -38,6 +38,7 @@
 #include "CSqueak.h"
 #include "CTripmine.h"
 
+#include "ClientLibrary.h"
 #include "const.h"
 #include "entity_state.h"
 #include "cl_entity.h"
@@ -263,7 +264,7 @@ void EV_HLDM_GunshotDecalTrace(pmtrace_t* pTrace, char* decalName)
 	// Only decal brush models such as the world etc.
 	if (decalName && '\0' != decalName[0] && pe && (pe->solid == SOLID_BSP || pe->movetype == MOVETYPE_PUSHSTEP))
 	{
-		if (0 != CVAR_GET_FLOAT("r_decals"))
+		if (0 != r_decals->value)
 		{
 			gEngfuncs.pEfxAPI->R_DecalShoot(
 				gEngfuncs.pEfxAPI->Draw_DecalIndex(gEngfuncs.pEfxAPI->Draw_DecalIndexFromName(decalName)),
