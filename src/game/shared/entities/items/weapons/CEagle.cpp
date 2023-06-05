@@ -254,7 +254,7 @@ void CEagle::Reload()
 		return;
 	}
 
-	const bool bResult = DefaultReload(EAGLE_MAX_CLIP, 0 != GetMagazine1() ? EAGLE_RELOAD : EAGLE_RELOAD_NOSHOT, 1.5, 1);
+	const bool bResult = DefaultReload(EAGLE_MAX_CLIP, 0 != GetMagazine1() ? EAGLE_RELOAD : EAGLE_RELOAD_NOSHOT, 1.5);
 
 #ifndef CLIENT_DLL
 	// Only turn it off if we're actually reloading

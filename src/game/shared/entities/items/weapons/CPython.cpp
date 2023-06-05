@@ -83,7 +83,7 @@ bool CPython::Deploy()
 		pev->body = 0;
 	}
 
-	return DefaultDeploy("models/v_357.mdl", "models/p_357.mdl", PYTHON_DRAW, "python", pev->body);
+	return DefaultDeploy("models/v_357.mdl", "models/p_357.mdl", PYTHON_DRAW, "python");
 }
 
 void CPython::Holster()
@@ -186,9 +186,7 @@ void CPython::Reload()
 		m_pPlayer->m_iFOV = 0; // 0 means reset to default fov
 	}
 
-	const bool bUseScope = UseLaserSight();
-
-	DefaultReload(6, PYTHON_RELOAD, 2.0, bUseScope ? 1 : 0);
+	DefaultReload(6, PYTHON_RELOAD, 2.0);
 }
 
 void CPython::WeaponIdle()
@@ -223,9 +221,7 @@ void CPython::WeaponIdle()
 		m_flTimeWeaponIdle = (170.0 / 30.0);
 	}
 
-	const bool bUseScope = UseLaserSight();
-
-	SendWeaponAnim(iAnim, bUseScope ? 1 : 0);
+	SendWeaponAnim(iAnim);
 }
 
 void CPython::ItemPostFrame()

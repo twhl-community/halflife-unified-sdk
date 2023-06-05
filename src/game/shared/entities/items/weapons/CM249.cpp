@@ -89,7 +89,7 @@ void CM249::WeaponIdle()
 
 		pev->body = 0;
 
-		SendWeaponAnim(M249_RELOAD_END, pev->body);
+		SendWeaponAnim(M249_RELOAD_END);
 	}
 
 	if (m_flTimeWeaponIdle <= UTIL_WeaponTimeBase())
@@ -109,7 +109,7 @@ void CM249::WeaponIdle()
 			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 6.16;
 		}
 
-		SendWeaponAnim(iAnim, pev->body);
+		SendWeaponAnim(iAnim);
 	}
 }
 
@@ -267,7 +267,7 @@ void CM249::PrimaryAttack()
 
 void CM249::Reload()
 {
-	if (DefaultReload(M249_MAX_CLIP, M249_RELOAD_START, 1.0, 0))
+	if (DefaultReload(M249_MAX_CLIP, M249_RELOAD_START, 1.0))
 	{
 		m_bReloading = true;
 

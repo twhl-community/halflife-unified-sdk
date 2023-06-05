@@ -145,7 +145,7 @@ void CBasePlayerWeapon::LinkWeaponInfo()
 	}
 }
 
-void CBasePlayerWeapon::SendWeaponAnim(int iAnim, int body)
+void CBasePlayerWeapon::SendWeaponAnim(int iAnim)
 {
 	m_pPlayer->pev->weaponanim = iAnim;
 
@@ -162,7 +162,7 @@ void CBasePlayerWeapon::SendWeaponAnim(int iAnim, int body)
 	WRITE_BYTE(pev->body); // weaponmodel bodygroup.
 	MESSAGE_END();
 #else
-	HUD_SendWeaponAnim(iAnim, body, false);
+	HUD_SendWeaponAnim(iAnim, pev->body, false);
 #endif
 }
 
@@ -196,7 +196,7 @@ bool CBasePlayerWeapon::CanDeploy()
 	return true;
 }
 
-bool CBasePlayerWeapon::DefaultDeploy(const char* szViewModel, const char* szWeaponModel, int iAnim, const char* szAnimExt, int body)
+bool CBasePlayerWeapon::DefaultDeploy(const char* szViewModel, const char* szWeaponModel, int iAnim, const char* szAnimExt)
 {
 	if (!CanDeploy())
 		return false;
@@ -209,7 +209,7 @@ bool CBasePlayerWeapon::DefaultDeploy(const char* szViewModel, const char* szWea
 	g_irunninggausspred = false;
 #endif
 
-	SendWeaponAnim(iAnim, body);
+	SendWeaponAnim(iAnim);
 
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;
 	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 1.0;
@@ -229,7 +229,7 @@ void CBasePlayerWeapon::Holster()
 #endif
 }
 
-bool CBasePlayerWeapon::DefaultReload(int iClipSize, int iAnim, float fDelay, int body)
+bool CBasePlayerWeapon::DefaultReload(int iClipSize, int iAnim, float fDelay)
 {
 	if (m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType) <= 0)
 		return false;
@@ -247,7 +247,7 @@ bool CBasePlayerWeapon::DefaultReload(int iClipSize, int iAnim, float fDelay, in
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + fDelay;
 
 	//!!UNDONE -- reload sound goes here !!!
-	SendWeaponAnim(iAnim, body);
+	SendWeaponAnim(iAnim);
 
 	m_fInReload = true;
 

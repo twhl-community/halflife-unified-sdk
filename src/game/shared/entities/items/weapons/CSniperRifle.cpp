@@ -162,12 +162,12 @@ void CSniperRifle::Reload()
 
 		if (0 != GetMagazine1())
 		{
-			if (DefaultReload(SNIPERRIFLE_MAX_CLIP, SNIPERRIFLE_RELOAD3, 2.324, 1))
+			if (DefaultReload(SNIPERRIFLE_MAX_CLIP, SNIPERRIFLE_RELOAD3, 2.324))
 			{
 				m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 2.324;
 			}
 		}
-		else if (DefaultReload(SNIPERRIFLE_MAX_CLIP, SNIPERRIFLE_RELOAD1, 2.324, 1))
+		else if (DefaultReload(SNIPERRIFLE_MAX_CLIP, SNIPERRIFLE_RELOAD1, 2.324))
 		{
 			m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 4.102;
 			m_flReloadStart = gpGlobals->time;

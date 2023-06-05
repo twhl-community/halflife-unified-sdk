@@ -324,10 +324,10 @@ public:
 	 */
 	virtual void UpdateItemInfo() {}
 
-	virtual void SendWeaponAnim(int iAnim, int body = 0);
+	virtual void SendWeaponAnim(int iAnim);
 
-	bool DefaultDeploy(const char* szViewModel, const char* szWeaponModel, int iAnim, const char* szAnimExt, int body = 0);
-	bool DefaultReload(int iClipSize, int iAnim, float fDelay, int body = 0);
+	bool DefaultDeploy(const char* szViewModel, const char* szWeaponModel, int iAnim, const char* szAnimExt);
+	bool DefaultReload(int iClipSize, int iAnim, float fDelay);
 
 	/**
 	 *	@brief called each frame by player PreThink
