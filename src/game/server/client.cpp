@@ -456,7 +456,6 @@ const int NumberOfEntitiesPerPage = 10;
 
 struct PageSearchResult
 {
-	bool UsePagination{false};
 	int TotalEntityCount{0};
 	int DesiredPage{0};
 	int PageCount{0};
@@ -470,11 +469,11 @@ struct PageSearchResult
 template <typename Function>
 PageSearchResult PageBasedEntitySearch(CBasePlayer* player, int desiredPage, Function&& filter)
 {
+	desiredPage = std::max(desiredPage, 1);
+
 	int pageCount = 0;
 	int totalCount = 0;
 	int currentPage = 1;
-
-	const bool doPagination = desiredPage != 0;
 
 	UTIL_ConsolePrint(player, "entindex - classname - targetname - origin\n");
 
@@ -487,15 +486,10 @@ PageSearchResult PageBasedEntitySearch(CBasePlayer* player, int desiredPage, Fun
 
 		++totalCount;
 
-		if (!doPagination || currentPage == desiredPage)
+		if (currentPage == desiredPage)
 		{
 			UTIL_ConsolePrint(player, "{} - {} - {} - {{{}}}\n",
 				entity->entindex(), entity->GetClassname(), entity->GetTargetname(), entity->pev->origin);
-
-			if (!doPagination)
-			{
-				continue;
-			}
 		}
 
 		++pageCount;
@@ -506,34 +500,19 @@ PageSearchResult PageBasedEntitySearch(CBasePlayer* player, int desiredPage, Fun
 		}
 	}
 
-	return {.UsePagination = doPagination, .TotalEntityCount = totalCount, .DesiredPage = desiredPage, .PageCount = currentPage};
+	return {.TotalEntityCount = totalCount, .DesiredPage = desiredPage, .PageCount = currentPage};
 }
 
 void PrintPageSearchResult(CBasePlayer* player, const PageSearchResult& result, const char* filterName, const char* filterContents)
 {
-	if (result.UsePagination)
-	{
-		UTIL_ConsolePrint(player, "{} entities having the {}: \"{}\" (page {} / {})\n",
-			result.TotalEntityCount, filterName, filterContents, result.DesiredPage, result.PageCount);
-	}
-	else
-	{
-		UTIL_ConsolePrint(player, "{} entities having the {}: \"{}\"\n",
-			result.TotalEntityCount, filterName, filterContents);
-	}
+	UTIL_ConsolePrint(player, "{} entities having the {}: \"{}\" (page {} / {})\n",
+		result.TotalEntityCount, filterName, filterContents, result.DesiredPage, result.PageCount);
 }
 
 void PrintPageSearchResult(CBasePlayer* player, const PageSearchResult& result)
 {
-	if (result.UsePagination)
-	{
-		UTIL_ConsolePrint(player, "Total {} / {} entities (page {} / {})\n",
-			result.TotalEntityCount, gpGlobals->maxEntities, result.DesiredPage, result.PageCount);
-	}
-	else
-	{
-		UTIL_ConsolePrint(player, "Total {} / {} entities\n", result.TotalEntityCount, gpGlobals->maxEntities);
-	}
+	UTIL_ConsolePrint(player, "Total {} / {} entities (page {} / {})\n",
+		result.TotalEntityCount, gpGlobals->maxEntities, result.DesiredPage, result.PageCount);
 }
 
 static CBaseEntity* FindNextEntityToRemove(CBasePlayer* player, CBaseEntity* startEntity, const char* needle)
@@ -797,8 +776,7 @@ void SV_CreateClientCommands()
 
 	g_ClientCommands.Create("ent_list", [](CBasePlayer* player, const CommandArgs& args)
 		{
-			// Turn pagination off by default for this so player gets a list of all entities by default.
-			const auto result = PageBasedEntitySearch(player, args.Count() > 1 ? std::max(atoi(args.Argument(1)), 0) : 0, [&](auto entity)
+			const auto result = PageBasedEntitySearch(player, args.Count() > 1 ? atoi(args.Argument(1)) : 1, [&](auto entity)
 				{ return true; });
 
 			PrintPageSearchResult(player, result); },
