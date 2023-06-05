@@ -81,7 +81,7 @@ public:
 
 vgui::BitmapTGA* vgui_LoadTGA(char const* pFilename, bool invertAlpha)
 {
-	const auto fileContents = FileSystem_LoadFileIntoBuffer(pFilename, FileContentFormat::Binary);
+	const auto fileContents = FileSystem_LoadFileIntoBuffer(pFilename, FileContentFormat::Binary, nullptr);
 
 	if (fileContents.empty())
 	{
@@ -93,4 +93,16 @@ vgui::BitmapTGA* vgui_LoadTGA(char const* pFilename, bool invertAlpha)
 	vgui::BitmapTGA* pRet = new vgui::BitmapTGA(&stream, invertAlpha);
 
 	return pRet;
+}
+
+vgui::BitmapTGA* vgui_LoadTGAWithDirectory(const char* pImageName, bool addResolutionPrefix, bool invertAlpha)
+{
+	const char* prefix = addResolutionPrefix ? "640_" : "";
+
+	eastl::fixed_string<char, 256> fullName;
+	fmt::format_to(std::back_inserter(fullName), "gfx/vgui/{}{}.tga", prefix, pImageName);
+
+	vgui::BitmapTGA* pTGA = vgui_LoadTGA(fullName.c_str(), invertAlpha);
+
+	return pTGA;
 }

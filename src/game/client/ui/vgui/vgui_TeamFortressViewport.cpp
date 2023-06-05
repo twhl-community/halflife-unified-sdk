@@ -158,22 +158,6 @@ const char* sCTFStatsSelection[StatsTeamsCount] =
 		"OpposingForce",
 		"Individual"};
 
-
-// Get the name of TGA file, based on GameDir
-char* GetVGUITGAName(const char* pszName)
-{
-	char sz[256];
-	static char gd[256];
-	const char* gamedir;
-
-	sprintf(sz, pszName, CHud::m_iRes);
-
-	gamedir = gEngfuncs.pfnGetGameDirectory();
-	sprintf(gd, "%s/gfx/vgui/%s.tga", gamedir, sz);
-
-	return gd;
-}
-
 //================================================================
 // COMMAND MENU
 //================================================================

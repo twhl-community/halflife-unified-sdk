@@ -753,7 +753,6 @@ public:
 	int m_iHideHUDDisplay = 0;
 	int m_iFOV = 0;
 	int m_Teamplay = 0;
-	static constexpr int m_iRes = 640;
 	cvar_t* m_pCvarStealMouse = nullptr;
 	cvar_t* m_pCvarDraw = nullptr;
 	cvar_t* m_pCvarCrosshair = nullptr;

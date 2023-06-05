@@ -10,7 +10,6 @@
 #include <VGUI_InputSignal.h>
 #include <VGUI_Scheme.h>
 #include <VGUI_Image.h>
-#include <VGUI_FileInputStream.h>
 #include <VGUI_BitmapTGA.h>
 #include <VGUI_DesktopIcon.h>
 #include <VGUI_App.h>
@@ -50,9 +49,6 @@ class CClassMenuPanel;
 class CTeamMenuPanel;
 class TeamFortressViewport;
 class CStatsMenuPanel;
-
-char* GetVGUITGAName(const char* pszName);
-BitmapTGA* LoadTGAForRes(const char* pImageName);
 
 const int StatsTeamsCount = 4;
 
