@@ -452,7 +452,7 @@ void CEgon::WeaponIdle()
 	if ((m_pPlayer->m_afButtonPressed & IN_ATTACK2) == 0 && (m_pPlayer->pev->button & IN_ATTACK) != 0)
 	{
 		// Immediately stop attack animation even when holding down attack.
-		if (m_pPlayer->ammo_uranium > 0)
+		if (HasAmmo())
 		{
 			return;
 		}
@@ -506,7 +506,7 @@ void CEgon::EndAttack()
 	PLAYBACK_EVENT_FULL(FEV_GLOBAL | FEV_RELIABLE, m_pPlayer->edict(), m_usEgonStop, 0, m_pPlayer->pev->origin, m_pPlayer->pev->angles, 0.0, 0.0,
 		static_cast<int>(bMakeNoise), 0, 0, 0);
 
-	if (m_pPlayer->ammo_uranium > 0)
+	if (HasAmmo())
 	{
 		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 2.0;
 	}
