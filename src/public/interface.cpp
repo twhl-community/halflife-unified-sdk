@@ -128,12 +128,12 @@ CSysModule* Sys_LoadModule(const char* pModuleName)
 	HMODULE hDLL = LoadLibrary(pModuleName);
 #else
 	HMODULE hDLL = nullptr;
-	char szAbsoluteModuleName[1024];
-	szAbsoluteModuleName[0] = 0;
+
+	eastl::fixed_string<char, 1024> absoluteModuleName;
+
 	if (pModuleName[0] != '/')
 	{
 		char szCwd[1024];
-		char szAbsoluteModuleName[1024];
 
 		// Prevent loading from garbage paths if the path is too large for the buffer
 		if (!getcwd(szCwd, sizeof(szCwd)))
@@ -144,30 +144,29 @@ CSysModule* Sys_LoadModule(const char* pModuleName)
 		if (szCwd[strlen(szCwd) - 1] == '/')
 			szCwd[strlen(szCwd) - 1] = 0;
 
-		snprintf(szAbsoluteModuleName, sizeof(szAbsoluteModuleName), "%s/%s", szCwd, pModuleName);
-
-		hDLL = dlopen(szAbsoluteModuleName, RTLD_NOW);
+		fmt::format(std::back_inserter(absoluteModuleName), "{}/{}", szCwd, pModuleName);
 	}
 	else
 	{
-		snprintf(szAbsoluteModuleName, sizeof(szAbsoluteModuleName), "%s", pModuleName);
-		hDLL = dlopen(pModuleName, RTLD_NOW);
+		absoluteModuleName = pModuleName;
 	}
+
+	hDLL = dlopen(absoluteModuleName.c_str(), RTLD_NOW);
 #endif
 
 	if (!hDLL)
 	{
-		char str[512];
+		char str[1536];
 #if defined(WIN32)
 		snprintf(str, sizeof(str), "%s.dll", pModuleName);
 		hDLL = LoadLibrary(str);
 #elif defined(OSX)
 		printf("Error:%s\n", dlerror());
-		snprintf(str, sizeof(str), "%s.dylib", szAbsoluteModuleName);
+		snprintf(str, sizeof(str), "%s.dylib", absoluteModuleName.c_str());
 		hDLL = dlopen(str, RTLD_NOW);
 #else
 		printf("Error:%s\n", dlerror());
-		snprintf(str, sizeof(str), "%s.so", szAbsoluteModuleName);
+		snprintf(str, sizeof(str), "%s.so", absoluteModuleName.c_str());
 		hDLL = dlopen(str, RTLD_NOW);
 #endif
 	}

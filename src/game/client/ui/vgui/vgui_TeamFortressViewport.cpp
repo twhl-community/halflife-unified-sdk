@@ -1331,7 +1331,7 @@ void TeamFortressViewport::UpdateSpectatorPanel()
 	if (0 != g_iUser1 && 0 != gHUD.m_pCvarDraw->value && !gHUD.m_iIntermission) // don't draw in dev_overview mode
 	{
 		char bottomText[128];
-		char helpString2[128];
+		eastl::fixed_string<char, 128> helpString2;
 		char tempString[128];
 		char* name;
 		char* pBottomText = nullptr;
@@ -1353,10 +1353,10 @@ void TeamFortressViewport::UpdateSpectatorPanel()
 		}
 
 		sprintf(bottomText, "#Spec_Mode%d", g_iUser1);
-		sprintf(helpString2, "#Spec_Mode%d", g_iUser1);
+		fmt::format_to(std::back_inserter(helpString2), "#Spec_Mode{}", g_iUser1);
 
 		if (0 != gEngfuncs.IsSpectateOnly())
-			strcat(helpString2, " - HLTV");
+			helpString2 += " - HLTV";
 
 		// check if we're locked onto a target, show the player's name
 		if ((g_iUser2 > 0) && (g_iUser2 <= gEngfuncs.GetMaxClients()) && (g_iUser1 != OBS_ROAMING))
@@ -1413,9 +1413,9 @@ void TeamFortressViewport::UpdateSpectatorPanel()
 		// add sting auto if we are in auto directed mode
 		if (0 != gHUD.m_Spectator.m_autoDirector->value)
 		{
-			char tempString[128];
-			sprintf(tempString, "#Spec_Auto %s", helpString2);
-			strcpy(helpString2, tempString);
+			const eastl::fixed_string<char, 128> original = helpString2;
+			helpString2.clear();
+			fmt::format_to(std::back_inserter(helpString2), "#Spec_Auto {}", original.c_str());
 		}
 
 		m_pSpectatorPanel->m_BottomMainLabel->setText("%s", pBottomText);

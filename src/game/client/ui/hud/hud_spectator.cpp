@@ -1221,11 +1221,6 @@ bool CHudSpectator::IsActivePlayer(cl_entity_t* ent)
 
 bool CHudSpectator::ParseOverviewFile()
 {
-	char filename[255];
-	char levelname[255];
-	char token[1024];
-	float height;
-
 	memset(&m_OverviewData, 0, sizeof(m_OverviewData));
 
 	// fill in standrd values
@@ -1244,20 +1239,23 @@ bool CHudSpectator::ParseOverviewFile()
 	if (strlen(m_OverviewData.map) == 0)
 		return false; // not active yet
 
-	strcpy(levelname, m_OverviewData.map + 5);
-	levelname[strlen(levelname) - 4] = 0;
+	Filename levelname = m_OverviewData.map + 5;
+	levelname.resize(levelname.size() - 4);
 
-	sprintf(filename, "overviews/%s.txt", levelname);
+	Filename filename;
+	fmt::format_to(std::back_inserter(filename), "overviews/{}.txt", levelname.c_str());
 
-	const auto fileContents = FileSystem_LoadFileIntoBuffer(filename, FileContentFormat::Text);
+	const auto fileContents = FileSystem_LoadFileIntoBuffer(filename.c_str(), FileContentFormat::Text);
 
 	if (fileContents.empty())
 	{
-		gEngfuncs.Con_DPrintf("Couldn't open file %s. Using default values for overview mode.\n", filename);
+		gEngfuncs.Con_DPrintf("Couldn't open file %s. Using default values for overview mode.\n", filename.c_str());
 		return false;
 	}
 
 	auto pfile = reinterpret_cast<const char*>(fileContents.data());
+
+	char token[1024];
 
 	while (true)
 	{
@@ -1272,7 +1270,7 @@ bool CHudSpectator::ParseOverviewFile()
 			pfile = gEngfuncs.COM_ParseFile(pfile, token);
 			if (stricmp(token, "{"))
 			{
-				gEngfuncs.Con_Printf("Error parsing overview file %s. (expected { )\n", filename);
+				gEngfuncs.Con_Printf("Error parsing overview file %s. (expected { )\n", filename.c_str());
 				return false;
 			}
 
@@ -1312,7 +1310,7 @@ bool CHudSpectator::ParseOverviewFile()
 				}
 				else
 				{
-					gEngfuncs.Con_Printf("Error parsing overview file %s. (%s unkown)\n", filename, token);
+					gEngfuncs.Con_Printf("Error parsing overview file %s. (%s unkown)\n", filename.c_str(), token);
 					return false;
 				}
 
@@ -1325,7 +1323,7 @@ bool CHudSpectator::ParseOverviewFile()
 
 			if (m_OverviewData.layers == OVERVIEW_MAX_LAYERS)
 			{
-				gEngfuncs.Con_Printf("Error parsing overview file %s. ( too many layers )\n", filename);
+				gEngfuncs.Con_Printf("Error parsing overview file %s. ( too many layers )\n", filename.c_str());
 				return false;
 			}
 
@@ -1334,7 +1332,7 @@ bool CHudSpectator::ParseOverviewFile()
 
 			if (stricmp(token, "{"))
 			{
-				gEngfuncs.Con_Printf("Error parsing overview file %s. (expected { )\n", filename);
+				gEngfuncs.Con_Printf("Error parsing overview file %s. (expected { )\n", filename.c_str());
 				return false;
 			}
 
@@ -1350,12 +1348,12 @@ bool CHudSpectator::ParseOverviewFile()
 				else if (!stricmp(token, "height"))
 				{
 					pfile = gEngfuncs.COM_ParseFile(pfile, token);
-					height = atof(token);
+					const float height = atof(token);
 					m_OverviewData.layersHeights[m_OverviewData.layers] = height;
 				}
 				else
 				{
-					gEngfuncs.Con_Printf("Error parsing overview file %s. (%s unkown)\n", filename, token);
+					gEngfuncs.Con_Printf("Error parsing overview file %s. (%s unkown)\n", filename.c_str(), token);
 					return false;
 				}
 

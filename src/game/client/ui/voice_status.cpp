@@ -515,9 +515,7 @@ void CVoiceStatus::UpdateServerState(bool bForce)
 	{
 		if (0 != gEngfuncs.pfnGetCvarFloat("voice_clientdebug"))
 		{
-			char msg[256];
-			sprintf(msg, "CVoiceStatus::UpdateServerState: Sending '%s'\n", str);
-			gEngfuncs.pfnConsolePrint(msg);
+			Con_Printf("CVoiceStatus::UpdateServerState: Sending '%s'\n", str);
 		}
 
 		gEngfuncs.pfnServerCmdUnreliable(str); // Tell the server..
