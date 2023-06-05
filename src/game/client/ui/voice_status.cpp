@@ -465,8 +465,8 @@ void CVoiceStatus::UpdateServerState(bool bForce)
 	{
 		m_bServerModEnable = bCVarModEnable;
 
-		char str[256];
-		snprintf(str, sizeof(str), "vmodenable %d", m_bServerModEnable);
+		char str[64];
+		snprintf(str, sizeof(str), "vmodenable %d", int(m_bServerModEnable));
 		ServerCmd(str);
 
 		if (0 != gEngfuncs.pfnGetCvarFloat("voice_clientdebug"))

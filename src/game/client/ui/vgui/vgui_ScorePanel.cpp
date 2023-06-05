@@ -948,10 +948,10 @@ void ScorePanel::mousePressed(MouseCode code, Panel* panel)
 
 			if (pl_info && pl_info->name && '\0' != pl_info->name[0])
 			{
-				char string[256];
+				char string[2048];
 				if (GetClientVoiceMgr()->IsPlayerBlocked(iPlayer))
 				{
-					char string1[1024];
+					char string1[512];
 
 					// remove mute
 					GetClientVoiceMgr()->SetPlayerBlockedState(iPlayer, false);
@@ -964,8 +964,8 @@ void ScorePanel::mousePressed(MouseCode code, Panel* panel)
 				}
 				else
 				{
-					char string1[1024];
-					char string2[1024];
+					char string1[512];
+					char string2[512];
 
 					// mute the player
 					GetClientVoiceMgr()->SetPlayerBlockedState(iPlayer, true);

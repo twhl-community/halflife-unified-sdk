@@ -1423,12 +1423,12 @@ void TeamFortressViewport::UpdateSpectatorPanel()
 
 
 		// update extra info field
-		char szText[64];
+		char szText[128];
 
 		if (0 != gEngfuncs.IsSpectateOnly())
 		{
 			// in HLTV mode show number of spectators
-			snprintf(szText, 63, "%s: %d", CHudTextMessage::BufferedLocaliseTextString("#Spectators"), gHUD.m_Spectator.m_iSpectatorNumber);
+			snprintf(szText, sizeof(szText), "%s: %d", CHudTextMessage::BufferedLocaliseTextString("#Spectators"), gHUD.m_Spectator.m_iSpectatorNumber);
 		}
 		else
 		{
@@ -1436,10 +1436,10 @@ void TeamFortressViewport::UpdateSpectatorPanel()
 			char szMapName[64];
 			COM_FileBase(gEngfuncs.pfnGetLevelName(), szMapName);
 
-			snprintf(szText, 63, "%s: %s", CHudTextMessage::BufferedLocaliseTextString("#Spec_Map"), szMapName);
+			snprintf(szText, sizeof(szText), "%s: %s", CHudTextMessage::BufferedLocaliseTextString("#Spec_Map"), szMapName);
 		}
 
-		szText[63] = 0;
+		szText[sizeof(szText) - 1] = 0;
 
 		m_pSpectatorPanel->m_ExtraInfo->setText(szText);
 

@@ -194,15 +194,17 @@ CStatsMenuPanel::CStatsMenuPanel(int iTrans, bool iRemoveMe, int x, int y, int w
 		// pNameLabel->setBorder(new LineBorder());
 		pNameLabel->setText("%s", localName);
 
-		if (ScreenWidth > 639)
+		if (ScreenWidth >= BASE_XRES)
 		{
 			int xOut, yOut;
 			pNameLabel->getTextSize(xOut, yOut);
 
 			if (i == 3)
-				sprintf(sz, sCTFStatsSelection[1]);
+				strncpy(sz, sCTFStatsSelection[1], sizeof(sz));
 			else
-				sprintf(sz, sCTFStatsSelection[i]);
+				strncpy(sz, sCTFStatsSelection[i], sizeof(sz));
+
+			sz[sizeof(sz) - 1] = '\0';
 
 			m_pClassImages[i] = new CImageLabel(sz, textOffs, 2 * yOut, XRES(250), YRES(80));
 			m_pClassImages[i]->setParent(m_pClassInfoPanel[i]);
