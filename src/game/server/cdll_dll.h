@@ -29,6 +29,8 @@ constexpr int MAX_EXTENT = 2 * MAX_COORD_INTEGER;
 
 constexpr int MAX_TEMPENTS = 2048;
 
+constexpr int MAX_HUDMSG_TEXT_LENGTH = 512;
+
 /**
  *	@brief Default sky to set if the map does not provide one.
  *	Should match the default value of the engine's @c sv_skyname cvar.

@@ -246,9 +246,9 @@ void CHudMessage::MessageScanStart()
 
 void CHudMessage::MessageDrawScan(client_textmessage_t* pMessage, float time)
 {
-	int i, j, length, width;
+	int i, length, width;
 	const char* pText;
-	unsigned char line[80];
+	eastl::fixed_string<char, MAX_HUDMSG_TEXT_LENGTH> line;
 
 	pText = pMessage->pMessage;
 	// Count lines
@@ -285,22 +285,20 @@ void CHudMessage::MessageDrawScan(client_textmessage_t* pMessage, float time)
 
 	for (i = 0; i < m_parms.lines; i++)
 	{
-		m_parms.lineLength = 0;
+		line.clear();
 		m_parms.width = 0;
 		while ('\0' != *pText && *pText != '\n')
 		{
 			unsigned char c = *pText;
-			line[m_parms.lineLength] = c;
+			line.push_back(c);
 			m_parms.width += gHUD.m_scrinfo.charWidths[c];
-			m_parms.lineLength++;
 			pText++;
 		}
 		pText++; // Skip LF
-		line[m_parms.lineLength] = 0;
 
 		m_parms.x = XPosition(pMessage->x, m_parms.width, m_parms.totalWidth);
 
-		for (j = 0; j < m_parms.lineLength; j++)
+		for (std::size_t j = 0; j < line.size(); j++)
 		{
 			m_parms.text = line[j];
 			int next = m_parms.x + gHUD.m_scrinfo.charWidths[m_parms.text];

@@ -680,15 +680,15 @@ void UTIL_HudMessage(CBasePlayer* pEntity, const hudtextparms_t& textparms, cons
 	if (textparms.effect == 2)
 		WRITE_SHORT(FixedUnsigned16(textparms.fxTime, 1 << 8));
 
-	if (strlen(pMessage) < 512)
+	if (strlen(pMessage) < MAX_HUDMSG_TEXT_LENGTH)
 	{
 		WRITE_STRING(pMessage);
 	}
 	else
 	{
-		char tmp[512];
-		strncpy(tmp, pMessage, 511);
-		tmp[511] = 0;
+		char tmp[MAX_HUDMSG_TEXT_LENGTH];
+		strncpy(tmp, pMessage, sizeof(tmp) - 1);
+		tmp[sizeof(tmp) - 1] = 0;
 		WRITE_STRING(tmp);
 	}
 	MESSAGE_END();

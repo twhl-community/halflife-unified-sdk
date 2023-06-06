@@ -429,7 +429,6 @@ struct message_parms_t
 	int totalWidth, totalHeight;
 	int width;
 	int lines;
-	int lineLength;
 	int length;
 	int r, g, b;
 	int text;
